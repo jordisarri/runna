@@ -22,13 +22,13 @@ const Joc = {
     // Música de la intro i del títol (continua sonant del títol al pròleg)
     musica: null,
 
-    iniciarMusica(scene) {
+    iniciarMusica(scene, seek = 0) {
         if (!scene.cache.audio.exists('musica_intro')) return;
         if (Joc.fadeMusica) { clearInterval(Joc.fadeMusica); Joc.fadeMusica = null; }
         if (Joc.musica && Joc.musica.isPlaying) { Joc.musica.setVolume(0.6); return; }
         if (Joc.musica) Joc.musica.destroy();
         Joc.musica = scene.sound.add('musica_intro', { loop: true, volume: 0.6 });
-        Joc.musica.play(); // si el navegador encara no deixa sonar, Phaser l'engega al primer clic/tecla
+        Joc.musica.play({ seek }); // si el navegador encara no deixa sonar, Phaser l'engega al primer clic/tecla
     },
 
     aturarMusica() {
@@ -60,7 +60,7 @@ const Joc = {
         const m = scene.game.scene;
         Joc.aturarTot(scene);
         if (m.isActive('UI')) m.stop('UI');
-        m.start('Titol');
+        m.start('Titol', { mode: 'directe' });
     }
 };
 
@@ -75,80 +75,21 @@ class EscenaCarrega extends Phaser.Scene {
         this.load.on('progress', v => { barra.width = 500 * v; });
         Grafics.carregar(this);
         this.load.audio('musica_intro', 'assets/musica/intro_runna.mp3');
+        // Vídeos de la intro (sense el seu so: sona la música del joc)
+        this.load.video('video_intro', 'assets/video/intro_runna.mp4', true);
+        this.load.video('video_bucle', 'assets/video/intro_runna_bucle.mp4', true);
     }
 
     create() {
         Grafics.preparar(this);
-        this.scene.start('Titol');
-    }
-}
-
-// ---------------- TÍTOL ----------------
-class EscenaTitol extends Phaser.Scene {
-    constructor() { super('Titol'); }
-
-    create() {
-        this.add.tileSprite(0, 0, AMPLE, ALT, 'herba').setOrigin(0).setTileScale(1 / RES);
-        const esg = this.add.image(AMPLE / 2, 470, 'esglesia').setOrigin(0.5, 1);
-        esg.setScale((this.textures.get('esglesia').customData.escala || 0.5) * 0.85);
-        this.add.particles(AMPLE / 2, 520, 'boira', {
-            x: { min: -600, max: 600 }, y: { min: -30, max: 60 },
-            speedX: { min: -10, max: 10 }, speedY: { min: -15, max: -4 },
-            scale: { start: 1.2, end: 3 }, alpha: { start: 0.5, end: 0 },
-            lifespan: 5000, frequency: 120
-        });
-        this.add.rectangle(0, 0, AMPLE, ALT, 0x0d0b09, 0.45).setOrigin(0);
-        Joc.iniciarMusica(this);
-
-        this.add.text(AMPLE / 2, 120, 'RUNNA', estilText(96, '#ffd34d', { fontStyle: 'bold', stroke: '#1a120b', strokeThickness: 10 })).setOrigin(0.5);
-        this.add.text(AMPLE / 2, 195, 'l\'espasa del Miracle', estilText(36, '#f2e6c8', { fontStyle: 'italic', stroke: '#1a120b', strokeThickness: 6 })).setOrigin(0.5);
-
-        const hiHa = Estat.hiHaPartida();
-        this.opcions = [];
-        if (hiHa) this.opcions.push({ text: 'Continuar', fn: () => { if (Estat.carregar()) Joc.continuar(this); } });
-        this.opcions.push({ text: 'Nova partida', fn: () => this.novaPartida(hiHa) });
-        this.opcions.push({ text: 'Carregar codi de partida', fn: () => this.carregarCodi() });
-
-        this.textOpcions = this.opcions.map((o, i) =>
-            this.add.text(AMPLE / 2, 450 + i * 62, o.text, estilText(30, '#f2e6c8', { stroke: '#1a120b', strokeThickness: 6 }))
-                .setOrigin(0.5).setInteractive({ useHandCursor: true })
-                .on('pointerover', () => { this.seleccio = i; this.pintar(); })
-                .on('pointerdown', () => o.fn()));
-        this.seleccio = 0;
-        this.pintar();
-
-        this.input.keyboard.on('keydown-UP', () => { this.seleccio = (this.seleccio + this.opcions.length - 1) % this.opcions.length; this.pintar(); });
-        this.input.keyboard.on('keydown-DOWN', () => { this.seleccio = (this.seleccio + 1) % this.opcions.length; this.pintar(); });
-        this.input.keyboard.on('keydown-ENTER', () => this.opcions[this.seleccio].fn());
-        this.input.keyboard.on('keydown-SPACE', () => this.opcions[this.seleccio].fn());
-
-        if (location.protocol === 'file:' || Grafics.pixelsBloquejats) {
-            this.add.text(AMPLE / 2, ALT - 40,
-                'Atenció: has obert el joc amb doble clic. Per veure bé els dibuixos, obre\'l amb un servidor local (Live Server de VS Code).',
-                estilText(16, '#ffb0a0', { backgroundColor: '#1a120bcc', padding: { x: 10, y: 6 }, wordWrap: { width: 1100 }, align: 'center' })).setOrigin(0.5);
-        }
-        this.cameras.main.fadeIn(500);
-    }
-
-    pintar() {
-        this.textOpcions.forEach((t, i) => {
-            t.setColor(i === this.seleccio ? '#ffd34d' : '#f2e6c8');
-            t.setText((i === this.seleccio ? '▸ ' : '') + this.opcions[i].text);
-        });
-    }
-
-    novaPartida(hiHa) {
-        if (hiHa && !window.confirm('Començar una partida nova? Es perdrà la partida desada.')) return;
-        Estat.nova();
-        Estat.desar();
-        this.scene.start('Proleg');
-    }
-
-    carregarCodi() {
-        const codi = window.prompt('Enganxa el teu codi de partida:');
-        if (!codi) return;
-        if (Estat.importarCodi(codi)) Joc.continuar(this);
-        else window.alert('Aquest codi no és vàlid.');
+        // Esperem les fonts de Google (màxim 3 s) perquè el títol es dibuixi amb la lletra bona
+        const fonts = document.fonts ? Promise.all([
+            document.fonts.load(`900 64px ${FONT_TITOL}`),
+            document.fonts.load(`48px ${FONT_CAL}`)
+        ]) : Promise.resolve();
+        Promise.race([fonts, new Promise(r => setTimeout(r, 3000))])
+            .catch(() => {})
+            .then(() => this.scene.start('Titol', { mode: 'intro' }));
     }
 }
 

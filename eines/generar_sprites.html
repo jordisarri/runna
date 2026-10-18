@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<title>Generador de sprites de l'Ineu</title>
+<style>
+    body { background: #2a2a2a; color: #eee; font-family: sans-serif; padding: 16px; }
+    canvas { background: repeating-conic-gradient(#888 0 25%, #aaa 0 50%) 0 0 / 16px 16px; margin: 4px; }
+    h2 { margin: 18px 0 6px; font-size: 16px; }
+    a { color: #ffd34d; }
+</style>
+</head>
+<body>
+<h1>Sprites de l'Ineu</h1>
+<p>Retalla les vistes principals de la fitxa del personatge, treu el fons blanc i crea els spritesheets de caminar
+(4 fotogrames per direcció). Obre aquesta pàgina amb el servidor local i descarrega els PNG amb els enllaços.
+Desa'ls a <code>assets/sprites/</code>.</p>
+<div id="sortida"></div>
+
+<script>
+const FITXA = '../assets/Fitxa de personatge del monjo aventurer.png';
+// Zona de la fitxa on hi ha les "Vistes principals" (frontal, perfil, esquena, caminant)
+const REGIO = { x: 505, y: 80, w: 750, h: 300 };
+// Mida de cada fotograma dels spritesheets i línia dels peus
+const CEL = { w: 230, h: 300, peus: 294 };
+const FOTOGRAMES = 4;
+
+function carregar(src) {
+    return new Promise((ok, ko) => { const i = new Image(); i.onload = () => ok(i); i.onerror = ko; i.src = src; });
+}
+
+function nouCanvas(w, h) {
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    return c;
+}
+
+// Fons blanc i ombres grises de terra connectats amb la vora → transparents
+function treureFons(c) {
+    const ctx = c.getContext('2d');
+    const { width: w, height: h } = c;
+    const img = ctx.getImageData(0, 0, w, h), px = img.data;
+    const esFons = i => {
+        const r = px[i], g = px[i + 1], b = px[i + 2];
+        const mn = Math.min(r, g, b), mx = Math.max(r, g, b);
+        return mn >= 150 && mx - mn <= 30;
+    };
+    const tret = new Uint8Array(w * h), pila = [];
+    const prova = (x, y) => { const p = y * w + x; if (!tret[p] && esFons(p * 4)) { tret[p] = 1; pila.push(p); } };
+    for (let x = 0; x < w; x++) { prova(x, 0); prova(x, h - 1); }
+    for (let y = 0; y < h; y++) { prova(0, y); prova(w - 1, y); }
+    while (pila.length) {
+        const p = pila.pop(), x = p % w, y = (p / w) | 0;
+        if (x > 0) prova(x - 1, y);
+        if (x < w - 1) prova(x + 1, y);
+        if (y > 0) prova(x, y - 1);
+        if (y < h - 1) prova(x, y + 1);
+    }
+    for (let p = 0; p < w * h; p++) {
+        if (tret[p]) { px[p * 4 + 3] = 0; continue; }
+        const x = p % w, y = (p / w) | 0;
+        const vei = (x > 0 && tret[p - 1]) || (x < w - 1 && tret[p + 1]) || (y > 0 && tret[p - w]) || (y < h - 1 && tret[p + w]);
+        if (vei) {
+            const i = p * 4, l = Math.min(px[i], px[i + 1], px[i + 2]);
+            if (l > 120) px[i + 3] = Math.max(0, Math.min(255, ((255 - l) / 135) * 255));
+        }
+    }
+    ctx.putImageData(img, 0, 0);
+}
+
+// Separa les figures per columnes buides i retorna cada figura retallada
+function separarFigures(c) {
+    const ctx = c.getContext('2d');
+    const { width: w, height: h } = c;
+    const px = ctx.getImageData(0, 0, w, h).data;
+    const opac = (x, y) => px[(y * w + x) * 4 + 3] > 40;
+    const col = [];
+    for (let x = 0; x < w; x++) { let n = 0; for (let y = 0; y < h; y++) if (opac(x, y)) n++; col.push(n); }
+    const trams = [];
+    let ini = -1;
+    for (let x = 0; x <= w; x++) {
+        const ple = x < w && col[x] > 2;
+        if (ple && ini < 0) ini = x;
+        if (!ple && ini >= 0) { if (x - ini > 40) trams.push([ini, x]); ini = -1; }
+    }
+    return trams.map(([x0, x1]) => {
+        let y0 = h, y1 = 0;
+        for (let x = x0; x < x1; x++) for (let y = 0; y < h; y++) if (opac(x, y)) { y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+        const f = nouCanvas(x1 - x0, y1 - y0 + 1);
+        f.getContext('2d').drawImage(c, x0, y0, x1 - x0, y1 - y0 + 1, 0, 0, x1 - x0, y1 - y0 + 1);
+        return f;
+    });
+}
+
+// A la franja dels peus: fora el blanc tancat entre les cames i l'ombra grisa del terra
+function netejarPeus(f, des) {
+    const ctx = f.getContext('2d', { willReadFrequently: true });
+    const w = f.width, y0 = Math.round(f.height * des), h = f.height - y0;
+    const img = ctx.getImageData(0, y0, w, h), px = img.data;
+    for (let i = 0; i < px.length; i += 4) {
+        const r = px[i], g = px[i + 1], b = px[i + 2];
+        const mn = Math.min(r, g, b), mx = Math.max(r, g, b);
+        if (mn >= 88 && mx - mn <= 36) px[i + 3] = 0;
+    }
+    ctx.putImageData(img, 0, y0);
+}
+
+// Centre horitzontal del cap (franja de dalt de la figura), per alinear vistes diferents
+function centreCap(f) {
+    const ctx = f.getContext('2d'), w = f.width, h = Math.round(f.height * 0.22);
+    const px = ctx.getImageData(0, 0, w, h).data;
+    let s = 0, n = 0;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (px[(y * w + x) * 4 + 3] > 40) { s += x; n++; }
+    return n ? s / n : w / 2;
+}
+
+// Retalla un tros d'una figura
+function tros(f, x, y, w, h) {
+    const c = nouCanvas(Math.max(1, w), Math.max(1, h));
+    c.getContext('2d').drawImage(f, x, y, w, h, 0, 0, w, h);
+    return c;
+}
+
+// Dibuixa una figura dins una cel·la amb els peus a la línia CEL.peus i el cap centrat
+function posar(ctx, f, cx, opts = {}) {
+    const dx = opts.dx || 0, dy = opts.dy || 0;
+    const x = cx - centreCap(f) + dx, y = CEL.peus - f.height + dy;
+    if (opts.angle) {
+        ctx.save();
+        ctx.translate(x + f.width / 2, CEL.peus);
+        ctx.rotate(opts.angle * Math.PI / 180);
+        ctx.drawImage(f, -f.width / 2, -f.height + dy);
+        ctx.restore();
+    } else {
+        ctx.drawImage(f, x, y);
+    }
+}
+
+/**
+ * Caminar de cara / d'esquena: separem cos i peus.
+ * tall = proporció de l'alçada on comencen els peus.
+ */
+function caminarFrontal(f, tall) {
+    const full = nouCanvas(CEL.w * FOTOGRAMES, CEL.h);
+    const ctx = full.getContext('2d');
+    const yTall = Math.round(f.height * tall);
+    const cos = tros(f, 0, 0, f.width, yTall + 2);
+    const peuE = tros(f, 0, yTall, Math.round(f.width / 2), f.height - yTall);
+    const peuD = tros(f, Math.round(f.width / 2), yTall, f.width - Math.round(f.width / 2), f.height - yTall);
+    const cc = centreCap(f);
+    const pas = [
+        { bob: 0, e: 0, d: 0, angle: 0 },
+        { bob: -4, e: -7, d: 0, angle: -1.5 },
+        { bob: 0, e: 0, d: 0, angle: 0 },
+        { bob: -4, e: 0, d: -7, angle: 1.5 }
+    ];
+    pas.forEach((p, i) => {
+        const ox = i * CEL.w + CEL.w / 2 - cc;           // on va la x=0 de la figura
+        const base = CEL.peus - f.height;                  // on va la y=0 de la figura
+        ctx.drawImage(peuE, ox, base + yTall + p.e);
+        ctx.drawImage(peuD, ox + Math.round(f.width / 2), base + yTall + p.d);
+        ctx.save();
+        ctx.translate(ox + f.width / 2, base + yTall);
+        ctx.rotate(p.angle * Math.PI / 180);
+        ctx.drawImage(cos, -f.width / 2, -yTall + p.bob);
+        ctx.restore();
+    });
+    return full;
+}
+
+/**
+ * Caminar de costat (cap a la dreta): alterna la vista "caminant" i el perfil,
+ * més un pas fet amb els peus del perfil (el de davant enrere i el de darrere endavant).
+ */
+function caminarCostat(perfil, caminant, tall) {
+    const full = nouCanvas(CEL.w * FOTOGRAMES, CEL.h);
+    const ctx = full.getContext('2d');
+    // 0: pas llarg (vista "caminant")
+    posar(ctx, caminant, CEL.w / 2);
+    // 1 i 3: perfil, una mica amunt (el cos puja quan les cames passen)
+    posar(ctx, perfil, CEL.w * 1.5, { dy: -4 });
+    posar(ctx, perfil, CEL.w * 3.5, { dy: -4 });
+    // 2: perfil amb els peus en tisora
+    const yTall = Math.round(perfil.height * tall);
+    const cos = tros(perfil, 0, 0, perfil.width, yTall + 2);
+    const mig = Math.round(perfil.width * 0.5);
+    const peuDarrere = tros(perfil, 0, yTall, mig, perfil.height - yTall);
+    const peuDavant = tros(perfil, mig, yTall, perfil.width - mig, perfil.height - yTall);
+    const ox = CEL.w * 2.5 - centreCap(perfil), base = CEL.peus - perfil.height;
+    ctx.drawImage(peuDavant, ox + mig - 5, base + yTall - 3);
+    ctx.drawImage(peuDarrere, ox + 6, base + yTall);
+    ctx.drawImage(cos, ox, base - 1);
+    return full;
+}
+
+function mostrar(nom, canvas) {
+    const s = document.getElementById('sortida');
+    const h = document.createElement('h2');
+    h.innerHTML = `${nom}.png (${canvas.width}×${canvas.height}) — <a download="${nom}.png" href="${canvas.toDataURL('image/png')}">descarregar</a>`;
+    s.appendChild(h);
+    s.appendChild(canvas);
+}
+
+(async () => {
+    const fitxa = await carregar(FITXA);
+    const regio = nouCanvas(REGIO.w, REGIO.h);
+    regio.getContext('2d', { willReadFrequently: true })
+        .drawImage(fitxa, REGIO.x, REGIO.y, REGIO.w, REGIO.h, 0, 0, REGIO.w, REGIO.h);
+    treureFons(regio);
+    const figures = separarFigures(regio);
+    if (figures.length !== 4) throw new Error('Esperava 4 figures i n\'he trobat ' + figures.length);
+    const [frontal, perfil, esquena, caminant] = figures;
+    netejarPeus(frontal, 0.84);
+    netejarPeus(esquena, 0.84);
+    netejarPeus(perfil, 0.86);
+    netejarPeus(caminant, 0.80);
+
+    window.SPRITES = {
+        ineu_avall: caminarFrontal(frontal, 0.86),
+        ineu_amunt: caminarFrontal(esquena, 0.88),
+        ineu_costat: caminarCostat(perfil, caminant, 0.86)
+    };
+    Object.entries(window.SPRITES).forEach(([nom, c]) => mostrar(nom, c));
+    figures.forEach((f, i) => mostrar('vista_' + ['frontal', 'perfil', 'esquena', 'caminant'][i], f));
+    window.FET = true;
+})().catch(e => { document.body.append('ERROR: ' + e.message); window.ERROR = e.message; });
+</script>
+</body>
+</html>

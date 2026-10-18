@@ -143,25 +143,29 @@ class ZonaBase extends Phaser.Scene {
         }
 
         this.ombraIneu = this.add.image(pos.x, pos.y, 'ombra').setScale(0.4).setDepth(-500);
-        this.ineu = this.physics.add.sprite(pos.x, pos.y, 'ineu_avall').setOrigin(0.5, 1);
-        const escala = this.textures.get('ineu_avall').customData.escala || 1 / RES;
-        this.ineu.setScale(escala);
+        const S = SPRITE_INEU;
+        this.ineu = this.physics.add.sprite(pos.x, pos.y, 'ineu_avall', S.quiet.avall).setOrigin(0.5, S.peus / S.alt);
+        this.ineu.setScale(S.alcada / S.alt);
         // Caixa de col·lisió petita als peus (en píxels de textura)
-        const tw = this.ineu.width, th = this.ineu.height;
-        this.ineu.body.setSize(tw * 0.36, th * 0.1);
-        this.ineu.body.setOffset(tw * 0.32, th * 0.88);
+        this.ineu.body.setSize(76, 24);
+        this.ineu.body.setOffset((S.ample - 76) / 2, S.peus - 24);
         this.ineu.setCollideWorldBounds(true);
         this.physics.add.collider(this.ineu, this.obstacles);
         this.direccio = pos.dir || 'avall';
         this.posarDireccio(this.direccio);
-        this.pas = 0;
     }
 
-    posarDireccio(dir) {
+    // dir: 'avall' | 'amunt' | 'esquerra' | 'dreta'
+    posarDireccio(dir, caminant = false) {
         this.direccio = dir;
-        const key = dir === 'amunt' ? 'ineu_amunt' : dir === 'avall' ? 'ineu_avall' : 'ineu_costat';
-        if (this.ineu.texture.key !== key) this.ineu.setTexture(key);
+        const vista = dir === 'esquerra' || dir === 'dreta' ? 'costat' : dir;
         this.ineu.setFlipX(dir === 'esquerra');
+        if (caminant) {
+            this.ineu.anims.play('caminar_' + vista, true);
+        } else {
+            this.ineu.anims.stop();
+            this.ineu.setTexture('ineu_' + vista, SPRITE_INEU.quiet[vista]);
+        }
     }
 
     guardarPosicio() {
@@ -180,6 +184,7 @@ class ZonaBase extends Phaser.Scene {
                       Phaser.Input.Keyboard.JustDown(this.tecles.E) ||
                       ui.consumirAccioTactil();
 
+        if ((ui.dialeg || ui.bloquejat) && this.ineu.anims.isPlaying) this.posarDireccio(this.direccio, false);
         if (ui.dialeg) {
             this.ineu.body.setVelocity(0);
             if (accio && !ui.menuObert) ui.avancar();
@@ -215,13 +220,10 @@ class ZonaBase extends Phaser.Scene {
 
         const movent = Math.hypot(vx, vy) > 0.15;
         if (movent) {
-            if (Math.abs(vx) > Math.abs(vy) * 1.1) this.posarDireccio(vx < 0 ? 'esquerra' : 'dreta');
-            else this.posarDireccio(vy < 0 ? 'amunt' : 'avall');
-            // Petit balanceig en caminar
-            this.pas += delta * 0.014;
-            this.ineu.setAngle(Math.sin(this.pas) * 3.5);
-        } else {
-            this.ineu.setAngle(0);
+            const dir = Math.abs(vx) > Math.abs(vy) * 1.1 ? (vx < 0 ? 'esquerra' : 'dreta') : (vy < 0 ? 'amunt' : 'avall');
+            this.posarDireccio(dir, true);
+        } else if (this.ineu.anims.isPlaying) {
+            this.posarDireccio(this.direccio, false);
         }
         this.ineu.setDepth(this.ineu.y);
         this.ombraIneu.setPosition(this.ineu.x, this.ineu.y);
@@ -263,6 +265,7 @@ class ZonaBase extends Phaser.Scene {
         Estat.dades.entrada = entrada;
         Estat.dades.x = null;
         Estat.dades.y = null;
+        this.posarDireccio(this.direccio, false);
         this.cameras.main.fadeOut(300, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
             this.scene.start(desti, { entrada });

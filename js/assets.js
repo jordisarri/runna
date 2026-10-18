@@ -9,10 +9,6 @@
 const RES = 2;
 
 const CATALEG = [
-    // Ineu (amplada en píxels de joc)
-    { key: 'ineu_avall',   file: 'assets/ineu_avall.png',   amplada: 96 },
-    { key: 'ineu_amunt',   file: 'assets/ineu_amunt.png',   amplada: 96 },
-    { key: 'ineu_costat',  file: 'assets/ineu_costat.png',  amplada: 96 },
     // Edificis
     { key: 'esglesia',     file: 'assets/esglesia.png',     amplada: 700 },
     { key: 'monestir',     file: 'assets/monestir.png',     amplada: 620, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.62, '#cdb08a', '#7a4a2a', 'Monestir') },
@@ -32,6 +28,18 @@ const CATALEG = [
     { key: 'retaule',      file: 'assets/retaule.png',      amplada: 360, provisional: (c, w) => dibuixarRetaule(c, w) }
 ];
 
+/**
+ * SPRITES DE L'INEU (generats amb eines/generar_sprites.html a partir de la fitxa del personatge)
+ * Cada spritesheet té 4 fotogrames de 230×300 amb els peus a y=294.
+ *   avall/amunt: fotograma 0 = quiet · costat: fotograma 1 = quiet (mira a la dreta)
+ */
+const SPRITE_INEU = {
+    ample: 230, alt: 300, peus: 294,
+    alcada: 128,          // alçada en píxels de joc
+    fps: 8,
+    quiet: { avall: 0, amunt: 0, costat: 1 }
+};
+
 const Grafics = {
     // Avís si el navegador no deixa llegir els píxels (obert amb doble clic, file://)
     pixelsBloquejats: false,
@@ -40,6 +48,8 @@ const Grafics = {
     carregar(scene) {
         scene.load.on('loaderror', f => Grafics.faltants.push(f.key));
         CATALEG.forEach(item => scene.load.image(item.key, item.file));
+        ['avall', 'amunt', 'costat'].forEach(dir => scene.load.spritesheet('ineu_' + dir, `assets/sprites/ineu_${dir}.png`,
+            { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt }));
     },
 
     // Processa tots els PNG carregats i crea marcadors/textures generades
@@ -50,6 +60,21 @@ const Grafics = {
             else Grafics.crearProvisional(scene, item);
         });
         Grafics.texturesGenerades(scene);
+        Grafics.animacions(scene);
+    },
+
+    // Animacions de caminar de l'Ineu (són globals: es creen una sola vegada)
+    animacions(scene) {
+        ['avall', 'amunt', 'costat'].forEach(dir => {
+            const key = 'caminar_' + dir;
+            if (scene.anims.exists(key) || !scene.textures.exists('ineu_' + dir)) return;
+            scene.anims.create({
+                key,
+                frames: scene.anims.generateFrameNumbers('ineu_' + dir, { start: 0, end: 3 }),
+                frameRate: SPRITE_INEU.fps,
+                repeat: -1
+            });
+        });
     },
 
     netejarPNG(scene, item) {
