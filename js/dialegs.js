@@ -130,6 +130,30 @@ const DIALEGS = {
 
     cartellOest: E => ({ pagines: [{ qui: '', text: "← Casa Gran · Taverna · Hospederia\n↓ Creu de l'Aparició i Bassadòria" }] }),
     cartellNord: E => ({ pagines: [{ qui: '', text: "↑ Les Runes · Ping-pong · Cel·les i Til·ler" }] }),
+    cartellCantonada: E => ({ pagines: [{ qui: '', text: "El Monestir i el Santuari fan cantonada aquí: el camí s'acaba contra el mur." }] }),
+    pedraSecreta: E => E.flag('tresorObert') ? {
+        pagines: [{ qui: '', text: 'La pedra ha girat i deixa un pas estret. Una escala baixa a un passatge fosc.' }]
+    } : {
+        pagines: [
+            { qui: '', text: 'El camí mor contra un mur de pedra vella. Una de les pedres és de color diferent de les altres, i quan hi passes la mà sembla que vibri.' },
+            { qui: 'Ineu', text: 'Aquesta pedra no hi pertany... Com si esperés una veu. Potser un cant de pedres la desvetlli.' }
+        ]
+    },
+    pedraSecretaOberta: { pagines: [
+        { qui: '', text: 'El Cant de les Pedres ressona al mur. La pedra tremola, gira lentament i deixa a la vista un passatge secret.' },
+        { qui: 'Ineu', text: 'Un passatge entre el Monestir i el Santuari! Els monjos antics sí que en sabien, d\'amagar coses.' }
+    ] },
+    cofreTresor: E => {
+        if (E.flag('cofreTresor')) return { pagines: [{ qui: '', text: 'El cofre és obert i buit. Les espelmes encara cremen, com si algú les cuidés.' }] };
+        return {
+            pagines: [
+                { qui: '', text: 'Un cofre vell, de bisagres rovellades, vigilat per dues espelmes que ningú no recorda haver encès.' },
+                { qui: '', text: 'A dins, un flascó de vidre amb un líquid daurat i una nota: «Per al qui sap escoltar les pedres.»' },
+                { qui: '', text: 'Beus el flascó. Notes el cor més fort.\n+1 COR MÀXIM i vida plena.' }
+            ],
+            enAcabar: () => { E.posaFlag('cofreTresor'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
+        };
+    },
     cartellEst: E => ({ pagines: [{ qui: '', text: '→ Monestir · Cel·les de Sant Antoni' }] }),
 
     // ---------------- ESGLÉSIA ----------------
@@ -608,7 +632,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: 'Garf', text: 'Mmm? Ah, un monjo! Soc el Garf, inventor. Tinc idees que ni jo entenc.' },
+                { qui: 'Garf', text: 'Mmm? Ah, un monjo! Seu, seu al banc de davant, que per xerrar s\'hi està millor. Soc el Garf, inventor. Tinc idees que ni jo entenc.' },
                 { qui: 'Garf', text: 'Si em portes un cristall de gel (n\'hi ha un a la Font del Bisbe, al bosc de l\'oest del Til·ler), et construiré un telescopi per mirar el cel.' }
             ]
         };
@@ -616,7 +640,19 @@ const DIALEGS = {
     cartellEra: E => ({ pagines: [{ qui: '', text: '↑ Ermita de la Desaparició · → Jardí pergolat i Hospederia\n← Camí de la Rovellonera (molt lluny, cap a ponent)' }] }),
 
     // ---------------- JARDÍ ----------------
+    // L'Isidre dóna les tisores de podar la primera vegada que hi parles
     isidre: E => {
+        const d = DIALEGS.isidreBase(E);
+        if (E.te('tisores')) return d;
+        const prev = d.enAcabar;
+        return {
+            pagines: [...d.pagines,
+                { qui: 'Isidre', text: 'Espera, monjo, que no marxis així. Agafa aquestes tisores de podar: les he fet jo i tallen com el vent. Pel món hi ha arbustos tan espessos que amaguen coses... i tu tens cara de ficar el nas a tot arreu.' },
+                { qui: '', text: 'Has obtingut les TISORES DE PODAR: amb ESPAI davant d\'un arbust espès, el podes.' }],
+            enAcabar: () => { if (prev) prev(); E.dona('tisores'); }
+        };
+    },
+    isidreBase: E => {
         if (E.flag("soparObert") && !E.flag("floresIsidre")) {
             return {
                 pagines: [
@@ -643,7 +679,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: 'Isidre', text: 'Bon dia, monjo! Perdona que no m\'aixequi: el peu, ja saps.' },
+                { qui: 'Isidre', text: 'Bon dia, monjo! Perdona que no m\'aixequi: el peu, ja saps. Aquesta pèrgola de pedra és més vella que el monestir: les columnes, l\'heura... i la porta de l\'Hospederia, aquí al costat, que comunica amb ella.' },
                 { qui: 'Isidre', text: 'Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s\'obre amb una flor de lluna, i la llavor, ves a saber... potser la tingui la venedora de verdura, la Sansa.' }
             ]
         };
@@ -654,8 +690,16 @@ const DIALEGS = {
             { qui: '', text: '(L\'Hospederia s\'obrirà en una fase propera.)' }
         ]
     } : {
-        pagines: [{ qui: '', text: 'Una llosa de pedra rodona entre la pergola i les roses. Té una ranura al mig, com un clot per una llavor.' }]
+        pagines: [{ qui: '', text: 'Una llosa de pedra rodona entre les flors, a l\'ombra de la pèrgola. Té una ranura al mig, com un clot per una llavor.' }]
     },
+    prunera: E => ({
+        pagines: [
+            { qui: '', text: 'Al fons de la pèrgola, a ponent, una prunera vella i retorçuda, carregada de prunes d\'un lila que lluu com si fossin de vidre.' },
+            { qui: 'Isidre', text: '(des del fons del passadís) No te\'n facis un fart, monjo! Són prunes màgiques: una sola et deixa com nou.' },
+            { qui: '', text: 'Menges una pruna. Té gust de tardor, de mel i de música. Et sents completament renovat.' }
+        ],
+        enAcabar: () => { E.dades.vida = E.dades.corsMax * 2; }
+    }),
     hospederia: E => ({ pagines: [{ qui: '', text: 'L\'Hospederia, casa d\'espiritualitat. Les portes són tancades per dins i els finestrals són foscos.\n(La masmorra s\'obrirà en una fase propera.)' }] }),
 
     // ---------------- LA CIROSA ----------------
@@ -821,17 +865,17 @@ const DIALEGS = {
                     { qui: "", text: "En una corba del camí, una nena transparent seu a terra, amb dues trenes llargues i sense res que les lligui. Plora sense fer soroll; on cauen les llàgrimes, l'herba es posa blanca." },
                     { qui: "Nena de les Trenes", text: "No et facis enrere, si us plau... No vull espantar ningú. Només que, quan arriba algú, sempre fuig." },
                     { qui: "Nena de les Trenes", text: "Vaig venir a collir rovellons amb la mare. Em va lligar les dues trenes amb dos llaços rosa, i em vaig perdre pel bosc. Fa molts, molts anys. No he pogut marxar d'aquí." },
-                    { qui: "Nena de les Trenes", text: "Els llaços van caure mentre corria: un va quedar pel camí, a prop, i l'altre ja dins el bosc dels rovellons. Sense ells, no sento les mans de la mare. Si me'ls tornessis a lligar..." },
+                    { qui: "Nena de les Trenes", text: "Els llaços van caure mentre corria: un va quedar pel camí, amagat sota una roca, i l'altre ja dins el bosc dels rovellons, darrere un arbust. Sense ells, no sento les mans de la mare. Si me'ls tornessis a lligar..." },
                     { qui: "Ineu", text: "Els trobaré. Et prometo que no hauràs de plorar sola." }
                 ],
                 enAcabar: () => {
                     E.posaFlag("nenaVista");
-                    E.posaObjectiu("Troba els dos llaços de la Nena de les Trenes (un pel camí, a prop; l'altre dins la Rovellonera) i porta-li-los.");
+                    E.posaObjectiu("Troba els dos llaços de la Nena de les Trenes (un sota una roca del camí; l'altre darrere un arbust de la Rovellonera) i porta-li-los.");
                 }
             };
         }
         if (n < 2) {
-            return { pagines: [{ qui: "Nena de les Trenes", text: "Has trobat " + n + " dels 2 llaços? Un és pel camí, a prop... i l'altre, més endins, entre els pins. Jo m'espero." }] };
+            return { pagines: [{ qui: "Nena de les Trenes", text: "Has trobat " + n + " dels 2 llaços? Un és pel camí, sota una roca que cal empènyer... i l'altre, més endins, darrere un arbust, entre els pins. Jo m'espero." }] };
         }
         return {
             pagines: [
@@ -990,14 +1034,14 @@ const DIALEGS = {
 
     posterSecret: E => {
         if (!E.te("clauer")) {
-            return { pagines: [{ qui: "", text: "Un pòster del Barça, una mica torçat. Al darrere hi ha una cosa dura... però no hi ha manera d'obrir-ho sense clau." }] };
+            return { pagines: [{ qui: "", text: "Una roda de carruatge enorme, penjada a la paret com a decoració. Al darrere hi ha una cosa dura... però no hi ha manera d'obrir-ho sense clau." }] };
         }
         return {
             pagines: E.flag("portaSecretaPP") ? [
-                { qui: "", text: "Aparta el pòster: darrere hi ha la porta secreta, amb una manilla de ferro amagada sota la xinxeta del Barça." }
+                { qui: "", text: "Fas girar la roda gegant: darrere hi ha la porta secreta, amb una manilla de ferro amagada al cub de la roda." }
             ] : [
-                { qui: "", text: "El pòster del Barça penja una mica torçat, com sempre. Quan el toques, sents una petita buidor al darrere." },
-                { qui: "Ineu", text: "Una porta! Camuflada darrere el pòster. Això no és per jugar a ping-pong..." },
+                { qui: "", text: "La roda de carruatge gegant penja una mica torçada, com sempre. Quan la toques, sents una petita buidor al darrere." },
+                { qui: "Ineu", text: "Una porta! Camuflada darrere la roda. Això no és per jugar a ping-pong..." },
                 { qui: "", text: "La porta té un pany antic: el Clauer de Novici l'obre. Una escala baixa cap a una olor de vi i d'humitat." }
             ],
             enAcabar: () => E.posaFlag("portaSecretaPP")

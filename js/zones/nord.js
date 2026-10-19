@@ -4,7 +4,7 @@
  */
 
 // ---------------- RUÏNES DE L'ESGLÉSIA ANTIGA (nus) ----------------
-// Porta del Ping-pong a baix, les runes a la dreta (d'on surt el camí de la Desaparició),
+// Porta del Ping-pong a baix, les runes a dalt a la dreta (sobre un replà de pedra; el camí de la Desaparició surt cap a l'oest),
 // i camí cap al nord per anar a les cel·les i al Til·ler.
 class ZonaRuines extends ZonaBase {
     constructor() {
@@ -31,25 +31,26 @@ class ZonaRuines extends ZonaBase {
         this.terra('cami', 1100, 520, 500, 130);        // cap al cementiri (est, darrere el Santuari)
 
         // Les runes, a la dreta; el camí passa per davant
-        this.posar('runes', 1230, 490, { col: { w: 250, h: 60 } });
-        this.interactiu(1230, 530, 110, DIALEGS.ruines, { altura: 140 });
+        this.terra('pedra', 980, 90, 520, 330);          // replà de pedra de les runes
+        this.posar('runes', 1260, 330, { col: { w: 250, h: 60 } });
+        this.interactiu(1260, 370, 110, DIALEGS.ruines, { altura: 140 });
 
         // Porta del Ping-pong, a baix
         this.edifici('sala_pingpong', 330, 900, 340, 80, 'ZonaPingpong', 'ruines', { alt: 90 });
 
         // L'ombra del monjo: només es veu quan has llegit el primer fragment del pergamí
-        this.ombraMonjo = this.add.image(1180, 500, 'ombra_monjo').setOrigin(0.5, 1)
-            .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(520).setAlpha(0);
-        this.interactiu(1180, 540, 95, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1') });
-        this.tweens.add({ targets: this.ombraMonjo, y: 504, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
+        this.ombraMonjo = this.add.image(1130, 340, 'ombra_monjo').setOrigin(0.5, 1)
+            .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(340).setAlpha(0);
+        this.interactiu(1130, 380, 95, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1') });
+        this.tweens.add({ targets: this.ombraMonjo, y: 344, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
         // Ambient de nit quan la llegenda s'ha començat a descobrir
         this.nit = this.add.rectangle(0, 0, AMPLE, ALT, 0x0a0a30, 0.22).setOrigin(0).setScrollFactor(0).setDepth(89000).setVisible(false);
 
         this.cartell(640, 700, DIALEGS.cartellRuinesPingpong);
         this.cartell(300, 700, DIALEGS.cartellCami);
 
-        this.arbres([[100, 150], [260, 90], [420, 190], [560, 80], [1000, 120], [1160, 220], [1340, 130],
-                     [1500, 240], [90, 480], [180, 580], [1480, 420], [60, 1000], [1530, 1020],
+        this.arbres([[100, 150], [260, 90], [420, 190], [560, 80], [900, 130], [940, 300], [1560, 100],
+                     [1540, 330], [90, 480], [180, 580], [1480, 420], [60, 1000], [1530, 1020],
                      [1100, 1030], [520, 1040]]);
 
         // Animalets del cementiri esquerdat
@@ -65,8 +66,8 @@ class ZonaRuines extends ZonaBase {
     // El Cant de les Pedres, tocat davant l'ombra, li desperta la memòria
     enMelodia(nom) {
         if (nom !== 'pedres' || !Estat.flag('fragment1')) return false;
-        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1180, 520) > 300) return false;
-        if (Estat.flag('benedicioMonjo')) { this.flotant(1180, 330, "L'ombra assenteix", '#d8c8ff'); return true; }
+        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1130, 360) > 300) return false;
+        if (Estat.flag('benedicioMonjo')) { this.flotant(1130, 200, "L'ombra assenteix", '#d8c8ff'); return true; }
         if (!['fragment1', 'fragment2', 'fragment3'].every(f => Estat.flag(f))) return false;
         this.ui().obrirDialeg(DIALEGS.benedicioMonjo(Estat), () => Estat.desar());
         return true;
@@ -110,12 +111,21 @@ class ZonaPingpong extends ZonaBase {
         this.posar('taula_pp', 860, 360, { col: { w: 220, h: 40 } });
         this.interactiu(420, 380, 120, DIALEGS.taulaPP, { altura: 100 });
 
-        // Porta secreta camuflada darrere d'un pòster (cap a la Casa Gran)
-        this.add.rectangle(160, 56, 70, 90, 0xd8d0b0).setStrokeStyle(3, 0x3a2a1a).setDepth(5);
-        this.add.rectangle(160, 56, 70, 30, 0xa50044).setDepth(6);
-        this.add.rectangle(160, 74, 70, 30, 0x004d98).setDepth(6);
-        this.interactiu(160, 130, 85, DIALEGS.posterSecret, {
-            altura: 100,
+        // Porta secreta camuflada darrere d'una roda de carruatge gegant penjada a la paret (cap a la Casa Gran)
+        const roda = this.add.graphics().setDepth(5);
+        const rx = 700, ry = 158, rr = 62;
+        roda.fillStyle(0x000000, 0.25).fillCircle(rx + 6, ry + 8, rr + 4);
+        roda.lineStyle(12, 0x6a4424, 1).strokeCircle(rx, ry, rr);
+        roda.lineStyle(4, 0x2a1a0c, 1).strokeCircle(rx, ry, rr + 6).strokeCircle(rx, ry, rr - 6);
+        roda.lineStyle(7, 0x7a5230, 1);
+        for (let i = 0; i < 12; i++) {
+            const a = i * Math.PI / 6;
+            roda.lineBetween(rx + Math.cos(a) * 14, ry + Math.sin(a) * 14, rx + Math.cos(a) * (rr - 4), ry + Math.sin(a) * (rr - 4));
+        }
+        roda.fillStyle(0x4a2c16, 1).fillCircle(rx, ry, 17).lineStyle(4, 0x2a1a0c, 1).strokeCircle(rx, ry, 17);
+        roda.fillStyle(0x8a8a8a, 1).fillCircle(rx, ry, 6);
+        this.interactiu(700, 225, 100, DIALEGS.posterSecret, {
+            altura: 120,
             enTancar: () => { if (Estat.flag('portaSecretaPP') && Estat.te('clauer')) this.canviarZona('ZonaCasaGranInt', 'secreta'); }
         });
 

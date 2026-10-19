@@ -10,6 +10,7 @@
  *   }
  */
 const VELOCITAT_INEU = 230;
+const TOPE_Y = 100;   // els peus de l'Ineu no passen d'aquí amunt: sempre se li veu el cos (la càmera s'atura a y=0)
 
 class ZonaBase extends Phaser.Scene {
     constructor(key, config) {
@@ -27,12 +28,13 @@ class ZonaBase extends Phaser.Scene {
         Estat.dades.zona = this.scene.key;
         Estat.posaFlag('visitada_' + this.scene.key); // el mapa només mostra el que s'ha visitat
 
-        this.physics.world.setBounds(0, 0, c.amplada, c.alcada);
+        this.physics.world.setBounds(0, TOPE_Y - 30, c.amplada, c.alcada - TOPE_Y + 30);   // la caixa dels peus fa 30 d'alt
         this.obstacles = this.physics.add.staticGroup();
         this.interactius = [];
         this.sortides = [];
         this.enemics = [];
         this.esbarzers = [];
+        this.tallables = [];
         this.caient = false;
         this.forcat = null;
         this.invulnerableFins = 0;
@@ -152,9 +154,30 @@ class ZonaBase extends Phaser.Scene {
 
     // Rectangle de sortida: quan l'Ineu el toca, es canvia a la zona "desti" i entra per "entrada"
     sortida(x, y, w, h, desti, entrada) {
+        // Una sortida enganxada a la vora superior s'allarga fins on l'Ineu pot arribar (TOPE_Y)
+        if (y < TOPE_Y - 10) h = Math.max(h, TOPE_Y - 10 - y);
         const r = new Phaser.Geom.Rectangle(x, y, w, h);
         this.sortides.push({ r, desti, entrada });
+        this.marcarSortida(r);
         if (Joc.debug) this.add.rectangle(x, y, w, h).setOrigin(0).setStrokeStyle(2, 0x00ffff).setDepth(99998);
+    }
+
+    // Llum pulsant i fletxa que indiquen on hi ha una sortida (vora de la pantalla o porta)
+    marcarSortida(r) {
+        const c = this.config, vora = 20;
+        let dir = 'amunt', cx = r.centerX, cy = r.centerY, ample = r.width, alt = r.height;
+        if (r.x <= vora) { dir = 'esquerra'; cx = 40; ample = 70; alt = Math.max(r.height, 80); }
+        else if (r.right >= c.amplada - vora) { dir = 'dreta'; cx = c.amplada - 40; ample = 70; alt = Math.max(r.height, 80); }
+        else if (r.bottom >= c.alcada - vora) { dir = 'avall'; cy = c.alcada - 40; alt = 70; ample = Math.max(r.width, 80); }
+        else if (r.y < TOPE_Y) { dir = 'amunt'; cy = TOPE_Y - 50; alt = 70; ample = Math.max(r.width, 80); }
+        else { cy = r.y + r.height * 0.35; ample = Math.max(r.width, 60); alt = 60; }   // porta d'un edifici
+        const llum = this.add.ellipse(cx, cy, ample, alt, 0xffe08a, 0.28).setDepth(-940);
+        this.tweens.add({ targets: llum, alpha: 0.08, scaleX: 1.12, scaleY: 1.12, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
+        const fletxa = { amunt: '▲', avall: '▼', esquerra: '◀', dreta: '▶' }[dir];
+        const dx = { esquerra: 26, dreta: -26 }[dir] || 0, dy = { amunt: 30, avall: -30 }[dir] || -30;
+        const t = this.add.text(cx + dx, cy + dy, fletxa, estilText(26, '#ffe08a', { stroke: '#000', strokeThickness: 4 })).setOrigin(0.5).setDepth(86000).setAlpha(0.85);
+        const m = { amunt: [0, -8], avall: [0, 8], esquerra: [-8, 0], dreta: [8, 0] }[dir];
+        this.tweens.add({ targets: t, x: t.x + m[0], y: t.y + m[1], yoyo: true, repeat: -1, duration: 650, ease: 'Sine.easeInOut' });
     }
 
     // Emissor de boira fosca
@@ -182,10 +205,15 @@ class ZonaBase extends Phaser.Scene {
             pos = e[this.dadesEntrada.entrada] || e[Object.keys(e)[0]];
         }
 
+        if (pos.y < TOPE_Y + 40) pos = Object.assign({}, pos, { y: TOPE_Y + 40 });
         this.ombraIneu = this.add.image(pos.x, pos.y, 'ombra').setScale(0.4).setDepth(-500);
         const S = SPRITE_INEU;
         this.ineu = this.physics.add.sprite(pos.x, pos.y, 'ineu_down', S.quiet).setOrigin(0.5, S.peus / S.alt);
         this.ineu.setScale(S.alcada / S.alt);
+        // Silueta fantasma: sempre per sobre de tot; on no hi ha res davant, es confon amb l'Ineu,
+        // però si un edifici o un arbre el tapa, se'n veu un contorn translúcid.
+        this.fantasma = this.add.sprite(pos.x, pos.y, 'ineu_down', S.quiet).setOrigin(0.5, S.peus / S.alt)
+            .setScale(S.alcada / S.alt).setDepth(87000);
         // Caixa de col·lisió petita als peus (en píxels de textura)
         this.ineu.body.setSize(72, 30);
         this.ineu.body.setOffset((S.ample - 72) / 2, S.peus - 30);
@@ -220,6 +248,58 @@ class ZonaBase extends Phaser.Scene {
         const col = this.colisio(x, y - 13, 80, 26);
         const o = { img, col, x, y, id, viu: true };
         this.esbarzers.push(o);
+        return o;
+    }
+
+    // Arbust verd que amaga alguna cosa: es poda amb les tisores de l'Isidre (ESPAI). id: perquè quedi tallat per sempre
+    arbust(x, y, id, textPista) {
+        const o = { x, y, id, viu: !Estat.flag('arb_' + id) };
+        if (!o.viu) return o;
+        o.img = this.posar('esbarzer', x, y).setTint(0x5a9a44);
+        o.col = this.colisio(x, y - 13, 80, 26);
+        this.tallables.push(o);
+        this.interactiu(x, y + 10, 90, () => Estat.te('tisores')
+            ? { pagines: [{ qui: '', text: 'Retalles les branques amb les tisores de l' + String.fromCharCode(39) + 'Isidre: clic, clic, clic.' }] }
+            : { pagines: [{ qui: '', text: textPista }] },
+            { altura: 70, actiu: () => o.viu, enTancar: () => { if (Estat.te('tisores')) this.tallarArbust(o); } });
+        return o;
+    }
+
+    tallarArbust(o) {
+        if (!o.viu) return;
+        o.viu = false;
+        Estat.posaFlag('arb_' + o.id);
+        this.obstacles.remove(o.col, true, true);
+        const p = this.add.particles(o.x, o.y - 30, 'espurna', {
+            speed: { min: 40, max: 120 }, lifespan: 700, scale: { start: 0.9, end: 0 },
+            tint: [0x5a9a44, 0x8acb5a], quantity: 10, emitting: false
+        }).setDepth(99990);
+        p.explode(14);
+        this.time.delayedCall(900, () => p.destroy());
+        this.tweens.add({ targets: o.img, alpha: 0, scaleY: o.img.scaleY * 0.5, duration: 400, onComplete: () => o.img.destroy() });
+    }
+
+    // Roca que es pot empènyer (ESPAI) cap a (dx, dy) per descobrir el que hi ha a sota
+    pedraMobil(x, y, id, dx, dy, textPista) {
+        const mogut = Estat.flag('pedra_' + id);
+        const o = { id, mogut, x: x + (mogut ? dx : 0), y: y + (mogut ? dy : 0) };
+        o.img = this.posar('roca', o.x, o.y);
+        o.col = this.colisio(o.x, o.y - 13, 70, 26);
+        if (!mogut) {
+            const dialeg = { pagines: [{ qui: '', text: textPista }, { qui: '', text: 'Empenys la roca amb tot el pes del cos. Es mou, rascant la terra.' }] };
+            this.interactiu(x, y + 24, 90, dialeg, {
+                altura: 70, actiu: () => !o.mogut,
+                enTancar: () => {
+                    o.mogut = true;
+                    Estat.posaFlag('pedra_' + id);
+                    this.obstacles.remove(o.col, true, true);
+                    this.tweens.add({ targets: o.img, x: x + dx, y: y + dy, duration: 600, onComplete: () => {
+                        o.img.setDepth(y + dy);
+                        o.col = this.colisio(x + dx, y + dy - 13, 70, 26);
+                    } });
+                }
+            });
+        }
         return o;
     }
 
@@ -311,6 +391,18 @@ class ZonaBase extends Phaser.Scene {
 
     // ---------------- Bucle ----------------
     update(time, delta) {
+        this.cicle(time, delta);
+        this.sincroFantasma();
+    }
+
+    sincroFantasma() {
+        const f = this.fantasma, i = this.ineu;
+        if (!f || !i) return;
+        if (f.texture.key !== i.texture.key || f.frame.name !== i.frame.name) f.setTexture(i.texture.key, i.frame.name);
+        f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(i.alpha * 0.38);
+    }
+
+    cicle(time, delta) {
         if (this.canviant) return;
         const ui = this.ui();
         const accio = Phaser.Input.Keyboard.JustDown(this.tecles.SPACE) ||

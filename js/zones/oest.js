@@ -72,7 +72,9 @@ class ZonaRovellonera extends ZonaBase {
         if (pas === 0) {
             this.llac = this.posar('llac', 1100, 300, { fonsY: 300 });
             this.tweens.add({ targets: this.llac, y: 294, yoyo: true, repeat: -1, duration: 700 });
-            this.interactiu(1100, 300, 70, DIALEGS.llac(2), { altura: 50, actiu: () => Estat.flag('nenaVista') && !Estat.flag('llac2') });
+            this.interactiu(1100, 300, 70, DIALEGS.llac(2), { altura: 50, actiu: () => this.llac2Lliure() });
+            // Amagat darrere un arbust espès: cal tallar-lo amb el bastó
+            this.arbust(1100, 335, 'llac2', 'Un arbust espès. Entre les branques hi brilla alguna cosa rosada... Necessites alguna eina per podar-lo... potser l\'Isidre, el del jardí, en sap de fer.');
         }
 
         // Cercle de bolets (segona clariana): portal màgic cap a la cabana de la Jaumeta, un cop descobert
@@ -129,8 +131,10 @@ class ZonaRovellonera extends ZonaBase {
         // Els rovellons es veuen millor amb la llanterna (revela el que la boira amaga)
         const clar = Estat.te('llanterna');
         (this.rovelloGrup || []).forEach(r => r.setAlpha(clar ? 1 : 0.35));
-        if (this.llac) this.llac.setVisible(Estat.flag('nenaVista') && !Estat.flag('llac2'));
+        if (this.llac) this.llac.setVisible(this.llac2Lliure());
     }
+
+    llac2Lliure() { return Estat.flag('nenaVista') && !Estat.flag('llac2') && Estat.flag('arb_llac2'); }
 }
 
 // ---------------- CAMÍ DE LA ROVELLONERA ----------------
@@ -168,38 +172,42 @@ class ZonaCamiRov extends ZonaBase {
             for (let x = 60; x < 2800; x += 170) {
                 const px = x + (rnd() - 0.5) * 80, py = y + (rnd() - 0.5) * 70;
                 if (tram.some(([tx, ty, tw, th]) => px > tx - 90 && px < tx + tw + 90 && py > ty - 70 && py < ty + th + 90)) continue;
-                if (Phaser.Math.Distance.Between(px, py, 1930, 470) < 160 || Phaser.Math.Distance.Between(px, py, 1300, 830) < 120) continue;
+                if (Phaser.Math.Distance.Between(px, py, 880, 880) < 170 || Phaser.Math.Distance.Between(px, py, 1300, 830) < 120) continue;
                 this.posar(rnd() < 0.5 ? 'xiprer' : 'arbre', px, py, { col: { w: 30, h: 14 } });
             }
         }
         [[2300, 460], [1500, 770], [1100, 560], [620, 1100], [500, 1330], [900, 1000]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 70, h: 26 } }));
         this.cartell(2640, 420, () => ({ pagines: [{ qui: '', text: '← Rovellonera\n«On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.»' }] }));
 
-        // La corba on espera la Nena de les Trenes
+        // La segona corba, ben endins del camí, on espera la Nena de les Trenes
         if (!Estat.flag('nenaAlliberada')) {
-            this.nena = this.posar('nena_trenes', 1790, 450, { fonsY: 450 }).setAlpha(0.72);
-            this.resplendorNena = this.add.circle(1790, 390, 90, 0xcfd8ff, 0.12).setDepth(449);
+            this.nena = this.posar('nena_trenes', 880, 880, { fonsY: 880 }).setAlpha(0.72);
+            this.resplendorNena = this.add.circle(880, 820, 90, 0xcfd8ff, 0.12).setDepth(879);
             this.tweens.add({ targets: [this.nena, this.resplendorNena], y: '-=10', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
-            this.interactiu(1790, 450, 100, DIALEGS.nenaTrenes, { altura: 130 });
+            this.interactiu(880, 880, 100, DIALEGS.nenaTrenes, { altura: 130 });
         }
-        // Primer llaç (a prop del camí, entre l'herba)
+        // Primer llaç: amagat sota una roca que cal empènyer
         this.llac = this.posar('llac', 1300, 830, { fonsY: 830 });
         this.tweens.add({ targets: this.llac, y: 824, yoyo: true, repeat: -1, duration: 700 });
-        this.interactiu(1300, 830, 70, DIALEGS.llac(1), { altura: 50, actiu: () => Estat.flag('nenaVista') && !Estat.flag('llac1') });
+        this.interactiu(1300, 830, 70, DIALEGS.llac(1), { altura: 50, actiu: () => this.llacLliure() });
+        this.roca1 = this.pedraMobil(1300, 840, 'llac1', 110, 0,
+            'Una roca grossa a la vora del camí, amb l\'herba aixafada al voltant. Sota seu hi brilla una cosa rosada.');
 
         // Animalets i bolets
-        [[2400, 320], [1500, 670], [1000, 660], [880, 1000], [500, 1230]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[2400, 320], [1500, 670], [1000, 660], [400, 1200], [500, 1230]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         [[2100, 620], [1200, 460], [700, 1060]].forEach(([x, y]) => this.enemic('bolet', x, y));
 
-        this.boira(1850, 500, 500, 160, 1);
+        this.boira(900, 900, 400, 160, 1);
         this.sortida(2786, 240, 14, 140, 'ZonaEra', 'rovellonera');
         this.sortida(0, 1160, 14, 140, 'ZonaRovellonera', 'cami');
         this.add.rectangle(0, 0, AMPLE, ALT, 0x1a0a30, 0.1).setOrigin(0).setScrollFactor(0).setDepth(90000);
     }
 
     actualitzar() {
-        if (this.llac) this.llac.setVisible(Estat.flag('nenaVista') && !Estat.flag('llac1'));
+        if (this.llac) this.llac.setVisible(this.llacLliure());
     }
+
+    llacLliure() { return Estat.flag('nenaVista') && !Estat.flag('llac1') && !!this.roca1 && this.roca1.mogut; }
 }
 
 // ---------------- ERMITA DE SANT GABRIEL (exterior) ----------------

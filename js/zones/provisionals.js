@@ -211,3 +211,40 @@ class ZonaCasaGran extends ZonaBase {
         this.sortida(0, 620, 14, 160, 'ZonaJardi', 'taverna');
     }
 }
+
+
+// ---------------- SALA DEL TRESOR (passatge secret de la cantonada Monestir-Santuari) ----------------
+class ZonaTresor extends ZonaBase {
+    constructor() {
+        super('ZonaTresor', {
+            nom: 'Passatge secret',
+            amplada: 1000,
+            alcada: 700,
+            colorFons: '#140e0a',
+            pacifica: true,
+            entrades: { porta: { x: 500, y: 630, dir: 'amunt' } }
+        });
+    }
+
+    construir() {
+        this.terra('pedra', 100, 40, 800, 660, -1100);
+        const murs = this.add.graphics().setDepth(-1000);
+        murs.fillStyle(0x2a1f18, 1).fillRect(60, 0, 40, 700).fillRect(900, 0, 40, 700);
+        murs.fillStyle(0x3a2c22, 1).fillRect(100, 0, 800, 70);
+        this.colisio(30, 350, 60, 700);
+        this.colisio(970, 350, 60, 700);
+        this.colisio(500, 55, 800, 110);
+        this.colisio(300, 690, 400, 20);
+        this.colisio(700, 690, 400, 20);
+
+        // Tresor del monjo que va obrir aquest racó: un cofre vell entre espelmes
+        this.posar('cofre', 500, 250, { col: { w: 50, h: 20 } });
+        this.interactiu(500, 255, 85, DIALEGS.cofreTresor, { altura: 80 });
+        [[400, 260], [600, 260]].forEach(([x, y], i) => {
+            const e = this.posar('espelma', x, y, { fonsY: y });
+            this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 350 + i * 90 });
+        });
+        this.add.rectangle(500, 350, 800, 700, 0xffd38a, 0.05).setDepth(80000);
+        this.sortida(460, 680, 80, 14, 'ZonaPlaca', 'tresor');
+    }
+}

@@ -97,6 +97,7 @@ La sala ha quedat com un museu de l'horror: eines de tortura rovellades, cadenes
 | Telescopi del Garf | Garf (amb el Cristall de Gel) | Veure estels als Dipòsits |
 | Llavor de Lluna | Sansa (compra màgica) | Isidre la planta al Jardí: obre l'entrada secreta de l'Hospederia |
 | Trenes de la Nena | Missió de la Nena de les Trenes | Allibera l'esperit; Cinta de la Nena = escut d'un cop |
+| **Tisores de podar** | L'Isidre, a la primera conversa | **ESPAI** davant d'un arbust espès el poda (amaga, per exemple, el segon llaç de la Nena) |
 | **Foc de la Jaumeta** | La Jaumeta (a la cabana, amb l'aigua de la Font del Bisbe) | **F**: flama cap on mires: crema **esbarzers negres** i fa 1 de dany als enemics (reutilitzable cada ~1,3 s) |
 | Llanterna de la Desaparició | Ermita de Sant Gabriel (o Ermita de la Desaparició) | Il·lumina zones fosques; fa visibles les ombres |
 | Fulla del Til·ler | El Gran Til·ler, **al sopar del Til·ler** (A6 2.1b) | "Permís" per al Dolmen |
@@ -332,3 +333,13 @@ Vista lateral simplificada: l'Ineu a baix i el rival a dalt, la taula al mig. No
 
 ## A10. Flags de progrés (per al desament)
 `introVista, portalJaumeta, jaumetaVista, focJaumeta, cantMiracle, cofreBosc, esb_bosc0..5, portaSecretaPP, nenaVista, llac1, llac2, nenaAlliberada, calze, estelsCompt, estelsPart1, estelLlorenc, saber, benediccio, runna, rovPas (comptador), soparObert, escudella, floresIsidre, pastorsConvencuts, soparFet, camiCirosaObert, pastorVencut, esquelles, esquellesVistes, cantAurora, cantPedres, ombraDemanaCant, parlatPianista, flauta (objecte), bastoObtingut, tillerBranca, tutorialCombat, combatActiu, practica (comptador), fragment1, fragment2, fragment3, benedicioMonjo, clauerNovici, parlatSantAntoni, parlatSantBenet, parlatNostraSenyora, portaGirgolesVista, martinaDesapareguda, llegendaExplicada, parlatTiler, palanca, esquelles, cantAurora, bassadoriaNeta, fullaTiler, cantPedres, saber, benediccio, llanterna, runna, capGirat, clauCellerVell, rescatBiel, rescatPol, rescatMartina, cantMiracle, bossVençut, cromoOr, pingpongVictories, eloiVençut, josepVençut, fontNeta, herba1, herba2, herba3, cristallGel, telescopi, llavorLluna, trenesNena, nenaAlliberada, estelLlorenc, monja1, monja2, monja3, motHospederia, col1…col12, visitada_<Zona>`.
+
+
+## Revisió 3: canvis de mapa i pantalles
+- **Plaça:** el camí cap a les Runes, el Ping-pong i les Cel·les surt a l'**esquerra del Santuari** (nord-oest). El camí del nord-est és un cul-de-sac (cantonada Monestir-Santuari) amb una pedra que s'obre amb el Cant de les Pedres: **passatge secret i sala del tresor** (+1 cor).
+- **Runes:** les runes són a dalt a la dreta; el camí de la Desaparició surt a l'oest.
+- **Ping-pong:** la porta secreta és darrere una **roda de carruatge gegant**.
+- **Jardí pergolat:** pèrgola de pedra amb sostre d'heura, enganxada a l'Hospederia; l'Isidre hi és a dins, amb la llosa del passadís secret i, a l'oest, la **Prunera Màgica** (cura del tot).
+- **L'Era:** el Garf és jove, grassonet i ros; dos bancs un davant de l'altre, on l'Ineu pot seure a parlar-hi.
+- **Camí de la Rovellonera:** la Nena de les Trenes és a la segona corba; el primer llaç és sota una roca que cal empènyer, el segon darrere un arbust que es poda amb les tisores.
+- **Tots els espais:** les sortides tenen llum i fletxa; l'Ineu no pot pujar tant que quedi amagat i es veu una silueta quan un edifici el tapa.

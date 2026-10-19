@@ -138,14 +138,17 @@ class ZonaEra extends ZonaBase {
         this.terra('cami', 0, 700, 1040, 130);           // camí cap a ponent, per davant de l'era
         this.terra('pedra', 340, 520, 360, 170);          // l'era: replà empedrat
 
-        // Dos roures enormes amb dos bancs al mig, mirant l'horitzó (nord)
+        // Dos roures enormes amb dos bancs al mig, un davant de l'altre: el Garf seu al del nord i l'Ineu pot seure al del sud
         this.posar('roure', 300, 520, { col: { w: 60, h: 30 } });
         this.posar('roure', 760, 520, { col: { w: 60, h: 30 } });
-        this.posar('banc', 470, 580, { col: { w: 140, h: 16 } });
-        this.posar('banc', 610, 580, { col: { w: 140, h: 16 } });
+        this.posar('banc', 530, 556, { col: { w: 140, h: 16 } });
+        this.posar('banc', 530, 656, { col: { w: 140, h: 16 } });
 
-        // El Garf, savi inventor
-        this.npc('garf', 540, 660, DIALEGS.garf);
+        // El Garf, savi inventor: jove, grassonet i ros, assegut al banc de dalt
+        this.garf = this.npc('garf', 530, 556, DIALEGS.garf);
+        this.interactiu(530, 700, 80, () => { this.seure(); return DIALEGS.garf(Estat); }, {
+            altura: 150, enTancar: () => this.alcar()
+        });
 
         // L'Home del Carruatge Verd, més al sud
         this.posar('carruatge', 1180, 820, { col: { w: 190, h: 50 } });
@@ -159,53 +162,108 @@ class ZonaEra extends ZonaBase {
         this.sortida(1586, 500, 14, 130, 'ZonaJardi', 'era');
         this.sortida(0, 700, 14, 130, 'ZonaCamiRov', 'era');
     }
+
+    // L'Ineu s'asseu al banc del sud, de cara al Garf (sense col·lisions mentre dura la conversa)
+    seure() {
+        this.ineu.body.checkCollision.none = true;
+        this.ineu.body.reset(530, 652);
+        this.ombraIneu.setPosition(530, 652);
+        this.ineu.setDepth(657);
+        this.posarDireccio('amunt', false);
+        this.flotant(530, 520, "L'Ineu s'asseu al banc", '#f2e6c8');
+    }
+
+    alcar() {
+        this.ineu.body.checkCollision.none = false;
+        this.ineu.body.reset(530, 704);
+        this.posarDireccio('amunt', false);
+    }
 }
 
 // ---------------- JARDÍ PERGOLAT ----------------
+// Una pèrgola de pedra, amb columnes i sostre d'heura, enganxada a l'Hospederia (casa d'espiritualitat):
+// comuniquen. Dins hi ha un jardí de flors, l'Isidre, la llosa del passadís secret de la masmorra i, al fons
+// (a l'oest de tot), la Prunera Màgica. El camí de l'Era i de la Taverna passa per davant (sud).
 class ZonaJardi extends ZonaBase {
     constructor() {
         super('ZonaJardi', {
             nom: 'Jardí pergolat',
             amplada: 1600,
             alcada: 1000,
-            entrades: { era: { x: 60, y: 565, dir: 'dreta' }, taverna: { x: 1540, y: 565, dir: 'esquerra' } }
+            entrades: { era: { x: 60, y: 840, dir: 'dreta' }, taverna: { x: 1540, y: 840, dir: 'esquerra' } }
         });
     }
 
     construir() {
         this.terra('herba', 0, 0, 1600, 1000, -1100);
-        this.terra('cami', 0, 500, 1600, 130);
-        this.terra('llamborda', 800, 640, 220, 200);
+        this.terra('cami', 0, 780, 1600, 130);            // camí de l'Era a la Taverna, davant la pèrgola
+        this.terra('cami', 740, 690, 150, 100);           // entrada a la pèrgola (buit de la fila de columnes)
+        this.terra('cami', 1180, 440, 140, 340);          // porta de l'Hospederia
+        this.terra('pedra', 300, 470, 700, 100);          // passadís de pedra dins la pèrgola
 
-        // Pergoles sobre el camí (decoratives: l'Ineu hi passa per sota)
-        [380, 640].forEach(x => this.posar('pergola', x, 520, { fonsY: -900 }));
-        // Parterres de flors a banda i banda
+        // --- Pèrgola de pedra: dues files de columnes ---
+        const X0 = 320, X1 = 980, PAS = 110;
+        for (let x = X0; x <= X1; x += PAS) {
+            this.posar('columna', x, 330, { col: { w: 30, h: 14 } });
+            if (x < 740 || x > 890) this.posar('columna', x, 690, { col: { w: 30, h: 14 } });
+        }
+        // Parets baixes entre columnes (el jardí només s'entra pel buit del davant o per l'Hospederia)
+        this.colisio(650, 318, 720, 30);
+        this.colisio(520, 690, 440, 18);
+        this.colisio(940, 690, 120, 18);
+        this.colisio(1005, 520, 20, 400);
+        this.colisio(290, 520, 20, 400);
+
+        // Sostre d'heura (per sobre de tot, translúcid: es veu què hi ha a sota)
+        const sostre = this.add.graphics().setDepth(85000);
+        sostre.fillStyle(0x2c5a2a, 0.5).fillRect(300, 190, 710, 380);
+        sostre.lineStyle(10, 0x4a3a28, 0.7);
+        for (let x = 320; x <= 980; x += PAS) sostre.lineBetween(x, 190, x, 570);
+        sostre.lineBetween(300, 380, 1010, 380);
         let llavor = 5;
         const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
-        for (let i = 0; i < 34; i++) {
-            const y = i % 2 ? 150 + rnd() * 270 : 680 + rnd() * 260;
-            this.posar('flors', 120 + rnd() * 820, y, { fonsY: -800 });
+        for (let i = 0; i < 150; i++) {
+            sostre.fillStyle(i % 3 ? 0x3f7a3a : 0x6aa04a, 0.55).fillCircle(300 + rnd() * 710, 190 + rnd() * 380, 10 + rnd() * 14);
         }
+        for (let x = 310; x < 1010; x += 28) sostre.fillStyle(0x3f7a3a, 0.7).fillCircle(x, 572 + rnd() * 10, 11);
 
-        // La llosa secreta: s'obre quan hi creix la flor de lluna
-        this.posar('llosa', 910, 760, { fonsY: -700 });
-        this.florLluna = this.posar('flors', 910, 760, { escala: 0.8 });
-        this.interactiu(910, 765, 80, DIALEGS.llosaJardi, { altura: 60 });
+        // --- Jardí de flors dins la pèrgola i voltants ---
+        for (let i = 0; i < 48; i++) {
+            const x = 350 + rnd() * 610, y = 360 + rnd() * 310;
+            if (y > 460 && y < 580) continue;                 // passadís
+            if (Math.hypot(x - 520, y - 640) < 70) continue;  // llosa
+            this.posar('flors', x, y, { fonsY: -800 });
+        }
+        for (let i = 0; i < 14; i++) this.posar('flors', 60 + rnd() * 1500, 700 + rnd() * 60 * (i % 2 ? 1 : -1) + 70, { fonsY: -800 });
 
-        // L'Isidre, coix i entranyable
-        this.npc('isidre', 740, 720, DIALEGS.isidre);
+        // La llosa secreta (passadís cap a la masmorra de l'Hospederia): s'obre quan hi creix la flor de lluna
+        this.posar('llosa', 520, 640, { fonsY: -700 });
+        this.florLluna = this.posar('flors', 520, 640, { escala: 0.8 });
+        this.interactiu(520, 645, 80, DIALEGS.llosaJardi, { altura: 60 });
 
-        // L'Hospederia, adossada al jardí
+        // L'Isidre, coix i entranyable, dins la pèrgola
+        this.npc('isidre', 780, 530, DIALEGS.isidre);
+
+        // La Prunera Màgica, al fons de la pèrgola (oest)
+        const prunera = this.posar('arbre', 345, 540, { col: { w: 40, h: 20 } }).setTint(0xcaa0f0);
+        this.add.ellipse(345, 470, 150, 110, 0xb070ff, 0.22).setDepth(8000);
+        const prunes = this.add.particles(345, 470, 'espurna', {
+            x: { min: -50, max: 50 }, y: { min: -40, max: 30 }, speed: { min: 4, max: 14 }, lifespan: 1800,
+            scale: { start: 0.55, end: 0 }, tint: [0xd090ff, 0xffe08a], frequency: 220, alpha: { start: 0.9, end: 0 }
+        }).setDepth(8001);
+        [[-40, -90], [-10, -110], [30, -95], [50, -70], [-55, -60], [10, -70]].forEach(([dx, dy]) => this.add.circle(345 + dx, 540 + dy, 7, 0x7a2aa8).setStrokeStyle(2, 0x2a0a40).setDepth(541));
+        this.interactiu(345, 545, 95, DIALEGS.prunera, { altura: 250 });
+
+        // L'Hospederia, adossada a la pèrgola (a llevant)
         this.posar('hospederia', 1250, 440, { col: { w: 520, h: 110 } });
         this.interactiu(1250, 460, 90, DIALEGS.hospederia, { altura: 120 });
 
-        this.arbres([[1300, 700], [1380, 860], [1150, 900], [1500, 900],
-                     [130, 120], [320, 90], [600, 120], [850, 100], [1100, 100], [1350, 100], [1520, 160],
-                     [130, 920], [400, 940], [650, 960]]);
+        this.arbres([[1450, 640], [1500, 980], [1250, 960], [700, 960], [300, 960], [130, 950], [130, 650], [180, 430],
+                     [130, 120], [320, 90], [600, 110], [850, 100], [1100, 100], [1350, 100], [1520, 160], [1530, 640]]);
 
-        this.cartell(1420, 480, () => ({ pagines: [{ qui: '', text: '→ La Taverna i la Casa Gran\n← L\'Era' }] }));
-        this.sortida(0, 500, 14, 130, 'ZonaEra', 'jardi');
-        this.sortida(1586, 500, 14, 130, 'ZonaCasaGran', 'oest');
+        this.cartell(1100, 840, () => ({ pagines: [{ qui: '', text: '→ La Taverna i la Casa Gran\n← L\'Era\n↑ La pèrgola de l\'Isidre i l\'Hospederia' }] }));
+        this.sortida(0, 780, 14, 130, 'ZonaEra', 'jardi');
+        this.sortida(1586, 780, 14, 130, 'ZonaCasaGran', 'oest');
     }
 
     actualitzar(ara) {
