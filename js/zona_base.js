@@ -25,11 +25,18 @@ class ZonaBase extends Phaser.Scene {
     create() {
         const c = this.config;
         Estat.dades.zona = this.scene.key;
+        Estat.posaFlag('visitada_' + this.scene.key); // el mapa només mostra el que s'ha visitat
 
         this.physics.world.setBounds(0, 0, c.amplada, c.alcada);
         this.obstacles = this.physics.add.staticGroup();
         this.interactius = [];
         this.sortides = [];
+        this.enemics = [];
+        this.esbarzers = [];
+        this.caient = false;
+        this.forcat = null;
+        this.invulnerableFins = 0;
+        this.cintaGastada = false;
 
         this.construir();
         this.crearIneu();
@@ -41,7 +48,7 @@ class ZonaBase extends Phaser.Scene {
         cam.fadeIn(350, 0, 0, 0);
 
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.tecles = this.input.keyboard.addKeys('W,A,S,D,E,SPACE,ENTER');
+        this.tecles = this.input.keyboard.addKeys('W,A,S,D,E,SPACE,ENTER,J,K,M,F,SHIFT');
 
         // Indicador "!" sobre el punt interactiu més proper
         this.indicador = this.add.text(0, 0, '!', estilText(28, '#ffd34d', { stroke: '#000', strokeThickness: 5, fontStyle: 'bold' }))
@@ -57,6 +64,13 @@ class ZonaBase extends Phaser.Scene {
         Estat.desar();
 
         if (this.enEntrar) this.enEntrar();
+        if (Estat.caigut) {
+            Estat.caigut = false;
+            this.time.delayedCall(600, () => ui.obrirDialeg({ pagines: [
+                { qui: '', text: 'Tot es torna fosc... i després, càlid.' },
+                { qui: 'Pare Jordi', text: 'Ineu! Que et trobo a terra! Respira, fill. Has de tenir més cura. Ja estàs bé?' }
+            ] }));
+        }
     }
 
     ui() { return this.scene.get('UI'); }
@@ -105,6 +119,32 @@ class ZonaBase extends Phaser.Scene {
         return img;
     }
 
+    // Llista d'arbres [[x, y], ...]
+    arbres(llista, key = 'arbre') {
+        llista.forEach(([x, y]) => this.posar(key, x, y, { col: { w: 34, h: 16 } }));
+    }
+
+    // Franja d'arbres que tanca un costat de la pantalla (per no deixar sortir on no hi ha res)
+    muralla(x1, y1, x2, y2, pas = 90, key = 'arbre') {
+        const n = Math.max(1, Math.round(Math.hypot(x2 - x1, y2 - y1) / pas));
+        for (let i = 0; i <= n; i++) {
+            this.posar(key, x1 + (x2 - x1) * i / n, y1 + (y2 - y1) * i / n, { col: { w: 60, h: 30 } });
+        }
+    }
+
+    // Edifici amb porta: dues col·lisions als costats i un forat al mig per entrar (sortida).
+    // x, y = peus del centre; ample = amplada de col·lisió total; porta = amplada del forat
+    edifici(key, x, y, ample, porta, desti, entrada, opts = {}) {
+        const img = this.posar(key, x, y, { fonsY: y - 20 });
+        const alt = opts.alt || 70;
+        const costat = (ample - porta) / 2;
+        this.colisio(x - porta / 2 - costat / 2, y - alt / 2, costat, alt);
+        this.colisio(x + porta / 2 + costat / 2, y - alt / 2, costat, alt);
+        this.colisio(x, y - alt - 10, porta, 20);   // dintell
+        if (desti) this.sortida(x - porta / 2, y - alt + 10, porta, alt - 4, desti, entrada);
+        return img;
+    }
+
     cartell(x, y, dialeg) {
         this.posar('cartell', x, y, { col: { w: 20, h: 10 } });
         return this.interactiu(x, y, 70, dialeg, { altura: 70 });
@@ -144,28 +184,122 @@ class ZonaBase extends Phaser.Scene {
 
         this.ombraIneu = this.add.image(pos.x, pos.y, 'ombra').setScale(0.4).setDepth(-500);
         const S = SPRITE_INEU;
-        this.ineu = this.physics.add.sprite(pos.x, pos.y, 'ineu_avall', S.quiet.avall).setOrigin(0.5, S.peus / S.alt);
+        this.ineu = this.physics.add.sprite(pos.x, pos.y, 'ineu_down', S.quiet).setOrigin(0.5, S.peus / S.alt);
         this.ineu.setScale(S.alcada / S.alt);
         // Caixa de col·lisió petita als peus (en píxels de textura)
-        this.ineu.body.setSize(76, 24);
-        this.ineu.body.setOffset((S.ample - 76) / 2, S.peus - 24);
+        this.ineu.body.setSize(72, 30);
+        this.ineu.body.setOffset((S.ample - 72) / 2, S.peus - 30);
         this.ineu.setCollideWorldBounds(true);
         this.physics.add.collider(this.ineu, this.obstacles);
         this.direccio = pos.dir || 'avall';
+        this.vista8Manual = false; this.vista8 = undefined;
         this.posarDireccio(this.direccio);
     }
 
-    // dir: 'avall' | 'amunt' | 'esquerra' | 'dreta'
-    posarDireccio(dir, caminant = false) {
+    // dir: 'avall' | 'amunt' | 'esquerra' | 'dreta' (per atacar i interactuar)
+    // vista8: una de DIRS_INEU (down, southeast...) per dibuixar el sprite en 8 direccions
+    posarDireccio(dir, caminant = false, vista8) {
         this.direccio = dir;
-        const vista = dir === 'esquerra' || dir === 'dreta' ? 'costat' : dir;
-        this.ineu.setFlipX(dir === 'esquerra');
+        const per4 = { avall: 'down', amunt: 'up', esquerra: 'left', dreta: 'right' };
+        if (vista8) this.vista8 = vista8;
+        else if (!this.vista8 || !this.vista8Manual) this.vista8 = per4[dir];
+        const vista = this.vista8;
         if (caminant) {
             this.ineu.anims.play('caminar_' + vista, true);
         } else {
             this.ineu.anims.stop();
-            this.ineu.setTexture('ineu_' + vista, SPRITE_INEU.quiet[vista]);
+            this.ineu.setTexture('ineu_' + vista, SPRITE_INEU.quiet);
         }
+    }
+
+    // ---------------- Esbarzers negres i foc de la Jaumeta ----------------
+    // id: nom únic perquè no tornin a créixer un cop cremats
+    esbarzer(x, y, id) {
+        if (id && Estat.flag('esb_' + id)) return null;
+        const img = this.posar('esbarzer', x, y, { fonsY: y });
+        const col = this.colisio(x, y - 13, 80, 26);
+        const o = { img, col, x, y, id, viu: true };
+        this.esbarzers.push(o);
+        return o;
+    }
+
+    destruirEsbarzer(o, foc) {
+        if (!o.viu) return;
+        o.viu = false;
+        if (o.id) Estat.posaFlag('esb_' + o.id);
+        this.obstacles.remove(o.col, true, true);
+        if (foc) o.img.setTint(0xff8030);
+        const p = this.add.particles(o.x, o.y - 30, 'espurna', {
+            speed: { min: 30, max: 110 }, lifespan: 700, scale: { start: 0.9, end: 0 },
+            tint: foc ? [0xff8030, 0xffd040] : [0xc070ff, 0x6a3a9a], quantity: 10, emitting: false
+        }).setDepth(99990);
+        p.explode(14);
+        this.time.delayedCall(900, () => p.destroy());
+        this.tweens.add({ targets: o.img, alpha: 0, scaleY: o.img.scaleY * 0.6, duration: 600, onComplete: () => o.img.destroy() });
+    }
+
+    // Petar de dits de la Jaumeta: flama cap on mires; crema esbarzers i fa mal als enemics
+    foc() {
+        const ara = this.time.now;
+        if (this.config.pacifica || ara < (this.focFins || 0) || this.caient) return;
+        this.focFins = ara + 1300;
+        const d = DIRS[this.direccio] || DIRS.avall;
+        const jo = this.ineu.body.center;
+        const fx = jo.x + d.x * 64, fy = jo.y + d.y * 64 - 14;
+        const flama = this.add.circle(fx, fy, 14, 0xffa030, 0.85).setDepth(99990);
+        this.tweens.add({ targets: flama, radius: 52, alpha: 0, duration: 420, onComplete: () => flama.destroy() });
+        const p = this.add.particles(fx, fy, 'espurna', {
+            speed: { min: 30, max: 120 }, lifespan: 500, scale: { start: 1, end: 0 },
+            tint: [0xff8030, 0xffd040, 0xff4010], quantity: 10, emitting: false
+        }).setDepth(99991);
+        p.explode(16);
+        this.time.delayedCall(700, () => p.destroy());
+        this.forcat = { vx: -d.x * 60, vy: -d.y * 60, fins: ara + 80 };
+        this.enemics.forEach(e => {
+            if (e.mort || e.def.practica) return;
+            const c = e.spr.body.center;
+            if (Phaser.Math.Distance.Between(c.x, c.y, fx, fy) < 64 + e.def.radi) this.colpejar(e, 1, d);
+        });
+        this.esbarzers.forEach(o => { if (o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, fx, fy) < 90) this.destruirEsbarzer(o, true); });
+        if (this.enFoc) this.enFoc(fx, fy);
+    }
+
+    // ---------------- Música ----------------
+    obrirMusica() {
+        if (this.canviant || this.game.scene.isActive('Musica')) return;
+        this.ineu.body.setVelocity(0);
+        this.game.scene.start('Musica', { mode: 'lliure' });
+        this.game.scene.bringToTop('Musica');
+    }
+
+    // Una melodia ha sonat bé. La zona pot gestionar-la amb enMelodia(nom) -> true
+    melodiaTocada(nom) {
+        if (Estat.te('esquelles')) this.adormirEnemics();
+        const gestionada = this.enMelodia ? this.enMelodia(nom) : false;
+        if (!gestionada) {
+            this.flotant(this.ineu.x, this.ineu.y - 150, '♪ ' + MELODIES[nom].nom, '#d8c8ff');
+            this.time.delayedCall(900, () => this.flotant(this.ineu.x, this.ineu.y - 130, 'Aquí no passa res...', '#a89878'));
+        }
+    }
+
+    // Les Esquelles dels Pastors: qualsevol cant adorm uns instants els enemics propers
+    adormirEnemics() {
+        const ara = this.time.now, c = this.ineu.body.center;
+        const cercle = this.add.circle(this.ineu.x, this.ineu.y - 30, 20, 0xd8c8ff, 0.0).setStrokeStyle(4, 0xd8c8ff, 0.9).setDepth(99990);
+        this.tweens.add({ targets: cercle, radius: 300, alpha: 0, duration: 800, onComplete: () => cercle.destroy() });
+        let n = 0;
+        this.enemics.forEach(e => {
+            if (e.mort || e.def.practica) return;
+            const b = e.spr.body.center;
+            if (Phaser.Math.Distance.Between(b.x, b.y, c.x, c.y) < 300) {
+                e.atorditFins = ara + (e.def.robust ? 1200 : 3000);
+                e.estat = 'repos'; e.fins = ara + 600;
+                e.spr.body.setVelocity(0);
+                this.flotant(b.x, b.y - 80, 'Zzz', '#d8c8ff');
+                n++;
+            }
+        });
+        if (n) this.flotant(this.ineu.x, this.ineu.y - 170, '♪ Les esquelles adormen', '#d8c8ff');
     }
 
     guardarPosicio() {
@@ -187,12 +321,14 @@ class ZonaBase extends Phaser.Scene {
         if ((ui.dialeg || ui.bloquejat) && this.ineu.anims.isPlaying) this.posarDireccio(this.direccio, false);
         if (ui.dialeg) {
             this.ineu.body.setVelocity(0);
+            this.congelarEnemics();
             if (accio && !ui.menuObert) ui.avancar();
             this.indicador.setVisible(false);
             return;
         }
         if (ui.bloquejat) {
             this.ineu.body.setVelocity(0);
+            this.congelarEnemics();
             return;
         }
 
@@ -200,12 +336,26 @@ class ZonaBase extends Phaser.Scene {
         const proper = this.puntProper();
         this.indicador.setVisible(!!proper);
         if (proper) this.indicador.setPosition(proper.x, proper.y - proper.altura);
+        const T = Phaser.Input.Keyboard.JustDown;
         if (accio && proper) this.interactuar(proper);
+        else if (accio || T(this.tecles.J)) this.atacar();
+        if (T(this.tecles.K) || T(this.tecles.SHIFT) || ui.consumirEsquivaTactil()) this.esquivar();
+        if (Estat.te('foc_jaumeta') && (T(this.tecles.F) || ui.consumirFocTactil())) this.foc();
+        if (Estat.te('flauta') && (T(this.tecles.M) || ui.consumirMusicaTactil())) this.obrirMusica();
+        time = this.time.now;   // un sol rellotge per a tot el combat
+        this.actualitzarCombat(time);
         this.comprovarSortides();
         if (this.actualitzar) this.actualitzar(time, delta);
     }
 
     moure(ui, delta) {
+        // Empenta forçada (esquiva, retrocés, tret de l'atac): el jugador no la controla
+        if (this.forcat && this.time.now < this.forcat.fins) {
+            this.ineu.body.setVelocity(this.forcat.vx, this.forcat.vy);
+            this.ineu.setDepth(this.ineu.y);
+            this.ombraIneu.setPosition(this.ineu.x, this.ineu.y);
+            return;
+        }
         let vx = 0, vy = 0;
         const c = this.cursors, t = this.tecles;
         if (c.left.isDown || t.A.isDown) vx -= 1;
@@ -221,7 +371,9 @@ class ZonaBase extends Phaser.Scene {
         const movent = Math.hypot(vx, vy) > 0.15;
         if (movent) {
             const dir = Math.abs(vx) > Math.abs(vy) * 1.1 ? (vx < 0 ? 'esquerra' : 'dreta') : (vy < 0 ? 'amunt' : 'avall');
-            this.posarDireccio(dir, true);
+            const oct = (Math.round(Math.atan2(vy, vx) / (Math.PI / 4)) + 8) % 8;
+            this.vista8Manual = true;
+            this.posarDireccio(dir, true, OCTANTS_INEU[oct]);
         } else if (this.ineu.anims.isPlaying) {
             this.posarDireccio(this.direccio, false);
         }

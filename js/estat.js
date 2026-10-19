@@ -16,11 +16,11 @@ const Estat = {
             entrada: 'inici',
             x: null,
             y: null,
-            cors: 3,
+            vida: 6,          // en meitats de cor (6 = 3 cors plens)
             corsMax: 3,
             monedes: 0,
             objectiu: 'Parla amb el Pare Jordi a la Plaça.',
-            objectes: ['basto'],
+            objectes: [],
             flags: {},
             pingpongVictories: 0
         };
@@ -75,6 +75,9 @@ const Estat = {
         const resultat = Object.assign({}, base, d);
         resultat.flags = Object.assign({}, d.flags || {});
         resultat.objectes = Array.isArray(d.objectes) ? d.objectes.slice() : base.objectes;
+        if (typeof d.vida !== 'number') resultat.vida = (typeof d.cors === 'number' ? d.cors : resultat.corsMax) * 2;
+        // El bastó s'aconsegueix al tutorial del Til·ler: les partides antigues no el tenen "de regal"
+        if (!resultat.flags.bastoObtingut) resultat.objectes = resultat.objectes.filter(o => o !== 'basto');
         // Migracions futures: if (resultat.versio < 2) { ... }
         resultat.versio = this.VERSIO;
         this.dades = resultat;

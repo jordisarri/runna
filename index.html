@@ -25,17 +25,38 @@
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
 </head>
 <body>
+    <pre id="errors" style="position:fixed;left:0;right:0;bottom:0;margin:0;padding:8px;max-height:40%;overflow:auto;background:#300;color:#fcc;font:12px monospace;z-index:9;display:none"></pre>
+    <script>
+        // Si alguna cosa falla en carregar, es veu a la pantalla (en comptes de quedar-se "Carregant...")
+        window.addEventListener('error', e => {
+            const el = document.getElementById('errors');
+            el.style.display = 'block';
+            el.textContent += (e.filename || '').split('/').pop() + ':' + e.lineno + '  ' + e.message + '\n';
+        });
+    </script>
     <div id="joc"></div>
 
     <!-- L'ordre importa: cada fitxer fa servir coses dels anteriors -->
-    <script src="js/estat.js"></script>
-    <script src="js/assets.js"></script>
-    <script src="js/dialegs.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/zona_base.js"></script>
-    <script src="js/zones/placa.js"></script>
-    <script src="js/zones/provisionals.js"></script>
-    <script src="js/intro.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/estat.js?v=1792402741"></script>
+    <script src="js/dibuixos.js?v=1792402741"></script>
+    <script src="js/assets.js?v=1792402741"></script>
+    <script src="js/dialegs.js?v=1792402741"></script>
+    <script src="js/ui.js?v=1792402741"></script>
+    <script src="js/zona_base.js?v=1792402741"></script>
+    <script src="js/combat.js?v=3"></script>
+    <script src="js/musica.js?v=3"></script>
+    <script src="js/zones/placa.js?v=1792402741"></script>
+    <script src="js/zones/provisionals.js?v=1792402741"></script>
+    <script src="js/zones/nord.js?v=1792402741"></script>
+    <script src="js/zones/cirosa.js?v=4"></script>
+    <script src="js/estels.js?v=5"></script>
+    <script src="js/zones/oest.js?v=5"></script>
+    <script src="js/zones/cementiri.js?v=7"></script>
+    <script src="js/zones/casa.js?v=6"></script>
+    <script src="js/zones/cabana.js?v=6"></script>
+    <script src="js/zones/cami.js?v=1792402741"></script>
+    <script src="js/mapa.js?v=1792402741"></script>
+    <script src="js/intro.js?v=1792402741"></script>
+    <script src="js/main.js?v=1792402741"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@ class EscenaUI extends Phaser.Scene {
     create() {
         this.dialeg = null;          // diàleg obert
         this.menuObert = false;
+        this.mapaObert = false;
         this.bloquejatFins = 0;
         this.vectorTactil = { x: 0, y: 0 };
         this.accioTactil = false;
@@ -24,13 +25,19 @@ class EscenaUI extends Phaser.Scene {
         this.crearMenu();
         this.crearControlsTactils();
 
-        this.input.keyboard.on('keydown-ESC', () => this.menuObert ? this.tancarMenu() : this.obrirMenu());
+        this.input.keyboard.on('keydown-ESC', () => {
+            if (this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels')) return;
+            if (this.mapaObert) this.tancarMapa();
+            else if (this.menuObert) this.tancarMenu();
+            else this.obrirMenu();
+        });
         this.input.keyboard.on('keydown-UP', () => this.menuObert && this.moureSeleccio(-1));
         this.input.keyboard.on('keydown-DOWN', () => this.menuObert && this.moureSeleccio(1));
         this.input.keyboard.on('keydown-W', () => this.menuObert && this.moureSeleccio(-1));
         this.input.keyboard.on('keydown-S', () => this.menuObert && this.moureSeleccio(1));
         const confirmar = () => {
-            if (this.menuObert) this.executarOpcio(this.seleccio);
+            if (this.mapaObert) this.tancarMapa();
+            else if (this.menuObert) this.executarOpcio(this.seleccio);
         };
         this.input.keyboard.on('keydown-ENTER', confirmar);
         this.input.keyboard.on('keydown-SPACE', confirmar);
@@ -46,7 +53,7 @@ class EscenaUI extends Phaser.Scene {
 
     // La zona consulta això per saber si l'Ineu pot moure's
     get bloquejat() {
-        return !!this.dialeg || this.menuObert || this.time.now < this.bloquejatFins;
+        return !!this.dialeg || this.menuObert || this.time.now < this.bloquejatFins || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels');
     }
 
     // ---------------- HUD ----------------
@@ -67,7 +74,7 @@ class EscenaUI extends Phaser.Scene {
             .on('pointerdown', () => this.menuObert ? this.tancarMenu() : this.obrirMenu());
 
         if (!this.sys.game.device.input.touch) {
-            this.add.text(AMPLE - 16, ALT - 12, 'Fletxes/WASD: moure · ESPAI: parlar/acció · ESC: menú',
+            this.textAjuda = this.add.text(AMPLE - 16, ALT - 12, 'Fletxes/WASD: moure · ESPAI/J: parlar o atacar · K/Majús: esquivar · ESC: menú',
                 estilText(13, '#f2e6c8')).setOrigin(1, 1).setAlpha(0.55);
         }
     }
@@ -75,10 +82,17 @@ class EscenaUI extends Phaser.Scene {
     actualitzarHUD() {
         const d = Estat.dades;
         if (!d) return;
-        this.textCors.setText('♥'.repeat(d.cors) + '♡'.repeat(Math.max(0, d.corsMax - d.cors)));
+        let cors = '';
+        for (let i = 0; i < d.corsMax; i++) cors += d.vida >= (i + 1) * 2 ? '♥' : d.vida === i * 2 + 1 ? '◐' : '♡';
+        this.textCors.setText(cors);
         this.textMonedes.setText('● ' + d.monedes);
         this.textObjectiu.setText('Objectiu: ' + (d.objectiu || ''));
         this.fonsHUD.height = Math.max(102, 86 + this.textObjectiu.height);
+        const flauta = Estat.te('flauta');
+        if (this.botoMusica) { this.botoMusica.setVisible(flauta); this.textBotoMusica.setVisible(flauta); }
+        const foc = Estat.te('foc_jaumeta');
+        if (this.botoFoc) { this.botoFoc.setVisible(foc); this.textBotoFoc.setVisible(foc); }
+        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI/J: parlar o atacar · K/Majús: esquivar' + (flauta ? ' · M: flauta' : '') + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · ESC: menú');
     }
 
     mostrarZona(nom) {
@@ -161,19 +175,20 @@ class EscenaUI extends Phaser.Scene {
     crearMenu() {
         this.menu = this.add.container(0, 0).setVisible(false).setDepth(60);
         const vel = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.65).setOrigin(0).setInteractive();
-        const panell = this.add.rectangle(AMPLE / 2, ALT / 2, 520, 420, 0x1a120b, 0.97).setStrokeStyle(4, 0xd4af37);
-        const titol = this.add.text(AMPLE / 2, ALT / 2 - 165, 'Pausa', estilText(32, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
+        const panell = this.add.rectangle(AMPLE / 2, ALT / 2, 520, 480, 0x1a120b, 0.97).setStrokeStyle(4, 0xd4af37);
+        const titol = this.add.text(AMPLE / 2, ALT / 2 - 195, 'Pausa', estilText(32, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
         this.menu.add([vel, panell, titol]);
 
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
+            { text: 'Mapa', fn: () => this.obrirMapa() },
             { text: 'Desar partida', fn: () => { this.tancarMenu(); this.desar(); } },
             { text: 'Copiar codi de partida', fn: () => this.copiarCodi() },
             { text: 'Carregar codi de partida', fn: () => this.carregarCodi() },
             { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];
         this.textOpcions = this.opcions.map((o, i) => {
-            const t = this.add.text(AMPLE / 2, ALT / 2 - 95 + i * 58, o.text, estilText(24, '#f2e6c8'))
+            const t = this.add.text(AMPLE / 2, ALT / 2 - 130 + i * 56, o.text, estilText(24, '#f2e6c8'))
                 .setOrigin(0.5).setInteractive({ useHandCursor: true })
                 .on('pointerover', () => { this.seleccio = i; this.pintarSeleccio(); })
                 .on('pointerdown', () => this.executarOpcio(i));
@@ -184,7 +199,7 @@ class EscenaUI extends Phaser.Scene {
     }
 
     obrirMenu() {
-        if (this.dialeg) return;
+        if (this.dialeg || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels')) return;
         this.menuObert = true;
         this.seleccio = 0;
         this.pintarSeleccio();
@@ -193,7 +208,31 @@ class EscenaUI extends Phaser.Scene {
 
     tancarMenu() {
         this.menuObert = false;
+        this.mapaObert = false;
+        if (this.mapa) { this.mapa.destroy(); this.mapa = null; }
         this.menu.setVisible(false);
+        this.bloquejatFins = this.time.now + 200;
+    }
+
+    // ---------------- MAPA ----------------
+    obrirMapa() {
+        if (this.mapa) this.mapa.destroy();
+        this.mapa = this.add.container(0, 0).setDepth(70);
+        const zona = Joc.zonaActiva(this);
+        MAPA.dibuixar(this, this.mapa, zona ? zona.scene.key : null);
+        // Clic a qualsevol lloc tanca el mapa
+        const vel = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.01).setOrigin(0).setInteractive()
+            .on('pointerdown', () => this.tancarMapa());
+        this.mapa.add(vel);
+        this.mapaObert = true;
+        this.menu.setVisible(false);
+    }
+
+    tancarMapa() {
+        if (!this.mapaObert) return;
+        this.mapaObert = false;
+        if (this.mapa) { this.mapa.destroy(); this.mapa = null; }
+        this.menu.setVisible(true);
         this.bloquejatFins = this.time.now + 200;
     }
 
@@ -259,6 +298,15 @@ class EscenaUI extends Phaser.Scene {
                 else if (!this.menuObert) this.accioTactil = true;
             });
         this.add.text(AMPLE - 110, ALT - 130, 'ACCIÓ', estilText(18, '#ffffff', { fontStyle: 'bold' })).setOrigin(0.5);
+        this.botoMusica = this.add.circle(AMPLE - 110, ALT - 250, 36, 0x8a5ac0, 0.45).setStrokeStyle(3, 0xffffff, 0.6)
+            .setInteractive().on('pointerdown', () => { if (!this.dialeg && !this.menuObert) this.musicaTactil = true; });
+        this.textBotoMusica = this.add.text(AMPLE - 110, ALT - 250, '♪', estilText(28, '#ffffff', { fontStyle: 'bold' })).setOrigin(0.5);
+        this.botoFoc = this.add.circle(AMPLE - 230, ALT - 180, 36, 0xe07a30, 0.45).setStrokeStyle(3, 0xffffff, 0.6)
+            .setInteractive().on('pointerdown', () => { if (!this.dialeg && !this.menuObert) this.focTactil = true; });
+        this.textBotoFoc = this.add.text(AMPLE - 230, ALT - 180, 'FOC', estilText(14, '#ffffff', { fontStyle: 'bold' })).setOrigin(0.5);
+        this.add.circle(AMPLE - 230, ALT - 80, 36, 0x4a8ad4, 0.4).setStrokeStyle(3, 0xffffff, 0.6)
+            .setInteractive().on('pointerdown', () => { if (!this.dialeg && !this.menuObert) this.esquivaTactil = true; });
+        this.add.text(AMPLE - 230, ALT - 80, 'ESQ.', estilText(14, '#ffffff', { fontStyle: 'bold' })).setOrigin(0.5);
 
         this.input.on('pointerdown', (p, objectes) => {
             if (objectes.length || this.dialeg || this.menuObert) return;
@@ -286,6 +334,24 @@ class EscenaUI extends Phaser.Scene {
         };
         this.input.on('pointerup', amagar);
         this.input.on('pointerupoutside', amagar);
+    }
+
+    consumirFocTactil() {
+        const a = this.focTactil;
+        this.focTactil = false;
+        return a;
+    }
+
+    consumirMusicaTactil() {
+        const a = this.musicaTactil;
+        this.musicaTactil = false;
+        return a;
+    }
+
+    consumirEsquivaTactil() {
+        const a = this.esquivaTactil;
+        this.esquivaTactil = false;
+        return a;
     }
 
     consumirAccioTactil() {

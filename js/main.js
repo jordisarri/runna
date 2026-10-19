@@ -4,7 +4,9 @@
  */
 const Joc = {
     debug: new URLSearchParams(location.search).has('debug'),
-    ZONES: ['ZonaPlaca', 'ZonaEsglesia', 'ZonaMonestir', 'ZonaCasaGran'],
+    ZONES: ['ZonaPlaca', 'ZonaEsglesia', 'ZonaMonestir', 'ZonaCreu', 'ZonaCasaGran', 'ZonaRuines', 'ZonaPingpong',
+            'ZonaCelles', 'ZonaBosc', 'ZonaCami', 'ZonaErmita', 'ZonaErmitaInt', 'ZonaEra', 'ZonaJardi',
+            'ZonaCamiCirosa', 'ZonaCirosa', 'ZonaCementiri', 'ZonaCasaGranInt', 'ZonaCabana', 'ZonaCabanaInt', 'ZonaCamiRov', 'ZonaRovellonera', 'ZonaGabriel', 'ZonaGabrielInt', 'ZonaDipositos', 'ZonaDolmen'],
 
     zonaActiva(scene) {
         const m = scene.game.scene;
@@ -14,7 +16,7 @@ const Joc = {
 
     aturarTot(scene) {
         const m = scene.game.scene;
-        [...Joc.ZONES, 'Titol', 'Proleg'].forEach(k => {
+        [...Joc.ZONES, 'Titol', 'Proleg', 'Musica', 'Estels'].forEach(k => {
             if (m.isActive(k) || m.isPaused(k) || m.isSleeping(k)) m.stop(k);
         });
     },
@@ -72,7 +74,10 @@ class EscenaCarrega extends Phaser.Scene {
         const barra = this.add.rectangle(AMPLE / 2 - 250, ALT / 2, 0, 16, 0xd4af37).setOrigin(0, 0.5);
         this.add.rectangle(AMPLE / 2, ALT / 2, 504, 20).setStrokeStyle(2, 0xd4af37);
         this.add.text(AMPLE / 2, ALT / 2 - 40, 'Carregant el Miracle...', estilText(22, '#f2e6c8')).setOrigin(0.5);
+        const detall = this.add.text(AMPLE / 2, ALT / 2 + 40, '', estilText(14, '#8a8070')).setOrigin(0.5);
         this.load.on('progress', v => { barra.width = 500 * v; });
+        this.load.on('fileprogress', f => detall.setText(f.key));
+        this.load.on('loaderror', f => console.warn("No s'ha pogut carregar", f.key));
         Grafics.carregar(this);
         this.load.audio('musica_intro', 'assets/musica/intro_runna.mp3');
         // Vídeos de la intro (sense el seu so: sona la música del joc)
@@ -180,5 +185,9 @@ const game = new Phaser.Game({
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
     physics: { default: 'arcade', arcade: { debug: Joc.debug } },
     loader: { imageLoadType: 'HTMLImageElement' },
-    scene: [EscenaCarrega, EscenaTitol, EscenaProleg, ZonaPlaca, ZonaEsglesia, ZonaMonestir, ZonaCasaGran, EscenaUI]
+    scene: [EscenaCarrega, EscenaTitol, EscenaProleg,
+            ZonaPlaca, ZonaEsglesia, ZonaMonestir, ZonaCreu, ZonaCasaGran, ZonaRuines, ZonaPingpong,
+            ZonaCelles, ZonaBosc, ZonaCami, ZonaErmita, ZonaErmitaInt, ZonaEra, ZonaJardi, ZonaCamiCirosa, ZonaCirosa,
+            ZonaCementiri, ZonaCasaGranInt, ZonaCabana, ZonaCabanaInt, ZonaCamiRov, ZonaRovellonera, ZonaGabriel, ZonaGabrielInt, ZonaDipositos, ZonaDolmen,
+            EscenaUI, EscenaMusica, EscenaEstels]
 });

@@ -1,7 +1,7 @@
 /**
  * ZONA 1: LA PLAÇA DEL SANTUARI (punt d'inici)
- * Nord: Església i Ruïnes de l'Església Inacabada · Oest: Creu de l'Aparició i Bassadòria,
- * i el camí cap a la Casa Gran · Est: camí cap al Monestir i les cel·les de Sant Antoni.
+ * Nord: Santuari, i el camí cap a les Runes (nord-est) · Oest: camí cap a la
+ * Creu de l'Aparició i la Bassadòria · Est: camí cap al Monestir. Sense carreteres: terra, herba i pedra.
  */
 class ZonaPlaca extends ZonaBase {
     constructor() {
@@ -12,8 +12,11 @@ class ZonaPlaca extends ZonaBase {
             entrades: {
                 inici:    { x: 1240, y: 820, dir: 'esquerra' },
                 casaGran: { x: 50,   y: 565, dir: 'dreta' },
+                creu:     { x: 840,  y: 1120, dir: 'amunt' },
+                ruines:   { x: 1190, y: 70,  dir: 'avall' },
                 monestir: { x: 1550, y: 815, dir: 'esquerra' },
-                esglesia: { x: 689,  y: 510, dir: 'avall' }
+                esglesia: { x: 689,  y: 510, dir: 'avall' },
+                porxo:    { x: 152,  y: 505, dir: 'avall' }
             }
         });
     }
@@ -22,24 +25,27 @@ class ZonaPlaca extends ZonaBase {
         // --- Terra ---
         this.terra('herba', 0, 0, 1600, 1200, -1100);
         this.terra('cami', 0, 470, 380, 190);            // cap a la Casa Gran (oest)
+        this.terra('cami', 760, 1000, 160, 200);         // cap a la Creu i la Bassadòria (sud)
         this.terra('cami', 1300, 740, 300, 150);         // cap al Monestir (est)
+        this.terra('cami', 1130, 0, 120, 440);           // cap a les Runes (nord)
         this.terra('llamborda', 360, 420, 960, 590);     // la plaça
         const vora = this.add.graphics().setDepth(-990);
         vora.lineStyle(4, 0x8a7658, 1).strokeRect(360, 420, 960, 590);
 
-        // --- Església i Ruïnes (nord) ---
+        // --- Santuari i Runes (nord) ---
         this.posar('esglesia', 800, 540, { fonsY: 452, col: { w: 630, h: 150, dx: -18, dy: -88 } });
         this.sortida(664, 440, 50, 22, 'ZonaEsglesia', 'porta');
-        this.interactiu(530, 470, 80, DIALEGS.ruines, { altura: 110 });
-        this.posar('xiprer', 1195, 470, { col: { w: 24, h: 12 } });
-        this.posar('xiprer', 1245, 488, { col: { w: 24, h: 12 } });
+        this.posar('xiprer', 1285, 455, { col: { w: 24, h: 12 } });
+        this.posar('xiprer', 1305, 490, { col: { w: 24, h: 12 } });
 
-        // --- Creu de l'Aparició i la Bassadòria (oest de la plaça) ---
-        this.posar('creu', 365, 830, { col: { w: 46, h: 22 } });
-        this.interactiu(365, 830, 75, DIALEGS.creu, { altura: 180 });
-        this.posar('bassadoria', 545, 870, { col: { w: 236, h: 92, dy: -26 } });
-        this.interactiu(545, 800, 150, DIALEGS.bassadoria, { altura: 110 });
-        this.boira(545, 800, 190, 60, 2.2);
+        // --- Porxo d'arcs (oest): porta amb reixa cap a la Casa Gran, tancada amb clau ---
+        this.posar('porxo', 190, 440, { fonsY: 430 });
+        this.colisio(71, 405, 102, 70);
+        this.colisio(271, 405, 178, 70);
+        this.interactiu(152, 455, 75, DIALEGS.portaReixa, {
+            altura: 120,
+            enTancar: () => { if (Estat.te('clauer')) this.canviarZona('ZonaCasaGranInt', 'porxo'); }
+        });
 
         // --- Reixes del terra per on surt la boira ---
         [[600, 625], [1080, 650], [870, 975]].forEach(([x, y]) => {
@@ -50,21 +56,29 @@ class ZonaPlaca extends ZonaBase {
 
         // --- Personatges ---
         this.npc('pare_jordi', 1000, 770, DIALEGS.pareJordi);
-        this.andreu = this.npc('germa_andreu', 1180, 940, DIALEGS.germaAndreu, { flipX: true });
+        if (!Estat.flag('pastorVencut')) this.andreu = this.npc('germa_andreu', 1180, 940, DIALEGS.germaAndreu, { flipX: true });
 
         // --- Cartells ---
         this.cartell(300, 465, DIALEGS.cartellOest);
         this.cartell(1345, 735, DIALEGS.cartellEst);
+        this.cartell(1270, 420, DIALEGS.cartellNord);
 
         // --- Arbres ---
-        [[110, 250], [230, 340], [140, 980], [300, 1110], [640, 1130], [1040, 1110],
-         [1420, 1110], [1540, 980], [1500, 560], [1420, 300], [1540, 380]].forEach(([x, y]) => {
+        [[110, 250], [140, 980], [300, 1110], [640, 1130], [1040, 1110],
+         [1420, 1110], [1540, 980], [1500, 560], [1420, 300], [1540, 380], [900, 120], [980, 200], [760, 180], [560, 130]].forEach(([x, y]) => {
             this.posar('arbre', x, y, { col: { w: 34, h: 16 } });
         });
 
         // --- Sortides ---
         this.sortida(0, 470, 14, 190, 'ZonaCasaGran', 'placa');
+        this.sortida(760, 1186, 160, 14, 'ZonaCreu', 'placa');
+        this.sortida(1130, 0, 120, 14, 'ZonaRuines', 'placa');
         this.sortida(1586, 740, 14, 150, 'ZonaMonestir', 'placa');
+
+        // Visitants corromputs per la boira
+        this.enemic('visitant', 520, 900);
+        this.enemic('visitant', 880, 960);
+        this.enemic('escolopendra', 1450, 640);
 
         // Vel lila: el santuari està tocat per la boira
         this.add.rectangle(0, 0, AMPLE, ALT, 0x3a1a55, 0.10).setOrigin(0).setScrollFactor(0).setDepth(90000);

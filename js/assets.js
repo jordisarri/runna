@@ -25,20 +25,104 @@ const CATALEG = [
     { key: 'font',         file: 'assets/font.png',         amplada: 110, provisional: (c, w) => dibuixarFont(c, w) },
     { key: 'arbre',        file: 'assets/arbre.png',        amplada: 150, provisional: (c, w) => dibuixarArbre(c, w) },
     { key: 'xiprer',       file: 'assets/xiprer.png',       amplada: 60,  provisional: (c, w) => dibuixarXiprer(c, w) },
-    { key: 'retaule',      file: 'assets/retaule.png',      amplada: 360, provisional: (c, w) => dibuixarRetaule(c, w) }
+    { key: 'retaule',      file: 'assets/retaule.png',      amplada: 360, provisional: (c, w) => dibuixarRetaule(c, w) },
+
+    // ---- Edificis nous ----
+    { key: 'sala_pingpong', file: 'assets/sala_pingpong.png', amplada: 340, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.62, '#d8c8a8', '#3a5a8a', 'Sala del Ping-pong') },
+    { key: 'cel_stbenet',   file: 'assets/cel_stbenet.png',   amplada: 420, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.6, '#e6d6b0', '#8a4a2a', 'Sant Benet') },
+    { key: 'cel_ntrasra',   file: 'assets/cel_ntrasra.png',   amplada: 560, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.55, '#ddc9a4', '#7a3a2a', 'Nostra Senyora') },
+    { key: 'ermita',        file: 'assets/ermita.png',        amplada: 300, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.7, '#b8b2a4', '#6a5a4a', 'Ermita de la Desaparició') },
+    { key: 'hospederia',    file: 'assets/hospederia.png',    amplada: 560, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.6, '#e2d2b0', '#7a4030', 'Hospederia') },
+
+    // ---- Personatges nous ----
+    { key: 'pianista',  file: 'assets/pianista.png',  amplada: 100, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
+    { key: 'tieta',     file: 'assets/tieta.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a5a7a', cabell: '#d8d8d8', dona: true, ample: 1.1, alt: 0.88 }) },
+    { key: 'tieta2',    file: 'assets/tieta2.png',    amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#7a4a4a', cabell: '#bcbcbc', dona: true, ample: 1.2, alt: 0.86, ulleres: true }) },
+    { key: 'neus',      file: 'assets/neus.png',      amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
+    { key: 'marit_neus', file: 'assets/marit_neus.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a6a7a', cabell: '#5a4636', alt: 0.98, calb: true }) },
+    { key: 'yordi',     file: 'assets/yordi.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7a5a', cabell: '#3b2a1e', alt: 0.96 }) },
+    { key: 'judit',     file: 'assets/judit.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d09a3a', cabell: '#6a3a1e', dona: true, alt: 0.92 }) },
+    { key: 'daniel_t',  file: 'assets/daniel_t.png',  amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a5a8a', cabell: '#2a2a2a', alt: 1.02, ample: 1.05 }) },
+    { key: 'turbo',     file: 'assets/turbo.png',     amplada: 80,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e05a2a', cabell: '#3b2a1e', alt: 0.7, cap: 17 }) },
+    { key: 'juli',      file: 'assets/juli.png',      amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8ec8f0', cabell: '#3b2a1e', alt: 0.9, cap: 20, ulleres: true, extra: 'angelets' }) },
+    { key: 'frederic',  file: 'assets/frederic.png',  amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#7a7a6a', cabell: '#e0e0e0', alt: 0.92, barba: '#e0e0e0', extra: 'pala' }) },
+    { key: 'eloi',      file: 'assets/eloi.png',      amplada: 110, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03030', cabell: '#2a2a2a', alt: 1.1, ample: 1.4 }) },
+    { key: 'josep',     file: 'assets/josep.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2a2a3a', cabell: '#1a1a1a', alt: 1.02, extra: 'gorra' }) },
+    { key: 'garf',      file: 'assets/garf.png',      amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#a0a0a0', alt: 0.98, ulleres: true, barba: '#a0a0a0' }) },
+    { key: 'isidre',    file: 'assets/isidre.png',    amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a7a3a', cabell: '#6a5a3a', alt: 0.94, bastoCoix: true, extra: 'gorra' }) },
+    { key: 'sansa',     file: 'assets/sansa.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
+    { key: 'home_carruatge', file: 'assets/home_carruatge.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2f6b3d', cabell: '#222', alt: 1.04, extra: 'gorra' }) },
+
+    // ---- Escenari nou ----
+    { key: 'runes',     file: 'assets/runes.png',     amplada: 300, provisional: (c, w) => dibuixarRunes(c, w) },
+    { key: 'columna',   file: 'assets/columna.png',   amplada: 58,  provisional: (c, w) => dibuixarColumna(c, w) },
+    { key: 'roure',     file: 'assets/roure.png',     amplada: 300, provisional: (c, w) => dibuixarRoure(c, w) },
+    { key: 'tiller',    file: 'assets/tiller.png',    amplada: 340, provisional: (c, w) => dibuixarTiller(c, w) },
+    { key: 'altar',     file: 'assets/altar.png',     amplada: 150, provisional: (c, w) => dibuixarAltar(c, w) },
+    { key: 'taula_pedra', file: 'assets/taula_pedra.png', amplada: 110, provisional: (c, w) => dibuixarTaulaPedra(c, w) },
+    { key: 'font_sj',   file: 'assets/font_sj.png',   amplada: 130, provisional: (c, w) => dibuixarFontSJ(c, w) },
+    { key: 'carruatge', file: 'assets/carruatge.png', amplada: 230, provisional: (c, w) => dibuixarCarruatge(c, w) },
+    { key: 'carro_sansa', file: 'assets/carro_sansa.png', amplada: 220, provisional: (c, w) => dibuixarCarroSansa(c, w) },
+    { key: 'pergola',   file: 'assets/pergola.png',   amplada: 260, provisional: (c, w) => dibuixarPergola(c, w) },
+    { key: 'flors',     file: 'assets/flors.png',     amplada: 90,  provisional: (c, w) => dibuixarFlors(c, w) },
+    { key: 'taula_pp',  file: 'assets/taula_pp.png',  amplada: 240, provisional: (c, w) => dibuixarTaulaPP(c, w) },
+    { key: 'alzina_buida', file: 'assets/alzina_buida.png', amplada: 200, provisional: (c, w) => dibuixarAlzinaBuida(c, w) },
+    { key: 'llosa',     file: 'assets/llosa.png',     amplada: 90,  provisional: (c, w) => dibuixarLlosa(c, w) },
+
+    // ---- Enemics ----
+    { key: 'escolopendra', file: 'assets/escolopendra.png', amplada: 64, provisional: (c, w) => dibuixarEscolopendra(c, w) },
+    { key: 'gripau',       file: 'assets/gripau.png',       amplada: 56, provisional: (c, w) => dibuixarGripau(c, w) },
+    { key: 'visitant',     file: 'assets/visitant.png',     amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e0a040', pell: '#9ab080', cabell: '#5a4a3a', alt: 0.98, extra: 'gorra', ulleres: true }) },
+    { key: 'espantaocell', file: 'assets/espantaocell.png', amplada: 70, provisional: (c, w) => dibuixarEspantaocell(c, w) },
+    { key: 'branca',       file: 'assets/branca.png',       amplada: 80, provisional: (c, w) => dibuixarBranca(c, w) },
+    { key: 'pergami',      file: 'assets/pergami.png',      amplada: 44, provisional: (c, w) => dibuixarPergami(c, w) },
+    { key: 'ombra_monjo',  file: 'assets/ombra_monjo.png',  amplada: 150, provisional: (c, w) => dibuixarOmbraMonjo(c, w) },
+    { key: 'ovella',         file: 'assets/ovella.png',         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },
+    { key: 'ovella_boira',   file: 'assets/ovella_boira.png',   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
+    { key: 'roca',           file: 'assets/roca.png',           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w) },
+    { key: 'masia',          file: 'assets/masia.png',          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },
+    { key: 'pastor_a',       file: 'assets/pastor_a.png',       amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a48', cabell: '#8a7a60', alt: 0.9, ample: 0.95, calb: true }) },
+    { key: 'pastor_b',       file: 'assets/pastor_b.png',       amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a4a58', cabell: '#7a7a7a', dona: true, alt: 0.88, ample: 0.95 }) },
+    { key: 'pastor_vell',    file: 'assets/pastor_vell.png',    amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a5040', cabell: '#d0d0d0', barba: '#d0d0d0', alt: 0.86, bastoCoix: true }) },
+    { key: 'foc',            file: 'assets/foc.png',            amplada: 80, provisional: (c, w) => dibuixarFoc(c, w) },
+    { key: 'espelma',        file: 'assets/espelma.png',        amplada: 20, provisional: (c, w) => dibuixarEspelma(c, w) },
+    { key: 'taula_sopar',    file: 'assets/taula_sopar.png',    amplada: 380, provisional: (c, w) => dibuixarTaulaSopar(c, w) },
+    { key: 'pastor_boira',   file: 'assets/pastor_boira.png',   amplada: 110, provisional: (c, w) => { dibuixarMonjo(c, w, { habit: '#2a1f3a', cabell: '#3b2a1e', alt: 1.1 }); afegirCaiada(c, w); } },
+    { key: 'bolet',          file: 'assets/bolet.png',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
+    { key: 'rovello',        file: 'assets/rovello.png',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
+    { key: 'llac',           file: 'assets/llac.png',           amplada: 36, provisional: (c, w) => dibuixarLlac(c, w) },
+    { key: 'diposit',        file: 'assets/diposit.png',        amplada: 300, provisional: (c, w) => dibuixarDiposit(c, w) },
+    { key: 'telescopi_mon',  file: 'assets/telescopi_mon.png',  amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w) },
+    { key: 'runna_pedra',    file: 'assets/runna_pedra.png',    amplada: 110, provisional: (c, w) => dibuixarRunnaPedra(c, w) },
+    { key: 'ermita_gabriel', file: 'assets/ermita_gabriel.png', amplada: 300, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.7, '#cfc6b0', '#5a5a6a', 'Sant Gabriel') },
+    { key: 'nena_trenes',    file: 'assets/nena_trenes.png',    amplada: 80, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e8e8f8', pell: '#dfe6ff', cabell: '#5a4636', dona: true, alt: 0.72, cap: 17, extra: 'trenes' }) },
+    { key: 'porxo',          file: 'assets/porxo.png',          amplada: 340, provisional: (c, w) => dibuixarPorxo(c, w) },
+    { key: 'esbarzer',       file: 'assets/esbarzer.png',       amplada: 96, provisional: (c, w) => dibuixarEsbarzer(c, w) },
+    { key: 'cofre',          file: 'assets/cofre.png',          amplada: 70, provisional: (c, w) => dibuixarCofre(c, w) },
+    { key: 'cabana',         file: 'assets/cabana.png',         amplada: 330, provisional: (c, w) => dibuixarCabana(c, w) },
+    { key: 'cercle_bolets',  file: 'assets/cercle_bolets.png',  amplada: 150, provisional: (c, w) => dibuixarCercleBolets(c, w) },
+    { key: 'olla',           file: 'assets/olla.png',           amplada: 110, provisional: (c, w) => dibuixarOlla(c, w) },
+    { key: 'ocell',          file: 'assets/ocell.png',          amplada: 34, provisional: (c, w) => dibuixarOcell(c, w) },
+    { key: 'jaumeta',        file: 'assets/jaumeta.png',        amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
+    { key: 'lapida',           file: 'assets/lapida.png',           amplada: 40,  provisional: (c, w) => dibuixarLapida(c, w) },
+    { key: 'tomba_esquerdada', file: 'assets/tomba_esquerdada.png', amplada: 240, provisional: (c, w) => dibuixarTombaEsquerdada(c, w) },
+    { key: 'espurna',      file: 'assets/espurna.png',      amplada: 32, provisional: (c, w) => dibuixarPuntSegell(c, w) }
 ];
 
 /**
- * SPRITES DE L'INEU (generats amb eines/generar_sprites.html a partir de la fitxa del personatge)
- * Cada spritesheet té 4 fotogrames de 230×300 amb els peus a y=294.
- *   avall/amunt: fotograma 0 = quiet · costat: fotograma 1 = quiet (mira a la dreta)
+ * SPRITES DE L'INEU: 8 direccions (assets/sprites/ineu/<direccio>.png, fons transparent).
+ * Cada fulla és una quadrícula 4x4 de 16 fotogrames de 256x256 (cicle de caminar) amb els peus a y~240.
+ * Els originals (Ineu-iso_walk_<dir>-v1.png, amb fons blanc) es van processar amb eines/netejar_ineu.js.
  */
+const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast'];
 const SPRITE_INEU = {
-    ample: 230, alt: 300, peus: 294,
-    alcada: 128,          // alçada en píxels de joc
-    fps: 8,
-    quiet: { avall: 0, amunt: 0, costat: 1 }
+    ample: 256, alt: 256, peus: 240,
+    alcada: 142,          // alçada del fotograma en píxels de joc (el personatge fa uns 125)
+    fps: 14,
+    quiet: 2              // fotograma de repòs de cada direcció
 };
+// Octants de moviment (angle en pantalla, y cap avall) -> direcció del sprite
+const OCTANTS_INEU = ['right', 'southeast', 'down', 'southwest', 'left', 'northwest', 'up', 'northeast'];
 
 const Grafics = {
     // Avís si el navegador no deixa llegir els píxels (obert amb doble clic, file://)
@@ -48,7 +132,7 @@ const Grafics = {
     carregar(scene) {
         scene.load.on('loaderror', f => Grafics.faltants.push(f.key));
         CATALEG.forEach(item => scene.load.image(item.key, item.file));
-        ['avall', 'amunt', 'costat'].forEach(dir => scene.load.spritesheet('ineu_' + dir, `assets/sprites/ineu_${dir}.png`,
+        DIRS_INEU.forEach(dir => scene.load.spritesheet('ineu_' + dir, `assets/sprites/ineu/${dir}.png`,
             { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt }));
     },
 
@@ -65,12 +149,12 @@ const Grafics = {
 
     // Animacions de caminar de l'Ineu (són globals: es creen una sola vegada)
     animacions(scene) {
-        ['avall', 'amunt', 'costat'].forEach(dir => {
+        DIRS_INEU.forEach(dir => {
             const key = 'caminar_' + dir;
             if (scene.anims.exists(key) || !scene.textures.exists('ineu_' + dir)) return;
             scene.anims.create({
                 key,
-                frames: scene.anims.generateFrameNumbers('ineu_' + dir, { start: 0, end: 3 }),
+                frames: scene.anims.generateFrameNumbers('ineu_' + dir, { start: 0, end: 15 }),
                 frameRate: SPRITE_INEU.fps,
                 repeat: -1
             });
@@ -144,6 +228,8 @@ const Grafics = {
             }
         });
         crea('cami', 64, 64, (ctx, w, h) => soroll(ctx, w, h, '#b89b6d', ['#a88b5d', '#c4a97c', '#9e8255'], 70, 1.5, 3));
+        crea('pedra', 64, 64, (ctx, w, h) => soroll(ctx, w, h, '#8c8a84', ['#7a7872', '#9c9a92', '#6e6c66'], 60, 2, 5));
+        crea('herba_fosca', 64, 64, (ctx, w, h) => soroll(ctx, w, h, '#3f6a30', ['#4a7a38', '#345a28', '#52843f'], 100, 2, 3));
         crea('rajola', 64, 64, (ctx, w, h) => {
             ctx.fillStyle = '#4a4038'; ctx.fillRect(0, 0, w, h);
             ctx.fillStyle = '#5a4e44'; ctx.fillRect(1, 1, 30, 30); ctx.fillRect(33, 33, 30, 30);
