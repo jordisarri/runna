@@ -329,7 +329,7 @@ Vista lateral simplificada: l'Ineu a baix i el rival a dalt, la taula al mig. No
 - ☐ Fase 4: interiors amb claus (Taverna, Sant Benet, Nostra Senyora, Hospederia…).
 - ✔ Fase 5a: Cirosa (Pastor de Boira, pastors anònims, Esquelles), sopar del Til·ler, Rovellonera + Nena de les Trenes, Sant Gabriel, Dipòsits, Dolmen (Runna), Saber i Benedicció.
 - ✔ Fase 5b: Cabana de la Jaumeta (portal, Foc, Cant del Miracle), esbarzers negres i cofre amagat al Bosc, porxo d'arcs i primera sala de la Casa Gran (Escalinata).
-- ✔ Fase 5c-1: **Casa Gran completa** (Escalinata amb el puzle de l'Home del Raïm, Retrats, Cuina i Rebost, Celler de les Botes, Cripta dels Monjos amb el Cellerer de Boira) i devolució de les 4 relíquies al Cementiri.
+- ✔ Fase 5c-1: **Casa Gran** (Escalinata, puzle i boss de l'Home del Raïm, cripta amb les relíquies i la Clau del Celler Vell), en Jordi de la Caseta (palanca) i devolució de les relíquies al Cementiri.
 - ☐ Fase 5c: Hospederia, Taverna, ping-pong, Acte 3 (Sala de les Gírgoles i Sala de la Gàbia), bosses finals.
 
 ## A10. Flags de progrés (per al desament)
@@ -345,10 +345,10 @@ Vista lateral simplificada: l'Ineu a baix i el rival a dalt, la taula al mig. No
 - **Camí de la Rovellonera:** la Nena de les Trenes és a la segona corba; el primer llaç és sota una roca que cal empènyer, el segon darrere un arbust que es poda amb les tisores.
 - **Tots els espais:** les sortides tenen llum i fletxa; l'Ineu no pot pujar tant que quedi amagat i es veu una silueta quan un edifici el tapa.
 
-### Casa Gran: com es juga (implementat)
-- **Entrades:** reixa del porxo → Escalinata · porta de servei → Cuina · porta secreta del Ping-pong → Escalinata (totes amb el Clauer de Novici).
-- **Retrats:** amb la llanterna es llegeixen les plaques; cal prémer els quatre retrats del més antic al més nou (1612, 1634, 1659, 1688). Dóna la **Clau de la Cuina** i la pista **E-S-E**.
-- **Cuina i Rebost:** el Rebost és tancat per esbarzers negres (Foc de la Jaumeta). Dins: la **Palanca** i el **Calze dels Monjos**. (Canvi: la Palanca ja no la dóna en Jordi de la Caseta, que encara no existeix.) Sortint de la cuina cap a l'escalinata, la porta queda oberta per sempre.
-- **Home del Raïm:** la palanca al forat de la base gira el cap un quart de volta (N→E→S→O); prémer el raïm confirma. Seqüència: llevant, migdia, llevant. Dóna la **Clau del Celler Vell** i obre la trapa de la **Cripta**.
-- **Celler:** rates de boira; la **Creu** i l'**Anell** dels monjos són dins de dues botes.
-- **Cripta:** boss **Cellerer de Boira** (+1 cor màxim); al cofre, el **Breviari**. Amb les 4 relíquies, la tomba del Cementiri es tanca.
+### Casa Gran: com es juga (implementat, versió simplificada)
+- **Entrades:** reixa del porxo, porta de servei i porta secreta del Ping-pong: totes donen a l'**Escalinata** (amb el Clauer de Novici). No hi ha més sales que l'Escalinata i una petita **cripta**.
+- **Palanca:** la dóna **en Jordi de la Caseta**, a la caseta darrere el Til·ler (pantalla de les Cel·les).
+- **Home del Raïm:** la palanca al forat de la base gira el cap un quart de volta (N→E→S→O). La rosa dels vents de terra diu «On neix el sol, el raïm madura»: cal posar el cap a **llevant (E)** i prémer el raïm de marbre. Cal tenir el bastó.
+- **Boss:** l'**Home del Raïm cobra vida** (carrega contra l'Ineu; més ràpid a la meitat de vida). Derrotat, es desfà en pedres i s'obre la trapa de la cripta.
+- **Cripta:** les **relíquies dels monjos** i la **Clau del Celler Vell**. La clau obre la porta de ferro de la **Sala de les Gírgoles**, que és **darrere de la Taverna, a la part de sota** (no es pot arribar a les Gírgoles des de la Casa Gran).
+- **Cementiri:** portant-hi les relíquies, la tomba esquerdada es tanca i la boira s'afebleix.

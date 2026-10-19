@@ -196,7 +196,7 @@ class ZonaCasaGran extends ZonaBase {
         this.add.rectangle(960, 440, 44, 74, 0x4a2c16).setStrokeStyle(3, 0x2a1a0c).setDepth(479);
         this.interactiu(960, 520, 85, DIALEGS.portaServei, {
             altura: 100,
-            enTancar: () => { if (Estat.te('clauer')) this.canviarZona('ZonaCasaCuina', 'servei'); }
+            enTancar: () => { if (Estat.te('clauer')) this.canviarZona('ZonaCasaGranInt', 'costat'); }
         });
 
         this.posar('font', 1100, 610, { col: { w: 90, h: 30 } });

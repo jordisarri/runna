@@ -31,9 +31,6 @@ const MAPA = {
         { id: 'ZonaPlaca',         nom: 'Plaça del Santuari',       x: 930,  y: 470 },
         { id: 'ZonaMonestir',      nom: 'El Monestir',              x: 1100, y: 470 },
         { id: 'ZonaCasaGranInt',   nom: 'Casa Gran · Escalinata',   x: 760,  y: 550 },
-        { id: 'ZonaCasaRetrats',   nom: 'Sala dels Retrats',        x: 840,  y: 510 },
-        { id: 'ZonaCasaCuina',     nom: 'Cuina i Rebost',           x: 600,  y: 520 },
-        { id: 'ZonaCasaCeller',    nom: 'Celler de les Botes',      x: 430,  y: 520 },
         { id: 'ZonaCasaCripta',    nom: 'Cripta dels Monjos',       x: 760,  y: 596 },
         { id: 'ZonaCreu',          nom: 'Creu i Bassadòria',        x: 930,  y: 550 },
         // Sud-oest i franja sud
@@ -44,8 +41,7 @@ const MAPA = {
         { id: 'ZonaDolmen',        nom: 'El Dolmen',                x: 900,  y: 640 }
     ],
     enllacos: [
-        ['ZonaPlaca', 'ZonaCreu'], ['ZonaPlaca', 'ZonaCasaGran'], ['ZonaCasaGran', 'ZonaCasaCuina'], ['ZonaCasaCuina', 'ZonaCasaGranInt'],
-        ['ZonaCasaGranInt', 'ZonaCasaRetrats'], ['ZonaCasaGranInt', 'ZonaCasaCeller'], ['ZonaCasaGranInt', 'ZonaCasaCripta'], ['ZonaPlaca', 'ZonaCasaGranInt'],
+        ['ZonaPlaca', 'ZonaCreu'], ['ZonaPlaca', 'ZonaCasaGran'], ['ZonaCasaGran', 'ZonaCasaGranInt'], ['ZonaCasaGranInt', 'ZonaCasaCripta'], ['ZonaPlaca', 'ZonaCasaGranInt'],
         ['ZonaPlaca', 'ZonaEsglesia'], ['ZonaPlaca', 'ZonaMonestir'], ['ZonaPlaca', 'ZonaRuines'],
         ['ZonaRuines', 'ZonaPingpong'], ['ZonaRuines', 'ZonaCami'], ['ZonaCami', 'ZonaErmita'],
         ['ZonaErmita', 'ZonaErmitaInt'], ['ZonaErmita', 'ZonaEra'], ['ZonaEra', 'ZonaJardi'],

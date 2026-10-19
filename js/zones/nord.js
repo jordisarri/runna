@@ -181,6 +181,10 @@ class ZonaCelles extends ZonaBase {
         this.enemic('espantaocell', 640, 930);
         this.enemic('espantaocell', 740, 960);
 
+        // La Caseta d'en Jordi, darrere el Til·ler (nord): el pagès eixerit que dóna la palanca
+        this.posar('masia', 640, 380, { escala: 0.55, col: { w: 240, h: 60 } });
+        this.npc('jordi_caseta', 830, 430, DIALEGS.jordiCaseta);
+
         // Sant Benet (est): la Neus i el seu marit
         this.npc('neus', 1250, 680, DIALEGS.neus);
         this.npc('marit_neus', 1320, 700, DIALEGS.maritNeus);
