@@ -31,8 +31,12 @@
         window.addEventListener('error', e => {
             const el = document.getElementById('errors');
             el.style.display = 'block';
-            el.textContent += (e.filename || '').split('/').pop() + ':' + e.lineno + '  ' + e.message + '\n';
-        });
+            if (e.target && e.target !== window && e.target.src) {      // un fitxer (script) no s'ha pogut carregar
+                el.textContent += "NO S'HA POGUT CARREGAR: " + e.target.src + "\n";
+            } else {
+                el.textContent += (e.filename || '').split('/').pop() + ':' + e.lineno + '  ' + e.message + "\n";
+            }
+        }, true);
     </script>
     <div id="joc"></div>
 
