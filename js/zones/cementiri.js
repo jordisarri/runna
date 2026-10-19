@@ -27,8 +27,10 @@ class ZonaCementiri extends ZonaBase {
         // La tomba esquerdada dels monjos primers: surt boira lila de l'esquerda
         this.posar('tomba_esquerdada', 700, 400, { col: { w: 200, h: 50 } });
         this.interactiu(700, 430, 120, DIALEGS.tombaMonjos, { altura: 110 });
-        this.boira(700, 360, 150, 60, 1.6);
-        this.add.circle(700, 380, 110, 0xa070ff, 0.10).setDepth(390);
+        if (!Estat.flag('relIquiesRetornades')) {   // quan les relíquies tornen, l'esquerda es tanca
+            this.boira(700, 360, 150, 60, 1.6);
+            this.add.circle(700, 380, 110, 0xa070ff, 0.10).setDepth(390);
+        }
         // Creu de pedra gran, al fons
         this.posar('creu', 700, 230, { col: { w: 46, h: 22 } });
         this.interactiu(700, 235, 80, DIALEGS.creuCementiri, { altura: 180 });
@@ -54,8 +56,10 @@ class ZonaCementiri extends ZonaBase {
         this.arbres([[60, 520], [60, 700], [60, 330], [1520, 300], [1520, 520], [1520, 760], [1400, 960], [300, 1040], [900, 1050], [1250, 1050]], 'xiprer');
 
         // Animalets que surten de la terra esquerdada
-        [[420, 420], [900, 440], [600, 700], [1200, 400], [300, 900]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
-        this.enemic('visitant', 1100, 800);
+        if (!Estat.flag('relIquiesRetornades')) {
+            [[420, 420], [900, 440], [600, 700], [1200, 400], [300, 900]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+            this.enemic('visitant', 1100, 800);
+        }
 
         this.sortida(0, 520, 14, 130, 'ZonaRuines', 'cementiri');
         this.sortida(1010, 1086, 150, 14, 'ZonaMonestir', 'cementiri');
