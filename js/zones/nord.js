@@ -44,7 +44,7 @@ class ZonaRuines extends ZonaBase {
         this.interactiu(1130, 380, 95, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1') });
         this.tweens.add({ targets: this.ombraMonjo, y: 344, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
         // Ambient de nit quan la llegenda s'ha començat a descobrir
-        this.nit = this.add.rectangle(0, 0, AMPLE, ALT, 0x0a0a30, 0.22).setOrigin(0).setScrollFactor(0).setDepth(89000).setVisible(false);
+        this.nit = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x0a0a30, 0.22).setScrollFactor(0).setDepth(89000).setVisible(false);
 
         this.cartell(640, 700, DIALEGS.cartellRuinesPingpong);
         this.cartell(300, 700, DIALEGS.cartellCami);
@@ -234,7 +234,7 @@ class ZonaCelles extends ZonaBase {
     // Escena del sopar del Til·ler: taula, pastors i ritual de les quatre espelmes
     fesSopar() {
         const cam = this.cameras.main;
-        const vel = this.add.rectangle(0, 0, AMPLE, ALT, 0x2a1000, 1).setOrigin(0).setScrollFactor(0).setDepth(89500).setAlpha(0);
+        const vel = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x2a1000, 1).setScrollFactor(0).setDepth(89500).setAlpha(0);
         this.tweens.add({ targets: vel, alpha: 0.38, duration: 1600 });
         const taula = this.posar('taula_sopar', 910, 800, { fonsY: 790 });
         const pastors = ['pastor_a', 'pastor_b', 'pastor_vell'].map((k, i) => this.posar(k, 800 + i * 110, 870 + (i % 2) * 14, { fonsY: 880 }));
@@ -323,7 +323,7 @@ class ZonaBosc extends ZonaBase {
         this.cartell(120, 700, DIALEGS.cartellBosc);
         this.sortida(1786, 640, 14, 130, 'ZonaCelles', 'bosc');
 
-        this.add.rectangle(0, 0, AMPLE, ALT, 0x102810, 0.18).setOrigin(0).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x102810, 0.18).setScrollFactor(0).setDepth(90000);
     }
 
     actualitzar(ara) {

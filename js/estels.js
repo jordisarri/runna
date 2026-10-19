@@ -4,9 +4,11 @@
  * Part 2: uneix els 7 punts en ordre i apareix la constel·lació amagada: un ocell sortint d'una gàbia oberta.
  * Controls: ratolí o fletxes/WASD per moure el cercle; ESPAI/ENTER/clic per triar; ESC per sortir (es desa el progrés).
  */
+// Coordenades dissenyades per a 1280x720; es desplacen al centre de la pantalla vertical
+const ESTELS_DX = -280, ESTELS_DY = 220;
 const ESTELS_PUNTS = [
     [640, 520], [640, 410], [640, 320], [540, 380], [450, 320], [740, 380], [830, 320]
-];
+].map(([x, y]) => [x + ESTELS_DX, y + ESTELS_DY]);
 const ESTELS_LINIES = [[1, 2], [2, 3], [2, 4], [4, 5], [2, 6], [6, 7]];
 
 // Final de la missió: l'Ineu té l'Estel de Sant Llorenç
@@ -43,9 +45,11 @@ class EscenaEstels extends Phaser.Scene {
         this.cel = this.add.graphics();
         this.fletxa = this.add.graphics();
 
-        this.titol = this.add.text(AMPLE / 2, 28, "Telescopi del Garf", estilText(22, "#ffd34d", { fontStyle: "bold" })).setOrigin(0.5);
-        this.info = this.add.text(AMPLE / 2, 62, "", estilText(17, "#d8e0ff", { fontStyle: "italic" })).setOrigin(0.5);
-        this.missatge = this.add.text(AMPLE / 2, ALT - 40, "ESC: deixar el telescopi (el progrés es desa)", estilText(14, "#8a90b0")).setOrigin(0.5);
+        this.titol = this.add.text(AMPLE / 2, 40, "Telescopi del Garf", estilText(22, "#ffd34d", { fontStyle: "bold" })).setOrigin(0.5);
+        this.info = this.add.text(AMPLE / 2, 90, "", estilText(17, "#d8e0ff", { fontStyle: "italic", align: "center", wordWrap: { width: 660 } })).setOrigin(0.5);
+        this.missatge = this.add.text(AMPLE / 2, ALT - 40, "El progrés es desa en sortir", estilText(14, "#8a90b0")).setOrigin(0.5);
+        this.add.text(AMPLE - 16, 16, "Sortir ✕", estilText(18, "#f2e6c8", { backgroundColor: "#1a120bcc", padding: { x: 10, y: 6 } }))
+            .setOrigin(1, 0).setDepth(20).setInteractive({ useHandCursor: true }).on("pointerdown", () => this.tancar(false));
 
         // Cercle d'apuntar
         this.rx = AMPLE / 2; this.ry = ALT / 2;
@@ -63,7 +67,7 @@ class EscenaEstels extends Phaser.Scene {
 
     // ---------- Part 1: estels fugaços ----------
     iniciarPart1() {
-        this.info.setText(`Compta els estels fugaços: apunta i prem ESPAI quan en creuï un.   ${this.compte}/7`);
+        this.info.setText(`Compta els estels fugaços: toca quan en creuï un.   ${this.compte}/7`);
         this.propEstrella = this.time.now + 900;
     }
 
@@ -94,7 +98,7 @@ class EscenaEstels extends Phaser.Scene {
                 const flaix = this.add.circle(e.x, e.y, 10, 0xffffff, 0.9);
                 this.tweens.add({ targets: flaix, radius: 70, alpha: 0, duration: 450, onComplete: () => flaix.destroy() });
                 this.so(this.compte);
-                this.info.setText(`Compta els estels fugaços: apunta i prem ESPAI quan en creuï un.   ${this.compte}/7`);
+                this.info.setText(`Compta els estels fugaços: toca quan en creuï un.   ${this.compte}/7`);
                 if (this.compte >= 7) {
                     Estat.posaFlag("estelsPart1");
                     this.estrelles = [];
@@ -129,12 +133,13 @@ class EscenaEstels extends Phaser.Scene {
         // Gàbia oberta al voltant de l'ocell
         const g = this.fletxa;
         g.lineStyle(3, 0xd4af37, 0.9);
-        for (let x = 410; x <= 870; x += 60) g.lineBetween(x, 560, x, 280);
-        g.lineBetween(410, 560, 870, 560);
-        g.beginPath().arc(640, 280, 230, Math.PI, Math.PI * 1.45).strokePath();   // el sostre queda obert per un costat
+        const dx = ESTELS_DX, dy = ESTELS_DY;
+        for (let x = 410; x <= 870; x += 60) g.lineBetween(x + dx, 560 + dy, x + dx, 280 + dy);
+        g.lineBetween(410 + dx, 560 + dy, 870 + dx, 560 + dy);
+        g.beginPath().arc(640 + dx, 280 + dy, 230, Math.PI, Math.PI * 1.45).strokePath();   // el sostre queda obert per un costat
         this.info.setText("Un ocell que s'enlaira d'una gàbia oberta... i una fletxa cap al sud-est.");
-        const fletxa = this.add.text(980, 600, "⬊", estilText(70, "#ffe08a"));
-        this.tweens.add({ targets: fletxa, x: 1040, y: 640, yoyo: true, repeat: -1, duration: 600 });
+        const fletxa = this.add.text(540, 900, "⬊", estilText(70, "#ffe08a"));
+        this.tweens.add({ targets: fletxa, x: 600, y: 940, yoyo: true, repeat: -1, duration: 600 });
         [1, 3, 2].forEach((n, i) => this.time.delayedCall(i * 350, () => this.so(n + 1)));
         this.time.delayedCall(3500, () => this.tancar(true));
     }

@@ -2,7 +2,7 @@
  * ESCENA UI: corre sempre per sobre de la zona activa.
  * HUD (cors, monedes, objectiu), caixa de diàleg, menú de pausa i controls tàctils.
  */
-const AMPLE = 1280, ALT = 720;
+const AMPLE = 720, ALT = 1280;
 const FONT = 'Georgia, "Times New Roman", serif';
 
 function estilText(mida, color = '#fff8e7', extra = {}) {
@@ -58,24 +58,24 @@ class EscenaUI extends Phaser.Scene {
 
     // ---------------- HUD ----------------
     crearHUD() {
-        this.fonsHUD = this.add.rectangle(12, 10, 420, 102, 0x120b06, 0.55).setOrigin(0).setStrokeStyle(2, 0x6e522e);
+        this.fonsHUD = this.add.rectangle(12, 10, 360, 102, 0x120b06, 0.55).setOrigin(0).setStrokeStyle(2, 0x6e522e);
         this.textCors = this.add.text(26, 16, '', estilText(30, '#e0283a', { stroke: '#000', strokeThickness: 4 }));
         this.textMonedes = this.add.text(30, 54, '', estilText(18, '#ffd34d', { stroke: '#000', strokeThickness: 4, fontStyle: 'bold' }));
-        this.textObjectiu = this.add.text(30, 80, '', estilText(14, '#f2e6c8', { fontStyle: 'italic', wordWrap: { width: 395 } }));
+        this.textObjectiu = this.add.text(30, 80, '', estilText(14, '#f2e6c8', { fontStyle: 'italic', wordWrap: { width: 335 } }));
 
-        this.bannerZona = this.add.text(AMPLE / 2, 70, '', estilText(34, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
+        this.bannerZona = this.add.text(AMPLE / 2, 180, '', estilText(32, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
             .setOrigin(0.5).setAlpha(0);
-        this.toast = this.add.text(AMPLE / 2, 130, '', estilText(20, '#ffffff', { backgroundColor: '#1a120bdd', padding: { x: 14, y: 8 } }))
+        this.toast = this.add.text(AMPLE / 2, 240, '', estilText(20, '#ffffff', { backgroundColor: '#1a120bdd', padding: { x: 14, y: 8 } }))
             .setOrigin(0.5).setAlpha(0).setDepth(50);
 
         // Botó de menú (ratolí i pantalla tàctil)
-        this.botoMenu = this.add.text(AMPLE - 24, 20, '☰ Menú', estilText(18, '#f2e6c8', { backgroundColor: '#1a120bcc', padding: { x: 10, y: 6 } }))
+        this.botoMenu = this.add.text(AMPLE - 12, 12, '☰', estilText(30, '#f2e6c8', { backgroundColor: '#1a120bcc', padding: { x: 14, y: 6 } }))
             .setOrigin(1, 0).setInteractive({ useHandCursor: true })
             .on('pointerdown', () => this.menuObert ? this.tancarMenu() : this.obrirMenu());
 
         if (!this.sys.game.device.input.touch) {
-            this.textAjuda = this.add.text(AMPLE - 16, ALT - 12, 'Fletxes/WASD: moure · ESPAI/J: parlar o atacar · K/Majús: esquivar · ESC: menú',
-                estilText(13, '#f2e6c8')).setOrigin(1, 1).setAlpha(0.55);
+            this.textAjuda = this.add.text(AMPLE - 16, ALT - 12, 'Fletxes/WASD: moure · ESPAI: parlar o atacar · ESC: menú',
+                estilText(12, '#f2e6c8')).setOrigin(1, 1).setAlpha(0.55);
         }
     }
 
@@ -89,10 +89,7 @@ class EscenaUI extends Phaser.Scene {
         this.textObjectiu.setText('Objectiu: ' + (d.objectiu || ''));
         this.fonsHUD.height = Math.max(102, 86 + this.textObjectiu.height);
         const flauta = Estat.te('flauta');
-        if (this.botoMusica) { this.botoMusica.setVisible(flauta); this.textBotoMusica.setVisible(flauta); }
-        const foc = Estat.te('foc_jaumeta');
-        if (this.botoFoc) { this.botoFoc.setVisible(foc); this.textBotoFoc.setVisible(foc); }
-        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI/J: parlar o atacar · K/Majús: esquivar' + (flauta ? ' · M: flauta' : '') + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · ESC: menú');
+        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (flauta ? ' · M: flauta' : '') + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · K: esquivar · ESC: menú');
     }
 
     mostrarZona(nom) {
@@ -116,12 +113,12 @@ class EscenaUI extends Phaser.Scene {
 
     // ---------------- DIÀLEG ----------------
     crearCaixaDialeg() {
-        this.caixa = this.add.container(AMPLE / 2, ALT - 110).setVisible(false).setDepth(40);
-        const fons = this.add.rectangle(0, 0, 1120, 170, 0x1a120b, 0.95).setStrokeStyle(4, 0xd4af37);
-        this.plaquetaNom = this.add.text(-540, -100, '', estilText(20, '#1a120b', { backgroundColor: '#d4af37', padding: { x: 12, y: 4 }, fontStyle: 'bold' }));
-        this.textDialeg = this.add.text(-530, -62, '', estilText(23, '#ffffff', { wordWrap: { width: 1060 }, lineSpacing: 8 }));
-        this.indicador = this.add.text(530, 62, '▼', estilText(20, '#d4af37')).setOrigin(1, 1);
-        this.tweens.add({ targets: this.indicador, y: 68, yoyo: true, repeat: -1, duration: 400 });
+        this.caixa = this.add.container(AMPLE / 2, ALT - 130).setVisible(false).setDepth(40);
+        const fons = this.add.rectangle(0, 0, 690, 230, 0x1a120b, 0.95).setStrokeStyle(4, 0xd4af37);
+        this.plaquetaNom = this.add.text(-330, -134, '', estilText(20, '#1a120b', { backgroundColor: '#d4af37', padding: { x: 12, y: 4 }, fontStyle: 'bold' }));
+        this.textDialeg = this.add.text(-325, -98, '', estilText(22, '#ffffff', { wordWrap: { width: 650 }, lineSpacing: 6 }));
+        this.indicador = this.add.text(325, 106, '▼', estilText(20, '#d4af37')).setOrigin(1, 1);
+        this.tweens.add({ targets: this.indicador, y: 112, yoyo: true, repeat: -1, duration: 400 });
         this.caixa.add([fons, this.plaquetaNom, this.textDialeg, this.indicador]);
     }
 
@@ -175,20 +172,21 @@ class EscenaUI extends Phaser.Scene {
     crearMenu() {
         this.menu = this.add.container(0, 0).setVisible(false).setDepth(60);
         const vel = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.65).setOrigin(0).setInteractive();
-        const panell = this.add.rectangle(AMPLE / 2, ALT / 2, 520, 480, 0x1a120b, 0.97).setStrokeStyle(4, 0xd4af37);
-        const titol = this.add.text(AMPLE / 2, ALT / 2 - 195, 'Pausa', estilText(32, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
+        const panell = this.add.rectangle(AMPLE / 2, ALT / 2, 600, 560, 0x1a120b, 0.97).setStrokeStyle(4, 0xd4af37);
+        const titol = this.add.text(AMPLE / 2, ALT / 2 - 235, 'Pausa', estilText(32, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
         this.menu.add([vel, panell, titol]);
 
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
             { text: 'Mapa', fn: () => this.obrirMapa() },
+            { text: 'Tocar la flauta', fn: () => this.tocarFlauta() },
             { text: 'Desar partida', fn: () => { this.tancarMenu(); this.desar(); } },
             { text: 'Copiar codi de partida', fn: () => this.copiarCodi() },
             { text: 'Carregar codi de partida', fn: () => this.carregarCodi() },
             { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];
         this.textOpcions = this.opcions.map((o, i) => {
-            const t = this.add.text(AMPLE / 2, ALT / 2 - 130 + i * 56, o.text, estilText(24, '#f2e6c8'))
+            const t = this.add.text(AMPLE / 2, ALT / 2 - 160 + i * 56, o.text, estilText(24, '#f2e6c8'))
                 .setOrigin(0.5).setInteractive({ useHandCursor: true })
                 .on('pointerover', () => { this.seleccio = i; this.pintarSeleccio(); })
                 .on('pointerdown', () => this.executarOpcio(i));
@@ -250,6 +248,13 @@ class EscenaUI extends Phaser.Scene {
 
     executarOpcio(i) { this.opcions[i].fn(); }
 
+    tocarFlauta() {
+        if (!Estat.te('flauta')) { this.notifica('Encara no tens cap flauta'); return; }
+        const zona = Joc.zonaActiva(this);
+        this.tancarMenu();
+        if (zona) zona.obrirMusica();
+    }
+
     // Desa la posició actual de l'Ineu (la zona activa la informa)
     desar() {
         const zona = Joc.zonaActiva(this);
@@ -291,26 +296,13 @@ class EscenaUI extends Phaser.Scene {
         this.joyBola = this.add.circle(0, 0, 32, 0xffffff, 0.35).setVisible(false);
         this.joyPunter = null;
 
-        this.botoAccio = this.add.circle(AMPLE - 110, ALT - 130, 58, 0xd4af37, 0.45).setStrokeStyle(4, 0xffffff, 0.6)
-            .setInteractive()
-            .on('pointerdown', () => {
-                if (this.dialeg) this.avancar();
-                else if (!this.menuObert) this.accioTactil = true;
-            });
-        this.add.text(AMPLE - 110, ALT - 130, 'ACCIÓ', estilText(18, '#ffffff', { fontStyle: 'bold' })).setOrigin(0.5);
-        this.botoMusica = this.add.circle(AMPLE - 110, ALT - 250, 36, 0x8a5ac0, 0.45).setStrokeStyle(3, 0xffffff, 0.6)
-            .setInteractive().on('pointerdown', () => { if (!this.dialeg && !this.menuObert) this.musicaTactil = true; });
-        this.textBotoMusica = this.add.text(AMPLE - 110, ALT - 250, '♪', estilText(28, '#ffffff', { fontStyle: 'bold' })).setOrigin(0.5);
-        this.botoFoc = this.add.circle(AMPLE - 230, ALT - 180, 36, 0xe07a30, 0.45).setStrokeStyle(3, 0xffffff, 0.6)
-            .setInteractive().on('pointerdown', () => { if (!this.dialeg && !this.menuObert) this.focTactil = true; });
-        this.textBotoFoc = this.add.text(AMPLE - 230, ALT - 180, 'FOC', estilText(14, '#ffffff', { fontStyle: 'bold' })).setOrigin(0.5);
-        this.add.circle(AMPLE - 230, ALT - 80, 36, 0x4a8ad4, 0.4).setStrokeStyle(3, 0xffffff, 0.6)
-            .setInteractive().on('pointerdown', () => { if (!this.dialeg && !this.menuObert) this.esquivaTactil = true; });
-        this.add.text(AMPLE - 230, ALT - 80, 'ESQ.', estilText(14, '#ffffff', { fontStyle: 'bold' })).setOrigin(0.5);
-
+        // Cap botó visible: tocar la meitat dreta de la pantalla = acció (parlar, atacar, avançar diàleg)
         this.input.on('pointerdown', (p, objectes) => {
-            if (objectes.length || this.dialeg || this.menuObert) return;
-            if (p.x < AMPLE * 0.55) {
+            if (objectes.length) return;
+            if (this.menuObert || this.mapaObert) return;
+            if (p.x >= AMPLE * 0.5) {
+                if (!this.dialeg) this.accioTactil = true;
+            } else if (!this.dialeg) {
                 this.joyPunter = p.id;
                 this.joyBase.setPosition(p.x, p.y).setVisible(true);
                 this.joyBola.setPosition(p.x, p.y).setVisible(true);
@@ -334,24 +326,6 @@ class EscenaUI extends Phaser.Scene {
         };
         this.input.on('pointerup', amagar);
         this.input.on('pointerupoutside', amagar);
-    }
-
-    consumirFocTactil() {
-        const a = this.focTactil;
-        this.focTactil = false;
-        return a;
-    }
-
-    consumirMusicaTactil() {
-        const a = this.musicaTactil;
-        this.musicaTactil = false;
-        return a;
-    }
-
-    consumirEsquivaTactil() {
-        const a = this.esquivaTactil;
-        this.esquivaTactil = false;
-        return a;
     }
 
     consumirAccioTactil() {

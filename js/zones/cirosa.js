@@ -54,7 +54,7 @@ class ZonaCamiCirosa extends ZonaBase {
         this.boira(700, 1400, 500, 120, 0.8);
         this.sortida(620, 2186, 160, 14, 'ZonaCelles', 'cirosa');
         this.sortida(500, 0, 160, 14, 'ZonaCirosa', 'cami');
-        this.add.rectangle(0, 0, AMPLE, ALT, 0x3a1a55, 0.09).setOrigin(0).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, 0.09).setScrollFactor(0).setDepth(90000);
     }
 }
 
@@ -123,7 +123,7 @@ class ZonaCirosa extends ZonaBase {
         this.muralla(700, 1186, 1020, 1186, 90);
 
         this.sortida(500, 1186, 160, 14, 'ZonaCamiCirosa', 'cirosa');
-        this.add.rectangle(0, 0, AMPLE, ALT, 0x3a1a55, lila ? 0.12 : 0).setOrigin(0).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, lila ? 0.12 : 0).setScrollFactor(0).setDepth(90000);
     }
 
     // Els pastors escolten música vora el foc: es convencen d'anar al sopar del Til·ler

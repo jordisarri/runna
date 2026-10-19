@@ -9,6 +9,8 @@
  *       construir() { ... }
  *   }
  */
+const ZOOM_CAMERA = 1;
+const BANDA_SUD = 120;   // franja de baix (vora sud, sortides) que es desplaça cap avall en ampliar la zona
 const VELOCITAT_INEU = 230;
 const TOPE_Y = 100;   // els peus de l'Ineu no passen d'aquí amunt: sempre se li veu el cos (la càmera s'atura a y=0)
 
@@ -40,11 +42,20 @@ class ZonaBase extends Phaser.Scene {
         this.invulnerableFins = 0;
         this.cintaGastada = false;
 
+        this.sols = [];
+        this.extraSud = 0;
+        this.yTall = Infinity;
+        this.preparaTweens();
         this.construir();
+        this.ampliarSud();
         this.crearIneu();
 
         const cam = this.cameras.main;
-        cam.setBounds(0, 0, c.amplada, c.alcada);
+        cam.setZoom(ZOOM_CAMERA);
+        // Si el món és més petit que la pantalla (interiors), es centra en lloc de quedar enganxat a una vora
+        const vw = AMPLE / ZOOM_CAMERA, vh = ALT / ZOOM_CAMERA, alcadaMon = c.alcada + this.extraSud;
+        const bx = Math.max(0, (vw - c.amplada) / 2), by = Math.max(0, (vh - alcadaMon) / 2);
+        cam.setBounds(-bx, -by, c.amplada + 2 * bx, alcadaMon + 2 * by);
         cam.startFollow(this.ineu, true, 0.12, 0.12);
         cam.setBackgroundColor(c.colorFons || '#2d4a22');
         cam.fadeIn(350, 0, 0, 0);
@@ -80,7 +91,66 @@ class ZonaBase extends Phaser.Scene {
     // ---------------- Construcció ----------------
     // Fons repetit (herba, llambordes...) en una àrea
     terra(key, x, y, w, h, profunditat = -1000) {
-        return this.add.tileSprite(x, y, w, h, key).setOrigin(0).setTileScale(1 / RES).setDepth(profunditat);
+        const t = this.add.tileSprite(x, y, w, h, key).setOrigin(0).setTileScale(1 / RES).setDepth(profunditat);
+        this.sols.push(t);
+        return t;
+    }
+
+    // Interior = sala fosca (colorFons molt fosc): es dibuixa centrada i no s'allarga
+    esInterior() {
+        const h = (this.config.colorFons || '').replace('#', '');
+        if (h.length !== 6) return false;
+        return [0, 2, 4].reduce((t, i) => t + parseInt(h.slice(i, i + 2), 16), 0) < 70;
+    }
+
+    // y d'una posició dissenyada abans d'ampliar la zona -> y real
+    mapY(y) { return y >= this.yTall ? y + this.extraSud : y; }
+
+    // Els tweens amb un 'y' fix (flotar, balancejar-se) s'han de moure amb l'objecte quan es desplaça
+    preparaTweens() {
+        const t = this.tweens;
+        if (!t.afegirOriginal) t.afegirOriginal = t.add;
+        t.add = cfg => {
+            if (cfg && typeof cfg.y === 'number') { const v = cfg.y; cfg = Object.assign({}, cfg, { y: () => this.mapY(v) }); }
+            return t.afegirOriginal.call(t, cfg);
+        };
+    }
+
+    // La pantalla vertical és més alta que la majoria de zones. S'afegeix terra al sud: tot el que
+    // és a la franja de baix (vora sud, sortides) baixa, i el terra que la travessa s'allarga.
+    ampliarSud() {
+        const c = this.config;
+        const extra = this.esInterior() ? 0 : Math.ceil(ALT / ZOOM_CAMERA) - c.alcada;
+        if (extra <= 0) return;
+        const tall = c.alcada - BANDA_SUD;
+        this.extraSud = extra;
+        this.yTall = tall;
+
+        const sols = new Set(this.sols);
+        this.sols.forEach(t => {
+            if (t.y >= tall) t.y += extra;
+            else if (t.y + t.height > tall) t.setSize(t.width, t.height + extra);
+        });
+        this.children.list.forEach(go => {
+            if (sols.has(go) || go.scrollFactorY === 0 || go.type === 'Graphics' || go.y < tall) return;
+            go.y += extra;
+            if (go.depth >= 0 && go.depth < 50000) go.setDepth(go.depth + extra);
+            if (go.body && go.body.updateFromGameObject && go.body.physicsType === Phaser.Physics.Arcade.STATIC_BODY) go.body.updateFromGameObject();
+        });
+        this.interactius.concat(this.esbarzers, this.tallables).forEach(o => { if (o.y >= tall) o.y += extra; });
+        this.sortides.forEach(s => {
+            if (s.r.y >= tall) s.r.y += extra;
+            else if (s.r.bottom >= c.alcada - 20) s.r.height += extra;
+        });
+        this.physics.world.setBounds(0, TOPE_Y - 30, c.amplada, c.alcada + extra - TOPE_Y + 30);
+
+        // Les vores laterals continuen per la franja nova
+        if (this.textures.exists('arbre')) {
+            for (let y = tall + 60; y < tall + extra; y += 90) {
+                this.posar('arbre', 24, y);
+                this.posar('arbre', c.amplada - 24, y);
+            }
+        }
     }
 
     // Imatge del catàleg amb els peus a (x, y). col = { w, h } caixa de col·lisió a la base.
@@ -203,6 +273,7 @@ class ZonaBase extends Phaser.Scene {
             pos = { x: Estat.dades.x, y: Estat.dades.y, dir: 'avall' };
         } else {
             pos = e[this.dadesEntrada.entrada] || e[Object.keys(e)[0]];
+            pos = Object.assign({}, pos, { y: this.mapY(pos.y) });
         }
 
         if (pos.y < TOPE_Y + 40) pos = Object.assign({}, pos, { y: TOPE_Y + 40 });
@@ -344,6 +415,14 @@ class ZonaBase extends Phaser.Scene {
         if (this.enFoc) this.enFoc(fx, fy);
     }
 
+    // Amb la Jaumeta, l'acció (un sol toc) crema l'esbarzer que tens a davant en lloc d'atacar
+    esbarzerDavant() {
+        if (!Estat.te('foc_jaumeta') || Estat.te('runna')) return false;
+        const d = DIRS[this.direccio] || DIRS.avall;
+        const jo = this.ineu.body.center;
+        return this.esbarzers.some(o => o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, jo.x + d.x * 64, jo.y + d.y * 64) < 130);
+    }
+
     // ---------------- Música ----------------
     obrirMusica() {
         if (this.canviant || this.game.scene.isActive('Musica')) return;
@@ -430,10 +509,11 @@ class ZonaBase extends Phaser.Scene {
         if (proper) this.indicador.setPosition(proper.x, proper.y - proper.altura);
         const T = Phaser.Input.Keyboard.JustDown;
         if (accio && proper) this.interactuar(proper);
+        else if (accio && this.esbarzerDavant()) this.foc();
         else if (accio || T(this.tecles.J)) this.atacar();
-        if (T(this.tecles.K) || T(this.tecles.SHIFT) || ui.consumirEsquivaTactil()) this.esquivar();
-        if (Estat.te('foc_jaumeta') && (T(this.tecles.F) || ui.consumirFocTactil())) this.foc();
-        if (Estat.te('flauta') && (T(this.tecles.M) || ui.consumirMusicaTactil())) this.obrirMusica();
+        if (T(this.tecles.K) || T(this.tecles.SHIFT)) this.esquivar();
+        if (Estat.te('foc_jaumeta') && T(this.tecles.F)) this.foc();
+        if (Estat.te('flauta') && T(this.tecles.M)) this.obrirMusica();
         time = this.time.now;   // un sol rellotge per a tot el combat
         this.actualitzarCombat(time);
         this.comprovarSortides();

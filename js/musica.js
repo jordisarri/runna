@@ -67,13 +67,13 @@ class EscenaMusica extends Phaser.Scene {
         this.tancat = false;
 
         const cx = AMPLE / 2, cy = ALT - 130;
-        this.add.rectangle(cx, ALT - 120, 760, 220, 0x120b06, 0.9).setStrokeStyle(4, 0xd4af37);
-        this.titol = this.add.text(cx, ALT - 214, '', estilText(20, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
-        this.estat = this.add.text(cx, ALT - 186, '', estilText(15, '#f2e6c8', { fontStyle: 'italic' })).setOrigin(0.5);
+        this.add.rectangle(cx, ALT - 120, 680, 250, 0x120b06, 0.9).setStrokeStyle(4, 0xd4af37);
+        this.titol = this.add.text(cx, ALT - 228, '', estilText(20, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
+        this.estat = this.add.text(cx, ALT - 198, '', estilText(15, '#f2e6c8', { fontStyle: 'italic', align: 'center', wordWrap: { width: 640 } })).setOrigin(0.5);
 
         this.botons = [null, 1, 2, 3].map((n, i) => {
             if (!n) return null;
-            const x = cx + (n - 2) * 150;
+            const x = cx + (n - 2) * 140;
             const cercle = this.add.circle(x, cy + 10, 52, COLORS_NOTA[n], 0.55).setStrokeStyle(4, 0xffffff, 0.7)
                 .setInteractive({ useHandCursor: true }).on('pointerdown', () => this.nota(n, true));
             this.add.text(x, cy + 10, String(n), estilText(34, '#ffffff', { fontStyle: 'bold', stroke: '#000', strokeThickness: 5 })).setOrigin(0.5);
@@ -94,11 +94,13 @@ class EscenaMusica extends Phaser.Scene {
             this.time.delayedCall(500, () => this.reproduir());
         } else {
             this.titol.setText('Flauta de la Pianista');
-            this.estat.setText('Toca les notes (1, 2, 3)  ·  M o ESC: guardar la flauta');
+            this.estat.setText('Toca les notes (1, 2, 3)');
             const sabudes = Object.values(MELODIES).filter(m => Estat.flag(m.flag));
             this.add.text(cx, ALT - 30, sabudes.length
                 ? sabudes.map(m => `${m.nom}: ${m.notes.join('-')}`).join('   ·   ')
-                : 'Encara no coneixes cap cant.', estilText(13, '#a89878')).setOrigin(0.5);
+                : 'Encara no coneixes cap cant.', estilText(12, '#a89878', { align: 'center', wordWrap: { width: 650 } })).setOrigin(0.5);
+            this.add.text(cx + 330, ALT - 238, 'Guardar ✕', estilText(15, '#f2e6c8', { backgroundColor: '#1a120bcc', padding: { x: 8, y: 4 } }))
+                .setOrigin(1, 0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => this.tancar(false));
             this.lastTime = 0;
         }
     }

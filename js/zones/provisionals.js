@@ -141,7 +141,7 @@ class ZonaCreu extends ZonaBase {
         this.propGripau = this.time.now + 1500;
         this.sortida(1100, 0, 160, 14, 'ZonaPlaca', 'creu');
 
-        this.add.rectangle(0, 0, AMPLE, ALT, 0x3a1a55, 0.08).setOrigin(0).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, 0.08).setScrollFactor(0).setDepth(90000);
     }
 
     // La Bassadòria reacciona al Cant de l'Aurora (només quan l'Ineu és a prop)

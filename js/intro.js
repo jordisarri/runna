@@ -13,6 +13,7 @@ const MUSICA_INICI_INTRO = 3.5;
 const FOSA_BUCLE = 500;
 // Els primers fotogrames d'intro_runna.mp4 són una imatge del dolmen que sobra: els saltem
 const INICI_VIDEO_INTRO = 0.25;
+const VIDEO_VISIBLE = 0.76;   // part de l'amplada del vídeo que es veu (el títol hi cap amb una mica d'aire)
 
 class EscenaTitol extends Phaser.Scene {
     constructor() { super('Titol'); }
@@ -44,9 +45,10 @@ class EscenaTitol extends Phaser.Scene {
 
     // Vídeo a pantalla completa (s'adapta a la mida quan el vídeo ja té dimensions)
     crearVideo(key, profunditat) {
-        const v = this.add.video(0, 0, key).setOrigin(0).setDepth(profunditat);
+        const v = this.add.video(AMPLE / 2, ALT / 2, key).setOrigin(0.5).setDepth(profunditat);
         v.setMute(true);
-        const ajusta = () => { if (v.width > 0) v.setDisplaySize(AMPLE, ALT); };
+        // El vídeo és horitzontal: es mostra només la franja central (títol amb una mica d'aire als costats)
+        const ajusta = () => { if (v.width > 0) { const f = AMPLE / (v.width * VIDEO_VISIBLE); v.setDisplaySize(v.width * f, v.height * f); } };
         v.on('created', ajusta);
         v.on('playing', ajusta);
         ajusta();
@@ -59,8 +61,8 @@ class EscenaTitol extends Phaser.Scene {
     construirPortada() {
         this.portada = this.add.container(0, 0).setDepth(2000);
         const fons = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000).setOrigin(0);
-        const t = this.add.text(AMPLE / 2, ALT / 2, 'Prem qualsevol tecla o toca la pantalla',
-            { fontFamily: FONT_CAL, fontSize: '46px', color: '#e8d9b0', resolution: 2 }).setOrigin(0.5);
+        const t = this.add.text(AMPLE / 2, ALT / 2, 'Toca la pantalla\nper començar',
+            { fontFamily: FONT_CAL, fontSize: '36px', color: '#e8d9b0', resolution: 2 }).setOrigin(0.5);
         const so = this.add.text(AMPLE / 2, ALT / 2 + 60, '♪ amb so', estilText(16, '#8a8070')).setOrigin(0.5);
         this.tweens.add({ targets: t, alpha: 0.35, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
         this.portada.add([fons, t, so]);
@@ -130,7 +132,7 @@ class EscenaTitol extends Phaser.Scene {
         this.menu = this.add.container(0, 0).setDepth(30).setAlpha(0);
         const banda = this.add.graphics();
         banda.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0, 0, 0.75, 0.75);
-        banda.fillRect(0, ALT - 150, AMPLE, 150);
+        banda.fillRect(0, ALT - 300, AMPLE, 300);
         this.menu.add(banda);
 
         const hiHa = Estat.hiHaPartida();
@@ -139,11 +141,11 @@ class EscenaTitol extends Phaser.Scene {
         this.opcions.push({ text: 'Nova partida', fn: () => this.novaPartida(hiHa) });
         this.opcions.push({ text: 'Carregar codi', fn: () => this.carregarCodi() });
 
-        const separacio = 340;
-        const x0 = AMPLE / 2 - (this.opcions.length - 1) * separacio / 2;
+        const separacio = 72;
+        const y0 = ALT - 70 - (this.opcions.length - 1) * separacio;
         this.textOpcions = this.opcions.map((o, i) => {
-            const t = this.add.text(x0 + i * separacio, ALT - 62, o.text, {
-                fontFamily: FONT_TITOL, fontSize: '28px', fontStyle: 'bold', color: '#f2e6c8',
+            const t = this.add.text(AMPLE / 2, y0 + i * separacio, o.text, {
+                fontFamily: FONT_TITOL, fontSize: '34px', fontStyle: 'bold', color: '#f2e6c8',
                 stroke: '#1a120b', strokeThickness: 6, resolution: 2
             }).setOrigin(0.5).setInteractive({ useHandCursor: true })
                 .on('pointerover', () => { this.seleccio = i; this.pintar(); })
@@ -157,7 +159,7 @@ class EscenaTitol extends Phaser.Scene {
         if (location.protocol === 'file:' || Grafics.pixelsBloquejats) {
             this.menu.add(this.add.text(AMPLE / 2, 16,
                 'Atenció: obre el joc amb un servidor local (Live Server de VS Code) perquè tot funcioni bé.',
-                estilText(15, '#ffb0a0', { backgroundColor: '#1a120bcc', padding: { x: 10, y: 5 } })).setOrigin(0.5, 0));
+                estilText(13, '#ffb0a0', { backgroundColor: '#1a120bcc', padding: { x: 10, y: 5 }, wordWrap: { width: 660 } })).setOrigin(0.5, 0));
         }
     }
 

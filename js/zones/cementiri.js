@@ -63,6 +63,6 @@ class ZonaCementiri extends ZonaBase {
 
         this.sortida(0, 520, 14, 130, 'ZonaRuines', 'cementiri');
         this.sortida(1010, 1086, 150, 14, 'ZonaMonestir', 'cementiri');
-        this.add.rectangle(0, 0, AMPLE, ALT, 0x201040, 0.14).setOrigin(0).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x201040, 0.14).setScrollFactor(0).setDepth(90000);
     }
 }

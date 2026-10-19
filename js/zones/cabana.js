@@ -52,7 +52,7 @@ class ZonaCabana extends ZonaBase {
                      [400, 980], [1000, 980], [1280, 880], [1300, 560], [200, 340], [1180, 280]]);
         // Les bestioles no arriben tan lluny: només algun bolet mal-humorat
         this.enemic('bolet', 1150, 880);
-        this.add.rectangle(0, 0, AMPLE, ALT, 0x0a3010, 0.12).setOrigin(0).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x0a3010, 0.12).setScrollFactor(0).setDepth(90000);
     }
 }
 

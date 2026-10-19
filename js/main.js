@@ -110,10 +110,10 @@ class EscenaProleg extends Phaser.Scene {
         // Plaça de nit
         const nit = this.add.container(0, 0).setAlpha(0);
         nit.add(this.add.tileSprite(0, 0, AMPLE, ALT, 'llamborda').setOrigin(0).setTileScale(1 / RES).setTint(0x2a3050));
-        const esg = this.add.image(AMPLE / 2 - 120, 430, 'esglesia').setOrigin(0.5, 1).setTint(0x3a4470);
+        const esg = this.add.image(AMPLE / 2 - 40, 600, 'esglesia').setOrigin(0.5, 1).setTint(0x3a4470);
         esg.setScale((this.textures.get('esglesia').customData.escala || 0.5) * 0.8);
         nit.add(esg);
-        const reixa = this.add.image(380, 560, 'reixa').setScale(0.6).setTint(0x556080);
+        const reixa = this.add.image(250, 760, 'reixa').setScale(0.6).setTint(0x556080);
         nit.add(reixa);
 
         // Siluetes: una figura amb hàbit i una de petita
@@ -125,17 +125,17 @@ class EscenaProleg extends Phaser.Scene {
         nen.fillStyle(0x07060a, 1);
         nen.fillRoundedRect(-11, -50, 22, 50, 8);
         nen.fillCircle(0, -58, 11);
-        const grup = this.add.container(260, 640, [silueta, nen]).setAlpha(0);
+        const grup = this.add.container(140, 880, [silueta, nen]).setAlpha(0);
         nen.x = 60;
         nit.add(grup);
 
-        nit.add(this.add.particles(380, 560, 'boira', {
+        nit.add(this.add.particles(250, 760, 'boira', {
             x: { min: -40, max: 40 }, speedX: { min: 5, max: 25 }, speedY: { min: -25, max: -5 },
             scale: { start: 1, end: 3.5 }, alpha: { start: 0.7, end: 0 }, lifespan: 5000, frequency: 90
         }));
         nit.add(this.add.rectangle(0, 0, AMPLE, ALT, 0x0a0820, 0.45).setOrigin(0));
 
-        const text = this.add.text(AMPLE / 2, ALT / 2, '', estilText(34, '#f2e6c8', { align: 'center', fontStyle: 'italic' }))
+        const text = this.add.text(AMPLE / 2, ALT / 2, '', estilText(30, '#f2e6c8', { align: 'center', fontStyle: 'italic' }))
             .setOrigin(0.5).setAlpha(0);
         const riure = this.add.text(0, 0, 'ji, ji, ji...', estilText(20, '#d8c8ff', { fontStyle: 'italic' })).setAlpha(0);
 
@@ -150,7 +150,7 @@ class EscenaProleg extends Phaser.Scene {
         this.time.delayedCall(4200, () => {
             this.tweens.add({ targets: nit, alpha: 1, duration: 1200 });
             this.tweens.add({ targets: grup, alpha: 1, duration: 1500 });
-            this.tweens.add({ targets: grup, x: 1150, duration: 6500, ease: 'Sine.easeInOut' });
+            this.tweens.add({ targets: grup, x: 640, duration: 6500, ease: 'Sine.easeInOut' });
         });
         this.time.delayedCall(6500, () => {
             this.tweens.add({
@@ -162,7 +162,7 @@ class EscenaProleg extends Phaser.Scene {
         mostra('Matí.', 12000, 900);
         this.time.delayedCall(14400, () => this.acabar());
 
-        this.add.text(AMPLE - 16, ALT - 12, 'ESPAI / clic: saltar', estilText(14, '#8a8070')).setOrigin(1, 1);
+        this.add.text(AMPLE - 16, ALT - 12, 'Toca per saltar', estilText(14, '#8a8070')).setOrigin(1, 1);
         this.input.keyboard.on('keydown-SPACE', () => this.acabar());
         this.input.keyboard.on('keydown-ENTER', () => this.acabar());
         this.input.on('pointerdown', () => this.acabar());

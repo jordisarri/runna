@@ -104,7 +104,7 @@ class ZonaPlaca extends ZonaBase {
         this.enemic('escolopendra', 1450, 640);
 
         // Vel lila: el santuari està tocat per la boira
-        this.add.rectangle(0, 0, AMPLE, ALT, 0x3a1a55, 0.10).setOrigin(0).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, 0.10).setScrollFactor(0).setDepth(90000);
     }
 
     // El Cant de les Pedres, tocat davant la pedra de la cantonada, la fa girar
