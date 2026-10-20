@@ -23,8 +23,8 @@ const CATALEG = [
     { key: 'creu',         file: 'assets/creu.png',         amplada: 70,  provisional: (c, w) => dibuixarCreu(c, w) },
     { key: 'bassadoria',   file: 'assets/bassadoria.png',   amplada: 260, provisional: (c, w) => dibuixarBassadoria(c, w) },
     { key: 'font',         file: 'assets/font.png',         amplada: 110, provisional: (c, w) => dibuixarFont(c, w) },
-    { key: 'arbre',        file: 'assets/arbre.png',        amplada: 150, provisional: (c, w) => dibuixarArbre(c, w) },
-    { key: 'xiprer',       file: 'assets/xiprer.png',       amplada: 60,  provisional: (c, w) => dibuixarXiprer(c, w) },
+    { key: 'arbre',        file: 'assets/arbre.png',        amplada: 240, provisional: (c, w) => dibuixarArbre(c, w) },
+    { key: 'xiprer',       file: 'assets/xiprer.png',       amplada: 80,  provisional: (c, w) => dibuixarXiprer(c, w) },
     { key: 'retaule',      file: 'assets/retaule.png',      amplada: 360, provisional: (c, w) => dibuixarRetaule(c, w) },
 
     // ---- Edificis nous ----
@@ -57,7 +57,7 @@ const CATALEG = [
     // ---- Escenari nou ----
     { key: 'runes',     file: 'assets/runes.png',     amplada: 300, provisional: (c, w) => dibuixarRunes(c, w) },
     { key: 'columna',   file: 'assets/columna.png',   amplada: 58,  provisional: (c, w) => dibuixarColumna(c, w) },
-    { key: 'roure',     file: 'assets/roure.png',     amplada: 300, provisional: (c, w) => dibuixarRoure(c, w) },
+    { key: 'roure',     file: 'assets/roure.png',     amplada: 420, provisional: (c, w) => dibuixarRoure(c, w) },
     { key: 'tiller',    file: 'assets/tiller.png',    amplada: 340, provisional: (c, w) => dibuixarTiller(c, w) },
     { key: 'altar',     file: 'assets/altar.png',     amplada: 150, provisional: (c, w) => dibuixarAltar(c, w) },
     { key: 'taula_pedra', file: 'assets/taula_pedra.png', amplada: 110, provisional: (c, w) => dibuixarTaulaPedra(c, w) },
@@ -67,7 +67,7 @@ const CATALEG = [
     { key: 'pergola',   file: 'assets/pergola.png',   amplada: 260, provisional: (c, w) => dibuixarPergola(c, w) },
     { key: 'flors',     file: 'assets/flors.png',     amplada: 90,  provisional: (c, w) => dibuixarFlors(c, w) },
     { key: 'taula_pp',  file: 'assets/taula_pp.png',  amplada: 240, provisional: (c, w) => dibuixarTaulaPP(c, w) },
-    { key: 'alzina_buida', file: 'assets/alzina_buida.png', amplada: 200, provisional: (c, w) => dibuixarAlzinaBuida(c, w) },
+    { key: 'alzina_buida', file: 'assets/alzina_buida.png', amplada: 280, provisional: (c, w) => dibuixarAlzinaBuida(c, w) },
     { key: 'llosa',     file: 'assets/llosa.png',     amplada: 90,  provisional: (c, w) => dibuixarLlosa(c, w) },
 
     // ---- Enemics ----
@@ -131,7 +131,11 @@ const Grafics = {
     faltants: [],
 
     carregar(scene) {
-        scene.load.on('loaderror', f => Grafics.faltants.push(f.key));
+        scene.load.on('loaderror', f => {
+            Grafics.faltants.push(f.key);
+            // Si no hi ha el PNG, provem el mateix nom en JPG (amb una clau a part)
+            if (CATALEG.some(i => i.key === f.key) && /\.png$/.test(f.url)) scene.load.image(f.key + '__jpg', f.url.replace(/\.png$/, '.jpg'));
+        });
         CATALEG.forEach(item => scene.load.image(item.key, item.file));
         DIRS_INEU.forEach(dir => scene.load.spritesheet('ineu_' + dir, `assets/sprites/ineu/${dir}.png`,
             { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt }));
@@ -140,6 +144,12 @@ const Grafics = {
     // Processa tots els PNG carregats i crea marcadors/textures generades
     preparar(scene) {
         CATALEG.forEach(item => {
+            // Gràfic carregat com a JPG: passa a ser el gràfic oficial
+            if (scene.textures.exists(item.key + '__jpg')) {
+                if (scene.textures.exists(item.key)) scene.textures.remove(item.key);
+                scene.textures.renameTexture(item.key + '__jpg', item.key);
+                Grafics.faltants = Grafics.faltants.filter(k => k !== item.key);
+            }
             const existeix = scene.textures.exists(item.key) && !Grafics.faltants.includes(item.key);
             if (existeix) Grafics.netejarPNG(scene, item);
             else Grafics.crearProvisional(scene, item);
@@ -164,15 +174,17 @@ const Grafics = {
 
     netejarPNG(scene, item) {
         const font = scene.textures.get(item.key).getSourceImage();
-        const escala = Math.min(1, (item.amplada * RES) / font.width);
-        const w = Math.round(font.width * escala);
-        const h = Math.round(font.height * escala);
+        // Retallem les vores transparents/blanques: "amplada" és l'amplada del que es veu de debò
+        const r = Grafics.capsa(font);
+        const escala = Math.min(1, (item.amplada * RES) / r.w);
+        const w = Math.round(r.w * escala);
+        const h = Math.round(r.h * escala);
         const canvas = document.createElement('canvas');
         canvas.width = w; canvas.height = h;
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
-        ctx.drawImage(font, 0, 0, w, h);
+        ctx.drawImage(font, r.x, r.y, r.w, r.h, 0, 0, w, h);
         try {
             const img = ctx.getImageData(0, 0, w, h);
             treureFonsBlanc(img.data, w, h);
@@ -184,6 +196,31 @@ const Grafics = {
         scene.textures.addCanvas(item.key, canvas);
         // Escala que cal aplicar a la imatge per mostrar-la a "amplada" píxels de joc
         scene.textures.get(item.key).customData.escala = item.amplada / w;
+    },
+
+    // Rectangle de la imatge que té contingut (en píxels de la font)
+    capsa(font) {
+        const tot = { x: 0, y: 0, w: font.width, h: font.height };
+        try {
+            const f = Math.min(1, 400 / font.width);
+            const w = Math.max(1, Math.round(font.width * f)), h = Math.max(1, Math.round(font.height * f));
+            const c = document.createElement('canvas');
+            c.width = w; c.height = h;
+            const ctx = c.getContext('2d', { willReadFrequently: true });
+            ctx.drawImage(font, 0, 0, w, h);
+            const img = ctx.getImageData(0, 0, w, h);
+            treureFonsBlanc(img.data, w, h);
+            let x0 = w, y0 = h, x1 = -1, y1 = -1;
+            for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+                if (img.data[(y * w + x) * 4 + 3] > 24) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+            }
+            if (x1 < 0) return tot;
+            const m = 2; // un petit marge
+            x0 = Math.max(0, x0 - m); y0 = Math.max(0, y0 - m); x1 = Math.min(w - 1, x1 + m); y1 = Math.min(h - 1, y1 + m);
+            return { x: Math.floor(x0 / f), y: Math.floor(y0 / f), w: Math.min(font.width, Math.ceil((x1 - x0 + 1) / f)), h: Math.min(font.height, Math.ceil((y1 - y0 + 1) / f)) };
+        } catch (e) {
+            return tot;
+        }
     },
 
     crearProvisional(scene, item) {

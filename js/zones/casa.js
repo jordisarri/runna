@@ -253,7 +253,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         rosa.lineStyle(2, 0x2a1f18, 1).lineBetween(cx - 80, cy, cx + 80, cy).lineBetween(cx, cy - 33, cx, cy + 33);
         this.posRosa = [[cx, cy - 22], [cx + 56, cy], [cx, cy + 22], [cx - 56, cy]];
         [['N', cx, cy - 46], ['E', cx + 96, cy], ['S', cx, cy + 46], ['O', cx - 96, cy]].forEach(([t, x, y]) => {
-            this.add.text(x, y, t, estilText(16, '#f2e6c8', { stroke: '#000', strokeThickness: 3, fontStyle: 'bold' })).setOrigin(0.5).setDepth(-955);
+            this.add.text(x, y, t, estilText(22, '#f2e6c8', { stroke: '#000', strokeThickness: 3, fontStyle: 'bold' })).setOrigin(0.5).setDepth(-955);
         });
         this.marcaRaim = this.add.circle(0, 0, 9, 0xffd34d).setStrokeStyle(2, 0x2a1f18).setDepth(-950);
         this.tweens.add({ targets: this.marcaRaim, scale: 1.4, yoyo: true, repeat: -1, duration: 500 });

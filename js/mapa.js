@@ -5,7 +5,7 @@
  * Les pantalles que encara no existeixen al joc no es poden visitar, així que no apareixen mai.
  */
 const MAPA = {
-    ample: 100, alt: 44,
+    ample: 108, alt: 50,
     pos(z) { return { x: 56 + (z.x - 150) * 0.64, y: 140 + (z.y - 90) * 1.85 }; },
     zones: [
         // Nord
@@ -59,7 +59,7 @@ const MAPA = {
     // Dibuixa el mapa dins del contenidor; actual = id de la zona on som
     dibuixar(scene, contenidor, actual) {
         const fons = scene.add.rectangle(AMPLE / 2, ALT / 2, 700, 1220, 0x1a120b, 1).setStrokeStyle(4, 0xd4af37);
-        const titol = scene.add.text(AMPLE / 2, 70, 'Mapa del Santuari', estilText(28, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
+        const titol = scene.add.text(AMPLE / 2, 70, 'Mapa del Santuari', estilText(38, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
         contenidor.add([fons, titol]);
 
         const per = id => MAPA.zones.find(z => z.id === id);
@@ -81,13 +81,13 @@ const MAPA = {
             const { x, y } = MAPA.pos(z);
             const caixa = scene.add.rectangle(x, y, MAPA.ample, MAPA.alt, ara ? 0x5a3a1a : 0x2e2216, 1)
                 .setStrokeStyle(ara ? 4 : 2, ara ? 0xffd34d : 0xc9b48a);
-            const text = scene.add.text(x, y, z.nom, estilText(11, ara ? '#ffd34d' : '#f2e6c8', { align: 'center', wordWrap: { width: MAPA.ample - 8 } })).setOrigin(0.5);
+            const text = scene.add.text(x, y, z.nom, estilText(15, ara ? '#ffd34d' : '#f2e6c8', { align: 'center', wordWrap: { width: MAPA.ample - 8 } })).setOrigin(0.5);
             contenidor.add([caixa, text]);
         });
 
         const peu = visitades < MAPA.zones.length
             ? 'Els llocs que encara no has trobat continuen amagats.'
             : 'Has trobat tots els llocs!';
-        contenidor.add(scene.add.text(AMPLE / 2, ALT - 46, peu + '\n(toca per tornar)', estilText(14, '#a89878', { fontStyle: 'italic' })).setOrigin(0.5));
+        contenidor.add(scene.add.text(AMPLE / 2, ALT - 46, peu + '\n(toca per tornar)', estilText(22, '#a89878', { fontStyle: 'italic' })).setOrigin(0.5));
     }
 };

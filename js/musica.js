@@ -67,9 +67,9 @@ class EscenaMusica extends Phaser.Scene {
         this.tancat = false;
 
         const cx = AMPLE / 2, cy = ALT - 130;
-        this.add.rectangle(cx, ALT - 120, 680, 250, 0x120b06, 0.9).setStrokeStyle(4, 0xd4af37);
-        this.titol = this.add.text(cx, ALT - 228, '', estilText(20, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
-        this.estat = this.add.text(cx, ALT - 198, '', estilText(15, '#f2e6c8', { fontStyle: 'italic', align: 'center', wordWrap: { width: 640 } })).setOrigin(0.5);
+        this.add.rectangle(cx, ALT - 135, 680, 290, 0x120b06, 0.9).setStrokeStyle(4, 0xd4af37);
+        this.titol = this.add.text(cx, ALT - 262, '', estilText(30, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
+        this.estat = this.add.text(cx, ALT - 222, '', estilText(24, '#f2e6c8', { fontStyle: 'italic', align: 'center', wordWrap: { width: 640 } })).setOrigin(0.5);
 
         this.botons = [null, 1, 2, 3].map((n, i) => {
             if (!n) return null;
@@ -96,10 +96,10 @@ class EscenaMusica extends Phaser.Scene {
             this.titol.setText('Flauta de la Pianista');
             this.estat.setText('Toca les notes (1, 2, 3)');
             const sabudes = Object.values(MELODIES).filter(m => Estat.flag(m.flag));
-            this.add.text(cx, ALT - 30, sabudes.length
+            this.add.text(cx, ALT - 34, sabudes.length
                 ? sabudes.map(m => `${m.nom}: ${m.notes.join('-')}`).join('   ·   ')
-                : 'Encara no coneixes cap cant.', estilText(12, '#a89878', { align: 'center', wordWrap: { width: 650 } })).setOrigin(0.5);
-            this.add.text(cx + 330, ALT - 238, 'Guardar ✕', estilText(15, '#f2e6c8', { backgroundColor: '#1a120bcc', padding: { x: 8, y: 4 } }))
+                : 'Encara no coneixes cap cant.', estilText(20, '#a89878', { align: 'center', wordWrap: { width: 650 } })).setOrigin(0.5);
+            this.add.text(cx + 330, ALT - 262, 'Guardar ✕', estilText(24, '#f2e6c8', { backgroundColor: '#1a120bcc', padding: { x: 8, y: 4 } }))
                 .setOrigin(1, 0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => this.tancar(false));
             this.lastTime = 0;
         }

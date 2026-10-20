@@ -218,7 +218,7 @@ Object.assign(ZonaBase.prototype, {
     },
 
     flotant(x, y, text, color = '#ffffff') {
-        const t = this.add.text(x, y, text, estilText(17, color, { stroke: '#000', strokeThickness: 4, fontStyle: 'bold' }))
+        const t = this.add.text(x, y, text, estilText(26, color, { stroke: '#000', strokeThickness: 4, fontStyle: 'bold' }))
             .setOrigin(0.5, 1).setDepth(99999);
         this.tweens.add({ targets: t, y: y - 46, alpha: 0, duration: 1300, delay: 300, onComplete: () => t.destroy() });
     },

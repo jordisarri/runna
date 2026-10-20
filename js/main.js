@@ -74,15 +74,15 @@ class EscenaCarrega extends Phaser.Scene {
         const barra = this.add.rectangle(AMPLE / 2 - 250, ALT / 2, 0, 16, 0xd4af37).setOrigin(0, 0.5);
         this.add.rectangle(AMPLE / 2, ALT / 2, 504, 20).setStrokeStyle(2, 0xd4af37);
         this.add.text(AMPLE / 2, ALT / 2 - 40, 'Carregant el Miracle...', estilText(22, '#f2e6c8')).setOrigin(0.5);
-        const detall = this.add.text(AMPLE / 2, ALT / 2 + 40, '', estilText(14, '#8a8070')).setOrigin(0.5);
+        const detall = this.add.text(AMPLE / 2, ALT / 2 + 40, '', estilText(22, '#8a8070')).setOrigin(0.5);
         this.load.on('progress', v => { barra.width = 500 * v; });
         this.load.on('fileprogress', f => detall.setText(f.key));
         this.load.on('loaderror', f => console.warn("No s'ha pogut carregar", f.key));
         Grafics.carregar(this);
         this.load.audio('musica_intro', 'assets/musica/intro_runna.mp3');
         // Vídeos de la intro (sense el seu so: sona la música del joc)
-        this.load.video('video_intro', 'assets/video/intro_runna.mp4', true);
-        this.load.video('video_bucle', 'assets/video/intro_runna_bucle.mp4', true);
+        this.load.video('video_intro', 'assets/video/intro_runna_vertical.mp4', true);
+        this.load.video('video_bucle', 'assets/video/intro_runna_bucle_vertical.mp4', true);
     }
 
     create() {
@@ -135,7 +135,7 @@ class EscenaProleg extends Phaser.Scene {
         }));
         nit.add(this.add.rectangle(0, 0, AMPLE, ALT, 0x0a0820, 0.45).setOrigin(0));
 
-        const text = this.add.text(AMPLE / 2, ALT / 2, '', estilText(30, '#f2e6c8', { align: 'center', fontStyle: 'italic' }))
+        const text = this.add.text(AMPLE / 2, ALT / 2, '', estilText(38, '#f2e6c8', { align: 'center', fontStyle: 'italic' }))
             .setOrigin(0.5).setAlpha(0);
         const riure = this.add.text(0, 0, 'ji, ji, ji...', estilText(20, '#d8c8ff', { fontStyle: 'italic' })).setAlpha(0);
 
@@ -162,7 +162,7 @@ class EscenaProleg extends Phaser.Scene {
         mostra('Matí.', 12000, 900);
         this.time.delayedCall(14400, () => this.acabar());
 
-        this.add.text(AMPLE - 16, ALT - 12, 'Toca per saltar', estilText(14, '#8a8070')).setOrigin(1, 1);
+        this.add.text(AMPLE - 16, ALT - 12, 'Toca per saltar', estilText(22, '#8a8070')).setOrigin(1, 1);
         this.input.keyboard.on('keydown-SPACE', () => this.acabar());
         this.input.keyboard.on('keydown-ENTER', () => this.acabar());
         this.input.on('pointerdown', () => this.acabar());

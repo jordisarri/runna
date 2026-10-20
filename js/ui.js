@@ -58,18 +58,18 @@ class EscenaUI extends Phaser.Scene {
 
     // ---------------- HUD ----------------
     crearHUD() {
-        this.fonsHUD = this.add.rectangle(12, 10, 360, 102, 0x120b06, 0.55).setOrigin(0).setStrokeStyle(2, 0x6e522e);
-        this.textCors = this.add.text(26, 16, '', estilText(30, '#e0283a', { stroke: '#000', strokeThickness: 4 }));
-        this.textMonedes = this.add.text(30, 54, '', estilText(18, '#ffd34d', { stroke: '#000', strokeThickness: 4, fontStyle: 'bold' }));
-        this.textObjectiu = this.add.text(30, 80, '', estilText(14, '#f2e6c8', { fontStyle: 'italic', wordWrap: { width: 335 } }));
+        this.fonsHUD = this.add.rectangle(12, 10, 440, 130, 0x120b06, 0.55).setOrigin(0).setStrokeStyle(2, 0x6e522e);
+        this.textCors = this.add.text(26, 14, '', estilText(38, '#e0283a', { stroke: '#000', strokeThickness: 4 }));
+        this.textMonedes = this.add.text(30, 62, '', estilText(26, '#ffd34d', { stroke: '#000', strokeThickness: 4, fontStyle: 'bold' }));
+        this.textObjectiu = this.add.text(30, 98, '', estilText(24, '#f2e6c8', { fontStyle: 'italic', wordWrap: { width: 410 } }));
 
-        this.bannerZona = this.add.text(AMPLE / 2, 180, '', estilText(32, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
+        this.bannerZona = this.add.text(AMPLE / 2, 180, '', estilText(42, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
             .setOrigin(0.5).setAlpha(0);
-        this.toast = this.add.text(AMPLE / 2, 240, '', estilText(20, '#ffffff', { backgroundColor: '#1a120bdd', padding: { x: 14, y: 8 } }))
+        this.toast = this.add.text(AMPLE / 2, 240, '', estilText(28, '#ffffff', { backgroundColor: '#1a120bdd', padding: { x: 16, y: 10 }, wordWrap: { width: 640 }, align: 'center' }))
             .setOrigin(0.5).setAlpha(0).setDepth(50);
 
         // Botó de menú (ratolí i pantalla tàctil)
-        this.botoMenu = this.add.text(AMPLE - 12, 12, '☰', estilText(30, '#f2e6c8', { backgroundColor: '#1a120bcc', padding: { x: 14, y: 6 } }))
+        this.botoMenu = this.add.text(AMPLE - 12, 12, '☰', estilText(40, '#f2e6c8', { backgroundColor: '#1a120bcc', padding: { x: 16, y: 8 } }))
             .setOrigin(1, 0).setInteractive({ useHandCursor: true })
             .on('pointerdown', () => this.menuObert ? this.tancarMenu() : this.obrirMenu());
 
@@ -87,7 +87,7 @@ class EscenaUI extends Phaser.Scene {
         this.textCors.setText(cors);
         this.textMonedes.setText('● ' + d.monedes);
         this.textObjectiu.setText('Objectiu: ' + (d.objectiu || ''));
-        this.fonsHUD.height = Math.max(102, 86 + this.textObjectiu.height);
+        this.fonsHUD.setSize(440, Math.max(130, 112 + this.textObjectiu.height));
         const flauta = Estat.te('flauta');
         if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (flauta ? ' · M: flauta' : '') + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · K: esquivar · ESC: menú');
     }
@@ -113,12 +113,12 @@ class EscenaUI extends Phaser.Scene {
 
     // ---------------- DIÀLEG ----------------
     crearCaixaDialeg() {
-        this.caixa = this.add.container(AMPLE / 2, ALT - 130).setVisible(false).setDepth(40);
-        const fons = this.add.rectangle(0, 0, 690, 230, 0x1a120b, 0.95).setStrokeStyle(4, 0xd4af37);
-        this.plaquetaNom = this.add.text(-330, -134, '', estilText(20, '#1a120b', { backgroundColor: '#d4af37', padding: { x: 12, y: 4 }, fontStyle: 'bold' }));
-        this.textDialeg = this.add.text(-325, -98, '', estilText(22, '#ffffff', { wordWrap: { width: 650 }, lineSpacing: 6 }));
-        this.indicador = this.add.text(325, 106, '▼', estilText(20, '#d4af37')).setOrigin(1, 1);
-        this.tweens.add({ targets: this.indicador, y: 112, yoyo: true, repeat: -1, duration: 400 });
+        this.caixa = this.add.container(AMPLE / 2, ALT - 190).setVisible(false).setDepth(40);
+        const fons = this.add.rectangle(0, 0, 690, 360, 0x1a120b, 0.95).setStrokeStyle(4, 0xd4af37);
+        this.plaquetaNom = this.add.text(-330, -204, '', estilText(28, '#1a120b', { backgroundColor: '#d4af37', padding: { x: 12, y: 4 }, fontStyle: 'bold' }));
+        this.textDialeg = this.add.text(-325, -156, '', estilText(30, '#ffffff', { wordWrap: { width: 650 }, lineSpacing: 6 }));
+        this.indicador = this.add.text(325, 172, '▼', estilText(28, '#d4af37')).setOrigin(1, 1);
+        this.tweens.add({ targets: this.indicador, y: 178, yoyo: true, repeat: -1, duration: 400 });
         this.caixa.add([fons, this.plaquetaNom, this.textDialeg, this.indicador]);
     }
 
@@ -172,8 +172,8 @@ class EscenaUI extends Phaser.Scene {
     crearMenu() {
         this.menu = this.add.container(0, 0).setVisible(false).setDepth(60);
         const vel = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.65).setOrigin(0).setInteractive();
-        const panell = this.add.rectangle(AMPLE / 2, ALT / 2, 600, 560, 0x1a120b, 0.97).setStrokeStyle(4, 0xd4af37);
-        const titol = this.add.text(AMPLE / 2, ALT / 2 - 235, 'Pausa', estilText(32, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
+        const panell = this.add.rectangle(AMPLE / 2, ALT / 2, 640, 700, 0x1a120b, 0.97).setStrokeStyle(4, 0xd4af37);
+        const titol = this.add.text(AMPLE / 2, ALT / 2 - 300, 'Pausa', estilText(44, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
         this.menu.add([vel, panell, titol]);
 
         this.opcions = [
@@ -186,7 +186,7 @@ class EscenaUI extends Phaser.Scene {
             { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];
         this.textOpcions = this.opcions.map((o, i) => {
-            const t = this.add.text(AMPLE / 2, ALT / 2 - 160 + i * 56, o.text, estilText(24, '#f2e6c8'))
+            const t = this.add.text(AMPLE / 2, ALT / 2 - 215 + i * 78, o.text, estilText(34, '#f2e6c8'))
                 .setOrigin(0.5).setInteractive({ useHandCursor: true })
                 .on('pointerover', () => { this.seleccio = i; this.pintarSeleccio(); })
                 .on('pointerdown', () => this.executarOpcio(i));

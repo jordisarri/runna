@@ -1,8 +1,8 @@
 /**
  * INTRO I PANTALLA DE TÍTOL (amb vídeo)
  *   1. Portada "prem una tecla" (cal un gest perquè el navegador deixi sonar la música)
- *   2. assets/video/intro_runna.mp4 (20 s), sense el so del vídeo: sona la música del joc
- *   3. assets/video/intro_runna_bucle.mp4 en bucle, amb el menú a sobre
+ *   2. assets/video/intro_runna_vertical.mp4 (10 s), sense el so del vídeo: sona la música del joc
+ *   3. assets/video/intro_runna_bucle_vertical.mp4 en bucle, amb el menú a sobre
  * Qualsevol tecla o clic durant la intro salta directament al bucle i al menú.
  */
 const FONT_TITOL = '"Cinzel Decorative", Georgia, serif';
@@ -11,9 +11,8 @@ const FONT_CAL = '"Great Vibes", "Brush Script MT", cursive';
 // La música té 3,5 s de silenci al principi: la fem començar on ja sona
 const MUSICA_INICI_INTRO = 3.5;
 const FOSA_BUCLE = 500;
-// Els primers fotogrames d'intro_runna.mp4 són una imatge del dolmen que sobra: els saltem
-const INICI_VIDEO_INTRO = 0.25;
-const VIDEO_VISIBLE = 0.76;   // part de l'amplada del vídeo que es veu (el títol hi cap amb una mica d'aire)
+// Si el vídeo no avança en aquest temps (el mòbil l'ha bloquejat), passem directament al bucle
+const ESPERA_VIDEO = 2500;
 
 class EscenaTitol extends Phaser.Scene {
     constructor() { super('Titol'); }
@@ -47,8 +46,8 @@ class EscenaTitol extends Phaser.Scene {
     crearVideo(key, profunditat) {
         const v = this.add.video(AMPLE / 2, ALT / 2, key).setOrigin(0.5).setDepth(profunditat);
         v.setMute(true);
-        // El vídeo és horitzontal: es mostra només la franja central (títol amb una mica d'aire als costats)
-        const ajusta = () => { if (v.width > 0) { const f = AMPLE / (v.width * VIDEO_VISIBLE); v.setDisplaySize(v.width * f, v.height * f); } };
+        // Els vídeos són verticals (720x1280, com el joc): s'ajusten a pantalla completa
+        const ajusta = () => { if (v.width > 0) v.setDisplaySize(AMPLE, ALT); };
         v.on('created', ajusta);
         v.on('playing', ajusta);
         ajusta();
@@ -63,7 +62,7 @@ class EscenaTitol extends Phaser.Scene {
         const fons = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000).setOrigin(0);
         const t = this.add.text(AMPLE / 2, ALT / 2, 'Toca la pantalla\nper començar',
             { fontFamily: FONT_CAL, fontSize: '36px', color: '#e8d9b0', resolution: 2 }).setOrigin(0.5);
-        const so = this.add.text(AMPLE / 2, ALT / 2 + 60, '♪ amb so', estilText(16, '#8a8070')).setOrigin(0.5);
+        const so = this.add.text(AMPLE / 2, ALT / 2 + 60, '♪ amb so', estilText(24, '#8a8070')).setOrigin(0.5);
         this.tweens.add({ targets: t, alpha: 0.35, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
         this.portada.add([fons, t, so]);
     }
@@ -72,14 +71,13 @@ class EscenaTitol extends Phaser.Scene {
         if (this.fase === 'espera' && this.mode === 'intro') {
             this.fase = 'intro';
             this.portada.destroy();
-            const comencar = () => {
-                Joc.iniciarMusica(this, MUSICA_INICI_INTRO);
-                // El vídeo queda amagat (pantalla negra) fins que reprodueix des del punt bo
-                this.videoIntro.setVisible(false);
-                if (this.videoIntro.video) this.videoIntro.video.currentTime = INICI_VIDEO_INTRO;
-                this.videoIntro.play(false);
-            };
-            if (this.sound.locked) this.sound.once('unlocked', comencar); else comencar();
+            // Tot dins del gest de l'usuari: el mòbil bloqueja play() si s'espera al desbloqueig de l'àudio
+            Joc.iniciarMusica(this, MUSICA_INICI_INTRO);
+            const v = this.videoIntro;
+            v.setVisible(true);
+            if (v.video) v.video.currentTime = 0;
+            v.play(false);
+            this.iniciIntro = this.time.now;
             return;
         }
         if (this.fase === 'intro') { this.anarAlBucle(true); return; }
@@ -120,8 +118,10 @@ class EscenaTitol extends Phaser.Scene {
             return;
         }
         if (this.fase !== 'intro' || !v) return;
-        if (!this.videoIntro.visible) {
-            if (!v.seeking && !v.paused && v.currentTime >= INICI_VIDEO_INTRO + 0.08 && v.currentTime < 2) this.videoIntro.setVisible(true);
+        // Vídeo bloquejat pel navegador: reintentem i, si no hi ha manera, anem al bucle
+        if (!v.ended && (v.paused || v.currentTime < 0.05) && this.time.now - this.iniciIntro > ESPERA_VIDEO) {
+            if (!this.reintentat) { this.reintentat = true; this.iniciIntro = this.time.now; this.videoIntro.play(false); }
+            else this.anarAlBucle(false);
             return;
         }
         if (v.ended || (v.duration && v.currentTime >= v.duration - 0.08)) this.anarAlBucle(true);
@@ -159,7 +159,7 @@ class EscenaTitol extends Phaser.Scene {
         if (location.protocol === 'file:' || Grafics.pixelsBloquejats) {
             this.menu.add(this.add.text(AMPLE / 2, 16,
                 'Atenció: obre el joc amb un servidor local (Live Server de VS Code) perquè tot funcioni bé.',
-                estilText(13, '#ffb0a0', { backgroundColor: '#1a120bcc', padding: { x: 10, y: 5 }, wordWrap: { width: 660 } })).setOrigin(0.5, 0));
+                estilText(20, '#ffb0a0', { backgroundColor: '#1a120bcc', padding: { x: 10, y: 5 }, wordWrap: { width: 660 } })).setOrigin(0.5, 0));
         }
     }
 
