@@ -172,6 +172,7 @@ class ZonaCamiRov extends ZonaBase {
             for (let x = 60; x < 2800; x += 170) {
                 const px = x + (rnd() - 0.5) * 80, py = y + (rnd() - 0.5) * 70;
                 if (tram.some(([tx, ty, tw, th]) => px > tx - 90 && px < tx + tw + 90 && py > ty - 70 && py < ty + th + 90)) continue;
+                if (Math.abs(px - 2640) < 190 && py > 380 && py < 640) continue;   // que cap arbre tapi el cartell
                 if (Phaser.Math.Distance.Between(px, py, 880, 880) < 170 || Phaser.Math.Distance.Between(px, py, 1300, 830) < 120) continue;
                 this.posar(rnd() < 0.5 ? 'xiprer' : 'arbre', px, py, { col: { w: 30, h: 14 } });
             }

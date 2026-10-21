@@ -153,6 +153,18 @@ const DIALEGS = {
         };
     },
 
+    cofreCabanaCami: E => {
+        if (E.flag('cofreCabanaCami')) return { pagines: [{ qui: '', text: "El cofre és obert i buit. Només queda l'olor de fusta vella i de cera." }] };
+        return {
+            pagines: [
+                { qui: '', text: "Una cabana de llenyataire oblidada, amagada entre els arbres. Ningú no hi ha entrat en anys: la pols és una catifa grisa." },
+                { qui: '', text: "Al fons, un cofre petit. A dins, un flascó daurat embolicat amb un drap i una nota gastada: «Per a qui es perd pel camí i el troba.»" },
+                { qui: '', text: "Beus el flascó. Notes el cor més fort.\n+1 COR MÀXIM i vida plena." }
+            ],
+            enAcabar: () => { E.posaFlag('cofreCabanaCami'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
+        };
+    },
+
     // ---------------- ESGLÉSIA ----------------
     pianista: E => {
         const primera = !E.flag("parlatPianista");
@@ -606,7 +618,7 @@ const DIALEGS = {
             }
         };
     },
-    sortidaErmita: E => ({ pagines: [{ qui: '', text: '↙ L\'Era · → Camí de la Desaparició' }] }),
+    sortidaErmita: E => ({ pagines: [{ qui: '', text: '← L\'Era · → Camí de la Desaparició' }] }),
     creuDesaparicio: E => ({
         pagines: [
             { qui: '', text: "La Creu de la Desaparició. Una creu de pedra, igual que la de l'Aparició, però aquesta no té flors als peus: només cera vella i alguna pedreta posada amb cura." },

@@ -24,16 +24,16 @@ const CATALEG = [
     { key: 'creu_desaparicio', file: 'assets/creu_desaparicio.png', amplada: 90, provisional: (c, w) => dibuixarCreuDesaparicio(c, w) },
     { key: 'bassadoria',   file: 'assets/bassadoria.png',   amplada: 260, provisional: (c, w) => dibuixarBassadoriaReixa(c, w) },
     { key: 'font',         file: 'assets/font.png',         amplada: 110, provisional: (c, w) => dibuixarFont(c, w) },
-    { key: 'arbre',        file: 'assets/arbre.png',        amplada: 240, provisional: (c, w) => dibuixarArbre(c, w) },
+    { key: 'arbre',        file: 'assets/arbre.png',        amplada: 300, provisional: (c, w) => dibuixarArbre(c, w) },
     { key: 'xiprer',       file: 'assets/xiprer.png',       amplada: 80,  provisional: (c, w) => dibuixarXiprer(c, w) },
     { key: 'retaule',      file: 'assets/retaule.png',      amplada: 300, provisional: (c, w) => dibuixarRetauleBarroc(c, w) },
 
     // ---- Edificis nous ----
-    { key: 'sala_pingpong', file: 'assets/sala_pingpong.png', amplada: 340, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.62, '#d8c8a8', '#3a5a8a', 'Sala del Ping-pong') },
+    { key: 'sala_pingpong', file: 'assets/sala_pingpong.png', amplada: 1200, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.62, '#d8c8a8', '#3a5a8a', 'Sala del Ping-pong') },
     { key: 'cel_stbenet',   file: 'assets/cel_stbenet.png',   amplada: 420, provisional: (c, w) => dibuixarCelSantBenet(c, w) },
     { key: 'cel_ntrasra',   file: 'assets/cel_ntrasra.png',   amplada: 560, provisional: (c, w) => dibuixarCelNostraSenyora(c, w) },
-    { key: 'ermita',        file: 'assets/ermita.png',        amplada: 300, provisional: (c, w) => dibuixarErmitaDesaparicio(c, w) },
-    { key: 'hospederia',    file: 'assets/hospederia.png',    amplada: 560, provisional: (c, w) => dibuixarHostatgeria(c, w) },
+    { key: 'ermita',        file: 'assets/ermita.png',        amplada: 620, provisional: (c, w) => dibuixarErmitaDesaparicio(c, w) },
+    { key: 'hospederia',    file: 'assets/hospederia.png',    amplada: 1100, provisional: (c, w) => dibuixarHostatgeria(c, w) },
 
     // ---- Personatges nous ----
     { key: 'pianista',  file: 'assets/pianista.png',  amplada: 100, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
@@ -56,7 +56,7 @@ const CATALEG = [
     { key: 'home_carruatge', file: 'assets/home_carruatge.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2f6b3d', cabell: '#222', alt: 1.04, extra: 'gorra' }) },
 
     // ---- Escenari nou ----
-    { key: 'runes',     file: 'assets/runes.png',     amplada: 420, provisional: (c, w) => dibuixarRunes(c, w) },
+    { key: 'runes',     file: 'assets/runes.png',     amplada: 760, provisional: (c, w) => dibuixarRunes(c, w) },
     { key: 'columna_proces', file: 'assets/columna_proces.png', amplada: 64, provisional: (c, w) => dibuixarColumnaProcessio(c, w) },
     { key: 'columna',   file: 'assets/columna.png',   amplada: 58,  provisional: (c, w) => dibuixarColumna(c, w) },
     { key: 'roure',     file: 'assets/roure.png',     amplada: 420, provisional: (c, w) => dibuixarRoure(c, w) },
@@ -363,12 +363,32 @@ const Grafics = {
             ctx.strokeRect(1.5, 1.5, w - 3, h - 3);
             for (let x = 8; x < w; x += 8) { ctx.beginPath(); ctx.moveTo(x, 2); ctx.lineTo(x, h - 2); ctx.stroke(); }
         });
-        crea('cartell', 56, 64, (ctx, w, h) => {
-            ctx.fillStyle = '#5a3a1e'; ctx.fillRect(25, 26, 6, 38);
-            ctx.fillStyle = '#9c6b3c'; ctx.strokeStyle = '#3d2610'; ctx.lineWidth = 2.5;
-            ctx.beginPath(); ctx.roundRect(3, 4, 50, 28, 4); ctx.fill(); ctx.stroke();
-            ctx.strokeStyle = '#6e4622'; ctx.lineWidth = 1.5;
-            for (let y = 12; y < 30; y += 7) { ctx.beginPath(); ctx.moveTo(10, y); ctx.lineTo(46, y); ctx.stroke(); }
+        // Cartell de fusta: post amb veta, tauler de tres taulons amb claus, ombra i herba al peu (es dibuixa per codi, sense PNG)
+        crea('cartell', 76, 86, (ctx, w, h) => {
+            ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(38, 82, 20, 5, 0, 0, Math.PI * 2); ctx.fill();
+            // Post
+            const post = ctx.createLinearGradient(32, 0, 46, 0);
+            post.addColorStop(0, '#7a4e26'); post.addColorStop(0.5, '#a46e38'); post.addColorStop(1, '#6a4020');
+            ctx.fillStyle = post; ctx.strokeStyle = '#2e1a0a'; ctx.lineWidth = 2;
+            ctx.fillRect(32, 38, 14, 44); ctx.strokeRect(32, 38, 14, 44);
+            ctx.strokeStyle = 'rgba(46,26,10,0.45)'; ctx.lineWidth = 1;
+            for (let y = 46; y < 80; y += 9) { ctx.beginPath(); ctx.moveTo(36, y); ctx.lineTo(37, y + 5); ctx.moveTo(42, y + 3); ctx.lineTo(41, y + 8); ctx.stroke(); }
+            // Tauler: tres taulons lleugerament desiguals
+            [[3, 5, 70, 14, '#c88f4e'], [2, 19, 72, 14, '#b57b3e'], [4, 33, 69, 13, '#c28648']].forEach(([x, y, ww, hh, col]) => {
+                const g = ctx.createLinearGradient(0, y, 0, y + hh);
+                g.addColorStop(0, col); g.addColorStop(1, '#8e5a2a');
+                ctx.fillStyle = g; ctx.strokeStyle = '#2e1a0a'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.roundRect(x, y, ww, hh, 3); ctx.fill(); ctx.stroke();
+                ctx.strokeStyle = 'rgba(80,46,16,0.45)'; ctx.lineWidth = 1;
+                for (let k = 0; k < 3; k++) { const gy = y + 4 + k * 4; ctx.beginPath(); ctx.moveTo(x + 6 + k * 9, gy); ctx.lineTo(x + ww - 8 - k * 13, gy); ctx.stroke(); }
+                ctx.fillStyle = 'rgba(255,236,190,0.35)'; ctx.fillRect(x + 4, y + 2, ww - 8, 2);
+            });
+            // Claus
+            ctx.fillStyle = '#3a2a1a';
+            [[9, 12], [67, 12], [9, 40], [67, 40]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2); ctx.fill(); });
+            // Herba al peu
+            ctx.strokeStyle = '#4f7a35'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+            [[26, 82, 22, 74], [28, 82, 28, 72], [48, 82, 52, 73], [50, 82, 55, 77]].forEach(([x1, y1, x2, y2]) => { ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); });
         });
         crea('banc', 140, 34, (ctx, w, h) => {
             ctx.fillStyle = '#5b3a20'; ctx.fillRect(0, 0, w, 12);

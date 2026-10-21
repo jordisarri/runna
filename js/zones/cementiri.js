@@ -49,7 +49,7 @@ class ZonaCementiri extends ZonaBase {
             }
         });
 
-        this.cartell(120, 600, () => ({ pagines: [{ qui: '', text: 'El Cementiri.\n← Les Runes · ↓ El Monestir\n«Aquí reposen els qui ja no necessiten cap dia.»' }] }));
+        this.cartell(950, 600, () => ({ pagines: [{ qui: '', text: '← Les Runes\n↓ El Monestir' }] }));
 
         // Xiprers al voltant
         this.muralla(0, 40, 1600, 40, 100, 'xiprer');

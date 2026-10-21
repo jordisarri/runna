@@ -15,9 +15,9 @@ class ZonaRuines extends ZonaBase {
             entrades: {
                 placa:    { x: 800,  y: 1040, dir: 'amunt' },
                 celles:   { x: 800,  y: 70,   dir: 'avall' },
-                cami:     { x: 60,   y: 585,  dir: 'dreta' },
+                cami:     { x: 60,   y: 915,  dir: 'dreta' },
                 cementiri:{ x: 1530, y: 585,  dir: 'esquerra' },
-                pingpong: { x: 330,  y: 965,  dir: 'avall' }
+                pingpong: { x: 400,  y: 960,  dir: 'avall' }
             }
         });
     }
@@ -27,50 +27,58 @@ class ZonaRuines extends ZonaBase {
         this.terra('pedra', 150, 640, 1300, 320);       // replà de pedra
         this.terra('cami', 700, 0, 200, 660);           // cap al nord (cel·les i Til·ler)
         this.terra('cami', 700, 940, 200, 160);         // cap a la Plaça
-        this.terra('cami', 0, 520, 800, 130);           // camí de la Desaparició (oest): surt de davant les runes
+        this.terra('cami', 0, 850, 800, 130);           // camí de la Desaparició (oest): a l'alçada de la porta del Ping-pong
         this.terra('cami', 1100, 520, 500, 130);        // cap al cementiri (est, darrere el Santuari)
 
         // Les runes, a la dreta; el camí passa per davant
-        this.terra('pedra', 980, 90, 520, 330);          // replà de pedra de les runes
-        this.posar('runes', 1270, 330, { col: { w: 360, h: 60 } });
-        // Un xiprer alt a l'esquerra de les runes (com a les fotos) i pedres caigudes davant
-        this.posar('xiprer', 1030, 330, { escala: 1.5, col: { w: 26, h: 12 } });
-        [[1110, 345, 0.6], [1440, 350, 0.5]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 30, h: 14 } }));
-        this.interactiu(1260, 370, 110, DIALEGS.ruines, { altura: 140 });
+        this.terra('pedra', 780, 400, 800, 240);         // replà de pedra de les runes
+        // Façana gran (760 d'ample): surt per dalt de la pantalla, no importa que no es vegi sencera
+        this.posar('runes', 1180, 470, { col: { w: 640, h: 80 } });
+        // Pedres caigudes davant
+        [[860, 525, 0.6], [1500, 530, 0.5]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 30, h: 14 } }));
+        this.interactiu(1190, 540, 110, DIALEGS.ruines, { altura: 140 });
 
-        // Porta del Ping-pong, a baix
-        this.edifici('sala_pingpong', 330, 900, 340, 80, 'ZonaPingpong', 'ruines', { alt: 90 });
+        // Sala del Ping-pong: és la Casa Gran vista per darrere. Només importa la porta (a baix, prou gran perquè hi passi
+        // l'Ineu): l'edifici surt per l'esquerra de la pantalla i es retalla a la vora del món.
+        const PORTA_X = 400, BASE_Y = 900, PORTA_AMPLE = 98;
+        const sala = this.posar('sala_pingpong', 0, BASE_Y, { fonsY: BASE_Y - 20 });
+        const mig = PORTA_X - 0.748 * sala.displayWidth;             // x de la vora esquerra de la imatge (la porta és al 74,8% de l'ample)
+        sala.setX(mig + sala.displayWidth / 2);
+        sala.setCrop(-mig / sala.scaleX, 0, sala.width + mig / sala.scaleX, sala.height);
+        const dreta = mig + sala.displayWidth * 0.99;                 // vora dreta de la paret
+        this.colisio((PORTA_X - PORTA_AMPLE / 2) / 2, BASE_Y - 45, PORTA_X - PORTA_AMPLE / 2, 90);
+        this.colisio((PORTA_X + PORTA_AMPLE / 2 + dreta) / 2, BASE_Y - 45, dreta - PORTA_X - PORTA_AMPLE / 2, 90);
+        this.colisio(PORTA_X, BASE_Y - 100, PORTA_AMPLE, 20);
+        this.sortida(PORTA_X - PORTA_AMPLE / 2, BASE_Y - 80, PORTA_AMPLE, 76, 'ZonaPingpong', 'ruines');
 
         // L'ombra del monjo: només es veu quan has llegit el primer fragment del pergamí
-        this.ombraMonjo = this.add.image(1130, 340, 'ombra_monjo').setOrigin(0.5, 1)
-            .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(340).setAlpha(0);
-        this.interactiu(1130, 380, 95, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1'), enTancar: () => Estat.posaFlag('flauta_ombra') });
-        this.llocFlauta('ombra', 1130, 390, 160, true);
-        this.tweens.add({ targets: this.ombraMonjo, y: 344, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
+        this.ombraMonjo = this.add.image(980, 560, 'ombra_monjo').setOrigin(0.5, 1)
+            .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(560).setAlpha(0);
+        this.interactiu(980, 600, 95, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1'), enTancar: () => Estat.posaFlag('flauta_ombra') });
+        this.llocFlauta('ombra', 980, 610, 160, true);
+        this.tweens.add({ targets: this.ombraMonjo, y: 564, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
         // Ambient de nit quan la llegenda s'ha començat a descobrir
         this.nit = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x0a0a30, 0.22).setScrollFactor(0).setDepth(89000).setVisible(false);
 
-        this.cartell(640, 700, DIALEGS.cartellRuinesPingpong);
+        this.cartell(620, 960, DIALEGS.cartellRuinesPingpong);
 
-        this.arbres([[100, 150], [260, 90], [420, 190], [560, 80], [900, 130], [940, 300], [1560, 100],
-                     [1540, 330], [90, 480], [180, 580], [1480, 420], [60, 1000], [1530, 1020],
-                     [1100, 1030], [520, 1040]]);
+        this.arbres([[60, 1000], [1530, 1020], [1100, 1030], [520, 1040]]);
 
         // Animalets del cementiri esquerdat
-        this.enemic('escolopendra', 400, 420);
-        this.enemic('escolopendra', 1000, 330);
+        this.enemic('escolopendra', 300, 1010);
+        this.enemic('escolopendra', 1350, 620);
         this.enemic('escolopendra', 1300, 800);
         this.sortida(700, 1086, 200, 14, 'ZonaPlaca', 'ruines');
         this.sortida(700, 0, 200, 14, 'ZonaCelles', 'ruines');
-        this.sortida(0, 520, 14, 130, 'ZonaCami', 'runes');
+        this.sortida(0, 850, 14, 130, 'ZonaCami', 'runes');
         this.sortida(1586, 520, 14, 130, 'ZonaCementiri', 'runes');
     }
 
     // El Cant de les Pedres, tocat davant l'ombra, li desperta la memòria
     enMelodia(nom) {
         if (nom !== 'pedres' || !Estat.flag('fragment1')) return false;
-        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1130, 360) > 300) return false;
-        if (Estat.flag('benedicioMonjo')) { this.flotant(1130, 200, "L'ombra assenteix", '#d8c8ff'); return true; }
+        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 980, 600) > 300) return false;
+        if (Estat.flag('benedicioMonjo')) { this.flotant(980, 440, "L'ombra assenteix", '#d8c8ff'); return true; }
         if (!['fragment1', 'fragment2', 'fragment3'].every(f => Estat.flag(f))) return false;
         this.ui().obrirDialeg(DIALEGS.benedicioMonjo(Estat), () => Estat.desar());
         return true;

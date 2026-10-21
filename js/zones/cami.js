@@ -12,7 +12,8 @@ class ZonaCami extends ZonaBase {
             alcada: 900,
             entrades: {
                 runes:  { x: 2740, y: 450, dir: 'esquerra' },
-                ermita: { x: 60,   y: 450, dir: 'dreta' }
+                ermita: { x: 60,   y: 450, dir: 'dreta' },
+                secret: { x: 1380, y: 200, dir: 'avall' }
             }
         });
     }
@@ -30,7 +31,10 @@ class ZonaCami extends ZonaBase {
 
         [[700, 450], [1250, 450], [1700, 430], [2200, 450], [2500, 460]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         this.cartell(2650, 560, DIALEGS.cartellCami);
-        this.muralla(0, 140, 2800, 140, 130);
+        // Mur d'arbres del nord: només a x=1380 hi ha dos arbres més separats, i per aquí es puja a la cabana (sense marcar-ho)
+        this.muralla(0, 140, 1280, 140, 128);
+        this.muralla(1480, 140, 2800, 140, 132);
+        this.sortides.push({ r: new Phaser.Geom.Rectangle(1320, 96, 120, 40), desti: 'ZonaCabanaCami', entrada: 'porta' });
         this.muralla(0, 770, 2800, 770, 130);
         this.boira(900, 450, 400, 80, 1);
         this.boira(1900, 450, 400, 80, 1);
@@ -62,18 +66,19 @@ class ZonaErmita extends ZonaBase {
         this.terra('cami', 400, 640, 1000, 130);
         this.terra('cami', 240, 640, 160, 360);          // baixa cap a l'Era (a la banda esquerra)
 
-        this.edifici('ermita', 500, 600, 300, 80, 'ZonaErmitaInt', 'ermita', { alt: 90 });
+        // Ermita gran (620 d'ample): la porta fa ~177 d'alt, més que l'Ineu
+        this.edifici('ermita', 500, 600, 590, 110, 'ZonaErmitaInt', 'ermita', { alt: 90 });
         // Xiprers alts als costats de l'ermita (com a la capella real)
-        [[322, 590, 1.5], [678, 590, 1.5], [248, 570, 1.15], [752, 570, 1.15]].forEach(([x, y, e]) => this.posar('xiprer', x, y, { escala: e, col: { w: 26, h: 12 } }));
+        [[130, 600, 1.5], [870, 600, 1.5], [60, 560, 1.35], [940, 560, 1.35], [100, 500, 1.2], [900, 500, 1.2], [30, 620, 1.3], [970, 620, 1.3]].forEach(([x, y, e]) => this.posar('xiprer', x, y, { escala: e, col: { w: 26, h: 12 } }));
         this.interactiu(500, 640, 70, DIALEGS.ermitaPorta, { altura: 190, actiu: () => false });
 
-        // Creu de la Desaparició, davant l'ermita (no té cap paper a la trama: només es pot llegir)
-        this.posar('creu_desaparicio', 740, 655, { col: { w: 46, h: 22 } });
-        this.interactiu(740, 662, 80, DIALEGS.creuDesaparicio, { altura: 180 });
+        // Creu de la Desaparició, davant l'ermita i a l'altra banda del camí (no té cap paper a la trama: només es pot llegir)
+        this.posar('creu_desaparicio', 500, 840, { col: { w: 46, h: 22 } });
+        this.interactiu(500, 847, 80, DIALEGS.creuDesaparicio, { altura: 180 });
 
         this.cartell(1120, 610, DIALEGS.sortidaErmita);
-        this.arbres([[120, 200], [300, 150], [700, 220], [900, 160], [1150, 240], [1300, 160], [150, 520],
-                     [100, 860], [520, 900], [720, 900], [1200, 880], [1320, 480]]);
+        this.arbres([[120, 200], [900, 160], [1150, 240], [1300, 160], [150, 520],
+                     [100, 860], [1200, 880], [1320, 480]]);
         this.muralla(0, 330, 0, 800, 100);
 
         this.enemic('escolopendra', 700, 800);
@@ -124,7 +129,7 @@ class ZonaErmitaInt extends ZonaBase {
 // ---------------- L'ERA ----------------
 // Un encreuament de camins de terra (Ermita al nord, Rovellonera a ponent, Jardí a llevant) i, al sud, una gran clariana
 // de gespa amb dos roures enormes i, al mig, dos bancs un davant de l'altre.
-const ERA_BANC_X = 960, ERA_BANC_N = 820, ERA_BANC_S = 1020;
+const ERA_BANC_X = 960, ERA_BANC_N = 670, ERA_BANC_S = 870;   // pujats perquè la caixa de diàleg (a baix) no tapi l'Ineu assegut
 
 class ZonaEra extends ZonaBase {
     constructor() {
@@ -154,7 +159,7 @@ class ZonaEra extends ZonaBase {
 
         // El Garf, savi inventor: jove, grassonet i ros, assegut al banc de dalt
         this.garf = this.npc('garf', ERA_BANC_X, ERA_BANC_N, DIALEGS.garf);
-        this.interactiu(ERA_BANC_X, ERA_BANC_S + 44, 80, () => { this.seure(); return DIALEGS.garf(Estat); }, {
+        this.interactiu(ERA_BANC_X, ERA_BANC_S, 100, () => { this.seure(); return DIALEGS.garf(Estat); }, {
             altura: 150, enTancar: () => this.alcar()
         });
 
@@ -178,14 +183,15 @@ class ZonaEra extends ZonaBase {
         this.ineu.body.reset(ERA_BANC_X, ERA_BANC_S - 4);
         this.ombraIneu.setPosition(ERA_BANC_X, ERA_BANC_S - 4);
         this.ineu.setDepth(ERA_BANC_S + 1);
-        this.posarDireccio('amunt', false);
+        this.vista8Manual = true;
+        this.posarDireccio('amunt', false, 'up');   // sempre de cara al Garf, vingui d'on vingui
         this.flotant(ERA_BANC_X, ERA_BANC_S - 136, "L'Ineu s'asseu al banc", '#f2e6c8');
     }
 
     alcar() {
         this.ineu.body.checkCollision.none = false;
         this.ineu.body.reset(ERA_BANC_X, ERA_BANC_S + 48);
-        this.posarDireccio('amunt', false);
+        this.posarDireccio('amunt', false, 'up');
     }
 }
 
@@ -207,7 +213,7 @@ class ZonaJardi extends ZonaBase {
         this.terra('herba', 0, 0, 1600, 1000, -1100);
         this.terra('cami', 0, 780, 1600, 130);            // camí de l'Era a la Taverna, davant la pèrgola
         this.terra('cami', 740, 690, 150, 100);           // entrada a la pèrgola (buit de la fila de columnes)
-        this.terra('cami', 1090, 440, 130, 340);          // porta de l'Hospederia
+        this.terra('cami', 1095, 690, 120, 100);          // porta de l'Hospederia, a l'alçada de l'entrada de la pèrgola
         this.terra('pedra', 300, 470, 700, 100);          // passadís de pedra dins la pèrgola
 
         // --- Pèrgola de pedra: dues files de columnes ---
@@ -264,25 +270,62 @@ class ZonaJardi extends ZonaBase {
         this.interactiu(345, 545, 95, DIALEGS.prunera, { altura: 250 });
 
         // L'Hospederia, adossada a la pèrgola (a llevant)
-        this.posar('hospederia', 1250, 470, { col: { w: 520, h: 110 } });
-        this.interactiu(1155, 495, 90, DIALEGS.hospederia, { altura: 120 });
-        // Jardinera rodona de pedra amb una bardissa de flors blanques i un pilar al mig (com al costat de la casa real)
-        const jard = this.add.graphics().setDepth(640);
-        jard.fillStyle(0x3f6a34, 1).fillEllipse(1290, 628, 130, 66);
-        for (let i = 0; i < 46; i++) jard.fillStyle(i % 3 ? 0xf2f0e4 : 0xdfe6c8, 1).fillCircle(1235 + Math.random() * 110, 598 + Math.random() * 54, 4 + Math.random() * 5);
-        jard.fillStyle(0x8f8873, 1).fillEllipse(1290, 662, 150, 34).lineStyle(3, 0x2a241a, 1).strokeEllipse(1290, 662, 150, 34);
-        jard.fillStyle(0xa7a08b, 1).fillRect(1281, 596, 18, 50).strokeRect(1281, 596, 18, 50);
-        this.colisio(1290, 650, 140, 36);
+        // Façana gran (1100 d'ample), retallada per l'esquerra (a x=1020) i per dalt: la porta (~134x165) queda a x=1155,
+        // a l'alçada de l'entrada de la pèrgola (y=690)
+        const casa = this.posar('hospederia', 0, 690, { fonsY: 670 });
+        const esq = 1155 - 0.581 * casa.displayWidth;                 // vora esquerra de la imatge (la porta és al 58,1% de l'ample)
+        casa.setX(esq + casa.displayWidth / 2);
+        casa.setCrop((1020 - esq) / casa.scaleX, 0, casa.width - (1020 - esq) / casa.scaleX, casa.height);
+        this.colisio(1310, 645, 580, 90);
+        this.interactiu(1155, 725, 90, DIALEGS.hospederia, { altura: 150 });
 
-        this.arbres([[1450, 640], [1500, 980], [1250, 960], [700, 960], [300, 960], [130, 950], [130, 650], [180, 430],
-                     [130, 120], [320, 90], [600, 110], [850, 100], [1100, 100], [1350, 100], [1520, 160], [1530, 640]]);
+        this.arbres([[1500, 980], [1250, 960], [700, 960], [300, 960], [130, 950], [130, 650], [180, 430],
+                     [130, 120], [320, 90], [600, 110], [850, 100]]);
 
-        this.cartell(1100, 840, () => ({ pagines: [{ qui: '', text: '→ La Taverna i la Casa Gran\n← L\'Era\n↑ La pèrgola de l\'Isidre i l\'Hospederia' }] }));
+        this.cartell(1100, 840, () => ({ pagines: [{ qui: '', text: '→ La Taverna i la Casa Gran\n← L\'Era' }] }));
         this.sortida(0, 780, 14, 130, 'ZonaEra', 'jardi');
         this.sortida(1586, 780, 14, 130, 'ZonaCasaGran', 'oest');
     }
 
     actualitzar(ara) {
         this.florLluna.setVisible(Estat.flag('llosaOberta'));
+    }
+}
+
+// ---------------- CABANA AMAGADA (camí secret del Camí de la Desaparició) ----------------
+class ZonaCabanaCami extends ZonaBase {
+    constructor() {
+        super('ZonaCabanaCami', {
+            nom: 'Cabana amagada',
+            amplada: 900,
+            alcada: 700,
+            colorFons: '#140e0a',
+            pacifica: true,
+            entrades: { porta: { x: 450, y: 600, dir: 'amunt' } }
+        });
+    }
+
+    construir() {
+        this.terra('cami', 100, 40, 700, 660, -1100).setTint(0x8a7a60);
+        const murs = this.add.graphics().setDepth(-1000);
+        murs.fillStyle(0x3a2a1c, 1).fillRect(60, 0, 40, 700).fillRect(800, 0, 40, 700).fillRect(100, 0, 700, 80);
+        this.colisio(30, 350, 60, 700);
+        this.colisio(870, 350, 60, 700);
+        this.colisio(450, 60, 700, 120);
+        this.colisio(280, 690, 360, 20);
+        this.colisio(620, 690, 360, 20);
+
+        // Un cofre petit entre dues espelmes, i quatre andròmines de llenyataire
+        this.posar('cofre', 450, 250, { col: { w: 50, h: 20 } });
+        this.interactiu(450, 255, 85, DIALEGS.cofreCabanaCami, { altura: 80 });
+        [[360, 260], [540, 260]].forEach(([x, y], i) => {
+            const e = this.posar('espelma', x, y, { fonsY: y });
+            this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 350 + i * 90 });
+        });
+        [[220, 460], [690, 430]].forEach(([x, y]) => this.posar('roca', x, y, { escala: 0.6, col: { w: 40, h: 16 } }));
+        [[230, 200], [680, 520], [330, 540]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 30 }));
+
+        this.add.rectangle(450, 350, 700, 700, 0xffd38a, 0.05).setDepth(80000);
+        this.sortida(410, 680, 80, 14, 'ZonaCami', 'secret');
     }
 }

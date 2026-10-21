@@ -16,7 +16,7 @@ class ZonaPlaca extends ZonaBase {
                 creu:     { x: 840,  y: 1120, dir: 'amunt' },
                 ruines:   { x: 390,  y: 150, dir: 'avall' },
                 tresor:   { x: 1190, y: 490, dir: 'avall' },
-                monestir: { x: 1550, y: 815, dir: 'esquerra' },
+                monestir: { x: 1550, y: 600, dir: 'esquerra' },
                 esglesia: { x: 661,  y: 510, dir: 'avall' }
             }
         });
@@ -26,7 +26,6 @@ class ZonaPlaca extends ZonaBase {
         // --- Terra ---
         this.terra('herba', 0, 0, 1600, 1200, -1100);
         this.terra('cami', 0, 470, 380, 190);            // cap a la Casa Gran (oest)
-        this.terra('cami', 760, 1000, 160, 200);         // cap a la Creu i la Bassadòria (sud)
         this.terra('cami', 760, 1000, 160, 200);         // cap a la Creu i la Bassadòria (sud)
         this.terra('cami', 330, 0, 130, 440);            // cap a les Runes (nord, a l'esquerra del Santuari)
         this.terra('llamborda', 360, 420, 1240, 590);    // la plaça: arriba fins a la vora est, davant del Monestir
@@ -76,12 +75,12 @@ class ZonaPlaca extends ZonaBase {
         this.sortida(0, 470, 14, 190, 'ZonaCasaGran', 'placa');
         this.sortida(760, 1186, 160, 14, 'ZonaCreu', 'placa');
         this.sortida(330, 0, 130, 14, 'ZonaRuines', 'placa');
-        this.sortida(1586, 740, 14, 150, 'ZonaMonestir', 'placa');
+        this.sortida(1586, 530, 14, 150, 'ZonaMonestir', 'placa');
 
         // Visitants corromputs per la boira
         this.enemic('visitant', 520, 900);
         this.enemic('visitant', 880, 960);
-        this.enemic('escolopendra', 1450, 640);
+        this.enemic('escolopendra', 1450, 800);
 
         // Vel lila: el santuari està tocat per la boira
         this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, 0.10).setScrollFactor(0).setDepth(90000);

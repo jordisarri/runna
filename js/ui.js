@@ -69,7 +69,7 @@ class EscenaUI extends Phaser.Scene {
     // de la pantalla) l'utilitza. Vegeu ZonaBase.flautaActiva.
     crearObjectes() {
         this.objectesHUD = OBJECTES_HUD.map((o, i) => {
-            const x = 566 + i * 104, y = ALT_HUD / 2;
+            const x = 530 - i * 100, y = ALT_HUD / 2;
             const halo = this.add.circle(x, y, 54, 0xffe08a, 0).setVisible(false);
             const fons = this.add.image(x, y, 'medallo').setScale(1 / RES).setVisible(false);
             const icona = this.add.image(x, y, o.icona).setScale(1 / RES).setVisible(false);
@@ -98,18 +98,11 @@ class EscenaUI extends Phaser.Scene {
 
     // ---------------- HUD ----------------
     crearHUD() {
-        // Franja de dalt: fusta fosca amb filet d'or a la vora de baix; l'escenari comença just a sota
-        const franja = this.add.graphics();
-        franja.fillStyle(0x1a120b, 1).fillRect(0, 0, AMPLE, ALT_HUD);
-        franja.fillStyle(0x2a1c10, 1).fillRect(0, 0, AMPLE, 6);
-        franja.fillStyle(0x0d0b09, 1).fillRect(0, ALT_HUD - 8, AMPLE, 8);
-        franja.fillStyle(0xd4af37, 1).fillRect(0, ALT_HUD - 8, AMPLE, 3);
-        franja.fillStyle(0x8a6a1c, 1).fillRect(0, ALT_HUD - 3, AMPLE, 2);
-
-        this.fonsHUD = marcPergami(this, 10, 8, 470, 150, 'marc_peti').setOrigin(0);
-        this.textCors = this.add.text(42, 22, '', estilText(36, '#c0182a', { stroke: '#4a0a10', strokeThickness: 3 }));
-        this.textMonedes = this.add.text(46, 68, '', estilText(26, '#6e4400', { fontStyle: 'bold' }));
-        this.textObjectiu = this.add.text(46, 102, '', estilText(20, '#3a2412', { fontStyle: 'italic', wordWrap: { width: 410 } }));
+        // Franja de dalt: un sol llenç de pergamí enmarcat a tot l'ample; l'escenari comença just a sota
+        this.fonsHUD = marcPergami(this, 0, 0, AMPLE, ALT_HUD, 'marc_peti').setOrigin(0);
+        this.textCors = this.add.text(48, 36, '', estilText(36, '#c0182a', { stroke: '#4a0a10', strokeThickness: 3 }));
+        this.textMonedes = this.add.text(300, 42, '', estilText(26, '#6e4400', { fontStyle: 'bold' }));
+        this.textObjectiu = this.add.text(48, 86, '', estilText(20, '#3a2412', { fontStyle: 'italic', wordWrap: { width: 400 } }));
 
         this.bannerZona = this.add.text(AMPLE / 2, 236, '', estilText(42, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
             .setOrigin(0.5).setAlpha(0);
@@ -117,7 +110,7 @@ class EscenaUI extends Phaser.Scene {
             .setOrigin(0.5).setAlpha(0).setDepth(50);
 
         // Botó de menú (ratolí i pantalla tàctil)
-        this.botoMenu = this.add.text(AMPLE - 14, (ALT_HUD - 8) / 2, '☰', estilText(40, '#f2e6c8', { backgroundColor: '#3a2412', padding: { x: 16, y: 8 } }))
+        this.botoMenu = this.add.text(AMPLE - 46, ALT_HUD / 2, '☰', estilText(40, '#3a2412', { backgroundColor: '#8a5a2a44', padding: { x: 16, y: 8 } }))
             .setOrigin(1, 0.5).setInteractive({ useHandCursor: true })
             .on('pointerdown', () => this.menuObert ? this.tancarMenu() : this.obrirMenu());
 
@@ -138,7 +131,7 @@ class EscenaUI extends Phaser.Scene {
         // L'objectiu ha de cabre dins del marc fix de la franja: si és llarg, es redueix la lletra
         let mida = 20;
         this.textObjectiu.setFontSize(mida);
-        while (this.textObjectiu.height > 50 && mida > 14) this.textObjectiu.setFontSize(--mida);
+        while (this.textObjectiu.height > 52 && mida > 14) this.textObjectiu.setFontSize(--mida);
         if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · K: esquivar · ESC: menú');
     }
 
