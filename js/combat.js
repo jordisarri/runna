@@ -240,27 +240,88 @@ Object.assign(ZonaBase.prototype, {
         const runna = Estat.te('runna');
         const agil = runna || Estat.te('basto_tiller');          // el bastó de Til·ler (i Runna) són més ràpids i amb més abast
         this.atacFins = ara + (agil ? 270 : 380);
-        const d = DIRS[this.direccio] || DIRS.avall;
         const jo = this.ineu.body.center;
-        const dany = runna ? 2 : 1;
-        // Zona de cop al terra, davant l'Ineu (amunt arriba una mica més lluny: l'enemic es veu "per sobre" del cap)
-        const reach = d.y < 0 ? 58 : 48;
-        const px = jo.x + d.x * reach, py = jo.y + d.y * reach, abast = agil ? 66 : 58;
+        const L = agil ? 135 : 118;                              // llargada de la zona de cop (des dels peus)
+        // Direcció: la de la vista de 8 direccions; si hi ha un enemic a prop dins del con, s'hi apunta
+        const v8 = { right: [1, 0], southeast: [1, 1], down: [0, 1], southwest: [-1, 1], left: [-1, 0], northwest: [-1, -1], up: [0, -1], northeast: [1, -1] }[this.vista8];
+        let d = v8 ? { x: v8[0] / Math.hypot(...v8), y: v8[1] / Math.hypot(...v8) } : (DIRS[this.direccio] || DIRS.avall);
+        let millor = null, millorDist = Infinity;
+        this.enemics.forEach(e => {
+            if (e.mort) return;
+            const c = e.spr.body.center, dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
+            if (dist > L + e.def.radi + 30 || dist >= millorDist) return;
+            const dif = Math.abs(Phaser.Math.Angle.Wrap(Math.atan2(c.y - jo.y, c.x - jo.x) - Math.atan2(d.y, d.x)));
+            if (dif < 1.0) { millor = c; millorDist = dist; }
+        });
+        if (millor) { const a = Math.atan2(millor.y - jo.y, millor.x - jo.x); d = { x: Math.cos(a), y: Math.sin(a) }; }
+        if (Math.abs(d.x) > Math.abs(d.y) * 1.1) this.direccio = d.x < 0 ? 'esquerra' : 'dreta';
+        else this.direccio = d.y < 0 ? 'amunt' : 'avall';
 
-        // Petit tret endavant, so i mitja lluna que surt de la silueta de l'Ineu
+        // Petit tret endavant, so, arma visible i mitja lluna
         this.forcat = { vx: d.x * 150, vy: d.y * 150, fins: ara + 100 };
         Sfx.atac(runna);
         this.tallBasto(jo, d, runna, agil);
+        this.armaCop(d, runna, agil);
+        // Finestra de cop activa mentre dura l'animació: cada enemic només rep un cop per atac
+        this.cop = { fins: ara + 200, d, L, ample: agil ? 34 : 28, dany: runna ? 2 : 1, tocats: new Set(), runna };
+        this.comprovarCop();
+        // Runna talla els esbarzers negres
+        if (runna) {
+            const px = jo.x + d.x * 55, py = jo.y + d.y * 55;
+            this.esbarzers.forEach(o => { if (o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, px, py) < 85) this.destruirEsbarzer(o, false); });
+        }
+    },
 
+    // Comprova cada fotograma els enemics tocats per la línia del cop (segment des dels peus de l'Ineu)
+    comprovarCop() {
+        const k = this.cop;
+        if (!k) return;
+        if (this.time.now > k.fins) { this.cop = null; return; }
+        const jo = this.ineu.body.center, d = k.d;
         let encertats = 0;
         this.enemics.forEach(e => {
-            if (e.mort) return;
+            if (e.mort || k.tocats.has(e)) return;
             const c = e.spr.body.center;
-            if (Phaser.Math.Distance.Between(c.x, c.y, px, py) < abast + e.def.radi) { this.colpejar(e, dany, d); encertats++; }
+            const rx = c.x - jo.x, ry = c.y - jo.y;
+            const t = rx * d.x + ry * d.y;                          // distància al llarg del cop
+            if (t < -12 || t > k.L + e.def.radi) return;
+            const lat = Math.abs(rx * d.y - ry * d.x);              // distància lateral
+            if (lat < e.def.radi + k.ample) { k.tocats.add(e); this.colpejar(e, k.dany, d); encertats++; }
         });
-        if (encertats) this.forcat = { vx: -d.x * 110, vy: -d.y * 110, fins: ara + 80 };     // retrocés en xocar
-        // Runna talla els esbarzers negres
-        if (runna) this.esbarzers.forEach(o => { if (o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, px, py) < 85) this.destruirEsbarzer(o, false); });
+        if (encertats) this.forcat = { vx: -d.x * 110, vy: -d.y * 110, fins: this.time.now + 80 };     // retrocés en xocar
+    },
+
+    // L'arma a la mà: bastó, bastó de Til·ler o espasa de Runna, girant en arc durant el cop
+    armaCop(d, runna, agil) {
+        if (this.armaNet) this.armaNet();
+        const g = this.add.graphics();
+        if (runna) {                                               // espasa
+            g.fillStyle(0x5a3a22, 1).fillRect(4, -4, 22, 8);                              // empunyadura
+            g.fillStyle(0xe0b84a, 1).fillRect(24, -16, 8, 32).fillCircle(2, 0, 6);          // guarda i pom
+            g.fillStyle(0xdfe8f0, 1).fillPoints([{ x: 32, y: -7 }, { x: 112, y: -5 }, { x: 128, y: 0 }, { x: 112, y: 5 }, { x: 32, y: 7 }], true);
+            g.fillStyle(0xffffff, 0.8).fillRect(34, -2, 78, 3);                           // fil de llum
+            g.lineStyle(2, 0x7a8896, 1).strokePoints([{ x: 32, y: -7 }, { x: 112, y: -5 }, { x: 128, y: 0 }, { x: 112, y: 5 }, { x: 32, y: 7 }], true);
+        } else {                                                   // bastó (el de Til·ler, més llarg i verd)
+            const L = agil ? 124 : 108, fust = agil ? 0x6a7a3a : 0x7a5230, clar = agil ? 0xa8c060 : 0xb98a58;
+            g.lineStyle(11, 0x2a1a0e, 1).lineBetween(-6, 0, L, 0);
+            g.lineStyle(8, fust, 1).lineBetween(-4, 0, L - 1, 0);
+            g.lineStyle(2, clar, 1).lineBetween(0, -2, L - 6, -2);
+            g.fillStyle(fust, 1).fillCircle(L - 2, 0, 8).lineStyle(2, 0x2a1a0e, 1).strokeCircle(L - 2, 0, 8);   // nus del cap
+            g.fillStyle(0x2a1a0e, 1).fillCircle(L * 0.45, 3, 2);
+        }
+        const jo = this.ineu;
+        const ang = Math.atan2(d.y, d.x);
+        // El cop va de dalt a baix: arranca alçat darrere d'un costat i acaba a l'altre
+        const des = ang - 1.25, fins = ang + 1.0;
+        g.setRotation(des).setScale(agil ? 1.05 : 1);
+        const seguir = () => g.setPosition(jo.x + d.x * 10, jo.y - 58 + d.y * 6).setDepth(d.y < -0.3 ? jo.y - 1 : jo.y + 40);
+        seguir();
+        this.events.on('update', seguir);
+        const net = () => { this.events.off('update', seguir); if (g.active) g.destroy(); if (this.armaNet === net) this.armaNet = null; };
+        this.armaNet = net;
+        this.tweens.add({ targets: g, rotation: fins, duration: 150, ease: 'Cubic.out' });
+        this.tweens.add({ targets: g, alpha: 0, duration: 110, delay: 190, onComplete: net });
+        this.time.delayedCall(450, net);
     },
 
     // La mitja lluna del cop: surt del pit de l'Ineu, més enllà del cap, dels peus i dels costats
@@ -568,6 +629,7 @@ Object.assign(ZonaBase.prototype, {
 
     // ---------------- Bucle ----------------
     actualitzarCombat(ara) {
+        this.comprovarCop();
         const jo = this.ineu.body.center;
         for (const e of this.enemics) {
             if (e.mort) continue;

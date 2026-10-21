@@ -44,6 +44,7 @@ class ZonaBase extends Phaser.Scene {
         this.tallables = [];
         this.caient = false;
         this.forcat = null;
+        this.cop = null; this.armaNet = null; this.atacFins = 0;
         this.invulnerableFins = 0;
         this.cintaGastada = false;
 
