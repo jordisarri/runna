@@ -8,11 +8,24 @@ indicada. Per això: fons blanc pur, sense ombres llargues sobre el fons, i res 
 
 ## Estil base (enganxeu-lo al principi de tots els prompts)
 
-> Hand-painted detailed pixel-art-like illustration for a top-down 3/4 view adventure game, warm Mediterranean palette
-> (sandstone ochre, terracotta roof tiles, olive and cypress greens, brown wood), soft light from the upper left,
-> clean crisp outlines, rich texture, no text, no watermark, isolated object on a pure white background, no ground
-> shadow beyond a tiny contact shadow, slight overhead camera angle (about 35 degrees), same style as a medieval
-> monastery in the Catalan countryside.
+> Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly
+> shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the
+> upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down
+> view like a classic JRPG.
+
+## Perspectiva (afegiu-la al final de TOTS els prompts)
+
+El joc és una vista 3/4 des de dalt: la càmera mira lleugerament cap avall (uns 30-35°) i l'objecte s'enfronta a la
+càmera. Es veu **la façana de davant** i una mica del **sostre/cim**; les parets laterals gairebé no es veuen. Així
+encaixa amb el terra del joc i amb les altres peces (`esglesia.png`, `roure.png`).
+
+> Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera
+> straight on (front elevation with the top slightly visible), not isometric, no strong perspective distortion, no
+> side walls visible, the base of the object sits flat at the bottom of the image.
+
+Per a **personatges**, afegiu: *"Front-facing standing pose, seen from slightly above (JRPG 3/4 top-down), whole body
+visible, feet at the bottom of the image."* Per a **objectes plans** (taules, basses, lloses): *"seen from about 45
+degrees above, the surface clearly visible."*
 
 **Referències ja fetes** (per dir-li a la IA "mateix estil que"): `assets/esglesia.png` (edifici), `assets/roure.png` (arbre),
 `assets/sprites/ineu/down.png` (personatge: línia fosca gruixuda, cap gran, hàbit marró, cordó de corda, creu de fusta).
@@ -27,29 +40,29 @@ contorn marró fosc gruixut, una sola figura, peus a la part de baix de la imatg
 ### `porxo.png` — Porxo d'arcades de la Casa Gran (amplada 340; al joc es dibuixa x1,9)
 > [Estil base] A long Renaissance stone arcade (porxo) with four round arches resting on slender columns, warm sandstone
 > blocks, a tiled shed roof, shadowy interior behind the arches. The SECOND arch from the left holds a closed wrought-iron
-> gate (reixa) with a small gold lock. Low plinth at the base, a few ivy leaves. Front view, slightly from above, about
-> 1.6:1 width to height.
+> gate (reixa) with a small gold lock. Low plinth at the base, a few ivy leaves. Straight front elevation, about 1.6:1
+> width to height.
 
 ### `casa_gran.png` — Casa Gran (amplada 640) *(ara no es fa servir: la façana és el porxo)*
 > [Estil base] A big old monastery guest house, two floors of sandstone ashlar, small windows with iron bars, wooden door,
-> terracotta tiled roof, a stone chimney, ivy on one side. 3/4 view from the front-left.
+> terracotta tiled roof, a stone chimney, ivy on one side. Straight front elevation, slightly from above.
 
 ### `ermita.png` — Ermita de la Desaparició (amplada 300)
 > [Estil base] A tiny old roadside hermitage chapel, rough grey-brown stone, low gable roof of weathered tiles, a small
 > round-arched wooden door left open, a tiny cross on the roof ridge, moss in the base stones, slightly eerie and abandoned,
-> faint cool mist at the foot. Front view.
+> faint cool mist at the foot. Straight front elevation.
 
 ### `ermita_gabriel.png` — Ermita de Sant Gabriel (amplada 300) · **referència: la foto que vau enviar**
 > [Estil base] A small rustic Romanesque chapel in the countryside, front facade only: cut sandstone ashlar blocks in
 > warm brown, steep gable roof with brown clay tiles and a stepped edge, a simple bell gable (espadanya) with one arched
 > opening and a small bell on top, a round rose window with stone tracery above the door, a round-arched wooden door in
 > reddish-brown planks framed by a wider relieving arch, a lighter stone plinth along the base. Dry earth at the foot.
-> No cross anywhere. Front view, slight overhead angle, about 1.1:1 height to width.
+> No cross anywhere. Straight front elevation, about 1.1:1 height to width.
 
 ### `monestir.png` — Monestir (amplada 620)
 > [Estil base] A large Catalan monastery wing with a cloister gallery of round arches on the ground floor, upper floor
 > with rows of small windows, sandstone walls, terracotta tiled roof, a small bell tower at the right end, a wooden
-> double door in the center. 3/4 view from the front-left.
+> double door in the center. Straight front elevation, slightly from above.
 
 ### `sala_pingpong.png` — Sala del Ping-pong (amplada 340)
 > [Estil base] A modest outbuilding turned into a recreation hall: whitewashed and ochre walls, a low tiled roof, a wide
@@ -109,7 +122,7 @@ contorn marró fosc gruixut, una sola figura, peus a la part de baix de la imatg
 
 ## Personatges (amplada 96 si no s'indica) — estil del bloc de personatges
 
-Un prompt per personatge: *"[Estil base] [Personatge], chibi proportions, thick dark brown outline, full body, front view, pure white background."*
+Un prompt per personatge: *"[Estil base] [Personatge], chibi proportions, thick dark brown outline, full body, front-facing standing pose, seen from slightly above (JRPG 3/4 top-down), pure white background."*
 
 | Fitxer | Descripció |
 |---|---|
