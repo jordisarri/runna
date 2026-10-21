@@ -580,7 +580,9 @@ class ZonaGolfes extends ZonaCasaBase {
             const x = 380 + i * 120, h = 56 + i * 12, amplada = 40 + i * 12;
             const c = this.add.graphics({ x, y: 430 }).setDepth(480);
             c.fillStyle(0xb58a3a, 1).lineStyle(3, 0x2a1608, 1);
-            c.beginPath(); c.moveTo(-amplada / 2, h); c.quadraticCurveTo(-amplada / 2, 8, 0, 0); c.quadraticCurveTo(amplada / 2, 8, amplada / 2, h); c.closePath(); c.fillPath(); c.strokePath();
+            const w2 = amplada / 2;                      // contorn de la campana (Graphics no té corbes: es fa amb punts)
+            const punts = [[-w2, h], [-w2 * 0.92, h * 0.6], [-w2 * 0.7, h * 0.28], [-w2 * 0.35, 6], [0, 0], [w2 * 0.35, 6], [w2 * 0.7, h * 0.28], [w2 * 0.92, h * 0.6], [w2, h]].map(([px, py]) => new Phaser.Geom.Point(px, py));
+            c.fillPoints(punts, true); c.strokePoints(punts, true);
             c.fillStyle(0x6a4a18, 1).fillCircle(0, h + 4, 5);
             return c;
         });
