@@ -26,9 +26,8 @@ const MAPA = {
         { id: 'ZonaGolfes',         nom: 'Golfes del Santuari',      x: 930,  y: 335 },
         { id: 'ZonaEsglesia',      nom: 'Santuari',                 x: 930,  y: 390 },
         { id: 'ZonaEra',           nom: 'L\'Era',                   x: 330,  y: 390 },
-        // Fila del poble (oest -> est): Jardí · Hospederia · Taverna · Casa Gran · Plaça · Monestir
-        { id: 'ZonaJardi',         nom: 'Jardí pergolat',           x: 250,  y: 470 },
-        { id: 'ZonaHospederia',    nom: 'Hospederia',               x: 420,  y: 470 },
+        // Fila del poble (oest -> est): Hostatgeria · Taverna · Casa Gran · Plaça · Monestir
+        { id: 'ZonaJardi',         nom: 'L\'Hostatgeria',           x: 250,  y: 470 },
         { id: 'ZonaTaverna',       nom: 'La Taverna',               x: 590,  y: 470 },
         { id: 'ZonaCasaGran',      nom: 'Casa Gran i Font',         x: 760,  y: 470 },
         { id: 'ZonaPlaca',         nom: 'Plaça del Santuari',       x: 930,  y: 470 },
@@ -50,7 +49,7 @@ const MAPA = {
         ['ZonaPlaca', 'ZonaEsglesia'], ['ZonaEsglesia', 'ZonaGolfes'], ['ZonaPlaca', 'ZonaMonestir'], ['ZonaPlaca', 'ZonaRuines'],
         ['ZonaRuines', 'ZonaPingpong'], ['ZonaRuines', 'ZonaCami'], ['ZonaCami', 'ZonaErmita'],
         ['ZonaErmita', 'ZonaErmitaInt'], ['ZonaErmita', 'ZonaEra'], ['ZonaEra', 'ZonaJardi'],
-        ['ZonaJardi', 'ZonaHospederia'], ['ZonaJardi', 'ZonaCasaGran'],
+        ['ZonaJardi', 'ZonaCasaGran'],
         ['ZonaRuines', 'ZonaCementiri'], ['ZonaCementiri', 'ZonaMonestir'],
         ['ZonaRuines', 'ZonaCelles'], ['ZonaCelles', 'ZonaBosc'], ['ZonaBosc', 'ZonaCabana'], ['ZonaCabana', 'ZonaCabanaInt'],
         ['ZonaCelles', 'ZonaTiller'], ['ZonaTiller', 'ZonaCamiCirosa'], ['ZonaCamiCirosa', 'ZonaCirosa'],

@@ -32,6 +32,8 @@ function dibuixarPersona(canvas, w, o) {
         ctx.fillStyle = o.cabell;
         ctx.beginPath(); ctx.roundRect(meitat - 20, capY - 2, 40, 46, 14); ctx.fill(); ctx.stroke();
     }
+    if (o.isidre) dibuixarCosIsidre(ctx, meitat, capY);
+    else {
     // Cos
     ctx.fillStyle = o.roba;
     ctx.beginPath();
@@ -53,6 +55,7 @@ function dibuixarPersona(canvas, w, o) {
     // Peus
     ctx.fillStyle = '#3b2a1e';
     ctx.fillRect(meitat - 20, 120, 14, 6); ctx.fillRect(meitat + 6, 120, 14, 6);
+    }
     // Cap
     const cap = o.cap || 15;
     ctx.fillStyle = o.pell || '#e8b48a';
@@ -88,6 +91,50 @@ function dibuixarPersona(canvas, w, o) {
         ctx.fillStyle = '#8a8a86'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2;
         ctx.beginPath(); ctx.ellipse(meitat + mig + 8, capY + 60, 10, 13, 0.3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     }
+}
+
+// Cos de l'Isidre: camisa blanca de màniga curta, pantalons marrons, cama de fusta a la dreta i un bastó
+function dibuixarCosIsidre(ctx, m, capY) {
+    const PELL = '#e0a878', CAMISA = '#f4f1e8', PANTALO = '#6b4a2a', SABATA = '#3b2a1e', FUSTA = '#a8794a';
+    ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.lineJoin = 'round';
+    const top = capY + 28, cintura = top + 34;
+    // Bastó (darrere les mans)
+    ctx.strokeStyle = CONTORN; ctx.lineWidth = 7;
+    ctx.beginPath(); ctx.moveTo(m + 27, top + 2); ctx.lineTo(m + 27, 125); ctx.stroke();
+    ctx.strokeStyle = '#7a5230'; ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(m + 27, top + 2); ctx.lineTo(m + 27, 125); ctx.stroke();
+    ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+    // Cama esquerra: pantaló marró i sabata
+    ctx.fillStyle = PANTALO;
+    ctx.fillRect(m - 14, cintura - 2, 12, 31); ctx.strokeRect(m - 14, cintura - 2, 12, 31);
+    ctx.fillStyle = SABATA; ctx.fillRect(m - 17, 119, 17, 7); ctx.strokeRect(m - 17, 119, 17, 7);
+    // Cama dreta: cuix de pantaló i cama de fusta
+    ctx.fillStyle = PANTALO;
+    ctx.fillRect(m + 2, cintura - 2, 12, 16); ctx.strokeRect(m + 2, cintura - 2, 12, 16);
+    ctx.fillStyle = FUSTA;
+    ctx.beginPath(); ctx.moveTo(m + 3, cintura + 14); ctx.lineTo(m + 13, cintura + 14); ctx.lineTo(m + 10, 124); ctx.lineTo(m + 6, 124); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#4a2e18'; ctx.fillRect(m + 2, cintura + 15, 12, 4); ctx.strokeRect(m + 2, cintura + 15, 12, 4);
+    ctx.fillStyle = '#7a7a78'; ctx.fillRect(m + 5, 123, 6, 3);
+    // Camisa blanca
+    ctx.fillStyle = CAMISA;
+    ctx.beginPath(); ctx.moveTo(m - 17, top); ctx.lineTo(m + 17, top); ctx.lineTo(m + 19, cintura); ctx.lineTo(m - 19, cintura); ctx.closePath(); ctx.fill(); ctx.stroke();
+    // Cinturó
+    ctx.fillStyle = '#3a2614'; ctx.fillRect(m - 19, cintura - 4, 38, 5); ctx.strokeRect(m - 19, cintura - 4, 38, 5);
+    // Coll obert i botons
+    ctx.fillStyle = PELL;
+    ctx.beginPath(); ctx.moveTo(m - 5, top); ctx.lineTo(m + 5, top); ctx.lineTo(m, top + 9); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#c8c4b8';
+    [14, 21, 28].forEach(dy => { ctx.beginPath(); ctx.arc(m, top + dy, 1.4, 0, Math.PI * 2); ctx.fill(); });
+    // Màniga curta (blanca) i avantbraç nu
+    [-1, 1].forEach(sd => {
+        const x0 = sd < 0 ? m - 28 : m + 17;
+        ctx.fillStyle = CAMISA; ctx.fillRect(x0, top + 1, 11, 14); ctx.strokeRect(x0, top + 1, 11, 14);
+        ctx.fillStyle = PELL; ctx.fillRect(sd < 0 ? m - 26 : m + 19, top + 15, 8, sd < 0 ? 20 : 17); ctx.strokeRect(sd < 0 ? m - 26 : m + 19, top + 15, 8, sd < 0 ? 20 : 17);
+    });
+    // Mans (la dreta agafa el bastó)
+    ctx.fillStyle = PELL;
+    ctx.beginPath(); ctx.arc(m - 22, top + 37, 4.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(m + 27, top + 34, 4.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
 }
 
 // Fons bàsic de les escenes: ombra a terra per donar volum
@@ -1258,7 +1305,7 @@ function dibuixarRetauleBarroc(c, w) {
     });
 }
 
-// Hostatgeria (casa d'espiritualitat): gran bloc de pedra bruna amb cantoneres clares, teulada de poc pendent amb ràfec
+// Hostatgeria: gran bloc de pedra bruna amb cantoneres clares, teulada de poc pendent amb ràfec
 // i una quadrícula de finestres petites amb persianes marrons; la porta, petita, a baix a l'esquerra del centre
 function dibuixarHostatgeria(c, w) {
     lienc(c, w, w * 0.84, (ctx, W, H) => {

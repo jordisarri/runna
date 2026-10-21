@@ -33,9 +33,9 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat p
 | **Sansa** | Cel·les (un sol cop) | Passa quan l'Isidre te n'ha parlat, et dona la **Llavor de Lluna** i se'n va. |
 | **Carmen i Eva** | La Taverna | La Carmen, mandrosa; l'Eva, amiga fidel, obre la porta del fons. |
 | **Juli, Frederic, Eloi, Josep** | El Celler | Ping-pong: Juli fa de tutorial, Frederic d'avi savi (revela la roda), Eloi d'arrogant (no cal vèncer-lo), **Josep** és el repte. |
-| **Isidre** | Jardí pergolat | Coix i hàbil: dona les **tisores** i cuida el jardí. |
+| **Isidre** | L'Hostatgeria | Calb, camisa blanca de màniga curta i pantalons marrons; porta cama de fusta i bastó. Coix i hàbil: dona les **tisores** i cuida el jardí. |
 | **Garf** | L'Era | Savi inventor, assegut al banc; telescopi. |
-| **Les Monges** (3) | Hospederia | Presoneres del mal (versió compacta, última fase). |
+| **Les Monges** (3) | Hostatgeria | Presoneres del mal (versió compacta, última fase). |
 | **La Nena de les Trenes** | Camí de la Rovellonera | Esperit: cal tornar-li els llaços. |
 | **La Jaumeta** | Cabana del bosc | **Curiositat**: bruixa-vident; hi vas pel portal i et diu la pista. |
 | **Els pastors de la Cirosa** | Cirosa | Desterrats; no es combaten. Guarden les **Esquelles**. |
@@ -60,7 +60,7 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat p
 | Tisores | Isidre | Podar arbustos. |
 | Aigua de la Font del Bisbe / Cristall de Gel | Font del Bisbe | L'aigua obre el portal de la Jaumeta; el cristall, el telescopi del Garf. |
 | Telescopi, Estel de Sant Llorenç | Garf, Dipòsits | Pista cap al Dolmen. |
-| Llavor de Lluna | Sansa | L'Isidre la planta: obre la llosa de l'Hospederia. |
+| Llavor de Lluna | Sansa | L'Isidre la planta: obre la llosa de l'Hostatgeria. |
 | Llanterna de la Desaparició | Camí de les 12 columnes | Il·lumina zones fosques. |
 | Cors extra | Cofres, ping-pong, rescats | +1 cor màxim. |
 
@@ -81,9 +81,9 @@ Vertical (720x1280); a dalt, una franja de pergamí amb el HUD. Camins de terra 
 - **Camí i La Cirosa**: camí llarg en zig-zag, masia, pastors i el Pastor de Boira.
 - **Bosc de Sant Joan**: Font del Bisbe, Alzina Buida (portal), cofre amagat (cal Runna). **Cabana de la Jaumeta**: curiositat.
 - **Camí de la Desaparició**: 12 columnes; al mur d'arbres del nord, un **forat més ample** (sense marca) duu a la **Cabana amagada** (cofre: +1 cor).
-- **Ermita de la Desaparició** (gran, porta alta; Creu de la Desaparició al davant; interior amb dues taules de pedra), **L'Era** (dos roures, bancs entre ells), **Jardí pergolat** (pèrgola petita a l'esquerra de l'Hospederia, amb la Prunera Màgica i la llosa; l'Isidre, a fora, rega i cull flors) i **Hospederia** (hotel gran, a la dreta).
+- **Ermita de la Desaparició** (gran, porta alta; Creu de la Desaparició al davant; interior amb dues taules de pedra), **L'Era** (dos roures, bancs entre ells), **L'Hostatgeria** (edifici gran a la dreta; enganxada al lateral esquerre, una pèrgola d'arcades de pedra i columnes sense sostre amb la llosa; la Prunera Màgica, a l'esquerra de tot; l'Isidre, davant l'entrada de la pèrgola).
 - **Camí de la Rovellonera i Rovellonera** (Nena de les Trenes, laberint de 3 clarianes), **Ermita de Sant Gabriel**, **Dipòsits** i **Dolmen** (extrem SE).
-- **Pendent de construir:** **La Taverna** (petit interior), **Sala de les Gírgoles**, **passadís de tortura** i **Sala de la Gàbia**; interior compacte de l'**Hospederia**.
+- **Pendent de construir:** **La Taverna** (petit interior), **Sala de les Gírgoles**, **passadís de tortura** i **Sala de la Gàbia**; interior compacte de l'**Hostatgeria**.
 
 **Mapa del joc (menú):** només es dibuixen les pantalles visitades (flag `visitada_<zona>`).
 
@@ -105,7 +105,7 @@ Pantalla negra: *«Santuari del Miracle. Tercera nit de boira.»* La plaça de n
 - **Sopar del Til·ler:** l'**escudella de la Neus**, les **flors de l'Isidre** i **convèncer els pastors** (música vora el seu foc). El ritual de quatre espelmes dona la **Fulla del Til·ler** i +1 cor.
 - **Bosc de Sant Joan:** Font del Bisbe (3 herbes: aigua i cristall de gel). L'Alzina Buida duu per portal a la **Jaumeta** (curiositat: la pista del moment).
 - **Camí de la Desaparició, Ermita i Era:** 12 columnes → missatge de les taules de pedra («els nens tornaran a l'alba amb la llum de Runna»); premi: Llanterna. **Garf** (telescopi, Cristall de Gel).
-- **Jardí:** l'Isidre (tisores), Llavor de Lluna (Sansa) i llosa; **Hospederia** (versió compacta, última fase).
+- **L'Hostatgeria (jardí):** l'Isidre (tisores), Llavor de Lluna (Sansa) i llosa; **Hostatgeria** (versió compacta, última fase).
 - **Rovellonera:** Nena de les Trenes (dos llaços), laberint, **Sant Gabriel** (Calze de Rosada), **Dipòsits** (estels) i **Dolmen:** amb la Fulla, la Benedicció i el Saber («RIURE»), Runna surt de la pedra: *«Hi torna a haver una gàbia, oi? Anem-hi.»*
 
 ### ACTE 3 — «La Sala de la Gàbia» (~1,5 h)
@@ -140,7 +140,7 @@ Només es juga **contra en Josep**, a **set punts** (2 de diferència a 6-6). Vi
 
 ## A9. Estat i pressupost de temps
 - ✔ Implementat: Plaça, Santuari, Monestir, Bassadòria, Casa Gran (exterior i Escalinata, Raïm, Cripta), Runes, Celler (sense minijoc), Passadís i Cambra secreta, Cementiri, Cel·les, Gran Til·ler, Bosc, Cabana de la Jaumeta, Cirosa i Pastor de Boira, Camí de la Desaparició (+cabana amagada), Ermita, Era, Jardí, Camí Rovellonera, Rovellonera, Sant Gabriel, Dipòsits, Dolmen, melodies i flauta, combat.
-- ☐ Pendent: **Taverna + Gírgoles + passadís de tortura + Sala de la Gàbia i boss final**; **minijoc del ping-pong (un partit)**; **Hospederia per dins (compacta)**.
+- ☐ Pendent: **Taverna + Gírgoles + passadís de tortura + Sala de la Gàbia i boss final**; **minijoc del ping-pong (un partit)**; **Hostatgeria per dins (compacta)**.
 - **Temps:** Acte 1 ~1 h · Acte 2 ~2,5 h · Acte 3 ~1,5 h = **~5 h**.
 
 ## A10. Flags de progrés

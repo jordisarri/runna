@@ -202,8 +202,17 @@ class ZonaCasaGran extends ZonaBase {
 
         // Façana gran (1250 d'ample): la reixa del porxo (arc del mig) queda a x=700, amb la base a y≈563 i ~170 d'alt
         this.posar('casa_gran', 700, 727, { fonsY: 560 });
-        this.colisio(700, 528, 1180, 70);
-        this.blocDarrere(700, 1180, 493);
+        // Parets: tot el que és darrere el terra de les arcades (y<572) és mur; les piles i els sòcols laterals també.
+        // Només es pot pujar per l'escalinata (x 355-1050) i entrar a les arcades pels buits entre piles.
+        this.blocDarrere(700, 1250, 572);
+        this.colisio(227, 592, 305, 40);        // mur esquerre + pila exterior (arcades)
+        this.colisio(1172, 592, 305, 40);       // mur dret + pila exterior
+        this.colisio(585, 592, 60, 40);         // pila entre l'arc esquerre i el del mig
+        this.colisio(817, 592, 55, 40);         // pila entre l'arc del mig i el dret
+        this.colisio(215, 641, 280, 58);        // sòcol de pedra a l'esquerra de l'escalinata
+        this.colisio(1190, 641, 270, 58);       // sòcol a la dreta
+        this.colisio(170, 699, 190, 58);        // part baixa del sòcol (l'escalinata s'eixampla)
+        this.colisio(1230, 699, 190, 58);
         // La reixa del porxo, tancada des de fa generacions: per fora no hi ha manera d'entrar
         this.interactiu(700, 585, 85, DIALEGS.portaReixa, { altura: 190 });
 

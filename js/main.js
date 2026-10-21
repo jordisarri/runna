@@ -21,35 +21,57 @@ const Joc = {
         });
     },
 
-    // Música de la intro i del títol (continua sonant del títol al pròleg)
+    // Música: 'musica_intro' (overworld: intro, títol i exteriors) i 'musica_bosc' (parts de bosc)
     musica: null,
+    musicaClau: null,
+    // Cançó de cada zona (les que no hi són, queden en silenci)
+    MUSICA_ZONES: {
+        // Bosc i camins
+        ZonaCami: 'musica_bosc', ZonaCamiRov: 'musica_bosc', ZonaRovellonera: 'musica_bosc', ZonaErmita: 'musica_bosc',
+        ZonaGabriel: 'musica_bosc', ZonaBosc: 'musica_bosc', ZonaCamiCirosa: 'musica_bosc', ZonaCirosa: 'musica_bosc',
+        ZonaDolmen: 'musica_bosc', ZonaTiller: 'musica_bosc', ZonaCabana: 'musica_bosc',
+        // Exteriors (overworld)
+        ZonaPlaca: 'musica_intro', ZonaMonestir: 'musica_intro', ZonaCreu: 'musica_intro', ZonaCasaGran: 'musica_intro',
+        ZonaRuines: 'musica_intro', ZonaCelles: 'musica_intro', ZonaEra: 'musica_intro', ZonaJardi: 'musica_intro', ZonaCementiri: 'musica_intro',
+        // Interiors de cases
+        ZonaEsglesia: 'musica_casa', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
+        ZonaCabanaCami: 'musica_casa', ZonaGolfes: 'musica_casa',
+        // Masmorres
+        ZonaCasaGranInt: 'musica_masmorra', ZonaPingpong: 'musica_masmorra', ZonaCasaCripta: 'musica_masmorra', ZonaPassadis: 'musica_masmorra',
+        ZonaCasaTresor: 'musica_masmorra', ZonaTresor: 'musica_masmorra', ZonaDipositos: 'musica_masmorra'
+    },
 
-    iniciarMusica(scene, seek = 0) {
-        if (!scene.cache.audio.exists('musica_intro')) return;
-        if (Joc.fadeMusica) { clearInterval(Joc.fadeMusica); Joc.fadeMusica = null; }
-        if (Joc.musica && Joc.musica.isPlaying) { Joc.musica.setVolume(0.6); return; }
-        if (Joc.musica) Joc.musica.destroy();
-        Joc.musica = scene.sound.add('musica_intro', { loop: true, volume: 0.6 });
+    iniciarMusica(scene, seek = 0, clau = 'musica_intro') {
+        if (!scene.cache.audio.exists(clau)) return;
+        if (Joc.musica && Joc.musicaClau === clau && Joc.musica.isPlaying) { Joc.musica.setVolume(0.6); return; }
+        Joc.aturarMusica();
+        Joc.musicaClau = clau;
+        Joc.musica = scene.sound.add(clau, { loop: true, volume: 0.6 });
         Joc.musica.play({ seek }); // si el navegador encara no deixa sonar, Phaser l'engega al primer clic/tecla
     },
 
+    // Cada zona demana la seva música; els interiors queden en silenci
+    musicaZona(scene) {
+        const clau = Joc.MUSICA_ZONES[scene.scene.key];
+        if (clau) Joc.iniciarMusica(scene, 0, clau);
+        else Joc.aturarMusica();
+    },
+
+    // Esvaeix la cançó que sona (cada cançó té el seu propi fade)
     aturarMusica() {
         const mus = Joc.musica;
-        if (!mus || Joc.fadeMusica) return;
-        Joc.fadeMusica = setInterval(() => {
+        Joc.musica = null;
+        Joc.musicaClau = null;
+        if (!mus) return;
+        const fade = setInterval(() => {
             mus.setVolume(Math.max(0, mus.volume - 0.04));
-            if (mus.volume <= 0) {
-                clearInterval(Joc.fadeMusica);
-                Joc.fadeMusica = null;
-                mus.stop();
-            }
+            if (mus.volume <= 0) { clearInterval(fade); mus.destroy(); }
         }, 50);
     },
 
     // Comença (o reprèn) la partida que hi ha a Estat.dades
     continuar(scene) {
         const m = scene.game.scene;
-        Joc.aturarMusica();
         Joc.aturarTot(scene);
         if (!m.isActive('UI')) m.start('UI');
         else m.getScene('UI').actualitzarHUD();
@@ -79,7 +101,10 @@ class EscenaCarrega extends Phaser.Scene {
         this.load.on('fileprogress', f => detall.setText(f.key));
         this.load.on('loaderror', f => console.warn("No s'ha pogut carregar", f.key));
         Grafics.carregar(this);
-        this.load.audio('musica_intro', 'assets/musica/intro_runna.mp3');
+        this.load.audio('musica_intro', encodeURI("assets/musica/The Hero's Ascension.mp3"));
+        this.load.audio('musica_casa', encodeURI('assets/musica/Inside All.mp3'));
+        this.load.audio('musica_masmorra', encodeURI('assets/musica/Deep Dungeon Stillness.mp3'));
+        this.load.audio('musica_bosc', 'assets/musica/Woodland Path.mp3'.replace(' ', '%20'));
         // Vídeos de la intro (sense el seu so: sona la música del joc)
         this.load.video('video_intro', 'assets/video/intro_runna_vertical.mp4', true);
         this.load.video('video_bucle', 'assets/video/intro_runna_bucle_vertical.mp4', true);

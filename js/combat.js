@@ -58,6 +58,7 @@ const ENEMICS = {
                 e.spr.body.setVelocity(Math.cos(cap) * vel, Math.sin(cap) * vel);
                 e.spr.setFlipX(Math.cos(cap) < 0);
                 e.spr.setScale(e.escalaBase * 1.18, e.escalaBase * 1.18);
+                Sfx.salt();
             }
         }
     },
@@ -111,6 +112,7 @@ const ENEMICS = {
                     e.estat = 'apunta'; e.fins = ara + 650;
                     e.ang = Math.atan2(jo.y - c.y, jo.x - c.x);
                     e.spr.setTint(0xffa8ff);
+                    Sfx.carrega();
                 }
             }
             e.spr.setFlipX(Math.cos(e.ang) < 0);
@@ -146,11 +148,13 @@ const ENEMICS = {
                     const vius = z.enemics.filter(x => x.tipus === 'ovella' && !x.mort).length;
                     if (vius < 4) {
                         z.flotant(c.x, c.y - 120, 'Be-e-e!', '#e0a0ff');
+                        Sfx.be();
                         [-1, 1].forEach(s => { const o = z.enemic('ovella', c.x + s * 150, c.y + 60); if (o) { z.boiraPuf(o.spr.x, o.spr.y); o.fins = ara + 900; } });
                     }
                 } else if (ara > e.proxCarrega && dist < 440) {
                     e.estat = 'apunta'; e.fins = ara + (fase2 ? 450 : 700); e.ang = cap;
                     e.spr.setTint(0xff8080);
+                    Sfx.carrega();
                 }
             }
         },
@@ -232,35 +236,57 @@ Object.assign(ZonaBase.prototype, {
 
     atacar() {
         const ara = this.time.now;
-        if (!this.teArma() || this.config.pacifica || ara < (this.atacFins || 0) || this.caient) return;
+        if (!this.teArma() || this.config.pacifica || ara < (this.atacFins || 0) || this.caient || this.assegut) return;
         const runna = Estat.te('runna');
         const agil = runna || Estat.te('basto_tiller');          // el bastó de Til·ler (i Runna) són més ràpids i amb més abast
         this.atacFins = ara + (agil ? 270 : 380);
         const d = DIRS[this.direccio] || DIRS.avall;
         const jo = this.ineu.body.center;
         const dany = runna ? 2 : 1;
-        const px = jo.x + d.x * 46, py = jo.y + d.y * 46, abast = agil ? 62 : 54;
+        // Zona de cop al terra, davant l'Ineu (amunt arriba una mica més lluny: l'enemic es veu "per sobre" del cap)
+        const reach = d.y < 0 ? 58 : 48;
+        const px = jo.x + d.x * reach, py = jo.y + d.y * reach, abast = agil ? 66 : 58;
 
-        // Petit tret endavant i mitja lluna visible
-        this.forcat = { vx: d.x * 130, vy: d.y * 130, fins: ara + 90 };
-        const g = this.add.graphics().setDepth(99990);
-        const ang = Math.atan2(d.y, d.x);
-        g.lineStyle(9, runna ? 0xffe08a : 0xf5ecd0, 0.95).beginPath()
-            .arc(jo.x, jo.y - 36, 52, ang - 1.0, ang + 1.0).strokePath();
-        this.tweens.add({ targets: g, alpha: 0, duration: 190, onComplete: () => g.destroy() });
+        // Petit tret endavant, so i mitja lluna que surt de la silueta de l'Ineu
+        this.forcat = { vx: d.x * 150, vy: d.y * 150, fins: ara + 100 };
+        Sfx.atac(runna);
+        this.tallBasto(jo, d, runna, agil);
 
+        let encertats = 0;
         this.enemics.forEach(e => {
             if (e.mort) return;
             const c = e.spr.body.center;
-            if (Phaser.Math.Distance.Between(c.x, c.y, px, py) < abast + e.def.radi) this.colpejar(e, dany, d);
+            if (Phaser.Math.Distance.Between(c.x, c.y, px, py) < abast + e.def.radi) { this.colpejar(e, dany, d); encertats++; }
         });
+        if (encertats) this.forcat = { vx: -d.x * 110, vy: -d.y * 110, fins: ara + 80 };     // retrocés en xocar
         // Runna talla els esbarzers negres
         if (runna) this.esbarzers.forEach(o => { if (o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, px, py) < 85) this.destruirEsbarzer(o, false); });
     },
 
+    // La mitja lluna del cop: surt del pit de l'Ineu, més enllà del cap, dels peus i dels costats
+    tallBasto(jo, d, runna, agil) {
+        const ang = Math.atan2(d.y, d.x);
+        const color = runna ? 0xffe08a : agil ? 0xd8f0b0 : 0xf5ecd0;
+        const g = this.add.graphics().setDepth(99990).setPosition(jo.x, jo.y - 62);
+        const R = agil ? 118 : 108;
+        [[0, 12, 0.95], [-14, 7, 0.55], [-28, 4, 0.3]].forEach(([dr, gruix, alfa]) => {
+            g.lineStyle(gruix, dr ? 0xffffff : color, alfa).beginPath().arc(0, 0, R + dr, ang - 1.05, ang + 1.05).strokePath();
+        });
+        g.rotation = -0.45; g.setScale(0.8);
+        this.tweens.add({ targets: g, rotation: 0.35, scale: 1.12, alpha: 0, duration: 200, ease: 'Cubic.out', onComplete: () => g.destroy() });
+        // Fragments de vent a la vora de la lluna
+        const p = this.add.particles(jo.x + d.x * R * 0.7, jo.y - 62 + d.y * R * 0.7, 'espurna', {
+            angle: { min: Phaser.Math.RadToDeg(ang) - 50, max: Phaser.Math.RadToDeg(ang) + 50 },
+            speed: { min: 60, max: 200 }, lifespan: 240, scale: { start: 0.22, end: 0 },
+            tint: color, quantity: 6, emitting: false
+        }).setDepth(99989);
+        p.explode(6);
+        this.time.delayedCall(350, () => p.destroy());
+    },
+
     esquivar() {
         const ara = this.time.now;
-        if (!this.teArma() || this.config.pacifica || ara < (this.esquivaFins || 0) || this.caient) return;
+        if (!this.teArma() || this.config.pacifica || ara < (this.esquivaFins || 0) || this.caient || this.assegut) return;
         this.esquivaFins = ara + 750;
         const c = this.cursors, t = this.tecles;
         let dx = (c.right.isDown || t.D.isDown ? 1 : 0) - (c.left.isDown || t.A.isDown ? 1 : 0);
@@ -269,37 +295,123 @@ Object.assign(ZonaBase.prototype, {
         const l = Math.hypot(dx, dy);
         this.forcat = { vx: dx / l * 520, vy: dy / l * 520, fins: ara + 170 };
         this.invulnerableFins = ara + 380;
+        Sfx.esquiva();
+        this.polsEsquiva();
         this.ineu.setAlpha(0.55);
         this.time.delayedCall(380, () => { if (!this.caient) this.ineu.setAlpha(1); });
     },
 
     colpejar(e, dany, d) {
         const ara = this.time.now;
-        if (e.def.practica) { this.colpPractica(e); return; }
+        if (e.def.practica) { this.colpPractica(e, d); return; }
         e.vida -= dany;
+        const mort = e.vida <= 0;
         if (e.def.robust) {             // els bosses no perden el torn ni surten volant
             e.atorditFins = ara + 110;
+            e.spr.body.setVelocity(d.x * 90, d.y * 90);
         } else {
-            e.atorditFins = ara + 230;
+            e.atorditFins = ara + 260;
             e.estat = 'repos'; e.fins = ara + 700;
-            e.spr.body.setVelocity(d.x * 280, d.y * 280);
-            e.spr.setScale(e.escalaBase);
+            e.spr.body.setVelocity(d.x * 380, d.y * 380);      // retrocés fort
         }
+        // Flaix blanc, esclafament i sacsejada de l'enemic
         e.spr.setTintFill(0xffffff);
-        this.time.delayedCall(90, () => { if (e.spr.active) e.spr.clearTint(); });
+        this.time.delayedCall(100, () => { if (e.spr.active) e.spr.clearTint(); });
+        this.tweens.killTweensOf(e.spr);
+        e.spr.setScale(e.escalaBase * 1.3, e.escalaBase * 0.72);
+        this.tweens.add({ targets: e.spr, scaleX: e.escalaBase, scaleY: e.escalaBase, duration: 200, ease: 'Back.out' });
         const c = e.spr.body.center;
-        this.esquitxar(c.x, c.y - 10);
-        this.cameras.main.shake(60, 0.002);
-        if (e.vida <= 0) this.derrotar(e);
+        this.impacte(c.x, c.y - 10, d, mort ? 2 : dany > 1 ? 1 : 0);
+        Sfx.cop(mort || dany > 1);
+        this.hitStop(mort ? 120 : dany > 1 ? 85 : 55);
+        this.cameras.main.shake(mort ? 170 : 110, mort ? 0.008 : 0.004, true);
+        if (mort) this.derrotar(e);
+    },
+
+    // Espurnes direccionals, anell d'impacte i estrelleta. forta: 0 normal, 1 Runna, 2 colp final
+    impacte(x, y, d, forta = 0) {
+        const ang = Phaser.Math.RadToDeg(Math.atan2(d.y, d.x));
+        const n = 8 + forta * 5;
+        const p = this.add.particles(x, y, 'espurna', {
+            angle: { min: ang - 38, max: ang + 38 }, speed: { min: 140, max: 380 }, lifespan: { min: 200, max: 380 },
+            scale: { start: 0.3 + forta * 0.08, end: 0 }, tint: [0xffffff, 0xffe08a, 0xff9a40], quantity: n, emitting: false
+        }).setDepth(99991);
+        p.explode(n);
+        // Borrissol lila cap als costats
+        const q = this.add.particles(x, y, 'espurna', {
+            speed: { min: 30, max: 110 }, lifespan: 500, scale: { start: 0.4, end: 0 }, tint: 0x9a7acf, quantity: 6, emitting: false
+        }).setDepth(99990);
+        q.explode(6);
+        this.time.delayedCall(650, () => { p.destroy(); q.destroy(); });
+        // Anell i ratlles
+        const g = this.add.graphics().setDepth(99992).setPosition(x, y);
+        g.lineStyle(forta ? 5 : 3, 0xffffff, 0.95).strokeCircle(0, 0, 14);
+        for (let i = 0; i < 6; i++) {
+            const a = (i / 6) * Math.PI * 2 + Math.random() * 0.4;
+            g.lineStyle(3, 0xfff0b0, 0.9).lineBetween(Math.cos(a) * 14, Math.sin(a) * 14, Math.cos(a) * 30, Math.sin(a) * 30);
+        }
+        this.tweens.add({ targets: g, scale: 1.7 + forta * 0.6, alpha: 0, duration: 230, ease: 'Cubic.out', onComplete: () => g.destroy() });
+    },
+
+    // Micro-congelació: el món s'atura un instant (física, animacions i tweens) i la càmera segueix tremolant
+    hitStop(ms) {
+        if (!this.physics || !this.physics.world) return;
+        const fins = performance.now() + ms;
+        if (this.hitStopFins && fins <= this.hitStopFins) return;
+        const nou = !this.hitStopFins;
+        this.hitStopFins = fins;
+        if (nou) {
+            this.physics.world.pause();
+            this.anims.pauseAll();
+            this.tweens.timeScale = 0.04;
+        }
+        clearTimeout(this.hitStopTimer);
+        this.hitStopTimer = setTimeout(() => {
+            this.hitStopFins = 0;
+            this.anims.resumeAll();                       // les animacions són globals: es reprenen sempre
+            if (!this.sys || !this.sys.settings || this.sys.settings.status > Phaser.Scenes.RUNNING) return;
+            this.physics.world.resume();
+            this.tweens.timeScale = 1;
+        }, ms);
+    },
+
+    polsEsquiva() {
+        const c = this.ineu.body.center;
+        const p = this.add.particles(c.x, c.y + 8, 'boira', {
+            speed: { min: 10, max: 40 }, lifespan: 380, scale: { start: 0.25, end: 0.6 },
+            alpha: { start: 0.45, end: 0 }, quantity: 4, emitting: false
+        }).setDepth(this.ineu.depth - 1);
+        p.explode(4);
+        this.time.delayedCall(450, () => p.destroy());
+    },
+
+    // Vinyeta vermella a les vores de la pantalla quan et fan mal
+    vinyeta() {
+        const cam = this.cameras.main;
+        const w = cam.width / cam.zoom, h = cam.height / cam.zoom;
+        const g = this.add.graphics().setDepth(99995);
+        const f = 130, K = 0xd01830;
+        g.fillGradientStyle(K, K, K, K, 0.65, 0.65, 0, 0).fillRect(0, 0, w, f);
+        g.fillGradientStyle(K, K, K, K, 0, 0, 0.65, 0.65).fillRect(0, h - f, w, f);
+        g.fillGradientStyle(K, K, K, K, 0.65, 0, 0.65, 0).fillRect(0, 0, f, h);
+        g.fillGradientStyle(K, K, K, K, 0, 0.65, 0, 0.65).fillRect(w - f, 0, f, h);
+        // Fixa a la vista de la càmera (ella es mou amb l'Ineu)
+        const seguir = () => g.setPosition(cam.worldView.x, cam.worldView.y);
+        seguir();
+        this.events.on('update', seguir);
+        this.tweens.add({ targets: g, alpha: 0, duration: 520, ease: 'Quad.out', onComplete: () => { this.events.off('update', seguir); g.destroy(); } });
     },
 
     // Cop a un espantaocell: s'agita i compta cap al tutorial
-    colpPractica(e) {
+    colpPractica(e, d) {
+        Sfx.cop(false);
+        this.hitStop(45);
+        this.cameras.main.shake(80, 0.003, true);
         e.spr.setTintFill(0xffffff);
         this.time.delayedCall(80, () => { if (e.spr.active) e.spr.clearTint(); });
         this.tweens.add({ targets: e.spr, angle: { from: -14, to: 0 }, duration: 260, ease: 'Elastic.out' });
         const c = e.spr.body.center;
-        this.esquitxar(c.x, c.y - 20);
+        this.impacte(c.x, c.y - 20, d || DIRS.avall, 0);
         const f = Estat.dades.flags;
         f.practica = (f.practica || 0) + 1;
         this.flotant(c.x, c.y - 90, `${Math.min(f.practica, 6)}/6`, '#f5ecd0');
@@ -329,6 +441,9 @@ Object.assign(ZonaBase.prototype, {
         const c = e.spr.body.center;
         Estat.dades.flags.derrotats = (Estat.dades.flags.derrotats || 0) + 1;
         this.boiraPuf(c.x, c.y);
+        Sfx.derrota();
+        this.tweens.killTweensOf(e.spr);
+        this.ondaMort(c.x, c.y);
         if (e.def.alDerrotar) { e.def.alDerrotar(this, e); return; }
 
         if (e.tipus === 'visitant') {            // cau adormit i es desperta confús
@@ -343,13 +458,30 @@ Object.assign(ZonaBase.prototype, {
 
         // Botí: només cors de tant en tant (no hi ha monedes: no es compra ni es ven res)
         if (Math.random() < e.def.cor && Estat.dades.vida < Estat.dades.corsMax * 2) {
+            const abans = Estat.dades.vida;
             Estat.dades.vida = Math.min(Estat.dades.corsMax * 2, Estat.dades.vida + 2);
             this.flotant(c.x + 20, c.y - 60, '+♥', '#ff6a7a');
+            Sfx.cura();
+            this.time.delayedCall(250, () => { const ui = this.ui(); if (ui && ui.animarGuany) ui.animarGuany(abans, Estat.dades.vida); });
         }
         this.ui().actualitzarHUD();
     },
 
+    // Anell gran i espurnes d'un enemic que es desfà
+    ondaMort(x, y) {
+        const g = this.add.graphics().setDepth(99992).setPosition(x, y);
+        g.lineStyle(6, 0xe0c8ff, 0.9).strokeCircle(0, 0, 24);
+        this.tweens.add({ targets: g, scale: 3, alpha: 0, duration: 420, ease: 'Cubic.out', onComplete: () => g.destroy() });
+        const p = this.add.particles(x, y - 10, 'espurna', {
+            speed: { min: 90, max: 280 }, lifespan: { min: 350, max: 650 }, scale: { start: 0.35, end: 0 },
+            tint: [0xe0c8ff, 0xffffff, 0x9a7acf], gravityY: -60, quantity: 16, emitting: false
+        }).setDepth(99991);
+        p.explode(16);
+        this.time.delayedCall(800, () => p.destroy());
+    },
+
     boiraPuf(x, y) {
+        Sfx.puf();
         const p = this.add.particles(x, y, 'boira', {
             speed: { min: 20, max: 70 }, lifespan: 900, scale: { start: 0.6, end: 1.6 },
             alpha: { start: 0.7, end: 0 }, quantity: 8, emitting: false
@@ -387,18 +519,37 @@ Object.assign(ZonaBase.prototype, {
             this.cintaGastada = true;
             this.invulnerableFins = ara + 1100;
             this.flotant(this.ineu.x, this.ineu.y - 150, 'La cinta et protegeix', '#e0a0c0');
+            Sfx.escut();
             return;
         }
         const d = Estat.dades;
+        const abans = d.vida;
         d.vida = Math.max(0, d.vida - mal);
         this.invulnerableFins = ara + 1100;
         const c = this.ineu.body.center;
         let dx = c.x - des.x, dy = c.y - des.y;
         const l = Math.hypot(dx, dy) || 1;
-        this.forcat = { vx: dx / l * 300, vy: dy / l * 300, fins: ara + 160 };
-        this.cameras.main.shake(110, 0.006);
+        this.forcat = { vx: dx / l * 420, vy: dy / l * 420, fins: ara + 210 };      // retrocés
+        // Cop rebut: so, congelació, sacsejada, vinyeta, espurnes i flaix blanc
+        Sfx.ferit();
+        Sfx.corPerdut();
+        this.hitStop(130);
+        this.cameras.main.shake(260, 0.013, true);
+        this.vinyeta();
+        this.ineu.setTintFill(0xffffff);
+        this.time.delayedCall(110, () => { if (this.ineu.active) this.ineu.setTint(0xff6060); });
+        this.time.delayedCall(320, () => { if (this.ineu.active) this.ineu.clearTint(); });
+        this.impacte(c.x, c.y - 50, { x: dx / l, y: dy / l }, 1);
+        const sang = this.add.particles(c.x, c.y - 50, 'espurna', {
+            speed: { min: 60, max: 220 }, lifespan: 480, scale: { start: 0.3, end: 0 },
+            tint: [0xe03a4a, 0xff7a8a], gravityY: 380, quantity: 10, emitting: false
+        }).setDepth(99991);
+        sang.explode(10);
+        this.time.delayedCall(600, () => sang.destroy());
         this.tweens.add({ targets: this.ineu, alpha: 0.3, yoyo: true, repeat: 4, duration: 90, onComplete: () => { if (!this.caient) this.ineu.setAlpha(1); } });
-        this.ui().actualitzarHUD();
+        const ui = this.ui();
+        ui.actualitzarHUD();
+        if (ui.animarPerdua) ui.animarPerdua(abans, d.vida);
         if (d.vida <= 0) this.caure();
     },
 

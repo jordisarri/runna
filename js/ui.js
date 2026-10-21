@@ -127,12 +127,95 @@ class EscenaUI extends Phaser.Scene {
             const v = d.vida - i * 2;
             img.setVisible(i < d.corsMax).setPosition(68 + i * 54, 54).setTexture(v >= 2 ? 'cor_ple' : v === 1 ? 'cor_mig' : 'cor_buit');
         });
+        this.gestionarLatidor();
         this.textObjectiu.setText('Objectiu: ' + (d.objectiu || ''));
         // L'objectiu ha de cabre dins del marc fix de la franja: si és llarg, es redueix la lletra
         let mida = 20;
         this.textObjectiu.setFontSize(mida);
         while (this.textObjectiu.height > 52 && mida > 14) this.textObjectiu.setFontSize(--mida);
         if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · K: esquivar · ESC: menú');
+    }
+
+    // Quan queda un sol cor o menys, l'últim cor bategueja
+    gestionarLatidor() {
+        if (this.animantCor) return;
+        const v = Estat.dades.vida;
+        const idx = v > 0 && v <= 2 ? Math.floor((v - 1) / 2) : -1;
+        if (idx === this.latidorIdx) return;
+        if (this.latidorTween) {
+            this.latidorTween.stop(); this.latidorTween = null;
+            const a = this.cors[this.latidorIdx];
+            if (a) a.setScale(1 / RES);
+        }
+        this.latidorIdx = idx;
+        if (idx >= 0 && this.cors[idx]) {
+            this.latidorTween = this.tweens.add({
+                targets: this.cors[idx], scale: { from: 1 / RES, to: 1.2 / RES }, yoyo: true, repeat: -1, duration: 380, ease: 'Sine.inOut'
+            });
+        }
+    }
+
+    // Cors que perden alguna meitat entre "abans" i "ara": es trenquen, cauen i la resta fa una onada
+    animarPerdua(abans, ara) {
+        const valor = (v, i) => Math.max(0, Math.min(2, v - i * 2));
+        const base = 1 / RES;
+        this.animantCor = true;
+        if (this.latidorTween) { this.latidorTween.stop(); this.latidorTween = null; }
+        this.latidorIdx = -1;
+        this.cors.forEach(c => { this.tweens.killTweensOf(c); c.setScale(base).setAngle(0).clearTint(); });
+        this.cameras.main.shake(240, 0.006, true);
+        this.cors.forEach((img, i) => {
+            if (!img.visible) return;
+            const antes = valor(abans, i), despres = valor(ara, i);
+            if (despres >= antes) {
+                // Els cors que es mantenen fan una petita onada d'ensurt
+                this.tweens.add({ targets: img, scale: base * 1.25, yoyo: true, duration: 110, delay: 60 + i * 45, ease: 'Sine.out' });
+                return;
+            }
+            // Flaix blanc i bot gran que s'afebleix
+            img.setTintFill(0xffffff);
+            this.time.delayedCall(90, () => img.clearTint());
+            img.setScale(base * 2.1);
+            this.tweens.add({ targets: img, scale: base, duration: 380, ease: 'Back.out' });
+            this.tweens.add({ targets: img, angle: { from: -22, to: 0 }, duration: 480, ease: 'Elastic.out' });
+            // Anell vermell
+            const anell = this.add.graphics().setPosition(img.x, img.y).setDepth(img.depth + 1);
+            anell.lineStyle(4, 0xff3a4a, 0.95).strokeCircle(0, 0, 18);
+            this.tweens.add({ targets: anell, scale: 2.6, alpha: 0, duration: 380, ease: 'Cubic.out', onComplete: () => anell.destroy() });
+            // La part perduda: un cor trencat que cau girant
+            const part = antes - despres;
+            const fantasma = this.add.image(img.x, img.y, part === 1 ? 'cor_mig' : 'cor_ple').setScale(base).setDepth(img.depth + 2);
+            this.tweens.add({
+                targets: fantasma, y: img.y + 120, x: img.x + Phaser.Math.Between(-22, 22), angle: Phaser.Math.Between(-80, 80),
+                alpha: 0, scale: base * 0.8, duration: 700, ease: 'Quad.in', onComplete: () => fantasma.destroy()
+            });
+            // Esquerdes de vidre vermell
+            const p = this.add.particles(img.x, img.y, 'espurna', {
+                speed: { min: 70, max: 260 }, lifespan: { min: 400, max: 700 }, scale: { start: 0.3, end: 0 },
+                tint: [0xe03a4a, 0xff7a8a, 0xffffff], gravityY: 420, quantity: 14, emitting: false
+            }).setDepth(img.depth + 3);
+            p.explode(14);
+            this.time.delayedCall(800, () => p.destroy());
+        });
+        this.time.delayedCall(700, () => { this.animantCor = false; this.gestionarLatidor(); });
+    }
+
+    // Cors que es recuperen: pugen amb un bot rosa
+    animarGuany(abans, ara) {
+        const valor = (v, i) => Math.max(0, Math.min(2, v - i * 2));
+        const base = 1 / RES;
+        this.cors.forEach((img, i) => {
+            if (!img.visible || valor(ara, i) <= valor(abans, i)) return;
+            this.tweens.killTweensOf(img);
+            img.setScale(base);
+            this.tweens.add({ targets: img, scale: base * 1.6, yoyo: true, duration: 170, ease: 'Sine.out' });
+            const p = this.add.particles(img.x, img.y, 'espurna', {
+                speed: { min: 30, max: 120 }, lifespan: 600, scale: { start: 0.25, end: 0 },
+                tint: [0xff8aa0, 0xffd0d8], gravityY: -80, quantity: 8, emitting: false
+            }).setDepth(img.depth + 3);
+            p.explode(8);
+            this.time.delayedCall(700, () => p.destroy());
+        });
     }
 
     mostrarZona(nom) {
@@ -193,6 +276,7 @@ class EscenaUI extends Phaser.Scene {
         this.timerText = this.time.addEvent({
             delay: 22, loop: true, callback: () => {
                 this.lletres++;
+                if (this.lletres % 2 === 0 && /\S/.test(this.textComplet[this.lletres - 1] || '')) Sfx.lletra();
                 this.textDialeg.setText(this.textComplet.slice(0, this.lletres));
                 if (this.lletres >= this.textComplet.length) this.acabarEscriptura();
             }
@@ -209,6 +293,7 @@ class EscenaUI extends Phaser.Scene {
         if (!this.dialeg) return;
         if (this.timerText) { this.acabarEscriptura(); return; }
         this.dialeg.pagina++;
+        Sfx.pagina();
         if (this.dialeg.pagina < this.dialeg.dades.pagines.length) { this.mostrarPagina(); return; }
         this.tancarDialeg();
     }

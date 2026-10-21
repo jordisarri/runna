@@ -31,7 +31,7 @@ const Estat = {
     flag(nom) { return !!(this.dades && this.dades.flags[nom]); },
     posaFlag(nom, valor = true) { this.dades.flags[nom] = valor; },
     te(objecte) { return this.dades.objectes.includes(objecte); },
-    dona(objecte) { if (!this.te(objecte)) this.dades.objectes.push(objecte); },
+    dona(objecte) { if (!this.te(objecte)) { this.dades.objectes.push(objecte); if (typeof Sfx !== 'undefined') Sfx.objecte(); } },
     treu(objecte) { this.dades.objectes = this.dades.objectes.filter(o => o !== objecte); },
     posaObjectiu(text) { this.dades.objectiu = text; },
 

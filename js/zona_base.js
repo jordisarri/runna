@@ -12,6 +12,9 @@
 const ZOOM_CAMERA = 1;
 const BANDA_SUD = 120;   // franja de baix (vora sud, sortides) que es desplaça cap avall en ampliar la zona
 const VELOCITAT_INEU = 230;
+// Caixa de col·lisió del tronc de l'arbre (gràfic 'arbre': les arrels fan ~130 px d'ample i el tronc ~70-100)
+const TRONC_ARBRE = esc => ({ w: Math.round(100 * esc), h: Math.round(36 * esc) });
+
 const TOPE_Y = 100;   // els peus de l'Ineu no passen d'aquí amunt: sempre se li veu el cos (la càmera s'atura a y=0)
 
 class ZonaBase extends Phaser.Scene {
@@ -29,6 +32,7 @@ class ZonaBase extends Phaser.Scene {
         const c = this.config;
         Estat.dades.zona = this.scene.key;
         Estat.posaFlag('visitada_' + this.scene.key); // el mapa només mostra el que s'ha visitat
+        Joc.musicaZona(this);
 
         this.physics.world.setBounds(0, TOPE_Y - 30, c.amplada, c.alcada - TOPE_Y + 30);   // la caixa dels peus fa 30 d'alt
         this.obstacles = this.physics.add.staticGroup();
@@ -258,6 +262,8 @@ class ZonaBase extends Phaser.Scene {
         const escala = (tex.customData && tex.customData.escala) || 1 / RES;
         const img = this.add.image(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
         img.setDepth(opts.fonsY !== undefined ? opts.fonsY : y);
+        // Tots els arbres del mateix gràfic tenen el mateix tronc sòlid (arrels incloses), proporcional a l'escala
+        if (key === 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: TRONC_ARBRE(opts.escala || 1) });
         if (opts.col) this.colisio(x + (opts.col.dx || 0), y - opts.col.h / 2 + (opts.col.dy || 0), opts.col.w, opts.col.h);
         return img;
     }
@@ -294,11 +300,26 @@ class ZonaBase extends Phaser.Scene {
         llista.forEach(([x, y]) => this.posar(key, x, y, { col: { w: 34, h: 16 } }));
     }
 
-    // Franja d'arbres que tanca un costat de la pantalla (per no deixar sortir on no hi ha res)
+    // Franja d'arbres que tanca un costat de la pantalla (per no deixar sortir on no hi ha res).
+    // Els troncs s'uneixen amb tires de col·lisió (sense forats) i, si la fila és a dalt de tot, una paret
+    // pel darrere impedeix passar per l'estreta franja que queda sobre els troncs.
     muralla(x1, y1, x2, y2, pas = 90, key = 'arbre') {
         const n = Math.max(1, Math.round(Math.hypot(x2 - x1, y2 - y1) / pas));
+        const arbre = key === 'arbre';
+        const alt = arbre ? TRONC_ARBRE(1).h : 30;
         for (let i = 0; i <= n; i++) {
-            this.posar(key, x1 + (x2 - x1) * i / n, y1 + (y2 - y1) * i / n, { col: { w: 60, h: 30 } });
+            const x = x1 + (x2 - x1) * i / n, y = y1 + (y2 - y1) * i / n;
+            this.posar(key, x, y, { col: arbre ? { w: TRONC_ARBRE(1).w, h: alt, fix: true } : { w: 60, h: 30 } });
+        }
+        const horitzontal = Math.abs(y2 - y1) < 5, vertical = Math.abs(x2 - x1) < 5;
+        for (let i = 0; i < n; i++) {
+            const mx = x1 + (x2 - x1) * (i + 0.5) / n, my = y1 + (y2 - y1) * (i + 0.5) / n;
+            if (horitzontal) this.colisio(mx, my - alt / 2, Math.abs(x2 - x1) / n, alt);
+            else if (vertical) this.colisio(mx, my - alt / 2, arbre ? TRONC_ARBRE(1).w : 60, Math.abs(y2 - y1) / n);
+        }
+        if (horitzontal && y1 - 30 > 10) {
+            const xa = Math.min(x1, x2), xb = Math.max(x1, x2);
+            this.colisio((xa + xb) / 2, (y1 - 30) / 2, xb - xa, y1 - 30);
         }
     }
 
@@ -479,6 +500,7 @@ class ZonaBase extends Phaser.Scene {
     }
 
     destruirEsbarzer(o, foc) {
+        Sfx.talla();
         if (!o.viu) return;
         o.viu = false;
         if (o.id) Estat.posaFlag('esb_' + o.id);
@@ -573,7 +595,7 @@ class ZonaBase extends Phaser.Scene {
         const f = this.fantasma, i = this.ineu;
         if (!f || !i) return;
         if (f.texture.key !== i.texture.key || f.frame.name !== i.frame.name) f.setTexture(i.texture.key, i.frame.name);
-        f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(i.alpha * 0.38);
+        f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(this.assegut ? 0 : i.alpha * 0.38);   // assegut: el banc el tapa de debò
     }
 
     cicle(time, delta) {
@@ -616,6 +638,14 @@ class ZonaBase extends Phaser.Scene {
     }
 
     moure(ui, delta) {
+        // Assegut en un banc: es queda quiet fins que el jugador es mou (llavors s'aixeca i continua caminant)
+        if (this.assegut) {
+            const c = this.cursors, t = this.tecles;
+            const vol = c.left.isDown || c.right.isDown || c.up.isDown || c.down.isDown ||
+                t.A.isDown || t.D.isDown || t.W.isDown || t.S.isDown || Math.hypot(ui.vectorTactil.x, ui.vectorTactil.y) > 0.15;
+            if (!vol) { this.ineu.body.setVelocity(0); return; }
+            this.alcar();
+        }
         // Empenta forçada (esquiva, retrocés, tret de l'atac): el jugador no la controla
         if (this.forcat && this.time.now < this.forcat.fins) {
             this.ineu.body.setVelocity(this.forcat.vx, this.forcat.vy);
@@ -637,6 +667,7 @@ class ZonaBase extends Phaser.Scene {
 
         const movent = Math.hypot(vx, vy) > 0.15;
         if (movent) {
+            if (this.time.now > (this.proxPas || 0)) { this.proxPas = this.time.now + 300; this.altrePas = !this.altrePas; Sfx.pas(this.altrePas); }
             const dir = Math.abs(vx) > Math.abs(vy) * 1.1 ? (vx < 0 ? 'esquerra' : 'dreta') : (vy < 0 ? 'amunt' : 'avall');
             const oct = (Math.round(Math.atan2(vy, vx) / (Math.PI / 4)) + 8) % 8;
             this.vista8Manual = true;
@@ -680,6 +711,7 @@ class ZonaBase extends Phaser.Scene {
     canviarZona(desti, entrada) {
         if (this.canviant) return;
         this.canviant = true;
+        Sfx.porta();
         this.ineu.body.setVelocity(0);
         Estat.dades.entrada = entrada;
         Estat.dades.x = null;

@@ -20,7 +20,7 @@ function pistaActual(E) {
     else if (!E.flag("fontNeta")) consell = "Al bosc de l'oest, a tocar del Til·ler, hi ha una Font del Bisbe que s'ha adormit. Porta-li tres herbes: la de Sant Joan, la ruda i la farigola.";
     else if (E.flag("soparFet") && !E.flag("saber")) consell = "El Pare Alcuí, a la biblioteca, sap la paraula que desperta l'espasa. Només te la dirà si has parlat amb l'ombra del monjo.";
     else if (E.flag("soparFet") && !E.flag("benediccio")) consell = "El Pare Jordi, a la Plaça, vol donar-te la benedicció. Fes-li una visita.";
-    else if (E.flag("soparFet") && !E.flag("runna")) consell = "Surt de l'Hospederia cap a l'oest, passa per davant de l'Era i segueix el camí un bon tros: arribaràs a la Rovellonera. Allà, on hi ha rovellons sota els pins, hi ha camí: sud, ponent i sud. I mira el cel als Dipòsits.";
+    else if (E.flag("soparFet") && !E.flag("runna")) consell = "Surt de l'Hostatgeria cap a l'oest, passa per davant de l'Era i segueix el camí un bon tros: arribaràs a la Rovellonera. Allà, on hi ha rovellons sota els pins, hi ha camí: sud, ponent i sud. I mira el cel als Dipòsits.";
     else if (!E.flag("cofreCambra")) consell = "Ara que portes Runna... Al Celler, a les Runes, hi ha una roda de carruatge que no gira per a qualsevol. El Frederic, el pare del Juli, en sap més del que diu. Parla-hi.";
     else if (!E.flag("raimDerrotat")) consell = "A la gran escalinata de la Casa Gran hi ha l'Home del Raïm. Necessites la palanca d'en Jordi de la Caseta (al nord del Til·ler) i recorda el que diu el pergamí del monjo: on neix el sol, el raïm madura.";
     else if (!E.flag("relIquiesRetornades")) consell = "Les relíquies dels monjos s'han de tornar a la tomba esquerdada del Cementiri, darrere el Santuari i el Monestir. I guarda bé aquella clau que has trobat: obre la porta de ferro de sota la Taverna.";
@@ -41,7 +41,7 @@ function consellTieta(E, qui) {
 function objectiuSopar(E) {
     const f = [];
     if (!E.flag("escudella")) f.push("l'escudella de la Neus");
-    if (!E.flag("floresIsidre")) f.push("les flors de l'Isidre (Jardí)");
+    if (!E.flag("floresIsidre")) f.push("les flors de l'Isidre (Hostatgeria)");
     if (!E.flag("pastorsConvencuts")) f.push("convèncer els pastors de la Cirosa (toca música vora el seu foc)");
     E.posaObjectiu(f.length ? "El sopar del Til·ler: falta " + f.join(", ") + "." : "Tot a punt: torna al Gran Til·ler per al sopar.");
 }
@@ -689,7 +689,7 @@ const DIALEGS = {
             ]
         };
     },
-    cartellEra: E => ({ pagines: [{ qui: '', text: '↑ Ermita de la Desaparició\n→ Hospederia\n← Rovellonera' }] }),
+    cartellEra: E => ({ pagines: [{ qui: '', text: '↑ Ermita de la Desaparició\n→ Hostatgeria\n← Rovellonera' }] }),
 
     // ---------------- JARDÍ ----------------
     // L'Isidre dóna les tisores de podar la primera vegada que hi parles
@@ -724,14 +724,14 @@ const DIALEGS = {
                 pagines: [
                     { qui: 'Isidre', text: 'Una Llavor de Lluna! Fa trenta anys que no en veia cap. Deixa-me-la...' },
                     { qui: '', text: 'L\'Isidre, coix però àgil, cava un clot al peu de la llosa de pedra, hi posa la llavor i la rega. De pressa, una flor blanca brota i brilla.' },
-                    { qui: 'Isidre', text: 'La llosa s\'ha mogut! Per aquí es baixa a l\'Hospederia, que el mal ha tancat per dins.' }
+                    { qui: 'Isidre', text: 'La llosa s\'ha mogut! Per aquí es baixa a l\'Hostatgeria, que el mal ha tancat per dins.' }
                 ],
-                enAcabar: () => { E.treu('llavorLluna'); E.posaFlag('llosaOberta'); E.posaObjectiu('L\'entrada secreta de l\'Hospederia és oberta (pròxima fase).'); }
+                enAcabar: () => { E.treu('llavorLluna'); E.posaFlag('llosaOberta'); E.posaObjectiu('L\'entrada secreta de l\'Hostatgeria és oberta (pròxima fase).'); }
             };
         }
         return {
             pagines: [
-                { qui: 'Isidre', text: 'Bon dia, monjo! Perdona que no m\'aixequi: el peu, ja saps. Aquesta pèrgola de pedra és més vella que el monestir: les columnes, l\'heura... i la porta de l\'Hospederia, aquí al costat, que comunica amb ella.' },
+                { qui: 'Isidre', text: 'Bon dia, monjo! Perdona que no m\'aixequi: el peu, ja saps. Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l\'Hostatgeria, aquí al costat, que s\'hi aguanta al darrere.' },
                 { qui: 'Isidre', text: 'Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s\'obre amb una flor de lluna, i la llavor, ves a saber... potser la tingui la venedora de verdura, la Sansa.' }
             ],
             enAcabar: () => { E.posaFlag('isidreSansa'); E.posaObjectiu('Busca la Sansa, la venedora de verdura: potser té una Llavor de Lluna per a la llosa del jardí.'); }
@@ -745,25 +745,25 @@ const DIALEGS = {
             { qui: '', text: 'Has obtingut la LLAVOR DE LLUNA.' },
             { qui: 'Sansa', text: 'Bé, jo ja he d' + String.fromCharCode(39) + 'anar fent camí. Avui encara em queden tres pobles per davant. Adéu, monjo!' }
         ],
-        enAcabar: () => { E.dona('llavorLluna'); E.posaFlag('llavorSansa'); E.posaObjectiu('Porta la Llavor de Lluna a l' + String.fromCharCode(39) + 'Isidre, al Jardí pergolat.'); }
+        enAcabar: () => { E.dona('llavorLluna'); E.posaFlag('llavorSansa'); E.posaObjectiu('Porta la Llavor de Lluna a l' + String.fromCharCode(39) + 'Isidre, a l' + String.fromCharCode(39) + 'Hostatgeria.'); }
     }),
     llosaJardi: E => E.flag('llosaOberta') ? {
         pagines: [
             { qui: '', text: 'La llosa descansa mig oberta. De sota puja una escala i una olor d\'encens i humitat.' },
-            { qui: '', text: '(L\'Hospederia s\'obrirà en una fase propera.)' }
+            { qui: '', text: '(L\'Hostatgeria s\'obrirà en una fase propera.)' }
         ]
     } : {
-        pagines: [{ qui: '', text: 'Una llosa de pedra rodona entre les flors, a l\'ombra de la pèrgola. Té una ranura al mig, com un clot per una llavor.' }]
+        pagines: [{ qui: '', text: 'Una llosa de pedra rodona entre les flors, dins la pèrgola. Té una ranura al mig, com un clot per una llavor.' }]
     },
     prunera: E => ({
         pagines: [
-            { qui: '', text: 'Al fons de la pèrgola, a ponent, una prunera vella i retorçuda, carregada de prunes d\'un lila que lluu com si fossin de vidre.' },
-            { qui: 'Isidre', text: '(des del fons del passadís) No te\'n facis un fart, monjo! Són prunes màgiques: una sola et deixa com nou.' },
+            { qui: '', text: 'A l\'extrem de ponent del jardí, una prunera vella i retorçuda, carregada de prunes d\'un lila que lluu com si fossin de vidre.' },
+            { qui: 'Isidre', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes màgiques: una sola et deixa com nou.' },
             { qui: '', text: 'Menges una pruna. Té gust de tardor, de mel i de música. Et sents completament renovat.' }
         ],
         enAcabar: () => { E.dades.vida = E.dades.corsMax * 2; }
     }),
-    hospederia: E => ({ pagines: [{ qui: '', text: 'L\'Hospederia, casa d\'espiritualitat. Les portes són tancades per dins i els finestrals són foscos.\n(La masmorra s\'obrirà en una fase propera.)' }] }),
+    hostatgeria: E => ({ pagines: [{ qui: '', text: 'L\'Hostatgeria. Les portes són tancades per dins i els finestrals són foscos.\n(La masmorra s\'obrirà en una fase propera.)' }] }),
 
     // ---------------- LA CIROSA ----------------
     // Els pastors de la Cirosa: desterrats, arruïnats i sense nom. No s'han de combatre.

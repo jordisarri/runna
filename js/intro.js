@@ -9,8 +9,8 @@ const FONT_TITOL = '"Cinzel Decorative", Georgia, serif';
 const FONT_TEXT = '"Cormorant Garamond", Georgia, "Times New Roman", serif';   // serifa elegant (portada)
 const FONT_PLACA = '"Cinzel", Georgia, serif';                                   // noms i títols a la interfície
 
-// La música té 3,5 s de silenci al principi: la fem començar on ja sona
-const MUSICA_INICI_INTRO = 3.5;
+// The Hero's Ascension: la fem començar al segon 18
+const MUSICA_INICI_INTRO = 18;
 const FOSA_BUCLE = 500;
 // Si el vídeo no avança en aquest temps (el mòbil l'ha bloquejat), passem directament al bucle
 const ESPERA_VIDEO = 2500;
@@ -31,7 +31,11 @@ class EscenaTitol extends Phaser.Scene {
         this.construirMenu();
 
         this.input.keyboard.on('keydown', e => this.tecla(e));
-        this.input.on('pointerdown', (p, objs) => { if (!objs.length) this.tecla(null); });
+        this.input.on('pointerdown', (p, objs) => {
+            // Menú sobre la intro congelada: un toc és un gest nou, reintentem engegar el bucle
+            if (this.esperaBucle && this.videoBucle.video && this.videoBucle.video.paused) this.videoBucle.play(true);
+            if (!objs.length) this.tecla(null);
+        });
 
         if (this.mode === 'intro') {
             this.construirPortada();
@@ -79,6 +83,10 @@ class EscenaTitol extends Phaser.Scene {
             v.setVisible(true);
             if (v.video) v.video.currentTime = 0;
             v.play(false);
+            // El mòbil només deixa engegar un vídeo dins d'un gest: el bucle ja corre, tapat per la intro
+            this.videoBucle.setVisible(true);
+            this.videoBucle.play(true);
+            this.bucleEngegat = true;
             this.iniciIntro = this.time.now;
             return;
         }
@@ -87,16 +95,27 @@ class EscenaTitol extends Phaser.Scene {
             const k = e.key;
             if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'a' || k === 'A' || k === 'w' || k === 'W') this.moure(-1);
             else if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'd' || k === 'D' || k === 's' || k === 'S') this.moure(1);
-            else if (k === 'Enter' || k === ' ') this.opcions[this.seleccio].fn();
+            else if (k === 'Enter' || k === ' ') { Sfx.tria(); this.opcions[this.seleccio].fn(); }
         }
     }
 
     anarAlBucle(fosa) {
         if (this.fase === 'menu') return;
         this.fase = 'menu';
-        if (this.videoBucle.video) this.videoBucle.video.currentTime = 0;
-        this.videoBucle.setVisible(true);
-        this.videoBucle.play(true);
+        const b = this.videoBucle.video;
+        if (!this.bucleEngegat || !b || b.paused) {
+            if (b) b.currentTime = 0;
+            this.videoBucle.setVisible(true);
+            this.videoBucle.play(true);
+        }
+        // Si el navegador no deixa reproduir el bucle, la intro es queda a l'últim fotograma (mai negre)
+        const bucleOk = b && !b.paused && b.readyState >= 2;
+        if (!bucleOk && this.videoIntro.visible) {
+            if (this.videoIntro.video) this.videoIntro.video.pause();
+            this.tweens.add({ targets: this.menu, alpha: 1, duration: 900 });
+            this.esperaBucle = true;
+            return;
+        }
         if (fosa && this.videoIntro.visible) {
             // L'últim fotograma de la intro es fon sobre el bucle
             if (this.videoIntro.video) this.videoIntro.video.pause();
@@ -114,6 +133,17 @@ class EscenaTitol extends Phaser.Scene {
     // Quan la intro arriba al final, passem al bucle
     update() {
         const v = this.videoIntro.video;
+        // Menú ja visible però el bucle no corria: quan arrenqui (o amb un toc), el fonem sobre la intro
+        if (this.esperaBucle) {
+            const b = this.videoBucle.video;
+            if (b && !b.paused && b.readyState >= 2 && b.currentTime > 0.05) {
+                this.esperaBucle = false;
+                this.tweens.add({
+                    targets: this.videoIntro, alpha: 0, duration: FOSA_BUCLE,
+                    onComplete: () => this.videoIntro.setVisible(false)
+                });
+            }
+        }
         if (this.fase === 'espera') {
             // Phaser a vegades engega els vídeos sols: mentre som a la portada, quiets
             [v, this.videoBucle.video].forEach(e => { if (e && !e.paused) { e.pause(); e.currentTime = 0; } });
@@ -166,6 +196,7 @@ class EscenaTitol extends Phaser.Scene {
 
     moure(d) {
         this.seleccio = (this.seleccio + d + this.opcions.length) % this.opcions.length;
+        Sfx.menu();
         this.pintar();
     }
 

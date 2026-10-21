@@ -10,9 +10,9 @@ const RES = 2;
 
 const CATALEG = [
     // Edificis
-    { key: 'esglesia',     file: 'assets/esglesia.png',     amplada: 1100 },   // gran: la porta (~165) ha de superar l'Ineu (~125); a la plaça es retalla i no es veu sencera
-    { key: 'monestir',     file: 'assets/monestir.png',     amplada: 620, provisional: (c, w) => dibuixarMonestir(c, w) },
-    { key: 'casa_gran',    file: 'assets/casa_gran.png',    amplada: 1250, provisional: (c, w) => dibuixarCasaGran(c, w) },
+    { key: 'esglesia',     file: 'assets/esglesia.webp',     amplada: 1100 },   // gran: la porta (~165) ha de superar l'Ineu (~125); a la plaça es retalla i no es veu sencera
+    { key: 'monestir',     file: 'assets/monestir.webp',     amplada: 620, provisional: (c, w) => dibuixarMonestir(c, w) },
+    { key: 'casa_gran',    file: 'assets/casa_gran.webp',    amplada: 1250, provisional: (c, w) => dibuixarCasaGran(c, w) },
     // Personatges
     { key: 'pare_jordi',   file: 'assets/pare_jordi.png',   amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
     { key: 'germa_andreu', file: 'assets/germa_andreu.png', amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#3b2a1e', pilota: true }) },
@@ -24,16 +24,16 @@ const CATALEG = [
     { key: 'creu_desaparicio', file: 'assets/creu_desaparicio.png', amplada: 90, provisional: (c, w) => dibuixarCreuDesaparicio(c, w) },
     { key: 'bassadoria',   file: 'assets/bassadoria.png',   amplada: 520, provisional: (c, w) => dibuixarBassadoriaReixa(c, w) },
     { key: 'font',         file: 'assets/font.png',         amplada: 150, provisional: (c, w) => dibuixarFont(c, w) },
-    { key: 'arbre',        file: 'assets/arbre.png',        amplada: 300, provisional: (c, w) => dibuixarArbre(c, w) },
-    { key: 'xiprer',       file: 'assets/xiprer.png',       amplada: 80,  provisional: (c, w) => dibuixarXiprer(c, w) },
+    { key: 'arbre',        file: 'assets/arbre.webp',        amplada: 300, provisional: (c, w) => dibuixarArbre(c, w) },
+    { key: 'xiprer',       file: 'assets/xiprer.webp',       amplada: 80,  provisional: (c, w) => dibuixarXiprer(c, w) },
     { key: 'retaule',      file: 'assets/retaule.png',      amplada: 300, provisional: (c, w) => dibuixarRetauleBarroc(c, w) },
 
     // ---- Edificis nous ----
-    { key: 'sala_pingpong', file: 'assets/sala_pingpong.png', amplada: 1200, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.62, '#d8c8a8', '#3a5a8a', 'Sala del Ping-pong') },
+    { key: 'sala_pingpong', file: 'assets/sala_pingpong.webp', amplada: 1200, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.62, '#d8c8a8', '#3a5a8a', 'Sala del Ping-pong') },
     { key: 'cel_stbenet',   file: 'assets/cel_stbenet.png',   amplada: 560, provisional: (c, w) => dibuixarCelSantBenet(c, w) },
     { key: 'cel_ntrasra',   file: 'assets/cel_ntrasra.png',   amplada: 900, provisional: (c, w) => dibuixarCelNostraSenyora(c, w) },
-    { key: 'ermita',        file: 'assets/ermita.png',        amplada: 620, provisional: (c, w) => dibuixarErmitaDesaparicio(c, w) },
-    { key: 'hospederia',    file: 'assets/hospederia.png',    amplada: 1100, provisional: (c, w) => dibuixarHostatgeria(c, w) },
+    { key: 'ermita',        file: 'assets/ermita.webp',        amplada: 620, provisional: (c, w) => dibuixarErmitaDesaparicio(c, w) },
+    { key: 'hostatgeria',    file: 'assets/hostatgeria.webp',    amplada: 1100, provisional: (c, w) => dibuixarHostatgeria(c, w) },
 
     // ---- Personatges nous ----
     { key: 'pianista',  file: 'assets/pianista.png',  amplada: 100, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
@@ -50,16 +50,16 @@ const CATALEG = [
     { key: 'eloi',      file: 'assets/eloi.png',      amplada: 110, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03030', cabell: '#2a2a2a', alt: 1.1, ample: 1.4 }) },
     { key: 'josep',     file: 'assets/josep.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2a2a3a', cabell: '#1a1a1a', alt: 1.02, extra: 'gorra' }) },
     { key: 'garf',      file: 'assets/garf.png',      amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#d9b45a', alt: 0.92, ample: 1.35, cap: 17 }) },
-    { key: 'isidre',    file: 'assets/isidre.png',    amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a7a3a', cabell: '#6a5a3a', alt: 0.94, bastoCoix: true, extra: 'gorra' }) },
+    { key: 'isidre',    file: 'assets/isidre.png',    amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { isidre: true, calb: true, roba: '#f4f1e8', cabell: '#000000', alt: 0.94 }) },
     { key: 'jordi_caseta', file: 'assets/jordi_caseta.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a7a3a', cabell: '#4a3a2a', alt: 0.97, extra: 'gorra' }) },
     { key: 'sansa',     file: 'assets/sansa.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
     { key: 'home_carruatge', file: 'assets/home_carruatge.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2f6b3d', cabell: '#222', alt: 1.04, extra: 'gorra' }) },
 
     // ---- Escenari nou ----
-    { key: 'runes',     file: 'assets/runes.png',     amplada: 760, provisional: (c, w) => dibuixarRunes(c, w) },
+    { key: 'runes',     file: 'assets/runes.webp',     amplada: 760, provisional: (c, w) => dibuixarRunes(c, w) },
     { key: 'columna_proces', file: 'assets/columna_proces.png', amplada: 64, provisional: (c, w) => dibuixarColumnaProcessio(c, w) },
     { key: 'columna',   file: 'assets/columna.png',   amplada: 58,  provisional: (c, w) => dibuixarColumna(c, w) },
-    { key: 'roure',     file: 'assets/roure.png',     amplada: 420, provisional: (c, w) => dibuixarRoure(c, w) },
+    { key: 'roure',     file: 'assets/roure.webp',     amplada: 420, provisional: (c, w) => dibuixarRoure(c, w) },
     { key: 'tiller',    file: 'assets/tiller.png',    amplada: 340, provisional: (c, w) => dibuixarTiller(c, w) },
     { key: 'altar',     file: 'assets/altar.png',     amplada: 150, provisional: (c, w) => dibuixarAltar(c, w) },
     { key: 'taula_pedra', file: 'assets/taula_pedra.png', amplada: 110, provisional: (c, w) => dibuixarTaulaPedra(c, w) },
@@ -69,7 +69,7 @@ const CATALEG = [
     { key: 'pergola',   file: 'assets/pergola.png',   amplada: 260, provisional: (c, w) => dibuixarPergola(c, w) },
     { key: 'flors',     file: 'assets/flors.png',     amplada: 90,  provisional: (c, w) => dibuixarFlors(c, w) },
     { key: 'taula_pp',  file: 'assets/taula_pp.png',  amplada: 240, provisional: (c, w) => dibuixarTaulaPP(c, w) },
-    { key: 'alzina_buida', file: 'assets/alzina_buida.png', amplada: 280, provisional: (c, w) => dibuixarAlzinaBuida(c, w) },
+    { key: 'alzina_buida', file: 'assets/alzina_buida.webp', amplada: 280, provisional: (c, w) => dibuixarAlzinaBuida(c, w) },
     { key: 'llosa',     file: 'assets/llosa.png',     amplada: 90,  provisional: (c, w) => dibuixarLlosa(c, w) },
 
     // ---- Enemics ----
@@ -77,12 +77,12 @@ const CATALEG = [
     { key: 'gripau',       file: 'assets/gripau.png',       amplada: 56, provisional: (c, w) => dibuixarGripau(c, w) },
     { key: 'visitant',     file: 'assets/visitant.png',     amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e0a040', pell: '#9ab080', cabell: '#5a4a3a', alt: 0.98, extra: 'gorra', ulleres: true }) },
     { key: 'espantaocell', file: 'assets/espantaocell.png', amplada: 70, provisional: (c, w) => dibuixarEspantaocell(c, w) },
-    { key: 'branca',       file: 'assets/branca.png',       amplada: 80, provisional: (c, w) => dibuixarBranca(c, w) },
+    { key: 'branca',       file: 'assets/branca.webp',       amplada: 80, provisional: (c, w) => dibuixarBranca(c, w) },
     { key: 'pergami',      file: 'assets/pergami.png',      amplada: 44, provisional: (c, w) => dibuixarPergami(c, w) },
     { key: 'ombra_monjo',  file: 'assets/ombra_monjo.png',  amplada: 150, provisional: (c, w) => dibuixarOmbraMonjo(c, w) },
     { key: 'ovella',         file: 'assets/ovella.png',         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },
     { key: 'ovella_boira',   file: 'assets/ovella_boira.png',   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
-    { key: 'roca',           file: 'assets/roca.png',           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w) },
+    { key: 'roca',           file: 'assets/roca.webp',           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w) },
     { key: 'masia',          file: 'assets/masia.png',          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },
     { key: 'pastor_a',       file: 'assets/pastor_a.png',       amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a48', cabell: '#8a7a60', alt: 0.9, ample: 0.95, calb: true }) },
     { key: 'pastor_b',       file: 'assets/pastor_b.png',       amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a4a58', cabell: '#7a7a7a', dona: true, alt: 0.88, ample: 0.95 }) },
@@ -91,19 +91,19 @@ const CATALEG = [
     { key: 'espelma',        file: 'assets/espelma.png',        amplada: 20, provisional: (c, w) => dibuixarEspelma(c, w) },
     { key: 'taula_sopar',    file: 'assets/taula_sopar.png',    amplada: 380, provisional: (c, w) => dibuixarTaulaSopar(c, w) },
     { key: 'pastor_boira',   file: 'assets/pastor_boira.png',   amplada: 110, provisional: (c, w) => { dibuixarMonjo(c, w, { habit: '#2a1f3a', cabell: '#3b2a1e', alt: 1.1 }); afegirCaiada(c, w); } },
-    { key: 'bolet',          file: 'assets/bolet.png',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
-    { key: 'rovello',        file: 'assets/rovello.png',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
+    { key: 'bolet',          file: 'assets/bolet.webp',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
+    { key: 'rovello',        file: 'assets/rovello.webp',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
     { key: 'llac',           file: 'assets/llac.png',           amplada: 36, provisional: (c, w) => dibuixarLlac(c, w) },
     { key: 'diposit',        file: 'assets/diposit.png',        amplada: 300, provisional: (c, w) => dibuixarDiposit(c, w) },
     { key: 'telescopi_mon',  file: 'assets/telescopi_mon.png',  amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w) },
     { key: 'runna_pedra',    file: 'assets/runna_pedra.png',    amplada: 110, provisional: (c, w) => dibuixarRunnaPedra(c, w) },
-    { key: 'ermita_gabriel', file: 'assets/ermita_gabriel.png', amplada: 300, provisional: (c, w) => dibuixarErmitaGabriel(c, w) },
+    { key: 'ermita_gabriel', file: 'assets/ermita_gabriel.webp', amplada: 300, provisional: (c, w) => dibuixarErmitaGabriel(c, w) },
     { key: 'nena_trenes',    file: 'assets/nena_trenes.png',    amplada: 80, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e8e8f8', pell: '#dfe6ff', cabell: '#5a4636', dona: true, alt: 0.72, cap: 17, extra: 'trenes' }) },
     { key: 'porxo',          file: 'assets/porxo.png',          amplada: 340, provisional: (c, w) => dibuixarPorxo(c, w) },
-    { key: 'esbarzer',       file: 'assets/esbarzer.png',       amplada: 96, provisional: (c, w) => dibuixarEsbarzer(c, w) },
+    { key: 'esbarzer',       file: 'assets/esbarzer.webp',       amplada: 96, provisional: (c, w) => dibuixarEsbarzer(c, w) },
     { key: 'cofre',          file: 'assets/cofre.png',          amplada: 70, provisional: (c, w) => dibuixarCofre(c, w) },
     { key: 'cabana',         file: 'assets/cabana.png',         amplada: 330, provisional: (c, w) => dibuixarCabana(c, w) },
-    { key: 'cercle_bolets',  file: 'assets/cercle_bolets.png',  amplada: 150, provisional: (c, w) => dibuixarCercleBolets(c, w) },
+    { key: 'cercle_bolets',  file: 'assets/cercle_bolets.webp',  amplada: 150, provisional: (c, w) => dibuixarCercleBolets(c, w) },
     { key: 'olla',           file: 'assets/olla.png',           amplada: 110, provisional: (c, w) => dibuixarOlla(c, w) },
     { key: 'ocell',          file: 'assets/ocell.png',          amplada: 34, provisional: (c, w) => dibuixarOcell(c, w) },
     { key: 'jaumeta',        file: 'assets/jaumeta.png',        amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
@@ -138,11 +138,11 @@ const Grafics = {
         scene.load.on('loaderror', f => {
             Grafics.faltants.push(f.key);
             // Si no hi ha el PNG, provem el mateix nom en JPG (amb una clau a part)
-            if (CATALEG.some(i => i.key === f.key) && /\.png$/.test(f.url)) scene.load.image(f.key + '__jpg', f.url.replace(/\.png$/, '.jpg'));
+            if (CATALEG.some(i => i.key === f.key) && /\.(png|webp)$/.test(f.url)) scene.load.image(f.key + '__jpg', f.url.replace(/\.(png|webp)$/, '.jpg'));
         });
         CATALEG.forEach(item => scene.load.image(item.key, item.file));
-        scene.load.image('ineu_perfil_font', 'assets/sprites/Ineu-walk-v1.png');
-        DIRS_INEU.forEach(dir => scene.load.spritesheet('ineu_' + dir, `assets/sprites/ineu/${dir}.png`,
+        scene.load.image('ineu_perfil_font', 'assets/sprites/Ineu-walk-v1.webp');
+        DIRS_INEU.forEach(dir => scene.load.spritesheet('ineu_' + dir, `assets/sprites/ineu/${dir}.webp`,
             { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt }));
     },
 
@@ -318,19 +318,8 @@ const Grafics = {
             scene.textures.get(key).customData.escala = 1 / RES;
         };
 
-        crea('herba', 64, 64, (ctx, w, h) => soroll(ctx, w, h, '#5d8f3f', ['#68a046', '#527f37', '#73a84d'], 90, 2, 3));
-        crea('llamborda', 64, 64, (ctx, w, h) => {
-            ctx.fillStyle = '#b9a588'; ctx.fillRect(0, 0, w, h);
-            ctx.strokeStyle = '#9a8668'; ctx.lineWidth = 1.5;
-            for (let fila = 0; fila < 4; fila++) {
-                const y = fila * 16, desp = (fila % 2) * 12;
-                for (let x = -24; x < w + 24; x += 24) {
-                    ctx.fillStyle = ['#c3af90', '#b5a083', '#bfaa8b'][(x / 24 + fila + 3) % 3 | 0];
-                    ctx.fillRect(x + desp + 1, y + 1, 22, 14);
-                    ctx.strokeRect(x + desp + 1, y + 1, 22, 14);
-                }
-            }
-        });
+        crea('herba', 256, 256, (ctx, w, h) => textureHerba(ctx, w, h, PALETA_HERBA, 11));
+        crea('llamborda', 256, 256, (ctx, w, h) => textureLloses(ctx, w, h, PALETA_LLAMBORDA, 5));
         crea('cami', 64, 64, (ctx, w, h) => {
             soroll(ctx, w, h, '#b89b6d', ['#a88b5d', '#c4a97c', '#9e8255'], 70, 1.5, 3);
             // Terra batuda: algunes pedretes clares i fosques escampades
@@ -341,8 +330,8 @@ const Grafics = {
                 ctx.beginPath(); ctx.ellipse(rnd() * w, rnd() * h, 0.8 + rnd() * 1.3, 0.6 + rnd() * 0.7, rnd() * 3, 0, Math.PI * 2); ctx.fill();
             }
         });
-        crea('pedra', 64, 64, (ctx, w, h) => soroll(ctx, w, h, '#8c8a84', ['#7a7872', '#9c9a92', '#6e6c66'], 60, 2, 5));
-        crea('herba_fosca', 64, 64, (ctx, w, h) => soroll(ctx, w, h, '#3f6a30', ['#4a7a38', '#345a28', '#52843f'], 100, 2, 3));
+        crea('pedra', 256, 256, (ctx, w, h) => textureLloses(ctx, w, h, PALETA_PEDRA, 9));
+        crea('herba_fosca', 256, 256, (ctx, w, h) => textureHerba(ctx, w, h, PALETA_HERBA_FOSCA, 23));
         crea('rajola', 64, 64, (ctx, w, h) => {
             ctx.fillStyle = '#4a4038'; ctx.fillRect(0, 0, w, h);
             ctx.fillStyle = '#5a4e44'; ctx.fillRect(1, 1, 30, 30); ctx.fillRect(33, 33, 30, 30);
@@ -466,6 +455,149 @@ const Grafics = {
         };
         crea('banc', 150, 70, (ctx, w, h) => banc(ctx, h, false));
         crea('banc_respatller', 150, 100, (ctx, w, h) => banc(ctx, h, true));
+        // Banc vist per darrere: qui hi seu mira cap amunt i el respatller li tapa l'esquena i les cames
+        crea('banc_davant', 150, 100, (ctx, w, h) => {
+            const base = h - 8;
+            ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(75, base + 3, 68, 6, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#2a1608'; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+            [[8, 20], [124, 20]].forEach(([x]) => {          // muntants
+                const g = ctx.createLinearGradient(x, 0, x + 18, 0); g.addColorStop(0, '#6a4220'); g.addColorStop(1, '#3e2410');
+                ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(x, 8, 18, base - 8 + 2, 4); ctx.fill(); ctx.stroke();
+            });
+            [[22, '#b07a42'], [38, '#a06c38'], [54, '#b07a42'], [70, '#a06c38']].forEach(([y, col]) => {    // taulons del respatller
+                ctx.fillStyle = col; ctx.beginPath(); ctx.roundRect(4, y, 142, 14, 3); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = 'rgba(255,230,180,0.3)'; ctx.fillRect(8, y + 2, 134, 2);
+                ctx.strokeStyle = 'rgba(70,40,14,0.4)'; ctx.lineWidth = 1;
+                for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.moveTo(24 + k * 40, y + 8); ctx.lineTo(56 + k * 40, y + 8); ctx.stroke(); }
+                ctx.strokeStyle = '#2a1608'; ctx.lineWidth = 2;
+            });
+            ctx.fillStyle = '#c48a4c'; ctx.beginPath(); ctx.roundRect(2, 4, 146, 11, 3); ctx.fill(); ctx.stroke();   // llistó superior
+            ctx.fillStyle = 'rgba(255,230,180,0.35)'; ctx.fillRect(6, 6, 138, 2);
+        });
+        // ---- Mobiliari i terra de fusta (cabanes) ----
+        const FUSTA_CONTORN = '#2a1608';
+        crea('taulons', 256, 256, (ctx, w, h) => {
+            let llavor = 61;
+            const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+            const COLORS = ['#a8763f', '#9a6a36', '#b4814a', '#8e6030', '#a06e3a'];
+            const FILES = 8, fh = h / FILES;
+            ctx.fillStyle = '#2a1608'; ctx.fillRect(0, 0, w, h);
+            for (let f = 0; f < FILES; f++) {
+                let x = -rnd() * 60;
+                while (x < w) {
+                    const pw = 50 + rnd() * 50, y0 = f * fh;
+                    const col = COLORS[Math.floor(rnd() * COLORS.length)];
+                    ctx.fillStyle = col; ctx.fillRect(x + 1, y0 + 1, pw - 2, fh - 2);
+                    const g = ctx.createLinearGradient(0, y0, 0, y0 + fh);
+                    g.addColorStop(0, 'rgba(255,230,180,0.22)'); g.addColorStop(0.5, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.25)');
+                    ctx.fillStyle = g; ctx.fillRect(x + 1, y0 + 1, pw - 2, fh - 2);
+                    ctx.strokeStyle = 'rgba(60,34,14,0.45)'; ctx.lineWidth = 0.8;       // veta de la fusta
+                    for (let k = 0; k < 4; k++) {
+                        const yy = y0 + 4 + rnd() * (fh - 8);
+                        ctx.beginPath(); ctx.moveTo(x + 2, yy); ctx.bezierCurveTo(x + pw * 0.3, yy + (rnd() - 0.5) * 4, x + pw * 0.6, yy + (rnd() - 0.5) * 4, x + pw - 2, yy); ctx.stroke();
+                    }
+                    if (rnd() < 0.3) {                                                   // nus
+                        const kx = x + 8 + rnd() * (pw - 16), ky = y0 + 6 + rnd() * (fh - 12);
+                        ctx.fillStyle = 'rgba(50,28,10,0.55)'; ctx.beginPath(); ctx.ellipse(kx, ky, 3, 2, 0, 0, Math.PI * 2); ctx.fill();
+                        ctx.strokeStyle = 'rgba(50,28,10,0.5)'; ctx.beginPath(); ctx.ellipse(kx, ky, 5.5, 3.6, 0, 0, Math.PI * 2); ctx.stroke();
+                    }
+                    ctx.fillStyle = 'rgba(30,18,8,0.7)';                                  // claus a les juntes
+                    ctx.fillRect(x + 3, y0 + 4, 1.5, 1.5); ctx.fillRect(x + 3, y0 + fh - 6, 1.5, 1.5);
+                    x += pw;
+                }
+            }
+        });
+        // Taula de fusta, vista de tres quarts, amb un bol i una tassa
+        crea('taula', 170, 110, (ctx, w, h) => {
+            ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(85, h - 8, 74, 8, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+            const pota = (x, y0, y1, ample) => {
+                const g = ctx.createLinearGradient(x, 0, x + ample, 0); g.addColorStop(0, '#6a4220'); g.addColorStop(1, '#3e2410');
+                ctx.fillStyle = g; ctx.fillRect(x, y0, ample, y1 - y0); ctx.strokeRect(x, y0, ample, y1 - y0);
+            };
+            pota(20, 52, 88, 10); pota(140, 52, 88, 10);                                   // potes del darrere
+            pota(10, 66, h - 10, 13); pota(147, 66, h - 10, 13);                           // potes del davant
+            ctx.fillStyle = '#4a2c14'; ctx.fillRect(22, 80, 126, 6); ctx.strokeRect(22, 80, 126, 6);   // travesser
+            // Tauler: cara de dalt (taulons) i cantell frontal
+            const taulons = ['#c48a4c', '#b87e42', '#c48a4c', '#b87e42'];
+            taulons.forEach((col, i) => {
+                const y = 10 + i * 11;
+                ctx.fillStyle = col; ctx.fillRect(4, y, 162, 11); ctx.strokeRect(4, y, 162, 11);
+                ctx.strokeStyle = 'rgba(70,40,14,0.4)'; ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(20 + i * 14, y + 5.5); ctx.lineTo(70 + i * 14, y + 5.5); ctx.moveTo(100 - i * 9, y + 5.5); ctx.lineTo(150 - i * 9, y + 5.5); ctx.stroke();
+                ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 2;
+            });
+            ctx.fillStyle = '#8e5a2a'; ctx.fillRect(4, 54, 162, 12); ctx.strokeRect(4, 54, 162, 12);
+            ctx.fillStyle = 'rgba(255,230,180,0.3)'; ctx.fillRect(8, 12, 154, 2);
+            // Bol de fusta i tassa d'estany
+            ctx.fillStyle = '#6a4220'; ctx.beginPath(); ctx.ellipse(52, 30, 15, 7, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#e8d8a0'; ctx.beginPath(); ctx.ellipse(52, 29, 11, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#9a9a96'; ctx.fillRect(112, 18, 12, 14); ctx.strokeRect(112, 18, 12, 14);
+            ctx.fillStyle = '#6a3a1a'; ctx.beginPath(); ctx.ellipse(118, 18, 6, 2.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        });
+        // Tamboret rodó de tres potes
+        crea('tamboret', 58, 62, (ctx, w, h) => {
+            ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(29, h - 6, 24, 5, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+            [[14, 28, 8, h - 8], [44, 28, 50, h - 8], [29, 36, 29, h - 4]].forEach(([x0, y0, x1, y1]) => {
+                ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+                ctx.strokeStyle = '#5e3a1c'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+            });
+            ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 2;
+            ctx.fillStyle = '#8e5a2a'; ctx.beginPath(); ctx.ellipse(29, 24, 23, 11, 0, 0, Math.PI); ctx.lineTo(6, 19); ctx.closePath(); ctx.fill(); ctx.stroke();     // gruix
+            ctx.fillStyle = '#c48a4c'; ctx.beginPath(); ctx.ellipse(29, 19, 23, 11, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(70,40,14,0.5)'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.ellipse(29, 19, 15, 7, 0, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.ellipse(29, 19, 7, 3.4, 0, 0, Math.PI * 2); ctx.stroke();
+        });
+        // Barril amb cèrcols de ferro
+        crea('barril', 64, 84, (ctx, w, h) => {
+            ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(32, h - 6, 28, 6, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+            const g = ctx.createLinearGradient(6, 0, 58, 0); g.addColorStop(0, '#6a4220'); g.addColorStop(0.45, '#b07a42'); g.addColorStop(1, '#5a361a');
+            ctx.fillStyle = g;
+            ctx.beginPath(); ctx.moveTo(10, 22); ctx.quadraticCurveTo(2, 48, 10, h - 12); ctx.lineTo(54, h - 12); ctx.quadraticCurveTo(62, 48, 54, 22); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(40,22,8,0.5)'; ctx.lineWidth = 1;
+            for (let x = 18; x < 56; x += 8) { ctx.beginPath(); ctx.moveTo(x, 24); ctx.quadraticCurveTo(x + (x - 32) * 0.12, 48, x, h - 14); ctx.stroke(); }
+            ctx.strokeStyle = '#3a3a3c'; ctx.lineWidth = 4;
+            [[30, 6, 58], [58, 2, 62], [h - 22, 5, 59]].forEach(([y, a, b]) => { ctx.beginPath(); ctx.moveTo(a + 3, y); ctx.quadraticCurveTo(32, y + 5, b - 3, y); ctx.stroke(); });
+            ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 2;
+            ctx.fillStyle = '#c48a4c'; ctx.beginPath(); ctx.ellipse(32, 22, 22, 9, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(70,40,14,0.5)'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(14, 20); ctx.lineTo(50, 24); ctx.moveTo(18, 25); ctx.lineTo(46, 18); ctx.stroke();
+        });
+        // Pila de llenya (extrems dels troncs amb anells) amb un tronc a sobre
+        crea('llenya', 124, 84, (ctx, w, h) => {
+            ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(62, h - 6, 56, 6, 0, 0, Math.PI * 2); ctx.fill();
+            const tronc = (cx, cy, r, tint) => {
+                ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 2;
+                ctx.fillStyle = '#5a3a1e'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();      // escorça
+                ctx.fillStyle = tint; ctx.beginPath(); ctx.arc(cx, cy, r - 3, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = 'rgba(80,46,18,0.55)'; ctx.lineWidth = 1;
+                for (let k = r - 6; k > 2; k -= 3.5) { ctx.beginPath(); ctx.arc(cx + 0.5, cy, k, 0, Math.PI * 2); ctx.stroke(); }
+                ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + r - 4, cy - 2); ctx.stroke();
+            };
+            const tints = ['#d8a868', '#cc9a5a', '#e0b070', '#c8955a'];
+            let i = 0;
+            [[4, 24], [3, 38], [2, 52]].forEach(([n, y]) => {
+                const r = 13, x0 = 62 - (n - 1) * r;
+                for (let k = 0; k < n; k++) tronc(x0 + k * 2 * r, h - 8 - (66 - y) * 0 - r - (4 - n) * 22 + 0 * y, r, tints[i++ % 4]);
+            });
+        });
+        // Tronc de picar llenya amb una destral clavada
+        crea('tronc_tall', 96, 90, (ctx, w, h) => {
+            ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(44, h - 6, 36, 7, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+            const g = ctx.createLinearGradient(8, 0, 80, 0); g.addColorStop(0, '#5a3a1e'); g.addColorStop(0.5, '#8a5a30'); g.addColorStop(1, '#4a2c14');
+            ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(8, 34); ctx.lineTo(10, h - 12); ctx.quadraticCurveTo(44, h - 4, 78, h - 12); ctx.lineTo(80, 34); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#d8a868'; ctx.beginPath(); ctx.ellipse(44, 34, 36, 15, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(80,46,18,0.55)'; ctx.lineWidth = 1;
+            for (let k = 1; k < 4; k++) { ctx.beginPath(); ctx.ellipse(44, 34, 36 - k * 9, 15 - k * 3.6, 0, 0, Math.PI * 2); ctx.stroke(); }
+            // Destral clavada: mànec inclinat i fulla de ferro
+            ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(50, 30); ctx.lineTo(70, 2); ctx.stroke();
+            ctx.strokeStyle = '#a06a34'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(50, 30); ctx.lineTo(70, 2); ctx.stroke();
+            ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 2; ctx.fillStyle = '#8a8a90';
+            ctx.beginPath(); ctx.moveTo(36, 22); ctx.lineTo(52, 18); ctx.lineTo(54, 34); ctx.lineTo(40, 36); ctx.closePath(); ctx.fill(); ctx.stroke();
+        });
         // Marcs de pergamí per als quadres de diàleg, el HUD i el menú (es fan servir amb nineslice: vegeu marcPergami a ui.js)
         crea('marc_gran', 2 * MARC_GRAN + 20, 2 * MARC_GRAN + 20, (ctx, w) => dibuixarMarc(ctx, w, MARC_GRAN, 1));
         crea('marc_peti', 2 * MARC_PETI + 20, 2 * MARC_PETI + 20, (ctx, w) => dibuixarMarc(ctx, w, MARC_PETI, 0.7));
@@ -626,6 +758,159 @@ function treureFonsBlanc(px, w, h) {
 }
 
 // ---------- Dibuixos provisionals ----------
+// ---------- Textures de terra grans i sense costures ----------
+// Es repeteixen cada 256 px (abans 64): la repetició gairebé no es nota. Els elements que surten per una vora
+// entren per l'altra, així que el mosaic encaixa perfectament.
+const PALETA_HERBA = {
+    base: '#5d8f3f',
+    clapes: ['#7bb353', '#4a7a33', '#6aa04a', '#437028'],
+    mig: ['#68a046', '#527f37', '#73a84d', '#4f8a38'],
+    fulles: ['#86c25a', '#3f6f2a', '#9bd16a', '#356326']
+};
+const PALETA_HERBA_FOSCA = {
+    base: '#3f6a30',
+    clapes: ['#52843f', '#2f5424', '#487a38', '#2a4a20'],
+    mig: ['#4a7a38', '#345a28', '#52843f', '#2f5a2a'],
+    fulles: ['#5f9a48', '#27481d', '#6aa850', '#1f3d17']
+};
+const PALETA_LLAMBORDA = {
+    junta: '#6e604b', files: 10, min: 22, max: 46, musgo: 0.2, arrodoniment: 5,
+    pedres: ['#c3af90', '#b5a083', '#bfaa8b', '#a89478', '#cdb998', '#b09a7c']
+};
+const PALETA_PEDRA = {
+    junta: '#4d4a45', files: 4, min: 56, max: 100, musgo: 0.25, arrodoniment: 9,
+    pedres: ['#8c8a84', '#7d7b75', '#9a988f', '#6f6d68', '#a3a198', '#85837c']
+};
+
+function llavorRnd(llavor) {
+    return () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+}
+
+// Dibuixa un element a (x, y) i, si toca una vora, també a l'altra banda
+function senseCostura(w, h, x, y, r, dibuixa) {
+    for (const dx of [-w, 0, w]) for (const dy of [-h, 0, h]) {
+        const px = x + dx, py = y + dy;
+        if (px > -r && px < w + r && py > -r && py < h + r) dibuixa(px, py);
+    }
+}
+
+function textureHerba(ctx, w, h, p, llavor) {
+    const rnd = llavorRnd(llavor);
+    ctx.fillStyle = p.base; ctx.fillRect(0, 0, w, h);
+    // Clapes grans de to, suaus: trenquen la sensació de mosaic
+    for (let i = 0; i < 46; i++) {
+        const x = rnd() * w, y = rnd() * h, r = 28 + rnd() * 60, col = p.clapes[i % p.clapes.length];
+        senseCostura(w, h, x, y, r, (px, py) => {
+            const g = ctx.createRadialGradient(px, py, 0, px, py, r);
+            g.addColorStop(0, col + '66'); g.addColorStop(1, col + '00');
+            ctx.fillStyle = g; ctx.fillRect(px - r, py - r, 2 * r, 2 * r);
+        });
+    }
+    // Taques mitjanes
+    for (let i = 0; i < 420; i++) {
+        const x = rnd() * w, y = rnd() * h, rx = 2 + rnd() * 4, ry = 1.4 + rnd() * 2.4, a = rnd() * 3, col = p.mig[i % p.mig.length];
+        senseCostura(w, h, x, y, 8, (px, py) => {
+            ctx.globalAlpha = 0.55; ctx.fillStyle = col;
+            ctx.beginPath(); ctx.ellipse(px, py, rx, ry, a, 0, Math.PI * 2); ctx.fill();
+        });
+    }
+    // Pues d'herba: clars i foscos, inclinats cap amunt
+    ctx.lineCap = 'round';
+    for (let i = 0; i < 1500; i++) {
+        const x = rnd() * w, y = rnd() * h, len = 3 + rnd() * 5, ang = -Math.PI / 2 + (rnd() - 0.5) * 1.3;
+        ctx.strokeStyle = p.fulles[i % p.fulles.length]; ctx.globalAlpha = 0.35 + rnd() * 0.4; ctx.lineWidth = 0.8 + rnd() * 0.6;
+        senseCostura(w, h, x, y, 8, (px, py) => {
+            ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + Math.cos(ang) * len, py + Math.sin(ang) * len); ctx.stroke();
+        });
+    }
+    // Mates: una ombra petita amb cinc fulles en ventall
+    for (let i = 0; i < 38; i++) {
+        const x = rnd() * w, y = rnd() * h;
+        senseCostura(w, h, x, y, 10, (px, py) => {
+            ctx.globalAlpha = 0.28; ctx.fillStyle = '#10240a';
+            ctx.beginPath(); ctx.ellipse(px, py + 1, 5, 2, 0, 0, Math.PI * 2); ctx.fill();
+            for (let k = 0; k < 5; k++) {
+                const a = -Math.PI / 2 + (k - 2) * 0.38, l = 6 + (k % 2 ? 0 : 3);
+                ctx.globalAlpha = 0.8; ctx.strokeStyle = p.fulles[(i + k) % p.fulles.length]; ctx.lineWidth = 1.1;
+                ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + Math.cos(a) * l, py + Math.sin(a) * l); ctx.stroke();
+            }
+        });
+    }
+    // Detalls esparsos: florinetes, trèvols i alguna pedreta
+    ctx.globalAlpha = 1;
+    const flors = ['#f4f0d0', '#f6e27a', '#f2b8d0', '#ffffff'];
+    for (let i = 0; i < 20; i++) {
+        const x = rnd() * w, y = rnd() * h;
+        senseCostura(w, h, x, y, 4, (px, py) => {
+            ctx.fillStyle = flors[i % flors.length]; ctx.beginPath(); ctx.arc(px, py, 1.1 + rnd() * 0.5, 0, Math.PI * 2); ctx.fill();
+        });
+    }
+    for (let i = 0; i < 9; i++) {
+        const x = rnd() * w, y = rnd() * h;
+        senseCostura(w, h, x, y, 5, (px, py) => {
+            ctx.fillStyle = 'rgba(140,136,120,0.7)'; ctx.beginPath(); ctx.ellipse(px, py, 2 + rnd() * 1.5, 1.3, rnd() * 3, 0, Math.PI * 2); ctx.fill();
+        });
+    }
+    ctx.globalAlpha = 1;
+}
+
+// Llambordes / lloses irregulars: files de pedres de mides i tons diferents, amb juntes fosques, volum, esquerdes i molsa
+function textureLloses(ctx, w, h, p, llavor) {
+    const rnd = llavorRnd(llavor);
+    ctx.fillStyle = p.junta; ctx.fillRect(0, 0, w, h);
+    const fh = h / p.files;
+    for (let f = 0; f < p.files; f++) {
+        const y0 = f * fh;
+        let amples = [], tot = 0;
+        while (tot < w - p.min) { const a = p.min + rnd() * (p.max - p.min); amples.push(a); tot += a; }
+        amples = amples.map(a => a * w / tot);
+        let x = rnd() * amples[0];                          // cada fila comença a un punt diferent
+        amples.forEach(a => {
+            const ins = 1 + rnd() * 1.2, ww = a - 2 * ins, hh = fh - 2 * ins - rnd() * 2.5, yy = y0 + ins + rnd() * 1.5;
+            const col = p.pedres[Math.floor(rnd() * p.pedres.length)];
+            const claror = (rnd() - 0.5) * 0.22;           // cada pedra és una mica més clara o fosca
+            const forma = { x: x + ins, y: yy, w: ww, h: hh };
+            const moll = rnd() < p.musgo, mx = rnd(), my = rnd(), esquerda = rnd() < 0.28, cr = [rnd(), rnd(), rnd()];
+            const gran = [];
+            for (let k = 0; k < 9; k++) gran.push([rnd(), rnd(), rnd() < 0.5]);
+            senseCostura(w, h, forma.x + ww / 2, forma.y + hh / 2, ww, (cx, cy) => {
+                const px = cx - ww / 2, py = cy - hh / 2;
+                ctx.save();
+                ctx.beginPath(); ctx.roundRect(px, py, ww, hh, p.arrodoniment); ctx.clip();
+                ctx.fillStyle = col; ctx.fillRect(px, py, ww, hh);
+                ctx.fillStyle = claror > 0 ? `rgba(255,255,255,${claror})` : `rgba(0,0,0,${-claror})`; ctx.fillRect(px, py, ww, hh);
+                // Volum: llum a dalt-esquerra i ombra a baix-dreta
+                const g = ctx.createLinearGradient(px + ww * 0.2, py, px + ww * 0.5, py + hh);
+                g.addColorStop(0, 'rgba(255,255,255,0.22)'); g.addColorStop(0.5, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(0,0,0,0.28)');
+                ctx.fillStyle = g; ctx.fillRect(px, py, ww, hh);
+                // Gra de la pedra
+                gran.forEach(([gx, gy, clar]) => {
+                    ctx.fillStyle = clar ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.16)';
+                    ctx.fillRect(px + gx * ww, py + gy * hh, 1.2, 1.2);
+                });
+                if (moll) {
+                    const gm = ctx.createRadialGradient(px + mx * ww, py + (my > 0.5 ? hh : 0), 0, px + mx * ww, py + (my > 0.5 ? hh : 0), ww * 0.38);
+                    gm.addColorStop(0, 'rgba(84,128,52,0.5)'); gm.addColorStop(1, 'rgba(84,128,52,0)');
+                    ctx.fillStyle = gm; ctx.fillRect(px, py, ww, hh);
+                }
+                if (esquerda) {
+                    ctx.strokeStyle = 'rgba(30,22,14,0.45)'; ctx.lineWidth = 0.8;
+                    ctx.beginPath(); ctx.moveTo(px + ww * (0.1 + cr[0] * 0.6), py + hh * 0.05);
+                    ctx.lineTo(px + ww * (0.15 + cr[1] * 0.7), py + hh * 0.5); ctx.lineTo(px + ww * (0.1 + cr[2] * 0.8), py + hh * 0.95); ctx.stroke();
+                }
+                ctx.restore();
+                // Cantell clar a dalt-esquerra i fosc a baix-dreta
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+                ctx.beginPath(); ctx.moveTo(px + p.arrodoniment, py + 0.5); ctx.lineTo(px + ww - p.arrodoniment, py + 0.5); ctx.moveTo(px + 0.5, py + p.arrodoniment); ctx.lineTo(px + 0.5, py + hh - p.arrodoniment); ctx.stroke();
+                ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+                ctx.beginPath(); ctx.moveTo(px + p.arrodoniment, py + hh - 0.5); ctx.lineTo(px + ww - p.arrodoniment, py + hh - 0.5); ctx.moveTo(px + ww - 0.5, py + p.arrodoniment); ctx.lineTo(px + ww - 0.5, py + hh - p.arrodoniment); ctx.stroke();
+            });
+            x += a;
+        });
+    }
+}
+
 function soroll(ctx, w, h, fons, colors, n, rmin, rmax) {
     ctx.fillStyle = fons; ctx.fillRect(0, 0, w, h);
     let llavor = 7;
