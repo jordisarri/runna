@@ -21,8 +21,9 @@ class ZonaEsglesia extends ZonaBase {
         // Terra i murs (la nau va de x=240 a x=1040)
         this.terra('rajola', 240, 60, 800, 760, -1100);
         const murs = this.add.graphics().setDepth(-1000);
-        murs.fillStyle(0x2a1f18, 1).fillRect(200, 0, 40, 820).fillRect(1040, 0, 40, 820);
-        murs.fillStyle(0x3a2c22, 1).fillRect(240, 0, 800, 70);
+        murs.fillStyle(0xcdb89a, 1).fillRect(200, 0, 40, 820).fillRect(1040, 0, 40, 820);
+        murs.fillStyle(0x9a2e34, 1).fillRect(240, 0, 800, 70);
+        murs.fillStyle(0xe8dcc4, 1).fillRect(240, 62, 800, 8);
         this.colisio(120, 410, 240, 820);
         this.colisio(1160, 410, 240, 820);
         this.colisio(640, 120, 800, 240);
@@ -30,8 +31,8 @@ class ZonaEsglesia extends ZonaBase {
         this.colisio(860, 810, 360, 20);
 
         // Retaule Major i orgue (la Pianista seu a l'orgue)
-        this.posar('retaule', 640, 300, { fonsY: 240 });
-        this.interactiu(640, 320, 100, DIALEGS.retaule, { altura: 120 });
+        this.posar('retaule', 640, 330, { fonsY: 250 });
+        this.interactiu(640, 345, 110, DIALEGS.retaule, { altura: 150 });
         this.posar('orgue', 940, 380, { col: { w: 110, h: 50 } });
         this.npc('pianista', 940, 450, DIALEGS.pianista);
         // El Pare Daniel dirigeix el cor, a prop del presbiteri
@@ -84,6 +85,9 @@ class ZonaMonestir extends ZonaBase {
         this.posar('monestir', 800, 440, { col: { w: 600, h: 140, dy: -10 } });
         this.interactiu(800, 450, 70, DIALEGS.enConstruccio('Biblioteca del Monestir'), { altura: 90 });
         this.npc('pare_alcui', 600, 540, DIALEGS.pareAlcui);
+        // Xiprers alts a l'esquerra del portal i una conífera a la dreta (com a la foto del monestir)
+        [[440, 445, 1.7], [492, 452, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y, { escala: e, col: { w: 26, h: 12 } }));
+        this.posar('xiprer', 1165, 450, { escala: 1.9, col: { w: 30, h: 12 } });
 
         this.cartell(1480, 450, () => ({ pagines: [{ qui: '', text: '→ Cel·les de Sant Antoni\n↑ El Cementiri (darrere el Monestir i el Santuari)' }] }));
         this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720]]);
@@ -116,10 +120,23 @@ class ZonaCreu extends ZonaBase {
         this.terra('pedra', 560, 250, 360, 190);        // replà de pedra davant la creu
 
         // Creu de l'Aparició
-        this.posar('creu', 740, 400, { col: { w: 46, h: 22 } });
-        this.interactiu(740, 405, 80, DIALEGS.creu, { altura: 180 });
+        const verd = this.add.graphics().setDepth(330);       // tanca d'arbust fosc i mur de pedra seca darrere la creu
+        for (let x = 520; x <= 960; x += 40) verd.fillStyle(x % 80 ? 0x2c5a2a : 0x3a6e34, 1).fillEllipse(x, 318, 80, 70);
+        verd.fillStyle(0x8a8068, 1).fillRect(500, 352, 480, 34).lineStyle(3, 0x2a241a, 1).strokeRect(500, 352, 480, 34);
+        verd.lineStyle(1.5, 0x4a4234, 0.8);
+        for (let x = 500; x < 980; x += 40) verd.lineBetween(x, 352, x, 386);
+        verd.lineBetween(500, 369, 980, 369);
+        this.posar('creu', 740, 440, { col: { w: 56, h: 24 } });
+        this.interactiu(740, 445, 85, DIALEGS.creu, { altura: 190 });
+        [[470, 350], [1010, 350]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xcfe08a));   // plàtans
 
         // Bassadòria
+        const mur = this.add.graphics().setDepth(640);        // mur de pedra seca darrere la bassa i plàtans de tardor
+        mur.fillStyle(0x8a8068, 1).fillRect(860, 610, 420, 40).lineStyle(3, 0x2a241a, 1).strokeRect(860, 610, 420, 40);
+        mur.lineStyle(1.5, 0x4a4234, 0.8);
+        for (let x = 860; x < 1280; x += 36) mur.lineBetween(x, 610, x, 650);
+        mur.lineBetween(860, 630, 1280, 630);
+        [[850, 640], [1290, 650]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xe0b868));
         this.posar('bassadoria', 1010, 770, { col: { w: 236, h: 92, dy: -26 } });
         this.interactiu(1010, 700, 150, DIALEGS.bassadoria, { altura: 110, enTancar: () => Estat.posaFlag('flauta_bassadoria') });
         this.llocFlauta('bassadoria', 1010, 740, 220, true);
@@ -179,7 +196,7 @@ class ZonaCasaGran extends ZonaBase {
                 placa:  { x: 1540, y: 700, dir: 'esquerra' },
                 oest:   { x: 60,   y: 700, dir: 'dreta' },
                 costat: { x: 930,  y: 560, dir: 'avall' },
-                porxo:  { x: 622,  y: 545, dir: 'avall' }
+                porxo:  { x: 756,  y: 580, dir: 'avall' }
             }
         });
     }
@@ -187,19 +204,19 @@ class ZonaCasaGran extends ZonaBase {
     construir() {
         this.terra('herba', 0, 0, 1600, 1100, -1100);
         this.terra('cami', 0, 620, 1600, 160);
-        this.terra('llamborda', 420, 500, 560, 130);
+        this.terra('llamborda', 420, 560, 560, 60);
 
-        // Porxo d'arcades amb la reixa (segon arc): s'obre amb el clauer de novici cap a l'Escalinata
-        this.posar('porxo', 700, 480, { escala: 1.9, fonsY: 470 });
-        this.colisio(700, 445, 650, 70);
-        this.interactiu(622, 510, 80, DIALEGS.portaReixa, {
+        // La Casa Gran, amb els tres arcs del porxo; la porta de ferro del fons del porxo (arc del mig) s'obre amb el clauer de novici
+        this.posar('casa_gran', 700, 600, { fonsY: 560 });
+        this.colisio(700, 510, 610, 70);
+        this.interactiu(756, 570, 85, DIALEGS.portaReixa, {
             altura: 130,
             enTancar: () => { if (Estat.te('clauer')) this.canviarZona('ZonaCasaGranInt', 'porxo'); }
         });
 
         // Porta de servei del costat de la Taverna: una altra entrada a la Casa Gran
-        this.add.rectangle(960, 440, 44, 74, 0x4a2c16).setStrokeStyle(3, 0x2a1a0c).setDepth(479);
-        this.interactiu(960, 520, 85, DIALEGS.portaServei, {
+        this.add.rectangle(988, 510, 36, 64, 0x4a2c16).setStrokeStyle(3, 0x2a1a0c).setDepth(561);
+        this.interactiu(988, 572, 80, DIALEGS.portaServei, {
             altura: 100,
             enTancar: () => { if (Estat.te('clauer')) this.canviarZona('ZonaCasaGranInt', 'costat'); }
         });
@@ -207,7 +224,7 @@ class ZonaCasaGran extends ZonaBase {
         this.posar('font', 250, 590, { col: { w: 90, h: 30 } });
         this.interactiu(250, 595, 85, DIALEGS.font, { altura: 130 });
 
-        this.cartell(860, 600, DIALEGS.cartellCasaGran);
+        this.cartell(930, 625, DIALEGS.cartellCasaGran);
         this.cartell(180, 600, DIALEGS.enConstruccio('← La Taverna i l\'Hospederia (per ara, el camí et porta fins al Jardí pergolat)'));
 
         this.arbres([[150, 250], [300, 340], [1250, 260], [1450, 340], [200, 950], [700, 980], [1300, 960]]);

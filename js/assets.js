@@ -11,28 +11,29 @@ const RES = 2;
 const CATALEG = [
     // Edificis
     { key: 'esglesia',     file: 'assets/esglesia.png',     amplada: 700 },
-    { key: 'monestir',     file: 'assets/monestir.png',     amplada: 620, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.62, '#cdb08a', '#7a4a2a', 'Monestir') },
-    { key: 'casa_gran',    file: 'assets/casa_gran.png',    amplada: 640, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.6, '#e2cfa8', '#9a5a32', 'Casa Gran') },
+    { key: 'monestir',     file: 'assets/monestir.png',     amplada: 620, provisional: (c, w) => dibuixarMonestir(c, w) },
+    { key: 'casa_gran',    file: 'assets/casa_gran.png',    amplada: 620, provisional: (c, w) => dibuixarCasaGran(c, w) },
     // Personatges
     { key: 'pare_jordi',   file: 'assets/pare_jordi.png',   amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
     { key: 'germa_andreu', file: 'assets/germa_andreu.png', amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#3b2a1e', pilota: true }) },
     { key: 'pare_daniel',  file: 'assets/pare_daniel.png',  amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
     { key: 'pare_alcui',   file: 'assets/pare_alcui.png',   amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
     // Elements
-    { key: 'home_raim',    file: 'assets/home_raim.png',    amplada: 80,  provisional: (c, w) => dibuixarHomeRaim(c, w) },
-    { key: 'creu',         file: 'assets/creu.png',         amplada: 70,  provisional: (c, w) => dibuixarCreu(c, w) },
-    { key: 'bassadoria',   file: 'assets/bassadoria.png',   amplada: 260, provisional: (c, w) => dibuixarBassadoria(c, w) },
+    { key: 'home_raim',    file: 'assets/home_raim.png',    amplada: 110, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },
+    { key: 'creu',         file: 'assets/creu.png',         amplada: 80,  provisional: (c, w) => dibuixarCreuAparicio(c, w) },
+    { key: 'creu_desaparicio', file: 'assets/creu_desaparicio.png', amplada: 90, provisional: (c, w) => dibuixarCreuDesaparicio(c, w) },
+    { key: 'bassadoria',   file: 'assets/bassadoria.png',   amplada: 260, provisional: (c, w) => dibuixarBassadoriaReixa(c, w) },
     { key: 'font',         file: 'assets/font.png',         amplada: 110, provisional: (c, w) => dibuixarFont(c, w) },
     { key: 'arbre',        file: 'assets/arbre.png',        amplada: 240, provisional: (c, w) => dibuixarArbre(c, w) },
     { key: 'xiprer',       file: 'assets/xiprer.png',       amplada: 80,  provisional: (c, w) => dibuixarXiprer(c, w) },
-    { key: 'retaule',      file: 'assets/retaule.png',      amplada: 360, provisional: (c, w) => dibuixarRetaule(c, w) },
+    { key: 'retaule',      file: 'assets/retaule.png',      amplada: 300, provisional: (c, w) => dibuixarRetauleBarroc(c, w) },
 
     // ---- Edificis nous ----
     { key: 'sala_pingpong', file: 'assets/sala_pingpong.png', amplada: 340, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.62, '#d8c8a8', '#3a5a8a', 'Sala del Ping-pong') },
-    { key: 'cel_stbenet',   file: 'assets/cel_stbenet.png',   amplada: 420, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.6, '#e6d6b0', '#8a4a2a', 'Sant Benet') },
-    { key: 'cel_ntrasra',   file: 'assets/cel_ntrasra.png',   amplada: 560, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.55, '#ddc9a4', '#7a3a2a', 'Nostra Senyora') },
-    { key: 'ermita',        file: 'assets/ermita.png',        amplada: 300, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.7, '#b8b2a4', '#6a5a4a', 'Ermita de la Desaparició') },
-    { key: 'hospederia',    file: 'assets/hospederia.png',    amplada: 560, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.6, '#e2d2b0', '#7a4030', 'Hospederia') },
+    { key: 'cel_stbenet',   file: 'assets/cel_stbenet.png',   amplada: 420, provisional: (c, w) => dibuixarCelSantBenet(c, w) },
+    { key: 'cel_ntrasra',   file: 'assets/cel_ntrasra.png',   amplada: 560, provisional: (c, w) => dibuixarCelNostraSenyora(c, w) },
+    { key: 'ermita',        file: 'assets/ermita.png',        amplada: 300, provisional: (c, w) => dibuixarErmitaDesaparicio(c, w) },
+    { key: 'hospederia',    file: 'assets/hospederia.png',    amplada: 560, provisional: (c, w) => dibuixarHostatgeria(c, w) },
 
     // ---- Personatges nous ----
     { key: 'pianista',  file: 'assets/pianista.png',  amplada: 100, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
@@ -55,7 +56,8 @@ const CATALEG = [
     { key: 'home_carruatge', file: 'assets/home_carruatge.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2f6b3d', cabell: '#222', alt: 1.04, extra: 'gorra' }) },
 
     // ---- Escenari nou ----
-    { key: 'runes',     file: 'assets/runes.png',     amplada: 300, provisional: (c, w) => dibuixarRunes(c, w) },
+    { key: 'runes',     file: 'assets/runes.png',     amplada: 420, provisional: (c, w) => dibuixarRunes(c, w) },
+    { key: 'columna_proces', file: 'assets/columna_proces.png', amplada: 64, provisional: (c, w) => dibuixarColumnaProcessio(c, w) },
     { key: 'columna',   file: 'assets/columna.png',   amplada: 58,  provisional: (c, w) => dibuixarColumna(c, w) },
     { key: 'roure',     file: 'assets/roure.png',     amplada: 420, provisional: (c, w) => dibuixarRoure(c, w) },
     { key: 'tiller',    file: 'assets/tiller.png',    amplada: 340, provisional: (c, w) => dibuixarTiller(c, w) },

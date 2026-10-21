@@ -234,8 +234,11 @@ class ZonaGabriel extends ZonaBase {
         this.edifici('ermita_gabriel', 420, 640, 300, 80, 'ZonaGabrielInt', 'porta', { alt: 90 });
         this.cartell(980, 790, () => ({ pagines: [{ qui: '', text: 'Ermita de Sant Gabriel.\n→ Els Dipòsits (només per a qui sap mirar el cel)\n↑ La Rovellonera' }] }));
 
+        this.terra('cami', 240, 650, 360, 200);          // esplanada de terra seca davant l'ermita
         this.arbres([[150, 200], [320, 140], [600, 180], [1050, 150], [1300, 220], [1480, 160], [140, 520], [160, 880],
-                     [420, 1020], [1100, 1020], [1400, 920], [1200, 330], [500, 400], [1450, 420], [600, 900]]);
+                     [420, 1020], [1100, 1020], [1400, 920], [1200, 330], [1450, 420], [600, 900]]);
+        // Pins joves i arbustos prims vora la capella (com a la foto): un turó obert, amb poc arbre
+        [[215, 655, 0.55], [650, 640, 0.6], [700, 590, 0.45], [110, 700, 0.5]].forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 18, h: 10 } }));
         [[400, 900], [1250, 880]].forEach(([x, y]) => this.enemic('bolet', x, y));
         [[400, 300], [1250, 300], [800, 900]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
 

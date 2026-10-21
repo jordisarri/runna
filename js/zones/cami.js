@@ -24,8 +24,8 @@ class ZonaCami extends ZonaBase {
         // Les 12 columnes de la processó, alternades a banda i banda del camí
         for (let i = 0; i < 12; i++) {
             const x = 2540 - i * 190, y = i % 2 === 0 ? 370 : 575;   // la columna 1 és la més propera a les Runes (est)
-            this.posar('columna', x, y, { col: { w: 30, h: 14 } });
-            this.interactiu(x, y + 6, 85, DIALEGS.columna(i + 1), { altura: 150 });
+            this.posar('columna_proces', x, y, { col: { w: 34, h: 14 } });
+            this.interactiu(x, y + 6, 85, DIALEGS.columna(i + 1), { altura: 120 });
         }
 
         [[700, 450], [1250, 450], [1700, 430], [2200, 450], [2500, 460]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
@@ -63,10 +63,12 @@ class ZonaErmita extends ZonaBase {
         this.terra('cami', 240, 640, 160, 360);          // baixa cap a l'Era (a la banda esquerra)
 
         this.edifici('ermita', 500, 600, 300, 80, 'ZonaErmitaInt', 'ermita', { alt: 90 });
+        // Xiprers alts als costats de l'ermita (com a la capella real)
+        [[322, 590, 1.5], [678, 590, 1.5], [248, 570, 1.15], [752, 570, 1.15]].forEach(([x, y, e]) => this.posar('xiprer', x, y, { escala: e, col: { w: 26, h: 12 } }));
         this.interactiu(500, 640, 70, DIALEGS.ermitaPorta, { altura: 190, actiu: () => false });
 
         // Creu de la Desaparició, davant l'ermita (no té cap paper a la trama: només es pot llegir)
-        this.posar('creu', 740, 655, { col: { w: 46, h: 22 } });
+        this.posar('creu_desaparicio', 740, 655, { col: { w: 46, h: 22 } });
         this.interactiu(740, 662, 80, DIALEGS.creuDesaparicio, { altura: 180 });
 
         this.cartell(1120, 610, DIALEGS.sortidaErmita);
@@ -205,7 +207,7 @@ class ZonaJardi extends ZonaBase {
         this.terra('herba', 0, 0, 1600, 1000, -1100);
         this.terra('cami', 0, 780, 1600, 130);            // camí de l'Era a la Taverna, davant la pèrgola
         this.terra('cami', 740, 690, 150, 100);           // entrada a la pèrgola (buit de la fila de columnes)
-        this.terra('cami', 1180, 440, 140, 340);          // porta de l'Hospederia
+        this.terra('cami', 1090, 440, 130, 340);          // porta de l'Hospederia
         this.terra('pedra', 300, 470, 700, 100);          // passadís de pedra dins la pèrgola
 
         // --- Pèrgola de pedra: dues files de columnes ---
@@ -262,8 +264,15 @@ class ZonaJardi extends ZonaBase {
         this.interactiu(345, 545, 95, DIALEGS.prunera, { altura: 250 });
 
         // L'Hospederia, adossada a la pèrgola (a llevant)
-        this.posar('hospederia', 1250, 440, { col: { w: 520, h: 110 } });
-        this.interactiu(1250, 460, 90, DIALEGS.hospederia, { altura: 120 });
+        this.posar('hospederia', 1250, 470, { col: { w: 520, h: 110 } });
+        this.interactiu(1155, 495, 90, DIALEGS.hospederia, { altura: 120 });
+        // Jardinera rodona de pedra amb una bardissa de flors blanques i un pilar al mig (com al costat de la casa real)
+        const jard = this.add.graphics().setDepth(640);
+        jard.fillStyle(0x3f6a34, 1).fillEllipse(1290, 628, 130, 66);
+        for (let i = 0; i < 46; i++) jard.fillStyle(i % 3 ? 0xf2f0e4 : 0xdfe6c8, 1).fillCircle(1235 + Math.random() * 110, 598 + Math.random() * 54, 4 + Math.random() * 5);
+        jard.fillStyle(0x8f8873, 1).fillEllipse(1290, 662, 150, 34).lineStyle(3, 0x2a241a, 1).strokeEllipse(1290, 662, 150, 34);
+        jard.fillStyle(0xa7a08b, 1).fillRect(1281, 596, 18, 50).strokeRect(1281, 596, 18, 50);
+        this.colisio(1290, 650, 140, 36);
 
         this.arbres([[1450, 640], [1500, 980], [1250, 960], [700, 960], [300, 960], [130, 950], [130, 650], [180, 430],
                      [130, 120], [320, 90], [600, 110], [850, 100], [1100, 100], [1350, 100], [1520, 160], [1530, 640]]);

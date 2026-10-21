@@ -219,10 +219,18 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         const esc = this.add.graphics().setDepth(-980);
         for (let i = 0; i < 9; i++) {
             const ample = 460 - i * 14, y = 600 - i * 44;
-            esc.fillStyle(i % 2 ? 0xb8a98c : 0xc9ba9d, 1).fillRect(700 - ample / 2, y, ample, 44);
-            esc.lineStyle(2, 0x8a7a5e, 1).strokeRect(700 - ample / 2, y, ample, 44);
+            esc.fillStyle(i % 2 ? 0xa9906a : 0xb89f78, 1).fillRect(700 - ample / 2, y, ample, 44);
+            esc.lineStyle(2, 0x6e5a3a, 1).strokeRect(700 - ample / 2, y, ample, 44);
         }
-        esc.fillStyle(0x7a2a2a, 1).fillRect(676, 204, 48, 440);   // catifa vermella
+        // Al fons, un balcó de pedra clara amb dues columnes esvelta de capitell, sota una gran volta de carreus
+        const balco = this.add.graphics().setDepth(-985);
+        balco.fillStyle(0x4a3a26, 1).fillEllipse(700, 215, 520, 250);
+        balco.lineStyle(5, 0x8a7448, 1).strokeEllipse(700, 215, 520, 250);
+        balco.fillStyle(0xd8d0bc, 1).fillRect(560, 196, 280, 26).lineStyle(3, 0x6e5a3a, 1).strokeRect(560, 196, 280, 26);
+        [640, 760].forEach(x => {
+            balco.fillStyle(0xe6dfcc, 1).fillRect(x - 9, 98, 18, 100).lineStyle(2, 0x8a7a5e, 1).strokeRect(x - 9, 98, 18, 100);
+            balco.fillStyle(0xcfc6ae, 1).fillRect(x - 16, 88, 32, 12).strokeRect(x - 16, 88, 32, 12);
+        });
         this.colisio(450, 400, 24, 430);
         this.colisio(950, 400, 24, 430);
 

@@ -32,7 +32,10 @@ class ZonaRuines extends ZonaBase {
 
         // Les runes, a la dreta; el camí passa per davant
         this.terra('pedra', 980, 90, 520, 330);          // replà de pedra de les runes
-        this.posar('runes', 1260, 330, { col: { w: 250, h: 60 } });
+        this.posar('runes', 1270, 330, { col: { w: 360, h: 60 } });
+        // Un xiprer alt a l'esquerra de les runes (com a les fotos) i pedres caigudes davant
+        this.posar('xiprer', 1030, 330, { escala: 1.5, col: { w: 26, h: 12 } });
+        [[1110, 345, 0.6], [1440, 350, 0.5]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 30, h: 14 } }));
         this.interactiu(1260, 370, 110, DIALEGS.ruines, { altura: 140 });
 
         // Porta del Ping-pong, a baix
@@ -166,6 +169,9 @@ class ZonaCelles extends ZonaBase {
         this.interactiu(450, 620, 90, DIALEGS.cel_ntrasra, { altura: 140 });
         this.posar('cel_stbenet', 1380, 600, { col: { w: 380, h: 90 } });
         this.interactiu(1380, 620, 80, DIALEGS.cel_stbenet, { altura: 140 });
+
+        // Arbres joves i prims plantats vora el camí, com a la foto de les cel·les
+        [[250, 632, 0.42], [570, 748, 0.38], [1180, 752, 0.38], [1480, 640, 0.42], [680, 560, 0.36]].forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 14, h: 8 } }));
 
         // El Gran Til·ler
         this.posar('tiller', 900, 600, { col: { w: 110, h: 40 } });
