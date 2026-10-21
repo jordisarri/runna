@@ -113,7 +113,7 @@ class EscenaProleg extends Phaser.Scene {
         const nit = this.add.container(0, 0).setAlpha(0);
         nit.add(this.add.tileSprite(0, 0, AMPLE, ALT, 'llamborda').setOrigin(0).setTileScale(1 / RES).setTint(0x2a3050));
         const esg = this.add.image(AMPLE / 2 - 40, 600, 'esglesia').setOrigin(0.5, 1).setTint(0x3a4470);
-        esg.setScale((this.textures.get('esglesia').customData.escala || 0.5) * 0.8);
+        esg.setScale((this.textures.get('esglesia').customData.escala || 0.5) * 0.8 * (700 / 1100));   // l'edifici és més gran que abans: es manté la mida del pròleg
         nit.add(esg);
         const reixa = this.add.image(250, 760, 'reixa').setScale(0.6).setTint(0x556080);
         nit.add(reixa);

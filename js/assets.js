@@ -10,7 +10,7 @@ const RES = 2;
 
 const CATALEG = [
     // Edificis
-    { key: 'esglesia',     file: 'assets/esglesia.png',     amplada: 700 },
+    { key: 'esglesia',     file: 'assets/esglesia.png',     amplada: 1100 },   // gran: la porta (~165) ha de superar l'Ineu (~125); a la plaça es retalla i no es veu sencera
     { key: 'monestir',     file: 'assets/monestir.png',     amplada: 620, provisional: (c, w) => dibuixarMonestir(c, w) },
     { key: 'casa_gran',    file: 'assets/casa_gran.png',    amplada: 620, provisional: (c, w) => dibuixarCasaGran(c, w) },
     // Personatges

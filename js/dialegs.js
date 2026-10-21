@@ -128,9 +128,7 @@ const DIALEGS = {
         ]
     }),
 
-    cartellOest: E => ({ pagines: [{ qui: '', text: "← Casa Gran · Taverna · Hospederia\n↓ Creu de l'Aparició i Bassadòria" }] }),
-    cartellNord: E => ({ pagines: [{ qui: '', text: "↑ Les Runes · Ping-pong · Cel·les i Til·ler" }] }),
-    cartellCantonada: E => ({ pagines: [{ qui: '', text: "El Monestir i el Santuari fan cantonada aquí: el camí s'acaba contra el mur." }] }),
+    cartellPlaca: E => ({ pagines: [{ qui: '', text: "↑ Runes\n← Casa Gran\n↓ Bassadoria" }] }),
     pedraSecreta: E => E.flag('tresorObert') ? {
         pagines: [{ qui: '', text: 'La pedra ha girat i deixa un pas estret. Una escala baixa a un passatge fosc.' }]
     } : {
@@ -154,7 +152,6 @@ const DIALEGS = {
             enAcabar: () => { E.posaFlag('cofreTresor'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
         };
     },
-    cartellEst: E => ({ pagines: [{ qui: '', text: '→ Monestir · Cel·les de Sant Antoni' }] }),
 
     // ---------------- ESGLÉSIA ----------------
     pianista: E => {

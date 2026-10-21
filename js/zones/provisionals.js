@@ -78,9 +78,8 @@ class ZonaMonestir extends ZonaBase {
 
     construir() {
         this.terra('herba', 0, 0, 1600, 1000, -1100);
-        this.terra('cami', 0, 450, 1600, 140);
+        this.terra('llamborda', 0, 430, 1600, 280);   // la mateixa plaça empedrada
         this.terra('cami', 1400, 0, 160, 460);          // cap al cementiri (darrere el Monestir i el Santuari)
-        this.terra('llamborda', 560, 430, 480, 80);
 
         this.posar('monestir', 800, 440, { col: { w: 600, h: 140, dy: -10 } });
         this.interactiu(800, 450, 70, DIALEGS.enConstruccio('Biblioteca del Monestir'), { altura: 90 });
@@ -203,8 +202,7 @@ class ZonaCasaGran extends ZonaBase {
 
     construir() {
         this.terra('herba', 0, 0, 1600, 1100, -1100);
-        this.terra('cami', 0, 620, 1600, 160);
-        this.terra('llamborda', 420, 560, 560, 60);
+        this.terra('llamborda', 0, 560, 1600, 220);   // la mateixa plaça empedrada, davant dels arcs
 
         // La Casa Gran, amb els tres arcs del porxo; la porta de ferro del fons del porxo (arc del mig) s'obre amb el clauer de novici
         this.posar('casa_gran', 700, 600, { fonsY: 560 });
