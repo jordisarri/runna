@@ -51,7 +51,7 @@ class ZonaErmita extends ZonaBase {
             alcada: 1000,
             entrades: {
                 cami:     { x: 1340, y: 705, dir: 'esquerra' },
-                era:      { x: 960,  y: 940, dir: 'amunt' },
+                era:      { x: 320,  y: 940, dir: 'amunt' },
                 interior: { x: 500,  y: 710, dir: 'avall' }
             }
         });
@@ -60,19 +60,23 @@ class ZonaErmita extends ZonaBase {
     construir() {
         this.terra('herba', 0, 0, 1400, 1000, -1100);
         this.terra('cami', 400, 640, 1000, 130);
-        this.terra('cami', 880, 640, 160, 360);
+        this.terra('cami', 240, 640, 160, 360);          // baixa cap a l'Era (a la banda esquerra)
 
         this.edifici('ermita', 500, 600, 300, 80, 'ZonaErmitaInt', 'ermita', { alt: 90 });
         this.interactiu(500, 640, 70, DIALEGS.ermitaPorta, { altura: 190, actiu: () => false });
 
+        // Creu de la Desaparició, davant l'ermita (no té cap paper a la trama: només es pot llegir)
+        this.posar('creu', 740, 655, { col: { w: 46, h: 22 } });
+        this.interactiu(740, 662, 80, DIALEGS.creuDesaparicio, { altura: 180 });
+
         this.cartell(1120, 610, DIALEGS.sortidaErmita);
         this.arbres([[120, 200], [300, 150], [700, 220], [900, 160], [1150, 240], [1300, 160], [150, 520],
-                     [180, 820], [420, 900], [720, 900], [1200, 880], [1320, 480]]);
+                     [100, 860], [520, 900], [720, 900], [1200, 880], [1320, 480]]);
         this.muralla(0, 330, 0, 800, 100);
 
         this.enemic('escolopendra', 700, 800);
         this.sortida(1386, 640, 14, 130, 'ZonaCami', 'ermita');
-        this.sortida(880, 986, 160, 14, 'ZonaEra', 'ermita');
+        this.sortida(240, 986, 160, 14, 'ZonaEra', 'ermita');
     }
 }
 
@@ -116,66 +120,69 @@ class ZonaErmitaInt extends ZonaBase {
 }
 
 // ---------------- L'ERA ----------------
+// Un encreuament de camins de terra (Ermita al nord, Rovellonera a ponent, Jardí a llevant) i, al sud, una gran clariana
+// de gespa amb dos roures enormes i, al mig, dos bancs un davant de l'altre.
+const ERA_BANC_X = 960, ERA_BANC_N = 820, ERA_BANC_S = 1020;
+
 class ZonaEra extends ZonaBase {
     constructor() {
         super('ZonaEra', {
-            nom: 'L\'Era',
-            amplada: 1600,
-            alcada: 1000,
+            nom: "L'Era",
+            amplada: 1800,
+            alcada: 1300,
             entrades: {
-                ermita: { x: 960,  y: 70,  dir: 'avall' },
-                jardi:  { x: 1540, y: 565, dir: 'esquerra' },
-                rovellonera: { x: 60, y: 765, dir: 'dreta' }
+                ermita: { x: 320,  y: 70,  dir: 'avall' },
+                jardi:  { x: 1740, y: 565, dir: 'esquerra' },
+                rovellonera: { x: 60, y: 565, dir: 'dreta' }
             }
         });
     }
 
     construir() {
-        this.terra('herba', 0, 0, 1600, 1000, -1100);
-        this.terra('cami', 880, 0, 160, 540);
-        this.terra('cami', 880, 500, 720, 130);
-        this.terra('cami', 880, 500, 160, 330);          // baixa cap al camí de la Rovellonera
-        this.terra('cami', 0, 700, 1040, 130);           // camí cap a ponent, per davant de l'era
-        this.terra('pedra', 340, 520, 360, 170);          // l'era: replà empedrat
+        this.terra('herba', 0, 0, 1800, 1300, -1100);
+        this.add.image(ERA_BANC_X, 920, 'clariana').setDisplaySize(1500, 900).setDepth(-1050);   // gespa tallada de l'era
+        this.terra('cami', 240, 0, 160, 630);             // cap a l'Ermita (nord)
+        this.terra('cami', 0, 500, 1800, 130);            // de la Rovellonera (oest) al Jardí (est)
 
         // Dos roures enormes amb dos bancs al mig, un davant de l'altre: el Garf seu al del nord i l'Ineu pot seure al del sud
-        this.posar('roure', 300, 520, { col: { w: 60, h: 30 } });
-        this.posar('roure', 760, 520, { col: { w: 60, h: 30 } });
-        this.posar('banc', 530, 556, { col: { w: 140, h: 16 } });
-        this.posar('banc', 530, 656, { col: { w: 140, h: 16 } });
+        this.posar('roure', 560, 1080, { escala: 1.7, col: { w: 90, h: 36 } });
+        this.posar('roure', 1360, 1080, { escala: 1.7, col: { w: 90, h: 36 } });
+        this.posar('banc', ERA_BANC_X, ERA_BANC_N, { col: { w: 140, h: 16 } });
+        this.posar('banc', ERA_BANC_X, ERA_BANC_S, { col: { w: 140, h: 16 } });
 
         // El Garf, savi inventor: jove, grassonet i ros, assegut al banc de dalt
-        this.garf = this.npc('garf', 530, 556, DIALEGS.garf);
-        this.interactiu(530, 700, 80, () => { this.seure(); return DIALEGS.garf(Estat); }, {
+        this.garf = this.npc('garf', ERA_BANC_X, ERA_BANC_N, DIALEGS.garf);
+        this.interactiu(ERA_BANC_X, ERA_BANC_S + 44, 80, () => { this.seure(); return DIALEGS.garf(Estat); }, {
             altura: 150, enTancar: () => this.alcar()
         });
 
-        // L'Home del Carruatge Verd, més al sud
-        this.posar('carruatge', 1180, 820, { col: { w: 190, h: 50 } });
-        this.npc('home_carruatge', 1300, 850, DIALEGS.homeCarruatge);
+        // L'Home del Carruatge Verd, a la vora sud-oest
+        this.posar('carruatge', 260, 1230, { col: { w: 190, h: 50 } });
+        this.npc('home_carruatge', 390, 1250, DIALEGS.homeCarruatge);
 
-        this.cartell(850, 600, DIALEGS.cartellEra);
-        this.arbres([[120, 200], [300, 130], [520, 190], [700, 130], [1150, 150], [1350, 240], [1500, 150],
-                     [320, 930], [700, 930], [1000, 940], [1500, 900], [1500, 760]]);
+        this.cartell(450, 665, DIALEGS.cartellEra);
+        this.arbres([[120, 200], [560, 150], [760, 230], [1000, 170], [1250, 230], [1500, 160], [1700, 260],
+                     [600, 380], [900, 400], [1200, 390], [1550, 400], [1700, 720], [100, 780], [90, 1000],
+                     [1700, 1100], [1700, 1270], [1000, 1270], [700, 1270], [120, 1280]]);
 
-        this.sortida(880, 0, 160, 14, 'ZonaErmita', 'era');
-        this.sortida(1586, 500, 14, 130, 'ZonaJardi', 'era');
-        this.sortida(0, 700, 14, 130, 'ZonaCamiRov', 'era');
+        this.sortida(240, 0, 160, 14, 'ZonaErmita', 'era');
+        this.sortida(1786, 500, 14, 130, 'ZonaJardi', 'era');
+        this.sortida(0, 500, 14, 130, 'ZonaCamiRov', 'era');
     }
 
     // L'Ineu s'asseu al banc del sud, de cara al Garf (sense col·lisions mentre dura la conversa)
     seure() {
         this.ineu.body.checkCollision.none = true;
-        this.ineu.body.reset(530, 652);
-        this.ombraIneu.setPosition(530, 652);
-        this.ineu.setDepth(657);
+        this.ineu.body.reset(ERA_BANC_X, ERA_BANC_S - 4);
+        this.ombraIneu.setPosition(ERA_BANC_X, ERA_BANC_S - 4);
+        this.ineu.setDepth(ERA_BANC_S + 1);
         this.posarDireccio('amunt', false);
-        this.flotant(530, 520, "L'Ineu s'asseu al banc", '#f2e6c8');
+        this.flotant(ERA_BANC_X, ERA_BANC_S - 136, "L'Ineu s'asseu al banc", '#f2e6c8');
     }
 
     alcar() {
         this.ineu.body.checkCollision.none = false;
-        this.ineu.body.reset(530, 704);
+        this.ineu.body.reset(ERA_BANC_X, ERA_BANC_S + 48);
         this.posarDireccio('amunt', false);
     }
 }

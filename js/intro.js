@@ -6,7 +6,8 @@
  * Qualsevol tecla o clic durant la intro salta directament al bucle i al menú.
  */
 const FONT_TITOL = '"Cinzel Decorative", Georgia, serif';
-const FONT_CAL = '"Great Vibes", "Brush Script MT", cursive';
+const FONT_TEXT = '"Cormorant Garamond", Georgia, "Times New Roman", serif';   // serifa elegant (portada)
+const FONT_PLACA = '"Cinzel", Georgia, serif';                                   // noms i títols a la interfície
 
 // La música té 3,5 s de silenci al principi: la fem començar on ja sona
 const MUSICA_INICI_INTRO = 3.5;
@@ -60,9 +61,10 @@ class EscenaTitol extends Phaser.Scene {
     construirPortada() {
         this.portada = this.add.container(0, 0).setDepth(2000);
         const fons = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000).setOrigin(0);
-        const t = this.add.text(AMPLE / 2, ALT / 2, 'Toca la pantalla\nper començar',
-            { fontFamily: FONT_CAL, fontSize: '36px', color: '#e8d9b0', resolution: 2 }).setOrigin(0.5);
-        const so = this.add.text(AMPLE / 2, ALT / 2 + 60, '♪ amb so', estilText(24, '#8a8070')).setOrigin(0.5);
+        const t = this.add.text(AMPLE / 2, ALT / 2, 'Toca la pantalla per començar',
+            { fontFamily: FONT_TEXT, fontSize: '44px', fontStyle: 'bold', color: '#e8d9b0', resolution: 2 }).setOrigin(0.5);
+        const so = this.add.text(AMPLE / 2, ALT / 2 + 56, '♪ amb so',
+            { fontFamily: FONT_TEXT, fontSize: '28px', fontStyle: 'italic', color: '#8a8070', resolution: 2 }).setOrigin(0.5);
         this.tweens.add({ targets: t, alpha: 0.35, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
         this.portada.add([fons, t, so]);
     }

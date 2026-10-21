@@ -725,3 +725,54 @@ function dibuixarTombaEsquerdada(c, w) {
         for (let x = 40; x < W - 40; x += 18) { if (x > W * 0.4 && x < W * 0.6) continue; ctx.beginPath(); ctx.moveTo(x, H * 0.42); ctx.lineTo(x + 8, H * 0.42); ctx.stroke(); }
     });
 }
+
+// Ermita de Sant Gabriel: capella petita de pedra picada, façana amb teulada a dues aigües, espadanya, rosassa i porta d'arc
+function dibuixarErmitaGabriel(c, w) {
+    lienc(c, w, w * 0.92, (ctx, W, H) => {
+        ombraTerra(ctx, W / 2, H - 6, W * 0.5, 9);
+        ctx.lineWidth = 4; ctx.strokeStyle = CONTORN;
+        const x0 = W * 0.06, x1 = W * 0.94, base = H - 8, cantell = H * 0.4, cim = H * 0.2;
+        // Façana de pedra
+        ctx.fillStyle = '#b49a74';
+        ctx.beginPath(); ctx.moveTo(x0, base); ctx.lineTo(x0, cantell); ctx.lineTo(W / 2, cim); ctx.lineTo(x1, cantell); ctx.lineTo(x1, base); ctx.closePath(); ctx.fill(); ctx.stroke();
+        // Carreus
+        ctx.save(); ctx.clip();
+        ctx.strokeStyle = 'rgba(70,50,30,0.35)'; ctx.lineWidth = 1.6;
+        const hc = H * 0.045;
+        for (let r = 0, y = base; y > cim; r++, y -= hc) {
+            ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+            for (let x = x0 + (r % 2) * W * 0.05; x < x1; x += W * 0.1) { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y - hc); ctx.stroke(); }
+        }
+        ctx.restore();
+        ctx.lineWidth = 4; ctx.strokeStyle = CONTORN;
+        // Sòcol més clar
+        ctx.fillStyle = '#d2c4a6'; ctx.fillRect(x0 - 2, base - H * 0.05, x1 - x0 + 4, H * 0.05); ctx.strokeRect(x0 - 2, base - H * 0.05, x1 - x0 + 4, H * 0.05);
+        // Teulada: vora de teules a cada vessant
+        ctx.fillStyle = '#9a6a44';
+        const vessant = (xa, ya, xb, yb) => {
+            ctx.beginPath(); ctx.moveTo(xa, ya); ctx.lineTo(xb, yb); ctx.lineTo(xb, yb - H * 0.05); ctx.lineTo(xa, ya - H * 0.05); ctx.closePath(); ctx.fill(); ctx.stroke();
+        };
+        vessant(x0 - W * 0.03, cantell + H * 0.015, W / 2, cim + H * 0.015);
+        vessant(x1 + W * 0.03, cantell + H * 0.015, W / 2, cim + H * 0.015);
+        // Espadanya amb campana
+        ctx.fillStyle = '#a58c68';
+        ctx.beginPath(); ctx.rect(W * 0.44, H * 0.02, W * 0.12, cim - H * 0.02); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#2a2018';
+        ctx.beginPath(); ctx.moveTo(W * 0.47, H * 0.17); ctx.lineTo(W * 0.47, H * 0.08); ctx.quadraticCurveTo(W * 0.5, H * 0.03, W * 0.53, H * 0.08); ctx.lineTo(W * 0.53, H * 0.17); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#c9a53a'; ctx.beginPath(); ctx.arc(W * 0.5, H * 0.115, W * 0.014, 0, Math.PI * 2); ctx.fill();
+        // Rosassa
+        ctx.fillStyle = '#6a5a44'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(W / 2, H * 0.46, W * 0.06, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = '#c9b48a'; ctx.lineWidth = 2;
+        for (let a = 0; a < 8; a++) { ctx.beginPath(); ctx.moveTo(W / 2, H * 0.46); ctx.lineTo(W / 2 + Math.cos(a * Math.PI / 4) * W * 0.05, H * 0.46 + Math.sin(a * Math.PI / 4) * W * 0.05); ctx.stroke(); }
+        // Arc de descàrrega i porta
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+        const pw = W * 0.2, ph = H * 0.3, pb = base - H * 0.05;
+        ctx.fillStyle = '#c4ae88';
+        ctx.beginPath(); ctx.moveTo(W / 2 - pw * 0.9, pb); ctx.lineTo(W / 2 - pw * 0.9, pb - ph * 0.8); ctx.arc(W / 2, pb - ph * 0.8, pw * 0.9, Math.PI, 0); ctx.lineTo(W / 2 + pw * 0.9, pb); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#7a4a30';
+        ctx.beginPath(); ctx.moveTo(W / 2 - pw / 2, pb); ctx.lineTo(W / 2 - pw / 2, pb - ph * 0.7); ctx.arc(W / 2, pb - ph * 0.7, pw / 2, Math.PI, 0); ctx.lineTo(W / 2 + pw / 2, pb); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(30,16,8,0.6)'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(W / 2, pb); ctx.lineTo(W / 2, pb - ph * 0.7 - pw / 2); ctx.stroke();
+    });
+}

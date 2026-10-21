@@ -233,7 +233,6 @@ class ZonaGabriel extends ZonaBase {
 
         this.edifici('ermita_gabriel', 420, 640, 300, 80, 'ZonaGabrielInt', 'porta', { alt: 90 });
         this.cartell(980, 790, () => ({ pagines: [{ qui: '', text: 'Ermita de Sant Gabriel.\n→ Els Dipòsits (només per a qui sap mirar el cel)\n↑ La Rovellonera' }] }));
-        this.posar('creu', 1060, 940, { col: { w: 40, h: 20 } });
 
         this.arbres([[150, 200], [320, 140], [600, 180], [1050, 150], [1300, 220], [1480, 160], [140, 520], [160, 880],
                      [420, 1020], [1100, 1020], [1400, 920], [1200, 330], [500, 400], [1450, 420], [600, 900]]);

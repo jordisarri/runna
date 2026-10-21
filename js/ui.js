@@ -9,6 +9,12 @@ function estilText(mida, color = '#fff8e7', extra = {}) {
     return Object.assign({ fontFamily: FONT, fontSize: mida + 'px', color, resolution: 2 }, extra);
 }
 
+// Marc de pergamí amb vores de fusta i ornaments d'or (nineslice: les cantonades no s'estiren)
+function marcPergami(scene, x, y, w, h, clau = 'marc_gran') {
+    const c = (clau === 'marc_gran' ? MARC_GRAN : MARC_PETI) * RES;
+    return scene.add.nineslice(x, y, clau, undefined, w * RES, h * RES, c, c, c, c).setScale(1 / RES);
+}
+
 class EscenaUI extends Phaser.Scene {
     constructor() { super('UI'); }
 
@@ -58,14 +64,14 @@ class EscenaUI extends Phaser.Scene {
 
     // ---------------- HUD ----------------
     crearHUD() {
-        this.fonsHUD = this.add.rectangle(12, 10, 440, 130, 0x120b06, 0.55).setOrigin(0).setStrokeStyle(2, 0x6e522e);
-        this.textCors = this.add.text(26, 14, '', estilText(38, '#e0283a', { stroke: '#000', strokeThickness: 4 }));
-        this.textMonedes = this.add.text(30, 62, '', estilText(26, '#ffd34d', { stroke: '#000', strokeThickness: 4, fontStyle: 'bold' }));
-        this.textObjectiu = this.add.text(30, 98, '', estilText(24, '#f2e6c8', { fontStyle: 'italic', wordWrap: { width: 410 } }));
+        this.fonsHUD = marcPergami(this, 8, 6, 460, 150, 'marc_peti').setOrigin(0);
+        this.textCors = this.add.text(40, 24, '', estilText(36, '#c0182a', { stroke: '#4a0a10', strokeThickness: 3 }));
+        this.textMonedes = this.add.text(44, 72, '', estilText(26, '#6e4400', { fontStyle: 'bold' }));
+        this.textObjectiu = this.add.text(44, 110, '', estilText(22, '#3a2412', { fontStyle: 'italic', wordWrap: { width: 384 } }));
 
-        this.bannerZona = this.add.text(AMPLE / 2, 180, '', estilText(42, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
+        this.bannerZona = this.add.text(AMPLE / 2, 236, '', estilText(42, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
             .setOrigin(0.5).setAlpha(0);
-        this.toast = this.add.text(AMPLE / 2, 240, '', estilText(28, '#ffffff', { backgroundColor: '#1a120bdd', padding: { x: 16, y: 10 }, wordWrap: { width: 640 }, align: 'center' }))
+        this.toast = this.add.text(AMPLE / 2, 300, '', estilText(28, '#ffffff', { backgroundColor: '#1a120bdd', padding: { x: 16, y: 10 }, wordWrap: { width: 640 }, align: 'center' }))
             .setOrigin(0.5).setAlpha(0).setDepth(50);
 
         // Botó de menú (ratolí i pantalla tàctil)
@@ -87,7 +93,8 @@ class EscenaUI extends Phaser.Scene {
         this.textCors.setText(cors);
         this.textMonedes.setText('● ' + d.monedes);
         this.textObjectiu.setText('Objectiu: ' + (d.objectiu || ''));
-        this.fonsHUD.setSize(440, Math.max(130, 112 + this.textObjectiu.height));
+        const altHUD = Math.max(150, 110 + this.textObjectiu.height + 28);
+        this.fonsHUD.setSize(460 * RES, altHUD * RES);
         const flauta = Estat.te('flauta');
         if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (flauta ? ' · M: flauta' : '') + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · K: esquivar · ESC: menú');
     }
@@ -114,12 +121,17 @@ class EscenaUI extends Phaser.Scene {
     // ---------------- DIÀLEG ----------------
     crearCaixaDialeg() {
         this.caixa = this.add.container(AMPLE / 2, ALT - 190).setVisible(false).setDepth(40);
-        const fons = this.add.rectangle(0, 0, 690, 360, 0x1a120b, 0.95).setStrokeStyle(4, 0xd4af37);
-        this.plaquetaNom = this.add.text(-330, -204, '', estilText(28, '#1a120b', { backgroundColor: '#d4af37', padding: { x: 12, y: 4 }, fontStyle: 'bold' }));
-        this.textDialeg = this.add.text(-325, -156, '', estilText(30, '#ffffff', { wordWrap: { width: 650 }, lineSpacing: 6 }));
-        this.indicador = this.add.text(325, 172, '▼', estilText(28, '#d4af37')).setOrigin(1, 1);
-        this.tweens.add({ targets: this.indicador, y: 178, yoyo: true, repeat: -1, duration: 400 });
-        this.caixa.add([fons, this.plaquetaNom, this.textDialeg, this.indicador]);
+        const ombra = this.add.rectangle(4, 8, 704, 360, 0x000000, 0.35);
+        const fons = marcPergami(this, 0, 0, 704, 360);
+        // Cinta amb el nom de qui parla, penjada de la vora de dalt
+        this.cintaNom = this.add.nineslice(-310, -178, 'cinta_nom', undefined, 120 * RES, 40 * RES, 20 * RES, 20 * RES)
+            .setScale(1 / RES).setOrigin(0, 0.5);
+        this.plaquetaNom = this.add.text(-310, -178, '', { fontFamily: FONT_PLACA, fontSize: '22px', fontStyle: 'bold', color: '#f8e9b8', resolution: 2 })
+            .setOrigin(0, 0.5);
+        this.textDialeg = this.add.text(-316, -146, '', estilText(28, '#2a170b', { wordWrap: { width: 632 }, lineSpacing: 5 }));
+        this.indicador = this.add.text(318, 152, '▼', estilText(26, '#7a3a14')).setOrigin(1, 1);
+        this.tweens.add({ targets: this.indicador, y: 158, yoyo: true, repeat: -1, duration: 400 });
+        this.caixa.add([ombra, fons, this.cintaNom, this.plaquetaNom, this.textDialeg, this.indicador]);
     }
 
     // dialeg = { pagines: [{qui, text}], enAcabar? }
@@ -132,11 +144,14 @@ class EscenaUI extends Phaser.Scene {
 
     mostrarPagina() {
         const p = this.dialeg.dades.pagines[this.dialeg.pagina];
-        this.plaquetaNom.setText(p.qui || '').setVisible(!!p.qui);
+        this.plaquetaNom.setText(p.qui || '').setVisible(!!p.qui).setX(-310 + 28);
+        this.cintaNom.setVisible(!!p.qui);
+        if (p.qui) this.cintaNom.setSize((this.plaquetaNom.width + 56) * RES, 40 * RES);
         this.textComplet = p.text;
         this.lletres = 0;
         this.textDialeg.setText('');
-        this.textDialeg.setColor(p.qui ? '#ffffff' : '#ffe9a8');
+        // La veu del narrador, en cursiva i en un to vermellós; els personatges, en tinta fosca
+        this.textDialeg.setColor(p.qui ? '#2a170b' : '#5a2410').setFontStyle(p.qui ? 'normal' : 'italic');
         this.indicador.setVisible(false);
         if (this.timerText) this.timerText.remove();
         this.timerText = this.time.addEvent({
@@ -172,8 +187,8 @@ class EscenaUI extends Phaser.Scene {
     crearMenu() {
         this.menu = this.add.container(0, 0).setVisible(false).setDepth(60);
         const vel = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.65).setOrigin(0).setInteractive();
-        const panell = this.add.rectangle(AMPLE / 2, ALT / 2, 640, 700, 0x1a120b, 0.97).setStrokeStyle(4, 0xd4af37);
-        const titol = this.add.text(AMPLE / 2, ALT / 2 - 300, 'Pausa', estilText(44, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
+        const panell = marcPergami(this, AMPLE / 2, ALT / 2, 640, 700);
+        const titol = this.add.text(AMPLE / 2, ALT / 2 - 296, 'Pausa', { fontFamily: FONT_PLACA, fontSize: '44px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5);
         this.menu.add([vel, panell, titol]);
 
         this.opcions = [
@@ -186,7 +201,7 @@ class EscenaUI extends Phaser.Scene {
             { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];
         this.textOpcions = this.opcions.map((o, i) => {
-            const t = this.add.text(AMPLE / 2, ALT / 2 - 215 + i * 78, o.text, estilText(34, '#f2e6c8'))
+            const t = this.add.text(AMPLE / 2, ALT / 2 - 215 + i * 78, o.text, { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#3a2412', resolution: 2 })
                 .setOrigin(0.5).setInteractive({ useHandCursor: true })
                 .on('pointerover', () => { this.seleccio = i; this.pintarSeleccio(); })
                 .on('pointerdown', () => this.executarOpcio(i));
@@ -241,7 +256,7 @@ class EscenaUI extends Phaser.Scene {
 
     pintarSeleccio() {
         this.textOpcions.forEach((t, i) => {
-            t.setColor(i === this.seleccio ? '#ffd34d' : '#f2e6c8');
+            t.setColor(i === this.seleccio ? '#9a1f1f' : '#3a2412');
             t.setText((i === this.seleccio ? '▸ ' : '') + this.opcions[i].text);
         });
     }

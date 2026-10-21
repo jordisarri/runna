@@ -90,7 +90,9 @@ class EscenaCarrega extends Phaser.Scene {
         // Esperem les fonts de Google (màxim 3 s) perquè el títol es dibuixi amb la lletra bona
         const fonts = document.fonts ? Promise.all([
             document.fonts.load(`900 64px ${FONT_TITOL}`),
-            document.fonts.load(`48px ${FONT_CAL}`)
+            document.fonts.load(`700 44px ${FONT_TEXT}`),
+            document.fonts.load(`italic 600 28px ${FONT_TEXT}`),
+            document.fonts.load(`700 24px ${FONT_PLACA}`)
         ]) : Promise.resolve();
         Promise.race([fonts, new Promise(r => setTimeout(r, 3000))])
             .catch(() => {})

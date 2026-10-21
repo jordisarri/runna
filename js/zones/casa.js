@@ -234,7 +234,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
 
         this.espelmes([[330, 200], [1070, 200], [330, 760], [1070, 760]]);
         this.cartell(900, 880, DIALEGS.cartellCasaGran);
-        this.sortida(640, 986, 120, 14, 'ZonaPlaca', 'porxo');
+        this.sortida(640, 986, 120, 14, 'ZonaCasaGran', 'porxo');
 
         this.puzleRaim();
     }

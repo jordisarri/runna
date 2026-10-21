@@ -80,20 +80,17 @@ class ZonaMonestir extends ZonaBase {
         this.terra('cami', 0, 450, 1600, 140);
         this.terra('cami', 1400, 0, 160, 460);          // cap al cementiri (darrere el Monestir i el Santuari)
         this.terra('llamborda', 560, 430, 480, 80);
-        // Una franja de pedra davant del claustre (sense carretera: només camins i pedra)
-        this.terra('pedra', 0, 840, 1600, 110);
 
         this.posar('monestir', 800, 440, { col: { w: 600, h: 140, dy: -10 } });
         this.interactiu(800, 450, 70, DIALEGS.enConstruccio('Biblioteca del Monestir'), { altura: 90 });
         this.npc('pare_alcui', 600, 540, DIALEGS.pareAlcui);
 
-        this.cartell(1480, 450, DIALEGS.enConstruccio('→ Cel·les de Sant Antoni'));
+        this.cartell(1480, 450, () => ({ pagines: [{ qui: '', text: '→ Cel·les de Sant Antoni\n↑ El Cementiri (darrere el Monestir i el Santuari)' }] }));
         this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720]]);
 
         this.enemic('visitant', 1100, 700);
         this.enemic('escolopendra', 400, 700);
         this.enemic('escolopendra', 1200, 360);
-        this.cartell(1340, 400, () => ({ pagines: [{ qui: '', text: '↑ El Cementiri (darrere el Monestir i el Santuari)' }] }));
         this.sortida(0, 450, 14, 140, 'ZonaPlaca', 'monestir');
         this.sortida(1400, 0, 160, 14, 'ZonaCementiri', 'monestir');
     }
@@ -180,7 +177,8 @@ class ZonaCasaGran extends ZonaBase {
             entrades: {
                 placa:  { x: 1540, y: 700, dir: 'esquerra' },
                 oest:   { x: 60,   y: 700, dir: 'dreta' },
-                costat: { x: 930,  y: 560, dir: 'avall' }
+                costat: { x: 930,  y: 560, dir: 'avall' },
+                porxo:  { x: 622,  y: 545, dir: 'avall' }
             }
         });
     }
@@ -190,7 +188,13 @@ class ZonaCasaGran extends ZonaBase {
         this.terra('cami', 0, 620, 1600, 160);
         this.terra('llamborda', 420, 500, 560, 130);
 
-        this.posar('casa_gran', 700, 480, { col: { w: 620, h: 140, dy: -10 } });
+        // Porxo d'arcades amb la reixa (segon arc): s'obre amb el clauer de novici cap a l'Escalinata
+        this.posar('porxo', 700, 480, { escala: 1.9, fonsY: 470 });
+        this.colisio(700, 445, 650, 70);
+        this.interactiu(622, 510, 80, DIALEGS.portaReixa, {
+            altura: 130,
+            enTancar: () => { if (Estat.te('clauer')) this.canviarZona('ZonaCasaGranInt', 'porxo'); }
+        });
 
         // Porta de servei del costat de la Taverna: una altra entrada a la Casa Gran
         this.add.rectangle(960, 440, 44, 74, 0x4a2c16).setStrokeStyle(3, 0x2a1a0c).setDepth(479);
@@ -199,8 +203,8 @@ class ZonaCasaGran extends ZonaBase {
             enTancar: () => { if (Estat.te('clauer')) this.canviarZona('ZonaCasaGranInt', 'costat'); }
         });
 
-        this.posar('font', 1100, 610, { col: { w: 90, h: 30 } });
-        this.interactiu(1100, 615, 85, DIALEGS.font, { altura: 130 });
+        this.posar('font', 250, 590, { col: { w: 90, h: 30 } });
+        this.interactiu(250, 595, 85, DIALEGS.font, { altura: 130 });
 
         this.cartell(860, 600, DIALEGS.cartellCasaGran);
         this.cartell(180, 600, DIALEGS.enConstruccio('← La Taverna i l\'Hospederia (per ara, el camí et porta fins al Jardí pergolat)'));

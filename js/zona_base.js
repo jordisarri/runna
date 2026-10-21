@@ -43,11 +43,13 @@ class ZonaBase extends Phaser.Scene {
         this.cintaGastada = false;
 
         this.sols = [];
+        this.camins = [];     // rectangles de camí de terra: es fusionen i es dibuixen amb vores suaus (construirCamins)
         this.extraSud = 0;
         this.yTall = Infinity;
         this.preparaTweens();
         this.construir();
         this.ampliarSud();
+        this.construirCamins();
         this.crearIneu();
 
         const cam = this.cameras.main;
@@ -91,6 +93,13 @@ class ZonaBase extends Phaser.Scene {
     // ---------------- Construcció ----------------
     // Fons repetit (herba, llambordes...) en una àrea
     terra(key, x, y, w, h, profunditat = -1000) {
+        // Els camins (i els replans) de l'exterior són sempre de terra, amb vora suau i corbes
+        if ((key === 'cami' || key === 'pedra') && profunditat === -1000 && !this.esInterior()) {
+            const r = { x, y, w, h, alfa: 1 };
+            this.camins.push(r);
+            const stub = { setAlpha: a => { r.alfa = a; return stub; }, setTint: () => stub };
+            return stub;
+        }
         const t = this.add.tileSprite(x, y, w, h, key).setOrigin(0).setTileScale(1 / RES).setDepth(profunditat);
         this.sols.push(t);
         return t;
@@ -131,6 +140,10 @@ class ZonaBase extends Phaser.Scene {
             if (t.y >= tall) t.y += extra;
             else if (t.y + t.height > tall) t.setSize(t.width, t.height + extra);
         });
+        this.camins.forEach(r => {
+            if (r.y >= tall) r.y += extra;
+            else if (r.y + r.h > tall) r.h += extra;
+        });
         this.children.list.forEach(go => {
             if (sols.has(go) || go.scrollFactorY === 0 || go.type === 'Graphics' || go.y < tall) return;
             go.y += extra;
@@ -150,6 +163,89 @@ class ZonaBase extends Phaser.Scene {
                 this.posar('arbre', 24, y);
                 this.posar('arbre', c.amplada - 24, y);
             }
+        }
+    }
+
+    // Camins de terra: tots els rectangles es fusionen en un sol mapa de baixa resolució que s'enfosqueix (desenfocament)
+    // i es talla amb una rampa suau. Així les vores es difuminen cap a l'herba, les cantonades s'arrodoneixen
+    // i els encreuaments fan corbes en lloc d'angles rectes.
+    construirCamins() {
+        const rs = this.camins.filter(r => r.alfa > 0);
+        if (!rs.length || !this.textures.exists('cami')) return;
+        const W = this.config.amplada, H = this.config.alcada + this.extraSud;
+        const MG = 64, CEL = 4, RAD = 5;
+        const gw = Math.ceil((W + 2 * MG) / CEL), gh = Math.ceil((H + 2 * MG) / CEL);
+        let a = new Float32Array(gw * gh), b = new Float32Array(gw * gh);
+
+        rs.forEach(r => {
+            // Un camí que arriba a la vora del món continua més enllà, perquè no es difumini allà
+            const x0 = r.x <= 2 ? -MG : r.x, y0 = r.y <= 2 ? -MG : r.y;
+            const x1 = r.x + r.w >= W - 2 ? W + MG : r.x + r.w, y1 = r.y + r.h >= H - 2 ? H + MG : r.y + r.h;
+            for (let j = 0; j < gh; j++) {
+                const wy = (j + 0.5) * CEL - MG;
+                if (wy < y0 || wy > y1) continue;
+                for (let i = 0; i < gw; i++) {
+                    const wx = (i + 0.5) * CEL - MG;
+                    if (wx >= x0 && wx <= x1 && a[j * gw + i] < r.alfa) a[j * gw + i] = r.alfa;
+                }
+            }
+        });
+
+        // Desenfocament de caixa separable (quatre passades ~ gaussiana)
+        const desenfoca = (s, d, horitz) => {
+            const n = horitz ? gw : gh, m = horitz ? gh : gw, pas = horitz ? 1 : gw, sal = horitz ? gw : 1;
+            for (let l = 0; l < m; l++) {
+                const base = l * sal;
+                let suma = 0;
+                for (let k = -RAD; k <= RAD; k++) suma += s[base + Math.min(n - 1, Math.max(0, k)) * pas];
+                for (let k = 0; k < n; k++) {
+                    d[base + k * pas] = suma / (2 * RAD + 1);
+                    suma += s[base + Math.min(n - 1, k + RAD + 1) * pas] - s[base + Math.max(0, k - RAD) * pas];
+                }
+            }
+        };
+        desenfoca(a, b, true); desenfoca(b, a, false); desenfoca(a, b, true); desenfoca(b, a, false);
+
+        // Soroll de valors: fa que la vora del camí ondulegi una mica
+        const hash = (x, y) => { const n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return n - Math.floor(n); };
+        const soroll = (x, y) => {
+            const xi = Math.floor(x), yi = Math.floor(y), u = x - xi, v = y - yi;
+            const su = u * u * (3 - 2 * u), sv = v * v * (3 - 2 * v);
+            const f = (p, q, t) => p + (q - p) * t;
+            return f(f(hash(xi, yi), hash(xi + 1, yi), su), f(hash(xi, yi + 1), hash(xi + 1, yi + 1), su), sv);
+        };
+
+        const mascara = document.createElement('canvas');
+        mascara.width = gw; mascara.height = gh;
+        const mctx = mascara.getContext('2d');
+        const px = mctx.createImageData(gw, gh);
+        for (let j = 0; j < gh; j++) for (let i = 0; i < gw; i++) {
+            const k = j * gw + i;
+            const ona = (soroll(i / 7, j / 7) - 0.5) * 0.30 + (soroll(i / 2.5 + 40, j / 2.5) - 0.5) * 0.12;
+            const t = Math.min(1, Math.max(0, (a[k] + ona - 0.28) / 0.44));
+            px.data[k * 4] = px.data[k * 4 + 1] = px.data[k * 4 + 2] = 255;
+            px.data[k * 4 + 3] = Math.round(t * t * (3 - 2 * t) * 255);
+        }
+        mctx.putImageData(px, 0, 0);
+
+        // Es talla en blocs perquè cap textura passi del límit de la targeta gràfica
+        const peca = this.textures.get('cami').getSourceImage(), LIM = 2048;
+        let n = 0;
+        for (let cy = 0; cy < H; cy += LIM) for (let cx = 0; cx < W; cx += LIM) {
+            const cw = Math.min(LIM, W - cx), ch = Math.min(LIM, H - cy);
+            const cv = document.createElement('canvas');
+            cv.width = cw; cv.height = ch;
+            const ctx = cv.getContext('2d');
+            for (let ty = Math.floor(cy / 64) * 64; ty < cy + ch; ty += 64) {
+                for (let tx = Math.floor(cx / 64) * 64; tx < cx + cw; tx += 64) ctx.drawImage(peca, tx - cx, ty - cy, 64, 64);
+            }
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.imageSmoothingEnabled = true;
+            ctx.drawImage(mascara, 0, 0, gw, gh, -MG - cx, -MG - cy, gw * CEL, gh * CEL);
+            const clau = 'camins_' + this.scene.key + '_' + (n++);
+            if (this.textures.exists(clau)) this.textures.remove(clau);
+            this.textures.addCanvas(clau, cv);
+            this.add.image(cx, cy, clau).setOrigin(0).setDepth(-1040);
         }
     }
 
@@ -307,7 +403,7 @@ class ZonaBase extends Phaser.Scene {
             this.ineu.anims.play('caminar_' + vista, true);
         } else {
             this.ineu.anims.stop();
-            this.ineu.setTexture('ineu_' + vista, SPRITE_INEU.quiet);
+            this.ineu.setTexture('ineu_' + vista, quietIneu(vista));
         }
     }
 

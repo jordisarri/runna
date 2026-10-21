@@ -235,7 +235,7 @@ const DIALEGS = {
         enAcabar: () => E.posaFlag('fragment1')
     }),
 
-    cartellRuinesPingpong: E => ({ pagines: [{ qui: '', text: "↙ Sala del Ping-pong\n← Camí de la Desaparició (cap a l'oest)\n→ El Cementiri (darrere el Santuari)\n↑ Cel·les de Nostra Senyora i Sant Benet · Gran Til·ler" }] }),
+    cartellRuinesPingpong: E => ({ pagines: [{ qui: '', text: "← Camí de la Desaparició\n→ Cementiri\n↑ Cel·les\n↓ Plaça" }] }),
 
     juli: E => ({
         pagines: [
@@ -609,7 +609,13 @@ const DIALEGS = {
             }
         };
     },
-    sortidaErmita: E => ({ pagines: [{ qui: '', text: '↓ L\'Era · → Camí de la Desaparició' }] }),
+    sortidaErmita: E => ({ pagines: [{ qui: '', text: '↙ L\'Era · → Camí de la Desaparició' }] }),
+    creuDesaparicio: E => ({
+        pagines: [
+            { qui: '', text: "La Creu de la Desaparició. Una creu de pedra, igual que la de l'Aparició, però aquesta no té flors als peus: només cera vella i alguna pedreta posada amb cura." },
+            { qui: '', text: "Al sòcol, gravat amb lletra gastada: «Els qui se'n van no s'obliden; només esperen que algú els cridi pel nom.»" }
+        ]
+    }),
 
     // ---------------- L'ERA ----------------
     garf: E => {
@@ -637,7 +643,7 @@ const DIALEGS = {
             ]
         };
     },
-    cartellEra: E => ({ pagines: [{ qui: '', text: '↑ Ermita de la Desaparició · → Jardí pergolat i Hospederia\n← Camí de la Rovellonera (molt lluny, cap a ponent)' }] }),
+    cartellEra: E => ({ pagines: [{ qui: '', text: '↑ Ermita de la Desaparició\n→ Hospederia\n← Camí de la Rovellonera' }] }),
 
     // ---------------- JARDÍ ----------------
     // L'Isidre dóna les tisores de podar la primera vegada que hi parles
@@ -1048,7 +1054,7 @@ const DIALEGS = {
         };
     },
 
-    cartellCasaGran: E => ({ pagines: [{ qui: "", text: "La Casa Gran.\nEntrades: la reixa del porxo d'arcs (oest de la plaça del Santuari), la porta de servei (aquí, a prop de la Taverna) i... diuen que alguna més, per sota." }] }),
+    cartellCasaGran: E => ({ pagines: [{ qui: "", text: "La Casa Gran.\nEntrades: la reixa del porxo d'arcs (aquí mateix), la porta de servei (aquí, a prop de la Taverna) i... diuen que alguna més, per sota." }] }),
 
     homeRaimInt: E => ({
         pagines: [

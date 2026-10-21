@@ -17,8 +17,7 @@ class ZonaPlaca extends ZonaBase {
                 ruines:   { x: 390,  y: 150, dir: 'avall' },
                 tresor:   { x: 1190, y: 330, dir: 'avall' },
                 monestir: { x: 1550, y: 815, dir: 'esquerra' },
-                esglesia: { x: 689,  y: 510, dir: 'avall' },
-                porxo:    { x: 152,  y: 505, dir: 'avall' }
+                esglesia: { x: 689,  y: 510, dir: 'avall' }
             }
         });
     }
@@ -60,15 +59,6 @@ class ZonaPlaca extends ZonaBase {
             enTancar: () => { if (Estat.flag('tresorObert')) this.canviarZona('ZonaTresor', 'porta'); }
         });
         this.cartell(1160, 420, DIALEGS.cartellCantonada);
-
-        // --- Porxo d'arcs (oest): porta amb reixa cap a la Casa Gran, tancada amb clau ---
-        this.posar('porxo', 190, 440, { fonsY: 430 });
-        this.colisio(71, 405, 102, 70);
-        this.colisio(271, 405, 178, 70);
-        this.interactiu(152, 455, 75, DIALEGS.portaReixa, {
-            altura: 120,
-            enTancar: () => { if (Estat.te('clauer')) this.canviarZona('ZonaCasaGranInt', 'porxo'); }
-        });
 
         // --- Reixes del terra per on surt la boira ---
         [[600, 625], [1080, 650], [870, 975]].forEach(([x, y]) => {

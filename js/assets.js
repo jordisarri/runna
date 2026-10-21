@@ -95,7 +95,7 @@ const CATALEG = [
     { key: 'diposit',        file: 'assets/diposit.png',        amplada: 300, provisional: (c, w) => dibuixarDiposit(c, w) },
     { key: 'telescopi_mon',  file: 'assets/telescopi_mon.png',  amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w) },
     { key: 'runna_pedra',    file: 'assets/runna_pedra.png',    amplada: 110, provisional: (c, w) => dibuixarRunnaPedra(c, w) },
-    { key: 'ermita_gabriel', file: 'assets/ermita_gabriel.png', amplada: 300, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.7, '#cfc6b0', '#5a5a6a', 'Sant Gabriel') },
+    { key: 'ermita_gabriel', file: 'assets/ermita_gabriel.png', amplada: 300, provisional: (c, w) => dibuixarErmitaGabriel(c, w) },
     { key: 'nena_trenes',    file: 'assets/nena_trenes.png',    amplada: 80, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e8e8f8', pell: '#dfe6ff', cabell: '#5a4636', dona: true, alt: 0.72, cap: 17, extra: 'trenes' }) },
     { key: 'porxo',          file: 'assets/porxo.png',          amplada: 340, provisional: (c, w) => dibuixarPorxo(c, w) },
     { key: 'esbarzer',       file: 'assets/esbarzer.png',       amplada: 96, provisional: (c, w) => dibuixarEsbarzer(c, w) },
@@ -123,6 +123,8 @@ const SPRITE_INEU = {
     quiet: 2              // fotograma de repòs de cada direcció
 };
 // Octants de moviment (angle en pantalla, y cap avall) -> direcció del sprite
+// Fotograma de repòs d'una vista (la fulla de perfil té 10 fotogrames i el de repòs és l'1)
+function quietIneu(vista) { return (vista === 'left' || vista === 'right') && Grafics.perfilNou ? 1 : SPRITE_INEU.quiet; }
 const OCTANTS_INEU = ['right', 'southeast', 'down', 'southwest', 'left', 'northwest', 'up', 'northeast'];
 
 const Grafics = {
@@ -137,6 +139,7 @@ const Grafics = {
             if (CATALEG.some(i => i.key === f.key) && /\.png$/.test(f.url)) scene.load.image(f.key + '__jpg', f.url.replace(/\.png$/, '.jpg'));
         });
         CATALEG.forEach(item => scene.load.image(item.key, item.file));
+        scene.load.image('ineu_perfil_font', 'assets/sprites/Ineu-walk-trimmed.png');
         DIRS_INEU.forEach(dir => scene.load.spritesheet('ineu_' + dir, `assets/sprites/ineu/${dir}.png`,
             { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt }));
     },
@@ -155,7 +158,66 @@ const Grafics = {
             else Grafics.crearProvisional(scene, item);
         });
         Grafics.texturesGenerades(scene);
+        Grafics.perfilIneu(scene);
         Grafics.animacions(scene);
+    },
+
+    // Caminar cap a l'esquerra i la dreta: una sola fulla (10 fotogrames, mirant a la dreta, fons blanc).
+    // Es neteja, s'escala i es centra com les altres fulles (cel·les de 256, peus a y=240) i se'n fa el mirall per a l'esquerra.
+    perfilIneu(scene) {
+        Grafics.perfilNou = false;
+        if (!scene.textures.exists('ineu_perfil_font') || Grafics.faltants.includes('ineu_perfil_font')) return;
+        try {
+            const font = scene.textures.get('ineu_perfil_font').getSourceImage();
+            const CEL = 256, COLS = 4, N = 10;
+            const c0 = document.createElement('canvas');
+            c0.width = font.width; c0.height = font.height;
+            const x0 = c0.getContext('2d', { willReadFrequently: true });
+            x0.drawImage(font, 0, 0);
+            const img = x0.getImageData(0, 0, c0.width, c0.height);
+            treureFonsBlanc(img.data, c0.width, c0.height);
+            x0.putImageData(img, 0, 0);
+
+            // Caixa del personatge a cada fotograma
+            const caixes = [];
+            for (let i = 0; i < N; i++) {
+                const cx = (i % COLS) * CEL, cy = Math.floor(i / COLS) * CEL;
+                let ax = CEL, ay = CEL, bx = -1, by = -1;
+                for (let y = 0; y < CEL; y++) for (let x = 0; x < CEL; x++) {
+                    if (img.data[((cy + y) * c0.width + cx + x) * 4 + 3] > 24) { if (x < ax) ax = x; if (x > bx) bx = x; if (y < ay) ay = y; if (y > by) by = y; }
+                }
+                caixes.push({ ax, ay, bx, by });
+            }
+            const mediana = v => v.slice().sort((a, b) => a - b)[Math.floor(v.length / 2)];
+            const alt = mediana(caixes.map(c => c.by - c.ay)), peus = mediana(caixes.map(c => c.by));
+            const centre = caixes.reduce((t, c) => t + (c.ax + c.bx) / 2, 0) / N;
+            const e = (SPRITE_INEU.peus - 8) / alt;      // mateixa alçada que les altres fulles (~225 de 256)
+
+            const fes = mirall => {
+                const out = document.createElement('canvas');
+                out.width = COLS * CEL; out.height = 3 * CEL;
+                const o = out.getContext('2d');
+                o.imageSmoothingQuality = 'high';
+                for (let i = 0; i < N; i++) {
+                    const cel = document.createElement('canvas');
+                    cel.width = CEL; cel.height = CEL;
+                    cel.getContext('2d').drawImage(c0, (i % COLS) * CEL, Math.floor(i / COLS) * CEL, CEL, CEL,
+                        CEL / 2 - centre * e, SPRITE_INEU.peus - peus * e, CEL * e, CEL * e);
+                    const dx = (i % COLS) * CEL, dy = Math.floor(i / COLS) * CEL;
+                    if (mirall) { o.save(); o.translate(dx + CEL, dy); o.scale(-1, 1); o.drawImage(cel, 0, 0); o.restore(); }
+                    else o.drawImage(cel, dx, dy);
+                }
+                return out;
+            };
+            [['ineu_right', false], ['ineu_left', true]].forEach(([clau, mirall]) => {
+                if (scene.textures.exists(clau)) scene.textures.remove(clau);
+                const t = scene.textures.addCanvas(clau, fes(mirall));
+                for (let i = 0; i < N; i++) t.add(i, 0, (i % COLS) * CEL, Math.floor(i / COLS) * CEL, CEL, CEL);
+            });
+            Grafics.perfilNou = true;
+        } catch (e) {
+            Grafics.pixelsBloquejats = true;      // sense lectura de píxels: es queden les fulles antigues
+        }
     },
 
     // Animacions de caminar de l'Ineu (són globals: es creen una sola vegada)
@@ -165,7 +227,7 @@ const Grafics = {
             if (scene.anims.exists(key) || !scene.textures.exists('ineu_' + dir)) return;
             scene.anims.create({
                 key,
-                frames: scene.anims.generateFrameNumbers('ineu_' + dir, { start: 0, end: 15 }),
+                frames: scene.anims.generateFrameNumbers('ineu_' + dir, { start: 0, end: (dir === 'left' || dir === 'right') && Grafics.perfilNou ? 9 : 15 }),
                 frameRate: SPRITE_INEU.fps,
                 repeat: -1
             });
@@ -265,7 +327,16 @@ const Grafics = {
                 }
             }
         });
-        crea('cami', 64, 64, (ctx, w, h) => soroll(ctx, w, h, '#b89b6d', ['#a88b5d', '#c4a97c', '#9e8255'], 70, 1.5, 3));
+        crea('cami', 64, 64, (ctx, w, h) => {
+            soroll(ctx, w, h, '#b89b6d', ['#a88b5d', '#c4a97c', '#9e8255'], 70, 1.5, 3);
+            // Terra batuda: algunes pedretes clares i fosques escampades
+            let llavor = 23;
+            const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+            for (let i = 0; i < 22; i++) {
+                ctx.fillStyle = i % 3 ? 'rgba(232,214,170,0.55)' : 'rgba(84,62,36,0.38)';
+                ctx.beginPath(); ctx.ellipse(rnd() * w, rnd() * h, 0.8 + rnd() * 1.3, 0.6 + rnd() * 0.7, rnd() * 3, 0, Math.PI * 2); ctx.fill();
+            }
+        });
         crea('pedra', 64, 64, (ctx, w, h) => soroll(ctx, w, h, '#8c8a84', ['#7a7872', '#9c9a92', '#6e6c66'], 60, 2, 5));
         crea('herba_fosca', 64, 64, (ctx, w, h) => soroll(ctx, w, h, '#3f6a30', ['#4a7a38', '#345a28', '#52843f'], 100, 2, 3));
         crea('rajola', 64, 64, (ctx, w, h) => {
@@ -302,6 +373,29 @@ const Grafics = {
             ctx.fillStyle = '#7a5030'; ctx.fillRect(0, 12, w, 14);
             ctx.fillStyle = '#3e2714'; ctx.fillRect(4, 26, 8, 8); ctx.fillRect(w - 12, 26, 8, 8);
         });
+        // Marcs de pergamí per als quadres de diàleg, el HUD i el menú (es fan servir amb nineslice: vegeu marcPergami a ui.js)
+        crea('marc_gran', 2 * MARC_GRAN + 20, 2 * MARC_GRAN + 20, (ctx, w) => dibuixarMarc(ctx, w, MARC_GRAN, 1));
+        crea('marc_peti', 2 * MARC_PETI + 20, 2 * MARC_PETI + 20, (ctx, w) => dibuixarMarc(ctx, w, MARC_PETI, 0.7));
+        crea('cinta_nom', 56, 40, (ctx, w, h) => {
+            const g = ctx.createLinearGradient(0, 0, 0, h);
+            g.addColorStop(0, '#9a2c34'); g.addColorStop(1, '#601820');
+            ctx.fillStyle = g; ctx.fillRect(0, 5, w, h - 10);
+            ctx.globalCompositeOperation = 'destination-out';      // cua de cinta (tall en V) als dos extrems
+            ctx.beginPath(); ctx.moveTo(-1, 4); ctx.lineTo(11, h / 2); ctx.lineTo(-1, h - 4); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(w + 1, 4); ctx.lineTo(w - 11, h / 2); ctx.lineTo(w + 1, h - 4); ctx.fill();
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.strokeStyle = '#e0bd55'; ctx.lineWidth = 1.6;
+            ctx.beginPath(); ctx.moveTo(14, 8.5); ctx.lineTo(w - 14, 8.5); ctx.moveTo(14, h - 8.5); ctx.lineTo(w - 14, h - 8.5); ctx.stroke();
+            ctx.strokeStyle = 'rgba(30,8,10,0.75)'; ctx.lineWidth = 1.2;
+            ctx.beginPath(); ctx.moveTo(0, 5); ctx.lineTo(w, 5); ctx.moveTo(0, h - 5); ctx.lineTo(w, h - 5); ctx.stroke();
+        });
+        // Clariana de gespa tallada (vora difuminada): s'estén sobre l'herba
+        crea('clariana', 256, 160, (ctx, w, h) => {
+            ctx.translate(w / 2, h / 2); ctx.scale(1, h / w);
+            const g = ctx.createRadialGradient(0, 0, 0, 0, 0, w / 2);
+            g.addColorStop(0, 'rgba(158,212,98,0.55)'); g.addColorStop(0.6, 'rgba(158,212,98,0.4)'); g.addColorStop(1, 'rgba(158,212,98,0)');
+            ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, w / 2, 0, Math.PI * 2); ctx.fill();
+        });
         crea('reclinatori', 60, 34, (ctx, w, h) => {
             ctx.fillStyle = '#7a1f2a'; ctx.fillRect(4, 18, 52, 12);
             ctx.fillStyle = '#5b3a20'; ctx.fillRect(0, 0, w, 16);
@@ -318,6 +412,63 @@ const Grafics = {
         });
     }
 };
+
+// ---------- Marc de pergamí ----------
+// Quadrat de (2C + 20) px: les cantonades (C px) porten els ornaments i la resta es pot estirar sense que es noti.
+const MARC_GRAN = 44, MARC_PETI = 30;
+
+function dibuixarMarc(ctx, T, C, k) {
+    const rr = (x, y, w, h, r) => { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); };
+    // Fusta fosca amb filets d'or
+    rr(0, 0, T, T, 9); ctx.fillStyle = '#1e1008'; ctx.fill();
+    const fusta = ctx.createLinearGradient(0, 0, T, T);
+    fusta.addColorStop(0, '#6e4626'); fusta.addColorStop(0.5, '#47290f'); fusta.addColorStop(1, '#5e3a1c');
+    rr(2.5, 2.5, T - 5, T - 5, 7); ctx.fillStyle = fusta; ctx.fill();
+    rr(2.5, 2.5, T - 5, T - 5, 7); ctx.strokeStyle = '#d9b441'; ctx.lineWidth = 1.6; ctx.stroke();
+    rr(8.5, 8.5, T - 17, T - 17, 2); ctx.strokeStyle = '#b08a2c'; ctx.lineWidth = 1.2; ctx.stroke();
+
+    // Pergamí amb les vores cremades
+    const m = 11, pw = T - 2 * m;
+    const fons = ctx.createRadialGradient(T / 2, T / 2, 0, T / 2, T / 2, T * 0.75);
+    fons.addColorStop(0, '#f1e3b6'); fons.addColorStop(1, '#dcc58c');
+    ctx.fillStyle = fons; ctx.fillRect(m, m, pw, pw);
+    const crema = (x0, y0, x1, y1, bx, by, bw, bh) => {
+        const g = ctx.createLinearGradient(x0, y0, x1, y1);
+        g.addColorStop(0, 'rgba(112,64,18,0.55)'); g.addColorStop(1, 'rgba(112,64,18,0)');
+        ctx.fillStyle = g; ctx.fillRect(bx, by, bw, bh);
+    };
+    crema(m, 0, m + 14, 0, m, m, 14, pw); crema(T - m, 0, T - m - 14, 0, T - m - 14, m, 14, pw);
+    crema(0, m, 0, m + 14, m, m, pw, 14); crema(0, T - m, 0, T - m - 14, m, T - m - 14, pw, 14);
+    // Taques lleugeres
+    let llavor = 9;
+    const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+    for (let i = 0; i < 14; i++) {
+        ctx.fillStyle = 'rgba(150,100,40,' + (0.04 + rnd() * 0.05) + ')';
+        ctx.beginPath(); ctx.ellipse(m + 10 + rnd() * (pw - 20), m + 10 + rnd() * (pw - 20), 3 + rnd() * 9, 2 + rnd() * 6, rnd() * 3, 0, Math.PI * 2); ctx.fill();
+    }
+    // Doble filet marró a dins
+    ctx.strokeStyle = 'rgba(112,72,30,0.85)'; ctx.lineWidth = 1.2; ctx.strokeRect(m + 7, m + 7, pw - 14, pw - 14);
+    ctx.strokeStyle = 'rgba(112,72,30,0.5)'; ctx.lineWidth = 0.6; ctx.strokeRect(m + 10, m + 10, pw - 20, pw - 20);
+
+    // Ornaments de cantonada: rosassa daurada i dos arcs
+    [[0, 0, 1, 1], [T, 0, -1, 1], [0, T, 1, -1], [T, T, -1, -1]].forEach(([x, y, sx, sy]) => {
+        ctx.save(); ctx.translate(x, y); ctx.scale(sx * k, sy * k);
+        ctx.strokeStyle = 'rgba(122,78,24,0.9)'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(14, 14, 24, 0.12, Math.PI / 2 - 0.12); ctx.stroke();
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(14, 14, 31, 0.3, Math.PI / 2 - 0.3); ctx.stroke();
+        ctx.fillStyle = '#b08a2c';
+        [[40, 17], [17, 40]].forEach(([fx, fy]) => { ctx.beginPath(); ctx.ellipse(fx, fy, 3.6, 1.8, Math.atan2(fy - 14, fx - 14) + Math.PI / 2, 0, Math.PI * 2); ctx.fill(); });
+        const or = ctx.createRadialGradient(12, 12, 1, 14, 14, 11);
+        or.addColorStop(0, '#fff0a8'); or.addColorStop(0.6, '#d9b441'); or.addColorStop(1, '#8e6a1c');
+        ctx.fillStyle = or; ctx.strokeStyle = '#2a1608'; ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.arc(14, 14, 10, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#7a1c24'; ctx.beginPath(); ctx.arc(14, 14, 4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#e0bd55';
+        for (let a = 0; a < 8; a++) { ctx.beginPath(); ctx.arc(14 + Math.cos(a * Math.PI / 4) * 7, 14 + Math.sin(a * Math.PI / 4) * 7, 0.9, 0, Math.PI * 2); ctx.fill(); }
+        ctx.restore();
+    });
+}
 
 // ---------- Neteja del fons blanc ----------
 // Omple des de les vores tot el blanc connectat i el fa transparent. Els blancs interiors (ulls...) es conserven.

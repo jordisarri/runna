@@ -47,7 +47,6 @@ class ZonaRuines extends ZonaBase {
         this.nit = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x0a0a30, 0.22).setScrollFactor(0).setDepth(89000).setVisible(false);
 
         this.cartell(640, 700, DIALEGS.cartellRuinesPingpong);
-        this.cartell(300, 700, DIALEGS.cartellCami);
 
         this.arbres([[100, 150], [260, 90], [420, 190], [560, 80], [900, 130], [940, 300], [1560, 100],
                      [1540, 330], [90, 480], [180, 580], [1480, 420], [60, 1000], [1530, 1020],
