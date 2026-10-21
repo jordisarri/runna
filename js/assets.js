@@ -396,6 +396,33 @@ const Grafics = {
             g.addColorStop(0, 'rgba(158,212,98,0.55)'); g.addColorStop(0.6, 'rgba(158,212,98,0.4)'); g.addColorStop(1, 'rgba(158,212,98,0)');
             ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, w / 2, 0, Math.PI * 2); ctx.fill();
         });
+        // Medalló d'objecte (HUD, dreta) i la seva icona de flauta
+        crea('medallo', 88, 88, (ctx, w) => {
+            const c = w / 2;
+            const fusta = ctx.createLinearGradient(0, 0, w, w);
+            fusta.addColorStop(0, '#6e4626'); fusta.addColorStop(1, '#3e2410');
+            ctx.fillStyle = '#1e1008'; ctx.beginPath(); ctx.arc(c, c, c - 1, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = fusta; ctx.beginPath(); ctx.arc(c, c, c - 3.5, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#d9b441'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(c, c, c - 4, 0, Math.PI * 2); ctx.stroke();
+            const pergami = ctx.createRadialGradient(c, c, 2, c, c, c - 10);
+            pergami.addColorStop(0, '#f1e3b6'); pergami.addColorStop(1, '#d6bd82');
+            ctx.fillStyle = pergami; ctx.beginPath(); ctx.arc(c, c, c - 10, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = 'rgba(112,72,30,0.8)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(c, c, c - 14, 0, Math.PI * 2); ctx.stroke();
+        });
+        crea('icona_flauta', 64, 64, (ctx, w) => {
+            ctx.save(); ctx.translate(w / 2, w / 2); ctx.rotate(-Math.PI / 4);
+            ctx.fillStyle = '#b9854a'; ctx.strokeStyle = '#3a2412'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.roundRect(-26, -5, 52, 10, 5); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#d6aa6a'; ctx.fillRect(-24, -3, 48, 3);
+            ctx.fillStyle = '#3a2412';
+            [-12, -3, 6, 15].forEach(x => { ctx.beginPath(); ctx.arc(x, 1, 2, 0, Math.PI * 2); ctx.fill(); });
+            ctx.strokeStyle = '#7a1c24'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-17, -5); ctx.lineTo(-17, 5); ctx.stroke();
+            ctx.restore();
+            ctx.fillStyle = '#7a1c24';
+            ctx.beginPath(); ctx.ellipse(w * 0.74, w * 0.2, 3.4, 2.6, -0.4, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#7a1c24'; ctx.lineWidth = 1.8;
+            ctx.beginPath(); ctx.moveTo(w * 0.74 + 3, w * 0.2); ctx.lineTo(w * 0.74 + 3, w * 0.06); ctx.stroke();
+        });
         crea('reclinatori', 60, 34, (ctx, w, h) => {
             ctx.fillStyle = '#7a1f2a'; ctx.fillRect(4, 18, 52, 12);
             ctx.fillStyle = '#5b3a20'; ctx.fillRect(0, 0, w, 16);

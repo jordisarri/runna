@@ -141,7 +141,6 @@ class EscenaTitol extends Phaser.Scene {
         this.opcions = [];
         if (hiHa) this.opcions.push({ text: 'Continuar', fn: () => { if (Estat.carregar()) Joc.continuar(this); } });
         this.opcions.push({ text: 'Nova partida', fn: () => this.novaPartida(hiHa) });
-        this.opcions.push({ text: 'Carregar codi', fn: () => this.carregarCodi() });
 
         const separacio = 72;
         const y0 = ALT - 70 - (this.opcions.length - 1) * separacio;
@@ -182,12 +181,5 @@ class EscenaTitol extends Phaser.Scene {
         Estat.nova();
         Estat.desar();
         this.scene.start('Proleg');
-    }
-
-    carregarCodi() {
-        const codi = window.prompt('Enganxa el teu codi de partida:');
-        if (!codi) return;
-        if (Estat.importarCodi(codi)) Joc.continuar(this);
-        else window.alert('Aquest codi no és vàlid.');
     }
 }

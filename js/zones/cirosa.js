@@ -83,6 +83,7 @@ class ZonaCirosa extends ZonaBase {
         this.tweens.add({ targets: this.foc, scaleY: this.foc.scaleY * 1.08, yoyo: true, repeat: -1, duration: 260 });
         this.resplendor = this.add.circle(280, 900, 130, 0xff9a30, 0.12).setDepth(940);
         this.tweens.add({ targets: this.resplendor, alpha: 0.2, yoyo: true, repeat: -1, duration: 400 });
+        this.llocFlauta('foc', 280, 935, 170);   // música vora el foc dels pastors
         this.npc('pastor_a', 200, 960, DIALEGS.pastorA, { flipX: false });
         this.npc('pastor_b', 370, 975, DIALEGS.pastorB, { flipX: true });
         this.npc('pastor_vell', 285, 870, DIALEGS.pastorVell);

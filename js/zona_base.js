@@ -33,6 +33,7 @@ class ZonaBase extends Phaser.Scene {
         this.physics.world.setBounds(0, TOPE_Y - 30, c.amplada, c.alcada - TOPE_Y + 30);   // la caixa dels peus fa 30 d'alt
         this.obstacles = this.physics.add.staticGroup();
         this.interactius = [];
+        this.llocsFlauta = [];
         this.sortides = [];
         this.enemics = [];
         this.esbarzers = [];
@@ -520,6 +521,18 @@ class ZonaBase extends Phaser.Scene {
     }
 
     // ---------------- Música ----------------
+    // Llocs on una melodia pot fer efecte. Amb la flauta a la mà, l'Ineu hi pot tocar (ESPAI o el medalló de la dreta).
+    // pista: cal haver llegit abans la pista del lloc (flag 'flauta_<id>', que posa el diàleg en tancar-se).
+    llocFlauta(id, x, y, radi, pista = false) {
+        this.llocsFlauta.push({ id, x, y, radi, pista });
+    }
+
+    flautaActiva() {
+        if (!Estat.te('flauta') || !this.ineu) return false;
+        return this.llocsFlauta.some(l => (!l.pista || Estat.flag('flauta_' + l.id)) &&
+            Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, l.x, l.y) <= l.radi);
+    }
+
     obrirMusica() {
         if (this.canviant || this.game.scene.isActive('Musica')) return;
         this.ineu.body.setVelocity(0);
@@ -529,32 +542,11 @@ class ZonaBase extends Phaser.Scene {
 
     // Una melodia ha sonat bé. La zona pot gestionar-la amb enMelodia(nom) -> true
     melodiaTocada(nom) {
-        if (Estat.te('esquelles')) this.adormirEnemics();
         const gestionada = this.enMelodia ? this.enMelodia(nom) : false;
         if (!gestionada) {
             this.flotant(this.ineu.x, this.ineu.y - 150, '♪ ' + MELODIES[nom].nom, '#d8c8ff');
             this.time.delayedCall(900, () => this.flotant(this.ineu.x, this.ineu.y - 130, 'Aquí no passa res...', '#a89878'));
         }
-    }
-
-    // Les Esquelles dels Pastors: qualsevol cant adorm uns instants els enemics propers
-    adormirEnemics() {
-        const ara = this.time.now, c = this.ineu.body.center;
-        const cercle = this.add.circle(this.ineu.x, this.ineu.y - 30, 20, 0xd8c8ff, 0.0).setStrokeStyle(4, 0xd8c8ff, 0.9).setDepth(99990);
-        this.tweens.add({ targets: cercle, radius: 300, alpha: 0, duration: 800, onComplete: () => cercle.destroy() });
-        let n = 0;
-        this.enemics.forEach(e => {
-            if (e.mort || e.def.practica) return;
-            const b = e.spr.body.center;
-            if (Phaser.Math.Distance.Between(b.x, b.y, c.x, c.y) < 300) {
-                e.atorditFins = ara + (e.def.robust ? 1200 : 3000);
-                e.estat = 'repos'; e.fins = ara + 600;
-                e.spr.body.setVelocity(0);
-                this.flotant(b.x, b.y - 80, 'Zzz', '#d8c8ff');
-                n++;
-            }
-        });
-        if (n) this.flotant(this.ineu.x, this.ineu.y - 170, '♪ Les esquelles adormen', '#d8c8ff');
     }
 
     guardarPosicio() {
@@ -604,12 +596,12 @@ class ZonaBase extends Phaser.Scene {
         this.indicador.setVisible(!!proper);
         if (proper) this.indicador.setPosition(proper.x, proper.y - proper.altura);
         const T = Phaser.Input.Keyboard.JustDown;
-        if (accio && proper) this.interactuar(proper);
+        if (accio && this.flautaActiva()) this.obrirMusica();
+        else if (accio && proper) this.interactuar(proper);
         else if (accio && this.esbarzerDavant()) this.foc();
         else if (accio || T(this.tecles.J)) this.atacar();
         if (T(this.tecles.K) || T(this.tecles.SHIFT)) this.esquivar();
         if (Estat.te('foc_jaumeta') && T(this.tecles.F)) this.foc();
-        if (Estat.te('flauta') && T(this.tecles.M)) this.obrirMusica();
         time = this.time.now;   // un sol rellotge per a tot el combat
         this.actualitzarCombat(time);
         this.comprovarSortides();

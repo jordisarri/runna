@@ -15,6 +15,11 @@ function marcPergami(scene, x, y, w, h, clau = 'marc_gran') {
     return scene.add.nineslice(x, y, clau, undefined, w * RES, h * RES, c, c, c, c).setScale(1 / RES);
 }
 
+// Objectes que es mostren a la dreta del HUD. te: l'Ineu l'ha aconseguit; activa(zona): té efecte ara mateix (brilla i l'acció l'usa)
+const OBJECTES_HUD = [
+    { id: 'flauta', icona: 'icona_flauta', te: () => Estat.te('flauta'), activa: zona => zona.flautaActiva() }
+];
+
 class EscenaUI extends Phaser.Scene {
     constructor() { super('UI'); }
 
@@ -30,6 +35,7 @@ class EscenaUI extends Phaser.Scene {
         this.crearCaixaDialeg();
         this.crearMenu();
         this.crearControlsTactils();
+        this.crearObjectes();
 
         this.input.keyboard.on('keydown-ESC', () => {
             if (this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels')) return;
@@ -56,6 +62,33 @@ class EscenaUI extends Phaser.Scene {
 
         this.actualitzarHUD();
     }
+
+    // ---------------- OBJECTES (columna dreta) ----------------
+    // Cada objecte és un medalló només informatiu: quan és "actiu" (brilla), l'acció (ESPAI o tocar la meitat dreta
+    // de la pantalla) l'utilitza. Vegeu ZonaBase.flautaActiva.
+    crearObjectes() {
+        this.objectesHUD = OBJECTES_HUD.map((o, i) => {
+            const x = AMPLE - 56, y = 140 + i * 104;
+            const halo = this.add.circle(x, y, 54, 0xffe08a, 0).setVisible(false);
+            const fons = this.add.image(x, y, 'medallo').setScale(1 / RES).setVisible(false);
+            const icona = this.add.image(x, y, o.icona).setScale(1 / RES).setVisible(false);
+            return { o, halo, fons, icona };
+        });
+    }
+
+    refrescaObjectes() {
+        if (!this.objectesHUD) return;
+        const lliure = !this.dialeg && !this.menuObert && !this.mapaObert && !!Estat.dades;
+        const zona = lliure ? Joc.zonaActiva(this) : null;
+        this.objectesHUD.forEach(({ o, halo, fons, icona }) => {
+            const vis = lliure && o.te();
+            fons.setVisible(vis); icona.setVisible(vis);
+            const actiu = vis && !!zona && o.activa(zona);
+            halo.setVisible(actiu).setFillStyle(0xffe08a, actiu ? 0.3 + 0.25 * Math.sin(this.time.now / 180) : 0);
+        });
+    }
+
+    update() { this.refrescaObjectes(); }
 
     // La zona consulta això per saber si l'Ineu pot moure's
     get bloquejat() {
@@ -95,8 +128,7 @@ class EscenaUI extends Phaser.Scene {
         this.textObjectiu.setText('Objectiu: ' + (d.objectiu || ''));
         const altHUD = Math.max(150, 110 + this.textObjectiu.height + 28);
         this.fonsHUD.setSize(460 * RES, altHUD * RES);
-        const flauta = Estat.te('flauta');
-        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (flauta ? ' · M: flauta' : '') + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · K: esquivar · ESC: menú');
+        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · K: esquivar · ESC: menú');
     }
 
     mostrarZona(nom) {
@@ -174,6 +206,10 @@ class EscenaUI extends Phaser.Scene {
         if (this.timerText) { this.acabarEscriptura(); return; }
         this.dialeg.pagina++;
         if (this.dialeg.pagina < this.dialeg.dades.pagines.length) { this.mostrarPagina(); return; }
+        this.tancarDialeg();
+    }
+
+    tancarDialeg() {
         const { dades, enTancar } = this.dialeg;
         this.dialeg = null;
         this.caixa.setVisible(false);
@@ -187,21 +223,18 @@ class EscenaUI extends Phaser.Scene {
     crearMenu() {
         this.menu = this.add.container(0, 0).setVisible(false).setDepth(60);
         const vel = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.65).setOrigin(0).setInteractive();
-        const panell = marcPergami(this, AMPLE / 2, ALT / 2, 640, 700);
-        const titol = this.add.text(AMPLE / 2, ALT / 2 - 296, 'Pausa', { fontFamily: FONT_PLACA, fontSize: '44px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5);
+        const panell = marcPergami(this, AMPLE / 2, ALT / 2, 640, 470);
+        const titol = this.add.text(AMPLE / 2, ALT / 2 - 160, 'Pausa', { fontFamily: FONT_PLACA, fontSize: '44px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5);
         this.menu.add([vel, panell, titol]);
 
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
             { text: 'Mapa', fn: () => this.obrirMapa() },
-            { text: 'Tocar la flauta', fn: () => this.tocarFlauta() },
             { text: 'Desar partida', fn: () => { this.tancarMenu(); this.desar(); } },
-            { text: 'Copiar codi de partida', fn: () => this.copiarCodi() },
-            { text: 'Carregar codi de partida', fn: () => this.carregarCodi() },
             { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];
         this.textOpcions = this.opcions.map((o, i) => {
-            const t = this.add.text(AMPLE / 2, ALT / 2 - 215 + i * 78, o.text, { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#3a2412', resolution: 2 })
+            const t = this.add.text(AMPLE / 2, ALT / 2 - 80 + i * 84, o.text, { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#3a2412', resolution: 2 })
                 .setOrigin(0.5).setInteractive({ useHandCursor: true })
                 .on('pointerover', () => { this.seleccio = i; this.pintarSeleccio(); })
                 .on('pointerdown', () => this.executarOpcio(i));
@@ -263,43 +296,11 @@ class EscenaUI extends Phaser.Scene {
 
     executarOpcio(i) { this.opcions[i].fn(); }
 
-    tocarFlauta() {
-        if (!Estat.te('flauta')) { this.notifica('Encara no tens cap flauta'); return; }
-        const zona = Joc.zonaActiva(this);
-        this.tancarMenu();
-        if (zona) zona.obrirMusica();
-    }
-
     // Desa la posició actual de l'Ineu (la zona activa la informa)
     desar() {
         const zona = Joc.zonaActiva(this);
         if (zona) zona.guardarPosicio();
         this.notifica(Estat.desar() ? 'Partida desada' : 'No s\'ha pogut desar');
-    }
-
-    copiarCodi() {
-        const zona = Joc.zonaActiva(this);
-        if (zona) zona.guardarPosicio();
-        const codi = Estat.exportarCodi();
-        const manual = () => window.prompt('Copia aquest codi i guarda\'l bé:', codi);
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(codi)
-                .then(() => this.notifica('Codi copiat al porta-retalls'))
-                .catch(manual);
-        } else {
-            manual();
-        }
-    }
-
-    carregarCodi() {
-        const codi = window.prompt('Enganxa el teu codi de partida:');
-        if (!codi) return;
-        if (Estat.importarCodi(codi)) {
-            this.tancarMenu();
-            Joc.continuar(this);
-        } else {
-            this.notifica('Aquest codi no és vàlid');
-        }
     }
 
     // ---------------- CONTROLS TÀCTILS ----------------

@@ -121,7 +121,8 @@ class ZonaCreu extends ZonaBase {
 
         // Bassadòria
         this.posar('bassadoria', 1010, 770, { col: { w: 236, h: 92, dy: -26 } });
-        this.interactiu(1010, 700, 150, DIALEGS.bassadoria, { altura: 110 });
+        this.interactiu(1010, 700, 150, DIALEGS.bassadoria, { altura: 110, enTancar: () => Estat.posaFlag('flauta_bassadoria') });
+        this.llocFlauta('bassadoria', 1010, 740, 220, true);
         if (!Estat.flag('bassadoriaNeta')) this.boiraBass = this.boira(1010, 700, 190, 60, 2.2);
 
         // L'Home del Carruatge Verd, a la vora del camí

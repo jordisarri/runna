@@ -56,8 +56,12 @@ class ZonaPlaca extends ZonaBase {
         this.pedraSecreta = this.add.rectangle(1190, 252, 44, 34, 0x8a7a64).setStrokeStyle(3, 0x2a1f18).setDepth(260);
         this.interactiu(1190, 290, 85, DIALEGS.pedraSecreta, {
             altura: 90,
-            enTancar: () => { if (Estat.flag('tresorObert')) this.canviarZona('ZonaTresor', 'porta'); }
+            enTancar: () => {
+                Estat.posaFlag('flauta_pedra');
+                if (Estat.flag('tresorObert')) this.canviarZona('ZonaTresor', 'porta');
+            }
         });
+        this.llocFlauta('pedra', 1190, 310, 150, true);
         this.cartell(1160, 420, DIALEGS.cartellCantonada);
 
         // --- Reixes del terra per on surt la boira ---

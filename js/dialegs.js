@@ -17,7 +17,7 @@ function consellTieta(E, qui) {
     else if (!E.te("basto")) consell = "Agafa la branca que ha caigut al peu del Til·ler. Un monjo sense bastó no va gaire lluny.";
     else if (!E.flag("tutorialCombat")) consell = "Prova el bastó amb els espantaocells del Germà Francesc: J o ESPAI per colpejar, K per esquivar.";
     else if (!E.flag("cantAurora")) consell = "Al Santuari, la Pianista encara sap un cant que la boira no li pot prendre. Fes-te'l ensenyar.";
-    else if (!E.flag("bassadoriaNeta")) consell = "Prem M amb la flauta i toca 1-2-3 davant la Bassadòria, al sud de la Plaça.";
+    else if (!E.flag("bassadoriaNeta")) consell = "Davant la Bassadòria, al sud de la Plaça, prem ESPAI i tria tocar la flauta: 1-2-3.";
     else if (!E.flag("fontNeta")) consell = "Al bosc de l'oest, a tocar del Til·ler, hi ha una Font del Bisbe que s'ha adormit. Porta-li tres herbes: la de Sant Joan, la ruda i la farigola.";
     else if (E.flag("soparFet") && !E.flag("saber")) consell = "El Pare Alcuí, a la biblioteca, sap la paraula que desperta l'espasa. Només te la dirà si has parlat amb l'ombra del monjo.";
     else if (E.flag("soparFet") && !E.flag("benediccio")) consell = "El Pare Jordi, a la Plaça, vol donar-te la benedicció. Fes-li una visita.";
@@ -185,14 +185,14 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "La Pianista", text: "Ai, mare de Déu, les esquelles dels pastors! Fa vint anys que no en sentia el so. Deixa-me-les tocar un instant..." },
-                    { qui: "La Pianista", text: "Duen una música antiga. Amb la flauta, qualsevol cant que toquis adormirà el mal que tinguis a prop. Vés amb compte, que amb aquesta força la boira no et perdonarà." }
+                    { qui: "La Pianista", text: "Duen una música antiga. Amb la flauta, els cants antics encara desperten allò que dorm sota la boira. Vés amb compte, que amb aquesta força la boira no et perdonarà." }
                 ],
                 enAcabar: () => E.posaFlag("esquellesVistes")
             };
         }
         return { pagines: [{ qui: "La Pianista", text: E.flag("bassadoriaNeta")
             ? "Se sent l'aigua cantar des d'aquí, fill. Ho has aconseguit. Torna'm quan hi hagi un altre cant per aprendre."
-            : "Si trobes la manera de tornar la música, porta-me-la. Jo no em moc d'aquest banc, ni que s'acabi el món. Toca el cant amb la flauta: tecla M." }] };
+            : "Si trobes la manera de tornar la música, porta-me-la. Jo no em moc d'aquest banc, ni que s'acabi el món. Toca el cant amb la flauta quan siguis al lloc on cal." }] };
     },
 
     pareDaniel: E => {
@@ -344,7 +344,7 @@ const DIALEGS = {
                 pagines: [
                     { qui: "El Gran Til·ler", text: "Sento l'aigua cantar de lluny... La Bassadòria és neta. Has fet bé, petit monjo." },
                     { qui: "El Gran Til·ler", text: "Aquest camí del nord el vaig tancar jo, amb arbres i esbarzers, perquè la boira no hi pugés. Ara que l'aigua respira, el deixo obert." },
-                    { qui: "El Gran Til·ler", text: "A la Cirosa viuen uns pastors desterrats que guarden les esquelles dels seus avis: amb elles, qualsevol cant fa adormir el mal. Tracta'ls amb dolçor, que ja han patit prou. I vés amb compte: un monjo hi ha pujat aquests dies." },
+                    { qui: "El Gran Til·ler", text: "A la Cirosa viuen uns pastors desterrats que guarden les esquelles dels seus avis: amb elles es van afinar els cants antics. Tracta'ls amb dolçor, que ja han patit prou. I vés amb compte: un monjo hi ha pujat aquests dies." },
                     { qui: "", text: "Els arbres del camí del nord s'aparten amb un cruixit llarg." }
                 ],
                 enAcabar: () => {
@@ -442,7 +442,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: "", text: "L'ombra espera, immòbil, amb les mans unides." },
-                { qui: "Ineu", text: "Toca el Cant de les Pedres amb la flauta: tecla M, i després 3-1-2-1." }
+                { qui: "Ineu", text: "Toca el Cant de les Pedres amb la flauta: 3-1-2-1." }
             ]
         };
     },
@@ -743,8 +743,8 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pastor vell", text: "Has tornat el ramat... i li has tret la boira a aquell pobre home. Que Déu t'ho pagui, monjo." },
-                    { qui: "Pastor vell", text: "Aquí tens les esquelles dels nostres avis. Fes-les sonar amb la teva flauta, i els mals bitxos s'adormiran. No dura gaire, però de vegades és tot el que cal." },
-                    { qui: "", text: "Has obtingut les ESQUELLES DELS PASTORS!\nQualsevol cant que toquis amb la flauta adorm uns segons els enemics que tinguis a prop." }
+                    { qui: "Pastor vell", text: "Aquí tens les esquelles dels nostres avis. Que sonin amb la teva flauta, i que els cants antics et guiïn." },
+                    { qui: "", text: "Has obtingut les ESQUELLES DELS PASTORS!\nEls cants antics sonaran més clars amb elles." }
                 ],
                 enAcabar: () => {
                     E.dona("esquelles"); E.posaFlag("esquelles");

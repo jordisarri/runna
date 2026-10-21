@@ -1,7 +1,7 @@
 /**
  * MÚSICA I MELODIES
  * La Pianista ensenya cants a l'Ineu (lliçó tipus "escolta i repeteix"). Un cop après, es poden
- * tocar amb la flauta (tecla M o botó ♪): prem 1, 2 i 3. Si estàs al lloc adequat, la melodia fa efecte
+ * tocar amb la flauta (el medalló de la dreta o ESPAI als llocs on té efecte): 1, 2 i 3. Si estàs al lloc adequat, la melodia fa efecte
  * (la zona implementa enMelodia(nom) i retorna true si l'ha gestionada).
  */
 const MELODIES = {
@@ -33,11 +33,11 @@ function completarLliço(nom) {
         E.dona('flauta');
         pagines = [
             { qui: 'La Pianista', text: 'Així, així! Tens oïda, fill. El Cant de l\'Aurora: tres notes, i la boira es fa enrere.' },
-            ...(primera ? [{ qui: 'La Pianista', text: 'Pren aquesta flauta de canya, que era del meu avi. Prem M i toca les notes amb 1, 2 i 3.' },
-                           { qui: '', text: 'Has obtingut la FLAUTA DE LA PIANISTA!\nTecla M (o botó ♪) per tocar · notes 1, 2 i 3.' }] : []),
+            ...(primera ? [{ qui: 'La Pianista', text: 'Pren aquesta flauta de canya, que era del meu avi. Toca les notes 1, 2 i 3.' },
+                           { qui: '', text: 'Has obtingut la FLAUTA DE LA PIANISTA!\nToca el medalló de la flauta, a la dreta de la pantalla (o ESPAI quan brilli).' }] : []),
             { qui: 'La Pianista', text: 'Toca\'l davant l\'aigua de la Bassadòria, la que surt tèrbola. Allà la boira té l\'arrel.' }
         ];
-        E.posaObjectiu('Toca el Cant de l\'Aurora (M, després 1-2-3) davant la Bassadòria, a l\'oest de la Plaça.');
+        E.posaObjectiu('Toca el Cant de l\'Aurora (1-2-3) davant la Bassadòria, a l\'oest de la Plaça.');
     } else if (nom === 'pedres') {
         pagines = [
             { qui: 'La Pianista', text: 'El Cant de les Pedres: 3-1-2-1. Les pedres antigues sempre l\'han entès. Toca\'l davant l\'ombra del monjo.' }
@@ -87,7 +87,6 @@ class EscenaMusica extends Phaser.Scene {
             k.on('keydown-NUMPAD_' + nom, () => this.nota(i + 1, true));
         });
         k.on('keydown-ESC', () => this.tancar(false));
-        k.on('keydown-M', () => { if (!llico) this.tancar(false); });
 
         if (llico) {
             this.titol.setText('Lliçó: ' + this.melodia.nom);

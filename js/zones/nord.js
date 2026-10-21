@@ -41,7 +41,8 @@ class ZonaRuines extends ZonaBase {
         // L'ombra del monjo: només es veu quan has llegit el primer fragment del pergamí
         this.ombraMonjo = this.add.image(1130, 340, 'ombra_monjo').setOrigin(0.5, 1)
             .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(340).setAlpha(0);
-        this.interactiu(1130, 380, 95, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1') });
+        this.interactiu(1130, 380, 95, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1'), enTancar: () => Estat.posaFlag('flauta_ombra') });
+        this.llocFlauta('ombra', 1130, 390, 160, true);
         this.tweens.add({ targets: this.ombraMonjo, y: 344, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
         // Ambient de nit quan la llegenda s'ha començat a descobrir
         this.nit = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x0a0a30, 0.22).setScrollFactor(0).setDepth(89000).setVisible(false);

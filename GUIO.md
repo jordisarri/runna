@@ -92,7 +92,7 @@ La sala ha quedat com un museu de l'horror: eines de tortura rovellades, cadenes
 | Servei de Josep | Josep t'ensenya la seva màgia | Mecànica de ping-pong (A8) |
 | Palanca | En Jordi de la Caseta | Moure roques, obrir reixes, girar el cap de l'Home del Raïm |
 | **Flauta de la Pianista** | La Pianista, en acabar la 1a lliçó | Instrument: tocar melodies (tecla **M** o botó ♪, notes **1-2-3**) |
-| Esquelles dels Pastors | La Cirosa (pastor vell, després del Pastor de Boira) | Qualsevol cant tocat amb la flauta **adorm uns segons els enemics propers** (radi ~300; els bosses, menys temps) |
+| Esquelles dels Pastors | La Cirosa (pastor vell, després del Pastor de Boira) | Objecte de trama (els pastors te'l donen i el Til·ler en parla); **no adorm enemics**: els enemics només es derroten amb el bastó o l'espasa |
 | Aigua de la Font del Bisbe / Cristall de Gel | Missió de la Font (Bosc de Sant Joan) | Ingredient del telescopi de Garf; cura màxima |
 | Telescopi del Garf | Garf (amb el Cristall de Gel) | Veure estels als Dipòsits |
 | Llavor de Lluna | Sansa (compra màgica) | Isidre la planta al Jardí: obre l'entrada secreta de l'Hospederia |
