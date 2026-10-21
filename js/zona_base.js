@@ -54,9 +54,10 @@ class ZonaBase extends Phaser.Scene {
         this.crearIneu();
 
         const cam = this.cameras.main;
+        cam.setViewport(0, ALT_HUD, AMPLE, ALT - ALT_HUD);   // la franja de dalt és per al HUD: no s'hi dibuixa escenari
         cam.setZoom(ZOOM_CAMERA);
         // Si el món és més petit que la pantalla (interiors), es centra en lloc de quedar enganxat a una vora
-        const vw = AMPLE / ZOOM_CAMERA, vh = ALT / ZOOM_CAMERA, alcadaMon = c.alcada + this.extraSud;
+        const vw = AMPLE / ZOOM_CAMERA, vh = (ALT - ALT_HUD) / ZOOM_CAMERA, alcadaMon = c.alcada + this.extraSud;
         const bx = Math.max(0, (vw - c.amplada) / 2), by = Math.max(0, (vh - alcadaMon) / 2);
         cam.setBounds(-bx, -by, c.amplada + 2 * bx, alcadaMon + 2 * by);
         cam.startFollow(this.ineu, true, 0.12, 0.12);
@@ -130,7 +131,7 @@ class ZonaBase extends Phaser.Scene {
     // és a la franja de baix (vora sud, sortides) baixa, i el terra que la travessa s'allarga.
     ampliarSud() {
         const c = this.config;
-        const extra = this.esInterior() ? 0 : Math.ceil(ALT / ZOOM_CAMERA) - c.alcada;
+        const extra = this.esInterior() ? 0 : Math.ceil((ALT - ALT_HUD) / ZOOM_CAMERA) - c.alcada;
         if (extra <= 0) return;
         const tall = c.alcada - BANDA_SUD;
         this.extraSud = extra;
