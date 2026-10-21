@@ -12,7 +12,7 @@ class ZonaCamiCirosa extends ZonaBase {
             alcada: 2200,
             colorFons: '#1f3a1a',
             entrades: {
-                celles: { x: 700, y: 2130, dir: 'amunt' },
+                tiller: { x: 700, y: 2130, dir: 'amunt' },
                 cirosa: { x: 580, y: 80,   dir: 'avall' }
             }
         });
@@ -52,7 +52,7 @@ class ZonaCamiCirosa extends ZonaBase {
         [[700, 2000], [330, 1500], [900, 1200], [560, 560]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
 
         this.boira(700, 1400, 500, 120, 0.8);
-        this.sortida(620, 2186, 160, 14, 'ZonaCelles', 'cirosa');
+        this.sortida(620, 2186, 160, 14, 'ZonaTiller', 'cirosa');
         this.sortida(500, 0, 160, 14, 'ZonaCirosa', 'cami');
         this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, 0.09).setScrollFactor(0).setDepth(90000);
     }

@@ -14,14 +14,16 @@ const MAPA = {
         { id: 'ZonaCabanaInt',     nom: 'Dins la cabana',           x: 200,  y: 110 },
         { id: 'ZonaCabana',        nom: 'Cabana de la Jaumeta',     x: 370,  y: 110 },
         { id: 'ZonaBosc',          nom: 'Bosc de Sant Joan',        x: 520,  y: 200 },
-        { id: 'ZonaCelles',        nom: 'Cel·les i Til·ler',        x: 800,  y: 210 },
+        { id: 'ZonaTiller',        nom: 'El Gran Til·ler',          x: 800,  y: 130 },
+        { id: 'ZonaCelles',        nom: 'Les Cel·les',              x: 800,  y: 210 },
         // Franja de les Runes, el Cementiri i el camí de la Desaparició
         { id: 'ZonaErmitaInt',     nom: 'Dins l\'ermita',           x: 150,  y: 300 },
         { id: 'ZonaErmita',        nom: 'Ermita Desaparició',       x: 330,  y: 300 },
         { id: 'ZonaCami',          nom: 'Camí de la Desaparició',   x: 560,  y: 300 },
         { id: 'ZonaRuines',        nom: 'Les Runes',                x: 800,  y: 300 },
         { id: 'ZonaCementiri',     nom: 'El Cementiri',             x: 1050, y: 300 },
-        { id: 'ZonaPingpong',      nom: 'Sala del Ping-pong',       x: 640,  y: 390 },
+        { id: 'ZonaPingpong',      nom: 'El Celler',                x: 640,  y: 390 },
+        { id: 'ZonaGolfes',         nom: 'Golfes del Santuari',      x: 930,  y: 335 },
         { id: 'ZonaEsglesia',      nom: 'Santuari',                 x: 930,  y: 390 },
         { id: 'ZonaEra',           nom: 'L\'Era',                   x: 330,  y: 390 },
         // Fila del poble (oest -> est): Jardí · Hospederia · Taverna · Casa Gran · Plaça · Monestir
@@ -33,7 +35,9 @@ const MAPA = {
         { id: 'ZonaMonestir',      nom: 'El Monestir',              x: 1100, y: 470 },
         { id: 'ZonaCasaGranInt',   nom: 'Casa Gran · Escalinata',   x: 760,  y: 550 },
         { id: 'ZonaCasaCripta',    nom: 'Cripta dels Monjos',       x: 760,  y: 596 },
-        { id: 'ZonaCreu',          nom: 'Creu i Bassadòria',        x: 930,  y: 550 },
+        { id: 'ZonaCasaTresor',    nom: 'Cambra secreta',          x: 590,  y: 550 },
+        { id: 'ZonaPassadis',      nom: 'Passadís secret',          x: 690,  y: 430 },
+        { id: 'ZonaCreu',          nom: 'La Bassadòria',            x: 930,  y: 550 },
         // Sud-oest i franja sud
         { id: 'ZonaCamiRov',       nom: 'Camí Rovellonera',         x: 230,  y: 540 },
         { id: 'ZonaRovellonera',   nom: 'Rovellonera',              x: 400,  y: 590 },
@@ -42,14 +46,14 @@ const MAPA = {
         { id: 'ZonaDolmen',        nom: 'El Dolmen',                x: 900,  y: 640 }
     ],
     enllacos: [
-        ['ZonaPlaca', 'ZonaCreu'], ['ZonaPlaca', 'ZonaCasaGran'], ['ZonaCasaGran', 'ZonaCasaGranInt'], ['ZonaCasaGranInt', 'ZonaCasaCripta'], ['ZonaPlaca', 'ZonaCasaGranInt'],
-        ['ZonaPlaca', 'ZonaEsglesia'], ['ZonaPlaca', 'ZonaMonestir'], ['ZonaPlaca', 'ZonaRuines'],
+        ['ZonaPlaca', 'ZonaCreu'], ['ZonaPlaca', 'ZonaCasaGran'], ['ZonaCasaGran', 'ZonaCasaGranInt'], ['ZonaCasaGranInt', 'ZonaCasaCripta'], ['ZonaCasaGranInt', 'ZonaCasaTresor'], ['ZonaCasaTresor', 'ZonaPassadis'], ['ZonaPassadis', 'ZonaPingpong'],
+        ['ZonaPlaca', 'ZonaEsglesia'], ['ZonaEsglesia', 'ZonaGolfes'], ['ZonaPlaca', 'ZonaMonestir'], ['ZonaPlaca', 'ZonaRuines'],
         ['ZonaRuines', 'ZonaPingpong'], ['ZonaRuines', 'ZonaCami'], ['ZonaCami', 'ZonaErmita'],
         ['ZonaErmita', 'ZonaErmitaInt'], ['ZonaErmita', 'ZonaEra'], ['ZonaEra', 'ZonaJardi'],
         ['ZonaJardi', 'ZonaHospederia'], ['ZonaJardi', 'ZonaCasaGran'],
         ['ZonaRuines', 'ZonaCementiri'], ['ZonaCementiri', 'ZonaMonestir'],
         ['ZonaRuines', 'ZonaCelles'], ['ZonaCelles', 'ZonaBosc'], ['ZonaBosc', 'ZonaCabana'], ['ZonaCabana', 'ZonaCabanaInt'],
-        ['ZonaCelles', 'ZonaCamiCirosa'], ['ZonaCamiCirosa', 'ZonaCirosa'],
+        ['ZonaCelles', 'ZonaTiller'], ['ZonaTiller', 'ZonaCamiCirosa'], ['ZonaCamiCirosa', 'ZonaCirosa'],
         ['ZonaEra', 'ZonaCamiRov'], ['ZonaCamiRov', 'ZonaRovellonera'], ['ZonaRovellonera', 'ZonaGabriel'],
         ['ZonaGabriel', 'ZonaDipositos'], ['ZonaDipositos', 'ZonaDolmen']
     ],

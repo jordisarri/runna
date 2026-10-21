@@ -129,7 +129,7 @@ class ZonaErmitaInt extends ZonaBase {
 // ---------------- L'ERA ----------------
 // Un encreuament de camins de terra (Ermita al nord, Rovellonera a ponent, Jardí a llevant) i, al sud, una gran clariana
 // de gespa amb dos roures enormes i, al mig, dos bancs un davant de l'altre.
-const ERA_BANC_X = 960, ERA_BANC_N = 670, ERA_BANC_S = 870;   // pujats perquè la caixa de diàleg (a baix) no tapi l'Ineu assegut
+const ERA_BANC_X = 960, ERA_BANC_N = 700, ERA_BANC_S = 880;   // pujats perquè la caixa de diàleg (a baix) no tapi l'Ineu assegut
 
 class ZonaEra extends ZonaBase {
     constructor() {
@@ -147,14 +147,14 @@ class ZonaEra extends ZonaBase {
 
     construir() {
         this.terra('herba', 0, 0, 1800, 1300, -1100);
-        this.add.image(ERA_BANC_X, 920, 'clariana').setDisplaySize(1500, 900).setDepth(-1050);   // gespa tallada de l'era
+        this.add.image(ERA_BANC_X, 800, 'clariana').setDisplaySize(1500, 900).setDepth(-1050);   // gespa tallada de l'era
         this.terra('cami', 240, 0, 160, 630);             // cap a l'Ermita (nord)
         this.terra('cami', 0, 500, 1800, 130);            // de la Rovellonera (oest) al Jardí (est)
 
         // Dos roures enormes amb dos bancs al mig, un davant de l'altre: el Garf seu al del nord i l'Ineu pot seure al del sud
-        this.posar('roure', 560, 1080, { escala: 1.7, col: { w: 90, h: 36 } });
-        this.posar('roure', 1360, 1080, { escala: 1.7, col: { w: 90, h: 36 } });
-        this.posar('banc', ERA_BANC_X, ERA_BANC_N, { col: { w: 140, h: 16 } });
+        this.posar('roure', 520, 1080, { escala: 1.7, col: { w: 90, h: 36 } });
+        this.posar('roure', 1400, 1080, { escala: 1.7, col: { w: 90, h: 36 } });
+        this.posar('banc_respatller', ERA_BANC_X, ERA_BANC_N, { col: { w: 140, h: 16 } });
         this.posar('banc', ERA_BANC_X, ERA_BANC_S, { col: { w: 140, h: 16 } });
 
         // El Garf, savi inventor: jove, grassonet i ros, assegut al banc de dalt
@@ -167,7 +167,7 @@ class ZonaEra extends ZonaBase {
         this.posar('carruatge', 260, 1230, { col: { w: 190, h: 50 } });
         this.npc('home_carruatge', 390, 1250, DIALEGS.homeCarruatge);
 
-        this.cartell(450, 665, DIALEGS.cartellEra);
+        this.cartell(470, 485, DIALEGS.cartellEra);
         this.arbres([[120, 200], [560, 150], [760, 230], [1000, 170], [1250, 230], [1500, 160], [1700, 260],
                      [600, 380], [900, 400], [1200, 390], [1550, 400], [1700, 720], [100, 780], [90, 1000],
                      [1700, 1100], [1700, 1270], [1000, 1270], [700, 1270], [120, 1280]]);
@@ -204,87 +204,77 @@ class ZonaJardi extends ZonaBase {
         super('ZonaJardi', {
             nom: 'Jardí pergolat',
             amplada: 1600,
-            alcada: 1000,
-            entrades: { era: { x: 60, y: 840, dir: 'dreta' }, taverna: { x: 1540, y: 840, dir: 'esquerra' } }
+            alcada: 1100,
+            entrades: { era: { x: 60, y: 960, dir: 'dreta' }, taverna: { x: 1540, y: 960, dir: 'esquerra' } }
         });
     }
 
     construir() {
-        this.terra('herba', 0, 0, 1600, 1000, -1100);
-        this.terra('cami', 0, 780, 1600, 130);            // camí de l'Era a la Taverna, davant la pèrgola
-        this.terra('cami', 740, 690, 150, 100);           // entrada a la pèrgola (buit de la fila de columnes)
-        this.terra('cami', 1095, 690, 120, 100);          // porta de l'Hospederia, a l'alçada de l'entrada de la pèrgola
-        this.terra('pedra', 300, 470, 700, 100);          // passadís de pedra dins la pèrgola
+        this.terra('herba', 0, 0, 1600, 1100, -1100);
+        this.terra('cami', 0, 880, 1600, 130);            // camí de l'Era a la Taverna, davant la pèrgola i la casa
+        this.terra('pedra', 70, 700, 400, 120);           // passadís de pedra dins la pèrgola
 
-        // --- Pèrgola de pedra: dues files de columnes ---
-        const X0 = 320, X1 = 980, PAS = 110;
-        for (let x = X0; x <= X1; x += PAS) {
-            this.posar('columna', x, 330, { col: { w: 30, h: 14 } });
-            if (x < 740 || x > 890) this.posar('columna', x, 690, { col: { w: 30, h: 14 } });
-        }
-        // Parets baixes entre columnes (el jardí només s'entra pel buit del davant o per l'Hospederia)
-        this.colisio(650, 318, 720, 30);
-        this.colisio(520, 690, 440, 18);
-        this.colisio(940, 690, 120, 18);
-        this.colisio(1005, 520, 20, 400);
-        this.colisio(290, 520, 20, 400);
+        // --- L'Hospederia: un hotel grandiós a la dreta (1100 d'ample, sense tallar pels costats) ---
+        // La porta (~110x150) queda a x≈1139.
+        this.posar('hospederia', 1050, 760, { fonsY: 640 });
+        this.colisio(1050, 715, 1100, 90);
+        this.blocDarrere(1050, 1100, 670);
+        this.interactiu(1139, 775, 90, DIALEGS.hospederia, { altura: 180 });
 
-        // Sostre d'heura (per sobre de tot, translúcid: es veu què hi ha a sota)
+        // --- Pèrgola de pedra, més petita, al costat esquerre de la casa: dues files de columnes ---
+        const COLS = [90, 205, 320, 435], YB = 620, YF = 840;
+        COLS.forEach(x => {
+            this.posar('columna', x, YB, { col: { w: 30, h: 14 } });
+            if (x !== 205) this.posar('columna', x, YF, { col: { w: 30, h: 14 } });   // buit al davant: l'entrada
+        });
+        this.colisio(262, YB - 12, 390, 30);              // paret del fons
+        this.colisio(132, YF, 100, 18);                   // parets baixes del davant (deixen l'entrada)
+        this.colisio(378, YF, 150, 18);
+        this.colisio(72, 730, 20, 240);
+        this.colisio(458, 730, 20, 240);
+
+        // Sostre d'heura (translúcid per sobre de tot)
         const sostre = this.add.graphics().setDepth(85000);
-        sostre.fillStyle(0x2c5a2a, 0.5).fillRect(300, 190, 710, 380);
+        sostre.fillStyle(0x2c5a2a, 0.5).fillRect(72, 480, 390, 240);
         sostre.lineStyle(10, 0x4a3a28, 0.7);
-        for (let x = 320; x <= 980; x += PAS) sostre.lineBetween(x, 190, x, 570);
-        sostre.lineBetween(300, 380, 1010, 380);
+        COLS.forEach(x => sostre.lineBetween(x, 480, x, 720));
+        sostre.lineBetween(72, 600, 462, 600);
         let llavor = 5;
         const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
-        for (let i = 0; i < 150; i++) {
-            sostre.fillStyle(i % 3 ? 0x3f7a3a : 0x6aa04a, 0.55).fillCircle(300 + rnd() * 710, 190 + rnd() * 380, 10 + rnd() * 14);
-        }
-        for (let x = 310; x < 1010; x += 28) sostre.fillStyle(0x3f7a3a, 0.7).fillCircle(x, 572 + rnd() * 10, 11);
+        for (let i = 0; i < 70; i++) sostre.fillStyle(i % 3 ? 0x3f7a3a : 0x6aa04a, 0.55).fillCircle(72 + rnd() * 390, 480 + rnd() * 240, 10 + rnd() * 12);
+        for (let x = 80; x < 460; x += 28) sostre.fillStyle(0x3f7a3a, 0.7).fillCircle(x, 722 + rnd() * 8, 11);
 
-        // --- Jardí de flors dins la pèrgola i voltants ---
-        for (let i = 0; i < 48; i++) {
-            const x = 350 + rnd() * 610, y = 360 + rnd() * 310;
-            if (y > 460 && y < 580) continue;                 // passadís
-            if (Math.hypot(x - 520, y - 640) < 70) continue;  // llosa
+        // Flors dins la pèrgola
+        for (let i = 0; i < 16; i++) {
+            const x = 110 + rnd() * 340, y = 630 + rnd() * 60;
             this.posar('flors', x, y, { fonsY: -800 });
         }
-        for (let i = 0; i < 14; i++) this.posar('flors', 60 + rnd() * 1500, 700 + rnd() * 60 * (i % 2 ? 1 : -1) + 70, { fonsY: -800 });
 
         // La llosa secreta (passadís cap a la masmorra de l'Hospederia): s'obre quan hi creix la flor de lluna
-        this.posar('llosa', 520, 640, { fonsY: -700 });
-        this.florLluna = this.posar('flors', 520, 640, { escala: 0.8 });
-        this.interactiu(520, 645, 80, DIALEGS.llosaJardi, { altura: 60 });
+        this.posar('llosa', 300, 775, { fonsY: -700 });
+        this.florLluna = this.posar('flors', 300, 775, { escala: 0.8 });
+        this.interactiu(300, 780, 80, DIALEGS.llosaJardi, { altura: 60 });
 
-        // L'Isidre, coix i entranyable, dins la pèrgola
-        this.npc('isidre', 780, 530, DIALEGS.isidre);
-
-        // La Prunera Màgica, al fons de la pèrgola (oest)
-        const prunera = this.posar('arbre', 345, 540, { col: { w: 40, h: 20 } }).setTint(0xcaa0f0);
-        this.add.ellipse(345, 470, 150, 110, 0xb070ff, 0.22).setDepth(8000);
-        const prunes = this.add.particles(345, 470, 'espurna', {
+        // La Prunera Màgica, al fons de la pèrgola
+        this.posar('arbre', 140, 705, { col: { w: 40, h: 20 } }).setTint(0xcaa0f0);
+        this.add.ellipse(140, 640, 150, 110, 0xb070ff, 0.22).setDepth(8000);
+        this.add.particles(140, 640, 'espurna', {
             x: { min: -50, max: 50 }, y: { min: -40, max: 30 }, speed: { min: 4, max: 14 }, lifespan: 1800,
             scale: { start: 0.55, end: 0 }, tint: [0xd090ff, 0xffe08a], frequency: 220, alpha: { start: 0.9, end: 0 }
         }).setDepth(8001);
-        [[-40, -90], [-10, -110], [30, -95], [50, -70], [-55, -60], [10, -70]].forEach(([dx, dy]) => this.add.circle(345 + dx, 540 + dy, 7, 0x7a2aa8).setStrokeStyle(2, 0x2a0a40).setDepth(541));
-        this.interactiu(345, 545, 95, DIALEGS.prunera, { altura: 250 });
+        [[-40, -90], [-10, -110], [30, -95], [50, -70], [-55, -60], [10, -70]].forEach(([dx, dy]) => this.add.circle(140 + dx, 705 + dy, 7, 0x7a2aa8).setStrokeStyle(2, 0x2a0a40).setDepth(706));
+        this.interactiu(140, 710, 95, DIALEGS.prunera, { altura: 250 });
 
-        // L'Hospederia, adossada a la pèrgola (a llevant)
-        // Façana gran (1100 d'ample), retallada per l'esquerra (a x=1020) i per dalt: la porta (~134x165) queda a x=1155,
-        // a l'alçada de l'entrada de la pèrgola (y=690)
-        const casa = this.posar('hospederia', 0, 690, { fonsY: 670 });
-        const esq = 1155 - 0.581 * casa.displayWidth;                 // vora esquerra de la imatge (la porta és al 58,1% de l'ample)
-        casa.setX(esq + casa.displayWidth / 2);
-        casa.setCrop((1020 - esq) / casa.scaleX, 0, casa.width - (1020 - esq) / casa.scaleX, casa.height);
-        this.colisio(1310, 645, 580, 90);
-        this.interactiu(1155, 725, 90, DIALEGS.hospederia, { altura: 150 });
+        // L'Isidre, coix i entranyable, fora de la pèrgola: rega i cull flors dels parterres
+        for (let i = 0; i < 18; i++) this.posar('flors', 540 + rnd() * 270, 800 + rnd() * 60, { fonsY: -800 });
+        this.npc('isidre', 580, 845, DIALEGS.isidre);
 
-        this.arbres([[1500, 980], [1250, 960], [700, 960], [300, 960], [130, 950], [130, 650], [180, 430],
-                     [130, 120], [320, 90], [600, 110], [850, 100]]);
+        // Arbres a l'esquerra de la casa, sobre la pèrgola
+        this.arbres([[110, 360], [260, 250], [430, 380], [150, 130]]);
 
-        this.cartell(1100, 840, () => ({ pagines: [{ qui: '', text: '→ La Taverna i la Casa Gran\n← L\'Era' }] }));
-        this.sortida(0, 780, 14, 130, 'ZonaEra', 'jardi');
-        this.sortida(1586, 780, 14, 130, 'ZonaCasaGran', 'oest');
+        this.cartell(1000, 860, () => ({ pagines: [{ qui: '', text: '→ La Taverna i la Casa Gran\n← L\'Era' }] }));
+        this.sortida(0, 900, 14, 130, 'ZonaEra', 'jardi');
+        this.sortida(1586, 900, 14, 130, 'ZonaCasaGran', 'oest');
     }
 
     actualitzar(ara) {

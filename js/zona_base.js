@@ -312,7 +312,13 @@ class ZonaBase extends Phaser.Scene {
         this.colisio(x + porta / 2 + costat / 2, y - alt / 2, costat, alt);
         this.colisio(x, y - alt - 10, porta, 20);   // dintell
         if (desti) this.sortida(x - porta / 2, y - alt + 10, porta, alt - 4, desti, entrada);
+        this.blocDarrere(x, ample, y - alt - 20, Math.max(0, y - img.displayHeight));
         return img;
+    }
+
+    // Bloc invisible darrere d'un edifici: no s'hi ha de poder passar per darrere (amb la silueta fantasma, l'Ineu es veuria a través de la façana)
+    blocDarrere(x, ample, baix, dalt = 0) {
+        if (baix - dalt > 10) this.colisio(x, (dalt + baix) / 2, ample, baix - dalt);
     }
 
     cartell(x, y, dialeg) {

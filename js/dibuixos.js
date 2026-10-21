@@ -1070,6 +1070,15 @@ function dibuixarCelNostraSenyora(c, w) {
             [0.28, 0.5].forEach(fy => finestra(ctx, W * cx - W * 0.03, H * fy, W * 0.06, H * 0.14, { arc: true, marc: '#c4ad82', vidre: '#6a3a24' }));
             finestra(ctx, W * cx - W * 0.03, H * 0.72, W * 0.06, H * 0.14, { arc: true, marc: '#c4ad82', vidre: '#1c1812', reixa: true });
         });
+        // Porta gran de fusta amb arc de pedra, al mig de la façana: més alta que l'Ineu
+        const px = W * 0.45, pw = W * 0.1, pt = wb - H * 0.22;
+        ctx.fillStyle = '#c4ad82'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(px - 8, wb); ctx.lineTo(px - 8, pt + pw * 0.5); ctx.arc(px + pw / 2, pt + pw * 0.5, pw / 2 + 8, Math.PI, 0); ctx.lineTo(px + pw + 8, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#5a3820';
+        ctx.beginPath(); ctx.moveTo(px, wb); ctx.lineTo(px, pt + pw * 0.5); ctx.arc(px + pw / 2, pt + pw * 0.5, pw / 2, Math.PI, 0); ctx.lineTo(px + pw, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(20,10,4,0.55)'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(px + pw / 2, pt); ctx.lineTo(px + pw / 2, wb); ctx.stroke();
+        ctx.fillStyle = '#c9a54a'; ctx.beginPath(); ctx.arc(px + pw * 0.4, wb - H * 0.1, 3, 0, Math.PI * 2); ctx.arc(px + pw * 0.6, wb - H * 0.1, 3, 0, Math.PI * 2); ctx.fill();
     });
 }
 
@@ -1092,10 +1101,15 @@ function dibuixarCelSantBenet(c, w) {
         // Finestra rodona al frontó
         ctx.fillStyle = '#26303a'; ctx.beginPath(); ctx.arc(W * 0.5, H * 0.27, W * 0.03, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         // Dues finestres d'arc amb marcs de maó
-        [0.34, 0.6].forEach(cx => finestra(ctx, W * cx, H * 0.42, W * 0.06, H * 0.26, { arc: true, marc: '#b86a42', vidre: '#6a3a24' }));
-        // Porta baixa amb graó
-        ctx.fillStyle = '#6a4228'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
-        ctx.fillRect(W * 0.46, H * 0.7, W * 0.08, H * 0.24); ctx.strokeRect(W * 0.46, H * 0.7, W * 0.08, H * 0.24);
+        [0.3, 0.64].forEach(cx => finestra(ctx, W * cx, H * 0.4, W * 0.06, H * 0.2, { arc: true, marc: '#b86a42', vidre: '#6a3a24' }));
+        // Porta de fusta amb arc, més alta que l'Ineu
+        const px = W * 0.455, pw = W * 0.09, pt = wb - H * 0.36;
+        ctx.fillStyle = '#b86a42'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(px - 6, wb); ctx.lineTo(px - 6, pt + pw * 0.5); ctx.arc(px + pw / 2, pt + pw * 0.5, pw / 2 + 6, Math.PI, 0); ctx.lineTo(px + pw + 6, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#6a4228';
+        ctx.beginPath(); ctx.moveTo(px, wb); ctx.lineTo(px, pt + pw * 0.5); ctx.arc(px + pw / 2, pt + pw * 0.5, pw / 2, Math.PI, 0); ctx.lineTo(px + pw, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(20,10,4,0.5)'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(px + pw / 2, pt); ctx.lineTo(px + pw / 2, wb); ctx.stroke();
     });
 }
 

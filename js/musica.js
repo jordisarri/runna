@@ -33,8 +33,8 @@ function completarLliço(nom) {
         E.dona('flauta');
         pagines = [
             { qui: 'La Pianista', text: 'Així, així! Tens oïda, fill. El Cant de l\'Aurora: tres notes, i la boira es fa enrere.' },
-            ...(primera ? [{ qui: 'La Pianista', text: 'Pren aquesta flauta de canya, que era del meu avi. Toca les notes 1, 2 i 3.' },
-                           { qui: '', text: 'Has obtingut la FLAUTA DE LA PIANISTA!\nToca el medalló de la flauta, a la dreta de la pantalla (o ESPAI quan brilli).' }] : []),
+            ...(primera ? [{ qui: 'La Pianista', text: 'Pren aquesta flauta de canya: és la flauta d'en Mamet. Toca les notes 1, 2 i 3.' },
+                           { qui: '', text: 'Has obtingut LA FLAUTA D'EN MAMET!\nToca el medalló de la flauta, a la dreta de la pantalla (o ESPAI quan brilli).' }] : []),
             { qui: 'La Pianista', text: 'Toca\'l davant l\'aigua de la Bassadòria, la que surt tèrbola. Allà la boira té l\'arrel.' }
         ];
         E.posaObjectiu('Toca el Cant de l\'Aurora (1-2-3) davant la Bassadòria, a l\'oest de la Plaça.');
@@ -77,23 +77,23 @@ class EscenaMusica extends Phaser.Scene {
             const cercle = this.add.circle(x, cy + 10, 52, COLORS_NOTA[n], 0.55).setStrokeStyle(4, 0xffffff, 0.7)
                 .setInteractive({ useHandCursor: true }).on('pointerdown', () => this.nota(n, true));
             this.add.text(x, cy + 10, String(n), estilText(34, '#ffffff', { fontStyle: 'bold', stroke: '#000', strokeThickness: 5 })).setOrigin(0.5);
+            this.add.text(x, cy - 62, ['', '←', 'ESPAI', '→'][n], estilText(20, '#f2e6c8', { stroke: '#000', strokeThickness: 3 })).setOrigin(0.5);
             return cercle;
         });
         this.punts = this.add.text(cx, ALT - 52, '', estilText(26, '#ffffff')).setOrigin(0.5);
 
+        // Teclat: 1, 2, 3 (o el teclat numèric), o bé ← (nota 1), ESPAI (nota 2) i → (nota 3); també A, W/S i D
         const k = this.input.keyboard;
-        ['ONE', 'TWO', 'THREE'].forEach((nom, i) => {
-            k.on('keydown-' + nom, () => this.nota(i + 1, true));
-            k.on('keydown-NUMPAD_' + nom, () => this.nota(i + 1, true));
-        });
+        const TECLES = { 1: ['ONE', 'NUMPAD_ONE', 'LEFT', 'A'], 2: ['TWO', 'NUMPAD_TWO', 'SPACE', 'UP', 'DOWN', 'W', 'S'], 3: ['THREE', 'NUMPAD_THREE', 'RIGHT', 'D'] };
+        Object.entries(TECLES).forEach(([n, noms]) => noms.forEach(nom => k.on('keydown-' + nom, () => this.nota(Number(n), true))));
         k.on('keydown-ESC', () => this.tancar(false));
 
         if (llico) {
             this.titol.setText('Lliçó: ' + this.melodia.nom);
             this.time.delayedCall(500, () => this.reproduir());
         } else {
-            this.titol.setText('Flauta de la Pianista');
-            this.estat.setText('Toca les notes (1, 2, 3)');
+            this.titol.setText('La flauta d'en Mamet');
+            this.estat.setText('Toca les notes: 1, 2, 3 (o ← ESPAI →)');
             const sabudes = Object.values(MELODIES).filter(m => Estat.flag(m.flag));
             this.add.text(cx, ALT - 34, sabudes.length
                 ? sabudes.map(m => `${m.nom}: ${m.notes.join('-')}`).join('   ·   ')
@@ -134,7 +134,7 @@ class EscenaMusica extends Phaser.Scene {
         this.melodia.notes.forEach((n, i) => this.time.delayedCall(i * 650, () => this.llum(n)));
         this.time.delayedCall(this.melodia.notes.length * 650 + 300, () => {
             this.bloquejat = false;
-            this.estat.setText('Ara tu! Repeteix les notes (1, 2, 3).');
+            this.estat.setText('Ara tu! Repeteix les notes: 1, 2, 3 (o ← ESPAI →).');
         });
     }
 

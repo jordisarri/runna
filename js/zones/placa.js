@@ -1,7 +1,7 @@
 /**
  * ZONA 1: LA PLAÇA DEL SANTUARI (punt d'inici)
  * Nord: Santuari · Nord-oest (a l'esquerra del Santuari): camí cap a les Runes, el Ping-pong i les Cel·les ·
- * Oest (més avall): camí cap a la Casa Gran i els porxos · Sud: Creu i Bassadòria · Est: Monestir.
+ * Oest (més avall): camí cap a la Casa Gran i els porxos · Sud: La Bassadòria · Est: Monestir.
  * La façana del Santuari amaga una pedra que obre una sala del tresor.
  */
 class ZonaPlaca extends ZonaBase {
@@ -36,6 +36,7 @@ class ZonaPlaca extends ZonaBase {
         // Façana gran (1100 d'ample) que acaba a la vora est del món: la porta, a x=661, fa ~165 d'alt (l'Ineu ~125)
         // i el cap de l'edifici surt per dalt de la pantalla.
         this.posar('esglesia', 1050, 463, { fonsY: 452, col: { w: 1100, h: 150, dy: -8 } });
+        this.blocDarrere(1050, 1100, 300);
         this.sortida(612, 440, 98, 22, 'ZonaEsglesia', 'porta');
         this.posar('xiprer', 1285, 455, { col: { w: 24, h: 12 } });
         this.posar('xiprer', 1305, 490, { col: { w: 24, h: 12 } });

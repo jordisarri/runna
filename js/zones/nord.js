@@ -1,6 +1,6 @@
 /**
  * ZONES DEL NORD I L'OEST DE LA PLAÇA
- * Les Runes (nus), Sala del Ping-pong, Cel·les i Til·ler, Bosc de Sant Joan.
+ * Les Runes (nus), El Celler (on es juga a ping-pong), Cel·les, Gran Til·ler, Bosc de Sant Joan.
  */
 
 // ---------------- RUÏNES DE L'ESGLÉSIA ANTIGA (nus) ----------------
@@ -31,14 +31,15 @@ class ZonaRuines extends ZonaBase {
         this.terra('cami', 1100, 520, 500, 130);        // cap al cementiri (est, darrere el Santuari)
 
         // Les runes, a la dreta; el camí passa per davant
-        this.terra('pedra', 780, 400, 800, 240);         // replà de pedra de les runes
+        this.terra('pedra', 900, 400, 700, 240);         // replà de pedra de les runes
         // Façana gran (760 d'ample): surt per dalt de la pantalla, no importa que no es vegi sencera
-        this.posar('runes', 1180, 470, { col: { w: 640, h: 80 } });
+        this.posar('runes', 1300, 470, { col: { w: 640, h: 80 } });
+        this.blocDarrere(1270, 660, 390);               // no es pot passar per darrere de les runes
         // Pedres caigudes davant
-        [[860, 525, 0.6], [1500, 530, 0.5]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 30, h: 14 } }));
-        this.interactiu(1190, 540, 110, DIALEGS.ruines, { altura: 140 });
+        [[950, 525, 0.6], [1570, 530, 0.5]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 30, h: 14 } }));
+        this.interactiu(1310, 540, 110, DIALEGS.ruines, { altura: 140 });
 
-        // Sala del Ping-pong: és la Casa Gran vista per darrere. Només importa la porta (a baix, prou gran perquè hi passi
+        // El Celler (ping-pong): és la Casa Gran vista per darrere. Només importa la porta (a baix, prou gran perquè hi passi
         // l'Ineu): l'edifici surt per l'esquerra de la pantalla i es retalla a la vora del món.
         const PORTA_X = 400, BASE_Y = 900, PORTA_AMPLE = 98;
         const sala = this.posar('sala_pingpong', 0, BASE_Y, { fonsY: BASE_Y - 20 });
@@ -50,19 +51,20 @@ class ZonaRuines extends ZonaBase {
         this.colisio((PORTA_X + PORTA_AMPLE / 2 + dreta) / 2, BASE_Y - 45, dreta - PORTA_X - PORTA_AMPLE / 2, 90);
         this.colisio(PORTA_X, BASE_Y - 100, PORTA_AMPLE, 20);
         this.sortida(PORTA_X - PORTA_AMPLE / 2, BASE_Y - 80, PORTA_AMPLE, 76, 'ZonaPingpong', 'ruines');
+        this.blocDarrere((0 + dreta) / 2, dreta, BASE_Y - 110);   // ni darrere de l'edifici
 
         // L'ombra del monjo: només es veu quan has llegit el primer fragment del pergamí
-        this.ombraMonjo = this.add.image(980, 560, 'ombra_monjo').setOrigin(0.5, 1)
+        this.ombraMonjo = this.add.image(1100, 560, 'ombra_monjo').setOrigin(0.5, 1)
             .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(560).setAlpha(0);
-        this.interactiu(980, 600, 95, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1'), enTancar: () => Estat.posaFlag('flauta_ombra') });
-        this.llocFlauta('ombra', 980, 610, 160, true);
+        this.interactiu(1100, 600, 95, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1'), enTancar: () => Estat.posaFlag('flauta_ombra') });
+        this.llocFlauta('ombra', 1100, 610, 160, true);
         this.tweens.add({ targets: this.ombraMonjo, y: 564, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
         // Ambient de nit quan la llegenda s'ha començat a descobrir
         this.nit = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x0a0a30, 0.22).setScrollFactor(0).setDepth(89000).setVisible(false);
 
         this.cartell(620, 960, DIALEGS.cartellRuinesPingpong);
 
-        this.arbres([[60, 1000], [1530, 1020], [1100, 1030], [520, 1040]]);
+        this.arbres([[1530, 1020], [1100, 1030]]);
 
         // Animalets del cementiri esquerdat
         this.enemic('escolopendra', 300, 1010);
@@ -77,8 +79,8 @@ class ZonaRuines extends ZonaBase {
     // El Cant de les Pedres, tocat davant l'ombra, li desperta la memòria
     enMelodia(nom) {
         if (nom !== 'pedres' || !Estat.flag('fragment1')) return false;
-        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 980, 600) > 300) return false;
-        if (Estat.flag('benedicioMonjo')) { this.flotant(980, 440, "L'ombra assenteix", '#d8c8ff'); return true; }
+        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1100, 600) > 300) return false;
+        if (Estat.flag('benedicioMonjo')) { this.flotant(1100, 440, "L'ombra assenteix", '#d8c8ff'); return true; }
         if (!['fragment1', 'fragment2', 'fragment3'].every(f => Estat.flag(f))) return false;
         this.ui().obrirDialeg(DIALEGS.benedicioMonjo(Estat), () => Estat.desar());
         return true;
@@ -93,16 +95,16 @@ class ZonaRuines extends ZonaBase {
     }
 }
 
-// ---------------- SALA DEL PING-PONG (interior) ----------------
+// ---------------- EL CELLER (interior; el ping-pong hi és una prova circumstancial) ----------------
 class ZonaPingpong extends ZonaBase {
     constructor() {
         super('ZonaPingpong', {
-            nom: 'Sala del Ping-pong',
+            nom: 'El Celler',
             amplada: 1280,
             alcada: 820,
             colorFons: '#140e0a',
             pacifica: true,
-            entrades: { porta: { x: 640, y: 740, dir: 'amunt' }, secreta: { x: 210, y: 320, dir: 'dreta' } }
+            entrades: { porta: { x: 640, y: 740, dir: 'amunt' }, passadis: { x: 700, y: 262, dir: 'avall' } }
         });
     }
 
@@ -122,23 +124,21 @@ class ZonaPingpong extends ZonaBase {
         this.posar('taula_pp', 860, 360, { col: { w: 220, h: 40 } });
         this.interactiu(420, 380, 120, DIALEGS.taulaPP, { altura: 100 });
 
-        // Porta secreta camuflada darrere d'una roda de carruatge gegant penjada a la paret (cap a la Casa Gran)
-        const roda = this.add.graphics().setDepth(5);
-        const rx = 700, ry = 158, rr = 62;
-        roda.fillStyle(0x000000, 0.25).fillCircle(rx + 6, ry + 8, rr + 4);
-        roda.lineStyle(12, 0x6a4424, 1).strokeCircle(rx, ry, rr);
-        roda.lineStyle(4, 0x2a1a0c, 1).strokeCircle(rx, ry, rr + 6).strokeCircle(rx, ry, rr - 6);
-        roda.lineStyle(7, 0x7a5230, 1);
-        for (let i = 0; i < 12; i++) {
-            const a = i * Math.PI / 6;
-            roda.lineBetween(rx + Math.cos(a) * 14, ry + Math.sin(a) * 14, rx + Math.cos(a) * (rr - 4), ry + Math.sin(a) * (rr - 4));
-        }
-        roda.fillStyle(0x4a2c16, 1).fillCircle(rx, ry, 17).lineStyle(4, 0x2a1a0c, 1).strokeCircle(rx, ry, 17);
-        roda.fillStyle(0x8a8a8a, 1).fillCircle(rx, ry, 6);
-        this.interactiu(700, 225, 100, DIALEGS.posterSecret, {
-            altura: 120,
-            enTancar: () => { if (Estat.flag('portaSecretaPP') && Estat.te('clauer')) this.canviarZona('ZonaCasaGranInt', 'secreta'); }
-        });
+        // L'entrada secreta de la Casa Gran: una roda de carruatge gegant al davant d'un forat de la paret. S'empeny des d'un costat
+        // caminant contra ella (cal Runna: encara no s'obre abans de l'Acte 3) i rodola, descobrint un passadís.
+        const forat = this.add.graphics().setDepth(-980);
+        forat.fillStyle(0x3a2c22, 1).fillRect(632, 84, 136, 156);
+        forat.fillStyle(0x050403, 1).fillRect(646, 98, 108, 142).fillCircle(700, 98, 54);
+        forat.lineStyle(5, 0x6a5a46, 1).strokeRect(646, 98, 108, 142);
+        this.rodaX = Estat.dades.flags.rodaX || 700;
+        this.rodaMoguda = Estat.flag('rodaMoguda');
+        this.roda = this.posar('roda_carruatge', this.rodaX, 236, { fonsY: 240 });
+        this.colRoda = this.add.zone(this.rodaX, 221, 110, 30);
+        this.physics.add.existing(this.colRoda, true);
+        if (this.rodaMoguda) this.roda.setAngle(this.rodaX > 700 ? 180 : -180);
+        this.empentaMs = 0; this.contacteRoda = 0; this.costatRoda = 1; this.pistaRoda = false;
+        this.interactiu(700, 270, 90, DIALEGS.posterSecret, { altura: 150, actiu: () => !this.rodaMoguda });
+        if (this.rodaMoguda) this.obrirPassadis();
 
         // Jugadors
         this.npc('juli', 300, 500, DIALEGS.juli);
@@ -149,60 +149,84 @@ class ZonaPingpong extends ZonaBase {
         this.add.rectangle(640, 410, 1080, 820, 0xffe9a8, 0.04).setDepth(80000);
         this.sortida(600, 790, 80, 20, 'ZonaRuines', 'pingpong');
     }
+
+    enEntrar() {
+        this.physics.add.collider(this.ineu, this.colRoda, (ineu, zona) => {
+            this.contacteRoda = this.time.now;
+            this.costatRoda = ineu.x < zona.x ? 1 : -1;
+        });
+    }
+
+    // L'Ineu empeny la roda si és a un costat i avança contra ella; amb Runna es mou, sense Runna pesa massa
+    actualitzar(ara, delta) {
+        if (this.rodaMoguda) return;
+        const ui = this.ui(), c = this.cursors, t = this.tecles;
+        const dirX = (c.right.isDown || t.D.isDown ? 1 : 0) - (c.left.isDown || t.A.isDown ? 1 : 0) || Math.sign(ui.vectorTactil.x > 0.3 ? 1 : ui.vectorTactil.x < -0.3 ? -1 : 0);
+        const toca = this.time.now - this.contacteRoda < 120 && Math.abs(this.ineu.x - this.colRoda.x) > 50 && dirX === this.costatRoda;
+        this.empentaMs = toca ? this.empentaMs + delta : 0;
+        if (this.empentaMs < 600) return;
+        this.empentaMs = 0;
+        if (!Estat.te('runna')) {
+            if (!this.pistaRoda) { this.pistaRoda = true; this.flotant(this.roda.x, this.roda.y - 160, 'Pesa massa... i la corrent ve del darrere', '#f2e6c8'); }
+            return;
+        }
+        this.mouRoda(this.costatRoda);
+    }
+
+    mouRoda(dir) {
+        this.rodaMoguda = true;
+        const x = this.roda.x + dir * 150;
+        Estat.posaFlag('rodaMoguda');
+        Estat.dades.flags.rodaX = x;
+        this.cameras.main.shake(350, 0.003);
+        this.tweens.add({
+            targets: this.roda, x, angle: dir * 180, duration: 900, ease: 'Sine.easeInOut',
+            onUpdate: () => { this.colRoda.x = this.roda.x; this.colRoda.body.updateFromGameObject(); },
+            onComplete: () => { this.flotant(700, 200, 'Un passadís!', '#d8c8ff'); this.obrirPassadis(); Estat.desar(); }
+        });
+    }
+
+    // L'obertura de la paret descoberta: porta al passadís (sortida sense llum ni fletxa, perquè és una troballa)
+    obrirPassadis() {
+        this.sortides.push({ r: new Phaser.Geom.Rectangle(650, 170, 100, 40), desti: 'ZonaPassadis', entrada: 'porta' });
+        this.tweens.add({ targets: this.add.circle(700, 190, 70, 0xa070ff, 0.10).setDepth(-970), alpha: 0.03, yoyo: true, repeat: -1, duration: 900 });
+    }
 }
 
-// ---------------- CEL·LES I TIL·LER ----------------
+// ---------------- CEL·LES ----------------
+// Nostra Senyora (oest, la més gran) i Sant Benet (est). El camí del nord puja al Gran Til·ler; a l'est no hi ha res.
 class ZonaCelles extends ZonaBase {
     constructor() {
         super('ZonaCelles', {
-            nom: 'Cel·les i Gran Til·ler',
+            nom: 'Les Cel·les',
             amplada: 1800,
             alcada: 1100,
             entrades: {
                 ruines: { x: 900, y: 1040, dir: 'amunt' },
                 bosc:   { x: 60,  y: 705,  dir: 'dreta' },
-                cirosa: { x: 1070, y: 90,  dir: 'avall' }
+                tiller: { x: 1070, y: 90,  dir: 'avall' }
             }
         });
     }
 
     construir() {
         this.terra('herba', 0, 0, 1800, 1100, -1100);
-        this.terra('cami', 0, 640, 1800, 130);           // camí est-oest (bosc de Sant Joan)
+        this.terra('cami', 0, 640, 1500, 130);           // camí est-oest: del bosc de Sant Joan fins a Sant Benet (a l'est no hi ha res més)
         this.terra('cami', 800, 770, 200, 330);          // cap a les Runes
-        this.terra('cami', 1000, 120, 140, 520);         // cap a la Cirosa
+        this.terra('cami', 1000, 0, 140, 640);           // cap al nord, al Gran Til·ler
 
-        // Nostra Senyora (oest, l'edifici més gran) i Sant Benet (est), com al mapa
-        this.posar('cel_ntrasra', 450, 600, { col: { w: 520, h: 100 } });
-        this.interactiu(450, 620, 90, DIALEGS.cel_ntrasra, { altura: 140 });
-        this.posar('cel_stbenet', 1380, 600, { col: { w: 380, h: 90 } });
+        // Nostra Senyora (oest, l'edifici més gran: la porta és més alta que l'Ineu) i Sant Benet (est)
+        const ns = this.posar('cel_ntrasra', 520, 600, { col: { w: 840, h: 100 } });
+        this.blocDarrere(520, 840, 495, Math.max(0, 600 - ns.displayHeight));
+        this.interactiu(520, 625, 90, DIALEGS.cel_ntrasra, { altura: 140 });
+        const sb = this.posar('cel_stbenet', 1380, 600, { col: { w: 520, h: 90 } });
+        this.blocDarrere(1380, 520, 505, Math.max(0, 600 - sb.displayHeight));
         this.interactiu(1380, 620, 80, DIALEGS.cel_stbenet, { altura: 140 });
 
-        // Arbres joves i prims plantats vora el camí, com a la foto de les cel·les
-        [[250, 632, 0.42], [570, 748, 0.38], [1180, 752, 0.38], [1480, 640, 0.42], [680, 560, 0.36]].forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 14, h: 8 } }));
-
-        // El Gran Til·ler
-        this.posar('tiller', 900, 600, { col: { w: 110, h: 40 } });
-        this.interactiu(900, 625, 100, DIALEGS.tiller, { altura: 280 });
-
-        // Després del sopar queden quatre espelmes vora les arrels del Til·ler
-        if (Estat.flag('soparFet')) this.posarEspelmes();
-
-        // Tutorial del bastó: la branca del Til·ler i els espantaocells de pràctica
-        this.branca = this.posar('branca', 990, 700, { fonsY: 600 });
-        this.interactiu(990, 705, 70, DIALEGS.branca, { altura: 60, actiu: () => Estat.flag('tillerBranca') && !Estat.te('basto') });
-        this.cartell(560, 860, DIALEGS.espantaocellsCartell);
-        this.enemic('espantaocell', 640, 930);
-        this.enemic('espantaocell', 740, 960);
-
-        // La Caseta d'en Jordi, darrere el Til·ler (nord): el pagès eixerit que dóna la palanca
-        this.posar('masia', 640, 380, { escala: 0.55, col: { w: 240, h: 60 } });
-        this.npc('jordi_caseta', 830, 430, DIALEGS.jordiCaseta);
-
-        // Sant Benet (est): la Neus i el seu marit
+        // Sant Benet (est): la Neus i el seu marit, el senyor Moliner
         this.npc('neus', 1250, 680, DIALEGS.neus);
         this.npc('marit_neus', 1320, 700, DIALEGS.maritNeus);
-        // Les Tietes, vora el Til·ler: donen consells
+        // Les Tietes, Enriqueta i Lola: donen consells
         this.npc('tieta', 780, 690, DIALEGS.tieta1);
         this.npc('tieta2', 850, 710, DIALEGS.tieta2, { flipX: true });
         // Nostra Senyora (oest): en Yordi i la Judit (testimonials)
@@ -212,46 +236,103 @@ class ZonaCelles extends ZonaBase {
         this.npc('daniel_t', 1560, 690, DIALEGS.danielT);
         this.npc('turbo', 1630, 720, DIALEGS.turbo);
 
-        // La Sansa i el seu carro: no sempre és aquí
-        if (Math.random() < 0.5) {
-            this.posar('carro_sansa', 1060, 880, { col: { w: 200, h: 50 } });
-            this.npc('sansa', 1160, 890, DIALEGS.sansa);
-        }
+        // La Sansa i el seu carro de verdures: passa per aquí un sol cop, quan l'Isidre te n'ha parlat, i se'n va un cop t'ha donat la llavor
+        if (Estat.flag('isidreSansa') && !Estat.flag('llavorSansa')) this.posarSansa();
 
-        this.cartell(1070, 420, DIALEGS.cartellCirosa);
-        this.cartell(130, 625, () => ({ pagines: [{ qui: '', text: '← Bosc de Sant Joan i la seva font' }] }));
+        this.cartell(130, 625, () => ({ pagines: [{ qui: '', text: '← Bosc de Sant Joan i la seva font\n↑ El Gran Til·ler' }] }));
 
-        // Arbres: tanquen el camí de la Cirosa de moment i emmarquen la pantalla
-        if (Estat.flag('camiCirosaObert')) {
-            this.terra('cami', 1000, 0, 140, 130);
-            this.sortida(1000, 0, 140, 14, 'ZonaCamiCirosa', 'celles');
-        } else {
-            this.muralla(1000, 110, 1140, 110, 70);
-        }
-        this.arbres([[80, 160], [220, 260], [150, 420], [1700, 220], [1640, 420], [1750, 540], [100, 960], [300, 1040],
-                     [560, 1000], [1250, 1020], [1480, 960], [1700, 1030], [700, 200], [820, 120], [1300, 220], [1450, 160]]);
+        this.arbres([[1700, 220], [1640, 420], [1750, 540], [100, 960], [300, 1040],
+                     [560, 1000], [1250, 1020], [1480, 960], [1700, 1030]]);
 
         this.enemic('escolopendra', 600, 900);
         this.enemic('escolopendra', 1500, 880);
         this.sortida(800, 1086, 200, 14, 'ZonaRuines', 'celles');
         this.sortida(0, 640, 14, 130, 'ZonaBosc', 'celles');
+        this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
+    }
+
+    posarSansa() {
+        this.carroSansa = this.posar('carro_sansa', 1060, 880);
+        this.colCarro = this.colisio(1060, 855, 200, 50);
+        this.sansa = this.posar('sansa', 1160, 890);
+        this.colSansa = this.colisio(1160, 881, 40, 18);
+        this.add.image(1160, 890, 'ombra').setScale(0.42).setDepth(-500);
+        const punt = this.interactiu(1160, 880, 85, DIALEGS.sansa, { altura: this.sansa.displayHeight + 6 });
+        punt.enTancar = () => this.marxaSansa(punt);
+    }
+
+    marxaSansa(punt) {
+        punt.actiu = () => false;
+        this.obstacles.remove(this.colCarro, true, true);
+        this.obstacles.remove(this.colSansa, true, true);
+        this.tweens.add({ targets: [this.sansa, this.carroSansa], alpha: 0, x: '+=140', duration: 1800, ease: 'Sine.easeIn',
+            onComplete: () => { this.sansa.destroy(); this.carroSansa.destroy(); } });
+    }
+}
+
+// ---------------- EL GRAN TIL·LER (escenari per a ell sol) ----------------
+// Hi arriba el camí del sud (les cel·les); del revolt, un camí puja a dalt a la dreta cap a la Cirosa.
+class ZonaTiller extends ZonaBase {
+    constructor() {
+        super('ZonaTiller', {
+            nom: 'El Gran Til·ler',
+            amplada: 1600,
+            alcada: 1100,
+            entrades: {
+                celles: { x: 840,  y: 1040, dir: 'amunt' },
+                cirosa: { x: 1390, y: 90,   dir: 'avall' }
+            }
+        });
+    }
+
+    construir() {
+        this.terra('herba', 0, 0, 1600, 1100, -1100);
+        this.terra('cami', 760, 560, 160, 540);           // des de les cel·les (sud)
+        this.terra('cami', 760, 560, 700, 170);           // el revolt cap a llevant
+        this.terra('cami', 1320, 0, 140, 730);            // cap a dalt a la dreta: la Cirosa
+
+        // El Gran Til·ler
+        this.posar('tiller', 560, 580, { col: { w: 110, h: 40 } });
+        this.interactiu(560, 605, 100, DIALEGS.tiller, { altura: 280 });
+
+        // Després del sopar queden quatre espelmes vora les arrels del Til·ler
+        if (Estat.flag('soparFet')) this.posarEspelmes();
+
+        // La branca del Til·ler: el bastó
+        this.branca = this.posar('branca', 650, 680, { fonsY: 580 });
+        this.interactiu(650, 685, 70, DIALEGS.branca, { altura: 60, actiu: () => Estat.flag('tillerBranca') && !Estat.te('basto_tiller') });
+
+        // La Caseta d'en Jordi, a la vora (nord-oest): el pagès eixerit que dóna la palanca
+        this.posar('masia', 260, 330, { escala: 0.55, col: { w: 240, h: 60 } });
+        this.npc('jordi_caseta', 260, 440, DIALEGS.jordiCaseta);
+
+        this.cartell(1200, 790, DIALEGS.cartellCirosa);
+
+        // El camí de la Cirosa: tancat amb arbres fins que el Til·ler l'obre
+        if (Estat.flag('camiCirosaObert')) {
+            this.sortida(1320, 0, 140, 14, 'ZonaCamiCirosa', 'tiller');
+        } else {
+            this.muralla(1320, 110, 1460, 110, 70);
+        }
+        this.arbres([[100, 150], [450, 90], [1000, 120], [1100, 330], [150, 880], [300, 1020], [1150, 1000], [1450, 950], [1540, 520]]);
+
+        this.sortida(760, 1086, 160, 14, 'ZonaCelles', 'tiller');
     }
 
     posarEspelmes() {
-        [840, 885, 930, 975].forEach((x, i) => {
-            const e = this.posar('espelma', x, 668 + (i % 2) * 6, { fonsY: 600 });
+        [500, 545, 590, 635].forEach((x, i) => {
+            const e = this.posar('espelma', x, 648 + (i % 2) * 6, { fonsY: 600 });
             this.tweens.add({ targets: e, alpha: 0.8, yoyo: true, repeat: -1, duration: 300 + i * 70, delay: i * 90 });
         });
-        this.interactiu(910, 675, 110, DIALEGS.espelmesTiller, { altura: 90 });
+        this.interactiu(570, 655, 110, DIALEGS.espelmesTiller, { altura: 90 });
     }
 
     // Escena del sopar del Til·ler: taula, pastors i ritual de les quatre espelmes
     fesSopar() {
-        const cam = this.cameras.main;
         const vel = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x2a1000, 1).setScrollFactor(0).setDepth(89500).setAlpha(0);
         this.tweens.add({ targets: vel, alpha: 0.38, duration: 1600 });
-        const taula = this.posar('taula_sopar', 910, 800, { fonsY: 790 });
-        const pastors = ['pastor_a', 'pastor_b', 'pastor_vell'].map((k, i) => this.posar(k, 800 + i * 110, 870 + (i % 2) * 14, { fonsY: 880 }));
+        const taula = this.posar('taula_sopar', 640, 880, { fonsY: 870 });
+        const pastors = ['pastor_a', 'pastor_b', 'pastor_vell'].map((k, i) => this.posar(k, 520 + i * 110, 950 + (i % 2) * 14, { fonsY: 960 }));
         this.time.delayedCall(1800, () => {
             this.ui().obrirDialeg(DIALEGS.tillerSoparRitual(Estat), () => Estat.desar());
         });
@@ -270,7 +351,7 @@ class ZonaCelles extends ZonaBase {
 
     actualitzar() {
         // La branca només es veu mentre encara no l'has agafada (i després que el Til·ler te l'hagi indicat)
-        this.branca.setVisible(Estat.flag('tillerBranca') && !Estat.te('basto'));
+        this.branca.setVisible(Estat.flag('tillerBranca') && !Estat.te('basto_tiller'));
     }
 }
 
@@ -326,7 +407,7 @@ class ZonaBosc extends ZonaBase {
         }
 
         [[600, 400], [1300, 300], [1200, 900], [450, 850], [1550, 560]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
-        // Amagatall tancat amb esbarzers negres (cal foc o Runna): un cofre
+        // Amagatall tancat amb esbarzers negres (cal Runna): un cofre
         for (let i = 0; i < 6; i++) {
             const a = i / 6 * Math.PI * 2;
             this.esbarzer(200 + Math.cos(a) * 105, 190 + Math.sin(a) * 75, 'bosc' + i);

@@ -1,6 +1,6 @@
 /**
  * ESCENA UI: corre sempre per sobre de la zona activa.
- * HUD (cors, monedes, objectiu), caixa de diàleg, menú de pausa i controls tàctils.
+ * HUD (cors, objectiu), caixa de diàleg, menú de pausa i controls tàctils.
  */
 const AMPLE = 720, ALT = 1280;
 const ALT_HUD = 170;   // franja de dalt reservada per al HUD: l'escenari es dibuixa només per sota
@@ -100,8 +100,7 @@ class EscenaUI extends Phaser.Scene {
     crearHUD() {
         // Franja de dalt: un sol llenç de pergamí enmarcat a tot l'ample; l'escenari comença just a sota
         this.fonsHUD = marcPergami(this, 0, 0, AMPLE, ALT_HUD, 'marc_peti').setOrigin(0);
-        this.textCors = this.add.text(48, 36, '', estilText(36, '#c0182a', { stroke: '#4a0a10', strokeThickness: 3 }));
-        this.textMonedes = this.add.text(300, 42, '', estilText(26, '#6e4400', { fontStyle: 'bold' }));
+        this.cors = [];     // imatges dels cors de vida (es creen a mesura que n'hi ha més)
         this.textObjectiu = this.add.text(48, 86, '', estilText(20, '#3a2412', { fontStyle: 'italic', wordWrap: { width: 400 } }));
 
         this.bannerZona = this.add.text(AMPLE / 2, 236, '', estilText(42, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
@@ -123,10 +122,11 @@ class EscenaUI extends Phaser.Scene {
     actualitzarHUD() {
         const d = Estat.dades;
         if (!d) return;
-        let cors = '';
-        for (let i = 0; i < d.corsMax; i++) cors += d.vida >= (i + 1) * 2 ? '♥' : d.vida === i * 2 + 1 ? '◐' : '♡';
-        this.textCors.setText(cors);
-        this.textMonedes.setText('● ' + d.monedes);
+        while (this.cors.length < d.corsMax) this.cors.push(this.add.image(0, 0, 'cor_ple').setScale(1 / RES));
+        this.cors.forEach((img, i) => {
+            const v = d.vida - i * 2;
+            img.setVisible(i < d.corsMax).setPosition(68 + i * 54, 54).setTexture(v >= 2 ? 'cor_ple' : v === 1 ? 'cor_mig' : 'cor_buit');
+        });
         this.textObjectiu.setText('Objectiu: ' + (d.objectiu || ''));
         // L'objectiu ha de cabre dins del marc fix de la franja: si és llarg, es redueix la lletra
         let mida = 20;

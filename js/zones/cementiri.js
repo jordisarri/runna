@@ -1,7 +1,7 @@
 /**
  * EL CEMENTIRI (darrere el Santuari i el Monestir, on s'ajunten).
  * S'hi arriba des de les Runes (est) o des del Monestir (nord). Hi reposen els monjos del Santuari
- * i, en una tomba esquerdada, els monjos primers del segle XV, el cementiri que els obrers van profanar.
+ * i, en una tomba esquerdada, els monjos primers.
  * De la fesomia esquerdada surt la boira i els animalets del cementiri.
  */
 class ZonaCementiri extends ZonaBase {

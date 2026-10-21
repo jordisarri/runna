@@ -233,12 +233,13 @@ Object.assign(ZonaBase.prototype, {
     atacar() {
         const ara = this.time.now;
         if (!this.teArma() || this.config.pacifica || ara < (this.atacFins || 0) || this.caient) return;
-        this.atacFins = ara + 380;
+        const runna = Estat.te('runna');
+        const agil = runna || Estat.te('basto_tiller');          // el bastó de Til·ler (i Runna) són més ràpids i amb més abast
+        this.atacFins = ara + (agil ? 270 : 380);
         const d = DIRS[this.direccio] || DIRS.avall;
         const jo = this.ineu.body.center;
-        const runna = Estat.te('runna');
         const dany = runna ? 2 : 1;
-        const px = jo.x + d.x * 46, py = jo.y + d.y * 46;
+        const px = jo.x + d.x * 46, py = jo.y + d.y * 46, abast = agil ? 62 : 54;
 
         // Petit tret endavant i mitja lluna visible
         this.forcat = { vx: d.x * 130, vy: d.y * 130, fins: ara + 90 };
@@ -251,7 +252,7 @@ Object.assign(ZonaBase.prototype, {
         this.enemics.forEach(e => {
             if (e.mort) return;
             const c = e.spr.body.center;
-            if (Phaser.Math.Distance.Between(c.x, c.y, px, py) < 54 + e.def.radi) this.colpejar(e, dany, d);
+            if (Phaser.Math.Distance.Between(c.x, c.y, px, py) < abast + e.def.radi) this.colpejar(e, dany, d);
         });
         // Runna talla els esbarzers negres
         if (runna) this.esbarzers.forEach(o => { if (o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, px, py) < 85) this.destruirEsbarzer(o, false); });
@@ -340,13 +341,7 @@ Object.assign(ZonaBase.prototype, {
             e.ombra.setVisible(false);
         }
 
-        // Botí
-        const [prob, min, max] = e.def.monedes;
-        if (Math.random() < prob) {
-            const n = min + Math.floor(Math.random() * (max - min + 1));
-            Estat.dades.monedes += n;
-            this.flotant(c.x, c.y - 40, `+${n} ●`, '#ffd34d');
-        }
+        // Botí: només cors de tant en tant (no hi ha monedes: no es compra ni es ven res)
         if (Math.random() < e.def.cor && Estat.dades.vida < Estat.dades.corsMax * 2) {
             Estat.dades.vida = Math.min(Estat.dades.corsMax * 2, Estat.dades.vida + 2);
             this.flotant(c.x + 20, c.y - 60, '+♥', '#ff6a7a');
@@ -371,8 +366,6 @@ Object.assign(ZonaBase.prototype, {
     // Final del combat contra el Pastor de Boira
     pastorDerrotat(e) {
         const c = e.spr.body.center;
-        Estat.dades.monedes += 15;
-        this.flotant(c.x, c.y - 60, '+15 ●', '#ffd34d');
         this.enemics.filter(x => x.tipus === 'ovella' && !x.mort).forEach(o => {
             o.mort = true; o.spr.body.enable = false; this.boiraPuf(o.spr.x, o.spr.y);
             this.tweens.add({ targets: [o.spr, o.ombra], alpha: 0, duration: 500, onComplete: () => this.retirar(o) });
