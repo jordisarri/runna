@@ -5,105 +5,133 @@
  */
 
 // ---------------- ESGLÉSIA (interior) ----------------
+// La nau fa 800 d'ample (x 240-1040). El retaule ocupa tot l'ample i es veu sencer (800 x 990); al seu peu hi ha dues
+// portes: la de la dreta duu a la torre de l'escala (ZonaTorre) i d'allà a les golfes del rellotge.
+const ESG = { alcada: 1640, retY: 1010, retTop: 20, sostre: 1000, portaDx: 870, portaEsq: 408 };
+
 class ZonaEsglesia extends ZonaBase {
     constructor() {
         super('ZonaEsglesia', {
             nom: 'Santuari del Miracle',
             amplada: 1280,
-            alcada: 820,
+            alcada: ESG.alcada,
             colorFons: '#140e0a',
             pacifica: true,
-            entrades: { porta: { x: 640, y: 770, dir: 'amunt' }, golfes: { x: 410, y: 300, dir: 'avall' } }
+            entrades: { porta: { x: 640, y: ESG.alcada - 50, dir: 'amunt' }, golfes: { x: ESG.portaDx, y: ESG.retY + 40, dir: 'avall' } }
         });
     }
 
     construir() {
-        // Terra i murs (la nau va de x=240 a x=1040)
-        this.terra('rajola', 240, 60, 800, 760, -1100);
+        const A = ESG.alcada;
+        // Terra i murs
+        this.terra('rajola', 240, 0, 800, A, -1100);
         const murs = this.add.graphics().setDepth(-1000);
-        murs.fillStyle(0xcdb89a, 1).fillRect(200, 0, 40, 820).fillRect(1040, 0, 40, 820);
-        murs.fillStyle(0x9a2e34, 1).fillRect(240, 0, 800, 70);
-        murs.fillStyle(0xe8dcc4, 1).fillRect(240, 62, 800, 8);
-        this.colisio(120, 410, 240, 820);
-        this.colisio(1160, 410, 240, 820);
-        this.colisio(640, 120, 800, 240);
-        this.colisio(420, 810, 360, 20);
-        this.colisio(860, 810, 360, 20);
+        murs.fillStyle(0x4a1e22, 1).fillRect(240, 0, 800, ESG.retY);                 // paret del fons, darrere el retaule
+        murs.fillStyle(0xe8dcc4, 1).fillRect(240, ESG.retY - 8, 800, 8);            // sòcol
+        murs.fillStyle(0xcdb89a, 1).fillRect(200, 0, 40, A).fillRect(1040, 0, 40, A);
+        this.colisio(120, A / 2, 240, A);
+        this.colisio(1160, A / 2, 240, A);
+        this.colisio(640, ESG.sostre / 2, 800, ESG.sostre);
+        this.colisio(420, A - 10, 360, 20);
+        this.colisio(860, A - 10, 360, 20);
 
-        // Retaule Major i orgue (la Pianista seu a l'orgue)
-        this.posar('retaule', 640, 330, { fonsY: 250 });
-        this.interactiu(640, 345, 110, DIALEGS.retaule, { altura: 150 });
-        this.posar('orgue', 940, 380, { col: { w: 110, h: 50 } });
-        this.npc('pianista', 940, 450, DIALEGS.pianista);
-        // El Pare Daniel dirigeix el cor, a prop del presbiteri
-        this.npc('pare_daniel', 440, 430, DIALEGS.pareDaniel, { flipX: false });
+        // Retaule Major (tot l'ample de la nau, sencer) i, al davant, l'altar de pedra
+        this.posar('retaule', 640, ESG.retY, { fonsY: 900 });
+        this.interactiu(640, ESG.retY + 36, 130, DIALEGS.retaule, { altura: 170 });
+        this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
+        this.interactiu(640, ESG.retY + 140, 90, () => this.rezar(), { altura: 100 });
 
-        // Passadís darrere el retaule: una porteta de fusta a l'esquerra, cap a les golfes del Santuari (rellotge i campanes)
-        const porta = this.add.graphics().setDepth(245);
-        porta.fillStyle(0x1a1008, 1).fillRect(378, 160, 64, 80).fillCircle(410, 160, 32);
-        porta.fillStyle(0x6a4424, 1).fillRect(386, 172, 48, 68).fillCircle(410, 172, 24);
-        porta.lineStyle(3, 0x2a1608, 1).strokeRect(386, 172, 48, 68);
-        porta.fillStyle(0xc9a54a, 1).fillCircle(424, 208, 3);
-        this.sortides.push({ r: new Phaser.Geom.Rectangle(380, 236, 60, 22), desti: 'ZonaGolfes', entrada: 'porta' });
+        // Portes del peu del retaule: la de la dreta duu a l'escala de la torre (golfes); l'esquerra és tancada
+        this.sortida(ESG.portaDx - 36, ESG.retY - 14, 72, 20, 'ZonaTorre', 'baix');
+        this.interactiu(ESG.portaEsq, ESG.retY + 50, 90, () => ({
+            pagines: [{ qui: '', text: 'La porta de l\'esquerra del retaule és tancada amb clau. Fa olor de cera vella i de pols.' }]
+        }), { altura: 150 });
 
-        // Reclinatori: desar partida
-        this.posar('reclinatori', 640, 390, { col: { w: 60, h: 16 } });
-        this.interactiu(640, 395, 70, () => ({
-            pagines: [
-                { qui: '', text: 'T\'agenolles al reclinatori i resses una estona en silenci.' },
-                { qui: '', text: 'Et sents en pau. (Partida desada.)' }
-            ],
-            enAcabar: () => { this.guardarPosicio(); Estat.desar(); this.ui().notifica('Partida desada'); }
-        }), { altura: 50 });
+        // Orgue (la Pianista seu a l'orgue) i el Pare Daniel, que dirigeix el cor
+        this.posar('orgue', 950, ESG.retY + 330, { col: { w: 110, h: 50 } });
+        this.npc('pianista', 950, ESG.retY + 400, DIALEGS.pianista);
+        this.npc('pare_daniel', 360, ESG.retY + 190, DIALEGS.pareDaniel, { flipX: false });
 
-        // Bancs
-        [480, 570, 660].forEach(y => {
-            this.posar('banc', 470, y, { col: { w: 140, h: 16 } });
-            this.posar('banc', 810, y, { col: { w: 140, h: 16 } });
+        // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar
+        // (files ben separades: entre banc i banc es veu el terra i s'hi pot passar)
+        const bancs = [ESG.retY + 230, ESG.retY + 380, ESG.retY + 530];
+        bancs.forEach(y => {
+            this.posar('banc_esglesia', 470, y, { col: { w: 140, h: 16 } });
+            this.posar('banc_esglesia', 810, y, { col: { w: 140, h: 16 } });
         });
 
-        // Pergamí amb el fragment 2 de la llegenda del monjo, sobre un banc del mig (lluny del Pare Daniel)
-        this.posar('pergami', 470, 552, { fonsY: 600 });
-        this.interactiu(470, 585, 70, DIALEGS.pergamiEsglesia, { altura: 80 });
+        // Pergamí amb el fragment 2 de la llegenda del monjo, oblidat sobre el capçal d'un banc del mig (lluny del Pare Daniel)
+        this.posar('pergami', 470, bancs[1] - 74, { fonsY: bancs[1] + 1 });
+        this.interactiu(470, bancs[1] + 14, 70, DIALEGS.pergamiEsglesia, { altura: 80 });
 
         // Llum de les vidrieres
-        this.add.rectangle(640, 410, 800, 820, 0xffd38a, 0.05).setDepth(80000);
+        this.add.rectangle(640, A / 2, 800, A, 0xffd38a, 0.05).setDepth(80000);
 
-        this.sortida(600, 800, 80, 20, 'ZonaPlaca', 'esglesia');
+        this.sortida(600, A - 20, 80, 20, 'ZonaPlaca', 'esglesia');
+    }
+
+    // Altar de pedra: l'Ineu s'agenolla, reposa (els grans del rosari tornen a brillar) i la partida es desa
+    rezar() {
+        const i = this.ineu, base = i.scaleY;
+        this.tweens.add({ targets: i, scaleY: base * 0.82, duration: 500, ease: 'Sine.easeOut' });
+        return {
+            pagines: [
+                { qui: '', text: 'T\'agenolles davant l\'altar de pedra i resses una estona en silenci.' },
+                { qui: '', text: 'Una calma tèbia et puja pel pit. Els grans del teu rosari tornen a brillar i la partida queda desada.' }
+            ],
+            enAcabar: () => {
+                this.tweens.add({ targets: i, scaleY: base, duration: 400, ease: 'Sine.easeInOut' });
+                Estat.dades.vida = Estat.dades.corsMax * 2;
+                this.ui().actualitzarHUD();
+                this.guardarPosicio();
+                Estat.desar();
+                this.ui().notifica('Partida desada');
+                const p = this.add.particles(i.x, i.y - 60, 'espurna', {
+                    speed: { min: 20, max: 90 }, angle: { min: 230, max: 310 }, lifespan: 1100,
+                    scale: { start: 0.3, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xffe6a8, 0xf8c060], blendMode: 'ADD', quantity: 18, emitting: false
+                }).setDepth(i.depth + 1);
+                p.explode(18);
+                this.time.delayedCall(1300, () => p.destroy());
+            }
+        };
     }
 }
 
 // ---------------- MONESTIR (exterior) ----------------
+const MONESTIR_DY = 150;      // tot l'escenari baixa perquè la façana del Monestir es vegi sencera, de dalt a baix
+
 class ZonaMonestir extends ZonaBase {
     constructor() {
+        const D = MONESTIR_DY;
         super('ZonaMonestir', {
             nom: 'El Monestir',
             amplada: 1600,
-            alcada: 1000,
-            entrades: { placa: { x: 60, y: 520, dir: 'dreta' }, cementiri: { x: 1480, y: 70, dir: 'avall' } }
+            alcada: 800 + D,
+            entrades: { placa: { x: 60, y: 520 + D, dir: 'dreta' }, cementiri: { x: 1480, y: 70, dir: 'avall' } }
         });
     }
 
     construir() {
-        this.terra('herba', 0, 0, 1600, 1000, -1100);
-        this.terra('llamborda', 0, 430, 1600, 280);   // la mateixa plaça empedrada
-        this.terra('cami', 1400, 0, 160, 460);          // cap al cementiri (darrere el Monestir i el Santuari)
+        const D = MONESTIR_DY;
+        this.terra('herba', 0, 0, 1600, 800 + D, -1100);
+        this.terra('llamborda', 0, 430 + D, 1600, 370);  // la mateixa plaça empedrada, fins a baix de tot
+        this.terra('cami', 1400, 0, 160, 460 + D);         // cap al cementiri (darrere el Monestir i el Santuari)
 
-        this.posar('monestir', 800, 440, { col: { w: 600, h: 140, dy: -10 } });
-        this.blocDarrere(800, 600, 295);
-        this.interactiu(800, 450, 70, DIALEGS.enConstruccio('Biblioteca del Monestir'), { altura: 90 });
-        this.npc('pare_alcui', 600, 540, DIALEGS.pareAlcui);
+        this.posar('monestir', 800, 440 + D, { col: { w: 600, h: 140, dy: -10 } });
+        this.blocDarrere(800, 600, 295 + D);
+        this.interactiu(800, 450 + D, 70, DIALEGS.enConstruccio('Biblioteca del Monestir'), { altura: 90 });
+        this.npc('pare_alcui', 600, 540 + D, DIALEGS.pareAlcui);
         // Xiprers alts a l'esquerra del portal i una conífera a la dreta (com a la foto del monestir)
-        [[440, 445, 1.7], [492, 452, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y, { escala: e, col: { w: 26, h: 12 } }));
-        this.posar('xiprer', 1165, 450, { escala: 1.9, col: { w: 30, h: 12 } });
+        [[440, 445, 1.7], [492, 452, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y + D, { escala: e, col: { w: 26, h: 12 } }));
+        this.posar('xiprer', 1165, 450 + D, { escala: 1.9, col: { w: 30, h: 12 } });
 
-        this.cartell(1480, 450, () => ({ pagines: [{ qui: '', text: '→ Cel·les de Sant Antoni\n↑ El Cementiri (darrere el Monestir i el Santuari)' }] }));
-        this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720]]);
+        this.cartell(1480, 450 + D, () => ({ pagines: [{ qui: '', text: '→ Cel·les de Sant Antoni\n↑ El Cementiri (darrere el Monestir i el Santuari)' }] }));
+        this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720], [420, 770], [1520, 560], [1520, 760], [1090, 770], [750, 780]].map(([x, y]) => [x, y + D]));
 
-        this.enemic('visitant', 1100, 700);
-        this.enemic('escolopendra', 400, 700);
-        this.enemic('escolopendra', 1200, 360);
-        this.sortida(0, 450, 14, 140, 'ZonaPlaca', 'monestir');
+        this.enemic('visitant', 1100, 700 + D);
+        this.enemic('escolopendra', 400, 700 + D);
+        this.enemic('escolopendra', 1200, 360 + D);
+        this.sortida(0, 450 + D, 14, 140, 'ZonaPlaca', 'monestir');
         this.sortida(1400, 0, 160, 14, 'ZonaCementiri', 'monestir');
     }
 }
@@ -130,7 +158,7 @@ class ZonaCreu extends ZonaBase {
         // Creu de l'Aparició (sense cap tanca ni mur al darrere)
         this.posar('creu', 740, 440, { col: { w: 56, h: 24 } });
         this.interactiu(740, 445, 85, DIALEGS.creu, { altura: 190 });
-        [[470, 350], [1010, 350]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xcfe08a));   // plàtans
+        [[470, 350], [940, 350]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xcfe08a));   // plàtans
 
         // Bassadòria: una bassa molt gran (520 d'ample, uns quatre Ineus), sense mur al darrere; plàtans de tardor als costats
         [[700, 930], [1330, 930]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xe0b868));
@@ -149,8 +177,12 @@ class ZonaCreu extends ZonaBase {
         this.enemic('escolopendra', 500, 300);
         // Aigua neta (després del Cant de l'Aurora)
         this.aiguaNeta = this.add.ellipse(1010, 755, 416, 130, 0x8fd0f0, 0.75).setDepth(901).setVisible(Estat.flag('bassadoriaNeta'));
-        // Els gripaus corromputs surten de la Bassadòria mentre l'aigua estigui tèrbola
-        this.propGripau = this.time.now + 1500;
+        // Els gripaus corromputs s'escapen de la Bassadòria: n'hi ha per tota l'escena i, a mesura que en caiguin,
+        // en surten de nous de la bassa. Quan la boira se'n va (aigua neta) ja no en surten més.
+        this.propGripau = this.time.now + 2500;
+        if (!Estat.flag('bassadoriaNeta')) {
+            [[560, 600], [900, 560], [1330, 620], [420, 560], [640, 830], [1420, 760], [1180, 300], [260, 760]].forEach(([x, y]) => this.enemic('gripau', x, y));
+        }
         this.sortida(1100, 0, 160, 14, 'ZonaPlaca', 'creu');
 
         this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, 0.08).setScrollFactor(0).setDepth(90000);
@@ -177,8 +209,14 @@ class ZonaCreu extends ZonaBase {
     actualitzar(ara) {
         if (Estat.flag('bassadoriaNeta') || ara < this.propGripau) return;
         const vius = this.enemics.filter(e => e.tipus === 'gripau' && !e.mort).length;
-        this.propGripau = ara + 4500;
-        if (vius < 3) this.enemic('gripau', 870 + Math.random() * 280, 870, { sortida: true });
+        if (vius >= 8) return;
+        this.propGripau = ara + 2200;
+        // Surt de la bassa d'un salt i s'escampa per l'escena
+        const sx = 880 + Math.random() * 260, sy = 850;
+        let dx, dy, intents = 0;
+        do { dx = 150 + Math.random() * 1300; dy = 280 + Math.random() * 600; intents++; }
+        while (intents < 12 && (dx > 740 && dx < 1280 && dy > 640 && dy < 880));       // no tornar a caure a la bassa
+        this.enemic('gripau', sx, sy, { sortida: true, salt: { x: dx, y: dy } });
     }
 }
 

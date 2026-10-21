@@ -61,14 +61,14 @@ class ZonaPlaca extends ZonaBase {
 
         // --- Personatges ---
         this.npc('pare_jordi', 1000, 770, DIALEGS.pareJordi);
-        if (!Estat.flag('pastorVencut')) this.andreu = this.npc('germa_andreu', 1180, 940, DIALEGS.germaAndreu, { flipX: true });
+        if (!Estat.flag('pastorVencut')) this.andreu = this.npc('germa_andreu', 1350, 505, DIALEGS.germaAndreu, { flipX: true });
 
         // --- Cartells ---
         this.cartell(300, 465, DIALEGS.cartellPlaca);
 
         // --- Arbres ---
         [[110, 250], [140, 980], [300, 1110], [640, 1130], [1040, 1110],
-         [1420, 1110], [1540, 980], [250, 120]].forEach(([x, y]) => {
+         [1420, 1110], [1540, 980], [170, 130]].forEach(([x, y]) => {
             this.posar('arbre', x, y, { col: { w: 34, h: 16 } });
         });
 

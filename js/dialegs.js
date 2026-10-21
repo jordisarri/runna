@@ -58,14 +58,12 @@ const DIALEGS = {
                     { qui: "Pare Jordi", text: "Les famílies estan angoixades. I aquesta boira que surt de sota terra... no m'agrada gens." },
                     { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Pren el meu clauer de novici: parla amb tothom i explica-m'ho tot." },
                     { qui: "", text: "Has obtingut el CLAUER DE NOVICI!\nObre la biblioteca i les cel·les." },
-                    { qui: "Pare Jordi", text: "I pren també aquest bastó de pelegrí. Aquesta boira ha despertat bestioles pels camins: escolopendres, sobretot. Fes-les adormir, que mai no es mor ningú de debò." },
-                    { qui: "", text: "Has obtingut el BASTÓ DE PELEGRÍ!\nAtac: J o ESPAI (cap on mires) · Esquiva: K o Majús." }
+                    { qui: "Pare Jordi", text: "I abans de marxar, passa a saludar el Germà Andreu, al costat dels xiprers: sempre té la butxaca plena de coses. Ves amb compte pels camins, Ineu." }
                 ],
                 enAcabar: () => {
                     E.posaFlag("clauerNovici");
                     E.dona("clauer");
-                    E.dona("basto"); E.posaFlag("bastoObtingut"); E.posaFlag("tutorialCombat"); E.posaFlag("combatActiu");
-                    E.posaObjectiu("Parla amb la gent del Santuari. Les cel·les són al nord, passant per les Runes.");
+                    E.posaObjectiu(E.flag("bastoObtingut") ? "Parla amb la gent del Santuari. Les cel·les són al nord, passant per les Runes." : "Passa a veure el Germà Andreu, vora els xiprers de la plaça. Després, les cel·les són al nord, passant per les Runes.");
                 }
             };
         }
@@ -96,15 +94,22 @@ const DIALEGS = {
     },
 
     germaAndreu: E => {
-        if (!E.flag('parlatAndreu')) {
+        if (!E.flag('bastoObtingut')) {
             return {
                 pagines: [
                     { qui: 'Germà Andreu', text: 'Ineu! Quin drama, oi? Tothom corrent amunt i avall...' },
                     { qui: 'Germà Andreu', text: 'Segur que els nens s\'han amagat per jugar. Jo els entenc, eh... Tantes pregàries, tant de silenci...' },
+                    { qui: 'Germà Andreu', text: 'Ei, vine. Pren aquest bastó de pelegrí: era d\'un vell que ja no el vol. Va bé per a tot, fins i tot per anar a collir bolets.' },
+                    { qui: '', text: 'Has obtingut el BASTÓ DE PELEGRÍ!\nAtac: J o ESPAI (cap on mires).' },
+                    { qui: 'Germà Andreu', text: 'I vés amb compte, eh. Amb els visitants, que van com sonàmbuls, i amb les escolopendres: piquen que no et pots ni imaginar. No les facis mal de debò: només fes-les adormir.' },
                     { qui: 'Germà Andreu', text: 'Ets del Barça, tu? Tinc uns cromos que els nens es moren per tenir. Ells sí que m\'escolten.' },
                     { qui: 'Ineu', text: '(El Germà Andreu sembla molt tranquil. Massa tranquil.)' }
                 ],
-                enAcabar: () => E.posaFlag('parlatAndreu')
+                enAcabar: () => {
+                    E.posaFlag('parlatAndreu');
+                    E.dona('basto'); E.posaFlag('bastoObtingut'); E.posaFlag('tutorialCombat'); E.posaFlag('combatActiu');
+                    if (E.flag('clauerNovici')) E.posaObjectiu('Parla amb la gent del Santuari. Les cel·les són al nord, passant per les Runes.');
+                }
             };
         }
         return {
@@ -682,12 +687,10 @@ const DIALEGS = {
                 }
             };
         }
-        return {
-            pagines: [
-                { qui: 'Garf', text: 'Mmm? Ah, un monjo! Seu, seu al banc de davant, que per xerrar s\'hi està millor. Soc el Garf, inventor. Tinc idees que ni jo entenc.' },
-                { qui: 'Garf', text: 'Si em portes un cristall de gel (n\'hi ha un a la Font del Bisbe, al bosc de l\'oest del Til·ler), et construiré un telescopi per mirar el cel.' }
-            ]
-        };
+        // Fins que l'Ineu no s'ha assegut al banc de davant, el Garf només l'hi convida
+        const pagines = [{ qui: 'Garf', text: 'Mmm? Ah, un monjo! Seu, seu al banc de davant, que per xerrar s\'hi està millor. Soc el Garf, inventor. Tinc idees que ni jo entenc.' }];
+        if (E.flag('garfBancSegut')) pagines.push({ qui: 'Garf', text: 'Si em portes un cristall de gel (n\'hi ha un a la Font del Bisbe, al bosc de l\'oest del Til·ler), et construiré un telescopi per mirar el cel.' });
+        return { pagines };
     },
     cartellEra: E => ({ pagines: [{ qui: '', text: '↑ Ermita de la Desaparició\n→ Hostatgeria\n← Rovellonera' }] }),
 
@@ -976,7 +979,7 @@ const DIALEGS = {
             if (!E.flag("calze")) { E.dona("calze"); E.posaFlag("calze"); }
             E.dades.vida = E.dades.corsMax * 2;
             const z = Joc.zonaActiva(game.scene.scenes[0]);
-            if (z) z.flotant(z.ineu.x, z.ineu.y - 150, "♥ Vida plena", "#ff6a7a");
+            if (z) z.flotant(z.ineu.x, z.ineu.y - 150, "✦ Rosari ple", "#ffd894");
         }
     }),
 

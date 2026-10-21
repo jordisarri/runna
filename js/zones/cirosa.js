@@ -148,6 +148,6 @@ class ZonaCirosa extends ZonaBase {
         if (!e) { this.bossIniciat = false; this.andreuNpc.setVisible(true); this.andreuOmbra.setVisible(true); return; }
         this.cameras.main.shake(300, 0.005);
         this.flotant(1400, 520, 'Be-e-e-e!', '#e0a0ff');
-        this.ui().notifica('Pastor de Boira: esquiva les envestides (K) i colpeja quan quedi cansat');
+        this.ui().notifica('Pastor de Boira: allunya\'t de les envestides i colpeja quan quedi cansat');
     }
 }

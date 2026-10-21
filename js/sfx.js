@@ -105,10 +105,6 @@ const Sfx = {
         this.to(880, 1320, 0.16, 'triangle', 0.18);
         this.to(1760, 2640, 0.2, 'sine', 0.08, 0.04);
     },
-    esquiva() {
-        if (!this.ok('esquiva', 80)) return;
-        this.xiu(0.22, 0.22, 'highpass', 400, 3200, 0.8);
-    },
     carrega() {                  // l'enemic apunta (avís abans de carregar)
         if (!this.ok('carrega', 200)) return;
         this.to(180, 640, 0.4, 'sawtooth', 0.1);

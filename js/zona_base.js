@@ -15,6 +15,7 @@ const VELOCITAT_INEU = 230;
 // Caixa de col·lisió del tronc de l'arbre (gràfic 'arbre': les arrels fan ~130 px d'ample i el tronc ~70-100)
 const TRONC_ARBRE = esc => ({ w: Math.round(100 * esc), h: Math.round(36 * esc) });
 
+const PROFUNDITAT_PORTA = 36;   // els interiors es surten per sota de la porta: l'Ineu l'ha de traspassar abans de canviar de zona
 const TOPE_Y = 100;   // els peus de l'Ineu no passen d'aquí amunt: sempre se li veu el cos (la càmera s'atura a y=0)
 
 class ZonaBase extends Phaser.Scene {
@@ -34,12 +35,13 @@ class ZonaBase extends Phaser.Scene {
         Estat.posaFlag('visitada_' + this.scene.key); // el mapa només mostra el que s'ha visitat
         Joc.musicaZona(this);
 
-        this.physics.world.setBounds(0, TOPE_Y - 30, c.amplada, c.alcada - TOPE_Y + 30);   // la caixa dels peus fa 30 d'alt
+        // La caixa dels peus fa 30 d'alt. Als interiors el món s'allarga una mica per sota: la porta es traspassa de debò
+        this.physics.world.setBounds(0, TOPE_Y - 30, c.amplada, c.alcada - TOPE_Y + 30 + (this.esInterior() ? PROFUNDITAT_PORTA + 50 : 0));
         this.obstacles = this.physics.add.staticGroup();
         this.interactius = [];
         this.llocsFlauta = [];
         this.sortides = [];
-        this.enemics = [];
+        this.enemics = []; this.copes = []; this.atacantFins = 0;
         this.esbarzers = [];
         this.tallables = [];
         this.caient = false;
@@ -53,7 +55,9 @@ class ZonaBase extends Phaser.Scene {
         this.extraSud = 0;
         this.yTall = Infinity;
         this.preparaTweens();
+        this.portesInt = [];
         this.construir();
+        this.obrirPortes();
         this.ampliarSud();
         this.construirCamins();
         this.crearIneu();
@@ -70,7 +74,7 @@ class ZonaBase extends Phaser.Scene {
         cam.fadeIn(350, 0, 0, 0);
 
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.tecles = this.input.keyboard.addKeys('W,A,S,D,E,SPACE,ENTER,J,K,M,F,SHIFT');
+        this.tecles = this.input.keyboard.addKeys('W,A,S,D,E,SPACE,ENTER,J,M,F');
 
         // Indicador "!" sobre el punt interactiu més proper
         this.indicador = this.add.text(0, 0, '!', estilText(28, '#ffd34d', { stroke: '#000', strokeThickness: 5, fontStyle: 'bold' }))
@@ -166,9 +170,11 @@ class ZonaBase extends Phaser.Scene {
 
         // Les vores laterals continuen per la franja nova
         if (this.textures.exists('arbre')) {
+            // (una capçada fa uns 340 d'alt: els arbres que en taparien una sortida lateral es deixen)
+            const tapa = (x, y) => this.sortides.some(s => s.r.width <= 40 && Math.abs(s.r.centerX - x) < 60 && s.r.bottom > y - 340 && s.r.y < y + 40);
             for (let y = tall + 60; y < tall + extra; y += 90) {
-                this.posar('arbre', 24, y);
-                this.posar('arbre', c.amplada - 24, y);
+                if (!tapa(24, y)) this.posar('arbre', 24, y);
+                if (!tapa(c.amplada - 24, y)) this.posar('arbre', c.amplada - 24, y);
             }
         }
     }
@@ -263,6 +269,7 @@ class ZonaBase extends Phaser.Scene {
         const escala = (tex.customData && tex.customData.escala) || 1 / RES;
         const img = this.add.image(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
         img.setDepth(opts.fonsY !== undefined ? opts.fonsY : y);
+        if (/^(arbre|xiprer|roure|alzina_buida|pinassa|rovello)$/.test(key)) (this.copes = this.copes || []).push(img);   // copes que es tornen translúcides si amaguen un enemic
         // Tots els arbres del mateix gràfic tenen el mateix tronc sòlid (arrels incloses), proporcional a l'escala
         if (key === 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: TRONC_ARBRE(opts.escala || 1) });
         if (opts.col) this.colisio(x + (opts.col.dx || 0), y - opts.col.h / 2 + (opts.col.dy || 0), opts.col.w, opts.col.h);
@@ -348,32 +355,76 @@ class ZonaBase extends Phaser.Scene {
         return this.interactiu(x, y, 70, dialeg, { altura: 70 });
     }
 
+    // Les parets d'un interior que barren la porta es parteixen perquè hi quedi un pas lliure (la porta s'ha de poder traspassar)
+    obrirPortes() {
+        (this.portesInt || []).forEach(p => {
+            const x0 = p.x - 8, x1 = p.x + p.w + 8;
+            this.obstacles.getChildren().slice().forEach(o => {
+                const b = o.body;
+                if (!b || b.x >= x1 || b.x + b.width <= x0 || b.y >= p.y + 60 || b.y + b.height <= p.y - 40) return;
+                if (b.width < 4 || b.height > 80) return;               // només tires de paret baixa
+                const { x, y, width: w, height: h } = b;
+                this.obstacles.remove(o, true, true);
+                if (x < x0) this.colisio((x + x0) / 2, y + h / 2, x0 - x, h);
+                if (x + w > x1) this.colisio((x1 + x + w) / 2, y + h / 2, x + w - x1, h);
+            });
+        });
+    }
+
     // Rectangle de sortida: quan l'Ineu el toca, es canvia a la zona "desti" i entra per "entrada"
-    sortida(x, y, w, h, desti, entrada) {
+    // peu = true: només compta el punt dels peus (no tota la caixa), per traspassar de debò un camí d'arbres.
+    sortida(x, y, w, h, desti, entrada, peu = false) {
+        // Porta a la vora de baix d'un interior: es desplaça cap avall perquè l'Ineu hagi de sortir per la porta
+        if (this.esInterior() && w >= h && y > this.config.alcada / 2 && y + h >= this.config.alcada - 30) {
+            (this.portesInt = this.portesInt || []).push({ x, y, w });
+            y += PROFUNDITAT_PORTA; h = 60;
+        }
         // Una sortida enganxada a la vora superior s'allarga fins on l'Ineu pot arribar (TOPE_Y)
         if (y < TOPE_Y - 10) h = Math.max(h, TOPE_Y - 10 - y);
         const r = new Phaser.Geom.Rectangle(x, y, w, h);
-        this.sortides.push({ r, desti, entrada });
+        this.sortides.push({ r, desti, entrada, peu });
         this.marcarSortida(r);
         if (Joc.debug) this.add.rectangle(x, y, w, h).setOrigin(0).setStrokeStyle(2, 0x00ffff).setDepth(99998);
     }
 
-    // Llum pulsant i fletxa que indiquen on hi ha una sortida (vora de la pantalla o porta)
+    // Sortida: una llum càlida i suau que s'esvaeix cap a dins i una remor de llumetes (focs follets) que s'enlairen
+    // cap a la sortida i s'hi esvaeixen. Sense fletxes: la llum "crida" sola, d'acord amb la boira màgica del Miracle.
     marcarSortida(r) {
         const c = this.config, vora = 20;
-        let dir = 'amunt', cx = r.centerX, cy = r.centerY, ample = r.width, alt = r.height;
-        if (r.x <= vora) { dir = 'esquerra'; cx = 40; ample = 70; alt = Math.max(r.height, 80); }
-        else if (r.right >= c.amplada - vora) { dir = 'dreta'; cx = c.amplada - 40; ample = 70; alt = Math.max(r.height, 80); }
-        else if (r.bottom >= c.alcada - vora) { dir = 'avall'; cy = c.alcada - 40; alt = 70; ample = Math.max(r.width, 80); }
-        else if (r.y < TOPE_Y) { dir = 'amunt'; cy = TOPE_Y - 50; alt = 70; ample = Math.max(r.width, 80); }
-        else { cy = r.y + r.height * 0.35; ample = Math.max(r.width, 60); alt = 60; }   // porta d'un edifici
-        const llum = this.add.ellipse(cx, cy, ample, alt, 0xffe08a, 0.28).setDepth(-940);
-        this.tweens.add({ targets: llum, alpha: 0.08, scaleX: 1.12, scaleY: 1.12, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
-        const fletxa = { amunt: '▲', avall: '▼', esquerra: '◀', dreta: '▶' }[dir];
-        const dx = { esquerra: 26, dreta: -26 }[dir] || 0, dy = { amunt: 30, avall: -30 }[dir] || -30;
-        const t = this.add.text(cx + dx, cy + dy, fletxa, estilText(26, '#ffe08a', { stroke: '#000', strokeThickness: 4 })).setOrigin(0.5).setDepth(86000).setAlpha(0.85);
-        const m = { amunt: [0, -8], avall: [0, 8], esquerra: [-8, 0], dreta: [8, 0] }[dir];
-        this.tweens.add({ targets: t, x: t.x + m[0], y: t.y + m[1], yoyo: true, repeat: -1, duration: 650, ease: 'Sine.easeInOut' });
+        let dir = 'amunt', ex = r.centerX, ey = r.centerY, span = r.width, fons = 100;
+        if (r.x <= vora) { dir = 'esquerra'; ex = 4; ey = r.centerY; span = Math.max(r.height, 90); }
+        else if (r.right >= c.amplada - vora) { dir = 'dreta'; ex = c.amplada - 4; ey = r.centerY; span = Math.max(r.height, 90); }
+        else if (r.bottom >= c.alcada - vora) { dir = 'avall'; ex = r.centerX; ey = c.alcada - 4; span = Math.max(r.width, 90); }
+        else if (r.y < TOPE_Y) { dir = 'amunt'; ex = r.centerX; ey = r.y <= 20 ? 4 : TOPE_Y - 14; span = Math.max(r.width, 90); }   // vora superior de la pantalla
+        else { dir = 'amunt'; ex = r.centerX; ey = r.y + r.height * 0.7; span = Math.min(Math.max(r.width, 70), 150); fons = 70; }   // porta d'un edifici
+        const v = { dreta: [1, 0], avall: [0, 1], esquerra: [-1, 0], amunt: [0, -1] }[dir];   // cap a fora
+        const angle = Math.atan2(v[1], v[0]);
+
+        // Resplendor: capes ovalades superposades, ben suaus, que neixen a la vora
+        const llum = this.add.container(ex, ey).setRotation(angle).setDepth(-940);
+        const g = this.add.graphics();
+        for (let i = 0; i < 7; i++) {
+            const f = i / 6;
+            g.fillStyle(0xd89a4a, 0.045 + 0.03 * (1 - f)).fillEllipse(-fons * 0.12, 0, fons * (1.5 - f * 1.1), span * (1.05 - f * 0.55));
+        }
+        llum.add(g);
+        llum.setBlendMode(Phaser.BlendModes.ADD);
+        this.tweens.add({ targets: llum, alpha: 0.55, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
+
+        // Llumetes: neixen dins de la pantalla i s'allunyen lentament cap a la sortida, tremolant una mica
+        const ample = Math.abs(v[0]) ? fons : span * 0.9, alt = Math.abs(v[0]) ? span * 0.9 : fons;
+        const zona = new Phaser.Geom.Rectangle(ex - v[0] * fons * 0.55 - ample / 2, ey - v[1] * fons * 0.55 - alt / 2, ample, alt);
+        this.add.particles(0, 0, 'espurna', {
+            emitZone: { type: 'random', source: zona },
+            speedX: { min: v[0] * 14 - 6, max: v[0] * 30 + 6 },
+            speedY: { min: v[1] * 14 - 6, max: v[1] * 30 + 6 },
+            lifespan: { min: 2600, max: 4200 },
+            scale: { values: [0, 0.24, 0.14, 0] },
+            alpha: { values: [0, 0.6, 0.5, 0] },
+            tint: [0xe8b068, 0xd89a58, 0xb8a0e0],
+            blendMode: 'ADD',
+            frequency: Math.max(45, 220 - span * 0.6)
+        }).setDepth(86000);
     }
 
     // Emissor de boira fosca
@@ -429,6 +480,7 @@ class ZonaBase extends Phaser.Scene {
         if (vista8) this.vista8 = vista8;
         else if (!this.vista8 || !this.vista8Manual) this.vista8 = per4[dir];
         const vista = this.vista8;
+        if (this.atacantFins && this.time.now < this.atacantFins) return;      // l'animació de l'atac no es talla
         if (caminant) {
             this.ineu.anims.play('caminar_' + vista, true);
         } else {
@@ -590,6 +642,32 @@ class ZonaBase extends Phaser.Scene {
     update(time, delta) {
         this.cicle(time, delta);
         this.sincroFantasma();
+        this.transparenciaCopes();
+    }
+
+    // Un enemic darrere la capçada d'un arbre no es perd: se'n veu una silueta translúcida per sobre
+    // (com la de l'Ineu), que apareix i s'esvaeix suaument. Els arbres no canvien.
+    transparenciaCopes() {
+        if (!this.copes || !this.enemics) return;
+        const caixes = this.copes.map(img => ({ y: img.y, b: img.getBounds() }));
+        this.enemics.forEach(e => {
+            const sp = e.spr;
+            let alfa = 0;
+            if (!e.mort && sp.active && sp.visible) {
+                const b = sp.getBounds();
+                if (caixes.some(c => sp.y < c.y + 4 && Phaser.Geom.Rectangle.Overlaps(c.b, b))) alfa = 0.42;
+            }
+            let f = e.fantasma;
+            if (!f) {
+                if (!alfa) return;
+                f = e.fantasma = this.add.sprite(sp.x, sp.y, sp.texture.key, sp.frame.name).setDepth(87000).setAlpha(0);
+            }
+            if (f.texture.key !== sp.texture.key || f.frame.name !== sp.frame.name) f.setTexture(sp.texture.key, sp.frame.name);
+            f.setOrigin(sp.originX, sp.originY).setPosition(sp.x, sp.y).setScale(sp.scaleX, sp.scaleY).setFlip(sp.flipX, sp.flipY).setAngle(sp.angle);
+            const dest = alfa * sp.alpha;
+            f.setAlpha(f.alpha + (dest - f.alpha) * 0.18);
+            f.setVisible(f.alpha > 0.01);
+        });
     }
 
     sincroFantasma() {
@@ -630,7 +708,6 @@ class ZonaBase extends Phaser.Scene {
         else if (accio && proper) this.interactuar(proper);
         else if (accio && this.esbarzerDavant()) this.foc();
         else if (accio || T(this.tecles.J)) this.atacar();
-        if (T(this.tecles.K) || T(this.tecles.SHIFT)) this.esquivar();
         if (Estat.te('foc_jaumeta') && T(this.tecles.F)) this.foc();
         time = this.time.now;   // un sol rellotge per a tot el combat
         this.actualitzarCombat(time);
@@ -647,9 +724,16 @@ class ZonaBase extends Phaser.Scene {
             if (!vol) { this.ineu.body.setVelocity(0); return; }
             this.alcar();
         }
-        // Empenta forçada (esquiva, retrocés, tret de l'atac): el jugador no la controla
+        // Empenta forçada (retrocés quan et fan mal): el jugador no la controla
         if (this.forcat && this.time.now < this.forcat.fins) {
             this.ineu.body.setVelocity(this.forcat.vx, this.forcat.vy);
+            this.ineu.setDepth(this.ineu.y);
+            this.ombraIneu.setPosition(this.ineu.x, this.ineu.y);
+            return;
+        }
+        // Mentre ataca no es mou del lloc (així els peus no llisquen sobre l'animació)
+        if (this.atacantFins && this.time.now < this.atacantFins) {
+            this.ineu.body.setVelocity(0);
             this.ineu.setDepth(this.ineu.y);
             this.ombraIneu.setPosition(this.ineu.x, this.ineu.y);
             return;
@@ -680,12 +764,18 @@ class ZonaBase extends Phaser.Scene {
         this.ombraIneu.setPosition(this.ineu.x, this.ineu.y);
     }
 
+    // Punt interactiu que l'Ineu té al davant: prou a prop (80% del radi) i dins d'un con de ±70° cap on mira.
+    // Així, si ataca d'esquena a un cartell, no es posa a llegir.
     puntProper() {
+        const v8 = { right: [1, 0], southeast: [1, 1], down: [0, 1], southwest: [-1, 1], left: [-1, 0], northwest: [-1, -1], up: [0, -1], northeast: [1, -1] }[this.vista8];
+        const dv = v8 ? { x: v8[0] / Math.hypot(...v8), y: v8[1] / Math.hypot(...v8) } : (DIRS[this.direccio] || DIRS.avall);
         let millor = null, millorDist = Infinity;
         for (const p of this.interactius) {
             if (p.actiu && !p.actiu()) continue;
-            const d = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, p.x, p.y);
-            if (d <= p.radi && d < millorDist) { millor = p; millorDist = d; }
+            const dx = p.x - this.ineu.x, dy = p.y - this.ineu.y, d = Math.hypot(dx, dy);
+            if (d > p.radi * 0.8 || d >= millorDist) continue;
+            if (d > 36 && (dx * dv.x + dy * dv.y) / d < 0.34) continue;          // no el mira
+            millor = p; millorDist = d;
         }
         return millor;
     }
@@ -702,7 +792,7 @@ class ZonaBase extends Phaser.Scene {
         const b = this.ineu.body;
         const peus = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
         for (const s of this.sortides) {
-            if (Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r)) {
+            if (s.peu ? s.r.contains(b.center.x, b.bottom) : Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r)) {
                 this.canviarZona(s.desti, s.entrada);
                 return;
             }

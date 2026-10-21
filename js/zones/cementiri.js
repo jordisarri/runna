@@ -53,7 +53,7 @@ class ZonaCementiri extends ZonaBase {
 
         // Xiprers al voltant
         this.muralla(0, 40, 1600, 40, 100, 'xiprer');
-        this.arbres([[60, 520], [60, 700], [60, 330], [1520, 300], [1520, 520], [1520, 760], [1400, 960], [300, 1040], [900, 1050], [1250, 1050]], 'xiprer');
+        this.arbres([[60, 520], [150, 700], [60, 330], [1520, 300], [1520, 520], [1520, 760], [1400, 960], [300, 1040], [900, 1050], [1250, 1050]], 'xiprer');
 
         // Animalets que surten de la terra esquerdada
         if (!Estat.flag('relIquiesRetornades')) {

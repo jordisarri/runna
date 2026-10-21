@@ -1,6 +1,6 @@
 /**
  * ESCENA UI: corre sempre per sobre de la zona activa.
- * HUD (cors, objectiu), caixa de diàleg, menú de pausa i controls tàctils.
+ * HUD (rosari d'energia, objectiu), caixa de diàleg, menú de pausa i controls tàctils.
  */
 const AMPLE = 720, ALT = 1280;
 const ALT_HUD = 170;   // franja de dalt reservada per al HUD: l'escenari es dibuixa només per sota
@@ -100,7 +100,10 @@ class EscenaUI extends Phaser.Scene {
     crearHUD() {
         // Franja de dalt: un sol llenç de pergamí enmarcat a tot l'ample; l'escenari comença just a sota
         this.fonsHUD = marcPergami(this, 0, 0, AMPLE, ALT_HUD, 'marc_peti').setOrigin(0);
-        this.cors = [];     // imatges dels cors de vida (es creen a mesura que n'hi ha més)
+        // Rosari d'energia: un cordó amb una creueta i un gra per cada punt (cada gra són dues meitats)
+        this.cordo = this.add.graphics();
+        this.creuRosari = this.add.image(38, 62, 'creu_rosari').setScale(1 / RES);
+        this.cors = [];     // els grans del rosari (es creen a mesura que n'hi ha més)
         this.textObjectiu = this.add.text(48, 86, '', estilText(20, '#3a2412', { fontStyle: 'italic', wordWrap: { width: 400 } }));
 
         this.bannerZona = this.add.text(AMPLE / 2, 236, '', estilText(42, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
@@ -122,21 +125,33 @@ class EscenaUI extends Phaser.Scene {
     actualitzarHUD() {
         const d = Estat.dades;
         if (!d) return;
-        while (this.cors.length < d.corsMax) this.cors.push(this.add.image(0, 0, 'cor_ple').setScale(1 / RES));
+        while (this.cors.length < d.corsMax) this.cors.push(this.add.image(0, 0, 'gra_ple').setScale(1 / RES));
+        const gx = i => 78 + i * 46, GY = 52;
         this.cors.forEach((img, i) => {
             const v = d.vida - i * 2;
-            img.setVisible(i < d.corsMax).setPosition(68 + i * 54, 54).setTexture(v >= 2 ? 'cor_ple' : v === 1 ? 'cor_mig' : 'cor_buit');
+            img.setVisible(i < d.corsMax).setPosition(gx(i), GY).setTexture(v >= 2 ? 'gra_ple' : v === 1 ? 'gra_mig' : 'gra_buit');
         });
+        // Cordó: de la creueta al primer gra i, entre gra i gra, una mica penjant
+        const c = this.cordo.clear();
+        c.lineStyle(2.4, 0x3a2412, 0.95);
+        c.beginPath(); c.moveTo(38, 44);
+        for (let k = 1; k <= 8; k++) { const t = k / 8; c.lineTo(38 + (gx(0) - 38) * t, 44 + (GY - 44) * t + Math.sin(Math.PI * t) * 5); }
+        for (let i = 0; i < d.corsMax - 1; i++) {
+            for (let k = 1; k <= 6; k++) { const t = k / 6; c.lineTo(gx(i) + 46 * t, GY + Math.sin(Math.PI * t) * 4); }
+        }
+        c.strokePath();
+        c.lineStyle(1, 0xb08850, 0.6);
+        c.beginPath(); c.moveTo(gx(0), GY - 1); c.lineTo(gx(Math.max(0, d.corsMax - 1)), GY - 1); c.strokePath();
         this.gestionarLatidor();
         this.textObjectiu.setText('Objectiu: ' + (d.objectiu || ''));
         // L'objectiu ha de cabre dins del marc fix de la franja: si és llarg, es redueix la lletra
         let mida = 20;
         this.textObjectiu.setFontSize(mida);
         while (this.textObjectiu.height > 52 && mida > 14) this.textObjectiu.setFontSize(--mida);
-        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · K: esquivar · ESC: menú');
+        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · ESC: menú');
     }
 
-    // Quan queda un sol cor o menys, l'últim cor bategueja
+    // Quan queda un sol gra o menys, l'últim gra bategueja
     gestionarLatidor() {
         if (this.animantCor) return;
         const v = Estat.dades.vida;
@@ -155,7 +170,7 @@ class EscenaUI extends Phaser.Scene {
         }
     }
 
-    // Cors que perden alguna meitat entre "abans" i "ara": es trenquen, cauen i la resta fa una onada
+    // Grans que perden alguna meitat entre "abans" i "ara": s'esquerden, en cau un tros i la resta fa una onada
     animarPerdua(abans, ara) {
         const valor = (v, i) => Math.max(0, Math.min(2, v - i * 2));
         const base = 1 / RES;
@@ -168,7 +183,7 @@ class EscenaUI extends Phaser.Scene {
             if (!img.visible) return;
             const antes = valor(abans, i), despres = valor(ara, i);
             if (despres >= antes) {
-                // Els cors que es mantenen fan una petita onada d'ensurt
+                // Els grans que es mantenen fan una petita onada d'ensurt
                 this.tweens.add({ targets: img, scale: base * 1.25, yoyo: true, duration: 110, delay: 60 + i * 45, ease: 'Sine.out' });
                 return;
             }
@@ -178,21 +193,21 @@ class EscenaUI extends Phaser.Scene {
             img.setScale(base * 2.1);
             this.tweens.add({ targets: img, scale: base, duration: 380, ease: 'Back.out' });
             this.tweens.add({ targets: img, angle: { from: -22, to: 0 }, duration: 480, ease: 'Elastic.out' });
-            // Anell vermell
+            // Anell de llum que s'apaga
             const anell = this.add.graphics().setPosition(img.x, img.y).setDepth(img.depth + 1);
-            anell.lineStyle(4, 0xff3a4a, 0.95).strokeCircle(0, 0, 18);
+            anell.lineStyle(4, 0xffb060, 0.95).strokeCircle(0, 0, 18);
             this.tweens.add({ targets: anell, scale: 2.6, alpha: 0, duration: 380, ease: 'Cubic.out', onComplete: () => anell.destroy() });
-            // La part perduda: un cor trencat que cau girant
+            // La part perduda: un tros de gra que cau girant
             const part = antes - despres;
-            const fantasma = this.add.image(img.x, img.y, part === 1 ? 'cor_mig' : 'cor_ple').setScale(base).setDepth(img.depth + 2);
+            const fantasma = this.add.image(img.x, img.y, part === 1 ? 'gra_mig' : 'gra_ple').setScale(base).setDepth(img.depth + 2);
             this.tweens.add({
                 targets: fantasma, y: img.y + 120, x: img.x + Phaser.Math.Between(-22, 22), angle: Phaser.Math.Between(-80, 80),
                 alpha: 0, scale: base * 0.8, duration: 700, ease: 'Quad.in', onComplete: () => fantasma.destroy()
             });
-            // Esquerdes de vidre vermell
+            // Estelles de fusta
             const p = this.add.particles(img.x, img.y, 'espurna', {
                 speed: { min: 70, max: 260 }, lifespan: { min: 400, max: 700 }, scale: { start: 0.3, end: 0 },
-                tint: [0xe03a4a, 0xff7a8a, 0xffffff], gravityY: 420, quantity: 14, emitting: false
+                tint: [0xc8843a, 0x8a5424, 0xffe0a0], gravityY: 420, quantity: 14, emitting: false
             }).setDepth(img.depth + 3);
             p.explode(14);
             this.time.delayedCall(800, () => p.destroy());
@@ -200,7 +215,7 @@ class EscenaUI extends Phaser.Scene {
         this.time.delayedCall(700, () => { this.animantCor = false; this.gestionarLatidor(); });
     }
 
-    // Cors que es recuperen: pugen amb un bot rosa
+    // Grans que es tornen a encendre: bot i espurnes daurades
     animarGuany(abans, ara) {
         const valor = (v, i) => Math.max(0, Math.min(2, v - i * 2));
         const base = 1 / RES;
@@ -211,7 +226,7 @@ class EscenaUI extends Phaser.Scene {
             this.tweens.add({ targets: img, scale: base * 1.6, yoyo: true, duration: 170, ease: 'Sine.out' });
             const p = this.add.particles(img.x, img.y, 'espurna', {
                 speed: { min: 30, max: 120 }, lifespan: 600, scale: { start: 0.25, end: 0 },
-                tint: [0xff8aa0, 0xffd0d8], gravityY: -80, quantity: 8, emitting: false
+                tint: [0xffd894, 0xfff2c8], gravityY: -80, quantity: 8, emitting: false
             }).setDepth(img.depth + 3);
             p.explode(8);
             this.time.delayedCall(700, () => p.destroy());

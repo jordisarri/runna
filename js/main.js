@@ -6,7 +6,7 @@ const Joc = {
     debug: new URLSearchParams(location.search).has('debug'),
     ZONES: ['ZonaPlaca', 'ZonaEsglesia', 'ZonaMonestir', 'ZonaCreu', 'ZonaCasaGran', 'ZonaRuines', 'ZonaPingpong',
             'ZonaCelles', 'ZonaTiller', 'ZonaBosc', 'ZonaCami', 'ZonaErmita', 'ZonaErmitaInt', 'ZonaEra', 'ZonaJardi',
-            'ZonaCamiCirosa', 'ZonaCirosa', 'ZonaCementiri', 'ZonaCasaGranInt', 'ZonaCabana', 'ZonaCabanaInt', 'ZonaCamiRov', 'ZonaRovellonera', 'ZonaGabriel', 'ZonaGabrielInt', 'ZonaDipositos', 'ZonaDolmen', 'ZonaTresor', 'ZonaGolfes', 'ZonaPassadis', 'ZonaCasaTresor', 'ZonaCabanaCami', 'ZonaCasaCripta'],
+            'ZonaCamiCirosa', 'ZonaCirosa', 'ZonaCementiri', 'ZonaCasaGranInt', 'ZonaCabana', 'ZonaCabanaInt', 'ZonaCamiRov', 'ZonaRovellonera', 'ZonaGabriel', 'ZonaGabrielInt', 'ZonaDipositos', 'ZonaDolmen', 'ZonaTresor', 'ZonaGolfes', 'ZonaPassadis', 'ZonaCasaTresor', 'ZonaCabanaCami', 'ZonaCasaCripta', 'ZonaTorre'],
 
     zonaActiva(scene) {
         const m = scene.game.scene;
@@ -35,7 +35,7 @@ const Joc = {
         ZonaRuines: 'musica_intro', ZonaCelles: 'musica_intro', ZonaEra: 'musica_intro', ZonaJardi: 'musica_intro', ZonaCementiri: 'musica_intro',
         // Interiors de cases
         ZonaEsglesia: 'musica_casa', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
-        ZonaCabanaCami: 'musica_casa', ZonaGolfes: 'musica_casa',
+        ZonaCabanaCami: 'musica_casa', ZonaGolfes: 'musica_casa', ZonaTorre: 'musica_casa',
         // Masmorres
         ZonaCasaGranInt: 'musica_masmorra', ZonaPingpong: 'musica_masmorra', ZonaCasaCripta: 'musica_masmorra', ZonaPassadis: 'musica_masmorra',
         ZonaCasaTresor: 'musica_masmorra', ZonaTresor: 'musica_masmorra', ZonaDipositos: 'musica_masmorra'
@@ -115,8 +115,11 @@ class EscenaCarrega extends Phaser.Scene {
         // Esperem les fonts de Google (màxim 3 s) perquè el títol es dibuixi amb la lletra bona
         const fonts = document.fonts ? Promise.all([
             document.fonts.load(`900 64px ${FONT_TITOL}`),
+            document.fonts.load(`700 34px ${FONT_TITOL}`),
             document.fonts.load(`700 44px ${FONT_TEXT}`),
+            document.fonts.load(`600 28px ${FONT_TEXT}`),
             document.fonts.load(`italic 600 28px ${FONT_TEXT}`),
+            document.fonts.load(`600 24px ${FONT_PLACA}`),
             document.fonts.load(`700 24px ${FONT_PLACA}`)
         ]) : Promise.resolve();
         Promise.race([fonts, new Promise(r => setTimeout(r, 3000))])
@@ -215,6 +218,6 @@ const game = new Phaser.Game({
     scene: [EscenaCarrega, EscenaTitol, EscenaProleg,
             ZonaPlaca, ZonaEsglesia, ZonaMonestir, ZonaCreu, ZonaCasaGran, ZonaRuines, ZonaPingpong,
             ZonaCelles, ZonaTiller, ZonaBosc, ZonaCami, ZonaErmita, ZonaErmitaInt, ZonaEra, ZonaJardi, ZonaCamiCirosa, ZonaCirosa,
-            ZonaCementiri, ZonaCasaGranInt, ZonaCabana, ZonaCabanaInt, ZonaCamiRov, ZonaRovellonera, ZonaGabriel, ZonaGabrielInt, ZonaDipositos, ZonaDolmen, ZonaTresor, ZonaGolfes, ZonaPassadis, ZonaCasaTresor, ZonaCabanaCami, ZonaCasaCripta,
+            ZonaCementiri, ZonaCasaGranInt, ZonaCabana, ZonaCabanaInt, ZonaCamiRov, ZonaRovellonera, ZonaGabriel, ZonaGabrielInt, ZonaDipositos, ZonaDolmen, ZonaTresor, ZonaGolfes, ZonaPassadis, ZonaCasaTresor, ZonaCabanaCami, ZonaCasaCripta, ZonaTorre,
             EscenaUI, EscenaMusica, EscenaEstels]
 });

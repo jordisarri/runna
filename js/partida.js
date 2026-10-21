@@ -16,7 +16,7 @@ const Estat = {
             entrada: 'inici',
             x: null,
             y: null,
-            vida: 6,          // en meitats de cor (6 = 3 cors plens)
+            vida: 6,          // en meitats de gra del rosari (6 = 3 grans encesos)
             corsMax: 3,
             monedes: 0,
             objectiu: 'Parla amb el Pare Jordi a la Plaça.',

@@ -96,58 +96,151 @@ class ZonaRuines extends ZonaBase {
 }
 
 // ---------------- EL CELLER (interior; el ping-pong hi és una prova circumstancial) ----------------
+const ALCADA_CELLER = 1100;
+
 class ZonaPingpong extends ZonaBase {
     constructor() {
         super('ZonaPingpong', {
             nom: 'El Celler',
             amplada: 1280,
-            alcada: 820,
+            alcada: ALCADA_CELLER,
             colorFons: '#140e0a',
             pacifica: true,
-            entrades: { porta: { x: 640, y: 740, dir: 'amunt' }, passadis: { x: 700, y: 262, dir: 'avall' } }
+            entrades: { porta: { x: 640, y: ALCADA_CELLER - 80, dir: 'amunt' }, passadis: { x: 640, y: 392, dir: 'avall' } }
         });
     }
 
     construir() {
-        this.terra('rajola', 100, 60, 1080, 760, -1100);
-        const murs = this.add.graphics().setDepth(-1000);
-        murs.fillStyle(0x2a1f18, 1).fillRect(60, 0, 40, 820).fillRect(1180, 0, 40, 820);
-        murs.fillStyle(0x3a2c22, 1).fillRect(100, 0, 1080, 70);
-        this.colisio(30, 410, 60, 820);
-        this.colisio(1250, 410, 60, 820);
-        this.colisio(640, 80, 1080, 160);
-        this.colisio(340, 810, 500, 20);
-        this.colisio(940, 810, 500, 20);
+        const A = ALCADA_CELLER, YP = 300;                 // YP: peu de la paret del fons (arcada i porta)
+        // ---- Terra de ciment i parets de pedra ----
+        this.terra('ciment', 100, YP, 1080, A - YP, -1100);
+        this.add.tileSprite(100, 0, 1080, YP, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setDepth(-1000);
+        this.add.tileSprite(60, 0, 40, A, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setDepth(-1000).setTint(0x8a8078);
+        this.add.tileSprite(1180, 0, 40, A, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setDepth(-1000).setTint(0x8a8078);
+        const mur = this.add.graphics().setDepth(-995);
+        mur.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.65, 0.65, 0, 0).fillRect(100, 0, 1080, 130);       // la volta s'enfosqueix a dalt
+        mur.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0, 0, 0.45, 0.45).fillRect(100, YP - 34, 1080, 34);  // ombra al peu de la paret
+        mur.fillStyle(0x6a6054, 1).fillRect(100, YP - 14, 1080, 14);                                                           // sòcol de pedra
+        mur.fillStyle(0xcfc4ae, 0.55).fillRect(100, YP - 14, 1080, 2);
+        mur.lineStyle(2, 0x1c1610, 1).strokeRect(100, YP - 14, 1080, 14);
+        mur.fillStyle(0x000000, 0.35).fillRect(60, 0, 8, A).fillRect(1172, 0, 8, A);                                           // els costats, en ombra
+        this.colisio(30, A / 2, 60, A);
+        this.colisio(1250, A / 2, 60, A);
+        this.colisio(640, (YP + 20) / 2, 1080, YP + 20);
+        this.colisio(340, A - 10, 500, 20);
+        this.colisio(940, A - 10, 500, 20);
 
-        // Taules de ping-pong
-        this.posar('taula_pp', 420, 360, { col: { w: 220, h: 40 } });
-        this.posar('taula_pp', 860, 360, { col: { w: 220, h: 40 } });
-        this.interactiu(420, 380, 120, DIALEGS.taulaPP, { altura: 100 });
+        // ---- Gran arcada del fons: pilars, dovelles i una fornícula fosca amb la porta tapada ----
+        const AX = 640, AY = 170, AR = 150;                // centre de la volta, y de naixement i radi
+        const buit = this.make.graphics({ x: 0, y: 0, add: false });
+        buit.fillStyle(0xffffff, 1).beginPath().arc(AX, AY, AR, Math.PI, 0, false).lineTo(AX + AR, YP).lineTo(AX - AR, YP).closePath().fillPath();
+        const fons = this.add.tileSprite(AX - AR, AY - AR, AR * 2, YP - AY + AR, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setDepth(-990).setTint(0x4c443b);
+        fons.setMask(buit.createGeometryMask());
+        const arc = this.add.graphics().setDepth(-985);
+        arc.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.7, 0.7, 0.1, 0.1).fillRect(AX - AR, AY - AR, AR * 2, YP - AY + AR);   // fondària de la fornícula
+        // dovelles (pedres de l'arc) i clau
+        const N = 13;
+        for (let i = 0; i < N; i++) {
+            const a0 = Math.PI + i * Math.PI / N, a1 = Math.PI + (i + 1) * Math.PI / N, r0 = AR, r1 = AR + 34;
+            const pts = [[r0, a0], [r1, a0], [r1, a1], [r0, a1]].map(([r, a]) => ({ x: AX + Math.cos(a) * r, y: AY + Math.sin(a) * r }));
+            const clau = i === (N - 1) / 2;
+            arc.fillStyle(clau ? 0xd8ceb8 : i % 2 ? 0xa89c86 : 0xbcb09a, 1).fillPoints(pts, true);
+            arc.lineStyle(2, 0x1c1610, 1).strokePoints(pts, true);
+            if (clau) { arc.fillStyle(0xe8dfca, 0.55).fillRect(AX - 6, AY - r1 + 2, 12, 5); }
+        }
+        // pilars amb cimaci i base
+        [AX - AR - 30, AX + AR].forEach(x => {
+            arc.fillStyle(0xb4a892, 1).fillRect(x, AY - 8, 30, YP - AY + 8).lineStyle(2, 0x1c1610, 1).strokeRect(x, AY - 8, 30, YP - AY + 8);
+            arc.fillStyle(0xffffff, 0.22).fillRect(x + 2, AY - 6, 5, YP - AY);
+            arc.fillStyle(0x000000, 0.22).fillRect(x + 22, AY - 6, 6, YP - AY);
+            arc.fillStyle(0xcdc1ab, 1).fillRect(x - 5, AY - 20, 40, 14).lineStyle(2, 0x1c1610, 1).strokeRect(x - 5, AY - 20, 40, 14);         // cimaci
+            arc.fillStyle(0xcdc1ab, 1).fillRect(x - 4, YP - 12, 38, 12).lineStyle(2, 0x1c1610, 1).strokeRect(x - 4, YP - 12, 38, 12);        // base
+            for (let k = 1; k < 5; k++) arc.lineStyle(1, 0x1c1610, 0.35).lineBetween(x + 1, AY - 8 + k * 26, x + 29, AY - 8 + k * 26);
+        });
+        // porta tapada: fusta de dues fulles amb bandes de ferro i taulons clavats en creu
+        const pt = this.add.graphics().setDepth(-980);
+        const PX0 = AX - 82, PX1 = AX + 82, PY = 210;
+        const portaForma = [{ x: PX0, y: YP }, { x: PX0, y: PY }];
+        for (let k = 1; k <= 10; k++) { const a = Math.PI + k / 10 * Math.PI; portaForma.push({ x: AX + Math.cos(a) * 82, y: PY + Math.sin(a) * 48 }); }
+        portaForma.push({ x: PX1, y: PY }, { x: PX1, y: YP });
+        pt.fillStyle(0x1b1109, 1).fillPoints(portaForma.map(p => ({ x: p.x + (p.x < AX ? -5 : 5), y: p.y })), true);
+        pt.fillStyle(0x5c3b1e, 1).fillPoints(portaForma, true);
+        for (let k = 1; k < 8; k++) pt.lineStyle(2, 0x2a1608, 0.9).lineBetween(PX0 + k * 164 / 8, PY - 40, PX0 + k * 164 / 8, YP);
+        pt.lineStyle(3, 0x120a04, 1).lineBetween(AX, PY - 48, AX, YP);
+        [PY + 12, PY + 52].forEach(y => { pt.fillStyle(0x34363c, 1).fillRect(PX0, y, 164, 8).lineStyle(1.5, 0x101216, 1).strokeRect(PX0, y, 164, 8); for (let x = PX0 + 8; x < PX1; x += 22) { pt.fillStyle(0x9a9ca6, 1).fillCircle(x, y + 4, 1.6); } });
+        [[AX - 40, PY + 6, -0.14], [AX + 34, PY + 34, 0.12], [AX - 30, PY + 58, 0.1]].forEach(([x, y, a]) => {       // taulons clavats
+            const lx = Math.cos(a) * 62, ly = Math.sin(a) * 62;
+            pt.lineStyle(14, 0x120a04, 1).lineBetween(x - lx, y - ly, x + lx, y + ly);
+            pt.lineStyle(10, 0x8a5c30, 1).lineBetween(x - lx, y - ly, x + lx, y + ly);
+            pt.lineStyle(2, 0xd9a868, 0.5).lineBetween(x - lx, y - ly - 3, x + lx, y + ly - 3);
+            pt.fillStyle(0x2a2c32, 1).fillCircle(x - lx * 0.85, y - ly * 0.85, 2.4).fillCircle(x + lx * 0.85, y + ly * 0.85, 2.4);
+        });
+        // fanals a banda i banda de l'arcada (flama que tremola)
+        [AX - AR - 110, AX + AR + 110].forEach((x, k) => {
+            const y = 150, f = this.add.graphics().setDepth(-975);
+            f.fillStyle(0x2a2118, 1).fillRect(x - 6, y, 12, 26).fillStyle(0x4a3a24, 1).fillRect(x - 11, y - 2, 22, 6).lineStyle(1.5, 0x120a04, 1).strokeRect(x - 11, y - 2, 22, 6);
+            const flama = this.add.graphics().setDepth(-974);
+            flama.fillStyle(0xff9a2a, 1).fillPoints([{ x: x - 7, y: y - 2 }, { x, y: y - 26 }, { x: x + 7, y: y - 2 }], true);
+            flama.fillStyle(0xffe080, 1).fillPoints([{ x: x - 3.5, y: y - 2 }, { x, y: y - 15 }, { x: x + 3.5, y: y - 2 }], true);
+            const resp = this.add.graphics().setDepth(-973).setBlendMode(Phaser.BlendModes.ADD);
+            for (let q = 0; q < 7; q++) resp.fillStyle(0xffa040, 0.05 + q * 0.01).fillCircle(x, y - 10, 130 * (1 - q / 7));
+            this.tweens.add({ targets: [flama, resp], alpha: 0.62, scaleY: 0.96, yoyo: true, repeat: -1, duration: 260 + k * 70, ease: 'Sine.easeInOut' });
+        });
+        // fornícules amb prestatges i gerros, a la paret dels costats
+        [250, 1030].forEach(x => {
+            const nx = this.add.graphics().setDepth(-990);
+            const forma = [{ x: x - 62, y: YP - 20 }, { x: x - 62, y: 170 }];
+            for (let k = 1; k <= 8; k++) { const a = Math.PI + k / 8 * Math.PI; forma.push({ x: x + Math.cos(a) * 62, y: 170 + Math.sin(a) * 38 }); }
+            forma.push({ x: x + 62, y: 170 }, { x: x + 62, y: YP - 20 });
+            nx.fillStyle(0xb4a892, 1).fillPoints(forma.map(p => ({ x: x + (p.x - x) * 1.12, y: p.y - (p.y < 170 ? 4 : 0) })), true);
+            nx.fillStyle(0x15100c, 1).fillPoints(forma, true);
+            nx.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.6, 0.6, 0, 0).fillRect(x - 62, 132, 124, 60);
+            [YP - 66, YP - 124].forEach(y => { nx.fillStyle(0x5a3a1e, 1).fillRect(x - 62, y, 124, 7).lineStyle(1.5, 0x120a04, 1).strokeRect(x - 62, y, 124, 7); });
+            [[-38, 0], [0, 1], [38, 2]].forEach(([dx, t], k) => { this.posar('gerro_' + t, x + dx, YP - 66, { fonsY: -985 }); this.posar('gerro_' + ((t + k + 1) % 3), x + dx + 6, YP - 124 + (k % 2 ? 0 : 0), { fonsY: -985, escala: 0.8 }); });
+        });
 
-        // L'entrada secreta de la Casa Gran: una roda de carruatge gegant al davant d'un forat de la paret. S'empeny des d'un costat
-        // caminant contra ella (cal Runna: encara no s'obre abans de l'Acte 3) i rodola, descobrint un passadís.
-        const forat = this.add.graphics().setDepth(-980);
-        forat.fillStyle(0x3a2c22, 1).fillRect(632, 84, 136, 156);
-        forat.fillStyle(0x050403, 1).fillRect(646, 98, 108, 142).fillCircle(700, 98, 54);
-        forat.lineStyle(5, 0x6a5a46, 1).strokeRect(646, 98, 108, 142);
-        this.rodaX = Estat.dades.flags.rodaX || 700;
+        // ---- La roda de carruatge davant la porta (s'empeny des d'un costat; cal Runna) ----
+        this.rodaX = Estat.dades.flags.rodaX || AX;
         this.rodaMoguda = Estat.flag('rodaMoguda');
-        this.roda = this.posar('roda_carruatge', this.rodaX, 236, { fonsY: 240 });
-        this.colRoda = this.add.zone(this.rodaX, 221, 110, 30);
+        this.roda = this.posar('roda_carruatge', this.rodaX, YP + 52, { fonsY: YP + 56 });
+        this.colRoda = this.add.zone(this.rodaX, YP + 36, 110, 30);
         this.physics.add.existing(this.colRoda, true);
-        if (this.rodaMoguda) this.roda.setAngle(this.rodaX > 700 ? 180 : -180);
+        if (this.rodaMoguda) this.roda.setAngle(this.rodaX > AX ? 180 : -180);
         this.empentaMs = 0; this.contacteRoda = 0; this.costatRoda = 1; this.pistaRoda = false;
-        this.interactiu(700, 270, 90, DIALEGS.posterSecret, { altura: 150, actiu: () => !this.rodaMoguda });
+        this.interactiu(AX, YP + 100, 100, DIALEGS.posterSecret, { altura: 150, actiu: () => !this.rodaMoguda });
         if (this.rodaMoguda) this.obrirPassadis();
 
-        // Jugadors
-        this.npc('juli', 300, 500, DIALEGS.juli);
-        this.npc('frederic', 1040, 250, DIALEGS.frederic, { flipX: true });
-        this.npc('eloi', 560, 520, DIALEGS.eloi);
-        this.npc('josep', 860, 520, DIALEGS.josep);
+        // ---- Mobiliari del celler ----
+        // Barrils contra la paret, a banda i banda
+        [[150, YP + 44], [206, YP + 56], [1130, YP + 44], [1074, YP + 56]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
+        // Una taula de fusta amb tamborets a l'esquerra i una altra amb un banc a la dreta (taules que no són de ping-pong)
+        this.posar('taula', 205, 520, { col: { w: 160, h: 30 } });
+        this.posar('tamboret', 150, 590, { col: { w: 40, h: 16 } });
+        this.posar('tamboret', 262, 590, { col: { w: 40, h: 16 } });
+        this.posar('taula', 1075, 520, { col: { w: 160, h: 30 } });
+        this.posar('banc', 1075, 612, { col: { w: 140, h: 16 } });
+        [[205, 480], [1075, 480]].forEach(([x, y], k) => {
+            const e = this.posar('espelma', x, y, { fonsY: y + 30 });
+            this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 330 + k * 80 });
+        });
+        // Bancs per seure al fons de la sala
+        this.posar('banc_davant', 320, 1030, { col: { w: 140, h: 16 } });
+        this.posar('banc_davant', 960, 1030, { col: { w: 140, h: 16 } });
+        [[132, 1050], [1148, 1050]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
 
-        this.add.rectangle(640, 410, 1080, 820, 0xffe9a8, 0.04).setDepth(80000);
-        this.sortida(600, 790, 80, 20, 'ZonaRuines', 'pingpong');
+        // ---- Taules de ping-pong (verdes), ben separades de la roda ----
+        this.posar('taula_pp', 410, 760, { col: { w: 220, h: 40 } });
+        this.posar('taula_pp', 870, 760, { col: { w: 220, h: 40 } });
+        this.interactiu(410, 790, 120, DIALEGS.taulaPP, { altura: 100 });
+
+        // ---- Jugadors ----
+        this.npc('juli', 262, 760, DIALEGS.juli);
+        this.npc('frederic', 1030, 760, DIALEGS.frederic, { flipX: true });
+        this.npc('eloi', 600, 780, DIALEGS.eloi);
+        this.npc('josep', 690, 780, DIALEGS.josep);
+
+        this.add.rectangle(640, A / 2, 1080, A, 0xffe9a8, 0.04).setDepth(80000);
+        this.sortida(600, A - 30, 80, 20, 'ZonaRuines', 'pingpong');
     }
 
     enEntrar() {
@@ -175,7 +268,7 @@ class ZonaPingpong extends ZonaBase {
 
     mouRoda(dir) {
         this.rodaMoguda = true;
-        const x = this.roda.x + dir * 150;
+        const x = this.roda.x + dir * 190;
         Estat.posaFlag('rodaMoguda');
         Estat.dades.flags.rodaX = x;
         this.cameras.main.shake(350, 0.003);
@@ -188,8 +281,8 @@ class ZonaPingpong extends ZonaBase {
 
     // L'obertura de la paret descoberta: porta al passadís (sortida sense llum ni fletxa, perquè és una troballa)
     obrirPassadis() {
-        this.sortides.push({ r: new Phaser.Geom.Rectangle(650, 170, 100, 40), desti: 'ZonaPassadis', entrada: 'porta' });
-        this.tweens.add({ targets: this.add.circle(700, 190, 70, 0xa070ff, 0.10).setDepth(-970), alpha: 0.03, yoyo: true, repeat: -1, duration: 900 });
+        this.sortides.push({ r: new Phaser.Geom.Rectangle(590, 318, 100, 32), desti: 'ZonaPassadis', entrada: 'porta' });
+        this.tweens.add({ targets: this.add.circle(640, 260, 80, 0xa070ff, 0.12).setDepth(-970), alpha: 0.03, yoyo: true, repeat: -1, duration: 900 });
     }
 }
 
@@ -241,7 +334,7 @@ class ZonaCelles extends ZonaBase {
 
         this.cartell(130, 625, () => ({ pagines: [{ qui: '', text: '← Bosc de Sant Joan i la seva font\n↑ El Gran Til·ler' }] }));
 
-        this.arbres([[1700, 220], [1640, 420], [1750, 540], [100, 960], [300, 1040],
+        this.arbres([[1700, 220], [1640, 420], [1750, 540], [260, 1000], [300, 1040],
                      [560, 1000], [1250, 1020], [1480, 960], [1700, 1030]]);
 
         this.enemic('escolopendra', 600, 900);
@@ -394,7 +487,7 @@ class ZonaBosc extends ZonaBase {
         });
 
         // Bosc dens: arbres en graella amb petits desplaçaments, deixant lliures el camí i els llocs importants
-        const lliure = [[200, 180, 160], [900, 650, 240], [300, 560, 150], [430, 280, 110], [1380, 990, 110], [560, 1010, 110], [120, 700, 110]];
+        const lliure = [[200, 180, 160], [900, 650, 240], [300, 560, 150], [430, 280, 110], [1380, 990, 110], [560, 1010, 110], [120, 700, 110], [1700, 700, 230]];
         let llavor = 11;
         const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
         for (let y = 80; y < 1180; y += 150) {

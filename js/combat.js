@@ -1,7 +1,7 @@
 /**
  * COMBAT (fase 2)
  * S'afegeix a ZonaBase (carregar després de zona_base.js). Cada zona crida this.enemic(tipus, x, y).
- *   Atac: J, ESPAI o ENTER/E (si no hi ha res per parlar) · Esquiva: K o MAJÚS
+ *   Atac: J, ESPAI o ENTER/E (si no hi ha res per parlar)
  * Vida del jugador en meitats de cor (Estat.dades.vida). Bastó = 1 de dany; Runna = 2.
  * Cap enemic "mor": es desfà en boira lila (els visitants cauen adormits).
  */
@@ -207,6 +207,19 @@ Object.assign(ZonaBase.prototype, {
             e.atorditFins = this.time.now + 600;
             this.tweens.add({ targets: spr, alpha: 1, scale: esc, duration: 450, ease: 'Back.out' });
             this.esquitxar(x, y);
+            if (opts.salt) {                // i s'escapa d'un salt cap a un punt de l'escena
+                const t = opts.salt, dur = 900;
+                e.atorditFins = this.time.now + dur + 200;
+                this.tweens.addCounter({
+                    from: 0, to: 1, duration: dur, ease: 'Sine.easeInOut',
+                    onUpdate: tw => {
+                        if (e.mort || !spr.active) return;
+                        const k = tw.getValue();
+                        spr.body.reset(x + (t.x - x) * k, y + (t.y - y) * k - Math.sin(Math.PI * k) * 90);
+                    },
+                    onComplete: () => { if (!e.mort && spr.active) { spr.body.reset(t.x, t.y); this.esquitxar(t.x, t.y); } }
+                });
+            }
         }
         this.enemics.push(e);
         return e;
@@ -231,7 +244,7 @@ Object.assign(ZonaBase.prototype, {
         this.enemics.forEach(e => { if (!e.mort) e.spr.body.setVelocity(0); });
     },
 
-    // ---------------- Atac i esquiva del jugador ----------------
+    // ---------------- Atac del jugador ----------------
     teArma() { return Estat.te('basto') || Estat.te('runna'); },
 
     atacar() {
@@ -257,11 +270,10 @@ Object.assign(ZonaBase.prototype, {
         if (Math.abs(d.x) > Math.abs(d.y) * 1.1) this.direccio = d.x < 0 ? 'esquerra' : 'dreta';
         else this.direccio = d.y < 0 ? 'amunt' : 'avall';
 
-        // Petit tret endavant, so, arma visible i mitja lluna
-        this.forcat = { vx: d.x * 150, vy: d.y * 150, fins: ara + 100 };
+        // So, arma visible i mitja lluna (l'Ineu no es desplaça en atacar)
         Sfx.atac(runna);
         this.tallBasto(jo, d, runna, agil);
-        this.armaCop(d, runna, agil);
+        if (!this.animarAtac(d)) { this.atacantFins = ara + 260; this.armaCop(d, runna, agil); }       // amb fulla d'atac l'arma ja és al sprite
         // Finestra de cop activa mentre dura l'animació: cada enemic només rep un cop per atac
         this.cop = { fins: ara + 200, d, L, ample: agil ? 34 : 28, dany: runna ? 2 : 1, tocats: new Set(), runna };
         this.comprovarCop();
@@ -270,6 +282,22 @@ Object.assign(ZonaBase.prototype, {
             const px = jo.x + d.x * 55, py = jo.y + d.y * 55;
             this.esbarzers.forEach(o => { if (o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, px, py) < 85) this.destruirEsbarzer(o, false); });
         }
+    },
+
+    // Animació d'atac de l'Ineu amb la fulla de la direcció (8 vistes). Retorna fals si no n'hi ha.
+    animarAtac(d) {
+        const vista = OCTANTS_INEU[(Math.round(Math.atan2(d.y, d.x) / (Math.PI / 4)) + 8) % 8];
+        if (!Grafics.atacsVista || !Grafics.atacsVista.has(vista)) return false;
+        this.atacantFins = 0;
+        this.vista8Manual = true;
+        this.posarDireccio(this.direccio, false, vista);
+        this.atacantFins = this.time.now + ATAC_INEU.fotogrames.length / ATAC_INEU.fps * 1000;
+        this.ineu.anims.play('atac_' + vista, true);
+        this.ineu.once('animationcomplete', () => {
+            this.atacantFins = 0;
+            if (!this.caient) this.posarDireccio(this.direccio, false);
+        });
+        return true;
     },
 
     // Comprova cada fotograma els enemics tocats per la línia del cop (segment des dels peus de l'Ineu)
@@ -288,40 +316,40 @@ Object.assign(ZonaBase.prototype, {
             const lat = Math.abs(rx * d.y - ry * d.x);              // distància lateral
             if (lat < e.def.radi + k.ample) { k.tocats.add(e); this.colpejar(e, k.dany, d); encertats++; }
         });
-        if (encertats) this.forcat = { vx: -d.x * 110, vy: -d.y * 110, fins: this.time.now + 80 };     // retrocés en xocar
     },
 
-    // L'arma a la mà: bastó, bastó de Til·ler o espasa de Runna, girant en arc durant el cop
+    // L'arma a la mà: bastó (assets/basto.png), bastó de Til·ler o espasa de Runna, girant en arc durant el cop.
+    // Apareix i desapareix de cop, sense fade.
     armaCop(d, runna, agil) {
         if (this.armaNet) this.armaNet();
-        const g = this.add.graphics();
+        let g;
         if (runna) {                                               // espasa
+            g = this.add.graphics();
             g.fillStyle(0x5a3a22, 1).fillRect(4, -4, 22, 8);                              // empunyadura
             g.fillStyle(0xe0b84a, 1).fillRect(24, -16, 8, 32).fillCircle(2, 0, 6);          // guarda i pom
             g.fillStyle(0xdfe8f0, 1).fillPoints([{ x: 32, y: -7 }, { x: 112, y: -5 }, { x: 128, y: 0 }, { x: 112, y: 5 }, { x: 32, y: 7 }], true);
             g.fillStyle(0xffffff, 0.8).fillRect(34, -2, 78, 3);                           // fil de llum
             g.lineStyle(2, 0x7a8896, 1).strokePoints([{ x: 32, y: -7 }, { x: 112, y: -5 }, { x: 128, y: 0 }, { x: 112, y: 5 }, { x: 32, y: 7 }], true);
-        } else {                                                   // bastó (el de Til·ler, més llarg i verd)
-            const L = agil ? 124 : 108, fust = agil ? 0x6a7a3a : 0x7a5230, clar = agil ? 0xa8c060 : 0xb98a58;
-            g.lineStyle(11, 0x2a1a0e, 1).lineBetween(-6, 0, L, 0);
-            g.lineStyle(8, fust, 1).lineBetween(-4, 0, L - 1, 0);
-            g.lineStyle(2, clar, 1).lineBetween(0, -2, L - 6, -2);
-            g.fillStyle(fust, 1).fillCircle(L - 2, 0, 8).lineStyle(2, 0x2a1a0e, 1).strokeCircle(L - 2, 0, 8);   // nus del cap
-            g.fillStyle(0x2a1a0e, 1).fillCircle(L * 0.45, 3, 2);
+        } else {
+            // La imatge és vertical (cap amb ganxo a dalt, virolla a baix): s'agafa pel terç inferior i el cap apunta endavant
+            const t = this.textures.get('arma_basto');
+            g = this.add.image(0, 0, 'arma_basto').setOrigin(0.5, 0.82).setScale(((t.customData && t.customData.escala) || 1) * (agil ? 1.1 : 1));
+            if (agil) g.setTint(0xc8e890);                         // el bastó de Til·ler, amb un toc verd
         }
         const jo = this.ineu;
         const ang = Math.atan2(d.y, d.x);
+        const gir = runna ? 0 : Math.PI / 2;                       // el bastó dibuixat apunta cap amunt
         // El cop va de dalt a baix: arranca alçat darrere d'un costat i acaba a l'altre
-        const des = ang - 1.25, fins = ang + 1.0;
-        g.setRotation(des).setScale(agil ? 1.05 : 1);
+        const des = ang - 1.25 + gir, fins = ang + 1.0 + gir;
+        g.setRotation(des);
+        if (runna) g.setScale(1.05);
         const seguir = () => g.setPosition(jo.x + d.x * 10, jo.y - 58 + d.y * 6).setDepth(d.y < -0.3 ? jo.y - 1 : jo.y + 40);
         seguir();
         this.events.on('update', seguir);
         const net = () => { this.events.off('update', seguir); if (g.active) g.destroy(); if (this.armaNet === net) this.armaNet = null; };
         this.armaNet = net;
         this.tweens.add({ targets: g, rotation: fins, duration: 150, ease: 'Cubic.out' });
-        this.tweens.add({ targets: g, alpha: 0, duration: 110, delay: 190, onComplete: net });
-        this.time.delayedCall(450, net);
+        this.time.delayedCall(170, net);
     },
 
     // La mitja lluna del cop: surt del pit de l'Ineu, més enllà del cap, dels peus i dels costats
@@ -343,23 +371,6 @@ Object.assign(ZonaBase.prototype, {
         }).setDepth(99989);
         p.explode(6);
         this.time.delayedCall(350, () => p.destroy());
-    },
-
-    esquivar() {
-        const ara = this.time.now;
-        if (!this.teArma() || this.config.pacifica || ara < (this.esquivaFins || 0) || this.caient || this.assegut) return;
-        this.esquivaFins = ara + 750;
-        const c = this.cursors, t = this.tecles;
-        let dx = (c.right.isDown || t.D.isDown ? 1 : 0) - (c.left.isDown || t.A.isDown ? 1 : 0);
-        let dy = (c.down.isDown || t.S.isDown ? 1 : 0) - (c.up.isDown || t.W.isDown ? 1 : 0);
-        if (!dx && !dy) { const d = DIRS[this.direccio]; dx = d.x; dy = d.y; }
-        const l = Math.hypot(dx, dy);
-        this.forcat = { vx: dx / l * 520, vy: dy / l * 520, fins: ara + 170 };
-        this.invulnerableFins = ara + 380;
-        Sfx.esquiva();
-        this.polsEsquiva();
-        this.ineu.setAlpha(0.55);
-        this.time.delayedCall(380, () => { if (!this.caient) this.ineu.setAlpha(1); });
     },
 
     colpejar(e, dany, d) {
@@ -436,16 +447,6 @@ Object.assign(ZonaBase.prototype, {
         }, ms);
     },
 
-    polsEsquiva() {
-        const c = this.ineu.body.center;
-        const p = this.add.particles(c.x, c.y + 8, 'boira', {
-            speed: { min: 10, max: 40 }, lifespan: 380, scale: { start: 0.25, end: 0.6 },
-            alpha: { start: 0.45, end: 0 }, quantity: 4, emitting: false
-        }).setDepth(this.ineu.depth - 1);
-        p.explode(4);
-        this.time.delayedCall(450, () => p.destroy());
-    },
-
     // Vinyeta vermella a les vores de la pantalla quan et fan mal
     vinyeta() {
         const cam = this.cameras.main;
@@ -483,9 +484,9 @@ Object.assign(ZonaBase.prototype, {
         Estat.posaFlag('tutorialCombat');
         this.time.delayedCall(500, () => this.ui().obrirDialeg({
             pagines: [
-                { qui: 'El Gran Til·ler', text: "Prou, prou, petit monjo! Ja saps manejar el bastó. Recorda: l'esquiva (K) et salvarà més sovint que el cop." },
+                { qui: 'El Gran Til·ler', text: "Prou, prou, petit monjo! Ja saps manejar el bastó. Recorda: més val allunyar-se d'una bestiola enutjada que no pas embolicar-se amb ella." },
                 { qui: 'El Gran Til·ler', text: "Escolta. Sota terra s'ha esquerdat un segell molt antic, i la boira desperta les bestioles del vell cementiri." },
-                { qui: '', text: "La boira s'espesseix. A partir d'ara hi haurà escolopendres, gripaus i visitants perduts pels camins.\nAtac: J o ESPAI · Esquiva: K o Majús." }
+                { qui: '', text: "La boira s'espesseix. A partir d'ara hi haurà escolopendres, gripaus i visitants perduts pels camins.\nAtac: J o ESPAI." }
             ],
             enAcabar: () => {
                 Estat.posaFlag('combatActiu');
@@ -517,14 +518,7 @@ Object.assign(ZonaBase.prototype, {
             e.ombra.setVisible(false);
         }
 
-        // Botí: només cors de tant en tant (no hi ha monedes: no es compra ni es ven res)
-        if (Math.random() < e.def.cor && Estat.dades.vida < Estat.dades.corsMax * 2) {
-            const abans = Estat.dades.vida;
-            Estat.dades.vida = Math.min(Estat.dades.corsMax * 2, Estat.dades.vida + 2);
-            this.flotant(c.x + 20, c.y - 60, '+♥', '#ff6a7a');
-            Sfx.cura();
-            this.time.delayedCall(250, () => { const ui = this.ui(); if (ui && ui.animarGuany) ui.animarGuany(abans, Estat.dades.vida); });
-        }
+        // Sense botí: l'energia només es recupera als llocs de repòs (la Prunera, l'altar...)
         this.ui().actualitzarHUD();
     },
 

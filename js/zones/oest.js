@@ -236,8 +236,8 @@ class ZonaGabriel extends ZonaBase {
         this.cartell(980, 790, () => ({ pagines: [{ qui: '', text: 'Ermita de Sant Gabriel.\n→ Els Dipòsits (només per a qui sap mirar el cel)\n↑ La Rovellonera' }] }));
 
         this.terra('cami', 240, 650, 360, 200);          // esplanada de terra seca davant l'ermita
-        this.arbres([[150, 200], [320, 140], [600, 180], [1050, 150], [1300, 220], [1480, 160], [140, 520], [160, 880],
-                     [420, 1020], [1100, 1020], [1400, 920], [1200, 330], [1450, 420], [600, 900]]);
+        this.arbres([[150, 200], [320, 140], [540, 180], [1050, 150], [1300, 220], [1480, 160], [140, 520], [160, 880],
+                     [420, 1020], [1100, 1020], [1320, 930], [1200, 330], [1450, 420], [600, 900]]);
         // Pins joves i arbustos prims vora la capella (com a la foto): un turó obert, amb poc arbre
         [[215, 655, 0.55], [650, 640, 0.6], [700, 590, 0.45], [110, 700, 0.5]].forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 18, h: 10 } }));
         [[400, 900], [1250, 880]].forEach(([x, y]) => this.enemic('bolet', x, y));
@@ -313,7 +313,7 @@ class ZonaDipositos extends ZonaBase {
         this.interactiu(1000, 645, 95, DIALEGS.telescopiMon, { altura: 120 });
         this.cartell(240, 600, () => ({ pagines: [{ qui: '', text: 'Els Dipòsits: aigua de la serra, i el millor cel de la comarca.\n→ Camí cap al Dolmen' }] }));
 
-        this.arbres([[100, 150], [250, 100], [800, 100], [1450, 140], [1520, 700], [1450, 900], [130, 800], [300, 940], [1300, 940]]);
+        this.arbres([[100, 150], [250, 100], [800, 100], [1450, 140], [1380, 720], [1450, 900], [330, 830], [300, 940], [1300, 940]]);
         [[1250, 760], [450, 780], [900, 450]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
 
         // Cel de nit estrellat sobre el paisatge
@@ -357,7 +357,7 @@ class ZonaDolmen extends ZonaBase {
         if (!Estat.te('runna')) this.tweens.add({ targets: this.resplendor, alpha: 0.25, yoyo: true, repeat: -1, duration: 1200 });
         this.interactiu(800, 700, 100, () => Estat.te('runna') ? DIALEGS.dolmenBuit(Estat) : DIALEGS.dolmen(Estat), { altura: 190 });
 
-        this.arbres([[120, 160], [300, 100], [560, 130], [1050, 120], [1300, 100], [1500, 170], [110, 560], [150, 960],
+        this.arbres([[120, 160], [300, 100], [560, 130], [1050, 120], [1300, 100], [1500, 170], [150, 960],
                      [450, 1020], [1150, 1030], [1470, 940], [1500, 540], [260, 380], [1350, 380]]);
         this.sortida(0, 520, 14, 130, 'ZonaDipositos', 'dolmen');
         this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x102040, 0.06).setScrollFactor(0).setDepth(90000);

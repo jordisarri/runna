@@ -43,7 +43,7 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat p
 ## A4. Objectes i habilitats
 | Objecte | Com s'aconsegueix | Per a què serveix |
 |---|---|---|
-| Bastó de pelegrí | Pare Jordi (inici) | Atac bàsic (1) i esquiva. |
+| Bastó de pelegrí | Pare Jordi (inici) | Atac bàsic (1). |
 | **Bastó de Til·ler** | Branca del Gran Til·ler | Atac més ràpid i amb més abast (1 de dany). |
 | Clauer de Novici | Pare Jordi | Biblioteca i cel·les (no la Casa Gran). |
 | **La flauta d'en Mamet** | La Pianista | Tocar els cants (M o botó): notes **1-2-3** amb les tecles 1, 2, 3 o amb **← ESPAI →**; al mòbil, toc als tres cercles. |
@@ -120,7 +120,7 @@ Pantalla negra: *«Santuari del Miracle. Tercera nit de boira.»* La plaça de n
 La boira es desfà; Andreu, que no vol deixar el seu Mestre, queda tancat a la gàbia buida i els monjos el vigilaran; els nens riuen; **l'orgue del Santuari sona** i el poble canta. El Pare Jordi: «Començaràs reparant-lo.» Torneig de ping-pong i crèdits.
 
 ## A7. Combat i enemics
-**Controls:** atac J o ESPAI; esquiva K o Majús. **Els enemics apareixen des del principi** (en parlar amb el Pare Jordi, que et dona el bastó de pelegrí); abans de parlar-hi, la plaça és tranquil·la. **Vida** en meitats de cor (3 cors al principi); si caus, el Pare Jordi et recull a la plaça. Santuari, Celler i interiors són **pacífics**. **Dany:** bastó 1; Runna 2. Els enemics es desfan en boira lila i, de tant en tant, deixen un cor. **No hi ha monedes** (no es compra ni es ven res).
+**Controls:** atac J o ESPAI (al mòbil, un sol botó d'acció). **Els enemics apareixen des del principi** (en parlar amb el Pare Jordi, que et dona el bastó de pelegrí); abans de parlar-hi, la plaça és tranquil·la. **Vida** en meitats de cor (3 cors al principi); si caus, el Pare Jordi et recull a la plaça. Santuari, Celler i interiors són **pacífics**. **Dany:** bastó 1; Runna 2. Els enemics es desfan en boira lila i no deixen res: l'energia es recupera als llocs de repòs (la Prunera, l'altar del Santuari...). **No hi ha monedes** (no es compra ni es ven res).
 
 | Enemic | On | Notes |
 |---|---|---|

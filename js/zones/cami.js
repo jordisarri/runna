@@ -34,8 +34,12 @@ class ZonaCami extends ZonaBase {
         // Mur d'arbres del nord: només a x=1380 hi ha dos arbres més separats, i per aquí es puja a la cabana (sense marcar-ho)
         this.muralla(0, 140, 1280, 140, 128);
         this.muralla(1480, 140, 2800, 140, 132);
-        this.sortides.push({ r: new Phaser.Geom.Rectangle(1320, 96, 120, 40), desti: 'ZonaCabanaCami', entrada: 'porta' });
+        this.sortides.push({ r: new Phaser.Geom.Rectangle(1320, 60, 120, 52), desti: 'ZonaCabanaCami', entrada: 'porta', peu: true });   // cal travessar la fila d'arbres fins dalt de tot
+        // Fila de baix: als extrems, arbres més petits (la capçada no ha de tapar les sortides de les puntes)
         this.muralla(0, 770, 2800, 770, 130);
+        this.copes.filter(img => img.y === 770 && (img.x < 200 || img.x > 2600)).forEach(img => img.destroy());
+        this.copes = this.copes.filter(img => img.active);
+        [[40, 790], [170, 790], [2630, 790], [2760, 790]].forEach(([x, y]) => this.posar('arbre', x, y, { escala: 0.55, col: { w: 1, h: 1, fix: true } }));
         this.boira(900, 450, 400, 80, 1);
         this.boira(1900, 450, 400, 80, 1);
 
@@ -155,7 +159,7 @@ class ZonaEra extends ZonaBase {
         this.posar('roure', 520, 1080, { escala: 1.7, col: { w: 90, h: 36 } });
         this.posar('roure', 1400, 1080, { escala: 1.7, col: { w: 90, h: 36 } });
         this.posar('banc_respatller', ERA_BANC_X, ERA_BANC_N, { col: { w: 140, h: 16 } });
-        this.bancSud = this.posar('banc', ERA_BANC_X, ERA_BANC_S, { col: { w: 140, h: 16 } });
+        this.bancSud = this.posar('banc_davant', ERA_BANC_X, ERA_BANC_S, { col: { w: 140, h: 16 } });   // sempre amb respatller (vist per darrere)
 
         // El Garf, savi inventor: jove, grassonet i ros, assegut al banc de dalt
         this.garf = this.npc('garf', ERA_BANC_X, ERA_BANC_N, DIALEGS.garf);
@@ -168,8 +172,8 @@ class ZonaEra extends ZonaBase {
         this.npc('home_carruatge', 390, 1250, DIALEGS.homeCarruatge);
 
         this.cartell(470, 485, DIALEGS.cartellEra);
-        this.arbres([[120, 200], [560, 150], [760, 230], [1000, 170], [1250, 230], [1500, 160], [1700, 260],
-                     [600, 380], [900, 400], [1200, 390], [1550, 400], [1700, 720], [100, 780], [90, 1000],
+        this.arbres([[70, 200], [560, 150], [760, 230], [1000, 170], [1250, 230], [1500, 160], [1700, 260],
+                     [600, 380], [900, 400], [1200, 390], [1550, 400], [1540, 740], [300, 800], [90, 1000],
                      [1700, 1100], [1700, 1270], [1000, 1270], [700, 1270], [120, 1280]]);
 
         this.sortida(240, 0, 160, 14, 'ZonaErmita', 'era');
@@ -182,11 +186,11 @@ class ZonaEra extends ZonaBase {
     seure() {
         const nou = !this.assegut;
         this.assegut = true;
+        Estat.posaFlag('garfBancSegut');
         this.ineu.body.checkCollision.none = true;
         this.ineu.body.reset(ERA_BANC_X, ERA_BANC_S - 4);
         this.ombraIneu.setPosition(ERA_BANC_X, ERA_BANC_S - 4);
         this.ineu.setDepth(ERA_BANC_S - 1);                       // el banc es dibuixa per sobre: el respatller el tapa
-        this.bancSud.setTexture('banc_davant');
         this.vista8Manual = true;
         this.posarDireccio('amunt', false, 'up');                 // sempre de cara al Garf, vingui d'on vingui
         if (nou) {
@@ -199,7 +203,6 @@ class ZonaEra extends ZonaBase {
         this.assegut = false;
         this.ineu.body.checkCollision.none = false;
         this.ineu.body.reset(ERA_BANC_X, ERA_BANC_S + 48);
-        this.bancSud.setTexture('banc');
         this.posarDireccio('avall', false);
     }
 }
@@ -354,10 +357,7 @@ class ZonaCabanaCami extends ZonaBase {
         // Prestatge amb gerros, al fons a la dreta
         const pres = this.add.graphics().setDepth(-980);
         pres.fillStyle(0x4a2c14, 1).fillRect(520, 56, 130, 8).lineStyle(2, 0x120a04, 1).strokeRect(520, 56, 130, 8);
-        [[540, 0xb86a3a], [575, 0x7a9a5a], [610, 0xc8a050]].forEach(([x, c]) => {
-            pres.fillStyle(c, 1).fillRoundedRect(x - 10, 34, 20, 22, 6).lineStyle(2, 0x120a04, 1).strokeRoundedRect(x - 10, 34, 20, 22, 6);
-            pres.fillStyle(0x3a2010, 1).fillRect(x - 6, 30, 12, 5);
-        });
+        [[540, 0], [578, 1], [616, 2]].forEach(([x, t]) => this.posar('gerro_' + t, x, 56, { fonsY: -970 }));
 
         // Catifa de teixit sota la taula
         const catifa = this.add.graphics().setDepth(-950);

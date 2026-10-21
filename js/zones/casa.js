@@ -594,7 +594,7 @@ class ZonaGolfes extends ZonaCasaBase {
 
         this.espelmes([[230, 560], [770, 560]]);
         this.add.rectangle(500, 350, 1000, 700, 0xffd38a, 0.05).setDepth(80000);
-        this.sortida(440, 686, 120, 14, 'ZonaEsglesia', 'golfes');
+        this.sortida(440, 686, 120, 14, 'ZonaTorre', 'dalt');
         if (this.reparat) this.agullaMinuts.rotation = 0;
     }
 
