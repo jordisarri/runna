@@ -485,7 +485,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
     }
 }
 
-// ---------------- LES GOLFES DEL SANTUARI (rellotge i campanes) ----------------
+// ---------------- LA SALA DEL RELLOTGE (rellotge i campanes, dalt de la torre del Santuari) ----------------
 // El rellotge és aturat a les tres i quart (l'hora que va arribar la boira) i les campanes són mudes. Puzle: posar tres engranatges
 // a la mida correcta i, amb el rellotge en marxa, tocar el Cant de l'Aurora davant les campanes.
 const GOLFES_SOLUCIO = [0, 2, 1];      // 0 petit, 1 mitjà, 2 gran: «el petit va primer, el gran al mig i el mitjà darrere»
@@ -519,7 +519,7 @@ Object.assign(DIALEGS, {
         pagines: [
             { qui: '', text: "El Cant de l'Aurora puja entre les bigues. Les tres campanes responen, una a una, i el so s'escampa per sobre del Santuari: DONG, DONG, DONG." },
             { qui: '', text: "A baix, a la nau, l'orgue sona un instant tot sol. La boira recula per les finestres, com si algú hagués obert una porta." },
-            { qui: '', text: "Has trobat, a la caixa de les campanes, un flascó de líquid daurat.\n+1 COR MÀXIM i vida plena." }
+            { qui: '', text: "Has trobat, a la caixa de les campanes, un flascó de líquid daurat.\n+1 GRA AL ROSARI i rosari ple." }
         ]
     }
 });
@@ -527,7 +527,7 @@ Object.assign(DIALEGS, {
 class ZonaGolfes extends ZonaCasaBase {
     constructor() {
         super('ZonaGolfes', {
-            nom: 'Golfes del Santuari',
+            nom: 'Sala del Rellotge',
             amplada: 1000,
             alcada: 700,
             colorFons: '#0a0806',

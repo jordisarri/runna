@@ -41,11 +41,16 @@ class ZonaEsglesia extends ZonaBase {
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
         this.interactiu(640, ESG.retY + 140, 90, () => this.rezar(), { altura: 100 });
 
-        // Portes del peu del retaule: la de la dreta duu a l'escala de la torre (golfes); l'esquerra és tancada
-        this.sortida(ESG.portaDx - 36, ESG.retY - 14, 72, 20, 'ZonaTorre', 'baix');
+        // Portes del peu del retaule: totes dues tancades. Quan el Pare Daniel diu que el rellotge s'ha aturat (rellotgeDit)
+        // s'obre la de la dreta, que duu a la torre i a la Sala del Rellotge. L'esquerra continua tancada.
+        this.portaRellotge = false;
+        this.obrirPortaRellotge(false);
         this.interactiu(ESG.portaEsq, ESG.retY + 50, 90, () => ({
             pagines: [{ qui: '', text: 'La porta de l\'esquerra del retaule és tancada amb clau. Fa olor de cera vella i de pols.' }]
         }), { altura: 150 });
+        this.interactiu(ESG.portaDx, ESG.retY + 50, 90, () => ({
+            pagines: [{ qui: '', text: 'La porta de la dreta del retaule és tancada amb clau. Per sota s\'escola un corrent d\'aire fred, com si pugés d\'una escala.' }]
+        }), { altura: 150, actiu: () => !this.portaRellotge });
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daniel, que dirigeix el cor
         this.posar('orgue', 950, ESG.retY + 330, { col: { w: 110, h: 50 } });
@@ -69,6 +74,16 @@ class ZonaEsglesia extends ZonaBase {
 
         this.sortida(600, A - 20, 80, 20, 'ZonaPlaca', 'esglesia');
     }
+
+    // Obre la porta de la dreta del retaule si el Pare Daniel ja ha parlat del rellotge (també a mitja visita)
+    obrirPortaRellotge(avis) {
+        if (this.portaRellotge || !(Estat.flag('rellotgeDit') || Estat.flag('rellotgeReparat'))) return;   // (partides velles: ja hi havien pujat)
+        this.portaRellotge = true;
+        this.sortida(ESG.portaDx - 36, ESG.retY - 14, 72, 20, 'ZonaTorre', 'baix');
+        if (avis) this.flotant(ESG.portaDx, ESG.retY - 170, 'La porta de la dreta del retaule ja és oberta', '#ffe9a8');
+    }
+
+    actualitzar() { this.obrirPortaRellotge(true); }
 
     // Altar de pedra: l'Ineu s'agenolla, reposa (els grans del rosari tornen a brillar) i la partida es desa
     rezar() {

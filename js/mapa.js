@@ -23,7 +23,7 @@ const MAPA = {
         { id: 'ZonaRuines',        nom: 'Les Runes',                x: 800,  y: 300 },
         { id: 'ZonaCementiri',     nom: 'El Cementiri',             x: 1050, y: 300 },
         { id: 'ZonaPingpong',      nom: 'El Celler',                x: 640,  y: 390 },
-        { id: 'ZonaGolfes',         nom: 'Golfes del Santuari',      x: 930,  y: 335 },
+        { id: 'ZonaGolfes',         nom: 'Sala del Rellotge',       x: 930,  y: 335 },
         { id: 'ZonaEsglesia',      nom: 'Santuari',                 x: 930,  y: 390 },
         { id: 'ZonaEra',           nom: 'L\'Era',                   x: 330,  y: 390 },
         // Fila del poble (oest -> est): Hostatgeria · Taverna · Casa Gran · Plaça · Monestir

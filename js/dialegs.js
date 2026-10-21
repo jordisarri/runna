@@ -160,7 +160,7 @@ const DIALEGS = {
             pagines: [
                 { qui: '', text: 'Un cofre vell, de bisagres rovellades, vigilat per dues espelmes que ningú no recorda haver encès.' },
                 { qui: '', text: 'A dins, un flascó de vidre amb un líquid daurat i una nota: «Per al qui sap escoltar les pedres.»' },
-                { qui: '', text: 'Beus el flascó. Notes el cor més fort.\n+1 COR MÀXIM i vida plena.' }
+                { qui: '', text: 'Beus el flascó. Notes el cor més fort.\n+1 GRA AL ROSARI i rosari ple.' }
             ],
             enAcabar: () => { E.posaFlag('cofreTresor'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
         };
@@ -172,7 +172,7 @@ const DIALEGS = {
             pagines: [
                 { qui: '', text: "Una cabana de llenyataire oblidada, amagada entre els arbres. Ningú no hi ha entrat en anys: la pols és una catifa grisa." },
                 { qui: '', text: "Al fons, un cofre petit. A dins, un flascó daurat embolicat amb un drap i una nota gastada: «Per a qui es perd pel camí i el troba.»" },
-                { qui: '', text: "Beus el flascó. Notes el cor més fort.\n+1 COR MÀXIM i vida plena." }
+                { qui: '', text: "Beus el flascó. Notes el cor més fort.\n+1 GRA AL ROSARI i rosari ple." }
             ],
             enAcabar: () => { E.posaFlag('cofreCabanaCami'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
         };
@@ -244,13 +244,13 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: 'Pare Daniel', text: 'Ei, Ineu, una cosa més que em preocupa: el rellotge del campanar s\'ha aturat a les tres i quart, la nit que va arribar la boira. I les campanes no sonen, per molt que les estirin.' },
-                    { qui: 'Pare Daniel', text: 'Hi ha una porteta de fusta darrere el retaule, a l\'esquerra, que puja a les golfes. Jo ja no tinc l\'esquena per pujar-hi, però tu... mira què hi passa, i a veure si algú pot fer-lo caminar.' }
+                    { qui: 'Pare Daniel', text: 'Té, la clau de la porta de la dreta del retaule: puja per la torre fins a la Sala del Rellotge. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa, i a veure si algú pot fer-lo caminar.' }
                 ],
                 enAcabar: () => E.posaFlag('rellotgeDit')
             };
         }
         if (!E.flag('rellotgeReparat')) {
-            return { pagines: [{ qui: 'Pare Daniel', text: 'Les golfes, fill: la porteta darrere el retaule, a l\'esquerra. El rellotge i les campanes. Si algú els torna el so, potser la boira s\'ho pensarà dues vegades.' }] };
+            return { pagines: [{ qui: 'Pare Daniel', text: 'La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. El rellotge i les campanes. Si algú els torna el so, potser la boira s\'ho pensarà dues vegades.' }] };
         }
         return { pagines: [{ qui: 'Pare Daniel', text: 'Sents el rellotge, Ineu? Torna a caminar! Ara només falta que les campanes tinguin veu: el Cant de l\'Aurora, diuen, els agrada molt.' }] };
     },
@@ -874,7 +874,7 @@ const DIALEGS = {
             { qui: "El Gran Til·ler", text: "Aquesta és la saviesa que et volia donar, petit monjo: ningú no es perd del tot mentre algú el recorda a taula. La gàbia de l'Ocellaire només s'omple de qui s'ha quedat sol." },
             { qui: "El Gran Til·ler", text: "Rep el meu permís. Que et sigui lleu, i que no et faci oblidar mai que vas menjar amb tots." },
             { qui: "", text: "Una fulla de til·ler, daurada, es desprèn de la branca més alta i cau, giravoltant, a les teves mans.\nHas obtingut la FULLA DEL TIL·LER!" },
-            { qui: "", text: "Els qui són a la taula mengen, riuen poc a poc, i algú comença a cantar a mitja veu. Des del Santuari, molt lluny, arriba una nota d'orgue que, per primer cop en dies, no s'apaga.\nEl sopar t'omple de força: +1 cor màxim, i la vida et torna del tot." }
+            { qui: "", text: "Els qui són a la taula mengen, riuen poc a poc, i algú comença a cantar a mitja veu. Des del Santuari, molt lluny, arriba una nota d'orgue que, per primer cop en dies, no s'apaga.\nEl sopar t'omple de força: +1 gra al rosari, i el rosari torna a brillar sencer." }
         ],
         enAcabar: () => {
             E.dona("fulla_tiler"); E.posaFlag("fullaTiler"); E.posaFlag("soparFet");
@@ -1073,7 +1073,7 @@ const DIALEGS = {
             pagines: [
                 { qui: "", text: "Dins l'amagatall, un cofre vell. Les bisagres són rovellades, però el pany ha cedit amb un petit toc." },
                 { qui: "", text: "A dins hi ha un coure petit amb una gota de sang de color rosa pàl·lid i una nota: «Per al qui vingui amb l'espasa.»" },
-                { qui: "", text: "Beus la gota. Notes com el pit se't fa més ample.\n+1 COR MÀXIM i vida plena." }
+                { qui: "", text: "Beus la gota. Notes com el pit se't fa més ample.\n+1 GRA AL ROSARI i rosari ple." }
             ],
             enAcabar: () => { E.posaFlag("cofreBosc"); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
         };
@@ -1116,7 +1116,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: "", text: "Una cambra secreta que els monjos van fer servir fa segles: un cofre massís entre botes buides. A dins, un flascó de vidre amb un líquid daurat i un pergamí de tapes de cuir." },
-                { qui: "", text: "Beus el flascó. Notes el cor més fort.\n+1 COR MÀXIM i vida plena." },
+                { qui: "", text: "Beus el flascó. Notes el cor més fort.\n+1 GRA AL ROSARI i rosari ple." },
                 { qui: "", text: "Has obtingut el PERGAMÍ DEL MONJO." },
                 { qui: "Pergamí del monjo", text: "«Les relíquies dels meus germans i la clau de ferro són sota l'escala, murades. Un guardià de pedra les vigila: ningú no hi baixa si no li gira el cap cap al sol que neix. On neix el sol, el raïm madura.»" },
                 { qui: "", text: "Al fons de la sala s'ha desfet un pany: una porta de fusta s'obre cap a l'escalinata de la Casa Gran." }

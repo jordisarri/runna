@@ -1,5 +1,5 @@
 /**
- * LA TORRE DEL CAMPANAR: sala de transició entre el Santuari i les golfes del rellotge.
+ * LA TORRE DEL CAMPANAR: sala de transició entre el Santuari i la Sala del Rellotge.
  * Una escala de cargol vista des del centre de la torre, amb un efecte pseudo-3D a l'estil de Nebulus/Castelian:
  * l'Ineu es queda al mig de la pantalla i, a mesura que puja, la paret rodona gira al seu voltant i els graons
  * van passant per sota els seus peus. Tot es dibuixa per codi a cada fotograma (no hi ha cap imatge).
@@ -193,7 +193,7 @@ class ZonaTorre extends Phaser.Scene {
         const cel = costat(hTop);
         g.fillStyle(0x0d0b09, 1).fillPoints([...cel, { x: this.pt(Math.PI / 2, T.R, hTop).x, y: -5 }, { x: this.pt(-Math.PI / 2, T.R, hTop).x, y: -5 }], true);
 
-        // ---- portes (a baix, entrada del Santuari; a dalt, cap a les golfes) ----
+        // ---- portes (a baix, entrada del Santuari; a dalt, cap a la Sala del Rellotge) ----
         const porta = (theta, h, ample, alt, ambLlum) => {
             const a = norm(theta - rot);
             if (Math.abs(a) > Math.PI / 2 + ample) return;
