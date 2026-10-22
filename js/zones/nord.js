@@ -51,6 +51,7 @@ class ZonaRuines extends ZonaBase {
         this.colisio((PORTA_X + PORTA_AMPLE / 2 + dreta) / 2, BASE_Y - 45, dreta - PORTA_X - PORTA_AMPLE / 2, 90);
         this.colisio(PORTA_X, BASE_Y - 100, PORTA_AMPLE, 20);
         this.sortida(PORTA_X - PORTA_AMPLE / 2, BASE_Y - 80, PORTA_AMPLE, 76, 'ZonaPingpong', 'ruines');
+        this.portaAnimada({ x: 404, top: 703, bottom: 862, ample: 102, fons: BASE_Y - 20, arc: true, color: 0xa84a30, vora: 0x3a1408 });   // la porta d'arc del Celler
         this.blocDarrere((0 + dreta) / 2, dreta, BASE_Y - 110);   // ni darrere de l'edifici
 
         // L'ombra del monjo: només es veu quan has llegit el primer fragment del pergamí
@@ -455,12 +456,12 @@ class ZonaSantAntoni extends ZonaBase {
         this.interactiu(545, 785, 80, DIALEGS.cel_stantoni, { altura: 150 });
 
         this.npc('germa_francesc', 1010, 870, DIALEGS.germaFrancesc, { flipX: true });
-        this.cartell(170, 830, () => ({ pagines: [{ qui: '', text: '← El Monestir i la Plaça' }] }));
-        this.arbres([[1250, 300], [1320, 560], [1290, 1000], [160, 300], [360, 220], [200, 1010], [560, 1040], [900, 1040], [1130, 1010]]);
+        this.cartell(170, 800, () => ({ pagines: [{ qui: '', text: '← El Monestir i la Plaça' }] }));
+        this.arbres([[1250, 300], [1320, 560], [1340, 1060], [160, 300], [360, 220]]);   // cap arbre davant el cartell ni el Germà Francesc
 
         this.enemic('escolopendra', 420, 1010);
         this.enemic('escolopendra', 1200, 900);
-        this.sortida(0, 820, 14, 140, 'ZonaMonestir', 'monestir');
+        this.sortida(0, 820, 14, 140, 'ZonaMonestir', 'santantoni');   // surts per l'est del Monestir
     }
 }
 

@@ -33,6 +33,7 @@ function pistaActual(E) {
     else if (cols < 12) consell = "El camí de la Desaparició té dotze columnes. Cada una t'explica una paraula. Apunta-les totes!";
     else if (!E.flag("missatgeDesxifrat")) consell = "Ja tens les dotze paraules. A l'ermita hi ha dues taules de pedra que només tu pots llegir.";
     else if (!E.flag("llosaOberta")) consell = "La Sansa, la de les verdures, ven coses que no s'han de veure. L'Isidre, al jardí, sap quina llavor fa florir la llosa.";
+    else if (E.flag("llosaOberta") && !E.flag("mongesTrobades")) consell = "A la llosa del jardí de l'Hostatgeria hi ha una escala que baixa: busca les monges per dins.";
     else consell = "Aviat tindràs més camins oberts. Vés pas a pas, fill, i no et deixis la bufanda.";
     return consell;
 }
@@ -48,6 +49,23 @@ function objectiuSopar(E) {
     if (!E.flag("floresIsidre")) f.push("les flors de l'Isidre (Hostatgeria)");
     if (!E.flag("pastorsConvencuts")) f.push("convèncer els pastors de la Cirosa (toca música vora el seu foc)");
     E.posaObjectiu(f.length ? "El sopar del Til·ler: falta " + f.join(", ") + "." : "Tot a punt: torna al Gran Til·ler per al sopar.");
+}
+
+// Cada monja allibera dona un gra més al rosari (+1 cor) i, quan les tres són lliures, l'Hostatgeria obre la porta per dins
+function premiMonja(nom, flag) {
+    const E = Estat;
+    E.posaFlag(flag);
+    E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
+    const ui = game.scene.getScene('UI');
+    if (ui) { ui.actualitzarHUD(); ui.notifica('+1 gra al rosari: ' + nom); }
+    if (E.flag('premiPains') && E.flag('premiPhili') && E.flag('premiCharm')) {
+        E.posaFlag('mongesTrobades');
+        E.posaObjectiu("Les tres monges són lliures i han obert la porta de l'Hostatgeria per dins: hi ha un lloc de repòs al vestíbul.");
+    } else {
+        const f = ['Pains', 'Phili', 'Charm'].filter(n => !E.flag('premi' + n));
+        E.posaObjectiu('Allibera les monges que falten: ' + f.join(', ') + '.');
+    }
+    E.desar();
 }
 
 const DIALEGS = {
@@ -729,12 +747,12 @@ const DIALEGS = {
         }
         if (E.te('llavorLluna')) {
             return {
-                pagines: [
-                    { qui: 'Isidre', text: 'Una Llavor de Lluna! Fa trenta anys que no en veia cap. Deixa-me-la...' },
-                    { qui: '', text: 'L\'Isidre, coix però àgil, cava un clot al peu de la llosa de pedra, hi posa la llavor i la rega. De pressa, una flor blanca brota i brilla.' },
-                    { qui: 'Isidre', text: 'La llosa s\'ha mogut! Per aquí es baixa a l\'Hostatgeria, que el mal ha tancat per dins.' }
-                ],
-                enAcabar: () => { E.treu('llavorLluna'); E.posaFlag('llosaOberta'); Sfx.secret(); E.posaObjectiu('L\'entrada secreta de l\'Hostatgeria és oberta (pròxima fase).'); }
+                pagines: [{ qui: 'Isidre', text: 'Una Llavor de Lluna! Fa trenta anys que no en veia cap. Deixa-me-la, monjo, que el peu em fa mal però encara sé cavar un clot.' }],
+                enAcabar: () => {
+                    E.treu('llavorLluna');
+                    const z = Joc.zonaActiva(game.scene.getScene('UI'));
+                    if (z && z.obrirLlosa) z.obrirLlosa(); else E.posaFlag('llosaOberta');
+                }
             };
         }
         return {
@@ -755,14 +773,9 @@ const DIALEGS = {
         ],
         enAcabar: () => { E.dona('llavorLluna'); E.posaFlag('llavorSansa'); E.posaObjectiu('Porta la Llavor de Lluna a l' + String.fromCharCode(39) + 'Isidre, a l' + String.fromCharCode(39) + 'Hostatgeria.'); }
     }),
-    llosaJardi: E => E.flag('llosaOberta') ? {
-        pagines: [
-            { qui: '', text: 'La llosa descansa mig oberta. De sota puja una escala i una olor d\'encens i humitat.' },
-            { qui: '', text: '(L\'Hostatgeria s\'obrirà en una fase propera.)' }
-        ]
-    } : {
+    llosaJardi: E => ({
         pagines: [{ qui: '', text: 'Una llosa de pedra rodona entre les flors, dins la pèrgola. Té una ranura al mig, com un clot per una llavor.' }]
-    },
+    }),
     prunera: E => ({
         pagines: [
             { qui: '', text: 'A l\'extrem de ponent del jardí, una prunera vella i retorçuda, carregada de prunes d\'un lila que lluu com si fossin de vidre.' },
@@ -771,7 +784,58 @@ const DIALEGS = {
         ],
         enAcabar: () => { E.dades.vida = E.dades.corsMax * 2; }
     }),
-    hostatgeria: E => ({ pagines: [{ qui: '', text: 'L\'Hostatgeria. Les portes són tancades per dins i els finestrals són foscos.\n(La masmorra s\'obrirà en una fase propera.)' }] }),
+    hostatgeria: E => E.flag('mongesTrobades')
+        ? { pagines: [{ qui: 'Charm', text: 'Entra, fill, que et farem una infusió.' }] }
+        : { pagines: [{ qui: '', text: 'L\'Hostatgeria. Les portes són tancades per dins i els finestrals són foscos.' }] },
+    sortidaMonges: E => ({ pagines: [{ qui: '', text: 'La gran porta de l\'Hostatgeria, tancada per dins amb tres barres de ferro.' }] }),
+    taulaRefetor: E => E.te('guants')
+        ? { pagines: [{ qui: 'Ineu', text: 'Amb els Guants de Poder, aquesta taula no pesa tant...' }] }
+        : { pagines: [
+            { qui: '', text: 'Una taula de roure massissa barra la porta del mig. Des de l\'altra banda, una veu fina i enrabiada colpeja el fusta.' },
+            { qui: 'Ineu', text: 'No la puc moure amb les mans soles. Ni dues persones... Necessito molta més força.' }] },
+    esbarzersCapella: E => ({ pagines: [
+        { qui: '', text: 'Uns esbarzers negres han crescut davant la porta de la dreta i la tapen del tot. Se sent algú resar a dins, molt baixet.' },
+        { qui: 'Ineu', text: 'El bastó no els talla. Només Runna ho aconsegueix.' }] }),
+
+    // ---------------- LES MONGES DE L'HOSTATGERIA ----------------
+    monjaPains: E => {
+        if (!E.flag('lliurePains')) return { pagines: [
+            { qui: '', text: 'Una velleta en cadira de rodes dorm dins un capoll de boira lila. No respon.' },
+            { qui: 'Ineu', text: 'Una música lleugera, de tres notes, potser la desperta. (Flauta: 1-2-3.)' }] };
+        if (!E.flag('premiPains')) return {
+            pagines: [
+                { qui: 'Pains', text: 'Oh, mon petit! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Pains.' },
+                { qui: 'Pains', text: 'La boira va entrar pel soterrani una nit de fa tres lluns. Vaig veure un home amb abric d\'ocells que s\'enduia les nenes del poble, rient baixet.' },
+                { qui: 'Pains', text: 'Pren això, fill. El rosari d\'aquesta casa és vell i fort: que et doni una mica de la seva claror.' }
+            ],
+            enAcabar: () => premiMonja('Pains', 'premiPains')
+        };
+        return { pagines: [{ qui: 'Pains', text: 'Vés amb Déu, fill. La cadira em fa mal als ossos, però encara tinc bones orelles.' }] };
+    },
+    monjaPhili: E => {
+        if (!E.flag('premiPhili')) return {
+            pagines: [
+                { qui: 'Phili', text: 'Per fi! Tres lluns que colpejo aquesta porta! Soc la Phili, i no, no m\'he estat quieta ni un minut.' },
+                { qui: 'Phili', text: 'T\'ho dic perquè ho vaig veure: el Germà Andreu, el de la pilota, baixava a la Taverna cada nit amb una clau grossa. Mai no li he cregut el somriure.' },
+                { qui: 'Phili', text: 'Aquí tens, per les molèsties. Que no se t\'acabin les forces!' }
+            ],
+            enAcabar: () => premiMonja('Phili', 'premiPhili')
+        };
+        return { pagines: [{ qui: 'Phili', text: 'Si necessites algú que miri amb els ulls ben oberts, ja saps on trobar-me.' }] };
+    },
+    monjaCharm: E => {
+        if (!E.flag('premiCharm')) return {
+            pagines: [
+                { qui: 'Charm', text: 'Benvingut, fill de Déu. Sóc la Charm, la mare superiora d\'aquesta casa. Havíem perdut l\'esperança, però no la pregària.' },
+                { qui: 'Charm', text: 'Als llibres d\'aquesta casa he llegit que l\'Ocellaire va robar el cant dels ocells, i que només aquest mateix cant obre la seva gàbia. Tu l\'aprendràs: la Pianista el recorda.' },
+                { qui: 'Charm', text: 'Accepta el que podem donar: una mica de la nostra paciència.' }
+            ],
+            enAcabar: () => premiMonja('Charm', 'premiCharm')
+        };
+        return { pagines: [{ qui: 'Charm', text: 'Que la llum del Miracle t\'acompanyi, fill.' }] };
+    },
+
+    portaHostatgeria: E => ({ pagines: [{ qui: '', text: 'Una porta de fusta, tancada per dins.' }] }),
 
     // ---------------- LA CIROSA ----------------
     // Els pastors de la Cirosa: desterrats, arruïnats i sense nom. No s'han de combatre.

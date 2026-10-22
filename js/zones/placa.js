@@ -38,7 +38,7 @@ class ZonaPlaca extends ZonaBase {
         this.posar('esglesia', 1050, 463, { fonsY: 452, col: { w: 1100, h: 150, dy: -8 } });
         this.blocDarrere(1050, 1100, 300);
         this.sortida(612, 440, 98, 22, 'ZonaEsglesia', 'porta');
-        this.posarPortaSantuari();
+        this.portaAnimada({ x: 683, top: 291, bottom: 450, ample: 90, fons: 452, color: 0x2c524a, panell: 0x3a6a5e, vora: 0x0f1e1a, finestra: true });   // la porta verda del Santuari
         this.posar('xiprer', 1285, 455, { col: { w: 24, h: 12 } });
         this.posar('xiprer', 1305, 490, { col: { w: 24, h: 12 } });
 
@@ -99,45 +99,6 @@ class ZonaPlaca extends ZonaBase {
         this.tweens.add({ targets: this.pedraSecreta, alpha: 0.15, scaleY: 0.2, duration: 900 });
         this.ui().obrirDialeg(DIALEGS.pedraSecretaOberta, () => Estat.desar());
         return true;
-    }
-
-    // La porta de doble batent del Santuari (verda, a la façana): els batents giren cap endins a mesura que l'Ineu s'acosta
-    // i es tornen a tancar quan se n'allunya. Dins s'entreveu la foscor càlida de la nau.
-    posarPortaSantuari() {
-        const DX = 683, DW = 90, DT = 291, DB = 450, H = DB - DT;
-        this.portaEsg = { DX, DB, a: 0, estat: 'tancada' };
-        const dins = this.add.graphics().setDepth(453);
-        dins.fillStyle(0x0e0806, 1).fillRect(DX - DW / 2, DT, DW, H);
-        dins.fillGradientStyle(0x0e0806, 0x0e0806, 0x6a4420, 0x6a4420, 1, 1, 0.9, 0.9).fillRect(DX - DW / 2, DT + H * 0.45, DW, H * 0.55);
-        dins.fillStyle(0xffd38a, 0.5).fillCircle(DX, DB - 22, 9);               // una espelma al fons
-        const batent = (x0, esq) => {
-            const g = this.add.graphics().setDepth(454);
-            const w = DW / 2, x = esq ? 0 : -w;                                // origen a la frontissa (vora de fora)
-            g.fillStyle(0x2c524a, 1).fillRect(x, 0, w, H).lineStyle(2, 0x0f1e1a, 1).strokeRect(x, 0, w, H);
-            g.fillStyle(0x3a6a5e, 1).fillRect(x + 6, 8, w - 12, H * 0.5 - 12).fillRect(x + 6, H * 0.5 + 4, w - 12, H * 0.5 - 14);
-            g.lineStyle(1.5, 0x10241f, 1).strokeRect(x + 6, 8, w - 12, H * 0.5 - 12).strokeRect(x + 6, H * 0.5 + 4, w - 12, H * 0.5 - 14);
-            if (esq) {                                                          // finestreta enreixada, com a l'original
-                g.fillStyle(0x10241f, 1).fillRect(x + 10, H - 66, 26, 40);
-                g.lineStyle(1.5, 0x5a7a70, 1); for (let k = 1; k < 4; k++) g.lineBetween(x + 10 + k * 6.5, H - 66, x + 10 + k * 6.5, H - 26);
-            } else g.fillStyle(0xcfb36a, 1).fillCircle(x + 9, H * 0.55, 2.6);   // pom
-            g.setPosition(x0, DT);
-            return g;
-        };
-        this.portaEsg.esq = batent(DX - DW / 2, true);
-        this.portaEsg.dre = batent(DX + DW / 2, false);
-    }
-
-    actualitzar(temps, delta) {
-        const P = this.portaEsg;
-        if (!P || !this.ineu) return;
-        const d = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, P.DX, P.DB + 16);
-        const objectiu = Phaser.Math.Clamp((230 - d) / 150, 0, 1);
-        P.a += (objectiu - P.a) * (1 - Math.exp(-(delta || 16) / 130));
-        const e = P.a * P.a * (3 - 2 * P.a);                                  // entrada i sortida suaus
-        P.esq.scaleX = P.dre.scaleX = 1 - 0.88 * e;                           // el batent es veu "de cantó" a mesura que gira cap endins
-        P.esq.setAlpha(1 - 0.25 * e); P.dre.setAlpha(1 - 0.25 * e);
-        if (P.estat === 'tancada' && P.a > 0.1) { P.estat = 'oberta'; Sfx.porta(); }
-        else if (P.estat === 'oberta' && P.a < 0.04) { P.estat = 'tancada'; Sfx.porta(); }
     }
 
     enEntrar() {

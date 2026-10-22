@@ -93,6 +93,45 @@ function dibuixarPersona(canvas, w, o) {
     }
 }
 
+// Monja de l'Hostatgeria: hàbit fosc amb toca blanca, cabells curts a les temples; opcions: ample (volum), alt, ulleres, cadira de rodes
+function dibuixarMonja(canvas, w, o) {
+    const h = Math.round(w * 4 / 3);
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(w / 96, w / 96);
+    ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const alt = o.alt || 1, amp = o.ample || 1, capY = (o.cadira ? 150 : 128) - 108 * alt * (o.cadira ? 0.9 : 1), m = 48;
+    const habit = '#2a2a3a', toca = '#f2efe6';
+    if (o.cadira) {
+        // Cadira de rodes: seient, respatller, rodes grans amb radis i un reposapeus
+        ctx.fillStyle = '#6a4a2e'; ctx.fillRect(m - 24, capY + 40, 6, 36); ctx.strokeRect(m - 24, capY + 40, 6, 36);              // respatller
+        ctx.fillRect(m - 22, capY + 64, 46, 7); ctx.strokeRect(m - 22, capY + 64, 46, 7);                                       // seient
+        [m - 20, m + 22].forEach(x => {
+            ctx.fillStyle = '#8a8a8a'; ctx.beginPath(); ctx.arc(x, 112, 17, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#e8d8b0'; ctx.beginPath(); ctx.arc(x, 112, 13, 0, Math.PI * 2); ctx.fill();
+            ctx.lineWidth = 1.4; for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2; ctx.beginPath(); ctx.moveTo(x, 112); ctx.lineTo(x + Math.cos(a) * 13, 112 + Math.sin(a) * 13); ctx.stroke(); }
+            ctx.lineWidth = 3; ctx.fillStyle = '#3a3a3a'; ctx.beginPath(); ctx.arc(x, 112, 3, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.fillStyle = habit;                                                                                                    // cos assegut, amb una manta
+        ctx.beginPath(); ctx.moveTo(m - 14, capY + 28); ctx.lineTo(m + 14, capY + 28); ctx.lineTo(m + 20, capY + 64); ctx.lineTo(m + 34, capY + 80); ctx.lineTo(m - 20, capY + 80); ctx.lineTo(m - 18, capY + 60); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#a05a4a'; ctx.beginPath(); ctx.moveTo(m - 20, capY + 66); ctx.lineTo(m + 30, capY + 66); ctx.lineTo(m + 34, capY + 84); ctx.lineTo(m - 22, capY + 84); ctx.closePath(); ctx.fill(); ctx.stroke();
+    } else {
+        ctx.fillStyle = habit; ctx.beginPath();
+        ctx.moveTo(m - 14 * amp, capY + 28); ctx.lineTo(m + 14 * amp, capY + 28); ctx.lineTo(m + 24 * amp + 6, 122); ctx.lineTo(m - 24 * amp - 6, 122); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = toca; ctx.beginPath(); ctx.moveTo(m - 12 * amp, capY + 28); ctx.lineTo(m + 12 * amp, capY + 28); ctx.lineTo(m + 9 * amp, capY + 46); ctx.lineTo(m - 9 * amp, capY + 46); ctx.closePath(); ctx.fill(); ctx.stroke();   // pitrera
+        ctx.strokeStyle = '#c9b48a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(m - 15 * amp, capY + 64); ctx.lineTo(m + 15 * amp, capY + 64); ctx.stroke(); ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;   // cordó
+        ctx.fillStyle = '#3b2a1e'; ctx.fillRect(m - 20, 120, 14, 6); ctx.fillRect(m + 6, 120, 14, 6);
+    }
+    // Cap: cara, cabells curts a les temples i toca (vel) blanca
+    ctx.fillStyle = '#e8b48a'; ctx.beginPath(); ctx.arc(m, capY + 14, 15, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = o.cabell; [-1, 1].forEach(sg => { ctx.beginPath(); ctx.ellipse(m + sg * 12, capY + 12, 5, 8, sg * 0.3, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+    ctx.fillStyle = toca; ctx.beginPath(); ctx.arc(m, capY + 8, 17, Math.PI * 1.02, Math.PI * 1.98); ctx.lineTo(m + 16, capY + 22); ctx.lineTo(m + 12, capY + 36); ctx.lineTo(m - 12, capY + 36); ctx.lineTo(m - 16, capY + 22); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#e8b48a'; ctx.beginPath(); ctx.ellipse(m, capY + 17, 11, 11, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = CONTORN; ctx.fillRect(m - 7, capY + 14, 3, 4); ctx.fillRect(m + 4, capY + 14, 3, 4);
+    if (o.ulleres) { ctx.lineWidth = 2; ctx.strokeRect(m - 11, capY + 11, 10, 9); ctx.strokeRect(m + 1, capY + 11, 10, 9); ctx.beginPath(); ctx.moveTo(m - 1, capY + 15); ctx.lineTo(m + 1, capY + 15); ctx.stroke(); }
+    ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(m, capY + 21, 3.5, 0.2, Math.PI - 0.2); ctx.stroke();
+}
+
 // Cos de l'Isidre: camisa blanca de màniga curta, pantalons marrons, cama de fusta a la dreta i un bastó
 function dibuixarCosIsidre(ctx, m, capY) {
     const PELL = '#e0a878', CAMISA = '#f4f1e8', PANTALO = '#6b4a2a', SABATA = '#3b2a1e', FUSTA = '#a8794a';

@@ -500,19 +500,24 @@ Object.assign(DIALEGS, {
         { qui: '', text: "El rellotge gran del Santuari torna a caminar. Es poden sentir el tic-tac i el soroll tranquil dels engranatges." }
     ] : [
         { qui: '', text: "El rellotge del Santuari, aturat a les tres i quart. Fa tres nits que no es mou: va ser quan va arribar la boira." },
-        { qui: 'Ineu', text: "Sota l'esfera hi ha tres engranatges fora de lloc. Si els poso a la mida que toca... Deu haver-hi alguna nota d'un campaner." }
+        { qui: 'Ineu', text: "Sota l'esfera hi ha tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran. Quan una posició és bona, el seu llum s'encén." },
+        { qui: 'Ineu', text: "La nota del campaner, a la biga de l'esquerra, deu dir l'ordre." }
     ] }),
 
     golfesNota: E => ({ pagines: [
         { qui: '', text: "Una nota de fusta clavada a una biga, amb lletra de campaner:" },
-        { qui: 'Nota del campaner', text: "«El rellotge només camina si els engranatges hi van en ordre: el petit primer, el gran al mig i el mitjà darrere. I les tres campanes, que són els tres sons del primer cant, no sonen si el rellotge és mut.»" }
+        { qui: 'Nota del campaner', text: "«El rellotge només camina si els engranatges hi van en ordre: el petit primer, el gran al mig i el mitjà darrere. I les tres campanes, que són els tres sons del primer cant, no sonen si el rellotge és mut.»" },
+        { qui: 'Ineu', text: "És a dir: posició I petit, posició II gran, posició III mitjà. Després, amb el rellotge en marxa, tocar el primer cant davant les campanes." }
     ] }),
 
     golfesCampanes: E => ({ pagines: E.flag('campanesRepicades') ? [
         { qui: '', text: "Les tres campanes pengen en silenci, netes i quietes. Han sonat." }
+    ] : E.flag('rellotgeReparat') && !E.te('flauta') ? [
+        { qui: '', text: "Tres campanes de bronze, afinades amb les notes 1, 2 i 3. Amb el rellotge en marxa ja vibren una mica." },
+        { qui: 'Ineu', text: "Necessito una flauta i el primer cant, el de l'Aurora. La Pianista, a l'orgue del Santuari, me'l pot ensenyar." }
     ] : E.flag('rellotgeReparat') ? [
         { qui: '', text: "Tres campanes de bronze, penjades d'una biga: una de petita, una de mitjana i una de gran. Estan afinades: fan les notes 1, 2 i 3." },
-        { qui: 'Ineu', text: "Amb el rellotge en marxa, potser el Cant de l'Aurora les farà sonar. (Flauta: 1-2-3.)" }
+        { qui: 'Ineu', text: "Amb el rellotge en marxa, el Cant de l'Aurora les farà sonar. Prem ESPAI aquí davant (o el medalló de la flauta) i toca 1-2-3." }
     ] : [
         { qui: '', text: "Tres campanes de bronze, mudes. Per més que les toques, no fan so: com si la boira se'ls hagués menjat el so." },
         { qui: 'Ineu', text: "Primer cal arreglar el rellotge que les governa." }
@@ -573,6 +578,13 @@ class ZonaGolfes extends ZonaCasaBase {
             this.interactiu(x, 395, 52, () => this.girarEngranatge(i), { altura: 90, actiu: () => !this.reparat });
         });
         this.add.rectangle(500, 340, 420, 14, 0x3a2412).setDepth(-880);
+        // Plaques de posició (I, II, III) i un llum per a cada una: verd quan l'engranatge d'aquella posició és el bo
+        this.llumsEng = [330, 500, 670].map((x, i) => {
+            this.add.rectangle(x, 400, 44, 22, 0x5a3a1e).setStrokeStyle(2, 0x2a1608).setDepth(-860);
+            this.add.text(x, 400, ['I', 'II', 'III'][i], estilText(16, '#f2e6c8', { fontStyle: 'bold' })).setOrigin(0.5).setDepth(-859);
+            return this.add.circle(x, 288, 7, 0x3a1a10).setStrokeStyle(2, 0x2a1608).setDepth(-860);
+        });
+        this.refrescaLlums();
 
         // Nota del campaner (la pista del puzle), clavada a una biga de l'esquerra
         this.posar('pergami', 190, 340, { fonsY: 340 });
@@ -589,6 +601,9 @@ class ZonaGolfes extends ZonaCasaBase {
             c.fillStyle(0x6a4a18, 1).fillCircle(0, h + 4, 5);
             return c;
         });
+        // Les notes de cada campana (1, 2, 3) i un resplendor que s'encén quan ja es poden fer sonar
+        this.notesCamp = [0, 1, 2].map(i => this.add.text(380 + i * 120, 430 + 56 + i * 12 + 26, String(i + 1), estilText(22, '#ffe08a', { fontStyle: 'bold', stroke: '#2a1608', strokeThickness: 4 })).setOrigin(0.5).setDepth(490));
+        this.halosCamp = [0, 1, 2].map(i => this.add.circle(380 + i * 120, 470 + i * 6, 46 + i * 6, 0xffe08a, 0).setDepth(479));
         const beta = this.add.graphics().setDepth(470);
         beta.fillStyle(0x3a2412, 1).fillRect(330, 418, 340, 14);
         this.colisio(500, 440, 360, 24);
@@ -599,6 +614,21 @@ class ZonaGolfes extends ZonaCasaBase {
         this.add.rectangle(500, 350, 1000, 700, 0xffd38a, 0.05).setDepth(80000);
         this.sortida(440, 686, 120, 14, 'ZonaTorre', 'dalt');
         if (this.reparat) this.agullaMinuts.rotation = 0;
+        this.objectiuGolfes();
+    }
+
+    // L'objectiu diu, en cada moment, què toca fer a la sala
+    objectiuGolfes() {
+        const E = Estat;
+        if (E.flag('campanesRepicades')) return;
+        if (!this.reparat) E.posaObjectiu("Rellotge: posa els engranatges en ordre (I petit, II gran, III mitjà, diu la nota). Toca'ls amb ESPAI per canviar-ne la mida.");
+        else if (!E.te('flauta') || !E.flag('cantAurora')) E.posaObjectiu("El rellotge camina. Per fer sonar les campanes cal la flauta i el Cant de l'Aurora: aprèn-lo de la Pianista, al Santuari.");
+        else E.posaObjectiu("Toca el Cant de l'Aurora (1-2-3) davant les campanes: ESPAI aquí davant o el medalló de la flauta.");
+        const ui = this.ui(); if (ui && ui.actualitzarHUD) ui.actualitzarHUD();
+    }
+
+    refrescaLlums() {
+        this.llumsEng.forEach((l, i) => l.setFillStyle(this.mides[i] === GOLFES_SOLUCIO[i] ? 0x6aff7a : 0x3a1a10));
     }
 
     dibuixaEngranatge(i) {
@@ -619,14 +649,19 @@ class ZonaGolfes extends ZonaCasaBase {
     girarEngranatge(i) {
         this.mides[i] = (this.mides[i] + 1) % 3;
         this.dibuixaEngranatge(i);
+        this.refrescaLlums();
+        Sfx.menu();
         const bé = this.mides.every((m, k) => m === GOLFES_SOLUCIO[k]);
-        if (!bé) return { pagines: [{ qui: '', text: "Gires l'engranatge i encaixa un altre cop. Ara és " + GOLFES_NOM[this.mides[i]] + "." }] };
+        if (!bé) {
+            this.flotant(330 + i * 170, 300, ['I', 'II', 'III'][i] + ': ' + GOLFES_NOM[this.mides[i]], this.mides[i] === GOLFES_SOLUCIO[i] ? '#9aff9a' : '#f2e6c8');
+            return null;
+        }
         return {
             pagines: [
                 { qui: '', text: "Els tres engranatges encaixen en ordre: petit, gran i mitjà. Una cosa dins la paret fa clac." },
                 { qui: '', text: "L'agulla dels minuts es mou. El rellotge del Santuari torna a caminar, tic-tac, tic-tac." }
             ],
-            enAcabar: () => { this.reparat = true; Estat.posaFlag('rellotgeReparat'); this.cameras.main.shake(300, 0.003); Sfx.secret(); Estat.desar(); }
+            enAcabar: () => { this.reparat = true; Estat.posaFlag('rellotgeReparat'); this.cameras.main.shake(300, 0.003); Sfx.secret(); this.objectiuGolfes(); Estat.desar(); }
         };
     }
 
@@ -634,7 +669,7 @@ class ZonaGolfes extends ZonaCasaBase {
     enMelodia(nom) {
         if (nom !== 'aurora') return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 500, 520) > 280) return false;
-        if (!this.reparat) { this.flotant(500, 440, 'Les campanes no ressonen: el rellotge és aturat', '#d8c8ff'); return true; }
+        if (!this.reparat) { this.flotant(500, 440, 'Les campanes no ressonen: primer cal arreglar el rellotge', '#d8c8ff'); return true; }
         if (Estat.flag('campanesRepicades')) { this.flotant(500, 440, 'Les campanes ja han sonat', '#d8c8ff'); return true; }
         this.repicar();
         return true;
@@ -648,6 +683,7 @@ class ZonaGolfes extends ZonaCasaBase {
         }));
         this.time.delayedCall(2400, () => this.ui().obrirDialeg(DIALEGS.golfesCampanesSonen, () => {
             const E = Estat;
+            E.posaObjectiu('Les campanes del Santuari tornen a sonar. Explica-ho al Pare Daniel.');
             E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
             this.ui().actualitzarHUD();
             E.desar();
@@ -668,6 +704,10 @@ class ZonaGolfes extends ZonaCasaBase {
     }
 
     actualitzar(ara, delta) {
+        // Les campanes brillen quan ja es poden fer sonar (rellotge en marxa i encara no han sonat)
+        const llestes = this.reparat && !Estat.flag('campanesRepicades');
+        this.halosCamp.forEach((h, i) => h.setFillStyle(0xffe08a, llestes ? 0.12 + 0.1 * Math.sin(ara / 260 + i) : 0));
+        this.notesCamp.forEach(t => t.setAlpha(Estat.flag('campanesRepicades') ? 0.35 : llestes ? 1 : 0.5));
         if (!this.reparat) return;
         this.agullaMinuts.rotation += delta * 0.0006;
         this.agullaHores.rotation += delta * 0.00005;

@@ -57,6 +57,7 @@ class ZonaBase extends Phaser.Scene {
         this.yTall = Infinity;
         this.preparaTweens();
         this.portesInt = [];
+        this.portesAnim = [];
         this.construir();
         this.obrirPortes();
         this.ampliarSud();
@@ -267,10 +268,10 @@ class ZonaBase extends Phaser.Scene {
     // fonsY: línia de profunditat (per defecte y); l'Ineu es dibuixa davant si és més avall.
     posar(key, x, y, opts = {}) {
         // Algunes zones (config.pins = { pi, pinyer }: proporcions) canvien una part dels arbres per pins; l'elecció és fixa per posició
-        if (key === 'arbre' && this.config.pins && !(opts.col && opts.col.fix) && !opts.escala) {
+        if (key === 'arbre' && this.config.pins && !opts.escala) {
             const h = Math.abs(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453) % 1, P = this.config.pins;
             if (h < (P.pi || 0)) key = 'pi'; else if (h < (P.pi || 0) + (P.pinyer || 0)) key = 'pi_pinyer';
-            if (key !== 'arbre') opts = Object.assign({}, opts, { col: { w: key === 'pi' ? 30 : 46, h: 16 } });
+            if (key !== 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: { w: key === 'pi' ? 30 : 46, h: 16 } });
         }
         const tex = this.textures.get(key);
         const escala = (tex.customData && tex.customData.escala) || 1 / RES;
@@ -302,7 +303,7 @@ class ZonaBase extends Phaser.Scene {
     // Personatge quiet amb diàleg
     npc(key, x, y, dialeg, opts = {}) {
         const img = this.posar(key, x, y, { col: { w: 40, h: 18 } });
-        this.add.image(x, y, 'ombra').setScale(0.42).setDepth(-500);
+        img.ombra = this.add.image(x, y, 'ombra').setScale(0.42).setDepth(-500);
         if (opts.flipX) img.setFlipX(true);
         // Respiració suau perquè sembli viu
         this.tweens.add({ targets: img, scaleY: img.scaleY * 1.02, yoyo: true, repeat: -1, duration: 1100 + Math.random() * 400 });
@@ -616,13 +617,13 @@ class ZonaBase extends Phaser.Scene {
     // ---------------- Música ----------------
     // Llocs on una melodia pot fer efecte. Amb la flauta a la mà, l'Ineu hi pot tocar (ESPAI o el medalló de la dreta).
     // pista: cal haver llegit abans la pista del lloc (flag 'flauta_<id>', que posa el diàleg en tancar-se).
-    llocFlauta(id, x, y, radi, pista = false) {
-        this.llocsFlauta.push({ id, x, y, radi, pista });
+    llocFlauta(id, x, y, radi, pista = false, actiu = null) {
+        this.llocsFlauta.push({ id, x, y, radi, pista, actiu });
     }
 
     flautaActiva() {
         if (!Estat.te('flauta') || !this.ineu) return false;
-        return this.llocsFlauta.some(l => (!l.pista || Estat.flag('flauta_' + l.id)) &&
+        return this.llocsFlauta.some(l => (!l.pista || Estat.flag('flauta_' + l.id)) && (!l.actiu || l.actiu()) &&
             Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, l.x, l.y) <= l.radi);
     }
 
@@ -724,6 +725,69 @@ class ZonaBase extends Phaser.Scene {
         this.actualitzarCombat(time);
         this.comprovarSortides();
         if (this.actualitzar) this.actualitzar(time, delta);
+        this.actualitzarPortes(delta);
+    }
+
+    // Porta de doble batent dibuixada damunt de la del gràfic de l'edifici: els batents giren cap endins quan l'Ineu
+    // s'hi acosta i es tornen a tancar quan se n'allunya; a dins s'entreveu la foscor càlida.
+    // o = { x, top, bottom, ample, fons (profunditat de l'edifici), arc (porta d'arc de mig punt), color, panell, vora, finestra, ferro }
+    portaAnimada(o) {
+        const DX = o.x, DT = o.top, DB = o.bottom, DW = o.ample, H = DB - DT, w = o.unic ? DW : DW / 2, r = o.arc ? DW / 2 : 0, Z = o.fons;
+        const forma = (x0, ample, alt, arc) => {                       // contorn d'un rectangle amb (opcionalment) la part de dalt en arc
+            if (!arc) return [{ x: x0, y: alt }, { x: x0, y: 0 }, { x: x0 + ample, y: 0 }, { x: x0 + ample, y: alt }];
+            const pts = [{ x: x0, y: alt }];
+            for (let k = 0; k <= 12; k++) { const a = Math.PI + k / 12 * Math.PI; pts.push({ x: x0 + ample / 2 + Math.cos(a) * ample / 2, y: ample / 2 + Math.sin(a) * ample / 2 }); }
+            pts.push({ x: x0 + ample, y: alt });
+            return pts;
+        };
+        const dins = this.add.graphics().setDepth(Z + 1).setPosition(0, DT);
+        dins.fillStyle(0x0e0806, 1).fillPoints(forma(DX - w, DW, H, o.arc), true);
+        dins.fillGradientStyle(0x0e0806, 0x0e0806, 0x6a4420, 0x6a4420, 1, 1, 0.9, 0.9).fillRect(DX - w, H * 0.45, DW, H * 0.55);
+        dins.fillStyle(0xffd38a, 0.5).fillCircle(DX, H - 22, 9);       // una espelma al fons
+        const batent = esq => {
+            const g = this.add.graphics().setDepth(Z + 2);
+            const x = esq ? 0 : -w;                                      // l'origen és la frontissa (vora de fora)
+            let pts;
+            if (!r || o.unic) pts = forma(x, w, H, !!r);
+            else {                                                       // mig arc: cada batent té el seu quart de cercle
+                pts = [{ x, y: H }];
+                const cx = esq ? x + w : x;
+                for (let k = 0; k <= 8; k++) { const a = (esq ? Math.PI : Math.PI * 1.5) + k / 8 * Math.PI / 2; pts.push({ x: cx + Math.cos(a) * r, y: r + Math.sin(a) * r }); }
+                pts.push({ x: x + w, y: H });
+            }
+            g.fillStyle(o.color, 1).fillPoints(pts, true).lineStyle(2, o.vora, 1).strokePoints(pts, true);
+            if (o.panell !== undefined) {
+                const p0 = r + 8, ph = (H - p0 - 18) / 2;
+                g.fillStyle(o.panell, 1).fillRect(x + 6, p0, w - 12, ph - 6).fillRect(x + 6, p0 + ph + 2, w - 12, ph - 6);
+                g.lineStyle(1.5, o.vora, 1).strokeRect(x + 6, p0, w - 12, ph - 6).strokeRect(x + 6, p0 + ph + 2, w - 12, ph - 6);
+            } else {
+                g.lineStyle(1.5, o.vora, 0.8);
+                for (let k = 1; k < 3; k++) g.lineBetween(x + w * k / 3, r * 0.6, x + w * k / 3, H - 2);
+            }
+            if (o.ferro) [0.22, 0.78].forEach(f => { g.lineStyle(4, 0x2a2018, 1).lineBetween(x + 3, H * f, x + w - 3, H * f); g.fillStyle(0x2a2018, 1).fillCircle(esq ? x + w - 8 : x + 8, H * f, 4); });
+            if (esq && o.finestra) {                                     // finestreta enreixada
+                g.fillStyle(o.vora, 1).fillRect(x + 10, H - 66, 26, 40);
+                g.lineStyle(1.5, 0x5a7a70, 1); for (let k = 1; k < 4; k++) g.lineBetween(x + 10 + k * 6.5, H - 66, x + 10 + k * 6.5, H - 26);
+            }
+            g.fillStyle(0xcfb36a, 1).fillCircle(esq ? x + w - 9 : x + 9, H * 0.55, 2.8);   // pom
+            g.setPosition(esq ? DX - DW / 2 : DX + DW / 2, DT);
+            return g;
+        };
+        const esq = batent(true), dre = o.unic ? null : batent(false);
+        this.portesAnim.push({ DX, DB, a: 0, estat: 'tancada', esq, dre });
+    }
+
+    actualitzarPortes(delta) {
+        if (!this.ineu) return;
+        this.portesAnim.forEach(P => {
+            const d = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, P.DX, P.DB + 16);
+            const objectiu = Phaser.Math.Clamp((230 - d) / 150, 0, 1);
+            P.a += (objectiu - P.a) * (1 - Math.exp(-(delta || 16) / 130));
+            const e = P.a * P.a * (3 - 2 * P.a);                          // entrada i sortida suaus
+            [P.esq, P.dre].forEach(b => { if (b) { b.scaleX = 1 - 0.88 * e; b.setAlpha(1 - 0.25 * e); } });   // el batent es veu "de cantó" a mesura que gira cap endins
+            if (P.estat === 'tancada' && P.a > 0.1) { P.estat = 'oberta'; Sfx.porta(); }
+            else if (P.estat === 'oberta' && P.a < 0.04) { P.estat = 'tancada'; Sfx.porta(); }
+        });
     }
 
     moure(ui, delta) {
@@ -793,6 +857,7 @@ class ZonaBase extends Phaser.Scene {
 
     interactuar(punt) {
         const dialeg = typeof punt.dialeg === 'function' ? punt.dialeg(Estat) : punt.dialeg;
+        if (!dialeg) { if (punt.enTancar) punt.enTancar(); return; }   // accions sense diàleg (només un efecte a l'escena)
         this.ui().obrirDialeg(dialeg, () => {
             if (punt.enTancar) punt.enTancar();
             Estat.desar();

@@ -78,6 +78,8 @@ const Estat = {
         if (typeof d.vida !== 'number') resultat.vida = (typeof d.cors === 'number' ? d.cors : resultat.corsMax) * 2;
         // El bastó s'aconsegueix al tutorial del Til·ler: les partides antigues no el tenen "de regal"
         if (!resultat.flags.bastoObtingut) resultat.objectes = resultat.objectes.filter(o => o !== 'basto');
+        // Si ja se sap el Cant de l'Aurora, la flauta hi ha de ser (alguna versió antiga no la donava)
+        if (resultat.flags.cantAurora && !resultat.objectes.includes('flauta')) resultat.objectes.push('flauta');
         // Migracions futures: if (resultat.versio < 2) { ... }
         resultat.versio = this.VERSIO;
         this.dades = resultat;

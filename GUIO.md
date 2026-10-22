@@ -36,7 +36,7 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat p
 | **Juli, Frederic, Eloi, Josep** | El Celler | Ping-pong: Juli fa de tutorial, Frederic d'avi savi (revela la roda), Eloi d'arrogant (no cal vèncer-lo), **Josep** és el repte. |
 | **Isidre** | L'Hostatgeria | Calb, camisa blanca de màniga curta i pantalons marrons; porta cama de fusta i bastó. Coix i hàbil: dona les **tisores** i cuida el jardí. |
 | **Garf** | L'Era | Savi inventor, assegut al banc; telescopi. |
-| **Les Monges** (3) | Hostatgeria | Presoneres del mal (versió compacta, última fase). |
+| **Les Monges** (3) | Hostatgeria | **Pains** (velleta en cadira de rodes, al dormitori, dins un capoll de boira), **Charm** (la mare superiora, grassoneta i amb cabells curts, a la capella) i **Phili** (prima, espavilada, amb ulleres i cabells curts, al refetor). Cada una dona +1 gra al rosari en ser alliberada. |
 | **La Nena de les Trenes** | Camí de la Rovellonera | Esperit: cal tornar-li els llaços. |
 | **La Jaumeta** | Cabana del bosc | **Curiositat**: bruixa-vident; hi vas pel portal i et diu la pista. |
 | **Els pastors de la Cirosa** | Cirosa | Desterrats; no es combaten. Guarden les **Esquelles**. |
@@ -75,6 +75,9 @@ Vertical (720x1280); a dalt, una franja de pergamí amb el HUD. Camins de terra 
 - **Els arcs de la Casa Gran**: tot el terra és de pedra (sense gespa); façana gran amb el porxo d'arcs i la reixa tancada per fora; cartell a terra a la dreta de les escales; arbres només a la dreta; les sortides, sota la casa (a l'oest va a la Taverna, a l'est a la Plaça). No hi ha cap font.
 - **La Taverna** (escena nova, entre l'Hostatgeria i els arcs de la Casa Gran): el camí passa per davant la façana de la Taverna; la porta és tancada («Avui no servim. — Carmen»); barrils, banc i arbres.
 - **L'Hostatgeria (jardí)**: gespa; la pèrgola d'arcades és gran, enganxada a la casa, amb la fila del davant a la línia de la façana i tan alta com la seva planta baixa; **només dins la pèrgola** hi ha flors, la Prunera Màgica (l'únic arbre) i la llosa secreta.
+- **Llosa del jardí:** ben visible entre les columnes. Amb la Llavor de Lluna, l'Isidre hi camina, planta la llavor, la flor creix i la llosa llisca i deixa veure un forat amb una escala que baixa (tot animat, sense text). L'Ineu hi baixa caminant.
+- **Soterrani de l'Hostatgeria:** laberint de passadissos foscos (només es veu el cercle de llum de l'Ineu, les espelmes i les escales; amb la Llanterna el cercle és més gran), amb escolopendres. Una escala al fons puja al **Vestíbul de l'Hostatgeria**, amb tres portes tancades per dins (les cambres de les monges: per fer).
+- **Vestíbul de l'Hostatgeria i les tres cambres:** tres portes. **Dormitori** (Pains): oberta, però dorm dins un capoll de boira lila → **Cant de l'Aurora** amb la flauta. **Refetor** (Phili): una taula de roure barra la porta → **Guants de Poder**. **Capella** (Charm): esbarzers negres → **Runna**. En lliurar-les totes tres, obren la porta de l'Hostatgeria per dins (s'hi entra des del jardí) i la taula d'infusions del vestíbul és un lloc de repòs (cura i desa). Charm diu que el Cant del Miracle és el que obre la gàbia de l'Ocellaire; la Phili ha vist el Germà Andreu baixar a la Taverna cada nit.
 - **Les Runes**: façana gran, ombra del monjo, fragment 1; a baix, la porta del **Celler**; camí cap a l'oest (**Camí de la Desaparició**), est (**Cementiri**) i nord (cel·les).
 - **El Celler** (ping-pong): Juli, Frederic, Eloi, Josep. Una **roda de carruatge** (s'empeny des d'un costat; calen els **Guants de Poder** del Germà Francesc) descobreix el **Passadís secret** (escolopendres i esbarzer negre) → **Cambra secreta** (cofre: +1 cor i el pergamí del monjo) → **Escalinata** de la Casa Gran. Un sol partit de ping-pong (Josep) obrirà l'Acte 3 quan existeixi el minijoc; ara, cal Runna.
 - **Casa Gran per dins:** Escalinata (Home del Raïm i rosa dels vents), **Cripta** (relíquies i Clau de ferro). La reixa del porxo s'obre per dins com a drecera.
@@ -88,7 +91,7 @@ Vertical (720x1280); a dalt, una franja de pergamí amb el HUD. Camins de terra 
 - **Camí de la Desaparició**: 12 columnes; al mur d'arbres del nord, un **forat més ample** (sense marca) duu a la **Cabana amagada** (cofre: +1 cor).
 - **Ermita de la Desaparició** (gran, porta alta; Creu de la Desaparició al davant; interior amb dues taules de pedra), **L'Era** (dos roures, bancs entre ells), **L'Hostatgeria** (edifici gran a la dreta; enganxada al lateral esquerre, una pèrgola d'arcades de pedra i columnes sense sostre amb la llosa; la Prunera Màgica, a l'esquerra de tot; l'Isidre, davant l'entrada de la pèrgola).
 - **Camí de la Rovellonera i Rovellonera** (Nena de les Trenes, laberint de 3 clarianes), **Ermita de Sant Gabriel**, **Dipòsits** i **Dolmen** (extrem SE).
-- **Pendent de construir:** **La Taverna** (petit interior), **Sala de les Gírgoles**, **passadís de tortura** i **Sala de la Gàbia**; interior compacte de l'**Hostatgeria**.
+- **Pendent de construir:** **La Taverna** (petit interior), **Sala de les Gírgoles**, **passadís de tortura** i **Sala de la Gàbia**; (l'Hostatgeria per dins, amb les monges, ja és implementada).
 
 **Mapa del joc (menú):** només es dibuixen les pantalles visitades (flag `visitada_<zona>`).
 

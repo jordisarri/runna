@@ -17,9 +17,9 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 ## Estat
 
-**Fets** (ja són a `assets/`): `alzina_buida`, `arbre`, `arma_basto`, `bolet`, `branca`, `casa_gran`, `cel_stantoni`, `cercle_bolets`, `ermita`, `ermita_gabriel`, `esbarzer`, `esglesia`, `hostatgeria`, `monestir`, `retaule`, `retaule_obert`, `roca`, `roure`, `rovello`, `runes`, `sala_pingpong`, `xiprer`.
+**Fets** (ja són a `assets/`, i el seu prompt ja no hi és): `alzina_buida`, `arbre`, `arma_basto`, `arma_tiller`, `bolet`, `branca`, `casa_gran`, `cel_stantoni`, `cercle_bolets`, `creu`, `creu_desaparicio`, `ermita`, `ermita_gabriel`, `esbarzer`, `esglesia`, `hostatgeria`, `monestir`, `pi`, `pi_pinyer`, `retaule`, `retaule_obert`, `roca`, `roure`, `rovello`, `runes`, `sala_pingpong`, `xiprer`.
 
-**Pendents** (el joc encara fa servir el dibuix provisional): `altar`, `bassadoria`, `cabana`, `carro_sansa`, `carruatge`, `caseta_joc`, `cel_ntrasra`, `cel_stbenet`, `cofre`, `columna`, `columna_proces`, `creu`, `creu_desaparicio`, `daniel_t`, `diposit`, `eloi`, `escolopendra`, `espelma`, `farigola`, `flors`, `foc`, `font_sj`, `frederic`, `garf`, `germa_andreu`, `germa_francesc`, `gripau`, `herba_sj`, `home_carruatge`, `home_raim`, `isidre`, `jaumeta`, `jordi_caseta`, `josep`, `judit`, `juli`, `lapida`, `llac`, `llosa`, `marit_neus`, `masia`, `nena_trenes`, `neus`, `ocell`, `olla`, `ombra_monjo`, `ovella`, `ovella_boira`, `pare_alcui`, `pare_daniel`, `pare_jordi`, `pastor_a`, `pastor_b`, `pastor_boira`, `pastor_vell`, `pergami`, `pergola`, `pi`, `pi_pinyer`, `pianista`, `porxo`, `romani`, `runna_pedra`, `sansa`, `taula_pedra`, `taula_pp`, `taula_sopar`, `taverna`, `telescopi_mon`, `tieta`, `tieta2`, `tiller`, `tomba_esquerdada`, `turbo`, `visitant`, `yordi`.
+**Pendents** (el joc encara fa servir el dibuix provisional): `altar`, `bassadoria`, `cabana`, `carro_sansa`, `carruatge`, `caseta_joc`, `cel_ntrasra`, `cel_stbenet`, `cofre`, `columna`, `columna_proces`, `daniel_t`, `diposit`, `eloi`, `escolopendra`, `espelma`, `farigola`, `flors`, `foc`, `font_sj`, `frederic`, `garf`, `germa_andreu`, `germa_francesc`, `gripau`, `herba_sj`, `home_carruatge`, `home_raim`, `isidre`, `jaumeta`, `jordi_caseta`, `josep`, `judit`, `juli`, `lapida`, `llac`, `llosa`, `marit_neus`, `masia`, `monja_charm`, `monja_pains`, `monja_phili`, `nena_trenes`, `neus`, `ocell`, `olla`, `ombra_monjo`, `ovella`, `ovella_boira`, `pare_alcui`, `pare_daniel`, `pare_jordi`, `pastor_a`, `pastor_b`, `pastor_boira`, `pastor_vell`, `pergami`, `pergola`, `pianista`, `porxo`, `romani`, `runna_pedra`, `sansa`, `taula_pedra`, `taula_pp`, `taula_sopar`, `taverna`, `telescopi_mon`, `tieta`, `tieta2`, `tiller`, `tomba_esquerdada`, `turbo`, `visitant`, `yordi`.
 
 **Nous, encara sense ús al joc** (preparats per a quan es facin): `andreu_guardia`, `arbre_sec`, `ferralla`, `gabia`, `gabia_oberta`, `guants_poder`, `home_raim_desperta`, `ocell_boira`, `ocellaire`, `ram_flors`, `ratpenat_boira`, `runes_ombra`.
 
@@ -93,12 +93,6 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 ---
 
 ## Elements d'escenari
-
-### `creu.png` (amplada 80) *(Creu de l'Aparició (referència: la foto de la creu commemorativa). Els arbustos i el mur de pedra seca de darrere ja són a l'escena: no els incloeu.)*
-
-```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A tall stone cross monument: three wide square stone steps at the bottom, on top of them a round drum-shaped plinth with a moulded cap, then a slender smooth round column and a plain round capital disc carrying a Latin stone cross at the very top; weathered grey stone with pale lichen patches; calm and old. About 1:2.7 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-```
 
 ### `bassadoria.png` (amplada 260) *(Bassadòria (referència: les fotos de la bassa). Els plàtans i el mur de pedra seca de darrere ja són a l'escena: no els incloeu.)*
 
@@ -260,12 +254,6 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A small hand-tied bunch of wild mountain flowers (white daisies, lilac thyme, yellow broom and a red poppy) wrapped with a piece of twine. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
 ```
 
-### `creu_desaparicio.png` (amplada 90) *(Creu de l'Ermita de la Desaparició.)*
-
-```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A weathered stone wayside cross on a stepped square base, lichen and moss on the stones, a small faded wreath at its foot, slightly melancholic. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-```
-
 ### `flors.png` (amplada 90) *(Mata de flors decorativa (es repeteix per l'escenari).)*
 
 ```
@@ -321,6 +309,24 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 
 ```
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. Very old monk, noticeably TALLER and THINNER than the other monks, long flowing white beard reaching his rope belt, white hair, dark brown habit a bit too short for him, cream rope belt, gentle tired smile, slightly stooped, holding a small bunch of wild flowers in one hand. Chibi proportions (big head, short round body), thick dark-brown outline, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
+```
+
+### `monja_pains.png` (amplada 110) *(La Pains, la velleta de l'Hostatgeria. Va en CADIRA DE RODES: el sprite ha de ser un personatge assegut a la cadira (no cal vista de la resta))*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A tiny very old nun in a WHEELCHAIR: frail, wrinkled kind face, white hair under a short white coif, dark blue-grey habit with a white bib, a red wool blanket over her knees, a rosary in her lap, a large old wooden wheelchair with two big spoked wheels, gentle sweet smile. Shown seated in the wheelchair, whole chair visible. Chibi proportions (big head, short round body), thick dark-brown outline, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
+```
+
+### `monja_charm.png` (amplada 110) *(La Charm, mare superiora de l'Hostatgeria. Grassoneta, cabells curts)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A plump, round, cheerful mother superior nun: wide friendly face with rosy cheeks, SHORT brown hair showing at the temples under a white coif and short veil, a dark blue-grey habit with a white bib and a big wooden cross on a cord, a heavy rosary belt, warm authoritative smile. Chibi proportions (big head, short round body), thick dark-brown outline, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
+```
+
+### `monja_phili.png` (amplada 96) *(La Phili, monja de l'Hostatgeria. Prima, espavilada, amb ulleres i cabells curts)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A thin, tall, quick-witted young nun: narrow alert face, round wire glasses, SHORT dark hair showing at the temples under a white coif and short veil, a dark blue-grey habit with a white bib, arms slightly raised as if about to speak, a sharp little grin, energetic stance. Chibi proportions (big head, short round body), thick dark-brown outline, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
 ```
 ### `pianista.png` (amplada 100)
 
@@ -566,27 +572,9 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 
 ---
 
-## Pins (i un arbre mort)
+## Arbre mort
 
-Els pins ja funcionen al joc amb un dibuix provisional fet per codi (`pi` i `pi_pinyer` al catàleg): quan hi hagi el PNG el substituirà sol. Mateix estil que `arbre` i `roure`; la mida d'amplada és la de joc (`arbre` = 300).
-
-| Gràfic | On es fa servir ara |
-|---|---|
-| `pi` (pi roig, alt) | **Rovellonera** (al voltant del 70% dels arbres: «els rovellons creixen sota els pins»), Camí de la Rovellonera, Camí de la Cirosa, Cirosa, Dipòsits, Dolmen, Cabana de la Jaumeta, masia d'en Jordi i el Til·ler (una part) |
-| `pi_pinyer` (pi pinyer, en para-sol) | Camí de la Desaparició, Ermita, Era, Sant Gabriel, Cel·les, Monestir (una part) |
-| `arbre_sec` (arbre mort, encara no s'usa) | Cementiri i Runes, quan es faci |
-
-### `pi.png` (amplada 240) *(Pi roig / pinastre mediterrani. Alt, copa irregular a dalt, no gaire ample)*
-
-```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A tall Mediterranean Scots/Aleppo pine tree: a straight slightly leaning reddish-orange scaly trunk with flaking bark, bare of branches for the lower two thirds, an irregular open crown made of layered flat clouds of blue-green needles at the top, a few cones, some dead brown needle clusters. Height about 1.7 times its width. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the whole tree facing the camera straight on, trunk base and roots visible at the bottom of the image, no ground, no grass, no cast shadow, not isometric, a single tree, same art style, line weight and color treatment as the existing `arbre` and `roure` trees.
-```
-
-### `pi_pinyer.png` (amplada 320) *(Pi pinyer. Copa en para-sol ben ampla)*
-
-```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A stone pine (umbrella pine): a thick curved reddish-brown trunk leaning slightly, splitting into a few strong branches that carry a wide flat umbrella-shaped crown of dark green needle masses, a few big round pine cones. Width about 1.3 times its height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the whole tree facing the camera straight on, trunk base and roots visible at the bottom of the image, no ground, no grass, no cast shadow, not isometric, a single tree, same art style, line weight and color treatment as the existing `arbre` and `roure` trees.
-```
+Els pins ja són fets (`pi`, `pi_pinyer`). Falta aquest, que encara no s'usa:
 
 ### `arbre_sec.png` (amplada 220) *(Arbre mort)*
 

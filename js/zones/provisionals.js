@@ -179,7 +179,7 @@ class ZonaCreu extends ZonaBase {
 
         // Creu de l'Aparició (sense cap tanca ni mur al darrere)
         this.posar('creu', 740, 440, { col: { w: 56, h: 24 } });
-        this.interactiu(740, 445, 85, DIALEGS.creu, { altura: 190 });
+        this.interactiu(740, 445, 95, DIALEGS.creu, { altura: 400 });
         [[470, 350], [940, 350]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xcfe08a));   // plàtans
 
         // Bassadòria: una bassa molt gran (520 d'ample, uns quatre Ineus), sense mur al darrere; plàtans de tardor als costats
