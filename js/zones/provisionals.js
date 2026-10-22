@@ -36,7 +36,7 @@ class ZonaEsglesia extends ZonaBase {
         this.colisio(860, A - 10, 360, 20);
 
         // Retaule Major (tot l'ample de la nau, sencer) i, al davant, l'altar de pedra
-        this.posar('retaule', 640, ESG.retY, { fonsY: 900 });
+        this.retaule = this.posar('retaule', 640, ESG.retY, { fonsY: 900 });
         this.interactiu(640, ESG.retY + 36, 130, DIALEGS.retaule, { altura: 170 });
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
         this.interactiu(640, ESG.retY + 140, 90, () => this.rezar(), { altura: 100 });
@@ -79,8 +79,12 @@ class ZonaEsglesia extends ZonaBase {
     obrirPortaRellotge(avis) {
         if (this.portaRellotge || !(Estat.flag('rellotgeDit') || Estat.flag('rellotgeReparat'))) return;   // (partides velles: ja hi havien pujat)
         this.portaRellotge = true;
+        this.retaule.setTexture('retaule_obert').setScale(this.textures.get('retaule_obert').customData.escala || 1 / RES);   // el gràfic amb la porta oberta
         this.sortida(ESG.portaDx - 36, ESG.retY - 14, 72, 20, 'ZonaTorre', 'baix');
-        if (avis) this.flotant(ESG.portaDx, ESG.retY - 170, 'La porta de la dreta del retaule ja és oberta', '#ffe9a8');
+        if (avis) {
+            Sfx.secret();
+            this.flotant(ESG.portaDx, ESG.retY - 170, 'La porta de la dreta del retaule ja és oberta', '#ffe9a8');
+        }
     }
 
     actualitzar() { this.obrirPortaRellotge(true); }

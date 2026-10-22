@@ -272,6 +272,7 @@ class ZonaPingpong extends ZonaBase {
         Estat.posaFlag('rodaMoguda');
         Estat.dades.flags.rodaX = x;
         this.cameras.main.shake(350, 0.003);
+        Sfx.secret();
         this.tweens.add({
             targets: this.roda, x, angle: dir * 180, duration: 900, ease: 'Sine.easeInOut',
             onUpdate: () => { this.colRoda.x = this.roda.x; this.colRoda.body.updateFromGameObject(); },

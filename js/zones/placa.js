@@ -94,6 +94,7 @@ class ZonaPlaca extends ZonaBase {
         if (Estat.flag('tresorObert')) { this.flotant(1190, 360, 'El passatge ja és obert', '#d8c8ff'); return true; }
         Estat.posaFlag('tresorObert');
         this.cameras.main.shake(500, 0.004);
+        Sfx.secret();
         this.tweens.add({ targets: this.pedraSecreta, alpha: 0.15, scaleY: 0.2, duration: 900 });
         this.ui().obrirDialeg(DIALEGS.pedraSecretaOberta, () => Estat.desar());
         return true;

@@ -147,6 +147,13 @@ const Sfx = {
         if (!this.ok('objecte', 200)) return;
         [659, 880, 1319].forEach((f, i) => this.to(f, f, 0.25, 'triangle', 0.16, i * 0.09));
     },
+    secret() {                   // descobriment: una porta amagada s'obre, un mecanisme encaixa
+        if (!this.ok('secret', 1500)) return;
+        this.to(70, 45, 0.9, 'sine', 0.3);                          // retruny de pedra
+        this.xiu(0.9, 0.12, 'lowpass', 600, 90, 0.8);
+        [440, 523, 659, 831, 988, 1319].forEach((f, i) => this.to(f, f, 0.28, 'triangle', 0.13, 0.25 + i * 0.1));
+        [1760, 2217].forEach((f, i) => this.to(f, f * 1.01, 0.6, 'sine', 0.06, 0.85 + i * 0.08));   // espurneig final
+    },
     lletra() {                   // veu del diàleg: un petit tic per cada dues lletres
         if (!this.ok('lletra', 45)) return;
         this.to(300 + Math.random() * 90, 260, 0.035, 'square', 0.025);

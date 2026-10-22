@@ -729,7 +729,7 @@ const DIALEGS = {
                     { qui: '', text: 'L\'Isidre, coix però àgil, cava un clot al peu de la llosa de pedra, hi posa la llavor i la rega. De pressa, una flor blanca brota i brilla.' },
                     { qui: 'Isidre', text: 'La llosa s\'ha mogut! Per aquí es baixa a l\'Hostatgeria, que el mal ha tancat per dins.' }
                 ],
-                enAcabar: () => { E.treu('llavorLluna'); E.posaFlag('llosaOberta'); E.posaObjectiu('L\'entrada secreta de l\'Hostatgeria és oberta (pròxima fase).'); }
+                enAcabar: () => { E.treu('llavorLluna'); E.posaFlag('llosaOberta'); Sfx.secret(); E.posaObjectiu('L\'entrada secreta de l\'Hostatgeria és oberta (pròxima fase).'); }
             };
         }
         return {

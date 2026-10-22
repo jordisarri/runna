@@ -247,6 +247,14 @@ class ZonaTorre extends Phaser.Scene {
             const A0 = this.pt(aa, T.R, h), A1 = this.pt(bb, T.R, h), B1 = this.pt(bb, rr, h), B0 = this.pt(aa, rr, h);
             // ombra a la paret, sota el graó
             g.fillStyle(0x000000, 0.28).fillPoints([A0, A1, { x: A1.x, y: A1.y + 22 }, { x: A0.x, y: A0.y + 22 }], true);
+            // cara lateral (el tall radial de l'extrem del graó): a l'esquerra de la vista es veu la de l'inici, a la dreta la del final
+            const lateral = (al, P, Q) => {
+                const D = [P, Q, { x: Q.x, y: Q.y + T.alt }, { x: P.x, y: P.y + T.alt }];
+                g.fillStyle(this.ombrejat(0x6f6658, al, 0.85), 1).fillPoints(D, true);
+                g.lineStyle(1.5, this.ombrejat(0x2a1c10, al), 0.9).strokePoints(D, true);
+            };
+            if (aa === a0 && Math.sin(a0) < 0) lateral(a0, A0, B0);
+            if (bb === a1 && Math.sin(a1) > 0) lateral(a1, A1, B1);
             // cim
             g.fillStyle(this.ombrejat(0xcbc1ac, a, 1.12), 1).fillPoints([A0, A1, B1, B0], true);
             g.lineStyle(1.5, this.ombrejat(0x2a1c10, a), 0.9).strokePoints([A0, A1, B1, B0], true);

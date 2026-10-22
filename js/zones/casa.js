@@ -623,7 +623,7 @@ class ZonaGolfes extends ZonaCasaBase {
                 { qui: '', text: "Els tres engranatges encaixen en ordre: petit, gran i mitjà. Una cosa dins la paret fa clac." },
                 { qui: '', text: "L'agulla dels minuts es mou. El rellotge del Santuari torna a caminar, tic-tac, tic-tac." }
             ],
-            enAcabar: () => { this.reparat = true; Estat.posaFlag('rellotgeReparat'); this.cameras.main.shake(300, 0.003); Estat.desar(); }
+            enAcabar: () => { this.reparat = true; Estat.posaFlag('rellotgeReparat'); this.cameras.main.shake(300, 0.003); Sfx.secret(); Estat.desar(); }
         };
     }
 
