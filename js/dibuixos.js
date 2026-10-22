@@ -849,34 +849,6 @@ function dibuixarOcell(c, w) {
     });
 }
 
-function dibuixarLapida(c, w) {
-    lienc(c, w, w * 1.3, (ctx, W, H) => {
-        ombraTerra(ctx, W / 2, H - 4, W * 0.45, 5);
-        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN;
-        ctx.fillStyle = '#8f8c84';
-        ctx.beginPath(); ctx.moveTo(6, H - 6); ctx.lineTo(6, H * 0.35); ctx.quadraticCurveTo(W / 2, -H * 0.05, W - 6, H * 0.35); ctx.lineTo(W - 6, H - 6); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.strokeStyle = '#5a5850'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(W / 2, H * 0.28); ctx.lineTo(W / 2, H * 0.62); ctx.moveTo(W * 0.32, H * 0.4); ctx.lineTo(W * 0.68, H * 0.4); ctx.stroke();
-        ctx.fillStyle = '#5d8f3f'; ctx.fillRect(4, H - 10, W - 8, 6);
-    });
-}
-
-function dibuixarTombaEsquerdada(c, w) {
-    lienc(c, w, w * 0.55, (ctx, W, H) => {
-        ombraTerra(ctx, W / 2, H - 5, W * 0.48, 8);
-        ctx.lineWidth = 4; ctx.strokeStyle = CONTORN;
-        ctx.fillStyle = '#7c7870';
-        ctx.beginPath(); ctx.moveTo(10, H - 8); ctx.lineTo(24, H * 0.25); ctx.lineTo(W - 24, H * 0.25); ctx.lineTo(W - 10, H - 8); ctx.closePath(); ctx.fill(); ctx.stroke();
-        // esquerda amb llum lila
-        const g = ctx.createLinearGradient(W * 0.45, H * 0.25, W * 0.55, H - 8);
-        g.addColorStop(0, '#d8b0ff'); g.addColorStop(1, '#5a2a9a');
-        ctx.fillStyle = g;
-        ctx.beginPath(); ctx.moveTo(W * 0.46, H * 0.25); ctx.lineTo(W * 0.52, H * 0.5); ctx.lineTo(W * 0.47, H * 0.7); ctx.lineTo(W * 0.55, H - 10); ctx.lineTo(W * 0.58, H * 0.7); ctx.lineTo(W * 0.54, H * 0.48); ctx.lineTo(W * 0.54, H * 0.25); ctx.closePath(); ctx.fill();
-        ctx.strokeStyle = '#4a463e'; ctx.lineWidth = 2;
-        for (let x = 40; x < W - 40; x += 18) { if (x > W * 0.4 && x < W * 0.6) continue; ctx.beginPath(); ctx.moveTo(x, H * 0.42); ctx.lineTo(x + 8, H * 0.42); ctx.stroke(); }
-    });
-}
-
 // Ermita de Sant Gabriel: capella petita de pedra picada, façana amb teulada a dues aigües, espadanya, rosassa i porta d'arc
 function dibuixarErmitaGabriel(c, w) {
     lienc(c, w, w * 0.92, (ctx, W, H) => {
@@ -2117,4 +2089,406 @@ function pintarTaulaPP(ctx, w, h) {
     const pl = P(0.66, 0.66);
     ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.beginPath(); ctx.ellipse(pl.x + 1.4, pl.y + 1.6, 3.2, 1.6, 0, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#f6f0e0'; ctx.strokeStyle = '#5a5040'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.arc(pl.x, pl.y - 1.4, 3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+}
+
+// ---------- Cementiri ----------
+// Tots es dibuixen en unitats de disseny (texturesGenerades hi aplica RES). La base de cada peça és a baix de tot, al mig.
+
+const PEDRA_TOMBA = { clar: '#c4c0b2', mig: '#a19d90', fosc: '#77736a', ombra: '#57544d', molsa: '#5f8036', molsaClar: '#86a650', linia: '#2a2620' };
+
+function rndTomba(llavor) {
+    return () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+}
+
+// Taques de molsa i líquens (dins d'un retall ja posat)
+function molsaTomba(ctx, rnd, x0, y0, x1, y1, n, mida = 3) {
+    for (let i = 0; i < n; i++) {
+        const x = x0 + rnd() * (x1 - x0), y = y0 + rnd() * (y1 - y0), r = mida * (0.5 + rnd());
+        ctx.fillStyle = rnd() < 0.7 ? PEDRA_TOMBA.molsa : PEDRA_TOMBA.molsaClar;
+        ctx.globalAlpha = 0.55 + rnd() * 0.4;
+        ctx.beginPath(); ctx.ellipse(x, y, r, r * 0.7, rnd() * 3, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    for (let i = 0; i < n / 2; i++) {                                    // líquens grocs i grisos
+        ctx.fillStyle = rnd() < 0.5 ? 'rgba(214,196,110,0.55)' : 'rgba(225,225,210,0.5)';
+        ctx.beginPath(); ctx.arc(x0 + rnd() * (x1 - x0), y0 + rnd() * (y1 - y0), 0.8 + rnd() * 1.4, 0, Math.PI * 2); ctx.fill();
+    }
+}
+
+// Mates d'herba als peus d'una peça
+function herbaTomba(ctx, rnd, x0, x1, y, n, alt = 7) {
+    ctx.lineCap = 'round';
+    for (let i = 0; i < n; i++) {
+        const x = x0 + rnd() * (x1 - x0);
+        for (let k = 0; k < 4; k++) {
+            ctx.strokeStyle = ['#3f6a2a', '#5a8a36', '#77a548'][Math.floor(rnd() * 3)]; ctx.lineWidth = 1.3;
+            const a = -Math.PI / 2 + (rnd() - 0.5) * 1.1, l = alt * (0.5 + rnd() * 0.7);
+            ctx.beginPath(); ctx.moveTo(x + k - 1.5, y); ctx.quadraticCurveTo(x + k - 1.5 + Math.cos(a) * l * 0.3, y - l * 0.6, x + k - 1.5 + Math.cos(a) * l, y + Math.sin(a) * l); ctx.stroke();
+        }
+    }
+    ctx.lineCap = 'butt';
+}
+
+// Gradient de pedra d'esquerra (llum) a dreta
+function pedraGrad(ctx, x0, x1, clar = PEDRA_TOMBA.clar, fosc = PEDRA_TOMBA.fosc) {
+    const g = ctx.createLinearGradient(x0, 0, x1, 0);
+    g.addColorStop(0, clar); g.addColorStop(0.55, PEDRA_TOMBA.mig); g.addColorStop(1, fosc);
+    return g;
+}
+
+// Sòcol de pedra en 3/4: cara de dalt clara, cantell dret i cara del davant
+function socolTomba(ctx, x0, x1, y, alt, fons) {
+    ctx.fillStyle = PEDRA_TOMBA.clar; ctx.beginPath(); ctx.moveTo(x0 + 3, y - alt - fons); ctx.lineTo(x1 + 3, y - alt - fons); ctx.lineTo(x1, y - alt); ctx.lineTo(x0, y - alt); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = PEDRA_TOMBA.ombra; ctx.beginPath(); ctx.moveTo(x1, y - alt); ctx.lineTo(x1 + 3, y - alt - fons); ctx.lineTo(x1 + 3, y - fons); ctx.lineTo(x1, y); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = pedraGrad(ctx, x0, x1); ctx.fillRect(x0, y - alt, x1 - x0, alt); ctx.strokeRect(x0, y - alt, x1 - x0, alt);
+}
+
+// Creu llatina de pedra (contorn), amb el peu a (cx, top)
+function formaCreuPedra(ctx, cx, top, b, braca, alt, dx = 0, dy = 0) {
+    const yb1 = top - alt * 0.57, yb2 = top - alt * 0.77;
+    ctx.beginPath();
+    ctx.moveTo(cx - b + dx, top + dy); ctx.lineTo(cx - b + dx, yb1 + dy); ctx.lineTo(cx - braca + dx, yb1 + dy); ctx.lineTo(cx - braca + dx, yb2 + dy);
+    ctx.lineTo(cx - b + dx, yb2 + dy); ctx.lineTo(cx - b + dx, top - alt + dy); ctx.lineTo(cx + b + dx, top - alt + dy); ctx.lineTo(cx + b + dx, yb2 + dy);
+    ctx.lineTo(cx + braca + dx, yb2 + dy); ctx.lineTo(cx + braca + dx, yb1 + dy); ctx.lineTo(cx + b + dx, yb1 + dy); ctx.lineTo(cx + b + dx, top + dy); ctx.closePath();
+}
+
+// Creu de pedra amb gruix, molsa i llum a la vora esquerra
+function creuPedra(ctx, rnd, cx, top, b, braca, alt) {
+    ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.6;
+    ctx.fillStyle = PEDRA_TOMBA.ombra; formaCreuPedra(ctx, cx, top, b, braca, alt, 3.5, -2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = pedraGrad(ctx, cx - braca, cx + braca); formaCreuPedra(ctx, cx, top, b, braca, alt); ctx.fill();
+    ctx.save(); formaCreuPedra(ctx, cx, top, b, braca, alt); ctx.clip();
+    molsaTomba(ctx, rnd, cx - braca, top - alt, cx + braca, top, 9, 2.2);
+    ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.fillRect(cx - b, top - alt, 2, alt); ctx.fillRect(cx - braca, top - alt * 0.77, braca * 2, 1.6);
+    ctx.restore();
+    formaCreuPedra(ctx, cx, top, b, braca, alt); ctx.stroke();
+}
+
+// Làpida d'arc (56 x 80): pedra gastada amb vora, creu gravada, inscripció i molsa
+function pintarLapidaArc(ctx, W, H, llavor = 3) {
+    const rnd = rndTomba(llavor), base = H - 4;
+    ombraTerra(ctx, W / 2 + 3, base - 1, W * 0.44, 4.5);
+    ctx.lineJoin = 'round'; ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.6;
+    socolTomba(ctx, 7, W - 9, base, 8, 3);
+    const x0 = 12, x1 = W - 14, cim = 20, r = (x1 - x0) / 2, top = base - 8;
+    const forma = (dx, dy) => { ctx.beginPath(); ctx.moveTo(x0 + dx, top + dy); ctx.lineTo(x0 + dx, cim + r + dy); ctx.arc((x0 + x1) / 2 + dx, cim + r + dy, r, Math.PI, 0); ctx.lineTo(x1 + dx, top + dy); ctx.closePath(); };
+    ctx.fillStyle = PEDRA_TOMBA.ombra; forma(3.5, -2); ctx.fill(); ctx.stroke();       // gruix (cantell dret)
+    ctx.fillStyle = pedraGrad(ctx, x0, x1); forma(0, 0); ctx.fill();
+    ctx.save(); forma(0, 0); ctx.clip();
+    molsaTomba(ctx, rnd, x0, top - 10, x1, top, 9, 2.6);
+    molsaTomba(ctx, rnd, x0, cim, x0 + 12, cim + 14, 4, 2.2);
+    ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.fillRect(x0, cim, 3, top - cim);
+    ctx.restore();
+    ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.6; forma(0, 0); ctx.stroke();
+    // Vora gravada
+    ctx.strokeStyle = 'rgba(60,56,48,0.55)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0 + 4, top - 4); ctx.lineTo(x0 + 4, cim + r); ctx.arc((x0 + x1) / 2, cim + r, r - 4, Math.PI, 0); ctx.lineTo(x1 - 4, top - 4); ctx.stroke();
+    // Creu gravada (solc fosc amb la llum a sota)
+    const cx = (x0 + x1) / 2, cy = cim + 15;
+    ['rgba(255,255,255,0.35)', 'rgba(40,36,30,0.75)'].forEach((c, i) => {
+        ctx.strokeStyle = c; ctx.lineWidth = 2; const d = i ? 0 : 0.8;
+        ctx.beginPath(); ctx.moveTo(cx + d, cy - 9 + d); ctx.lineTo(cx + d, cy + 9 + d); ctx.moveTo(cx - 6 + d, cy - 3 + d); ctx.lineTo(cx + 6 + d, cy - 3 + d); ctx.stroke();
+    });
+    // Inscripció
+    ctx.strokeStyle = 'rgba(40,36,30,0.55)'; ctx.lineWidth = 1.1;
+    [[cy + 16, 0.7], [cy + 21, 0.5], [cy + 26, 0.6]].forEach(([y, f]) => { ctx.beginPath(); ctx.moveTo(cx - r * f, y); ctx.lineTo(cx + r * f, y); ctx.stroke(); });
+    // Esquerda fina
+    ctx.strokeStyle = 'rgba(30,26,20,0.6)'; ctx.lineWidth = 0.9;
+    ctx.beginPath(); ctx.moveTo(x1 - 3, cim + r + 4); ctx.lineTo(x1 - 8, cim + r + 10); ctx.lineTo(x1 - 6, cim + r + 16); ctx.stroke();
+    herbaTomba(ctx, rnd, 4, W - 6, base, 6);
+}
+
+// Creu de pedra sobre un sòcol de dos graons (54 x 90)
+function pintarLapidaCreu(ctx, W, H, llavor = 5) {
+    const rnd = rndTomba(llavor), base = H - 4, cx = W / 2 - 1;
+    ombraTerra(ctx, cx + 3, base - 1, W * 0.42, 4.5);
+    ctx.lineJoin = 'round'; ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.6;
+    socolTomba(ctx, cx - 18, cx + 18, base, 6, 3);
+    socolTomba(ctx, cx - 11, cx + 11, base - 6, 9, 2);
+    const top = base - 15, alt = 62;
+    creuPedra(ctx, rnd, cx, top, 5.5, 17, alt);
+    ctx.fillStyle = 'rgba(40,36,30,0.6)'; ctx.beginPath(); ctx.arc(cx, top - alt * 0.67, 2.2, 0, Math.PI * 2); ctx.fill();   // rosetó del mig
+    herbaTomba(ctx, rnd, cx - 20, cx + 20, base, 5);
+}
+
+// Creu de ferro forjat amb volutes i plaqueta (46 x 84), una mica tòrcida, clavada en un dau de pedra
+function pintarLapidaFerro(ctx, W, H, llavor = 7) {
+    const rnd = rndTomba(llavor), base = H - 4, cx = W / 2;
+    ombraTerra(ctx, cx + 2, base - 1, W * 0.36, 4);
+    ctx.lineJoin = 'round'; ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.5;
+    socolTomba(ctx, cx - 11, cx + 11, base, 9, 3);
+    ctx.save(); ctx.translate(cx, base - 9); ctx.rotate(0.07);
+    const ferro = (lw, c) => {
+        ctx.strokeStyle = c; ctx.lineWidth = lw; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -64); ctx.moveTo(-17, -46); ctx.lineTo(17, -46); ctx.stroke();
+        [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy]) => { ctx.beginPath(); ctx.arc(sx * 6.5, -46 + sy * 6.5, 3.2, Math.PI * 0.2, Math.PI * 1.6); ctx.stroke(); });   // volutes
+        [[0, -66], [-19, -46], [19, -46]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 2.6, 0, Math.PI * 2); ctx.stroke(); });                           // trèvols
+    };
+    ferro(4, '#0e0c0a'); ferro(2, '#3a3632');
+    ctx.strokeStyle = 'rgba(160,150,140,0.5)'; ctx.lineWidth = 0.8; ctx.beginPath(); ctx.moveTo(-1, -2); ctx.lineTo(-1, -62); ctx.stroke();
+    ctx.strokeStyle = 'rgba(150,70,30,0.6)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, -4); ctx.lineTo(0, -14); ctx.stroke();   // rovell
+    // Plaqueta esmaltada
+    ctx.fillStyle = '#e8e2cc'; ctx.strokeStyle = '#1a1612'; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.ellipse(0, -30, 7, 5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(40,36,30,0.6)'; ctx.lineWidth = 0.8; [-31.5, -28.5].forEach(y => { ctx.beginPath(); ctx.moveTo(-4, y); ctx.lineTo(4, y); ctx.stroke(); });
+    ctx.restore();
+    ctx.lineCap = 'butt';
+    herbaTomba(ctx, rnd, cx - 15, cx + 15, base, 4, 8);
+}
+
+// Vorada de pedra d'una tomba vista en 3/4 (el davant a baix). Retorna els quatre vèrtexs de l'interior
+function voradaTomba(ctx, W, base, fons, marge, entrant) {
+    const a = { x: marge, y: base - 5 }, b = { x: W - marge, y: base - 5 }, c = { x: W - marge - entrant, y: base - 5 - fons }, d = { x: marge + entrant, y: base - 5 - fons };
+    ctx.fillStyle = PEDRA_TOMBA.fosc; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.lineTo(b.x, base); ctx.lineTo(a.x, base); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = PEDRA_TOMBA.clar; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.lineTo(c.x, c.y); ctx.lineTo(d.x, d.y); ctx.closePath(); ctx.fill(); ctx.stroke();
+    const k = 5;
+    return [{ x: a.x + k + 1, y: a.y - k * 0.6 }, { x: b.x - k - 1, y: b.y - k * 0.6 }, { x: c.x - k + 1, y: c.y + k * 0.5 }, { x: d.x + k - 1, y: d.y + k * 0.5 }];
+}
+function camiPunts(ctx, p) { ctx.beginPath(); ctx.moveTo(p[0].x, p[0].y); p.slice(1).forEach(q => ctx.lineTo(q.x, q.y)); ctx.closePath(); }
+
+// Herba d'un túmul dins la vorada
+function tumulHerba(ctx, rnd, dins, W, base, fons) {
+    camiPunts(ctx, dins); ctx.fillStyle = '#4c7432'; ctx.fill();
+    ctx.save(); camiPunts(ctx, dins); ctx.clip();
+    const g = ctx.createRadialGradient(W / 2, base - fons * 0.55, 4, W / 2, base - fons * 0.5, W * 0.45);
+    g.addColorStop(0, 'rgba(140,190,90,0.45)'); g.addColorStop(1, 'rgba(20,40,15,0.45)');
+    ctx.fillStyle = g; ctx.fillRect(0, base - fons - 8, W, fons + 8);
+    herbaTomba(ctx, rnd, 12, W - 12, base - 7, 12, 6);
+    herbaTomba(ctx, rnd, 16, W - 16, base - fons * 0.5, 9, 5);
+    ctx.restore();
+}
+
+// Tomba a terra amb vorada (110 x 96), coberta de grava ('grava'), d'herba ('herba') o d'herba florida ('flors'),
+// i una làpida petita al cap
+function pintarTombaVorada(ctx, W, H, mode, llavor = 11) {
+    const rnd = rndTomba(llavor), base = H - 3, fons = 34;
+    ombraTerra(ctx, W / 2 + 2, base - 4, W * 0.5, 7);
+    ctx.lineJoin = 'round'; ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.5;
+    // Làpida del cap, darrere la vorada
+    const lx0 = W / 2 - 20, lx1 = W / 2 + 20, lb = base - fons - 2, lt = lb - 40;
+    const lap = (dx, dy) => { ctx.beginPath(); ctx.moveTo(lx0 + dx, lb + dy); ctx.lineTo(lx0 + dx, lt + 10 + dy); ctx.quadraticCurveTo(W / 2 + dx, lt - 6 + dy, lx1 + dx, lt + 10 + dy); ctx.lineTo(lx1 + dx, lb + dy); ctx.closePath(); };
+    ctx.fillStyle = PEDRA_TOMBA.ombra; lap(3, -2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = pedraGrad(ctx, lx0, lx1); lap(0, 0); ctx.fill();
+    ctx.save(); lap(0, 0); ctx.clip(); molsaTomba(ctx, rnd, lx0, lb - 8, lx1, lb, 6, 2.2); ctx.restore();
+    lap(0, 0); ctx.stroke();
+    ctx.strokeStyle = 'rgba(40,36,30,0.6)'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(W / 2, lt + 6); ctx.lineTo(W / 2, lt + 20); ctx.moveTo(W / 2 - 5, lt + 11); ctx.lineTo(W / 2 + 5, lt + 11); ctx.stroke();
+    ctx.lineWidth = 1; [lt + 26, lt + 30].forEach(y => { ctx.beginPath(); ctx.moveTo(W / 2 - 11, y); ctx.lineTo(W / 2 + 11, y); ctx.stroke(); });
+    ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.5;
+    const dins = voradaTomba(ctx, W, base, fons, 6, 7);
+    if (mode === 'grava') {
+        camiPunts(ctx, dins); ctx.fillStyle = '#8c8676'; ctx.fill();
+        ctx.save(); camiPunts(ctx, dins); ctx.clip();
+        for (let i = 0; i < 160; i++) { ctx.fillStyle = ['#b2ab98', '#6e695c', '#c8c2b0', '#958f7e'][i % 4]; ctx.beginPath(); ctx.ellipse(rnd() * W, base - fons - 4 + rnd() * (fons + 2), 1 + rnd() * 1.2, 0.7 + rnd() * 0.6, 0, 0, Math.PI * 2); ctx.fill(); }
+        ctx.restore();
+    } else {
+        tumulHerba(ctx, rnd, dins, W, base, fons);
+        const cols = mode === 'flors' ? ['#d9c2f0', '#f2e6a0', '#ffffff', '#c89ae0'] : ['#e8e2c8'];
+        for (let i = 0; i < (mode === 'flors' ? 16 : 6); i++) {
+            const x = 18 + rnd() * (W - 36), y = base - 10 - rnd() * (fons - 12);
+            ctx.fillStyle = cols[i % cols.length];
+            for (let p = 0; p < 5; p++) { const a = p * Math.PI * 0.4; ctx.beginPath(); ctx.arc(x + Math.cos(a) * 1.5, y + Math.sin(a) * 1.2, 1.2, 0, Math.PI * 2); ctx.fill(); }
+            ctx.fillStyle = '#e0a830'; ctx.beginPath(); ctx.arc(x, y, 0.8, 0, Math.PI * 2); ctx.fill();
+        }
+    }
+    ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.2; camiPunts(ctx, dins); ctx.stroke();
+    ctx.save(); ctx.beginPath(); ctx.rect(0, base - 6, W, 6); ctx.clip(); molsaTomba(ctx, rnd, 6, base - 5, W - 6, base, 7, 1.8); ctx.restore();
+    herbaTomba(ctx, rnd, 2, W - 2, base, 7, 6);
+}
+
+// La tomba de la creu on el Germà Francesc porta flors (140 x 132): vorada a terra, túmul d'herba, una creu de pedra
+// baixa al cap i, als seus peus, un gerro amb el ram (marcit o fresc, amb una espelmeta encesa)
+function pintarTombaCreu(ctx, W, H, fresc) {
+    const rnd = rndTomba(29), base = H - 3, fons = 44, cx = W / 2;
+    ombraTerra(ctx, cx + 2, base - 5, W * 0.5, 8);
+    ctx.lineJoin = 'round'; ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.7;
+    const sb = base - fons - 4;
+    socolTomba(ctx, cx - 22, cx + 22, sb, 7, 3);
+    socolTomba(ctx, cx - 14, cx + 14, sb - 7, 8, 2);
+    const top = sb - 15;
+    creuPedra(ctx, rnd, cx, top, 6, 20, 60);
+    ctx.strokeStyle = 'rgba(40,36,30,0.65)'; ctx.lineWidth = 1;                       // monograma i inscripció gravats
+    ctx.beginPath(); ctx.arc(cx, top - 40, 3.4, 0, Math.PI * 2); ctx.stroke();
+    [top - 26, top - 21, top - 16].forEach(y => { ctx.beginPath(); ctx.moveTo(cx - 3, y); ctx.lineTo(cx + 3, y); ctx.stroke(); });
+    // Vorada i túmul d'herba
+    ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.7;
+    const dins = voradaTomba(ctx, W, base, fons, 8, 9);
+    tumulHerba(ctx, rnd, dins, W, base, fons);
+    ctx.lineWidth = 1.2; camiPunts(ctx, dins); ctx.stroke();
+    // Plaqueta de bronze a la vorada del davant
+    ctx.fillStyle = '#8a6a2a'; ctx.strokeStyle = '#2a1c08'; ctx.lineWidth = 1;
+    ctx.fillRect(cx - 12, base - 5, 24, 4.5); ctx.strokeRect(cx - 12, base - 5, 24, 4.5);
+    ctx.fillStyle = 'rgba(255,220,140,0.45)'; ctx.fillRect(cx - 11, base - 4.6, 22, 1);
+    // Gerro de pedra als peus de la creu
+    const gx = cx, gy = base - fons + 8;
+    ctx.fillStyle = pedraGrad(ctx, gx - 8, gx + 8); ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.moveTo(gx - 9, gy - 15); ctx.lineTo(gx + 9, gy - 15); ctx.lineTo(gx + 6, gy - 3); ctx.lineTo(gx + 4, gy); ctx.lineTo(gx - 4, gy); ctx.lineTo(gx - 6, gy - 3); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = PEDRA_TOMBA.ombra; ctx.beginPath(); ctx.ellipse(gx, gy - 15, 9, 2.2, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    // Ram
+    ctx.lineCap = 'round';
+    const tiges = [[-11, -34], [-5, -38], [0, -41], [6, -37], [12, -32], [-14, -26], [15, -25]];
+    tiges.forEach(([dx, dy], i) => {
+        const caiguda = (i % 2 ? 1 : -1) * (8 + i);                       // les marcides s'arrosseguen cap avall
+        const fx = gx + dx + (fresc ? 0 : caiguda * 0.5), fy = gy - 15 + (fresc ? dy : dy * 0.45 + 8);
+        ctx.strokeStyle = fresc ? '#3f7a2a' : '#6a5a30'; ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.moveTo(gx + dx * 0.15, gy - 15); ctx.quadraticCurveTo(gx + dx * 0.6, gy - 15 + dy * (fresc ? 0.7 : 0.5), fx, fy); ctx.stroke();
+        if (fresc) {
+            ctx.fillStyle = '#4f9a34'; ctx.beginPath(); ctx.ellipse(gx + dx * 0.55, gy - 15 + dy * 0.55, 3.2, 1.5, Math.atan2(dy, dx), 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = ['#f4f0f8', '#e86a8a', '#f6d24a', '#c8a0f0', '#ffffff', '#f09ab4', '#ffd870'][i]; ctx.strokeStyle = 'rgba(40,20,20,0.6)'; ctx.lineWidth = 0.8;
+            for (let p = 0; p < 6; p++) { const a = p * Math.PI / 3; ctx.beginPath(); ctx.arc(fx + Math.cos(a) * 2.6, fy + Math.sin(a) * 2.3, 2.1, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+            ctx.fillStyle = i % 2 ? '#e8a020' : '#a05a20'; ctx.beginPath(); ctx.arc(fx, fy, 1.5, 0, Math.PI * 2); ctx.fill();
+        } else {
+            ctx.fillStyle = ['#7a5a3a', '#8a6a48', '#6a4a30'][i % 3]; ctx.strokeStyle = 'rgba(30,20,10,0.6)'; ctx.lineWidth = 0.7;
+            ctx.beginPath(); ctx.ellipse(fx, fy + 1.5, 2.4, 3.4, 0.4 * (i % 2 ? 1 : -1), 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        }
+    });
+    if (!fresc) {                                                         // pètals secs caiguts
+        for (let i = 0; i < 7; i++) { ctx.fillStyle = 'rgba(120,90,55,0.85)'; ctx.beginPath(); ctx.ellipse(gx - 22 + rnd() * 44, gy + 2 + rnd() * 10, 1.6, 1, rnd() * 3, 0, Math.PI * 2); ctx.fill(); }
+    } else {                                                              // espelmeta encesa al costat
+        ctx.fillStyle = '#efe6cc'; ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1;
+        ctx.fillRect(gx + 16, gy - 9, 5, 9); ctx.strokeRect(gx + 16, gy - 9, 5, 9);
+        const fl = ctx.createRadialGradient(gx + 18.5, gy - 13, 0, gx + 18.5, gy - 13, 8); fl.addColorStop(0, 'rgba(255,220,130,0.9)'); fl.addColorStop(1, 'rgba(255,200,100,0)');
+        ctx.fillStyle = fl; ctx.beginPath(); ctx.arc(gx + 18.5, gy - 13, 8, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#ffcc55'; ctx.beginPath(); ctx.ellipse(gx + 18.5, gy - 12.5, 1.6, 3, 0, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.lineCap = 'butt';
+    ctx.save(); ctx.beginPath(); ctx.rect(0, base - 6, W, 6); ctx.clip(); molsaTomba(ctx, rnd, 8, base - 5, W - 8, base, 8, 1.8); ctx.restore();
+    herbaTomba(ctx, rnd, 2, W - 2, base, 8, 6);
+}
+
+// Àngel de pedra que plora sobre un pedestal (96 x 176)
+function pintarAngelPedra(ctx, W, H) {
+    const rnd = rndTomba(41), base = H - 4, cx = W / 2;
+    ombraTerra(ctx, cx + 4, base - 1, W * 0.46, 6);
+    ctx.lineJoin = 'round'; ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.8;
+    socolTomba(ctx, cx - 34, cx + 34, base, 10, 5);
+    socolTomba(ctx, cx - 26, cx + 26, base - 10, 34, 4);
+    socolTomba(ctx, cx - 30, cx + 30, base - 44, 7, 4);
+    ctx.strokeStyle = 'rgba(40,36,30,0.55)'; ctx.lineWidth = 1.1;                  // inscripció del pedestal
+    [base - 32, base - 27, base - 22].forEach((y, i) => { ctx.beginPath(); ctx.moveTo(cx - 15 + i * 3, y); ctx.lineTo(cx + 15 - i * 3, y); ctx.stroke(); });
+    ctx.save(); ctx.beginPath(); ctx.rect(cx - 26, base - 44, 52, 34); ctx.clip(); molsaTomba(ctx, rnd, cx - 26, base - 20, cx + 26, base - 10, 10, 2.4); ctx.restore();
+    const peu = base - 51;
+    ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.8;
+    // Ales (darrere)
+    const ala = s => {
+        ctx.beginPath(); ctx.moveTo(cx + s * 6, peu - 88);
+        ctx.bezierCurveTo(cx + s * 30, peu - 118, cx + s * 46, peu - 100, cx + s * 40, peu - 64);
+        ctx.bezierCurveTo(cx + s * 38, peu - 40, cx + s * 30, peu - 20, cx + s * 22, peu - 6);
+        ctx.bezierCurveTo(cx + s * 22, peu - 30, cx + s * 14, peu - 60, cx + s * 6, peu - 68); ctx.closePath();
+    };
+    [-1, 1].forEach(s => {
+        ctx.fillStyle = s < 0 ? '#b6b2a4' : '#86827a'; ala(s); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(50,46,40,0.5)'; ctx.lineWidth = 1;          // plomes
+        for (let k = 0; k < 6; k++) { ctx.beginPath(); ctx.moveTo(cx + s * (12 + k * 2), peu - 80 + k * 10); ctx.quadraticCurveTo(cx + s * (30 + k), peu - 78 + k * 12, cx + s * (36 - k * 2), peu - 58 + k * 9); ctx.stroke(); }
+        ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.8;
+    });
+    // Túnica
+    ctx.fillStyle = pedraGrad(ctx, cx - 22, cx + 22);
+    ctx.beginPath(); ctx.moveTo(cx - 10, peu - 76); ctx.quadraticCurveTo(cx - 22, peu - 40, cx - 21, peu); ctx.lineTo(cx + 21, peu); ctx.quadraticCurveTo(cx + 22, peu - 40, cx + 10, peu - 76); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(50,46,40,0.55)'; ctx.lineWidth = 1.2;                   // plecs
+    [[-12, -2], [-5, 0], [3, 0], [11, -1]].forEach(([dx, c]) => { ctx.beginPath(); ctx.moveTo(cx + dx * 0.4, peu - 50); ctx.quadraticCurveTo(cx + dx + c, peu - 26, cx + dx * 1.3, peu - 1); ctx.stroke(); });
+    ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.beginPath(); ctx.moveTo(cx - 9, peu - 70); ctx.quadraticCurveTo(cx - 18, peu - 40, cx - 17, peu - 2); ctx.lineTo(cx - 13, peu - 2); ctx.quadraticCurveTo(cx - 13, peu - 40, cx - 6, peu - 70); ctx.fill();
+    // Braços plegats amb les mans juntes sota la cara
+    ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.8; ctx.fillStyle = PEDRA_TOMBA.mig;
+    ctx.beginPath(); ctx.moveTo(cx - 11, peu - 72); ctx.quadraticCurveTo(cx - 16, peu - 56, cx - 5, peu - 52); ctx.lineTo(cx + 2, peu - 68); ctx.lineTo(cx - 4, peu - 74); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#8f8b80';
+    ctx.beginPath(); ctx.moveTo(cx + 11, peu - 72); ctx.quadraticCurveTo(cx + 15, peu - 56, cx + 5, peu - 52); ctx.lineTo(cx - 1, peu - 68); ctx.lineTo(cx + 4, peu - 74); ctx.closePath(); ctx.fill(); ctx.stroke();
+    // Cap cot, amb els cabells recollits
+    ctx.fillStyle = PEDRA_TOMBA.clar;
+    ctx.beginPath(); ctx.ellipse(cx + 2, peu - 82, 8.5, 9.5, 0.35, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = PEDRA_TOMBA.mig;
+    ctx.beginPath(); ctx.ellipse(cx - 1, peu - 86, 9, 7, 0.35, Math.PI * 0.9, Math.PI * 2.1); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(50,46,40,0.6)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx + 2, peu - 80); ctx.quadraticCurveTo(cx + 5, peu - 78, cx + 8, peu - 79); ctx.stroke();   // parpella closa
+    // Molsa i líquens per la figura
+    for (let i = 0; i < 14; i++) { ctx.fillStyle = rnd() < 0.6 ? 'rgba(95,128,54,0.55)' : 'rgba(214,196,110,0.45)'; ctx.beginPath(); ctx.arc(cx - 16 + rnd() * 32, peu - 4 - rnd() * 40, 1 + rnd() * 2, 0, Math.PI * 2); ctx.fill(); }
+    herbaTomba(ctx, rnd, cx - 38, cx + 38, base, 9, 8);
+}
+
+// La gran tomba dels monjos primers (240 x 150): sarcòfag sobre una plataforma de dos graons, arcs cecs al davant,
+// columnetes als cantons, heura i la tapa esquerdada (oberta: en surt llum lila; tancada: només la ferida a la pedra)
+function pintarTombaMonjos(ctx, W, H, oberta = true) {
+    const rnd = rndTomba(53), base = H - 4;
+    ombraTerra(ctx, W / 2 + 4, base - 3, W * 0.5, 10);
+    ctx.lineJoin = 'round'; ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 2.2;
+    socolTomba(ctx, 6, W - 14, base, 10, 14);
+    socolTomba(ctx, 20, W - 28, base - 10, 10, 12);
+    const x0 = 34, x1 = W - 44, yb = base - 20, yt = yb - 56, fons = 30, ent = 10;
+    // Cantell dret i cara del davant
+    ctx.fillStyle = PEDRA_TOMBA.ombra; ctx.beginPath(); ctx.moveTo(x1, yb); ctx.lineTo(x1 + ent, yb - fons); ctx.lineTo(x1 + ent, yt - fons); ctx.lineTo(x1, yt); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = pedraGrad(ctx, x0, x1, '#bdb8a8', '#8a867a'); ctx.fillRect(x0, yt, x1 - x0, yb - yt); ctx.strokeRect(x0, yt, x1 - x0, yb - yt);
+    // Arcs cecs amb una creueta a dins
+    const n = 4, aw = (x1 - x0 - 24) / n;
+    for (let i = 0; i < n; i++) {
+        const ax = x0 + 12 + i * aw, r = aw / 2 - 4;
+        ctx.fillStyle = 'rgba(50,46,40,0.35)'; ctx.strokeStyle = 'rgba(40,36,30,0.7)'; ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.moveTo(ax + 4, yb - 6); ctx.lineTo(ax + 4, yt + 24 + r); ctx.arc(ax + aw / 2, yt + 24 + r, r, Math.PI, 0); ctx.lineTo(ax + aw - 4, yb - 6); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.beginPath(); ctx.moveTo(ax + 5, yb - 7); ctx.lineTo(ax + 5, yt + 25 + r); ctx.stroke();
+        ctx.strokeStyle = 'rgba(30,26,22,0.7)'; ctx.lineWidth = 1.6; const mx = ax + aw / 2, my = yt + 24 + r + 6;
+        ctx.beginPath(); ctx.moveTo(mx, my - 5); ctx.lineTo(mx, my + 7); ctx.moveTo(mx - 4, my - 1); ctx.lineTo(mx + 4, my - 1); ctx.stroke();
+    }
+    // Faixa amb les lletres antigues gairebé esborrades
+    ctx.fillStyle = 'rgba(230,224,206,0.6)'; ctx.fillRect(x0 + 10, yt + 6, x1 - x0 - 20, 11);
+    ctx.strokeStyle = 'rgba(40,36,30,0.75)'; ctx.lineWidth = 1; ctx.strokeRect(x0 + 10, yt + 6, x1 - x0 - 20, 11);
+    for (let x = x0 + 16; x < x1 - 16; x += 5 + rnd() * 3) { ctx.beginPath(); ctx.moveTo(x, yt + 9); ctx.lineTo(x + 1 + rnd() * 2, yt + 9 + rnd() * 5); ctx.stroke(); }
+    // Columnetes als cantons
+    ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.6;
+    [x0 - 4, x1 - 6].forEach(cx => {
+        ctx.fillStyle = pedraGrad(ctx, cx, cx + 10); ctx.fillRect(cx, yt, 10, yb - yt); ctx.strokeRect(cx, yt, 10, yb - yt);
+        ctx.fillStyle = PEDRA_TOMBA.clar; ctx.fillRect(cx - 2, yt - 1, 14, 5); ctx.strokeRect(cx - 2, yt - 1, 14, 5); ctx.fillRect(cx - 2, yb - 5, 14, 5); ctx.strokeRect(cx - 2, yb - 5, 14, 5);
+    });
+    // Tapa (una mica sortida)
+    const tp = [{ x: x0 - 8, y: yt }, { x: x1 + 4, y: yt }, { x: x1 + ent + 6, y: yt - fons }, { x: x0 + ent - 6, y: yt - fons }];
+    ctx.lineWidth = 2.2;
+    ctx.fillStyle = '#7f7b70'; ctx.beginPath(); ctx.moveTo(tp[0].x, yt); ctx.lineTo(tp[1].x, yt); ctx.lineTo(tp[1].x, yt + 6); ctx.lineTo(tp[0].x, yt + 6); ctx.closePath(); ctx.fill(); ctx.stroke();
+    camiPunts(ctx, tp); ctx.fillStyle = '#b4af9f'; ctx.fill(); ctx.stroke();
+    ctx.save(); camiPunts(ctx, tp); ctx.clip();
+    molsaTomba(ctx, rnd, x0, yt - fons, x1 + 10, yt, 22, 3);
+    // Creu gran en relleu a la tapa, en escorç
+    const cxT = (x0 + x1) / 2 + 4, cyT = yt - fons / 2;
+    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.fillRect(cxT - 40, cyT - 3, 80, 6); ctx.fillRect(cxT - 20, cyT - 11, 7, 22);
+    ctx.strokeStyle = 'rgba(40,36,30,0.6)'; ctx.lineWidth = 1; ctx.strokeRect(cxT - 40, cyT - 3, 80, 6); ctx.strokeRect(cxT - 20, cyT - 11, 7, 22);
+    // L'esquerda
+    const esq = [[cxT + 18, yt - fons], [cxT + 12, yt - fons + 8], [cxT + 20, yt - fons + 14], [cxT + 10, yt - fons + 22], [cxT + 16, yt]];
+    const linia = () => { ctx.beginPath(); esq.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); };
+    if (oberta) {
+        ctx.shadowColor = 'rgba(200,150,255,0.95)'; ctx.shadowBlur = 10;
+        ctx.strokeStyle = '#e6cfff'; ctx.lineWidth = 3.4; linia();
+        ctx.shadowBlur = 0; ctx.strokeStyle = '#7a3ac0'; ctx.lineWidth = 1.2; linia();
+    } else {
+        ctx.strokeStyle = 'rgba(30,26,20,0.8)'; ctx.lineWidth = 1.3; linia();
+    }
+    ctx.restore();
+    ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 2.2; camiPunts(ctx, tp); ctx.stroke();
+    if (oberta) {                                                        // l'esquerda baixa per la cara del davant
+        ctx.shadowColor = 'rgba(200,150,255,0.9)'; ctx.shadowBlur = 8;
+        ctx.strokeStyle = '#d8b8ff'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(cxT + 16, yt + 6); ctx.lineTo(cxT + 11, yt + 20); ctx.lineTo(cxT + 15, yt + 30); ctx.stroke();
+        ctx.shadowBlur = 0;
+    }
+    // Heura que s'enfila pel cantó esquerre
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#3a5a22'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(x0 - 2, base - 10); ctx.bezierCurveTo(x0 + 6, yb - 20, x0 - 6, yt + 20, x0 + 10, yt - 6); ctx.stroke();
+    for (let i = 0; i < 16; i++) {
+        const t = i / 15, x = x0 - 2 + Math.sin(t * 7) * 6 + t * 10, y = base - 10 - t * (base - 10 - yt + 6);
+        ctx.fillStyle = i % 3 ? '#4f7a2e' : '#6a9a3a'; ctx.beginPath(); ctx.ellipse(x + (i % 2 ? 4 : -4), y, 3.6, 2.4, i, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.lineCap = 'butt';
+    ctx.save(); ctx.beginPath(); ctx.rect(0, base - 20, W, 20); ctx.clip(); molsaTomba(ctx, rnd, 8, base - 18, W - 14, base, 20, 2.6); ctx.restore();
+    herbaTomba(ctx, rnd, 4, W - 8, base, 16, 8);
+}
+
+// Fanalet de tomba (24 x 46): caseta de ferro amb vidres i una espelma encesa
+function pintarFanalet(ctx, W, H) {
+    const base = H - 3, cx = W / 2;
+    ombraTerra(ctx, cx + 1, base - 1, 9, 2.5);
+    ctx.lineJoin = 'round'; ctx.strokeStyle = '#0e0c0a'; ctx.lineWidth = 1.4;
+    const g = ctx.createRadialGradient(cx, base - 18, 1, cx, base - 18, 11); g.addColorStop(0, 'rgba(255,214,130,0.95)'); g.addColorStop(1, 'rgba(255,180,90,0.25)');
+    ctx.fillStyle = '#2a2622'; ctx.fillRect(cx - 8, base - 6, 16, 6); ctx.strokeRect(cx - 8, base - 6, 16, 6);
+    ctx.fillStyle = g; ctx.fillRect(cx - 7, base - 30, 14, 24); ctx.strokeRect(cx - 7, base - 30, 14, 24);
+    ctx.fillStyle = '#f4ead0'; ctx.fillRect(cx - 2, base - 15, 4, 8);
+    ctx.fillStyle = '#ffd060'; ctx.beginPath(); ctx.ellipse(cx, base - 18, 1.6, 3, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(cx, base - 30); ctx.lineTo(cx, base - 6); ctx.stroke();
+    ctx.fillStyle = '#2a2622'; ctx.beginPath(); ctx.moveTo(cx - 10, base - 30); ctx.lineTo(cx + 10, base - 30); ctx.lineTo(cx, base - 40); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, base - 42, 2.4, 0, Math.PI * 2); ctx.stroke();
 }

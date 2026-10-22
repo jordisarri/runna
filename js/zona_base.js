@@ -621,10 +621,11 @@ class ZonaBase extends Phaser.Scene {
         this.llocsFlauta.push({ id, x, y, radi, pista, actiu });
     }
 
+    // Lloc de flauta on és l'Ineu (o null)
     flautaActiva() {
-        if (!Estat.te('flauta') || !this.ineu) return false;
-        return this.llocsFlauta.some(l => (!l.pista || Estat.flag('flauta_' + l.id)) && (!l.actiu || l.actiu()) &&
-            Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, l.x, l.y) <= l.radi);
+        if (!Estat.te('flauta') || !this.ineu) return null;
+        return this.llocsFlauta.find(l => (!l.pista || Estat.flag('flauta_' + l.id)) && (!l.actiu || l.actiu()) &&
+            Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, l.x, l.y) <= l.radi) || null;
     }
 
     obrirMusica() {
@@ -716,7 +717,9 @@ class ZonaBase extends Phaser.Scene {
         this.indicador.setVisible(!!proper);
         if (proper) this.indicador.setPosition(proper.x, proper.y - proper.altura);
         const T = Phaser.Input.Keyboard.JustDown;
-        if (accio && this.flautaActiva()) this.obrirMusica();
+        // La flauta passa davant només del punt del mateix lloc (la bassa, la pedra...): un cartell o algú proper es llegeix/escolta
+        const flauta = accio && this.flautaActiva();
+        if (flauta && (!proper || Phaser.Math.Distance.Between(proper.x, proper.y, flauta.x, flauta.y) < 80)) this.obrirMusica();
         else if (accio && proper) this.interactuar(proper);
         else if (accio && this.esbarzerDavant()) this.foc();
         else if (accio || T(this.tecles.J)) this.atacar();

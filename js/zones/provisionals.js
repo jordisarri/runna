@@ -186,7 +186,7 @@ class ZonaCreu extends ZonaBase {
         [[700, 930], [1330, 930]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xe0b868));
         this.posar('bassadoria', 1010, 900, { col: { w: 470, h: 190, dy: -50 } });
         this.interactiu(1010, 755, 280, DIALEGS.bassadoria, { altura: 110, enTancar: () => Estat.posaFlag('flauta_bassadoria') });
-        this.llocFlauta('bassadoria', 1010, 755, 340, true);
+        this.llocFlauta('bassadoria', 1010, 755, 340, true, () => !Estat.flag('bassadoriaNeta'));
         if (!Estat.flag('bassadoriaNeta')) this.boiraBass = this.boira(1010, 760, 380, 110, 3.5);
 
         // L'Home del Carruatge Verd, a la vora del camí

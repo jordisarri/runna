@@ -118,8 +118,6 @@ const CATALEG = [
     { key: 'olla',           file: 'assets/olla.png',           amplada: 110, provisional: (c, w) => dibuixarOlla(c, w) },
     { key: 'ocell',          file: 'assets/ocell.png',          amplada: 34, provisional: (c, w) => dibuixarOcell(c, w) },
     { key: 'jaumeta',        file: 'assets/jaumeta.png',        amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
-    { key: 'lapida',           file: 'assets/lapida.png',           amplada: 40,  provisional: (c, w) => dibuixarLapida(c, w) },
-    { key: 'tomba_esquerdada', file: 'assets/tomba_esquerdada.png', amplada: 240, provisional: (c, w) => dibuixarTombaEsquerdada(c, w) },
     { key: 'arma_tiller', file: 'assets/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
     { key: 'espurna',      file: 'assets/espurna.png',      amplada: 32, provisional: (c, w) => dibuixarPuntSegell(c, w) }
@@ -221,9 +219,33 @@ const Grafics = {
                 }
                 caixes.push({ ax, ay, bx, by });
             }
+            // Els fotogrames originals no estan ben alineats entre ells: el cap puja i baixa sense ordre (fins a 4 px)
+            // i l'alçada del cos varia (159-164 px). Es mesura cada fotograma per separat (vores amb cobertura, no un
+            // sol píxel solt, i centre del cap ponderat per l'alfa) i es redibuixa perquè el cap i els peus quedin
+            // sempre a la mateixa alçada i el cap a la mateixa x. Així al caminar no tremola.
+            const mides = [];
+            for (let i = 0; i < N; i++) {
+                const cx = (i % COLS) * CEL, cy = Math.floor(i / COLS) * CEL;
+                const fila = [];
+                for (let y = 0; y < CEL; y++) {
+                    let s = 0;
+                    for (let x = 0; x < CEL; x++) s += img.data[((cy + y) * c0.width + cx + x) * 4 + 3];
+                    fila.push(s / 255);
+                }
+                const dalt = fila.findIndex(v => v >= 10);
+                let baix = CEL - 1;
+                while (baix > dalt && fila[baix] < 10) baix--;
+                let sx = 0, sa = 0;
+                for (let y = dalt; y < dalt + 35; y++) for (let x = 0; x < CEL; x++) {
+                    const a = img.data[((cy + y) * c0.width + cx + x) * 4 + 3];
+                    sx += x * a; sa += a;
+                }
+                mides.push({ dalt, baix, cap: sx / sa });
+            }
             const mediana = v => v.slice().sort((a, b) => a - b)[Math.floor(v.length / 2)];
-            const alt = mediana(caixes.map(c => c.by - c.ay)), peus = mediana(caixes.map(c => c.by));
+            const alt = mediana(mides.map(m => m.baix - m.dalt));
             const centre = caixes.reduce((t, c) => t + (c.ax + c.bx) / 2, 0) / N;
+            const desvCap = centre - mides.reduce((t, m) => t + m.cap, 0) / N;      // el cos queda on era abans
             const e = (SPRITE_INEU.peus - 8) / alt;      // mateixa alçada que les altres fulles (~225 de 256)
             // Fotograma de repòs: aquell en què les cames estan més juntes (caixa més estreta)
             Grafics.quietPerfil = caixes.reduce((m, c, i) => (c.bx - c.ax < caixes[m].bx - caixes[m].ax ? i : m), 0);
@@ -236,8 +258,11 @@ const Grafics = {
                 for (let i = 0; i < N; i++) {
                     const cel = document.createElement('canvas');
                     cel.width = CEL; cel.height = CEL;
-                    cel.getContext('2d').drawImage(c0, (i % COLS) * CEL, Math.floor(i / COLS) * CEL, CEL, CEL,
-                        CEL / 2 - centre * e, SPRITE_INEU.peus - peus * e, CEL * e, CEL * e);
+                    const m = mides[i], ey = e * alt / (m.baix - m.dalt);      // escala vertical pròpia: cap i peus a lloc
+                    const cc = cel.getContext('2d');
+                    cc.imageSmoothingQuality = 'high';
+                    cc.drawImage(c0, (i % COLS) * CEL, Math.floor(i / COLS) * CEL, CEL, CEL,
+                        CEL / 2 - (m.cap + desvCap) * e, SPRITE_INEU.peus - m.baix * ey, CEL * e, CEL * ey);
                     const dx = (i % COLS) * CEL, dy = Math.floor(i / COLS) * CEL;
                     if (mirall) { o.save(); o.translate(dx + CEL, dy); o.scale(-1, 1); o.drawImage(cel, 0, 0); o.restore(); }
                     else o.drawImage(cel, dx, dy);
@@ -554,6 +579,20 @@ const Grafics = {
             ctx.beginPath(); ctx.moveTo(11, 3); ctx.lineTo(17, 3); ctx.lineTo(17, 11); ctx.lineTo(25, 11); ctx.lineTo(25, 17); ctx.lineTo(17, 17); ctx.lineTo(17, 37); ctx.lineTo(11, 37); ctx.lineTo(11, 17); ctx.lineTo(3, 17); ctx.lineTo(3, 11); ctx.lineTo(11, 11); ctx.closePath(); ctx.fill(); ctx.stroke();
             ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fillRect(12.5, 5, 1.6, 30); ctx.fillRect(5, 12.5, 18, 1.4);
         });
+        // Cementiri (dibuixos.js): làpides, tombes amb vorada, la tomba de la creu del Germà Francesc, l'àngel i els fanalets
+        crea('lapida', 56, 80, (ctx, w, h) => pintarLapidaArc(ctx, w, h, 3));
+        crea('lapida_b', 56, 80, (ctx, w, h) => pintarLapidaArc(ctx, w, h, 17));
+        crea('lapida_creu', 54, 90, (ctx, w, h) => pintarLapidaCreu(ctx, w, h));
+        crea('lapida_ferro', 46, 84, (ctx, w, h) => pintarLapidaFerro(ctx, w, h));
+        crea('tomba_grava', 110, 96, (ctx, w, h) => pintarTombaVorada(ctx, w, h, 'grava', 11));
+        crea('tomba_flors', 110, 96, (ctx, w, h) => pintarTombaVorada(ctx, w, h, 'flors', 13));
+        crea('tomba_herba', 110, 96, (ctx, w, h) => pintarTombaVorada(ctx, w, h, 'herba', 19));
+        crea('tomba_creu', 140, 132, (ctx, w, h) => pintarTombaCreu(ctx, w, h, false));
+        crea('tomba_creu_flors', 140, 132, (ctx, w, h) => pintarTombaCreu(ctx, w, h, true));
+        crea('angel_pedra', 96, 176, pintarAngelPedra);
+        crea('tomba_esquerdada', 240, 150, (ctx, w, h) => pintarTombaMonjos(ctx, w, h, true));
+        crea('tomba_tancada', 240, 150, (ctx, w, h) => pintarTombaMonjos(ctx, w, h, false));
+        crea('fanalet', 24, 46, pintarFanalet);
         // Banc de fusta de jardí: tres taulons de seient, cantell frontal, potes amb travesser i ombra al terra
         const banc = (ctx, alt, respatller) => {
             const base = alt - 8;
