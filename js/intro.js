@@ -29,6 +29,7 @@ class EscenaTitol extends Phaser.Scene {
         this.videoBucle = this.crearVideo('video_bucle', 0).setVisible(false);
         this.videoIntro = this.crearVideo('video_intro', 1).setVisible(false);
         this.construirMenu();
+        Joc.precarregarMusiques(this);       // la resta de cançons, en segon pla mentre es mira la intro
 
         this.input.keyboard.on('keydown', e => this.tecla(e));
         this.input.on('pointerdown', (p, objs) => {

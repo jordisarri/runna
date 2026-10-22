@@ -45,10 +45,10 @@ function completarLliço(nom) {
         E.posaObjectiu('Toca el Cant de les Pedres (3-1-2-1) davant l\'ombra del monjo, a les Runes.');
     } else {
         pagines = [
-            { qui: 'La Jaumeta', text: 'Aaaixò! Ja el tens, xaval! Els ocells el saben des d\'abans que existissin els frares. Se\'l va emportar aquell trinxat de la gàbia, i ells el cantaven a pèl, sense poder.' },
-            { qui: 'La Jaumeta', text: 'Quan ell s\'ho tanqui, tu el toques, i els barrots no tindran més remei que obrir-se. Ara fot el camp, que tinc feina.' }
+            { qui: 'La Pianista', text: 'Això mateix, fill! El Cant del Miracle. Els ocells el cantaven a l\'alba, abans que l\'Ocellaire se\'l quedés i el tanqués a la seva gàbia.' },
+            { qui: 'La Pianista', text: 'Diu la meva mare que aquella gàbia només s\'obre amb el cant que li van robar. Si els nens hi són a dins, toca\'l davant els barrots i no tindran més remei que obrir-se.' }
         ];
-        E.posaObjectiu('Tens el Cant del Miracle (1-3-2-3-1). Torna al Santuari: la veu ve de sota el Bar.');
+        E.posaObjectiu('Tens el Cant del Miracle (1-3-2-3-1): obre la gàbia de l\'Ocellaire. La porta de ferro és sota la Taverna.');
     }
     if (ui) ui.obrirDialeg({ pagines }, () => E.desar());
 }

@@ -203,12 +203,12 @@ class ZonaTorre extends Phaser.Scene {
             g.fillStyle(pedra, 1).fillPoints(marc, true);
             const porta = [this.pt(aL, T.R, h), ...arc(1), this.pt(aR, T.R, h)];
             g.fillStyle(0x0c0806, 1).fillPoints(porta, true);
-            g.fillStyle(fusta, 1).fillPoints([this.pt(aL + 0.015, T.R, h), ...arc(0.9), this.pt(aR - 0.015, T.R, h)], true);
-            g.lineStyle(2, this.ombrejat(0x2a1608, a), 1);
-            for (let k = 1; k < 4; k++) { const ai = aL + (aR - aL) * k / 4; g.lineBetween(this.pt(ai, T.R, h).x, this.pt(ai, T.R, h).y, this.pt(ai, T.R, h + alt - 36).x, this.pt(ai, T.R, h + alt - 36).y); }
-            const m = this.pt(a + ample * 0.28, T.R, h + alt * 0.42);
-            g.fillStyle(0xd4af37, 1).fillCircle(m.x, m.y, 4);
-            if (ambLlum) { const c = this.pt(a, T.R - 24, h + alt * 0.4); this.resplendor(c.x, c.y, 100, 0xffd38a, 0.22); }
+            // porta oberta: el forat fosc amb la claror de l'altra banda, i el batent girat cap endins, arran del brancal esquerre
+            g.fillStyle(0x3a2a18, 0.8).fillPoints([this.pt(aL + 0.06, T.R, h), ...arc(0.7), this.pt(aR - 0.06, T.R, h)], true);
+            const fulla = [this.pt(aL + 0.015, T.R, h), this.pt(aL + 0.015, T.R, h + alt - 26), this.pt(aL + ample * 0.2, T.R - 28, h + alt - 34), this.pt(aL + ample * 0.2, T.R - 28, h + 2)];
+            g.fillStyle(fusta, 1).fillPoints(fulla, true);
+            g.lineStyle(2, this.ombrejat(0x2a1608, a), 1).strokePoints(fulla, true);
+            if (ambLlum) { const c = this.pt(a, T.R - 24, h + alt * 0.4); this.resplendor(c.x, c.y, 100, 0xffd38a, 0.3); }
         };
         porta(-0.5 * dth, 0, 0.62, 128, true);
         porta((T.graons + 1.1) * dth, this.cim(T.graons), 0.62, 128, true);

@@ -13,18 +13,22 @@ function pistaActual(E) {
     let consell;
     const cols = Array.from({ length: 12 }, (_, i) => E.flag("col" + (i + 1))).filter(Boolean).length;
     if (!E.flag("clauerNovici")) consell = "Fill, ves a la Plaça: el Pare Jordi et busca i t'ha de donar el clauer.";
-    else if (!E.flag("parlatTiler")) consell = "Fill, el Gran Til·ler és al nord, seguint el camí que puja des d'aquí. Parla-hi: ell sap què fer amb les bestioles que desperten.";
-    else if (!E.te("basto_tiller")) consell = "Agafa la branca que ha caigut al peu del Til·ler: és més àgil que el bastó de pelegrí que portes.";
     else if (!E.flag("cantAurora")) consell = "Al Santuari, la Pianista encara sap un cant que la boira no li pot prendre. Fes-te'l ensenyar.";
     else if (!E.flag("bassadoriaNeta")) consell = "Davant la Bassadòria, al sud de la Plaça, prem ESPAI i tria tocar la flauta: 1-2-3.";
-    else if (!E.flag("fontNeta")) consell = "Al bosc de l'oest, a tocar del Til·ler, hi ha una Font del Bisbe que s'ha adormit. Porta-li tres herbes: la de Sant Joan, la ruda i la farigola.";
+    else if (!E.flag("fontNeta")) consell = "Al bosc de l'oest, a tocar de les Cel·les, hi ha una Font del Bisbe que s'ha adormit. Porta-li tres herbes: la de Sant Joan, el romaní i la farigola. Brillen entre els arbres, com espurnes.";
+    else if (!E.flag("jaumetaVista") && !E.flag("parlatTiler")) consell = "Amb l'aigua de la Font del Bisbe, l'Alzina Buida del bosc, la més grossa de la clariana, s'obre com un portal. Allà viu la Jaumeta, que és vident i et donarà alguna cosa per al camí del Til·ler.";
+    else if (!E.flag("boiraTillerNeta") && !E.flag("parlatTiler")) consell = "El Gran Til·ler és al nord de les Cel·les, però una boira espessa tapa el camí. Aboca-hi el beuratge de la Jaumeta i es desfarà.";
+    else if (!E.flag("parlatTiler")) consell = "Pel camí que s'ha aclarit, al nord de les Cel·les, hi ha el Gran Til·ler. Parla-hi: ell sap què fer amb les bestioles que desperten.";
+    else if (!E.te("basto_tiller")) consell = "Agafa la branca que ha caigut al peu del Til·ler: és més àgil que el bastó de pelegrí que portes.";
     else if (E.flag("soparFet") && !E.flag("saber")) consell = "El Pare Alcuí, a la biblioteca, sap la paraula que desperta l'espasa. Només te la dirà si has parlat amb l'ombra del monjo.";
     else if (E.flag("soparFet") && !E.flag("benediccio")) consell = "El Pare Jordi, a la Plaça, vol donar-te la benedicció. Fes-li una visita.";
     else if (E.flag("soparFet") && !E.flag("runna")) consell = "Surt de l'Hostatgeria cap a l'oest, passa per davant de l'Era i segueix el camí un bon tros: arribaràs a la Rovellonera. Allà, on hi ha rovellons sota els pins, hi ha camí: sud, ponent i sud. I mira el cel als Dipòsits.";
-    else if (!E.flag("cofreCambra")) consell = "Ara que portes Runna... Al Celler, a les Runes, hi ha una roda de carruatge que no gira per a qualsevol. El Frederic, el pare del Juli, en sap més del que diu. Parla-hi.";
-    else if (!E.flag("raimDerrotat")) consell = "A la gran escalinata de la Casa Gran hi ha l'Home del Raïm. Necessites la palanca d'en Jordi de la Caseta (al nord del Til·ler) i recorda el que diu el pergamí del monjo: on neix el sol, el raïm madura.";
+    else if (!E.flag("fredericRoda") && !E.flag("cofreCambra")) consell = "Ara que portes Runna... Al Celler, a les Runes, hi ha una roda de carruatge que amaga alguna cosa. El Frederic, el pare del Juli, en sap més del que diu. Parla-hi.";
+    else if (!E.te("guants") && !E.flag("rodaMoguda")) consell = E.flag("florsCreu") ? "Torna a Sant Antoni, fill: el Germà Francesc t'espera." : E.te("ram") ? "El ram del Germà Francesc va als peus de la creu del Cementiri." : "El Germà Francesc, a les cel·les de Sant Antoni (a llevant del Monestir), té uns guants que mouen el que pesa. Fes-li un favor i te'ls deixarà.";
+    else if (!E.flag("cofreCambra")) consell = "Amb els guants posats, empeny la roda del Celler des d'un costat. Al darrere hi ha el túnel dels monjos.";
+    else if (!E.flag("raimDerrotat")) consell = "A la gran escalinata de la Casa Gran hi ha l'Home del Raïm. Necessites la palanca: és a la caseta de joc del jardí de la masia d'en Jordi, a l'oest del Gran Til·ler. I recorda el que diu el pergamí del monjo: on neix el sol, el raïm madura.";
     else if (!E.flag("relIquiesRetornades")) consell = "Les relíquies dels monjos s'han de tornar a la tomba esquerdada del Cementiri, darrere el Santuari i el Monestir. I guarda bé aquella clau que has trobat: obre la porta de ferro de sota la Taverna.";
-    else if (!E.flag("cantMiracle")) consell = "Abans de baixar sota la Taverna, passa pel Santuari: la Pianista té un últim cant per a tu, el Cant del Miracle.";
+    else if (!E.flag("cantMiracle")) consell = "Abans de baixar sota la Taverna, passa pel Santuari: la Pianista té un últim cant per a tu, el Cant del Miracle. Els barrots de la gàbia només l'escolten a ell.";
     else if (!E.flag("telescopi")) consell = "Aquest cristall de gel que has trobat... el Garf, a l'Era, en sabrà fer alguna cosa. Segueix el camí de les Runes cap a l'oest, fins a l'Ermita i l'Era.";
     else if (cols < 12) consell = "El camí de la Desaparició té dotze columnes. Cada una t'explica una paraula. Apunta-les totes!";
     else if (!E.flag("missatgeDesxifrat")) consell = "Ja tens les dotze paraules. A l'ermita hi ha dues taules de pedra que només tu pots llegir.";
@@ -267,10 +271,6 @@ const DIALEGS = {
         ]
     }),
 
-    font: E => ({
-        pagines: [{ qui: '', text: 'La Font de la Mare de Déu. L\'aigua raja, però freda com el gel.' }]
-    }),
-
     // ---------------- RUÏNES I PING-PONG ----------------
     ruines: E => ({
         pagines: [
@@ -295,10 +295,15 @@ const DIALEGS = {
         pagines: [
             { qui: 'Frederic', text: "Ei, noi. Veig que portes una espasa que no és de ferro. Això canvia el que et volia dir." },
             { qui: 'Frederic', text: "Aquest lloc es diu el Celler per alguna cosa: era el celler de la Casa Gran, la casa vella dels monjos. Els monjos hi van fer un túnel que va a la casa sense que ningú el vegi." },
-            { qui: 'Frederic', text: "Aquella roda de carruatge no és decoració. Empeny-la des d'un costat, caminant-hi en contra: només cedeix a qui porta alguna cosa que talla el mal. Al darrere hi ha un túnel que va a la Casa Gran." },
+            { qui: 'Frederic', text: "Aquella roda de carruatge no és decoració: al darrere hi ha un túnel que va a la Casa Gran. Però pesa com un carro ple, i amb els braços sols no la mouràs." },
+            { qui: 'Frederic', text: E.te("guants") ? "Aquests guants que portes... són els dels picapedrers dels monjos! Amb això, empeny-la des d'un costat, caminant-hi en contra." : "El Germà Francesc, a les cel·les de Sant Antoni, a llevant del Monestir, guarda els guants dels picapedrers dels monjos. Amb ells, la roda cediria." },
             { qui: 'Frederic', text: "Allà baix hi ha una clau de ferro que els monjos van perdre fa segles: la de la porta de ferro de sota la Taverna. Fes-ne bon ús." }
         ],
-        enAcabar: () => { E.posaFlag("fredericRoda"); E.posaObjectiu("Empeny la roda de carruatge del Celler (a les Runes): amaga un passadís cap a la Casa Gran."); }
+        enAcabar: () => {
+            E.posaFlag("fredericRoda");
+            E.posaObjectiu(E.te("guants") ? "Empeny la roda de carruatge del Celler (a les Runes): amaga un passadís cap a la Casa Gran."
+                                          : "Demana els guants dels picapedrers al Germà Francesc (Sant Antoni, a llevant del Monestir) i empeny la roda del Celler.");
+        }
     } : ({
         pagines: [
             { qui: 'Frederic', text: 'Calma, noi. La pilota no s\'ha de perseguir, s\'ha d\'esperar.' },
@@ -395,13 +400,12 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "El Gran Til·ler", text: "Sento l'aigua cantar de lluny... La Bassadòria és neta. Has fet bé, petit monjo." },
-                    { qui: "El Gran Til·ler", text: "Aquest camí del nord el vaig tancar jo, amb arbres i esbarzers, perquè la boira no hi pugés. Ara que l'aigua respira, el deixo obert." },
+                    { qui: "El Gran Til·ler", text: "El camí del nord-est cap a la Cirosa el vaig tancar jo amb una bardissa viva, perquè la boira no hi pugés. Ara que l'aigua respira, pots passar: la bardissa només reconeix la meva branca. Acosta-l'hi." },
                     { qui: "El Gran Til·ler", text: "A la Cirosa viuen uns pastors desterrats que guarden les esquelles dels seus avis: amb elles es van afinar els cants antics. Tracta'ls amb dolçor, que ja han patit prou. I vés amb compte: un monjo hi ha pujat aquests dies." },
-                    { qui: "", text: "Els arbres del camí del nord s'aparten amb un cruixit llarg." }
+                    { qui: "", text: "Al fons, el camí que puja cap al nord-est és tancat per una bardissa de punxes negres." }
                 ],
                 enAcabar: () => {
-                    E.posaFlag("camiCirosaObert");
-                    E.posaObjectiu("Puja a la Cirosa pel camí que surt del Til·ler cap al nord-est: els pastors desterrats guarden les esquelles dels seus avis.");
+                    E.posaObjectiu("Aparta la bardissa del camí del nord-est (a la dreta del Til·ler) amb la branca del Gran Til·ler.");
                 }
             };
         }
@@ -534,7 +538,7 @@ const DIALEGS = {
         if (herbes === 3) {
             return {
                 pagines: [
-                    { qui: '', text: 'Poses l\'herba de Sant Joan, la ruda i la farigola a la pica de la font.' },
+                    { qui: '', text: 'Poses l\'herba de Sant Joan, el romaní i la farigola a la pica de la font.' },
                     { qui: '', text: 'L\'aigua s\'aclareix a poc a poc. Un fil de llum puja de les pedres i la boira lila fuig del bosc.' },
                     { qui: 'Ineu', text: 'Ha funcionat! Al fons de la pica hi ha un cristall que sembla de gel...' },
                     { qui: '', text: 'Has obtingut l\'AIGUA DE LA FONT DEL BISBE i un CRISTALL DE GEL.\nEl Garf, a l\'Era, segur que sap què fer-ne.' }
@@ -548,7 +552,8 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: '', text: 'La Font del Bisbe: una font de pedra del temps de Sant Joan, seca i amb una olor estranya. Sobre la pica hi ha una mitra gravada: diuen que un bisbe, fa segles, hi va beneir l\'aigua.' },
-                { qui: 'Ineu', text: 'Les Tietes diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Em falten tres herbes: herba de Sant Joan, ruda i farigola.' },
+                { qui: 'Ineu', text: 'Les Tietes diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Em falten tres herbes: herba de Sant Joan, romaní i farigola.' },
+                { qui: 'Ineu', text: 'Amb aquesta boira lila tot costa de veure... Però les herbes de la Nit de Sant Joan fan llum: n\'hi ha una al nord (cap al Til·ler), el romaní al sud-est i la farigola al sud, sempre en una clariana.' },
                 { qui: '', text: `Herbes trobades: ${herbes}/3.` }
             ],
             enAcabar: () => { E.posaFlag('fontVista'); E.posaObjectiu(`Troba 3 herbes de Sant Joan pel bosc (${herbes}/3) i porta-les a la font.`); }
@@ -589,7 +594,7 @@ const DIALEGS = {
     },
 
     cartellBosc: E => ({ pagines: [{ qui: "", text: "Bosc de Sant Joan.\n«Qui busca la font, que segueixi l'aigua... i qui no, que no es perdi.»" }] }),
-    cartellCirosa: E => ({ pagines: [{ qui: "", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí a munt)" : "↑ La Cirosa\nEl camí és tancat per una espessor d'arbres i esbarzers. Potser el Gran Til·ler sap per què." }] }),
+    cartellCirosa: E => ({ pagines: [{ qui: "", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí a munt)\n← La masia d'en Jordi\n↓ Les Cel·les" : "↑ La Cirosa\nEl camí és tancat per una bardissa viva. Diuen que només s'aparta amb la fusta del Gran Til·ler.\n← La masia d'en Jordi" }] }),
 
     // ---------------- CARRUATGE VERD ----------------
     homeCarruatge: E => {
@@ -1103,10 +1108,15 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: "", text: "Una roda de carruatge enorme, dreta contra la paret com a decoració. De sota la fusta ve un fil d'aire fred, i una olor de vi i d'humitat." },
-                { qui: "Ineu", text: E.te("runna") ? "Hi ha un forat darrere... Potser si l'empeny des d'un costat, caminant-hi en contra, rodolarà." : "Hi ha alguna cosa al darrere, però la roda pesa com un carro ple. Això no és per jugar a ping-pong... Potser més endavant, amb més força." }
+                { qui: "Ineu", text: E.te("guants") ? "Hi ha un forat darrere... Amb els guants, si l'empenyo des d'un costat, caminant-hi en contra, potser rodolarà." : "Hi ha alguna cosa al darrere, però la roda pesa com un carro ple. Amb les mans soles no la mouré mai." }
             ]
         };
     },
+
+    taverna: E => ({ pagines: [
+        { qui: '', text: 'La porta de la Taverna és tancada amb pany i clau. Al vidre hi ha un paper clavat amb xinxetes: «Avui no servim. — Carmen».' },
+        { qui: 'Ineu', text: 'Des de dins se sent un fil de música d\'acordió, molt baixet... i una olor de fregit que no s\'acaba d\'esvair.' }
+    ] }),
 
     cartellCasaGran: E => ({ pagines: [{ qui: "", text: "La Casa Gran.\nLa reixa del porxo d'arcs fa generacions que és tancada amb cadenes. Diuen que ningú no en recorda la clau... ni si encara hi ha ningú a dins." }] }),
 
@@ -1133,7 +1143,7 @@ const DIALEGS = {
         pagines: [
             { qui: "", text: "Al mig de la gran escalinata, l'Home del Raïm: una escultura de pedra gairebé tan alta com dos homes, amb un carràs de raïm de marbre a les mans." },
             { qui: "Ineu", text: "Té el cap girat cap enrere, com si vigilés la porta de sota l'escala. Sembla que guardi alguna cosa." },
-            { qui: "", text: "(Cal una palanca per fer-lo girar. L'en Jordi de la Caseta en té una.)" }
+            { qui: "", text: "(Cal una palanca per fer-lo girar. L'en Jordi, de la masia a l'oest del Til·ler, en té una.)" }
         ]
     }),
 
@@ -1151,16 +1161,78 @@ const DIALEGS = {
                     { qui: "La Jaumeta", text: "Ei! Tu! Qui coi t'ha dit que podies entrar? Els frares no veniu mai per aquí! Fot el camp o et faig créixer bolets a les orelles!" },
                     { qui: "Ineu", text: "Perdoni... He arribat per l'alzina. Duc aigua de la Font del Bisbe." },
                     { qui: "La Jaumeta", text: "Aigua... de la Font del Bisbe?! Dona'm aixòooo! Fa trenta anys que no en tinc ni una gota neta." },
-                    { qui: "", text: "L'agafa, destapa l'ampolla amb les dents i la buida sencera a l'olla. SPLASH verd! La cabana s'omple d'una olor de menta, de roses i de pluja." },
-                    { qui: "La Jaumeta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Mira, que avui estic de bon humor: els ocells i les guineus xerren, i jo ho sento tot. Escolta: " + pista }
+                    { qui: "", text: "L'agafa, destapa l'ampolla amb les dents i la buida a mitges a l'olla. SPLASH verd! La cabana s'omple d'una olor de menta, de roses i de pluja." },
+                    { qui: "La Jaumeta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? No és al nord de sempre, com et diuen: és al nord de les Cel·les, i han tapat el camí amb una boira que no marxa amb el vent." },
+                    { qui: "La Jaumeta", text: "Mira, he barrejat l'aigua que queda amb farigola, romaní i herba de Sant Joan. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
+                    { qui: "", text: "Has obtingut el BEURATGE DE LA JAUMETA.\nAboca'l a la boira que tapa el camí al nord de les Cel·les." }
                 ],
-                enAcabar: () => { E.treu("aigua_sj"); E.posaFlag("jaumetaVista"); }
+                enAcabar: () => {
+                    E.treu("aigua_sj"); E.posaFlag("jaumetaVista"); E.dona("beuratge");
+                    E.posaObjectiu("Aboca el beuratge de la Jaumeta a la boira que tapa el camí al nord de les Cel·les: duu al Gran Til·ler.");
+                }
             };
         }
         return { pagines: [
             { qui: "La Jaumeta", text: "Ja tornes, xaval? Els ocells m'ho diuen tot. Escolta: " + pista },
             { qui: "La Jaumeta", text: "Ara fot el camp, que tinc feina amb la sopa. I no li diguis a ningú on visc, o et converteixo en bolet." }
         ] };
+    },
+
+    // La boira que tapa el camí al Til·ler (nord de les Cel·les)
+    boiraTiller: E => E.te("beuratge") ? {
+        pagines: [
+            { qui: "", text: "Destapes l'ampolla de la Jaumeta i n'aboques el beuratge a la boira. Fa un so de ferro roent... i la boira es retira davant teu, com si tingués por." },
+            { qui: "Ineu", text: "Ha funcionat! El camí del Gran Til·ler torna a ser net." }
+        ]
+    } : {
+        pagines: [
+            { qui: "", text: "Una boira espessa i freda tapa el camí que puja cap al nord. Quan hi poses la mà, et glaça els dits." },
+            { qui: "Ineu", text: "No hi puc passar... Aquesta boira no és de les que marxen amb el vent. Algú que en sàpiga, de bruixeries, potser la Jaumeta, del bosc, tindria alguna cosa per desfer-la." }
+        ]
+    },
+
+    // La bardissa viva del camí de la Cirosa (s'aparta amb la branca del Til·ler)
+    bardissa: E => {
+        if (!E.te("basto_tiller")) {
+            return { pagines: [
+                { qui: "", text: "Una bardissa viva, de punxes negres, tanca el camí cap al nord-est. Quan t'hi acostes, les branques es belluguen soles." },
+                { qui: "Ineu", text: "El bastó de pelegrí no la tallarà. Potser alguna cosa de fusta viva... la branca del Gran Til·ler?" }
+            ] };
+        }
+        if (!E.flag("bassadoriaNeta")) {
+            return { pagines: [
+                { qui: "", text: "Acostes la branca del Gran Til·ler a la bardissa. S'estremeix... però no es mou." },
+                { qui: "Ineu", text: "Sembla que espera alguna cosa: potser que l'aigua clara de la Bassadòria torni a respirar." }
+            ] };
+        }
+        return { pagines: [
+            { qui: "", text: "Passes la branca del Gran Til·ler entre les punxes. Les branques de la bardissa es retiren, una a una, com si reconeguessin una veu molt antiga." }
+        ] };
+    },
+
+    masiaJordi: E => ({ pagines: [{ qui: "", text: "La masia d'en Jordi: de pedra vella, amb les finestres obertes de bat a bat i una olor de pa torrat. La porta és tancada: en Jordi és al jardí." }] }),
+
+    // El cofre de les joguines de la caseta: la palanca és a sota
+    cofrePalanca: E => {
+        if (E.te("palanca") || E.flag("palanca")) {
+            return { pagines: [{ qui: "", text: "El cofre de les joguines, ple de soldadets de fusta, una baldufa i un tambor sense pell. La palanca ja no hi és." }] };
+        }
+        if (!E.flag("jordiPalanca")) {
+            return { pagines: [
+                { qui: "", text: "Un cofre de joguines. Sota els soldadets de fusta s'hi endevina una palanca de ferro, gran i pesada." },
+                { qui: "Ineu", text: "No és meva... Millor preguntar a en Jordi abans d'agafar-la." }
+            ] };
+        }
+        return {
+            pagines: [
+                { qui: "", text: "Aparteu els soldadets de fusta i una baldufa: sota, entre un tambor sense pell i una pilota, hi ha una palanca de ferro, de les bones." },
+                { qui: "", text: "Has obtingut la PALANCA." }
+            ],
+            enAcabar: () => {
+                E.dona("palanca"); E.posaFlag("palanca");
+                if (E.flag("cofreCambra")) E.posaObjectiu("Porta la palanca a l'Home del Raïm, al mig de l'escalinata de la Casa Gran.");
+            }
+        };
     },
 
     // ---------------- EL CEMENTIRI ----------------
@@ -1179,12 +1251,18 @@ const DIALEGS = {
         };
     },
 
-    creuCementiri: E => ({
-        pagines: [
-            { qui: "", text: "Una gran creu de pedra al fons del cementiri, amb molsa als peus. A la base, gravat: «Els monjos del Miracle, d'ara i d'abans.»" },
-            { qui: "Ineu", text: "La boira ha marcit les flors, però algú encara les canvia cada setmana. Segur que el Germà Francesc." }
-        ]
-    }),
+    creuCementiri: E => {
+        const gravat = { qui: "", text: "Una gran creu de pedra al fons del cementiri, amb molsa als peus. A la base, gravat: «Els monjos del Miracle, d'ara i d'abans.»" };
+        if (E.te("ram")) return {
+            pagines: [gravat,
+                { qui: "", text: "Treus les flors marcides i deixes el ram del Germà Francesc als peus de la creu. Per un moment, la boira s'aparta i hi toca el sol." }
+            ],
+            enAcabar: () => { E.treu("ram"); E.posaFlag("florsCreu"); E.posaObjectiu("Torna a Sant Antoni: el Germà Francesc t'ha de donar una cosa."); }
+        };
+        return { pagines: [gravat, E.flag("florsCreu")
+            ? { qui: "Ineu", text: "El ram del Germà Francesc encara és fresc. La boira no s'hi acosta." }
+            : { qui: "Ineu", text: "La boira ha marcit les flors, però algú encara les canvia cada setmana. Segur que el Germà Francesc, de Sant Antoni." }] };
+    },
 
     lapida: n => E => {
         const mots = [

@@ -8,13 +8,6 @@
 const DIRS = { avall: { x: 0, y: 1 }, amunt: { x: 0, y: -1 }, esquerra: { x: -1, y: 0 }, dreta: { x: 1, y: 0 } };
 
 const ENEMICS = {
-    // Titella de pràctica del tutorial del Til·ler: no es mou, no fa mal i no es pot derrotar
-    espantaocell: {
-        tex: 'espantaocell', vida: 999, vel: 0, mal: 0, radi: 22, cos: [30, 16], ombra: 0, practica: true,
-        monedes: [0, 0, 0], cor: 0,
-        ia() {}
-    },
-
     escolopendra: {
         tex: 'escolopendra', vida: 2, vel: 95, mal: 1, radi: 20, cos: [40, 16], ombra: 0.3,
         monedes: [0.35, 1, 1], cor: 0.08,
@@ -188,7 +181,7 @@ Object.assign(ZonaBase.prototype, {
     enemic(tipus, x, y, opts = {}) {
         const def = ENEMICS[tipus];
         // Fins que l'Ineu no ha acabat el tutorial del bastó, la boira no ha despertat les bestioles
-        if (!def.practica && !Estat.flag('combatActiu')) return null;
+        if (!Estat.flag('combatActiu')) return null;
         const tex = this.textures.get(def.tex);
         const esc = ((tex.customData && tex.customData.escala) || 1 / RES);
         const spr = this.physics.add.sprite(x, y, def.tex).setScale(esc);
@@ -332,9 +325,9 @@ Object.assign(ZonaBase.prototype, {
             g.lineStyle(2, 0x7a8896, 1).strokePoints([{ x: 32, y: -7 }, { x: 112, y: -5 }, { x: 128, y: 0 }, { x: 112, y: 5 }, { x: 32, y: 7 }], true);
         } else {
             // La imatge és vertical (cap amb ganxo a dalt, virolla a baix): s'agafa pel terç inferior i el cap apunta endavant
-            const t = this.textures.get('arma_basto');
-            g = this.add.image(0, 0, 'arma_basto').setOrigin(0.5, 0.82).setScale(((t.customData && t.customData.escala) || 1) * (agil ? 1.1 : 1));
-            if (agil) g.setTint(0xc8e890);                         // el bastó de Til·ler, amb un toc verd
+            const clau = agil ? 'arma_tiller' : 'arma_basto';       // agil sense Runna = la branca del Til·ler
+            const t = this.textures.get(clau);
+            g = this.add.image(0, 0, clau).setOrigin(0.5, 0.82).setScale(((t.customData && t.customData.escala) || 1) * (agil ? 1.1 : 1));
         }
         const jo = this.ineu;
         const ang = Math.atan2(d.y, d.x);
@@ -375,7 +368,6 @@ Object.assign(ZonaBase.prototype, {
 
     colpejar(e, dany, d) {
         const ara = this.time.now;
-        if (e.def.practica) { this.colpPractica(e, d); return; }
         e.vida -= dany;
         const mort = e.vida <= 0;
         if (e.def.robust) {             // els bosses no perden el torn ni surten volant
@@ -462,37 +454,6 @@ Object.assign(ZonaBase.prototype, {
         seguir();
         this.events.on('update', seguir);
         this.tweens.add({ targets: g, alpha: 0, duration: 520, ease: 'Quad.out', onComplete: () => { this.events.off('update', seguir); g.destroy(); } });
-    },
-
-    // Cop a un espantaocell: s'agita i compta cap al tutorial
-    colpPractica(e, d) {
-        Sfx.cop(false);
-        this.hitStop(45);
-        this.cameras.main.shake(80, 0.003, true);
-        e.spr.setTintFill(0xffffff);
-        this.time.delayedCall(80, () => { if (e.spr.active) e.spr.clearTint(); });
-        this.tweens.add({ targets: e.spr, angle: { from: -14, to: 0 }, duration: 260, ease: 'Elastic.out' });
-        const c = e.spr.body.center;
-        this.impacte(c.x, c.y - 20, d || DIRS.avall, 0);
-        const f = Estat.dades.flags;
-        f.practica = (f.practica || 0) + 1;
-        this.flotant(c.x, c.y - 90, `${Math.min(f.practica, 6)}/6`, '#f5ecd0');
-        if (f.practica >= 6 && !Estat.flag('tutorialCombat')) this.acabarTutorial();
-    },
-
-    acabarTutorial() {
-        Estat.posaFlag('tutorialCombat');
-        this.time.delayedCall(500, () => this.ui().obrirDialeg({
-            pagines: [
-                { qui: 'El Gran Til·ler', text: "Prou, prou, petit monjo! Ja saps manejar el bastó. Recorda: més val allunyar-se d'una bestiola enutjada que no pas embolicar-se amb ella." },
-                { qui: 'El Gran Til·ler', text: "Escolta. Sota terra s'ha esquerdat un segell molt antic, i la boira desperta les bestioles del vell cementiri." },
-                { qui: '', text: "La boira s'espesseix. A partir d'ara hi haurà escolopendres, gripaus i visitants perduts pels camins.\nAtac: J o ESPAI." }
-            ],
-            enAcabar: () => {
-                Estat.posaFlag('combatActiu');
-                Estat.posaObjectiu('La boira ha despertat bestioles: ves amb compte pels camins i segueix investigant.');
-            }
-        }));
     },
 
     derrotar(e) {

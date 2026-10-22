@@ -11,6 +11,7 @@ const ROV_OPOSAT = { N: 'S', S: 'N', E: 'W', W: 'E' };
 class ZonaRovellonera extends ZonaBase {
     constructor() {
         super('ZonaRovellonera', {
+            pins: { pi: 0.6 },
             nom: 'Rovellonera',
             amplada: 1600,
             alcada: 1100,
@@ -43,20 +44,20 @@ class ZonaRovellonera extends ZonaBase {
         const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
         for (let x = 60; x < 1560; x += 105) {
             if (Math.abs(x - 800) < 120) continue;
-            this.posar('xiprer', x + rnd() * 30, 40 + rnd() * 30, { col: { w: 28, h: 14 } });
-            this.posar('xiprer', x + rnd() * 30, 1060 + rnd() * 30, { col: { w: 28, h: 14 } });
+            this.posar(rnd() < 0.55 ? 'pi' : 'xiprer', x + rnd() * 30, 40 + rnd() * 30, { col: { w: 28, h: 14 } });
+            this.posar(rnd() < 0.55 ? 'pi' : 'xiprer', x + rnd() * 30, 1060 + rnd() * 30, { col: { w: 28, h: 14 } });
         }
         for (let y = 130; y < 1000; y += 105) {
             if (Math.abs(y - 550) < 120) continue;
-            this.posar('xiprer', 40 + rnd() * 30, y + rnd() * 30, { col: { w: 28, h: 14 } });
-            this.posar('xiprer', 1540 + rnd() * 30, y + rnd() * 30, { col: { w: 28, h: 14 } });
+            this.posar(rnd() < 0.55 ? 'pi' : 'xiprer', 40 + rnd() * 30, y + rnd() * 30, { col: { w: 28, h: 14 } });
+            this.posar(rnd() < 0.55 ? 'pi' : 'xiprer', 1540 + rnd() * 30, y + rnd() * 30, { col: { w: 28, h: 14 } });
         }
         // Pins soltes a l'interior, lluny del centre i dels passos
         for (let i = 0; i < 18; i++) {
             const x = 160 + rnd() * 1280, y = 160 + rnd() * 780;
             if (Phaser.Math.Distance.Between(x, y, 800, 550) < 230) continue;
             if (Math.abs(x - 800) < 140 || Math.abs(y - 550) < 140) continue;
-            this.posar(i % 3 ? 'xiprer' : 'arbre', x, y, { col: { w: 28, h: 14 } });
+            this.posar(i % 3 ? 'pi' : 'arbre', x, y, { col: { w: 28, h: 14 } });
         }
 
         // Rovellons sota els pins, al costat de la sortida correcta
@@ -142,6 +143,7 @@ class ZonaRovellonera extends ZonaBase {
 class ZonaCamiRov extends ZonaBase {
     constructor() {
         super('ZonaCamiRov', {
+            pins: { pi: 0.5 },
             nom: 'Camí de la Rovellonera',
             amplada: 2800,
             alcada: 1400,
@@ -174,7 +176,7 @@ class ZonaCamiRov extends ZonaBase {
                 if (tram.some(([tx, ty, tw, th]) => px > tx - 90 && px < tx + tw + 90 && py > ty - 70 && py < ty + th + 90)) continue;
                 if (Math.abs(px - 2640) < 190 && py > 380 && py < 640) continue;   // que cap arbre tapi el cartell
                 if (Phaser.Math.Distance.Between(px, py, 880, 880) < 170 || Phaser.Math.Distance.Between(px, py, 1300, 830) < 120) continue;
-                this.posar(rnd() < 0.5 ? 'xiprer' : 'arbre', px, py, { col: { w: 30, h: 14 } });
+                this.posar(rnd() < 0.6 ? 'pi' : 'arbre', px, py, { col: { w: 30, h: 14 } });
             }
         }
         [[2300, 460], [1500, 770], [1100, 560], [620, 1100], [500, 1330], [900, 1000]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 70, h: 26 } }));
@@ -216,6 +218,7 @@ class ZonaCamiRov extends ZonaBase {
 class ZonaGabriel extends ZonaBase {
     constructor() {
         super('ZonaGabriel', {
+            pins: { pinyer: 0.3 },
             nom: 'Ermita de Sant Gabriel',
             amplada: 1600,
             alcada: 1100,
@@ -291,6 +294,7 @@ class ZonaGabrielInt extends ZonaBase {
 class ZonaDipositos extends ZonaBase {
     constructor() {
         super('ZonaDipositos', {
+            pins: { pi: 0.5 },
             nom: 'Els Dipòsits',
             amplada: 1600,
             alcada: 1000,
@@ -332,6 +336,7 @@ class ZonaDipositos extends ZonaBase {
 class ZonaDolmen extends ZonaBase {
     constructor() {
         super('ZonaDolmen', {
+            pins: { pi: 0.45 },
             nom: 'El Dolmen',
             amplada: 1600,
             alcada: 1100,

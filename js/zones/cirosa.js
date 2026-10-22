@@ -7,6 +7,7 @@
 class ZonaCamiCirosa extends ZonaBase {
     constructor() {
         super('ZonaCamiCirosa', {
+            pins: { pi: 0.5 },
             nom: 'Camí de la Cirosa',
             amplada: 1400,
             alcada: 2200,
@@ -62,6 +63,7 @@ class ZonaCamiCirosa extends ZonaBase {
 class ZonaCirosa extends ZonaBase {
     constructor() {
         super('ZonaCirosa', {
+            pins: { pi: 0.45 },
             nom: 'La Cirosa',
             amplada: 1800,
             alcada: 1200,

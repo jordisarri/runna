@@ -16,6 +16,7 @@ const VELOCITAT_INEU = 230;
 const TRONC_ARBRE = esc => ({ w: Math.round(100 * esc), h: Math.round(36 * esc) });
 
 const PROFUNDITAT_PORTA = 36;   // els interiors es surten per sota de la porta: l'Ineu l'ha de traspassar abans de canviar de zona
+const MARGE_TEULADA = 62;   // mig cos de l'Ineu: la col·lisió d'un edifici comença així de baix de la seva teulada, i per dalt es pot passar-hi darrere
 const TOPE_Y = 100;   // els peus de l'Ineu no passen d'aquí amunt: sempre se li veu el cos (la càmera s'atura a y=0)
 
 class ZonaBase extends Phaser.Scene {
@@ -265,11 +266,17 @@ class ZonaBase extends Phaser.Scene {
     // Imatge del catàleg amb els peus a (x, y). col = { w, h } caixa de col·lisió a la base.
     // fonsY: línia de profunditat (per defecte y); l'Ineu es dibuixa davant si és més avall.
     posar(key, x, y, opts = {}) {
+        // Algunes zones (config.pins = { pi, pinyer }: proporcions) canvien una part dels arbres per pins; l'elecció és fixa per posició
+        if (key === 'arbre' && this.config.pins && !(opts.col && opts.col.fix) && !opts.escala) {
+            const h = Math.abs(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453) % 1, P = this.config.pins;
+            if (h < (P.pi || 0)) key = 'pi'; else if (h < (P.pi || 0) + (P.pinyer || 0)) key = 'pi_pinyer';
+            if (key !== 'arbre') opts = Object.assign({}, opts, { col: { w: key === 'pi' ? 30 : 46, h: 16 } });
+        }
         const tex = this.textures.get(key);
         const escala = (tex.customData && tex.customData.escala) || 1 / RES;
         const img = this.add.image(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
         img.setDepth(opts.fonsY !== undefined ? opts.fonsY : y);
-        if (/^(arbre|xiprer|roure|alzina_buida|pinassa|rovello)$/.test(key)) (this.copes = this.copes || []).push(img);   // copes que es tornen translúcides si amaguen un enemic
+        if (/^(arbre|xiprer|pi|pi_pinyer|roure|alzina_buida|pinassa|rovello)$/.test(key)) (this.copes = this.copes || []).push(img);   // copes que es tornen translúcides si amaguen un enemic
         // Tots els arbres del mateix gràfic tenen el mateix tronc sòlid (arrels incloses), proporcional a l'escala
         if (key === 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: TRONC_ARBRE(opts.escala || 1) });
         if (opts.col) this.colisio(x + (opts.col.dx || 0), y - opts.col.h / 2 + (opts.col.dy || 0), opts.col.w, opts.col.h);
@@ -345,9 +352,12 @@ class ZonaBase extends Phaser.Scene {
         return img;
     }
 
-    // Bloc invisible darrere d'un edifici: no s'hi ha de poder passar per darrere (amb la silueta fantasma, l'Ineu es veuria a través de la façana)
+    // Bloc invisible darrere d'un edifici: l'Ineu no hi ha de travessar la façana (amb la silueta fantasma, es veuria a través).
+    // dalt = on comença el gràfic. A la part de la teulada hi queda un marge (MARGE_TEULADA) lliure: l'Ineu hi pot passar
+    // per darrere de l'edifici, amb el cos tapat per la façana (però mai per sobre de TOPE_Y, on els peus no arriben).
     blocDarrere(x, ample, baix, dalt = 0) {
-        if (baix - dalt > 10) this.colisio(x, (dalt + baix) / 2, ample, baix - dalt);
+        const cim = Math.max(dalt, TOPE_Y) + MARGE_TEULADA;
+        if (baix - cim > 10) this.colisio(x, (cim + baix) / 2, ample, baix - cim);
     }
 
     cartell(x, y, dialeg) {
@@ -428,8 +438,9 @@ class ZonaBase extends Phaser.Scene {
     }
 
     // Emissor de boira fosca
-    boira(x, y, ample = 120, alt = 40, quantitat = 1) {
+    boira(x, y, ample = 120, alt = 40, quantitat = 1, to = null) {
         return this.add.particles(x, y, 'boira', {
+            ...(to ? { tint: to } : {}),
             x: { min: -ample / 2, max: ample / 2 },
             y: { min: -alt / 2, max: alt / 2 },
             speedX: { min: -12, max: 12 },
@@ -586,7 +597,7 @@ class ZonaBase extends Phaser.Scene {
         this.time.delayedCall(700, () => p.destroy());
         this.forcat = { vx: -d.x * 60, vy: -d.y * 60, fins: ara + 80 };
         this.enemics.forEach(e => {
-            if (e.mort || e.def.practica) return;
+            if (e.mort) return;
             const c = e.spr.body.center;
             if (Phaser.Math.Distance.Between(c.x, c.y, fx, fy) < 64 + e.def.radi) this.colpejar(e, 1, d);
         });

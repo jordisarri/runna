@@ -7,7 +7,7 @@
 // ---------------- ESGLÉSIA (interior) ----------------
 // La nau fa 800 d'ample (x 240-1040). El retaule ocupa tot l'ample i es veu sencer (800 x 990); al seu peu hi ha dues
 // portes: la de la dreta duu a la torre de l'escala (ZonaTorre) i d'allà a les golfes del rellotge.
-const ESG = { alcada: 1640, retY: 1010, retTop: 20, sostre: 1000, portaDx: 870, portaEsq: 408 };
+const ESG = { alcada: 1640, retY: 1010, retBaix: 24, retTop: 20, sostre: 1000, portaDx: 870, portaEsq: 408 };
 
 class ZonaEsglesia extends ZonaBase {
     constructor() {
@@ -27,7 +27,7 @@ class ZonaEsglesia extends ZonaBase {
         this.terra('rajola', 240, 0, 800, A, -1100);
         const murs = this.add.graphics().setDepth(-1000);
         murs.fillStyle(0x4a1e22, 1).fillRect(240, 0, 800, ESG.retY);                 // paret del fons, darrere el retaule
-        murs.fillStyle(0xe8dcc4, 1).fillRect(240, ESG.retY - 8, 800, 8);            // sòcol
+        murs.fillStyle(0x2e1216, 1).fillRect(240, ESG.retY - 8, 800, 8);            // sòcol fosc (si el retaule no el tapa del tot, no es veu cap línia clara)
         murs.fillStyle(0xcdb89a, 1).fillRect(200, 0, 40, A).fillRect(1040, 0, 40, A);
         this.colisio(120, A / 2, 240, A);
         this.colisio(1160, A / 2, 240, A);
@@ -36,7 +36,7 @@ class ZonaEsglesia extends ZonaBase {
         this.colisio(860, A - 10, 360, 20);
 
         // Retaule Major (tot l'ample de la nau, sencer) i, al davant, l'altar de pedra
-        this.retaule = this.posar('retaule', 640, ESG.retY, { fonsY: 900 });
+        this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
         this.interactiu(640, ESG.retY + 36, 130, DIALEGS.retaule, { altura: 170 });
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
         this.interactiu(640, ESG.retY + 140, 90, () => this.rezar(), { altura: 100 });
@@ -123,10 +123,11 @@ class ZonaMonestir extends ZonaBase {
     constructor() {
         const D = MONESTIR_DY;
         super('ZonaMonestir', {
+            pins: { pinyer: 0.35 },
             nom: 'El Monestir',
             amplada: 1600,
             alcada: 800 + D,
-            entrades: { placa: { x: 60, y: 520 + D, dir: 'dreta' }, cementiri: { x: 1480, y: 70, dir: 'avall' } }
+            entrades: { placa: { x: 60, y: 520 + D, dir: 'dreta' }, cementiri: { x: 1480, y: 70, dir: 'avall' }, santantoni: { x: 1530, y: 560 + D, dir: 'esquerra' } }
         });
     }
 
@@ -136,8 +137,9 @@ class ZonaMonestir extends ZonaBase {
         this.terra('llamborda', 0, 430 + D, 1600, 370);  // la mateixa plaça empedrada, fins a baix de tot
         this.terra('cami', 1400, 0, 160, 460 + D);         // cap al cementiri (darrere el Monestir i el Santuari)
 
-        this.posar('monestir', 800, 440 + D, { col: { w: 600, h: 140, dy: -10 } });
-        this.blocDarrere(800, 600, 295 + D);
+        // 800 d'ample: la façana surt per dalt de la pantalla i només es veu a partir de les últimes fileres de teula
+        this.posar('monestir', 800, 440 + D, { col: { w: 790, h: 180, dy: -10 } });
+        this.blocDarrere(800, 790, 405);
         this.interactiu(800, 450 + D, 70, DIALEGS.enConstruccio('Biblioteca del Monestir'), { altura: 90 });
         this.npc('pare_alcui', 600, 540 + D, DIALEGS.pareAlcui);
         // Xiprers alts a l'esquerra del portal i una conífera a la dreta (com a la foto del monestir)
@@ -145,13 +147,14 @@ class ZonaMonestir extends ZonaBase {
         this.posar('xiprer', 1165, 450 + D, { escala: 1.9, col: { w: 30, h: 12 } });
 
         this.cartell(1480, 450 + D, () => ({ pagines: [{ qui: '', text: '→ Cel·les de Sant Antoni\n↑ El Cementiri (darrere el Monestir i el Santuari)' }] }));
-        this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720], [420, 770], [1520, 560], [1520, 760], [1090, 770], [750, 780]].map(([x, y]) => [x, y + D]));
+        this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720], [420, 770], [1520, 760], [1090, 770], [750, 780]].map(([x, y]) => [x, y + D]));
 
         this.enemic('visitant', 1100, 700 + D);
         this.enemic('escolopendra', 400, 700 + D);
         this.enemic('escolopendra', 1200, 360 + D);
         this.sortida(0, 450 + D, 14, 140, 'ZonaPlaca', 'monestir');
         this.sortida(1400, 0, 160, 14, 'ZonaCementiri', 'monestir');
+        this.sortida(1586, 490 + D, 14, 140, 'ZonaSantAntoni', 'monestir');
     }
 }
 
@@ -239,11 +242,11 @@ class ZonaCreu extends ZonaBase {
     }
 }
 
-// ---------------- CASA GRAN, LA FONT I L'HOME DEL RAÏM ----------------
+// ---------------- ELS ARCS DE LA CASA GRAN (façana, escalinata i porxo d'arcs) ----------------
 class ZonaCasaGran extends ZonaBase {
     constructor() {
         super('ZonaCasaGran', {
-            nom: 'La Casa Gran i la Font',
+            nom: 'Els arcs de la Casa Gran',
             amplada: 1600,
             alcada: 1100,
             entrades: {
@@ -276,19 +279,15 @@ class ZonaCasaGran extends ZonaBase {
         // Cartell a terra, a la dreta de les escales
         this.cartell(1180, 860, DIALEGS.cartellCasaGran);
 
-        // La Font de la Mare de Déu, a la part baixa de l'escena (separada de la casa)
-        this.posar('font', 250, 1040, { col: { w: 110, h: 34 } });
-        this.interactiu(250, 1045, 90, DIALEGS.font, { altura: 150 });
-
         // Cartell que indica la Taverna, a la vora de la sortida de l'esquerra
-        this.cartell(170, 880, DIALEGS.enConstruccio('← La Taverna'));
+        this.cartell(170, 880, () => ({ pagines: [{ qui: '', text: '← La Taverna i l\'Hostatgeria\n→ La Plaça del Santuari' }] }));
 
         // Arbres només a la dreta, deixant el camí lliure
         this.arbres([[1480, 300], [1530, 520], [1470, 740]]);
 
         // Les sortides són a sota de la casa (la façana no les tapa)
         this.sortida(1586, 880, 14, 160, 'ZonaPlaca', 'casaGran');
-        this.sortida(0, 880, 14, 160, 'ZonaJardi', 'taverna');
+        this.sortida(0, 880, 14, 160, 'ZonaTaverna', 'casagran');
     }
 }
 

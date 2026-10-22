@@ -15,9 +15,25 @@ indicada. Per això: fons blanc pur i res de blanc a la vora de l'objecte.
 **Perspectiva:** els **edificis** es veuen com a *A Link to the Past*: façana de cara i teulada visible des de dalt, sense parets laterals. La resta d'objectes, vista 3/4 des de dalt (uns 30°) i de cara a la càmera.
 Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està inclòs a cada prompt.
 
+## Estat
+
+**Fets** (ja són a `assets/`): `alzina_buida`, `arbre`, `arma_basto`, `bolet`, `branca`, `casa_gran`, `cel_stantoni`, `cercle_bolets`, `ermita`, `ermita_gabriel`, `esbarzer`, `esglesia`, `hostatgeria`, `monestir`, `retaule`, `retaule_obert`, `roca`, `roure`, `rovello`, `runes`, `sala_pingpong`, `xiprer`.
+
+**Pendents** (el joc encara fa servir el dibuix provisional): `altar`, `bassadoria`, `cabana`, `carro_sansa`, `carruatge`, `caseta_joc`, `cel_ntrasra`, `cel_stbenet`, `cofre`, `columna`, `columna_proces`, `creu`, `creu_desaparicio`, `daniel_t`, `diposit`, `eloi`, `escolopendra`, `espelma`, `farigola`, `flors`, `foc`, `font_sj`, `frederic`, `garf`, `germa_andreu`, `germa_francesc`, `gripau`, `herba_sj`, `home_carruatge`, `home_raim`, `isidre`, `jaumeta`, `jordi_caseta`, `josep`, `judit`, `juli`, `lapida`, `llac`, `llosa`, `marit_neus`, `masia`, `nena_trenes`, `neus`, `ocell`, `olla`, `ombra_monjo`, `ovella`, `ovella_boira`, `pare_alcui`, `pare_daniel`, `pare_jordi`, `pastor_a`, `pastor_b`, `pastor_boira`, `pastor_vell`, `pergami`, `pergola`, `pi`, `pi_pinyer`, `pianista`, `porxo`, `romani`, `runna_pedra`, `sansa`, `taula_pedra`, `taula_pp`, `taula_sopar`, `taverna`, `telescopi_mon`, `tieta`, `tieta2`, `tiller`, `tomba_esquerdada`, `turbo`, `visitant`, `yordi`.
+
+**Nous, encara sense ús al joc** (preparats per a quan es facin): `andreu_guardia`, `arbre_sec`, `ferralla`, `gabia`, `gabia_oberta`, `guants_poder`, `home_raim_desperta`, `ocell_boira`, `ocellaire`, `ram_flors`, `ratpenat_boira`, `runes_ombra`.
+
+Els prompts de sota són només dels pendents i dels nous.
+
 ---
 
 ## Edificis
+
+### `taverna.png` (amplada 640) *(La Taverna, entre l'Hostatgeria i els arcs de la Casa Gran. Edifici de poble de dues plantes, amb una ensenya de ferro. La porta és tancada: la Carmen no obre. El joc l'espera a `assets/taverna.webp`; si el poses com a PNG, passa'l amb eines/convertir_webp.js.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. The front facade of an old village tavern with two floors: ground floor of rough ochre sandstone blocks with two small barred windows on each side, a central round-arched wooden door with a stone frame and a small iron lantern, a wrought-iron bracket sign hanging to the right of the door showing a golden beer mug on a cream disc (no text); the upper floor in warm cream plaster with five windows with open green wooden shutters and warm light inside; stone corner quoins, a wooden beam cornice with visible beam ends under a low pitched roof of terracotta tiles. A couple of wooden barrels stacked beside the door. Cozy, slightly weathered. About 1.6:1 width to height. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above, with the roof planes sloping away from the viewer in perspective (you can see the roof surface and ridge). EVERY roof is a pitched, sloped roof covered with visible rows of terracotta clay tiles, NEVER a flat roof. Strictly NO side walls visible, the building is symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
+```
 
 ### `cel_stbenet.png` (amplada 420) *(Cel·les de Sant Benet (referència: la foto de Sant Benet). Edifici petit.)*
 
@@ -29,6 +45,31 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 
 ```
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. The front facade of a large three-storey rectangular block of rough brown fieldstone masonry with pale stone corner quoins, a low-pitched roof of orange terracotta tiles with slightly projecting eaves; regular grid of round-arched windows (four columns by three rows), each with a light stone frame and brown wooden shutters, the bottom row with black iron grilles; austere and quiet. About 1.3:1 width to height. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above, with the roof planes sloping away from the viewer in perspective (you can see the roof surface and ridge). EVERY roof is a pitched, sloped roof covered with visible rows of terracotta clay tiles, NEVER a flat roof. Strictly NO side walls visible, the building is symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
+```
+
+### `runes_ombra.png` (amplada 760) *(Les Runes amb l'ombra del monjo ja projectada al mur. És l'edició del gràfic `runes` que ja tens: puja'l al generador com a imatge de referència i demana aquest canvi. Surt a `assets/runes_ombra.png`; el joc el mostrarà superposat a `runes` i li farà «respirar» l'opacitat.)*
+
+**Com ha de ser l'ombra (perquè sigui convincent):**
+- **On:** al llenç llis de pedra a l'ESQUERRA de la porta fosca d'arc (entre l'arc lateral amb el xiprer i la porta), aproximadament entre el 36% i el 47% de l'ample i entre el 52% i el 78% de l'alçada. Així no tapa la porta, ni les finestres, ni s'enfonsa a la zona que ja és d'ombra natural a la dreta de la porta (allà no es llegiria).
+- **Què:** un monjo encaputxat, de perfil cap a la porta, agenollat i corbat endavant amb les mans unides, com si pregués. Silueta clara i llegible d'un cop d'ull (la caputxa punxeguda i les mans unides són el que la fa «monjo»).
+- **Mida:** uns 28% de l'alçada de la imatge (una mica més que l'Ineu en pantalla).
+- **Com és d'«ombra de mur»:** els carreus la «trenquen» (la silueta fa un petit salt a les juntes de les pedres) i les línies de pedra es continuen veient a través; vora suau però definida; color índigo-violeta profund translúcid (≈55% d'opacitat), mai negre pla. Una molt tènue llum violeta a la vora la fa sobrenatural: **no hi ha cap objecte que la projecti** (la llum de l'escena ve de dalt a l'esquerra, i aquesta ombra no hi obeeix).
+- **Estil:** el mateix d'aquest gràfic (pintat a mà, cel·shading suau); l'ombra no té contorn marró.
+
+```
+Use the attached image of the ruined church facade as the exact base (image-to-image edit). Keep EVERYTHING identical: same canvas size and aspect ratio, same composition, the same lines, colors, outlines, lighting, vegetation and the plain pure white background. Do not redraw, crop, shift, rescale or restyle anything. Change only one thing: add the cast shadow of a praying monk on the large flat sandstone wall to the LEFT of the dark arched doorway (between the left arched side-vault with the cypress and the doorway), spanning roughly 36%-47% of the image width and 52%-78% of its height, clearly clear of the doorway and the windows. The shadow is the silhouette of a hooded monk in a long habit seen in profile facing the doorway, kneeling and bowed forward with his hands joined in prayer, pointed hood, about 28% of the image height tall. Make it look truly cast on the wall: it breaks slightly at the joints of the stone blocks and the stone lines stay visible through it, soft but defined edges, translucent deep indigo-violet at about 55% opacity (never flat black), no brown outline, with a very faint violet glow along its edge so that it feels uncanny, as if nothing is casting it. Same flat hand-painted cel-shaded storybook style as the base image. No extra characters, no text, no light rays, no changes anywhere else.
+```
+
+**Variant per superposar amb animació (opcional, millor per al joc):** si prefereixes tenir l'ombra com a capa a part (així el joc la pot fer aparèixer, desaparèixer i respirar sense duplicar tot el gràfic), demana això després de l'anterior:
+
+```
+Using the previous result, output a second image with the EXACT same canvas size, aspect ratio and framing, containing ONLY the monk's shadow, at exactly the same position and size, on a plain pure white (#FFFFFF) background: no wall, no building, no ground, no other elements. Keep the shadow's translucent deep indigo-violet color, its soft edges and its faint violet glow. Do not move or resize it.
+```
+
+### `caseta_joc.png` (amplada 240) *(Caseta de joc del jardí de la masia d'en Jordi. Dins hi ha la palanca. Ja té un dibuix provisional al joc.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. The front facade of a small wooden playhouse for children in a farm garden: walls of vertical planks painted warm yellow with a red painted base strip, a small round window with a cross-shaped frame, a small arched red wooden door with a golden knob, a little pitched roof of blue-painted wooden shingles, a tiny red pennant flag on the ridge, a toy blue bucket and a small wooden spade leaning at the side; cozy, a bit worn, child-sized (looks only slightly taller than a person). About 1.05:1 width to height. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above. Strictly NO side walls visible, symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
 ```
 
 ### `masia.png` (amplada 520)
@@ -65,36 +106,40 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A large oval stone pool (the old village washing pool): a low rim of two stepped courses of grey stone around murky green water with a faint purple mist; a black wrought-iron railing with vertical bars running around the back half of the rim; at the front center two square stone gate pillars with caps and a small iron gate between them; on each side of the gate a rectangular stone trough, the left one with red flowers. About 1.6:1 width to height. Camera angle: classic JRPG 3/4 top-down, seen from about 45 degrees above, the top surface clearly visible, not isometric, no strong perspective distortion.
 ```
 
-### `font.png` (amplada 110)
+### `font_sj.png` (amplada 190) *(Font del Bisbe, al Bosc de Sant Joan: centre de la clariana. Antiga font de pedra adormida, que torna a rajar quan es fa la missió de les herbes)*
 
 ```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A small stone wall fountain with a carved spout and a shallow basin, clear cold water falling. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. An old ornate stone fountain, the 'Bishop's Fountain', centered and symmetric, built in warm pale grey sandstone: two wide round stepped tiers at the base, a large round basin with a thick carved rim and, on the front of the basin, a bishop's mitre carved in relief; the basin holds dark murky still water with a faint lilac tint and a few ripples; from the middle of the basin rises a fluted stone pedestal carrying a smaller upper bowl, topped by a small finial with a mitre and a cross; the fountain is dry and neglected: green moss on the steps and rim, ivy climbing the pedestal, small cracks in the stone, a few drifting wisps of violet mist at its base. Rich craftsmanship, readable at small size, about 1:1 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
 ```
 
-### `font_sj.png` (amplada 130)
+### `herba_sj.png` (amplada 70) *(Herba de Sant Joan (hipèric): la primera de les tres herbes de la font del bosc. Es veu des de lluny: ha de ser clara i vistosa)*
 
 ```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A rustic woodland spring: mossy rocks, a stone trough, a crystal-clear stream, faint icy blue glow. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A small clump of Saint John's wort (hypericum): six slender green stems fanning out with small oval opposite leaves and, at the tip of each stem, a bright golden-yellow five-petal flower with orange stamens; fresh and lively, slightly luminous, very readable at small size, about 1:1.1 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
 ```
 
-### `home_raim.png` (amplada 110) *(L'Home del Raïm (referència: les fotos de l'estàtua). Estàtua de marbre amb el cap girat enrere (es veu la nuca).)*
+### `romani.png` (amplada 70) *(Romaní: substitueix la ruda com a segona herba de la font)*
 
 ```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A tall Baroque white-grey marble statue of a bearded man in classical drapery standing on a small rock base, seen from the FRONT of the pedestal but with his HEAD TURNED COMPLETELY BACKWARDS over the shoulder so we see the back of his head and hair instead of the face, one arm folded across the chest holding a bunch of dark purple grapes; the statue stands on a tall stone pedestal with a stepped moulded base, an octagonal recessed panel on the die and a projecting cornice. Weathered cool marble with soft grey shadows. About 1:2.4 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A small bushy sprig of rosemary: several woody brown stems rising with dense narrow dark-green needle-like leaves along them and clusters of tiny pale blue-lilac flowers near the tips; aromatic, silvery-green tones, very readable at small size, about 1:1.1 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
 ```
 
+### `farigola.png` (amplada 70) *(Farigola: la tercera herba de la font)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A low round cushion of wild thyme: a dense dome of tiny grey-green round leaves covered in small pink-lilac flowers, a few thin woody stems at the base; compact, soft, very readable at small size, about 1.4:1 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+```
 ### `columna_proces.png` (amplada 64) *(Columna de la processó del camí de la Desaparició (referència: la foto del camí). Una de sola, serveix per a les 12: el signe de cada una es mostra al quadre de diàleg. Es fa servir a les 12 columnes del camí de la Desaparició.)*
 
 ```
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A short wayside shrine pillar of rough grey fieldstone masonry with a slightly crooked, hand-built look, lichen and moss on the stone, a flat stone cap on top; on its front face a rectangular ceramic tile panel (azulejo) set into the stone with a thin yellow-ochre and blue border, painted in warm folk-art colours (cobalt blue, mustard yellow, terracotta) showing a simple abstract pilgrim sign in the middle; the panel is slightly weathered. About 1:2 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
 ```
 
-### `columna.png` (amplada 58) *(Columna de la pèrgola del Jardí (columna esvelta de pedra; no és la del camí de la Desaparició). Es fa servir a les dues files de la pèrgola.)*
+### `columna.png` (amplada 58) *(Columna de la pèrgola del Jardí de l'Hostatgeria (esvelta, de pedra; no és la del camí de la Desaparició). Es fa servir a les dues files de la pèrgola, escalada ×1,4: ha de ser ALTA i estreta, perquè les arcades arribin a l'alçada de la planta baixa de la casa.)*
 
 ```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A slender stone column for a garden pergola: a square plinth, a smooth round shaft slightly tapered, a simple moulded capital supporting a flat stone abacus, pale warm grey sandstone with a little moss at the base and a few leaves of climbing ivy wrapped around the shaft. About 1:2.4 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A tall slender round stone column of pale grey sandstone seen from the front: a square plinth base, a smooth shaft with subtle vertical shading and a bit of moss near the bottom, and a plain square capital with a small cornice on top, ready to carry an arch on both sides. Height about 2.4 times its width, symmetric, the base sits flat at the bottom of the image. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
 ```
-
 ### `altar.png` (amplada 150)
 
 ```
@@ -105,12 +150,6 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 
 ```
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A large standing stone tablet with rows of carved mysterious symbols. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-```
-
-### `retaule.png` (amplada 300) *(Retaule barroc del Santuari (referència: les fotos del retaule). Es veu de cara, amb l'altar de marbre al davant.)*
-
-```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A monumental Baroque altarpiece seen straight on, covered in rich gold leaf: a tall central arched niche with a small radiant glory, a dove inside a golden sunburst at the top, twisted Solomonic columns on both sides, two niches on each side with polychrome saints in red, blue, green and ochre robes and golden halos, a crowning arch with scrolls and angels, a lower predella with two small arched doors and a central golden tabernacle, and a pinkish marble altar table with a white cloth in front. Warm glittering gold, red and blue accents. About 1:1 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
 ```
 
 ### `carruatge.png` (amplada 230)
@@ -191,12 +230,11 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A crackling campfire with logs and sparks. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
 ```
 
-### `pergami.png` (amplada 44)
+### `pergami.png` (amplada 70) *(Rotlle tancat, LLARG i estret, amb lacre vermell i cinteta. És l'objecte dels fragments de la crònica del monjo.)*
 
 ```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A small rolled parchment tied with a red ribbon. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A long closed parchment scroll lying slightly diagonal, clearly LONGER than it is thick (about 2.3:1 length to thickness): a thin rolled sheet of cream-and-ochre vellum, the right end showing the visible spiral of the rolled layers, the left end slightly frayed and curling, a few faint brown age stains; a narrow crimson silk ribbon wraps once around the middle and is tied in a small bow, with two ribbon tails hanging down; on top of the ribbon a round blob of melted red sealing wax with uneven dripping edges, a small cross pressed into it and a glossy highlight. Rich detail but very clear shapes. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
 ```
-
 ### `lapida.png` (amplada 40)
 
 ```
@@ -209,6 +247,36 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A large stone tomb with a deep diagonal crack and a faint purple glow inside. Camera angle: classic JRPG 3/4 top-down, seen from about 45 degrees above, the top surface clearly visible, not isometric, no strong perspective distortion.
 ```
 
+
+### `guants_poder.png` (amplada 40) *(Guants de Poder del Germà Francesc (objecte; també serveix d'icona). Permeten moure la roda del Celler.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A pair of old heavy stonemason work gloves made of thick worn brown leather, reinforced with riveted iron plates on the knuckles and a broad cuff, a faint warm golden glow around them as if they held ancient strength, lying one over the other. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+```
+
+### `ram_flors.png` (amplada 34) *(El ram que el Germà Francesc demana portar a la creu del Cementiri.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A small hand-tied bunch of wild mountain flowers (white daisies, lilac thyme, yellow broom and a red poppy) wrapped with a piece of twine. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+```
+
+### `creu_desaparicio.png` (amplada 90) *(Creu de l'Ermita de la Desaparició.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A weathered stone wayside cross on a stepped square base, lichen and moss on the stones, a small faded wreath at its foot, slightly melancholic. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+```
+
+### `flors.png` (amplada 90) *(Mata de flors decorativa (es repeteix per l'escenari).)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A small low clump of wild flowers in the grass: white daisies, lilac thyme and yellow broom, with a few green leaves, no pot. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+```
+
+### `porxo.png` (amplada 340) *(Porxo de la Casa Gran amb la reixa tancada.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. The front of a rustic stone porch of a big old manor house: two thick stone pillars with a wooden beam and a small terracotta tiled roof above, an iron gate between the pillars closed with a wooden bar. About 1.5:1 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+```
 ### `ocell.png` (amplada 34)
 
 ```
@@ -246,9 +314,14 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 ### `pare_alcui.png` (amplada 96)
 
 ```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. Very old monk with white hair, black habit, carrying a thick red book. Chibi proportions (big head, short round body), thick dark-brown outline, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. Old monk librarian, white hair around a bald crown, round wire glasses, black habit with a cream rope belt, holding a thick red leather-bound book against his chest, kind and wise expression. Chibi proportions (big head, short round body), thick dark-brown outline, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
 ```
 
+### `germa_francesc.png` (amplada 96) *(Germà Francesc, de les cel·les de Sant Antoni: prim, alt, barba llarga blanca. Dona els Guants de Poder.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. Very old monk, noticeably TALLER and THINNER than the other monks, long flowing white beard reaching his rope belt, white hair, dark brown habit a bit too short for him, cream rope belt, gentle tired smile, slightly stooped, holding a small bunch of wild flowers in one hand. Chibi proportions (big head, short round body), thick dark-brown outline, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
+```
 ### `pianista.png` (amplada 100)
 
 ```
@@ -387,12 +460,6 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. An old bearded shepherd with a cane. Chibi proportions (big head, short round body), thick dark-brown outline, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
 ```
 
-### `pastor_boira.png` (amplada 110)
-
-```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A tall shepherd in a dark purple cloak, covered in violet mist. Chibi proportions (big head, short round body), thick dark-brown outline, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-```
-
 ### `ombra_monjo.png` (amplada 150)
 
 ```
@@ -403,34 +470,128 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 
 ## Enemics
 
-### `escolopendra.png` (amplada 64)
+Tots els enemics són bestioles o persones **corrompudes per la boira lila**: han de llegir-se bé a mida petita (uns 60-110 px al joc), amb una silueta clara i ulls que brillen.
+
+### `escolopendra.png` (amplada 64) *(Escolopendra: erràtica, surt de l'esquerda del Cementiri. Camins, Runes, Passadís, Cementiri, Bosc.)*
 
 ```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A large red-brown centipede, segmented, many legs. Camera angle: classic JRPG 3/4 top-down, seen from slightly above, whole creature visible, thick dark-brown outline, a single creature.
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A large giant centipede the length of a forearm, glossy segmented reddish-brown armored body with darker bands, many thin orange legs, two long curved antennae and sharp yellow pincers raised in a threatening S-curve pose, faint lilac mist trailing from its joints, small glowing violet eyes. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
 ```
 
-### `gripau.png` (amplada 56)
+### `gripau.png` (amplada 56) *(Gripau corromput: salta i només fa mal mentre salta. Bassadòria.)*
 
 ```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A swollen toad with purple-green skin and glowing eyes. Camera angle: classic JRPG 3/4 top-down, seen from slightly above, whole creature visible, thick dark-brown outline, a single creature.
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A swollen corrupted toad, warty olive-green skin turning sickly purple on the back, puffed throat sac, crouched ready to leap, big glowing violet eyes, a few drops of murky water and lilac mist dripping from it. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
 ```
 
-### `visitant.png` (amplada 96)
+### `visitant.png` (amplada 96) *(Visitant: lent i adormit; en vèncer-lo cau dormint. Plaça, Monestir.)*
 
 ```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A tourist corrupted by mist: orange shirt, grey-green skin, cap and glasses. Camera angle: classic JRPG 3/4 top-down, seen from slightly above, whole creature visible, thick dark-brown outline, a single creature.
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A sleepwalking day-tripper tourist possessed by the mist: orange short-sleeved shirt, beige shorts, baseball cap, round glasses, camera on a strap, grey-green skin, arms stretched forward like a zombie but comical, half-closed glowing violet eyes, mouth open in a yawn, wisps of lilac mist around the feet. Chibi proportions like the other characters. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
 ```
 
-### `ovella.png` (amplada 70)
+### `ovella_boira.png` (amplada 76) *(Ovella de boira: embesteix i queda cansada. Camí de la Cirosa.)*
 
 ```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A fluffy sheep. Camera angle: classic JRPG 3/4 top-down, seen from slightly above, whole creature visible, thick dark-brown outline, a single creature.
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A sheep possessed by the mist: thick dirty-grey wool with lilac smoky tips, black face with angry lowered head ready to charge, small curled horns, glowing violet eyes, hooves scraping the ground, violet fog leaking from the wool. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
 ```
 
-### `ovella_boira.png` (amplada 76)
+### `ovella.png` (amplada 70) *(Ovella normal (sense boira).)*
 
 ```
-Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A fluffy sheep with violet glowing eyes, wrapped in a faint violet mist. Camera angle: classic JRPG 3/4 top-down, seen from slightly above, whole creature visible, thick dark-brown outline, a single creature.
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A fluffy friendly white mountain sheep with a black face and legs, calm pose. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+```
+
+### `pastor_boira.png` (amplada 110) *(Pastor de Boira (el Germà Andreu transformat): mini-boss de la Cirosa.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. Mini-boss: a tall young man in a ragged dark purple shepherd's cloak with the hood up, a long crook staff wrapped in violet mist, the face half hidden, a cruel grin and glowing violet eyes, a cowbell hanging from his belt, swirling lilac fog around the hem. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
+```
+
+### `home_raim.png` (amplada 110) *(L'Home del Raïm com a estàtua (abans del combat).)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A white marble statue of a bearded man carrying a big bunch of grapes on his shoulder, head turned back over his shoulder, on a low square pedestal, veins of grey in the marble, calm and still. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+```
+
+### `home_raim_desperta.png` (amplada 120) *(L'Home del Raïm despert (boss de l'Escalinata).)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. Boss: the same marble statue of the grape man come to life, cracked marble skin with violet light glowing through the cracks, two burning red eyes, swinging the heavy marble bunch of grapes like a club, small pieces of marble falling off. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
+```
+
+### Enemics futurs (Acte 3)
+
+### `ratpenat_boira.png` (amplada 60) *(Ratpenat de boira: Sala de les Gírgoles, sota la Taverna.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A bat made of dark violet mist with leathery wings spread wide, small fangs, glowing violet eyes, the edges of the wings dissolving into smoke. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
+```
+
+### `ocell_boira.png` (amplada 50) *(Ocell de boira: fase 1 del combat final (els ocells robats per l'Ocellaire).)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A small songbird made of grey-violet fog, sharp beak, ragged smoky feathers, glowing violet eyes, diving pose. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
+```
+
+### `ferralla.png` (amplada 90) *(Ferralla viva: passadís sota la Taverna.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A clanking creature assembled from rusty old iron tools (chains, pincers, a cogwheel, hooks) animated by violet mist, two glowing violet eyes in an iron pot used as a head, menacing but not gory. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
+```
+
+### `andreu_guardia.png` (amplada 96) *(El Germà Andreu fent de guàrdia de la Gàbia (segon combat).)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A young monk with dark hair, black habit with violet mist clinging to it, holding a wooden staff like a guard, smug smile, faintly glowing violet eyes. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
+```
+
+### `ocellaire.png` (amplada 140) *(L'Ocellaire (l'Home de la Gàbia): boss final.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. Final boss, the Birdcatcher: a tall gaunt figure in a long tattered dark coat covered in grey feathers, a wide-brimmed hat, a long thin face with a hooked nose, glowing violet eyes, long fingers, small cages and bird whistles hanging from his belt, swirling violet fog and shadowy birds around him. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
+```
+
+### `gabia.png` (amplada 220) *(La Gàbia de l'Ocellaire: només s'obre amb el Cant del Miracle.)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A huge old wrought-iron birdcage big enough for children, domed top with a ring, thick curved bars wrapped in violet mist, a heavy padlock, three sleeping children inside wrapped in soft cocoons of lilac fog. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+```
+
+### `gabia_oberta.png` (amplada 220) *(La Gàbia oberta (després del Cant del Miracle).)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. The same huge wrought-iron birdcage with its door swung wide open and the bars bent outward, the mist gone, warm morning light, empty inside. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+```
+
+---
+
+## Pins (i un arbre mort)
+
+Els pins ja funcionen al joc amb un dibuix provisional fet per codi (`pi` i `pi_pinyer` al catàleg): quan hi hagi el PNG el substituirà sol. Mateix estil que `arbre` i `roure`; la mida d'amplada és la de joc (`arbre` = 300).
+
+| Gràfic | On es fa servir ara |
+|---|---|
+| `pi` (pi roig, alt) | **Rovellonera** (al voltant del 70% dels arbres: «els rovellons creixen sota els pins»), Camí de la Rovellonera, Camí de la Cirosa, Cirosa, Dipòsits, Dolmen, Cabana de la Jaumeta, masia d'en Jordi i el Til·ler (una part) |
+| `pi_pinyer` (pi pinyer, en para-sol) | Camí de la Desaparició, Ermita, Era, Sant Gabriel, Cel·les, Monestir (una part) |
+| `arbre_sec` (arbre mort, encara no s'usa) | Cementiri i Runes, quan es faci |
+
+### `pi.png` (amplada 240) *(Pi roig / pinastre mediterrani. Alt, copa irregular a dalt, no gaire ample)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A tall Mediterranean Scots/Aleppo pine tree: a straight slightly leaning reddish-orange scaly trunk with flaking bark, bare of branches for the lower two thirds, an irregular open crown made of layered flat clouds of blue-green needles at the top, a few cones, some dead brown needle clusters. Height about 1.7 times its width. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the whole tree facing the camera straight on, trunk base and roots visible at the bottom of the image, no ground, no grass, no cast shadow, not isometric, a single tree, same art style, line weight and color treatment as the existing `arbre` and `roure` trees.
+```
+
+### `pi_pinyer.png` (amplada 320) *(Pi pinyer. Copa en para-sol ben ampla)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A stone pine (umbrella pine): a thick curved reddish-brown trunk leaning slightly, splitting into a few strong branches that carry a wide flat umbrella-shaped crown of dark green needle masses, a few big round pine cones. Width about 1.3 times its height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the whole tree facing the camera straight on, trunk base and roots visible at the bottom of the image, no ground, no grass, no cast shadow, not isometric, a single tree, same art style, line weight and color treatment as the existing `arbre` and `roure` trees.
+```
+
+### `arbre_sec.png` (amplada 220) *(Arbre mort)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A dead old tree: a gnarled twisted grey trunk and a few bare crooked branches, a few last dry brown leaves hanging, peeling bark, a small hole in the trunk. About 1:1.2 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the whole tree facing the camera straight on, trunk base and roots visible at the bottom of the image, no ground, no grass, no cast shadow, not isometric, a single tree, same art style, line weight and color treatment as the existing `arbre` and `roure` trees.
 ```
 
 ---
@@ -439,5 +600,4 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 - Genereu cada gràfic **a part**, amb fons blanc pur; el joc ja treu el fons.
 - Si una imatge surt amb fons de quadrícula o degradat, afegiu "plain pure white #FFFFFF background".
 - Els edificis es dibuixen amb els peus (la base) a la part de baix de la imatge; el joc els posa per la base.
-- Ja existeixen `arbre`, `xiprer`, `roure`, `roca`, `esbarzer`, `flors`, `bolet`, `branca`, `cercle_bolets`, `pinassa`, `rovello` i `alzina_buida`.
 - Quan en tingueu un, dieu-m'ho i comprovo la mida, les portes i les col·lisions (issue "Ajustar portes i col·lisions").

@@ -5,6 +5,7 @@
 class ZonaCabana extends ZonaBase {
     constructor() {
         super('ZonaCabana', {
+            pins: { pi: 0.3 },
             nom: 'La cabana de la Jaumeta',
             amplada: 1400,
             alcada: 1000,

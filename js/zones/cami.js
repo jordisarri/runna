@@ -7,6 +7,7 @@
 class ZonaCami extends ZonaBase {
     constructor() {
         super('ZonaCami', {
+            pins: { pinyer: 0.4 },
             nom: 'Camí de la Desaparició',
             amplada: 2800,
             alcada: 900,
@@ -54,6 +55,7 @@ class ZonaCami extends ZonaBase {
 class ZonaErmita extends ZonaBase {
     constructor() {
         super('ZonaErmita', {
+            pins: { pinyer: 0.4 },
             nom: 'Ermita de la Desaparició',
             amplada: 1400,
             alcada: 1000,
@@ -138,6 +140,7 @@ const ERA_BANC_X = 960, ERA_BANC_N = 700, ERA_BANC_S = 880;   // pujats perquè 
 class ZonaEra extends ZonaBase {
     constructor() {
         super('ZonaEra', {
+            pins: { pinyer: 0.4 },
             nom: "L'Era",
             amplada: 1800,
             alcada: 1300,
@@ -208,10 +211,11 @@ class ZonaEra extends ZonaBase {
 }
 
 // ---------------- L'HOSTATGERIA ----------------
-// Un gran edifici de pedra a la dreta i, enganxada al seu lateral esquerre, una pèrgola d'arcades de pedra
-// i columnes (sense sostre: es veu tot l'interior). Dins hi ha la llosa del passadís secret de la masmorra;
-// a l'extrem oest hi ha la Prunera Màgica, i davant l'entrada de la pèrgola, l'Isidre. El camí de l'Era
-// i de la Taverna passa per davant (sud). L'id de la zona continua sent ZonaJardi (les partides desades hi compten).
+// Un gran edifici de pedra a la dreta i, enganxada al seu lateral esquerre, una pèrgola d'arcades de pedra: és un jardí
+// de gespa amb flors (només allà dins n'hi ha). Les arcades del davant són a la mateixa línia que la façana de la casa i
+// tan altes com la seva planta baixa, perquè la façana i la pèrgola es llegeixin com una sola obra. Dins hi ha la Prunera
+// Màgica i la llosa del passadís secret de la masmorra; davant l'entrada, l'Isidre. El camí de l'Era i de la Taverna
+// passa per davant (sud). L'id de la zona continua sent ZonaJardi (les partides desades hi compten).
 class ZonaJardi extends ZonaBase {
     constructor() {
         super('ZonaJardi', {
@@ -227,23 +231,28 @@ class ZonaJardi extends ZonaBase {
         const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
         this.terra('herba', 0, 0, 1800, 1100, -1100);
         this.terra('cami', 0, 880, 1800, 130);            // camí de l'Era a la Taverna, davant la pèrgola i la casa
-        this.terra('pedra', 290, 630, 462, 215, -999).setTint(0xe2d6c2);    // lloses de pedra dins la pèrgola
 
         // --- L'Hostatgeria: edifici gran a la dreta (1100 d'ample; la paret de l'esquerra és a x≈752) ---
         // La porta (~110x150) queda a x≈1339.
-        this.posar('hostatgeria', 1250, 760, { fonsY: 640 });
+        const casa = this.posar('hostatgeria', 1250, 760, { fonsY: 640 });
         this.colisio(1250, 715, 1100, 90);
         this.blocDarrere(1250, 1100, 670);
         this.interactiu(1339, 775, 90, DIALEGS.hostatgeria, { altura: 180 });
 
         // --- Pèrgola de pedra enganxada al lateral esquerre: dues files de columnes unides per arcades ---
-        const COLS = [310, 450, 590, 730], YB = 640, YF = 840, ALT_COL = 139;
+        // Fila del davant a y=760 (la base de la façana); l'alçada de les arcades és la de la planta baixa de la casa
+        // (fins a la cornisa). Fila del darrere 300 més amunt: el jardí hi cap de ple.
+        const COLS = [132, 284, 436, 588, 740], YB = 460, YF = 760;
+        const PLANTA = Math.round(casa.displayHeight * 0.339);            // alçada de la planta baixa de la façana
+        const tex = this.textures.get('columna'), escalaBase = (tex.customData && tex.customData.escala) || 1 / RES;
+        const colH = tex.getSourceImage().height * escalaBase;            // alçada d'una columna sense escalar
+        const ESC = 1.4, ALT_COL = Math.round(colH * ESC), COL_W = Math.round(tex.getSourceImage().width * escalaBase * ESC);
         const pedra = 0xb8b2a4, ombra = 0x6a6458;
         const arcades = this.add.graphics().setDepth(YF + 1);     // arcades del davant (per sobre de l'Ineu si és a dins)
         const darrere = this.add.graphics().setDepth(YB + 1);
         const bigues = this.add.graphics().setDepth(YB + 1);      // bigues transversals: l'Ineu hi passa per davant
         const arc = (g, x1, x2, y) => {
-            const cx = (x1 + x2) / 2, y0 = y - ALT_COL, r = (x2 - x1 - 58) / 2 + 7;
+            const cx = (x1 + x2) / 2, y0 = y - ALT_COL, r = (x2 - x1 - COL_W) / 2 + 7;
             g.lineStyle(20, 0x120c08, 1).beginPath().arc(cx, y0, r, Math.PI, Math.PI * 2).strokePath();
             g.lineStyle(14, pedra, 1).beginPath().arc(cx, y0, r, Math.PI, Math.PI * 2).strokePath();
             g.lineStyle(3, ombra, 0.6).beginPath().arc(cx, y0, r - 4, Math.PI, Math.PI * 2).strokePath();
@@ -254,28 +263,13 @@ class ZonaJardi extends ZonaBase {
         COLS.forEach(x => {
             bigues.lineStyle(16, 0x120c08, 1).lineBetween(x, YB - ALT_COL - 4, x, YF - ALT_COL - 4);
             bigues.lineStyle(10, pedra, 1).lineBetween(x, YB - ALT_COL - 4, x, YF - ALT_COL - 4);
-            this.posar('columna', x, YB, { col: { w: 30, h: 14 } });
-            this.posar('columna', x, YF, { col: { w: 30, h: 14 } });
+            this.posar('columna', x, YB, { escala: ESC, col: { w: 34, h: 14 } });
+            this.posar('columna', x, YF, { escala: ESC, col: { w: 34, h: 14 } });
         });
+        this.pergola = { x0: COLS[0], x1: COLS[COLS.length - 1], yb: YB, yf: YF, planta: PLANTA };
 
-        // --- Vegetació només al terra: flors i plantes ---
-        const flor = (x, y) => {
-            const f = this.posar('flors', x, y, { fonsY: -800, escala: 0.8 + rnd() * 0.5 });
-            f.setTint([0xffffff, 0xffd6e6, 0xfff2b0, 0xd6e8ff][Math.floor(rnd() * 4)]);
-        };
-        for (let i = 0; i < 14; i++) flor(300 + rnd() * 440, 650 + rnd() * 170);                   // entre les columnes
-        for (let i = 0; i < 10; i++) flor(300 + rnd() * 440, 856 + rnd() * 14);                    // vora de la pèrgola
-        for (let i = 0; i < 40; i++) flor(790 + rnd() * 950, 785 + rnd() * 80);                    // parterres davant la casa
-        for (let i = 0; i < 26; i++) flor(60 + rnd() * 640, 160 + rnd() * 440);                    // prat del nord
-        for (let i = 0; i < 6; i++) flor(60 + rnd() * 200, 800 + rnd() * 60);
-
-        // La llosa secreta (passadís cap a la masmorra de l'Hostatgeria): s'obre quan hi creix la flor de lluna
-        this.posar('llosa', 520, 740, { fonsY: -700 });
-        this.florLluna = this.posar('flors', 520, 740, { escala: 0.8 });
-        this.interactiu(520, 745, 80, DIALEGS.llosaJardi, { altura: 60 });
-
-        // La Prunera Màgica, l'únic arbre: a l'esquerra de tot
-        const PX = 120, PY = 720;
+        // La Prunera Màgica, l'únic arbre: dins el jardí de la pèrgola
+        const PX = 290, PY = 640;
         this.posar('arbre', PX, PY, { col: { w: 40, h: 20 } }).setTint(0xcaa0f0);
         this.add.ellipse(PX, PY - 65, 150, 110, 0xb070ff, 0.22).setDepth(8000);
         this.add.particles(PX, PY - 65, 'espurna', {
@@ -285,16 +279,70 @@ class ZonaJardi extends ZonaBase {
         [[-40, -90], [-10, -110], [30, -95], [50, -70], [-55, -60], [10, -70]].forEach(([dx, dy]) => this.add.circle(PX + dx, PY + dy, 7, 0x7a2aa8).setStrokeStyle(2, 0x2a0a40).setDepth(PY + 1));
         this.interactiu(PX, PY + 5, 95, DIALEGS.prunera, { altura: 250 });
 
-        // L'Isidre, davant l'entrada de la pèrgola
-        this.npc('isidre', 520, 915, DIALEGS.isidre);
+        // La llosa secreta (passadís cap a la masmorra de l'Hostatgeria): s'obre quan hi creix la flor de lluna
+        const LX = 570, LY = 690;
+        this.posar('llosa', LX, LY, { fonsY: -700 });
+        this.florLluna = this.posar('flors', LX, LY, { escala: 0.8 });
+        this.interactiu(LX, LY + 5, 80, DIALEGS.llosaJardi, { altura: 60 });
 
-        this.cartell(1500, 860, () => ({ pagines: [{ qui: '', text: '→ La Taverna i la Casa Gran\n← L\'Era' }] }));
+        // --- Gespa amb flors: només dins la pèrgola (cap flor fora). Un rectangle clar fa de gespa ben cuidada ---
+        this.add.rectangle((COLS[0] + COLS[COLS.length - 1]) / 2, (YB + YF) / 2, COLS[COLS.length - 1] - COLS[0], YF - YB, 0xc4f08c, 0.14).setDepth(-1090);
+        const lliure = (x, y) => Math.hypot(x - PX, (y - PY) * 1.6) > 70 && Math.hypot(x - LX, (y - LY) * 1.6) > 60;
+        for (let n = 0, intents = 0; n < 46 && intents < 600; intents++) {
+            const x = COLS[0] + 20 + rnd() * (COLS[COLS.length - 1] - COLS[0] - 40), y = YB + 20 + rnd() * (YF - YB - 30);
+            if (!lliure(x, y)) continue;
+            const f = this.posar('flors', x, y, { fonsY: -800, escala: 0.55 + rnd() * 0.5 });
+            f.setTint([0xffffff, 0xffd6e6, 0xfff2b0, 0xd6e8ff][Math.floor(rnd() * 4)]);
+            n++;
+        }
+
+        // L'Isidre, davant l'entrada de la pèrgola
+        this.npc('isidre', 510, 915, DIALEGS.isidre);
+
+        this.cartell(1500, 860, () => ({ pagines: [{ qui: '', text: '→ La Taverna\n← L\'Era' }] }));
         this.sortida(0, 900, 14, 130, 'ZonaEra', 'jardi');
-        this.sortida(1786, 900, 14, 130, 'ZonaCasaGran', 'oest');
+        this.sortida(1786, 900, 14, 130, 'ZonaTaverna', 'jardi');
     }
 
     actualitzar(ara) {
         this.florLluna.setVisible(Estat.flag('llosaOberta'));
+    }
+}
+
+// ---------------- LA TAVERNA (entre l'Hostatgeria i els arcs de la Casa Gran) ----------------
+// Una sola escena de poble: el camí d'est a oest passa per davant la façana de la Taverna. La porta és tancada
+// (la Carmen no obre a ningú aquests dies; el pas del fons, a la banda de sota, encara no existeix).
+class ZonaTaverna extends ZonaBase {
+    constructor() {
+        super('ZonaTaverna', {
+            nom: 'La Taverna',
+            amplada: 1600,
+            alcada: 1100,
+            entrades: { jardi: { x: 60, y: 960, dir: 'dreta' }, casagran: { x: 1540, y: 960, dir: 'esquerra' } }
+        });
+    }
+
+    construir() {
+        this.terra('herba', 0, 0, 1600, 1100, -1100);
+        this.terra('cami', 0, 880, 1600, 130);              // camí de l'Hostatgeria als arcs de la Casa Gran
+        this.terra('llamborda', 440, 740, 720, 140);        // replà empedrat davant la façana
+
+        // Façana (640 d'ample): la porta d'arc és al mig
+        const t = this.posar('taverna', 800, 750, { fonsY: 640 });
+        this.colisio(800, 705, 640, 90);
+        this.blocDarrere(800, 640, 660, Math.max(0, 750 - t.displayHeight));
+        this.interactiu(800, 765, 90, DIALEGS.taverna, { altura: 170 });
+
+        // Barrils a la dreta de la porta i un banc a l'esquerra, contra la façana
+        this.posar('barril', 1010, 800, { col: { w: 40, h: 16 } });
+        this.posar('barril', 1060, 812, { col: { w: 40, h: 16 } });
+        this.posar('banc', 590, 790, { col: { w: 130, h: 22 } });
+
+        this.cartell(260, 860, () => ({ pagines: [{ qui: '', text: '← L\'Hostatgeria i l\'Era\n→ Els arcs de la Casa Gran' }] }));
+        this.arbres([[130, 250], [300, 180], [200, 560], [1300, 220], [1460, 330], [1400, 600], [260, 1040], [1180, 1050]]);
+
+        this.sortida(0, 900, 14, 130, 'ZonaJardi', 'taverna');
+        this.sortida(1586, 900, 14, 130, 'ZonaCasaGran', 'oest');
     }
 }
 

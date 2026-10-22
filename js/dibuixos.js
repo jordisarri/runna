@@ -267,14 +267,95 @@ function dibuixarTaulaPedra(c, w) {
     });
 }
 
+// Font del Bisbe: font de pedra de dues graderies i una pica rodona amb una mitra gravada al brocal, un pedestal estriat amb
+// una copa petita i un coronament, molsa i heura, l'aigua morta (tèrbola i lila) i volves de boira. Seca i abandonada.
 function dibuixarFontSJ(c, w) {
-    lienc(c, w, w * 0.85, (ctx, W, H) => {
-        ombraTerra(ctx, W / 2, H - 6, W * 0.45, 9);
-        ctx.lineWidth = 3.5; ctx.strokeStyle = CONTORN;
-        ctx.fillStyle = '#a8a092'; ctx.beginPath(); ctx.ellipse(W / 2, H * 0.72, W * 0.44, H * 0.22, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#4a5a58'; ctx.beginPath(); ctx.ellipse(W / 2, H * 0.68, W * 0.34, H * 0.15, 0, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#b8b2a4'; ctx.fillRect(W / 2 - 10, H * 0.15, 20, H * 0.5); ctx.strokeRect(W / 2 - 10, H * 0.15, 20, H * 0.5);
-        ctx.fillRect(W / 2 - 18, H * 0.08, 36, 14); ctx.strokeRect(W / 2 - 18, H * 0.08, 36, 14);
+    lienc(c, w, w * 0.95, (ctx, W, H) => {
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        let sd = 13; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        const lat = (cx, rx, a, b, d) => { const g = ctx.createLinearGradient(cx - rx, 0, cx + rx, 0); g.addColorStop(0, a); g.addColorStop(0.42, b); g.addColorStop(1, d); return g; };
+        // Cilindre de pedra: cos amb llum a l'esquerra, junts verticals i la tapa el·líptica
+        const cil = (cx, y0, y1, rx0, rx1, ry, cTop, a, b, d) => {
+            ctx.fillStyle = lat(cx, Math.max(rx0, rx1), a, b, d); ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.5;
+            ctx.beginPath(); ctx.moveTo(cx - rx0, y0); ctx.lineTo(cx - rx1, y1); ctx.ellipse(cx, y1, rx1, ry * rx1 / rx0, 0, Math.PI, 0, true); ctx.lineTo(cx + rx0, y0); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(40,30,20,0.35)'; ctx.lineWidth = 1.4;
+            for (let k = -3; k <= 3; k++) { const f = k / 3.4; ctx.beginPath(); ctx.moveTo(cx + rx0 * f, y0 + ry * Math.sqrt(Math.max(0, 1 - f * f))); ctx.lineTo(cx + rx1 * f, y1 + ry * (rx1 / rx0) * Math.sqrt(Math.max(0, 1 - f * f))); ctx.stroke(); }
+            ctx.fillStyle = cTop; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.ellipse(cx, y0, rx0, ry, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        };
+        const cx = W / 2;
+        ombraTerra(ctx, cx, H - 7, W * 0.47, 11);
+        // Dues graderies de pedra
+        cil(cx, H * 0.77, H * 0.92, W * 0.46, W * 0.46, H * 0.085, '#bcb4a4', '#a39c8c', '#c2baaa', '#7a7466');
+        cil(cx, H * 0.66, H * 0.78, W * 0.37, W * 0.37, H * 0.07, '#c8c0b0', '#aaa393', '#cdc5b4', '#807a6c');
+        // Pica: brocal ample, cos que s'estreny cap avall
+        cil(cx, H * 0.50, H * 0.67, W * 0.33, W * 0.27, H * 0.09, '#d2cab8', '#b0a999', '#d6cebd', '#847e70');
+        // Aigua morta: tèrbola, entre verd fosc i lila, amb anells
+        const ag = ctx.createRadialGradient(cx - W * 0.06, H * 0.49, 2, cx, H * 0.5, W * 0.3);
+        ag.addColorStop(0, '#6a6f78'); ag.addColorStop(0.6, '#4b4f5e'); ag.addColorStop(1, '#3a3446');
+        ctx.fillStyle = ag; ctx.beginPath(); ctx.ellipse(cx, H * 0.505, W * 0.285, H * 0.068, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = 'rgba(180,150,230,0.35)'; ctx.lineWidth = 1.3;
+        [[0.2, 0.045], [0.12, 0.028]].forEach(([rx, ry]) => { ctx.beginPath(); ctx.ellipse(cx + W * 0.03, H * 0.505, W * rx, H * ry, 0, 0, Math.PI * 2); ctx.stroke(); });
+        // Mitra gravada al brocal: dues puntes, cinta i dues llaçades
+        ctx.save(); ctx.translate(cx, H * 0.605);
+        ctx.fillStyle = '#e4dccb'; ctx.strokeStyle = '#4a4234'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(-W * 0.07, W * 0.045); ctx.quadraticCurveTo(-W * 0.085, -W * 0.03, -W * 0.02, -W * 0.075); ctx.lineTo(0, -W * 0.095); ctx.lineTo(W * 0.02, -W * 0.075);
+        ctx.quadraticCurveTo(W * 0.085, -W * 0.03, W * 0.07, W * 0.045); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(-W * 0.07, W * 0.025); ctx.lineTo(W * 0.07, W * 0.025); ctx.moveTo(0, -W * 0.075); ctx.lineTo(0, W * 0.025); ctx.stroke();
+        ctx.strokeStyle = '#4a4234'; ctx.beginPath(); ctx.moveTo(-W * 0.03, W * 0.045); ctx.lineTo(-W * 0.06, W * 0.085); ctx.moveTo(W * 0.03, W * 0.045); ctx.lineTo(W * 0.06, W * 0.085); ctx.stroke();
+        ctx.restore();
+        // Pedestal estriat amb la copa petita
+        cil(cx, H * 0.18, H * 0.52, W * 0.075, W * 0.095, H * 0.02, '#cfc7b6', '#aaa393', '#d0c8b7', '#7e786a');
+        ctx.strokeStyle = 'rgba(60,50,38,0.4)'; ctx.lineWidth = 1.2;
+        [-0.04, 0, 0.04].forEach(dx => { ctx.beginPath(); ctx.moveTo(cx + W * dx, H * 0.22); ctx.lineTo(cx + W * dx * 1.2, H * 0.5); ctx.stroke(); });
+        cil(cx, H * 0.17, H * 0.2, W * 0.17, W * 0.09, H * 0.045, '#d6cebd', '#b6af9f', '#d8d0bf', '#868072');
+        ctx.fillStyle = '#4a5260'; ctx.beginPath(); ctx.ellipse(cx, H * 0.172, W * 0.145, H * 0.032, 0, 0, Math.PI * 2); ctx.fill();
+        // Coronament: bolla i una petita mitra
+        cil(cx, H * 0.1, H * 0.17, W * 0.03, W * 0.05, H * 0.012, '#d6cebd', '#b0a999', '#d4ccbb', '#827c6e');
+        ctx.fillStyle = '#d6cebd'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(cx, H * 0.075, W * 0.03, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx, H * 0.045); ctx.lineTo(cx, H * 0.005); ctx.moveTo(cx - W * 0.025, H * 0.02); ctx.lineTo(cx + W * 0.025, H * 0.02); ctx.stroke();
+        // Gota d'aigua que no cau (la font és seca) i una esquerda
+        ctx.strokeStyle = 'rgba(30,22,14,0.7)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(W * 0.78, H * 0.62); ctx.lineTo(W * 0.74, H * 0.66); ctx.lineTo(W * 0.76, H * 0.7); ctx.stroke();
+        // Molsa a les graderies i heura al pedestal
+        ctx.lineWidth = 1.6; ctx.strokeStyle = '#26361e';
+        for (let k = 0; k < 26; k++) { const a = r() * Math.PI * 2, rr = 0.22 + r() * 0.2, x = cx + Math.cos(a) * W * rr, y = H * (0.86 + Math.sin(a) * 0.04 * (r() > 0.5 ? 1 : 0.6)); ctx.fillStyle = ['#4a7a34', '#5a8c3e', '#3a6a2a'][k % 3]; ctx.beginPath(); ctx.arc(x, y, W * (0.012 + r() * 0.016), 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+        for (let k = 0; k < 14; k++) { const y = H * (0.26 + k * 0.022), x = cx - W * 0.075 + Math.sin(k * 1.7) * W * 0.03; ctx.fillStyle = ['#3f7a32', '#4f8c3a'][k % 2]; ctx.beginPath(); ctx.ellipse(x, y, W * 0.022, W * 0.013, 0.7 * (k % 2 ? 1 : -1), 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+        // Volves de boira lila vora la base
+        for (let k = 0; k < 5; k++) { ctx.fillStyle = `rgba(170,140,220,${0.22 - k * 0.02})`; ctx.beginPath(); ctx.ellipse(W * (0.18 + k * 0.17), H * (0.9 + (k % 2) * 0.03), W * 0.12, H * 0.035, 0, 0, Math.PI * 2); ctx.fill(); }
+    });
+}
+
+// Herbes de la Nit de Sant Joan que cal trobar al bosc (herba de Sant Joan, romaní i farigola)
+function dibuixarHerba(c, w, tipus) {
+    lienc(c, w, w * 1.1, (ctx, W, H) => {
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        let sd = tipus === 'sj' ? 5 : tipus === 'romani' ? 9 : 17; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        ombraTerra(ctx, W / 2, H - 5, W * 0.38, 6);
+        const base = H - 8;
+        const flor = (x, y, rr, pet, cen, vora) => {
+            ctx.fillStyle = pet; ctx.strokeStyle = vora; ctx.lineWidth = 1.5;
+            for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2 - Math.PI / 2; ctx.beginPath(); ctx.ellipse(x + Math.cos(a) * rr * 0.7, y + Math.sin(a) * rr * 0.7, rr * 0.62, rr * 0.42, a, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+            ctx.fillStyle = cen; ctx.beginPath(); ctx.arc(x, y, rr * 0.38, 0, Math.PI * 2); ctx.fill();
+        };
+        if (tipus === 'sj') {                  // hipèric: tiges primes amb fulles ovalades i flors grogues
+            for (let k = 0; k < 6; k++) {
+                const x1 = W * (0.5 + (k - 2.5) * 0.12), y1 = H * (0.22 + (k % 3) * 0.08);
+                ctx.strokeStyle = '#2c4a22'; ctx.lineWidth = 4.2; ctx.beginPath(); ctx.moveTo(W * 0.5 + (k - 2.5) * 3, base); ctx.quadraticCurveTo(x1 - 4 * (k - 2.5), H * 0.6, x1, y1); ctx.stroke();
+                ctx.strokeStyle = '#6fa04a'; ctx.lineWidth = 2; ctx.stroke();
+                for (let q = 1; q < 5; q++) { const t = q / 5, lx = W * 0.5 + (x1 - W * 0.5) * t, ly = base + (y1 - base) * t; ctx.fillStyle = '#5f9a3e'; ctx.strokeStyle = '#26361e'; ctx.lineWidth = 1.2; [-1, 1].forEach(sg => { ctx.beginPath(); ctx.ellipse(lx + sg * 6, ly, 6, 3, sg * 0.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }); }
+                flor(x1, y1, W * 0.085, '#ffd21f', '#e08a10', '#8a5a08');
+            }
+        } else if (tipus === 'romani') {      // romaní: tiges llenyoses amb fulles d'agulla i floretes blavoses
+            for (let k = 0; k < 5; k++) {
+                const x1 = W * (0.5 + (k - 2) * 0.13), y1 = H * (0.12 + (k % 2) * 0.12);
+                ctx.strokeStyle = '#4a3220'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(W * 0.5 + (k - 2) * 4, base); ctx.quadraticCurveTo(x1, H * 0.55, x1, y1); ctx.stroke();
+                for (let q = 0; q < 16; q++) { const t = 0.15 + q / 16 * 0.85, lx = W * 0.5 + (x1 - W * 0.5) * t + ((q % 2) ? 5 : -5), ly = base + (y1 - base) * t; ctx.strokeStyle = q % 3 ? '#2f5a34' : '#3d7040'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(lx - ((q % 2) ? 3 : -3), ly + 2); ctx.lineTo(lx + ((q % 2) ? 7 : -7), ly - 7); ctx.stroke(); }
+                if (k % 2 === 0) for (let q = 0; q < 3; q++) { ctx.fillStyle = '#9ab8f0'; ctx.strokeStyle = '#3a4a8a'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x1 + (q - 1) * 5, y1 + 3 + (q % 2) * 7, 3.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+            }
+        } else {                               // farigola: coixinet baix de fulletes grisenques amb flors lila rosades
+            ctx.strokeStyle = '#26361e'; ctx.lineWidth = 1.5;
+            for (let k = 0; k < 44; k++) { const a = r() * Math.PI, rr = r(); const x = W * 0.5 + Math.cos(a) * W * 0.4 * rr * (r() > 0.5 ? 1 : -1), y = base - Math.sin(a) * H * 0.36 * (0.2 + rr * 0.8) - 6; ctx.fillStyle = ['#6f8a5a', '#7e9a68', '#5f7a4e'][k % 3]; ctx.beginPath(); ctx.arc(x, y, 4.5 + r() * 3, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+            for (let k = 0; k < 14; k++) { const a = r() * Math.PI, rr = r(); const x = W * 0.5 + Math.cos(a) * W * 0.33 * rr * (r() > 0.5 ? 1 : -1), y = base - Math.sin(a) * H * 0.34 * (0.3 + rr * 0.7) - 10; ctx.fillStyle = ['#d78ac8', '#c070e0', '#f0a0d0'][k % 3]; ctx.strokeStyle = '#5a2a5a'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x, y, 3.8, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+        }
     });
 }
 
@@ -422,28 +503,6 @@ function dibuixarPuntSegell(c, w) {
     });
 }
 
-function dibuixarEspantaocell(c, w) {
-    lienc(c, w, w * 1.5, (ctx, W, H) => {
-        ombraTerra(ctx, W / 2, H - 6, W * 0.3, 7);
-        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN;
-        ctx.fillStyle = '#6b4a2a'; ctx.fillRect(W / 2 - 4, H * 0.3, 8, H * 0.66); ctx.strokeRect(W / 2 - 4, H * 0.3, 8, H * 0.66);
-        ctx.fillRect(W * 0.08, H * 0.42, W * 0.84, 8); ctx.strokeRect(W * 0.08, H * 0.42, W * 0.84, 8);
-        // palla
-        ctx.strokeStyle = '#d8b84a'; ctx.lineWidth = 3;
-        [[0.06, 0.5], [0.94, 0.5]].forEach(([x, y]) => { for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(W * x, H * 0.44); ctx.lineTo(W * x + i * 4, H * y + 12); ctx.stroke(); } });
-        // cos de sac
-        ctx.strokeStyle = CONTORN; ctx.fillStyle = '#b8955a';
-        ctx.beginPath(); ctx.roundRect(W * 0.28, H * 0.44, W * 0.44, H * 0.28, 8); ctx.fill(); ctx.stroke();
-        // cap
-        ctx.fillStyle = '#d8b878'; ctx.beginPath(); ctx.arc(W / 2, H * 0.3, W * 0.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = CONTORN; ctx.fillRect(W * 0.4, H * 0.27, 5, 5); ctx.fillRect(W * 0.55, H * 0.27, 5, 5);
-        ctx.beginPath(); ctx.moveTo(W * 0.4, H * 0.35); ctx.lineTo(W * 0.6, H * 0.35); ctx.stroke();
-        // barret
-        ctx.fillStyle = '#4a3a2a'; ctx.fillRect(W * 0.22, H * 0.15, W * 0.56, 7); ctx.strokeRect(W * 0.22, H * 0.15, W * 0.56, 7);
-        ctx.fillRect(W * 0.33, H * 0.03, W * 0.34, H * 0.13); ctx.strokeRect(W * 0.33, H * 0.03, W * 0.34, H * 0.13);
-    });
-}
-
 function dibuixarBranca(c, w) {
     lienc(c, w, w * 0.4, (ctx, W, H) => {
         ctx.lineWidth = 3; ctx.strokeStyle = CONTORN;
@@ -455,7 +514,7 @@ function dibuixarBranca(c, w) {
 }
 
 function dibuixarPergami(c, w) {
-    const L = w / RES, H = Math.round(L * 0.64);
+    const L = w / RES, H = Math.round(L * 0.46);
     lienc(c, w, H * RES, ctx => { ctx.scale(RES, RES); pintarPergami(ctx, L, H); });
 }
 
@@ -1309,6 +1368,172 @@ function dibuixarHostatgeria(c, w) {
     });
 }
 
+// Taverna: façana de cara amb la teulada vista des de dalt (com els altres edificis). Planta baixa de carreus,
+// pis de guix clar amb persianes verdes, porta d'arc amb marc de pedra, barra d'una ensenya de ferro i barrils al costat.
+function dibuixarTaverna(c, w) {
+    lienc(c, w, w * 0.62, (ctx, W, H) => {
+        ombraTerra(ctx, W / 2, H - 5, W * 0.5, 8);
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        const wb = H - 8, roof = H * 0.30, x0 = W * 0.04, x1 = W * 0.96, pis = H * 0.62;
+        // Paret: pis de guix i planta baixa de carreus
+        ctx.fillStyle = '#e4d2a8'; ctx.fillRect(x0, roof, x1 - x0, pis - roof);
+        carreus(ctx, x0, pis, x1 - x0, wb - pis, '#a89270', H * 0.05, W * 0.06, 29);
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 4; ctx.strokeRect(x0, roof, x1 - x0, wb - roof);
+        ctx.fillStyle = '#c9b48c'; ctx.fillRect(x0 - 3, pis - 4, x1 - x0 + 6, 8); ctx.strokeRect(x0 - 3, pis - 4, x1 - x0 + 6, 8);   // cornisa entre pisos
+        [x0, x1 - W * 0.035].forEach(x => { ctx.fillStyle = '#c4ad82'; ctx.fillRect(x, roof, W * 0.035, wb - roof); ctx.strokeRect(x, roof, W * 0.035, wb - roof); });   // cantoneres
+        // Teulada de teula ceràmica amb ràfec de bigues
+        ctx.fillStyle = '#b8553a';
+        ctx.beginPath(); ctx.moveTo(-W * 0.005, roof + H * 0.03); ctx.lineTo(W * 0.07, H * 0.03); ctx.lineTo(W * 0.93, H * 0.03); ctx.lineTo(W * 1.005, roof + H * 0.03); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(70,28,16,0.55)'; ctx.lineWidth = 1.6;
+        for (let k = 1; k < 6; k++) { const y = H * 0.03 + (roof + H * 0.03 - H * 0.03) * k / 6, dx = W * 0.065 * (1 - k / 6); ctx.beginPath(); ctx.moveTo(dx, y); ctx.lineTo(W - dx, y); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(70,28,16,0.35)'; ctx.lineWidth = 1;
+        for (let k = 0; k < 40; k++) { const x = W * 0.08 + k * (W * 0.84 / 40); ctx.beginPath(); ctx.moveTo(x, H * 0.04); ctx.lineTo(x - (x - W / 2) * 0.012, roof + H * 0.02); ctx.stroke(); }
+        ctx.fillStyle = '#6a4228'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2;
+        for (let k = 0; k < 14; k++) { const x = W * 0.05 + k * (W * 0.9 / 13); ctx.fillRect(x - 4, roof + H * 0.025, 9, 11); ctx.strokeRect(x - 4, roof + H * 0.025, 9, 11); }   // caps de biga
+        // Finestres del pis, amb persianes verdes obertes
+        for (let k = 0; k < 5; k++) {
+            const fw = W * 0.075, fh = H * 0.15, x = W * (0.12 + k * 0.17) + (k >= 3 ? -W * 0.02 : 0), y = roof + H * 0.07;
+            ctx.fillStyle = '#c4ad82'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.5; ctx.fillRect(x - 4, y - 4, fw + 8, fh + 8); ctx.strokeRect(x - 4, y - 4, fw + 8, fh + 8);
+            ctx.fillStyle = '#2c3140'; ctx.fillRect(x, y, fw, fh); ctx.strokeRect(x, y, fw, fh);
+            ctx.fillStyle = 'rgba(255,200,110,0.5)'; ctx.fillRect(x + 3, y + 3, fw - 6, fh * 0.4);
+            ctx.fillStyle = '#4f7a4a'; [[x - fw * 0.34, -1], [x + fw, 1]].forEach(([sx]) => { ctx.fillRect(sx, y, fw * 0.34, fh); ctx.strokeRect(sx, y, fw * 0.34, fh); });
+        }
+        // Finestres de la planta baixa, amb reixa
+        [0.13, 0.27, 0.66, 0.81].forEach(fx => {
+            const fw = W * 0.07, fh = H * 0.11, x = W * fx, y = pis + H * 0.085;
+            ctx.fillStyle = '#c4ad82'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.5; ctx.fillRect(x - 4, y - 4, fw + 8, fh + 8); ctx.strokeRect(x - 4, y - 4, fw + 8, fh + 8);
+            ctx.fillStyle = '#26222a'; ctx.fillRect(x, y, fw, fh); ctx.strokeRect(x, y, fw, fh);
+            ctx.strokeStyle = '#6a6a70'; ctx.lineWidth = 1.5;
+            for (let r = 1; r < 4; r++) { ctx.beginPath(); ctx.moveTo(x + fw * r / 4, y); ctx.lineTo(x + fw * r / 4, y + fh); ctx.stroke(); }
+        });
+        // Porta d'arc amb marc de pedra
+        const pw = W * 0.13, px = W / 2 - pw / 2, pt = pis + H * 0.02, pb = wb;
+        ctx.fillStyle = '#d4c19a'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(px - 8, pb); ctx.lineTo(px - 8, pt + pw * 0.5); ctx.arc(W / 2, pt + pw * 0.5, pw / 2 + 8, Math.PI, 0); ctx.lineTo(px + pw + 8, pb); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#4a2c16';
+        ctx.beginPath(); ctx.moveTo(px, pb); ctx.lineTo(px, pt + pw * 0.5); ctx.arc(W / 2, pt + pw * 0.5, pw / 2, Math.PI, 0); ctx.lineTo(px + pw, pb); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(20,10,4,0.65)'; ctx.lineWidth = 1.5;
+        for (let r = 1; r < 4; r++) { ctx.beginPath(); ctx.moveTo(px + pw * r / 4, pt + pw * 0.45); ctx.lineTo(px + pw * r / 4, pb); ctx.stroke(); }
+        ctx.fillStyle = '#d4af37'; ctx.beginPath(); ctx.arc(px + pw * 0.8, pt + pw * 1.1, 3, 0, Math.PI * 2); ctx.fill();
+        // Ensenya de ferro penjada a la dreta de la porta: barra, cadenetes i un disc amb una gerra
+        const sx = W * 0.62, sy = pis + H * 0.02;
+        ctx.strokeStyle = '#2a2a2e'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x1 - W * 0.31, sy); ctx.lineTo(x1 - W * 0.13, sy); ctx.stroke();
+        ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(sx + W * 0.04, sy); ctx.lineTo(sx + W * 0.04, sy + H * 0.04); ctx.moveTo(sx + W * 0.12, sy); ctx.lineTo(sx + W * 0.12, sy + H * 0.04); ctx.stroke();
+        ctx.fillStyle = '#e8d8a8'; ctx.strokeStyle = '#2a2a2e'; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(sx, sy + H * 0.04, W * 0.16, H * 0.14, 6); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#b8862a'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2;
+        ctx.fillRect(sx + W * 0.045, sy + H * 0.075, W * 0.05, H * 0.07); ctx.strokeRect(sx + W * 0.045, sy + H * 0.075, W * 0.05, H * 0.07);
+        ctx.beginPath(); ctx.arc(sx + W * 0.105, sy + H * 0.11, H * 0.022, -Math.PI / 2, Math.PI / 2); ctx.stroke();
+        ctx.fillStyle = '#f4ecd0'; ctx.fillRect(sx + W * 0.045, sy + H * 0.075, W * 0.05, H * 0.018);
+    });
+}
+
+// Pi roig (pinastre): tronc alt i recte de color de teula amb escates, branques curtes i copa irregular de núvols d'agulles blaves
+function dibuixarPi(c, w) {
+    lienc(c, w, w * 1.75, (ctx, W, H) => {
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        let sd = 21; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        ombraTerra(ctx, W / 2, H - 8, W * 0.26, 9);
+        const cx = y => W * 0.5 + (H - y) * 0.03 + Math.sin(y * 0.02) * W * 0.012;     // lleugera inclinació
+        const amp = y => W * (0.032 + 0.05 * (y / H));                                   // el tronc s'eixampla cap a baix
+        // Branques cap als núvols
+        const nuv = [[0.5, 0.11, 0.27, 0.07], [0.3, 0.2, 0.22, 0.06], [0.72, 0.22, 0.2, 0.06], [0.46, 0.3, 0.26, 0.065], [0.66, 0.4, 0.16, 0.05], [0.3, 0.43, 0.15, 0.045]];
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 6;
+        nuv.forEach(([nx, ny]) => { const y0 = H * (ny + 0.1); ctx.beginPath(); ctx.moveTo(cx(y0), y0 + 12); ctx.quadraticCurveTo((cx(y0) + W * nx) / 2, y0 - 4, W * nx, H * ny); ctx.stroke(); });
+        ctx.strokeStyle = '#7a3a22'; ctx.lineWidth = 3.2;
+        nuv.forEach(([nx, ny]) => { const y0 = H * (ny + 0.1); ctx.beginPath(); ctx.moveTo(cx(y0), y0 + 12); ctx.quadraticCurveTo((cx(y0) + W * nx) / 2, y0 - 4, W * nx, H * ny); ctx.stroke(); });
+        // Tronc
+        const g = ctx.createLinearGradient(W * 0.4, 0, W * 0.62, 0); g.addColorStop(0, '#c26a3e'); g.addColorStop(0.5, '#9a4a2a'); g.addColorStop(1, '#63291a');
+        ctx.fillStyle = g; ctx.strokeStyle = CONTORN; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(cx(H - 10) - amp(H) * 1.5, H - 8);
+        for (let y = H - 12; y >= H * 0.1; y -= 12) ctx.lineTo(cx(y) - amp(y), y);
+        for (let y = H * 0.1; y <= H - 12; y += 12) ctx.lineTo(cx(y) + amp(y), y);
+        ctx.lineTo(cx(H - 10) + amp(H) * 1.5, H - 8); ctx.closePath(); ctx.fill(); ctx.stroke();
+        // Escates de l'escorça
+        ctx.strokeStyle = 'rgba(58,22,10,0.6)'; ctx.lineWidth = 1.6;
+        for (let k = 0; k < 90; k++) { const y = H * (0.15 + r() * 0.8), x = cx(y) + (r() - 0.5) * amp(y) * 1.7; ctx.beginPath(); ctx.moveTo(x - 4, y); ctx.quadraticCurveTo(x, y + 4, x + 5, y); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(240,170,110,0.35)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx(H * 0.9) - amp(H * 0.9) * 0.6, H * 0.9); ctx.lineTo(cx(H * 0.2) - amp(H * 0.2) * 0.6, H * 0.2); ctx.stroke();
+        // Núvols d'agulles
+        nuv.forEach(([nx, ny, rx, ry], i) => {
+            const x = W * nx, y = H * ny, a = W * rx, b = H * ry;
+            ctx.fillStyle = '#2c5646'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.5;
+            ctx.beginPath(); ctx.ellipse(x, y + b * 0.25, a, b, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#4a7c64'; ctx.beginPath(); ctx.ellipse(x - a * 0.05, y - b * 0.1, a * 0.86, b * 0.72, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#6d9c7e'; ctx.beginPath(); ctx.ellipse(x - a * 0.18, y - b * 0.38, a * 0.5, b * 0.34, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.lineWidth = 1.5;
+            for (let k = 0; k < 46; k++) { const px = x + (r() - 0.5) * a * 1.8, py = y + (r() - 0.45) * b * 1.5; ctx.strokeStyle = k % 3 ? '#1f4034' : '#86b090'; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + (r() - 0.5) * 12, py + 5 + r() * 5); ctx.stroke(); }
+            if (i % 2 === 0) { ctx.fillStyle = '#a8552a'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.ellipse(x + a * 0.5, y + b * 0.9, 5, 7, 0.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }     // una pinya
+        });
+        // Arrels que s'obren a la base
+        ctx.fillStyle = '#7a3a22'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+        [[-1, 0.12], [1, 0.14]].forEach(([sg, l]) => { ctx.beginPath(); ctx.moveTo(cx(H - 20) + sg * amp(H) * 0.8, H - 30); ctx.quadraticCurveTo(cx(H) + sg * W * l * 0.8, H - 18, cx(H) + sg * W * l, H - 6); ctx.lineTo(cx(H) + sg * W * 0.03, H - 6); ctx.closePath(); ctx.fill(); ctx.stroke(); });
+    });
+}
+
+// Pi pinyer: tronc gruixut i corbat que es parteix en poques branques i porta una copa ampla en forma de para-sol
+function dibuixarPiPinyer(c, w) {
+    lienc(c, w, w * 0.95, (ctx, W, H) => {
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        let sd = 33; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        ombraTerra(ctx, W / 2, H - 8, W * 0.3, 10);
+        const tronc = (x0, y0, x1, y1, a0, a1, col) => {
+            ctx.fillStyle = col; ctx.strokeStyle = CONTORN; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(x0 - a0, y0); ctx.quadraticCurveTo(x0 - a0, (y0 + y1) / 2, x1 - a1, y1); ctx.lineTo(x1 + a1, y1); ctx.quadraticCurveTo(x0 + a0, (y0 + y1) / 2, x0 + a0, y0); ctx.closePath(); ctx.fill(); ctx.stroke();
+        };
+        // Branques (dins la copa) i tronc principal, corbat
+        [[0.3, 0.3], [0.5, 0.2], [0.7, 0.3], [0.4, 0.32], [0.62, 0.34]].forEach(([bx, by]) => tronc(W * 0.47, H * 0.58, W * bx, H * by, W * 0.025, W * 0.012, '#7a4a2e'));
+        const g = ctx.createLinearGradient(W * 0.4, 0, W * 0.6, 0); g.addColorStop(0, '#a8643a'); g.addColorStop(0.5, '#86492a'); g.addColorStop(1, '#5a2c1a');
+        tronc(W * 0.5, H - 10, W * 0.46, H * 0.55, W * 0.075, W * 0.045, g);
+        ctx.strokeStyle = 'rgba(52,22,10,0.6)'; ctx.lineWidth = 1.6;
+        for (let k = 0; k < 40; k++) { const y = H * (0.6 + r() * 0.36), x = W * 0.49 + (r() - 0.5) * W * 0.11; ctx.beginPath(); ctx.moveTo(x - 4, y); ctx.quadraticCurveTo(x, y + 4, x + 5, y); ctx.stroke(); }
+        // Copa en para-sol: núvols aplanats escampats pel cim
+        const nuv = [[0.12, 0.36, 0.14, 0.09], [0.28, 0.24, 0.17, 0.1], [0.5, 0.18, 0.18, 0.1], [0.72, 0.24, 0.17, 0.1], [0.88, 0.36, 0.14, 0.09], [0.36, 0.38, 0.17, 0.09], [0.64, 0.38, 0.17, 0.09], [0.5, 0.32, 0.18, 0.09]];
+        nuv.forEach(([nx, ny, rx, ry], i) => {
+            const x = W * nx, y = H * ny, a = W * rx, b = H * ry;
+            ctx.fillStyle = '#2a5030'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.5;
+            ctx.beginPath(); ctx.ellipse(x, y + b * 0.2, a, b, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#4a8044'; ctx.beginPath(); ctx.ellipse(x - a * 0.05, y - b * 0.12, a * 0.86, b * 0.7, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#74ac62'; ctx.beginPath(); ctx.ellipse(x - a * 0.2, y - b * 0.4, a * 0.5, b * 0.32, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.lineWidth = 1.4;
+            for (let k = 0; k < 40; k++) { const px = x + (r() - 0.5) * a * 1.8, py = y + (r() - 0.45) * b * 1.5; ctx.strokeStyle = k % 3 ? '#1c3a22' : '#98c68a'; ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + (r() - 0.5) * 11, py + 5 + r() * 4); ctx.stroke(); }
+            if (i % 3 === 1) { ctx.fillStyle = '#9a6a38'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.ellipse(x + a * 0.2, y + b * 1.05, 8, 10, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }     // pinya
+        });
+    });
+}
+
+// Caseta de joc del jardí: una casa petita de fusta pintada per als nens, amb la teulada d'escates i una banderola
+function dibuixarCasetaJoc(c, w) {
+    lienc(c, w, w * 0.95, (ctx, W, H) => {
+        ombraTerra(ctx, W / 2, H - 5, W * 0.48, 8);
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        const wb = H - 8, roof = H * 0.34, x0 = W * 0.08, x1 = W * 0.92;
+        // Parets de llistons pintats en groc
+        ctx.fillStyle = '#e8c860'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 4; ctx.fillRect(x0, roof, x1 - x0, wb - roof); ctx.strokeRect(x0, roof, x1 - x0, wb - roof);
+        ctx.strokeStyle = 'rgba(110,70,20,0.55)'; ctx.lineWidth = 1.6;
+        for (let x = x0 + 12; x < x1; x += 14) { ctx.beginPath(); ctx.moveTo(x, roof + 4); ctx.lineTo(x, wb - 2); ctx.stroke(); }
+        ctx.fillStyle = '#d86a5a'; ctx.fillRect(x0, wb - H * 0.07, x1 - x0, H * 0.07); ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.strokeRect(x0, wb - H * 0.07, x1 - x0, H * 0.07);   // sòcol roig
+        // Teulada de llates blaves, vista des de dalt
+        ctx.fillStyle = '#4a7a98'; ctx.beginPath(); ctx.moveTo(-W * 0.01, roof + H * 0.03); ctx.lineTo(W * 0.16, H * 0.06); ctx.lineTo(W * 0.84, H * 0.06); ctx.lineTo(W * 1.01, roof + H * 0.03); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(20,50,70,0.6)'; ctx.lineWidth = 1.5;
+        for (let k = 1; k < 5; k++) { const y = H * 0.06 + (roof + H * 0.03 - H * 0.06) * k / 5, dx = W * 0.17 * (1 - k / 5); ctx.beginPath(); ctx.moveTo(dx, y); ctx.lineTo(W - dx, y); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(20,50,70,0.4)';
+        for (let k = 0; k < 16; k++) { const x = W * 0.18 + k * W * 0.04; ctx.beginPath(); ctx.moveTo(x, H * 0.07); ctx.lineTo(x, roof + H * 0.02); ctx.stroke(); }
+        // Banderola de colors al cim
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(W * 0.5, H * 0.06); ctx.lineTo(W * 0.5, -H * 0.0 + 4); ctx.stroke();
+        ctx.fillStyle = '#d8434a'; ctx.beginPath(); ctx.moveTo(W * 0.5, 4); ctx.lineTo(W * 0.62, 12); ctx.lineTo(W * 0.5, 20); ctx.closePath(); ctx.fill(); ctx.lineWidth = 2; ctx.stroke();
+        // Finestra rodona amb creu
+        ctx.fillStyle = '#9ad0e8'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(W * 0.28, roof + H * 0.2, W * 0.08, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(W * 0.28 - W * 0.08, roof + H * 0.2); ctx.lineTo(W * 0.28 + W * 0.08, roof + H * 0.2); ctx.moveTo(W * 0.28, roof + H * 0.2 - W * 0.08); ctx.lineTo(W * 0.28, roof + H * 0.2 + W * 0.08); ctx.stroke();
+        // Porta petita d'arc, de fusta vermella, amb un pom
+        const pw = W * 0.2, px = W * 0.55, pt = roof + H * 0.1;
+        ctx.fillStyle = '#b8523a'; ctx.beginPath(); ctx.moveTo(px, wb - H * 0.07); ctx.lineTo(px, pt + pw / 2); ctx.arc(px + pw / 2, pt + pw / 2, pw / 2, Math.PI, 0); ctx.lineTo(px + pw, wb - H * 0.07); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(30,10,4,0.55)'; ctx.lineWidth = 1.4; for (let k = 1; k < 3; k++) { ctx.beginPath(); ctx.moveTo(px + pw * k / 3, pt + pw / 2); ctx.lineTo(px + pw * k / 3, wb - H * 0.07); ctx.stroke(); }
+        ctx.fillStyle = '#f0d060'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(px + pw * 0.8, pt + pw * 0.9, 3.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        // Un cubell i una pala de joguina al costat
+        ctx.fillStyle = '#4aa0d0'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(W * 0.78, wb - H * 0.01); ctx.lineTo(W * 0.8, wb - H * 0.1); ctx.lineTo(W * 0.9, wb - H * 0.1); ctx.lineTo(W * 0.92, wb - H * 0.01); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = '#8a5a30'; ctx.lineWidth = 3.4; ctx.beginPath(); ctx.moveTo(W * 0.96, wb); ctx.lineTo(W * 0.99, wb - H * 0.2); ctx.stroke();
+    });
+}
+
 // Pilar de la processó (camí de la Desaparició): pilar baix de pedra tosca amb un plafó de rajoles ceràmiques incrustat
 function dibuixarColumnaProcessio(c, w) {
     lienc(c, w, w * 2.0, (ctx, W, H) => {
@@ -1676,36 +1901,67 @@ function pintarAltarPedra(ctx, w, h) {
 
 // Pergamí cargolat pels dos extrems, amb text, caplletra i un segell de cera amb cinta
 function pintarPergami(ctx, w, h) {
+    // Rotlle de pergamí tancat, una mica inclinat: cilindre amb l'espiral a la punta, cinteta vermella amb llaç i lacre
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    const C = '#2a1608', yMig = h / 2;
-    ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(w / 2 + 1, h - 2, w * 0.46, 2.4, 0, 0, Math.PI * 2); ctx.fill();
-    // Full: vores una mica irregulars
-    const g = ctx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#f2e4b4'); g.addColorStop(1, '#d8c284');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(9, 4);
-    for (let x = 9; x <= w - 9; x += (w - 18) / 8) ctx.lineTo(x, 3.4 + ((x * 7) % 3) * 0.4);
-    ctx.lineTo(w - 9, h - 5);
-    for (let x = w - 9; x >= 9; x -= (w - 18) / 8) ctx.lineTo(x, h - 4.2 - ((x * 5) % 3) * 0.4);
-    ctx.closePath(); ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 1.3; ctx.stroke();
-    ctx.fillStyle = 'rgba(120,80,30,0.18)'; ctx.fillRect(10, 4, w - 20, 3); ctx.fillRect(10, h - 8, w - 20, 3);
-    // Text: línies de lletra, amb una caplletra vermella
-    ctx.strokeStyle = '#4a3418'; ctx.lineWidth = 1;
-    for (let r = 0; r < 4; r++) {
-        const y = 8 + r * ((h - 18) / 3.2);
-        ctx.beginPath(); ctx.moveTo(r === 0 ? 20 : 13, y); ctx.lineTo(w - 14 - ((r * 11) % 7), y); ctx.stroke();
-    }
-    ctx.fillStyle = '#a02830'; ctx.fillRect(12, 6.5, 6, 6);
-    ctx.fillStyle = '#e8c860'; ctx.fillRect(13.6, 8, 2.8, 2.8);
-    // Segell de cera i cinta vermella
-    ctx.strokeStyle = '#9a2430'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(w - 15, h - 8); ctx.quadraticCurveTo(w - 20, h - 2, w - 24, h - 3); ctx.moveTo(w - 15, h - 8); ctx.quadraticCurveTo(w - 13, h - 1, w - 10, h - 2); ctx.stroke();
-    ctx.fillStyle = '#b02a34'; ctx.beginPath(); ctx.arc(w - 15, h - 9, 3.6, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#5a1018'; ctx.lineWidth = 1; ctx.stroke();
-    ctx.fillStyle = 'rgba(255,200,200,0.55)'; ctx.beginPath(); ctx.arc(w - 16, h - 10, 1.2, 0, Math.PI * 2); ctx.fill();
-    // Rotlles als extrems
-    [[6, 1], [w - 6, -1]].forEach(([x, s]) => {
-        const r = ctx.createLinearGradient(x - 6, 0, x + 6, 0); r.addColorStop(0, s > 0 ? '#a8864a' : '#e6cf92'); r.addColorStop(0.5, '#f4e6b2'); r.addColorStop(1, s > 0 ? '#e6cf92' : '#a8864a');
-        ctx.fillStyle = r; ctx.beginPath(); ctx.roundRect(x - 4.6, 1.5, 9.2, h - 3.5, 4.6); ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 1.3; ctx.stroke();
-        ctx.strokeStyle = 'rgba(110,76,30,0.7)'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.ellipse(x - s * 1.2, yMig, 2.4, (h - 12) / 2, 0, 0, Math.PI * 2); ctx.stroke();
-        ctx.fillStyle = '#7a5a2a'; ctx.strokeStyle = C; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, 1.6, 2.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();     // pom de fusta
+    const C = '#2a1608', cy = h * 0.46, r = h * 0.27, x0 = w * 0.12, x1 = w * 0.86, xc = w * 0.47;
+    ctx.fillStyle = 'rgba(0,0,0,0.26)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 3, w * 0.42, 2.6, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.save(); ctx.translate(w / 2, cy); ctx.rotate(-0.13); ctx.translate(-w / 2, -cy);
+    // Cos del rotlle: llum a dalt, ombra a baix
+    const g = ctx.createLinearGradient(0, cy - r, 0, cy + r);
+    g.addColorStop(0, '#d9c08a'); g.addColorStop(0.22, '#f7ebc4'); g.addColorStop(0.55, '#e6d19c'); g.addColorStop(1, '#a8874f');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x0, cy - r);
+    for (let k = 1; k <= 6; k++) ctx.lineTo(x0 + (x1 - x0) * k / 6, cy - r + ((k * 7) % 3) * 0.25);
+    ctx.ellipse(x1, cy, r * 0.42, r, 0, -Math.PI / 2, Math.PI / 2);
+    for (let k = 5; k >= 0; k--) ctx.lineTo(x0 + (x1 - x0) * k / 6, cy + r - ((k * 5) % 3) * 0.25);
+    ctx.ellipse(x0, cy, r * 0.42, r, 0, Math.PI / 2, Math.PI * 1.5);
+    ctx.closePath(); ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 1.2; ctx.stroke();
+    // Vora del full que fa la volta (la darrera capa), taques i fibres
+    ctx.strokeStyle = 'rgba(110,76,30,0.55)'; ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.moveTo(x0 + 3, cy + r * 0.55); ctx.lineTo(xc - 6, cy + r * 0.62); ctx.moveTo(xc + 7, cy + r * 0.66); ctx.lineTo(x1 - 2, cy + r * 0.5); ctx.stroke();
+    ctx.fillStyle = 'rgba(140,96,40,0.22)';
+    [[0.24, -0.2, 2.2], [0.66, 0.25, 1.6], [0.78, -0.35, 1.2], [0.33, 0.35, 1.3]].forEach(([fx, fy, rr]) => { ctx.beginPath(); ctx.arc(w * fx, cy + r * fy, rr, 0, Math.PI * 2); ctx.fill(); });
+    ctx.strokeStyle = 'rgba(255,250,230,0.7)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0 + 2, cy - r * 0.6); ctx.lineTo(x1 - 3, cy - r * 0.62); ctx.stroke();
+    // Punta de la dreta: l'espiral del rotlle
+    const e = ctx.createRadialGradient(x1, cy, 0.5, x1, cy, r);
+    e.addColorStop(0, '#8a6a36'); e.addColorStop(0.5, '#e8d4a0'); e.addColorStop(1, '#c8aa6e');
+    ctx.fillStyle = e; ctx.beginPath(); ctx.ellipse(x1, cy, r * 0.42, r, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 1.1; ctx.stroke();
+    ctx.strokeStyle = 'rgba(90,60,24,0.85)'; ctx.lineWidth = 0.7; ctx.beginPath();
+    for (let t = 0; t < Math.PI * 5; t += 0.25) { const q = 1 - t / (Math.PI * 5.4); const px = x1 + Math.cos(t) * r * 0.36 * q, py = cy + Math.sin(t) * r * 0.86 * q; t ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }
+    ctx.stroke();
+    // Punta de l'esquerra: el full que sobresurt una mica, esfilagarsat
+    ctx.fillStyle = '#efdfae'; ctx.beginPath();
+    ctx.moveTo(x0, cy - r * 0.8); ctx.lineTo(x0 - 4, cy - r * 0.5); ctx.lineTo(x0 - 2.5, cy - r * 0.15); ctx.lineTo(x0 - 4.5, cy + r * 0.2); ctx.lineTo(x0 - 2, cy + r * 0.55); ctx.lineTo(x0, cy + r * 0.8);
+    ctx.closePath(); ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 1; ctx.stroke();
+    // Cinteta vermella que fa la volta al rotlle
+    const cinta = ctx.createLinearGradient(xc - 3, 0, xc + 3, 0);
+    cinta.addColorStop(0, '#7a1620'); cinta.addColorStop(0.45, '#d0404a'); cinta.addColorStop(1, '#8a1c26');
+    ctx.fillStyle = cinta; ctx.beginPath();
+    ctx.moveTo(xc - 2.6, cy - r - 0.6); ctx.quadraticCurveTo(xc - 3.4, cy, xc - 2.6, cy + r + 0.6);
+    ctx.lineTo(xc + 2.6, cy + r + 0.6); ctx.quadraticCurveTo(xc + 1.8, cy, xc + 2.6, cy - r - 0.6); ctx.closePath();
+    ctx.fill(); ctx.strokeStyle = '#4a0c12'; ctx.lineWidth = 0.9; ctx.stroke();
+    // Les dues puntes de la cinta, penjant per sota
+    [[-1, 5.5], [1, 4.5]].forEach(([s, llarg]) => {
+        ctx.fillStyle = s < 0 ? '#b8323c' : '#9a2430'; ctx.beginPath();
+        ctx.moveTo(xc + s * 0.5, cy + r * 0.2); ctx.quadraticCurveTo(xc + s * 4, cy + r + 2, xc + s * 5.5, cy + r + llarg);
+        ctx.lineTo(xc + s * 3.2, cy + r + llarg - 1.2); ctx.lineTo(xc + s * 2.6, cy + r + llarg + 0.6);
+        ctx.quadraticCurveTo(xc + s * 1.6, cy + r + 1, xc - s * 1.2, cy + r * 0.3); ctx.closePath();
+        ctx.fill(); ctx.strokeStyle = '#4a0c12'; ctx.lineWidth = 0.8; ctx.stroke();
     });
+    // Llaç: dues baules a dalt del lacre
+    [-1, 1].forEach(s => {
+        ctx.fillStyle = '#c23a44'; ctx.beginPath();
+        ctx.moveTo(xc, cy - r * 0.35); ctx.bezierCurveTo(xc + s * 7, cy - r * 1.35, xc + s * 9, cy - r * 0.1, xc, cy - r * 0.2);
+        ctx.fill(); ctx.strokeStyle = '#4a0c12'; ctx.lineWidth = 0.8; ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,190,190,0.6)'; ctx.lineWidth = 0.6; ctx.beginPath(); ctx.moveTo(xc + s * 2, cy - r * 0.6); ctx.quadraticCurveTo(xc + s * 4.5, cy - r * 0.95, xc + s * 6, cy - r * 0.6); ctx.stroke();
+    });
+    // Lacre: gota de cera vermella fosa, amb la vora irregular, una creu en relleu i lluentor
+    ctx.fillStyle = '#a3202c'; ctx.beginPath();
+    for (let k = 0; k < 12; k++) { const a = k / 12 * Math.PI * 2, rr = 4.6 + ((k * 5) % 3) * 0.45; const px = xc + Math.cos(a) * rr, py = cy + 0.5 + Math.sin(a) * rr * 0.92; k ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }
+    ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#4a0810'; ctx.lineWidth = 0.9; ctx.stroke();
+    ctx.fillStyle = '#c8333f'; ctx.beginPath(); ctx.arc(xc, cy + 0.5, 3.1, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#6a0e18'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.moveTo(xc, cy - 1.6); ctx.lineTo(xc, cy + 2.6); ctx.moveTo(xc - 1.6, cy + 0.2); ctx.lineTo(xc + 1.6, cy + 0.2); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,215,215,0.75)'; ctx.beginPath(); ctx.ellipse(xc - 1.6, cy - 1.4, 1.1, 0.7, -0.6, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
 }
 
 // ---------------- EL CELLER: terra de ciment, paret de pedra i taules de ping-pong ----------------

@@ -250,7 +250,7 @@ class ZonaPingpong extends ZonaBase {
         });
     }
 
-    // L'Ineu empeny la roda si és a un costat i avança contra ella; amb Runna es mou, sense Runna pesa massa
+    // L'Ineu empeny la roda si és a un costat i avança contra ella; amb els Guants de Poder es mou, sense pesa massa
     actualitzar(ara, delta) {
         if (this.rodaMoguda) return;
         const ui = this.ui(), c = this.cursors, t = this.tecles;
@@ -259,8 +259,8 @@ class ZonaPingpong extends ZonaBase {
         this.empentaMs = toca ? this.empentaMs + delta : 0;
         if (this.empentaMs < 600) return;
         this.empentaMs = 0;
-        if (!Estat.te('runna')) {
-            if (!this.pistaRoda) { this.pistaRoda = true; this.flotant(this.roda.x, this.roda.y - 160, 'Pesa massa... i la corrent ve del darrere', '#f2e6c8'); }
+        if (!Estat.te('guants')) {
+            if (!this.pistaRoda) { this.pistaRoda = true; this.flotant(this.roda.x, this.roda.y - 160, 'Pesa massa... calen unes mans més fortes', '#f2e6c8'); }
             return;
         }
         this.mouRoda(this.costatRoda);
@@ -292,6 +292,7 @@ class ZonaPingpong extends ZonaBase {
 class ZonaCelles extends ZonaBase {
     constructor() {
         super('ZonaCelles', {
+            pins: { pinyer: 0.3 },
             nom: 'Les Cel·les',
             amplada: 1800,
             alcada: 1100,
@@ -342,7 +343,36 @@ class ZonaCelles extends ZonaBase {
         this.enemic('escolopendra', 1500, 880);
         this.sortida(800, 1086, 200, 14, 'ZonaRuines', 'celles');
         this.sortida(0, 640, 14, 130, 'ZonaBosc', 'celles');
+        // El camí del Gran Til·ler, al nord, és tapat per una boira espessa que no marxa amb el vent: la desfà el beuratge de la Jaumeta
+        this.boiraTiller = null;
+        if (Estat.flag('boiraTillerNeta') || Estat.flag('parlatTiler')) this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
+        else this.posarBoiraTiller();
+    }
+
+    posarBoiraTiller() {
+        const X = 1070, Y = 300;
+        this.colBoira = this.colisio(X, Y, 360, 90);
+        this.fosc = this.add.ellipse(X, Y, 470, 190, 0x2a1550, 0.42).setDepth(Y + 40);
+        this.boiraTiller = [-150, -50, 50, 150].map(dx => this.boira(X + dx, Y, 190, 120, 2.4));
+        this.interactiu(X, Y + 80, 120, DIALEGS.boiraTiller, {
+            altura: 150, actiu: () => !!this.boiraTiller,
+            enTancar: () => { if (Estat.te('beuratge')) this.esvairBoira(); }
+        });
+    }
+
+    esvairBoira() {
+        if (!this.boiraTiller) return;
+        Estat.posaFlag('boiraTillerNeta'); Estat.treu('beuratge');
+        this.boiraTiller.forEach(b => b.stop());
+        this.boiraTiller = null;
+        this.tweens.add({ targets: this.fosc, alpha: 0, duration: 2600, onComplete: () => this.fosc.destroy() });
+        this.obstacles.remove(this.colBoira, true, true);
+        this.cameras.main.shake(400, 0.003);
+        Sfx.secret();
         this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
+        this.flotant(1070, 220, 'El camí del Til·ler és lliure', '#d8c8ff');
+        Estat.posaObjectiu("Puja al Gran Til·ler: és al nord de les Cel·les, pel camí que s'ha aclarit.");
+        Estat.desar();
     }
 
     posarSansa() {
@@ -364,69 +394,169 @@ class ZonaCelles extends ZonaBase {
     }
 }
 
-// ---------------- EL GRAN TIL·LER (escenari per a ell sol) ----------------
-// Hi arriba el camí del sud (les cel·les); del revolt, un camí puja a dalt a la dreta cap a la Cirosa.
+// ---------------- CEL·LES DE SANT ANTONI ----------------
+// A llevant del Monestir. Hi viu el Germà Francesc, el monjo que cuida les flors del cementiri: per un favor (portar-hi
+// el seu ram), et dona els Guants de Poder, els que mouen la roda del Celler. D'aquí era el Biel, el primer nen desaparegut.
+Object.assign(DIALEGS, {
+    cel_stbenet: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Benet: petites, de pedra ocre, amb les persianes mig ajustades. Hi fa olor de sopa.' }] }),
+    cel_ntrasra: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Nostra Senyora, les més grans del Santuari. Avui les finestres són tancades: ningú no vol que hi entri la boira.' }] }),
+    cel_stantoni: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Antoni, de pedra vella i teula. La porta és oberta, però a dins no hi ha ningú: la família del Biel és a la Plaça, buscant-lo.' }] }),
+
+    germaFrancesc: E => {
+        if (E.te('guants')) return { pagines: [
+            { qui: 'Germà Francesc', text: 'Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.' }
+        ] };
+        if (E.flag('florsCreu')) return {
+            pagines: [
+                { qui: 'Germà Francesc', text: 'Les has deixades a la creu? Que Déu t\'ho pagui, fill. Els monjos d\'abans ja deuen estar contents: algú encara se\'n recorda.' },
+                { qui: 'Germà Francesc', text: 'Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.' },
+                { qui: '', text: 'Has obtingut els GUANTS DE PODER!\nAra pots empènyer coses molt pesades.' },
+                { qui: 'Germà Francesc', text: 'Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.' }
+            ],
+            enAcabar: () => {
+                E.dona('guants');
+                if (E.flag('fredericRoda')) E.posaObjectiu('Amb els Guants de Poder, empeny la roda de carruatge del Celler (a les Runes).');
+            }
+        };
+        if (E.te('ram')) return { pagines: [
+            { qui: 'Germà Francesc', text: 'El ram, a la creu de pedra del fons del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.' }
+        ] };
+        return {
+            pagines: [
+                { qui: 'Germà Francesc', text: 'Ineu... Passa, passa. Perdona que no m\'aixequi de pressa: aquests genolls ja tenen més anys que el campanar.' },
+                { qui: 'Germà Francesc', text: 'El Biel vivia aquí, a Sant Antoni. Cada matí em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
+                { qui: 'Germà Francesc', text: 'Cada setmana porto flors a la creu del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
+                { qui: 'Germà Francesc', text: 'Me\'n faries el favor? Deixa aquest ram als peus de la creu. I torna, que tinc una cosa per a tu.' },
+                { qui: '', text: 'Has obtingut un RAM DE FLORS.' }
+            ],
+            enAcabar: () => { E.dona('ram'); E.posaObjectiu('Deixa el ram del Germà Francesc als peus de la creu del Cementiri.'); }
+        };
+    }
+});
+
+class ZonaSantAntoni extends ZonaBase {
+    constructor() {
+        super('ZonaSantAntoni', {
+            nom: 'Cel·les de Sant Antoni',
+            amplada: 1400,
+            alcada: 1100,
+            entrades: { monestir: { x: 60, y: 880, dir: 'dreta' } }
+        });
+    }
+
+    construir() {
+        this.terra('herba', 0, 0, 1400, 1100, -1100);
+        this.terra('cami', 0, 810, 1100, 130);             // des del Monestir, davant la façana
+        this.terra('pedra', 420, 770, 260, 60);            // replà davant la porta
+
+        // La casa (900 d'ample): la porta, un pèl més alta que l'Ineu, és al 33% de l'ample, a x≈545
+        const sa = this.posar('cel_stantoni', 700, 760, { col: { w: 880, h: 90 } });
+        this.blocDarrere(700, 880, 670, Math.max(0, 760 - sa.displayHeight));
+        this.interactiu(545, 785, 80, DIALEGS.cel_stantoni, { altura: 150 });
+
+        this.npc('germa_francesc', 1010, 870, DIALEGS.germaFrancesc, { flipX: true });
+        this.cartell(170, 830, () => ({ pagines: [{ qui: '', text: '← El Monestir i la Plaça' }] }));
+        this.arbres([[1250, 300], [1320, 560], [1290, 1000], [160, 300], [360, 220], [200, 1010], [560, 1040], [900, 1040], [1130, 1010]]);
+
+        this.enemic('escolopendra', 420, 1010);
+        this.enemic('escolopendra', 1200, 900);
+        this.sortida(0, 820, 14, 140, 'ZonaMonestir', 'monestir');
+    }
+}
+
+// ---------------- EL GRAN TIL·LER (escenari petit: només l'arbre amb qui es parla) ----------------
+// Hi arriba el camí del sud (les cel·les). Cap a l'oest, un camí duu a la masia d'en Jordi; cap al nord-est, a la Cirosa, tancat
+// per una bardissa viva que només aparta la branca del Til·ler.
+const TIL_X = 520, TIL_Y = 440;
+
 class ZonaTiller extends ZonaBase {
     constructor() {
         super('ZonaTiller', {
+            pins: { pi: 0.3 },
             nom: 'El Gran Til·ler',
-            amplada: 1600,
-            alcada: 1100,
+            amplada: 1400,
+            alcada: 1000,
             entrades: {
-                celles: { x: 840,  y: 1040, dir: 'amunt' },
-                cirosa: { x: 1390, y: 90,   dir: 'avall' }
+                celles: { x: 700,  y: 940, dir: 'amunt' },
+                cirosa: { x: 1170, y: 140, dir: 'avall' },
+                jordi:  { x: 60,   y: 600, dir: 'dreta' }
             }
         });
     }
 
     construir() {
-        this.terra('herba', 0, 0, 1600, 1100, -1100);
-        this.terra('cami', 760, 560, 160, 540);           // des de les cel·les (sud)
-        this.terra('cami', 760, 560, 700, 170);           // el revolt cap a llevant
-        this.terra('cami', 1320, 0, 140, 730);            // cap a dalt a la dreta: la Cirosa
+        this.terra('herba', 0, 0, 1400, 1000, -1100);
+        this.terra('cami', 620, 520, 160, 480);           // des de les cel·les (sud)
+        this.terra('cami', 0, 520, 1240, 150);            // d'oest a est: la masia d'en Jordi i el camí de la Cirosa
+        this.terra('cami', 1100, 0, 140, 670);            // cap a dalt a la dreta: la Cirosa
 
         // El Gran Til·ler
-        this.posar('tiller', 560, 580, { col: { w: 110, h: 40 } });
-        this.interactiu(560, 605, 100, DIALEGS.tiller, { altura: 280 });
+        this.posar('tiller', TIL_X, TIL_Y, { col: { w: 110, h: 40 } });
+        this.interactiu(TIL_X, TIL_Y + 25, 100, DIALEGS.tiller, { altura: 280 });
 
         // Després del sopar queden quatre espelmes vora les arrels del Til·ler
         if (Estat.flag('soparFet')) this.posarEspelmes();
 
         // La branca del Til·ler: el bastó
-        this.branca = this.posar('branca', 650, 680, { fonsY: 580 });
-        this.interactiu(650, 685, 70, DIALEGS.branca, { altura: 60, actiu: () => Estat.flag('tillerBranca') && !Estat.te('basto_tiller') });
+        this.branca = this.posar('branca', TIL_X + 100, TIL_Y + 110, { fonsY: TIL_Y });
+        this.interactiu(TIL_X + 100, TIL_Y + 115, 70, DIALEGS.branca, { altura: 60, actiu: () => Estat.flag('tillerBranca') && !Estat.te('basto_tiller') });
 
-        // La Caseta d'en Jordi, a la vora (nord-oest): el pagès eixerit que dóna la palanca
-        this.posar('masia', 260, 330, { escala: 0.55, col: { w: 240, h: 60 } });
-        this.npc('jordi_caseta', 260, 440, DIALEGS.jordiCaseta);
+        this.cartell(980, 470, DIALEGS.cartellCirosa);
 
-        this.cartell(1200, 790, DIALEGS.cartellCirosa);
+        // El camí de la Cirosa: tancat per una bardissa viva fins que s'aparta amb la branca del Til·ler
+        this.bardissa = [];
+        if (Estat.flag('camiCirosaObert')) this.sortida(1100, 0, 140, 14, 'ZonaCamiCirosa', 'tiller');
+        else this.posarBardissa();
 
-        // El camí de la Cirosa: tancat amb arbres fins que el Til·ler l'obre
-        if (Estat.flag('camiCirosaObert')) {
-            this.sortida(1320, 0, 140, 14, 'ZonaCamiCirosa', 'tiller');
-        } else {
-            this.muralla(1320, 110, 1460, 110, 70);
-        }
-        this.arbres([[100, 150], [450, 90], [1000, 120], [1100, 330], [150, 880], [300, 1020], [1150, 1000], [1450, 950], [1540, 520]]);
+        this.arbres([[100, 150], [300, 90], [900, 100], [820, 330], [150, 820], [300, 940], [1000, 900], [1300, 880], [1350, 560], [760, 160]]);   // cap arbre vora la bardissa: les copes no l'han de tapar
 
-        this.sortida(760, 1086, 160, 14, 'ZonaCelles', 'tiller');
+        this.sortida(620, 986, 160, 14, 'ZonaCelles', 'tiller');
+        this.sortida(0, 540, 14, 130, 'ZonaJordi', 'til');
+    }
+
+    // Bardissa viva: una fila d'esbarzers foscos, amb boira. S'aparta (es retira cap als costats) amb la branca del Til·ler.
+    posarBardissa() {
+        const Y = 250;
+        this.colBardissa = this.colisio(1175, Y - 16, 230, 44);
+        [1105, 1140, 1175, 1210, 1245].forEach((x, i) => {
+            const img = this.posar('esbarzer', x, Y + (i % 2) * 10, { escala: 2.1 }).setTint(0x9a78b8);
+            this.bardissa.push({ img, x0: x, dir: x < 1180 ? -1 : 1 });
+        });
+        this.boiraBardissa = this.boira(1170, Y - 30, 190, 60, 0.7);
+        this.interactiu(1170, Y + 60, 110, DIALEGS.bardissa, {
+            altura: 110, actiu: () => !Estat.flag('camiCirosaObert'),
+            enTancar: () => { if (Estat.te('basto_tiller') && Estat.flag('bassadoriaNeta')) this.apartarBardissa(); }
+        });
+    }
+
+    apartarBardissa() {
+        if (Estat.flag('camiCirosaObert')) return;
+        Estat.posaFlag('camiCirosaObert');
+        this.bardissa.forEach(({ img, dir }, i) => this.tweens.add({ targets: img, x: img.x + dir * (110 + i * 6), alpha: 0.55, duration: 1500, ease: 'Sine.easeInOut' }));
+        this.boiraBardissa.stop();
+        this.obstacles.remove(this.colBardissa, true, true);
+        Sfx.secret();
+        this.cameras.main.shake(300, 0.003);
+        this.sortida(1100, 0, 140, 14, 'ZonaCamiCirosa', 'tiller');
+        this.flotant(1170, 200, 'La bardissa s\'aparta', '#d8c8ff');
+        Estat.posaObjectiu('Puja a la Cirosa pel camí del nord-est: els pastors desterrats guarden les esquelles dels seus avis.');
+        Estat.desar();
     }
 
     posarEspelmes() {
-        [500, 545, 590, 635].forEach((x, i) => {
-            const e = this.posar('espelma', x, 648 + (i % 2) * 6, { fonsY: 600 });
+        [TIL_X - 60, TIL_X - 15, TIL_X + 30, TIL_X + 75].forEach((x, i) => {
+            const e = this.posar('espelma', x, TIL_Y + 68 + (i % 2) * 6, { fonsY: TIL_Y + 20 });
             this.tweens.add({ targets: e, alpha: 0.8, yoyo: true, repeat: -1, duration: 300 + i * 70, delay: i * 90 });
         });
-        this.interactiu(570, 655, 110, DIALEGS.espelmesTiller, { altura: 90 });
+        this.interactiu(TIL_X + 10, TIL_Y + 75, 110, DIALEGS.espelmesTiller, { altura: 90 });
     }
 
     // Escena del sopar del Til·ler: taula, pastors i ritual de les quatre espelmes
     fesSopar() {
         const vel = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x2a1000, 1).setScrollFactor(0).setDepth(89500).setAlpha(0);
         this.tweens.add({ targets: vel, alpha: 0.38, duration: 1600 });
-        const taula = this.posar('taula_sopar', 640, 880, { fonsY: 870 });
-        const pastors = ['pastor_a', 'pastor_b', 'pastor_vell'].map((k, i) => this.posar(k, 520 + i * 110, 950 + (i % 2) * 14, { fonsY: 960 }));
+        const taula = this.posar('taula_sopar', 400, 810, { fonsY: 800 });
+        const pastors = ['pastor_a', 'pastor_b', 'pastor_vell'].map((k, i) => this.posar(k, 290 + i * 110, 880 + (i % 2) * 14, { fonsY: 890 }));
         this.time.delayedCall(1800, () => {
             this.ui().obrirDialeg(DIALEGS.tillerSoparRitual(Estat), () => Estat.desar());
         });
@@ -449,6 +579,97 @@ class ZonaTiller extends ZonaBase {
     }
 }
 
+// ---------------- LA MASIA D'EN JORDI (a l'oest del Til·ler) ----------------
+// Escenari petit: només en Jordi, la seva masia i, al costat, una caseta de joc de jardí. La palanca és a dins de la caseta.
+class ZonaJordi extends ZonaBase {
+    constructor() {
+        super('ZonaJordi', {
+            pins: { pi: 0.25 },
+            nom: "La masia d'en Jordi",
+            amplada: 1100,
+            alcada: 800,
+            entrades: { til: { x: 1040, y: 580, dir: 'esquerra' }, caseta: { x: 860, y: 540, dir: 'avall' } }
+        });
+    }
+
+    construir() {
+        this.terra('herba', 0, 0, 1100, 800, -1100);
+        this.terra('cami', 330, 500, 770, 150);            // del Til·ler (est) a la porta de la masia
+
+        // La masia (520 d'ample): la porta és al mig
+        const m = this.posar('masia', 380, 480, { col: { w: 500, h: 70 } });
+        this.blocDarrere(380, 500, 405, Math.max(0, 480 - m.displayHeight));
+        this.interactiu(380, 500, 100, DIALEGS.masiaJordi, { altura: 130 });
+        this.npc('jordi_caseta', 480, 570, DIALEGS.jordiCaseta);
+
+        // La caseta de joc del jardí (la palanca és a dins)
+        this.edifici('caseta_joc', 860, 480, 240, 64, 'ZonaCasetaJoc', 'porta', { alt: 70 });
+
+        // Detalls de jardí
+        this.posar('barril', 700, 520, { col: { w: 40, h: 16 } });
+        this.posar('barril', 745, 530, { col: { w: 40, h: 16 } });
+        this.posar('banc', 560, 700, { col: { w: 130, h: 22 } });
+        this.cartell(1000, 720, () => ({ pagines: [{ qui: '', text: '→ El Gran Til·ler' }] }));
+
+        this.arbres([[80, 180], [250, 120], [600, 100], [900, 140], [1040, 220], [90, 640], [250, 740], [850, 740], [1040, 740]]);
+        this.sortida(1086, 510, 14, 130, 'ZonaTiller', 'jordi');
+    }
+}
+
+// ---------------- LA CASETA DE JOC (interior) ----------------
+class ZonaCasetaJoc extends ZonaBase {
+    constructor() {
+        super('ZonaCasetaJoc', {
+            nom: 'La caseta de joc',
+            amplada: 640,
+            alcada: 520,
+            colorFons: '#140e0a',
+            pacifica: true,
+            entrades: { porta: { x: 320, y: 440, dir: 'amunt' } }
+        });
+    }
+
+    construir() {
+        this.terra('taulons', 60, 40, 520, 440, -1100);
+        // Parets de llistons pintats, amb franja de colors
+        const murs = this.add.graphics().setDepth(-990);
+        murs.fillStyle(0xe8c860, 1).fillRect(60, 0, 520, 130);
+        murs.lineStyle(2, 0x8a5a20, 0.5); for (let x = 74; x < 580; x += 16) murs.lineBetween(x, 6, x, 124);
+        murs.fillStyle(0xd86a5a, 1).fillRect(60, 124, 520, 10);
+        murs.fillStyle(0x4a7a98, 1).fillRect(30, 0, 30, 520).fillRect(580, 0, 30, 520);
+        this.colisio(30, 260, 60, 520);
+        this.colisio(610, 260, 60, 520);
+        this.colisio(320, 60, 640, 120);
+        this.colisio(160, 510, 200, 20);
+        this.colisio(480, 510, 200, 20);
+
+        // Dibuixos d'infant penjats a la paret i una finestreta
+        const dib = this.add.graphics().setDepth(-980);
+        [[110, 20, 0xd8434a], [200, 28, 0x4aa0d0], [450, 20, 0x6ab04a], [530, 30, 0xf0b040]].forEach(([x, y, col]) => {
+            dib.fillStyle(0xfff6e0, 1).fillRect(x, y, 50, 40).lineStyle(2, 0x3a2410, 1).strokeRect(x, y, 50, 40);
+            dib.fillStyle(col, 1).fillCircle(x + 25, y + 20, 11);
+        });
+        dib.fillStyle(0x9ad0e8, 1).fillRect(290, 22, 60, 50).lineStyle(4, 0x5a3a1e, 1).strokeRect(290, 22, 60, 50).lineBetween(320, 22, 320, 72);
+
+        // Catifa i joguines: taula i tamborets de la mida d'un nen, un cavallet i el cofre dels tresors
+        const catifa = this.add.graphics().setDepth(-950);
+        catifa.fillStyle(0x4a7a98, 1).fillRoundedRect(190, 250, 260, 150, 10);
+        catifa.lineStyle(3, 0xf0d060, 1).strokeRoundedRect(198, 258, 244, 134, 8);
+        this.posar('taula', 320, 330, { escala: 0.7, col: { w: 110, h: 22 } });
+        this.posar('tamboret', 240, 360, { escala: 0.7, col: { w: 28, h: 12 } });
+        this.posar('tamboret', 400, 360, { escala: 0.7, col: { w: 28, h: 12 } });
+        this.posar('barril', 110, 220, { escala: 0.8, col: { w: 40, h: 18 } });
+        this.posar('llenya', 540, 400, { escala: 0.6, col: { w: 70, h: 20 } });
+
+        // El cofre dels joguets, amb la palanca d'en Jordi a sota
+        this.posar('cofre', 510, 220, { col: { w: 50, h: 20 } });
+        this.interactiu(510, 225, 85, DIALEGS.cofrePalanca, { altura: 80 });
+
+        this.add.rectangle(320, 260, 640, 520, 0xffd38a, 0.05).setDepth(80000);
+        this.sortida(280, 492, 80, 22, 'ZonaJordi', 'caseta');
+    }
+}
+
 // ---------------- BOSC DE SANT JOAN ----------------
 class ZonaBosc extends ZonaBase {
     constructor() {
@@ -457,40 +678,62 @@ class ZonaBosc extends ZonaBase {
             amplada: 1800,
             alcada: 1200,
             colorFons: '#1f3a1a',
-            entrades: { celles: { x: 1740, y: 705, dir: 'esquerra' }, portal: { x: 300, y: 650, dir: 'avall' } }
+            entrades: { celles: { x: 1740, y: 705, dir: 'esquerra' }, portal: { x: 330, y: 870, dir: 'avall' } }
         });
     }
 
     construir() {
+        let llavor = 11;
+        const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
         this.terra('herba_fosca', 0, 0, 1800, 1200, -1100);
         this.terra('cami', 880, 640, 920, 130);          // camí des de les cel·les fins a la font
         this.terra('pedra', 780, 520, 260, 230);         // clariana de pedra de la font
 
         // Font del Bisbe (missió de la font)
-        this.posar('font_sj', 910, 610, { col: { w: 110, h: 40 } });
-        this.interactiu(910, 625, 100, DIALEGS.fontSJ, { altura: 130 });
+        this.posar('font_sj', 910, 610, { col: { w: 150, h: 50 } });
+        this.interactiu(910, 625, 110, DIALEGS.fontSJ, { altura: 170 });
 
-        // Alzina Buida: el portal ocult cap a la cabana de la Jaumeta
-        this.posar('alzina_buida', 300, 560, { col: { w: 90, h: 36 } });
-        this.interactiu(300, 575, 100, DIALEGS.alzinaBuida, {
-            altura: 220,
+        // Alzina Buida: el portal ocult cap a la cabana de la Jaumeta. És el doble de gran que els altres arbres, té la seva
+        // pròpia clariana (llum verda a terra, llumenetes i pedres) i el forat del tronc fa claror: no es pot confondre amb la resta.
+        const AX = 330, AY = 780;
+        this.add.ellipse(AX, AY + 40, 760, 380, 0x8fe08a, 0.13).setDepth(-1090);
+        this.add.ellipse(AX, AY + 40, 480, 220, 0xb8f0a0, 0.13).setDepth(-1089);
+        this.alzina = this.posar('alzina_buida', AX, AY, { col: { w: 150, h: 46 } });
+        this.interactiu(AX, AY + 20, 130, DIALEGS.alzinaBuida, {
+            altura: 330,
             enTancar: () => { if (Estat.flag('portalJaumeta')) { Estat.dades.portalTorna = 'bosc'; this.canviarZona('ZonaCabana', 'portal'); } }
         });
-        this.boira(300, 520, 70, 40, 0.5);
+        [[-250, 75, 0.7], [255, 45, 0.55], [-120, 120, 0.4]].forEach(([dx, dy, e]) => this.posar('roca', AX + dx, AY + dy, { escala: e, col: { w: 34, h: 14 } }));
+        this.claror = this.add.ellipse(AX - 18, AY - 128, 78, 104, 0x6aff9a, 0.3).setDepth(AY + 1);
+        this.tweens.add({ targets: this.claror, alpha: 0.12, scaleX: 1.2, scaleY: 1.12, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
+        this.add.particles(AX, AY - 90, 'espurna', {
+            x: { min: -230, max: 230 }, y: { min: -120, max: 60 }, speedX: { min: -8, max: 8 }, speedY: { min: -14, max: -3 }, lifespan: 3200,
+            scale: { start: 0.28, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xbaffb0, 0xf2ffc0], frequency: 260, blendMode: 'ADD'
+        }).setDepth(AY + 2);
+        this.boira(AX, AY - 20, 300, 60, 0.5);
 
-        // Herbes de Sant Joan: apareixen fins que les agafes
+        // Herbes de la Nit de Sant Joan: cal trobar-les entre els arbres. Cada una és en una clariana, més gran que abans,
+        // amb un halo a terra, espurnes i una columna de llum tènue que es veu per sobre de les copes.
         this.herbes = [];
-        [[1, 'herba de Sant Joan', 430, 280], [2, 'ruda', 1380, 990], [3, 'farigola', 560, 1010]].forEach(([n, nom, x, y]) => {
-            const img = this.posar('flors', x, y);
-            this.tweens.add({ targets: img, scaleY: img.scaleY * 1.06, yoyo: true, repeat: -1, duration: 900 });
-            this.interactiu(x, y, 70, DIALEGS.herba(n, nom), { altura: 60, actiu: () => !Estat.flag('herba' + n) });
-            this.herbes.push({ img, flag: 'herba' + n });
+        [[1, 'herba de Sant Joan', 'herba_sj', 720, 290], [2, 'romaní', 'romani', 1380, 990], [3, 'farigola', 'farigola', 560, 1020]].forEach(([n, nom, key, x, y]) => {
+            const halo = this.add.ellipse(x, y - 10, 96, 44, 0xfff0a0, 0.3).setDepth(y - 1);
+            this.tweens.add({ targets: halo, alpha: 0.08, scale: 1.35, yoyo: true, repeat: -1, duration: 1100 });
+            const raig = this.add.rectangle(x, y - 110, 30, 220, 0xfff4b0, 0.12).setDepth(9500);
+            this.tweens.add({ targets: raig, alpha: 0.04, yoyo: true, repeat: -1, duration: 1400 });
+            const img = this.posar(key, x, y);
+            this.tweens.add({ targets: img, scaleY: img.scaleY * 1.05, yoyo: true, repeat: -1, duration: 900 });
+            const espurnes = this.add.particles(x, y - 14, 'espurna', {
+                x: { min: -30, max: 30 }, y: { min: -10, max: 10 }, speedY: { min: -46, max: -16 }, lifespan: 1600,
+                scale: { start: 0.38, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xfff2a0, 0xffffff], frequency: 260, blendMode: 'ADD'
+            }).setDepth(9501);
+            this.interactiu(x, y, 80, DIALEGS.herba(n, nom), { altura: 70, actiu: () => !Estat.flag('herba' + n) });
+            this.herbes.push({ img, halo, raig, espurnes, flag: 'herba' + n });
         });
 
         // Bosc dens: arbres en graella amb petits desplaçaments, deixant lliures el camí i els llocs importants
-        const lliure = [[200, 180, 160], [900, 650, 240], [300, 560, 150], [430, 280, 110], [1380, 990, 110], [560, 1010, 110], [120, 700, 110], [1700, 700, 230]];
-        let llavor = 11;
-        const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+        // (els arbres es dibuixen davant segons la y: una herba o un cartell queda tapat per les copes dels arbres que té al sud,
+        // per això les clarianes són amples i el cartell en té una de més a sota)
+        const lliure = [[200, 180, 170], [900, 650, 250], [AX, AY - 60, 330], [720, 290, 210], [1380, 990, 210], [560, 1020, 210], [1700, 700, 240], [1520, 600, 190], [1520, 830, 210]];
         for (let y = 80; y < 1180; y += 150) {
             for (let x = 70; x < 1760; x += 170) {
                 const px = x + (rnd() - 0.5) * 90, py = y + (rnd() - 0.5) * 70;
@@ -500,7 +743,7 @@ class ZonaBosc extends ZonaBase {
             }
         }
 
-        [[600, 400], [1300, 300], [1200, 900], [450, 850], [1550, 560]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[600, 400], [1300, 300], [1200, 900], [450, 560], [1550, 450]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         // Amagatall tancat amb esbarzers negres (cal Runna): un cofre
         for (let i = 0; i < 6; i++) {
             const a = i / 6 * Math.PI * 2;
@@ -509,13 +752,40 @@ class ZonaBosc extends ZonaBase {
         this.cofre = this.posar('cofre', 200, 200, { col: { w: 50, h: 20 } });
         this.interactiu(200, 205, 80, DIALEGS.cofreBosc, { altura: 70 });
 
-        this.cartell(120, 700, DIALEGS.cartellBosc);
+        // El cartell, a la vora del camí d'entrada, en una zona sense arbres que el tapin
+        this.cartell(1520, 600, DIALEGS.cartellBosc);
         this.sortida(1786, 640, 14, 130, 'ZonaCelles', 'bosc');
 
+        // La boira lila del mal: cobreix tot el bosc mentre la Font del Bisbe estigui adormida; en netejar-la, se'n va
+        this.boires = [];
+        if (!Estat.flag('fontNeta')) {
+            for (let gy = 140; gy < 1200; gy += 250) for (let gx = 140; gx < 1800; gx += 290) {
+                if (Math.hypot(gx - AX, gy - AY) < 260) continue;                            // l'Alzina Buida és un lloc a part: aire net
+                this.boires.push(this.boira(gx + rnd() * 120, gy + rnd() * 90, 260, 110, 0.8));
+            }
+            this.llumLila = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, 0.17).setScrollFactor(0).setDepth(90001);
+        }
         this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x102810, 0.18).setScrollFactor(0).setDepth(90000);
     }
 
     actualitzar(ara) {
-        this.herbes.forEach(h => h.img.setVisible(!Estat.flag(h.flag)));
+        this.herbes.forEach(h => {
+            const visible = !Estat.flag(h.flag);
+            h.img.setVisible(visible); h.halo.setVisible(visible); h.raig.setVisible(visible);
+            if (!visible && !h.apagada) { h.apagada = true; h.espurnes.stop(); }
+        });
+        // La font s'ha netejat: la boira lila se'n va (deixa de néixer i el to lila s'esvaeix)
+        if (Estat.flag('fontNeta') && this.boires.length) {
+            this.boires.forEach(b => b.stop());
+            this.boires = [];
+            if (this.llumLila) this.tweens.add({ targets: this.llumLila, alpha: 0, duration: 3500 });
+        }
+        // I l'aigua de la font brilla
+        if (Estat.flag('fontNeta') && !this.fontBrilla) {
+            this.fontBrilla = this.add.particles(910, 575, 'espurna', {
+                x: { min: -45, max: 45 }, y: { min: -10, max: 10 }, speedY: { min: -22, max: -6 }, lifespan: 1500,
+                scale: { start: 0.3, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xbfe8ff, 0xffffff], frequency: 280, blendMode: 'ADD'
+            }).setDepth(700);
+        }
     }
 }

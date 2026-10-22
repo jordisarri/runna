@@ -6,7 +6,7 @@ const Joc = {
     debug: new URLSearchParams(location.search).has('debug'),
     ZONES: ['ZonaPlaca', 'ZonaEsglesia', 'ZonaMonestir', 'ZonaCreu', 'ZonaCasaGran', 'ZonaRuines', 'ZonaPingpong',
             'ZonaCelles', 'ZonaTiller', 'ZonaBosc', 'ZonaCami', 'ZonaErmita', 'ZonaErmitaInt', 'ZonaEra', 'ZonaJardi',
-            'ZonaCamiCirosa', 'ZonaCirosa', 'ZonaCementiri', 'ZonaCasaGranInt', 'ZonaCabana', 'ZonaCabanaInt', 'ZonaCamiRov', 'ZonaRovellonera', 'ZonaGabriel', 'ZonaGabrielInt', 'ZonaDipositos', 'ZonaDolmen', 'ZonaTresor', 'ZonaGolfes', 'ZonaPassadis', 'ZonaCasaTresor', 'ZonaCabanaCami', 'ZonaCasaCripta', 'ZonaTorre'],
+            'ZonaCamiCirosa', 'ZonaCirosa', 'ZonaCementiri', 'ZonaCasaGranInt', 'ZonaCabana', 'ZonaCabanaInt', 'ZonaCamiRov', 'ZonaRovellonera', 'ZonaGabriel', 'ZonaGabrielInt', 'ZonaDipositos', 'ZonaDolmen', 'ZonaTresor', 'ZonaGolfes', 'ZonaPassadis', 'ZonaCasaTresor', 'ZonaCabanaCami', 'ZonaCasaCripta', 'ZonaTorre', 'ZonaSantAntoni', 'ZonaTaverna', 'ZonaJordi', 'ZonaCasetaJoc'],
 
     zonaActiva(scene) {
         const m = scene.game.scene;
@@ -32,7 +32,7 @@ const Joc = {
         ZonaDolmen: 'musica_bosc', ZonaTiller: 'musica_bosc', ZonaCabana: 'musica_bosc',
         // Exteriors (overworld)
         ZonaPlaca: 'musica_intro', ZonaMonestir: 'musica_intro', ZonaCreu: 'musica_intro', ZonaCasaGran: 'musica_intro',
-        ZonaRuines: 'musica_intro', ZonaCelles: 'musica_intro', ZonaEra: 'musica_intro', ZonaJardi: 'musica_intro', ZonaCementiri: 'musica_intro',
+        ZonaRuines: 'musica_intro', ZonaCelles: 'musica_intro', ZonaSantAntoni: 'musica_intro', ZonaTaverna: 'musica_intro', ZonaJordi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaEra: 'musica_intro', ZonaJardi: 'musica_intro', ZonaCementiri: 'musica_intro',
         // Interiors de cases
         ZonaEsglesia: 'musica_casa', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
         ZonaCabanaCami: 'musica_casa', ZonaGolfes: 'musica_casa', ZonaTorre: 'musica_casa',
@@ -41,8 +41,34 @@ const Joc = {
         ZonaCasaTresor: 'musica_masmorra', ZonaTresor: 'musica_masmorra', ZonaDipositos: 'musica_masmorra'
     },
 
+    // Fitxers de cada cançó (AAC .m4a, comprimides amb eines/comprimir_media.sh). Només 'musica_intro' es carrega
+    // a la pantalla de càrrega; la resta es baixen en segon pla des del títol, o quan una zona les demana.
+    FITXERS_MUSICA: {
+        musica_intro: "The Hero's Ascension", musica_casa: 'Inside All',
+        musica_masmorra: 'Deep Dungeon Stillness', musica_bosc: 'Woodland Path'
+    },
+
+    carregarMusica(scene, clau) {
+        const enCua = [...scene.load.list.entries, ...scene.load.inflight.entries].some(f => f.type === 'audio' && f.key === clau);
+        if (scene.cache.audio.exists(clau) || enCua) return;
+        scene.load.audio(clau, encodeURI(`assets/musica/${Joc.FITXERS_MUSICA[clau]}.m4a`));
+    },
+
+    precarregarMusiques(scene) {
+        Object.keys(Joc.FITXERS_MUSICA).forEach(clau => Joc.carregarMusica(scene, clau));
+        scene.load.start();
+    },
+
     iniciarMusica(scene, seek = 0, clau = 'musica_intro') {
-        if (!scene.cache.audio.exists(clau)) return;
+        if (!scene.cache.audio.exists(clau)) {
+            // Encara no s'ha baixat: es carrega ara i sona en acabar, si la zona encara la vol
+            Joc.musicaPendent = clau;
+            scene.load.once('filecomplete-audio-' + clau, () => { if (Joc.musicaPendent === clau) Joc.iniciarMusica(scene, seek, clau); });
+            Joc.carregarMusica(scene, clau);
+            scene.load.start();
+            return;
+        }
+        Joc.musicaPendent = null;
         if (Joc.musica && Joc.musicaClau === clau && Joc.musica.isPlaying) { Joc.musica.setVolume(0.6); return; }
         Joc.aturarMusica();
         Joc.musicaClau = clau;
@@ -54,7 +80,7 @@ const Joc = {
     musicaZona(scene) {
         const clau = Joc.MUSICA_ZONES[scene.scene.key];
         if (clau) Joc.iniciarMusica(scene, 0, clau);
-        else Joc.aturarMusica();
+        else { Joc.musicaPendent = null; Joc.aturarMusica(); }
     },
 
     // Esvaeix la cançó que sona (cada cançó té el seu propi fade)
@@ -101,10 +127,7 @@ class EscenaCarrega extends Phaser.Scene {
         this.load.on('fileprogress', f => detall.setText(f.key));
         this.load.on('loaderror', f => console.warn("No s'ha pogut carregar", f.key));
         Grafics.carregar(this);
-        this.load.audio('musica_intro', encodeURI("assets/musica/The Hero's Ascension.mp3"));
-        this.load.audio('musica_casa', encodeURI('assets/musica/Inside All.mp3'));
-        this.load.audio('musica_masmorra', encodeURI('assets/musica/Deep Dungeon Stillness.mp3'));
-        this.load.audio('musica_bosc', 'assets/musica/Woodland Path.mp3'.replace(' ', '%20'));
+        Joc.carregarMusica(this, 'musica_intro');
         // Vídeos de la intro (sense el seu so: sona la música del joc)
         this.load.video('video_intro', 'assets/video/intro_runna_vertical.mp4', true);
         this.load.video('video_bucle', 'assets/video/intro_runna_bucle_vertical.mp4', true);
@@ -218,6 +241,6 @@ const game = new Phaser.Game({
     scene: [EscenaCarrega, EscenaTitol, EscenaProleg,
             ZonaPlaca, ZonaEsglesia, ZonaMonestir, ZonaCreu, ZonaCasaGran, ZonaRuines, ZonaPingpong,
             ZonaCelles, ZonaTiller, ZonaBosc, ZonaCami, ZonaErmita, ZonaErmitaInt, ZonaEra, ZonaJardi, ZonaCamiCirosa, ZonaCirosa,
-            ZonaCementiri, ZonaCasaGranInt, ZonaCabana, ZonaCabanaInt, ZonaCamiRov, ZonaRovellonera, ZonaGabriel, ZonaGabrielInt, ZonaDipositos, ZonaDolmen, ZonaTresor, ZonaGolfes, ZonaPassadis, ZonaCasaTresor, ZonaCabanaCami, ZonaCasaCripta, ZonaTorre,
+            ZonaCementiri, ZonaCasaGranInt, ZonaCabana, ZonaCabanaInt, ZonaCamiRov, ZonaRovellonera, ZonaGabriel, ZonaGabrielInt, ZonaDipositos, ZonaDolmen, ZonaTresor, ZonaGolfes, ZonaPassadis, ZonaCasaTresor, ZonaCabanaCami, ZonaCasaCripta, ZonaTorre, ZonaSantAntoni, ZonaTaverna, ZonaJordi, ZonaCasetaJoc,
             EscenaUI, EscenaMusica, EscenaEstels]
 });

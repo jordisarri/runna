@@ -11,20 +11,25 @@ const RES = 2;
 const CATALEG = [
     // Edificis
     { key: 'esglesia',     file: 'assets/esglesia.webp',     amplada: 1100 },   // gran: la porta (~165) ha de superar l'Ineu (~125); a la plaça es retalla i no es veu sencera
-    { key: 'monestir',     file: 'assets/monestir.webp',     amplada: 620, provisional: (c, w) => dibuixarMonestir(c, w) },
+    { key: 'monestir',     file: 'assets/monestir.webp',     amplada: 800, provisional: (c, w) => dibuixarMonestir(c, w) },
+    { key: 'cel_stantoni', file: 'assets/cel_stantoni.webp', amplada: 900, provisional: (c, w) => dibuixarCasaGran(c, w) },
+    { key: 'taverna',      file: 'assets/taverna.webp',      amplada: 640, provisional: (c, w) => dibuixarTaverna(c, w) },
     { key: 'casa_gran',    file: 'assets/casa_gran.webp',    amplada: 1250, provisional: (c, w) => dibuixarCasaGran(c, w) },
     // Personatges
     { key: 'pare_jordi',   file: 'assets/pare_jordi.png',   amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
     { key: 'germa_andreu', file: 'assets/germa_andreu.png', amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#3b2a1e', pilota: true }) },
     { key: 'pare_daniel',  file: 'assets/pare_daniel.png',  amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
+    { key: 'germa_francesc', file: 'assets/germa_francesc.png', amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
     { key: 'pare_alcui',   file: 'assets/pare_alcui.png',   amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
     // Elements
     { key: 'home_raim',    file: 'assets/home_raim.png',    amplada: 110, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },
     { key: 'creu',         file: 'assets/creu.png',         amplada: 80,  provisional: (c, w) => dibuixarCreuAparicio(c, w) },
     { key: 'creu_desaparicio', file: 'assets/creu_desaparicio.png', amplada: 90, provisional: (c, w) => dibuixarCreuDesaparicio(c, w) },
     { key: 'bassadoria',   file: 'assets/bassadoria.png',   amplada: 520, provisional: (c, w) => dibuixarBassadoriaReixa(c, w) },
-    { key: 'font',         file: 'assets/font.png',         amplada: 150, provisional: (c, w) => dibuixarFont(c, w) },
     { key: 'arbre',        file: 'assets/arbre.webp',        amplada: 300, provisional: (c, w) => dibuixarArbre(c, w) },
+    { key: 'pi',           file: 'assets/pi.png',           amplada: 240, provisional: (c, w) => dibuixarPi(c, w) },
+    { key: 'pi_pinyer',    file: 'assets/pi_pinyer.png',    amplada: 320, provisional: (c, w) => dibuixarPiPinyer(c, w) },
+    { key: 'caseta_joc',   file: 'assets/caseta_joc.png',   amplada: 240, provisional: (c, w) => dibuixarCasetaJoc(c, w) },
     { key: 'xiprer',       file: 'assets/xiprer.webp',       amplada: 80,  provisional: (c, w) => dibuixarXiprer(c, w) },
     { key: 'retaule',      file: 'assets/retaule_tancat.webp', amplada: 800, provisional: (c, w) => dibuixarRetauleBarroc(c, w) },
     { key: 'retaule_obert', file: 'assets/retaule_obert.webp', amplada: 800, provisional: (c, w) => dibuixarRetauleBarroc(c, w) },   // porta de la dreta oberta (torre del rellotge)
@@ -64,22 +69,21 @@ const CATALEG = [
     { key: 'tiller',    file: 'assets/tiller.png',    amplada: 340, provisional: (c, w) => dibuixarTiller(c, w) },
     { key: 'altar',     file: 'assets/altar.png',     amplada: 150, provisional: (c, w) => dibuixarAltar(c, w) },
     { key: 'taula_pedra', file: 'assets/taula_pedra.png', amplada: 110, provisional: (c, w) => dibuixarTaulaPedra(c, w) },
-    { key: 'font_sj',   file: 'assets/font_sj.png',   amplada: 130, provisional: (c, w) => dibuixarFontSJ(c, w) },
+    { key: 'font_sj',   file: 'assets/font_sj.png',   amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w) },
     { key: 'carruatge', file: 'assets/carruatge.png', amplada: 230, provisional: (c, w) => dibuixarCarruatge(c, w) },
     { key: 'carro_sansa', file: 'assets/carro_sansa.png', amplada: 220, provisional: (c, w) => dibuixarCarroSansa(c, w) },
     { key: 'pergola',   file: 'assets/pergola.png',   amplada: 260, provisional: (c, w) => dibuixarPergola(c, w) },
     { key: 'flors',     file: 'assets/flors.png',     amplada: 90,  provisional: (c, w) => dibuixarFlors(c, w) },
     { key: 'taula_pp',  file: 'assets/taula_pp.png',  amplada: 240, provisional: (c, w) => dibuixarTaulaPP(c, w) },
-    { key: 'alzina_buida', file: 'assets/alzina_buida.webp', amplada: 280, provisional: (c, w) => dibuixarAlzinaBuida(c, w) },
+    { key: 'alzina_buida', file: 'assets/alzina_buida.webp', amplada: 520, provisional: (c, w) => dibuixarAlzinaBuida(c, w) },
     { key: 'llosa',     file: 'assets/llosa.png',     amplada: 90,  provisional: (c, w) => dibuixarLlosa(c, w) },
 
     // ---- Enemics ----
     { key: 'escolopendra', file: 'assets/escolopendra.png', amplada: 64, provisional: (c, w) => dibuixarEscolopendra(c, w) },
     { key: 'gripau',       file: 'assets/gripau.png',       amplada: 56, provisional: (c, w) => dibuixarGripau(c, w) },
     { key: 'visitant',     file: 'assets/visitant.png',     amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e0a040', pell: '#9ab080', cabell: '#5a4a3a', alt: 0.98, extra: 'gorra', ulleres: true }) },
-    { key: 'espantaocell', file: 'assets/espantaocell.png', amplada: 70, provisional: (c, w) => dibuixarEspantaocell(c, w) },
     { key: 'branca',       file: 'assets/branca.webp',       amplada: 80, provisional: (c, w) => dibuixarBranca(c, w) },
-    { key: 'pergami',      file: 'assets/pergami.png',      amplada: 44, provisional: (c, w) => dibuixarPergami(c, w) },
+    { key: 'pergami',      file: 'assets/pergami.png',      amplada: 70, provisional: (c, w) => dibuixarPergami(c, w) },
     { key: 'ombra_monjo',  file: 'assets/ombra_monjo.png',  amplada: 150, provisional: (c, w) => dibuixarOmbraMonjo(c, w) },
     { key: 'ovella',         file: 'assets/ovella.png',         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },
     { key: 'ovella_boira',   file: 'assets/ovella_boira.png',   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
@@ -104,12 +108,16 @@ const CATALEG = [
     { key: 'esbarzer',       file: 'assets/esbarzer.webp',       amplada: 96, provisional: (c, w) => dibuixarEsbarzer(c, w) },
     { key: 'cofre',          file: 'assets/cofre.png',          amplada: 70, provisional: (c, w) => dibuixarCofre(c, w) },
     { key: 'cabana',         file: 'assets/cabana.png',         amplada: 330, provisional: (c, w) => dibuixarCabana(c, w) },
+    { key: 'herba_sj',     file: 'assets/herba_sj.png',     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'sj') },
+    { key: 'romani',       file: 'assets/romani.png',       amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'romani') },
+    { key: 'farigola',     file: 'assets/farigola.png',     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'farigola') },
     { key: 'cercle_bolets',  file: 'assets/cercle_bolets.webp',  amplada: 150, provisional: (c, w) => dibuixarCercleBolets(c, w) },
     { key: 'olla',           file: 'assets/olla.png',           amplada: 110, provisional: (c, w) => dibuixarOlla(c, w) },
     { key: 'ocell',          file: 'assets/ocell.png',          amplada: 34, provisional: (c, w) => dibuixarOcell(c, w) },
     { key: 'jaumeta',        file: 'assets/jaumeta.png',        amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
     { key: 'lapida',           file: 'assets/lapida.png',           amplada: 40,  provisional: (c, w) => dibuixarLapida(c, w) },
     { key: 'tomba_esquerdada', file: 'assets/tomba_esquerdada.png', amplada: 240, provisional: (c, w) => dibuixarTombaEsquerdada(c, w) },
+    { key: 'arma_tiller', file: 'assets/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
     { key: 'espurna',      file: 'assets/espurna.png',      amplada: 32, provisional: (c, w) => dibuixarPuntSegell(c, w) }
 ];
@@ -1060,14 +1068,15 @@ function dibuixarMonjo(canvas, w, o) {
     ctx.lineWidth = 3; ctx.strokeStyle = '#120c08'; ctx.lineJoin = 'round';
     const alt = o.alt || 1;
     const capY = 128 - 108 * alt;
+    const X = x => 48 + (x - 48) * (o.prim ? 0.76 : 1);      // prim: l'hàbit més estret
     // Hàbit
     ctx.fillStyle = o.habit;
     ctx.beginPath();
-    ctx.moveTo(48, capY + 26); ctx.lineTo(70, capY + 40); ctx.lineTo(78, 122); ctx.lineTo(18, 122); ctx.lineTo(26, capY + 40);
+    ctx.moveTo(48, capY + 26); ctx.lineTo(X(70), capY + 40); ctx.lineTo(X(78), 122); ctx.lineTo(X(18), 122); ctx.lineTo(X(26), capY + 40);
     ctx.closePath(); ctx.fill(); ctx.stroke();
     // Cordó
     ctx.strokeStyle = '#c9b48a'; ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.moveTo(28, capY + 66); ctx.lineTo(68, capY + 66); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(X(28), capY + 66); ctx.lineTo(X(68), capY + 66); ctx.stroke();
     ctx.strokeStyle = '#120c08';
     // Peus
     ctx.fillStyle = '#5b3a20';
@@ -1080,6 +1089,15 @@ function dibuixarMonjo(canvas, w, o) {
     // Ulls
     ctx.fillStyle = '#120c08';
     ctx.fillRect(41, capY + 14, 3, 4); ctx.fillRect(52, capY + 14, 3, 4);
+    if (o.barba) {                       // barba llarga que baixa fins al cordó
+        ctx.fillStyle = o.barba; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(35, capY + 18); ctx.quadraticCurveTo(36, capY + 44, 48, capY + 64);
+        ctx.quadraticCurveTo(60, capY + 44, 61, capY + 18); ctx.quadraticCurveTo(48, capY + 26, 35, capY + 18);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(120,120,120,0.6)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(44, capY + 30); ctx.lineTo(46, capY + 52); ctx.moveTo(52, capY + 30); ctx.lineTo(50, capY + 52); ctx.stroke();
+        ctx.strokeStyle = '#120c08';
+    }
     if (o.ulleres) {
         ctx.lineWidth = 2;
         ctx.strokeRect(37, capY + 11, 10, 9); ctx.strokeRect(49, capY + 11, 10, 9);
@@ -1141,47 +1159,6 @@ function dibuixarBassadoria(canvas, w) {
     ctx.beginPath(); ctx.ellipse(w / 2, h / 2, w * 0.40, h * 0.34, 0, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = 'rgba(80,40,110,0.45)';
     ctx.beginPath(); ctx.ellipse(w * 0.45, h * 0.48, w * 0.26, h * 0.18, 0.2, 0, Math.PI * 2); ctx.fill();
-}
-
-function dibuixarFont(canvas, w) {
-    // Font de paret de pedra: mur amb fornícula d'arc, brolador de cap de lleó, raig d'aigua, pica baixa amb ondes i molsa
-    const h = Math.round(w * 1.15); canvas.width = w; canvas.height = h;
-    const ctx = canvas.getContext('2d');
-    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    const CT = '#2a2218', pedra = (x, y, ww, hh, c1, c2) => { const g = ctx.createLinearGradient(x, y, x + ww, y); g.addColorStop(0, c1); g.addColorStop(1, c2); ctx.fillStyle = g; };
-    // Ombra
-    ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(w / 2, h * 0.93, w * 0.46, h * 0.05, 0, 0, Math.PI * 2); ctx.fill();
-    // Mur del darrere amb fornícula d'arc
-    ctx.lineWidth = w * 0.025; ctx.strokeStyle = CT;
-    pedra(w * 0.2, h * 0.1, w * 0.6, h * 0.6, '#cfc3a8', '#a99d84');
-    ctx.beginPath(); ctx.moveTo(w * 0.2, h * 0.68); ctx.lineTo(w * 0.2, h * 0.22); ctx.quadraticCurveTo(w * 0.2, h * 0.08, w * 0.5, h * 0.06); ctx.quadraticCurveTo(w * 0.8, h * 0.08, w * 0.8, h * 0.22); ctx.lineTo(w * 0.8, h * 0.68); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.strokeStyle = 'rgba(70,58,40,0.45)'; ctx.lineWidth = 1;
-    for (let y = h * 0.16; y < h * 0.68; y += h * 0.085) { ctx.beginPath(); ctx.moveTo(w * 0.21, y); ctx.lineTo(w * 0.79, y); ctx.stroke(); }
-    for (let r = 0; r < 6; r++) for (let k = 0; k < 4; k++) { const x = w * (0.26 + k * 0.15 + (r % 2) * 0.07), y = h * (0.16 + r * 0.085); ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + h * 0.085); ctx.stroke(); }
-    // Fornícula fosca
-    ctx.fillStyle = '#4a4538'; ctx.strokeStyle = CT; ctx.lineWidth = w * 0.02;
-    ctx.beginPath(); ctx.moveTo(w * 0.33, h * 0.66); ctx.lineTo(w * 0.33, h * 0.3); ctx.quadraticCurveTo(w * 0.33, h * 0.18, w * 0.5, h * 0.17); ctx.quadraticCurveTo(w * 0.67, h * 0.18, w * 0.67, h * 0.3); ctx.lineTo(w * 0.67, h * 0.66); ctx.closePath(); ctx.fill(); ctx.stroke();
-    // Cornisa i coronament
-    ctx.fillStyle = '#d8ccb0'; ctx.fillRect(w * 0.15, h * 0.04, w * 0.7, h * 0.045); ctx.strokeRect(w * 0.15, h * 0.04, w * 0.7, h * 0.045);
-    // Cap de lleó (brolador)
-    ctx.fillStyle = '#b6aa90'; ctx.beginPath(); ctx.arc(w * 0.5, h * 0.42, w * 0.085, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#26200f'; ctx.beginPath(); ctx.ellipse(w * 0.5, h * 0.44, w * 0.03, h * 0.022, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#2a2218'; ctx.beginPath(); ctx.arc(w * 0.47, h * 0.4, w * 0.012, 0, Math.PI * 2); ctx.arc(w * 0.53, h * 0.4, w * 0.012, 0, Math.PI * 2); ctx.fill();
-    // Raig d'aigua
-    const aig = ctx.createLinearGradient(0, h * 0.45, 0, h * 0.8); aig.addColorStop(0, 'rgba(190,230,250,0.95)'); aig.addColorStop(1, 'rgba(110,170,210,0.9)');
-    ctx.fillStyle = aig; ctx.beginPath(); ctx.moveTo(w * 0.485, h * 0.45); ctx.lineTo(w * 0.515, h * 0.45); ctx.lineTo(w * 0.525, h * 0.8); ctx.lineTo(w * 0.475, h * 0.8); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(w * 0.495, h * 0.47); ctx.lineTo(w * 0.497, h * 0.78); ctx.stroke();
-    // Pica: dos graons de pedra i l'aigua amb ondes
-    ctx.strokeStyle = CT; ctx.lineWidth = w * 0.025;
-    ctx.fillStyle = '#9d9078'; ctx.beginPath(); ctx.ellipse(w / 2, h * 0.84, w * 0.47, h * 0.12, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#b8ab92'; ctx.beginPath(); ctx.ellipse(w / 2, h * 0.81, w * 0.42, h * 0.1, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    const aigua = ctx.createRadialGradient(w / 2, h * 0.8, 2, w / 2, h * 0.8, w * 0.38); aigua.addColorStop(0, '#9fd4ee'); aigua.addColorStop(1, '#5c9ec2');
-    ctx.fillStyle = aigua; ctx.beginPath(); ctx.ellipse(w / 2, h * 0.805, w * 0.36, h * 0.075, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.75)'; ctx.lineWidth = 1.5;
-    [0.1, 0.2, 0.3].forEach(r => { ctx.beginPath(); ctx.ellipse(w / 2, h * 0.805, w * r, h * r * 0.2, 0, 0, Math.PI * 2); ctx.stroke(); });
-    // Molsa
-    ctx.fillStyle = 'rgba(92,140,60,0.7)';
-    [[0.22, 0.66, 0.06], [0.7, 0.6, 0.05], [0.12, 0.86, 0.05], [0.84, 0.84, 0.05], [0.3, 0.9, 0.04]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.ellipse(w * x, h * y, w * r, h * r * 0.7, 0, 0, Math.PI * 2); ctx.fill(); });
 }
 
 function dibuixarHomeRaim(canvas, w) {
