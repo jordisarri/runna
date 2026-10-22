@@ -2296,20 +2296,50 @@ function pintarTombaVorada(ctx, W, H, mode, llavor = 11) {
     herbaTomba(ctx, rnd, 2, W - 2, base, 7, 6);
 }
 
-// La tomba de la creu on el Germà Francesc porta flors (140 x 132): vorada a terra, túmul d'herba, una creu de pedra
-// baixa al cap i, als seus peus, un gerro amb el ram (marcit o fresc, amb una espelmeta encesa)
-function pintarTombaCreu(ctx, W, H, fresc) {
+// Creueta de tomba (alt 36): creu curta de pedra amb una anella al creuer, a l'estil de les creus de cementiri
+function creuTomba(ctx, rnd, cx, top) {
+    const alt = 36, b = 3.6, braca = 11, cy = top - alt * 0.67;
+    const anella = (dx, dy) => { ctx.beginPath(); ctx.arc(cx + dx, cy + dy, 9.5, 0, Math.PI * 2); ctx.arc(cx + dx, cy + dy, 6.2, 0, Math.PI * 2, true); };
+    ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.4;
+    ctx.fillStyle = PEDRA_TOMBA.ombra; anella(2.5, -1.5); ctx.fill(); ctx.stroke();      // gruix
+    formaCreuPedra(ctx, cx, top, b, braca, alt, 2.5, -1.5); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = pedraGrad(ctx, cx - 10, cx + 10); anella(0, 0); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = pedraGrad(ctx, cx - braca, cx + braca); formaCreuPedra(ctx, cx, top, b, braca, alt); ctx.fill();
+    ctx.save(); formaCreuPedra(ctx, cx, top, b, braca, alt); ctx.clip();
+    molsaTomba(ctx, rnd, cx - braca, top - 10, cx + braca, top, 5, 1.6);
+    ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.fillRect(cx - b, top - alt, 1.5, alt);
+    ctx.restore();
+    formaCreuPedra(ctx, cx, top, b, braca, alt); ctx.stroke();
+    ctx.fillStyle = 'rgba(40,36,30,0.6)'; ctx.beginPath(); ctx.arc(cx, cy, 1.5, 0, Math.PI * 2); ctx.fill();   // rosetó
+}
+
+// Tomba de la creueta (140 x 112): vorada a terra, túmul d'herba i una creueta de pedra al cap
+function pintarTombaCreu(ctx, W, H) {
+    pintarTombaRam(ctx, W, H, null, (rnd, cx, sb) => {
+        socolTomba(ctx, cx - 12, cx + 12, sb, 6, 2);
+        creuTomba(ctx, rnd, cx, sb - 6);
+        ctx.strokeStyle = 'rgba(40,36,30,0.65)'; ctx.lineWidth = 0.9;                 // inscripció del sòcol
+        ctx.beginPath(); ctx.moveTo(cx - 7, sb - 3); ctx.lineTo(cx + 7, sb - 3); ctx.stroke();
+    });
+}
+
+// La tomba de l'àngel on el Germà Francesc porta flors (140 x 226): l'àngel que plora al cap de la tomba i, als peus,
+// un gerro amb el ram (marcit o fresc, amb una espelmeta encesa)
+function pintarTombaAngel(ctx, W, H, fresc) {
+    pintarTombaRam(ctx, W, H, fresc, (rnd, cx, sb) => {
+        ctx.save(); ctx.translate(cx - 48, sb - 172); pintarAngelPedra(ctx, 96, 176); ctx.restore();
+    });
+}
+
+// Tomba a terra amb vorada i túmul d'herba (fons 44). cap(rnd, cx, sb) dibuixa la peça del cap, amb la base a sb;
+// fresc: null sense gerro, false amb el ram marcit, true amb el ram fresc
+function pintarTombaRam(ctx, W, H, fresc, cap) {
     const rnd = rndTomba(29), base = H - 3, fons = 44, cx = W / 2;
     ombraTerra(ctx, cx + 2, base - 5, W * 0.5, 8);
     ctx.lineJoin = 'round'; ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.7;
     const sb = base - fons - 4;
-    socolTomba(ctx, cx - 22, cx + 22, sb, 7, 3);
-    socolTomba(ctx, cx - 14, cx + 14, sb - 7, 8, 2);
-    const top = sb - 15;
-    creuPedra(ctx, rnd, cx, top, 6, 20, 60);
-    ctx.strokeStyle = 'rgba(40,36,30,0.65)'; ctx.lineWidth = 1;                       // monograma i inscripció gravats
-    ctx.beginPath(); ctx.arc(cx, top - 40, 3.4, 0, Math.PI * 2); ctx.stroke();
-    [top - 26, top - 21, top - 16].forEach(y => { ctx.beginPath(); ctx.moveTo(cx - 3, y); ctx.lineTo(cx + 3, y); ctx.stroke(); });
+    cap(rnd, cx, sb);
+    ctx.lineJoin = 'round';
     // Vorada i túmul d'herba
     ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.7;
     const dins = voradaTomba(ctx, W, base, fons, 8, 9);
@@ -2319,14 +2349,19 @@ function pintarTombaCreu(ctx, W, H, fresc) {
     ctx.fillStyle = '#8a6a2a'; ctx.strokeStyle = '#2a1c08'; ctx.lineWidth = 1;
     ctx.fillRect(cx - 12, base - 5, 24, 4.5); ctx.strokeRect(cx - 12, base - 5, 24, 4.5);
     ctx.fillStyle = 'rgba(255,220,140,0.45)'; ctx.fillRect(cx - 11, base - 4.6, 22, 1);
-    // Gerro de pedra als peus de la creu
-    const gx = cx, gy = base - fons + 8;
+    if (fresc === null) {
+        ctx.save(); ctx.beginPath(); ctx.rect(0, base - 6, W, 6); ctx.clip(); molsaTomba(ctx, rnd, 8, base - 5, W - 8, base, 8, 1.8); ctx.restore();
+        herbaTomba(ctx, rnd, 2, W - 2, base, 8, 6);
+        return;
+    }
+    // Gerro de pedra als peus de la tomba (el ram, baix, no tapa el cap)
+    const gx = cx, gy = base - 10;
     ctx.fillStyle = pedraGrad(ctx, gx - 8, gx + 8); ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1.4;
     ctx.beginPath(); ctx.moveTo(gx - 9, gy - 15); ctx.lineTo(gx + 9, gy - 15); ctx.lineTo(gx + 6, gy - 3); ctx.lineTo(gx + 4, gy); ctx.lineTo(gx - 4, gy); ctx.lineTo(gx - 6, gy - 3); ctx.closePath(); ctx.fill(); ctx.stroke();
     ctx.fillStyle = PEDRA_TOMBA.ombra; ctx.beginPath(); ctx.ellipse(gx, gy - 15, 9, 2.2, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     // Ram
     ctx.lineCap = 'round';
-    const tiges = [[-11, -34], [-5, -38], [0, -41], [6, -37], [12, -32], [-14, -26], [15, -25]];
+    const tiges = [[-11, -20], [-5, -23], [0, -25], [6, -22], [12, -19], [-14, -15], [15, -14]];
     tiges.forEach(([dx, dy], i) => {
         const caiguda = (i % 2 ? 1 : -1) * (8 + i);                       // les marcides s'arrosseguen cap avall
         const fx = gx + dx + (fresc ? 0 : caiguda * 0.5), fy = gy - 15 + (fresc ? dy : dy * 0.45 + 8);
@@ -2343,7 +2378,7 @@ function pintarTombaCreu(ctx, W, H, fresc) {
         }
     });
     if (!fresc) {                                                         // pètals secs caiguts
-        for (let i = 0; i < 7; i++) { ctx.fillStyle = 'rgba(120,90,55,0.85)'; ctx.beginPath(); ctx.ellipse(gx - 22 + rnd() * 44, gy + 2 + rnd() * 10, 1.6, 1, rnd() * 3, 0, Math.PI * 2); ctx.fill(); }
+        for (let i = 0; i < 7; i++) { ctx.fillStyle = 'rgba(120,90,55,0.85)'; ctx.beginPath(); ctx.ellipse(gx - 26 + rnd() * 52, gy - 8 + rnd() * 12, 1.6, 1, rnd() * 3, 0, Math.PI * 2); ctx.fill(); }
     } else {                                                              // espelmeta encesa al costat
         ctx.fillStyle = '#efe6cc'; ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 1;
         ctx.fillRect(gx + 16, gy - 9, 5, 9); ctx.strokeRect(gx + 16, gy - 9, 5, 9);

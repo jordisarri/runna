@@ -396,8 +396,8 @@ class ZonaCelles extends ZonaBase {
 }
 
 // ---------------- CEL·LES DE SANT ANTONI ----------------
-// A llevant del Monestir. Hi viu el Germà Francesc, el monjo que cuida les flors del cementiri: per un favor (portar-hi
-// el seu ram), et dona els Guants de Poder, els que mouen la roda del Celler. D'aquí era el Biel, el primer nen desaparegut.
+// A llevant del Monestir. Hi passeja el Germà Francesc, monjo del Monestir que cuida les flors del cementiri: per un favor
+// (portar-hi el seu ram), et dona els Guants de Poder, els que mouen la roda del Celler. D'aquí era el Biel, el primer nen desaparegut.
 Object.assign(DIALEGS, {
     cel_stbenet: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Benet: petites, de pedra ocre, amb les persianes mig ajustades. Hi fa olor de sopa.' }] }),
     cel_ntrasra: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Nostra Senyora, les més grans del Santuari. Avui les finestres són tancades: ningú no vol que hi entri la boira.' }] }),
@@ -409,7 +409,7 @@ Object.assign(DIALEGS, {
         ] };
         if (E.flag('florsCreu')) return {
             pagines: [
-                { qui: 'Germà Francesc', text: 'Les has deixades a la creu? Que Déu t\'ho pagui, fill. Els monjos d\'abans ja deuen estar contents: algú encara se\'n recorda.' },
+                { qui: 'Germà Francesc', text: 'Les has deixades a l\'àngel? Que Déu t\'ho pagui, fill. Els monjos d\'abans ja deuen estar contents: algú encara se\'n recorda.' },
                 { qui: 'Germà Francesc', text: 'Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.' },
                 { qui: '', text: 'Has obtingut els GUANTS DE PODER!\nAra pots empènyer coses molt pesades.' },
                 { qui: 'Germà Francesc', text: 'Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.' }
@@ -420,17 +420,17 @@ Object.assign(DIALEGS, {
             }
         };
         if (E.te('ram')) return { pagines: [
-            { qui: 'Germà Francesc', text: 'El ram, a la creu de pedra del fons del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.' }
+            { qui: 'Germà Francesc', text: 'El ram, a la tomba de l\'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.' }
         ] };
         return {
             pagines: [
-                { qui: 'Germà Francesc', text: 'Ineu... Passa, passa. Perdona que no m\'aixequi de pressa: aquests genolls ja tenen més anys que el campanar.' },
-                { qui: 'Germà Francesc', text: 'El Biel vivia aquí, a Sant Antoni. Cada matí em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
-                { qui: 'Germà Francesc', text: 'Cada setmana porto flors a la creu del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
-                { qui: 'Germà Francesc', text: 'Me\'n faries el favor? Deixa aquest ram als peus de la creu. I torna, que tinc una cosa per a tu.' },
+                { qui: 'Germà Francesc', text: 'Ineu... Bon dia, fill. Perdona que no camini de pressa: aquests genolls ja tenen més anys que el campanar.' },
+                { qui: 'Germà Francesc', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. El Biel vivia aquí: em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
+                { qui: 'Germà Francesc', text: 'Cada setmana porto flors a l\'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
+                { qui: 'Germà Francesc', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },
                 { qui: '', text: 'Has obtingut un RAM DE FLORS.' }
             ],
-            enAcabar: () => { E.dona('ram'); E.posaObjectiu('Deixa el ram del Germà Francesc als peus de la creu del Cementiri.'); }
+            enAcabar: () => { E.dona('ram'); E.posaObjectiu('Deixa el ram del Germà Francesc a la tomba de l\'àngel del Cementiri.'); }
         };
     }
 });

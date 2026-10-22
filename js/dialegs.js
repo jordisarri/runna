@@ -24,7 +24,7 @@ function pistaActual(E) {
     else if (E.flag("soparFet") && !E.flag("benediccio")) consell = "El Pare Jordi, a la Plaça, vol donar-te la benedicció. Fes-li una visita.";
     else if (E.flag("soparFet") && !E.flag("runna")) consell = "Surt de l'Hostatgeria cap a l'oest, passa per davant de l'Era i segueix el camí un bon tros: arribaràs a la Rovellonera. Allà, on hi ha rovellons sota els pins, hi ha camí: sud, ponent i sud. I mira el cel als Dipòsits.";
     else if (!E.flag("fredericRoda") && !E.flag("cofreCambra")) consell = "Ara que portes Runna... Al Celler, a les Runes, hi ha una roda de carruatge que amaga alguna cosa. El Frederic, el pare del Juli, en sap més del que diu. Parla-hi.";
-    else if (!E.te("guants") && !E.flag("rodaMoguda")) consell = E.flag("florsCreu") ? "Torna a Sant Antoni, fill: el Germà Francesc t'espera." : E.te("ram") ? "El ram del Germà Francesc va als peus de la creu del Cementiri." : "El Germà Francesc, a les cel·les de Sant Antoni (a llevant del Monestir), té uns guants que mouen el que pesa. Fes-li un favor i te'ls deixarà.";
+    else if (!E.te("guants") && !E.flag("rodaMoguda")) consell = E.flag("florsCreu") ? "Torna a Sant Antoni, fill: el Germà Francesc t'espera." : E.te("ram") ? "El ram del Germà Francesc va a la tomba de l'àngel del Cementiri." : "El Germà Francesc, que passeja per Sant Antoni (a llevant del Monestir), té uns guants que mouen el que pesa. Fes-li un favor i te'ls deixarà.";
     else if (!E.flag("cofreCambra")) consell = "Amb els guants posats, empeny la roda del Celler des d'un costat. Al darrere hi ha el túnel dels monjos.";
     else if (!E.flag("raimDerrotat")) consell = "A la gran escalinata de la Casa Gran hi ha l'Home del Raïm. Necessites la palanca: és a la caseta de joc del jardí de la masia d'en Jordi, a l'oest del Gran Til·ler. I recorda el que diu el pergamí del monjo: on neix el sol, el raïm madura.";
     else if (!E.flag("relIquiesRetornades")) consell = "Les relíquies dels monjos s'han de tornar a la tomba esquerdada del Cementiri, darrere el Santuari i el Monestir. I guarda bé aquella clau que has trobat: obre la porta de ferro de sota la Taverna.";
@@ -314,13 +314,13 @@ const DIALEGS = {
             { qui: 'Frederic', text: "Ei, noi. Veig que portes una espasa que no és de ferro. Això canvia el que et volia dir." },
             { qui: 'Frederic', text: "Aquest lloc es diu el Celler per alguna cosa: era el celler de la Casa Gran, la casa vella dels monjos. Els monjos hi van fer un túnel que va a la casa sense que ningú el vegi." },
             { qui: 'Frederic', text: "Aquella roda de carruatge no és decoració: al darrere hi ha un túnel que va a la Casa Gran. Però pesa com un carro ple, i amb els braços sols no la mouràs." },
-            { qui: 'Frederic', text: E.te("guants") ? "Aquests guants que portes... són els dels picapedrers dels monjos! Amb això, empeny-la des d'un costat, caminant-hi en contra." : "El Germà Francesc, a les cel·les de Sant Antoni, a llevant del Monestir, guarda els guants dels picapedrers dels monjos. Amb ells, la roda cediria." },
+            { qui: 'Frederic', text: E.te("guants") ? "Aquests guants que portes... són els dels picapedrers dels monjos! Amb això, empeny-la des d'un costat, caminant-hi en contra." : "El Germà Francesc, del Monestir, que passeja cada dia per Sant Antoni, guarda els guants dels picapedrers dels monjos. Amb ells, la roda cediria." },
             { qui: 'Frederic', text: "Allà baix hi ha una clau de ferro que els monjos van perdre fa segles: la de la porta de ferro de sota la Taverna. Fes-ne bon ús." }
         ],
         enAcabar: () => {
             E.posaFlag("fredericRoda");
             E.posaObjectiu(E.te("guants") ? "Empeny la roda de carruatge del Celler (a les Runes): amaga un passadís cap a la Casa Gran."
-                                          : "Demana els guants dels picapedrers al Germà Francesc (Sant Antoni, a llevant del Monestir) i empeny la roda del Celler.");
+                                          : "Demana els guants dels picapedrers al Germà Francesc (passeja per Sant Antoni, a llevant del Monestir) i empeny la roda del Celler.");
         }
     } : ({
         pagines: [
@@ -1302,11 +1302,11 @@ const DIALEGS = {
     // ---------------- EL CEMENTIRI ----------------
     tombaMonjos: E => {
         if (E.flag("relIquiesRetornades")) {
-            return { pagines: [{ qui: "", text: "La llosa de la tomba dels monjos primers, tancada de nou. Les relíquies reposen a sota, i només un fil de llum tèbia surt de l'esquerda." }] };
+            return { pagines: [{ qui: "", text: "La tapa del sarcòfag dels monjos primers, tancada de nou. Les relíquies reposen a sota, i només un fil de llum tèbia surt de l'esquerda." }] };
         }
         return {
             pagines: [
-                { qui: "", text: "Una gran llosa esquerdada al mig del replà, amb lletres antigues gairebé esborrades: «Ací reposen els qui van tancar la porta.»" },
+                { qui: "", text: "Un gran sarcòfag de pedra al mig del replà, amb la tapa esquerdada i lletres antigues gairebé esborrades: «Ací reposen els qui van tancar la porta.»" },
                 { qui: "", text: "De l'esquerda surt una boira lila, freda, que sembla respirar. Al seu voltant, la terra és plena d'animalets que no haurien de sortir." },
                 { qui: "Ineu", text: "Aquí és, doncs, el cementiri vell dels monjos del segle XV. L'esquerda del segell... i la boira. Si algú els tornés el que els van prendre..." },
                 { qui: "", text: "(El monjo les va amagar a la Casa Gran perquè ningú no les robés. Quan les portis aquí, l'esquerda es tancarà.)" }
@@ -1316,16 +1316,16 @@ const DIALEGS = {
     },
 
     creuCementiri: E => {
-        const gravat = { qui: "", text: "Una gran creu de pedra al fons del cementiri, amb molsa als peus. A la base, gravat: «Els monjos del Miracle, d'ara i d'abans.»" };
+        const gravat = { qui: "", text: "Una tomba arran de terra, voltada de pedra, amb un àngel que plora al cap i un gerro als peus. A la base, gravat: «Els monjos del Miracle, d'ara i d'abans.»" };
         if (E.te("ram")) return {
             pagines: [gravat,
-                { qui: "", text: "Treus les flors marcides i deixes el ram del Germà Francesc als peus de la creu. Per un moment, la boira s'aparta i hi toca el sol." }
+                { qui: "", text: "Treus les flors marcides del gerro i hi poses el ram del Germà Francesc, als peus de l'àngel. Hi encens l'espelmeta. Per un moment, la boira s'aparta i hi toca el sol." }
             ],
             enAcabar: () => { E.treu("ram"); E.posaFlag("florsCreu"); E.posaObjectiu("Torna a Sant Antoni: el Germà Francesc t'ha de donar una cosa."); }
         };
         return { pagines: [gravat, E.flag("florsCreu")
             ? { qui: "Ineu", text: "El ram del Germà Francesc encara és fresc. La boira no s'hi acosta." }
-            : { qui: "Ineu", text: "La boira ha marcit les flors, però algú encara les canvia cada setmana. Segur que el Germà Francesc, de Sant Antoni." }] };
+            : { qui: "Ineu", text: "La boira ha marcit les flors, però algú encara les canvia cada setmana. Segur que el Germà Francesc, del Monestir." }] };
     },
 
     lapida: n => E => {

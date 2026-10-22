@@ -579,7 +579,7 @@ const Grafics = {
             ctx.beginPath(); ctx.moveTo(11, 3); ctx.lineTo(17, 3); ctx.lineTo(17, 11); ctx.lineTo(25, 11); ctx.lineTo(25, 17); ctx.lineTo(17, 17); ctx.lineTo(17, 37); ctx.lineTo(11, 37); ctx.lineTo(11, 17); ctx.lineTo(3, 17); ctx.lineTo(3, 11); ctx.lineTo(11, 11); ctx.closePath(); ctx.fill(); ctx.stroke();
             ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fillRect(12.5, 5, 1.6, 30); ctx.fillRect(5, 12.5, 18, 1.4);
         });
-        // Cementiri (dibuixos.js): làpides, tombes amb vorada, la tomba de la creu del Germà Francesc, l'àngel i els fanalets
+        // Cementiri (dibuixos.js): làpides, tombes amb vorada, la creueta, la tomba de l'àngel (on el Germà Francesc porta flors) i els fanalets
         crea('lapida', 56, 80, (ctx, w, h) => pintarLapidaArc(ctx, w, h, 3));
         crea('lapida_b', 56, 80, (ctx, w, h) => pintarLapidaArc(ctx, w, h, 17));
         crea('lapida_creu', 54, 90, (ctx, w, h) => pintarLapidaCreu(ctx, w, h));
@@ -587,9 +587,9 @@ const Grafics = {
         crea('tomba_grava', 110, 96, (ctx, w, h) => pintarTombaVorada(ctx, w, h, 'grava', 11));
         crea('tomba_flors', 110, 96, (ctx, w, h) => pintarTombaVorada(ctx, w, h, 'flors', 13));
         crea('tomba_herba', 110, 96, (ctx, w, h) => pintarTombaVorada(ctx, w, h, 'herba', 19));
-        crea('tomba_creu', 140, 132, (ctx, w, h) => pintarTombaCreu(ctx, w, h, false));
-        crea('tomba_creu_flors', 140, 132, (ctx, w, h) => pintarTombaCreu(ctx, w, h, true));
-        crea('angel_pedra', 96, 176, pintarAngelPedra);
+        crea('tomba_creu', 140, 112, pintarTombaCreu);
+        crea('tomba_angel', 140, 226, (ctx, w, h) => pintarTombaAngel(ctx, w, h, false));
+        crea('tomba_angel_flors', 140, 226, (ctx, w, h) => pintarTombaAngel(ctx, w, h, true));
         crea('tomba_esquerdada', 240, 150, (ctx, w, h) => pintarTombaMonjos(ctx, w, h, true));
         crea('tomba_tancada', 240, 150, (ctx, w, h) => pintarTombaMonjos(ctx, w, h, false));
         crea('fanalet', 24, 46, pintarFanalet);
