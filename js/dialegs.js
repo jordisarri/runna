@@ -259,22 +259,19 @@ const DIALEGS = {
                 enAcabar: () => E.posaFlag('parlatDaniel')
             };
         }
-        if (E.flag('campanesRepicades')) {
-            return { pagines: [{ qui: 'Pare Daniel', text: 'Has fet sonar les campanes, Ineu! Fa tres nits que ningú no les sentia. Els nens em diuen que canto massa fort, però avui no cal: ho fan elles per mi!' }] };
-        }
         if (!E.flag('rellotgeReparat') && !E.flag('rellotgeDit')) {
             return {
                 pagines: [
-                    { qui: 'Pare Daniel', text: 'Ei, Ineu, una cosa més que em preocupa: el rellotge del campanar s\'ha aturat a les tres i quart, la nit que va arribar la boira. I les campanes no sonen, per molt que les estirin.' },
+                    { qui: 'Pare Daniel', text: 'Ei, Ineu, una cosa més que em preocupa: el rellotge del campanar s\'ha aturat a les tres i quart, la nit que va arribar la boira. I no hi ha manera de saber quina hora és, ni de posar-hi remei.' },
                     { qui: 'Pare Daniel', text: 'Té, la clau de la porta de la dreta del retaule: puja per la torre fins a la Sala del Rellotge. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa, i a veure si algú pot fer-lo caminar.' }
                 ],
                 enAcabar: () => E.posaFlag('rellotgeDit')
             };
         }
         if (!E.flag('rellotgeReparat')) {
-            return { pagines: [{ qui: 'Pare Daniel', text: 'La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. El rellotge i les campanes. Si algú els torna el so, potser la boira s\'ho pensarà dues vegades.' }] };
+            return { pagines: [{ qui: 'Pare Daniel', text: 'La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s\'ho pensarà dues vegades.' }] };
         }
-        return { pagines: [{ qui: 'Pare Daniel', text: 'Sents el rellotge, Ineu? Torna a caminar! Ara només falta que les campanes tinguin veu: el Cant de l\'Aurora, diuen, els agrada molt.' }] };
+        return { pagines: [{ qui: 'Pare Daniel', text: 'Sents el rellotge, Ineu? Torna a caminar! Fa tres nits que no el sentia. Els nens em diuen que canto massa fort, però avui no cal: ho fa ell per mi!' }] };
     },
     retaule: E => ({
         pagines: [{ qui: '', text: 'El Retaule Major, barroc, tot d\'or i de figures. Avui fins i tot ell sembla més apagat.' }]

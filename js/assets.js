@@ -87,6 +87,7 @@ const CATALEG = [
     { key: 'visitant',     file: 'assets/visitant.png',     amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e0a040', pell: '#9ab080', cabell: '#5a4a3a', alt: 0.98, extra: 'gorra', ulleres: true }) },
     { key: 'branca',       file: 'assets/branca.webp',       amplada: 80, provisional: (c, w) => dibuixarBranca(c, w) },
     { key: 'pergami',      file: 'assets/pergami.png',      amplada: 70, provisional: (c, w) => dibuixarPergami(c, w) },
+    { key: 'pergami_paret', file: 'assets/pergami_paret.png', amplada: 62, provisional: (c, w) => dibuixarPergamiParet(c, w) },   // el mateix pergamí, desplegat i clavat a la paret
     { key: 'ombra_monjo',  file: 'assets/ombra_monjo.png',  amplada: 150, provisional: (c, w) => dibuixarOmbraMonjo(c, w) },
     { key: 'ovella',         file: 'assets/ovella.png',         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },
     { key: 'ovella_boira',   file: 'assets/ovella_boira.png',   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
@@ -110,7 +111,7 @@ const CATALEG = [
     { key: 'porxo',          file: 'assets/porxo.png',          amplada: 340, provisional: (c, w) => dibuixarPorxo(c, w) },
     { key: 'esbarzer',       file: 'assets/esbarzer.webp',       amplada: 96, provisional: (c, w) => dibuixarEsbarzer(c, w) },
     { key: 'cofre',          file: 'assets/cofre.png',          amplada: 70, provisional: (c, w) => dibuixarCofre(c, w) },
-    { key: 'cabana',         file: 'assets/cabana.png',         amplada: 330, provisional: (c, w) => dibuixarCabana(c, w) },
+    { key: 'cabana',         file: 'assets/cabana.png',         amplada: 400, provisional: (c, w) => dibuixarCabana(c, w) },
     { key: 'herba_sj',     file: 'assets/herba_sj.png',     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'sj') },
     { key: 'romani',       file: 'assets/romani.png',       amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'romani') },
     { key: 'farigola',     file: 'assets/farigola.png',     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'farigola') },
@@ -120,6 +121,7 @@ const CATALEG = [
     { key: 'jaumeta',        file: 'assets/jaumeta.png',        amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
     { key: 'arma_tiller', file: 'assets/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
+    { key: 'arma_espasa', file: 'assets/espasa.webp',      amplada: 28, provisional: (c, w) => dibuixarEspasaProvisional(c, w) },   // l'espasa de Runna
     { key: 'espurna',      file: 'assets/espurna.png',      amplada: 32, provisional: (c, w) => dibuixarPuntSegell(c, w) }
 ];
 
@@ -136,20 +138,14 @@ const SPRITE_INEU = {
     quiet: 2              // fotograma de repòs de cada direcció
 };
 /**
- * ATACS DE L'INEU: una fulla per direcció (assets/sprites/Ineu-iso_attack_<dir>*.webp, 4x4 fotogrames, fons blanc).
- * Es netegen en carregar i es normalitzen: tots els fotogrames s'escalen amb el mateix factor perquè el personatge
- * tingui l'alçada de caminar i els peus caiguin a SPRITE_INEU.peus. Si en falta una de sud-est, es fa el mirall de la de sud-oest.
+ * ATACS DE L'INEU: una fulla per direcció (assets/sprites/ineu/atac_<direccio>.webp, 4x4 fotogrames de 256, fons transparent).
+ * Surten de eines/convertir_atacs.js: ja estan normalitzades (mateixa escala per a totes les direccions, peus a SPRITE_INEU.peus) i
+ * l'Ineu hi apareix sense arma. L'arma (bastó, branca del Til·ler o espasa) s'hi afegeix com una capa que segueix la mà
+ * fotograma a fotograma (taula ATAC_ARMA a js/atac_arma.js).
  */
 const ATAC_INEU = {
-    fitxers: {
-        down: 'Ineu-iso_attack_down-v3.webp', up: 'Ineu-iso_attack_up-v3.webp', left: 'Ineu-iso_attack_left-v3.webp',
-        right: 'Ineu-iso_attack_right-v3.webp', southwest: 'Ineu-iso_attack_southwest-v3.webp',
-        southeast: 'Ineu-iso_attack_southeast-v3.webp', northeast: 'Ineu-iso_attack_northeast-v3.webp',
-        northwest: 'Ineu-iso_attack_northwest.webp'
-    },
     fotogrames: [0, 1, 2, 3, 4, 5, 12, 13, 14, 15],   // alçada, cop, posició i tornada (els 6-11 són gairebé repòs)
-    fps: 28,
-    alt: 225                                           // alçada del cos en píxels de fulla (com al caminar)
+    fps: 28
 };
 // Octants de moviment (angle en pantalla, y cap avall) -> direcció del sprite
 // Fotograma de repòs d'una vista (a la fulla de perfil és el de les cames més juntes, calculat en carregar-la)
@@ -168,10 +164,12 @@ const Grafics = {
             if (CATALEG.some(i => i.key === f.key) && /\.(png|webp)$/.test(f.url)) scene.load.image(f.key + '__jpg', f.url.replace(/\.(png|webp)$/, '.jpg'));
         });
         CATALEG.forEach(item => scene.load.image(item.key, item.file));
-        Object.entries(ATAC_INEU.fitxers).forEach(([dir, f]) => scene.load.image('ineu_atac_font_' + dir, 'assets/sprites/' + f));
         scene.load.image('ineu_perfil_font', 'assets/sprites/Ineu-walk-v1.webp');
-        DIRS_INEU.forEach(dir => scene.load.spritesheet('ineu_' + dir, `assets/sprites/ineu/${dir}.webp`,
-            { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt }));
+        DIRS_INEU.forEach(dir => {
+            const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
+            scene.load.spritesheet('ineu_' + dir, `assets/sprites/ineu/${dir}.webp`, mida);
+            scene.load.spritesheet('ineu_atac_' + dir, `assets/sprites/ineu/atac_${dir}.webp`, mida);
+        });
     },
 
     // Processa tots els PNG carregats i crea marcadors/textures generades
@@ -189,7 +187,7 @@ const Grafics = {
         });
         Grafics.texturesGenerades(scene);
         Grafics.perfilIneu(scene);
-        Grafics.atacsIneu(scene);
+        Grafics.atacsVista = new Set(DIRS_INEU.filter(d => scene.textures.exists('ineu_atac_' + d) && !Grafics.faltants.includes('ineu_atac_' + d)));
         Grafics.animacions(scene);
     },
 
@@ -277,70 +275,6 @@ const Grafics = {
             Grafics.perfilNou = true;
         } catch (e) {
             Grafics.pixelsBloquejats = true;      // sense lectura de píxels: es queden les fulles antigues
-        }
-    },
-
-    // Fulles d'atac: es neteja el fons blanc, es mesura on cauen els peus i es redibuixen en cel·les de 256 normalitzades
-    atacsIneu(scene) {
-        Grafics.atacsVista = new Set();
-        try {
-            const CEL = 256, COLS = 4, N = 16;
-            const mediana = v => v.slice().sort((a, b) => a - b)[Math.floor(v.length / 2)];
-            const fulles = {};
-            Object.keys(ATAC_INEU.fitxers).forEach(dir => {
-                const clau = 'ineu_atac_font_' + dir;
-                if (!scene.textures.exists(clau) || Grafics.faltants.includes(clau)) return;
-                const font = scene.textures.get(clau).getSourceImage();
-                const c0 = document.createElement('canvas');
-                c0.width = font.width; c0.height = font.height;
-                const x0 = c0.getContext('2d', { willReadFrequently: true });
-                x0.drawImage(font, 0, 0);
-                const img = x0.getImageData(0, 0, c0.width, c0.height);
-                treureFonsBlanc(img.data, c0.width, c0.height);
-                x0.putImageData(img, 0, 0);
-                const cs = c0.width / COLS, peus = [], alts = [];
-                for (let i = 4; i < N; i++) {                    // sense els fotogrames d'alçar l'arma: la imatge és el cos sol
-                    const cx = (i % COLS) * cs, cy = Math.floor(i / COLS) * cs;
-                    let dalt = cs, baix = -1;
-                    for (let y = 0; y < cs; y++) for (let x = 0; x < cs; x++) {
-                        if (img.data[((cy + y) * c0.width + cx + x) * 4 + 3] > 24) { if (y < dalt) dalt = y; if (y > baix) baix = y; }
-                    }
-                    if (baix >= 0) { peus.push(baix); alts.push(baix - dalt); }
-                }
-                fulles[dir] = { c0, cs, peus: mediana(peus), alt: mediana(alts) };
-            });
-            const claus = Object.keys(fulles);
-            if (!claus.length) return;
-            const k = ATAC_INEU.alt / mediana(claus.map(d => fulles[d].alt));      // el mateix factor per a totes les direccions
-
-            const fes = (f, mirall) => {
-                const out = document.createElement('canvas');
-                out.width = COLS * CEL; out.height = Math.ceil(N / COLS) * CEL;
-                const o = out.getContext('2d');
-                o.imageSmoothingQuality = 'high';
-                const e = k * CEL / f.cs;
-                for (let i = 0; i < N; i++) {
-                    const cel = document.createElement('canvas');
-                    cel.width = CEL; cel.height = CEL;
-                    cel.getContext('2d').drawImage(f.c0, (i % COLS) * f.cs, Math.floor(i / COLS) * f.cs, f.cs, f.cs,
-                        CEL / 2 - f.cs * e / 2, SPRITE_INEU.peus - f.peus * e, f.cs * e, f.cs * e);
-                    const dx = (i % COLS) * CEL, dy = Math.floor(i / COLS) * CEL;
-                    if (mirall) { o.save(); o.translate(dx + CEL, dy); o.scale(-1, 1); o.drawImage(cel, 0, 0); o.restore(); }
-                    else o.drawImage(cel, dx, dy);
-                }
-                return out;
-            };
-            const peces = claus.map(d => [d, fulles[d], false]);
-            if (!fulles.southeast && fulles.southwest) peces.push(['southeast', fulles.southwest, true]);
-            peces.forEach(([dir, f, mirall]) => {
-                const clau = 'ineu_atac_' + dir;
-                if (scene.textures.exists(clau)) scene.textures.remove(clau);
-                const t = scene.textures.addCanvas(clau, fes(f, mirall));
-                for (let i = 0; i < N; i++) t.add(i, 0, (i % COLS) * CEL, Math.floor(i / COLS) * CEL, CEL, CEL);
-                Grafics.atacsVista.add(dir);
-            });
-        } catch (e) {
-            Grafics.atacsVista.clear();      // sense lectura de píxels: es queda l'arma dibuixada per codi
         }
     },
 
@@ -486,31 +420,59 @@ const Grafics = {
             ctx.strokeRect(1.5, 1.5, w - 3, h - 3);
             for (let x = 8; x < w; x += 8) { ctx.beginPath(); ctx.moveTo(x, 2); ctx.lineTo(x, h - 2); ctx.stroke(); }
         });
-        // Cartell de fusta: post amb veta, tauler de tres taulons amb claus, ombra i herba al peu (es dibuixa per codi, sense PNG)
+        // Cartell de fusta: un sol panell llis clavat en un pal, amb línies d'escriptura que no diuen res (serveix per a tots els cartells)
         crea('cartell', 76, 86, (ctx, w, h) => {
+            ctx.lineCap = 'round'; ctx.lineJoin = 'round';
             ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(38, 82, 20, 5, 0, 0, Math.PI * 2); ctx.fill();
-            // Post
-            const post = ctx.createLinearGradient(32, 0, 46, 0);
-            post.addColorStop(0, '#7a4e26'); post.addColorStop(0.5, '#a46e38'); post.addColorStop(1, '#6a4020');
+            // Pal: un tronc ras que puja fins darrere el panell
+            const post = ctx.createLinearGradient(31, 0, 46, 0);
+            post.addColorStop(0, '#6a4020'); post.addColorStop(0.45, '#a46e38'); post.addColorStop(1, '#5e3a1c');
             ctx.fillStyle = post; ctx.strokeStyle = '#2e1a0a'; ctx.lineWidth = 2;
-            ctx.fillRect(32, 38, 14, 44); ctx.strokeRect(32, 38, 14, 44);
+            ctx.beginPath(); ctx.moveTo(32, 80); ctx.lineTo(31.5, 40); ctx.lineTo(45.5, 40); ctx.lineTo(46, 80); ctx.quadraticCurveTo(38.5, 84, 32, 80); ctx.closePath(); ctx.fill(); ctx.stroke();
             ctx.strokeStyle = 'rgba(46,26,10,0.45)'; ctx.lineWidth = 1;
-            for (let y = 46; y < 80; y += 9) { ctx.beginPath(); ctx.moveTo(36, y); ctx.lineTo(37, y + 5); ctx.moveTo(42, y + 3); ctx.lineTo(41, y + 8); ctx.stroke(); }
-            // Tauler: tres taulons lleugerament desiguals
-            [[3, 5, 70, 14, '#c88f4e'], [2, 19, 72, 14, '#b57b3e'], [4, 33, 69, 13, '#c28648']].forEach(([x, y, ww, hh, col]) => {
-                const g = ctx.createLinearGradient(0, y, 0, y + hh);
-                g.addColorStop(0, col); g.addColorStop(1, '#8e5a2a');
-                ctx.fillStyle = g; ctx.strokeStyle = '#2e1a0a'; ctx.lineWidth = 2;
-                ctx.beginPath(); ctx.roundRect(x, y, ww, hh, 3); ctx.fill(); ctx.stroke();
-                ctx.strokeStyle = 'rgba(80,46,16,0.45)'; ctx.lineWidth = 1;
-                for (let k = 0; k < 3; k++) { const gy = y + 4 + k * 4; ctx.beginPath(); ctx.moveTo(x + 6 + k * 9, gy); ctx.lineTo(x + ww - 8 - k * 13, gy); ctx.stroke(); }
-                ctx.fillStyle = 'rgba(255,236,190,0.35)'; ctx.fillRect(x + 4, y + 2, ww - 8, 2);
+            for (let y = 52; y < 78; y += 9) { ctx.beginPath(); ctx.moveTo(36, y); ctx.lineTo(37, y + 5); ctx.moveTo(42, y + 3); ctx.lineTo(41, y + 8); ctx.stroke(); }
+            // Panell llis: una sola peça de fusta amb la veta, les vores gastades i un nus
+            const px = 3, py = 4, pw = 70, ph = 44;
+            const fusta = ctx.createLinearGradient(0, py, 0, py + ph);
+            fusta.addColorStop(0, '#d29d5a'); fusta.addColorStop(0.5, '#bf8848'); fusta.addColorStop(1, '#94602c');
+            ctx.fillStyle = fusta; ctx.strokeStyle = '#2e1a0a'; ctx.lineWidth = 2.2;
+            ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 4); ctx.fill(); ctx.stroke();
+            ctx.save(); ctx.beginPath(); ctx.roundRect(px, py, pw, ph, 4); ctx.clip();
+            ctx.strokeStyle = 'rgba(86,48,16,0.28)'; ctx.lineWidth = 1;
+            [9, 17, 25, 33, 40].forEach((vy, i) => { ctx.beginPath(); ctx.moveTo(px, py + vy); ctx.bezierCurveTo(px + 20, py + vy - 2 + i % 2 * 3, px + 44, py + vy + 2 - i % 2 * 3, px + pw, py + vy + 1); ctx.stroke(); });
+            ctx.fillStyle = 'rgba(86,48,16,0.35)'; ctx.beginPath(); ctx.ellipse(60, 38, 3.2, 2.2, 0.3, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = 'rgba(86,48,16,0.4)'; ctx.beginPath(); ctx.ellipse(60, 38, 5.4, 3.6, 0.3, 0, Math.PI * 2); ctx.stroke();
+            ctx.fillStyle = 'rgba(255,236,190,0.4)'; ctx.fillRect(px + 3, py + 2, pw - 6, 2);                    // llum de la vora de dalt
+            ctx.fillStyle = 'rgba(40,20,6,0.25)'; ctx.fillRect(px, py + ph - 4, pw, 4);                           // ombra de la vora de baix
+            ctx.restore();
+            // Línies escrites que no volen dir res: paraules fetes de traços i uns quants símbols
+            let llavor = 5;
+            const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+            ctx.strokeStyle = 'rgba(54,28,8,0.82)'; ctx.fillStyle = 'rgba(54,28,8,0.82)'; ctx.lineWidth = 1.7;
+            [[15, 60], [24, 55], [33, 43]].forEach(([ly, fins], fila) => {
+                let x = 11;
+                while (x < fins) {
+                    const llarg = Math.min(fins - x, 6 + rnd() * 11);
+                    if (rnd() < 0.2) {                                                                                 // un símbol en lloc d'una paraula
+                        const t = Math.floor(rnd() * 3);
+                        ctx.beginPath();
+                        if (t === 0) ctx.arc(x + 3, ly, 2.6, 0, Math.PI * 2);
+                        else if (t === 1) { ctx.moveTo(x, ly + 3); ctx.lineTo(x + 3, ly - 3); ctx.lineTo(x + 6, ly + 3); }
+                        else { ctx.moveTo(x, ly - 3); ctx.lineTo(x + 5, ly + 3); ctx.moveTo(x + 5, ly - 3); ctx.lineTo(x, ly + 3); }
+                        ctx.stroke(); x += 9;
+                        continue;
+                    }
+                    ctx.beginPath(); ctx.moveTo(x, ly); ctx.lineTo(x + llarg, ly + (rnd() - 0.5) * 0.8); ctx.stroke();
+                    for (let k = x + 2; k < x + llarg - 1; k += 3 + rnd() * 2) { ctx.beginPath(); ctx.moveTo(k, ly); ctx.lineTo(k, ly - 1.5 - rnd() * 2.6); ctx.stroke(); }
+                    x += llarg + 4.5;
+                }
             });
             // Claus
             ctx.fillStyle = '#3a2a1a';
-            [[9, 12], [67, 12], [9, 40], [67, 40]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2); ctx.fill(); });
+            [[8, 9], [68, 9], [8, 43], [68, 43]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 1.9, 0, Math.PI * 2); ctx.fill(); });
+            ctx.fillStyle = 'rgba(255,230,180,0.5)'; [[7.4, 8.4], [67.4, 8.4]].forEach(([x, y]) => ctx.fillRect(x, y, 1, 1));
             // Herba al peu
-            ctx.strokeStyle = '#4f7a35'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+            ctx.strokeStyle = '#4f7a35'; ctx.lineWidth = 2;
             [[26, 82, 22, 74], [28, 82, 28, 72], [48, 82, 52, 73], [50, 82, 55, 77]].forEach(([x1, y1, x2, y2]) => { ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); });
         });
         // Roda de carruatge gegant (la de la Sala del Ping-pong, la que amaga el passadís)

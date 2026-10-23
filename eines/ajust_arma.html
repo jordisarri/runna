@@ -1,0 +1,364 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Ajust de l'arma als atacs de l'Ineu</title>
+<style>
+    body { background: #2a3a22; color: #f2e6c8; font: 14px Georgia, serif; margin: 12px; }
+    canvas { background: #46603a; display: block; }
+    #c { cursor: crosshair; width: 100%; height: auto; }
+    #tira { width: 100%; height: auto; }
+    #wrapG { position: relative; flex: 1 1 760px; max-width: 1050px; }
+    #arcG { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; background: none; }
+    #cursor { position: absolute; pointer-events: none; border: 2px dashed #ffe08a; box-sizing: border-box; opacity: .8; }
+    select, button, input { font: inherit; }
+    button { cursor: pointer; }
+    .barra { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+    #alt { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin-bottom: 8px; }
+    #panell { flex: 0 0 340px; }
+    #panell label { display: inline-flex; align-items: center; gap: 4px; margin: 2px 10px 2px 0; }
+    #panell input[type=number] { width: 5.5em; }
+    #panell h3 { margin: 6px 0 4px; font-size: 15px; }
+    #resum { opacity: .85; font-size: 13px; margin: 4px 0; min-height: 2.6em; }
+    small { opacity: .75; }
+    #estat { font-weight: bold; }
+    .mode { padding: 2px 8px; border: 1px solid #f2e6c8; border-radius: 4px; }
+</style>
+
+<div class="barra">
+    <label>Vista <select id="vista"></select></label>
+    <label>Arma <select id="arma"><option value="basto">basto</option><option value="tiller">branca</option><option value="espasa">espasa</option></select></label>
+    <label>Fotograma <select id="frame"></select></label>
+    <label class="mode">Edita <select id="mode">
+        <option value="base">Base (les 3 armes)</option>
+        <option value="arma">Només aquesta arma</option>
+    </select></label>
+    <label>Llargada <input id="llarg" type="number" min="20" max="400" step="1" style="width:4.5em"></label>
+    <label>Agafa <input id="agafa" type="number" min="0" max="1" step="0.01" style="width:4.5em"></label>
+    <button id="desa">Desa al joc</button>
+    <span id="estat"></span>
+</div>
+<div class="barra"><small>Graella: clic o arrossega = mou la mà · roda = gira · fletxes = 1 px (Maj = 0,25) · [ ] = mida (només a «aquesta arma») · Supr = esborra · D = davant/darrere de l'Ineu (per fotograma; a «aquesta arma» només per a l'arma triada) · , . = fotograma anterior/següent · Espai = reprodueix/pausa · Ctrl+Z = desfés · Ctrl+S = desa</small></div>
+
+<div class="barra">
+    <button id="play">⏸ Pausa</button>
+    <label>Velocitat <select id="vel"><option value="1">1× (joc)</option><option value="0.5">0,5×</option><option value="0.25">0,25×</option><option value="0.1">0,1×</option></select></label>
+    <span id="quadre"></span>
+    <label title="Dibuixa per sobre l'estela en mitja lluna que fa el joc en atacar: mostra cap a quin costat es mou l'arma"><input id="arcOn" type="checkbox" checked> Arc del cop</label>
+    <small>Graella: els 10 fotogrames de la vista triada (el requadre groc fi és el que s'està reproduint) · Tira de sota: les 8 vistes en moviment amb la mateixa arma</small>
+</div>
+<div id="alt">
+    <div id="wrapG"><canvas id="c"></canvas><canvas id="arcG"></canvas><div id="cursor"></div></div>
+    <div id="panell">
+        <h3>Fotograma seleccionat <span id="titolFrame"></span></h3>
+        <div id="resum"></div>
+        <label>x <input id="fx" type="number" step="0.25"></label>
+        <label>y <input id="fy" type="number" step="0.25"></label>
+        <label>angle <input id="fa" type="number" step="1"></label>
+        <label id="lE">mida × <input id="fe" type="number" step="0.02" min="0.1" max="5"></label>
+        <label id="lD"><input id="fd" type="checkbox"> davant del cos</label>
+        <label id="lDA">posició <select id="fdA"><option value="">com la base</option><option value="davant">davant del cos (tapa la mà)</option><option value="darrere">darrere del cos</option></select></label>
+        <div class="barra" style="margin-top:8px">
+            <button id="reinicia">Reinicia el fotograma</button>
+            <button id="aTotes">Ajust → les 3 armes</button>
+            <button id="reiniciaVista">Reinicia la vista (aquesta arma)</button>
+        </div>
+        <small id="ajuda"></small>
+    </div>
+</div>
+<canvas id="tira"></canvas>
+
+<script src="../js/atac_arma.js"></script>
+<script>
+const VISTES = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast'];
+const FOTOGRAMES = [0, 1, 2, 3, 4, 5, 12, 13, 14, 15];      // els mateixos que ATAC_INEU.fotogrames al joc
+const FPS = 28;                                              // i ATAC_INEU.fps
+const ESC = 0.555;                                           // mida de la cel·la al joc (142/256)
+const ESCALA = 2;                                            // escala de la graella i de la vista prèvia
+const ARMES = {          // la llargada (ARMA_LLARG) i l'agafada (ARMES_ATAC) vénen de js/atac_arma.js: són les mateixes que fa servir el joc
+    basto: { fitxer: '../assets/basto.webp' },
+    tiller: { fitxer: '../assets/branca_tiler.webp' },
+    espasa: { fitxer: '../assets/espasa.webp' }
+};
+const NOMS = Object.keys(ARMES);
+let llarg = ARMA_LLARG;
+NOMS.forEach(k => ARMES[k].agafa = ARMES_ATAC[k].agafa);
+const clona = o => JSON.parse(JSON.stringify(o));
+const taula = clona(ATAC_ARMA);
+const ajust = {};
+NOMS.forEach(w => { ajust[w] = {}; VISTES.forEach(v => { ajust[w][v] = FOTOGRAMES.map((_, i) => { const a = ATAC_AJUST[w] && ATAC_AJUST[w][v] && ATAC_AJUST[w][v][i]; return a ? clona(a) : null; }); }); });
+
+const $ = id => document.getElementById(id);
+const imatges = {};
+const carrega = src => new Promise(r => { const i = new Image(); i.onload = () => r(i); i.onerror = () => r(null); i.src = src; });
+const r2 = v => Math.round(v * 100) / 100;
+VISTES.forEach(v => $('vista').add(new Option(v, v)));
+FOTOGRAMES.forEach((f, i) => $('frame').add(new Option('#' + i + ' (fot. ' + f + ')', i)));
+$('vista').value = 'right'; $('frame').value = 3;
+const c = $('c'), ctx = c.getContext('2d'), tc = $('tira').getContext('2d');
+c.width = 5 * 256 * ESCALA; c.height = 2 * 256 * ESCALA;
+
+const sel = () => ({ v: $('vista').value, w: $('arma').value, i: +$('frame').value, mode: $('mode').value });
+
+// ---------- Dades: valor efectiu de la mà (base + ajust de l'arma) ----------
+function efectiu(w, v, i) {
+    const b = taula[v][i];
+    if (!b) return null;
+    const a = ajust[w][v][i];
+    return { x: b.x + (a ? a.dx : 0), y: b.y + (a ? a.dy : 0), a: b.a + (a ? a.a : 0), e: a ? a.e : 1, d: a && a.d != null ? a.d : b.d };
+}
+const senseAjust = a => a.dx === 0 && a.dy === 0 && a.a === 0 && a.e === 1 && a.d == null;
+
+// ---------- Desfés ----------
+const pila = [], refer = [];
+let ultimCanvi = 0, brut = false;
+const instantania = () => JSON.stringify({ taula, ajust, llarg, agafa: Object.fromEntries(NOMS.map(k => [k, ARMES[k].agafa])) });
+function restaura(txt) {
+    const d = JSON.parse(txt);
+    VISTES.forEach(v => { taula[v] = d.taula[v]; });
+    NOMS.forEach(w => { ajust[w] = d.ajust[w]; ARMES[w].agafa = d.agafa[w]; });
+    llarg = d.llarg;
+    brut = true; mostraConfig(); refresca();
+}
+function canvia(fn, agrupa) {
+    const ara = Date.now();
+    if (!agrupa || ara - ultimCanvi > 700) { pila.push(instantania()); if (pila.length > 200) pila.shift(); refer.length = 0; }
+    ultimCanvi = ara;
+    fn(); brut = true; refresca();
+}
+function desfes() { if (!pila.length) return; refer.push(instantania()); restaura(pila.pop()); }
+function refes() { if (!refer.length) return; pila.push(instantania()); restaura(refer.pop()); }
+
+// ---------- Edició del fotograma seleccionat ----------
+function posaEfectiu(camps) {
+    const { v, w, i, mode } = sel(), b = taula[v][i];
+    if (mode === 'base') {
+        const n = b || { x: 128, y: 150, a: 0, d: true };
+        if (camps.x !== undefined) n.x = r2(camps.x);
+        if (camps.y !== undefined) n.y = r2(camps.y);
+        if (camps.a !== undefined) n.a = ((r2(camps.a) % 360) + 360) % 360;
+        if (camps.d !== undefined) n.d = camps.d;
+        taula[v][i] = n;
+    } else {
+        if (!b) return;
+        const a = ajust[w][v][i] || { dx: 0, dy: 0, a: 0, e: 1, d: null };
+        if (camps.d !== undefined) a.d = camps.d;
+        if (camps.x !== undefined) a.dx = r2(camps.x - b.x);
+        if (camps.y !== undefined) a.dy = r2(camps.y - b.y);
+        if (camps.a !== undefined) a.a = r2(camps.a - b.a);
+        if (camps.e !== undefined) a.e = r2(Math.min(5, Math.max(0.1, camps.e)));
+        ajust[w][v][i] = senseAjust(a) ? null : a;
+    }
+}
+function esborraFotograma() {
+    const { v, w, i, mode } = sel();
+    if (mode === 'base') taula[v][i] = null; else ajust[w][v][i] = null;
+}
+
+// ---------- Dibuix ----------
+function dibuixaCela(g, v, i, w, ox, oy, S) {
+    const f = FOTOGRAMES[i], e = efectiu(w, v, i), arma = ARMES[w];
+    const dibuixaArma = () => {
+        const img = arma.img;
+        if (!e || !img) return;
+        const h = llarg / ESC * S * e.e, ample = h * img.width / img.height;
+        g.save(); g.translate(ox + e.x * S, oy + e.y * S); g.rotate(e.a * Math.PI / 180);
+        g.drawImage(img, -ample / 2, -h * arma.agafa, ample, h); g.restore();
+    };
+    g.fillStyle = 'rgba(0,0,0,.18)'; g.beginPath(); g.ellipse(ox + 128 * S, oy + 240 * S, 40 * S, 7 * S, 0, 0, 7); g.fill();     // ombra als peus
+    if (e && !e.d) dibuixaArma();
+    if (imatges[v]) g.drawImage(imatges[v], (f % 4) * 256, Math.floor(f / 4) * 256, 256, 256, ox, oy, 256 * S, 256 * S);
+    if (e && e.d) dibuixaArma();
+}
+function dibuixa() {
+    const { v, w, i: seleccionat } = sel();
+    ctx.clearRect(0, 0, c.width, c.height);
+    FOTOGRAMES.forEach((f, i) => {
+        const ox = (i % 5) * 256 * ESCALA, oy = Math.floor(i / 5) * 256 * ESCALA, e = efectiu(w, v, i), b = taula[v][i], aj = ajust[w][v][i];
+        dibuixaCela(ctx, v, i, w, ox, oy, ESCALA);
+        ctx.strokeStyle = i === seleccionat ? '#ffe08a' : 'rgba(255,255,255,.2)'; ctx.lineWidth = i === seleccionat ? 3 : 1;
+        ctx.strokeRect(ox + 0.5, oy + 0.5, 256 * ESCALA - 1, 256 * ESCALA - 1);
+        ctx.strokeStyle = 'rgba(255,255,255,.12)'; ctx.lineWidth = 1;       // quadrícula cada 32 px de cel·la
+        for (let gg = 32; gg < 256; gg += 32) { ctx.beginPath(); ctx.moveTo(ox + gg * ESCALA, oy); ctx.lineTo(ox + gg * ESCALA, oy + 256 * ESCALA); ctx.moveTo(ox, oy + gg * ESCALA); ctx.lineTo(ox + 256 * ESCALA, oy + gg * ESCALA); ctx.stroke(); }
+        ctx.fillStyle = '#fff'; ctx.font = '16px sans-serif'; ctx.fillText('#' + i + (b ? '' : ' (buida)') + (aj ? '  ★ ajust' : ''), ox + 6, oy + 18);
+        if (b && aj) { ctx.fillStyle = '#5ab4ff'; ctx.beginPath(); ctx.arc(ox + b.x * ESCALA, oy + b.y * ESCALA, 4, 0, 7); ctx.fill(); }
+        if (e) { ctx.fillStyle = '#ff5a5a'; ctx.beginPath(); ctx.arc(ox + e.x * ESCALA, oy + e.y * ESCALA, 4, 0, 7); ctx.fill(); }
+    });
+}
+
+// ---------- Vista prèvia animada (temps real) ----------
+const arcC = $('arcG'), arcG = arcC.getContext('2d');
+arcC.width = c.width; arcC.height = c.height;
+const MARGE = 220;     // marge al voltant de la cel·la (en píxels de cel·la) perquè l'arma es vegi sencera a la tira
+const S_TIRA = 0.33, CAIXA_TIRA = Math.round((256 + 2 * MARGE) * S_TIRA);
+const tira = $('tira');
+tira.width = CAIXA_TIRA * VISTES.length; tira.height = CAIXA_TIRA;
+let jugant = true, velocitat = 1, t0 = performance.now();
+function estatAnimacio(ara) {
+    const n = FOTOGRAMES.length, msFot = 1000 / FPS;
+    if (!jugant) { const i = sel().i; return { idx: i, tJoc: i * msFot }; }
+    const ms = msFot / velocitat, pausa = 500 / velocitat;      // després de l'últim fotograma, una petita pausa abans de repetir
+    const t = (ara - t0) % (n * ms + pausa);
+    return { idx: Math.min(n - 1, Math.floor(t / ms)), tJoc: t * velocitat };      // tJoc: ms de joc des de l'inici de l'atac
+}
+
+// ---------- Arc del cop: el mateix que dibuixa el joc (tallBasto, a js/combat.js) ----------
+const DIR_VISTA = { right: [1, 0], southeast: [1, 1], down: [0, 1], southwest: [-1, 1], left: [-1, 0], northwest: [-1, -1], up: [0, -1], northeast: [1, -1] };
+function dibuixaArc(g, v, w, ox, oy, S, tJoc) {
+    const p = Math.min(1, tJoc / 200);                      // el joc l'anima 200 ms: gira de -0,45 a 0,35 rad, creix de 0,8 a 1,12 i s'esvaeix (Cubic.out)
+    if (p >= 1) return;
+    const e = 1 - Math.pow(1 - p, 3), arc = ARC_ATAC[w], k = S / ESC;
+    const ang = Math.atan2(DIR_VISTA[v][1], DIR_VISTA[v][0]);
+    g.save();
+    g.translate(ox + 128 * S, oy + (240 - 62 / ESC) * S);       // el centre és al pit de l'Ineu: 62 px de joc sobre els peus
+    g.rotate(-0.45 + 0.8 * e); g.scale(0.8 + 0.32 * e, 0.8 + 0.32 * e);
+    g.lineCap = 'butt';
+    [[0, 12, 0.95], [-14, 7, 0.55], [-28, 4, 0.3]].forEach(([dr, gruix, alfa]) => {
+        g.globalAlpha = alfa * (1 - e); g.strokeStyle = dr ? '#ffffff' : arc.color; g.lineWidth = gruix * k;
+        g.beginPath(); g.arc(0, 0, (arc.R + dr) * k, ang - 1.05, ang + 1.05); g.stroke();
+    });
+    g.restore();
+}
+
+function tick(ara) {
+    requestAnimationFrame(tick);
+    const { v, w } = sel(), { idx, tJoc } = estatAnimacio(ara), arcOn = $('arcOn').checked;
+    $('quadre').textContent = 'fotograma #' + idx + (efectiu(w, v, idx) ? '' : ' (mà buida)');
+    tc.clearRect(0, 0, tira.width, tira.height);
+    VISTES.forEach((vv, k) => {
+        const bx = k * CAIXA_TIRA;
+        dibuixaCela(tc, vv, idx, w, bx + MARGE * S_TIRA, MARGE * S_TIRA, S_TIRA);
+        if (arcOn) dibuixaArc(tc, vv, w, bx + MARGE * S_TIRA, MARGE * S_TIRA, S_TIRA, tJoc);
+        tc.fillStyle = vv === v ? '#ffe08a' : '#fff'; tc.font = '14px sans-serif'; tc.fillText(vv, bx + 8, 18);
+        tc.strokeStyle = vv === v ? '#ffe08a' : 'rgba(255,255,255,.2)'; tc.lineWidth = vv === v ? 2 : 1; tc.strokeRect(bx + 1, 1, CAIXA_TIRA - 2, CAIXA_TIRA - 2);
+    });
+    // requadre que marca, a la graella, el fotograma que s'està reproduint
+    const r = c.getBoundingClientRect(), cw = r.width / 5, ch = r.height / 2, cur = $('cursor');
+    cur.style.width = cw + 'px'; cur.style.height = ch + 'px';
+    cur.style.left = (idx % 5) * cw + 'px'; cur.style.top = Math.floor(idx / 5) * ch + 'px';
+    cur.style.display = jugant ? '' : 'none';
+    // l'arc també sobre el fotograma de la graella que s'està reproduint
+    arcG.clearRect(0, 0, arcC.width, arcC.height);
+    if (arcOn) dibuixaArc(arcG, v, w, (idx % 5) * 256 * ESCALA, Math.floor(idx / 5) * 256 * ESCALA, ESCALA, tJoc);
+}
+
+// ---------- Panell del fotograma ----------
+function refrescaPanell() {
+    const { v, w, i, mode } = sel(), b = taula[v][i], e = efectiu(w, v, i), a = ajust[w][v][i];
+    const nomArma = $('arma').selectedOptions[0].textContent;
+    $('titolFrame').textContent = '#' + i + ' · ' + v + ' · ' + nomArma;
+    $('lE').style.display = mode === 'arma' ? '' : 'none';
+    $('lD').style.display = mode === 'base' ? '' : 'none';
+    $('lDA').style.display = mode === 'arma' ? '' : 'none';
+    $('reinicia').textContent = mode === 'base' ? 'Buida la mà (base)' : "Reinicia l'ajust del fotograma";
+    $('aTotes').style.display = mode === 'arma' ? '' : 'none';
+    $('reiniciaVista').style.display = mode === 'arma' ? '' : 'none';
+    for (const id of ['fx', 'fy', 'fa', 'fe']) $(id).disabled = !(mode === 'base' || b);
+    const posa = (id, val) => { if (document.activeElement !== $(id)) $(id).value = val; };
+    posa('fx', e ? r2(e.x) : ''); posa('fy', e ? r2(e.y) : ''); posa('fa', e ? r2(e.a) : ''); posa('fe', e ? e.e : 1);
+    $('fd').checked = b ? b.d : true; $('fd').disabled = !b;
+    $('fdA').value = a && a.d != null ? (a.d ? 'davant' : 'darrere') : ''; $('fdA').disabled = !b;
+    $('resum').innerHTML = b
+        ? 'Base: x ' + b.x + ', y ' + b.y + ', angle ' + b.a + '°, ' + (b.d ? 'davant' : 'darrere') + '<br>' + (a ? 'Ajust ' + nomArma + ': dx ' + a.dx + ', dy ' + a.dy + ', gir ' + a.a + '°, mida ×' + a.e + (a.d != null ? ', ' + (a.d ? 'davant' : 'darrere') : '') : 'Sense ajust per a aquesta arma')
+        : "La mà és buida en aquest fotograma (no es veu l'arma). Fes clic a la graella (mode Base) per posar-la.";
+    $('ajuda').textContent = mode === 'base'
+        ? 'Mode Base: el que canviïs val per a les 3 armes.'
+        : "Mode «Només aquesta arma»: els canvis són desplaçament, gir, mida i davant/darrere respecte a la base, només per a l'arma triada.";
+}
+function refresca() {
+    dibuixa(); refrescaPanell();
+    $('desa').textContent = brut ? 'Desa al joc ●' : 'Desa al joc';
+}
+['fx', 'fy', 'fa', 'fe'].forEach(id => $(id).addEventListener('input', () => {
+    const val = parseFloat($(id).value);
+    if (Number.isNaN(val)) return;
+    canvia(() => posaEfectiu({ x: id === 'fx' ? val : undefined, y: id === 'fy' ? val : undefined, a: id === 'fa' ? val : undefined, e: id === 'fe' ? val : undefined }), true);
+}));
+$('fd').addEventListener('change', () => canvia(() => posaEfectiu({ d: $('fd').checked })));
+$('fdA').addEventListener('change', () => canvia(() => posaEfectiu({ d: $('fdA').value === '' ? null : $('fdA').value === 'davant' })));
+$('reinicia').onclick = () => canvia(esborraFotograma);
+$('aTotes').onclick = () => canvia(() => { const { v, i, w } = sel(), a = ajust[w][v][i]; NOMS.forEach(k => { ajust[k][v][i] = a ? clona(a) : null; }); });
+$('reiniciaVista').onclick = () => canvia(() => { const { v, w } = sel(); ajust[w][v] = FOTOGRAMES.map(() => null); });
+['vista', 'arma', 'frame', 'mode'].forEach(id => $(id).addEventListener('change', () => { mostraConfig(); refresca(); }));
+function mostraConfig() { $('llarg').value = llarg; $('agafa').value = ARMES[$('arma').value].agafa; }
+$('llarg').addEventListener('input', () => { const n = +$('llarg').value; if (n >= 20) canvia(() => { llarg = n; }, true); });
+$('agafa').addEventListener('input', () => { const n = Math.min(1, Math.max(0, +$('agafa').value)); canvia(() => { ARMES[$('arma').value].agafa = n; }, true); });
+$('play').onclick = () => { jugant = !jugant; t0 = performance.now(); $('play').textContent = jugant ? '⏸ Pausa' : '▶ Reprodueix'; };
+$('vel').onchange = () => { velocitat = +$('vel').value; t0 = performance.now(); };
+
+// ---------- Ratolí i teclat ----------
+let arrossega = false;
+function cursorACela(ev) {
+    const r = c.getBoundingClientRect(), k = c.width / r.width;
+    const px = (ev.clientX - r.left) * k, py = (ev.clientY - r.top) * k;
+    const i = Math.floor(px / (256 * ESCALA)) + 5 * Math.floor(py / (256 * ESCALA));
+    return { i, x: r2(px / ESCALA - (i % 5) * 256), y: r2(py / ESCALA - Math.floor(i / 5) * 256) };
+}
+c.addEventListener('mousedown', ev => {
+    const p = cursorACela(ev);
+    if (p.i < 0 || p.i > 9) return;
+    $('frame').value = p.i; arrossega = true;
+    canvia(() => posaEfectiu({ x: p.x, y: p.y }));
+});
+addEventListener('mousemove', ev => {
+    if (!arrossega) return;
+    const p = cursorACela(ev);
+    if (p.i === sel().i) canvia(() => posaEfectiu({ x: p.x, y: p.y }), true);
+});
+addEventListener('mouseup', () => { arrossega = false; });
+c.addEventListener('wheel', ev => {
+    ev.preventDefault();
+    const { v, w, i } = sel(), e = efectiu(w, v, i);
+    if (e) canvia(() => posaEfectiu({ a: e.a + (ev.deltaY > 0 ? 5 : -5) }), true);
+}, { passive: false });
+addEventListener('keydown', ev => {
+    const cmd = ev.ctrlKey || ev.metaKey, k = ev.key.toLowerCase();
+    if (cmd && k === 's') { ev.preventDefault(); $('desa').click(); return; }
+    if (cmd && k === 'z') { ev.preventDefault(); ev.shiftKey ? refes() : desfes(); return; }
+    if (cmd && k === 'y') { ev.preventDefault(); refes(); return; }
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(ev.target.tagName)) return;
+    const { v, w, i, mode } = sel(), e = efectiu(w, v, i), pas = ev.shiftKey ? 0.25 : 1;
+    if (k === ' ') { ev.preventDefault(); $('play').click(); return; }
+    if (k === ',' || k === '.') { $('frame').value = (i + (k === '.' ? 1 : 9)) % 10; refresca(); return; }
+    if (k === 'delete') { canvia(esborraFotograma); return; }
+    if (!e) return;
+    if (k === 'd') canvia(() => posaEfectiu({ d: !e.d }));
+    else if (k === 'arrowleft') canvia(() => posaEfectiu({ x: e.x - pas }), true);
+    else if (k === 'arrowright') canvia(() => posaEfectiu({ x: e.x + pas }), true);
+    else if (k === 'arrowup') canvia(() => posaEfectiu({ y: e.y - pas }), true);
+    else if (k === 'arrowdown') canvia(() => posaEfectiu({ y: e.y + pas }), true);
+    else if (k === '[' && mode === 'arma') canvia(() => posaEfectiu({ e: e.e - 0.02 }), true);
+    else if (k === ']' && mode === 'arma') canvia(() => posaEfectiu({ e: e.e + 0.02 }), true);
+    else return;
+    ev.preventDefault();
+});
+try { $('arcOn').checked = localStorage.getItem('ajustArmaArc') !== '0'; } catch (e) { }
+$('arcOn').onchange = () => { try { localStorage.setItem('ajustArmaArc', $('arcOn').checked ? '1' : '0'); } catch (e) { } };
+addEventListener('beforeunload', ev => { if (brut) { ev.preventDefault(); ev.returnValue = ''; } });
+
+// ---------- Desa al joc ----------
+$('desa').onclick = async () => {
+    const estat = $('estat');
+    try {
+        const r = await fetch('/desa-atac-arma', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ taula, ajust, llarg, armes: Object.fromEntries(NOMS.map(k => [k, { agafa: ARMES[k].agafa }])) })
+        });
+        const d = await r.json();
+        if (d.ok) brut = false;
+        estat.textContent = d.ok ? 'Desat a js/atac_arma.js (còpia anterior: atac_arma.js.bak). Recarrega el joc.' : "No s'ha pogut desar: " + (d.error || r.status);
+        estat.style.color = d.ok ? '#9aff9a' : '#ff9a9a';
+    } catch (e) {
+        estat.textContent = "No s'ha pogut desar: obre aquesta pàgina amb python serveix.py (http://localhost:8000/eines/ajust_arma.html)";
+        estat.style.color = '#ff9a9a';
+    }
+    refresca();
+};
+
+async function inicia() {
+    for (const v of VISTES) imatges[v] = await carrega('../assets/sprites/ineu/atac_' + v + '.webp');
+    for (const a of Object.values(ARMES)) a.img = await carrega(a.fitxer);
+    mostraConfig(); refresca();
+    requestAnimationFrame(tick);
+}
+window.taula = taula; window.ajust = ajust; window.refresca = refresca;
+inicia();
+</script>

@@ -266,7 +266,7 @@ Object.assign(ZonaBase.prototype, {
         // So, arma visible i mitja lluna (l'Ineu no es desplaça en atacar)
         Sfx.atac(runna);
         this.tallBasto(jo, d, runna, agil);
-        if (!this.animarAtac(d)) { this.atacantFins = ara + 260; this.armaCop(d, runna, agil); }       // amb fulla d'atac l'arma ja és al sprite
+        if (!this.animarAtac(d, runna, agil)) { this.atacantFins = ara + 260; this.armaCop(d, runna, agil); }       // amb fulla d'atac, l'arma és una capa que segueix la mà
         // Finestra de cop activa mentre dura l'animació: cada enemic només rep un cop per atac
         this.cop = { fins: ara + 200, d, L, ample: agil ? 34 : 28, dany: runna ? 2 : 1, tocats: new Set(), runna };
         this.comprovarCop();
@@ -278,19 +278,56 @@ Object.assign(ZonaBase.prototype, {
     },
 
     // Animació d'atac de l'Ineu amb la fulla de la direcció (8 vistes). Retorna fals si no n'hi ha.
-    animarAtac(d) {
+    // La fulla mostra l'Ineu sense arma: l'arma (bastó, branca del Til·ler o espasa) és una capa que segueix la mà (ATAC_ARMA).
+    animarAtac(d, runna, agil) {
         const vista = OCTANTS_INEU[(Math.round(Math.atan2(d.y, d.x) / (Math.PI / 4)) + 8) % 8];
         if (!Grafics.atacsVista || !Grafics.atacsVista.has(vista)) return false;
         this.atacantFins = 0;
         this.vista8Manual = true;
         this.posarDireccio(this.direccio, false, vista);
         this.atacantFins = this.time.now + ATAC_INEU.fotogrames.length / ATAC_INEU.fps * 1000;
+        const net = this.capaArma(vista, runna, agil);
         this.ineu.anims.play('atac_' + vista, true);
         this.ineu.once('animationcomplete', () => {
+            net();
             this.atacantFins = 0;
             if (!this.caient) this.posarDireccio(this.direccio, false);
         });
         return true;
+    },
+
+    // L'arma de l'atac: una imatge que a cada fotograma de l'animació es posa a la mà de l'Ineu (taula ATAC_ARMA).
+    // Retorna la funció que la treu.
+    capaArma(vista, runna, agil) {
+        if (this.armaNet) this.armaNet();
+        // Les tres armes fan la mateixa llargada i s'agafen pel mateix lloc (ARMA_LLARG i ARMES_ATAC, a js/atac_arma.js)
+        const nom = runna ? 'espasa' : agil ? 'tiller' : 'basto';       // agil sense Runna = la branca del Til·ler
+        const conf = ARMES_ATAC[nom];
+        const arma = this.add.image(0, 0, conf.clau).setOrigin(0.5, conf.agafa).setVisible(false);
+        const escalaBase = ARMA_LLARG / arma.height;
+        const ajustos = (ATAC_AJUST[nom] && ATAC_AJUST[nom][vista]) || [];      // ajust fi d'aquesta arma, vista i fotograma
+        const taula = ATAC_ARMA[vista] || [];
+        const posa = frame => {
+            const e = taula[frame.index - 1];                  // frame.index compta des d'1 dins l'animació
+            if (!e) { arma.setVisible(false); return; }
+            const aj = ajustos[frame.index - 1] || { dx: 0, dy: 0, a: 0, e: 1 };
+            const davant = aj.d == null ? e.d : aj.d;
+            const jo = this.ineu, s = jo.scaleX;
+            arma.setVisible(true).setPosition(jo.x + (e.x + aj.dx - SPRITE_INEU.ample / 2) * s, jo.y + (e.y + aj.dy - SPRITE_INEU.peus) * s)
+                .setAngle(e.a + aj.a).setScale(escalaBase * aj.e).setDepth(jo.depth + (davant ? 1 : -1));
+        };
+        const alActualitzar = (anim, frame) => posa(frame);
+        this.ineu.on('animationstart', alActualitzar);
+        this.ineu.on('animationupdate', alActualitzar);
+        const net = () => {
+            this.ineu.off('animationstart', alActualitzar);
+            this.ineu.off('animationupdate', alActualitzar);
+            if (arma.active) arma.destroy();
+            if (this.armaNet === net) this.armaNet = null;
+        };
+        this.armaNet = net;
+        this.time.delayedCall(ATAC_INEU.fotogrames.length / ATAC_INEU.fps * 1000 + 150, net);       // per si l'animació s'interromp
+        return net;
     },
 
     // Comprova cada fotograma els enemics tocats per la línia del cop (segment des dels peus de l'Ineu)
@@ -348,9 +385,9 @@ Object.assign(ZonaBase.prototype, {
     // La mitja lluna del cop: surt del pit de l'Ineu, més enllà del cap, dels peus i dels costats
     tallBasto(jo, d, runna, agil) {
         const ang = Math.atan2(d.y, d.x);
-        const color = runna ? 0xffe08a : agil ? 0xd8f0b0 : 0xf5ecd0;
+        const arc = ARC_ATAC[runna ? 'espasa' : agil ? 'tiller' : 'basto'];       // color i radi, a js/atac_arma.js
+        const color = parseInt(arc.color.slice(1), 16), R = arc.R;
         const g = this.add.graphics().setDepth(99990).setPosition(jo.x, jo.y - 62);
-        const R = agil ? 118 : 108;
         [[0, 12, 0.95], [-14, 7, 0.55], [-28, 4, 0.3]].forEach(([dr, gruix, alfa]) => {
             g.lineStyle(gruix, dr ? 0xffffff : color, alfa).beginPath().arc(0, 0, R + dr, ang - 1.05, ang + 1.05).strokePath();
         });

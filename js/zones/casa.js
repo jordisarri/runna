@@ -488,12 +488,15 @@ class ZonaCasaTresor extends ZonaCasaBase {
     }
 }
 
-// ---------------- LA SALA DEL RELLOTGE (rellotge i campanes, dalt de la torre del Santuari) ----------------
-// El rellotge és aturat a les tres i quart (l'hora que va arribar la boira) i les campanes són mudes. Puzle: posar tres engranatges
-// a la mida correcta i, amb el rellotge en marxa, tocar el Cant de l'Aurora davant les campanes.
+// ---------------- LA SALA DEL RELLOTGE (el rellotge del campanar, dalt de la torre del Santuari) ----------------
+// El rellotge és aturat a les tres i quart (l'hora que va arribar la boira). Puzle: posar tres engranatges a la mida correcta
+// perquè torni a caminar. Arreglar-lo dóna +1 gra al rosari.
 const GOLFES_SOLUCIO = [0, 2, 1];      // 0 petit, 1 mitjà, 2 gran: «el petit va primer, el gran al mig i el mitjà darrere»
 const GOLFES_RADI = [24, 34, 44];
 const GOLFES_NOM = ['petit', 'mitjà', 'gran'];
+const GOLFES_ENG_X = [330, 500, 670];
+const GOLFES_ENG_Y = 372;
+const GOLFES_PARET = 446;          // fins on arriba la paret del fons (a sota, el terra)
 
 Object.assign(DIALEGS, {
     golfesRellotge: E => ({ pagines: E.flag('rellotgeReparat') ? [
@@ -501,36 +504,48 @@ Object.assign(DIALEGS, {
     ] : [
         { qui: '', text: "El rellotge del Santuari, aturat a les tres i quart. Fa tres nits que no es mou: va ser quan va arribar la boira." },
         { qui: 'Ineu', text: "Sota l'esfera hi ha tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran. Quan una posició és bona, el seu llum s'encén." },
-        { qui: 'Ineu', text: "La nota del campaner, a la biga de l'esquerra, deu dir l'ordre." }
+        { qui: 'Ineu', text: "La nota del campaner, a la paret de l'esquerra, deu dir l'ordre." }
     ] }),
 
     golfesNota: E => ({ pagines: [
-        { qui: '', text: "Una nota de fusta clavada a una biga, amb lletra de campaner:" },
-        { qui: 'Nota del campaner', text: "«El rellotge només camina si els engranatges hi van en ordre: el petit primer, el gran al mig i el mitjà darrere. I les tres campanes, que són els tres sons del primer cant, no sonen si el rellotge és mut.»" },
-        { qui: 'Ineu', text: "És a dir: posició I petit, posició II gran, posició III mitjà. Després, amb el rellotge en marxa, tocar el primer cant davant les campanes." }
+        { qui: '', text: "Un pergamí gastat i doblegat, clavat a la paret amb tres claus. Té la lletra apretada del campaner:" },
+        { qui: 'Nota del campaner', text: "«El rellotge només camina si els engranatges hi van en ordre: el petit primer, el gran al mig i el mitjà darrere.»" },
+        { qui: 'Ineu', text: "És a dir: posició I petit, posició II gran, posició III mitjà." }
     ] }),
 
-    golfesCampanes: E => ({ pagines: E.flag('campanesRepicades') ? [
-        { qui: '', text: "Les tres campanes pengen en silenci, netes i quietes. Han sonat." }
-    ] : E.flag('rellotgeReparat') && !E.te('flauta') ? [
-        { qui: '', text: "Tres campanes de bronze, afinades amb les notes 1, 2 i 3. Amb el rellotge en marxa ja vibren una mica." },
-        { qui: 'Ineu', text: "Necessito una flauta i el primer cant, el de l'Aurora. La Pianista, a l'orgue del Santuari, me'l pot ensenyar." }
-    ] : E.flag('rellotgeReparat') ? [
-        { qui: '', text: "Tres campanes de bronze, penjades d'una biga: una de petita, una de mitjana i una de gran. Estan afinades: fan les notes 1, 2 i 3." },
-        { qui: 'Ineu', text: "Amb el rellotge en marxa, el Cant de l'Aurora les farà sonar. Prem ESPAI aquí davant (o el medalló de la flauta) i toca 1-2-3." }
-    ] : [
-        { qui: '', text: "Tres campanes de bronze, mudes. Per més que les toques, no fan so: com si la boira se'ls hagués menjat el so." },
-        { qui: 'Ineu', text: "Primer cal arreglar el rellotge que les governa." }
-    ] }),
+    golfesPendol: E => ({ pagines: [{ qui: '', text: E.flag('rellotgeReparat') ? "El pèndol batega amb calma, tic-tac, tic-tac." : "Un pèndol de llautó, penjat sense moure's dins la caixa de fusta." }] }),
 
-    golfesCampanesSonen: {
+    golfesPremi: {
         pagines: [
-            { qui: '', text: "El Cant de l'Aurora puja entre les bigues. Les tres campanes responen, una a una, i el so s'escampa per sobre del Santuari: DONG, DONG, DONG." },
-            { qui: '', text: "A baix, a la nau, l'orgue sona un instant tot sol. La boira recula per les finestres, com si algú hagués obert una porta." },
-            { qui: '', text: "Has trobat, a la caixa de les campanes, un flascó de líquid daurat.\n+1 GRA AL ROSARI i rosari ple." }
+            { qui: '', text: "Els tres engranatges encaixen en ordre: petit, gran i mitjà. Una cosa dins la paret fa clac." },
+            { qui: '', text: "L'agulla dels minuts es mou. El rellotge del Santuari torna a caminar, tic-tac, tic-tac, i el pèndol comença a batre." },
+            { qui: '', text: "Dins la caixa del mecanisme hi ha un flascó de líquid daurat.\n+1 GRA AL ROSARI i rosari ple." }
         ]
     }
 });
+
+// Roda dentada de llautó dibuixada al voltant de (0, 0): dents, anell, radis, cub i una lluïssor a dalt a l'esquerra
+function pintaEngranatge(g, r, dents, color = 0xc8a64a) {
+    g.fillStyle(color, 1).lineStyle(3, 0x2a1608, 1);
+    g.beginPath();
+    for (let k = 0; k < dents * 4; k++) {
+        const a = k * Math.PI / (dents * 2), pla = k % 4 < 2, rr = pla ? r + 8 : r;
+        const px = Math.cos(a) * rr, py = Math.sin(a) * rr;
+        k ? g.lineTo(px, py) : g.moveTo(px, py);
+    }
+    g.closePath(); g.fillPath(); g.strokePath();
+    g.fillStyle(0x6a4a18, 1).fillCircle(0, 0, r * 0.74);
+    g.fillStyle(color, 1).fillCircle(0, 0, r * 0.64);
+    g.lineStyle(2, 0x2a1608, 1).strokeCircle(0, 0, r * 0.64);
+    for (let k = 0; k < 5; k++) {
+        const a = k * Math.PI * 2 / 5 + 0.3;
+        g.fillStyle(0x6a4a18, 1).fillCircle(Math.cos(a) * r * 0.36, Math.sin(a) * r * 0.36, r * 0.14);          // forats entre els radis
+    }
+    g.fillStyle(0x8a6a28, 1).fillCircle(0, 0, 9);
+    g.lineStyle(2, 0x2a1608, 1).strokeCircle(0, 0, 9);
+    g.fillStyle(0x2a1608, 1).fillCircle(0, 0, 3);
+    g.lineStyle(3, 0xfff0b0, 0.55).beginPath(); g.arc(0, 0, r + 4, Math.PI * 1.1, Math.PI * 1.45); g.strokePath();
+}
 
 class ZonaGolfes extends ZonaCasaBase {
     constructor() {
@@ -546,84 +561,137 @@ class ZonaGolfes extends ZonaCasaBase {
 
     construir() {
         this.sala(1000, 700, 500, 0x8a6a48);
-        // Bigues i teulada de fusta
+        // Paret del fons de fusta, amb sòcol, i unes bigues robustes al sostre
+        const paret = this.add.graphics().setDepth(-995);
+        paret.fillStyle(0x4a2e18, 1).fillRect(130, 0, 740, GOLFES_PARET);
+        for (let x = 130; x < 870; x += 46) {
+            paret.fillStyle(x / 46 % 2 ? 0x54341c : 0x4a2e18, 1).fillRect(x, 0, 46, GOLFES_PARET);
+            paret.lineStyle(2, 0x2a1608, 0.8).lineBetween(x, 0, x, GOLFES_PARET);
+            paret.lineStyle(1, 0x2a1608, 0.35).lineBetween(x + 14, 30, x + 16, GOLFES_PARET - 40).lineBetween(x + 31, 50, x + 29, GOLFES_PARET - 30);
+        }
+        paret.fillStyle(0x2a1608, 1).fillRect(130, GOLFES_PARET - 10, 740, 12);
+        paret.fillStyle(0xffd9a0, 0.14).fillRect(130, GOLFES_PARET + 2, 740, 3);
+        this.colisio(500, (160 + GOLFES_PARET) / 2, 740, GOLFES_PARET - 160);                                                           // la paret del fons, fins al sòcol
         const bigues = this.add.graphics().setDepth(-990);
-        bigues.lineStyle(10, 0x3a2412, 1);
-        for (let x = 200; x <= 800; x += 120) bigues.lineBetween(x, 80, x, 150);
-        bigues.lineBetween(130, 150, 870, 150);
+        for (let x = 200; x <= 800; x += 120) {
+            bigues.fillStyle(0x2a1608, 1).fillRect(x - 7, 0, 14, 160);
+            bigues.fillStyle(0x4a2c14, 1).fillRect(x - 5, 0, 10, 160);
+            bigues.fillStyle(0xffd9a0, 0.18).fillRect(x - 5, 0, 2, 160);
+        }
+        bigues.fillStyle(0x2a1608, 1).fillRect(130, 140, 740, 20);
+        bigues.fillStyle(0x4a2c14, 1).fillRect(130, 142, 740, 14);
+        bigues.fillStyle(0xffd9a0, 0.2).fillRect(130, 142, 740, 2);
+
+        // Rodes dentades decoratives (no fan res) a la paret, a banda i banda
+        [[205, 200, 24, 10, 0x9a8650], [800, 205, 30, 12, 0x9a8650], [200, 250, 14, 8, 0xb59a52]].forEach(([x, y, r, d, col]) => {
+            const g = this.add.graphics({ x, y }).setDepth(-960);
+            pintaEngranatge(g, r, d, col);
+        });
+        // Cadenes amb contrapesos de pedra, a cada costat del rellotge
+        const cad = this.add.graphics().setDepth(-940);
+        [240, 760].forEach(x => {
+            cad.lineStyle(3, 0x2a1608, 1);
+            for (let y = 164; y < 288; y += 11) cad.strokeEllipse(x, y + 5, 7, 11);
+            cad.fillStyle(0x6a6862, 1).lineStyle(3, 0x1a1008, 1);
+            cad.fillRoundedRect(x - 14, 288, 28, 52, 6).strokeRoundedRect(x - 14, 288, 28, 52, 6);
+            cad.lineStyle(1.5, 0x2a2824, 0.7).lineBetween(x - 14, 304, x + 14, 304).lineBetween(x - 14, 322, x + 14, 322);
+            cad.fillStyle(0xffffff, 0.22).fillRect(x - 11, 291, 4, 46);
+        });
 
         // El rellotge gran, a la paret del fons: aturat a les 3:15 fins que s'arregla
+        const cx = 500, cy = 196;
         const cara = this.add.graphics().setDepth(-900);
-        cara.fillStyle(0x3a2412, 1).fillCircle(500, 215, 108);
-        cara.fillStyle(0xe8dcc0, 1).fillCircle(500, 215, 96);
-        cara.lineStyle(3, 0x3a2412, 1).strokeCircle(500, 215, 96);
-        for (let i = 0; i < 12; i++) {
-            const a = i * Math.PI / 6;
-            cara.lineStyle(i % 3 === 0 ? 6 : 3, 0x3a2412, 1).lineBetween(500 + Math.sin(a) * 78, 215 - Math.cos(a) * 78, 500 + Math.sin(a) * 90, 215 - Math.cos(a) * 90);
+        cara.fillStyle(0x000000, 0.3).fillCircle(cx + 4, cy + 6, 116);
+        cara.fillStyle(0x2a1608, 1).fillCircle(cx, cy, 114);
+        cara.fillStyle(0xb58a3a, 1).fillCircle(cx, cy, 109);
+        cara.fillStyle(0xe0b857, 1).fillCircle(cx, cy, 104);
+        cara.lineStyle(2, 0x2a1608, 1).strokeCircle(cx, cy, 104).strokeCircle(cx, cy, 98);
+        cara.fillStyle(0xf0e6cc, 1).fillCircle(cx, cy, 96);
+        cara.fillStyle(0xd8c8a0, 0.6).fillCircle(cx + 18, cy + 30, 52);                            // taques d'humitat
+        cara.fillStyle(0xc8b488, 0.5).fillCircle(cx - 38, cy - 24, 26);
+        cara.lineStyle(3, 0x3a2412, 1).strokeCircle(cx, cy, 96).strokeCircle(cx, cy, 62);
+        cara.lineStyle(1, 0x3a2412, 0.5).strokeCircle(cx, cy, 90);
+        for (let i = 0; i < 60; i++) {
+            const a = i * Math.PI / 30, gran = i % 5 === 0;
+            cara.lineStyle(gran ? 4 : 1.5, 0x3a2412, 1).lineBetween(cx + Math.sin(a) * (gran ? 78 : 83), cy - Math.cos(a) * (gran ? 78 : 83), cx + Math.sin(a) * 90, cy - Math.cos(a) * 90);
         }
-        this.agullaMinuts = this.add.graphics({ x: 500, y: 215 }).setDepth(-880);
-        this.agullaMinuts.lineStyle(6, 0x2a1608, 1).lineBetween(0, 0, 0, -76);
-        this.agullaHores = this.add.graphics({ x: 500, y: 215 }).setDepth(-879);
-        this.agullaHores.lineStyle(9, 0x2a1608, 1).lineBetween(0, 0, 0, -50);
+        for (let i = 0; i < 12; i++) {                                                           // reblons del bisell
+            const a = i * Math.PI / 6;
+            cara.fillStyle(0x6a4a18, 1).fillCircle(cx + Math.sin(a) * 101, cy - Math.cos(a) * 101, 2.4);
+            cara.fillStyle(0xfff0b0, 0.7).fillCircle(cx + Math.sin(a) * 101 - 0.7, cy - Math.cos(a) * 101 - 0.7, 0.9);
+        }
+        ['XII', 'I', 'II', 'III', 'IIII', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'].forEach((n, i) => {
+            const a = i * Math.PI / 6;
+            this.add.text(cx + Math.sin(a) * 68, cy - Math.cos(a) * 68, n, estilText(i % 3 === 0 ? 17 : 13, '#3a2412', { fontStyle: 'bold' })).setOrigin(0.5).setDepth(-895);
+        });
+        this.agullaMinuts = this.add.graphics({ x: cx, y: cy }).setDepth(-880);
+        this.agullaMinuts.fillStyle(0x2a1608, 1).fillPoints([{ x: -3.5, y: 8 }, { x: -1.6, y: -78 }, { x: 0, y: -86 }, { x: 1.6, y: -78 }, { x: 3.5, y: 8 }], true);
+        this.agullaHores = this.add.graphics({ x: cx, y: cy }).setDepth(-879);
+        this.agullaHores.fillStyle(0x2a1608, 1).fillPoints([{ x: -5, y: 8 }, { x: -3.5, y: -26 }, { x: 0, y: -33 }, { x: 3.5, y: -26 }, { x: 5, y: 8 }], true);
+        this.agullaHores.fillPoints([{ x: -2, y: -33 }, { x: 0, y: -52 }, { x: 2, y: -33 }], true);
+        this.add.circle(cx, cy, 9, 0xb58a3a).setStrokeStyle(2, 0x2a1608).setDepth(-870);
+        this.add.circle(cx, cy, 3, 0x2a1608).setDepth(-869);
         this.agullaMinuts.rotation = Math.PI / 2;           // 3:15
         this.agullaHores.rotation = Math.PI / 2 + 0.13;
-        this.interactiu(500, 330, 70, DIALEGS.golfesRellotge, { altura: 170 });
+        this.interactiu(500, GOLFES_PARET + 10, 70, DIALEGS.golfesRellotge, { altura: 170 });
 
-        // Mecanisme: tres engranatges sota el rellotge (cada interacció els fa girar de mida)
+        // Mecanisme: tres engranatges sota el rellotge (cada interacció els fa girar de mida), muntats sobre una placa de fusta
         this.reparat = Estat.flag('rellotgeReparat');
         this.mides = this.reparat ? GOLFES_SOLUCIO.slice() : [2, 2, 2];
-        this.engranatges = [0, 1, 2].map(i => this.add.graphics().setDepth(-870));
-        [330, 500, 670].forEach((x, i) => {
+        const placa = this.add.graphics().setDepth(-890);
+        placa.fillStyle(0x2a1608, 1).fillRoundedRect(270, 312, 460, 128, 10);
+        placa.fillStyle(0x4a2c14, 1).fillRoundedRect(274, 316, 452, 120, 8);
+        placa.lineStyle(2, 0x7a5a30, 0.8).strokeRoundedRect(278, 320, 444, 112, 6);
+        [[284, 326], [716, 326], [284, 426], [716, 426]].forEach(([x, y]) => { placa.fillStyle(0x8a8a90, 1).fillCircle(x, y, 4); placa.fillStyle(0x2a1608, 1).fillRect(x - 3, y - 0.8, 6, 1.6); });
+        placa.fillStyle(0x2a1608, 1).fillRect(290, GOLFES_ENG_Y - 3, 420, 6);                      // eix on s'enfilen els engranatges
+        this.engranatges = GOLFES_ENG_X.map(x => this.add.graphics({ x, y: GOLFES_ENG_Y }).setDepth(-870));
+        GOLFES_ENG_X.forEach((x, i) => {
             this.dibuixaEngranatge(i);
-            this.interactiu(x, 395, 52, () => this.girarEngranatge(i), { altura: 90, actiu: () => !this.reparat });
+            this.interactiu(x, GOLFES_PARET + 6, 52, () => this.girarEngranatge(i), { altura: 90, actiu: () => !this.reparat });
         });
-        this.add.rectangle(500, 340, 420, 14, 0x3a2412).setDepth(-880);
         // Plaques de posició (I, II, III) i un llum per a cada una: verd quan l'engranatge d'aquella posició és el bo
-        this.llumsEng = [330, 500, 670].map((x, i) => {
-            this.add.rectangle(x, 400, 44, 22, 0x5a3a1e).setStrokeStyle(2, 0x2a1608).setDepth(-860);
-            this.add.text(x, 400, ['I', 'II', 'III'][i], estilText(16, '#f2e6c8', { fontStyle: 'bold' })).setOrigin(0.5).setDepth(-859);
-            return this.add.circle(x, 288, 7, 0x3a1a10).setStrokeStyle(2, 0x2a1608).setDepth(-860);
+        this.llumsEng = GOLFES_ENG_X.map((x, i) => {
+            this.add.rectangle(x, 422, 44, 20, 0x5a3a1e).setStrokeStyle(2, 0x2a1608).setDepth(-860);
+            this.add.text(x, 422, ['I', 'II', 'III'][i], estilText(15, '#f2e6c8', { fontStyle: 'bold' })).setOrigin(0.5).setDepth(-859);
+            this.add.circle(x, 330, 9, 0x1a0c06).setStrokeStyle(2, 0xb58a3a).setDepth(-861);
+            return this.add.circle(x, 330, 6, 0x3a1a10).setDepth(-860);
         });
         this.refrescaLlums();
 
-        // Nota del campaner (la pista del puzle), clavada a una biga de l'esquerra
-        this.posar('pergami', 190, 340, { fonsY: 340 });
-        this.interactiu(190, 360, 70, DIALEGS.golfesNota, { altura: 70 });
+        // Nota del campaner (la pista del puzle), clavada a la paret de l'esquerra: pergamí desplegat i gastat
+        this.posar('pergami_paret', 175, 360, { fonsY: -850, escala: 1.15 });
+        this.interactiu(175, GOLFES_PARET + 10, 70, DIALEGS.golfesNota, { altura: 90 });
 
-        // Les tres campanes (petita, mitjana i gran), penjades d'una biga davant
-        this.campanes = [0, 1, 2].map(i => {
-            const x = 380 + i * 120, h = 56 + i * 12, amplada = 40 + i * 12;
-            const c = this.add.graphics({ x, y: 430 }).setDepth(480);
-            c.fillStyle(0xb58a3a, 1).lineStyle(3, 0x2a1608, 1);
-            const w2 = amplada / 2;                      // contorn de la campana (Graphics no té corbes: es fa amb punts)
-            const punts = [[-w2, h], [-w2 * 0.92, h * 0.6], [-w2 * 0.7, h * 0.28], [-w2 * 0.35, 6], [0, 0], [w2 * 0.35, 6], [w2 * 0.7, h * 0.28], [w2 * 0.92, h * 0.6], [w2, h]].map(([px, py]) => new Phaser.Geom.Point(px, py));
-            c.fillPoints(punts, true); c.strokePoints(punts, true);
-            c.fillStyle(0x6a4a18, 1).fillCircle(0, h + 4, 5);
-            return c;
-        });
-        // Les notes de cada campana (1, 2, 3) i un resplendor que s'encén quan ja es poden fer sonar
-        this.notesCamp = [0, 1, 2].map(i => this.add.text(380 + i * 120, 430 + 56 + i * 12 + 26, String(i + 1), estilText(22, '#ffe08a', { fontStyle: 'bold', stroke: '#2a1608', strokeThickness: 4 })).setOrigin(0.5).setDepth(490));
-        this.halosCamp = [0, 1, 2].map(i => this.add.circle(380 + i * 120, 470 + i * 6, 46 + i * 6, 0xffe08a, 0).setDepth(479));
-        const beta = this.add.graphics().setDepth(470);
-        beta.fillStyle(0x3a2412, 1).fillRect(330, 418, 340, 14);
-        this.colisio(500, 440, 360, 24);
-        this.interactiu(500, 505, 90, DIALEGS.golfesCampanes, { altura: 120 });
-        this.llocFlauta('campanes', 500, 520, 230, false);
+        // Caixa del pèndol, al costat dret: el pèndol batega quan el rellotge camina
+        const caixa = this.add.graphics().setDepth(522);
+        caixa.fillStyle(0x000000, 0.28).fillEllipse(810, 530, 120, 18);
+        caixa.fillStyle(0x2a1608, 1).fillRoundedRect(766, 360, 88, 168, 6);
+        caixa.fillStyle(0x5a3a1e, 1).fillRoundedRect(770, 364, 80, 160, 5);
+        caixa.fillStyle(0x140a04, 1).fillRoundedRect(780, 380, 60, 124, 3);
+        caixa.fillStyle(0x7a5a30, 1).fillRect(760, 354, 100, 12).fillRect(764, 520, 92, 10);
+        caixa.lineStyle(2, 0x2a1608, 1).strokeRect(760, 354, 100, 12).strokeRect(764, 520, 92, 10);
+        this.pendol = this.add.graphics({ x: 810, y: 386 }).setDepth(523);
+        this.pendol.lineStyle(3, 0x8a6a28, 1).lineBetween(0, 0, 0, 92);
+        this.pendol.fillStyle(0xb58a3a, 1).fillCircle(0, 98, 17).lineStyle(2.5, 0x2a1608, 1).strokeCircle(0, 98, 17);
+        this.pendol.fillStyle(0xfff0b0, 0.55).fillCircle(-5, 92, 4);
+        this.pendol.fillStyle(0x6a4a18, 1).fillCircle(0, 0, 4);
+        const vidre = this.add.graphics().setDepth(524);
+        vidre.fillStyle(0xbfe6ff, 0.1).fillRoundedRect(780, 380, 60, 124, 3);
+        vidre.fillStyle(0xffffff, 0.14).fillPoints([{ x: 784, y: 384 }, { x: 800, y: 384 }, { x: 784, y: 440 }], true);
+        this.colisio(810, 516, 96, 22);
+        this.interactiu(810, 545, 60, DIALEGS.golfesPendol, { altura: 100 });
 
-        this.espelmes([[230, 560], [770, 560]]);
-        this.add.rectangle(500, 350, 1000, 700, 0xffd38a, 0.05).setDepth(80000);
+        this.espelmes([[230, 560], [770, 590]]);
         this.sortida(440, 686, 120, 14, 'ZonaTorre', 'dalt');
         if (this.reparat) this.agullaMinuts.rotation = 0;
         this.objectiuGolfes();
     }
 
-    // L'objectiu diu, en cada moment, què toca fer a la sala
+    // L'objectiu diu què toca fer a la sala
     objectiuGolfes() {
         const E = Estat;
-        if (E.flag('campanesRepicades')) return;
-        if (!this.reparat) E.posaObjectiu("Rellotge: posa els engranatges en ordre (I petit, II gran, III mitjà, diu la nota). Toca'ls amb ESPAI per canviar-ne la mida.");
-        else if (!E.te('flauta') || !E.flag('cantAurora')) E.posaObjectiu("El rellotge camina. Per fer sonar les campanes cal la flauta i el Cant de l'Aurora: aprèn-lo de la Pianista, al Santuari.");
-        else E.posaObjectiu("Toca el Cant de l'Aurora (1-2-3) davant les campanes: ESPAI aquí davant o el medalló de la flauta.");
+        if (this.reparat) return;
+        E.posaObjectiu("Rellotge: posa els engranatges en ordre (I petit, II gran, III mitjà, diu la nota). Toca'ls amb ESPAI per canviar-ne la mida.");
         const ui = this.ui(); if (ui && ui.actualitzarHUD) ui.actualitzarHUD();
     }
 
@@ -632,18 +700,9 @@ class ZonaGolfes extends ZonaCasaBase {
     }
 
     dibuixaEngranatge(i) {
-        const g = this.engranatges[i], x = 330 + i * 170, r = GOLFES_RADI[this.mides[i]];
+        const g = this.engranatges[i];
         g.clear();
-        g.fillStyle(0xb5a273, 1).lineStyle(3, 0x2a1608, 1);
-        const dents = 10 + this.mides[i] * 3;
-        g.beginPath();
-        for (let k = 0; k < dents * 2; k++) {
-            const a = k * Math.PI / dents, rr = k % 2 ? r : r + 7;
-            const px = x + Math.cos(a) * rr, py = 340 + Math.sin(a) * rr;
-            k ? g.lineTo(px, py) : g.moveTo(px, py);
-        }
-        g.closePath(); g.fillPath(); g.strokePath();
-        g.fillStyle(0x3a2412, 1).fillCircle(x, 340, 6);
+        pintaEngranatge(g, GOLFES_RADI[this.mides[i]], 10 + this.mides[i] * 3);
     }
 
     girarEngranatge(i) {
@@ -653,63 +712,29 @@ class ZonaGolfes extends ZonaCasaBase {
         Sfx.menu();
         const bé = this.mides.every((m, k) => m === GOLFES_SOLUCIO[k]);
         if (!bé) {
-            this.flotant(330 + i * 170, 300, ['I', 'II', 'III'][i] + ': ' + GOLFES_NOM[this.mides[i]], this.mides[i] === GOLFES_SOLUCIO[i] ? '#9aff9a' : '#f2e6c8');
+            this.flotant(GOLFES_ENG_X[i], 330, ['I', 'II', 'III'][i] + ': ' + GOLFES_NOM[this.mides[i]], this.mides[i] === GOLFES_SOLUCIO[i] ? '#9aff9a' : '#f2e6c8');
             return null;
         }
         return {
-            pagines: [
-                { qui: '', text: "Els tres engranatges encaixen en ordre: petit, gran i mitjà. Una cosa dins la paret fa clac." },
-                { qui: '', text: "L'agulla dels minuts es mou. El rellotge del Santuari torna a caminar, tic-tac, tic-tac." }
-            ],
-            enAcabar: () => { this.reparat = true; Estat.posaFlag('rellotgeReparat'); this.cameras.main.shake(300, 0.003); Sfx.secret(); this.objectiuGolfes(); Estat.desar(); }
+            pagines: DIALEGS.golfesPremi.pagines,
+            enAcabar: () => {
+                this.reparat = true; Estat.posaFlag('rellotgeReparat');
+                this.cameras.main.shake(300, 0.003); Sfx.secret();
+                const E = Estat;
+                E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
+                E.posaObjectiu('El rellotge del Santuari torna a caminar. Explica-ho al Pare Daniel.');
+                this.ui().actualitzarHUD();
+                E.desar();
+            }
         };
     }
 
-    // Cant de l'Aurora davant les campanes: amb el rellotge en marxa, sonen
-    enMelodia(nom) {
-        if (nom !== 'aurora') return false;
-        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 500, 520) > 280) return false;
-        if (!this.reparat) { this.flotant(500, 440, 'Les campanes no ressonen: primer cal arreglar el rellotge', '#d8c8ff'); return true; }
-        if (Estat.flag('campanesRepicades')) { this.flotant(500, 440, 'Les campanes ja han sonat', '#d8c8ff'); return true; }
-        this.repicar();
-        return true;
-    }
-
-    repicar() {
-        Estat.posaFlag('campanesRepicades');
-        [0, 1, 2].forEach(i => this.time.delayedCall(i * 600, () => {
-            this.so(i + 1);
-            this.tweens.add({ targets: this.campanes[i], rotation: { from: -0.3, to: 0.3 }, yoyo: true, repeat: 3, duration: 180 });
-        }));
-        this.time.delayedCall(2400, () => this.ui().obrirDialeg(DIALEGS.golfesCampanesSonen, () => {
-            const E = Estat;
-            E.posaObjectiu('Les campanes del Santuari tornen a sonar. Explica-ho al Pare Daniel.');
-            E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
-            this.ui().actualitzarHUD();
-            E.desar();
-        }));
-    }
-
-    so(n) {
-        const ctx = this.sound && this.sound.context;
-        if (!ctx) return;
-        if (ctx.state === 'suspended') ctx.resume();
-        const o = ctx.createOscillator(), g = ctx.createGain();
-        o.type = 'sine'; o.frequency.value = [0, 262, 330, 392][n];
-        g.gain.setValueAtTime(0.0001, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.35, ctx.currentTime + 0.02);
-        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.8);
-        o.connect(g); g.connect(ctx.destination);
-        o.start(); o.stop(ctx.currentTime + 1.9);
-    }
-
     actualitzar(ara, delta) {
-        // Les campanes brillen quan ja es poden fer sonar (rellotge en marxa i encara no han sonat)
-        const llestes = this.reparat && !Estat.flag('campanesRepicades');
-        this.halosCamp.forEach((h, i) => h.setFillStyle(0xffe08a, llestes ? 0.12 + 0.1 * Math.sin(ara / 260 + i) : 0));
-        this.notesCamp.forEach(t => t.setAlpha(Estat.flag('campanesRepicades') ? 0.35 : llestes ? 1 : 0.5));
         if (!this.reparat) return;
+        // Amb el rellotge en marxa: agulles, engranatges (cadascun en sentit contrari al del veí) i pèndol
         this.agullaMinuts.rotation += delta * 0.0006;
         this.agullaHores.rotation += delta * 0.00005;
+        this.engranatges.forEach((g, i) => { g.rotation += delta * 0.0007 * (i % 2 ? -1 : 1) * 30 / GOLFES_RADI[this.mides[i]]; });
+        this.pendol.rotation = Math.sin(ara / 520) * 0.32;
     }
 }

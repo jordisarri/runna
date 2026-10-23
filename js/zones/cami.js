@@ -450,29 +450,8 @@ class ZonaCabanaCami extends ZonaBase {
     construir() {
         this.terra('taulons', 100, 40, 700, 660, -1100);
 
-        // --- Parets de troncs ---
-        const murs = this.add.graphics().setDepth(-990);
-        const TRONCS = ['#7a4e2a', '#8a5a30', '#6e4624', '#94643a', '#80542c'];
-        // Paret del fons: sis fileres de troncs horitzontals amb llum a dalt i ombra a baix
-        for (let f = 0; f < 4; f++) {
-            const y = f * 23, col = Phaser.Display.Color.HexStringToColor(TRONCS[f % TRONCS.length]).color;
-            murs.fillStyle(0x120a04, 1).fillRoundedRect(58, y, 784, 24, 11);
-            murs.fillStyle(col, 1).fillRoundedRect(60, y + 1, 780, 21, 10);
-            murs.fillStyle(0xffd9a0, 0.22).fillRect(70, y + 3, 760, 3);
-            murs.fillStyle(0x000000, 0.25).fillRect(70, y + 17, 760, 4);
-            murs.lineStyle(1, 0x3a2010, 0.5);
-            for (let k = 0; k < 6; k++) { const yy = y + 7 + (k % 3) * 4, x0 = 90 + k * 125 + f * 23; murs.lineBetween(x0, yy, x0 + 70, yy); }
-        }
-        murs.fillStyle(0x120a04, 1).fillRect(58, 92, 784, 6);                                  // sòcol fosc
-        // Parets laterals: les puntes dels troncs, amb els seus anells
-        [80, 820].forEach(x => {
-            for (let y = 92, i = 0; y < 700; y += 24, i++) {
-                murs.fillStyle(0x120a04, 1).fillEllipse(x, y + 12, 44, 25);
-                murs.fillStyle(0x5a3a1e, 1).fillEllipse(x, y + 12, 40, 22);
-                murs.fillStyle(i % 2 ? 0xc89458 : 0xd8a868, 1).fillEllipse(x, y + 12, 32, 17);
-                murs.lineStyle(1, 0x7a4a20, 0.6).strokeEllipse(x, y + 12, 22, 11).strokeEllipse(x, y + 12, 11, 5);
-            }
-        });
+        // --- Parets de troncs (les mateixes que fa servir la cabana de la Jaumeta) ---
+        paretsTroncs(this);
         this.colisio(30, 350, 60, 700);
         this.colisio(870, 350, 60, 700);
         this.colisio(450, 60, 800, 120);
@@ -492,6 +471,23 @@ class ZonaCabanaCami extends ZonaBase {
         const pres = this.add.graphics().setDepth(-980);
         pres.fillStyle(0x4a2c14, 1).fillRect(520, 56, 130, 8).lineStyle(2, 0x120a04, 1).strokeRect(520, 56, 130, 8);
         [[540, 0], [578, 1], [616, 2]].forEach(([x, t]) => this.posar('gerro_' + t, x, 56, { fonsY: -970 }));
+
+        // Manats d'herbes i alls penjats de les bigues, una destral clavada a la paret i teranyines a les cantonades
+        [[470, 98], [505, 100], [250, 100]].forEach(([x, y], i) => manatHerbes(this, x, y - 62, 38 + (i % 2) * 8, i === 2 ? [0xe8e0c8, 0xd8d0b0, 0xe8e0c8] : undefined));
+        const destral = this.add.graphics().setDepth(-975);
+        destral.fillStyle(0x6a4020, 1).fillRect(140, 30, 5, 52).lineStyle(1.5, 0x120a04, 1).strokeRect(140, 30, 5, 52);
+        destral.fillStyle(0x8a8a92, 1).fillTriangle(145, 34, 172, 26, 172, 58).fillRect(145, 34, 5, 20);
+        destral.lineStyle(2, 0x120a04, 1).strokeTriangle(145, 34, 172, 26, 172, 58);
+        destral.fillStyle(0xffffff, 0.45).fillRect(165, 32, 2, 18);
+        teranyina(this, 100, 98, 100, 150, 150, 98);
+        teranyina(this, 800, 98, 800, 148, 752, 98);
+        // Un fanal penjat del sostre il·lumina la taula
+        const fanal = this.add.graphics().setDepth(79000);
+        fanal.lineStyle(2, 0x120a04, 1).lineBetween(450, 0, 450, 98);
+        fanal.fillStyle(0x3a3a40, 1).fillRect(440, 98, 20, 4).fillRect(440, 126, 20, 4);
+        fanal.fillStyle(0xffd890, 0.95).fillRect(443, 102, 14, 24).lineStyle(2, 0x120a04, 1).strokeRect(443, 102, 14, 24);
+        const llumFanal = this.add.circle(450, 114, 120, 0xffd38a, 0.1).setDepth(79000);
+        this.tweens.add({ targets: llumFanal, alpha: 0.16, yoyo: true, repeat: -1, duration: 900 });
 
         // Catifa de teixit sota la taula
         const catifa = this.add.graphics().setDepth(-950);
