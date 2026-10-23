@@ -18,6 +18,8 @@ const FULLES = {
     southeast: 'Ineu-iso_attack_southeast-v3.png', northeast: 'Ineu-iso_attack_northeast-v3.png',
     northwest: 'Ineu-iso_attack_northwest.png'
 };
+// Fulles dibuixades a una altra escala que la resta (l'atac amunt v3 té el cos ~15% més petit): s'escalen amb la seva pròpia alçada
+const ESCALA_PROPIA = ['up'];
 
 // Algorisme de treure el fons blanc: el mateix que fa servir el joc (js/assets.js)
 const font = fs.readFileSync(path.join(ARREL, 'js/assets.js'), 'utf8');
@@ -54,12 +56,13 @@ window.fulles = async (fitxers, q) => {
         }
         dades[dir] = { c, cs, peus: mediana(peus), alt: mediana(alts) };
     }
-    const k = ${ATAC_ALT} / mediana(Object.values(dades).map(f => f.alt));    // el mateix factor per a totes les direccions
+    const propia = ${JSON.stringify(ESCALA_PROPIA)};
+    const k = ${ATAC_ALT} / mediana(Object.entries(dades).filter(([dir]) => !propia.includes(dir)).map(([, f]) => f.alt));    // el mateix factor per a totes les direccions
     const sortida = {}, info = {};
     for (const [dir, f] of Object.entries(dades)) {
         const out = document.createElement('canvas'); out.width = COLS * CEL; out.height = COLS * CEL;
         const o = out.getContext('2d'); o.imageSmoothingQuality = 'high';
-        const e = k * CEL / f.cs;
+        const e = (propia.includes(dir) ? ${ATAC_ALT} / f.alt : k) * CEL / f.cs;
         for (let i = 0; i < N; i++) {
             o.save(); o.beginPath(); o.rect((i % COLS) * CEL, Math.floor(i / COLS) * CEL, CEL, CEL); o.clip();
             o.drawImage(f.c, (i % COLS) * f.cs, Math.floor(i / COLS) * f.cs, f.cs, f.cs,

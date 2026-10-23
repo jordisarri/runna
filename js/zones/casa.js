@@ -492,18 +492,22 @@ class ZonaCasaTresor extends ZonaCasaBase {
 // El rellotge és aturat a les tres i quart (l'hora que va arribar la boira). Puzle: posar tres engranatges a la mida correcta
 // perquè torni a caminar. Arreglar-lo dóna +1 gra al rosari.
 const GOLFES_SOLUCIO = [0, 2, 1];      // 0 petit, 1 mitjà, 2 gran: «el petit va primer, el gran al mig i el mitjà darrere»
-const GOLFES_RADI = [24, 34, 44];
+const GOLFES_DENTS = [18, 24, 30];     // radi primitiu = dents * 1.5: totes les rodes tenen el mateix pas de dent i poden engranar
 const GOLFES_NOM = ['petit', 'mitjà', 'gran'];
-const GOLFES_ENG_X = [330, 500, 670];
-const GOLFES_ENG_Y = 372;
+// Els engranatges són en un bastidor dret a terra, a l'esquerra (lluny del rellotge, que té el seu punt propi a la paret).
+// Els eixos estan a la distància justa perquè, amb la solució, les dents de cada roda encaixin amb les de la veïna.
+const GOLFES_ENG_X = [222, 222 + 27 + 45, 222 + 27 + 45 + 45 + 36];
+const GOLFES_ENG_Y = 524;
+const GOLFES_BASTIDOR = 604;       // peus del bastidor dels engranatges
 const GOLFES_PARET = 446;          // fins on arriba la paret del fons (a sota, el terra)
+const radiEng = mida => GOLFES_DENTS[mida] * 1.5;
 
 Object.assign(DIALEGS, {
     golfesRellotge: E => ({ pagines: E.flag('rellotgeReparat') ? [
         { qui: '', text: "El rellotge gran del Santuari torna a caminar. Es poden sentir el tic-tac i el soroll tranquil dels engranatges." }
     ] : [
         { qui: '', text: "El rellotge del Santuari, aturat a les tres i quart. Fa tres nits que no es mou: va ser quan va arribar la boira." },
-        { qui: 'Ineu', text: "Sota l'esfera hi ha tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran. Quan una posició és bona, el seu llum s'encén." },
+        { qui: 'Ineu', text: "El mecanisme és al bastidor de fusta de l'esquerra: tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran. Quan una posició és bona, el seu llum s'encén." },
         { qui: 'Ineu', text: "La nota del campaner, a la paret de l'esquerra, deu dir l'ordre." }
     ] }),
 
@@ -524,27 +528,56 @@ Object.assign(DIALEGS, {
     }
 });
 
-// Roda dentada de llautó dibuixada al voltant de (0, 0): dents, anell, radis, cub i una lluïssor a dalt a l'esquerra
-function pintaEngranatge(g, r, dents, color = 0xc8a64a) {
-    g.fillStyle(color, 1).lineStyle(3, 0x2a1608, 1);
-    g.beginPath();
-    for (let k = 0; k < dents * 4; k++) {
-        const a = k * Math.PI / (dents * 2), pla = k % 4 < 2, rr = pla ? r + 8 : r;
-        const px = Math.cos(a) * rr, py = Math.sin(a) * rr;
-        k ? g.lineTo(px, py) : g.moveTo(px, py);
+// Roda dentada de llautó dibuixada al voltant de (0, 0). R = radi primitiu (on engranen les dents).
+// Dents trapezoïdals (una centrada a l'angle 0), corona, radis buidats, cub amb cargols i forat de l'eix.
+// La llum (lluïssor a dalt a l'esquerra, ombra a baix a la dreta) va a part a llumEngranatge, perquè no giri amb la roda.
+function pintaEngranatge(g, R, dents, color = 0xc8a64a) {
+    const m = 2 * R / dents, cap = R + m, peu = R - 1.25 * m, pas = Math.PI * 2 / dents;
+    const fosc = 0x2a1608, buit = 0x3a2410, ombra = 0x8a6a28;
+    const p = [];
+    for (let k = 0; k < dents; k++) {
+        const c = k * pas;
+        [[-0.3, peu], [-0.17, cap], [0.17, cap], [0.3, peu]].forEach(([f, rr]) => p.push({ x: Math.cos(c + f * pas) * rr, y: Math.sin(c + f * pas) * rr }));
     }
-    g.closePath(); g.fillPath(); g.strokePath();
-    g.fillStyle(0x6a4a18, 1).fillCircle(0, 0, r * 0.74);
-    g.fillStyle(color, 1).fillCircle(0, 0, r * 0.64);
-    g.lineStyle(2, 0x2a1608, 1).strokeCircle(0, 0, r * 0.64);
-    for (let k = 0; k < 5; k++) {
-        const a = k * Math.PI * 2 / 5 + 0.3;
-        g.fillStyle(0x6a4a18, 1).fillCircle(Math.cos(a) * r * 0.36, Math.sin(a) * r * 0.36, r * 0.14);          // forats entre els radis
+    g.fillStyle(color, 1).fillPoints(p, true);
+    g.lineStyle(2.5, fosc, 1).strokePoints(p, true);
+    // Corona: una línia fosca marca on comencen les dents i una de clara el cantell de la corona
+    const corona = peu - Math.max(3, R * 0.16);
+    g.lineStyle(1.5, ombra, 0.9).strokeCircle(0, 0, peu - 1.5);
+    // Buit entre la corona i el cub, amb els radis
+    g.fillStyle(buit, 1).fillCircle(0, 0, corona);
+    const nRadis = dents >= 28 ? 6 : dents >= 20 ? 5 : 4, ampleRadi = Math.max(3, R * 0.13), cub = Math.max(7, R * 0.3);
+    for (let k = 0; k < nRadis; k++) {
+        const a = k * Math.PI * 2 / nRadis + pas / 2, ca = Math.cos(a), sa = Math.sin(a), nx = -sa, ny = ca;
+        const rp = [
+            { x: ca * cub * 0.6 + nx * ampleRadi * 1.3, y: sa * cub * 0.6 + ny * ampleRadi * 1.3 },
+            { x: ca * (corona + 1) + nx * ampleRadi, y: sa * (corona + 1) + ny * ampleRadi },
+            { x: ca * (corona + 1) - nx * ampleRadi, y: sa * (corona + 1) - ny * ampleRadi },
+            { x: ca * cub * 0.6 - nx * ampleRadi * 1.3, y: sa * cub * 0.6 - ny * ampleRadi * 1.3 }
+        ];
+        g.fillStyle(color, 1).fillPoints(rp, true);
+        g.lineStyle(1.2, fosc, 0.9).lineBetween(rp[0].x, rp[0].y, rp[1].x, rp[1].y).lineBetween(rp[2].x, rp[2].y, rp[3].x, rp[3].y);
     }
-    g.fillStyle(0x8a6a28, 1).fillCircle(0, 0, 9);
-    g.lineStyle(2, 0x2a1608, 1).strokeCircle(0, 0, 9);
-    g.fillStyle(0x2a1608, 1).fillCircle(0, 0, 3);
-    g.lineStyle(3, 0xfff0b0, 0.55).beginPath(); g.arc(0, 0, r + 4, Math.PI * 1.1, Math.PI * 1.45); g.strokePath();
+    g.lineStyle(2, fosc, 1).strokeCircle(0, 0, corona);
+    // Cub: anell, cargols i forat de l'eix amb el xaveter
+    g.fillStyle(color, 1).fillCircle(0, 0, cub);
+    g.lineStyle(2, fosc, 1).strokeCircle(0, 0, cub);
+    g.lineStyle(1.2, ombra, 1).strokeCircle(0, 0, cub * 0.72);
+    if (cub >= 9) for (let k = 0; k < 3; k++) {
+        const a = k * Math.PI * 2 / 3 + 0.5;
+        g.fillStyle(fosc, 1).fillCircle(Math.cos(a) * cub * 0.72, Math.sin(a) * cub * 0.72, 1.6);
+    }
+    g.fillStyle(0x1a0c04, 1).fillCircle(0, 0, cub * 0.34);
+    g.fillRect(-1.5, -cub * 0.34 - 2, 3, 3);
+}
+
+// Llum fixa sobre una roda dentada (no gira): reflex de metall a dalt a l'esquerra i ombra a baix a la dreta
+function llumEngranatge(g, R, dents) {
+    const m = 2 * R / dents, cap = R + m, peu = R - 1.25 * m;
+    g.lineStyle(Math.max(2, m * 0.8), 0xfff0b0, 0.45).beginPath(); g.arc(0, 0, peu - m * 0.6, Math.PI * 1.05, Math.PI * 1.5); g.strokePath();
+    g.lineStyle(1.5, 0xfff8d8, 0.5).beginPath(); g.arc(0, 0, R * 0.3 - 1, Math.PI * 1.1, Math.PI * 1.45); g.strokePath();
+    g.lineStyle(Math.max(2, m * 0.8), 0x1a0c04, 0.28).beginPath(); g.arc(0, 0, peu - m * 0.6, Math.PI * 0.05, Math.PI * 0.5); g.strokePath();
+    g.lineStyle(2, 0x000000, 0.18).beginPath(); g.arc(0, 0, cap, Math.PI * 0.1, Math.PI * 0.45); g.strokePath();
 }
 
 class ZonaGolfes extends ZonaCasaBase {
@@ -583,9 +616,10 @@ class ZonaGolfes extends ZonaCasaBase {
         bigues.fillStyle(0xffd9a0, 0.2).fillRect(130, 142, 740, 2);
 
         // Rodes dentades decoratives (no fan res) a la paret, a banda i banda
-        [[205, 200, 24, 10, 0x9a8650], [800, 205, 30, 12, 0x9a8650], [200, 250, 14, 8, 0xb59a52]].forEach(([x, y, r, d, col]) => {
+        [[205, 200, 27, 14, 0x9a8650], [800, 205, 33, 18, 0x9a8650], [200, 250, 15, 8, 0xb59a52]].forEach(([x, y, r, d, col]) => {
             const g = this.add.graphics({ x, y }).setDepth(-960);
             pintaEngranatge(g, r, d, col);
+            llumEngranatge(g, r, d);
         });
         // Cadenes amb contrapesos de pedra, a cada costat del rellotge
         const cad = this.add.graphics().setDepth(-940);
@@ -635,26 +669,55 @@ class ZonaGolfes extends ZonaCasaBase {
         this.agullaHores.rotation = Math.PI / 2 + 0.13;
         this.interactiu(500, GOLFES_PARET + 10, 70, DIALEGS.golfesRellotge, { altura: 170 });
 
-        // Mecanisme: tres engranatges sota el rellotge (cada interacció els fa girar de mida), muntats sobre una placa de fusta
+        // Mecanisme: un bastidor de fusta dret a terra, a l'esquerra, amb tres engranatges (cada interacció en canvia la mida).
+        // Està separat de la paret perquè el rellotge i cada engranatge tinguin el seu punt d'ESPAI.
         this.reparat = Estat.flag('rellotgeReparat');
-        this.mides = this.reparat ? GOLFES_SOLUCIO.slice() : [2, 2, 2];
-        const placa = this.add.graphics().setDepth(-890);
-        placa.fillStyle(0x2a1608, 1).fillRoundedRect(270, 312, 460, 128, 10);
-        placa.fillStyle(0x4a2c14, 1).fillRoundedRect(274, 316, 452, 120, 8);
-        placa.lineStyle(2, 0x7a5a30, 0.8).strokeRoundedRect(278, 320, 444, 112, 6);
-        [[284, 326], [716, 326], [284, 426], [716, 426]].forEach(([x, y]) => { placa.fillStyle(0x8a8a90, 1).fillCircle(x, y, 4); placa.fillStyle(0x2a1608, 1).fillRect(x - 3, y - 0.8, 6, 1.6); });
-        placa.fillStyle(0x2a1608, 1).fillRect(290, GOLFES_ENG_Y - 3, 420, 6);                      // eix on s'enfilen els engranatges
-        this.engranatges = GOLFES_ENG_X.map(x => this.add.graphics({ x, y: GOLFES_ENG_Y }).setDepth(-870));
+        this.mides = this.reparat ? GOLFES_SOLUCIO.slice() : [1, 1, 1];
+        const B = GOLFES_BASTIDOR, bx0 = 156, bx1 = 442, dalt = 448, D = B;           // dalt: travesser de dalt (on van els llums)
+        const bast = this.add.graphics().setDepth(D);
+        bast.fillStyle(0x000000, 0.3).fillEllipse((bx0 + bx1) / 2, B + 2, bx1 - bx0 + 30, 20);
+        bast.fillStyle(0x2a1608, 1).fillRoundedRect(bx0 + 6, dalt + 10, bx1 - bx0 - 12, B - dalt - 26, 4);                // tauler del fons
+        for (let x = bx0 + 8; x < bx1 - 10; x += 26) {
+            bast.fillStyle(x / 26 % 2 < 1 ? 0x4a2c14 : 0x442812, 1).fillRect(x, dalt + 12, Math.min(26, bx1 - 8 - x), B - dalt - 30);
+            bast.lineStyle(1, 0x1a0c04, 0.6).lineBetween(x, dalt + 12, x, B - 18);
+        }
+        bast.fillStyle(0x000000, 0.25).fillRect(bx0 + 8, dalt + 12, bx1 - bx0 - 16, 8);                                     // ombra del travesser
+        [bx0, bx1 - 18].forEach(x => {                                                                                       // muntants
+            bast.fillStyle(0x2a1608, 1).fillRect(x - 2, dalt - 4, 22, B - dalt + 6);
+            bast.fillStyle(0x6a4424, 1).fillRect(x, dalt - 2, 18, B - dalt + 2);
+            bast.fillStyle(0xffd9a0, 0.18).fillRect(x + 2, dalt - 2, 3, B - dalt + 2);
+            bast.fillStyle(0x2a1608, 1).fillRect(x - 6, B - 8, 30, 10);                                                       // peus
+        });
+        bast.fillStyle(0x2a1608, 1).fillRect(bx0 - 4, dalt - 8, bx1 - bx0 + 8, 22);                                        // travesser de dalt
+        bast.fillStyle(0x6a4424, 1).fillRect(bx0 - 2, dalt - 6, bx1 - bx0 + 4, 18);
+        bast.fillStyle(0xffd9a0, 0.2).fillRect(bx0 - 2, dalt - 6, bx1 - bx0 + 4, 3);
+        bast.fillStyle(0x2a1608, 1).fillRect(bx0, B - 26, bx1 - bx0, 14);                                                  // travesser de baix
+        bast.fillStyle(0x5a3a1e, 1).fillRect(bx0 + 2, B - 24, bx1 - bx0 - 4, 10);
+        [[bx0 + 9, dalt + 3], [bx1 - 9, dalt + 3], [bx0 + 9, B - 19], [bx1 - 9, B - 19]].forEach(([x, y]) => {
+            bast.fillStyle(0x8a8a90, 1).fillCircle(x, y, 3.5); bast.fillStyle(0x2a1608, 1).fillRect(x - 2.5, y - 0.7, 5, 1.4);
+        });
+        GOLFES_ENG_X.forEach(x => {                                                                                         // suports dels eixos
+            bast.fillStyle(0x1a0c04, 1).fillRect(x - 5, GOLFES_ENG_Y, 10, B - 26 - GOLFES_ENG_Y);
+            bast.fillStyle(0x5a5a60, 1).fillRect(x - 3, GOLFES_ENG_Y, 6, B - 26 - GOLFES_ENG_Y);
+        });
+        this.colisio((bx0 + bx1) / 2, B - 12, bx1 - bx0 + 8, 24);
+        // Cada engranatge: ombra al tauler (fixa), la roda (gira) i la llum (fixa). El del mig va per darrere dels dos veïns.
+        this.engranatges = GOLFES_ENG_X.map((x, i) => ({
+            ombra: this.add.graphics({ x: x + 4, y: GOLFES_ENG_Y + 5 }).setDepth(D + 1),
+            roda: this.add.graphics({ x, y: GOLFES_ENG_Y }).setDepth(D + (i === 1 ? 2 : 4)),
+            llum: this.add.graphics({ x, y: GOLFES_ENG_Y }).setDepth(D + (i === 1 ? 3 : 5))
+        }));
         GOLFES_ENG_X.forEach((x, i) => {
             this.dibuixaEngranatge(i);
-            this.interactiu(x, GOLFES_PARET + 6, 52, () => this.girarEngranatge(i), { altura: 90, actiu: () => !this.reparat });
+            this.interactiu(x, B + 26, 48, () => this.girarEngranatge(i), { altura: 190, actiu: () => !this.reparat });
         });
-        // Plaques de posició (I, II, III) i un llum per a cada una: verd quan l'engranatge d'aquella posició és el bo
+        if (this.reparat) this.encaixaEngranatges();
+        // Plaques de posició (I, II, III) al travesser de baix i un llum per a cada una al de dalt: verd quan l'engranatge és el bo
         this.llumsEng = GOLFES_ENG_X.map((x, i) => {
-            this.add.rectangle(x, 422, 44, 20, 0x5a3a1e).setStrokeStyle(2, 0x2a1608).setDepth(-860);
-            this.add.text(x, 422, ['I', 'II', 'III'][i], estilText(15, '#f2e6c8', { fontStyle: 'bold' })).setOrigin(0.5).setDepth(-859);
-            this.add.circle(x, 330, 9, 0x1a0c06).setStrokeStyle(2, 0xb58a3a).setDepth(-861);
-            return this.add.circle(x, 330, 6, 0x3a1a10).setDepth(-860);
+            this.add.rectangle(x, B - 19, 30, 14, 0x3a2412).setStrokeStyle(1.5, 0xb58a3a).setDepth(D + 6);
+            this.add.text(x, B - 19, ['I', 'II', 'III'][i], estilText(11, '#f2e6c8', { fontStyle: 'bold' })).setOrigin(0.5).setDepth(D + 7);
+            this.add.circle(x, dalt + 3, 7, 0x1a0c06).setStrokeStyle(2, 0xb58a3a).setDepth(D + 6);
+            return this.add.circle(x, dalt + 3, 4.5, 0x3a1a10).setDepth(D + 7);
         });
         this.refrescaLlums();
 
@@ -681,7 +744,7 @@ class ZonaGolfes extends ZonaCasaBase {
         this.colisio(810, 516, 96, 22);
         this.interactiu(810, 545, 60, DIALEGS.golfesPendol, { altura: 100 });
 
-        this.espelmes([[230, 560], [770, 590]]);
+        this.espelmes([[600, 520], [770, 590]]);
         this.sortida(440, 686, 120, 14, 'ZonaTorre', 'dalt');
         if (this.reparat) this.agullaMinuts.rotation = 0;
         this.objectiuGolfes();
@@ -700,25 +763,43 @@ class ZonaGolfes extends ZonaCasaBase {
     }
 
     dibuixaEngranatge(i) {
-        const g = this.engranatges[i];
-        g.clear();
-        pintaEngranatge(g, GOLFES_RADI[this.mides[i]], 10 + this.mides[i] * 3);
+        const e = this.engranatges[i], dents = GOLFES_DENTS[this.mides[i]], R = radiEng(this.mides[i]);
+        e.ombra.clear().fillStyle(0x000000, 0.35).fillCircle(0, 0, R + 2 * R / dents);
+        e.roda.clear(); pintaEngranatge(e.roda, R, dents);
+        e.llum.clear(); llumEngranatge(e.llum, R, dents);
+    }
+
+    // Gira cada roda perquè les dents encaixin amb les de la veïna (una dent davant d'un forat al punt de contacte).
+    // f: fracció del pas de dent que la roda té al punt de contacte (0 = centre d'una dent, 0.5 = centre d'un forat);
+    // dues rodes engranades sumen sempre 0.5 i, si giren a la velocitat que toca, la suma es manté.
+    encaixaEngranatges() {
+        let f = 0;
+        this.engranatges.forEach((e, i) => {
+            const pas = Math.PI * 2 / GOLFES_DENTS[this.mides[i]];
+            if (i === 0) { e.roda.rotation = 0; return; }
+            const fi = ((0.5 - f) % 1 + 1) % 1;                  // fracció que necessita a l'angle PI (de cara a la roda d'abans)
+            e.roda.rotation = Math.PI - fi * pas;
+            f = (((-e.roda.rotation) / pas) % 1 + 1) % 1;        // fracció que té a l'angle 0 (de cara a la roda següent)
+        });
     }
 
     girarEngranatge(i) {
         this.mides[i] = (this.mides[i] + 1) % 3;
         this.dibuixaEngranatge(i);
+        const roda = this.engranatges[i].roda;
+        this.tweens.add({ targets: roda, scale: { from: 0.86, to: 1 }, duration: 220, ease: 'Back.Out' });
         this.refrescaLlums();
         Sfx.menu();
         const bé = this.mides.every((m, k) => m === GOLFES_SOLUCIO[k]);
         if (!bé) {
-            this.flotant(GOLFES_ENG_X[i], 330, ['I', 'II', 'III'][i] + ': ' + GOLFES_NOM[this.mides[i]], this.mides[i] === GOLFES_SOLUCIO[i] ? '#9aff9a' : '#f2e6c8');
+            this.flotant(GOLFES_ENG_X[i], GOLFES_ENG_Y - 90,['I', 'II', 'III'][i] + ': ' + GOLFES_NOM[this.mides[i]], this.mides[i] === GOLFES_SOLUCIO[i] ? '#9aff9a' : '#f2e6c8');
             return null;
         }
         return {
             pagines: DIALEGS.golfesPremi.pagines,
             enAcabar: () => {
                 this.reparat = true; Estat.posaFlag('rellotgeReparat');
+                this.encaixaEngranatges();
                 this.cameras.main.shake(300, 0.003); Sfx.secret();
                 const E = Estat;
                 E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
@@ -734,7 +815,8 @@ class ZonaGolfes extends ZonaCasaBase {
         // Amb el rellotge en marxa: agulles, engranatges (cadascun en sentit contrari al del veí) i pèndol
         this.agullaMinuts.rotation += delta * 0.0006;
         this.agullaHores.rotation += delta * 0.00005;
-        this.engranatges.forEach((g, i) => { g.rotation += delta * 0.0007 * (i % 2 ? -1 : 1) * 30 / GOLFES_RADI[this.mides[i]]; });
+        // Velocitat inversa al nombre de dents: així les dents de les rodes veïnes continuen encaixades
+        this.engranatges.forEach((e, i) => { e.roda.rotation += delta * 0.0009 * (i % 2 ? -1 : 1) * GOLFES_DENTS[this.mides[0]] / GOLFES_DENTS[this.mides[i]]; });
         this.pendol.rotation = Math.sin(ara / 520) * 0.32;
     }
 }
