@@ -348,7 +348,7 @@ Object.assign(ZonaBase.prototype, {
         });
     },
 
-    // L'arma a la mà: bastó (assets/basto.png), bastó de Til·ler o espasa de Runna, girant en arc durant el cop.
+    // L'arma a la mà: bastó (assets/armes/basto.png), bastó de Til·ler o espasa de Runna, girant en arc durant el cop.
     // Apareix i desapareix de cop, sense fade.
     armaCop(d, runna, agil) {
         if (this.armaNet) this.armaNet();

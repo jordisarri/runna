@@ -20,7 +20,8 @@ const mb = n => (n / 1048576).toFixed(2) + ' MB';
 let abans = 0, despres = 0;
 
 async function catalog(it) {
-    const src = path.join(ARREL, it.file);
+    const stem = path.basename(it.file).replace(/\.\w+$/, '');
+    const src = path.join(ARREL, 'art/fonts_png', stem + '.png');       // els PNG d'origen són a art/fonts_png
     if (!fs.existsSync(src)) return;
     const { data, info } = await sharp(src).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     treureFonsBlanc(data, info.width, info.height);
@@ -35,7 +36,7 @@ async function catalog(it) {
     let img = sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } }).extract({ left: x0, top: y0, width: w, height: h });
     const objectiu = it.amplada * RES;
     if (w > objectiu) img = img.resize({ width: objectiu, kernel: 'lanczos3' });
-    const dest = src.replace(/\.png$/, '.webp');
+    const dest = path.join(ARREL, it.file.replace(/\.\w+$/, '.webp'));
     const r = await img.webp({ quality: QUALITAT, alphaQuality: 100, effort: 6, smartSubsample: true }).toFile(dest);
     const a = fs.statSync(src).size;
     abans += a; despres += r.size;

@@ -1,10 +1,10 @@
 /**
  * Converteix les fulles d'atac de l'Ineu i l'espasa a WebP amb transparència i pèrdua, fent servir el Chrome del sistema
  * (sense instal·lar res). Cal tenir el joc servit (python serveix.py):  node eines/convertir_atacs.js
- *  - assets/sprites/ineu/Ineu-iso_attack_<dir>*.png  ->  assets/sprites/ineu/atac_<dir>.webp
+ *  - art/sprites_png/ineu/Ineu-iso_attack_<dir>*.png  ->  assets/sprites/ineu/atac_<dir>.webp
  *    Les fulles (4x4 fotogrames de 256, l'Ineu sense arma) es normalitzen: mateix factor d'escala per a totes les direccions
  *    (cos de ATAC_ALT píxels), centrades i amb els peus a y = PEUS, igual que les fulles de caminar.
- *  - assets/espasa.jpg  ->  assets/espasa.webp (fons blanc fet transparent, retallada i reduïda a AMPLADA_ESPASA * RES)
+ *  - art/fonts_png/espasa.jpg  ->  assets/armes/espasa.webp (fons blanc fet transparent, retallada i reduïda a AMPLADA_ESPASA * RES)
  */
 const { spawn } = require('child_process');
 const fs = require('fs'), path = require('path');
@@ -39,7 +39,7 @@ const alWebp = async (canvas, q) => {
 window.fulles = async (fitxers, q) => {
     const dades = {};
     for (const [dir, f] of Object.entries(fitxers)) {
-        const im = await carrega('/assets/sprites/ineu/' + f);
+        const im = await carrega('/art/sprites_png/ineu/' + f);
         const c = document.createElement('canvas'); c.width = im.width; c.height = im.height;
         const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0);
         const d = x.getImageData(0, 0, c.width, c.height);
@@ -72,7 +72,7 @@ window.fulles = async (fitxers, q) => {
     return { sortida, info };
 };
 window.espasa = async (fitxer, ample, q) => {
-    const im = await carrega('/assets/' + fitxer);
+    const im = await carrega('/art/fonts_png/' + fitxer);
     const c = document.createElement('canvas'); c.width = im.width; c.height = im.height;
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0);
     const d = x.getImageData(0, 0, c.width, c.height);
@@ -121,15 +121,15 @@ const dorm = ms => new Promise(r => setTimeout(r, ms));
         for (const [dir, b64] of Object.entries(sortida)) {
             const dest = path.join(ARREL, 'assets/sprites/ineu', `atac_${dir}.webp`);
             fs.writeFileSync(dest, Buffer.from(b64, 'base64'));
-            const a = fs.statSync(path.join(ARREL, 'assets/sprites/ineu', FULLES[dir])).size, d = fs.statSync(dest).size;
+            const a = fs.statSync(path.join(ARREL, 'art/sprites_png/ineu', FULLES[dir])).size, d = fs.statSync(dest).size;
             total += d;
             console.log(`atac_${dir}.webp`.padEnd(24), (a / 1024).toFixed(0).padStart(5), 'KB ->', (d / 1024).toFixed(0).padStart(4), 'KB', JSON.stringify(info[dir]));
         }
         console.log('Total atacs:', (total / 1024).toFixed(0), 'KB');
 
         const e = await executa(`window.espasa('espasa.jpg', ${AMPLADA_ESPASA * RES}, ${QUALITAT})`);
-        fs.writeFileSync(path.join(ARREL, 'assets/espasa.webp'), Buffer.from(e.webp, 'base64'));
-        console.log('espasa.webp', `${e.w}x${e.h}`, (fs.statSync(path.join(ARREL, 'assets/espasa.webp')).size / 1024).toFixed(0), 'KB');
+        fs.writeFileSync(path.join(ARREL, 'assets/armes/espasa.webp'), Buffer.from(e.webp, 'base64'));
+        console.log('espasa.webp', `${e.w}x${e.h}`, (fs.statSync(path.join(ARREL, 'assets/armes/espasa.webp')).size / 1024).toFixed(0), 'KB');
         ws.close();
     } finally {
         chrome.kill();

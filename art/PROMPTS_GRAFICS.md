@@ -1,6 +1,7 @@
 # Prompts per als gràfics que falten
 
-Cada gràfic va a `assets/<nom>.png`. Si el fitxer no hi és, el joc fa servir un dibuix provisional fet amb codi
+Cada gràfic va a `assets/<carpeta>/<nom>.png` (carpetes: `edificis`, `personatges`, `enemics`, `natura`, `objectes`, `armes`; la carpeta de cada
+gràfic es veu a `CATALEG`, a `js/assets.js`). Si el fitxer no hi és, el joc fa servir un dibuix provisional fet amb codi
 (vegeu `CATALEG` a `js/assets.js`). Quan hi poses el PNG, apareix sol: no cal tocar res més.
 
 **Cada prompt és complet:** porta l'estil base, la descripció i la perspectiva. Només cal copiar el bloc (a GitHub hi ha un
@@ -10,7 +11,7 @@ botó de copiar a dalt a la dreta de cada bloc) i enganxar-lo al generador.
 indicada. Per això: fons blanc pur i res de blanc a la vora de l'objecte.
 
 **Referències ja fetes** (si el generador admet imatge de referència, pujeu-la i digueu "same art style"):
-`assets/esglesia.png` (edifici), `assets/roure.png` (arbre), `assets/sprites/ineu/down.png` (personatge).
+`assets/edificis/esglesia.png` (edifici), `assets/natura/roure.png` (arbre), `assets/sprites/ineu/down.png` (personatge).
 
 **Perspectiva:** els **edificis** es veuen com a *A Link to the Past*: façana de cara i teulada visible des de dalt, sense parets laterals. La resta d'objectes, vista 3/4 des de dalt (uns 30°) i de cara a la càmera.
 Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està inclòs a cada prompt.
@@ -29,7 +30,7 @@ Els prompts de sota són només dels pendents i dels nous.
 
 ## Edificis
 
-### `taverna.png` (amplada 640) *(La Taverna, entre l'Hostatgeria i els arcs de la Casa Gran. Edifici de poble de dues plantes, amb una ensenya de ferro. La porta és tancada: la Carmen no obre. El joc l'espera a `assets/taverna.webp`; si el poses com a PNG, passa'l amb eines/convertir_webp.js.)*
+### `taverna.png` (amplada 640) *(La Taverna, entre l'Hostatgeria i els arcs de la Casa Gran. Edifici de poble de dues plantes, amb una ensenya de ferro. La porta és tancada: la Carmen no obre. El joc l'espera a `assets/edificis/taverna.webp`; si el poses com a PNG, passa'l amb eines/convertir_webp.js.)*
 
 ```
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. The front facade of an old village tavern with two floors: ground floor of rough ochre sandstone blocks with two small barred windows on each side, a central round-arched wooden door with a stone frame and a small iron lantern, a wrought-iron bracket sign hanging to the right of the door showing a golden beer mug on a cream disc (no text); the upper floor in warm cream plaster with five windows with open green wooden shutters and warm light inside; stone corner quoins, a wooden beam cornice with visible beam ends under a low pitched roof of terracotta tiles. A couple of wooden barrels stacked beside the door. Cozy, slightly weathered. About 1.6:1 width to height. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above, with the roof planes sloping away from the viewer in perspective (you can see the roof surface and ridge). EVERY roof is a pitched, sloped roof covered with visible rows of terracotta clay tiles, NEVER a flat roof. Strictly NO side walls visible, the building is symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
@@ -47,7 +48,7 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. The front facade of a large three-storey rectangular block of rough brown fieldstone masonry with pale stone corner quoins, a low-pitched roof of orange terracotta tiles with slightly projecting eaves; regular grid of round-arched windows (four columns by three rows), each with a light stone frame and brown wooden shutters, the bottom row with black iron grilles; austere and quiet. About 1.3:1 width to height. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above, with the roof planes sloping away from the viewer in perspective (you can see the roof surface and ridge). EVERY roof is a pitched, sloped roof covered with visible rows of terracotta clay tiles, NEVER a flat roof. Strictly NO side walls visible, the building is symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
 ```
 
-### `runes_ombra.png` (amplada 760) *(Les Runes amb l'ombra del monjo ja projectada al mur. És l'edició del gràfic `runes` que ja tens: puja'l al generador com a imatge de referència i demana aquest canvi. Surt a `assets/runes_ombra.png`; el joc el mostrarà superposat a `runes` i li farà «respirar» l'opacitat.)*
+### `runes_ombra.png` (amplada 760) *(Les Runes amb l'ombra del monjo ja projectada al mur. És l'edició del gràfic `runes` que ja tens: puja'l al generador com a imatge de referència i demana aquest canvi. Surt a `assets/edificis/runes_ombra.png`; el joc el mostrarà superposat a `runes` i li farà «respirar» l'opacitat.)*
 
 **Com ha de ser l'ombra (perquè sigui convincent):**
 - **On:** al llenç llis de pedra a l'ESQUERRA de la porta fosca d'arc (entre l'arc lateral amb el xiprer i la porta), aproximadament entre el 36% i el 47% de l'ample i entre el 52% i el 78% de l'alçada. Així no tapa la porta, ni les finestres, ni s'enfonsa a la zona que ja és d'ombra natural a la dreta de la porta (allà no es llegiria).

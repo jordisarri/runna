@@ -1706,7 +1706,7 @@ function dibuixarColumnaProcessio(c, w) {
     });
 }
 
-// Bastó vertical (cap a dalt) per si falta assets/basto.png
+// Bastó vertical (cap a dalt) per si falta assets/armes/basto.png
 function dibuixarBastoProvisional(c, w) {
     c.width = w; c.height = Math.round(w * 4.25);
     const x = c.getContext('2d');
@@ -1715,7 +1715,7 @@ function dibuixarBastoProvisional(c, w) {
     x.strokeStyle = '#8a5a34'; x.lineWidth = w * 0.2; x.stroke();
 }
 
-// Espasa provisional (si falta assets/espasa.webp): vertical, punta cap amunt, empunyadura a baix
+// Espasa provisional (si falta assets/armes/espasa.webp): vertical, punta cap amunt, empunyadura a baix
 function dibuixarEspasaProvisional(c, w) {
     c.width = w; c.height = Math.round(w * 4.55);
     const x = c.getContext('2d'), h = c.height;
