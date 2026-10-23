@@ -9,7 +9,7 @@ const DIRS = { avall: { x: 0, y: 1 }, amunt: { x: 0, y: -1 }, esquerra: { x: -1,
 
 const ENEMICS = {
     escolopendra: {
-        tex: 'escolopendra', vida: 2, vel: 95, mal: 1, radi: 20, cos: [40, 16], ombra: 0.3,
+        tex: 'escolopendra', vida: 2, vel: 95, mal: 1, radi: 20, cos: [40, 16], ombra: 0, centrat: true,   // l'ombra ja és al dibuix; vista de dalt, el cos és al mig
         monedes: [0.35, 1, 1], cor: 0.08,
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
@@ -193,7 +193,7 @@ Object.assign(ZonaBase.prototype, {
         const spr = this.physics.add.sprite(x, y, def.tex, tex.has(0) ? 0 : undefined).setScale(esc);   // (els fulls d'animació, al fotograma 0)
         const fw = spr.width, fh = spr.height;
         spr.body.setSize(def.cos[0] / esc, def.cos[1] / esc);
-        spr.body.setOffset((fw - def.cos[0] / esc) / 2, fh - def.cos[1] / esc);
+        spr.body.setOffset((fw - def.cos[0] / esc) / 2, def.centrat ? (fh - def.cos[1] / esc) / 2 : fh - def.cos[1] / esc);
         spr.setCollideWorldBounds(true);
         this.physics.add.collider(spr, this.obstacles);
         const ombra = this.add.image(x, y, 'ombra').setScale(def.ombra || 0.3).setDepth(-500).setVisible(!!def.ombra);

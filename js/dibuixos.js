@@ -581,6 +581,11 @@ function dibuixarEscolopendra(c, w, n = 8) {
             const a = P[Math.max(0, i - 1)], b = P[Math.min(N - 1, i + 1)], l = Math.hypot(b.x - a.x, b.y - a.y);
             p.tx = (b.x - a.x) / l; p.ty = (b.y - a.y) / l; p.nx = -p.ty; p.ny = p.tx;
         });
+        // Ombra arran del cos (l'insecte és pla i enganxat a terra: l'ombra en segueix la forma, una mica desplaçada)
+        ctx.save(); ctx.translate(2, 4);
+        ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.lineWidth = 24;
+        ctx.beginPath(); P.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.lineTo(P[N - 1].x + P[N - 1].tx * 10, P[N - 1].y + P[N - 1].ty * 10); ctx.stroke();
+        ctx.restore();
         // Potes: un parell per segment, amb genoll, que es mouen endavant i enrere en onada
         P.forEach((p, i) => {
             if (i === 0 || i === N - 1) return;
