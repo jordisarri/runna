@@ -455,10 +455,18 @@ class ZonaBase extends Phaser.Scene {
     }
 
     // ---------------- Ineu ----------------
+    // Una posició desada és bona si és dins la zona i els peus no queden dins d'un obstacle (si l'escena ha canviat
+    // des que es va desar, la posició pot haver quedat dins d'una paret: llavors l'Ineu surt per l'entrada)
+    llocLliure(x, y) {
+        if (x < 0 || y < 0 || x > this.config.amplada || y > this.config.alcada) return false;
+        const peus = new Phaser.Geom.Rectangle(x - 18, y - 12, 36, 12);
+        return !this.obstacles.getChildren().some(o => o.body && Phaser.Geom.Intersects.RectangleToRectangle(peus, new Phaser.Geom.Rectangle(o.body.x, o.body.y, o.body.width, o.body.height)));
+    }
+
     crearIneu() {
         const e = this.config.entrades;
         let pos;
-        if (this.dadesEntrada.restaurar && Estat.dades.x !== null) {
+        if (this.dadesEntrada.restaurar && Estat.dades.x !== null && this.llocLliure(Estat.dades.x, Estat.dades.y)) {
             pos = { x: Estat.dades.x, y: Estat.dades.y, dir: 'avall' };
         } else {
             pos = e[this.dadesEntrada.entrada] || e[Object.keys(e)[0]];
