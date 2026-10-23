@@ -713,10 +713,10 @@ class ZonaBosc extends ZonaBase {
         }).setDepth(AY + 2);
         this.boira(AX, AY - 20, 300, 60, 0.5);
 
-        // Herbes de la Nit de Sant Joan: cal trobar-les entre els arbres. Cada una és en una clariana, més gran que abans,
+        // Herbes de la Nit de Sant Joan (la tercera ofrena de la font és una pruna de la Prunera): cal trobar-les entre els arbres. Cada una és en una clariana, més gran que abans,
         // amb un halo a terra, espurnes i una columna de llum tènue que es veu per sobre de les copes.
         this.herbes = [];
-        [[1, 'herba de Sant Joan', 'herba_sj', 720, 290], [2, 'romaní', 'romani', 1380, 990], [3, 'farigola', 'farigola', 560, 1020]].forEach(([n, nom, key, x, y]) => {
+        [[1, 'herba de Sant Joan', 'herba_sj', 720, 290], [2, 'romaní', 'romani', 1380, 990]].forEach(([n, nom, key, x, y]) => {
             const halo = this.add.ellipse(x, y - 10, 96, 44, 0xfff0a0, 0.3).setDepth(y - 1);
             this.tweens.add({ targets: halo, alpha: 0.08, scale: 1.35, yoyo: true, repeat: -1, duration: 1100 });
             const raig = this.add.rectangle(x, y - 110, 30, 220, 0xfff4b0, 0.12).setDepth(9500);

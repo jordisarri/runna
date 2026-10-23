@@ -37,7 +37,7 @@ class ZonaEsglesia extends ZonaBase {
 
         // Retaule Major (tot l'ample de la nau, sencer) i, al davant, l'altar de pedra
         this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
-        this.interactiu(640, ESG.retY + 36, 130, DIALEGS.retaule, { altura: 170 });
+        this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170 });     // el sagrari, al mig del retaule (fragment 2)
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
         this.interactiu(640, ESG.retY + 140, 90, () => this.rezar(), { altura: 100 });
 
@@ -64,10 +64,6 @@ class ZonaEsglesia extends ZonaBase {
             this.posar('banc_esglesia', 470, y, { col: { w: 140, h: 16 } });
             this.posar('banc_esglesia', 810, y, { col: { w: 140, h: 16 } });
         });
-
-        // Pergamí amb el fragment 2 de la llegenda del monjo, oblidat sobre el capçal d'un banc del mig (lluny del Pare Daniel)
-        this.posar('pergami', 470, bancs[1] - 74, { fonsY: bancs[1] + 1 });
-        this.interactiu(470, bancs[1] + 14, 70, DIALEGS.pergamiEsglesia, { altura: 80 });
 
         // Llum de les vidrieres
         this.add.rectangle(640, A / 2, 800, A, 0xffd38a, 0.05).setDepth(80000);
@@ -275,9 +271,6 @@ class ZonaCasaGran extends ZonaBase {
         this.colisio(1230, 699, 190, 58);
         // La reixa del porxo, tancada des de fa generacions: per fora no hi ha manera d'entrar
         this.interactiu(700, 585, 85, DIALEGS.portaReixa, { altura: 190 });
-
-        // Cartell a terra, a la dreta de les escales
-        this.cartell(1180, 860, DIALEGS.cartellCasaGran);
 
         // Cartell que indica la Taverna, a la vora de la sortida de l'esquerra
         this.cartell(170, 880, () => ({ pagines: [{ qui: '', text: '← La Taverna i l\'Hostatgeria\n→ La Plaça del Santuari' }] }));

@@ -244,7 +244,7 @@ class ZonaJardi extends ZonaBase {
         this.blocDarrere(1250, 1100, 670);
         if (oberta) {
             this.sortida(1295, 686, 86, 30, 'ZonaHostatgeriaInt', 'porta');
-            this.portaAnimada({ x: 1338, top: 582, bottom: 719, ample: 90, fons: 640, unic: true, color: 0xa86a3a, panell: 0xb87a48, vora: 0x3a2010 });
+            this.portaAnimada({ x: 1338, top: 582, bottom: 719, ample: 90, fons: 640, unic: true, retall: casa });   // la mateixa porta del gràfic, que s'obre
         } else {
             this.colisio(1338, 700, 90, 40);
             this.interactiu(1339, 775, 90, DIALEGS.hostatgeria, { altura: 180 });
@@ -340,7 +340,7 @@ class ZonaJardi extends ZonaBase {
 
     posarEntradaForat() {
         const { x, y } = this.llosaPos;
-        this.sortida(x - 34, y - 26, 68, 52, 'ZonaSoterraniHost', 'entrada');
+        this.sortidaEscala(x - 34, y - 26, 68, 52, 'ZonaSoterraniHost', 'entrada', y + 30);   // l'Ineu baixa l'escala abans de canviar de zona
     }
 
     // L'Isidre porta la llavor a la llosa, la planta, la flor creix i la llosa s'aparta i deixa veure l'escala. Tot es veu, no s'explica.

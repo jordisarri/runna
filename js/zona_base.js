@@ -733,21 +733,37 @@ class ZonaBase extends Phaser.Scene {
 
     // Porta de doble batent dibuixada damunt de la del gràfic de l'edifici: els batents giren cap endins quan l'Ineu
     // s'hi acosta i es tornen a tancar quan se n'allunya; a dins s'entreveu la foscor càlida.
-    // o = { x, top, bottom, ample, fons (profunditat de l'edifici), arc (porta d'arc de mig punt), color, panell, vora, finestra, ferro }
+    // o = { x, top, bottom, ample, fons (profunditat de l'edifici), arc (true: arc de mig punt; un número: arc rebaixat, amb aquesta
+    //       fletxa), color, panell, vora, finestra, ferro }
+    // Amb retall (la imatge de l'edifici ja posada), el batent és el tros del mateix gràfic: la porta oberta és la que es veu dibuixada.
     portaAnimada(o) {
         const DX = o.x, DT = o.top, DB = o.bottom, DW = o.ample, H = DB - DT, w = o.unic ? DW : DW / 2, r = o.arc ? DW / 2 : 0, Z = o.fons;
         const forma = (x0, ample, alt, arc) => {                       // contorn d'un rectangle amb (opcionalment) la part de dalt en arc
             if (!arc) return [{ x: x0, y: alt }, { x: x0, y: 0 }, { x: x0 + ample, y: 0 }, { x: x0 + ample, y: alt }];
-            const pts = [{ x: x0, y: alt }];
-            for (let k = 0; k <= 12; k++) { const a = Math.PI + k / 12 * Math.PI; pts.push({ x: x0 + ample / 2 + Math.cos(a) * ample / 2, y: ample / 2 + Math.sin(a) * ample / 2 }); }
+            const pts = [{ x: x0, y: alt }], fl = arc === true ? ample / 2 : arc;
+            for (let k = 0; k <= 12; k++) { const a = Math.PI + k / 12 * Math.PI; pts.push({ x: x0 + ample / 2 + Math.cos(a) * ample / 2, y: fl + Math.sin(a) * fl }); }
             pts.push({ x: x0 + ample, y: alt });
             return pts;
         };
         const dins = this.add.graphics().setDepth(Z + 1).setPosition(0, DT);
-        dins.fillStyle(0x0e0806, 1).fillPoints(forma(DX - w, DW, H, o.arc), true);
-        dins.fillGradientStyle(0x0e0806, 0x0e0806, 0x6a4420, 0x6a4420, 1, 1, 0.9, 0.9).fillRect(DX - w, H * 0.45, DW, H * 0.55);
+        dins.fillStyle(0x0e0806, 1).fillPoints(forma(DX - DW / 2, DW, H, o.arc), true);
+        dins.fillGradientStyle(0x0e0806, 0x0e0806, 0x6a4420, 0x6a4420, 1, 1, 0.9, 0.9).fillRect(DX - DW / 2, H * 0.45, DW, H * 0.55);
         dins.fillStyle(0xffd38a, 0.5).fillCircle(DX, H - 22, 9);       // una espelma al fons
         const batent = esq => {
+            if (o.retall) {
+                // El batent és el tros del gràfic de la porta, retallat amb la seva forma (a una textura pròpia)
+                const im = o.retall, src = im.texture.getSourceImage(), nom = 'porta_' + im.texture.key + '_' + DX + '_' + DT;
+                const sx = (DX - DW / 2 - im.x + im.displayWidth * im.originX) / im.scaleX, sy = (DT - im.y + im.displayHeight * im.originY) / im.scaleY;
+                if (!this.textures.exists(nom)) {
+                    const sw = Math.ceil(DW / im.scaleX), sh = Math.ceil(H / im.scaleY), ct = this.textures.createCanvas(nom, sw, sh), cx = ct.getContext();
+                    if (o.arc) { cx.beginPath(); forma(0, sw, sh, o.arc === true ? true : o.arc / im.scaleY).forEach((p, k) => k ? cx.lineTo(p.x, p.y) : cx.moveTo(p.x, p.y)); cx.closePath(); cx.clip(); }
+                    cx.drawImage(src, sx, sy, sw, sh, 0, 0, sw, sh);
+                    ct.refresh();
+                }
+                const g = this.add.container(DX - DW / 2, DT).setDepth(Z + 2);
+                g.add(this.add.image(0, 0, nom).setOrigin(0).setScale(im.scaleX, im.scaleY));
+                return g;
+            }
             const g = this.add.graphics().setDepth(Z + 2);
             const x = esq ? 0 : -w;                                      // l'origen és la frontissa (vora de fora)
             let pts;
@@ -872,10 +888,41 @@ class ZonaBase extends Phaser.Scene {
         const peus = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
         for (const s of this.sortides) {
             if (s.peu ? s.r.contains(b.center.x, b.bottom) : Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r)) {
-                this.canviarZona(s.desti, s.entrada);
+                if (s.baixar !== undefined) this.baixarEscala(s);
+                else this.canviarZona(s.desti, s.entrada);
                 return;
             }
         }
+    }
+
+    // Escala que baixa sota terra cap al nord (un forat, una trapa): ycut és la vora de davant del forat
+    sortidaEscala(x, y, w, h, desti, entrada, ycut) {
+        this.sortida(x, y, w, h, desti, entrada);
+        Object.assign(this.sortides[this.sortides.length - 1], { baixar: ycut, xEscala: x + w / 2 });
+    }
+
+    // L'Ineu baixa l'escala: camina d'esquena cap al mig de l'escala i s'enfonsa darrere la vora de davant del forat,
+    // cada cop més fosc, graó a graó; després canvia de zona
+    baixarEscala(s) {
+        if (this.canviant) return;
+        this.canviant = true;
+        const I = this.ineu, alt = I.displayHeight, y0 = I.y, y1 = s.baixar + alt * 0.95;
+        I.body.setVelocity(0); I.body.enable = false;
+        this.posarDireccio('amunt', true);
+        this.ombraIneu.setVisible(false);
+        I.setMask(this.make.graphics({ add: false }).fillRect(0, 0, this.config.amplada, s.baixar).createGeometryMask());
+        const graons = 6;
+        this.tweens.addCounter({
+            from: 0, to: 1, duration: 1500,
+            onUpdate: tw => {
+                const f = tw.getValue(), g = f * graons, pas = Math.floor(g) + Phaser.Math.Easing.Sine.InOut(g % 1);   // cada graó: baixada suau i repòs
+                I.setPosition(Phaser.Math.Linear(I.x, s.xEscala, 0.08), y0 + (y1 - y0) * pas / graons);
+                const c = Math.round(255 * (1 - 0.7 * f));
+                I.setTint(Phaser.Display.Color.GetColor(c, c, c));
+            }
+        });
+        Sfx.porta();
+        this.time.delayedCall(1250, () => { this.canviant = false; this.canviarZona(s.desti, s.entrada); });
     }
 
     canviarZona(desti, entrada) {

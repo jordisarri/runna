@@ -105,8 +105,14 @@ const CATALEG = [
     { key: 'llac',           file: 'assets/natura/llac.png',           amplada: 36, provisional: (c, w) => dibuixarLlac(c, w) },
     { key: 'diposit',        file: 'assets/edificis/diposit.png',        amplada: 300, provisional: (c, w) => dibuixarDiposit(c, w) },
     { key: 'telescopi_mon',  file: 'assets/objectes/telescopi_mon.png',  amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w) },
+    { key: 'tripode',        file: 'assets/objectes/tripode.png',        amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w, false) },   // el trípode del mirador, sense el telescopi
     { key: 'runna_pedra',    file: 'assets/objectes/runna_pedra.png',    amplada: 110, provisional: (c, w) => dibuixarRunnaPedra(c, w) },
-    { key: 'ermita_gabriel', file: 'assets/edificis/ermita_gabriel.webp', amplada: 300, provisional: (c, w) => dibuixarErmitaGabriel(c, w) },
+    { key: 'runna_pedra_buida', file: 'assets/objectes/runna_pedra_buida.png', amplada: 110, provisional: (c, w) => dibuixarRunnaPedra(c, w, 'pedra') },   // la pedra, quan ja no hi ha l'espasa
+    { key: 'runna_espasa',   file: 'assets/objectes/runna_espasa.png',   amplada: 110, provisional: (c, w) => dibuixarRunnaPedra(c, w, 'espasa') },  // només l'espasa (s'aixeca en despertar-la)
+    { key: 'dolmen',         file: 'assets/edificis/dolmen.png',         amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w) },
+    { key: 'conill',         file: 'assets/natura/conill.png',         amplada: 44, provisional: (c, w) => dibuixarConill(c, w) },
+    { key: 'esquirol',       file: 'assets/natura/esquirol.png',       amplada: 40, provisional: (c, w) => dibuixarEsquirol(c, w) },
+    { key: 'ermita_gabriel', file: 'assets/edificis/ermita_gabriel.webp', amplada: 560, provisional: (c, w) => dibuixarErmitaGabriel(c, w) },
     { key: 'nena_trenes',    file: 'assets/personatges/nena_trenes.png',    amplada: 80, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e8e8f8', pell: '#dfe6ff', cabell: '#5a4636', dona: true, alt: 0.72, cap: 17, extra: 'trenes' }) },
     { key: 'porxo',          file: 'assets/edificis/porxo.png',          amplada: 340, provisional: (c, w) => dibuixarPorxo(c, w) },
     { key: 'esbarzer',       file: 'assets/natura/esbarzer.webp',       amplada: 96, provisional: (c, w) => dibuixarEsbarzer(c, w) },
@@ -792,6 +798,17 @@ const Grafics = {
             ctx.beginPath(); ctx.ellipse(w * 0.74, w * 0.2, 3.4, 2.6, -0.4, 0, Math.PI * 2); ctx.fill();
             ctx.strokeStyle = '#7a1c24'; ctx.lineWidth = 1.8;
             ctx.beginPath(); ctx.moveTo(w * 0.74 + 3, w * 0.2); ctx.lineTo(w * 0.74 + 3, w * 0.06); ctx.stroke();
+        });
+        // Icona del sarró (inventari): bossa de cuir amb solapa, sivella i corretja
+        crea('icona_sarro', 64, 64, ctx => {
+            ctx.strokeStyle = '#3a2412'; ctx.lineWidth = 2.4; ctx.lineJoin = 'round';
+            ctx.beginPath(); ctx.moveTo(18, 26); ctx.quadraticCurveTo(32, 2, 46, 26); ctx.stroke();
+            ctx.fillStyle = '#9a6a3a'; ctx.beginPath(); ctx.roundRect(12, 24, 40, 32, 8); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#7a4e28'; ctx.beginPath(); ctx.moveTo(12, 30); ctx.quadraticCurveTo(12, 24, 20, 24); ctx.lineTo(44, 24);
+            ctx.quadraticCurveTo(52, 24, 52, 30); ctx.lineTo(50, 40); ctx.quadraticCurveTo(32, 48, 14, 40); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#d9b441'; ctx.beginPath(); ctx.arc(32, 42, 3.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(240,210,160,0.6)'; ctx.lineWidth = 1.4; ctx.setLineDash([2, 3]);
+            ctx.beginPath(); ctx.moveTo(17, 51); ctx.lineTo(47, 51); ctx.stroke(); ctx.setLineDash([]);
         });
         // Altar de pedra del presbiteri (desar partida i reposar)
         crea('altar', 150, 118, pintarAltarPedra);

@@ -16,10 +16,38 @@ function marcPergami(scene, x, y, w, h, clau = 'marc_gran') {
     return scene.add.nineslice(x, y, clau, undefined, w * RES, h * RES, c, c, c, c).setScale(1 / RES);
 }
 
-// Objectes que es mostren a la dreta del HUD. te: l'Ineu l'ha aconseguit; activa(zona): té efecte ara mateix (brilla i l'acció l'usa)
-const OBJECTES_HUD = [
-    { id: 'flauta', icona: 'icona_flauta', te: () => Estat.te('flauta'), activa: zona => zona.flautaActiva() }
-];
+// El sarró de l'Ineu (inventari): nom i una línia de cada objecte que es pot portar
+const CATALEG_OBJECTES = {
+    flauta:           ['Flauta', 'Es toca amb ESPAI allà on la música pot fer efecte.'],
+    basto:            ['Bastó de pelegrí', 'Per caminar... i per defensar-se.'],
+    basto_tiller:     ['Branca del Til·ler', 'Més lleugera i àgil que el bastó de pelegrí.'],
+    clauer:           ['Clauer del novici', 'El que et va donar el Pare Jordi.'],
+    clau_sagrari:     ['Clau del sagrari', 'Petita, gairebé de joguina. És del Pare Daniel.'],
+    aigua_sj:         ['Aigua de la Font del Bisbe', 'Aigua beneïda, clara com el vidre.'],
+    cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Garf en sabrà fer alguna cosa.'],
+    pruna:            ['Pruna màgica', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en vol una.'],
+    beuratge:         ['Beuratge de la Jaumeta', 'Fa fugir la boira dolenta. No te\'l beguis!'],
+    escudella:        ['Escudella de la Neus', 'Amb la cullerada de més, la del que falta.'],
+    flors_isidre:     ['Flors de l\'Isidre', 'Un ram embolicat amb un tros de pergamí.'],
+    pa_pastor:        ['Pa dels pastors', 'Una barra baixa i fosca, cuita sota la cendra.'],
+    esquelles:        ['Esquelles dels pastors', 'Amb elles, els cants antics sonen més clars.'],
+    fulla_tiler:      ['Fulla del Til·ler', 'Un record del sopar sota el Gran Til·ler.'],
+    cinta_nena:       ['Cinta de la Nena', 'Absorbeix un cop cada vegada que entres a una zona.'],
+    llac_nena:        ['Llaç de cinta', 'Rosa i descolorit. És de la Nena de les Trenes.'],
+    tisores:          ['Tisores de podar', 'Les de l\'Isidre: tallen els arbustos més espessos.'],
+    llanterna:        ['Llanterna', 'Fa més llum a les foscors de sota terra.'],
+    telescopi:        ['Telescopi del Garf', 'Per mirar els estels als Dipòsits.'],
+    estel_llorenc:    ['Estel de Sant Llorenç', 'Un bocí de llum caigut del cel.'],
+    runna:            ['Runna', 'L\'espasa de llum del monjo.'],
+    ram:              ['Ram de flors', 'Del Germà Francesc, per a la tomba de l\'àngel.'],
+    guants:           ['Guants de Poder', 'Per moure el que pesa massa.'],
+    palanca:          ['Palanca d\'en Jordi', 'De ferro, de les bones.'],
+    pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.»'],
+    calze:            ['Calze', 'De plata, antic.'],
+    reliquies_monjos: ['Relíquies dels monjos', 'Un calze, una creu, un anell i un breviari.'],
+    clau_ferro:       ['Clau de ferro', 'Obre la porta de ferro de sota la Taverna.'],
+    llavorLluna:      ['Llavor de Lluna', 'De la Sansa. L\'Isidre sap on plantar-la.']
+};
 
 class EscenaUI extends Phaser.Scene {
     constructor() { super('UI'); }
@@ -40,7 +68,8 @@ class EscenaUI extends Phaser.Scene {
 
         this.input.keyboard.on('keydown-ESC', () => {
             if (this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels')) return;
-            if (this.mapaObert) this.tancarMapa();
+            if (this.inventariObert) this.tancarInventari();
+            else if (this.mapaObert) this.tancarMapa();
             else if (this.menuObert) this.tancarMenu();
             else this.obrirMenu();
         });
@@ -49,7 +78,8 @@ class EscenaUI extends Phaser.Scene {
         this.input.keyboard.on('keydown-W', () => this.menuObert && this.moureSeleccio(-1));
         this.input.keyboard.on('keydown-S', () => this.menuObert && this.moureSeleccio(1));
         const confirmar = () => {
-            if (this.mapaObert) this.tancarMapa();
+            if (this.inventariObert) this.tancarInventari();
+            else if (this.mapaObert) this.tancarMapa();
             else if (this.menuObert) this.executarOpcio(this.seleccio);
         };
         this.input.keyboard.on('keydown-ENTER', confirmar);
@@ -64,36 +94,65 @@ class EscenaUI extends Phaser.Scene {
         this.actualitzarHUD();
     }
 
-    // ---------------- OBJECTES (columna dreta) ----------------
-    // Cada objecte és un medalló només informatiu: quan és "actiu" (brilla), l'acció (ESPAI o tocar la meitat dreta
-    // de la pantalla) l'utilitza. Vegeu ZonaBase.flautaActiva.
+    // ---------------- SARRÓ (inventari) ----------------
+    // Un medalló petit a la dreta del HUD obre el sarró (també la tecla I). Quan l'Ineu és en un lloc on la flauta fa
+    // efecte, al costat hi brilla la flauta: l'acció (ESPAI o tocar la meitat dreta de la pantalla) la toca.
+    // Vegeu ZonaBase.flautaActiva.
     crearObjectes() {
-        this.objectesHUD = OBJECTES_HUD.map((o, i) => {
-            const x = 530 - i * 100, y = ALT_HUD / 2;
-            const halo = this.add.circle(x, y, 54, 0xffe08a, 0).setVisible(false);
-            const fons = this.add.image(x, y, 'medallo').setScale(1 / RES).setVisible(false);
-            const icona = this.add.image(x, y, o.icona).setScale(1 / RES).setVisible(false);
-            return { o, halo, fons, icona };
-        });
+        const x = 548, y = ALT_HUD / 2, commuta = () => this.inventariObert ? this.tancarInventari() : this.obrirInventari();
+        this.fonsSarro = this.add.image(x, y, 'medallo').setScale(0.62 / RES).setVisible(false)
+            .setInteractive({ useHandCursor: true }).on('pointerdown', commuta);
+        this.iconaSarro = this.add.image(x, y, 'icona_sarro').setScale(0.62 / RES).setVisible(false);
+        this.haloFlauta = this.add.circle(x - 68, y, 30, 0xffe08a, 0).setVisible(false);
+        this.iconaFlauta = this.add.image(x - 68, y, 'icona_flauta').setScale(0.75 / RES).setVisible(false);
+        this.input.keyboard.on('keydown-I', commuta);
     }
 
     refrescaObjectes() {
-        if (!this.objectesHUD) return;
-        const lliure = !this.dialeg && !this.menuObert && !this.mapaObert && !!Estat.dades;
+        if (!this.fonsSarro) return;
+        const vis = !!Estat.dades && !this.menuObert && !this.mapaObert;
+        this.fonsSarro.setVisible(vis); this.iconaSarro.setVisible(vis);
+        const lliure = vis && !this.dialeg && !this.inventariObert;
         const zona = lliure ? Joc.zonaActiva(this) : null;
-        this.objectesHUD.forEach(({ o, halo, fons, icona }) => {
-            const vis = lliure && o.te();
-            fons.setVisible(vis); icona.setVisible(vis);
-            const actiu = vis && !!zona && o.activa(zona);
-            halo.setVisible(actiu).setFillStyle(0xffe08a, actiu ? 0.3 + 0.25 * Math.sin(this.time.now / 180) : 0);
+        const flauta = !!zona && Estat.te('flauta') && !!zona.flautaActiva();
+        this.iconaFlauta.setVisible(flauta);
+        this.haloFlauta.setVisible(flauta).setFillStyle(0xffe08a, flauta ? 0.3 + 0.25 * Math.sin(this.time.now / 180) : 0);
+    }
+
+    obrirInventari() {
+        if (this.dialeg || this.menuObert || !Estat.dades || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels')) return;
+        this.inventariObert = true;
+        if (this.inventari) this.inventari.destroy();
+        const c = this.inventari = this.add.container(0, 0).setDepth(60);
+        const W = 660, H = 1000, cx = AMPLE / 2, cy = ALT / 2 + 40, dalt = cy - H / 2;
+        c.add(this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.65).setOrigin(0).setInteractive().on('pointerdown', () => this.tancarInventari()));
+        c.add(marcPergami(this, cx, cy, W, H));
+        c.add(this.add.text(cx, dalt + 70, 'El sarró', { fontFamily: FONT_PLACA, fontSize: '44px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5));
+        const llista = Estat.dades.objectes.filter(o => CATALEG_OBJECTES[o]);
+        if (!llista.length) c.add(this.add.text(cx, cy, 'El sarró és buit.', estilText(24, '#5a3a20', { fontStyle: 'italic' })).setOrigin(0.5));
+        // Una columna amb el nom de cada objecte i, al costat, què és. Si no hi caben, dues columnes només amb el nom.
+        const x0 = cx - W / 2 + 64, y0 = dalt + 130, lloc = H - 220, curt = llista.length * 56 > lloc;
+        const fila = curt ? Math.min(56, lloc / Math.ceil(llista.length / 2)) : 56, ample = curt ? (W - 140) / 2 : W - 128;
+        llista.forEach((o, i) => {
+            const [nom, desc] = CATALEG_OBJECTES[o];
+            const x = x0 + (curt ? (i % 2) * (ample + 12) : 0), y = y0 + (curt ? Math.floor(i / 2) : i) * fila;
+            c.add(this.add.text(x, y, '✦ ' + nom, estilText(curt ? 19 : 22, '#3a2412', { fontStyle: 'bold' })));
+            if (!curt) c.add(this.add.text(x + 22, y + 27, desc, estilText(16, '#5a3a20', { fontStyle: 'italic' })));
         });
+        c.add(this.add.text(cx, dalt + H - 48, 'Toca la pantalla o prem I per tancar', estilText(16, '#7a5a3a')).setOrigin(0.5));
+    }
+
+    tancarInventari() {
+        this.inventariObert = false;
+        if (this.inventari) { this.inventari.destroy(); this.inventari = null; }
+        this.bloquejatFins = this.time.now + 200;
     }
 
     update() { this.refrescaObjectes(); }
 
     // La zona consulta això per saber si l'Ineu pot moure's
     get bloquejat() {
-        return !!this.dialeg || this.menuObert || this.time.now < this.bloquejatFins || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels');
+        return !!this.dialeg || this.menuObert || this.inventariObert || this.time.now < this.bloquejatFins || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels');
     }
 
     // ---------------- HUD ----------------
@@ -117,7 +176,7 @@ class EscenaUI extends Phaser.Scene {
             .on('pointerdown', () => this.menuObert ? this.tancarMenu() : this.obrirMenu());
 
         if (!this.sys.game.device.input.touch) {
-            this.textAjuda = this.add.text(AMPLE - 16, ALT - 12, 'Fletxes/WASD: moure · ESPAI: parlar o atacar · ESC: menú',
+            this.textAjuda = this.add.text(AMPLE - 16, ALT - 12, 'Fletxes/WASD: moure · ESPAI: parlar o atacar · I: sarró · ESC: menú',
                 estilText(12, '#f2e6c8')).setOrigin(1, 1).setAlpha(0.55);
         }
     }
@@ -148,7 +207,7 @@ class EscenaUI extends Phaser.Scene {
         let mida = 20;
         this.textObjectiu.setFontSize(mida);
         while (this.textObjectiu.height > 52 && mida > 14) this.textObjectiu.setFontSize(--mida);
-        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · ESC: menú');
+        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · I: sarró · ESC: menú');
     }
 
     // Quan queda un sol gra o menys, l'últim gra bategueja

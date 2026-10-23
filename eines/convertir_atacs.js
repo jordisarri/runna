@@ -4,6 +4,8 @@
  *  - art/sprites_png/ineu/Ineu-iso_attack_<dir>*.png  ->  assets/sprites/ineu/atac_<dir>.webp
  *    Les fulles (4x4 fotogrames de 256, l'Ineu sense arma) es normalitzen: mateix factor d'escala per a totes les direccions
  *    (cos de ATAC_ALT píxels), centrades i amb els peus a y = PEUS, igual que les fulles de caminar.
+ *    L'atac amunt no surt d'aquí: és la fulla ja normalitzada i retocada a mà (assets/sprites/ineu/atac_up.png),
+ *    passada directament a WebP:  ffmpeg -i atac_up.png -c:v libwebp -quality 90 -pix_fmt yuva420p atac_up.webp
  *  - art/fonts_png/espasa.jpg  ->  assets/armes/espasa.webp (fons blanc fet transparent, retallada i reduïda a AMPLADA_ESPASA * RES)
  */
 const { spawn } = require('child_process');
@@ -13,13 +15,11 @@ const ARREL = path.join(__dirname, '..');
 const CHROME = process.env.CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const QUALITAT = 0.9, RES = 2, CEL = 256, ATAC_ALT = 225, PEUS = 240, AMPLADA_ESPASA = 28;
 const FULLES = {
-    down: 'Ineu-iso_attack_down-v3.png', up: 'Ineu-iso_attack_up-v3.png', left: 'Ineu-iso_attack_left-v3.png',
+    down: 'Ineu-iso_attack_down-v3.png', left: 'Ineu-iso_attack_left-v3.png',
     right: 'Ineu-iso_attack_right-v3.png', southwest: 'Ineu-iso_attack_southwest-v3.png',
     southeast: 'Ineu-iso_attack_southeast-v3.png', northeast: 'Ineu-iso_attack_northeast-v3.png',
     northwest: 'Ineu-iso_attack_northwest.png'
 };
-// Fulles dibuixades a una altra escala que la resta (l'atac amunt v3 té el cos ~15% més petit): s'escalen amb la seva pròpia alçada
-const ESCALA_PROPIA = ['up'];
 
 // Algorisme de treure el fons blanc: el mateix que fa servir el joc (js/assets.js)
 const font = fs.readFileSync(path.join(ARREL, 'js/assets.js'), 'utf8');
@@ -56,13 +56,12 @@ window.fulles = async (fitxers, q) => {
         }
         dades[dir] = { c, cs, peus: mediana(peus), alt: mediana(alts) };
     }
-    const propia = ${JSON.stringify(ESCALA_PROPIA)};
-    const k = ${ATAC_ALT} / mediana(Object.entries(dades).filter(([dir]) => !propia.includes(dir)).map(([, f]) => f.alt));    // el mateix factor per a totes les direccions
+    const k = ${ATAC_ALT} / mediana(Object.values(dades).map(f => f.alt));    // el mateix factor per a totes les direccions
     const sortida = {}, info = {};
     for (const [dir, f] of Object.entries(dades)) {
         const out = document.createElement('canvas'); out.width = COLS * CEL; out.height = COLS * CEL;
         const o = out.getContext('2d'); o.imageSmoothingQuality = 'high';
-        const e = (propia.includes(dir) ? ${ATAC_ALT} / f.alt : k) * CEL / f.cs;
+        const e = k * CEL / f.cs;
         for (let i = 0; i < N; i++) {
             o.save(); o.beginPath(); o.rect((i % COLS) * CEL, Math.floor(i / COLS) * CEL, CEL, CEL); o.clip();
             o.drawImage(f.c, (i % COLS) * f.cs, Math.floor(i / COLS) * f.cs, f.cs, f.cs,

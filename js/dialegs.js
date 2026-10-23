@@ -8,6 +8,13 @@
 const PARAULES_MISSATGE = ["Quan", "la", "boira", "cobreixi", "el", "Miracle,", "els", "passos", "dels", "absents", "tornaran", "amb l'alba."];
 const SIGNES_MISSATGE = ["☉", "☽", "✦", "♆", "⚶", "☿", "♄", "♃", "⚸", "☋", "☊", "⚷"];
 
+// Ofrenes per a la Font del Bisbe: l'herba de Sant Joan, el romaní i una pruna de la Prunera Màgica
+// (a les partides velles, la farigola que s'hi portava abans compta com la pruna)
+function ofrenesFont(E) { return ['herba1', 'herba2'].filter(h => E.flag(h)).length + (E.te('pruna') || E.flag('herba3') ? 1 : 0); }
+function objectiuFont(n) {
+    return n === 3 ? 'Ja ho tens tot: torna a la Font del Bisbe.' : `Porta a la Font del Bisbe l'herba de Sant Joan, el romaní (al bosc) i una pruna de la Prunera de l'Hostatgeria (${n}/3).`;
+}
+
 // Les Tietes sempre donen una pista segons el que et falta fer
 function pistaActual(E) {
     let consell;
@@ -15,7 +22,7 @@ function pistaActual(E) {
     if (!E.flag("clauerNovici")) consell = "Fill, ves a la Plaça: el Pare Jordi et busca i t'ha de donar el clauer.";
     else if (!E.flag("cantAurora")) consell = "Al Santuari, la Pianista encara sap un cant que la boira no li pot prendre. Fes-te'l ensenyar.";
     else if (!E.flag("bassadoriaNeta")) consell = "Davant la Bassadòria, al sud de la Plaça, prem ESPAI i tria tocar la flauta: 1-2-3.";
-    else if (!E.flag("fontNeta")) consell = "Al bosc de l'oest, a tocar de les Cel·les, hi ha una Font del Bisbe que s'ha adormit. Porta-li tres herbes: la de Sant Joan, el romaní i la farigola. Brillen entre els arbres, com espurnes.";
+    else if (!E.flag("fontNeta")) consell = "Al bosc de l'oest, a tocar de les Cel·les, hi ha una Font del Bisbe que s'ha adormit. Porta-li l'herba de Sant Joan i el romaní, que brillen entre els arbres com espurnes, i una pruna de la Prunera Màgica del jardí de l'Hostatgeria.";
     else if (!E.flag("jaumetaVista") && !E.flag("parlatTiler")) consell = "Amb l'aigua de la Font del Bisbe, l'Alzina Buida del bosc, la més grossa de la clariana, s'obre com un portal. Allà viu la Jaumeta, que és vident i et donarà alguna cosa per al camí del Til·ler.";
     else if (!E.flag("boiraTillerNeta") && !E.flag("parlatTiler")) consell = "El Gran Til·ler és al nord de les Cel·les, però una boira espessa tapa el camí. Aboca-hi el beuratge de la Jaumeta i es desfarà.";
     else if (!E.flag("parlatTiler")) consell = "Pel camí que s'ha aclarit, al nord de les Cel·les, hi ha el Gran Til·ler. Parla-hi: ell sap què fer amb les bestioles que desperten.";
@@ -259,6 +266,16 @@ const DIALEGS = {
                 enAcabar: () => E.posaFlag('parlatDaniel')
             };
         }
+        if (!E.te('clau_sagrari') && !E.flag('fragment2') && (E.flag('fragment1') || E.flag('sagrariVist'))) {
+            return {
+                pagines: [
+                    { qui: 'Pare Daniel', text: 'El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se\'ls mengi. Si el Pare Alcuí els busca, ja era hora que algú els llegís!' },
+                    { qui: 'Pare Daniel', text: 'Té, la clau del sagrari. És aquesta petita, la que sembla de joguina. Torna a tancar quan acabis, eh?' },
+                    { qui: '', text: 'Has obtingut la CLAU DEL SAGRARI.' }
+                ],
+                enAcabar: () => E.dona('clau_sagrari')
+            };
+        }
         if (!E.flag('rellotgeReparat') && !E.flag('rellotgeDit')) {
             return {
                 pagines: [
@@ -273,9 +290,23 @@ const DIALEGS = {
         }
         return { pagines: [{ qui: 'Pare Daniel', text: 'Sents el rellotge, Ineu? Torna a caminar! Fa tres nits que no el sentia. Els nens em diuen que canto massa fort, però avui no cal: ho fa ell per mi!' }] };
     },
-    retaule: E => ({
-        pagines: [{ qui: '', text: 'El Retaule Major, barroc, tot d\'or i de figures. Avui fins i tot ell sembla més apagat.' }]
-    }),
+    // Sagrari del Retaule Major: hi ha el fragment 2 de la llegenda del monjo. És tancat fins que el Pare Daniel en dona la clau.
+    sagrari: E => {
+        if (E.flag("fragment2")) return { pagines: [{ qui: "", text: "El sagrari, tancat de nou amb la clau del Pare Daniel. A dins hi ha quedat el lloc buit on era el pergamí." }] };
+        if (!E.te("clau_sagrari")) {
+            return {
+                pagines: [{ qui: "", text: "Al mig del retaule, el sagrari de fusta daurada. La porteta és tancada amb clau. El Pare Daniel en deu tenir la clau." }],
+                enAcabar: () => E.posaFlag("sagrariVist")
+            };
+        }
+        return {
+            pagines: [
+                { qui: "", text: "Gires la clau petita del Pare Daniel i la porteta del sagrari s'obre. A dins, darrere el calze, hi ha un pergamí doblegat amb cura (fragment 2 de 2):\n«El monjo va guardar el segell fins al darrer dia. Des d'aleshores la seva ombra torna cada nit al mur de les Runes a vigilar. Les relíquies dels seus germans, i amb elles la clau de ferro, són on ell les va deixar, sota la mirada d'un guardià de pedra.»" },
+                { qui: "", text: "«Qui busqui la clau, que no oblidi mai on neix el sol.»" }
+            ],
+            enAcabar: () => E.posaFlag("fragment2")
+        };
+    },
 
     // ---------------- MONESTIR ----------------
     // ---------------- CASA GRAN ----------------
@@ -291,7 +322,7 @@ const DIALEGS = {
         pagines: [
             { qui: '', text: "Les Les Runes. Murs i arcs que mai no es van acabar de construir." },
             { qui: '', text: "Entre dues pedres, un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de Runna i la va deixar dormint a la pedra. Després va amagar la clau i les relíquies dels monjos morts allà on ningú no les trobés.»" },
-            { qui: 'Ineu', text: "Falta l'altre fragment. Potser al Santuari... I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." }
+            { qui: 'Ineu', text: "Falta l'altre fragment. Potser a l'església... I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." }
         ],
         enAcabar: () => E.posaFlag('fragment1')
     }),
@@ -439,15 +470,6 @@ const DIALEGS = {
     }),
 
 
-    // ---- Fragments de la llegenda del Monjo ----
-    pergamiEsglesia: E => ({
-        pagines: [
-            { qui: "", text: "Sobre un banc, un pergamí doblegat amb cura (fragment 2 de 2):\n«El monjo va guardar el segell fins al darrer dia. Des d'aleshores la seva ombra torna cada nit al mur de les Runes a vigilar. Les relíquies dels seus germans, i amb elles la clau de ferro, són on ell les va deixar, sota la mirada d'un guardià de pedra.»" },
-            { qui: "", text: "«Qui busqui la clau, que no oblidi mai on neix el sol.»" }
-        ],
-        enAcabar: () => E.posaFlag("fragment2")
-    }),
-
     pareAlcui: E => {
         const f1 = E.flag("fragment1"), f2 = E.flag("fragment2");
         if (E.flag("fragment3") && E.flag("benedicioMonjo") && !E.flag("saber")) {
@@ -476,7 +498,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: "Pare Alcuí", text: "Ineu, fill. Aquesta boira no és natural. Les boires d'aquí baixen de les muntanyes; aquesta puja de sota terra." },
-                { qui: "Pare Alcuí", text: "Diuen que cada nit apareix l'ombra d'un monjo a les Runes. Hi ha dos fragments d'una crònica antiga escampats pel Santuari: un a les Runes i un altre al Santuari. Porta-me'ls i els llegirem junts." }
+                { qui: "Pare Alcuí", text: "Diuen que cada nit apareix l'ombra d'un monjo a les Runes. Hi ha dos fragments d'una crònica antiga escampats pel Santuari: un a les Runes i un altre al sagrari de l'església. Porta-me'ls i els llegirem junts." }
             ],
             enAcabar: () => E.posaFlag("parlatAlcui")
         };
@@ -546,20 +568,20 @@ const DIALEGS = {
 
     // ---------------- BOSC DE SANT JOAN ----------------
     fontSJ: E => {
-        const herbes = ['herba1', 'herba2', 'herba3'].filter(h => E.flag(h)).length;
+        const herbes = ofrenesFont(E);
         if (E.flag('fontNeta')) {
             return { pagines: [{ qui: '', text: 'La Font del Bisbe raja cristal·lina. Sota l\'aigua, el gel brilla, tot i ser estiu.' }] };
         }
         if (herbes === 3) {
             return {
                 pagines: [
-                    { qui: '', text: 'Poses l\'herba de Sant Joan, el romaní i la farigola a la pica de la font.' },
+                    { qui: '', text: 'Poses l\'herba de Sant Joan, el romaní i la pruna lila de la Prunera a la pica de la font.' },
                     { qui: '', text: 'L\'aigua s\'aclareix a poc a poc. Un fil de llum puja de les pedres i la boira lila fuig del bosc.' },
                     { qui: 'Ineu', text: 'Ha funcionat! Al fons de la pica hi ha un cristall que sembla de gel...' },
                     { qui: '', text: 'Has obtingut l\'AIGUA DE LA FONT DEL BISBE i un CRISTALL DE GEL.\nEl Garf, a l\'Era, segur que sap què fer-ne.' }
                 ],
                 enAcabar: () => {
-                    E.posaFlag('fontNeta'); E.dona('aigua_sj'); E.dona('cristall_gel'); E.posaFlag('cristallGel');
+                    E.posaFlag('fontNeta'); E.treu('pruna'); E.dona('aigua_sj'); E.dona('cristall_gel'); E.posaFlag('cristallGel');
                     E.posaObjectiu('Porta el Cristall de Gel al Garf, a l\'Era (camí de la Desaparició).');
                 }
             };
@@ -567,11 +589,11 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: '', text: 'La Font del Bisbe: una font de pedra del temps de Sant Joan, seca i amb una olor estranya. Sobre la pica hi ha una mitra gravada: diuen que un bisbe, fa segles, hi va beneir l\'aigua.' },
-                { qui: 'Ineu', text: 'Les Tietes diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Em falten tres herbes: herba de Sant Joan, romaní i farigola.' },
-                { qui: 'Ineu', text: 'Amb aquesta boira lila tot costa de veure... Però les herbes de la Nit de Sant Joan fan llum: n\'hi ha una al nord (cap al Til·ler), el romaní al sud-est i la farigola al sud, sempre en una clariana.' },
-                { qui: '', text: `Herbes trobades: ${herbes}/3.` }
+                { qui: 'Ineu', text: 'Les Tietes diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, romaní i el fruit de l\'arbre lila.»' },
+                { qui: 'Ineu', text: 'Les herbes de la Nit de Sant Joan fan llum: n\'hi ha una al nord (cap al Til·ler) i el romaní al sud-est, sempre en una clariana. I l\'arbre lila... és la Prunera Màgica, al jardí de l\'Hostatgeria! Una pruna.' },
+                { qui: '', text: `Ofrenes trobades: ${herbes}/3.` }
             ],
-            enAcabar: () => { E.posaFlag('fontVista'); E.posaObjectiu(`Troba 3 herbes de Sant Joan pel bosc (${herbes}/3) i porta-les a la font.`); }
+            enAcabar: () => { E.posaFlag('fontVista'); E.posaObjectiu(objectiuFont(herbes)); }
         };
     },
 
@@ -579,8 +601,7 @@ const DIALEGS = {
         pagines: [{ qui: '', text: `Has trobat ${nom}!` }],
         enAcabar: () => {
             E.posaFlag('herba' + n);
-            const t = ['herba1', 'herba2', 'herba3'].filter(h => E.flag(h)).length;
-            if (E.flag('fontVista')) E.posaObjectiu(t === 3 ? 'Ja tens les 3 herbes: torna a la Font del Bisbe.' : `Troba 3 herbes de Sant Joan pel bosc (${t}/3).`);
+            if (E.flag('fontVista')) E.posaObjectiu(objectiuFont(ofrenesFont(E)));
         }
     }),
 
@@ -773,14 +794,22 @@ const DIALEGS = {
     llosaJardi: E => ({
         pagines: [{ qui: '', text: 'Una llosa de pedra rodona entre les flors, dins la pèrgola. Té una ranura al mig, com un clot per una llavor.' }]
     }),
-    prunera: E => ({
-        pagines: [
+    prunera: E => {
+        const pagines = [
             { qui: '', text: 'A l\'extrem de ponent del jardí, una prunera vella i retorçuda, carregada de prunes d\'un lila que lluu com si fossin de vidre.' },
             { qui: 'Isidre', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes màgiques: una sola et deixa com nou.' },
             { qui: '', text: 'Menges una pruna. Té gust de tardor, de mel i de música. Et sents completament renovat.' }
-        ],
-        enAcabar: () => { E.dades.vida = E.dades.corsMax * 2; }
-    }),
+        ];
+        const perFont = !E.flag('fontNeta') && !E.te('pruna') && !E.flag('herba3');
+        if (perFont) pagines.push({ qui: '', text: 'En culls una altra i te la guardes al sarró: la Font del Bisbe en vol una.\nHas obtingut una PRUNA MÀGICA.' });
+        return {
+            pagines,
+            enAcabar: () => {
+                E.dades.vida = E.dades.corsMax * 2;
+                if (perFont) { E.dona('pruna'); if (E.flag('fontVista')) E.posaObjectiu(objectiuFont(ofrenesFont(E))); }
+            }
+        };
+    },
     hostatgeria: E => E.flag('mongesTrobades')
         ? { pagines: [{ qui: 'Charm', text: 'Entra, fill, que et farem una infusió.' }] }
         : { pagines: [{ qui: '', text: 'L\'Hostatgeria. Les portes són tancades per dins i els finestrals són foscos.' }] },
@@ -1051,7 +1080,10 @@ const DIALEGS = {
 
     telescopiMon: E => {
         if (E.flag("estelLlorenc")) {
-            return { pagines: [{ qui: "", text: "El mirador dels Dipòsits. El cel és ple d'estels, i un d'ells brilla una mica més que els altres, cap al sud-est." }] };
+            return { pagines: [{ qui: "", text: "El mirador dels Dipòsits. El cel és ple d'estels, i les llàgrimes de Sant Llorenç ja han dit el que havien de dir." }] };
+        }
+        if (E.flag("estelsFets")) {
+            return { pagines: [{ qui: "Ineu", text: "L'últim estel s'ha apagat damunt del dipòsit de llevant. Hi ha una llum a l'aigua: he d'anar-hi." }] };
         }
         if (!E.te("telescopi")) {
             return { pagines: [
@@ -1064,9 +1096,33 @@ const DIALEGS = {
                 { qui: "", text: "Poses el telescopi del Garf a la tripode. La nit és neta i freda, i fa olor de pedra mullada." },
                 { qui: "Ineu", text: "Diuen que per Sant Llorenç el cel plora. Compta les llàgrimes... i potser et mostraran alguna cosa." }
             ],
-            enAcabar: () => game.scene.start("Estels")
+            enAcabar: () => { E.posaFlag("telescopiMuntat"); game.scene.start("Estels"); }
         };
     },
+
+    // La llum que ha deixat l'últim estel a l'aigua del dipòsit de llevant
+    estelDiposit: E => ({
+        pagines: [
+            { qui: "", text: "T'enfiles per l'escala de ferro del dipòsit. A l'aigua, arran del coronament, sura una pedreta que fa una llum freda i blava, com la dels estels fugaços." },
+            { qui: "", text: "Has obtingut l'ESTEL DE SANT LLORENÇ: una llàgrima de llum que no crema ni s'apaga." },
+            { qui: "Ineu", text: "Fa la mateixa claror que els set estels... Diuen que la boira no gosa tocar la llum de Sant Llorenç. El camí del Dolmen, a llevant, n'és ple." }
+        ],
+        enAcabar: () => {
+            E.posaFlag("estelLlorenc"); E.dona("estel_llorenc");
+            E.posaObjectiu("Porta l'Estel de Sant Llorenç a la boira que tapa el camí del Dolmen, a llevant dels Dipòsits.");
+            E.desar();
+        }
+    }),
+
+    // La boira que tapa el camí del Dolmen: només l'aparta la llum de l'Estel de Sant Llorenç
+    boiraDolmen: E => E.te("estel_llorenc")
+        ? { pagines: [
+            { qui: "", text: "L'Estel de Sant Llorenç s'encén a la teva mà. La boira recula davant la seva llum, s'esfilagarsa i deixa veure un corriol que s'enfila entre els arbres." }
+        ] }
+        : { pagines: [
+            { qui: "", text: "Una boira espessa i freda tapa el camí de llevant, el que puja al Dolmen. Quan t'hi acostes, s'espesseix encara més." },
+            { qui: "Ineu", text: "Aquí no s'hi veu res. Em caldria una llum que la boira no pogués apagar..." }
+        ] },
 
     // ---------------- DOLMEN ----------------
     dolmen: E => {
@@ -1179,7 +1235,6 @@ const DIALEGS = {
         { qui: 'Ineu', text: 'Des de dins se sent un fil de música d\'acordió, molt baixet... i una olor de fregit que no s\'acaba d\'esvair.' }
     ] }),
 
-    cartellCasaGran: E => ({ pagines: [{ qui: "", text: "La Casa Gran.\nLa reixa del porxo d'arcs fa generacions que és tancada amb cadenes. Diuen que ningú no en recorda la clau... ni si encara hi ha ningú a dins." }] }),
 
     // Cambra secreta dels monjos (sala del tresor, entre el Celler i la Casa Gran)
     cofreCambra: E => {

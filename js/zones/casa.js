@@ -191,6 +191,29 @@ class ZonaCasaBase extends ZonaBase {
         return this.add.rectangle(x, y, w, h, color).setStrokeStyle(4, 0x2a1a0c).setDepth(y - 60);
     }
 
+    // Aplic de ferro clavat a la paret: placa, volutes que aguanten el platet, espelma i flama. (x, y) és el platet.
+    aplic(x, y, i = 0, fons = -930) {
+        const ap = this.add.graphics().setDepth(fons);
+        ap.fillStyle(0xffc060, 0.08).fillCircle(x, y - 34, 46).fillStyle(0xffc060, 0.08).fillCircle(x, y - 34, 26);   // claror a la paret
+        ap.fillStyle(0x000000, 0.3).fillRoundedRect(x - 7, y - 4, 16, 34, 4);
+        ap.fillStyle(0x1e1a18, 1).fillRoundedRect(x - 8, y - 6, 16, 34, 4);
+        ap.fillStyle(0x4a4440, 1).fillCircle(x, y + 3, 2.2).fillCircle(x, y + 19, 2.2);
+        [-1, 1].forEach(s => {
+            ap.lineStyle(3.5, 0x1e1a18, 1).beginPath(); ap.arc(x + s * 8, y + 6, 8, Math.PI * 1.5, Math.PI * 0.5, s < 0); ap.strokePath();
+        });
+        ap.fillStyle(0x1e1a18, 1).fillEllipse(x, y - 3, 26, 7);
+        ap.fillStyle(0x5a524c, 1).fillEllipse(x, y - 4.5, 22, 3);
+        ap.fillStyle(0xeee2c4, 1).fillRect(x - 4, y - 30, 8, 26);
+        ap.fillStyle(0xc8b896, 1).fillRect(x + 1, y - 30, 3, 26);
+        ap.fillStyle(0xeee2c4, 1).fillEllipse(x - 4, y - 18, 3, 9);                                                         // regalim de cera
+        ap.lineStyle(1.5, 0x2a1608, 1).lineBetween(x, y - 30, x, y - 34);
+        const flama = this.add.graphics({ x, y: y - 34 }).setDepth(fons + 1);
+        flama.fillStyle(0xffb040, 0.35).fillCircle(0, -3, 9);
+        flama.fillStyle(0xffc860, 1).fillEllipse(0, -5, 8, 15);
+        flama.fillStyle(0xfff4c0, 1).fillEllipse(0, -3, 4, 8);
+        this.tweens.add({ targets: flama, alpha: 0.75, scaleY: 0.88, yoyo: true, repeat: -1, duration: 350 + i * 90 });
+    }
+
     espelmes(llista) {
         llista.forEach(([x, y], i) => {
             const e = this.posar('espelma', x, y, { fonsY: y });
@@ -242,7 +265,6 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.sortida(116, 690, 14, 100, 'ZonaCasaTresor', 'escala');
 
         this.espelmes([[330, 200], [1070, 200], [330, 760], [1070, 760]]);
-        this.cartell(900, 880, DIALEGS.cartellCasaGran);
         this.reixaPorxo();
 
         this.puzleRaim();
@@ -744,7 +766,7 @@ class ZonaGolfes extends ZonaCasaBase {
         this.colisio(810, 516, 96, 22);
         this.interactiu(810, 545, 60, DIALEGS.golfesPendol, { altura: 100 });
 
-        this.espelmes([[600, 520], [770, 590]]);
+        this.aplic(320, 290, 0); this.aplic(680, 290, 1);           // dos aplics a la paret, entre les cadenes i el rellotge
         this.sortida(440, 686, 120, 14, 'ZonaTorre', 'dalt');
         if (this.reparat) this.agullaMinuts.rotation = 0;
         this.objectiuGolfes();

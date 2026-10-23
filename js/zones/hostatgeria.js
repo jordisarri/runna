@@ -169,8 +169,8 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
             alcada: 900,
             colorFons: '#0a0806',
             entrades: {
-                soterrani: { x: 600, y: 760, dir: 'amunt' },
-                porta:     { x: 1000, y: 780, dir: 'amunt' },
+                soterrani: { x: 200, y: 760, dir: 'amunt' },
+                porta:     { x: 600, y: 780, dir: 'amunt' },
                 cambra1:   { x: 300, y: 220, dir: 'avall' },
                 cambra2:   { x: 600, y: 220, dir: 'avall' },
                 cambra3:   { x: 900, y: 220, dir: 'avall' }
@@ -198,20 +198,12 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
             murs.fillStyle(0x7a1f2a, 1).fillRect(x - 24, 6, 48, 70).lineStyle(2, 0xd4af37, 1).strokeRect(x - 20, 10, 40, 62);
             murs.fillStyle(0xd4af37, 1).fillTriangle(x - 10, 30, x + 10, 30, x, 52);
         });
-        // Catifa: del peu de l'escala del soterrani fins al centre, i una franja de porta a porta
+        // Catifa: de la porta de l'Hostatgeria (a baix, al mig) fins al centre, i una franja de porta a porta
         const cat = this.add.graphics().setDepth(-1050);
-        cat.fillStyle(0x6a1f24, 1).fillRect(540, 300, 120, 520).fillRect(260, 230, 680, 90);
-        cat.lineStyle(4, 0xc8a050, 1).strokeRect(548, 308, 104, 504).strokeRect(268, 238, 664, 74);
-        // Columnes amb capitell, a banda i banda de la sala
-        const col = this.add.graphics();
-        [[230, 420], [970, 420], [230, 680], [970, 680]].forEach(([x, y]) => {
-            this.colisio(x, y - 10, 46, 24);
-            const c = this.add.graphics().setDepth(y);
-            c.fillStyle(0x000000, 0.3).fillEllipse(x, y, 60, 16);
-            c.fillStyle(0x8a7e70, 1).fillRect(x - 22, y - 16, 44, 16).fillStyle(0xa89c8c, 1).fillRect(x - 16, y - 150, 32, 136);
-            c.fillStyle(0xc4b8a6, 1).fillRect(x - 12, y - 150, 8, 136).fillStyle(0x8a7e70, 1).fillRect(x - 24, y - 166, 48, 18);
-            c.lineStyle(2, 0x2a2018, 1).strokeRect(x - 16, y - 150, 32, 136).strokeRect(x - 24, y - 166, 48, 18).strokeRect(x - 22, y - 16, 44, 16);
-        });
+        cat.fillStyle(0x6a1f24, 1).fillRect(540, 300, 120, 590).fillRect(260, 230, 680, 90);
+        cat.lineStyle(4, 0xc8a050, 1).strokeRect(548, 308, 104, 590).strokeRect(268, 238, 664, 74);
+        // Aplics a la paret del fons, entre les portes i les finestres
+        [375, 515, 685, 825].forEach((x, i) => this.aplic(x, 66, i, -990));
         // Bancs contra les parets laterals
         this.posar('banc_respatller', 200, 560, { col: { w: 140, h: 16 } });
         this.posar('banc_respatller', 1000, 300, { col: { w: 140, h: 16 } });
@@ -219,8 +211,8 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         this.colisio(A - 50, H / 2, 80, H);
         // Paret del fons, amb un forat de 90 a cada porta
         [[130, 255], [345, 555], [645, 855], [945, 1070]].forEach(([a, b]) => this.colisio((a + b) / 2, 85, b - a, 170));
-        // Paret de baix: forat de l'escala del soterrani (530-670) i de la porta de l'Hostatgeria (940-1060)
-        [[0, 530], [670, 940], [1060, A]].forEach(([a, b]) => this.colisio((a + b) / 2, H - 10, b - a, 20));
+        // Paret de baix: forat de l'escala del soterrani (140-260, al racó) i de la porta de l'Hostatgeria (540-660)
+        [[0, 140], [260, 540], [660, A]].forEach(([a, b]) => this.colisio((a + b) / 2, H - 10, b - a, 20));
 
         // Portes del fons: l'obertura s'omple amb la porta de fusta; la de les cambres és la sortida
         PX.forEach((x, i) => {
@@ -239,22 +231,29 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         this.esbarzer(880, 215, 'host_cap1'); this.esbarzer(924, 215, 'host_cap2');
         this.interactiu(900, 255, 90, DIALEGS.esbarzersCapella, { altura: 90, actiu: () => this.esbarzers.some(o => o.viu) });
 
-        // Escala que baixa al soterrani (els graons s'enfosqueixen cap a baix)
+        // Escala que baixa al soterrani, arraconada a baix a l'esquerra, entre la paret i una barana de fusta:
+        // els graons s'enfosqueixen cap a baix i no hi arriba la catifa
         const e = this.add.graphics().setDepth(-980);
+        e.fillStyle(0x0a0604, 1).fillRect(140, 806, 120, 94);
         for (let i = 0; i < 6; i++) {
-            const c = [0xb8a278, 0x9a8460, 0x7a6648, 0x5a4a36, 0x3a2e22, 0x1a1410][i];
-            e.fillStyle(c, 1).fillRect(550, 812 + i * 14, 100, 14);
-            e.lineStyle(1, 0x120c08, 0.8).lineBetween(550, 826 + i * 14, 650, 826 + i * 14);
+            const c = [0x6a5a44, 0x54463a, 0x40342a, 0x2e241c, 0x1e1812, 0x120c08][i];
+            e.fillStyle(c, 1).fillRect(146, 812 + i * 14, 108, 14);
+            e.lineStyle(1, 0x0a0604, 0.8).lineBetween(146, 826 + i * 14, 254, 826 + i * 14);
         }
-        this.sortida(540, 840, 120, 40, 'ZonaSoterraniHost', 'escala');
-        // Porta de l'Hostatgeria a baix a la dreta: tancada fins que les monges l'obren
-        this.porta(1000, 884, 120, 30, 0x4a2c16);
-        this.sortida(940, 872, 120, 28, 'ZonaJardi', 'hostatgeria');
+        e.fillStyle(0x000000, 0.35).fillRect(140, 806, 120, 94);
+        const barana = this.add.graphics().setDepth(900);                                   // barana del costat de la sala
+        barana.fillStyle(0x2a1a0c, 1).fillRect(262, 760, 9, 140);
+        barana.fillStyle(0x5a3a1e, 1).fillRect(258, 752, 17, 10).fillRect(263, 762, 4, 138);
+        for (let y = 776; y < 900; y += 20) barana.fillStyle(0x3a2412, 1).fillRect(259, y, 15, 4);
+        this.colisio(266, 830, 14, 140);
+        this.sortida(150, 870, 100, 30, 'ZonaSoterraniHost', 'escala');
+        // Porta de l'Hostatgeria, a baix al mig: tancada fins que les monges l'obren
+        this.porta(600, 884, 120, 30, 0x4a2c16);
+        this.sortida(540, 872, 120, 28, 'ZonaJardi', 'hostatgeria');
 
         // Una taula d'infusions: lloc de repòs un cop les monges són lliures
         this.posar('taula', 1040, 560, { escala: 0.9, col: { w: 100, h: 24 } });
         this.interactiu(1040, 590, 85, () => this.descans(), { altura: 90, actiu: () => Estat.flag('mongesTrobades') });
-        this.espelmes([[250, 330], [950, 330], [250, 640], [950, 640]]);
         this.boira(600, 450, 900, 260, 1.2);
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.1).setDepth(80000);
     }
@@ -291,13 +290,59 @@ class CambraMonja extends ZonaCasaBase {
         const A = 800, H = 620, m = this.monja;
         this.sala(A, H, 400, m === 'pains' ? 0x7a6a5e : m === 'charm' ? 0x8a7a6e : 0x8a7260);
         this.sortida(350, H - 22, 100, 14, 'ZonaHostatgeriaInt', { pains: 'cambra1', phili: 'cambra2', charm: 'cambra3' }[m]);
-        if (m === 'pains') {                                           // dormitori: quatre llits estrets
-            const llits = this.add.graphics().setDepth(-950);
-            [[200, 260], [420, 260], [620, 260], [200, 430]].forEach(([x, y]) => {
-                llits.fillStyle(0x5a3a22, 1).fillRect(x - 40, y - 18, 80, 130).lineStyle(2, 0x120c08, 1).strokeRect(x - 40, y - 18, 80, 130);
-                llits.fillStyle(0xe8dcc4, 1).fillRect(x - 34, y - 12, 68, 36);
-                llits.fillStyle(0x6a7a9a, 1).fillRect(x - 34, y + 24, 68, 82);
+        // Paret del fons: arrebossat amb taques de calç, un sòcol de fusta i dos aplics
+        const paret = this.add.graphics().setDepth(-995);
+        paret.fillStyle(m === 'charm' ? 0x5a4a40 : 0x6a5646, 1).fillRect(130, 0, A - 260, 90);
+        let sd = m.length * 7; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        for (let k = 0; k < 14; k++) paret.fillStyle(0xffffff, 0.04 + r() * 0.05).fillEllipse(150 + r() * 500, 8 + r() * 50, 30 + r() * 50, 10 + r() * 14);
+        paret.fillStyle(0x4a2e1a, 1).fillRect(130, 64, A - 260, 26);
+        paret.fillStyle(0xffd9a0, 0.18).fillRect(130, 64, A - 260, 3);
+        for (let x = 150; x < A - 130; x += 36) paret.lineStyle(1, 0x2a1a0c, 0.7).lineBetween(x, 68, x, 88);
+        this.aplic(240, 50, 0, -990); this.aplic(560, 50, 1, -990);
+        // Finestra d'arc amb llum de lluna (a la capella, un rosetó de colors)
+        const fin = this.add.graphics().setDepth(-993);
+        if (m === 'charm') {
+            fin.fillStyle(0x2a1a0c, 1).fillCircle(400, 30, 26);
+            [0xc84a3a, 0x3a6ac8, 0xe8c050, 0x4a9a5a, 0xa04ac0, 0x3a6ac8, 0xe8c050, 0x4a9a5a].forEach((c, i) => {
+                fin.fillStyle(c, 0.9).slice(400, 30, 22, i * Math.PI / 4, (i + 1) * Math.PI / 4).fillPath();
             });
+            fin.fillStyle(0xfff0c0, 1).fillCircle(400, 30, 6).lineStyle(2, 0x2a1a0c, 1).strokeCircle(400, 30, 22);
+            this.add.ellipse(400, 250, 220, 90, 0xffe0a0, 0.08).setDepth(-1080);                       // claror del rosetó a terra
+        } else {
+            fin.fillStyle(0x2a1a0c, 1).fillRect(374, 6, 52, 52).fillCircle(400, 8, 26);
+            fin.fillStyle(0x7a9ac8, 0.6).fillRect(379, 10, 42, 46).fillCircle(400, 10, 21);
+            fin.lineStyle(3, 0x3a2a1a, 1).lineBetween(400, -10, 400, 56).lineBetween(379, 32, 421, 32);
+            fin.fillStyle(0x4a2e1a, 1).fillRect(368, 56, 64, 6);
+        }
+
+        if (m === 'pains') {                                           // dormitori: quatre llits estrets amb capçal, coixí i flassada
+            const llits = this.add.graphics().setDepth(-950);
+            const flassades = [0x5a6a8e, 0x6a8a5a, 0xa0784a, 0x9a5a6a];
+            const capcal = { tl: 10, tr: 10, bl: 0, br: 0 };
+            [[200, 260], [420, 260], [620, 260], [200, 430]].forEach(([x, y], i) => {
+                llits.fillStyle(0x000000, 0.25).fillRect(x - 38, y + 106, 84, 10);
+                llits.fillStyle(0x4a2e18, 1).fillRoundedRect(x - 44, y - 34, 88, 26, capcal).lineStyle(2, 0x120c08, 1).strokeRoundedRect(x - 44, y - 34, 88, 26, capcal);
+                llits.fillStyle(0x6a4424, 1).fillRect(x - 36, y - 28, 72, 4);
+                llits.fillStyle(0x5a3a22, 1).fillRect(x - 40, y - 10, 80, 122).lineStyle(2, 0x120c08, 1).strokeRect(x - 40, y - 10, 80, 122);
+                llits.fillStyle(0xe8dcc4, 1).fillRoundedRect(x - 32, y - 6, 64, 24, 8).lineStyle(1.5, 0x8a7a64, 1).strokeRoundedRect(x - 32, y - 6, 64, 24, 8);
+                llits.fillStyle(0xf4ecd8, 1).fillRect(x - 36, y + 22, 72, 12);                                   // llençol girat
+                llits.fillStyle(flassades[i], 1).fillRect(x - 36, y + 32, 72, 76);
+                llits.lineStyle(1.5, 0xffffff, 0.25);
+                for (let k = 1; k < 4; k++) llits.lineBetween(x - 36, y + 32 + k * 19, x + 36, y + 32 + k * 19).lineBetween(x - 36 + k * 18, y + 32, x - 36 + k * 18, y + 108);
+                llits.lineStyle(2, 0x120c08, 1).strokeRect(x - 36, y + 22, 72, 86);
+            });
+            [[310, 250], [520, 250]].forEach(([x, y]) => {                                         // tauletes de nit amb un llibre i un càntir
+                this.colisio(x, y + 8, 40, 20);
+                const t = this.add.graphics().setDepth(y + 20);
+                t.fillStyle(0x000000, 0.25).fillEllipse(x, y + 20, 46, 10);
+                t.fillStyle(0x4a2e18, 1).fillRect(x - 20, y - 26, 40, 46).lineStyle(2, 0x120c08, 1).strokeRect(x - 20, y - 26, 40, 46);
+                t.fillStyle(0x6a4424, 1).fillRect(x - 22, y - 30, 44, 8).strokeRect(x - 22, y - 30, 44, 8);
+                t.fillStyle(0xcfb36a, 1).fillCircle(x, y - 4, 2.5);
+                t.fillStyle(0x7a2a2a, 1).fillRect(x - 15, y - 38, 16, 8).strokeRect(x - 15, y - 38, 16, 8);
+                t.fillStyle(0xb8a07a, 1).fillEllipse(x + 10, y - 38, 12, 18).strokeEllipse(x + 10, y - 38, 12, 18);
+            });
+            const cat = this.add.graphics().setDepth(-1050);                                     // estora entre els llits
+            cat.fillStyle(0x8a6a3a, 1).fillRoundedRect(430, 410, 180, 120, 10).lineStyle(3, 0x5a3a1a, 1).strokeRoundedRect(438, 418, 164, 104, 8);
             this.colisio(200, 330, 80, 130); this.colisio(420, 330, 80, 130); this.colisio(620, 330, 80, 130); this.colisio(200, 500, 80, 130);
             this.pains = this.npc('monja_pains', 520, 470, DIALEGS.monjaPains);
             this.capoll = this.add.ellipse(520, 420, 130, 150, 0xa070ff, 0.5).setDepth(9000).setStrokeStyle(3, 0x6a40b0, 0.8);
@@ -305,16 +350,50 @@ class CambraMonja extends ZonaCasaBase {
             this.boiraCapoll = this.boira(520, 430, 120, 110, 1.4);
             this.llocFlauta('pains', 520, 480, 300, false, () => !Estat.flag('lliurePains'));
             if (Estat.flag('lliurePains')) this.alliberada(true);
-        } else if (m === 'phili') {                                    // refetor: una taula llarga amb tamborets
+        } else if (m === 'phili') {                                    // refetor: taula llarga, aparador amb plats, faristol i rastells d'alls
             this.posar('taula_sopar', 400, 330, { col: { w: 360, h: 40 } });
             [[260, 380], [540, 380], [260, 280], [540, 280]].forEach(([x, y]) => this.posar('tamboret', x, y, { col: { w: 28, h: 12 } }));
             this.posar('barril', 130 + 40, 200, { col: { w: 40, h: 18 } });
+            const ap = this.add.graphics().setDepth(180);                                       // aparador contra la paret del fons, a la dreta
+            ap.fillStyle(0x000000, 0.25).fillEllipse(620, 180, 100, 14);
+            ap.fillStyle(0x4a2e18, 1).fillRect(578, 40, 84, 140).lineStyle(2, 0x120c08, 1).strokeRect(578, 40, 84, 140);
+            ap.fillStyle(0x2a1a0c, 1).fillRect(584, 46, 72, 70);
+            [66, 92].forEach(y => {
+                ap.fillStyle(0x6a4424, 1).fillRect(584, y + 18, 72, 4);
+                for (let k = 0; k < 4; k++) ap.fillStyle(0xe8e0cc, 1).fillCircle(594 + k * 17, y + 8, 7.5).lineStyle(1.5, 0x3a6a9a, 1).strokeCircle(594 + k * 17, y + 8, 5);
+            });
+            ap.fillStyle(0x5a3a22, 1).fillRect(584, 124, 34, 50).fillRect(622, 124, 34, 50).lineStyle(1.5, 0x120c08, 1).strokeRect(584, 124, 34, 50).strokeRect(622, 124, 34, 50);
+            ap.fillStyle(0xcfb36a, 1).fillCircle(612, 150, 2.5).fillCircle(628, 150, 2.5);
+            this.colisio(620, 168, 90, 24);
+            const fa = this.add.graphics().setDepth(470);                                       // faristol amb el llibre de les lectures
+            fa.fillStyle(0x000000, 0.25).fillEllipse(200, 470, 50, 10);
+            fa.fillStyle(0x4a2e18, 1).fillRect(196, 410, 8, 60).fillRect(184, 466, 32, 6);
+            fa.fillStyle(0x5a3a22, 1).fillPoints([{ x: 172, y: 404 }, { x: 228, y: 404 }, { x: 222, y: 386 }, { x: 178, y: 386 }], true);
+            fa.fillStyle(0xf4ecd8, 1).fillRect(180, 388, 19, 14).fillRect(201, 388, 19, 14);
+            fa.lineStyle(1, 0x8a7a64, 1).lineBetween(183, 392, 196, 392).lineBetween(183, 396, 196, 396).lineBetween(204, 392, 217, 392).lineBetween(204, 396, 217, 396);
+            this.colisio(200, 464, 36, 14);
+            const alls = this.add.graphics().setDepth(-990);                                     // rastells d'alls i un pernil a la paret
+            [160, 300].forEach(x => {
+                alls.lineStyle(2, 0xc9b48a, 1).lineBetween(x, 6, x, 54);
+                for (let k = 0; k < 6; k++) alls.fillStyle(0xf0e8d8, 1).fillCircle(x + (k % 2 ? 5 : -5), 14 + k * 7, 5).lineStyle(1, 0x8a7a64, 1).strokeCircle(x + (k % 2 ? 5 : -5), 14 + k * 7, 5);
+            });
+            alls.fillStyle(0xa0503a, 1).fillEllipse(480, 36, 26, 44).lineStyle(2, 0x3a1a0c, 1).strokeEllipse(480, 36, 26, 44).lineBetween(480, 0, 480, 14);
             this.npc('monja_phili', 400, 470, DIALEGS.monjaPhili);
-        } else {                                                       // capella: altar i bancs
+        } else {                                                       // capella: rosetó, altar, catifa fins a l'altar, bancs i dues fornícules
+            const cat = this.add.graphics().setDepth(-1050);
+            cat.fillStyle(0x6a1f24, 1).fillRect(360, 270, 80, 340);
+            cat.lineStyle(3, 0xc8a050, 1).strokeRect(366, 276, 68, 334);
             this.posar('altar', 400, 240, { col: { w: 140, h: 36 } });
             this.posar('banc_esglesia', 270, 400, { escala: 0.8, col: { w: 110, h: 16 } });
             this.posar('banc_esglesia', 530, 400, { escala: 0.8, col: { w: 110, h: 16 } });
-            this.espelmes([[330, 230], [470, 230]]);
+            const ni = this.add.graphics().setDepth(-990);                                       // fornícules amb la Mare de Déu i un sant
+            [[170, 0x3a5a9a], [630, 0x8a3a3a]].forEach(([x, mant]) => {
+                ni.fillStyle(0x2a1a0c, 1).fillRect(x - 18, 4, 36, 56).fillCircle(x, 6, 18);
+                ni.fillStyle(0x4a3a30, 1).fillRect(x - 14, 8, 28, 50).fillCircle(x, 8, 14);
+                ni.fillStyle(mant, 1).fillTriangle(x, 12, x - 10, 56, x + 10, 56);
+                ni.fillStyle(0xf4ecd8, 1).fillCircle(x, 16, 4.5);
+                ni.lineStyle(1.5, 0xe8c050, 0.9).strokeCircle(x, 15, 7.5);
+            });
             this.npc('monja_charm', 400, 340, DIALEGS.monjaCharm);
         }
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.08).setDepth(80100);
