@@ -82,7 +82,7 @@ const CATALEG = [
     { key: 'llosa',     file: 'assets/objectes/llosa.png',     amplada: 90,  provisional: (c, w) => dibuixarLlosa(c, w) },
 
     // ---- Enemics ----
-    { key: 'escolopendra', file: 'assets/enemics/escolopendra.png', amplada: 64, provisional: (c, w) => dibuixarEscolopendra(c, w) },
+    { key: 'escolopendra', file: 'assets/enemics/escolopendra.png', amplada: 76, fotogrames: 8, provisional: (c, w) => dibuixarEscolopendra(c, w, 8) },   // full de 8 fotogrames (caminar)
     { key: 'gripau',       file: 'assets/enemics/gripau.png',       amplada: 56, provisional: (c, w) => dibuixarGripau(c, w) },
     { key: 'visitant',     file: 'assets/enemics/visitant.png',     amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e0a040', pell: '#9ab080', cabell: '#5a4a3a', alt: 0.98, extra: 'gorra', ulleres: true }) },
     { key: 'branca',       file: 'assets/natura/branca.webp',       amplada: 80, provisional: (c, w) => dibuixarBranca(c, w) },
@@ -287,6 +287,10 @@ const Grafics = {
 
     // Animacions de caminar de l'Ineu (són globals: es creen una sola vegada)
     animacions(scene) {
+        // L'escolopendra caminant (ondula el cos i les potes)
+        if (!scene.anims.exists('cempeus') && scene.textures.get('escolopendra').has(0)) {
+            scene.anims.create({ key: 'cempeus', frames: scene.anims.generateFrameNumbers('escolopendra', { start: 0, end: 7 }), frameRate: 16, repeat: -1 });
+        }
         (Grafics.atacsVista || []).forEach(dir => {
             const key = 'atac_' + dir;
             if (scene.anims.exists(key)) scene.anims.remove(key);
@@ -373,7 +377,10 @@ const Grafics = {
         }
         if (scene.textures.exists(item.key)) scene.textures.remove(item.key);
         scene.textures.addCanvas(item.key, canvas);
-        scene.textures.get(item.key).customData.escala = 1 / RES;
+        const tex = scene.textures.get(item.key);
+        tex.customData.escala = 1 / RES;
+        // Fulls d'animació: fotogrames 0..n-1 en una fila, de l'amplada de l'element
+        if (item.fotogrames) for (let i = 0; i < item.fotogrames; i++) tex.add(i, 0, i * w, 0, w, canvas.height);
     },
 
     // Textures que sempre es generen per codi (terra, boira, etc.)

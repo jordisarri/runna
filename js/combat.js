@@ -27,7 +27,13 @@ const ENEMICS = {
             }
             const quiet = ara < (e.pausaFins || 0);
             e.spr.body.setVelocity(quiet ? 0 : Math.cos(e.ang) * this.vel, quiet ? 0 : Math.sin(e.ang) * this.vel);
-            e.spr.rotation = e.ang + Math.sin(ara / 70) * 0.12;
+            // Mira cap on camina (gira suau) i les potes es mouen només quan avança
+            e.spr.rotation = Phaser.Math.Angle.RotateTo(e.spr.rotation, e.ang, 0.18);
+            if (z.anims.exists('cempeus')) {
+                if (!quiet && !e.spr.anims.isPlaying) e.spr.play('cempeus', true);
+                else if (quiet && e.spr.anims.isPlaying) e.spr.anims.pause();
+                else if (!quiet && e.spr.anims.isPaused) e.spr.anims.resume();
+            }
         }
     },
 
@@ -184,8 +190,8 @@ Object.assign(ZonaBase.prototype, {
         if (!Estat.flag('combatActiu')) return null;
         const tex = this.textures.get(def.tex);
         const esc = ((tex.customData && tex.customData.escala) || 1 / RES);
-        const spr = this.physics.add.sprite(x, y, def.tex).setScale(esc);
-        const fw = tex.getSourceImage().width, fh = tex.getSourceImage().height;
+        const spr = this.physics.add.sprite(x, y, def.tex, tex.has(0) ? 0 : undefined).setScale(esc);   // (els fulls d'animació, al fotograma 0)
+        const fw = spr.width, fh = spr.height;
         spr.body.setSize(def.cos[0] / esc, def.cos[1] / esc);
         spr.body.setOffset((fw - def.cos[0] / esc) / 2, fh - def.cos[1] / esc);
         spr.setCollideWorldBounds(true);

@@ -256,40 +256,151 @@ class ZonaGabriel extends ZonaBase {
 }
 
 // ---------------- ERMITA DE SANT GABRIEL (interior) ----------------
+// Com l'ermita de debò: una sola nau estreta, de carreus ocres, amb volta apuntada; la paret del fons, de carreus més
+// vermellosos, amb l'arcàngel Gabriel de mosaic. Al davant, sobre un graó de pedra clara, l'altar de blocs amb una creu i
+// dos canelobres de ferro (i el Calze de Rosada), dos testos de flors i un terra de lloses grans i gastades.
+// Una espitllera a la paret de la dreta deixa entrar un raig de llum.
+const GAB = { A: 720, H: 1000, x0: 170, x1: 550, fons: 300, grao: 420 };
+
 class ZonaGabrielInt extends ZonaBase {
     constructor() {
         super('ZonaGabrielInt', {
             nom: 'Sant Gabriel',
-            amplada: 900,
-            alcada: 700,
+            amplada: GAB.A,
+            alcada: GAB.H,
             colorFons: '#140e0a',
             pacifica: true,
-            entrades: { porta: { x: 450, y: 620, dir: 'amunt' } }
+            entrades: { porta: { x: GAB.A / 2, y: GAB.H - 90, dir: 'amunt' } }
         });
     }
 
     construir() {
-        this.terra('rajola', 100, 40, 700, 660, -1100);
-        const murs = this.add.graphics().setDepth(-1000);
-        murs.fillStyle(0x2a1f18, 1).fillRect(60, 0, 40, 700).fillRect(800, 0, 40, 700);
-        murs.fillStyle(0x3a2c22, 1).fillRect(100, 0, 700, 70);
-        this.colisio(30, 350, 60, 700);
-        this.colisio(870, 350, 60, 700);
-        this.colisio(450, 55, 700, 110);
-        this.colisio(280, 690, 360, 20);
-        this.colisio(620, 690, 360, 20);
+        const { A, H, x0, x1, fons, grao } = GAB, cx = A / 2;
+        let sd = 7; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        const g = this.add.graphics().setDepth(-1000);
+        const carreus = (gx, y0, y1, xa, xb, alt, colors, junta) => {          // filades de carreus desplaçades
+            for (let y = y0, f = 0; y < y1; y += alt, f++) {
+                for (let x = xa - (f % 2) * 22; x < xb; x += 44 + (f * 7 + x) % 12) {
+                    const a = Math.max(x, xa), b = Math.min(x + 44, xb);
+                    if (b - a < 4) continue;
+                    gx.fillStyle(colors[Math.floor(r() * colors.length)], 1).fillRect(a + 1, y + 1, b - a - 2, Math.min(alt, y1 - y) - 2);
+                }
+                gx.lineStyle(1.5, junta, 0.7).lineBetween(xa, y, xb, y);
+            }
+        };
 
-        // Altar petit amb una creu i el Calze de Rosada
-        this.posar('altar', 450, 260, { col: { w: 140, h: 36 } });
-        [-90, 90].forEach(dx => {
-            const e = this.posar('espelma', 450 + dx, 270, { fonsY: 250 });
-            this.tweens.add({ targets: e, alpha: 0.75, yoyo: true, repeat: -1, duration: 350 + dx });
+        // Volta (ocre) i parets dels costats, vistes de cara: carreus que s'enfosqueixen cap a les vores
+        g.fillStyle(0x2a1e14, 1).fillRect(0, 0, A, H);
+        carreus(g, 0, fons, 70, A - 70, 22, [0xb89a64, 0xa88a58, 0xc4a670, 0x9c8050], 0x5a4628);
+        carreus(g, fons, H, 70, x0, 26, [0xa88c5a, 0x98804e, 0xb49a66], 0x5a4628);
+        carreus(g, fons, H, x1, A - 70, 26, [0xa88c5a, 0x98804e, 0xb49a66], 0x5a4628);
+        g.fillStyle(0x000000, 0.35).fillRect(70, 0, 30, H).fillRect(A - 100, 0, 30, H);
+        g.lineStyle(4, 0x3a2a18, 1).lineBetween(x0, fons, x0, H).lineBetween(x1, fons, x1, H);
+        g.fillStyle(0x000000, 0.18).fillRect(x0, fons, 14, H - fons).fillRect(x1 - 14, fons, 14, H - fons);
+
+        // Paret del fons amb l'arc apuntat de la volta (carreus vermellosos) i les juntes de la volta que hi convergeixen
+        const h = fons - 40, R = (((x1 - x0) / 2) ** 2 + h * h) / (2 * ((x1 - x0) / 2)), arc = [];   // arc apuntat: dos cercles de radi R
+        for (let k = 0; k <= 20; k++) {                                       // costat esquerre: centre a la dreta
+            const ax = x0 + R, a0 = Math.PI, a1 = Math.PI + Math.atan2(h, R - (x1 - x0) / 2), a = a0 + (a1 - a0) * k / 20;
+            arc.push({ x: ax + Math.cos(a) * R, y: fons + Math.sin(a) * R });
+        }
+        for (let k = 20; k >= 0; k--) {                                       // costat dret: simètric
+            const p = arc[k]; arc.push({ x: 2 * cx - p.x, y: p.y });
+        }
+        arc.push({ x: x1, y: fons }, { x: x0, y: fons });
+        const fonsG = this.add.graphics().setDepth(-998);
+        fonsG.fillStyle(0x9a5a3e, 1).fillPoints(arc, true);
+        const mask = this.make.graphics({ add: false }).fillPoints(arc, true).createGeometryMask();
+        const carr = this.add.graphics().setDepth(-997).setMask(mask);
+        carreus(carr, 0, fons, x0, x1, 22, [0xa8644a, 0x9a5a40, 0xb47058, 0x8e5038, 0xa86a4c], 0x4a2a1a);
+        fonsG.lineStyle(5, 0x5a4628, 1).strokePoints(arc.slice(0, 42), false);
+        for (let k = 1; k < 20; k += 2) {                                     // juntes de la volta, radials
+            [arc[k], arc[41 - k]].forEach(p => g.lineStyle(1.5, 0x5a4628, 0.6).lineBetween(p.x, p.y, p.x + (p.x - cx) * 0.35, p.y - 34));
+        }
+        g.fillStyle(0xffffff, 0.06).fillRect(cx - 30, 0, 60, fons);          // llum a la clau de la volta
+
+        // L'arcàngel Gabriel de mosaic: ales obertes, aurèola, túnica i un lliri a la mà
+        const gb = this.add.graphics().setDepth(-996), gx = cx, gy = 150;
+        gb.fillStyle(0x6a5a40, 0.6).fillRoundedRect(gx - 52, gy - 70, 104, 150, 10);
+        gb.fillStyle(0xd8d0b8, 1).fillTriangle(gx - 8, gy - 30, gx - 48, gy - 64, gx - 40, gy + 40);    // ales
+        gb.fillStyle(0xc8bea4, 1).fillTriangle(gx + 8, gy - 30, gx + 46, gy - 60, gx + 36, gy + 36);
+        gb.lineStyle(1.2, 0x8a7a5a, 0.8);
+        for (let k = 0; k < 5; k++) { gb.lineBetween(gx - 12, gy - 26 + k * 12, gx - 44, gy - 58 + k * 20); gb.lineBetween(gx + 12, gy - 26 + k * 12, gx + 42, gy - 54 + k * 18); }
+        gb.fillStyle(0xe8c860, 0.9).fillCircle(gx, gy - 44, 15);                                     // aurèola
+        gb.fillStyle(0xe8c8a0, 1).fillCircle(gx, gy - 44, 9);
+        gb.fillStyle(0xc8b48a, 1).fillPoints([{ x: gx - 12, y: gy - 32 }, { x: gx + 12, y: gy - 32 }, { x: gx + 20, y: gy + 62 }, { x: gx - 20, y: gy + 62 }], true);
+        gb.fillStyle(0xa89060, 1).fillPoints([{ x: gx - 4, y: gy - 30 }, { x: gx + 12, y: gy - 30 }, { x: gx + 16, y: gy + 62 }, { x: gx + 2, y: gy + 62 }], true);
+        gb.lineStyle(2, 0x3a5a2a, 1).lineBetween(gx + 18, gy - 20, gx + 20, gy + 60);               // la tija del lliri
+        gb.fillStyle(0xf4f0e0, 1).fillCircle(gx + 18, gy - 24, 5).fillCircle(gx + 13, gy - 20, 4).fillCircle(gx + 23, gy - 20, 4);
+        for (let k = 0; k < 60; k++) gb.fillStyle(0xffffff, 0.12 + r() * 0.12).fillRect(gx - 50 + r() * 100, gy - 68 + r() * 146, 2, 2);   // tessel·les
+        this.interactiu(cx - 150, fons + 40, 70, () => ({ pagines: [{ qui: '', text: "A la paret del fons, l'arcàngel Gabriel fet de petites pedres de colors: les ales obertes i un lliri a la mà. Amb la llum de l'espitllera, sembla que es mogui." }] }), { altura: 220 });
+
+        // Espitllera a la paret de la dreta i el raig de llum que travessa la nau
+        g.fillStyle(0x1a120a, 1).fillRect(x1 + 26, fons + 20, 16, 90);
+        g.fillStyle(0xfff0c8, 0.85).fillRect(x1 + 30, fons + 26, 8, 78);
+        const raig = this.add.graphics().setDepth(80001).setBlendMode('ADD');
+        raig.fillStyle(0xfff0c8, 0.09).fillPoints([{ x: x1 + 30, y: fons + 26 }, { x: x1 + 38, y: fons + 104 }, { x: cx - 40, y: fons + 330 }, { x: cx - 120, y: fons + 250 }], true);
+        this.tweens.add({ targets: raig, alpha: 0.6, yoyo: true, repeat: -1, duration: 3000, ease: 'Sine.easeInOut' });
+
+        // Terra de lloses grans, gastades i esquerdades
+        const terra = this.add.graphics().setDepth(-995);
+        terra.fillStyle(0x8e8a80, 1).fillRect(x0, fons, x1 - x0, H - fons);
+        for (let y = grao + 16, f = 0; y < H; f++) {
+            const alt = Math.min(60 + r() * 50, H - y);
+            for (let x = x0; x < x1;) {
+                const amp = 70 + r() * 90, b = Math.min(x + amp, x1);
+                terra.fillStyle([0xc8c4b8, 0xbab6aa, 0xd2cec2, 0xb0aca0][Math.floor(r() * 4)], 1).fillRect(x + 2, y + 2, b - x - 4, alt - 4);
+                if (r() < 0.4) terra.lineStyle(1.2, 0x6a665c, 0.6).lineBetween(x + r() * (b - x), y + 4, x + r() * (b - x), y + alt - 6);
+                if (r() < 0.25) terra.fillStyle(0x6a665c, 0.12).fillEllipse(x + (b - x) / 2, y + alt / 2, (b - x) * 0.6, alt * 0.4);
+                x = b;
+            }
+            y += alt;
+        }
+        terra.fillStyle(0x000000, 0.18).fillRect(x0, grao, 14, H - grao).fillRect(x1 - 14, grao, 14, H - grao);   // ombra arran de les parets
+
+        // El graó del presbiteri, de pedra clara, i l'altar de blocs
+        const pr = this.add.graphics().setDepth(-994);
+        pr.fillStyle(0xd8d2c2, 1).fillRect(x0, fons, x1 - x0, grao - fons);
+        pr.lineStyle(1.2, 0xa8a090, 0.8);
+        for (let x = x0 + 76; x < x1; x += 76) pr.lineBetween(x, fons, x, grao);
+        pr.lineBetween(x0, fons + 60, x1, fons + 60);
+        pr.fillStyle(0xb4ac9a, 1).fillRect(x0, grao, x1 - x0, 16);
+        pr.lineStyle(2, 0x6a6458, 1).lineBetween(x0, grao, x1, grao).lineBetween(x0, grao + 16, x1, grao + 16);
+        const al = this.add.graphics().setDepth(395), ay = 395;
+        al.fillStyle(0x000000, 0.2).fillRect(cx - 70, ay - 2, 146, 10);
+        al.fillStyle(0xe4dece, 1).fillRect(cx - 64, ay - 58, 128, 58).lineStyle(2, 0x6a6458, 1).strokeRect(cx - 64, ay - 58, 128, 58);
+        al.lineStyle(1.2, 0x9a9282, 1).lineBetween(cx - 64, ay - 29, cx + 64, ay - 29).lineBetween(cx - 20, ay - 58, cx - 20, ay - 29).lineBetween(cx + 24, ay - 58, cx + 24, ay - 29).lineBetween(cx, ay - 29, cx, ay);
+        al.fillStyle(0xf0ebdf, 1).fillRect(cx - 74, ay - 72, 148, 14).lineStyle(2, 0x6a6458, 1).strokeRect(cx - 74, ay - 72, 148, 14);
+        // Damunt l'altar: creu i canelobres de ferro, i el calze
+        al.fillStyle(0x1e1c1a, 1).fillRect(cx - 2, ay - 132, 4, 60).fillRect(cx - 16, ay - 118, 32, 4).fillRect(cx - 10, ay - 76, 20, 4);
+        [-44, 44].forEach(dx => {
+            al.fillStyle(0x1e1c1a, 1).fillRect(cx + dx - 1.5, ay - 94, 3, 22).fillRect(cx + dx - 8, ay - 76, 16, 4).fillRect(cx + dx - 7, ay - 96, 14, 3);
+            al.fillStyle(0xf4f0e4, 1).fillRect(cx + dx - 3, ay - 112, 6, 16);
         });
-        this.interactiu(450, 300, 90, DIALEGS.altarGabriel, { altura: 100 });
-        [270, 630].forEach(x => this.posar('banc', x, 470, { col: { w: 140, h: 16 } }));
+        al.fillStyle(0xc8ccd4, 1).fillRect(cx - 28, ay - 84, 10, 4).fillTriangle(cx - 30, ay - 96, cx - 16, ay - 96, cx - 23, ay - 86).fillRect(cx - 24, ay - 86, 2, 4);
+        [-44, 44].forEach((dx, i) => {
+            const fl = this.add.ellipse(cx + dx, ay - 118, 6, 11, 0xffc860).setDepth(396);
+            this.tweens.add({ targets: fl, scaleY: 1.25, alpha: 0.75, yoyo: true, repeat: -1, duration: 300 + i * 110 });
+            this.add.circle(cx + dx, ay - 118, 22, 0xffc860, 0.12).setDepth(396).setBlendMode('ADD');
+        });
+        this.colisio(cx, ay - 20, 150, 40);
+        // Dos testos de flors seques al peu del graó
+        [-40, 40].forEach(dx => {
+            const t = this.add.graphics().setDepth(grao + 30);
+            t.fillStyle(0x2e5a22, 1).fillCircle(cx + dx - 5, grao + 14, 6).fillCircle(cx + dx + 5, grao + 12, 6).fillCircle(cx + dx, grao + 8, 6);
+            [[-6, 10, 0xe8c050], [4, 6, 0xd84a3a], [7, 14, 0xe8c050], [-2, 4, 0xf4f0e0]].forEach(([fx, fy, c]) => t.fillStyle(c, 1).fillCircle(cx + dx + fx, grao + fy, 2.5));
+            t.fillStyle(0xa0563a, 1).fillEllipse(cx + dx, grao + 22, 26, 10).lineStyle(1.5, 0x4a2414, 1).strokeEllipse(cx + dx, grao + 22, 26, 10);
+        });
+        this.interactiu(cx, grao + 40, 90, DIALEGS.altarGabriel, { altura: 140 });
 
-        this.add.rectangle(450, 350, 700, 700, 0xffd38a, 0.04).setDepth(80000);
-        this.sortida(410, 680, 80, 14, 'ZonaGabriel', 'interior');
+        // Parets i porta
+        this.colisio(x0 / 2, H / 2, x0, H);
+        this.colisio((x1 + A) / 2, H / 2, A - x1, H);
+        this.colisio(cx, fons / 2, x1 - x0, fons);
+        this.colisio((x0 + cx - 50) / 2, H - 10, cx - 50 - x0, 20);
+        this.colisio((cx + 50 + x1) / 2, H - 10, x1 - cx - 50, 20);
+        this.add.rectangle(cx, H / 2, A, H, 0xffd38a, 0.05).setDepth(80000);
+        this.sortida(cx - 50, H - 20, 100, 14, 'ZonaGabriel', 'interior');
     }
 }
 

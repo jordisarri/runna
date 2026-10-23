@@ -1066,7 +1066,7 @@ const DIALEGS = {
     // ---------------- SANT GABRIEL ----------------
     altarGabriel: E => ({
         pagines: [
-            { qui: "", text: "Un altar petit de pedra sense desbastar, amb una creu de fusta i un calze d'argent entelat, ple d'aigua de rosada del matí." },
+            { qui: "", text: "Un altar senzill de blocs de pedra clara, amb una creu i dos canelobres de ferro. Al costat de la creu, un calze d'argent entelat, ple d'aigua de rosada del matí." },
             ...(E.flag("calze") ? [] : [{ qui: "", text: "Un raig de claror baixa de la finestra i es posa al calze. És el CALZE DE ROSADA: cada cop que en beguis, et sentiràs renovat." }]),
             { qui: "", text: "Beus l'aigua fresca del calze. Et sents renovat." }
         ],

@@ -558,25 +558,83 @@ function dibuixarLlosa(c, w) {
 }
 
 // ---------------- ENEMICS ----------------
-function dibuixarEscolopendra(c, w) {
-    lienc(c, w, w * 0.4, (ctx, W, H) => {
-        ctx.lineWidth = 2; ctx.strokeStyle = CONTORN;
-        const n = 9;
-        for (let i = 0; i < n; i++) {
-            const x = W * 0.1 + i * (W * 0.78 / n), y = H * 0.5 + Math.sin(i * 0.9) * 3;
-            // potes
-            ctx.strokeStyle = '#6a2a14'; ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.moveTo(x, y - 12); ctx.lineTo(x - 2, y + 12); ctx.stroke();
-            ctx.strokeStyle = CONTORN; ctx.lineWidth = 2;
-            ctx.fillStyle = i % 2 ? '#a8481e' : '#c25a28';
-            ctx.beginPath(); ctx.ellipse(x, y, W * 0.055, H * 0.3, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+// Escolopendra (centpeus) vista de dalt, mirant a la dreta: un full de n fotogrames d'amplada w. El cos de segments
+// ondula (l'ona va del cap a la cua), cada segment té un parell de potes que es mouen en onada, i té el cap amb
+// antenes i pinces i els dos apèndixs llargs de la cua
+function dibuixarEscolopendra(c, w, n = 8) {
+    const fh = Math.round(w * 0.42);
+    c.width = w * n; c.height = fh;
+    const ctx = c.getContext('2d');
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const u = w / 200, N = 15;
+    for (let f = 0; f < n; f++) {
+        ctx.save(); ctx.translate(f * w, 0); ctx.scale(u, u);
+        const fase = f / n * Math.PI * 2, H = fh / u, mig = H / 2;
+        // Punts del cos (de la cua al cap), la seva direcció i la normal
+        const P = [];
+        for (let i = 0; i < N; i++) {
+            const t = i / (N - 1), x = 24 + t * 140;
+            const y = mig + Math.sin(t * Math.PI * 2.2 + fase) * 7 * (1 - 0.6 * t);
+            P.push({ x, y });
         }
-        // cap i antenes (a la dreta)
-        ctx.fillStyle = '#e0a020';
-        ctx.beginPath(); ctx.ellipse(W * 0.92, H * 0.5, W * 0.07, H * 0.32, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(W * 0.97, H * 0.4); ctx.lineTo(W, H * 0.15); ctx.moveTo(W * 0.97, H * 0.6); ctx.lineTo(W, H * 0.85); ctx.stroke();
-        ctx.fillStyle = '#d8ffd0'; ctx.fillRect(W * 0.94, H * 0.42, 3, 3);
-    });
+        P.forEach((p, i) => {
+            const a = P[Math.max(0, i - 1)], b = P[Math.min(N - 1, i + 1)], l = Math.hypot(b.x - a.x, b.y - a.y);
+            p.tx = (b.x - a.x) / l; p.ty = (b.y - a.y) / l; p.nx = -p.ty; p.ny = p.tx;
+        });
+        // Potes: un parell per segment, amb genoll, que es mouen endavant i enrere en onada
+        P.forEach((p, i) => {
+            if (i === 0 || i === N - 1) return;
+            [-1, 1].forEach(s => {
+                const sw = Math.sin(fase * 2 + i * 0.85 + (s > 0 ? Math.PI : 0)) * 0.55;
+                const kx = p.x + p.nx * s * 13 + p.tx * sw * 5, ky = p.y + p.ny * s * 13 + p.ty * sw * 5;
+                const fx = kx + p.nx * s * 7 + p.tx * (sw * 9 - 4), fy = ky + p.ny * s * 7 + p.ty * (sw * 9 - 4);
+                ctx.strokeStyle = '#2a1206'; ctx.lineWidth = 4.2;
+                ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(kx, ky); ctx.lineTo(fx, fy); ctx.stroke();
+                ctx.strokeStyle = '#f0a83a'; ctx.lineWidth = 2.2;
+                ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(kx, ky); ctx.lineTo(fx, fy); ctx.stroke();
+            });
+        });
+        // Apèndixs de la cua, llargs i una mica oberts
+        const q = P[0];
+        [-1, 1].forEach(s => {
+            const ex = q.x - q.tx * 26 + q.nx * s * 10, ey = q.y - q.ty * 26 + q.ny * s * 10;
+            ctx.strokeStyle = '#2a1206'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(q.x, q.y); ctx.quadraticCurveTo(q.x - q.tx * 14, q.y - q.ty * 14 + s * 2, ex, ey); ctx.stroke();
+            ctx.strokeStyle = '#e07a2a'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(q.x, q.y); ctx.quadraticCurveTo(q.x - q.tx * 14, q.y - q.ty * 14 + s * 2, ex, ey); ctx.stroke();
+        });
+        // Segments del cos: plaques fosques amb la vora taronja i una ratlla clara al mig
+        P.forEach((p, i) => {
+            const amp = i === 0 ? 7 : 10 + Math.sin(i / (N - 1) * Math.PI) * 1.5;
+            ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(Math.atan2(p.ty, p.tx));
+            ctx.fillStyle = '#1e0e08'; ctx.beginPath(); ctx.ellipse(0, 0, 7.4, amp + 1.6, 0, 0, Math.PI * 2); ctx.fill();
+            const g = ctx.createLinearGradient(0, -amp, 0, amp);
+            g.addColorStop(0, '#b84e1c'); g.addColorStop(0.35, '#6a2412'); g.addColorStop(0.65, '#4a180c'); g.addColorStop(1, '#a0441a');
+            ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, 0, 6.2, amp, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = 'rgba(255,200,140,0.35)'; ctx.fillRect(-4, -1.2, 8, 2.4);
+            ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.beginPath(); ctx.ellipse(-1, -amp * 0.5, 3, 2, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+        });
+        // Cap: pinces (forcípules), antenes que es belluguen, ulls
+        const h = P[N - 1], hx = h.x + h.tx * 9, hy = h.y + h.ty * 9, ha = Math.atan2(h.ty, h.tx);
+        ctx.save(); ctx.translate(hx, hy); ctx.rotate(ha);
+        [-1, 1].forEach(s => {
+            const ant = Math.sin(fase * 2 + s) * 4;
+            ctx.strokeStyle = '#2a1206'; ctx.lineWidth = 3.4;
+            ctx.beginPath(); ctx.moveTo(6, s * 4); ctx.quadraticCurveTo(20, s * (10 + ant), 32, s * (20 + ant)); ctx.stroke();
+            ctx.strokeStyle = '#d88a34'; ctx.lineWidth = 1.6;
+            ctx.beginPath(); ctx.moveTo(6, s * 4); ctx.quadraticCurveTo(20, s * (10 + ant), 32, s * (20 + ant)); ctx.stroke();
+            ctx.strokeStyle = '#1e0e08'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(2, s * 7); ctx.quadraticCurveTo(12, s * 10, 12, s * 2); ctx.stroke();
+            ctx.strokeStyle = '#8a2a12'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(2, s * 7); ctx.quadraticCurveTo(12, s * 10, 12, s * 2); ctx.stroke();
+        });
+        ctx.fillStyle = '#1e0e08'; ctx.beginPath(); ctx.ellipse(0, 0, 9.5, 10, 0, 0, Math.PI * 2); ctx.fill();
+        const gc = ctx.createRadialGradient(-2, -3, 1, 0, 0, 10);
+        gc.addColorStop(0, '#f0a040'); gc.addColorStop(1, '#a84a14');
+        ctx.fillStyle = gc; ctx.beginPath(); ctx.ellipse(0, 0, 8.2, 8.8, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#1a0a04'; [-1, 1].forEach(s => { ctx.beginPath(); ctx.arc(3.5, s * 4, 1.6, 0, Math.PI * 2); ctx.fill(); });
+        ctx.restore();
+        ctx.restore();
+    }
 }
 
 function dibuixarGripau(c, w) {
