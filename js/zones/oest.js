@@ -704,7 +704,8 @@ class ZonaDolmen extends ZonaBase {
     // El despertar de Runna: tot acció, sense narrador
     //  1. L'Ineu camina davant del dolmen i s'agenolla; la càmera s'hi acosta i el cel s'enfosqueix.
     //  2. La Fulla del Til·ler vola de l'Ineu a la pedra i s'hi encén d'or. El vent i les espurnes giren cap a l'espasa.
-    //  3. L'Ineu s'aixeca i crida «RIURE!»: la terra tremola i de l'espasa en surten raigs de llum.
+    //  3. L'Ineu s'aixeca i crida les paraules del monjo («La foscor tem la llum, però més encara el riure!»): la terra tremola
+    //     i de l'espasa en surten raigs de llum.
     //  4. L'espasa s'arrenca de la pedra, s'enlaira girant i baixa a la mà de l'Ineu, que l'alça. Esclat blanc.
     //  5. Rètol: RUNNA, l'espasa del Miracle.
     despertarRunna(fet) {
@@ -725,7 +726,7 @@ class ZonaDolmen extends ZonaBase {
             // 1. Davant la pedra, agenollat; la càmera s'hi acosta
             c => this.ineuVa(sx, sy + 70, c, 160),
             c => { this.posarDireccio('amunt', false); cam.stopFollow(); cam.pan(sx, ey + 40, 1400, 'Sine.easeInOut'); cam.zoomTo(1.35, 1600, 'Sine.easeInOut');
-                   this.tweens.add({ targets: fosc, alpha: 0.45, duration: 1600 }); this.ajupir('ineu', null, 2600); this.esperar(1000, c); },
+                   this.tweens.add({ targets: fosc, alpha: 0.45, duration: 1600 }); this.ajupir('ineu', null, 3400); this.esperar(1000, c); },
             // 2. La Fulla vola fins a la pedra i s'encén
             c => {
                 const f = this.add.ellipse(I.x, I.y - 70, 16, 26, 0xf0c040).setStrokeStyle(2, 0x8a6a10).setDepth(99000);
@@ -747,15 +748,22 @@ class ZonaDolmen extends ZonaBase {
                 so([110, 116], 'sawtooth', 0.06, 1.8);
                 this.esperar(1700, c);
             },
-            // 3. «RIURE!»: l'Ineu s'aixeca i ho crida
+            // 3. Les paraules del monjo, cridades en dos temps: «La foscor tem la llum...» i, amb tota la força, «...però més encara el riure!»
             c => {
-                const t = this.ui().add.text(AMPLE / 2, ALT * 0.36, 'RIURE!', { fontFamily: typeof FONT_TITOL !== 'undefined' ? FONT_TITOL : 'Georgia', fontSize: '110px', fontStyle: 'bold', color: '#fff4c0', stroke: '#3a2408', strokeThickness: 12 })
-                    .setOrigin(0.5).setDepth(500).setScale(0.2).setAlpha(0);
-                this.ui().tweens.add({ targets: t, scale: 1.15, alpha: 1, duration: 350, ease: 'Back.easeOut', onComplete: () => this.ui().tweens.add({ targets: t, alpha: 0, scale: 1.4, delay: 700, duration: 500, onComplete: () => t.destroy() }) });
-                this.tweens.add({ targets: I, y: I.y - 14, yoyo: true, duration: 180 });
-                cam.shake(900, 0.012);
-                so([262, 330, 392, 523], 'square', 0.12, 1.2);
-                this.esperar(900, c);
+                const ui = this.ui(), font = typeof FONT_TITOL !== 'undefined' ? FONT_TITOL : 'Georgia';
+                const estil = (mida, color) => ({ fontFamily: font, fontSize: mida + 'px', fontStyle: 'bold', color, stroke: '#2a1808', strokeThickness: Math.round(mida / 9), align: 'center', wordWrap: { width: AMPLE - 60 } });
+                const t1 = ui.add.text(AMPLE / 2, ALT * 0.3, 'La foscor\ntem la llum...', estil(60, '#e8e0d0')).setOrigin(0.5).setDepth(500).setAlpha(0);
+                ui.tweens.add({ targets: t1, alpha: 1, y: ALT * 0.29, duration: 600 });
+                so([196, 247], 'triangle', 0.15, 1.4);
+                this.esperar(1500, () => {
+                    ui.tweens.add({ targets: t1, alpha: 0, y: ALT * 0.24, duration: 400, onComplete: () => t1.destroy() });
+                    const t2 = ui.add.text(AMPLE / 2, ALT * 0.36, '...però més encara\nEL RIURE!', estil(84, '#fff4c0')).setOrigin(0.5).setDepth(500).setScale(0.3).setAlpha(0);
+                    ui.tweens.add({ targets: t2, scale: 1.1, alpha: 1, duration: 380, ease: 'Back.easeOut', onComplete: () => ui.tweens.add({ targets: t2, alpha: 0, scale: 1.35, delay: 1200, duration: 600, onComplete: () => t2.destroy() }) });
+                    this.tweens.add({ targets: I, y: I.y - 16, yoyo: true, duration: 200 });
+                    cam.shake(1100, 0.014);
+                    so([262, 330, 392, 523], 'square', 0.12, 1.4);
+                    this.esperar(1300, c);
+                });
             },
             // Raigs de llum que surten de l'espasa i giren
             c => {

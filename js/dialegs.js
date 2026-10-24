@@ -84,7 +84,7 @@ const DIALEGS = {
         }
         if (E.te("basto_tiller") && !E.flag("runna")) {
             return { pagines: [
-                { qui: "Pare Jordi", text: "Ineu, la gent diu que has parlat amb el Gran Til·ler. Per despertar Runna et calen tres coses: el permís de l'arbre (la Fulla), la Paraula del Saber del Pare Alcuí i la meva benedicció." },
+                { qui: "Pare Jordi", text: "Ineu, la gent diu que has parlat amb el Gran Til·ler. Per despertar Runna et calen tres coses: el permís de l'arbre (la Fulla), les Paraules del Saber del Pare Alcuí i la meva benedicció." },
                 { qui: "Pare Jordi", text: pistaRunna(E) }
             ] };
         }
@@ -523,14 +523,14 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pare Alcuí", text: "Has parlat amb l'ombra, oi? Fa temps que ho sospitava. A la Crònica hi ha un marge que no vaig saber llegir: una paraula esborrada, de la mateixa mà que va escriure els fragments." },
-                    { qui: "Pare Alcuí", text: "Amb el que m'expliques, ara ho entenc. «La foscor tem la llum, però més encara el riure.» La paraula que desperta Runna no és un conjur, fill: és «RIURE»." },
-                    { qui: "", text: "Has après la PARAULA DEL SABER: «RIURE»." }
+                    { qui: "Pare Alcuí", text: "Amb el que m'expliques, ara ho entenc. «La foscor tem la llum, però més encara el riure.» Aquestes són les paraules que desperten Runna, fill: no és un conjur, és una veritat. Digues-les davant l'espasa, senceres i amb tot el cor." },
+                    { qui: "", text: "Has après les PARAULES DEL SABER:\n«La foscor tem la llum, però més encara el riure.»" }
                 ],
                 enAcabar: () => { E.posaFlag("saber"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
             };
         }
         if (E.flag("fragment3")) {
-            return { pagines: [{ qui: "Pare Alcuí", text: E.flag("saber") ? "Ja saps la paraula, fill. Ara només cal que arribi el dia de pronunciar-la." : "Els dos fragments expliquen el mateix, fill: algú vigila el segell des de fa segles. " + (pistaRunna(E) || "Ves a les Runes i no tinguis por de l'ombra.") }] };
+            return { pagines: [{ qui: "Pare Alcuí", text: E.flag("saber") ? "Ja saps les paraules, fill. Ara només cal que arribi el dia de cridar-les." : "Els dos fragments expliquen el mateix, fill: algú vigila el segell des de fa segles. " + (pistaRunna(E) || "Ves a les Runes i no tinguis por de l'ombra.") }] };
         }
         if (f1 && f2) {
             return {
@@ -1187,7 +1187,7 @@ const DIALEGS = {
     dolmen: E => {
         const falta = [];
         if (!E.flag("fullaTiler")) falta.push("el permís del Til·ler (la Fulla)");
-        if (!E.flag("saber")) falta.push("la Paraula del Saber (Pare Alcuí)");
+        if (!E.flag("saber")) falta.push("les Paraules del Saber (Pare Alcuí)");
         if (!E.flag("benediccio")) falta.push("la Benedicció del prior (Pare Jordi)");
         if (falta.length) {
             return { pagines: [
@@ -1201,7 +1201,7 @@ const DIALEGS = {
                 { fer: (z, fet) => z.despertarRunna(fet) },
                 { qui: "Runna", text: "Fa molt que dormo. Hi torna a haver una gàbia, oi? Anem-hi." },
                 { qui: "Ineu", text: "Runna... Em parles al cap!" },
-                { qui: "Runna", text: "Em sents perquè m'has despertat rient. Es veu que això encara funciona." }
+                { qui: "Runna", text: "Feia tres-cents anys que ningú no em deia que el riure espanta la foscor. Es veu que encara és veritat." }
             ],
             enAcabar: () => {
                 E.dona("runna"); E.posaFlag("runna");
@@ -1217,7 +1217,7 @@ const DIALEGS = {
 
     objectiuRunna: E => {
         const falta = [];
-        if (!E.flag("saber")) falta.push("la Paraula del Saber (Pare Alcuí)");
+        if (!E.flag("saber")) falta.push("les Paraules del Saber (Pare Alcuí)");
         if (!E.flag("benediccio")) falta.push("la Benedicció del Pare Jordi");
         if (!E.flag("fullaTiler")) falta.push("la Fulla del Til·ler (sopar)");
         return falta.length ? "Per despertar Runna falta: " + falta.join(", ") + "." : "Ho tens tot: ves al Dolmen (sud-est, passats els Dipòsits) i desperta Runna.";

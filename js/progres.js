@@ -60,7 +60,7 @@ const PROGRES = {
               : !E.flag('cantPedres') ? "La Pianista, al Santuari, t'ensenya el Cant de les Pedres. Després toca'l amb la flauta davant l'ombra del monjo, a les Runes."
               : "Toca el Cant de les Pedres amb la flauta (3-1-2-1) davant l'ombra del monjo, a les Runes." },
         { id: 'saber', marca: ['saber'], fet: E => E.flag('saber'),
-          pista: E => "Ara que l'ombra t'ha beneït, el Pare Alcuí, a la biblioteca, et dirà la Paraula del Saber." },
+          pista: E => "Ara que l'ombra t'ha beneït, el Pare Alcuí, a la biblioteca, et dirà les Paraules del Saber." },
         { id: 'benediccio', marca: ['benediccio'], fet: E => E.flag('benediccio'),
           pista: E => "El Pare Jordi, a la Plaça, vol donar-te la benedicció ara que tens el permís del Til·ler." },
         // ---- ACTE 2: el camí del Dolmen ----
