@@ -57,7 +57,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pare Jordi", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
-                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: l'Uri, de Sant Antoni; el Flam, de Sant Benet; i aquesta nit, el Sardin, el fill del Daniel." },
+                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: l'Uri i el Flam, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardin, el nebot de les monges de l'Hostatgeria." },
                     { qui: "Pare Jordi", text: "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada... i, diu la Neus, un piular d'ocells que no se sap d'on ve." },
                     { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Pren el meu clauer de novici: parla amb tothom i explica-m'ho tot." },
                     { qui: "", text: "Has obtingut el CLAUER DE NOVICI!\nObre la biblioteca i les cel·les." },
@@ -176,18 +176,39 @@ const DIALEGS = {
     },
 
     // El Ciscu, el fill de la Carmen, s'ha escapat a la cabana amagada a jugar al solitari
-    ciscu: E => E.flag('ciscuTrobat') ? { pagines: [
-        { qui: 'Ciscu', text: E.flag('relIquiesRetornades') ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el cavall de copes. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
-        { qui: 'Ciscu', text: 'Si veus la mare, no li diguis on sóc. Bé... si et pregunta molt, sí.' }
-    ] } : {
-        pagines: [
-            { qui: '', text: 'Un nen amb gorra, assegut a terra davant la taula, té les cartes estirades en files: un solitari a mig fer. Quan et veu, s\'hi tira a sobre per amagar-les.' },
-            { qui: 'Ciscu', text: 'No diguis res a la mare! Sóc el Ciscu, el de la Carmen, la de la Taverna. Des que hi ha boira, ella dorm tot el dia i l\'Eva em fa fregar gots.' },
-            { qui: 'Ciscu', text: 'Aquí ningú no em busca i puc jugar al solitari tranquil. Les cartes són de l\'avi. Li falta el set d\'oros, però faig veure que hi és.' },
-            { qui: 'Ciscu', text: 'Una cosa: de nit, abans de venir, he vist el Germà Andreu entrar per la porta de ferro de darrere la Taverna, la del soterrani. Sempre la tanca amb clau. I d\'allà dins se senten ocells.' }
-        ],
-        enAcabar: () => E.posaFlag('ciscuTrobat')
+    ciscu: E => {
+        // La clau rovellada: al Germà Andreu li va caure a la porta de ferro, i el Ciscu se la va quedar
+        const clau = [
+            { qui: 'Ciscu', text: 'I mira què vaig trobar: una nit, al Germà Andreu li va caure aquesta clau davant la porta de ferro, i no se n\'adonà. És petita i rovellada. Me la vaig quedar per jugar a pirates.' },
+            { qui: 'Ciscu', text: 'Té, a tu et servirà més que a mi. Però no diguis a la mare que jo era a fora de nit!' },
+            { qui: '', text: 'Has obtingut la CLAU ROVELLADA: petita, de ferro vell, amb un ocell gravat a l\'anella.' }
+        ];
+        const donar = () => { E.posaFlag('ciscuTrobat'); E.posaFlag('clauGirgoles'); E.dona('clau_girgoles'); };
+        if (!E.flag('ciscuTrobat')) return {
+            pagines: [
+                { qui: '', text: 'Un nen amb gorra, assegut a terra davant la taula, té les cartes estirades en files: un solitari a mig fer. Quan et veu, s\'hi tira a sobre per amagar-les.' },
+                { qui: 'Ciscu', text: 'No diguis res a la mare! Sóc el Ciscu, el de la Carmen, la de la Taverna. Des que hi ha boira, ella dorm tot el dia i l\'Eva em fa fregar gots.' },
+                { qui: 'Ciscu', text: 'Aquí ningú no em busca i puc jugar al solitari tranquil. Les cartes són de l\'avi. Li falta el set d\'oros, però faig veure que hi és. (Bé, i el cavall de copes i la sota d\'espases, que se m\'han caigut pel camí.)' },
+                { qui: 'Ciscu', text: 'De nit, abans de venir, he vist el Germà Andreu entrar per la porta de ferro de darrere la Taverna, la del soterrani. A baix n\'hi ha una altra, de ferro, amb un pany petit. I d\'allà dins se senten ocells.' },
+                ...clau
+            ],
+            enAcabar: donar
+        };
+        if (!E.flag('clauGirgoles')) return { pagines: clau, enAcabar: donar };
+        return { pagines: [
+            { qui: 'Ciscu', text: E.flag('relIquiesRetornades') ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el set d\'oros de paper. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
+            { qui: 'Ciscu', text: 'Si veus la mare, no li diguis on sóc. Bé... si et pregunta molt, sí.' }
+        ] };
     },
+
+    // Les cartes que el Ciscu ha perdut pel camí de la Desaparició: duen al forat sense marca del mur d'arbres
+    cartaCami: n => E => ({ pagines: [[
+        { qui: '', text: 'Una carta de la baralla espanyola, tirada a terra, humida de rosada: el cavall de copes. Algú l\'ha perduda fa poc.' },
+        { qui: 'Ineu', text: '(Una mica més amunt, cap als arbres, n\'hi ha una altra...)' }
+    ], [
+        { qui: '', text: 'Una altra carta, la sota d\'espases, entre les arrels de dos arbres. Aquí els troncs són més separats que en cap altre lloc del mur.' },
+        { qui: 'Ineu', text: '(Un nen hi passaria ben bé. Potser jo també, si m\'ajupo.)' }
+    ]][n] }),
 
     solitari: E => ({ pagines: [{ qui: '', text: 'Un solitari a mig fer: set columnes de cartes de la baralla espanyola, gastades i amb les puntes doblegades. Falta el set d\'oros: algú hi ha posat un tros de paper amb un 7 dibuixat.' }] }),
 
@@ -436,10 +457,10 @@ const DIALEGS = {
     yordi: E => ({ pagines: [{ qui: 'Yordi', text: 'Hola, Ineu! Si veus la meva germana Judit, digues-li que em deu un gelat.' }] }),
     judit: E => ({ pagines: [{ qui: 'Judit', text: 'Bon dia! Jo no li dec cap gelat a en Yordi. Que ho sàpigues.' }] }),
     danielT: E => ({ pagines: [
-        { qui: 'Daniel', text: 'Ineu... El Sardin, el meu fill, no era al llit aquest matí. La finestra era tancada per dins. Ell no surt mai sol de nit: li fa por la fosca.' },
-        { qui: 'Daniel', text: 'Ahir a la tarda va anar a berenar a la Taverna, com sempre, amb l\'Eva. Potser l\'Eva va veure alguna cosa. Jo em quedo amb el Turbo: no el deixo sortir d\'aquí.' }
+        { qui: 'Daniel', text: 'Ineu... L\'Uri, el meu fill, va ser el primer. Fa tres nits no era al llit. La finestra era tancada per dins. Ell no surt mai sol de nit: li fa por la fosca.' },
+        { qui: 'Daniel', text: 'La nit següent va ser el Flam, el de la porta del costat, el de la Neus. Jo em quedo amb el Turbo, el meu nebot: no el deixo sortir d\'aquí.' }
     ] }),
-    turbo: E => ({ pagines: [{ qui: 'Turbo', text: 'El cosí Sardin diu que els ocells de nit canten el seu nom. Jo no els he sentit mai. Però jo corro més que tu!' }] }),
+    turbo: E => ({ pagines: [{ qui: 'Turbo', text: 'El cosí Uri diu que els ocells de nit canten el seu nom. Jo no els he sentit mai. Però jo corro més que tu!' }] }),
 
     tiller: E => {
         if (E.te("basto") && !E.flag("tutorialCombat")) { E.posaFlag("tutorialCombat"); E.posaFlag("combatActiu"); }   // partides velles
@@ -871,7 +892,7 @@ const DIALEGS = {
         if (!E.flag('premiPains')) return {
             pagines: [
                 { qui: 'Pains', text: 'Oh, mon petit! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Pains.' },
-                { qui: 'Pains', text: 'La boira va entrar pel soterrani una nit de fa tres lluns. Vaig veure un home amb abric d\'ocells que s\'enduia les nenes del poble, rient baixet.' },
+                { qui: 'Pains', text: 'La boira va entrar pel soterrani una nit de fa tres lluns. Vaig veure un home amb abric d\'ocells que s\'enduia els nens del poble, rient baixet.' },
                 { qui: 'Pains', text: 'Pren això, fill. El rosari d\'aquesta casa és vell i fort: que et doni una mica de la seva claror.' }
             ],
             enAcabar: () => premiMonja('Pains', 'premiPains')
@@ -893,6 +914,7 @@ const DIALEGS = {
         if (!E.flag('premiCharm')) return {
             pagines: [
                 { qui: 'Charm', text: 'Benvingut, fill de Déu. Sóc la Charm, la mare superiora d\'aquesta casa. Havíem perdut l\'esperança, però no la pregària.' },
+                { qui: 'Charm', text: 'El nostre nebot, el Sardin, passava aquí la tardor amb nosaltres. La nit que la boira ens va tancar a les cambres, el seu llit va quedar buit. Porta\'l a casa, fill. Porta\'ls a tots.' },
                 { qui: 'Charm', text: 'Als llibres d\'aquesta casa he llegit que l\'Ocellaire va robar el cant dels ocells, i que només aquest mateix cant obre la seva gàbia. Tu l\'aprendràs: la Pianista el recorda.' },
                 { qui: 'Charm', text: 'Accepta el que podem donar: una mica de la nostra paciència.' }
             ],

@@ -102,8 +102,11 @@ const PROGRES = {
         // ---- Sota la Taverna ----
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
           pista: E => "Al darrere de la Taverna (per fora, a la dreta de la façana) hi ha una porta de ferro baixa: la del soterrani, la que el Germà Andreu tanca cada nit. La Clau de ferro l'obre." },
+        { id: 'clauCiscu', marca: ['ciscuTrobat', 'clauGirgoles', 'obj:clau_girgoles'], fet: E => E.te('clau_girgoles') || E.flag('portaFerroOberta'),
+          pista: E => E.flag('ciscuTrobat') ? "Torna a la cabana amagada: el Ciscu té una clau rovellada per a tu."
+              : "La porta de ferro del fons del soterrani té un pany petit: la Clau de ferro no hi entra. El Ciscu, el fill de la Carmen, va veure el Germà Andreu entrar-hi de nit. L'Eva diu que s'escapa pel camí de la Desaparició, per un forat entre els arbres: segueix les cartes que va perdent." },
         { id: 'portaFerro', marca: ['portaFerroOberta'], fet: E => E.flag('portaFerroOberta'),
-          pista: E => "Al soterrani de la Taverna, la Clau de ferro obre també la porta de ferro del fons, d'on surt la boira." },
+          pista: E => "Al soterrani de la Taverna, la clau rovellada del Ciscu obre la porta de ferro del fons, d'on surt la boira." },
         { id: 'girgoles', marca: ['girgolesEnceses'], fet: E => E.flag('girgolesEnceses'),
           pista: E => "A la Sala de les Gírgoles, sota la porta de ferro, fes que les cinc mates de gírgoles lluminoses brillin alhora: cada una que toques canvia ella i les dues del costat." },
         { id: 'rastell', marca: ['rastellObert'], fet: E => E.flag('rastellObert'),
@@ -123,8 +126,6 @@ const PROGRES = {
     laterals: [
         { id: 'taverna', marca: ['tavernaOberta', 'evaParlat'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('evaParlat'),
           pista: E => "El Sardin berenava cada tarda a la Taverna amb l'Eva. La porta és tancada, però truca: potser l'Eva et deixa entrar." },
-        { id: 'ciscu', marca: ['ciscuTrobat'], obert: E => E.flag('evaParlat'), fet: E => E.flag('ciscuTrobat'),
-          pista: E => "El Ciscu, el fill de la Carmen, s'escapa a jugar a cartes on ningú no el molesta. Diuen que hi ha una cabana amagada darrere els arbres del camí de la Desaparició." },
         { id: 'rellotge', marca: ['rellotgeReparat'], obert: E => E.flag('rellotgeDit'), fet: E => E.flag('rellotgeReparat'),
           pista: E => "El rellotge del campanar continua aturat: la porta de la dreta del retaule puja a la Sala del Rellotge." },
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),

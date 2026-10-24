@@ -1678,16 +1678,18 @@ function dibuixarCelSantBenet(c, w) {
         vessant(W * 0.04, cantell + H * 0.02, W * 0.5, H * 0.1 + H * 0.02); vessant(W * 0.96, cantell + H * 0.02, W * 0.5, H * 0.1 + H * 0.02);
         // Finestra rodona al frontó
         ctx.fillStyle = '#26303a'; ctx.beginPath(); ctx.arc(W * 0.5, H * 0.27, W * 0.03, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        // Dues finestres d'arc amb marcs de maó
-        [0.3, 0.64].forEach(cx => finestra(ctx, W * cx, H * 0.4, W * 0.06, H * 0.2, { arc: true, marc: '#b86a42', vidre: '#6a3a24' }));
-        // Porta de fusta amb arc, més alta que l'Ineu
-        const px = W * 0.455, pw = W * 0.09, pt = wb - H * 0.36;
-        ctx.fillStyle = '#b86a42'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.moveTo(px - 6, wb); ctx.lineTo(px - 6, pt + pw * 0.5); ctx.arc(px + pw / 2, pt + pw * 0.5, pw / 2 + 6, Math.PI, 0); ctx.lineTo(px + pw + 6, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#6a4228';
-        ctx.beginPath(); ctx.moveTo(px, wb); ctx.lineTo(px, pt + pw * 0.5); ctx.arc(px + pw / 2, pt + pw * 0.5, pw / 2, Math.PI, 0); ctx.lineTo(px + pw, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.strokeStyle = 'rgba(20,10,4,0.5)'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(px + pw / 2, pt); ctx.lineTo(px + pw / 2, wb); ctx.stroke();
+        // Tres finestres d'arc amb marcs de maó (una sobre cada porta i una al mig)
+        [0.245, 0.47, 0.685].forEach(cx => finestra(ctx, W * cx, H * 0.36, W * 0.06, H * 0.18, { arc: true, marc: '#b86a42', vidre: '#6a3a24' }));
+        // Dues portes de fusta amb arc, més altes que l'Ineu: la de l'esquerra (la família del Flam) i la de la dreta (la de l'Uri)
+        [0.28, 0.72].forEach(cx => {
+            const pw = W * 0.09, px = W * cx - pw / 2, pt = wb - H * 0.36;
+            ctx.fillStyle = '#b86a42'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(px - 6, wb); ctx.lineTo(px - 6, pt + pw * 0.5); ctx.arc(px + pw / 2, pt + pw * 0.5, pw / 2 + 6, Math.PI, 0); ctx.lineTo(px + pw + 6, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#6a4228';
+            ctx.beginPath(); ctx.moveTo(px, wb); ctx.lineTo(px, pt + pw * 0.5); ctx.arc(px + pw / 2, pt + pw * 0.5, pw / 2, Math.PI, 0); ctx.lineTo(px + pw, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(20,10,4,0.5)'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(px + pw / 2, pt); ctx.lineTo(px + pw / 2, wb); ctx.stroke();
+        });
     });
 }
 

@@ -157,7 +157,7 @@ const PROLEG_QUADRES = [
     { text: "Fa tres-cents anys, un firaire pujava cada primavera al Miracle amb gàbies plenes d'ocells que cantaven com persones: Mestre Gaspar, l'Ocellaire.\nEls nens que l'escoltaven es quedaven sense riure.", dibuix: 'ocellaire' },
     { text: "Els pastors de la Cirosa i els monjos el van tancar dins la seva pròpia gàbia, sota terra. Un monjo va segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la va deixar dormint entre pedres.", dibuix: 'segell' },
     { text: "Ara, fa tres nits, una boira freda i lila surt de sota terra. Marceix els horts, entela l'aigua i fa callar l'orgue del Santuari.", dibuix: 'boira' },
-    { text: "I cada nit falta un nen.\nL'Uri, de Sant Antoni. El Flam, de Sant Benet.\nI aquesta nit... el Sardin.", dibuix: 'nens' },
+    { text: "I cada nit falta un nen.\nL'Uri i el Flam, de Sant Benet.\nI aquesta nit... el Sardin, el nebot de les monges.", dibuix: 'nens' },
     { text: "Matí. L'Ineu, el monjo més jove del Santuari, es desperta.\nEl Pare Jordi el busca a la Plaça.", dibuix: 'mati' }
 ];
 

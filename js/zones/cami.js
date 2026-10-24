@@ -35,7 +35,17 @@ class ZonaCami extends ZonaBase {
         // Mur d'arbres del nord: només a x=1380 hi ha dos arbres més separats, i per aquí es puja a la cabana (sense marcar-ho)
         this.muralla(0, 140, 1280, 140, 128);
         this.muralla(1480, 140, 2800, 140, 132);
-        this.sortides.push({ r: new Phaser.Geom.Rectangle(1320, 60, 120, 52), desti: 'ZonaCabanaCami', entrada: 'porta', peu: true });   // cal travessar la fila d'arbres fins dalt de tot
+        this.sortides.push({ r: new Phaser.Geom.Rectangle(1320, 60, 120, 52), desti: 'ZonaCabanaCami', entrada: 'porta', peu: true });
+        // Dues cartes del Ciscu tirades a terra: la pista del forat sense marca
+        const cartes = this.add.graphics().setDepth(-900);
+        [[1320, 335, 0.3, 0xb83a3a], [1372, 232, -0.25, 0x2a5aa0]].forEach(([x, y, a, c]) => {
+            cartes.save(); cartes.translateCanvas(x, y); cartes.rotateCanvas(a);
+            cartes.fillStyle(0xf4ecd8, 1).fillRect(-9, -13, 18, 26).lineStyle(1.5, 0x3a2410, 1).strokeRect(-9, -13, 18, 26);
+            cartes.fillStyle(c, 1).fillCircle(0, 0, 4);
+            cartes.restore();
+        });
+        this.interactiu(1320, 345, 60, DIALEGS.cartaCami(0), { altura: 40 });
+        this.interactiu(1372, 242, 60, DIALEGS.cartaCami(1), { altura: 40 });   // cal travessar la fila d'arbres fins dalt de tot
         // Fila de baix: als extrems, arbres més petits (la capçada no ha de tapar les sortides de les puntes)
         this.muralla(0, 770, 2800, 770, 130, 'arbre', false);
         this.copes.filter(img => img.y === 770 && (img.x < 200 || img.x > 2600)).forEach(img => img.destroy());

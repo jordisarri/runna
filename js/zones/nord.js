@@ -317,7 +317,8 @@ class ZonaCelles extends ZonaBase {
         this.interactiu(520, 625, 90, DIALEGS.cel_ntrasra, { altura: 140 });
         const sb = this.posar('cel_stbenet', 1380, 600, { col: { w: 520, h: 90 } });
         this.blocDarrere(1380, 520, 505, Math.max(0, 600 - sb.displayHeight));
-        this.interactiu(1380, 620, 80, DIALEGS.cel_stbenet, { altura: 140 });
+        this.interactiu(1257, 620, 70, DIALEGS.portaFlam, { altura: 140 });         // porta de l'esquerra: la família del Flam (la Neus)
+        this.interactiu(1503, 620, 70, DIALEGS.portaUri, { altura: 140 });          // porta de la dreta: la família de l'Uri (el Daniel)
 
         // Sant Benet (est): la Neus i el seu marit, el senyor Moliner
         this.npc('neus', 1250, 680, DIALEGS.neus);
@@ -397,11 +398,12 @@ class ZonaCelles extends ZonaBase {
 
 // ---------------- CEL·LES DE SANT ANTONI ----------------
 // A llevant del Monestir. Hi passeja el Germà Francesc, monjo del Monestir que cuida les flors del cementiri: per un favor
-// (portar-hi el seu ram), et dona els Guants de Poder, els que mouen la roda del Celler. D'aquí era l'Uri, el primer nen desaparegut.
+// (portar-hi el seu ram), et dona els Guants de Poder, els que mouen la roda del Celler. L'Uri, el primer nen desaparegut, hi venia a robar figues.
 Object.assign(DIALEGS, {
-    cel_stbenet: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Benet: petites, de pedra ocre, amb les persianes mig ajustades. Hi fa olor de sopa.' }] }),
+    portaFlam: E => ({ pagines: [{ qui: '', text: 'Sant Benet, porta de l\'esquerra: la cel·la de la Neus i el senyor Moliner, i del Flam. Al llindar hi ha una sabata petita, sola. Fa olor de sopa.' }] }),
+    portaUri: E => ({ pagines: [{ qui: '', text: 'Sant Benet, porta de la dreta: la cel·la del Daniel i de l\'Uri. A la finestra hi ha un dibuix d\'un ocell fet amb ceres, clavat per dins.' }] }),
     cel_ntrasra: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Nostra Senyora, les més grans del Santuari. Avui les finestres són tancades: ningú no vol que hi entri la boira.' }] }),
-    cel_stantoni: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Antoni, de pedra vella i teula. La porta és oberta, però a dins no hi ha ningú: la família de l\'Uri és a la Plaça, buscant-lo.' }] }),
+    cel_stantoni: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Antoni, de pedra vella i teula. La porta és oberta, però a dins no hi ha ningú: els que hi viuen han baixat a ajudar a buscar els nens és a la Plaça, buscant-lo.' }] }),
 
     germaFrancesc: E => {
         if (E.te('guants')) return { pagines: [
@@ -425,7 +427,7 @@ Object.assign(DIALEGS, {
         return {
             pagines: [
                 { qui: 'Germà Francesc', text: 'Ineu... Bon dia, fill. Perdona que no camini de pressa: aquests genolls ja tenen més anys que el campanar.' },
-                { qui: 'Germà Francesc', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L\'Uri vivia aquí: em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
+                { qui: 'Germà Francesc', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L\'Uri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
                 { qui: 'Germà Francesc', text: 'Cada setmana porto flors a l\'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
                 { qui: 'Germà Francesc', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },
                 { qui: '', text: 'Has obtingut un RAM DE FLORS.' }
