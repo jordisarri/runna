@@ -13,7 +13,7 @@ const CATALEG = [
     { key: 'esglesia',     file: 'assets/edificis/esglesia.webp',     amplada: 1100 },   // gran: la porta (~165) ha de superar l'Ineu (~125); a la plaça es retalla i no es veu sencera
     { key: 'monestir',     file: 'assets/edificis/monestir.webp',     amplada: 800, provisional: (c, w) => dibuixarMonestir(c, w) },
     { key: 'cel_stantoni', file: 'assets/edificis/cel_stantoni.webp', amplada: 900, provisional: (c, w) => dibuixarCasaGran(c, w) },
-    { key: 'taverna',      file: 'assets/edificis/taverna.webp',      amplada: 640, provisional: (c, w) => dibuixarTaverna(c, w) },
+    { key: 'taverna',      file: 'assets/edificis/taverna.webp',      amplada: 900, provisional: (c, w) => dibuixarTaverna(c, w) },
     { key: 'casa_gran',    file: 'assets/edificis/casa_gran.webp',    amplada: 1250, provisional: (c, w) => dibuixarCasaGran(c, w) },
     // Personatges
     { key: 'pare_jordi',   file: 'assets/personatges/pare_jordi.png',   amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },

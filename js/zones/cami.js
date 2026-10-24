@@ -411,21 +411,22 @@ class ZonaTaverna extends ZonaBase {
     construir() {
         this.terra('herba', 0, 0, 1600, 1100, -1100);
         this.terra('cami', 0, 880, 1600, 130);              // camí de l'Hostatgeria als arcs de la Casa Gran
-        this.terra('llamborda', 440, 740, 720, 140);        // replà empedrat davant la façana
+        this.terra('llamborda', 320, 740, 960, 140);        // replà empedrat davant la façana
 
-        // Façana (640 d'ample): la porta d'arc és al mig
+        // Façana (900 d'ample, tres plantes): la porta és l'arc del mig
         const t = this.posar('taverna', 800, 750, { fonsY: 640 });
-        this.colisio(800, 705, 640, 90);
-        this.blocDarrere(800, 640, 660, Math.max(0, 750 - t.displayHeight));
+        this.colisio(800, 705, 900, 90);
+        this.blocDarrere(800, 900, 660, Math.max(0, 750 - t.displayHeight));
         this.interactiu(800, 765, 90, DIALEGS.taverna, { altura: 170 });
 
-        // Barrils a la dreta de la porta i un banc a l'esquerra, contra la façana
-        this.posar('barril', 1010, 800, { col: { w: 40, h: 16 } });
-        this.posar('barril', 1060, 812, { col: { w: 40, h: 16 } });
-        this.posar('banc', 590, 790, { col: { w: 130, h: 22 } });
+        // Barrils a la dreta, taula i banc a l'esquerra, contra la façana
+        this.posar('barril', 1150, 800, { col: { w: 40, h: 16 } });
+        this.posar('barril', 1200, 812, { col: { w: 40, h: 16 } });
+        this.posar('banc', 520, 790, { col: { w: 130, h: 22 } });
+        this.posar('taula', 400, 805, { escala: 0.7, col: { w: 110, h: 22 } });
 
         this.cartell(260, 860, () => ({ pagines: [{ qui: '', text: '← L\'Hostatgeria i l\'Era\n→ Els arcs de la Casa Gran' }] }));
-        this.arbres([[130, 250], [300, 180], [200, 560], [1300, 220], [1460, 330], [1400, 600], [60, 1070], [1180, 1050]]);   // cap arbre davant el cartell
+        this.arbres([[130, 250], [200, 560], [1460, 330], [1450, 600], [60, 1070], [1180, 1050]]);   // cap arbre davant el cartell
 
         this.sortida(0, 900, 14, 130, 'ZonaJardi', 'taverna');
         this.sortida(1586, 900, 14, 130, 'ZonaCasaGran', 'oest');
