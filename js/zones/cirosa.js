@@ -186,6 +186,8 @@ class ZonaCirosa extends ZonaBase {
             // (sense col·lisió: el boss hi apareixerà al mateix lloc)
             this.andreuNpc = this.posar('pastor_boira', 1400, 640);
             this.andreuOmbra = this.add.image(1400, 640, 'ombra').setScale(0.5).setDepth(-500);
+            this.andreuNpc.ombra = this.andreuOmbra;
+            (this.npcs = this.npcs || {}).andreu = this.andreuNpc;
             this.interactiu(1400, 630, 95, DIALEGS.andreuPastor, { altura: this.andreuNpc.displayHeight + 6, actiu: () => !this.bossIniciat });
         } else {
             this.posar('cartell', 1030, 710, { col: { w: 20, h: 10 } });
@@ -233,6 +235,28 @@ class ZonaCirosa extends ZonaBase {
         if (Estat.flag('pastorsConvencuts')) { this.flotant(280, 800, 'Els pastors somriuen', '#ffd9a0'); return true; }
         this.ui().obrirDialeg(DIALEGS.pastorsConvencuts(Estat), () => Estat.desar());
         return true;
+    }
+
+    // Vençut, el Pastor cau de genolls i la boira li surt del cos
+    andreuAgenollat(fet) {
+        const e = this.bossCaigut;
+        if (!e || !e.spr.active) { fet(); return; }
+        this.tweens.add({ targets: e.spr, angle: 0, scaleY: e.spr.scaleY * 0.78, duration: 500 });
+        const p = this.add.particles(e.spr.x, e.spr.y - 60, 'boira', { speed: { min: 20, max: 70 }, lifespan: 1600, scale: { start: 0.8, end: 2.5 }, alpha: { start: 0.6, end: 0 }, tint: [0x9a50ff, 0xb88aff], quantity: 2, frequency: 60 }).setDepth(e.spr.depth + 1);
+        this.time.delayedCall(1500, () => { p.stop(); this.time.delayedCall(1600, () => p.destroy()); fet(); });
+    }
+    // S'aixeca, riu i se'n va camí avall, cap a la Taverna
+    andreuMarxa(fet) {
+        const e = this.bossCaigut;
+        if (!e || !e.spr.active) { fet(); return; }
+        this.tweens.add({ targets: e.spr, scaleY: e.spr.scaleY / 0.78, duration: 400, onComplete: () => {
+            this.flotant(e.spr.x, e.spr.y - 160, 'je, je, je...', '#d8c8ff');
+            if (e.spr.body) e.spr.body.enable = false;
+            this.tweens.add({ targets: e.spr, angle: { from: -4, to: 4 }, yoyo: true, repeat: -1, duration: 160 });
+            this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), x: 580, y: 1150, duration: 2600, onComplete: () => {
+                this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), alpha: 0, duration: 400, onComplete: fet });
+            } });
+        } });
     }
 
     // El Pastor de Boira es posa en marxa després del diàleg

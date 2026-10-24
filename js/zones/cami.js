@@ -474,6 +474,23 @@ class ZonaTaverna extends ZonaBase {
         Estat.desar();
     }
 
+    // L'Eva treu el cap per l'aparador de l'esquerra, mira a banda i banda, i torna a dins
+    evaFinestra(fet) {
+        const eva = this.add.image(548, 700, 'eva').setOrigin(0.5, 1).setDepth(800).setAlpha(0);
+        eva.setScale(((this.textures.get('eva').customData || {}).escala || 0.5) * 0.9);
+        this.tweens.add({ targets: eva, alpha: 1, y: 690, duration: 500, onComplete: () => {
+            this.tweens.add({ targets: eva, scaleX: -eva.scaleX, yoyo: true, repeat: 1, duration: 300, delay: 200, onComplete: () => {
+                this.tweens.add({ targets: eva, alpha: 0, delay: 300, duration: 400, onComplete: () => { eva.destroy(); fet(); } });
+            } });
+        } });
+    }
+    // Se sent el forrellat i la porta del mig s'obre (es veu fosc a dins)
+    obrirPortaAnim(fet) {
+        Sfx.secret && Sfx.secret();
+        const forat = this.add.rectangle(800, 705, 2, 92, 0x120a04).setDepth(760);
+        this.tweens.add({ targets: forat, width: 70, duration: 700, ease: 'Sine.easeOut', onComplete: fet });
+    }
+
     obrirPorta() {
         if (!Estat.flag('tavernaOberta') || this.portaOberta) return;
         this.portaOberta = true;

@@ -338,6 +338,22 @@ class EscenaUI extends Phaser.Scene {
 
     mostrarPagina() {
         const p = this.dialeg.dades.pagines[this.dialeg.pagina];
+        // Pàgina d'acció: no hi ha text, el personatge ho fa (camina, salta, dona una cosa...) i després es continua
+        if (p.fer) {
+            this.caixa.setVisible(false);
+            this.dialeg.fent = true;
+            const d = this.dialeg, z = Joc.zonaActiva(this);
+            let fet = false;
+            const seguir = () => {
+                if (fet || this.dialeg !== d) return;
+                fet = true; d.fent = false;
+                d.pagina++;
+                if (d.pagina < d.dades.pagines.length) { this.caixa.setVisible(true); this.mostrarPagina(); } else this.tancarDialeg();
+            };
+            if (z) { try { p.fer(z, seguir); } catch (e) { console.warn('Acció de diàleg', e); seguir(); } } else seguir();
+            return;
+        }
+        this.caixa.setVisible(true);
         this.plaquetaNom.setText(p.qui || '').setVisible(!!p.qui).setX(-310 + 28);
         this.cintaNom.setVisible(!!p.qui);
         if (p.qui) this.cintaNom.setSize((this.plaquetaNom.width + 56) * RES, 40 * RES);
@@ -365,7 +381,7 @@ class EscenaUI extends Phaser.Scene {
     }
 
     avancar() {
-        if (!this.dialeg) return;
+        if (!this.dialeg || this.dialeg.fent) return;
         if (this.timerText) { this.acabarEscriptura(); return; }
         this.dialeg.pagina++;
         Sfx.pagina();

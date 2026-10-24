@@ -87,11 +87,18 @@ class ZonaRuines extends ZonaBase {
         return true;
     }
 
+    // L'ombra aixeca el cap i es fa més clara un moment
+    ombraReacciona(fet) {
+        this.ombraForta = true;
+        this.tweens.add({ targets: this.ombraMonjo, scaleX: this.ombraMonjo.scaleX * 1.06, scaleY: this.ombraMonjo.scaleY * 1.06, yoyo: true, duration: 700, onComplete: () => { this.ombraForta = false; if (fet) fet(); } });
+        this.llum(this.ombraMonjo.x, this.ombraMonjo.y - 150, 0xd8c8ff);
+    }
+
     actualitzar() {
         const visible = Estat.flag('fragment1');
         this.nit.setVisible(visible);
         // L'ombra apareix i desapareix lentament, com una respiració
-        const alfa = visible ? 0.55 + 0.25 * Math.sin(this.time.now / 900) : 0;
+        const alfa = visible ? (this.ombraForta ? 0.95 : 0.55 + 0.25 * Math.sin(this.time.now / 900)) : 0;
         this.ombraMonjo.setAlpha(Math.max(0, alfa));
     }
 }
@@ -403,7 +410,7 @@ Object.assign(DIALEGS, {
     portaFlam: E => ({ pagines: [{ qui: '', text: 'Sant Benet, porta de l\'esquerra: la cel·la on dormia el Flam. Al llindar hi ha una sabata petita, sola.' }] }),
     portaUri: E => ({ pagines: [{ qui: '', text: 'Sant Benet, porta de la dreta: la cel·la on dormia l\'Uri. A la finestra hi ha un dibuix d\'un ocell fet amb ceres, clavat per dins.' }] }),
     cel_ntrasra: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Nostra Senyora, les més grans del Santuari. Avui les finestres són tancades: ningú no vol que hi entri la boira.' }] }),
-    cel_stantoni: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Antoni, de pedra vella i teula. La porta és oberta, però a dins no hi ha ningú: els que hi viuen han baixat a ajudar a buscar els nens és a la Plaça, buscant-lo.' }] }),
+    cel_stantoni: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Antoni. La porta és oberta, però a dins no hi ha ningú: han baixat a ajudar a buscar els nens.' }] }),
 
     germaFrancesc: E => {
         if (E.te('guants')) return { pagines: [
@@ -554,23 +561,57 @@ class ZonaTiller extends ZonaBase {
         this.interactiu(TIL_X + 10, TIL_Y + 75, 110, DIALEGS.espelmesTiller, { altura: 90 });
     }
 
-    // Escena del sopar del Til·ler: taula, pastors i ritual de les quatre espelmes
+    // Escena del sopar del Til·ler: cau el dia, la gent de les cel·les puja del sud i els pastors baixen del camí de la Cirosa
     fesSopar() {
         const vel = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x2a1000, 1).setScrollFactor(0).setDepth(89500).setAlpha(0);
         this.tweens.add({ targets: vel, alpha: 0.38, duration: 1600 });
-        const taula = this.posar('taula_sopar', 400, 810, { fonsY: 800 });
-        const pastors = ['pastor_a', 'pastor_b', 'pastor_vell'].map((k, i) => this.posar(k, 290 + i * 110, 880 + (i % 2) * 14, { fonsY: 890 }));
-        this.time.delayedCall(1800, () => {
+        const taula = this.posar('taula_sopar', 400, 810, { fonsY: 800 }).setAlpha(0);
+        this.tweens.add({ targets: taula, alpha: 1, duration: 1200 });
+        this.npcs = this.npcs || {};
+        const gent = [
+            ['pastor_a', 1170, 60, 290, 880], ['pastor_b', 1170, 20, 400, 894], ['pastor_vell', 1170, -20, 510, 880],      // pel camí de la Cirosa
+            ['neus', 700, 1000, 300, 760], ['tieta', 660, 1040, 420, 750], ['tieta2', 740, 1060, 520, 760]                   // des de les cel·les
+        ];
+        const imatges = gent.map(([k, x0, y0, x, y], i) => {
+            const img = this.posar(k, x0, y0, { fonsY: y0 });
+            img.ombra = null;
+            this.npcs['sopar_' + k] = img;
+            this.time.delayedCall(400 + i * 350, () => this.npcVa('sopar_' + k, x, y, null, 170));
+            return img;
+        });
+        this.time.delayedCall(4600, () => {
             this.ui().obrirDialeg(DIALEGS.tillerSoparRitual(Estat), () => Estat.desar());
         });
-        this.sopar = { vel, taula, pastors };
+        this.sopar = { vel, taula, pastors: imatges, espelmes: [] };
+    }
+
+    // L'Ineu encén les espelmes (índexs 0-3) una a una, sobre la taula
+    encendreEspelmes(llista, fet) {
+        if (!this.sopar) { fet(); return; }
+        this.seq(llista.map(i => c => {
+            const x = 330 + i * 50, y = 790;
+            const e = this.posar('espelma', x, y, { fonsY: 820 }).setAlpha(0);
+            this.sopar.espelmes.push(e);
+            this.tweens.add({ targets: e, alpha: 1, duration: 300 });
+            this.llum(x, y - 30, 0xffd890);
+            this.esperar(700, c);
+        }), fet);
+    }
+
+    // Una fulla daurada es desprèn de la branca més alta i cau, giravoltant, fins a l'Ineu
+    fullaCau(fet) {
+        const f = this.add.ellipse(TIL_X, TIL_Y - 260, 18, 28, 0xf0c040, 1).setStrokeStyle(2, 0x8a6a10).setDepth(99000);
+        this.tweens.add({ targets: f, angle: 720, duration: 2400 });
+        this.tweens.add({ targets: f, x: { value: this.ineu.x, ease: 'Sine.easeInOut' }, y: this.ineu.y - 70, duration: 2400, onComplete: () => {
+            f.destroy(); this.llum(this.ineu.x, this.ineu.y - 70, 0xf0c040, fet);
+        } });
     }
 
     acabarSopar() {
         if (!this.sopar) { this.posarEspelmes(); return; }
-        const { vel, taula, pastors } = this.sopar;
+        const { vel, taula, pastors, espelmes } = this.sopar;
         this.time.delayedCall(800, () => {
-            this.tweens.add({ targets: [vel, taula, ...pastors], alpha: 0, duration: 2200, onComplete: () => { [taula, ...pastors].forEach(o => o.destroy()); vel.destroy(); } });
+            this.tweens.add({ targets: [vel, taula, ...pastors, ...espelmes], alpha: 0, duration: 2200, onComplete: () => { [taula, ...pastors, ...espelmes].forEach(o => o.destroy()); vel.destroy(); } });
             this.posarEspelmes();
         });
         this.sopar = null;
@@ -622,7 +663,7 @@ class ZonaJordi extends ZonaBase {
 // ---------------- CASA D'EN JORDI (interior) ----------------
 // Una casa de pagès endreçada i plena de vida, però buida: en Jordi és al jardí. Només es mira.
 Object.assign(DIALEGS, {
-    casaJordiEines: E => ({ pagines: [{ qui: '', text: "Un tauler a la paret amb les eines d'en Jordi, cadascuna dins la seva silueta pintada: serres, martells, tenalles, una aixada... Només hi falta una forma llarga, de palanca." }] }),
+    casaJordiEines: E => ({ pagines: [{ qui: '', text: "El tauler d'eines d'en Jordi, cada una dins la seva silueta pintada. N'hi falta una, llarga: la de la palanca." }] }),
     casaJordiTaula: E => ({ pagines: [{ qui: '', text: "La taula de la cuina: un pa de pagès, un pot de mel, tres tasses i un dibuix d'uns nens jugant a la caseta, enganxat amb una agulla de cosir." }] }),
     casaJordiLlar: E => ({ pagines: [{ qui: '', text: "La llar de foc encara té brases. Fa olor de pa torrat i de romaní. Sobre la lleixa, una rajola pintada: «A la Caseta, la porta mai no té clau.»" }] }),
     casaJordiGat: E => ({ pagines: [{ qui: '', text: "Un gat gris dorm enroscat dins un cove de vímet. Obre un ull, et mira i el torna a tancar. Aquí no passa res que valgui la pena." }] })

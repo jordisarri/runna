@@ -12,9 +12,9 @@ Object.assign(DIALEGS, {
         pagines: [
             { qui: '', text: 'La porta de la Taverna és tancada amb pany i clau. Al vidre hi ha un paper clavat amb xinxetes: «Avui no servim. — Carmen».' },
             { qui: 'Ineu', text: 'Des de dins se sent un fil de música d\'acordió, molt baixet... i una olor de fregit.' },
-            { qui: '', text: 'La cortina d\'una finestra es mou. Una noia amb una cua rossa treu el cap i mira a banda i banda de la plaça.' },
+            { fer: (z, fet) => z.evaFinestra ? z.evaFinestra(fet) : fet() },
             { qui: 'Eva', text: 'Psst! Tu ets l\'Ineu, oi? El monjo que pregunta pels nens. Entra, de pressa, que la Carmen dorm i no vull que ens vegin.' },
-            { qui: '', text: 'Se sent un forrellat. La porta s\'obre un pam.' }
+            { fer: (z, fet) => z.obrirPortaAnim ? z.obrirPortaAnim(fet) : fet() }
         ],
         enAcabar: () => { E.posaFlag('tavernaOberta'); E.desar(); }
     },
@@ -31,7 +31,7 @@ Object.assign(DIALEGS, {
         if (!E.flag('evaParlat')) return {
             pagines: [
                 { qui: 'Eva', text: 'Sóc l\'Eva. Ajudo la Carmen... bé, faig la feina de la Carmen. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
-                { qui: 'Eva', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Andreu obre la porta de ferro de fora, la del darrere de la Taverna, i baixa al soterrani. Diu que va a buscar vi. Mai no puja amb cap ampolla. I la torna a tancar amb clau.' },
+                { qui: 'Eva', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Andreu pica tres cops a la porta de ferro de fora, la del darrere de la Taverna, i la porta s\'obre sola. Baixa al soterrani. Diu que va a buscar vi. Mai no puja amb cap ampolla.' },
                 { qui: 'Eva', text: 'Des d\'aquí dins no s\'hi pot baixar: el soterrani només té aquella porta de fora. I a baix, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Sota terra, Ineu. Ocells.' },
                 { qui: 'Eva', text: 'I el Ciscu, el fill de la Carmen, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
                 { qui: 'Eva', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
@@ -53,13 +53,13 @@ Object.assign(DIALEGS, {
         ] };
     },
 
-    rebostTaverna: E => ({ pagines: [{ qui: '', text: "La porta del rebost, tancada amb forrellat. A dins només hi ha sacs de farina i ampolles. Al soterrani no s'hi baixa d'aquí: només per la porta de ferro de fora, al darrere." }] }),
+    rebostTaverna: E => ({ pagines: [{ qui: '', text: "La porta del rebost, tancada amb forrellat. D'aquí no es baixa al soterrani." }] }),
 
     // La porta de ferro de fora, al darrere de la Taverna: la del soterrani, que el Germà Andreu tanca amb clau cada nit
     portaSoterrani: E => E.flag('clauFerro') ? { pagines: [
-        { qui: '', text: "Una porta de ferro baixa, mig enterrada al costat de la Taverna, amb un pany rovellat. Hi poses la Clau de ferro: gira amb un gemec i la porta s'obre sobre una escala de pedra que baixa al soterrani." }
+        { qui: '', text: "La Clau de ferro gira al pany amb un gemec. La porta s'obre sobre una escala que baixa al soterrani." }
     ] } : { pagines: [
-        { qui: '', text: "Una porta de ferro baixa, mig enterrada al costat de la Taverna, amb un pany gros com un puny. Per sota s'escola una boira lila i freda. Hi ha petjades de sandàlia al fang." },
+        { qui: '', text: "Una porta de ferro baixa, mig enterrada al costat de la Taverna, tancada amb clau. Per sota s'escola boira lila. Al fang, petjades de sandàlia." },
         { qui: 'Ineu', text: "(Tancada amb clau. Per aquí deu baixar el Germà Andreu cada nit. Em caldria una clau de ferro, de les velles.)" }
     ] },
 
@@ -69,11 +69,11 @@ Object.assign(DIALEGS, {
     portaFerro: E => {
         if (E.flag('portaFerroOberta')) return { pagines: [{ qui: '', text: "La porta de ferro, oberta de bat a bat. Una escala humida baixa cap a la foscor, i d'allà puja olor de bolets i de terra mullada." }] };
         if (E.te('clau_girgoles')) return { pagines: [
-            { qui: '', text: 'La clau rovellada del Ciscu entra al pany petit com si hi hagués nascut. Gira amb un gemec de segles, i la porta s\'obre cap endins. La boira lila surt a glops i, molt avall, se senten ocells.' },
+            { qui: '', text: 'La clau rovellada del Ciscu gira al pany petit. La porta s\'obre i, molt avall, se senten ocells.' },
             { qui: 'Ineu', text: E.flag('cantMiracle') ? '(Tinc Runna i el Cant del Miracle. Endavant.)' : '(La Pianista em va dir que els barrots de la gàbia només escolten el Cant del Miracle. Potser hauria d\'anar-la a veure abans de baixar gaire.)' }
         ] };
         return { pagines: [
-            { qui: '', text: 'Una segona porta de ferro negre, plena de reblons. Té un pany petit, molt diferent del de la porta de fora. Pels costats en surt una boira lila i freda que s\'arrossega per terra.' },
+            { qui: '', text: 'Una segona porta de ferro, amb un pany petit, molt diferent del de la porta de fora. Per sota surt boira lila.' },
             { qui: '', text: 'A la fusta del marc, algú hi va gravar fa segles una espasa i una gàbia. A dins, molt lluny, se sent piular.' },
             { qui: 'Ineu', text: E.flag('clauFerro') ? '(La Clau de ferro dels monjos no hi entra: és massa grossa. El Germà Andreu en deu tenir una altra, de petita. Algú l\'ha vist entrar de nit?)' : '(Aquí és d\'on surt tot. Em falta l\'espasa que la va segellar... i una clau.)' }
         ] };

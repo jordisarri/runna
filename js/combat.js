@@ -557,6 +557,7 @@ Object.assign(ZonaBase.prototype, {
     // Final del combat contra el Pastor de Boira
     pastorDerrotat(e) {
         const c = e.spr.body.center;
+        this.bossCaigut = e;
         this.enemics.filter(x => x.tipus === 'ovella' && !x.mort).forEach(o => {
             o.mort = true; o.spr.body.enable = false; this.boiraPuf(o.spr.x, o.spr.y);
             this.tweens.add({ targets: [o.spr, o.ombra], alpha: 0, duration: 500, onComplete: () => this.retirar(o) });

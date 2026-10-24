@@ -300,15 +300,122 @@ class ZonaBase extends Phaser.Scene {
         return punt;
     }
 
-    // Personatge quiet amb diàleg
+    // Personatge quiet amb diàleg (es pot moure amb npcVa: les accions dels diàlegs es fan caminant, no explicant-les)
     npc(key, x, y, dialeg, opts = {}) {
-        const img = this.posar(key, x, y, { col: { w: 40, h: 18 } });
+        const img = this.posar(key, x, y);
+        img.col = this.colisio(x, y - 9, 40, 18);
         img.ombra = this.add.image(x, y, 'ombra').setScale(0.42).setDepth(-500);
         if (opts.flipX) img.setFlipX(true);
+        img.escalaBase = img.scaleY;
         // Respiració suau perquè sembli viu
-        this.tweens.add({ targets: img, scaleY: img.scaleY * 1.02, yoyo: true, repeat: -1, duration: 1100 + Math.random() * 400 });
+        img.respira = this.tweens.add({ targets: img, scaleY: img.scaleY * 1.02, yoyo: true, repeat: -1, duration: 1100 + Math.random() * 400 });
         img.punt = this.interactiu(x, y - 10, 85, dialeg, { altura: img.displayHeight + 6 });
+        (this.npcs = this.npcs || {})[key] = img;
         return img;
+    }
+
+    // ---------------- Accions animades (les fan servir les pàgines { fer } dels diàlegs) ----------------
+    // Cada acció rep fet() i el crida en acabar. seq() en fa una rere l'altra.
+    seq(passos, fet) {
+        let i = 0;
+        const seguent = () => { if (i >= passos.length) { if (fet) fet(); return; } const p = passos[i++]; p(seguent); };
+        seguent();
+    }
+    esperar(ms, fet) { this.time.delayedCall(ms, fet); }
+
+    // Un personatge camina fins a (x, y), balancejant-se, i s'hi gira
+    npcVa(key, x, y, fet, vel = 150) {
+        const img = this.npcs && this.npcs[key];
+        if (!img) { if (fet) fet(); return; }
+        const dist = Phaser.Math.Distance.Between(img.x, img.y, x, y), dur = Math.max(150, dist / vel * 1000);
+        if (Math.abs(x - img.x) > 4) img.setFlipX(x < img.x);
+        const pas = this.tweens.add({ targets: img, angle: { from: -4, to: 4 }, yoyo: true, repeat: -1, duration: 160 });
+        this.tweens.add({ targets: [img, img.ombra].filter(Boolean), x, y, duration: dur, ease: 'Sine.easeInOut', onUpdate: () => img.setDepth(img.y), onComplete: () => {
+            pas.stop(); img.setAngle(0);
+            if (img.col) { img.col.setPosition(img.x, img.y - 9); img.col.body.updateFromGameObject(); }
+            if (img.punt) { img.punt.x = img.x; img.punt.y = img.y - 10; }
+            if (fet) fet();
+        } });
+    }
+    // Un personatge se'n va i desapareix (fos), i deixa de ser interactiu
+    npcMarxa(key, x, y, fet, vel = 150) {
+        const img = this.npcs && this.npcs[key];
+        if (!img) { if (fet) fet(); return; }
+        this.npcVa(key, x, y, () => {
+            this.tweens.add({ targets: [img, img.ombra].filter(Boolean), alpha: 0, duration: 500, onComplete: () => {
+                img.setVisible(false); if (img.ombra) img.ombra.setVisible(false);
+                if (img.col) this.obstacles.remove(img.col, true, true);
+                if (img.punt) img.punt.actiu = () => false;
+                if (fet) fet();
+            } });
+        }, vel);
+    }
+    npcSalta(key, fet, vegades = 2) {
+        const img = this.npcs && this.npcs[key];
+        if (!img) { if (fet) fet(); return; }
+        this.tweens.add({ targets: img, y: img.y - 26, yoyo: true, repeat: vegades - 1, duration: 170, ease: 'Quad.easeOut', onComplete: fet });
+    }
+    npcMira(key, cap, fet) {                 // cap: 'ineu' o una x
+        const img = this.npcs && this.npcs[key];
+        if (img) img.setFlipX((cap === 'ineu' ? this.ineu.x : cap) < img.x);
+        if (fet) fet();
+    }
+    // Feina amb les mans: es mou endavant i enrere, amb guspires o notes (tipus: 'guspires' | 'notes' | 'fulles')
+    npcFeina(key, ms, tipus, fet) {
+        const img = this.npcs && this.npcs[key];
+        if (!img) { if (fet) fet(); return; }
+        const t = this.tweens.add({ targets: img, angle: { from: -7, to: 7 }, yoyo: true, repeat: -1, duration: 140 });
+        const colors = { guspires: [0xffd060, 0xff8030], notes: [0xd8c8ff, 0xffe8a0], fulles: [0x6ab04a, 0xe86aa0], bombolles: [0x6aff6a, 0xb8ffb0] }[tipus] || [0xffffff];
+        const ev = this.time.addEvent({ delay: 160, loop: true, callback: () => {
+            if (tipus === 'notes') { this.flotant(img.x + Phaser.Math.Between(-30, 30), img.y - img.displayHeight, Phaser.Utils.Array.GetRandom(['♪', '♫', '♩']), '#d8c8ff'); return; }
+            const p = this.add.circle(img.x + Phaser.Math.Between(-20, 20), img.y - img.displayHeight * 0.5, 4, Phaser.Utils.Array.GetRandom(colors)).setDepth(img.depth + 1);
+            this.tweens.add({ targets: p, x: p.x + Phaser.Math.Between(-50, 50), y: p.y - Phaser.Math.Between(20, 60), alpha: 0, duration: 600, onComplete: () => p.destroy() });
+        } });
+        this.time.delayedCall(ms, () => { t.stop(); img.setAngle(0); ev.remove(); if (fet) fet(); });
+    }
+    // Bombolla sobre el cap d'algú: '!', '?', '♪', '❤', '…', 'Zzz'
+    bombolla(qui, text, fet, ms = 900) {
+        const img = qui === 'ineu' ? this.ineu : this.npcs && this.npcs[qui];
+        if (!img) { if (fet) fet(); return; }
+        const t = this.add.text(img.x, img.y - img.displayHeight - 16, text, estilText(34, '#2a170b', { backgroundColor: '#f2e6c8', padding: { x: 10, y: 4 } })).setOrigin(0.5, 1).setDepth(99000);
+        this.tweens.add({ targets: t, y: t.y - 10, duration: 250, ease: 'Back.easeOut' });
+        this.time.delayedCall(ms, () => { t.destroy(); if (fet) fet(); });
+    }
+    // Un objecte (o una espurna) vola d'algú cap a l'Ineu
+    objecteVola(de, fet, key) {
+        const img = de && de.x !== undefined ? de : this.npcs && this.npcs[de];
+        const x0 = img ? img.x : this.ineu.x, y0 = img ? img.y - (img.displayHeight || 60) * 0.6 : this.ineu.y - 120;
+        const o = key && this.textures.exists(key) ? this.add.image(x0, y0, key) : this.add.circle(x0, y0, 10, 0xffe8a0, 1);
+        if (o.type === 'Image') o.setScale(46 / Math.max(o.height, o.width));
+        o.setDepth(99000);
+        this.tweens.add({ targets: o, x: this.ineu.x, y: this.ineu.y - 70, duration: 700, ease: 'Sine.easeInOut', onComplete: () => {
+            o.destroy();
+            const fl = this.add.circle(this.ineu.x, this.ineu.y - 70, 14, 0xffffff, 0.9).setDepth(99000);
+            this.tweens.add({ targets: fl, radius: 46, alpha: 0, duration: 350, onComplete: () => fl.destroy() });
+            if (fet) fet();
+        } });
+    }
+    // L'Ineu camina fins a (x, y)
+    ineuVa(x, y, fet, vel = 180) {
+        const dx = x - this.ineu.x, dy = y - this.ineu.y, dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'esquerra' : 'dreta') : (dy < 0 ? 'amunt' : 'avall');
+        this.posarDireccio(dir, true);
+        const dur = Math.max(150, Math.hypot(dx, dy) / vel * 1000);
+        this.tweens.add({ targets: this.ineu, x, y, duration: dur, onComplete: () => { this.posarDireccio(dir, false); if (fet) fet(); } });
+    }
+    // L'Ineu (o un personatge) s'ajup/agenolla un moment
+    ajupir(qui, fet, ms = 900) {
+        const img = qui === 'ineu' ? this.ineu : this.npcs && this.npcs[qui];
+        if (!img) { if (fet) fet(); return; }
+        const s = img.scaleY;
+        this.tweens.add({ targets: img, scaleY: s * 0.8, duration: 300, yoyo: true, hold: ms, onComplete: () => { img.scaleY = s; if (fet) fet(); } });
+    }
+    // Un esclat de llum suau en un punt (benediccions, màgia)
+    llum(x, y, color = 0xffe8a0, fet) {
+        const c = this.add.circle(x, y, 20, color, 0.7).setDepth(99000).setBlendMode('ADD');
+        this.tweens.add({ targets: c, radius: 120, alpha: 0, duration: 900, onComplete: () => { c.destroy(); if (fet) fet(); } });
+        const p = this.add.particles(x, y, 'espurna', { speed: { min: 20, max: 90 }, lifespan: 1000, scale: { start: 0.35, end: 0 }, tint: [color, 0xffffff], blendMode: 'ADD', quantity: 18, emitting: false }).setDepth(99001);
+        p.explode(18);
+        this.time.delayedCall(1200, () => p.destroy());
     }
 
     // Llista d'arbres [[x, y], ...]

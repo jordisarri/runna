@@ -75,7 +75,7 @@ const DIALEGS = {
                 pagines: [
                     { qui: "Pare Jordi", text: "Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna ni a mi." },
                     { qui: "Pare Jordi", text: "Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és voler bé de debò. Ajup el cap." },
-                    { qui: "", text: "El Pare Jordi posa la mà a la teva testa i resa una pregària breu, en veu baixa." },
+                    { fer: (z, fet) => z.seq([c => z.npcVa('pare_jordi', z.ineu.x + 60, z.ineu.y + 4, c), c => z.npcMira('pare_jordi', 'ineu', c), c => { z.ajupir('ineu'); z.llum(z.ineu.x, z.ineu.y - 90, 0xffe8a0, c); }], fet) },
                     { qui: "Pare Jordi", text: "No vas sol, Ineu. Vas amb tot el Miracle darrere teu." },
                     { qui: "", text: "Has rebut la BENEDICCIÓ DEL PARE JORDI." }
                 ],
@@ -186,10 +186,10 @@ const DIALEGS = {
         const donar = () => { E.posaFlag('ciscuTrobat'); E.posaFlag('clauGirgoles'); E.dona('clau_girgoles'); };
         if (!E.flag('ciscuTrobat')) return {
             pagines: [
-                { qui: '', text: 'Un nen amb gorra, assegut a terra davant la taula, té les cartes estirades en files: un solitari a mig fer. Quan et veu, s\'hi tira a sobre per amagar-les.' },
+                { fer: (z, fet) => z.seq([c => z.bombolla('ciscu', '!', c, 600), c => z.npcSalta('ciscu', c, 1)], fet) },
                 { qui: 'Ciscu', text: 'No diguis res a la mare! Sóc el Ciscu, el de la Carmen, la de la Taverna. Des que hi ha boira, ella dorm tot el dia i l\'Eva em fa fregar gots.' },
                 { qui: 'Ciscu', text: 'Aquí ningú no em busca i puc jugar al solitari tranquil. Les cartes són de l\'avi. Li falta el set d\'oros, però faig veure que hi és.' },
-                { qui: 'Ciscu', text: 'De nit, abans de venir, he vist el Germà Andreu entrar per la porta de ferro de darrere la Taverna, la del soterrani. A baix n\'hi ha una altra, de ferro, amb un pany petit. I d\'allà dins se senten ocells.' },
+                { qui: 'Ciscu', text: 'De nit he vist el Germà Andreu picar tres cops a la porta de ferro de darrere la Taverna, la del soterrani. No té clau, d\'aquesta: la porta s\'obre sola, com si de dins l\'esperessin. A baix n\'hi ha una altra, amb un pany petit.' },
                 ...clau
             ],
             enAcabar: donar
@@ -201,7 +201,7 @@ const DIALEGS = {
         ] };
     },
 
-    solitari: E => ({ pagines: [{ qui: '', text: 'Un solitari a mig fer: set columnes de cartes de la baralla espanyola, gastades i amb les puntes doblegades. Falta el set d\'oros: algú hi ha posat un tros de paper amb un 7 dibuixat.' }] }),
+    solitari: E => ({ pagines: [{ qui: '', text: 'Un solitari a mig fer amb la baralla espanyola de l\'avi. Falta el set d\'oros: algú n\'hi ha dibuixat un en un paper.' }] }),
 
     cofreCabanaCami: E => {
         if (E.flag('cofreCabanaCami')) return { pagines: [{ qui: '', text: "El cofre és obert i buit. Només queda l'olor de fusta vella i de cera." }] };
@@ -221,7 +221,7 @@ const DIALEGS = {
         if (!E.flag("cantAurora")) {
             const intro = primera ? [
                 { qui: "La Pianista", text: "Ai, Ineu, fill... Passa, passa. Perdona que no et miri, no puc deixar l'orgue." },
-                { qui: "", text: "La Pianista prem les tecles amb els dits gruixuts i ràpids. Les notes surten... i s'apaguen a mig aire, com si algú se les empassés." },
+                { fer: (z, fet) => z.seq([c => z.npcFeina('pianista', 1600, 'notes', c), c => z.bombolla('pianista', '…', c)], fet) },
                 { qui: "La Pianista", text: "Fa quaranta anys que toco cada dia i mai no m'havia faltat el so. Jo només visc per això, fill. Sense música, què sóc?" },
                 { qui: "La Pianista", text: "És com si alguna cosa s'estigués menjant la música. Fa tres nits, des que va arribar la boira." }
             ] : [{ qui: "La Pianista", text: "Ho tornem a provar, fill? Escolta bé les tres notes." }];
@@ -395,7 +395,8 @@ const DIALEGS = {
             { qui: 'Josep', text: '...Me l\'has tornat. El servei. Me l\'has tornat de debò.' },
             { qui: 'Juli', text: 'HO SABIA! Efecte Magnus, Josep! Física pura!' },
             { qui: 'Frederic', text: 'Bon partit, noi. Ara sí: vine, que t\'he de dir una cosa.' },
-            { qui: '', text: 'En Josep et dóna la mà i un got d\'aigua de bota. Notes el cor més fort.\n+1 GRA AL ROSARI.' }
+            { fer: (z, fet) => z.seq([c => z.npcVa('josep', z.ineu.x + 60, z.ineu.y, c), c => z.objecteVola('josep', c)], fet) },
+            { qui: '', text: '+1 GRA AL ROSARI.' }
         ],
         enAcabar: () => {
             E.posaFlag('josepVencut');
@@ -532,7 +533,8 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pare Alcuí", text: "Has trobat els dos fragments! Deixa'm llegir-los... Sí. Ho explica la Crònica que guardo a la biblioteca: un monjo va segellar la foscor amb la llum de Runna." },
-                    { qui: "", text: "El Pare Alcuí, a la Crònica, assenyala un marge (llegit amb els dos fragments):\n«Des que la tercera església va quedar inacabada, l'ombra del monjo es veu clarament sobre el mur de les Runes: mig corbat, amb les mans unides, com si pregués. Apareix cada nit.»" },
+                    { fer: (z, fet) => z.npcVa('pare_alcui', 812, 372, fet, 120) },
+                    { qui: "", text: "Al marge de la Crònica, amb la mateixa lletra dels fragments:\n«Des que la tercera església va quedar inacabada, l'ombra del monjo es veu clarament sobre el mur de les Runes: mig corbat, amb les mans unides, com si pregués. Apareix cada nit.»" },
                     { qui: "Pare Alcuí", text: "L'ombra del monjo... No fa mal a ningú, Ineu. Crec que és el monjo que va segellar la foscor amb la llum de Runna. Ves a veure'l, de nit, a les Runes." }
                 ],
                 enAcabar: () => { E.posaFlag("fragment3"); E.posaFlag("parlatAlcui"); E.posaObjectiu("Visita l'ombra del monjo a les Runes (a l'est de la plaça de les Runes, de nit)."); }
@@ -564,7 +566,7 @@ const DIALEGS = {
         if (!E.flag("cantPedres")) {
             return {
                 pagines: [
-                    { qui: "", text: "L'ombra gira lentament el cap cap a tu. Dins el teu cap, una veu molt baixa, de moltes veus." },
+                    { fer: (z, fet) => z.ombraReacciona(fet) },
                     { qui: "Monjo", text: "Fa segles que no sento parlar cap llengua que no siguin les pedres. Només el cant de les pedres em desperta del tot." },
                     { qui: "Monjo", text: "Qui toca l'orgue el coneix. Aprèn-lo, petit monjo, i torna a cantar-me'l aquí." }
                 ],
@@ -585,7 +587,7 @@ const DIALEGS = {
     // Es llança quan l'Ineu toca el Cant de les Pedres davant l'ombra
     benedicioMonjo: E => ({
         pagines: [
-            { qui: "", text: "Les notes pugen cap al mur. L'ombra aixeca el cap, i per primer cop se li veu la cara: serena, vella, cansada." },
+            { fer: (z, fet) => z.ombraReacciona(fet) },
             { qui: "Monjo", text: "Jo era el qui va tancar la porta. Quan van obrir el cementiri, rient, els meus germans van deixar de descansar i el segell es va esquerdar." },
             { qui: "Monjo", text: "Sota terra hi ha una gàbia, petit monjo, i una cosa que no ha oblidat cap cant ni cap nen. Jo només puc vigilar. Tu pots tornar a tancar-ho." },
             { qui: "Monjo", text: "L'espasa dorm al sud-est, entre pedres, allà on el sol s'atura. Rep la meva benedicció, que no pesa ni es veu, i recorda: la foscor tem la llum, però més encara el riure." },
@@ -600,7 +602,7 @@ const DIALEGS = {
     // ---- Bassadòria ----
     bassadoriaNeta: E => ({
         pagines: [
-            { qui: "", text: "Les tres notes cauen sobre l'aigua com gotes de llum. La boira lila s'esfilagarsa, la bassa es torna clara, i al fons se sent un cop d'aigua: els gripaus han tornat a ser gripaus normals i se'n van saltant." },
+            { qui: "", text: "La boira lila s'esfilagarsa i l'aigua de la bassa es torna clara. Els gripaus tornen a ser gripaus." },
             { qui: "Ineu", text: "Ha funcionat! L'aigua és neta..." }
         ],
         enAcabar: () => {
@@ -631,7 +633,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: '', text: 'La Font del Bisbe: una font de pedra del temps de Sant Joan, seca i amb una olor estranya. Sobre la pica hi ha una mitra gravada: diuen que un bisbe, fa segles, hi va beneir l\'aigua.' },
+                { qui: '', text: 'La Font del Bisbe: seca, i amb una olor estranya. A la pica hi ha una mitra gravada.' },
                 { qui: 'Ineu', text: 'Les Tietes diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, romaní i el fruit de l\'arbre lila.»' },
                 { qui: 'Ineu', text: 'Les herbes de la Nit de Sant Joan fan llum: n\'hi ha una al nord (cap al Til·ler) i el romaní al sud-est, sempre en una clariana. I l\'arbre lila... és la Prunera Màgica, al jardí de l\'Hostatgeria! Una pruna.' },
                 { qui: '', text: `Ofrenes trobades: ${herbes}/3.` }
@@ -761,7 +763,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: 'Garf', text: 'Un cristall de gel de la Font del Bisbe! Fa anys que en buscava un. Dóna\'m una estona.' },
-                    { qui: '', text: 'El Garf martelleja, mesura, bufa i fa saltar guspires. Al cap d\'una estona, et mostra un tub de llautó amb lents.' },
+                    { fer: (z, fet) => z.seq([c => z.npcFeina('garf', 1800, 'guspires', c), c => z.npcSalta('garf', c, 1), c => z.objecteVola('garf', c, 'telescopi_mon')], fet) },
                     { qui: 'Garf', text: 'Un telescopi! Amb això veuràs coses que cap monjo no ha vist. Perquè no se\'t perdi: les estrelles fan camí.' },
                     { qui: '', text: 'Has obtingut el TELESCOPI DEL GARF.' }
                 ],
@@ -796,7 +798,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Isidre", text: "Sopar del Til·ler, eh? Cada any se n'omple el cap amb escudelles i s'obliden de les flors. Jo hi fico flors des que tenia dos peus bons." },
-                    { qui: "", text: "L'Isidre, coix, va de parterre en parterre tallant amb una navalla petita. Al final et dona un ram embolicat amb un tros de pergamí." },
+                    { fer: (z, fet) => { const i = z.npcs.isidre, x0 = i.x, y0 = i.y; z.seq([c => z.npcVa('isidre', x0 - 140, y0 - 30, c, 80), c => z.npcFeina('isidre', 1300, 'fulles', c), c => z.npcVa('isidre', x0, y0, c, 80), c => z.objecteVola('isidre', c, 'flors')], fet); } },
                     { qui: "Isidre", text: "Les flors de lluna són pels que falten. Posa-les al mig de la taula. Jo no podré ser-hi, que el peu em ballaria... però seré a cada pètal." },
                     { qui: "", text: "Has obtingut les FLORS DE L'ISIDRE." }
                 ],
@@ -883,7 +885,7 @@ const DIALEGS = {
         if (!E.flag('premiPains')) return {
             pagines: [
                 { qui: 'Pains', text: 'Oh, mon petit! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Pains.' },
-                { qui: 'Pains', text: 'La boira va entrar pel soterrani una nit de fa tres lluns. Vaig veure un home amb abric d\'ocells que s\'enduia els nens del poble, rient baixet.' },
+                { qui: 'Pains', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb abric d\'ocells que s\'enduia els nens del poble, rient baixet.' },
                 { qui: 'Pains', text: 'Pren això, fill. El rosari d\'aquesta casa és vell i fort: que et doni una mica de la seva claror.' }
             ],
             enAcabar: () => premiMonja('Pains', 'premiPains')
@@ -893,8 +895,8 @@ const DIALEGS = {
     monjaPhili: E => {
         if (!E.flag('premiPhili')) return {
             pagines: [
-                { qui: 'Phili', text: 'Per fi! Tres lluns que colpejo aquesta porta! Soc la Phili, i no, no m\'he estat quieta ni un minut.' },
-                { qui: 'Phili', text: 'T\'ho dic perquè ho vaig veure: el Germà Andreu, el de la pilota, baixava a la Taverna cada nit amb una clau grossa. Mai no li he cregut el somriure.' },
+                { qui: 'Phili', text: 'Per fi! Tres nits que colpejo aquesta porta! Soc la Phili, i no, no m\'he estat quieta ni un minut.' },
+                { qui: 'Phili', text: 'T\'ho dic perquè ho vaig veure: el Germà Andreu, el de la pilota, baixava a la Taverna cada nit, al soterrani, amb una clau petita i rovellada. Mai no li he cregut el somriure.' },
                 { qui: 'Phili', text: 'Aquí tens, per les molèsties. Que no se t\'acabin les forces!' }
             ],
             enAcabar: () => premiMonja('Phili', 'premiPhili')
@@ -975,7 +977,7 @@ const DIALEGS = {
     // Es llança quan l'Ineu toca música vora la foguera dels pastors (durant el sopar del Til·ler)
     pastorsConvencuts: E => ({
         pagines: [
-            { qui: "", text: "Les notes pugen amb el fum. Els pastors, que s'escalfaven en silenci, aixequen el cap un a un. La flama s'aviva sola." },
+            { fer: (z, fet) => { ['pastor_a', 'pastor_vell', 'pastor_b'].forEach((k, i) => z.time.delayedCall(i * 300, () => { z.npcSalta(k, null, 1); z.bombolla(k, '♪', null, 1100); })); if (z.foc) z.tweens.add({ targets: z.foc, scale: z.foc.scale * 1.5, yoyo: true, duration: 600 }); z.esperar(1600, fet); } },
             { qui: "Pastora", text: "Havia oblidat que existia això..." },
             { qui: "Pastor vell", text: "Fa cinquanta anys que ningú no ens convidava enlloc, monjo. Ni a una missa, ni a una taula. I tu ens parles amb música." },
             { qui: "Pastor vell", text: "Vindrem. No direm gaire cosa, perquè no sabem com es fa. Però portarem pa. És el que sabem fer." },
@@ -1004,7 +1006,6 @@ const DIALEGS = {
     tillerSoparPreparat: E => ({
         pagines: [
             { qui: "El Gran Til·ler", text: "Ho has portat tot. Que es faci el sopar." },
-            { qui: "", text: "Cau el dia. De les cel·les surt la gent amb safates i cadires; per l'altre camí baixen, callats i amb el pa sota el braç, els pastors de la Cirosa." }
         ],
         enAcabar: () => game.scene.getScene("ZonaTiller").fesSopar()
     }),
@@ -1012,17 +1013,19 @@ const DIALEGS = {
     // El ritual: s'encén una espelma per cada absent... i una per qui no té nom
     tillerSoparRitual: E => ({
         pagines: [
-            { qui: "", text: "Sota el Til·ler hi ha una taula llarguíssima: l'escudella fumeja, el pa dels pastors al mig, i flors de lluna entre els plats. Tres cadires buides, i una de més, al capdavall." },
+            { qui: "", text: "Sota el Til·ler, una taula llarga: l'escudella, el pa dels pastors i les flors de lluna. Tres cadires buides, i una de més." },
             { qui: "Neus", text: "Aquest any m'he descuidat de fer-hi cantar ningú. I a l'escudella hi he posat una cullerada de més, com cada any: la del que falta. Enguany n'hi he posat tres." },
             { qui: "Senyor Moliner", text: "...I jo hi he posat una altra per a ella. Per si de cas. Que no ho sàpiga." },
             { qui: "Tieta Enriqueta", text: "Sempre fem el mateix, fill: una espelma per cada llar que té una cadira buida. Encén-la tu, que ets qui ho ha de portar a terme." },
-            { qui: "", text: "L'Ineu encén una espelma per a l'Uri. Una altra per al Flam. Una tercera per al Sardin. Mentre ho fa, ningú no diu res; només es veu com cada flama es reflecteix als ulls dels qui miren." },
+            { fer: (z, fet) => z.encendreEspelmes([0, 1, 2], fet) },
             { qui: "Pastor vell", text: "I una quarta... per als que no tenen nom. Per als que ningú no va recordar. Si el pare ho permet." },
-            { qui: "", text: "L'Ineu la posa a l'extrem. Les quatre flames tremolen alhora i, per un moment, es fan una de sola." },
+            { fer: (z, fet) => z.encendreEspelmes([3], fet) },
             { qui: "El Gran Til·ler", text: "Aquesta és la saviesa que et volia donar, petit monjo: ningú no es perd del tot mentre algú el recorda a taula. La gàbia de l'Ocellaire només s'omple de qui s'ha quedat sol." },
             { qui: "El Gran Til·ler", text: "Rep el meu permís. Que et sigui lleu, i que no et faci oblidar mai que vas menjar amb tots." },
-            { qui: "", text: "Una fulla de til·ler, daurada, es desprèn de la branca més alta i cau, giravoltant, a les teves mans.\nHas obtingut la FULLA DEL TIL·LER!" },
-            { qui: "", text: "Els qui són a la taula mengen, riuen poc a poc, i algú comença a cantar a mitja veu. Des del Santuari, molt lluny, arriba una nota d'orgue que, per primer cop en dies, no s'apaga.\nEl sopar t'omple de força: +1 gra al rosari, i el rosari torna a brillar sencer." }
+            { fer: (z, fet) => z.fullaCau(fet) },
+            { qui: "", text: "Has obtingut la FULLA DEL TIL·LER!" },
+            { fer: (z, fet) => { ['sopar_pastor_a', 'sopar_pastor_b', 'sopar_pastor_vell'].forEach(k => z.bombolla(k, '♪', null, 1400)); z.esperar(1500, fet); } },
+            { qui: "", text: "Des del Santuari, molt lluny, arriba una nota d'orgue que, per primer cop en dies, no s'apaga.\n+1 gra al rosari, i el rosari torna a brillar sencer." }
         ],
         enAcabar: () => {
             E.dona("fulla_tiler"); E.posaFlag("fullaTiler"); E.posaFlag("soparFet");
@@ -1043,7 +1046,7 @@ const DIALEGS = {
 
     andreuPastor: E => ({
         pagines: [
-            { qui: "", text: "Al mig de la pastura, el Germà Andreu aixeca una caiada. Els ulls li brillen lila, i el ramat de boira bessa al seu voltant." },
+            { fer: (z, fet) => z.seq([c => z.npcSalta('andreu', c, 1), c => z.llum(z.npcs.andreu.x, z.npcs.andreu.y - 90, 0xb88aff, c)], fet) },
             { qui: "Germà Andreu", text: "Ineu! Has pujat fins aquí... Mira'ls. Mira com em segueixen. Ningú no m'havia seguit mai." },
             { qui: "Germà Andreu", text: "El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» Jo no el trobo a faltar: l'admiro. I ara sóc el seu pastor. El PASTOR!" },
             { qui: "Ineu", text: "Andreu, això que et parla no és bo. Encara pots tornar enrere." },
@@ -1054,11 +1057,11 @@ const DIALEGS = {
 
     andreuDerrotat: E => ({
         pagines: [
-            { qui: "", text: "El Pastor cau de genolls. La boira surt del seu cos com un fum lila i s'escampa entre els xais, que de sobte tornen a ser blancs." },
+            { fer: (z, fet) => z.andreuAgenollat(fet) },
             { qui: "Germà Andreu", text: "Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré." },
-            { qui: "Germà Andreu", text: "El Mestre és sota el Bar, i ja és despert. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells." },
-            { qui: "", text: "El Germà Andreu s'aixeca, riu amb un riure sec i s'allunya pel camí, cap al sud, cap a la Taverna." },
-            { qui: "Ineu", text: "(«Sota el Bar»... Ara ja sé on mirar.)" }
+            { qui: "Germà Andreu", text: "El Mestre és sota la Taverna, i ja és despert. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells." },
+            { fer: (z, fet) => z.andreuMarxa(fet) },
+            { qui: "Ineu", text: "(«Sota la Taverna»... Ara ja sé on mirar.)" }
         ],
         enAcabar: () => {
             E.posaFlag("pastorVencut");
@@ -1076,7 +1079,7 @@ const DIALEGS = {
         if (!E.flag("nenaVista")) {
             return {
                 pagines: [
-                    { qui: "", text: "En una corba del camí, una nena transparent seu a terra, amb dues trenes llargues i sense res que les lligui. Plora sense fer soroll; on cauen les llàgrimes, l'herba es posa blanca." },
+                    { qui: "", text: "Una nena transparent seu a terra, amb dues trenes sense lligar. Plora en silenci, i on cauen les llàgrimes l'herba es torna blanca." },
                     { qui: "Nena de les Trenes", text: "No et facis enrere, si us plau... No vull espantar ningú. Només que, quan arriba algú, sempre fuig." },
                     { qui: "Nena de les Trenes", text: "Vaig venir a collir rovellons amb la mare. Em va lligar les dues trenes amb dos llaços rosa, i em vaig perdre pel bosc. Fa molts, molts anys. No he pogut marxar d'aquí." },
                     { qui: "Nena de les Trenes", text: "Els llaços van caure mentre corria: un va quedar pel camí, amagat sota una roca, i l'altre ja dins el bosc dels rovellons, darrere un arbust. Sense ells, no sento les mans de la mare. Si me'ls tornessis a lligar..." },
@@ -1094,9 +1097,9 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: "Nena de les Trenes", text: "Els has trobat... Els dos? Oh, monjo..." },
-                { qui: "", text: "L'Ineu s'agenolla davant la nena. Amb molta cura, perquè sembla de boira, lliga un llaç rosa a cada trena. Sota els seus dits, els cabells es fan, per un moment, de debò." },
+                { fer: (z, fet) => z.seq([c => z.ineuVa(z.nena.x + 70, z.nena.y + 10, c), c => { z.ajupir('ineu'); z.llum(z.nena.x, z.nena.y - 60, 0xffc8e0, c); }], fet) },
                 { qui: "Nena de les Trenes", text: "Les sento... Sento les mans de la mare! Mare...? Mare, ets tu? M'has trobat?" },
-                { qui: "", text: "A la corba del camí, una dona sense rostre ni veu s'agenolla i obre els braços. La nena corre cap a ella, i quan s'abracen, tot es torna llum." },
+                { fer: (z, fet) => z.mareNena(fet) },
                 { qui: "Nena de les Trenes", text: "Gràcies, monjo. Ja no tinc por. Aquí et deixo un dels meus llaços: guarda't amb ell, que també protegeix els que es perden." },
                 { qui: "", text: "Has obtingut la CINTA DE LA NENA: absorbeix un cop cada cop que entres a una zona.\nLa Nena de les Trenes ja no espantarà ningú." }
             ],
@@ -1265,7 +1268,7 @@ const DIALEGS = {
     // Reixa del porxo vista des de l'escalinata (per dins només hi ha una barra de ferro)
     reixaDins: E => ({
         pagines: [
-            { qui: "", text: "La reixa del porxo, vista des de dins: unes cadenes gruixudes i una barra de ferro travessada. De fora no hi ha qui l'obri, però per dins n'hi ha prou amb aixecar la barra." },
+            { qui: "", text: "La reixa del porxo, tancada amb una barra de ferro. Per dins, n'hi ha prou amb aixecar-la." },
             { qui: "", text: "L'Ineu aixeca la barra amb un xiscle de ferro vell. La reixa cedeix una mica: ara es pot sortir a la plaça (per dins; de fora continua tancada)." }
         ],
         enAcabar: () => E.posaFlag("reixaObertaDins")
@@ -1290,7 +1293,7 @@ const DIALEGS = {
         if (E.flag("cofreCambra")) return { pagines: [{ qui: "", text: "El cofre és obert i buit. Només queda un pergamí de tapes de cuir." }] };
         return {
             pagines: [
-                { qui: "", text: "Una cambra secreta que els monjos van fer servir fa segles: un cofre massís entre botes buides. A dins, un flascó de vidre amb un líquid daurat i un pergamí de tapes de cuir." },
+                { qui: "", text: "Un cofre massís entre botes buides. A dins, un flascó daurat i un pergamí de tapes de cuir." },
                 { qui: "", text: "Beus el flascó. Notes el cor més fort.\n+1 GRA AL ROSARI i rosari ple." },
                 { qui: "", text: "Has obtingut el PERGAMÍ DEL MONJO." },
                 { qui: "Pergamí del monjo", text: "«Les relíquies dels meus germans i la clau de ferro són sota l'escala, murades. Un guardià de pedra les vigila: ningú no hi baixa si no li gira el cap cap al sol que neix. On neix el sol, el raïm madura.»" },
@@ -1320,11 +1323,11 @@ const DIALEGS = {
         if (!E.flag("jaumetaVista")) {
             return {
                 pagines: [
-                    { qui: "", text: "Dins la cabana fa olor de fum, de pèl mullat i de sopa de fa setmanes. Una dona petita i espigada, amb uns cabells feréstecs plens de fulles, remena una olla negra amb una cullera de fusta." },
+                    { fer: (z, fet) => z.seq([c => z.npcFeina('jaumeta', 1400, 'bombolles', c), c => z.bombolla('jaumeta', '!', c, 700)], fet) },
                     { qui: "La Jaumeta", text: "Ei! Tu! Qui coi t'ha dit que podies entrar? Els frares no veniu mai per aquí! Fot el camp o et faig créixer bolets a les orelles!" },
                     { qui: "Ineu", text: "Perdoni... He arribat per l'alzina. Duc aigua de la Font del Bisbe." },
                     { qui: "La Jaumeta", text: "Aigua... de la Font del Bisbe?! Dona'm aixòooo! Fa trenta anys que no en tinc ni una gota neta." },
-                    { qui: "", text: "L'agafa, destapa l'ampolla amb les dents i la buida a mitges a l'olla. SPLASH verd! La cabana s'omple d'una olor de menta, de roses i de pluja." },
+                    { fer: (z, fet) => z.seq([c => z.npcVa('jaumeta', 500, 360, c, 200), c => z.llum(450, 290, 0x6aff6a, c), c => z.npcVa('jaumeta', 560, 420, c, 200)], fet) },
                     { qui: "La Jaumeta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? No és al nord de sempre, com et diuen: és al nord de les Cel·les, i han tapat el camí amb una boira que no marxa amb el vent." },
                     { qui: "La Jaumeta", text: "Mira, he barrejat l'aigua que queda amb farigola, romaní i herba de Sant Joan. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
                     { qui: "", text: "Has obtingut el BEURATGE DE LA JAUMETA.\nAboca'l a la boira que tapa el camí al nord de les Cel·les." }
