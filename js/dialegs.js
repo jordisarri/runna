@@ -57,7 +57,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pare Jordi", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
-                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: el Biel, de Sant Antoni; el Pol, de Sant Benet; i aquesta nit, la Martina, la filla del Daniel." },
+                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: l'Uri, de Sant Antoni; el Flam, de Sant Benet; i aquesta nit, el Sardin, el fill del Daniel." },
                     { qui: "Pare Jordi", text: "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada... i, diu la Neus, un piular d'ocells que no se sap d'on ve." },
                     { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Pren el meu clauer de novici: parla amb tothom i explica-m'ho tot." },
                     { qui: "", text: "Has obtingut el CLAUER DE NOVICI!\nObre la biblioteca i les cel·les." },
@@ -175,11 +175,27 @@ const DIALEGS = {
         };
     },
 
+    // El Ciscu, el fill de la Carmen, s'ha escapat a la cabana amagada a jugar al solitari
+    ciscu: E => E.flag('ciscuTrobat') ? { pagines: [
+        { qui: 'Ciscu', text: E.flag('relIquiesRetornades') ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el cavall de copes. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
+        { qui: 'Ciscu', text: 'Si veus la mare, no li diguis on sóc. Bé... si et pregunta molt, sí.' }
+    ] } : {
+        pagines: [
+            { qui: '', text: 'Un nen amb gorra, assegut a terra davant la taula, té les cartes estirades en files: un solitari a mig fer. Quan et veu, s\'hi tira a sobre per amagar-les.' },
+            { qui: 'Ciscu', text: 'No diguis res a la mare! Sóc el Ciscu, el de la Carmen, la de la Taverna. Des que hi ha boira, ella dorm tot el dia i l\'Eva em fa fregar gots.' },
+            { qui: 'Ciscu', text: 'Aquí ningú no em busca i puc jugar al solitari tranquil. Les cartes són de l\'avi. Li falta el set d\'oros, però faig veure que hi és.' },
+            { qui: 'Ciscu', text: 'Una cosa: de nit, abans de venir, he vist el Germà Andreu entrar per la porta de ferro de darrere la Taverna, la del soterrani. Sempre la tanca amb clau. I d\'allà dins se senten ocells.' }
+        ],
+        enAcabar: () => E.posaFlag('ciscuTrobat')
+    },
+
+    solitari: E => ({ pagines: [{ qui: '', text: 'Un solitari a mig fer: set columnes de cartes de la baralla espanyola, gastades i amb les puntes doblegades. Falta el set d\'oros: algú hi ha posat un tros de paper amb un 7 dibuixat.' }] }),
+
     cofreCabanaCami: E => {
         if (E.flag('cofreCabanaCami')) return { pagines: [{ qui: '', text: "El cofre és obert i buit. Només queda l'olor de fusta vella i de cera." }] };
         return {
             pagines: [
-                { qui: '', text: "Una cabana de llenyataire oblidada, amagada entre els arbres. Ningú no hi ha entrat en anys: la pols és una catifa grisa." },
+                { qui: '', text: "Una cabana de llenyataire oblidada, amagada entre els arbres. La pols és una catifa grisa, menys al voltant de la taula, on algú hi juga a cartes." },
                 { qui: '', text: "Al fons, un cofre petit. A dins, un flascó daurat embolicat amb un drap i una nota gastada: «Per a qui es perd pel camí i el troba.»" },
                 { qui: '', text: "Beus el flascó. Notes el cor més fort.\n+1 GRA AL ROSARI i rosari ple." }
             ],
@@ -389,9 +405,9 @@ const DIALEGS = {
         if (E.flag("soparObert") && !E.flag("escudella")) {
             return {
                 pagines: [
-                    { qui: "Neus", text: "El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb el Pol fora..." },
+                    { qui: "Neus", text: "El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb el Flam fora..." },
                     { qui: "Neus", text: "...Però el Til·ler té raó, maleït sigui. No es pot deixar de fer el que s'ha fet sempre, ni quan el cor fa mal. Pren l'escudella, i no la vessis!" },
-                    { qui: "Neus", text: "Hi he posat una cullerada més, com cada any: la del que falta. Enguany és per al Pol. Tu tingues-ne cura de portar-la sencera." },
+                    { qui: "Neus", text: "Hi he posat una cullerada més, com cada any: la del que falta. Enguany és per al Flam. Tu tingues-ne cura de portar-la sencera." },
                     { qui: "", text: "Has obtingut L'ESCUDELLA DE LA NEUS." }
                 ],
                 enAcabar: () => { E.dona("escudella"); E.posaFlag("escudella"); objectiuSopar(E); }
@@ -399,7 +415,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: "Neus", text: "Ineu, fill, no t'hi quedis plantat! El Pol va marxar d'aquí fa dues nits i ningú no fa res!" },
+                { qui: "Neus", text: "Ineu, fill, no t'hi quedis plantat! El Flam va marxar d'aquí fa dues nits i ningú no fa res!" },
                 { qui: "Senyor Moliner", text: "Neus, deixa'l respirar..." },
                 { qui: "Neus", text: "Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'l. I si veus la Júlia, que no surti de cel·la." }
             ],
@@ -420,10 +436,10 @@ const DIALEGS = {
     yordi: E => ({ pagines: [{ qui: 'Yordi', text: 'Hola, Ineu! Si veus la meva germana Judit, digues-li que em deu un gelat.' }] }),
     judit: E => ({ pagines: [{ qui: 'Judit', text: 'Bon dia! Jo no li dec cap gelat a en Yordi. Que ho sàpigues.' }] }),
     danielT: E => ({ pagines: [
-        { qui: 'Daniel', text: 'Ineu... La Martina, la meva filla, no era al llit aquest matí. La finestra era tancada per dins. Ella no surt mai sola de nit: li fa por la fosca.' },
+        { qui: 'Daniel', text: 'Ineu... El Sardin, el meu fill, no era al llit aquest matí. La finestra era tancada per dins. Ell no surt mai sol de nit: li fa por la fosca.' },
         { qui: 'Daniel', text: 'Ahir a la tarda va anar a berenar a la Taverna, com sempre, amb l\'Eva. Potser l\'Eva va veure alguna cosa. Jo em quedo amb el Turbo: no el deixo sortir d\'aquí.' }
     ] }),
-    turbo: E => ({ pagines: [{ qui: 'Turbo', text: 'La cosina Martina diu que els ocells de nit canten el seu nom. Jo no els he sentit mai. Però jo corro més que tu!' }] }),
+    turbo: E => ({ pagines: [{ qui: 'Turbo', text: 'El cosí Sardin diu que els ocells de nit canten el seu nom. Jo no els he sentit mai. Però jo corro més que tu!' }] }),
 
     tiller: E => {
         if (E.te("basto") && !E.flag("tutorialCombat")) { E.posaFlag("tutorialCombat"); E.posaFlag("combatActiu"); }   // partides velles
@@ -984,10 +1000,10 @@ const DIALEGS = {
     tillerSoparRitual: E => ({
         pagines: [
             { qui: "", text: "Sota el Til·ler hi ha una taula llarguíssima: l'escudella fumeja, el pa dels pastors al mig, i flors de lluna entre els plats. Tres cadires buides, i una de més, al capdavall." },
-            { qui: "Neus", text: "Aquest any m'he descuidat de fer-hi cantar ningú. I a l'escudella hi he posat una cullerada de més, com cada any: la del que falta. Enguany és per al Pol." },
+            { qui: "Neus", text: "Aquest any m'he descuidat de fer-hi cantar ningú. I a l'escudella hi he posat una cullerada de més, com cada any: la del que falta. Enguany és per al Flam." },
             { qui: "Senyor Moliner", text: "...I jo hi he posat una altra per a ella. Per si de cas. Que no ho sàpiga." },
             { qui: "Tieta Enriqueta", text: "Sempre fem el mateix, fill: una espelma per cada llar que té una cadira buida. Encén-la tu, que ets qui ho ha de portar a terme." },
-            { qui: "", text: "L'Ineu encén una espelma per al Biel. Una altra per al Pol. Una tercera per a la Martina. Mentre ho fa, ningú no diu res; només es veu com cada flama es reflecteix als ulls dels qui miren." },
+            { qui: "", text: "L'Ineu encén una espelma per a l'Uri. Una altra per al Flam. Una tercera per al Sardin. Mentre ho fa, ningú no diu res; només es veu com cada flama es reflecteix als ulls dels qui miren." },
             { qui: "Pastor vell", text: "I una quarta... per als que no tenen nom. Per als que ningú no va recordar. Si el pare ho permet." },
             { qui: "", text: "L'Ineu la posa a l'extrem. Les quatre flames tremolen alhora i, per un moment, es fan una de sola." },
             { qui: "El Gran Til·ler", text: "Aquesta és la saviesa que et volia donar, petit monjo: ningú no es perd del tot mentre algú el recorda a taula. La gàbia de l'Ocellaire només s'omple de qui s'ha quedat sol." },
@@ -1007,8 +1023,8 @@ const DIALEGS = {
 
     espelmesTiller: E => ({
         pagines: [
-            { qui: "", text: "Quatre espelmes que no s'han apagat des del sopar, vora les arrels del Til·ler: per al Biel, per al Pol, per a la Martina... i una de més, per qui no té nom." },
-            ...(E.flag("rescatBiel") && E.flag("rescatPol") && E.flag("rescatMartina") ? [{ qui: "", text: "Les tres primeres s'han apagat soles, i fa olor de cera tèbia i de rialles." }] : [])
+            { qui: "", text: "Quatre espelmes que no s'han apagat des del sopar, vora les arrels del Til·ler: per a l'Uri, per al Flam, per al Sardin... i una de més, per qui no té nom." },
+            ...(E.flag("rescatUri") && E.flag("rescatFlam") && E.flag("rescatSardin") ? [{ qui: "", text: "Les tres primeres s'han apagat soles, i fa olor de cera tèbia i de rialles." }] : [])
         ]
     }),
 

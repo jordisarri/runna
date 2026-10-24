@@ -1,7 +1,8 @@
 /**
  * LA TAVERNA PER DINS i el SOTERRANI DE LA PORTA DE FERRO
  * La Carmen (mandrosa) dorm darrere el taulell; l'Eva (amiga fidel) obre la porta a l'Ineu i li explica què passa de nit.
- * Pel fons, una escala baixa al soterrani: la porta de ferro d'on surt la boira. S'obrirà amb la Clau de ferro (Acte 3).
+ * Des de dins NO es pot baixar al soterrani: s'hi entra per la porta de ferro exterior, al darrere de la Taverna (la que fa servir
+ * el Germà Andreu cada nit), que s'obre amb la Clau de ferro. Al soterrani, una segona porta de ferro baixa a la Sala de les Gírgoles.
  */
 
 Object.assign(DIALEGS, {
@@ -22,21 +23,22 @@ Object.assign(DIALEGS, {
         { qui: 'Carmen', text: 'Ves, ves. I si baixes, tanca la porta, que fa corrent.' }
     ] : [
         { qui: '', text: 'La Carmen ronca, asseguda darrere el taulell, amb els peus sobre una caixa de gasoses i el davantal per mocador.' },
-        { qui: 'Carmen', text: '...Zzz... Avui no servim... Ni demà... Ni passat... Zzz...' }
+        { qui: 'Carmen', text: E.flag('ciscuTrobat') ? '...Zzz... Ciscu... frega els gots... i deixa les cartes de l\'avi... Zzz...' : '...Zzz... Avui no servim... Ni demà... Ni passat... Zzz...' }
     ] }),
 
     eva: E => {
         if (!E.flag('evaParlat')) return {
             pagines: [
                 { qui: 'Eva', text: 'Sóc l\'Eva. Ajudo la Carmen... bé, faig la feina de la Carmen. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
-                { qui: 'Eva', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Andreu entra per la porta del darrere i baixa al soterrani. Diu que va a buscar vi. Mai no puja amb cap ampolla.' },
-                { qui: 'Eva', text: 'Al soterrani hi ha una porta de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Sota terra, Ineu. Ocells.' },
-                { qui: 'Eva', text: 'La Martina hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve. Si hi baixes, jo vindré amb tu. No em facis dir que no.' }
+                { qui: 'Eva', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Andreu obre la porta de ferro de fora, la del darrere de la Taverna, i baixa al soterrani. Diu que va a buscar vi. Mai no puja amb cap ampolla. I la torna a tancar amb clau.' },
+                { qui: 'Eva', text: 'Des d\'aquí dins no s\'hi pot baixar: el soterrani només té aquella porta de fora. I a baix, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Sota terra, Ineu. Ocells.' },
+                { qui: 'Eva', text: 'I el Ciscu, el fill de la Carmen, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
+                { qui: 'Eva', text: 'El Sardin hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve. Si hi baixes, jo vindré amb tu. No em facis dir que no.' }
             ],
-            enAcabar: () => { E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'Baixa al soterrani de la Taverna: la Clau de ferro obre la porta d\'on surt la boira.' : E.dades.objectiu); }
+            enAcabar: () => { E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La porta de ferro del darrere de la Taverna (per fora) baixa al soterrani: la Clau de ferro l\'obre.' : E.dades.objectiu); }
         };
         if (E.flag('clauFerro')) return { pagines: [
-            { qui: 'Eva', text: 'Aquesta clau... és de ferro vell, com la porta del soterrani! L\'has trobada a la Casa Gran?' },
+            { qui: 'Eva', text: 'Aquesta clau... és de ferro vell, com la porta de fora, la del soterrani! L\'has trobada a la Casa Gran? Surt i dona la volta a la Taverna: és a la dreta, de cara al camí.' },
             { qui: 'Eva', text: E.flag('cantMiracle') ? 'I la Pianista t\'ha ensenyat el cant. Quan vulguis, baixem. Jo agafo el llum.' : 'Abans de baixar, passa pel Santuari: la Pianista sempre diu que hi ha un cant per a cada porta.' }
         ] };
         if (E.flag('runna')) return { pagines: [
@@ -48,6 +50,16 @@ Object.assign(DIALEGS, {
             { qui: 'Eva', text: 'Busca aquesta espasa, Ineu. I torna. Jo t\'espero aquí, fent veure que treballo.' }
         ] };
     },
+
+    rebostTaverna: E => ({ pagines: [{ qui: '', text: "La porta del rebost, tancada amb forrellat. A dins només hi ha sacs de farina i ampolles. Al soterrani no s'hi baixa d'aquí: només per la porta de ferro de fora, al darrere." }] }),
+
+    // La porta de ferro de fora, al darrere de la Taverna: la del soterrani, que el Germà Andreu tanca amb clau cada nit
+    portaSoterrani: E => E.flag('clauFerro') ? { pagines: [
+        { qui: '', text: "Una porta de ferro baixa, mig enterrada al costat de la Taverna, amb un pany rovellat. Hi poses la Clau de ferro: gira amb un gemec i la porta s'obre sobre una escala de pedra que baixa al soterrani." }
+    ] } : { pagines: [
+        { qui: '', text: "Una porta de ferro baixa, mig enterrada al costat de la Taverna, amb un pany gros com un puny. Per sota s'escola una boira lila i freda. Hi ha petjades de sandàlia al fang." },
+        { qui: 'Ineu', text: "(Tancada amb clau. Per aquí deu baixar el Germà Andreu cada nit. Em caldria una clau de ferro, de les velles.)" }
+    ] },
 
     acordio: E => ({ pagines: [{ qui: '', text: "Un acordió vell sobre una cadira, amb una cinta vermella. L'Eva el toca quan la Carmen dorm: diu que així la boira no entra." }] }),
     taulellTaverna: E => ({ pagines: [{ qui: '', text: "El taulell de la Taverna, de marbre gastat. Gots del revés, una gerra de vi del Solsonès i un plat de coca amb sucre que ningú no ha tastat." }] }),
@@ -75,7 +87,7 @@ class ZonaTavernaInt extends ZonaBase {
             alcada: 800,
             colorFons: '#140e0a',
             pacifica: true,
-            entrades: { porta: { x: 500, y: 700, dir: 'amunt' }, soterrani: { x: 860, y: 330, dir: 'avall' } }
+            entrades: { porta: { x: 500, y: 700, dir: 'amunt' } }
         });
     }
 
@@ -152,14 +164,13 @@ class ZonaTavernaInt extends ZonaBase {
         // L'Eva, al costat de la llar
         this.npc('eva', 560, 300, DIALEGS.eva, { flipX: true });
 
-        // La porta del fons (cap al soterrani), a la paret del fons a la dreta
+        // La porta del rebost, a la paret del fons a la dreta: tancada (des d'aquí no es baixa al soterrani)
         const pf = this.add.graphics().setDepth(-950);
         pf.fillStyle(0x120a04, 1).fillRect(812, 30, 96, 106);
-        pf.fillStyle(0x3a2412, 1).fillRect(818, 36, 84, 100);
-        pf.fillStyle(0x0a0608, 1).fillRect(830, 60, 60, 76);
-        pf.fillStyle(0x9a50ff, 0.18).fillEllipse(860, 130, 90, 26);
-        this.boira(860, 128, 60, 16, 0.4);
-        this.sortida(825, 132, 70, 30, 'ZonaSotaTaverna', 'escala');
+        pf.fillStyle(0x5a3a1e, 1).fillRect(818, 36, 84, 100);
+        for (let k = 1; k < 4; k++) pf.lineStyle(2, 0x2a1608, 1).lineBetween(818 + k * 21, 36, 818 + k * 21, 136);
+        pf.fillStyle(0x2a2a2e, 1).fillRect(830, 82, 60, 8).fillCircle(892, 92, 4);
+        this.interactiu(860, 175, 70, DIALEGS.rebostTaverna, { altura: 90 });
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffc070, 0.07).setDepth(80000);
         this.sortida(460, H - 22, 80, 14, 'ZonaTaverna', 'interior');
@@ -175,7 +186,7 @@ class ZonaSotaTaverna extends ZonaBase {
             alcada: 900,
             colorFons: '#08060a',
             pacifica: true,
-            entrades: { escala: { x: 400, y: 790, dir: 'amunt' }, girgoles: { x: 400, y: 280, dir: 'avall' } }
+            entrades: { exterior: { x: 400, y: 790, dir: 'amunt' }, girgoles: { x: 400, y: 280, dir: 'avall' } }
         });
     }
 
@@ -223,7 +234,7 @@ class ZonaSotaTaverna extends ZonaBase {
         const esc = this.add.graphics().setDepth(-1000);
         for (let k = 0; k < 5; k++) esc.fillStyle(0x4a4450 + k * 0x050505, 1).fillRect(340, H - 100 + k * 20, 120, 20);
         this.add.rectangle(A / 2, H / 2, A, H, 0x1a0a30, 0.25).setDepth(80000);
-        this.sortida(360, H - 22, 80, 14, 'ZonaTavernaInt', 'soterrani');
+        this.sortida(360, H - 22, 80, 14, 'ZonaTaverna', 'soterrani');                 // l'escala puja a la porta de ferro de fora
     }
 
     // La Clau de ferro obre la porta: s'hi veu l'escala que baixa a la Sala de les Gírgoles

@@ -76,11 +76,11 @@ Object.assign(DIALEGS, {
         ]
     },
     gabiaGran: E => ({ pagines: E.flag('gabiaCantada') ? [
-        { qui: '', text: "Els barrots encara vibren amb el Cant del Miracle. Dins la gàbia, els tres capolls de boira respiren a poc a poc: el Biel, el Pol i la Martina." },
+        { qui: '', text: "Els barrots encara vibren amb el Cant del Miracle. Dins la gàbia, els tres capolls de boira respiren a poc a poc: l'Uri, el Flam i el Sardin." },
         { qui: '', text: "(Aquí l'Home de la Gàbia i el Germà Andreu et barraran el pas. El combat final i l'epíleg encara s'han de fer.)" }
     ] : [
         { qui: '', text: "Una gàbia d'ocell gegant, alta com una església, de barrots negres retorçats i una cúpula rematada amb una anella. A dins, tres capolls de boira lila suren a mig aire." },
-        { qui: '', text: "Dins de cada capoll s'endevina un nen adormit. El Biel. El Pol. La Martina. Respiren, però no somriuen." },
+        { qui: '', text: "Dins de cada capoll s'endevina un nen adormit. L'Uri. El Flam. El Sardin. Respiren, però no somriuen." },
         { qui: 'Ineu', text: "(Els barrots no tenen pany. Només un cant els pot obrir: el Cant del Miracle, el que l'Ocellaire va robar als ocells.)" }
     ] }),
     capoll: nom => E => ({ pagines: [{ qui: '', text: `Dins del capoll lila, ${nom} dorm arraulit. Té la cara tranquil·la, però sense el somriure que tenen els nens quan dormen.` }] })
@@ -467,7 +467,7 @@ class ZonaGabia extends ZonaBase {
         for (let k = 0; k <= 12; k++) { const t = k / 12, x = gx - gw / 2 + t * gw, dy = Math.sqrt(Math.max(0, (gw / 2) ** 2 - (x - gx) ** 2)); this.brillGabia.lineBetween(x, base - Math.sin(t * Math.PI) * 22, x, base - gh + gw / 2 - dy * 0.9); }
         this.colisio(gx, base - 10, gw + 10, 50);
         // Tres capolls de boira (els nens) dins la gàbia
-        [['el Biel', -80], ['el Pol', 0], ['la Martina', 80]].forEach(([nom, dx], i) => {
+        [["l'Uri", -80], ['el Flam', 0], ['el Sardin', 80]].forEach(([nom, dx], i) => {
             const c = this.add.ellipse(gx + dx, base - 150 - (i % 2) * 30, 60, 100, 0xb88aff, 0.55).setDepth(G.y + 110).setStrokeStyle(3, 0xe0c8ff, 0.8);
             this.add.ellipse(gx + dx, base - 150 - (i % 2) * 30, 26, 44, 0x2a1a3a, 0.6).setDepth(G.y + 111);
             this.tweens.add({ targets: c, y: c.y - 10, scaleX: 1.06, yoyo: true, repeat: -1, duration: 1500 + i * 300, ease: 'Sine.easeInOut' });
@@ -539,7 +539,7 @@ class ZonaGabia extends ZonaBase {
         this.cameras.main.flash(500, 255, 230, 160);
         this.ui().obrirDialeg({ pagines: [
             { qui: '', text: 'Les notes del Cant del Miracle pugen per la cúpula. Els barrots, un a un, s\'encenen d\'or i comencen a vibrar, com cordes d\'una arpa gegant.' },
-            { qui: '', text: 'Dins dels capolls, els tres nens es mouen. La Martina obre una mica els ulls.' },
+            { qui: '', text: 'Dins dels capolls, els tres nens es mouen. El Sardin obre una mica els ulls.' },
             { qui: '', text: '(Aquí arribaran l\'Home de la Gàbia i el Germà Andreu: el combat final, l\'alliberament i l\'epíleg encara s\'han de fer.)' }
         ] }, () => Estat.desar());
         if (primera) Estat.posaObjectiu('La gàbia respon al Cant del Miracle. (Fi del camí fet fins ara: falten el combat final i l\'epíleg.)');

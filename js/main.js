@@ -157,7 +157,7 @@ const PROLEG_QUADRES = [
     { text: "Fa tres-cents anys, un firaire pujava cada primavera al Miracle amb gàbies plenes d'ocells que cantaven com persones: Mestre Gaspar, l'Ocellaire.\nEls nens que l'escoltaven es quedaven sense riure.", dibuix: 'ocellaire' },
     { text: "Els pastors de la Cirosa i els monjos el van tancar dins la seva pròpia gàbia, sota terra. Un monjo va segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la va deixar dormint entre pedres.", dibuix: 'segell' },
     { text: "Ara, fa tres nits, una boira freda i lila surt de sota terra. Marceix els horts, entela l'aigua i fa callar l'orgue del Santuari.", dibuix: 'boira' },
-    { text: "I cada nit falta un nen.\nEl Biel, de Sant Antoni. El Pol, de Sant Benet.\nI aquesta nit... la Martina.", dibuix: 'nens' },
+    { text: "I cada nit falta un nen.\nL'Uri, de Sant Antoni. El Flam, de Sant Benet.\nI aquesta nit... el Sardin.", dibuix: 'nens' },
     { text: "Matí. L'Ineu, el monjo més jove del Santuari, es desperta.\nEl Pare Jordi el busca a la Plaça.", dibuix: 'mati' }
 ];
 
@@ -317,13 +317,13 @@ class EscenaProleg extends Phaser.Scene {
         boira.fastForward(4000);
     }
 
-    // 4. Tres finestres que s'apaguen i l'ombra que s'endú una nena cap a la Taverna
+    // 4. Tres finestres que s'apaguen i l'ombra que s'endú un nen cap a la Taverna
     dibuix_nens(c) {
         this.cel(c, 0x05060f, 0x141028);
         this.estrelles(c, 50, 400);
         const g = this.add.graphics(); c.add(g);
         // Silueta del poble: tres cases amb una finestra encesa cadascuna (Sant Antoni, Sant Benet i la Taverna)
-        const cases = [[130, 'Biel'], [360, 'Pol'], [590, 'Martina']];
+        const cases = [[130, 'Uri'], [360, 'Flam'], [590, 'Sardin']];
         c.add(this.add.circle(AMPLE / 2, 300, 260, 0x8a7ab8, 0.08));
         cases.forEach(([x]) => {
             g.fillStyle(0x1c1c36, 1).fillRect(x - 100, 470, 200, 260).fillStyle(0x3a2030, 1).fillTriangle(x - 115, 474, x + 115, 474, x, 380);
@@ -337,7 +337,7 @@ class EscenaProleg extends Phaser.Scene {
         });
         g.fillStyle(0x10101c, 1).fillRect(0, 730, AMPLE, 220);
         c.add(this.add.ellipse(AMPLE / 2, 900, 820, 140, 0x9a50ff, 0.22));
-        // L'ombra amb hàbit i la nena, caminant cap a la Taverna dins la boira
+        // L'ombra amb hàbit i el nen, caminant cap a la Taverna dins la boira
         const sil = this.add.graphics();
         sil.fillStyle(0x000000, 1).fillTriangle(0, -150, -42, 0, 42, 0).fillCircle(0, -152, 22);
         sil.lineStyle(2, 0xb88aff, 0.7).strokeTriangle(0, -150, -42, 0, 42, 0).strokeCircle(0, -152, 22).strokeCircle(60, -78, 14);

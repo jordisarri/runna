@@ -397,11 +397,11 @@ class ZonaCelles extends ZonaBase {
 
 // ---------------- CEL·LES DE SANT ANTONI ----------------
 // A llevant del Monestir. Hi passeja el Germà Francesc, monjo del Monestir que cuida les flors del cementiri: per un favor
-// (portar-hi el seu ram), et dona els Guants de Poder, els que mouen la roda del Celler. D'aquí era el Biel, el primer nen desaparegut.
+// (portar-hi el seu ram), et dona els Guants de Poder, els que mouen la roda del Celler. D'aquí era l'Uri, el primer nen desaparegut.
 Object.assign(DIALEGS, {
     cel_stbenet: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Benet: petites, de pedra ocre, amb les persianes mig ajustades. Hi fa olor de sopa.' }] }),
     cel_ntrasra: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Nostra Senyora, les més grans del Santuari. Avui les finestres són tancades: ningú no vol que hi entri la boira.' }] }),
-    cel_stantoni: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Antoni, de pedra vella i teula. La porta és oberta, però a dins no hi ha ningú: la família del Biel és a la Plaça, buscant-lo.' }] }),
+    cel_stantoni: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Antoni, de pedra vella i teula. La porta és oberta, però a dins no hi ha ningú: la família de l\'Uri és a la Plaça, buscant-lo.' }] }),
 
     germaFrancesc: E => {
         if (E.te('guants')) return { pagines: [
@@ -425,7 +425,7 @@ Object.assign(DIALEGS, {
         return {
             pagines: [
                 { qui: 'Germà Francesc', text: 'Ineu... Bon dia, fill. Perdona que no camini de pressa: aquests genolls ja tenen més anys que el campanar.' },
-                { qui: 'Germà Francesc', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. El Biel vivia aquí: em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
+                { qui: 'Germà Francesc', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L\'Uri vivia aquí: em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
                 { qui: 'Germà Francesc', text: 'Cada setmana porto flors a l\'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
                 { qui: 'Germà Francesc', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },
                 { qui: '', text: 'Has obtingut un RAM DE FLORS.' }
