@@ -89,8 +89,8 @@ const PROGRES = {
           pista: E => "Baixa pel passadís de darrere la roda: talla amb Runna el mur d'esbarzers negres (llueixen violeta entre quatre espelmes) i arribaràs a la Cambra secreta dels monjos, amb un cofre." },
         { id: 'palanca', marca: ['jordiPalanca', 'palanca', 'obj:palanca'], fet: E => E.flag('palanca') || E.te('palanca'),
           pista: E => E.flag('jordiPalanca')
-              ? "La palanca d'en Jordi és al cofre de les joguines de la caseta de joc, al costat de la seva masia (a l'oest del Gran Til·ler)."
-              : "Per fer girar l'Home del Raïm cal una palanca. En Jordi, de la masia a l'oest del Gran Til·ler, en té una: parla-hi." },
+              ? "La palanca d'en Jordi és al cofre de les joguines, dalt de la caseta aixecada sobre pals, a la Caseta (a l'oest del Gran Til·ler)."
+              : "Per fer girar l'Home del Raïm cal una palanca. En Jordi de la Caseta, a l'oest del Gran Til·ler, en té una: parla-hi." },
         { id: 'raim', marca: ['raimDesperta', 'raimDerrotat'], fet: E => E.flag('raimDerrotat'),
           pista: E => "A la gran escalinata de la Casa Gran, l'Home del Raïm. Recorda el pergamí del monjo: gira-li el cap amb la palanca cap a on neix el sol (la rosa dels vents t'ho diu) i prem-li el raïm." },
         { id: 'cripta', marca: ['relTretes', 'clauFerro', 'obj:reliquies_monjos', 'obj:clau_ferro'], fet: E => E.flag('relTretes'),

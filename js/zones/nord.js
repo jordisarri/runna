@@ -466,7 +466,7 @@ class ZonaSantAntoni extends ZonaBase {
 }
 
 // ---------------- EL GRAN TIL·LER (escenari petit: només l'arbre amb qui es parla) ----------------
-// Hi arriba el camí del sud (les cel·les). Cap a l'oest, un camí duu a la masia d'en Jordi; cap al nord-est, a la Cirosa, tancat
+// Hi arriba el camí del sud (les cel·les). Cap a l'oest, un camí duu a la Caseta (on viu en Jordi); cap al nord-est, a la Cirosa, tancat
 // per una bardissa viva que només aparta la branca del Til·ler.
 const TIL_X = 520, TIL_Y = 440;
 
@@ -488,7 +488,7 @@ class ZonaTiller extends ZonaBase {
     construir() {
         this.terra('herba', 0, 0, 1400, 1000, -1100);
         this.terra('cami', 620, 520, 160, 480);           // des de les cel·les (sud)
-        this.terra('cami', 0, 520, 1240, 150);            // d'oest a est: la masia d'en Jordi i el camí de la Cirosa
+        this.terra('cami', 0, 520, 1240, 150);            // d'oest a est: la Caseta i el camí de la Cirosa
         this.terra('cami', 1100, 0, 140, 670);            // cap a dalt a la dreta: la Cirosa
 
         // El Gran Til·ler
@@ -580,40 +580,135 @@ class ZonaTiller extends ZonaBase {
     }
 }
 
-// ---------------- LA MASIA D'EN JORDI (a l'oest del Til·ler) ----------------
-// Escenari petit: només en Jordi, la seva masia i, al costat, una caseta de joc de jardí. La palanca és a dins de la caseta.
+// ---------------- LA CASETA (a l'oest del Til·ler): on viu el Jordi de la Caseta ----------------
+// Escenari petit: en Jordi al jardí, la seva casa (es pot entrar: només decorada) i la caseta aixecada sobre pilars
+// de fusta, amb el cofre de les joguines on hi ha la palanca.
 class ZonaJordi extends ZonaBase {
     constructor() {
         super('ZonaJordi', {
             pins: { pi: 0.25 },
-            nom: "La masia d'en Jordi",
+            nom: 'La Caseta',
             amplada: 1100,
             alcada: 800,
-            entrades: { til: { x: 1040, y: 580, dir: 'esquerra' }, caseta: { x: 860, y: 540, dir: 'avall' } }
+            entrades: { til: { x: 1040, y: 580, dir: 'esquerra' }, caseta: { x: 860, y: 560, dir: 'avall' }, casa: { x: 380, y: 560, dir: 'avall' } }
         });
     }
 
     construir() {
         this.terra('herba', 0, 0, 1100, 800, -1100);
-        this.terra('cami', 330, 500, 770, 150);            // del Til·ler (est) a la porta de la masia
+        this.terra('cami', 330, 500, 770, 150);            // del Til·ler (est) a la porta de la casa
 
-        // La masia (520 d'ample): la porta és al mig
-        const m = this.posar('masia', 380, 480, { col: { w: 500, h: 70 } });
-        this.blocDarrere(380, 500, 405, Math.max(0, 480 - m.displayHeight));
-        this.interactiu(380, 500, 100, DIALEGS.masiaJordi, { altura: 130 });
-        this.npc('jordi_caseta', 480, 570, DIALEGS.jordiCaseta);
+        // La casa d'en Jordi (520 d'ample): la porta del mig duu a dins
+        this.edifici('masia', 380, 480, 500, 90, 'ZonaCasaJordi', 'porta', { alt: 90 });
+        this.npc('jordi_caseta', 560, 590, DIALEGS.jordiCaseta);
 
-        // La caseta de joc del jardí (la palanca és a dins)
-        this.edifici('caseta_joc', 860, 480, 240, 64, 'ZonaCasetaJoc', 'porta', { alt: 70 });
+        // La caseta, aixecada sobre pilars de fusta: s'hi puja per l'escala del mig (la palanca és a dins)
+        this.edifici('caseta_joc', 860, 500, 250, 64, 'ZonaCasetaJoc', 'porta', { alt: 80 });
 
         // Detalls de jardí
-        this.posar('barril', 700, 520, { col: { w: 40, h: 16 } });
-        this.posar('barril', 745, 530, { col: { w: 40, h: 16 } });
-        this.posar('banc', 560, 700, { col: { w: 130, h: 22 } });
-        this.cartell(1000, 720, () => ({ pagines: [{ qui: '', text: '→ El Gran Til·ler' }] }));
+        this.posar('barril', 1010, 470, { col: { w: 40, h: 16 } });
+        this.posar('llenya', 690, 470, { escala: 0.7, col: { w: 80, h: 20 } });
+        this.posar('banc', 560, 720, { col: { w: 130, h: 22 } });
+        [[650, 700], [720, 740], [140, 600]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
+        this.cartell(1000, 720, () => ({ pagines: [{ qui: '', text: 'La Caseta\n→ El Gran Til·ler' }] }));
 
-        this.arbres([[80, 180], [250, 120], [600, 100], [900, 140], [1040, 220], [90, 640], [250, 740], [850, 740], [1040, 740]]);
+        this.arbres([[80, 180], [250, 120], [600, 100], [1040, 160], [90, 680], [250, 760], [850, 760], [1040, 760]]);
         this.sortida(1086, 510, 14, 130, 'ZonaTiller', 'jordi');
+    }
+}
+
+// ---------------- CASA D'EN JORDI (interior) ----------------
+// Una casa de pagès endreçada i plena de vida, però buida: en Jordi és al jardí. Només es mira.
+Object.assign(DIALEGS, {
+    casaJordiEines: E => ({ pagines: [{ qui: '', text: "Un tauler a la paret amb les eines d'en Jordi, cadascuna dins la seva silueta pintada: serres, martells, tenalles, una aixada... Només hi falta una forma llarga, de palanca." }] }),
+    casaJordiTaula: E => ({ pagines: [{ qui: '', text: "La taula de la cuina: un pa de pagès, un pot de mel, tres tasses i un dibuix d'uns nens jugant a la caseta, enganxat amb una agulla de cosir." }] }),
+    casaJordiLlar: E => ({ pagines: [{ qui: '', text: "La llar de foc encara té brases. Fa olor de pa torrat i de romaní. Sobre la lleixa, una rajola pintada: «A la Caseta, la porta mai no té clau.»" }] }),
+    casaJordiGat: E => ({ pagines: [{ qui: '', text: "Un gat gris dorm enroscat dins un cove de vímet. Obre un ull, et mira i el torna a tancar. Aquí no passa res que valgui la pena." }] })
+});
+
+class ZonaCasaJordi extends ZonaBase {
+    constructor() {
+        super('ZonaCasaJordi', {
+            nom: "Casa d'en Jordi",
+            amplada: 900,
+            alcada: 700,
+            colorFons: '#140e0a',
+            pacifica: true,
+            entrades: { porta: { x: 450, y: 600, dir: 'amunt' } }
+        });
+    }
+
+    construir() {
+        const A = 900, H = 700;
+        this.terra('rajola', 100, 40, 700, 660, -1100).setTint(0xc89a6a);
+        // Parets emblanquinades amb sòcol de rajola i bigues de fusta
+        const p = this.add.graphics().setDepth(-990);
+        p.fillStyle(0x120a04, 1).fillRect(58, 0, 784, 110);
+        p.fillStyle(0xeee2c8, 1).fillRect(60, 0, 780, 106);
+        for (let x = 60; x < 840; x += 26) p.fillStyle((x / 26) % 2 ? 0xd8b04a : 0x3a7a5a, 1).fillRect(x, 80, 26, 26);
+        p.fillStyle(0x5a3a1e, 1).fillRect(60, 0, 780, 10);
+        [180, 450, 720].forEach(x => p.fillStyle(0x5a3a1e, 1).fillRect(x - 8, 0, 16, 24));
+        p.fillStyle(0x4a3018, 1).fillRect(30, 0, 30, H).fillRect(840, 0, 30, H);
+        this.colisio(30, H / 2, 60, H);
+        this.colisio(A - 30, H / 2, 60, H);
+        this.colisio(A / 2, 60, A - 120, 120);
+        this.colisio(270, H - 10, 340, 20);
+        this.colisio(630, H - 10, 340, 20);
+
+        // Llar de foc a l'esquerra, amb lleixa i rajola
+        const ll = this.add.graphics().setDepth(-960);
+        ll.fillStyle(0x120a04, 1).fillRect(110, 14, 170, 104);
+        ll.fillStyle(0xd8c8a8, 1).fillRect(116, 20, 158, 96);
+        ll.fillStyle(0x1a0e06, 1).fillRect(140, 44, 110, 72);
+        ll.fillStyle(0x5a3a1e, 1).fillRect(104, 12, 182, 10);
+        ll.fillStyle(0x3a7a9a, 1).fillRect(176, 0, 40, 12);
+        const foc = this.posar('foc', 195, 110, { escala: 0.8, fonsY: 110 });
+        this.tweens.add({ targets: foc, scaleY: foc.scaleY * 1.08, yoyo: true, repeat: -1, duration: 300 });
+        this.add.circle(195, 140, 120, 0xff9a30, 0.1).setDepth(300);
+        this.interactiu(195, 160, 90, DIALEGS.casaJordiLlar, { altura: 90 });
+
+        // Tauler d'eines (un buit amb forma de palanca)
+        const te = this.add.graphics().setDepth(-950);
+        te.fillStyle(0x7a5a3a, 1).fillRect(560, 10, 220, 64).lineStyle(2, 0x2a1608, 1).strokeRect(560, 10, 220, 64);
+        te.lineStyle(3, 0x2a2a2e, 1).lineBetween(580, 20, 580, 64).lineBetween(572, 22, 588, 22);
+        te.fillStyle(0x8a8a90, 1).fillTriangle(600, 20, 640, 20, 600, 60);
+        te.lineStyle(4, 0x5a3a1e, 1).lineBetween(660, 20, 660, 64); te.fillStyle(0x6a6a70, 1).fillRect(650, 18, 22, 10);
+        te.lineStyle(2, 0xd8d0b0, 0.7).strokeRect(690, 16, 12, 52);                                  // silueta buida: la palanca
+        te.lineStyle(4, 0x6a4a2a, 1).lineBetween(730, 20, 760, 64); te.fillStyle(0x6a6a70, 1).fillRect(752, 56, 20, 10);
+        this.interactiu(670, 140, 90, DIALEGS.casaJordiEines, { altura: 100 });
+
+        // Penjolls: alls i pebrots
+        const pj = this.add.graphics().setDepth(-940);
+        [[330, 0xf2ecdc], [370, 0xb8402e], [410, 0xf2ecdc]].forEach(([x, c]) => {
+            pj.lineStyle(2, 0x8a6a3a, 1).lineBetween(x, 10, x, 34);
+            for (let k = 0; k < 4; k++) pj.fillStyle(c, 1).fillEllipse(x + (k % 2 ? 5 : -5), 38 + k * 10, 10, 13);
+        });
+
+        // Taula de la cuina amb cadires
+        this.posar('taula', 450, 330, { col: { w: 170, h: 30 } });
+        [[380, 370], [520, 370]].forEach(([x, y]) => this.posar('tamboret', x, y, { col: { w: 36, h: 14 } }));
+        this.interactiu(450, 345, 110, DIALEGS.casaJordiTaula, { altura: 70 });
+
+        // Llit amb manta de quadres i una catifa
+        const cat = this.add.graphics().setDepth(-1050);
+        cat.fillStyle(0x8a3a3a, 1).fillEllipse(450, 520, 300, 120).lineStyle(3, 0xd8b04a, 1).strokeEllipse(450, 520, 280, 104);
+        const llit = this.add.graphics().setDepth(300);
+        llit.fillStyle(0x3a2412, 1).fillRoundedRect(680, 200, 130, 190, 10);
+        llit.fillStyle(0xf2ecdc, 1).fillRoundedRect(690, 210, 110, 40, 8);
+        for (let r = 0; r < 4; r++) for (let c2 = 0; c2 < 3; c2++) llit.fillStyle((r + c2) % 2 ? 0x3a6a9a : 0xe8d8b0, 1).fillRect(690 + c2 * 37, 256 + r * 32, 36, 31);
+        this.colisio(745, 300, 130, 190);
+
+        // Un gat dormint en un cove i una gerra amb flors
+        const gat = this.add.graphics().setDepth(560);
+        gat.fillStyle(0x8a6a3a, 1).fillEllipse(180, 560, 90, 40).fillStyle(0x6a6a70, 1).fillEllipse(180, 550, 60, 30).fillCircle(205, 545, 13);
+        gat.fillStyle(0x6a6a70, 1).fillTriangle(198, 534, 204, 524, 208, 536).fillTriangle(208, 534, 214, 524, 216, 538);
+        this.colisio(180, 555, 90, 30);
+        this.interactiu(180, 600, 70, DIALEGS.casaJordiGat, { altura: 60 });
+        this.posar('flors', 450, 300, { fonsY: 360 });
+        this.posar('barril', 790, 560, { col: { w: 46, h: 20 } });
+
+        this.add.rectangle(A / 2, H / 2, A, H, 0xffd38a, 0.06).setDepth(80000);
+        this.sortida(410, H - 22, 80, 14, 'ZonaJordi', 'casa');
     }
 }
 
@@ -621,7 +716,7 @@ class ZonaJordi extends ZonaBase {
 class ZonaCasetaJoc extends ZonaBase {
     constructor() {
         super('ZonaCasetaJoc', {
-            nom: 'La caseta de joc',
+            nom: 'Dins la caseta',
             amplada: 640,
             alcada: 520,
             colorFons: '#140e0a',

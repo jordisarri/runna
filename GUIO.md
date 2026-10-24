@@ -24,7 +24,7 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat p
 | **La Pianista** | Santuari | Ensenya els **cants** (Aurora, Pedres, Miracle). |
 | **Pare Daniel** | Santuari | Dirigeix el cor; rialler. |
 | **Germà Francesc** | Viu al Monestir; passeja per Sant Antoni | Monjo vell, prim i alt, amb una llarga barba blanca. Cuida les flors de la tomba de l'àngel del Cementiri; si li fas el favor de portar-hi el seu ram, et dona els **Guants de Poder** (els dels picapedrers dels monjos), que mouen la roda del Celler. |
-| **En Jordi** | Masia a l'oest del Til·ler | Pagès eixerit: té la **Palanca** amagada al cofre de les joguines de la caseta de joc del seu jardí; et deixa agafar-la. |
+| **El Jordi de la Caseta** | La Caseta, a l'oest del Til·ler | Pagès eixerit, sempre al jardí: té la **Palanca** amagada al cofre de les joguines, dins la caseta aixecada sobre pals; et deixa agafar-la. |
 | **El Gran Til·ler** | Gran Til·ler | Esperit savi: dona la **Fulla** (permís) i el **bastó**. |
 | **Germà Andreu** | Plaça, Cirosa, Gàbia | Antagonista: **servent i admirador de l'Ocellaire**, simpàtic en aparença i dolent de debò; mini-boss «Pastor de Boira» i guàrdia de la Gàbia. |
 | **L'Ocellaire** | Sala de la Gàbia | Boss final. |
@@ -55,7 +55,7 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat p
 | Fulla del Til·ler | Sopar del Til·ler | Permís per al Dolmen. |
 | Benedicció / Saber | Pare Jordi / Pare Alcuí | Requisits del Dolmen. |
 | **Runna** | El Dolmen | Dany 2; talla esbarzers negres. |
-| Palanca | Caseta de joc del jardí d'en Jordi (cofre de les joguines) | Gira el cap de l'Home del Raïm. |
+| Palanca | Dins la caseta de la Caseta (cofre de les joguines) | Gira el cap de l'Home del Raïm. |
 | Pergamí del monjo | Cambra secreta (Casa Gran) | Pista del puzle del Raïm. |
 | **Relíquies dels monjos** i **Clau de ferro** | Cripta de la Casa Gran | Les relíquies tanquen l'esquerda del Cementiri; la clau obre la porta de ferro de la Taverna. |
 | Tisores | Isidre | Podar arbustos. |
@@ -83,8 +83,8 @@ Vertical (720x1280); a dalt, una franja de pergamí amb el HUD. Camins de terra 
 - **Casa Gran per dins:** Escalinata (Home del Raïm i rosa dels vents), **Cripta** (relíquies i Clau de ferro). La reixa del porxo s'obre per dins com a drecera.
 - **El Cementiri**: tomba esquerdada, làpides, escolopendres.
 - **Les Cel·les**: Nostra Senyora (gran) i Sant Benet, amb porta; personatges i Sansa quan toca. Camí a l'oest cap al bosc i al nord cap al Til·ler; a l'est no hi ha res.
-- **El Gran Til·ler** (pantalla petita, només l'arbre i la branca): al **nord de les Cel·les**, però el camí és tapat per una **boira espessa** que només esvaeix el **beuratge de la Jaumeta**. Cap a l'oest, un camí duu a la **Masia d'en Jordi**; cap al nord-est, a la Cirosa, tancat per una **bardissa viva** que només aparta la **branca del Til·ler** (i només quan la Bassadòria és neta).
-- **La Masia d'en Jordi** (escena petita): en Jordi, la seva masia i, al costat, una **caseta de joc de jardí** (interior: el cofre de les joguines, amb la **palanca** a sota).
+- **El Gran Til·ler** (pantalla petita, només l'arbre i la branca): al **nord de les Cel·les**, però el camí és tapat per una **boira espessa** que només esvaeix el **beuratge de la Jaumeta**. Cap a l'oest, un camí duu a la **Caseta**; cap al nord-est, a la Cirosa, tancat per una **bardissa viva** que només aparta la **branca del Til·ler** (i només quan la Bassadòria és neta).
+- **La Caseta** (escena petita, a l'oest del Til·ler): en Jordi al jardí; la seva **casa** (es pot entrar: llar de foc, cuina, tauler d'eines amb el buit de la palanca, llit i un gat; no hi ha ningú) i la **caseta**, una cabana de fusta aixecada sobre pilars amb terrassa i escala (com una cabana d'arbre, sense arbre). Dins la caseta, el cofre de les joguines amb la **palanca** (el tresor).
 - **Pins:** el **pi roig** domina la Rovellonera i els boscos del nord-est; el **pi pinyer** els camins de l'oest (Ermita, Era, Desaparició).
 - **Camí i La Cirosa**: camí llarg en zig-zag amb tres cartells i un **banc de pedra** (hi reposes i es desa la partida); ovelles de boira fins que cau el Pastor, i després ovelles blanques. A dalt, la masia, un pou, bales de palla, la pastura i els pastors vora el foc. **El Mas de la Cirosa** (interior): llar (repòs i desat), taula, jaços, biga amb ganxos buits (les esquelles) i el **Llibre del Ramat**, que explica la història de la gàbia des del punt de vista dels pastors.
 - **Bosc de Sant Joan**: Font del Bisbe, Alzina Buida (portal; doble de gran que la resta d'arbres, amb clariana pròpia i claror verda), cofre amagat (cal Runna). Tot el bosc és ple de **boira lila** mentre la font és adormida; en tirar-hi les tres herbes (herba de Sant Joan, **romaní** i farigola, que brillen en una clariana) la boira se'n va. **Cabana de la Jaumeta**: hi dona el beuratge per al camí del Til·ler.
@@ -108,7 +108,7 @@ Cinc quadres il·lustrats amb text (tocar passa al següent; «Saltar» ho salta
 5. **Taverna (lateral, des de l'inici):** la porta és tancada; l'Eva hi fa entrar l'Ineu d'amagat. La Carmen dorm. L'Eva explica que el Germà Andreu baixa cada nit al soterrani i que d'allà se senten ocells; la Martina hi berenava cada tarda. Al soterrani, la **porta de ferro** d'on surt la boira: tancada amb clau.
 
 ### ACTE 2 — «La recerca de Runna» (~2,5 h)
-- **Bosc de Sant Joan → Jaumeta → Gran Til·ler:** amb el beuratge s'esvaeix la boira i s'arriba al **Gran Til·ler**, que parla de la terra esquerdada i dona el **bastó de Til·ler** (branca): més àgil que el de pelegrí (atac més ràpid i amb més abast). «Et donaré el permís quan hagis tornat la vida a la terra.» Amb la Bassadòria neta, la branca aparta la **bardissa viva** i s'obre el camí de la **Cirosa**. **La Masia d'en Jordi** (oest del Til·ler): la **Palanca** al cofre de la caseta de joc.
+- **Bosc de Sant Joan → Jaumeta → Gran Til·ler:** amb el beuratge s'esvaeix la boira i s'arriba al **Gran Til·ler**, que parla de la terra esquerdada i dona el **bastó de Til·ler** (branca): més àgil que el de pelegrí (atac més ràpid i amb més abast). «Et donaré el permís quan hagis tornat la vida a la terra.» Amb la Bassadòria neta, la branca aparta la **bardissa viva** i s'obre el camí de la **Cirosa**. **La Caseta** (oest del Til·ler): la **Palanca** al cofre de la caseta de joc.
 - **Cirosa:** camí llarg amb ovelles de boira; masia, pastors i **Pastor de Boira** (Andreu, servent de l'Ocellaire, mini-boss): en vèncer-lo, no es penedeix: diu que el Mestre ja és despert sota el Bar i marxa rient cap a la Taverna; el pastor vell dona les **Esquelles**.
 - **Sopar del Til·ler:** l'**escudella de la Neus**, les **flors de l'Isidre** i **convèncer els pastors** (música vora el seu foc). El ritual de quatre espelmes dona la **Fulla del Til·ler** i +1 cor.
 - **Bosc de Sant Joan:** Font del Bisbe (3 herbes: aigua i cristall de gel). L'Alzina Buida duu per portal a la **Jaumeta**, que et dona el **beuratge** per esvair la boira del camí del Til·ler (el Til·ler ve **després** de la font; abans no s'hi pot arribar).

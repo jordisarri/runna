@@ -645,7 +645,7 @@ const DIALEGS = {
     },
 
     cartellBosc: E => ({ pagines: [{ qui: "", text: "Bosc de Sant Joan.\n«Qui busca la font, que segueixi l'aigua... i qui no, que no es perdi.»" }] }),
-    cartellCirosa: E => ({ pagines: [{ qui: "", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí a munt)\n← La masia d'en Jordi\n↓ Les Cel·les" : "↑ La Cirosa\nEl camí és tancat per una bardissa viva. Diuen que només s'aparta amb la fusta del Gran Til·ler.\n← La masia d'en Jordi" }] }),
+    cartellCirosa: E => ({ pagines: [{ qui: "", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí a munt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\nEl camí és tancat per una bardissa viva. Diuen que només s'aparta amb la fusta del Gran Til·ler.\n← La Caseta" }] }),
 
     // ---------------- CARRUATGE VERD ----------------
     homeCarruatge: E => {
@@ -1270,7 +1270,7 @@ const DIALEGS = {
             enAcabar: () => {
                 E.dona("pergami_monjo"); E.posaFlag("cofreCambra");
                 E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
-                E.posaObjectiu(E.te("palanca") ? "Puja a l'escalinata de la Casa Gran: gira el cap de l'Home del Raïm cap a llevant amb la palanca i prem-li el raïm." : "L'Home del Raïm guarda les relíquies: cal una palanca. En Jordi de la Caseta (darrere el Til·ler) en té una.");
+                E.posaObjectiu(E.te("palanca") ? "Puja a l'escalinata de la Casa Gran: gira el cap de l'Home del Raïm cap a llevant amb la palanca i prem-li el raïm." : "L'Home del Raïm guarda les relíquies: cal una palanca. En Jordi de la Caseta (a l'oest del Til·ler) en té una.");
             }
         };
     },
@@ -1279,7 +1279,7 @@ const DIALEGS = {
         pagines: [
             { qui: "", text: "Al mig de la gran escalinata, l'Home del Raïm: una escultura de pedra gairebé tan alta com dos homes, amb un carràs de raïm de marbre a les mans." },
             { qui: "Ineu", text: "Té el cap girat cap enrere, com si vigilés la porta de sota l'escala. Sembla que guardi alguna cosa." },
-            { qui: "", text: "(Cal una palanca per fer-lo girar. L'en Jordi, de la masia a l'oest del Til·ler, en té una.)" }
+            { qui: "", text: "(Cal una palanca per fer-lo girar. En Jordi de la Caseta, a l'oest del Til·ler, en té una.)" }
         ]
     }),
 
@@ -1346,7 +1346,6 @@ const DIALEGS = {
         ] };
     },
 
-    masiaJordi: E => ({ pagines: [{ qui: "", text: "La masia d'en Jordi: de pedra vella, amb les finestres obertes de bat a bat i una olor de pa torrat. La porta és tancada: en Jordi és al jardí." }] }),
 
     // El cofre de les joguines de la caseta: la palanca és a sota
     cofrePalanca: E => {

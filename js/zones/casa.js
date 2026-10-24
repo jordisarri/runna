@@ -3,7 +3,7 @@
  *   Entrada: només la secreta, des d'El Celler (el ping-pong; darrere la roda de carruatge, amb Runna): passadís amb escolopendres
  *            i un esbarzer negre, sala del tresor (la cambra secreta dels monjos) i una porta cap a l'Escalinata. La reixa del porxo
  *            (plaça) és tancada des de fora; només es pot obrir per dins, com a drecera de tornada.
- *   Escalinata: l'Home del Raïm. Amb la Palanca (és a la caseta de joc de la masia d'en Jordi) es gira el cap cap a llevant i es prem el raïm:
+ *   Escalinata: l'Home del Raïm. Amb la Palanca (és a la caseta d'en Jordi, a la Caseta) es gira el cap cap a llevant i es prem el raïm:
  *               l'estàtua cobra vida (BOSS). Derrotada, s'obre la trapa de la cripta.
  *   Cripta: les relíquies robades als monjos (cal portar-les a la tomba esquerdada del Cementiri) i la Clau de ferro,
  *           que obre la porta de ferro de la Sala de les Gírgoles (a sota de la Taverna, no pas des d'aquí).
@@ -111,24 +111,24 @@ Object.assign(DIALEGS, {
         };
     },
 
-    // En Jordi, a la seva masia (a l'oest del Til·ler): diu on té la palanca, a la caseta de joc del jardí
+    // El Jordi de la Caseta (a l'oest del Til·ler): diu on té la palanca, dins la caseta aixecada del jardí
     jordiCaseta: E => {
         if (E.te('palanca') || E.flag('palanca')) {
             return { pagines: [{ qui: 'Jordi', text: "Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes." }] };
         }
         if (E.flag('jordiPalanca')) {
-            return { pagines: [{ qui: 'Jordi', text: "La caseta és aquí al costat, monjo. El cofre de les joguines: la palanca és a sota. Que no se't cansi el braç!" }] };
+            return { pagines: [{ qui: 'Jordi', text: "La caseta és aquí al costat: puja per l'escala. Al cofre de les joguines, la palanca és a sota. Que no se't cansi el braç!" }] };
         }
         return {
             pagines: [
-                { qui: 'Jordi', text: "Ei, monjo! Em dic Jordi, el de la masia. Conec cada drecera del Miracle, i les eines, encara millor." },
+                { qui: 'Jordi', text: "Ei, monjo! Sóc en Jordi, el de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
                 { qui: 'Ineu', text: "Jordi, em diuen que en saps, d'eines. De vegades cal moure una cosa pesada i no hi ha manera." },
                 { qui: 'Jordi', text: "Una palanca! En tinc una de ferro, de les bones. Per moure roques, per obrir reixes... i, si cal, per girar el cap a una estàtua tossuda." },
-                { qui: 'Jordi', text: "Però la vaig amagar a la caseta de joc dels nens, al jardí, sota les joguines: ningú no la hi buscarà. Entra, que la porta no té clau, i agafa-la." }
+                { qui: 'Jordi', text: "Però la vaig amagar dalt de la caseta dels nens, la que està aixecada sobre pals, al cofre de les joguines: ningú no la hi buscarà. Puja per l'escala, que la porta no té clau, i agafa-la." }
             ],
             enAcabar: () => {
                 E.posaFlag('jordiPalanca');
-                E.posaObjectiu("Agafa la palanca d'en Jordi: és al cofre de les joguines de la caseta de joc, al jardí de la seva masia.");
+                E.posaObjectiu("Agafa la palanca d'en Jordi: és al cofre de les joguines, dalt de la caseta aixecada sobre pals (a la Caseta).");
             }
         };
     }

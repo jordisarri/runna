@@ -15,8 +15,9 @@ const MAPA = {
         { id: 'ZonaCabanaInt',     nom: 'Dins la cabana',           x: 200,  y: 110 },
         { id: 'ZonaCabana',        nom: 'Cabana de la Jaumeta',     x: 370,  y: 110 },
         { id: 'ZonaBosc',          nom: 'Bosc de Sant Joan',        x: 520,  y: 200 },
-        { id: 'ZonaJordi',          nom: 'Masia d\'en Jordi',        x: 630,  y: 130 },
-        { id: 'ZonaCasetaJoc',     nom: 'Caseta de joc',            x: 630,  y: 80 },
+        { id: 'ZonaJordi',          nom: 'La Caseta',                x: 630,  y: 130 },
+        { id: 'ZonaCasaJordi',     nom: 'Casa d\'en Jordi',         x: 470,  y: 80 },
+        { id: 'ZonaCasetaJoc',     nom: 'Dins la caseta',           x: 630,  y: 80 },
         { id: 'ZonaTiller',        nom: 'El Gran Til·ler',          x: 800,  y: 130 },
         { id: 'ZonaCelles',        nom: 'Les Cel·les',              x: 800,  y: 210 },
         // Franja de les Runes, el Cementiri i el camí de la Desaparició
@@ -64,7 +65,7 @@ const MAPA = {
         ['ZonaJardi', 'ZonaTaverna'], ['ZonaJardi', 'ZonaSoterraniHost'], ['ZonaSoterraniHost', 'ZonaHostatgeriaInt'], ['ZonaHostatgeriaInt', 'ZonaCambraPains'], ['ZonaHostatgeriaInt', 'ZonaCambraPhili'], ['ZonaHostatgeriaInt', 'ZonaCambraCharm'], ['ZonaTaverna', 'ZonaCasaGran'], ['ZonaTaverna', 'ZonaTavernaInt'], ['ZonaTavernaInt', 'ZonaSotaTaverna'], ['ZonaMonestir', 'ZonaBiblioteca'],
         ['ZonaRuines', 'ZonaCementiri'], ['ZonaCementiri', 'ZonaMonestir'], ['ZonaMonestir', 'ZonaSantAntoni'],
         ['ZonaRuines', 'ZonaCelles'], ['ZonaCelles', 'ZonaBosc'], ['ZonaBosc', 'ZonaCabana'], ['ZonaCabana', 'ZonaCabanaInt'],
-        ['ZonaCelles', 'ZonaTiller'], ['ZonaTiller', 'ZonaJordi'], ['ZonaJordi', 'ZonaCasetaJoc'], ['ZonaTiller', 'ZonaCamiCirosa'], ['ZonaCamiCirosa', 'ZonaCirosa'], ['ZonaCirosa', 'ZonaMasiaCirosa'],
+        ['ZonaCelles', 'ZonaTiller'], ['ZonaTiller', 'ZonaJordi'], ['ZonaJordi', 'ZonaCasetaJoc'], ['ZonaJordi', 'ZonaCasaJordi'], ['ZonaTiller', 'ZonaCamiCirosa'], ['ZonaCamiCirosa', 'ZonaCirosa'], ['ZonaCirosa', 'ZonaMasiaCirosa'],
         ['ZonaEra', 'ZonaCamiRov'], ['ZonaCamiRov', 'ZonaRovellonera'], ['ZonaRovellonera', 'ZonaGabriel'],
         ['ZonaGabriel', 'ZonaDipositos'], ['ZonaDipositos', 'ZonaDolmen']
     ],
