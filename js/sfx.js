@@ -142,6 +142,26 @@ const Sfx = {
         if (!this.ok('flama', 60)) return;
         this.xiu(0.22, 0.14, 'lowpass', 2400, 300, 0.8);
     },
+    ratpenat() {                 // xisclet agut
+        if (!this.ok('ratpenat', 250)) return;
+        this.to(3200, 4200, 0.07, 'square', 0.03); this.to(3600, 4600, 0.06, 'square', 0.025, 0.09);
+    },
+    ferralla() {                 // ferros que piquen a terra
+        if (!this.ok('ferralla', 120)) return;
+        this.to(1800, 1500, 0.12, 'square', 0.05); this.to(2600, 2300, 0.09, 'triangle', 0.06, 0.03);
+        this.xiu(0.1, 0.18, 'highpass', 4000, 2500);
+    },
+    tambor(fort) {               // tambor de guerra del combat final
+        if (!this.ok('tambor', 90)) return;
+        this.to(fort ? 95 : 80, 38, fort ? 0.45 : 0.32, 'sine', fort ? 0.55 : 0.4);
+        this.xiu(0.12, fort ? 0.2 : 0.12, 'lowpass', 600, 120);
+    },
+    rugit() {                    // l'Ocellaire crida: veu greu i un xiscle d'ocell a sobre
+        if (!this.ok('rugit', 600)) return;
+        this.to(140, 60, 1.1, 'sawtooth', 0.22); this.to(146, 55, 1.1, 'square', 0.08);
+        this.xiu(1.0, 0.25, 'bandpass', 900, 200, 1.5);
+        this.to(2200, 3400, 0.5, 'sawtooth', 0.04, 0.2);
+    },
     riure() {                    // els nens riuen: tres pujades alegres
         if (!this.ok('riure', 500)) return;
         [0, 0.16, 0.32, 0.5].forEach((t, i) => this.to(620 + i * 60, 820 + i * 60, 0.11, 'triangle', 0.12, t));

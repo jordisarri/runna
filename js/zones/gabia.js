@@ -111,7 +111,6 @@ class ZonaGirgoles extends ZonaBase {
             amplada: 1400,
             alcada: 1300,
             colorFons: '#050806',
-            pacifica: true,
             entrades: { porta: { x: 700, y: 1200, dir: 'amunt' }, tortura: { x: 700, y: 230, dir: 'avall' } }
         });
     }
@@ -214,6 +213,9 @@ class ZonaGirgoles extends ZonaBase {
             this.interactiu(700, 230, 90, DIALEGS.cortinaMicel, { altura: 90, actiu: () => !Estat.flag('girgolesEnceses') });
         }
 
+        // Ratpenats de boira que pengen de la volta
+        [[420, 520], [980, 560], [360, 900], [1020, 980], [700, 360]].forEach(([x, y]) => { const e = this.enemic('ratpenat', x, y); if (e) e.estat = 'penja'; });
+
         this.foscor = crearFoscor(this, W, H);
         this.sortida(650, 130, 100, 30, 'ZonaTortura', 'girgoles');
         this.sortida(660, H - 22, 80, 14, 'ZonaSotaTaverna', 'girgoles');
@@ -274,7 +276,6 @@ class ZonaTortura extends ZonaBase {
             amplada: 900,
             alcada: 1900,
             colorFons: '#0a0606',
-            pacifica: true,
             entrades: { girgoles: { x: 450, y: 1800, dir: 'amunt' }, gabia: { x: 450, y: 220, dir: 'avall' } }
         });
     }
@@ -378,6 +379,9 @@ class ZonaTortura extends ZonaBase {
         this.boira(450, 700, 200, 40, 0.4);
         this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x1a0a20, 0.3).setScrollFactor(0).setDepth(90000);
 
+        // Ferralla viva: les eines dels torturadors s'aixequen i barren el pas
+        [[330, 1420], [580, 1300], [420, 860], [580, 1020], [350, 640]].forEach(([x, y]) => this.enemic('ferralla', x, y));
+
         this.sortida(390, 120, 120, 30, 'ZonaGabia', 'tortura');
         this.sortida(410, H - 22, 80, 14, 'ZonaGirgoles', 'tortura');
     }
@@ -415,6 +419,7 @@ class ZonaGabia extends ZonaBase {
             amplada: 1800,
             alcada: 1640,
             colorFons: '#06040a',
+            reneix: 'tortura',            // si l'Ineu cau al combat final, torna a l'entrada de la sala
             entrades: { tortura: { x: 900, y: 1540, dir: 'amunt' } }
         });
     }
@@ -602,12 +607,56 @@ class ZonaGabia extends ZonaBase {
         if (!b.volant) { b.x = c.x + (e.spr.flipX ? -42 : 42); b.y = c.y - 78; }
         b.rot += b.gir;
         b.g.setPosition(b.x, b.y).setRotation(b.rot).setDepth(c.y + 2);
+        if (e.ulls) this.posarUlls(e.ulls, e.spr, c.y + 1);
         // Mentre gira de pressa, les puntes deixen un rastre de foc
         if (e.flama) {
             if (b.gir > 0.2) { if (!e.flama.emitting) e.flama.start(); e.flama.setPosition(b.x + Math.cos(b.rot) * 92, b.y + Math.sin(b.rot) * 92); }
             else if (e.flama.emitting) e.flama.stop();
         }
     }
+    // Els ulls vermells que brillen (també a la foscor i a través de la boira)
+    crearUlls() {
+        const g = this.add.container(0, 0).setDepth(99950);
+        [-1, 1].forEach(sd => {
+            g.add(this.add.circle(sd * 6, 0, 8, 0xff2010, 0.3).setBlendMode('ADD'));
+            g.add(this.add.circle(sd * 6, 0, 3.5, 0xff5030, 0.9).setBlendMode('ADD'));
+            g.add(this.add.circle(sd * 6, 0, 1.5, 0xffffff, 1));
+        });
+        this.tweens.add({ targets: g, alpha: 0.65, yoyo: true, repeat: -1, duration: 500 });
+        return g;
+    }
+    posarUlls(u, spr, prof) {
+        u.setPosition(spr.x, spr.y - spr.displayHeight * 0.5 + spr.displayHeight * 0.165).setVisible(spr.alpha > 0.3);
+        if (prof) u.setDepth(prof + 1);
+    }
+    // Tambors de guerra mentre dura el combat (BUM · BUM BUM ·)
+    tambors(ms) {
+        if (this.tambor) this.tambor.remove();
+        let k = 0;
+        this.tambor = this.time.addEvent({ delay: ms, loop: true, callback: () => {
+            const t = k++ % 4;
+            if (!this.ui().dialeg && t !== 1) Sfx.tambor(t === 0);
+        } });
+    }
+    // Segona fase: rugit, ona de xoc que empeny l'Ineu, la cova es torna vermella i els tambors s'acceleren
+    furiaOcellaire(e) {
+        const c = e.spr.body.center, cam = this.cameras.main;
+        Sfx.rugit();
+        cam.shake(1300, 0.012);
+        cam.flash(400, 255, 60, 40);
+        this.bombolla('ocellaire', 'PROU JOCS!', null, 1400);
+        const ona = this.add.circle(c.x, c.y - 30, 30).setStrokeStyle(10, 0xff5030, 0.9).setDepth(99960);
+        this.tweens.add({ targets: ona, radius: 520, alpha: 0, duration: 900, ease: 'Cubic.out', onComplete: () => ona.destroy() });
+        const jo = this.ineu.body.center, dx = jo.x - c.x, dy = jo.y - c.y, l = Math.hypot(dx, dy) || 1;
+        if (l < 420) this.forcat = { vx: dx / l * 520, vy: dy / l * 520, fins: this.time.now + 260 };
+        this.tweens.add({ targets: this.velLila, alpha: 0.32, duration: 800 });
+        this.velLila.setFillStyle(0x3a0610, this.velLila.alpha);
+        this.llumLila.setFillStyle(0xff3020, 0.1);
+        this.espurnes.setParticleTint && this.espurnes.setParticleTint(0xff6040);
+        if (e.ulls) this.tweens.add({ targets: e.ulls, scale: 1.6, duration: 400 });
+        this.tambors(400);
+    }
+
     // Rastre de foc d'un ocell
     flamaOcell(o) {
         o.spr.setTintFill(0xffa040).setBlendMode('ADD');
@@ -659,19 +708,23 @@ class ZonaGabia extends ZonaBase {
     iniciarCombatFinal() {
         this.combatIniciat = true;
         const gx = this.gx, base = this.base, vist = Estat.flag('ocellaireVist');
-        const ap = this.add.image(gx, base + 150, 'ocellaire').setAlpha(0).setDepth(base + 150);
+        const ap = this.add.image(gx, base + 90, 'ocellaire').setAlpha(0).setDepth(base + 90);
         ap.setScale(this.textures.get('ocellaire').customData.escala || 1 / RES);
         this.npcs.ocellaire = ap;
+        const cam = this.cameras.main, ui = this.ui();
         const pagines = [{ fer: (z, fet) => z.seq([
+            f => { ui.franges(true); z.ineuVa(this.ineu.x, Math.max(this.ineu.y, base + 300), null, 160); cam.stopFollow(); cam.pan(gx, base + 60, 900, 'Sine.easeInOut'); z.esperar(950, f); },
             f => z.npcMira('germa_andreu', 'ineu', f),
             f => z.bombolla('germa_andreu', vist ? 'Una altra vegada?' : 'Mestre! Ja és aquí!', f, 1400),
             f => z.npcSalta('germa_andreu', f, 2),
             f => z.invocarOcellaire(ap, f),
+            f => { Sfx.rugit(); cam.shake(900, 0.008); ui.titolBoss("L'OCELLAIRE", 'Mestre Gaspar'); z.esperar(vist ? 1600 : 2600, f); },
             ...(vist ? [] : [
                 f => z.bombolla('ocellaire', 'Un nen que riu...', f, 1500),
                 f => z.bombolla('ocellaire', 'El teu riure també serà meu!', f, 1800)
             ]),
-            f => z.npcVa('germa_andreu', gx + 330, base + 40, f, 220)
+            f => { z.npcVa('germa_andreu', gx + 330, base + 40, null, 220); cam.pan(this.ineu.x, this.ineu.y, 700, 'Sine.easeInOut', false, (cm, p) => { if (p === 1) { cam.startFollow(this.ineu, true, 0.12, 0.12); f(); } }); },
+            f => { ui.franges(false); f(); }
         ], fet) }];
         this.ui().obrirDialeg({ pagines }, () => this.començarBoss(ap));
     }
@@ -688,25 +741,43 @@ class ZonaGabia extends ZonaBase {
             p.stop(); this.time.delayedCall(1400, () => p.destroy());
             this.boiraPuf(ap.x, ap.y - 60);
             this.cameras.main.flash(250, 160, 80, 255);
-            this.tweens.add({ targets: ap, alpha: 1, duration: 500, onComplete: () => this.esperar(300, fet) });
+            this.tweens.add({ targets: ap, alpha: 1, duration: 500, onComplete: () => {
+                ap.ulls = this.crearUlls(); this.posarUlls(ap.ulls, ap, 0);
+                this.esperar(300, fet);
+            } });
         });
     }
 
     començarBoss(ap) {
         Estat.posaFlag('ocellaireVist');
         const x = ap.x, y = ap.y;
+        if (ap.ulls) ap.ulls.destroy();
         ap.destroy(); delete this.npcs.ocellaire;
         const e = this.enemic('ocellaire', x, y);
         if (!e) return;
         this.boss = e;
         this.crearBasto(e);
+        e.ulls = this.crearUlls();
+        this.ui().barraBoss("L'Ocellaire");
+        this.invulnerableFins = this.time.now + 1500;
+        this.tambors(560);
         this.npcs.ocellaire = e.spr;
-        this.ui().notifica("L'Ocellaire: talla els ocells de foc i colpeja'l quan el bàcul s'alenteixi");
+        this.ui().notifica("Talla els ocells de foc i colpeja'l quan el bàcul s'alenteixi");
     }
 
     ocellaireDerrotat(e) {
         this.bossCaigut = e;
-        const b = e.basto, c = e.spr.body.center;
+        const b = e.basto, c = e.spr.body.center, cam = this.cameras.main, ui = this.ui();
+        if (this.tambor) { this.tambor.remove(); this.tambor = null; }
+        ui.amagarBarraBoss();
+        // El cop final: el món gairebé s'atura, la càmera s'hi acosta i un flaix blanc ho esborra tot
+        this.hitStop(450);
+        cam.flash(700, 255, 255, 255);
+        cam.zoomTo(cam.zoom * 1.3, 500, 'Sine.easeOut');
+        Sfx.rugit();
+        this.time.delayedCall(2600, () => cam.zoomTo(ZOOM_CAMERA, 900, 'Sine.easeInOut'));
+        ui.franges(true);
+        if (e.ulls) this.tweens.add({ targets: e.ulls, alpha: 0, duration: 2200, onComplete: () => e.ulls.destroy() });
         // Els ocells de foc s'apaguen tots alhora
         this.enemics.filter(o => o.tipus === 'ocellFoc' && !o.mort).forEach(o => this.apagarOcell(o));
         if (e.flama) { e.flama.destroy(); e.flama = null; }
@@ -738,11 +809,18 @@ class ZonaGabia extends ZonaBase {
             f => z.bombolla('germa_andreu', 'Mestre! No em deixeu!', f, 1500),
             f => z.ajupir('germa_andreu', f, 1500)
         ], fet) }] }, () => {
+            ui.franges(false);
+            this.tornarColorCova();
             Estat.posaFlag('ocellaireVencut');
             Estat.posaObjectiu("L'Ocellaire ha caigut. Toca el Cant del Miracle (1-3-2-3-1) davant la gàbia.");
             this.guardarPosicio();
             Estat.desar();
         }));
+    }
+
+    tornarColorCova() {
+        this.velLila.setFillStyle(0x1a0a30, 0.22);
+        this.llumLila.setFillStyle(0x9a50ff, 0.08);
     }
 
     // ---------------- L'alliberament ----------------

@@ -3189,58 +3189,125 @@ function pintarFanalet(ctx, W, H) {
     ctx.beginPath(); ctx.arc(cx, base - 42, 2.4, 0, Math.PI * 2); ctx.stroke();
 }
 
-// L'Ocellaire (Mestre Gaspar): capa negra i lila amb serrell de plomes, màscara d'ocell pàl·lida amb bec d'or,
-// ulls lila que brillen, gàbia petita al cinturó i el cor de boira al pit (el que Runna ha de tallar).
+// L'Ocellaire (Mestre Gaspar): hàbit de monjo negre i esparracat, lligat amb cadenes (creuades al pit, a la cintura i
+// grillons als canells), calb i ossut, amb els ulls vermells que brillen. Una gàbia petita li penja del cinturó.
 // El bàcul no hi és: el dibuixa la zona, perquè gira.
 function dibuixarOcellaire(c, w) {
     lienc(c, w, w * 1.3, (ctx, W, H) => {
         const m = W / 2;
-        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN;
-        // Capa: un triangle ample que s'eixampla com unes ales plegades
-        ctx.fillStyle = '#1e1428';
-        ctx.beginPath(); ctx.moveTo(m, H * 0.12); ctx.quadraticCurveTo(W * 0.98, H * 0.5, W * 0.9, H * 0.97);
-        ctx.lineTo(W * 0.1, H * 0.97); ctx.quadraticCurveTo(W * 0.02, H * 0.5, m, H * 0.12); ctx.closePath(); ctx.fill(); ctx.stroke();
-        // Serrell de plomes a baix i a les espatlles
-        ctx.fillStyle = '#4a2a6a';
-        for (let k = 0; k < 9; k++) {
-            const x = W * 0.12 + k * W * 0.095;
-            ctx.beginPath(); ctx.moveTo(x - W * 0.05, H * 0.9); ctx.lineTo(x, H * 0.99); ctx.lineTo(x + W * 0.05, H * 0.9); ctx.closePath(); ctx.fill(); ctx.stroke();
-        }
-        [-1, 1].forEach(s => {
-            for (let k = 0; k < 4; k++) {
-                const x = m + s * (W * 0.16 + k * W * 0.07), y = H * 0.3 + k * H * 0.05;
-                ctx.beginPath(); ctx.ellipse(x, y, W * 0.05, H * 0.035, s * 0.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-            }
-        });
-        // Túnica lila del mig
-        ctx.fillStyle = '#3a2052';
-        ctx.beginPath(); ctx.moveTo(m - W * 0.12, H * 0.3); ctx.lineTo(m + W * 0.12, H * 0.3); ctx.lineTo(m + W * 0.2, H * 0.9); ctx.lineTo(m - W * 0.2, H * 0.9); ctx.closePath(); ctx.fill(); ctx.stroke();
-        // Cor de boira
-        const cor = ctx.createRadialGradient(m, H * 0.44, 2, m, H * 0.44, W * 0.1);
-        cor.addColorStop(0, '#ffffff'); cor.addColorStop(0.35, '#e0b0ff'); cor.addColorStop(1, 'rgba(154,80,255,0)');
-        ctx.fillStyle = cor; ctx.beginPath(); ctx.arc(m, H * 0.44, W * 0.1, 0, Math.PI * 2); ctx.fill();
-        // Cinturó i la gàbia petita
-        ctx.fillStyle = '#b89a50'; ctx.fillRect(m - W * 0.17, H * 0.58, W * 0.34, H * 0.025); ctx.strokeRect(m - W * 0.17, H * 0.58, W * 0.34, H * 0.025);
-        ctx.strokeStyle = '#b89a50'; ctx.lineWidth = 2;
-        const gx = m + W * 0.1, gy = H * 0.62;
-        ctx.beginPath(); ctx.arc(gx, gy + H * 0.02, W * 0.045, Math.PI, 0); ctx.stroke();
-        for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(gx + k * W * 0.02, gy + H * 0.02); ctx.lineTo(gx + k * W * 0.02, gy + H * 0.07); ctx.stroke(); }
-        ctx.beginPath(); ctx.moveTo(gx - W * 0.05, gy + H * 0.07); ctx.lineTo(gx + W * 0.05, gy + H * 0.07); ctx.stroke();
+        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.lineJoin = 'round';
+        // Caputxa abaixada, darrere les espatlles
+        ctx.fillStyle = '#1a1418';
+        ctx.beginPath(); ctx.ellipse(m, H * 0.27, W * 0.2, H * 0.06, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        // Hàbit: ample de baix, amb la vora esparracada
+        ctx.fillStyle = '#2a2026';
+        ctx.beginPath(); ctx.moveTo(m - W * 0.16, H * 0.26); ctx.lineTo(m + W * 0.16, H * 0.26);
+        ctx.lineTo(m + W * 0.3, H * 0.6); ctx.lineTo(m + W * 0.36, H * 0.95);
+        for (let k = 0; k <= 8; k++) ctx.lineTo(m + W * 0.36 - k * W * 0.09, H * (k % 2 ? 0.92 : 0.98));
+        ctx.lineTo(m - W * 0.3, H * 0.6); ctx.closePath(); ctx.fill(); ctx.stroke();
+        // Plecs
+        ctx.strokeStyle = '#120c10'; ctx.lineWidth = 2;
+        [-0.12, 0, 0.12].forEach(d => { ctx.beginPath(); ctx.moveTo(m + W * d * 0.6, H * 0.62); ctx.lineTo(m + W * d * 1.5, H * 0.93); ctx.stroke(); });
         ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
-        // Caputxa
-        ctx.fillStyle = '#140c1c';
-        ctx.beginPath(); ctx.arc(m, H * 0.16, W * 0.17, Math.PI * 0.95, Math.PI * 2.05); ctx.lineTo(m + W * 0.15, H * 0.27); ctx.lineTo(m - W * 0.15, H * 0.27); ctx.closePath(); ctx.fill(); ctx.stroke();
-        // Màscara d'ocell
-        ctx.fillStyle = '#e8dcc8';
-        ctx.beginPath(); ctx.ellipse(m, H * 0.18, W * 0.1, H * 0.07, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#d8a830';
-        ctx.beginPath(); ctx.moveTo(m - W * 0.04, H * 0.2); ctx.lineTo(m, H * 0.31); ctx.lineTo(m + W * 0.04, H * 0.2); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#c070ff';
-        ctx.beginPath(); ctx.ellipse(m - W * 0.045, H * 0.17, W * 0.025, H * 0.014, -0.3, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.ellipse(m + W * 0.045, H * 0.17, W * 0.025, H * 0.014, 0.3, 0, Math.PI * 2); ctx.fill();
-        // Plomes de la cresta
-        ctx.fillStyle = '#6a3a9a';
-        [-0.5, 0, 0.5].forEach(a => { ctx.save(); ctx.translate(m, H * 0.04); ctx.rotate(a); ctx.beginPath(); ctx.ellipse(0, -H * 0.03, W * 0.025, H * 0.05, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.restore(); });
+        // Mànigues i mans ossudes amb grillons
+        [-1, 1].forEach(sd => {
+            ctx.fillStyle = '#2a2026';
+            ctx.beginPath(); ctx.moveTo(m + sd * W * 0.14, H * 0.3); ctx.lineTo(m + sd * W * 0.34, H * 0.5); ctx.lineTo(m + sd * W * 0.3, H * 0.58); ctx.lineTo(m + sd * W * 0.18, H * 0.5); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#c8b8a8';
+            ctx.beginPath(); ctx.ellipse(m + sd * W * 0.33, H * 0.6, W * 0.04, H * 0.03, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#5a5a60'; ctx.fillRect(m + sd * W * 0.33 - W * 0.05, H * 0.555, W * 0.1, H * 0.022); ctx.strokeRect(m + sd * W * 0.33 - W * 0.05, H * 0.555, W * 0.1, H * 0.022);
+        });
+        // Cadenes: baules grises
+        const baules = (x0, y0, x1, y1, n) => {
+            for (let k = 0; k <= n; k++) {
+                const t = k / n, x = x0 + (x1 - x0) * t, y = y0 + (y1 - y0) * t, a = Math.atan2(y1 - y0, x1 - x0);
+                ctx.save(); ctx.translate(x, y); ctx.rotate(a + (k % 2 ? Math.PI / 2 : 0));
+                ctx.fillStyle = '#7a7a82'; ctx.strokeStyle = '#1a1a1e'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.ellipse(0, 0, W * 0.022, W * 0.012, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+                ctx.restore();
+            }
+        };
+        baules(m - W * 0.15, H * 0.28, m + W * 0.24, H * 0.6, 11);
+        baules(m + W * 0.15, H * 0.28, m - W * 0.24, H * 0.6, 11);
+        baules(m - W * 0.27, H * 0.62, m + W * 0.27, H * 0.62, 14);
+        baules(m - W * 0.33, H * 0.62, m - W * 0.36, H * 0.82, 6);       // la que penja del grilló
+        baules(m + W * 0.33, H * 0.62, m + W * 0.3, H * 0.86, 7);
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+        // Cadenat al pit, on es creuen
+        ctx.fillStyle = '#8a7a4a'; ctx.beginPath(); ctx.roundRect(m - W * 0.035, H * 0.42, W * 0.07, H * 0.05, 3); ctx.fill(); ctx.stroke();
+        ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(m, H * 0.42, W * 0.022, Math.PI, 0); ctx.stroke(); ctx.lineWidth = 3;
+        // Gàbia petita al cinturó
+        ctx.strokeStyle = '#b89a50'; ctx.lineWidth = 2;
+        const gx = m + W * 0.12, gy = H * 0.66;
+        ctx.beginPath(); ctx.arc(gx, gy + H * 0.02, W * 0.04, Math.PI, 0); ctx.stroke();
+        for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(gx + k * W * 0.018, gy + H * 0.02); ctx.lineTo(gx + k * W * 0.018, gy + H * 0.065); ctx.stroke(); }
+        ctx.beginPath(); ctx.moveTo(gx - W * 0.045, gy + H * 0.065); ctx.lineTo(gx + W * 0.045, gy + H * 0.065); ctx.stroke();
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+        // Cap calb i ossut
+        ctx.fillStyle = '#cdbcaa';
+        ctx.beginPath(); ctx.ellipse(m, H * 0.16, W * 0.1, H * 0.085, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.ellipse(m - W * 0.03, H * 0.11, W * 0.035, H * 0.02, -0.4, 0, Math.PI * 2); ctx.fill();
+        // Conques fosques, celles arrufades i galtes xuclades
+        ctx.fillStyle = '#3a2a2a';
+        ctx.beginPath(); ctx.ellipse(m - W * 0.042, H * 0.165, W * 0.03, H * 0.02, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(m + W * 0.042, H * 0.165, W * 0.03, H * 0.02, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(m - W * 0.075, H * 0.14); ctx.lineTo(m - W * 0.015, H * 0.155); ctx.moveTo(m + W * 0.075, H * 0.14); ctx.lineTo(m + W * 0.015, H * 0.155); ctx.stroke();
+        ctx.strokeStyle = 'rgba(60,40,40,0.6)'; ctx.beginPath(); ctx.moveTo(m - W * 0.07, H * 0.19); ctx.lineTo(m - W * 0.05, H * 0.215); ctx.moveTo(m + W * 0.07, H * 0.19); ctx.lineTo(m + W * 0.05, H * 0.215); ctx.stroke();
+        ctx.strokeStyle = CONTORN; ctx.beginPath(); ctx.moveTo(m - W * 0.03, H * 0.215); ctx.quadraticCurveTo(m, H * 0.205, m + W * 0.03, H * 0.215); ctx.stroke();
+        // Ulls vermells que brillen
+        [-1, 1].forEach(sd => {
+            const ex = m + sd * W * 0.042, ey = H * 0.165;
+            const g = ctx.createRadialGradient(ex, ey, 0, ex, ey, W * 0.05);
+            g.addColorStop(0, '#ffffff'); g.addColorStop(0.25, '#ff3020'); g.addColorStop(1, 'rgba(255,0,0,0)');
+            ctx.fillStyle = g; ctx.beginPath(); ctx.arc(ex, ey, W * 0.05, 0, Math.PI * 2); ctx.fill();
+        });
+    });
+}
+
+// Ratpenat de boira: ales lila translúcides i dos punts vermells
+function dibuixarRatpenat(c, w) {
+    lienc(c, w, w * 0.6, (ctx, W, H) => {
+        ctx.lineWidth = 2.5; ctx.strokeStyle = '#1a0a2a';
+        ctx.fillStyle = 'rgba(120,80,170,0.85)';
+        [-1, 1].forEach(sd => {
+            ctx.beginPath(); ctx.moveTo(W / 2, H * 0.4);
+            ctx.quadraticCurveTo(W / 2 + sd * W * 0.25, H * 0.0, W / 2 + sd * W * 0.49, H * 0.25);
+            ctx.lineTo(W / 2 + sd * W * 0.4, H * 0.55); ctx.lineTo(W / 2 + sd * W * 0.3, H * 0.45); ctx.lineTo(W / 2 + sd * W * 0.2, H * 0.62);
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+        });
+        ctx.fillStyle = '#3a2050';
+        ctx.beginPath(); ctx.ellipse(W / 2, H * 0.5, W * 0.1, H * 0.25, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(W / 2 - W * 0.07, H * 0.32); ctx.lineTo(W / 2 - W * 0.04, H * 0.14); ctx.lineTo(W / 2, H * 0.3); ctx.lineTo(W / 2 + W * 0.04, H * 0.14); ctx.lineTo(W / 2 + W * 0.07, H * 0.32); ctx.fill();
+        ctx.fillStyle = '#ff4040'; ctx.fillRect(W / 2 - W * 0.05, H * 0.4, W * 0.03, H * 0.06); ctx.fillRect(W / 2 + W * 0.02, H * 0.4, W * 0.03, H * 0.06);
+    });
+}
+
+// Ferralla viva: un garbuix d'eines rovellades (estenalles, un ganxo, una clau de gàbia i cadena) amb un ull lila
+function dibuixarFerralla(c, w) {
+    lienc(c, w, w * 0.9, (ctx, W, H) => {
+        ombraTerra(ctx, W / 2, H * 0.92, W * 0.36, H * 0.05);
+        ctx.lineCap = 'round'; ctx.strokeStyle = CONTORN;
+        const eina = (x0, y0, x1, y1, color, gruix) => { ctx.lineWidth = gruix + 4; ctx.strokeStyle = CONTORN; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke(); ctx.lineWidth = gruix; ctx.strokeStyle = color; ctx.stroke(); };
+        // Potes: dues eines que fan de cames
+        eina(W * 0.35, H * 0.55, W * 0.22, H * 0.9, '#7a5030', 6);
+        eina(W * 0.65, H * 0.55, W * 0.8, H * 0.9, '#6a4a2a', 6);
+        // Estenalles obertes (la boca)
+        eina(W * 0.3, H * 0.5, W * 0.12, H * 0.2, '#8a5a3a', 7);
+        eina(W * 0.3, H * 0.5, W * 0.05, H * 0.42, '#9a6a40', 7);
+        // Ganxo
+        eina(W * 0.7, H * 0.55, W * 0.78, H * 0.15, '#7a6a5a', 6);
+        ctx.lineWidth = 6; ctx.strokeStyle = '#7a6a5a'; ctx.beginPath(); ctx.arc(W * 0.86, H * 0.17, W * 0.08, Math.PI, Math.PI * 0.2, true); ctx.stroke();
+        // Cos: un pany vell
+        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.fillStyle = '#6a4a30';
+        ctx.beginPath(); ctx.roundRect(W * 0.3, H * 0.36, W * 0.4, H * 0.28, 8); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(170,90,40,0.6)'; ctx.fillRect(W * 0.34, H * 0.52, W * 0.12, H * 0.07); ctx.fillRect(W * 0.55, H * 0.4, W * 0.1, H * 0.05);
+        // L'ull de boira
+        const g = ctx.createRadialGradient(W / 2, H * 0.47, 0, W / 2, H * 0.47, W * 0.09);
+        g.addColorStop(0, '#ffffff'); g.addColorStop(0.35, '#c080ff'); g.addColorStop(1, 'rgba(154,80,255,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(W / 2, H * 0.47, W * 0.09, 0, Math.PI * 2); ctx.fill();
+        // Cadena que penja
+        ctx.lineWidth = 2; ctx.strokeStyle = '#5a5a60';
+        for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.ellipse(W * 0.5 + k * 4, H * 0.66 + k * 7, 4, 3, k % 2 ? 1.2 : 0, 0, Math.PI * 2); ctx.stroke(); }
     });
 }
 

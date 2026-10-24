@@ -35,6 +35,9 @@ class ZonaBase extends Phaser.Scene {
         Estat.dades.zona = this.scene.key;
         Estat.posaFlag('visitada_' + this.scene.key); // el mapa només mostra el que s'ha visitat
         Joc.musicaZona(this);
+        const uiB = this.ui();                         // si es venia d'un combat de boss (o s'hi ha caigut), fora barra i franges
+        if (uiB && uiB.boss) uiB.amagarBarraBoss();
+        if (uiB && uiB.frangesG) uiB.franges(false, 10);
 
         // La caixa dels peus fa 30 d'alt. Als interiors el món s'allarga una mica per sota: la porta es traspassa de debò
         this.physics.world.setBounds(0, TOPE_Y - 30, c.amplada, c.alcada - TOPE_Y + 30 + (this.esInterior() ? PROFUNDITAT_PORTA + 50 : 0));

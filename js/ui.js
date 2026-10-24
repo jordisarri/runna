@@ -312,6 +312,57 @@ class EscenaUI extends Phaser.Scene {
         this.tweens.add({ targets: this.toast, alpha: 0, delay: 1800, duration: 500 });
     }
 
+    // ---------------- CINEMÀTIQUES I BOSSES ----------------
+    // Franges negres de cinema a dalt i a baix (per sota de tota la resta de la UI)
+    franges(on, ms = 600) {
+        if (!this.frangesG) {
+            const h = 120;
+            this.frangesG = [this.add.rectangle(0, ALT_HUD, AMPLE, h, 0x000000).setOrigin(0, 1), this.add.rectangle(0, ALT, AMPLE, h, 0x000000).setOrigin(0, 0)];
+            this.frangesG.forEach(r => r.setDepth(-1));
+            this.frangesG.h = h;
+        }
+        const [a, b] = this.frangesG, h = this.frangesG.h;
+        this.tweens.killTweensOf(this.frangesG);
+        this.tweens.add({ targets: a, y: on ? ALT_HUD + h : ALT_HUD, duration: ms, ease: 'Sine.easeInOut' });
+        this.tweens.add({ targets: b, y: on ? ALT - h : ALT, duration: ms, ease: 'Sine.easeInOut' });
+    }
+
+    // Rètol gran amb el nom del boss: apareix, s'hi queda i s'esvaeix
+    titolBoss(nom, sub) {
+        const t1 = this.add.text(AMPLE / 2, ALT * 0.42, nom, { fontFamily: typeof FONT_TITOL !== 'undefined' ? FONT_TITOL : 'Georgia', fontSize: '76px', fontStyle: 'bold', color: '#ff6a5a', stroke: '#1a0408', strokeThickness: 10, align: 'center' }).setOrigin(0.5).setAlpha(0).setScale(1.4);
+        const t2 = this.add.text(AMPLE / 2, ALT * 0.42 - 70, sub, estilText(30, '#f2e6c8', { fontStyle: 'italic', stroke: '#1a0408', strokeThickness: 6 })).setOrigin(0.5).setAlpha(0);
+        this.tweens.add({ targets: t1, alpha: 1, scale: 1, duration: 500, ease: 'Back.easeOut' });
+        this.tweens.add({ targets: t2, alpha: 1, duration: 600, delay: 250 });
+        this.tweens.add({ targets: [t1, t2], alpha: 0, duration: 700, delay: 2600, onComplete: () => { t1.destroy(); t2.destroy(); } });
+    }
+
+    // Barra de vida del boss, a baix de la pantalla
+    barraBoss(nom) {
+        this.amagarBarraBoss();
+        const y = ALT - 64, w = AMPLE - 120, x = 60;
+        const c = this.add.container(0, 0).setAlpha(0);
+        c.add(this.add.rectangle(x - 4, y - 4, w + 8, 26, 0x1a0408).setOrigin(0).setStrokeStyle(3, 0xb89a50));
+        const fons = this.add.rectangle(x, y, w, 18, 0x3a1010).setOrigin(0);
+        const ple = this.add.rectangle(x, y, w, 18, 0xe03a2a).setOrigin(0);
+        const brill = this.add.rectangle(x, y, w, 6, 0xffb0a0, 0.5).setOrigin(0);
+        c.add([fons, ple, brill]);
+        c.add(this.add.text(AMPLE / 2, y - 12, nom, estilText(24, '#ffe9a8', { stroke: '#1a0408', strokeThickness: 5 })).setOrigin(0.5, 1));
+        this.tweens.add({ targets: c, alpha: 1, duration: 500 });
+        this.boss = { c, ple, brill, w };
+    }
+    vidaBoss(fr) {
+        if (!this.boss) return;
+        const b = this.boss, ww = Math.max(0, fr) * b.w;
+        this.tweens.add({ targets: [b.ple, b.brill], width: ww, duration: 250, ease: 'Cubic.out' });
+        b.ple.setFillStyle(0xffffff);
+        this.time.delayedCall(80, () => b.ple.setFillStyle(fr > 0.5 ? 0xe03a2a : 0xff6a20));
+    }
+    amagarBarraBoss() {
+        if (!this.boss) return;
+        const c = this.boss.c; this.boss = null;
+        this.tweens.add({ targets: c, alpha: 0, duration: 500, onComplete: () => c.destroy() });
+    }
+
     // ---------------- DIÀLEG ----------------
     crearCaixaDialeg() {
         this.caixa = this.add.container(AMPLE / 2, ALT - 190).setVisible(false).setDepth(40);

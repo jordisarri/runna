@@ -165,19 +165,26 @@ const ENEMICS = {
     // com un remolí i desapareix en boira per tornar a sortir en un altre lloc.
     ocellaire: {
         tex: 'ocellaire', vida: 24, vel: 70, mal: 1, radi: 34, cos: [56, 26], ombra: 0.75,
-        monedes: [0, 0, 0], cor: 0, robust: true,
+        monedes: [0, 0, 0], cor: 0, robust: true, barra: true,
         perill: e => !e.amagat && e.estat !== 'apareix',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const fase2 = e.vida <= this.vida / 2;
             if (!e.proxAtac) { e.proxAtac = ara + 1800; e.estat = 'sura'; e.nAtac = 0; }
-            if (fase2 && !e.fase2) {                     // el cor de boira s'encén: tot va més de pressa
+            if (fase2 && !e.fase2) {                     // es posa furiós: rugit, ona que empeny l'Ineu i tot va més de pressa
                 e.fase2 = true;
-                z.cameras.main.flash(300, 160, 80, 255);
-                z.flotant(c.x, c.y - 200, 'Prou jocs, criatura!', '#e0b0ff');
+                z.enemics.filter(o => o.tipus === 'ocellFoc' && !o.mort).forEach(o => z.apagarOcell(o));
+                e.estat = 'rugit'; e.fins = ara + 1500; e.basto.volant = false;
+                z.tweens.killTweensOf(e.basto);
+                z.furiaOcellaire(e);
             }
             const b = e.basto;
-            if (e.estat === 'sura') {
+            if (e.estat === 'rugit') {
+                e.spr.body.setVelocity(0);
+                b.gir = 0.5;
+                e.spr.angle = Math.sin(ara / 25) * 3;
+                if (ara > e.fins) { e.spr.angle = 0; e.estat = 'invoca'; e.fins = ara + 1500; e.nOcells = 0; e.proxOcell = ara + 150; }
+            } else if (e.estat === 'sura') {
                 // Es manté a uns 240 px de l'Ineu, voltant-lo a poc a poc
                 if (!e.puntSura || ara > e.canviFins) {
                     const a = Math.atan2(c.y - jo.y, c.x - jo.x) + (Math.random() < 0.5 ? -0.8 : 0.8);
@@ -280,6 +287,66 @@ const ENEMICS = {
                 const bl = e.spr.body.blocked;
                 if (ara > e.morFins || bl.left || bl.right || bl.up || bl.down) z.apagarOcell(e);
             }
+        }
+    },
+
+    // Ratpenat de boira (Gírgoles): penja quiet a la foscor; quan l'Ineu s'acosta, baixa fent ziga-zaga, i després s'enlaira
+    ratpenat: {
+        tex: 'ratpenat', vida: 1, vel: 190, mal: 1, radi: 20, cos: [34, 20], ombra: 0.2, centrat: true,
+        monedes: [0, 0, 0], cor: 0,
+        perill: e => e.estat === 'ataca',
+        ia(z, e, ara) {
+            const jo = z.ineu.body.center, c = e.spr.body.center;
+            const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
+            if (!e.casa) e.casa = { x: c.x, y: c.y };
+            e.spr.setScale(e.escalaBase, e.escalaBase * (0.75 + 0.25 * Math.abs(Math.sin(ara / 70))));     // aleteig
+            if (e.estat === 'ataca') {
+                const a = Math.atan2(jo.y - c.y, jo.x - c.x), zz = Math.sin(ara / 110) * 0.9;
+                e.spr.body.setVelocity(Math.cos(a + zz) * this.vel, Math.sin(a + zz) * this.vel);
+                if (ara > e.fins || dist < 26) { e.estat = 'fuig'; e.fins = ara + 900; e.ang = a + Math.PI + (Math.random() - 0.5); }
+            } else if (e.estat === 'fuig') {
+                e.spr.body.setVelocity(Math.cos(e.ang) * 150, Math.sin(e.ang) * 150);
+                if (ara > e.fins) { e.estat = 'volta'; e.fins = ara + 700 + Math.random() * 900; }
+            } else if (e.estat === 'volta') {
+                const t = ara / 400;
+                e.spr.body.setVelocity(Math.cos(t) * 70, Math.sin(t * 1.3) * 50);
+                if (ara > e.fins && dist < 330) { e.estat = 'ataca'; e.fins = ara + 1400; Sfx.ratpenat(); }
+            } else {   // penja
+                e.spr.body.setVelocity(0);
+                if (dist < 280) { e.estat = 'ataca'; e.fins = ara + 1400; Sfx.ratpenat(); }
+            }
+            e.spr.setFlipX(e.spr.body.velocity.x < 0);
+        }
+    },
+
+    // Ferralla viva (passadís de tortura): eines rovellades que s'ajunten i avancen a salts, fent soroll de ferro
+    ferralla: {
+        tex: 'ferralla', vida: 2, vel: 230, mal: 1, radi: 26, cos: [44, 22], ombra: 0.4,
+        monedes: [0, 0, 0], cor: 0,
+        perill: e => e.estat === 'salta',
+        ia(z, e, ara) {
+            const jo = z.ineu.body.center, c = e.spr.body.center;
+            const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
+            if (e.estat === 'salta') {
+                if (ara > e.fins) {
+                    e.estat = 'repos'; e.fins = ara + 650 + Math.random() * 400; e.spr.body.setVelocity(0);
+                    Sfx.ferralla();
+                }
+            } else if (e.estat === 'apunta') {
+                e.spr.body.setVelocity(0);
+                e.spr.angle = Math.sin(ara / 30) * 6;      // tremola abans de saltar
+                if (ara > e.fins) {
+                    e.spr.angle = 0;
+                    e.estat = 'salta'; e.fins = ara + 330;
+                    const a = Math.atan2(jo.y - c.y, jo.x - c.x);
+                    e.spr.body.setVelocity(Math.cos(a) * this.vel, Math.sin(a) * this.vel);
+                    z.tweens.add({ targets: e.spr, y: e.spr.y - 1, scaleY: e.escalaBase * 1.15, yoyo: true, duration: 160 });
+                }
+            } else {
+                e.spr.body.setVelocity(0);
+                if (ara > e.fins && dist < 420) { e.estat = 'apunta'; e.fins = ara + 380; }
+            }
+            if (Math.abs(jo.x - c.x) > 5) e.spr.setFlipX(jo.x < c.x);
         }
     },
 
@@ -567,6 +634,7 @@ Object.assign(ZonaBase.prototype, {
         Sfx.cop(mort || dany > 1);
         this.hitStop(mort ? 120 : dany > 1 ? 85 : 55);
         this.cameras.main.shake(mort ? 170 : 110, mort ? 0.008 : 0.004, true);
+        if (e.def.barra) this.ui().vidaBoss(e.vida / e.def.vida);
         if (mort) this.derrotar(e);
     },
 
@@ -756,7 +824,11 @@ Object.assign(ZonaBase.prototype, {
         this.cameras.main.fadeOut(900, 40, 0, 20);
         this.cameras.main.once('camerafadeoutcomplete', () => {
             Estat.dades.vida = Estat.dades.corsMax * 2;
-            Estat.dades.entrada = 'inici'; Estat.dades.x = null; Estat.dades.y = null;
+            Estat.dades.x = null; Estat.dades.y = null;
+            // Zones amb punt de control (el combat final): es torna a començar a l'entrada, amb tota la vida
+            const rn = this.config.reneix;
+            if (rn) { Estat.dades.entrada = rn; this.scene.start(this.scene.key, { entrada: rn }); return; }
+            Estat.dades.entrada = 'inici';
             Estat.caigut = true;
             this.scene.start('ZonaPlaca', { entrada: 'inici' });
         });
