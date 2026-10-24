@@ -37,7 +37,7 @@ class ZonaCami extends ZonaBase {
         this.muralla(1480, 140, 2800, 140, 132);
         this.sortides.push({ r: new Phaser.Geom.Rectangle(1320, 60, 120, 52), desti: 'ZonaCabanaCami', entrada: 'porta', peu: true });   // cal travessar la fila d'arbres fins dalt de tot
         // Fila de baix: als extrems, arbres més petits (la capçada no ha de tapar les sortides de les puntes)
-        this.muralla(0, 770, 2800, 770, 130);
+        this.muralla(0, 770, 2800, 770, 130, 'arbre', false);
         this.copes.filter(img => img.y === 770 && (img.x < 200 || img.x > 2600)).forEach(img => img.destroy());
         this.copes = this.copes.filter(img => img.active);
         [[40, 790], [170, 790], [2630, 790], [2760, 790]].forEach(([x, y]) => this.posar('arbre', x, y, { escala: 0.55, col: { w: 1, h: 1, fix: true } }));
