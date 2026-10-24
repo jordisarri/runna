@@ -1660,36 +1660,52 @@ function dibuixarCelNostraSenyora(c, w) {
     });
 }
 
-// Cel·les de Sant Benet: edifici més petit de pedra clara i detalls de maó, frontó esglaonat amb finestra rodona i dues finestres d'arc
+// Cel·les de Sant Benet (com la foto): edifici llarg de dues plantes, de pedra i maó ocre, teulada de quatre aigües de teula clara.
+// La façana és el costat llarg, amb una filera de finestres d'arc de maó a cada planta i dues portes (esquerra i dreta).
+// A l'esquerra es veu, de biaix, el capçal: un frontó de maó més alt que la teulada, amb un ull de bou i dues finestres.
 function dibuixarCelSantBenet(c, w) {
-    lienc(c, w, w * 0.72, (ctx, W, H) => {
-        ombraTerra(ctx, W / 2, H - 5, W * 0.5, 8);
-        const wb = H - 8, cantell = H * 0.3;
-        ctx.lineJoin = 'round'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 4;
-        ctx.fillStyle = '#d0a56a';
-        ctx.beginPath(); ctx.moveTo(W * 0.08, wb); ctx.lineTo(W * 0.08, cantell); ctx.lineTo(W * 0.5, H * 0.1); ctx.lineTo(W * 0.92, cantell); ctx.lineTo(W * 0.92, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.save(); ctx.clip();
-        ctx.strokeStyle = 'rgba(100,60,30,0.3)'; ctx.lineWidth = 1.4;
-        for (let y = wb; y > 0; y -= H * 0.05) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
-        ctx.restore();
-        // Cornisa que segueix el frontó
-        ctx.strokeStyle = CONTORN; ctx.lineWidth = 4; ctx.fillStyle = '#b98652';
-        const vessant = (xa, ya, xb, yb) => { ctx.beginPath(); ctx.moveTo(xa, ya); ctx.lineTo(xb, yb); ctx.lineTo(xb, yb - H * 0.05); ctx.lineTo(xa, ya - H * 0.05); ctx.closePath(); ctx.fill(); ctx.stroke(); };
-        vessant(W * 0.04, cantell + H * 0.02, W * 0.5, H * 0.1 + H * 0.02); vessant(W * 0.96, cantell + H * 0.02, W * 0.5, H * 0.1 + H * 0.02);
-        // Finestra rodona al frontó
-        ctx.fillStyle = '#26303a'; ctx.beginPath(); ctx.arc(W * 0.5, H * 0.27, W * 0.03, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        // Tres finestres d'arc amb marcs de maó (una sobre cada porta i una al mig)
-        [0.245, 0.47, 0.685].forEach(cx => finestra(ctx, W * cx, H * 0.36, W * 0.06, H * 0.18, { arc: true, marc: '#b86a42', vidre: '#6a3a24' }));
-        // Dues portes de fusta amb arc, més altes que l'Ineu: la de l'esquerra (la família del Flam) i la de la dreta (la de l'Uri)
-        [0.28, 0.72].forEach(cx => {
-            const pw = W * 0.09, px = W * cx - pw / 2, pt = wb - H * 0.36;
-            ctx.fillStyle = '#b86a42'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+    lienc(c, w, w * 0.62, (ctx, W, H) => {
+        ombraTerra(ctx, W / 2, H - 5, W * 0.52, 8);
+        ctx.lineJoin = 'round'; ctx.strokeStyle = CONTORN;
+        const wb = H - 8, ras = H * 0.34, xc = W * 0.2;            // ras: on comença la teulada de la façana; xc: on s'acaba el capçal
+        // Façana llarga: carreus ocres
+        carreus(ctx, xc, ras, W - xc - W * 0.02, wb - ras, '#c8955a', H * 0.04, W * 0.05, 17);
+        ctx.lineWidth = 4; ctx.strokeRect(xc, ras, W - xc - W * 0.02, wb - ras);
+        ctx.fillStyle = '#b5824a'; ctx.fillRect(xc, (ras + wb) / 2 - 3, W - xc - W * 0.02, 7);   // imposta entre plantes
+        // Teulada de quatre aigües, de teula clara
+        ctx.fillStyle = '#c99a72'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(xc - W * 0.01, ras + 4); ctx.lineTo(xc + W * 0.06, H * 0.16); ctx.lineTo(W * 0.92, H * 0.16); ctx.lineTo(W, ras + 4); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(110,60,30,0.35)'; ctx.lineWidth = 1.3;
+        for (let k = 1; k < 4; k++) { const y = H * 0.16 + (ras + 4 - H * 0.16) * k / 4; ctx.beginPath(); ctx.moveTo(xc + W * 0.06 * (1 - k / 4), y); ctx.lineTo(W - W * 0.08 * (1 - k / 4), y); ctx.stroke(); }
+        // Finestres d'arc amb marc de maó: set a dalt; a baix, cinc i dues portes
+        const fin = (x, y, fw, fh) => finestra(ctx, x - fw / 2, y, fw, fh, { arc: true, marc: '#a8603a', vidre: '#3a2a20' });
+        const cols = [0.28, 0.37, 0.45, 0.54, 0.63, 0.71, 0.8, 0.89];
+        cols.forEach(cx => fin(W * cx, ras + H * 0.06, W * 0.035, H * 0.15));
+        [0.28, 0.37, 0.54, 0.63, 0.89].forEach(cx => fin(W * cx, (ras + wb) / 2 + H * 0.05, W * 0.035, H * 0.15));
+        // Dues portes de fusta amb arc de maó, més altes que l'Ineu
+        [0.45, 0.78].forEach(cx => {
+            const pw = W * 0.065, px = W * cx - pw / 2, pt = wb - H * 0.3;
+            ctx.fillStyle = '#a8603a'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
             ctx.beginPath(); ctx.moveTo(px - 6, wb); ctx.lineTo(px - 6, pt + pw * 0.5); ctx.arc(px + pw / 2, pt + pw * 0.5, pw / 2 + 6, Math.PI, 0); ctx.lineTo(px + pw + 6, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
-            ctx.fillStyle = '#6a4228';
+            ctx.fillStyle = '#5a3a20';
             ctx.beginPath(); ctx.moveTo(px, wb); ctx.lineTo(px, pt + pw * 0.5); ctx.arc(px + pw / 2, pt + pw * 0.5, pw / 2, Math.PI, 0); ctx.lineTo(px + pw, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
             ctx.strokeStyle = 'rgba(20,10,4,0.5)'; ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.moveTo(px + pw / 2, pt); ctx.lineTo(px + pw / 2, wb); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(px + pw / 2, pt + 4); ctx.lineTo(px + pw / 2, wb); ctx.stroke();
         });
+        // El capçal (a l'esquerra, en ombra): paret de maó amb un frontó que sobresurt de la teulada
+        const x0 = W * 0.02;
+        ctx.fillStyle = '#b07a46'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.moveTo(x0, wb); ctx.lineTo(x0, ras - H * 0.04); ctx.lineTo(x0 + W * 0.035, ras - H * 0.04); ctx.lineTo(x0 + W * 0.035, H * 0.1);
+        ctx.lineTo(xc - W * 0.035, H * 0.1); ctx.lineTo(xc - W * 0.035, ras - H * 0.04); ctx.lineTo(xc, ras - H * 0.04); ctx.lineTo(xc, wb); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.save(); ctx.clip(); ctx.strokeStyle = 'rgba(70,35,15,0.35)'; ctx.lineWidth = 1.2;
+        for (let y = wb; y > 0; y -= H * 0.025) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+        ctx.restore();
+        ctx.fillStyle = '#9a6a3c'; ctx.fillRect(x0 + W * 0.025, H * 0.075, xc - x0 - W * 0.05, H * 0.03); ctx.lineWidth = 2.5; ctx.strokeRect(x0 + W * 0.025, H * 0.075, xc - x0 - W * 0.05, H * 0.03);
+        ctx.fillStyle = '#26303a'; ctx.beginPath(); ctx.arc((x0 + xc) / 2, H * 0.2, W * 0.022, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 3; ctx.stroke();
+        ctx.strokeStyle = '#d8b088'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc((x0 + xc) / 2, H * 0.2, W * 0.03, 0, Math.PI * 2); ctx.stroke();
+        [0.37, 0.63].forEach(f => finestra(ctx, x0 + (xc - x0) * f - W * 0.017, ras + H * 0.06, W * 0.034, H * 0.14, { arc: true, marc: '#d8b088', vidre: '#3a2a20' }));
+        [0.37, 0.63].forEach(f => finestra(ctx, x0 + (xc - x0) * f - W * 0.017, (ras + wb) / 2 + H * 0.06, W * 0.034, H * 0.14, { arc: true, marc: '#d8b088', vidre: '#3a2a20' }));
+        ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.fillRect(x0, ras - H * 0.04, xc - x0, wb - ras + H * 0.04);   // el capçal queda a l'ombra
     });
 }
 

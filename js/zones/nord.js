@@ -317,10 +317,10 @@ class ZonaCelles extends ZonaBase {
         this.interactiu(520, 625, 90, DIALEGS.cel_ntrasra, { altura: 140 });
         const sb = this.posar('cel_stbenet', 1380, 600, { col: { w: 520, h: 90 } });
         this.blocDarrere(1380, 520, 505, Math.max(0, 600 - sb.displayHeight));
-        this.interactiu(1257, 620, 70, DIALEGS.portaFlam, { altura: 140 });         // porta de l'esquerra: la família del Flam (la Neus)
-        this.interactiu(1503, 620, 70, DIALEGS.portaUri, { altura: 140 });          // porta de la dreta: la família de l'Uri (el Daniel)
+        this.interactiu(1352, 620, 70, DIALEGS.portaFlam, { altura: 140 });         // porta de l'esquerra: on dormia el Flam
+        this.interactiu(1537, 620, 70, DIALEGS.portaUri, { altura: 140 });          // porta de la dreta: on dormia l'Uri
 
-        // Sant Benet (est): la Neus i el seu marit, el senyor Moliner
+        // Sant Benet (est): la Neus i el seu marit, el senyor Moliner, veïns de Sant Benet
         this.npc('neus', 1250, 680, DIALEGS.neus);
         this.npc('marit_neus', 1320, 700, DIALEGS.maritNeus);
         // Les Tietes, Enriqueta i Lola: donen consells
@@ -400,8 +400,8 @@ class ZonaCelles extends ZonaBase {
 // A llevant del Monestir. Hi passeja el Germà Francesc, monjo del Monestir que cuida les flors del cementiri: per un favor
 // (portar-hi el seu ram), et dona els Guants de Poder, els que mouen la roda del Celler. L'Uri, el primer nen desaparegut, hi venia a robar figues.
 Object.assign(DIALEGS, {
-    portaFlam: E => ({ pagines: [{ qui: '', text: 'Sant Benet, porta de l\'esquerra: la cel·la de la Neus i el senyor Moliner, i del Flam. Al llindar hi ha una sabata petita, sola. Fa olor de sopa.' }] }),
-    portaUri: E => ({ pagines: [{ qui: '', text: 'Sant Benet, porta de la dreta: la cel·la del Daniel i de l\'Uri. A la finestra hi ha un dibuix d\'un ocell fet amb ceres, clavat per dins.' }] }),
+    portaFlam: E => ({ pagines: [{ qui: '', text: 'Sant Benet, porta de l\'esquerra: la cel·la on dormia el Flam. Al llindar hi ha una sabata petita, sola.' }] }),
+    portaUri: E => ({ pagines: [{ qui: '', text: 'Sant Benet, porta de la dreta: la cel·la on dormia l\'Uri. A la finestra hi ha un dibuix d\'un ocell fet amb ceres, clavat per dins.' }] }),
     cel_ntrasra: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Nostra Senyora, les més grans del Santuari. Avui les finestres són tancades: ningú no vol que hi entri la boira.' }] }),
     cel_stantoni: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Antoni, de pedra vella i teula. La porta és oberta, però a dins no hi ha ningú: els que hi viuen han baixat a ajudar a buscar els nens és a la Plaça, buscant-lo.' }] }),
 
