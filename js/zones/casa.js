@@ -88,8 +88,8 @@ Object.assign(DIALEGS, {
         if (E.te('reliquies_monjos')) {
             return {
                 pagines: [
-                    { qui: '', text: "Davant la llosa esquerdada, l'Ineu posa a terra, una a una, el calze, la creu, l'anell i el breviari." },
-                    { qui: '', text: "La boira lila s'atura, com si algú hagués deixat de respirar. L'esquerda es tanca amb un so de pedra que perdona." },
+                    { fer: (z, fet) => z.seq([c => z.deixar(c, null, 0xd8c890), c => z.deixar(c, null, 0xe8e8f0), c => z.deixar(c, null, 0xf0b040), c => z.deixar(c, null, 0xb83a3a)], fet) },
+                    { fer: (z, fet) => { z.cameras.main.shake(500, 0.004); const p = z.puntActiu || z.ineu; z.llum(p.x, p.y - 30, 0xd8c8ff, fet); } },
                     { qui: 'Ineu', text: "Ja podeu descansar, germans." },
                     { qui: '', text: "(La boira del cementiri s'afebleix. Però el segell més gran continua trencat: l'Ocellaire és sota la Taverna.)" }
                 ],

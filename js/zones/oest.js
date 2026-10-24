@@ -701,36 +701,127 @@ class ZonaDolmen extends ZonaBase {
     }
 
     // El moment èpic: Runna surt de la llosa del dolmen
-    despertarRunna() {
-        const { sx, sy } = DOL, cam = this.cameras.main, ey = this.espasaY;
-        cam.shake(1500, 0.004);
-        cam.flash(900, 255, 255, 255);
-        const raig = this.add.rectangle(sx + 10, 0, 70, ey, 0xe8f2ff, 0.0).setOrigin(0.5, 0).setDepth(sy + 5);
-        this.tweens.add({ targets: raig, alpha: 0.85, duration: 700, yoyo: true, hold: 900 });
-        const p = this.add.particles(sx + 10, ey, 'espurna', {
-            speedY: { min: -260, max: -90 }, speedX: { min: -70, max: 70 }, lifespan: 1500,
-            scale: { start: 0.8, end: 0 }, tint: 0xd8e8ff, frequency: 40, quantity: 3
-        }).setDepth(sy + 6);
-        this.time.delayedCall(2600, () => { p.stop(); });
-        this.time.delayedCall(4200, () => p.destroy());
-        // So èpic: acord ascendent
-        [1, 3, 2].forEach((n, i) => this.time.delayedCall(300 + i * 400, () => {
+    // El despertar de Runna: tot acció, sense narrador
+    //  1. L'Ineu camina davant del dolmen i s'agenolla; la càmera s'hi acosta i el cel s'enfosqueix.
+    //  2. La Fulla del Til·ler vola de l'Ineu a la pedra i s'hi encén d'or. El vent i les espurnes giren cap a l'espasa.
+    //  3. L'Ineu s'aixeca i crida «RIURE!»: la terra tremola i de l'espasa en surten raigs de llum.
+    //  4. L'espasa s'arrenca de la pedra, s'enlaira girant i baixa a la mà de l'Ineu, que l'alça. Esclat blanc.
+    //  5. Rètol: RUNNA, l'espasa del Miracle.
+    despertarRunna(fet) {
+        const { sx, sy } = DOL, cam = this.cameras.main, ey = this.espasaY, I = this.ineu;
+        const fi = () => { if (fet) fet(); };
+        const so = (freqs, tipus = 'triangle', vol = 0.25, dur = 1.6) => {
             const ctx = this.sound.context; if (!ctx) return;
             if (ctx.state === 'suspended') ctx.resume();
-            const o = ctx.createOscillator(), g = ctx.createGain();
-            o.type = 'triangle'; o.frequency.value = [0, 330, 392, 494][n] * 1.5;
-            g.gain.setValueAtTime(0.0001, ctx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.3, ctx.currentTime + 0.05);
-            g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.8);
-            o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime + 1.9);
-        }));
-        const espasa = this.add.image(this.dolmen.x, this.dolmen.y, 'dolmen_espasa').setOrigin(0.5, 1).setScale(this.dolmen.scaleX).setDepth(sy + 1);
-        this.dolmen.setTexture('dolmen_buit');
-        this.tweens.add({ targets: espasa, y: espasa.y - 40, duration: 1800 });
-        this.time.delayedCall(2800, () => {
-            espasa.destroy();
-            this.resplendor.setAlpha(0);
-            this.ui().obrirDialeg(DIALEGS.runnaDespertada(Estat), () => Estat.desar());
-        });
+            freqs.forEach((f, i) => {
+                const o = ctx.createOscillator(), g = ctx.createGain(), t0 = ctx.currentTime + i * 0.12;
+                o.type = tipus; o.frequency.value = f;
+                g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol, t0 + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+                o.connect(g); g.connect(ctx.destination); o.start(t0); o.stop(t0 + dur + 0.1);
+            });
+        };
+        const fosc = this.add.rectangle(sx, sy - 400, 4000, 4000, 0x06081a, 1).setDepth(sy + 4).setAlpha(0);   // el cel s'enfosqueix (per sota de la llum de l'espasa)
+        this.seq([
+            // 1. Davant la pedra, agenollat; la càmera s'hi acosta
+            c => this.ineuVa(sx, sy + 70, c, 160),
+            c => { this.posarDireccio('amunt', false); cam.stopFollow(); cam.pan(sx, ey + 40, 1400, 'Sine.easeInOut'); cam.zoomTo(1.35, 1600, 'Sine.easeInOut');
+                   this.tweens.add({ targets: fosc, alpha: 0.45, duration: 1600 }); this.ajupir('ineu', null, 2600); this.esperar(1000, c); },
+            // 2. La Fulla vola fins a la pedra i s'encén
+            c => {
+                const f = this.add.ellipse(I.x, I.y - 70, 16, 26, 0xf0c040).setStrokeStyle(2, 0x8a6a10).setDepth(99000);
+                this.tweens.add({ targets: f, angle: 540, duration: 1300 });
+                this.tweens.add({ targets: f, x: sx + 10, y: ey + 30, duration: 1300, ease: 'Sine.easeInOut', onComplete: () => {
+                    this.llum(sx + 10, ey + 30, 0xf0c040); so([392, 494, 587], 'sine', 0.18, 2);
+                    this.tweens.add({ targets: f, alpha: 0, scale: 2, duration: 900, onComplete: () => f.destroy() });
+                    c();
+                } });
+            },
+            // El vent: espurnes i fulles que giren i es xuclen cap a l'espasa; la terra comença a tremolar
+            c => {
+                this.vent = this.add.particles(0, 0, 'espurna', {
+                    emitZone: { type: 'edge', source: new Phaser.Geom.Circle(sx + 10, ey, 260), quantity: 48 },
+                    moveToX: sx + 10, moveToY: ey - 20, lifespan: 900, scale: { start: 0.5, end: 0.05 }, alpha: { start: 0, end: 1 },
+                    tint: [0xd8e8ff, 0xf0c040, 0xffffff], frequency: 25, blendMode: 'ADD'
+                }).setDepth(sy + 6);
+                cam.shake(1800, 0.003);
+                so([110, 116], 'sawtooth', 0.06, 1.8);
+                this.esperar(1700, c);
+            },
+            // 3. «RIURE!»: l'Ineu s'aixeca i ho crida
+            c => {
+                const t = this.ui().add.text(AMPLE / 2, ALT * 0.36, 'RIURE!', { fontFamily: typeof FONT_TITOL !== 'undefined' ? FONT_TITOL : 'Georgia', fontSize: '110px', fontStyle: 'bold', color: '#fff4c0', stroke: '#3a2408', strokeThickness: 12 })
+                    .setOrigin(0.5).setDepth(500).setScale(0.2).setAlpha(0);
+                this.ui().tweens.add({ targets: t, scale: 1.15, alpha: 1, duration: 350, ease: 'Back.easeOut', onComplete: () => this.ui().tweens.add({ targets: t, alpha: 0, scale: 1.4, delay: 700, duration: 500, onComplete: () => t.destroy() }) });
+                this.tweens.add({ targets: I, y: I.y - 14, yoyo: true, duration: 180 });
+                cam.shake(900, 0.012);
+                so([262, 330, 392, 523], 'square', 0.12, 1.2);
+                this.esperar(900, c);
+            },
+            // Raigs de llum que surten de l'espasa i giren
+            c => {
+                this.raigs = this.add.graphics({ x: sx + 10, y: ey - 20 }).setDepth(sy + 7).setBlendMode('ADD').setAlpha(0);
+                for (let k = 0; k < 14; k++) { const a = k / 14 * Math.PI * 2; this.raigs.fillStyle(k % 2 ? 0xd8e8ff : 0xfff0b0, 0.5).fillTriangle(0, 0, Math.cos(a - 0.07) * 900, Math.sin(a - 0.07) * 900, Math.cos(a + 0.07) * 900, Math.sin(a + 0.07) * 900); }
+                this.tweens.add({ targets: this.raigs, alpha: 1, duration: 600 });
+                this.tweens.add({ targets: this.raigs, angle: 90, duration: 4000 });
+                const halo = this.add.circle(sx + 10, ey - 20, 40, 0xffffff, 0.8).setDepth(sy + 8).setBlendMode('ADD');
+                this.tweens.add({ targets: halo, radius: 160, alpha: 0.25, yoyo: true, repeat: 2, duration: 300, onComplete: () => halo.destroy() });
+                this.esperar(1200, c);
+            },
+            // 4. L'espasa s'arrenca de la pedra i s'enlaira girant
+            c => {
+                if (this.vent) this.vent.stop();
+                cam.flash(400, 255, 255, 255);
+                this.esp = this.add.image(this.dolmen.x, this.dolmen.y, 'dolmen_espasa').setOrigin(0.5, 1).setScale(this.dolmen.scaleX).setDepth(sy + 9);
+                this.dolmen.setTexture('dolmen_buit');
+                this.resplendor.setAlpha(0);
+                const pols = this.add.particles(sx + 10, ey + 10, 'boira', { speed: { min: 40, max: 160 }, angle: { min: 200, max: 340 }, lifespan: 900, scale: { start: 0.6, end: 1.6 }, alpha: { start: 0.5, end: 0 }, tint: 0xb8a890, quantity: 20, emitting: false }).setDepth(sy + 8);
+                pols.explode(24);
+                so([196, 247, 294], 'triangle', 0.25, 2);
+                this.tweens.add({ targets: this.esp, y: this.esp.y - 220, duration: 1300, ease: 'Cubic.easeOut' });
+                this.esperar(1300, c);
+            },
+            // ...gira a l'aire i baixa fins a la mà de l'Ineu
+            c => {
+                cam.pan(I.x, I.y - 120, 900, 'Sine.easeInOut');
+                const e = this.add.image(sx + 10, this.esp.y - this.esp.displayHeight * 0.55, 'arma_espasa').setDepth(99100);
+                e.setScale(150 / e.height);
+                this.esp.destroy();
+                const llumE = this.add.circle(e.x, e.y, 34, 0xd8e8ff, 0.35).setDepth(99099).setBlendMode('ADD');
+                this.tweens.add({ targets: e, angle: 720, duration: 1100, ease: 'Sine.easeInOut' });
+                this.tweens.add({ targets: [e, llumE], x: I.x + 6, y: I.y - 150, duration: 1100, ease: 'Sine.easeInOut', onComplete: () => { this.runnaAlta = e; this.llumRunna = llumE; c(); } });
+            },
+            // L'Ineu l'agafa i l'alça: esclat blanc, raigs, acord
+            c => {
+                const e = this.runnaAlta;
+                this.tweens.add({ targets: I, y: I.y - 20, yoyo: true, duration: 220, ease: 'Quad.easeOut' });
+                cam.flash(700, 255, 255, 255);
+                cam.shake(500, 0.01);
+                so([330, 415, 494, 659], 'triangle', 0.3, 2.4);
+                this.llum(e.x, e.y - 40, 0xffffff);
+                if (this.raigs) this.tweens.add({ targets: this.raigs, x: e.x, y: e.y, duration: 300 });
+                this.tweens.add({ targets: this.llumRunna, radius: 60, alpha: 0.15, yoyo: true, repeat: -1, duration: 500 });
+                this.esperar(900, c);
+            },
+            // 5. El rètol
+            c => {
+                const ui = this.ui(), t1 = ui.add.text(AMPLE / 2, ALT * 0.3, 'RUNNA', { fontFamily: typeof FONT_TITOL !== 'undefined' ? FONT_TITOL : 'Georgia', fontSize: '96px', fontStyle: 'bold', color: '#ffe08a', stroke: '#2a1808', strokeThickness: 10 }).setOrigin(0.5).setDepth(500).setAlpha(0);
+                const t2 = ui.add.text(AMPLE / 2, ALT * 0.3 + 86, "l'espasa del Miracle", estilText(36, '#f2e6c8', { fontStyle: 'italic', stroke: '#2a1808', strokeThickness: 6 })).setOrigin(0.5).setDepth(500).setAlpha(0);
+                ui.tweens.add({ targets: [t1, t2], alpha: 1, duration: 700 });
+                ui.tweens.add({ targets: t1, scale: { from: 0.8, to: 1 }, duration: 900, ease: 'Back.easeOut' });
+                ui.tweens.add({ targets: [t1, t2], alpha: 0, delay: 2400, duration: 700, onComplete: () => { t1.destroy(); t2.destroy(); } });
+                this.esperar(3000, c);
+            },
+            // Tot torna a la calma
+            c => {
+                const coses = [this.runnaAlta, this.llumRunna, this.raigs, fosc].filter(Boolean);
+                coses.forEach(o => this.tweens.killTweensOf(o));
+                this.tweens.add({ targets: coses, alpha: 0, duration: 800, onComplete: () => {
+                    [...coses, this.vent].forEach(o => o && o.destroy());
+                } });
+                cam.zoomTo(ZOOM_CAMERA, 900, 'Sine.easeInOut');
+                cam.pan(I.x, I.y, 900, 'Sine.easeInOut', false, (cm, prog) => { if (prog === 1) cam.startFollow(I, true, 0.12, 0.12); });
+                this.esperar(1000, c);
+            }
+        ], fi);
     }
 }

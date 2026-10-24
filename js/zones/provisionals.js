@@ -91,7 +91,6 @@ class ZonaEsglesia extends ZonaBase {
         this.tweens.add({ targets: i, scaleY: base * 0.82, duration: 500, ease: 'Sine.easeOut' });
         return {
             pagines: [
-                { qui: '', text: 'T\'agenolles davant l\'altar de pedra i resses una estona en silenci.' },
                 { qui: '', text: 'Una calma tèbia et puja pel pit. Els grans del teu rosari tornen a brillar i la partida queda desada.' }
             ],
             enAcabar: () => {

@@ -395,6 +395,31 @@ class ZonaBase extends Phaser.Scene {
             if (fet) fet();
         } });
     }
+    // ---- Accions de l'Ineu sobre el punt amb què interactua (this.puntActiu) ----
+    // Agafar: l'objecte (o una llum) vola del punt a l'Ineu, que s'ajup
+    agafar(fet, key, color = 0xffe8a0) {
+        const p = this.puntActiu || { x: this.ineu.x, y: this.ineu.y - 60 };
+        this.ajupir('ineu', null, 300);
+        this.objecteVolaDe(p.x, p.y - 30, this.ineu.x, this.ineu.y - 70, key, color, () => { this.llum(this.ineu.x, this.ineu.y - 70, color); this.esperar(300, fet); });
+    }
+    // Deixar: l'objecte vola de l'Ineu al punt i s'hi encén
+    deixar(fet, key, color = 0xffe8a0) {
+        const p = this.puntActiu || { x: this.ineu.x, y: this.ineu.y - 60 };
+        this.ajupir('ineu', null, 400);
+        this.objecteVolaDe(this.ineu.x, this.ineu.y - 70, p.x, p.y - 30, key, color, () => { this.llum(p.x, p.y - 30, color); this.esperar(400, fet); });
+    }
+    // Beure (un flascó, l'aigua d'un calze, una pruna): llum que puja per l'Ineu
+    beure(fet, color = 0xffd890) {
+        this.tweens.add({ targets: this.ineu, y: this.ineu.y - 10, yoyo: true, duration: 200 });
+        this.llum(this.ineu.x, this.ineu.y - 60, color, () => this.esperar(200, fet));
+    }
+    objecteVolaDe(x0, y0, x1, y1, key, color, fet) {
+        const o = key && this.textures.exists(key) ? this.add.image(x0, y0, key) : this.add.circle(x0, y0, 9, color, 1);
+        if (o.type === 'Image') o.setScale(42 / Math.max(o.height, o.width));
+        o.setDepth(99000);
+        this.tweens.add({ targets: o, x: x1, y: y1, duration: 650, ease: 'Sine.easeInOut', onComplete: () => { o.destroy(); if (fet) fet(); } });
+    }
+
     // L'Ineu camina fins a (x, y)
     ineuVa(x, y, fet, vel = 180) {
         const dx = x - this.ineu.x, dy = y - this.ineu.y, dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'esquerra' : 'dreta') : (dy < 0 ? 'amunt' : 'avall');
@@ -990,6 +1015,7 @@ class ZonaBase extends Phaser.Scene {
     }
 
     interactuar(punt) {
+        this.puntActiu = punt;
         const dialeg = typeof punt.dialeg === 'function' ? punt.dialeg(Estat) : punt.dialeg;
         if (!dialeg) { if (punt.enTancar) punt.enTancar(); return; }   // accions sense diàleg (només un efecte a l'escena)
         this.ui().obrirDialeg(dialeg, () => {

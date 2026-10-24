@@ -169,7 +169,8 @@ const DIALEGS = {
             pagines: [
                 { qui: '', text: 'Un cofre vell, de bisagres rovellades, vigilat per dues espelmes que ningú no recorda haver encès.' },
                 { qui: '', text: 'A dins, un flascó de vidre amb un líquid daurat i una nota: «Per al qui sap escoltar les pedres.»' },
-                { qui: '', text: 'Beus el flascó. Notes el cor més fort.\n+1 GRA AL ROSARI i rosari ple.' }
+                { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xf0c040), c => z.beure(c, 0xf0c040)], fet) },
+                { qui: "", text: "+1 GRA AL ROSARI i rosari ple." }
             ],
             enAcabar: () => { E.posaFlag('cofreTresor'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
         };
@@ -209,7 +210,8 @@ const DIALEGS = {
             pagines: [
                 { qui: '', text: "Una cabana de llenyataire oblidada, amagada entre els arbres. La pols és una catifa grisa, menys al voltant de la taula, on algú hi juga a cartes." },
                 { qui: '', text: "Al fons, un cofre petit. A dins, un flascó daurat embolicat amb un drap i una nota gastada: «Per a qui es perd pel camí i el troba.»" },
-                { qui: '', text: "Beus el flascó. Notes el cor més fort.\n+1 GRA AL ROSARI i rosari ple." }
+                { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xf0c040), c => z.beure(c, 0xf0c040)], fet) },
+                { qui: "", text: "+1 GRA AL ROSARI i rosari ple." }
             ],
             enAcabar: () => { E.posaFlag('cofreCabanaCami'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
         };
@@ -309,7 +311,8 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: "", text: "Gires la clau petita del Pare Daniel i la porteta del sagrari s'obre. A dins, darrere el calze, hi ha un pergamí doblegat amb cura (fragment 2 de 2):\n«El monjo va guardar el segell fins al darrer dia. Des d'aleshores la seva ombra torna cada nit al mur de les Runes a vigilar. Les relíquies dels seus germans, i amb elles la clau de ferro, són on ell les va deixar, sota la mirada d'un guardià de pedra.»" },
+                { fer: (z, fet) => z.agafar(fet, 'pergami', 0xf2e6c8) },
+                { qui: "", text: "Fragment 2 de 2:\n«El monjo va guardar el segell fins al darrer dia. Des d'aleshores la seva ombra torna cada nit al mur de les Runes a vigilar. Les relíquies dels seus germans, i amb elles la clau de ferro, són on ell les va deixar, sota la mirada d'un guardià de pedra.»" },
                 { qui: "", text: "«Qui busqui la clau, que no oblidi mai on neix el sol.»" }
             ],
             enAcabar: () => E.posaFlag("fragment2")
@@ -341,7 +344,7 @@ const DIALEGS = {
         pagines: [
             { qui: 'Juli', text: 'Ineu! Sabies que el ping-pong és física pura? Efecte Magnus, rebot, fricció... i els angelets de la samarreta són de l\'edició limitada.' },
             { qui: 'Juli', text: 'El meu pare, en Frederic, juga amb una pala de pedra. De pedra! I em guanya igualment. Frikis de mena.' },
-            { qui: 'Juli', text: 'En Josep és el millor de la sala, i només es pot vèncer d\'una manera: tornant-li el servei. Quan hi hagi taula... jo t\'entreno.' }
+            { qui: 'Juli', text: 'En Josep és el millor de la sala, i només es pot vèncer d\'una manera: tornant-li el servei. Mira-li la mà quan serveix, no la pilota.' }
         ]
     }),
 
@@ -430,7 +433,7 @@ const DIALEGS = {
             pagines: [
                 { qui: "Neus", text: "Ineu, fill, no t'hi quedis plantat! L'Uri i el Flam dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!" },
                 { qui: "Senyor Moliner", text: "Neus, deixa'l respirar..." },
-                { qui: "Neus", text: "Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls. I si veus la Júlia, que no surti de cel·la." }
+                { qui: "Neus", text: "Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls." }
             ],
             enAcabar: () => E.posaFlag("parlatSantBenet")
         };
@@ -504,7 +507,7 @@ const DIALEGS = {
 
     branca: E => ({
         pagines: [
-            { qui: "", text: "Agafes la branca del Gran Til·ler. És lleugera, recta i càlida, com si encara respirés." },
+            { fer: (z, fet) => z.agafar(fet, 'branca', 0xd8f0a0) },
             { qui: "", text: "Has obtingut el BASTÓ DE TIL·LER!\nTambé ataca amb J o ESPAI, però més ràpid i amb més abast." }
         ],
         enAcabar: () => {
@@ -620,8 +623,8 @@ const DIALEGS = {
         if (herbes === 3) {
             return {
                 pagines: [
-                    { qui: '', text: 'Poses l\'herba de Sant Joan, el romaní i la pruna lila de la Prunera a la pica de la font.' },
-                    { qui: '', text: 'L\'aigua s\'aclareix a poc a poc. Un fil de llum puja de les pedres i la boira lila fuig del bosc.' },
+                    { fer: (z, fet) => z.seq([c => z.deixar(c, 'herba_sj'), c => z.deixar(c, 'romani'), c => z.deixar(c, null, 0xb88aff)], fet) },
+                    { qui: '', text: 'L\'aigua s\'aclareix i la boira lila fuig del bosc.' },
                     { qui: 'Ineu', text: 'Ha funcionat! Al fons de la pica hi ha un cristall que sembla de gel...' },
                     { qui: '', text: 'Has obtingut l\'AIGUA DE LA FONT DEL BISBE i un CRISTALL DE GEL.\nEl Garf, a l\'Era, segur que sap què fer-ne.' }
                 ],
@@ -661,7 +664,7 @@ const DIALEGS = {
                 pagines: [
                     { qui: "", text: "L'alzina vella té un forat al tronc, i sembla que tingui set. De dins surt una claror verdosa." },
                     { qui: "Ineu", text: "Duc aigua de la Font del Bisbe. Potser..." },
-                    { qui: "", text: "Aboques unes gotes de l'aigua de la Font del Bisbe sobre les arrels. L'escorça beu amb un sospir; el forat s'eixampla i la claror es torna d'un verd profund." },
+                    { fer: (z, fet) => z.deixar(fet, null, 0x8fe0ff) },
                     { qui: "Veu del bosc", text: "...Qui ens porta... l'aigua... bona... Passa, passa, fill... Només la Jaumeta... sap on acabes." },
                     { qui: "", text: "Un portal màgic s'ha obert a l'Alzina Buida. Una cabana molt lluny, al cor del bosc, t'espera a l'altra banda." }
                 ],
@@ -843,7 +846,7 @@ const DIALEGS = {
         const pagines = [
             { qui: '', text: 'A l\'extrem de ponent del jardí, una prunera vella i retorçuda, carregada de prunes d\'un lila que lluu com si fossin de vidre.' },
             { qui: 'Isidre', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes màgiques: una sola et deixa com nou.' },
-            { qui: '', text: 'Menges una pruna. Té gust de tardor, de mel i de música. Et sents completament renovat.' }
+            { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xb88aff), c => z.beure(c, 0xb88aff)], fet) },
         ];
         const perFont = !E.flag('fontNeta') && !E.te('pruna') && !E.flag('herba3');
         if (perFont) pagines.push({ qui: '', text: 'En culls una altra i te la guardes al sarró: la Font del Bisbe en vol una.\nHas obtingut una PRUNA MÀGICA.' });
@@ -1124,7 +1127,7 @@ const DIALEGS = {
         pagines: [
             { qui: "", text: "Un altar senzill de blocs de pedra clara, amb una creu i dos canelobres de ferro. Al costat de la creu, un calze d'argent entelat, ple d'aigua de rosada del matí." },
             ...(E.flag("calze") ? [] : [{ qui: "", text: "Un raig de claror baixa de la finestra i es posa al calze. És el CALZE DE ROSADA: cada cop que en beguis, et sentiràs renovat." }]),
-            { qui: "", text: "Beus l'aigua fresca del calze. Et sents renovat." }
+            { fer: (z, fet) => z.beure(fet, 0xd8e8ff) },
         ],
         enAcabar: () => {
             if (!E.flag("calze")) { E.dona("calze"); E.posaFlag("calze"); }
@@ -1149,7 +1152,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: "", text: "Poses el telescopi del Garf a la tripode. La nit és neta i freda, i fa olor de pedra mullada." },
+                { fer: (z, fet) => z.deixar(fet, 'telescopi_mon', 0xd8e8ff) },
                 { qui: "Ineu", text: "Diuen que per Sant Llorenç el cel plora. Compta les llàgrimes... i potser et mostraran alguna cosa." }
             ],
             enAcabar: () => { E.posaFlag("telescopiMuntat"); game.scene.start("Estels"); }
@@ -1159,7 +1162,7 @@ const DIALEGS = {
     // La llum que ha deixat l'últim estel a l'aigua del dipòsit de llevant
     estelDiposit: E => ({
         pagines: [
-            { qui: "", text: "T'enfiles per l'escala de ferro del dipòsit. A l'aigua, arran del coronament, sura una pedreta que fa una llum freda i blava, com la dels estels fugaços." },
+            { fer: (z, fet) => z.agafar(fet, null, 0x8fc8ff) },
             { qui: "", text: "Has obtingut l'ESTEL DE SANT LLORENÇ: una llàgrima de llum que no crema ni s'apaga." },
             { qui: "Ineu", text: "Fa la mateixa claror que els set estels... Diuen que la boira no gosa tocar la llum de Sant Llorenç. El camí del Dolmen, a llevant, n'és ple." }
         ],
@@ -1192,29 +1195,21 @@ const DIALEGS = {
                 { qui: "Ineu", text: "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré." }
             ] };
         }
+        // Tot és acció: l'Ineu s'agenolla, la Fulla vola a la pedra, crida la paraula i Runna s'allibera (ZonaDolmen.despertarRunna)
         return {
             pagines: [
-                { qui: "", text: "L'Ineu s'agenolla davant l'espasa. Posa la Fulla del Til·ler sobre la llosa, i la fulla fa un petit llum daurat." },
-                { qui: "Ineu", text: "Per la benedicció del prior, pel permís de l'arbre vell, i per la paraula que fa servir la foscor com a cant... RIURE." },
-                { qui: "", text: "El silenci del Dolmen es trenca. L'aire vibra com una corda tibada." }
+                { fer: (z, fet) => z.despertarRunna(fet) },
+                { qui: "Runna", text: "Fa molt que dormo. Hi torna a haver una gàbia, oi? Anem-hi." },
+                { qui: "Ineu", text: "Runna... Em parles al cap!" },
+                { qui: "Runna", text: "Em sents perquè m'has despertat rient. Es veu que això encara funciona." }
             ],
-            enAcabar: () => game.scene.getScene("ZonaDolmen").despertarRunna()
+            enAcabar: () => {
+                E.dona("runna"); E.posaFlag("runna");
+                const ui = game.scene.getScene("UI"); if (ui) ui.notifica("Runna: 2 de dany. Talla els esbarzers negres.");
+                E.posaObjectiu("Les ombres s'han fet més fortes. Parla amb el Frederic, al Celler (a les Runes): sap com baixar-hi per una altra banda.");
+            }
         };
     },
-
-    runnaDespertada: E => ({
-        pagines: [
-            { qui: "", text: "L'espasa surt de la pedra sola, llisca fins a la mà de l'Ineu i s'acomoda al palmell com si hi hagués viscut sempre." },
-            { qui: "Runna", text: "Fa molt que dormo. Hi torna a haver una gàbia, oi? Anem-hi." },
-            { qui: "Ineu", text: "Runna... Tu em parles al cap!" },
-            { qui: "Runna", text: "Em sents perquè em vas somriure al despertar-me. Es veu que això de riure encara funciona." },
-            { qui: "", text: "Has obtingut RUNNA, L'ESPASA DEL MIRACLE!\nFa 2 de dany. Les escolopendres cauen d'un sol cop." }
-        ],
-        enAcabar: () => {
-            E.dona("runna"); E.posaFlag("runna");
-            E.posaObjectiu("Les ombres s'han fet més fortes. Parla amb el Frederic, al Celler (a les Runes): sap com baixar-hi per una altra banda.");
-        }
-    }),
 
     dolmenBuit: E => ({
         pagines: [{ qui: "", text: "La llosa del Dolmen, buida i tèbia. Al lloc on dormia Runna ha quedat una empremta de llum que no s'acaba d'apagar." }]
@@ -1251,7 +1246,8 @@ const DIALEGS = {
             pagines: [
                 { qui: "", text: "Dins l'amagatall, un cofre vell. Les bisagres són rovellades, però el pany ha cedit amb un petit toc." },
                 { qui: "", text: "A dins hi ha un coure petit amb una gota de sang de color rosa pàl·lid i una nota: «Per al qui vingui amb l'espasa.»" },
-                { qui: "", text: "Beus la gota. Notes com el pit se't fa més ample.\n+1 GRA AL ROSARI i rosari ple." }
+                { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xffb8c8), c => z.beure(c, 0xffb8c8)], fet) },
+                { qui: "", text: "+1 GRA AL ROSARI i rosari ple." }
             ],
             enAcabar: () => { E.posaFlag("cofreBosc"); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
         };
@@ -1269,7 +1265,8 @@ const DIALEGS = {
     reixaDins: E => ({
         pagines: [
             { qui: "", text: "La reixa del porxo, tancada amb una barra de ferro. Per dins, n'hi ha prou amb aixecar-la." },
-            { qui: "", text: "L'Ineu aixeca la barra amb un xiscle de ferro vell. La reixa cedeix una mica: ara es pot sortir a la plaça (per dins; de fora continua tancada)." }
+            { fer: (z, fet) => { z.cameras.main.shake(250, 0.004); z.agafar(fet, null, 0x8a8a90); } },
+            { qui: "Ineu", text: "(Ara puc sortir a la plaça per aquí. De fora, la reixa continua tancada.)" }
         ],
         enAcabar: () => E.posaFlag("reixaObertaDins")
     }),
@@ -1294,7 +1291,8 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: "", text: "Un cofre massís entre botes buides. A dins, un flascó daurat i un pergamí de tapes de cuir." },
-                { qui: "", text: "Beus el flascó. Notes el cor més fort.\n+1 GRA AL ROSARI i rosari ple." },
+                { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xf0c040), c => z.beure(c, 0xf0c040)], fet) },
+                { qui: "", text: "+1 GRA AL ROSARI i rosari ple." },
                 { qui: "", text: "Has obtingut el PERGAMÍ DEL MONJO." },
                 { qui: "Pergamí del monjo", text: "«Les relíquies dels meus germans i la clau de ferro són sota l'escala, murades. Un guardià de pedra les vigila: ningú no hi baixa si no li gira el cap cap al sol que neix. On neix el sol, el raïm madura.»" },
                 { qui: "", text: "Al fons de la sala s'ha desfet un pany: una porta de fusta s'obre cap a l'escalinata de la Casa Gran." }
@@ -1347,7 +1345,7 @@ const DIALEGS = {
     // La boira que tapa el camí al Til·ler (nord de les Cel·les)
     boiraTiller: E => E.te("beuratge") ? {
         pagines: [
-            { qui: "", text: "Destapes l'ampolla de la Jaumeta i n'aboques el beuratge a la boira. Fa un so de ferro roent... i la boira es retira davant teu, com si tingués por." },
+            { fer: (z, fet) => z.deixar(fet, null, 0x6aff6a) },
             { qui: "Ineu", text: "Ha funcionat! El camí del Gran Til·ler torna a ser net." }
         ]
     } : {
@@ -1367,12 +1365,12 @@ const DIALEGS = {
         }
         if (!E.flag("bassadoriaNeta")) {
             return { pagines: [
-                { qui: "", text: "Acostes la branca del Gran Til·ler a la bardissa. S'estremeix... però no es mou." },
+                { fer: (z, fet) => { z.deixar(() => { z.cameras.main.shake(200, 0.003); fet(); }, 'branca', 0xd8f0a0); } },
                 { qui: "Ineu", text: "Sembla que espera alguna cosa: potser que l'aigua clara de la Bassadòria torni a respirar." }
             ] };
         }
         return { pagines: [
-            { qui: "", text: "Passes la branca del Gran Til·ler entre les punxes. Les branques de la bardissa es retiren, una a una, com si reconeguessin una veu molt antiga." }
+            { fer: (z, fet) => z.deixar(fet, 'branca', 0xd8f0a0) },
         ] };
     },
 
@@ -1390,7 +1388,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: "", text: "Aparteu els soldadets de fusta i una baldufa: sota, entre un tambor sense pell i una pilota, hi ha una palanca de ferro, de les bones." },
+                { fer: (z, fet) => z.agafar(fet, null, 0x8a8a90) },
                 { qui: "", text: "Has obtingut la PALANCA." }
             ],
             enAcabar: () => {
@@ -1420,7 +1418,7 @@ const DIALEGS = {
         const gravat = { qui: "", text: "Una tomba arran de terra, voltada de pedra, amb un àngel que plora al cap i un gerro als peus. A la base, gravat: «Els monjos del Miracle, d'ara i d'abans.»" };
         if (E.te("ram")) return {
             pagines: [gravat,
-                { qui: "", text: "Treus les flors marcides del gerro i hi poses el ram del Germà Francesc, als peus de l'àngel. Hi encens l'espelmeta. Per un moment, la boira s'aparta i hi toca el sol." }
+                { fer: (z, fet) => z.deixar(fet, 'flors', 0xffd8e8) },
             ],
             enAcabar: () => { E.treu("ram"); E.posaFlag("florsCreu"); E.posaObjectiu("Torna a Sant Antoni: el Germà Francesc t'ha de donar una cosa."); }
         };

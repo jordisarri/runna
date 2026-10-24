@@ -45,7 +45,7 @@ Object.assign(DIALEGS, {
 
     masiaLlar: E => ({ pagines: [
         { qui: '', text: "Una llar gran de pedra, amb un foc petit que mai no s'apaga del tot. Penja una olla fumejant d'un ganxo i a prop hi ha un bagul de llenya tallada." },
-        { qui: '', text: "T'asseus al racó de la llar, i la calor et puja per les cames. Aquí dins no entra la boira." }
+        { fer: (z, fet) => { z.ajupir('ineu', null, 900); z.llum(z.ineu.x, z.ineu.y - 60, 0xffb060, fet); } },
     ], enAcabar: () => game.scene.getScene('ZonaMasiaCirosa').descansar() })
 });
 
