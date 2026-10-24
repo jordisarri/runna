@@ -754,8 +754,40 @@ function afegirCaiada(c, w) {
     ctx.restore();
 }
 
+// Masia de pagès: planta baixa de pedra amb el portal d'arc al mig, dues finestres per banda, teulada de teules amb xemeneia fumant
 function dibuixarMasia(c, w) {
-    dibuixarEdifici(c, w, w * 0.55, '#e0cfa8', '#8a3a2a', 'Mas de la Cirosa');
+    lienc(c, w, w * 0.62, (ctx, W, H) => {
+        ombraTerra(ctx, W / 2, H - 6, W * 0.52, 9);
+        const base = H - 8, sostre = H * 0.4;
+        // Xemeneia (darrere la teulada) amb un tall de fum
+        carreus(ctx, W * 0.74, H * 0.0, W * 0.07, H * 0.26, '#9a8a6c', H * 0.04, W * 0.035, 5);
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.strokeRect(W * 0.74, H * 0.0, W * 0.07, H * 0.26);
+        ctx.fillStyle = '#6a5c48'; ctx.fillRect(W * 0.725, H * 0.0, W * 0.10, H * 0.025); ctx.strokeRect(W * 0.725, H * 0.0, W * 0.10, H * 0.025);
+        // Paret de carreus, amb sòcol més fosc
+        carreus(ctx, 0, sostre, W, base - sostre, '#d6c298', H * 0.05, W * 0.07, 11);
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 4; ctx.strokeRect(0, sostre, W, base - sostre);
+        ctx.fillStyle = 'rgba(60,44,26,0.28)'; ctx.fillRect(0, base - H * 0.07, W, H * 0.07);
+        // Cantonades de pedra picada
+        ctx.fillStyle = '#b3a07a';
+        for (let y = sostre + 6; y < base - 14; y += H * 0.1) { ctx.fillRect(0, y, W * 0.035, H * 0.07); ctx.strokeRect(0, y, W * 0.035, H * 0.07); ctx.fillRect(W * 0.965, y, W * 0.035, H * 0.07); ctx.strokeRect(W * 0.965, y, W * 0.035, H * 0.07); }
+        // Finestres
+        const fw = W * 0.075, fh = H * 0.2, fy = sostre + H * 0.12;
+        [W * 0.1, W * 0.26, W * 0.665, W * 0.825].forEach(x => finestra(ctx, x, fy, fw, fh, { guardapols: false, marc: '#b3a07a', vidre: '#2c3640' }));
+        // Portal d'arc de fusta amb ferratges, al mig
+        const pw = W * 0.15, px = W / 2 - pw / 2, py = sostre + H * 0.16;
+        ctx.fillStyle = '#b3a07a'; ctx.beginPath(); ctx.moveTo(px - 7, base); ctx.lineTo(px - 7, py + pw * 0.5); ctx.arc(W / 2, py + pw * 0.5, pw / 2 + 7, Math.PI, 0); ctx.lineTo(px + pw + 7, base); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#5a3a20'; ctx.beginPath(); ctx.moveTo(px, base); ctx.lineTo(px, py + pw * 0.5); ctx.arc(W / 2, py + pw * 0.5, pw / 2, Math.PI, 0); ctx.lineTo(px + pw, base); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = '#2a1a0c'; ctx.lineWidth = 2;
+        for (let k = 1; k < 4; k++) { ctx.beginPath(); ctx.moveTo(px + pw * k / 4, py + pw * 0.2); ctx.lineTo(px + pw * k / 4, base); ctx.stroke(); }
+        ctx.strokeStyle = '#3a3a40'; ctx.lineWidth = 4;
+        [0.18, 0.38].forEach(f => { ctx.beginPath(); ctx.moveTo(px, py + pw * 0.5 + (base - py) * f); ctx.lineTo(px + pw, py + pw * 0.5 + (base - py) * f); ctx.stroke(); });
+        ctx.fillStyle = '#d8b050'; ctx.beginPath(); ctx.arc(px + pw * 0.8, base - H * 0.14, 3.5, 0, Math.PI * 2); ctx.fill();
+        // Teulada
+        teuladaTeules(ctx, W, H * 0.2, sostre + 4, '#a85c3a');
+        // Un manat de pebrots i un cove penjats a la façana, a l'esquerra del portal
+        ctx.strokeStyle = '#4a3a24'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(W * 0.4, sostre + H * 0.04); ctx.lineTo(W * 0.4, sostre + H * 0.1); ctx.stroke();
+        ctx.fillStyle = '#b8402e'; for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.ellipse(W * 0.4 + (k % 2 ? 4 : -4), sostre + H * 0.12 + k * 5, 2.6, 6, 0, 0, Math.PI * 2); ctx.fill(); }
+    });
 }
 
 function dibuixarFoc(c, w) {

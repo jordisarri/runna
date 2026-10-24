@@ -10,6 +10,7 @@ const MAPA = {
     zones: [
         // Nord
         { id: 'ZonaCirosa',        nom: 'La Cirosa',                x: 1100, y: 90 },
+        { id: 'ZonaMasiaCirosa',   nom: 'El Mas de la Cirosa',     x: 930,  y: 90 },
         { id: 'ZonaCamiCirosa',    nom: 'Camí de la Cirosa',        x: 950,  y: 150 },
         { id: 'ZonaCabanaInt',     nom: 'Dins la cabana',           x: 200,  y: 110 },
         { id: 'ZonaCabana',        nom: 'Cabana de la Jaumeta',     x: 370,  y: 110 },
@@ -60,7 +61,7 @@ const MAPA = {
         ['ZonaJardi', 'ZonaTaverna'], ['ZonaJardi', 'ZonaSoterraniHost'], ['ZonaSoterraniHost', 'ZonaHostatgeriaInt'], ['ZonaHostatgeriaInt', 'ZonaCambraPains'], ['ZonaHostatgeriaInt', 'ZonaCambraPhili'], ['ZonaHostatgeriaInt', 'ZonaCambraCharm'], ['ZonaTaverna', 'ZonaCasaGran'],
         ['ZonaRuines', 'ZonaCementiri'], ['ZonaCementiri', 'ZonaMonestir'], ['ZonaMonestir', 'ZonaSantAntoni'],
         ['ZonaRuines', 'ZonaCelles'], ['ZonaCelles', 'ZonaBosc'], ['ZonaBosc', 'ZonaCabana'], ['ZonaCabana', 'ZonaCabanaInt'],
-        ['ZonaCelles', 'ZonaTiller'], ['ZonaTiller', 'ZonaJordi'], ['ZonaJordi', 'ZonaCasetaJoc'], ['ZonaTiller', 'ZonaCamiCirosa'], ['ZonaCamiCirosa', 'ZonaCirosa'],
+        ['ZonaCelles', 'ZonaTiller'], ['ZonaTiller', 'ZonaJordi'], ['ZonaJordi', 'ZonaCasetaJoc'], ['ZonaTiller', 'ZonaCamiCirosa'], ['ZonaCamiCirosa', 'ZonaCirosa'], ['ZonaCirosa', 'ZonaMasiaCirosa'],
         ['ZonaEra', 'ZonaCamiRov'], ['ZonaCamiRov', 'ZonaRovellonera'], ['ZonaRovellonera', 'ZonaGabriel'],
         ['ZonaGabriel', 'ZonaDipositos'], ['ZonaDipositos', 'ZonaDolmen']
     ],

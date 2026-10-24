@@ -447,8 +447,20 @@ class ZonaPassadis extends ZonaCasaBase {
 
         this.espelmes([[230, 1250], [570, 1250], [230, 820], [570, 820], [230, 360], [570, 360]]);
 
-        // Un mur d'esbarzers negres a mig passadís: només es talla amb Runna
-        [240, 320, 400, 480, 560].forEach((x, i) => this.esbarzer(x, 740, 'passadis' + i));
+        // Un mur d'esbarzers negres a mig passadís: només es talla amb Runna. Fosc sobre pedra fosca no es veuria: llueixen violeta
+        // i hi ha dues espelmes a cada costat perquè es vegin de lluny.
+        this.espelmes([[225, 770], [575, 770]]);
+        [240, 320, 400, 480, 560].forEach((x, i) => {
+            const o = this.esbarzer(x, 740, 'passadis' + i);
+            if (!o) return;
+            o.img.setTint(0xc8a0ff);
+            const halo = this.add.ellipse(x, 722, 96, 60, 0x9a50ff, 0.32).setDepth(739);
+            this.tweens.add({ targets: halo, alpha: 0.1, scale: 1.2, yoyo: true, repeat: -1, duration: 900 + i * 110 });
+            o.halo = halo;
+        });
+        if (this.esbarzers.length) {
+            this.interactiu(400, 790, 300, DIALEGS.murEsbarzers, { altura: 70, actiu: () => this.esbarzers.some(o => o.viu) });
+        }
 
         // Els animalets del cementiri esquerdat, abans i després del mur
         if (!Estat.flag('passadisNet')) {
@@ -461,6 +473,7 @@ class ZonaPassadis extends ZonaCasaBase {
     }
 
     actualitzar() {
+        this.esbarzers.forEach(o => { if (!o.viu && o.halo) { o.halo.destroy(); o.halo = null; } });
         if (Estat.flag('passadisNet')) return;
         if (this.enemics.every(e => e.mort) && this.esbarzers.every(o => !o.viu)) Estat.posaFlag('passadisNet');
     }

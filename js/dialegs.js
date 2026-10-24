@@ -15,6 +15,34 @@ function objectiuFont(n) {
     return n === 3 ? 'Ja ho tens tot: torna a la Font del Bisbe.' : `Porta a la Font del Bisbe l'herba de Sant Joan, el romaní (al bosc) i una pruna de la Prunera de l'Hostatgeria (${n}/3).`;
 }
 
+// El pas següent per arribar a Runna (null si ja la tens). Les Tietes i els monjos el fan servir perquè mai no et quedis sense pista.
+// Ordre: bardissa → Cirosa → esquelles → sopar del Til·ler (Fulla) → fragments → ombra i Cant de les Pedres → Saber → Benedicció → Dolmen.
+function pistaRunna(E) {
+    if (E.flag("runna")) return null;
+    if (!E.flag("camiCirosaObert")) return "Al Gran Til·ler, el camí del nord-est és tancat per una bardissa viva. Acosta-hi la branca del Til·ler (parla amb la bardissa) i s'apartarà.";
+    if (!E.flag("pastorVencut")) return "Puja a la Cirosa pel camí que ha obert la bardissa. Al mig de la pastura hi ha el Germà Andreu fet Pastor de Boira: has de vèncer-lo.";
+    if (!E.flag("esquelles")) return "A la Cirosa, parla amb el pastor vell, vora el foc: t'ha de donar les esquelles dels seus avis.";
+    if (!E.flag("soparObert")) return "Torna al Gran Til·ler amb les esquelles: et vol parlar d'un sopar.";
+    if (!E.flag("soparFet")) {
+        const f = [];
+        if (!E.flag("escudella")) f.push("l'escudella de la Neus (Sant Benet, a les cel·les)");
+        if (!E.flag("floresIsidre")) f.push("les flors de l'Isidre (jardí de l'Hostatgeria)");
+        if (!E.flag("pastorsConvencuts")) f.push("els pastors de la Cirosa (toca la flauta vora el seu foc)");
+        return f.length ? "Per al sopar del Til·ler et falta: " + f.join(", ") + "." : "Ja ho tens tot: torna al Gran Til·ler i que es faci el sopar.";
+    }
+    if (!E.flag("fragment1")) return "A les Runes, entre dues pedres, hi ha un pergamí esquinçat (fragment 1). Mira-hi bé.";
+    if (!E.flag("fragment2")) return "El Pare Daniel, al Santuari, et dóna la clau del sagrari; el sagrari és al mig del retaule i guarda el fragment 2.";
+    if (!E.flag("fragment3")) return "Porta els dos fragments al Pare Alcuí, a la biblioteca del Monestir: te'ls llegirà.";
+    if (!E.flag("benedicioMonjo")) return E.flag("ombraDemanaCant") && !E.flag("cantPedres")
+        ? "La Pianista, al Santuari, t'ensenya el Cant de les Pedres. Després tocal amb la flauta davant l'ombra del monjo, a les Runes."
+        : E.flag("ombraDemanaCant")
+            ? "Toca el Cant de les Pedres amb la flauta (3-1-2-1) davant l'ombra del monjo, a les Runes."
+            : "Parla amb l'ombra del monjo, a les Runes (a la dreta del replà de pedra): et dirà què vol.";
+    if (!E.flag("saber")) return "Ara que l'ombra t'ha beneït, el Pare Alcuí, a la biblioteca, et dirà la Paraula del Saber.";
+    if (!E.flag("benediccio")) return "El Pare Jordi, a la Plaça, vol donar-te la benedicció ara que tens el permís del Til·ler.";
+    return "Surt de l'Hostatgeria cap a l'oest, passa per davant de l'Era i segueix el camí un bon tros: arribaràs a la Rovellonera. Allà, on hi ha rovellons sota els pins, hi ha camí: sud, ponent i sud. I mira el cel als Dipòsits. El Dolmen és al sud-est.";
+}
+
 // Les Tietes sempre donen una pista segons el que et falta fer
 function pistaActual(E) {
     let consell;
@@ -27,12 +55,11 @@ function pistaActual(E) {
     else if (!E.flag("boiraTillerNeta") && !E.flag("parlatTiler")) consell = "El Gran Til·ler és al nord de les Cel·les, però una boira espessa tapa el camí. Aboca-hi el beuratge de la Jaumeta i es desfarà.";
     else if (!E.flag("parlatTiler")) consell = "Pel camí que s'ha aclarit, al nord de les Cel·les, hi ha el Gran Til·ler. Parla-hi: ell sap què fer amb les bestioles que desperten.";
     else if (!E.te("basto_tiller")) consell = "Agafa la branca que ha caigut al peu del Til·ler: és més àgil que el bastó de pelegrí que portes.";
-    else if (E.flag("soparFet") && !E.flag("saber")) consell = "El Pare Alcuí, a la biblioteca, sap la paraula que desperta l'espasa. Només te la dirà si has parlat amb l'ombra del monjo.";
-    else if (E.flag("soparFet") && !E.flag("benediccio")) consell = "El Pare Jordi, a la Plaça, vol donar-te la benedicció. Fes-li una visita.";
-    else if (E.flag("soparFet") && !E.flag("runna")) consell = "Surt de l'Hostatgeria cap a l'oest, passa per davant de l'Era i segueix el camí un bon tros: arribaràs a la Rovellonera. Allà, on hi ha rovellons sota els pins, hi ha camí: sud, ponent i sud. I mira el cel als Dipòsits.";
+    else if (pistaRunna(E)) consell = pistaRunna(E);
     else if (!E.flag("fredericRoda") && !E.flag("cofreCambra")) consell = "Ara que portes Runna... Al Celler, a les Runes, hi ha una roda de carruatge que amaga alguna cosa. El Frederic, el pare del Juli, en sap més del que diu. Parla-hi.";
     else if (!E.te("guants") && !E.flag("rodaMoguda")) consell = E.flag("florsCreu") ? "Torna a Sant Antoni, fill: el Germà Francesc t'espera." : E.te("ram") ? "El ram del Germà Francesc va a la tomba de l'àngel del Cementiri." : "El Germà Francesc, que passeja per Sant Antoni (a llevant del Monestir), té uns guants que mouen el que pesa. Fes-li un favor i te'ls deixarà.";
-    else if (!E.flag("cofreCambra")) consell = "Amb els guants posats, empeny la roda del Celler des d'un costat. Al darrere hi ha el túnel dels monjos.";
+    else if (!E.flag("rodaMoguda")) consell = "Amb els guants posats, empeny la roda del Celler des d'un costat. Al darrere hi ha el túnel dels monjos.";
+    else if (!E.flag("cofreCambra")) consell = "Baixa pel passadís de darrere la roda: tallant amb Runna el mur d'esbarzers negres (hi ha una espelma a cada costat) arribaràs a la Cambra secreta dels monjos, amb un cofre.";
     else if (!E.flag("raimDerrotat")) consell = "A la gran escalinata de la Casa Gran hi ha l'Home del Raïm. Necessites la palanca: és a la caseta de joc del jardí de la masia d'en Jordi, a l'oest del Gran Til·ler. I recorda el que diu el pergamí del monjo: on neix el sol, el raïm madura.";
     else if (!E.flag("relIquiesRetornades")) consell = "Les relíquies dels monjos s'han de tornar a la tomba esquerdada del Cementiri, darrere el Santuari i el Monestir. I guarda bé aquella clau que has trobat: obre la porta de ferro de sota la Taverna.";
     else if (!E.flag("cantMiracle")) consell = "Abans de baixar sota la Taverna, passa pel Santuari: la Pianista té un últim cant per a tu, el Cant del Miracle. Els barrots de la gàbia només l'escolten a ell.";
@@ -107,6 +134,12 @@ const DIALEGS = {
                 ],
                 enAcabar: () => { E.posaFlag("benediccio"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
             };
+        }
+        if (E.te("basto_tiller") && !E.flag("runna")) {
+            return { pagines: [
+                { qui: "Pare Jordi", text: "Ineu, la gent diu que has parlat amb el Gran Til·ler. Per despertar Runna et calen tres coses: el permís de l'arbre (la Fulla), la Paraula del Saber del Pare Alcuí i la meva benedicció." },
+                { qui: "Pare Jordi", text: pistaRunna(E) }
+            ] };
         }
         if (E.flag("combatActiu")) {
             return { pagines: [
@@ -435,7 +468,8 @@ const DIALEGS = {
             return { pagines: [{ qui: "El Gran Til·ler", text: "La branca és a terra, a prop de les meves arrels. Agafa-la, petit monjo." }] };
         }
         if (E.flag("soparFet")) {
-            return { pagines: [{ qui: "El Gran Til·ler", text: "El permís és teu, petit monjo, i les espelmes continuen enceses. Recorda a taula qui hi falta. Ara ves a veure el Pare Alcuí: et falta el Saber." }] };
+            const pas = pistaRunna(E);
+            return { pagines: [{ qui: "El Gran Til·ler", text: "El permís és teu, petit monjo, i les espelmes continuen enceses. Recorda a taula qui hi falta." + (pas ? " Ara, per despertar l'espasa: " + pas : " Que Runna et sigui lleu.") }] };
         }
         if (E.flag("esquelles") && !E.flag("soparObert")) return DIALEGS.tillerSoparIntro(E);
         if (E.flag("soparObert") && !E.flag("soparFet")) {
@@ -455,7 +489,10 @@ const DIALEGS = {
                 }
             };
         }
-        return { pagines: [{ qui: "El Gran Til·ler", text: "Et donaré el meu permís quan hagis tornat la vida a la terra que la boira ha emmalaltit. Has tornat l'aigua: encara en falta, de terra." }] };
+        return { pagines: [
+            { qui: "El Gran Til·ler", text: "Et donaré el meu permís quan hagis tornat la vida a la terra que la boira ha emmalaltit. Has tornat l'aigua: encara en falta, de terra." },
+            ...(pistaRunna(E) ? [{ qui: "", text: "(" + pistaRunna(E) + ")" }] : [])
+        ] };
     },
 
     branca: E => ({
@@ -483,7 +520,7 @@ const DIALEGS = {
             };
         }
         if (E.flag("fragment3")) {
-            return { pagines: [{ qui: "Pare Alcuí", text: E.flag("saber") ? "Ja saps la paraula, fill. Ara només cal que arribi el dia de pronunciar-la." : "Els dos fragments expliquen el mateix, fill: algú vigila el segell des de fa segles. Ves a les Runes quan caigui la nit, i no tinguis por de l'ombra." }] };
+            return { pagines: [{ qui: "Pare Alcuí", text: E.flag("saber") ? "Ja saps la paraula, fill. Ara només cal que arribi el dia de pronunciar-la." : "Els dos fragments expliquen el mateix, fill: algú vigila el segell des de fa segles. " + (pistaRunna(E) || "Ves a les Runes i no tinguis por de l'ombra.") }] };
         }
         if (f1 && f2) {
             return {
@@ -819,6 +856,15 @@ const DIALEGS = {
         : { pagines: [
             { qui: '', text: 'Una taula de roure massissa barra la porta del mig. Des de l\'altra banda, una veu fina i enrabiada colpeja el fusta.' },
             { qui: 'Ineu', text: 'No la puc moure amb les mans soles. Ni dues persones... Necessito molta més força.' }] },
+    // El mur d'esbarzers del passadís secret (Celler → Cambra secreta)
+    murEsbarzers: E => ({ pagines: E.te('runna') ? [
+        { qui: '', text: "Un mur d'esbarzers negres tanca el passadís de banda a banda. Les punxes llueixen violeta a la llum de les espelmes." },
+        { qui: 'Ineu', text: "Runna els talla: situa't davant de cada un i ataca (ESPAI). Són cinc. Mata també les escolopendres, que després tornen." }
+    ] : [
+        { qui: '', text: "Un mur d'esbarzers negres tanca el passadís de banda a banda. Les punxes llueixen violeta a la llum de les espelmes." },
+        { qui: 'Ineu', text: "Ni el bastó de pelegrí ni el del Til·ler no els tallen: només Runna. Primer cal despertar-la al Dolmen. Torna quan la tinguis." }
+    ] }),
+
     esbarzersCapella: E => ({ pagines: [
         { qui: '', text: 'Uns esbarzers negres han crescut davant la porta de la dreta i la tapen del tot. Se sent algú resar a dins, molt baixet.' },
         { qui: 'Ineu', text: 'El bastó no els talla. Només Runna ho aconsegueix.' }] }),

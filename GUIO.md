@@ -79,14 +79,14 @@ Vertical (720x1280); a dalt, una franja de pergamí amb el HUD. Camins de terra 
 - **Soterrani de l'Hostatgeria:** laberint de passadissos foscos (només es veu el cercle de llum de l'Ineu, les espelmes i les escales; amb la Llanterna el cercle és més gran), amb escolopendres. Una escala al fons puja al **Vestíbul de l'Hostatgeria**, amb tres portes tancades per dins (les cambres de les monges: per fer).
 - **Vestíbul de l'Hostatgeria i les tres cambres:** tres portes. **Dormitori** (Pains): oberta, però dorm dins un capoll de boira lila → **Cant de l'Aurora** amb la flauta. **Refetor** (Phili): una taula de roure barra la porta → **Guants de Poder**. **Capella** (Charm): esbarzers negres → **Runna**. En lliurar-les totes tres, obren la porta de l'Hostatgeria per dins (s'hi entra des del jardí) i la taula d'infusions del vestíbul és un lloc de repòs (cura i desa). Charm diu que el Cant del Miracle és el que obre la gàbia de l'Ocellaire; la Phili ha vist el Germà Andreu baixar a la Taverna cada nit.
 - **Les Runes**: façana gran, ombra del monjo, fragment 1; a baix, la porta del **Celler**; camí cap a l'oest (**Camí de la Desaparició**), est (**Cementiri**) i nord (cel·les).
-- **El Celler** (ping-pong): Juli, Frederic, Eloi, Josep. Una **roda de carruatge** (s'empeny des d'un costat; calen els **Guants de Poder** del Germà Francesc) descobreix el **Passadís secret** (escolopendres i esbarzer negre) → **Cambra secreta** (cofre: +1 cor i el pergamí del monjo) → **Escalinata** de la Casa Gran. Un sol partit de ping-pong (Josep) obrirà l'Acte 3 quan existeixi el minijoc; ara, cal Runna.
+- **El Celler** (ping-pong): Juli, Frederic, Eloi, Josep. Una **roda de carruatge** (s'empeny des d'un costat; calen els **Guants de Poder** del Germà Francesc) descobreix el **Passadís secret** (escolopendres i un mur de cinc esbarzers negres que llueixen violeta entre quatre espelmes; només Runna els talla) → **Cambra secreta** (premi: cofre amb +1 cor i el pergamí del monjo, que obre una porta cap a l'Escalinata) → **Escalinata** de la Casa Gran. Un sol partit de ping-pong (Josep) obrirà l'Acte 3 quan existeixi el minijoc; ara, cal Runna.
 - **Casa Gran per dins:** Escalinata (Home del Raïm i rosa dels vents), **Cripta** (relíquies i Clau de ferro). La reixa del porxo s'obre per dins com a drecera.
 - **El Cementiri**: tomba esquerdada, làpides, escolopendres.
 - **Les Cel·les**: Nostra Senyora (gran) i Sant Benet, amb porta; personatges i Sansa quan toca. Camí a l'oest cap al bosc i al nord cap al Til·ler; a l'est no hi ha res.
 - **El Gran Til·ler** (pantalla petita, només l'arbre i la branca): al **nord de les Cel·les**, però el camí és tapat per una **boira espessa** que només esvaeix el **beuratge de la Jaumeta**. Cap a l'oest, un camí duu a la **Masia d'en Jordi**; cap al nord-est, a la Cirosa, tancat per una **bardissa viva** que només aparta la **branca del Til·ler** (i només quan la Bassadòria és neta).
 - **La Masia d'en Jordi** (escena petita): en Jordi, la seva masia i, al costat, una **caseta de joc de jardí** (interior: el cofre de les joguines, amb la **palanca** a sota).
 - **Pins:** el **pi roig** domina la Rovellonera i els boscos del nord-est; el **pi pinyer** els camins de l'oest (Ermita, Era, Desaparició).
-- **Camí i La Cirosa**: camí llarg en zig-zag, masia, pastors i el Pastor de Boira.
+- **Camí i La Cirosa**: camí llarg en zig-zag amb tres cartells i un **banc de pedra** (hi reposes i es desa la partida); ovelles de boira fins que cau el Pastor, i després ovelles blanques. A dalt, la masia, un pou, bales de palla, la pastura i els pastors vora el foc. **El Mas de la Cirosa** (interior): llar (repòs i desat), taula, jaços, biga amb ganxos buits (les esquelles) i el **Llibre del Ramat**, que explica la història de la gàbia des del punt de vista dels pastors.
 - **Bosc de Sant Joan**: Font del Bisbe, Alzina Buida (portal; doble de gran que la resta d'arbres, amb clariana pròpia i claror verda), cofre amagat (cal Runna). Tot el bosc és ple de **boira lila** mentre la font és adormida; en tirar-hi les tres herbes (herba de Sant Joan, **romaní** i farigola, que brillen en una clariana) la boira se'n va. **Cabana de la Jaumeta**: curiositat.
 - **Camí de la Desaparició**: 12 columnes; al mur d'arbres del nord, un **forat més ample** (sense marca) duu a la **Cabana amagada** (cofre: +1 cor).
 - **Ermita de la Desaparició** (gran, porta alta; Creu de la Desaparició al davant; interior amb dues taules de pedra), **L'Era** (dos roures, bancs entre ells), **L'Hostatgeria** (edifici gran a la dreta; enganxada al lateral esquerre, una pèrgola d'arcades de pedra i columnes sense sostre amb la llosa; la Prunera Màgica, a l'esquerra de tot; l'Isidre, davant l'entrada de la pèrgola).
@@ -126,6 +126,16 @@ Pantalla negra: *«Santuari del Miracle. Tercera nit de boira.»* La plaça de n
 
 ### EPÍLEG — «Torna el cant»
 La boira es desfà; Andreu, que no vol deixar el seu Mestre, queda tancat a la gàbia buida i els monjos el vigilaran; els nens riuen; **l'orgue del Santuari sona** i el poble canta. El Pare Jordi: «Començaràs reparant-lo.» Torneig de ping-pong i crèdits.
+
+### Ordre per arribar a Runna (les Tietes, el Pare Jordi, el Pare Alcuí i el Til·ler en donen la pista del pas següent: `pistaRunna` a `dialegs.js`)
+1. Bastó de Til·ler (branca) → bardissa viva del Til·ler s'aparta (cal la Bassadòria neta).
+2. Cirosa: vèncer el Pastor de Boira → pastor vell dona les **Esquelles**.
+3. Til·ler: sopar (escudella de la Neus, flors de l'Isidre, pastors convençuts amb la flauta) → **Fulla del Til·ler**.
+4. Fragment 1 (Runes) + clau del sagrari (Pare Daniel) + fragment 2 (Santuari) → Pare Alcuí els llegeix (fragment 3).
+5. Ombra de les Runes demana el Cant de les Pedres → Pianista l'ensenya → tocat davant l'ombra: **Benedicció del monjo**.
+6. Pare Alcuí: **Saber** («RIURE»). Pare Jordi: **Benedicció** (només amb la Fulla).
+7. Rovellonera → Dipòsits (Estel de Sant Llorenç) → Dolmen: **Runna**.
+Només després de Runna les Tietes (i el Frederic) parlen de la roda del Celler.
 
 ## A7. Combat i enemics
 **Controls:** atac J o ESPAI (al mòbil, un sol botó d'acció). **Els enemics apareixen des del principi** (en parlar amb el Pare Jordi, que et dona el bastó de pelegrí); abans de parlar-hi, la plaça és tranquil·la. **Vida** en meitats de cor (3 cors al principi); si caus, el Pare Jordi et recull a la plaça. Santuari, Celler i interiors són **pacífics**. **Dany:** bastó 1; Runna 2. Els enemics es desfan en boira lila i no deixen res: l'energia es recupera als llocs de repòs (la Prunera, l'altar del Santuari...). **No hi ha monedes** (no es compra ni es ven res).
