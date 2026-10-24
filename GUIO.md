@@ -101,7 +101,7 @@ Vertical (720x1280); a dalt, una franja de pergamí amb el HUD. Camins de terra 
 Pantalla negra: *«Santuari del Miracle. Tercera nit de boira.»* La plaça de nit, una ombra amb hàbit guia una silueta petita cap al darrere de la Taverna. Matí: l'Ineu es desperta.
 
 ### ACTE 1 — «El misteri» (~1 h; el combat comença des del principi)
-1. **Plaça:** el Pare Jordi li dona el **Clauer de Novici** i un **bastó de pelegrí** (la boira ja ha despertat bestioles: escolopendres als camins, Runes i Cementiri) i l'envia a parlar amb tothom (desapareguts: Biel, Pol). El Germà Andreu hi passeja amb una pilota.
+1. **Plaça:** el Pare Jordi li dona el **Clauer de Novici** i un **bastó de pelegrí** (la boira ja ha despertat bestioles: escolopendres als camins, Runes i Cementiri) i l'envia a parlar amb tothom (desapareguts: Biel, Pol). El Germà Andreu hi passeja amb una pilota (desapareix de la Plaça quan s'obre el camí de la Cirosa: és allà, fet Pastor de Boira).
 2. **Santuari:** la Pianista no aconsegueix que soni l'orgue; li ensenya el **Cant de l'Aurora** i la **flauta**. **Bassadòria:** tocat el cant, l'aigua es neteja.
 3. **Runes:** fragment 1 i l'ombra del monjo. **Santuari:** fragment 2. **Alcuí** els llegeix: un monjo va segellar la foscor amb Runna. L'ombra demana el **Cant de les Pedres** (Pianista) i, en sentir-lo, dona la **Benedicció del Monjo**.
 4. **Cel·les:** la Neus, el senyor Moliner, les Tietes (pistes), Yordi, Judit, Daniel i Turbo. El camí del nord (cap al Gran Til·ler) és tapat per una boira espessa.

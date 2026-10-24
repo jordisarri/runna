@@ -20,7 +20,7 @@ function objectiuFont(n) {
 function pistaRunna(E) {
     if (E.flag("runna")) return null;
     if (!E.flag("camiCirosaObert")) return "Al Gran Til·ler, el camí del nord-est és tancat per una bardissa viva. Acosta-hi la branca del Til·ler (parla amb la bardissa) i s'apartarà.";
-    if (!E.flag("pastorVencut")) return "Puja a la Cirosa pel camí que ha obert la bardissa. Al mig de la pastura hi ha el Germà Andreu fet Pastor de Boira: has de vèncer-lo.";
+    if (!E.flag("pastorVencut")) return "Puja a la Cirosa pel camí que ha obert la bardissa. El Germà Andreu ja no és a la Plaça: és a la pastura, fet Pastor de Boira, i l'has de vèncer.";
     if (!E.flag("esquelles")) return "A la Cirosa, parla amb el pastor vell, vora el foc: t'ha de donar les esquelles dels seus avis.";
     if (!E.flag("soparObert")) return "Torna al Gran Til·ler amb les esquelles: et vol parlar d'un sopar.";
     if (!E.flag("soparFet")) {
