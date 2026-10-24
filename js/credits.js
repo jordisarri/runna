@@ -29,7 +29,7 @@ class EscenaCredits extends Phaser.Scene {
         this.cameras.main.fadeIn(1200, 0, 0, 0);
         // Ocells daurats que volen de costat a costat
         for (let k = 0; k < 7; k++) {
-            const o = this.add.image(-60, 120 + k * 150, 'ocell').setTint(0xffe08a).setAlpha(0.35).setBlendMode('ADD');
+            const o = this.add.image(-60, 120 + k * 150, 'ocell').setTintFill(0xffe08a).setAlpha(0.3);
             o.setScale(50 / o.height);
             this.tweens.add({ targets: o, x: AMPLE + 60, y: o.y - 60, duration: 9000 + k * 1300, delay: k * 900, repeat: -1 });
         }
