@@ -194,8 +194,8 @@ class ZonaCirosa extends ZonaBase {
         this.cartell(700, 700, () => ({ pagines: [{ qui: '', text: 'La Cirosa. Algú ha clavat un cartell amb lletra tremolosa:\n«Aquí només volem viure en pau.»' }] }));
         this.arbres([[100, 150], [260, 90], [500, 120], [800, 100], [900, 280], [140, 420], [100, 980], [330, 1090], [820, 1100],
                      [900, 950], [940, 480], [1760, 120], [1760, 1100], [1100, 1120], [1400, 1130]]);
-        this.muralla(0, 1186, 460, 1186, 90);
-        this.muralla(700, 1186, 1020, 1186, 90);
+        this.muralla(0, 1186, 460, 1186, 90, 'arbre', false);
+        this.muralla(700, 1186, 1020, 1186, 90, 'arbre', false);
 
         this.sortida(500, 1186, 160, 14, 'ZonaCamiCirosa', 'cirosa');
         this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, lila ? 0.12 : 0).setScrollFactor(0).setDepth(90000);

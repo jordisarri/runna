@@ -318,8 +318,8 @@ class ZonaBase extends Phaser.Scene {
 
     // Franja d'arbres que tanca un costat de la pantalla (per no deixar sortir on no hi ha res).
     // Els troncs s'uneixen amb tires de col·lisió (sense forats) i, si la fila és a dalt de tot, una paret
-    // pel darrere impedeix passar per l'estreta franja que queda sobre els troncs.
-    muralla(x1, y1, x2, y2, pas = 90, key = 'arbre') {
+    // pel darrere impedeix passar per l'estreta franja que queda sobre els troncs (paretDarrere = false per a una fila a baix de tot).
+    muralla(x1, y1, x2, y2, pas = 90, key = 'arbre', paretDarrere = true) {
         const n = Math.max(1, Math.round(Math.hypot(x2 - x1, y2 - y1) / pas));
         const arbre = key === 'arbre';
         const alt = arbre ? TRONC_ARBRE(1).h : 30;
@@ -333,7 +333,7 @@ class ZonaBase extends Phaser.Scene {
             if (horitzontal) this.colisio(mx, my - alt / 2, Math.abs(x2 - x1) / n, alt);
             else if (vertical) this.colisio(mx, my - alt / 2, arbre ? TRONC_ARBRE(1).w : 60, Math.abs(y2 - y1) / n);
         }
-        if (horitzontal && y1 - 30 > 10) {
+        if (paretDarrere && horitzontal && y1 - 30 > 10) {
             const xa = Math.min(x1, x2), xb = Math.max(x1, x2);
             this.colisio((xa + xb) / 2, (y1 - 30) / 2, xb - xa, y1 - 30);
         }
