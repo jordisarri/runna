@@ -76,6 +76,12 @@ PROGRES.passos.concat(PROGRES.laterals).forEach(p => {
 for (const m of progresCodi.matchAll(/E\.flag\(\s*'([\w·]+)'\s*\)/g)) if (!esPosat(m[1])) errors.push(`progres.js llegeix el flag «${m[1]}», que el joc no posa mai`);
 for (const m of progresCodi.matchAll(/E\.te\(\s*'([\w·]+)'\s*\)/g)) if (!donats.has(m[1])) errors.push(`progres.js mira l'objecte «${m[1]}», que el joc no dóna mai`);
 
+// Cada pas i cada lateral ha de tenir títol i lloc al Diari de l'Ineu (js/diari.js), per a la pestanya Encàrrecs i el mapa
+const diari = fs.readFileSync(path.join(ARREL, 'js', 'diari.js'), 'utf8');
+const bloc = nom => { const i = diari.indexOf('const ' + nom); return diari.slice(i, diari.indexOf('};', i)); };
+PROGRES.passos.forEach(p => { if (!new RegExp('\\b' + p.id + ':').test(bloc('DIARI_PASSOS'))) errors.push(`Pas ${p.id}: falta a DIARI_PASSOS (js/diari.js)`); });
+PROGRES.laterals.forEach(p => { if (!new RegExp('\\b' + p.id + ':').test(bloc('DIARI_LATERALS'))) errors.push(`Lateral ${p.id}: falta a DIARI_LATERALS (js/diari.js)`); });
+
 // Flags llegits a tot el joc que ningú no posa (avís: poden ser de partides velles)
 const llegits = new Set([...codi.matchAll(/(?:E|Estat|F)\.flag\(\s*['"]([\w·]+)['"]\s*\)/g)].map(m => m[1]));
 [...llegits].filter(f => !esPosat(f)).sort().forEach(f => avisos.push(`el joc llegeix el flag «${f}», però no el posa enlloc`));

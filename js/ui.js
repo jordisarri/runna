@@ -107,6 +107,9 @@ class EscenaUI extends Phaser.Scene {
         this.haloFlauta = this.add.circle(x - 68, y, 30, 0xffe08a, 0).setVisible(false);
         this.iconaFlauta = this.add.image(x - 68, y, 'icona_flauta').setScale(0.75 / RES).setVisible(false);
         this.input.keyboard.on('keydown-I', commuta);
+        this.input.keyboard.on('keydown-M', () => this.inventariObert ? this.tancarInventari() : this.obrirInventari('mapa'));
+        ['LEFT', 'A'].forEach(k => this.input.keyboard.on('keydown-' + k, () => this.inventariObert && DIARI.moure(this, -1)));
+        ['RIGHT', 'D'].forEach(k => this.input.keyboard.on('keydown-' + k, () => this.inventariObert && DIARI.moure(this, 1)));
     }
 
     refrescaObjectes() {
@@ -120,31 +123,15 @@ class EscenaUI extends Phaser.Scene {
         this.haloFlauta.setVisible(flauta).setFillStyle(0xffe08a, flauta ? 0.3 + 0.25 * Math.sin(this.time.now / 180) : 0);
     }
 
-    obrirInventari() {
+    // El sarró obre el Diari de l'Ineu (js/diari.js): missió, encàrrecs, objectes i mapa
+    obrirInventari(pestanya) {
         if (this.dialeg || this.menuObert || !Estat.dades || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
-        this.inventariObert = true;
-        if (this.inventari) this.inventari.destroy();
-        const c = this.inventari = this.add.container(0, 0).setDepth(60);
-        const W = 660, H = 1000, cx = AMPLE / 2, cy = ALT / 2 + 40, dalt = cy - H / 2;
-        c.add(this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.65).setOrigin(0).setInteractive().on('pointerdown', () => this.tancarInventari()));
-        c.add(marcPergami(this, cx, cy, W, H));
-        c.add(this.add.text(cx, dalt + 70, 'El sarró', { fontFamily: FONT_PLACA, fontSize: '44px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5));
-        const llista = Estat.dades.objectes.filter(o => CATALEG_OBJECTES[o]);
-        if (!llista.length) c.add(this.add.text(cx, cy, 'El sarró és buit.', estilText(24, '#5a3a20', { fontStyle: 'italic' })).setOrigin(0.5));
-        // Una columna amb el nom de cada objecte i, al costat, què és. Si no hi caben, dues columnes només amb el nom.
-        const x0 = cx - W / 2 + 64, y0 = dalt + 130, lloc = H - 220, curt = llista.length * 56 > lloc;
-        const fila = curt ? Math.min(56, lloc / Math.ceil(llista.length / 2)) : 56, ample = curt ? (W - 140) / 2 : W - 128;
-        llista.forEach((o, i) => {
-            const [nom, desc] = CATALEG_OBJECTES[o];
-            const x = x0 + (curt ? (i % 2) * (ample + 12) : 0), y = y0 + (curt ? Math.floor(i / 2) : i) * fila;
-            c.add(this.add.text(x, y, '✦ ' + nom, estilText(curt ? 19 : 22, '#3a2412', { fontStyle: 'bold' })));
-            if (!curt) c.add(this.add.text(x + 22, y + 27, desc, estilText(16, '#5a3a20', { fontStyle: 'italic' })));
-        });
-        c.add(this.add.text(cx, dalt + H - 48, 'Toca la pantalla o prem I per tancar', estilText(16, '#7a5a3a')).setOrigin(0.5));
+        DIARI.obrir(this, pestanya);
     }
 
     tancarInventari() {
         this.inventariObert = false;
+        DIARI.netejar(this);
         if (this.inventari) { this.inventari.destroy(); this.inventari = null; }
         this.bloquejatFins = this.time.now + 200;
     }
@@ -460,7 +447,7 @@ class EscenaUI extends Phaser.Scene {
 
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
-            { text: 'Mapa', fn: () => this.obrirMapa() },
+            { text: 'Diari i mapa', fn: () => { this.tancarMenu(); this.obrirInventari('mapa'); } },
             { text: 'Desar partida', fn: () => { this.tancarMenu(); this.desar(); } },
             { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];
