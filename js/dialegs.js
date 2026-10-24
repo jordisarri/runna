@@ -1283,8 +1283,6 @@ const DIALEGS = {
         ]
     }),
 
-    portaRetrats: E => ({ pagines: [{ qui: "", text: "Dalt de l'escalinata, una porta de doble batent: la Sala dels Retrats.\n(Tancada per ara: la masmorra s'obrirà en una fase propera.)" }] }),
-    portaCeller: E => ({ pagines: [{ qui: "", text: "Una porta baixa, de ferro, amb un pany antic, sota el pas de l'escala. Del forat de la pany surt aire fred.\nSembla que l'Home del Raïm en tingui la clau... (Clau de ferro, per a la fase propera.)" }] }),
 
     // ---------------- LA CABANA DE LA JAUMETA ----------------
     // La Jaumeta, bruixa del bosc: una curiositat. Hi vas pel portal de l'Alzina Buida i et diu la pista del moment (és vident)
@@ -1410,10 +1408,5 @@ const DIALEGS = {
             "«Pare Quirze, bibliotecari. Va ensenyar a llegir més gent que ningú.»"
         ];
         return { pagines: [{ qui: "", text: mots[n % mots.length] }] };
-    },
-
-    // ---------------- GENÈRICS ----------------
-    enConstruccio: nom => E => ({
-        pagines: [{ qui: '', text: `${nom}\n(Aquesta zona encara s'està construint. Aviat hi podràs entrar!)` }]
-    })
+    }
 };

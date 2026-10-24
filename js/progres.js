@@ -99,9 +99,24 @@ const PROGRES = {
           pista: E => "Les relíquies dels monjos s'han de tornar a la tomba esquerdada del Cementiri, darrere el Santuari i el Monestir. I guarda bé la Clau de ferro: obre la porta de ferro de sota la Taverna." },
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
           pista: E => "Abans de baixar sota la Taverna, passa pel Santuari: la Pianista té un últim cant per a tu, el Cant del Miracle. Els barrots de la gàbia només l'escolten a ell." },
-        // La Taverna per dins, les Gírgoles i la Sala de la Gàbia encara no existeixen al joc: aquest pas no es pot fer
-        { id: 'gabia', marca: [], pendent: true, fet: E => false,
-          pista: E => "Ves a la Taverna i baixa al soterrani amb l'Eva: la Clau de ferro obre la porta de ferro, i el Cant del Miracle, els barrots de la gàbia. (Aquesta part del joc encara s'està construint.)" }
+        // ---- Sota la Taverna ----
+        { id: 'portaFerro', marca: ['tavernaOberta', 'portaFerroOberta'], fet: E => E.flag('portaFerroOberta'),
+          pista: E => E.flag('tavernaOberta')
+              ? "A la Taverna, baixa al soterrani per la porta del fons: la Clau de ferro obre la porta d'on surt la boira."
+              : "Ves a la Taverna i truca: l'Eva t'obrirà. Al soterrani hi ha la porta de ferro, i la Clau de ferro l'obre." },
+        { id: 'girgoles', marca: ['girgolesEnceses'], fet: E => E.flag('girgolesEnceses'),
+          pista: E => "A la Sala de les Gírgoles, sota la porta de ferro, fes que les cinc mates de gírgoles lluminoses brillin alhora: cada una que toques canvia ella i les dues del costat." },
+        { id: 'rastell', marca: ['rastellObert'], fet: E => E.flag('rastellObert'),
+          pista: E => "Al passadís de tortura, un rastell rovellat barra el pas. Gira el torn de la dreta amb els Guants de Poder." },
+        { id: 'tortura', marca: ['torturaNet'], fet: E => E.flag('torturaNet'),
+          pista: E => "Al final del passadís de tortura, talla amb Runna el mur d'esbarzers negres." },
+        { id: 'pont', marca: ['pontGabia'], fet: E => E.flag('pontGabia'),
+          pista: E => "A la Sala de la Gàbia, la gàbia penja sobre un avenc. Al marge, toca el Cant de les Pedres (3-1-2-1) i els blocs del fons s'aixecaran fent un pont." },
+        { id: 'gabia', marca: ['gabiaCantada'], fet: E => E.flag('gabiaCantada'),
+          pista: E => "Davant dels barrots de la gàbia, toca el Cant del Miracle." },
+        // El combat final (l'Andreu i l'Home de la Gàbia), l'alliberament i l'epíleg encara no existeixen: aquest pas no es pot fer
+        { id: 'final', marca: [], pendent: true, fet: E => false,
+          pista: E => "Els nens dormen dins la gàbia, que ja respon al Cant del Miracle. (El combat final i l'epíleg encara s'estan construint.)" }
     ],
 
     // Missions laterals: no barren el camí. Les Tietes les recorden quan ja s'han pogut començar.

@@ -53,14 +53,10 @@ Object.assign(DIALEGS, {
     taulellTaverna: E => ({ pagines: [{ qui: '', text: "El taulell de la Taverna, de marbre gastat. Gots del revés, una gerra de vi del Solsonès i un plat de coca amb sucre que ningú no ha tastat." }] }),
 
     portaFerro: E => {
-        if (E.flag('clauFerro') && E.flag('cantMiracle')) return { pagines: [
-            { qui: '', text: 'Poses la Clau de ferro al pany. Gira, amb un gemec de segles. La boira lila surt a glops per sota la porta, i a dins se sent cantar ocells.' },
-            { qui: 'Eva', text: '(amb un llum a la mà) Hi som, Ineu. Junts.' },
-            { qui: '', text: '(La Sala de les Gírgoles, el passadís i la Sala de la Gàbia encara s\'estan construint. Aquí s\'acaba, de moment, el camí.)' }
-        ] };
+        if (E.flag('portaFerroOberta')) return { pagines: [{ qui: '', text: "La porta de ferro, oberta de bat a bat. Una escala humida baixa cap a la foscor, i d'allà puja olor de bolets i de terra mullada." }] };
         if (E.flag('clauFerro')) return { pagines: [
-            { qui: '', text: 'La Clau de ferro encaixa al pany. Però abans de girar-la, sents a dins un cant d\'ocells que et glaça les mans.' },
-            { qui: 'Ineu', text: '(No. Encara no. La Pianista té un últim cant per a mi: sense ell, els barrots de la gàbia no s\'obriran.)' }
+            { qui: '', text: 'Poses la Clau de ferro al pany. Gira amb un gemec de segles, i la porta s\'obre cap endins. La boira lila surt a glops i, molt avall, se senten ocells.' },
+            { qui: 'Ineu', text: E.flag('cantMiracle') ? '(Tinc la clau, Runna i el Cant del Miracle. Endavant.)' : '(La Pianista em va dir que els barrots de la gàbia només escolten el Cant del Miracle. Potser hauria d\'anar-la a veure abans de baixar gaire.)' }
         ] };
         return { pagines: [
             { qui: '', text: 'Una porta de ferro negre, plena de reblons, amb un pany gros com un puny. Pels costats en surt una boira lila i freda que s\'arrossega per terra.' },
@@ -179,7 +175,7 @@ class ZonaSotaTaverna extends ZonaBase {
             alcada: 900,
             colorFons: '#08060a',
             pacifica: true,
-            entrades: { escala: { x: 400, y: 790, dir: 'amunt' } }
+            entrades: { escala: { x: 400, y: 790, dir: 'amunt' }, girgoles: { x: 400, y: 280, dir: 'avall' } }
         });
     }
 
@@ -212,7 +208,9 @@ class ZonaSotaTaverna extends ZonaBase {
         this.boira(400, 170, 220, 40, 1.2);
         this.boira(300, 420, 160, 40, 0.5);
         this.boira(520, 600, 160, 40, 0.5);
-        this.interactiu(400, 220, 120, DIALEGS.portaFerro, { altura: 170 });
+        this.fullaPorta = pf;
+        this.interactiu(400, 220, 120, DIALEGS.portaFerro, { altura: 170, actiu: () => !Estat.flag('portaFerroOberta'), enTancar: () => { if (Estat.flag('clauFerro')) this.obrirPortaFerro(); } });
+        if (Estat.flag('portaFerroOberta')) this.obrirPortaFerro(true);
 
         // Sacs i botes de vi, i petjades a la pols
         [[150, 300], [180, 350], [640, 320]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 46, h: 20 } }));
@@ -226,5 +224,17 @@ class ZonaSotaTaverna extends ZonaBase {
         for (let k = 0; k < 5; k++) esc.fillStyle(0x4a4450 + k * 0x050505, 1).fillRect(340, H - 100 + k * 20, 120, 20);
         this.add.rectangle(A / 2, H / 2, A, H, 0x1a0a30, 0.25).setDepth(80000);
         this.sortida(360, H - 22, 80, 14, 'ZonaTavernaInt', 'soterrani');
+    }
+
+    // La Clau de ferro obre la porta: s'hi veu l'escala que baixa a la Sala de les Gírgoles
+    obrirPortaFerro(ja = false) {
+        if (this.portaOberta) return;
+        this.portaOberta = true;
+        if (!ja) { Estat.posaFlag('portaFerroOberta'); Sfx.secret(); this.cameras.main.shake(400, 0.004); Estat.posaObjectiu('Baixa per la porta de ferro, al soterrani de la Taverna.'); Estat.desar(); }
+        const forat = this.add.graphics().setDepth(-945);
+        forat.fillStyle(0x000000, 1).fillRect(312, 20, 176, 140);
+        for (let k = 0; k < 5; k++) forat.fillStyle(0x2a2430 - k * 0x040404, 1).fillRect(330 + k * 6, 40 + k * 22, 140 - k * 12, 18);
+        forat.fillStyle(0x2a2a30, 1).fillRect(470, 18, 30, 142);
+        this.sortida(340, 170, 120, 30, 'ZonaGirgoles', 'porta');
     }
 }
