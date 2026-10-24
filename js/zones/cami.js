@@ -404,7 +404,7 @@ class ZonaTaverna extends ZonaBase {
             nom: 'La Taverna',
             amplada: 1600,
             alcada: 1100,
-            entrades: { jardi: { x: 60, y: 960, dir: 'dreta' }, casagran: { x: 1540, y: 960, dir: 'esquerra' } }
+            entrades: { jardi: { x: 60, y: 960, dir: 'dreta' }, casagran: { x: 1540, y: 960, dir: 'esquerra' }, interior: { x: 800, y: 820, dir: 'avall' } }
         });
     }
 
@@ -415,9 +415,13 @@ class ZonaTaverna extends ZonaBase {
 
         // Façana (900 d'ample, tres plantes): la porta és l'arc del mig
         const t = this.posar('taverna', 800, 750, { fonsY: 640 });
-        this.colisio(800, 705, 900, 90);
+        this.colisio(555, 705, 410, 90);
+        this.colisio(1045, 705, 410, 90);
         this.blocDarrere(800, 900, 660, Math.max(0, 750 - t.displayHeight));
-        this.interactiu(800, 765, 90, DIALEGS.taverna, { altura: 170 });
+        // La porta (l'arc del mig): tancada fins que l'Eva l'obre des de dins
+        this.colPorta = this.colisio(800, 705, 80, 90);
+        if (Estat.flag('tavernaOberta')) this.obrirPorta();
+        else this.interactiu(800, 765, 90, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() });
 
         // Barrils a la dreta, taula i banc a l'esquerra, contra la façana
         this.posar('barril', 1150, 800, { col: { w: 40, h: 16 } });
@@ -430,6 +434,13 @@ class ZonaTaverna extends ZonaBase {
 
         this.sortida(0, 900, 14, 130, 'ZonaJardi', 'taverna');
         this.sortida(1586, 900, 14, 130, 'ZonaCasaGran', 'oest');
+    }
+
+    obrirPorta() {
+        if (!Estat.flag('tavernaOberta') || this.portaOberta) return;
+        this.portaOberta = true;
+        this.obstacles.remove(this.colPorta, true, true);
+        this.sortida(762, 690, 76, 56, 'ZonaTavernaInt', 'porta');
     }
 }
 

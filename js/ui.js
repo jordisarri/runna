@@ -67,7 +67,7 @@ class EscenaUI extends Phaser.Scene {
         this.crearObjectes();
 
         this.input.keyboard.on('keydown-ESC', () => {
-            if (this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels')) return;
+            if (this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
             if (this.inventariObert) this.tancarInventari();
             else if (this.mapaObert) this.tancarMapa();
             else if (this.menuObert) this.tancarMenu();
@@ -120,7 +120,7 @@ class EscenaUI extends Phaser.Scene {
     }
 
     obrirInventari() {
-        if (this.dialeg || this.menuObert || !Estat.dades || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels')) return;
+        if (this.dialeg || this.menuObert || !Estat.dades || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
         this.inventariObert = true;
         if (this.inventari) this.inventari.destroy();
         const c = this.inventari = this.add.container(0, 0).setDepth(60);
@@ -152,7 +152,7 @@ class EscenaUI extends Phaser.Scene {
 
     // La zona consulta això per saber si l'Ineu pot moure's
     get bloquejat() {
-        return !!this.dialeg || this.menuObert || this.inventariObert || this.time.now < this.bloquejatFins || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels');
+        return !!this.dialeg || this.menuObert || this.inventariObert || this.time.now < this.bloquejatFins || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong');
     }
 
     // ---------------- HUD ----------------
@@ -408,7 +408,7 @@ class EscenaUI extends Phaser.Scene {
     }
 
     obrirMenu() {
-        if (this.dialeg || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels')) return;
+        if (this.dialeg || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
         this.menuObert = true;
         this.seleccio = 0;
         this.pintarSeleccio();

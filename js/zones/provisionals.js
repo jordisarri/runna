@@ -123,7 +123,7 @@ class ZonaMonestir extends ZonaBase {
             nom: 'El Monestir',
             amplada: 1600,
             alcada: 800 + D,
-            entrades: { placa: { x: 60, y: 520 + D, dir: 'dreta' }, cementiri: { x: 1480, y: 70, dir: 'avall' }, santantoni: { x: 1530, y: 560 + D, dir: 'esquerra' } }
+            entrades: { placa: { x: 60, y: 520 + D, dir: 'dreta' }, biblioteca: { x: 800, y: 500 + D, dir: 'avall' }, cementiri: { x: 1480, y: 70, dir: 'avall' }, santantoni: { x: 1530, y: 560 + D, dir: 'esquerra' } }
         });
     }
 
@@ -134,10 +134,13 @@ class ZonaMonestir extends ZonaBase {
         this.terra('cami', 1400, 0, 160, 460 + D);         // cap al cementiri (darrere el Monestir i el Santuari)
 
         // 800 d'ample: la façana surt per dalt de la pantalla i només es veu a partir de les últimes fileres de teula
-        this.posar('monestir', 800, 440 + D, { col: { w: 790, h: 180, dy: -10 } });
+        // La façana: el portal del mig duu a la biblioteca (on treballa el Pare Alcuí)
+        this.posar('monestir', 800, 440 + D);
+        this.colisio(577, 340 + D, 354, 180);
+        this.colisio(1023, 340 + D, 354, 180);
+        this.colisio(800, 280 + D, 92, 60);
         this.blocDarrere(800, 790, 405);
-        this.interactiu(800, 450 + D, 70, DIALEGS.enConstruccio('Biblioteca del Monestir'), { altura: 90 });
-        this.npc('pare_alcui', 600, 540 + D, DIALEGS.pareAlcui);
+        this.sortida(754, 380 + D, 92, 50, 'ZonaBiblioteca', 'porta');
         // Xiprers alts a l'esquerra del portal i una conífera a la dreta (com a la foto del monestir)
         [[440, 445, 1.7], [492, 452, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y + D, { escala: e, col: { w: 26, h: 12 } }));
         this.posar('xiprer', 1165, 450 + D, { escala: 1.9, col: { w: 30, h: 12 } });

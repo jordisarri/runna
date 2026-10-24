@@ -1,0 +1,230 @@
+/**
+ * LA TAVERNA PER DINS i el SOTERRANI DE LA PORTA DE FERRO
+ * La Carmen (mandrosa) dorm darrere el taulell; l'Eva (amiga fidel) obre la porta a l'Ineu i li explica què passa de nit.
+ * Pel fons, una escala baixa al soterrani: la porta de ferro d'on surt la boira. S'obrirà amb la Clau de ferro (Acte 3).
+ */
+
+Object.assign(DIALEGS, {
+    // La porta de la Taverna (des de fora): la primera vegada, l'Eva obre d'amagat
+    portaTaverna: E => E.flag('tavernaOberta') ? { pagines: [{ qui: '', text: "La porta de la Taverna, ajustada. L'Eva l'ha deixat oberta per a tu." }] } : {
+        pagines: [
+            { qui: '', text: 'La porta de la Taverna és tancada amb pany i clau. Al vidre hi ha un paper clavat amb xinxetes: «Avui no servim. — Carmen».' },
+            { qui: 'Ineu', text: 'Des de dins se sent un fil de música d\'acordió, molt baixet... i una olor de fregit.' },
+            { qui: '', text: 'La cortina d\'una finestra es mou. Una noia amb una cua rossa treu el cap i mira a banda i banda de la plaça.' },
+            { qui: 'Eva', text: 'Psst! Tu ets l\'Ineu, oi? El monjo que pregunta pels nens. Entra, de pressa, que la Carmen dorm i no vull que ens vegin.' },
+            { qui: '', text: 'Se sent un forrellat. La porta s\'obre un pam.' }
+        ],
+        enAcabar: () => { E.posaFlag('tavernaOberta'); E.desar(); }
+    },
+
+    carmen: E => ({ pagines: E.flag('relIquiesRetornades') ? [
+        { qui: 'Carmen', text: '(obrint un ull) Ah, ets tu. Diu l\'Eva que ets valent. Jo també ho seria, si no tingués tanta son.' },
+        { qui: 'Carmen', text: 'Ves, ves. I si baixes, tanca la porta, que fa corrent.' }
+    ] : [
+        { qui: '', text: 'La Carmen ronca, asseguda darrere el taulell, amb els peus sobre una caixa de gasoses i el davantal per mocador.' },
+        { qui: 'Carmen', text: '...Zzz... Avui no servim... Ni demà... Ni passat... Zzz...' }
+    ] }),
+
+    eva: E => {
+        if (!E.flag('evaParlat')) return {
+            pagines: [
+                { qui: 'Eva', text: 'Sóc l\'Eva. Ajudo la Carmen... bé, faig la feina de la Carmen. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
+                { qui: 'Eva', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Andreu entra per la porta del darrere i baixa al soterrani. Diu que va a buscar vi. Mai no puja amb cap ampolla.' },
+                { qui: 'Eva', text: 'Al soterrani hi ha una porta de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Sota terra, Ineu. Ocells.' },
+                { qui: 'Eva', text: 'La Martina hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve. Si hi baixes, jo vindré amb tu. No em facis dir que no.' }
+            ],
+            enAcabar: () => { E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'Baixa al soterrani de la Taverna: la Clau de ferro obre la porta d\'on surt la boira.' : E.dades.objectiu); }
+        };
+        if (E.flag('clauFerro')) return { pagines: [
+            { qui: 'Eva', text: 'Aquesta clau... és de ferro vell, com la porta del soterrani! L\'has trobada a la Casa Gran?' },
+            { qui: 'Eva', text: E.flag('cantMiracle') ? 'I la Pianista t\'ha ensenyat el cant. Quan vulguis, baixem. Jo agafo el llum.' : 'Abans de baixar, passa pel Santuari: la Pianista sempre diu que hi ha un cant per a cada porta.' }
+        ] };
+        if (E.flag('runna')) return { pagines: [
+            { qui: 'Eva', text: 'Aquesta espasa brilla com si estigués contenta. Amb això potser obriríem la porta... però el pany és de clau. Una clau de ferro, grossa.' },
+            { qui: 'Eva', text: 'L\'Isidre diu que els monjos ho amagaven tot a la Casa Gran. Potser la clau també.' }
+        ] };
+        return { pagines: [
+            { qui: 'Eva', text: 'No et puc ajudar a obrir la porta de ferro: no té pany per a cap clau que hi hagi a la Taverna. Diuen que els monjos la van tancar amb una espasa que brilla.' },
+            { qui: 'Eva', text: 'Busca aquesta espasa, Ineu. I torna. Jo t\'espero aquí, fent veure que treballo.' }
+        ] };
+    },
+
+    acordio: E => ({ pagines: [{ qui: '', text: "Un acordió vell sobre una cadira, amb una cinta vermella. L'Eva el toca quan la Carmen dorm: diu que així la boira no entra." }] }),
+    taulellTaverna: E => ({ pagines: [{ qui: '', text: "El taulell de la Taverna, de marbre gastat. Gots del revés, una gerra de vi del Solsonès i un plat de coca amb sucre que ningú no ha tastat." }] }),
+
+    portaFerro: E => {
+        if (E.flag('clauFerro') && E.flag('cantMiracle')) return { pagines: [
+            { qui: '', text: 'Poses la Clau de ferro al pany. Gira, amb un gemec de segles. La boira lila surt a glops per sota la porta, i a dins se sent cantar ocells.' },
+            { qui: 'Eva', text: '(amb un llum a la mà) Hi som, Ineu. Junts.' },
+            { qui: '', text: '(La Sala de les Gírgoles, el passadís i la Sala de la Gàbia encara s\'estan construint. Aquí s\'acaba, de moment, el camí.)' }
+        ] };
+        if (E.flag('clauFerro')) return { pagines: [
+            { qui: '', text: 'La Clau de ferro encaixa al pany. Però abans de girar-la, sents a dins un cant d\'ocells que et glaça les mans.' },
+            { qui: 'Ineu', text: '(No. Encara no. La Pianista té un últim cant per a mi: sense ell, els barrots de la gàbia no s\'obriran.)' }
+        ] };
+        return { pagines: [
+            { qui: '', text: 'Una porta de ferro negre, plena de reblons, amb un pany gros com un puny. Pels costats en surt una boira lila i freda que s\'arrossega per terra.' },
+            { qui: '', text: 'A la fusta del marc, algú hi va gravar fa segles una espasa i una gàbia. A dins, molt lluny, se sent piular.' },
+            { qui: 'Ineu', text: E.flag('runna') ? '(Runna tremola a la meva mà. Però el pany és de clau: em cal la clau de ferro dels monjos.)' : '(Aquí és d\'on surt tot. Encara no puc fer res: em falta l\'espasa que la va segellar... i una clau.)' }
+        ] };
+    }
+});
+
+// ---------------- LA TAVERNA PER DINS ----------------
+class ZonaTavernaInt extends ZonaBase {
+    constructor() {
+        super('ZonaTavernaInt', {
+            nom: 'La Taverna',
+            amplada: 1000,
+            alcada: 800,
+            colorFons: '#140e0a',
+            pacifica: true,
+            entrades: { porta: { x: 500, y: 700, dir: 'amunt' }, soterrani: { x: 860, y: 330, dir: 'avall' } }
+        });
+    }
+
+    construir() {
+        const A = 1000, H = 800;
+        this.terra('taulons', 100, 40, 800, 760, -1100).setTint(0xb08a5a);
+        // Paret del fons: arrebossat càlid, sòcol de rajola i bigues
+        const p = this.add.graphics().setDepth(-990);
+        p.fillStyle(0x120a04, 1).fillRect(58, 0, 884, 130);
+        p.fillStyle(0xc8a878, 1).fillRect(60, 0, 880, 126);
+        let l = 7; const r = () => (l = l * 16807 % 2147483647) / 2147483647;
+        for (let k = 0; k < 22; k++) p.fillStyle(0x7a5a3a, 0.06 + r() * 0.06).fillEllipse(80 + r() * 840, 10 + r() * 80, 30 + r() * 70, 8 + r() * 16);
+        for (let x = 60; x < 940; x += 28) { p.fillStyle((x / 28) % 2 ? 0x2a6a8a : 0xe8e0c8, 1).fillRect(x, 96, 28, 30); }    // sòcol de rajola blava i blanca
+        p.lineStyle(1, 0x1a1008, 0.5).strokeRect(60, 96, 880, 30);
+        p.fillStyle(0x4a2c14, 1).fillRect(60, 0, 880, 12);
+        [200, 420, 640, 860].forEach(x => p.fillStyle(0x4a2c14, 1).fillRect(x - 8, 0, 16, 30));
+        p.fillStyle(0x4a3018, 1).fillRect(30, 0, 30, H).fillRect(940, 0, 30, H);
+        this.colisio(30, H / 2, 60, H);
+        this.colisio(A - 30, H / 2, 60, H);
+        this.colisio(A / 2, 70, A - 120, 140);
+        this.colisio(265, H - 10, 330, 20);
+        this.colisio(735, H - 10, 330, 20);
+
+        // Prestatgeria d'ampolles darrere el taulell i un rellotge de paret
+        const pr = this.add.graphics().setDepth(-980);
+        [28, 62].forEach(y => pr.fillStyle(0x4a2c14, 1).fillRect(120, y, 360, 8));
+        const colors = [0x3a7a3a, 0x7a2a2a, 0xc8a050, 0x2a4a7a, 0x5a3a6a];
+        for (let k = 0; k < 18; k++) {
+            const x = 132 + (k % 9) * 38, y = k < 9 ? 28 : 62, c = colors[k % colors.length];
+            pr.fillStyle(c, 0.95).fillRoundedRect(x, y - 24, 14, 24, 3).fillRect(x + 4, y - 32, 6, 9);
+            pr.fillStyle(0xffffff, 0.25).fillRect(x + 2, y - 20, 3, 14);
+        }
+        pr.fillStyle(0x5a3a1e, 1).fillCircle(560, 50, 26).fillStyle(0xf2ecdc, 1).fillCircle(560, 50, 20);
+        pr.lineStyle(2, 0x1a1008, 1).lineBetween(560, 50, 560, 36).lineBetween(560, 50, 570, 54);
+
+        // El taulell (llarg, de fusta amb sobre de marbre) i la Carmen dormint al darrere
+        const t = this.add.graphics().setDepth(250);
+        t.fillStyle(0x000000, 0.25).fillRect(110, 248, 400, 14);
+        t.fillStyle(0x6a4224, 1).fillRect(110, 180, 400, 70);
+        for (let x = 130; x < 500; x += 46) t.fillStyle(0x5a361c, 1).fillRect(x, 192, 30, 48);
+        t.fillStyle(0xe0d8c8, 1).fillRect(104, 168, 412, 16).lineStyle(2, 0x1a1008, 1).strokeRect(104, 168, 412, 16).strokeRect(110, 184, 400, 66);
+        [[170, 160], [230, 158], [400, 160]].forEach(([x, y]) => t.fillStyle(0xd8e8f0, 0.8).fillRect(x, y, 14, 18).lineStyle(1, 0x5a6a7a, 1).strokeRect(x, y, 14, 18));
+        t.fillStyle(0xc87a3a, 1).fillEllipse(320, 166, 50, 14);                                   // plat de coca
+        this.colisio(310, 215, 410, 70);
+        this.interactiu(310, 270, 90, DIALEGS.taulellTaverna, { altura: 90 });
+        this.npc('carmen', 300, 160, DIALEGS.carmen);
+        const zz = this.add.text(330, 70, 'z z Z', estilText(26, '#f2e6c8', { fontStyle: 'italic' })).setDepth(400);
+        this.tweens.add({ targets: zz, y: 50, alpha: 0.2, yoyo: true, repeat: -1, duration: 1400 });
+
+        // Llar de foc a la dreta
+        const llar = this.add.graphics().setDepth(-960);
+        llar.fillStyle(0x120a04, 1).fillRect(612, 20, 156, 110);
+        llar.fillStyle(0x5a4a3a, 1).fillRect(618, 26, 144, 100);
+        llar.fillStyle(0x0c0806, 1).fillRect(636, 52, 108, 74);
+        this.foc = this.posar('foc', 690, 120, { fonsY: 120 });
+        this.tweens.add({ targets: this.foc, scaleY: this.foc.scaleY * 1.08, yoyo: true, repeat: -1, duration: 280 });
+        this.add.circle(690, 150, 170, 0xff9a30, 0.1).setDepth(300);
+
+        // Taules amb tamborets i espelmes
+        [[260, 470], [520, 430], [700, 560], [330, 620]].forEach(([x, y], i) => {
+            this.posar('taula', x, y, { escala: 0.8, col: { w: 130, h: 26 } });
+            [[-70, 20], [70, 20]].forEach(([dx, dy]) => this.posar('tamboret', x + dx, y + dy, { escala: 0.8, col: { w: 30, h: 12 } }));
+            const e = this.posar('espelma', x, y - 50, { fonsY: y + 2 });
+            this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 330 + i * 80 });
+        });
+        // Barrils de vi, apilats a la dreta, i l'acordió
+        [[860, 470], [900, 500], [880, 440]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 46, h: 20 } }));
+        this.posar('tamboret', 150, 400, { col: { w: 36, h: 14 } });
+        const ac = this.add.graphics().setDepth(390);
+        ac.fillStyle(0x8a1a1a, 1).fillRoundedRect(130, 360, 40, 30, 4);
+        for (let k = 0; k < 5; k++) ac.fillStyle(k % 2 ? 0xf2ecdc : 0x2a2a2a, 1).fillRect(134 + k * 7, 362, 5, 26);
+        this.interactiu(150, 410, 70, DIALEGS.acordio, { altura: 60 });
+
+        // L'Eva, al costat de la llar
+        this.npc('eva', 560, 300, DIALEGS.eva, { flipX: true });
+
+        // La porta del fons (cap al soterrani), a la paret del fons a la dreta
+        const pf = this.add.graphics().setDepth(-950);
+        pf.fillStyle(0x120a04, 1).fillRect(812, 30, 96, 106);
+        pf.fillStyle(0x3a2412, 1).fillRect(818, 36, 84, 100);
+        pf.fillStyle(0x0a0608, 1).fillRect(830, 60, 60, 76);
+        pf.fillStyle(0x9a50ff, 0.18).fillEllipse(860, 130, 90, 26);
+        this.boira(860, 128, 60, 16, 0.4);
+        this.sortida(825, 132, 70, 30, 'ZonaSotaTaverna', 'escala');
+
+        this.add.rectangle(A / 2, H / 2, A, H, 0xffc070, 0.07).setDepth(80000);
+        this.sortida(460, H - 22, 80, 14, 'ZonaTaverna', 'interior');
+    }
+}
+
+// ---------------- EL SOTERRANI DE LA TAVERNA (la porta de ferro) ----------------
+class ZonaSotaTaverna extends ZonaBase {
+    constructor() {
+        super('ZonaSotaTaverna', {
+            nom: 'Soterrani de la Taverna',
+            amplada: 800,
+            alcada: 900,
+            colorFons: '#08060a',
+            pacifica: true,
+            entrades: { escala: { x: 400, y: 790, dir: 'amunt' } }
+        });
+    }
+
+    construir() {
+        const A = 800, H = 900;
+        this.terra('pedra', 100, 60, 600, 840, -1100).setTint(0x6a6070);
+        const m = this.add.graphics().setDepth(-990);
+        m.fillStyle(0x2a2430, 1).fillRect(60, 0, 680, 150);
+        m.lineStyle(1.5, 0x120e16, 0.7);
+        for (let y = 24, f = 0; y < 150; y += 26, f++) { m.lineBetween(60, y, 740, y); for (let x = 60 + (f % 2) * 30; x < 740; x += 60) m.lineBetween(x, y, x, y - 26); }
+        m.fillStyle(0x1a1620, 1).fillRect(30, 0, 70, H).fillRect(700, 0, 70, H);
+        this.colisio(50, H / 2, 100, H);
+        this.colisio(A - 50, H / 2, 100, H);
+        this.colisio(A / 2, 90, A, 180);
+        this.colisio(220, H - 10, 280, 20);
+        this.colisio(580, H - 10, 280, 20);
+
+        // La porta de ferro, al mig de la paret del fons, amb boira lila que en surt
+        const pf = this.add.graphics().setDepth(-950);
+        pf.fillStyle(0x0a0808, 1).fillRect(300, 10, 200, 150);
+        pf.fillStyle(0x2a2a30, 1).fillRect(310, 18, 180, 142);
+        for (let y = 30; y < 160; y += 26) for (let x = 322; x < 490; x += 28) pf.fillStyle(0x4a4a52, 1).fillCircle(x, y, 4);
+        pf.fillStyle(0x1a1a1e, 1).fillRect(310, 82, 180, 10).fillRect(310, 128, 180, 10);
+        pf.fillStyle(0x8a7a40, 1).fillRect(460, 88, 18, 26).fillStyle(0x0a0808, 1).fillRect(466, 96, 6, 12);
+        // Espasa i gàbia gravades al marc
+        pf.lineStyle(3, 0x7a6a8a, 0.8).lineBetween(282, 30, 282, 120).lineBetween(272, 50, 292, 50);
+        pf.strokeRect(508, 60, 24, 34).lineBetween(514, 60, 514, 94).lineBetween(520, 60, 520, 94).lineBetween(526, 60, 526, 94);
+        const resplendor = this.add.ellipse(400, 170, 320, 70, 0x9a50ff, 0.25).setDepth(-940);
+        this.tweens.add({ targets: resplendor, alpha: 0.08, scaleX: 1.15, yoyo: true, repeat: -1, duration: 1600 });
+        this.boira(400, 170, 220, 40, 1.2);
+        this.boira(300, 420, 160, 40, 0.5);
+        this.boira(520, 600, 160, 40, 0.5);
+        this.interactiu(400, 220, 120, DIALEGS.portaFerro, { altura: 170 });
+
+        // Sacs i botes de vi, i petjades a la pols
+        [[150, 300], [180, 350], [640, 320]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 46, h: 20 } }));
+        const sacs = this.add.graphics().setDepth(520);
+        [[620, 520], [660, 545], [140, 560]].forEach(([x, y]) => sacs.fillStyle(0x8a7a5a, 1).fillEllipse(x, y, 60, 40).lineStyle(2, 0x3a3020, 1).strokeEllipse(x, y, 60, 40));
+        const pj = this.add.graphics().setDepth(-1000);
+        for (let k = 0; k < 9; k++) pj.fillStyle(0x2a2430, 0.6).fillEllipse(380 + (k % 2) * 30, 740 - k * 60, 14, 22);
+
+        // Escala que puja (sortida), a baix
+        const esc = this.add.graphics().setDepth(-1000);
+        for (let k = 0; k < 5; k++) esc.fillStyle(0x4a4450 + k * 0x050505, 1).fillRect(340, H - 100 + k * 20, 120, 20);
+        this.add.rectangle(A / 2, H / 2, A, H, 0x1a0a30, 0.25).setDepth(80000);
+        this.sortida(360, H - 22, 80, 14, 'ZonaTavernaInt', 'soterrani');
+    }
+}

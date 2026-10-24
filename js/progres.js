@@ -75,6 +75,8 @@ const PROGRES = {
         { id: 'runna', marca: ['runna', 'obj:runna'], fet: E => E.flag('runna'),
           pista: E => "Amb l'Estel de Sant Llorenç, la boira del camí de llevant dels Dipòsits s'aparta. Al final hi ha el Dolmen: amb la Fulla, el Saber i la Benedicció, Runna es despertarà." },
         // ---- ACTE 3 ----
+        { id: 'josep', marca: ['josepVencut'], fet: E => E.flag('josepVencut'),
+          pista: E => "Al Celler, a les Runes, en Josep és el millor jugador de ping-pong. Allà els secrets es guanyen a la taula: parla amb en Josep i guanya-li el partit. (Com més d'hora prems, pitjor: espera que el cercle toqui l'anell.)" },
         { id: 'frederic', marca: ['fredericRoda'], fet: E => E.flag('fredericRoda') || E.flag('rodaMoguda'),
           pista: E => "Ara que portes Runna... Al Celler, a les Runes, hi ha una roda de carruatge que amaga alguna cosa. El Frederic, el pare del Juli, en sap més del que diu. Parla-hi." },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
@@ -99,11 +101,13 @@ const PROGRES = {
           pista: E => "Abans de baixar sota la Taverna, passa pel Santuari: la Pianista té un últim cant per a tu, el Cant del Miracle. Els barrots de la gàbia només l'escolten a ell." },
         // La Taverna per dins, les Gírgoles i la Sala de la Gàbia encara no existeixen al joc: aquest pas no es pot fer
         { id: 'gabia', marca: [], pendent: true, fet: E => false,
-          pista: E => "La Clau de ferro obre la porta de sota la Taverna, i el Cant del Miracle, els barrots de la gàbia. (Aquesta part del joc encara s'està construint.)" }
+          pista: E => "Ves a la Taverna i baixa al soterrani amb l'Eva: la Clau de ferro obre la porta de ferro, i el Cant del Miracle, els barrots de la gàbia. (Aquesta part del joc encara s'està construint.)" }
     ],
 
     // Missions laterals: no barren el camí. Les Tietes les recorden quan ja s'han pogut començar.
     laterals: [
+        { id: 'taverna', marca: ['tavernaOberta', 'evaParlat'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('evaParlat'),
+          pista: E => "La Martina berenava cada tarda a la Taverna amb l'Eva. La porta és tancada, però truca: potser l'Eva et deixa entrar." },
         { id: 'rellotge', marca: ['rellotgeReparat'], obert: E => E.flag('rellotgeDit'), fet: E => E.flag('rellotgeReparat'),
           pista: E => "El rellotge del campanar continua aturat: la porta de la dreta del retaule puja a la Sala del Rellotge." },
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),

@@ -57,8 +57,8 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pare Jordi", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
-                    { qui: "Pare Jordi", text: "No et vull espantar, però el Biel, de les cel·les de Sant Antoni, fa dos dies que va desaparèixer. I aquesta nit ha estat el Pol, de Sant Benet." },
-                    { qui: "Pare Jordi", text: "Les famílies estan angoixades. I aquesta boira que surt de sota terra... no m'agrada gens." },
+                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: el Biel, de Sant Antoni; el Pol, de Sant Benet; i aquesta nit, la Martina, la filla del Daniel." },
+                    { qui: "Pare Jordi", text: "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada... i, diu la Neus, un piular d'ocells que no se sap d'on ve." },
                     { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Pren el meu clauer de novici: parla amb tothom i explica-m'ho tot." },
                     { qui: "", text: "Has obtingut el CLAUER DE NOVICI!\nObre la biblioteca i les cel·les." },
                     { qui: "Pare Jordi", text: "I abans de marxar, passa a saludar el Germà Andreu, al costat dels xiprers: sempre té la butxaca plena de coses. Ves amb compte pels camins, Ineu." }
@@ -317,7 +317,13 @@ const DIALEGS = {
         ]
     }),
 
-    frederic: E => E.te("runna") && !E.flag("cofreCambra") ? {
+    frederic: E => E.te("runna") && !E.flag("josepVencut") && !E.flag("cofreCambra") ? {
+        pagines: [
+            { qui: 'Frederic', text: "Ei, noi. Portes una espasa que no és de ferro, eh? Ja veig que vens a preguntar." },
+            { qui: 'Frederic', text: "Però al Celler hi ha una norma més vella que jo: els secrets es guanyen a la taula. Guanya en Josep i parlarem." }
+        ],
+        enAcabar: () => E.posaObjectiu("Guanya en Josep a ping-pong, al Celler: el Frederic t'explicarà què amaga la roda.")
+    } : E.te("runna") && !E.flag("cofreCambra") ? {
         pagines: [
             { qui: 'Frederic', text: "Ei, noi. Veig que portes una espasa que no és de ferro. Això canvia el que et volia dir." },
             { qui: 'Frederic', text: "Aquest lloc es diu el Celler per alguna cosa: era el celler de la Casa Gran, la casa vella dels monjos. Els monjos hi van fer un túnel que va a la casa sense que ningú el vegi." },
@@ -341,20 +347,42 @@ const DIALEGS = {
     eloi: E => ({
         pagines: [
             { qui: 'Eloi', text: 'Mira qui ha vingut a perdre el temps. Soc l\'Eloi, el segon millor de la sala. I el primer, si no fos per aquell servei absurd d\'en Josep.' },
-            { qui: 'Eloi', text: 'Vols jugar? Ho veurem aviat. Primer m\'he d\'escalfar... Però el repte important no és el meu: és el d\'en Josep.' },
-            { qui: '', text: '(El ping-pong arribarà en una pròxima fase del joc.)' }
+            { qui: 'Eloi', text: E.flag('josepVencut') ? 'Has guanyat en Josep? Sort, segur. Jo també ho hauria fet si no m\'hagués cansat escalfant.' : 'Vols jugar? Primer m\'he d\'escalfar... Però el repte important no és el meu: és el d\'en Josep. Parla-hi.' }
         ]
     }),
 
-    josep: E => ({
+    josep: E => E.flag('josepVencut') ? {
+        pagines: [{ qui: 'Josep', text: 'Ningú no m\'havia tornat el servei en vint anys. Ni l\'Eloi. Quan vulguis la revenja, aquí em tens... però ja no et regalaré res.' }]
+    } : {
         pagines: [
             { qui: 'Josep', text: 'Aquest és el meu servei. Ningú no l\'ha tornat mai. Ni l\'Eloi, per molt que presumeixi.' },
-            { qui: 'Josep', text: 'Si vols vèncer-me, hauràs de tornar el meu servei: un sol partit, a set punts. I només et mostraré la màgia si saps tornar-la.' },
-            { qui: '', text: '(Repte de ping-pong: pròxima fase.)' }
-        ]
+            { qui: 'Josep', text: 'Aquí al Celler les coses es guanyen a la taula. Si vols que la gent d\'aquí et parli de debò, guanya\'m: un sol partit, a set punts.' },
+            { qui: '', text: 'Com es juga: la pilota ve per un dels tres carrils. Quan el cercle groc toqui l\'anell, prem aquell carril (← ↓ →, A S D o els botons de sota). Al servei màgic d\'en Josep, repeteix en ordre els tres carrils que t\'ensenya. Per servir tu, el centre.' }
+        ],
+        enAcabar: () => game.scene.start('PingPong')
+    },
+
+    josepGuanyat: E => ({
+        pagines: [
+            { qui: 'Josep', text: '...Me l\'has tornat. El servei. Me l\'has tornat de debò.' },
+            { qui: 'Juli', text: 'HO SABIA! Efecte Magnus, Josep! Física pura!' },
+            { qui: 'Frederic', text: 'Bon partit, noi. Ara sí: vine, que t\'he de dir una cosa.' },
+            { qui: '', text: 'En Josep et dóna la mà i un got d\'aigua de bota. Notes el cor més fort.\n+1 GRA AL ROSARI.' }
+        ],
+        enAcabar: () => {
+            E.posaFlag('josepVencut');
+            E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
+            const ui = game.scene.getScene('UI'); if (ui) ui.actualitzarHUD();
+            E.posaObjectiu(E.flag('runna') ? 'Parla amb el Frederic, al Celler: ara et dirà el que sap.' : 'Has guanyat en Josep. Segueix buscant Runna.');
+        }
     }),
 
-    taulaPP: E => ({ pagines: [{ qui: '', text: 'Una taula de ping-pong. Ara mateix hi ha massa gent per jugar-hi... aviat tindràs la teva oportunitat.' }] }),
+    josepPerdut: (E, abandonat) => ({
+        pagines: [{ qui: 'Josep', text: abandonat ? 'Ja te\'n vas? La taula no fuig. Torna quan vulguis.' : 'Bona partida, monjo. Però el servei encara és meu. Torna-hi quan vulguis: el Juli diu que la segona vegada sempre surt millor.' }],
+        enAcabar: () => E.posaObjectiu('Guanya en Josep a ping-pong, al Celler: parla-hi per jugar.')
+    }),
+
+    taulaPP: E => ({ pagines: [{ qui: '', text: E.flag('josepVencut') ? 'La taula on vas guanyar en Josep. Encara hi ha la marca de la pilota, al cantell.' : 'Una taula de ping-pong. Per jugar-hi, parla amb en Josep: és ell qui mana a la sala.' }] }),
 
     // ---------------- CEL·LES I TIL·LER ----------------
     neus: E => {
@@ -391,8 +419,11 @@ const DIALEGS = {
 
     yordi: E => ({ pagines: [{ qui: 'Yordi', text: 'Hola, Ineu! Si veus la meva germana Judit, digues-li que em deu un gelat.' }] }),
     judit: E => ({ pagines: [{ qui: 'Judit', text: 'Bon dia! Jo no li dec cap gelat a en Yordi. Que ho sàpigues.' }] }),
-    danielT: E => ({ pagines: [{ qui: 'Daniel', text: 'Bon dia, Ineu. Aquest és el meu nebot Turbo. No paris atenció si desapareix cada dos minuts.' }] }),
-    turbo: E => ({ pagines: [{ qui: 'Turbo', text: 'Corro més que tu! Corro més que tu! Corro més que... on és el meu tió?' }] }),
+    danielT: E => ({ pagines: [
+        { qui: 'Daniel', text: 'Ineu... La Martina, la meva filla, no era al llit aquest matí. La finestra era tancada per dins. Ella no surt mai sola de nit: li fa por la fosca.' },
+        { qui: 'Daniel', text: 'Ahir a la tarda va anar a berenar a la Taverna, com sempre, amb l\'Eva. Potser l\'Eva va veure alguna cosa. Jo em quedo amb el Turbo: no el deixo sortir d\'aquí.' }
+    ] }),
+    turbo: E => ({ pagines: [{ qui: 'Turbo', text: 'La cosina Martina diu que els ocells de nit canten el seu nom. Jo no els he sentit mai. Però jo corro més que tu!' }] }),
 
     tiller: E => {
         if (E.te("basto") && !E.flag("tutorialCombat")) { E.posaFlag("tutorialCombat"); E.posaFlag("combatActiu"); }   // partides velles
@@ -1223,10 +1254,6 @@ const DIALEGS = {
         };
     },
 
-    taverna: E => ({ pagines: [
-        { qui: '', text: 'La porta de la Taverna és tancada amb pany i clau. Al vidre hi ha un paper clavat amb xinxetes: «Avui no servim. — Carmen».' },
-        { qui: 'Ineu', text: 'Des de dins se sent un fil de música d\'acordió, molt baixet... i una olor de fregit que no s\'acaba d\'esvair.' }
-    ] }),
 
 
     // Cambra secreta dels monjos (sala del tresor, entre el Celler i la Casa Gran)

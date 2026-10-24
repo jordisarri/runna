@@ -1,7 +1,7 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
-*Revisió 7: ordre de la història a `js/progres.js`, ping-pong opcional i sense torneig, Jaumeta i telescopi obligatoris. Revisió 6: guió retallat de ~10 h a ~5 h. S'han tret el Cellerer, els vinyaters, els obrers i el contraban; els fragments són dos; la Jaumeta és una curiositat; el ping-pong és un sol partit.*
+*Revisió 8: pròleg il·lustrat (llegenda i les tres desaparicions), la Martina ja ha desaparegut quan comença el joc, ping-pong obligatori contra en Josep, Taverna per dins amb l'Eva i biblioteca del Monestir. Revisió 7: ordre de la història a `js/progres.js`, Jaumeta i telescopi obligatoris. Revisió 6: guió retallat de ~10 h a ~5 h. S'han tret el Cellerer, els vinyaters, els obrers i el contraban; els fragments són dos; el ping-pong és un sol partit.*
 
 ## A1. Premissa
 Al Santuari del Miracle hi ha famílies de descans a les cel·les de **Sant Benet**, **Nostra Senyora** i **Sant Antoni**. Fa unes nits que una **boira fosca i freda** surt de sota terra: marceix els horts, entela l'aigua de la Bassadòria, **fa callar l'orgue del Santuari** i fa desaparèixer nens. Els que tornen ho fan adormits, sense ganes de riure.
@@ -30,9 +30,9 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat p
 | **L'Ocellaire** | Sala de la Gàbia | Boss final. |
 | **La Neus i el senyor Moliner** | Sant Benet | Matrimoni: ella mana, ell obeeix. Pares del Pol. |
 | **Les Tietes (Enriqueta i Lola)** | Cel·les | Donen **la pista del moment** si l'Ineu va perdut. |
-| **Yordi, Judit, Daniel i Turbo** | Cel·les | Testimonials. |
+| **Yordi, Judit, Daniel i Turbo** | Cel·les | Testimonials. El **Daniel** és el pare de la **Martina** (la tercera desapareguda) i oncle del Turbo. |
 | **Sansa** | Cel·les (un sol cop) | Passa quan l'Isidre te n'ha parlat, et dona la **Llavor de Lluna** i se'n va. |
-| **Carmen i Eva** | La Taverna | La Carmen, mandrosa; l'Eva, amiga fidel, obre la porta del fons. |
+| **Carmen i Eva** | La Taverna | La Carmen, mandrosa, dorm des que va arribar la boira; l'**Eva**, amiga fidel, obre la porta a l'Ineu, li explica que el Germà Andreu baixa cada nit al soterrani i l'acompanyarà a la porta de ferro. La Martina hi berenava cada tarda. |
 | **Juli, Frederic, Eloi, Josep** | El Celler | Ping-pong: Juli fa de tutorial, Frederic d'avi savi (revela la roda), Eloi d'arrogant (no cal vèncer-lo), **Josep** és el repte. |
 | **Isidre** | L'Hostatgeria | Calb, camisa blanca de màniga curta i pantalons marrons; porta cama de fusta i bastó. Coix i hàbil: dona les **tisores** i cuida el jardí. |
 | **Garf** | L'Era | Savi inventor, assegut al banc; telescopi. |
@@ -71,15 +71,15 @@ Vertical (720x1280); a dalt, una franja de pergamí amb el HUD. Camins de terra 
 - **Plaça del Santuari** (inici): façana gran del **Santuari** (la **pedra secreta** de la façana, amb el Cant de les Pedres, duu a una sala del tresor: +1 cor), camí a les Runes (NO), **Monestir** (E), **Casa Gran** (O, amb la reixa del porxo, tancada per fora) i **La Bassadòria** (S; amb la Creu de l'Aparició). Un cartell únic.
 - **Santuari** (interior): Pianista, Pare Daniel, altar de pedra per desar i reposar, fragment 2 (sobre un banc del mig). Les dues portes del peu del retaule són tancades; quan el Pare Daniel explica que el rellotge s'ha aturat, dóna la clau de la **dreta**, que puja per la **Torre del campanar** (escala de cargol) fins a la **Sala del Rellotge**.
 - **Sala del Rellotge:** el rellotge és aturat a les tres i quart (l'hora que va arribar la boira). Puzle curt: posar tres engranatges a la mida correcta (la nota del campaner, un pergamí desplegat i clavat a la paret, diu: petit, gran, mitjà) perquè el rellotge torni a caminar (agulles, engranatges i pèndol es mouen). Premi: +1 gra al rosari. (Ja no hi ha campanes al puzle.)
-- **Monestir**: biblioteca (Alcuí) i camí al **Cementiri**.
+- **Monestir**: el portal duu a la **Biblioteca** (prestatgeries fins al sostre, dos vitralls que tenyeixen el terra, pols dins la llum, taula de lectura, faristol amb la **Crònica**, globus i escala): hi treballa el Pare Alcuí. Camí al **Cementiri**.
 - **Els arcs de la Casa Gran**: tot el terra és de pedra (sense gespa); façana gran amb el porxo d'arcs i la reixa tancada per fora; cartell a terra a la dreta de les escales; arbres només a la dreta; les sortides, sota la casa (a l'oest va a la Taverna, a l'est a la Plaça). No hi ha cap font.
-- **La Taverna** (escena nova, entre l'Hostatgeria i els arcs de la Casa Gran): el camí passa per davant la façana de la Taverna; la porta és tancada («Avui no servim. — Carmen»); barrils, banc i arbres.
+- **La Taverna**: casa gran de tres plantes entre l'Hostatgeria i els arcs de la Casa Gran. La porta és tancada («Avui no servim. — Carmen») fins que l'Eva l'obre per la finestra. **Per dins:** taulell amb la Carmen adormida, llar de foc, taules, acordió i l'Eva. Per la porta del fons, una escala baixa al **Soterrani de la Taverna**: la **porta de ferro** d'on surt la boira (s'obre a l'Acte 3 amb la Clau de ferro i el Cant del Miracle).
 - **L'Hostatgeria (jardí)**: gespa; la pèrgola d'arcades és gran, enganxada a la casa, amb la fila del davant a la línia de la façana i tan alta com la seva planta baixa; **només dins la pèrgola** hi ha flors, la Prunera Màgica (l'únic arbre) i la llosa secreta.
 - **Llosa del jardí:** ben visible entre les columnes. Amb la Llavor de Lluna, l'Isidre hi camina, planta la llavor, la flor creix i la llosa llisca i deixa veure un forat amb una escala que baixa (tot animat, sense text). L'Ineu hi baixa caminant.
 - **Soterrani de l'Hostatgeria:** laberint de passadissos foscos (només es veu el cercle de llum de l'Ineu, les espelmes i les escales; amb la Llanterna el cercle és més gran), amb escolopendres. Una escala al fons puja al **Vestíbul de l'Hostatgeria**, amb tres portes tancades per dins (les cambres de les monges: per fer).
 - **Vestíbul de l'Hostatgeria i les tres cambres:** tres portes. **Dormitori** (Pains): oberta, però dorm dins un capoll de boira lila → **Cant de l'Aurora** amb la flauta. **Refetor** (Phili): una taula de roure barra la porta → **Guants de Poder**. **Capella** (Charm): esbarzers negres → **Runna**. En lliurar-les totes tres, obren la porta de l'Hostatgeria per dins (s'hi entra des del jardí) i la taula d'infusions del vestíbul és un lloc de repòs (cura i desa). Charm diu que el Cant del Miracle és el que obre la gàbia de l'Ocellaire; la Phili ha vist el Germà Andreu baixar a la Taverna cada nit.
 - **Les Runes**: façana gran, ombra del monjo, fragment 1; a baix, la porta del **Celler**; camí cap a l'oest (**Camí de la Desaparició**), est (**Cementiri**) i nord (cel·les).
-- **El Celler** (ping-pong): Juli, Frederic, Eloi, Josep. Una **roda de carruatge** (s'empeny des d'un costat; calen els **Guants de Poder** del Germà Francesc) descobreix el **Passadís secret** (escolopendres i un mur de cinc esbarzers negres que llueixen violeta entre quatre espelmes; només Runna els talla) → **Cambra secreta** (premi: cofre amb +1 cor i el pergamí del monjo, que obre una porta cap a l'Escalinata) → **Escalinata** de la Casa Gran. El partit de ping-pong contra en Josep és **opcional** (+1 cor); l'Acte 3 s'obre amb Runna.
+- **El Celler** (ping-pong): Juli, Frederic, Eloi, Josep. Una **roda de carruatge** (s'empeny des d'un costat; calen els **Guants de Poder** del Germà Francesc) descobreix el **Passadís secret** (escolopendres i un mur de cinc esbarzers negres que llueixen violeta entre quatre espelmes; només Runna els talla) → **Cambra secreta** (premi: cofre amb +1 cor i el pergamí del monjo, que obre una porta cap a l'Escalinata) → **Escalinata** de la Casa Gran. Amb Runna, cal **guanyar en Josep a ping-pong** perquè el Frederic expliqui el secret de la roda.
 - **Casa Gran per dins:** Escalinata (Home del Raïm i rosa dels vents), **Cripta** (relíquies i Clau de ferro). La reixa del porxo s'obre per dins com a drecera.
 - **El Cementiri**: tomba esquerdada, làpides, escolopendres.
 - **Les Cel·les**: Nostra Senyora (gran) i Sant Benet, amb porta; personatges i Sansa quan toca. Camí a l'oest cap al bosc i al nord cap al Til·ler; a l'est no hi ha res.
@@ -97,15 +97,15 @@ Vertical (720x1280); a dalt, una franja de pergamí amb el HUD. Camins de terra 
 
 ## A6. Guió per actes
 
-### PRÒLEG — «La nit de la boira»
-Pantalla negra: *«Santuari del Miracle. Tercera nit de boira.»* La plaça de nit, una ombra amb hàbit guia una silueta petita cap al darrere de la Taverna. Matí: l'Ineu es desperta.
+### PRÒLEG — «Tres nits de boira»
+Cinc quadres il·lustrats amb text (tocar passa al següent; «Saltar» ho salta tot): **1.** l'Ocellaire amb les seves gàbies, i els nens que es queden sense riure; **2.** pastors i monjos el tanquen sota terra i un monjo segella la porta de ferro amb la llum de Runna; **3.** el Santuari de nit: fa tres nits que puja una boira lila que emmudeix l'orgue; **4.** cada nit falta un nen: el **Biel** (Sant Antoni), el **Pol** (Sant Benet) i, aquesta nit, la **Martina** (filla del Daniel); una ombra amb hàbit se l'endú dins la boira cap a la Taverna; **5.** matí: l'Ineu es desperta i el Pare Jordi el busca. No hi ha cap escena més de desaparició: quan comença el joc, els tres nens ja falten.
 
 ### ACTE 1 — «El misteri» (~1 h; el combat comença des del principi)
 1. **Plaça:** el Pare Jordi li dona el **Clauer de Novici** i l'envia a saludar el Germà Andreu, que li dona un **bastó de pelegrí** (la boira ja ha despertat bestioles: escolopendres als camins, Runes i Cementiri) i l'envia a parlar amb tothom (desapareguts: Biel, Pol). El Germà Andreu hi passeja amb una pilota (desapareix de la Plaça quan s'obre el camí de la Cirosa: és allà, fet Pastor de Boira).
 2. **Santuari:** la Pianista no aconsegueix que soni l'orgue; li ensenya el **Cant de l'Aurora** i la **flauta**. **Bassadòria:** tocat el cant, l'aigua es neteja.
 3. **Runes:** fragment 1 i l'ombra del monjo. **Santuari:** fragment 2. **Alcuí** els llegeix: un monjo va segellar la foscor amb Runna. L'ombra demana el **Cant de les Pedres** (Pianista) i, en sentir-lo, dona la **Benedicció del Monjo**.
 4. **Cel·les:** la Neus, el senyor Moliner, les Tietes (pistes), Yordi, Judit, Daniel i Turbo. El camí del nord (cap al Gran Til·ler) és tapat per una boira espessa.
-5. **Taverna:** la Carmen no vol servir res; l'Eva obre la porta del fons: a baix, la porta de ferro d'on surt la boira. L'Ineu fuig. Aquella nit desapareix la **Martina**.
+5. **Taverna (lateral, des de l'inici):** la porta és tancada; l'Eva hi fa entrar l'Ineu d'amagat. La Carmen dorm. L'Eva explica que el Germà Andreu baixa cada nit al soterrani i que d'allà se senten ocells; la Martina hi berenava cada tarda. Al soterrani, la **porta de ferro** d'on surt la boira: tancada amb clau.
 
 ### ACTE 2 — «La recerca de Runna» (~2,5 h)
 - **Bosc de Sant Joan → Jaumeta → Gran Til·ler:** amb el beuratge s'esvaeix la boira i s'arriba al **Gran Til·ler**, que parla de la terra esquerdada i dona el **bastó de Til·ler** (branca): més àgil que el de pelegrí (atac més ràpid i amb més abast). «Et donaré el permís quan hagis tornat la vida a la terra.» Amb la Bassadòria neta, la branca aparta la **bardissa viva** i s'obre el camí de la **Cirosa**. **La Masia d'en Jordi** (oest del Til·ler): la **Palanca** al cofre de la caseta de joc.
@@ -117,7 +117,7 @@ Pantalla negra: *«Santuari del Miracle. Tercera nit de boira.»* La plaça de n
 - **Rovellonera:** Nena de les Trenes (dos llaços), laberint, **Sant Gabriel** (Calze de Rosada), **Dipòsits** (estels) i **Dolmen:** amb la Fulla, la Benedicció i el Saber («RIURE»), Runna surt de la pedra: *«Hi torna a haver una gàbia, oi? Anem-hi.»*
 
 ### ACTE 3 — «La Sala de la Gàbia» (~1,5 h)
-1. **El Celler:** el **Frederic** (amb Runna) revela la roda i el túnel dels monjos; la roda pesa massa per a uns braços sols. **Sant Antoni:** el **Germà Francesc** demana que portis el seu ram a la tomba de l'àngel del Cementiri i, en tornar, et dona els **Guants de Poder**, amb què la roda cedeix.
+1. **El Celler:** cal guanyar en **Josep** a ping-pong; aleshores el **Frederic** (amb Runna) revela la roda i el túnel dels monjos; la roda pesa massa per a uns braços sols. **Sant Antoni:** el **Germà Francesc** demana que portis el seu ram a la tomba de l'àngel del Cementiri i, en tornar, et dona els **Guants de Poder**, amb què la roda cedeix.
 2. **Casa Gran:** roda → **Passadís secret** (escolopendres i esbarzer negre: cal Runna) → **Cambra secreta** (+1 cor i el pergamí del monjo) → **Escalinata:** la **Palanca** (d'en Jordi) al forat de l'Home del Raïm, cap a llevant (la rosa dels vents), prémer el raïm → **boss** → **Cripta:** **relíquies i Clau de ferro**.
 3. **Cementiri:** les relíquies tanquen l'esquerda; la boira s'afebleix.
 4. **Pianista:** ensenya el **Cant del Miracle**.
@@ -135,8 +135,8 @@ L'ordre exacte dels passos és a **`js/progres.js`** (la taula `PROGRES.passos`;
 4. **Sopar del Til·ler** (escudella, flors, pastors) → **Fulla del Til·ler**.
 5. **Saber:** fragment 1 (Runes) → fragment 2 (sagrari, clau del Pare Daniel) → Pare Alcuí → ombra i Cant de les Pedres (**Benedicció del monjo**) → **Saber** (Alcuí) → **Benedicció** (Pare Jordi, només amb la Fulla).
 6. **Dolmen:** Garf (seure al banc + Cristall de Gel) → **Telescopi** → mirador dels Dipòsits (estels) → **Estel de Sant Llorenç** → boira del Dolmen → **Runna**.
-7. **Acte 3:** Frederic → Guants (ram del Germà Francesc) → roda → passadís → Cambra secreta → palanca (en Jordi) → Home del Raïm → Cripta (relíquies i Clau de ferro) → tomba del Cementiri → Cant del Miracle → (pendent) Taverna i Gàbia.
-**Laterals:** rellotge del campanar, pedra secreta del Santuari, Nena de les Trenes, columnes i Llanterna, llosa i monges. Les Tietes en recorden una quan la història principal arriba a una part encara per fer.
+7. **Acte 3:** **partit contra en Josep** (obligatori: al Celler els secrets es guanyen a la taula) → Frederic → Guants (ram del Germà Francesc) → roda → passadís → Cambra secreta → palanca (en Jordi) → Home del Raïm → Cripta (relíquies i Clau de ferro) → tomba del Cementiri → Cant del Miracle → soterrani de la Taverna amb l'Eva → (pendent) Gírgoles i Gàbia.
+**Laterals:** la Taverna i l'Eva, rellotge del campanar, pedra secreta del Santuari, Nena de les Trenes, columnes i Llanterna, llosa i monges. Les Tietes en recorden una quan la història principal arriba a una part encara per fer.
 
 ## A7. Combat i enemics
 **Controls:** atac J o ESPAI (al mòbil, un sol botó d'acció). **Els enemics apareixen des del principi** (en parlar amb el Pare Jordi, que et dona el bastó de pelegrí); abans de parlar-hi, la plaça és tranquil·la. **Vida** en meitats de cor (3 cors al principi); si caus, el Pare Jordi et recull a la plaça. Santuari, Celler i interiors són **pacífics**. **Dany:** bastó 1; Runna 2. Els enemics es desfan en boira lila i no deixen res: l'energia es recupera als llocs de repòs (la Prunera, l'altar del Santuari...). **No hi ha monedes** (no es compra ni es ven res).
@@ -154,13 +154,13 @@ L'ordre exacte dels passos és a **`js/progres.js`** (la taula `PROGRES.passos`;
 
 **Bosses:** Pastor de Boira (Cirosa), **Home del Raïm** (Casa Gran), Home de la Gàbia (final).
 
-## A8. Ping-pong (un sol partit)
-Només es juga **contra en Josep**, a **set punts** (2 de diferència a 6-6). Vista lateral simplificada: **timing + direcció**; el rival colpeja, la pilota s'acosta amb un cercle que es fa petit i una marca esquerra/centre/dreta; l'Ineu apunta amb ← → ↓ i prem ESPAI quan el cercle toca l'anell (**perfecte** = forta, **bé** = normal, **tard/d'hora** = xarxa o fora). **Servei màgic de Josep:** una seqüència de 3 tecles que apareixen un instant; si no es reprodueix en ordre, la pilota passa. El **Juli** fa de tutorial i el **Frederic** dona consells; l'**Eloi** és només decoratiu. És **opcional** (no barra la història) i no hi ha cap torneig. Premi: un cor.
+## A8. Ping-pong (un sol partit, obligatori)
+Només es juga **contra en Josep**, a **set punts** (2 de diferència a 6-6), i **cal guanyar-lo**: fins que no el vences, el Frederic no explica què amaga la roda. Es pot tornar a jugar tantes vegades com calgui. Vista des de darrere l'Ineu, amb la taula en perspectiva (`js/pingpong.js`): la pilota ve per un de **tres carrils**; un cercle groc es fa petit fins a l'anell del carril i, quan el toca, cal prémer aquell carril (**← ↓ →**, A S D o els tres botons tàctils). **Perfecte** = cop fort (en Josep sovint no hi arriba); **bé** = cop normal; **d'hora, tard o carril equivocat** = punt d'en Josep. Els rallys s'acceleren. **Servei màgic d'en Josep:** ensenya tres carrils un instant i cal repetir-los en ordre. **El teu servei:** el carril del centre. Canvi de servei cada dos punts. El **Juli** fa de tutorial i el **Frederic** dona consells; l'**Eloi** és només decoratiu. No hi ha cap torneig. Premi: +1 cor i que el Frederic parli.
 
 ## A9. Estat i pressupost de temps
-- ✔ Implementat: Plaça, Santuari, Monestir, Bassadòria, Arcs de la Casa Gran (exterior i Escalinata, Raïm, Cripta), Taverna (exterior, casa gran de tres plantes), Runes, Celler (sense minijoc), Passadís i Cambra secreta, Cementiri, Cel·les, Gran Til·ler, Bosc, Cabana de la Jaumeta, Cirosa (amb el Mas per dins) i Pastor de Boira, Hostatgeria per dins i monges, Camí de la Desaparició (+cabana amagada), Ermita, Era, Jardí, Camí Rovellonera, Rovellonera, Sant Gabriel, Dipòsits, Dolmen, melodies i flauta, combat.
-- ☐ Pendent: **Taverna per dins** (Carmen i Eva; l'escena de l'Acte 1, pas 5, amb la porta de ferro i la desaparició de la Martina) **+ Gírgoles + passadís de tortura + Sala de la Gàbia i boss final + epíleg**; **minijoc del ping-pong (un partit, opcional)**; biblioteca del Monestir per dins.
-- Fet a la revisió 7: Mas de la Cirosa per dins, la Taverna com a casa gran de tres plantes, pistes centralitzades (`js/progres.js`) i prova automàtica (`node eines/prova_progres.js`).
+- ✔ Implementat: Plaça, Santuari, Monestir, Bassadòria, Arcs de la Casa Gran (exterior i Escalinata, Raïm, Cripta), Taverna (per fora i per dins, amb el soterrani), Biblioteca del Monestir, Runes, Celler (amb el partit contra en Josep), Passadís i Cambra secreta, Cementiri, Cel·les, Gran Til·ler, Bosc, Cabana de la Jaumeta, Cirosa (amb el Mas per dins) i Pastor de Boira, Hostatgeria per dins i monges, Camí de la Desaparició (+cabana amagada), Ermita, Era, Jardí, Camí Rovellonera, Rovellonera, Sant Gabriel, Dipòsits, Dolmen, melodies i flauta, combat.
+- ☐ Pendent: **Sala de les Gírgoles + passadís de tortura + Sala de la Gàbia i boss final + epíleg**.
+- Fet a les revisions 7 i 8: Mas de la Cirosa per dins, la Taverna com a casa gran (per fora i per dins, amb el soterrani de la porta de ferro), la biblioteca del Monestir, el partit de ping-pong, el pròleg il·lustrat, pistes centralitzades (`js/progres.js`) i prova automàtica (`node eines/prova_progres.js`).
 - **Temps:** Acte 1 ~1 h · Acte 2 ~2,5 h · Acte 3 ~1,5 h = **~5 h**.
 
 ## A10. Flags de progrés
