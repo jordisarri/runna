@@ -53,7 +53,7 @@ class ZonaEsglesia extends ZonaBase {
         }), { altura: 150, actiu: () => !this.portaRellotge });
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daniel, que dirigeix el cor
-        this.posar('orgue', 950, ESG.retY + 330, { col: { w: 110, h: 50 } });
+        this.orgue = this.posar('orgue', 950, ESG.retY + 330, { col: { w: 110, h: 50 } });
         this.npc('pianista', 950, ESG.retY + 400, DIALEGS.pianista);
         this.npc('pare_daniel', 360, ESG.retY + 190, DIALEGS.pareDaniel, { flipX: false });
 
@@ -69,6 +69,77 @@ class ZonaEsglesia extends ZonaBase {
         this.add.rectangle(640, A / 2, 800, A, 0xffd38a, 0.05).setDepth(80000);
 
         this.sortida(600, A - 20, 80, 20, 'ZonaPlaca', 'esglesia');
+        if (Estat.flag('epilegPendent') && !Estat.flag('epilegFet')) this.prepararEpileg();
+    }
+
+    // ---------------- EPÍLEG: «Torna el cant» ----------------
+    // Tothom és al Santuari: els nens riuen, l'orgue torna a sonar, el poble canta... i un tub de l'orgue salta.
+    prepararEpileg() {
+        this.epileg = true;
+        const R = ESG.retY;
+        [['nen_uri', 560, R + 160], ['nen_flam', 640, R + 175], ['nen_sardin', 720, R + 160],
+         ['pare_jordi', 800, R + 200], ['germa_francesc', 470, R + 205], ['pare_alcui', 400, R + 270],
+         ['monja_pains', 420, R + 360], ['monja_phili', 520, R + 360], ['monja_charm', 470, R + 300],
+         ['tieta', 760, R + 360], ['tieta2', 860, R + 360], ['frederic', 420, R + 510], ['josep', 520, R + 510],
+         ['garf', 760, R + 510], ['isidre', 860, R + 510], ['jaumeta', 1000, R + 520]
+        ].forEach(([k, x, y]) => { if (this.textures.exists(k) && !(this.npcs && this.npcs[k])) this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 }); });
+        this.cameras.main.fadeIn(1200, 0, 0, 0);
+    }
+
+    actualitzar() {
+        this.obrirPortaRellotge(true);
+        if (this.epileg && !this.epilegEngegat) { this.epilegEngegat = true; this.time.delayedCall(900, () => this.ferEpileg()); }
+    }
+
+    ferEpileg() {
+        const R = ESG.retY, nens = ['nen_uri', 'nen_flam', 'nen_sardin'];
+        const gent = Object.keys(this.npcs).filter(k => !nens.includes(k) && k !== 'pianista' && k !== 'pare_jordi');
+        const tots = Object.keys(this.npcs).filter(k => k !== 'pianista');
+        const riure = (llista, f) => { Sfx.riure(); llista.forEach((k, i) => { this.npcSalta(k, null, 2); this.bombolla(k, ['Ha ha!', 'Ha ha ha!', 'Hi hi!'][i % 3], null, 1300); }); this.esperar(1500, f); };
+        this.ui().obrirDialeg({ pagines: [{ fer: (z, fet) => z.seq([
+            f => z.ineuVa(640, R + 330, f, 150),
+            f => riure(nens, f),
+            // L'orgue torna a sonar (el Cant del Miracle) i tothom canta
+            f => {
+                z.npcFeina('pianista', 4200, 'notes');
+                gent.forEach(k => z.npcFeina(k, 3800, 'notes'));
+                const acords = [[330, 415, 494], [494, 622, 740], [392, 494, 587], [494, 622, 740], [330, 415, 494]];
+                acords.forEach((a, i) => this.time.delayedCall(i * 750, () => Sfx.orgue(a, 0.9)));
+                this.esperar(4400, f);
+            },
+            // ... i un tub fa una nota de pega i surt disparat
+            f => {
+                Sfx.pet();
+                this.cameras.main.shake(300, 0.006);
+                const o = this.orgue, x0 = o.x + 30, y0 = o.y - o.displayHeight + 10;
+                const tub = this.add.rectangle(x0, y0, 12, 46, 0xd8b860).setStrokeStyle(2, 0x5a4020).setDepth(99000);
+                this.boiraPuf(x0, y0);
+                this.tweens.add({ targets: tub, x: 700, duration: 1100, ease: 'Linear' });
+                this.tweens.add({ targets: tub, y: y0 - 160, duration: 450, ease: 'Quad.easeOut', yoyo: false, onComplete: () => {
+                    this.tweens.add({ targets: tub, y: R + 340, duration: 650, ease: 'Bounce.easeOut', onComplete: () => { Sfx.cop(false); this.tub = tub; } });
+                } });
+                this.tweens.add({ targets: tub, angle: 540, duration: 1100 });
+                tots.forEach(k => this.bombolla(k, '!', null, 900));
+                this.esperar(1700, f);
+            },
+            f => riure(tots, f),
+            f => z.npcVa('pare_jordi', 720, R + 330, f, 120),
+            f => z.npcMira('pare_jordi', 'ineu', f),
+            f => z.bombolla('pare_jordi', 'Començaràs reparant-lo.', f, 2600),
+            f => z.bombolla('ineu', '...!', f, 1000),
+            f => riure(tots, f),
+            f => { this.cameras.main.fadeOut(1800, 0, 0, 0); this.esperar(1900, f); }
+        ], fet) }] }, () => {
+            Estat.posaFlag('epilegFet');
+            Estat.posaFlag('epilegPendent', false);
+            Estat.dades.zona = 'ZonaEsglesia'; Estat.dades.entrada = 'porta'; Estat.dades.x = null; Estat.dades.y = null;
+            Estat.posaObjectiu("El Santuari torna a cantar. (I l'orgue té un tub de menys.)");
+            Estat.desar();
+            this.canviant = true;
+            Joc.aturarTot(this);
+            this.scene.stop('UI');
+            this.scene.start('Credits');
+        });
     }
 
     // Obre la porta de la dreta del retaule si el Pare Daniel ja ha parlat del rellotge (també a mitja visita)
@@ -83,7 +154,6 @@ class ZonaEsglesia extends ZonaBase {
         }
     }
 
-    actualitzar() { this.obrirPortaRellotge(true); }
 
     // Altar de pedra: l'Ineu s'agenolla, reposa (els grans del rosari tornen a brillar) i la partida es desa
     rezar() {

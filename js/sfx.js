@@ -128,6 +128,33 @@ const Sfx = {
         this.xiu(0.14, 0.3, 'highpass', 2500, 1200);
         this.to(500, 180, 0.12, 'sawtooth', 0.12);
     },
+    basto() {                    // el bàcul de l'Ocellaire que gira: un vuit-vuit d'aire
+        if (!this.ok('basto', 140)) return;
+        this.xiu(0.13, 0.16, 'bandpass', 380, 900, 3);
+    },
+    xiscle() {                   // els ocells de foc es llancen
+        if (!this.ok('xiscle', 300)) return;
+        this.to(1400, 2600, 0.18, 'sawtooth', 0.06);
+        this.to(1900, 3200, 0.22, 'square', 0.03, 0.08);
+        this.xiu(0.25, 0.1, 'highpass', 3000, 1800);
+    },
+    flama() {                    // un ocell de foc que s'apaga
+        if (!this.ok('flama', 60)) return;
+        this.xiu(0.22, 0.14, 'lowpass', 2400, 300, 0.8);
+    },
+    riure() {                    // els nens riuen: tres pujades alegres
+        if (!this.ok('riure', 500)) return;
+        [0, 0.16, 0.32, 0.5].forEach((t, i) => this.to(620 + i * 60, 820 + i * 60, 0.11, 'triangle', 0.12, t));
+    },
+    orgue(notes, durada = 0.6) { // acord d'orgue: notes en Hz, totes alhora
+        if (!this.ok('orgue', 200)) return;
+        notes.forEach(f => { this.to(f, f, durada, 'sawtooth', 0.04); this.to(f * 2, f * 2, durada, 'sine', 0.05); });
+    },
+    pet() {                      // un tub de l'orgue que fa una nota de pega
+        if (!this.ok('pet', 300)) return;
+        this.to(110, 70, 0.7, 'sawtooth', 0.2);
+        this.to(116, 60, 0.7, 'square', 0.08);
+    },
     cura() {
         if (!this.ok('cura', 150)) return;
         [523, 659, 784, 1047].forEach((f, i) => this.to(f, f, 0.22, 'sine', 0.14, i * 0.07));

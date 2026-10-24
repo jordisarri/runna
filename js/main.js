@@ -16,7 +16,7 @@ const Joc = {
 
     aturarTot(scene) {
         const m = scene.game.scene;
-        [...Joc.ZONES, 'Titol', 'Proleg', 'Musica', 'Estels', 'PingPong'].forEach(k => {
+        [...Joc.ZONES, 'Titol', 'Proleg', 'Musica', 'Estels', 'PingPong', 'Credits'].forEach(k => {
             if (m.isActive(k) || m.isPaused(k) || m.isSleeping(k)) m.stop(k);
         });
     },
@@ -389,5 +389,5 @@ const game = new Phaser.Game({
             ZonaPlaca, ZonaEsglesia, ZonaMonestir, ZonaCreu, ZonaCasaGran, ZonaRuines, ZonaPingpong,
             ZonaCelles, ZonaTiller, ZonaBosc, ZonaCami, ZonaErmita, ZonaErmitaInt, ZonaEra, ZonaJardi, ZonaCamiCirosa, ZonaCirosa, ZonaMasiaCirosa, ZonaTavernaInt, ZonaSotaTaverna, ZonaGirgoles, ZonaTortura, ZonaGabia, ZonaBiblioteca,
             ZonaCementiri, ZonaCasaGranInt, ZonaCabana, ZonaCabanaInt, ZonaCamiRov, ZonaRovellonera, ZonaGabriel, ZonaGabrielInt, ZonaDipositos, ZonaDolmen, ZonaTresor, ZonaGolfes, ZonaPassadis, ZonaCasaTresor, ZonaCabanaCami, ZonaCasaCripta, ZonaTorre, ZonaSantAntoni, ZonaTaverna, ZonaJordi, ZonaCasaJordi, ZonaCasetaJoc, ZonaSoterraniHost, ZonaHostatgeriaInt, ZonaCambraPains, ZonaCambraPhili, ZonaCambraCharm,
-            EscenaUI, EscenaMusica, EscenaEstels, EscenaPingPong]
+            EscenaUI, EscenaMusica, EscenaEstels, EscenaPingPong, EscenaCredits]
 });

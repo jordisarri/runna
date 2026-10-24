@@ -378,6 +378,8 @@ class ZonaBase extends Phaser.Scene {
         const img = qui === 'ineu' ? this.ineu : this.npcs && this.npcs[qui];
         if (!img) { if (fet) fet(); return; }
         const t = this.add.text(img.x, img.y - img.displayHeight - 16, text, estilText(34, '#2a170b', { backgroundColor: '#f2e6c8', padding: { x: 10, y: 4 } })).setOrigin(0.5, 1).setDepth(99000);
+        const v = this.cameras.main.worldView, mw = t.displayWidth / 2 + 8;          // que no surti per la vora de la pantalla
+        if (v.width > 2 * mw) t.x = Phaser.Math.Clamp(t.x, v.x + mw, v.right - mw);
         this.tweens.add({ targets: t, y: t.y - 10, duration: 250, ease: 'Back.easeOut' });
         this.time.delayedCall(ms, () => { t.destroy(); if (fet) fet(); });
     }

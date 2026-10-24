@@ -115,11 +115,15 @@ const PROGRES = {
           pista: E => "Al final del passadís de tortura, talla amb Runna el mur d'esbarzers negres." },
         { id: 'pont', marca: ['pontGabia'], fet: E => E.flag('pontGabia'),
           pista: E => "A la Sala de la Gàbia, la gàbia penja sobre un avenc. Al marge, toca el Cant de les Pedres (3-1-2-1) i els blocs del fons s'aixecaran fent un pont." },
-        { id: 'gabia', marca: ['gabiaCantada'], fet: E => E.flag('gabiaCantada'),
-          pista: E => "Davant dels barrots de la gàbia, toca el Cant del Miracle." },
-        // El combat final (l'Andreu i l'Home de la Gàbia), l'alliberament i l'epíleg encara no existeixen: aquest pas no es pot fer
-        { id: 'final', marca: [], pendent: true, fet: E => false,
-          pista: E => "Els nens dormen dins la gàbia, que ja respon al Cant del Miracle. (El combat final i l'epíleg encara s'estan construint.)" }
+        { id: 'ocellaire', marca: ['ocellaireVencut'], fet: E => E.flag('ocellaireVencut'),
+          pista: E => E.flag('ocellaireVist') ? "L'Ocellaire fa girar el bàcul per treure'n ocells de foc. Talla els ocells amb Runna, aparta't quan el bàcul gira de pressa i colpeja'l quan s'alenteix."
+              : "Creua el pont fins a la gàbia. El Germà Andreu hi fa guàrdia... i no hi és sol." },
+        { id: 'gabia', marca: ['gabiaOberta'], fet: E => E.flag('gabiaOberta'),
+          pista: E => "L'Ocellaire ha caigut. Davant dels barrots de la gàbia, toca el Cant del Miracle (1-3-2-3-1)." },
+        { id: 'nens', marca: ['rescatUri', 'rescatFlam', 'rescatSardin'], fet: E => E.flag('rescatUri') && E.flag('rescatFlam') && E.flag('rescatSardin'),
+          pista: E => "La gàbia és oberta. Trenca amb Runna els capolls de boira on dormen l'Uri, el Flam i el Sardin." },
+        { id: 'final', marca: ['andreuTancat', 'epilegFet'], fet: E => E.flag('epilegFet'),
+          pista: E => "Els nens tornen a riure. Al Santuari t'esperen tots." }
     ],
 
     // Missions laterals: no barren el camí. Les Tietes les recorden quan ja s'han pogut començar.
@@ -154,7 +158,8 @@ const PROGRES = {
         const l = this.laterals.find(m => m.obert(E) && !m.fet(E));
         if (p && l) return p.pista(E) + " Mentrestant: " + l.pista(E);
         if (p) return p.pista(E);
-        return "Aviat tindràs més camins oberts. Vés pas a pas, fill, i no et deixis la bufanda.";
+        if (l) return "Els nens tornen a riure i l'orgue sona (gairebé bé). Si encara vols feina: " + l.pista(E);
+        return "Els nens tornen a riure i l'orgue sona (gairebé bé). Ho has fet tot, fill. Ara, a reparar aquell tub.";
     },
 
     // Pista només fins a Runna (null quan ja la tens): la fan servir el Pare Jordi, el Pare Alcuí i el Til·ler

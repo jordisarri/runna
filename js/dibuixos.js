@@ -3188,3 +3188,70 @@ function pintarFanalet(ctx, W, H) {
     ctx.fillStyle = '#2a2622'; ctx.beginPath(); ctx.moveTo(cx - 10, base - 30); ctx.lineTo(cx + 10, base - 30); ctx.lineTo(cx, base - 40); ctx.closePath(); ctx.fill(); ctx.stroke();
     ctx.beginPath(); ctx.arc(cx, base - 42, 2.4, 0, Math.PI * 2); ctx.stroke();
 }
+
+// L'Ocellaire (Mestre Gaspar): capa negra i lila amb serrell de plomes, màscara d'ocell pàl·lida amb bec d'or,
+// ulls lila que brillen, gàbia petita al cinturó i el cor de boira al pit (el que Runna ha de tallar).
+// El bàcul no hi és: el dibuixa la zona, perquè gira.
+function dibuixarOcellaire(c, w) {
+    lienc(c, w, w * 1.3, (ctx, W, H) => {
+        const m = W / 2;
+        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN;
+        // Capa: un triangle ample que s'eixampla com unes ales plegades
+        ctx.fillStyle = '#1e1428';
+        ctx.beginPath(); ctx.moveTo(m, H * 0.12); ctx.quadraticCurveTo(W * 0.98, H * 0.5, W * 0.9, H * 0.97);
+        ctx.lineTo(W * 0.1, H * 0.97); ctx.quadraticCurveTo(W * 0.02, H * 0.5, m, H * 0.12); ctx.closePath(); ctx.fill(); ctx.stroke();
+        // Serrell de plomes a baix i a les espatlles
+        ctx.fillStyle = '#4a2a6a';
+        for (let k = 0; k < 9; k++) {
+            const x = W * 0.12 + k * W * 0.095;
+            ctx.beginPath(); ctx.moveTo(x - W * 0.05, H * 0.9); ctx.lineTo(x, H * 0.99); ctx.lineTo(x + W * 0.05, H * 0.9); ctx.closePath(); ctx.fill(); ctx.stroke();
+        }
+        [-1, 1].forEach(s => {
+            for (let k = 0; k < 4; k++) {
+                const x = m + s * (W * 0.16 + k * W * 0.07), y = H * 0.3 + k * H * 0.05;
+                ctx.beginPath(); ctx.ellipse(x, y, W * 0.05, H * 0.035, s * 0.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            }
+        });
+        // Túnica lila del mig
+        ctx.fillStyle = '#3a2052';
+        ctx.beginPath(); ctx.moveTo(m - W * 0.12, H * 0.3); ctx.lineTo(m + W * 0.12, H * 0.3); ctx.lineTo(m + W * 0.2, H * 0.9); ctx.lineTo(m - W * 0.2, H * 0.9); ctx.closePath(); ctx.fill(); ctx.stroke();
+        // Cor de boira
+        const cor = ctx.createRadialGradient(m, H * 0.44, 2, m, H * 0.44, W * 0.1);
+        cor.addColorStop(0, '#ffffff'); cor.addColorStop(0.35, '#e0b0ff'); cor.addColorStop(1, 'rgba(154,80,255,0)');
+        ctx.fillStyle = cor; ctx.beginPath(); ctx.arc(m, H * 0.44, W * 0.1, 0, Math.PI * 2); ctx.fill();
+        // Cinturó i la gàbia petita
+        ctx.fillStyle = '#b89a50'; ctx.fillRect(m - W * 0.17, H * 0.58, W * 0.34, H * 0.025); ctx.strokeRect(m - W * 0.17, H * 0.58, W * 0.34, H * 0.025);
+        ctx.strokeStyle = '#b89a50'; ctx.lineWidth = 2;
+        const gx = m + W * 0.1, gy = H * 0.62;
+        ctx.beginPath(); ctx.arc(gx, gy + H * 0.02, W * 0.045, Math.PI, 0); ctx.stroke();
+        for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(gx + k * W * 0.02, gy + H * 0.02); ctx.lineTo(gx + k * W * 0.02, gy + H * 0.07); ctx.stroke(); }
+        ctx.beginPath(); ctx.moveTo(gx - W * 0.05, gy + H * 0.07); ctx.lineTo(gx + W * 0.05, gy + H * 0.07); ctx.stroke();
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+        // Caputxa
+        ctx.fillStyle = '#140c1c';
+        ctx.beginPath(); ctx.arc(m, H * 0.16, W * 0.17, Math.PI * 0.95, Math.PI * 2.05); ctx.lineTo(m + W * 0.15, H * 0.27); ctx.lineTo(m - W * 0.15, H * 0.27); ctx.closePath(); ctx.fill(); ctx.stroke();
+        // Màscara d'ocell
+        ctx.fillStyle = '#e8dcc8';
+        ctx.beginPath(); ctx.ellipse(m, H * 0.18, W * 0.1, H * 0.07, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#d8a830';
+        ctx.beginPath(); ctx.moveTo(m - W * 0.04, H * 0.2); ctx.lineTo(m, H * 0.31); ctx.lineTo(m + W * 0.04, H * 0.2); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#c070ff';
+        ctx.beginPath(); ctx.ellipse(m - W * 0.045, H * 0.17, W * 0.025, H * 0.014, -0.3, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(m + W * 0.045, H * 0.17, W * 0.025, H * 0.014, 0.3, 0, Math.PI * 2); ctx.fill();
+        // Plomes de la cresta
+        ctx.fillStyle = '#6a3a9a';
+        [-0.5, 0, 0.5].forEach(a => { ctx.save(); ctx.translate(m, H * 0.04); ctx.rotate(a); ctx.beginPath(); ctx.ellipse(0, -H * 0.03, W * 0.025, H * 0.05, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.restore(); });
+    });
+}
+
+// Capoll de boira on dorm un nen (es trenca amb Runna)
+function dibuixarCapoll(c, w) {
+    lienc(c, w, w * 1.6, (ctx, W, H) => {
+        const g = ctx.createRadialGradient(W / 2, H * 0.5, 4, W / 2, H * 0.5, W * 0.5);
+        g.addColorStop(0, 'rgba(60,30,90,0.9)'); g.addColorStop(0.6, 'rgba(184,138,255,0.75)'); g.addColorStop(1, 'rgba(224,200,255,0.4)');
+        ctx.fillStyle = g; ctx.strokeStyle = '#e0c8ff'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.ellipse(W / 2, H / 2, W * 0.46, H * 0.47, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(224,200,255,0.6)'; ctx.lineWidth = 2;
+        for (let k = 0; k < 5; k++) { ctx.beginPath(); ctx.ellipse(W / 2, H / 2, W * 0.46, H * (0.12 + k * 0.08), 0.3 * (k - 2), 0, Math.PI * 2); ctx.stroke(); }
+    });
+}

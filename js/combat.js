@@ -160,6 +160,141 @@ const ENEMICS = {
         alDerrotar(z, e) { z.pastorDerrotat(e); }
     },
 
+    // BOSS FINAL: l'Ocellaire. Sura per la plataforma i fa girar el bàcul: quan gira de pressa, en surten ocells de foc
+    // que li volten al voltant i després es llancen contra l'Ineu (Runna els talla). A la segona meitat llança el bàcul
+    // com un remolí i desapareix en boira per tornar a sortir en un altre lloc.
+    ocellaire: {
+        tex: 'ocellaire', vida: 24, vel: 70, mal: 1, radi: 34, cos: [56, 26], ombra: 0.75,
+        monedes: [0, 0, 0], cor: 0, robust: true,
+        perill: e => !e.amagat && e.estat !== 'apareix',
+        ia(z, e, ara) {
+            const jo = z.ineu.body.center, c = e.spr.body.center;
+            const fase2 = e.vida <= this.vida / 2;
+            if (!e.proxAtac) { e.proxAtac = ara + 1800; e.estat = 'sura'; e.nAtac = 0; }
+            if (fase2 && !e.fase2) {                     // el cor de boira s'encén: tot va més de pressa
+                e.fase2 = true;
+                z.cameras.main.flash(300, 160, 80, 255);
+                z.flotant(c.x, c.y - 200, 'Prou jocs, criatura!', '#e0b0ff');
+            }
+            const b = e.basto;
+            if (e.estat === 'sura') {
+                // Es manté a uns 240 px de l'Ineu, voltant-lo a poc a poc
+                if (!e.puntSura || ara > e.canviFins) {
+                    const a = Math.atan2(c.y - jo.y, c.x - jo.x) + (Math.random() < 0.5 ? -0.8 : 0.8);
+                    e.puntSura = z.puntPlataforma(jo.x + Math.cos(a) * 240, jo.y + Math.sin(a) * 200);
+                    e.canviFins = ara + 1400;
+                }
+                const dx = e.puntSura.x - c.x, dy = e.puntSura.y - c.y, l = Math.hypot(dx, dy);
+                const v = l > 12 ? this.vel * (fase2 ? 1.5 : 1) : 0;
+                e.spr.body.setVelocity(dx / (l || 1) * v, dy / (l || 1) * v);
+                b.gir = 0.04;
+                if (ara > e.proxAtac) {
+                    e.spr.body.setVelocity(0);
+                    const n = e.nAtac++;
+                    if (fase2 && n % 3 === 1) { e.estat = 'llança'; e.fins = ara + 400; e.spr.setTint(0xffb070); Sfx.carrega(); }
+                    else if (fase2 && n % 3 === 2) { e.estat = 'esvaeix'; e.fins = ara + 500; Sfx.puf(); z.boiraPuf(c.x, c.y - 40); z.tweens.add({ targets: [e.spr, b.g], alpha: 0, duration: 400 }); }
+                    else { e.estat = 'invoca'; e.fins = ara + (fase2 ? 1500 : 1900); e.nOcells = 0; e.proxOcell = ara + 200; }
+                }
+            } else if (e.estat === 'invoca') {
+                // Fa girar el bàcul cada cop més de pressa i n'escup ocells de foc, que li volten al voltant
+                e.spr.body.setVelocity(0);
+                b.gir = Math.min(0.55, b.gir + 0.03);
+                Sfx.basto();
+                const max = fase2 ? 6 : 4;
+                if (e.nOcells < max && ara > e.proxOcell) {
+                    e.proxOcell = ara + 260;
+                    const o = z.enemic('ocellFoc', b.x, b.y);
+                    if (o) { o.amo = e; o.angOrb = e.nOcells / max * Math.PI * 2; o.estat = 'orbita'; o.llançar = Infinity; z.flamaOcell(o); }
+                    e.nOcells++;
+                }
+                if (Phaser.Math.Distance.Between(b.x, b.y, jo.x, jo.y - 40) < 95) z.ferIneu(1, { x: b.x, y: b.y });   // el bàcul que gira fa mal
+                if (ara > e.fins) {
+                    // Els ocells es llancen un rere l'altre
+                    z.enemics.filter(o => o.amo === e && o.estat === 'orbita').forEach((o, i) => { o.llançar = ara + 250 + i * (fase2 ? 220 : 380); });
+                    Sfx.xiscle();
+                    e.estat = 'cansat'; e.fins = ara + (fase2 ? 1300 : 2000);
+                }
+            } else if (e.estat === 'llança') {
+                // Llança el bàcul com un remolí cap a on és l'Ineu i li torna a la mà
+                e.spr.body.setVelocity(0);
+                b.gir = 0.6;
+                if (ara > e.fins && !b.volant) {
+                    e.spr.clearTint();
+                    b.volant = true;
+                    const desti = { x: jo.x, y: jo.y - 40 };
+                    z.tweens.add({ targets: b, x: desti.x, y: desti.y, duration: 650, ease: 'Sine.easeOut', yoyo: true,
+                        onUpdate: () => { if (Phaser.Math.Distance.Between(b.x, b.y, z.ineu.body.center.x, z.ineu.body.center.y - 30) < 70) z.ferIneu(1, { x: b.x, y: b.y }); },
+                        onComplete: () => { b.volant = false; if (!e.mort) { e.estat = 'cansat'; e.fins = z.time.now + 1100; } } });
+                }
+                if (b.volant) Sfx.basto();
+            } else if (e.estat === 'esvaeix') {
+                e.spr.body.setVelocity(0);
+                e.amagat = true;
+                if (ara > e.fins) {
+                    // Torna a sortir a l'altra banda de la plataforma
+                    const p = z.puntPlataforma(jo.x + (jo.x < z.centreGabia().x ? 1 : -1) * 300, jo.y - 120);
+                    e.spr.body.reset(p.x, p.y);
+                    z.boiraPuf(p.x, p.y - 40);
+                    z.tweens.add({ targets: [e.spr, b.g], alpha: 1, duration: 400 });
+                    e.estat = 'apareix'; e.fins = ara + 500;
+                }
+            } else if (e.estat === 'apareix') {
+                e.spr.body.setVelocity(0);
+                if (ara > e.fins) { e.amagat = false; e.estat = 'invoca'; e.fins = ara + 1400; e.nOcells = 0; e.proxOcell = ara + 150; }
+            } else {   // cansat: el bàcul s'alenteix i és el moment de colpejar-lo
+                e.spr.body.setVelocity(0);
+                b.gir = Math.max(0.02, b.gir * 0.94);
+                if (ara > e.fins) { e.estat = 'sura'; e.proxAtac = ara + (fase2 ? 1400 : 2400); e.puntSura = null; }
+            }
+            e.spr.setFlipX(jo.x < c.x);
+            z.moureBasto(e);
+        },
+        alDerrotar(z, e) { z.ocellaireDerrotat(e); }
+    },
+
+    // Ocell de foc de l'Ocellaire: volta al voltant del seu amo i, quan li toca, es llança contra l'Ineu
+    ocellFoc: {
+        tex: 'ocell', vida: 1, vel: 300, mal: 1, radi: 18, cos: [26, 20], ombra: 0.15, centrat: true,
+        monedes: [0, 0, 0], cor: 0,
+        perill: e => e.estat === 'vola' || e.estat === 'orbita',
+        ia(z, e, ara) {
+            const jo = z.ineu.body.center, c = e.spr.body.center;
+            const amo = e.amo;
+            if (e.estat === 'orbita') {
+                if (!amo || amo.mort || ara > e.llançar) {
+                    e.estat = 'vola'; e.morFins = ara + 2600; e.guiaFins = ara + 650;
+                    e.ang = Math.atan2(jo.y - c.y, jo.x - c.x);
+                    return;
+                }
+                const t = e.angOrb + ara / 260, ac = amo.spr.body.center;
+                e.spr.body.setVelocity(0);
+                e.spr.body.reset(ac.x + Math.cos(t) * 110, ac.y - 30 + Math.sin(t) * 70);
+                e.spr.setFlipX(Math.sin(t) > 0);
+            } else if (e.estat === 'vola') {
+                if (ara < e.guiaFins) {     // corregeix una mica el rumb al principi
+                    const a = Math.atan2(jo.y - c.y, jo.x - c.x);
+                    e.ang += Phaser.Math.Clamp(Phaser.Math.Angle.Wrap(a - e.ang), -0.06, 0.06);
+                }
+                e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel);
+                e.spr.setFlipX(Math.cos(e.ang) < 0);
+                const bl = e.spr.body.blocked;
+                if (ara > e.morFins || bl.left || bl.right || bl.up || bl.down) z.apagarOcell(e);
+            }
+        }
+    },
+
+    // Capoll de boira on dorm un nen: Runna el trenca
+    capoll: {
+        tex: 'capoll', vida: 1, vel: 0, mal: 0, radi: 30, cos: [50, 40], ombra: 0.35,
+        monedes: [0, 0, 0], cor: 0,
+        perill: () => false,
+        ia(z, e, ara) {
+            e.spr.body.setVelocity(0);
+            e.spr.y = e.yBase + Math.sin(ara / 400 + e.fase) * 6;
+        },
+        alDerrotar(z, e) { z.capollTrencat(e); }
+    },
+
     visitant: {
         tex: 'visitant', vida: 4, vel: 58, mal: 1, radi: 24, cos: [40, 22], ombra: 0.42,
         monedes: [1, 2, 4], cor: 0.2,
@@ -344,7 +479,7 @@ Object.assign(ZonaBase.prototype, {
         const jo = this.ineu.body.center, d = k.d;
         let encertats = 0;
         this.enemics.forEach(e => {
-            if (e.mort || k.tocats.has(e)) return;
+            if (e.mort || e.amagat || k.tocats.has(e)) return;
             const c = e.spr.body.center;
             const rx = c.x - jo.x, ry = c.y - jo.y;
             const t = rx * d.x + ry * d.y;                          // distància al llarg del cop
@@ -550,6 +685,7 @@ Object.assign(ZonaBase.prototype, {
     },
 
     retirar(e) {
+        if (e.flama) { e.flama.destroy(); e.flama = null; }
         e.spr.destroy(); e.ombra.destroy();
         this.enemics = this.enemics.filter(x => x !== e);
     },
