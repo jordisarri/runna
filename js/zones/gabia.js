@@ -845,6 +845,7 @@ class ZonaGabia extends ZonaBase {
         ], fet) }] }, () => {
             Estat.posaFlag('andreuTancat');
             Estat.posaFlag('epilegPendent');
+            Estat.posaObjectiu('Els nens tornen a riure. Al Santuari us esperen tots.');
             Estat.dades.entrada = 'porta'; Estat.dades.x = null; Estat.dades.y = null;
             Estat.desar();
             this.canviant = true;
