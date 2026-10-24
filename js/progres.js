@@ -20,7 +20,7 @@ const PROGRES = {
         { id: 'bassadoria', marca: ['bassadoriaNeta'], fet: E => E.flag('bassadoriaNeta'),
           pista: E => "Davant la Bassadòria, al sud de la Plaça, prem ESPAI i tria tocar la flauta: 1-2-3." },
         // ---- ACTE 2: el camí del Til·ler ----
-        { id: 'font', marca: ['fontNeta', 'cristallGel', 'obj:cristall_gel'], fet: E => E.flag('fontNeta'),
+        { id: 'font', marca: ['fontNeta', 'cristallGel', 'obj:cristall_gel', 'obj:aigua_sj'], fet: E => E.flag('fontNeta'),
           pista: E => "Al bosc de l'oest, a tocar de les Cel·les, hi ha una Font del Bisbe que s'ha adormit. Porta-li l'herba de Sant Joan i el romaní, que brillen entre els arbres com espurnes, i una pruna de la Prunera Màgica del jardí de l'Hostatgeria." },
         { id: 'jaumeta', marca: ['jaumetaVista', 'obj:beuratge'], fet: E => E.flag('jaumetaVista') || E.flag('parlatTiler'),
           pista: E => "Amb l'aigua de la Font del Bisbe, l'Alzina Buida del bosc, la més grossa de la clariana, s'obre com un portal. Allà viu la Jaumeta, que és vident i et donarà alguna cosa per al camí del Til·ler." },
