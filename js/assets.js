@@ -16,7 +16,7 @@ const CATALEG = [
     { key: 'taverna',      file: 'assets/edificis/taverna.webp',      amplada: 900, provisional: (c, w) => dibuixarTaverna(c, w) },
     { key: 'casa_gran',    file: 'assets/edificis/casa_gran.webp',    amplada: 1250, provisional: (c, w) => dibuixarCasaGran(c, w) },
     // Personatges
-    { key: 'pare_jordi',   file: 'assets/personatges/pare_jordi.png',   amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
+    { key: 'pare_jordi',   file: 'assets/personatges/pare_jordi.webp',   amplada: 76, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
     { key: 'germa_andreu', file: 'assets/personatges/germa_andreu.webp', amplada: 84, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
     { key: 'pare_daniel',  file: 'assets/personatges/pare_daniel.webp',  amplada: 82, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
     { key: 'monja_pains',   file: 'assets/personatges/monja_pains.png',   amplada: 110, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },

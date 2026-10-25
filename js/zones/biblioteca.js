@@ -16,7 +16,10 @@ Object.assign(DIALEGS, {
     prestatgesBiblio: n => E => ({ pagines: [{ qui: '', text: [
         'Llibres de lloms gastats: «Herbari del Solsonès», «Tractat de les abelles», «Cants de l\'orgue, volum III»... i un «Manual de ping-pong per a monjos», amb anotacions del Juli als marges.',
         'Una filera de lligalls lligats amb cordill: comptes del Monestir des de fa tres-cents anys. Algú hi ha deixat una fulla de til·ler de punt de llibre.',
-        'Rotllos de pergamí dins de caselles de fusta. N\'hi ha un amb el dibuix d\'una gàbia, i al costat, ratllat amb força: «NO».'
+        'Rotllos de pergamí dins de caselles de fusta. N\'hi ha un amb el dibuix d\'una gàbia, i al costat, ratllat amb força: «NO».',
+        'Una secció sencera de «Vides de sants», en vint volums. Un d\'ells té els marges plens de gats dibuixats per algun novici avorrit.',
+        'Manuscrits il·luminats dins de caixes de fusta: el «Salteri del Miracle», amb una orla de cargols i d\'ocells. Molts ocells.',
+        'Llibres de comptes de la vinya, de les abelles i del refetor. Algú hi ha subratllat: «el vi és sempre més car al setembre».'
     ][n] }] }),
     globusBiblio: E => ({ pagines: [{ qui: '', text: 'Un globus terraqüi vell, amb mars plens de monstres. Al lloc on hauria de ser el Miracle, algú hi ha dibuixat una creueta i un ocell petit.' }] }),
     vitrallBiblio: E => ({ pagines: [{ qui: '', text: 'El vitrall mostra un monjo amb una espasa de llum davant d\'una porta de ferro. La llum que hi passa pinta el terra de blau i d\'or.' }] })
@@ -110,6 +113,55 @@ class ZonaBiblioteca extends ZonaBase {
             lat.fillStyle(0x2a1608, 1).fillRect(x, 220, 40, 600);
             for (let y = 230; y < 810; y += 14) lat.fillStyle([0x7a1e24, 0x2a4a7a, 0x3a6a3a, 0x8a6a2a, 0x5a3a6a][(y / 14 + s) % 5 | 0], 1).fillRect(x + 6, y, 28, 11);
         });
+        // Prestatgeries lliures de terra a sostre, en dues files, que formen passadissos: la biblioteca és enorme
+        const prestatge = (x, base, w, files, llavor, n) => {
+            const alt = files * 46 + 6, y = base - alt;
+            const g = this.add.graphics().setDepth(base);
+            g.fillStyle(0x000000, 0.28).fillEllipse(x + w / 2, base + 4, w + 26, 16);
+            llibres(g, x, y, w, files, llavor);
+            g.fillStyle(0x4a2c14, 1).fillRect(x - 10, y - 14, w + 20, 10).lineStyle(2, 0x1a0c04, 1).strokeRect(x - 10, y - 14, w + 20, 10);
+            g.fillStyle(0x6a4224, 1).fillRect(x - 10, y - 14, w + 20, 3);
+            this.colisio(x + w / 2, base - 12, w + 12, 24);
+            this.interactiu(x + w / 2, base + 22, 70, DIALEGS.prestatgesBiblio(n), { altura: alt });
+        };
+        [[110, 540, 120, 31, 3], [880, 540, 110, 37, 4], [110, 700, 150, 41, 5], [280, 700, 120, 43, 3], [700, 700, 120, 47, 4], [850, 700, 150, 53, 5]].forEach(([x, base, w, llavor, n]) => prestatge(x, base, w, 3, llavor, n));
+        // Columnes de pedra que aguanten les voltes, a banda i banda de la catifa
+        const columna = (x, base) => {
+            const g = this.add.graphics().setDepth(base);
+            g.fillStyle(0x000000, 0.25).fillEllipse(x, base + 2, 70, 16);
+            g.fillStyle(0x9a8a70, 1).fillRect(x - 22, base - 16, 44, 16).fillRect(x - 15, base - 200, 30, 186).fillRect(x - 24, base - 214, 48, 16);
+            g.fillStyle(0xb8a888, 1).fillRect(x - 15, base - 200, 12, 186).fillRect(x - 24, base - 214, 48, 6);
+            g.fillStyle(0x6a5a44, 1).fillRect(x + 8, base - 200, 7, 186);
+            g.lineStyle(2.5, 0x1a1008, 1).strokeRect(x - 22, base - 16, 44, 16).strokeRect(x - 15, base - 200, 30, 186).strokeRect(x - 24, base - 214, 48, 16);
+            this.colisio(x, base - 8, 40, 18);
+        };
+        columna(430, 330); columna(670, 330); columna(440, 650); columna(660, 650);
+        // Arc apuntat de pedra entre les dues columnes del fons: el cor de la nau
+        const arc = this.add.graphics().setDepth(120);
+        const punts = [];
+        for (let k = 0; k <= 24; k++) { const t = k / 24, a2 = Math.PI * (1 - t) * 0.5; punts.push({ x: 430 + 120 * (1 - Math.cos(a2)) * 1 + 0, y: 118 - 100 * Math.sin(a2) * (1) }); }
+        const dreta = punts.map(q => ({ x: 1100 - q.x, y: q.y })).reverse();
+        const mig = punts.concat(dreta);
+        arc.lineStyle(14, 0x6a5a44, 1).strokePoints(mig, false);
+        arc.lineStyle(8, 0x9a8a70, 1).strokePoints(mig, false);
+        arc.lineStyle(2.5, 0x1a1008, 1).strokePoints(mig.map(q => ({ x: q.x, y: q.y - 7 })), false).strokePoints(mig.map(q => ({ x: q.x, y: q.y + 7 })), false);
+        // Piles de llibres a terra i dos faristols petits de lectura, amb la seva espelma
+        const pila = (x, y, n) => {
+            const g = this.add.graphics().setDepth(y), cols = [0x7a1e24, 0x2a4a7a, 0x3a6a3a, 0x8a6a2a, 0x5a3a6a];
+            g.fillStyle(0x000000, 0.25).fillEllipse(x, y + 2, 60, 12);
+            for (let k = 0; k < n; k++) g.fillStyle(cols[k % 5], 1).fillRect(x - 24 + (k % 2) * 4, y - 10 - k * 10, 46 - (k % 3) * 4, 10).lineStyle(1.5, 0x1a1008, 1).strokeRect(x - 24 + (k % 2) * 4, y - 10 - k * 10, 46 - (k % 3) * 4, 10);
+            this.colisio(x, y - 6, 48, 16);
+        };
+        pila(140, 800, 4); pila(960, 800, 5); pila(330, 590, 3); pila(780, 590, 4); pila(1000 - 40, 330, 3);
+        [[160, 480], [940, 650]].forEach(([x, y]) => {
+            const g = this.add.graphics().setDepth(y);
+            g.fillStyle(0x000000, 0.25).fillEllipse(x, y + 2, 56, 12);
+            g.fillStyle(0x4a2c14, 1).fillRect(x - 5, y - 40, 10, 40).fillStyle(0x5a3a1e, 1).fillPoints([{ x: x - 28, y: y - 36 }, { x: x + 28, y: y - 36 }, { x: x + 20, y: y - 58 }, { x: x - 20, y: y - 58 }], true);
+            g.fillStyle(0xf2e6c8, 1).fillRect(x - 24, y - 56, 22, 18).fillRect(x + 2, y - 56, 22, 18);
+            this.colisio(x, y - 8, 40, 14);
+            this.posar('espelma', x + 34, y - 4, { fonsY: y + 1 });
+        });
+
         // Escala de mà recolzada a la prestatgeria de l'esquerra
         const esc = this.add.graphics().setDepth(230);
         esc.lineStyle(6, 0x6a4224, 1).lineBetween(270, 20, 300, 230).lineBetween(310, 20, 340, 230);
