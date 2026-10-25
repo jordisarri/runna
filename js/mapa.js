@@ -45,8 +45,8 @@ const MAPA = {
         { id: 'ZonaTortura',       nom: 'Passadís de tortura',      x: 1100, y: 596 },
         { id: 'ZonaGabia',         nom: 'Sala de la Gàbia',         x: 1100, y: 650 },
         { id: 'ZonaCelaStAntoni',   nom: 'Cel·la de Sant Antoni',      x: 1100, y: 330 },
-        { id: 'ZonaMonestirRebedor',  nom: 'Rebedor del Monestir',        x: 1010, y: 520 },
-        { id: 'ZonaBiblioteca',    nom: 'Biblioteca del Monestir',  x: 1100, y: 545 },
+        { id: 'ZonaMonestirRebedor',  nom: 'Rebedor del Monestir',        x: 1010, y: 514 },
+        { id: 'ZonaBiblioteca',    nom: 'Biblioteca del Monestir',  x: 1100, y: 562 },
         { id: 'ZonaCasaGran',      nom: 'Arcs de la Casa Gran',         x: 760,  y: 470 },
         { id: 'ZonaPlaca',         nom: 'Plaça del Santuari',       x: 930,  y: 470 },
         { id: 'ZonaMonestir',      nom: 'El Monestir',              x: 1100, y: 470 },
@@ -97,7 +97,7 @@ const MAPA = {
         q.lineStyle(1, 0xffffff, 0.04);
         for (let x = X0 + 30; x < X1; x += 30) q.lineBetween(x, top + 2, x, baix - 2);
         for (let y = top + 30; y < baix; y += 30) q.lineBetween(X0 + 2, y, X1 - 2, y);
-        add(scene.add.text(X1 - 14, top + 10, 'N ▲', estilText(16, '#6a5a48', { fontStyle: 'bold' })).setOrigin(1, 0));
+        add(scene.add.text(X1 - 14, top + 10, 'N ▲', estilText(21, '#6a5a48', { fontStyle: 'bold' })).setOrigin(1, 0));
 
         // On és l'objectiu i on hi ha encàrrecs
         const seg = PROGRES.seguent(E);
@@ -122,7 +122,7 @@ const MAPA = {
         });
 
         // Fitxes dels llocs
-        const info = add(scene.add.text(AMPLE / 2, baix - 104, '', estilText(19, '#f2e6c8', { align: 'center', wordWrap: { width: X1 - X0 - 40 } })).setOrigin(0.5, 0));
+        const info = add(scene.add.text(AMPLE / 2, baix - 104, '', estilText(24, '#f2e6c8', { align: 'center', wordWrap: { width: X1 - X0 - 40 } })).setOrigin(0.5, 0));
         const explicar = id => {
             const z = per(id), parts = [vis(id) ? z.nom : 'Lloc per explorar'];
             if (id === actual) parts[0] += '  ·  ets aquí';
@@ -130,7 +130,7 @@ const MAPA = {
             (encarrecs[id] || []).forEach(t => parts.push('! ' + t));
             info.setText(parts.join('\n'));
         };
-        const W = 98, H = 40;
+        const W = 100, H = 50;
         let trobats = 0;
         MAPA.zones.forEach(z => {
             if (!conegut(z.id)) return;
@@ -145,25 +145,26 @@ const MAPA = {
             f.fillStyle(0x000000, 0.45).fillRoundedRect(x - W / 2 + 2, y - H / 2 + 3, W, H, 10);
             f.fillStyle(fons, 1).fillRoundedRect(x - W / 2, y - H / 2, W, H, 10);
             f.lineStyle(ara ? 3 : 2, ara ? 0xffd34d : vora, 1).strokeRoundedRect(x - W / 2, y - H / 2, W, H, 10);
-            add(scene.add.text(x, y, v ? z.nom : '?', estilText(v ? 13 : 20, ara ? '#ffe9a8' : v ? '#f2e6c8' : '#8a7a68', { align: 'center', fontStyle: 'bold', wordWrap: { width: W - 8 } })).setOrigin(0.5));
+            add(scene.add.text(x, y, v ? z.nom : '?', estilText(v ? 16 : 26, ara ? '#ffe9a8' : v ? '#f2e6c8' : '#8a7a68', { align: 'center', fontStyle: 'bold', wordWrap: { width: W - 6 }, lineSpacing: -4 })).setOrigin(0.5));
             add(scene.add.zone(x, y, W, H).setInteractive({ useHandCursor: true }).on('pointerdown', () => explicar(z.id)));
             if (z.id === zObj) {
                 const st = add(scene.add.text(x + W / 2 - 4, y - H / 2 + 2, '★', estilText(30, '#ff7a4a', { stroke: '#2a0a04', strokeThickness: 5 })).setOrigin(0.5));
                 scene.tweens.add({ targets: st, scale: 1.3, yoyo: true, repeat: -1, duration: 500 });
             }
             if (encarrecs[z.id]) add(scene.add.text(x - W / 2 + 4, y - H / 2 + 2, '!', estilText(24, '#7ab8ff', { fontStyle: 'bold', stroke: '#0a1a2a', strokeThickness: 5 })).setOrigin(0.5));
-            if (ara) add(scene.add.text(x, y - H / 2 - 14, 'ETS AQUÍ', estilText(13, '#ffd34d', { fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 })).setOrigin(0.5));
+            if (ara) add(scene.add.text(x, y - H / 2 - 14, 'ETS AQUÍ', estilText(17, '#ffd34d', { fontStyle: 'bold', stroke: '#000000', strokeThickness: 4 })).setOrigin(0.5));
         });
         explicar(actual && per(actual) ? actual : (zObj || 'ZonaPlaca'));
 
         // Llegenda i recompte
         const ly = baix - 34;
         add(scene.add.rectangle(X0 + 2, baix - 50, X1 - X0 - 4, 48, 0x000000, 0.35).setOrigin(0));
+        let lx = X0 + 14;
         [['■', '#6ac09a', 'Fora'], ['■', '#d8a868', 'Dins'], ['■', '#a888e8', 'Sota terra'], ['★', '#ff7a4a', 'Objectiu'], ['!', '#7ab8ff', 'Encàrrec'], ['?', '#8a7a68', 'Per explorar']].forEach(([s, col, t], i) => {
-            const x = X0 + 18 + i * 112;
-            add(scene.add.text(x, ly, s, estilText(18, col, { fontStyle: 'bold' })).setOrigin(0, 0.5));
-            add(scene.add.text(x + 20, ly, t, estilText(14, '#c8b898')).setOrigin(0, 0.5));
+            const a = add(scene.add.text(lx, ly, s, estilText(20, col, { fontStyle: 'bold' })).setOrigin(0, 0.5));
+            const b = add(scene.add.text(lx + a.width + 5, ly, t, estilText(17, '#c8b898')).setOrigin(0, 0.5));
+            lx = b.x + b.width + 14;
         });
-        add(scene.add.text(X0 + 14, top + 10, `${trobats}/${MAPA.zones.length} llocs · toca un lloc per veure què hi ha`, estilText(15, '#8a7a68', { fontStyle: 'italic' })));
+        add(scene.add.text(X0 + 14, top + 10, `${trobats}/${MAPA.zones.length} llocs`, estilText(19, '#8a7a68', { fontStyle: 'italic' })));
     }
 };
