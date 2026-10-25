@@ -34,9 +34,12 @@ const DIARI_PASSOS = {
     gabia: ['La gàbia', 'ZonaGabia'], nens: ['Els tres capolls', 'ZonaGabia'], final: ['Torna el cant', 'ZonaEsglesia']
 };
 const DIARI_LATERALS = {
-    taverna: ["L'Eva de la Taverna", 'ZonaTaverna'], rellotge: ['El rellotge aturat', 'ZonaGolfes'],
-    tresor: ['La pedra que escolta', 'ZonaPlaca'], nena: ['Els llaços de la Nena', 'ZonaCamiRov'],
-    llanterna: ['Les dotze columnes', 'ZonaCami'], monges: ["Les monges de l'Hostatgeria", 'ZonaJardi']
+    taverna: ["L'Eva de la Taverna", 'ZonaTaverna', '2 infusions'],
+    rellotge: ['El rellotge aturat', 'ZonaGolfes', "3 infusions, i una infusió més a l'altar cada cop que hi reposis"],
+    tresor: ['La pedra que escolta', 'ZonaPlaca', 'Escapulari del sant (més temps sense poder-te ferir)'],
+    nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Cinta de la Nena i 1 infusió'],
+    llanterna: ['Les dotze columnes', 'ZonaCami', 'Llanterna i 2 infusions'],
+    monges: ["Les monges de l'Hostatgeria", 'ZonaJardi', '+1 cor per cada monja i un lloc de repòs']
 };
 const DIARI_ACTES = [
     { nom: 'Acte 1 · La boira', des: 'clauer' },
@@ -188,10 +191,12 @@ const DIARI = {
         const fets = PROGRES.laterals.filter(l => l.fet(E));
         if (!oberts.length) y = this.text(ui, c, X, y, fets.length ? 'No tens cap encàrrec pendent.' : 'Encara ningú no t\'ha demanat res. Parla amb la gent!', 18, TINTA_SUAU, { fontStyle: 'italic' }) + 20;
         oberts.forEach(l => {
-            const [nom, zona] = DIARI_LATERALS[l.id] || [l.id, null];
+            const [nom, zona, premi] = DIARI_LATERALS[l.id] || [l.id, null];
             c.add(ui.add.text(X, y, '! ' + nom, estilText(20, '#2a4a7a', { fontStyle: 'bold' })));
             if (zona) c.add(ui.add.text(AMPLE - X, y + 3, this.nomZona(zona), estilText(15, TINTA_SUAU, { fontStyle: 'italic' })).setOrigin(1, 0));
-            y = this.text(ui, c, X + 26, y + 30, l.pista(E), 17, TINTA) + 22;
+            y = this.text(ui, c, X + 26, y + 30, l.pista(E), 17, TINTA);
+            if (premi) y = this.text(ui, c, X + 26, y + 3, 'Premi: ' + premi, 15, '#3a7a3a', { fontStyle: 'italic' });
+            y += 20;
         });
         if (fets.length) {
             y += 6;
@@ -203,7 +208,9 @@ const DIARI = {
     // ---------------- Sarró ----------------
     sarro(ui, c) {
         const llista = Estat.dades.objectes.filter(o => CATALEG_OBJECTES[o]);
-        const X = 44, W = (AMPLE - 2 * X - 16) / 2, top = 170;
+        const inf = Estat.dades.infusions || 0;
+        if (inf) c.add(ui.add.text(AMPLE / 2, 168, `Infusions: ${inf}  ·  tecla H (o el flascó de la pantalla) per beure'n una i recuperar 2 grans`, estilText(16, '#3a7a3a', { fontStyle: 'bold', align: 'center', wordWrap: { width: AMPLE - 80 } })).setOrigin(0.5, 0));
+        const X = 44, W = (AMPLE - 2 * X - 16) / 2, top = inf ? 214 : 170;
         if (!llista.length) { c.add(ui.add.text(AMPLE / 2, ALT / 2, 'El sarró és buit.', estilText(24, TINTA_SUAU, { fontStyle: 'italic' })).setOrigin(0.5)); return; }
         const files = Math.ceil(llista.length / 2), hFila = Math.min(96, (ALT - 110 - top) / files);
         llista.forEach((o, i) => {

@@ -559,7 +559,8 @@ Object.assign(DIALEGS, {
         pagines: [
             { qui: '', text: "Els tres engranatges encaixen en ordre: petit, gran i mitjà. Una cosa dins la paret fa clac." },
             { qui: '', text: "L'agulla dels minuts es mou. El rellotge del Santuari torna a caminar, tic-tac, tic-tac, i el pèndol comença a batre." },
-            { qui: '', text: "Dins la caixa del mecanisme hi ha un flascó de líquid daurat.\n+1 GRA AL ROSARI i rosari ple." }
+            { qui: '', text: "Dins la caixa del mecanisme hi ha tres flascons d'infusió, que el Pare Daniel guardava per a les nits fredes.\nHas obtingut 3 INFUSIONS." },
+            { qui: 'Ineu', text: "(I diu que, de tant en tant, en deixarà una a l'altar del Santuari.)" }
         ]
     }
 });
@@ -838,7 +839,7 @@ class ZonaGolfes extends ZonaCasaBase {
                 this.encaixaEngranatges();
                 this.cameras.main.shake(300, 0.003); Sfx.secret();
                 const E = Estat;
-                E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
+                E.donaInfusions(3);
                 E.posaObjectiu('El rellotge del Santuari torna a caminar. Explica-ho al Pare Daniel.');
                 this.ui().actualitzarHUD();
                 E.desar();

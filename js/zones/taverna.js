@@ -35,9 +35,12 @@ Object.assign(DIALEGS, {
                 { qui: 'Eva', text: 'Des d\'aquí dins no s\'hi pot baixar: el soterrani només té aquella porta de fora. I a baix, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Sota terra, Ineu. Ocells.' },
                 { qui: 'Eva', text: 'I el Ciscu, el fill de la Carmen, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
                 { qui: 'Eva', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
-                { qui: 'Eva', text: 'El Sardin hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve.' }
+                { qui: 'Eva', text: 'El Sardin hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve.' },
+                { fer: (z, fet) => z.objecteVola('eva', fet) },
+                { qui: 'Eva', text: 'Té: dues infusions de les que fa la Carmen quan no dorm. Curen més que qualsevol cosa del rebost. (Prem H per beure\'n.)' },
+                { qui: '', text: 'Has obtingut 2 INFUSIONS.' }
             ],
-            enAcabar: () => { E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La porta de ferro del darrere de la Taverna (per fora) baixa al soterrani: la Clau de ferro l\'obre.' : E.dades.objectiu); }
+            enAcabar: () => { E.donaInfusions(2); E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La porta de ferro del darrere de la Taverna (per fora) baixa al soterrani: la Clau de ferro l\'obre.' : E.dades.objectiu); }
         };
         if (E.flag('clauFerro')) return { pagines: [
             { qui: 'Eva', text: 'Aquesta clau... és de ferro vell, com la porta de fora, la del soterrani! L\'has trobada a la Casa Gran? Surt i dona la volta a la Taverna: és a la dreta, de cara al camí.' },

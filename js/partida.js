@@ -18,6 +18,7 @@ const Estat = {
             y: null,
             vida: 6,          // en meitats de gra del rosari (6 = 3 grans encesos)
             corsMax: 3,
+            infusions: 0,     // infusions guardades al sarró (cada una cura 2 grans; màxim 5)
             monedes: 0,
             objectiu: 'Parla amb el Pare Jordi a la Plaça.',
             objectes: [],
@@ -34,6 +35,7 @@ const Estat = {
     dona(objecte) { if (!this.te(objecte)) { this.dades.objectes.push(objecte); if (typeof Sfx !== 'undefined') Sfx.objecte(); } },
     treu(objecte) { this.dades.objectes = this.dades.objectes.filter(o => o !== objecte); },
     posaObjectiu(text) { this.dades.objectiu = text; },
+    donaInfusions(n, max = 5) { this.dades.infusions = Math.min(max, (this.dades.infusions || 0) + n); },
 
     // ---------- localStorage ----------
     desar() {

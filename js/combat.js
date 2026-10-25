@@ -934,7 +934,7 @@ Object.assign(ZonaBase.prototype, {
         const d = Estat.dades;
         const abans = d.vida;
         d.vida = Math.max(0, d.vida - mal);
-        this.invulnerableFins = ara + 1100;
+        this.invulnerableFins = ara + (Estat.te('escapulari') ? 1650 : 1100);       // l'Escapulari del sant allarga el temps sense poder-te ferir
         const c = this.ineu.body.center;
         let dx = c.x - des.x, dy = c.y - des.y;
         const l = Math.hypot(dx, dy) || 1;

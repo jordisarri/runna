@@ -132,7 +132,7 @@ const PROGRES = {
         { id: 'taverna', marca: ['tavernaOberta', 'evaParlat'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('evaParlat'),
           pista: E => "El Sardin berenava cada tarda a la Taverna amb l'Eva. La porta és tancada, però truca: potser l'Eva et deixa entrar." },
         { id: 'rellotge', marca: ['rellotgeReparat'], obert: E => E.flag('rellotgeDit'), fet: E => E.flag('rellotgeReparat'),
-          pista: E => "El rellotge del campanar continua aturat: la porta de la dreta del retaule puja a la Sala del Rellotge." },
+          pista: E => "El rellotge del campanar s'ha aturat a les tres i quart. Al Santuari, la porta de la dreta del retaule brilla amb una llum daurada: puja per la torre fins a la Sala del Rellotge. Allà, una nota clavada a la paret diu en quin ordre van els engranatges." },
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta el Cant de les Pedres." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),

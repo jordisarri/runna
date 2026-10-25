@@ -47,7 +47,8 @@ const CATALEG_OBJECTES = {
     calze:            ['Calze', 'De plata, antic.'],
     reliquies_monjos: ['Relíquies dels monjos', 'Un calze, una creu, un anell i un breviari.'],
     clau_ferro:       ['Clau de ferro', 'Obre la porta de ferro de sota la Taverna.'],
-    llavorLluna:      ['Llavor de Lluna', 'De la Sansa. L\'Isidre sap on plantar-la.']
+    llavorLluna:      ['Llavor de Lluna', 'De la Sansa. L\'Isidre sap on plantar-la.'],
+    escapulari:       ['Escapulari del sant', 'Després d\'un cop, tardes més a poder-te tornar a ferir.']
 };
 
 class EscenaUI extends Phaser.Scene {
@@ -107,6 +108,19 @@ class EscenaUI extends Phaser.Scene {
         this.haloFlauta = this.add.circle(x - 68, y, 30, 0xffe08a, 0).setVisible(false);
         this.iconaFlauta = this.add.image(x - 68, y, 'icona_flauta').setScale(0.75 / RES).setVisible(false);
         this.input.keyboard.on('keydown-I', commuta);
+        this.input.keyboard.on('keydown-H', () => this.beureInfusio());
+        // Botó de l'infusió (a baix a l'esquerra): només es veu quan en tens alguna
+        const bx = 64, by = ALT - 96;
+        this.botoInfusio = this.add.container(bx, by).setDepth(45).setVisible(false);
+        const fl = this.add.graphics();
+        fl.fillStyle(0x000000, 0.35).fillCircle(0, 3, 38);
+        fl.fillStyle(0xf2e6c8, 0.95).fillCircle(0, 0, 36).lineStyle(4, 0x8a5a2a, 1).strokeCircle(0, 0, 36);
+        fl.fillStyle(0x6ab04a, 1).fillRoundedRect(-11, -4, 22, 24, 6);                 // el flascó, amb l'infusió verda
+        fl.fillStyle(0xd8c8a0, 1).fillRect(-5, -16, 10, 14).fillStyle(0x8a5a2a, 1).fillRect(-7, -20, 14, 6);
+        fl.lineStyle(2, 0x3a2412, 1).strokeRoundedRect(-11, -4, 22, 24, 6);
+        this.textInfusio = this.add.text(22, 20, '', estilText(22, '#ffffff', { fontStyle: 'bold', stroke: '#2a170b', strokeThickness: 5 })).setOrigin(0.5);
+        const zona = this.add.zone(0, 0, 80, 80).setInteractive({ useHandCursor: true }).on('pointerdown', () => this.beureInfusio());
+        this.botoInfusio.add([fl, this.textInfusio, zona]);
         this.input.keyboard.on('keydown-M', () => this.inventariObert ? this.tancarInventari() : this.obrirInventari('mapa'));
         ['LEFT', 'A'].forEach(k => this.input.keyboard.on('keydown-' + k, () => this.inventariObert && DIARI.moure(this, -1)));
         ['RIGHT', 'D'].forEach(k => this.input.keyboard.on('keydown-' + k, () => this.inventariObert && DIARI.moure(this, 1)));
@@ -120,10 +134,26 @@ class EscenaUI extends Phaser.Scene {
         const zona = lliure ? Joc.zonaActiva(this) : null;
         const flauta = !!zona && Estat.te('flauta') && !!zona.flautaActiva();
         this.iconaFlauta.setVisible(flauta);
+        const inf = (Estat.dades && Estat.dades.infusions) || 0;
+        if (this.botoInfusio) { this.botoInfusio.setVisible(vis && lliure && inf > 0); this.textInfusio.setText('×' + inf); }
         this.haloFlauta.setVisible(flauta).setFillStyle(0xffe08a, flauta ? 0.3 + 0.25 * Math.sin(this.time.now / 180) : 0);
     }
 
     // El sarró obre el Diari de l'Ineu (js/diari.js): missió, encàrrecs, objectes i mapa
+    // Beure una infusió (tecla H o el botó a baix a l'esquerra): cura 2 grans del rosari
+    beureInfusio() {
+        const d = Estat.dades, z = Joc.zonaActiva(this);
+        if (!d || !(d.infusions > 0) || !z || z.caient || z.canviant || this.dialeg || this.menuObert || this.inventariObert) return;
+        if (d.vida >= d.corsMax * 2) { this.notifica('Ja tens el rosari ple'); return; }
+        const abans = d.vida;
+        d.infusions--; d.vida = Math.min(d.corsMax * 2, d.vida + 4);
+        Sfx.cura();
+        z.beure(null, 0x9be07a);
+        this.actualitzarHUD();
+        if (this.animarGuany) this.animarGuany(abans, d.vida);
+        this.notifica('Infusió: +2 grans (' + d.infusions + ' més al sarró)');
+    }
+
     obrirInventari(pestanya) {
         if (this.dialeg || this.menuObert || !Estat.dades || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
         DIARI.obrir(this, pestanya);

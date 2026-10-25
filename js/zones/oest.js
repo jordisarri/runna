@@ -63,6 +63,18 @@ class ZonaRovellonera extends ZonaBase {
         // Rovellons sota els pins, al costat de la sortida correcta
         const D = ROV_SEQ[pas];
         if (D) this.rovellons(D);
+        // Cartell d'entrada (només a la primera clariana): la regla del bosc
+        if (pas === 0) this.cartell(1330, 650, () => ({ pagines: [
+            { qui: '', text: 'BOSC DE LES ROVELLONERES' },
+            { qui: '', text: "«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»" },
+            { qui: 'Ineu', text: "(Tres clarianes. Cal escollir la sortida on hi ha rovellons, i així tres cops.)" }
+        ] }));
+        // Si l'Ineu s'ha perdut dues vegades o més, unes llumetes assenyalen la sortida bona (el bosc s'apiada)
+        if (D && (Estat.dades.rovPerdut || 0) >= 2) {
+            const ang = { N: -90, S: 90, W: 180, E: 0 }[D];
+            this.add.particles(800, 550, 'espurna', { speed: { min: 170, max: 200 }, angle: { min: ang - 6, max: ang + 6 }, lifespan: 1500, scale: { start: 0.75, end: 0 },
+                alpha: { start: 1, end: 0 }, tint: [0xffe08a, 0xfff2c0], frequency: 110, blendMode: 'ADD' }).setDepth(3000);
+        }
         // Pista: en cada clariana, una sola vegada, es recorda que els rovellons marquen la sortida bona
         if (D && !Estat.flag('rovPista' + pas)) {
             Estat.posaFlag('rovPista' + pas);
@@ -129,7 +141,9 @@ class ZonaRovellonera extends ZonaBase {
             } else if (pas > 0 && d === ROV_OPOSAT[ROV_SEQ[pas - 1]]) { pas--; ent = 'ent_' + ROV_OPOSAT[d]; }
             else { pas = 0; ent = 'ent_' + ROV_OPOSAT[d]; perdut = true; }
             Estat.dades.rovPas = pas;
-            if (perdut && this.pas !== 0) this.ui().notifica('T\'has perdut entre els pins... tornes a la primera clariana');
+            if (perdut) Estat.dades.rovPerdut = (Estat.dades.rovPerdut || 0) + 1;
+            if (pas >= 3) Estat.dades.rovPerdut = 0;
+            if (perdut && this.pas !== 0) this.ui().notifica('T\'has perdut entre els pins... tornes a la primera clariana' + ((Estat.dades.rovPerdut || 0) >= 2 ? ' (ara el bosc t\'assenyalarà el camí)' : ''));
             return super.canviarZona(dest, ent);
         }
         return super.canviarZona(desti, entrada);

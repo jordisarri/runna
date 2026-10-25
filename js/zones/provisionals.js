@@ -146,6 +146,13 @@ class ZonaEsglesia extends ZonaBase {
     obrirPortaRellotge(avis) {
         if (this.portaRellotge || !(Estat.flag('rellotgeDit') || Estat.flag('rellotgeReparat'))) return;   // (partides velles: ja hi havien pujat)
         this.portaRellotge = true;
+        if (!Estat.flag('rellotgeReparat')) {                       // una llum daurada i unes espurnes assenyalen la porta de la torre
+            const x = ESG.portaDx, y = ESG.retY + 50;
+            this.cuaRellotge = this.add.ellipse(x, y - 40, 150, 210, 0xffd060, 0.34).setDepth(ESG.retY + 90).setBlendMode('ADD');
+            this.tweens.add({ targets: this.cuaRellotge, alpha: 0.04, yoyo: true, repeat: -1, duration: 1000, ease: 'Sine.easeInOut' });
+            this.add.particles(x, y - 60, 'espurna', { x: { min: -40, max: 40 }, speedY: { min: -40, max: -14 }, lifespan: 1700, scale: { start: 0.32, end: 0 },
+                alpha: { start: 0.9, end: 0 }, tint: [0xffe08a, 0xffffff], frequency: 380, blendMode: 'ADD' }).setDepth(ESG.retY + 91);
+        }
         this.retaule.setTexture('retaule_obert').setScale(this.textures.get('retaule_obert').customData.escala || 1 / RES);   // el gràfic amb la porta oberta
         this.sortida(ESG.portaDx - 36, ESG.retY - 14, 72, 20, 'ZonaTorre', 'baix');
         if (avis) {
@@ -168,8 +175,10 @@ class ZonaEsglesia extends ZonaBase {
                 Estat.dades.vida = Estat.dades.corsMax * 2;
                 this.ui().actualitzarHUD();
                 this.guardarPosicio();
+                // Amb el rellotge arreglat, el Pare Daniel hi deixa una infusió cada cop (fins a tenir-ne 3)
+                if (Estat.flag('rellotgeReparat') && (Estat.dades.infusions || 0) < 3) { Estat.donaInfusions(1); this.ui().notifica("El Pare Daniel t'ha deixat una infusió a l'altar"); }
+                else this.ui().notifica('Partida desada');
                 Estat.desar();
-                this.ui().notifica('Partida desada');
                 const p = this.add.particles(i.x, i.y - 60, 'espurna', {
                     speed: { min: 20, max: 90 }, angle: { min: 230, max: 310 }, lifespan: 1100,
                     scale: { start: 0.3, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xffe6a8, 0xf8c060], blendMode: 'ADD', quantity: 18, emitting: false
