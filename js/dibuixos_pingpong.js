@@ -2,12 +2,12 @@
  * ELS PERSONATGES DEL CELLER (ping-pong): Frederic, Eloi, Josep i Juli, tots en estil xibi (cap gran, cos petit) i amb molt de detall.
  *  - Frederic: senyor gras d'uns 50 anys, amb ulleres i la pala de pedra.
  *  - Eloi: atleta alt i musculós.
- *  - Josep: una mena de gurú amb ulleres, barba i cabell pèl-roig.
+ *  - Josep: una mena de gurú alt i prim, amb ulleres, cabell curt i barba taronges.
  *  - Juli: cap enorme, ulleres i molt prim; porta la samarreta dels angelets.
  * Cada funció pinta en un llenç de 100 unitats d'ample (ctx ja escalat); dibuixarNpcPingpong ho prepara per al catàleg d'assets.
  */
 
-const PP_PROPORCIO = { frederic: 1.32, eloi: 1.58, josep: 1.38, juli: 1.44 };
+const PP_PROPORCIO = { frederic: 1.32, eloi: 1.58, josep: 1.52, juli: 1.44 };
 
 function dibuixarNpcPingpong(c, w, qui) {
     const asp = PP_PROPORCIO[qui];
@@ -162,58 +162,54 @@ PP_FN.eloi = (ctx, W, H) => {
     ppRubor(ctx, 34, 40, 4.4, 2.8); ppRubor(ctx, 66, 40, 4.4, 2.8);
 };
 
-// JOSEP: gurú tranquil, cabell llarg pèl-roig, barba frondosa, ulleres rodones, túnica porpra, collaret de boles i una pilota que levita
+// JOSEP: gurú tranquil, alt i prim; cabell curt i barba taronges, ulleres rodones, túnica porpra estreta, collaret de boles i una pilota que levita
 PP_FN.josep = (ctx, W, H) => {
-    // halo suau
-    const halo = ctx.createRadialGradient(50, 38, 8, 50, 38, 48); halo.addColorStop(0, 'rgba(255,226,150,0.36)'); halo.addColorStop(1, 'rgba(255,226,150,0)');
+    const halo = ctx.createRadialGradient(50, 36, 6, 50, 36, 44); halo.addColorStop(0, 'rgba(255,226,150,0.36)'); halo.addColorStop(1, 'rgba(255,226,150,0)');
     ctx.fillStyle = halo; ctx.fillRect(0, 0, W, 90);
-    ppOmbraTerra(ctx, 50, H - 6, 32);
-    // cabell llarg del darrere
-    ctx.fillStyle = ppGradV(ctx, 20, 90, '#d8662a', '#8a3a14'); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4;
-    ctx.beginPath(); ctx.moveTo(22, 34); ctx.quadraticCurveTo(10, 70, 18, 90); ctx.quadraticCurveTo(30, 84, 34, 70); ctx.lineTo(66, 70); ctx.quadraticCurveTo(70, 84, 82, 90); ctx.quadraticCurveTo(90, 70, 78, 34); ctx.closePath(); ctx.fill(); ctx.stroke();
-    // túnica llarga porpra amb vora daurada i mànigues amples
-    const roba = new Path2D(); roba.moveTo(28, 62); roba.quadraticCurveTo(50, 56, 72, 62); roba.lineTo(84, H - 10); roba.quadraticCurveTo(50, H - 4, 16, H - 10); roba.closePath();
-    ctx.fillStyle = ppGradH(ctx, 16, 84, '#5a2a6a', '#3a1a4a', '#7a3a8a'); ctx.fill(roba); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4; ctx.stroke(roba);
-    ctx.save(); ctx.clip(roba); ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 1.4; [-20, -9, 0, 9, 20].forEach(dx => { ctx.beginPath(); ctx.moveTo(50 + dx * 0.4, 70); ctx.quadraticCurveTo(50 + dx * 1.1, 100, 50 + dx * 1.5, H - 8); ctx.stroke(); }); ctx.restore();
-    ctx.strokeStyle = '#d4a840'; ctx.lineWidth = 3.4; ctx.beginPath(); ctx.moveTo(16, H - 12); ctx.quadraticCurveTo(50, H - 6, 84, H - 12); ctx.stroke();
-    ctx.strokeStyle = '#d4a840'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(50, 62); ctx.lineTo(50, H - 8); ctx.stroke();
-    // cinturó de tela
-    ppRect(ctx, 30, 94, 40, 6, '#e8c860', 2);
-    // mànigues amples, i mans juntes davant (gest tranquil) amb la pilota que levita
-    [[-1], [1]].forEach(([s]) => {
-        ctx.fillStyle = ppGradH(ctx, 50 + s * 20, 50 + s * 42, '#4a2258', '#6a3278'); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4;
-        ctx.beginPath(); ctx.moveTo(50 + s * 22, 64); ctx.quadraticCurveTo(50 + s * 46, 74, 50 + s * 38, 96); ctx.lineTo(50 + s * 12, 94); ctx.quadraticCurveTo(50 + s * 18, 76, 50 + s * 22, 64); ctx.closePath(); ctx.fill(); ctx.stroke();
-    });
-    ppMans(ctx, 46, 92, 4.6); ppMans(ctx, 54, 92, 4.6);
-    ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#ffd870'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(50, 82, 4.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,230,140,0.4)'; ctx.beginPath(); ctx.arc(50, 82, 9, 0, Math.PI * 2); ctx.fill();
+    ppOmbraTerra(ctx, 50, H - 6, 28);
+    const NAR = '#d8662a';
+    // túnica llarga i estreta, amb vora daurada i plecs
+    const roba = new Path2D(); roba.moveTo(36, 66); roba.quadraticCurveTo(50, 60, 64, 66); roba.lineTo(72, H - 10); roba.quadraticCurveTo(50, H - 4, 28, H - 10); roba.closePath();
+    ctx.fillStyle = ppGradH(ctx, 28, 72, '#5a2a6a', '#3a1a4a', '#7a3a8a'); ctx.fill(roba); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4; ctx.stroke(roba);
+    ctx.save(); ctx.clip(roba); ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 1.4; [-12, -5, 0, 5, 12].forEach(dx => { ctx.beginPath(); ctx.moveTo(50 + dx * 0.4, 72); ctx.quadraticCurveTo(50 + dx * 1.1, 110, 50 + dx * 1.6, H - 8); ctx.stroke(); }); ctx.restore();
+    ctx.strokeStyle = '#d4a840'; ctx.lineWidth = 3.2; ctx.beginPath(); ctx.moveTo(28, H - 12); ctx.quadraticCurveTo(50, H - 6, 72, H - 12); ctx.stroke();
+    ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(50, 64); ctx.lineTo(50, H - 8); ctx.stroke();
+    ppRect(ctx, 38, 98, 24, 5, '#e8c860', 2);                                  // cinturó de tela
     // sandàlies
-    [[38], [62]].forEach(([x]) => ppRect(ctx, x - 9, H - 10, 18, 8, '#8a5a2c', 4));
-    // collaret de boles de fusta (mala) fins a la panxa
-    for (let k = 0; k < 15; k++) { const t = k / 14, x = 38 + t * 24, y = 62 + 6 + Math.sin(t * Math.PI) * 22; ppEl(ctx, x, y, 2.4, 2.4, k % 5 === 0 ? '#d4a840' : '#7a4a22'); }
-    // cap
-    ppCap(ctx, 50, 38, 25, 23);
-    // barba pèl-roja frondosa amb ondulacions
-    ctx.fillStyle = ppGradV(ctx, 46, 82, '#e2742e', '#9a4616'); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4;
-    ctx.beginPath(); ctx.moveTo(28, 46); ctx.quadraticCurveTo(26, 66, 38, 74); ctx.quadraticCurveTo(44, 86, 50, 82); ctx.quadraticCurveTo(56, 86, 62, 74); ctx.quadraticCurveTo(74, 66, 72, 46);
-    ctx.quadraticCurveTo(62, 56, 50, 54); ctx.quadraticCurveTo(38, 56, 28, 46); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.strokeStyle = 'rgba(255,200,130,0.55)'; ctx.lineWidth = 1.2; [-12, -4, 4, 12].forEach(dx => { ctx.beginPath(); ctx.moveTo(50 + dx, 58); ctx.quadraticCurveTo(50 + dx * 1.2, 70, 50 + dx * 0.8, 78); ctx.stroke(); });
+    [[41], [59]].forEach(([x]) => ppRect(ctx, x - 7, H - 10, 14, 7, '#8a5a2c', 3));
+    // mànigues estretes i mans juntes davant amb la pilota que levita
+    [[-1], [1]].forEach(([s]) => {
+        ctx.fillStyle = ppGradH(ctx, 50 + s * 6, 50 + s * 24, '#4a2258', '#6a3278'); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4;
+        ctx.beginPath(); ctx.moveTo(50 + s * 14, 68); ctx.quadraticCurveTo(50 + s * 28, 82, 50 + s * 12, 106); ctx.lineTo(50 + s * 3, 104); ctx.quadraticCurveTo(50 + s * 16, 82, 50 + s * 11, 69); ctx.closePath(); ctx.fill(); ctx.stroke();
+    });
+    ppMans(ctx, 46, 106, 4.2); ppMans(ctx, 54, 106, 4.2);
+    ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#ffd870'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(50, 94, 4.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,230,140,0.4)'; ctx.beginPath(); ctx.arc(50, 94, 8.6, 0, Math.PI * 2); ctx.fill();
+    // collaret de boles de fusta (mala)
+    for (let k = 0; k < 13; k++) { const t = k / 12, x = 41 + t * 18, y = 67 + Math.sin(t * Math.PI) * 20; ppEl(ctx, x, y, 2.2, 2.2, k % 4 === 0 ? '#d4a840' : '#7a4a22'); }
+    // coll prim i cap (una mica més petit que el d'un xibi del tot, perquè és alt)
+    ppRect(ctx, 45, 56, 10, 12, PP_PELL_OMBRA, 2);
+    ppCap(ctx, 50, 38, 23, 21);
+    // cabell curt taronja amb serrell i patilles
+    ctx.fillStyle = NAR; ctx.strokeStyle = PP_C; ctx.lineWidth = 2.2;
+    ctx.beginPath(); ctx.moveTo(26, 40); ctx.quadraticCurveTo(24, 14, 50, 12); ctx.quadraticCurveTo(76, 14, 74, 40); ctx.quadraticCurveTo(72, 30, 66, 26); ctx.quadraticCurveTo(50, 20, 34, 26); ctx.quadraticCurveTo(28, 30, 26, 40); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,210,150,0.6)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(34, 20); ctx.quadraticCurveTo(50, 14, 66, 20); ctx.stroke();
+    // barba taronja, més curta i ben cuidada
+    ctx.fillStyle = ppGradV(ctx, 46, 74, '#e2742e', '#a04a18'); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(28, 44); ctx.quadraticCurveTo(27, 62, 38, 66); ctx.quadraticCurveTo(46, 76, 50, 74); ctx.quadraticCurveTo(54, 76, 62, 66); ctx.quadraticCurveTo(73, 62, 72, 44);
+    ctx.quadraticCurveTo(62, 52, 50, 50); ctx.quadraticCurveTo(38, 52, 28, 44); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,200,130,0.55)'; ctx.lineWidth = 1.2; [-9, -3, 3, 9].forEach(dx => { ctx.beginPath(); ctx.moveTo(50 + dx, 56); ctx.quadraticCurveTo(50 + dx * 1.2, 64, 50 + dx * 0.8, 70); ctx.stroke(); });
     // bigoti i boca serena
-    ctx.fillStyle = '#e2742e'; ctx.strokeStyle = PP_C; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(50, 53); ctx.quadraticCurveTo(38, 50, 34, 58); ctx.quadraticCurveTo(44, 58, 50, 56); ctx.quadraticCurveTo(56, 58, 66, 58); ctx.quadraticCurveTo(62, 50, 50, 53); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.strokeStyle = '#7a2a1a'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(45, 61); ctx.quadraticCurveTo(50, 64, 55, 61); ctx.stroke();
-    // cabell del davant i monyo
-    ctx.fillStyle = '#d8662a'; ctx.strokeStyle = PP_C; ctx.lineWidth = 2.2;
-    ctx.beginPath(); ctx.moveTo(25, 36); ctx.quadraticCurveTo(26, 14, 50, 12); ctx.quadraticCurveTo(74, 14, 75, 36); ctx.quadraticCurveTo(66, 24, 50, 26); ctx.quadraticCurveTo(34, 24, 25, 36); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ppEl(ctx, 50, 8, 9, 7, '#d8662a');
-    ctx.strokeStyle = 'rgba(255,210,150,0.6)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(34, 24); ctx.quadraticCurveTo(50, 16, 66, 24); ctx.stroke();
-    // ulls plàcids (parpelles mig caigudes), celles roges, ulleres rodones de filferro daurat
-    [[41], [59]].forEach(([x]) => { ppUll(ctx, x, 40, 4.4, 4.6, '#3a5a3a', 0); ctx.fillStyle = PP_PELL; ctx.beginPath(); ctx.ellipse(x, 36.6, 4.9, 2.6, 0, Math.PI, 0); ctx.fill(); ctx.strokeStyle = PP_C; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x - 4.6, 37.6); ctx.lineTo(x + 4.6, 37.6); ctx.stroke(); });
-    ppCella(ctx, 34, 32, 47, 31.5, '#c0521e', 3); ppCella(ctx, 53, 31.5, 66, 32, '#c0521e', 3);
+    ctx.fillStyle = NAR; ctx.strokeStyle = PP_C; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(50, 50); ctx.quadraticCurveTo(38, 48, 35, 55); ctx.quadraticCurveTo(44, 55, 50, 53); ctx.quadraticCurveTo(56, 55, 65, 55); ctx.quadraticCurveTo(62, 48, 50, 50); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = '#7a2a1a'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(45, 58); ctx.quadraticCurveTo(50, 61, 55, 58); ctx.stroke();
+    // ulls plàcids (parpelles mig caigudes), celles taronges, ulleres rodones de filferro daurat
+    [[42], [58]].forEach(([x]) => { ppUll(ctx, x, 39, 4, 4.4, '#3a5a3a', 0); ctx.fillStyle = PP_PELL; ctx.beginPath(); ctx.ellipse(x, 35.8, 4.5, 2.4, 0, Math.PI, 0); ctx.fill(); ctx.strokeStyle = PP_C; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x - 4.2, 36.8); ctx.lineTo(x + 4.2, 36.8); ctx.stroke(); });
+    ppCella(ctx, 35, 31, 47, 30.6, '#c0521e', 2.8); ppCella(ctx, 53, 30.6, 65, 31, '#c0521e', 2.8);
     ctx.strokeStyle = '#d4a840'; ctx.lineWidth = 2.2; ctx.fillStyle = 'rgba(220,240,255,0.2)';
-    [[41], [59]].forEach(([x]) => { ctx.beginPath(); ctx.arc(x, 40, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
-    ctx.beginPath(); ctx.moveTo(49, 39); ctx.lineTo(51, 39); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.beginPath(); ctx.arc(37.5, 36.5, 1.8, 0, Math.PI * 2); ctx.arc(55.5, 36.5, 1.8, 0, Math.PI * 2); ctx.fill();
-    ppEl(ctx, 50, 47, 3.2, 2.6, '#eab090');
+    [[42], [58]].forEach(([x]) => { ctx.beginPath(); ctx.arc(x, 39, 7.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+    ctx.beginPath(); ctx.moveTo(49.6, 38); ctx.lineTo(50.4, 38); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.beginPath(); ctx.arc(38.6, 35.6, 1.7, 0, Math.PI * 2); ctx.arc(54.6, 35.6, 1.7, 0, Math.PI * 2); ctx.fill();
+    ppEl(ctx, 50, 46, 3, 2.4, '#eab090');
 };
 
 // JULI: cap enorme, ulleres grosses, molt prim; samarreta blava amb un angelet, texans i sabatilles gegants
@@ -248,23 +244,27 @@ PP_FN.juli = (ctx, W, H) => {
     // coll prim i cap ENORME
     ppRect(ctx, 46, 66, 8, 12, PP_PELL_OMBRA, 2);
     ppCap(ctx, 50, 38, 37, 31);
-    // cabell fosc, esbullat, amb remolins
-    ctx.fillStyle = '#3a2a24'; ctx.strokeStyle = PP_C; ctx.lineWidth = 2.2;
+    // cabell taronja, esbullat, amb remolins
+    ctx.fillStyle = '#e8741c'; ctx.strokeStyle = PP_C; ctx.lineWidth = 2.2;
     ctx.beginPath(); ctx.moveTo(14, 38); ctx.quadraticCurveTo(10, 10, 36, 6); ctx.quadraticCurveTo(44, 0, 52, 5); ctx.quadraticCurveTo(66, 0, 76, 8); ctx.quadraticCurveTo(92, 14, 86, 38);
     ctx.quadraticCurveTo(80, 22, 68, 22); ctx.lineTo(62, 14); ctx.lineTo(54, 24); ctx.lineTo(44, 14); ctx.lineTo(36, 24); ctx.quadraticCurveTo(22, 22, 14, 38); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(26, 14); ctx.quadraticCurveTo(40, 8, 56, 10); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,230,170,0.5)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(26, 14); ctx.quadraticCurveTo(40, 8, 56, 10); ctx.stroke();
     // ulleres rodones gegants (muntura negra gruixuda)
     ctx.strokeStyle = '#1a1a22'; ctx.lineWidth = 3.6; ctx.fillStyle = 'rgba(200,232,255,0.3)';
     [[34], [66]].forEach(([x]) => { ctx.beginPath(); ctx.arc(x, 40, 13, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
     ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(47, 38); ctx.lineTo(53, 38); ctx.moveTo(21, 38); ctx.lineTo(14, 36); ctx.moveTo(79, 38); ctx.lineTo(86, 36); ctx.stroke();
     // ulls grossos i expressius, celles alçades
     ppUll(ctx, 34, 41, 6.6, 7.4, '#2a4a7a', 0.6); ppUll(ctx, 66, 41, 6.6, 7.4, '#2a4a7a', -0.6);
-    ppCella(ctx, 24, 24, 42, 24, '#2a1a14', 3); ppCella(ctx, 58, 24, 76, 24, '#2a1a14', 3);
+    ppCella(ctx, 24, 24, 42, 24, '#b04a10', 3); ppCella(ctx, 58, 24, 76, 24, '#b04a10', 3);
     ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.beginPath(); ctx.ellipse(28, 32, 3.4, 1.6, -0.7, 0, Math.PI * 2); ctx.ellipse(60, 32, 3.4, 1.6, -0.7, 0, Math.PI * 2); ctx.fill();
     // nas petit, pigues i boca oberta d'entusiasme
-    ppEl(ctx, 50, 52, 3.4, 2.8, '#eab090');
-    ctx.fillStyle = 'rgba(190,100,70,0.5)'; [[40, 54], [43, 56.4], [37, 56.4], [60, 54], [57, 56.4], [63, 56.4]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 0.9, 0, Math.PI * 2); ctx.fill(); });
-    ctx.fillStyle = '#7a2a2a'; ctx.strokeStyle = PP_C; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(40, 59); ctx.quadraticCurveTo(50, 72, 60, 59); ctx.quadraticCurveTo(50, 61, 40, 59); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(42, 60); ctx.quadraticCurveTo(50, 63, 58, 60); ctx.lineTo(57, 62.4); ctx.quadraticCurveTo(50, 65, 43, 62.4); ctx.closePath(); ctx.fill();
+    // nas aguileny: pont convex i punta ganxuda cap avall
+    ctx.fillStyle = '#eab090'; ctx.strokeStyle = PP_C; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(47, 42); ctx.quadraticCurveTo(56, 47, 57, 55); ctx.quadraticCurveTo(58, 61, 52, 61); ctx.quadraticCurveTo(47, 61, 48, 58); ctx.quadraticCurveTo(52, 57, 51.5, 54); ctx.quadraticCurveTo(50, 48, 47, 42); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.beginPath(); ctx.ellipse(52, 48, 1.4, 3, -0.4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(120,50,30,0.7)'; ctx.beginPath(); ctx.ellipse(51, 59.4, 1.5, 0.9, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(190,100,70,0.5)'; [[38, 54], [41, 56.4], [35, 56.4], [64, 54], [61, 56.4], [67, 56.4]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 0.9, 0, Math.PI * 2); ctx.fill(); });
+    ctx.fillStyle = '#7a2a2a'; ctx.strokeStyle = PP_C; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(40, 62); ctx.quadraticCurveTo(50, 74, 60, 62); ctx.quadraticCurveTo(50, 64, 40, 62); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(42, 63); ctx.quadraticCurveTo(50, 66, 58, 63); ctx.lineTo(57, 65.4); ctx.quadraticCurveTo(50, 68, 43, 65.4); ctx.closePath(); ctx.fill();
     ppRubor(ctx, 24, 56, 5, 3); ppRubor(ctx, 76, 56, 5, 3);
 };
