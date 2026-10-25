@@ -175,24 +175,17 @@ class ZonaPingpong extends ZonaBase {
             arc.fillStyle(0xcdc1ab, 1).fillRect(x - 4, YP - 12, 38, 12).lineStyle(2, 0x1c1610, 1).strokeRect(x - 4, YP - 12, 38, 12);        // base
             for (let k = 1; k < 5; k++) arc.lineStyle(1, 0x1c1610, 0.35).lineBetween(x + 1, AY - 8 + k * 26, x + 29, AY - 8 + k * 26);
         });
-        // porta tapada: fusta de dues fulles amb bandes de ferro i taulons clavats en creu
-        const pt = this.add.graphics().setDepth(-980);
+        // porta secreta: una porta de pedra que es confon amb la paret de la fornícula; només es veuen unes juntes molt fines. Quan la roda
+        // ja no la tapa, les juntes s'il·luminen i la porta s'obre amb animació cada cop que l'Ineu s'hi acosta.
         const PX0 = AX - 82, PX1 = AX + 82, PY = 210;
-        const portaForma = [{ x: PX0, y: YP }, { x: PX0, y: PY }];
-        for (let k = 1; k <= 10; k++) { const a = Math.PI + k / 10 * Math.PI; portaForma.push({ x: AX + Math.cos(a) * 82, y: PY + Math.sin(a) * 48 }); }
-        portaForma.push({ x: PX1, y: PY }, { x: PX1, y: YP });
-        pt.fillStyle(0x1b1109, 1).fillPoints(portaForma.map(p => ({ x: p.x + (p.x < AX ? -5 : 5), y: p.y })), true);
-        pt.fillStyle(0x5c3b1e, 1).fillPoints(portaForma, true);
-        for (let k = 1; k < 8; k++) pt.lineStyle(2, 0x2a1608, 0.9).lineBetween(PX0 + k * 164 / 8, PY - 40, PX0 + k * 164 / 8, YP);
-        pt.lineStyle(3, 0x120a04, 1).lineBetween(AX, PY - 48, AX, YP);
-        [PY + 12, PY + 52].forEach(y => { pt.fillStyle(0x34363c, 1).fillRect(PX0, y, 164, 8).lineStyle(1.5, 0x101216, 1).strokeRect(PX0, y, 164, 8); for (let x = PX0 + 8; x < PX1; x += 22) { pt.fillStyle(0x9a9ca6, 1).fillCircle(x, y + 4, 1.6); } });
-        [[AX - 40, PY + 6, -0.14], [AX + 34, PY + 34, 0.12], [AX - 30, PY + 58, 0.1]].forEach(([x, y, a]) => {       // taulons clavats
-            const lx = Math.cos(a) * 62, ly = Math.sin(a) * 62;
-            pt.lineStyle(14, 0x120a04, 1).lineBetween(x - lx, y - ly, x + lx, y + ly);
-            pt.lineStyle(10, 0x8a5c30, 1).lineBetween(x - lx, y - ly, x + lx, y + ly);
-            pt.lineStyle(2, 0xd9a868, 0.5).lineBetween(x - lx, y - ly - 3, x + lx, y + ly - 3);
-            pt.fillStyle(0x2a2c32, 1).fillCircle(x - lx * 0.85, y - ly * 0.85, 2.4).fillCircle(x + lx * 0.85, y + ly * 0.85, 2.4);
-        });
+        const juntes = this.add.graphics().setDepth(-981);
+        const forma = [{ x: PX0, y: YP }, { x: PX0, y: PY }];
+        for (let k = 1; k <= 10; k++) { const a = Math.PI + k / 10 * Math.PI; forma.push({ x: AX + Math.cos(a) * 82, y: PY + Math.sin(a) * 48 }); }
+        forma.push({ x: PX1, y: PY }, { x: PX1, y: YP });
+        juntes.lineStyle(2, 0x0a0806, 0.5).strokePoints(forma, false).lineBetween(AX, PY - 48, AX, YP);
+        juntes.lineStyle(1.5, 0x8a8070, 0.18).strokePoints(forma.map(p => ({ x: p.x + 2, y: p.y + 1 })), false);
+        this.juntesPorta = juntes;
+        this.portaSecreta = this.portaAnimada({ x: AX, top: PY - 48, bottom: YP, ample: 164, arc: 48, fons: -979, color: 0x5e574c, vora: 0x1a1612, bloq: () => !this.rodaMoguda });
         // fanals a banda i banda de l'arcada (flama que tremola)
         [AX - AR - 110, AX + AR + 110].forEach((x, k) => {
             const y = 150, f = this.add.graphics().setDepth(-975);
@@ -294,12 +287,18 @@ class ZonaPingpong extends ZonaBase {
         this.tweens.add({
             targets: this.roda, x, angle: dir * 180, duration: 900, ease: 'Sine.easeInOut',
             onUpdate: () => { this.colRoda.x = this.roda.x; this.colRoda.body.updateFromGameObject(); },
-            onComplete: () => { this.flotant(700, 200, 'Un passadís!', '#d8c8ff'); this.obrirPassadis(); Estat.desar(); }
+            onComplete: () => {
+                this.flotant(700, 200, 'Un passadís!', '#d8c8ff'); this.obrirPassadis(); Estat.desar();
+                // La porta secreta es descobreix: les juntes s'il·luminen i s'obre un moment per ensenyar el passadís (després s'obre en acostar-s'hi)
+                this.tweens.add({ targets: this.juntesPorta, alpha: 0.4, yoyo: true, repeat: 2, duration: 220 });
+                this.portaSecreta.forcaFins = this.time.now + 2200;
+            }
         });
     }
 
     // L'obertura de la paret descoberta: porta al passadís (sortida sense llum ni fletxa, perquè és una troballa)
     obrirPassadis() {
+
         this.sortides.push({ r: new Phaser.Geom.Rectangle(590, 318, 100, 32), desti: 'ZonaPassadis', entrada: 'porta' });
         this.tweens.add({ targets: this.add.circle(640, 260, 80, 0xa070ff, 0.12).setDepth(-970), alpha: 0.03, yoyo: true, repeat: -1, duration: 900 });
     }

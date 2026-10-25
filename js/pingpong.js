@@ -2,10 +2,12 @@
  * EL CELLER: el partit de ping-pong contra en Josep (un sol partit, obligatori: el Frederic no parla de la roda fins que el guanyes)
  * Vista des de darrere de l'Ineu: la taula en perspectiva, en Josep a l'altra banda.
  * - Cops: la pilota ve per un dels tres carrils (esquerra, centre, dreta). Un cercle es fa petit fins a l'anell del carril:
- *   quan el toca, prem el carril bo (← ↓ →, A S D, o el botó de sota). Perfecte = cop fort; bé = cop normal; d'hora, tard o carril
- *   equivocat = punt d'en Josep.
- * - Servei màgic d'en Josep: mostra tres carrils un instant; repeteix-los en ordre per tornar-lo.
- * - El teu servei: prem el centre (↓, ESPAI o el botó del mig).
+ *   quan el toca, prem el carril bo (← ↓ →, A S D, o el botó de sota). Hi ha un marge ampli abans i després del moment exacte:
+ *   perfecte = cop fort; bé = cop normal; si prems el carril del costat, la pilota es torna de rebot (cop feble). Prémer massa d'hora
+ *   o el carril que no toca no es castiga: es pot rectificar fins que passa el marge. Només perds el punt si no hi arribes (la pilota
+ *   segueix el seu camí i se'n va per darrere de l'Ineu).
+ * - Servei màgic d'en Josep: mostra tres carrils amb calma; repeteix-los en ordre per tornar-lo (hi ha dos intents).
+ * - El teu servei: qualsevol botó (↓, ESPAI o els botons de sota).
  * - Set punts; a 6-6, cal guanyar de dos. Es canvia de servei cada dos punts.
  */
 const PP = {
@@ -14,7 +16,7 @@ const PP = {
     // Perspectiva: la taula va de y=330 (fons, en Josep) a y=1000 (a prop, l'Ineu)
     fonsY: 330, propY: 1000, copY: 930,
     xFons: [290, 360, 430], xProp: [170, 360, 550],
-    PERFECTE: 85, BE: 200
+    PERFECTE: 150, BE: 330
 };
 
 class EscenaPingPong extends Phaser.Scene {
@@ -84,6 +86,7 @@ class EscenaPingPong extends Phaser.Scene {
             const x = PP.xProp[c], y = ALT - 60;
             const b = this.add.circle(x, y, 52, 0x1a120b, 0.8).setStrokeStyle(3, 0xd4af37).setDepth(30).setInteractive({ useHandCursor: true });
             this.add.text(x, y, s, estilText(40, '#f2e6c8')).setOrigin(0.5).setDepth(31);
+            b.setInteractive(new Phaser.Geom.Circle(52, 52, 92), Phaser.Geom.Circle.Contains);   // zona de toc generosa, més gran que el botó
             b.on('pointerdown', () => { b.setFillStyle(0x4a3a20, 0.95); this.entrada(c); });
             b.on('pointerup', () => b.setFillStyle(0x1a120b, 0.8));
             b.on('pointerout', () => b.setFillStyle(0x1a120b, 0.8));
@@ -121,7 +124,7 @@ class EscenaPingPong extends Phaser.Scene {
         this.actualitzarMarcador();
         if (this.serveixIneu()) {
             this.estat = 'serveiIneu';
-            this.avis('El teu servei: prem el centre (↓ o ESPAI)', 1800, '#f2e6c8');
+            this.avis('El teu servei: prem qualsevol botó (↓ o ESPAI)', 1800, '#f2e6c8');
             this.anells[1].setStrokeStyle(5, 0xffd34d, 0.9);
         } else {
             this.serveiMagic();
@@ -130,21 +133,29 @@ class EscenaPingPong extends Phaser.Scene {
 
     // ---------------- Servei màgic d'en Josep: tres carrils que s'han de repetir ----------------
     serveiMagic() {
-        this.estat = 'mirant';
-        const n = 3, ms = Math.max(420, 640 - (this.ineu + this.josep) * 18);
-        this.ordre = Array.from({ length: n }, () => Phaser.Math.Between(0, 2));
-        this.entrat = [];
+        this.intents = 2;
+        this.ordre = Array.from({ length: 3 }, () => Phaser.Math.Between(0, 2));
         this.avis('Servei màgic d\'en Josep: memoritza!', 1200, '#d8b0ff');
-        this.ordre.forEach((c, i) => this.time.delayedCall(900 + i * ms, () => {
+        this.mostrarOrdre(900);
+    }
+
+    // Mostra els tres carrils, un a un i sense pressa; després cal repetir-los
+    mostrarOrdre(retard) {
+        this.estat = 'mirant';
+        this.entrat = [];
+        const n = this.ordre.length, ms = Math.max(620, 880 - (this.ineu + this.josep) * 14);
+        this.ordre.forEach((c, i) => this.time.delayedCall(retard + i * ms, () => {
+            if (this.acabat) return;
             this.seq.setText(['◀', '●', '▶'][c]).setAlpha(1).setX(PP.xProp[c]);
             this.so(3 + c);
-            this.tweens.add({ targets: this.seq, alpha: 0, delay: ms * 0.55, duration: ms * 0.35 });
+            this.tweens.add({ targets: this.seq, alpha: 0, delay: ms * 0.6, duration: ms * 0.3 });
         }));
-        this.time.delayedCall(900 + n * ms + 150, () => {
+        this.time.delayedCall(retard + n * ms + 150, () => {
             if (this.acabat) return;
             this.estat = 'repetint';
             this.avis('Repeteix-los en ordre!', 1400, '#d8b0ff');
-            this.limitServei = this.time.delayedCall(4200, () => { if (this.estat === 'repetint') this.puntJosep('El servei passa de llarg...'); });
+            if (this.limitServei) this.limitServei.remove();
+            this.limitServei = this.time.delayedCall(7000, () => { if (this.estat === 'repetint') this.puntJosep('El servei passa de llarg...'); });
         });
     }
 
@@ -153,7 +164,7 @@ class EscenaPingPong extends Phaser.Scene {
         if (this.acabat) return;
         this.estat = 'cop';
         this.carril = Phaser.Math.Between(0, 2);
-        this.durada = Math.max(620, 1150 - this.rally * 70 - (this.ineu + this.josep) * 14);
+        this.durada = Math.max(1050, 1800 - this.rally * 45 - (this.ineu + this.josep) * 10);       // el cop arriba amb calma i s'accelera molt poc a poc
         this.t0 = this.time.now;
         this.tCop = this.t0 + this.durada;
         this.respost = false;
@@ -166,10 +177,9 @@ class EscenaPingPong extends Phaser.Scene {
     entrada(c) {
         if (this.acabat) return;
         if (this.estat === 'serveiIneu') {
-            if (c !== 1) { this.avis('Per servir, el botó del mig (↓ o ESPAI)', 1000, '#f2e6c8'); return; }
             this.anells[1].setStrokeStyle(4, 0xf2e6c8, 0.25);
             this.cop(1, true);
-            this.tornada(0.75);
+            this.tornada(0.8);
             return;
         }
         if (this.estat === 'repetint') {
@@ -178,7 +188,15 @@ class EscenaPingPong extends Phaser.Scene {
             this.botons[c].setFillStyle(0x4a3a20, 0.95);
             this.time.delayedCall(120, () => this.botons[c].setFillStyle(0x1a120b, 0.8));
             const i = this.entrat.length - 1;
-            if (this.entrat[i] !== this.ordre[i]) { if (this.limitServei) this.limitServei.remove(); this.puntJosep('No era aquest ordre!'); return; }
+            if (this.entrat[i] !== this.ordre[i]) {
+                if (this.limitServei) this.limitServei.remove();
+                this.intents--;
+                if (this.intents <= 0) { this.puntJosep('No era aquest ordre!'); return; }
+                this.estat = 'mirant';
+                this.avis('No era aquest ordre. Mira-ho un cop més!', 1300, '#d8b0ff');
+                this.mostrarOrdre(1400);
+                return;
+            }
             if (this.entrat.length === this.ordre.length) {
                 if (this.limitServei) this.limitServei.remove();
                 this.estat = 'res';
@@ -189,11 +207,21 @@ class EscenaPingPong extends Phaser.Scene {
             return;
         }
         if (this.estat !== 'cop' || this.respost) return;
-        this.respost = true;
         const err = this.time.now - this.tCop;
+        if (Math.abs(err) > PP.BE) return;                     // encara és massa lluny: no passa res (es pot tornar a provar)
+        const exacte = c === this.carril, costat = Math.abs(c - this.carril) === 1;
+        if (!exacte && !costat) {                              // el carril de l'altra punta: s'avisa, però es pot rectificar
+            this.avis('Aquest no és el carril!', 600, '#f2e6c8'); this.so(0);
+            return;
+        }
+        this.respost = true;
         this.cercle.setVisible(false);
-        if (c !== this.carril) { this.cop(c, false); return this.puntJosep('Costat equivocat!'); }
-        if (Math.abs(err) > PP.BE) { this.cop(c, false); return this.puntJosep(err < 0 ? 'Massa d\'hora!' : 'Massa tard!'); }
+        if (!exacte) {                                         // el carril del costat: la pilota es torna de rebot, amb poca força
+            this.cop(c, true);
+            this.avis('De rebot!', 600, '#f2e6c8');
+            this.tornada(0.5 - this.rally * 0.04);
+            return;
+        }
         const perfecte = Math.abs(err) <= PP.PERFECTE;
         this.cop(c, true);
         this.avis(perfecte ? 'PERFECTE!' : 'Bé!', 500, perfecte ? '#9fe0ff' : '#f2e6c8');
@@ -205,12 +233,15 @@ class EscenaPingPong extends Phaser.Scene {
         this.estat = 'res';
         this.rally++;
         const c = Phaser.Math.Between(0, 2);
-        this.tornant = { t0: this.time.now, dur: 520, c };
-        this.time.delayedCall(560, () => {
+        this.tornant = { t0: this.time.now, dur: 760, c };
+        this.time.delayedCall(800, () => {
             this.tornant = null;
             if (this.acabat) return;
-            if (Math.random() < Math.max(0.12, prob)) { this.so(2); this.copEntrant(); }
-            else this.puntIneu(Math.random() < 0.5 ? 'En Josep no hi arriba!' : 'La pilota toca la xarxa!');
+            if (Math.random() < Math.max(0.15, prob)) { this.so(2); this.copEntrant(); }
+            else {                                                      // en Josep no la torna: la pilota se'n va per darrere seu
+                this.fugJosep = { t0: this.time.now, c };
+                this.time.delayedCall(850, () => { this.fugJosep = null; if (!this.acabat) this.puntIneu(Math.random() < 0.5 ? 'En Josep no hi arriba!' : 'La pilota toca la xarxa!'); });
+            }
         });
     }
 
@@ -230,7 +261,7 @@ class EscenaPingPong extends Phaser.Scene {
     finalPunt(text, color) {
         this.estat = 'res';
         this.cercle.setVisible(false);
-        this.pilota.setVisible(false); this.ombra.setVisible(false);
+        this.pilota.setVisible(false).setAlpha(1); this.ombra.setVisible(false).setAlpha(1);
         this.anells.forEach(a => a.setStrokeStyle(4, 0xf2e6c8, 0.25));
         this.actualitzarMarcador();
         this.avis(text, 900, color);
@@ -247,7 +278,31 @@ class EscenaPingPong extends Phaser.Scene {
             this.posarPilota(this.carril, f, true);
             const r = 46 + (150 - 46) * Math.max(0, 1 - f);
             this.cercle.setRadius(r);
-            if (time > this.tCop + PP.BE) { this.respost = true; this.puntJosep('No hi has arribat!'); }
+            const e = Math.abs(time - this.tCop);                 // el cercle canvia de color quan és el moment: groc, verd (bé) i blau (perfecte)
+            this.cercle.setStrokeStyle(5, e <= PP.PERFECTE ? 0x9fe0ff : e <= PP.BE ? 0x9fe0a0 : 0xffd34d, 1);
+            if (time > this.tCop + PP.BE) {                         // no hi arribes: la pilota continua cap enrere, no desapareix de cop
+                this.respost = true; this.estat = 'res';
+                this.cercle.setVisible(false);
+                this.fug = { t0: time, c: this.carril };
+                this.avis('No hi has arribat!', 800, '#ff9a8a');
+                this.time.delayedCall(950, () => { this.fug = null; if (!this.acabat) this.puntJosep('No hi has arribat!'); });
+            }
+        }
+        if (this.fug) {                                            // la pilota passa de llarg per darrere de l'Ineu, rebota i s'esvaeix
+            const f = Phaser.Math.Clamp((time - this.fug.t0) / 900, 0, 1);
+            const x = this.xCarril(this.fug.c, 1) + (this.fug.c - 1) * 90 * f;
+            const y = PP.copY + 40 + 190 * f - Math.abs(Math.sin(f * Math.PI * 1.5)) * 70;
+            const esc = 1.5 + f * 0.5;
+            this.pilota.setVisible(true).setPosition(x, y).setScale(esc).setAlpha(1 - f * 0.8);
+            this.ombra.setVisible(true).setPosition(x, PP.copY + 40 + 190 * f).setScale(esc).setAlpha(1 - f);
+        }
+        if (this.fugJosep) {                                       // la pilota d'en Josep se'n va cap al fons, per sobre la taula
+            const f = Phaser.Math.Clamp((time - this.fugJosep.t0) / 850, 0, 1);
+            const x = this.xCarril(this.fugJosep.c, 0) + (this.fugJosep.c - 1) * 40 * f;
+            const y = PP.fonsY - 30 - 110 * f + Math.abs(Math.sin(f * Math.PI * 2)) * 24;
+            const esc = 0.7 - 0.3 * f;
+            this.pilota.setVisible(true).setPosition(x, y).setScale(esc).setAlpha(1 - f * 0.8);
+            this.ombra.setVisible(true).setPosition(x, PP.fonsY - 30 - 60 * f).setScale(esc).setAlpha(1 - f);
         }
         if (this.tornant) {
             const f = Phaser.Math.Clamp((time - this.tornant.t0) / this.tornant.dur, 0, 1);

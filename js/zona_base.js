@@ -967,7 +967,7 @@ class ZonaBase extends Phaser.Scene {
             return g;
         };
         const esq = batent(true), dre = o.unic ? null : batent(false);
-        const P = { DX, DB, a: 0, estat: 'tancada', esq, dre };
+        const P = { DX, DB, a: 0, estat: 'tancada', esq, dre, bloq: o.bloq };
         this.portesAnim.push(P);
         return P;
     }
@@ -982,7 +982,7 @@ class ZonaBase extends Phaser.Scene {
         if (!this.ineu) return;
         this.portesAnim.forEach(P => {
             const d = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, P.DX, P.DB + 16);
-            const objectiu = P.forcaFins && this.time.now < P.forcaFins ? 1 : Phaser.Math.Clamp((230 - d) / 150, 0, 1);
+            const objectiu = P.forcaFins && this.time.now < P.forcaFins ? 1 : (P.bloq && P.bloq()) ? 0 : Phaser.Math.Clamp((230 - d) / 150, 0, 1);
             P.a += (objectiu - P.a) * (1 - Math.exp(-(delta || 16) / 130));
             const e = P.a * P.a * (3 - 2 * P.a);                          // entrada i sortida suaus
             [P.esq, P.dre].forEach(b => { if (b) { b.scaleX = 1 - 0.88 * e; b.setAlpha(1 - 0.25 * e); } });   // el batent es veu "de cantó" a mesura que gira cap endins
