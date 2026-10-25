@@ -213,8 +213,9 @@ class ZonaPingpong extends ZonaBase {
         // ---- La roda de carruatge davant la porta (s'empeny des d'un costat; cal Runna) ----
         this.rodaX = Estat.dades.flags.rodaX || AX;
         this.rodaMoguda = Estat.flag('rodaMoguda');
-        this.roda = this.posar('roda_carruatge', this.rodaX, YP + 52, { fonsY: YP + 56 });
-        this.colRoda = this.add.zone(this.rodaX, YP + 36, 110, 30);
+        this.roda = this.posar('roda_carruatge', this.rodaX, YP + 24, { fonsY: YP + 28 });   // recolzada a la paret, just davant del sòcol
+        this.roda.setOrigin(0.5, 0.5).setY(YP + 24 - this.roda.displayHeight / 2);          // gira sobre el seu centre (si no, en rodar quedaria separada de la paret)
+        this.colRoda = this.add.zone(this.rodaX, YP + 22, 110, 28);
         this.physics.add.existing(this.colRoda, true);
         if (this.rodaMoguda) this.roda.setAngle(this.rodaX > AX ? 180 : -180);
         this.empentaMs = 0; this.contacteRoda = 0; this.costatRoda = 1; this.pistaRoda = false;
