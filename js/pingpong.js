@@ -72,7 +72,7 @@ class EscenaPingPong extends Phaser.Scene {
         [[-1, a1, b1], [1, a2, b2]].forEach(([sg, a, b]) => { t.lineStyle(7, 0x2a2a2e, 1).lineBetween(a.x + sg * 8, a.y, b.x + sg * 8, b.y - 8); });
 
         // ---- Jugadors ----
-        this.spJosep = this.add.image(360, 335, 'josep_pp').setOrigin(0.5, 1);
+        this.spJosep = this.add.image(360, 335, 'josep_pp').setOrigin(0.5, 1).setDepth(1);
         this.spJosep.setScale(((this.textures.get('josep_pp').customData || {}).escala || 0.5) * 2.2);
         // Darrere la taula només es veu de cintura cap amunt: es retalla el gràfic i es baixa perquè la cintura quedi a la vora del fons de la taula
         const FR = 0.7;                                            // fracció del gràfic (de dalt a baix) que arriba a la cintura
@@ -89,7 +89,8 @@ class EscenaPingPong extends Phaser.Scene {
         gp.fillStyle(0x8a1a1a, 1).fillEllipse(0, -62, 52, 62).lineStyle(3, 0x1a0e06, 1).strokeEllipse(0, -62, 52, 62);
         gp.fillStyle(0xd83a3a, 1).fillEllipse(0, -64, 44, 54).fillStyle(0xffffff, 0.22).fillEllipse(-9, -74, 12, 22);
         this.pala.add(gp);
-        this.bracIneu = this.add.graphics().setDepth(5.5);
+        this.bracIneu = this.add.graphics().setDepth(4.8);          // la màniga queda per sota del cos de l'Ineu
+        this.manIneu = this.add.graphics().setDepth(6.5);           // la mà, per damunt del mànec de la pala
         this.impacte = this.add.circle(0, 0, 30).setStrokeStyle(5, 0xffffff, 0.9).setDepth(8).setVisible(false);
 
         // ---- Anells dels carrils i el cercle que es fa petit ----
@@ -97,8 +98,8 @@ class EscenaPingPong extends Phaser.Scene {
         this.cercle = this.add.circle(0, 0, 150).setStrokeStyle(5, 0xffd34d, 1).setDepth(4).setScale(1, 0.73).setVisible(false);
 
         // ---- Pilota amb ombra ----
-        this.ombra = this.add.ellipse(0, 0, 22, 8, 0x000000, 0.35).setDepth(2).setVisible(false);
-        this.pilota = this.add.circle(0, 0, 10, 0xfff6e0, 1).setStrokeStyle(2, 0xd8c8a0).setDepth(7).setVisible(false);
+        this.ombra = this.add.ellipse(0, 0, 22, 8, 0x000000, 0.35).setDepth(0.5).setVisible(false);
+        this.pilota = this.add.circle(0, 0, 10, 0xfff6e0, 1).setStrokeStyle(2, 0xd8c8a0).setDepth(16).setVisible(false);       // sempre per davant d'en Josep (i dels seus braços)
 
         // ---- Marcador, missatges i servei màgic ----
         this.add.rectangle(AMPLE / 2, 58, 460, 84, 0x1a120b, 0.85).setStrokeStyle(3, 0xd4af37);
@@ -401,8 +402,8 @@ class EscenaPingPong extends Phaser.Scene {
     update(time) {
         // Braç de l'Ineu: de l'espatlla a la mà que duu la pala (segueix el desplaçament i el gir de la pala)
         const bi = this.bracIneu, sx = this.spIneu.x + 24, sy = this.spIneu.y - 120, hx = this.pala.x, hy = this.pala.y;
-        bi.clear().lineStyle(28, 0x140a04, 1).lineBetween(sx, sy, hx, hy).lineStyle(21, 0x6a4a2e, 1).lineBetween(sx, sy, hx, hy)
-          .fillStyle(0xf4cba2, 1).fillCircle(hx, hy, 11).lineStyle(3, 0x140a04, 1).strokeCircle(hx, hy, 11);
+        bi.clear().lineStyle(28, 0x140a04, 1).lineBetween(sx, sy, hx, hy).lineStyle(21, 0x6a4a2e, 1).lineBetween(sx, sy, hx, hy);
+        this.manIneu.clear().fillStyle(0xf4cba2, 1).fillCircle(hx, hy, 11).lineStyle(3, 0x140a04, 1).strokeCircle(hx, hy, 11);
         // Pilota que ve: bota a la meitat de l'Ineu i s'enlaira; al punt més alt és el moment del cop
         if (this.estat === 'cop' && !this.respost) {
             const t = time - this.t0, f = t / this.durada;
