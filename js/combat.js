@@ -7,6 +7,72 @@
  */
 const DIRS = { avall: { x: 0, y: 1 }, amunt: { x: 0, y: -1 }, esquerra: { x: -1, y: 0 }, dreta: { x: 1, y: 0 } };
 
+// L'ocell de foc de l'Ocellaire: un ocell fet de flames, de perfil, que mou les ales (4 fotogrames: amunt, mig, avall, mig)
+// i deixa una cua de flames. Es dibuixa amb codi (el joc no necessita cap PNG) i s'anima amb 'ocell_foc_vola'.
+function preparaOcellFoc(scene) {
+    const FW = 160, FH = 120;
+    if (!scene.textures.exists('ocell_foc')) {
+        const tex = scene.textures.createCanvas('ocell_foc', FW * 4, FH);
+        const ctx = tex.getContext();
+        const TINTA = '#4a1204';
+        const ala = (ox, ang, mida, alfa) => {                 // una ala de plomes de foc, que surt de l'espatlla
+            ctx.save();
+            ctx.translate(ox + 80, 58); ctx.rotate(ang); ctx.globalAlpha = alfa;
+            const L = 64 * mida, g = ctx.createLinearGradient(0, 0, 0, -L);
+            g.addColorStop(0, '#fff2a0'); g.addColorStop(0.45, '#ffa030'); g.addColorStop(1, '#e83a10');
+            ctx.fillStyle = g; ctx.strokeStyle = TINTA; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
+            ctx.beginPath(); ctx.moveTo(-9, 2);
+            ctx.quadraticCurveTo(-26 * mida, -L * 0.5, -12 * mida, -L);
+            [[-6, -L + 10], [-1, -L - 4], [4, -L + 12], [10, -L - 2], [14, -L + 14], [20, -L + 4], [22, -L * 0.62]].forEach(([x, y]) => ctx.lineTo(x * mida, y));
+            ctx.quadraticCurveTo(22 * mida, -L * 0.3, 11, 2);
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.globalAlpha = alfa * 0.8; ctx.strokeStyle = '#fff6c0'; ctx.lineWidth = 2;      // les nervadures de llum
+            [-6, 3, 12].forEach(x => { ctx.beginPath(); ctx.moveTo(x * 0.3, -6); ctx.quadraticCurveTo(x, -L * 0.5, x * 1.1, -L * 0.82); ctx.stroke(); });
+            ctx.restore();
+        };
+        const llengua = (x, y, long, ample, ang, fons, punta) => {      // una llengua de foc que apunta cap a 'ang'
+            ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+            const g = ctx.createLinearGradient(0, 0, long, 0);
+            g.addColorStop(0, fons); g.addColorStop(1, punta);
+            ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, -ample);
+            ctx.quadraticCurveTo(long * 0.55, -ample * 1.1, long, 0); ctx.quadraticCurveTo(long * 0.55, ample * 1.1, 0, ample);
+            ctx.closePath(); ctx.fill(); ctx.restore();
+        };
+        // [angle de l'ala, fase de les flames]
+        [[-0.3, 0], [-1.25, 1.2], [-2.3, 2.4], [-1.25, 3.6]].forEach(([ang, fase], i) => {
+            const ox = i * FW;
+            // resplendor
+            const halo = ctx.createRadialGradient(ox + 84, 64, 4, ox + 84, 64, 62);
+            halo.addColorStop(0, 'rgba(255,190,70,0.6)'); halo.addColorStop(1, 'rgba(255,90,20,0)');
+            ctx.fillStyle = halo; ctx.fillRect(ox, 0, FW, FH);
+            // cua de flames, darrere
+            [[0, 28, 11], [-0.35, 24, 9], [0.35, 24, 9], [-0.7, 17, 7], [0.7, 17, 7]].forEach(([a, l, w], k) => {
+                const ond = Math.sin(fase + k * 1.3) * 0.22;
+                llengua(ox + 62, 66, l * 1.9, w * 1.15, Math.PI + a + ond, '#ff8a20', 'rgba(232,50,16,0)');
+            });
+            ala(ox, ang * 0.8 + 0.5, 0.78, 0.55);                 // l'ala llunyana, més fosca i petita
+            // cos
+            const cos = ctx.createRadialGradient(ox + 80, 62, 2, ox + 80, 66, 30);
+            cos.addColorStop(0, '#fff0a0'); cos.addColorStop(0.5, '#ffa030'); cos.addColorStop(1, '#e8400e');
+            ctx.fillStyle = cos; ctx.strokeStyle = TINTA; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.ellipse(ox + 80, 65, 27, 17, -0.12, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            // cap, cresta de flames i bec
+            [[-1.9, 12], [-1.4, 15], [-0.95, 11]].forEach(([a, l], k) => llengua(ox + 107, 51, l, 4.5, a + Math.sin(fase + k) * 0.15, '#ff9a28', 'rgba(255,230,120,0)'));
+            ctx.fillStyle = cos; ctx.beginPath(); ctx.arc(ox + 108, 55, 13, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#ffd860'; ctx.beginPath(); ctx.moveTo(ox + 118, 51); ctx.lineTo(ox + 138, 58); ctx.lineTo(ox + 118, 64); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#fffbe0'; ctx.beginPath(); ctx.arc(ox + 112, 52, 4.2, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#7a1604'; ctx.beginPath(); ctx.arc(ox + 113.5, 52, 2.1, 0, Math.PI * 2); ctx.fill();
+            ala(ox, ang, 1, 1);                                    // l'ala propera, a davant
+        });
+        tex.refresh();
+        for (let i = 0; i < 4; i++) tex.add(i, 0, i * FW, 0, FW, FH);
+        tex.customData.escala = 1 / RES;
+    }
+    if (!scene.anims.exists('ocell_foc_vola')) {
+        scene.anims.create({ key: 'ocell_foc_vola', frames: [0, 1, 2, 1].map(f => ({ key: 'ocell_foc', frame: f })), frameRate: 16, repeat: -1 });
+    }
+}
+
 const ENEMICS = {
     escolopendra: {
         tex: 'escolopendra', vida: 2, vel: 95, mal: 1, radi: 20, cos: [40, 16], ombra: 0, centrat: true,   // l'ombra ja és al dibuix; vista de dalt, el cos és al mig
@@ -261,8 +327,9 @@ const ENEMICS = {
 
     // Ocell de foc de l'Ocellaire: volta al voltant del seu amo i, quan li toca, es llança contra l'Ineu
     ocellFoc: {
-        tex: 'ocell', vida: 1, vel: 300, mal: 1, radi: 18, cos: [26, 20], ombra: 0.15, centrat: true,
+        tex: 'ocell_foc', vida: 1, vel: 300, mal: 1, radi: 18, cos: [26, 20], ombra: 0.15, centrat: true,
         monedes: [0, 0, 0], cor: 0,
+        preparar: z => preparaOcellFoc(z),
         perill: e => e.estat === 'vola' || e.estat === 'orbita',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
@@ -388,6 +455,7 @@ Object.assign(ZonaBase.prototype, {
     // ---------------- Crear enemics ----------------
     enemic(tipus, x, y, opts = {}) {
         const def = ENEMICS[tipus];
+        if (def.preparar) def.preparar(this);
         // Fins que l'Ineu no ha acabat el tutorial del bastó, la boira no ha despertat les bestioles
         if (!Estat.flag('combatActiu')) return null;
         const tex = this.textures.get(def.tex);

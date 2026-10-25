@@ -659,8 +659,8 @@ class ZonaGabia extends ZonaBase {
 
     // Rastre de foc d'un ocell
     flamaOcell(o) {
-        o.spr.setTintFill(0xffa040).setBlendMode('ADD');
-        o.spr.setScale(o.escalaBase * 1.9); o.escalaBase *= 1.9;
+        o.spr.anims.play('ocell_foc_vola');
+        o.spr.anims.setProgress(Math.random());                 // que no aleteixin tots alhora
         o.flama = this.add.particles(0, 0, 'espurna', {
             follow: o.spr, speed: { min: 5, max: 40 }, lifespan: 380, scale: { start: 0.3, end: 0 }, alpha: { start: 0.9, end: 0 },
             tint: [0xff9a40, 0xffd060, 0xff5020], blendMode: 'ADD', frequency: 45
