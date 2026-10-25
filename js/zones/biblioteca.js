@@ -75,21 +75,21 @@ class ZonaBiblioteca extends ZonaBase {
         this.add.image(1000, 220, 'prestatge_lat_d').setOrigin(0).setScale(1 / RES).setDepth(-980);
 
         // Prestatgeries lliures de terra a sostre, en dues files, que formen passadissos: la biblioteca és enorme
-        [['prestatge_l1', 170, 540, 3], ['prestatge_l2', 930, 540, 4], ['prestatge_l3', 185, 700, 5], ['prestatge_l4', 340, 700, 3],
-         ['prestatge_l5', 760, 700, 4], ['prestatge_l6', 915, 700, 5]].forEach(([k, x, base, n]) => {
+        [['prestatge_l1', 170, 540, 3], ['prestatge_l2', 930, 540, 4], ['prestatge_l3', 185, 740, 5], ['prestatge_l4', 336, 740, 3],
+         ['prestatge_l5', 768, 740, 4], ['prestatge_l6', 915, 740, 5]].forEach(([k, x, base, n]) => {
             const g = this.add.image(x, base, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(base);
             this.add.ellipse(x, base + 2, g.displayWidth + 24, 14, 0x000000, 0.28).setDepth(base - 1);
             this.colisio(x, base - 12, g.displayWidth, 24);
             this.interactiu(x, base + 22, 70, DIALEGS.prestatgesBiblio(n), { altura: 170 });
         });
         // Piles de llibres a terra
-        [['pila_a', 140, 800], ['pila_b', 960, 800], ['pila_c', 330, 590], ['pila_a', 780, 590], ['pila_b', 962, 330]].forEach(([k, x, y]) => {
+        [['pila_a', 140, 810], ['pila_b', 960, 810], ['pila_c', 290, 440], ['pila_a', 812, 450], ['pila_b', 962, 330]].forEach(([k, x, y]) => {
             this.add.image(x, y, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
             this.colisio(x, y - 6, 44, 16);
         });
 
         // Escala de mà recolzada a la prestatgeria de l'esquerra
-        this.add.image(228, 236, 'escala_biblio').setOrigin(0.5, 1).setScale(1 / RES).setDepth(230);
+        this.add.image(160, 238, 'escala_biblio').setOrigin(0.5, 1).setScale(1 / RES).setDepth(230);
 
         // Parets i col·lisions
         this.colisio(50, H / 2, 100, H);
@@ -106,7 +106,7 @@ class ZonaBiblioteca extends ZonaBase {
             this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 320 + i * 90 });
             this.add.circle(x, y - 40, 60, 0xffc060, 0.08).setDepth(480);
         });
-        [[400, 548], [550, 553], [700, 548]].forEach(([x, y]) => {
+        [[432, 548], [550, 553], [668, 548]].forEach(([x, y]) => {
             this.add.image(x, y, 'cadira_biblio').setOrigin(0.5, 1).setScale(1.15 / RES).setDepth(y);
             this.colisio(x, y - 8, 34, 14);
         });
