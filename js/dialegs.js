@@ -391,19 +391,28 @@ const DIALEGS = {
     }),
 
     josep: E => E.flag('josepVencut') ? {
-        pagines: [{ qui: 'Josep', text: 'Ningú no m\'havia tornat el servei en vint anys. Ni l\'Eloi. Quan vulguis la revenja, aquí em tens... però ja no et regalaré res.' }]
+        pagines: [
+            { qui: 'Josep', text: 'Ningú no m\'havia tornat el servei en vint anys. Ni l\'Eloi. Ja no et regalaré res, però la taula és teva quan vulguis.' },
+            { qui: 'Josep', text: 'Vols jugar un altre partit?' },
+            { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaPP = i; fet(); }) }
+        ],
+        enAcabar: () => { if (DIALEGS._triaPP === 0) game.scene.start('PingPong'); DIALEGS._triaPP = null; }
     } : {
         pagines: [
             { qui: 'Josep', text: 'Aquest és el meu servei. Ningú no l\'ha tornat mai. Ni l\'Eloi, per molt que presumeixi.' },
             { qui: 'Josep', text: 'Aquí al Celler les coses es guanyen a la taula. Si vols que la gent d\'aquí et parli de debò, guanya\'m: un sol partit, a set punts.' },
             { qui: '', text: 'COM ES JUGA (1/3). La pilota ve per un dels tres carrils de la taula. Un cercle groc es fa petit fins a l\'anell d\'aquell carril. Quan l\'atrapa, prem el carril: ← ↓ → (o A S D, o els tres botons de sota). L\'Ineu es desplaça fins al carril, colpeja amb la pala i la pilota torna des d\'allà mateix.' },
             { qui: '', text: 'COM ES JUGA (2/3). La pilota bota a la teva meitat de la taula i s\'enlaira: quan és al punt més alt, el cercle es posa VERD (ja pots colpejar) i BLAU (cop perfecte: en Josep gairebé mai no la torna). Cal prémer EL CARRIL DE LA PILOTA: si prems un altre, l\'Ineu hi va i fa el gest a l\'aire, però no la toca. Perds el punt només si la pilota et passa de llarg.' },
-            { qui: '', text: 'COM ES JUGA (3/3). Quan en Josep serveix, el servei màgic ensenya tres carrils, un a un: memoritza\'ls i repeteix-los en ordre (dos intents). Quan serveixes tu, prem qualsevol botó. Set punts, i cal guanyar de dos.' }
+            { qui: '', text: 'COM ES JUGA (3/3). Quan en Josep serveix, el servei màgic ensenya tres carrils, un a un: memoritza\'ls i repeteix-los en ordre (dos intents). Quan serveixes tu, prem el carril des d\'on vols servir: l\'Ineu hi va i la pilota en surt d\'allà. Set punts, i cal guanyar de dos.' }
         ],
         enAcabar: () => game.scene.start('PingPong')
     },
 
-    josepGuanyat: E => ({
+    josepGuanyat: E => E.flag('josepVencut') ? ({
+        pagines: [
+            { qui: 'Josep', text: 'Un altre cop me l\'has tornat... El servei és teu, noi. Quan vulguis, tornem-hi.' }
+        ]
+    }) : ({
         pagines: [
             { qui: 'Josep', text: '...Me l\'has tornat. El servei. Me l\'has tornat de debò.' },
             { qui: 'Juli', text: 'HO SABIA! Efecte Magnus, Josep! Física pura!' },
@@ -421,7 +430,7 @@ const DIALEGS = {
 
     josepPerdut: (E, abandonat) => ({
         pagines: [{ qui: 'Josep', text: abandonat ? 'Ja te\'n vas? La taula no fuig. Torna quan vulguis.' : 'Bona partida, monjo. Però el servei encara és meu. Torna-hi quan vulguis: el Juli diu que la segona vegada sempre surt millor.' }],
-        enAcabar: () => E.posaObjectiu('Guanya en Josep a ping-pong, al Celler: parla-hi per jugar.')
+        enAcabar: () => { if (!E.flag('josepVencut')) E.posaObjectiu('Guanya en Josep a ping-pong, al Celler: parla-hi per jugar.'); }
     }),
 
     taulaPP: E => ({ pagines: [{ qui: '', text: E.flag('josepVencut') ? 'La taula on vas guanyar en Josep. Encara hi ha la marca de la pilota, al cantell.' : 'Una taula de ping-pong. Per jugar-hi, parla amb en Josep: és ell qui mana a la sala.' }] }),

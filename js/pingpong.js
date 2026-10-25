@@ -6,7 +6,7 @@
  *   o el botó de sota). Hi ha un marge ampli abans i després: perfecte = cop fort; bé = cop normal. Només el carril de la pilota
  *   la toca: un altre carril fa que l'Ineu hi vagi i faci el gest en fals (un instant d'espera). Només perds el punt si no hi arribes.
  * - Servei màgic d'en Josep: mostra tres carrils amb calma; repeteix-los en ordre per tornar-lo (hi ha dos intents).
- * - El teu servei: qualsevol botó (↓, ESPAI o els botons de sota).
+ * - El teu servei: prem el carril des d'on vols servir (la pilota hi surt d'aquell carril).
  * - Set punts; a 6-6, cal guanyar de dos. Es canvia de servei cada dos punts.
  */
 const PP = {
@@ -218,8 +218,8 @@ class EscenaPingPong extends Phaser.Scene {
         this.actualitzarMarcador();
         if (this.serveixIneu()) {
             this.estat = 'serveiIneu';
-            this.avis('El teu servei: prem qualsevol botó (↓ o ESPAI)', 1800, '#f2e6c8');
-            this.anells[1].setStrokeStyle(5, 0xffd34d, 0.9);
+            this.avis('El teu servei: tria el carril des d\'on vols servir', 1800, '#f2e6c8');
+            this.anells.forEach(a => a.setStrokeStyle(5, 0xffd34d, 0.9));
         } else {
             this.serveiMagic();
         }
@@ -303,9 +303,9 @@ class EscenaPingPong extends Phaser.Scene {
     entrada(c) {
         if (this.acabat) return;
         if (this.estat === 'serveiIneu') {
-            this.anells[1].setStrokeStyle(4, 0xf2e6c8, 0.25);
-            this.cop(1, true);
-            this.tornada(0.8, 1);
+            this.anells.forEach(a => a.setStrokeStyle(4, 0xf2e6c8, 0.25));
+            this.cop(c, true);                                           // serveixes des del carril que has premut
+            this.tornada(0.8, c);
             return;
         }
         if (this.estat === 'repetint') {

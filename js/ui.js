@@ -437,6 +437,38 @@ class EscenaUI extends Phaser.Scene {
         this.actualitzarHUD();
     }
 
+    // Tria entre dues (o més) respostes, com «Sí» / «No»: botons grans que es toquen o es trien amb ← → (A D) i ESPAI/ENTER.
+    // cb(i) rep la posició de la resposta. S'usa des d'una pàgina d'acció d'un diàleg: { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { ...; fet(); }) }
+    triar(opcions, cb) {
+        const y = ALT - 330, ample = 250, sep = 40, total = opcions.length * ample + (opcions.length - 1) * sep, x0 = AMPLE / 2 - total / 2 + ample / 2;
+        const cont = this.add.container(0, 0).setDepth(70);
+        let sel = 0, fet = false;
+        const botons = opcions.map((t, i) => {
+            const x = x0 + i * (ample + sep);
+            const fons = marcPergami(this, x, y, ample, 110);
+            const txt = this.add.text(x, y, t, { fontFamily: FONT_PLACA, fontSize: '44px', fontStyle: 'bold', color: '#3a1a0c', resolution: 2 }).setOrigin(0.5);
+            const zona = this.add.rectangle(x, y, ample, 110, 0xffffff, 0.001).setInteractive({ useHandCursor: true });
+            zona.on('pointerdown', () => tria(i)); zona.on('pointerover', () => { sel = i; pinta(); });
+            cont.add([fons, txt, zona]);
+            return { txt, fons };
+        });
+        const pinta = () => botons.forEach((b, i) => { b.txt.setText((i === sel ? '▸ ' : '') + opcions[i]).setColor(i === sel ? '#a01c10' : '#3a1a0c'); b.fons.setAlpha(i === sel ? 1 : 0.8); });
+        const tecla = ev => {
+            if (['ArrowLeft', 'ArrowUp', 'KeyA', 'KeyW'].includes(ev.code)) { sel = (sel + opcions.length - 1) % opcions.length; pinta(); }
+            else if (['ArrowRight', 'ArrowDown', 'KeyD', 'KeyS'].includes(ev.code)) { sel = (sel + 1) % opcions.length; pinta(); }
+            else if (['Space', 'Enter'].includes(ev.code)) tria(sel);
+        };
+        const tria = i => {
+            if (fet) return; fet = true;
+            this.input.keyboard.off('keydown', tecla);
+            cont.destroy();
+            this.bloquejatFins = this.time.now + 250;
+            cb(i);
+        };
+        this.input.keyboard.on('keydown', tecla);
+        pinta();
+    }
+
     // ---------------- MENÚ ----------------
     crearMenu() {
         this.menu = this.add.container(0, 0).setVisible(false).setDepth(60);
