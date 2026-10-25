@@ -57,7 +57,11 @@ class EscenaPingPong extends Phaser.Scene {
 
         // ---- Jugadors ----
         this.spJosep = this.add.image(360, 335, 'josep').setOrigin(0.5, 1);
-        this.spJosep.setScale(((this.textures.get('josep').customData || {}).escala || 0.5) * 1.5);
+        this.spJosep.setScale(((this.textures.get('josep').customData || {}).escala || 0.5) * 2.2);
+        // Darrere la taula només es veu de cintura cap amunt: es retalla el gràfic i es baixa perquè la cintura quedi a la vora del fons de la taula
+        const FR = 0.7;                                            // fracció del gràfic (de dalt a baix) que arriba a la cintura
+        this.spJosep.setCrop(0, 0, this.spJosep.width, this.spJosep.height * FR);
+        this.spJosep.setY(PP.fonsY + 6 + this.spJosep.displayHeight * (1 - FR));
         const ineuTex = this.textures.exists('ineu_up') ? 'ineu_up' : 'ineu_avall';
         this.spIneu = this.add.sprite(360, ALT - 100, ineuTex, 0).setOrigin(0.5, 1).setDepth(5);
         this.spIneu.setScale(((this.textures.get(ineuTex).customData || {}).escala || 0.5) * 1.6);
