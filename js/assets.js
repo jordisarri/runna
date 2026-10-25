@@ -18,12 +18,12 @@ const CATALEG = [
     // Personatges
     { key: 'pare_jordi',   file: 'assets/personatges/pare_jordi.png',   amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
     { key: 'germa_andreu', file: 'assets/personatges/germa_andreu.webp', amplada: 84, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
-    { key: 'pare_daniel',  file: 'assets/personatges/pare_daniel.png',  amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
+    { key: 'pare_daniel',  file: 'assets/personatges/pare_daniel.webp',  amplada: 82, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
     { key: 'monja_pains',   file: 'assets/personatges/monja_pains.png',   amplada: 110, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },
     { key: 'monja_charm',   file: 'assets/personatges/monja_charm.png',   amplada: 110, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#6a4a2e', ample: 1.45, alt: 0.92 }) },
     { key: 'monja_phili',   file: 'assets/personatges/monja_phili.png',   amplada: 96,  provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#3b2a1e', ulleres: true, ample: 0.8, alt: 1.06 }) },
     { key: 'germa_francesc', file: 'assets/personatges/germa_francesc.png', amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
-    { key: 'pare_alcui',   file: 'assets/personatges/pare_alcui.png',   amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
+    { key: 'pare_alcui',   file: 'assets/personatges/pare_alcui.webp',   amplada: 81, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
     // Elements
     { key: 'home_raim',    file: 'assets/personatges/home_raim.png',    amplada: 110, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },
     { key: 'creu',         file: 'assets/objectes/creu.webp',        amplada: 150,  provisional: (c, w) => dibuixarCreuAparicio(c, w) },
