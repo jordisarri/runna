@@ -641,11 +641,14 @@ class ZonaJordi extends ZonaBase {
         this.terra('cami', 330, 500, 770, 150);            // del Til·ler (est) a la porta de la casa
 
         // La casa d'en Jordi (520 d'ample): la porta del mig duu a dins
-        this.edifici('masia', 380, 480, 500, 90, 'ZonaCasaJordi', 'porta', { alt: 90 });
+        const masiaJordi = this.edifici('masia', 380, 480, 500, 90, 'ZonaCasaJordi', 'porta', { alt: 90 });
+        this.portaMasia(masiaJordi, 380, 480);
         this.npc('jordi_caseta', 560, 590, DIALEGS.jordiCaseta);
 
         // La caseta, aixecada sobre pilars de fusta: s'hi puja per l'escala del mig (la palanca és a dins)
-        this.edifici('caseta_joc', 860, 500, 250, 64, 'ZonaCasetaJoc', 'porta', { alt: 80 });
+        const caseta = this.edifici('caseta_joc', 860, 500, 250, 64, 'ZonaCasetaJoc', 'porta', { alt: 80 });
+        const kT = 500 - caseta.displayHeight;      // la porta és a la terrassa, damunt dels pilars: s'obre quan l'Ineu s'acosta a l'escala
+        this.portaAnimada({ x: 860, top: kT + caseta.displayHeight * 0.27 + 10, bottom: kT + caseta.displayHeight * 0.6 - 5, ample: caseta.displayWidth * 0.18, fons: 480, unic: true, retall: caseta });
 
         // Detalls de jardí
         this.posar('barril', 1010, 470, { col: { w: 40, h: 16 } });

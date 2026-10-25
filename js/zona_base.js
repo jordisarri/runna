@@ -906,7 +906,9 @@ class ZonaBase extends Phaser.Scene {
                     ct.refresh();
                 }
                 const g = this.add.container(DX - DW / 2, DT).setDepth(Z + 2);
-                g.add(this.add.image(0, 0, nom).setOrigin(0).setScale(im.scaleX, im.scaleY));
+                const bi = this.add.image(0, 0, nom).setOrigin(0).setScale(im.scaleX, im.scaleY);
+                if (o.tint) bi.setTint(o.tint);                         // la façana té un to (setTint): el batent l'ha de tenir igual
+                g.add(bi);
                 return g;
             }
             const g = this.add.graphics().setDepth(Z + 2);
@@ -938,14 +940,22 @@ class ZonaBase extends Phaser.Scene {
             return g;
         };
         const esq = batent(true), dre = o.unic ? null : batent(false);
-        this.portesAnim.push({ DX, DB, a: 0, estat: 'tancada', esq, dre });
+        const P = { DX, DB, a: 0, estat: 'tancada', esq, dre };
+        this.portesAnim.push(P);
+        return P;
+    }
+
+    // El portal d'arc de la masia (gràfic provisional 'masia'): x, y = peus del centre de la façana
+    portaMasia(img, x, y) {
+        const t = y - img.displayHeight;
+        this.portaAnimada({ x, top: t + img.displayHeight * 0.56, bottom: y - 4, ample: img.displayWidth * 0.15, fons: y - 20, unic: true, arc: true, retall: img, tint: img.isTinted ? img.tintTopLeft : 0 });
     }
 
     actualitzarPortes(delta) {
         if (!this.ineu) return;
         this.portesAnim.forEach(P => {
             const d = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, P.DX, P.DB + 16);
-            const objectiu = Phaser.Math.Clamp((230 - d) / 150, 0, 1);
+            const objectiu = P.forcaFins && this.time.now < P.forcaFins ? 1 : Phaser.Math.Clamp((230 - d) / 150, 0, 1);
             P.a += (objectiu - P.a) * (1 - Math.exp(-(delta || 16) / 130));
             const e = P.a * P.a * (3 - 2 * P.a);                          // entrada i sortida suaus
             [P.esq, P.dre].forEach(b => { if (b) { b.scaleX = 1 - 0.88 * e; b.setAlpha(1 - 0.25 * e); } });   // el batent es veu "de cantó" a mesura que gira cap endins

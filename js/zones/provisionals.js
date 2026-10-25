@@ -217,6 +217,7 @@ class ZonaMonestir extends ZonaBase {
         this.colisio(800, 280 + D, 92, 60);
         this.blocDarrere(800, 790, 405);
         this.sortida(754, 380 + D, 92, 50, 'ZonaBiblioteca', 'porta');
+        this.portaAnimada({ x: 800, top: 325, bottom: 435, ample: 74, fons: 440 + D, color: 0x6a4328, panell: 0x7a5233, vora: 0x2a1608, ferro: true });   // el portal romànic: els batents de fusta s'obren cap endins
         // Xiprers alts a l'esquerra del portal i una conífera a la dreta (com a la foto del monestir)
         [[440, 445, 1.7], [492, 452, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y + D, { escala: e, col: { w: 26, h: 12 } }));
         this.posar('xiprer', 1165, 450 + D, { escala: 1.9, col: { w: 30, h: 12 } });

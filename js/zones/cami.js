@@ -415,13 +415,13 @@ class ZonaTaverna extends ZonaBase {
         this.terra('llamborda', 320, 740, 960, 140);        // replà empedrat davant la façana
 
         // Façana (900 d'ample, tres plantes): la porta és l'arc del mig
-        const t = this.posar('taverna', 800, 750, { fonsY: 640 });
+        const t = this.taverna = this.posar('taverna', 800, 750, { fonsY: 640 });
         this.colisio(555, 705, 410, 90);
         this.colisio(1045, 705, 410, 90);
         this.blocDarrere(800, 900, 660, Math.max(0, 750 - t.displayHeight));
         // La porta (l'arc del mig): tancada fins que l'Eva l'obre des de dins
         this.colPorta = this.colisio(800, 705, 80, 90);
-        if (Estat.flag('tavernaOberta')) this.obrirPorta();
+        if (Estat.flag('tavernaOberta')) { this.obrirPorta(); this.portaTavernaAnim(); }
         else this.interactiu(800, 765, 90, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() });
 
         // Barrils a la dreta, taula i banc a l'esquerra, contra la façana
@@ -469,6 +469,14 @@ class ZonaTaverna extends ZonaBase {
         Estat.posaFlag('portaSoterraniOberta');
         Sfx.secret(); this.cameras.main.shake(300, 0.003);
         this.pintarPortaSoterrani(true);
+        // Les dues fulles de ferro s'obren cap als costats (giren sobre la frontissa de fora) i descobreixen l'escala
+        [-1, 1].forEach(s => {
+            const f = this.add.graphics().setDepth(781).setPosition(1340 + s * 64, 790);   // l'origen és la frontissa (vora de fora)
+            const x0 = s < 0 ? 0 : -64;
+            f.fillStyle(0x2a2a30, 1).fillRect(x0, -50, 64, 50).lineStyle(2, 0x111114, 1).strokeRect(x0, -50, 64, 50);
+            for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) f.fillStyle(0x5a5a62, 1).fillCircle(x0 + 10 + c * 20, -42 + r * 16, 3);
+            this.tweens.add({ targets: f, scaleX: 0.08, duration: 900, ease: 'Sine.easeInOut', onComplete: () => f.destroy() });
+        });
         this.sortida(1290, 780, 100, 30, 'ZonaSotaTaverna', 'exterior');
         Estat.posaObjectiu('Baixa al soterrani de la Taverna per la porta de ferro de fora.');
         Estat.desar();
@@ -487,8 +495,14 @@ class ZonaTaverna extends ZonaBase {
     // Se sent el forrellat i la porta del mig s'obre (es veu fosc a dins)
     obrirPortaAnim(fet) {
         Sfx.secret && Sfx.secret();
-        const forat = this.add.rectangle(800, 705, 2, 92, 0x120a04).setDepth(760);
-        this.tweens.add({ targets: forat, width: 70, duration: 700, ease: 'Sine.easeOut', onComplete: fet });
+        const P = this.portaTavernaAnim();
+        P.forcaFins = this.time.now + 1400;          // els batents s'obren sols; després segueixen l'Ineu com la resta de portes
+        this.time.delayedCall(900, fet);
+    }
+
+    // L'arc del mig de la façana: els batents són el tros del mateix gràfic i giren cap endins quan l'Ineu s'hi acosta
+    portaTavernaAnim() {
+        return this.portaTaverna || (this.portaTaverna = this.portaAnimada({ x: 800, top: 555, bottom: 745, ample: 112, fons: 640, unic: true, arc: true, retall: this.taverna }));
     }
 
     obrirPorta() {

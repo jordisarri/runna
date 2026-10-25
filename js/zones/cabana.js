@@ -95,7 +95,9 @@ class ZonaCabana extends ZonaBase {
         });
 
         // La cabana, bruta i deixada
-        this.edifici('cabana', 800, 590, 360, 80, 'ZonaCabanaInt', 'porta', { alt: 95 });
+        const cabana = this.edifici('cabana', 800, 590, 360, 80, 'ZonaCabanaInt', 'porta', { alt: 95 });
+        const cT = 590 - cabana.displayHeight;
+        this.portaAnimada({ x: 800, top: cT + cabana.displayHeight * 0.58, bottom: 590 - 11, ample: 76, fons: 570, unic: true, retall: cabana });   // la porta de taulons del gràfic, que s'obre
         this.posar('olla', 1000, 660, { col: { w: 50, h: 20 } });
         this.add.circle(1000, 600, 55, 0x9ae060, 0.12).setDepth(660);
         this.boira(790, 300, 140, 60, 0.5);

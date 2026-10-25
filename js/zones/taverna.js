@@ -248,6 +248,14 @@ class ZonaSotaTaverna extends ZonaBase {
         forat.fillStyle(0x000000, 1).fillRect(312, 20, 176, 140);
         for (let k = 0; k < 5; k++) forat.fillStyle(0x2a2430 - k * 0x040404, 1).fillRect(330 + k * 6, 40 + k * 22, 140 - k * 12, 18);
         forat.fillStyle(0x2a2a30, 1).fillRect(470, 18, 30, 142);
+        // La fulla de ferro gira sobre la frontissa de l'esquerra i es queda oberta, de cantó
+        const f = this.add.graphics().setDepth(-944).setPosition(310, 18);
+        f.fillStyle(0x2a2a30, 1).fillRect(0, 0, 180, 142).lineStyle(2, 0x111114, 1).strokeRect(0, 0, 180, 142);
+        for (let y = 12; y < 142; y += 26) for (let x = 12; x < 180; x += 28) f.fillStyle(0x4a4a52, 1).fillCircle(x, y, 4);
+        f.fillStyle(0x1a1a1e, 1).fillRect(0, 64, 180, 10).fillRect(0, 110, 180, 10);
+        f.fillStyle(0x8a7a40, 1).fillRect(150, 70, 18, 26).fillStyle(0x0a0808, 1).fillRect(156, 78, 6, 12);
+        if (ja) f.scaleX = 0.1;
+        else this.tweens.add({ targets: f, scaleX: 0.1, duration: 1100, ease: 'Sine.easeInOut' });
         this.sortida(340, 170, 120, 30, 'ZonaGirgoles', 'porta');
     }
 }

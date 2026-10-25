@@ -142,7 +142,8 @@ class ZonaCirosa extends ZonaBase {
         this.terra('cami', 200, 620, 800, 140);           // davant la masia i cap a la pastura
 
         // La masia (mas vell i descurat) amb la porta que duu a dins
-        this.edifici('masia', 380, 640, 520, 90, 'ZonaMasiaCirosa', 'porta', { alt: 110 }).setTint(0xc8b8a0);
+        const masia = this.edifici('masia', 380, 640, 520, 90, 'ZonaMasiaCirosa', 'porta', { alt: 110 }).setTint(0xc8b8a0);
+        this.portaMasia(masia, 380, 640);
         this.posar('barril', 830, 690, { col: { w: 40, h: 16 } });
         this.posar('barril', 875, 700, { col: { w: 40, h: 16 } });
         this.posar('llenya', 110, 700, { col: { w: 90, h: 22 } });
