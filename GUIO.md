@@ -243,5 +243,5 @@ S'obre amb el medalló del sarró (o **I**; **M** obre el mapa; **◀ ▶** canv
 El Diari (Encàrrecs) mostra el premi de cada missió.
 
 **Pistes repensades**
-- *Rellotge:* el Pare Daniel en parla ja a la primera conversa, la porta de la dreta del retaule **brilla** amb una llum daurada i espurnes, i la pista de les Tietes explica on és la nota dels engranatges.
+- *Rellotge:* el Pare Daniel en parla ja a la primera conversa, la porta de la dreta del retaule **s'obre** (sense cap resplendor addicional), i la pista de les Tietes explica on és la nota dels engranatges.
 - *Rovellonera:* un **cartell** a la primera clariana explica la regla («els rovellons creixen vora el bon camí»), la Nena ho repeteix, els rovellons són més visibles i, si l'Ineu s'ha perdut **dues vegades o més**, unes **llumetes daurades** assenyalen la sortida bona.
