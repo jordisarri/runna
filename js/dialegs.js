@@ -992,8 +992,9 @@ const DIALEGS = {
         if (E.flag("soparObert") && !E.flag("pastorsConvencuts")) {
             return { pagines: [
                 { qui: "Pastor vell", text: "Un sopar, dius? Al Til·ler? Amb els de les cel·les?... No, fill. Nosaltres no som gent per a asseure's amb la gent." },
-                { qui: "Pastor vell", text: "Fa anys que no sentim música vora el foc. Si algú en toqués... potser ens recordaria que encara som persones." }
-            ] };
+                { qui: "Pastor vell", text: "Fa anys que no sentim música vora el foc. Si algú en toqués... potser ens recordaria que encara som persones." },
+                { qui: "Ineu", text: "Tinc la flauta. Qualsevol cant val: tocaré el de l'Aurora vora el foc, i que sigui el que Déu vulgui." }
+            ], enAcabar: () => E.posaObjectiu("Toca la flauta vora el foc dels pastors, a la Cirosa (qualsevol cant que sàpigues, com el de l'Aurora): acosta't a les flames i prem ESPAI quan brilli la flauta.") };
         }
         return { pagines: [{ qui: "Pastor vell", text: "Aquesta pastura torna a ser un lloc tranquil. Gràcies per això." }] };
     },

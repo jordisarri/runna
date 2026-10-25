@@ -204,7 +204,7 @@ class ZonaCirosa extends ZonaBase {
     enMelodia(nom) {
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 280, 790) > 380) return false;
         if (!Estat.flag('soparObert')) {
-            this.flotant(280, 650, 'Els pastors t\'escolten en silenci', '#ffd9a0');
+            this.flotant(280, 650, 'Els pastors t\'escolten en silenci... (encara no és el moment: parla amb el Til·ler)', '#ffd9a0');
             return true;
         }
         if (Estat.flag('pastorsConvencuts')) { this.flotant(280, 650, 'Els pastors somriuen', '#ffd9a0'); return true; }
