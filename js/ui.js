@@ -109,6 +109,8 @@ class EscenaUI extends Phaser.Scene {
         this.input.keyboard.on('keydown-M', () => this.inventariObert ? this.tancarInventari() : this.obrirInventari('mapa'));
         ['LEFT', 'A'].forEach(k => this.input.keyboard.on('keydown-' + k, () => this.inventariObert && DIARI.moure(this, -1)));
         ['RIGHT', 'D'].forEach(k => this.input.keyboard.on('keydown-' + k, () => this.inventariObert && DIARI.moure(this, 1)));
+        ['UP', 'W'].forEach(k => this.input.keyboard.on('keydown-' + k, () => this.inventariObert && DIARI.desplacar(this, -140)));
+        ['DOWN', 'S'].forEach(k => this.input.keyboard.on('keydown-' + k, () => this.inventariObert && DIARI.desplacar(this, 140)));
     }
 
     refrescaObjectes() {

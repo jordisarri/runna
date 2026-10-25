@@ -70,10 +70,18 @@ const DIARI = {
             return { id, fons, t };
         });
         c.add(ui.add.text(AMPLE / 2, ALT - 40, '◀ ▶ canvia de pestanya · I o ✕ per tancar', estilText(19, '#7a5a3a')).setOrigin(0.5));
+        // Mida de la lletra: A− / A+ (també es pot pessigar o Ctrl + rodeta)
+        this.botonsText = [];
+        [['A−', 104, 1 / 1.15], ['A+', 164, 1.15]].forEach(([t, x, f]) => {
+            const b = ui.add.circle(x, ALT - 42, 26, 0x8a5a2a, 0.25).setStrokeStyle(2, 0x6a1f12, 0.8).setInteractive({ useHandCursor: true })
+                .on('pointerdown', () => { Sfx.pagina(); this.canviarEscala(ui, this.escala * f); });
+            const l = ui.add.text(x, ALT - 43, t, { fontFamily: FONT_PLACA, fontSize: '26px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5);
+            c.add([b, l]); this.botonsText.push(b, l);
+        });
         this.mostrar(ui, pestanya || this.darrera || 'missio');
     },
 
-    mostrar(ui, id) {
+    mostrar(ui, id, silenci) {
         if (!ui.inventari) return;
         this.darrera = this.actual = id;
         this.netejar(ui);
@@ -84,15 +92,24 @@ const DIARI = {
             b.fons.setFillStyle(sel ? 0x6a1f12 : 0x8a5a2a, sel ? 0.9 : 0.15);
             b.t.setColor(sel ? '#ffe9a8' : TINTA);
         });
-        Sfx.pagina();
-        this[id](ui, this.cos);
+        if (this.botonsText) this.botonsText.forEach(o => o.setVisible(id !== 'mapa'));
+        if (!silenci) Sfx.pagina();
+        if (id === 'mapa') { this.mapa(ui, this.cos); return; }
+        // Pestanyes de text: es dibuixen en una amplada «virtual» (AMPLE / escala) i es mostren ampliades, amb scroll
+        this.AV = AMPLE / this.escala;
+        this.MX = Math.max(20, 50 / this.escala);                       // marge lateral: sempre uns 50 px a la pantalla
+        const cont = ui.add.container(0, 0);
+        this[id](ui, cont);
+        this.cos.add(cont);
+        this.preparaScroll(ui, cont);
     },
 
     // Atura els batecs del mapa abans de destruir-ne els objectes
     netejar(ui) {
         if (!this.cos) return;
         this.cos.list.forEach(o => ui.tweens.killTweensOf(o));
-        this.cos.destroy(); this.cos = null;
+        if (this.mascara) { this.mascara.destroy(); this.mascara = null; }
+        this.cos.destroy(); this.cos = null; this.cont = null;
     },
 
     moure(ui, d) {
@@ -100,15 +117,80 @@ const DIARI = {
         this.mostrar(ui, DIARI_PESTANYES[(i + d + 4) % 4][0]);
     },
 
+    // ---------------- Mida de la lletra i scroll ----------------
+    escala: (() => { try { const v = parseFloat(localStorage.getItem('runna_diari_escala')); if (v >= 0.9 && v <= 2.2) return v; } catch (e) { /* sense emmagatzematge */ } return 1.25; })(),
+    PANTALLA: { y0: 162, y1: ALT - 72 },
+
+    // Canvia la mida de la lletra (es torna a distribuir el text perquè s'ajusti a l'amplada) i manté la posició de lectura
+    canviarEscala(ui, nova) {
+        nova = Math.min(2.2, Math.max(0.9, nova));
+        if (!this.cont || Math.abs(nova - this.escala) < 0.01) return;
+        this.fraccio = this.maxScroll > 0 ? this.scroll / this.maxScroll : 0;
+        this.escala = nova;
+        try { localStorage.setItem('runna_diari_escala', String(nova)); } catch (e) { /* res */ }
+        this.mostrar(ui, this.actual, true);
+    },
+
+    preparaScroll(ui, cont) {
+        const s = this.escala, { y0, y1 } = this.PANTALLA, TOP = 170;
+        let baix = TOP;
+        cont.list.forEach(o => { const h = o.displayHeight; if (Number.isFinite(h) && Number.isFinite(o.y)) baix = Math.max(baix, o.y + h * (1 - (o.originY === undefined ? 0 : o.originY))); });
+        this.maxScroll = Math.max(0, (baix - TOP + 40) * s - (y1 - TOP));
+        this.scroll = Math.min(this.maxScroll, Math.max(0, (this.fraccio || 0) * this.maxScroll)); this.fraccio = 0;
+        // Les lletres es redibuixen amb més resolució quan s'amplien, perquè no es vegin borroses
+        cont.list.forEach(o => { if (o.setResolution && o.type === 'Text') o.setResolution(Math.min(4, Math.ceil(2 * s))); });
+        this.cont = cont;
+        const g = ui.make.graphics({ add: false }); g.fillStyle(0xffffff).fillRect(24, y0, AMPLE - 48, y1 - y0);
+        this.mascara = g; cont.setMask(g.createGeometryMask());
+        // Barra d'scroll
+        const ind = ui.add.rectangle(AMPLE - 22, y0, 6, 40, 0x6a1f12, 0.55).setOrigin(0.5, 0).setVisible(this.maxScroll > 0);
+        this.cos.add(ind);
+        const aplica = () => {
+            this.scroll = Math.min(this.maxScroll, Math.max(0, this.scroll));
+            cont.setScale(s).setPosition(0, TOP - TOP * s - this.scroll);
+            if (this.maxScroll > 0) {
+                const alt = Math.max(40, (y1 - y0) * (y1 - TOP) / ((y1 - TOP) + this.maxScroll));
+                ind.setSize(6, alt).setY(y0 + (this.scroll / this.maxScroll) * (y1 - y0 - alt));
+            }
+        };
+        this.aplicaScroll = aplica; aplica();
+        // Entrada: arrossegar amb el dit/ratolí, rodeta, pessigar o botons per ampliar
+        const zona = ui.add.zone(24, y0, AMPLE - 48, y1 - y0).setOrigin(0).setInteractive();
+        this.cos.add(zona);
+        let arr = null, d0 = 0;
+        zona.on('pointerdown', p => { arr = { y: p.y, sc: this.scroll }; d0 = 0; });
+        const mou = p => {
+            const p1 = ui.input.pointer1, p2 = ui.input.pointer2;
+            if (p1 && p2 && p1.isDown && p2.isDown) {                  // pessigar: ajusta la mida de la lletra
+                const d = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+                if (!d0) d0 = d;
+                else if (Math.abs(d / d0 - 1) > 0.08) { const r = d / d0; d0 = d; arr = null; this.canviarEscala(ui, this.escala * r); }
+                return;
+            }
+            d0 = 0;
+            if (arr && p.isDown) { this.scroll = arr.sc - (p.y - arr.y); aplica(); }
+        };
+        const solta = () => { arr = null; d0 = 0; };
+        const roda = (p, o, dx, dy, dz, ev) => {
+            if ((ev && ev.ctrlKey) || (p.event && p.event.ctrlKey)) this.canviarEscala(ui, this.escala * (dy > 0 ? 0.92 : 1.09));
+            else { this.scroll += dy; aplica(); }
+        };
+        if (!ui.input.pointer2) ui.input.addPointer(1);
+        ui.input.on('pointermove', mou); ui.input.on('pointerup', solta); ui.input.on('wheel', roda);
+        this.cos.once('destroy', () => { ui.input.off('pointermove', mou); ui.input.off('pointerup', solta); ui.input.off('wheel', roda); });
+    },
+
+    desplacar(ui, dy) { if (this.cont && this.aplicaScroll) { this.scroll += dy; this.aplicaScroll(); } },
+
     // ---------------- Ajudes de dibuix ----------------
     titol(ui, c, x, y, text) {
         c.add(ui.add.text(x, y, text, { fontFamily: FONT_PLACA, fontSize: '29px', fontStyle: 'bold', color: VERMELL, resolution: 2 }));
-        const g = ui.add.graphics().lineStyle(2, 0x8a5a2a, 0.5).lineBetween(x, y + 40, AMPLE - 60, y + 40);
+        const g = ui.add.graphics().lineStyle(2, 0x8a5a2a, 0.5).lineBetween(x, y + 40, this.AV - this.MX, y + 40);
         c.add(g);
         return y + 52;
     },
     text(ui, c, x, y, text, mida = 24, color = TINTA, extra = {}) {
-        const t = ui.add.text(x, y, text, estilText(mida, color, Object.assign({ wordWrap: { width: AMPLE - 60 - x } }, extra)));
+        const t = ui.add.text(x, y, text, estilText(mida, color, Object.assign({ wordWrap: { width: this.AV - this.MX - x } }, extra)));
         c.add(t);
         return y + t.height;
     },
@@ -120,69 +202,74 @@ const DIARI = {
 
     // ---------------- Missió ----------------
     missio(ui, c) {
-        const E = Estat, X = 50;
+        const E = Estat, X = this.MX, AV = this.AV;
         const passos = PROGRES.passos, fets = passos.filter(p => p.fet(E)).length;
         const seg = PROGRES.seguent(E);
         const iActe = seg ? DIARI_ACTES.reduce((a, acte, i) => passos.findIndex(p => p.id === acte.des) <= passos.indexOf(seg) ? i : a, 0) : 2;
         let y = 170;
         // L'objectiu, en un requadre
         const obj = E.dades.objectiu || '';
-        const tObj = ui.add.text(X + 20, y + 50, obj, estilText(27, TINTA, { fontStyle: 'italic', wordWrap: { width: AMPLE - 2 * X - 40 } }));
-        const h = tObj.height + 74;
-        c.add(ui.add.rectangle(X, y, AMPLE - 2 * X, h, 0xffffff, 0.25).setOrigin(0).setStrokeStyle(2, 0x6a1f12, 0.7));
-        c.add(ui.add.text(X + 20, y + 12, seg ? DIARI_ACTES[iActe].nom.toUpperCase() : 'HISTÒRIA ACABADA', estilText(20, VERMELL, { fontStyle: 'bold' })));
-        c.add(tObj);
+        const tAct = ui.add.text(X + 20, y + 12, seg ? DIARI_ACTES[iActe].nom.toUpperCase() : 'HISTÒRIA ACABADA', estilText(20, VERMELL, { fontStyle: 'bold', wordWrap: { width: AV - 2 * X - 40 } }));
+        const tObj = ui.add.text(X + 20, y + 22 + tAct.height, obj, estilText(27, TINTA, { fontStyle: 'italic', wordWrap: { width: AV - 2 * X - 40 } }));
+        const h = tAct.height + tObj.height + 44;
+        c.add(ui.add.rectangle(X, y, AV - 2 * X, h, 0xffffff, 0.25).setOrigin(0).setStrokeStyle(2, 0x6a1f12, 0.7));
+        c.add(tAct); c.add(tObj);
         y += h + 20;
         // Progrés per actes
         y = this.titol(ui, c, X, y, 'Progrés');
         DIARI_ACTES.forEach((a, i) => {
             const ini = passos.findIndex(p => p.id === a.des), fi = i < 2 ? passos.findIndex(p => p.id === DIARI_ACTES[i + 1].des) : passos.length;
             const tram = passos.slice(ini, fi), f = tram.filter(p => p.fet(E)).length;
-            c.add(ui.add.text(X, y, a.nom, estilText(23, i === iActe ? TINTA : TINTA_SUAU, { fontStyle: i === iActe ? 'bold' : 'normal' })));
-            c.add(ui.add.text(AMPLE - X, y, f === tram.length ? '✓' : f + '/' + tram.length, estilText(23, TINTA_SUAU)).setOrigin(1, 0));
-            this.barra(ui, c, X, y + 42, AMPLE - 2 * X, f / tram.length, f === tram.length ? 0x3a7a3a : 0x6a1f12);
-            y += 62;
+            const t = ui.add.text(X, y, a.nom, estilText(23, i === iActe ? TINTA : TINTA_SUAU, { fontStyle: i === iActe ? 'bold' : 'normal', wordWrap: { width: AV - 2 * X - 80 } }));
+            c.add(t);
+            c.add(ui.add.text(AV - X, y, f === tram.length ? '✓' : f + '/' + tram.length, estilText(23, TINTA_SUAU)).setOrigin(1, 0));
+            this.barra(ui, c, X, y + t.height + 14, AV - 2 * X, f / tram.length, f === tram.length ? 0x3a7a3a : 0x6a1f12);
+            y += t.height + 36;
         });
-        c.add(ui.add.text(AMPLE - X, y - 8, 'Total: ' + Math.round(fets / passos.length * 100) + '%', estilText(20, TINTA_SUAU, { fontStyle: 'italic' })).setOrigin(1, 0));
-        y += 22;
+        c.add(ui.add.text(AV - X, y - 6, 'Total: ' + Math.round(fets / passos.length * 100) + '%', estilText(20, TINTA_SUAU, { fontStyle: 'italic' })).setOrigin(1, 0));
+        y += 34;
         // Nens rescatats
         y = this.titol(ui, c, X, y, 'Els nens');
+        const colNens = AV >= 520, ampleNen = (AV - 2 * X - 20) / 3;
         [['Uri', 'rescatUri'], ['Flam', 'rescatFlam'], ['Sardin', 'rescatSardin']].forEach(([n, f], i) => {
-            const ok = E.flag(f), x = X + 20 + i * 205;
-            c.add(ui.add.circle(x + 18, y + 20, 18, ok ? 0x3a7a3a : 0x8a5a2a, ok ? 0.9 : 0.25).setStrokeStyle(2, 0x3a2412, 0.6));
-            c.add(ui.add.text(x + 18, y + 20, ok ? '✓' : '?', estilText(23, ok ? '#ffffff' : TINTA_SUAU, { fontStyle: 'bold' })).setOrigin(0.5));
-            c.add(ui.add.text(x + 46, y + 4, n, estilText(26, ok ? TINTA : TINTA_SUAU, { fontStyle: ok ? 'bold' : 'normal' })));
+            const ok = E.flag(f), x = colNens ? X + 20 + i * ampleNen : X + 20, yy = colNens ? y : y + i * 48;
+            c.add(ui.add.circle(x + 18, yy + 20, 18, ok ? 0x3a7a3a : 0x8a5a2a, ok ? 0.9 : 0.25).setStrokeStyle(2, 0x3a2412, 0.6));
+            c.add(ui.add.text(x + 18, yy + 20, ok ? '✓' : '?', estilText(23, ok ? '#ffffff' : TINTA_SUAU, { fontStyle: 'bold' })).setOrigin(0.5));
+            c.add(ui.add.text(x + 46, yy + 4, n, estilText(26, ok ? TINTA : TINTA_SUAU, { fontStyle: ok ? 'bold' : 'normal' })));
         });
-        y += 62;
+        y += colNens ? 62 : 3 * 48 + 14;
         // Cants apresos, amb les notes per tocar-los
         y = this.titol(ui, c, X, y, 'Cants de la flauta');
         Object.values(MELODIES).forEach(m => {
-            const sap = E.flag(m.flag);
-            c.add(ui.add.text(X, y + 4, sap ? m.nom : '— encara no el saps —', estilText(23, sap ? TINTA : TINTA_SUAU, { fontStyle: sap ? 'bold' : 'italic' })));
+            const sap = E.flag(m.flag), nn = sap ? m.notes.length : 0;
+            const junt = AV - 2 * X - nn * 46 > 270;                     // si no hi caben, les notes baixen a sota del nom
+            const t = ui.add.text(X, y + 4, sap ? m.nom : '— encara no el saps —', estilText(23, sap ? TINTA : TINTA_SUAU, { fontStyle: sap ? 'bold' : 'italic', wordWrap: { width: junt ? AV - 2 * X - nn * 46 - 6 : AV - 2 * X } }));
+            c.add(t);
+            const yn = junt ? y + 20 : y + t.height + 26;
             if (sap) m.notes.forEach((n, k) => {
-                const x = AMPLE - X - (m.notes.length - k) * 46 + 16;
-                c.add(ui.add.circle(x, y + 20, 18, COLORS_NOTA[n], 1).setStrokeStyle(2, 0x2a1808, 0.8));
-                c.add(ui.add.text(x, y + 20, String(n), estilText(22, '#ffffff', { fontStyle: 'bold' })).setOrigin(0.5));
+                const x = junt ? AV - X - (m.notes.length - k) * 46 + 16 : X + 18 + k * 46;
+                c.add(ui.add.circle(x, yn, 18, COLORS_NOTA[n], 1).setStrokeStyle(2, 0x2a1808, 0.8));
+                c.add(ui.add.text(x, yn, String(n), estilText(22, '#ffffff', { fontStyle: 'bold' })).setOrigin(0.5));
             });
-            y += 52;
+            y += Math.max(52, junt ? t.height + 14 : t.height + (sap ? 62 : 14));
         });
         y += 8;
         y = this.titol(ui, c, X, y, 'L\'Ineu');
         const d = E.dades;
-        this.text(ui, c, X, y, `Grans del rosari: ${d.corsMax}   ·   Bestioles calmades: ${d.flags.derrotats || 0}   ·   Llocs trobats: ${MAPA.zones.filter(z => MAPA.visitada(z.id)).length}/${MAPA.zones.length}`, 21, TINTA_SUAU);
+        this.text(ui, c, X, y, `Grans del rosari: ${d.corsMax}\nBestioles calmades: ${d.flags.derrotats || 0}\nLlocs trobats: ${MAPA.zones.filter(z => MAPA.visitada(z.id)).length}/${MAPA.zones.length}`, 23, TINTA_SUAU, { lineSpacing: 6 });
     },
 
     // ---------------- Encàrrecs ----------------
     encarrecs(ui, c) {
-        const E = Estat, X = 50;
+        const E = Estat, X = this.MX;
         let y = 170;
         const seg = PROGRES.seguent(E);
         y = this.titol(ui, c, X, y, 'Ara toca');
         if (seg) {
             const [nom, zona] = DIARI_PASSOS[seg.id] || [seg.id, null];
-            c.add(ui.add.text(X, y, '★ ' + nom, estilText(27, VERMELL, { fontStyle: 'bold' })));
-            if (zona) c.add(ui.add.text(AMPLE - X, y + 4, this.nomZona(zona), estilText(20, TINTA_SUAU, { fontStyle: 'italic' })).setOrigin(1, 0));
-            y = this.text(ui, c, X + 26, y + 42, seg.pista(E), 22, TINTA) + 26;
+            y = this.text(ui, c, X, y, '★ ' + nom, 27, VERMELL, { fontStyle: 'bold' });
+            if (zona) y = this.text(ui, c, X + 26, y + 2, this.nomZona(zona), 20, TINTA_SUAU, { fontStyle: 'italic' });
+            y = this.text(ui, c, X + 26, y + 8, seg.pista(E), 22, TINTA) + 26;
         } else y = this.text(ui, c, X, y, 'Ja ho has fet tot. Els nens tornen a riure.', 24, TINTA, { fontStyle: 'italic' }) + 26;
 
         y = this.titol(ui, c, X, y, 'Et van demanar...');
@@ -191,33 +278,38 @@ const DIARI = {
         if (!oberts.length) y = this.text(ui, c, X, y, fets.length ? 'No tens cap encàrrec pendent.' : 'Encara ningú no t\'ha demanat res. Parla amb la gent!', 22, TINTA_SUAU, { fontStyle: 'italic' }) + 20;
         oberts.forEach(l => {
             const [nom, zona, premi] = DIARI_LATERALS[l.id] || [l.id, null];
-            c.add(ui.add.text(X, y, '! ' + nom, estilText(25, '#2a4a7a', { fontStyle: 'bold' })));
-            if (zona) c.add(ui.add.text(AMPLE - X, y + 3, this.nomZona(zona), estilText(19, TINTA_SUAU, { fontStyle: 'italic' })).setOrigin(1, 0));
-            y = this.text(ui, c, X + 26, y + 38, l.pista(E), 21, TINTA);
+            y = this.text(ui, c, X, y, '! ' + nom, 25, '#2a4a7a', { fontStyle: 'bold' });
+            if (zona) y = this.text(ui, c, X + 26, y + 2, this.nomZona(zona), 19, TINTA_SUAU, { fontStyle: 'italic' });
+            y = this.text(ui, c, X + 26, y + 6, l.pista(E), 21, TINTA);
             if (premi) y = this.text(ui, c, X + 26, y + 4, 'Premi: ' + premi, 19, '#3a7a3a', { fontStyle: 'italic' });
-            y += 20;
+            y += 22;
         });
         if (fets.length) {
             y += 6;
             y = this.titol(ui, c, X, y, 'Fets');
-            fets.forEach(l => { c.add(ui.add.text(X, y, '✓ ' + (DIARI_LATERALS[l.id] || [l.id])[0], estilText(22, '#3a7a3a'))); y += 38; });
+            fets.forEach(l => { y = this.text(ui, c, X, y, '✓ ' + (DIARI_LATERALS[l.id] || [l.id])[0], 22, '#3a7a3a') + 8; });
         }
     },
 
     // ---------------- Sarró ----------------
     sarro(ui, c) {
         const llista = Estat.dades.objectes.filter(o => CATALEG_OBJECTES[o]);
-        const X = 44, W = (AMPLE - 2 * X - 16) / 2, top = 170;
-        if (!llista.length) { c.add(ui.add.text(AMPLE / 2, ALT / 2, 'El sarró és buit.', estilText(30, TINTA_SUAU, { fontStyle: 'italic' })).setOrigin(0.5)); return; }
-        const files = Math.ceil(llista.length / 2), hFila = Math.min(112, (ALT - 110 - top) / files);
-        llista.forEach((o, i) => {
-            const [nom, desc] = CATALEG_OBJECTES[o];
-            const x = X + (i % 2) * (W + 16), y = top + Math.floor(i / 2) * hFila;
-            c.add(ui.add.rectangle(x, y, W, hFila - 8, 0xffffff, 0.22).setOrigin(0).setStrokeStyle(1.5, 0x8a5a2a, 0.5));
-            const tn = hFila >= 90 ? 25 : hFila >= 76 ? 22 : 19, td = hFila >= 90 ? 20 : hFila >= 76 ? 17 : 15;
-            c.add(ui.add.text(x + 12, y + 8, nom, estilText(tn, TINTA, { fontStyle: 'bold', wordWrap: { width: W - 24 } })));
-            if (hFila > 60) c.add(ui.add.text(x + 12, y + 10 + tn * 1.35, desc, estilText(td, TINTA_SUAU, { fontStyle: 'italic', wordWrap: { width: W - 24 } })));
-        });
+        const AV = this.AV, X = this.MX, top = 170;
+        if (!llista.length) { c.add(ui.add.text(AV / 2, 400, 'El sarró és buit.', estilText(30, TINTA_SUAU, { fontStyle: 'italic' })).setOrigin(0.5)); return; }
+        const cols = AV >= 600 ? 2 : 1, W = (AV - 2 * X - 16 * (cols - 1)) / cols;
+        // Cada fitxa s'adapta al text; en una fila, totes tenen l'alçada de la més alta
+        let y = top;
+        for (let i = 0; i < llista.length; i += cols) {
+            const fila = llista.slice(i, i + cols).map((o, k) => {
+                const [nom, desc] = CATALEG_OBJECTES[o], x = X + k * (W + 16);
+                const tn = ui.add.text(x + 14, y + 10, nom, estilText(25, TINTA, { fontStyle: 'bold', wordWrap: { width: W - 28 } }));
+                const td = ui.add.text(x + 14, y + 14 + tn.height, desc, estilText(20, TINTA_SUAU, { fontStyle: 'italic', wordWrap: { width: W - 28 } }));
+                return { x, tn, td, h: tn.height + td.height + 32 };
+            });
+            const h = Math.max(...fila.map(f => f.h));
+            fila.forEach(f => { c.add(ui.add.rectangle(f.x, y, W, h, 0xffffff, 0.22).setOrigin(0).setStrokeStyle(1.5, 0x8a5a2a, 0.5)); c.add(f.tn); c.add(f.td); });
+            y += h + 10;
+        }
     },
 
     // ---------------- Mapa ----------------
