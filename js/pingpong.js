@@ -193,15 +193,45 @@ class EscenaPingPong extends Phaser.Scene {
     mostrarOrdre(retard) {
         this.estat = 'mirant';
         this.entrat = [];
-        const n = this.ordre.length, ms = Math.max(620, 880 - (this.ineu + this.josep) * 14);
+        const n = this.ordre.length, ms = Math.max(700, 940 - (this.ineu + this.josep) * 14);
+        const COL = [0x6ac8ff, 0xffd34d, 0xff7ad8], hx = 360, hy = PP.fonsY - 8;
+        // En Josep concentra la màgia: aura de fum lila i espurnes al voltant de les mans durant tot el servei
+        this.time.delayedCall(Math.max(0, retard - 500), () => {
+            if (this.acabat) return;
+            this.auraFum = this.add.particles(hx, hy, 'boira', { speed: { min: 20, max: 60 }, angle: { min: 190, max: 350 }, lifespan: 1500, frequency: 50, quantity: 2,
+                scale: { start: 0.3, end: 1.4 }, alpha: { start: 0.75, end: 0 }, tint: [0x9a50ff, 0xc890ff, 0x6a3aa8] }).setDepth(12);
+            this.auraEsp = this.add.particles(hx, hy, 'espurna', { speed: { min: 30, max: 90 }, lifespan: 800, frequency: 55, scale: { start: 0.35, end: 0 },
+                alpha: { start: 1, end: 0 }, tint: [0xffe08a, 0xd8b0ff, 0xffffff], blendMode: 'ADD' }).setDepth(13);
+        });
         this.ordre.forEach((c, i) => this.time.delayedCall(retard + i * ms, () => {
             if (this.acabat) return;
-            this.seq.setText(['◀', '●', '▶'][c]).setAlpha(1).setX(PP.xProp[c]);
+            // Gest d'en Josep: s'alça una mica i en surt un orbe màgic que vola fins al carril, deixant una cua de llum
+            this.tweens.add({ targets: this.spJosep, y: this.spJosep.y - 10, yoyo: true, duration: 150, ease: 'Quad.easeOut' });
             this.so(3 + c);
-            this.tweens.add({ targets: this.seq, alpha: 0, delay: ms * 0.6, duration: ms * 0.3 });
+            const orbe = this.add.container(hx, hy).setDepth(14);
+            orbe.add([this.add.circle(0, 0, 30, COL[c], 0.28).setBlendMode(Phaser.BlendModes.ADD), this.add.circle(0, 0, 15, COL[c], 0.9).setBlendMode(Phaser.BlendModes.ADD), this.add.circle(0, 0, 7, 0xffffff, 1)]);
+            const cua = this.add.particles(0, 0, 'espurna', { follow: orbe, speed: { min: 10, max: 40 }, lifespan: 520, frequency: 18, scale: { start: 0.45, end: 0 },
+                alpha: { start: 0.9, end: 0 }, tint: [COL[c], 0xffffff], blendMode: 'ADD' }).setDepth(13);
+            const v = { u: 0 }, X0 = hx, Y0 = hy, X1 = PP.xProp[c], Y1 = PP.copY - 30, dur = Math.min(ms * 0.78, 640);
+            this.tweens.add({ targets: v, u: 1, duration: dur, ease: 'Sine.easeIn',
+                onUpdate: () => { orbe.setPosition(Phaser.Math.Linear(X0, X1, v.u), Phaser.Math.Linear(Y0, Y1, v.u) - Math.sin(Math.PI * v.u) * 90); orbe.setScale(0.5 + 1.1 * v.u); },
+                onComplete: () => {
+                    // Impacte: ona de llum al carril, esclat d'espurnes i el símbol del carril
+                    cua.stop(); this.time.delayedCall(600, () => cua.destroy()); orbe.destroy();
+                    const esc = this.add.particles(X1, Y1 + 20, 'espurna', { speed: { min: 60, max: 200 }, lifespan: 700, scale: { start: 0.6, end: 0 }, alpha: { start: 1, end: 0 },
+                        tint: [COL[c], 0xffffff], blendMode: 'ADD', emitting: false }).setDepth(15);
+                    esc.explode(30); this.time.delayedCall(900, () => esc.destroy());
+                    const ona = this.add.circle(X1, PP.copY, 30).setStrokeStyle(6, COL[c], 1).setScale(1, 0.73).setDepth(15);
+                    this.tweens.add({ targets: ona, scale: { from: 0.6, to: 2.2 }, scaleY: { from: 0.44, to: 1.6 }, alpha: 0, duration: 600, onComplete: () => ona.destroy() });
+                    this.anells[c].setStrokeStyle(7, COL[c], 1);
+                    this.time.delayedCall(ms * 0.7, () => this.anells[c].setStrokeStyle(4, 0xf2e6c8, 0.25));
+                    this.seq.setText(['◀', '●', '▶'][c]).setFontSize(60).setColor('#fff3c8').setAlpha(1).setPosition(X1, Y1 - 30);
+                    this.tweens.add({ targets: this.seq, alpha: 0, delay: ms * 0.45, duration: ms * 0.3 });
+                } });
         }));
-        this.time.delayedCall(retard + n * ms + 150, () => {
+        this.time.delayedCall(retard + n * ms + 250, () => {
             if (this.acabat) return;
+            [this.auraFum, this.auraEsp].forEach(e => { if (e) { e.stop(); this.time.delayedCall(1300, () => e.destroy()); } });
             this.estat = 'repetint';
             this.avis('Repeteix-los en ordre!', 1400, '#d8b0ff');
             if (this.limitServei) this.limitServei.remove();
