@@ -282,14 +282,14 @@ class ZonaJardi extends ZonaBase {
 
         // La Prunera Màgica, l'únic arbre: dins el jardí de la pèrgola
         const PX = 290, PY = 640;
-        this.posar('arbre', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } }).setTint(0xc898f8);   // gran i alta: destaca sobre la pèrgola
-        this.add.ellipse(PX, PY - 50, 380, 90, 0xb070ff, 0.14).setDepth(-1080);
-        this.add.ellipse(PX, PY - 220, 330, 240, 0xb070ff, 0.18).setDepth(8000);
+        this.posar('arbre', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } }).setTint(0xffd878);   // gran i alta: destaca sobre la pèrgola
+        this.add.ellipse(PX, PY - 50, 380, 90, 0xffc850, 0.16).setDepth(-1080);
+        this.add.ellipse(PX, PY - 220, 330, 240, 0xffc850, 0.18).setDepth(8000);
         this.add.particles(PX, PY - 220, 'espurna', {
             x: { min: -150, max: 150 }, y: { min: -110, max: 90 }, speed: { min: 4, max: 14 }, lifespan: 1800,
-            scale: { start: 0.55, end: 0 }, tint: [0xd090ff, 0xffe08a], frequency: 220, alpha: { start: 0.9, end: 0 }
+            scale: { start: 0.55, end: 0 }, tint: [0xffd060, 0xfff0b0], frequency: 220, alpha: { start: 0.9, end: 0 }
         }).setDepth(8001);
-        [[-110, -190], [-60, -250], [0, -300], [70, -260], [120, -200], [-140, -140], [40, -170], [-20, -210], [100, -130], [-90, -100]].forEach(([dx, dy]) => this.add.circle(PX + dx, PY + dy, 10, 0x7a2aa8).setStrokeStyle(2, 0x2a0a40).setDepth(PY + 1));
+        [[-110, -190], [-60, -250], [0, -300], [70, -260], [120, -200], [-140, -140], [40, -170], [-20, -210], [100, -130], [-90, -100]].forEach(([dx, dy]) => this.add.circle(PX + dx, PY + dy, 10, 0xf0b830).setStrokeStyle(2, 0x7a5010).setDepth(PY + 1));
         this.interactiu(PX, PY + 5, 110, DIALEGS.prunera, { altura: 400 });
 
         // La llosa del passadís cap al soterrani de l'Hostatgeria, entre les columnes (ben visible). S'obre quan hi creix la flor de lluna

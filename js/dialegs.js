@@ -624,7 +624,7 @@ const DIALEGS = {
         if (herbes === 3) {
             return {
                 pagines: [
-                    { fer: (z, fet) => z.seq([c => z.deixar(c, 'herba_sj'), c => z.deixar(c, 'romani'), c => z.deixar(c, null, 0xb88aff)], fet) },
+                    { fer: (z, fet) => z.seq([c => z.deixar(c, 'herba_sj'), c => z.deixar(c, 'romani'), c => z.deixar(c, null, 0xffd060)], fet) },
                     { qui: '', text: 'L\'aigua s\'aclareix i la boira lila fuig del bosc.' },
                     { qui: 'Ineu', text: 'Ha funcionat! Al fons de la pica hi ha un cristall que sembla de gel...' },
                     { qui: '', text: 'Has obtingut l\'AIGUA DE LA FONT DEL BISBE i un CRISTALL DE GEL.\nEl Garf, a l\'Era, segur que sap què fer-ne.' }
@@ -638,8 +638,8 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: '', text: 'La Font del Bisbe: seca, i amb una olor estranya. A la pica hi ha una mitra gravada.' },
-                { qui: 'Ineu', text: 'Les Tietes diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, romaní i el fruit de l\'arbre lila.»' },
-                { qui: 'Ineu', text: 'Les herbes de la Nit de Sant Joan fan llum: n\'hi ha una al nord (cap al Til·ler) i el romaní al sud-est, sempre en una clariana. I l\'arbre lila... és la Prunera Màgica, al jardí de l\'Hostatgeria! Una pruna.' },
+                { qui: 'Ineu', text: 'Les Tietes diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, romaní i el fruit de l\'arbre d\'or.»' },
+                { qui: 'Ineu', text: 'Les herbes de la Nit de Sant Joan fan llum: n\'hi ha una al nord (cap al Til·ler) i el romaní al sud-est, sempre en una clariana. I l\'arbre d\'or... és la Prunera Màgica, al jardí de l\'Hostatgeria! Una pruna.' },
                 { qui: '', text: `Ofrenes trobades: ${herbes}/3.` }
             ],
             enAcabar: () => { E.posaFlag('fontVista'); E.posaObjectiu(objectiuFont(herbes)); }
@@ -845,12 +845,12 @@ const DIALEGS = {
     }),
     prunera: E => {
         const pagines = [
-            { qui: '', text: 'A l\'extrem de ponent del jardí, una prunera vella i retorçuda, carregada de prunes d\'un lila que lluu com si fossin de vidre.' },
-            { qui: 'Isidre', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes màgiques: una sola et deixa com nou.' },
-            { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xb88aff), c => z.beure(c, 0xb88aff)], fet) },
+            { qui: '', text: 'A l\'extrem de ponent del jardí, una prunera vella i retorçuda, carregada de prunes daurades que lluen com si fossin d\'or.' },
+            { qui: 'Isidre', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou.' },
+            { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xffd060), c => z.beure(c, 0xffd060)], fet) },
         ];
         const perFont = !E.flag('fontNeta') && !E.te('pruna') && !E.flag('herba3');
-        if (perFont) pagines.push({ qui: '', text: 'En culls una altra i te la guardes al sarró: la Font del Bisbe en vol una.\nHas obtingut una PRUNA MÀGICA.' });
+        if (perFont) pagines.push({ qui: '', text: 'En culls una altra i te la guardes al sarró: la Font del Bisbe en vol una.\nHas obtingut una PRUNA DAURADA.' });
         return {
             pagines,
             enAcabar: () => {

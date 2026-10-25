@@ -106,11 +106,11 @@ class ZonaRovellonera extends ZonaBase {
     rovellons(D) {
         const base = { N: [800, 190], S: [800, 910], W: [190, 550], E: [1410, 550] }[D];
         this.rovelloGrup = [];
-        const halo = this.add.ellipse(base[0], base[1] + 10, 220, 90, 0xffd890, 0.22).setDepth(base[1] - 2).setBlendMode('ADD');
+        const halo = this.add.ellipse(base[0], base[1] + 10, 150, 60, 0xffd890, 0.22).setDepth(base[1] - 2).setBlendMode('ADD');
         this.tweens.add({ targets: halo, alpha: 0.08, yoyo: true, repeat: -1, duration: 900 });
-        [[-70, 0], [70, 10], [0, 40], [-30, -30], [40, -25]].forEach(([dx, dy]) => {
-            const r = this.add.image(base[0] + dx, base[1] + dy, 'rovello').setScale(0.5).setDepth(base[1] + dy).setAlpha(0.9);
-            this.tweens.add({ targets: r, scale: 0.55, yoyo: true, repeat: -1, duration: 900 + dx });
+        [[-38, 0], [38, 6], [0, 22], [-18, -16], [22, -14]].forEach(([dx, dy]) => {
+            const r = this.add.image(base[0] + dx, base[1] + dy, 'rovello').setScale(0.2).setDepth(base[1] + dy).setAlpha(0.95);
+            this.tweens.add({ targets: r, scale: 0.23, yoyo: true, repeat: -1, duration: 900 + dx });
             this.rovelloGrup.push(r);
         });
         this.xipresHint = [this.posar('xiprer', base[0] - 100, base[1] - 20, { col: { w: 24, h: 12 } }),

@@ -3190,7 +3190,7 @@ function pintarFanalet(ctx, W, H) {
 }
 
 // L'Ocellaire (Mestre Gaspar): hàbit de monjo negre i esparracat, lligat amb cadenes (creuades al pit, a la cintura i
-// grillons als canells), calb i ossut, amb els ulls vermells que brillen. Una gàbia petita li penja del cinturó.
+// grillons als canells), calb i ossut, amb els ulls lila que brillen. Una gàbia petita li penja del cinturó.
 // El bàcul no hi és: el dibuixa la zona, perquè gira.
 function dibuixarOcellaire(c, w) {
     lienc(c, w, w * 1.3, (ctx, W, H) => {
@@ -3254,11 +3254,11 @@ function dibuixarOcellaire(c, w) {
         ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(m - W * 0.075, H * 0.14); ctx.lineTo(m - W * 0.015, H * 0.155); ctx.moveTo(m + W * 0.075, H * 0.14); ctx.lineTo(m + W * 0.015, H * 0.155); ctx.stroke();
         ctx.strokeStyle = 'rgba(60,40,40,0.6)'; ctx.beginPath(); ctx.moveTo(m - W * 0.07, H * 0.19); ctx.lineTo(m - W * 0.05, H * 0.215); ctx.moveTo(m + W * 0.07, H * 0.19); ctx.lineTo(m + W * 0.05, H * 0.215); ctx.stroke();
         ctx.strokeStyle = CONTORN; ctx.beginPath(); ctx.moveTo(m - W * 0.03, H * 0.215); ctx.quadraticCurveTo(m, H * 0.205, m + W * 0.03, H * 0.215); ctx.stroke();
-        // Ulls vermells que brillen
+        // Ulls lila que brillen
         [-1, 1].forEach(sd => {
             const ex = m + sd * W * 0.042, ey = H * 0.165;
             const g = ctx.createRadialGradient(ex, ey, 0, ex, ey, W * 0.05);
-            g.addColorStop(0, '#ffffff'); g.addColorStop(0.25, '#ff3020'); g.addColorStop(1, 'rgba(255,0,0,0)');
+            g.addColorStop(0, '#ffffff'); g.addColorStop(0.25, '#b070ff'); g.addColorStop(1, 'rgba(154,80,255,0)');
             ctx.fillStyle = g; ctx.beginPath(); ctx.arc(ex, ey, W * 0.05, 0, Math.PI * 2); ctx.fill();
         });
     });

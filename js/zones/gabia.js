@@ -614,12 +614,12 @@ class ZonaGabia extends ZonaBase {
             else if (e.flama.emitting) e.flama.stop();
         }
     }
-    // Els ulls vermells que brillen (també a la foscor i a través de la boira)
+    // Els ulls lila que brillen (també a la foscor i a través de la boira)
     crearUlls() {
         const g = this.add.container(0, 0).setDepth(99950);
         [-1, 1].forEach(sd => {
-            g.add(this.add.circle(sd * 6, 0, 8, 0xff2010, 0.3).setBlendMode('ADD'));
-            g.add(this.add.circle(sd * 6, 0, 3.5, 0xff5030, 0.9).setBlendMode('ADD'));
+            g.add(this.add.circle(sd * 6, 0, 8, 0x9a50ff, 0.35).setBlendMode('ADD'));
+            g.add(this.add.circle(sd * 6, 0, 3.5, 0xc490ff, 0.95).setBlendMode('ADD'));
             g.add(this.add.circle(sd * 6, 0, 1.5, 0xffffff, 1));
         });
         this.tweens.add({ targets: g, alpha: 0.65, yoyo: true, repeat: -1, duration: 500 });
