@@ -1,13 +1,13 @@
 /**
- * EL HALL DEL MONESTIR
+ * EL VESTÍBUL DEL MONESTIR
  * Sala d'entrada del Monestir: lloses de pedra en damer, catifa fins al portal d'arc del fons (la porta de la Biblioteca), dos vitralls,
  * penons vermells, candelabres i bancs contra les parets. No hi ha res per llegir ni per tocar: és un lloc de pas.
  */
 
-class ZonaMonestirHall extends ZonaBase {
+class ZonaMonestirVestibul extends ZonaBase {
     constructor() {
-        super('ZonaMonestirHall', {
-            nom: 'Hall del Monestir',
+        super('ZonaMonestirVestibul', {
+            nom: 'Vestíbul del Monestir',
             amplada: 1100,
             alcada: 900,
             colorFons: '#100a06',
@@ -18,7 +18,7 @@ class ZonaMonestirHall extends ZonaBase {
 
     construir() {
         const A = 1100, H = 900, CX = 550;
-        this.terra('lloses_hall', 100, 40, 900, 860, -1100);
+        this.terra('lloses_vestibul', 100, 40, 900, 860, -1100);
         this.add.image(CX - 492, 0, 'paret_biblio').setOrigin(0).setScale(1 / RES).setDepth(-995);
         this.add.image(470, 230, 'catifa_biblio').setOrigin(0).setScale(1 / RES).setDepth(-1050);
 
@@ -75,6 +75,6 @@ class ZonaMonestirHall extends ZonaBase {
         this.colisio(815, H - 10, 370, 20);
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffd38a, 0.06).setDepth(80000);
-        this.sortida(510, H - 22, 80, 14, 'ZonaMonestir', 'hall');
+        this.sortida(510, H - 22, 80, 14, 'ZonaMonestir', 'vestibul');
     }
 }

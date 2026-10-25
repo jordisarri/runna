@@ -457,9 +457,9 @@ function pintarPilaBiblio(ctx, w, h, n, llavor) {
     }
 }
 
-// ---------- HALL DEL MONESTIR ----------
+// ---------- VESTÍBUL DEL MONESTIR ----------
 // Lloses de pedra clara en damer, amb rejuntat i desgast (peça repetible 128x128)
-function pintarLosesHall(ctx, w, h) {
+function pintarLosesVestibul(ctx, w, h) {
     const r = rndBib(33), m = w / 2;
     ctx.fillStyle = '#4a4034'; ctx.fillRect(0, 0, w, h);
     for (let by = 0; by < 2; by++) for (let bx = 0; bx < 2; bx++) {
