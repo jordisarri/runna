@@ -973,7 +973,7 @@ const DIALEGS = {
                 enAcabar: () => E.posaObjectiu("Derrota el Pastor de Boira a la pastura de la Cirosa (porta de la tanca, a la dreta de la masia).")
             };
         }
-        if (!E.flag("esquelles")) {
+        if (!E.te("esquelles")) {                    // (també si el senyal hi és però l'objecte no: es tornen a donar)
             return {
                 pagines: [
                     { qui: "Pastor vell", text: "Has tornat el ramat... i li has tret la boira a aquell pobre home. Que Déu t'ho pagui, monjo." },
