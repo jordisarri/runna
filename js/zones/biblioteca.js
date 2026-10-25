@@ -5,26 +5,6 @@
  * Hi treballa el Pare Alcuí, que llegeix els fragments i dona el Saber.
  */
 
-Object.assign(DIALEGS, {
-    cronica: E => ({ pagines: [
-        { qui: '', text: 'Sobre el faristol, la Crònica del Miracle: un llibre enorme de pergamí, amb tancadors de llautó i les vores menjades per segles de dits.' },
-        { qui: 'Crònica', text: '«Any de la gran fira. Va pujar al Miracle un firaire amb gàbies de canya plenes d\'ocells que cantaven com persones: Mestre Gaspar, l\'Ocellaire. On ell passava, els nens reien... i l\'endemà ja no reien amb res.»' },
-        { qui: 'Crònica', text: E.flag('fragment3')
-            ? '«Els pastors de la Cirosa i els germans del Miracle el tancaren dins la seva gàbia, sota terra. Un germà segellà la porta amb la llum de l\'espasa i l\'adormí entre pedres, a migdia.» (Al marge, una paraula esborrada.)'
-            : '(La pàgina següent és arrencada. Al marge, algú hi ha escrit amb lletra petita: «la resta, a les Runes i al sagrari».)' }
-    ] }),
-    prestatgesBiblio: n => E => ({ pagines: [{ qui: '', text: [
-        'Llibres de lloms gastats: «Herbari del Solsonès», «Tractat de les abelles», «Cants de l\'orgue, volum III»... i un «Manual de ping-pong per a monjos», amb anotacions del Juli als marges.',
-        'Una filera de lligalls lligats amb cordill: comptes del Monestir des de fa tres-cents anys. Algú hi ha deixat una fulla de til·ler de punt de llibre.',
-        'Rotllos de pergamí dins de caselles de fusta. N\'hi ha un amb el dibuix d\'una gàbia, i al costat, ratllat amb força: «NO».',
-        'Una secció sencera de «Vides de sants», en vint volums. Un d\'ells té els marges plens de gats dibuixats per algun novici avorrit.',
-        'Manuscrits il·luminats dins de caixes de fusta: el «Salteri del Miracle», amb una orla de cargols i d\'ocells. Molts ocells.',
-        'Llibres de comptes de la vinya, de les abelles i del refetor. Algú hi ha subratllat: «el vi és sempre més car al setembre».'
-    ][n] }] }),
-    globusBiblio: E => ({ pagines: [{ qui: '', text: 'Un globus terraqüi vell, amb mars plens de monstres. Al lloc on hauria de ser el Miracle, algú hi ha dibuixat una creueta i un ocell petit.' }] }),
-    vitrallBiblio: E => ({ pagines: [{ qui: '', text: 'El vitrall mostra un monjo amb una espasa de llum davant d\'una porta de ferro. La llum que hi passa pinta el terra de blau i d\'or.' }] })
-});
-
 class ZonaBiblioteca extends ZonaBase {
     constructor() {
         super('ZonaBiblioteca', {
@@ -47,7 +27,6 @@ class ZonaBiblioteca extends ZonaBase {
         this.add.image(58, 0, 'paret_biblio').setOrigin(0).setScale(1 / RES).setDepth(-995);
         [330, 770].forEach(cx => {
             this.add.image(cx, 194, 'vitrall_biblio').setOrigin(0.5, 1).setScale(1 / RES).setDepth(-990);
-            this.interactiu(cx, 240, 70, DIALEGS.vitrallBiblio, { altura: 200 });
         });
         // Feixos de llum de colors que baixen fins al terra
         [330, 770].forEach((cx, i) => {
@@ -68,7 +47,6 @@ class ZonaBiblioteca extends ZonaBase {
         // Prestatgeries del fons: quatre estants de llibres fins al sostre
         [['prestatge_a', 185, 0], ['prestatge_b', 550, 1], ['prestatge_c', 955, 2]].forEach(([k, x, n]) => {
             this.add.image(x, 206, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(-985);
-            this.interactiu(x, 240, 80, DIALEGS.prestatgesBiblio(n), { altura: 200 });
         });
         // Prestatgeries laterals (de cantó), pegades a les parets
         this.add.image(60, 220, 'prestatge_lat_e').setOrigin(0).setScale(1 / RES).setDepth(-980);
@@ -80,7 +58,6 @@ class ZonaBiblioteca extends ZonaBase {
             const g = this.add.image(x, base, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(base);
             this.add.ellipse(x, base + 2, g.displayWidth + 24, 14, 0x000000, 0.28).setDepth(base - 1);
             this.colisio(x, base - 12, g.displayWidth, 24);
-            this.interactiu(x, base + 22, 70, DIALEGS.prestatgesBiblio(n), { altura: 170 });
         });
         // Piles de llibres a terra
         [['pila_a', 140, 810], ['pila_b', 960, 810], ['pila_b', 962, 330]].forEach(([k, x, y]) => {
@@ -114,12 +91,10 @@ class ZonaBiblioteca extends ZonaBase {
         // El faristol amb la Crònica, a la dreta de la catifa
         this.add.image(842, 338, 'faristol_cronica').setOrigin(0.5, 1).setScale(1 / RES).setDepth(330);
         this.colisio(842, 318, 70, 20);
-        this.interactiu(842, 350, 80, DIALEGS.cronica, { altura: 120 });
 
         // Globus terraqüi a l'esquerra
         this.add.image(246, 344, 'globus_biblio').setOrigin(0.5, 1).setScale(1 / RES).setDepth(340);
         this.colisio(246, 330, 50, 16);
-        this.interactiu(246, 360, 70, DIALEGS.globusBiblio, { altura: 90 });
 
         // Llum d'aranya penjada del sostre: dos anells de llautó, cadenes i dotze espelmes amb flama
         const ar = this.add.graphics().setDepth(90000 - 1);
