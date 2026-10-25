@@ -498,6 +498,33 @@ class ZonaBase extends Phaser.Scene {
         if (baix - cim > 10) this.colisio(x, (cim + baix) / 2, ample, baix - cim);
     }
 
+    // Ovella que pastura: s'atura a menjar (cap cap a terra i mastegant) i de tant en tant fa uns passos fins a una altra mata d'herba,
+    // sempre dins d'un radi al voltant d'on l'has posat. Només mou la imatge (angle, escala, posició), així serveix amb qualsevol gràfic.
+    pasturar(spr, radi = 70) {
+        const x0 = spr.x, y0 = spr.y, sx = spr.scaleX, sy = spr.scaleY;
+        const nova = () => {
+            const dreta = !spr.flipX, cap = dreta ? 1 : -1;
+            // Menja una estona: el cap baixa i mastega
+            this.tweens.add({ targets: spr, angle: 9 * cap, duration: 500, ease: 'Sine.easeOut' });
+            const masteg = this.tweens.add({ targets: spr, scaleY: sy * 0.965, angle: 9 * cap + 1.6 * cap, yoyo: true, repeat: -1, duration: 230, delay: 500 });
+            this.time.delayedCall(Phaser.Math.Between(2600, 6200), () => {
+                masteg.stop();
+                this.tweens.add({ targets: spr, angle: 0, scaleY: sy, duration: 350 });
+                // Aixeca el cap i camina fins a una altra mata
+                const tx = Phaser.Math.Clamp(x0 + Phaser.Math.Between(-radi, radi), 40, this.config.amplada - 40), ty = y0 + Phaser.Math.Between(-radi * 0.4, radi * 0.4);
+                this.time.delayedCall(450, () => {
+                    spr.setFlipX(tx < spr.x);
+                    const dist = Phaser.Math.Distance.Between(spr.x, spr.y, tx, ty);
+                    const passos = this.tweens.add({ targets: spr, scaleY: sy * 1.045, yoyo: true, repeat: -1, duration: 190 });
+                    this.tweens.add({ targets: spr, x: tx, y: ty, duration: Math.max(600, dist / 24 * 1000), ease: 'Sine.easeInOut',
+                        onUpdate: () => spr.setDepth(spr.y),
+                        onComplete: () => { passos.stop(); spr.setScale(sx, sy); spr.setDepth(spr.y); nova(); } });
+                });
+            });
+        };
+        this.time.delayedCall(Phaser.Math.Between(0, 2500), nova);
+    }
+
     cartell(x, y, dialeg) {
         this.posar('cartell', x, y, { col: { w: 20, h: 10 } });
         return this.interactiu(x, y, 70, dialeg, { altura: 70 });

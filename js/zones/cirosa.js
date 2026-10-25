@@ -104,7 +104,7 @@ class ZonaCamiCirosa extends ZonaBase {
         [[420, 1830], [750, 1550], [380, 1330], [930, 1000], [700, 770], [580, 400]].forEach(([x, y], i) => {
             if (!net) { this.enemic('ovella', x, y); return; }
             const o = this.posar('ovella', x, y, { fonsY: y });
-            this.tweens.add({ targets: o, y: y - 5, yoyo: true, repeat: -1, duration: 800 + i * 140, delay: i * 200 });
+            this.pasturar(o, 80);
         });
         [[700, 2000], [330, 1500], [560, 560]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         // Flors de pastura i pedres a la vora del camí
@@ -171,7 +171,7 @@ class ZonaCirosa extends ZonaBase {
         [[1200, 330], [1500, 420], [1650, 700], [1350, 880], [1580, 930], [1250, 560], [1700, 300], [1100, 840]].forEach(([x, y]) => {
             const o = this.posar('ovella', x, y, { fonsY: y });
             if (lila) o.setTint(0xcdb8e8);
-            else this.tweens.add({ targets: o, y: y - 6, yoyo: true, repeat: -1, duration: 700 + Math.random() * 500, delay: Math.random() * 600 });
+            else this.pasturar(o, 90);
         });
 
         // El Germà Andreu, de Pastor de Boira, al mig de la pastura
