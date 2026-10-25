@@ -47,7 +47,6 @@ class ZonaBase extends Phaser.Scene {
         this.sortides = [];
         this.enemics = []; this.copes = []; this.atacantFins = 0;
         this.esbarzers = [];
-        this.tallables = [];
         this.caient = false;
         this.forcat = null;
         this.cop = null; this.armaNet = null; this.atacFins = 0;
@@ -166,7 +165,7 @@ class ZonaBase extends Phaser.Scene {
             if (go.depth >= 0 && go.depth < 50000) go.setDepth(go.depth + extra);
             if (go.body && go.body.updateFromGameObject && go.body.physicsType === Phaser.Physics.Arcade.STATIC_BODY) go.body.updateFromGameObject();
         });
-        this.interactius.concat(this.esbarzers, this.tallables).forEach(o => { if (o.y >= tall) o.y += extra; });
+        this.interactius.concat(this.esbarzers).forEach(o => { if (o.y >= tall) o.y += extra; });
         this.sortides.forEach(s => {
             if (s.r.y >= tall) s.r.y += extra;
             else if (s.r.bottom >= c.alcada - 20) s.r.height += extra;
@@ -682,34 +681,6 @@ class ZonaBase extends Phaser.Scene {
         const o = { img, col, x, y, id, viu: true };
         this.esbarzers.push(o);
         return o;
-    }
-
-    // Arbust verd que amaga alguna cosa: es poda amb les tisores de l'Isidre (ESPAI). id: perquè quedi tallat per sempre
-    arbust(x, y, id, textPista) {
-        const o = { x, y, id, viu: !Estat.flag('arb_' + id) };
-        if (!o.viu) return o;
-        o.img = this.posar('esbarzer', x, y).setTint(0x5a9a44);
-        o.col = this.colisio(x, y - 13, 80, 26);
-        this.tallables.push(o);
-        this.interactiu(x, y + 10, 90, () => Estat.te('tisores')
-            ? { pagines: [{ qui: '', text: 'Retalles les branques amb les tisores de l' + String.fromCharCode(39) + 'Isidre: clic, clic, clic.' }] }
-            : { pagines: [{ qui: '', text: textPista }] },
-            { altura: 70, actiu: () => o.viu, enTancar: () => { if (Estat.te('tisores')) this.tallarArbust(o); } });
-        return o;
-    }
-
-    tallarArbust(o) {
-        if (!o.viu) return;
-        o.viu = false;
-        Estat.posaFlag('arb_' + o.id);
-        this.obstacles.remove(o.col, true, true);
-        const p = this.add.particles(o.x, o.y - 30, 'espurna', {
-            speed: { min: 40, max: 120 }, lifespan: 700, scale: { start: 0.9, end: 0 },
-            tint: [0x5a9a44, 0x8acb5a], quantity: 10, emitting: false
-        }).setDepth(99990);
-        p.explode(14);
-        this.time.delayedCall(900, () => p.destroy());
-        this.tweens.add({ targets: o.img, alpha: 0, scaleY: o.img.scaleY * 0.5, duration: 400, onComplete: () => o.img.destroy() });
     }
 
     // Roca que es pot empènyer (ESPAI) cap a (dx, dy) per descobrir el que hi ha a sota

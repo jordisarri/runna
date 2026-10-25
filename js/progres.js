@@ -140,7 +140,7 @@ const PROGRES = {
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta el Cant de les Pedres." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
-          pista: E => "La Nena de les Trenes, al camí de la Rovellonera, encara espera els seus dos llaços: un sota una roca del camí i l'altre darrere un arbust de la Rovellonera (cal podar-lo)." },
+          pista: E => "La Nena de les Trenes, al camí de la Rovellonera, encara espera els seus dos llaços: un sota una roca del camí i l'altre a la primera clariana de la Rovellonera." },
         { id: 'monges', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'mongesTrobades'], obert: E => E.flag('isidreSansa'), fet: E => E.flag('mongesTrobades'),
           pista: E => !E.flag('llavorSansa') && !E.flag('llosaOberta') ? "La Sansa, la de les verdures, passa per les Cel·les: l'Isidre diu que té una Llavor de Lluna."
               : !E.flag('llosaOberta') ? "Porta la Llavor de Lluna a l'Isidre, al jardí de l'Hostatgeria."

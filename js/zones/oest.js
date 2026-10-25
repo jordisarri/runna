@@ -91,8 +91,6 @@ class ZonaRovellonera extends ZonaBase {
             this.llac = this.posar('llac', 1100, 300, { fonsY: 300 });
             this.tweens.add({ targets: this.llac, y: 294, yoyo: true, repeat: -1, duration: 700 });
             this.interactiu(1100, 300, 70, DIALEGS.llac(2), { altura: 50, actiu: () => this.llac2Lliure() });
-            // Amagat darrere un arbust espès: cal tallar-lo amb el bastó
-            this.arbust(1100, 335, 'llac2', 'Un arbust espès. Entre les branques hi brilla alguna cosa rosada... Necessites alguna eina per podar-lo... potser l\'Isidre, el del jardí, en sap de fer.');
         }
 
         // Cercle de bolets (segona clariana): portal màgic cap a la cabana de la Jaumeta, un cop descobert
@@ -156,7 +154,7 @@ class ZonaRovellonera extends ZonaBase {
         if (this.llac) this.llac.setVisible(this.llac2Lliure());
     }
 
-    llac2Lliure() { return Estat.flag('nenaVista') && !Estat.flag('llac2') && Estat.flag('arb_llac2'); }
+    llac2Lliure() { return Estat.flag('nenaVista') && !Estat.flag('llac2'); }
 }
 
 // ---------------- CAMÍ DE LA ROVELLONERA ----------------

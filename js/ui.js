@@ -33,7 +33,6 @@ const CATALEG_OBJECTES = {
     fulla_tiler:      ['Fulla del Til·ler', 'Un record del sopar sota el Gran Til·ler.'],
     cinta_nena:       ['Cinta de la Nena', 'Absorbeix un cop cada vegada que entres a una zona.'],
     llac_nena:        ['Llaç de cinta', 'Rosa i descolorit. És de la Nena de les Trenes.'],
-    tisores:          ['Tisores de podar', 'Les de l\'Isidre: tallen els arbustos més espessos.'],
     llanterna:        ['Llanterna', 'Fa més llum a les foscors de sota terra.'],
     telescopi:        ['Telescopi del Garf', 'Per mirar els estels als Dipòsits.'],
     estel_llorenc:    ['Estel de Sant Llorenç', 'Un bocí de llum caigut del cel.'],

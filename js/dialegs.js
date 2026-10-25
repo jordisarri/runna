@@ -805,18 +805,7 @@ const DIALEGS = {
     cartellEra: E => ({ pagines: [{ qui: '', text: '↑ Ermita de la Desaparició\n→ Hostatgeria\n← Rovellonera' }] }),
 
     // ---------------- JARDÍ ----------------
-    // L'Isidre dóna les tisores de podar la primera vegada que hi parles
-    isidre: E => {
-        const d = DIALEGS.isidreBase(E);
-        if (E.te('tisores')) return d;
-        const prev = d.enAcabar;
-        return {
-            pagines: [...d.pagines,
-                { qui: 'Isidre', text: 'Espera, monjo, que no marxis així. Agafa aquestes tisores de podar: les he fet jo i tallen com el vent. Pel món hi ha arbustos tan espessos que amaguen coses... i tu tens cara de ficar el nas a tot arreu.' },
-                { qui: '', text: 'Has obtingut les TISORES DE PODAR: amb ESPAI davant d\'un arbust espès, el podes.' }],
-            enAcabar: () => { if (prev) prev(); E.dona('tisores'); }
-        };
-    },
+    isidre: E => DIALEGS.isidreBase(E),
     isidreBase: E => {
         if (E.flag("soparObert") && !E.flag("floresIsidre")) {
             return {
@@ -1107,18 +1096,18 @@ const DIALEGS = {
                     { qui: "", text: "Una nena transparent seu a terra, amb dues trenes sense lligar. Plora en silenci, i on cauen les llàgrimes l'herba es torna blanca." },
                     { qui: "Nena de les Trenes", text: "No et facis enrere, si us plau... No vull espantar ningú. Només que, quan arriba algú, sempre fuig." },
                     { qui: "Nena de les Trenes", text: "Vaig venir a collir rovellons amb la mare. Ella deia que els rovellons creixen sempre vora el bon camí, i que qui se'n fia no es perd mai pel bosc. Em vaig perdre perquè em vaig oblidar de mirar a terra. Em va lligar les dues trenes amb dos llaços rosa, i em vaig perdre pel bosc. Fa molts, molts anys. No he pogut marxar d'aquí." },
-                    { qui: "Nena de les Trenes", text: "Els llaços van caure mentre corria: un va quedar pel camí, amagat sota una roca, i l'altre ja dins el bosc dels rovellons, darrere un arbust. Sense ells, no sento les mans de la mare. Si me'ls tornessis a lligar..." },
+                    { qui: "Nena de les Trenes", text: "Els llaços van caure mentre corria: un va quedar pel camí, amagat sota una roca, i l'altre ja dins el bosc dels rovellons, a la primera clariana. Sense ells, no sento les mans de la mare. Si me'ls tornessis a lligar..." },
                     { qui: "Ineu", text: "Els trobaré. Et prometo que no hauràs de plorar sola." }
                 ],
                 enAcabar: () => {
                     E.posaFlag("nenaVista");
-                    E.posaObjectiu("Troba els dos llaços de la Nena de les Trenes (un sota una roca del camí; l'altre darrere un arbust de la Rovellonera) i porta-li-los.");
+                    E.posaObjectiu("Troba els dos llaços de la Nena de les Trenes (un sota una roca del camí; l'altre a la primera clariana de la Rovellonera) i porta-li-los.");
                 }
             };
         }
         if (n < 2) {
-            const pista = n === 0 ? "Un és pel camí, sota una roca que cal empènyer... i l'altre, més endins, darrere un arbust, entre els pins."
-                : E.flag("llac1") ? "El del camí ja el tens! Falta el de dins el bosc dels rovellons, a la primera clariana, darrere un arbust espès: amb unes tisores el podaràs."
+            const pista = n === 0 ? "Un és pel camí, sota una roca que cal empènyer... i l'altre, més endins, a la primera clariana del bosc dels rovellons."
+                : E.flag("llac1") ? "El del camí ja el tens! Falta el de dins el bosc dels rovellons, a la primera clariana, entre els pins."
                 : "El del bosc ja el tens! Falta el del camí, sota una roca grossa a la vora: empeny-la.";
             return { pagines: [{ qui: "Nena de les Trenes", text: "Has trobat " + n + " dels 2 llaços. " + pista + " Jo m'espero." }] };
         }
@@ -1143,7 +1132,7 @@ const DIALEGS = {
         enAcabar: () => {
             E.posaFlag("llac" + k); E.dona("llac_nena");
             const n = ["llac1", "llac2"].filter(f => E.flag(f)).length;
-            E.posaObjectiu(n < 2 ? (k === 1 ? "Troba el segon llaç de la Nena de les Trenes (1/2): és a la primera clariana de la Rovellonera, darrere un arbust espès (cal podar-lo)." : "Troba el segon llaç de la Nena de les Trenes (1/2): és pel camí, sota una roca grossa que cal empènyer.") : "Ja tens els dos llaços: porta-los a la Nena de les Trenes, a la corba del camí.");
+            E.posaObjectiu(n < 2 ? (k === 1 ? "Troba el segon llaç de la Nena de les Trenes (1/2): és a la primera clariana de la Rovellonera, entre els pins." : "Troba el segon llaç de la Nena de les Trenes (1/2): és pel camí, sota una roca grossa que cal empènyer.") : "Ja tens els dos llaços: porta-los a la Nena de les Trenes, a la corba del camí.");
         }
     }),
 
