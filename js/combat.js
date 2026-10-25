@@ -230,7 +230,7 @@ const ENEMICS = {
     // que li volten al voltant i després es llancen contra l'Ineu (Runna els talla). A la segona meitat llança el bàcul
     // com un remolí i desapareix en boira per tornar a sortir en un altre lloc.
     ocellaire: {
-        tex: 'ocellaire', vida: 24, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8, copDy: 80, copRadi: 50,
+        tex: 'ocellaire', vida: 24, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8, soloCap: true,
         monedes: [0, 0, 0], cor: 0, robust: true, barra: true,
         perill: e => !e.amagat && e.estat !== 'apareix',
         ia(z, e, ara) {
@@ -285,7 +285,7 @@ const ENEMICS = {
                     // Els ocells es llancen un rere l'altre
                     z.enemics.filter(o => o.amo === e && o.estat === 'orbita').forEach((o, i) => { o.llançar = ara + 250 + i * (fase2 ? 220 : 380); });
                     Sfx.xiscle();
-                    e.estat = 'cansat'; e.fins = ara + (fase2 ? 1300 : 2000);
+                    e.estat = 'cansat'; e.fins = ara + (fase2 ? 1900 : 2600);
                 }
             } else if (e.estat === 'llança') {
                 // Llança el bàcul com un remolí cap a on és l'Ineu i li torna a la mà
@@ -297,7 +297,7 @@ const ENEMICS = {
                     const desti = { x: jo.x, y: jo.y - 40 };
                     z.tweens.add({ targets: b, x: desti.x, y: desti.y, duration: 650, ease: 'Sine.easeOut', yoyo: true,
                         onUpdate: () => { if (Phaser.Math.Distance.Between(b.x, b.y, z.ineu.body.center.x, z.ineu.body.center.y - 30) < 70) z.ferIneu(1, { x: b.x, y: b.y }); },
-                        onComplete: () => { b.volant = false; if (!e.mort) { e.estat = 'cansat'; e.fins = z.time.now + 1100; } } });
+                        onComplete: () => { b.volant = false; if (!e.mort) { e.estat = 'cansat'; e.fins = z.time.now + 1800; } } });
                 }
                 if (b.volant) Sfx.basto();
             } else if (e.estat === 'esvaeix') {
@@ -314,11 +314,16 @@ const ENEMICS = {
             } else if (e.estat === 'apareix') {
                 e.spr.body.setVelocity(0);
                 if (ara > e.fins) { e.amagat = false; e.estat = 'invoca'; e.fins = ara + 1400; e.nOcells = 0; e.proxOcell = ara + 150; }
-            } else {   // cansat: el bàcul s'alenteix i és el moment de colpejar-lo
+            } else {   // cansat: el bàcul s'alenteix, abaixa el cap i és el moment de colpejar-lo
                 e.spr.body.setVelocity(0);
+                e.baixaObj = 1;
                 b.gir = Math.max(0.02, b.gir * 0.94);
                 if (ara > e.fins) { e.estat = 'sura'; e.proxAtac = ara + (fase2 ? 1400 : 2400); e.puntSura = null; }
             }
+            // S'ajup (o es redreça) suaument: el cap, que és el seu únic punt feble, baixa fins a l'abast de l'espasa
+            if (e.estat !== 'cansat') e.baixaObj = 0;
+            e.baixa = (e.baixa || 0) + ((e.baixaObj || 0) - (e.baixa || 0)) * 0.2;
+            e.spr.setScale(e.escalaBase, e.escalaBase * (1 - 0.38 * e.baixa));
             e.spr.setFlipX(jo.x < c.x);
             z.moureBasto(e);
         },
@@ -616,14 +621,17 @@ Object.assign(ZonaBase.prototype, {
         let encertats = 0;
         this.enemics.forEach(e => {
             if (e.mort || e.amagat || k.tocats.has(e)) return;
-            const toca = this.puntsCop(e).some(c => {
+            const tocats = this.puntsCop(e).filter(c => {
                 const rx = c.x - jo.x, ry = c.y - jo.y;
                 const t = rx * d.x + ry * d.y;                      // distància al llarg del cop
                 if (t < -12 || t > k.L + c.r) return false;
                 const lat = Math.abs(rx * d.y - ry * d.x);          // distància lateral
                 return lat < c.r + k.ample;
             });
-            if (toca) { k.tocats.add(e); this.colpejar(e, k.dany, d); encertats++; }
+            if (!tocats.length) return;
+            k.tocats.add(e);
+            if (e.def.soloCap && !tocats.some(c => c.cap)) { this.copRebutjat(e, d); return; }
+            this.colpejar(e, k.dany, d); encertats++;
         });
     },
 
@@ -684,13 +692,28 @@ Object.assign(ZonaBase.prototype, {
 
     // On cal colpejar un enemic: el cos físic (que bloqueja i fa mal) és als peus, però un enemic alt (el boss final) es colpeja
     // per tot el cos, dels peus al cap: la zona de cop és una cadena de cercles que puja 'copDy' píxels, amb el radi 'copRadi'.
+    // Amb 'soloCap' (el boss final) només fa mal el cap: la resta del cos rebutja el cop. Les zones segueixen el sprite
+    // dibuixat (s'abaixa quan s'ajup), de manera que el cap només s'abasta amb l'espasa quan l'Ocellaire abaixa el cap.
     puntsCop(e) {
-        const c = e.spr.body.center, dy = e.def.copDy || 0, r = e.def.copRadi || e.def.radi, n = dy ? 4 : 1;
-        return Array.from({ length: n }, (_, i) => ({ x: c.x, y: c.y - dy * i / Math.max(1, n - 1), r }));
+        const c = e.spr.body.center;
+        if (!e.def.soloCap) return [{ x: c.x, y: c.y, r: e.def.radi }];
+        const s = e.spr, h = s.displayHeight, dalt = s.y - h / 2;
+        return [{ x: s.x, y: dalt + h * 0.12, r: 34, cap: true },
+                { x: s.x, y: dalt + h * 0.42, r: 44 }, { x: s.x, y: dalt + h * 0.66, r: 44 }, { x: s.x, y: c.y, r: 44 }];
     },
-    zonaCop(e) {                    // el centre de la zona (el tors): on surten les espurnes i cap a on s'apunta
-        const c = e.spr.body.center, dy = e.def.copDy || 0;
-        return { x: c.x, y: c.y - dy * 0.6, r: e.def.copRadi || e.def.radi };
+    zonaCop(e) {                    // on surten les espurnes del cop
+        const c = e.spr.body.center;
+        if (!e.def.soloCap) return { x: c.x, y: c.y, r: e.def.radi };
+        const q = this.puntsCop(e)[e.baixa > 0.5 ? 0 : 1];
+        return { x: q.x, y: q.y, r: q.r };
+    },
+    // El cop ha caigut al cos, no al cap: no fa mal
+    copRebutjat(e, d) {
+        const q = this.puntsCop(e)[2], ara = this.time.now;
+        Sfx.escut();
+        this.cameras.main.shake(70, 0.0015, true);
+        this.impacte(q.x, q.y, { x: -d.x, y: -d.y }, 0);
+        if (!(ara < (e.ultimAvis || 0))) { e.ultimAvis = ara + 2500; this.flotant(q.x, q.y - 150, 'Al cap!', '#ffe08a'); }
     },
 
     colpejar(e, dany, d) {

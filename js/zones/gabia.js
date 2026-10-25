@@ -758,18 +758,27 @@ class ZonaGabia extends ZonaBase {
         this.crearBasto(e);
         e.ulls = this.crearUlls();
         // Els ulls segueixen el cap just després de la física (si no, anirien un fotograma enrere)
-        this.events.on('postupdate', () => { if (e.ulls && e.ulls.active && e.spr.active) this.posarUlls(e.ulls, e.spr, e.spr.body.bottom + 1); });
+        this.events.on('postupdate', () => {
+            if (e.ulls && e.ulls.active && e.spr.active) this.posarUlls(e.ulls, e.spr, e.spr.body.bottom + 1);
+            // Un anell daurat marca el cap quan es pot colpejar (l'únic punt feble)
+            if (e.diana && e.diana.active) {
+                const q = this.puntsCop(e)[0], obert = !e.mort && !e.amagat && e.baixa > 0.6;
+                e.diana.setVisible(obert).setPosition(q.x, q.y).setDepth(e.spr.body.bottom + 2).setAlpha(0.6 + 0.4 * Math.sin(this.time.now / 90));
+            }
+        });
+        e.diana = this.add.circle(0, 0, 26).setStrokeStyle(3, 0xffe08a, 0.95).setVisible(false);
         this.ui().barraBoss("L'Ocellaire");
         this.invulnerableFins = this.time.now + 1500;
         this.tambors(560);
         this.npcs.ocellaire = e.spr;
-        this.ui().notifica("Talla els ocells de foc i colpeja'l quan el bàcul s'alenteixi");
+        this.ui().notifica("Només el cap li fa mal: colpeja'l quan abaixi el cap");
     }
 
     ocellaireDerrotat(e) {
         this.bossCaigut = e;
         const b = e.basto, c = e.spr.body.center, cam = this.cameras.main, ui = this.ui();
         if (this.tambor) { this.tambor.remove(); this.tambor = null; }
+        if (e.diana) { e.diana.destroy(); e.diana = null; }
         ui.amagarBarraBoss();
         // El cop final: el món gairebé s'atura, la càmera s'hi acosta i un flaix blanc ho esborra tot
         this.hitStop(450);
