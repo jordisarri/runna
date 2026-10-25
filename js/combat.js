@@ -536,6 +536,9 @@ Object.assign(ZonaBase.prototype, {
         this.time.delayedCall(600, () => p.destroy());
     },
 
+    // Missatge que s'ha de poder llegir: al quadre de diàleg de sota
+    missatge(text, fet) { this.ui().missatge(text, fet); },
+
     flotant(x, y, text, color = '#ffffff') {
         const t = this.add.text(x, y, text, estilText(26, color, { stroke: '#000', strokeThickness: 4, fontStyle: 'bold' }))
             .setOrigin(0.5, 1).setDepth(99999);

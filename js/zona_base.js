@@ -812,8 +812,7 @@ class ZonaBase extends Phaser.Scene {
     melodiaTocada(nom) {
         const gestionada = this.enMelodia ? this.enMelodia(nom) : false;
         if (!gestionada) {
-            this.flotant(this.ineu.x, this.ineu.y - 150, '♪ ' + MELODIES[nom].nom, '#d8c8ff');
-            this.time.delayedCall(900, () => this.flotant(this.ineu.x, this.ineu.y - 130, 'Aquí no passa res...', '#a89878'));
+            this.missatge('♪ ' + MELODIES[nom].nom + '\nAquí no passa res...');
         }
     }
 

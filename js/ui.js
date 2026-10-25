@@ -295,7 +295,14 @@ class EscenaUI extends Phaser.Scene {
     notifica(text) {
         this.tweens.killTweensOf(this.toast);
         this.toast.setText(text).setAlpha(1);
-        this.tweens.add({ targets: this.toast, alpha: 0, delay: 1800, duration: 500 });
+        this.tweens.add({ targets: this.toast, alpha: 0, delay: 1800 + text.length * 40, duration: 500 });
+    }
+
+    // Missatge llegible: surt al quadre de baix, com qualsevol diàleg, i el joc s'atura fins que es llegeix.
+    // Si ja hi ha un diàleg obert, es queda amb l'avís de sempre.
+    missatge(text, fet) {
+        if (this.dialeg) { this.notifica(String(text).replace(/\n/g, ' ')); if (fet) fet(); return; }
+        this.obrirDialeg({ pagines: [{ text }] }, fet);
     }
 
     // ---------------- CINEMÀTIQUES I BOSSES ----------------

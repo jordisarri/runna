@@ -204,10 +204,10 @@ class ZonaCirosa extends ZonaBase {
     enMelodia(nom) {
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 280, 720) > 380) return false;
         if (!Estat.flag('soparObert')) {
-            this.flotant(280, 580, 'Els pastors t\'escolten en silenci... (encara no és el moment: parla amb el Til·ler)', '#ffd9a0');
+            this.missatge('Els pastors t\'escolten en silenci... (encara no és el moment: parla amb el Til·ler)');
             return true;
         }
-        if (Estat.flag('pastorsConvencuts')) { this.flotant(280, 580, 'Els pastors somriuen', '#ffd9a0'); return true; }
+        if (Estat.flag('pastorsConvencuts')) { this.missatge('Els pastors somriuen.'); return true; }
         this.ui().obrirDialeg(DIALEGS.pastorsConvencuts(Estat), () => Estat.desar());
         return true;
     }
@@ -276,7 +276,7 @@ class ZonaCirosa extends ZonaBase {
         this.cameras.main.shake(300, 0.005);
         this.tancarArena();
         this.flotant(1400, 520, 'Be-e-e-e!', '#e0a0ff');
-        this.ui().notifica('Pastor de Boira: allunya\'t de les envestides i colpeja quan quedi cansat');
+        this.missatge('Pastor de Boira: allunya\'t de les envestides i colpeja quan quedi cansat.');
     }
 }
 

@@ -403,7 +403,7 @@ class CambraMonja extends ZonaCasaBase {
     enMelodia(nom) {
         if (this.monja !== 'pains' || nom !== 'aurora') return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 520, 460) > 320) return false;
-        if (Estat.flag('lliurePains')) { this.flotant(520, 360, 'La Pains ja és desperta', '#d8c8ff'); return true; }
+        if (Estat.flag('lliurePains')) { this.missatge('La Pains ja és desperta.'); return true; }
         Estat.posaFlag('lliurePains');
         this.alliberada(false);
         Sfx.secret();

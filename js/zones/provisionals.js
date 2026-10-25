@@ -150,7 +150,7 @@ class ZonaEsglesia extends ZonaBase {
         this.sortida(ESG.portaDx - 36, ESG.retY - 14, 72, 20, 'ZonaTorre', 'baix');
         if (avis) {
             Sfx.secret();
-            this.flotant(ESG.portaDx, ESG.retY - 170, 'La porta de la dreta del retaule ja és oberta', '#ffe9a8');
+            this.missatge('La porta de la dreta del retaule ja és oberta.');
         }
     }
 
@@ -283,7 +283,7 @@ class ZonaCreu extends ZonaBase {
         if (nom !== 'aurora') return false;
         const prop = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1010, 800) < 520;
         if (!prop) return false;
-        if (Estat.flag('bassadoriaNeta')) { this.flotant(1010, 640, "L'aigua ja és clara", '#9fd8ff'); return true; }
+        if (Estat.flag('bassadoriaNeta')) { this.missatge("L'aigua ja és clara."); return true; }
         this.aiguaNeta.setVisible(true).setAlpha(0);
         this.tweens.add({ targets: this.aiguaNeta, alpha: 0.75, duration: 1500 });
         if (this.boiraBass) this.boiraBass.stop();

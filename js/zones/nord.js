@@ -81,7 +81,7 @@ class ZonaRuines extends ZonaBase {
     enMelodia(nom) {
         if (nom !== 'pedres' || !Estat.flag('fragment1')) return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1100, 600) > 300) return false;
-        if (Estat.flag('benedicioMonjo')) { this.flotant(1100, 440, "L'ombra assenteix", '#d8c8ff'); return true; }
+        if (Estat.flag('benedicioMonjo')) { this.missatge("L'ombra assenteix."); return true; }
         if (!['fragment1', 'fragment2', 'fragment3'].every(f => Estat.flag(f))) return false;
         this.ui().obrirDialeg(DIALEGS.benedicioMonjo(Estat), () => Estat.desar());
         return true;
@@ -278,7 +278,7 @@ class ZonaPingpong extends ZonaBase {
         if (this.empentaMs < 600) return;
         this.empentaMs = 0;
         if (!Estat.te('guants')) {
-            if (!this.pistaRoda) { this.pistaRoda = true; this.flotant(this.roda.x, this.roda.y - 160, 'Pesa massa... calen unes mans més fortes', '#f2e6c8'); }
+            if (!this.pistaRoda) { this.pistaRoda = true; this.missatge('Pesa massa... calen unes mans més fortes.'); }
             return;
         }
         this.mouRoda(this.costatRoda);
@@ -295,7 +295,7 @@ class ZonaPingpong extends ZonaBase {
             targets: this.roda, x, angle: dir * 180, duration: 900, ease: 'Sine.easeInOut',
             onUpdate: () => { this.colRoda.x = this.roda.x; this.colRoda.body.updateFromGameObject(); },
             onComplete: () => {
-                this.flotant(700, 200, 'Un passadís!', '#d8c8ff'); this.obrirPassadis(); Estat.desar();
+                this.missatge('Un passadís!'); this.obrirPassadis(); Estat.desar();
                 // La porta secreta es descobreix: les juntes s'il·luminen i s'obre un moment per ensenyar el passadís (després s'obre en acostar-s'hi)
                 this.tweens.add({ targets: this.juntesPorta, alpha: 0.4, yoyo: true, repeat: 2, duration: 220 });
                 this.portaSecreta.forcaFins = this.time.now + 2200;
@@ -393,7 +393,7 @@ class ZonaCelles extends ZonaBase {
         this.cameras.main.shake(400, 0.003);
         Sfx.secret();
         this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
-        this.flotant(1070, 220, 'El camí del Til·ler és lliure', '#d8c8ff');
+        this.missatge('El camí del Til·ler és lliure.');
         Estat.posaObjectiu("Puja al Gran Til·ler: és al nord de les Cel·les, pel camí que s'ha aclarit.");
         Estat.desar();
     }
@@ -566,7 +566,7 @@ class ZonaTiller extends ZonaBase {
         Sfx.secret();
         this.cameras.main.shake(300, 0.003);
         this.sortida(1100, 0, 140, 14, 'ZonaCamiCirosa', 'tiller');
-        this.flotant(1170, 200, 'La bardissa s\'aparta', '#d8c8ff');
+        this.missatge('La bardissa s\'aparta.');
         Estat.posaObjectiu('Puja a la Cirosa pel camí del nord-est: els pastors desterrats guarden les esquelles dels seus avis.');
         Estat.desar();
     }

@@ -1230,7 +1230,7 @@ const DIALEGS = {
             ],
             enAcabar: () => {
                 E.dona("runna"); E.posaFlag("runna");
-                const ui = game.scene.getScene("UI"); if (ui) ui.notifica("Runna: 2 de dany. Talla els esbarzers negres.");
+                const ui = game.scene.getScene("UI"); if (ui) ui.missatge("Runna: 2 de dany. Talla els esbarzers negres.");
                 E.posaObjectiu("Les ombres s'han fet més fortes. Parla amb el Frederic, al Celler (a les Runes): sap com baixar-hi per una altra banda.");
             }
         };

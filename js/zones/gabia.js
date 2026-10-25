@@ -244,7 +244,7 @@ class ZonaGirgoles extends ZonaBase {
         this.cameras.main.shake(300, 0.003);
         if (this.colCortina) this.obstacles.remove(this.colCortina, true, true);
         this.tweens.add({ targets: this.cortina, alpha: 0, duration: 1600 });
-        this.flotant(700, 260, 'Les gírgoles canten: el micel·li es desfà', '#9affd0');
+        this.missatge('Les gírgoles canten: el micel·li es desfà.');
         Estat.posaObjectiu('Segueix pel túnel del nord de la Sala de les Gírgoles.');
         Estat.desar();
     }
@@ -754,7 +754,7 @@ class ZonaGabia extends ZonaBase {
         const d = (x, y) => Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, x, y);
         if (nom === 'pedres' && !Estat.flag('pontGabia') && d(GABIA.x, this.yPont) < 260) { this.aixecarPont(); return true; }
         if (nom === 'miracle' && d(this.gx, this.base + 60) < 300) {
-            if (this.boss && !this.boss.mort) { this.flotant(this.gx, this.base - 200, "L'Ocellaire xiula més fort que el cant", '#e0b0ff'); return true; }
+            if (this.boss && !this.boss.mort) { this.missatge("L'Ocellaire xiula més fort que el cant."); return true; }
             if (Estat.flag('ocellaireVencut') && !Estat.flag('gabiaOberta')) { this.obrirGabia(); return true; }
         }
         return false;
@@ -766,7 +766,7 @@ class ZonaGabia extends ZonaBase {
         this.cameras.main.shake(600, 0.004);
         this.blocs.forEach((b, i) => this.tweens.add({ targets: b, alpha: 1, scale: 1, delay: i * 400, duration: 700, ease: 'Back.easeOut' }));
         this.time.delayedCall(1300, () => { if (this.colPont) this.obstacles.remove(this.colPont, true, true); });
-        this.flotant(GABIA.x, this.yPont - 180, 'Les pedres es desperten', '#d8c8ff');
+        this.missatge('Les pedres es desperten.');
         Estat.posaObjectiu('Creua el pont de pedra fins a la gàbia.');
         Estat.desar();
     }
@@ -845,7 +845,7 @@ class ZonaGabia extends ZonaBase {
         this.invulnerableFins = this.time.now + 1500;
         this.tambors(560);
         this.npcs.ocellaire = e.spr;
-        this.ui().notifica("Només el cap li fa mal: colpeja'l quan abaixi el cap");
+        this.missatge("Només el cap li fa mal: colpeja'l quan abaixi el cap.");
     }
 
     ocellaireDerrotat(e) {

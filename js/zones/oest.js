@@ -78,7 +78,7 @@ class ZonaRovellonera extends ZonaBase {
         // Pista: en cada clariana, una sola vegada, es recorda que els rovellons marquen la sortida bona
         if (D && !Estat.flag('rovPista' + pas)) {
             Estat.posaFlag('rovPista' + pas);
-            this.time.delayedCall(1000, () => this.ui().notifica(pas === 0 ? 'Els rovellons creixen vora la sortida bona...' : 'Segueix els rovellons: assenyalen el camí'));
+            this.time.delayedCall(1000, () => this.missatge(pas === 0 ? 'Els rovellons creixen vora la sortida bona...' : 'Segueix els rovellons: assenyalen el camí.'));
         }
         this.hintLlanterna = Estat.te('llanterna');
 
@@ -548,7 +548,7 @@ class ZonaDipositos extends ZonaBase {
         this.obstacles.remove(this.colBoira, true, true);
         Sfx.secret();
         this.sortida(1586, 520, 14, 130, 'ZonaDolmen', 'diposits');
-        this.flotant(DIP.boiraX, 470, 'El camí del Dolmen és lliure', '#d8e0ff');
+        this.missatge('El camí del Dolmen és lliure.');
         Estat.posaObjectiu(DIALEGS.objectiuRunna(Estat));
         Estat.desar();
     }
