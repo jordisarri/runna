@@ -638,31 +638,103 @@ class ZonaGabia extends ZonaBase {
         } });
     }
     // Segona fase: rugit, ona de xoc que empeny l'Ineu, la cova es torna vermella i els tambors s'acceleren
-    furiaOcellaire(e) {
+    furiaOcellaire(e, fase = 2) {
         const c = e.spr.body.center, cam = this.cameras.main;
         Sfx.rugit();
-        cam.shake(1300, 0.012);
-        cam.flash(400, 255, 60, 40);
-        this.bombolla('ocellaire', 'PROU JOCS!', null, 1400);
+        cam.shake(fase === 3 ? 1800 : 1300, fase === 3 ? 0.016 : 0.012);
+        cam.flash(400, 255, fase === 3 ? 140 : 60, 40);
+        this.bombolla('ocellaire', fase === 3 ? 'ARA CREMARÀS!' : 'PROU JOCS!', null, 1500);
         const ona = this.add.circle(c.x, c.y - 30, 30).setStrokeStyle(10, 0xff5030, 0.9).setDepth(99960);
         this.tweens.add({ targets: ona, radius: 520, alpha: 0, duration: 900, ease: 'Cubic.out', onComplete: () => ona.destroy() });
         const jo = this.ineu.body.center, dx = jo.x - c.x, dy = jo.y - c.y, l = Math.hypot(dx, dy) || 1;
         if (l < 420) this.forcat = { vx: dx / l * 520, vy: dy / l * 520, fins: this.time.now + 260 };
-        this.tweens.add({ targets: this.velLila, alpha: 0.32, duration: 800 });
-        this.velLila.setFillStyle(0x3a0610, this.velLila.alpha);
-        this.llumLila.setFillStyle(0xff3020, 0.1);
+        this.tweens.add({ targets: this.velLila, alpha: fase === 3 ? 0.42 : 0.32, duration: 800 });
+        this.velLila.setFillStyle(fase === 3 ? 0x4a0a04 : 0x3a0610, this.velLila.alpha);
+        this.llumLila.setFillStyle(fase === 3 ? 0xff7020 : 0xff3020, fase === 3 ? 0.16 : 0.1);
         this.espurnes.setParticleTint && this.espurnes.setParticleTint(0xff6040);
         if (e.ulls) this.tweens.add({ targets: e.ulls, scale: 1.6, duration: 400 });
-        this.tambors(400);
+        this.tambors(fase === 3 ? 300 : 400);
+    }
+
+    // ---- Atacs a terra (cercle i foc): els avisos són ovals aixafats, com tot el que va a terra en aquesta vista ----
+    ovalTerra(x, y, R, color, alfaOmple, gruix = 4) {
+        const g = this.add.ellipse(x, y, R * 2, R * 1.1, color, alfaOmple).setStrokeStyle(gruix, color, 0.9).setDepth(y - 400);
+        return g;
+    }
+    dinsOval(x, y, R, p) { const dx = (p.x - x) / R, dy = (p.y - y) / (R * 0.55); return dx * dx + dy * dy < 1; }
+
+    // Cop en cercle: avís (un anell que s'omple) i, en acabar l'avís, l'ona
+    avisAnell(x, y, R, ms) {
+        const g = this.ovalTerra(x, y, R, 0xffb040, 0.04);
+        this.tweens.add({ targets: g, fillAlpha: 0.3, duration: ms, ease: 'Quad.in' });
+        this.tweens.add({ targets: g, alpha: { from: 1, to: 0.55 }, yoyo: true, repeat: -1, duration: 110 });
+        (this.anellsAvis = this.anellsAvis || []).push(g);
+        return g;
+    }
+    colpAnell(e, R) {
+        const c = e.spr.body.center;
+        if (e.avisCercle) { this.tweens.killTweensOf(e.avisCercle); e.avisCercle.destroy(); e.avisCercle = null; }
+        Sfx.cop(true); Sfx.rugit();
+        this.cameras.main.shake(260, 0.009, true);
+        const ona = this.ovalTerra(c.x, c.y, R * 0.5, 0xfff0b0, 0.25, 6);
+        this.tweens.add({ targets: ona, scaleX: 2.1, scaleY: 2.1, alpha: 0, duration: 420, ease: 'Cubic.out', onComplete: () => ona.destroy() });
+        const jo = this.ineu.body.center;
+        if (this.dinsOval(c.x, c.y, R, jo)) {
+            this.ferIneu(1, { x: c.x, y: c.y });
+            const dx = jo.x - c.x, dy = jo.y - c.y, l = Math.hypot(dx, dy) || 1;     // i l'empeny cap enfora
+            this.forcat = { vx: dx / l * 700, vy: dy / l * 700, fins: this.time.now + 300 };
+        }
+    }
+    // Terra en flames (fase 3): quatre zones, una on ets ara, que avisen i després cremen
+    focsTerra(e) {
+        const jo = this.ineu.body.center, punts = [{ x: jo.x, y: jo.y }];
+        for (let k = 0; k < 3; k++) { const a = Math.random() * Math.PI * 2, d = 150 + Math.random() * 110; punts.push({ x: jo.x + Math.cos(a) * d, y: jo.y + Math.sin(a) * d * 0.6 }); }
+        punts.forEach(q => { const p = this.puntPlataforma(q.x, q.y); this.focTerra(p.x, p.y, 70, 950, 3000); });
+    }
+    focTerra(x, y, R, avis, dura) {
+        const av = this.ovalTerra(x, y, R, 0xff5020, 0.05, 3);
+        this.tweens.add({ targets: av, fillAlpha: 0.32, alpha: { from: 1, to: 0.6 }, duration: avis });
+        const f = { x, y, R, av, mort: false };
+        (this.focs = this.focs || []).push(f);
+        this.time.delayedCall(avis, () => {
+            if (f.mort) return;
+            Sfx.flama();
+            av.setFillStyle(0xff7a20, 0.42).setStrokeStyle(4, 0xffd060, 0.95).setAlpha(1);
+            this.tweens.add({ targets: av, alpha: 0.7, yoyo: true, repeat: -1, duration: 160 });
+            f.flames = this.add.particles(x, y, 'espurna', {
+                emitZone: { type: 'random', source: new Phaser.Geom.Ellipse(0, 0, R * 1.7, R * 0.9) },
+                speedY: { min: -90, max: -30 }, lifespan: 700, scale: { start: 0.5, end: 0 }, alpha: { start: 0.95, end: 0 },
+                tint: [0xff5020, 0xff9a30, 0xffe060], blendMode: 'ADD', frequency: 28
+            }).setDepth(y + 300);
+            const ticks = this.time.addEvent({ delay: 300, loop: true, callback: () => {
+                if (f.mort) return;
+                if (this.dinsOval(x, y, R, this.ineu.body.center)) this.ferIneu(1, { x, y });
+            } });
+            this.time.delayedCall(dura, () => { ticks.remove(); this.apagarFoc(f); });
+        });
+    }
+    apagarFoc(f) {
+        if (f.mort) return;
+        f.mort = true;
+        this.tweens.killTweensOf(f.av);
+        this.tweens.add({ targets: f.av, alpha: 0, duration: 300, onComplete: () => f.av.destroy() });
+        if (f.flames) { f.flames.stop(); this.time.delayedCall(800, () => f.flames.destroy()); }
+    }
+    // Neteja d'avisos i flames (canvi de fase o final del combat)
+    netejarRonda(e) {
+        (this.focs || []).forEach(f => this.apagarFoc(f)); this.focs = [];
+        (this.anellsAvis || []).forEach(g => { if (g.active) { this.tweens.killTweensOf(g); g.destroy(); } }); this.anellsAvis = [];
+        if (e) e.avisCercle = null;
     }
 
     // Rastre de foc d'un ocell
     flamaOcell(o) {
         o.spr.anims.play('ocell_foc_vola');
         o.spr.anims.setProgress(Math.random());                 // que no aleteixin tots alhora
+        if (o.rapid) o.spr.setScale(o.escalaBase * 1.2);          // l'ocell ràpid: un punt més gran i amb rastre blanc d'escalfor
         o.flama = this.add.particles(0, 0, 'espurna', {
-            follow: o.spr, speed: { min: 5, max: 40 }, lifespan: 380, scale: { start: 0.3, end: 0 }, alpha: { start: 0.9, end: 0 },
-            tint: [0xff9a40, 0xffd060, 0xff5020], blendMode: 'ADD', frequency: 45
+            follow: o.spr, speed: { min: 5, max: 40 }, lifespan: 380, scale: { start: o.rapid ? 0.45 : 0.3, end: 0 }, alpha: { start: 0.9, end: 0 },
+            tint: o.rapid ? [0xffffff, 0xfff0b0, 0xffd060] : [0xff9a40, 0xffd060, 0xff5020], blendMode: 'ADD', frequency: o.rapid ? 25 : 45
         }).setDepth(99979);
         o.spr.setAlpha(0);
         this.tweens.add({ targets: o.spr, alpha: 1, duration: 200 });
@@ -779,6 +851,7 @@ class ZonaGabia extends ZonaBase {
         const b = e.basto, c = e.spr.body.center, cam = this.cameras.main, ui = this.ui();
         if (this.tambor) { this.tambor.remove(); this.tambor = null; }
         if (e.diana) { e.diana.destroy(); e.diana = null; }
+        this.netejarRonda(e);
         ui.amagarBarraBoss();
         // El cop final: el món gairebé s'atura, la càmera s'hi acosta i un flaix blanc ho esborra tot
         this.hitStop(450);

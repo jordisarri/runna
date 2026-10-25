@@ -230,26 +230,33 @@ const ENEMICS = {
     // que li volten al voltant i després es llancen contra l'Ineu (Runna els talla). A la segona meitat llança el bàcul
     // com un remolí i desapareix en boira per tornar a sortir en un altre lloc.
     ocellaire: {
-        tex: 'ocellaire', vida: 24, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8, soloCap: true,
+        tex: 'ocellaire', vida: 36, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8, soloCap: true,
         monedes: [0, 0, 0], cor: 0, robust: true, barra: true,
         perill: e => !e.amagat && e.estat !== 'apareix',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
-            const fase2 = e.vida <= this.vida / 2;
+            const fase3 = e.vida <= this.vida / 3, fase2 = e.vida <= this.vida * 2 / 3;      // tres fases de dos terços de vida cadascuna: 36 → 24 → 12
             if (!e.proxAtac) { e.proxAtac = ara + 1800; e.estat = 'sura'; e.nAtac = 0; }
-            if (fase2 && !e.fase2) {                     // es posa furiós: rugit, ona que empeny l'Ineu i tot va més de pressa
-                e.fase2 = true;
+            // Cada canvi de fase: rugit, ona que l'empeny, els ocells s'apaguen i tot va més de pressa (la 3a crema el terra)
+            if ((fase3 && !e.fase3) || (fase2 && !e.fase2)) {
+                const f = fase3 ? 3 : 2;
+                e.fase2 = true; if (fase3) e.fase3 = true;
                 z.enemics.filter(o => o.tipus === 'ocellFoc' && !o.mort).forEach(o => z.apagarOcell(o));
-                e.estat = 'rugit'; e.fins = ara + 1500; e.basto.volant = false;
+                z.netejarRonda(e);
+                e.estat = 'rugit'; e.fins = ara + 1500; e.basto.volant = false; e.nAtac = 0;
                 z.tweens.killTweensOf(e.basto);
-                z.furiaOcellaire(e);
+                z.furiaOcellaire(e, f);
             }
             const b = e.basto;
             if (e.estat === 'rugit') {
                 e.spr.body.setVelocity(0);
                 b.gir = 0.5;
                 e.spr.angle = Math.sin(ara / 25) * 3;
-                if (ara > e.fins) { e.spr.angle = 0; e.estat = 'invoca'; e.fins = ara + 1500; e.nOcells = 0; e.proxOcell = ara + 150; }
+                if (ara > e.fins) {
+                    e.spr.angle = 0;
+                    if (fase3) { e.estat = 'foc'; e.fins = ara + 950; e.focFet = false; }          // la fase 3 s'obre cremant el terra
+                    else { e.estat = 'invoca'; e.fins = ara + 1500; e.nOcells = 0; e.proxOcell = ara + 150; }
+                }
             } else if (e.estat === 'sura') {
                 // Es manté a uns 240 px de l'Ineu, voltant-lo a poc a poc
                 if (!e.puntSura || ara > e.canviFins) {
@@ -258,15 +265,20 @@ const ENEMICS = {
                     e.canviFins = ara + 1400;
                 }
                 const dx = e.puntSura.x - c.x, dy = e.puntSura.y - c.y, l = Math.hypot(dx, dy);
-                const v = l > 12 ? this.vel * (fase2 ? 1.5 : 1) : 0;
+                const v = l > 12 ? this.vel * (fase3 ? 1.9 : fase2 ? 1.5 : 1) : 0;
                 e.spr.body.setVelocity(dx / (l || 1) * v, dy / (l || 1) * v);
                 b.gir = 0.04;
                 if (ara > e.proxAtac) {
                     e.spr.body.setVelocity(0);
+                    // Repertori de cada fase: la 1a alterna ocells i un cop de bàcul en cercle; la 2a hi afegeix el bàcul llançat i
+                    // l'esvaïment; la 3a, a més, crema el terra
                     const n = e.nAtac++;
-                    if (fase2 && n % 3 === 1) { e.estat = 'llança'; e.fins = ara + 400; e.spr.setTint(0xffb070); Sfx.carrega(); }
-                    else if (fase2 && n % 3 === 2) { e.estat = 'esvaeix'; e.fins = ara + 500; Sfx.puf(); z.boiraPuf(c.x, c.y - 40); z.tweens.add({ targets: [e.spr, b.g], alpha: 0, duration: 400 }); }
-                    else { e.estat = 'invoca'; e.fins = ara + (fase2 ? 1500 : 1900); e.nOcells = 0; e.proxOcell = ara + 200; }
+                    const tria = (fase3 ? ['foc', 'invoca', 'llança', 'cercle'] : fase2 ? ['invoca', 'llança', 'cercle', 'esvaeix'] : ['invoca', 'cercle', 'invoca'])[n % (fase3 || fase2 ? 4 : 3)];
+                    if (tria === 'llança') { e.estat = 'llança'; e.fins = ara + 400; e.spr.setTint(0xffb070); Sfx.carrega(); }
+                    else if (tria === 'esvaeix') { e.estat = 'esvaeix'; e.fins = ara + 500; Sfx.puf(); z.boiraPuf(c.x, c.y - 40); z.tweens.add({ targets: [e.spr, b.g], alpha: 0, duration: 400 }); }
+                    else if (tria === 'cercle') { e.estat = 'cercle'; e.fins = ara + 850; e.radiCercle = fase3 ? 230 : 190; e.avisCercle = null; Sfx.carrega(); }
+                    else if (tria === 'foc') { e.estat = 'foc'; e.fins = ara + 950; e.focFet = false; }
+                    else { e.estat = 'invoca'; e.fins = ara + (fase3 ? 1300 : fase2 ? 1500 : 1900); e.nOcells = 0; e.proxOcell = ara + 200; }
                 }
             } else if (e.estat === 'invoca') {
                 // Fa girar el bàcul cada cop més de pressa i n'escup ocells de foc, que li volten al voltant
@@ -277,16 +289,31 @@ const ENEMICS = {
                 if (e.nOcells < max && ara > e.proxOcell) {
                     e.proxOcell = ara + 260;
                     const o = z.enemic('ocellFoc', b.x, b.y);
-                    if (o) { o.amo = e; o.angOrb = e.nOcells / max * Math.PI * 2; o.estat = 'orbita'; o.llançar = Infinity; z.flamaOcell(o); }
+                    if (o) { o.amo = e; o.angOrb = e.nOcells / max * Math.PI * 2; o.estat = 'orbita'; o.llançar = Infinity; o.rapid = e.nOcells % 3 === 2; z.flamaOcell(o); }
                     e.nOcells++;
                 }
                 if (Phaser.Math.Distance.Between(b.x, b.y, jo.x, jo.y - 40) < 95) z.ferIneu(1, { x: b.x, y: b.y });   // el bàcul que gira fa mal
                 if (ara > e.fins) {
                     // Els ocells es llancen un rere l'altre
-                    z.enemics.filter(o => o.amo === e && o.estat === 'orbita').forEach((o, i) => { o.llançar = ara + 250 + i * (fase2 ? 220 : 380); });
+                    z.enemics.filter(o => o.amo === e && o.estat === 'orbita').forEach((o, i) => { o.llançar = fase3 ? ara + 250 + Math.floor(i / 2) * 450 : ara + 250 + i * (fase2 ? 220 : 380); });   // a la fase 3 surten de dos en dos
                     Sfx.xiscle();
-                    e.estat = 'cansat'; e.fins = ara + (fase2 ? 1900 : 2600);
+                    e.estat = 'cansat'; e.fins = ara + (fase3 ? 1500 : fase2 ? 1900 : 2600);
                 }
+            } else if (e.estat === 'cercle') {
+                // Cop de bàcul en cercle: avisa amb un anell a terra i, en acabar, una ona que fa mal i t'allunya
+                e.spr.body.setVelocity(0);
+                b.gir = Math.min(0.6, b.gir + 0.05);
+                if (!e.avisCercle) e.avisCercle = z.avisAnell(c.x, c.y, e.radiCercle, e.fins - ara);
+                if (ara > e.fins) {
+                    z.colpAnell(e, e.radiCercle);
+                    e.estat = 'cansat'; e.fins = ara + (fase3 ? 1500 : 1900); e.avisCercle = null;
+                }
+            } else if (e.estat === 'foc') {
+                // Fase 3: alça el bàcul i el terra crema al voltant de l'Ineu (cal moure's de seguida)
+                e.spr.body.setVelocity(0);
+                b.gir = 0.6;
+                if (!e.focFet) { e.focFet = true; z.focsTerra(e); Sfx.carrega(); }
+                if (ara > e.fins) { e.estat = 'cansat'; e.fins = ara + 1600; e.focFet = false; }
             } else if (e.estat === 'llança') {
                 // Llança el bàcul com un remolí cap a on és l'Ineu i li torna a la mà
                 e.spr.body.setVelocity(0);
@@ -297,7 +324,7 @@ const ENEMICS = {
                     const desti = { x: jo.x, y: jo.y - 40 };
                     z.tweens.add({ targets: b, x: desti.x, y: desti.y, duration: 650, ease: 'Sine.easeOut', yoyo: true,
                         onUpdate: () => { if (Phaser.Math.Distance.Between(b.x, b.y, z.ineu.body.center.x, z.ineu.body.center.y - 30) < 70) z.ferIneu(1, { x: b.x, y: b.y }); },
-                        onComplete: () => { b.volant = false; if (!e.mort) { e.estat = 'cansat'; e.fins = z.time.now + 1800; } } });
+                        onComplete: () => { b.volant = false; if (!e.mort) { e.estat = 'cansat'; e.fins = z.time.now + (fase3 ? 1500 : 1800); } } });
                 }
                 if (b.volant) Sfx.basto();
             } else if (e.estat === 'esvaeix') {
@@ -318,7 +345,7 @@ const ENEMICS = {
                 e.spr.body.setVelocity(0);
                 e.baixaObj = 1;
                 b.gir = Math.max(0.02, b.gir * 0.94);
-                if (ara > e.fins) { e.estat = 'sura'; e.proxAtac = ara + (fase2 ? 1400 : 2400); e.puntSura = null; }
+                if (ara > e.fins) { e.estat = 'sura'; e.proxAtac = ara + (fase3 ? 900 : fase2 ? 1400 : 2400); e.puntSura = null; }
             }
             // S'ajup (o es redreça) suaument: el cap, que és el seu únic punt feble, baixa fins a l'abast de l'espasa
             if (e.estat !== 'cansat') e.baixaObj = 0;
@@ -341,7 +368,7 @@ const ENEMICS = {
             const amo = e.amo;
             if (e.estat === 'orbita') {
                 if (!amo || amo.mort || ara > e.llançar) {
-                    e.estat = 'vola'; e.morFins = ara + 2600; e.guiaFins = ara + 650;
+                    e.estat = 'vola'; e.morFins = ara + (e.rapid ? 1800 : 2600); e.guiaFins = ara + (e.rapid ? 420 : 650);
                     e.ang = Math.atan2(jo.y - c.y, jo.x - c.x);
                     return;
                 }
@@ -354,7 +381,8 @@ const ENEMICS = {
                     const a = Math.atan2(jo.y - c.y, jo.x - c.x);
                     e.ang += Phaser.Math.Clamp(Phaser.Math.Angle.Wrap(a - e.ang), -0.06, 0.06);
                 }
-                e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel);
+                const vv = e.rapid ? 470 : this.vel;                 // l'ocell ràpid és blanc d'escalfor i corre més, però corregeix poc el rumb
+                e.spr.body.setVelocity(Math.cos(e.ang) * vv, Math.sin(e.ang) * vv);
                 e.spr.setFlipX(Math.cos(e.ang) < 0);
                 const bl = e.spr.body.blocked;
                 if (ara > e.morFins || bl.left || bl.right || bl.up || bl.down) z.apagarOcell(e);
