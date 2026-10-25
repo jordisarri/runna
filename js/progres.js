@@ -12,7 +12,7 @@ const PROGRES = {
     passos: [
         // ---- ACTE 1 ----
         { id: 'clauer', marca: ['clauerNovici'], fet: E => E.flag('clauerNovici'),
-          pista: E => "Fill, ves a la Plaça: el Pare Jordi et busca i t'ha de donar el clauer." },
+          pista: E => "Fill, ves a la Plaça: el Pare Jordi et busca." },
         { id: 'basto', marca: ['bastoObtingut', 'obj:basto'], fet: E => E.flag('bastoObtingut'),
           pista: E => "El Germà Andreu, vora els xiprers de la Plaça, té un bastó de pelegrí per a tu. Amb les bestioles que corren, et farà falta." },
         { id: 'cantAurora', marca: ['cantAurora'], fet: E => E.flag('cantAurora'),
@@ -49,10 +49,14 @@ const PROGRES = {
         // ---- ACTE 2: el Saber i les benediccions ----
         { id: 'fragment1', marca: ['fragment1'], fet: E => E.flag('fragment1'),
           pista: E => "A les Runes, entre dues pedres, hi ha un pergamí esquinçat (fragment 1). Mira-hi bé." },
-        { id: 'fragment2', marca: ['fragment2', 'obj:clau_sagrari'], fet: E => E.flag('fragment2'),
-          pista: E => E.te('clau_sagrari')
-              ? "Ja tens la clau petita del Pare Daniel: el sagrari és al mig del retaule del Santuari i guarda el fragment 2."
-              : "El Pare Daniel, al Santuari, guarda la clau del sagrari. Parla-hi (si et parla d'una altra cosa, torna-hi): el sagrari, al mig del retaule, guarda el fragment 2." },
+        { id: 'clauSagrari', marca: ['missatgeDesxifrat', 'obj:clau_sagrari'], fet: E => E.flag('missatgeDesxifrat') || E.te('clau_sagrari') || E.flag('fragment2'),
+          pista: E => {
+              const cols = Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).filter(Boolean).length;
+              return cols < 12 ? "El sagrari del Santuari guarda el fragment 2, però és tancat amb una clau petita que els monjos van deixar a l'ermita de la Desaparició. Al camí de la Desaparició hi ha dotze columnes, i cada una t'explica una paraula (" + cols + "/12). Apunta-les totes!"
+                  : "Ja tens les dotze paraules. A l'ermita de la Desaparició hi ha dues taules de pedra que només tu pots llegir: al peu hi ha la clau petita del sagrari.";
+          } },
+        { id: 'fragment2', marca: ['fragment2'], fet: E => E.flag('fragment2'),
+          pista: E => "Ja tens la clau petita: el sagrari és al mig del retaule del Santuari i guarda el fragment 2." },
         { id: 'fragment3', marca: ['fragment3'], fet: E => E.flag('fragment3'),
           pista: E => "Porta els dos fragments al Pare Alcuí, a la biblioteca del Monestir: te'ls llegirà." },
         { id: 'ombra', marca: ['ombraDemanaCant', 'cantPedres', 'benedicioMonjo'], fet: E => E.flag('benedicioMonjo'),
@@ -137,12 +141,6 @@ const PROGRES = {
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta el Cant de les Pedres." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
           pista: E => "La Nena de les Trenes, al camí de la Rovellonera, encara espera els seus dos llaços: un sota una roca del camí i l'altre darrere un arbust de la Rovellonera (cal podar-lo)." },
-        { id: 'llanterna', marca: ['missatgeDesxifrat', 'columnesGra'], obert: E => E.flag('visitada_ZonaCami'), fet: E => E.flag('missatgeDesxifrat'),
-          pista: E => {
-              const cols = Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).filter(Boolean).length;
-              return cols < 12 ? "El camí de la Desaparició té dotze columnes, i cada una t'explica una paraula (" + cols + "/12). Apunta-les totes!"
-                  : "Ja tens les dotze paraules. A l'ermita de la Desaparició hi ha dues taules de pedra que només tu pots llegir.";
-          } },
         { id: 'monges', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'mongesTrobades'], obert: E => E.flag('isidreSansa'), fet: E => E.flag('mongesTrobades'),
           pista: E => !E.flag('llavorSansa') && !E.flag('llosaOberta') ? "La Sansa, la de les verdures, passa per les Cel·les: l'Isidre diu que té una Llavor de Lluna."
               : !E.flag('llosaOberta') ? "Porta la Llavor de Lluna a l'Isidre, al jardí de l'Hostatgeria."

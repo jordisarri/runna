@@ -59,13 +59,12 @@ const DIALEGS = {
                     { qui: "Pare Jordi", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
                     { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: l'Uri i el Flam, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardin, el nebot de les monges de l'Hostatgeria." },
                     { qui: "Pare Jordi", text: "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada... i, diu la Neus, un piular d'ocells que no se sap d'on ve." },
-                    { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Pren el meu clauer de novici: parla amb tothom i explica-m'ho tot." },
+                    { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot." },
                     { qui: "", text: "Has obtingut el CLAUER DE NOVICI!\nObre la biblioteca i les cel·les." },
                     { qui: "Pare Jordi", text: "I abans de marxar, passa a saludar el Germà Andreu, al costat dels xiprers: sempre té la butxaca plena de coses. Ves amb compte pels camins, Ineu." }
                 ],
                 enAcabar: () => {
                     E.posaFlag("clauerNovici");
-                    E.dona("clauer");
                     E.posaObjectiu(E.flag("bastoObtingut") ? "Parla amb la gent del Santuari. Les cel·les són al nord, passant per les Runes." : "Passa a veure el Germà Andreu, vora els xiprers de la plaça. Després, les cel·les són al nord, passant per les Runes.");
                 }
             };
@@ -281,10 +280,9 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: 'Pare Daniel', text: 'El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se\'ls mengi. Si el Pare Alcuí els busca, ja era hora que algú els llegís!' },
-                    { qui: 'Pare Daniel', text: 'Té, la clau del sagrari. És aquesta petita, la que sembla de joguina. Torna a tancar quan acabis, eh?' },
-                    { qui: '', text: 'Has obtingut la CLAU DEL SAGRARI.' }
+                    { qui: 'Pare Daniel', text: 'Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l\'ermita de la Desaparició, camí de l\'Era, a l\'oest de les Runes. Potser allà.' }
                 ],
-                enAcabar: () => E.dona('clau_sagrari')
+                enAcabar: () => E.posaFlag('clauSagrariDita')
             };
         }
         if (!E.flag('rellotgeReparat') && !E.flag('rellotgeDit')) {
@@ -301,12 +299,12 @@ const DIALEGS = {
         }
         return { pagines: [{ qui: 'Pare Daniel', text: 'Sents el rellotge, Ineu? Torna a caminar! Fa tres nits que no el sentia. Els nens em diuen que canto massa fort, però avui no cal: ho fa ell per mi!' }] };
     },
-    // Sagrari del Retaule Major: hi ha el fragment 2 de la llegenda del monjo. És tancat fins que el Pare Daniel en dona la clau.
+    // Sagrari del Retaule Major: hi ha el fragment 2 de la llegenda del monjo. És tancat amb una clau petita que és a l'ermita de la Desaparició (premi del missatge de les dotze columnes).
     sagrari: E => {
-        if (E.flag("fragment2")) return { pagines: [{ qui: "", text: "El sagrari, tancat de nou amb la clau del Pare Daniel. A dins hi ha quedat el lloc buit on era el pergamí." }] };
+        if (E.flag("fragment2")) return { pagines: [{ qui: "", text: "El sagrari, tancat de nou amb la clau petita. A dins hi ha quedat el lloc buit on era el pergamí." }] };
         if (!E.te("clau_sagrari")) {
             return {
-                pagines: [{ qui: "", text: "Al mig del retaule, el sagrari de fusta daurada. La porteta és tancada amb clau. El Pare Daniel en deu tenir la clau." }],
+                pagines: [{ qui: "", text: "Al mig del retaule, el sagrari de fusta daurada. La porteta és tancada amb una clau molt petita. Potser el Pare Daniel sap on és." }],
                 enAcabar: () => E.posaFlag("sagrariVist")
             };
         }
@@ -755,7 +753,8 @@ const DIALEGS = {
         if (totes) {
             pagines.push({ qui: 'Ineu', text: 'Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l\'alba.' });
             if (!E.flag('missatgeDesxifrat')) {
-                pagines.push({ qui: '', text: 'Al peu de la taula, dins d\'una nínxol, hi ha un gra de rosari d\'ambre.\n+1 GRA AL ROSARI.' });
+                pagines.push({ qui: '', text: 'Al peu de la taula, dins d\'un nínxol, hi ha una clau petita lligada amb un cordill, gairebé de joguina.\nHas obtingut la CLAU DEL SAGRARI.' });
+                pagines.push({ qui: 'Ineu', text: 'La clau del sagrari del Santuari! Els monjos la van deixar aquí. Amb això obriré el sagrari del retaule.' });
             }
         } else {
             pagines.push({ qui: 'Ineu', text: 'Només entenc les paraules que he apuntat al camí. Els signes que em falten... són a les columnes.' });
@@ -764,8 +763,9 @@ const DIALEGS = {
             pagines,
             enAcabar: () => {
                 if (totes && !E.flag('missatgeDesxifrat')) {
-                    E.posaFlag('missatgeDesxifrat'); E.posaFlag('columnesGra'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
-                    E.posaObjectiu('Els nens tornaran amb l\'alba: cal trobar Runna al Dolmen.');
+                    E.posaFlag('missatgeDesxifrat');
+                    if (!E.te('clau_sagrari') && !E.flag('fragment2')) E.dona('clau_sagrari');
+                    if (!E.flag('fragment2')) E.posaObjectiu('Amb la clau petita, obre el sagrari del Santuari (al mig del retaule): guarda el fragment 2.');
                 }
             }
         };
