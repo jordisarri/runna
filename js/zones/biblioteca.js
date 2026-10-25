@@ -53,14 +53,14 @@ class ZonaBiblioteca extends ZonaBase {
         this.add.image(1000, 220, 'prestatge_lat_d').setOrigin(0).setScale(1 / RES).setDepth(-980);
 
         // Prestatgeries lliures de terra a sostre, en dues files, que formen passadissos: la biblioteca és enorme
-        [['prestatge_l1', 170, 540, 3], ['prestatge_l2', 930, 540, 4], ['prestatge_l3', 185, 740, 5], ['prestatge_l4', 336, 740, 3],
+        [['prestatge_l3', 185, 740, 5], ['prestatge_l4', 336, 740, 3],
          ['prestatge_l5', 768, 740, 4], ['prestatge_l6', 915, 740, 5]].forEach(([k, x, base, n]) => {
             const g = this.add.image(x, base, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(base);
             this.add.ellipse(x, base + 2, g.displayWidth + 24, 14, 0x000000, 0.28).setDepth(base - 1);
             this.colisio(x, base - 12, g.displayWidth, 24);
         });
         // Piles de llibres a terra
-        [['pila_a', 140, 810], ['pila_b', 960, 810], ['pila_b', 962, 330]].forEach(([k, x, y]) => {
+        [['pila_a', 140, 810], ['pila_b', 960, 810]].forEach(([k, x, y]) => {
             this.add.image(x, y, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
             this.colisio(x, y - 6, 44, 16);
         });
