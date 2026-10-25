@@ -168,11 +168,11 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: '', text: 'Un cofre vell, de bisagres rovellades, vigilat per dues espelmes que ningú no recorda haver encès.' },
-                { qui: '', text: 'A dins, un escapulari de llana brodat amb fil d\'or i una nota: «Per al qui sap escoltar les pedres.»' },
-                { fer: (z, fet) => z.agafar(fet, null, 0xf0c040) },
-                { qui: "", text: "Has obtingut l'ESCAPULARI DEL SANT: després d'un cop, tardes més a poder-te tornar a ferir." }
+                { qui: '', text: 'A dins, un flascó de vidre amb un líquid daurat i una nota: «Per al qui sap escoltar les pedres.»' },
+                { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xf0c040), c => z.beure(c, 0xf0c040)], fet) },
+                { qui: "", text: "+1 GRA AL ROSARI i rosari ple." }
             ],
-            enAcabar: () => { E.posaFlag('cofreTresor'); E.dona('escapulari'); }
+            enAcabar: () => { E.posaFlag('cofreTresor'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
         };
     },
 
@@ -735,7 +735,7 @@ const DIALEGS = {
         if (totes) {
             pagines.push({ qui: 'Ineu', text: 'Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l\'alba.' });
             if (!E.flag('missatgeDesxifrat')) {
-                pagines.push({ qui: '', text: 'Al peu de la taula, dins d\'una nínxol, hi ha un fanalet vell i, al costat, una empunyadura de cuir gastada.\nHas obtingut la LLANTERNA DE LA DESAPARICIÓ i l\'EMPUNYADURA DELS MONJOS: el cop arriba més lluny.' });
+                pagines.push({ qui: '', text: 'Al peu de la taula, dins d\'una nínxol, hi ha un fanalet vell.\nHas obtingut la LLANTERNA DE LA DESAPARICIÓ.' });
             }
         } else {
             pagines.push({ qui: 'Ineu', text: 'Només entenc les paraules que he apuntat al camí. Els signes que em falten... són a les columnes.' });
@@ -744,7 +744,7 @@ const DIALEGS = {
             pagines,
             enAcabar: () => {
                 if (totes && !E.flag('missatgeDesxifrat')) {
-                    E.posaFlag('missatgeDesxifrat'); E.dona('llanterna'); E.posaFlag('llanterna'); E.dona('empunyadura');
+                    E.posaFlag('missatgeDesxifrat'); E.dona('llanterna'); E.posaFlag('llanterna');
                     E.posaObjectiu('Els nens tornaran amb l\'alba: cal trobar Runna al Dolmen.');
                 }
             }

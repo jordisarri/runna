@@ -3505,7 +3505,7 @@ function dibuixarPastorBoira(canvas, w) {
     ctx.fillStyle = '#2a2040'; ctx.beginPath(); ctx.ellipse(44, 44, 19, 9, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     // cap d'home jove, cabell fosc i somriure de qui sap alguna cosa
     E(44, 34, 13, 15, 0, '#e0b896');
-    ctx.fillStyle = '#2a1c16'; ctx.beginPath(); ctx.moveTo(30.4, 32); ctx.quadraticCurveTo(32, 16, 44, 16); ctx.quadraticCurveTo(57, 16, 57.6, 32); ctx.quadraticCurveTo(52, 25, 44, 25); ctx.quadraticCurveTo(36, 25, 30.4, 32); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#d8d8dc'; ctx.beginPath(); ctx.moveTo(30.4, 32); ctx.quadraticCurveTo(32, 16, 44, 16); ctx.quadraticCurveTo(57, 16, 57.6, 32); ctx.quadraticCurveTo(52, 25, 44, 25); ctx.quadraticCurveTo(36, 25, 30.4, 32); ctx.closePath(); ctx.fill(); ctx.stroke();
     ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(37, 44); ctx.quadraticCurveTo(44, 49, 52, 43.4); ctx.stroke();                // somriure ample
     ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(35, 30); ctx.lineTo(41, 32); ctx.moveTo(53, 30); ctx.lineTo(47, 32); ctx.stroke();   // celles de murri
     [-1, 1].forEach(sd => {

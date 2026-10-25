@@ -34,11 +34,11 @@ const DIARI_PASSOS = {
     gabia: ['La gàbia', 'ZonaGabia'], nens: ['Els tres capolls', 'ZonaGabia'], final: ['Torna el cant', 'ZonaEsglesia']
 };
 const DIARI_LATERALS = {
-    taverna: ["L'Eva de la Taverna", 'ZonaTaverna', "Botes de l'avi (camines un 15% més de pressa)"],
+    taverna: ["L'Eva de la Taverna", 'ZonaTaverna', null],
     rellotge: ['El rellotge aturat', 'ZonaGolfes', '+1 cor'],
-    tresor: ['La pedra que escolta', 'ZonaPlaca', 'Escapulari del sant (més temps sense poder-te ferir)'],
+    tresor: ['La pedra que escolta', 'ZonaPlaca', '+1 cor'],
     nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Cinta de la Nena (absorbeix un cop per zona)'],
-    llanterna: ['Les dotze columnes', 'ZonaCami', 'Llanterna i Empunyadura dels monjos (el cop arriba més lluny)'],
+    llanterna: ['Les dotze columnes', 'ZonaCami', 'Llanterna'],
     monges: ["Les monges de l'Hostatgeria", 'ZonaJardi', '+1 cor per cada monja i un lloc de repòs']
 };
 const DIARI_ACTES = [

@@ -556,7 +556,7 @@ Object.assign(ZonaBase.prototype, {
         const agil = runna || Estat.te('basto_tiller');          // el bastó de Til·ler (i Runna) són més ràpids i amb més abast
         this.atacFins = ara + (agil ? 270 : 380);
         const jo = this.ineu.body.center;
-        const L = (agil ? 135 : 118) + (Estat.te('empunyadura') ? 18 : 0);                              // llargada de la zona de cop (des dels peus)
+        const L = agil ? 135 : 118;                              // llargada de la zona de cop (des dels peus)
         // Direcció: la de la vista de 8 direccions; si hi ha un enemic a prop dins del con, s'hi apunta
         const v8 = { right: [1, 0], southeast: [1, 1], down: [0, 1], southwest: [-1, 1], left: [-1, 0], northwest: [-1, -1], up: [0, -1], northeast: [1, -1] }[this.vista8];
         let d = v8 ? { x: v8[0] / Math.hypot(...v8), y: v8[1] / Math.hypot(...v8) } : (DIRS[this.direccio] || DIRS.avall);
@@ -934,7 +934,7 @@ Object.assign(ZonaBase.prototype, {
         const d = Estat.dades;
         const abans = d.vida;
         d.vida = Math.max(0, d.vida - mal);
-        this.invulnerableFins = ara + (Estat.te('escapulari') ? 1650 : 1100);       // l'Escapulari del sant allarga el temps sense poder-te ferir
+        this.invulnerableFins = ara + 1100;
         const c = this.ineu.body.center;
         let dx = c.x - des.x, dy = c.y - des.y;
         const l = Math.hypot(dx, dy) || 1;

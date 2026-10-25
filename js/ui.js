@@ -48,9 +48,6 @@ const CATALEG_OBJECTES = {
     reliquies_monjos: ['Relíquies dels monjos', 'Un calze, una creu, un anell i un breviari.'],
     clau_ferro:       ['Clau de ferro', 'Obre la porta de ferro de sota la Taverna.'],
     llavorLluna:      ['Llavor de Lluna', 'De la Sansa. L\'Isidre sap on plantar-la.'],
-    botes_avi:        ['Botes de l\'avi', 'Lleugeres: camines un 15% més de pressa.'],
-    empunyadura:      ['Empunyadura dels monjos', 'El cop arriba una mica més lluny.'],
-    escapulari:       ['Escapulari del sant', 'Després d\'un cop, tardes més a poder-te tornar a ferir.']
 };
 
 class EscenaUI extends Phaser.Scene {
