@@ -28,17 +28,17 @@ const Joc = {
     MUSICA_ZONES: {
         // Bosc i camins
         ZonaCami: 'musica_bosc', ZonaCamiRov: 'musica_bosc', ZonaRovellonera: 'musica_bosc', ZonaErmita: 'musica_bosc',
-        ZonaGabriel: 'musica_bosc', ZonaBosc: 'musica_bosc', ZonaCamiCirosa: 'musica_bosc', ZonaCirosa: 'musica_bosc', ZonaMasiaCirosa: 'musica_casa', ZonaTavernaInt: 'musica_casa', ZonaSotaTaverna: 'musica_masmorra', ZonaGirgoles: 'musica_masmorra', ZonaTortura: 'musica_masmorra', ZonaGabia: 'musica_masmorra', ZonaBiblioteca: 'musica_casa',
+        ZonaGabriel: 'musica_bosc', ZonaBosc: 'musica_bosc', ZonaCamiCirosa: 'musica_bosc', ZonaCirosa: 'musica_cirosa', ZonaMasiaCirosa: 'musica_cirosa', ZonaTavernaInt: 'musica_taverna', ZonaSotaTaverna: 'musica_masmorra', ZonaGirgoles: 'musica_girgoles', ZonaTortura: 'musica_masmorra', ZonaGabia: 'musica_gabia', ZonaBiblioteca: 'musica_biblioteca',
         ZonaDolmen: 'musica_bosc', ZonaTiller: 'musica_bosc', ZonaCabana: 'musica_bosc',
         // Exteriors (overworld)
         ZonaPlaca: 'musica_intro', ZonaMonestir: 'musica_intro', ZonaCreu: 'musica_intro', ZonaCasaGran: 'musica_intro',
-        ZonaRuines: 'musica_intro', ZonaCelles: 'musica_intro', ZonaSantAntoni: 'musica_intro', ZonaTaverna: 'musica_intro', ZonaJordi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaJordi: 'musica_casa', ZonaEra: 'musica_intro', ZonaJardi: 'musica_intro', ZonaCementiri: 'musica_intro',
+        ZonaRuines: 'musica_intro', ZonaCelles: 'musica_celles', ZonaSantAntoni: 'musica_intro', ZonaTaverna: 'musica_intro', ZonaJordi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaJordi: 'musica_casa', ZonaEra: 'musica_intro', ZonaJardi: 'musica_intro', ZonaCementiri: 'musica_intro',
         // Interiors de cases
         ZonaEsglesia: 'musica_casa', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
         ZonaCabanaCami: 'musica_casa', ZonaGolfes: 'musica_casa', ZonaTorre: 'musica_casa',
         // Masmorres
         ZonaCasaGranInt: 'musica_masmorra', ZonaPingpong: 'musica_masmorra', ZonaCasaCripta: 'musica_masmorra', ZonaPassadis: 'musica_masmorra',
-        ZonaCasaTresor: 'musica_masmorra', ZonaSoterraniHost: 'musica_masmorra', ZonaHostatgeriaInt: 'musica_casa', ZonaCambraPains: 'musica_casa', ZonaCambraPhili: 'musica_casa', ZonaCambraCharm: 'musica_casa', ZonaTresor: 'musica_masmorra', ZonaDipositos: 'musica_masmorra'
+        ZonaCasaTresor: 'musica_masmorra', ZonaSoterraniHost: 'musica_masmorra', ZonaHostatgeriaInt: 'musica_hostatgeria', ZonaCambraPains: 'musica_hostatgeria', ZonaCambraPhili: 'musica_hostatgeria', ZonaCambraCharm: 'musica_hostatgeria', ZonaTresor: 'musica_masmorra', ZonaDipositos: 'musica_masmorra'
     },
 
     // Fitxers de cada cançó (AAC .m4a, comprimides amb eines/comprimir_media.sh). Només 'musica_intro' es carrega
@@ -48,18 +48,74 @@ const Joc = {
         musica_masmorra: 'Deep Dungeon Stillness', musica_bosc: 'Woodland Path'
     },
 
+    // Músiques opcionals: es fan servir si el fitxer assets/musica/<fitxer>.m4a existeix; si no, sona la de reserva ('fallback').
+    // Així es poden anar afegint cançons una a una sense tocar res més (vegeu art/INSTRUCCIONS_MUSICA.md).
+    MUSICA_OPCIONAL: {
+        musica_celles:     { fitxer: 'celles',     fallback: 'musica_intro' },
+        musica_taverna:    { fitxer: 'taverna',    fallback: 'musica_casa' },
+        musica_cirosa:     { fitxer: 'cirosa',     fallback: 'musica_bosc' },
+        musica_biblioteca: { fitxer: 'biblioteca', fallback: 'musica_casa' },
+        musica_hostatgeria: { fitxer: 'hostatgeria', fallback: 'musica_casa' },
+        musica_girgoles:   { fitxer: 'girgoles',   fallback: 'musica_masmorra' },
+        musica_gabia:      { fitxer: 'gabia',      fallback: 'musica_masmorra' },
+        musica_boss:       { fitxer: 'boss',       fallback: 'musica_masmorra' },
+        musica_boss_final: { fitxer: 'boss_final', fallback: 'musica_boss' },
+        musica_epileg:     { fitxer: 'epileg',     fallback: 'musica_intro' },
+        musica_credits:    { fitxer: 'credits',    fallback: 'musica_epileg' },
+        jingle_runna:      { fitxer: 'jingle_runna', fallback: null, jingle: true },
+        jingle_boss:       { fitxer: 'jingle_boss',  fallback: null, jingle: true }
+    },
+    musicaDisponible: new Set(),
+    musicaDeteccio: null,
+    // Mira (una sola vegada) quins fitxers opcionals hi ha realment, amb una petició HEAD per a cadascun
+    detectarMusica() {
+        if (!Joc.musicaDeteccio) {
+            Joc.musicaDeteccio = Promise.all(Object.entries(Joc.MUSICA_OPCIONAL).map(([clau, o]) =>
+                fetch(encodeURI(`assets/musica/${o.fitxer}.m4a`), { method: 'HEAD' })
+                    .then(r => { if (r.ok && /audio|mp4|mpeg|octet/i.test(r.headers.get('content-type') || 'audio')) Joc.musicaDisponible.add(clau); })
+                    .catch(() => {})));
+        }
+        return Joc.musicaDeteccio;
+    },
+    // La cançó que sonarà de debò: la demanada, o la de reserva si el fitxer encara no existeix
+    resoldreMusica(clau) {
+        let k = clau;
+        while (Joc.MUSICA_OPCIONAL[k] && !Joc.musicaDisponible.has(k)) k = Joc.MUSICA_OPCIONAL[k].fallback;
+        return k;
+    },
+    // Una peça curta que sona una sola vegada per sobre de tot (no talla la música de fons)
+    jingle(scene, clau) {
+        Joc.detectarMusica().then(() => {
+            if (!Joc.musicaDisponible.has(clau)) return;
+            const play = () => { const s = scene.sound.add(clau, { volume: 0.9 }); s.once('complete', () => s.destroy()); s.play(); };
+            if (scene.cache.audio.exists(clau)) play();
+            else { scene.load.once('filecomplete-audio-' + clau, play); Joc.carregarMusica(scene, clau); scene.load.start(); }
+        });
+    },
+
     carregarMusica(scene, clau) {
         const enCua = [...scene.load.list.entries, ...scene.load.inflight.entries].some(f => f.type === 'audio' && f.key === clau);
         if (scene.cache.audio.exists(clau) || enCua) return;
-        scene.load.audio(clau, encodeURI(`assets/musica/${Joc.FITXERS_MUSICA[clau]}.m4a`));
+        const fitxer = Joc.FITXERS_MUSICA[clau] || (Joc.MUSICA_OPCIONAL[clau] && Joc.MUSICA_OPCIONAL[clau].fitxer);
+        scene.load.audio(clau, encodeURI(`assets/musica/${fitxer}.m4a`));
     },
 
     precarregarMusiques(scene) {
         Object.keys(Joc.FITXERS_MUSICA).forEach(clau => Joc.carregarMusica(scene, clau));
         scene.load.start();
+        Joc.detectarMusica().then(() => {             // les opcionals que existeixin també es baixen en segon pla
+            Object.keys(Joc.MUSICA_OPCIONAL).filter(k => Joc.musicaDisponible.has(k)).forEach(k => Joc.carregarMusica(scene, k));
+            scene.load.start();
+        });
     },
 
     iniciarMusica(scene, seek = 0, clau = 'musica_intro') {
+        if (Joc.MUSICA_OPCIONAL[clau] && !Joc.musicaDeteccio) {           // encara no sabem quins fitxers hi ha: s'espera un instant
+            Joc.musicaPendent = clau;
+            Joc.detectarMusica().then(() => { if (Joc.musicaPendent === clau) Joc.iniciarMusica(scene, seek, clau); });
+            return;
+        }
+        clau = Joc.resoldreMusica(clau);
         if (!scene.cache.audio.exists(clau)) {
             // Encara no s'ha baixat: es carrega ara i sona en acabar, si la zona encara la vol
             Joc.musicaPendent = clau;
@@ -78,7 +134,8 @@ const Joc = {
 
     // Cada zona demana la seva música; els interiors queden en silenci
     musicaZona(scene) {
-        const clau = Joc.MUSICA_ZONES[scene.scene.key];
+        let clau = Joc.MUSICA_ZONES[scene.scene.key];
+        if (scene.scene.key === 'ZonaEsglesia' && Estat.flag('epilegPendent') && !Estat.flag('epilegFet')) clau = 'musica_epileg';   // l'epíleg té el seu tema
         if (clau) Joc.iniciarMusica(scene, 0, clau);
         else { Joc.musicaPendent = null; Joc.aturarMusica(); }
     },

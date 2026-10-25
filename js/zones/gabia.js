@@ -654,6 +654,7 @@ class ZonaGabia extends ZonaBase {
         this.espurnes.setParticleTint && this.espurnes.setParticleTint(0xff6040);
         if (e.ulls) this.tweens.add({ targets: e.ulls, scale: 1.6, duration: 400 });
         this.tambors(fase === 3 ? 300 : 400);
+        if (fase === 3) Joc.iniciarMusica(this, 0, 'musica_boss_final');
     }
 
     // ---- Atacs a terra (cercle i foc): els avisos són ovals aixafats, com tot el que va a terra en aquesta vista ----
@@ -840,6 +841,7 @@ class ZonaGabia extends ZonaBase {
         });
         e.diana = this.add.circle(0, 0, 26).setStrokeStyle(3, 0xffe08a, 0.95).setVisible(false);
         this.ui().barraBoss("L'Ocellaire");
+        Joc.iniciarMusica(this, 0, 'musica_boss');
         this.invulnerableFins = this.time.now + 1500;
         this.tambors(560);
         this.npcs.ocellaire = e.spr;
@@ -850,6 +852,7 @@ class ZonaGabia extends ZonaBase {
         this.bossCaigut = e;
         const b = e.basto, c = e.spr.body.center, cam = this.cameras.main, ui = this.ui();
         if (this.tambor) { this.tambor.remove(); this.tambor = null; }
+        Joc.aturarMusica(); Joc.jingle(this, 'jingle_boss');
         if (e.diana) { e.diana.destroy(); e.diana = null; }
         this.netejarRonda(e);
         ui.amagarBarraBoss();
@@ -910,6 +913,7 @@ class ZonaGabia extends ZonaBase {
     // El Cant del Miracle: els barrots s'encenen, la gàbia s'aixeca i els capolls baixen fins a l'Ineu
     obrirGabia() {
         const gx = this.gx, base = this.base;
+        Joc.iniciarMusica(this, 0, 'musica_epileg');
         this.ui().obrirDialeg({ pagines: [{ fer: (z, fet) => z.seq([
             f => {
                 this.cameras.main.flash(500, 255, 230, 160);

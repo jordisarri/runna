@@ -26,6 +26,7 @@ class EscenaCredits extends Phaser.Scene {
 
     create() {
         this.cameras.main.setBackgroundColor('#06040a');
+        Joc.iniciarMusica(this, 0, 'musica_credits');
         this.cameras.main.fadeIn(1200, 0, 0, 0);
         // Ocells daurats que volen de costat a costat
         for (let k = 0; k < 7; k++) {

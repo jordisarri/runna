@@ -717,6 +717,7 @@ class ZonaDolmen extends ZonaBase {
     //  5. Rètol: RUNNA, l'espasa del Miracle.
     despertarRunna(fet) {
         const { sx, sy } = DOL, cam = this.cameras.main, ey = this.espasaY, I = this.ineu;
+        Joc.jingle(this, 'jingle_runna');
         const fi = () => { if (fet) fet(); };
         const so = (freqs, tipus = 'triangle', vol = 0.25, dur = 1.6) => {
             const ctx = this.sound.context; if (!ctx) return;
