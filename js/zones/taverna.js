@@ -37,10 +37,10 @@ Object.assign(DIALEGS, {
                 { qui: 'Eva', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
                 { qui: 'Eva', text: 'El Sardin hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve.' },
                 { fer: (z, fet) => z.objecteVola('eva', fet) },
-                { qui: 'Eva', text: 'Té: dues infusions de les que fa la Carmen quan no dorm. Curen més que qualsevol cosa del rebost. (Prem H per beure\'n.)' },
-                { qui: '', text: 'Has obtingut 2 INFUSIONS.' }
+                { qui: 'Eva', text: 'Té: les botes de l\'avi del Ciscu, les de caminar pel bosc. Són lleugeres. Amb elles aniràs més de pressa.' },
+                { qui: '', text: 'Has obtingut les BOTES DE L\'AVI: camines més de pressa.' }
             ],
-            enAcabar: () => { E.donaInfusions(2); E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La porta de ferro del darrere de la Taverna (per fora) baixa al soterrani: la Clau de ferro l\'obre.' : E.dades.objectiu); }
+            enAcabar: () => { E.dona('botes_avi'); E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La porta de ferro del darrere de la Taverna (per fora) baixa al soterrani: la Clau de ferro l\'obre.' : E.dades.objectiu); }
         };
         if (E.flag('clauFerro')) return { pagines: [
             { qui: 'Eva', text: 'Aquesta clau... és de ferro vell, com la porta de fora, la del soterrani! L\'has trobada a la Casa Gran? Surt i dona la volta a la Taverna: és a la dreta, de cara al camí.' },

@@ -987,7 +987,8 @@ class ZonaBase extends Phaser.Scene {
 
         const len = Math.hypot(vx, vy);
         if (len > 1) { vx /= len; vy /= len; }
-        this.ineu.body.setVelocity(vx * VELOCITAT_INEU, vy * VELOCITAT_INEU);
+        const vb = Estat.te('botes_avi') ? 1.15 : 1;       // les botes de l'avi: un 15% més de pressa
+        this.ineu.body.setVelocity(vx * VELOCITAT_INEU * vb, vy * VELOCITAT_INEU * vb);
 
         const movent = Math.hypot(vx, vy) > 0.15;
         if (movent) {

@@ -175,9 +175,7 @@ class ZonaEsglesia extends ZonaBase {
                 Estat.dades.vida = Estat.dades.corsMax * 2;
                 this.ui().actualitzarHUD();
                 this.guardarPosicio();
-                // Amb el rellotge arreglat, el Pare Daniel hi deixa una infusió cada cop (fins a tenir-ne 3)
-                if (Estat.flag('rellotgeReparat') && (Estat.dades.infusions || 0) < 3) { Estat.donaInfusions(1); this.ui().notifica("El Pare Daniel t'ha deixat una infusió a l'altar"); }
-                else this.ui().notifica('Partida desada');
+                this.ui().notifica('Partida desada');
                 Estat.desar();
                 const p = this.add.particles(i.x, i.y - 60, 'espurna', {
                     speed: { min: 20, max: 90 }, angle: { min: 230, max: 310 }, lifespan: 1100,

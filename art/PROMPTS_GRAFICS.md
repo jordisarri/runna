@@ -604,3 +604,27 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 - Si una imatge surt amb fons de quadrícula o degradat, afegiu "plain pure white #FFFFFF background".
 - Els edificis es dibuixen amb els peus (la base) a la part de baix de la imatge; el joc els posa per la base.
 - Quan en tingueu un, dieu-m'ho i comprovo la mida, les portes i les col·lisions (issue "Ajustar portes i col·lisions").
+
+---
+
+## El Germà Andreu i el Pastor de Boira (amb foto de referència)
+
+**Cal pujar la foto al generador com a imatge de referència** (la cara, el cabell, el to de pell, l'edat i la complexió s'han de reconèixer, però
+estilitzats i pintats, no fotogràfics). Els dos dibuixos són **la mateixa persona**: el Pastor de Boira és l'Andreu corromput. Si el generador
+no deixa pujar imatge, descriviu-hi la cara a mà al lloc on diu `[FACE FROM REFERENCE]`.
+Surten a `assets/personatges/germa_andreu.png` (amplada 96) i `assets/enemics/pastor_boira.png` (amplada 110).
+
+### `germa_andreu.png` (amplada 96) *(L'Andreu NPC: simpàtic, de la Plaça; porta una pilota)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A young Catalan monk, Brother Andreu. FACE, HAIR, SKIN TONE, AGE AND BUILD TAKEN FROM THE ATTACHED REFERENCE PHOTO [FACE FROM REFERENCE], recognizable but stylized and painted, NOT photorealistic, do not copy the photo's background or clothes. He wears a plain black monk's habit with wide sleeves, a hood folded down on his back and a simple white rope belt with a loose knot, brown leather sandals. Friendly, relaxed, charming smile with a hint of mischief in one eyebrow (nice on the surface, something hidden underneath). Standing straight facing the camera, a small old leather football tucked under his left arm, right hand relaxed. Character proportions like a classic JRPG sprite: slightly large head (about one quarter of his height), expressive face, readable silhouette at small size. Same art style and proportions as a cute chibi-like village monk game sprite, whole figure visible head to feet, feet at the bottom of the image, thick dark-brown outline, a single character, aspect ratio about 3:4, no background, no ground.
+```
+
+### `pastor_boira.png` (amplada 110) *(El Pastor de Boira: l'Andreu corromput; mini-boss de la Cirosa)*
+
+```
+Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey) with violet-lilac accents, clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. The Mist Shepherd: the SAME young monk as the reference, Brother Andreu, corrupted by the lilac fog. FACE, HAIR, SKIN TONE AND BUILD TAKEN FROM THE ATTACHED REFERENCE PHOTO [FACE FROM REFERENCE], stylized and painted, NOT photorealistic, recognizable as the same man. Now his eyes GLOW BRIGHT LILAC-VIOLET (#c080ff with a white core), his smile is wide, confident and unsettling, one eyebrow raised. His black monk's habit has turned deep violet-black with a ragged hem dissolving into curling lilac fog, a thick scarf of fluffy lilac fog-wool around his neck, hood folded down, a rope belt. In his right hand a tall wooden shepherd's crook with a curved top, a small copper sheep bell tied to it, and a tiny lantern hanging from the hook holding glowing lilac mist. A few tufts of lilac wool float around him. Menacing but not gory (family-friendly), the corruption shown as swirling violet-lilac fog and glowing eyes. Game boss sprite, readable silhouette at small size, standing facing the camera, slightly larger head than body like a classic JRPG sprite, whole figure visible head to feet with the crook fully inside the frame, feet at the bottom of the image, thick dark-brown outline, a single character, aspect ratio about 3:4, no background, no ground.
+```
+
+**Perquè encaixin al joc:** la cara ha de ser la mateixa als dos; la pilota (només a l'NPC) i la caiada (només al Pastor) són el que els diferencia de lluny.
+El joc els pot girar en mirall, així que res d'asimètric que sigui essencial (lletres, números).

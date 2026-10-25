@@ -735,7 +735,7 @@ const DIALEGS = {
         if (totes) {
             pagines.push({ qui: 'Ineu', text: 'Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l\'alba.' });
             if (!E.flag('missatgeDesxifrat')) {
-                pagines.push({ qui: '', text: 'Al peu de la taula, dins d\'una nínxol, hi ha un fanalet vell i dos flascons d\'infusió.\nHas obtingut la LLANTERNA DE LA DESAPARICIÓ i 2 INFUSIONS.' });
+                pagines.push({ qui: '', text: 'Al peu de la taula, dins d\'una nínxol, hi ha un fanalet vell i, al costat, una empunyadura de cuir gastada.\nHas obtingut la LLANTERNA DE LA DESAPARICIÓ i l\'EMPUNYADURA DELS MONJOS: el cop arriba més lluny.' });
             }
         } else {
             pagines.push({ qui: 'Ineu', text: 'Només entenc les paraules que he apuntat al camí. Els signes que em falten... són a les columnes.' });
@@ -744,7 +744,7 @@ const DIALEGS = {
             pagines,
             enAcabar: () => {
                 if (totes && !E.flag('missatgeDesxifrat')) {
-                    E.posaFlag('missatgeDesxifrat'); E.dona('llanterna'); E.posaFlag('llanterna'); E.donaInfusions(2);
+                    E.posaFlag('missatgeDesxifrat'); E.dona('llanterna'); E.posaFlag('llanterna'); E.dona('empunyadura');
                     E.posaObjectiu('Els nens tornaran amb l\'alba: cal trobar Runna al Dolmen.');
                 }
             }
@@ -1108,10 +1108,10 @@ const DIALEGS = {
                 { qui: "Nena de les Trenes", text: "Les sento... Sento les mans de la mare! Mare...? Mare, ets tu? M'has trobat?" },
                 { fer: (z, fet) => z.mareNena(fet) },
                 { qui: "Nena de les Trenes", text: "Gràcies, monjo. Ja no tinc por. Aquí et deixo un dels meus llaços: guarda't amb ell, que també protegeix els que es perden." },
-                { qui: "", text: "Has obtingut la CINTA DE LA NENA: absorbeix un cop cada cop que entres a una zona, i 1 INFUSIÓ de la cistella de la mare.\nLa Nena de les Trenes ja no espantarà ningú." }
+                { qui: "", text: "Has obtingut la CINTA DE LA NENA: absorbeix un cop cada cop que entres a una zona.\nLa Nena de les Trenes ja no espantarà ningú." }
             ],
             enAcabar: () => {
-                E.posaFlag("nenaAlliberada"); E.posaFlag("trenesNena"); E.dona("cinta_nena"); E.treu("llac_nena"); E.donaInfusions(1);
+                E.posaFlag("nenaAlliberada"); E.posaFlag("trenesNena"); E.dona("cinta_nena"); E.treu("llac_nena");
                 E.posaObjectiu("Segueix el camí cap al sud-oest: la Rovellonera, Sant Gabriel, els Dipòsits i, a l'extrem sud-est, el Dolmen.");
             }
         };
