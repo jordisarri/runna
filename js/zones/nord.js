@@ -321,8 +321,8 @@ class ZonaCelles extends ZonaBase {
         const ns = this.posar('cel_ntrasra', 520, 600, { col: { w: 840, h: 100 } });
         this.blocDarrere(520, 840, 495, Math.max(0, 600 - ns.displayHeight));
         this.interactiu(520, 625, 90, DIALEGS.cel_ntrasra, { altura: 140 });
-        const sb = this.posar('cel_stbenet', 1380, 600, { col: { w: 520, h: 90 } });
-        this.blocDarrere(1380, 520, 505, Math.max(0, 600 - sb.displayHeight));
+        const sb = this.posar('cel_stbenet', 1380, 600, { col: { w: 550, h: 90 } });
+        this.blocDarrere(1380, 550, 505, Math.max(0, 600 - sb.displayHeight));
         this.interactiu(1352, 620, 70, DIALEGS.portaFlam, { altura: 140 });         // porta de l'esquerra: on dormia el Flam
         this.interactiu(1537, 620, 70, DIALEGS.portaUri, { altura: 140 });          // porta de la dreta: on dormia l'Uri
 
@@ -342,13 +342,11 @@ class ZonaCelles extends ZonaBase {
         // La Sansa i el seu carro de verdures: passa per aquí un sol cop, quan l'Isidre te n'ha parlat, i se'n va un cop t'ha donat la llavor
         if (Estat.flag('isidreSansa') && !Estat.flag('llavorSansa')) this.posarSansa();
 
-        this.cartell(130, 625, () => ({ pagines: [{ qui: '', text: '← Bosc de Sant Joan i la seva font\n↑ El Gran Til·ler' }] }));
+        this.cartell(130, 625, () => ({ pagines: [{ qui: '', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler' }] }));
 
         this.arbres([[1700, 220], [1640, 420], [1750, 540], [260, 1000], [300, 1040],
                      [560, 1000], [1250, 1020], [1480, 960], [1700, 1030]]);
 
-        this.enemic('escolopendra', 600, 900);
-        this.enemic('escolopendra', 1500, 880);
         this.sortida(800, 1086, 200, 14, 'ZonaRuines', 'celles');
         this.sortida(0, 640, 14, 130, 'ZonaBosc', 'celles');
         // El camí del Gran Til·ler, al nord, és tapat per una boira espessa que no marxa amb el vent: la desfà el beuratge de la Jaumeta
