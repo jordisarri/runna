@@ -186,7 +186,7 @@ const ENEMICS = {
 
     // BOSS: el Germà Andreu convertit en Pastor de Boira. Crida ovelles i carrega amb la caiada.
     pastor: {
-        tex: 'pastor_boira', vida: 12, vel: 330, mal: 1, radi: 36, cos: [56, 30], ombra: 0.7,
+        tex: 'pastor_boira', vida: 12, vel: 330, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5,
         monedes: [1, 15, 15], cor: 0, robust: true,
         perill: e => e.estat === 'carrega',
         ia(z, e, ara) {
