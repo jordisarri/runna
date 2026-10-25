@@ -199,7 +199,7 @@ class ZonaMonestir extends ZonaBase {
             nom: 'El Monestir',
             amplada: 1600,
             alcada: 800 + D,
-            entrades: { placa: { x: 60, y: 520 + D, dir: 'dreta' }, vestibul: { x: 800, y: 494, dir: 'avall' }, cementiri: { x: 1480, y: 70, dir: 'avall' }, santantoni: { x: 1530, y: 560 + D, dir: 'esquerra' } }
+            entrades: { placa: { x: 60, y: 520 + D, dir: 'dreta' }, rebedor: { x: 800, y: 494, dir: 'avall' }, cementiri: { x: 1480, y: 70, dir: 'avall' }, santantoni: { x: 1530, y: 560 + D, dir: 'esquerra' } }
         });
     }
 
@@ -211,12 +211,12 @@ class ZonaMonestir extends ZonaBase {
 
         // 800 d'ample: la façana surt per dalt de la pantalla i només es veu a partir de les últimes fileres de teula
         // La façana: el portal del mig duu a la biblioteca (on treballa el Pare Alcuí)
-        // La imatge va al fons (fonsY): l'Ineu puja l'escalinata per davant i arriba a la porta, que es veu obrir-se i el duu al Vestíbul
+        // La imatge va al fons (fonsY): l'Ineu puja l'escalinata per davant i arriba a la porta, que es veu obrir-se i el duu al Rebedor
         this.posar('monestir', 800, 440 + D, { fonsY: 330 });
         this.colisio(577, 387, 354, 115);
         this.colisio(1023, 387, 354, 115);
         this.blocDarrere(800, 790, 405);
-        this.sortida(754, 440, 92, 30, 'ZonaMonestirVestibul', 'porta');
+        this.sortida(754, 440, 92, 30, 'ZonaMonestirRebedor', 'porta');
         this.portaAnimada({ x: 800, top: 325, bottom: 435, ample: 74, fons: 335, color: 0x6a4328, panell: 0x7a5233, vora: 0x2a1608, ferro: true });   // el portal romànic: els batents de fusta s'obren cap endins
         // Xiprers alts a l'esquerra del portal i una conífera a la dreta (com a la foto del monestir)
         [[440, 445, 1.7], [492, 452, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y + D, { escala: e, col: { w: 26, h: 12 } }));

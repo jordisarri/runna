@@ -756,7 +756,7 @@ const Grafics = {
         crea('catifa_biblio', 160, 640, pintarCatifaBiblio);
         crea('parquet_biblio', 64, 64, pintarParquetBiblio);
         crea('paret_biblio', 984, 214, pintarParetBiblio);
-        crea('lloses_vestibul', 128, 128, pintarLosesVestibul);
+        crea('lloses_rebedor', 128, 128, pintarLosesRebedor);
         crea('candelabre_hall', 44, 112, pintarCandelabreHall);
         crea('banner_hall', 60, 150, pintarBannerHall);
         // Barril de fusta amb cèrcols de ferro, dogues i tapa
