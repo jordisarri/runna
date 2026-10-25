@@ -154,14 +154,14 @@ class ZonaCirosa extends ZonaBase {
         [[1080, 240], [1120, 250], [1100, 215], [1110, 960], [1150, 980]].forEach(([x, y]) => this.bala(x, y));
 
         // Els pastors desterrats (sense nom), al voltant d'un foc a l'esquerra del camí
-        this.foc = this.posar('foc', 280, 940, { col: { w: 40, h: 16 } });
+        this.foc = this.posar('foc', 280, 790, { col: { w: 40, h: 16 } });
         this.tweens.add({ targets: this.foc, scaleY: this.foc.scaleY * 1.08, yoyo: true, repeat: -1, duration: 260 });
-        this.resplendor = this.add.circle(280, 900, 130, 0xff9a30, 0.12).setDepth(940);
+        this.resplendor = this.add.circle(280, 750, 130, 0xff9a30, 0.12).setDepth(940);
         this.tweens.add({ targets: this.resplendor, alpha: 0.2, yoyo: true, repeat: -1, duration: 400 });
-        this.llocFlauta('foc', 280, 935, 170);   // música vora el foc dels pastors
-        this.npc('pastor_a', 200, 960, DIALEGS.pastorA, { flipX: false });
-        this.npc('pastor_b', 370, 975, DIALEGS.pastorB, { flipX: true });
-        this.npc('pastor_vell', 285, 870, DIALEGS.pastorVell);
+        this.llocFlauta('foc', 280, 785, 170);   // música vora el foc dels pastors
+        this.npc('pastor_a', 200, 810, DIALEGS.pastorA, { flipX: false });
+        this.npc('pastor_b', 370, 825, DIALEGS.pastorB, { flipX: true });
+        this.npc('pastor_vell', 285, 720, DIALEGS.pastorVell);
 
         // La pastura de la dreta: oberta del tot. Només es tanca amb unes tanques de fusta quan comença el combat contra el Pastor
         this.terra('herba', 1032, 160, 740, 860, -1050).setTint(0xcdeaa0);
@@ -182,12 +182,9 @@ class ZonaCirosa extends ZonaBase {
             this.andreuNpc.ombra = this.andreuOmbra;
             (this.npcs = this.npcs || {}).andreu = this.andreuNpc;
             this.interactiu(1400, 630, 95, DIALEGS.andreuPastor, { altura: this.andreuNpc.displayHeight + 6, actiu: () => !this.bossIniciat });
-        } else {
-            this.posar('cartell', 1030, 710, { col: { w: 20, h: 10 } });
         }
 
-        this.cartell(700, 700, () => ({ pagines: [{ qui: '', text: 'La Cirosa. Algú ha clavat un cartell amb lletra tremolosa:\n«Aquí només volem viure en pau.»' }] }));
-        this.arbres([[100, 150], [260, 90], [500, 120], [800, 100], [900, 280], [140, 420], [100, 980], [330, 1090], [820, 1100],
+        this.arbres([[100, 150], [260, 90], [500, 120], [800, 100], [900, 280], [140, 420], [40, 1100], [820, 1100],
                      [900, 950], [940, 480], [1760, 120], [1760, 1100], [1100, 1120], [1400, 1130]]);
         this.muralla(0, 1186, 460, 1186, 90, 'arbre', false);
         this.muralla(700, 1186, 1020, 1186, 90, 'arbre', false);
@@ -220,12 +217,12 @@ class ZonaCirosa extends ZonaBase {
 
     // Els pastors escolten música vora el foc: es convencen d'anar al sopar del Til·ler
     enMelodia(nom) {
-        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 280, 940) > 380) return false;
+        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 280, 790) > 380) return false;
         if (!Estat.flag('soparObert')) {
-            this.flotant(280, 800, 'Els pastors t\'escolten en silenci', '#ffd9a0');
+            this.flotant(280, 650, 'Els pastors t\'escolten en silenci', '#ffd9a0');
             return true;
         }
-        if (Estat.flag('pastorsConvencuts')) { this.flotant(280, 800, 'Els pastors somriuen', '#ffd9a0'); return true; }
+        if (Estat.flag('pastorsConvencuts')) { this.flotant(280, 650, 'Els pastors somriuen', '#ffd9a0'); return true; }
         this.ui().obrirDialeg(DIALEGS.pastorsConvencuts(Estat), () => Estat.desar());
         return true;
     }
