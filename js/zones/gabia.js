@@ -604,10 +604,9 @@ class ZonaGabia extends ZonaBase {
     moureBasto(e) {
         const b = e.basto, c = e.spr.body.center;
         if (!b) return;
-        if (!b.volant) { b.x = c.x + (e.spr.flipX ? -42 : 42); b.y = c.y - 78; }
+        if (!b.volant) { b.x = c.x + (e.spr.flipX ? -66 : 66); b.y = c.y - 92; }
         b.rot += b.gir;
         b.g.setPosition(b.x, b.y).setRotation(b.rot).setDepth(c.y + 2);
-        if (e.ulls) this.posarUlls(e.ulls, e.spr, c.y + 1);
         // Mentre gira de pressa, les puntes deixen un rastre de foc
         if (e.flama) {
             if (b.gir > 0.2) { if (!e.flama.emitting) e.flama.start(); e.flama.setPosition(b.x + Math.cos(b.rot) * 92, b.y + Math.sin(b.rot) * 92); }
@@ -618,15 +617,15 @@ class ZonaGabia extends ZonaBase {
     crearUlls() {
         const g = this.add.container(0, 0).setDepth(99950);
         [-1, 1].forEach(sd => {
-            g.add(this.add.circle(sd * 6, 0, 8, 0x9a50ff, 0.35).setBlendMode('ADD'));
-            g.add(this.add.circle(sd * 6, 0, 3.5, 0xc490ff, 0.95).setBlendMode('ADD'));
-            g.add(this.add.circle(sd * 6, 0, 1.5, 0xffffff, 1));
+            g.add(this.add.circle(sd * 9, 0, 7, 0x9a50ff, 0.2).setBlendMode('ADD'));
+            g.add(this.add.circle(sd * 9, 0, 3, 0xc490ff, 0.55).setBlendMode('ADD'));
+            g.add(this.add.circle(sd * 9, 0, 1.2, 0xffffff, 0.8));
         });
         this.tweens.add({ targets: g, alpha: 0.65, yoyo: true, repeat: -1, duration: 500 });
         return g;
     }
     posarUlls(u, spr, prof) {
-        u.setPosition(spr.x, spr.y - spr.displayHeight * 0.5 + spr.displayHeight * 0.165).setVisible(spr.alpha > 0.3);
+        u.setPosition(spr.x - spr.displayWidth * (spr.flipX ? -0.005 : 0.005), spr.y - spr.displayHeight * 0.5 + spr.displayHeight * 0.085).setVisible(spr.alpha > 0.3);
         if (prof) u.setDepth(prof + 1);
     }
     // Tambors de guerra mentre dura el combat (BUM · BUM BUM ·)
@@ -758,6 +757,8 @@ class ZonaGabia extends ZonaBase {
         this.boss = e;
         this.crearBasto(e);
         e.ulls = this.crearUlls();
+        // Els ulls segueixen el cap just després de la física (si no, anirien un fotograma enrere)
+        this.events.on('postupdate', () => { if (e.ulls && e.ulls.active && e.spr.active) this.posarUlls(e.ulls, e.spr, e.spr.body.bottom + 1); });
         this.ui().barraBoss("L'Ocellaire");
         this.invulnerableFins = this.time.now + 1500;
         this.tambors(560);

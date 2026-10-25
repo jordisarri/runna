@@ -230,7 +230,7 @@ const ENEMICS = {
     // que li volten al voltant i després es llancen contra l'Ineu (Runna els talla). A la segona meitat llança el bàcul
     // com un remolí i desapareix en boira per tornar a sortir en un altre lloc.
     ocellaire: {
-        tex: 'ocellaire', vida: 24, vel: 70, mal: 1, radi: 34, cos: [56, 26], ombra: 0.75,
+        tex: 'ocellaire', vida: 24, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8,
         monedes: [0, 0, 0], cor: 0, robust: true, barra: true,
         perill: e => !e.amagat && e.estat !== 'apareix',
         ia(z, e, ara) {

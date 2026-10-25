@@ -18,11 +18,11 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 ## Estat
 
-**Fets** (ja són a `assets/`, i el seu prompt ja no hi és): `alzina_buida`, `arbre`, `arma_basto`, `arma_tiller`, `bolet`, `branca`, `casa_gran`, `cel_stantoni`, `cercle_bolets`, `creu`, `creu_desaparicio`, `ermita`, `ermita_gabriel`, `esbarzer`, `esglesia`, `hostatgeria`, `monestir`, `pi`, `pi_pinyer`, `retaule`, `retaule_obert`, `roca`, `roure`, `rovello`, `runes`, `sala_pingpong`, `xiprer`.
+**Fets** (ja són a `assets/`, i el seu prompt ja no hi és): `alzina_buida`, `arbre`, `arma_basto`, `arma_tiller`, `bolet`, `branca`, `casa_gran`, `cel_stantoni`, `cercle_bolets`, `creu`, `creu_desaparicio`, `ermita`, `ermita_gabriel`, `esbarzer`, `esglesia`, `hostatgeria`, `monestir`, `ocellaire`, `pi`, `pi_pinyer`, `retaule`, `retaule_obert`, `roca`, `roure`, `rovello`, `runes`, `sala_pingpong`, `xiprer`.
 
 **Pendents** (el joc encara fa servir el dibuix provisional): `altar`, `bassadoria`, `cabana`, `carro_sansa`, `carruatge`, `caseta_joc`, `cel_ntrasra`, `cel_stbenet`, `cofre`, `columna`, `columna_proces`, `daniel_t`, `diposit`, `eloi`, `escolopendra`, `espelma`, `farigola`, `flors`, `foc`, `font_sj`, `frederic`, `garf`, `germa_andreu`, `germa_francesc`, `gripau`, `herba_sj`, `home_carruatge`, `home_raim`, `isidre`, `jaumeta`, `jordi_caseta`, `josep`, `judit`, `juli`, `lapida`, `llac`, `llosa`, `marit_neus`, `masia`, `monja_charm`, `monja_pains`, `monja_phili`, `nena_trenes`, `neus`, `ocell`, `olla`, `ombra_monjo`, `ovella`, `ovella_boira`, `pare_alcui`, `pare_daniel`, `pare_jordi`, `pastor_a`, `pastor_b`, `pastor_boira`, `pastor_vell`, `pergami`, `pergola`, `pianista`, `porxo`, `romani`, `runna_pedra`, `sansa`, `taula_pedra`, `taula_pp`, `taula_sopar`, `taverna`, `telescopi_mon`, `tieta`, `tieta2`, `tiller`, `tomba_esquerdada`, `turbo`, `visitant`, `yordi`.
 
-**Nous, encara sense ús al joc** (preparats per a quan es facin): `andreu_guardia`, `arbre_sec`, `ferralla`, `gabia`, `gabia_oberta`, `guants_poder`, `home_raim_desperta`, `ocell_boira`, `ocellaire`, `ram_flors`, `ratpenat_boira`, `runes_ombra`.
+**Nous, encara sense ús al joc** (preparats per a quan es facin): `andreu_guardia`, `arbre_sec`, `ferralla`, `gabia`, `gabia_oberta`, `guants_poder`, `home_raim_desperta`, `ocell_boira`, `ram_flors`, `ratpenat_boira`, `runes_ombra`.
 
 Els prompts de sota són només dels pendents i dels nous.
 
@@ -553,7 +553,7 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, muted earthy palette (ochre, moss green, slate blue, stone grey), clean dark-brown outline, light from the upper left, single object centered, isolated on a plain pure white background, no ground shadow, no text, 3/4 top-down view like a classic JRPG. A young monk with dark hair, black habit with violet mist clinging to it, holding a wooden staff like a guard, smug smile, faintly glowing violet eyes. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
 ```
 
-### `ocellaire.png` (amplada 160) *(L'Ocellaire (Mestre Gaspar, l'Home de la Gàbia): boss final de la Sala de la Gàbia. Va vestit de monjo, lligat amb cadenes, calb, amb els ulls lila que brillen. EL BÀCUL NO ÉS AL GRÀFIC: el joc el dibuixa a part perquè gira, així que les mans han d'anar buides.)*
+### `ocellaire.png` — **FET** (`assets/enemics/ocellaire.webp`, amplada 115; font a `art/fonts_png/ocellaire.png`) *(L'Ocellaire (Mestre Gaspar, l'Home de la Gàbia): boss final de la Sala de la Gàbia. Va vestit de monjo, lligat amb cadenes, calb, amb els ulls lila que brillen. EL BÀCUL NO ÉS AL GRÀFIC: el joc el dibuixa a part perquè gira, així que les mans han d'anar buides.)*
 
 **Com ha de ser (perquè encaixi al joc):**
 - **Simètric i de cara**, com un monjo del joc (el joc el gira en mirall segons on sigui l'Ineu): res d'asimètric com una arma a la mà ni lletres.
