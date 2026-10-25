@@ -57,11 +57,18 @@ class EscenaPingPong extends Phaser.Scene {
 
         // ---- Jugadors ----
         this.spJosep = this.add.image(360, 335, 'josep').setOrigin(0.5, 1);
-        this.spJosep.setScale(((this.textures.get('josep').customData || {}).escala || 0.5) * 1.9);
+        this.spJosep.setScale(((this.textures.get('josep').customData || {}).escala || 0.5) * 1.5);
         const ineuTex = this.textures.exists('ineu_up') ? 'ineu_up' : 'ineu_avall';
         this.spIneu = this.add.sprite(360, ALT - 100, ineuTex, 0).setOrigin(0.5, 1).setDepth(5);
         this.spIneu.setScale(((this.textures.get(ineuTex).customData || {}).escala || 0.5) * 1.6);
-        this.pala = this.add.graphics().setDepth(6);
+        // La pala a la mà de l'Ineu: gira cap al carril on colpeja. El pivot és la mà (el mànec cap avall).
+        this.pala = this.add.container(360 + 46, ALT - 150).setDepth(6).setAngle(20);
+        const gp = this.add.graphics();
+        gp.fillStyle(0x5a3a1e, 1).fillRoundedRect(-4, -34, 8, 40, 3).lineStyle(2, 0x1a0e06, 1).strokeRoundedRect(-4, -34, 8, 40, 3);
+        gp.fillStyle(0x8a1a1a, 1).fillEllipse(0, -62, 52, 62).lineStyle(3, 0x1a0e06, 1).strokeEllipse(0, -62, 52, 62);
+        gp.fillStyle(0xd83a3a, 1).fillEllipse(0, -64, 44, 54).fillStyle(0xffffff, 0.22).fillEllipse(-9, -74, 12, 22);
+        this.pala.add(gp);
+        this.impacte = this.add.circle(0, 0, 30).setStrokeStyle(5, 0xffffff, 0.9).setDepth(8).setVisible(false);
 
         // ---- Anells dels carrils i el cercle que es fa petit ----
         this.anells = PP.xProp.map(x => this.add.circle(x, PP.copY, 46).setStrokeStyle(4, 0xf2e6c8, 0.25).setDepth(3));
@@ -121,6 +128,8 @@ class EscenaPingPong extends Phaser.Scene {
     seguentPunt() {
         if (this.acabat) return;
         this.rally = 0;
+        this.tweens.add({ targets: this.spIneu, x: 360, duration: 350, ease: 'Sine.easeInOut' });
+        this.tweens.add({ targets: this.pala, x: 360 + 46, duration: 350, ease: 'Sine.easeInOut' });
         this.actualitzarMarcador();
         if (this.serveixIneu()) {
             this.estat = 'serveiIneu';
@@ -179,7 +188,7 @@ class EscenaPingPong extends Phaser.Scene {
         if (this.estat === 'serveiIneu') {
             this.anells[1].setStrokeStyle(4, 0xf2e6c8, 0.25);
             this.cop(1, true);
-            this.tornada(0.8);
+            this.tornada(0.8, 1);
             return;
         }
         if (this.estat === 'repetint') {
@@ -219,20 +228,19 @@ class EscenaPingPong extends Phaser.Scene {
         if (!exacte) {                                         // el carril del costat: la pilota es torna de rebot, amb poca força
             this.cop(c, true);
             this.avis('De rebot!', 600, '#f2e6c8');
-            this.tornada(0.5 - this.rally * 0.04);
+            this.tornada(0.5 - this.rally * 0.04, c);
             return;
         }
         const perfecte = Math.abs(err) <= PP.PERFECTE;
         this.cop(c, true);
         this.avis(perfecte ? 'PERFECTE!' : 'Bé!', 500, perfecte ? '#9fe0ff' : '#f2e6c8');
-        this.tornada(perfecte ? 0.42 - this.rally * 0.06 : 0.86 - this.rally * 0.1);
+        this.tornada(perfecte ? 0.42 - this.rally * 0.06 : 0.86 - this.rally * 0.1, c);
     }
 
     // La pilota se'n va cap a en Josep; ell la torna o no (prob = probabilitat que la torni)
-    tornada(prob) {
+    tornada(prob, c = Phaser.Math.Between(0, 2)) {                 // c: el carril des d'on l'Ineu ha colpejat (la pilota en surt i hi torna a l'altre costat)
         this.estat = 'res';
         this.rally++;
-        const c = Phaser.Math.Between(0, 2);
         this.tornant = { t0: this.time.now, dur: 760, c };
         this.time.delayedCall(800, () => {
             this.tornant = null;
@@ -245,14 +253,20 @@ class EscenaPingPong extends Phaser.Scene {
         });
     }
 
-    // Animació de la pala de l'Ineu cap al carril
+    // L'Ineu es desplaça fins al carril i hi fa el cop amb la pala; la pilota en surt des d'aquest mateix carril
     cop(c, encert) {
-        this.spIneu.x = Phaser.Math.Linear(this.spIneu.x, PP.xProp[c], 0.6);
-        this.pala.clear();
-        const x = PP.xProp[c] + (c === 0 ? -10 : c === 2 ? 10 : 0), y = PP.copY + 30;
-        this.pala.fillStyle(0x8a2a2a, 1).fillCircle(x, y, 26).fillStyle(0x5a3a1e, 1).fillRect(x - 5, y + 18, 10, 34);
-        this.tweens.add({ targets: this.pala, alpha: { from: 1, to: 0 }, duration: 420 });
-        if (encert) this.so(2);
+        const x = PP.xProp[c];
+        this.tweens.killTweensOf(this.spIneu); this.tweens.killTweensOf(this.pala);
+        this.tweens.add({ targets: this.spIneu, x, duration: 150, ease: 'Sine.easeOut' });
+        const repos = 20, colp = c === 0 ? -75 : c === 2 ? 75 : -35;
+        this.pala.setAngle(repos + (c === 0 ? 40 : c === 2 ? -40 : 0));
+        this.tweens.add({ targets: this.pala, x: x + 46, angle: colp, duration: 130, ease: 'Quad.easeOut',
+            onComplete: () => this.tweens.add({ targets: this.pala, angle: repos, duration: 260, ease: 'Sine.easeInOut' }) });
+        if (encert) {
+            this.impacte.setPosition(x, PP.copY).setVisible(true).setScale(0.6).setAlpha(1);
+            this.tweens.add({ targets: this.impacte, scale: 1.8, alpha: 0, duration: 320, onComplete: () => this.impacte.setVisible(false) });
+            this.so(2);
+        }
     }
 
     puntIneu(text) { this.ineu++; this.finalPunt(text, '#9fe0a0'); }

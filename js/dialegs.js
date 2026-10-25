@@ -349,8 +349,8 @@ const DIALEGS = {
     juli: E => ({
         pagines: [
             { qui: 'Juli', text: 'Ineu! Sabies que el ping-pong és física pura? Efecte Magnus, rebot, fricció... i els angelets de la samarreta són de l\'edició limitada.' },
-            { qui: 'Juli', text: 'El meu pare, en Frederic, juga amb una pala de pedra. De pedra! I em guanya igualment. Frikis de mena.' },
-            { qui: 'Juli', text: 'En Josep és el millor de la sala, i només es pot vèncer d\'una manera: tornant-li el servei. Mira-li la mà quan serveix, no la pilota.' }
+            { qui: 'Juli', text: 'El meu pare, en Frederic, juga amb una pala de pedra. De pedra! I em guanya igualment. Frikis de mena. (Segons ell, la pala és igual: «el que compta és el que portes dins».)' },
+            { qui: 'Juli', text: 'En Josep és el millor de la sala, i només es pot vèncer d\'una manera: tornant-li el servei. Quan et fa el servei màgic ensenya tres carrils: memoritza\'ls i repeteix-los en ordre. Tens dos intents, i et deixa mirar-ho una altra vegada.' }
         ]
     }),
 
@@ -376,8 +376,10 @@ const DIALEGS = {
     } : ({
         pagines: [
             { qui: 'Frederic', text: 'Calma, noi. La pilota no s\'ha de perseguir, s\'ha d\'esperar.' },
-            { qui: 'Frederic', text: 'Mira-li la mà al rival, no la pilota. I quan el cercle toqui l\'anell... ni abans, ni després. Això és tot.' },
-            { qui: 'Frederic', text: 'La pala de pedra? Pesa, sí. Però no perdona ni dubta. Com jo.' }
+            { qui: 'Frederic', text: 'Jo jugo amb una pala de pedra. De pedra, sí: pesa com un maó i no té goma ni res. Quan jugueu a la taula, no em veuràs ni a mi ni la pala; no cal.' },
+            { qui: 'Frederic', text: 'Perquè amb què es juga és igual. La pala només és la mà allargada. El que compta és l\'esperit del joc que portes dins: el talent, o la màgia, que a la teva edat és gairebé el mateix.' },
+            { qui: 'Frederic', text: 'I la teva màgia funciona així: mira per quin carril ve la pilota. Quan el cercle toqui l\'anell d\'aquell carril, colpeja-la: l\'Ineu hi anirà i la pilota en sortirà d\'allà mateix. Si el cercle es posa verd, ja pots; blau, és el moment perfecte.' },
+            { qui: 'Frederic', text: 'Si prems el carril veí, la torna fluixa; si et despistes, no passa res: ho tornes a provar mentre el marge sigui obert. Només perds el punt si la pilota et passa de llarg. Això és tot.' }
         ]
     }),
 
@@ -394,7 +396,9 @@ const DIALEGS = {
         pagines: [
             { qui: 'Josep', text: 'Aquest és el meu servei. Ningú no l\'ha tornat mai. Ni l\'Eloi, per molt que presumeixi.' },
             { qui: 'Josep', text: 'Aquí al Celler les coses es guanyen a la taula. Si vols que la gent d\'aquí et parli de debò, guanya\'m: un sol partit, a set punts.' },
-            { qui: '', text: 'Com es juga: la pilota ve per un dels tres carrils. Quan el cercle groc toqui l\'anell, prem aquell carril (← ↓ →, A S D o els botons de sota). Al servei màgic d\'en Josep, repeteix en ordre els tres carrils que t\'ensenya. Per servir tu, el centre.' }
+            { qui: '', text: 'COM ES JUGA (1/3). La pilota ve per un dels tres carrils de la taula. Un cercle groc es fa petit fins a l\'anell d\'aquell carril. Quan l\'atrapa, prem el carril: ← ↓ → (o A S D, o els tres botons de sota). L\'Ineu es desplaça fins al carril, colpeja amb la pala i la pilota torna des d\'allà mateix.' },
+            { qui: '', text: 'COM ES JUGA (2/3). El cercle es posa VERD quan ja pots colpejar (el marge és ample) i BLAU quan el cop és perfecte: llavors en Josep gairebé mai no la torna. Si prems el carril del costat, la pilota hi arriba de rebot, fluixa. Prémer massa d\'hora o el carril que no toca no es castiga: perds el punt només si la pilota et passa de llarg.' },
+            { qui: '', text: 'COM ES JUGA (3/3). Quan en Josep serveix, el servei màgic ensenya tres carrils, un a un: memoritza\'ls i repeteix-los en ordre (dos intents). Quan serveixes tu, prem qualsevol botó. Set punts, i cal guanyar de dos.' }
         ],
         enAcabar: () => game.scene.start('PingPong')
     },

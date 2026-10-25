@@ -1,13 +1,13 @@
 /**
  * ELS PERSONATGES DEL CELLER (ping-pong): Frederic, Eloi, Josep i Juli, tots en estil xibi (cap gran, cos petit) i amb molt de detall.
- *  - Frederic: senyor gras d'uns 50 anys, amb ulleres i la pala de pedra.
+ *  - Frederic: senyor alt i panxut d'uns 50 anys, amb molt de cabell, ulleres i la pala de pedra.
  *  - Eloi: atleta alt i musculós.
  *  - Josep: una mena de gurú alt i prim, amb ulleres, cabell curt i barba taronges.
  *  - Juli: cap enorme, ulleres i molt prim; porta la samarreta dels angelets.
  * Cada funció pinta en un llenç de 100 unitats d'ample (ctx ja escalat); dibuixarNpcPingpong ho prepara per al catàleg d'assets.
  */
 
-const PP_PROPORCIO = { frederic: 1.32, eloi: 1.58, josep: 1.52, juli: 1.44 };
+const PP_PROPORCIO = { frederic: 1.54, eloi: 1.58, josep: 1.52, juli: 1.44 };
 
 function dibuixarNpcPingpong(c, w, qui) {
     const asp = PP_PROPORCIO[qui];
@@ -58,49 +58,47 @@ function ppCap(ctx, cx, cy, rx, ry, extra = {}) {            // cap de pell amb 
 // ---------------------------------------------------------------------------------------------
 const PP_FN = {};
 
-// FREDERIC: senyor gras d'uns 50 anys, ulleres rectangulars, cabell gris escàs, jersei i tirants, pala de pedra
+// FREDERIC: senyor alt i ben panxut d'uns 50 anys, amb molt de cabell gris, ulleres rectangulars, jersei de ratlles, tirants i pala de pedra
 PP_FN.frederic = (ctx, W, H) => {
     ppOmbraTerra(ctx, 50, H - 6, 34);
-    // peus i cames
-    [[34, '#4a4a54'], [66, '#4a4a54']].forEach(([x, c]) => { ppRect(ctx, x - 9, H - 38, 18, 26, ppGradH(ctx, x - 9, x + 9, '#5a5a66', '#34343c'), 4); });
-    [[34], [66]].forEach(([x]) => ppEl(ctx, x + (x < 50 ? -1 : 1), H - 9, 12, 6, '#6a4220'));
-    // cos: jersei de ratlles amb pançó, tirants i camisa blanca
-    const cos = new Path2D(); cos.moveTo(22, 62); cos.quadraticCurveTo(10, 94, 16, H - 36); cos.lineTo(84, H - 36); cos.quadraticCurveTo(90, 94, 78, 62); cos.closePath();
-    ctx.fillStyle = ppGradH(ctx, 14, 86, '#6a8a9a', '#4a6a7a', '#7a9aaa'); ctx.fill(cos); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4; ctx.stroke(cos);
-    ctx.save(); ctx.clip(cos); ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 3; for (let y = 70; y < H - 36; y += 9) { ctx.beginPath(); ctx.moveTo(10, y); ctx.quadraticCurveTo(50, y + 6, 90, y); ctx.stroke(); } ctx.restore();
-    ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.beginPath(); ctx.ellipse(50, 98, 30, 14, 0, 0, Math.PI); ctx.fill();       // volum de la panxa
+    // cames llargues de pantaló gris i sabates
+    [[37], [63]].forEach(([x]) => { ppRect(ctx, x - 8.5, H - 62, 17, 50, ppGradH(ctx, x - 8.5, x + 8.5, '#5a5a66', '#34343c'), 4); ppEl(ctx, x + (x < 50 ? -1 : 1), H - 9, 12, 6, '#6a4220'); });
+    // cos: jersei de ratlles amb una panxa ben rodona que penja sobre el cinturó
+    const cos = new Path2D(); cos.moveTo(23, 62); cos.quadraticCurveTo(7, 90, 13, 106); cos.quadraticCurveTo(19, 128, 50, 129); cos.quadraticCurveTo(81, 128, 87, 106); cos.quadraticCurveTo(93, 90, 77, 62); cos.closePath();
+    ctx.fillStyle = ppGradH(ctx, 12, 88, '#6a8a9a', '#4a6a7a', '#7a9aaa'); ctx.fill(cos); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4; ctx.stroke(cos);
+    ctx.save(); ctx.clip(cos); ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 3; for (let y = 70; y < 130; y += 9) { ctx.beginPath(); ctx.moveTo(8, y); ctx.quadraticCurveTo(50, y + 8, 92, y); ctx.stroke(); }
+    ctx.fillStyle = 'rgba(0,0,0,0.13)'; ctx.beginPath(); ctx.ellipse(50, 116, 34, 14, 0, 0, Math.PI); ctx.fill();               // ombra sota la panxa
+    ctx.fillStyle = 'rgba(255,255,255,0.14)'; ctx.beginPath(); ctx.ellipse(36, 98, 8, 16, 0.3, 0, Math.PI * 2); ctx.fill(); ctx.restore();   // llum a la panxa
     ctx.fillStyle = '#f2ecdc'; ctx.beginPath(); ctx.moveTo(40, 60); ctx.lineTo(50, 74); ctx.lineTo(60, 60); ctx.closePath(); ctx.fill(); ctx.strokeStyle = PP_C; ctx.lineWidth = 2; ctx.stroke();   // coll de la camisa
-    ctx.strokeStyle = '#8a2a2a'; ctx.lineWidth = 4; [-17, 17].forEach(dx => { ctx.beginPath(); ctx.moveTo(50 + dx, 64); ctx.lineTo(50 + dx * 1.15, H - 36); ctx.stroke(); });
-    ctx.fillStyle = '#d4a840'; [-17, 17].forEach(dx => { ppEl(ctx, 50 + dx * 1.15, H - 40, 2.4, 2.4, '#d4a840'); });
-    // braços (màniques arremangades blanques) i mans
-    ppRect(ctx, 4, 64, 17, 34, ppGradH(ctx, 4, 21, '#f2ecdc', '#c8c0aa'), 8); ppMans(ctx, 12, 102, 5.4);
-    ppRect(ctx, 79, 64, 17, 34, ppGradH(ctx, 79, 96, '#f2ecdc', '#c8c0aa'), 8); ppMans(ctx, 88, 100, 5.4);
-    // pala de pedra a la mà dreta (el mànec és de fusta)
-    ctx.save(); ctx.translate(90, 98); ctx.rotate(-0.18);
+    ctx.strokeStyle = '#8a2a2a'; ctx.lineWidth = 4; [-18, 18].forEach(dx => { ctx.beginPath(); ctx.moveTo(50 + dx, 64); ctx.quadraticCurveTo(50 + dx * 1.5, 96, 50 + dx * 1.3, 119); ctx.stroke(); });
+    [-18, 18].forEach(dx => ppEl(ctx, 50 + dx * 1.3, 119, 2.6, 2.6, '#d4a840'));
+    ppRect(ctx, 30, 121, 40, 5, '#3a2a1a', 2);                                                                                   // cinturó
+    // braços (màniques arremangades) i mans; la dreta duu la pala de pedra
+    ppRect(ctx, 3, 64, 17, 36, ppGradH(ctx, 3, 20, '#f2ecdc', '#c8c0aa'), 8); ppMans(ctx, 11, 106, 5.6);
+    ppRect(ctx, 80, 64, 17, 36, ppGradH(ctx, 80, 97, '#f2ecdc', '#c8c0aa'), 8);
+    ctx.save(); ctx.translate(90, 100); ctx.rotate(-0.16);
     ppRect(ctx, -3, -4, 6, 26, ppGradH(ctx, -3, 3, '#a67442', '#5a3418'), 2);
     ctx.fillStyle = ppGradV(ctx, -44, -4, '#b8b8b0', '#7a7a74'); ctx.beginPath(); ctx.ellipse(0, -24, 15, 19, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4; ctx.stroke();
     ctx.strokeStyle = 'rgba(60,60,56,0.55)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(-8, -34); ctx.lineTo(-2, -26); ctx.lineTo(-6, -18); ctx.moveTo(6, -30); ctx.lineTo(10, -22); ctx.stroke();
     ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.ellipse(-5, -32, 4, 7, -0.4, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
-    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fillRect(16, 90, 4, 3);
-    // coll papallona
-    ppEl(ctx, 50, 62, 12, 5, '#d8b8a0', false);
-    // cap
+    ppMans(ctx, 89, 102, 5.6);
+    // cap rodó amb papada
     ppCap(ctx, 50, 38, 29, 26);
-    ppEl(ctx, 50, 60, 18, 6, 'rgba(210,150,120,0.55)', false);                                   // papada
-    // cabell gris escàs: serrell als costats i una vora fina al clatell
-    ctx.fillStyle = '#a8a8ae'; ctx.strokeStyle = PP_C; ctx.lineWidth = 2;
-    [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(50 + s * 27, 44); ctx.quadraticCurveTo(50 + s * 33, 26, 50 + s * 22, 17); ctx.quadraticCurveTo(50 + s * 27, 30, 50 + s * 22, 42); ctx.closePath(); ctx.fill(); ctx.stroke(); });
-    ctx.beginPath(); ctx.moveTo(30, 18); ctx.quadraticCurveTo(50, 8, 70, 18); ctx.quadraticCurveTo(50, 14, 30, 18); ctx.fill(); ctx.stroke();
-    ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(34, 18); ctx.quadraticCurveTo(50, 11, 66, 18); ctx.stroke();
+    ppEl(ctx, 50, 60, 18, 6, 'rgba(210,150,120,0.55)', false);
+    // cabellera gris abundant: monyo de voluta al damunt, serrell ondulat i patilles
+    ctx.fillStyle = '#b6b6bc'; ctx.strokeStyle = PP_C; ctx.lineWidth = 2.2;
+    ctx.beginPath(); ctx.moveTo(21, 42); ctx.quadraticCurveTo(14, 18, 30, 8); ctx.quadraticCurveTo(40, -1, 52, 3); ctx.quadraticCurveTo(66, -2, 74, 9); ctx.quadraticCurveTo(88, 18, 79, 42);
+    ctx.quadraticCurveTo(78, 30, 70, 24); ctx.quadraticCurveTo(62, 28, 56, 22); ctx.quadraticCurveTo(46, 28, 38, 22); ctx.quadraticCurveTo(28, 28, 26, 36); ctx.quadraticCurveTo(22, 36, 21, 42); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,0.75)'; ctx.lineWidth = 1.4; [[28, 14, 40, 8], [44, 8, 58, 6], [60, 8, 72, 12]].forEach(([a, b, c2, d]) => { ctx.beginPath(); ctx.moveTo(a, b + 6); ctx.quadraticCurveTo((a + c2) / 2, d - 4, c2, d + 5); ctx.stroke(); });
+    ctx.strokeStyle = 'rgba(90,90,100,0.5)'; ctx.lineWidth = 1; [[24, 20], [34, 14], [50, 10], [66, 14], [76, 20]].forEach(([x, y]) => { ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + 2, y + 8, x - 1, y + 14); ctx.stroke(); });
     // cara
     ppRubor(ctx, 35, 52, 6, 3.6); ppRubor(ctx, 65, 52, 6, 3.6);
     ppUll(ctx, 41, 43, 4.4, 4.8, '#5a3a22', 0.4); ppUll(ctx, 59, 43, 4.4, 4.8, '#5a3a22', -0.4);
-    ppCella(ctx, 34, 35, 47, 34, '#8a8a90', 2.8); ppCella(ctx, 53, 34, 66, 35, '#8a8a90', 2.8);
+    ppCella(ctx, 34, 35, 47, 34, '#8a8a90', 3.2); ppCella(ctx, 53, 34, 66, 35, '#8a8a90', 3.2);
     ppEl(ctx, 50, 52, 4.6, 3.8, '#eab090');
-    ctx.strokeStyle = '#8a8a90'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(44, 57); ctx.quadraticCurveTo(50, 54, 56, 57); ctx.stroke();                                              // bigoti gris
-    ctx.strokeStyle = PP_C; ctx.lineWidth = 2; ctx.fillStyle = '#7a2a2a'; ctx.beginPath(); ctx.moveTo(41, 59); ctx.quadraticCurveTo(50, 68, 59, 59); ctx.quadraticCurveTo(50, 61, 41, 59); ctx.fill(); ctx.stroke();   // somriure
-    // ulleres rectangulars de muntura bruna
+    ctx.strokeStyle = '#9a9aa0'; ctx.lineWidth = 2.8; ctx.beginPath(); ctx.moveTo(44, 57); ctx.quadraticCurveTo(50, 54, 56, 57); ctx.stroke();                                              // bigoti gris
+    ctx.strokeStyle = PP_C; ctx.lineWidth = 2; ctx.fillStyle = '#7a2a2a'; ctx.beginPath(); ctx.moveTo(41, 59); ctx.quadraticCurveTo(50, 68, 59, 59); ctx.quadraticCurveTo(50, 61, 41, 59); ctx.fill(); ctx.stroke();
     ctx.strokeStyle = '#4a2a14'; ctx.lineWidth = 2.6; ctx.fillStyle = 'rgba(190,225,255,0.22)';
     [[30, 36], [52, 36]].forEach(([x, y]) => { ctx.beginPath(); ctx.roundRect(x, y, 19, 14, 3); ctx.fill(); ctx.stroke(); });
     ctx.beginPath(); ctx.moveTo(49, 42); ctx.lineTo(52, 42); ctx.stroke(); ctx.beginPath(); ctx.moveTo(30, 41); ctx.lineTo(23, 39); ctx.moveTo(71, 41); ctx.lineTo(77, 39); ctx.stroke();
