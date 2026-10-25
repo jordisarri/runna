@@ -55,6 +55,7 @@ class ZonaRuines extends ZonaBase {
         this.blocDarrere((0 + dreta) / 2, dreta, BASE_Y - 110);   // ni darrere de l'edifici
 
         // L'ombra del monjo: només es veu quan has llegit el primer fragment del pergamí
+        this.apareix = 1;            // 0..1: com de present és l'ombra (la primera vegada es materialitza lentament)
         this.ombraMonjo = this.add.image(1100, 560, 'ombra_monjo').setOrigin(0.5, 1)
             .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(560).setAlpha(0);
         this.interactiu(1100, 600, 95, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1'), enTancar: () => Estat.posaFlag('flauta_ombra') });
@@ -86,6 +87,16 @@ class ZonaRuines extends ZonaBase {
         return true;
     }
 
+    // El moment en què es llegeix el primer fragment: cau la nit de cop i l'ombra del monjo es materialitza sobre el mur
+    aparicioOmbra(fet) {
+        this.apareix = 0; this.ombraVista = true;
+        Sfx.secret && Sfx.secret();
+        this.cameras.main.shake(400, 0.002);
+        this.nit.setVisible(true).setAlpha(0);
+        this.tweens.add({ targets: this.nit, alpha: 0.5, duration: 1600, onComplete: () => this.tweens.add({ targets: this.nit, alpha: 0.22, duration: 1600 }) });   // cau la nit de cop i s'assosseguen
+        this.tweens.add({ targets: this, apareix: 1, duration: 3000, delay: 400, onStart: () => this.llum(this.ombraMonjo.x, this.ombraMonjo.y - 150, 0xd8c8ff), onComplete: () => { if (fet) fet(); } });
+    }
+
     // L'ombra aixeca el cap i es fa més clara un moment
     ombraReacciona(fet) {
         this.ombraForta = true;
@@ -94,10 +105,10 @@ class ZonaRuines extends ZonaBase {
     }
 
     actualitzar() {
-        const visible = Estat.flag('fragment1');
+        const visible = Estat.flag('fragment1') || this.ombraVista;
         this.nit.setVisible(visible);
         // L'ombra apareix i desapareix lentament, com una respiració
-        const alfa = visible ? (this.ombraForta ? 0.95 : 0.55 + 0.25 * Math.sin(this.time.now / 900)) : 0;
+        const alfa = visible ? (this.ombraForta ? 0.95 : 0.55 + 0.25 * Math.sin(this.time.now / 900)) * this.apareix : 0;
         this.ombraMonjo.setAlpha(Math.max(0, alfa));
     }
 }

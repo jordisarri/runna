@@ -334,7 +334,12 @@ const DIALEGS = {
         pagines: [
             { qui: '', text: "Les Les Runes. Murs i arcs que mai no es van acabar de construir." },
             { qui: '', text: "Entre dues pedres, un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de Runna i la va deixar dormint a la pedra. Després va amagar la clau i les relíquies dels monjos morts allà on ningú no les trobés.»" },
-            { qui: 'Ineu', text: "Falta l'altre fragment. Potser a l'església... I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." }
+            { qui: 'Ineu', text: "Falta l'altre fragment. Potser a l'església... I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." },
+            ...(E.flag('fragment1') ? [] : [
+                { fer: (z, fet) => z.aparicioOmbra ? z.aparicioOmbra(fet) : fet() },
+                { qui: '', text: "De cop, el cel s'enfosqueix. Sobre el mur de les Runes es dibuixa l'ombra d'un monjo corbat, amb les mans unides, com si pregués. No hi ha ningú que la projecti." },
+                { qui: 'Ineu', text: "Ha aparegut en llegir el pergamí... És el monjo del segell? El Pare Alcuí ha de veure això: li duré els dos fragments." }
+            ])
         ],
         enAcabar: () => E.posaFlag('fragment1')
     }),
@@ -595,6 +600,7 @@ const DIALEGS = {
             { qui: "Monjo", text: "Jo era el qui va tancar la porta. Quan van obrir el cementiri, rient, els meus germans van deixar de descansar i el segell es va esquerdar." },
             { qui: "Monjo", text: "Sota terra hi ha una gàbia, petit monjo, i una cosa que no ha oblidat cap cant ni cap nen. Jo només puc vigilar. Tu pots tornar a tancar-ho." },
             { qui: "Monjo", text: "L'espasa dorm al sud-est, entre pedres, allà on el sol s'atura. Rep la meva benedicció, que no pesa ni es veu, i recorda: la foscor tem la llum, però més encara el riure." },
+            { qui: "Monjo", text: "Jo només puc dir-te les paraules; el Pare Alcuí sabrà entendre-les. Quan les cridis davant l'espasa, la meva benedicció farà que et reconegui." },
             { qui: "", text: "Has rebut la BENEDICCIÓ DEL MONJO.\nAra necessites el Saber del Pare Alcuí i el permís del Til·ler per despertar Runna." }
         ],
         enAcabar: () => {
