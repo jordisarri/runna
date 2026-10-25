@@ -230,7 +230,7 @@ const ENEMICS = {
     // que li volten al voltant i després es llancen contra l'Ineu (Runna els talla). A la segona meitat llança el bàcul
     // com un remolí i desapareix en boira per tornar a sortir en un altre lloc.
     ocellaire: {
-        tex: 'ocellaire', vida: 24, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8,
+        tex: 'ocellaire', vida: 24, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8, copDy: 80, copRadi: 50,
         monedes: [0, 0, 0], cor: 0, robust: true, barra: true,
         perill: e => !e.amagat && e.estat !== 'apareix',
         ia(z, e, ara) {
@@ -530,8 +530,9 @@ Object.assign(ZonaBase.prototype, {
         let millor = null, millorDist = Infinity;
         this.enemics.forEach(e => {
             if (e.mort) return;
-            const c = e.spr.body.center, dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
-            if (dist > L + e.def.radi + 30 || dist >= millorDist) return;
+            const c = this.puntsCop(e).reduce((m, q) => Phaser.Math.Distance.Between(q.x, q.y, jo.x, jo.y) < Phaser.Math.Distance.Between(m.x, m.y, jo.x, jo.y) ? q : m),
+                  dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
+            if (dist > L + c.r + 30 || dist >= millorDist) return;
             const dif = Math.abs(Phaser.Math.Angle.Wrap(Math.atan2(c.y - jo.y, c.x - jo.x) - Math.atan2(d.y, d.x)));
             if (dif < 1.0) { millor = c; millorDist = dist; }
         });
@@ -615,12 +616,14 @@ Object.assign(ZonaBase.prototype, {
         let encertats = 0;
         this.enemics.forEach(e => {
             if (e.mort || e.amagat || k.tocats.has(e)) return;
-            const c = e.spr.body.center;
-            const rx = c.x - jo.x, ry = c.y - jo.y;
-            const t = rx * d.x + ry * d.y;                          // distància al llarg del cop
-            if (t < -12 || t > k.L + e.def.radi) return;
-            const lat = Math.abs(rx * d.y - ry * d.x);              // distància lateral
-            if (lat < e.def.radi + k.ample) { k.tocats.add(e); this.colpejar(e, k.dany, d); encertats++; }
+            const toca = this.puntsCop(e).some(c => {
+                const rx = c.x - jo.x, ry = c.y - jo.y;
+                const t = rx * d.x + ry * d.y;                      // distància al llarg del cop
+                if (t < -12 || t > k.L + c.r) return false;
+                const lat = Math.abs(rx * d.y - ry * d.x);          // distància lateral
+                return lat < c.r + k.ample;
+            });
+            if (toca) { k.tocats.add(e); this.colpejar(e, k.dany, d); encertats++; }
         });
     },
 
@@ -679,6 +682,17 @@ Object.assign(ZonaBase.prototype, {
         this.time.delayedCall(350, () => p.destroy());
     },
 
+    // On cal colpejar un enemic: el cos físic (que bloqueja i fa mal) és als peus, però un enemic alt (el boss final) es colpeja
+    // per tot el cos, dels peus al cap: la zona de cop és una cadena de cercles que puja 'copDy' píxels, amb el radi 'copRadi'.
+    puntsCop(e) {
+        const c = e.spr.body.center, dy = e.def.copDy || 0, r = e.def.copRadi || e.def.radi, n = dy ? 4 : 1;
+        return Array.from({ length: n }, (_, i) => ({ x: c.x, y: c.y - dy * i / Math.max(1, n - 1), r }));
+    },
+    zonaCop(e) {                    // el centre de la zona (el tors): on surten les espurnes i cap a on s'apunta
+        const c = e.spr.body.center, dy = e.def.copDy || 0;
+        return { x: c.x, y: c.y - dy * 0.6, r: e.def.copRadi || e.def.radi };
+    },
+
     colpejar(e, dany, d) {
         const ara = this.time.now;
         e.vida -= dany;
@@ -697,7 +711,7 @@ Object.assign(ZonaBase.prototype, {
         this.tweens.killTweensOf(e.spr);
         e.spr.setScale(e.escalaBase * 1.3, e.escalaBase * 0.72);
         this.tweens.add({ targets: e.spr, scaleX: e.escalaBase, scaleY: e.escalaBase, duration: 200, ease: 'Back.out' });
-        const c = e.spr.body.center;
+        const c = this.zonaCop(e);
         this.impacte(c.x, c.y - 10, d, mort ? 2 : dany > 1 ? 1 : 0);
         Sfx.cop(mort || dany > 1);
         this.hitStop(mort ? 120 : dany > 1 ? 85 : 55);
