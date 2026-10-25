@@ -441,7 +441,8 @@ Object.assign(DIALEGS, {
         ] };
         return {
             pagines: [
-                { qui: 'Germà Francesc', text: 'Ineu... Bon dia, fill. Perdona que no camini de pressa: aquests genolls ja tenen més anys que el campanar.' },
+                { qui: 'Germà Francesc', text: 'Ineu... Bon dia, fill. Ja et deixen créixer?' },
+                { qui: 'Germà Francesc', text: 'Perdona que no camini de pressa: aquests genolls ja tenen més anys que el campanar.' },
                 { qui: 'Germà Francesc', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L\'Uri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
                 { qui: 'Germà Francesc', text: 'Cada setmana porto flors a l\'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
                 { qui: 'Germà Francesc', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },

@@ -22,7 +22,7 @@ const CATALEG = [
     { key: 'monja_pains',   file: 'assets/personatges/monja_pains.png',   amplada: 110, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },
     { key: 'monja_charm',   file: 'assets/personatges/monja_charm.png',   amplada: 110, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#6a4a2e', ample: 1.45, alt: 0.92 }) },
     { key: 'monja_phili',   file: 'assets/personatges/monja_phili.png',   amplada: 96,  provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#3b2a1e', ulleres: true, ample: 0.8, alt: 1.06 }) },
-    { key: 'germa_francesc', file: 'assets/personatges/germa_francesc.png', amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
+    { key: 'germa_francesc', file: 'assets/personatges/germa_francesc.webp', amplada: 78, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
     { key: 'pare_alcui',   file: 'assets/personatges/pare_alcui.webp',   amplada: 81, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
     // Elements
     { key: 'home_raim',    file: 'assets/personatges/home_raim.png',    amplada: 110, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },
