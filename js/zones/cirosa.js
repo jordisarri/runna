@@ -163,15 +163,7 @@ class ZonaCirosa extends ZonaBase {
         this.npc('pastor_b', 370, 975, DIALEGS.pastorB, { flipX: true });
         this.npc('pastor_vell', 285, 870, DIALEGS.pastorVell);
 
-        // Corral/pastura a la dreta: tanca amb una porta oberta davant el camí
-        const g = this.add.graphics().setDepth(-900);
-        g.fillStyle(0x6b4a2a, 1);
-        const posts = [];
-        for (let y = 180; y <= 1000; y += 40) if (y < 600 || y > 780) posts.push(y);
-        posts.forEach(y => g.fillRect(1020, y, 10, 30));
-        g.fillRect(1018, 180, 14, 420).fillRect(1018, 780, 14, 220);
-        this.colisio(1025, 390, 14, 420);
-        this.colisio(1025, 890, 14, 220);
+        // La pastura de la dreta: oberta del tot. Només es tanca amb unes tanques de fusta quan comença el combat contra el Pastor
         this.terra('herba', 1032, 160, 740, 860, -1050).setTint(0xcdeaa0);
 
         // Ovelles del ramat (decoratives): lila i adormides mentre el Pastor hi és
@@ -260,6 +252,38 @@ class ZonaCirosa extends ZonaBase {
         } });
     }
 
+    // Tanques de fusta que apareixen al voltant de la pastura quan comença el combat: no es pot sortir de l'arena fins que el Pastor cau
+    tancarArena() {
+        if (this.tanques) return;
+        const A = { x0: 1040, y0: 170, x1: 1780, y1: 1010 }, T = 60, peces = [], cols = [];
+        const peca = (px, py, vertical) => {
+            const g = this.add.graphics().setDepth(py + 2).setAlpha(0);
+            g.fillStyle(0x000000, 0.22).fillEllipse(px, py + 2, 22, 8);
+            g.fillStyle(0x7a5430, 1).lineStyle(2, 0x2a1a0c, 1);
+            if (vertical) g.fillRect(px - 3, py - 22, 6, T).strokeRect(px - 3, py - 22, 6, T).fillRect(px - 3, py - 10, 6, T).strokeRect(px - 3, py - 10, 6, T);
+            else g.fillRect(px, py - 28, T, 6).strokeRect(px, py - 28, T, 6).fillRect(px, py - 14, T, 6).strokeRect(px, py - 14, T, 6);
+            g.fillStyle(0x5a3a1e, 1).fillRect(px - 6, py - 38, 12, 42).strokeRect(px - 6, py - 38, 12, 42);
+            g.fillStyle(0x9a7040, 1).fillRect(px - 6, py - 38, 12, 6);
+            peces.push(g);
+        };
+        for (let x = A.x0; x <= A.x1; x += T) { peca(x, A.y0, false); peca(x, A.y1, false); }
+        for (let y = A.y0 + T; y < A.y1; y += T) { peca(A.x0, y, true); peca(A.x1, y, true); }
+        const gruix = 22;
+        [[(A.x0 + A.x1) / 2, A.y0 - 12, A.x1 - A.x0 + T, gruix], [(A.x0 + A.x1) / 2, A.y1 - 12, A.x1 - A.x0 + T, gruix],
+         [A.x0, (A.y0 + A.y1) / 2, gruix, A.y1 - A.y0], [A.x1, (A.y0 + A.y1) / 2, gruix, A.y1 - A.y0]].forEach(([x, y, w, h]) => cols.push(this.colisio(x, y, w, h)));
+        this.tanques = { peces, cols };
+        this.tweens.add({ targets: peces, alpha: 1, duration: 500 });
+        Sfx.porta();
+    }
+
+    treureTanques() {
+        const T = this.tanques;
+        if (!T) return;
+        this.tanques = null;
+        T.cols.forEach(c => this.obstacles.remove(c, true, true));
+        this.tweens.add({ targets: T.peces, alpha: 0, duration: 600, onComplete: () => T.peces.forEach(g => g.destroy()) });
+    }
+
     // El Pastor de Boira es posa en marxa després del diàleg
     iniciarBoss() {
         if (this.bossIniciat) return;
@@ -268,6 +292,7 @@ class ZonaCirosa extends ZonaBase {
         const e = this.enemic('pastor', 1400, 570);
         if (!e) { this.bossIniciat = false; this.andreuNpc.setVisible(true); this.andreuOmbra.setVisible(true); return; }
         this.cameras.main.shake(300, 0.005);
+        this.tancarArena();
         this.flotant(1400, 520, 'Be-e-e-e!', '#e0a0ff');
         this.ui().notifica('Pastor de Boira: allunya\'t de les envestides i colpeja quan quedi cansat');
     }
