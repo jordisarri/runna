@@ -9,13 +9,13 @@
 
 const PP_PROPORCIO = { frederic: 1.54, eloi: 1.58, josep: 1.52, juli: 1.44 };
 
-function dibuixarNpcPingpong(c, w, qui) {
+function dibuixarNpcPingpong(c, w, qui, opts) {
     const asp = PP_PROPORCIO[qui];
     c.width = w; c.height = Math.round(w * asp);
     const ctx = c.getContext('2d');
     ctx.scale(w / 100, w / 100);
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    PP_FN[qui](ctx, 100, 100 * asp);
+    PP_FN[qui](ctx, 100, 100 * asp, opts);
 }
 
 const PP_C = '#140a04';
@@ -161,7 +161,7 @@ PP_FN.eloi = (ctx, W, H) => {
 };
 
 // JOSEP: gurú tranquil, alt i prim; cabell curt i barba taronges, ulleres rodones, túnica porpra estreta, collaret de boles i una pilota que levita
-PP_FN.josep = (ctx, W, H) => {
+PP_FN.josep = (ctx, W, H, opts = {}) => {
     const halo = ctx.createRadialGradient(50, 36, 6, 50, 36, 44); halo.addColorStop(0, 'rgba(255,226,150,0.36)'); halo.addColorStop(1, 'rgba(255,226,150,0)');
     ctx.fillStyle = halo; ctx.fillRect(0, 0, W, 90);
     ppOmbraTerra(ctx, 50, H - 6, 28);
@@ -175,6 +175,7 @@ PP_FN.josep = (ctx, W, H) => {
     ppRect(ctx, 38, 98, 24, 5, '#e8c860', 2);                                  // cinturó de tela
     // sandàlies
     [[41], [59]].forEach(([x]) => ppRect(ctx, x - 7, H - 10, 14, 7, '#8a5a2c', 3));
+    if (!opts.senseBraços) {                                                   // (al partit els braços i la pala es dibuixen a part i es mouen)
     // mànigues estretes i mans juntes davant amb la pilota que levita
     [[-1], [1]].forEach(([s]) => {
         ctx.fillStyle = ppGradH(ctx, 50 + s * 6, 50 + s * 24, '#4a2258', '#6a3278'); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4;
@@ -183,6 +184,7 @@ PP_FN.josep = (ctx, W, H) => {
     ppMans(ctx, 46, 106, 4.2); ppMans(ctx, 54, 106, 4.2);
     ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#ffd870'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(50, 94, 4.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     ctx.fillStyle = 'rgba(255,230,140,0.4)'; ctx.beginPath(); ctx.arc(50, 94, 8.6, 0, Math.PI * 2); ctx.fill();
+    }
     // collaret de boles de fusta (mala)
     for (let k = 0; k < 13; k++) { const t = k / 12, x = 41 + t * 18, y = 67 + Math.sin(t * Math.PI) * 20; ppEl(ctx, x, y, 2.2, 2.2, k % 4 === 0 ? '#d4a840' : '#7a4a22'); }
     // coll prim i cap (una mica més petit que el d'un xibi del tot, perquè és alt)

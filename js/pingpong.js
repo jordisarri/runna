@@ -72,12 +72,13 @@ class EscenaPingPong extends Phaser.Scene {
         [[-1, a1, b1], [1, a2, b2]].forEach(([sg, a, b]) => { t.lineStyle(7, 0x2a2a2e, 1).lineBetween(a.x + sg * 8, a.y, b.x + sg * 8, b.y - 8); });
 
         // ---- Jugadors ----
-        this.spJosep = this.add.image(360, 335, 'josep').setOrigin(0.5, 1);
-        this.spJosep.setScale(((this.textures.get('josep').customData || {}).escala || 0.5) * 2.2);
+        this.spJosep = this.add.image(360, 335, 'josep_pp').setOrigin(0.5, 1);
+        this.spJosep.setScale(((this.textures.get('josep_pp').customData || {}).escala || 0.5) * 2.2);
         // Darrere la taula només es veu de cintura cap amunt: es retalla el gràfic i es baixa perquè la cintura quedi a la vora del fons de la taula
         const FR = 0.7;                                            // fracció del gràfic (de dalt a baix) que arriba a la cintura
         this.spJosep.setCrop(0, 0, this.spJosep.width, this.spJosep.height * FR);
         this.spJosep.setY(PP.fonsY + 6 + this.spJosep.displayHeight * (1 - FR));
+        this.crearBracosJosep();
         const ineuTex = this.textures.exists('ineu_up') ? 'ineu_up' : 'ineu_avall';
         this.spIneu = this.add.sprite(360, ALT - 100, ineuTex, 0).setOrigin(0.5, 1).setDepth(5);
         this.spIneu.setScale(((this.textures.get(ineuTex).customData || {}).escala || 0.5) * 1.6);
@@ -88,6 +89,7 @@ class EscenaPingPong extends Phaser.Scene {
         gp.fillStyle(0x8a1a1a, 1).fillEllipse(0, -62, 52, 62).lineStyle(3, 0x1a0e06, 1).strokeEllipse(0, -62, 52, 62);
         gp.fillStyle(0xd83a3a, 1).fillEllipse(0, -64, 44, 54).fillStyle(0xffffff, 0.22).fillEllipse(-9, -74, 12, 22);
         this.pala.add(gp);
+        this.bracIneu = this.add.graphics().setDepth(5.5);
         this.impacte = this.add.circle(0, 0, 30).setStrokeStyle(5, 0xffffff, 0.9).setDepth(8).setVisible(false);
 
         // ---- Anells dels carrils i el cercle que es fa petit ----
@@ -125,6 +127,55 @@ class EscenaPingPong extends Phaser.Scene {
         this.actualitzarMarcador();
         this.avis('En Josep contra l\'Ineu\nA set punts', 1600);
         this.time.delayedCall(1800, () => this.seguentPunt());
+    }
+
+    // ---------------- En Josep: braços i pala que es mouen (no es desplaça de lloc) ----------------
+    crearBracosJosep() {
+        const sj = this.spJosep, u = sj.displayWidth / 100, top = sj.y - sj.displayHeight;
+        this.uJ = u;
+        const colMan = 0x5a2a6a, colMan2 = 0x7a3a8a;
+        const braç = (xOmbro, armat) => {
+            const c = this.add.container(xOmbro, top + 70 * u).setDepth(11);
+            const g = this.add.graphics();
+            g.fillStyle(colMan, 1).fillRoundedRect(-7 * u, -4 * u, 14 * u, 34 * u, 6 * u).fillStyle(colMan2, 0.6).fillRoundedRect(-7 * u, -4 * u, 5 * u, 34 * u, 3 * u)
+             .lineStyle(2.4, 0x140a04, 1).strokeRoundedRect(-7 * u, -4 * u, 14 * u, 34 * u, 6 * u);
+            g.fillStyle(0xd8b050, 1).fillRect(-7 * u, 26 * u, 14 * u, 3 * u);                      // vora daurada del puny
+            c.add(g);
+            if (armat) {                                                                                // pala a la mà: el mànec surt del puny i la pala queda amunt
+                const pala = this.add.container(0, 34 * u).setRotation(Math.PI);
+                const gp = this.add.graphics();
+                gp.fillStyle(0x6a4020, 1).fillRoundedRect(-2.2 * u, -2 * u, 4.4 * u, 14 * u, 2 * u).lineStyle(2, 0x140a04, 1).strokeRoundedRect(-2.2 * u, -2 * u, 4.4 * u, 14 * u, 2 * u);
+                gp.fillStyle(0x140a04, 1).fillEllipse(0, 22 * u, 22 * u, 26 * u).fillStyle(0x2a2a8a, 1).fillEllipse(0, 22 * u, 18 * u, 22 * u).fillStyle(0xffffff, 0.2).fillEllipse(-3 * u, 17 * u, 5 * u, 9 * u);
+                pala.add(gp); c.add(pala);
+                const mà = this.add.circle(0, 33 * u, 5 * u, 0xf4cba2).setStrokeStyle(2, 0x140a04);
+                c.add(mà);
+            } else c.add(this.add.circle(0, 33 * u, 5 * u, 0xf4cba2).setStrokeStyle(2, 0x140a04));
+            return c;
+        };
+        this.bracPala = braç(360 + 17 * u, true).setAngle(-24);          // el seu braç dret (el de la dreta de la imatge) duu la pala
+        this.bracLliure = braç(360 - 17 * u, false).setAngle(14);
+        this.tweens.add({ targets: this.bracLliure, angle: 20, yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
+        this.reposJosep();
+    }
+    reposJosep() {
+        this.tweens.killTweensOf(this.bracPala);
+        this.bracPala.setAngle(-24);
+        this.tweens.add({ targets: this.bracPala, angle: -30, yoyo: true, repeat: -1, duration: 1000, ease: 'Sine.easeInOut' });
+    }
+    // Servei màgic: en Josep alça la pala amb un gest ample, com si llancés l'orbe
+    copJosepMagic(c) {
+        this.tweens.killTweensOf(this.bracPala);
+        this.tweens.add({ targets: this.bracPala, angle: -105, duration: 170, ease: 'Sine.easeOut',
+            onComplete: () => this.tweens.add({ targets: this.bracPala, angle: c === 0 ? -60 : c === 2 ? -6 : -34, duration: 130, ease: 'Quad.easeIn',
+                onComplete: () => this.time.delayedCall(200, () => this.reposJosep()) }) });
+    }
+    // Cop d'en Josep: prepara el braç enrere, colpeja cap al carril c i torna al repòs (el contacte és als ~220 ms)
+    cop_josep(c) {
+        this.tweens.killTweensOf(this.bracPala);
+        const fi = c === 0 ? -64 : c === 2 ? -4 : -34;
+        this.tweens.add({ targets: this.bracPala, angle: -78, duration: 120, ease: 'Sine.easeOut',
+            onComplete: () => this.tweens.add({ targets: this.bracPala, angle: fi, duration: 100, ease: 'Quad.easeIn',
+                onComplete: () => this.time.delayedCall(220, () => this.reposJosep()) }) });
     }
 
     // ---------------- Perspectiva ----------------
@@ -206,7 +257,7 @@ class EscenaPingPong extends Phaser.Scene {
         this.ordre.forEach((c, i) => this.time.delayedCall(retard + i * ms, () => {
             if (this.acabat) return;
             // Gest d'en Josep: s'alça una mica i en surt un orbe màgic que vola fins al carril, deixant una cua de llum
-            this.tweens.add({ targets: this.spJosep, y: this.spJosep.y - 10, yoyo: true, duration: 150, ease: 'Quad.easeOut' });
+            this.copJosepMagic(c);
             this.so(3 + c);
             const orbe = this.add.container(hx, hy).setDepth(14);
             orbe.add([this.add.circle(0, 0, 30, COL[c], 0.28).setBlendMode(Phaser.BlendModes.ADD), this.add.circle(0, 0, 15, COL[c], 0.9).setBlendMode(Phaser.BlendModes.ADD), this.add.circle(0, 0, 7, 0xffffff, 1)]);
@@ -243,7 +294,8 @@ class EscenaPingPong extends Phaser.Scene {
     copEntrant() {
         if (this.acabat) return;
         this.estat = 'cop';
-        this.carril = Phaser.Math.Between(0, 2);
+        this.carril = this.carrilSeguent !== undefined ? this.carrilSeguent : Phaser.Math.Between(0, 2);
+        this.carrilSeguent = undefined;
         this.durada = Math.max(1050, 1800 - this.rally * 45 - (this.ineu + this.josep) * 10);       // el cop arriba amb calma i s'accelera molt poc a poc
         this.t0 = this.time.now;
         this.tCop = this.t0 + this.durada;               // el moment del cop = l'alçada màxima de la pilota després del bot
@@ -309,6 +361,8 @@ class EscenaPingPong extends Phaser.Scene {
         this.estat = 'res';
         this.rally++;
         this.tornant = { t0: this.time.now, dur: 900, c };
+        this.carrilSeguent = Phaser.Math.Between(0, 2);
+        this.time.delayedCall(690, () => { if (!this.acabat) this.cop_josep(this.carrilSeguent); });     // en Josep avança el braç perquè el cop coincideixi amb l'arribada de la pilota
         this.time.delayedCall(940, () => {
             this.tornant = null;
             if (this.acabat) return;
@@ -353,6 +407,10 @@ class EscenaPingPong extends Phaser.Scene {
     }
 
     update(time) {
+        // Braç de l'Ineu: de l'espatlla a la mà que duu la pala (segueix el desplaçament i el gir de la pala)
+        const bi = this.bracIneu, sx = this.spIneu.x + 24, sy = this.spIneu.y - 120, hx = this.pala.x, hy = this.pala.y;
+        bi.clear().lineStyle(28, 0x140a04, 1).lineBetween(sx, sy, hx, hy).lineStyle(21, 0x6a4a2e, 1).lineBetween(sx, sy, hx, hy)
+          .fillStyle(0xf4cba2, 1).fillCircle(hx, hy, 11).lineStyle(3, 0x140a04, 1).strokeCircle(hx, hy, 11);
         // Pilota que ve: bota a la meitat de l'Ineu i s'enlaira; al punt més alt és el moment del cop
         if (this.estat === 'cop' && !this.respost) {
             const t = time - this.t0, f = t / this.durada;
