@@ -613,7 +613,7 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 curt blanc-grisenc pentinat enrere, ulleres rectangulars de muntura fina, afaitat, pell clara, complexió prima i mitjana, expressió tranquil·la i amable.
 Els dos dibuixos són **la mateixa persona**: el Pastor de Boira és l'Andreu corromput. Si el generador no deixa pujar imatge, descriviu-hi la cara amb el text
 que ja hi ha als prompts.
-**Ja estan fets i posats al joc** (`assets/personatges/germa_andreu.webp`, amplada 52; `assets/enemics/pastor_boira.webp`, amplada 93; originals a `art/fonts_png`).
+**Ja estan fets i posats al joc** (`assets/personatges/germa_andreu.webp`, amplada 84, estil xibi; `assets/enemics/pastor_boira.webp`, amplada 122, més gran perquè és boss; originals a `art/fonts_png`).
 
 ### `germa_andreu.png` (amplada 96) *(L'Andreu NPC: afable, de la Plaça; porta una pilota)*
 

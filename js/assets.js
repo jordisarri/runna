@@ -17,7 +17,7 @@ const CATALEG = [
     { key: 'casa_gran',    file: 'assets/edificis/casa_gran.webp',    amplada: 1250, provisional: (c, w) => dibuixarCasaGran(c, w) },
     // Personatges
     { key: 'pare_jordi',   file: 'assets/personatges/pare_jordi.png',   amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
-    { key: 'germa_andreu', file: 'assets/personatges/germa_andreu.webp', amplada: 52, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
+    { key: 'germa_andreu', file: 'assets/personatges/germa_andreu.webp', amplada: 84, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
     { key: 'pare_daniel',  file: 'assets/personatges/pare_daniel.png',  amplada: 96, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
     { key: 'monja_pains',   file: 'assets/personatges/monja_pains.png',   amplada: 110, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },
     { key: 'monja_charm',   file: 'assets/personatges/monja_charm.png',   amplada: 110, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#6a4a2e', ample: 1.45, alt: 0.92 }) },
@@ -109,7 +109,7 @@ const CATALEG = [
     { key: 'nen_uri',        file: 'assets/personatges/nen_uri.png',    amplada: 112, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7ad0', cabell: '#3a2a1a', alt: 0.66, cap: 17 }) },
     { key: 'nen_flam',       file: 'assets/personatges/nen_flam.png',   amplada: 112, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d04a3a', cabell: '#d08a30', alt: 0.62, cap: 17 }) },
     { key: 'nen_sardin',     file: 'assets/personatges/nen_sardin.png', amplada: 112, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a9a5a', cabell: '#1e1a16', alt: 0.6, cap: 17, extra: 'gorra' }) },
-    { key: 'pastor_boira',   file: 'assets/enemics/pastor_boira.webp',   amplada: 93, provisional: (c, w) => dibuixarPastorBoira(c, w) },
+    { key: 'pastor_boira',   file: 'assets/enemics/pastor_boira.webp',   amplada: 122, provisional: (c, w) => dibuixarPastorBoira(c, w) },
     { key: 'bolet',          file: 'assets/enemics/bolet.webp',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
     { key: 'rovello',        file: 'assets/natura/rovello.webp',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
     { key: 'llac',           file: 'assets/natura/llac.png',           amplada: 36, provisional: (c, w) => dibuixarLlac(c, w) },
