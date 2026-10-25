@@ -83,7 +83,7 @@ class ZonaBiblioteca extends ZonaBase {
             this.interactiu(x, base + 22, 70, DIALEGS.prestatgesBiblio(n), { altura: 170 });
         });
         // Piles de llibres a terra
-        [['pila_a', 140, 810], ['pila_b', 960, 810], ['pila_c', 290, 440], ['pila_a', 812, 450], ['pila_b', 962, 330]].forEach(([k, x, y]) => {
+        [['pila_a', 140, 810], ['pila_b', 960, 810], ['pila_b', 962, 330]].forEach(([k, x, y]) => {
             this.add.image(x, y, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
             this.colisio(x, y - 6, 44, 16);
         });
