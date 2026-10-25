@@ -139,8 +139,8 @@ class EscenaPingPong extends Phaser.Scene {
             const c = this.add.container(xOmbro, top + 68 * u).setDepth(11);
             c.add(this.add.image(0, -1 * u, 'josep_maniga').setOrigin(0.5, 0).setScale(esc('josep_maniga')));
             if (armat) {
-                c.add(this.add.image(0, 38 * u, 'josep_pala').setOrigin(0.5, 52 / 64).setScale(esc('josep_pala')));
-                c.add(this.add.image(0, 38.5 * u, 'josep_man').setOrigin(0.5, 0.5).setScale(esc('josep_man')));
+                c.add(this.add.image(0, 42 * u, 'josep_pala').setOrigin(0.5, 53 / 71).setScale(esc('josep_pala')));        // el mànec passa pel mig del puny
+                c.add(this.add.image(0, 42 * u, 'josep_man').setOrigin(0.5, 0.5).setScale(esc('josep_man')));
             } else c.add(this.add.image(0, 35 * u, 'josep_man_oberta').setOrigin(0.5, 0.15).setScale(esc('josep_man_oberta')));
             return c;
         };

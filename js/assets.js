@@ -742,8 +742,8 @@ const Grafics = {
             ctx.beginPath(); ctx.ellipse(29, 19, 15, 7, 0, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.ellipse(29, 19, 7, 3.4, 0, 0, Math.PI * 2); ctx.stroke();
         });
         // En Josep al partit de ping-pong: el cos i el cap sense braços (els braços i la pala són a part i es mouen)
-        crea('josep_maniga', 28, 40, pintarManigaJosep); crea('josep_man', 20, 20, pintarManTancadaJosep);
-        crea('josep_man_oberta', 20, 22, pintarManObertaJosep); crea('josep_pala', 28, 64, pintarPalaJosep);
+        crea('josep_maniga', 28, 40, pintarManigaJosep); crea('josep_man', 20, 18, pintarManTancadaJosep);
+        crea('josep_man_oberta', 20, 22, pintarManObertaJosep); crea('josep_pala', 28, 71, pintarPalaJosep);
         crea('josep_pp', 98, 149, (ctx, w) => { ctx.scale(w / 100, w / 100); PP_FN.josep(ctx, 100, 152, { senseBraços: true }); });
         // Biblioteca del Monestir (js/dibuixos_biblio.js)
         [['prestatge_a', 162, 4, 3], ['prestatge_b', 212, 4, 11], ['prestatge_c', 162, 4, 17]].forEach(([k, w, files, llavor]) => crea(k, w, 202, (ctx, w2, h2) => pintarPrestatgeBiblio(ctx, w2, h2, files, llavor)));

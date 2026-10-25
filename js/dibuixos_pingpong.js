@@ -292,16 +292,23 @@ function pintarManigaJosep(ctx, w, h) {
     ctx.strokeStyle = 'rgba(255,245,200,0.7)'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.moveTo(4, 31); ctx.quadraticCurveTo(14, 37, 24, 31); ctx.stroke();
 }
 
-// Mà tancada que agafa el mànec: palmell, quatre dits davant i el polze per damunt
+// Mà tancada que empunya el mànec com un martell: quatre dits apilats al davant, amb els artells, i el polze travessat per sobre
 function pintarManTancadaJosep(ctx, w, h) {
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = PP_C; ctx.lineWidth = 2;
-    ctx.fillStyle = ppGradV(ctx, 3, 19, '#fbdcb8', '#dba378');
-    ctx.beginPath(); ctx.ellipse(10, 9.6, 7.4, 6.8, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    [[5.2, 15.2], [8.4, 16.6], [11.8, 16.6], [15, 15.2]].forEach(([x, y]) => { ctx.fillStyle = ppGradV(ctx, y - 3, y + 3, '#f8d4ac', '#e0a982'); ctx.beginPath(); ctx.ellipse(x, y, 2.5, 2.9, 0, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 1.5; ctx.stroke(); });
-    ctx.fillStyle = '#f6cfa6'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.ellipse(14.4, 6.4, 2.8, 4.4, 0.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();                 // polze
-    ctx.strokeStyle = 'rgba(160,90,60,0.5)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(6, 12); ctx.quadraticCurveTo(10, 14, 14, 12); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.beginPath(); ctx.ellipse(7, 6.4, 2, 1.2, -0.5, 0, Math.PI * 2); ctx.fill();
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    // palmell/dors al darrere (assoma una mica per la banda del polze)
+    ctx.strokeStyle = PP_C; ctx.lineWidth = 2; ctx.fillStyle = '#e8b890';
+    ctx.beginPath(); ctx.roundRect(2.4, 1.2, 15.2, 15.6, 4); ctx.fill(); ctx.stroke();
+    // quatre dits en horitzontal, un sobre l'altre, embolcallant el mànec
+    [3.4, 7.2, 11, 14.8].forEach((y, k) => {
+        ctx.fillStyle = ppGradV(ctx, y - 2.8, y + 2.8, k === 0 ? '#fbdcb8' : '#f8d4ac', '#dba378');
+        ctx.beginPath(); ctx.roundRect(1.4 + (k === 3 ? 1.6 : 0), y - 2.7, 17.2 - (k === 3 ? 3.2 : 0), 5.4, 2.7); ctx.fill(); ctx.lineWidth = 1.7; ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.ellipse(5 + (k === 3 ? 1.6 : 0), y - 1, 2, 0.9, 0, 0, Math.PI * 2); ctx.fill();     // llum a l'artell
+    });
+    // polze: travessa per sobre dels dits d'amunt i s'enganxa al segon
+    ctx.fillStyle = ppGradH(ctx, 11, 19, '#fbdcb8', '#e0a982'); ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.ellipse(13.8, 4.4, 5.2, 2.6, 0.38, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.beginPath(); ctx.ellipse(12.4, 3.6, 2, 0.8, 0.38, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(150,80,50,0.55)'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.arc(16.6, 5.6, 1.1, 0, Math.PI); ctx.stroke();           // l'ungla
 }
 
 // Mà relaxada, oberta, amb el polze una mica separat
@@ -319,9 +326,9 @@ function pintarManObertaJosep(ctx, w, h) {
 function pintarPalaJosep(ctx, w, h) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.strokeStyle = PP_C; ctx.lineWidth = 2;
-    ctx.fillStyle = ppGradH(ctx, 11, 17, '#b98048', '#5a3418'); ctx.beginPath(); ctx.roundRect(11.2, 41, 5.6, 21, 2.4); ctx.fill(); ctx.stroke();                 // mànec
-    ctx.strokeStyle = 'rgba(30,14,4,0.7)'; ctx.lineWidth = 1.2; for (let y = 44; y < 58; y += 3.4) { ctx.beginPath(); ctx.moveTo(11.4, y); ctx.lineTo(16.6, y + 1.6); ctx.stroke(); }
-    ctx.fillStyle = '#3a2010'; ctx.strokeStyle = PP_C; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.roundRect(10.4, 58.4, 7.2, 4.4, 1.8); ctx.fill(); ctx.stroke();            // tap del mànec
+    ctx.fillStyle = ppGradH(ctx, 11, 17, '#b98048', '#5a3418'); ctx.beginPath(); ctx.roundRect(11.2, 41, 5.6, 27, 2.4); ctx.fill(); ctx.stroke();                 // mànec
+    ctx.strokeStyle = 'rgba(30,14,4,0.7)'; ctx.lineWidth = 1.2; for (let y = 44; y < 63; y += 3.4) { ctx.beginPath(); ctx.moveTo(11.4, y); ctx.lineTo(16.6, y + 1.6); ctx.stroke(); }
+    ctx.fillStyle = '#3a2010'; ctx.strokeStyle = PP_C; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.roundRect(10.4, 65, 7.2, 4.4, 1.8); ctx.fill(); ctx.stroke();            // tap del mànec
     ctx.fillStyle = '#8a5a2c'; ctx.beginPath(); ctx.moveTo(11.6, 41.4); ctx.lineTo(10.6, 36); ctx.lineTo(17.4, 36); ctx.lineTo(16.4, 41.4); ctx.closePath(); ctx.fill(); ctx.strokeStyle = PP_C; ctx.stroke();   // coll
     ctx.fillStyle = ppGradV(ctx, 0, 38, '#e2b878', '#a67442'); ctx.beginPath(); ctx.ellipse(14, 19, 13, 18.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4; ctx.stroke();   // vora
     const g = ctx.createRadialGradient(10, 11, 2, 14, 19, 18); g.addColorStop(0, '#5a48c8'); g.addColorStop(0.55, '#34268a'); g.addColorStop(1, '#16104a');
