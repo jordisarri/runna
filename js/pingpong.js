@@ -133,47 +133,39 @@ class EscenaPingPong extends Phaser.Scene {
     crearBracosJosep() {
         const sj = this.spJosep, u = sj.displayWidth / 100, top = sj.y - sj.displayHeight;
         this.uJ = u;
-        const colMan = 0x5a2a6a, colMan2 = 0x7a3a8a;
+        const esc = k => (this.textures.get(k).customData.escala || 0.5) * u;
         const braç = (xOmbro, armat) => {
-            const c = this.add.container(xOmbro, top + 70 * u).setDepth(11);
-            const g = this.add.graphics();
-            g.fillStyle(colMan, 1).fillRoundedRect(-7 * u, -4 * u, 14 * u, 34 * u, 6 * u).fillStyle(colMan2, 0.6).fillRoundedRect(-7 * u, -4 * u, 5 * u, 34 * u, 3 * u)
-             .lineStyle(2.4, 0x140a04, 1).strokeRoundedRect(-7 * u, -4 * u, 14 * u, 34 * u, 6 * u);
-            g.fillStyle(0xd8b050, 1).fillRect(-7 * u, 26 * u, 14 * u, 3 * u);                      // vora daurada del puny
-            c.add(g);
-            if (armat) {                                                                                // pala a la mà: el mànec surt del puny i la pala queda amunt
-                const pala = this.add.container(0, 34 * u).setRotation(Math.PI);
-                const gp = this.add.graphics();
-                gp.fillStyle(0x6a4020, 1).fillRoundedRect(-2.2 * u, -2 * u, 4.4 * u, 14 * u, 2 * u).lineStyle(2, 0x140a04, 1).strokeRoundedRect(-2.2 * u, -2 * u, 4.4 * u, 14 * u, 2 * u);
-                gp.fillStyle(0x140a04, 1).fillEllipse(0, 22 * u, 22 * u, 26 * u).fillStyle(0x2a2a8a, 1).fillEllipse(0, 22 * u, 18 * u, 22 * u).fillStyle(0xffffff, 0.2).fillEllipse(-3 * u, 17 * u, 5 * u, 9 * u);
-                pala.add(gp); c.add(pala);
-                const mà = this.add.circle(0, 33 * u, 5 * u, 0xf4cba2).setStrokeStyle(2, 0x140a04);
-                c.add(mà);
-            } else c.add(this.add.circle(0, 33 * u, 5 * u, 0xf4cba2).setStrokeStyle(2, 0x140a04));
+            // pivot a l'espatlla; la màniga penja cap avall, la pala (si en duu) surt del puny amb la pala cap amunt
+            const c = this.add.container(xOmbro, top + 68 * u).setDepth(11);
+            c.add(this.add.image(0, -1 * u, 'josep_maniga').setOrigin(0.5, 0).setScale(esc('josep_maniga')));
+            if (armat) {
+                c.add(this.add.image(0, 38 * u, 'josep_pala').setOrigin(0.5, 52 / 64).setScale(esc('josep_pala')));
+                c.add(this.add.image(0, 38.5 * u, 'josep_man').setOrigin(0.5, 0.5).setScale(esc('josep_man')));
+            } else c.add(this.add.image(0, 35 * u, 'josep_man_oberta').setOrigin(0.5, 0.15).setScale(esc('josep_man_oberta')));
             return c;
         };
-        this.bracPala = braç(360 + 17 * u, true).setAngle(-24);          // el seu braç dret (el de la dreta de la imatge) duu la pala
+        this.bracPala = braç(360 + 17 * u, true).setAngle(-44);          // el seu braç dret (el de la dreta de la imatge) duu la pala
         this.bracLliure = braç(360 - 17 * u, false).setAngle(14);
         this.tweens.add({ targets: this.bracLliure, angle: 20, yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
         this.reposJosep();
     }
     reposJosep() {
         this.tweens.killTweensOf(this.bracPala);
-        this.bracPala.setAngle(-24);
-        this.tweens.add({ targets: this.bracPala, angle: -30, yoyo: true, repeat: -1, duration: 1000, ease: 'Sine.easeInOut' });
+        this.bracPala.setAngle(-44);
+        this.tweens.add({ targets: this.bracPala, angle: -50, yoyo: true, repeat: -1, duration: 1000, ease: 'Sine.easeInOut' });
     }
     // Servei màgic: en Josep alça la pala amb un gest ample, com si llancés l'orbe
     copJosepMagic(c) {
         this.tweens.killTweensOf(this.bracPala);
-        this.tweens.add({ targets: this.bracPala, angle: -105, duration: 170, ease: 'Sine.easeOut',
-            onComplete: () => this.tweens.add({ targets: this.bracPala, angle: c === 0 ? -60 : c === 2 ? -6 : -34, duration: 130, ease: 'Quad.easeIn',
+        this.tweens.add({ targets: this.bracPala, angle: -115, duration: 170, ease: 'Sine.easeOut',
+            onComplete: () => this.tweens.add({ targets: this.bracPala, angle: c === 0 ? -72 : c === 2 ? -14 : -44, duration: 130, ease: 'Quad.easeIn',
                 onComplete: () => this.time.delayedCall(200, () => this.reposJosep()) }) });
     }
     // Cop d'en Josep: prepara el braç enrere, colpeja cap al carril c i torna al repòs (el contacte és als ~220 ms)
     cop_josep(c) {
         this.tweens.killTweensOf(this.bracPala);
-        const fi = c === 0 ? -64 : c === 2 ? -4 : -34;
-        this.tweens.add({ targets: this.bracPala, angle: -78, duration: 120, ease: 'Sine.easeOut',
+        const fi = c === 0 ? -74 : c === 2 ? -12 : -42;
+        this.tweens.add({ targets: this.bracPala, angle: -92, duration: 120, ease: 'Sine.easeOut',
             onComplete: () => this.tweens.add({ targets: this.bracPala, angle: fi, duration: 100, ease: 'Quad.easeIn',
                 onComplete: () => this.time.delayedCall(220, () => this.reposJosep()) }) });
     }

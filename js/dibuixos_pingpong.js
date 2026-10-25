@@ -268,3 +268,66 @@ PP_FN.juli = (ctx, W, H) => {
     ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(42, 63); ctx.quadraticCurveTo(50, 66, 58, 63); ctx.lineTo(57, 65.4); ctx.quadraticCurveTo(50, 68, 43, 65.4); ctx.closePath(); ctx.fill();
     ppRubor(ctx, 24, 56, 5, 3); ppRubor(ctx, 76, 56, 5, 3);
 };
+
+// ---------------------------------------------------------------------------------------------
+// ELS BRAÇOS I LA PALA D'EN JOSEP PER AL PARTIT (peces separades que es mouen). Coordenades en unitats de disseny.
+// ---------------------------------------------------------------------------------------------
+
+// Màniga ampla de túnica porpra, de l'espatlla (dalt al centre) al puny, amb plecs, folre fosc i vora daurada
+function pintarManigaJosep(ctx, w, h) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const forma = () => { ctx.beginPath(); ctx.moveTo(7, 1.5); ctx.quadraticCurveTo(14, -1, 21, 1.5); ctx.quadraticCurveTo(25.5, 18, 26.5, 33); ctx.quadraticCurveTo(14, 39, 1.5, 33); ctx.quadraticCurveTo(2.5, 18, 7, 1.5); ctx.closePath(); };
+    forma(); ctx.fillStyle = ppGradH(ctx, 1, 27, '#4a2258', '#4a2258', '#8a44a0'); ctx.fill();
+    ctx.save(); forma(); ctx.clip();
+    ctx.strokeStyle = 'rgba(20,6,30,0.38)'; ctx.lineWidth = 1.3;
+    [[9.5, 4, 6.5, 34], [14, 2, 14, 37], [19, 4, 22, 34]].forEach(([a, b, c, d]) => { ctx.beginPath(); ctx.moveTo(a, b); ctx.quadraticCurveTo((a + c) / 2 + 1, (b + d) / 2, c, d); ctx.stroke(); });
+    ctx.fillStyle = 'rgba(255,230,255,0.2)'; ctx.beginPath(); ctx.ellipse(10, 12, 2.2, 8, 0.12, 0, Math.PI * 2); ctx.fill();   // llum a la màniga
+    ctx.fillStyle = ppGradV(ctx, 0, 14, 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0)'); ctx.fillRect(0, 0, w, 14);                           // ombra sota l'espatlla
+    ctx.restore();
+    forma(); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4; ctx.stroke();
+    // folre fosc de l'obertura del puny i vora daurada
+    ctx.fillStyle = '#1e0a28'; ctx.beginPath(); ctx.ellipse(14, 35.6, 11.6, 3.4, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = PP_C; ctx.lineWidth = 4.6; ctx.beginPath(); ctx.moveTo(2.4, 31.8); ctx.quadraticCurveTo(14, 38.4, 25.6, 31.8); ctx.stroke();
+    ctx.strokeStyle = '#e0bc58'; ctx.lineWidth = 2.6; ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,245,200,0.7)'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.moveTo(4, 31); ctx.quadraticCurveTo(14, 37, 24, 31); ctx.stroke();
+}
+
+// Mà tancada que agafa el mànec: palmell, quatre dits davant i el polze per damunt
+function pintarManTancadaJosep(ctx, w, h) {
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = PP_C; ctx.lineWidth = 2;
+    ctx.fillStyle = ppGradV(ctx, 3, 19, '#fbdcb8', '#dba378');
+    ctx.beginPath(); ctx.ellipse(10, 9.6, 7.4, 6.8, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    [[5.2, 15.2], [8.4, 16.6], [11.8, 16.6], [15, 15.2]].forEach(([x, y]) => { ctx.fillStyle = ppGradV(ctx, y - 3, y + 3, '#f8d4ac', '#e0a982'); ctx.beginPath(); ctx.ellipse(x, y, 2.5, 2.9, 0, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 1.5; ctx.stroke(); });
+    ctx.fillStyle = '#f6cfa6'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.ellipse(14.4, 6.4, 2.8, 4.4, 0.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();                 // polze
+    ctx.strokeStyle = 'rgba(160,90,60,0.5)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(6, 12); ctx.quadraticCurveTo(10, 14, 14, 12); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.beginPath(); ctx.ellipse(7, 6.4, 2, 1.2, -0.5, 0, Math.PI * 2); ctx.fill();
+}
+
+// Mà relaxada, oberta, amb el polze una mica separat
+function pintarManObertaJosep(ctx, w, h) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.strokeStyle = PP_C; ctx.lineWidth = 2;
+    ctx.fillStyle = ppGradV(ctx, 2, 16, '#fbdcb8', '#dba378');
+    ctx.beginPath(); ctx.ellipse(10, 8, 6.4, 6.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    [[5.4, 15.4, 0.14], [8.4, 17.4, 0.05], [11.6, 17.4, -0.05], [14.6, 15.4, -0.14]].forEach(([x, y, a]) => { ctx.fillStyle = ppGradH(ctx, x - 2.4, x + 2.4, '#fbdcb8', '#e6b088'); ctx.beginPath(); ctx.ellipse(x, y, 2.3, 4.6, a, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 1.6; ctx.stroke(); });
+    ctx.fillStyle = '#f6cfa6'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.ellipse(15.6, 8.4, 2.4, 4.6, -0.7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.beginPath(); ctx.ellipse(7, 5.4, 2, 1.2, -0.5, 0, Math.PI * 2); ctx.fill();
+}
+
+// Pala de ping-pong: vora de fusta clara, goma violeta fosca amb el logo daurat, coll i mànec de fusta amb el grip lligat
+function pintarPalaJosep(ctx, w, h) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.strokeStyle = PP_C; ctx.lineWidth = 2;
+    ctx.fillStyle = ppGradH(ctx, 11, 17, '#b98048', '#5a3418'); ctx.beginPath(); ctx.roundRect(11.2, 41, 5.6, 21, 2.4); ctx.fill(); ctx.stroke();                 // mànec
+    ctx.strokeStyle = 'rgba(30,14,4,0.7)'; ctx.lineWidth = 1.2; for (let y = 44; y < 58; y += 3.4) { ctx.beginPath(); ctx.moveTo(11.4, y); ctx.lineTo(16.6, y + 1.6); ctx.stroke(); }
+    ctx.fillStyle = '#3a2010'; ctx.strokeStyle = PP_C; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.roundRect(10.4, 58.4, 7.2, 4.4, 1.8); ctx.fill(); ctx.stroke();            // tap del mànec
+    ctx.fillStyle = '#8a5a2c'; ctx.beginPath(); ctx.moveTo(11.6, 41.4); ctx.lineTo(10.6, 36); ctx.lineTo(17.4, 36); ctx.lineTo(16.4, 41.4); ctx.closePath(); ctx.fill(); ctx.strokeStyle = PP_C; ctx.stroke();   // coll
+    ctx.fillStyle = ppGradV(ctx, 0, 38, '#e2b878', '#a67442'); ctx.beginPath(); ctx.ellipse(14, 19, 13, 18.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4; ctx.stroke();   // vora
+    const g = ctx.createRadialGradient(10, 11, 2, 14, 19, 18); g.addColorStop(0, '#5a48c8'); g.addColorStop(0.55, '#34268a'); g.addColorStop(1, '#16104a');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(14, 19, 10.8, 16.2, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(14, 19, 8.6, 14, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.beginPath(); ctx.ellipse(8.6, 11, 2.2, 5.6, -0.35, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#e8c458'; ctx.strokeStyle = PP_C; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(14, 24, 3.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();      // logo daurat
+    ctx.fillStyle = '#fff4c0'; ctx.beginPath(); ctx.arc(14, 24, 1.4, 0, Math.PI * 2); ctx.fill();
+}
