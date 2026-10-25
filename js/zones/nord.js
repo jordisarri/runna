@@ -230,7 +230,7 @@ class ZonaPingpong extends ZonaBase {
 
         // ---- Mobiliari del celler ----
         // Barrils contra la paret, a banda i banda
-        [[150, YP + 44], [206, YP + 56], [1130, YP + 44], [1074, YP + 56]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
+        [[1130, YP + 44], [1074, YP + 56]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
         // Una taula de fusta amb tamborets a l'esquerra i una altra amb un banc a la dreta (taules que no són de ping-pong)
         this.posar('taula', 205, 520, { col: { w: 160, h: 30 } });
         this.posar('tamboret', 150, 590, { col: { w: 40, h: 16 } });
@@ -244,7 +244,7 @@ class ZonaPingpong extends ZonaBase {
         // Bancs per seure al fons de la sala
         this.posar('banc_davant', 320, 1030, { col: { w: 140, h: 16 } });
         this.posar('banc_davant', 960, 1030, { col: { w: 140, h: 16 } });
-        [[132, 1050], [1148, 1050]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
+        [[132, 1050], [188, 1064], [1148, 1050]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
 
         // ---- Taules de ping-pong (verdes), ben separades de la roda ----
         this.posar('taula_pp', 410, 760, { col: { w: 220, h: 40 } });
