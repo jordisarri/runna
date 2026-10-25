@@ -798,16 +798,16 @@ const Grafics = {
         // Marcs de pergamí per als quadres de diàleg, el HUD i el menú (es fan servir amb nineslice: vegeu marcPergami a ui.js)
         crea('marc_gran', 2 * MARC_GRAN + 20, 2 * MARC_GRAN + 20, (ctx, w) => dibuixarMarc(ctx, w, MARC_GRAN, 1));
         crea('marc_peti', 2 * MARC_PETI + 20, 2 * MARC_PETI + 20, (ctx, w) => dibuixarMarc(ctx, w, MARC_PETI, 0.7));
-        crea('cinta_nom', 56, 40, (ctx, w, h) => {
+        crea('cinta_nom', 76, 60, (ctx, w, h) => {
             const g = ctx.createLinearGradient(0, 0, 0, h);
             g.addColorStop(0, '#9a2c34'); g.addColorStop(1, '#601820');
             ctx.fillStyle = g; ctx.fillRect(0, 5, w, h - 10);
             ctx.globalCompositeOperation = 'destination-out';      // cua de cinta (tall en V) als dos extrems
-            ctx.beginPath(); ctx.moveTo(-1, 4); ctx.lineTo(11, h / 2); ctx.lineTo(-1, h - 4); ctx.fill();
-            ctx.beginPath(); ctx.moveTo(w + 1, 4); ctx.lineTo(w - 11, h / 2); ctx.lineTo(w + 1, h - 4); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(-1, 4); ctx.lineTo(15, h / 2); ctx.lineTo(-1, h - 4); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(w + 1, 4); ctx.lineTo(w - 15, h / 2); ctx.lineTo(w + 1, h - 4); ctx.fill();
             ctx.globalCompositeOperation = 'source-over';
             ctx.strokeStyle = '#e0bd55'; ctx.lineWidth = 1.6;
-            ctx.beginPath(); ctx.moveTo(14, 8.5); ctx.lineTo(w - 14, 8.5); ctx.moveTo(14, h - 8.5); ctx.lineTo(w - 14, h - 8.5); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(20, 9); ctx.lineTo(w - 20, 9); ctx.moveTo(20, h - 9); ctx.lineTo(w - 20, h - 9); ctx.stroke();
             ctx.strokeStyle = 'rgba(30,8,10,0.75)'; ctx.lineWidth = 1.2;
             ctx.beginPath(); ctx.moveTo(0, 5); ctx.lineTo(w, 5); ctx.moveTo(0, h - 5); ctx.lineTo(w, h - 5); ctx.stroke();
         });

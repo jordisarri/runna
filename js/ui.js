@@ -356,9 +356,9 @@ class EscenaUI extends Phaser.Scene {
         const ombra = this.add.rectangle(4, 8, 704, 360, 0x000000, 0.35);
         const fons = marcPergami(this, 0, 0, 704, 360);
         // Cinta amb el nom de qui parla, penjada de la vora de dalt
-        this.cintaNom = this.add.nineslice(-310, -178, 'cinta_nom', undefined, 120 * RES, 40 * RES, 20 * RES, 20 * RES)
+        this.cintaNom = this.add.nineslice(-318, -186, 'cinta_nom', undefined, 160 * RES, 60 * RES, 26 * RES, 26 * RES)
             .setScale(1 / RES).setOrigin(0, 0.5);
-        this.plaquetaNom = this.add.text(-310, -178, '', { fontFamily: FONT_PLACA, fontSize: '22px', fontStyle: 'bold', color: '#f8e9b8', resolution: 2 })
+        this.plaquetaNom = this.add.text(-310, -186, '', { fontFamily: FONT_PLACA, fontSize: '32px', fontStyle: 'bold', color: '#fff3c8', stroke: '#2a0a0e', strokeThickness: 4, resolution: 2 })
             .setOrigin(0, 0.5);
         this.textDialeg = this.add.text(-316, -146, '', estilText(28, '#2a170b', { wordWrap: { width: 632 }, lineSpacing: 5 }));
         this.indicador = this.add.text(318, 152, '▼', estilText(26, '#7a3a14')).setOrigin(1, 1);
@@ -392,9 +392,9 @@ class EscenaUI extends Phaser.Scene {
             return;
         }
         this.caixa.setVisible(true);
-        this.plaquetaNom.setText(p.qui || '').setVisible(!!p.qui).setX(-310 + 28);
+        this.plaquetaNom.setText(p.qui || '').setVisible(!!p.qui).setX(-318 + 44);
         this.cintaNom.setVisible(!!p.qui);
-        if (p.qui) this.cintaNom.setSize((this.plaquetaNom.width + 56) * RES, 40 * RES);
+        if (p.qui) this.cintaNom.setSize((this.plaquetaNom.width + 88) * RES, 60 * RES);
         this.textComplet = p.text;
         this.lletres = 0;
         this.textDialeg.setText('');
