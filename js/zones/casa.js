@@ -459,9 +459,6 @@ class ZonaPassadis extends ZonaCasaBase {
             this.tweens.add({ targets: halo, alpha: 0.1, scale: 1.2, yoyo: true, repeat: -1, duration: 900 + i * 110 });
             o.halo = halo;
         });
-        if (this.esbarzers.length) {
-            this.interactiu(400, 790, 300, DIALEGS.murEsbarzers, { altura: 70, actiu: () => this.esbarzers.some(o => o.viu) });
-        }
 
         // Els animalets del cementiri esquerdat, abans i després del mur
         if (!Estat.flag('passadisNet')) {

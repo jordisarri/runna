@@ -254,8 +254,8 @@ class ZonaPingpong extends ZonaBase {
         // ---- Jugadors ----
         this.npc('juli', 262, 760, DIALEGS.juli);
         this.npc('frederic', 1030, 760, DIALEGS.frederic, { flipX: true });
-        this.npc('eloi', 600, 780, DIALEGS.eloi);
-        this.npc('josep', 690, 780, DIALEGS.josep);
+        this.npc('eloi', 585, 780, DIALEGS.eloi);
+        this.npc('josep', 705, 780, DIALEGS.josep);
 
         this.add.rectangle(640, A / 2, 1080, A, 0xffe9a8, 0.04).setDepth(80000);
         this.sortida(600, A - 30, 80, 20, 'ZonaRuines', 'pingpong');
