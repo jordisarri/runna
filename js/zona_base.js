@@ -972,6 +972,42 @@ class ZonaBase extends Phaser.Scene {
         return P;
     }
 
+    // Mostra una imatge gran (un cartell, una carta...) amb zoom automàtic: surt de l'objecte de la paret, creix fins a omplir la pantalla i s'aclareix de borrosa a nítida.
+    // x, y: centre de l'objecte al món; ample: la seva amplada al món; borros: textura petita que hi ha a la paret (opcional). Es tanca tocant o amb ESPAI/ESC; fet() quan es tanca.
+    mostrarImatge(key, x, y, ample, borros, fet) {
+        const ui = this.ui(), cam = this.cameras.main;
+        const sx = cam.x + (x - cam.worldView.x) * cam.zoom, sy = cam.y + (y - cam.worldView.y) * cam.zoom, aw = ample * cam.zoom;
+        const tex = ui.textures.get(key).getSourceImage();
+        const fons = ui.add.rectangle(AMPLE / 2, ALT / 2, AMPLE, ALT, 0x000000, 0).setDepth(99000).setInteractive();
+        const nitid = ui.add.image(sx, sy, key).setDepth(99002).setAlpha(0);
+        const dif = borros ? ui.add.image(sx, sy, borros).setDepth(99001) : null;
+        const ini = aw / tex.width;
+        nitid.setScale(ini);
+        if (dif) dif.setScale(aw / ui.textures.get(borros).getSourceImage().width);
+        const fi = Math.min(AMPLE * 0.9 / tex.width, ALT * 0.78 / tex.height);
+        const pista = ui.add.text(AMPLE / 2, ALT - 70, 'Toca per tancar', estilText(26, '#f2e6c8', { stroke: '#000000', strokeThickness: 5 })).setOrigin(0.5).setDepth(99003).setAlpha(0);
+        const v = { u: 0 };
+        let obert = false, tancat = false;
+        ui.tweens.add({ targets: v, u: 1, duration: 900, ease: 'Sine.easeInOut', onUpdate: () => {
+            const e = v.u, x2 = Phaser.Math.Linear(sx, AMPLE / 2, e), y2 = Phaser.Math.Linear(sy, ALT / 2 - 10, e), sc = Phaser.Math.Linear(ini, fi, e);
+            nitid.setPosition(x2, y2).setScale(sc).setAlpha(Phaser.Math.Clamp((e - 0.3) / 0.5, 0, 1));
+            if (dif) { dif.setPosition(x2, y2).setScale(sc * (ini > 0 ? (tex.width / ui.textures.get(borros).getSourceImage().width) : 1)).setAlpha(1 - Phaser.Math.Clamp((e - 0.3) / 0.5, 0, 1)); }
+            fons.setFillStyle(0x000000, 0.82 * e);
+        }, onComplete: () => { obert = true; ui.tweens.add({ targets: pista, alpha: 1, duration: 300 }); } });
+        const tanca = () => {
+            if (!obert || tancat) return; tancat = true;
+            ui.input.keyboard.off('keydown', tecla);
+            ui.tweens.add({ targets: [nitid, dif, pista, fons].filter(Boolean), alpha: 0, duration: 260, onComplete: () => {
+                [nitid, dif, pista, fons].forEach(o => o && o.destroy());
+                ui.bloquejatFins = ui.time.now + 350;
+                if (fet) fet();
+            } });
+        };
+        const tecla = ev => { if (['Space', 'Enter', 'Escape'].includes(ev.code)) tanca(); };
+        ui.input.keyboard.on('keydown', tecla);
+        fons.on('pointerdown', tanca);
+    }
+
     // El portal d'arc de la masia (gràfic provisional 'masia'): x, y = peus del centre de la façana
     portaMasia(img, x, y) {
         const t = y - img.displayHeight;

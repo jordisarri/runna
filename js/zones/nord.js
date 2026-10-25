@@ -210,6 +210,12 @@ class ZonaPingpong extends ZonaBase {
             [[-38, 0], [0, 1], [38, 2]].forEach(([dx, t], k) => { this.posar('gerro_' + t, x + dx, YP - 66, { fonsY: -985 }); this.posar('gerro_' + ((t + k + 1) % 3), x + dx + 6, YP - 124 + (k % 2 ? 0 : 0), { fonsY: -985, escala: 0.8 }); });
         });
 
+        // Un cartell de paper clavat a la paret (esquerra): de lluny és una taca blanca borrosa; en examinar-lo, el zoom automàtic el mostra sencer
+        const cp = this.add.image(144, 248, 'cartell_llums_borros').setOrigin(0.5, 1).setDepth(-960);
+        cp.setScale(56 / this.textures.get('cartell_llums_borros').getSourceImage().width);
+        this.add.rectangle(144, 250, cp.displayWidth + 8, 5, 0x000000, 0.25).setDepth(-961);
+        this.interactiu(144, 300, 80, () => ({ pagines: [{ fer: (z, fet) => z.mostrarImatge('cartell_llums', 144, 248 - cp.displayHeight / 2, cp.displayWidth, 'cartell_llums_borros', fet) }] }), { altura: 110 });
+
         // ---- La roda de carruatge davant la porta (s'empeny des d'un costat; cal Runna) ----
         this.rodaX = Estat.dades.flags.rodaX || AX;
         this.rodaMoguda = Estat.flag('rodaMoguda');

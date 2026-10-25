@@ -137,6 +137,8 @@ const CATALEG = [
     { key: 'arma_tiller', file: 'assets/armes/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/armes/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
     { key: 'arma_espasa', file: 'assets/armes/espasa.webp',      amplada: 28, provisional: (c, w) => dibuixarEspasaProvisional(c, w) },   // l'espasa de Runna
+    { key: 'cartell_llums', file: 'assets/objectes/cartell_llums.webp', amplada: 560, cru: true },            // cartell de paper (es mostra tal com és, amb el fons blanc)
+    { key: 'cartell_llums_borros', file: 'assets/objectes/cartell_llums_borros.webp', amplada: 56, cru: true },   // la mateixa imatge, borrosa i petita, per a la paret
     { key: 'espurna',      file: 'assets/objectes/espurna.png',      amplada: 32, provisional: (c, w) => dibuixarPuntSegell(c, w) }
 ];
 
@@ -199,7 +201,8 @@ const Grafics = {
                 Grafics.faltants = Grafics.faltants.filter(k => k !== item.key);
             }
             const existeix = scene.textures.exists(item.key) && !Grafics.faltants.includes(item.key);
-            if (existeix) Grafics.netejarPNG(scene, item);
+            if (existeix && item.cru) scene.textures.get(item.key).customData.escala = item.amplada / scene.textures.get(item.key).getSourceImage().width;      // sense treure el fons
+            else if (existeix) Grafics.netejarPNG(scene, item);
             else Grafics.crearProvisional(scene, item);
         });
         Grafics.texturesGenerades(scene);
