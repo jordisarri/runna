@@ -113,6 +113,6 @@ class ZonaBiblioteca extends ZonaBase {
         this.npc('pare_alcui', 760, 330, DIALEGS.pareAlcui, { flipX: true });
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffd38a, 0.06).setDepth(80000);
-        this.sortida(510, H - 22, 80, 14, 'ZonaMonestir', 'biblioteca');
+        this.sortida(510, H - 22, 80, 14, 'ZonaMonestirHall', 'biblioteca');
     }
 }

@@ -456,3 +456,56 @@ function pintarPilaBiblio(ctx, w, h, n, llavor) {
         y -= bh;
     }
 }
+
+// ---------- HALL DEL MONESTIR ----------
+// Lloses de pedra clara en damer, amb rejuntat i desgast (peça repetible 128x128)
+function pintarLosesHall(ctx, w, h) {
+    const r = rndBib(33), m = w / 2;
+    ctx.fillStyle = '#4a4034'; ctx.fillRect(0, 0, w, h);
+    for (let by = 0; by < 2; by++) for (let bx = 0; bx < 2; bx++) {
+        const clara = (bx + by) % 2 === 0, t = clara ? 1 : 0.78;
+        const x = bx * m + 2, y = by * m + 2, s = m - 4;
+        ctx.fillStyle = gradVBib(ctx, y, y + s, [[0, `rgb(${Math.round(196 * t)},${Math.round(184 * t)},${Math.round(160 * t)})`], [1, `rgb(${Math.round(176 * t)},${Math.round(164 * t)},${Math.round(142 * t)})`]]);
+        ctx.fillRect(x, y, s, s);
+        ctx.fillStyle = 'rgba(255,248,225,0.2)'; ctx.fillRect(x, y, s, 2); ctx.fillRect(x, y, 2, s);
+        ctx.fillStyle = 'rgba(40,28,14,0.22)'; ctx.fillRect(x, y + s - 2, s, 2); ctx.fillRect(x + s - 2, y, 2, s);
+        for (let k = 0; k < 14; k++) { ctx.fillStyle = r() < 0.5 ? 'rgba(60,44,26,0.12)' : 'rgba(255,245,220,0.1)'; ctx.fillRect(x + r() * s, y + r() * s, 3 + r() * 9, 1.4); }
+        if (r() < 0.6) { ctx.strokeStyle = 'rgba(50,36,20,0.4)'; ctx.lineWidth = 0.9; ctx.beginPath(); const cx = x + 8 + r() * (s - 16), cy = y + 8 + r() * (s - 16); ctx.moveTo(cx, cy); ctx.lineTo(cx + 8 + r() * 10, cy + 4 + r() * 8); ctx.lineTo(cx + 14 + r() * 10, cy + 6 + r() * 12); ctx.stroke(); }
+    }
+}
+
+// Candelabre alt de llautó amb tres espelmes encesas
+function pintarCandelabreHall(ctx, w, h) {
+    const cx = w / 2;
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(cx, h - 5, 17, 5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 2;
+    ctx.fillStyle = gradHBib(ctx, cx - 14, cx + 14, [[0, '#e0bc58'], [0.5, '#c8a040'], [1, '#6a4e14']]);
+    ctx.beginPath(); ctx.moveTo(cx - 14, h - 6); ctx.quadraticCurveTo(cx - 12, h - 18, cx - 4, h - 22); ctx.lineTo(cx + 4, h - 22); ctx.quadraticCurveTo(cx + 12, h - 18, cx + 14, h - 6); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = gradHBib(ctx, cx - 4, cx + 4, [[0, '#e0bc58'], [1, '#6a4e14']]);
+    ctx.fillRect(cx - 3, 34, 6, h - 56); ctx.strokeRect(cx - 3, 34, 6, h - 56);
+    [[h - 40, 12], [h - 56, 9], [h - 72, 11]].forEach(([y, ww]) => { ctx.beginPath(); ctx.ellipse(cx, y, ww / 2 + 2, 3.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+    ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(cx - 17, 24); ctx.quadraticCurveTo(cx - 17, 38, cx, 38); ctx.quadraticCurveTo(cx + 17, 38, cx + 17, 24); ctx.stroke();
+    ctx.strokeStyle = '#c8a040'; ctx.lineWidth = 2.6; ctx.stroke();
+    [-17, 0, 17].forEach((dx, i) => {
+        const y = i === 1 ? 20 : 26;
+        ctx.fillStyle = '#c8a040'; ctx.fillRect(cx + dx - 5, y + 2, 10, 4); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.4; ctx.strokeRect(cx + dx - 5, y + 2, 10, 4);
+        ctx.fillStyle = '#f2e6c8'; ctx.fillRect(cx + dx - 2.6, y - 12, 5.2, 14); ctx.strokeRect(cx + dx - 2.6, y - 12, 5.2, 14);
+        ctx.fillStyle = '#ffc040'; ctx.beginPath(); ctx.ellipse(cx + dx, y - 17, 2.6, 4.6, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#fff4c0'; ctx.beginPath(); ctx.ellipse(cx + dx, y - 16, 1.1, 2.2, 0, 0, Math.PI * 2); ctx.fill();
+    });
+}
+
+// Penó de tela vermella amb creu daurada, penjat d'una barra de fusta amb borles
+function pintarBannerHall(ctx, w, h) {
+    const cx = w / 2;
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 2;
+    ctx.fillStyle = gradHBib(ctx, 0, w, [[0, '#8a2430'], [0.5, '#a82e3a'], [1, '#6a1a24']]);
+    ctx.beginPath(); ctx.moveTo(6, 10); ctx.lineTo(w - 6, 10); ctx.lineTo(w - 6, h - 28); ctx.lineTo(cx, h - 8); ctx.lineTo(6, h - 28); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = '#d4a840'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(11, 16); ctx.lineTo(w - 11, 16); ctx.lineTo(w - 11, h - 32); ctx.lineTo(cx, h - 16); ctx.lineTo(11, h - 32); ctx.closePath(); ctx.stroke();
+    ctx.fillStyle = '#d4a840'; ctx.fillRect(cx - 3.4, 30, 6.8, 62); ctx.fillRect(cx - 17, 46, 34, 6.8);
+    ctx.strokeStyle = 'rgba(40,10,10,0.35)'; ctx.lineWidth = 1; for (let y = 22; y < h - 30; y += 12) { ctx.beginPath(); ctx.moveTo(8, y); ctx.lineTo(w - 8, y + 2); ctx.stroke(); }
+    ctx.fillStyle = gradVBib(ctx, 2, 12, [[0, '#8a5a2c'], [1, '#4a2a14']]); ctx.fillRect(0, 4, w, 8); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 2; ctx.strokeRect(0, 4, w, 8);
+    ctx.fillStyle = '#d4a840'; [2, w - 2].forEach(x => { ctx.beginPath(); ctx.arc(x, 8, 3.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+}

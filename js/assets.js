@@ -756,6 +756,9 @@ const Grafics = {
         crea('catifa_biblio', 160, 640, pintarCatifaBiblio);
         crea('parquet_biblio', 64, 64, pintarParquetBiblio);
         crea('paret_biblio', 984, 214, pintarParetBiblio);
+        crea('lloses_hall', 128, 128, pintarLosesHall);
+        crea('candelabre_hall', 44, 112, pintarCandelabreHall);
+        crea('banner_hall', 60, 150, pintarBannerHall);
         // Barril de fusta amb cèrcols de ferro, dogues i tapa
         crea('barril', 64, 84, pintarBarril);
         // Gerros i pots de l'estanteria: àmfora d'argila, pot amb tap de suro i ampolla de vidre
