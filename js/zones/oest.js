@@ -63,6 +63,11 @@ class ZonaRovellonera extends ZonaBase {
         // Rovellons sota els pins, al costat de la sortida correcta
         const D = ROV_SEQ[pas];
         if (D) this.rovellons(D);
+        // Pista: en cada clariana, una sola vegada, es recorda que els rovellons marquen la sortida bona
+        if (D && !Estat.flag('rovPista' + pas)) {
+            Estat.posaFlag('rovPista' + pas);
+            this.time.delayedCall(1000, () => this.ui().notifica(pas === 0 ? 'Els rovellons creixen vora la sortida bona...' : 'Segueix els rovellons: assenyalen el camí'));
+        }
         this.hintLlanterna = Estat.te('llanterna');
 
         // Sortides
@@ -101,8 +106,10 @@ class ZonaRovellonera extends ZonaBase {
     rovellons(D) {
         const base = { N: [800, 190], S: [800, 910], W: [190, 550], E: [1410, 550] }[D];
         this.rovelloGrup = [];
+        const halo = this.add.ellipse(base[0], base[1] + 10, 220, 90, 0xffd890, 0.22).setDepth(base[1] - 2).setBlendMode('ADD');
+        this.tweens.add({ targets: halo, alpha: 0.08, yoyo: true, repeat: -1, duration: 900 });
         [[-70, 0], [70, 10], [0, 40], [-30, -30], [40, -25]].forEach(([dx, dy]) => {
-            const r = this.add.image(base[0] + dx, base[1] + dy, 'rovello').setScale(0.5).setDepth(base[1] + dy).setAlpha(0.55);
+            const r = this.add.image(base[0] + dx, base[1] + dy, 'rovello').setScale(0.5).setDepth(base[1] + dy).setAlpha(0.9);
             this.tweens.add({ targets: r, scale: 0.55, yoyo: true, repeat: -1, duration: 900 + dx });
             this.rovelloGrup.push(r);
         });

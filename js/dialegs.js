@@ -271,9 +271,10 @@ const DIALEGS = {
                 pagines: [
                     { qui: 'Pare Daniel', text: 'Ineu! Quina alegria de veure\'t! Vine, vine, que dirigeixo el cor i necessito una veu més.' },
                     { qui: 'Pare Daniel', text: 'La Pianista i jo som amics de tota la vida. Ella toca com ningú, i jo... jo només canto i faig el ximple amb els nens. Però la música es queda sense orgue, ja ho veus.' },
-                    { qui: 'Pare Daniel', text: 'No et preocupis: si la música s\'ha amagat, la cantarem perquè torni! Riure és la primera pregària.' }
+                    { qui: 'Pare Daniel', text: 'No et preocupis: si la música s\'ha amagat, la cantarem perquè torni! Riure és la primera pregària.' },
+                    { qui: 'Pare Daniel', text: 'Ah, i una cosa que em preocupa: el rellotge del campanar s\'ha aturat a les tres i quart, la nit que va arribar la boira. La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' }
                 ],
-                enAcabar: () => E.posaFlag('parlatDaniel')
+                enAcabar: () => { E.posaFlag('parlatDaniel'); E.posaFlag('rellotgeDit'); }
             };
         }
         if (!E.te('clau_sagrari') && !E.flag('fragment2') && (E.flag('fragment1') || E.flag('sagrariVist'))) {
@@ -772,7 +773,7 @@ const DIALEGS = {
                 ],
                 enAcabar: () => {
                     E.dona('telescopi'); E.posaFlag('telescopi'); E.treu('cristall_gel');
-                    E.posaObjectiu('Porta el telescopi als Dipòsits (Rovellonera: sud, ponent i sud; Sant Gabriel; i a llevant) i munta\'l al mirador.');
+                    E.posaObjectiu('Porta el telescopi als Dipòsits (Rovellonera: sud, ponent i sud, seguint els rovellons; Sant Gabriel; i a llevant) i munta\'l al mirador.');
                 }
             };
         }
@@ -1095,7 +1096,10 @@ const DIALEGS = {
             };
         }
         if (n < 2) {
-            return { pagines: [{ qui: "Nena de les Trenes", text: "Has trobat " + n + " dels 2 llaços? Un és pel camí, sota una roca que cal empènyer... i l'altre, més endins, darrere un arbust, entre els pins. Jo m'espero." }] };
+            const pista = n === 0 ? "Un és pel camí, sota una roca que cal empènyer... i l'altre, més endins, darrere un arbust, entre els pins."
+                : E.flag("llac1") ? "El del camí ja el tens! Falta el de dins el bosc dels rovellons, a la primera clariana, darrere un arbust espès: amb unes tisores el podaràs."
+                : "El del bosc ja el tens! Falta el del camí, sota una roca grossa a la vora: empeny-la.";
+            return { pagines: [{ qui: "Nena de les Trenes", text: "Has trobat " + n + " dels 2 llaços. " + pista + " Jo m'espero." }] };
         }
         return {
             pagines: [
@@ -1118,7 +1122,7 @@ const DIALEGS = {
         enAcabar: () => {
             E.posaFlag("llac" + k); E.dona("llac_nena");
             const n = ["llac1", "llac2"].filter(f => E.flag(f)).length;
-            E.posaObjectiu(n < 2 ? "Troba el segon llaç de la Nena de les Trenes (" + n + "/2)." : "Ja tens els dos llaços: porta-los a la Nena de les Trenes, a la corba del camí.");
+            E.posaObjectiu(n < 2 ? (k === 1 ? "Troba el segon llaç de la Nena de les Trenes (1/2): és a la primera clariana de la Rovellonera, darrere un arbust espès (cal podar-lo)." : "Troba el segon llaç de la Nena de les Trenes (1/2): és pel camí, sota una roca grossa que cal empènyer.") : "Ja tens els dos llaços: porta-los a la Nena de les Trenes, a la corba del camí.");
         }
     }),
 
