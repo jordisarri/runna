@@ -459,7 +459,7 @@ class ZonaSantAntoni extends ZonaBase {
             nom: 'Cel·les de Sant Antoni',
             amplada: 1400,
             alcada: 1100,
-            entrades: { monestir: { x: 60, y: 880, dir: 'dreta' } }
+            entrades: { monestir: { x: 60, y: 880, dir: 'dreta' }, cela: { x: 549, y: 800, dir: 'avall' } }
         });
     }
 
@@ -469,9 +469,12 @@ class ZonaSantAntoni extends ZonaBase {
         this.terra('pedra', 420, 770, 260, 60);            // replà davant la porta
 
         // La casa (900 d'ample): la porta, un pèl més alta que l'Ineu, és al 33% de l'ample, a x≈545
-        const sa = this.posar('cel_stantoni', 700, 760, { col: { w: 880, h: 90 } });
+        const sa = this.posar('cel_stantoni', 700, 760);
+        this.colisio((260 + 503) / 2, 715, 503 - 260, 90);          // façana a banda i banda de la porta (503-595)
+        this.colisio((595 + 1140) / 2, 715, 1140 - 595, 90);
         this.blocDarrere(700, 880, 670, Math.max(0, 760 - sa.displayHeight));
-        this.interactiu(545, 785, 80, DIALEGS.cel_stantoni, { altura: 150 });
+        this.sortida(503, 738, 92, 32, 'ZonaCelaStAntoni', 'porta');
+        this.portaAnimada({ x: 549, top: 600, bottom: 755, ample: 92, fons: 761, color: 0x5a3a20, panell: 0x6a4628, vora: 0x2a1608, ferro: true });   // la porta de la cel·la, de fusta amb ferros
 
         this.npc('germa_francesc', 1010, 870, DIALEGS.germaFrancesc, { flipX: true });
         this.cartell(170, 800, () => ({ pagines: [{ qui: '', text: '← El Monestir i la Plaça' }] }));

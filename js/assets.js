@@ -757,6 +757,18 @@ const Grafics = {
         crea('parquet_biblio', 64, 64, pintarParquetBiblio);
         crea('paret_biblio', 984, 214, pintarParetBiblio);
         crea('lloses_rebedor', 128, 128, pintarLosesRebedor);
+        // Cel·la de Sant Antoni (js/dibuixos_cela.js)
+        crea('paret_cela', 760, 200, pintarParetCela);
+        crea('llar_cela', 200, 170, pintarLlarCela);
+        crea('llit_cela', 120, 180, pintarLlitCela);
+        crea('taula_cela', 120, 90, pintarTaulaCela);
+        crea('cadira_cela', 48, 70, pintarCadiraCela);
+        crea('finestra_cela', 80, 110, pintarFinestraCela);
+        crea('prestatge_cela', 130, 100, pintarPrestatgeCela);
+        crea('creu_cela', 36, 60, pintarCreuCela);
+        crea('habit_cela', 60, 110, pintarHabitCela);
+        crea('estora_cela', 230, 110, pintarEstoraCela);
+        crea('cofre_cela', 90, 56, pintarCofreCela);
         crea('candelabre_hall', 44, 112, pintarCandelabreHall);
         crea('banner_hall', 60, 150, pintarBannerHall);
         // Barril de fusta amb cèrcols de ferro, dogues i tapa
