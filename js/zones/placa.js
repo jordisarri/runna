@@ -80,8 +80,7 @@ class ZonaPlaca extends ZonaBase {
         this.sortida(1586, 530, 14, 150, 'ZonaMonestir', 'placa');
 
         // Visitants corromputs per la boira
-        this.enemic('visitant', 520, 900);
-        this.enemic('visitant', 880, 960);
+        this.enemic('visitant', 700, 930);
         this.enemic('escolopendra', 1450, 800);
 
         // Vel lila: el santuari està tocat per la boira

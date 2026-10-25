@@ -30,7 +30,7 @@ class ZonaCami extends ZonaBase {
             this.interactiu(x, y + 6, 85, DIALEGS.columna(i + 1), { altura: 120 });
         }
 
-        [[700, 450], [1250, 450], [1700, 430], [2200, 450], [2500, 460]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[700, 450], [1250, 450], [1950, 440], [2500, 460]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         this.cartell(2650, 560, DIALEGS.cartellCami);
         // Mur d'arbres del nord: només a x=1380 hi ha dos arbres més separats, i per aquí es puja a la cabana (sense marcar-ho)
         this.muralla(0, 140, 1280, 140, 128);

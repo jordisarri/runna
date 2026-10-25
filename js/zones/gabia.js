@@ -214,7 +214,7 @@ class ZonaGirgoles extends ZonaBase {
         }
 
         // Ratpenats de boira que pengen de la volta
-        [[420, 520], [980, 560], [360, 900], [1020, 980], [700, 360]].forEach(([x, y]) => { const e = this.enemic('ratpenat', x, y); if (e) e.estat = 'penja'; });
+        [[420, 520], [980, 560], [360, 900], [1020, 980]].forEach(([x, y]) => { const e = this.enemic('ratpenat', x, y); if (e) e.estat = 'penja'; });
 
         this.foscor = crearFoscor(this, W, H);
         this.sortida(650, 130, 100, 30, 'ZonaTortura', 'girgoles');
@@ -380,7 +380,7 @@ class ZonaTortura extends ZonaBase {
         this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x1a0a20, 0.3).setScrollFactor(0).setDepth(90000);
 
         // Ferralla viva: les eines dels torturadors s'aixequen i barren el pas
-        [[330, 1420], [580, 1300], [420, 860], [580, 1020], [350, 640]].forEach(([x, y]) => this.enemic('ferralla', x, y));
+        [[330, 1420], [580, 1300], [420, 860], [350, 640]].forEach(([x, y]) => this.enemic('ferralla', x, y));
 
         this.sortida(390, 120, 120, 30, 'ZonaGabia', 'tortura');
         this.sortida(410, H - 22, 80, 14, 'ZonaGirgoles', 'tortura');

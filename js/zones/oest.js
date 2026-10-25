@@ -219,7 +219,7 @@ class ZonaCamiRov extends ZonaBase {
             'Una roca grossa a la vora del camí, amb l\'herba aixafada al voltant. Sota seu hi brilla una cosa rosada.');
 
         // Animalets i bolets
-        [[2400, 320], [1500, 670], [1000, 660], [400, 1200], [500, 1230]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[2400, 320], [1500, 670], [1000, 660], [450, 1210]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         [[2100, 620], [1200, 460], [700, 1060]].forEach(([x, y]) => this.enemic('bolet', x, y));
 
         this.boira(900, 900, 400, 160, 1);

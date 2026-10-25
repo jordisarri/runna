@@ -70,7 +70,6 @@ class ZonaRuines extends ZonaBase {
         // Animalets del cementiri esquerdat
         this.enemic('escolopendra', 300, 1010);
         this.enemic('escolopendra', 1350, 620);
-        this.enemic('escolopendra', 1300, 800);
         this.sortida(700, 1086, 200, 14, 'ZonaPlaca', 'ruines');
         this.sortida(700, 0, 200, 14, 'ZonaCelles', 'ruines');
         this.sortida(0, 850, 14, 130, 'ZonaCami', 'runes');
@@ -882,7 +881,7 @@ class ZonaBosc extends ZonaBase {
             }
         }
 
-        [[600, 400], [1300, 300], [1200, 900], [450, 560], [1550, 450]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[600, 400], [1300, 300], [1200, 900], [1550, 450]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         // Amagatall tancat amb esbarzers negres (cal Runna): un cofre
         for (let i = 0; i < 6; i++) {
             const a = i / 6 * Math.PI * 2;

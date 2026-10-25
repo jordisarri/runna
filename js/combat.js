@@ -104,7 +104,7 @@ const ENEMICS = {
     },
 
     gripau: {
-        tex: 'gripau', vida: 3, vel: 250, mal: 1, radi: 22, cos: [36, 22], ombra: 0.38,
+        tex: 'gripau', vida: 2, vel: 250, mal: 1, radi: 22, cos: [36, 22], ombra: 0.38,
         monedes: [0.6, 1, 2], cor: 0.12,
         // Només fa mal mentre salta; en aterrar queda quiet i vulnerable
         perill: e => e.estat === 'salt',
@@ -112,7 +112,7 @@ const ENEMICS = {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
             if (e.estat === 'salt') {
-                if (ara > e.fins) { e.estat = 'repos'; e.fins = ara + 900; e.spr.body.setVelocity(0); e.spr.setScale(e.escalaBase); }
+                if (ara > e.fins) { e.estat = 'repos'; e.fins = ara + 1150; e.spr.body.setVelocity(0); e.spr.setScale(e.escalaBase); }
                 return;
             }
             e.spr.body.setVelocity(0);
@@ -392,7 +392,7 @@ const ENEMICS = {
 
     // Ratpenat de boira (Gírgoles): penja quiet a la foscor; quan l'Ineu s'acosta, baixa fent ziga-zaga, i després s'enlaira
     ratpenat: {
-        tex: 'ratpenat', vida: 1, vel: 190, mal: 1, radi: 20, cos: [34, 20], ombra: 0.2, centrat: true,
+        tex: 'ratpenat', vida: 2, vel: 190, mal: 1, radi: 20, cos: [34, 20], ombra: 0.2, centrat: true,
         monedes: [0, 0, 0], cor: 0,
         perill: e => e.estat === 'ataca',
         ia(z, e, ara) {
@@ -421,7 +421,7 @@ const ENEMICS = {
 
     // Ferralla viva (passadís de tortura): eines rovellades que s'ajunten i avancen a salts, fent soroll de ferro
     ferralla: {
-        tex: 'ferralla', vida: 2, vel: 230, mal: 1, radi: 26, cos: [44, 22], ombra: 0.4,
+        tex: 'ferralla', vida: 4, vel: 230, mal: 1, radi: 26, cos: [44, 22], ombra: 0.4,
         monedes: [0, 0, 0], cor: 0,
         perill: e => e.estat === 'salta',
         ia(z, e, ara) {
@@ -903,8 +903,20 @@ Object.assign(ZonaBase.prototype, {
         this.ui().actualitzarHUD();
         this.time.delayedCall(900, () => this.ui().obrirDialeg(DIALEGS.andreuDerrotat(Estat), () => {
             this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
+            this.granRosari('pastorGra', 'Pastor de Boira vençut');
             Estat.desar();
         }));
+    },
+
+    // Un gra més al rosari (un cor més) com a premi, una sola vegada per cada 'flag'. Cura del tot.
+    granRosari(flag, motiu) {
+        if (Estat.flag(flag)) return false;
+        Estat.posaFlag(flag);
+        Estat.dades.corsMax += 1; Estat.dades.vida = Estat.dades.corsMax * 2;
+        const ui = this.ui(); ui.actualitzarHUD(); ui.notifica('+1 gra al rosari: ' + motiu);
+        Sfx.cura();
+        this.llum(this.ineu.x, this.ineu.y - 70, 0xf0c040);
+        return true;
     },
 
     // ---------------- Dany al jugador ----------------

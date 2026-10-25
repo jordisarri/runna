@@ -219,7 +219,6 @@ class ZonaMonestir extends ZonaBase {
 
         this.enemic('visitant', 1100, 700 + D);
         this.enemic('escolopendra', 400, 700 + D);
-        this.enemic('escolopendra', 1200, 360 + D);
         this.sortida(0, 450 + D, 14, 140, 'ZonaPlaca', 'monestir');
         this.sortida(1400, 0, 160, 14, 'ZonaCementiri', 'monestir');
         this.sortida(1586, 490 + D, 14, 140, 'ZonaSantAntoni', 'monestir');
@@ -271,7 +270,7 @@ class ZonaCreu extends ZonaBase {
         // en surten de nous de la bassa. Quan la boira se'n va (aigua neta) ja no en surten més.
         this.propGripau = this.time.now + 2500;
         if (!Estat.flag('bassadoriaNeta')) {
-            [[560, 600], [900, 560], [1330, 620], [420, 560], [640, 830], [1420, 760], [1180, 300], [260, 760]].forEach(([x, y]) => this.enemic('gripau', x, y));
+            [[560, 600], [1330, 620], [640, 830], [1180, 300]].forEach(([x, y]) => this.enemic('gripau', x, y));
         }
         this.sortida(1100, 0, 160, 14, 'ZonaPlaca', 'creu');
 
@@ -299,8 +298,8 @@ class ZonaCreu extends ZonaBase {
     actualitzar(ara) {
         if (Estat.flag('bassadoriaNeta') || ara < this.propGripau) return;
         const vius = this.enemics.filter(e => e.tipus === 'gripau' && !e.mort).length;
-        if (vius >= 8) return;
-        this.propGripau = ara + 2200;
+        if (vius >= 5) return;
+        this.propGripau = ara + 3800;
         // Surt de la bassa d'un salt i s'escampa per l'escena
         const sx = 880 + Math.random() * 260, sy = 850;
         let dx, dy, intents = 0;

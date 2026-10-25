@@ -136,7 +136,7 @@ Object.assign(DIALEGS, {
 
 // ---------------- BOSS: L'HOME DEL RAÏM VIU ----------------
 ENEMICS.raim = {
-    tex: 'home_raim', vida: 12, vel: 300, mal: 1, radi: 30, cos: [50, 24], ombra: 0.5,
+    tex: 'home_raim', vida: 16, vel: 300, mal: 1, radi: 30, cos: [50, 24], ombra: 0.5,
     monedes: [1, 20, 20], cor: 0, robust: true,
     perill: e => e.estat === 'carrega',
     ia(z, e, ara) {
@@ -387,6 +387,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.tweens.add({ targets: e.spr, angle: 70, duration: 400 });
         this.time.delayedCall(900, () => this.ui().obrirDialeg(DIALEGS.raimDerrotat, () => {
             this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
+            this.granRosari('raimGra', "Home del Raïm vençut");
             this.runes();
             this.trapa.setVisible(true);
             Estat.posaObjectiu("Baixa per la trapa de sota l'escalinata, a la cripta dels monjos.");

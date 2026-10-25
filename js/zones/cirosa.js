@@ -106,7 +106,7 @@ class ZonaCamiCirosa extends ZonaBase {
             const o = this.posar('ovella', x, y, { fonsY: y });
             this.tweens.add({ targets: o, y: y - 5, yoyo: true, repeat: -1, duration: 800 + i * 140, delay: i * 200 });
         });
-        [[700, 2000], [330, 1500], [900, 1200], [560, 560]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[700, 2000], [330, 1500], [560, 560]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         // Flors de pastura i pedres a la vora del camí
         [[640, 1990], [340, 1650], [940, 1330], [440, 1180], [1000, 650], [560, 620], [430, 250], [640, 150]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
 

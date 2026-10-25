@@ -83,7 +83,7 @@ class ZonaCementiri extends ZonaBase {
 
         // Animalets que surten de la terra esquerdada
         if (!tancada) {
-            [[420, 450], [900, 450], [540, 880], [1200, 470], [300, 870]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+            [[420, 450], [900, 450], [1200, 470], [300, 870]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
             this.enemic('visitant', 1100, 800);
         }
 
