@@ -75,8 +75,8 @@ const PROGRES = {
         { id: 'runna', marca: ['runna', 'obj:runna'], fet: E => E.flag('runna'),
           pista: E => "Amb l'Estel de Sant Llorenç, la boira del camí de llevant dels Dipòsits s'aparta. Al final hi ha el Dolmen: amb la Fulla, el Saber i la Benedicció, Runna es despertarà." },
         // ---- ACTE 3 ----
-        { id: 'josep', marca: ['josepVencut'], fet: E => E.flag('josepVencut'),
-          pista: E => "Al Celler, a les Runes, en Josep és el millor jugador de ping-pong. Allà els secrets es guanyen a la taula: parla amb en Josep i guanya-li el partit. (Com més d'hora prems, pitjor: espera que el cercle toqui l'anell.)" },
+        { id: 'josep', marca: ['josepVencut', 'obj:llanterna'], fet: E => E.flag('josepVencut'),
+          pista: E => "Al Celler, a les Runes, en Josep és el millor jugador de ping-pong. Allà els secrets es guanyen a la taula: parla amb en Josep i guanya-li el partit. (Quan la pilota bota i s'enlaira, espera que el cercle es posi verd i prem el carril de la pilota.)" },
         { id: 'frederic', marca: ['fredericRoda'], fet: E => E.flag('fredericRoda') || E.flag('rodaMoguda'),
           pista: E => "Ara que portes Runna... Al Celler, a les Runes, hi ha una roda de carruatge que amaga alguna cosa. El Frederic, el pare del Juli, en sap més del que diu. Parla-hi." },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
@@ -137,7 +137,7 @@ const PROGRES = {
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta el Cant de les Pedres." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
           pista: E => "La Nena de les Trenes, al camí de la Rovellonera, encara espera els seus dos llaços: un sota una roca del camí i l'altre darrere un arbust de la Rovellonera (cal podar-lo)." },
-        { id: 'llanterna', marca: ['missatgeDesxifrat', 'obj:llanterna'], obert: E => E.flag('visitada_ZonaCami'), fet: E => E.flag('missatgeDesxifrat'),
+        { id: 'llanterna', marca: ['missatgeDesxifrat', 'columnesGra'], obert: E => E.flag('visitada_ZonaCami'), fet: E => E.flag('missatgeDesxifrat'),
           pista: E => {
               const cols = Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).filter(Boolean).length;
               return cols < 12 ? "El camí de la Desaparició té dotze columnes, i cada una t'explica una paraula (" + cols + "/12). Apunta-les totes!"

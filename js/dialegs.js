@@ -418,11 +418,12 @@ const DIALEGS = {
             { qui: 'Juli', text: 'HO SABIA! Efecte Magnus, Josep! Física pura!' },
             { qui: 'Frederic', text: 'Bon partit, noi. Ara sí: vine, que t\'he de dir una cosa.' },
             { fer: (z, fet) => z.seq([c => z.npcVa('josep', z.ineu.x + 60, z.ineu.y, c), c => z.objecteVola('josep', c)], fet) },
-            { qui: '', text: '+1 GRA AL ROSARI.' }
+            { qui: 'Josep', text: 'Pren-la. Al Celler en teníem per als passadissos dels monjos: allà baix hi fa una fosca que no perdona.' },
+            { qui: '', text: 'Has obtingut la LLANTERNA: hi veuràs millor a les zones fosques.' }
         ],
         enAcabar: () => {
             E.posaFlag('josepVencut');
-            E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
+            if (!E.te('llanterna')) { E.dona('llanterna'); E.posaFlag('llanterna'); }
             const ui = game.scene.getScene('UI'); if (ui) ui.actualitzarHUD();
             E.posaObjectiu(E.flag('runna') ? 'Parla amb el Frederic, al Celler: ara et dirà el que sap.' : 'Has guanyat en Josep. Segueix buscant Runna.');
         }
@@ -754,7 +755,7 @@ const DIALEGS = {
         if (totes) {
             pagines.push({ qui: 'Ineu', text: 'Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l\'alba.' });
             if (!E.flag('missatgeDesxifrat')) {
-                pagines.push({ qui: '', text: 'Al peu de la taula, dins d\'una nínxol, hi ha un fanalet vell.\nHas obtingut la LLANTERNA DE LA DESAPARICIÓ.' });
+                pagines.push({ qui: '', text: 'Al peu de la taula, dins d\'una nínxol, hi ha un gra de rosari d\'ambre.\n+1 GRA AL ROSARI.' });
             }
         } else {
             pagines.push({ qui: 'Ineu', text: 'Només entenc les paraules que he apuntat al camí. Els signes que em falten... són a les columnes.' });
@@ -763,7 +764,7 @@ const DIALEGS = {
             pagines,
             enAcabar: () => {
                 if (totes && !E.flag('missatgeDesxifrat')) {
-                    E.posaFlag('missatgeDesxifrat'); E.dona('llanterna'); E.posaFlag('llanterna');
+                    E.posaFlag('missatgeDesxifrat'); E.posaFlag('columnesGra'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
                     E.posaObjectiu('Els nens tornaran amb l\'alba: cal trobar Runna al Dolmen.');
                 }
             }
