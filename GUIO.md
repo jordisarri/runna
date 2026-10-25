@@ -222,11 +222,11 @@ S'obre amb el medalló del sarró (o **I**; **M** obre el mapa; **◀ ▶** canv
 |---|---|---|
 | Sopar del Til·ler | +1 | 4 |
 | **Pastor de Boira vençut** | +1 | 5 |
-| Partit contra en Josep | +1 | 6 |
-| Cofre de la cabana del Ciscu | +1 | 7 |
-| Cofre de la Cambra secreta | +1 | 8 |
-| **Home del Raïm vençut** | +1 | **9** |
-| Opcionals: cofre del Bosc, les tres monges (+1 cadascuna) | +4 | fins a 13 |
+| Cofre de la cabana del Ciscu | +1 | 6 |
+| Cofre de la Cambra secreta | +1 | 7 |
+| **Home del Raïm vençut** | +1 | **8** |
+| Opcionals: cofre del Bosc, les dotze columnes (provisional), les tres monges (+1 cadascuna) | +5 | fins a 13 |
+(En Josep ja no dona gra: dona la Llanterna.)
 
 **Enemics per zona** (les xifres són d'abans de la revisió → ara): Plaça 2 visitants + 1 escolopendra → 1 + 1; Monestir 1 visitant + 2 escolopendres → 1 + 1; Runes 3 → 2; Cementiri 5 + visitant → 4 + visitant; Camí de la Desaparició 5 → 4; Bosc 5 → 4; Camí de la Rovellonera 5 → 4; Camí de la Cirosa 4 → 3; **Bassadòria 8 gripaus → 4** (surten de nous, màxim 5 vius, cada 3,8 s); Gírgoles 5 ratpenats → 4; passadís de tortura 5 ferralles → 4.
 **Força:** gripau vida 3 → 2 (descansa més entre salts); ratpenat vida 1 → 2; ferralla vida 2 → 4; Home del Raïm vida 12 → 16.
