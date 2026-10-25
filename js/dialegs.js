@@ -610,7 +610,7 @@ const DIALEGS = {
         ],
         enAcabar: () => {
             E.posaFlag("bassadoriaNeta");
-            E.posaObjectiu("La Bassadòria és neta. Segueix investigant: les Tietes i el Gran Til·ler tenen més coses a dir.");
+            E.posaObjectiu("La Bassadòria és neta. Segueix investigant: les Tietes, a les Cel·les, et diran per on continuar.");
         }
     }),
 
@@ -630,7 +630,7 @@ const DIALEGS = {
                 ],
                 enAcabar: () => {
                     E.posaFlag('fontNeta'); E.treu('pruna'); E.dona('aigua_sj'); E.dona('cristall_gel'); E.posaFlag('cristallGel');
-                    E.posaObjectiu('Porta el Cristall de Gel al Garf, a l\'Era (camí de la Desaparició).');
+                    E.posaObjectiu('Porta l\'aigua de la Font del Bisbe a l\'Alzina Buida, la més grossa del bosc. (I guarda el Cristall de Gel: el Garf, a l\'Era, en sabrà fer alguna cosa.)');
                 }
             };
         }

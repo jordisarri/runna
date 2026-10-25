@@ -123,7 +123,8 @@ const PROGRES = {
         { id: 'nens', marca: ['rescatUri', 'rescatFlam', 'rescatSardin'], fet: E => E.flag('rescatUri') && E.flag('rescatFlam') && E.flag('rescatSardin'),
           pista: E => "La gàbia és oberta. Trenca amb Runna els capolls de boira on dormen l'Uri, el Flam i el Sardin." },
         { id: 'final', marca: ['andreuTancat', 'epilegFet'], fet: E => E.flag('epilegFet'),
-          pista: E => "Els nens tornen a riure. Al Santuari t'esperen tots." }
+          pista: E => E.flag('andreuTancat') ? "Els nens tornen a riure. Al Santuari t'esperen tots."
+              : "Els tres nens són lliures. Torna a la Sala de la Gàbia: encara t'esperen allà." }
     ],
 
     // Missions laterals: no barren el camí. Les Tietes les recorden quan ja s'han pogut començar.
