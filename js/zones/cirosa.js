@@ -5,17 +5,6 @@
 
 // Diàlegs propis de la Cirosa
 Object.assign(DIALEGS, {
-    cartellCirosaCami: n => E => ({ pagines: [{ qui: '', text: [
-        'La Cirosa, a dalt. Camí llarg: porta aigua i no et fiïs de les ovelles que no bessen.',
-        'Un cartell de fusta, gastat pel vent: «Cirosa: tres revoltes més. Qui torna, ho fa per aquí mateix.»',
-        'Un cartell clavat entre dues pedres: «Ramat de la Cirosa. Si sents una esquella, no la segueixis.»'
-    ][n] }] }),
-
-    pouCirosa: E => ({ pagines: [
-        { qui: '', text: "Un pou de pedra baix, amb una corriola de fusta i un poal penjat d'una corda. L'aigua del fons és clara i molt freda." },
-        { qui: '', text: E.flag('pastorVencut') ? "Beus un glop. Té gust de pedra i de neu. Aquí la boira ja no arriba." : "Beus un glop. Té gust de pedra i de neu... i, al fons, d'un regust lila que no t'agrada gens." }
-    ] }),
-
     bancCami: E => ({ pagines: [{ qui: '', text: "Un banc de pedra a la vora del camí, amb una creu petita gravada al respatller: «Descansa, pelegrí.» Hi seus una estona i els peus et ho agraeixen." }],
         enAcabar: () => game.scene.getScene('ZonaCamiCirosa').descansar() }),
 
@@ -93,9 +82,6 @@ class ZonaCamiCirosa extends ZonaBase {
         [[560, 1980], [880, 2050], [270, 1600], [480, 1330], [930, 1100], [1060, 800], [440, 760], [700, 300]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 70, h: 26 } }));
 
         // Cartells a cada tram del camí i un banc de pedra a mig pujar (hi reposes i es desa la partida)
-        this.cartell(780, 2090, DIALEGS.cartellCirosaCami(0));
-        this.cartell(350, 1715, DIALEGS.cartellCirosaCami(1));
-        this.cartell(900, 1440, DIALEGS.cartellCirosaCami(2));
         this.posar('banc', 560, 1228, { col: { w: 130, h: 22 } });
         this.interactiu(560, 1238, 95, DIALEGS.bancCami, { altura: 70 });
 
@@ -203,7 +189,6 @@ class ZonaCirosa extends ZonaBase {
         g.fillStyle(0x5a3a1e, 1).fillRect(x - 36, y - 98, 6, 62).fillRect(x + 30, y - 98, 6, 62).fillRect(x - 38, y - 100, 76, 6);
         g.fillStyle(0x4a2c14, 1).fillRect(x - 3, y - 94, 6, 26).fillRect(x - 6, y - 70, 12, 10);
         this.colisio(x, y - 10, 80, 26);
-        this.interactiu(x, y + 6, 90, DIALEGS.pouCirosa, { altura: 100 });
     }
 
     // Bala de palla rodona
