@@ -39,40 +39,23 @@ class ZonaBiblioteca extends ZonaBase {
 
     construir() {
         const A = 1100, H = 900;
-        // Terra de rajola de fang i catifa llarga
-        this.terra('rajola', 100, 40, 900, 860, -1100).setTint(0xb87a50);
-        const cat = this.add.graphics().setDepth(-1050);
-        cat.fillStyle(0x7a1e24, 1).fillRect(470, 230, 160, 640);
-        cat.lineStyle(4, 0xd4a640, 1).strokeRect(478, 238, 144, 624);
-        for (let y = 270; y < 860; y += 60) cat.fillStyle(0xd4a640, 0.6).fillPoints([{ x: 550, y }, { x: 566, y: y + 16 }, { x: 550, y: y + 32 }, { x: 534, y: y + 16 }], true);
+        // Parquet de roure en cistell i catifa llarga
+        this.terra('parquet_biblio', 100, 40, 900, 860, -1100);
+        this.add.image(470, 230, 'catifa_biblio').setOrigin(0).setScale(1 / RES).setDepth(-1050);
 
-        // Paret del fons: pedra amb dos vitralls apuntats i una prestatgeria a cada banda
-        const m = this.add.graphics().setDepth(-995);
-        m.fillStyle(0x120a04, 1).fillRect(58, 0, 984, 214);
-        m.fillStyle(0x6a5a48, 1).fillRect(60, 0, 980, 210);
-        m.lineStyle(1.2, 0x2a2014, 0.45);
-        for (let y = 26, f = 0; y < 210; y += 26, f++) { m.lineBetween(60, y, 1040, y); for (let x = 60 + (f % 2) * 35; x < 1040; x += 70) m.lineBetween(x, y, x, y - 26); }
-        m.fillStyle(0x3a2412, 1).fillRect(60, 196, 980, 18);
-        // Vitralls (arc apuntat amb plom i vidres de colors)
-        const vitrall = (cx) => {
-            const w = 110, top = 18, base = 170;
-            const forma = [{ x: cx - w / 2, y: base }, { x: cx - w / 2, y: top + 50 }, { x: cx, y: top }, { x: cx + w / 2, y: top + 50 }, { x: cx + w / 2, y: base }];
-            m.fillStyle(0x120a04, 1).fillPoints(forma.map(p => ({ x: p.x + (p.x < cx ? -8 : p.x > cx ? 8 : 0), y: p.y + (p.y === base ? 6 : -6) })), true);
-            const cols = [0x2a5ab8, 0xd8a030, 0xb83a3a, 0x3a9a5a, 0x7a4ab8, 0x2a8ab8];
-            for (let r = 0; r < 6; r++) for (let c = 0; c < 4; c++) {
-                const x = cx - w / 2 + c * w / 4, y = top + 30 + r * 24;
-                m.fillStyle(cols[(r + c * 2) % cols.length], 0.95).fillRect(x + 2, y, w / 4 - 4, 22);
-            }
-            m.fillStyle(0xd8a030, 1).fillCircle(cx, top + 40, 14).fillStyle(0xfff4c0, 1).fillCircle(cx, top + 40, 7);
-            m.lineStyle(3, 0x1a1008, 1).strokePoints(forma, true);
-        };
-        vitrall(330); vitrall(770);
-        this.interactiu(330, 240, 70, DIALEGS.vitrallBiblio, { altura: 200 });
-        this.interactiu(770, 240, 70, DIALEGS.vitrallBiblio, { altura: 200 });
+        // Paret del fons: pedra picada amb sòcol de fusta, dos vitralls apuntats i una prestatgeria a cada banda
+        this.add.image(58, 0, 'paret_biblio').setOrigin(0).setScale(1 / RES).setDepth(-995);
+        [330, 770].forEach(cx => {
+            this.add.image(cx, 194, 'vitrall_biblio').setOrigin(0.5, 1).setScale(1 / RES).setDepth(-990);
+            this.interactiu(cx, 240, 70, DIALEGS.vitrallBiblio, { altura: 200 });
+        });
         // Feixos de llum de colors que baixen fins al terra
         [330, 770].forEach((cx, i) => {
             const f = this.add.graphics().setDepth(-900).setBlendMode('ADD');
-            [[0x2a5ab8, -30], [0xd8a030, 0], [0xb83a3a, 30]].forEach(([c, dx]) => f.fillStyle(c, 0.07).fillPoints([{ x: cx + dx - 20, y: 175 }, { x: cx + dx + 20, y: 175 }, { x: cx + dx + 70, y: 560 }, { x: cx + dx - 10, y: 560 }], true));
+            [[0x2a5ab8, -30], [0xd8a030, 0], [0xb83a3a, 30]].forEach(([c, dx]) => {          // cada feix s'esvaeix cap al terra
+                f.fillGradientStyle(c, c, c, c, 0.1, 0.1, 0, 0).fillTriangle(cx + dx - 20, 175, cx + dx + 20, 175, cx + dx + 70, 560);
+                f.fillGradientStyle(c, c, c, c, 0.1, 0, 0, 0).fillTriangle(cx + dx - 20, 175, cx + dx + 70, 560, cx + dx + 30, 560);
+            });
             this.tweens.add({ targets: f, alpha: 0.65, yoyo: true, repeat: -1, duration: 3000 + i * 700, ease: 'Sine.easeInOut' });
         });
         // Pols que balla dins la llum
@@ -82,90 +65,31 @@ class ZonaBiblioteca extends ZonaBase {
             scale: { start: 0.12, end: 0 }, alpha: { start: 0.7, end: 0 }, tint: [0xfff0c0, 0xd8e0ff], frequency: 180, blendMode: 'ADD'
         }).setDepth(9000);
 
-        // Prestatgeries plenes de llibres de colors (paret del fons i laterals)
-        const llibres = (g, x, y, w, files, llavor) => {
-            let l = llavor; const r = () => (l = l * 16807 % 2147483647) / 2147483647;
-            const cols = [0x7a1e24, 0x2a4a7a, 0x3a6a3a, 0x8a6a2a, 0x5a3a6a, 0x9a5a2a, 0x2a2a2a, 0xc8b080];
-            g.fillStyle(0x2a1608, 1).fillRect(x - 6, y - 6, w + 12, files * 46 + 12);
-            for (let f = 0; f < files; f++) {
-                const yb = y + f * 46 + 40;
-                g.fillStyle(0x4a2c14, 1).fillRect(x - 6, yb, w + 12, 6);
-                g.fillStyle(0x140a04, 1).fillRect(x, yb - 40, w, 40);
-                for (let bx = x + 2; bx < x + w - 8;) {
-                    const bw = 7 + r() * 9, bh = 26 + r() * 13, c = cols[Math.floor(r() * cols.length)];
-                    if (r() < 0.08) { g.fillStyle(c, 1).fillRect(bx, yb - 10, 26, 10); bx += 28; continue; }      // un llibre ajagut
-                    g.fillStyle(c, 1).fillRect(bx, yb - bh, bw, bh);
-                    g.fillStyle(0xd4a640, 0.7).fillRect(bx + 1, yb - bh + 5, bw - 2, 2).fillRect(bx + 1, yb - 8, bw - 2, 2);
-                    bx += bw + 1;
-                }
-            }
-        };
-        const pres = this.add.graphics().setDepth(-985);
-        llibres(pres, 110, 14, 150, 4, 3);
-        llibres(pres, 450, 14, 200, 3, 11);
-        llibres(pres, 880, 14, 150, 4, 17);
-        this.interactiu(185, 240, 80, DIALEGS.prestatgesBiblio(0), { altura: 200 });
-        this.interactiu(550, 240, 80, DIALEGS.prestatgesBiblio(1), { altura: 200 });
-        this.interactiu(955, 240, 80, DIALEGS.prestatgesBiblio(2), { altura: 200 });
-        // Prestatgeries laterals (de cantó), amb llibres vistos des de dalt
-        const lat = this.add.graphics().setDepth(-980);
-        [[60, 1], [1000, -1]].forEach(([x], s) => {
-            lat.fillStyle(0x2a1608, 1).fillRect(x, 220, 40, 600);
-            for (let y = 230; y < 810; y += 14) lat.fillStyle([0x7a1e24, 0x2a4a7a, 0x3a6a3a, 0x8a6a2a, 0x5a3a6a][(y / 14 + s) % 5 | 0], 1).fillRect(x + 6, y, 28, 11);
+        // Prestatgeries del fons: quatre estants de llibres fins al sostre
+        [['prestatge_a', 185, 0], ['prestatge_b', 550, 1], ['prestatge_c', 955, 2]].forEach(([k, x, n]) => {
+            this.add.image(x, 206, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(-985);
+            this.interactiu(x, 240, 80, DIALEGS.prestatgesBiblio(n), { altura: 200 });
         });
+        // Prestatgeries laterals (de cantó), pegades a les parets
+        this.add.image(60, 220, 'prestatge_lat_e').setOrigin(0).setScale(1 / RES).setDepth(-980);
+        this.add.image(1000, 220, 'prestatge_lat_d').setOrigin(0).setScale(1 / RES).setDepth(-980);
+
         // Prestatgeries lliures de terra a sostre, en dues files, que formen passadissos: la biblioteca és enorme
-        const prestatge = (x, base, w, files, llavor, n) => {
-            const alt = files * 46 + 6, y = base - alt;
-            const g = this.add.graphics().setDepth(base);
-            g.fillStyle(0x000000, 0.28).fillEllipse(x + w / 2, base + 4, w + 26, 16);
-            llibres(g, x, y, w, files, llavor);
-            g.fillStyle(0x4a2c14, 1).fillRect(x - 10, y - 14, w + 20, 10).lineStyle(2, 0x1a0c04, 1).strokeRect(x - 10, y - 14, w + 20, 10);
-            g.fillStyle(0x6a4224, 1).fillRect(x - 10, y - 14, w + 20, 3);
-            this.colisio(x + w / 2, base - 12, w + 12, 24);
-            this.interactiu(x + w / 2, base + 22, 70, DIALEGS.prestatgesBiblio(n), { altura: alt });
-        };
-        [[110, 540, 120, 31, 3], [880, 540, 110, 37, 4], [110, 700, 150, 41, 5], [280, 700, 120, 43, 3], [700, 700, 120, 47, 4], [850, 700, 150, 53, 5]].forEach(([x, base, w, llavor, n]) => prestatge(x, base, w, 3, llavor, n));
-        // Columnes de pedra que aguanten les voltes, a banda i banda de la catifa
-        const columna = (x, base) => {
-            const g = this.add.graphics().setDepth(base);
-            g.fillStyle(0x000000, 0.25).fillEllipse(x, base + 2, 70, 16);
-            g.fillStyle(0x9a8a70, 1).fillRect(x - 22, base - 16, 44, 16).fillRect(x - 15, base - 200, 30, 186).fillRect(x - 24, base - 214, 48, 16);
-            g.fillStyle(0xb8a888, 1).fillRect(x - 15, base - 200, 12, 186).fillRect(x - 24, base - 214, 48, 6);
-            g.fillStyle(0x6a5a44, 1).fillRect(x + 8, base - 200, 7, 186);
-            g.lineStyle(2.5, 0x1a1008, 1).strokeRect(x - 22, base - 16, 44, 16).strokeRect(x - 15, base - 200, 30, 186).strokeRect(x - 24, base - 214, 48, 16);
-            this.colisio(x, base - 8, 40, 18);
-        };
-        columna(430, 330); columna(670, 330); columna(440, 650); columna(660, 650);
-        // Arc apuntat de pedra entre les dues columnes del fons: el cor de la nau
-        const arc = this.add.graphics().setDepth(120);
-        const punts = [];
-        for (let k = 0; k <= 24; k++) { const t = k / 24, a2 = Math.PI * (1 - t) * 0.5; punts.push({ x: 430 + 120 * (1 - Math.cos(a2)) * 1 + 0, y: 118 - 100 * Math.sin(a2) * (1) }); }
-        const dreta = punts.map(q => ({ x: 1100 - q.x, y: q.y })).reverse();
-        const mig = punts.concat(dreta);
-        arc.lineStyle(14, 0x6a5a44, 1).strokePoints(mig, false);
-        arc.lineStyle(8, 0x9a8a70, 1).strokePoints(mig, false);
-        arc.lineStyle(2.5, 0x1a1008, 1).strokePoints(mig.map(q => ({ x: q.x, y: q.y - 7 })), false).strokePoints(mig.map(q => ({ x: q.x, y: q.y + 7 })), false);
-        // Piles de llibres a terra i dos faristols petits de lectura, amb la seva espelma
-        const pila = (x, y, n) => {
-            const g = this.add.graphics().setDepth(y), cols = [0x7a1e24, 0x2a4a7a, 0x3a6a3a, 0x8a6a2a, 0x5a3a6a];
-            g.fillStyle(0x000000, 0.25).fillEllipse(x, y + 2, 60, 12);
-            for (let k = 0; k < n; k++) g.fillStyle(cols[k % 5], 1).fillRect(x - 24 + (k % 2) * 4, y - 10 - k * 10, 46 - (k % 3) * 4, 10).lineStyle(1.5, 0x1a1008, 1).strokeRect(x - 24 + (k % 2) * 4, y - 10 - k * 10, 46 - (k % 3) * 4, 10);
-            this.colisio(x, y - 6, 48, 16);
-        };
-        pila(140, 800, 4); pila(960, 800, 5); pila(330, 590, 3); pila(780, 590, 4); pila(1000 - 40, 330, 3);
-        [[160, 480], [940, 650]].forEach(([x, y]) => {
-            const g = this.add.graphics().setDepth(y);
-            g.fillStyle(0x000000, 0.25).fillEllipse(x, y + 2, 56, 12);
-            g.fillStyle(0x4a2c14, 1).fillRect(x - 5, y - 40, 10, 40).fillStyle(0x5a3a1e, 1).fillPoints([{ x: x - 28, y: y - 36 }, { x: x + 28, y: y - 36 }, { x: x + 20, y: y - 58 }, { x: x - 20, y: y - 58 }], true);
-            g.fillStyle(0xf2e6c8, 1).fillRect(x - 24, y - 56, 22, 18).fillRect(x + 2, y - 56, 22, 18);
-            this.colisio(x, y - 8, 40, 14);
-            this.posar('espelma', x + 34, y - 4, { fonsY: y + 1 });
+        [['prestatge_l1', 170, 540, 3], ['prestatge_l2', 930, 540, 4], ['prestatge_l3', 185, 700, 5], ['prestatge_l4', 340, 700, 3],
+         ['prestatge_l5', 760, 700, 4], ['prestatge_l6', 915, 700, 5]].forEach(([k, x, base, n]) => {
+            const g = this.add.image(x, base, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(base);
+            this.add.ellipse(x, base + 2, g.displayWidth + 24, 14, 0x000000, 0.28).setDepth(base - 1);
+            this.colisio(x, base - 12, g.displayWidth, 24);
+            this.interactiu(x, base + 22, 70, DIALEGS.prestatgesBiblio(n), { altura: 170 });
+        });
+        // Piles de llibres a terra
+        [['pila_a', 140, 800], ['pila_b', 960, 800], ['pila_c', 330, 590], ['pila_a', 780, 590], ['pila_b', 962, 330]].forEach(([k, x, y]) => {
+            this.add.image(x, y, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            this.colisio(x, y - 6, 44, 16);
         });
 
         // Escala de mà recolzada a la prestatgeria de l'esquerra
-        const esc = this.add.graphics().setDepth(230);
-        esc.lineStyle(6, 0x6a4224, 1).lineBetween(270, 20, 300, 230).lineBetween(310, 20, 340, 230);
-        for (let k = 0; k < 7; k++) esc.lineStyle(4, 0x8a5a30, 1).lineBetween(274 + k * 4, 40 + k * 28, 314 + k * 4, 40 + k * 28);
+        this.add.image(228, 236, 'escala_biblio').setOrigin(0.5, 1).setScale(1 / RES).setDepth(230);
 
         // Parets i col·lisions
         this.colisio(50, H / 2, 100, H);
@@ -174,47 +98,41 @@ class ZonaBiblioteca extends ZonaBase {
         this.colisio(285, H - 10, 370, 20);
         this.colisio(815, H - 10, 370, 20);
 
-        // Taula llarga de lectura amb llibres oberts, espelmes i un tinter
-        const t = this.add.graphics().setDepth(470);
-        t.fillStyle(0x000000, 0.25).fillEllipse(550, 478, 440, 30);
-        t.fillStyle(0x5a3a1e, 1).fillRect(340, 400, 420, 66).fillStyle(0x4a2c14, 1).fillRect(340, 466, 420, 14);
-        t.fillStyle(0x3a2412, 1).fillRect(350, 480, 14, 10).fillRect(736, 480, 14, 10);
-        [[400, 418], [600, 420]].forEach(([x, y]) => {                 // llibres oberts
-            t.fillStyle(0xf2e6c8, 1).fillRect(x, y, 34, 26).fillRect(x + 36, y, 34, 26);
-            t.lineStyle(1, 0x5a4a30, 0.7); for (let k = 0; k < 5; k++) { t.lineBetween(x + 4, y + 5 + k * 4, x + 30, y + 5 + k * 4); t.lineBetween(x + 40, y + 5 + k * 4, x + 66, y + 5 + k * 4); }
-        });
-        t.fillStyle(0x1a1a2a, 1).fillCircle(520, 440, 7).lineStyle(2, 0xf2ecdc, 1).lineBetween(522, 438, 534, 420);   // tinter i ploma
-        t.fillStyle(0x7a1e24, 1).fillRect(690, 430, 40, 12).fillStyle(0x2a4a7a, 1).fillRect(694, 420, 34, 10);    // pila de llibres
+        // Taula llarga de lectura amb llibres oberts, espelmes i un tinter, i una cadira a cada lloc
+        this.add.image(550, 502, 'taula_lectura').setOrigin(0.5, 1).setScale(1 / RES).setDepth(479);
         this.colisio(550, 440, 420, 80);
         [[370, 405], [730, 405], [550, 405]].forEach(([x, y], i) => {
             const e = this.posar('espelma', x, y, { fonsY: 480 });
             this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 320 + i * 90 });
             this.add.circle(x, y - 40, 60, 0xffc060, 0.08).setDepth(480);
         });
-        [[400, 520], [550, 525], [700, 520]].forEach(([x, y]) => this.posar('tamboret', x, y, { col: { w: 34, h: 14 } }));
+        [[400, 548], [550, 553], [700, 548]].forEach(([x, y]) => {
+            this.add.image(x, y, 'cadira_biblio').setOrigin(0.5, 1).setScale(1.15 / RES).setDepth(y);
+            this.colisio(x, y - 8, 34, 14);
+        });
 
         // El faristol amb la Crònica, a la dreta de la catifa
-        const f = this.add.graphics().setDepth(330);
-        f.fillStyle(0x4a2c14, 1).fillRect(836, 270, 12, 60).fillRect(812, 326, 60, 8);
-        f.fillStyle(0x5a3a1e, 1).fillPoints([{ x: 800, y: 270 }, { x: 884, y: 270 }, { x: 874, y: 240 }, { x: 810, y: 240 }], true);
-        f.fillStyle(0xf2e6c8, 1).fillRect(812, 238, 30, 26).fillRect(844, 238, 30, 26);
-        f.fillStyle(0xb83a3a, 1).fillRect(840, 236, 6, 34);
+        this.add.image(842, 338, 'faristol_cronica').setOrigin(0.5, 1).setScale(1 / RES).setDepth(330);
         this.colisio(842, 318, 70, 20);
         this.interactiu(842, 350, 80, DIALEGS.cronica, { altura: 120 });
 
         // Globus terraqüi a l'esquerra
-        const gl = this.add.graphics().setDepth(340);
-        gl.fillStyle(0x4a2c14, 1).fillRect(242, 300, 8, 36).fillRect(224, 334, 44, 6);
-        gl.fillStyle(0x3a6a9a, 1).fillCircle(246, 278, 30).fillStyle(0xc8b070, 1).fillEllipse(238, 270, 24, 16).fillEllipse(258, 292, 16, 10);
-        gl.lineStyle(3, 0xd4a640, 1).strokeCircle(246, 278, 34);
+        this.add.image(246, 344, 'globus_biblio').setOrigin(0.5, 1).setScale(1 / RES).setDepth(340);
         this.colisio(246, 330, 50, 16);
         this.interactiu(246, 360, 70, DIALEGS.globusBiblio, { altura: 90 });
 
-        // Llum d'aranya penjada del sostre
+        // Llum d'aranya penjada del sostre: dos anells de llautó, cadenes i dotze espelmes amb flama
         const ar = this.add.graphics().setDepth(90000 - 1);
-        ar.lineStyle(2, 0x2a2a2a, 0.8).lineBetween(550, 0, 550, 60);
-        ar.lineStyle(4, 0x3a3030, 1).strokeEllipse(550, 70, 160, 26);
-        [-70, -35, 0, 35, 70].forEach(dx => ar.fillStyle(0xfff0c0, 1).fillRect(550 + dx - 3, 56, 6, 12).fillStyle(0xffc060, 0.5).fillCircle(550 + dx, 52, 8));
+        ar.lineStyle(2, 0x2a2a2a, 0.9).lineBetween(550, 0, 550, 44).lineBetween(550, 44, 484, 72).lineBetween(550, 44, 616, 72);
+        [[170, 28, 0x6a4a14], [120, 20, 0xc8a040]].forEach(([wd, ht, c], i) => {
+            ar.lineStyle(i ? 3 : 6, 0x1a1008, 1).strokeEllipse(550, 76 - i * 2, wd, ht);
+            ar.lineStyle(i ? 1.6 : 4, c, 1).strokeEllipse(550, 76 - i * 2, wd, ht);
+        });
+        [-72, -48, -24, 0, 24, 48, 72].forEach(dx => {
+            const dy = 76 - Math.sqrt(Math.max(0, 1 - (dx / 85) * (dx / 85))) * -14 * -1;
+            ar.fillStyle(0xf2e6c8, 1).fillRect(550 + dx - 2.5, 58, 5, 14).lineStyle(1, 0x3a2a14, 1).strokeRect(550 + dx - 2.5, 58, 5, 14);
+            ar.fillStyle(0xffc040, 0.9).fillEllipse(550 + dx, 55, 5, 8).fillStyle(0xffe890, 0.5).fillCircle(550 + dx, 55, 10);
+        });
 
         // El Pare Alcuí, entre la taula i el faristol
         this.npc('pare_alcui', 760, 330, DIALEGS.pareAlcui, { flipX: true });

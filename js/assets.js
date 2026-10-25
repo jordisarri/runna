@@ -741,6 +741,21 @@ const Grafics = {
             ctx.strokeStyle = 'rgba(70,40,14,0.5)'; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.ellipse(29, 19, 15, 7, 0, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.ellipse(29, 19, 7, 3.4, 0, 0, Math.PI * 2); ctx.stroke();
         });
+        // Biblioteca del Monestir (js/dibuixos_biblio.js)
+        [['prestatge_a', 162, 4, 3], ['prestatge_b', 212, 4, 11], ['prestatge_c', 162, 4, 17]].forEach(([k, w, files, llavor]) => crea(k, w, 202, (ctx, w2, h2) => pintarPrestatgeBiblio(ctx, w2, h2, files, llavor)));
+        [['prestatge_l1', 132, 31], ['prestatge_l2', 132, 37], ['prestatge_l3', 162, 41], ['prestatge_l4', 132, 43], ['prestatge_l5', 132, 47], ['prestatge_l6', 162, 53]].forEach(([k, w, llavor]) => crea(k, w, 170, (ctx, w2, h2) => pintarPrestatgeBiblio(ctx, w2, h2, 3, llavor)));
+        crea('prestatge_lat_e', 40, 600, (ctx, w, h) => pintarPrestatgeLateralBiblio(ctx, w, h, 7, true));
+        crea('prestatge_lat_d', 40, 600, (ctx, w, h) => pintarPrestatgeLateralBiblio(ctx, w, h, 8, false));
+        [['pila_a', 4, 5], ['pila_b', 3, 6], ['pila_c', 5, 7]].forEach(([k, n, llavor]) => crea(k, 52, 12 + n * 10 + 10, (ctx, w, h) => pintarPilaBiblio(ctx, w, h, n, llavor)));
+        crea('vitrall_biblio', 118, 190, pintarVitrallBiblio);
+        crea('globus_biblio', 72, 108, pintarGlobusBiblio);
+        crea('cadira_biblio', 54, 76, pintarCadiraBiblio);
+        crea('faristol_cronica', 100, 140, pintarFaristolCronica);
+        crea('escala_biblio', 76, 232, pintarEscalaBiblio);
+        crea('taula_lectura', 450, 112, pintarTaulaBiblio);
+        crea('catifa_biblio', 160, 640, pintarCatifaBiblio);
+        crea('parquet_biblio', 64, 64, pintarParquetBiblio);
+        crea('paret_biblio', 984, 214, pintarParetBiblio);
         // Barril de fusta amb cèrcols de ferro, dogues i tapa
         crea('barril', 64, 84, pintarBarril);
         // Gerros i pots de l'estanteria: àmfora d'argila, pot amb tap de suro i ampolla de vidre
