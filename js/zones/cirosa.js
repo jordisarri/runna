@@ -118,36 +118,36 @@ class ZonaCirosa extends ZonaBase {
             nom: 'La Cirosa',
             amplada: 1800,
             alcada: 1200,
-            entrades: { cami: { x: 580, y: 1120, dir: 'amunt' }, masia: { x: 380, y: 720, dir: 'avall' } }
+            entrades: { cami: { x: 580, y: 1120, dir: 'amunt' }, masia: { x: 380, y: 600, dir: 'avall' } }
         });
     }
 
     construir() {
         this.terra('herba', 0, 0, 1800, 1200, -1100);
-        this.terra('cami', 500, 620, 160, 580);           // des del camí llarg
-        this.terra('cami', 200, 620, 800, 140);           // davant la masia i cap a la pastura
+        this.terra('cami', 500, 500, 160, 700);           // des del camí llarg
+        this.terra('cami', 200, 500, 800, 140);           // davant la masia i cap a la pastura
 
         // La masia (mas vell i descurat) amb la porta que duu a dins
-        const masia = this.edifici('masia', 380, 640, 520, 90, 'ZonaMasiaCirosa', 'porta', { alt: 110 }).setTint(0xc8b8a0);
-        this.portaMasia(masia, 380, 640);
-        this.posar('barril', 830, 690, { col: { w: 40, h: 16 } });
-        this.posar('barril', 875, 700, { col: { w: 40, h: 16 } });
-        this.posar('llenya', 110, 700, { col: { w: 90, h: 22 } });
-        this.posar('banc', 560, 690, { col: { w: 110, h: 20 } });
+        const masia = this.edifici('masia', 380, 520, 520, 90, 'ZonaMasiaCirosa', 'porta', { alt: 110 }).setTint(0xc8b8a0);
+        this.portaMasia(masia, 380, 520);
+        this.posar('barril', 830, 570, { col: { w: 40, h: 16 } });
+        this.posar('barril', 875, 580, { col: { w: 40, h: 16 } });
+        this.posar('llenya', 110, 580, { col: { w: 90, h: 22 } });
+        this.posar('banc', 560, 570, { col: { w: 110, h: 20 } });
         // El pou, a la vora de la masia
-        this.pou(790, 560);
+        this.pou(790, 440);
         // Bales de palla a la vora de la tanca, dins la pastura
         [[1080, 240], [1120, 250], [1100, 215], [1110, 960], [1150, 980]].forEach(([x, y]) => this.bala(x, y));
 
         // Els pastors desterrats (sense nom), al voltant d'un foc a l'esquerra del camí
-        this.foc = this.posar('foc', 280, 790, { col: { w: 40, h: 16 } });
+        this.foc = this.posar('foc', 280, 720, { col: { w: 40, h: 16 } });
         this.tweens.add({ targets: this.foc, scaleY: this.foc.scaleY * 1.08, yoyo: true, repeat: -1, duration: 260 });
-        this.resplendor = this.add.circle(280, 750, 130, 0xff9a30, 0.12).setDepth(940);
+        this.resplendor = this.add.circle(280, 680, 130, 0xff9a30, 0.12).setDepth(940);
         this.tweens.add({ targets: this.resplendor, alpha: 0.2, yoyo: true, repeat: -1, duration: 400 });
-        this.llocFlauta('foc', 280, 785, 170);   // música vora el foc dels pastors
-        this.npc('pastor_a', 200, 810, DIALEGS.pastorA, { flipX: false });
-        this.npc('pastor_b', 370, 825, DIALEGS.pastorB, { flipX: true });
-        this.npc('pastor_vell', 285, 720, DIALEGS.pastorVell);
+        this.llocFlauta('foc', 280, 715, 170);   // música vora el foc dels pastors
+        this.npc('pastor_a', 200, 740, DIALEGS.pastorA, { flipX: false });
+        this.npc('pastor_b', 370, 755, DIALEGS.pastorB, { flipX: true });
+        this.npc('pastor_vell', 285, 650, DIALEGS.pastorVell);
 
         // La pastura de la dreta: oberta del tot. Només es tanca amb unes tanques de fusta quan comença el combat contra el Pastor
         this.terra('herba', 1032, 160, 740, 860, -1050).setTint(0xcdeaa0);
@@ -202,12 +202,12 @@ class ZonaCirosa extends ZonaBase {
 
     // Els pastors escolten música vora el foc: es convencen d'anar al sopar del Til·ler
     enMelodia(nom) {
-        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 280, 790) > 380) return false;
+        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 280, 720) > 380) return false;
         if (!Estat.flag('soparObert')) {
-            this.flotant(280, 650, 'Els pastors t\'escolten en silenci... (encara no és el moment: parla amb el Til·ler)', '#ffd9a0');
+            this.flotant(280, 580, 'Els pastors t\'escolten en silenci... (encara no és el moment: parla amb el Til·ler)', '#ffd9a0');
             return true;
         }
-        if (Estat.flag('pastorsConvencuts')) { this.flotant(280, 650, 'Els pastors somriuen', '#ffd9a0'); return true; }
+        if (Estat.flag('pastorsConvencuts')) { this.flotant(280, 580, 'Els pastors somriuen', '#ffd9a0'); return true; }
         this.ui().obrirDialeg(DIALEGS.pastorsConvencuts(Estat), () => Estat.desar());
         return true;
     }
