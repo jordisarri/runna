@@ -789,8 +789,9 @@ class ZonaBase extends Phaser.Scene {
     // ---------------- Música ----------------
     // Llocs on una melodia pot fer efecte. Amb la flauta a la mà, l'Ineu hi pot tocar (ESPAI o el medalló de la dreta).
     // pista: cal haver llegit abans la pista del lloc (flag 'flauta_<id>', que posa el diàleg en tancar-se).
-    llocFlauta(id, x, y, radi, pista = false, actiu = null) {
-        this.llocsFlauta.push({ id, x, y, radi, pista, actiu });
+    // prioritat: la flauta passa davant de qualsevol persona que hi hagi a prop (p. ex. els pastors al voltant del foc)
+    llocFlauta(id, x, y, radi, pista = false, actiu = null, prioritat = false) {
+        this.llocsFlauta.push({ id, x, y, radi, pista, actiu, prioritat });
     }
 
     // Lloc de flauta on és l'Ineu (o null)
@@ -891,7 +892,7 @@ class ZonaBase extends Phaser.Scene {
         const T = Phaser.Input.Keyboard.JustDown;
         // La flauta passa davant només del punt del mateix lloc (la bassa, la pedra...): un cartell o algú proper es llegeix/escolta
         const flauta = accio && this.flautaActiva();
-        if (flauta && (!proper || Phaser.Math.Distance.Between(proper.x, proper.y, flauta.x, flauta.y) < 80)) this.obrirMusica();
+        if (flauta && (flauta.prioritat || !proper || Phaser.Math.Distance.Between(proper.x, proper.y, flauta.x, flauta.y) < 80)) this.obrirMusica();
         else if (accio && proper) this.interactuar(proper);
         else if (accio && this.esbarzerDavant()) this.foc();
         else if (accio || T(this.tecles.J)) this.atacar();

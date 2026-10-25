@@ -144,7 +144,7 @@ class ZonaCirosa extends ZonaBase {
         this.tweens.add({ targets: this.foc, scaleY: this.foc.scaleY * 1.08, yoyo: true, repeat: -1, duration: 260 });
         this.resplendor = this.add.circle(280, 680, 130, 0xff9a30, 0.12).setDepth(940);
         this.tweens.add({ targets: this.resplendor, alpha: 0.2, yoyo: true, repeat: -1, duration: 400 });
-        this.llocFlauta('foc', 280, 715, 170);   // música vora el foc dels pastors
+        this.llocFlauta('foc', 280, 715, 200, false, () => Estat.flag('soparObert') && !Estat.flag('pastorsConvencuts'), true);   // només quan toca convèncer els pastors; passa davant d'ells   // música vora el foc dels pastors
         this.npc('pastor_a', 200, 740, DIALEGS.pastorA, { flipX: false });
         this.npc('pastor_b', 370, 755, DIALEGS.pastorB, { flipX: true });
         this.npc('pastor_vell', 285, 650, DIALEGS.pastorVell);
