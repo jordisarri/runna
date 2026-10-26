@@ -14,7 +14,7 @@ const DIARI_PASSOS = {
     cantAurora: ["El Cant de l'Aurora", 'ZonaEsglesia'], bassadoria: ['La Bassadòria tèrbola', 'ZonaCreu'],
     font: ['La Font del Bisbe', 'ZonaBosc'], jaumeta: ["L'Alzina Buida", 'ZonaBosc'],
     boiraTiller: ['La boira del Til·ler', 'ZonaCelles'], tiller: ['El Gran Til·ler', 'ZonaTiller'],
-    branca: ['La branca del Til·ler', 'ZonaTiller'], bardissa: ['La bardissa viva', 'ZonaTiller'],
+    branca: ['La branca del Til·ler', 'ZonaTiller'], bardissa: ['Les arrels del Til·ler', 'ZonaTiller'],
     pastor: ['El Pastor de Boira', 'ZonaCirosa'], esquelles: ['Les esquelles', 'ZonaCirosa'],
     soparObert: ['Tornar al Til·ler', 'ZonaTiller'], sopar: ['El sopar del Til·ler', 'ZonaTiller'],
     fragment1: ['El primer fragment', 'ZonaRuines'], clauSagrari: ['La clau del sagrari', 'ZonaCami'], fragment2: ['El sagrari', 'ZonaEsglesia'],
@@ -38,7 +38,7 @@ const DIARI_LATERALS = {
     rellotge: ['El rellotge aturat', 'ZonaGolfes', '+1 cor'],
     tresor: ['La pedra que escolta', 'ZonaPlaca', '+1 cor'],
     nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Cinta de la Nena (absorbeix un cop per zona)'],
-    monges: ["Les monges de l'Hostatgeria", 'ZonaJardi', '+1 cor per cada monja i un lloc de repòs']
+    monges: ["Les sacerdotesses de l'Hostatgeria", 'ZonaJardi', '+1 cor per cada sacerdotessa i un lloc de repòs']
 };
 const DIARI_ACTES = [
     { nom: 'Acte 1 · La boira', des: 'clauer' },
@@ -69,13 +69,16 @@ const DIARI = {
             c.add([fons, t]);
             return { id, fons, t };
         });
-        c.add(ui.add.text(AMPLE / 2, ALT - 40, '◀ ▶ canvia de pestanya · I o ✕ per tancar', estilText(19, '#7a5a3a')).setOrigin(0.5));
+        // Peu, dins del pergamí (el marc fa 44 px): a l'esquerra, la mida de la lletra; a la dreta, la llegenda de les tecles
+        const yPeu = this.PEU;
+        c.add(ui.add.rectangle(AMPLE / 2, yPeu - 34, AMPLE - 120, 2, 0x8a5a2a, 0.35));
+        c.add(ui.add.text(AMPLE - 64, yPeu, '◀ ▶ pestanya · I o ✕ tanca', estilText(19, '#7a5a3a')).setOrigin(1, 0.5));
         // Mida de la lletra: A− / A+ (també es pot pessigar o Ctrl + rodeta)
         this.botonsText = [];
-        [['A−', 104, 1 / 1.15], ['A+', 164, 1.15]].forEach(([t, x, f]) => {
-            const b = ui.add.circle(x, ALT - 42, 26, 0x8a5a2a, 0.25).setStrokeStyle(2, 0x6a1f12, 0.8).setInteractive({ useHandCursor: true })
+        [['A−', 90, 1 / 1.15], ['A+', 146, 1.15]].forEach(([t, x, f]) => {
+            const b = ui.add.circle(x, yPeu, 24, 0x8a5a2a, 0.25).setStrokeStyle(2, 0x6a1f12, 0.8).setInteractive({ useHandCursor: true })
                 .on('pointerdown', () => { Sfx.pagina(); this.canviarEscala(ui, this.escala * f); });
-            const l = ui.add.text(x, ALT - 43, t, { fontFamily: FONT_PLACA, fontSize: '26px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5);
+            const l = ui.add.text(x, yPeu - 1, t, { fontFamily: FONT_PLACA, fontSize: '24px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5);
             c.add([b, l]); this.botonsText.push(b, l);
         });
         this.mostrar(ui, pestanya || this.darrera || 'missio');
@@ -85,6 +88,7 @@ const DIARI = {
         if (!ui.inventari) return;
         this.darrera = this.actual = id;
         this.netejar(ui);
+        this.enToc = null; this.fitxa = null;
         this.cos = ui.add.container(0, 0);
         ui.inventari.add(this.cos);
         this.botons.forEach(b => {
@@ -119,7 +123,8 @@ const DIARI = {
 
     // ---------------- Mida de la lletra i scroll ----------------
     escala: (() => { try { const v = parseFloat(localStorage.getItem('runna_diari_escala')); if (v >= 0.9 && v <= 2.2) return v; } catch (e) { /* sense emmagatzematge */ } return 1.25; })(),
-    PANTALLA: { y0: 162, y1: ALT - 72 },
+    PEU: ALT - 82,                                                    // fila de botons de baix
+    PANTALLA: { y0: 162, y1: ALT - 122 },
 
     // Canvia la mida de la lletra (es torna a distribuir el text perquè s'ajusti a l'amplada) i manté la posició de lectura
     canviarEscala(ui, nova) {
@@ -140,10 +145,10 @@ const DIARI = {
         // Les lletres es redibuixen amb més resolució quan s'amplien, perquè no es vegin borroses
         cont.list.forEach(o => { if (o.setResolution && o.type === 'Text') o.setResolution(Math.min(4, Math.ceil(2 * s))); });
         this.cont = cont;
-        const g = ui.make.graphics({ add: false }); g.fillStyle(0xffffff).fillRect(24, y0, AMPLE - 48, y1 - y0);
+        const g = ui.make.graphics({ add: false }); g.fillStyle(0xffffff).fillRect(48, y0, AMPLE - 96, y1 - y0);
         this.mascara = g; cont.setMask(g.createGeometryMask());
         // Barra d'scroll
-        const ind = ui.add.rectangle(AMPLE - 22, y0, 6, 40, 0x6a1f12, 0.55).setOrigin(0.5, 0).setVisible(this.maxScroll > 0);
+        const ind = ui.add.rectangle(AMPLE - 56, y0, 6, 40, 0x6a1f12, 0.55).setOrigin(0.5, 0).setVisible(this.maxScroll > 0);
         this.cos.add(ind);
         const aplica = () => {
             this.scroll = Math.min(this.maxScroll, Math.max(0, this.scroll));
@@ -155,7 +160,7 @@ const DIARI = {
         };
         this.aplicaScroll = aplica; aplica();
         // Entrada: arrossegar amb el dit/ratolí, rodeta, pessigar o botons per ampliar
-        const zona = ui.add.zone(24, y0, AMPLE - 48, y1 - y0).setOrigin(0).setInteractive();
+        const zona = ui.add.zone(48, y0, AMPLE - 96, y1 - y0).setOrigin(0).setInteractive();
         this.cos.add(zona);
         let arr = null, d0 = 0;
         zona.on('pointerdown', p => { arr = { y: p.y, sc: this.scroll }; d0 = 0; });
@@ -170,7 +175,11 @@ const DIARI = {
             d0 = 0;
             if (arr && p.isDown) { this.scroll = arr.sc - (p.y - arr.y); aplica(); }
         };
-        const solta = () => { arr = null; d0 = 0; };
+        // Un toc (sense arrossegar) es passa a la pestanya amb les coordenades del contingut
+        const solta = p => {
+            if (arr && p && Math.abs(p.y - arr.y) < 12 && this.enToc && !this.fitxa) this.enToc((p.x - cont.x) / s, (p.y - cont.y) / s);
+            arr = null; d0 = 0;
+        };
         const roda = (p, o, dx, dy, dz, ev) => {
             if ((ev && ev.ctrlKey) || (p.event && p.event.ctrlKey)) this.canviarEscala(ui, this.escala * (dy > 0 ? 0.92 : 1.09));
             else { this.scroll += dy; aplica(); }
@@ -292,29 +301,64 @@ const DIARI = {
     },
 
     // ---------------- Sarró ----------------
+    // Una quadrícula d'icones amb el nom; tocar-ne una obre la fitxa (descripció i si encara farà falta)
     sarro(ui, c) {
         const llista = Estat.dades.objectes.filter(o => CATALEG_OBJECTES[o]);
         const AV = this.AV, X = this.MX, top = 170;
         if (!llista.length) { c.add(ui.add.text(AV / 2, 400, 'El sarró és buit.', estilText(30, TINTA_SUAU, { fontStyle: 'italic' })).setOrigin(0.5)); return; }
-        const cols = AV >= 600 ? 2 : 1, W = (AV - 2 * X - 16 * (cols - 1)) / cols;
-        // Cada fitxa s'adapta al text; en una fila, totes tenen l'alçada de la més alta
-        let y = top;
+        c.add(ui.add.text(X, top, 'Toca un objecte per saber-ne més.', estilText(20, TINTA_SUAU, { fontStyle: 'italic', wordWrap: { width: AV - 2 * X } })));
+        const cols = AV >= 520 ? 3 : 2, G = 12, W = (AV - 2 * X - G * (cols - 1)) / cols, IC = Math.min(96, W - 28);
+        const caixes = [];
+        let y = top + 40;
         for (let i = 0; i < llista.length; i += cols) {
             const fila = llista.slice(i, i + cols).map((o, k) => {
-                const [nom, desc] = CATALEG_OBJECTES[o], x = X + k * (W + 16);
-                const tn = ui.add.text(x + 14, y + 10, nom, estilText(25, TINTA, { fontStyle: 'bold', wordWrap: { width: W - 28 } }));
-                const td = ui.add.text(x + 14, y + 14 + tn.height, desc, estilText(20, TINTA_SUAU, { fontStyle: 'italic', wordWrap: { width: W - 28 } }));
-                return { x, tn, td, h: tn.height + td.height + 32 };
+                const x = X + k * (W + G);
+                const tn = ui.add.text(x + W / 2, y + IC + 22, CATALEG_OBJECTES[o][0], estilText(20, TINTA, { fontStyle: 'bold', align: 'center', wordWrap: { width: W - 12 } })).setOrigin(0.5, 0);
+                return { o, x, tn, h: IC + 30 + tn.height };
             });
             const h = Math.max(...fila.map(f => f.h));
-            fila.forEach(f => { c.add(ui.add.rectangle(f.x, y, W, h, 0xffffff, 0.22).setOrigin(0).setStrokeStyle(1.5, 0x8a5a2a, 0.5)); c.add(f.tn); c.add(f.td); });
-            y += h + 10;
+            fila.forEach(({ o, x, tn }) => {
+                const us = usObjecte(Estat, o);
+                c.add(ui.add.rectangle(x, y, W, h, 0xffffff, us === 'record' ? 0.1 : 0.25).setOrigin(0).setStrokeStyle(1.5, 0x8a5a2a, 0.5));
+                const clau = iconaObjecte(ui, o);
+                if (clau) c.add(ui.add.image(x + W / 2, y + 12 + IC / 2, clau).setDisplaySize(IC, IC).setAlpha(us === 'record' ? 0.6 : 1));
+                if (us !== 'sempre') c.add(ui.add.text(x + W - 8, y + 6, us === 'cal' ? '★' : '✓', estilText(22, US_TEXTOS[us][1], { fontStyle: 'bold' })).setOrigin(1, 0));
+                c.add(tn);
+                caixes.push({ o, x, y, w: W, h });
+            });
+            y += h + G;
         }
+        this.enToc = (cx, cy) => {
+            const t = caixes.find(b => cx >= b.x && cx <= b.x + b.w && cy >= b.y && cy <= b.y + b.h);
+            if (t) { Sfx.pagina(); this.fitxaObjecte(ui, t.o); }
+        };
+    },
+
+    // Fitxa d'un objecte, damunt del sarró: icona gran, nom, descripció i si encara farà falta. Es tanca tocant-la.
+    fitxaObjecte(ui, o) {
+        if (this.fitxa) this.fitxa.destroy();
+        const [nom, desc] = CATALEG_OBJECTES[o], [txtUs, colUs] = US_TEXTOS[usObjecte(Estat, o)];
+        const W = AMPLE - 140, x0 = (AMPLE - W) / 2, f = this.fitxa = ui.add.container(0, 0);
+        const tn = ui.add.text(AMPLE / 2, 0, nom, { fontFamily: FONT_PLACA, fontSize: '34px', fontStyle: 'bold', color: VERMELL, align: 'center', wordWrap: { width: W - 48 }, resolution: 2 }).setOrigin(0.5, 0);
+        const td = ui.add.text(AMPLE / 2, 0, desc, estilText(25, TINTA, { fontStyle: 'italic', align: 'center', wordWrap: { width: W - 48 } })).setOrigin(0.5, 0);
+        const tu = ui.add.text(AMPLE / 2, 0, txtUs, estilText(24, colUs, { fontStyle: 'bold', align: 'center', wordWrap: { width: W - 48 } })).setOrigin(0.5, 0);
+        const tt = ui.add.text(AMPLE / 2, 0, '(toca per tancar)', estilText(18, TINTA_SUAU, { fontStyle: 'italic' })).setOrigin(0.5, 0);
+        const h = 24 + 150 + 16 + tn.height + 14 + td.height + 22 + tu.height + 22 + tt.height + 22, y0 = (this.PANTALLA.y0 + this.PANTALLA.y1 - h) / 2;
+        f.add(ui.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.45).setOrigin(0).setInteractive().on('pointerdown', () => { f.destroy(); this.fitxa = null; Sfx.pagina(); }));
+        f.add(ui.add.rectangle(x0, y0, W, h, 0xf4e6c4, 1).setOrigin(0).setStrokeStyle(4, 0x6a1f12, 0.9));
+        f.add(ui.add.rectangle(x0 + 8, y0 + 8, W - 16, h - 16, 0, 0).setOrigin(0).setStrokeStyle(1.5, 0x8a5a2a, 0.6));
+        let y = y0 + 24;
+        const clau = iconaObjecte(ui, o);
+        if (clau) f.add(ui.add.image(AMPLE / 2, y + 75, clau).setDisplaySize(150, 150));
+        y += 166;
+        [[tn, 14], [td, 22], [tu, 22], [tt, 0]].forEach(([t, d]) => { t.setY(y); f.add(t); y += t.height + d; });
+        this.cos.add(f);
+        f.once('destroy', () => { if (this.fitxa === f) this.fitxa = null; });
     },
 
     // ---------------- Mapa ----------------
     mapa(ui, c) {
         const zona = Joc.zonaActiva(ui);
-        MAPA.dibuixar(ui, c, zona ? zona.scene.key : null, 170, ALT - 70);
+        MAPA.dibuixar(ui, c, zona ? zona.scene.key : null, 170, this.PANTALLA.y1 + 4);
     }
 };

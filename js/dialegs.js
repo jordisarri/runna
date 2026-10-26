@@ -32,7 +32,7 @@ function objectiuSopar(E) {
     E.posaObjectiu(f.length ? "El sopar del Til·ler: falta " + f.join(", ") + "." : "Tot a punt: torna al Gran Til·ler per al sopar.");
 }
 
-// Cada monja allibera dona un gra més al rosari (+1 cor) i, quan les tres són lliures, l'Hostatgeria obre la porta per dins
+// Cada sacerdotessa allibera dona un gra més al rosari (+1 cor) i, quan les tres són lliures, l'Hostatgeria obre la porta per dins
 function premiMonja(nom, flag) {
     const E = Estat;
     E.posaFlag(flag);
@@ -41,10 +41,10 @@ function premiMonja(nom, flag) {
     if (ui) { ui.actualitzarHUD(); ui.notifica('+1 gra al rosari: ' + nom); }
     if (E.flag('premiPains') && E.flag('premiPhili') && E.flag('premiCharm')) {
         E.posaFlag('mongesTrobades');
-        E.posaObjectiu("Les tres monges són lliures i han obert la porta de l'Hostatgeria per dins: hi ha un lloc de repòs al vestíbul.");
+        E.posaObjectiu("Les tres sacerdotesses són lliures i han obert la porta de l'Hostatgeria per dins: hi ha un lloc de repòs al vestíbul.");
     } else {
         const f = ['Pains', 'Phili', 'Charm'].filter(n => !E.flag('premi' + n));
-        E.posaObjectiu('Allibera les monges que falten: ' + f.join(', ') + '.');
+        E.posaObjectiu('Allibera les sacerdotesses que falten: ' + f.join(', ') + '.');
     }
     E.desar();
 }
@@ -57,7 +57,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pare Jordi", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
-                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: l'Uri i el Flam, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardin, el nebot de les monges de l'Hostatgeria." },
+                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: l'Uri i el Flam, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardin, el nebot de les sacerdotesses de l'Hostatgeria." },
                     { qui: "Pare Jordi", text: "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada... i, diu la Neus, un piular d'ocells que no se sap d'on ve." },
                     { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot." },
                     { qui: "", text: "Has obtingut el CLAUER DE NOVICI!\nObre la biblioteca i les cel·les." },
@@ -149,7 +149,7 @@ const DIALEGS = {
         ]
     }),
 
-    cartellPlaca: E => ({ pagines: [{ qui: '', text: "↑ Runes\n← Casa Gran\n↓ La Bassadòria" }] }),
+    cartellPlaca: E => ({ pagines: [{ qui: '', text: "↑ El Celler i les Runes\n← Casa Gran\n↓ La Bassadòria" }] }),
     pedraSecreta: E => E.flag('tresorObert') ? {
         pagines: [{ qui: '', text: 'La pedra ha girat i deixa un pas estret. Una escala baixa a un passatge fosc.' }]
     } : {
@@ -342,7 +342,8 @@ const DIALEGS = {
         enAcabar: () => E.posaFlag('fragment1')
     }),
 
-    cartellRuinesPingpong: E => ({ pagines: [{ qui: '', text: "← Camí de la Desaparició\n→ Cementiri\n↑ Cel·les\n↓ Plaça" }] }),
+    cartellRuinesPingpong: E => ({ pagines: [{ qui: '', text: "← Camí de la Desaparició\n→ Cementiri\n↑ Cel·les\n↓ El Celler i la Plaça" }] }),
+    cartellCeller: E => ({ pagines: [{ qui: '', text: "← El Celler (ping-pong)\n↑ Les Runes\n↓ Plaça" }] }),
 
     juli: E => ({
         pagines: [
@@ -368,7 +369,7 @@ const DIALEGS = {
         ],
         enAcabar: () => {
             E.posaFlag("fredericRoda");
-            E.posaObjectiu(E.te("guants") ? "Empeny la roda de carruatge del Celler (a les Runes): amaga un passadís cap a la Casa Gran."
+            E.posaObjectiu(E.te("guants") ? "Empeny la roda de carruatge del Celler (al Pati del Celler, entre la Plaça i les Runes): amaga un passadís cap a la Casa Gran."
                                           : "Demana els guants dels picapedrers al Germà Francesc (passeja per Sant Antoni, a llevant del Monestir) i empeny la roda del Celler.");
         }
     } : ({
@@ -508,12 +509,12 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "El Gran Til·ler", text: "Sento l'aigua cantar de lluny... La Bassadòria és neta. Has fet bé, petit monjo." },
-                    { qui: "El Gran Til·ler", text: "El camí del nord-est cap a la Cirosa el vaig tancar jo amb una bardissa viva, perquè la boira no hi pugés. Ara que l'aigua respira, pots passar: la bardissa només reconeix la meva branca. Acosta-l'hi." },
+                    { qui: "El Gran Til·ler", text: "El camí del nord-est cap a la Cirosa el vaig tancar jo amb les meves arrels, perquè la boira no hi pugés. Ara que l'aigua respira, pots passar: les arrels només reconeixen la meva branca. Acosta-les-hi i s'enfonsaran." },
                     { qui: "El Gran Til·ler", text: "A la Cirosa viuen uns pastors desterrats que guarden les esquelles dels seus avis: amb elles es van afinar els cants antics. Tracta'ls amb dolçor, que ja han patit prou. I vés amb compte: un monjo hi ha pujat aquests dies." },
-                    { qui: "", text: "Al fons, el camí que puja cap al nord-est és tancat per una bardissa de punxes negres." }
+                    { qui: "", text: "Al fons, el camí que puja cap al nord-est és tancat per un mur d'arrels nuoses que surten de terra." }
                 ],
                 enAcabar: () => {
-                    E.posaObjectiu("Aparta la bardissa del camí del nord-est (a la dreta del Til·ler) amb la branca del Gran Til·ler.");
+                    E.posaObjectiu("Acosta la branca del Gran Til·ler a les arrels que tanquen el camí del nord-est (a la dreta del Til·ler).");
                 }
             };
         }
@@ -697,7 +698,7 @@ const DIALEGS = {
     },
 
     cartellBosc: E => ({ pagines: [{ qui: "", text: "Bosc de Sant Joan.\n«Qui busca la font, que segueixi l'aigua... i qui no, que no es perdi.»" }] }),
-    cartellCirosa: E => ({ pagines: [{ qui: "", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí a munt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\nEl camí és tancat per una bardissa viva. Diuen que només s'aparta amb la fusta del Gran Til·ler.\n← La Caseta" }] }),
+    cartellCirosa: E => ({ pagines: [{ qui: "", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí a munt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\nLes arrels del Gran Til·ler tanquen el camí. Diuen que només reconeixen la fusta del mateix arbre.\n← La Caseta" }] }),
 
     // ---------------- CARRUATGE VERD ----------------
     homeCarruatge: E => {
@@ -890,7 +891,7 @@ const DIALEGS = {
         { qui: '', text: 'Uns esbarzers negres han crescut davant la porta de la dreta i la tapen del tot. Se sent algú resar a dins, molt baixet.' },
         { qui: 'Ineu', text: 'El bastó no els talla. Només Runna ho aconsegueix.' }] }),
 
-    // ---------------- LES MONGES DE L'HOSTATGERIA ----------------
+    // ---------------- LES SACERDOTESSES DE L'HOSTATGERIA ----------------
     monjaPains: E => {
         if (!E.flag('lliurePains')) return { pagines: [
             { qui: '', text: 'Una velleta en cadira de rodes dorm dins un capoll de boira lila. No respon.' },
@@ -919,7 +920,7 @@ const DIALEGS = {
     monjaCharm: E => {
         if (!E.flag('premiCharm')) return {
             pagines: [
-                { qui: 'Charm', text: 'Benvingut, fill de Déu. Sóc la Charm, la mare superiora d\'aquesta casa. Havíem perdut l\'esperança, però no la pregària.' },
+                { qui: 'Charm', text: 'Benvingut, fill de Déu. Sóc la Charm, la gran sacerdotessa d\'aquesta casa. Havíem perdut l\'esperança, però no la pregària.' },
                 { qui: 'Charm', text: 'El nostre nebot, el Sardin, passava aquí la tardor amb nosaltres. La nit que la boira ens va tancar a les cambres, el seu llit va quedar buit. Porta\'l a casa, fill. Porta\'ls a tots.' },
                 { qui: 'Charm', text: 'Als llibres d\'aquesta casa he llegit que l\'Ocellaire va robar el cant dels ocells, i que només aquest mateix cant obre la seva gàbia. Tu l\'aprendràs: la Pianista el recorda.' },
                 { qui: 'Charm', text: 'Accepta el que podem donar: una mica de la nostra paciència.' }
@@ -1096,18 +1097,18 @@ const DIALEGS = {
                     { qui: "", text: "Una nena transparent seu a terra, amb dues trenes sense lligar. Plora en silenci, i on cauen les llàgrimes l'herba es torna blanca." },
                     { qui: "Nena de les Trenes", text: "No et facis enrere, si us plau... No vull espantar ningú. Només que, quan arriba algú, sempre fuig." },
                     { qui: "Nena de les Trenes", text: "Vaig venir a collir rovellons amb la mare. Ella deia que els rovellons creixen sempre vora el bon camí, i que qui se'n fia no es perd mai pel bosc. Em vaig perdre perquè em vaig oblidar de mirar a terra. Em va lligar les dues trenes amb dos llaços rosa, i em vaig perdre pel bosc. Fa molts, molts anys. No he pogut marxar d'aquí." },
-                    { qui: "Nena de les Trenes", text: "Els llaços van caure mentre corria: un va quedar pel camí, amagat sota una roca, i l'altre ja dins el bosc dels rovellons, a la primera clariana. Sense ells, no sento les mans de la mare. Si me'ls tornessis a lligar..." },
+                    { qui: "Nena de les Trenes", text: "Els llaços van caure mentre corria, i les pedres els van colgar: un és aquí al camí, sota una roca grossa a la vora, i l'altre a la Rovellonera, a la primera clariana, sota una altra pedra. Sense ells, no sento les mans de la mare. Si me'ls tornessis a lligar..." },
                     { qui: "Ineu", text: "Els trobaré. Et prometo que no hauràs de plorar sola." }
                 ],
                 enAcabar: () => {
                     E.posaFlag("nenaVista");
-                    E.posaObjectiu("Troba els dos llaços de la Nena de les Trenes (un sota una roca del camí; l'altre a la primera clariana de la Rovellonera) i porta-li-los.");
+                    E.posaObjectiu("Troba els dos llaços de la Nena de les Trenes, colgats sota pedres: un sota una roca del camí; l'altre sota una pedra de la primera clariana de la Rovellonera. Empeny-les i porta-li'ls.");
                 }
             };
         }
         if (n < 2) {
-            const pista = n === 0 ? "Un és pel camí, sota una roca que cal empènyer... i l'altre, més endins, a la primera clariana del bosc dels rovellons."
-                : E.flag("llac1") ? "El del camí ja el tens! Falta el de dins el bosc dels rovellons, a la primera clariana, entre els pins."
+            const pista = n === 0 ? "Són sota les pedres: un aquí al camí, sota una roca que cal empènyer... i l'altre a la Rovellonera, sota una pedra de la primera clariana."
+                : E.flag("llac1") ? "El del camí ja el tens! Falta el de la Rovellonera: és sota una pedra de la primera clariana, entre els pins."
                 : "El del bosc ja el tens! Falta el del camí, sota una roca grossa a la vora: empeny-la.";
             return { pagines: [{ qui: "Nena de les Trenes", text: "Has trobat " + n + " dels 2 llaços. " + pista + " Jo m'espero." }] };
         }
@@ -1132,7 +1133,7 @@ const DIALEGS = {
         enAcabar: () => {
             E.posaFlag("llac" + k); E.dona("llac_nena");
             const n = ["llac1", "llac2"].filter(f => E.flag(f)).length;
-            E.posaObjectiu(n < 2 ? (k === 1 ? "Troba el segon llaç de la Nena de les Trenes (1/2): és a la primera clariana de la Rovellonera, entre els pins." : "Troba el segon llaç de la Nena de les Trenes (1/2): és pel camí, sota una roca grossa que cal empènyer.") : "Ja tens els dos llaços: porta-los a la Nena de les Trenes, a la corba del camí.");
+            E.posaObjectiu(n < 2 ? (k === 1 ? "Troba el segon llaç de la Nena de les Trenes (1/2): és sota una pedra de la primera clariana de la Rovellonera; empeny-la." : "Troba el segon llaç de la Nena de les Trenes (1/2): és pel camí, sota una roca grossa que cal empènyer.") : "Ja tens els dos llaços: porta-los a la Nena de les Trenes, a la corba del camí.");
         }
     }),
 
@@ -1220,7 +1221,7 @@ const DIALEGS = {
             enAcabar: () => {
                 E.dona("runna"); E.posaFlag("runna");
                 const ui = game.scene.getScene("UI"); if (ui) ui.missatge("Runna: 2 de dany. Talla els esbarzers negres.");
-                E.posaObjectiu("Les ombres s'han fet més fortes. Parla amb el Frederic, al Celler (a les Runes): sap com baixar-hi per una altra banda.");
+                E.posaObjectiu("Les ombres s'han fet més fortes. Parla amb el Frederic, al Celler (entre la Plaça i les Runes): sap com baixar-hi per una altra banda.");
             }
         };
     },
@@ -1369,18 +1370,18 @@ const DIALEGS = {
         ]
     },
 
-    // La bardissa viva del camí de la Cirosa (s'aparta amb la branca del Til·ler)
-    bardissa: E => {
+    // Les arrels del Til·ler que tanquen el camí de la Cirosa (s'enfonsen davant la branca del mateix arbre)
+    arrelsTiller: E => {
         if (!E.te("basto_tiller")) {
             return { pagines: [
-                { qui: "", text: "Una bardissa viva, de punxes negres, tanca el camí cap al nord-est. Quan t'hi acostes, les branques es belluguen soles." },
-                { qui: "Ineu", text: "El bastó de pelegrí no la tallarà. Potser alguna cosa de fusta viva... la branca del Gran Til·ler?" }
+                { qui: "", text: "Unes arrels enormes surten de terra i fan arcs de banda a banda del camí del nord-est. Són de til·ler: quan t'hi acostes, es tensen com si et miressin." },
+                { qui: "Ineu", text: "Són les arrels del Gran Til·ler. El bastó de pelegrí no les mourà... però potser reconeixerien una branca del mateix arbre." }
             ] };
         }
         if (!E.flag("bassadoriaNeta")) {
             return { pagines: [
                 { fer: (z, fet) => { z.deixar(() => { z.cameras.main.shake(200, 0.003); fet(); }, 'branca', 0xd8f0a0); } },
-                { qui: "Ineu", text: "Sembla que espera alguna cosa: potser que l'aigua clara de la Bassadòria torni a respirar." }
+                { qui: "Ineu", text: "Les arrels s'han estremit en reconèixer la branca, però no s'enfonsen. Sembla que esperen alguna cosa: potser que l'aigua clara de la Bassadòria torni a respirar." }
             ] };
         }
         return { pagines: [

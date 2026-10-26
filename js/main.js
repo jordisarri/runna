@@ -4,7 +4,7 @@
  */
 const Joc = {
     debug: new URLSearchParams(location.search).has('debug'),
-    ZONES: ['ZonaPlaca', 'ZonaEsglesia', 'ZonaMonestir', 'ZonaCreu', 'ZonaCasaGran', 'ZonaRuines', 'ZonaPingpong',
+    ZONES: ['ZonaPlaca', 'ZonaEsglesia', 'ZonaMonestir', 'ZonaCreu', 'ZonaCasaGran', 'ZonaRuines', 'ZonaCellerFora', 'ZonaPingpong',
             'ZonaCelles', 'ZonaTiller', 'ZonaBosc', 'ZonaCami', 'ZonaErmita', 'ZonaErmitaInt', 'ZonaEra', 'ZonaJardi',
             'ZonaCamiCirosa', 'ZonaCirosa', 'ZonaMasiaCirosa', 'ZonaTavernaInt', 'ZonaSotaTaverna', 'ZonaGirgoles', 'ZonaTortura', 'ZonaGabia', 'ZonaBiblioteca', 'ZonaMonestirRebedor', 'ZonaCelaStAntoni', 'ZonaCementiri', 'ZonaCasaGranInt', 'ZonaCabana', 'ZonaCabanaInt', 'ZonaCamiRov', 'ZonaRovellonera', 'ZonaGabriel', 'ZonaGabrielInt', 'ZonaDipositos', 'ZonaDolmen', 'ZonaTresor', 'ZonaGolfes', 'ZonaPassadis', 'ZonaCasaTresor', 'ZonaCabanaCami', 'ZonaCasaCripta', 'ZonaTorre', 'ZonaSantAntoni', 'ZonaTaverna', 'ZonaJordi', 'ZonaCasaJordi', 'ZonaCasetaJoc', 'ZonaSoterraniHost', 'ZonaHostatgeriaInt', 'ZonaCambraPains', 'ZonaCambraPhili', 'ZonaCambraCharm'],
 
@@ -32,7 +32,7 @@ const Joc = {
         ZonaDolmen: 'musica_bosc', ZonaTiller: 'musica_bosc', ZonaCabana: 'musica_bosc',
         // Exteriors (overworld)
         ZonaPlaca: 'musica_intro', ZonaMonestir: 'musica_intro', ZonaCreu: 'musica_intro', ZonaCasaGran: 'musica_intro',
-        ZonaRuines: 'musica_intro', ZonaCelles: 'musica_celles', ZonaSantAntoni: 'musica_intro', ZonaTaverna: 'musica_intro', ZonaJordi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaJordi: 'musica_casa', ZonaEra: 'musica_intro', ZonaJardi: 'musica_intro', ZonaCementiri: 'musica_intro',
+        ZonaRuines: 'musica_intro', ZonaCellerFora: 'musica_intro', ZonaCelles: 'musica_celles', ZonaSantAntoni: 'musica_intro', ZonaTaverna: 'musica_intro', ZonaJordi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaJordi: 'musica_casa', ZonaEra: 'musica_intro', ZonaJardi: 'musica_intro', ZonaCementiri: 'musica_intro',
         // Interiors de cases
         ZonaEsglesia: 'musica_casa', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
         ZonaCabanaCami: 'musica_casa', ZonaGolfes: 'musica_casa', ZonaTorre: 'musica_casa',
@@ -214,7 +214,7 @@ const PROLEG_QUADRES = [
     { text: "Fa tres-cents anys, un firaire pujava cada primavera al Miracle amb gàbies plenes d'ocells que cantaven com persones: Mestre Gaspar, l'Ocellaire.\nEls nens que l'escoltaven es quedaven sense riure.", dibuix: 'ocellaire' },
     { text: "Els pastors de la Cirosa i els monjos el van tancar dins la seva pròpia gàbia, sota terra. Un monjo va segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la va deixar dormint entre pedres.", dibuix: 'segell' },
     { text: "Ara, fa tres nits, una boira freda i lila surt de sota terra. Marceix els horts, entela l'aigua i fa callar l'orgue del Santuari.", dibuix: 'boira' },
-    { text: "I cada nit falta un nen.\nL'Uri i el Flam, de Sant Benet.\nI aquesta nit... el Sardin, el nebot de les monges.", dibuix: 'nens' },
+    { text: "I cada nit falta un nen.\nL'Uri i el Flam, de Sant Benet.\nI aquesta nit... el Sardin, el nebot de les sacerdotesses.", dibuix: 'nens' },
     { text: "Matí. L'Ineu, el monjo més jove del Santuari, es desperta.\nEl Pare Jordi el busca a la Plaça.", dibuix: 'mati' }
 ];
 
@@ -443,7 +443,7 @@ const game = new Phaser.Game({
     physics: { default: 'arcade', arcade: { debug: Joc.debug } },
     loader: { imageLoadType: 'HTMLImageElement' },
     scene: [EscenaCarrega, EscenaTitol, EscenaProleg,
-            ZonaPlaca, ZonaEsglesia, ZonaMonestir, ZonaCreu, ZonaCasaGran, ZonaRuines, ZonaPingpong,
+            ZonaPlaca, ZonaEsglesia, ZonaMonestir, ZonaCreu, ZonaCasaGran, ZonaRuines, ZonaCellerFora, ZonaPingpong,
             ZonaCelles, ZonaTiller, ZonaBosc, ZonaCami, ZonaErmita, ZonaErmitaInt, ZonaEra, ZonaJardi, ZonaCamiCirosa, ZonaCirosa, ZonaMasiaCirosa, ZonaTavernaInt, ZonaSotaTaverna, ZonaGirgoles, ZonaTortura, ZonaGabia, ZonaBiblioteca, ZonaMonestirRebedor, ZonaCelaStAntoni,
             ZonaCementiri, ZonaCasaGranInt, ZonaCabana, ZonaCabanaInt, ZonaCamiRov, ZonaRovellonera, ZonaGabriel, ZonaGabrielInt, ZonaDipositos, ZonaDolmen, ZonaTresor, ZonaGolfes, ZonaPassadis, ZonaCasaTresor, ZonaCabanaCami, ZonaCasaCripta, ZonaTorre, ZonaSantAntoni, ZonaTaverna, ZonaJordi, ZonaCasaJordi, ZonaCasetaJoc, ZonaSoterraniHost, ZonaHostatgeriaInt, ZonaCambraPains, ZonaCambraPhili, ZonaCambraCharm,
             EscenaUI, EscenaMusica, EscenaEstels, EscenaPingPong, EscenaCredits]

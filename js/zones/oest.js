@@ -35,6 +35,7 @@ class ZonaRovellonera extends ZonaBase {
         if (ent === 'portal') Estat.dades.rovPas = 1;
         this.pas = Math.min(Estat.dades.rovPas || 0, 2);
         const pas = this.pas;
+        this.llac = this.roca2 = null;     // (l'escena es reutilitza: que no quedin els de la clariana anterior)
 
         this.terra('herba_fosca', 0, 0, 1600, 1100, -1100);
         this.terra('cami', 700, 0, 200, 1100).setAlpha(0.0);       // (reservat)
@@ -57,6 +58,7 @@ class ZonaRovellonera extends ZonaBase {
             const x = 160 + rnd() * 1280, y = 160 + rnd() * 780;
             if (Phaser.Math.Distance.Between(x, y, 800, 550) < 230) continue;
             if (Math.abs(x - 800) < 140 || Math.abs(y - 550) < 140) continue;
+            if (pas === 0 && Phaser.Math.Distance.Between(x, y, 1150, 300) < 230) continue;   // lloc per empènyer la roca del llaç
             this.posar(i % 3 ? 'pi' : 'arbre', x, y, { col: { w: 28, h: 14 } });
         }
 
@@ -86,11 +88,13 @@ class ZonaRovellonera extends ZonaBase {
         const mapaSortides = { N: [700, 0, 200, 14], S: [700, 1086, 200, 14], W: [0, 440, 14, 220], E: [1586, 440, 14, 220] };
         Object.entries(mapaSortides).forEach(([d, r]) => this.sortida(r[0], r[1], r[2], r[3], 'ZonaRovellonera', 'x_' + d));
 
-        // Segon llaç de la Nena de les Trenes (el primer és pel camí): a la primera clariana
+        // Segon llaç de la Nena de les Trenes (el primer és pel camí): a la primera clariana, també sota una pedra
         if (pas === 0) {
             this.llac = this.posar('llac', 1100, 300, { fonsY: 300 });
             this.tweens.add({ targets: this.llac, y: 294, yoyo: true, repeat: -1, duration: 700 });
             this.interactiu(1100, 300, 70, DIALEGS.llac(2), { altura: 50, actiu: () => this.llac2Lliure() });
+            this.roca2 = this.pedraMobil(1100, 310, 'llac2', 110, 0,
+                'Una roca grossa entre els pins, coberta de molsa. Per sota en surt un tros de cinta rosa.');
         }
 
         // Cercle de bolets (segona clariana): portal màgic cap a la cabana de la Jaumeta, un cop descobert
@@ -154,7 +158,7 @@ class ZonaRovellonera extends ZonaBase {
         if (this.llac) this.llac.setVisible(this.llac2Lliure());
     }
 
-    llac2Lliure() { return Estat.flag('nenaVista') && !Estat.flag('llac2'); }
+    llac2Lliure() { return Estat.flag('nenaVista') && !Estat.flag('llac2') && !!this.roca2 && this.roca2.mogut; }
 }
 
 // ---------------- CAMÍ DE LA ROVELLONERA ----------------
@@ -272,7 +276,7 @@ class ZonaGabriel extends ZonaBase {
         // L'ermita, prou gran perquè la porta (d'arc rebaixat) sigui una mica més alta que l'Ineu; la porta s'obre en acostar-s'hi
         const ermita = this.edifici('ermita_gabriel', 400, 640, 520, 88, 'ZonaGabrielInt', 'porta', { alt: 90 });
         this.portaAnimada({ x: 400, top: 493, bottom: 625, ample: 88, fons: 620, unic: true, arc: 26, retall: ermita });
-        this.cartell(930, 800, () => ({ pagines: [{ qui: '', text: 'Ermita de Sant Gabriel.\n→ Els Dipòsits (només per a qui sap mirar el cel)\n↑ La Rovellonera' }] }));
+        this.cartell(930, 800, () => ({ pagines: [{ qui: '', text: '→ Dipòsits\n↑ La Rovellonera' }] }));
 
         this.terra('cami', 220, 650, 360, 200);          // esplanada de terra seca davant l'ermita
         // (cap arbre davant la porta ni davant del cartell)
@@ -569,7 +573,7 @@ class ZonaDolmen extends ZonaBase {
             nom: 'El Dolmen',
             amplada: DOL.A,
             alcada: DOL.H,
-            colorFons: '#13200f',
+            colorFons: '#1a2c16',              // prou clar perquè no compti com a interior: camí amb vores difuminades
             pacifica: true,
             entrades: { diposits: { x: 60, y: DOL.baixY + DOL.baixH / 2, dir: 'dreta' } }
         });
@@ -585,15 +589,23 @@ class ZonaDolmen extends ZonaBase {
         cl.fillStyle(0x9ad86a, 0.22).fillEllipse(A / 2, 720, 840, 1000);
         cl.fillStyle(0xc8f08a, 0.16).fillEllipse(A / 2, 720, 560, 640);
         // Camí: entra per l'esquerra, fa un colze i puja recte fins a la clariana
-        this.terra('cami', 0, baixY, x1, baixH).setDepth(-1080);
-        this.terra('cami', x0, 1000, ample, baixY + baixH - 1000).setDepth(-1080);
+        this.terra('cami', 0, baixY, x1, baixH);
+        this.terra('cami', x0, 1000, ample, baixY + baixH - 1000);
 
-        // El dolmen amb Runna clavada a dalt de la llosa
+        // El dolmen (sense espasa: Runna és un sprite a part, clavat a la llosa) i els escalons del darrere
         this.dolmen = this.posar(Estat.te('runna') ? 'dolmen_buit' : 'dolmen', sx, sy, { col: { w: 300, h: 40 } });
-        this.espasaY = sy - 186;                                                // on s'enfonsa la fulla a la llosa
-        this.resplendor = this.add.circle(sx + 18, this.espasaY - 70, 90, 0xd8e8ff, Estat.te('runna') ? 0 : 0.12).setDepth(sy + 1).setBlendMode('ADD');
+        const kD = this.dolmen.displayWidth / DOLMEN_DIB.W, topD = this.dolmen.y - this.dolmen.displayHeight;
+        const wx = tx => this.dolmen.x + (tx - DOLMEN_DIB.W / 2) * kD, wy = ty => topD + ty * kD;
+        this.espX = wx(DOLMEN_DIB.ex); this.espY = wy(DOLMEN_DIB.ey);          // on s'enfonsa la punta de la fulla
+        this.espasaY = this.espY;
+        if (!Estat.te('runna')) {
+            const esc = (this.textures.get('arma_espasa').customData || {}).escala || 0.5;
+            this.espadaDol = this.add.image(this.espX, this.espY, 'arma_espasa').setOrigin(0.5, 0).setAngle(188).setScale(esc * 0.95).setDepth(sy + 1);
+        }
+        this.resplendor = this.add.circle(this.espX, this.espY - 60, 90, 0xd8e8ff, Estat.te('runna') ? 0 : 0.12).setDepth(sy + 1).setBlendMode('ADD');
         if (!Estat.te('runna')) this.tweens.add({ targets: this.resplendor, alpha: 0.28, yoyo: true, repeat: -1, duration: 1200 });
         this.interactiu(sx, sy + 15, 110, () => Estat.te('runna') ? DIALEGS.dolmenBuit(Estat) : DIALEGS.dolmen(Estat), { altura: 380 });
+        this.posarEscales(wy(DOLMEN_DIB.ly));
 
         // Com a la pantalla del títol: una pedra dreta, una tanca de fusta vella, falgueres, roques i flors roses
         const det = this.add.graphics().setDepth(sy + 120);
@@ -628,7 +640,7 @@ class ZonaDolmen extends ZonaBase {
             }
         };
         [[140, 1060, 1.2], [260, 1090, 1], [650, 1070, 1.1], [780, 1050, 1.25], [120, 820, 0.9], [790, 840, 1], [330, 960, 0.8], [580, 950, 0.85]].forEach(([x, y, e]) => falguera(x, y, e));
-        [[690, 900, 0.6], [140, 640, 0.7], [760, 620, 0.55]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 50, h: 18 } }));
+        [[690, 900, 0.6], [140, 640, 0.7], [800, 500, 0.55]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 50, h: 18 } }));
         for (let n = 0, i = 0; n < 34 && i < 400; i++) {
             const x = 110 + rnd() * 680, y = 520 + rnd() * 520;
             if (Math.abs(x - sx) < 190 && y < sy + 50 && y > sy - 120) continue;            // no damunt del dolmen
@@ -719,16 +731,56 @@ class ZonaDolmen extends ZonaBase {
         }
     }
 
+    // Els escalons de pedra pel darrere del dolmen (a la dreta): sis blocs que pugen fins a la vora de la llosa.
+    // lyMon = y del món del centre de la cara de dalt de la llosa. Guarda els punts per on puja l'Ineu (this.camiPujada).
+    posarEscales(lyMon) {
+        const { sx, sy } = DOL, N = 6, tw = 24, ox = 10, oy = 14, y0 = sy - 58, xr = sx + 277;
+        const sh = (y0 - oy / 2 - (lyMon - 22)) / N;                                  // el de dalt arriba a la vora de darrere de la llosa
+        const g = this.add.graphics().setDepth(y0 + 2);
+        let sd = 5; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        g.fillStyle(0x000000, 0.28).fillEllipse(xr - N * tw / 2 + 6, y0 + 4, N * tw + 50, 16);
+        const punts = [];
+        for (let i = N - 1; i >= 0; i--) {
+            const h = (i + 1) * sh, xl = xr - (i + 1) * tw, yT = y0 - h;
+            g.lineStyle(2.4, 0x120c08, 1);
+            g.fillStyle(0x6e675a, 1).fillPoints([{ x: xl + tw, y: yT }, { x: xl + tw + ox, y: yT - oy }, { x: xl + tw + ox, y: y0 - oy }, { x: xl + tw, y: y0 }], true).strokePoints([{ x: xl + tw, y: yT }, { x: xl + tw + ox, y: yT - oy }, { x: xl + tw + ox, y: y0 - oy }, { x: xl + tw, y: y0 }], true);
+            g.fillStyle(0xa39a85, 1).fillRect(xl, yT, tw, h).strokeRect(xl, yT, tw, h);
+            g.fillStyle(0xcdc5ae, 1).fillPoints([{ x: xl, y: yT }, { x: xl + ox, y: yT - oy }, { x: xl + tw + ox, y: yT - oy }, { x: xl + tw, y: yT }], true).strokePoints([{ x: xl, y: yT }, { x: xl + ox, y: yT - oy }, { x: xl + tw + ox, y: yT - oy }, { x: xl + tw, y: yT }], true);
+            for (let k = 0; k < 10; k++) { g.fillStyle(r() < 0.5 ? 0x3c352a : 0xf0e8d0, 0.3).fillRect(xl + r() * tw, yT + r() * h, 1 + r() * 2, 1 + r() * 2); }
+            if (i % 2 === 0) g.fillStyle(0x6a9a40, 0.7).fillEllipse(xl + tw / 2, y0 - 2, tw * 0.9, 6);
+        }
+        for (let i = 0; i < N; i++) punts.push([xr - (i + 1) * tw + tw / 2 + ox / 2, y0 - (i + 1) * sh - oy / 2]);
+        this.colisio(xr - N * tw / 2 + 6, y0 - 12, N * tw + ox, 24);                 // no s'hi pot passar a través
+        // Per on puja l'Ineu: dels peus de l'escala, graó a graó, i sobre la llosa fins a la fulla
+        this.camiPujada = [[xr + 34, y0 + 18, 'right'], [xr + 30, y0 + 2, 'up'], ...punts.map(([x, y]) => [x, y, 'northwest']), [sx + 120, lyMon + 4, 'left']];
+        this.baixaEscales = { x: xr + 34, y: y0 + 22 };
+    }
+
+    // L'Ineu recorre uns punts [x, y, vista] sense col·lisions, caminant (sempre per sobre del dolmen i els escalons)
+    recorregut(punts, vel, fet) {
+        const I = this.ineu, dir4 = { up: 'amunt', down: 'avall', left: 'esquerra', right: 'dreta', northwest: 'amunt', northeast: 'amunt', southwest: 'avall', southeast: 'avall' };
+        I.body.enable = false;
+        I.setDepth(DOL.sy + 5);
+        let i = 0;
+        const seg = () => {
+            if (i >= punts.length) { if (fet) fet(); return; }
+            const [x, y, v] = punts[i++], d = Math.hypot(x - I.x, y - I.y);
+            this.posarDireccio(dir4[v], true, v);
+            this.tweens.add({ targets: I, x, y, duration: Math.max(80, d / vel * 1000), onUpdate: () => this.ombraIneu.setPosition(I.x, I.y), onComplete: seg });
+        };
+        seg();
+    }
+
     // El moment èpic: Runna surt de la llosa del dolmen
     // El despertar de Runna: tot acció, sense narrador
-    //  1. L'Ineu camina davant del dolmen i s'agenolla; la càmera s'hi acosta i el cel s'enfosqueix.
+    //  1. L'Ineu rodeja el dolmen, puja pels escalons del darrere i es posa a la llosa, al costat de l'espasa; la càmera s'hi acosta.
     //  2. La Fulla del Til·ler vola de l'Ineu a la pedra i s'hi encén d'or. El vent i les espurnes giren cap a l'espasa.
-    //  3. L'Ineu s'aixeca i crida les paraules del monjo («La foscor tem la llum, però més encara el riure!»): la terra tremola
+    //  3. L'Ineu crida les paraules del monjo («La foscor tem la llum, però més encara el riure!»): la terra tremola
     //     i de l'espasa en surten raigs de llum.
-    //  4. L'espasa s'arrenca de la pedra, s'enlaira girant i baixa a la mà de l'Ineu, que l'alça. Esclat blanc.
-    //  5. Rètol: RUNNA, l'espasa del Miracle.
+    //  4. L'espasa s'arrenca de la pedra, s'enlaira girant i baixa a la mà de l'Ineu, que canvia a la pose d'alçar-la mirant amunt.
+    //  5. Rètol: RUNNA, l'espasa del Miracle. L'Ineu baixa de la llosa.
     despertarRunna(fet) {
-        const { sx, sy } = DOL, cam = this.cameras.main, ey = this.espasaY, I = this.ineu;
+        const { sx, sy } = DOL, cam = this.cameras.main, I = this.ineu, ex = this.espX, ey = this.espY, cE = ey - 60;   // cE: mig de l'espasa clavada
         Joc.jingle(this, 'jingle_runna');
         const fi = () => { if (fet) fet(); };
         const so = (freqs, tipus = 'triangle', vol = 0.25, dur = 1.6) => {
@@ -742,17 +794,19 @@ class ZonaDolmen extends ZonaBase {
             });
         };
         const fosc = this.add.rectangle(sx, sy - 400, 4000, 4000, 0x06081a, 1).setDepth(sy + 4).setAlpha(0);   // el cel s'enfosqueix (per sota de la llum de l'espasa)
+        const ESC_AIX = (this.textures.get('ineu_aixeca').customData || {}).escala || 0.5;
         this.seq([
-            // 1. Davant la pedra, agenollat; la càmera s'hi acosta
-            c => this.ineuVa(sx, sy + 70, c, 160),
-            c => { this.posarDireccio('amunt', false); cam.stopFollow(); cam.pan(sx, ey + 40, 1400, 'Sine.easeInOut'); cam.zoomTo(1.35, 1600, 'Sine.easeInOut');
-                   this.tweens.add({ targets: fosc, alpha: 0.45, duration: 1600 }); this.ajupir('ineu', null, 3400); this.esperar(1000, c); },
+            // 1. Pel darrere: escalons amunt i, a la llosa, al costat de la fulla; la càmera s'hi acosta
+            c => this.ineuVa(sx + 300, sy + 40, c, 170),
+            c => this.recorregut(this.camiPujada.concat([[sx - 45, ey + 14, 'left']]), 150, c),
+            c => { this.posarDireccio('dreta', false, 'right'); cam.stopFollow(); cam.pan(sx, ey - 10, 1400, 'Sine.easeInOut'); cam.zoomTo(1.35, 1600, 'Sine.easeInOut');
+                   this.tweens.add({ targets: fosc, alpha: 0.45, duration: 1600 }); this.ajupir('ineu', null, 2400); this.esperar(1000, c); },
             // 2. La Fulla vola fins a la pedra i s'encén
             c => {
                 const f = this.add.ellipse(I.x, I.y - 70, 16, 26, 0xf0c040).setStrokeStyle(2, 0x8a6a10).setDepth(99000);
                 this.tweens.add({ targets: f, angle: 540, duration: 1300 });
-                this.tweens.add({ targets: f, x: sx + 10, y: ey + 30, duration: 1300, ease: 'Sine.easeInOut', onComplete: () => {
-                    this.llum(sx + 10, ey + 30, 0xf0c040); so([392, 494, 587], 'sine', 0.18, 2);
+                this.tweens.add({ targets: f, x: ex, y: ey - 20, duration: 1300, ease: 'Sine.easeInOut', onComplete: () => {
+                    this.llum(ex, ey - 20, 0xf0c040); so([392, 494, 587], 'sine', 0.18, 2);
                     this.tweens.add({ targets: f, alpha: 0, scale: 2, duration: 900, onComplete: () => f.destroy() });
                     c();
                 } });
@@ -760,8 +814,8 @@ class ZonaDolmen extends ZonaBase {
             // El vent: espurnes i fulles que giren i es xuclen cap a l'espasa; la terra comença a tremolar
             c => {
                 this.vent = this.add.particles(0, 0, 'espurna', {
-                    emitZone: { type: 'edge', source: new Phaser.Geom.Circle(sx + 10, ey, 260), quantity: 48 },
-                    moveToX: sx + 10, moveToY: ey - 20, lifespan: 900, scale: { start: 0.5, end: 0.05 }, alpha: { start: 0, end: 1 },
+                    emitZone: { type: 'edge', source: new Phaser.Geom.Circle(ex, cE, 260), quantity: 48 },
+                    moveToX: ex, moveToY: cE - 10, lifespan: 900, scale: { start: 0.5, end: 0.05 }, alpha: { start: 0, end: 1 },
                     tint: [0xd8e8ff, 0xf0c040, 0xffffff], frequency: 25, blendMode: 'ADD'
                 }).setDepth(sy + 6);
                 cam.shake(1800, 0.003);
@@ -787,46 +841,51 @@ class ZonaDolmen extends ZonaBase {
             },
             // Raigs de llum que surten de l'espasa i giren
             c => {
-                this.raigs = this.add.graphics({ x: sx + 10, y: ey - 20 }).setDepth(sy + 7).setBlendMode('ADD').setAlpha(0);
+                this.raigs = this.add.graphics({ x: ex, y: cE }).setDepth(sy + 7).setBlendMode('ADD').setAlpha(0);
                 for (let k = 0; k < 14; k++) { const a = k / 14 * Math.PI * 2; this.raigs.fillStyle(k % 2 ? 0xd8e8ff : 0xfff0b0, 0.5).fillTriangle(0, 0, Math.cos(a - 0.07) * 900, Math.sin(a - 0.07) * 900, Math.cos(a + 0.07) * 900, Math.sin(a + 0.07) * 900); }
                 this.tweens.add({ targets: this.raigs, alpha: 1, duration: 600 });
                 this.tweens.add({ targets: this.raigs, angle: 90, duration: 4000 });
-                const halo = this.add.circle(sx + 10, ey - 20, 40, 0xffffff, 0.8).setDepth(sy + 8).setBlendMode('ADD');
+                const halo = this.add.circle(ex, cE, 40, 0xffffff, 0.8).setDepth(sy + 8).setBlendMode('ADD');
                 this.tweens.add({ targets: halo, radius: 160, alpha: 0.25, yoyo: true, repeat: 2, duration: 300, onComplete: () => halo.destroy() });
                 this.esperar(1200, c);
             },
-            // 4. L'espasa s'arrenca de la pedra i s'enlaira girant
+            // 4. L'espasa (el gràfic del joc) s'arrenca de la pedra i s'enlaira girant
             c => {
                 if (this.vent) this.vent.stop();
                 cam.flash(400, 255, 255, 255);
-                this.esp = this.add.image(this.dolmen.x, this.dolmen.y, 'dolmen_espasa').setOrigin(0.5, 1).setScale(this.dolmen.scaleX).setDepth(sy + 9);
-                this.dolmen.setTexture('dolmen_buit');
+                const h = this.espadaDol.displayHeight, th = Phaser.Math.DegToRad(this.espadaDol.angle);
+                const e = this.add.image(ex - Math.sin(th) * h / 2, ey + Math.cos(th) * h / 2, 'arma_espasa').setScale(this.espadaDol.scaleX).setAngle(this.espadaDol.angle).setDepth(sy + 9);
+                this.espadaDol.destroy(); this.espadaDol = null; this.esp = e;
                 this.resplendor.setAlpha(0);
-                const pols = this.add.particles(sx + 10, ey + 10, 'boira', { speed: { min: 40, max: 160 }, angle: { min: 200, max: 340 }, lifespan: 900, scale: { start: 0.6, end: 1.6 }, alpha: { start: 0.5, end: 0 }, tint: 0xb8a890, quantity: 20, emitting: false }).setDepth(sy + 8);
+                const pols = this.add.particles(ex, ey, 'boira', { speed: { min: 40, max: 160 }, angle: { min: 200, max: 340 }, lifespan: 900, scale: { start: 0.6, end: 1.6 }, alpha: { start: 0.5, end: 0 }, tint: 0xb8a890, quantity: 20, emitting: false }).setDepth(sy + 8);
                 pols.explode(24);
                 so([196, 247, 294], 'triangle', 0.25, 2);
-                this.tweens.add({ targets: this.esp, y: this.esp.y - 220, duration: 1300, ease: 'Cubic.easeOut' });
+                this.tweens.add({ targets: e, y: e.y - 200, angle: e.angle + 360, duration: 1300, ease: 'Cubic.easeOut' });
                 this.esperar(1300, c);
             },
             // ...gira a l'aire i baixa fins a la mà de l'Ineu
             c => {
-                cam.pan(I.x, I.y - 120, 900, 'Sine.easeInOut');
-                const e = this.add.image(sx + 10, this.esp.y - this.esp.displayHeight * 0.55, 'arma_espasa').setDepth(99100);
-                e.setScale(150 / e.height);
-                this.esp.destroy();
-                const llumE = this.add.circle(e.x, e.y, 34, 0xd8e8ff, 0.35).setDepth(99099).setBlendMode('ADD');
-                this.tweens.add({ targets: e, angle: 720, duration: 1100, ease: 'Sine.easeInOut' });
-                this.tweens.add({ targets: [e, llumE], x: I.x + 6, y: I.y - 150, duration: 1100, ease: 'Sine.easeInOut', onComplete: () => { this.runnaAlta = e; this.llumRunna = llumE; c(); } });
+                cam.pan(I.x, I.y - 100, 900, 'Sine.easeInOut');
+                const e = this.esp, llumE = this.add.circle(e.x, e.y, 34, 0xd8e8ff, 0.35).setDepth(99099).setBlendMode('ADD');
+                e.setDepth(99100);
+                // la mà de l'Ineu quan alça l'espada, i l'espasa amb la inclinació del dibuix (uns 33° cap a la dreta)
+                const mx = I.x - 15, my = I.y - 143;
+                this.tweens.add({ targets: e, angle: 33 + 360 * 3, scale: e.scale * 0.65, duration: 1100, ease: 'Sine.easeInOut' });
+                this.tweens.add({ targets: [e, llumE], x: mx, y: my, duration: 1100, ease: 'Sine.easeInOut', onComplete: () => { this.llumRunna = llumE; c(); } });
             },
-            // L'Ineu l'agafa i l'alça: esclat blanc, raigs, acord
+            // L'Ineu l'agafa i l'alça mirant amunt: canvia al sprite que alça l'espasa. Esclat blanc, raigs, acord
             c => {
-                const e = this.runnaAlta;
-                this.tweens.add({ targets: I, y: I.y - 20, yoyo: true, duration: 220, ease: 'Quad.easeOut' });
+                this.esp.destroy(); this.esp = null;
+                I.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
+                this.ineuAlt = this.add.image(I.x, I.y + 2, 'ineu_aixeca').setOrigin(0.5, 1).setScale(ESC_AIX).setDepth(99100);
+                this.tweens.add({ targets: this.ineuAlt, y: this.ineuAlt.y - 14, yoyo: true, duration: 240, ease: 'Quad.easeOut' });
                 cam.flash(700, 255, 255, 255);
                 cam.shake(500, 0.01);
                 so([330, 415, 494, 659], 'triangle', 0.3, 2.4);
-                this.llum(e.x, e.y - 40, 0xffffff);
-                if (this.raigs) this.tweens.add({ targets: this.raigs, x: e.x, y: e.y, duration: 300 });
+                const punta = { x: I.x + 7, y: I.y - 177 };
+                this.llum(punta.x, punta.y, 0xffffff);
+                this.llumRunna.setPosition(punta.x - 10, punta.y + 40);
+                if (this.raigs) this.tweens.add({ targets: this.raigs, x: punta.x, y: punta.y + 20, duration: 300 });
                 this.tweens.add({ targets: this.llumRunna, radius: 60, alpha: 0.15, yoyo: true, repeat: -1, duration: 500 });
                 this.esperar(900, c);
             },
@@ -839,16 +898,25 @@ class ZonaDolmen extends ZonaBase {
                 ui.tweens.add({ targets: [t1, t2], alpha: 0, delay: 2400, duration: 700, onComplete: () => { t1.destroy(); t2.destroy(); } });
                 this.esperar(3000, c);
             },
-            // Tot torna a la calma
+            // Tot torna a la calma: l'Ineu torna a la pose normal i baixa de la llosa pels escalons
             c => {
-                const coses = [this.runnaAlta, this.llumRunna, this.raigs, fosc].filter(Boolean);
+                const coses = [this.llumRunna, this.raigs, fosc].filter(Boolean);
                 coses.forEach(o => this.tweens.killTweensOf(o));
                 this.tweens.add({ targets: coses, alpha: 0, duration: 800, onComplete: () => {
                     [...coses, this.vent].forEach(o => o && o.destroy());
                 } });
+                this.ineuAlt.destroy(); this.ineuAlt = null;
+                I.setVisible(true); if (this.fantasma) this.fantasma.setVisible(true);
+                this.posarDireccio('esquerra', false, 'left');
                 cam.zoomTo(ZOOM_CAMERA, 900, 'Sine.easeInOut');
-                cam.pan(I.x, I.y, 900, 'Sine.easeInOut', false, (cm, prog) => { if (prog === 1) cam.startFollow(I, true, 0.12, 0.12); });
-                this.esperar(1000, c);
+                cam.pan(this.baixaEscales.x, this.baixaEscales.y - 80, 1400, 'Sine.easeInOut');
+                const avall = this.camiPujada.slice(1).reverse().map(([x, y]) => [x, y, 'southeast']);
+                this.recorregut([[sx + 120, ey + 14, 'right'], ...avall, [this.baixaEscales.x, this.baixaEscales.y, 'down']], 170, () => {
+                    I.body.enable = true; I.body.reset(I.x, I.y);
+                    this.posarDireccio('avall', false);
+                    cam.startFollow(I, true, 0.12, 0.12);
+                    c();
+                });
             }
         ], fi);
     }

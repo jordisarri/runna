@@ -93,7 +93,7 @@ function dibuixarPersona(canvas, w, o) {
     }
 }
 
-// Monja de l'Hostatgeria: vel negre i toca blanca que emmarquen la cara, gorgera blanca, hàbit amb plecs i escapulari,
+// Sacerdotessa de l'Hostatgeria: vel negre i toca blanca que emmarquen la cara, gorgera blanca, hàbit amb plecs i escapulari,
 // mànigues amples amb les mans juntes i un rosari al cordó. Opcions: cabell (el serrell que treu sota la toca), ample, alt,
 // ulleres, cadira (asseguda en una cadira de rodes, amb una manta)
 function dibuixarMonja(canvas, w, o) {
@@ -562,7 +562,7 @@ function dibuixarLlosa(c, w) {
 // ondula (l'ona va del cap a la cua), cada segment té un parell de potes que es mouen en onada, i té el cap amb
 // antenes i pinces i els dos apèndixs llargs de la cua
 function dibuixarEscolopendra(c, w, n = 8) {
-    const fh = Math.round(w * 0.42);
+    const fh = Math.round(w * 0.64);
     c.width = w * n; c.height = fh;
     const ctx = c.getContext('2d');
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
@@ -574,7 +574,7 @@ function dibuixarEscolopendra(c, w, n = 8) {
         const P = [];
         for (let i = 0; i < N; i++) {
             const t = i / (N - 1), x = 24 + t * 140;
-            const y = mig + Math.sin(t * Math.PI * 2.2 + fase) * 7 * (1 - 0.6 * t);
+            const y = mig + Math.sin(t * Math.PI * 3 - fase) * 21 * (1 - 0.45 * t);   // l'ona viatja pel cos: s'enrosca i serpenteja
             P.push({ x, y });
         }
         P.forEach((p, i) => {
@@ -590,9 +590,9 @@ function dibuixarEscolopendra(c, w, n = 8) {
         P.forEach((p, i) => {
             if (i === 0 || i === N - 1) return;
             [-1, 1].forEach(s => {
-                const sw = Math.sin(fase * 2 + i * 0.85 + (s > 0 ? Math.PI : 0)) * 0.55;
-                const kx = p.x + p.nx * s * 13 + p.tx * sw * 5, ky = p.y + p.ny * s * 13 + p.ty * sw * 5;
-                const fx = kx + p.nx * s * 7 + p.tx * (sw * 9 - 4), fy = ky + p.ny * s * 7 + p.ty * (sw * 9 - 4);
+                const sw = Math.sin(fase - i * 0.9 + (s > 0 ? Math.PI : 0)) * 0.75;
+                const kx = p.x + p.nx * s * 20 + p.tx * sw * 8, ky = p.y + p.ny * s * 20 + p.ty * sw * 8;
+                const fx = kx + p.nx * s * 14 + p.tx * (sw * 14 - 7), fy = ky + p.ny * s * 14 + p.ty * (sw * 14 - 7);
                 ctx.strokeStyle = '#2a1206'; ctx.lineWidth = 4.2;
                 ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(kx, ky); ctx.lineTo(fx, fy); ctx.stroke();
                 ctx.strokeStyle = '#f0a83a'; ctx.lineWidth = 2.2;
@@ -931,12 +931,33 @@ function dibuixarRovello(c, w) {
 }
 
 function dibuixarLlac(c, w) {
-    lienc(c, w, w * 0.8, (ctx, W, H) => {
-        ctx.lineWidth = 2.5; ctx.strokeStyle = CONTORN;
-        ctx.fillStyle = '#e07a9a';
-        ctx.beginPath(); ctx.moveTo(W / 2, H / 2); ctx.quadraticCurveTo(W * 0.1, H * 0.1, W * 0.1, H * 0.5); ctx.quadraticCurveTo(W * 0.1, H * 0.9, W / 2, H / 2); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(W / 2, H / 2); ctx.quadraticCurveTo(W * 0.9, H * 0.1, W * 0.9, H * 0.5); ctx.quadraticCurveTo(W * 0.9, H * 0.9, W / 2, H / 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#c0507a'; ctx.beginPath(); ctx.arc(W / 2, H / 2, 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    // Un llaç de debò: dues gases amb el plec interior, el nus al mig i dues cues que pengen acabades en punta de cua d'oreneta
+    lienc(c, w, w * 0.9, (ctx, W, H) => {
+        const u = W / 56, cx = W / 2, cy = H * 0.36;
+        ctx.lineWidth = 2.2 * u; ctx.strokeStyle = CONTORN;
+        [-1, 1].forEach(s => {
+            ctx.fillStyle = '#cc6088';
+            ctx.beginPath(); ctx.moveTo(cx - s * u, cy + 2 * u); ctx.lineTo(cx + s * 5 * u, cy + 2 * u);
+            ctx.lineTo(cx + s * 16 * u, H * 0.95); ctx.lineTo(cx + s * 11 * u, H * 0.86); ctx.lineTo(cx + s * 6 * u, H * 0.95);
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+        });
+        [-1, 1].forEach(s => {
+            ctx.fillStyle = '#ec8cae';
+            ctx.beginPath(); ctx.moveTo(cx, cy);
+            ctx.bezierCurveTo(cx + s * 9 * u, cy - 21 * u, cx + s * 27 * u, cy - 19 * u, cx + s * 26 * u, cy);
+            ctx.bezierCurveTo(cx + s * 26 * u, cy + 17 * u, cx + s * 9 * u, cy + 15 * u, cx, cy);
+            ctx.fill(); ctx.stroke();
+            ctx.fillStyle = 'rgba(150,40,90,0.45)';                       // el plec de dins de la gasa
+            ctx.beginPath(); ctx.moveTo(cx + s * 4 * u, cy);
+            ctx.bezierCurveTo(cx + s * 10 * u, cy - 9 * u, cx + s * 17 * u, cy - 7 * u, cx + s * 17 * u, cy);
+            ctx.bezierCurveTo(cx + s * 16 * u, cy + 5 * u, cx + s * 9 * u, cy + 5 * u, cx + s * 4 * u, cy);
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = 1.6 * u;   // lluentor
+            ctx.beginPath(); ctx.moveTo(cx + s * 9 * u, cy - 10 * u); ctx.quadraticCurveTo(cx + s * 17 * u, cy - 15 * u, cx + s * 22 * u, cy - 8 * u); ctx.stroke();
+            ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.2 * u;
+        });
+        ctx.fillStyle = '#c0507a';
+        ctx.beginPath(); ctx.roundRect(cx - 5 * u, cy - 6.5 * u, 10 * u, 13 * u, 3 * u); ctx.fill(); ctx.stroke();
     });
 }
 
@@ -1053,87 +1074,95 @@ function dibuixarTelescopiMon(c, w, ambTub = true) {
     });
 }
 
-// Dolmen (com a la pantalla del títol): una llosa grossa i arrodonida de granit clar, amb liquen i molsa, damunt de dos
-// pilars de pedra quadrats, i Runna clavada a la part de dalt de la llosa, una mica decantada.
-// mode: 'tot' (amb l'espasa), 'buit' (la llosa amb el tall on era l'espasa) o 'espasa' (només l'espasa, al mateix lloc)
+// Dolmen del Santuari del Miracle (Roc de la Mare de Déu): una llosa de calcària ovalada, grossa i gruixuda, amb la
+// superfície rugosa i plena de liquen blanc i ocre, damunt de dos pilars de blocs de pedra. És un sol cos arrodonit: la
+// cara de dalt es fon amb el cantell i no té cap segon contorn. Runna no hi és: és un sprite a part (arma_espasa) clavat al
+// punt DOLMEN_DIB.ex/ey. 'buit' i 'espasa' donen el mateix dibuix (el dolmen ja no porta l'espasa).
+const DOLMEN_DIB = { W: 380, H: 361, ly: 172, ex: 206, ey: 178 };     // ly: centre de la cara de dalt; ex, ey: on entra la fulla
+
 function dibuixarDolmen(c, w, mode = 'tot') {
     lienc(c, w, w * 0.95, (ctx, W, H) => {
-        const u = W / 380, peu = H - 12 * u, ly = H * 0.5;              // ly: centre de la cara de dalt de la llosa
-        const ex = 200 * u, ey = ly - 6 * u, inc = 0.14;                  // on entra l'espasa a la llosa, i la inclinació
-        if (mode !== 'espasa') {
-            ombraTerra(ctx, W / 2 + 12 * u, peu, W * 0.44, 18 * u);
-            ctx.lineWidth = 3.5 * u; ctx.strokeStyle = CONTORN; ctx.lineJoin = 'round';
-            // Foscor de sota la llosa
-            ctx.fillStyle = 'rgba(20,16,12,0.85)'; ctx.beginPath(); ctx.ellipse(W / 2, ly + 72 * u, 140 * u, 30 * u, 0, 0, Math.PI * 2); ctx.fill();
-            // Pilars quadrats, amb la cara del davant i la del costat
-            const pilar = (x, y0, amp, alt, prof) => {
-                ctx.fillStyle = '#9a9282'; ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x + amp, y0); ctx.lineTo(x + amp, y0 + alt); ctx.lineTo(x, y0 + alt); ctx.closePath(); ctx.fill(); ctx.stroke();
-                ctx.fillStyle = '#6e685c'; ctx.beginPath(); ctx.moveTo(x + amp, y0); ctx.lineTo(x + amp + prof, y0 - prof * 0.5); ctx.lineTo(x + amp + prof, y0 + alt - prof * 0.5); ctx.lineTo(x + amp, y0 + alt); ctx.closePath(); ctx.fill(); ctx.stroke();
-                ctx.strokeStyle = 'rgba(40,32,24,0.45)'; ctx.lineWidth = 1.5 * u;
-                ctx.beginPath(); ctx.moveTo(x + amp * 0.3, y0 + 8 * u); ctx.lineTo(x + amp * 0.42, y0 + alt * 0.5); ctx.moveTo(x + 6 * u, y0 + alt * 0.62); ctx.lineTo(x + amp - 8 * u, y0 + alt * 0.66); ctx.stroke();
-                ctx.fillStyle = 'rgba(96,140,64,0.75)'; ctx.beginPath(); ctx.ellipse(x + amp * 0.5, y0 + alt - 4 * u, amp * 0.55, 6 * u, 0, 0, Math.PI * 2); ctx.fill();
-                ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.5 * u;
-            };
-            pilar(236 * u, ly + 40 * u, 58 * u, peu - ly - 40 * u - 6 * u, 16 * u);           // el del fons, a la dreta
-            pilar(92 * u, ly + 46 * u, 74 * u, peu - ly - 46 * u, 18 * u);                      // el del davant, a l'esquerra
-            // La llosa: cantell gruixut i cara de dalt arrodonida, irregular
-            const vora = (dy, rx, ry) => {
-                ctx.beginPath();
-                for (let k = 0; k <= 40; k++) {
-                    const t = k / 40 * Math.PI * 2, r = 1 + 0.035 * Math.sin(t * 5) + 0.025 * Math.cos(t * 3);
-                    const x = W / 2 + Math.cos(t) * rx * r, y = ly + dy + Math.sin(t) * ry * r;
-                    k ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
-                }
-                ctx.closePath();
-            };
-            const cant = ctx.createLinearGradient(0, ly, 0, ly + 70 * u);
-            cant.addColorStop(0, '#a8a090'); cant.addColorStop(1, '#6a6458');
-            ctx.fillStyle = cant; vora(30 * u, 168 * u, 46 * u); ctx.fill(); ctx.stroke();
-            const cara = ctx.createRadialGradient(W * 0.42, ly - 14 * u, 10 * u, W / 2, ly, 170 * u);
-            cara.addColorStop(0, '#e2dccc'); cara.addColorStop(0.7, '#c4bcaa'); cara.addColorStop(1, '#a49c8a');
-            ctx.fillStyle = cara; vora(0, 164 * u, 40 * u); ctx.fill(); ctx.stroke();
-            // Granit: pigues fosques i clapes de liquen groc i verd
-            let sd = 9; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
-            for (let k = 0; k < 140; k++) {
-                const t = r() * Math.PI * 2, d = Math.sqrt(r());
-                const x = W / 2 + Math.cos(t) * 158 * u * d, y = ly + Math.sin(t) * 36 * u * d + (r() < 0.3 ? 30 * u : 0);
-                ctx.fillStyle = r() < 0.6 ? 'rgba(60,54,46,0.45)' : 'rgba(255,255,255,0.35)';
-                ctx.beginPath(); ctx.arc(x, y, (0.8 + r() * 1.4) * u, 0, Math.PI * 2); ctx.fill();
-            }
-            [[120, -6, 26, 0], [262, 4, 30, 1], [170, 16, 18, 0], [300, -10, 14, 1], [80, 28, 20, 1], [230, 44, 22, 0]].forEach(([x, dy, rr, k]) => {
-                ctx.fillStyle = k ? 'rgba(110,150,70,0.6)' : 'rgba(206,190,100,0.55)';
-                ctx.beginPath(); ctx.ellipse(x * u, ly + dy * u, rr * u, rr * 0.4 * u, 0.1, 0, Math.PI * 2); ctx.fill();
-            });
-            ctx.strokeStyle = 'rgba(50,42,32,0.5)'; ctx.lineWidth = 1.8 * u;
-            ctx.beginPath(); ctx.moveTo(110 * u, ly - 18 * u); ctx.lineTo(140 * u, ly - 4 * u); ctx.lineTo(132 * u, ly + 12 * u); ctx.moveTo(280 * u, ly - 24 * u); ctx.lineTo(262 * u, ly - 8 * u); ctx.stroke();
-            // El tall on s'enfonsa la fulla
-            ctx.fillStyle = '#1e1a14'; ctx.beginPath(); ctx.ellipse(ex, ey, 9 * u, 3 * u, 0, 0, Math.PI * 2); ctx.fill();
-            if (mode === 'buit') return;
+        const u = W / 380, peu = H - 12 * u, ly = DOLMEN_DIB.ly * u, cx = W / 2;
+        const RX = 172 * u, RY = 44 * u, T = 50 * u;                       // semieixos de la cara de dalt i gruix del cantell
+        let sd = 31; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+
+        // Ombra al terra i foscor sota la llosa
+        ombraTerra(ctx, cx + 14 * u, peu - 4 * u, W * 0.46, 16 * u);
+        ctx.fillStyle = 'rgba(14,10,8,0.9)'; ctx.beginPath(); ctx.ellipse(cx, ly + T + 22 * u, 150 * u, 30 * u, 0, 0, Math.PI * 2); ctx.fill();
+
+        // Un bloc de pedra tallat: cara del davant, cara de la dreta i cara de dalt (si es veu)
+        const bloc = (x, y, bw, bh, dpt, [cf, cd, cs], cima = true) => {
+            ctx.lineWidth = 3 * u; ctx.strokeStyle = CONTORN;
+            const ox = dpt, oy = dpt * 0.55;
+            ctx.fillStyle = cd; ctx.beginPath(); ctx.moveTo(x + bw, y); ctx.lineTo(x + bw + ox, y - oy); ctx.lineTo(x + bw + ox, y + bh - oy); ctx.lineTo(x + bw, y + bh); ctx.closePath(); ctx.fill(); ctx.stroke();
+            const g = ctx.createLinearGradient(x, 0, x + bw, 0); g.addColorStop(0, cf); g.addColorStop(1, cd);
+            ctx.fillStyle = g; ctx.beginPath(); ctx.rect(x, y, bw, bh); ctx.fill(); ctx.stroke();
+            if (cima) { ctx.fillStyle = cs; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + ox, y - oy); ctx.lineTo(x + bw + ox, y - oy); ctx.lineTo(x + bw, y); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+            // Picat i vetes de la pedra
+            ctx.save(); ctx.beginPath(); ctx.rect(x, y, bw, bh); ctx.clip();
+            for (let k = 0; k < bw * bh / (90 * u * u); k++) { ctx.fillStyle = r() < 0.5 ? 'rgba(50,42,32,0.28)' : 'rgba(255,250,235,0.22)'; ctx.fillRect(x + r() * bw, y + r() * bh, (1 + r() * 2) * u, (1 + r() * 2) * u); }
+            ctx.strokeStyle = 'rgba(40,32,24,0.4)'; ctx.lineWidth = 1.4 * u;
+            ctx.beginPath(); ctx.moveTo(x + bw * (0.2 + r() * 0.5), y + 2 * u); ctx.lineTo(x + bw * (0.3 + r() * 0.4), y + bh * 0.55); ctx.stroke();
+            ctx.restore();
+        };
+        // Els dos pilars quadrats de sempre, amb la cara del davant i la del costat (no han canviat)
+        ctx.lineWidth = 3.5 * u; ctx.strokeStyle = CONTORN;
+        const pilar = (x, y0, amp, alt, prof) => {
+            ctx.fillStyle = '#9a9282'; ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x + amp, y0); ctx.lineTo(x + amp, y0 + alt); ctx.lineTo(x, y0 + alt); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#6e685c'; ctx.beginPath(); ctx.moveTo(x + amp, y0); ctx.lineTo(x + amp + prof, y0 - prof * 0.5); ctx.lineTo(x + amp + prof, y0 + alt - prof * 0.5); ctx.lineTo(x + amp, y0 + alt); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(40,32,24,0.45)'; ctx.lineWidth = 1.5 * u;
+            ctx.beginPath(); ctx.moveTo(x + amp * 0.3, y0 + 8 * u); ctx.lineTo(x + amp * 0.42, y0 + alt * 0.5); ctx.moveTo(x + 6 * u, y0 + alt * 0.62); ctx.lineTo(x + amp - 8 * u, y0 + alt * 0.66); ctx.stroke();
+            ctx.fillStyle = 'rgba(96,140,64,0.75)'; ctx.beginPath(); ctx.ellipse(x + amp * 0.5, y0 + alt - 4 * u, amp * 0.55, 6 * u, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.5 * u;
+        };
+        pilar(236 * u, 220 * u, 58 * u, peu - 220 * u - 6 * u, 16 * u);           // el del fons, a la dreta
+        pilar(92 * u, 226 * u, 74 * u, peu - 226 * u, 18 * u);                     // el del davant, a l'esquerra
+
+        // Ombra de la llosa damunt els pilars
+        [[92, 74], [236, 58]].forEach(([x, bw]) => { const sg = ctx.createLinearGradient(0, ly + T + 4 * u, 0, ly + T + 34 * u); sg.addColorStop(0, 'rgba(10,8,6,0.55)'); sg.addColorStop(1, 'rgba(10,8,6,0)'); ctx.fillStyle = sg; ctx.fillRect(x * u, ly + T + 4 * u, bw * u, 30 * u); });
+
+        // La llosa: una sola silueta (la meitat de dalt de l'el·lipse de la cara + la meitat de baix de la del cantell)
+        const N = 64, rad = t => 1 + 0.03 * Math.sin(t * 5 + 1) + 0.022 * Math.cos(t * 3) + 0.012 * Math.sin(t * 9);
+        const sil = () => {
+            ctx.beginPath();
+            for (let k = 0; k <= N; k++) { const t = Math.PI + k / N * Math.PI, q = rad(t); const x = cx + Math.cos(t) * RX * q * (1 + 0.04 * Math.cos(t)), y = ly + Math.sin(t) * RY * q; k ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+            for (let k = 0; k <= N; k++) { const t = k / N * Math.PI, q = rad(t); ctx.lineTo(cx + Math.cos(t) * RX * q * (1 + 0.04 * Math.cos(t)), ly + T * (0.5 + 0.5 * Math.sin(t)) + Math.sin(t) * RY * q * 0.96); }
+            ctx.closePath();
+        };
+        // Un sol degradat vertical: la cara de dalt clara, l'arrodoniment del cantell i la part de sota a l'ombra
+        const g = ctx.createLinearGradient(0, ly - RY, 0, ly + T + RY);
+        g.addColorStop(0, '#ded8c6'); g.addColorStop(0.3, '#d2cbb7'); g.addColorStop(0.5, '#c0b8a2'); g.addColorStop(0.62, '#a39b86'); g.addColorStop(0.8, '#7c7464'); g.addColorStop(1, '#4e483e');
+        ctx.fillStyle = g; sil(); ctx.fill();
+        ctx.save(); sil(); ctx.clip();
+        // Llum càlida del capvespre a l'esquerra i ombra a la dreta
+        const l = ctx.createLinearGradient(cx - RX, 0, cx + RX, 0);
+        l.addColorStop(0, 'rgba(255,236,190,0.28)'); l.addColorStop(0.5, 'rgba(255,255,255,0)'); l.addColorStop(1, 'rgba(30,24,40,0.3)');
+        ctx.fillStyle = l; ctx.fillRect(0, 0, W, H);
+        // Pigues fosques i grans de la pedra
+        for (let k = 0; k < 420; k++) {
+            const x = cx + (r() - 0.5) * 2 * RX, y = ly - RY + r() * (2 * RY + T);
+            ctx.fillStyle = r() < 0.55 ? 'rgba(56,48,38,0.38)' : 'rgba(255,255,255,0.3)';
+            ctx.beginPath(); ctx.arc(x, y, (0.5 + r() * 1.0) * u, 0, Math.PI * 2); ctx.fill();
         }
-        // Runna, clavada i una mica decantada: fulla, creuera daurada, empunyadura de cuir i pom
-        ctx.save(); ctx.translate(ex, ey); ctx.rotate(inc);
-        const aura = ctx.createRadialGradient(0, -110 * u, 4 * u, 0, -110 * u, 90 * u);
-        aura.addColorStop(0, 'rgba(210,230,255,0.45)'); aura.addColorStop(1, 'rgba(210,230,255,0)');
-        ctx.fillStyle = aura; ctx.fillRect(-90 * u, -200 * u, 180 * u, 200 * u);
-        ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.5 * u; ctx.lineJoin = 'round';
-        const bl = ctx.createLinearGradient(-7 * u, 0, 7 * u, 0);
-        bl.addColorStop(0, '#f4f8ff'); bl.addColorStop(0.5, '#c4d8f4'); bl.addColorStop(1, '#7a94c0');
-        const cr = -118 * u;
-        ctx.fillStyle = bl; ctx.beginPath(); ctx.moveTo(-7 * u, cr + 6 * u); ctx.lineTo(-6 * u, 0); ctx.lineTo(6 * u, 0); ctx.lineTo(7 * u, cr + 6 * u); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.strokeStyle = 'rgba(80,110,160,0.8)'; ctx.lineWidth = 1.4 * u; ctx.beginPath(); ctx.moveTo(0, cr + 8 * u); ctx.lineTo(0, -4 * u); ctx.stroke();
-        ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.fillRect(-5 * u, cr + 8 * u, 1.6 * u, -cr - 14 * u);
-        ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.5 * u;
-        ctx.fillStyle = '#e0b84a'; ctx.beginPath();
-        ctx.moveTo(-26 * u, cr - 2 * u); ctx.quadraticCurveTo(-30 * u, cr + 7 * u, -21 * u, cr + 7 * u); ctx.lineTo(21 * u, cr + 7 * u);
-        ctx.quadraticCurveTo(30 * u, cr + 7 * u, 26 * u, cr - 2 * u); ctx.quadraticCurveTo(0, cr + 3 * u, -26 * u, cr - 2 * u); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#3a6ad8'; ctx.beginPath(); ctx.arc(0, cr + 2.5 * u, 3.4 * u, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#5a3420'; ctx.fillRect(-4.5 * u, cr - 28 * u, 9 * u, 26 * u); ctx.strokeRect(-4.5 * u, cr - 28 * u, 9 * u, 26 * u);
-        ctx.strokeStyle = '#8a5a34'; ctx.lineWidth = 1.4 * u;
-        for (let y = cr - 25 * u; y < cr - 4 * u; y += 4.5 * u) { ctx.beginPath(); ctx.moveTo(-4.5 * u, y); ctx.lineTo(4.5 * u, y + 2.8 * u); ctx.stroke(); }
-        ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.5 * u;
-        ctx.fillStyle = '#e0b84a'; ctx.beginPath(); ctx.arc(0, cr - 33 * u, 6 * u, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = 'rgba(255,250,220,0.8)'; ctx.beginPath(); ctx.arc(-2 * u, cr - 35 * u, 1.8 * u, 0, Math.PI * 2); ctx.fill();
+        // Clapes de liquen: blanc-crema, ocre i verd grisenc; cada clapa és un munt de cercles petits
+        const clapa = (x, y, rr, col, n) => { ctx.fillStyle = col; for (let k = 0; k < n; k++) { const a = r() * 6.28, d = Math.sqrt(r()) * rr; ctx.beginPath(); ctx.ellipse(x + Math.cos(a) * d, y + Math.sin(a) * d * 0.45, (1.6 + r() * 3.4) * u, (1 + r() * 2) * u, r(), 0, Math.PI * 2); ctx.fill(); } };
+        for (let k = 0; k < 20; k++) {
+            const x = cx + (r() - 0.5) * 2 * RX * 0.9, y = ly + (r() - 0.45) * RY * 1.5 + (r() < 0.25 ? T * 0.5 : 0), rr = (12 + r() * 22) * u;
+            clapa(x, y, rr, 'rgba(240,236,218,0.6)', 46);
+            if (r() < 0.55) clapa(x + 4 * u, y, rr * 0.6, 'rgba(176,160,104,0.34)', 14);
+            if (r() < 0.35) clapa(x - 3 * u, y + 2 * u, rr * 0.5, 'rgba(128,142,108,0.4)', 12);
+        }
+        // Esquerdes fines
+        ctx.strokeStyle = 'rgba(46,38,30,0.55)'; ctx.lineWidth = 1.5 * u;
+        [[-110, -6], [90, -14], [30, 40], [-40, 36]].forEach(([dx, dy]) => { let x = cx + dx * u, y = ly + dy * u; ctx.beginPath(); ctx.moveTo(x, y); for (let k = 0; k < 4; k++) { x += (r() - 0.3) * 14 * u; y += (4 + r() * 9) * u; ctx.lineTo(x, y); } ctx.stroke(); });
+        // Lluïssor a l'aresta de dalt
+        ctx.strokeStyle = 'rgba(255,252,236,0.5)'; ctx.lineWidth = 3 * u; ctx.beginPath(); ctx.ellipse(cx, ly + 1 * u, RX * 0.96, RY * 0.9, 0, Math.PI * 1.05, Math.PI * 1.9); ctx.stroke();
         ctx.restore();
+        // Un únic contorn, el de la silueta
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.6 * u; sil(); ctx.stroke();
+        // El tall on s'enfonsa la fulla
+        ctx.fillStyle = '#1e1a14'; ctx.beginPath(); ctx.ellipse(DOLMEN_DIB.ex * u, DOLMEN_DIB.ey * u, 8 * u, 2.8 * u, 0, 0, Math.PI * 2); ctx.fill();
     });
 }
 

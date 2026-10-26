@@ -76,7 +76,7 @@ class ZonaPlaca extends ZonaBase {
         // --- Sortides ---
         this.sortida(0, 470, 14, 190, 'ZonaCasaGran', 'placa');
         this.sortida(760, 1186, 160, 14, 'ZonaCreu', 'placa');
-        this.sortida(330, 0, 130, 14, 'ZonaRuines', 'placa');
+        this.sortida(330, 0, 130, 14, 'ZonaCellerFora', 'placa');
         this.sortida(1586, 530, 14, 150, 'ZonaMonestir', 'placa');
 
         // Visitants corromputs per la boira

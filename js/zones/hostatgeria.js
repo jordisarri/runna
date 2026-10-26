@@ -1,7 +1,7 @@
 /**
  * L'HOSTATGERIA PER DINS
  * Soterrani: un laberint de passadissos foscos (només hi veus el cercle de llum de l'Ineu, les espelmes i les escales).
- * Vestíbul: la sala d'entrada de l'Hostatgeria, on s'han de trobar les monges.
+ * Vestíbul: la sala d'entrada de l'Hostatgeria, on s'han de trobar les sacerdotesses.
  */
 
 const SOT = { cel: 120, cols: 13, files: 9, oy: 120 };
@@ -156,8 +156,8 @@ class ZonaSoterraniHost extends ZonaBase {
     }
 }
 
-// El vestíbul de l'Hostatgeria. Tres portes duen a les cambres de les monges; cada una té el seu bloqueig:
-//   esquerra (dormitori, la Pains): oberta, però la monja dorm dins un capoll de boira → Cant de l'Aurora (flauta)
+// El vestíbul de l'Hostatgeria. Tres portes duen a les cambres de les sacerdotesses; cada una té el seu bloqueig:
+//   esquerra (dormitori, la Pains): oberta, però la sacerdotessa dorm dins un capoll de boira → Cant de l'Aurora (flauta)
 //   mig (refetor, la Phili): una taula pesadíssima barra la porta → Guants de Poder
 //   dreta (capella, la Charm): esbarzers negres → Runna
 // En alliberar les tres, obren la porta de l'Hostatgeria per dins (el vestíbul esdevé un lloc de repòs).
@@ -247,11 +247,11 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         for (let y = 776; y < 900; y += 20) barana.fillStyle(0x3a2412, 1).fillRect(259, y, 15, 4);
         this.colisio(266, 830, 14, 140);
         this.sortida(150, 870, 100, 30, 'ZonaSoterraniHost', 'escala');
-        // Porta de l'Hostatgeria, a baix al mig: tancada fins que les monges l'obren
+        // Porta de l'Hostatgeria, a baix al mig: tancada fins que les sacerdotesses l'obren
         this.porta(600, 884, 120, 30, 0x4a2c16);
         this.sortida(540, 872, 120, 28, 'ZonaJardi', 'hostatgeria');
 
-        // Una taula d'infusions: lloc de repòs un cop les monges són lliures
+        // Una taula d'infusions: lloc de repòs un cop les sacerdotesses són lliures
         this.posar('taula', 1040, 560, { escala: 0.9, col: { w: 100, h: 24 } });
         this.interactiu(1040, 590, 85, () => this.descans(), { altura: 90, actiu: () => Estat.flag('mongesTrobades') });
         this.boira(600, 450, 900, 260, 1.2);
@@ -279,7 +279,7 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
     }
 }
 
-// ---------------- LES TRES CAMBRES DE LES MONGES ----------------
+// ---------------- LES TRES CAMBRES DE LES SACERDOTESSES ----------------
 class CambraMonja extends ZonaCasaBase {
     constructor(clau, nomCambra, monja) {
         super(clau, { nom: nomCambra, amplada: 800, alcada: 620, colorFons: '#0a0806', entrades: { porta: { x: 400, y: 540, dir: 'amunt' } } });
@@ -420,6 +420,6 @@ class CambraMonja extends ZonaCasaBase {
     }
 }
 
-class ZonaCambraPains extends CambraMonja { constructor() { super('ZonaCambraPains', 'Dormitori de les monges', 'pains'); } }
-class ZonaCambraPhili extends CambraMonja { constructor() { super('ZonaCambraPhili', 'Refetor de les monges', 'phili'); } }
+class ZonaCambraPains extends CambraMonja { constructor() { super('ZonaCambraPains', 'Dormitori de les sacerdotesses', 'pains'); } }
+class ZonaCambraPhili extends CambraMonja { constructor() { super('ZonaCambraPhili', 'Refetor de les sacerdotesses', 'phili'); } }
 class ZonaCambraCharm extends CambraMonja { constructor() { super('ZonaCambraCharm', "Capella de l'Hostatgeria", 'charm'); } }

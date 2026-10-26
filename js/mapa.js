@@ -9,9 +9,9 @@ const MAPA = {
     pos(z) { return { x: 56 + (z.x - 150) * 0.64, y: 140 + (z.y - 90) * 1.85 }; },
     zones: [
         // Nord
-        { id: 'ZonaCirosa',        nom: 'La Cirosa',                x: 1100, y: 90 },
-        { id: 'ZonaMasiaCirosa',   nom: 'El Mas de la Cirosa',     x: 930,  y: 90 },
-        { id: 'ZonaCamiCirosa',    nom: 'Camí de la Cirosa',        x: 950,  y: 150 },
+        { id: 'ZonaCirosa',        nom: 'La Cirosa',                x: 900, y: 0 },
+        { id: 'ZonaMasiaCirosa',   nom: 'El Mas de la Cirosa',     x: 1070,  y: 0 },
+        { id: 'ZonaCamiCirosa',    nom: 'Camí de la Cirosa',        x: 850,  y: 65 },
         { id: 'ZonaCabanaInt',     nom: 'Dins la cabana',           x: 200,  y: 110 },
         { id: 'ZonaCabana',        nom: 'Cabana de la Jaumeta',     x: 370,  y: 110 },
         { id: 'ZonaBosc',          nom: 'Bosc de Sant Joan',        x: 520,  y: 200 },
@@ -27,53 +27,54 @@ const MAPA = {
         { id: 'ZonaCabanaCami',    nom: 'Cabana amagada',           x: 450,  y: 245 },
         { id: 'ZonaRuines',        nom: 'Les Runes',                x: 800,  y: 300 },
         { id: 'ZonaCementiri',     nom: 'El Cementiri',             x: 1050, y: 300 },
+        { id: 'ZonaCellerFora',    nom: 'Pati del Celler',          x: 800,  y: 385 },
         { id: 'ZonaPingpong',      nom: 'El Celler',                x: 640,  y: 390 },
         { id: 'ZonaGolfes',         nom: 'Sala del Rellotge',       x: 930,  y: 335 },
         { id: 'ZonaEsglesia',      nom: 'Santuari',                 x: 930,  y: 390 },
-        { id: 'ZonaEra',           nom: 'L\'Era',                   x: 330,  y: 390 },
+        { id: 'ZonaEra',           nom: 'L\'Era',                   x: 300,  y: 390 },
         // Fila del poble (oest -> est): Hostatgeria · Taverna · Casa Gran · Plaça · Monestir
-        { id: 'ZonaJardi',         nom: 'L\'Hostatgeria',           x: 250,  y: 470 },
-        { id: 'ZonaHostatgeriaInt', nom: 'Hostatgeria per dins',      x: 420,  y: 470 },
-        { id: 'ZonaCambraPains',    nom: 'Dormitori',                x: 250,  y: 420 },
-        { id: 'ZonaCambraPhili',   nom: 'Refetor',                  x: 410,  y: 420 },
-        { id: 'ZonaCambraCharm',   nom: 'Capella',                  x: 570,  y: 420 },
-        { id: 'ZonaSoterraniHost', nom: 'Soterrani de l\'Hostatgeria', x: 420, y: 520 },
+        { id: 'ZonaJardi',         nom: 'L\'Hostatgeria',           x: 440,  y: 470 },
+        { id: 'ZonaHostatgeriaInt', nom: 'Hostatgeria per dins',      x: 440,  y: 410 },
+        { id: 'ZonaCambraPains',    nom: 'Dormitori',                x: 340,  y: 350 },
+        { id: 'ZonaCambraPhili',   nom: 'Refetor',                  x: 440,  y: 350 },
+        { id: 'ZonaCambraCharm',   nom: 'Capella',                  x: 540,  y: 350 },
+        { id: 'ZonaSoterraniHost', nom: 'Soterrani de l\'Hostatgeria', x: 440, y: 530 },
         { id: 'ZonaTaverna',       nom: 'La Taverna',               x: 590,  y: 470 },
         { id: 'ZonaTavernaInt',    nom: 'La Taverna per dins',      x: 590,  y: 520 },
         { id: 'ZonaSotaTaverna',   nom: 'Soterrani de la Taverna',  x: 590,  y: 596 },
         { id: 'ZonaGirgoles',      nom: 'Sala de les Gírgoles',     x: 930,  y: 596 },
         { id: 'ZonaTortura',       nom: 'Passadís de tortura',      x: 1100, y: 596 },
         { id: 'ZonaGabia',         nom: 'Sala de la Gàbia',         x: 1100, y: 650 },
-        { id: 'ZonaCelaStAntoni',   nom: 'Cel·la de Sant Antoni',      x: 1100, y: 330 },
+        { id: 'ZonaCelaStAntoni',   nom: 'Cel·la de Sant Antoni',      x: 1260, y: 400 },
         { id: 'ZonaMonestirRebedor',  nom: 'Rebedor del Monestir',        x: 1010, y: 514 },
         { id: 'ZonaBiblioteca',    nom: 'Biblioteca del Monestir',  x: 1100, y: 562 },
         { id: 'ZonaCasaGran',      nom: 'Arcs de la Casa Gran',         x: 760,  y: 470 },
         { id: 'ZonaPlaca',         nom: 'Plaça del Santuari',       x: 930,  y: 470 },
         { id: 'ZonaMonestir',      nom: 'El Monestir',              x: 1100, y: 470 },
-        { id: 'ZonaSantAntoni',    nom: 'Sant Antoni',              x: 1100, y: 390 },
+        { id: 'ZonaSantAntoni',    nom: 'Sant Antoni',              x: 1260, y: 470 },
         { id: 'ZonaCasaGranInt',   nom: 'Casa Gran · Escalinata',   x: 760,  y: 550 },
         { id: 'ZonaCasaCripta',    nom: 'Cripta dels Monjos',       x: 760,  y: 596 },
-        { id: 'ZonaCasaTresor',    nom: 'Cambra secreta',          x: 590,  y: 550 },
-        { id: 'ZonaPassadis',      nom: 'Passadís secret',          x: 760,  y: 420 },
+        { id: 'ZonaCasaTresor',    nom: 'Cambra secreta',          x: 675,  y: 550 },
+        { id: 'ZonaPassadis',      nom: 'Passadís secret',          x: 675,  y: 425 },
         { id: 'ZonaCreu',          nom: 'La Bassadòria',            x: 930,  y: 550 },
         // Sud-oest i franja sud
-        { id: 'ZonaCamiRov',       nom: 'Camí Rovellonera',         x: 230,  y: 540 },
-        { id: 'ZonaRovellonera',   nom: 'Rovellonera',              x: 400,  y: 590 },
-        { id: 'ZonaGabriel',       nom: 'Ermita de Sant Gabriel',   x: 400,  y: 640 },
-        { id: 'ZonaDipositos',     nom: 'Els Dipòsits',             x: 650,  y: 640 },
-        { id: 'ZonaDolmen',        nom: 'El Dolmen',                x: 900,  y: 640 }
+        { id: 'ZonaCamiRov',       nom: 'Camí Rovellonera',         x: 170,  y: 460 },
+        { id: 'ZonaRovellonera',   nom: 'Rovellonera',              x: 60,  y: 530 },
+        { id: 'ZonaGabriel',       nom: 'Ermita de Sant Gabriel',   x: 60,  y: 610 },
+        { id: 'ZonaDipositos',     nom: 'Els Dipòsits',             x: 250,  y: 640 },
+        { id: 'ZonaDolmen',        nom: 'El Dolmen',                x: 430,  y: 640 }
     ],
     enllacos: [
-        ['ZonaPlaca', 'ZonaCreu'], ['ZonaPlaca', 'ZonaCasaGran'], ['ZonaCasaGran', 'ZonaCasaGranInt'], ['ZonaCasaGranInt', 'ZonaCasaCripta'], ['ZonaCasaGranInt', 'ZonaCasaTresor'], ['ZonaCasaTresor', 'ZonaPassadis'], ['ZonaPassadis', 'ZonaPingpong'],
-        ['ZonaPlaca', 'ZonaEsglesia'], ['ZonaEsglesia', 'ZonaGolfes'], ['ZonaPlaca', 'ZonaMonestir'], ['ZonaPlaca', 'ZonaRuines'],
-        ['ZonaRuines', 'ZonaPingpong'], ['ZonaRuines', 'ZonaCami'], ['ZonaCami', 'ZonaErmita'], ['ZonaCami', 'ZonaCabanaCami'],
-        ['ZonaErmita', 'ZonaErmitaInt'], ['ZonaErmita', 'ZonaEra'], ['ZonaEra', 'ZonaJardi'],
-        ['ZonaJardi', 'ZonaTaverna'], ['ZonaJardi', 'ZonaSoterraniHost'], ['ZonaSoterraniHost', 'ZonaHostatgeriaInt'], ['ZonaHostatgeriaInt', 'ZonaCambraPains'], ['ZonaHostatgeriaInt', 'ZonaCambraPhili'], ['ZonaHostatgeriaInt', 'ZonaCambraCharm'], ['ZonaTaverna', 'ZonaCasaGran'], ['ZonaTaverna', 'ZonaTavernaInt'], ['ZonaTaverna', 'ZonaSotaTaverna'], ['ZonaSotaTaverna', 'ZonaGirgoles'], ['ZonaGirgoles', 'ZonaTortura'], ['ZonaTortura', 'ZonaGabia'], ['ZonaMonestir', 'ZonaMonestirRebedor'], ['ZonaMonestirRebedor', 'ZonaBiblioteca'],
-        ['ZonaRuines', 'ZonaCementiri'], ['ZonaCementiri', 'ZonaMonestir'], ['ZonaMonestir', 'ZonaSantAntoni'], ['ZonaSantAntoni', 'ZonaCelaStAntoni'],
-        ['ZonaRuines', 'ZonaCelles'], ['ZonaCelles', 'ZonaBosc'], ['ZonaBosc', 'ZonaCabana'], ['ZonaCabana', 'ZonaCabanaInt'],
-        ['ZonaCelles', 'ZonaTiller'], ['ZonaTiller', 'ZonaJordi'], ['ZonaJordi', 'ZonaCasetaJoc'], ['ZonaJordi', 'ZonaCasaJordi'], ['ZonaTiller', 'ZonaCamiCirosa'], ['ZonaCamiCirosa', 'ZonaCirosa'], ['ZonaCirosa', 'ZonaMasiaCirosa'],
-        ['ZonaEra', 'ZonaCamiRov'], ['ZonaCamiRov', 'ZonaRovellonera'], ['ZonaRovellonera', 'ZonaGabriel'],
-        ['ZonaGabriel', 'ZonaDipositos'], ['ZonaDipositos', 'ZonaDolmen']
+        ['ZonaPlaca', 'ZonaCreu', 'S', 'N'], ['ZonaPlaca', 'ZonaCasaGran', 'W', 'E'], ['ZonaCasaGran', 'ZonaCasaGranInt'], ['ZonaCasaGranInt', 'ZonaCasaCripta'], ['ZonaCasaGranInt', 'ZonaCasaTresor'], ['ZonaCasaTresor', 'ZonaPassadis'], ['ZonaPassadis', 'ZonaPingpong'],
+        ['ZonaPlaca', 'ZonaEsglesia'], ['ZonaEsglesia', 'ZonaGolfes'], ['ZonaPlaca', 'ZonaMonestir', 'E', 'W'], ['ZonaPlaca', 'ZonaCellerFora', 'N', 'S'], ['ZonaCellerFora', 'ZonaRuines', 'N', 'S'],
+        ['ZonaCellerFora', 'ZonaPingpong'], ['ZonaRuines', 'ZonaCami', 'W', 'E'], ['ZonaCami', 'ZonaErmita', 'W', 'E'], ['ZonaCami', 'ZonaCabanaCami'],
+        ['ZonaErmita', 'ZonaErmitaInt'], ['ZonaErmita', 'ZonaEra', 'S', 'N'], ['ZonaEra', 'ZonaJardi', 'E', 'W'],
+        ['ZonaJardi', 'ZonaTaverna', 'E', 'W'], ['ZonaJardi', 'ZonaHostatgeriaInt'], ['ZonaJardi', 'ZonaSoterraniHost'], ['ZonaSoterraniHost', 'ZonaHostatgeriaInt'], ['ZonaHostatgeriaInt', 'ZonaCambraPains'], ['ZonaHostatgeriaInt', 'ZonaCambraPhili'], ['ZonaHostatgeriaInt', 'ZonaCambraCharm'], ['ZonaTaverna', 'ZonaCasaGran', 'E', 'W'], ['ZonaTaverna', 'ZonaTavernaInt'], ['ZonaTaverna', 'ZonaSotaTaverna'], ['ZonaSotaTaverna', 'ZonaGirgoles'], ['ZonaGirgoles', 'ZonaTortura'], ['ZonaTortura', 'ZonaGabia'], ['ZonaMonestir', 'ZonaMonestirRebedor'], ['ZonaMonestirRebedor', 'ZonaBiblioteca'],
+        ['ZonaRuines', 'ZonaCementiri', 'E', 'W'], ['ZonaCementiri', 'ZonaMonestir', 'S', 'N'], ['ZonaMonestir', 'ZonaSantAntoni', 'E', 'W'], ['ZonaSantAntoni', 'ZonaCelaStAntoni'],
+        ['ZonaRuines', 'ZonaCelles', 'N', 'S'], ['ZonaCelles', 'ZonaBosc', 'W', 'E'], ['ZonaBosc', 'ZonaCabana'], ['ZonaCabana', 'ZonaCabanaInt'],
+        ['ZonaCelles', 'ZonaTiller', 'N', 'S'], ['ZonaTiller', 'ZonaJordi', 'W', 'E'], ['ZonaJordi', 'ZonaCasetaJoc'], ['ZonaJordi', 'ZonaCasaJordi'], ['ZonaTiller', 'ZonaCamiCirosa', 'N', 'S'], ['ZonaCamiCirosa', 'ZonaCirosa', 'N', 'S'], ['ZonaCirosa', 'ZonaMasiaCirosa'],
+        ['ZonaEra', 'ZonaCamiRov', 'W', 'E'], ['ZonaCamiRov', 'ZonaRovellonera', 'W', 'E'], ['ZonaRovellonera', 'ZonaGabriel', 'S', 'N'],
+        ['ZonaGabriel', 'ZonaDipositos', 'E', 'W'], ['ZonaDipositos', 'ZonaDolmen', 'E', 'W']
     ],
 
     visitada(id) { return Estat.flag('visitada_' + id); },
@@ -92,7 +93,7 @@ const MAPA = {
     REGIONS: [
         { nom: 'La Cirosa', color: 0xe0b050, ids: ['ZonaCirosa', 'ZonaMasiaCirosa', 'ZonaCamiCirosa'] },
         { nom: 'Bosc de Sant Joan', color: 0x58b878, ids: ['ZonaCabanaInt', 'ZonaCabana', 'ZonaBosc', 'ZonaJordi', 'ZonaCasaJordi', 'ZonaCasetaJoc', 'ZonaTiller', 'ZonaCelles'] },
-        { nom: 'Les Runes', color: 0x78a8d8, ids: ['ZonaRuines', 'ZonaCementiri', 'ZonaPingpong', 'ZonaCami', 'ZonaCabanaCami', 'ZonaErmita', 'ZonaErmitaInt'] },
+        { nom: 'Les Runes', color: 0x78a8d8, ids: ['ZonaRuines', 'ZonaCellerFora', 'ZonaCementiri', 'ZonaPingpong', 'ZonaCami', 'ZonaCabanaCami', 'ZonaErmita', 'ZonaErmitaInt'] },
         { nom: 'El Poble', color: 0xd09a58, ids: ['ZonaEra', 'ZonaJardi', 'ZonaHostatgeriaInt', 'ZonaCambraPains', 'ZonaCambraPhili', 'ZonaCambraCharm', 'ZonaTaverna', 'ZonaTavernaInt', 'ZonaCasaGran', 'ZonaCasaGranInt', 'ZonaPlaca', 'ZonaCreu', 'ZonaEsglesia', 'ZonaGolfes'] },
         { nom: 'El Monestir', color: 0xd8704a, ids: ['ZonaMonestir', 'ZonaSantAntoni', 'ZonaCelaStAntoni', 'ZonaMonestirRebedor', 'ZonaBiblioteca'] },
         { nom: 'La Rovellonera', color: 0xc08848, ids: ['ZonaCamiRov', 'ZonaRovellonera', 'ZonaGabriel', 'ZonaDipositos', 'ZonaDolmen'] },
@@ -102,7 +103,7 @@ const MAPA = {
 
     // Dibuixa el mapa dins del contenidor, entre les y top i baix; actual = id de la zona on som
     dibuixar(scene, cont, actual, top = 120, baix = ALT - 60) {
-        const E = Estat, X0 = 24, X1 = AMPLE - 24, VW = X1 - X0, VH = baix - top;
+        const E = Estat, X0 = 50, X1 = AMPLE - 50, VW = X1 - X0, VH = baix - top;   // dins del pergamí (el marc fa 44 px)
         const hInfo = 124, yInfo = baix - 46 - hInfo, VH2 = yInfo - top;        // VH2: part visible above the info panel
         const per = id => MAPA.zones.find(z => z.id === id);
         const hex = n => '#' + n.toString(16).padStart(6, '0');
@@ -163,16 +164,27 @@ const MAPA = {
             etiquetes.push(add(scene.add.text(cx, cy, r.nom.toUpperCase(), estilText(60, hex(r.color), { fontStyle: 'bold', fontFamily: FONT_PLACA })).setOrigin(0.5).setAlpha(0.3), mon));
         });
 
-        // Camins
+        // Camins. Els que a l'escena surten per una vora (da, db: N, S, E, W) surten de la fitxa per aquell mateix costat i
+        // fan corba fins a l'altra; les portes (sense direcció) són un traç recte.
         const g = add(scene.add.graphics(), mon);
-        MAPA.enllacos.forEach(([a, b]) => {
+        const DIR = { N: [0, -1], S: [0, 1], E: [1, 0], W: [-1, 0] };
+        const tracat = (na, nb, da, db) => {
+            if (!da || !db) return [{ x: na.x, y: na.y }, { x: nb.x, y: nb.y }];
+            const [ax, ay] = DIR[da], [bx, by] = DIR[db];
+            const p0 = new Phaser.Math.Vector2(na.x + ax * na.w / 2, na.y + ay * na.h / 2), p3 = new Phaser.Math.Vector2(nb.x + bx * nb.w / 2, nb.y + by * nb.h / 2);
+            const L = Math.max(50, p0.distance(p3) * 0.45);
+            return new Phaser.Curves.CubicBezier(p0, new Phaser.Math.Vector2(p0.x + ax * L, p0.y + ay * L), new Phaser.Math.Vector2(p3.x + bx * L, p3.y + by * L), p3).getPoints(24);
+        };
+        MAPA.enllacos.forEach(([a, b, da, db]) => {
             const na = nodeDe(a), nb = nodeDe(b);
             if (!na || !nb || (!na.v && !nb.v)) return;
-            if (na.v && nb.v) { g.lineStyle(9, 0x000000, 0.55).lineBetween(na.x, na.y + 2, nb.x, nb.y + 2); g.lineStyle(5, 0xb09a74, 1).lineBetween(na.x, na.y, nb.x, nb.y); }
+            const pts = tracat(na, nb, da, db);
+            if (na.v && nb.v) { g.lineStyle(9, 0x000000, 0.55).strokePoints(pts.map(p => ({ x: p.x, y: p.y + 2 }))); g.lineStyle(5, 0xb09a74, 1).strokePoints(pts); }
             else {                                                       // camí a un lloc encara per explorar: puntejat
-                const n = Math.max(2, Math.floor(Math.hypot(nb.x - na.x, nb.y - na.y) / 22));
+                const corba = new Phaser.Curves.Spline(pts.map(p => new Phaser.Math.Vector2(p.x, p.y)));
+                const n = Math.max(2, Math.floor(corba.getLength() / 22));
                 g.fillStyle(0x8a7a62, 0.95);
-                for (let k = 1; k < n; k++) g.fillCircle(na.x + (nb.x - na.x) * k / n, na.y + (nb.y - na.y) * k / n, 3.5);
+                corba.getSpacedPoints(n).slice(1, -1).forEach(p => g.fillCircle(p.x, p.y, 3.5));
             }
         });
 

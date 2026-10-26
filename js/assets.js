@@ -112,7 +112,7 @@ const CATALEG = [
     { key: 'pastor_boira',   file: 'assets/enemics/pastor_boira.webp',   amplada: 88, provisional: (c, w) => dibuixarPastorBoira(c, w) },
     { key: 'bolet',          file: 'assets/enemics/bolet.webp',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
     { key: 'rovello',        file: 'assets/natura/rovello.webp',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
-    { key: 'llac',           file: 'assets/natura/llac.png',           amplada: 36, provisional: (c, w) => dibuixarLlac(c, w) },
+    { key: 'llac',           file: 'assets/natura/llac.png',           amplada: 58, provisional: (c, w) => dibuixarLlac(c, w) },
     { key: 'diposit',        file: 'assets/edificis/diposit.png',        amplada: 300, provisional: (c, w) => dibuixarDiposit(c, w) },
     { key: 'telescopi_mon',  file: 'assets/objectes/telescopi_mon.png',  amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w) },
     { key: 'tripode',        file: 'assets/objectes/tripode.png',        amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w, false) },   // el trípode del mirador, sense el telescopi
@@ -136,6 +136,7 @@ const CATALEG = [
     { key: 'jaumeta',        file: 'assets/personatges/jaumeta.png',        amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
     { key: 'arma_tiller', file: 'assets/armes/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/armes/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
+    { key: 'ineu_aixeca', file: 'assets/personatges/ineu_aixeca_espasa.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant Runna, mirant amunt (ja amb fons transparent)
     { key: 'arma_espasa', file: 'assets/armes/espasa.webp',      amplada: 28, provisional: (c, w) => dibuixarEspasaProvisional(c, w) },   // l'espasa de Runna
     { key: 'cartell_llums', file: 'assets/objectes/cartell_llums.webp', amplada: 560, cru: true },            // cartell de paper (es mostra tal com és, amb el fons blanc)
     { key: 'cartell_llums_borros', file: 'assets/objectes/cartell_llums_borros.webp', amplada: 56, cru: true },   // la mateixa imatge, borrosa i petita, per a la paret

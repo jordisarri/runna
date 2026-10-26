@@ -54,6 +54,7 @@ class ZonaBase extends Phaser.Scene {
         this.cintaGastada = false;
 
         this.sols = [];
+        this.pedresMobils = [];
         this.camins = [];     // rectangles de camí de terra: es fusionen i es dibuixen amb vores suaus (construirCamins)
         this.extraSud = 0;
         this.yTall = Infinity;
@@ -683,28 +684,47 @@ class ZonaBase extends Phaser.Scene {
         return o;
     }
 
-    // Roca que es pot empènyer (ESPAI) cap a (dx, dy) per descobrir el que hi ha a sota
+    // Roca que l'Ineu empeny de debò cap a (dx, dy) per descobrir el que hi ha a sota: s'hi ha de posar a l'altra banda
+    // i caminar contra ella. ESPAI només l'examina (i diu cap on s'ha d'empènyer).
     pedraMobil(x, y, id, dx, dy, textPista) {
         const mogut = Estat.flag('pedra_' + id);
-        const o = { id, mogut, x: x + (mogut ? dx : 0), y: y + (mogut ? dy : 0) };
+        const dist = Math.hypot(dx, dy);
+        const o = { id, mogut, x: x + (mogut ? dx : 0), y: y + (mogut ? dy : 0), ux: dx / dist, uy: dy / dist, dist, fet: 0, empenta: 0 };
         o.img = this.posar('roca', o.x, o.y);
         o.col = this.colisio(o.x, o.y - 13, 70, 26);
         if (!mogut) {
-            const dialeg = { pagines: [{ qui: '', text: textPista }, { qui: '', text: 'Empenys la roca amb tot el pes del cos. Es mou, rascant la terra.' }] };
-            this.interactiu(x, y + 24, 90, dialeg, {
-                altura: 70, actiu: () => !o.mogut,
-                enTancar: () => {
-                    o.mogut = true;
-                    Estat.posaFlag('pedra_' + id);
-                    this.obstacles.remove(o.col, true, true);
-                    this.tweens.add({ targets: o.img, x: x + dx, y: y + dy, duration: 600, onComplete: () => {
-                        o.img.setDepth(y + dy);
-                        o.col = this.colisio(x + dx, y + dy - 13, 70, 26);
-                    } });
-                }
-            });
+            const cap = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'la dreta' : "l'esquerra") : (dy > 0 ? 'avall' : 'amunt');
+            this.interactiu(x, y + 24, 90, { pagines: [{ qui: '', text: textPista }, { qui: 'Ineu', text: '(Si m\'hi recolzo i l\'empenyo cap a ' + cap + ', potser cedirà.)' }] },
+                { altura: 70, actiu: () => !o.mogut });
+            (this.pedresMobils = this.pedresMobils || []).push(o);
         }
         return o;
+    }
+
+    // Cada fotograma: si l'Ineu toca la roca pel costat de darrere i camina cap on s'ha d'empènyer, la roca avança a poc a poc
+    actualitzarPedres(delta) {
+        if (!this.pedresMobils) return;
+        const b = this.ineu.body, v = b.velocity;
+        this.pedresMobils.forEach(o => {
+            if (o.mogut) return;
+            const c = o.col.body, M = 10;
+            const toca = o.ux ? (o.ux > 0 ? Math.abs(b.right - c.left) < M : Math.abs(b.left - c.right) < M) && b.bottom > c.top + 2 && b.top < c.bottom - 2
+                              : (o.uy > 0 ? Math.abs(b.bottom - c.top) < M : Math.abs(b.top - c.bottom) < M) && b.right > c.left + 4 && b.left < c.right - 4;
+            const empeny = toca && (v.x * o.ux + v.y * o.uy) > VELOCITAT_INEU * 0.5;
+            o.empenta = empeny ? o.empenta + delta : 0;
+            if (o.empenta < 220) return;                                    // primer s'hi recolza una mica
+            const pas = Math.min(o.dist - o.fet, 75 * delta / 1000);
+            o.fet += pas;
+            o.img.x += o.ux * pas; o.img.y += o.uy * pas; o.img.setDepth(o.img.y);
+            o.col.setPosition(o.img.x, o.img.y - 13); c.updateFromGameObject();
+            if (this.time.now > (o.proxSo || 0)) { o.proxSo = this.time.now + 260; Sfx.pas(true); this.cameras.main.shake(80, 0.0015); }
+            if (o.fet >= o.dist - 0.5) {
+                o.mogut = true;
+                Estat.posaFlag('pedra_' + o.id);
+                Sfx.secret();
+                Estat.desar();
+            }
+        });
     }
 
     destruirEsbarzer(o, foc) {
@@ -856,6 +876,7 @@ class ZonaBase extends Phaser.Scene {
         }
 
         this.moure(ui, delta);
+        this.actualitzarPedres(delta);
         const proper = this.puntProper();
         this.indicador.setVisible(!!proper);
         if (proper) this.indicador.setPosition(proper.x, proper.y - proper.altura);
