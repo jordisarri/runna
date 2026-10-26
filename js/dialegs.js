@@ -1206,7 +1206,6 @@ const DIALEGS = {
         if (!E.flag("benediccio")) falta.push("la Benedicció del prior (Pare Jordi)");
         if (falta.length) {
             return { pagines: [
-                { qui: "", text: "Una espasa clavada entre les lloses, fosca i tranquil·la, com si dormís. Sembla que et reconegui... però no s'inmuta." },
                 { qui: "Ineu", text: "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré." }
             ] };
         }
