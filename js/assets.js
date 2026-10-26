@@ -118,6 +118,7 @@ const CATALEG = [
     { key: 'tripode',        file: 'assets/objectes/tripode.png',        amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w, false) },   // el trípode del mirador, sense el telescopi
     { key: 'dolmen',         file: 'assets/edificis/dolmen.png',         amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w) },   // amb Runna clavada a dalt
     { key: 'dolmen_buit',    file: 'assets/edificis/dolmen_buit.png',    amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w, 'buit') },     // quan ja no hi ha l'espasa
+    { key: 'dolmen_clavada', file: 'assets/edificis/dolmen_clavada.png', amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w, 'clavada') },   // només Runna clavada (va per davant de l'Ineu)
     { key: 'dolmen_espasa',  file: 'assets/edificis/dolmen_espasa.png',  amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w, 'espasa') },   // només l'espasa (s'aixeca en despertar-la)
     { key: 'conill',         file: 'assets/natura/conill.png',         amplada: 44, provisional: (c, w) => dibuixarConill(c, w) },
     { key: 'esquirol',       file: 'assets/natura/esquirol.png',       amplada: 40, provisional: (c, w) => dibuixarEsquirol(c, w) },
@@ -136,6 +137,7 @@ const CATALEG = [
     { key: 'jaumeta',        file: 'assets/personatges/jaumeta.png',        amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
     { key: 'arma_tiller', file: 'assets/armes/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/armes/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
+    { key: 'espasa_dib', file: 'assets/armes/espasa_dib.webp', amplada: 17, provisional: (c, w) => dibuixarEspasaSola(c, w) },   // Runna dibuixada a mà (la mateixa que va clavada al dolmen), per quan vola
     { key: 'ineu_aixeca', file: 'assets/personatges/ineu_aixeca_espasa.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant Runna, mirant amunt (ja amb fons transparent)
     { key: 'arma_espasa', file: 'assets/armes/espasa.webp',      amplada: 28, provisional: (c, w) => dibuixarEspasaProvisional(c, w) },   // l'espasa de Runna
     { key: 'cartell_llums', file: 'assets/objectes/cartell_llums.webp', amplada: 560, cru: true },            // cartell de paper (es mostra tal com és, amb el fons blanc)

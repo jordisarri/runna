@@ -1074,22 +1074,55 @@ function dibuixarTelescopiMon(c, w, ambTub = true) {
     });
 }
 
+// Runna dibuixada a mà, com la del joc: fulla recta d'acer blavós amb canal central, creuera de bronze corbada cap a la
+// fulla, empunyadura de cuir negre amb anelles i pom arrodonit. La punta és a (0, 0) i l'espasa puja cap a -y; s = mida
+// (1 = 255 unitats de llarg). u = píxels per unitat.
+function traceEspasa(ctx, u, s) {
+    const k = u * s, Y = v => -v * k, X = v => v * k;
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.strokeStyle = CONTORN; ctx.lineWidth = Math.max(1.6, 2.2 * k);
+    // Fulla
+    const bl = ctx.createLinearGradient(X(-7.6), 0, X(7.6), 0);
+    bl.addColorStop(0, '#e2eaf6'); bl.addColorStop(0.3, '#aebfdc'); bl.addColorStop(0.7, '#7f9bc4'); bl.addColorStop(1, '#556e98');
+    ctx.fillStyle = bl; ctx.beginPath();
+    ctx.moveTo(0, 0); ctx.quadraticCurveTo(X(-3.4), Y(8), X(-6.6), Y(34)); ctx.lineTo(X(-7.4), Y(188)); ctx.lineTo(X(-8.2), Y(193)); ctx.lineTo(X(-7.6), Y(200));
+    ctx.lineTo(X(7.6), Y(200)); ctx.lineTo(X(8.2), Y(193)); ctx.lineTo(X(7.4), Y(188)); ctx.lineTo(X(6.6), Y(34)); ctx.quadraticCurveTo(X(3.4), Y(8), 0, 0);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(60,84,130,0.7)'; ctx.lineWidth = Math.max(1, 1.8 * k); ctx.beginPath(); ctx.moveTo(0, Y(16)); ctx.lineTo(0, Y(192)); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,0.65)'; ctx.lineWidth = Math.max(1, 1.5 * k); ctx.beginPath(); ctx.moveTo(X(-4.4), Y(40)); ctx.lineTo(X(-4.6), Y(186)); ctx.stroke();
+    ctx.strokeStyle = CONTORN; ctx.lineWidth = Math.max(1.6, 2.2 * k);
+    // Empunyadura i pom
+    ctx.fillStyle = '#26251f'; ctx.beginPath(); ctx.rect(X(-3.4), Y(238), X(6.8), -Y(238) + Y(204)); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(112,108,84,0.8)'; ctx.lineWidth = Math.max(1, 1.4 * k);
+    for (let v = 208; v < 236; v += 5) { ctx.beginPath(); ctx.moveTo(X(-3.4), Y(v)); ctx.lineTo(X(3.4), Y(v + 3)); ctx.stroke(); }
+    ctx.strokeStyle = CONTORN; ctx.lineWidth = Math.max(1.6, 2.2 * k);
+    const bronze = ctx.createLinearGradient(0, Y(256), 0, Y(196)); bronze.addColorStop(0, '#e2bc6a'); bronze.addColorStop(1, '#8a6430');
+    ctx.fillStyle = bronze;
+    [222, 232].forEach(v => { ctx.beginPath(); ctx.rect(X(-4.2), Y(v + 2), X(8.4), -Y(v + 2) + Y(v - 1)); ctx.fill(); ctx.stroke(); });
+    ctx.beginPath(); ctx.ellipse(0, Y(246), X(6.4), 9 * k, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    // Creuera: corba, amb els braços cap a la fulla
+    ctx.fillStyle = bronze; ctx.beginPath();
+    ctx.moveTo(X(-17.5), Y(196)); ctx.quadraticCurveTo(X(-15), Y(206), 0, Y(209)); ctx.quadraticCurveTo(X(15), Y(206), X(17.5), Y(196));
+    ctx.lineTo(X(14.5), Y(197)); ctx.quadraticCurveTo(X(12), Y(201), 0, Y(203)); ctx.quadraticCurveTo(X(-12), Y(201), X(-14.5), Y(197)); ctx.closePath(); ctx.fill(); ctx.stroke();
+}
+
 // Dolmen del Santuari del Miracle (Roc de la Mare de Déu): una llosa de calcària ovalada, grossa i gruixuda, amb la
 // superfície rugosa i plena de liquen blanc i ocre, damunt de dos pilars de blocs de pedra. És un sol cos arrodonit: la
 // cara de dalt es fon amb el cantell i no té cap segon contorn. Runna no hi és: és un sprite a part (arma_espasa) clavat al
 // punt DOLMEN_DIB.ex/ey. 'buit' i 'espasa' donen el mateix dibuix (el dolmen ja no porta l'espasa).
-const DOLMEN_DIB = { W: 380, H: 361, ly: 172, ex: 206, ey: 178 };     // ly: centre de la cara de dalt; ex, ey: on entra la fulla
+const DOLMEN_DIB = { W: 380, H: 456, dy: 95, ly: 172, ex: 206, ey: 178, esp: 0.5, ent: 40 };   // dy: espai afegit a dalt per a l'espasa; esp: mida de l'espasa (1 = 255 de llarg), ent: unitats de fulla enfonsades a la pedra     // ly: centre de la cara de dalt; ex, ey: on entra la fulla
 
+// mode: 'tot' (dolmen amb l'espasa), 'buit' (sense), 'clavada' (només l'espasa clavada, per dibuixar-la per davant de l'Ineu) o
+// 'espasa' (només l'espasa sencera, per quan s'arrenca)
 function dibuixarDolmen(c, w, mode = 'tot') {
-    lienc(c, w, w * 0.95, (ctx, W, H) => {
-        const u = W / 380, peu = H - 12 * u, ly = DOLMEN_DIB.ly * u, cx = W / 2;
+    lienc(c, w, w * DOLMEN_DIB.H / DOLMEN_DIB.W, (ctx, W, H) => {
+        const u = W / 380, peu = 349 * u, ly = DOLMEN_DIB.ly * u, cx = W / 2;
+        ctx.translate(0, DOLMEN_DIB.dy * u);
         const RX = 172 * u, RY = 44 * u, T = 50 * u;                       // semieixos de la cara de dalt i gruix del cantell
         let sd = 31; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
         ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-
-        // Ombra al terra i foscor sota la llosa
+        const cos = () => {
+        // Només l'ombra normal del terra (cap foscor negra sota la llosa)
         ombraTerra(ctx, cx + 14 * u, peu - 4 * u, W * 0.46, 16 * u);
-        ctx.fillStyle = 'rgba(14,10,8,0.9)'; ctx.beginPath(); ctx.ellipse(cx, ly + T + 22 * u, 150 * u, 30 * u, 0, 0, Math.PI * 2); ctx.fill();
 
         // Un bloc de pedra tallat: cara del davant, cara de la dreta i cara de dalt (si es veu)
         const bloc = (x, y, bw, bh, dpt, [cf, cd, cs], cima = true) => {
@@ -1163,6 +1196,29 @@ function dibuixarDolmen(c, w, mode = 'tot') {
         ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.6 * u; sil(); ctx.stroke();
         // El tall on s'enfonsa la fulla
         ctx.fillStyle = '#1e1a14'; ctx.beginPath(); ctx.ellipse(DOLMEN_DIB.ex * u, DOLMEN_DIB.ey * u, 8 * u, 2.8 * u, 0, 0, Math.PI * 2); ctx.fill();
+        };
+        if (mode !== 'espasa' && mode !== 'clavada') cos();
+        // Runna clavada a la llosa, una mica decantada: la punta és dins la pedra
+        if (mode !== 'buit') {
+            const exu = DOLMEN_DIB.ex * u, eyu = DOLMEN_DIB.ey * u, ent = DOLMEN_DIB.ent * DOLMEN_DIB.esp * u;
+            ctx.save();
+            if (mode === 'tot' || mode === 'clavada') { ctx.beginPath(); ctx.rect(-W, -H, 3 * W, H + eyu + 2 * u); ctx.clip(); }      // la part enfonsada a la llosa no es veu
+            ctx.translate(exu, eyu); ctx.rotate(0.14); ctx.translate(0, ent);                                   // la punta, dins la pedra
+            traceEspasa(ctx, u, DOLMEN_DIB.esp);
+            ctx.restore();
+            if (mode === 'tot' || mode === 'clavada') {                                                         // vora de davant de la ranura, per sobre la fulla
+                ctx.fillStyle = '#1e1a14'; ctx.beginPath(); ctx.ellipse(exu, eyu, 9 * u, 3 * u, 0, 0, Math.PI); ctx.fill();
+                ctx.strokeStyle = 'rgba(244,238,214,0.7)'; ctx.lineWidth = 1.6 * u; ctx.beginPath(); ctx.ellipse(exu, eyu + 0.6 * u, 9.6 * u, 3.4 * u, 0, 0.15, Math.PI - 0.15); ctx.stroke();
+            }
+        }
+    });
+}
+
+// L'espasa sola, dreta (la punta a dalt), per quan vola: mateix dibuix que la del dolmen
+function dibuixarEspasaSola(c, w) {
+    lienc(c, w, w * 255 / 34, (ctx, W, H) => {
+        ctx.translate(W / 2, 2); ctx.scale(1, -1);
+        traceEspasa(ctx, W / 34, 1);
     });
 }
 
