@@ -10,6 +10,8 @@
  *   }
  */
 const ZOOM_CAMERA = 1;
+// Inici tancat: fins que l'Ineu no ha parlat amb el Pare Jordi i no té el bastó de pelegrí, només pot anar pel Monestir i la Plaça
+const ZONES_INICI = ['ZonaMonestir', 'ZonaMonestirRebedor', 'ZonaBiblioteca', 'ZonaPlaca'];
 const BANDA_SUD = 120;   // franja de baix (vora sud, sortides) que es desplaça cap avall en ampliar la zona
 const VELOCITAT_INEU = 230;
 // Caixa de col·lisió del tronc de l'arbre (gràfic 'arbre': les arrels fan ~130 px d'ample i el tronc ~70-100)
@@ -67,6 +69,7 @@ class ZonaBase extends Phaser.Scene {
         this.ampliarSud();
         this.construirCamins();
         this.crearIneu();
+        this.posarBoiraSortides();
         Grafics.alliberar(this.textures, this.scene.key);      // fora les textures grans de la zona anterior (vegeu Grafics, a assets.js)
 
         const cam = this.cameras.main;
@@ -1161,11 +1164,63 @@ class ZonaBase extends Phaser.Scene {
         this.posarDireccio(Math.abs(dx) > Math.abs(dy) * 0.9 ? (dx < 0 ? 'esquerra' : 'dreta') : (dy < 0 ? 'amunt' : 'avall'), false);
     }
 
+    // ---- Inici tancat ----
+    // L'aventura s'obre en tenir parlat amb el Pare Jordi i el bastó de pelegrí (les partides que ja han anat més enllà, també queden obertes)
+    iniciObert() {
+        return (Estat.flag('clauerNovici') && Estat.flag('bastoObtingut')) ||
+            ['cantAurora', 'visitada_ZonaRuines', 'visitada_ZonaCreu', 'visitada_ZonaCasaGran', 'visitada_ZonaCelles', 'visitada_ZonaEsglesia'].some(f => Estat.flag(f));
+    }
+    sortidaTancada(s) { return !this.iniciObert() && ZONES_INICI.includes(this.scene.key) && !ZONES_INICI.includes(s.desti); }
+
+    // Boira lila espessa a les sortides que encara no es poden fer servir; s'esvaeix sola quan s'obre el camí
+    posarBoiraSortides() {
+        if (this.iniciObert() || !ZONES_INICI.includes(this.scene.key)) return;
+        const tancades = this.sortides.filter(s => this.sortidaTancada(s));
+        if (!tancades.length) return;
+        const obj = [];
+        tancades.forEach((s, i) => {
+            const cx = s.r.centerX, cy = s.r.centerY, w = Math.max(s.r.width, 170), h = Math.max(s.r.height, 170);
+            const f = this.boira(cx, cy, w, h, 5).setDepth(6000);
+            obj.push(f);
+            [[0, 0, 1], [-w * 0.18, h * 0.1, 0.8], [w * 0.2, -h * 0.1, 0.9]].forEach(([dx, dy, e], k) => {
+                const n = this.add.image(cx + dx, cy + dy, 'boira').setTint(0xb888ff).setAlpha(0.85).setDepth(5990 + k).setScale(Math.max(w, h) * 0.034 * e);
+                obj.push(n);
+                this.tweens.add({ targets: n, x: n.x + (k - 1) * 14, alpha: 0.55, yoyo: true, repeat: -1, duration: 2600 + i * 300 + k * 500, ease: 'Sine.easeInOut' });
+            });
+        });
+        const vig = this.time.addEvent({ delay: 400, loop: true, callback: () => {
+            if (!this.iniciObert()) return;
+            vig.remove();
+            obj.forEach(o => { if (o.stop) o.stop(); this.tweens.add({ targets: o, alpha: 0, duration: 1600, onComplete: () => o.destroy() }); });
+        } });
+    }
+
+    // L'Ineu toca una sortida tancada: una frase breu i un pas enrere
+    tancaPas(s) {
+        const ara = this.time.now;
+        if (ara < (this.tancaFins || 0)) return;
+        this.tancaFins = ara + 2600;
+        const I = this.ineu, W = this.config.amplada, H = this.config.alcada;
+        const diu = () => this.bombolla('ineu', !Estat.flag('clauerNovici') ? 'Primer he de veure el Pare Jordi.' : 'Abans, el Germà Andreu té un bastó per a mi.', null, 2200);
+        const a0 = Math.atan2(H / 2 - I.y, W / 2 - I.x);
+        for (const gir of [0, 0.5, -0.5, 1, -1]) {
+            const x = I.x + Math.cos(a0 + gir) * 90, y = I.y + Math.sin(a0 + gir) * 90;
+            if (this.llocLliure(x, y) && y > TOPE_Y + 8 && !this.sortides.some(r => Phaser.Geom.Rectangle.Contains(Phaser.Geom.Rectangle.Inflate(Phaser.Geom.Rectangle.Clone(r.r), 20, 20), x, y))) {
+                I.body.setVelocity(0);
+                this.canviant = true;
+                this.tweens.add({ targets: I, x, y, duration: 220, ease: 'Sine.easeOut', onComplete: () => { I.body.reset(I.x, I.y); this.canviant = false; diu(); } });
+                return;
+            }
+        }
+        diu();
+    }
+
     comprovarSortides() {
         const b = this.ineu.body;
         const peus = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
         for (const s of this.sortides) {
             if (s.peu ? s.r.contains(b.center.x, b.bottom) : Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r)) {
+                if (this.sortidaTancada(s)) { this.tancaPas(s); return; }
                 if (s.baixar !== undefined) this.baixarEscala(s);
                 else this.canviarZona(s.desti, s.entrada);
                 return;
