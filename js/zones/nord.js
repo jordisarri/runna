@@ -546,7 +546,7 @@ class ZonaSantAntoni extends ZonaBase {
 // ---------------- EL GRAN TIL·LER (escenari petit: només l'arbre amb qui es parla) ----------------
 // Hi arriba el camí del sud (les cel·les). Cap a l'oest, un camí duu a la Caseta (on viu en Jordi); cap al nord-est, a la Cirosa, tancat
 // per les arrels del Til·ler, que només s'enfonsen davant la seva branca.
-const TIL_X = 520, TIL_Y = 440;
+const TIL_X = 520, TIL_Y = 510;
 
 class ZonaTiller extends ZonaBase {
     constructor() {
@@ -570,8 +570,8 @@ class ZonaTiller extends ZonaBase {
         this.terra('cami', 1100, 0, 140, 670);            // cap a dalt a la dreta: la Cirosa
 
         // El Gran Til·ler
-        this.posar('tiller', TIL_X, TIL_Y, { col: { w: 170, h: 40 } });
-        this.interactiu(TIL_X, TIL_Y + 25, 110, DIALEGS.tiller, { altura: 320 });
+        this.posar('tiller', TIL_X, TIL_Y, { col: { w: 230, h: 44 } });                    // gran i solemne: ell sol, sense arbres al voltant
+        this.interactiu(TIL_X, TIL_Y + 25, 140, DIALEGS.tiller, { altura: 430 });
 
         // Després del sopar queden quatre espelmes vora les arrels del Til·ler
         if (Estat.flag('soparFet')) this.posarEspelmes();
@@ -587,7 +587,7 @@ class ZonaTiller extends ZonaBase {
         if (Estat.flag('camiCirosaObert')) this.sortida(1100, 0, 140, 14, 'ZonaCamiCirosa', 'tiller');
         else this.posarArrels();
 
-        this.arbres([[820, 330], [150, 820], [300, 940], [1000, 900], [1300, 880], [1350, 560]]);   // cap arbre vora les arrels: les copes no les han de tapar
+        this.arbres([[120, 870], [1320, 900]]);   // només dos arbres als cantons: el Til·ler es veu sol
 
         this.sortida(620, 986, 160, 14, 'ZonaCelles', 'tiller');
         this.sortida(0, 540, 14, 130, 'ZonaJordi', 'til');
@@ -600,7 +600,7 @@ class ZonaTiller extends ZonaBase {
         this.arrelsY = Y;
         let sd = 11; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
         this.colArrels = this.colisio(1190, Y - 20, 440, 50);
-        this.muralla(0, 150, 960, 150, 110);             // fins aquí, una fila d'arbres tanca el pas per l'oest
+        this.muralla(0, 150, 960, 150, 110, 'arbre', true, x => x > 230);   // fins aquí, una paret invisible tanca el pas per l'oest (arbres només al canton, perquè el Til·ler quedi sol)
         for (let i = 0; i < 11; i++) {
             const x = 990 + i * 38 + r() * 10, y = Y + (i % 2) * 10, s = i % 2 ? 1 : -1;
             const amp = 50 + r() * 40, alt = 60 + r() * 70;
@@ -702,7 +702,7 @@ class ZonaTiller extends ZonaBase {
 
     // Una fulla daurada es desprèn de la branca més alta i cau, giravoltant, fins a l'Ineu
     fullaCau(fet) {
-        const f = this.add.ellipse(TIL_X, TIL_Y - 260, 18, 28, 0xf0c040, 1).setStrokeStyle(2, 0x8a6a10).setDepth(99000);
+        const f = this.add.ellipse(TIL_X, TIL_Y - 330, 18, 28, 0xf0c040, 1).setStrokeStyle(2, 0x8a6a10).setDepth(99000);
         this.tweens.add({ targets: f, angle: 720, duration: 2400 });
         this.tweens.add({ targets: f, x: { value: this.ineu.x, ease: 'Sine.easeInOut' }, y: this.ineu.y - 70, duration: 2400, onComplete: () => {
             f.destroy(); this.llum(this.ineu.x, this.ineu.y - 70, 0xf0c040, fet);

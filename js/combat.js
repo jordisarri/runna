@@ -570,7 +570,7 @@ Object.assign(ZonaBase.prototype, {
         const ara = this.time.now;
         if (!this.teArma() || this.config.pacifica || ara < (this.atacFins || 0) || this.caient || this.assegut) return;
         const runna = Estat.te('runna');
-        const agil = runna || Estat.te('basto_tiller');          // el bastó de Til·ler (i Runna) són més ràpids i amb més abast
+        const agil = runna || Estat.te('basto_tiller');          // la branca del Til·ler (i Runna) són més ràpids i amb més abast
         this.atacFins = ara + (agil ? 270 : 380);
         const jo = this.ineu.body.center;
         const L = agil ? 135 : 118;                              // llargada de la zona de cop (des dels peus)
@@ -681,7 +681,7 @@ Object.assign(ZonaBase.prototype, {
         });
     },
 
-    // L'arma a la mà: bastó (assets/armes/basto.png), bastó de Til·ler o espasa de Runna, girant en arc durant el cop.
+    // L'arma a la mà: bastó (assets/armes/basto.png), branca del Til·ler o espasa de Runna, girant en arc durant el cop.
     // Apareix i desapareix de cop, sense fade.
     armaCop(d, runna, agil) {
         if (this.armaNet) this.armaNet();

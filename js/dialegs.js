@@ -487,12 +487,12 @@ const DIALEGS = {
     branca: E => ({
         pagines: [
             { fer: (z, fet) => { z.brancaAgafada = true; z.agafar(() => z.ineuAixeca('ineu_aixeca_tiler', fet), 'branca', 0xd8f0a0); } },
-            { qui: "", text: "Has obtingut el BASTÓ DE TIL·LER!" },
+            { qui: "", text: "Has obtingut la BRANCA DEL TIL·LER!" },
             { fer: (z, fet) => z.ineuBaixa(fet) }
         ],
         enAcabar: () => {
             E.dona("basto_tiller");
-            E.posaObjectiu("Tens el bastó de Til·ler (més àgil). Segueix investigant: les Venerables Sàvies saben què et falta fer.");
+            E.posaObjectiu("Tens la branca del Til·ler (més àgil). Segueix investigant: les Venerables Sàvies saben què et falta fer.");
         }
     }),
 
@@ -861,7 +861,7 @@ const DIALEGS = {
         { qui: 'Ineu', text: "Runna els talla: situa't davant de cada un i ataca (ESPAI). Són cinc. Mata també les escolopendres, que després tornen." }
     ] : [
         { qui: '', text: "Un mur d'esbarzers negres tanca el passadís de banda a banda. Les punxes llueixen violeta a la llum de les espelmes." },
-        { qui: 'Ineu', text: "Ni el bastó de pelegrí ni el del Til·ler no els tallen: només Runna. Primer cal despertar-la al Dolmen. Torna quan la tinguis." }
+        { qui: 'Ineu', text: "Ni el bastó de pelegrí ni la branca del Til·ler no els tallen: només Runna. Primer cal despertar-la al Dolmen. Torna quan la tinguis." }
     ] }),
 
     esbarzersCapella: E => ({ pagines: [

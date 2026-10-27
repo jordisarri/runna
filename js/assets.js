@@ -73,7 +73,7 @@ const CATALEG = [
     ...Array.from({ length: 12 }, (_, k) => ({ key: 'columna_proces_' + k, file: 'assets/objectes/columna_proces_' + k + '.png', amplada: 64, provisional: (c, w) => dibuixarColumnaProcessio(c, w, k) })),
     { key: 'columna',   file: 'assets/objectes/columna.png',   amplada: 58,  provisional: (c, w) => dibuixarColumna(c, w) },
     { key: 'roure',     file: 'assets/natura/roure.webp',     amplada: 420, provisional: (c, w) => dibuixarRoure(c, w) },
-    { key: 'tiller',    file: 'assets/personatges/tiller.webp',    amplada: 440, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },
+    { key: 'tiller',    file: 'assets/personatges/tiller.webp',    amplada: 640, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },
     { key: 'altar',     file: 'assets/objectes/altar.png',     amplada: 150, provisional: (c, w) => dibuixarAltar(c, w) },
     { key: 'taula_pedra', file: 'assets/objectes/taula_pedra.png', amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 0) },
     { key: 'taula_pedra2', file: 'assets/objectes/taula_pedra2.png', amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
