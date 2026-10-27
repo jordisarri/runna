@@ -75,7 +75,6 @@ class ZonaTorre extends Phaser.Scene {
         const ui = this.ui();
         ui.actualitzarHUD();
         ui.mostrarZona('Torre del campanar');
-        this.time.delayedCall(900, () => { if (!Estat.flag('torreVista')) { Estat.posaFlag('torreVista'); ui.missatge('Puja l\'escala: amunt o cap a la dreta.'); } });
         Estat.desar();
     }
 
