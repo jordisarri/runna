@@ -105,13 +105,11 @@ const DIALEGS = {
         if (!E.flag('bastoObtingut')) {
             return {
                 pagines: [
-                    { qui: 'Germà Andreu', text: 'Ineu! Quin drama, oi? Tothom corrent amunt i avall...' },
-                    { qui: 'Germà Andreu', text: 'Segur que els nens s\'han amagat per jugar. Jo els entenc, eh... Tantes pregàries, tant de silenci...' },
-                    { qui: 'Germà Andreu', text: 'Ei, vine. Pren aquest bastó de pelegrí: era d\'un vell que ja no el vol. Va bé per a tot, fins i tot per anar a collir bolets.' },
-                    { qui: '', text: 'Has obtingut el BASTÓ DE PELEGRÍ!\nAtac: J o ESPAI (cap on mires).' },
-                    { qui: 'Germà Andreu', text: 'I vés amb compte, eh. Amb els visitants, que van com sonàmbuls, i amb les escolopendres: piquen que no et pots ni imaginar. No les facis mal de debò: només fes-les adormir.' },
+                    { qui: 'Germà Andreu', text: 'Ineu! Quin drama, oi? Tothom corrent amunt i avall... Segur que els nens s\'han amagat per jugar.' },
                     { qui: 'Germà Andreu', text: 'Ets del Barça, tu? Tinc uns cromos que els nens es moren per tenir. Ells sí que m\'escolten.' },
-                    { qui: 'Ineu', text: '(El Germà Andreu sembla molt tranquil. Massa tranquil.)' }
+                    { qui: 'Germà Andreu', text: 'Ei, pren aquest bastó de pelegrí. Era d\'un vell que ja no el vol.' },
+                    { fer: (z, fet) => z.objecteVola('germa_andreu', () => z.ineuAixeca('ineu_aixeca_basto', fet), 'arma_basto') },
+                    { qui: '', text: 'Has obtingut el BASTÓ DE PELEGRÍ!' }
                 ],
                 enAcabar: () => {
                     E.posaFlag('parlatAndreu');

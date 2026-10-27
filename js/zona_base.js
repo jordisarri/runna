@@ -400,6 +400,16 @@ class ZonaBase extends Phaser.Scene {
             if (fet) fet();
         } });
     }
+    // L'Ineu alça un objecte que acaba de rebre (sprite mirant amunt), amb un esclat de llum, i torna a la pose normal
+    ineuAixeca(key, fet) {
+        const I = this.ineu, esc = (this.textures.get(key).customData || {}).escala || 0.5;
+        I.setVisible(false);
+        const alt = this.add.image(I.x, I.y + 2, key).setOrigin(0.5, 1).setScale(esc).setDepth(I.depth + 1);
+        this.tweens.add({ targets: alt, y: alt.y - 12, yoyo: true, duration: 240, ease: 'Quad.easeOut' });
+        this.cameras.main.flash(400, 255, 240, 200);
+        this.llum(I.x - 8, I.y - 190, 0xffe8a0);
+        this.esperar(1500, () => { alt.destroy(); I.setVisible(true); if (fet) fet(); });
+    }
     // ---- Accions de l'Ineu sobre el punt amb què interactua (this.puntActiu) ----
     // Agafar: l'objecte (o una llum) vola del punt a l'Ineu, que s'ajup
     agafar(fet, key, color = 0xffe8a0) {
