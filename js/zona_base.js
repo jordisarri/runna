@@ -410,7 +410,8 @@ class ZonaBase extends Phaser.Scene {
         const I = this.ineu, esc = (this.textures.get(key).customData || {}).escala || 0.5;
         if (this.ineuAlt) this.ineuAlt.destroy();
         I.setVisible(false);
-        this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(I.depth + 1);
+        if (this.fantasma) this.fantasma.setVisible(false);          // la silueta translúcida de l'Ineu també: un dibuix desapareix i l'altre apareix, sense transparències
+        this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(99100);       // per sobre de tothom (també del Germà Andreu)
         this.llum(I.x - 8, I.y - 190, 0xffe8a0);
         Joc.fanfaraObjecte(this);
         if (fet) fet();
@@ -418,6 +419,7 @@ class ZonaBase extends Phaser.Scene {
     ineuBaixa(fet) {
         if (this.ineuAlt) { this.ineuAlt.destroy(); this.ineuAlt = null; }
         this.ineu.setVisible(true);
+        if (this.fantasma) this.fantasma.setVisible(true);
         if (fet) fet();
     }
     // ---- Accions de l'Ineu sobre el punt amb què interactua (this.puntActiu) ----
