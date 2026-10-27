@@ -478,7 +478,6 @@ const ENEMICS = {
     visitant: {
         tex: 'visitant', vida: 4, vel: 58, mal: 1, radi: 24, cos: [40, 22], ombra: 0.42,
         monedes: [1, 2, 4], cor: 0.2,
-        frases: ['Quin retaule... més... barroc...', 'On... és... el bus?', 'Només volia... una foto...', 'Zzz... retaule... zzz...'],
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
@@ -870,8 +869,6 @@ Object.assign(ZonaBase.prototype, {
         if (e.def.alDerrotar) { e.def.alDerrotar(this, e); return; }
 
         if (e.tipus === 'visitant') {            // cau adormit i es desperta confús
-            const frase = e.def.frases[Math.floor(Math.random() * e.def.frases.length)];
-            this.flotant(c.x, c.y - 90, frase, '#ffe9a8');
             this.tweens.add({ targets: e.spr, angle: 90, duration: 300 });
             this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 700, delay: 1500, onComplete: () => this.retirar(e) });
         } else {
