@@ -329,7 +329,7 @@ class ZonaCasaGran extends ZonaBase {
         this.terra('llamborda', 0, 0, 1600, 1100, -1100);   // tota l'escena és de pedra (la mateixa plaça empedrada), sense gespa
 
         // Façana gran (1250 d'ample): la reixa del porxo (arc del mig) queda a x=700, amb la base a y≈563 i ~170 d'alt
-        this.posar('casa_gran', 700, 727, { fonsY: 560 });
+        const facana = this.posar('casa_gran', 700, 727, { fonsY: 560 });
         // Parets: tot el que és darrere el terra de les arcades (y<572) és mur; les piles i els sòcols laterals també.
         // Només es pot pujar per l'escalinata (x 355-1050) i entrar a les arcades pels buits entre piles.
         this.blocDarrere(700, 1250, 572);
@@ -342,7 +342,11 @@ class ZonaCasaGran extends ZonaBase {
         this.colisio(170, 699, 190, 58);        // part baixa del sòcol (l'escalinata s'eixampla)
         this.colisio(1230, 699, 190, 58);
         // La reixa del porxo, tancada des de fa generacions: per fora no hi ha manera d'entrar
-        this.interactiu(700, 585, 85, DIALEGS.portaReixa, { altura: 190 });
+        if (Estat.flag('ocellaireVencut')) {
+            // Un cop vençut l'Ocellaire, la reixa s'obre també per fora (els batents giren en acostar-s'hi) i es pot entrar a la Casa Gran
+            this.portaReixaFora = this.portaAnimada({ x: 700, top: 400, bottom: 573, ample: 107, fons: 560, arc: true, retall: facana });
+            this.sortida(650, 574, 100, 30, 'ZonaCasaGranInt', 'porxo');
+        } else this.interactiu(700, 585, 85, DIALEGS.portaReixa, { altura: 190 });
 
         // Cartell que indica la Taverna, a la vora de la sortida de l'esquerra
         this.cartell(170, 880, () => ({ pagines: [{ qui: '', text: '← La Taverna i l\'Hostatgeria\n→ La Plaça del Santuari' }] }));

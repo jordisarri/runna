@@ -1300,23 +1300,25 @@ const DIALEGS = {
 
     // Cambra secreta dels monjos (sala del tresor, entre el Celler i la Casa Gran)
     cofreCambra: E => {
-        if (E.flag("cofreCambra")) return { pagines: [{ qui: "", text: "El cofre és obert i buit. Només queda un pergamí de tapes de cuir." }] };
+        if (E.flag("cofreCambra")) return { pagines: [{ qui: "", text: "El cofre és obert i buit." }] };
         return {
             pagines: [
-                { qui: "", text: "Un cofre massís entre botes buides. A dins, un flascó daurat i un pergamí de tapes de cuir." },
-                { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xf0c040), c => z.beure(c, 0xf0c040)], fet) },
-                { qui: "", text: "+1 GRA AL ROSARI i rosari ple." },
-                { qui: "", text: "Has obtingut el PERGAMÍ DEL MONJO." },
-                { qui: "Pergamí del monjo", text: "«Les relíquies dels meus germans i la clau de ferro són sota l'escala, murades. Un guardià de pedra les vigila: ningú no hi baixa si no li gira el cap cap al sol que neix. On neix el sol, el raïm madura.»" },
-                { qui: "", text: "Al fons de la sala s'ha desfet un pany: una porta de fusta s'obre cap a l'escalinata de la Casa Gran." }
+                { qui: "", text: "Dins el cofre només hi ha un pergamí de tapes de cuir. Has obtingut el PERGAMÍ DEL MONJO." },
+                { qui: "Ineu", text: "«Les relíquies dels meus germans i la clau de ferro són sota l'escala, murades. Un guardià de pedra les vigila: ningú no hi baixa si no li gira el cap cap al sol que neix. On neix el sol, el raïm madura.»" },
+                { qui: "Ineu", text: "I al revers, amb una altra lletra: «Qui busqui sortida, que alci la bóta marcada amb la creu.»" }
             ],
             enAcabar: () => {
                 E.dona("pergami_monjo"); E.posaFlag("cofreCambra");
-                E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
-                E.posaObjectiu(E.te("palanca") ? "Puja a l'escalinata de la Casa Gran: gira el cap de l'Home del Raïm cap a llevant amb la palanca i prem-li el raïm." : "L'Home del Raïm guarda les relíquies: cal una palanca. En Jordi de la Caseta (a l'oest del Til·ler) en té una.");
+                E.posaObjectiu("Alça la bóta de la creu vermella, a la cambra, per obrir la porta del fons i pujar a l'escalinata de la Casa Gran.");
             }
         };
     },
+
+    // La bóta marcada de la cambra secreta: en alçar-la, deixa a la vista l'anella que obre la porta del fons
+    botaTresor: E => ({
+        pagines: [{ qui: "Ineu", text: "Una bóta amb una creu vermella. Pesa molt menys que les altres... i a sota hi ha una anella de ferro." }],
+        enAcabar: () => { E.posaFlag("botaAlcada"); E.posaObjectiu("Puja a l'escalinata de la Casa Gran per la porta del fons de la cambra: gira el cap de l'Home del Raïm cap a llevant amb la palanca."); }
+    }),
 
     homeRaimInt: E => ({
         pagines: [

@@ -781,6 +781,21 @@ const Grafics = {
         crea('habit_cela', 60, 110, pintarHabitCela);
         crea('estora_cela', 230, 110, pintarEstoraCela);
         crea('cofre_cela', 90, 56, pintarCofreCela);
+        // Casa Gran per dins (js/dibuixos_casa.js)
+        crea('paret_cripta', 740, 170, pintarParetCripta);
+        crea('paret_tresor', 740, 170, pintarParetTresor);
+        crea('mur_passadis', 40, 1400, pintarMurPassadis);
+        crea('fons_passadis', 400, 90, pintarFonsPassadis);
+        crea('costella_passadis', 400, 44, pintarCostellaPassadis);
+        crea('sarcofag_cripta', 150, 110, pintarSarcofagCripta);
+        crea('llosa_cripta', 200, 120, (ctx, w, h) => pintarLlosaCripta(ctx, w, h, true));
+        crea('llosa_cripta_buida', 200, 120, (ctx, w, h) => pintarLlosaCripta(ctx, w, h, false));
+        crea('sacs_tresor', 140, 90, pintarSacsTresor);
+        crea('monedes_tresor', 110, 50, pintarMonedesTresor);
+        crea('bota_creu', 64, 84, pintarBotaCreu);
+        crea('cofre_tresor', 110, 80, pintarCofreTresor);
+        crea('rosa_vents', 380, 200, pintarRosaVents);
+        crea('fletxa_raim', 90, 90, pintarFletxaRaim);
         // Ermita de la Desaparició (js/dibuixos_ermita.js)
         crea('paret_ermita', 800, 170, pintarParetErmita);
         crea('mur_ermita', 40, 700, pintarMurErmita);
