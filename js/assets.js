@@ -65,7 +65,7 @@ const CATALEG = [
     { key: 'jordi_caseta', file: 'assets/personatges/jordi_caseta.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a7a3a', cabell: '#4a3a2a', alt: 0.97, extra: 'gorra' }) },
     { key: 'sansa',     file: 'assets/personatges/sansa.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
     { key: 'ciscu',     file: 'assets/personatges/ciscu.png',     amplada: 80,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#c8a040', cabell: '#5a3a1e', alt: 0.74, cap: 17, extra: 'gorra' }) },
-    { key: 'eva',       file: 'assets/personatges/eva.png',       amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7a5a', cabell: '#e8cc66', dona: true, alt: 0.95 }) },
+    { key: 'eva',       file: 'assets/personatges/eva.webp',       amplada: 67, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7a5a', cabell: '#e8cc66', dona: true, alt: 0.95 }) },
     { key: 'home_carruatge', file: 'assets/personatges/home_carruatge.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2f6b3d', cabell: '#222', alt: 1.04, extra: 'gorra' }) },
 
     // ---- Escenari nou ----
@@ -99,9 +99,9 @@ const CATALEG = [
     { key: 'ovella_boira',   file: 'assets/enemics/ovella_boira.png',   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
     { key: 'roca',           file: 'assets/natura/roca.webp',           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w) },
     { key: 'masia',          file: 'assets/edificis/masia.png',          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },
-    { key: 'pastor_a',       file: 'assets/personatges/pastor_a.png',       amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a48', cabell: '#8a7a60', alt: 0.9, ample: 0.95, calb: true }) },
-    { key: 'pastor_b',       file: 'assets/personatges/pastor_b.png',       amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a4a58', cabell: '#7a7a7a', dona: true, alt: 0.88, ample: 0.95 }) },
-    { key: 'pastor_vell',    file: 'assets/personatges/pastor_vell.png',    amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a5040', cabell: '#d0d0d0', barba: '#d0d0d0', alt: 0.86, bastoCoix: true }) },
+    { key: 'pastor_a',       file: 'assets/personatges/pastor_a.webp',       amplada: 89, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a48', cabell: '#8a7a60', alt: 0.9, ample: 0.95, calb: true }) },
+    { key: 'pastor_b',       file: 'assets/personatges/pastor_b.webp',       amplada: 84, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a4a58', cabell: '#7a7a7a', dona: true, alt: 0.88, ample: 0.95 }) },
+    { key: 'pastor_vell',    file: 'assets/personatges/pastor_vell.webp',    amplada: 87, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a5040', cabell: '#d0d0d0', barba: '#d0d0d0', alt: 0.86, bastoCoix: true }) },
     { key: 'foc',            file: 'assets/objectes/foc.png',            amplada: 80, provisional: (c, w) => dibuixarFoc(c, w) },
     { key: 'espelma',        file: 'assets/objectes/espelma.png',        amplada: 20, provisional: (c, w) => dibuixarEspelma(c, w) },
     { key: 'taula_sopar',    file: 'assets/objectes/taula_sopar.png',    amplada: 380, provisional: (c, w) => dibuixarTaulaSopar(c, w) },
