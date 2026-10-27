@@ -91,6 +91,7 @@ const CATALEG = [
     { key: 'visitant',     file: 'assets/enemics/visitant.png',     amplada: 96, provisional: (c, w) => dibuixarTurista(c, w) },
     { key: 'branca',       file: 'assets/natura/branca.webp',       amplada: 80, provisional: (c, w) => dibuixarBranca(c, w) },
     { key: 'pergami',      file: 'assets/objectes/pergami.png',      amplada: 70, provisional: (c, w) => dibuixarPergami(c, w) },
+    { key: 'pergami_partit', file: 'assets/objectes/pergami_partit.png', amplada: 80, provisional: (c, w) => dibuixarPergamiPartit(c, w) },
     { key: 'pergami_paret', file: 'assets/objectes/pergami_paret.png', amplada: 62, provisional: (c, w) => dibuixarPergamiParet(c, w) },   // el mateix pergamí, desplegat i clavat a la paret
     { key: 'ombra_monjo',  file: 'assets/enemics/ombra_monjo.png',  amplada: 150, provisional: (c, w) => dibuixarOmbraMonjo(c, w) },
     { key: 'ovella',         file: 'assets/enemics/ovella.png',         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },

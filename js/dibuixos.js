@@ -3692,3 +3692,28 @@ function dibuixarPastorBoira(canvas, w) {
     ctx.fillStyle = 'rgba(190,150,255,0.35)';
     [[20, 122, 14], [44, 126, 18], [68, 122, 13]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.ellipse(x, y, r, 4, 0, 0, Math.PI * 2); ctx.fill(); });
 }
+
+// Pergamí partit pel mig, estès a terra: el tall és irregular, amb línies d'escriptura i un racó rosegat
+function dibuixarPergamiPartit(c, w) {
+    lienc(c, w, w * 0.78, (ctx, W, H) => {
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(W / 2 + 2, H - 4, W * 0.46, 4, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.save(); ctx.translate(W / 2, H / 2); ctx.rotate(-0.12); ctx.translate(-W / 2, -H / 2);
+        const x0 = W * 0.08, x1 = W * 0.94, y0 = H * 0.1, y1 = H * 0.86;
+        ctx.beginPath(); ctx.moveTo(x0, y0 + 3); ctx.lineTo(x1 - 6, y0);
+        // Vora dreta esquinçada (el tall)
+        const talls = [[x1, y0 + 8], [x1 - 7, y0 + 16], [x1 + 1, y0 + 24], [x1 - 8, y0 + 34], [x1 - 1, y1 - 14], [x1 - 9, y1 - 6], [x1 - 3, y1]];
+        talls.forEach(([x, y]) => ctx.lineTo(x, y));
+        ctx.lineTo(x0 + 6, y1 + 2); ctx.lineTo(x0 - 1, y1 - 12); ctx.lineTo(x0 + 2, y0 + 14); ctx.closePath();
+        const g = ctx.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, '#f2e4b4'); g.addColorStop(0.6, '#e2cd96'); g.addColorStop(1, '#c4a666');
+        ctx.fillStyle = g; ctx.fill(); ctx.lineWidth = 2.4; ctx.strokeStyle = '#2a1608'; ctx.stroke();
+        // Taca d'humitat i vora fosca
+        ctx.fillStyle = 'rgba(120,80,30,0.2)'; ctx.beginPath(); ctx.ellipse(x0 + W * 0.18, y1 - 6, W * 0.16, 5, 0, 0, Math.PI * 2); ctx.fill();
+        // Línies de text (tallades a la dreta) i una caplletra vermella
+        ctx.strokeStyle = '#4a2c14'; ctx.lineWidth = 1.5;
+        const llarg = [0.68, 0.74, 0.6, 0.72, 0.5];
+        llarg.forEach((l, i) => { const y = y0 + 12 + i * ((y1 - y0 - 18) / 5); ctx.beginPath(); ctx.moveTo(x0 + 16, y); ctx.lineTo(x0 + 16 + (x1 - x0 - 24) * l, y + (i % 2 ? 0.6 : -0.4)); ctx.stroke(); });
+        ctx.fillStyle = '#9a2a1a'; ctx.fillRect(x0 + 5, y0 + 8, 9, 9); ctx.strokeStyle = '#2a1608'; ctx.lineWidth = 1; ctx.strokeRect(x0 + 5, y0 + 8, 9, 9);
+        ctx.restore();
+    });
+}

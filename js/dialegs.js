@@ -330,14 +330,12 @@ const DIALEGS = {
     // ---------------- RUÏNES I PING-PONG ----------------
     ruines: E => ({
         pagines: [
-            { qui: '', text: "Les Les Runes. Murs i arcs que mai no es van acabar de construir." },
-            { qui: '', text: "Entre dues pedres, un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de Runna i la va deixar dormint a la pedra. Després va amagar la clau i les relíquies dels monjos morts allà on ningú no les trobés.»" },
+            { qui: '', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de Runna i la va deixar dormint a la pedra. Després va amagar la clau i les relíquies dels monjos morts allà on ningú no les trobés.»" },
+            { fer: (z, fet) => z.agafarPergamiRunes ? z.agafarPergamiRunes(fet) : fet() },
             { qui: 'Ineu', text: "Falta l'altre fragment. Potser a l'església... I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." },
-            ...(E.flag('fragment1') ? [] : [
-                { fer: (z, fet) => z.aparicioOmbra ? z.aparicioOmbra(fet) : fet() },
-                { qui: '', text: "De cop, el cel s'enfosqueix. Sobre el mur de les Runes es dibuixa l'ombra d'un monjo corbat, amb les mans unides, com si pregués. No hi ha ningú que la projecti." },
-                { qui: 'Ineu', text: "Ha aparegut en llegir el pergamí... És el monjo del segell? El Pare Alcuí ha de veure això: li duré els dos fragments." }
-            ])
+            { fer: (z, fet) => z.aparicioOmbra ? z.aparicioOmbra(fet) : fet() },
+            { qui: '', text: "De cop, el cel s'enfosqueix. Sobre el mur de les Runes es dibuixa l'ombra d'un monjo corbat, amb les mans unides, com si pregués. No hi ha ningú que la projecti." },
+            { qui: 'Ineu', text: "Ha aparegut en llegir el pergamí... És el monjo del segell? El Pare Alcuí ha de veure això: li duré els dos fragments." }
         ],
         enAcabar: () => E.posaFlag('fragment1')
     }),
@@ -1418,32 +1416,20 @@ const DIALEGS = {
     },
 
     // ---------------- EL CEMENTIRI ----------------
-    tombaMonjos: E => {
-        if (E.flag("relIquiesRetornades")) {
-            return { pagines: [{ qui: "", text: "La tapa del sarcòfag dels monjos primers, tancada de nou. Les relíquies reposen a sota, i només un fil de llum tèbia surt de l'esquerda." }] };
-        }
-        return {
-            pagines: [
-                { qui: "", text: "Un gran sarcòfag de pedra al mig del replà, amb la tapa esquerdada i lletres antigues gairebé esborrades: «Ací reposen els qui van tancar la porta.»" },
-                { qui: "", text: "De l'esquerda surt una boira lila, freda, que sembla respirar. Al seu voltant, la terra és plena d'animalets que no haurien de sortir." },
-                { qui: "Ineu", text: "Aquí és, doncs, el cementiri vell dels monjos del segle XV. L'esquerda del segell... i la boira. Si algú els tornés el que els van prendre..." },
-                { qui: "", text: "(El monjo les va amagar a la Casa Gran perquè ningú no les robés. Quan les portis aquí, l'esquerda es tancarà.)" }
-            ],
-            enAcabar: () => E.posaFlag("tombaVista")
-        };
-    },
+    tombaMonjos: E => ({
+        pagines: [{ qui: "Ineu", text: "«Ací reposen els qui van tancar la porta.»" }],
+        enAcabar: () => E.posaFlag("tombaVista")
+    }),
 
     creuCementiri: E => {
-        const gravat = { qui: "", text: "Una tomba arran de terra, voltada de pedra, amb un àngel que plora al cap i un gerro als peus. A la base, gravat: «Els monjos del Miracle, d'ara i d'abans.»" };
+        const gravat = { qui: "Ineu", text: "«Els monjos del Miracle, d'ara i d'abans.»" };
         if (E.te("ram")) return {
             pagines: [gravat,
                 { fer: (z, fet) => z.deixar(fet, 'flors', 0xffd8e8) },
             ],
             enAcabar: () => { E.treu("ram"); E.posaFlag("florsCreu"); E.posaObjectiu("Torna a Sant Antoni: el Germà Francesc t'ha de donar una cosa."); }
         };
-        return { pagines: [gravat, E.flag("florsCreu")
-            ? { qui: "Ineu", text: "El ram del Germà Francesc encara és fresc. La boira no s'hi acosta." }
-            : { qui: "Ineu", text: "La boira ha marcit les flors, però algú encara les canvia cada setmana. Segur que el Germà Francesc, del Monestir." }] };
+        return { pagines: [gravat] };
     },
 
     lapida: n => E => {

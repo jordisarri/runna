@@ -185,6 +185,12 @@ const ICONES_OBJECTES = {
         ctx.strokeStyle = '#6a6e78'; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(22, 84); ctx.lineTo(66, 22); ctx.quadraticCurveTo(74, 10, 84, 18); ctx.stroke();
         ctx.strokeStyle = 'rgba(255,255,255,0.45)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(26, 78); ctx.lineTo(62, 26); ctx.stroke();
     },
+    fragment1: ctx => {
+        ctx.lineWidth = 3; ctx.fillStyle = '#e8d8a8';
+        ctx.beginPath(); ctx.moveTo(20, 20); ctx.lineTo(70, 18); ctx.lineTo(64, 30); ctx.lineTo(72, 42); ctx.lineTo(63, 54); ctx.lineTo(71, 66); ctx.lineTo(66, 78); ctx.lineTo(22, 80); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 2; [32, 43, 54, 65].forEach(y => { ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(58 - (y % 11), y); ctx.stroke(); });
+        ctx.fillStyle = '#9a2a1a'; ctx.fillRect(27, 24, 7, 7);
+    },
     pergami_monjo: ctx => {
         ctx.lineWidth = 3; ctx.fillStyle = '#e8d8a8';
         ctx.beginPath(); ctx.rect(22, 18, 52, 60); ctx.fill(); ctx.stroke();
@@ -248,6 +254,7 @@ const US_OBJECTES = {
     estel_llorenc: E => E.flag('boiraDolmenNeta') ? 'record' : 'cal',
     guants: E => E.flag('rodaMoguda') && E.flag('refetorObert') && E.flag('rastellObert') ? 'record' : 'cal',
     palanca: E => E.flag('raimDerrotat') ? 'record' : 'cal',
+    fragment1: E => E.flag('benedicioMonjo') ? 'record' : 'cal',
     pergami_monjo: E => E.flag('raimDerrotat') ? 'record' : 'cal',
     clau_girgoles: E => E.flag('portaFerroOberta') ? 'record' : 'cal',
     clau_ferro: E => E.flag('portaSoterraniOberta') ? 'record' : 'cal',

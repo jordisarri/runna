@@ -41,6 +41,7 @@ const CATALEG_OBJECTES = {
     guants:           ['Guants de Poder', 'Per moure el que pesa massa.'],
     palanca:          ['Palanca d\'en Jordi', 'De ferro, de les bones.'],
     clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Andreu li va caure; el Siscu te l\'ha donada.'],
+    fragment1:        ['Pergamí partit (1/2)', 'La meitat d\'un pergamí esquinçat, trobada a les Runes.'],
     pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.»'],
     calze:            ['Calze de Rosada', "De plata, antic. A l'altar de Sant Gabriel, cada cop que hi beus l'aigua de rosada, el rosari et queda ple."],
     reliquies_monjos: ['Relíquies dels monjos', 'Un calze, una creu, un anell i un breviari.'],

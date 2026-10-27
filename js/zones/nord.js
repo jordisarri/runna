@@ -86,7 +86,13 @@ class ZonaRuines extends ZonaBase {
         // Pedres caigudes davant i, a ponent, carreus escampats de l'església que mai no es va acabar
         [[950, 525, 0.6], [1570, 530, 0.5], [240, 700, 0.8], [420, 760, 0.55], [330, 1040, 0.7], [560, 640, 0.5], [130, 560, 0.65]]
             .forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 60 * e, h: 22 * e } }));
-        this.interactiu(1310, 540, 110, DIALEGS.ruines, { altura: 140 });
+        // El pergamí partit entre dues pedres: s'agafa i passa al sarró
+        if (!Estat.flag('fragment1')) {
+            this.pergamiRunes = this.posar('pergami_partit', 1030, 600, { fonsY: 600 });
+            this.pergamiBrill = this.add.circle(1030, 590, 46, 0xffe8a0, 0.16).setDepth(599).setBlendMode('ADD');
+            this.tweens.add({ targets: this.pergamiBrill, alpha: 0.05, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
+            this.interactiu(1030, 606, 80, DIALEGS.ruines, { altura: 60, actiu: () => !Estat.flag('fragment1') });
+        } else if (!Estat.te('fragment1')) Estat.dona('fragment1');          // partides desades d'abans del pergamí físic
 
         // L'ombra del monjo: només es veu quan has llegit el primer fragment del pergamí
         this.apareix = 1;            // 0..1: com de present és l'ombra (la primera vegada es materialitza lentament)
@@ -109,6 +115,21 @@ class ZonaRuines extends ZonaBase {
         this.sortida(700, 0, 200, 14, 'ZonaCelles', 'ruines');
         this.sortida(0, 850, 14, 130, 'ZonaCami', 'runes');
         this.sortida(1586, 520, 14, 130, 'ZonaCementiri', 'runes');
+    }
+
+    // El pergamí vola cap a l'Ineu i passa al sarró
+    agafarPergamiRunes(fet) {
+        const s = this.pergamiRunes;
+        if (!s) { fet(); return; }
+        Sfx.objecte();
+        if (this.pergamiBrill) { this.pergamiBrill.destroy(); this.pergamiBrill = null; }
+        this.ajupir('ineu', null, 300);
+        this.tweens.add({ targets: s, x: this.ineu.x, y: this.ineu.y - 70, scale: s.scale * 0.5, alpha: 0.2, duration: 650, ease: 'Sine.easeIn', onComplete: () => {
+            s.destroy(); this.pergamiRunes = null;
+            Estat.dona('fragment1'); this.ui().actualitzarHUD();
+            this.llum(this.ineu.x, this.ineu.y - 70, 0xffe8a0);
+            this.esperar(300, fet);
+        } });
     }
 
     // El Cant de les Pedres, tocat davant l'ombra, li desperta la memòria
