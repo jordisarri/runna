@@ -722,7 +722,7 @@ class ZonaTiller extends ZonaBase {
 
     actualitzar() {
         // La branca només es veu mentre encara no l'has agafada (i després que el Til·ler te l'hagi indicat)
-        this.branca.setVisible(Estat.flag('tillerBranca') && !Estat.te('basto_tiller'));
+        this.branca.setVisible(Estat.flag('tillerBranca') && !Estat.te('basto_tiller') && !this.brancaAgafada);
     }
 }
 

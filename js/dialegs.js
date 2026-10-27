@@ -108,7 +108,7 @@ const DIALEGS = {
                     { qui: 'Germà Andreu', text: 'Ineu! Quin drama, oi? Tothom corrent amunt i avall... Segur que els nens s\'han amagat per jugar.' },
                     { qui: 'Germà Andreu', text: 'Ets del Barça, tu? Tinc uns cromos que els nens es moren per tenir. Ells sí que m\'escolten.' },
                     { qui: 'Germà Andreu', text: 'Ei, pren aquest bastó de pelegrí. Era d\'un vell que ja no el vol.' },
-                    { fer: (z, fet) => z.objecteVola('germa_andreu', () => z.ineuAixeca('ineu_aixeca_basto', fet), 'arma_basto') },
+                    { fer: (z, fet) => z.objecteVola('germa_andreu', () => z.ineuAixeca('ineu_aixeca_basto', fet, 0.58), 'arma_basto') },
                     { qui: '', text: 'Has obtingut el BASTÓ DE PELEGRÍ!' }
                 ],
                 enAcabar: () => {
@@ -504,8 +504,8 @@ const DIALEGS = {
 
     branca: E => ({
         pagines: [
-            { fer: (z, fet) => z.agafar(fet, 'branca', 0xd8f0a0) },
-            { qui: "", text: "Has obtingut el BASTÓ DE TIL·LER!\nTambé ataca amb J o ESPAI, però més ràpid i amb més abast." }
+            { fer: (z, fet) => { z.brancaAgafada = true; z.agafar(() => z.ineuAixeca('ineu_aixeca_tiler', fet), 'branca', 0xd8f0a0); } },
+            { qui: "", text: "Has obtingut el BASTÓ DE TIL·LER!" }
         ],
         enAcabar: () => {
             E.dona("basto_tiller");

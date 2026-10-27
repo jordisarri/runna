@@ -20,6 +20,7 @@ Aquest document diu **exactament** quines cançons falten, com han de ser i com 
 | 11 | `biblioteca.m4a` | Biblioteca del Monestir | bucle | 2:00 | Recomanada | interiors |
 | 12 | `hostatgeria.m4a` | Hostatgeria i les tres cambres de les sacerdotesses | bucle | 1:45 | Recomanada | interiors |
 | 13 | `girgoles.m4a` | Sala de les Gírgoles | bucle | 2:00 | Recomanada | masmorra |
+| 14 | `jingle_objecte.m4a` | Quan l'Ineu alça el bastó de pelegrí o la branca del Til·ler | peça única | 0:04 | Recomanada | fanfara sintetitzada |
 
 Les 4 que ja hi ha són el «món base»: `The Hero's Ascension` (plaça i poble), `Woodland Path` (boscos), `Inside All` (interiors) i
 `Deep Dungeon Stillness` (masmorres). Les noves han de **sonar de la mateixa família**: fantasia acústica de cambra, càlida, una mica
@@ -186,6 +187,13 @@ fragment del Cant de l'Aurora a la flauta. Si és una peça diferent de la resta
   verds de sintetitzador suau (és l'única peça que admet pad sintètic). Rarament una resta de flauta.
 - **Prompt:** `instrumental eerie bioluminescent cave ambience, dripping water, soft marimba and vibraphone, glassy pads, slow 50 bpm, E phrygian, sparse, mysterious and calm, no drums, no vocals, seamless loop`
 
+### 2.14 `jingle_objecte.m4a` — l'Ineu alça una arma nova *(recomanada)*
+- **4 segons, no fa bucle.** Sona, sempre la mateixa, quan l'Ineu rep el bastó de pelegrí (Germà Andreu) i quan agafa la branca del Gran Til·ler:
+  l'Ineu l'alça mirant amunt amb un esclat de llum. La música de fons s'abaixa mentre dura.
+- Petita i lluminosa, de la família de `jingle_runna` però humil (no és l'espasa): **arpegi ascendent de Mi major** a l'arpa o la flauta,
+  que s'obre en un acord sostingut amb una campaneta. Cap percussió forta.
+- **Prompt:** `short 4 second fantasy item fanfare, acoustic chamber, ascending E major arpeggio on harp and wooden flute, opens into a warm sustained chord, small bell shimmer, gentle and humble, no drums, no loop`
+
 ---
 
 ## 3. Llista de comprovació abans de lliurar cada peça
@@ -204,3 +212,4 @@ fragment del Cant de l'Aurora a la flauta. Si és una peça diferent de la resta
 - En obrir la gàbia (Cant del Miracle) arrenca `epileg` i **no es reinicia** en canviar al Santuari: és una sola peça contínua.
 - `credits` sona a la pantalla de crèdits; en tornar al joc, cada zona torna a la seva música.
 - `jingle_runna` sona un cop a l'inici de la cinemàtica del Dolmen, per sobre de la música de zona.
+- `jingle_objecte` sona quan l'Ineu alça el bastó o la branca; la música de zona baixa de volum uns segons i després torna.

@@ -194,6 +194,12 @@ const Sfx = {
         if (!this.ok('objecte', 200)) return;
         [659, 880, 1319].forEach((f, i) => this.to(f, f, 0.25, 'triangle', 0.16, i * 0.09));
     },
+    fanfara() {                  // l'Ineu alça una arma nova: arpegi de Mi major que s'obre en un acord llarg, amb campaneta
+        if (!this.ok('fanfara', 1500)) return;
+        [330, 415, 494, 659].forEach((f, i) => this.to(f, f, 0.3, 'triangle', 0.16, i * 0.11));
+        [330, 415, 494, 659, 988].forEach(f => { this.to(f, f, 1.6, 'triangle', 0.09, 0.48); this.to(f * 2, f * 2, 1.2, 'sine', 0.04, 0.48); });
+        this.to(1319, 1319, 1.4, 'sine', 0.08, 0.5);
+    },
     secret() {                   // descobriment: una porta amagada s'obre, un mecanisme encaixa
         if (!this.ok('secret', 1500)) return;
         this.to(70, 45, 0.9, 'sine', 0.3);                          // retruny de pedra

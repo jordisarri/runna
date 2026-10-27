@@ -63,7 +63,8 @@ const Joc = {
         musica_epileg:     { fitxer: 'epileg',     fallback: 'musica_intro' },
         musica_credits:    { fitxer: 'credits',    fallback: 'musica_epileg' },
         jingle_runna:      { fitxer: 'jingle_runna', fallback: null, jingle: true },
-        jingle_boss:       { fitxer: 'jingle_boss',  fallback: null, jingle: true }
+        jingle_boss:       { fitxer: 'jingle_boss',  fallback: null, jingle: true },
+        jingle_objecte:    { fitxer: 'jingle_objecte', fallback: null, jingle: true }
     },
     musicaDisponible: new Set(),
     musicaDeteccio: null,
@@ -91,6 +92,14 @@ const Joc = {
             if (scene.cache.audio.exists(clau)) play();
             else { scene.load.once('filecomplete-audio-' + clau, play); Joc.carregarMusica(scene, clau); scene.load.start(); }
         });
+    },
+
+    // L'Ineu alça una arma nova (el bastó, la branca del Til·ler): sempre la mateixa fanfara. La música de fons s'abaixa mentre sona.
+    // Si encara no hi ha el fitxer jingle_objecte.m4a, sona una fanfara sintetitzada.
+    fanfaraObjecte(scene) {
+        const m = Joc.musica;
+        if (m && m.isPlaying) { m.setVolume(0.2); scene.time.delayedCall(2600, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
+        Joc.detectarMusica().then(() => { if (Joc.musicaDisponible.has('jingle_objecte')) Joc.jingle(scene, 'jingle_objecte'); else Sfx.fanfara(); });
     },
 
     carregarMusica(scene, clau) {
