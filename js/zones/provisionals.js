@@ -192,7 +192,21 @@ class ZonaMonestir extends ZonaBase {
             nom: 'El Monestir',
             amplada: 1600,
             alcada: 800 + D,
-            entrades: { placa: { x: 60, y: 520 + D, dir: 'dreta' }, rebedor: { x: 800, y: 494, dir: 'avall' }, cementiri: { x: 1480, y: 70, dir: 'avall' }, santantoni: { x: 1530, y: 560 + D, dir: 'esquerra' } }
+            entrades: { placa: { x: 60, y: 520 + D, dir: 'dreta' }, rebedor: { x: 800, y: 494, dir: 'avall' }, inici: { x: 800, y: 540, dir: 'avall' }, cementiri: { x: 1480, y: 70, dir: 'avall' }, santantoni: { x: 1530, y: 560 + D, dir: 'esquerra' } }
+        });
+    }
+
+    // La partida comença aquí, davant la porta del Monestir: l'Ineu n'acaba de sortir i ha d'anar cap a la Plaça
+    enEntrar() {
+        if (Estat.flag('introVista')) return;
+        Estat.posaFlag('introVista');
+        this.time.delayedCall(700, () => {
+            this.ui().obrirDialeg({
+                pagines: [
+                    { qui: '', text: 'Monestir del Miracle. Matí.' },
+                    { qui: 'Ineu', text: 'Una altra nit de boira... i aquest fred que no marxa. El Pare Jordi em deu estar esperant a la Plaça.' }
+                ]
+            }, () => Estat.desar());
         });
     }
 

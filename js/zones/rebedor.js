@@ -12,21 +12,7 @@ class ZonaMonestirRebedor extends ZonaBase {
             alcada: 900,
             colorFons: '#100a06',
             pacifica: true,
-            entrades: { porta: { x: 550, y: 800, dir: 'amunt' }, biblioteca: { x: 550, y: 300, dir: 'avall' }, inici: { x: 550, y: 560, dir: 'avall' } }
-        });
-    }
-
-    // La partida comença aquí: l'Ineu es desperta al Monestir i ha de sortir cap a la Plaça
-    enEntrar() {
-        if (Estat.flag('introVista')) return;
-        Estat.posaFlag('introVista');
-        this.time.delayedCall(700, () => {
-            this.ui().obrirDialeg({
-                pagines: [
-                    { qui: '', text: 'Monestir del Miracle. Matí.' },
-                    { qui: 'Ineu', text: 'Una altra nit de boira... i aquest fred que no marxa. El Pare Jordi em deu estar esperant a la Plaça.' }
-                ]
-            }, () => Estat.desar());
+            entrades: { porta: { x: 550, y: 800, dir: 'amunt' }, biblioteca: { x: 550, y: 300, dir: 'avall' }, inici: { x: 550, y: 560, dir: 'avall' } }      // «inici»: partides començades quan s'hi començava
         });
     }
 

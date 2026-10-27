@@ -12,7 +12,7 @@ const Estat = {
     nova() {
         this.dades = {
             versio: this.VERSIO,
-            zona: 'ZonaMonestirRebedor',
+            zona: 'ZonaMonestir',
             entrada: 'inici',
             x: null,
             y: null,
