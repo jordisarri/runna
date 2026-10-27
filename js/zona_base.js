@@ -787,7 +787,7 @@ class ZonaBase extends Phaser.Scene {
 
     // Lloc de flauta on és l'Ineu (o null)
     flautaActiva() {
-        if (!Estat.te('flauta') || !this.ineu) return null;
+        if (!Estat.te('flauta') || !this.ineu || this.sensePunts()) return null;
         return this.llocsFlauta.find(l => (!l.pista || Estat.flag('flauta_' + l.id)) && (!l.actiu || l.actiu()) &&
             Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, l.x, l.y) <= l.radi) || null;
     }
@@ -1070,7 +1070,11 @@ class ZonaBase extends Phaser.Scene {
 
     // Punt interactiu que l'Ineu té al davant: prou a prop (80% del radi) i dins d'un con de ±70° cap on mira.
     // Així, si ataca d'esquena a un cartell, no es posa a llegir.
+    // Una zona pot desactivar tots els punts interactius i la flauta (el combat final: ningú no parla ni toca res)
+    sensePunts() { return false; }
+
     puntProper() {
+        if (this.sensePunts()) return null;
         const v8 = { right: [1, 0], southeast: [1, 1], down: [0, 1], southwest: [-1, 1], left: [-1, 0], northwest: [-1, -1], up: [0, -1], northeast: [1, -1] }[this.vista8];
         const dv = v8 ? { x: v8[0] / Math.hypot(...v8), y: v8[1] / Math.hypot(...v8) } : (DIRS[this.direccio] || DIRS.avall);
         let millor = null, millorDist = Infinity;

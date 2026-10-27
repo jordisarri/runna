@@ -505,7 +505,6 @@ class ZonaGabia extends ZonaBase {
             c.setScale(this.textures.get('capoll').customData.escala || 1 / RES);
             this.tweens.add({ targets: c, y: y - 10, yoyo: true, repeat: -1, duration: 1500 + i * 300, ease: 'Sine.easeInOut' });
             this.capolls.push(c);
-            this.interactiu(gx + n.dx, base + 50, 60, DIALEGS.capoll(n.nom), { altura: 200, actiu: () => !Estat.flag('gabiaOberta') });
         });
         // Els nens ja alliberats, al davant de la gàbia
         NENS_GABIA.forEach((n, i) => { if (Estat.flag(n.flag)) this.posarNen(n, gx - 200 + i * 200, base + 220); });
@@ -774,11 +773,20 @@ class ZonaGabia extends ZonaBase {
     // ---------------- El combat final ----------------
     actualitzar() {
         // L'Ineu trepitja la plataforma: l'Andreu crida el seu Mestre
-        if (!this.combatIniciat && Estat.flag('pontGabia') && !Estat.flag('ocellaireVencut') && this.ineu.y < GABIA.y + GABIA.platH / 2 - 30) this.iniciarCombatFinal();
+        if (!this.combatIniciat && Estat.flag('pontGabia') && !Estat.flag('ocellaireVencut') && this.ineu.y < GABIA.y + GABIA.platH / 2 - 30) {
+            if (!Estat.flag('cantMiracle')) {                                         // sense el Cant del Miracle no es pot entrar al combat
+                this.ineu.setY(GABIA.y + GABIA.platH / 2 - 10);
+                if (this.time.now > (this.avisCant || 0)) { this.avisCant = this.time.now + 4000; this.missatge("Una força invisible no et deixa avançar: sense el Cant del Miracle els barrots de la gàbia no t'escoltaran. La Pianista, al Santuari, te l'ha d'ensenyar."); }
+            } else this.iniciarCombatFinal();
+        }
     }
+
+    // Durant el combat final no es pot parlar amb ningú ni tocar la flauta
+    sensePunts() { return !!this.bossActiu; }
 
     iniciarCombatFinal() {
         this.combatIniciat = true;
+        this.bossActiu = true;
         const gx = this.gx, base = this.base, vist = Estat.flag('ocellaireVist');
         const ap = this.add.image(gx, base + 90, 'ocellaire').setAlpha(0).setDepth(base + 90);
         ap.setScale(this.textures.get('ocellaire').customData.escala || 1 / RES);
@@ -795,10 +803,23 @@ class ZonaGabia extends ZonaBase {
                 f => z.bombolla('ocellaire', 'Un nen que riu...', f, 1500),
                 f => z.bombolla('ocellaire', 'El teu riure també serà meu!', f, 1800)
             ]),
-            f => { z.npcVa('germa_andreu', gx + 330, base + 40, null, 220); cam.pan(this.ineu.x, this.ineu.y, 700, 'Sine.easeInOut', false, (cm, p) => { if (p === 1) { cam.startFollow(this.ineu, true, 0.12, 0.12); f(); } }); },
+            f => { z.npcVa('germa_andreu', gx + 330, base + 40, null, 220); z.amagarAndreu(); cam.pan(this.ineu.x, this.ineu.y, 700, 'Sine.easeInOut', false, (cm, p) => { if (p === 1) { cam.startFollow(this.ineu, true, 0.12, 0.12); f(); } }); },
             f => { ui.franges(false); f(); }
         ], fet) }];
         this.ui().obrirDialeg({ pagines }, () => this.començarBoss(ap));
+    }
+
+    // L'Andreu fuig i s'amaga durant el combat (després torna)
+    amagarAndreu() {
+        const a = this.npcs.germa_andreu;
+        if (!a) return;
+        this.time.delayedCall(1100, () => this.tweens.add({ targets: [a, a.ombra].filter(Boolean), alpha: 0, duration: 500, onComplete: () => { if (this.bossActiu) { a.setVisible(false); if (a.ombra) a.ombra.setVisible(false); } } }));
+    }
+    mostrarAndreu() {
+        const a = this.npcs.germa_andreu;
+        if (!a) return;
+        this.tweens.killTweensOf(a);
+        a.setVisible(true).setAlpha(1); if (a.ombra) a.ombra.setVisible(true).setAlpha(a.ombra.alpha || 1);
     }
 
     // La boira baixa de la cúpula, s'arremolina i en surt l'Ocellaire
@@ -856,6 +877,7 @@ class ZonaGabia extends ZonaBase {
         if (e.diana) { e.diana.destroy(); e.diana = null; }
         this.netejarRonda(e);
         ui.amagarBarraBoss();
+        this.mostrarAndreu();
         // El cop final: el món gairebé s'atura, la càmera s'hi acosta i un flaix blanc ho esborra tot
         this.hitStop(450);
         cam.flash(700, 255, 255, 255);
@@ -896,6 +918,7 @@ class ZonaGabia extends ZonaBase {
             f => z.ajupir('germa_andreu', f, 1500)
         ], fet) }] }, () => {
             ui.franges(false);
+            this.bossActiu = false;
             this.tornarColorCova();
             Estat.posaFlag('ocellaireVencut');
             Estat.posaObjectiu("L'Ocellaire ha caigut. Toca el Cant del Miracle (1-3-2-3-1) davant la gàbia.");

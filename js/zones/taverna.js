@@ -19,14 +19,6 @@ Object.assign(DIALEGS, {
         enAcabar: () => { E.posaFlag('tavernaOberta'); E.desar(); }
     },
 
-    carmen: E => ({ pagines: E.flag('relIquiesRetornades') ? [
-        { qui: 'Carmen', text: '(obrint un ull) Ah, ets tu. Diu l\'Eva que ets valent. Jo també ho seria, si no tingués tanta son.' },
-        { qui: 'Carmen', text: 'Ves, ves. I si baixes, tanca la porta, que fa corrent.' }
-    ] : [
-        { qui: '', text: 'La Carmen ronca, asseguda darrere el taulell, amb els peus sobre una caixa de gasoses i el davantal per mocador.' },
-        { qui: 'Carmen', text: E.flag('ciscuTrobat') ? '...Zzz... Siscu... frega els gots... i deixa les cartes de l\'avi... Zzz...' : '...Zzz... Avui no servim... Ni demà... Ni passat... Zzz...' }
-    ] }),
-
     eva: E => {
         if (!E.flag('evaParlat')) return {
             pagines: [
@@ -68,9 +60,12 @@ Object.assign(DIALEGS, {
 
     portaFerro: E => {
         if (E.flag('portaFerroOberta')) return { pagines: [{ qui: '', text: "La porta de ferro, oberta de bat a bat. Una escala humida baixa cap a la foscor, i d'allà puja olor de bolets i de terra mullada." }] };
+        if (E.te('clau_girgoles') && !E.flag('cantMiracle')) return { pagines: [
+            { qui: 'Ineu', text: '(Tinc la clau, però allà baix només un cant em serveix: els barrots de la gàbia només escolten el Cant del Miracle. Primer l\'he d\'aprendre: la Pianista, al Santuari, me l\'ensenyarà.)' }
+        ] };
         if (E.te('clau_girgoles')) return { pagines: [
             { qui: '', text: 'La clau rovellada del Siscu gira al pany petit. La porta s\'obre i, molt avall, se senten ocells.' },
-            { qui: 'Ineu', text: E.flag('cantMiracle') ? '(Tinc Runna i el Cant del Miracle. Endavant.)' : '(La Pianista em va dir que els barrots de la gàbia només escolten el Cant del Miracle. Potser hauria d\'anar-la a veure abans de baixar gaire.)' }
+            { qui: 'Ineu', text: '(Tinc Runna i el Cant del Miracle. Endavant.)' }
         ] };
         return { pagines: [
             { qui: '', text: 'Una segona porta de ferro, amb un pany petit, molt diferent del de la porta de fora. Per sota surt boira lila.' },
@@ -135,7 +130,6 @@ class ZonaTavernaInt extends ZonaBase {
         t.fillStyle(0xc87a3a, 1).fillEllipse(320, 166, 50, 14);                                   // plat de coca
         this.colisio(310, 215, 410, 70);
         this.interactiu(310, 270, 90, DIALEGS.taulellTaverna, { altura: 90 });
-        this.npc('carmen', 300, 160, DIALEGS.carmen);
         const zz = this.add.text(330, 70, 'z z Z', estilText(26, '#f2e6c8', { fontStyle: 'italic' })).setDepth(400);
         this.tweens.add({ targets: zz, y: 50, alpha: 0.2, yoyo: true, repeat: -1, duration: 1400 });
 
@@ -222,7 +216,7 @@ class ZonaSotaTaverna extends ZonaBase {
         this.boira(300, 420, 160, 40, 0.5);
         this.boira(520, 600, 160, 40, 0.5);
         this.fullaPorta = pf;
-        this.interactiu(400, 220, 120, DIALEGS.portaFerro, { altura: 170, actiu: () => !Estat.flag('portaFerroOberta'), enTancar: () => { if (Estat.te('clau_girgoles')) this.obrirPortaFerro(); } });
+        this.interactiu(400, 220, 120, DIALEGS.portaFerro, { altura: 170, actiu: () => !Estat.flag('portaFerroOberta'), enTancar: () => { if (Estat.te('clau_girgoles') && Estat.flag('cantMiracle')) this.obrirPortaFerro(); } });
         if (Estat.flag('portaFerroOberta')) this.obrirPortaFerro(true);
 
         // Sacs i botes de vi, i petjades a la pols
