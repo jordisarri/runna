@@ -88,10 +88,11 @@ class ZonaRuines extends ZonaBase {
             .forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 60 * e, h: 22 * e } }));
         // El pergamí partit entre dues pedres: s'agafa i passa al sarró
         if (!Estat.flag('fragment1')) {
-            this.pergamiRunes = this.posar('pergami_partit', 1030, 600, { fonsY: 600 });
-            this.pergamiBrill = this.add.circle(1030, 590, 46, 0xffe8a0, 0.16).setDepth(599).setBlendMode('ADD');
+            // Dins de les runes, sobre els carreus caiguts davant del portal esfondrat (per sobre de l'sprite de les runes)
+            this.pergamiRunes = this.posar('pergami_partit', 1275, 452, { fonsY: 480, escala: 0.75 });
+            this.pergamiBrill = this.add.circle(1275, 430, 40, 0xffe8a0, 0.2).setDepth(479).setBlendMode('ADD');
             this.tweens.add({ targets: this.pergamiBrill, alpha: 0.05, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
-            this.interactiu(1030, 606, 80, DIALEGS.ruines, { altura: 60, actiu: () => !Estat.flag('fragment1') });
+            this.interactiu(1275, 500, 80, DIALEGS.ruines, { altura: 60, actiu: () => !Estat.flag('fragment1') });
         } else if (!Estat.te('fragment1')) Estat.dona('fragment1');          // partides desades d'abans del pergamí físic
 
         // L'ombra del monjo: només es veu quan has llegit el primer fragment del pergamí
