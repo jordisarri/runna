@@ -103,7 +103,7 @@ const DIARI = {
         if (id === 'mapa') { this.mapa(ui, this.cos); return; }
         // Pestanyes de text: es dibuixen en una amplada «virtual» (AMPLE / escala) i es mostren ampliades, amb scroll
         this.AV = AMPLE / this.escala;
-        this.MX = Math.max(20, 50 / this.escala);                       // marge lateral: sempre uns 50 px a la pantalla
+        this.MX = Math.max(26, 74 / this.escala);                       // marge lateral: uns 74 px a la pantalla, perquè la barra d'scroll (a la dreta) no toqui el text
         const cont = ui.add.container(0, 0);
         this[id](ui, cont);
         this.cos.add(cont);
@@ -150,7 +150,7 @@ const DIARI = {
         const g = ui.make.graphics({ add: false }); g.fillStyle(0xffffff).fillRect(48, y0, AMPLE - 96, y1 - y0);
         this.mascara = g; cont.setMask(g.createGeometryMask());
         // Barra d'scroll
-        const ind = ui.add.rectangle(AMPLE - 56, y0, 6, 40, 0x6a1f12, 0.55).setOrigin(0.5, 0).setVisible(this.maxScroll > 0);
+        const ind = ui.add.rectangle(AMPLE - 44, y0, 6, 40, 0x6a1f12, 0.55).setOrigin(0.5, 0).setVisible(this.maxScroll > 0);
         this.cos.add(ind);
         const aplica = () => {
             this.scroll = Math.min(this.maxScroll, Math.max(0, this.scroll));

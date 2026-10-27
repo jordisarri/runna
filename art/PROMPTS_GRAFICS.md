@@ -629,3 +629,16 @@ Hand-painted 2D game asset, warm storybook fantasy with a slightly eerie Catalan
 
 **Perquè encaixin al joc:** la cara ha de ser la mateixa als dos; la pilota (només a l'NPC) i la caiada (només al Pastor) són el que els diferencia de lluny.
 El joc els pot girar en mirall, així que res d'asimètric que sigui essencial (lletres, números).
+
+## Pròleg
+
+### `proleg/ocellaire.webp` (720 × 950, il·lustració sencera, sense retallar el fons) *(Primer quadre del pròleg: Mestre Gaspar, l'Ocellaire, fa tres-cents anys, a la fira de primavera del Miracle, ABANS de ser tancat a la gàbia. Encantador i inquietant alhora. El joc el posarà a la part de dalt de la pantalla, sobre el text.)*
+
+```
+Hand-painted 2D storybook illustration, vertical portrait composition (3:4, about 720x950), warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, clean dark-brown outlines, rich sunset light from behind with long violet shadows. Full scene, NOT isolated, no white background.
+Subject: Mestre Gaspar "l'Ocellaire", a traveling bird-seller at a spring village fair in the Catalan pre-Pyrenees, three hundred years ago (early 18th century). He is very tall and gaunt, standing in the center of the village square, seen full body from the front, slightly from below so he towers over the scene. He wears a long ragged coat made of overlapping feathers in faded browns, soot greys and dull iridescent greens, reaching his ankles with a jagged feathered hem; a wide-brimmed black hat crowned with bright red, yellow and green plumes; a thin pale face half in shadow, a charming but slightly too-wide smile, small glinting amber eyes; long bony fingers, one hand raised as if conducting the birds' song, the other holding a tiny silver bird whistle on a cord. Across his shoulders he carries a curved wooden yoke from which hang five or six ornate brass birdcages of different sizes (bell-shaped and dome-shaped), each holding a small songbird that glows softly golden as it sings.
+He looks friendly, fascinating and festive at first sight, but subtly unsettling: his shadow on the ground is shaped like a giant cage.
+Around him: four or five village children (about 6-9 years old, simple 18th-century rural clothes) listening enchanted; thin golden wisps of light (their laughter) drift from their open mouths up into the cages, and the children closest to him look a little paler and desaturated than the rest.
+Background: fair stalls with red-and-white and blue-and-white striped awnings and strings of colourful triangular bunting; behind, on a hill, a Romanesque stone sanctuary with a square bell tower against a golden-orange sunset sky; layered blue-violet mountains in the distance.
+Palette: warm ochre, sunset orange, honey gold, muted moss green, deep violet shadows. No text, no letters, no logos, no frame, no border, no watermark.
+```

@@ -116,16 +116,5 @@ class ZonaPlaca extends ZonaBase {
 
     enEntrar() {
         if (Estat.flag('tresorObert')) this.obrirPedra(false);
-        if (Estat.flag('introVista')) return;
-        Estat.posaFlag('introVista');
-        this.time.delayedCall(700, () => {
-            this.ui().obrirDialeg({
-                pagines: [
-                    { qui: '', text: 'Santuari del Miracle. Matí.' },
-                    { qui: 'Ineu', text: 'Una altra nit de boira... i aquest fred que no marxa. El Pare Jordi em deu estar esperant a la plaça.' },
-                    { qui: '', text: 'Mou l\'Ineu amb les fletxes o WASD (o el joystick tàctil).\nPrem ESPAI quan vegis un  !  per parlar o mirar.' }
-                ]
-            }, () => Estat.desar());
-        });
     }
 }

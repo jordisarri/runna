@@ -215,7 +215,7 @@ const PROLEG_QUADRES = [
     { text: "Els pastors de la Cirosa i els monjos el van tancar dins la seva pròpia gàbia, sota terra. Un monjo va segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la va deixar dormint entre pedres.", dibuix: 'segell' },
     { text: "Ara, fa tres nits, una boira freda i lila surt de sota terra. Marceix els horts, entela l'aigua i fa callar l'orgue del Santuari.", dibuix: 'boira' },
     { text: "I cada nit falta un nen.\nL'Uri i el Flam, de Sant Benet.\nI aquesta nit... el Sardin, el nebot de les sacerdotesses.", dibuix: 'nens' },
-    { text: "Matí. L'Ineu, el monjo més jove del Santuari, es desperta.\nEl Pare Jordi el busca a la Plaça.", dibuix: 'mati' }
+    { text: "Matí. Al Monestir, l'Ineu, el monjo més jove, es desperta.\nEl Pare Jordi el busca a la Plaça.", dibuix: 'mati' }
 ];
 
 class EscenaProleg extends Phaser.Scene {
@@ -307,66 +307,40 @@ class EscenaProleg extends Phaser.Scene {
         g.lineBetween(cx, base - h, cx, base - h - 30); g.strokeCircle(cx, base - h - 40, 10);
     }
 
-    // 1. L'Ocellaire amb les seves gàbies, en un pergamí de color sèpia
+    // Fons pintat del quadre (js/dibuixos_proleg.js), a sobre de la caixa del text
+    fons(c, key) {
+        const im = this.add.image(0, 0, key).setOrigin(0).setScale(1 / RES);
+        c.add(im);
+        return im;
+    }
+
+    // 1. Mestre Gaspar, l'Ocellaire, a la fira del Miracle: les gàbies brillen i el riure dels nens hi vola
     dibuix_ocellaire(c) {
-        this.cel(c, 0x6a4a2a, 0x2a1a0c);
-        const g = this.add.graphics(); c.add(g);
-        g.fillStyle(0xd8b880, 0.15).fillCircle(AMPLE / 2, 470, 330);
-        // Silueta de l'Ocellaire: barret alt, capa i un pal amb gàbies penjades
-        g.fillStyle(0x140a04, 1);
-        g.fillTriangle(360, 330, 250, 860, 470, 860);
-        g.fillCircle(360, 320, 34);
-        g.fillRect(318, 236, 84, 70).fillRect(296, 296, 128, 12);
-        g.lineStyle(8, 0x140a04, 1).lineBetween(400, 470, 600, 300).lineBetween(320, 470, 120, 320);
-        this.gabia(g, 600, 470, 110, 150, 0x140a04, 5);
-        this.gabia(g, 120, 480, 90, 130, 0x140a04, 5);
-        g.fillStyle(0xd8b060, 1).fillCircle(372, 316, 5);                        // un ull que brilla
-        // Ocells que piulen dins les gàbies i en vol
-        [[600, 420], [120, 440], [200, 250], [520, 220], [640, 600]].forEach(([x, y], i) => {
-            const o = this.imatge(c, 'ocell', x, y, 46, 0xf2d890);
-            if (o) this.tweens.add({ targets: o, y: y - 10, yoyo: true, repeat: -1, duration: 500 + i * 120 });
+        this.fons(c, 'proleg_ocellaire');
+        const p = this.add.particles(0, 0, 'espurna', { x: { min: 60, max: 660 }, y: { min: 560, max: 900 }, speedY: { min: -40, max: -15 }, speedX: { min: -12, max: 12 },
+            lifespan: 3200, scale: { start: 0.35, end: 0 }, alpha: { start: 0.8, end: 0 }, tint: [0xffe08a, 0xfff2c0], frequency: 140, blendMode: 'ADD' });
+        c.add(p);
+        [[130, 552], [220, 602], [500, 594], [590, 548]].forEach(([x, y], i) => {
+            const l = this.add.circle(x, y, 34, 0xffd870, 0.25).setBlendMode(Phaser.BlendModes.ADD); c.add(l);
+            this.tweens.add({ targets: l, alpha: 0.08, scale: 1.3, yoyo: true, repeat: -1, duration: 700 + i * 150 });
         });
-        // Nens sense riure, petits, a baix
-        [[150, 940], [230, 950], [520, 945], [600, 935]].forEach(([x, y]) => { g.fillStyle(0x2a1a0c, 1).fillRoundedRect(x - 14, y - 64, 28, 64, 10).fillCircle(x, y - 76, 15); });
     }
 
-    // 2. La gàbia sota terra, la porta de ferro i el monjo amb Runna que la segella
+    // 2. Sota terra: la gàbia, els pastors i els monjos, i el monjo que segella la porta amb la llum de Runna
     dibuix_segell(c) {
-        this.cel(c, 0x0a0a1a, 0x1a1020);
-        const g = this.add.graphics(); c.add(g);
-        g.fillStyle(0x2a2430, 1).fillRect(0, 160, AMPLE, 760);
-        g.lineStyle(1.5, 0x120e16, 0.8);
-        for (let y = 190, f = 0; y < 920; y += 34, f++) { g.lineBetween(0, y, AMPLE, y); for (let x = (f % 2) * 40; x < AMPLE; x += 80) g.lineBetween(x, y, x, y - 34); }
-        // Porta de ferro
-        g.fillStyle(0x0a0808, 1).fillRect(170, 300, 260, 400).fillStyle(0x2a2a30, 1).fillRect(182, 312, 236, 388);
-        for (let y = 330; y < 700; y += 36) for (let x = 200; x < 410; x += 36) g.fillStyle(0x4a4a52, 1).fillCircle(x, y, 5);
-        // Gàbia darrere, amb una ombra d'ocell
-        this.gabia(g, 300, 690, 170, 260, 0x9a50ff, 3);
-        g.fillStyle(0x9a50ff, 0.25).fillEllipse(300, 600, 120, 60);
-        // El monjo amb l'espasa de llum
-        g.fillStyle(0x0c0806, 1).fillTriangle(560, 560, 480, 900, 640, 900).fillCircle(560, 548, 30);
-        const llum = this.add.graphics().setBlendMode('ADD'); c.add(llum);
-        llum.fillStyle(0xbfe0ff, 0.95).fillRect(586, 380, 10, 220);
-        llum.fillStyle(0xd8eeff, 0.25).fillCircle(591, 470, 130).fillStyle(0xd8eeff, 0.18).fillCircle(591, 470, 220);
-        this.tweens.add({ targets: llum, alpha: 0.6, yoyo: true, repeat: -1, duration: 900 });
-        // Raigs cap a la porta
-        const r = this.add.graphics().setBlendMode('ADD'); c.add(r);
-        for (let k = 0; k < 6; k++) r.lineStyle(3, 0xbfe0ff, 0.25).lineBetween(591, 470, 200 + k * 45, 320 + k * 60);
+        this.fons(c, 'proleg_segell');
+        const l = this.add.circle(506, 300, 46, 0xd8eeff, 0.14).setBlendMode(Phaser.BlendModes.ADD); c.add(l);
+        this.tweens.add({ targets: l, alpha: 0.05, scale: 1.4, yoyo: true, repeat: -1, duration: 900 });
+        const g = this.add.circle(230, 470, 120, 0xa060ff, 0.12).setBlendMode(Phaser.BlendModes.ADD); c.add(g);
+        this.tweens.add({ targets: g, alpha: 0.04, yoyo: true, repeat: -1, duration: 1400 });
     }
 
-    // 3. El Santuari de nit, la lluna i la boira lila que puja
+    // 3. Ara: el Santuari de nit i la boira lila que surt de les esquerdes
     dibuix_boira(c) {
-        this.cel(c, 0x060818, 0x1a1438);
-        this.estrelles(c, 90, 520);
-        const lluna = this.add.circle(560, 210, 54, 0xf4ecd0, 1); c.add(lluna);
-        c.add(this.add.circle(560, 210, 90, 0xf4ecd0, 0.08));
-        const s = this.imatge(c, 'esglesia', AMPLE / 2, 900, 560, 0x2a3060);
-        if (s) { const l = this.add.graphics(); c.add(l); }
-        const g = this.add.graphics(); c.add(g);
-        g.fillStyle(0x0a0c18, 1).fillRect(0, 890, AMPLE, 400);
-        // Boira lila que puja de terra
+        this.fons(c, 'proleg_boira');
+        this.imatge(c, 'esglesia', AMPLE / 2 + 40, 830, 460, 0x2a3060);
         const boira = this.add.particles(0, 0, 'boira', {
-            emitZone: { type: 'random', source: new Phaser.Geom.Rectangle(0, 860, AMPLE, 60) },
+            emitZone: { type: 'random', source: new Phaser.Geom.Rectangle(0, 820, AMPLE, 80) },
             speedY: { min: -30, max: -10 }, speedX: { min: -10, max: 10 }, scale: { start: 1.4, end: 4 },
             alpha: { start: 0.5, end: 0 }, tint: [0x9a50ff, 0x6a3ab8], lifespan: 6000, frequency: 70
         });
@@ -376,24 +350,15 @@ class EscenaProleg extends Phaser.Scene {
 
     // 4. Tres finestres que s'apaguen i l'ombra que s'endú un nen cap a la Taverna
     dibuix_nens(c) {
-        this.cel(c, 0x05060f, 0x141028);
-        this.estrelles(c, 50, 400);
-        const g = this.add.graphics(); c.add(g);
-        // Silueta del poble: tres cases amb una finestra encesa cadascuna (Sant Antoni, Sant Benet i la Taverna)
-        const cases = [[130, 'Uri'], [360, 'Flam'], [590, 'Sardin']];
-        c.add(this.add.circle(AMPLE / 2, 300, 260, 0x8a7ab8, 0.08));
-        cases.forEach(([x]) => {
-            g.fillStyle(0x1c1c36, 1).fillRect(x - 100, 470, 200, 260).fillStyle(0x3a2030, 1).fillTriangle(x - 115, 474, x + 115, 474, x, 380);
-            g.lineStyle(2, 0x5a5a8a, 0.6).strokeRect(x - 100, 470, 200, 260).strokeTriangle(x - 115, 474, x + 115, 474, x, 380);
-        });
-        cases.forEach(([x, nom], i) => {
-            const f = this.add.rectangle(x, 560, 46, 58, 0xffc860, 1); c.add(f);
-            const t = this.add.text(x, 760, nom, estilText(30, '#d8c8a0', { fontStyle: 'italic' })).setOrigin(0.5); c.add(t);
-            this.tweens.add({ targets: f, alpha: 0.05, delay: 900 + i * 1300, duration: 700 });
+        this.fons(c, 'proleg_nens');
+        const cases = [[40, 741, 200, 230, 'Uri'], [270, 722, 190, 250, 'Flam'], [490, 741, 200, 230, 'Sardin']];
+        cases.forEach(([x, y, w, h, nom], i) => {
+            const f = this.add.rectangle(x + w * 0.29, y - h * 0.57, w * 0.26 - 4, h * 0.3 - 4, 0xffc860, 1); c.add(f);
+            const llum = this.add.circle(x + w * 0.29, y - h * 0.57, 60, 0xffc860, 0.18).setBlendMode(Phaser.BlendModes.ADD); c.add(llum);
+            const t = this.add.text(x + w / 2, y + 36, nom, estilText(30, '#d8c8a0', { fontStyle: 'italic', stroke: '#0a0816', strokeThickness: 5 })).setOrigin(0.5); c.add(t);
+            this.tweens.add({ targets: [f, llum], alpha: 0.03, delay: 900 + i * 1300, duration: 700 });
             this.tweens.add({ targets: t, alpha: 0.35, delay: 900 + i * 1300, duration: 700 });
         });
-        g.fillStyle(0x10101c, 1).fillRect(0, 730, AMPLE, 220);
-        c.add(this.add.ellipse(AMPLE / 2, 900, 820, 140, 0x9a50ff, 0.22));
         // L'ombra amb hàbit i el nen, caminant cap a la Taverna dins la boira
         const sil = this.add.graphics();
         sil.fillStyle(0x000000, 1).fillTriangle(0, -150, -42, 0, 42, 0).fillCircle(0, -152, 22);
@@ -412,16 +377,17 @@ class EscenaProleg extends Phaser.Scene {
         c.add(boira);
     }
 
-    // 5. Matí al Santuari: cel de sortida de sol i l'Ineu
+    // 5. Matí al Monestir: el sol surt entre muntanyes i la boira s'arrossega per les valls
     dibuix_mati(c) {
-        this.cel(c, 0x6a9ad0, 0xf2c890);
-        const sol = this.add.circle(160, 760, 120, 0xffe8a0, 0.9); c.add(sol);
-        c.add(this.add.circle(160, 760, 220, 0xffe8a0, 0.2));
-        this.imatge(c, 'esglesia', AMPLE / 2 + 60, 900, 560);
-        const g = this.add.graphics(); c.add(g);
-        g.fillStyle(0xb8a888, 1).fillRect(0, 890, AMPLE, 400);
-        const ineu = this.textures.exists('ineu_down') ? this.add.sprite(AMPLE / 2, 940, 'ineu_down', 0) : null;
-        if (ineu) { ineu.setOrigin(0.5, 1).setScale(((this.textures.get('ineu_down').customData || {}).escala || 0.5) * 1.8); c.add(ineu); this.tweens.add({ targets: ineu, scaleY: ineu.scaleY * 0.97, yoyo: true, repeat: -1, duration: 900 }); }
+        this.fons(c, 'proleg_mati');
+        this.imatge(c, 'monestir', AMPLE / 2 + 60, 760, 380);
+        const boira = this.add.particles(0, 0, 'boira', {
+            emitZone: { type: 'random', source: new Phaser.Geom.Rectangle(0, 600, AMPLE, 60) },
+            speedX: { min: 4, max: 14 }, speedY: { min: -4, max: 2 }, scale: { start: 1.6, end: 3.6 },
+            alpha: { start: 0.35, end: 0 }, tint: [0xe8c8f0, 0xd0b8e8], lifespan: 7000, frequency: 160
+        });
+        c.add(boira);
+        boira.fastForward(5000);
     }
 
     acabar() {

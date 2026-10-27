@@ -781,6 +781,12 @@ const Grafics = {
         crea('habit_cela', 60, 110, pintarHabitCela);
         crea('estora_cela', 230, 110, pintarEstoraCela);
         crea('cofre_cela', 90, 56, pintarCofreCela);
+        // Pròleg (js/dibuixos_proleg.js): els cinc quadres pintats
+        crea('proleg_ocellaire', 720, 950, pintarProlegOcellaire);
+        crea('proleg_segell', 720, 950, pintarProlegSegell);
+        crea('proleg_boira', 720, 950, pintarProlegBoira);
+        crea('proleg_nens', 720, 950, pintarProlegNens);
+        crea('proleg_mati', 720, 950, pintarProlegMati);
         // Casa Gran per dins (js/dibuixos_casa.js)
         crea('paret_cripta', 740, 170, pintarParetCripta);
         crea('paret_tresor', 740, 170, pintarParetTresor);
