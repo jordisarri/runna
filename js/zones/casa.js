@@ -3,9 +3,9 @@
  *   Entrada: només la secreta, des d'El Celler (el ping-pong; darrere la roda de carruatge, amb Runna): passadís amb escolopendres
  *            i un esbarzer negre, sala del tresor (la cambra secreta dels monjos) i una porta cap a l'Escalinata. La reixa del porxo
  *            (plaça) és tancada des de fora; només es pot obrir per dins, com a drecera de tornada.
- *   Escalinata: l'Home del Raïm. Amb la Palanca (és a la caseta d'en Jordi, a la Caseta) es gira el cap cap a llevant i es prem el raïm:
+ *   Escalinata: l'Home del Raïm. Amb la Palanca (és a la caseta d'en Jordi, a la Caseta) es gira el cap cap a llevant:
  *               l'estàtua cobra vida (BOSS). Derrotada, s'obre la trapa de la cripta.
- *   Cripta: les relíquies robades als monjos (cal portar-les a la tomba esquerdada del Cementiri) i la Clau de ferro,
+ *   Cripta: la Clau de ferro (i un paper: la llum de Runna segella la tomba esquerdada del Cementiri),
  *           que obre la porta de ferro de la Sala de les Gírgoles (a sota de la Taverna, no pas des d'aquí).
  */
 
@@ -58,49 +58,18 @@ Object.assign(DIALEGS, {
     }),
 
     cofreCripta: E => E.flag('relTretes') ? {
-        pagines: [{ qui: '', text: "La cripta és buida. Sobre la llosa, només el drap de lli plegat." }]
+        pagines: [{ qui: '', text: "Sobre la llosa només hi queda el drap de lli." }]
     } : {
         pagines: [
-            { qui: '', text: "Una cambra petita, tapiada fa segles. Sobre una llosa, un drap de lli embolcalla un calze, una creu de plata, un anell amb ambre i un breviari de cuir vermell." },
-            { qui: 'Ineu', text: "Les relíquies dels monjos! El monjo de Runna les va amagar aquí perquè ningú no les toqués, i sense elles la tomba del cementiri s'ha esquerdat. Aquesta és l'esquerda del segell." },
-            { qui: '', text: "Penjada d'un clau, una gran clau de ferro negre, i un paper: «Qui vulgui entrar on mai no s'ha d'entrar, que passi per sota la Taverna.»" },
-            { qui: '', text: "Has obtingut les RELÍQUIES DELS MONJOS i la CLAU DE FERRO." }
+            { qui: '', text: "Sobre la llosa, damunt un drap de lli, una gran clau de ferro negre i un paper:" },
+            { qui: 'Ineu', text: "«Qui vulgui entrar on mai no s'ha d'entrar, que passi per sota la Taverna. I la llum que va tancar la porta tancarà també la nostra tomba.»" },
+            { qui: '', text: "Has obtingut la CLAU DE FERRO." }
         ],
         enAcabar: () => {
-            E.dona('reliquies_monjos'); E.dona('clau_ferro'); E.posaFlag('relTretes'); E.posaFlag('clauFerro');
-            E.posaObjectiu("Porta les relíquies a la tomba esquerdada del Cementiri (darrere el Santuari i el Monestir).");
+            E.dona('clau_ferro'); E.posaFlag('relTretes'); E.posaFlag('clauFerro');
+            E.posaObjectiu(E.flag('tombaSegellada') ? "Troba la porta de ferro, darrere de la Taverna, a la part de sota: és l'entrada a la Sala de les Gírgoles."
+                                                   : "La tomba esquerdada del Cementiri treu boira: segella-la amb la llum de Runna (colpeja-la). I després, la porta de ferro de sota la Taverna.");
         }
-    },
-
-    // La tomba del Cementiri: amb les relíquies, l'esquerda es tanca
-    tombaMonjos: E => {
-        if (E.flag('relIquiesRetornades')) {
-            return { pagines: [{ qui: '', text: "La llosa de la tomba dels monjos primers, tancada de nou. Les relíquies reposen a sota, i només un fil de llum tèbia surt de l'esquerda." }] };
-        }
-        if (E.te('reliquies_monjos')) {
-            return {
-                pagines: [
-                    { fer: (z, fet) => z.seq([c => z.deixar(c, null, 0xd8c890), c => z.deixar(c, null, 0xe8e8f0), c => z.deixar(c, null, 0xf0b040), c => z.deixar(c, null, 0xb83a3a)], fet) },
-                    { fer: (z, fet) => { z.cameras.main.shake(500, 0.004); const p = z.puntActiu || z.ineu; z.llum(p.x, p.y - 30, 0xd8c8ff, fet); } },
-                    { qui: 'Ineu', text: "Ja podeu descansar, germans." },
-                    { qui: '', text: "(La boira del cementiri s'afebleix. Però el segell més gran continua trencat: l'Ocellaire és sota la Taverna.)" }
-                ],
-                enAcabar: () => {
-                    E.treu('reliquies_monjos');
-                    E.posaFlag('relIquiesRetornades');
-                    E.posaObjectiu("Troba la porta de ferro, darrere de la Taverna, a la part de sota: és l'entrada a la Sala de les Gírgoles.");
-                }
-            };
-        }
-        return {
-            pagines: [
-                { qui: '', text: "Una gran llosa esquerdada al mig del replà, amb lletres antigues gairebé esborrades: «Ací reposen els qui van tancar la porta.»" },
-                { qui: '', text: "De l'esquerda surt una boira lila, freda, que sembla respirar. Al seu voltant, la terra és plena d'animalets que no haurien de sortir." },
-                { qui: 'Ineu', text: "Aquí és, doncs, el cementiri vell dels monjos del segle XV. L'esquerda del segell... Si algú els tornés el que els van prendre..." },
-                { qui: '', text: "(El monjo les va amagar a la Casa Gran perquè ningú no les robés. Quan les portis aquí, l'esquerda es tancarà.)" }
-            ],
-            enAcabar: () => E.posaFlag('tombaVista')
-        };
     },
 
     // El Jordi de la Caseta (a l'oest del Til·ler): diu on té la palanca, dins la caseta aixecada del jardí
@@ -424,7 +393,7 @@ class ZonaCasaCripta extends ZonaCasaBase {
             this.add.image(x, y, 'pilastra_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
             this.colisio(x, y - 8, 40, 16);
         });
-        // Llosa amb les relíquies sota un raig de llum tènue, i dos candelabres
+        // Llosa amb la clau de ferro sota un raig de llum tènue, i dos candelabres
         this.llosaCripta = this.add.image(500, 340, Estat.flag('relTretes') ? 'llosa_cripta_buida' : 'llosa_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(340);
         this.colisio(500, 316, 180, 36);
         this.interactiu(500, 372, 95, DIALEGS.cofreCripta, { altura: 130, enTancar: () => { if (Estat.flag('relTretes')) this.llosaCripta.setTexture('llosa_cripta_buida'); } });

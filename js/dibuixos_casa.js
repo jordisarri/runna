@@ -119,7 +119,7 @@ function pintarSarcofagCripta(ctx, w, h) {
     teranyinaCasa(ctx, 4, h * 0.2, 1, 22);
 }
 
-// ---------- Llosa de la cripta amb les relíquies (drap de lli, calze, creu de plata, anell i breviari) o buida ----------
+// ---------- Llosa de la cripta amb la clau de ferro i el paper dels monjos, o buida ----------
 function pintarLlosaCripta(ctx, w, h, plena) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 5, w * 0.5, 6, 0, 0, Math.PI * 2); ctx.fill();
@@ -130,12 +130,15 @@ function pintarLlosaCripta(ctx, w, h, plena) {
     ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fillRect(2, h * 0.355, w - 4, 2);
     ctx.strokeStyle = 'rgba(40,32,22,0.7)'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(w / 2, h * 0.58); ctx.lineTo(w / 2, h * 0.8); ctx.moveTo(w / 2 - 10, h * 0.66); ctx.lineTo(w / 2 + 10, h * 0.66); ctx.stroke();
     if (!plena) return;
-    // Drap de lli i les relíquies
+    // Drap de lli, la clau de ferro negre i el paper plegat
     ctx.fillStyle = '#f0e8d4'; ctx.beginPath(); ctx.moveTo(14, h * 0.36); ctx.lineTo(w - 14, h * 0.36); ctx.lineTo(w - 8, h * 0.5); ctx.lineTo(8, h * 0.5); ctx.closePath(); ctx.fill(); ctx.strokeStyle = CASA_C; ctx.lineWidth = 1.4; ctx.stroke();
-    ctx.fillStyle = '#9a2a1a'; ctx.fillRect(w * 0.64, h * 0.1, 30, 24); ctx.strokeRect(w * 0.64, h * 0.1, 30, 24); ctx.fillStyle = '#e0b83a'; ctx.fillRect(w * 0.64 + 12, h * 0.1 + 6, 6, 12);   // breviari
-    ctx.fillStyle = '#c0c8d0'; ctx.fillRect(w * 0.12 + 6, h * 0.06, 6, 30); ctx.fillRect(w * 0.12 - 4, h * 0.06 + 8, 26, 6); ctx.strokeRect(w * 0.12 + 6, h * 0.06, 6, 30); ctx.strokeRect(w * 0.12 - 4, h * 0.06 + 8, 26, 6);   // creu de plata
-    ctx.fillStyle = '#e0b83a'; ctx.beginPath(); ctx.moveTo(w * 0.4, h * 0.08); ctx.lineTo(w * 0.52, h * 0.08); ctx.lineTo(w * 0.5, h * 0.2); ctx.lineTo(w * 0.46 + 4, h * 0.26); ctx.lineTo(w * 0.46 + 4, h * 0.31); ctx.lineTo(w * 0.52, h * 0.34); ctx.lineTo(w * 0.4, h * 0.34); ctx.lineTo(w * 0.46, h * 0.31); ctx.lineTo(w * 0.46, h * 0.26); ctx.lineTo(w * 0.42, h * 0.2); ctx.closePath(); ctx.fill(); ctx.stroke();   // calze
-    ctx.fillStyle = '#c87a1a'; ctx.beginPath(); ctx.arc(w * 0.84, h * 0.32, 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();                                                       // anell
+    ctx.save(); ctx.translate(w * 0.42, h * 0.27); ctx.rotate(-0.12);
+    ctx.strokeStyle = CASA_C; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(-28, 0, 11, 0, Math.PI * 2); ctx.moveTo(-17, 0); ctx.lineTo(36, 0); ctx.moveTo(26, 0); ctx.lineTo(26, 12); ctx.moveTo(34, 0); ctx.lineTo(34, 9); ctx.stroke();
+    ctx.strokeStyle = '#3a3a40'; ctx.lineWidth = 4; ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-14, -1.5); ctx.lineTo(34, -1.5); ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = '#e8dcb4'; ctx.save(); ctx.translate(w * 0.8, h * 0.28); ctx.rotate(0.2); ctx.fillRect(-12, -9, 24, 18); ctx.strokeStyle = CASA_C; ctx.lineWidth = 1.2; ctx.strokeRect(-12, -9, 24, 18);
+    ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 1; [-3, 2].forEach(y => { ctx.beginPath(); ctx.moveTo(-8, y); ctx.lineTo(8, y); ctx.stroke(); }); ctx.restore();
 }
 
 // ---------- Prestatge de la cambra del tresor ----------

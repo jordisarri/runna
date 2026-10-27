@@ -48,7 +48,8 @@ function completarLliço(nom) {
             { qui: 'La Pianista', text: 'Això mateix, fill! El Cant del Miracle. Els ocells el cantaven a l\'alba, abans que l\'Ocellaire se\'l quedés i el tanqués a la seva gàbia.' },
             { qui: 'La Pianista', text: 'Diu la meva mare que aquella gàbia només s\'obre amb el cant que li van robar. Si els nens hi són a dins, toca\'l davant els barrots i no tindran més remei que obrir-se.' }
         ];
-        E.posaObjectiu('Tens el Cant del Miracle (1-3-2-3-1): obre la gàbia de l\'Ocellaire. La porta de ferro és sota la Taverna.');
+        E.posaObjectiu(!E.flag('josepVencut') ? 'Ves al Celler (entre la Plaça i les Runes) i guanya en Josep a ping-pong: allà els secrets es guanyen a la taula.'
+            : !E.flag('rodaMoguda') ? 'Empeny amb els Guants la roda de carruatge del Celler: amaga el túnel dels monjos.' : 'Segueix el túnel dels monjos fins a la Casa Gran.');
     }
     if (ui) ui.obrirDialeg({ pagines }, () => E.desar());
 }

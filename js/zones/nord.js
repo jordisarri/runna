@@ -491,7 +491,7 @@ Object.assign(DIALEGS, {
             ],
             enAcabar: () => {
                 E.dona('guants');
-                if (E.flag('fredericRoda')) E.posaObjectiu('Amb els Guants de Poder, empeny la roda de carruatge del Celler (entre la Plaça i les Runes).');
+                if (E.flag('josepVencut') && !E.flag('rodaMoguda')) E.posaObjectiu('Amb els Guants de Poder, empeny la roda de carruatge del Celler (entre la Plaça i les Runes).');
             }
         };
         if (E.te('ram')) return { pagines: [

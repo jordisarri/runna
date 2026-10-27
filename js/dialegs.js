@@ -196,7 +196,7 @@ const DIALEGS = {
         };
         if (!E.flag('clauGirgoles')) return { pagines: clau, enAcabar: donar };
         return { pagines: [
-            { qui: 'Siscu', text: E.flag('relIquiesRetornades') ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el set d\'oros de paper. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
+            { qui: 'Siscu', text: (E.flag('tombaSegellada') || E.flag('relIquiesRetornades')) ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el set d\'oros de paper. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
             { qui: 'Siscu', text: 'Si veus la mare, no li diguis on sóc. Bé... si et pregunta molt, sí.' }
         ] };
     },
@@ -311,7 +311,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { fer: (z, fet) => z.agafar(fet, 'pergami', 0xf2e6c8) },
-                { qui: "", text: "Fragment 2 de 2:\n«El monjo va guardar el segell fins al darrer dia. Des d'aleshores la seva ombra torna cada nit al mur de les Runes a vigilar. Les relíquies dels seus germans, i amb elles la clau de ferro, són on ell les va deixar, sota la mirada d'un guardià de pedra.»" },
+                { qui: "", text: "Fragment 2 de 2:\n«El monjo va guardar el segell fins al darrer dia. Des d'aleshores la seva ombra torna cada nit al mur de les Runes a vigilar. La clau de ferro és on ell la va deixar, amb els seus germans, sota la mirada d'un guardià de pedra.»" },
                 { qui: "", text: "«Qui busqui la clau, que no oblidi mai on neix el sol.»" }
             ],
             enAcabar: () => E.posaFlag("fragment2")
@@ -330,7 +330,7 @@ const DIALEGS = {
     // ---------------- RUÏNES I PING-PONG ----------------
     ruines: E => ({
         pagines: [
-            { qui: '', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de Runna i la va deixar dormint a la pedra. Després va amagar la clau i les relíquies dels monjos morts allà on ningú no les trobés.»" },
+            { qui: '', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de Runna i la va deixar dormint a la pedra. Després va amagar la clau de la porta allà on ningú no la trobés.»" },
             { fer: (z, fet) => z.agafarPergamiRunes ? z.agafarPergamiRunes(fet) : fet() },
             { qui: 'Ineu', text: "Falta l'altre fragment. Potser a l'església... I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." },
             { fer: (z, fet) => z.aparicioOmbra ? z.aparicioOmbra(fet) : fet() },
@@ -350,26 +350,7 @@ const DIALEGS = {
         ]
     }),
 
-    frederic: E => E.te("runna") && !E.flag("josepVencut") && !E.flag("cofreCambra") ? {
-        pagines: [
-            { qui: 'Frederic', text: "Ei, noi. Portes una espasa que no és de ferro, eh? Ja veig que vens a preguntar." },
-            { qui: 'Frederic', text: "Però al Celler hi ha una norma més vella que jo: els secrets es guanyen a la taula. Guanya en Josep i parlarem." }
-        ],
-        enAcabar: () => E.posaObjectiu("Guanya en Josep a ping-pong, al Celler: el Frederic t'explicarà què amaga la roda.")
-    } : E.te("runna") && !E.flag("cofreCambra") ? {
-        pagines: [
-            { qui: 'Frederic', text: "Ei, noi. Veig que portes una espasa que no és de ferro. Això canvia el que et volia dir." },
-            { qui: 'Frederic', text: "Aquest lloc es diu el Celler per alguna cosa: era el celler de la Casa Gran, la casa vella dels monjos. Els monjos hi van fer un túnel que va a la casa sense que ningú el vegi." },
-            { qui: 'Frederic', text: "Aquella roda de carruatge no és decoració: tapa l'entrada d'aquest túnel. Però dins el camí és ofegat per un mur d'esbarzers negres, d'aquells de punxes violeta." },
-            { qui: 'Frederic', text: "Amb una espasa així, sí que hi passaràs: Runna els talla, i res més no ho fa. Entra-hi i obre't camí fins a la Casa Gran." },
-            { qui: 'Frederic', text: "Allà baix hi ha una clau de ferro que els monjos van perdre fa segles: la de la porta de ferro de sota la Taverna. Fes-ne bon ús." }
-        ],
-        enAcabar: () => {
-            E.posaFlag("fredericRoda");
-            E.posaObjectiu(E.te("guants") ? "Empeny la roda de carruatge del Celler (al Pati del Celler, entre la Plaça i les Runes) i, dins el passadís, talla els esbarzers negres amb Runna."
-                                          : "Demana els guants dels picapedrers al Germà Francesc (passeja per Sant Antoni, a llevant del Monestir), empeny la roda del Celler i talla amb Runna els esbarzers del passadís.");
-        }
-    } : ({
+    frederic: E => ({
         pagines: [
             { qui: 'Frederic', text: 'Calma, noi. La pilota no s\'ha de perseguir, s\'ha d\'esperar.' },
             { qui: 'Frederic', text: 'Jo jugo amb una pala de pedra. De pedra, sí: pesa com un maó i no té goma ni res. Quan jugueu a la taula, no em veuràs ni a mi ni la pala; no cal.' },
@@ -416,13 +397,16 @@ const DIALEGS = {
             { fer: (z, fet) => z.npcVa('josep', z.ineu.x + 60, z.ineu.y, fet) },
             { qui: 'Josep', text: 'Això és per a tu: una llanterna. Als passadissos dels monjos hi fa una fosca que no perdona, i amb la seva llum hi veuràs.' },
             { fer: (z, fet) => z.objecteVola('josep', fet) },
-            { qui: '', text: 'Has obtingut la LLANTERNA: hi veuràs millor a les zones fosques.' }
+            { qui: '', text: 'Has obtingut la LLANTERNA: hi veuràs millor a les zones fosques.' },
+            { qui: 'Josep', text: 'I un secret, per qui sap tornar un servei: aquella roda de carruatge del pati no és decoració. Darrere hi ha el túnel dels monjos cap a la Casa Gran. Però pesa com un carro ple.' }
         ],
         enAcabar: () => {
             E.posaFlag('josepVencut');
             if (!E.te('llanterna')) { E.dona('llanterna'); E.posaFlag('llanterna'); }
             const ui = game.scene.getScene('UI'); if (ui) ui.actualitzarHUD();
-            E.posaObjectiu(E.flag('runna') ? 'Parla amb el Frederic, al Celler: ara et dirà el que sap.' : 'Has guanyat en Josep. Segueix buscant Runna.');
+            E.posaObjectiu(!E.flag('runna') ? 'Has guanyat en Josep. Segueix buscant Runna.'
+                : E.te('guants') ? 'Empeny amb els Guants la roda de carruatge del Celler: amaga el túnel dels monjos (Runna en talla els esbarzers).'
+                : 'La roda del Celler pesa massa: el Germà Francesc, a Sant Antoni, té uns guants que mouen el que pesa.');
         }
     }),
 
@@ -1233,7 +1217,7 @@ const DIALEGS = {
             enAcabar: () => {
                 E.dona("runna"); E.posaFlag("runna");
                 const ui = game.scene.getScene("UI"); if (ui) ui.missatge("Runna: 2 de dany. Talla els esbarzers negres.");
-                E.posaObjectiu("Les ombres s'han fet més fortes. Parla amb el Frederic, al Celler (entre la Plaça i les Runes): sap com baixar-hi per una altra banda.");
+                E.posaObjectiu("Torna al Santuari: la Pianista t'ha d'ensenyar l'últim cant, el Cant del Miracle.");
             }
         };
     },
@@ -1304,7 +1288,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: "", text: "Dins el cofre només hi ha un pergamí de tapes de cuir. Has obtingut el PERGAMÍ DEL MONJO." },
-                { qui: "Ineu", text: "«Les relíquies dels meus germans i la clau de ferro són sota l'escala, murades. Un guardià de pedra les vigila: ningú no hi baixa si no li gira el cap cap al sol que neix. On neix el sol, el raïm madura.»" },
+                { qui: "Ineu", text: "«La clau de ferro és sota l'escala, murada amb els meus germans. Un guardià de pedra la vigila: ningú no hi baixa si no li gira el cap cap al sol que neix. On neix el sol, el raïm madura.»" },
                 { qui: "Ineu", text: "I al revers, amb una altra lletra: «Qui busqui sortida, que alci la bóta marcada amb la creu.»" }
             ],
             enAcabar: () => {

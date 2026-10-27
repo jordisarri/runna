@@ -20,7 +20,7 @@ class ZonaCementiri extends ZonaBase {
     }
 
     construir() {
-        const tancada = Estat.flag('relIquiesRetornades');
+        const tancada = Estat.flag('tombaSegellada') || Estat.flag('relIquiesRetornades');
         this.terra('herba', 0, 0, 1600, 1100, -1100).setTint(0xa0b898);
         this.terra('cami', 0, 520, 1160, 130);           // des de les Runes
         this.terra('cami', 1010, 520, 150, 580);         // cap al Monestir (sud)
@@ -30,10 +30,11 @@ class ZonaCementiri extends ZonaBase {
 
         // La tomba dels monjos primers: un sarcòfag sobre graons. Mentre és oberta, en surt boira lila de l'esquerda
         this.tomba = this.posar(tancada ? 'tomba_tancada' : 'tomba_esquerdada', 700, 470, { col: { w: 210, h: 60 } });
-        this.interactiu(700, 480, 130, DIALEGS.tombaMonjos, { altura: 150 });
+        // Amb Runna a la mà, ESPAI ja no llegeix la làpida: colpeja (i segella) la tomba
+        this.interactiu(700, 480, 130, DIALEGS.tombaMonjos, { altura: 150, actiu: () => !Estat.te('runna') || Estat.flag('tombaSegellada') || Estat.flag('relIquiesRetornades') });
         if (!tancada) {
-            this.boira(712, 360, 90, 40, 1.6);
-            this.add.circle(712, 380, 120, 0xa070ff, 0.10).setDepth(390);
+            this.boiraTomba = this.boira(712, 360, 90, 40, 1.6);
+            this.llumTomba = this.add.circle(712, 380, 120, 0xa070ff, 0.10).setDepth(390);
         }
         this.fanalet(585, 500); this.fanalet(818, 500);
 
@@ -97,6 +98,30 @@ class ZonaCementiri extends ZonaBase {
         this.posar('fanalet', x, y);
         const llum = this.add.circle(x, y - 22, 46, 0xffc070, 0.13).setDepth(y + 1).setBlendMode(Phaser.BlendModes.ADD);
         this.tweens.add({ targets: llum, alpha: 0.2, scale: 1.1, yoyo: true, repeat: -1, duration: 300 + Math.random() * 250, ease: 'Sine.easeInOut' });
+    }
+
+    // Un cop de Runna a la tomba esquerdada: la llum que va tancar la porta tanca també l'esquerda i la boira s'esvaeix
+    alAtacar(jo, d) {
+        if (!Estat.te('runna') || Estat.flag('tombaSegellada') || Estat.flag('relIquiesRetornades')) return;
+        const px = jo.x + d.x * 60, py = jo.y + d.y * 60;
+        if (Math.abs(px - 700) > 140 || Math.abs(py - 440) > 110) return;
+        Estat.posaFlag('tombaSegellada');
+        Sfx.secret();
+        this.cameras.main.shake(600, 0.004);
+        const esq = this.add.graphics().setDepth(this.tomba.depth + 1).setBlendMode('ADD');
+        esq.lineStyle(6, 0xcfe0ff, 1).beginPath(); esq.moveTo(650, 420); esq.lineTo(690, 432); esq.lineTo(705, 418); esq.lineTo(745, 430); esq.strokePath();
+        esq.setAlpha(0);
+        this.tweens.add({ targets: esq, alpha: 1, duration: 300, yoyo: true, hold: 500, onComplete: () => esq.destroy() });
+        this.llum(700, 410, 0xd8e8ff);
+        this.time.delayedCall(700, () => {
+            const nova = this.add.image(this.tomba.x, this.tomba.y, 'tomba_tancada').setOrigin(0.5, 1).setScale(this.tomba.scaleX).setDepth(this.tomba.depth + 1).setAlpha(0);
+            this.tweens.add({ targets: nova, alpha: 1, duration: 900, onComplete: () => { this.tomba.setTexture('tomba_tancada'); nova.destroy(); } });
+            if (this.boiraTomba) { this.boiraTomba.stop(); this.time.delayedCall(1800, () => this.boiraTomba && this.boiraTomba.destroy()); }
+            if (this.llumTomba) this.tweens.add({ targets: this.llumTomba, alpha: 0, duration: 1200 });
+        });
+        Estat.posaObjectiu(Estat.te('clau_ferro') ? "Troba la porta de ferro, darrere de la Taverna, a la part de sota: és l'entrada a la Sala de les Gírgoles."
+                                                 : "La tomba descansa. A la Casa Gran, sota l'escalinata, hi ha la Clau de ferro dels monjos.");
+        Estat.desar();
     }
 
     // Quan el ram del Germà Francesc ja és als peus de l'àngel, la tomba canvia de gràfic amb un fos
