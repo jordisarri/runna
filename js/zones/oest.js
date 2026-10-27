@@ -66,19 +66,13 @@ class ZonaRovellonera extends ZonaBase {
         // Cartell d'entrada (només a la primera clariana): la regla del bosc
         if (pas === 0) this.cartell(1330, 650, () => ({ pagines: [
             { qui: '', text: 'BOSC DE LES ROVELLONERES' },
-            { qui: '', text: "«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»" },
-            { qui: 'Ineu', text: "(Tres clarianes. Cal escollir la sortida on hi ha rovellons, i així tres cops.)" }
+            { qui: '', text: "«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»" }
         ] }));
         // Si l'Ineu s'ha perdut dues vegades o més, unes llumetes assenyalen la sortida bona (el bosc s'apiada)
         if (D && (Estat.dades.rovPerdut || 0) >= 2) {
             const ang = { N: -90, S: 90, W: 180, E: 0 }[D];
             this.add.particles(800, 550, 'espurna', { speed: { min: 170, max: 200 }, angle: { min: ang - 6, max: ang + 6 }, lifespan: 1500, scale: { start: 0.75, end: 0 },
                 alpha: { start: 1, end: 0 }, tint: [0xffe08a, 0xfff2c0], frequency: 110, blendMode: 'ADD' }).setDepth(3000);
-        }
-        // Pista: en cada clariana, una sola vegada, es recorda que els rovellons marquen la sortida bona
-        if (D && !Estat.flag('rovPista' + pas)) {
-            Estat.posaFlag('rovPista' + pas);
-            this.time.delayedCall(1000, () => this.missatge(pas === 0 ? 'Els rovellons creixen vora la sortida bona...' : 'Segueix els rovellons: assenyalen el camí.'));
         }
         this.hintLlanterna = Estat.te('llanterna');
 
@@ -208,7 +202,7 @@ class ZonaCamiRov extends ZonaBase {
             for (let x = 60; x < 2800; x += 170) {
                 const px = x + (rnd() - 0.5) * 80, py = y + (rnd() - 0.5) * 70;
                 if (tram.some(([tx, ty, tw, th]) => px > tx - 90 && px < tx + tw + 90 && py > ty - 70 && py < ty + th + 90)) continue;
-                if (Math.abs(px - 2640) < 190 && py > 380 && py < 640) continue;   // que cap arbre tapi el cartell
+                if (Math.abs(px - 2640) < 240 && py > 330 && py < 880) continue;   // que cap arbre tapi el cartell
                 if (Phaser.Math.Distance.Between(px, py, 880, 880) < 170 || Phaser.Math.Distance.Between(px, py, 1300, 830) < 120) continue;
                 this.posar(rnd() < 0.6 ? 'pi' : 'arbre', px, py, { col: { w: 30, h: 14 } });
             }
@@ -479,7 +473,7 @@ class ZonaDipositos extends ZonaBase {
         this.tripode = this.posar(muntat ? 'telescopi_mon' : 'tripode', MX, MY + 10, { col: { w: 36, h: 16 } });
         this.interactiu(MX, MY + 15, 95, DIALEGS.telescopiMon, { altura: 120 });
         // Cartell a la vora del camí, sense cap arbre al davant
-        this.cartell(230, 500, () => ({ pagines: [{ qui: '', text: 'Els Dipòsits: aigua de la serra, i el millor cel de la comarca.\n→ Camí cap al Dolmen' }] }));
+        this.cartell(230, 500, () => ({ pagines: [{ qui: '', text: '→ Dolmen\n← Ermita de Sant Gabriel' }] }));
 
         this.arbres([[100, 150], [250, 90], [800, 100], [1450, 140], [1350, 900], [1500, 960], [120, 960], [560, 960], [660, 820]]);
         [[1250, 800], [450, 800], [800, 440]].forEach(([x, y]) => this.enemic('escolopendra', x, y));

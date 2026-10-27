@@ -357,19 +357,50 @@ function dibuixarAltar(c, w) {
     });
 }
 
-function dibuixarTaulaPedra(c, w) {
+// Taula de pedra de l'ermita: llosa alta d'arc rodó, amb marc cisellat, sis files de signes gravats, molsa i esquerdes.
+// part: 0 per a la primera (signes 1-6), 6 per a la segona (7-12)
+function dibuixarTaulaPedra(c, w, part = 0) {
     lienc(c, w, w * 1.4, (ctx, W, H) => {
-        ombraTerra(ctx, W / 2, H - 6, W * 0.45, 7);
-        ctx.lineWidth = 4; ctx.strokeStyle = CONTORN;
-        ctx.fillStyle = '#8f897c';
-        ctx.beginPath(); ctx.moveTo(8, H - 8); ctx.lineTo(8, 24); ctx.quadraticCurveTo(W / 2, -8, W - 8, 24); ctx.lineTo(W - 8, H - 8); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.strokeStyle = '#4a463e'; ctx.lineWidth = 2.5;
+        const r = rndBib(77 + part);
+        ombraTerra(ctx, W / 2, H - 5, W * 0.5, 7);
+        const C = CONTORN;
+        // Sòcol
+        let g = ctx.createLinearGradient(0, H - 22, 0, H - 4); g.addColorStop(0, '#a8a090'); g.addColorStop(1, '#6e6859');
+        ctx.fillStyle = g; ctx.fillRect(3, H - 22, W - 6, 18); ctx.lineWidth = 3; ctx.strokeStyle = C; ctx.strokeRect(3, H - 22, W - 6, 18);
+        ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.fillRect(5, H - 20, W - 10, 2);
+        // Llosa amb el cap arrodonit
+        const cos = (m) => { ctx.beginPath(); ctx.moveTo(8 + m, H - 22); ctx.lineTo(8 + m, 46 + m); ctx.quadraticCurveTo(8 + m, 6 + m, W / 2, 4 + m); ctx.quadraticCurveTo(W - 8 - m, 6 + m, W - 8 - m, 46 + m); ctx.lineTo(W - 8 - m, H - 22); ctx.closePath(); };
+        g = ctx.createLinearGradient(8, 0, W - 8, 0); g.addColorStop(0, '#b4ac9a'); g.addColorStop(0.5, '#9a9382'); g.addColorStop(1, '#7c7666');
+        ctx.fillStyle = g; cos(0); ctx.fill(); ctx.lineWidth = 3.4; ctx.strokeStyle = C; ctx.stroke();
+        // Marc cisellat: filet clar i filet fosc
+        ctx.lineWidth = 1.6; ctx.strokeStyle = 'rgba(255,255,255,0.4)'; cos(5); ctx.stroke();
+        ctx.strokeStyle = 'rgba(40,34,26,0.7)'; cos(8); ctx.stroke();
+        // Plafó interior enfonsat
+        g = ctx.createLinearGradient(0, 18, 0, H - 26); g.addColorStop(0, '#7e786a'); g.addColorStop(1, '#8c8575');
+        ctx.fillStyle = g; cos(12); ctx.fill(); ctx.strokeStyle = 'rgba(30,24,16,0.85)'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.save(); cos(12); ctx.clip();
+        ctx.fillStyle = 'rgba(0,0,0,0.22)'; ctx.fillRect(0, 0, W, 30);                              // ombra interior de dalt
+        ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.fillRect(0, 0, 8, H);
+        // Textura de gra
+        for (let i = 0; i < 70; i++) { ctx.fillStyle = r() < 0.5 ? 'rgba(255,255,255,0.05)' : 'rgba(20,14,8,0.07)'; ctx.fillRect(r() * W, r() * H, 1 + r() * 3, 1 + r() * 2); }
+        // Línia de separació i sis files de signes: un de cada columna (els importants) + dos de farciment
+        const y0 = 36, pas = (H - 34 - y0 - 6) / 6;
+        ctx.strokeStyle = 'rgba(30,24,16,0.55)'; ctx.lineWidth = 1.3;
+        ctx.beginPath(); ctx.moveTo(22, 25); ctx.lineTo(W - 22, 25); ctx.stroke();
         for (let i = 0; i < 6; i++) {
-            const y = 44 + i * ((H - 70) / 6);
-            for (let x = 22; x < W - 28; x += 16) {
-                ctx.beginPath(); ctx.arc(x + 4, y, 4, 0, Math.PI * 2); ctx.moveTo(x + 4, y + 4); ctx.lineTo(x + 4, y + 11); ctx.stroke();
-            }
+            const y = y0 + i * pas + pas / 2;
+            runaErmita(ctx, part + i, 25, y, 12);
+            const n = 2 + Math.floor(r() * 3);
+            for (let j = 0; j < n; j++) runaErmita(ctx, Math.floor(r() * 12), 42 + j * 15, y, 8);
         }
+        // Esquerdes i molsa
+        ctx.strokeStyle = 'rgba(25,18,10,0.65)'; ctx.lineWidth = 1.3; ctx.beginPath();
+        const ex = 16 + r() * (W - 32); ctx.moveTo(ex, 20); ctx.lineTo(ex + 6, 42); ctx.lineTo(ex - 3, 60); ctx.lineTo(ex + 4, 76); ctx.stroke();
+        ctx.restore();
+        ctx.fillStyle = 'rgba(72,104,52,0.5)';
+        for (let i = 0; i < 9; i++) { ctx.beginPath(); ctx.ellipse(10 + r() * (W - 20), H - 24 - r() * 12, 4 + r() * 6, 2 + r() * 3.5, 0, 0, Math.PI * 2); ctx.fill(); }
+        // Esquerda de la vora i resplendor al cantell esquerre
+        ctx.fillStyle = 'rgba(255,255,255,0.28)'; ctx.fillRect(10, 50, 2.4, H - 80);
     });
 }
 

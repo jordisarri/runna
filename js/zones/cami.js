@@ -110,24 +110,56 @@ class ZonaErmitaInt extends ZonaBase {
 
     construir() {
         this.terra('pedra', 100, 40, 800, 660, -1100);
-        const murs = this.add.graphics().setDepth(-1000);
-        murs.fillStyle(0x2a1f18, 1).fillRect(60, 0, 40, 700).fillRect(900, 0, 40, 700);
-        murs.fillStyle(0x3a2c22, 1).fillRect(100, 0, 800, 70);
+        // Paret del fons (amb vitrall i fornícules) i murs laterals de pedra
+        this.add.image(100, 0, 'paret_ermita').setOrigin(0).setScale(1 / RES).setDepth(-995);
+        this.add.image(60, 0, 'mur_ermita').setOrigin(0).setScale(1 / RES).setDepth(-995);
+        this.add.image(900, 0, 'mur_ermita').setOrigin(0).setScale(1 / RES).setDepth(-995).setFlipX(true);
+        // El terra s'enfosqueix cap a les parets
+        const vora = this.add.graphics().setDepth(-1040);
+        vora.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.45, 0, 0.45, 0).fillRect(100, 170, 110, 530);
+        vora.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0, 0.45, 0, 0.45).fillRect(790, 170, 110, 530);
         this.colisio(30, 350, 60, 700);
         this.colisio(970, 350, 60, 700);
-        this.colisio(500, 55, 800, 110);
+        this.colisio(500, 85, 800, 170);
         this.colisio(300, 690, 400, 20);
         this.colisio(700, 690, 400, 20);
 
+        // Catifa de la porta a l'altar i graons de l'altar
+        this.add.image(500, 690, 'catifa_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(-1050);
+        this.add.image(500, 262, 'graons_ermita').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-990);
+
+        // Pilastres de pedra adossades als murs laterals
+        [[122, 330], [122, 520], [122, 680], [878, 330], [878, 520], [878, 680]].forEach(([x, y]) => {
+            this.add.image(x, y, 'pilastra_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            this.colisio(x, y - 8, 40, 16);
+        });
+        // Bancs de fusta dels fidels
+        [[260, 450], [260, 590], [740, 450], [740, 590]].forEach(([x, y]) => this.posar('banc', x, y, { col: { w: 120, h: 20 } }));
+
         // Dues taules de pedra al fons, darrere l'altar
-        this.posar('taula_pedra', 340, 190, { col: { w: 90, h: 20 } });
+        this.posar('taula_pedra', 340, 190, { col: { w: 100, h: 20 } });
         this.interactiu(340, 210, 90, DIALEGS.taulaPedra(1), { altura: 170 });
-        this.posar('taula_pedra', 660, 190, { col: { w: 90, h: 20 } });
+        this.posar('taula_pedra2', 660, 190, { col: { w: 100, h: 20 } });
         this.interactiu(660, 210, 90, DIALEGS.taulaPedra(2), { altura: 170 });
 
-        // Altar
+        // Altar (sense text: es mira) amb les ofrenes dels nens als peus i dos canelobres
         this.posar('altar', 500, 300, { col: { w: 140, h: 36 } });
-        this.interactiu(500, 330, 85, DIALEGS.altarErmita, { altura: 100 });
+        this.add.image(500, 374, 'ofrenes_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(374);
+        [[392, 352], [608, 352]].forEach(([x, y], i) => {
+            this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            this.colisio(x, y - 8, 24, 14);
+            const llum = this.add.circle(x, y - 78, 70, 0xffc060, 0.1).setDepth(y + 1);
+            this.tweens.add({ targets: llum, alpha: 0.05, scale: 0.92, yoyo: true, repeat: -1, duration: 420 + i * 90 });
+        });
+
+        // Un raig de llum del vitrall cau sobre l'altar, amb pols flotant
+        const raig = this.add.graphics().setDepth(79000).setBlendMode(Phaser.BlendModes.ADD);
+        raig.fillStyle(0xffe6a0, 0.1).fillPoints([{ x: 462, y: 100 }, { x: 538, y: 100 }, { x: 640, y: 330 }, { x: 360, y: 330 }], true);
+        this.tweens.add({ targets: raig, alpha: 0.55, yoyo: true, repeat: -1, duration: 2600, ease: 'Sine.easeInOut' });
+        this.add.particles(0, 0, 'espurna', {
+            x: { min: 400, max: 600 }, y: { min: 130, max: 340 }, speedX: { min: -6, max: 6 }, speedY: { min: -10, max: 2 },
+            lifespan: 4200, scale: { start: 0.22, end: 0 }, alpha: { start: 0.5, end: 0 }, tint: [0xfff0c0, 0xffffff], frequency: 240, blendMode: 'ADD'
+        }).setDepth(79001);
 
         this.add.rectangle(500, 350, 800, 700, 0xffd38a, 0.04).setDepth(80000);
         this.sortida(460, 680, 80, 14, 'ZonaErmita', 'interior');

@@ -738,12 +738,6 @@ const DIALEGS = {
 
     // ---------------- ERMITA DE LA DESAPARICIÓ ----------------
     ermitaPorta: E => ({ pagines: [{ qui: '', text: 'L\'ermita és petita i antiga. La porta és oberta de bat a bat.' }] }),
-    altarErmita: E => ({
-        pagines: [
-            { qui: '', text: 'Un altar de pedra nua amb una creu de ferro. Hi ha cera vella i petites ofrenes de nens: pedretes, plomes, una trompeta de llauna.' },
-            { qui: 'Ineu', text: 'Darrere l\'altar, a la paret, dues grans taules de pedra amb signes gravats.' }
-        ]
-    }),
     taulaPedra: part => E => {
         const inici = part === 1 ? 0 : 6;
         const mots = [];

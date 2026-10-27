@@ -166,6 +166,8 @@ class EscenaUI extends Phaser.Scene {
         if (!this.sys.game.device.input.touch) {
             this.textAjuda = this.add.text(AMPLE - 16, ALT - 12, 'Fletxes/WASD: moure · ESPAI: parlar o atacar · I: sarró · ESC: menú',
                 estilText(12, '#f2e6c8')).setOrigin(1, 1).setAlpha(0.55);
+            // Només al principi: després s'esvaeix perquè no es quedi a la pantalla tota l'estona
+            this.tweens.add({ targets: this.textAjuda, alpha: 0, delay: 9000, duration: 1500 });
         }
     }
 

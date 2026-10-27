@@ -74,7 +74,8 @@ const CATALEG = [
     { key: 'roure',     file: 'assets/natura/roure.webp',     amplada: 420, provisional: (c, w) => dibuixarRoure(c, w) },
     { key: 'tiller',    file: 'assets/personatges/tiller.png',    amplada: 340, provisional: (c, w) => dibuixarTiller(c, w) },
     { key: 'altar',     file: 'assets/objectes/altar.png',     amplada: 150, provisional: (c, w) => dibuixarAltar(c, w) },
-    { key: 'taula_pedra', file: 'assets/objectes/taula_pedra.png', amplada: 110, provisional: (c, w) => dibuixarTaulaPedra(c, w) },
+    { key: 'taula_pedra', file: 'assets/objectes/taula_pedra.png', amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 0) },
+    { key: 'taula_pedra2', file: 'assets/objectes/taula_pedra2.png', amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
     { key: 'font_sj',   file: 'assets/objectes/font_sj.png',   amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w) },
     { key: 'carruatge', file: 'assets/objectes/carruatge.png', amplada: 230, provisional: (c, w) => dibuixarCarruatge(c, w) },
     { key: 'carro_sansa', file: 'assets/objectes/carro_sansa.png', amplada: 220, provisional: (c, w) => dibuixarCarroSansa(c, w) },
@@ -776,6 +777,13 @@ const Grafics = {
         crea('habit_cela', 60, 110, pintarHabitCela);
         crea('estora_cela', 230, 110, pintarEstoraCela);
         crea('cofre_cela', 90, 56, pintarCofreCela);
+        // Ermita de la Desaparició (js/dibuixos_ermita.js)
+        crea('paret_ermita', 800, 170, pintarParetErmita);
+        crea('mur_ermita', 40, 700, pintarMurErmita);
+        crea('pilastra_ermita', 54, 170, pintarPilastraErmita);
+        crea('catifa_ermita', 120, 440, pintarCatifaErmita);
+        crea('graons_ermita', 380, 90, pintarGraonsErmita);
+        crea('ofrenes_ermita', 130, 44, pintarOfrenesErmita);
         crea('candelabre_hall', 44, 112, pintarCandelabreHall);
         crea('banner_hall', 60, 150, pintarBannerHall);
         // Barril de fusta amb cèrcols de ferro, dogues i tapa
