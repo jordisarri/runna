@@ -7,6 +7,7 @@
  */
 const FONT_TITOL = '"Cinzel Decorative", Georgia, serif';
 const FONT_TEXT = '"Cormorant Garamond", Georgia, "Times New Roman", serif';   // serifa elegant (portada)
+const FONT_LLIBRE = '"IM Fell English", "Cormorant Garamond", Georgia, serif';             // text de llibre antic (pròleg)
 const FONT_PLACA = '"Cinzel", Georgia, serif';                                   // noms i títols a la interfície
 
 // The Hero's Ascension: la fem començar al segon 18

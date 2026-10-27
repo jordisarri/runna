@@ -248,7 +248,8 @@ class EscenaCarrega extends Phaser.Scene {
             document.fonts.load(`600 28px ${FONT_TEXT}`),
             document.fonts.load(`italic 600 28px ${FONT_TEXT}`),
             document.fonts.load(`600 24px ${FONT_PLACA}`),
-            document.fonts.load(`700 24px ${FONT_PLACA}`)
+            document.fonts.load(`700 24px ${FONT_PLACA}`),
+            document.fonts.load(`29px ${FONT_LLIBRE}`)
         ]) : Promise.resolve();
         Promise.race([fonts, new Promise(r => setTimeout(r, 3000))])
             .catch(() => {})
@@ -257,14 +258,18 @@ class EscenaCarrega extends Phaser.Scene {
 }
 
 // ---------------- PRÒLEG: la llegenda i les tres nits de boira ----------------
-// Cinc quadres il·lustrats amb un text a sota. Tocar (o ESPAI) passa al següent; «Saltar» ho salta tot.
+// Cinc quadres il·lustrats amb un text a sota. Cap quadre avança sol: tocar la pantalla (o ESPAI/ENTER) passa al següent; «Saltar» ho salta tot.
+// Els quadres amb vitrall (assets/proleg/<dibuix>.webp) es veuen amb un zoom enrere (Ken Burns): comencen sobre l'escena del vitrall i s'allunyen fins a
+// mostrar la finestra de la catedral. `vitrall: [x, y, zoom]`: centre de l'escena (fracció de la imatge) i zoom inicial (segons com d'alt sigui el vidre); a l'inici queda a la part de dalt de la pantalla, per damunt de la caixa del text. Si la imatge no hi és, es fa servir el dibuix de codi.
 const PROLEG_QUADRES = [
-    { text: "Fa tres-cents anys, un firaire pujava cada primavera al Miracle amb gàbies plenes d'ocells que cantaven com persones: Mestre Gaspar, l'Ocellaire.\nEls nens que l'escoltaven es quedaven sense riure.", dibuix: 'ocellaire' },
-    { text: "Els pastors de la Cirosa i els monjos el van tancar dins la seva pròpia gàbia, sota terra. Un monjo va segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la va deixar dormint entre pedres.", dibuix: 'segell' },
-    { text: "Ara, fa tres nits, una boira freda i lila surt de sota terra. Marceix els horts, entela l'aigua i fa callar l'orgue del Santuari.", dibuix: 'boira' },
-    { text: "I cada nit falta un nen.\nL'Uri i el Flam, de Sant Benet.\nI aquesta nit... el Sardin, el nebot de les sacerdotesses.", dibuix: 'nens' },
-    { text: "Matí. Al Monestir, l'Ineu, el monjo més jove, es desperta.\nEl Pare Jordi el busca a la Plaça.", dibuix: 'mati' }
+    { text: "Fa tres-cents anys, un firaire pujava cada primavera al Miracle amb gàbies plenes d'ocells que cantaven com persones: l'Ocellaire.\nEls nens que l'escoltaven es quedaven sense riure.", dibuix: 'ocellaire', vitrall: [0.515, 0.50, 1.95] },
+    { text: "Els pastors de la Cirosa i els monjos el van tancar dins la seva pròpia gàbia, sota terra. Un monjo va segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la va deixar dormint entre pedres.", dibuix: 'segell', vitrall: [0.515, 0.50, 1.95] },
+    { text: "Ara, fa tres nits, una boira freda i lila surt de sota terra. Marceix els horts, entela l'aigua i fa callar l'orgue del Santuari.", dibuix: 'boira', vitrall: [0.513, 0.497, 1.95] },
+    { text: "I cada nit falta un nen.\nL'Uri i el Flam, de Sant Benet.\nI aquesta nit... el Sardin, el nebot de les sacerdotesses.", dibuix: 'nens', vitrall: [0.51, 0.4475, 1.6] },
+    { text: "Matí. Al Monestir, l'Ineu, el monjo més jove, es desperta.\nEl Pare Jordi el busca a la Plaça.", dibuix: 'mati', vitrall: [0.50, 0.48, 1.45] }
 ];
+
+const PAPER_X = 30, PAPER_W = AMPLE - 60, PAPER_H = 285, PAPER_Y = ALT - 365;      // full de paper vell del text del pròleg
 
 class EscenaProleg extends Phaser.Scene {
     constructor() { super('Proleg'); }
@@ -275,12 +280,10 @@ class EscenaProleg extends Phaser.Scene {
         this.cameras.main.setBackgroundColor('#000000');
         Joc.iniciarMusica(this);
 
-        // Marc de pergamí per al text
-        this.caixa = this.add.graphics().setDepth(50);
-        this.caixa.fillStyle(0x1a120b, 0.88).fillRoundedRect(30, ALT - 330, AMPLE - 60, 250, 18);
-        this.caixa.lineStyle(3, 0xd4af37, 0.9).strokeRoundedRect(30, ALT - 330, AMPLE - 60, 250, 18);
-        this.text = this.add.text(AMPLE / 2, ALT - 205, '', estilText(30, '#f2e6c8', { align: 'center', fontStyle: 'italic', wordWrap: { width: AMPLE - 120 }, lineSpacing: 6 })).setOrigin(0.5).setDepth(51);
-        this.punts = this.add.text(AMPLE / 2, ALT - 60, '', estilText(26, '#d4af37')).setOrigin(0.5).setDepth(51);
+        // Full de paper vell per al text (el text s'hi composa justificat, com en un llibre antic)
+        this.paper = this.add.image(PAPER_X, PAPER_Y, this.crearPaper()).setOrigin(0).setDepth(50).setScale(1 / RES);
+        this.textCont = null;
+        this.punts = this.add.text(AMPLE / 2, ALT - 58, '', estilText(26, '#d4af37')).setOrigin(0.5).setDepth(51);
         this.add.text(AMPLE - 20, 20, 'Saltar ⏭', estilText(26, '#f2e6c8', { backgroundColor: '#1a120bcc', padding: { x: 14, y: 8 } }))
             .setOrigin(1, 0).setDepth(60).setInteractive({ useHandCursor: true })
             .on('pointerdown', (p, x, y, ev) => { if (ev) ev.stopPropagation(); this.acabar(); });
@@ -290,40 +293,118 @@ class EscenaProleg extends Phaser.Scene {
         this.input.keyboard.on('keydown-ENTER', () => this.seguent());
         this.input.keyboard.on('keydown-ESC', () => this.acabar());
         this.input.on('pointerdown', (p, sobre) => { if (!sobre.length) this.seguent(); });
-        this.seguent();
+        // Carrega els vitralls que hi hagi (els que falten es queden amb el dibuix de codi) i comença
+        PROLEG_QUADRES.forEach(q => { if (q.vitrall && !this.textures.exists('vitrall_' + q.dibuix)) this.load.image('vitrall_' + q.dibuix, 'assets/proleg/' + q.dibuix + '.webp'); });
+        if (this.load.list.size) { this.load.once('complete', () => this.seguent()); this.load.start(); }
+        else this.seguent();
     }
 
     // Passa al quadre següent (o acaba d'escriure el text si encara s'escriu)
     seguent() {
         if (this.acabat) return;
-        if (this.escrivint) { this.escrivint.remove(); this.escrivint = null; this.text.setText(this.complet); this.programarAuto(); return; }
+        if (this.escrivint) { this.escrivint(); return; }
         this.index++;
         if (this.index >= PROLEG_QUADRES.length) return this.acabar();
         const q = PROLEG_QUADRES[this.index];
         if (this.quadre) {
             const vell = this.quadre, clauVella = 'proleg_' + PROLEG_QUADRES[this.index - 1].dibuix;
             this.tweens.add({ targets: vell, alpha: 0, duration: 600, onComplete: () => { vell.destroy(); Grafics.descarta(this.textures, clauVella); } });
+            if (this.kenBurns) { this.kenBurns.stop(); this.kenBurns = null; }
         }
         this.quadre = this.add.container(0, 0).setAlpha(0);
-        this['dibuix_' + q.dibuix](this.quadre);
+        if (q.vitrall && this.textures.exists('vitrall_' + q.dibuix)) this.vitrall(this.quadre, 'vitrall_' + q.dibuix, q.vitrall);
+        else this['dibuix_' + q.dibuix](this.quadre);
         this.tweens.add({ targets: this.quadre, alpha: 1, duration: 900 });
         const seg = PROLEG_QUADRES[this.index + 1];             // el quadre següent es dibuixa mentre es llegeix aquest (només n'hi ha dos a memòria)
         if (seg) this.time.delayedCall(1500, () => { if (!this.acabat) this.textures.get('proleg_' + seg.dibuix); });
         this.punts.setText(PROLEG_QUADRES.map((_, i) => i === this.index ? '●' : '○').join('  '));
-        // Text lletra a lletra
-        this.complet = q.text; let n = 0;
-        this.text.setText('');
-        if (this.auto) this.auto.remove();
-        const ev = this.escrivint = this.time.addEvent({ delay: 28, loop: true, callback: () => {
-            if (this.escrivint !== ev) return;
-            n++; this.text.setText(this.complet.slice(0, n));
-            if (n >= this.complet.length) { ev.remove(); this.escrivint = null; this.programarAuto(); }
-        } });
+        this.escriure(q.text);
     }
 
-    programarAuto() {
-        if (this.auto) this.auto.remove();
-        this.auto = this.time.delayedCall(5500, () => this.seguent());
+    // Full de paper vell: crema envellit, taques, vora fosca i petits grans (es pinta una vegada)
+    crearPaper() {
+        if (this.textures.exists('proleg_paper')) return 'proleg_paper';
+        const w = PAPER_W * RES, h = PAPER_H * RES;
+        const tex = this.textures.createCanvas('proleg_paper', w, h), c = tex.getContext();
+        let s = 7;
+        const r = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+        c.fillStyle = '#e4cf9c'; c.fillRect(0, 0, w, h);
+        for (let i = 0; i < 70; i++) {                                    // taques de humitat i zones clares
+            const x = r() * w, y = r() * h, rad = (30 + r() * 110) * RES / 2, g = c.createRadialGradient(x, y, 0, x, y, rad);
+            g.addColorStop(0, r() < 0.4 ? 'rgba(250,236,190,0.35)' : 'rgba(150,100,40,0.16)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+            c.fillStyle = g; c.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+        }
+        for (let i = 0; i < 2600; i++) {                                  // gra fi
+            c.fillStyle = r() < 0.5 ? 'rgba(90,55,20,0.10)' : 'rgba(255,245,210,0.12)';
+            c.fillRect(r() * w, r() * h, 1 + r() * 2, 1 + r() * 2);
+        }
+        const v = c.createLinearGradient(0, 0, 0, h);
+        v.addColorStop(0, 'rgba(110,70,25,0.30)'); v.addColorStop(0.12, 'rgba(0,0,0,0)'); v.addColorStop(0.88, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(90,55,20,0.38)');
+        c.fillStyle = v; c.fillRect(0, 0, w, h);
+        const e = c.createLinearGradient(0, 0, w, 0);
+        e.addColorStop(0, 'rgba(100,60,20,0.40)'); e.addColorStop(0.07, 'rgba(0,0,0,0)'); e.addColorStop(0.93, 'rgba(0,0,0,0)'); e.addColorStop(1, 'rgba(100,60,20,0.40)');
+        c.fillStyle = e; c.fillRect(0, 0, w, h);
+        c.strokeStyle = 'rgba(70,40,12,0.55)'; c.lineWidth = 3 * RES; c.strokeRect(1.5 * RES, 1.5 * RES, w - 3 * RES, h - 3 * RES);                  // vora cremada
+        c.strokeStyle = 'rgba(122,40,24,0.45)'; c.lineWidth = RES; c.strokeRect(14 * RES, 14 * RES, w - 28 * RES, h - 28 * RES);                    // filet vermell
+        tex.refresh();
+        return 'proleg_paper';
+    }
+
+    // Compon el text justificat (com un llibre antic: línies plenes, l'última de cada paràgraf a l'esquerra) i el mostra amb un fade-in línia a línia
+    escriure(text) {
+        if (this.textCont) { const vell = this.textCont; this.tweens.add({ targets: vell, alpha: 0, duration: 300, onComplete: () => vell.destroy() }); }
+        const cont = this.textCont = this.add.container(0, 0).setDepth(51);
+        const MIDA = 29, INTERLINIA = 40, X0 = PAPER_X + 38, AMPLE_TEXT = PAPER_W - 76, Y0 = PAPER_Y + 34;
+        const mesura = this.mesuraCtx = this.mesuraCtx || document.createElement('canvas').getContext('2d');
+        mesura.font = MIDA + 'px ' + FONT_LLIBRE;
+        const espai = mesura.measureText(' ').width;
+        const linies = [];                                                  // { paraules: [[text, amplada]], ultima }
+        text.split('\n').forEach(par => {
+            let actual = [], ample = 0;
+            par.split(/\s+/).filter(Boolean).forEach(p => {
+                const w = mesura.measureText(p).width;
+                if (actual.length && ample + espai + w > AMPLE_TEXT) { linies.push({ paraules: actual, ultima: false }); actual = []; ample = 0; }
+                ample += (actual.length ? espai : 0) + w;
+                actual.push([p, w]);
+            });
+            if (actual.length) linies.push({ paraules: actual, ultima: true });
+        });
+        const objectes = [];
+        linies.forEach((l, i) => {
+            const suma = l.paraules.reduce((s, [, w]) => s + w, 0), forats = l.paraules.length - 1;
+            const sep = (l.ultima || forats === 0) ? espai : (AMPLE_TEXT - suma) / forats;
+            let x = X0;
+            const grup = l.paraules.map(([p, w]) => {
+                const o = this.add.text(x, Y0 + i * INTERLINIA, p, { fontFamily: FONT_LLIBRE, fontSize: MIDA + 'px', color: '#2e1a0a', resolution: 2 }).setAlpha(0);
+                x += w + sep;
+                return o;
+            });
+            cont.add(grup);
+            objectes.push(grup);
+        });
+        // Fade-in línia a línia; un toc els mostra tots de cop
+        let acabats = 0;
+        const tweens = objectes.map((grup, i) => this.tweens.add({ targets: grup, alpha: 1, duration: 900, delay: 350 + i * 700,
+            onComplete: () => { if (++acabats === objectes.length) this.escrivint = null; } }));
+        this.escrivint = () => { tweens.forEach(tw => tw.stop()); objectes.forEach(g => g.forEach(o => o.setAlpha(1))); this.escrivint = null; };
+    }
+
+    // Vitrall a pantalla completa amb zoom enrere: comença a sobre l'escena del vitrall (centrada a la part de dalt, per damunt de la caixa del text)
+    // i s'allunya fins a veure tota la finestra de la catedral. L'escena es veu sencera tota l'estona.
+    vitrall(c, key, [fx, fy, Z = 1.55]) {
+        const im = this.add.image(0, 0, key);
+        const base = Math.max(AMPLE / im.width, ALT / im.height);            // la imatge cobreix tota la pantalla
+        const DESTI_Y = 470;
+        c.add(im);
+        const px = (fx - 0.5) * im.width * base, py = (fy - 0.5) * im.height * base;     // centre de l'escena respecte al centre de la imatge
+        this.kenBurns = this.tweens.addCounter({ from: 0, to: 1, duration: 16000, ease: 'Sine.easeInOut', onUpdate: tw => {
+            const k = tw.getValue(), z = Z + (1 - Z) * k;
+            const x0 = AMPLE / 2 - px * Z, y0 = DESTI_Y - py * Z;          // inici: escena centrada a dalt
+            const x1 = AMPLE / 2 - px, y1 = ALT / 2 - py;                  // final: imatge centrada
+            im.setScale(base * z);
+            const w = im.displayWidth, h = im.displayHeight;               // la imatge sempre cobreix tota la pantalla (sense vores negres)
+            im.setPosition(Phaser.Math.Clamp(x0 + (x1 - x0) * k, AMPLE - w / 2, w / 2), Phaser.Math.Clamp(y0 + (y1 - y0) * k, ALT - h / 2, h / 2));
+        } });
     }
 
     // ---------------- Il·lustracions ----------------
@@ -367,7 +448,7 @@ class EscenaProleg extends Phaser.Scene {
         return im;
     }
 
-    // 1. Mestre Gaspar, l'Ocellaire, a la fira del Miracle: les gàbies brillen i el riure dels nens hi vola
+    // 1. L'Ocellaire, a la fira del Miracle: les gàbies brillen i el riure dels nens hi vola
     dibuix_ocellaire(c) {
         this.fons(c, 'proleg_ocellaire');
         const p = this.add.particles(0, 0, 'espurna', { x: { min: 60, max: 660 }, y: { min: 560, max: 900 }, speedY: { min: -40, max: -15 }, speedX: { min: -12, max: 12 },

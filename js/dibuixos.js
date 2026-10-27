@@ -3437,7 +3437,7 @@ function pintarFanalet(ctx, W, H) {
     ctx.beginPath(); ctx.arc(cx, base - 42, 2.4, 0, Math.PI * 2); ctx.stroke();
 }
 
-// L'Ocellaire (Mestre Gaspar): hàbit de monjo negre i esparracat, lligat amb cadenes (creuades al pit, a la cintura i
+// L'Ocellaire (l'Home de la Gàbia): hàbit de monjo negre i esparracat, lligat amb cadenes (creuades al pit, a la cintura i
 // grillons als canells), calb i ossut, amb els ulls lila que brillen. Una gàbia petita li penja del cinturó.
 // El bàcul no hi és: el dibuixa la zona, perquè gira.
 function dibuixarOcellaire(c, w) {

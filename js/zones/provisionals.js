@@ -39,7 +39,6 @@ class ZonaEsglesia extends ZonaBase {
         this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
         this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170 });     // el sagrari, al mig del retaule (fragment 2)
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
-        this.interactiu(640, ESG.retY + 140, 90, () => this.rezar(), { altura: 100 });
 
         // Portes del peu del retaule: totes dues tancades. Quan el Pare Daniel diu que el rellotge s'ha aturat (rellotgeDit)
         // s'obre la de la dreta, que duu a la torre i a la Sala del Rellotge. L'esquerra continua tancada.
@@ -53,8 +52,8 @@ class ZonaEsglesia extends ZonaBase {
         }), { altura: 150, actiu: () => !this.portaRellotge });
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daniel, que dirigeix el cor
-        this.orgue = this.posar('orgue', 950, ESG.retY + 330, { col: { w: 110, h: 50 } });
-        this.npc('pianista', 950, ESG.retY + 400, DIALEGS.pianista, { flipX: true });
+        this.orgue = this.posar('orgue', 975, ESG.retY + 250, { col: { w: 110, h: 50 } });
+        this.npc('pianista', 975, ESG.retY + 320, DIALEGS.pianista, { flipX: true, radi: 200 });
         this.npc('pare_daniel', 360, ESG.retY + 190, DIALEGS.pareDaniel, { flipX: false });
 
         // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar
@@ -152,32 +151,6 @@ class ZonaEsglesia extends ZonaBase {
             Sfx.secret();
             this.missatge('La porta de la dreta del retaule ja és oberta.');
         }
-    }
-
-
-    // Altar de pedra: l'Ineu s'agenolla, reposa (els grans del rosari tornen a brillar) i la partida es desa
-    rezar() {
-        const i = this.ineu, base = i.scaleY;
-        this.tweens.add({ targets: i, scaleY: base * 0.82, duration: 500, ease: 'Sine.easeOut' });
-        return {
-            pagines: [
-                { qui: '', text: 'Una calma tèbia et puja pel pit. Els grans del teu rosari tornen a brillar i la partida queda desada.' }
-            ],
-            enAcabar: () => {
-                this.tweens.add({ targets: i, scaleY: base, duration: 400, ease: 'Sine.easeInOut' });
-                Estat.dades.vida = Estat.dades.corsMax * 2;
-                this.ui().actualitzarHUD();
-                this.guardarPosicio();
-                this.ui().notifica('Partida desada');
-                Estat.desar();
-                const p = this.add.particles(i.x, i.y - 60, 'espurna', {
-                    speed: { min: 20, max: 90 }, angle: { min: 230, max: 310 }, lifespan: 1100,
-                    scale: { start: 0.3, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xffe6a8, 0xf8c060], blendMode: 'ADD', quantity: 18, emitting: false
-                }).setDepth(i.depth + 1);
-                p.explode(18);
-                this.time.delayedCall(1300, () => p.destroy());
-            }
-        };
     }
 }
 

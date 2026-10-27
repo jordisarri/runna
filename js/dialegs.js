@@ -59,9 +59,7 @@ const DIALEGS = {
                     { qui: "Pare Jordi", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
                     { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: l'Uri i el Flam, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardin, el nebot de les sacerdotesses de l'Hostatgeria." },
                     { qui: "Pare Jordi", text: "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada... i, diu la Neus, un piular d'ocells que no se sap d'on ve." },
-                    { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot." },
-                    { qui: "", text: "Has obtingut el CLAUER DE NOVICI!\nObre la biblioteca i les cel·les." },
-                    { qui: "Pare Jordi", text: "I abans de marxar, passa a saludar el Germà Andreu, al costat dels xiprers: sempre té la butxaca plena de coses. Ves amb compte pels camins, Ineu." }
+                    { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot. Ves amb compte pels camins, Ineu." }
                 ],
                 enAcabar: () => {
                     E.posaFlag("clauerNovici");
@@ -76,7 +74,7 @@ const DIALEGS = {
                     { qui: "Pare Jordi", text: "Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és voler bé de debò. Ajup el cap." },
                     { fer: (z, fet) => z.seq([c => z.npcVa('pare_jordi', z.ineu.x + 60, z.ineu.y + 4, c), c => z.npcMira('pare_jordi', 'ineu', c), c => { z.ajupir('ineu'); z.llum(z.ineu.x, z.ineu.y - 90, 0xffe8a0, c); }], fet) },
                     { qui: "Pare Jordi", text: "No vas sol, Ineu. Vas amb tot el Miracle darrere teu." },
-                    { qui: "", text: "Has rebut la BENEDICCIÓ DEL PARE JORDI." }
+                    { avis: "Has rebut la BENEDICCIÓ DEL PARE JORDI." }
                 ],
                 enAcabar: () => { E.posaFlag("benediccio"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
             };
@@ -109,7 +107,8 @@ const DIALEGS = {
                     { qui: 'Germà Andreu', text: 'Ets del Barça, tu? Tinc uns cromos que els nens es moren per tenir. Ells sí que m\'escolten.' },
                     { qui: 'Germà Andreu', text: 'Ei, pren aquest bastó de pelegrí. Era d\'un vell que ja no el vol.' },
                     { fer: (z, fet) => z.objecteVola('germa_andreu', () => z.ineuAixeca('ineu_aixeca_basto', fet, 0.58), 'arma_basto') },
-                    { qui: '', text: 'Has obtingut el BASTÓ DE PELEGRÍ!' }
+                    { avis: 'Has obtingut el BASTÓ DE PELEGRÍ!' },
+                    { fer: (z, fet) => z.ineuBaixa(fet) }
                 ],
                 enAcabar: () => {
                     E.posaFlag('parlatAndreu');
@@ -125,18 +124,14 @@ const DIALEGS = {
         };
     },
 
-    bassadoria: E => E.flag("bassadoriaNeta") ? ({
-        pagines: [{ qui: "", text: "La Bassadòria, clara com el cristall. Les flors de la Creu, al costat, comencen a aixecar el cap." }]
-    }) : ({
+    bassadoria: E => E.flag("bassadoriaNeta") ? ({ pagines: [] }) : ({
         pagines: [
-            { qui: "", text: "La Bassadòria, al costat de la Creu de l'Aparició." },
             { qui: "Ineu", text: "L'aigua sempre ha estat clara... Ara és tèrbola i fa olor de soterrani. I en surten aquests gripaus enverinats i una boira lila, a glopades." }
         ]
     }),
 
     creu: E => ({
         pagines: [
-            { qui: '', text: 'La Creu de l\'Aparició. Sempre hi ha flors fresques als seus peus.' },
             { qui: 'Ineu', text: 'Avui les flors estan pansides. Com si la boira se\'n begués el color.' }
         ]
     }),
@@ -147,27 +142,18 @@ const DIALEGS = {
         ]
     }),
 
-    cartellPlaca: E => ({ pagines: [{ qui: '', text: "↑ El Celler i les Runes\n← Casa Gran\n↓ La Bassadòria" }] }),
-    pedraSecreta: E => E.flag('tresorObert') ? {
-        pagines: [{ qui: '', text: 'La pedra ha girat i deixa un pas estret. Una escala baixa a un passatge fosc.' }]
-    } : {
-        pagines: [
-            { qui: '', text: 'El camí mor contra un mur de pedra vella. Una de les pedres és de color diferent de les altres, i quan hi passes la mà sembla que vibri.' },
-            { qui: 'Ineu', text: 'Aquesta pedra no hi pertany... Com si esperés una veu. Potser un cant de pedres la desvetlli.' }
-        ]
-    },
+    cartellPlaca: E => ({ pagines: [{ qui: 'Cartell', text: "↑ El Celler i les Runes\n← Casa Gran\n↓ La Bassadòria" }] }),
+    pedraSecreta: E => ({ pagines: [] }),
     pedraSecretaOberta: { pagines: [
-        { qui: '', text: 'El Cant de les Pedres ressona al mur. La pedra tremola, gira lentament i deixa a la vista un passatge secret.' },
         { qui: 'Ineu', text: 'Un passatge entre el Monestir i el Santuari! Els monjos antics sí que en sabien, d\'amagar coses.' }
     ] },
     cofreTresor: E => {
-        if (E.flag('cofreTresor')) return { pagines: [{ qui: '', text: 'El cofre és obert i buit. Les espelmes encara cremen, com si algú les cuidés.' }] };
+        if (E.flag('cofreTresor')) return { pagines: [] };
         return {
             pagines: [
-                { qui: '', text: 'Un cofre vell, de bisagres rovellades, vigilat per dues espelmes que ningú no recorda haver encès.' },
-                { qui: '', text: 'A dins, un flascó de vidre amb un líquid daurat i una nota: «Per al qui sap escoltar les pedres.»' },
+                { qui: 'Nota', text: '«Per al qui sap escoltar les pedres.»' },
                 { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xf0c040), c => z.beure(c, 0xf0c040)], fet) },
-                { qui: "", text: "+1 GRA AL ROSARI i rosari ple." }
+                { avis: "+1 GRA AL ROSARI i rosari ple." }
             ],
             enAcabar: () => { E.posaFlag('cofreTresor'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
         };
@@ -179,7 +165,7 @@ const DIALEGS = {
         const clau = [
             { qui: 'Siscu', text: 'I mira què vaig trobar: una nit, al Germà Andreu li va caure aquesta clau davant la porta de ferro, i no se n\'adonà. És petita i rovellada. Me la vaig quedar per jugar a pirates.' },
             { qui: 'Siscu', text: 'Té, a tu et servirà més que a mi. Però no diguis a la mare que jo era a fora de nit!' },
-            { qui: '', text: 'Has obtingut la CLAU ROVELLADA: petita, de ferro vell, amb un ocell gravat a l\'anella.' }
+            { avis: 'Has obtingut la CLAU ROVELLADA' }
         ];
         const donar = () => { E.posaFlag('ciscuTrobat'); E.posaFlag('clauGirgoles'); E.dona('clau_girgoles'); };
         if (!E.flag('ciscuTrobat')) return {
@@ -199,16 +185,15 @@ const DIALEGS = {
         ] };
     },
 
-    solitari: E => ({ pagines: [{ qui: '', text: 'Un solitari a mig fer amb la baralla espanyola de l\'avi. Falta el set d\'oros: algú n\'hi ha dibuixat un en un paper.' }] }),
+    solitari: E => ({ pagines: [] }),
 
     cofreCabanaCami: E => {
-        if (E.flag('cofreCabanaCami')) return { pagines: [{ qui: '', text: "El cofre és obert i buit. Només queda l'olor de fusta vella i de cera." }] };
+        if (E.flag('cofreCabanaCami')) return { pagines: [] };
         return {
             pagines: [
-                { qui: '', text: "Una cabana de llenyataire oblidada, amagada entre els arbres. La pols és una catifa grisa, menys al voltant de la taula, on algú hi juga a cartes." },
-                { qui: '', text: "Al fons, un cofre petit. A dins, un flascó daurat embolicat amb un drap i una nota gastada: «Per a qui es perd pel camí i el troba.»" },
+                { qui: 'Nota', text: "«Per a qui es perd pel camí i el troba.»" },
                 { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xf0c040), c => z.beure(c, 0xf0c040)], fet) },
-                { qui: "", text: "+1 GRA AL ROSARI i rosari ple." }
+                { avis: "+1 GRA AL ROSARI i rosari ple." }
             ],
             enAcabar: () => { E.posaFlag('cofreCabanaCami'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
         };
@@ -299,18 +284,18 @@ const DIALEGS = {
     },
     // Sagrari del Retaule Major: hi ha el fragment 2 de la llegenda del monjo. És tancat amb una clau petita que és a l'ermita de la Desaparició (premi del missatge de les dotze columnes).
     sagrari: E => {
-        if (E.flag("fragment2")) return { pagines: [{ qui: "", text: "El sagrari, tancat de nou amb la clau petita. A dins hi ha quedat el lloc buit on era el pergamí." }] };
+        if (E.flag("fragment2")) return { pagines: [] };
         if (!E.te("clau_sagrari")) {
             return {
-                pagines: [{ qui: "", text: "Al mig del retaule, el sagrari de fusta daurada. La porteta és tancada amb una clau molt petita. Potser el Pare Daniel sap on és." }],
+                pagines: [],
                 enAcabar: () => E.posaFlag("sagrariVist")
             };
         }
         return {
             pagines: [
                 { fer: (z, fet) => z.agafar(fet, 'pergami', 0xf2e6c8) },
-                { qui: "", text: "Fragment 2 de 2:\n«El monjo va guardar el segell fins al darrer dia. Des d'aleshores la seva ombra torna cada nit al mur de les Runes a vigilar. La clau de ferro és on ell la va deixar, amb els seus germans, sota la mirada d'un guardià de pedra.»" },
-                { qui: "", text: "«Qui busqui la clau, que no oblidi mai on neix el sol.»" }
+                { qui: "Pergamí", text: "Fragment 2 de 2:\n«El monjo va guardar el segell fins al darrer dia. Des d'aleshores la seva ombra torna cada nit al mur de les Runes a vigilar. La clau de ferro és on ell la va deixar, amb els seus germans, sota la mirada d'un guardià de pedra.»" },
+                { qui: "Pergamí", text: "«Qui busqui la clau, que no oblidi mai on neix el sol.»" }
             ],
             enAcabar: () => E.posaFlag("fragment2")
         };
@@ -320,26 +305,24 @@ const DIALEGS = {
     // ---------------- CASA GRAN ----------------
     homeRaim: E => ({
         pagines: [
-            { qui: '', text: 'L\'Home del Raïm, a les escalinates de la Casa Gran. Té un carràs de raïm a les mans...' },
-            { qui: 'Ineu', text: '...i el cap posat del revés. Sembla que vigili alguna cosa a la seva esquena.' }
+            { qui: 'Ineu', text: 'Té el cap posat del revés. Sembla que vigili alguna cosa a la seva esquena.' }
         ]
     }),
 
     // ---------------- RUÏNES I PING-PONG ----------------
     ruines: E => ({
         pagines: [
-            { qui: '', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de Runna i la va deixar dormint a la pedra. Després va amagar la clau de la porta allà on ningú no la trobés.»" },
+            { qui: 'Pergamí', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de Runna i la va deixar dormint a la pedra. Després va amagar la clau de la porta allà on ningú no la trobés.»" },
             { fer: (z, fet) => z.agafarPergamiRunes ? z.agafarPergamiRunes(fet) : fet() },
             { qui: 'Ineu', text: "Falta l'altre fragment. Potser a l'església... I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." },
             { fer: (z, fet) => z.aparicioOmbra ? z.aparicioOmbra(fet) : fet() },
-            { qui: '', text: "De cop, el cel s'enfosqueix. Sobre el mur de les Runes es dibuixa l'ombra d'un monjo corbat, amb les mans unides, com si pregués. No hi ha ningú que la projecti." },
             { qui: 'Ineu', text: "Ha aparegut en llegir el pergamí... És el monjo del segell? El Pare Alcuí ha de veure això: li duré els dos fragments." }
         ],
         enAcabar: () => E.posaFlag('fragment1')
     }),
 
-    cartellRuinesPingpong: E => ({ pagines: [{ qui: '', text: "← Camí de la Desaparició\n→ Cementiri\n↑ Cel·les\n↓ El Celler i la Plaça" }] }),
-    cartellCeller: E => ({ pagines: [{ qui: '', text: "← El Celler (ping-pong)\n↑ Les Runes\n↓ Plaça" }] }),
+    cartellRuinesPingpong: E => ({ pagines: [{ qui: 'Cartell', text: "← Camí de la Desaparició\n→ Cementiri\n↑ Cel·les\n↓ El Celler i la Plaça" }] }),
+    cartellCeller: E => ({ pagines: [{ qui: 'Cartell', text: "← El Celler (ping-pong)\n↑ Les Runes\n↓ Plaça" }] }),
 
     juli: E => ({
         pagines: [
@@ -505,7 +488,8 @@ const DIALEGS = {
     branca: E => ({
         pagines: [
             { fer: (z, fet) => { z.brancaAgafada = true; z.agafar(() => z.ineuAixeca('ineu_aixeca_tiler', fet), 'branca', 0xd8f0a0); } },
-            { qui: "", text: "Has obtingut el BASTÓ DE TIL·LER!" }
+            { qui: "", text: "Has obtingut el BASTÓ DE TIL·LER!" },
+            { fer: (z, fet) => z.ineuBaixa(fet) }
         ],
         enAcabar: () => {
             E.dona("basto_tiller");
@@ -1266,7 +1250,7 @@ const DIALEGS = {
     portaReixa: E => ({
         pagines: [
             { qui: "", text: "Sota el porxo d'arcs, una porta amb una reixa de ferro gruixuda, lligada amb cadenes rovellades. El pany és tan antic que ja ni té forat." },
-            { qui: "Ineu", text: E.flag("reixaObertaDins") ? "Per dins hi ha la barra aixecada, però les cadenes de fora no cedeixen. Aquí no s'hi entra." : "Ni el Clauer de Novici hi encaixa. Fa generacions que ningú no obre això. Haurà d'haver-hi una altra manera d'entrar-hi." }
+            { qui: "Ineu", text: E.flag("reixaObertaDins") ? "Per dins hi ha la barra aixecada, però les cadenes de fora no cedeixen. Aquí no s'hi entra." : "Fa generacions que ningú no obre això. Haurà d'haver-hi una altra manera d'entrar-hi." }
         ]
     }),
 

@@ -71,7 +71,7 @@ function vinyetaProleg(ctx, w, h, forca = 0.75) {
     ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
 }
 
-// ---------- 1. Mestre Gaspar, l'Ocellaire, a la fira del Miracle, fa tres-cents anys ----------
+// ---------- 1. L'Ocellaire, a la fira del Miracle, fa tres-cents anys ----------
 function pintarProlegOcellaire(ctx, w, h) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.fillStyle = gradVBib(ctx, 0, h, [[0, '#3a2440'], [0.35, '#a0503a'], [0.6, '#e09a54'], [1, '#5a3420']]); ctx.fillRect(0, 0, w, h);
