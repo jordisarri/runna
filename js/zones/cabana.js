@@ -1,6 +1,6 @@
 /**
  * LA CABANA DE LA JAUMETA: molt lluny, al mig del bosc. Només s'hi arriba per un portal màgic:
- * l'Alzina Buida del Bosc de Sant Joan (cal portar-hi aigua de la font) o el cercle de bolets de la Rovellonera.
+ * l'Alzina Buida del Bosc de Sant Joan (cal portar-hi aigua de la font) o el cercle de bolets de la Rovellonera. La tornada és sempre per l'Alzina Buida de la cabana.
  */
 
 // Parets de troncs d'un interior petit (900x700): al fons quatre fileres de troncs horitzontals i als costats les puntes
@@ -63,7 +63,7 @@ class ZonaCabana extends ZonaBase {
             alcada: 1000,
             colorFons: '#14301a',
             entrades: {
-                portal:   { x: 320, y: 840, dir: 'dreta' },
+                portal:   { x: 330, y: 975, dir: 'amunt' },
                 interior: { x: 800, y: 640, dir: 'avall' }
             }
         });
@@ -126,12 +126,19 @@ class ZonaCabana extends ZonaBase {
         });
         this.colisio(1110, 712, 16, 10); this.colisio(1260, 717, 16, 10);
 
-        // Cercle de bolets: el portal de tornada
-        this.cercle = this.posar('cercle_bolets', 320, 880, { fonsY: -800 });
-        this.resplandor = this.add.circle(320, 860, 90, 0xb0ffb0, 0.12).setDepth(861);
-        this.tweens.add({ targets: this.resplandor, alpha: 0.28, yoyo: true, repeat: -1, duration: 900 });
-        this.interactiu(320, 870, 90, DIALEGS.portalTornada, {
-            altura: 40,
+        // L'Alzina Buida, la mateixa del bosc: el portal de tornada (amb la seva clariana verda, claror al forat i llumenetes)
+        const AX = 330, AY = 905;
+        this.add.ellipse(AX, AY + 40, 760, 300, 0x8fe08a, 0.13).setDepth(-1090);
+        this.add.ellipse(AX, AY + 40, 480, 180, 0xb8f0a0, 0.13).setDepth(-1089);
+        this.alzina = this.posar('alzina_buida', AX, AY, { col: { w: 150, h: 46 } });
+        this.claror = this.add.ellipse(AX - 18, AY - 128, 78, 104, 0x6aff9a, 0.3).setDepth(AY + 1);
+        this.tweens.add({ targets: this.claror, alpha: 0.12, scaleX: 1.2, scaleY: 1.12, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
+        this.add.particles(AX, AY - 90, 'espurna', {
+            x: { min: -230, max: 230 }, y: { min: -120, max: 60 }, speedX: { min: -8, max: 8 }, speedY: { min: -14, max: -3 }, lifespan: 3200,
+            scale: { start: 0.28, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xbaffb0, 0xf2ffc0], frequency: 260, blendMode: 'ADD'
+        }).setDepth(AY + 2);
+        this.interactiu(AX, AY + 20, 130, DIALEGS.portalTornada, {
+            altura: 330,
             enTancar: () => {
                 const rov = Estat.dades.portalTorna === 'rov';
                 this.canviarZona(rov ? 'ZonaRovellonera' : 'ZonaBosc', 'portal');
@@ -148,8 +155,8 @@ class ZonaCabana extends ZonaBase {
         [[1120, 520], [480, 560], [700, 780]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 20 }));
         [[1100, 880], [400, 780]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 60, h: 24 } }));
 
-        this.arbres([[120, 150], [300, 90], [520, 130], [820, 90], [1050, 130], [1280, 160], [90, 520], [140, 800],
-                     [400, 980], [1000, 980], [1280, 880], [1300, 560], [200, 340], [1180, 280]]);
+        this.arbres([[120, 150], [300, 90], [520, 130], [820, 90], [1050, 130], [1280, 160], [90, 520],
+                     [1000, 980], [1280, 880], [1300, 560], [200, 340], [1180, 280]]);
         // Les bestioles no arriben tan lluny: només algun bolet mal-humorat
         this.enemic('bolet', 1150, 880);
 

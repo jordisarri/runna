@@ -31,7 +31,7 @@ const CATALEG_OBJECTES = {
     pa_pastor:        ['Pa dels pastors', 'Una barra baixa i fosca, cuita sota la cendra.'],
     esquelles:        ['Esquelles dels pastors', 'Amb elles, els cants antics sonen més clars.'],
     fulla_tiler:      ['Fulla del Til·ler', 'Un record del sopar sota el Gran Til·ler.'],
-    cinta_nena:       ['Cinta de la Nena', 'Absorbeix un cop cada vegada que entres a una zona.'],
+    cinta_nena:       ['Llaç de la Nena', 'Absorbeix un cop cada vegada que entres a una zona.'],
     llac_nena:        ['Llaç de cinta', 'Rosa i descolorit. És de la Nena de les Trenes.'],
     llanterna:        ['Llanterna', 'Fa més llum a les foscors de sota terra.'],
     telescopi:        ['Telescopi del Garf', 'Per mirar els estels als Dipòsits.'],

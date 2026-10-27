@@ -37,7 +37,7 @@ const DIARI_LATERALS = {
     taverna: ["L'Eva de la Taverna", 'ZonaTaverna', null],
     rellotge: ['El rellotge aturat', 'ZonaGolfes', '+1 cor'],
     tresor: ['La pedra que escolta', 'ZonaPlaca', '+1 cor'],
-    nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Cinta de la Nena (absorbeix un cop per zona)'],
+    nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Llaç de la Nena (absorbeix un cop per zona)'],
     monges: ["Les sacerdotesses de l'Hostatgeria", 'ZonaJardi', '+1 cor per cada sacerdotessa i un lloc de repòs']
 };
 const DIARI_ACTES = [
@@ -66,6 +66,8 @@ const DIARI = {
             const fons = ui.add.rectangle(x, y, w - 8, 60, 0x8a5a2a, 0.15).setStrokeStyle(2, 0x8a5a2a, 0.6).setInteractive({ useHandCursor: true })
                 .on('pointerdown', () => this.mostrar(ui, id));
             const t = ui.add.text(x, y, nom, { fontFamily: FONT_PLACA, fontSize: '27px', fontStyle: 'bold', color: TINTA, resolution: 2 }).setOrigin(0.5);
+            // El títol sempre ha de cabre dins la pestanya (la tipografia del joc pot ser més ampla que la del navegador)
+            for (let m = 27; t.width > w - 28 && m > 12; m--) t.setFontSize(m);
             c.add([fons, t]);
             return { id, fons, t };
         });

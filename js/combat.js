@@ -927,11 +927,11 @@ Object.assign(ZonaBase.prototype, {
     ferIneu(mal, des) {
         const ara = this.time.now;
         if (ara < (this.invulnerableFins || 0) || this.caient) return;
-        // La Cinta de la Nena absorbeix un cop cada cop que entres a una zona
+        // El Llaç de la Nena absorbeix un cop cada cop que entres a una zona
         if (Estat.te('cinta_nena') && !this.cintaGastada) {
             this.cintaGastada = true;
             this.invulnerableFins = ara + 1100;
-            this.flotant(this.ineu.x, this.ineu.y - 150, 'La cinta et protegeix', '#e0a0c0');
+            this.flotant(this.ineu.x, this.ineu.y - 150, 'El llaç et protegeix', '#e0a0c0');
             Sfx.escut();
             return;
         }

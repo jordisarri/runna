@@ -1124,7 +1124,7 @@ const DIALEGS = {
                 { qui: "Nena de les Trenes", text: "Les sento... Sento les mans de la mare! Mare...? Mare, ets tu? M'has trobat?" },
                 { fer: (z, fet) => z.mareNena(fet) },
                 { qui: "Nena de les Trenes", text: "Gràcies, monjo. Ja no tinc por. Aquí et deixo un dels meus llaços: guarda't amb ell, que també protegeix els que es perden." },
-                { qui: "", text: "Has obtingut la CINTA DE LA NENA: absorbeix un cop cada cop que entres a una zona.\nLa Nena de les Trenes ja no espantarà ningú." }
+                { qui: "", text: "Has obtingut el LLAÇ DE LA NENA: absorbeix un cop cada cop que entres a una zona.\nLa Nena de les Trenes ja no espantarà ningú." }
             ],
             enAcabar: () => {
                 E.posaFlag("nenaAlliberada"); E.posaFlag("trenesNena"); E.dona("cinta_nena"); E.treu("llac_nena");
@@ -1256,7 +1256,7 @@ const DIALEGS = {
     }),
 
     portalTornada: E => ({
-        pagines: [{ qui: "", text: "El cercle de bolets de la cabana tremola. Si hi poses els peus, tornaràs al lloc d'on has vingut." }]
+        pagines: [{ qui: "", text: "L'Alzina Buida de la cabana: pel forat del tronc tornaràs al lloc d'on has vingut." }]
     }),
 
     cofreBosc: E => {
