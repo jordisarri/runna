@@ -314,7 +314,7 @@ class ZonaBase extends Phaser.Scene {
         img.escalaBase = img.scaleY;
         // Respiració suau perquè sembli viu
         img.respira = this.tweens.add({ targets: img, scaleY: img.scaleY * 1.02, yoyo: true, repeat: -1, duration: 1100 + Math.random() * 400 });
-        img.punt = this.interactiu(x, y - 10, 85, dialeg, { altura: img.displayHeight + 6 });
+        img.punt = this.interactiu(x, y - 10, opts.radi || 85, dialeg, { altura: img.displayHeight + 6 });
         (this.npcs = this.npcs || {})[key] = img;
         return img;
     }
@@ -404,15 +404,21 @@ class ZonaBase extends Phaser.Scene {
     }
     // L'Ineu alça l'arma que acaba de rebre (sprite mirant amunt), amb un esclat de llum i la fanfara de l'objecte, i torna a la pose normal.
     // ox: on cau el cos de l'Ineu dins el dibuix (l'arma queda a un costat), perquè no salti de lloc en canviar de sprite
+    // L'Ineu canvia a l'sprite d'«aixecar l'objecte» a l'instant (sense saltar ni parpellejar) i hi roman fins que es crida ineuBaixa()
+    // (el diàleg ho fa quan s'avança després del missatge d'obtenció). Continua de seguida (fet).
     ineuAixeca(key, fet, ox = 0.5) {
         const I = this.ineu, esc = (this.textures.get(key).customData || {}).escala || 0.5;
+        if (this.ineuAlt) this.ineuAlt.destroy();
         I.setVisible(false);
-        const alt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(I.depth + 1);
-        this.tweens.add({ targets: alt, y: alt.y - 12, yoyo: true, duration: 240, ease: 'Quad.easeOut' });
-        this.cameras.main.flash(400, 255, 240, 200);
+        this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(I.depth + 1);
         this.llum(I.x - 8, I.y - 190, 0xffe8a0);
         Joc.fanfaraObjecte(this);
-        this.esperar(2000, () => { alt.destroy(); I.setVisible(true); if (fet) fet(); });
+        if (fet) fet();
+    }
+    ineuBaixa(fet) {
+        if (this.ineuAlt) { this.ineuAlt.destroy(); this.ineuAlt = null; }
+        this.ineu.setVisible(true);
+        if (fet) fet();
     }
     // ---- Accions de l'Ineu sobre el punt amb què interactua (this.puntActiu) ----
     // Agafar: l'objecte (o una llum) vola del punt a l'Ineu, que s'ajup
@@ -1094,6 +1100,7 @@ class ZonaBase extends Phaser.Scene {
         let millor = null, millorDist = Infinity;
         for (const p of this.interactius) {
             if (p.actiu && !p.actiu()) continue;
+            if (!p.enTancar) { const d = typeof p.dialeg === 'function' ? p.dialeg(Estat) : p.dialeg; if (d && d.pagines && !d.pagines.length) continue; }     // sense res a dir: no és interactiu
             const dx = p.x - this.ineu.x, dy = p.y - this.ineu.y, d = Math.hypot(dx, dy);
             if (d > p.radi * 0.8 || d >= millorDist) continue;
             if (d > 36 && (dx * dv.x + dy * dv.y) / d < 0.34) continue;          // no el mira

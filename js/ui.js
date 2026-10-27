@@ -377,7 +377,8 @@ class EscenaUI extends Phaser.Scene {
 
     // dialeg = { pagines: [{qui, text}], enAcabar? }
     obrirDialeg(dialeg, enTancar) {
-        if (!dialeg || !dialeg.pagines || !dialeg.pagines.length) return;
+        if (!dialeg || !dialeg.pagines) return;
+        if (!dialeg.pagines.length) { if (dialeg.enAcabar) dialeg.enAcabar(); if (enTancar) enTancar(); return; }    // sense text: només l'efecte
         this.dialeg = { dades: dialeg, pagina: 0, enTancar };
         this.caixa.setVisible(true);
         this.mostrarPagina();
@@ -385,6 +386,13 @@ class EscenaUI extends Phaser.Scene {
 
     mostrarPagina() {
         const p = this.dialeg.dades.pagines[this.dialeg.pagina];
+        // Pàgina d'avís ({ avis: 'Has obtingut...' }): un avís petit a la pantalla (sense caixa de diàleg) i es continua de seguida
+        if (p.avis !== undefined) {
+            this.notifica(p.avis);
+            this.dialeg.pagina++;
+            if (this.dialeg.pagina < this.dialeg.dades.pagines.length) this.mostrarPagina(); else this.tancarDialeg();
+            return;
+        }
         // Pàgina d'acció: no hi ha text, el personatge ho fa (camina, salta, dona una cosa...) i després es continua
         if (p.fer) {
             this.caixa.setVisible(false);

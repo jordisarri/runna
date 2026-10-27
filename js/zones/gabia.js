@@ -797,7 +797,7 @@ class ZonaGabia extends ZonaBase {
             f => z.bombolla('germa_andreu', vist ? 'Una altra vegada?' : 'Mestre! Ja és aquí!', f, 1400),
             f => z.npcSalta('germa_andreu', f, 2),
             f => z.invocarOcellaire(ap, f),
-            f => { Sfx.rugit(); cam.shake(900, 0.008); ui.titolBoss("L'OCELLAIRE", 'Mestre Gaspar'); z.esperar(vist ? 1600 : 2600, f); },
+            f => { Sfx.rugit(); cam.shake(900, 0.008); ui.titolBoss("L'OCELLAIRE", "L'Home de la Gàbia"); z.esperar(vist ? 1600 : 2600, f); },
             ...(vist ? [] : [
                 f => z.bombolla('ocellaire', 'Un nen que riu...', f, 1500),
                 f => z.bombolla('ocellaire', 'El teu riure també serà meu!', f, 1800)

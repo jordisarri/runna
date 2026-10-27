@@ -54,6 +54,9 @@ function completarLliço(nom) {
     if (ui) ui.obrirDialeg({ pagines }, () => E.desar());
 }
 
+// Mides del pergamí de la flauta (a baix de la pantalla; el joc es continua veient a sobre)
+const MUS_W = 680, MUS_H = 370, MUS_T = ALT - 385;
+
 class EscenaMusica extends Phaser.Scene {
     constructor() { super('Musica'); }
 
@@ -67,21 +70,62 @@ class EscenaMusica extends Phaser.Scene {
         this.bloquejat = false;
         this.tancat = false;
 
-        const cx = AMPLE / 2, cy = ALT - 130;
-        this.add.rectangle(cx, ALT - 135, 680, 290, 0x120b06, 0.9).setStrokeStyle(4, 0xd4af37);
-        this.titol = this.add.text(cx, ALT - 262, '', estilText(30, '#ffd34d', { fontStyle: 'bold' })).setOrigin(0.5);
-        this.estat = this.add.text(cx, ALT - 222, '', estilText(24, '#f2e6c8', { fontStyle: 'italic', align: 'center', wordWrap: { width: 640 } })).setOrigin(0.5);
+        const cx = AMPLE / 2, T = MUS_T;
+        const llibre = { fontFamily: FONT_LLIBRE, resolution: 2 };
+        this.panell = this.add.container(0, 30).setAlpha(0);
+        const add = o => { this.panell.add(o); return o; };
 
-        this.botons = [null, 1, 2, 3].map((n, i) => {
+        // Pergamí amb marc de fusta
+        const g = add(this.add.graphics());
+        g.fillStyle(0x000000, 0.35).fillRoundedRect(cx - MUS_W / 2 + 6, T + 10, MUS_W, MUS_H, 22);                    // ombra
+        g.fillStyle(0x4a2c14, 1).fillRoundedRect(cx - MUS_W / 2, T, MUS_W, MUS_H, 22);                                // fusta
+        g.lineStyle(3, 0xd4af37, 0.9).strokeRoundedRect(cx - MUS_W / 2 + 2, T + 2, MUS_W - 4, MUS_H - 4, 21);
+        g.fillStyle(0xe4cf9c, 1).fillRoundedRect(cx - MUS_W / 2 + 14, T + 14, MUS_W - 28, MUS_H - 28, 12);            // paper
+        let s = 11;
+        const r = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+        for (let i = 0; i < 26; i++) {                                                                                 // taques del paper
+            g.fillStyle(r() < 0.5 ? 0xc9a868 : 0xf2e2b0, 0.22).fillCircle(cx - MUS_W / 2 + 30 + r() * (MUS_W - 60), T + 30 + r() * (MUS_H - 60), 12 + r() * 34);
+        }
+        g.lineStyle(2, 0x7a2818, 0.5).strokeRoundedRect(cx - MUS_W / 2 + 24, T + 24, MUS_W - 48, MUS_H - 48, 8);       // filet vermell
+        [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy]) => g.fillStyle(0xd4af37, 1).fillCircle(cx + sx * (MUS_W / 2 - 12), T + (sy < 0 ? 12 : MUS_H - 12), 5));
+
+        this.titol = add(this.add.text(cx, T + 46, '', { fontFamily: FONT_TITOL, fontSize: '28px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5));
+        this.estat = add(this.add.text(cx, T + 86, '', { ...llibre, fontSize: '25px', fontStyle: 'italic', color: '#3a2412', align: 'center', wordWrap: { width: 580 } }).setOrigin(0.5));
+
+        // Fila de notes (es van omplint amb el color de cada nota)
+        const nSlots = llico ? this.melodia.notes.length : 5;
+        this.slots = [];
+        for (let i = 0; i < nSlots; i++) {
+            const x = cx + (i - (nSlots - 1) / 2) * 44, y = T + 128;
+            const ple = add(this.add.circle(x, y, 14, 0x000000, 0.08));
+            const anell = add(this.add.circle(x, y, 14).setStrokeStyle(3, 0x5a3a1a, 0.8));
+            this.slots.push({ ple, anell });
+        }
+
+        // La flauta: una canya amb tres forats, damunt dels botons
+        const fy = T + 168;
+        const fl = add(this.add.graphics());
+        fl.fillStyle(0x6a4a1c, 1).fillRoundedRect(cx - 262, fy - 17, 524, 34, 16);
+        fl.fillStyle(0xd8b866, 1).fillRoundedRect(cx - 258, fy - 13, 516, 26, 13);
+        fl.fillStyle(0xf2dc96, 0.7).fillRoundedRect(cx - 250, fy - 10, 500, 8, 4);                                    // llum a la canya
+        [-150, -60, 40, 150].forEach(x => fl.lineStyle(3, 0x7a5420, 0.9).lineBetween(cx + x, fy - 13, cx + x, fy + 13));   // nusos
+        fl.fillStyle(0x3a2412, 1).fillRoundedRect(cx - 262, fy - 17, 26, 34, 10);                                     // broquet
+        this.botons = [null, 1, 2, 3].map(n => {
             if (!n) return null;
             const x = cx + (n - 2) * 140;
-            const cercle = this.add.circle(x, cy + 10, 52, COLORS_NOTA[n], 0.55).setStrokeStyle(4, 0xffffff, 0.7)
-                .setInteractive({ useHandCursor: true }).on('pointerdown', () => this.nota(n, true));
-            this.add.text(x, cy + 10, String(n), estilText(34, '#ffffff', { fontStyle: 'bold', stroke: '#000', strokeThickness: 5 })).setOrigin(0.5);
-            this.add.text(x, cy - 62, ['', '←', 'ESPAI', '→'][n], estilText(20, '#f2e6c8', { stroke: '#000', strokeThickness: 3 })).setOrigin(0.5);
-            return cercle;
+            const forat = add(this.add.circle(x, fy, 9, 0x2a1608, 1).setStrokeStyle(2, 0x5a3a14, 1));
+            const halo = add(this.add.circle(x, fy, 22, COLORS_NOTA[n], 0).setBlendMode(Phaser.BlendModes.ADD));
+            // Botó: disc de fusta amb una gemma del color de la nota
+            const by = T + 250;
+            const base = add(this.add.circle(x, by, 56, 0x3a2412, 1).setStrokeStyle(4, 0xd4af37, 0.9).setInteractive({ useHandCursor: true }));
+            base.on('pointerdown', () => this.nota(n, true));
+            const gemma = add(this.add.circle(x, by, 46, COLORS_NOTA[n], 0.7));
+            add(this.add.circle(x, by, 46).setStrokeStyle(3, 0x000000, 0.35));
+            add(this.add.ellipse(x - 14, by - 20, 26, 14, 0xffffff, 0.35));                                           // reflex
+            add(this.add.text(x, by + 2, String(n), { fontFamily: FONT_TITOL, fontSize: '40px', fontStyle: 'bold', color: '#ffffff', stroke: '#2a1608', strokeThickness: 6, resolution: 2 }).setOrigin(0.5));
+            add(this.add.text(x, by + 76, ['', '←', 'ESPAI', '→'][n], { ...llibre, fontSize: '20px', color: '#5a3a1a' }).setOrigin(0.5));
+            return { x, by, base, gemma, forat, halo };
         });
-        this.punts = this.add.text(cx, ALT - 52, '', estilText(26, '#ffffff')).setOrigin(0.5);
 
         // Teclat: 1, 2, 3 (o el teclat numèric), o bé ← (nota 1), ESPAI (nota 2) i → (nota 3); també A, W/S i D
         const k = this.input.keyboard;
@@ -91,18 +135,19 @@ class EscenaMusica extends Phaser.Scene {
 
         if (llico) {
             this.titol.setText('Lliçó: ' + this.melodia.nom);
-            this.time.delayedCall(500, () => this.reproduir());
+            this.time.delayedCall(700, () => this.reproduir());
         } else {
             this.titol.setText('La flauta d\'en Mamet');
             this.estat.setText('Toca les notes: 1, 2, 3 (o ← ESPAI →)');
             const sabudes = Object.values(MELODIES).filter(m => Estat.flag(m.flag));
-            this.add.text(cx, ALT - 34, sabudes.length
+            add(this.add.text(cx, T + MUS_H - 38, sabudes.length
                 ? sabudes.map(m => `${m.nom}: ${m.notes.join('-')}`).join('   ·   ')
-                : 'Encara no coneixes cap cant.', estilText(20, '#a89878', { align: 'center', wordWrap: { width: 650 } })).setOrigin(0.5);
-            this.add.text(cx + 330, ALT - 262, 'Guardar ✕', estilText(24, '#f2e6c8', { backgroundColor: '#1a120bcc', padding: { x: 8, y: 4 } }))
-                .setOrigin(1, 0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => this.tancar(false));
+                : 'Encara no coneixes cap cant.', { ...llibre, fontSize: '19px', fontStyle: 'italic', color: '#6a4a28', align: 'center', wordWrap: { width: 600 } }).setOrigin(0.5));
+            add(this.add.text(cx + MUS_W / 2 - 34, T + 40, '✕', { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#6a1f12', padding: { x: 8, y: 4 }, resolution: 2 })
+                .setOrigin(0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => this.tancar(false)));
             this.lastTime = 0;
         }
+        this.tweens.add({ targets: this.panell, alpha: 1, y: 0, duration: 350, ease: 'Sine.easeOut' });
     }
 
     // ---- So i imatge de cada nota ----
@@ -119,22 +164,51 @@ class EscenaMusica extends Phaser.Scene {
         o.start(); o.stop(ctx.currentTime + 0.6);
     }
 
+    // La gemma s'encén i rebota, el forat de la flauta brilla, una ona surt del botó i una nota musical puja
     llum(n) {
-        const b = this.botons[n];
+        const b = this.botons[n], color = COLORS_NOTA[n];
         this.so(n);
-        b.setFillStyle(COLORS_NOTA[n], 1).setScale(1.12);
-        this.time.delayedCall(260, () => { if (b.active) b.setFillStyle(COLORS_NOTA[n], 0.55).setScale(1); });
+        b.gemma.setFillStyle(color, 1);
+        this.tweens.add({ targets: [b.base, b.gemma], scale: { from: 1.14, to: 1 }, duration: 260, ease: 'Back.easeOut' });
+        this.time.delayedCall(280, () => { if (b.gemma.active) b.gemma.setFillStyle(color, 0.7); });
+        b.forat.setFillStyle(color, 1);
+        b.halo.setAlpha(0.85);
+        this.tweens.add({ targets: b.halo, alpha: 0, scale: { from: 1, to: 1.8 }, duration: 520 });
+        this.time.delayedCall(320, () => { if (b.forat.active) b.forat.setFillStyle(0x2a1608, 1); });
+        const ona = this.add.circle(b.x, b.by, 56).setStrokeStyle(4, color, 0.9);
+        this.panell.add(ona);
+        this.tweens.add({ targets: ona, scale: 1.7, alpha: 0, duration: 520, onComplete: () => ona.destroy() });
+        const nota = this.add.text(b.x + Phaser.Math.Between(-14, 14), b.by - 66, ['♪', '♫'][Phaser.Math.Between(0, 1)],
+            { fontFamily: 'Georgia, serif', fontSize: '34px', color: '#' + color.toString(16).padStart(6, '0'), stroke: '#2a1608', strokeThickness: 4, resolution: 2 }).setOrigin(0.5);
+        this.panell.add(nota);
+        this.tweens.add({ targets: nota, y: nota.y - 150, x: nota.x + Phaser.Math.Between(-30, 30), alpha: 0, angle: Phaser.Math.Between(-18, 18), duration: 1100, ease: 'Sine.easeOut', onComplete: () => nota.destroy() });
+    }
+
+    // Fila de notes: omple cada casella amb el color de la nota tocada (en mode lliure, les últimes cinc)
+    pintaSlots(notes) {
+        const vistes = notes.slice(-this.slots.length);
+        this.slots.forEach((sl, i) => {
+            const n = vistes[i];
+            sl.ple.setFillStyle(n ? COLORS_NOTA[n] : 0x000000, n ? 1 : 0.08);
+            sl.anell.setStrokeStyle(3, n ? 0x3a2412 : 0x5a3a1a, n ? 1 : 0.8);
+            if (n) this.tweens.add({ targets: [sl.ple, sl.anell], scale: { from: 1.35, to: 1 }, duration: 220, ease: 'Back.easeOut' });
+        });
+    }
+    flaixSlots(color) {
+        this.slots.forEach(sl => { sl.ple.setFillStyle(color, 1); this.tweens.add({ targets: [sl.ple, sl.anell], scale: { from: 1.25, to: 1 }, duration: 300, ease: 'Back.easeOut' }); });
     }
 
     // ---- Lliçó: la Pianista toca i l'Ineu repeteix ----
     reproduir() {
         this.bloquejat = true;
         this.entrada = [];
-        this.punts.setText('');
+        this.pintaSlots([]);
         this.estat.setText('Escolta la Pianista...');
-        this.melodia.notes.forEach((n, i) => this.time.delayedCall(i * 650, () => this.llum(n)));
+        this.melodia.notes.forEach((n, i) => this.time.delayedCall(i * 650, () => { this.llum(n); this.pintaSlots(this.melodia.notes.slice(0, i + 1)); }));
         this.time.delayedCall(this.melodia.notes.length * 650 + 300, () => {
             this.bloquejat = false;
+            this.entrada = [];
+            this.pintaSlots([]);
             this.estat.setText('Ara tu! Repeteix les notes: 1, 2, 3 (o ← ESPAI →).');
         });
     }
@@ -143,16 +217,18 @@ class EscenaMusica extends Phaser.Scene {
         if (this.bloquejat || this.tancat) return;
         this.llum(n);
         this.entrada.push(n);
-        this.punts.setText(this.entrada.map(x => '●').join(' '));
 
         if (this.llico) {
+            this.pintaSlots(this.entrada);
             const i = this.entrada.length - 1;
             if (this.melodia.notes[i] !== n) {
                 this.bloquejat = true;
+                this.flaixSlots(0xb03030);
                 this.estat.setText('Això no era... torna a escoltar.');
                 this.time.delayedCall(1000, () => this.reproduir());
             } else if (this.entrada.length === this.melodia.notes.length) {
                 this.bloquejat = true;
+                this.flaixSlots(0xe8c040);
                 this.estat.setText('Perfecte!');
                 this.time.delayedCall(900, () => this.tancar(true));
             }
@@ -163,12 +239,13 @@ class EscenaMusica extends Phaser.Scene {
         const ara = this.time.now;
         if (ara - this.lastTime > 3500) this.entrada = [n];
         this.lastTime = ara;
-        this.punts.setText(this.entrada.map(() => '●').join(' '));
+        this.pintaSlots(this.entrada);
         for (const [clau, m] of Object.entries(MELODIES)) {
             if (!Estat.flag(m.flag)) continue;
             const l = m.notes.length, fi = this.entrada.slice(-l);
             if (fi.length === l && fi.every((x, i) => x === m.notes[i])) {
                 this.bloquejat = true;
+                this.flaixSlots(0xe8c040);
                 this.estat.setText('♪ ' + m.nom);
                 this.time.delayedCall(700, () => this.tancar(false, clau));
                 return;
