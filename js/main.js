@@ -2,6 +2,59 @@
  * MAIN: configuració del joc, càrrega, pantalla de títol i pròleg.
  * Afegeix ?debug a l'adreça per veure les caixes de col·lisió (vermell) i sortides (blau).
  */
+// Una cançó de fons en streaming: un <audio> que passa pel context d'àudio de Phaser (el volum es porta amb un GainNode, que també va a l'iPhone).
+// Phaser descodifica les cançons senceres a memòria (unes 4 cançons = ~280 MB) i el mòbil acabava tancant la pestanya.
+class MusicaStream {
+    constructor(fitxer, volum, seek = 0) {
+        this.volum = volum; this.destruida = false; this.gest = null;
+        const a = this.el = new Audio();
+        a.loop = true; a.preload = 'auto';
+        a.src = encodeURI(`assets/musica/${fitxer}.m4a`);
+        if (seek) a.addEventListener('loadedmetadata', () => { try { a.currentTime = seek; } catch (e) {} }, { once: true });
+        const ctx = game.sound && game.sound.context;
+        if (ctx) {
+            try {
+                this.gain = ctx.createGain(); this.gain.gain.value = volum;
+                ctx.createMediaElementSource(a).connect(this.gain); this.gain.connect(ctx.destination);
+            } catch (e) { this.gain = null; }
+        }
+        if (!this.gain) a.volume = Math.min(1, volum);
+        this.engega();
+    }
+    get volume() { return this.volum; }
+    get isPlaying() { return !this.destruida; }
+    setVolume(v) {
+        this.volum = v;
+        if (this.gain) this.gain.gain.value = v; else this.el.volume = Math.min(1, Math.max(0, v));
+    }
+    // El navegador no deixa sonar fins que l'usuari toca alguna cosa: s'hi torna a provar al primer toc o tecla
+    engega() {
+        if (this.destruida) return;
+        const ctx = this.gain && this.gain.context;
+        if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
+        const p = this.el.play();
+        if (p && p.catch) p.catch(() => this.esperaGest());
+    }
+    esperaGest() {
+        if (this.gest || this.destruida) return;
+        const evs = ['pointerdown', 'touchend', 'mousedown', 'keydown'];
+        this.gest = () => { evs.forEach(e => window.removeEventListener(e, this.gest, true)); this.gest = null; this.engega(); };
+        evs.forEach(e => window.addEventListener(e, this.gest, true));
+    }
+    pausa() { if (!this.destruida) this.el.pause(); }
+    destroy() {
+        if (this.destruida) return;
+        this.destruida = true;
+        if (this.gest) ['pointerdown', 'touchend', 'mousedown', 'keydown'].forEach(e => window.removeEventListener(e, this.gest, true));
+        this.el.pause(); this.el.removeAttribute('src'); this.el.load();       // allibera el que s'ha baixat
+        try { if (this.gain) this.gain.disconnect(); } catch (e) {}
+    }
+}
+document.addEventListener('visibilitychange', () => {       // amb la pestanya amagada la música no ha de seguir baixant ni sonant
+    const m = Joc.musica;
+    if (m && m.pausa) { if (document.hidden) m.pausa(); else m.engega(); }
+});
+
 const Joc = {
     debug: new URLSearchParams(location.search).has('debug'),
     ZONES: ['ZonaPlaca', 'ZonaEsglesia', 'ZonaMonestir', 'ZonaCreu', 'ZonaCasaGran', 'ZonaRuines', 'ZonaCellerFora', 'ZonaPingpong',
@@ -109,14 +162,8 @@ const Joc = {
         scene.load.audio(clau, encodeURI(`assets/musica/${fitxer}.m4a`));
     },
 
-    precarregarMusiques(scene) {
-        Object.keys(Joc.FITXERS_MUSICA).forEach(clau => Joc.carregarMusica(scene, clau));
-        scene.load.start();
-        Joc.detectarMusica().then(() => {             // les opcionals que existeixin també es baixen en segon pla
-            Object.keys(Joc.MUSICA_OPCIONAL).filter(k => Joc.musicaDisponible.has(k)).forEach(k => Joc.carregarMusica(scene, k));
-            scene.load.start();
-        });
-    },
+    // Les cançons de fons van en streaming (MusicaStream); només les peces curtes (jingles) passen per Phaser
+    precarregarMusiques() {},
 
     iniciarMusica(scene, seek = 0, clau = 'musica_intro') {
         if (Joc.MUSICA_OPCIONAL[clau] && !Joc.musicaDeteccio) {           // encara no sabem quins fitxers hi ha: s'espera un instant
@@ -125,20 +172,13 @@ const Joc = {
             return;
         }
         clau = Joc.resoldreMusica(clau);
-        if (!scene.cache.audio.exists(clau)) {
-            // Encara no s'ha baixat: es carrega ara i sona en acabar, si la zona encara la vol
-            Joc.musicaPendent = clau;
-            scene.load.once('filecomplete-audio-' + clau, () => { if (Joc.musicaPendent === clau) Joc.iniciarMusica(scene, seek, clau); });
-            Joc.carregarMusica(scene, clau);
-            scene.load.start();
-            return;
-        }
         Joc.musicaPendent = null;
         if (Joc.musica && Joc.musicaClau === clau && Joc.musica.isPlaying) { Joc.musica.setVolume(0.6); return; }
+        const fitxer = Joc.FITXERS_MUSICA[clau] || (Joc.MUSICA_OPCIONAL[clau] && Joc.MUSICA_OPCIONAL[clau].fitxer);
         Joc.aturarMusica();
+        if (!fitxer) return;
         Joc.musicaClau = clau;
-        Joc.musica = scene.sound.add(clau, { loop: true, volume: 0.6 });
-        Joc.musica.play({ seek }); // si el navegador encara no deixa sonar, Phaser l'engega al primer clic/tecla
+        Joc.musica = new MusicaStream(fitxer, 0.6, seek);       // en streaming: no es carrega a memòria
     },
 
     // Cada zona demana la seva música; els interiors queden en silenci
@@ -193,7 +233,6 @@ class EscenaCarrega extends Phaser.Scene {
         this.load.on('fileprogress', f => detall.setText(f.key));
         this.load.on('loaderror', f => console.warn("No s'ha pogut carregar", f.key));
         Grafics.carregar(this);
-        Joc.carregarMusica(this, 'musica_intro');
         // Vídeos de la intro (sense el seu so: sona la música del joc)
         this.load.video('video_intro', 'assets/video/intro_runna_vertical.mp4', true);
         this.load.video('video_bucle', 'assets/video/intro_runna_bucle_vertical.mp4', true);
@@ -261,10 +300,15 @@ class EscenaProleg extends Phaser.Scene {
         this.index++;
         if (this.index >= PROLEG_QUADRES.length) return this.acabar();
         const q = PROLEG_QUADRES[this.index];
-        if (this.quadre) { const vell = this.quadre; this.tweens.add({ targets: vell, alpha: 0, duration: 600, onComplete: () => vell.destroy() }); }
+        if (this.quadre) {
+            const vell = this.quadre, clauVella = 'proleg_' + PROLEG_QUADRES[this.index - 1].dibuix;
+            this.tweens.add({ targets: vell, alpha: 0, duration: 600, onComplete: () => { vell.destroy(); Grafics.descarta(this.textures, clauVella); } });
+        }
         this.quadre = this.add.container(0, 0).setAlpha(0);
         this['dibuix_' + q.dibuix](this.quadre);
         this.tweens.add({ targets: this.quadre, alpha: 1, duration: 900 });
+        const seg = PROLEG_QUADRES[this.index + 1];             // el quadre següent es dibuixa mentre es llegeix aquest (només n'hi ha dos a memòria)
+        if (seg) this.time.delayedCall(1500, () => { if (!this.acabat) this.textures.get('proleg_' + seg.dibuix); });
         this.punts.setText(PROLEG_QUADRES.map((_, i) => i === this.index ? '●' : '○').join('  '));
         // Text lletra a lletra
         this.complet = q.text; let n = 0;

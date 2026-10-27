@@ -22,7 +22,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+    <!-- Phaser va amb el joc (així no depèn de cap servidor extern); si el fitxer local fallés, es prova el CDN -->
+    <script src="js/lib/phaser.min.js?v=3.80.1"></script>
+    <script>if (typeof Phaser === 'undefined') document.write('<script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"><\/script>');</script>
 </head>
 <body>
     <pre id="errors" style="position:fixed;left:0;right:0;bottom:0;margin:0;padding:8px;max-height:40%;overflow:auto;background:#300;color:#fcc;font:12px monospace;z-index:9;display:none"></pre>
@@ -52,10 +54,10 @@
     <script src="js/dibuixos_casa.js?v=1793103306"></script>
     <script src="js/dibuixos_proleg.js?v=1793103653"></script>
     <script src="js/dibuixos_pingpong.js?v=1793106839"></script>
-    <script src="js/assets.js?v=1793107842"></script>
+    <script src="js/assets.js?v=1793109276"></script>
     <script src="js/dialegs.js?v=1793107149"></script>
     <script src="js/ui.js?v=1793103306"></script>
-    <script src="js/zona_base.js?v=1793107149"></script>
+    <script src="js/zona_base.js?v=1793109276"></script>
     <script src="js/atac_arma.js?v=4"></script>
     <script src="js/combat.js?v=1793100169"></script>
     <script src="js/musica.js?v=1793103306"></script>
@@ -80,7 +82,7 @@
     <script src="js/zones/cela.js?v=1792962159"></script>
     <script src="js/diari.js?v=1793104030"></script>
     <script src="js/mapa.js?v=1793100200"></script>
-    <script src="js/intro.js?v=1794100009"></script>
-    <script src="js/main.js?v=1793107149"></script>
+    <script src="js/intro.js?v=1793109276"></script>
+    <script src="js/main.js?v=1793109276"></script>
 </body>
 </html>

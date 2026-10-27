@@ -212,4 +212,5 @@ fragment del Cant de l'Aurora a la flauta. Si és una peça diferent de la resta
 - En obrir la gàbia (Cant del Miracle) arrenca `epileg` i **no es reinicia** en canviar al Santuari: és una sola peça contínua.
 - `credits` sona a la pantalla de crèdits; en tornar al joc, cada zona torna a la seva música.
 - `jingle_runna` sona un cop a l'inici de la cinemàtica del Dolmen, per sobre de la música de zona.
+- Les cançons de fons (bucles) **van en streaming** (no es carreguen senceres a memòria: al mòbil, 4 cançons descodificades eren ~280 MB). Per això el `.m4a` ha de tenir l'índex al principi: `ffmpeg -i x.m4a -c copy -movflags +faststart y.m4a` (`eines/comprimir_media.sh` ja ho fa). Els `jingle_*`, que són curts, es descodifiquen normalment.
 - `jingle_objecte` sona quan l'Ineu alça el bastó o la branca; la música de zona baixa de volum uns segons i després torna.

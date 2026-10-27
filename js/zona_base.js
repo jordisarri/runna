@@ -61,11 +61,13 @@ class ZonaBase extends Phaser.Scene {
         this.preparaTweens();
         this.portesInt = [];
         this.portesAnim = [];
+        Grafics.epoca++;
         this.construir();
         this.obrirPortes();
         this.ampliarSud();
         this.construirCamins();
         this.crearIneu();
+        Grafics.alliberar(this.textures, this.scene.key);      // fora les textures grans de la zona anterior (vegeu Grafics, a assets.js)
 
         const cam = this.cameras.main;
         cam.setViewport(0, ALT_HUD, AMPLE, ALT - ALT_HUD);   // la franja de dalt és per al HUD: no s'hi dibuixa escenari

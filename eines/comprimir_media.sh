@@ -14,6 +14,6 @@ done
 for m in assets/musica/*.mp3; do
     [ -f "$m" ] || continue
     nom=$(basename "$m" .mp3)
-    ffmpeg -v error -y -i "$m" -vn -c:a aac -b:a 96k "assets/musica/$nom.m4a" && mv "$m" "art/musica/$nom.mp3"
+    ffmpeg -v error -y -i "$m" -vn -c:a aac -b:a 96k -movflags +faststart "assets/musica/$nom.m4a" && mv "$m" "art/musica/$nom.mp3"
 done
 ls -la assets/video assets/musica

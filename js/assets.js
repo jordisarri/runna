@@ -200,6 +200,69 @@ const Grafics = {
         });
     },
 
+    // ---- MEMÒRIA ----
+    // Un fons gran descodificat ocupa 10-16 MB (i la mateixa quantitat a la targeta gràfica). Tots junts passaven dels 300 MB i el mòbil
+    // tancava la pestanya (el joc "es reiniciava"). Les textures grans es construeixen la primera vegada que algú les demana
+    // (textures.get) i, en entrar a una zona, s'alliberen les que aquella zona no ha fet servir.
+    perezosos: {},          // clau → { construir(tm) }
+    usos: {},               // clau → època de l'última petició
+    epoca: 0,               // puja cada cop que s'entra a una zona
+    ocupat: false,          // mentre és true, els ganxos no fan res (les pròpies operacions no s'han de reconstruir)
+    MIDA_GRAN: 2.5 * 1048576,
+
+    fesPerezos(tm, item, img) {
+        const cru = item.cru || /\.webp$/.test(item.file);       // els WebP ja venen nets i retallats (eines/convertir_webp.js)
+        Grafics.ocupat = true;
+        try { if (tm.list[item.key]) tm.remove(item.key); } finally { Grafics.ocupat = false; }
+        Grafics.perezosos[item.key] = { construir: t => {
+            t.addImage(item.key, img);
+            if (cru) t.list[item.key].customData.escala = item.amplada / img.width;
+            else Grafics.netejarPNG({ textures: t }, item);
+        } };
+    },
+
+    instalarPerezosos() {
+        const TM = Phaser.Textures.TextureManager.prototype;
+        if (TM.__perezosos) return;
+        TM.__perezosos = true;
+        const get = TM.get, exists = TM.exists, getFrame = TM.getFrame;
+        TM.get = function (key) {
+            if (!Grafics.ocupat && Grafics.perezosos[key]) {
+                Grafics.usos[key] = Grafics.epoca;
+                if (!this.list[key]) Grafics.construir(this, key);
+            }
+            return get.apply(this, arguments);
+        };
+        TM.exists = function (key) { return (!Grafics.ocupat && !!Grafics.perezosos[key]) || exists.apply(this, arguments); };
+        TM.getFrame = function (key) {
+            if (!Grafics.ocupat && Grafics.perezosos[key]) this.get(key);
+            return getFrame.apply(this, arguments);
+        };
+    },
+
+    construir(tm, key) {
+        Grafics.ocupat = true;
+        try { Grafics.perezosos[key].construir(tm); } finally { Grafics.ocupat = false; }
+    },
+
+    // Treu una textura de la memòria (i buida el seu canvas perquè el navegador recuperi la memòria de seguida)
+    descarta(tm, key) {
+        const t = tm.list[key];
+        if (!t) return;
+        const src = t.source && t.source[0], cv = src && src.isCanvas ? src.image : null;
+        Grafics.ocupat = true;
+        try { tm.remove(key); } finally { Grafics.ocupat = false; }
+        if (cv) { cv.width = 0; cv.height = 0; }
+    },
+
+    // En entrar a una zona (ja construïda): fora les textures grans que no ha demanat, i els camins de les altres zones
+    alliberar(tm, zona) {
+        Object.keys(tm.list).forEach(k => {
+            if (Grafics.perezosos[k] && Grafics.usos[k] !== Grafics.epoca) Grafics.descarta(tm, k);
+            else if (k.startsWith('camins_') && !k.startsWith('camins_' + zona + '_')) Grafics.descarta(tm, k);
+        });
+    },
+
     // Processa tots els PNG carregats i crea marcadors/textures generades
     preparar(scene) {
         CATALEG.forEach(item => {
@@ -210,11 +273,19 @@ const Grafics = {
                 Grafics.faltants = Grafics.faltants.filter(k => k !== item.key);
             }
             const existeix = scene.textures.exists(item.key) && !Grafics.faltants.includes(item.key);
+            if (existeix && !item.fotogrames) {                  // les imatges grans només es construeixen quan una zona les fa servir
+                const img = scene.textures.get(item.key).getSourceImage();
+                if (img.width * img.height * 4 >= Grafics.MIDA_GRAN) { Grafics.fesPerezos(scene.textures, item, img); return; }
+            }
             if (existeix && item.cru) scene.textures.get(item.key).customData.escala = item.amplada / scene.textures.get(item.key).getSourceImage().width;      // sense treure el fons
             else if (existeix) Grafics.netejarPNG(scene, item);
-            else Grafics.crearProvisional(scene, item);
+            else if (item.amplada * RES >= 1400) {                // marcador gran (l'art encara no hi és): també a demanda
+                Grafics.perezosos[item.key] = { construir: t => Grafics.crearProvisional({ textures: t }, item) };
+                Grafics.ocupat = true; try { if (scene.textures.list[item.key]) scene.textures.remove(item.key); } finally { Grafics.ocupat = false; }
+            } else Grafics.crearProvisional(scene, item);
         });
         Grafics.texturesGenerades(scene);
+        Grafics.instalarPerezosos();
         Grafics.perfilIneu(scene);
         Grafics.atacsVista = new Set(DIRS_INEU.filter(d => scene.textures.exists('ineu_atac_' + d) && !Grafics.faltants.includes('ineu_atac_' + d)));
         Grafics.animacions(scene);
@@ -408,14 +479,23 @@ const Grafics = {
     // Textures que sempre es generen per codi (terra, boira, etc.)
     texturesGenerades(scene) {
         const crea = (key, w, h, dibuix) => {
-            const canvas = document.createElement('canvas');
-            canvas.width = w * RES; canvas.height = h * RES;
-            const ctx = canvas.getContext('2d');
-            ctx.scale(RES, RES);
-            dibuix(ctx, w, h);
+            const construir = tm => {
+                const canvas = document.createElement('canvas');
+                canvas.width = w * RES; canvas.height = h * RES;
+                const ctx = canvas.getContext('2d');
+                ctx.scale(RES, RES);
+                dibuix(ctx, w, h);
+                tm.addCanvas(key, canvas);
+                tm.list[key].customData.escala = 1 / RES;
+            };
+            if (w * h * RES * RES * 4 >= Grafics.MIDA_GRAN) {       // gran: es dibuixa quan una zona (o el pròleg) la demana
+                Grafics.ocupat = true;
+                try { if (scene.textures.list[key]) scene.textures.remove(key); } finally { Grafics.ocupat = false; }
+                Grafics.perezosos[key] = { construir };
+                return;
+            }
             if (scene.textures.exists(key)) scene.textures.remove(key);
-            scene.textures.addCanvas(key, canvas);
-            scene.textures.get(key).customData.escala = 1 / RES;
+            construir(scene.textures);
         };
 
         crea('herba', 256, 256, (ctx, w, h) => textureHerba(ctx, w, h, PALETA_HERBA, 11));
