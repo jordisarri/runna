@@ -54,12 +54,13 @@ const CATALEG = [
     { key: 'judit',     file: 'assets/personatges/judit.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d09a3a', cabell: '#6a3a1e', dona: true, alt: 0.92 }) },
     { key: 'daniel_t',  file: 'assets/personatges/daniel_t.png',  amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a5a8a', cabell: '#2a2a2a', alt: 1.02, ample: 1.05 }) },
     { key: 'turbo',     file: 'assets/personatges/turbo.png',     amplada: 80,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e05a2a', cabell: '#3b2a1e', alt: 0.7, cap: 17 }) },
-    { key: 'juli',      file: 'assets/personatges/juli.png',      amplada: 92,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'juli') },
-    { key: 'frederic',  file: 'assets/personatges/frederic.png',  amplada: 100,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'frederic') },
+    { key: 'juli',      file: 'assets/personatges/juli.webp',      amplada: 72, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'juli') },
+    { key: 'frederic',  file: 'assets/personatges/frederic.webp',  amplada: 68, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'frederic') },
     { key: 'eloi',      file: 'assets/personatges/eloi.png',      amplada: 104, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'eloi') },
-    { key: 'josep',     file: 'assets/personatges/josep.png',     amplada: 98,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },
+    { key: 'josep',     file: 'assets/personatges/josep.webp',     amplada: 66, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },
+    { key: 'josep_levita', file: 'assets/personatges/josep_levita.webp', amplada: 156, cru: true, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },   // en Josep levitant amb la pala (minijoc de ping-pong)
     { key: 'garf',      file: 'assets/personatges/garf.png',      amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#d9b45a', alt: 0.92, ample: 1.35, cap: 17 }) },
-    { key: 'isidre',    file: 'assets/personatges/isidre.png',    amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { isidre: true, calb: true, roba: '#f4f1e8', cabell: '#000000', alt: 0.94 }) },
+    { key: 'isidre',    file: 'assets/personatges/isidre.webp',    amplada: 85, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { isidre: true, calb: true, roba: '#f4f1e8', cabell: '#000000', alt: 0.94 }) },
     { key: 'jordi_caseta', file: 'assets/personatges/jordi_caseta.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a7a3a', cabell: '#4a3a2a', alt: 0.97, extra: 'gorra' }) },
     { key: 'sansa',     file: 'assets/personatges/sansa.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
     { key: 'ciscu',     file: 'assets/personatges/ciscu.png',     amplada: 80,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#c8a040', cabell: '#5a3a1e', alt: 0.74, cap: 17, extra: 'gorra' }) },
@@ -752,9 +753,6 @@ const Grafics = {
             ctx.beginPath(); ctx.ellipse(29, 19, 15, 7, 0, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.ellipse(29, 19, 7, 3.4, 0, 0, Math.PI * 2); ctx.stroke();
         });
         // En Josep al partit de ping-pong: el cos i el cap sense braços (els braços i la pala són a part i es mouen)
-        crea('josep_maniga', 28, 40, pintarManigaJosep); crea('josep_man', 20, 18, pintarManTancadaJosep);
-        crea('josep_man_oberta', 20, 22, pintarManObertaJosep); crea('josep_pala', 28, 71, pintarPalaJosep);
-        crea('josep_pp', 98, 149, (ctx, w) => { ctx.scale(w / 100, w / 100); PP_FN.josep(ctx, 100, 152, { senseBraços: true }); });
         // Biblioteca del Monestir (js/dibuixos_biblio.js)
         [['prestatge_a', 162, 4, 3], ['prestatge_b', 212, 4, 11], ['prestatge_c', 162, 4, 17]].forEach(([k, w, files, llavor]) => crea(k, w, 202, (ctx, w2, h2) => pintarPrestatgeBiblio(ctx, w2, h2, files, llavor)));
         [['prestatge_l1', 132, 31], ['prestatge_l2', 132, 37], ['prestatge_l3', 162, 41], ['prestatge_l4', 132, 43], ['prestatge_l5', 132, 47], ['prestatge_l6', 162, 53]].forEach(([k, w, llavor]) => crea(k, w, 170, (ctx, w2, h2) => pintarPrestatgeBiblio(ctx, w2, h2, 3, llavor)));
