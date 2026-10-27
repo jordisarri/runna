@@ -225,10 +225,14 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         if (!Estat.flag('refetorObert')) {
             this.taulaPorta = this.posar('taula', 600, 232, { escala: 1.5, col: { w: 150, h: 36 } });
             this.colTaula = this.obstacles.getChildren()[this.obstacles.getChildren().length - 1];
-            this.interactiu(600, 262, 90, DIALEGS.taulaRefetor, { altura: 100, actiu: () => !Estat.flag('refetorObert'), enTancar: () => { if (Estat.te('guants')) this.empenyTaula(); } });
+            this.obstacles.remove(this.colTaula);          // el bloqueig de la taula té el seu propi col·lisionador, que avisa quan l'Ineu hi empeny
+            // Entre la taula i la paret no s'hi pot passar: només es pot obrir la porta empenyent la taula des d'un costat
+            this.colDarrereTaula = this.colisio(600, 182, 200, 30);
+            this.empentaMs = 0; this.contacteTaula = 0; this.costatTaula = 1; this.pistaTaula = false;
         }
-        // Bloqueig de la capella (porta de la dreta): dues mates d'esbarzers negres
+        // Bloqueig de la capella (porta de la dreta): dues mates d'esbarzers negres, i un mur invisible al darrere perquè no es pugui vorejar
         this.esbarzer(880, 215, 'host_cap1'); this.esbarzer(924, 215, 'host_cap2');
+        this.colCapella = this.colisio(902, 190, 190, 50);
         this.interactiu(900, 255, 90, DIALEGS.esbarzersCapella, { altura: 90, actiu: () => this.esbarzers.some(o => o.viu) });
 
         // Escala que baixa al soterrani, arraconada a baix a l'esquerra, entre la paret i una barana de fusta:
@@ -258,13 +262,36 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.1).setDepth(80000);
     }
 
-    empenyTaula() {
+    enEntrar() {
+        if (this.taulaPorta) this.colliderTaula = this.physics.add.collider(this.ineu, this.colTaula, (ineu, t) => { this.contacteTaula = this.time.now; this.costatTaula = ineu.x < t.x ? 1 : -1; });
+    }
+
+    // L'Ineu empeny la taula si és a un costat i avança contra ella; amb els Guants de Poder es mou
+    actualitzar(ara, delta) {
+        if (this.colCapella && this.esbarzers.every(o => !o.viu)) { this.obstacles.remove(this.colCapella, true, true); this.colCapella = null; }
+        if (!this.taulaPorta || Estat.flag('refetorObert')) return;
+        const ui = this.ui(), c = this.cursors, t = this.tecles;
+        const dirX = (c.right.isDown || t.D.isDown ? 1 : 0) - (c.left.isDown || t.A.isDown ? 1 : 0) || Math.sign(ui.vectorTactil.x > 0.3 ? 1 : ui.vectorTactil.x < -0.3 ? -1 : 0);
+        const toca = this.time.now - this.contacteTaula < 120 && Math.abs(this.ineu.x - this.taulaPorta.x) > 70 && dirX === this.costatTaula;
+        this.empentaMs = toca ? this.empentaMs + delta : 0;
+        if (this.empentaMs < 600) return;
+        this.empentaMs = 0;
+        if (!Estat.te('guants')) {
+            if (!this.pistaTaula) { this.pistaTaula = true; this.missatge('Una taula de roure massissa barra la porta del mig. Des de l\'altra banda, una veu fina i enrabiada colpeja la fusta. Pesa massa: calen unes mans més fortes.'); }
+            return;
+        }
+        this.empenyTaula(this.costatTaula);
+    }
+
+    empenyTaula(dir = 1) {
         if (Estat.flag('refetorObert') || !this.taulaPorta) return;
         Estat.posaFlag('refetorObert');
-        this.obstacles.remove(this.colTaula, true, true);
+        if (this.colliderTaula) this.colliderTaula.destroy();
+        this.colTaula.destroy();
+        if (this.colDarrereTaula) { this.obstacles.remove(this.colDarrereTaula, true, true); this.colDarrereTaula = null; }
         Sfx.secret();
         this.cameras.main.shake(300, 0.003);
-        this.tweens.add({ targets: this.taulaPorta, x: 800, duration: 1400, ease: 'Sine.easeInOut', onComplete: () => Estat.desar() });
+        this.tweens.add({ targets: this.taulaPorta, x: this.taulaPorta.x + dir * 200, duration: 1400, ease: 'Sine.easeInOut', onComplete: () => Estat.desar() });
     }
 
     descans() {

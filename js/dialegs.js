@@ -36,11 +36,11 @@ function objectiuSopar(E) {
 function premiMonja(nom, flag) {
     const E = Estat;
     E.posaFlag(flag);
-    E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
     const ui = game.scene.getScene('UI');
-    if (ui) { ui.actualitzarHUD(); ui.notifica('+1 gra al rosari: ' + nom); }
     if (E.flag('premiPains') && E.flag('premiPhili') && E.flag('premiCharm')) {
         E.posaFlag('mongesTrobades');
+        E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;      // un sol gra pel conjunt de les tres germanes
+        if (ui) { ui.actualitzarHUD(); ui.notifica('+1 gra al rosari: les tres germanes'); }
         E.posaObjectiu("Les tres sacerdotesses són lliures i han obert la porta de l'Hostatgeria per dins: hi ha un lloc de repòs al vestíbul.");
     } else {
         const f = ['Pains', 'Phili', 'Charm'].filter(n => !E.flag('premi' + n));
@@ -360,14 +360,14 @@ const DIALEGS = {
         pagines: [
             { qui: 'Frederic', text: "Ei, noi. Veig que portes una espasa que no és de ferro. Això canvia el que et volia dir." },
             { qui: 'Frederic', text: "Aquest lloc es diu el Celler per alguna cosa: era el celler de la Casa Gran, la casa vella dels monjos. Els monjos hi van fer un túnel que va a la casa sense que ningú el vegi." },
-            { qui: 'Frederic', text: "Aquella roda de carruatge no és decoració: al darrere hi ha un túnel que va a la Casa Gran. Però pesa com un carro ple, i amb els braços sols no la mouràs." },
-            { qui: 'Frederic', text: E.te("guants") ? "Aquests guants que portes... són els dels picapedrers dels monjos! Amb això, empeny-la des d'un costat, caminant-hi en contra." : "El Germà Francesc, del Monestir, que passeja cada dia per Sant Antoni, guarda els guants dels picapedrers dels monjos. Amb ells, la roda cediria." },
+            { qui: 'Frederic', text: "Aquella roda de carruatge no és decoració: tapa l'entrada d'aquest túnel. Però dins el camí és ofegat per un mur d'esbarzers negres, d'aquells de punxes violeta." },
+            { qui: 'Frederic', text: "Amb una espasa així, sí que hi passaràs: Runna els talla, i res més no ho fa. Entra-hi i obre't camí fins a la Casa Gran." },
             { qui: 'Frederic', text: "Allà baix hi ha una clau de ferro que els monjos van perdre fa segles: la de la porta de ferro de sota la Taverna. Fes-ne bon ús." }
         ],
         enAcabar: () => {
             E.posaFlag("fredericRoda");
-            E.posaObjectiu(E.te("guants") ? "Empeny la roda de carruatge del Celler (al Pati del Celler, entre la Plaça i les Runes): amaga un passadís cap a la Casa Gran."
-                                          : "Demana els guants dels picapedrers al Germà Francesc (passeja per Sant Antoni, a llevant del Monestir) i empeny la roda del Celler.");
+            E.posaObjectiu(E.te("guants") ? "Empeny la roda de carruatge del Celler (al Pati del Celler, entre la Plaça i les Runes) i, dins el passadís, talla els esbarzers negres amb Runna."
+                                          : "Demana els guants dels picapedrers al Germà Francesc (passeja per Sant Antoni, a llevant del Monestir), empeny la roda del Celler i talla amb Runna els esbarzers del passadís.");
         }
     } : ({
         pagines: [
@@ -820,6 +820,16 @@ const DIALEGS = {
                 enAcabar: () => { E.dona("flors_isidre"); E.posaFlag("floresIsidre"); objectiuSopar(E); }
             };
         }
+        if (E.flag('mongesTrobades') && !E.flag('isidreSap')) {
+            return {
+                pagines: [
+                    { qui: 'Isidre', text: 'He sentit com s\'obria la porta de l\'Hostatgeria. Són elles, oi? La Pains, la Phili, la Charm... les germanes de la meva dona.' },
+                    { qui: 'Isidre', text: 'Tres nits tancades a vint passes de mi, i jo aquí amb les flors, sense saber-ne res. Ella em deia sempre: «cuida-les, que elles no saben cuidar-se».' },
+                    { qui: 'Isidre', text: 'I el Sardin... el nostre Sardin. Té set anys, monjo. Cada tarda s\'enfilava a la prunera i es manxava de prunes fins a no poder dir ni mu. Si el trobes, digues-li que el seu pare no ha deixat de regar la prunera.' }
+                ],
+                enAcabar: () => E.posaFlag('isidreSap')
+            };
+        }
         if (E.flag('llosaOberta')) {
             return { pagines: [{ qui: 'Isidre', text: 'La flor de lluna ja ha florit sobre la llosa. Em fa mal el peu, però no deixaré de cuidar-la.' }] };
         }
@@ -836,7 +846,8 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: 'Isidre', text: 'Bon dia, monjo! Perdona que no m\'aixequi: el peu, ja saps. Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l\'Hostatgeria, aquí al costat, que s\'hi aguanta al darrere.' },
-                { qui: 'Isidre', text: 'Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s\'obre amb una flor de lluna, i la llavor, ves a saber... potser la tingui la venedora de verdura, la Sansa.' }
+                { qui: 'Isidre', text: 'Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s\'obre amb una flor de lluna, i la llavor, ves a saber... potser la tingui la venedora de verdura, la Sansa.' },
+                { qui: 'Isidre', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí era del meu fill, el Sardin. Des que la boira se\'l va endur, el cuido perquè, quan torni, ho trobi tot tal com ho va deixar.' }
             ],
             enAcabar: () => { E.posaFlag('isidreSansa'); E.posaObjectiu('Busca la Sansa, la venedora de verdura: potser té una Llavor de Lluna per a la llosa del jardí.'); }
         };
@@ -857,7 +868,7 @@ const DIALEGS = {
     prunera: E => {
         const pagines = [
             { qui: '', text: 'A l\'extrem de ponent del jardí, una prunera vella i retorçuda, carregada de prunes daurades que lluen com si fossin d\'or.' },
-            { qui: 'Isidre', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou.' },
+            { qui: 'Isidre', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardin en menjava deu cada tarda i no n\'hi tenia mai prou...' },
             { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xffd060), c => z.beure(c, 0xffd060)], fet) },
         ];
         const perFont = !E.flag('fontNeta') && !E.te('pruna') && !E.flag('herba3');
@@ -901,6 +912,7 @@ const DIALEGS = {
             pagines: [
                 { qui: 'Pains', text: 'Oh, mon petit! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Pains.' },
                 { qui: 'Pains', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb abric d\'ocells que s\'enduia els nens del poble, rient baixet.' },
+                { qui: 'Pains', text: 'Si passes pel jardí, saluda l\'Isidre, el marit de la nostra germana. Un bon home, amb el peu malmès i el cor més malmès encara des que ens va faltar el petit.' },
                 { qui: 'Pains', text: 'Pren això, fill. El rosari d\'aquesta casa és vell i fort: que et doni una mica de la seva claror.' }
             ],
             enAcabar: () => premiMonja('Pains', 'premiPains')
@@ -912,6 +924,7 @@ const DIALEGS = {
             pagines: [
                 { qui: 'Phili', text: 'Per fi! Tres nits que colpejo aquesta porta! Soc la Phili, i no, no m\'he estat quieta ni un minut.' },
                 { qui: 'Phili', text: 'T\'ho dic perquè ho vaig veure: el Germà Andreu, el de la pilota, baixava a la Taverna cada nit, al soterrani, amb una clau petita i rovellada. Mai no li he cregut el somriure.' },
+                { qui: 'Phili', text: 'I si veus el Sardin, el meu nebot... digues-li que la tieta Phili ha après a no cridar tant. Només una mica.' },
                 { qui: 'Phili', text: 'Aquí tens, per les molèsties. Que no se t\'acabin les forces!' }
             ],
             enAcabar: () => premiMonja('Phili', 'premiPhili')
@@ -922,7 +935,7 @@ const DIALEGS = {
         if (!E.flag('premiCharm')) return {
             pagines: [
                 { qui: 'Charm', text: 'Benvingut, fill de Déu. Sóc la Charm, la gran sacerdotessa d\'aquesta casa. Havíem perdut l\'esperança, però no la pregària.' },
-                { qui: 'Charm', text: 'El nostre nebot, el Sardin, passava aquí la tardor amb nosaltres. La nit que la boira ens va tancar a les cambres, el seu llit va quedar buit. Porta\'l a casa, fill. Porta\'ls a tots.' },
+                { qui: 'Charm', text: 'El nostre nebot, el Sardin, el fill de la nostra germana i de l\'Isidre, el jardiner d\'aquí al costat, passava aquí la tardor amb nosaltres. La nit que la boira ens va tancar a les cambres, el seu llit va quedar buit. Porta\'l a casa, fill: a ell, i a tots els altres.' },
                 { qui: 'Charm', text: 'Als llibres d\'aquesta casa he llegit que l\'Ocellaire va robar el cant dels ocells, i que només aquest mateix cant obre la seva gàbia. Tu l\'aprendràs: la Pianista el recorda.' },
                 { qui: 'Charm', text: 'Accepta el que podem donar: una mica de la nostra paciència.' }
             ],
@@ -1041,12 +1054,11 @@ const DIALEGS = {
             { fer: (z, fet) => z.fullaCau(fet) },
             { qui: "", text: "Has obtingut la FULLA DEL TIL·LER!" },
             { fer: (z, fet) => { ['sopar_pastor_a', 'sopar_pastor_b', 'sopar_pastor_vell'].forEach(k => z.bombolla(k, '♪', null, 1400)); z.esperar(1500, fet); } },
-            { qui: "", text: "Des del Santuari, molt lluny, arriba una nota d'orgue que, per primer cop en dies, no s'apaga.\n+1 gra al rosari, i el rosari torna a brillar sencer." }
+            { qui: "", text: "Des del Santuari, molt lluny, arriba una nota d'orgue que, per primer cop en dies, no s'apaga." }
         ],
         enAcabar: () => {
             E.dona("fulla_tiler"); E.posaFlag("fullaTiler"); E.posaFlag("soparFet");
             E.treu("pa_pastor");
-            E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
             E.posaObjectiu("Tens la Fulla del Til·ler. Ara falten el Saber del Pare Alcuí i la Benedicció, i trobar Runna al sud-est.");
             const z = game.scene.getScene("ZonaTiller");
             if (z && z.acabarSopar) z.acabarSopar();
