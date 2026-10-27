@@ -1179,6 +1179,10 @@ class ZonaBase extends Phaser.Scene {
         if (!tancades.length) return;
         const obj = [];
         tancades.forEach((s, i) => {
+            // Paret invisible davant de la sortida (no hi arriba): en obrir-se el camí, desapareix amb la boira
+            const r = s.r;
+            const vert = r.width < r.height, ox = vert ? Math.sign(this.config.amplada / 2 - r.centerX) * 30 : 0, oy = vert ? 0 : Math.sign(this.config.alcada / 2 - r.centerY) * 30;
+            obj.push(this.colisio(r.centerX + ox, r.centerY + oy, r.width + (vert ? 70 : 24), r.height + (vert ? 24 : 70)));       // s'estén cap a dins de l'escena
             const cx = s.r.centerX, cy = s.r.centerY, w = Math.max(s.r.width, 170), h = Math.max(s.r.height, 170);
             const f = this.boira(cx, cy, w, h, 5).setDepth(6000);
             obj.push(f);
@@ -1191,28 +1195,12 @@ class ZonaBase extends Phaser.Scene {
         const vig = this.time.addEvent({ delay: 400, loop: true, callback: () => {
             if (!this.iniciObert()) return;
             vig.remove();
-            obj.forEach(o => { if (o.stop) o.stop(); this.tweens.add({ targets: o, alpha: 0, duration: 1600, onComplete: () => o.destroy() }); });
+            obj.forEach(o => {
+                if (o.type === 'Zone') { o.destroy(); return; }                      // les parets invisibles, de seguida
+                if (o.stop) o.stop();
+                this.tweens.add({ targets: o, alpha: 0, duration: 1600, onComplete: () => o.destroy() });
+            });
         } });
-    }
-
-    // L'Ineu toca una sortida tancada: una frase breu i un pas enrere
-    tancaPas(s) {
-        const ara = this.time.now;
-        if (ara < (this.tancaFins || 0)) return;
-        this.tancaFins = ara + 2600;
-        const I = this.ineu, W = this.config.amplada, H = this.config.alcada;
-        const diu = () => this.bombolla('ineu', !Estat.flag('clauerNovici') ? 'Primer he de veure el Pare Jordi.' : 'Abans, el Germà Andreu té un bastó per a mi.', null, 2200);
-        const a0 = Math.atan2(H / 2 - I.y, W / 2 - I.x);
-        for (const gir of [0, 0.5, -0.5, 1, -1]) {
-            const x = I.x + Math.cos(a0 + gir) * 90, y = I.y + Math.sin(a0 + gir) * 90;
-            if (this.llocLliure(x, y) && y > TOPE_Y + 8 && !this.sortides.some(r => Phaser.Geom.Rectangle.Contains(Phaser.Geom.Rectangle.Inflate(Phaser.Geom.Rectangle.Clone(r.r), 20, 20), x, y))) {
-                I.body.setVelocity(0);
-                this.canviant = true;
-                this.tweens.add({ targets: I, x, y, duration: 220, ease: 'Sine.easeOut', onComplete: () => { I.body.reset(I.x, I.y); this.canviant = false; diu(); } });
-                return;
-            }
-        }
-        diu();
     }
 
     comprovarSortides() {
@@ -1220,7 +1208,7 @@ class ZonaBase extends Phaser.Scene {
         const peus = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
         for (const s of this.sortides) {
             if (s.peu ? s.r.contains(b.center.x, b.bottom) : Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r)) {
-                if (this.sortidaTancada(s)) { this.tancaPas(s); return; }
+                if (this.sortidaTancada(s)) continue;                    // tancada per la boira: no és una sortida (a més, una paret invisible no hi deixa arribar)
                 if (s.baixar !== undefined) this.baixarEscala(s);
                 else this.canviarZona(s.desti, s.entrada);
                 return;
