@@ -57,7 +57,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pare Jordi", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
-                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: l'Uri i el Flam, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardin, el nebot de les sacerdotesses de l'Hostatgeria." },
+                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: l'Huri i el Flami, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el nebot de les sacerdotesses de l'Hostatgeria." },
                     { qui: "Pare Jordi", text: "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada... i, diu la Neus, un piular d'ocells que no se sap d'on ve." },
                     { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot. Ves amb compte pels camins, Ineu." }
                 ],
@@ -412,7 +412,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: "Neus", text: "Ineu, fill, no t'hi quedis plantat! L'Uri i el Flam dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!" },
+                { qui: "Neus", text: "Ineu, fill, no t'hi quedis plantat! L'Huri i el Flami dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!" },
                 { qui: "Senyor Moliner", text: "Neus, deixa'l respirar..." },
                 { qui: "Neus", text: "Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls." }
             ],
@@ -432,10 +432,10 @@ const DIALEGS = {
     yordi: E => ({ pagines: [{ qui: 'Yordi', text: 'Hola, Ineu! Si veus la meva germana Judit, digues-li que em deu un gelat.' }] }),
     judit: E => ({ pagines: [{ qui: 'Judit', text: 'Bon dia! Jo no li dec cap gelat a en Yordi. Que ho sàpigues.' }] }),
     danielT: E => ({ pagines: [
-        { qui: 'Daniel', text: 'Ineu... L\'Uri, el nen de la porta de la dreta, va ser el primer. Fa tres nits el seu llit era buit i la finestra, tancada per dins. Ell no sortia mai sol de nit: li feia por la fosca.' },
-        { qui: 'Daniel', text: 'La nit següent va ser el Flam, el de la porta de l\'esquerra. Jo em quedo amb el Turbo, el meu nebot: no el deixo sortir d\'aquí.' }
+        { qui: 'Daniel', text: 'Ineu... L\'Huri, el nen de la porta de la dreta, va ser el primer. Fa tres nits el seu llit era buit i la finestra, tancada per dins. Ell no sortia mai sol de nit: li feia por la fosca.' },
+        { qui: 'Daniel', text: 'La nit següent va ser el Flami, el de la porta de l\'esquerra. Jo em quedo amb el Turbo, el meu nebot: no el deixo sortir d\'aquí.' }
     ] }),
-    turbo: E => ({ pagines: [{ qui: 'Turbo', text: 'L\'Uri em va dir que els ocells de nit canten el seu nom. Jo no els he sentit mai. Però jo corro més que tu!' }] }),
+    turbo: E => ({ pagines: [{ qui: 'Turbo', text: 'L\'Huri em va dir que els ocells de nit canten el seu nom. Jo no els he sentit mai. Però jo corro més que tu!' }] }),
 
     tiller: E => {
         if (E.te("basto") && !E.flag("tutorialCombat")) { E.posaFlag("tutorialCombat"); E.posaFlag("combatActiu"); }   // partides velles
@@ -790,7 +790,7 @@ const DIALEGS = {
                 pagines: [
                     { qui: 'Isidre', text: 'He sentit com s\'obria la porta de l\'Hostatgeria. Són elles, oi? La Pains, la Phili, la Charm... les germanes de la meva dona.' },
                     { qui: 'Isidre', text: 'Tres nits tancades a vint passes de mi, i jo aquí amb les flors, sense saber-ne res. Ella em deia sempre: «cuida-les, que elles no saben cuidar-se».' },
-                    { qui: 'Isidre', text: 'I el Sardin... el nostre Sardin. Té set anys, monjo. Cada tarda s\'enfilava a la prunera i es manxava de prunes fins a no poder dir ni mu. Si el trobes, digues-li que el seu pare no ha deixat de regar la prunera.' }
+                    { qui: 'Isidre', text: 'I el Sardi... el nostre Sardi. Té set anys, monjo. Cada tarda s\'enfilava a la prunera i es manxava de prunes fins a no poder dir ni mu. Si el trobes, digues-li que el seu pare no ha deixat de regar la prunera.' }
                 ],
                 enAcabar: () => E.posaFlag('isidreSap')
             };
@@ -812,7 +812,7 @@ const DIALEGS = {
             pagines: [
                 { qui: 'Isidre', text: 'Bon dia, monjo! Perdona que no m\'aixequi: el peu, ja saps. Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l\'Hostatgeria, aquí al costat, que s\'hi aguanta al darrere.' },
                 { qui: 'Isidre', text: 'Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s\'obre amb una flor de lluna, i la llavor, ves a saber... potser la tingui la venedora de verdura, la Sansa.' },
-                { qui: 'Isidre', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí era del meu fill, el Sardin. Des que la boira se\'l va endur, el cuido perquè, quan torni, ho trobi tot tal com ho va deixar.' }
+                { qui: 'Isidre', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí era del meu fill, el Sardi. Des que la boira se\'l va endur, el cuido perquè, quan torni, ho trobi tot tal com ho va deixar.' }
             ],
             enAcabar: () => { E.posaFlag('isidreSansa'); E.posaObjectiu('Busca la Sansa, la venedora de verdura: potser té una Llavor de Lluna per a la llosa del jardí.'); }
         };
@@ -833,7 +833,7 @@ const DIALEGS = {
     prunera: E => {
         const pagines = [
             { qui: '', text: 'A l\'extrem de ponent del jardí, una prunera vella i retorçuda, carregada de prunes daurades que lluen com si fossin d\'or.' },
-            { qui: 'Isidre', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardin en menjava deu cada tarda i no n\'hi tenia mai prou...' },
+            { qui: 'Isidre', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardi en menjava deu cada tarda i no n\'hi tenia mai prou...' },
             { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xffd060), c => z.beure(c, 0xffd060)], fet) },
         ];
         const perFont = !E.flag('fontNeta') && !E.te('pruna') && !E.flag('herba3');
@@ -889,7 +889,7 @@ const DIALEGS = {
             pagines: [
                 { qui: 'Phili', text: 'Per fi! Tres nits que colpejo aquesta porta! Soc la Phili, i no, no m\'he estat quieta ni un minut.' },
                 { qui: 'Phili', text: 'T\'ho dic perquè ho vaig veure: el Germà Andreu, el de la pilota, baixava a la Taverna cada nit, al soterrani, amb una clau petita i rovellada. Mai no li he cregut el somriure.' },
-                { qui: 'Phili', text: 'I si veus el Sardin, el meu nebot... digues-li que la tieta Phili ha après a no cridar tant. Només una mica.' },
+                { qui: 'Phili', text: 'I si veus el Sardi, el meu nebot... digues-li que la tieta Phili ha après a no cridar tant. Només una mica.' },
                 { qui: 'Phili', text: 'Aquí tens, per les molèsties. Que no se t\'acabin les forces!' }
             ],
             enAcabar: () => premiMonja('Phili', 'premiPhili')
@@ -900,7 +900,7 @@ const DIALEGS = {
         if (!E.flag('premiCharm')) return {
             pagines: [
                 { qui: 'Charm', text: 'Benvingut, fill de Déu. Sóc la Charm, la gran sacerdotessa d\'aquesta casa. Havíem perdut l\'esperança, però no la pregària.' },
-                { qui: 'Charm', text: 'El nostre nebot, el Sardin, el fill de la nostra germana i de l\'Isidre, el jardiner d\'aquí al costat, passava aquí la tardor amb nosaltres. La nit que la boira ens va tancar a les cambres, el seu llit va quedar buit. Porta\'l a casa, fill: a ell, i a tots els altres.' },
+                { qui: 'Charm', text: 'El nostre nebot, el Sardi, el fill de la nostra germana i de l\'Isidre, el jardiner d\'aquí al costat, passava aquí la tardor amb nosaltres. La nit que la boira ens va tancar a les cambres, el seu llit va quedar buit. Porta\'l a casa, fill: a ell, i a tots els altres.' },
                 { qui: 'Charm', text: 'Als llibres d\'aquesta casa he llegit que l\'Ocellaire va robar el cant dels ocells, i que només aquest mateix cant obre la seva gàbia. Tu l\'aprendràs: la Pianista el recorda.' },
                 { qui: 'Charm', text: 'Accepta el que podem donar: una mica de la nostra paciència.' }
             ],
@@ -1032,7 +1032,7 @@ const DIALEGS = {
 
     espelmesTiller: E => ({
         pagines: [
-            { qui: "", text: "Quatre espelmes que no s'han apagat des del sopar, vora les arrels del Til·ler: per a l'Uri, per al Flam, per al Sardin... i una de més, per qui no té nom." },
+            { qui: "", text: "Quatre espelmes que no s'han apagat des del sopar, vora les arrels del Til·ler: per a l'Huri, per al Flami, per al Sardi... i una de més, per qui no té nom." },
             ...(E.flag("rescatUri") && E.flag("rescatFlam") && E.flag("rescatSardin") ? [{ qui: "", text: "Les tres primeres s'han apagat soles, i fa olor de cera tèbia i de rialles." }] : [])
         ]
     }),

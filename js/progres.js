@@ -123,7 +123,7 @@ const PROGRES = {
         { id: 'gabia', marca: ['gabiaOberta'], fet: E => E.flag('gabiaOberta'),
           pista: E => "L'Ocellaire ha caigut. Davant dels barrots de la gàbia, toca el Cant del Miracle (1-3-2-3-1)." },
         { id: 'nens', marca: ['rescatUri', 'rescatFlam', 'rescatSardin'], fet: E => E.flag('rescatUri') && E.flag('rescatFlam') && E.flag('rescatSardin'),
-          pista: E => "La gàbia és oberta. Trenca amb Runna els capolls de boira on dormen l'Uri, el Flam i el Sardin." },
+          pista: E => "La gàbia és oberta. Trenca amb Runna els capolls de boira on dormen l'Huri, el Flami i el Sardi." },
         { id: 'final', marca: ['andreuTancat', 'epilegFet'], fet: E => E.flag('epilegFet'),
           pista: E => E.flag('andreuTancat') ? "Els nens tornen a riure. Al Santuari t'esperen tots."
               : "Els tres nens són lliures. Torna a la Sala de la Gàbia: encara t'esperen allà." }
@@ -132,7 +132,7 @@ const PROGRES = {
     // Missions laterals: no barren el camí. Les Tietes les recorden quan ja s'han pogut començar.
     laterals: [
         { id: 'taverna', marca: ['tavernaOberta', 'evaParlat'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('evaParlat'),
-          pista: E => "El Sardin berenava cada tarda a la Taverna amb l'Eva. La porta és tancada, però truca: potser l'Eva et deixa entrar." },
+          pista: E => "El Sardi berenava cada tarda a la Taverna amb l'Eva. La porta és tancada, però truca: potser l'Eva et deixa entrar." },
         { id: 'rellotge', marca: ['rellotgeReparat'], obert: E => E.flag('rellotgeDit'), fet: E => E.flag('rellotgeReparat'),
           pista: E => "El rellotge del campanar s'ha aturat a les tres i quart. Al Santuari, la porta de la dreta del retaule és oberta: puja per la torre fins a la Sala del Rellotge. Allà, una nota clavada a la paret diu en quin ordre van els engranatges." },
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),

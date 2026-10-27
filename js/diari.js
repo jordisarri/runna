@@ -242,7 +242,7 @@ const DIARI = {
         // Nens rescatats
         y = this.titol(ui, c, X, y, 'Els nens');
         const colNens = AV >= 520, ampleNen = (AV - 2 * X - 20) / 3;
-        [['Uri', 'rescatUri'], ['Flam', 'rescatFlam'], ['Sardin', 'rescatSardin']].forEach(([n, f], i) => {
+        [['Huri', 'rescatUri'], ['Flami', 'rescatFlam'], ['Sardi', 'rescatSardin']].forEach(([n, f], i) => {
             const ok = E.flag(f), x = colNens ? X + 20 + i * ampleNen : X + 20, yy = colNens ? y : y + i * 48;
             c.add(ui.add.circle(x + 18, yy + 20, 18, ok ? 0x3a7a3a : 0x8a5a2a, ok ? 0.9 : 0.25).setStrokeStyle(2, 0x3a2412, 0.6));
             c.add(ui.add.text(x + 18, yy + 20, ok ? '✓' : '?', estilText(23, ok ? '#ffffff' : TINTA_SUAU, { fontStyle: 'bold' })).setOrigin(0.5));

@@ -27,7 +27,7 @@ Object.assign(DIALEGS, {
                 { qui: 'Eva', text: 'Des d\'aquí dins no s\'hi pot baixar: el soterrani només té aquella porta de fora. I a baix, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Sota terra, Ineu. Ocells.' },
                 { qui: 'Eva', text: 'I el Siscu, el fill de la Carmen, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
                 { qui: 'Eva', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
-                { qui: 'Eva', text: 'El Sardin hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve.' },
+                { qui: 'Eva', text: 'El Sardi hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve.' },
             ],
             enAcabar: () => { E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La porta de ferro del darrere de la Taverna (per fora) baixa al soterrani: la Clau de ferro l\'obre.' : E.dades.objectiu); }
         };

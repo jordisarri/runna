@@ -9,7 +9,7 @@ const CREDITS = [
     ['', 40],
     ['PERSONATGES', 28, '#ffe08a'],
     ["L'Ineu, novici", 24], ['El Pare Jordi', 24], ['El Germà Andreu', 24], ["L'Ocellaire, l'Home de la Gàbia", 24],
-    ["L'Uri, el Flam i el Sardin", 24], ['La Pianista', 24], ['El Pare Daniel i el Pare Alcuí', 24], ['El Germà Francesc', 24],
+    ["L'Huri, el Flami i el Sardi", 24], ['La Pianista', 24], ['El Pare Daniel i el Pare Alcuí', 24], ['El Germà Francesc', 24],
     ['Les sacerdotesses Pains, Phili i Charm', 24], ['Les Venerables Sàvies', 24], ['El Frederic, en Josep i el Garf', 24], ["L'Isidre, la Jaumeta i la Sansa", 24],
     ['El Siscu i la Carmen', 24], ["L'Eva de la Taverna", 24], ['En Jordi de la Caseta', 24], ["L'ombra del monjo", 24],
     ['', 40],

@@ -83,7 +83,7 @@ Object.assign(DIALEGS, {
         { qui: '', text: "Els barrots encara fumegen. Dins la gàbia, els tres capolls de boira respiren a poc a poc." },
         { qui: 'Ineu', text: "(Ara. El Cant del Miracle: 1-3-2-3-1.)" }
     ] : [
-        { qui: '', text: "Una gàbia d'ocell gegant, de barrots negres retorçats. A dins, tres capolls de boira lila suren a mig aire: l'Uri, el Flam i el Sardin." },
+        { qui: '', text: "Una gàbia d'ocell gegant, de barrots negres retorçats. A dins, tres capolls de boira lila suren a mig aire: l'Huri, el Flami i el Sardi." },
         { qui: 'Ineu', text: "(Els barrots no tenen pany. Només un cant els pot obrir: el Cant del Miracle.)" }
     ] }),
     capoll: nom => E => ({ pagines: [{ qui: '', text: `Dins del capoll lila, ${nom} dorm arraulit.` }] }),
@@ -95,9 +95,9 @@ Object.assign(DIALEGS, {
     ] }),
     gentEpileg: E => ({ pagines: [{ qui: '', text: "Avui tothom canta, encara que l'orgue faci una nota de pega." }] }),
     nenGabia: nom => E => ({ pagines: [{ qui: nom, text: {
-        Uri: "Ineu! Somiava que era un ocell dins d'una gàbia... i ara tinc unes ganes de riure!",
-        Flam: "On és l'home dels ocells? L'has fet fugir tu? Ha ha ha! Quina cara que feia!",
-        Sardin: "Les tietes deuen estar fent un sidral... Anem a casa, Ineu?"
+        Huri: "Ineu! Somiava que era un ocell dins d'una gàbia... i ara tinc unes ganes de riure!",
+        Flami: "On és l'home dels ocells? L'has fet fugir tu? Ha ha ha! Quina cara que feia!",
+        Sardi: "Les tietes deuen estar fent un sidral... Anem a casa, Ineu?"
     }[nom] }] })
 });
 
@@ -407,9 +407,9 @@ class ZonaTortura extends ZonaBase {
 // La gàbia és al fons d'una plataforma gran voltada per un avenc. Al davant hi ha l'espai del combat final.
 const GABIA = { x: 900, y: 720, platW: 900, platH: 600, avenc: 130 };
 const NENS_GABIA = [
-    { id: 'Uri', key: 'nen_uri', nom: "l'Uri", flag: 'rescatUri', dx: -80 },
-    { id: 'Flam', key: 'nen_flam', nom: 'el Flam', flag: 'rescatFlam', dx: 0 },
-    { id: 'Sardin', key: 'nen_sardin', nom: 'el Sardin', flag: 'rescatSardin', dx: 80 }
+    { id: 'Huri', key: 'nen_uri', nom: "l'Huri", flag: 'rescatUri', dx: -80 },
+    { id: 'Flami', key: 'nen_flam', nom: 'el Flami', flag: 'rescatFlam', dx: 0 },
+    { id: 'Sardi', key: 'nen_sardin', nom: 'el Sardi', flag: 'rescatSardin', dx: 80 }
 ];
 
 class ZonaGabia extends ZonaBase {

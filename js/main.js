@@ -265,7 +265,7 @@ const PROLEG_QUADRES = [
     { text: "Fa tres-cents anys, un firaire pujava cada primavera al Miracle amb gàbies plenes d'ocells que cantaven com persones: l'Ocellaire.\nEls nens que l'escoltaven es quedaven sense riure.", dibuix: 'ocellaire', vitrall: [0.515, 0.50, 1.95] },
     { text: "Els pastors de la Cirosa i els monjos el van tancar dins la seva pròpia gàbia, sota terra. Un monjo va segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la va deixar dormint entre pedres.", dibuix: 'segell', vitrall: [0.515, 0.50, 1.95] },
     { text: "Ara, fa tres nits, una boira freda i lila surt de sota terra. Marceix els horts, entela l'aigua i fa callar l'orgue del Santuari.", dibuix: 'boira', vitrall: [0.513, 0.497, 1.95] },
-    { text: "I cada nit falta un nen.\nL'Uri i el Flam, de Sant Benet.\nI aquesta nit... el Sardin, el nebot de les sacerdotesses.", dibuix: 'nens', vitrall: [0.51, 0.4475, 1.6] },
+    { text: "I cada nit falta un nen.\nL'Huri i el Flami, de Sant Benet.\nI aquesta nit... el Sardi, el nebot de les sacerdotesses.", dibuix: 'nens', vitrall: [0.51, 0.4475, 1.6] },
     { text: "Matí. Al Monestir, l'Ineu, el monjo més jove, es desperta.\nEl Pare Jordi el busca a la Plaça.", dibuix: 'mati', vitrall: [0.50, 0.48, 1.45] }
 ];
 
@@ -485,7 +485,7 @@ class EscenaProleg extends Phaser.Scene {
     // 4. Tres finestres que s'apaguen i l'ombra que s'endú un nen cap a la Taverna
     dibuix_nens(c) {
         this.fons(c, 'proleg_nens');
-        const cases = [[40, 741, 200, 230, 'Uri'], [270, 722, 190, 250, 'Flam'], [490, 741, 200, 230, 'Sardin']];
+        const cases = [[40, 741, 200, 230, 'Huri'], [270, 722, 190, 250, 'Flami'], [490, 741, 200, 230, 'Sardi']];
         cases.forEach(([x, y, w, h, nom], i) => {
             const f = this.add.rectangle(x + w * 0.29, y - h * 0.57, w * 0.26 - 4, h * 0.3 - 4, 0xffc860, 1); c.add(f);
             const llum = this.add.circle(x + w * 0.29, y - h * 0.57, 60, 0xffc860, 0.18).setBlendMode(Phaser.BlendModes.ADD); c.add(llum);
