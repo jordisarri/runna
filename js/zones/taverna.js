@@ -3,7 +3,7 @@
  * La Carmen (mandrosa) dorm darrere el taulell; l'Eva (amiga fidel) obre la porta a l'Ineu i li explica què passa de nit.
  * Des de dins NO es pot baixar al soterrani: s'hi entra per la porta de ferro exterior, al darrere de la Taverna (la que fa servir
  * el Germà Andreu cada nit), que s'obre amb la Clau de ferro. Al soterrani, una segona porta de ferro, de pany petit, baixa a la
- * Sala de les Gírgoles: l'obre la clau rovellada que el Ciscu va trobar (al Germà Andreu li va caure).
+ * Sala de les Gírgoles: l'obre la clau rovellada que el Siscu va trobar (al Germà Andreu li va caure).
  */
 
 Object.assign(DIALEGS, {
@@ -24,7 +24,7 @@ Object.assign(DIALEGS, {
         { qui: 'Carmen', text: 'Ves, ves. I si baixes, tanca la porta, que fa corrent.' }
     ] : [
         { qui: '', text: 'La Carmen ronca, asseguda darrere el taulell, amb els peus sobre una caixa de gasoses i el davantal per mocador.' },
-        { qui: 'Carmen', text: E.flag('ciscuTrobat') ? '...Zzz... Ciscu... frega els gots... i deixa les cartes de l\'avi... Zzz...' : '...Zzz... Avui no servim... Ni demà... Ni passat... Zzz...' }
+        { qui: 'Carmen', text: E.flag('ciscuTrobat') ? '...Zzz... Siscu... frega els gots... i deixa les cartes de l\'avi... Zzz...' : '...Zzz... Avui no servim... Ni demà... Ni passat... Zzz...' }
     ] }),
 
     eva: E => {
@@ -33,7 +33,7 @@ Object.assign(DIALEGS, {
                 { qui: 'Eva', text: 'Sóc l\'Eva. Ajudo la Carmen... bé, faig la feina de la Carmen. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
                 { qui: 'Eva', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Andreu pica tres cops a la porta de ferro de fora, la del darrere de la Taverna, i la porta s\'obre sola. Baixa al soterrani. Diu que va a buscar vi. Mai no puja amb cap ampolla.' },
                 { qui: 'Eva', text: 'Des d\'aquí dins no s\'hi pot baixar: el soterrani només té aquella porta de fora. I a baix, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Sota terra, Ineu. Ocells.' },
-                { qui: 'Eva', text: 'I el Ciscu, el fill de la Carmen, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
+                { qui: 'Eva', text: 'I el Siscu, el fill de la Carmen, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
                 { qui: 'Eva', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
                 { qui: 'Eva', text: 'El Sardin hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve.' },
             ],
@@ -69,7 +69,7 @@ Object.assign(DIALEGS, {
     portaFerro: E => {
         if (E.flag('portaFerroOberta')) return { pagines: [{ qui: '', text: "La porta de ferro, oberta de bat a bat. Una escala humida baixa cap a la foscor, i d'allà puja olor de bolets i de terra mullada." }] };
         if (E.te('clau_girgoles')) return { pagines: [
-            { qui: '', text: 'La clau rovellada del Ciscu gira al pany petit. La porta s\'obre i, molt avall, se senten ocells.' },
+            { qui: '', text: 'La clau rovellada del Siscu gira al pany petit. La porta s\'obre i, molt avall, se senten ocells.' },
             { qui: 'Ineu', text: E.flag('cantMiracle') ? '(Tinc Runna i el Cant del Miracle. Endavant.)' : '(La Pianista em va dir que els barrots de la gàbia només escolten el Cant del Miracle. Potser hauria d\'anar-la a veure abans de baixar gaire.)' }
         ] };
         return { pagines: [

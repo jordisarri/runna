@@ -615,7 +615,7 @@ class ZonaCabanaCami extends ZonaBase {
         this.posar('taula', 450, 470, { col: { w: 160, h: 30 } });
         this.posar('tamboret', 340, 505, { col: { w: 40, h: 16 } });
         this.posar('tamboret', 565, 505, { col: { w: 40, h: 16 } });
-        // El solitari del Ciscu, estirat sobre la taula, i el Ciscu (el fill de la Carmen) al costat
+        // El solitari del Siscu, estirat sobre la taula, i el Siscu (el fill de la Carmen) al costat
         const cartes = this.add.graphics().setDepth(480);
         for (let c = 0; c < 7; c++) for (let f = 0; f <= Math.min(c, 3); f++) {
             const x = 386 + c * 19, y = 418 + f * 7, tapada = f < Math.min(c, 3);

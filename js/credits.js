@@ -11,7 +11,7 @@ const CREDITS = [
     ["L'Ineu, novici", 24], ['El Pare Jordi', 24], ['El Germà Andreu', 24], ["Mestre Gaspar l'Ocellaire", 24],
     ["L'Uri, el Flam i el Sardin", 24], ['La Pianista', 24], ['El Pare Daniel i el Pare Alcuí', 24], ['El Germà Francesc', 24],
     ['Les sacerdotesses Pains, Phili i Charm', 24], ['Les Tietes', 24], ['El Frederic, en Josep i el Garf', 24], ["L'Isidre, la Jaumeta i la Sansa", 24],
-    ['El Ciscu i la Carmen', 24], ["L'Eva de la Taverna", 24], ['En Jordi de la Caseta', 24], ["L'ombra del monjo", 24],
+    ['El Siscu i la Carmen', 24], ["L'Eva de la Taverna", 24], ['En Jordi de la Caseta', 24], ["L'ombra del monjo", 24],
     ['', 40],
     ['GRÀCIES PER JUGAR', 30, '#ffe08a'],
     ['', 20],

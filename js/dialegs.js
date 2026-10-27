@@ -175,29 +175,29 @@ const DIALEGS = {
         };
     },
 
-    // El Ciscu, el fill de la Carmen, s'ha escapat a la cabana amagada a jugar al solitari
+    // El Siscu, el fill de la Carmen, s'ha escapat a la cabana amagada a jugar al solitari
     ciscu: E => {
-        // La clau rovellada: al Germà Andreu li va caure a la porta de ferro, i el Ciscu se la va quedar
+        // La clau rovellada: al Germà Andreu li va caure a la porta de ferro, i el Siscu se la va quedar
         const clau = [
-            { qui: 'Ciscu', text: 'I mira què vaig trobar: una nit, al Germà Andreu li va caure aquesta clau davant la porta de ferro, i no se n\'adonà. És petita i rovellada. Me la vaig quedar per jugar a pirates.' },
-            { qui: 'Ciscu', text: 'Té, a tu et servirà més que a mi. Però no diguis a la mare que jo era a fora de nit!' },
+            { qui: 'Siscu', text: 'I mira què vaig trobar: una nit, al Germà Andreu li va caure aquesta clau davant la porta de ferro, i no se n\'adonà. És petita i rovellada. Me la vaig quedar per jugar a pirates.' },
+            { qui: 'Siscu', text: 'Té, a tu et servirà més que a mi. Però no diguis a la mare que jo era a fora de nit!' },
             { qui: '', text: 'Has obtingut la CLAU ROVELLADA: petita, de ferro vell, amb un ocell gravat a l\'anella.' }
         ];
         const donar = () => { E.posaFlag('ciscuTrobat'); E.posaFlag('clauGirgoles'); E.dona('clau_girgoles'); };
         if (!E.flag('ciscuTrobat')) return {
             pagines: [
                 { fer: (z, fet) => z.seq([c => z.bombolla('ciscu', '!', c, 600), c => z.npcSalta('ciscu', c, 1)], fet) },
-                { qui: 'Ciscu', text: 'No diguis res a la mare! Sóc el Ciscu, el de la Carmen, la de la Taverna. Des que hi ha boira, ella dorm tot el dia i l\'Eva em fa fregar gots.' },
-                { qui: 'Ciscu', text: 'Aquí ningú no em busca i puc jugar al solitari tranquil. Les cartes són de l\'avi. Li falta el set d\'oros, però faig veure que hi és.' },
-                { qui: 'Ciscu', text: 'De nit he vist el Germà Andreu picar tres cops a la porta de ferro de darrere la Taverna, la del soterrani. No té clau, d\'aquesta: la porta s\'obre sola, com si de dins l\'esperessin. A baix n\'hi ha una altra, amb un pany petit.' },
+                { qui: 'Siscu', text: 'No diguis res a la mare! Sóc el Siscu, el de la Carmen, la de la Taverna. Des que hi ha boira, ella dorm tot el dia i l\'Eva em fa fregar gots.' },
+                { qui: 'Siscu', text: 'Aquí ningú no em busca i puc jugar al solitari tranquil. Les cartes són de l\'avi. Li falta el set d\'oros, però faig veure que hi és.' },
+                { qui: 'Siscu', text: 'De nit he vist el Germà Andreu picar tres cops a la porta de ferro de darrere la Taverna, la del soterrani. No té clau, d\'aquesta: la porta s\'obre sola, com si de dins l\'esperessin. A baix n\'hi ha una altra, amb un pany petit.' },
                 ...clau
             ],
             enAcabar: donar
         };
         if (!E.flag('clauGirgoles')) return { pagines: clau, enAcabar: donar };
         return { pagines: [
-            { qui: 'Ciscu', text: E.flag('relIquiesRetornades') ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el set d\'oros de paper. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
-            { qui: 'Ciscu', text: 'Si veus la mare, no li diguis on sóc. Bé... si et pregunta molt, sí.' }
+            { qui: 'Siscu', text: E.flag('relIquiesRetornades') ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el set d\'oros de paper. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
+            { qui: 'Siscu', text: 'Si veus la mare, no li diguis on sóc. Bé... si et pregunta molt, sí.' }
         ] };
     },
 
