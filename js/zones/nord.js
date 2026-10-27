@@ -399,7 +399,7 @@ class ZonaCelles extends ZonaBase {
         this.npc('neus', 1250, 680, DIALEGS.neus);
         this.npc('marit_neus', 1320, 700, DIALEGS.maritNeus);
         // Les dues Venerables Sàvies (agafades del braç, un sol gràfic): donen consells
-        this.npc('venerables', 815, 700, DIALEGS.venerables, { colAmple: 110 });
+        this.npc('venerables', 815, 700, DIALEGS.venerables, { colAmple: 100 });
         // Nostra Senyora (oest): en Yordi i la Judit (testimonials)
         this.npc('yordi', 330, 680, DIALEGS.yordi);
         this.npc('judit', 400, 700, DIALEGS.judit);
