@@ -398,9 +398,8 @@ class ZonaCelles extends ZonaBase {
         // Sant Benet (est): la Neus i el seu marit, el senyor Moliner, veïns de Sant Benet
         this.npc('neus', 1250, 680, DIALEGS.neus);
         this.npc('marit_neus', 1320, 700, DIALEGS.maritNeus);
-        // Les Tietes, Enriqueta i Lola: donen consells
-        this.npc('tieta', 780, 690, DIALEGS.tieta1);
-        this.npc('tieta2', 850, 710, DIALEGS.tieta2, { flipX: true });
+        // Les dues Venerables Sàvies (agafades del braç, un sol gràfic): donen consells
+        this.npc('venerables', 815, 700, DIALEGS.venerables, { colAmple: 110 });
         // Nostra Senyora (oest): en Yordi i la Judit (testimonials)
         this.npc('yordi', 330, 680, DIALEGS.yordi);
         this.npc('judit', 400, 700, DIALEGS.judit);
@@ -673,7 +672,7 @@ class ZonaTiller extends ZonaBase {
         this.npcs = this.npcs || {};
         const gent = [
             ['pastor_a', 1170, 60, 290, 880], ['pastor_b', 1170, 20, 400, 894], ['pastor_vell', 1170, -20, 510, 880],      // pel camí de la Cirosa
-            ['neus', 700, 1000, 300, 760], ['tieta', 660, 1040, 420, 750], ['tieta2', 740, 1060, 520, 760]                   // des de les cel·les
+            ['neus', 700, 1000, 300, 760], ['venerables', 700, 1050, 600, 760]                   // des de les cel·les
         ];
         const imatges = gent.map(([k, x0, y0, x, y], i) => {
             const img = this.posar(k, x0, y0, { fonsY: y0 });

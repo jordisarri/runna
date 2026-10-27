@@ -47,8 +47,8 @@ const CATALEG = [
 
     // ---- Personatges nous ----
     { key: 'pianista',  file: 'assets/personatges/pianista.webp',  amplada: 115, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
-    { key: 'tieta',     file: 'assets/personatges/tieta.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a5a7a', cabell: '#d8d8d8', dona: true, ample: 1.1, alt: 0.88 }) },
-    { key: 'tieta2',    file: 'assets/personatges/tieta2.png',    amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#7a4a4a', cabell: '#bcbcbc', dona: true, ample: 1.2, alt: 0.86, ulleres: true }) },
+    { key: 'venerables', file: 'assets/personatges/venerables.png', amplada: 160, provisional: (c, w) => dibuixarVenerables(c, w) },   // les dues Venerables Sàvies de les Cel·les, agafades del braç (un sol gràfic)
+    { key: 'mare_nena', file: 'assets/personatges/mare_nena.png', amplada: 80, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#cfd6ee', cabell: '#e8e8f2', dona: true, ample: 1.1, alt: 0.9 }) },   // la mare de la Nena de les Trenes (visió de llum, sense rostre)
     { key: 'neus',      file: 'assets/personatges/neus.png',      amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
     { key: 'marit_neus', file: 'assets/personatges/marit_neus.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a6a7a', cabell: '#5a4636', alt: 0.98, calb: true }) },
     { key: 'yordi',     file: 'assets/personatges/yordi.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7a5a', cabell: '#3b2a1e', alt: 0.96 }) },

@@ -19,8 +19,8 @@ function objectiuFont(n) {
 function pistaRunna(E) { return PROGRES.pistaRunna(E); }
 function pistaActual(E) { return PROGRES.pista(E); }
 
-function consellTieta(E, qui) {
-    return { pagines: [{ qui, text: "Ai, fill, torna a seure. A veure... " + pistaActual(E) }] };
+function consellVenerables(E) {
+    return { pagines: [{ qui: 'Les Venerables Sàvies', text: "Ai, fill, torna a seure. A veure... " + pistaActual(E) }] };
 }
 
 // Objectiu viu del sopar del Til·ler: diu què falta
@@ -96,7 +96,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: "Pare Jordi", text: "Parla amb la gent: les famílies de les cel·les, els germans, la Pianista... Algú haurà vist alguna cosa." },
-                { qui: "Pare Jordi", text: "Si et perds, les Tietes de les cel·les sempre tenen un bon consell." }
+                { qui: "Pare Jordi", text: "Si et perds, les Venerables Sàvies de les cel·les sempre tenen un bon consell." }
             ]
         };
     },
@@ -444,8 +444,7 @@ const DIALEGS = {
         ]
     }),
 
-    tieta1: E => consellTieta(E, 'Tieta Enriqueta'),
-    tieta2: E => consellTieta(E, 'Tieta Lola'),
+    venerables: E => consellVenerables(E),
 
     yordi: E => ({ pagines: [{ qui: 'Yordi', text: 'Hola, Ineu! Si veus la meva germana Judit, digues-li que em deu un gelat.' }] }),
     judit: E => ({ pagines: [{ qui: 'Judit', text: 'Bon dia! Jo no li dec cap gelat a en Yordi. Que ho sàpigues.' }] }),
@@ -509,7 +508,7 @@ const DIALEGS = {
         ],
         enAcabar: () => {
             E.dona("basto_tiller");
-            E.posaObjectiu("Tens el bastó de Til·ler (més àgil). Segueix investigant: les Tietes saben què et falta fer.");
+            E.posaObjectiu("Tens el bastó de Til·ler (més àgil). Segueix investigant: les Venerables Sàvies saben què et falta fer.");
         }
     }),
 
@@ -608,7 +607,7 @@ const DIALEGS = {
         ],
         enAcabar: () => {
             E.posaFlag("bassadoriaNeta");
-            E.posaObjectiu("La Bassadòria és neta. Segueix investigant: les Tietes, a les Cel·les, et diran per on continuar.");
+            E.posaObjectiu("La Bassadòria és neta. Segueix investigant: les Venerables Sàvies, a les Cel·les, et diran per on continuar.");
         }
     }),
 
@@ -635,7 +634,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: '', text: 'La Font del Bisbe: seca, i amb una olor estranya. A la pica hi ha una mitra gravada.' },
-                { qui: 'Ineu', text: 'Les Tietes diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, romaní i el fruit de l\'arbre d\'or.»' },
+                { qui: 'Ineu', text: 'Les Venerables Sàvies diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, romaní i el fruit de l\'arbre d\'or.»' },
                 { qui: 'Ineu', text: 'Les herbes de la Nit de Sant Joan fan llum: n\'hi ha una al nord (cap al Til·ler) i el romaní al sud-est, sempre en una clariana. I l\'arbre d\'or... és la Prunera Màgica, al jardí de l\'Hostatgeria! Una pruna.' },
                 { qui: '', text: `Ofrenes trobades: ${herbes}/3.` }
             ],
@@ -1027,7 +1026,7 @@ const DIALEGS = {
             { qui: "", text: "Sota el Til·ler, una taula llarga: l'escudella, el pa dels pastors i les flors de lluna. Tres cadires buides, i una de més." },
             { qui: "Neus", text: "Aquest any m'he descuidat de fer-hi cantar ningú. I a l'escudella hi he posat una cullerada de més, com cada any: la del que falta. Enguany n'hi he posat tres." },
             { qui: "Senyor Moliner", text: "...I jo hi he posat una altra per a ella. Per si de cas. Que no ho sàpiga." },
-            { qui: "Tieta Enriqueta", text: "Sempre fem el mateix, fill: una espelma per cada llar que té una cadira buida. Encén-la tu, que ets qui ho ha de portar a terme." },
+            { qui: "Les Venerables Sàvies", text: "Sempre fem el mateix, fill: una espelma per cada llar que té una cadira buida. Encén-la tu, que ets qui ho ha de portar a terme." },
             { fer: (z, fet) => z.encendreEspelmes([0, 1, 2], fet) },
             { qui: "Pastor vell", text: "I una quarta... per als que no tenen nom. Per als que ningú no va recordar. Si el pare ho permet." },
             { fer: (z, fet) => z.encendreEspelmes([3], fet) },

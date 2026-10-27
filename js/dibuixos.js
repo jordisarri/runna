@@ -93,6 +93,62 @@ function dibuixarPersona(canvas, w, o) {
     }
 }
 
+// Les dues Venerables Sàvies de les Cel·les: dues velletes grassonetes agafades del braç (un sol gràfic, de 160 x 128 de disseny).
+// L'esquerra, la més grassoneta: ulleres rodones grosses i cabell gris curt. La dreta, menys grassoneta: cabell blanquíssim, més curt, i ulls rasgats.
+function dibuixarVenerables(canvas, w) {
+    const s = w / 160, h = Math.round(128 * s);
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(s, s);
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+    const PELL = '#e8b48a';
+    const A = { cx: 48, amp: 1.3, roba: '#4a5a7a', cabell: '#a9a9b0', R: 19 };
+    const B = { cx: 112, amp: 1.05, roba: '#7a4a4a', cabell: '#f6f6f8', R: 17 };
+    const manega = (pts, color) => {                                   // un braç: línia gruixuda amb contorn (per punts: espatlla, colze, mà) i la mà al final
+        const traç = (gruix, c) => { ctx.strokeStyle = c; ctx.lineWidth = gruix; ctx.beginPath(); pts.forEach(([x, y], k) => k ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); };
+        traç(11, CONTORN); traç(7.5, color);
+        const [mx, my] = pts[pts.length - 1];
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.fillStyle = PELL; ctx.beginPath(); ctx.arc(mx, my, 4.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    };
+    // Cossos (vestit llarg, més ample el de l'esquerra) i sabates
+    [A, B].forEach(p => {
+        ctx.fillStyle = '#3b2a1e';
+        [-1, 1].forEach(sd => { ctx.beginPath(); ctx.ellipse(p.cx + sd * 11 * p.amp, 122, 9, 4.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+        ctx.fillStyle = p.roba;
+        ctx.beginPath(); ctx.moveTo(p.cx - 14 * p.amp, 52); ctx.quadraticCurveTo(p.cx - 33 * p.amp, 88, p.cx - 29 * p.amp, 119);
+        ctx.lineTo(p.cx + 29 * p.amp, 119); ctx.quadraticCurveTo(p.cx + 33 * p.amp, 88, p.cx + 14 * p.amp, 52); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.beginPath(); ctx.ellipse(p.cx, 88, 15 * p.amp, 22, 0, 0, Math.PI * 2); ctx.fill();
+    });
+    // Braços de fora (caiguts) i braços agafats pel mig: el de la dreta passa per sobre del de l'esquerra
+    manega([[A.cx - 15 * A.amp, 57], [A.cx - 31 * A.amp, 92]], A.roba);
+    manega([[B.cx + 15 * B.amp, 57], [B.cx + 31 * B.amp, 92]], B.roba);
+    manega([[A.cx + 15 * A.amp, 57], [80, 86], [86, 104]], A.roba);          // el braç de la de l'esquerra, penjant cap al mig...
+    manega([[B.cx - 15 * B.amp, 57], [95, 80], [73, 88]], B.roba);           // ... i la de la dreta li passa el seu per sobre del colze
+    // Caps
+    [A, B].forEach((p, i) => {
+        const cy = 34, R = p.R;
+        ctx.fillStyle = p.cabell;                                                   // cabell de darrere (curt, a l'alçada de les orelles)
+        if (i === 0) { ctx.beginPath(); ctx.ellipse(p.cx, cy + 2, R + 3, R + 1, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+        ctx.fillStyle = PELL; ctx.beginPath(); ctx.arc(p.cx, cy + 2, R, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = p.cabell;                                                   // serrell i part de dalt
+        ctx.beginPath(); ctx.arc(p.cx, cy, R + 1, Math.PI * (i === 0 ? 1.02 : 1.1), Math.PI * (i === 0 ? 1.98 : 1.9)); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(232,110,100,0.35)';                                   // galtes
+        [-1, 1].forEach(sd => { ctx.beginPath(); ctx.ellipse(p.cx + sd * 11, cy + 10, 4.4, 3, 0, 0, Math.PI * 2); ctx.fill(); });
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.fillStyle = CONTORN;
+        if (i === 0) {                                                              // ulleres rodones grosses
+            [-1, 1].forEach(sd => { ctx.beginPath(); ctx.arc(p.cx + sd * 7.6, cy + 4, 7, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fill(); ctx.lineWidth = 2.6; ctx.stroke(); });
+            ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(p.cx - 1, cy + 3); ctx.lineTo(p.cx + 1, cy + 3); ctx.stroke();
+            ctx.fillStyle = CONTORN; [-1, 1].forEach(sd => { ctx.beginPath(); ctx.arc(p.cx + sd * 7.6, cy + 4, 1.7, 0, Math.PI * 2); ctx.fill(); });
+        } else {                                                                    // ulls rasgats (la cua de l'ull puja cap a fora)
+            [-1, 1].forEach(sd => { ctx.beginPath(); ctx.ellipse(p.cx + sd * 6.6, cy + 4, 3.8, 1.3, -sd * 0.38, 0, Math.PI * 2); ctx.fill(); });
+            ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(p.cx - 11, cy - 3); ctx.quadraticCurveTo(p.cx - 7, cy - 6, p.cx - 3, cy - 3); ctx.moveTo(p.cx + 11, cy - 3); ctx.quadraticCurveTo(p.cx + 7, cy - 6, p.cx + 3, cy - 3); ctx.stroke();
+        }
+        ctx.lineWidth = 2; ctx.strokeStyle = CONTORN;                               // boca, i dues arrugues
+        ctx.beginPath(); ctx.arc(p.cx, cy + 12, 4.2, 0.2, Math.PI - 0.2); ctx.stroke();
+        ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(p.cx - R + 4, cy + 12); ctx.lineTo(p.cx - R + 7, cy + 14); ctx.moveTo(p.cx + R - 4, cy + 12); ctx.lineTo(p.cx + R - 7, cy + 14); ctx.stroke();
+    });
+}
+
 // Sacerdotessa de l'Hostatgeria: vel negre i toca blanca que emmarquen la cara, gorgera blanca, hàbit amb plecs i escapulari,
 // mànigues amples amb les mans juntes i un rosari al cordó. Opcions: cabell (el serrell que treu sota la toca), ample, alt,
 // ulleres, cadira (asseguda en una cadira de rodes, amb una manta)

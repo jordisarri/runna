@@ -80,7 +80,7 @@ class ZonaEsglesia extends ZonaBase {
         [['nen_uri', 560, R + 160], ['nen_flam', 640, R + 175], ['nen_sardin', 720, R + 160],
          ['pare_jordi', 800, R + 200], ['germa_francesc', 470, R + 205], ['pare_alcui', 400, R + 270],
          ['monja_pains', 420, R + 360], ['monja_phili', 520, R + 360], ['monja_charm', 470, R + 300],
-         ['tieta', 760, R + 360], ['tieta2', 860, R + 360], ['frederic', 420, R + 510], ['josep', 520, R + 510],
+         ['venerables', 810, R + 360], ['frederic', 420, R + 510], ['josep', 520, R + 510],
          ['garf', 760, R + 510], ['isidre', 860, R + 510], ['jaumeta', 1000, R + 520]
         ].forEach(([k, x, y]) => { if (this.textures.exists(k) && !(this.npcs && this.npcs[k])) this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 }); });
         this.cameras.main.fadeIn(1200, 0, 0, 0);

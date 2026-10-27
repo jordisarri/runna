@@ -308,7 +308,7 @@ class ZonaBase extends Phaser.Scene {
     // Personatge quiet amb diàleg (es pot moure amb npcVa: les accions dels diàlegs es fan caminant, no explicant-les)
     npc(key, x, y, dialeg, opts = {}) {
         const img = this.posar(key, x, y);
-        img.col = this.colisio(x, y - 9, 40, 18);
+        img.col = this.colisio(x, y - 9, opts.colAmple || 40, 18);
         img.ombra = this.add.image(x, y, 'ombra').setScale(0.42).setDepth(-500);
         if (opts.flipX) img.setFlipX(true);
         img.escalaBase = img.scaleY;

@@ -176,8 +176,8 @@ class ZonaCamiRov extends ZonaBase {
     mareNena(fet) {
         const n = this.nena;
         if (!n) { fet(); return; }
-        const mare = this.add.image(n.x - 180, n.y, 'tieta').setOrigin(0.5, 1).setTint(0xe8eeff).setAlpha(0).setDepth(n.y);
-        mare.setScale((this.textures.get('tieta').customData || {}).escala || 0.5);
+        const mare = this.add.image(n.x - 180, n.y, 'mare_nena').setOrigin(0.5, 1).setTint(0xe8eeff).setAlpha(0).setDepth(n.y);
+        mare.setScale((this.textures.get('mare_nena').customData || {}).escala || 0.5);
         this.tweens.killTweensOf([n, this.resplendorNena]);
         this.tweens.add({ targets: mare, alpha: 0.7, duration: 1200, onComplete: () => {
             this.tweens.add({ targets: [n, this.resplendorNena], x: n.x - 130, duration: 1100, ease: 'Sine.easeInOut', onComplete: () => {
