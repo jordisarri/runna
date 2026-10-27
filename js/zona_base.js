@@ -315,6 +315,7 @@ class ZonaBase extends Phaser.Scene {
         // Respiració suau perquè sembli viu
         img.respira = this.tweens.add({ targets: img, scaleY: img.scaleY * 1.02, yoyo: true, repeat: -1, duration: 1100 + Math.random() * 400 });
         img.punt = this.interactiu(x, y - 10, opts.radi || 85, dialeg, { altura: img.displayHeight + 6 });
+        img.punt.npc = img;                                  // en parlar-hi, l'Ineu es fa enrere i no se solapen (vegeu separarDeNpc)
         (this.npcs = this.npcs || {})[key] = img;
         return img;
     }
@@ -1116,10 +1117,48 @@ class ZonaBase extends Phaser.Scene {
         this.puntActiu = punt;
         const dialeg = typeof punt.dialeg === 'function' ? punt.dialeg(Estat) : punt.dialeg;
         if (!dialeg) { if (punt.enTancar) punt.enTancar(); return; }   // accions sense diàleg (només un efecte a l'escena)
-        this.ui().obrirDialeg(dialeg, () => {
+        const obre = () => this.ui().obrirDialeg(dialeg, () => {
             if (punt.enTancar) punt.enTancar();
             Estat.desar();
         });
+        if (punt.npc && dialeg.pagines && dialeg.pagines.length) this.separarDeNpc(punt.npc, obre); else obre();
+    }
+
+    // Parlar amb algú: l'Ineu fa un pas enrere perquè els dos dibuixos no se solapin («parlen a una petita distància, sense tocar-se»).
+    // La distància és una el·lipse: més ample als costats (l'amplada dels dos dibuixos i un buit) que de cara (uns 80 px). Si enrere hi ha una paret,
+    // un arbre, un altre personatge o una sortida, prova altres direccions properes; si no hi cap enlloc, es queda on és.
+    separarDeNpc(n, fet) {
+        const I = this.ineu;
+        if (this.assegut || !n || !n.active || !I.visible) { fet(); return; }
+        const ax = 31 + n.displayWidth * 0.5 + 14, ay = 80;                                   // mig cos de l'Ineu + mig cos de l'altre + un buit de 14
+        const dx0 = I.x - n.x, dy0 = I.y - n.y, d0 = Math.hypot(dx0, dy0) || 1, ang0 = Math.atan2(dy0 || 1, dx0);
+        const radi = a => 1 / Math.hypot(Math.cos(a) / ax, Math.sin(a) / ay);              // distància necessària en aquella direcció
+        const lliure = (x, y) => this.llocLliure(x, y) && y > TOPE_Y + 8 && x > 24 && x < this.config.amplada - 24 &&
+            !this.sortides.some(r => Phaser.Geom.Rectangle.Contains(Phaser.Geom.Rectangle.Inflate(Phaser.Geom.Rectangle.Clone(r.r), 24, 24), x, y));
+        const cami = (x, y) => { for (let k = 1; k <= 8; k++) if (!lliure(I.x + (x - I.x) * k / 8, I.y + (y - I.y) * k / 8)) return false; return true; };
+        if (d0 >= radi(ang0) - 4) { this.cara(n); fet(); return; }                           // ja és prou lluny
+        let millor = null;
+        for (const gir of [0, 0.45, -0.45, 0.9, -0.9, 1.35, -1.35]) {
+            const a = ang0 + gir, r = radi(a), x = n.x + Math.cos(a) * r, y = n.y + Math.sin(a) * r;
+            if (cami(x, y)) { millor = { x, y }; break; }
+        }
+        if (!millor) {                                                                       // tan enrere com es pugui en línia recta
+            let t = 0; const r = radi(ang0), ux = Math.cos(ang0), uy = Math.sin(ang0);
+            for (let k = 1; k <= 12; k++) { const x = I.x + ux * (r - d0) * k / 12, y = I.y + uy * (r - d0) * k / 12; if (!lliure(x, y)) break; t = k / 12; }
+            if (t > 0) millor = { x: I.x + ux * (r - d0) * t, y: I.y + uy * (r - d0) * t };
+        }
+        if (!millor) { this.cara(n); fet(); return; }
+        this.canviant = true;                                                                // no es pot moure mentre fa el pas
+        I.body.setVelocity(0);
+        this.cara(n);
+        this.tweens.add({ targets: I, x: millor.x, y: millor.y, duration: 170, ease: 'Sine.easeOut', onComplete: () => {
+            I.body.reset(I.x, I.y); this.canviant = false; this.cara(n); fet();
+        } });
+    }
+    // L'Ineu es gira cap a algú
+    cara(n) {
+        const dx = n.x - this.ineu.x, dy = n.y - this.ineu.y;
+        this.posarDireccio(Math.abs(dx) > Math.abs(dy) * 0.9 ? (dx < 0 ? 'esquerra' : 'dreta') : (dy < 0 ? 'amunt' : 'avall'), false);
     }
 
     comprovarSortides() {
