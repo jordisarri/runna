@@ -612,19 +612,18 @@ class ZonaGabia extends ZonaBase {
             else if (e.flama.emitting) e.flama.stop();
         }
     }
-    // Els ulls lila que brillen (també a la foscor i a través de la boira)
+    // Els ulls lila que brillen (també a la foscor i a través de la boira): una llum que cobreix els ulls del dibuix
     crearUlls() {
         const g = this.add.container(0, 0).setDepth(99950);
         [-1, 1].forEach(sd => {
-            g.add(this.add.circle(sd * 9, 0, 7, 0x9a50ff, 0.2).setBlendMode('ADD'));
-            g.add(this.add.circle(sd * 9, 0, 3, 0xc490ff, 0.55).setBlendMode('ADD'));
-            g.add(this.add.circle(sd * 9, 0, 1.2, 0xffffff, 0.8));
+            g.add(this.add.circle(sd * 15, 0, 14, 0x9a50ff, 0.22).setBlendMode('ADD'));
+            g.add(this.add.circle(sd * 15, 0, 7, 0xd8a8ff, 0.45).setBlendMode('ADD'));
         });
         this.tweens.add({ targets: g, alpha: 0.65, yoyo: true, repeat: -1, duration: 500 });
         return g;
     }
     posarUlls(u, spr, prof) {
-        u.setPosition(spr.x - spr.displayWidth * (spr.flipX ? -0.005 : 0.005), spr.y - spr.displayHeight * 0.5 + spr.displayHeight * 0.085).setVisible(spr.alpha > 0.3);
+        u.setPosition(spr.x, spr.y - spr.displayHeight * 0.5 + spr.displayHeight * 0.254).setVisible(spr.alpha > 0.3);       // els ulls són al 25% del dibuix
         if (prof) u.setDepth(prof + 1);
     }
     // Tambors de guerra mentre dura el combat (BUM · BUM BUM ·)

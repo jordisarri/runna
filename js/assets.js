@@ -46,7 +46,7 @@ const CATALEG = [
     { key: 'hostatgeria',    file: 'assets/edificis/hostatgeria.webp',    amplada: 1100, provisional: (c, w) => dibuixarHostatgeria(c, w) },
 
     // ---- Personatges nous ----
-    { key: 'pianista',  file: 'assets/personatges/pianista.png',  amplada: 100, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
+    { key: 'pianista',  file: 'assets/personatges/pianista.webp',  amplada: 87, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
     { key: 'tieta',     file: 'assets/personatges/tieta.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a5a7a', cabell: '#d8d8d8', dona: true, ample: 1.1, alt: 0.88 }) },
     { key: 'tieta2',    file: 'assets/personatges/tieta2.png',    amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#7a4a4a', cabell: '#bcbcbc', dona: true, ample: 1.2, alt: 0.86, ulleres: true }) },
     { key: 'neus',      file: 'assets/personatges/neus.png',      amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
@@ -106,7 +106,7 @@ const CATALEG = [
     { key: 'foc',            file: 'assets/objectes/foc.png',            amplada: 80, provisional: (c, w) => dibuixarFoc(c, w) },
     { key: 'espelma',        file: 'assets/objectes/espelma.png',        amplada: 20, provisional: (c, w) => dibuixarEspelma(c, w) },
     { key: 'taula_sopar',    file: 'assets/objectes/taula_sopar.png',    amplada: 380, provisional: (c, w) => dibuixarTaulaSopar(c, w) },
-    { key: 'ocellaire',      file: 'assets/enemics/ocellaire.webp',     amplada: 115, provisional: (c, w) => dibuixarOcellaire(c, w) },
+    { key: 'ocellaire',      file: 'assets/enemics/ocellaire.webp',     amplada: 110, cru: true, provisional: (c, w) => dibuixarOcellaire(c, w) },
     { key: 'ratpenat',       file: 'assets/enemics/ratpenat.png',       amplada: 64, provisional: (c, w) => dibuixarRatpenat(c, w) },
     { key: 'ferralla',       file: 'assets/enemics/ferralla.png',       amplada: 70, provisional: (c, w) => dibuixarFerralla(c, w) },
     { key: 'capoll',         file: 'assets/enemics/capoll.png',         amplada: 70, provisional: (c, w) => dibuixarCapoll(c, w) },

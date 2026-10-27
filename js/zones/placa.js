@@ -66,7 +66,7 @@ class ZonaPlaca extends ZonaBase {
         });
 
         // --- Personatges ---
-        this.npc('pare_jordi', 690, 550, DIALEGS.pareJordi);
+        this.npc('pare_jordi', 700, 660, DIALEGS.pareJordi);
         if (!Estat.flag('camiCirosaObert') && !Estat.flag('pastorVencut')) this.andreu = this.npc('germa_andreu', 1465, 500, DIALEGS.germaAndreu, { flipX: true });
 
         // --- Cartells ---

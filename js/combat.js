@@ -743,7 +743,7 @@ Object.assign(ZonaBase.prototype, {
         const c = e.spr.body.center;
         if (!e.def.soloCap) return [{ x: c.x, y: c.y, r: e.def.radi }];
         const s = e.spr, h = s.displayHeight, dalt = s.y - h / 2;
-        return [{ x: s.x, y: dalt + h * 0.12, r: 34, cap: true },
+        return [{ x: s.x, y: dalt + h * 0.17, r: 36, cap: true },        // el cap és la bola del dibuix, al 17% des de dalt
                 { x: s.x, y: dalt + h * 0.42, r: 44 }, { x: s.x, y: dalt + h * 0.66, r: 44 }, { x: s.x, y: c.y, r: 44 }];
     },
     zonaCop(e) {                    // on surten les espurnes del cop
