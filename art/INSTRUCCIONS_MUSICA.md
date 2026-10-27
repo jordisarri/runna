@@ -18,7 +18,7 @@ Aquest document diu **exactament** quines cançons falten, com han de ser i com 
 | 9 | `taverna.m4a` | La Taverna per dins | bucle | 1:45 | Recomanada | interiors |
 | 10 | `cirosa.m4a` | Camí de la Cirosa, pastura i Mas | bucle | 2:00 | Recomanada | bosc |
 | 11 | `biblioteca.m4a` | Biblioteca del Monestir | bucle | 2:00 | Recomanada | interiors |
-| 12 | `hostatgeria.m4a` | Hostatgeria i les tres cambres de les monges | bucle | 1:45 | Recomanada | interiors |
+| 12 | `hostatgeria.m4a` | Hostatgeria i les tres cambres de les sacerdotesses | bucle | 1:45 | Recomanada | interiors |
 | 13 | `girgoles.m4a` | Sala de les Gírgoles | bucle | 2:00 | Recomanada | masmorra |
 
 Les 4 que ja hi ha són el «món base»: `The Hero's Ascension` (plaça i poble), `Woodland Path` (boscos), `Inside All` (interiors) i
@@ -175,8 +175,8 @@ fragment del Cant de l'Aurora a la flauta. Si és una peça diferent de la resta
   un violoncel sol. Hi apareix el **Cant de les Pedres** a l'harmònium. Que se senti la **pols dins la llum**, sense dramatisme.
 - **Prompt:** `instrumental quiet monastery library, soft wordless Gregorian humming, harpsichord arpeggios, solo cello, 60 bpm, E dorian, dust in sunlight, calm, no drums, seamless loop`
 
-### 2.12 `hostatgeria.m4a` — les monges *(recomanada)*
-- **1:45, bucle. 70 BPM, 4/4, Sol major.** Calma i **una mica càlida i còmica** (són tres monges: la Pains, la Charm i la Phili). Arpa i flauta, un
+### 2.12 `hostatgeria.m4a` — les sacerdotesses *(recomanada)*
+- **1:45, bucle. 70 BPM, 4/4, Sol major.** Calma i **una mica càlida i còmica** (són tres sacerdotesses: la Pains, la Charm i la Phili). Arpa i flauta, un
   harmònium, campaneta de mà, pizzicato lleuger. Més lluminosa que `biblioteca`.
 - **Prompt:** `instrumental cozy convent music, harp and flute, harmonium, small hand bell, light pizzicato strings, 70 bpm, G major, warm and slightly humorous, seamless loop, no vocals`
 

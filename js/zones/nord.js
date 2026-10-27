@@ -3,44 +3,28 @@
  * Les Runes (nus), El Celler (on es juga a ping-pong), Cel·les, Gran Til·ler, Bosc de Sant Joan.
  */
 
-// ---------------- RUÏNES DE L'ESGLÉSIA ANTIGA (nus) ----------------
-// Porta del Ping-pong a baix, les runes a dalt a la dreta (sobre un replà de pedra; el camí de la Desaparició surt cap a l'oest),
-// i camí cap al nord per anar a les cel·les i al Til·ler.
-class ZonaRuines extends ZonaBase {
+// ---------------- EL PATI DEL CELLER ----------------
+// Entre la Plaça (sud) i les Runes (nord). A l'esquerra, el Celler, on es juga a ping-pong: és la Casa Gran vista per darrere.
+// Només importa la porta (prou gran perquè hi passi l'Ineu): l'edifici surt per l'esquerra i es retalla a la vora del món.
+class ZonaCellerFora extends ZonaBase {
     constructor() {
-        super('ZonaRuines', {
-            nom: 'Les Runes',
+        super('ZonaCellerFora', {
+            nom: 'Pati del Celler',
             amplada: 1600,
             alcada: 1100,
             entrades: {
-                placa:    { x: 800,  y: 1040, dir: 'amunt' },
-                celles:   { x: 800,  y: 70,   dir: 'avall' },
-                cami:     { x: 60,   y: 915,  dir: 'dreta' },
-                cementiri:{ x: 1530, y: 585,  dir: 'esquerra' },
-                pingpong: { x: 400,  y: 960,  dir: 'avall' }
+                placa:    { x: 800, y: 1040, dir: 'amunt' },
+                runes:    { x: 800, y: 70,   dir: 'avall' },
+                pingpong: { x: 400, y: 960,  dir: 'avall' }
             }
         });
     }
 
     construir() {
         this.terra('herba', 0, 0, 1600, 1100, -1100);
-        this.terra('pedra', 150, 640, 1300, 320);       // replà de pedra
-        this.terra('cami', 700, 0, 200, 660);           // cap al nord (cel·les i Til·ler)
-        this.terra('cami', 700, 940, 200, 160);         // cap a la Plaça
-        this.terra('cami', 0, 850, 800, 130);           // camí de la Desaparició (oest): a l'alçada de la porta del Ping-pong
-        this.terra('cami', 1100, 520, 500, 130);        // cap al cementiri (est, darrere el Santuari)
+        this.terra('cami', 700, 0, 200, 1100);          // de la Plaça (sud) a les Runes (nord)
+        this.terra('pedra', 150, 900, 640, 120);        // esplanada de pedra davant la porta del Celler
 
-        // Les runes, a la dreta; el camí passa per davant
-        this.terra('pedra', 900, 400, 700, 240);         // replà de pedra de les runes
-        // Façana gran (760 d'ample): surt per dalt de la pantalla, no importa que no es vegi sencera
-        this.posar('runes', 1300, 470, { col: { w: 640, h: 80 } });
-        this.blocDarrere(1270, 660, 390);               // no es pot passar per darrere de les runes
-        // Pedres caigudes davant
-        [[950, 525, 0.6], [1570, 530, 0.5]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 30, h: 14 } }));
-        this.interactiu(1310, 540, 110, DIALEGS.ruines, { altura: 140 });
-
-        // El Celler (ping-pong): és la Casa Gran vista per darrere. Només importa la porta (a baix, prou gran perquè hi passi
-        // l'Ineu): l'edifici surt per l'esquerra de la pantalla i es retalla a la vora del món.
         const PORTA_X = 400, BASE_Y = 900, PORTA_AMPLE = 98;
         const sala = this.posar('sala_pingpong', 0, BASE_Y, { fonsY: BASE_Y - 20 });
         const mig = PORTA_X - 0.748 * sala.displayWidth;             // x de la vora esquerra de la imatge (la porta és al 74,8% de l'ample)
@@ -50,9 +34,59 @@ class ZonaRuines extends ZonaBase {
         this.colisio((PORTA_X - PORTA_AMPLE / 2) / 2, BASE_Y - 45, PORTA_X - PORTA_AMPLE / 2, 90);
         this.colisio((PORTA_X + PORTA_AMPLE / 2 + dreta) / 2, BASE_Y - 45, dreta - PORTA_X - PORTA_AMPLE / 2, 90);
         this.colisio(PORTA_X, BASE_Y - 100, PORTA_AMPLE, 20);
-        this.sortida(PORTA_X - PORTA_AMPLE / 2, BASE_Y - 80, PORTA_AMPLE, 76, 'ZonaPingpong', 'ruines');
+        this.sortida(PORTA_X - PORTA_AMPLE / 2, BASE_Y - 80, PORTA_AMPLE, 76, 'ZonaPingpong', 'porta');
         this.portaAnimada({ x: 404, top: 703, bottom: 862, ample: 102, fons: BASE_Y - 20, arc: true, color: 0xa84a30, vora: 0x3a1408 });   // la porta d'arc del Celler
         this.blocDarrere((0 + dreta) / 2, dreta, BASE_Y - 110);   // ni darrere de l'edifici
+
+        // Barrils i una bóta vella vora la porta; a l'altra banda del camí, un pati d'herba amb arbres
+        [[560, 930], [612, 948], [190, 940]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
+        this.cartell(1000, 960, DIALEGS.cartellCeller);
+        this.arbres([[1100, 200], [1350, 120], [1500, 380], [1150, 560], [1450, 700], [1250, 900], [1520, 1020], [1050, 1040]]);
+        [[1300, 420], [1180, 820]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: -800, escala: 0.6 }));
+
+        this.enemic('escolopendra', 1300, 600);
+        this.sortida(700, 1086, 200, 14, 'ZonaPlaca', 'ruines');
+        this.sortida(700, 0, 200, 14, 'ZonaRuines', 'celler');
+    }
+}
+
+// ---------------- RUÏNES DE L'ESGLÉSIA ANTIGA (nus) ----------------
+// Les runes a la dreta (sobre un replà de pedra) amb l'ombra del monjo; el camí de la Desaparició surt cap a l'oest, el del
+// Cementiri cap a l'est, i el del nord va a les cel·les i al Til·ler. Al sud, el Pati del Celler.
+class ZonaRuines extends ZonaBase {
+    constructor() {
+        super('ZonaRuines', {
+            nom: 'Les Runes',
+            amplada: 1600,
+            alcada: 1100,
+            entrades: {
+                celler:   { x: 800,  y: 1040, dir: 'amunt' },
+                placa:    { x: 800,  y: 1040, dir: 'amunt' },   // (partides desades d'abans del Pati del Celler)
+                pingpong: { x: 800,  y: 1040, dir: 'amunt' },
+                celles:   { x: 800,  y: 70,   dir: 'avall' },
+                cami:     { x: 60,   y: 915,  dir: 'dreta' },
+                cementiri:{ x: 1530, y: 585,  dir: 'esquerra' }
+            }
+        });
+    }
+
+    construir() {
+        this.terra('herba', 0, 0, 1600, 1100, -1100);
+        this.terra('pedra', 150, 640, 1300, 320);       // replà de pedra
+        this.terra('cami', 700, 0, 200, 660);           // cap al nord (cel·les i Til·ler)
+        this.terra('cami', 700, 940, 200, 160);         // cap al Pati del Celler i la Plaça
+        this.terra('cami', 0, 850, 800, 130);           // camí de la Desaparició (oest)
+        this.terra('cami', 1100, 520, 500, 130);        // cap al cementiri (est, darrere el Santuari)
+
+        // Les runes, a la dreta; el camí passa per davant
+        this.terra('pedra', 900, 400, 700, 240);         // replà de pedra de les runes
+        // Façana gran (760 d'ample): surt per dalt de la pantalla, no importa que no es vegi sencera
+        this.posar('runes', 1300, 470, { col: { w: 640, h: 80 } });
+        this.blocDarrere(1270, 660, 390);               // no es pot passar per darrere de les runes
+        // Pedres caigudes davant i, a ponent, carreus escampats de l'església que mai no es va acabar
+        [[950, 525, 0.6], [1570, 530, 0.5], [240, 700, 0.8], [420, 760, 0.55], [330, 1040, 0.7], [560, 640, 0.5], [130, 560, 0.65]]
+            .forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 60 * e, h: 22 * e } }));
+        this.interactiu(1310, 540, 110, DIALEGS.ruines, { altura: 140 });
 
         // L'ombra del monjo: només es veu quan has llegit el primer fragment del pergamí
         this.apareix = 1;            // 0..1: com de present és l'ombra (la primera vegada es materialitza lentament)
@@ -66,12 +100,12 @@ class ZonaRuines extends ZonaBase {
 
         this.cartell(620, 960, DIALEGS.cartellRuinesPingpong);
 
-        this.arbres([[1530, 1020], [1100, 1030]]);
+        this.arbres([[1530, 1020], [1100, 1030], [120, 180], [380, 120], [250, 420], [1500, 160]]);
 
         // Animalets del cementiri esquerdat
-        this.enemic('escolopendra', 300, 1010);
+        this.enemic('escolopendra', 300, 600);
         this.enemic('escolopendra', 1350, 620);
-        this.sortida(700, 1086, 200, 14, 'ZonaPlaca', 'ruines');
+        this.sortida(700, 1086, 200, 14, 'ZonaCellerFora', 'runes');
         this.sortida(700, 0, 200, 14, 'ZonaCelles', 'ruines');
         this.sortida(0, 850, 14, 130, 'ZonaCami', 'runes');
         this.sortida(1586, 520, 14, 130, 'ZonaCementiri', 'runes');
@@ -258,7 +292,7 @@ class ZonaPingpong extends ZonaBase {
         this.npc('josep', 705, 780, DIALEGS.josep);
 
         this.add.rectangle(640, A / 2, 1080, A, 0xffe9a8, 0.04).setDepth(80000);
-        this.sortida(600, A - 30, 80, 20, 'ZonaRuines', 'pingpong');
+        this.sortida(600, A - 30, 80, 20, 'ZonaCellerFora', 'pingpong');
     }
 
     enEntrar() {
@@ -439,7 +473,7 @@ Object.assign(DIALEGS, {
             ],
             enAcabar: () => {
                 E.dona('guants');
-                if (E.flag('fredericRoda')) E.posaObjectiu('Amb els Guants de Poder, empeny la roda de carruatge del Celler (a les Runes).');
+                if (E.flag('fredericRoda')) E.posaObjectiu('Amb els Guants de Poder, empeny la roda de carruatge del Celler (entre la Plaça i les Runes).');
             }
         };
         if (E.te('ram')) return { pagines: [
@@ -494,7 +528,7 @@ class ZonaSantAntoni extends ZonaBase {
 
 // ---------------- EL GRAN TIL·LER (escenari petit: només l'arbre amb qui es parla) ----------------
 // Hi arriba el camí del sud (les cel·les). Cap a l'oest, un camí duu a la Caseta (on viu en Jordi); cap al nord-est, a la Cirosa, tancat
-// per una bardissa viva que només aparta la branca del Til·ler.
+// per les arrels del Til·ler, que només s'enfonsen davant la seva branca.
 const TIL_X = 520, TIL_Y = 440;
 
 class ZonaTiller extends ZonaBase {
@@ -531,42 +565,63 @@ class ZonaTiller extends ZonaBase {
 
         this.cartell(980, 470, DIALEGS.cartellCirosa);
 
-        // El camí de la Cirosa: tancat per una bardissa viva fins que s'aparta amb la branca del Til·ler
-        this.bardissa = [];
+        // El camí de la Cirosa: tancat per les arrels del Til·ler fins que reconeixen la seva branca
+        this.arrels = [];
         if (Estat.flag('camiCirosaObert')) this.sortida(1100, 0, 140, 14, 'ZonaCamiCirosa', 'tiller');
-        else this.posarBardissa();
+        else this.posarArrels();
 
-        this.arbres([[100, 150], [300, 90], [900, 100], [820, 330], [150, 820], [300, 940], [1000, 900], [1300, 880], [1350, 560], [760, 160]]);   // cap arbre vora la bardissa: les copes no l'han de tapar
+        this.arbres([[100, 150], [300, 90], [900, 100], [820, 330], [150, 820], [300, 940], [1000, 900], [1300, 880], [1350, 560], [760, 160]]);   // cap arbre vora les arrels: les copes no les han de tapar
 
         this.sortida(620, 986, 160, 14, 'ZonaCelles', 'tiller');
         this.sortida(0, 540, 14, 130, 'ZonaJordi', 'til');
     }
 
-    // Bardissa viva: una fila d'esbarzers foscos, amb boira. S'aparta (es retira cap als costats) amb la branca del Til·ler.
-    posarBardissa() {
+    // Arrels del Til·ler: grans arcs nuosos que surten de terra i tanquen el camí, amb fulles de til·ler a dalt.
+    // L'arbre les hi va fer créixer perquè la boira no pugés; quan hi acostes la seva branca, la reconeixen i s'enfonsen.
+    posarArrels() {
         const Y = 250;
-        this.colBardissa = this.colisio(1175, Y - 16, 230, 44);
-        [1105, 1140, 1175, 1210, 1245].forEach((x, i) => {
-            const img = this.posar('esbarzer', x, Y + (i % 2) * 10, { escala: 2.1 }).setTint(0x9a78b8);
-            this.bardissa.push({ img, x0: x, dir: x < 1180 ? -1 : 1 });
-        });
-        this.boiraBardissa = this.boira(1170, Y - 30, 190, 60, 0.7);
-        this.interactiu(1170, Y + 60, 110, DIALEGS.bardissa, {
+        let sd = 11; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        this.colArrels = this.colisio(1175, Y - 20, 240, 50);
+        for (let i = 0; i < 7; i++) {
+            const x = 1070 + i * 35 + r() * 10, y = Y + (i % 2) * 10, s = i % 2 ? 1 : -1;
+            const amp = 50 + r() * 40, alt = 60 + r() * 70;
+            const g = this.add.graphics({ x, y }).setDepth(y);
+            const pts = new Phaser.Curves.CubicBezier(new Phaser.Math.Vector2(0, 0), new Phaser.Math.Vector2(s * amp * 0.1, -alt * 1.3),
+                new Phaser.Math.Vector2(s * amp * 0.9, -alt * 1.3), new Phaser.Math.Vector2(s * amp, 0)).getPoints(18);
+            g.fillStyle(0x000000, 0.3).fillEllipse(0, 2, 34, 10).fillEllipse(s * amp, 2, 30, 9);   // la terra remoguda als peus
+            g.lineStyle(20, 0x120c08, 1).strokePoints(pts);
+            g.lineStyle(14, 0x5e3e24, 1).strokePoints(pts);
+            g.lineStyle(4, 0x8a6440, 0.9).strokePoints(pts.map(p => ({ x: p.x - 3, y: p.y - 3 })));
+            const cim = pts[9];                                                  // fulles de til·ler, en forma de cor
+            [[-10, -6, 0x5a8a32], [8, -10, 0x6a9a3a], [2, 2, 0x4e7a2c]].forEach(([fx, fy, c]) => {
+                g.fillStyle(c, 1).fillCircle(cim.x + fx - 3, cim.y + fy, 5).fillCircle(cim.x + fx + 3, cim.y + fy, 5).fillTriangle(cim.x + fx - 8, cim.y + fy + 2, cim.x + fx + 8, cim.y + fy + 2, cim.x + fx, cim.y + fy + 11);
+            });
+            this.arrels.push(g);
+            this.tweens.add({ targets: g, scaleY: 1.04, yoyo: true, repeat: -1, duration: 1400 + i * 130, ease: 'Sine.easeInOut' });   // respiren
+        }
+        this.interactiu(1170, Y + 60, 110, DIALEGS.arrelsTiller, {
             altura: 110, actiu: () => !Estat.flag('camiCirosaObert'),
-            enTancar: () => { if (Estat.te('basto_tiller') && Estat.flag('bassadoriaNeta')) this.apartarBardissa(); }
+            enTancar: () => { if (Estat.te('basto_tiller') && Estat.flag('bassadoriaNeta')) this.apartarArrels(); }
         });
     }
 
-    apartarBardissa() {
+    apartarArrels() {
         if (Estat.flag('camiCirosaObert')) return;
         Estat.posaFlag('camiCirosaObert');
-        this.bardissa.forEach(({ img, dir }, i) => this.tweens.add({ targets: img, x: img.x + dir * (110 + i * 6), alpha: 0.55, duration: 1500, ease: 'Sine.easeInOut' }));
-        this.boiraBardissa.stop();
-        this.obstacles.remove(this.colBardissa, true, true);
+        this.arrels.forEach((g, i) => {
+            this.tweens.killTweensOf(g);
+            this.tweens.add({ targets: g, scaleY: 0, duration: 1300, delay: i * 140, ease: 'Sine.easeIn' });
+        });
+        const terra = this.add.particles(1175, 250, 'espurna', {
+            x: { min: -120, max: 120 }, speedY: { min: -80, max: -20 }, speedX: { min: -30, max: 30 }, lifespan: 700,
+            scale: { start: 0.6, end: 0 }, tint: [0x5e3e24, 0x8a6440, 0x6a9a3a], frequency: 40
+        }).setDepth(260);
+        this.time.delayedCall(2200, () => terra.destroy());
+        this.obstacles.remove(this.colArrels, true, true);
         Sfx.secret();
-        this.cameras.main.shake(300, 0.003);
+        this.cameras.main.shake(1200, 0.004);
         this.sortida(1100, 0, 140, 14, 'ZonaCamiCirosa', 'tiller');
-        this.missatge('La bardissa s\'aparta.');
+        this.missatge('Les arrels s\'enfonsen a la terra.');
         Estat.posaObjectiu('Puja a la Cirosa pel camí del nord-est: els pastors desterrats guarden les esquelles dels seus avis.');
         Estat.desar();
     }

@@ -269,7 +269,7 @@ class ZonaJardi extends ZonaBase {
         // --- L'Hostatgeria: edifici gran a la dreta (1100 d'ample; la paret de l'esquerra és a x≈752) ---
         // La porta (~110x150) queda a x≈1339.
         const casa = this.posar('hostatgeria', 1250, 760, { fonsY: 640 });
-        // La façana, amb un forat a la porta (x 1293-1383). Un cop s'ha sortit per dins (o les monges l'han oberta), s'hi pot entrar
+        // La façana, amb un forat a la porta (x 1293-1383). Un cop s'ha sortit per dins (o les sacerdotesses l'han oberta), s'hi pot entrar
         if (this.dadesEntrada.entrada === 'hostatgeria') Estat.posaFlag('portaHostOberta');
         const oberta = Estat.flag('portaHostOberta') || Estat.flag('mongesTrobades');
         this.colisio((700 + 1293) / 2, 715, 1293 - 700, 90);

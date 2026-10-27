@@ -31,9 +31,9 @@ const PROGRES = {
         { id: 'branca', marca: ['obj:basto_tiller'], fet: E => E.te('basto_tiller'),
           pista: E => "Agafa la branca que ha caigut al peu del Til·ler: és més àgil que el bastó de pelegrí que portes." },
         { id: 'bardissa', marca: ['camiCirosaObert'], fet: E => E.flag('camiCirosaObert'),
-          pista: E => "Al Gran Til·ler, el camí del nord-est és tancat per una bardissa viva. Acosta-hi la branca del Til·ler (parla amb la bardissa) i s'apartarà." },
+          pista: E => "Al Gran Til·ler, el camí del nord-est és tancat per les arrels de l'arbre. Acosta-hi la branca del Til·ler (examina les arrels) i s'enfonsaran." },
         { id: 'pastor', marca: ['pastorVencut'], fet: E => E.flag('pastorVencut'),
-          pista: E => "Puja a la Cirosa pel camí que ha obert la bardissa. El Germà Andreu ja no és a la Plaça: és a la pastura, a la dreta de la tanca, fet Pastor de Boira. L'has de vèncer." },
+          pista: E => "Puja a la Cirosa pel camí que han obert les arrels. El Germà Andreu ja no és a la Plaça: és a la pastura, a la dreta de la tanca, fet Pastor de Boira. L'has de vèncer." },
         { id: 'esquelles', marca: ['esquelles', 'obj:esquelles'], fet: E => E.flag('esquelles'),
           pista: E => "A la Cirosa, parla amb el pastor vell, vora el foc: t'ha de donar les esquelles dels seus avis." },
         { id: 'soparObert', marca: ['soparObert'], fet: E => E.flag('soparObert'),
@@ -80,9 +80,9 @@ const PROGRES = {
           pista: E => "Amb l'Estel de Sant Llorenç, la boira del camí de llevant dels Dipòsits s'aparta. Al final hi ha el Dolmen: amb la Fulla, el Saber i la Benedicció, Runna es despertarà." },
         // ---- ACTE 3 ----
         { id: 'josep', marca: ['josepVencut', 'obj:llanterna'], fet: E => E.flag('josepVencut'),
-          pista: E => "Al Celler, a les Runes, en Josep és el millor jugador de ping-pong. Allà els secrets es guanyen a la taula: parla amb en Josep i guanya-li el partit. (Quan la pilota bota i s'enlaira, espera que el cercle es posi verd i prem el carril de la pilota.)" },
+          pista: E => "Al Celler, entre la Plaça i les Runes, en Josep és el millor jugador de ping-pong. Allà els secrets es guanyen a la taula: parla amb en Josep i guanya-li el partit. (Quan la pilota bota i s'enlaira, espera que el cercle es posi verd i prem el carril de la pilota.)" },
         { id: 'frederic', marca: ['fredericRoda'], fet: E => E.flag('fredericRoda') || E.flag('rodaMoguda'),
-          pista: E => "Ara que portes Runna... Al Celler, a les Runes, hi ha una roda de carruatge que amaga alguna cosa. El Frederic, el pare del Juli, en sap més del que diu. Parla-hi." },
+          pista: E => "Ara que portes Runna... Al Celler, entre la Plaça i les Runes, hi ha una roda de carruatge que amaga alguna cosa. El Frederic, el pare del Juli, en sap més del que diu. Parla-hi." },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
           pista: E => E.flag('florsCreu') ? "Torna a Sant Antoni, fill: el Germà Francesc t'espera."
               : E.te('ram') ? "El ram del Germà Francesc va a la tomba de l'àngel del Cementiri."
@@ -140,11 +140,11 @@ const PROGRES = {
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta el Cant de les Pedres." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
-          pista: E => "La Nena de les Trenes, al camí de la Rovellonera, encara espera els seus dos llaços: un sota una roca del camí i l'altre a la primera clariana de la Rovellonera." },
+          pista: E => "La Nena de les Trenes, al camí de la Rovellonera, encara espera els seus dos llaços: tots dos colgats sota pedres: una roca del camí i una pedra de la primera clariana de la Rovellonera. Posa't darrere la pedra i camina contra ella per empènyer-la." },
         { id: 'monges', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'mongesTrobades'], obert: E => E.flag('isidreSansa'), fet: E => E.flag('mongesTrobades'),
           pista: E => !E.flag('llavorSansa') && !E.flag('llosaOberta') ? "La Sansa, la de les verdures, passa per les Cel·les: l'Isidre diu que té una Llavor de Lluna."
               : !E.flag('llosaOberta') ? "Porta la Llavor de Lluna a l'Isidre, al jardí de l'Hostatgeria."
-              : "Sota la llosa del jardí de l'Hostatgeria hi ha un soterrani que puja a les cambres de les monges. Per alliberar-les et caldran el Cant de l'Aurora, els Guants de Poder i Runna." }
+              : "Sota la llosa del jardí de l'Hostatgeria hi ha un soterrani que puja a les cambres de les sacerdotesses. Per alliberar-les et caldran el Cant de l'Aurora, els Guants de Poder i Runna." }
     ],
 
     // El primer pas de la història que encara no és fet
