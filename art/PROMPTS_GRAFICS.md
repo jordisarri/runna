@@ -632,13 +632,60 @@ El joc els pot girar en mirall, així que res d'asimètric que sigui essencial (
 
 ## Pròleg
 
-### `proleg/ocellaire.webp` (720 × 950, il·lustració sencera, sense retallar el fons) *(Primer quadre del pròleg: Mestre Gaspar, l'Ocellaire, fa tres-cents anys, a la fira de primavera del Miracle, ABANS de ser tancat a la gàbia. Encantador i inquietant alhora. El joc el posarà a la part de dalt de la pantalla, sobre el text.)*
+Quatre quadres il·lustrats (el cinquè, el matí al Monestir, ja el resol el joc amb l'edifici). Cada un va a `assets/proleg/<nom>.webp`,
+**vertical 3:4** (idealment 1440 × 1900; si el generador dóna una altra mida, mantén la proporció 3:4 i ja ho retallo jo), il·lustració **sencera, sense fons blanc ni retallar**.
+El text del pròleg va a sota de la imatge, fora d'ella.
+
+**Perquè tots quatre quedin de la mateixa família i amb el Monestir del joc:** si el generador admet imatges de referència, pujeu-hi
+`assets/edificis/monestir.webp`, `assets/edificis/esglesia.webp`, `assets/natura/arbre.webp` i `assets/natura/xiprer.webp` i digueu «match the buildings and trees».
+Cada prompt ja porta el bloc **GAME LOOK** (el Monestir, la plaça i els arbres tal com es veuen al joc) allà on surten.
+
+**GAME LOOK (es repeteix, enganxat, als prompts que el necessiten):**
+- *Monastery:* a rectangular two-storey Romanesque monastery of warm honey-coloured sandstone ashlar blocks, low red terracotta-tiled gable roof, a central round-arched Romanesque portal with stepped archivolts and a dark wooden door, a wide stone staircase with two sloping stone side-rails leading up to the door, a twin-arched window above the portal, a triple-arched window higher up, small tall narrow arched windows on both sides of both floors, light moss at the base.
+- *Square:* paved with irregular grey-beige cobblestones (a worn staggered stone pattern with moss in the cracks).
+- *Trees:* round-crowned broadleaf trees with thick twisted trunks and gnarled visible roots, olive-green leaf clumps with golden-orange autumn tips and blue-shadowed undersides; and tall, narrow, dark blue-green cypress trees.
+
+**Què afegeix el joc a sobre (per això algunes coses van «apagades» a la imatge):** la boira lila que es mou, les llums de les finestres que s'apaguen, els noms dels nens i l'ombra que camina. No ho pinteu.
+
+### `proleg/ocellaire.webp` — 1. Mestre Gaspar, l'Ocellaire, a la fira del Miracle (fa 300 anys, abans de ser tancat)
 
 ```
-Hand-painted 2D storybook illustration, vertical portrait composition (3:4, about 720x950), warm storybook fantasy with a slightly eerie Catalan mountain-village mood, soft painterly shading, clean dark-brown outlines, rich sunset light from behind with long violet shadows. Full scene, NOT isolated, no white background.
-Subject: Mestre Gaspar "l'Ocellaire", a traveling bird-seller at a spring village fair in the Catalan pre-Pyrenees, three hundred years ago (early 18th century). He is very tall and gaunt, standing in the center of the village square, seen full body from the front, slightly from below so he towers over the scene. He wears a long ragged coat made of overlapping feathers in faded browns, soot greys and dull iridescent greens, reaching his ankles with a jagged feathered hem; a wide-brimmed black hat crowned with bright red, yellow and green plumes; a thin pale face half in shadow, a charming but slightly too-wide smile, small glinting amber eyes; long bony fingers, one hand raised as if conducting the birds' song, the other holding a tiny silver bird whistle on a cord. Across his shoulders he carries a curved wooden yoke from which hang five or six ornate brass birdcages of different sizes (bell-shaped and dome-shaped), each holding a small songbird that glows softly golden as it sings.
-He looks friendly, fascinating and festive at first sight, but subtly unsettling: his shadow on the ground is shaped like a giant cage.
-Around him: four or five village children (about 6-9 years old, simple 18th-century rural clothes) listening enchanted; thin golden wisps of light (their laughter) drift from their open mouths up into the cages, and the children closest to him look a little paler and desaturated than the rest.
-Background: fair stalls with red-and-white and blue-and-white striped awnings and strings of colourful triangular bunting; behind, on a hill, a Romanesque stone sanctuary with a square bell tower against a golden-orange sunset sky; layered blue-violet mountains in the distance.
-Palette: warm ochre, sunset orange, honey gold, muted moss green, deep violet shadows. No text, no letters, no logos, no frame, no border, no watermark.
+Hand-painted 2D storybook illustration, vertical portrait 3:4, warm Catalan-mountain fantasy with a slightly eerie mood, soft painterly shading, clean dark-brown outlines, rich sunset light from behind with long violet shadows. Full scene, no white background, no text, no frame, no watermark.
+Subject: Mestre Gaspar "l'Ocellaire", a travelling bird-seller at the spring fair, three hundred years ago (early 18th century). Very tall and gaunt, standing in the middle of the village square, full body seen from the front and slightly from below so he towers over the scene. Long ragged coat of overlapping feathers in faded browns, soot greys and dull iridescent greens with a jagged feathered hem; wide-brimmed black hat crowned with red, yellow and green plumes; pale face half in shadow, a charming but slightly too-wide smile, small glinting amber eyes; long bony fingers, one hand raised as if conducting the birds' song, the other holding a tiny silver bird whistle. A curved wooden yoke across his shoulders carries five or six ornate brass birdcages that each hold a songbird glowing softly golden as it sings. He looks friendly and fascinating, but his shadow on the ground is shaped like a giant cage.
+Around him four or five village children (6-9 years old, simple 18th-century rural clothes) listen enchanted; thin golden wisps of light (their laughter) drift from their open mouths up into the cages, and the children nearest to him look a little paler and desaturated.
+Setting (match the game): the fair is held on a square paved with irregular grey-beige cobblestones with moss in the cracks, with red-and-white and blue-and-white striped stall awnings and strings of coloured bunting. Behind the square, in the right background, the monastery: a rectangular two-storey Romanesque monastery of warm honey-coloured sandstone ashlar blocks, low red terracotta-tiled gable roof, a central round-arched portal with stepped archivolts and a wide stone staircase with sloping side-rails, a twin-arched window above the portal, small tall arched windows (the building is newer here: no moss, clean stone). Round-crowned broadleaf trees with thick twisted trunks and golden-orange autumn leaf tips frame the sides; a tall dark cypress or two. Layered blue-violet mountains and a golden-orange sunset sky beyond.
+Palette: warm ochre, sunset orange, honey gold, muted moss green, deep violet shadows.
+```
+
+### `proleg/segell.webp` — 2. Sota terra: el tanquen a la gàbia i un monjo segella la porta amb Runna
+
+```
+Hand-painted 2D storybook illustration, vertical portrait 3:4, dark fantasy storybook mood, soft painterly shading, clean dark outlines, strong chiaroscuro. Full scene, no white background, no text, no frame, no watermark.
+Setting: a vast underground cavern, rock vault with stalactites, almost black violet and indigo walls, damp stone floor, a few lit lanterns.
+Left-centre: a giant bell-shaped black iron cage, taller than a house, glowing from inside with a violet light; inside it, the tall gaunt silhouette of the bird-seller Mestre Gaspar in his ragged feather coat and wide-brimmed hat, only two amber-violet glowing eyes visible, his long fingers gripping the bars. A few small songbirds lie still at the bottom.
+Right side: a group of rough mountain shepherds (sheepskin cloaks, crooks, wide hats, lanterns) and hooded monks in brown habits, straining together to close a massive iron-banded door set in the cavern wall.
+Foreground, slightly right of centre, seen largely in dark silhouette from behind and below: a young monk in a hooded habit raising Runna, a short straight bright sword, in one hand above his head. A pale blue-white light pours from the blade, lighting the monks' faces from the side, drawing glowing white-blue runes across the iron door and lock and sealing it, and casting long rays toward the cage.
+Mood: solemn, tense, a moment of sacrifice and relief. Palette: deep violet, indigo, black, with the icy blue-white of the sword light and small warm orange lantern accents.
+```
+
+### `proleg/boira.webp` — 3. Ara: el Monestir de nit i la boira lila que surt de terra
+
+```
+Hand-painted 2D storybook illustration, vertical portrait 3:4, warm Catalan-mountain fantasy turned eerie, soft painterly shading, clean dark-brown outlines, moonlit night. Full scene, no white background, no text, no frame, no watermark.
+Subject: the monastery at night, centred and seen from the front, dominant in the lower two thirds: a rectangular two-storey Romanesque monastery of warm honey-coloured sandstone ashlar blocks (here cooled by the moonlight to blue-grey and dull ochre), low red terracotta-tiled gable roof, a central round-arched Romanesque portal with stepped archivolts and a dark door, a wide stone staircase with two sloping stone side-rails leading up to it, a twin-arched window above the portal, a triple-arched window higher up, small tall arched windows on both sides of both floors, moss at the base. Every window is dark.
+In front of the monastery the square paved with irregular grey-beige cobblestones with moss in the cracks, shining wet. Left and right, round-crowned broadleaf trees with thick twisted trunks, gnarled visible roots and olive-green leaf clumps with golden-orange autumn tips, now dulled and slightly withered by the fog, plus two tall dark cypresses.
+From cracks in the cobblestones and from under the trees a cold lilac-violet fog seeps out and creeps up the staircase and the base of the walls, glowing faintly from within, with a few thin glowing violet cracks on the ground.
+Sky: a large pale moon at upper right, scattered stars, thin dark violet clouds, layered dark blue-violet mountains behind the roof. Mood: silent, ominous, beautiful.
+Palette: midnight blue, indigo, lilac-violet fog, cold moon cream, small warm tones only in the stone.
+```
+
+### `proleg/nens.webp` — 4. Cada nit falta un nen: tres cases, tres finestres
+
+```
+Hand-painted 2D storybook illustration, vertical portrait 3:4, warm Catalan-mountain village turned eerie, soft painterly shading, clean dark-brown outlines, deep night. Full scene, no white background, no text, no frame, no watermark.
+Composition: a quiet village street at night, seen from the front. Three small stone village houses stand in a row across the lower middle of the picture, each with a tiled roof, a wooden door and one window in its upper-left part: the left house about 200 px wide, the middle one slightly taller, the right one like the left, all of them evenly spaced and fully visible (about a quarter of the image height each). ALL WINDOWS ARE DARK AND UNLIT (dark glass, closed shutters) and the doors are shut: the game paints the warm window light on top and switches it off later.
+The street in front of the houses, across the bottom fifth of the picture, is paved with irregular grey-beige cobblestones with moss in the cracks and is EMPTY: no people, no objects (the game animates a hooded shadow leading a child there, and writes the three names under the houses).
+Between and behind the houses: round-crowned broadleaf trees with thick twisted trunks and golden-orange autumn leaf tips, now dim in the moonlight, and tall dark cypresses. High on the hill behind them, small, the monastery: a rectangular two-storey Romanesque sandstone building with a red tiled gable roof and a round-arched portal, all windows dark.
+A cold lilac fog lies low along the street and between the houses. Night sky with many stars, dark blue-violet mountains behind the hill. Mood: a village holding its breath.
+Palette: midnight blue, indigo, soft lilac fog, moonlit stone greys, tiny warm tones in the roof tiles.
 ```
