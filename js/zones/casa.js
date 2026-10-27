@@ -545,9 +545,7 @@ Object.assign(DIALEGS, {
     ] }),
 
     golfesNota: E => ({ pagines: [
-        { qui: '', text: "Un pergamí gastat i doblegat, clavat a la paret amb tres claus. Té la lletra apretada del campaner:" },
-        { qui: 'Nota del campaner', text: "«El rellotge només camina si els engranatges hi van en ordre: el petit primer, el gran al mig i el mitjà darrere.»" },
-        { qui: 'Ineu', text: "És a dir: posició I petit, posició II gran, posició III mitjà." }
+        { qui: 'Ineu', text: "«Nota del campaner. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el gran al mig, i el mitjà darrere.»" }
     ] }),
 
     golfesPendol: E => ({ pagines: [{ qui: '', text: E.flag('rellotgeReparat') ? "El pèndol batega amb calma, tic-tac, tic-tac." : "Un pèndol de llautó, penjat sense moure's dins la caixa de fusta." }] }),

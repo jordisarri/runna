@@ -186,28 +186,41 @@ const ENEMICS = {
 
     // BOSS: el Germà Andreu convertit en Pastor de Boira. Crida ovelles i carrega amb la caiada.
     pastor: {
-        tex: 'pastor_boira', vida: 12, vel: 330, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5,
+        tex: 'pastor_boira', vida: 18, vel: 360, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 520,
         monedes: [1, 15, 15], cor: 0, robust: true,
         perill: e => e.estat === 'carrega',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
-            const fase2 = e.vida <= 6;
-            if (!e.proxCrida) { e.proxCrida = ara + 2500; e.proxCarrega = ara + 3500; }
+            const fase2 = e.vida <= 9;
+            if (!e.proxCrida) { e.proxCrida = ara + 2500; e.proxCarrega = ara + 2600; e.proxBat = ara + 1800; }
             const cap = Math.atan2(jo.y - c.y, jo.x - c.x);
             if (e.estat === 'apunta') {
                 e.spr.body.setVelocity(0);
                 if (ara > e.fins) { e.estat = 'carrega'; e.fins = ara + 340; e.spr.clearTint(); e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel); }
             } else if (e.estat === 'carrega') {
-                if (ara > e.fins) { e.estat = 'cansat'; e.fins = ara + (fase2 ? 700 : 1100); e.spr.body.setVelocity(0); e.proxCarrega = ara + (fase2 ? 2200 : 3400); }
+                if (ara > e.fins) { e.estat = 'cansat'; e.fins = ara + (fase2 ? 650 : 950); e.spr.body.setVelocity(0); e.proxCarrega = ara + (fase2 ? 1800 : 2600); }
+            } else if (e.estat === 'bat') {
+                // Cop de caiada en arc: s'avisa amb un instant de pausa i colpeja tot al seu voltant
+                e.spr.body.setVelocity(0);
+                if (ara > e.fins) {
+                    e.spr.clearTint();
+                    z.cameras.main.shake(120, 0.004);
+                    Sfx.cop(true);
+                    const arc = z.add.circle(c.x, c.y, 40, 0xffe0a0, 0.35).setStrokeStyle(4, 0xffffff, 0.8).setDepth(99980);
+                    z.tweens.add({ targets: arc, scale: 3.4, alpha: 0, duration: 260, onComplete: () => arc.destroy() });
+                    if (Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y) < 150) z.ferIneu(1, { x: c.x, y: c.y });
+                    e.estat = 'cansat'; e.fins = ara + 500; e.proxBat = ara + (fase2 ? 1700 : 2400);
+                }
             } else if (e.estat === 'cansat') {
                 e.spr.body.setVelocity(0);
                 if (ara > e.fins) e.estat = 'camina';
             } else {   // camina cap a l'Ineu i crida el ramat
                 e.estat = 'camina';
-                const v = dist > 140 ? 42 : 0;
+                const v = dist > 95 ? (fase2 ? 85 : 66) : 0;
                 e.spr.body.setVelocity(Math.cos(cap) * v, Math.sin(cap) * v);
                 e.spr.setFlipX(Math.cos(cap) < 0);
+                if (dist < 130 && ara > e.proxBat) { e.estat = 'bat'; e.fins = ara + (fase2 ? 380 : 520); e.spr.setTint(0xffe080); }
                 if (ara > e.proxCrida) {
                     e.proxCrida = ara + (fase2 ? 4200 : 6500);
                     const vius = z.enemics.filter(x => x.tipus === 'ovella' && !x.mort).length;
@@ -217,7 +230,7 @@ const ENEMICS = {
                         [-1, 1].forEach(s => { const o = z.enemic('ovella', c.x + s * 150, c.y + 60); if (o) { z.boiraPuf(o.spr.x, o.spr.y); o.fins = ara + 900; } });
                     }
                 } else if (ara > e.proxCarrega && dist < 440) {
-                    e.estat = 'apunta'; e.fins = ara + (fase2 ? 450 : 700); e.ang = cap;
+                    e.estat = 'apunta'; e.fins = ara + (fase2 ? 400 : 620); e.ang = cap;
                     e.spr.setTint(0xff8080);
                     Sfx.carrega();
                 }
@@ -588,6 +601,7 @@ Object.assign(ZonaBase.prototype, {
             const px = jo.x + d.x * 55, py = jo.y + d.y * 55;
             this.esbarzers.forEach(o => { if (o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, px, py) < 85) this.destruirEsbarzer(o, false); });
         }
+        if (this.alAtacar) this.alAtacar(jo, d);          // les zones poden reaccionar al cop (les arrels del Til·ler)
     },
 
     // Animació d'atac de l'Ineu amb la fulla de la direcció (8 vistes). Retorna fals si no n'hi ha.
@@ -749,6 +763,9 @@ Object.assign(ZonaBase.prototype, {
 
     colpejar(e, dany, d) {
         const ara = this.time.now;
+        // Alguns bosses no deixen que els colpegis seguit: després d'un cop, un instant sense dany
+        if (e.def.immune && ara < (e.immuneFins || 0)) { Sfx.escut(); return; }
+        if (e.def.immune) e.immuneFins = ara + e.def.immune;
         e.vida -= dany;
         const mort = e.vida <= 0;
         if (e.def.robust) {             // els bosses no perden el torn ni surten volant

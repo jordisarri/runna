@@ -54,7 +54,7 @@ class ZonaEsglesia extends ZonaBase {
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daniel, que dirigeix el cor
         this.orgue = this.posar('orgue', 950, ESG.retY + 330, { col: { w: 110, h: 50 } });
-        this.npc('pianista', 950, ESG.retY + 400, DIALEGS.pianista);
+        this.npc('pianista', 950, ESG.retY + 400, DIALEGS.pianista, { flipX: true });
         this.npc('pare_daniel', 360, ESG.retY + 190, DIALEGS.pareDaniel, { flipX: false });
 
         // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar

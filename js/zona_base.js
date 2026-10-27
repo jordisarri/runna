@@ -507,16 +507,16 @@ class ZonaBase extends Phaser.Scene {
             // Menja una estona: el cap baixa i mastega
             this.tweens.add({ targets: spr, angle: 9 * cap, duration: 500, ease: 'Sine.easeOut' });
             const masteg = this.tweens.add({ targets: spr, scaleY: sy * 0.965, angle: 9 * cap + 1.6 * cap, yoyo: true, repeat: -1, duration: 230, delay: 500 });
-            this.time.delayedCall(Phaser.Math.Between(2600, 6200), () => {
+            this.time.delayedCall(Phaser.Math.Between(1400, 3600), () => {
                 masteg.stop();
                 this.tweens.add({ targets: spr, angle: 0, scaleY: sy, duration: 350 });
                 // Aixeca el cap i camina fins a una altra mata
-                const tx = Phaser.Math.Clamp(x0 + Phaser.Math.Between(-radi, radi), 40, this.config.amplada - 40), ty = y0 + Phaser.Math.Between(-radi * 0.4, radi * 0.4);
+                const tx = Phaser.Math.Clamp(x0 + Phaser.Math.Between(-radi * 2, radi * 2), 40, this.config.amplada - 40), ty = y0 + Phaser.Math.Between(-radi * 0.9, radi * 0.9);
                 this.time.delayedCall(450, () => {
                     spr.setFlipX(tx < spr.x);
                     const dist = Phaser.Math.Distance.Between(spr.x, spr.y, tx, ty);
                     const passos = this.tweens.add({ targets: spr, scaleY: sy * 1.045, yoyo: true, repeat: -1, duration: 190 });
-                    this.tweens.add({ targets: spr, x: tx, y: ty, duration: Math.max(600, dist / 24 * 1000), ease: 'Sine.easeInOut',
+                    this.tweens.add({ targets: spr, x: tx, y: ty, duration: Math.max(900, dist / 20 * 1000), ease: 'Sine.easeInOut',
                         onUpdate: () => spr.setDepth(spr.y),
                         onComplete: () => { passos.stop(); spr.setScale(sx, sy); spr.setDepth(spr.y); nova(); } });
                 });

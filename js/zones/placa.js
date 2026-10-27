@@ -43,6 +43,11 @@ class ZonaPlaca extends ZonaBase {
         this.posar('xiprer', 1305, 490, { col: { w: 24, h: 12 } });
 
         // Pedra que no encaixa amb la resta de la façana del Santuari: amaga un passatge (cal una palanca)
+        // Darrere la pedra, un forat fosc amb graons que només es veu quan la pedra s'aparta
+        this.forat = this.add.graphics().setDepth(459).setAlpha(0);
+        this.forat.fillStyle(0x07040c, 1).fillRoundedRect(1166, 384, 48, 42, 4).lineStyle(3, 0x2a1c10, 1).strokeRoundedRect(1166, 384, 48, 42, 4);
+        [0, 1, 2].forEach(k => this.forat.fillStyle(0x3a2c4a, 1 - k * 0.25).fillRect(1170 + k * 3, 410 + k * 5 - 8, 40 - k * 6, 4));
+        this.forat.fillStyle(0xa070ff, 0.18).fillEllipse(1190, 405, 60, 52);
         this.pedraSecreta = this.add.rectangle(1190, 405, 44, 34, 0x9a7a54).setStrokeStyle(3, 0x4a3420).setDepth(460);
         this.interactiu(1190, 480, 85, DIALEGS.pedraSecreta, {
             altura: 90,
@@ -95,13 +100,22 @@ class ZonaPlaca extends ZonaBase {
         Estat.posaFlag('tresorObert');
         this.cameras.main.shake(500, 0.004);
         Sfx.secret();
-        this.tweens.add({ targets: this.pedraSecreta, alpha: 0.15, scaleY: 0.2, duration: 900 });
+        this.obrirPedra(true);
         this.ui().obrirDialeg(DIALEGS.pedraSecretaOberta, () => Estat.desar());
         return true;
     }
 
+    // La pedra s'aixeca i s'enfila cap amunt, deixant a la vista el forat
+    obrirPedra(animat) {
+        if (!animat) { this.pedraSecreta.setAlpha(0).setY(370); this.forat.setAlpha(1); return; }
+        const pols = this.add.particles(1190, 405, 'espurna', { x: { min: -26, max: 26 }, speedY: { min: -40, max: 10 }, speedX: { min: -30, max: 30 }, lifespan: 900, scale: { start: 0.5, end: 0 }, tint: [0xb8a080, 0x8a7a68], frequency: 40 }).setDepth(461);
+        this.time.delayedCall(1300, () => pols.destroy());
+        this.tweens.add({ targets: this.forat, alpha: 1, duration: 600, delay: 300 });
+        this.tweens.add({ targets: this.pedraSecreta, y: 360, alpha: 0, duration: 1100, ease: 'Sine.easeInOut' });
+    }
+
     enEntrar() {
-        if (Estat.flag('tresorObert')) this.pedraSecreta.setAlpha(0.15).setScale(1, 0.2);
+        if (Estat.flag('tresorObert')) this.obrirPedra(false);
         if (Estat.flag('introVista')) return;
         Estat.posaFlag('introVista');
         this.time.delayedCall(700, () => {

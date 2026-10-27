@@ -588,7 +588,7 @@ class ZonaTiller extends ZonaBase {
         if (Estat.flag('camiCirosaObert')) this.sortida(1100, 0, 140, 14, 'ZonaCamiCirosa', 'tiller');
         else this.posarArrels();
 
-        this.arbres([[100, 150], [300, 90], [900, 100], [820, 330], [150, 820], [300, 940], [1000, 900], [1300, 880], [1350, 560], [760, 160]]);   // cap arbre vora les arrels: les copes no les han de tapar
+        this.arbres([[820, 330], [150, 820], [300, 940], [1000, 900], [1300, 880], [1350, 560]]);   // cap arbre vora les arrels: les copes no les han de tapar
 
         this.sortida(620, 986, 160, 14, 'ZonaCelles', 'tiller');
         this.sortida(0, 540, 14, 130, 'ZonaJordi', 'til');
@@ -597,11 +597,13 @@ class ZonaTiller extends ZonaBase {
     // Arrels del Til·ler: grans arcs nuosos que surten de terra i tanquen el camí, amb fulles de til·ler a dalt.
     // L'arbre les hi va fer créixer perquè la boira no pugés; quan hi acostes la seva branca, la reconeixen i s'enfonsen.
     posarArrels() {
-        const Y = 250;
+        const Y = 190;                                   // prou amunt perquè no hi hagi manera de vorejar-les
+        this.arrelsY = Y;
         let sd = 11; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
-        this.colArrels = this.colisio(1175, Y - 20, 240, 50);
-        for (let i = 0; i < 7; i++) {
-            const x = 1070 + i * 35 + r() * 10, y = Y + (i % 2) * 10, s = i % 2 ? 1 : -1;
+        this.colArrels = this.colisio(1190, Y - 20, 440, 50);
+        this.muralla(0, 150, 960, 150, 110);             // fins aquí, una fila d'arbres tanca el pas per l'oest
+        for (let i = 0; i < 11; i++) {
+            const x = 990 + i * 38 + r() * 10, y = Y + (i % 2) * 10, s = i % 2 ? 1 : -1;
             const amp = 50 + r() * 40, alt = 60 + r() * 70;
             const g = this.add.graphics({ x, y }).setDepth(y);
             const pts = new Phaser.Curves.CubicBezier(new Phaser.Math.Vector2(0, 0), new Phaser.Math.Vector2(s * amp * 0.1, -alt * 1.3),
@@ -617,10 +619,21 @@ class ZonaTiller extends ZonaBase {
             this.arrels.push(g);
             this.tweens.add({ targets: g, scaleY: 1.04, yoyo: true, repeat: -1, duration: 1400 + i * 130, ease: 'Sine.easeInOut' });   // respiren
         }
-        this.interactiu(1170, Y + 60, 110, DIALEGS.arrelsTiller, {
-            altura: 110, actiu: () => !Estat.flag('camiCirosaObert'),
-            enTancar: () => { if (Estat.te('basto_tiller') && Estat.flag('bassadoriaNeta')) this.apartarArrels(); }
-        });
+        // Sense la branca, les arrels només es poden mirar; amb ella, es colpegen com qualsevol cosa (ESPAI)
+        this.interactiu(1190, Y + 60, 130, DIALEGS.arrelsTiller, { altura: 110, actiu: () => !Estat.flag('camiCirosaObert') && !Estat.te('basto_tiller') });
+    }
+
+    // Cop de l'Ineu (combat.js) amb la branca del Til·ler a prop de les arrels
+    alAtacar(jo, d) {
+        if (!this.arrelsY || Estat.flag('camiCirosaObert') || !Estat.te('basto_tiller')) return;
+        const px = jo.x + d.x * 60, py = jo.y + d.y * 60;
+        if (Math.abs(px - 1190) > 280 || Math.abs(py - (this.arrelsY - 20)) > 110) return;
+        Sfx.puf();
+        this.arrels.forEach((g, i) => { this.tweens.add({ targets: g, scaleX: 1.12, yoyo: true, duration: 140, delay: i * 25 }); });
+        this.cameras.main.shake(140, 0.003);
+        this.impacte(px, py, d, 0);
+        if (Estat.flag('bassadoriaNeta')) this.apartarArrels();
+        else if (!this.avisArrels) { this.avisArrels = true; this.missatge('Les arrels s\'estremeixen en reconèixer la branca, però no cedeixen: encara esperen alguna cosa.'); }
     }
 
     apartarArrels() {
@@ -630,7 +643,7 @@ class ZonaTiller extends ZonaBase {
             this.tweens.killTweensOf(g);
             this.tweens.add({ targets: g, scaleY: 0, duration: 1300, delay: i * 140, ease: 'Sine.easeIn' });
         });
-        const terra = this.add.particles(1175, 250, 'espurna', {
+        const terra = this.add.particles(1190, this.arrelsY, 'espurna', {
             x: { min: -120, max: 120 }, speedY: { min: -80, max: -20 }, speedX: { min: -30, max: 30 }, lifespan: 700,
             scale: { start: 0.6, end: 0 }, tint: [0x5e3e24, 0x8a6440, 0x6a9a3a], frequency: 40
         }).setDepth(260);
@@ -639,7 +652,6 @@ class ZonaTiller extends ZonaBase {
         Sfx.secret();
         this.cameras.main.shake(1200, 0.004);
         this.sortida(1100, 0, 140, 14, 'ZonaCamiCirosa', 'tiller');
-        this.missatge('Les arrels s\'enfonsen a la terra.');
         Estat.posaObjectiu('Puja a la Cirosa pel camí del nord-est: els pastors desterrats guarden les esquelles dels seus avis.');
         Estat.desar();
     }

@@ -276,7 +276,6 @@ class ZonaCirosa extends ZonaBase {
         this.cameras.main.shake(300, 0.005);
         this.tancarArena();
         this.flotant(1400, 520, 'Be-e-e-e!', '#e0a0ff');
-        this.missatge('Pastor de Boira: allunya\'t de les envestides i colpeja quan quedi cansat.');
     }
 }
 

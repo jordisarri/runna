@@ -506,12 +506,11 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "El Gran Til·ler", text: "Sento l'aigua cantar de lluny... La Bassadòria és neta. Has fet bé, petit monjo." },
-                    { qui: "El Gran Til·ler", text: "El camí del nord-est cap a la Cirosa el vaig tancar jo amb les meves arrels, perquè la boira no hi pugés. Ara que l'aigua respira, pots passar: les arrels només reconeixen la meva branca. Acosta-les-hi i s'enfonsaran." },
-                    { qui: "El Gran Til·ler", text: "A la Cirosa viuen uns pastors desterrats que guarden les esquelles dels seus avis: amb elles es van afinar els cants antics. Tracta'ls amb dolçor, que ja han patit prou. I vés amb compte: un monjo hi ha pujat aquests dies." },
-                    { qui: "", text: "Al fons, el camí que puja cap al nord-est és tancat per un mur d'arrels nuoses que surten de terra." }
+                    { qui: "El Gran Til·ler", text: "El camí del nord-est cap a la Cirosa el vaig tancar jo amb les meves arrels, perquè la boira no hi pugés. Ara que l'aigua respira, pots passar: les arrels només reconeixen la meva branca. Colpeja-les amb ella i s'enfonsaran." },
+                    { qui: "El Gran Til·ler", text: "A la Cirosa viuen uns pastors desterrats que guarden les esquelles dels seus avis: amb elles es van afinar els cants antics. Tracta'ls amb dolçor, que ja han patit prou. I vés amb compte: un monjo hi ha pujat aquests dies." }
                 ],
                 enAcabar: () => {
-                    E.posaObjectiu("Acosta la branca del Gran Til·ler a les arrels que tanquen el camí del nord-est (a la dreta del Til·ler).");
+                    E.posaObjectiu("Colpeja amb la branca del Gran Til·ler les arrels que tanquen el camí del nord-est (a la dreta del Til·ler).");
                 }
             };
         }
