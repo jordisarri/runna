@@ -107,7 +107,7 @@ const DIALEGS = {
                     { qui: 'Germà Andreu', text: 'Ets del Barça, tu? Tinc uns cromos que els nens es moren per tenir. Ells sí que m\'escolten.' },
                     { qui: 'Germà Andreu', text: 'Ei, pren aquest bastó de pelegrí. Era d\'un vell que ja no el vol.' },
                     { fer: (z, fet) => z.objecteVola('germa_andreu', () => z.ineuAixeca('ineu_aixeca_basto', fet, 0.58), 'arma_basto') },
-                    { avis: 'Has obtingut el BASTÓ DE PELEGRÍ!' },
+                    { qui: '', text: 'Has obtingut el BASTÓ DE PELEGRÍ!' },        // quadre de diàleg: l'Ineu hi roman alçant el bastó fins que s'avança
                     { fer: (z, fet) => z.ineuBaixa(fet) }
                 ],
                 enAcabar: () => {
