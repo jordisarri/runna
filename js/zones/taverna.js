@@ -158,7 +158,7 @@ class ZonaTavernaInt extends ZonaBase {
         this.interactiu(150, 410, 70, DIALEGS.acordio, { altura: 60 });
 
         // L'Eva, al costat de la llar
-        this.npc('eva', 560, 300, DIALEGS.eva, { flipX: true });
+        this.npc('eva', 650, 290, DIALEGS.eva, { flipX: true });
 
         // La porta del rebost, a la paret del fons a la dreta: tancada (des d'aquí no es baixa al soterrani)
         const pf = this.add.graphics().setDepth(-950);
