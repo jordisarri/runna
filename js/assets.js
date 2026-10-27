@@ -802,6 +802,8 @@ const Grafics = {
         crea('pilastra_ermita', 54, 170, pintarPilastraErmita);
         crea('catifa_ermita', 120, 440, pintarCatifaErmita);
         crea('graons_ermita', 380, 90, pintarGraonsErmita);
+        crea('altar_ermita', 150, 118, pintarAltarAustera);
+        crea('candelabre_apagat', 36, 112, pintarCandelabreApagat);
         crea('ofrenes_ermita', 130, 44, pintarOfrenesErmita);
         crea('candelabre_hall', 44, 112, pintarCandelabreHall);
         crea('banner_hall', 60, 150, pintarBannerHall);

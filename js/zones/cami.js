@@ -126,7 +126,6 @@ class ZonaErmitaInt extends ZonaBase {
         this.colisio(700, 690, 400, 20);
 
         // Catifa de la porta a l'altar i graons de l'altar
-        this.add.image(500, 690, 'catifa_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(-1050);
         this.add.image(500, 262, 'graons_ermita').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-990);
 
         // Pilastres de pedra adossades als murs laterals
@@ -143,17 +142,14 @@ class ZonaErmitaInt extends ZonaBase {
         this.posar('taula_pedra2', 660, 190, { col: { w: 100, h: 20 } });
         this.interactiu(660, 210, 90, DIALEGS.taulaPedra(2), { altura: 170 });
 
-        // Altar amb les ofrenes dels nens als peus i dos canelobres. Amb les dotze paraules, l'Ineu hi diu la frase i apareix un cofre
-        this.posar('altar', 500, 300, { col: { w: 140, h: 36 } });
+        // Altar de pedra nua, amb dos peus de ferro amb les espelmes apagades. Amb les dotze paraules, l'Ineu hi diu la frase i apareix un cofre
+        this.posar('altar_ermita', 500, 300, { col: { w: 140, h: 36 } });
         const totes = () => Array.from({ length: 12 }, (_, i) => Estat.flag('col' + (i + 1))).every(Boolean);
         this.interactiu(500, 335, 90, DIALEGS.altarErmita, { altura: 100, actiu: () => totes() && !Estat.flag('cofreAltar') });
         if (Estat.flag('cofreAltar') && !Estat.flag('missatgeDesxifrat')) this.posarCofreAltar();
-        this.add.image(500, 374, 'ofrenes_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(374);
-        [[392, 352], [608, 352]].forEach(([x, y], i) => {
-            this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
-            this.colisio(x, y - 8, 24, 14);
-            const llum = this.add.circle(x, y - 78, 70, 0xffc060, 0.1).setDepth(y + 1);
-            this.tweens.add({ targets: llum, alpha: 0.05, scale: 0.92, yoyo: true, repeat: -1, duration: 420 + i * 90 });
+        [[392, 352], [608, 352]].forEach(([x, y]) => {          // dos peus de ferro amb l'espelma apagada
+            this.add.image(x, y, 'candelabre_apagat').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            this.colisio(x, y - 8, 20, 14);
         });
 
         // Un raig de llum del vitrall cau sobre l'altar, amb pols flotant

@@ -37,13 +37,13 @@ function vitrallErmita(ctx, cx, y0, w, h) {
     const arc = () => { ctx.beginPath(); ctx.moveTo(x0, y0 + h); ctx.lineTo(x0, y0 + w * 0.8); ctx.quadraticCurveTo(x0, y0 + 4, cx, y0); ctx.quadraticCurveTo(x0 + w, y0 + 4, x0 + w, y0 + w * 0.8); ctx.lineTo(x0 + w, y0 + h); ctx.closePath(); };
     // Resplendor de fora
     const g = ctx.createRadialGradient(cx, y0 + h * 0.45, 4, cx, y0 + h * 0.45, h * 0.9);
-    g.addColorStop(0, 'rgba(255,236,170,0.5)'); g.addColorStop(1, 'rgba(255,236,170,0)');
+    g.addColorStop(0, 'rgba(220,230,240,0.35)'); g.addColorStop(1, 'rgba(220,230,240,0)');
     ctx.fillStyle = g; ctx.fillRect(cx - h, y0 - 20, 2 * h, h * 1.6);
     // Marc de pedra
     ctx.save(); ctx.translate(0, 0); ctx.lineWidth = 8; ctx.strokeStyle = '#a89e8a'; arc(); ctx.stroke(); ctx.restore();
     ctx.lineWidth = 2; ctx.strokeStyle = BIB_CONTORN; arc(); ctx.stroke();
     ctx.save(); arc(); ctx.clip();
-    const colors = ['#2a4a8a', '#c88a24', '#a02a2a', '#2a7a5a', '#3a6aaa', '#e0a838'];
+    const colors = ['#aeb8bc', '#9aa6ac', '#bcc4c4', '#a2aeb2'];            // vidre llis, gairebé incolor: una ermita austera
     const nc = 3, nf = 7, cw = w / nc, ch = h / nf;
     for (let i = 0; i < nc; i++) for (let j = 0; j < nf; j++) {
         ctx.fillStyle = colors[Math.floor(r() * colors.length)]; ctx.fillRect(x0 + i * cw, y0 + j * ch, cw, ch);
@@ -67,12 +67,9 @@ function fornaculaErmita(ctx, cx, y0, w, h) {
     const g = ctx.createLinearGradient(0, y0, 0, y0 + h); g.addColorStop(0, '#0e0a06'); g.addColorStop(1, '#2a2014');
     ctx.fillStyle = g; arc(); ctx.fill(); ctx.lineWidth = 1.8; ctx.strokeStyle = BIB_CONTORN; arc(); ctx.stroke();
     ctx.fillStyle = '#8a8070'; ctx.fillRect(x0 - 3, y0 + h - 8, w + 6, 8); ctx.strokeRect(x0 - 3, y0 + h - 8, w + 6, 8);
-    // Espelma i resplendor
-    const gl = ctx.createRadialGradient(cx, y0 + h - 24, 1, cx, y0 + h - 24, 26); gl.addColorStop(0, 'rgba(255,200,100,0.55)'); gl.addColorStop(1, 'rgba(255,200,100,0)');
-    ctx.fillStyle = gl; ctx.fillRect(cx - 30, y0 + h - 54, 60, 60);
-    ctx.fillStyle = '#f0e4c0'; ctx.fillRect(cx - 3, y0 + h - 22, 6, 14); ctx.strokeRect(cx - 3, y0 + h - 22, 6, 14);
-    ctx.fillStyle = '#ffb030'; ctx.beginPath(); ctx.ellipse(cx, y0 + h - 28, 2.6, 5, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#fff2b0'; ctx.beginPath(); ctx.ellipse(cx, y0 + h - 27, 1.2, 2.6, 0, 0, Math.PI * 2); ctx.fill();
+    // Una espelma curta, apagada (el ble ennegrit i un fil de cera gastada)
+    ctx.fillStyle = '#b8b09c'; ctx.fillRect(cx - 3, y0 + h - 18, 6, 10); ctx.strokeRect(cx - 3, y0 + h - 18, 6, 10);
+    ctx.strokeStyle = '#2a2218'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(cx, y0 + h - 18); ctx.lineTo(cx + 1, y0 + h - 22); ctx.stroke();
 }
 
 // ---------- Paret del fons: carreus, vitrall al mig, dues fornícules, cornisa i teranyines ----------
@@ -226,4 +223,39 @@ function runaErmita(ctx, k, x, y, s) {
     };
     traca(0.9, 1, 'rgba(255,255,255,0.28)', 1.5);
     traca(0, 0, '#34302a', 1.7);
+}
+
+// ---------- Altar de pedra nua: un bloc de carreus amb la taula de dalt, sense mantell ni ornaments; dues espelmes de ferro, apagades ----------
+function pintarAltarAustera(ctx, w, h) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const cx = w / 2, C = BIB_CONTORN;
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(cx + 3, h - 3, w * 0.5, 6, 0, 0, Math.PI * 2); ctx.fill();
+    const pesa = (x, y, ww, hh, c1, c2) => { const g = ctx.createLinearGradient(x, y, x + ww, y + hh); g.addColorStop(0, c1); g.addColorStop(1, c2); ctx.fillStyle = g; ctx.fillRect(x, y, ww, hh); ctx.strokeStyle = C; ctx.lineWidth = 1.8; ctx.strokeRect(x, y, ww, hh); };
+    pesa(14, h - 26, w - 28, 22, '#a8a090', '#767066');                  // sòcol
+    pesa(20, 40, w - 40, h - 62, '#b8b0a0', '#7e776b');                   // cos
+    ctx.strokeStyle = 'rgba(40,34,26,0.5)'; ctx.lineWidth = 1;
+    for (let r = 0; r < 3; r++) { const y = 52 + r * 15; ctx.beginPath(); ctx.moveTo(20, y); ctx.lineTo(w - 20, y); ctx.stroke(); for (let x = 36 + (r % 2) * 18; x < w - 24; x += 34) { ctx.beginPath(); ctx.moveTo(x, y - 15); ctx.lineTo(x, y); ctx.stroke(); } }
+    pesa(10, 30, w - 20, 12, '#cfc8b6', '#948c7c');                       // taula de dalt
+    ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(12, 31, w - 24, 2);
+    // Una creu de ferro negra gravada al davant, sòbria
+    ctx.strokeStyle = 'rgba(30,26,22,0.8)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(cx, 54); ctx.lineTo(cx, 82); ctx.moveTo(cx - 9, 64); ctx.lineTo(cx + 9, 64); ctx.stroke();
+    // Dues espelmes apagades en peus de ferro, als extrems de la taula
+    [w * 0.2, w * 0.8].forEach(x => {
+        ctx.fillStyle = '#26221e'; ctx.fillRect(x - 5, 26, 10, 5); ctx.strokeRect(x - 5, 26, 10, 5);
+        ctx.fillStyle = '#c8bfa6'; ctx.fillRect(x - 3, 10, 6, 17); ctx.strokeStyle = C; ctx.lineWidth = 1.2; ctx.strokeRect(x - 3, 10, 6, 17);
+        ctx.strokeStyle = '#1a1612'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, 10); ctx.lineTo(x + 0.8, 5); ctx.stroke();
+    });
+}
+
+// ---------- Peu de ferro amb una espelma apagada ----------
+function pintarCandelabreApagat(ctx, w, h) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const cx = w / 2;
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(cx, h - 4, w * 0.4, 4, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(cx, h - 8); ctx.lineTo(cx, 34); ctx.stroke();
+    ctx.strokeStyle = '#3a3630'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(cx, h - 8); ctx.lineTo(cx, 34); ctx.stroke();
+    ctx.fillStyle = '#2e2a26'; ctx.beginPath(); ctx.ellipse(cx, h - 8, w * 0.32, 5, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.6; ctx.stroke();
+    ctx.fillStyle = '#2e2a26'; ctx.beginPath(); ctx.ellipse(cx, 36, 9, 3.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#c8bfa6'; ctx.fillRect(cx - 3.5, 14, 7, 22); ctx.strokeRect(cx - 3.5, 14, 7, 22);
+    ctx.strokeStyle = '#1a1612'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(cx, 14); ctx.lineTo(cx + 1, 9); ctx.stroke();
 }
