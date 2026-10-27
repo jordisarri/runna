@@ -507,6 +507,7 @@ Object.assign(ZonaBase.prototype, {
         const tex = this.textures.get(def.tex);
         const esc = ((tex.customData && tex.customData.escala) || 1 / RES);
         const spr = this.physics.add.sprite(x, y, def.tex, tex.has(0) ? 0 : undefined).setScale(esc);   // (els fulls d'animació, al fotograma 0)
+        spr.setDepth(y + spr.displayHeight / 2);       // ja des del primer moment (mentre hi ha un diàleg no s'actualitza: sense això el decorat el tapava)
         const fw = spr.width, fh = spr.height;
         spr.body.setSize(def.cos[0] / esc, def.cos[1] / esc);
         spr.body.setOffset((fw - def.cos[0] / esc) / 2, def.centrat ? (fh - def.cos[1] / esc) / 2 : fh - def.cos[1] / esc);
