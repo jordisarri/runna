@@ -265,22 +265,24 @@ class ZonaCreu extends ZonaBase {
         [[470, 350], [940, 350]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xcfe08a));   // plàtans
 
         // Bassadòria: una bassa molt gran (520 d'ample, uns quatre Ineus), sense mur al darrere; plàtans de tardor als costats
-        [[700, 930], [1330, 930]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xe0b868));
-        this.posar('bassadoria', 1010, 900, { col: { w: 470, h: 190, dy: -50 } });
-        this.interactiu(1010, 755, 280, DIALEGS.bassadoria, { altura: 110, enTancar: () => Estat.posaFlag('flauta_bassadoria') });
-        this.llocFlauta('bassadoria', 1010, 755, 340, true, () => !Estat.flag('bassadoriaNeta'));
-        if (!Estat.flag('bassadoriaNeta')) this.boiraBass = this.boira(1010, 760, 380, 110, 3.5);
+        [[600, 980], [1430, 980]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xe0b868));
+        // Dos dibuixos de la mateixa bassa: tèrbola i amb boira, i neta (després del Cant de l'Aurora)
+        this.bassa = this.posar(Estat.flag('bassadoriaNeta') ? 'bassadoria' : 'bassadoria_boira', 1010, 900, { fonsY: 640 });   // profunditat de la vora del fons: els gripaus de dins l'aigua es veuen
+        this.colisio(1010, 740, 600, 170);             // l'anella de pedra (una el·lipse feta de tres franges)
+        this.colisio(1010, 630, 430, 60);
+        this.colisio(1015, 855, 390, 80);              // portella, jardinera i abeurador
+        this.interactiu(1010, 815, 200, DIALEGS.bassadoria, { altura: 110, enTancar: () => Estat.posaFlag('flauta_bassadoria') });
+        this.llocFlauta('bassadoria', 1010, 800, 340, true, () => !Estat.flag('bassadoriaNeta'));
+        if (!Estat.flag('bassadoriaNeta')) this.boiraBass = this.boira(1010, 700, 480, 120, 3.5);
 
         // L'Home del Carruatge Verd, a la vora del camí
         this.posar('carruatge', 330, 730, { col: { w: 190, h: 50 } });
         this.npc('home_carruatge', 440, 760, DIALEGS.homeCarruatge);
 
         this.cartell(1180, 480, () => ({ pagines: [{ qui: '', text: '↑ Plaça del Santuari' }] }));
-        this.arbres([[150, 180], [320, 260], [1450, 220], [200, 900], [650, 940], [1300, 930], [1500, 780], [100, 520], [190, 640], [1400, 440], [1480, 600], [260, 440]]);
+        this.arbres([[150, 180], [320, 260], [1450, 220], [200, 900], [1500, 780], [100, 520], [190, 640], [1400, 440], [1480, 600], [260, 440]]);
 
         this.enemic('escolopendra', 500, 300);
-        // Aigua neta (després del Cant de l'Aurora)
-        this.aiguaNeta = this.add.ellipse(1010, 755, 416, 130, 0x8fd0f0, 0.75).setDepth(901).setVisible(Estat.flag('bassadoriaNeta'));
         // Els gripaus corromputs s'escapen de la Bassadòria: n'hi ha per tota l'escena i, a mesura que en caiguin,
         // en surten de nous de la bassa. Quan la boira se'n va (aigua neta) ja no en surten més.
         this.propGripau = this.time.now + 2500;
@@ -298,8 +300,8 @@ class ZonaCreu extends ZonaBase {
         const prop = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1010, 800) < 520;
         if (!prop) return false;
         if (Estat.flag('bassadoriaNeta')) { this.missatge("L'aigua ja és clara."); return true; }
-        this.aiguaNeta.setVisible(true).setAlpha(0);
-        this.tweens.add({ targets: this.aiguaNeta, alpha: 0.75, duration: 1500 });
+        const neta = this.posar('bassadoria', 1010, 900).setDepth(this.bassa.depth + 0.5).setAlpha(0);       // l'aigua s'aclareix a poc a poc
+        this.tweens.add({ targets: neta, alpha: 1, duration: 2200, onComplete: () => { this.bassa.destroy(); this.bassa = neta; } });
         if (this.boiraBass) this.boiraBass.stop();
         this.enemics.filter(e => e.tipus === 'gripau' && !e.mort).forEach(e => {
             e.mort = true; e.spr.body.enable = false;
@@ -316,10 +318,10 @@ class ZonaCreu extends ZonaBase {
         if (vius >= 5) return;
         this.propGripau = ara + 3800;
         // Surt de la bassa d'un salt i s'escampa per l'escena
-        const sx = 880 + Math.random() * 260, sy = 850;
+        const sx = 820 + Math.random() * 380, sy = 720;
         let dx, dy, intents = 0;
         do { dx = 150 + Math.random() * 1300; dy = 280 + Math.random() * 600; intents++; }
-        while (intents < 12 && (dx > 740 && dx < 1280 && dy > 640 && dy < 880));       // no tornar a caure a la bassa
+        while (intents < 12 && (dx > 680 && dx < 1340 && dy > 560 && dy < 920));       // no tornar a caure a la bassa
         this.enemic('gripau', sx, sy, { sortida: true, salt: { x: dx, y: dy } });
     }
 }

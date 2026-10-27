@@ -571,8 +571,8 @@ class ZonaTiller extends ZonaBase {
         this.terra('cami', 1100, 0, 140, 670);            // cap a dalt a la dreta: la Cirosa
 
         // El Gran Til·ler
-        this.posar('tiller', TIL_X, TIL_Y, { col: { w: 110, h: 40 } });
-        this.interactiu(TIL_X, TIL_Y + 25, 100, DIALEGS.tiller, { altura: 280 });
+        this.posar('tiller', TIL_X, TIL_Y, { col: { w: 170, h: 40 } });
+        this.interactiu(TIL_X, TIL_Y + 25, 110, DIALEGS.tiller, { altura: 320 });
 
         // Després del sopar queden quatre espelmes vora les arrels del Til·ler
         if (Estat.flag('soparFet')) this.posarEspelmes();

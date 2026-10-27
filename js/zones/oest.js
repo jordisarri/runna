@@ -219,7 +219,7 @@ class ZonaCamiRov extends ZonaBase {
             this.nena = this.posar('nena_trenes', 880, 880, { fonsY: 880 }).setAlpha(0.72);
             this.resplendorNena = this.add.circle(880, 820, 90, 0xcfd8ff, 0.12).setDepth(879);
             this.tweens.add({ targets: [this.nena, this.resplendorNena], y: '-=10', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
-            this.interactiu(880, 880, 100, DIALEGS.nenaTrenes, { altura: 130 });
+            this.interactiu(880, 880, 100, DIALEGS.nenaTrenes, { altura: 105 });
         }
         // Primer llaç: amagat sota una roca que cal empènyer
         this.llac = this.posar('llac', 1300, 830, { fonsY: 830 });
