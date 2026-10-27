@@ -345,9 +345,8 @@ const DIALEGS = {
 
     juli: E => ({
         pagines: [
-            { qui: 'Juli', text: 'Ineu! Sabies que el ping-pong és física pura? Efecte Magnus, rebot, fricció... i els angelets de la samarreta són de l\'edició limitada.' },
-            { qui: 'Juli', text: 'El meu pare, en Frederic, juga amb una pala de pedra. De pedra! I em guanya igualment. Frikis de mena. (Segons ell, la pala és igual: «el que compta és el que portes dins».)' },
-            { qui: 'Juli', text: 'En Josep és el millor de la sala, i només es pot vèncer d\'una manera: tornant-li el servei. Quan et fa el servei màgic ensenya tres carrils: memoritza\'ls i repeteix-los en ordre. Tens dos intents, i et deixa mirar-ho una altra vegada. Quan encertes l\'ordre, l\'Ineu li torna la pilota.' }
+            { qui: 'Juli', text: 'Ei, Ineu! Aquí tot gira al voltant d\'en Josep i del seu servei. Si vols jugar, parla-hi.' },
+            { qui: 'Juli', text: 'El meu pare, en Frederic, juga amb una pala de pedra. De pedra! I em guanya igualment. Frikis de mena.' }
         ]
     }),
 
@@ -374,36 +373,38 @@ const DIALEGS = {
         pagines: [
             { qui: 'Frederic', text: 'Calma, noi. La pilota no s\'ha de perseguir, s\'ha d\'esperar.' },
             { qui: 'Frederic', text: 'Jo jugo amb una pala de pedra. De pedra, sí: pesa com un maó i no té goma ni res. Quan jugueu a la taula, no em veuràs ni a mi ni la pala; no cal.' },
-            { qui: 'Frederic', text: 'Perquè amb què es juga és igual. La pala només és la mà allargada. El que compta és l\'esperit del joc que portes dins: el talent, o la màgia, que a la teva edat és gairebé el mateix.' },
-            { qui: 'Frederic', text: 'I la teva màgia funciona així: mira per quin carril ve la pilota. Bota a la taula i s\'enlaira: quan és al punt més alt, el cercle es posa verd (ja pots) i blau (perfecte). Llavors colpeja-la, i prem EL CARRIL DE LA PILOTA: l\'Ineu hi anirà i la pilota en sortirà d\'allà mateix.' },
-            { qui: 'Frederic', text: 'Si prems un altre carril, l\'Ineu s\'hi mou i fa el gest a l\'aire, però no la toca: perds un instant. Només perds el punt si la pilota et passa de llarg. Això és tot.' }
-        ]
-    }),
-
-    eloi: E => ({
-        pagines: [
-            { qui: 'Eloi', text: 'Mira qui ha vingut a perdre el temps. Soc l\'Eloi, el segon millor de la sala. I el primer, si no fos per aquell servei absurd d\'en Josep.' },
-            { qui: 'Eloi', text: E.flag('josepVencut') ? 'Has guanyat en Josep? Sort, segur. Jo també ho hauria fet si no m\'hagués cansat escalfant.' : 'Vols jugar? Primer m\'he d\'escalfar... Però el repte important no és el meu: és el d\'en Josep. Parla-hi.' }
+            { qui: 'Frederic', text: 'Perquè amb què es juga és igual. La pala només és la mà allargada. El que compta és l\'esperit del joc que portes dins: el talent, o la màgia, que a la teva edat és gairebé el mateix.' }
         ]
     }),
 
     josep: E => E.flag('josepVencut') ? {
         pagines: [
-            { qui: 'Josep', text: 'Ningú no m\'havia tornat el servei en vint anys. Ni l\'Eloi. Ja no et regalaré res, però la taula és teva quan vulguis.' },
-            { qui: 'Josep', text: 'Vols jugar un altre partit?' },
+            { qui: 'Josep', text: 'La taula és teva quan vulguis, noi. Vols provar de tornar-me el servei un altre cop?' },
             { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaPP = i; fet(); }) }
         ],
         enAcabar: () => { if (DIALEGS._triaPP === 0) game.scene.start('PingPong'); DIALEGS._triaPP = null; }
     } : {
         pagines: [
-            { qui: 'Josep', text: 'Aquest és el meu servei. Ningú no l\'ha tornat mai. Ni l\'Eloi, per molt que presumeixi.' },
-            { qui: 'Josep', text: 'Aquí al Celler les coses es guanyen a la taula. Si vols que la gent d\'aquí et parli de debò, guanya\'m: un sol partit, a set punts.' },
-            { qui: '', text: 'COM ES JUGA (1/3). La pilota ve per un dels tres carrils de la taula. Un cercle groc es fa petit fins a l\'anell d\'aquell carril. Quan l\'atrapa, prem el carril: ← ↓ → (o A S D, o els tres botons de sota). L\'Ineu es desplaça fins al carril, colpeja amb la pala i la pilota torna des d\'allà mateix.' },
-            { qui: '', text: 'COM ES JUGA (2/3). La pilota bota a la teva meitat de la taula i s\'enlaira: quan és al punt més alt, el cercle es posa VERD (ja pots colpejar) i BLAU (cop perfecte: en Josep gairebé mai no la torna). Cal prémer EL CARRIL DE LA PILOTA: si prems un altre, l\'Ineu hi va i fa el gest a l\'aire, però no la toca. Perds el punt només si la pilota et passa de llarg.' },
-            { qui: '', text: 'COM ES JUGA (3/3). Quan en Josep serveix, el servei màgic ensenya tres carrils, un a un: memoritza\'ls i repeteix-los en ordre (dos intents). Quan serveixes tu, prem el carril des d\'on vols servir: l\'Ineu hi va i la pilota en surt d\'allà. Set punts, i cal guanyar de dos.' }
+            { qui: 'Josep', text: 'Benvingut al Celler, viatger. Les pales i la pilota només són l\'escorça: el que jo practico aquí és màgia blanca.' },
+            { qui: 'Josep', text: 'Aquest és el meu servei màgic. La pilota hi porta tres llums que s\'encenen una a una, i fins ara ningú no ha sabut aturar-lo.' },
+            { qui: 'Josep', text: 'Vols provar-ho? Una partida, a set punts.' },
+            { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaPP = i; fet(); }) }
         ],
-        enAcabar: () => game.scene.start('PingPong')
+        enAcabar: () => {
+            const triat = DIALEGS._triaPP; DIALEGS._triaPP = null;
+            const ui = game.scene.getScene('UI');
+            if (triat === 0) ui.obrirDialeg(DIALEGS.josepRegles(E), () => game.scene.start('PingPong'));
+            else ui.obrirDialeg({ pagines: [{ qui: 'Josep', text: 'Com vulguis. La taula ja no se\'n va enlloc.' }] });
+        }
     },
+
+    // Les úniques explicacions de com es juga: les dóna en Josep, i curtes
+    josepRegles: E => ({
+        pagines: [
+            { qui: 'Josep', text: 'Mira per on ve la pilota: quan el cercle es posi verd, prem el seu carril (← ↓ → o els botons) i la tornaràs.' },
+            { qui: 'Josep', text: 'I quan jo faci el servei màgic, mira els tres signes i repeteix-los en el mateix ordre.' }
+        ]
+    }),
 
     josepGuanyat: E => E.flag('josepVencut') ? ({
         pagines: [
@@ -411,11 +412,10 @@ const DIALEGS = {
         ]
     }) : ({
         pagines: [
-            { qui: 'Josep', text: '...Me l\'has tornat. El servei. Me l\'has tornat de debò.' },
-            { qui: 'Juli', text: 'HO SABIA! Efecte Magnus, Josep! Física pura!' },
-            { qui: 'Frederic', text: 'Bon partit, noi. Ara sí: vine, que t\'he de dir una cosa.' },
-            { fer: (z, fet) => z.seq([c => z.npcVa('josep', z.ineu.x + 60, z.ineu.y, c), c => z.objecteVola('josep', c)], fet) },
-            { qui: 'Josep', text: 'Pren-la. Al Celler en teníem per als passadissos dels monjos: allà baix hi fa una fosca que no perdona.' },
+            { qui: 'Josep', text: '...Me l\'has tornat. El servei. Algú, per fi, l\'ha aturat de debò.' },
+            { fer: (z, fet) => z.npcVa('josep', z.ineu.x + 60, z.ineu.y, fet) },
+            { qui: 'Josep', text: 'Això és per a tu: una llanterna. Als passadissos dels monjos hi fa una fosca que no perdona, i amb la seva llum hi veuràs.' },
+            { fer: (z, fet) => z.objecteVola('josep', fet) },
             { qui: '', text: 'Has obtingut la LLANTERNA: hi veuràs millor a les zones fosques.' }
         ],
         enAcabar: () => {
@@ -431,7 +431,6 @@ const DIALEGS = {
         enAcabar: () => { if (!E.flag('josepVencut')) E.posaObjectiu('Guanya en Josep a ping-pong, al Celler: parla-hi per jugar.'); }
     }),
 
-    taulaPP: E => ({ pagines: [{ qui: '', text: E.flag('josepVencut') ? 'La taula on vas guanyar en Josep. Encara hi ha la marca de la pilota, al cantell.' : 'Una taula de ping-pong. Per jugar-hi, parla amb en Josep: és ell qui mana a la sala.' }] }),
 
     // ---------------- CEL·LES I TIL·LER ----------------
     neus: E => {
@@ -1287,20 +1286,6 @@ const DIALEGS = {
         ],
         enAcabar: () => E.posaFlag("reixaObertaDins")
     }),
-
-    posterSecret: E => {
-        if (E.flag("rodaMoguda")) {
-            return { pagines: [{ qui: "", text: "La roda de carruatge, desplaçada, i al darrere un passadís fosc que baixa. Se sent una olor de vi vell i d'humitat." }] };
-        }
-        return {
-            pagines: [
-                { qui: "", text: "Una roda de carruatge enorme, dreta contra la paret com a decoració. De sota la fusta ve un fil d'aire fred, i una olor de vi i d'humitat." },
-                { qui: "Ineu", text: E.te("guants") ? "Hi ha un forat darrere... Amb els guants, si l'empenyo des d'un costat, caminant-hi en contra, potser rodolarà." : "Hi ha alguna cosa al darrere, però la roda pesa com un carro ple. Amb les mans soles no la mouré mai." }
-            ]
-        };
-    },
-
-
 
     // Cambra secreta dels monjos (sala del tresor, entre el Celler i la Casa Gran)
     cofreCambra: E => {

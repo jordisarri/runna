@@ -280,7 +280,6 @@ class ZonaPingpong extends ZonaBase {
         this.physics.add.existing(this.colRoda, true);
         if (this.rodaMoguda) this.roda.setAngle(this.rodaX > AX ? 180 : -180);
         this.empentaMs = 0; this.contacteRoda = 0; this.costatRoda = 1; this.pistaRoda = false;
-        this.interactiu(AX, YP + 100, 100, DIALEGS.posterSecret, { altura: 150, actiu: () => !this.rodaMoguda });
         if (this.rodaMoguda) this.obrirPassadis();
 
         // ---- Mobiliari del celler ----
@@ -304,12 +303,10 @@ class ZonaPingpong extends ZonaBase {
         // ---- Taules de ping-pong (verdes), ben separades de la roda ----
         this.posar('taula_pp', 410, 760, { col: { w: 220, h: 40 } });
         this.posar('taula_pp', 870, 760, { col: { w: 220, h: 40 } });
-        this.interactiu(410, 790, 120, DIALEGS.taulaPP, { altura: 100 });
 
         // ---- Jugadors ----
         this.npc('juli', 262, 760, DIALEGS.juli);
         this.npc('frederic', 1030, 760, DIALEGS.frederic, { flipX: true });
-        this.npc('eloi', 585, 780, DIALEGS.eloi);
         this.npc('josep', 705, 780, DIALEGS.josep);
 
         this.add.rectangle(640, A / 2, 1080, A, 0xffe9a8, 0.04).setDepth(80000);
@@ -345,12 +342,12 @@ class ZonaPingpong extends ZonaBase {
         Estat.posaFlag('rodaMoguda');
         Estat.dades.flags.rodaX = x;
         this.cameras.main.shake(350, 0.003);
-        Sfx.secret();
+        Sfx.porta();
         this.tweens.add({
             targets: this.roda, x, angle: dir * 180, duration: 900, ease: 'Sine.easeInOut',
             onUpdate: () => { this.colRoda.x = this.roda.x; this.colRoda.body.updateFromGameObject(); },
             onComplete: () => {
-                this.missatge('Un passadís!'); this.obrirPassadis(); Estat.desar();
+                Sfx.secret(); this.obrirPassadis(); Estat.desar();
                 // La porta secreta es descobreix: les juntes s'il·luminen i s'obre un moment per ensenyar el passadís (després s'obre en acostar-s'hi)
                 this.tweens.add({ targets: this.juntesPorta, alpha: 0.4, yoyo: true, repeat: 2, duration: 220 });
                 this.portaSecreta.forcaFins = this.time.now + 2200;

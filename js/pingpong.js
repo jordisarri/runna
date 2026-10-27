@@ -83,14 +83,14 @@ class EscenaPingPong extends Phaser.Scene {
         this.spIneu = this.add.sprite(360, ALT - 100, ineuTex, 0).setOrigin(0.5, 1).setDepth(5);
         this.spIneu.setScale(((this.textures.get(ineuTex).customData || {}).escala || 0.5) * 1.6);
         // La pala a la mà de l'Ineu: gira cap al carril on colpeja. El pivot és la mà (el mànec cap avall).
-        this.pala = this.add.container(360 + 46, ALT - 150).setDepth(6).setAngle(20);
+        this.pala = this.add.container(360 + 46, ALT - 150).setDepth(4.5).setAngle(20);      // darrere del cos de l'Ineu: només en surt la part que el seu cos no tapa
         const gp = this.add.graphics();
         gp.fillStyle(0x5a3a1e, 1).fillRoundedRect(-4, -34, 8, 40, 3).lineStyle(2, 0x1a0e06, 1).strokeRoundedRect(-4, -34, 8, 40, 3);
         gp.fillStyle(0x8a1a1a, 1).fillEllipse(0, -62, 52, 62).lineStyle(3, 0x1a0e06, 1).strokeEllipse(0, -62, 52, 62);
         gp.fillStyle(0xd83a3a, 1).fillEllipse(0, -64, 44, 54).fillStyle(0xffffff, 0.22).fillEllipse(-9, -74, 12, 22);
         this.pala.add(gp);
         this.bracIneu = this.add.graphics().setDepth(4.8);          // la màniga queda per sota del cos de l'Ineu
-        this.manIneu = this.add.graphics().setDepth(6.5);           // la mà, per damunt del mànec de la pala
+        this.manIneu = this.add.graphics().setDepth(5.5);           // la mà, per damunt del cos i del mànec de la pala
         this.impacte = this.add.circle(0, 0, 30).setStrokeStyle(5, 0xffffff, 0.9).setDepth(8).setVisible(false);
 
         // ---- Anells dels carrils i el cercle que es fa petit ----
@@ -125,9 +125,51 @@ class EscenaPingPong extends Phaser.Scene {
         this.add.text(AMPLE - 16, 120, 'Sortir ✕', estilText(26, '#f2e6c8', { backgroundColor: '#1a120bcc', padding: { x: 12, y: 6 } }))
             .setOrigin(1, 0).setDepth(30).setInteractive({ useHandCursor: true }).on('pointerdown', () => this.sortir());
 
+        this.creaIconesCarril();
         this.actualitzarMarcador();
         this.avis('En Josep contra l\'Ineu\nA set punts', 1600);
         this.time.delayedCall(1800, () => this.seguentPunt());
+    }
+
+    // ---------------- Icones màgiques dels tres carrils: lluna (esquerra), sol (mig) i estel (dreta), amb resplendor ----------------
+    creaIconesCarril() {
+        const COL = ['#6ac8ff', '#ffd34d', '#ff7ad8'];
+        [0, 1, 2].forEach(c => {
+            if (this.textures.exists('pp_ic' + c)) this.textures.remove('pp_ic' + c);
+            const tx = this.textures.createCanvas('pp_ic' + c, 160, 160), g = tx.getContext();
+            const gl = g.createRadialGradient(80, 80, 6, 80, 80, 78); gl.addColorStop(0, COL[c] + 'cc'); gl.addColorStop(0.55, COL[c] + '44'); gl.addColorStop(1, COL[c] + '00');
+            g.fillStyle = gl; g.fillRect(0, 0, 160, 160);
+            g.lineJoin = 'round'; g.lineCap = 'round';
+            g.fillStyle = COL[c]; g.strokeStyle = '#1a0a2a'; g.lineWidth = 6;
+            if (c === 0) {                                              // lluna creixent
+                g.beginPath(); g.arc(80, 80, 40, 0, Math.PI * 2); g.fill();
+                g.globalCompositeOperation = 'destination-out'; g.beginPath(); g.arc(98, 70, 34, 0, Math.PI * 2); g.fill(); g.globalCompositeOperation = 'source-over';
+                g.strokeStyle = '#ffffff'; g.lineWidth = 3; g.beginPath(); g.arc(80, 80, 40, 0.6, Math.PI * 1.45); g.stroke();
+            } else if (c === 1) {                                       // sol amb raigs
+                for (let a = 0; a < 12; a++) { const an = a / 12 * Math.PI * 2, r0 = 32, r1 = a % 2 ? 48 : 58; g.beginPath(); g.moveTo(80 + Math.cos(an - 0.14) * r0, 80 + Math.sin(an - 0.14) * r0); g.lineTo(80 + Math.cos(an) * r1, 80 + Math.sin(an) * r1); g.lineTo(80 + Math.cos(an + 0.14) * r0, 80 + Math.sin(an + 0.14) * r0); g.fill(); }
+                g.beginPath(); g.arc(80, 80, 30, 0, Math.PI * 2); g.fill(); g.strokeStyle = '#ffffff'; g.lineWidth = 3; g.beginPath(); g.arc(80, 80, 22, 3.6, 5.2); g.stroke();
+            } else {                                                    // estel de cinc puntes
+                g.beginPath(); for (let k = 0; k < 10; k++) { const an = -Math.PI / 2 + k * Math.PI / 5, r = k % 2 ? 22 : 54; g.lineTo(80 + Math.cos(an) * r, 80 + Math.sin(an) * r); } g.closePath(); g.fill();
+                g.strokeStyle = '#ffffff'; g.lineWidth = 3; g.beginPath(); g.moveTo(80, 36); g.lineTo(72, 62); g.stroke();
+            }
+            g.fillStyle = '#ffffffcc'; g.beginPath(); g.arc(80, 80, 6, 0, Math.PI * 2); g.fill();
+            tx.refresh();
+        });
+        // Fitxes sota el marcador: mostren, una a una, el que has de repetir
+        this.slots = [0, 1, 2].map(i => {
+            const x = AMPLE / 2 + (i - 1) * 78, y = 610;
+            const fons = this.add.circle(x, y, 32, 0x1a120b, 0.88).setStrokeStyle(3, 0xd4af37).setDepth(20).setAlpha(0);
+            const ic = this.add.image(x, y, 'pp_ic0').setDisplaySize(64, 64).setDepth(21).setAlpha(0);
+            const q = this.add.text(x, y, '?', estilText(30, '#d8c8a0', { fontStyle: 'bold' })).setOrigin(0.5).setDepth(21).setAlpha(0);
+            return { fons, ic, q };
+        });
+    }
+    ocultaSlots(ms = 0) { this.slots.forEach(s => this.tweens.add({ targets: [s.fons, s.ic, s.q], alpha: 0, delay: ms, duration: 300 })); }
+    reiniciaSlots() { this.slots.forEach(s => { this.tweens.killTweensOf([s.fons, s.ic, s.q]); s.fons.setAlpha(0.88).setStrokeStyle(3, 0xd4af37); s.ic.setAlpha(0); s.q.setAlpha(1); }); }
+    omplirSlot(i, c, bo = true) {
+        const s = this.slots[i]; if (!s) return;
+        s.q.setAlpha(0); s.ic.setTexture('pp_ic' + c).setAlpha(1).setDisplaySize(64, 64); s.fons.setStrokeStyle(4, bo ? 0x9fe0a0 : 0xff9a8a);
+        this.tweens.add({ targets: s.ic, scale: { from: s.ic.scale * 1.5, to: s.ic.scale }, duration: 260, ease: 'Back.easeOut' });
     }
 
     // ---------------- En Josep: braços i pala que es mouen (no es desplaça de lloc) ----------------
@@ -237,6 +279,7 @@ class EscenaPingPong extends Phaser.Scene {
     mostrarOrdre(retard) {
         this.estat = 'mirant';
         this.entrat = [];
+        this.reiniciaSlots();
         const n = this.ordre.length, ms = Math.max(700, 940 - (this.ineu + this.josep) * 14);
         const COL = [0x6ac8ff, 0xffd34d, 0xff7ad8], hx = 360, hy = PP.fonsY - 8;
         // En Josep concentra la màgia: aura de fum lila i espurnes al voltant de les mans durant tot el servei
@@ -269,14 +312,18 @@ class EscenaPingPong extends Phaser.Scene {
                     this.tweens.add({ targets: ona, scale: { from: 0.6, to: 2.2 }, scaleY: { from: 0.44, to: 1.6 }, alpha: 0, duration: 600, onComplete: () => ona.destroy() });
                     this.anells[c].setStrokeStyle(7, COL[c], 1);
                     this.time.delayedCall(ms * 0.7, () => this.anells[c].setStrokeStyle(4, 0xf2e6c8, 0.25));
-                    this.seq.setText(['◀', '●', '▶'][c]).setFontSize(60).setColor('#fff3c8').setAlpha(1).setPosition(X1, Y1 - 30);
-                    this.tweens.add({ targets: this.seq, alpha: 0, delay: ms * 0.45, duration: ms * 0.3 });
+                    // El símbol del carril s'encén gran sobre la taula i queda guardat a la fitxa de dalt
+                    const ic = this.add.image(X1, Y1 - 30, 'pp_ic' + c).setDepth(21).setDisplaySize(40, 40);
+                    this.tweens.add({ targets: ic, displayWidth: 150, displayHeight: 150, duration: 280, ease: 'Back.easeOut' });
+                    this.tweens.add({ targets: ic, alpha: 0, delay: ms * 0.5, duration: ms * 0.3, onComplete: () => ic.destroy() });
+                    this.omplirSlot(i, c);
                 } });
         }));
         this.time.delayedCall(retard + n * ms + 250, () => {
             if (this.acabat) return;
             [this.auraFum, this.auraEsp].forEach(e => { if (e) { e.stop(); this.time.delayedCall(1300, () => e.destroy()); } });
             this.estat = 'repetint';
+            this.reiniciaSlots();
             this.avis('Repeteix-los en ordre!', 1400, '#d8b0ff');
             if (this.limitServei) this.limitServei.remove();
             this.limitServei = this.time.delayedCall(7000, () => { if (this.estat === 'repetint') this.puntJosep('El servei passa de llarg...'); });
@@ -315,6 +362,7 @@ class EscenaPingPong extends Phaser.Scene {
             this.botons[c].setFillStyle(0x4a3a20, 0.95);
             this.time.delayedCall(120, () => this.botons[c].setFillStyle(0x1a120b, 0.8));
             const i = this.entrat.length - 1;
+            this.omplirSlot(i, c, this.entrat[i] === this.ordre[i]);
             if (this.entrat[i] !== this.ordre[i]) {
                 if (this.limitServei) this.limitServei.remove();
                 this.intents--;
@@ -327,6 +375,7 @@ class EscenaPingPong extends Phaser.Scene {
             if (this.entrat.length === this.ordre.length) {
                 if (this.limitServei) this.limitServei.remove();
                 this.estat = 'res';
+                this.ocultaSlots(600);
                 this.avis('Servei màgic tornat!', 900, '#9fe0a0');
                 this.time.delayedCall(260, () => { this.cop(c, true); this.tornada(1, c); });      // la pilota màgica es veu sortir cap a en Josep, que la torna
             }
@@ -362,7 +411,7 @@ class EscenaPingPong extends Phaser.Scene {
             if (Math.random() < Math.max(0.15, prob)) { this.so(2); this.copEntrant(); }
             else {                                                      // en Josep no la torna: la pilota se'n va per darrere seu
                 this.fugJosep = { t0: this.time.now, c };
-                this.time.delayedCall(850, () => { this.fugJosep = null; if (!this.acabat) this.puntIneu(Math.random() < 0.5 ? 'En Josep no hi arriba!' : 'La pilota toca la xarxa!'); });
+                this.time.delayedCall(850, () => { this.fugJosep = null; if (!this.acabat) this.puntIneu('En Josep no hi arriba!'); });
             }
         });
     }
@@ -388,6 +437,7 @@ class EscenaPingPong extends Phaser.Scene {
 
     finalPunt(text, color) {
         this.estat = 'res';
+        if (this.slots) this.ocultaSlots(300);
         this.cercle.setVisible(false);
         this.pilota.setVisible(false).setAlpha(1); this.ombra.setVisible(false).setAlpha(1);
         this.anells.forEach(a => a.setStrokeStyle(4, 0xf2e6c8, 0.25));
