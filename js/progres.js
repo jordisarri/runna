@@ -53,7 +53,7 @@ const PROGRES = {
           pista: E => {
               const cols = Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).filter(Boolean).length;
               return cols < 12 ? "El sagrari del Santuari guarda el fragment 2, però és tancat amb una clau petita que els monjos van deixar a l'ermita de la Desaparició. Al camí de la Desaparició hi ha dotze columnes, i cada una t'explica una paraula (" + cols + "/12). Apunta-les totes!"
-                  : "Ja tens les dotze paraules. A l'ermita de la Desaparició hi ha dues taules de pedra que només tu pots llegir: al peu hi ha la clau petita del sagrari.";
+                  : "Ja tens les dotze paraules. A l'ermita de la Desaparició, llegeix les taules de pedra i digues la frase sencera davant l'altar: apareixerà un cofre amb la clau petita del sagrari.";
           } },
         { id: 'fragment2', marca: ['fragment2'], fet: E => E.flag('fragment2'),
           pista: E => "Ja tens la clau petita: el sagrari és al mig del retaule del Santuari i guarda el fragment 2." },

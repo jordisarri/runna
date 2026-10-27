@@ -10,7 +10,7 @@ class ZonaCami extends ZonaBase {
             pins: { pinyer: 0.4 },
             nom: 'Camí de la Desaparició',
             amplada: 2800,
-            alcada: 900,
+            alcada: 1000,
             entrades: {
                 runes:  { x: 2740, y: 450, dir: 'esquerra' },
                 ermita: { x: 60,   y: 450, dir: 'dreta' },
@@ -20,28 +20,29 @@ class ZonaCami extends ZonaBase {
     }
 
     construir() {
-        this.terra('herba', 0, 0, 2800, 900, -1100);
+        this.terra('herba', 0, 0, 2800, 1000, -1100);
         this.terra('cami', 0, 380, 2800, 140);
 
         // Les 12 columnes de la processó, alternades a banda i banda del camí
         for (let i = 0; i < 12; i++) {
             const x = 2540 - i * 190, y = i % 2 === 0 ? 370 : 575;   // la columna 1 és la més propera a les Runes (est)
-            this.posar('columna_proces', x, y, { col: { w: 34, h: 14 } });
+            this.posar('columna_proces_' + i, x, y, { col: { w: 34, h: 14 } });
             this.interactiu(x, y + 6, 85, DIALEGS.columna(i + 1), { altura: 120 });
         }
 
         [[700, 450], [1250, 450], [1950, 440], [2500, 460]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         this.cartell(2650, 560, DIALEGS.cartellCami);
         // Mur d'arbres del nord: només a x=1380 hi ha dos arbres més separats, i per aquí es puja a la cabana (sense marcar-ho)
-        this.muralla(0, 140, 1280, 140, 128);
-        this.muralla(1480, 140, 2800, 140, 132);
-        this.sortides.push({ r: new Phaser.Geom.Rectangle(1320, 60, 120, 52), desti: 'ZonaCabanaCami', entrada: 'porta', peu: true });
+        this.muralla(0, 140, 1160, 140, 128);
+        this.muralla(1600, 140, 2800, 140, 132);
+        this.colisio(1230, 55, 140, 110); this.colisio(1530, 55, 140, 110);
+        this.sortides.push({ r: new Phaser.Geom.Rectangle(1300, 60, 160, 52), desti: 'ZonaCabanaCami', entrada: 'porta', peu: true });
   // cal travessar la fila d'arbres fins dalt de tot
         // Fila de baix: als extrems, arbres més petits (la capçada no ha de tapar les sortides de les puntes)
-        this.muralla(0, 770, 2800, 770, 130, 'arbre', false);
-        this.copes.filter(img => img.y === 770 && (img.x < 200 || img.x > 2600)).forEach(img => img.destroy());
+        this.muralla(0, 930, 2800, 930, 130, 'arbre', false);
+        this.copes.filter(img => img.y === 930 && (img.x < 200 || img.x > 2600)).forEach(img => img.destroy());
         this.copes = this.copes.filter(img => img.active);
-        [[40, 790], [170, 790], [2630, 790], [2760, 790]].forEach(([x, y]) => this.posar('arbre', x, y, { escala: 0.55, col: { w: 1, h: 1, fix: true } }));
+        [[40, 950], [170, 950], [2630, 950], [2760, 950]].forEach(([x, y]) => this.posar('arbre', x, y, { escala: 0.55, col: { w: 1, h: 1, fix: true } }));
         this.boira(900, 450, 400, 80, 1);
         this.boira(1900, 450, 400, 80, 1);
 
@@ -81,8 +82,8 @@ class ZonaErmita extends ZonaBase {
         this.interactiu(500, 640, 70, DIALEGS.ermitaPorta, { altura: 190, actiu: () => false });
 
         // Creu de la Desaparició, davant la finestra de la dreta de l'ermita i a l'altra banda del camí (no té cap paper a la trama: només es pot llegir)
-        this.posar('creu_desaparicio', 660, 840, { col: { w: 46, h: 22 } });
-        this.interactiu(660, 847, 80, DIALEGS.creuDesaparicio, { altura: 180 });
+        this.posar('creu_desaparicio', 660, 840, { escala: 1.9, col: { w: 70, h: 26 } });
+        this.interactiu(660, 850, 95, DIALEGS.creuDesaparicio, { altura: 300 });
 
         this.cartell(1120, 610, DIALEGS.sortidaErmita);
         this.arbres([[120, 200], [900, 160], [1150, 240], [1300, 160], [150, 520],
@@ -142,8 +143,11 @@ class ZonaErmitaInt extends ZonaBase {
         this.posar('taula_pedra2', 660, 190, { col: { w: 100, h: 20 } });
         this.interactiu(660, 210, 90, DIALEGS.taulaPedra(2), { altura: 170 });
 
-        // Altar (sense text: es mira) amb les ofrenes dels nens als peus i dos canelobres
+        // Altar amb les ofrenes dels nens als peus i dos canelobres. Amb les dotze paraules, l'Ineu hi diu la frase i apareix un cofre
         this.posar('altar', 500, 300, { col: { w: 140, h: 36 } });
+        const totes = () => Array.from({ length: 12 }, (_, i) => Estat.flag('col' + (i + 1))).every(Boolean);
+        this.interactiu(500, 335, 90, DIALEGS.altarErmita, { altura: 100, actiu: () => totes() && !Estat.flag('cofreAltar') });
+        if (Estat.flag('cofreAltar') && !Estat.flag('missatgeDesxifrat')) this.posarCofreAltar();
         this.add.image(500, 374, 'ofrenes_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(374);
         [[392, 352], [608, 352]].forEach(([x, y], i) => {
             this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
@@ -163,6 +167,25 @@ class ZonaErmitaInt extends ZonaBase {
 
         this.add.rectangle(500, 350, 800, 700, 0xffd38a, 0.04).setDepth(80000);
         this.sortida(460, 680, 80, 14, 'ZonaErmita', 'interior');
+    }
+
+    // El cofre de la clau del sagrari, davant els graons de l'altar
+    posarCofreAltar(y = 420) {
+        this.cofreAltar = this.posar('cofre', 500, y, { col: { w: 50, h: 20 } });
+        this.interactiu(500, y + 6, 85, DIALEGS.cofreAltar, { altura: 80, actiu: () => !Estat.flag('missatgeDesxifrat') });
+    }
+
+    apareixCofreAltar(fet) {
+        Estat.posaFlag('cofreAltar');
+        Sfx.secret();
+        this.llum(500, 330, 0xffe8a0);
+        this.cameras.main.shake(250, 0.002);
+        this.time.delayedCall(500, () => {
+            this.posarCofreAltar(420);
+            const c = this.cofreAltar, y1 = c.y;
+            c.y = y1 - 160; c.alpha = 0;
+            this.tweens.add({ targets: c, y: y1, alpha: 1, duration: 650, ease: 'Bounce.easeOut', onComplete: () => { this.llum(500, y1 - 20, 0xfff2c0); Estat.desar(); if (fet) fet(); } });
+        });
     }
 }
 

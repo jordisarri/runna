@@ -746,26 +746,37 @@ const DIALEGS = {
         const totes = Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).every(Boolean);
         const pagines = [{ qui: '', text: `Taula de pedra ${part} de 2:\n\n${mots.join('   ')}` }];
         if (totes) {
-            pagines.push({ qui: 'Ineu', text: 'Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l\'alba.' });
-            if (!E.flag('missatgeDesxifrat')) {
-                pagines.push({ qui: '', text: 'Al peu de la taula, dins d\'un nínxol, hi ha una clau petita lligada amb un cordill, gairebé de joguina.\nHas obtingut la CLAU DEL SAGRARI.' });
-                pagines.push({ qui: 'Ineu', text: 'La clau del sagrari del Santuari! Els monjos la van deixar aquí. Amb això obriré el sagrari del retaule.' });
-            }
+            pagines.push({ qui: 'Ineu', text: E.flag('missatgeDesxifrat') ? 'Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l\'alba.' : 'Ja ho tinc sencer. Això són paraules per dir en veu alta... davant l\'altar.' });
         } else {
             pagines.push({ qui: 'Ineu', text: 'Només entenc les paraules que he apuntat al camí. Els signes que em falten... són a les columnes.' });
         }
         return {
             pagines,
             enAcabar: () => {
-                if (totes && !E.flag('missatgeDesxifrat')) {
-                    E.posaFlag('missatgeDesxifrat');
-                    if (!E.te('clau_sagrari') && !E.flag('fragment2')) E.dona('clau_sagrari');
-                    if (!E.flag('fragment2')) E.posaObjectiu('Amb la clau petita, obre el sagrari del Santuari (al mig del retaule): guarda el fragment 2.');
-                }
+                if (totes && !E.flag('missatgeDesxifrat') && !E.flag('cofreAltar')) E.posaObjectiu('Digues la frase sencera davant l\'altar de l\'ermita de la Desaparició.');
             }
         };
     },
-    sortidaErmita: E => ({ pagines: [{ qui: '', text: '← L\'Era · → Camí de la Desaparició' }] }),
+    // L'Ineu s'acosta a l'altar i pronuncia la frase: apareix un cofre amb la clau del sagrari
+    altarErmita: E => ({
+        pagines: [
+            { fer: (z, fet) => z.ineuVa(500, 350, fet, 150) },
+            { qui: 'Ineu', text: '«Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l\'alba.»' },
+            { fer: (z, fet) => z.apareixCofreAltar(fet) }
+        ]
+    }),
+    cofreAltar: E => ({
+        pagines: [
+            { qui: '', text: 'Dins el cofre hi ha una clau petita lligada amb un cordill, gairebé de joguina.\nHas obtingut la CLAU DEL SAGRARI.' },
+            { qui: 'Ineu', text: 'La clau del sagrari del Santuari! Els monjos la van deixar aquí. Amb això obriré el sagrari del retaule.' }
+        ],
+        enAcabar: () => {
+            E.posaFlag('missatgeDesxifrat');
+            if (!E.te('clau_sagrari') && !E.flag('fragment2')) E.dona('clau_sagrari');
+            if (!E.flag('fragment2')) E.posaObjectiu('Amb la clau petita, obre el sagrari del Santuari (al mig del retaule): guarda el fragment 2.');
+        }
+    }),
+    sortidaErmita: E => ({ pagines: [{ qui: '', text: '← L\'Era\n→ Camí de la Desaparició' }] }),
     creuDesaparicio: E => ({
         pagines: [
             { qui: '', text: "La Creu de la Desaparició. Una creu de pedra, igual que la de l'Aparició, però aquesta no té flors als peus: només cera vella i alguna pedreta posada amb cura." },

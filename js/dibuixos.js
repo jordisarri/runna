@@ -2282,7 +2282,83 @@ function dibuixarCasetaJoc(c, w) {
 }
 
 // Pilar de la processó (camí de la Desaparició): pilar baix de pedra tosca amb un plafó de rajoles ceràmiques incrustat
-function dibuixarColumnaProcessio(c, w) {
+// Emblemes medievals i religiosos, un per columna del camí: crismó, calze, coloma, anyell, peix, claus, flor de lis, campana, llibre, sol, espasa i escut, raïm
+function emblemaColumna(ctx, k, cx, cy, u) {
+    ctx.save(); ctx.translate(cx, cy); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const C = '#2a1c10';
+    const traca = (w, col = C) => { ctx.lineWidth = w; ctx.strokeStyle = col; ctx.stroke(); };
+    const omple = (col, w = 1.6) => { ctx.fillStyle = col; ctx.fill(); traca(w); };
+    switch (k % 12) {
+        case 0:   // crismó (Chi-Rho)
+            ctx.beginPath(); ctx.arc(0, 0, u * 1.05, 0, Math.PI * 2); omple('#f6e7b0');
+            ctx.beginPath(); ctx.moveTo(0, -u * 0.9); ctx.lineTo(0, u * 0.9); traca(4.2, '#8a1c18');
+            ctx.beginPath(); ctx.arc(u * 0.22, -u * 0.5, u * 0.34, -Math.PI / 2, Math.PI / 2); traca(3.6, '#8a1c18');
+            ctx.beginPath(); ctx.moveTo(-u * 0.6, -u * 0.15); ctx.lineTo(u * 0.6, u * 0.75); ctx.moveTo(u * 0.6, -u * 0.15); ctx.lineTo(-u * 0.6, u * 0.75); traca(3.6, '#8a1c18'); break;
+        case 1:   // calze
+            ctx.beginPath(); ctx.moveTo(-u * 0.75, -u * 0.8); ctx.lineTo(u * 0.75, -u * 0.8); ctx.quadraticCurveTo(u * 0.7, u * 0.1, 0, u * 0.1); ctx.quadraticCurveTo(-u * 0.7, u * 0.1, -u * 0.75, -u * 0.8); omple('#e0b83a', 2);
+            ctx.beginPath(); ctx.rect(-u * 0.12, u * 0.1, u * 0.24, u * 0.6); omple('#c89a28', 1.6);
+            ctx.beginPath(); ctx.ellipse(0, u * 0.82, u * 0.6, u * 0.2, 0, 0, Math.PI * 2); omple('#e0b83a', 1.8);
+            ctx.beginPath(); ctx.ellipse(0, -u * 0.8, u * 0.75, u * 0.14, 0, 0, Math.PI * 2); omple('#8a1c18', 1.6); break;
+        case 2:   // coloma amb una branca d'olivera
+            ctx.beginPath(); ctx.ellipse(0, u * 0.1, u * 0.8, u * 0.45, -0.2, 0, Math.PI * 2); omple('#f6f2ea', 1.8);
+            ctx.beginPath(); ctx.moveTo(-u * 0.1, -u * 0.1); ctx.quadraticCurveTo(-u * 0.9, -u * 1.1, -u * 0.2, -u * 0.9); ctx.quadraticCurveTo(u * 0.2, -u * 0.6, u * 0.3, -u * 0.1); omple('#dcd6c8', 1.6);
+            ctx.beginPath(); ctx.arc(u * 0.8, -u * 0.25, u * 0.28, 0, Math.PI * 2); omple('#f6f2ea', 1.6);
+            ctx.beginPath(); ctx.moveTo(u * 1.05, -u * 0.25); ctx.lineTo(u * 1.4, -u * 0.18); ctx.lineTo(u * 1.05, -u * 0.1); omple('#d89a28', 1.2);
+            ctx.beginPath(); ctx.moveTo(u * 0.5, u * 0.55); ctx.quadraticCurveTo(u * 1.1, u * 0.9, u * 1.3, u * 0.3); traca(2, '#3a6a2a');
+            ctx.beginPath(); ctx.ellipse(u * 1.0, u * 0.7, u * 0.22, u * 0.1, -0.6, 0, Math.PI * 2); omple('#5a9a3a', 1); break;
+        case 3:   // anyell de Déu amb el penó de la creu
+            [[-0.5, 0.1], [0, -0.1], [0.45, 0.1], [-0.2, 0.3], [0.2, 0.3]].forEach(([dx, dy]) => { ctx.beginPath(); ctx.arc(dx * u, dy * u, u * 0.42, 0, Math.PI * 2); omple('#f4efe4', 1.4); });
+            ctx.beginPath(); ctx.arc(u * 0.95, -u * 0.1, u * 0.28, 0, Math.PI * 2); omple('#3a2c22', 1.4);
+            [-0.5, -0.1, 0.35, 0.65].forEach(dx => { ctx.beginPath(); ctx.moveTo(dx * u, u * 0.55); ctx.lineTo(dx * u, u * 1.0); traca(2.4, '#3a2c22'); });
+            ctx.beginPath(); ctx.moveTo(-u * 0.1, -u * 0.5); ctx.lineTo(-u * 0.1, -u * 1.3); traca(1.8, '#6a4a2a');
+            ctx.beginPath(); ctx.rect(-u * 0.1, -u * 1.3, u * 0.7, u * 0.4); omple('#f6f2ea', 1.2);
+            ctx.beginPath(); ctx.moveTo(u * 0.25, -u * 1.25); ctx.lineTo(u * 0.25, -u * 0.95); ctx.moveTo(u * 0.1, -u * 1.1); ctx.lineTo(u * 0.4, -u * 1.1); traca(1.6, '#8a1c18'); break;
+        case 4:   // peix (ichthys)
+            ctx.beginPath(); ctx.moveTo(-u * 1.0, 0); ctx.quadraticCurveTo(0, -u * 1.0, u * 0.7, 0); ctx.quadraticCurveTo(0, u * 1.0, -u * 1.0, 0); omple('#5a8ac8', 2);
+            ctx.beginPath(); ctx.moveTo(u * 0.6, 0); ctx.lineTo(u * 1.3, -u * 0.55); ctx.lineTo(u * 1.3, u * 0.55); ctx.closePath(); omple('#3a68a8', 1.8);
+            ctx.beginPath(); ctx.arc(-u * 0.6, -u * 0.12, u * 0.1, 0, Math.PI * 2); ctx.fillStyle = '#f6f2ea'; ctx.fill();
+            ctx.beginPath(); ctx.moveTo(-u * 0.2, -u * 0.4); ctx.quadraticCurveTo(0, 0, -u * 0.2, u * 0.4); traca(1.5, 'rgba(255,255,255,0.7)'); break;
+        case 5:   // claus de Sant Pere, encreuades
+            [-1, 1].forEach(sg => {
+                ctx.save(); ctx.rotate(sg * 0.6);
+                ctx.beginPath(); ctx.moveTo(0, -u * 0.5); ctx.lineTo(0, u * 1.1); traca(4.2, C); ctx.beginPath(); ctx.moveTo(0, -u * 0.5); ctx.lineTo(0, u * 1.1); traca(2.6, '#e0b83a');
+                ctx.beginPath(); ctx.arc(0, -u * 0.8, u * 0.34, 0, Math.PI * 2); traca(4.2, C); ctx.beginPath(); ctx.arc(0, -u * 0.8, u * 0.34, 0, Math.PI * 2); traca(2.4, '#e0b83a');
+                ctx.beginPath(); ctx.rect(0, u * 0.6, u * 0.42, u * 0.18); omple('#e0b83a', 1.4); ctx.beginPath(); ctx.rect(0, u * 0.9, u * 0.32, u * 0.16); omple('#e0b83a', 1.4);
+                ctx.restore();
+            }); break;
+        case 6:   // flor de lis
+            ctx.beginPath(); ctx.moveTo(0, -u * 1.1); ctx.quadraticCurveTo(u * 0.55, -u * 0.5, u * 0.18, u * 0.35); ctx.lineTo(-u * 0.18, u * 0.35); ctx.quadraticCurveTo(-u * 0.55, -u * 0.5, 0, -u * 1.1); omple('#2f5fa8', 2);
+            [-1, 1].forEach(sg => { ctx.beginPath(); ctx.moveTo(sg * u * 0.15, u * 0.2); ctx.quadraticCurveTo(sg * u * 1.3, -u * 0.5, sg * u * 1.0, u * 0.3); ctx.quadraticCurveTo(sg * u * 0.7, u * 0.55, sg * u * 0.2, u * 0.45); omple('#2f5fa8', 2); });
+            ctx.beginPath(); ctx.rect(-u * 0.7, u * 0.45, u * 1.4, u * 0.2); omple('#e0b83a', 1.6);
+            ctx.beginPath(); ctx.moveTo(-u * 0.2, u * 0.65); ctx.lineTo(-u * 0.3, u * 1.1); ctx.moveTo(u * 0.2, u * 0.65); ctx.lineTo(u * 0.3, u * 1.1); traca(2.2, '#2f5fa8'); break;
+        case 7:   // campana
+            ctx.beginPath(); ctx.moveTo(-u * 0.25, -u * 0.95); ctx.quadraticCurveTo(0, -u * 1.25, u * 0.25, -u * 0.95); traca(2.4, C);
+            ctx.beginPath(); ctx.moveTo(-u * 0.4, -u * 0.8); ctx.quadraticCurveTo(-u * 0.5, u * 0.3, -u * 0.95, u * 0.65); ctx.lineTo(u * 0.95, u * 0.65); ctx.quadraticCurveTo(u * 0.5, u * 0.3, u * 0.4, -u * 0.8); ctx.closePath(); omple('#d8a82c', 2);
+            ctx.beginPath(); ctx.moveTo(-u * 0.7, u * 0.4); ctx.lineTo(u * 0.7, u * 0.4); traca(1.6, 'rgba(60,30,6,0.7)');
+            ctx.beginPath(); ctx.arc(0, u * 0.95, u * 0.2, 0, Math.PI * 2); omple('#6a4a1c', 1.4); break;
+        case 8:   // llibre obert amb una creu
+            ctx.beginPath(); ctx.moveTo(0, -u * 0.5); ctx.quadraticCurveTo(-u * 0.6, -u * 0.8, -u * 1.2, -u * 0.55); ctx.lineTo(-u * 1.2, u * 0.7); ctx.quadraticCurveTo(-u * 0.6, u * 0.45, 0, u * 0.75); ctx.closePath(); omple('#f6ecd0', 2);
+            ctx.beginPath(); ctx.moveTo(0, -u * 0.5); ctx.quadraticCurveTo(u * 0.6, -u * 0.8, u * 1.2, -u * 0.55); ctx.lineTo(u * 1.2, u * 0.7); ctx.quadraticCurveTo(u * 0.6, u * 0.45, 0, u * 0.75); ctx.closePath(); omple('#fbf4de', 2);
+            ctx.beginPath(); ctx.moveTo(-u * 0.6, -u * 0.25); ctx.lineTo(-u * 0.6, u * 0.35); ctx.moveTo(-u * 0.85, 0); ctx.lineTo(-u * 0.35, 0); traca(2.4, '#8a1c18');
+            [-0.05, 0.2, 0.45].forEach(dy => { ctx.beginPath(); ctx.moveTo(u * 0.25, dy * u); ctx.lineTo(u * 1.0, (dy - 0.05) * u); traca(1.2, '#6a4a2a'); }); break;
+        case 9:   // sol amb el monograma IHS
+            for (let a = 0; a < 16; a++) { const an = a / 16 * Math.PI * 2; ctx.beginPath(); ctx.moveTo(Math.cos(an) * u * 0.8, Math.sin(an) * u * 0.8); ctx.lineTo(Math.cos(an) * u * (a % 2 ? 1.15 : 1.4), Math.sin(an) * u * (a % 2 ? 1.15 : 1.4)); traca(a % 2 ? 2 : 2.8, '#c8901c'); }
+            ctx.beginPath(); ctx.arc(0, 0, u * 0.82, 0, Math.PI * 2); omple('#f0c850', 2);
+            ctx.fillStyle = '#6a1c14'; ctx.font = `bold ${Math.round(u * 0.75)}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('IHS', 0, u * 0.05); break;
+        case 10:  // escut amb creu i espasa al darrere
+            ctx.beginPath(); ctx.moveTo(0, -u * 1.35); ctx.lineTo(0, u * 1.2); traca(5, C); ctx.beginPath(); ctx.moveTo(0, -u * 1.35); ctx.lineTo(0, u * 1.2); traca(3, '#c8ccd4');
+            ctx.beginPath(); ctx.moveTo(-u * 0.45, -u * 0.3); ctx.lineTo(u * 0.45, -u * 0.3); traca(5, C); ctx.beginPath(); ctx.moveTo(-u * 0.45, -u * 0.3); ctx.lineTo(u * 0.45, -u * 0.3); traca(3, '#a8782a');
+            ctx.beginPath(); ctx.moveTo(-u * 0.85, -u * 0.7); ctx.lineTo(u * 0.85, -u * 0.7); ctx.lineTo(u * 0.85, u * 0.1); ctx.quadraticCurveTo(u * 0.85, u * 0.85, 0, u * 1.1); ctx.quadraticCurveTo(-u * 0.85, u * 0.85, -u * 0.85, u * 0.1); ctx.closePath(); omple('#f6f2ea', 2);
+            ctx.beginPath(); ctx.moveTo(0, -u * 0.55); ctx.lineTo(0, u * 0.85); ctx.moveTo(-u * 0.55, -u * 0.05); ctx.lineTo(u * 0.55, -u * 0.05); traca(4.4, '#8a1c18'); break;
+        default:  // raïm amb fulla i espiga
+            ctx.beginPath(); ctx.moveTo(0, -u * 0.7); ctx.quadraticCurveTo(u * 0.5, -u * 1.1, u * 0.9, -u * 0.8); ctx.quadraticCurveTo(u * 0.8, -u * 0.3, u * 0.1, -u * 0.5); omple('#4a8a34', 1.6);
+            ctx.beginPath(); ctx.moveTo(0, -u * 0.7); ctx.lineTo(0, -u * 0.35); traca(2.2, '#5a3a1c');
+            [[-0.55, -0.2], [0, -0.2], [0.55, -0.2], [-0.28, 0.25], [0.28, 0.25], [0, 0.7]].forEach(([dx, dy]) => { ctx.beginPath(); ctx.arc(dx * u, dy * u, u * 0.32, 0, Math.PI * 2); omple('#6a3a8a', 1.4); ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.arc(dx * u - u * 0.1, dy * u - u * 0.1, u * 0.08, 0, Math.PI * 2); ctx.fill(); });
+    }
+    ctx.restore();
+}
+
+function dibuixarColumnaProcessio(c, w, k = 0) {
     lienc(c, w, w * 2.0, (ctx, W, H) => {
         ombraTerra(ctx, W / 2, H - 5, W * 0.5, 6);
         ctx.lineJoin = 'round'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
@@ -2291,17 +2367,14 @@ function dibuixarColumnaProcessio(c, w) {
         ctx.strokeRect(x0, cim, x1 - x0, base - cim);
         ctx.fillStyle = '#a8a292'; ctx.fillRect(W * 0.04, 0, W * 0.92, H * 0.06); ctx.strokeRect(W * 0.04, 0, W * 0.92, H * 0.06);   // coberta
         ctx.fillStyle = '#9a9486'; ctx.fillRect(W * 0.04, base - H * 0.05, W * 0.92, H * 0.05); ctx.strokeRect(W * 0.04, base - H * 0.05, W * 0.92, H * 0.05);   // sòcol
-        // Plafó de rajoles amb vora groga i blava
+        // Plafó amb vora d'or i fons de pergamí, amb l'emblema d'aquesta columna
         const px = W * 0.2, py = H * 0.17, pw = W * 0.6, ph = H * 0.56;
         ctx.fillStyle = '#e8b83a'; ctx.fillRect(px - 3, py - 3, pw + 6, ph + 6); ctx.strokeRect(px - 3, py - 3, pw + 6, ph + 6);
         ctx.fillStyle = '#2f5fa8'; ctx.fillRect(px, py, pw, ph);
-        ctx.fillStyle = '#f2e9c8'; ctx.fillRect(px + 4, py + 4, pw - 8, ph - 8);
-        ctx.fillStyle = '#7fb0d8'; ctx.beginPath(); ctx.ellipse(px + pw * 0.22, py + ph * 0.18, pw * 0.2, ph * 0.08, 0, 0, Math.PI * 2); ctx.fill();   // núvols
-        ctx.beginPath(); ctx.ellipse(px + pw * 0.8, py + ph * 0.3, pw * 0.16, ph * 0.07, 0, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#d98a2c'; ctx.beginPath(); ctx.arc(px + pw / 2, py + ph * 0.38, pw * 0.13, 0, Math.PI * 2); ctx.fill();        // pelegrí abstracte
-        ctx.fillStyle = '#2f5fa8'; ctx.beginPath(); ctx.moveTo(px + pw * 0.5, py + ph * 0.5); ctx.lineTo(px + pw * 0.3, py + ph * 0.86); ctx.lineTo(px + pw * 0.7, py + ph * 0.86); ctx.closePath(); ctx.fill();
-        ctx.strokeStyle = 'rgba(40,40,60,0.35)'; ctx.lineWidth = 1;                                                                     // junts de rajola
-        for (let k = 1; k < 4; k++) { ctx.beginPath(); ctx.moveTo(px + pw * k / 4, py); ctx.lineTo(px + pw * k / 4, py + ph); ctx.moveTo(px, py + ph * k / 4); ctx.lineTo(px + pw, py + ph * k / 4); ctx.stroke(); }
+        ctx.fillStyle = '#f2e9c8'; ctx.fillRect(px + 3, py + 3, pw - 6, ph - 6);
+        emblemaColumna(ctx, k, px + pw / 2, py + ph * 0.46, pw * 0.31);
+        ctx.fillStyle = '#2f5fa8'; ctx.font = `bold ${Math.round(W * 0.15)}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'][k % 12], W / 2, py + ph - 8);   // número romà
     });
 }
 
