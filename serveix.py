@@ -1,7 +1,7 @@
 """Servidor local per provar el joc: python serveix.py  ->  http://localhost:8000/
 (sense memòria cau, perquè els canvis es vegin sempre en recarregar)
 També deixa que eines/ajust_arma.html desi la taula, la mida i els ajustos fins de l'arma directament a js/atac_arma.js."""
-import http.server, socketserver, json, os, re
+import http.server, socketserver, json, os, re, ipaddress
 
 ARREL = os.path.dirname(os.path.abspath(__file__))
 FITXER_ARMA = os.path.join(ARREL, 'js', 'atac_arma.js')
@@ -22,6 +22,14 @@ def taula_valida(t):
             if not all(isinstance(e[k], (int, float)) and not isinstance(e[k], bool) for k in 'xya') or not isinstance(e['d'], bool):
                 return False
     return True
+
+def xarxa_local(ip):
+    """L'eina d'ajust pot desar des de l'ordinador o des d'un altre dispositiu de la mateixa xarxa local (el mòbil), mai des d'internet."""
+    try:
+        a = ipaddress.ip_address(ip.split('%')[0])
+        return a.is_loopback or a.is_private or (a.version == 6 and a.ipv4_mapped is not None and (a.ipv4_mapped.is_private or a.ipv4_mapped.is_loopback))
+    except ValueError:
+        return False
 
 ARMES = ['basto', 'tiller', 'espasa']
 
@@ -130,7 +138,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_POST(self):
         resposta, codi = {'ok': False}, 400
-        if self.path == '/desa-atac-arma' and self.client_address[0] in ('127.0.0.1', '::1'):
+        if self.path == '/desa-atac-arma' and xarxa_local(self.client_address[0]):
             try:
                 dades = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
                 if taula_valida(dades.get('taula')) and config_valida(dades.get('llarg'), dades.get('armes')) and ajust_valid(dades.get('ajust')):

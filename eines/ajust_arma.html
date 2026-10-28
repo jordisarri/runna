@@ -1,5 +1,6 @@
 <!doctype html>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ajust de l'arma als atacs de l'Ineu</title>
 <style>
     body { background: #2a3a22; color: #f2e6c8; font: 14px Georgia, serif; margin: 12px; }
@@ -19,8 +20,32 @@
     #panell h3 { margin: 6px 0 4px; font-size: 15px; }
     #resum { opacity: .85; font-size: 13px; margin: 4px 0; min-height: 2.6em; }
     small { opacity: .75; }
+    .mob { display: none; }
+    @media (max-width: 900px) { .mob { display: block; } }
     #estat { font-weight: bold; }
     .mode { padding: 2px 8px; border: 1px solid #f2e6c8; border-radius: 4px; }
+    #inner { position: relative; }
+    #c, #arcG { touch-action: none; }
+    /* Vista ampliada (mòbil): només es veu el fotograma triat, gran; la graella sencera es desplaça darrere */
+    #wrapG.amp { overflow: hidden; aspect-ratio: 1 / 1; }
+    #wrapG.amp #inner { position: absolute; width: 400%; }
+    #pad button { min-width: 44px; }
+    #pad .fi { display: inline-flex; align-items: center; gap: 4px; }
+    /* Pantalles estretes: tot en una columna, controls grans per als dits */
+    @media (max-width: 900px) {
+        body { margin: 8px; font-size: 15px; }
+        select, button, input { font-size: 16px; }
+        button { min-height: 44px; padding: 6px 12px; }
+        select { min-height: 40px; }
+        .barra { gap: 8px; }
+        #wrapG { flex: 1 1 100%; max-width: none; }
+        #panell { flex: 1 1 100%; }
+        #panell { display: flex; flex-direction: column; }
+        #panell #pad { order: -1; margin: 0 0 8px; }      /* els botons, just sota del fotograma */
+        #panell input[type=number] { width: 6em; min-height: 40px; }
+        .desk { display: none; }
+        small { font-size: 12px; }
+    }
 </style>
 
 <div class="barra">
@@ -34,19 +59,22 @@
     <label>Llargada <input id="llarg" type="number" min="20" max="400" step="1" style="width:4.5em"></label>
     <label>Agafa <input id="agafa" type="number" min="0" max="1" step="0.01" style="width:4.5em"></label>
     <button id="desa">Desa al joc</button>
+    <button id="copia" title="Copia les dades al porta-retalls (per si no es pot desar des d'aquest dispositiu)">Copia les dades</button>
     <span id="estat"></span>
 </div>
-<div class="barra"><small>Graella: clic o arrossega = mou la mà · roda = gira · fletxes = 1 px (Maj = 0,25) · [ ] = mida (només a «aquesta arma») · Supr = esborra · D = davant/darrere de l'Ineu (per fotograma; a «aquesta arma» només per a l'arma triada) · , . = fotograma anterior/següent · Espai = reprodueix/pausa · Ctrl+Z = desfés · Ctrl+S = desa</small></div>
+<div class="barra"><small class="mob">Al mòbil: obre l'eina des de l'adreça de l'ordinador (python serveix.py, p. ex. http://192.168.x.x:8000/eines/ajust_arma.html). Toca o arrossega sobre el fotograma per posar la mà i fes servir els botons de sota: fletxes, gir, mida i desfés.</small></div>
+<div class="barra"><small class="desk">Graella: clic o arrossega = mou la mà · roda = gira · fletxes = 1 px (Maj = 0,25) · [ ] = mida (només a «aquesta arma») · Supr = esborra · D = davant/darrere de l'Ineu (per fotograma; a «aquesta arma» només per a l'arma triada) · , . = fotograma anterior/següent · Espai = reprodueix/pausa · Ctrl+Z = desfés · Ctrl+S = desa</small></div>
 
 <div class="barra">
     <button id="play">⏸ Pausa</button>
     <label>Velocitat <select id="vel"><option value="1">1× (joc)</option><option value="0.5">0,5×</option><option value="0.25">0,25×</option><option value="0.1">0,1×</option></select></label>
     <span id="quadre"></span>
+    <label title="Mostra només el fotograma triat, gran (millor al mòbil)"><input id="amp" type="checkbox"> Un fotograma gran</label>
     <label title="Dibuixa per sobre l'estela en mitja lluna que fa el joc en atacar: mostra cap a quin costat es mou l'arma"><input id="arcOn" type="checkbox" checked> Arc del cop</label>
-    <small>Graella: els 16 fotogrames de la vista triada (el requadre groc fi és el que s'està reproduint) · Tira de sota: les 8 vistes en moviment amb la mateixa arma</small>
+    <small class="desk">Graella: els 16 fotogrames de la vista triada (el requadre groc fi és el que s'està reproduint) · Tira de sota: les 8 vistes en moviment amb la mateixa arma</small>
 </div>
 <div id="alt">
-    <div id="wrapG"><canvas id="c"></canvas><canvas id="arcG"></canvas><div id="cursor"></div></div>
+    <div id="wrapG"><div id="inner"><canvas id="c"></canvas><canvas id="arcG"></canvas><div id="cursor"></div></div></div>
     <div id="panell">
         <h3>Fotograma seleccionat <span id="titolFrame"></span></h3>
         <div id="resum"></div>
@@ -60,6 +88,14 @@
             <button id="reinicia">Reinicia el fotograma</button>
             <button id="aTotes">Ajust → les 3 armes</button>
             <button id="reiniciaVista">Reinicia la vista (aquesta arma)</button>
+        </div>
+        <div id="pad" class="barra" style="margin-top:8px">
+            <button data-act="prev">‹ fot.</button><button data-act="next">fot. ›</button>
+            <button data-act="up">▲</button><button data-act="left">◀</button><button data-act="down">▼</button><button data-act="right">▶</button>
+            <button data-act="rotm">⟲</button><button data-act="rotp">⟳</button>
+            <button data-act="smaller">− mida</button><button data-act="bigger">+ mida</button>
+            <button data-act="undo">↶</button><button data-act="redo">↷</button>
+            <label class="fi"><input id="fi" type="checkbox"> pas fi</label>
         </div>
         <small id="ajuda"></small>
     </div>
@@ -235,7 +271,7 @@ function tick(ara) {
     const r = c.getBoundingClientRect(), cw = r.width / COLS, ch = r.height / FILES, cur = $('cursor');
     cur.style.width = cw + 'px'; cur.style.height = ch + 'px';
     cur.style.left = (idx % COLS) * cw + 'px'; cur.style.top = Math.floor(idx / COLS) * ch + 'px';
-    cur.style.display = jugant ? '' : 'none';
+    cur.style.display = jugant && !$('amp').checked ? '' : 'none';
     // l'arc també sobre el fotograma de la graella que s'està reproduint
     arcG.clearRect(0, 0, arcC.width, arcC.height);
     if (arcOn) dibuixaArc(arcG, v, w, (idx % COLS) * 256 * ESCALA, Math.floor(idx / COLS) * 256 * ESCALA, ESCALA, tJoc);
@@ -264,8 +300,16 @@ function refrescaPanell() {
         ? 'Mode Base: el que canviïs val per a les 3 armes.'
         : "Mode «Només aquesta arma»: els canvis són desplaçament, gir, mida i davant/darrere respecte a la base, només per a l'arma triada.";
 }
+// Vista ampliada: el requadre només mostra la cel·la del fotograma triat (la graella sencera, 4 cel·les d'ample, es desplaça darrere)
+function ajustaZoom() {
+    const w = $('wrapG'), amp = $('amp').checked, inner = $('inner');
+    w.classList.toggle('amp', amp);
+    if (!amp) { inner.style.left = inner.style.top = ''; return; }
+    const cel = w.clientWidth, i = sel().i;
+    inner.style.left = -(i % COLS) * cel + 'px'; inner.style.top = -Math.floor(i / COLS) * cel + 'px';
+}
 function refresca() {
-    dibuixa(); refrescaPanell();
+    ajustaZoom(); dibuixa(); refrescaPanell();
     $('desa').textContent = brut ? 'Desa al joc ●' : 'Desa al joc';
 }
 ['fx', 'fy', 'fa', 'fe'].forEach(id => $(id).addEventListener('input', () => {
@@ -293,18 +337,21 @@ function cursorACela(ev) {
     const i = Math.floor(px / (256 * ESCALA)) + COLS * Math.floor(py / (256 * ESCALA));
     return { i, x: r2(px / ESCALA - (i % COLS) * 256), y: r2(py / ESCALA - Math.floor(i / COLS) * 256) };
 }
-c.addEventListener('mousedown', ev => {
+c.addEventListener('pointerdown', ev => {
     const p = cursorACela(ev);
-    if (p.i < 0 || p.i > 9) return;
+    if (p.i < 0 || p.i >= FOTOGRAMES.length) return;
+    if (ev.pointerId !== undefined && c.setPointerCapture) { try { c.setPointerCapture(ev.pointerId); } catch (e) { } }
+    ev.preventDefault();
     $('frame').value = p.i; arrossega = true;
     canvia(() => posaEfectiu({ x: p.x, y: p.y }));
 });
-addEventListener('mousemove', ev => {
+addEventListener('pointermove', ev => {
     if (!arrossega) return;
     const p = cursorACela(ev);
     if (p.i === sel().i) canvia(() => posaEfectiu({ x: p.x, y: p.y }), true);
 });
-addEventListener('mouseup', () => { arrossega = false; });
+addEventListener('pointerup', () => { arrossega = false; });
+addEventListener('pointercancel', () => { arrossega = false; });
 c.addEventListener('wheel', ev => {
     ev.preventDefault();
     const { v, w, i } = sel(), e = efectiu(w, v, i);
@@ -318,7 +365,7 @@ addEventListener('keydown', ev => {
     if (['INPUT', 'SELECT', 'TEXTAREA'].includes(ev.target.tagName)) return;
     const { v, w, i, mode } = sel(), e = efectiu(w, v, i), pas = ev.shiftKey ? 0.25 : 1;
     if (k === ' ') { ev.preventDefault(); $('play').click(); return; }
-    if (k === ',' || k === '.') { $('frame').value = (i + (k === '.' ? 1 : 9)) % 10; refresca(); return; }
+    if (k === ',' || k === '.') { $('frame').value = (i + (k === '.' ? 1 : FOTOGRAMES.length - 1)) % FOTOGRAMES.length; refresca(); return; }
     if (k === 'delete') { canvia(esborraFotograma); return; }
     if (!e) return;
     if (k === 'd') canvia(() => posaEfectiu({ d: !e.d }));
@@ -335,6 +382,39 @@ try { $('arcOn').checked = localStorage.getItem('ajustArmaArc') !== '0'; } catch
 $('arcOn').onchange = () => { try { localStorage.setItem('ajustArmaArc', $('arcOn').checked ? '1' : '0'); } catch (e) { } };
 addEventListener('beforeunload', ev => { if (brut) { ev.preventDefault(); ev.returnValue = ''; } });
 
+// ---------- Controls tàctils (el mateix que fan el teclat i la roda) ----------
+try { const g = localStorage.getItem('ajustArmaAmp'); $('amp').checked = g === null ? matchMedia('(max-width: 900px)').matches : g === '1'; } catch (e) { $('amp').checked = matchMedia('(max-width: 900px)').matches; }
+$('amp').onchange = () => { try { localStorage.setItem('ajustArmaAmp', $('amp').checked ? '1' : '0'); } catch (e) { } refresca(); };
+addEventListener('resize', ajustaZoom);
+document.querySelectorAll('#pad button').forEach(b => b.addEventListener('click', () => {
+    const act = b.dataset.act, { v, w, i, mode } = sel(), e = efectiu(w, v, i), fi = $('fi').checked, pas = fi ? 0.25 : 1, gir = fi ? 1 : 5, n = FOTOGRAMES.length;
+    if (act === 'prev' || act === 'next') { $('frame').value = (i + (act === 'next' ? 1 : n - 1)) % n; refresca(); return; }
+    if (act === 'undo') { desfes(); return; }
+    if (act === 'redo') { refes(); return; }
+    if (!e) return;
+    if (act === 'up') canvia(() => posaEfectiu({ y: e.y - pas }), true);
+    else if (act === 'down') canvia(() => posaEfectiu({ y: e.y + pas }), true);
+    else if (act === 'left') canvia(() => posaEfectiu({ x: e.x - pas }), true);
+    else if (act === 'right') canvia(() => posaEfectiu({ x: e.x + pas }), true);
+    else if (act === 'rotm') canvia(() => posaEfectiu({ a: e.a - gir }), true);
+    else if (act === 'rotp') canvia(() => posaEfectiu({ a: e.a + gir }), true);
+    else if (act === 'smaller' || act === 'bigger') {
+        if (mode !== 'arma') { $('estat').textContent = "La mida només es canvia en el mode «Només aquesta arma»."; $('estat').style.color = '#ffd34d'; return; }
+        canvia(() => posaEfectiu({ e: e.e + (act === 'bigger' ? 0.02 : -0.02) }), true);
+    }
+}));
+$('copia').onclick = async () => {
+    const txt = JSON.stringify({ taula, ajust, llarg, armes: Object.fromEntries(NOMS.map(k => [k, { agafa: ARMES[k].agafa }])) });
+    const estat = $('estat');
+    try { await navigator.clipboard.writeText(txt); estat.textContent = 'Dades copiades al porta-retalls (' + txt.length + ' caràcters).'; estat.style.color = '#9aff9a'; }
+    catch (e) {
+        const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select();
+        let ok = false; try { ok = document.execCommand('copy'); } catch (x) { }
+        ta.remove();
+        estat.textContent = ok ? 'Dades copiades al porta-retalls.' : "No s'han pogut copiar."; estat.style.color = ok ? '#9aff9a' : '#ff9a9a';
+    }
+};
+
 // ---------- Desa al joc ----------
 $('desa').onclick = async () => {
     const estat = $('estat');
@@ -348,7 +428,7 @@ $('desa').onclick = async () => {
         estat.textContent = d.ok ? 'Desat a js/atac_arma.js (còpia anterior: atac_arma.js.bak). Recarrega el joc.' : "No s'ha pogut desar: " + (d.error || r.status);
         estat.style.color = d.ok ? '#9aff9a' : '#ff9a9a';
     } catch (e) {
-        estat.textContent = "No s'ha pogut desar: obre aquesta pàgina amb python serveix.py (http://localhost:8000/eines/ajust_arma.html)";
+        estat.textContent = "No s'ha pogut desar: obre aquesta pàgina amb python serveix.py (http://localhost:8000/eines/ajust_arma.html, o amb l'adreça del teu ordinador a la xarxa des del mòbil). Pots usar «Copia les dades».";
         estat.style.color = '#ff9a9a';
     }
     refresca();
