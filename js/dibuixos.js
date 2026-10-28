@@ -2580,48 +2580,75 @@ function pintarTroncDestral(ctx, w, h) {
     ctx.fillStyle = '#4e5258'; ctx.beginPath(); ctx.arc(cx + 10, yTop - 4, 1.4, 0, Math.PI * 2); ctx.fill();
 }
 
-// Cofre de fusta amb tapa bombada, bandes de ferro, reblons i pany daurat
+// COFRE (el mateix per a tots els cofres del joc, a qualsevol mida): fusta a taulons amb veta, tapa bombada amb vora daurada,
+// bandes de ferro amb reblons, escaires daurats a les cantonades i un pany daurat gran amb forat de clau.
 function pintarCofre(ctx, w, h) {
-    ctx.lineJoin = 'round';
-    const x0 = 5, x1 = w - 5, yCos = h * 0.46, yBaix = h - 7, yTapa = h * 0.08;
-    ctx.fillStyle = 'rgba(0,0,0,0.30)'; ctx.beginPath(); ctx.ellipse(w / 2 + 2, h - 4, w * 0.46, 5, 0, 0, Math.PI * 2); ctx.fill();
-    // Cos: fusta a taulons
-    const g = ctx.createLinearGradient(0, yCos, 0, yBaix);
-    g.addColorStop(0, '#9a6430'); g.addColorStop(1, '#6a4020');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(x0, yCos, x1 - x0, yBaix - yCos, 2); ctx.fill();
-    ctx.strokeStyle = 'rgba(40,20,6,0.6)'; ctx.lineWidth = 1;
-    const mid = (yCos + yBaix) / 2;
-    ctx.beginPath(); ctx.moveTo(x0 + 1, mid); ctx.lineTo(x1 - 1, mid); ctx.stroke();
-    for (let x = x0 + 12; x < x1 - 8; x += 17) { ctx.beginPath(); ctx.moveTo(x, mid - 2); ctx.lineTo(x + 6, mid - 2); ctx.moveTo(x + 8, mid + 4); ctx.lineTo(x + 14, mid + 4); ctx.stroke(); }
-    ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.roundRect(x0, yCos, x1 - x0, yBaix - yCos, 2); ctx.stroke();
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const x0 = Math.round(w * 0.06), x1 = w - x0, yBaix = h - 6;
+    const yCos = h * 0.44, yTapa = h * 0.06, gruix = Math.max(1.8, w / 40);
+    let llavor = 7;
+    const rnd = () => (llavor = (llavor * 16807) % 2147483647) / 2147483647;
+    // Ombra al terra
+    ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.beginPath(); ctx.ellipse(w / 2 + 2, h - 3.5, w * 0.48, h * 0.065, 0, 0, Math.PI * 2); ctx.fill();
+
+    // Cos: taulons horitzontals amb degradat, veta i una vora de llum dalt i d'ombra baix
+    const cos = new Path2D(); cos.roundRect(x0, yCos, x1 - x0, yBaix - yCos, 3);
+    const g = ctx.createLinearGradient(0, yCos, 0, yBaix); g.addColorStop(0, '#a8703a'); g.addColorStop(0.55, '#7f4f26'); g.addColorStop(1, '#5a3418');
+    ctx.fillStyle = g; ctx.fill(cos);
+    ctx.save(); ctx.clip(cos);
+    const taulons = 3, alt = (yBaix - yCos) / taulons;
+    for (let t = 0; t < taulons; t++) {
+        const y = yCos + t * alt;
+        ctx.strokeStyle = 'rgba(30,14,4,0.55)'; ctx.lineWidth = 1.3; if (t) { ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(255,220,160,0.18)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0, y + 1.6); ctx.lineTo(x1, y + 1.6); ctx.stroke();
+        ctx.strokeStyle = 'rgba(40,18,6,0.32)'; ctx.lineWidth = 0.9;                               // veta
+        for (let k = 0; k < 4; k++) { const vx = x0 + rnd() * (x1 - x0 - 16), vy = y + 3 + rnd() * (alt - 6); ctx.beginPath(); ctx.moveTo(vx, vy); ctx.quadraticCurveTo(vx + 8, vy + (rnd() - 0.5) * 3, vx + 8 + rnd() * 10, vy + (rnd() - 0.5) * 2); ctx.stroke(); }
+    }
+    ctx.fillStyle = 'rgba(0,0,0,0.22)'; ctx.fillRect(x0, yBaix - 4, x1 - x0, 4);               // ombra de baix
+    ctx.restore();
+    ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix; ctx.stroke(cos);
+
     // Tapa bombada
-    const tapa = new Path2D();
-    tapa.moveTo(x0, yCos + 1); tapa.lineTo(x0, yCos - 5); tapa.quadraticCurveTo(w / 2, yTapa - 14, x1, yCos - 5); tapa.lineTo(x1, yCos + 1); tapa.closePath();
-    const gt = ctx.createLinearGradient(0, yTapa, 0, yCos);
-    gt.addColorStop(0, '#d29a58'); gt.addColorStop(0.5, '#b07a42'); gt.addColorStop(1, '#8a5a2c');
+    const caiguda = h * 0.05, tapa = new Path2D();
+    tapa.moveTo(x0, yCos + 1); tapa.lineTo(x0, yCos - caiguda); tapa.quadraticCurveTo(w / 2, yTapa - h * 0.1, x1, yCos - caiguda); tapa.lineTo(x1, yCos + 1); tapa.closePath();
+    const gt = ctx.createLinearGradient(0, yTapa, 0, yCos); gt.addColorStop(0, '#e0aa66'); gt.addColorStop(0.45, '#bb8446'); gt.addColorStop(1, '#8c5a2a');
     ctx.fillStyle = gt; ctx.fill(tapa);
     ctx.save(); ctx.clip(tapa);
-    ctx.strokeStyle = 'rgba(50,26,8,0.5)'; ctx.lineWidth = 1;
-    for (let i = 1; i < 4; i++) { ctx.beginPath(); ctx.moveTo(x0, yCos - 5 - i * 5); ctx.quadraticCurveTo(w / 2, yTapa - 14 - i * 5 + 8, x1, yCos - 5 - i * 5); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(50,24,6,0.38)'; ctx.lineWidth = 1;
+    for (let i = 1; i < 4; i++) { ctx.beginPath(); ctx.moveTo(x0, yCos - caiguda - i * h * 0.07); ctx.quadraticCurveTo(w / 2, yTapa - h * 0.1 - i * h * 0.07 + h * 0.1, x1, yCos - caiguda - i * h * 0.07); ctx.stroke(); }
+    ctx.fillStyle = 'rgba(255,240,200,0.28)'; ctx.beginPath(); ctx.ellipse(w * 0.36, yTapa + h * 0.1, w * 0.2, h * 0.035, -0.06, 0, Math.PI * 2); ctx.fill();   // reflex
     ctx.restore();
-    ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = 2.2; ctx.stroke(tapa);
-    // Bandes de ferro verticals (seguint la corba de la tapa) amb reblons
-    [x0 + 7, x1 - 7].forEach(x => {
-        ctx.fillStyle = '#4a4c54'; ctx.fillRect(x - 4, yCos - 6, 8, yBaix - yCos + 6);
-        ctx.fillStyle = '#6a6c76'; ctx.fillRect(x - 4, yCos - 6, 3, yBaix - yCos + 6);
-        ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = 1.6; ctx.strokeRect(x - 4, yCos - 6, 8, yBaix - yCos + 6);
-        ctx.fillStyle = '#b0b2ba';
-        [yCos - 2, yCos + 9, yBaix - 6].forEach(y => { ctx.beginPath(); ctx.arc(x, y, 1.3, 0, Math.PI * 2); ctx.fill(); });
+    ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix; ctx.stroke(tapa);
+
+    // Bandes de ferro verticals, seguint la tapa, amb vora de llum i reblons
+    const ampleB = Math.max(6, w * 0.115);
+    [w * 0.2, w * 0.8].forEach(cx => {
+        const y0 = yCos - caiguda, apex = (y0 + yTapa - h * 0.1) / 2, t = (cx - w / 2) / (w / 2);
+        const bx = cx - ampleB / 2, top = y0 + (apex - y0) * (1 - t * t) + gruix * 0.8;                       // la banda segueix la corba de la tapa
+        ctx.fillStyle = '#464850'; ctx.fillRect(bx, top, ampleB, yBaix - top);
+        ctx.fillStyle = '#7a7c86'; ctx.fillRect(bx, top, ampleB * 0.3, yBaix - top);
+        ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix * 0.75; ctx.strokeRect(bx, top, ampleB, yBaix - top);
+        ctx.fillStyle = '#d9c26a';
+        [top + 4, yCos + 5, yBaix - 7].forEach(y => { ctx.beginPath(); ctx.arc(cx, y, Math.max(1.3, w / 60), 0, Math.PI * 2); ctx.fill(); });
     });
-    ctx.fillStyle = '#3e4048'; ctx.fillRect(x0, yCos - 1, x1 - x0, 4); ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = 1.4; ctx.strokeRect(x0, yCos - 1, x1 - x0, 4);
-    ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(x0 + 1, yCos, x1 - x0 - 2, 1);
-    // Pany daurat amb forat de clau
-    const px = w / 2, py = yCos + 4;
-    const gp = ctx.createLinearGradient(px - 7, py - 6, px + 7, py + 10); gp.addColorStop(0, '#f6dc7a'); gp.addColorStop(1, '#b8892a');
-    ctx.fillStyle = gp; ctx.beginPath(); ctx.roundRect(px - 7, py - 6, 14, 17, 3); ctx.fill();
-    ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = 1.8; ctx.stroke();
-    ctx.fillStyle = '#1c1008'; ctx.beginPath(); ctx.arc(px, py + 1.5, 2.2, 0, Math.PI * 2); ctx.fill(); ctx.fillRect(px - 1, py + 2, 2, 5);
-    ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.fillRect(px - 5, py - 4.5, 5, 1.4);
+    // Vora daurada entre la tapa i el cos
+    ctx.fillStyle = '#c99a32'; ctx.fillRect(x0 - 1, yCos - 2.5, x1 - x0 + 2, 5.5);
+    ctx.fillStyle = 'rgba(255,245,190,0.7)'; ctx.fillRect(x0 - 1, yCos - 2.5, x1 - x0 + 2, 1.4);
+    ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix * 0.7; ctx.strokeRect(x0 - 1, yCos - 2.5, x1 - x0 + 2, 5.5);
+    // Escaires daurats a les cantonades de baix
+    ctx.fillStyle = '#c99a32'; ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix * 0.7;
+    [[x0, 1], [x1, -1]].forEach(([x, sg]) => {
+        const k = Math.max(7, w * 0.12);
+        ctx.beginPath(); ctx.moveTo(x, yBaix - k); ctx.lineTo(x, yBaix); ctx.lineTo(x + sg * k, yBaix); ctx.lineTo(x + sg * k, yBaix - 4); ctx.lineTo(x + sg * 4, yBaix - 4); ctx.lineTo(x + sg * 4, yBaix - k); ctx.closePath(); ctx.fill(); ctx.stroke();
+    });
+    // Pany daurat gran amb forat de clau
+    const pw = Math.max(13, w * 0.2), ph = pw * 1.2, px = w / 2 - pw / 2, py = yCos - 3;
+    const gp = ctx.createLinearGradient(px, py, px + pw, py + ph); gp.addColorStop(0, '#fbe58a'); gp.addColorStop(0.55, '#d2a53a'); gp.addColorStop(1, '#9a6e1c');
+    ctx.fillStyle = gp; ctx.beginPath(); ctx.roundRect(px, py, pw, ph, pw * 0.22); ctx.fill();
+    ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix * 0.9; ctx.stroke();
+    ctx.fillStyle = '#1c1008'; ctx.beginPath(); ctx.arc(w / 2, py + ph * 0.42, pw * 0.13, 0, Math.PI * 2); ctx.fill();
+    ctx.fillRect(w / 2 - pw * 0.05, py + ph * 0.42, pw * 0.1, ph * 0.3);
+    ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.fillRect(px + pw * 0.16, py + ph * 0.12, pw * 0.38, 1.5);
 }
 
 // Gerros i pots d'argila i vidre. tipus: 0 àmfora amb nanses, 1 pot panxut amb tap, 2 ampolla de vidre amb brou verd

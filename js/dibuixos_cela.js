@@ -272,14 +272,3 @@ function pintarEstoraCela(ctx, w, h) {
     for (let a = 0; a < Math.PI * 2; a += 0.12) { ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * w * 0.12, cy + Math.sin(a) * h * 0.12); ctx.lineTo(cx + Math.cos(a) * w * 0.47, cy + Math.sin(a) * h * 0.47); ctx.stroke(); }
 }
 
-// ---------- Cofre de fusta amb bandes i pany de ferro ----------
-function pintarCofreCela(ctx, w, h) {
-    ctx.lineJoin = 'round';
-    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 5, w * 0.5, 6, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 2.2;
-    ctx.fillStyle = gradVBib(ctx, 20, h - 8, [[0, '#8a5a2c'], [1, '#4a2a14']]); ctx.beginPath(); ctx.roundRect(2, 22, w - 4, h - 30, 4); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = gradVBib(ctx, 4, 24, [[0, '#a67442'], [1, '#6a4020']]); ctx.beginPath(); ctx.roundRect(0, 6, w, 20, [10, 10, 3, 3]); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#3a3a42'; [14, w - 22].forEach(x => { ctx.fillRect(x, 8, 8, h - 14); ctx.strokeRect(x, 8, 8, h - 14); });
-    ctx.fillStyle = '#c8a040'; ctx.fillRect(w / 2 - 6, 20, 12, 14); ctx.strokeRect(w / 2 - 6, 20, 12, 14); ctx.fillStyle = '#1a1208'; ctx.fillRect(w / 2 - 1.4, 25, 2.8, 6);
-    ctx.strokeStyle = 'rgba(40,20,8,0.4)'; ctx.lineWidth = 1; for (let y = 32; y < h - 10; y += 8) { ctx.beginPath(); ctx.moveTo(26, y); ctx.lineTo(w - 26, y); ctx.stroke(); }
-}

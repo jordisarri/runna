@@ -859,7 +859,7 @@ const Grafics = {
         crea('creu_cela', 36, 60, pintarCreuCela);
         crea('habit_cela', 60, 110, pintarHabitCela);
         crea('estora_cela', 230, 110, pintarEstoraCela);
-        crea('cofre_cela', 90, 56, pintarCofreCela);
+        crea('cofre_cela', 90, 66, pintarCofre);
         // Pròleg (js/dibuixos_proleg.js): els cinc quadres pintats
         crea('proleg_ocellaire', 720, 950, pintarProlegOcellaire);
         crea('proleg_segell', 720, 950, pintarProlegSegell);
@@ -878,7 +878,7 @@ const Grafics = {
         crea('sacs_tresor', 140, 90, pintarSacsTresor);
         crea('monedes_tresor', 110, 50, pintarMonedesTresor);
         crea('bota_creu', 64, 84, pintarBotaCreu);
-        crea('cofre_tresor', 110, 80, pintarCofreTresor);
+        crea('cofre_tresor', 110, 80, pintarCofre);
         crea('rosa_vents', 380, 200, pintarRosaVents);
         crea('fletxa_raim', 90, 90, pintarFletxaRaim);
         // Ermita de la Desaparició (js/dibuixos_ermita.js)

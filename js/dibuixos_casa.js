@@ -168,20 +168,6 @@ function pintarBotaCreu(ctx, w, h) {
     ctx.beginPath(); ctx.moveTo(w / 2, h * 0.34); ctx.lineTo(w / 2, h * 0.7); ctx.moveTo(w / 2 - 12, h * 0.46); ctx.lineTo(w / 2 + 12, h * 0.46); ctx.stroke();
     ctx.strokeStyle = 'rgba(255,200,170,0.5)'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(w / 2 - 1.5, h * 0.35); ctx.lineTo(w / 2 - 1.5, h * 0.68); ctx.stroke();
 }
-// Cofre del tresor: gran, de fusta fosca amb ferros daurats, damunt una estora
-function pintarCofreTresor(ctx, w, h) {
-    ctx.lineJoin = 'round';
-    ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 5, w * 0.5, 6, 0, 0, Math.PI * 2); ctx.fill();
-    const gf = ctx.createLinearGradient(0, h * 0.35, 0, h - 8); gf.addColorStop(0, '#6a3e1a'); gf.addColorStop(1, '#3a200c');
-    ctx.fillStyle = gf; ctx.fillRect(6, h * 0.38, w - 12, h * 0.55); ctx.strokeStyle = CASA_C; ctx.lineWidth = 2.4; ctx.strokeRect(6, h * 0.38, w - 12, h * 0.55);
-    const gt = ctx.createLinearGradient(0, 4, 0, h * 0.4); gt.addColorStop(0, '#8a5a2a'); gt.addColorStop(1, '#5a3418');
-    ctx.fillStyle = gt; ctx.beginPath(); ctx.moveTo(6, h * 0.4); ctx.quadraticCurveTo(6, 6, w / 2, 6); ctx.quadraticCurveTo(w - 6, 6, w - 6, h * 0.4); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#d4a93a'; [w * 0.2, w * 0.8 - 8].forEach(x => { ctx.fillRect(x, 8, 8, h * 0.85); ctx.strokeRect(x, 8, 8, h * 0.85); });
-    ctx.fillRect(4, h * 0.36, w - 8, 8); ctx.strokeRect(4, h * 0.36, w - 8, 8);
-    ctx.fillStyle = '#e8c040'; ctx.beginPath(); ctx.rect(w / 2 - 9, h * 0.34, 18, 22); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#2a1608'; ctx.beginPath(); ctx.arc(w / 2, h * 0.5, 3.4, 0, Math.PI * 2); ctx.fill(); ctx.fillRect(w / 2 - 1.4, h * 0.5, 2.8, 8);
-    ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.fillRect(10, h * 0.4, w - 20, 2);
-}
-
 // ---------- Rosa dels vents de pedra (davant l'Home del Raïm): mosaic amb estrella de vuit puntes i els quatre punts cardinals ----------
 function pintarRosaVents(ctx, w, h) {
     ctx.lineJoin = 'round';
