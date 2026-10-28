@@ -281,7 +281,7 @@ const DIALEGS = {
         if (E.flag("fragment2")) return { pagines: [] };
         if (!E.te("clau_sagrari")) {
             return {
-                pagines: [],
+                pagines: [{ qui: "Ineu", text: "El sagrari és tancat amb una clau molt petita." }],
                 enAcabar: () => E.posaFlag("sagrariVist")
             };
         }

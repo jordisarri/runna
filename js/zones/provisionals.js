@@ -37,7 +37,7 @@ class ZonaEsglesia extends ZonaBase {
 
         // Retaule Major (tot l'ample de la nau, sencer) i, al davant, l'altar de pedra
         this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
-        this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170 });     // el sagrari, al mig del retaule (fragment 2)
+        this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });     // el sagrari, al mig del retaule (fragment 2)
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
 
         // Portes del peu del retaule: totes dues tancades. Quan el Pare Daniel diu que el rellotge s'ha aturat (rellotgeDit)
@@ -138,6 +138,34 @@ class ZonaEsglesia extends ZonaBase {
             Joc.aturarTot(this);
             this.scene.stop('UI');
             this.scene.start('Credits');
+        });
+    }
+
+    // Venint de la torre, l'Ineu surt per la porta del peu del retaule: comença darrere el retaule (tapat per ell) i camina cap avall fins
+    // passar-ne la vora, i només llavors es dibuixa davant. Així no se li superposa el retaule.
+    enEntrar() {
+        if (this.dadesEntrada.entrada !== 'golfes' || this.dadesEntrada.restaurar) return;
+        this.entradaPropia = true;
+        const I = this.ineu, x = ESG.portaDx, y0 = ESG.retY - 10, y1 = ESG.retY + 110, darrere = this.retaule.depth - 1;
+        this.canviant = true;
+        I.body.checkCollision.none = true;
+        I.setPosition(x, y0).setDepth(darrere);
+        this.ombraIneu.setVisible(false);
+        if (this.fantasma) this.fantasma.setVisible(false);
+        this.posarDireccio('avall', true);
+        this.tweens.addCounter({
+            from: 0, to: 1, duration: 900, delay: 150,
+            onUpdate: tw => {
+                const y = y0 + (y1 - y0) * tw.getValue(), fora = y > ESG.retY + 34;
+                I.setPosition(x, y).setDepth(fora ? y : darrere);
+                this.ombraIneu.setPosition(x, y).setVisible(fora);
+            },
+            onComplete: () => {
+                I.body.checkCollision.none = false;
+                if (this.fantasma) this.fantasma.setVisible(true);
+                this.canviant = false;
+                this.posarDireccio('avall', false);
+            }
         });
     }
 
@@ -251,7 +279,7 @@ class ZonaCreu extends ZonaBase {
         [[760, 860], [1260, 860]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xcfe08a));   // plàtans
 
         // Bassadòria: una bassa molt gran (520 d'ample, uns quatre Ineus), sense mur al darrere; plàtans de tardor als costats
-        [[330, 560], [1070, 560]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xe0b868));
+        [[330, 560]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xe0b868));
         // Dos dibuixos de la mateixa bassa: tèrbola i amb boira, i neta (després del Cant de l'Aurora)
         this.bassa = this.posar(Estat.flag('bassadoriaNeta') ? 'bassadoria' : 'bassadoria_boira', 700, 560, { fonsY: 300 });   // profunditat de la vora del fons: els gripaus de dins l'aigua es veuen
         this.colisio(700, 400, 600, 170);             // l'anella de pedra (una el·lipse feta de tres franges)

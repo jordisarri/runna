@@ -36,6 +36,20 @@ function nivellBoira() {
     return 1 - (1 - BOIRA_MINIM) * fets / BOIRA_PASSOS.length;
 }
 
+const LIM_PEUS_DIALEG = 760;       // durant un diàleg, els peus de l'Ineu (i de qui li parla) han de quedar per sobre d'aquesta y de la pantalla (la caixa de text comença a ~910)
+// Un punt interactiu sense res a dir (diàleg buit i sense efecte) no és interactiu. Només es mira als diàlegs del registre DIALEGS (funcions pures
+// de l'estat): les funcions que fan alguna cosa en cridar-les (girar un engranatge, la palanca...) no s'han d'executar mai per mirar-ho.
+let _dialegsPurs = null;
+function esDialegBuit(dialeg) {
+    let d = dialeg;
+    if (typeof dialeg === 'function') {
+        _dialegsPurs = _dialegsPurs || new Set(Object.values(DIALEGS).filter(v => typeof v === 'function'));
+        if (!_dialegsPurs.has(dialeg)) return false;
+        d = dialeg(Estat);
+    }
+    return !!(d && d.pagines && !d.pagines.length && !d.enAcabar);
+}
+
 const PAS_PORTA = 44;       // en passar una porta (o qualsevol sortida), l'Ineu camina aquests píxels més cap a la foscor abans de canviar d'escena, i en arribar en camina altres tants cap endins
 const MS_PAS_PORTA = 450;
 const TOPE_Y = 100;   // els peus de l'Ineu no passen d'aquí amunt: sempre se li veu el cos (la càmera s'atura a y=0)
@@ -49,6 +63,8 @@ class ZonaBase extends Phaser.Scene {
     init(data) {
         this.dadesEntrada = data || {};
         this.canviant = false;
+        this.camDialeg = null;
+        this.entradaPropia = false;
     }
 
     create() {
@@ -120,7 +136,7 @@ class ZonaBase extends Phaser.Scene {
         Estat.desar();
 
         if (this.enEntrar) this.enEntrar();
-        if (this.dadesEntrada.entrada && !this.dadesEntrada.restaurar && !Estat.caigut) this.pasEntrada(this.posEntrada);
+        if (this.dadesEntrada.entrada && !this.dadesEntrada.restaurar && !Estat.caigut && !this.entradaPropia) this.pasEntrada(this.posEntrada);
         if (Estat.caigut) {
             Estat.caigut = false;
             this.time.delayedCall(600, () => ui.obrirDialeg({ pagines: [
@@ -938,6 +954,27 @@ class ZonaBase extends Phaser.Scene {
         f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(this.assegut ? 0 : i.alpha * 0.38);   // assegut: el banc el tapa de debò
     }
 
+    // Quan hi ha un diàleg, la caixa de text tapa la part de baix de la pantalla: si l'Ineu (o qui li parla) hi queda a sobre perquè la càmera
+    // s'ha aturat contra la vora de baix de la zona, la càmera baixa una mica més (fora de la zona) fins que tots dos queden per sobre de la caixa.
+    camaraDialeg(obert) {
+        const cam = this.cameras.main;
+        if (obert) {
+            if (this.camDialeg) return;
+            const I = this.ineu, p = this.puntActiu, baix = Math.max(I.y, p && p.npc ? p.npc.y : 0);
+            const falta = ALT_HUD + (baix - cam.scrollY) * ZOOM_CAMERA - LIM_PEUS_DIALEG;
+            if (falta <= 0) return;
+            const extra = Math.ceil(falta / ZOOM_CAMERA) + 8, b = cam.getBounds();
+            this.camDialeg = { extra, bounds: { x: b.x, y: b.y, w: b.width, h: b.height } };
+            cam.setBounds(b.x, b.y, b.width, b.height + extra);
+            cam.setFollowOffset(0, -extra);
+        } else if (this.camDialeg) {
+            const d = this.camDialeg;
+            this.camDialeg = null;
+            cam.setFollowOffset(0, 0);
+            this.time.delayedCall(900, () => { if (!this.camDialeg) cam.setBounds(d.bounds.x, d.bounds.y, d.bounds.w, d.bounds.h); });     // quan la càmera ja és a lloc
+        }
+    }
+
     cicle(time, delta) {
         if (this.canviant) return;
         const ui = this.ui();
@@ -947,6 +984,7 @@ class ZonaBase extends Phaser.Scene {
                       ui.consumirAccioTactil();
 
         if ((ui.dialeg || ui.bloquejat) && this.ineu.anims.isPlaying) this.posarDireccio(this.direccio, false);
+        this.camaraDialeg(!!ui.dialeg);
         if (ui.dialeg) {
             this.ineu.body.setVelocity(0);
             this.congelarEnemics();
@@ -1165,7 +1203,7 @@ class ZonaBase extends Phaser.Scene {
         let millor = null, millorDist = Infinity;
         for (const p of this.interactius) {
             if (p.actiu && !p.actiu()) continue;
-            if (!p.enTancar) { const d = typeof p.dialeg === 'function' ? p.dialeg(Estat) : p.dialeg; if (d && d.pagines && !d.pagines.length && !d.enAcabar) continue; }     // sense res a dir: no és interactiu
+            if (!p.enTancar && esDialegBuit(p.dialeg)) continue;                                        // sense res a dir: no és interactiu
             const dx = p.x - this.ineu.x, dy = p.y - this.ineu.y, d = Math.hypot(dx, dy);
             if (d > p.radi * 0.8 || d >= millorDist) continue;
             if (d > 36 && (dx * dv.x + dy * dv.y) / d < 0.34) continue;          // no el mira

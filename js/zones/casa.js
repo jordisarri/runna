@@ -551,8 +551,7 @@ const radiEng = mida => GOLFES_DENTS[mida] * 1.5;
 Object.assign(DIALEGS, {
     golfesRellotge: E => ({ pagines: E.flag('rellotgeReparat') ? [
     ] : [
-        { qui: 'Ineu', text: "El mecanisme és al bastidor de fusta de l'esquerra: tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran. Quan una posició és bona, el seu llum s'encén." },
-        { qui: 'Ineu', text: "La nota del campaner, a la paret de l'esquerra, deu dir l'ordre." }
+        { qui: 'Ineu', text: "El mecanisme és al bastidor de fusta de l'esquerra: tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran." }
     ] }),
 
     golfesNota: E => ({ pagines: [
@@ -752,14 +751,11 @@ class ZonaGolfes extends ZonaCasaBase {
             this.interactiu(x, B + 26, 48, () => this.girarEngranatge(i), { altura: 190, actiu: () => !this.reparat });
         });
         if (this.reparat) this.encaixaEngranatges();
-        // Plaques de posició (I, II, III) al travesser de baix i un llum per a cada una al de dalt: verd quan l'engranatge és el bo
-        this.llumsEng = GOLFES_ENG_X.map((x, i) => {
+        // Plaques de posició (I, II, III) al travesser de baix. Cap llum ni avís: el puzle només es resol quan tots tres són bons.
+        GOLFES_ENG_X.forEach((x, i) => {
             this.add.rectangle(x, B - 19, 30, 14, 0x3a2412).setStrokeStyle(1.5, 0xb58a3a).setDepth(D + 6);
             this.add.text(x, B - 19, ['I', 'II', 'III'][i], estilText(11, '#f2e6c8', { fontStyle: 'bold' })).setOrigin(0.5).setDepth(D + 7);
-            this.add.circle(x, dalt + 3, 7, 0x1a0c06).setStrokeStyle(2, 0xb58a3a).setDepth(D + 6);
-            return this.add.circle(x, dalt + 3, 4.5, 0x3a1a10).setDepth(D + 7);
         });
-        this.refrescaLlums();
 
         // Nota del campaner (la pista del puzle), clavada a la paret de l'esquerra: pergamí desplegat i gastat
         this.posar('pergami_paret', 175, 360, { fonsY: -850, escala: 1.15 });
@@ -798,10 +794,6 @@ class ZonaGolfes extends ZonaCasaBase {
         const ui = this.ui(); if (ui && ui.actualitzarHUD) ui.actualitzarHUD();
     }
 
-    refrescaLlums() {
-        this.llumsEng.forEach((l, i) => l.setFillStyle(this.mides[i] === GOLFES_SOLUCIO[i] ? 0x6aff7a : 0x3a1a10));
-    }
-
     dibuixaEngranatge(i) {
         const e = this.engranatges[i], dents = GOLFES_DENTS[this.mides[i]], R = radiEng(this.mides[i]);
         e.ombra.clear().fillStyle(0x000000, 0.35).fillCircle(0, 0, R + 2 * R / dents);
@@ -828,13 +820,9 @@ class ZonaGolfes extends ZonaCasaBase {
         this.dibuixaEngranatge(i);
         const roda = this.engranatges[i].roda;
         this.tweens.add({ targets: roda, scale: { from: 0.86, to: 1 }, duration: 220, ease: 'Back.Out' });
-        this.refrescaLlums();
         Sfx.menu();
         const bé = this.mides.every((m, k) => m === GOLFES_SOLUCIO[k]);
-        if (!bé) {
-            this.flotant(GOLFES_ENG_X[i], GOLFES_ENG_Y - 90,['I', 'II', 'III'][i] + ': ' + GOLFES_NOM[this.mides[i]], this.mides[i] === GOLFES_SOLUCIO[i] ? '#9aff9a' : '#f2e6c8');
-            return null;
-        }
+        if (!bé) return null;
         return {
             pagines: DIALEGS.golfesPremi.pagines,
             enAcabar: () => {
