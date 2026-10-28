@@ -6,12 +6,13 @@ import http.server, socketserver, json, os, re
 ARREL = os.path.dirname(os.path.abspath(__file__))
 FITXER_ARMA = os.path.join(ARREL, 'js', 'atac_arma.js')
 VISTES = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast']
+FOTOGRAMES = 16      # els de la fulla d'atac (ATAC_INEU.fotogrames al joc)
 
 def taula_valida(t):
     if not isinstance(t, dict) or set(t) != set(VISTES):
         return False
     for v in VISTES:
-        if not isinstance(t[v], list) or len(t[v]) != 10:
+        if not isinstance(t[v], list) or len(t[v]) != FOTOGRAMES:
             return False
         for e in t[v]:
             if e is None:
@@ -30,7 +31,7 @@ def config_valida(llarg, armes):
             and all(isinstance(armes[k], dict) and num(armes[k].get('agafa')) and 0 <= armes[k]['agafa'] <= 1 for k in ARMES))
 
 def ajust_valid(a):
-    """ajust = { arma: { vista: [10 x (null | {dx, dy, a, e})] } }"""
+    """ajust = { arma: { vista: [16 x (null | {dx, dy, a, e})] } }"""
     num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
     if not isinstance(a, dict) or set(a) != set(ARMES):
         return False
@@ -38,7 +39,7 @@ def ajust_valid(a):
         if not isinstance(a[k], dict) or not set(a[k]) <= set(VISTES):
             return False
         for v, llista in a[k].items():
-            if not isinstance(llista, list) or len(llista) != 10:
+            if not isinstance(llista, list) or len(llista) != FOTOGRAMES:
                 return False
             for e in llista:
                 if e is not None and (not isinstance(e, dict) or not {'dx', 'dy', 'a', 'e'} <= set(e) <= {'dx', 'dy', 'a', 'e', 'd'}

@@ -94,7 +94,8 @@ VISTES.forEach(v => $('vista').add(new Option(v, v)));
 FOTOGRAMES.forEach((f, i) => $('frame').add(new Option('#' + i + ' (fot. ' + f + ')', i)));
 $('vista').value = 'right'; $('frame').value = 3;
 const c = $('c'), ctx = c.getContext('2d'), tc = $('tira').getContext('2d');
-c.width = 5 * 256 * ESCALA; c.height = 2 * 256 * ESCALA;
+const COLS = 4, FILES = Math.ceil(FOTOGRAMES.length / COLS);      // la graella: els 16 fotogrames de la fulla en 4x4
+c.width = COLS * 256 * ESCALA; c.height = FILES * 256 * ESCALA;
 
 const sel = () => ({ v: $('vista').value, w: $('arma').value, i: +$('frame').value, mode: $('mode').value });
 
@@ -172,7 +173,7 @@ function dibuixa() {
     const { v, w, i: seleccionat } = sel();
     ctx.clearRect(0, 0, c.width, c.height);
     FOTOGRAMES.forEach((f, i) => {
-        const ox = (i % 5) * 256 * ESCALA, oy = Math.floor(i / 5) * 256 * ESCALA, e = efectiu(w, v, i), b = taula[v][i], aj = ajust[w][v][i];
+        const ox = (i % COLS) * 256 * ESCALA, oy = Math.floor(i / COLS) * 256 * ESCALA, e = efectiu(w, v, i), b = taula[v][i], aj = ajust[w][v][i];
         dibuixaCela(ctx, v, i, w, ox, oy, ESCALA);
         ctx.strokeStyle = i === seleccionat ? '#ffe08a' : 'rgba(255,255,255,.2)'; ctx.lineWidth = i === seleccionat ? 3 : 1;
         ctx.strokeRect(ox + 0.5, oy + 0.5, 256 * ESCALA - 1, 256 * ESCALA - 1);
@@ -231,13 +232,13 @@ function tick(ara) {
         tc.strokeStyle = vv === v ? '#ffe08a' : 'rgba(255,255,255,.2)'; tc.lineWidth = vv === v ? 2 : 1; tc.strokeRect(bx + 1, 1, CAIXA_TIRA - 2, CAIXA_TIRA - 2);
     });
     // requadre que marca, a la graella, el fotograma que s'està reproduint
-    const r = c.getBoundingClientRect(), cw = r.width / 5, ch = r.height / 2, cur = $('cursor');
+    const r = c.getBoundingClientRect(), cw = r.width / COLS, ch = r.height / FILES, cur = $('cursor');
     cur.style.width = cw + 'px'; cur.style.height = ch + 'px';
-    cur.style.left = (idx % 5) * cw + 'px'; cur.style.top = Math.floor(idx / 5) * ch + 'px';
+    cur.style.left = (idx % COLS) * cw + 'px'; cur.style.top = Math.floor(idx / COLS) * ch + 'px';
     cur.style.display = jugant ? '' : 'none';
     // l'arc també sobre el fotograma de la graella que s'està reproduint
     arcG.clearRect(0, 0, arcC.width, arcC.height);
-    if (arcOn) dibuixaArc(arcG, v, w, (idx % 5) * 256 * ESCALA, Math.floor(idx / 5) * 256 * ESCALA, ESCALA, tJoc);
+    if (arcOn) dibuixaArc(arcG, v, w, (idx % COLS) * 256 * ESCALA, Math.floor(idx / COLS) * 256 * ESCALA, ESCALA, tJoc);
 }
 
 // ---------- Panell del fotograma ----------
@@ -289,8 +290,8 @@ let arrossega = false;
 function cursorACela(ev) {
     const r = c.getBoundingClientRect(), k = c.width / r.width;
     const px = (ev.clientX - r.left) * k, py = (ev.clientY - r.top) * k;
-    const i = Math.floor(px / (256 * ESCALA)) + 5 * Math.floor(py / (256 * ESCALA));
-    return { i, x: r2(px / ESCALA - (i % 5) * 256), y: r2(py / ESCALA - Math.floor(i / 5) * 256) };
+    const i = Math.floor(px / (256 * ESCALA)) + COLS * Math.floor(py / (256 * ESCALA));
+    return { i, x: r2(px / ESCALA - (i % COLS) * 256), y: r2(py / ESCALA - Math.floor(i / COLS) * 256) };
 }
 c.addEventListener('mousedown', ev => {
     const p = cursorACela(ev);
