@@ -50,7 +50,7 @@ Object.assign(DIALEGS, {
     // La porta de ferro de la Sala de les Gírgoles (a l'est del Pati del Celler): la del soterrani, que el Germà Andreu tanca amb clau cada nit
     portaSoterrani: E => E.flag('clauFerro') ? { pagines: [
     ] } : { pagines: [
-        { qui: 'Ineu', text: "(Tancada amb clau. Per aquí deu baixar el Germà Andreu cada nit. Em caldria una clau de ferro, de les velles.)" }
+        { qui: 'Ineu', text: "Tancada amb clau." }
     ] },
 
     acordio: E => ({ pagines: [] }),
