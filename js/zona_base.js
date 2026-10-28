@@ -103,7 +103,6 @@ class ZonaBase extends Phaser.Scene {
         if (Estat.caigut) {
             Estat.caigut = false;
             this.time.delayedCall(600, () => ui.obrirDialeg({ pagines: [
-                { qui: '', text: 'Tot es torna fosc... i després, càlid.' },
                 { qui: 'Pare Jordi', text: 'Ineu! Que et trobo a terra! Respira, fill. Has de tenir més cura. Ja estàs bé?' }
             ] }));
         }
@@ -721,7 +720,7 @@ class ZonaBase extends Phaser.Scene {
         o.col = this.colisio(o.x, o.y - 13, 70, 26);
         if (!mogut) {
             const cap = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'la dreta' : "l'esquerra") : (dy > 0 ? 'avall' : 'amunt');
-            this.interactiu(x, y + 24, 90, { pagines: [{ qui: '', text: textPista }, { qui: 'Ineu', text: '(Si m\'hi recolzo i l\'empenyo cap a ' + cap + ', potser cedirà.)' }] },
+            this.interactiu(x, y + 24, 90, { pagines: [{ qui: 'Ineu', text: '(Si m\'hi recolzo i l\'empenyo cap a ' + cap + ', potser cedirà.)' }] },
                 { altura: 70, actiu: () => !o.mogut });
             (this.pedresMobils = this.pedresMobils || []).push(o);
         }
@@ -1107,7 +1106,7 @@ class ZonaBase extends Phaser.Scene {
         let millor = null, millorDist = Infinity;
         for (const p of this.interactius) {
             if (p.actiu && !p.actiu()) continue;
-            if (!p.enTancar) { const d = typeof p.dialeg === 'function' ? p.dialeg(Estat) : p.dialeg; if (d && d.pagines && !d.pagines.length) continue; }     // sense res a dir: no és interactiu
+            if (!p.enTancar) { const d = typeof p.dialeg === 'function' ? p.dialeg(Estat) : p.dialeg; if (d && d.pagines && !d.pagines.length && !d.enAcabar) continue; }     // sense res a dir: no és interactiu
             const dx = p.x - this.ineu.x, dy = p.y - this.ineu.y, d = Math.hypot(dx, dy);
             if (d > p.radi * 0.8 || d >= millorDist) continue;
             if (d > 36 && (dx * dv.x + dy * dv.y) / d < 0.34) continue;          // no el mira

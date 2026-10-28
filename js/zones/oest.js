@@ -67,8 +67,7 @@ class ZonaRovellonera extends ZonaBase {
         if (D) this.rovellons(D);
         // Cartell d'entrada (només a la primera clariana): la regla del bosc
         if (pas === 0) this.cartell(1330, 650, () => ({ pagines: [
-            { qui: '', text: 'BOSC DE LES ROVELLONERES' },
-            { qui: '', text: "«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»" }
+            { qui: 'Cartell', text: "Bosc de les Rovelloneres.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»" }
         ] }));
         // Si l'Ineu s'ha perdut dues vegades o més, unes llumetes assenyalen la sortida bona (el bosc s'apiada)
         if (D && (Estat.dades.rovPerdut || 0) >= 2) {
@@ -212,7 +211,7 @@ class ZonaCamiRov extends ZonaBase {
             }
         }
         [[2300, 460], [1500, 770], [1100, 560], [620, 1100], [500, 1330], [900, 1000]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 70, h: 26 } }));
-        this.cartell(2640, 420, () => ({ pagines: [{ qui: '', text: '← Rovellonera\n«On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.»' }] }));
+        this.cartell(2640, 420, () => ({ pagines: [{ qui: 'Cartell', text: '← Rovellonera\n«On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.»' }] }));
 
         // La segona corba, ben endins del camí, on espera la Nena de les Trenes
         if (!Estat.flag('nenaAlliberada')) {
@@ -270,7 +269,7 @@ class ZonaGabriel extends ZonaBase {
         // L'ermita, prou gran perquè la porta (d'arc rebaixat) sigui una mica més alta que l'Ineu; la porta s'obre en acostar-s'hi
         const ermita = this.edifici('ermita_gabriel', 400, 640, 520, 88, 'ZonaGabrielInt', 'porta', { alt: 90 });
         this.portaAnimada({ x: 400, top: 493, bottom: 625, ample: 88, fons: 620, unic: true, arc: 26, retall: ermita });
-        this.cartell(930, 800, () => ({ pagines: [{ qui: '', text: '→ Dipòsits\n↑ La Rovellonera' }] }));
+        this.cartell(930, 800, () => ({ pagines: [{ qui: 'Cartell', text: '→ Dipòsits\n↑ La Rovellonera' }] }));
 
         this.terra('cami', 220, 650, 360, 200);          // esplanada de terra seca davant l'ermita
         // (cap arbre davant la porta ni davant del cartell)
@@ -365,7 +364,6 @@ class ZonaGabrielInt extends ZonaBase {
         gb.lineStyle(2, 0x3a5a2a, 1).lineBetween(gx + 18, gy - 20, gx + 20, gy + 60);               // la tija del lliri
         gb.fillStyle(0xf4f0e0, 1).fillCircle(gx + 18, gy - 24, 5).fillCircle(gx + 13, gy - 20, 4).fillCircle(gx + 23, gy - 20, 4);
         for (let k = 0; k < 60; k++) gb.fillStyle(0xffffff, 0.12 + r() * 0.12).fillRect(gx - 50 + r() * 100, gy - 68 + r() * 146, 2, 2);   // tessel·les
-        this.interactiu(cx - 150, fons + 40, 70, () => ({ pagines: [{ qui: '', text: "A la paret del fons, l'arcàngel Gabriel fet de petites pedres de colors: les ales obertes i un lliri a la mà. Amb la llum de l'espitllera, sembla que es mogui." }] }), { altura: 220 });
 
         // Espitllera a la paret de la dreta i el raig de llum que travessa la nau
         g.fillStyle(0x1a120a, 1).fillRect(x1 + 26, fons + 20, 16, 90);
@@ -477,7 +475,7 @@ class ZonaDipositos extends ZonaBase {
         this.tripode = this.posar(muntat ? 'telescopi_mon' : 'tripode', MX, MY + 10, { col: { w: 36, h: 16 } });
         this.interactiu(MX, MY + 15, 95, DIALEGS.telescopiMon, { altura: 120 });
         // Cartell a la vora del camí, sense cap arbre al davant
-        this.cartell(230, 500, () => ({ pagines: [{ qui: '', text: '→ Dolmen\n← Ermita de Sant Gabriel' }] }));
+        this.cartell(230, 500, () => ({ pagines: [{ qui: 'Cartell', text: '→ Dolmen\n← Ermita de Sant Gabriel' }] }));
 
         this.arbres([[100, 150], [250, 90], [800, 100], [1450, 140], [1350, 900], [1500, 960], [120, 960], [560, 960], [660, 820]]);
         [[1250, 800], [450, 800], [800, 440]].forEach(([x, y]) => this.enemic('escolopendra', x, y));

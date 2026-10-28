@@ -8,9 +8,9 @@
 
 Object.assign(DIALEGS, {
     // La porta de la Taverna (des de fora): la primera vegada, l'Eva obre d'amagat
-    portaTaverna: E => E.flag('tavernaOberta') ? { pagines: [{ qui: '', text: "La porta de la Taverna, ajustada. L'Eva l'ha deixat oberta per a tu." }] } : {
+    portaTaverna: E => E.flag('tavernaOberta') ? { pagines: [] } : {
         pagines: [
-            { qui: '', text: 'La porta de la Taverna és tancada amb pany i clau. Al vidre hi ha un paper clavat amb xinxetes: «Avui no servim. — Carmen».' },
+            { qui: 'Nota', text: '«Avui no servim. — Carmen»' },
             { qui: 'Ineu', text: 'Des de dins se sent un fil de música d\'acordió, molt baixet... i una olor de fregit.' },
             { fer: (z, fet) => z.evaFinestra ? z.evaFinestra(fet) : fet() },
             { qui: 'Eva', text: 'Psst! Tu ets l\'Ineu, oi? El monjo que pregunta pels nens. Entra, de pressa, que la Carmen dorm i no vull que ens vegin.' },
@@ -45,31 +45,26 @@ Object.assign(DIALEGS, {
         ] };
     },
 
-    rebostTaverna: E => ({ pagines: [{ qui: '', text: "La porta del rebost, tancada amb forrellat. D'aquí no es baixa al soterrani." }] }),
+    rebostTaverna: E => ({ pagines: [] }),
 
     // La porta de ferro de fora, al darrere de la Taverna: la del soterrani, que el Germà Andreu tanca amb clau cada nit
     portaSoterrani: E => E.flag('clauFerro') ? { pagines: [
-        { qui: '', text: "La Clau de ferro gira al pany amb un gemec. La porta s'obre sobre una escala que baixa al soterrani." }
     ] } : { pagines: [
-        { qui: '', text: "Una porta de ferro baixa, mig enterrada al costat de la Taverna, tancada amb clau. Per sota s'escola boira lila. Al fang, petjades de sandàlia." },
         { qui: 'Ineu', text: "(Tancada amb clau. Per aquí deu baixar el Germà Andreu cada nit. Em caldria una clau de ferro, de les velles.)" }
     ] },
 
-    acordio: E => ({ pagines: [{ qui: '', text: "Un acordió vell sobre una cadira, amb una cinta vermella. L'Eva el toca quan la Carmen dorm: diu que així la boira no entra." }] }),
-    taulellTaverna: E => ({ pagines: [{ qui: '', text: "El taulell de la Taverna, de marbre gastat. Gots del revés, una gerra de vi del Solsonès i un plat de coca amb sucre que ningú no ha tastat." }] }),
+    acordio: E => ({ pagines: [] }),
+    taulellTaverna: E => ({ pagines: [] }),
 
     portaFerro: E => {
-        if (E.flag('portaFerroOberta')) return { pagines: [{ qui: '', text: "La porta de ferro, oberta de bat a bat. Una escala humida baixa cap a la foscor, i d'allà puja olor de bolets i de terra mullada." }] };
+        if (E.flag('portaFerroOberta')) return { pagines: [] };
         if (E.te('clau_girgoles') && !E.flag('cantMiracle')) return { pagines: [
             { qui: 'Ineu', text: '(Tinc la clau, però allà baix només un cant em serveix: els barrots de la gàbia només escolten el Cant del Miracle. Primer l\'he d\'aprendre: la Pianista, al Santuari, me l\'ensenyarà.)' }
         ] };
         if (E.te('clau_girgoles')) return { pagines: [
-            { qui: '', text: 'La clau rovellada del Siscu gira al pany petit. La porta s\'obre i, molt avall, se senten ocells.' },
             { qui: 'Ineu', text: '(Tinc Runna i el Cant del Miracle. Endavant.)' }
         ] };
         return { pagines: [
-            { qui: '', text: 'Una segona porta de ferro, amb un pany petit, molt diferent del de la porta de fora. Per sota surt boira lila.' },
-            { qui: '', text: 'A la fusta del marc, algú hi va gravar fa segles una espasa i una gàbia. A dins, molt lluny, se sent piular.' },
             { qui: 'Ineu', text: E.flag('clauFerro') ? '(La Clau de ferro dels monjos no hi entra: és massa grossa. El Germà Andreu en deu tenir una altra, de petita. Algú l\'ha vist entrar de nit?)' : '(Aquí és d\'on surt tot. Em falta l\'espasa que la va segellar... i una clau.)' }
         ] };
     }

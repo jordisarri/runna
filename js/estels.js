@@ -21,7 +21,6 @@ function completarEstels() {
     E.posaObjectiu("S'ha encès una llum a l'aigua del dipòsit de llevant: ves-hi.");
     if (ui) ui.obrirDialeg({ pagines: [
         { qui: "Ineu", text: "Set estels... i un ocell que s'escapa d'una gàbia oberta. És la nit de les llàgrimes de Sant Llorenç!" },
-        { qui: "", text: "Encara passa un últim estel fugaç, més lent que els altres. Baixa, baixa... i s'apaga just damunt del dipòsit de llevant. A l'aigua hi queda una llum." }
     ] }, () => E.desar());
 }
 

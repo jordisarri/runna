@@ -15,7 +15,7 @@ const NOMS_DIR = ["cap al nord (cap a l'escala)", "cap a llevant (E)", "cap a mi
 Object.assign(DIALEGS, {
     homeRaimInt: E => {
         if (E.flag('raimDerrotat')) {
-            return { pagines: [{ qui: '', text: "Un munt de pedres, un carràs de marbre trencat i pols de segles. Al mig, la trapa de la cripta és oberta." }] };
+            return { pagines: [] };
         }
         return {
             pagines: [
@@ -32,7 +32,6 @@ Object.assign(DIALEGS, {
 
     raimDesperta: {
         pagines: [
-            { qui: '', text: "Dins l'estàtua una cosa gran cedeix. Els ulls de l'Home del Raïm s'obren: dues llums vermelles com el most. Els peus de pedra es mouen, rascant els graons." },
             { qui: 'Home del Raïm', text: "NINGÚ... NO... BAIXA... A LA... PORTA." },
             { qui: 'Ineu', text: "Un guardià! És ell, el que vigila la cripta. Haig d'aturar-lo!" }
         ]
@@ -40,30 +39,26 @@ Object.assign(DIALEGS, {
 
     raimSenseArma: {
         pagines: [
-            { qui: '', text: "Estàs a punt de prémer el raïm de marbre, però un calfred et recorre l'esquena." },
             { qui: 'Ineu', text: "Si això desperta alguna cosa, no tinc res amb què defensar-me. Millor tornar amb el bastó." }
         ]
     },
 
     raimDerrotat: {
         pagines: [
-            { qui: '', text: "L'Home del Raïm vacil·la, s'esquerda de dalt a baix i es desfà en un munt de pedres. El carràs de marbre rebota per l'escalinata com una pilota." },
             { qui: 'Home del Raïm', text: "Ja... us... podeu... ... endur-les." },
-            { qui: '', text: "Allà on era, una llosa s'ha enfonsat i mostra una trapa amb una escala estreta que baixa a la foscor: la cripta." }
         ]
     },
 
     trapaCripta: E => ({
-        pagines: [{ qui: '', text: "La trapa oberta sota l'escalinata. De baix en puja una olor de pedra freda i d'encens vell." }]
+        pagines: []
     }),
 
     cofreCripta: E => E.flag('relTretes') ? {
-        pagines: [{ qui: '', text: "Sobre la llosa només hi queda el drap de lli." }]
+        pagines: []
     } : {
         pagines: [
-            { qui: '', text: "Sobre la llosa, damunt un drap de lli, una gran clau de ferro negre i un paper:" },
             { qui: 'Ineu', text: "«Qui vulgui entrar on mai no s'ha d'entrar, que passi per sota la Taverna. I la llum que va tancar la porta tancarà també la nostra tomba.»" },
-            { qui: '', text: "Has obtingut la CLAU DE FERRO." }
+            { avis: "Has obtingut la CLAU DE FERRO." }
         ],
         enAcabar: () => {
             E.dona('clau_ferro'); E.posaFlag('relTretes'); E.posaFlag('clauFerro');
@@ -302,12 +297,12 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // Forat quadrat de la base: aquí s'encaixa la palanca i es gira el cap
         if (!derrotat) this.add.rectangle(618, 505, 26, 22, 0x1a1410).setStrokeStyle(3, 0x8a7a5e).setDepth(500);
         this.interactiu(618, 505, 55, E => {
-            if (!E.te('palanca')) return { pagines: [{ qui: '', text: "Un forat quadrat a la base de l'estàtua, com per encaixar-hi una palanca." }] };
+            if (!E.te('palanca')) return { pagines: [] };
             this.raimDir = (this.raimDir + 1) % 4;
             this.actualitzarRaim(true);
             const llevant = this.raimDir === 1;
             this.volDespertar = llevant && this.teArma();
-            return { pagines: [{ qui: '', text: llevant ? "Gires la palanca: el cap de pedra grinyola i s'atura mirant a llevant." : "Gires la palanca: el cap de pedra grinyola i mira " + NOMS_DIR[this.raimDir] + "." }] };
+            return { pagines: [{ avis: llevant ? "El cap de pedra mira a llevant." : "El cap de pedra mira " + NOMS_DIR[this.raimDir] + "." }] };
         }, { altura: 90, actiu: () => !Estat.flag('raimDesperta'),
              enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.ui().obrirDialeg(DIALEGS.raimDesperta, () => this.despertarRaim()); } } });
 
@@ -555,9 +550,7 @@ const radiEng = mida => GOLFES_DENTS[mida] * 1.5;
 
 Object.assign(DIALEGS, {
     golfesRellotge: E => ({ pagines: E.flag('rellotgeReparat') ? [
-        { qui: '', text: "El rellotge gran del Santuari torna a caminar. Es poden sentir el tic-tac i el soroll tranquil dels engranatges." }
     ] : [
-        { qui: '', text: "El rellotge del Santuari, aturat a les tres i quart. Fa tres nits que no es mou: va ser quan va arribar la boira." },
         { qui: 'Ineu', text: "El mecanisme és al bastidor de fusta de l'esquerra: tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran. Quan una posició és bona, el seu llum s'encén." },
         { qui: 'Ineu', text: "La nota del campaner, a la paret de l'esquerra, deu dir l'ordre." }
     ] }),
@@ -566,13 +559,11 @@ Object.assign(DIALEGS, {
         { qui: 'Ineu', text: "«Nota del campaner. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el gran al mig, i el mitjà darrere.»" }
     ] }),
 
-    golfesPendol: E => ({ pagines: [{ qui: '', text: E.flag('rellotgeReparat') ? "El pèndol batega amb calma, tic-tac, tic-tac." : "Un pèndol de llautó, penjat sense moure's dins la caixa de fusta." }] }),
+    golfesPendol: E => ({ pagines: [] }),
 
     golfesPremi: {
         pagines: [
-            { qui: '', text: "Els tres engranatges encaixen en ordre: petit, gran i mitjà. Una cosa dins la paret fa clac." },
-            { qui: '', text: "L'agulla dels minuts es mou. El rellotge del Santuari torna a caminar, tic-tac, tic-tac, i el pèndol comença a batre." },
-            { qui: '', text: "Dins la caixa del mecanisme hi ha un flascó de líquid daurat.\n+1 GRA AL ROSARI i rosari ple." }
+            { avis: "+1 GRA AL ROSARI i rosari ple." }
         ]
     }
 });

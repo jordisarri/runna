@@ -5,35 +5,28 @@
 
 // Diàlegs propis de la Cirosa
 Object.assign(DIALEGS, {
-    bancCami: E => ({ pagines: [{ qui: '', text: "Un banc de pedra a la vora del camí, amb una creu petita gravada al respatller: «Descansa, pelegrí.» Hi seus una estona i els peus et ho agraeixen." }],
+    bancCami: E => ({ pagines: [],
         enAcabar: () => game.scene.getScene('ZonaCamiCirosa').descansar() }),
 
     masiaTaula: E => ({ pagines: E.flag('soparFet') ? [
-        { qui: '', text: "La taula dels pastors. Hi ha tres plats d'escudella neta i un quart plat, a l'extrem, sense cullera." },
         { qui: 'Ineu', text: "(Per als que no tenen nom. Algú se n'ha recordat.)" }
     ] : [
-        { qui: '', text: "Una taula llarga de pi, amb tres plats d'estany i un pa dur, mig rosegat. Tot és net i ordenat, com fan els qui no tenen res més que això." }
     ] }),
 
     masiaLlibre: E => ({ pagines: [
-        { qui: '', text: "Un llibre de comptes de tapes de cuir ratllades, obert sobre un prestatge. La lletra és tremolosa i antiga: «Llibre del Ramat de la Cirosa»." },
         { qui: 'Llibre', text: "«L'Ocellaire baixava cada primavera amb els seus ocells enjaulats. Els nens reien amb ells; després ja no reien amb res. Hi va haver anys de plors a les cases.»" },
         { qui: 'Llibre', text: "«Els pastors i els monjos el vam tancar dins la seva gàbia, sota terra, i un monjo va segellar la porta amb la llum de l'espasa. El poble va estar content tres dies. Després va voler algú a qui culpar, i ens va culpar a nosaltres.»" },
         { qui: 'Llibre', text: "«Que qui trobi això no ens oblidi: vam obrir els ulls abans que ningú. Només vam fer el que calia.»" }
     ] }),
 
     masiaEsquelles: E => ({ pagines: E.te('esquelles') ? [
-        { qui: '', text: "Una biga de la paret amb ganxos de ferro. Les esquelles que penjaven aquí són ara al teu sarró; només en queda la marca, més neta, a la fusta." }
     ] : E.flag('pastorVencut') ? [
-        { qui: '', text: "Una biga de la paret amb ganxos de ferro, buits. A la fusta es veu, més neta, la marca de cada esquella que hi va penjar durant segles." },
         { qui: 'Ineu', text: "(El pastor vell les té. Li he de parlar vora el foc.)" }
     ] : [
-        { qui: '', text: "Una biga de la paret amb ganxos de ferro, buits. A la fusta es veu, més neta, la marca de cada esquella que hi va penjar durant segles." },
         { qui: 'Ineu', text: "(Qui sap on són ara. Potser els pastors les guarden.)" }
     ] }),
 
     masiaLlar: E => ({ pagines: [
-        { qui: '', text: "Una llar gran de pedra, amb un foc petit que mai no s'apaga del tot. Penja una olla fumejant d'un ganxo i a prop hi ha un bagul de llenya tallada." },
         { fer: (z, fet) => { z.ajupir('ineu', null, 900); z.llum(z.ineu.x, z.ineu.y - 60, 0xffb060, fet); } },
     ], enAcabar: () => game.scene.getScene('ZonaMasiaCirosa').descansar() })
 });

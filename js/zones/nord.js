@@ -411,7 +411,7 @@ class ZonaCelles extends ZonaBase {
         // La Sansa i el seu carro de verdures: passa per aquí un sol cop, quan l'Isidre te n'ha parlat, i se'n va un cop t'ha donat la llavor
         if (Estat.flag('isidreSansa') && !Estat.flag('llavorSansa')) this.posarSansa();
 
-        this.cartell(130, 625, () => ({ pagines: [{ qui: '', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler' }] }));
+        this.cartell(130, 625, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler' }] }));
 
         this.arbres([[1700, 220], [1640, 420], [1750, 540], [260, 1000], [300, 1040],
                      [560, 1000], [1250, 1020], [1480, 960], [1700, 1030]]);
@@ -473,10 +473,10 @@ class ZonaCelles extends ZonaBase {
 // A llevant del Monestir. Hi passeja el Germà Francesc, monjo del Monestir que cuida les flors del cementiri: per un favor
 // (portar-hi el seu ram), et dona els Guants de Poder, els que mouen la roda del Celler. L'Huri, el primer nen desaparegut, hi venia a robar figues.
 Object.assign(DIALEGS, {
-    portaFlam: E => ({ pagines: [{ qui: '', text: 'Sant Benet, porta de l\'esquerra: la cel·la on dormia el Flami. Al llindar hi ha una sabata petita, sola.' }] }),
-    portaUri: E => ({ pagines: [{ qui: '', text: 'Sant Benet, porta de la dreta: la cel·la on dormia l\'Huri. A la finestra hi ha un dibuix d\'un ocell fet amb ceres, clavat per dins.' }] }),
-    cel_ntrasra: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Nostra Senyora, les més grans del Santuari. Avui les finestres són tancades: ningú no vol que hi entri la boira.' }] }),
-    cel_stantoni: E => ({ pagines: [{ qui: '', text: 'Les cel·les de Sant Antoni. La porta és oberta, però a dins no hi ha ningú: han baixat a ajudar a buscar els nens.' }] }),
+    portaFlam: E => ({ pagines: [] }),
+    portaUri: E => ({ pagines: [] }),
+    cel_ntrasra: E => ({ pagines: [] }),
+    cel_stantoni: E => ({ pagines: [] }),
 
     germaFrancesc: E => {
         if (E.te('guants')) return { pagines: [
@@ -486,7 +486,7 @@ Object.assign(DIALEGS, {
             pagines: [
                 { qui: 'Germà Francesc', text: 'Les has deixades a l\'àngel? Que Déu t\'ho pagui, fill. Els monjos d\'abans ja deuen estar contents: algú encara se\'n recorda.' },
                 { qui: 'Germà Francesc', text: 'Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.' },
-                { qui: '', text: 'Has obtingut els GUANTS DE PODER!\nAra pots empènyer coses molt pesades.' },
+                { avis: 'Has obtingut els GUANTS DE PODER!' },
                 { qui: 'Germà Francesc', text: 'Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.' }
             ],
             enAcabar: () => {
@@ -504,7 +504,7 @@ Object.assign(DIALEGS, {
                 { qui: 'Germà Francesc', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L\'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
                 { qui: 'Germà Francesc', text: 'Cada setmana porto flors a l\'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
                 { qui: 'Germà Francesc', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },
-                { qui: '', text: 'Has obtingut un RAM DE FLORS.' }
+                { avis: 'Has obtingut un RAM DE FLORS.' }
             ],
             enAcabar: () => { E.dona('ram'); E.posaObjectiu('Deixa el ram del Germà Francesc a la tomba de l\'àngel del Cementiri.'); }
         };
@@ -535,7 +535,7 @@ class ZonaSantAntoni extends ZonaBase {
         this.portaAnimada({ x: 549, top: 600, bottom: 755, ample: 92, fons: 761, color: 0x5a3a20, panell: 0x6a4628, vora: 0x2a1608, ferro: true });   // la porta de la cel·la, de fusta amb ferros
 
         this.npc('germa_francesc', 1010, 870, DIALEGS.germaFrancesc, { flipX: true });
-        this.cartell(170, 800, () => ({ pagines: [{ qui: '', text: '← El Monestir i la Plaça' }] }));
+        this.cartell(170, 800, () => ({ pagines: [{ qui: 'Cartell', text: '← El Monestir i la Plaça' }] }));
         this.arbres([[1250, 300], [1320, 560], [1340, 1060], [160, 300], [360, 220]]);   // cap arbre davant el cartell ni el Germà Francesc
 
         this.enemic('escolopendra', 420, 1010);
@@ -759,7 +759,7 @@ class ZonaJordi extends ZonaBase {
         this.posar('llenya', 690, 470, { escala: 0.7, col: { w: 80, h: 20 } });
         this.posar('banc', 560, 720, { col: { w: 130, h: 22 } });
         [[650, 700], [720, 740], [140, 600]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
-        this.cartell(1000, 720, () => ({ pagines: [{ qui: '', text: 'La Caseta\n→ El Gran Til·ler' }] }));
+        this.cartell(1000, 720, () => ({ pagines: [{ qui: 'Cartell', text: 'La Caseta\n→ El Gran Til·ler' }] }));
 
         this.arbres([[80, 180], [250, 120], [600, 100], [1040, 160], [90, 680], [250, 760], [850, 760], [1040, 760]]);
         this.sortida(1086, 510, 14, 130, 'ZonaTiller', 'jordi');
@@ -769,10 +769,10 @@ class ZonaJordi extends ZonaBase {
 // ---------------- CASA D'EN JORDI (interior) ----------------
 // Una casa de pagès endreçada i plena de vida, però buida: en Jordi és al jardí. Només es mira.
 Object.assign(DIALEGS, {
-    casaJordiEines: E => ({ pagines: [{ qui: '', text: "El tauler d'eines d'en Jordi, cada una dins la seva silueta pintada. N'hi falta una, llarga: la de la palanca." }] }),
-    casaJordiTaula: E => ({ pagines: [{ qui: '', text: "La taula de la cuina: un pa de pagès, un pot de mel, tres tasses i un dibuix d'uns nens jugant a la caseta, enganxat amb una agulla de cosir." }] }),
-    casaJordiLlar: E => ({ pagines: [{ qui: '', text: "La llar de foc encara té brases. Fa olor de pa torrat i de romaní. Sobre la lleixa, una rajola pintada: «A la Caseta, la porta mai no té clau.»" }] }),
-    casaJordiGat: E => ({ pagines: [{ qui: '', text: "Un gat gris dorm enroscat dins un cove de vímet. Obre un ull, et mira i el torna a tancar. Aquí no passa res que valgui la pena." }] })
+    casaJordiEines: E => ({ pagines: [] }),
+    casaJordiTaula: E => ({ pagines: [] }),
+    casaJordiLlar: E => ({ pagines: [{ qui: 'Inscripció', text: "«A la Caseta, la porta mai no té clau.»" }] }),
+    casaJordiGat: E => ({ pagines: [] })
 });
 
 class ZonaCasaJordi extends ZonaBase {

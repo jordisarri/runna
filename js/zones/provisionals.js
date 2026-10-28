@@ -45,10 +45,10 @@ class ZonaEsglesia extends ZonaBase {
         this.portaRellotge = false;
         this.obrirPortaRellotge(false);
         this.interactiu(ESG.portaEsq, ESG.retY + 50, 90, () => ({
-            pagines: [{ qui: '', text: 'La porta de l\'esquerra del retaule és tancada amb clau. Fa olor de cera vella i de pols.' }]
+            pagines: []
         }), { altura: 150 });
         this.interactiu(ESG.portaDx, ESG.retY + 50, 90, () => ({
-            pagines: [{ qui: '', text: 'La porta de la dreta del retaule és tancada amb clau. Per sota s\'escola un corrent d\'aire fred, com si pugés d\'una escala.' }]
+            pagines: []
         }), { altura: 150, actiu: () => !this.portaRellotge });
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daniel, que dirigeix el cor
@@ -201,7 +201,7 @@ class ZonaMonestir extends ZonaBase {
         [[440, 445, 1.7], [492, 452, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y + D, { escala: e, col: { w: 26, h: 12 } }));
         this.posar('xiprer', 1165, 450 + D, { escala: 1.9, col: { w: 30, h: 12 } });
 
-        this.cartell(1368, 450 + D, () => ({ pagines: [{ qui: '', text: '→ Cel·les de Sant Antoni\n↑ El Cementiri (darrere el Monestir i el Santuari)' }] }));
+        this.cartell(1368, 450 + D, () => ({ pagines: [{ qui: 'Cartell', text: '→ Cel·les de Sant Antoni\n↑ El Cementiri (darrere el Monestir i el Santuari)' }] }));
         this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720], [420, 770], [1520, 760], [1090, 770], [750, 780]].map(([x, y]) => [x, y + D]));
 
         // La boira lila que surt de sota terra jeu a la plaça, davant del Monestir i al peu de l'escalinata, fins que cau l'Ocellaire
@@ -262,7 +262,7 @@ class ZonaCreu extends ZonaBase {
         this.posar('carruatge', 330, 730, { col: { w: 190, h: 50 } });
         this.npc('home_carruatge', 440, 760, DIALEGS.homeCarruatge);
 
-        this.cartell(1180, 480, () => ({ pagines: [{ qui: '', text: '↑ Plaça del Santuari' }] }));
+        this.cartell(1180, 480, () => ({ pagines: [{ qui: 'Cartell', text: '↑ Plaça del Santuari' }] }));
         this.arbres([[150, 180], [320, 260], [1450, 220], [200, 900], [1500, 780], [100, 520], [190, 640], [1400, 440], [1480, 600], [260, 440]]);
 
         this.enemic('escolopendra', 500, 300);
@@ -348,7 +348,7 @@ class ZonaCasaGran extends ZonaBase {
         } else this.interactiu(700, 585, 85, DIALEGS.portaReixa, { altura: 190 });
 
         // Cartell que indica la Taverna, a la vora de la sortida de l'esquerra
-        this.cartell(170, 880, () => ({ pagines: [{ qui: '', text: '← La Taverna i l\'Hostatgeria\n→ La Plaça del Santuari' }] }));
+        this.cartell(170, 880, () => ({ pagines: [{ qui: 'Cartell', text: '← La Taverna i l\'Hostatgeria\n→ La Plaça del Santuari' }] }));
 
         // Arbres només a la dreta, deixant el camí lliure
         this.arbres([[1480, 300], [1530, 520], [1470, 740]]);

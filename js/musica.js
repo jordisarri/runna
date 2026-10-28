@@ -34,7 +34,7 @@ function completarLliço(nom) {
         pagines = [
             { qui: 'La Pianista', text: 'Així, així! Tens oïda, fill. El Cant de l\'Aurora: tres notes, i la boira es fa enrere.' },
             ...(primera ? [{ qui: 'La Pianista', text: 'Pren aquesta flauta de canya: és la flauta d\'en Mamet. Toca les notes 1, 2 i 3.' },
-                           { qui: '', text: 'Has obtingut LA FLAUTA D\'EN MAMET!\nToca el medalló de la flauta, a la dreta de la pantalla (o ESPAI quan brilli).' }] : []),
+                           { avis: 'Has obtingut LA FLAUTA D\'EN MAMET!' }] : []),
             { qui: 'La Pianista', text: 'Toca\'l davant l\'aigua de la Bassadòria, la que surt tèrbola. Allà la boira té l\'arrel.' }
         ];
         E.posaObjectiu('Toca el Cant de l\'Aurora (1-2-3) davant la Bassadòria, a l\'oest de la Plaça.');

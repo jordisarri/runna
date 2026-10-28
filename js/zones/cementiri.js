@@ -68,7 +68,7 @@ class ZonaCementiri extends ZonaBase {
                 x += w + pas;
             });
         });
-        this.cartell(940, 512, () => ({ pagines: [{ qui: '', text: '← Les Runes\n↓ El Monestir' }] }));
+        this.cartell(940, 512, () => ({ pagines: [{ qui: 'Cartell', text: '← Les Runes\n↓ El Monestir' }] }));
 
         // Xiprers: la tanca de dalt, els límits i avingudes regulars al llarg dels camins
         this.muralla(0, 40, 1600, 40, 100, 'xiprer');

@@ -107,7 +107,7 @@ const DIALEGS = {
                     { qui: 'Germà Andreu', text: 'Ets del Barça, tu? Tinc uns cromos que els nens es moren per tenir. Ells sí que m\'escolten.' },
                     { qui: 'Germà Andreu', text: 'Ei, pren aquest bastó de pelegrí. Era d\'un vell que ja no el vol.' },
                     { fer: (z, fet) => z.objecteVola('germa_andreu', () => z.ineuAixeca('ineu_aixeca_basto', fet, 0.58), 'arma_basto') },
-                    { qui: '', text: 'Has obtingut el BASTÓ DE PELEGRÍ!' },        // quadre de diàleg: l'Ineu hi roman alçant el bastó fins que s'avança
+                    { avis: 'Has obtingut el BASTÓ DE PELEGRÍ!' },        // quadre de diàleg: l'Ineu hi roman alçant el bastó fins que s'avança
                     { fer: (z, fet) => z.ineuBaixa(fet) }
                 ],
                 enAcabar: () => {
@@ -378,7 +378,7 @@ const DIALEGS = {
             { fer: (z, fet) => z.npcVa('josep', z.ineu.x + 60, z.ineu.y, fet) },
             { qui: 'Josep', text: 'Això és per a tu: una llanterna. Als passadissos dels monjos hi fa una fosca que no perdona, i amb la seva llum hi veuràs.' },
             { fer: (z, fet) => z.objecteVola('josep', fet) },
-            { qui: '', text: 'Has obtingut la LLANTERNA: hi veuràs millor a les zones fosques.' },
+            { avis: 'Has obtingut la LLANTERNA.' },
             { qui: 'Josep', text: 'I un secret, per qui sap tornar un servei: aquella roda de carruatge del pati no és decoració. Darrere hi ha el túnel dels monjos cap a la Casa Gran. Però pesa com un carro ple.' }
         ],
         enAcabar: () => {
@@ -405,7 +405,7 @@ const DIALEGS = {
                     { qui: "Neus", text: "El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb tres nens que falten..." },
                     { qui: "Neus", text: "...Però el Til·ler té raó, maleït sigui. No es pot deixar de fer el que s'ha fet sempre, ni quan el cor fa mal. Pren l'escudella, i no la vessis!" },
                     { qui: "Neus", text: "Hi he posat una cullerada més, com cada any: la del que falta. Enguany n'hi he posat tres. Tu tingues-ne cura de portar-la sencera." },
-                    { qui: "", text: "Has obtingut L'ESCUDELLA DE LA NEUS." }
+                    { avis: "Has obtingut L'ESCUDELLA DE LA NEUS." }
                 ],
                 enAcabar: () => { E.dona("escudella"); E.posaFlag("escudella"); objectiuSopar(E); }
             };
@@ -442,11 +442,9 @@ const DIALEGS = {
         if (!E.flag("parlatTiler")) {
             return {
                 pagines: [
-                    { qui: "", text: "El Gran Til·ler. L'escorça forma una cara antiga i serena. Les fulles tremolen sense vent." },
                     { qui: "El Gran Til·ler", text: "Fa tres-cents anys que vaig veure aquella gàbia baixar a la foscor, petit monjo." },
                     { qui: "El Gran Til·ler", text: "Sento que la terra s'esquerda a sota. Ja en surten, d'animalons dels vells cementiris, i no vénen amb bones intencions." },
                     { qui: "El Gran Til·ler", text: "El bastó de pelegrí aguanta per a un camí tranquil, però no et farà prou. Una branca meva ha caigut al peu del tronc: agafa-la, serà el teu bastó, més àgil i més ràpid." },
-                    { qui: "", text: "Una branca llarga i recta descansa a terra, a prop de l'arbre." }
                 ],
                 enAcabar: () => {
                     E.posaFlag("parlatTiler"); E.posaFlag("tillerBranca");
@@ -480,14 +478,13 @@ const DIALEGS = {
         }
         return { pagines: [
             { qui: "El Gran Til·ler", text: "Et donaré el meu permís quan hagis tornat la vida a la terra que la boira ha emmalaltit. Has tornat l'aigua: encara en falta, de terra." },
-            ...(pistaRunna(E) ? [{ qui: "", text: "(" + pistaRunna(E) + ")" }] : [])
         ] };
     },
 
     branca: E => ({
         pagines: [
             { fer: (z, fet) => { z.brancaAgafada = true; z.agafar(() => z.ineuAixeca('ineu_aixeca_tiler', fet), 'branca', 0xd8f0a0); } },
-            { qui: "", text: "Has obtingut la BRANCA DEL TIL·LER!" },
+            { avis: "Has obtingut la BRANCA DEL TIL·LER!" },
             { fer: (z, fet) => z.ineuBaixa(fet) }
         ],
         enAcabar: () => {
@@ -504,7 +501,7 @@ const DIALEGS = {
                 pagines: [
                     { qui: "Pare Alcuí", text: "Has parlat amb l'ombra, oi? Fa temps que ho sospitava. A la Crònica hi ha un marge que no vaig saber llegir: una paraula esborrada, de la mateixa mà que va escriure els fragments." },
                     { qui: "Pare Alcuí", text: "Amb el que m'expliques, ara ho entenc. «La foscor tem la llum, però més encara el riure.» Aquestes són les paraules que desperten Runna, fill: no és un conjur, és una veritat. Digues-les davant l'espasa, senceres i amb tot el cor." },
-                    { qui: "", text: "Has après les PARAULES DEL SABER:\n«La foscor tem la llum, però més encara el riure.»" }
+                    { avis: "Has après les PARAULES DEL SABER." }
                 ],
                 enAcabar: () => { E.posaFlag("saber"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
             };
@@ -517,7 +514,7 @@ const DIALEGS = {
                 pagines: [
                     { qui: "Pare Alcuí", text: "Has trobat els dos fragments! Deixa'm llegir-los... Sí. Ho explica la Crònica que guardo a la biblioteca: un monjo va segellar la foscor amb la llum de Runna." },
                     { fer: (z, fet) => z.npcVa('pare_alcui', 812, 372, fet, 120) },
-                    { qui: "", text: "Al marge de la Crònica, amb la mateixa lletra dels fragments:\n«Des que la tercera església va quedar inacabada, l'ombra del monjo es veu clarament sobre el mur de les Runes: mig corbat, amb les mans unides, com si pregués. Apareix cada nit.»" },
+                    { qui: "Crònica", text: "«Des que la tercera església va quedar inacabada, l'ombra del monjo es veu clarament sobre el mur de les Runes: mig corbat, amb les mans unides, com si pregués. Apareix cada nit.»" },
                     { qui: "Pare Alcuí", text: "L'ombra del monjo... No fa mal a ningú, Ineu. Crec que és el monjo que va segellar la foscor amb la llum de Runna. Ves a veure'l, de nit, a les Runes." }
                 ],
                 enAcabar: () => { E.posaFlag("fragment3"); E.posaFlag("parlatAlcui"); E.posaObjectiu("Visita l'ombra del monjo a les Runes (a l'est de la plaça de les Runes, de nit)."); }
@@ -536,13 +533,11 @@ const DIALEGS = {
     ombraMonjo: E => {
         const fr = ["fragment1", "fragment2"].filter(x => E.flag(x)).length;
         if (E.flag("benedicioMonjo")) {
-            return { pagines: [{ qui: "", text: "L'ombra del monjo continua pregant, immòbil, sobre el mur. Quan t'acostes, aixeca una mica el cap i torna a baixar-lo, com un adéu." }] };
+            return { pagines: [] };
         }
         if (fr < 2 || !E.flag("fragment3")) {
             return {
                 pagines: [
-                    { qui: "", text: "Sobre el mur de les Runes, l'ombra d'un monjo corbat, amb les mans unides. No hi ha ningú que la projecti." },
-                    { qui: "", text: "Sembla que et mira. Però no parla. Necessites saber-ne més: has trobat " + fr + " de 2 fragments de la crònica, i el Pare Alcuí te'ls ha de llegir." }
                 ]
             };
         }
@@ -561,7 +556,6 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: "", text: "L'ombra espera, immòbil, amb les mans unides." },
                 { qui: "Ineu", text: "Toca el Cant de les Pedres amb la flauta: 3-1-2-1." }
             ]
         };
@@ -575,7 +569,7 @@ const DIALEGS = {
             { qui: "Monjo", text: "Sota terra hi ha una gàbia, petit monjo, i una cosa que no ha oblidat cap cant ni cap nen. Jo només puc vigilar. Tu pots tornar a tancar-ho." },
             { qui: "Monjo", text: "L'espasa dorm al sud-est, entre pedres, allà on el sol s'atura. Rep la meva benedicció, que no pesa ni es veu, i recorda: la foscor tem la llum, però més encara el riure." },
             { qui: "Monjo", text: "Jo només puc dir-te les paraules; el Pare Alcuí sabrà entendre-les. Quan les cridis davant l'espasa, la meva benedicció farà que et reconegui." },
-            { qui: "", text: "Has rebut la BENEDICCIÓ DEL MONJO.\nAra necessites el Saber del Pare Alcuí i el permís del Til·ler per despertar Runna." }
+            { avis: "Has rebut la BENEDICCIÓ DEL MONJO." }
         ],
         enAcabar: () => {
             E.posaFlag("benedicioMonjo");
@@ -586,7 +580,6 @@ const DIALEGS = {
     // ---- Bassadòria ----
     bassadoriaNeta: E => ({
         pagines: [
-            { qui: "", text: "La boira lila s'esfilagarsa i l'aigua de la bassa es torna clara. Els gripaus tornen a ser gripaus." },
             { qui: "Ineu", text: "Ha funcionat! L'aigua és neta..." }
         ],
         enAcabar: () => {
@@ -599,15 +592,14 @@ const DIALEGS = {
     fontSJ: E => {
         const herbes = ofrenesFont(E);
         if (E.flag('fontNeta')) {
-            return { pagines: [{ qui: '', text: 'La Font del Bisbe raja cristal·lina. Sota l\'aigua, el gel brilla, tot i ser estiu.' }] };
+            return { pagines: [] };
         }
         if (herbes === 3) {
             return {
                 pagines: [
                     { fer: (z, fet) => z.seq([c => z.deixar(c, 'herba_sj'), c => z.deixar(c, 'romani'), c => z.deixar(c, null, 0xffd060)], fet) },
-                    { qui: '', text: 'L\'aigua s\'aclareix i la boira lila fuig del bosc.' },
                     { qui: 'Ineu', text: 'Ha funcionat! Al fons de la pica hi ha un cristall que sembla de gel...' },
-                    { qui: '', text: 'Has obtingut l\'AIGUA DE LA FONT DEL BISBE i un CRISTALL DE GEL.\nEl Garf, a l\'Era, segur que sap què fer-ne.' }
+                    { avis: 'Has obtingut l\'AIGUA DE LA FONT DEL BISBE i un CRISTALL DE GEL.' }
                 ],
                 enAcabar: () => {
                     E.posaFlag('fontNeta'); E.treu('pruna'); E.dona('aigua_sj'); E.dona('cristall_gel'); E.posaFlag('cristallGel');
@@ -617,17 +609,16 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: '', text: 'La Font del Bisbe: seca, i amb una olor estranya. A la pica hi ha una mitra gravada.' },
                 { qui: 'Ineu', text: 'Les Venerables Sàvies diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, romaní i el fruit de l\'arbre d\'or.»' },
                 { qui: 'Ineu', text: 'Les herbes de la Nit de Sant Joan fan llum: n\'hi ha una al nord (cap al Til·ler) i el romaní al sud-est, sempre en una clariana. I l\'arbre d\'or... és la Prunera Màgica, al jardí de l\'Hostatgeria! Una pruna.' },
-                { qui: '', text: `Ofrenes trobades: ${herbes}/3.` }
+                { avis: `Ofrenes trobades: ${herbes}/3.` }
             ],
             enAcabar: () => { E.posaFlag('fontVista'); E.posaObjectiu(objectiuFont(herbes)); }
         };
     },
 
     herba: (n, nom) => E => ({
-        pagines: [{ qui: '', text: `Has trobat ${nom}!` }],
+        pagines: [{ avis: `Has trobat ${nom}!` }],
         enAcabar: () => {
             E.posaFlag('herba' + n);
             if (E.flag('fontVista')) E.posaObjectiu(objectiuFont(ofrenesFont(E)));
@@ -637,29 +628,25 @@ const DIALEGS = {
     alzinaBuida: E => {
         if (E.flag("portalJaumeta")) {
             return { pagines: [
-                { qui: "", text: "L'Alzina Buida brilla amb una llum verdosa. El forat del tronc s'obre com una porta, i del cap a l'altre s'aixeca una olor de fum de llenya i de sopa de fa setmanes." }
             ] };
         }
         if (E.te("aigua_sj")) {
             return {
                 pagines: [
-                    { qui: "", text: "L'alzina vella té un forat al tronc, i sembla que tingui set. De dins surt una claror verdosa." },
                     { qui: "Ineu", text: "Duc aigua de la Font del Bisbe. Potser..." },
                     { fer: (z, fet) => z.deixar(fet, null, 0x8fe0ff) },
                     { qui: "Veu del bosc", text: "...Qui ens porta... l'aigua... bona... Passa, passa, fill... Només la Jaumeta... sap on acabes." },
-                    { qui: "", text: "Un portal màgic s'ha obert a l'Alzina Buida. Una cabana molt lluny, al cor del bosc, t'espera a l'altra banda." }
                 ],
                 enAcabar: () => { E.posaFlag("portalJaumeta"); E.posaObjectiu("Passa pel portal de l'Alzina Buida: la cabana de la Jaumeta, la bruixa del bosc, és a l'altra banda."); }
             };
         }
         return { pagines: [
-            { qui: "", text: "Una alzina vella amb un forat al tronc. De dins surt una claror verdosa i una olor de fum de llenya. L'escorça sembla assedegada." },
             { qui: "Ineu", text: "Sento una veu allà dins... «Aigua... aigua de la Font del Bisbe...» Potser necessito l'aigua de la font d'aquí a prop." }
         ] };
     },
 
-    cartellBosc: E => ({ pagines: [{ qui: "", text: "Bosc de Sant Joan.\n«Qui busca la font, que segueixi l'aigua... i qui no, que no es perdi.»" }] }),
-    cartellCirosa: E => ({ pagines: [{ qui: "", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí a munt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\nLes arrels del Gran Til·ler tanquen el camí. Diuen que només reconeixen la fusta del mateix arbre.\n← La Caseta" }] }),
+    cartellBosc: E => ({ pagines: [{ qui: "Cartell", text: "Bosc de Sant Joan.\n«Qui busca la font, que segueixi l'aigua... i qui no, que no es perdi.»" }] }),
+    cartellCirosa: E => ({ pagines: [{ qui: "Cartell", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí a munt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\n← La Caseta" }] }),
 
     // ---------------- CARRUATGE VERD ----------------
     homeCarruatge: E => {
@@ -682,11 +669,11 @@ const DIALEGS = {
         const total = () => Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).filter(Boolean).length;
         return {
             pagines: [
-                { qui: '', text: `Columna ${n} de 12. Als peus hi ha una pedra plana amb un signe gravat: ${signe}` },
+                { qui: 'Inscripció', text: `Columna ${n} de 12. Signe gravat: ${signe}` },
                 { qui: 'Ineu', text: E.flag('col' + n)
                     ? `Ja el vaig apuntar: ${signe} vol dir «${paraula}».`
                     : `Sota el signe, amb lletra petita: «${paraula}». ${signe} = «${paraula}». Ho apunto.` },
-                { qui: '', text: `Paraules apuntades: ${total() + (E.flag('col' + n) ? 0 : 1)}/12.` }
+                { avis: `Paraules apuntades: ${total() + (E.flag('col' + n) ? 0 : 1)}/12.` }
             ],
             enAcabar: () => {
                 E.posaFlag('col' + n);
@@ -696,16 +683,16 @@ const DIALEGS = {
         };
     },
 
-    cartellCami: E => ({ pagines: [{ qui: '', text: 'Camí de la Desaparició.\n"Qui segueix els passos, no torna sol."' }] }),
+    cartellCami: E => ({ pagines: [{ qui: 'Cartell', text: 'Camí de la Desaparició.\n"Qui segueix els passos, no torna sol."' }] }),
 
     // ---------------- ERMITA DE LA DESAPARICIÓ ----------------
-    ermitaPorta: E => ({ pagines: [{ qui: '', text: 'L\'ermita és petita i antiga. La porta és oberta de bat a bat.' }] }),
+    ermitaPorta: E => ({ pagines: [] }),
     taulaPedra: part => E => {
         const inici = part === 1 ? 0 : 6;
         const mots = [];
         for (let i = inici; i < inici + 6; i++) mots.push(E.flag('col' + (i + 1)) ? PARAULES_MISSATGE[i] : SIGNES_MISSATGE[i]);
         const totes = Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).every(Boolean);
-        const pagines = [{ qui: '', text: `Taula de pedra ${part} de 2:\n\n${mots.join('   ')}` }];
+        const pagines = [{ qui: 'Inscripció', text: `Taula de pedra ${part} de 2:\n\n${mots.join('   ')}` }];
         if (totes) {
             pagines.push({ qui: 'Ineu', text: E.flag('missatgeDesxifrat') ? 'Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l\'alba.' : 'Ja ho tinc sencer. Això són paraules per dir en veu alta... davant l\'altar.' });
         } else {
@@ -728,7 +715,7 @@ const DIALEGS = {
     }),
     cofreAltar: E => ({
         pagines: [
-            { qui: '', text: 'Dins el cofre hi ha una clau petita lligada amb un cordill, gairebé de joguina.\nHas obtingut la CLAU DEL SAGRARI.' },
+            { avis: 'Has obtingut la CLAU DEL SAGRARI.' },
             { qui: 'Ineu', text: 'La clau del sagrari del Santuari! Els monjos la van deixar aquí. Amb això obriré el sagrari del retaule.' }
         ],
         enAcabar: () => {
@@ -737,11 +724,10 @@ const DIALEGS = {
             if (!E.flag('fragment2')) E.posaObjectiu('Amb la clau petita, obre el sagrari del Santuari (al mig del retaule): guarda el fragment 2.');
         }
     }),
-    sortidaErmita: E => ({ pagines: [{ qui: '', text: '← L\'Era\n→ Camí de la Desaparició' }] }),
+    sortidaErmita: E => ({ pagines: [{ qui: 'Cartell', text: '← L\'Era\n→ Camí de la Desaparició' }] }),
     creuDesaparicio: E => ({
         pagines: [
-            { qui: '', text: "La Creu de la Desaparició. Una creu de pedra, igual que la de l'Aparició, però aquesta no té flors als peus: només cera vella i alguna pedreta posada amb cura." },
-            { qui: '', text: "Al sòcol, gravat amb lletra gastada: «Els qui se'n van no s'obliden; només esperen que algú els cridi pel nom.»" }
+            { qui: 'Inscripció', text: "«Els qui se'n van no s'obliden; només esperen que algú els cridi pel nom.»" }
         ]
     }),
 
@@ -756,7 +742,7 @@ const DIALEGS = {
                     { qui: 'Garf', text: 'Un cristall de gel de la Font del Bisbe! Fa anys que en buscava un. Dóna\'m una estona.' },
                     { fer: (z, fet) => z.seq([c => z.npcFeina('garf', 1800, 'guspires', c), c => z.npcSalta('garf', c, 1), c => z.objecteVola('garf', c, 'telescopi_mon')], fet) },
                     { qui: 'Garf', text: 'Un telescopi! Amb això veuràs coses que cap monjo no ha vist. Perquè no se\'t perdi: les estrelles fan camí.' },
-                    { qui: '', text: 'Has obtingut el TELESCOPI DEL GARF.' }
+                    { avis: 'Has obtingut el TELESCOPI DEL GARF.' }
                 ],
                 enAcabar: () => {
                     E.dona('telescopi'); E.posaFlag('telescopi'); E.treu('cristall_gel');
@@ -769,7 +755,7 @@ const DIALEGS = {
         if (E.flag('garfBancSegut')) pagines.push({ qui: 'Garf', text: 'Si em portes un cristall de gel (n\'hi ha un a la Font del Bisbe, al bosc de l\'oest del Til·ler), et construiré un telescopi per mirar el cel.' });
         return { pagines };
     },
-    cartellEra: E => ({ pagines: [{ qui: '', text: '↑ Ermita de la Desaparició\n→ Hostatgeria\n← Rovellonera' }] }),
+    cartellEra: E => ({ pagines: [{ qui: 'Cartell', text: '↑ Ermita de la Desaparició\n→ Hostatgeria\n← Rovellonera' }] }),
 
     // ---------------- JARDÍ ----------------
     isidre: E => DIALEGS.isidreBase(E),
@@ -780,7 +766,7 @@ const DIALEGS = {
                     { qui: "Isidre", text: "Sopar del Til·ler, eh? Cada any se n'omple el cap amb escudelles i s'obliden de les flors. Jo hi fico flors des que tenia dos peus bons." },
                     { fer: (z, fet) => { const i = z.npcs.isidre, x0 = i.x, y0 = i.y; z.seq([c => z.npcVa('isidre', x0 - 140, y0 - 30, c, 80), c => z.npcFeina('isidre', 1300, 'fulles', c), c => z.npcVa('isidre', x0, y0, c, 80), c => z.objecteVola('isidre', c, 'flors')], fet); } },
                     { qui: "Isidre", text: "Les flors de lluna són pels que falten. Posa-les al mig de la taula. Jo no podré ser-hi, que el peu em ballaria... però seré a cada pètal." },
-                    { qui: "", text: "Has obtingut les FLORS DE L'ISIDRE." }
+                    { avis: "Has obtingut les FLORS DE L'ISIDRE." }
                 ],
                 enAcabar: () => { E.dona("flors_isidre"); E.posaFlag("floresIsidre"); objectiuSopar(E); }
             };
@@ -822,22 +808,20 @@ const DIALEGS = {
         pagines: [
             { qui: 'Sansa', text: 'Verdures fresques, fruita de la rodalia! ...Ai, ets el monjo de l' + String.fromCharCode(39) + 'Isidre? M' + String.fromCharCode(39) + 'ha dit que buscaves una cosa especial.' },
             { qui: 'Sansa', text: 'Una Llavor de Lluna. Fa anys que la guardo al fons del carro, entre les cebes, i no sé ni per què. Pren, és teva. Que floreixi a qui sàpiga cuidar-la.' },
-            { qui: '', text: 'Has obtingut la LLAVOR DE LLUNA.' },
+            { avis: 'Has obtingut la LLAVOR DE LLUNA.' },
             { qui: 'Sansa', text: 'Bé, jo ja he d' + String.fromCharCode(39) + 'anar fent camí. Avui encara em queden tres pobles per davant. Adéu, monjo!' }
         ],
         enAcabar: () => { E.dona('llavorLluna'); E.posaFlag('llavorSansa'); E.posaObjectiu('Porta la Llavor de Lluna a l' + String.fromCharCode(39) + 'Isidre, a l' + String.fromCharCode(39) + 'Hostatgeria.'); }
     }),
     llosaJardi: E => ({
-        pagines: [{ qui: '', text: 'Una llosa de pedra rodona entre les flors, dins la pèrgola. Té una ranura al mig, com un clot per una llavor.' }]
     }),
     prunera: E => {
         const pagines = [
-            { qui: '', text: 'A l\'extrem de ponent del jardí, una prunera vella i retorçuda, carregada de prunes daurades que lluen com si fossin d\'or.' },
             { qui: 'Isidre', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardi en menjava deu cada tarda i no n\'hi tenia mai prou...' },
             { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xffd060), c => z.beure(c, 0xffd060)], fet) },
         ];
         const perFont = !E.flag('fontNeta') && !E.te('pruna') && !E.flag('herba3');
-        if (perFont) pagines.push({ qui: '', text: 'En culls una altra i te la guardes al sarró: la Font del Bisbe en vol una.\nHas obtingut una PRUNA DAURADA.' });
+        if (perFont) pagines.push({ avis: 'Has obtingut una PRUNA DAURADA.' });
         return {
             pagines,
             enAcabar: () => {
@@ -848,30 +832,25 @@ const DIALEGS = {
     },
     hostatgeria: E => E.flag('mongesTrobades')
         ? { pagines: [{ qui: 'Charm', text: 'Entra, fill, que et farem una infusió.' }] }
-        : { pagines: [{ qui: '', text: 'L\'Hostatgeria. Les portes són tancades per dins i els finestrals són foscos.' }] },
-    sortidaMonges: E => ({ pagines: [{ qui: '', text: 'La gran porta de l\'Hostatgeria, tancada per dins amb tres barres de ferro.' }] }),
+        : { pagines: [] },
+    sortidaMonges: E => ({ pagines: [] }),
     taulaRefetor: E => E.te('guants')
         ? { pagines: [{ qui: 'Ineu', text: 'Amb els Guants de Poder, aquesta taula no pesa tant...' }] }
         : { pagines: [
-            { qui: '', text: 'Una taula de roure massissa barra la porta del mig. Des de l\'altra banda, una veu fina i enrabiada colpeja el fusta.' },
             { qui: 'Ineu', text: 'No la puc moure amb les mans soles. Ni dues persones... Necessito molta més força.' }] },
     // El mur d'esbarzers del passadís secret (Celler → Cambra secreta)
     murEsbarzers: E => ({ pagines: E.te('runna') ? [
-        { qui: '', text: "Un mur d'esbarzers negres tanca el passadís de banda a banda. Les punxes llueixen violeta a la llum de les espelmes." },
         { qui: 'Ineu', text: "Runna els talla: situa't davant de cada un i ataca (ESPAI). Són cinc. Mata també les escolopendres, que després tornen." }
     ] : [
-        { qui: '', text: "Un mur d'esbarzers negres tanca el passadís de banda a banda. Les punxes llueixen violeta a la llum de les espelmes." },
         { qui: 'Ineu', text: "Ni el bastó de pelegrí ni la branca del Til·ler no els tallen: només Runna. Primer cal despertar-la al Dolmen. Torna quan la tinguis." }
     ] }),
 
     esbarzersCapella: E => ({ pagines: [
-        { qui: '', text: 'Uns esbarzers negres han crescut davant la porta de la dreta i la tapen del tot. Se sent algú resar a dins, molt baixet.' },
         { qui: 'Ineu', text: 'El bastó no els talla. Només Runna ho aconsegueix.' }] }),
 
     // ---------------- LES SACERDOTESSES DE L'HOSTATGERIA ----------------
     monjaPains: E => {
         if (!E.flag('lliurePains')) return { pagines: [
-            { qui: '', text: 'Una velleta en cadira de rodes dorm dins un capoll de boira lila. No respon.' },
             { qui: 'Ineu', text: 'Una música lleugera, de tres notes, potser la desperta. (Flauta: 1-2-3.)' }] };
         if (!E.flag('premiPains')) return {
             pagines: [
@@ -909,7 +888,7 @@ const DIALEGS = {
         return { pagines: [{ qui: 'Charm', text: 'Que la llum del Miracle t\'acompanyi, fill.' }] };
     },
 
-    portaHostatgeria: E => ({ pagines: [{ qui: '', text: 'Una porta de fusta, tancada per dins.' }] }),
+    portaHostatgeria: E => ({ pagines: [] }),
 
     // ---------------- LA CIROSA ----------------
     // Els pastors de la Cirosa: desterrats, arruïnats i sense nom. No s'han de combatre.
@@ -947,7 +926,7 @@ const DIALEGS = {
                 pagines: [
                     { qui: "Pastor vell", text: "Has tornat el ramat... i li has tret la boira a aquell pobre home. Que Déu t'ho pagui, monjo." },
                     { qui: "Pastor vell", text: "Aquí tens les esquelles dels nostres avis. Que sonin amb la teva flauta, i que els cants antics et guiïn." },
-                    { qui: "", text: "Has obtingut les ESQUELLES DELS PASTORS!\nEls cants antics sonaran més clars amb elles." }
+                    { avis: "Has obtingut les ESQUELLES DELS PASTORS!" }
                 ],
                 enAcabar: () => {
                     E.dona("esquelles"); E.posaFlag("esquelles");
@@ -975,7 +954,7 @@ const DIALEGS = {
             { qui: "Pastora", text: "Havia oblidat que existia això..." },
             { qui: "Pastor vell", text: "Fa cinquanta anys que ningú no ens convidava enlloc, monjo. Ni a una missa, ni a una taula. I tu ens parles amb música." },
             { qui: "Pastor vell", text: "Vindrem. No direm gaire cosa, perquè no sabem com es fa. Però portarem pa. És el que sabem fer." },
-            { qui: "", text: "Has obtingut el PA DELS PASTORS: una barra baixa i fosca, cuita sota la cendra." }
+            { avis: "Has obtingut el PA DELS PASTORS." }
         ],
         enAcabar: () => { E.posaFlag("pastorsConvencuts"); E.dona("pa_pastor"); objectiuSopar(E); }
     }),
@@ -1007,7 +986,6 @@ const DIALEGS = {
     // El ritual: s'encén una espelma per cada absent... i una per qui no té nom
     tillerSoparRitual: E => ({
         pagines: [
-            { qui: "", text: "Sota el Til·ler, una taula llarga: l'escudella, el pa dels pastors i les flors de lluna. Tres cadires buides, i una de més." },
             { qui: "Neus", text: "Aquest any m'he descuidat de fer-hi cantar ningú. I a l'escudella hi he posat una cullerada de més, com cada any: la del que falta. Enguany n'hi he posat tres." },
             { qui: "Senyor Moliner", text: "...I jo hi he posat una altra per a ella. Per si de cas. Que no ho sàpiga." },
             { qui: "Les Venerables Sàvies", text: "Sempre fem el mateix, fill: una espelma per cada llar que té una cadira buida. Encén-la tu, que ets qui ho ha de portar a terme." },
@@ -1017,9 +995,8 @@ const DIALEGS = {
             { qui: "El Gran Til·ler", text: "Aquesta és la saviesa que et volia donar, petit monjo: ningú no es perd del tot mentre algú el recorda a taula. La gàbia de l'Ocellaire només s'omple de qui s'ha quedat sol." },
             { qui: "El Gran Til·ler", text: "Rep el meu permís. Que et sigui lleu, i que no et faci oblidar mai que vas menjar amb tots." },
             { fer: (z, fet) => z.fullaCau(fet) },
-            { qui: "", text: "Has obtingut la FULLA DEL TIL·LER!" },
+            { avis: "Has obtingut la FULLA DEL TIL·LER!" },
             { fer: (z, fet) => { ['sopar_pastor_a', 'sopar_pastor_b', 'sopar_pastor_vell'].forEach(k => z.bombolla(k, '♪', null, 1400)); z.esperar(1500, fet); } },
-            { qui: "", text: "Des del Santuari, molt lluny, arriba una nota d'orgue que, per primer cop en dies, no s'apaga." }
         ],
         enAcabar: () => {
             E.dona("fulla_tiler"); E.posaFlag("fullaTiler"); E.posaFlag("soparFet");
@@ -1032,8 +1009,6 @@ const DIALEGS = {
 
     espelmesTiller: E => ({
         pagines: [
-            { qui: "", text: "Quatre espelmes que no s'han apagat des del sopar, vora les arrels del Til·ler: per a l'Huri, per al Flami, per al Sardi... i una de més, per qui no té nom." },
-            ...(E.flag("rescatUri") && E.flag("rescatFlam") && E.flag("rescatSardin") ? [{ qui: "", text: "Les tres primeres s'han apagat soles, i fa olor de cera tèbia i de rialles." }] : [])
         ]
     }),
 
@@ -1067,12 +1042,11 @@ const DIALEGS = {
     nenaTrenes: E => {
         const n = ["llac1", "llac2"].filter(f => E.flag(f)).length;
         if (E.flag("nenaAlliberada")) {
-            return { pagines: [{ qui: "", text: "En aquesta corba del camí, l'herba és de nou verda. De vegades, quan passa el vent, sembla que s'hi senti una rialleta." }] };
+            return { pagines: [] };
         }
         if (!E.flag("nenaVista")) {
             return {
                 pagines: [
-                    { qui: "", text: "Una nena transparent seu a terra, amb dues trenes sense lligar. Plora en silenci, i on cauen les llàgrimes l'herba es torna blanca." },
                     { qui: "Nena de les Trenes", text: "No et facis enrere, si us plau... No vull espantar ningú. Només que, quan arriba algú, sempre fuig." },
                     { qui: "Nena de les Trenes", text: "Vaig venir a collir rovellons amb la mare. Ella deia que els rovellons creixen sempre vora el bon camí, i que qui se'n fia no es perd mai pel bosc. Em vaig perdre perquè em vaig oblidar de mirar a terra. Em va lligar les dues trenes amb dos llaços rosa, i em vaig perdre pel bosc. Fa molts, molts anys. No he pogut marxar d'aquí." },
                     { qui: "Nena de les Trenes", text: "Els llaços van caure mentre corria, i les pedres els van colgar: un és aquí al camí, sota una roca grossa a la vora, i l'altre a la Rovellonera, a la primera clariana, sota una altra pedra. Sense ells, no sento les mans de la mare. Si me'ls tornessis a lligar..." },
@@ -1097,7 +1071,7 @@ const DIALEGS = {
                 { qui: "Nena de les Trenes", text: "Les sento... Sento les mans de la mare! Mare...? Mare, ets tu? M'has trobat?" },
                 { fer: (z, fet) => z.mareNena(fet) },
                 { qui: "Nena de les Trenes", text: "Gràcies, monjo. Ja no tinc por. Aquí et deixo un dels meus llaços: guarda't amb ell, que també protegeix els que es perden." },
-                { qui: "", text: "Has obtingut el LLAÇ DE LA NENA: absorbeix un cop cada cop que entres a una zona.\nLa Nena de les Trenes ja no espantarà ningú." }
+                { avis: "Has obtingut el LLAÇ DE LA NENA." }
             ],
             enAcabar: () => {
                 E.posaFlag("nenaAlliberada"); E.posaFlag("trenesNena"); E.dona("cinta_nena"); E.treu("llac_nena");
@@ -1107,7 +1081,7 @@ const DIALEGS = {
     },
 
     llac: k => E => ({
-        pagines: [{ qui: "", text: "Un llaç de cinta, rosa i descolorit, entre l'herba. Sembla que encara estigui calent. (Llaços: " + (["llac1", "llac2"].filter(f => E.flag(f) || f === "llac" + k).length) + "/2)" }],
+        pagines: [{ avis: "Has trobat un llaç de la nena (" + (["llac1", "llac2"].filter(f => E.flag(f) || f === "llac" + k).length) + "/2)." }],
         enAcabar: () => {
             E.posaFlag("llac" + k); E.dona("llac_nena");
             const n = ["llac1", "llac2"].filter(f => E.flag(f)).length;
@@ -1118,8 +1092,7 @@ const DIALEGS = {
     // ---------------- SANT GABRIEL ----------------
     altarGabriel: E => ({
         pagines: [
-            { qui: "", text: "Un altar senzill de blocs de pedra clara, amb una creu i dos canelobres de ferro. Al costat de la creu, un calze d'argent entelat, ple d'aigua de rosada del matí." },
-            ...(E.flag("calze") ? [] : [{ qui: "", text: "Un raig de claror baixa de la finestra i es posa al calze. És el CALZE DE ROSADA: cada cop que en beguis, et sentiràs renovat." }]),
+            ...(E.flag("calze") ? [] : [{ avis: "Has obtingut el CALZE DE ROSADA." }]),
             { fer: (z, fet) => z.beure(fet, 0xd8e8ff) },
         ],
         enAcabar: () => {
@@ -1132,14 +1105,13 @@ const DIALEGS = {
 
     telescopiMon: E => {
         if (E.flag("estelLlorenc")) {
-            return { pagines: [{ qui: "", text: "El mirador dels Dipòsits. El cel és ple d'estels, i les llàgrimes de Sant Llorenç ja han dit el que havien de dir." }] };
+            return { pagines: [] };
         }
         if (E.flag("estelsFets")) {
             return { pagines: [{ qui: "Ineu", text: "L'últim estel s'ha apagat damunt del dipòsit de llevant. Hi ha una llum a l'aigua: he d'anar-hi." }] };
         }
         if (!E.te("telescopi")) {
             return { pagines: [
-                { qui: "", text: "Un mirador de pedra, amb la tripode buida. Segurament és el lloc on s'han de mirar els estels." },
                 { qui: "Ineu", text: "Em falta un telescopi. El Garf, a l'Era, segur que en sap construir un." }
             ] };
         }
@@ -1156,7 +1128,7 @@ const DIALEGS = {
     estelDiposit: E => ({
         pagines: [
             { fer: (z, fet) => z.agafar(fet, null, 0x8fc8ff) },
-            { qui: "", text: "Has obtingut l'ESTEL DE SANT LLORENÇ: una llàgrima de llum que no crema ni s'apaga." },
+            { avis: "Has obtingut l'ESTEL DE SANT LLORENÇ." },
             { qui: "Ineu", text: "Fa la mateixa claror que els set estels... Diuen que la boira no gosa tocar la llum de Sant Llorenç. El camí del Dolmen, a llevant, n'és ple." }
         ],
         enAcabar: () => {
@@ -1169,10 +1141,8 @@ const DIALEGS = {
     // La boira que tapa el camí del Dolmen: només l'aparta la llum de l'Estel de Sant Llorenç
     boiraDolmen: E => E.te("estel_llorenc")
         ? { pagines: [
-            { qui: "", text: "L'Estel de Sant Llorenç s'encén a la teva mà. La boira recula davant la seva llum, s'esfilagarsa i deixa veure un corriol que s'enfila entre els arbres." }
         ] }
         : { pagines: [
-            { qui: "", text: "Una boira espessa i freda tapa el camí de llevant, el que puja al Dolmen. Quan t'hi acostes, s'espesseix encara més." },
             { qui: "Ineu", text: "Aquí no s'hi veu res. Em caldria una llum que la boira no pogués apagar..." }
         ] },
 
@@ -1204,7 +1174,7 @@ const DIALEGS = {
     },
 
     dolmenBuit: E => ({
-        pagines: [{ qui: "", text: "La llosa del Dolmen, buida i tèbia. Al lloc on dormia Runna ha quedat una empremta de llum que no s'acaba d'apagar." }]
+        pagines: []
     }),
 
     objectiuRunna: E => {
@@ -1220,26 +1190,23 @@ const DIALEGS = {
 
     cercleRovellonera: E => ({
         pagines: E.flag("portalJaumeta") ? [
-            { qui: "", text: "Un cercle de bolets vermells i grocs, dibuixat amb una precisió que no és natural. Brilla suaument, igual que l'Alzina Buida." },
             { qui: "Ineu", text: "És l'altra banda del portal de la Jaumeta. Si hi entro, arribaré a la seva cabana." }
         ] : [
-            { qui: "", text: "Un cercle perfecte de bolets, enmig de la clariana. Sembla que hi ballin fades, si n'hi hagués." },
             { qui: "Ineu", text: "Estrany... Em fa la sensació que és una porta, però no sé de què." }
         ]
     }),
 
     portalTornada: E => ({
-        pagines: [{ qui: "", text: "L'Alzina Buida de la cabana: pel forat del tronc tornaràs al lloc d'on has vingut." }]
+        pagines: []
     }),
 
     cofreBosc: E => {
-        if (E.flag("cofreBosc")) return { pagines: [{ qui: "", text: "El cofre és obert i buit. Les cendres dels esbarzers encara estan tèbies." }] };
+        if (E.flag("cofreBosc")) return { pagines: [] };
         return {
             pagines: [
-                { qui: "", text: "Dins l'amagatall, un cofre vell. Les bisagres són rovellades, però el pany ha cedit amb un petit toc." },
-                { qui: "", text: "A dins hi ha un coure petit amb una gota de sang de color rosa pàl·lid i una nota: «Per al qui vingui amb l'espasa.»" },
+                { qui: "Nota", text: "«Per al qui vingui amb l'espasa.»" },
                 { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xffb8c8), c => z.beure(c, 0xffb8c8)], fet) },
-                { qui: "", text: "+1 GRA AL ROSARI i rosari ple." }
+                { avis: "+1 GRA AL ROSARI i rosari ple." }
             ],
             enAcabar: () => { E.posaFlag("cofreBosc"); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
         };
@@ -1248,7 +1215,6 @@ const DIALEGS = {
     // ---------------- LA CASA GRAN ----------------
     portaReixa: E => ({
         pagines: [
-            { qui: "", text: "Sota el porxo d'arcs, una porta amb una reixa de ferro gruixuda, lligada amb cadenes rovellades. El pany és tan antic que ja ni té forat." },
             { qui: "Ineu", text: E.flag("reixaObertaDins") ? "Per dins hi ha la barra aixecada, però les cadenes de fora no cedeixen. Aquí no s'hi entra." : "Fa generacions que ningú no obre això. Haurà d'haver-hi una altra manera d'entrar-hi." }
         ]
     }),
@@ -1256,7 +1222,6 @@ const DIALEGS = {
     // Reixa del porxo vista des de l'escalinata (per dins només hi ha una barra de ferro)
     reixaDins: E => ({
         pagines: [
-            { qui: "", text: "La reixa del porxo, tancada amb una barra de ferro. Per dins, n'hi ha prou amb aixecar-la." },
             { fer: (z, fet) => { z.cameras.main.shake(250, 0.004); z.agafar(fet, null, 0x8a8a90); } },
             { qui: "Ineu", text: "(Ara puc sortir a la plaça per aquí. De fora, la reixa continua tancada.)" }
         ],
@@ -1265,10 +1230,10 @@ const DIALEGS = {
 
     // Cambra secreta dels monjos (sala del tresor, entre el Celler i la Casa Gran)
     cofreCambra: E => {
-        if (E.flag("cofreCambra")) return { pagines: [{ qui: "", text: "El cofre és obert i buit." }] };
+        if (E.flag("cofreCambra")) return { pagines: [] };
         return {
             pagines: [
-                { qui: "", text: "Dins el cofre només hi ha un pergamí de tapes de cuir. Has obtingut el PERGAMÍ DEL MONJO." },
+                { avis: "Has obtingut el PERGAMÍ DEL MONJO." },
                 { qui: "Ineu", text: "«La clau de ferro és sota l'escala, murada amb els meus germans. Un guardià de pedra la vigila: ningú no hi baixa si no li gira el cap cap al sol que neix. On neix el sol, el raïm madura.»" },
                 { qui: "Ineu", text: "I al revers, amb una altra lletra: «Qui busqui sortida, que alci la bóta marcada amb la creu.»" }
             ],
@@ -1287,9 +1252,7 @@ const DIALEGS = {
 
     homeRaimInt: E => ({
         pagines: [
-            { qui: "", text: "Al mig de la gran escalinata, l'Home del Raïm: una escultura de pedra gairebé tan alta com dos homes, amb un carràs de raïm de marbre a les mans." },
             { qui: "Ineu", text: "Té el cap girat cap enrere, com si vigilés la porta de sota l'escala. Sembla que guardi alguna cosa." },
-            { qui: "", text: "(Cal una palanca per fer-lo girar. En Jordi de la Caseta, a l'oest del Til·ler, en té una.)" }
         ]
     }),
 
@@ -1308,7 +1271,7 @@ const DIALEGS = {
                     { fer: (z, fet) => z.seq([c => z.npcVa('jaumeta', 500, 360, c, 200), c => z.llum(450, 290, 0x6aff6a, c), c => z.npcVa('jaumeta', 560, 420, c, 200)], fet) },
                     { qui: "La Jaumeta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? No és al nord de sempre, com et diuen: és al nord de les Cel·les, i han tapat el camí amb una boira que no marxa amb el vent." },
                     { qui: "La Jaumeta", text: "Mira, he barrejat l'aigua que queda amb farigola, romaní i herba de Sant Joan. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
-                    { qui: "", text: "Has obtingut el BEURATGE DE LA JAUMETA.\nAboca'l a la boira que tapa el camí al nord de les Cel·les." }
+                    { avis: "Has obtingut el BEURATGE DE LA JAUMETA." }
                 ],
                 enAcabar: () => {
                     E.treu("aigua_sj"); E.posaFlag("jaumetaVista"); E.dona("beuratge");
@@ -1330,7 +1293,6 @@ const DIALEGS = {
         ]
     } : {
         pagines: [
-            { qui: "", text: "Una boira espessa i freda tapa el camí que puja cap al nord. Quan hi poses la mà, et glaça els dits." },
             { qui: "Ineu", text: "No hi puc passar... Aquesta boira no és de les que marxen amb el vent. Algú que en sàpiga, de bruixeries, potser la Jaumeta, del bosc, tindria alguna cosa per desfer-la." }
         ]
     },
@@ -1339,7 +1301,6 @@ const DIALEGS = {
     arrelsTiller: E => {
         if (!E.te("basto_tiller")) {
             return { pagines: [
-                { qui: "", text: "Unes arrels enormes surten de terra i fan arcs de banda a banda del camí del nord-est. Són de til·ler: quan t'hi acostes, es tensen com si et miressin." },
                 { qui: "Ineu", text: "Són les arrels del Gran Til·ler. El bastó de pelegrí no les mourà... però potser reconeixerien una branca del mateix arbre." }
             ] };
         }
@@ -1358,18 +1319,17 @@ const DIALEGS = {
     // El cofre de les joguines de la caseta: la palanca és a sota
     cofrePalanca: E => {
         if (E.te("palanca") || E.flag("palanca")) {
-            return { pagines: [{ qui: "", text: "El cofre de les joguines, ple de soldadets de fusta, una baldufa i un tambor sense pell. La palanca ja no hi és." }] };
+            return { pagines: [] };
         }
         if (!E.flag("jordiPalanca")) {
             return { pagines: [
-                { qui: "", text: "Un cofre de joguines. Sota els soldadets de fusta s'hi endevina una palanca de ferro, gran i pesada." },
                 { qui: "Ineu", text: "No és meva... Millor preguntar a en Jordi abans d'agafar-la." }
             ] };
         }
         return {
             pagines: [
                 { fer: (z, fet) => z.agafar(fet, null, 0x8a8a90) },
-                { qui: "", text: "Has obtingut la PALANCA." }
+                { avis: "Has obtingut la PALANCA." }
             ],
             enAcabar: () => {
                 E.dona("palanca"); E.posaFlag("palanca");
@@ -1405,6 +1365,6 @@ const DIALEGS = {
             "«Un monjo sense nom, trobat a la cripta. Que algú li doni un nom, almenys al cel.»",
             "«Pare Quirze, bibliotecari. Va ensenyar a llegir més gent que ningú.»"
         ];
-        return { pagines: [{ qui: "", text: mots[n % mots.length] }] };
+        return { pagines: [{ qui: "Làpida", text: mots[n % mots.length] }] };
     }
 };

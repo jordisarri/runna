@@ -47,53 +47,39 @@ function girgoles(g, x, y, n = 4, color = 0x9a8a78, fosc = 0x5a4e40) {
 
 Object.assign(DIALEGS, {
     girgolesInscripcio: E => ({ pagines: [
-        { qui: '', text: "A la paret, sota la molsa, una inscripció dels monjos: «Les gírgoles de la cova canten juntes o callen juntes. Toca'n una i despertaràs també les dues que té al costat. Quan cantin totes, el pas s'obre.»" }
+        { qui: 'Inscripció', text: "«Les gírgoles de la cova canten juntes o callen juntes. Toca'n una i despertaràs també les dues que té al costat. Quan cantin totes, el pas s'obre.»" }
     ] }),
     cortinaMicel: E => ({ pagines: [
-        { qui: '', text: "Un tel blanc i fibrós de micel·li tapa el túnel del nord, de terra a sostre. Quan l'empenys, és tou però no cedeix. Sembla que s'alimenti de la foscor." }
     ] }),
-    sacsGirgoles: E => ({ pagines: [{ qui: '', text: "Sacs de gra podrits per la humitat. D'un d'ells en surt un ocell de boira, transparent, que s'esvaeix abans de tocar el sostre." }] }),
-    tornRastell: E => E.flag('rastellObert') ? { pagines: [{ qui: '', text: "El torn, falcat amb una barra. El rastell queda enlaire." }] } : E.te('guants') ? {
+    sacsGirgoles: E => ({ pagines: [] }),
+    tornRastell: E => E.flag('rastellObert') ? { pagines: [] } : E.te('guants') ? {
         pagines: [
-            { qui: '', text: "Un torn de ferro rovellat, amb una cadena que puja fins al rastell. Ningú no l'ha girat en segles." },
-            { qui: '', text: "Amb els Guants de Poder, el torn grinyola... i gira. La cadena s'enrotlla i el rastell puja, pam a pam, fins dalt." }
         ]
     } : { pagines: [
-        { qui: '', text: "Un torn de ferro rovellat, amb una cadena que puja fins al rastell. Hi poses tot el pes del cos i no es mou ni un dit." },
         { qui: 'Ineu', text: "(Em caldrien unes mans molt més fortes: els guants dels picapedrers del Germà Francesc.)" }
     ] },
-    instrumentsTortura: n => E => ({ pagines: [{ qui: '', text: [
-        "Un potro de fusta negra, amb cordes podrides i manetes de ferro. Algú hi ha deixat una gàbia petita, buida, amb la porteta oberta.",
-        "Una donzella de ferro, mig oberta. A dins no hi ha punxes: hi ha plomes. Centenars de plomes grises.",
-        "Una roda d'esmolar enorme, amb un pedal. Al costat, un rengle d'eines rovellades: estenalles, ganxos, claus de gàbia de totes les mides.",
-        "Cadenes que pengen del sostre, i, al final de cada una, una gàbia d'ocell. Totes buides. Quan passes, es gronxen soles."
-    ][n] }] }),
-    pontGabia: E => E.flag('pontGabia') ? { pagines: [{ qui: '', text: "Els blocs de pedra suren sobre l'avenc i formen un pont fins a la gàbia." }] } : {
+    instrumentsTortura: n => E => ({ pagines: [] }),
+    pontGabia: E => E.flag('pontGabia') ? { pagines: [] } : {
         pagines: [
-            { qui: '', text: "La gàbia penja al mig d'un avenc sense fons. Al marge, sobre la pedra, hi ha gravada una paraula antiga: PEDRES." },
-            { qui: '', text: "Al fons de l'avenc, molt avall, s'endevinen uns blocs de pedra quadrats, com si dormissin." },
+            { qui: 'Inscripció', text: "Gravada a la pedra, una paraula antiga: PEDRES." },
             { qui: 'Ineu', text: E.flag('cantPedres') ? "(Les pedres... L'ombra del monjo es va despertar amb el Cant de les Pedres. Potser aquestes també: 3-1-2-1.)" : "(Pedres que dormen. Hi deu haver un cant per despertar-les.)" }
         ]
     },
     gabiaGran: E => ({ pagines: E.flag('andreuTancat') ? [
-        { qui: '', text: "La gàbia, tancada. A dins, el Germà Andreu seu a terra, abraçat als genolls." }
     ] : E.flag('gabiaOberta') ? [
-        { qui: '', text: "La gàbia penja enlaire, oberta. Sota, els capolls de boira esperen." }
     ] : E.flag('ocellaireVencut') ? [
-        { qui: '', text: "Els barrots encara fumegen. Dins la gàbia, els tres capolls de boira respiren a poc a poc." },
         { qui: 'Ineu', text: "(Ara. El Cant del Miracle: 1-3-2-3-1.)" }
     ] : [
-        { qui: '', text: "Una gàbia d'ocell gegant, de barrots negres retorçats. A dins, tres capolls de boira lila suren a mig aire: l'Huri, el Flami i el Sardi." },
         { qui: 'Ineu', text: "(Els barrots no tenen pany. Només un cant els pot obrir: el Cant del Miracle.)" }
     ] }),
-    capoll: nom => E => ({ pagines: [{ qui: '', text: `Dins del capoll lila, ${nom} dorm arraulit.` }] }),
+    capoll: nom => E => ({ pagines: [] }),
     andreuGabia: E => ({ pagines: E.flag('andreuTancat') ? [
         { qui: 'Germà Andreu', text: "Ell em va veure, saps? Tothom em passava pel costat. Ell em va veure." },
         { qui: 'Germà Andreu', text: "Deixa'm aquí. Si mai torna, que em trobi esperant-lo." }
     ] : [
         { qui: 'Germà Andreu', text: "Mestre... no em deixeu..." }
     ] }),
-    gentEpileg: E => ({ pagines: [{ qui: '', text: "Avui tothom canta, encara que l'orgue faci una nota de pega." }] }),
+    gentEpileg: E => ({ pagines: [{ qui: 'Gent', text: "Avui tothom canta, encara que l'orgue faci una nota de pega." }] }),
     nenGabia: nom => E => ({ pagines: [{ qui: nom, text: {
         Huri: "Ineu! Somiava que era un ocell dins d'una gàbia... i ara tinc unes ganes de riure!",
         Flami: "On és l'home dels ocells? L'has fet fugir tu? Ha ha ha! Quina cara que feia!",

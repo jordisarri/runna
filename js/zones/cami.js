@@ -219,6 +219,7 @@ class ZonaEra extends ZonaBase {
 
         // El Garf, savi inventor: jove, grassonet i ros, assegut al banc de dalt
         this.garf = this.npc('garf', ERA_BANC_X, ERA_BANC_N, DIALEGS.garf);
+        this.garf.setDepth(ERA_BANC_N + 1);                       // assegut: el banc queda darrere seu
         // L'Ineu s'asseu i s'hi queda fins que es vulgui aixecar (movent-se)
         this.assegut = false;
         this.interactiu(ERA_BANC_X, ERA_BANC_S, 100, () => { this.seure(); return DIALEGS.garf(Estat); }, { altura: 150 });
@@ -373,7 +374,7 @@ class ZonaJardi extends ZonaBase {
             this.isidre.punt.x = LX + 70; this.isidre.punt.y = LY + 52;
         }
 
-        this.cartell(1500, 860, () => ({ pagines: [{ qui: '', text: '→ La Taverna\n← L\'Era' }] }));
+        this.cartell(1500, 860, () => ({ pagines: [{ qui: 'Cartell', text: '→ La Taverna\n← L\'Era' }] }));
         this.sortida(0, 900, 14, 130, 'ZonaEra', 'jardi');
         this.sortida(1786, 900, 14, 130, 'ZonaTaverna', 'jardi');
     }
@@ -481,7 +482,7 @@ class ZonaTaverna extends ZonaBase {
         this.posar('banc', 520, 790, { col: { w: 130, h: 22 } });
         this.posar('taula', 400, 805, { escala: 0.7, col: { w: 110, h: 22 } });
 
-        this.cartell(260, 860, () => ({ pagines: [{ qui: '', text: '← L\'Hostatgeria i l\'Era\n→ Els arcs de la Casa Gran' }] }));
+        this.cartell(260, 860, () => ({ pagines: [{ qui: 'Cartell', text: '← L\'Hostatgeria i l\'Era\n→ Els arcs de la Casa Gran' }] }));
         this.arbres([[130, 250], [200, 560], [1460, 330], [1450, 600], [60, 1070], [1180, 1050]]);   // cap arbre davant el cartell
 
         // La porta de ferro del soterrani, per fora, al darrere de la Taverna (a la dreta de la façana): la Clau de ferro l'obre
