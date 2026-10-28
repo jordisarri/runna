@@ -1,0 +1,41 @@
+{
+  "style_definition": {
+    "name": "Chibi Adventure Sprite",
+    "version": "1.0",
+    "art_style": {
+      "genre": ["Chibi", "Super-Deformed (SD)", "2D Cartoon Illustration", "Adventure Game Sprite"],
+      "rendering": "Digital vector-like 2D art, cel-shaded with soft ambient occlusion, crisp finish"
+    },
+    "character_proportions": {
+      "head_to_body_ratio": "1:2 to 1:2.5",
+      "head": "Enlarged, rounded facial structure with soft cheeks",
+      "torso": "Compact, slightly stocky and rounded",
+      "limbs": "Shortened, stout limbs; stylized hands with simplified fingers and rounded shoes/feet"
+    },
+    "facial_features": {
+      "eyes": {
+        "scale": "Large, expressive anime-inspired chibi eyes",
+        "details": "Crisp dark outline, glossy highlights, detailed iris gradients"
+      },
+      "expression": "Warm, cheerful, friendly smirk or gentle smile",
+      "aging_and_details": "Minimalist facial lines; age is captured via hair color/shape, glasses, and subtle folds rather than deep wrinkles"
+    },
+    "line_art": {
+      "outer_contour": "Bold, clean, consistent black outline framing the entire silhouette",
+      "inner_lines": "Medium-to-fine clean black/dark line work defining inner garments and facial details",
+      "sketchiness": "None (zero pencil textures, zero scratchy strokes)"
+    },
+    "color_palette_and_shading": {
+      "colors": "Rich, saturated yet earthy palette; distinct solid block colors per garment/element",
+      "shading_type": "Two-tone cel shading (base tone + solid shadow plane) combined with subtle smooth gradient highlights",
+      "lighting": "Clean, directional light slightly from the top-front"
+    },
+    "composition_and_framing": {
+      "viewpoint": "Straight-on eye level, strictly front-facing orthographic perspective",
+      "pose": "Full body standing centered, ground-planted, symmetrical or lightly posed",
+      "background": "Pure white background (#FFFFFF), entirely clean and isolated",
+      "shadow": "No cast shadow, no ground shadow beneath the character"
+    }
+  },
+  "instructions_for_generation": "When applied to a reference image, extract the subject's key facial features, hairstyle, attire, and accessories, then reimagine them adhering strictly to the 'style_definition' parameters above."
+}

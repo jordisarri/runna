@@ -39,6 +39,7 @@ Joc web fet amb Phaser 3. Per provar-lo en local: `python serveix.py` i obre `ht
 - `convertir_webp.js`: passa a WebP les imatges del catàleg (`art/<carpeta>/<nom>` → `assets/<carpeta>/<nom>.webp`). Cal `sharp`.
 - `convertir_atacs.js`: fulles d'atac de l'Ineu i espasa. Cal servir el joc i tenir Chrome.
 - `comprimir_media.sh`: vídeos i música (cal `ffmpeg`).
+- `personatges.json` i `edificis.json`: l'estil gràfic del joc (personatges/enemics i edificis/natura/objectes). Els prompts de `docs/PROMPTS_GRAFICS.md` en deriven.
 - `generar_sprites.html`, `ajust_arma.html`, `netejar_ineu.js`, `prova_progres.js`: utilitats de desenvolupament.
 
 Per afegir un gràfic: deixa l'original a `art/<carpeta>/<nom>.png|jpg`, afegeix-lo a `js/assets.js` i executa `node eines/convertir_webp.js`.

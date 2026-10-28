@@ -1,0 +1,42 @@
+{
+  "style_definition": {
+    "name": "Chibi Adventure Environment",
+    "version": "1.0",
+    "note": "Germà d'eines/personatges.json: mateix render, mateix contorn i mateixa il·luminació, perquè personatges i escenari es vegin com un sol joc. Serveix per a edificis, natura i objectes.",
+    "art_style": {
+      "genre": ["Chibi", "Super-Deformed (SD)", "2D Cartoon Illustration", "Adventure Game Asset"],
+      "rendering": "Digital vector-like 2D art, cel-shaded with soft ambient occlusion, crisp finish"
+    },
+    "object_proportions": {
+      "overall": "Chunky, rounded and slightly squashed, as if the object were a chibi version of itself",
+      "buildings": "Thick walls, oversized roofs, doors, windows and arches; soft rounded corners and slightly leaning, hand-built silhouettes; nothing sharp, nothing photorealistic",
+      "nature": "Fat rounded trunks, big puffy foliage clumps, stubby rocks; simplified readable shapes",
+      "props": "Oversized handles, hinges, locks and rims; simplified details that read at small size",
+      "detail_level": "Readable at 100 px wide: few large shapes, no tiny ornaments, no fine texture"
+    },
+    "line_art": {
+      "outer_contour": "Bold, clean, consistent black outline framing the entire silhouette",
+      "inner_lines": "Medium-to-fine clean black/dark line work defining stones, planks, tiles and details",
+      "sketchiness": "None (zero pencil textures, zero scratchy strokes)"
+    },
+    "color_palette_and_shading": {
+      "colors": "Rich, saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue); distinct solid block colors per material",
+      "shading_type": "Two-tone cel shading (base tone + solid shadow plane) combined with subtle smooth gradient highlights",
+      "lighting": "Clean, directional light slightly from the top-front",
+      "mood": "Warm Catalan mountain village with a hint of eerie mist; never grim or realistic"
+    },
+    "composition_and_framing": {
+      "background": "Pure white background (#FFFFFF), entirely clean and isolated; no white inside the edge of the object",
+      "shadow": "No cast shadow, no ground shadow beneath the object",
+      "text": "No text, no letters (except where the prompt asks for a sign)",
+      "framing": "Single object centered; buildings drawn with their base at the bottom edge of the image",
+      "viewpoint_by_category": {
+        "edificis": "Like A Link to the Past: front facade seen straight on with the roof visible from above, no side walls",
+        "objectes": "3/4 view from above (about 30 degrees), facing the camera",
+        "objectes_plans": "Flat things (tables, pools, slabs) seen from about 45 degrees",
+        "natura": "3/4 view from above, facing the camera"
+      }
+    }
+  },
+  "instructions_for_generation": "When applied to a reference image, keep the subject's shapes, materials and distinctive features, then reimagine them adhering strictly to the 'style_definition' parameters above. Upload an already-made asset (for example art/edificis/esglesia.png) as the style reference."
+}
