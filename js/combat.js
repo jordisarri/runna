@@ -76,7 +76,6 @@ function preparaOcellFoc(scene) {
 const ENEMICS = {
     escolopendra: {
         tex: 'escolopendra', vida: 2, vel: 95, mal: 1, radi: 20, cos: [40, 16], ombra: 0, centrat: true,   // l'ombra ja és al dibuix; vista de dalt, el cos és al mig
-        monedes: [0.35, 1, 1], cor: 0.08,
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             if (ara > e.canviFins) {
@@ -105,7 +104,6 @@ const ENEMICS = {
 
     gripau: {
         tex: 'gripau', vida: 2, vel: 250, mal: 1, radi: 22, cos: [36, 22], ombra: 0.38,
-        monedes: [0.6, 1, 2], cor: 0.12,
         // Només fa mal mentre salta; en aterrar queda quiet i vulnerable
         perill: e => e.estat === 'salt',
         ia(z, e, ara) {
@@ -131,7 +129,6 @@ const ENEMICS = {
     // Bolet brut: estàtic; carrega espores (cercle verd) i les deixa anar a l'àrea
     bolet: {
         tex: 'bolet', vida: 2, vel: 0, mal: 1, radi: 22, cos: [34, 18], ombra: 0.35,
-        monedes: [0.4, 1, 2], cor: 0.1,
         perill: () => false,            // el mal el fan les espores, no el contacte
         ia(z, e, ara) {
             e.spr.body.setVelocity(0);
@@ -155,7 +152,6 @@ const ENEMICS = {
     // Embesteix en línia recta: apunta (flaix lila), carrega, i queda cansada i vulnerable
     ovella: {
         tex: 'ovella_boira', vida: 3, vel: 290, mal: 1, radi: 24, cos: [46, 24], ombra: 0.4,
-        monedes: [0.5, 1, 2], cor: 0.12,
         perill: e => e.estat === 'carrega',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
@@ -187,7 +183,7 @@ const ENEMICS = {
     // BOSS: el Germà Andreu convertit en Pastor de Boira. Crida ovelles i carrega amb la caiada.
     pastor: {
         tex: 'pastor_boira', vida: 18, vel: 360, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 520,
-        monedes: [1, 15, 15], cor: 0, robust: true,
+        robust: true,
         perill: e => e.estat === 'carrega',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
@@ -244,7 +240,7 @@ const ENEMICS = {
     // com un remolí i desapareix en boira per tornar a sortir en un altre lloc.
     ocellaire: {
         tex: 'ocellaire', vida: 36, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8, soloCap: true,
-        monedes: [0, 0, 0], cor: 0, robust: true, barra: true,
+        robust: true, barra: true,
         perill: e => !e.amagat && e.estat !== 'apareix',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
@@ -373,7 +369,6 @@ const ENEMICS = {
     // Ocell de foc de l'Ocellaire: volta al voltant del seu amo i, quan li toca, es llança contra l'Ineu
     ocellFoc: {
         tex: 'ocell_foc', vida: 1, vel: 300, mal: 1, radi: 18, cos: [26, 20], ombra: 0.15, centrat: true,
-        monedes: [0, 0, 0], cor: 0,
         preparar: z => preparaOcellFoc(z),
         perill: e => e.estat === 'vola' || e.estat === 'orbita',
         ia(z, e, ara) {
@@ -406,7 +401,6 @@ const ENEMICS = {
     // Ratpenat de boira (Gírgoles): penja quiet a la foscor; quan l'Ineu s'acosta, baixa fent ziga-zaga, i després s'enlaira
     ratpenat: {
         tex: 'ratpenat', vida: 2, vel: 190, mal: 1, radi: 20, cos: [34, 20], ombra: 0.2, centrat: true,
-        monedes: [0, 0, 0], cor: 0,
         perill: e => e.estat === 'ataca',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
@@ -435,7 +429,6 @@ const ENEMICS = {
     // Ferralla viva (passadís de tortura): eines rovellades que s'ajunten i avancen a salts, fent soroll de ferro
     ferralla: {
         tex: 'ferralla', vida: 4, vel: 230, mal: 1, radi: 26, cos: [44, 22], ombra: 0.4,
-        monedes: [0, 0, 0], cor: 0,
         perill: e => e.estat === 'salta',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
@@ -466,7 +459,6 @@ const ENEMICS = {
     // Capoll de boira on dorm un nen: Runna el trenca
     capoll: {
         tex: 'capoll', vida: 1, vel: 0, mal: 0, radi: 30, cos: [50, 40], ombra: 0.35,
-        monedes: [0, 0, 0], cor: 0,
         perill: () => false,
         ia(z, e, ara) {
             e.spr.body.setVelocity(0);
@@ -477,7 +469,6 @@ const ENEMICS = {
 
     visitant: {
         tex: 'visitant', vida: 4, vel: 58, mal: 1, radi: 24, cos: [40, 22], ombra: 0.42,
-        monedes: [1, 2, 4], cor: 0.2,
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);

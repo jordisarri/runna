@@ -93,7 +93,7 @@ Object.assign(DIALEGS, {
 // ---------------- BOSS: L'HOME DEL RAÏM VIU ----------------
 ENEMICS.raim = {
     tex: 'home_raim', vida: 16, vel: 300, mal: 1, radi: 30, cos: [50, 24], ombra: 0.5,
-    monedes: [1, 20, 20], cor: 0, robust: true,
+    robust: true,
     perill: e => e.estat === 'carrega',
     ia(z, e, ara) {
         const jo = z.ineu.body.center, c = e.spr.body.center;

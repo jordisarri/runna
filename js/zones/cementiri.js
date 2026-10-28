@@ -20,7 +20,7 @@ class ZonaCementiri extends ZonaBase {
     }
 
     construir() {
-        const tancada = Estat.flag('tombaSegellada') || Estat.flag('relIquiesRetornades');
+        const tancada = Estat.flag('tombaSegellada');
         this.terra('herba', 0, 0, 1600, 1100, -1100).setTint(0xa0b898);
         this.terra('cami', 0, 520, 1160, 130);           // des de les Runes
         this.terra('cami', 1010, 520, 150, 580);         // cap al Monestir (sud)
@@ -31,7 +31,7 @@ class ZonaCementiri extends ZonaBase {
         // La tomba dels monjos primers: un sarcòfag sobre graons. Mentre és oberta, en surt boira lila de l'esquerda
         this.tomba = this.posar(tancada ? 'tomba_tancada' : 'tomba_esquerdada', 700, 470, { col: { w: 210, h: 60 } });
         // Amb Runna a la mà, ESPAI ja no llegeix la làpida: colpeja (i segella) la tomba
-        this.interactiu(700, 480, 130, DIALEGS.tombaMonjos, { altura: 150, actiu: () => !Estat.te('runna') || Estat.flag('tombaSegellada') || Estat.flag('relIquiesRetornades') });
+        this.interactiu(700, 480, 130, DIALEGS.tombaMonjos, { altura: 150, actiu: () => !Estat.te('runna') || Estat.flag('tombaSegellada') });
         if (!tancada) {
             this.boiraTomba = this.boira(712, 360, 90, 40, 1.6);
             this.llumTomba = this.add.circle(712, 380, 120, 0xa070ff, 0.10).setDepth(390);
@@ -102,7 +102,7 @@ class ZonaCementiri extends ZonaBase {
 
     // Un cop de Runna a la tomba esquerdada: la llum que va tancar la porta tanca també l'esquerda i la boira s'esvaeix
     alAtacar(jo, d) {
-        if (!Estat.te('runna') || Estat.flag('tombaSegellada') || Estat.flag('relIquiesRetornades')) return;
+        if (!Estat.te('runna') || Estat.flag('tombaSegellada')) return;
         const px = jo.x + d.x * 60, py = jo.y + d.y * 60;
         if (Math.abs(px - 700) > 140 || Math.abs(py - 440) > 110) return;
         Estat.posaFlag('tombaSegellada');

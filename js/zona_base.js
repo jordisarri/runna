@@ -26,7 +26,7 @@ const BOIRA_PASSOS = [
     E => E.flag('boiraTillerNeta'),                                        // Camí del Gran Til·ler: beuratge de la Jaumeta
     E => E.flag('pastorVencut'),                                           // Cirosa: Pastor de Boira
     E => E.flag('boiraDolmenNeta'),                                        // Camí del Dolmen: Estel de Sant Llorenç
-    E => E.flag('tombaSegellada') || E.flag('relIquiesRetornades')         // Cementiri: Runna segella la tomba
+    E => E.flag('tombaSegellada')         // Cementiri: Runna segella la tomba
 ];
 const BOIRA_MINIM = 0.2;                                                  // el que en queda quan s'han fet totes, fins al combat final
 // 1 = tota la boira; 0 = cap (només quan l'Ocellaire és vençut)

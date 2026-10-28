@@ -185,7 +185,7 @@ const DIALEGS = {
         };
         if (!E.flag('clauGirgoles')) return { pagines: clau, enAcabar: donar };
         return { pagines: [
-            { qui: 'Siscu', text: (E.flag('tombaSegellada') || E.flag('relIquiesRetornades')) ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el set d\'oros de paper. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
+            { qui: 'Siscu', text: (E.flag('tombaSegellada')) ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el set d\'oros de paper. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
             { qui: 'Siscu', text: 'Si veus la mare, no li diguis on sóc. Bé... si et pregunta molt, sí.' }
         ] };
     },
@@ -259,7 +259,8 @@ const DIALEGS = {
                     { qui: 'Pare Daniel', text: 'Ineu! Quina alegria de veure\'t! Vine, vine, que dirigeixo el cor i necessito una veu més.' },
                     { qui: 'Pare Daniel', text: 'La Pianista i jo som amics de tota la vida. Ella toca com ningú, i jo... jo només canto i faig el ximple amb els nens. Però la música es queda sense orgue, ja ho veus.' },
                     { qui: 'Pare Daniel', text: 'No et preocupis: si la música s\'ha amagat, la cantarem perquè torni! Riure és la primera pregària.' },
-                    { qui: 'Pare Daniel', text: 'Ah, i una cosa que em preocupa: el rellotge del campanar s\'ha aturat a les tres i quart, la nit que va arribar la boira. La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarden les Venerables Sàvies, a les Cel·les. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' }
+                    { qui: 'Pare Daniel', text: 'Ah, i una cosa que em preocupa: el rellotge del campanar s\'ha aturat a les tres i quart, la nit que va arribar la boira.' },
+                    { qui: 'Pare Daniel', text: 'La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarden les Venerables Sàvies, a les Cel·les. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' }
                 ],
                 enAcabar: () => { E.posaFlag('parlatDaniel'); E.posaFlag('rellotgeDit'); }
             };
@@ -1046,7 +1047,8 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Nena de les Trenes", text: "No et facis enrere, si us plau... No vull espantar ningú. Només que, quan arriba algú, sempre fuig." },
-                    { qui: "Nena de les Trenes", text: "Vaig venir a collir rovellons amb la mare. Ella deia que els rovellons creixen sempre vora el bon camí, i que qui se'n fia no es perd mai pel bosc. Em vaig perdre perquè em vaig oblidar de mirar a terra. Em va lligar les dues trenes amb dos llaços rosa, i em vaig perdre pel bosc. Fa molts, molts anys. No he pogut marxar d'aquí." },
+                    { qui: "Nena de les Trenes", text: "Vaig venir a collir rovellons amb la mare. Ella deia que els rovellons creixen sempre vora el bon camí, i que qui se'n fia no es perd mai pel bosc. Em vaig perdre perquè em vaig oblidar de mirar a terra." },
+                    { qui: "Nena de les Trenes", text: "Em va lligar les dues trenes amb dos llaços rosa, i em vaig perdre pel bosc. Fa molts, molts anys. No he pogut marxar d'aquí." },
                     { qui: "Nena de les Trenes", text: "Els llaços van caure mentre corria, i les pedres els van colgar: un és aquí al camí, sota una roca grossa a la vora, i l'altre a la Rovellonera, a la primera clariana, sota una altra pedra. Sense ells, no sento les mans de la mare. Si me'ls tornessis a lligar..." },
                     { qui: "Ineu", text: "Els trobaré. Et prometo que no hauràs de plorar sola." }
                 ],
