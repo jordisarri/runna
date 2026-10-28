@@ -36,7 +36,7 @@ function nivellBoira() {
     return 1 - (1 - BOIRA_MINIM) * fets / BOIRA_PASSOS.length;
 }
 
-const LIM_PEUS_DIALEG = 760;       // durant un diàleg, els peus de l'Ineu (i de qui li parla) han de quedar per sobre d'aquesta y de la pantalla (la caixa de text comença a ~910)
+const LIM_PEUS_DIALEG = 850;       // durant un diàleg, els peus de l'Ineu (i de qui li parla) han de quedar per sobre d'aquesta y de la pantalla (la caixa de text comença a ~910 i la cinta del nom a ~880): només es mou la càmera el just
 // Un punt interactiu sense res a dir (diàleg buit i sense efecte) no és interactiu. Només es mira als diàlegs del registre DIALEGS (funcions pures
 // de l'estat): les funcions que fan alguna cosa en cridar-les (girar un engranatge, la palanca...) no s'han d'executar mai per mirar-ho.
 let _dialegsPurs = null;
@@ -64,6 +64,8 @@ class ZonaBase extends Phaser.Scene {
         this.dadesEntrada = data || {};
         this.canviant = false;
         this.camDialeg = null;
+        this.boundsCamOrig = null;
+        this.twCamDialeg = null;
         this.entradaPropia = false;
     }
 
@@ -955,7 +957,8 @@ class ZonaBase extends Phaser.Scene {
     }
 
     // Quan hi ha un diàleg, la caixa de text tapa la part de baix de la pantalla: si l'Ineu (o qui li parla) hi queda a sobre perquè la càmera
-    // s'ha aturat contra la vora de baix de la zona, la càmera baixa una mica més (fora de la zona) fins que tots dos queden per sobre de la caixa.
+    // s'ha aturat contra la vora de baix de la zona, la càmera baixa només el just (fora de la zona), a poc a poc, perquè tots dos quedin
+    // per sobre de la caixa; en acabar torna a lloc igual de suau.
     camaraDialeg(obert) {
         const cam = this.cameras.main;
         if (obert) {
@@ -963,15 +966,26 @@ class ZonaBase extends Phaser.Scene {
             const I = this.ineu, p = this.puntActiu, baix = Math.max(I.y, p && p.npc ? p.npc.y : 0);
             const falta = ALT_HUD + (baix - cam.scrollY) * ZOOM_CAMERA - LIM_PEUS_DIALEG;
             if (falta <= 0) return;
-            const extra = Math.ceil(falta / ZOOM_CAMERA) + 8, b = cam.getBounds();
-            this.camDialeg = { extra, bounds: { x: b.x, y: b.y, w: b.width, h: b.height } };
-            cam.setBounds(b.x, b.y, b.width, b.height + extra);
-            cam.setFollowOffset(0, -extra);
+            const extra = Math.ceil(falta / ZOOM_CAMERA);
+            if (!this.boundsCamOrig) { const b = cam.getBounds(); this.boundsCamOrig = { x: b.x, y: b.y, w: b.width, h: b.height }; }
+            const o = this.boundsCamOrig;
+            this.camDialeg = { extra };
+            if (this.twCamDialeg) this.twCamDialeg.stop();
+            cam.setBounds(o.x, o.y, o.w, o.h + extra);
+            cam.stopFollow();
+            this.twCamDialeg = this.tweens.add({ targets: cam, scrollY: cam.scrollY + extra, duration: 1100, ease: 'Sine.easeInOut' });
         } else if (this.camDialeg) {
-            const d = this.camDialeg;
+            const d = this.camDialeg, o = this.boundsCamOrig;
             this.camDialeg = null;
-            cam.setFollowOffset(0, 0);
-            this.time.delayedCall(900, () => { if (!this.camDialeg) cam.setBounds(d.bounds.x, d.bounds.y, d.bounds.w, d.bounds.h); });     // quan la càmera ja és a lloc
+            if (this.twCamDialeg) this.twCamDialeg.stop();
+            this.twCamDialeg = this.tweens.add({
+                targets: cam, scrollY: cam.scrollY - d.extra, duration: 900, ease: 'Sine.easeInOut',
+                onComplete: () => {
+                    cam.setBounds(o.x, o.y, o.w, o.h);
+                    cam.startFollow(this.ineu, true, 0.12, 0.12);
+                    this.boundsCamOrig = null;
+                }
+            });
         }
     }
 

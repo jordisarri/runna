@@ -70,6 +70,7 @@ const ICONES_OBJECTES = {
             ctx.beginPath(); ctx.moveTo(x, y + 12); ctx.bezierCurveTo(x - 14, y + 2, x - 8, y - 12, x, y - 4); ctx.bezierCurveTo(x + 8, y - 12, x + 14, y + 2, x, y + 12); ctx.fill(); ctx.stroke();
         });
     },
+    clau_campanar: ctx => iconaClau(ctx, '#c8a858', '#7a5a22'),
     clau_sagrari: ctx => iconaClau(ctx, '#e8c050', '#a07a20'),
     clau_girgoles: ctx => iconaClau(ctx, '#a8603a', '#6a3418'),
     clau_ferro: ctx => iconaClau(ctx, '#6a6a72', '#3a3a40', true),
@@ -234,6 +235,7 @@ const US_OBJECTES = {
     flauta: () => 'sempre',
     basto: E => E.te('basto_tiller') || E.te('runna') ? 'record' : 'sempre',
     basto_tiller: E => !E.flag('camiCirosaObert') ? 'cal' : E.te('runna') ? 'record' : 'sempre',
+    clau_campanar: E => E.flag('rellotgeReparat') ? 'record' : 'cal',
     clau_sagrari: E => E.flag('fragment2') ? 'record' : 'cal',
     escudella: E => E.flag('soparFet') ? 'record' : 'cal',
     flors_isidre: E => E.flag('soparFet') ? 'record' : 'cal',
