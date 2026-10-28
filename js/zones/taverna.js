@@ -258,35 +258,35 @@ class ZonaGirgolesFora extends ZonaBase {
     constructor() {
         super('ZonaGirgolesFora', {
             nom: 'Sala de les Gírgoles',
-            amplada: 1400,
-            alcada: 1000,
-            entrades: { celler: { x: 60, y: 700, dir: 'dreta' }, porta: { x: 700, y: 360, dir: 'avall' } }
+            amplada: 800,
+            alcada: 1100,
+            entrades: { celler: { x: 60, y: 620, dir: 'dreta' }, porta: { x: 400, y: 360, dir: 'avall' } }
         });
     }
 
     construir() {
-        const PX = 700, BASE = 300, CX = 700, CY = 610, R = 250;
+        const PX = 400, BASE = 300, CX = 400, CY = 620, R = 200, A = 800;
         this.PX = PX; this.BASE = BASE;
-        this.terra('herba', 0, 0, 1400, 1000, -1100);
+        this.terra('herba', 0, 0, A, 1100, -1100);
         // La plaça de terra rodona: franges d'amplada decreixent (el difuminat dels camins les arrodoneix)
         for (let dy = -R; dy < R; dy += 20) {
             const m = dy + 10, w = 2 * Math.sqrt(R * R - m * m);
             this.terra('cami', CX - w / 2, CY + dy, w, 20);
         }
-        this.terra('cami', 0, 650, 460, 100);                               // el camí des del Pati del Celler (oest)
+        this.terra('cami', 0, 570, 260, 100);                               // el camí des del Pati del Celler (oest)
         this.terra('cami', PX - 75, BASE, 150, CY - R - BASE + 40);         // de la plaça a la porta
 
-        // L'edifici: paret de carreus amb la teulada a dalt, soc de pedra i dues reixes de ventilació
+        // L'edifici, de vora a vora de la pantalla: paret de carreus amb la teulada a dalt, soc de pedra i dues reixes de ventilació
         const e = this.add.graphics().setDepth(-950);
-        e.fillStyle(0x7d7466, 1).fillRect(250, 0, 900, BASE);
+        e.fillStyle(0x7d7466, 1).fillRect(0, 0, A, BASE);
         e.lineStyle(1.5, 0x3a342c, 0.55);
-        for (let y = 70, f = 0; y < BASE; y += 30, f++) { e.lineBetween(250, y, 1150, y); for (let x = 250 + (f % 2) * 36; x < 1150; x += 72) e.lineBetween(x, y, x, y + 30); }
-        e.fillStyle(0x4a3a34, 1).fillRect(230, 0, 940, 70);
+        for (let y = 70, f = 0; y < BASE; y += 30, f++) { e.lineBetween(0, y, A, y); for (let x = (f % 2) * 36; x < A; x += 72) e.lineBetween(x, y, x, y + 30); }
+        e.fillStyle(0x4a3a34, 1).fillRect(0, 0, A, 70);
         e.lineStyle(1.5, 0x241812, 0.6);
-        for (let y = 14, f = 0; y < 70; y += 14, f++) { e.lineBetween(230, y, 1170, y); for (let x = 230 + (f % 2) * 20; x < 1170; x += 40) e.lineBetween(x, y, x, y + 14); }
-        e.fillStyle(0x4a443a, 1).fillRect(250, BASE - 24, 900, 24);
-        e.fillStyle(0x000000, 0.25).fillRect(250, BASE, 900, 10);
-        [430, 970].forEach(x => {
+        for (let y = 14, f = 0; y < 70; y += 14, f++) { e.lineBetween(0, y, A, y); for (let x = (f % 2) * 20; x < A; x += 40) e.lineBetween(x, y, x, y + 14); }
+        e.fillStyle(0x4a443a, 1).fillRect(0, BASE - 24, A, 24);
+        e.fillStyle(0x000000, 0.25).fillRect(0, BASE, A, 10);
+        [120, 680].forEach(x => {
             e.fillStyle(0x0a0608, 1).fillRect(x - 28, 150, 56, 70).lineStyle(3, 0x2a241c, 1).strokeRect(x - 28, 150, 56, 70);
             e.lineStyle(3, 0x3a3a42, 1);
             for (let k = 1; k < 4; k++) e.lineBetween(x - 28 + k * 14, 150, x - 28 + k * 14, 220);
@@ -294,12 +294,12 @@ class ZonaGirgolesFora extends ZonaBase {
 
         // La porta de ferro (marc de pedra amb arc), sempre visible
         this.portaG = this.add.graphics().setDepth(-940);
-        this.pintarPorta(Estat.flag('portaSoterraniOberta'));
         const oberta = Estat.flag('portaSoterraniOberta');
-        this.colisio(435, BASE / 2, 370, BASE);                              // paret a banda i banda de la porta
-        this.colisio(965, BASE / 2, 370, BASE);
+        this.pintarPorta(oberta);
+        this.colisio((PX - 80) / 2, BASE / 2, PX - 80, BASE);                // paret a banda i banda de la porta
+        this.colisio((PX + 80 + A) / 2, BASE / 2, A - PX - 80, BASE);
         this.colisio(PX, 205, 160, 20);                                      // res no passa per darrere de l'obertura
-        this.cartell(545, 345, DIALEGS.cartellGirgoles);
+        this.cartell(PX - 130, 345, DIALEGS.cartellGirgoles);
         if (oberta) this.sortida(PX - 80, 230, 160, 70, 'ZonaSotaTaverna', 'exterior');
         else {
             this.colPorta = this.colisio(PX, 200, 160, 200);
@@ -307,20 +307,11 @@ class ZonaGirgolesFora extends ZonaBase {
             this.interactiu(PX, 340, 90, DIALEGS.portaSoterrani, { altura: 120, actiu: () => !Estat.flag('portaSoterraniOberta'), enTancar: () => this.obrirPorta() });
         }
 
-        // Arbres: una corona al voltant de la plaça (sense tapar el camí de l'oest ni el de la porta) i les vores del món
-        for (let a = 0; a < 360; a += 40) {
-            const r = a * Math.PI / 180, dx = Math.cos(r), dy = Math.sin(r);
-            if (dx < -0.8 || dy < -0.8) continue;
-            this.posar('arbre', CX + dx * (R + 85), CY + dy * (R + 60), { col: { w: 34, h: 16 } });
-        }
-        this.muralla(40, 340, 250, 340, 130);
-        this.muralla(1150, 340, 1360, 340, 130);
-        this.muralla(40, 340, 40, 600, 130);
-        this.muralla(40, 800, 40, 980, 130);
-        this.muralla(1360, 340, 1360, 980, 130);
-        this.muralla(40, 980, 1360, 980, 130, 'arbre', false);
+        // Pocs arbres i escampats amb naturalitat: cap no arriba a tocar l'edifici (les capçades fan uns 280 d'alt: els de dalt, més petits)
+        [[62, 520, 0.7], [735, 545, 0.75], [70, 880], [150, 1060, 0.9], [340, 1085], [600, 1070, 0.85], [740, 950]]
+            .forEach(([x, y, esc]) => this.posar('arbre', x, y, esc ? { escala: esc } : {}));
 
-        this.sortida(0, 640, 14, 130, 'ZonaCellerFora', 'girgoles');
+        this.sortida(0, 560, 14, 120, 'ZonaCellerFora', 'girgoles');
     }
 
     // Porta de ferro en un marc de pedra amb arc: dues fulles amb reblons; oberta, es veu l'escala que baixa
