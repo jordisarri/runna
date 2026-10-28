@@ -122,7 +122,7 @@ class ZonaBase extends Phaser.Scene {
         cam.fadeIn(350, 0, 0, 0);
 
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.tecles = this.input.keyboard.addKeys('W,A,S,D,E,SPACE,ENTER,J,M,F');
+        this.tecles = this.input.keyboard.addKeys('W,A,S,D,E,SPACE,ENTER,J,M');
 
         // Indicador "!" sobre el punt interactiu més proper
         this.indicador = this.add.text(0, 0, '!', estilText(28, '#ffd34d', { stroke: '#000', strokeThickness: 5, fontStyle: 'bold' }))
@@ -776,7 +776,7 @@ class ZonaBase extends Phaser.Scene {
         }
     }
 
-    // ---------------- Esbarzers negres i foc de la Jaumeta ----------------
+    // ---------------- Esbarzers negres ----------------
     // id: nom únic perquè no tornin a créixer un cop cremats
     esbarzer(x, y, id) {
         if (id && Estat.flag('esb_' + id)) return null;
@@ -830,54 +830,19 @@ class ZonaBase extends Phaser.Scene {
         });
     }
 
-    destruirEsbarzer(o, foc) {
+    destruirEsbarzer(o) {
         Sfx.talla();
         if (!o.viu) return;
         o.viu = false;
         if (o.id) Estat.posaFlag('esb_' + o.id);
         this.obstacles.remove(o.col, true, true);
-        if (foc) o.img.setTint(0xff8030);
         const p = this.add.particles(o.x, o.y - 30, 'espurna', {
             speed: { min: 30, max: 110 }, lifespan: 700, scale: { start: 0.9, end: 0 },
-            tint: foc ? [0xff8030, 0xffd040] : [0xc070ff, 0x6a3a9a], quantity: 10, emitting: false
+            tint: [0xc070ff, 0x6a3a9a], quantity: 10, emitting: false
         }).setDepth(99990);
         p.explode(14);
         this.time.delayedCall(900, () => p.destroy());
         this.tweens.add({ targets: o.img, alpha: 0, scaleY: o.img.scaleY * 0.6, duration: 600, onComplete: () => o.img.destroy() });
-    }
-
-    // Petar de dits de la Jaumeta: flama cap on mires; crema esbarzers i fa mal als enemics
-    foc() {
-        const ara = this.time.now;
-        if (this.config.pacifica || ara < (this.focFins || 0) || this.caient) return;
-        this.focFins = ara + 1300;
-        const d = DIRS[this.direccio] || DIRS.avall;
-        const jo = this.ineu.body.center;
-        const fx = jo.x + d.x * 64, fy = jo.y + d.y * 64 - 14;
-        const flama = this.add.circle(fx, fy, 14, 0xffa030, 0.85).setDepth(99990);
-        this.tweens.add({ targets: flama, radius: 52, alpha: 0, duration: 420, onComplete: () => flama.destroy() });
-        const p = this.add.particles(fx, fy, 'espurna', {
-            speed: { min: 30, max: 120 }, lifespan: 500, scale: { start: 1, end: 0 },
-            tint: [0xff8030, 0xffd040, 0xff4010], quantity: 10, emitting: false
-        }).setDepth(99991);
-        p.explode(16);
-        this.time.delayedCall(700, () => p.destroy());
-        this.forcat = { vx: -d.x * 60, vy: -d.y * 60, fins: ara + 80 };
-        this.enemics.forEach(e => {
-            if (e.mort) return;
-            const c = e.spr.body.center;
-            if (Phaser.Math.Distance.Between(c.x, c.y, fx, fy) < 64 + e.def.radi) this.colpejar(e, 1, d);
-        });
-        this.esbarzers.forEach(o => { if (o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, fx, fy) < 90) this.destruirEsbarzer(o, true); });
-        if (this.enFoc) this.enFoc(fx, fy);
-    }
-
-    // Amb la Jaumeta, l'acció (un sol toc) crema l'esbarzer que tens a davant en lloc d'atacar
-    esbarzerDavant() {
-        if (!Estat.te('foc_jaumeta') || Estat.te('runna')) return false;
-        const d = DIRS[this.direccio] || DIRS.avall;
-        const jo = this.ineu.body.center;
-        return this.esbarzers.some(o => o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, jo.x + d.x * 64, jo.y + d.y * 64) < 130);
     }
 
     // ---------------- Música ----------------
@@ -1022,9 +987,7 @@ class ZonaBase extends Phaser.Scene {
         const flauta = accio && this.flautaActiva();
         if (flauta && (flauta.prioritat || !proper || Phaser.Math.Distance.Between(proper.x, proper.y, flauta.x, flauta.y) < 80)) this.obrirMusica();
         else if (accio && proper) this.interactuar(proper);
-        else if (accio && this.esbarzerDavant()) this.foc();
         else if (accio || T(this.tecles.J)) this.atacar();
-        if (Estat.te('foc_jaumeta') && T(this.tecles.F)) this.foc();
         time = this.time.now;   // un sol rellotge per a tot el combat
         this.actualitzarCombat(time);
         this.comprovarSortides();

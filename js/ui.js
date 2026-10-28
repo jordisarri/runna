@@ -198,7 +198,7 @@ class EscenaUI extends Phaser.Scene {
         let mida = 20;
         this.textObjectiu.setFontSize(mida);
         while (this.textObjectiu.height > 52 && mida > 14) this.textObjectiu.setFontSize(--mida);
-        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + (Estat.te('foc_jaumeta') ? ' · F: foc' : '') + ' · I: sarró · ESC: menú');
+        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + ' · I: sarró · ESC: menú');
     }
 
     // Quan queda un sol gra o menys, l'últim gra bategueja

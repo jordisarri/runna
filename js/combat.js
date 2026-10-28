@@ -590,7 +590,7 @@ Object.assign(ZonaBase.prototype, {
         // Runna talla els esbarzers negres
         if (runna) {
             const px = jo.x + d.x * 55, py = jo.y + d.y * 55;
-            this.esbarzers.forEach(o => { if (o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, px, py) < 85) this.destruirEsbarzer(o, false); });
+            this.esbarzers.forEach(o => { if (o.viu && Phaser.Math.Distance.Between(o.x, o.y - 20, px, py) < 85) this.destruirEsbarzer(o); });
         }
         if (this.alAtacar) this.alAtacar(jo, d);          // les zones poden reaccionar al cop (les arrels del Til·ler)
     },

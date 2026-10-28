@@ -73,7 +73,7 @@ class ZonaErmita extends ZonaBase {
         this.terra('cami', 240, 640, 160, 360);          // baixa cap a l'Era (a la banda esquerra)
 
         // Ermita gran (620 d'ample): la porta fa ~177 d'alt, més que l'Ineu
-        this.edifici('ermita', 500, 600, 590, 110, 'ZonaErmitaInt', 'ermita', { alt: 90 });
+        this.edifici('ermita', 500, 600, 590, 110, 'ZonaErmitaInt', 'porta', { alt: 90 });
         this.portaAnimada({ x: 500, top: 391, bottom: 570, ample: 124, fons: 580, color: 0xa8543a, vora: 0x3a1a0c, ferro: true });   // la porta de fusta vermella, amb ferros
         // Xiprers alts als costats de l'ermita (com a la capella real)
         [[130, 600, 1.5], [870, 600, 1.5], [60, 560, 1.35], [940, 560, 1.35], [100, 500, 1.2], [900, 500, 1.2], [30, 620, 1.3], [970, 620, 1.3]].forEach(([x, y, e]) => this.posar('xiprer', x, y, { escala: e, col: { w: 26, h: 12 } }));
