@@ -170,8 +170,8 @@ const SPRITE_INEU = {
  * fotograma a fotograma (taula ATAC_ARMA a js/atac_arma.js).
  */
 const ATAC_INEU = {
-    fotogrames: [0, 1, 2, 3, 4, 5, 12, 13, 14, 15],   // alçada, cop, posició i tornada (els 6-11 són gairebé repòs)
-    fps: 28
+    fotogrames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],   // els 16 de la fulla: alçada, cop, posició i tornada
+    fps: 40                                                              // 16 fotogrames a 40 fps = 0,4 s (el mateix que abans amb 10 a 28)
 };
 // Octants de moviment (angle en pantalla, y cap avall) -> direcció del sprite
 // Fotograma de repòs d'una vista (a la fulla de perfil és el de les cames més juntes, calculat en carregar-la)

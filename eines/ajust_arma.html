@@ -43,7 +43,7 @@
     <label>Velocitat <select id="vel"><option value="1">1× (joc)</option><option value="0.5">0,5×</option><option value="0.25">0,25×</option><option value="0.1">0,1×</option></select></label>
     <span id="quadre"></span>
     <label title="Dibuixa per sobre l'estela en mitja lluna que fa el joc en atacar: mostra cap a quin costat es mou l'arma"><input id="arcOn" type="checkbox" checked> Arc del cop</label>
-    <small>Graella: els 10 fotogrames de la vista triada (el requadre groc fi és el que s'està reproduint) · Tira de sota: les 8 vistes en moviment amb la mateixa arma</small>
+    <small>Graella: els 16 fotogrames de la vista triada (el requadre groc fi és el que s'està reproduint) · Tira de sota: les 8 vistes en moviment amb la mateixa arma</small>
 </div>
 <div id="alt">
     <div id="wrapG"><canvas id="c"></canvas><canvas id="arcG"></canvas><div id="cursor"></div></div>
@@ -69,8 +69,8 @@
 <script src="../js/atac_arma.js"></script>
 <script>
 const VISTES = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast'];
-const FOTOGRAMES = [0, 1, 2, 3, 4, 5, 12, 13, 14, 15];      // els mateixos que ATAC_INEU.fotogrames al joc
-const FPS = 28;                                              // i ATAC_INEU.fps
+const FOTOGRAMES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];      // els mateixos que ATAC_INEU.fotogrames al joc
+const FPS = 40;                                              // i ATAC_INEU.fps
 const ESC = 0.555;                                           // mida de la cel·la al joc (142/256)
 const ESCALA = 2;                                            // escala de la graella i de la vista prèvia
 const ARMES = {          // la llargada (ARMA_LLARG) i l'agafada (ARMES_ATAC) vénen de js/atac_arma.js: són les mateixes que fa servir el joc
