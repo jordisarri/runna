@@ -495,6 +495,17 @@ const DIALEGS = {
 
     pareAlcui: E => {
         const f1 = E.flag("fragment1"), f2 = E.flag("fragment2");
+        if (E.flag("runna") && E.flag("relTretes") && !E.flag("tombaSegellada") && !E.flag("tombaLlegida")) {
+            return {
+                pagines: [
+                    { qui: "Pare Alcuí", text: "Has baixat a la cripta, oi? Una clau de ferro, i la tomba dels monjos que no para de treure boira... Deixa'm mirar la Crònica." },
+                    { fer: (z, fet) => z.npcVa('pare_alcui', 812, 372, fet, 120) },
+                    { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
+                    { qui: "Pare Alcuí", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." }
+                ],
+                enAcabar: () => { E.posaFlag("tombaLlegida"); E.posaObjectiu("Segella amb Runna la tomba esquerdada del Cementiri (colpeja-la)."); }
+            };
+        }
         if (E.flag("fragment3") && E.flag("benedicioMonjo") && !E.flag("saber")) {
             return {
                 pagines: [

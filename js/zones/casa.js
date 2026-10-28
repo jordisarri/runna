@@ -57,13 +57,12 @@ Object.assign(DIALEGS, {
         pagines: []
     } : {
         pagines: [
-            { qui: 'Ineu', text: "«Qui vulgui entrar on mai no s'ha d'entrar, que passi per sota la Taverna. I la llum que va tancar la porta tancarà també la nostra tomba.»" },
             { avis: "Has obtingut la CLAU DE FERRO." }
         ],
         enAcabar: () => {
             E.dona('clau_ferro'); E.posaFlag('relTretes'); E.posaFlag('clauFerro');
             E.posaObjectiu(E.flag('tombaSegellada') ? "Troba la porta de ferro, darrere de la Taverna, a la part de sota: és l'entrada a la Sala de les Gírgoles."
-                                                   : "La tomba esquerdada del Cementiri treu boira: segella-la amb la llum de Runna (colpeja-la). I després, la porta de ferro de sota la Taverna.");
+                                                   : "Porta la Clau de ferro al Pare Alcuí, a la Biblioteca: la Crònica deu dir què fer amb la tomba dels monjos.");
         }
     },
 
