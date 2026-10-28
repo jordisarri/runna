@@ -104,6 +104,7 @@ const Joc = {
     // Músiques opcionals: es fan servir si el fitxer assets/musica/<fitxer>.m4a existeix; si no, sona la de reserva ('fallback').
     // Així es poden anar afegint cançons una a una sense tocar res més (vegeu art/INSTRUCCIONS_MUSICA.md).
     MUSICA_OPCIONAL: {
+        musica_proleg:     { fitxer: 'light book', fallback: 'musica_intro' },
         musica_celles:     { fitxer: 'celles',     fallback: 'musica_intro' },
         musica_taverna:    { fitxer: 'taverna',    fallback: 'musica_casa' },
         musica_cirosa:     { fitxer: 'cirosa',     fallback: 'musica_bosc' },
@@ -278,7 +279,7 @@ class EscenaProleg extends Phaser.Scene {
         this.acabat = false;
         this.index = -1;
         this.cameras.main.setBackgroundColor('#000000');
-        Joc.iniciarMusica(this);
+        Joc.iniciarMusica(this, 0, 'musica_proleg');
 
         // Full de paper vell per al text (el text s'hi composa justificat, com en un llibre antic)
         this.paper = this.add.image(PAPER_X, PAPER_Y, this.crearPaper()).setOrigin(0).setDepth(50).setScale(1 / RES);
