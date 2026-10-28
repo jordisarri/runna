@@ -21,6 +21,7 @@ const CATALEG_OBJECTES = {
     flauta:           ['Flauta', 'Es toca amb ESPAI allà on la música pot fer efecte.'],
     basto:            ['Bastó de pelegrí', 'Per caminar... i per defensar-se.'],
     basto_tiller:     ['Branca del Til·ler', 'Més lleugera i àgil que el bastó de pelegrí.'],
+    clau_campanar:    ['Clau del campanar', 'Obre la porta de la dreta del retaule, la que duu a la torre del rellotge. La guardaven les Venerables Sàvies.'],
     clau_sagrari:     ['Clau del sagrari', 'Petita, gairebé de joguina. Guardada a l\'ermita.'],
     aigua_sj:         ['Aigua de la Font del Bisbe', 'Aigua beneïda, clara com el vidre.'],
     cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Garf en sabrà fer alguna cosa.'],

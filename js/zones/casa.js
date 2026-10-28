@@ -790,7 +790,7 @@ class ZonaGolfes extends ZonaCasaBase {
     objectiuGolfes() {
         const E = Estat;
         if (this.reparat) return;
-        E.posaObjectiu("Rellotge: posa els engranatges en ordre (I petit, II gran, III mitjà, diu la nota). Toca'ls amb ESPAI per canviar-ne la mida.");
+        E.posaObjectiu("Posa els engranatges del rellotge en ordre.");
         const ui = this.ui(); if (ui && ui.actualitzarHUD) ui.actualitzarHUD();
     }
 

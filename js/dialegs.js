@@ -20,6 +20,17 @@ function pistaRunna(E) { return PROGRES.pistaRunna(E); }
 function pistaActual(E) { return PROGRES.pista(E); }
 
 function consellVenerables(E) {
+    // El rellotge del campanar: són elles qui tenen la clau de la porta del retaule (les partides velles que ja han pujat a la torre no la necessiten)
+    if (!E.te('clau_campanar') && !E.flag('portaCampanarOberta') && !E.flag('rellotgeReparat') && !E.flag('visitada_ZonaTorre')) {
+        return {
+            pagines: [
+                { qui: 'Les Venerables Sàvies', text: "Ai, fill, has vist que el rellotge del campanar s'ha aturat? La porta del retaule que duu a la torre fa anys que és tancada: des que el campaner se'n va, la clau la guardem nosaltres." },
+                { qui: 'Les Venerables Sàvies', text: "Pren-la. Puja per la torre i mira què se li ha espatllat al pobre rellotge, que sense hora tot es fa més llarg." },
+                { avis: 'Has obtingut la CLAU DEL CAMPANAR.' }
+            ],
+            enAcabar: () => { E.dona('clau_campanar'); E.posaFlag('clauCampanar'); }
+        };
+    }
     return { pagines: [{ qui: 'Les Venerables Sàvies', text: "Ai, fill, torna a seure. A veure... " + pistaActual(E) }] };
 }
 
@@ -248,7 +259,7 @@ const DIALEGS = {
                     { qui: 'Pare Daniel', text: 'Ineu! Quina alegria de veure\'t! Vine, vine, que dirigeixo el cor i necessito una veu més.' },
                     { qui: 'Pare Daniel', text: 'La Pianista i jo som amics de tota la vida. Ella toca com ningú, i jo... jo només canto i faig el ximple amb els nens. Però la música es queda sense orgue, ja ho veus.' },
                     { qui: 'Pare Daniel', text: 'No et preocupis: si la música s\'ha amagat, la cantarem perquè torni! Riure és la primera pregària.' },
-                    { qui: 'Pare Daniel', text: 'Ah, i una cosa que em preocupa: el rellotge del campanar s\'ha aturat a les tres i quart, la nit que va arribar la boira. La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' }
+                    { qui: 'Pare Daniel', text: 'Ah, i una cosa que em preocupa: el rellotge del campanar s\'ha aturat a les tres i quart, la nit que va arribar la boira. La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarden les Venerables Sàvies, a les Cel·les. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' }
                 ],
                 enAcabar: () => { E.posaFlag('parlatDaniel'); E.posaFlag('rellotgeDit'); }
             };
@@ -262,17 +273,10 @@ const DIALEGS = {
                 enAcabar: () => E.posaFlag('clauSagrariDita')
             };
         }
-        if (!E.flag('rellotgeReparat') && !E.flag('rellotgeDit')) {
-            return {
-                pagines: [
-                    { qui: 'Pare Daniel', text: 'Ei, Ineu, una cosa més que em preocupa: el rellotge del campanar s\'ha aturat a les tres i quart, la nit que va arribar la boira. I no hi ha manera de saber quina hora és, ni de posar-hi remei.' },
-                    { qui: 'Pare Daniel', text: 'Té, la clau de la porta de la dreta del retaule: puja per la torre fins a la Sala del Rellotge. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa, i a veure si algú pot fer-lo caminar.' }
-                ],
-                enAcabar: () => E.posaFlag('rellotgeDit')
-            };
-        }
         if (!E.flag('rellotgeReparat')) {
-            return { pagines: [{ qui: 'Pare Daniel', text: 'La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s\'ho pensarà dues vegades.' }] };
+            return { pagines: [{ qui: 'Pare Daniel', text: E.te('clau_campanar') || E.flag('portaCampanarOberta')
+                ? 'La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s\'ho pensarà dues vegades.'
+                : 'La porta de la dreta del retaule és tancada, fill: la clau la guarden les Venerables Sàvies, a les Cel·les. Si algú fa caminar el rellotge, potser la boira s\'ho pensarà dues vegades.' }] };
         }
         return { pagines: [{ qui: 'Pare Daniel', text: 'Sents el rellotge, Ineu? Torna a caminar! Fa tres nits que no el sentia. Els nens em diuen que canto massa fort, però avui no cal: ho fa ell per mi!' }] };
     },

@@ -37,6 +37,8 @@ class ZonaEsglesia extends ZonaBase {
 
         // Retaule Major (tot l'ample de la nau, sencer) i, al davant, l'altar de pedra
         this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
+        // La porta de la dreta del peu del retaule: la mateixa del gràfic, que s'obre cap endins (amb la clau del campanar) i duu a la torre
+        this.portaRetaule = this.portaAnimada({ x: 872, top: 868, bottom: 1021, ample: 83, fons: 900, unic: true, arc: true, retall: this.retaule, bloq: () => !this.portaRellotge });
         this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });     // el sagrari, al mig del retaule (fragment 2)
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
 
@@ -45,10 +47,13 @@ class ZonaEsglesia extends ZonaBase {
         this.portaRellotge = false;
         this.obrirPortaRellotge(false);
         this.interactiu(ESG.portaEsq, ESG.retY + 50, 90, () => ({
-            pagines: []
+            pagines: [{ qui: 'Ineu', text: 'Tancada amb clau.' }]
         }), { altura: 150 });
-        this.interactiu(ESG.portaDx, ESG.retY + 50, 90, () => ({
-            pagines: []
+        this.interactiu(ESG.portaDx, ESG.retY + 50, 90, () => Estat.te('clau_campanar') ? ({
+            pagines: [{ qui: 'Ineu', text: 'La clau del campanar encaixa al pany. La porta s\'obre.' }],
+            enAcabar: () => { Estat.posaFlag('portaCampanarOberta'); Sfx.secret(); this.obrirPortaRellotge(false); }
+        }) : ({
+            pagines: [{ qui: 'Ineu', text: 'Tancada amb clau.' }]
         }), { altura: 150, actiu: () => !this.portaRellotge });
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daniel, que dirigeix el cor
@@ -146,8 +151,9 @@ class ZonaEsglesia extends ZonaBase {
     enEntrar() {
         if (this.dadesEntrada.entrada !== 'golfes' || this.dadesEntrada.restaurar) return;
         this.entradaPropia = true;
-        const I = this.ineu, x = ESG.portaDx, y0 = ESG.retY - 10, y1 = ESG.retY + 110, darrere = this.retaule.depth - 1;
+        const I = this.ineu, x = ESG.portaDx, y0 = ESG.retY - 10, y1 = ESG.retY + 110, darrere = this.retaule.depth + 1.5;      // dins del forat de la porta: sobre la foscor, sota el batent
         this.canviant = true;
+        this.portaRetaule.forcaFins = this.time.now + 1800;                                                                       // la porta s'obre per deixar-lo sortir
         I.body.checkCollision.none = true;
         I.setPosition(x, y0).setDepth(darrere);
         this.ombraIneu.setVisible(false);
@@ -171,9 +177,8 @@ class ZonaEsglesia extends ZonaBase {
 
     // Obre la porta de la dreta del retaule si el Pare Daniel ja ha parlat del rellotge (també a mitja visita)
     obrirPortaRellotge(avis) {
-        if (this.portaRellotge || !(Estat.flag('rellotgeDit') || Estat.flag('rellotgeReparat'))) return;   // (partides velles: ja hi havien pujat)
-        this.portaRellotge = true;
-        this.retaule.setTexture('retaule_obert').setScale(this.textures.get('retaule_obert').customData.escala || 1 / RES);   // el gràfic amb la porta oberta
+        if (this.portaRellotge || !(Estat.flag('portaCampanarOberta') || Estat.flag('rellotgeReparat') || Estat.flag('visitada_ZonaTorre'))) return;   // (partides velles: ja hi havien pujat)
+        this.portaRellotge = true;                // el batent de la porta (portaRetaule) ja no queda bloquejat: s'obre quan l'Ineu s'hi acosta
         this.sortida(ESG.portaDx - 36, ESG.retY - 14, 72, 20, 'ZonaTorre', 'baix');
         if (avis) {
             Sfx.secret();

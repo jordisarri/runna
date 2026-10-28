@@ -36,7 +36,6 @@ const CATALEG = [
     { key: 'caseta_joc',   file: 'assets/edificis/caseta_joc.png',   amplada: 270, provisional: (c, w) => dibuixarCasetaJoc(c, w) },
     { key: 'xiprer',       file: 'assets/natura/xiprer.webp',       amplada: 80,  provisional: (c, w) => dibuixarXiprer(c, w) },
     { key: 'retaule',      file: 'assets/edificis/retaule_tancat.webp', amplada: 800, provisional: (c, w) => dibuixarRetauleBarroc(c, w) },
-    { key: 'retaule_obert', file: 'assets/edificis/retaule_obert.webp', amplada: 800, provisional: (c, w) => dibuixarRetauleBarroc(c, w) },   // porta de la dreta oberta (torre del rellotge)
 
     // ---- Edificis nous ----
     { key: 'sala_pingpong', file: 'assets/edificis/sala_pingpong.webp', amplada: 1200, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.62, '#d8c8a8', '#3a5a8a', 'Sala del Ping-pong') },
