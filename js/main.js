@@ -263,11 +263,11 @@ class EscenaCarrega extends Phaser.Scene {
 // Els quadres amb vitrall (assets/proleg/<dibuix>.webp) es veuen amb un zoom enrere (Ken Burns): comencen sobre l'escena del vitrall i s'allunyen fins a
 // mostrar la finestra de la catedral. `vitrall: [x, y, zoom]`: centre de l'escena (fracció de la imatge) i zoom inicial (segons com d'alt sigui el vidre); a l'inici queda a la part de dalt de la pantalla, per damunt de la caixa del text. Si la imatge no hi és, es fa servir el dibuix de codi.
 const PROLEG_QUADRES = [
-    { text: "Fa tres-cents anys, un firaire pujava cada primavera al Miracle amb gàbies plenes d'ocells que cantaven com persones: l'Ocellaire.\nEls nens que l'escoltaven es quedaven sense riure.", dibuix: 'ocellaire', vitrall: [0.515, 0.50, 1.95] },
-    { text: "Els pastors de la Cirosa i els monjos el van tancar dins la seva pròpia gàbia, sota terra. Un monjo va segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la va deixar dormint entre pedres.", dibuix: 'segell', vitrall: [0.515, 0.50, 1.95] },
-    { text: "Ara, fa tres nits, una boira freda i lila surt de sota terra. Marceix els horts, entela l'aigua i fa callar l'orgue del Santuari.", dibuix: 'boira', vitrall: [0.513, 0.497, 1.95] },
-    { text: "I cada nit falta un nen.\nL'Huri i el Flami, de Sant Benet.\nI aquesta nit... el Sardi, el nebot de les sacerdotesses.", dibuix: 'nens', vitrall: [0.51, 0.4475, 1.6] },
-    { text: "Matí. Al Monestir, l'Ineu, el monjo més jove, es desperta.\nEl Pare Jordi el busca a la Plaça.", dibuix: 'mati', vitrall: [0.502, 0.515, 2.2] }
+    { text: "Fa tres segles, quan el món encara tremolava de pregàries, un firaire de capa negra pujava cada primavera al Miracle amb gàbies d'ocells que cantaven amb veu de persona: l'Ocellaire. I els nens que l'escoltaven perdien el riure per sempre.", dibuix: 'ocellaire', vitrall: [0.515, 0.50, 1.95] },
+    { text: "Pastors i monjos s'alçaren contra ell i el van tancar dins la seva pròpia gàbia, al més profund de la terra. Els monjos van segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la van fer dormir entre pedres, a l'espera del dia en què la foscor tornés.", dibuix: 'segell', vitrall: [0.515, 0.50, 1.95] },
+    { text: "Però la foscor no oblida. Fa tres nits, una boira violeta i glaçada s'ha alçat de sota terra: marceix els horts, enterboleix les aigües i ha fet emmudir l'orgue sagrat del Santuari.", dibuix: 'boira', vitrall: [0.513, 0.497, 1.95] },
+    { text: "I cada nit, la boira reclama un nen.\nPrimer l'Huri i el Flami, a Sant Benet.\nI ara, en aquesta nit maleïda... el Sardi, el nebot de les sacerdotesses.", dibuix: 'nens', vitrall: [0.51, 0.4475, 1.6] },
+    { text: "Quan l'alba torna a incendiar el cel del Miracle, un jove monjo desperta al Monestir: l'Ineu.\nEl destí l'ha triat, encara que ell no ho sàpiga. El Pare Jordi l'espera a la Plaça.", dibuix: 'mati', vitrall: [0.502, 0.515, 2.2] }
 ];
 
 const PAPER_X = 30, PAPER_W = AMPLE - 60, PAPER_H = 285, PAPER_Y = ALT - 365;      // full de paper vell del text del pròleg

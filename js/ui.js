@@ -302,10 +302,10 @@ class EscenaUI extends Phaser.Scene {
     }
 
     // Missatge llegible: surt al quadre de baix, com qualsevol diàleg, i el joc s'atura fins que es llegeix.
-    // Si ja hi ha un diàleg obert, es queda amb l'avís de sempre.
+    // Si ja hi ha un diàleg obert, es posa a la cua i surt just quan es tanqui.
     missatge(text, fet) {
-        if (this.dialeg) { this.notifica(String(text).replace(/\n/g, ' ')); if (fet) fet(); return; }
-        this.obrirDialeg({ pagines: [{ text }] }, fet);
+        if (this.dialeg) { (this.cuaMissatges = this.cuaMissatges || []).push({ text, fet }); return; }
+        this.obrirDialeg({ pagines: [{ avis: text }] }, fet);
     }
 
     // ---------------- CINEMÀTIQUES I BOSSES ----------------
@@ -385,14 +385,9 @@ class EscenaUI extends Phaser.Scene {
     }
 
     mostrarPagina() {
-        const p = this.dialeg.dades.pagines[this.dialeg.pagina];
-        // Pàgina d'avís ({ avis: 'Has obtingut...' }): un avís petit a la pantalla (sense caixa de diàleg) i es continua de seguida
-        if (p.avis !== undefined) {
-            this.notifica(p.avis);
-            this.dialeg.pagina++;
-            if (this.dialeg.pagina < this.dialeg.dades.pagines.length) this.mostrarPagina(); else this.tancarDialeg();
-            return;
-        }
+        let p = this.dialeg.dades.pagines[this.dialeg.pagina];
+        // Pàgina d'avís ({ avis: 'Has obtingut...' }): es veu a la caixa de text, sense nom, i es passa amb un clic com la resta
+        if (p.avis !== undefined) p = { qui: '', text: p.avis, avis: true };
         // Pàgina d'acció: no hi ha text, el personatge ho fa (camina, salta, dona una cosa...) i després es continua
         if (p.fer) {
             this.caixa.setVisible(false);
@@ -416,7 +411,7 @@ class EscenaUI extends Phaser.Scene {
         this.lletres = 0;
         this.textDialeg.setText('');
         // La veu del narrador, en cursiva i en un to vermellós; els personatges, en tinta fosca
-        this.textDialeg.setColor(p.qui ? '#2a170b' : '#5a2410').setFontStyle(p.qui ? 'normal' : 'italic');
+        this.textDialeg.setColor(p.qui || p.avis ? '#2a170b' : '#5a2410').setFontStyle(p.qui || p.avis ? 'normal' : 'italic');
         this.indicador.setVisible(false);
         if (this.timerText) this.timerText.remove();
         this.timerText = this.time.addEvent({
@@ -452,6 +447,10 @@ class EscenaUI extends Phaser.Scene {
         if (dades.enAcabar) dades.enAcabar();
         if (enTancar) enTancar();
         this.actualitzarHUD();
+        if (!this.dialeg && this.cuaMissatges && this.cuaMissatges.length) {          // missatges que han arribat mentre hi havia un diàleg obert
+            const m = this.cuaMissatges.shift();
+            this.time.delayedCall(250, () => this.missatge(m.text, m.fet));
+        }
     }
 
     // Tria entre dues (o més) respostes, com «Sí» / «No»: botons grans que es toquen o es trien amb ← → (A D) i ESPAI/ENTER.
@@ -497,7 +496,6 @@ class EscenaUI extends Phaser.Scene {
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
             { text: 'Diari i mapa', fn: () => { this.tancarMenu(); this.obrirInventari('mapa'); } },
-            { text: 'Desar partida', fn: () => { this.tancarMenu(); this.desar(); } },
             { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];
         this.textOpcions = this.opcions.map((o, i) => {
@@ -567,7 +565,7 @@ class EscenaUI extends Phaser.Scene {
     desar() {
         const zona = Joc.zonaActiva(this);
         if (zona) zona.guardarPosicio();
-        this.notifica(Estat.desar() ? 'Partida desada' : 'No s\'ha pogut desar');
+        Estat.desar();                      // la partida es desa sola: cap avís
     }
 
     // ---------------- CONTROLS TÀCTILS ----------------

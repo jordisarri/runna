@@ -300,7 +300,6 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
             enAcabar: () => {
                 Estat.dades.vida = Estat.dades.corsMax * 2;
                 this.ui().actualitzarHUD(); this.guardarPosicio(); Estat.desar();
-                this.ui().notifica('Partida desada');
             }
         };
     }

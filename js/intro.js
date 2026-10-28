@@ -10,8 +10,8 @@ const FONT_TEXT = '"Cormorant Garamond", Georgia, "Times New Roman", serif';   /
 const FONT_LLIBRE = '"IM Fell English", "Cormorant Garamond", Georgia, serif';             // text de llibre antic (pròleg)
 const FONT_PLACA = '"Cinzel", Georgia, serif';                                   // noms i títols a la interfície
 
-// The Hero's Ascension: la fem començar al segon 18
-const MUSICA_INICI_INTRO = 18;
+// The Hero's Ascension: la fanfarria comença al segon 17 de la cançó. La música arrenca d'aquí, des del primer segon de la intro.
+const MUSICA_FANFARRIA = 17;
 const FOSA_BUCLE = 500;
 // Si el vídeo no avança en aquest temps (el mòbil l'ha bloquejat), passem directament al bucle
 const ESPERA_VIDEO = 2500;
@@ -42,7 +42,7 @@ class EscenaTitol extends Phaser.Scene {
         if (this.mode === 'intro') {
             this.construirPortada();
         } else {
-            Joc.iniciarMusica(this, MUSICA_INICI_INTRO);
+            Joc.iniciarMusica(this, MUSICA_FANFARRIA);
             this.videoIntro.setVisible(false);
             this.anarAlBucle(false);
             this.cameras.main.fadeIn(600);
@@ -80,7 +80,7 @@ class EscenaTitol extends Phaser.Scene {
             this.fase = 'intro';
             this.portada.destroy();
             // Tot dins del gest de l'usuari: el mòbil bloqueja play() si s'espera al desbloqueig de l'àudio
-            Joc.iniciarMusica(this, MUSICA_INICI_INTRO);
+            Joc.iniciarMusica(this, MUSICA_FANFARRIA);
             const v = this.videoIntro;
             v.setVisible(true);
             if (v.video) v.video.currentTime = 0;

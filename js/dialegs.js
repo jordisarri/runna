@@ -40,7 +40,7 @@ function premiMonja(nom, flag) {
     if (E.flag('premiPains') && E.flag('premiPhili') && E.flag('premiCharm')) {
         E.posaFlag('mongesTrobades');
         E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;      // un sol gra pel conjunt de les tres germanes
-        if (ui) { ui.actualitzarHUD(); ui.notifica('+1 gra al rosari: les tres germanes'); }
+        if (ui) { ui.actualitzarHUD(); ui.missatge('+1 gra al rosari: les tres germanes'); }
         E.posaObjectiu("Les tres sacerdotesses són lliures i han obert la porta de l'Hostatgeria per dins: hi ha un lloc de repòs al vestíbul.");
     } else {
         const f = ['Pains', 'Phili', 'Charm'].filter(n => !E.flag('premi' + n));
@@ -57,8 +57,8 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pare Jordi", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
-                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira lila surt de sota terra, i cada nit falta un nen: l'Huri i el Flami, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el nebot de les sacerdotesses de l'Hostatgeria." },
-                    { qui: "Pare Jordi", text: "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada... i, diu la Neus, un piular d'ocells que no se sap d'on ve." },
+                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira violeta surt de sota terra, i cada nit falta un nen: l'Huri i el Flami, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el nebot de les sacerdotesses de l'Hostatgeria." },
+                    { qui: "Pare Jordi", text: "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada." },
                     { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot. Ves amb compte pels camins, Ineu." }
                 ],
                 enAcabar: () => {
@@ -126,19 +126,13 @@ const DIALEGS = {
 
     bassadoria: E => E.flag("bassadoriaNeta") ? ({ pagines: [] }) : ({
         pagines: [
-            { qui: "Ineu", text: "L'aigua sempre ha estat clara... Ara és tèrbola i fa olor de soterrani. I en surten aquests gripaus enverinats i una boira lila, a glopades." }
+            { qui: "Ineu", text: "L'aigua sempre ha estat clara... Ara és tèrbola i fa olor de soterrani. I en surten aquests gripaus enverinats i una boira violeta, a glopades." }
         ]
     }),
 
     creu: E => ({
         pagines: [
             { qui: 'Ineu', text: 'Avui les flors estan pansides. Com si la boira se\'n begués el color.' }
-        ]
-    }),
-
-    reixa: E => ({
-        pagines: [
-            { qui: 'Ineu', text: 'Per aquesta reixa del terra surt boira. És freda com el gel... i sembla que respiri.' }
         ]
     }),
 

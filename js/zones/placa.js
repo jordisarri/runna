@@ -8,6 +8,7 @@ class ZonaPlaca extends ZonaBase {
     constructor() {
         super('ZonaPlaca', {
             nom: 'Plaça del Santuari',
+            densitatBoira: 1.8,                // la boira del Miracle és més espessa aquí, a prop d'on neix
             amplada: 1600,
             alcada: 1200,
             entrades: {
@@ -60,7 +61,6 @@ class ZonaPlaca extends ZonaBase {
         // --- Reixes del terra per on surt la boira ---
         [[600, 625], [1080, 650], [870, 975]].forEach(([x, y]) => {
             this.posar('reixa', x, y, { fonsY: -900 });
-            this.interactiu(x, y - 10, 45, DIALEGS.reixa, { altura: 40 });
             this.boira(x, y - 14, 40, 10, 0.8);
         });
 
@@ -86,9 +86,6 @@ class ZonaPlaca extends ZonaBase {
         // Visitants corromputs per la boira
         this.enemic('visitant', 700, 930);
         this.enemic('escolopendra', 1450, 800);
-
-        // Vel lila: el santuari està tocat per la boira
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, 0.10).setScrollFactor(0).setDepth(90000);
     }
 
     // El Cant de les Pedres, tocat davant la pedra de la cantonada, la fa girar

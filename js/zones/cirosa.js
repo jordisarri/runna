@@ -99,7 +99,6 @@ class ZonaCamiCirosa extends ZonaBase {
     descansar() {
         Estat.dades.vida = Estat.dades.corsMax * 2;
         this.ui().actualitzarHUD(); this.guardarPosicio(); Estat.desar();
-        this.ui().notifica('Partida desada');
     }
 }
 
@@ -362,6 +361,5 @@ class ZonaMasiaCirosa extends ZonaBase {
     descansar() {
         Estat.dades.vida = Estat.dades.corsMax * 2;
         this.ui().actualitzarHUD(); this.guardarPosicio(); Estat.desar();
-        this.ui().notifica('Partida desada');
     }
 }

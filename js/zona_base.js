@@ -19,6 +19,25 @@ const TRONC_ARBRE = esc => ({ w: Math.round(100 * esc), h: Math.round(36 * esc) 
 
 const PROFUNDITAT_PORTA = 36;   // els interiors es surten per sota de la porta: l'Ineu l'ha de traspassar abans de canviar de zona
 const MARGE_TEULADA = 62;   // mig cos de l'Ineu: la col·lisió d'un edifici comença així de baix de la seva teulada, i per dalt es pot passar-hi darrere
+// Missions que fan marxar la boira del Miracle (cadascuna n'esvaeix una part); la boira no desapareix del tot fins que cau l'Ocellaire
+const BOIRA_PASSOS = [
+    E => E.flag('bassadoriaNeta'),                                         // Bassadòria: Cant de l'Aurora
+    E => E.flag('fontNeta'),                                               // Font del Bisbe: les tres ofrenes
+    E => E.flag('boiraTillerNeta'),                                        // Camí del Gran Til·ler: beuratge de la Jaumeta
+    E => E.flag('pastorVencut'),                                           // Cirosa: Pastor de Boira
+    E => E.flag('boiraDolmenNeta'),                                        // Camí del Dolmen: Estel de Sant Llorenç
+    E => E.flag('tombaSegellada') || E.flag('relIquiesRetornades')         // Cementiri: Runna segella la tomba
+];
+const BOIRA_MINIM = 0.2;                                                  // el que en queda quan s'han fet totes, fins al combat final
+// 1 = tota la boira; 0 = cap (només quan l'Ocellaire és vençut)
+function nivellBoira() {
+    if (Estat.flag('ocellaireVencut')) return 0;
+    const fets = BOIRA_PASSOS.filter(f => f(Estat)).length;
+    return 1 - (1 - BOIRA_MINIM) * fets / BOIRA_PASSOS.length;
+}
+
+const PAS_PORTA = 44;       // en passar una porta (o qualsevol sortida), l'Ineu camina aquests píxels més cap a la foscor abans de canviar d'escena, i en arribar en camina altres tants cap endins
+const MS_PAS_PORTA = 450;
 const TOPE_Y = 100;   // els peus de l'Ineu no passen d'aquí amunt: sempre se li veu el cos (la càmera s'atura a y=0)
 
 class ZonaBase extends Phaser.Scene {
@@ -70,6 +89,7 @@ class ZonaBase extends Phaser.Scene {
         this.construirCamins();
         this.crearIneu();
         this.posarBoiraSortides();
+        this.posarBoiraGeneral();
         Grafics.alliberar(this.textures, this.scene.key);      // fora les textures grans de la zona anterior (vegeu Grafics, a assets.js)
 
         const cam = this.cameras.main;
@@ -100,6 +120,7 @@ class ZonaBase extends Phaser.Scene {
         Estat.desar();
 
         if (this.enEntrar) this.enEntrar();
+        if (this.dadesEntrada.entrada && !this.dadesEntrada.restaurar && !Estat.caigut) this.pasEntrada(this.posEntrada);
         if (Estat.caigut) {
             Estat.caigut = false;
             this.time.delayedCall(600, () => ui.obrirDialeg({ pagines: [
@@ -583,9 +604,14 @@ class ZonaBase extends Phaser.Scene {
         // Una sortida enganxada a la vora superior s'allarga fins on l'Ineu pot arribar (TOPE_Y)
         if (y < TOPE_Y - 10) h = Math.max(h, TOPE_Y - 10 - y);
         const r = new Phaser.Geom.Rectangle(x, y, w, h);
-        this.sortides.push({ r, desti, entrada, peu });
-        this.marcarSortida(r);
+        const s = { r, desti, entrada, peu };
+        this.sortides.push(s);
+        // Sortida encara tancada (l'inici del joc): ni llum ni paret invisible. Es camina contra el marge com a la resta de l'escenari;
+        // la llum apareix quan s'obre el camí (vegeu posarBoiraSortides)
+        if (this.sortidaTancada(s)) s.pendentLlum = true;
+        else this.marcarSortida(r);
         if (Joc.debug) this.add.rectangle(x, y, w, h).setOrigin(0).setStrokeStyle(2, 0x00ffff).setDepth(99998);
+        return s;
     }
 
     // Sortida: una llum càlida i suau que s'esvaeix cap a dins i una remor de llumetes (focs follets) que s'enlairen
@@ -629,6 +655,38 @@ class ZonaBase extends Phaser.Scene {
     }
 
     // Emissor de boira fosca
+    // ---------------- La boira del Miracle (general) ----------------
+    // Una sola boira per a tot el Santuari: un vel violeta i uns bancs de boira que passen per davant de la càmera a totes les zones
+    // d'exterior. Va marxant a poc a poc a mesura que es resolen les missions (BOIRA_PASSOS) i s'esvaeix del tot quan cau l'Ocellaire.
+    // Si una missió es resol dins de la mateixa zona, es veu com la boira s'aclareix. config.densitatBoira: més espessa a prop d'on neix.
+    posarBoiraGeneral() {
+        if (this.esInterior() || this.config.senseBoira) return;
+        const dens = this.config.densitatBoira || 1;
+        const W = AMPLE / ZOOM_CAMERA + 4, H = ALT / ZOOM_CAMERA + 4;
+        const parts = [];                                               // { o, alfa }: el que val cada peça amb la boira al màxim
+        const vel = this.add.rectangle(AMPLE / 2, ALT / 2, W, H, 0x3a1a55, 1).setScrollFactor(0).setDepth(90000).setAlpha(0);
+        parts.push({ o: vel, alfa: Math.min(0.34, 0.14 * dens) });
+        if (this.textures.exists('boira')) {
+            const n = Math.round(4 + 2 * dens);
+            for (let i = 0; i < n; i++) {
+                const x = AMPLE / 2 + (i / (n - 1) - 0.5) * W * 0.9, y = ALT / 2 + (((i * 37) % 7) / 7 - 0.5) * H * 0.9;
+                const b = this.add.image(x, y, 'boira').setTint(0xa878ec).setScrollFactor(0).setDepth(89990 + i * 0.01).setAlpha(0).setDisplaySize(W * 0.7, H * 0.28);
+                parts.push({ o: b, alfa: 0.3 * Math.min(dens, 1.6) });
+                this.tweens.add({ targets: b, x: x + (i % 2 ? 60 : -60), duration: 9000 + i * 1300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+            }
+        }
+        let nivell = nivellBoira(), objectiu = nivell, tw = null;
+        const posa = v => { nivell = v; parts.forEach(p => p.o.setAlpha(p.alfa * v)); };
+        posa(nivell);
+        this.time.addEvent({ delay: 700, loop: true, callback: () => {
+            const n = nivellBoira();
+            if (Math.abs(n - objectiu) < 0.001) return;
+            objectiu = n;
+            if (tw) tw.stop();
+            tw = this.tweens.addCounter({ from: nivell, to: n, duration: 4000, onUpdate: c => posa(c.getValue()) });
+        } });
+    }
+
     boira(x, y, ample = 120, alt = 40, quantitat = 1, to = null) {
         return this.add.particles(x, y, 'boira', {
             ...(to ? { tint: to } : {}),
@@ -664,6 +722,7 @@ class ZonaBase extends Phaser.Scene {
         }
 
         if (pos.y < TOPE_Y + 40) pos = Object.assign({}, pos, { y: TOPE_Y + 40 });
+        this.posEntrada = pos;
         this.ombraIneu = this.add.image(pos.x, pos.y, 'ombra').setScale(0.4).setDepth(-500);
         const S = SPRITE_INEU;
         this.ineu = this.physics.add.sprite(pos.x, pos.y, 'ineu_down', S.quiet).setOrigin(0.5, S.peus / S.alt);
@@ -1171,34 +1230,14 @@ class ZonaBase extends Phaser.Scene {
     }
     sortidaTancada(s) { return !this.iniciObert() && ZONES_INICI.includes(this.scene.key) && !ZONES_INICI.includes(s.desti); }
 
-    // Boira lila espessa a les sortides que encara no es poden fer servir; s'esvaeix sola quan s'obre el camí
+    // Les sortides tancades de l'inici no tenen llum: en obrir-se el camí (bastó + Pare Jordi), apareix la llum i ja es pot passar
     posarBoiraSortides() {
-        if (this.iniciObert() || !ZONES_INICI.includes(this.scene.key)) return;
-        const tancades = this.sortides.filter(s => this.sortidaTancada(s));
-        if (!tancades.length) return;
-        const obj = [];
-        tancades.forEach((s, i) => {
-            // Paret invisible davant de la sortida (no hi arriba): en obrir-se el camí, desapareix amb la boira
-            const r = s.r;
-            const vert = r.width < r.height, ox = vert ? Math.sign(this.config.amplada / 2 - r.centerX) * 30 : 0, oy = vert ? 0 : Math.sign(this.config.alcada / 2 - r.centerY) * 30;
-            obj.push(this.colisio(r.centerX + ox, r.centerY + oy, r.width + (vert ? 70 : 24), r.height + (vert ? 24 : 70)));       // s'estén cap a dins de l'escena
-            const cx = s.r.centerX, cy = s.r.centerY, w = Math.max(s.r.width, 170), h = Math.max(s.r.height, 170);
-            const f = this.boira(cx, cy, w, h, 5).setDepth(6000);
-            obj.push(f);
-            [[0, 0, 1], [-w * 0.18, h * 0.1, 0.8], [w * 0.2, -h * 0.1, 0.9]].forEach(([dx, dy, e], k) => {
-                const n = this.add.image(cx + dx, cy + dy, 'boira').setTint(0xb888ff).setAlpha(0.85).setDepth(5990 + k).setScale(Math.max(w, h) * 0.034 * e);
-                obj.push(n);
-                this.tweens.add({ targets: n, x: n.x + (k - 1) * 14, alpha: 0.55, yoyo: true, repeat: -1, duration: 2600 + i * 300 + k * 500, ease: 'Sine.easeInOut' });
-            });
-        });
+        const pendents = this.sortides.filter(s => s.pendentLlum);
+        if (!pendents.length) return;
         const vig = this.time.addEvent({ delay: 400, loop: true, callback: () => {
             if (!this.iniciObert()) return;
             vig.remove();
-            obj.forEach(o => {
-                if (o.type === 'Zone') { o.destroy(); return; }                      // les parets invisibles, de seguida
-                if (o.stop) o.stop();
-                this.tweens.add({ targets: o, alpha: 0, duration: 1600, onComplete: () => o.destroy() });
-            });
+            pendents.forEach(s => { s.pendentLlum = false; this.marcarSortida(s.r); });
         } });
     }
 
@@ -1207,9 +1246,9 @@ class ZonaBase extends Phaser.Scene {
         const peus = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
         for (const s of this.sortides) {
             if (s.peu ? s.r.contains(b.center.x, b.bottom) : Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r)) {
-                if (this.sortidaTancada(s)) continue;                    // tancada per la boira: no és una sortida (a més, una paret invisible no hi deixa arribar)
+                if (s.pendentLlum) continue;                             // encara tancada: no és una sortida (sense llum; es camina contra el marge)
                 if (s.baixar !== undefined) this.baixarEscala(s);
-                else this.canviarZona(s.desti, s.entrada);
+                else this.canviarZona(s.desti, s.entrada, this.dirSortida(s.r));
                 return;
             }
         }
@@ -1217,8 +1256,7 @@ class ZonaBase extends Phaser.Scene {
 
     // Escala que baixa sota terra cap al nord (un forat, una trapa): ycut és la vora de davant del forat
     sortidaEscala(x, y, w, h, desti, entrada, ycut) {
-        this.sortida(x, y, w, h, desti, entrada);
-        Object.assign(this.sortides[this.sortides.length - 1], { baixar: ycut, xEscala: x + w / 2 });
+        Object.assign(this.sortida(x, y, w, h, desti, entrada), { baixar: ycut, xEscala: x + w / 2 });
     }
 
     // L'Ineu baixa l'escala: camina d'esquena cap al mig de l'escala i s'enfonsa darrere la vora de davant del forat,
@@ -1245,7 +1283,51 @@ class ZonaBase extends Phaser.Scene {
         this.time.delayedCall(1250, () => { this.canviant = false; this.canviarZona(s.desti, s.entrada); });
     }
 
-    canviarZona(desti, entrada) {
+    // Per on surt una sortida: segons la vora de la zona on és el rectangle (igual que marcarSortida)
+    dirSortida(r) {
+        const c = this.config, vora = 20;
+        if (r.x <= vora) return 'esquerra';
+        if (r.right >= c.amplada - vora) return 'dreta';
+        if (r.bottom >= c.alcada - vora) return 'avall';
+        return 'amunt';
+    }
+
+    // L'Ineu camina PAS_PORTA píxels en la direcció dir, sense col·lisions (travessa la porta, la llum, la paret...). amb foscor: s'enfosqueix mentre avança.
+    pasPorta(dir, fet, foscor = false, d = PAS_PORTA) {
+        const I = this.ineu, v = { esquerra: [-1, 0], dreta: [1, 0], amunt: [0, -1], avall: [0, 1] }[dir] || [0, 0];
+        I.body.setVelocity(0);
+        I.body.checkCollision.none = true;
+        this.posarDireccio(dir, true);
+        const x0 = I.x, y0 = I.y;
+        this.tweens.addCounter({
+            from: 0, to: 1, duration: MS_PAS_PORTA,
+            onUpdate: tw => {
+                const f = tw.getValue();
+                I.setPosition(x0 + v[0] * d * f, y0 + v[1] * d * f);
+                this.ombraIneu.setPosition(I.x, I.y);
+                if (foscor) { const c = Math.round(255 * (1 - 0.65 * f)); I.setTint(Phaser.Display.Color.GetColor(c, c, c)); }
+            },
+            onComplete: () => { this.posarDireccio(dir, false); if (fet) fet(); }
+        });
+    }
+
+    // En arribar per una porta, l'Ineu camina una mica cap endins de la sala (el mateix pas que en sortir)
+    pasEntrada(pos) {
+        const ui = this.ui();
+        if (!pos || ui.dialeg || ui.bloquejat) return;
+        const v = { esquerra: [-1, 0], dreta: [1, 0], amunt: [0, -1], avall: [0, 1] }[pos.dir || 'avall'];
+        let d = PAS_PORTA;
+        while (d > 0 && !this.llocLliure(pos.x + v[0] * d, pos.y + v[1] * d)) d -= 8;       // no cap a dins d'un obstacle
+        if (d <= 0) return;
+        this.canviant = true;
+        this.pasPorta(pos.dir || 'avall', () => {
+            this.ineu.body.checkCollision.none = false;
+            this.canviant = false;
+        }, false, d);
+    }
+
+    // dir: per on s'ha sortit (si es coneix): l'Ineu avança un pas més cap a la foscor mentre la pantalla s'enfosqueix
+    canviarZona(desti, entrada, dir) {
         if (this.canviant) return;
         this.canviant = true;
         Sfx.porta();
@@ -1253,8 +1335,13 @@ class ZonaBase extends Phaser.Scene {
         Estat.dades.entrada = entrada;
         Estat.dades.x = null;
         Estat.dades.y = null;
-        this.posarDireccio(this.direccio, false);
-        this.cameras.main.fadeOut(300, 0, 0, 0);
+        if (dir) {
+            this.pasPorta(dir, null, true);
+            this.cameras.main.fadeOut(MS_PAS_PORTA, 0, 0, 0);
+        } else {
+            this.posarDireccio(this.direccio, false);
+            this.cameras.main.fadeOut(300, 0, 0, 0);
+        }
         this.cameras.main.once('camerafadeoutcomplete', () => {
             this.scene.start(desti, { entrada });
         });

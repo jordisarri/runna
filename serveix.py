@@ -84,10 +84,48 @@ def desa_arma(t, llarg, armes, ajust):
     with open(FITXER_ARMA, 'w', encoding='utf-8', newline='') as f:
         f.write(text)
 
+class Tros:
+    """Fitxer limitat a n bytes (per a les respostes parcials 206)."""
+    def __init__(self, f, n):
+        self.f, self.n = f, n
+    def read(self, k=-1):
+        k = self.n if k is None or k < 0 else min(k, self.n)
+        d = self.f.read(k)
+        self.n -= len(d)
+        return d
+    def close(self):
+        self.f.close()
+
 class Handler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store')
+        self.send_header('Accept-Ranges', 'bytes')
         super().end_headers()
+
+    def send_head(self):
+        # Peticions Range (bytes=a-b): imprescindibles perquè <audio> pugui començar una cançó pel mig (la fanfarria de la intro)
+        rang = self.headers.get('Range')
+        cami = self.translate_path(self.path)
+        m = re.match(r'bytes=(\d*)-(\d*)$', (rang or '').strip())
+        if not m or not os.path.isfile(cami) or not (m.group(1) or m.group(2)):
+            return super().send_head()
+        mida = os.path.getsize(cami)
+        if m.group(1):
+            ini = int(m.group(1)); fi = int(m.group(2)) if m.group(2) else mida - 1
+        else:
+            ini = max(0, mida - int(m.group(2))); fi = mida - 1
+        fi = min(fi, mida - 1)
+        if ini > fi:
+            self.send_error(416, 'Requested Range Not Satisfiable')
+            return None
+        f = open(cami, 'rb')
+        f.seek(ini)
+        self.send_response(206)
+        self.send_header('Content-Type', self.guess_type(cami))
+        self.send_header('Content-Range', 'bytes %d-%d/%d' % (ini, fi, mida))
+        self.send_header('Content-Length', str(fi - ini + 1))
+        self.end_headers()
+        return Tros(f, fi - ini + 1)
 
     def do_POST(self):
         resposta, codi = {'ok': False}, 400

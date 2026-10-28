@@ -163,6 +163,7 @@ class ZonaMonestir extends ZonaBase {
         super('ZonaMonestir', {
             pins: { pinyer: 0.35 },
             nom: 'El Monestir',
+            densitatBoira: 1.8,                // la boira del Miracle és més espessa aquí, a prop d'on neix
             amplada: 1600,
             alcada: 800 + D,
             entrades: { placa: { x: 60, y: 520 + D, dir: 'dreta' }, rebedor: { x: 800, y: 494, dir: 'avall' }, inici: { x: 800, y: 540, dir: 'avall' }, cementiri: { x: 1480, y: 70, dir: 'avall' }, santantoni: { x: 1530, y: 560 + D, dir: 'esquerra' } }
@@ -204,13 +205,15 @@ class ZonaMonestir extends ZonaBase {
         this.cartell(1368, 450 + D, () => ({ pagines: [{ qui: 'Cartell', text: '→ Cel·les de Sant Antoni\n↑ El Cementiri (darrere el Monestir i el Santuari)' }] }));
         this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720], [420, 770], [1520, 760], [1090, 770], [750, 780]].map(([x, y]) => [x, y + D]));
 
-        // La boira lila que surt de sota terra jeu a la plaça, davant del Monestir i al peu de l'escalinata, fins que cau l'Ocellaire
+        // La boira violeta que surt de sota terra jeu a la plaça, davant del Monestir i al peu de l'escalinata (vegeu posarBoiraGeneral):
+        // aquí és on és més espessa, i va marxant a mesura que es resolen les missions
         if (!Estat.flag('ocellaireVencut')) {
+            const nivell = () => nivellBoira();
             const vel = this.add.graphics().setDepth(5000);
             vel.fillGradientStyle(0x9a5ae8, 0x9a5ae8, 0x9a5ae8, 0x9a5ae8, 0, 0, 0.5, 0.5).fillRect(0, 440 + D, 1600, 800);
-            this.tweens.add({ targets: vel, alpha: 0.65, yoyo: true, repeat: -1, duration: 3600, ease: 'Sine.easeInOut' });
+            this.tweens.add({ targets: vel, alpha: 0.65 * nivell(), yoyo: true, repeat: -1, duration: 3600, ease: 'Sine.easeInOut' });
             [[800, 590, 1500, 110, 4], [800, 530, 760, 90, 3.2], [420, 660, 800, 120, 3], [1180, 660, 800, 120, 3], [800, 730, 1500, 100, 3]].forEach(([x, y, w, h, q]) => {
-                const f = this.boira(x, y + D, w, h, q);
+                const f = this.boira(x, y + D, w, h, q * nivell());
                 f.setDepth(5100);
             });
         }
@@ -238,34 +241,34 @@ class ZonaCreu extends ZonaBase {
 
     construir() {
         this.terra('herba', 0, 0, 1600, 1000, -1100);
-        this.terra('cami', 1100, 0, 160, 520);          // des de la plaça (nord)
-        this.terra('cami', 300, 440, 960, 140);
-        this.terra('pedra', 560, 250, 360, 190);        // replà de pedra davant la creu
+        this.terra('cami', 1100, 0, 160, 720);          // des de la plaça (nord)
+        this.terra('cami', 300, 600, 960, 140);
+        this.terra('pedra', 830, 710, 360, 190);        // replà de pedra davant la creu
 
         // Creu de l'Aparició (sense cap tanca ni mur al darrere)
-        this.posar('creu', 740, 440, { col: { w: 56, h: 24 } });
-        this.interactiu(740, 445, 95, DIALEGS.creu, { altura: 400 });
-        [[470, 350], [940, 350]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xcfe08a));   // plàtans
+        this.posar('creu', 1010, 900, { col: { w: 56, h: 24 } });
+        this.interactiu(1010, 905, 95, DIALEGS.creu, { altura: 400 });
+        [[760, 860], [1260, 860]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xcfe08a));   // plàtans
 
         // Bassadòria: una bassa molt gran (520 d'ample, uns quatre Ineus), sense mur al darrere; plàtans de tardor als costats
-        [[600, 980], [1430, 980]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xe0b868));
+        [[330, 560], [1070, 560]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xe0b868));
         // Dos dibuixos de la mateixa bassa: tèrbola i amb boira, i neta (després del Cant de l'Aurora)
-        this.bassa = this.posar(Estat.flag('bassadoriaNeta') ? 'bassadoria' : 'bassadoria_boira', 1010, 900, { fonsY: 640 });   // profunditat de la vora del fons: els gripaus de dins l'aigua es veuen
-        this.colisio(1010, 740, 600, 170);             // l'anella de pedra (una el·lipse feta de tres franges)
-        this.colisio(1010, 630, 430, 60);
-        this.colisio(1015, 855, 390, 80);              // portella, jardinera i abeurador
-        this.interactiu(1010, 815, 200, DIALEGS.bassadoria, { altura: 110, enTancar: () => Estat.posaFlag('flauta_bassadoria') });
-        this.llocFlauta('bassadoria', 1010, 800, 340, true, () => !Estat.flag('bassadoriaNeta'));
-        if (!Estat.flag('bassadoriaNeta')) this.boiraBass = this.boira(1010, 700, 480, 120, 3.5);
+        this.bassa = this.posar(Estat.flag('bassadoriaNeta') ? 'bassadoria' : 'bassadoria_boira', 700, 560, { fonsY: 300 });   // profunditat de la vora del fons: els gripaus de dins l'aigua es veuen
+        this.colisio(700, 400, 600, 170);             // l'anella de pedra (una el·lipse feta de tres franges)
+        this.colisio(700, 290, 430, 60);
+        this.colisio(705, 515, 390, 80);              // portella, jardinera i abeurador
+        this.interactiu(700, 480, 260, DIALEGS.bassadoria, { altura: 110, enTancar: () => Estat.posaFlag('flauta_bassadoria') });
+        this.llocFlauta('bassadoria', 700, 470, 340, true, () => !Estat.flag('bassadoriaNeta'));
+        if (!Estat.flag('bassadoriaNeta')) this.boiraBass = this.boira(700, 360, 480, 120, 3.5);
 
         // L'Home del Carruatge Verd, a la vora del camí
-        this.posar('carruatge', 330, 730, { col: { w: 190, h: 50 } });
-        this.npc('home_carruatge', 440, 760, DIALEGS.homeCarruatge);
+        this.posar('carruatge', 330, 880, { col: { w: 190, h: 50 } });
+        this.npc('home_carruatge', 440, 910, DIALEGS.homeCarruatge);
 
         this.cartell(1180, 480, () => ({ pagines: [{ qui: 'Cartell', text: '↑ Plaça del Santuari' }] }));
-        this.arbres([[150, 180], [320, 260], [1450, 220], [200, 900], [1500, 780], [100, 520], [190, 640], [1400, 440], [1480, 600], [260, 440]]);
+        this.arbres([[150, 180], [320, 260], [1450, 220], [90, 900], [1500, 780], [100, 520], [190, 640], [1400, 440], [1480, 600], [260, 440]]);
 
-        this.enemic('escolopendra', 500, 300);
+        this.enemic('escolopendra', 1350, 300);
         // Els gripaus corromputs s'escapen de la Bassadòria: n'hi ha per tota l'escena i, a mesura que en caiguin,
         // en surten de nous de la bassa. Quan la boira se'n va (aigua neta) ja no en surten més.
         this.propGripau = this.time.now + 2500;
@@ -273,17 +276,15 @@ class ZonaCreu extends ZonaBase {
             [[560, 600], [1330, 620], [640, 830], [1180, 300]].forEach(([x, y]) => this.enemic('gripau', x, y));
         }
         this.sortida(1100, 0, 160, 14, 'ZonaPlaca', 'creu');
-
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, 0.08).setScrollFactor(0).setDepth(90000);
     }
 
     // La Bassadòria reacciona al Cant de l'Aurora (només quan l'Ineu és a prop)
     enMelodia(nom) {
         if (nom !== 'aurora') return false;
-        const prop = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1010, 800) < 520;
+        const prop = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 700, 470) < 520;
         if (!prop) return false;
         if (Estat.flag('bassadoriaNeta')) { this.missatge("L'aigua ja és clara."); return true; }
-        const neta = this.posar('bassadoria', 1010, 900).setDepth(this.bassa.depth + 0.5).setAlpha(0);       // l'aigua s'aclareix a poc a poc
+        const neta = this.posar('bassadoria', 700, 560).setDepth(this.bassa.depth + 0.5).setAlpha(0);       // l'aigua s'aclareix a poc a poc
         this.tweens.add({ targets: neta, alpha: 1, duration: 2200, onComplete: () => { this.bassa.destroy(); this.bassa = neta; } });
         if (this.boiraBass) this.boiraBass.stop();
         this.enemics.filter(e => e.tipus === 'gripau' && !e.mort).forEach(e => {

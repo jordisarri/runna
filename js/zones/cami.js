@@ -48,8 +48,6 @@ class ZonaCami extends ZonaBase {
 
         this.sortida(2786, 380, 14, 140, 'ZonaRuines', 'cami');
         this.sortida(0, 380, 14, 140, 'ZonaErmita', 'cami');
-
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, 0.10).setScrollFactor(0).setDepth(90000);
     }
 }
 

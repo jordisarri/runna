@@ -932,7 +932,7 @@ Object.assign(ZonaBase.prototype, {
         if (Estat.flag(flag)) return false;
         Estat.posaFlag(flag);
         Estat.dades.corsMax += 1; Estat.dades.vida = Estat.dades.corsMax * 2;
-        const ui = this.ui(); ui.actualitzarHUD(); ui.notifica('+1 gra al rosari: ' + motiu);
+        const ui = this.ui(); ui.actualitzarHUD(); ui.missatge('+1 gra al rosari: ' + motiu);
         Sfx.cura();
         this.llum(this.ineu.x, this.ineu.y - 70, 0xf0c040);
         return true;
