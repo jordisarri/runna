@@ -5,7 +5,7 @@
  *   fet    E => true quan el pas ja és fet
  *   pista  E => text que diuen les Venerables Sàvies (i els monjos, i el Til·ler) quan aquest és el pas següent
  *   marca  flags ('nom') i objectes ('obj:nom') que el joc posa en acabar el pas; la prova comprova que el codi els posa de debò
- * Les pistes de tot el joc surten d'aquí: si canvia l'ordre del guió, només cal tocar aquesta taula (i GUIO.md).
+ * Les pistes de tot el joc surten d'aquí: si canvia l'ordre del guió, només cal tocar aquesta taula (i docs/GUIO.md).
  */
 const PROGRES = {
     // Història principal, en ordre. Els passos de més d'un tram (sopar, fragments) donen una pista diferent per a cada tram.

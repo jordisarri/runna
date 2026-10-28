@@ -137,13 +137,13 @@ const CATALEG = [
     { key: 'cercle_bolets',  file: 'assets/natura/cercle_bolets.webp',  amplada: 150, provisional: (c, w) => dibuixarCercleBolets(c, w) },
     { key: 'olla',           file: 'assets/objectes/olla.png',           amplada: 110, provisional: (c, w) => dibuixarOlla(c, w) },
     { key: 'ocell',          file: 'assets/natura/ocell.png',          amplada: 34, provisional: (c, w) => dibuixarOcell(c, w) },
-    { key: 'jaumeta',        file: 'assets/personatges/jaumeta.webp',        amplada: 69, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
+    { key: 'jaumeta',        file: 'assets/personatges/jaumeta.webp',        amplada: 89, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
     { key: 'arma_tiller', file: 'assets/armes/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/armes/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
     { key: 'espasa_dib', file: 'assets/armes/espasa_dib.webp', amplada: 17, provisional: (c, w) => dibuixarEspasaSola(c, w) },   // Runna dibuixada a mà (la mateixa que va clavada al dolmen), per quan vola
-    { key: 'ineu_aixeca', file: 'assets/personatges/ineu_aixeca_espasa.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant Runna, mirant amunt (ja amb fons transparent)
-    { key: 'ineu_aixeca_basto', file: 'assets/personatges/ineu_aixeca_basto.webp', amplada: 83, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // el mateix, alçant el bastó de pelegrí que li dona el Germà Andreu
-    { key: 'ineu_aixeca_tiler', file: 'assets/personatges/ineu_aixeca_tiler.webp', amplada: 96, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // ... i alçant la branca del Gran Til·ler
+    { key: 'ineu_aixeca', file: 'assets/ineu/aixeca_espasa.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant Runna, mirant amunt (ja amb fons transparent)
+    { key: 'ineu_aixeca_basto', file: 'assets/ineu/aixeca_basto.webp', amplada: 83, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // el mateix, alçant el bastó de pelegrí que li dona el Germà Andreu
+    { key: 'ineu_aixeca_tiler', file: 'assets/ineu/aixeca_tiler.webp', amplada: 96, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // ... i alçant la branca del Gran Til·ler
     { key: 'arma_espasa', file: 'assets/armes/espasa.webp',      amplada: 28, provisional: (c, w) => dibuixarEspasaProvisional(c, w) },   // l'espasa de Runna
     { key: 'cartell_llums', file: 'assets/objectes/cartell_llums.webp', amplada: 560, cru: true },            // cartell de paper (es mostra tal com és, amb el fons blanc)
     { key: 'cartell_llums_borros', file: 'assets/objectes/cartell_llums_borros.webp', amplada: 56, cru: true },   // la mateixa imatge, borrosa i petita, per a la paret
@@ -151,7 +151,7 @@ const CATALEG = [
 ];
 
 /**
- * SPRITES DE L'INEU: 8 direccions (assets/sprites/ineu/<direccio>.png, fons transparent).
+ * SPRITES DE L'INEU: 8 direccions (assets/ineu/<direccio>.webp, fons transparent).
  * Cada fulla és una quadrícula 4x4 de 16 fotogrames de 256x256 (cicle de caminar) amb els peus a y~240.
  * Els originals (Ineu-iso_walk_<dir>-v1.png, amb fons blanc) es van processar amb eines/netejar_ineu.js.
  */
@@ -165,7 +165,7 @@ const SPRITE_INEU = {
     quiet: 2              // fotograma de repòs de cada direcció
 };
 /**
- * ATACS DE L'INEU: una fulla per direcció (assets/sprites/ineu/atac_<direccio>.webp, 4x4 fotogrames de 256, fons transparent).
+ * ATACS DE L'INEU: una fulla per direcció (assets/ineu/atac_<direccio>.webp, 4x4 fotogrames de 256, fons transparent).
  * Surten de eines/convertir_atacs.js: ja estan normalitzades (mateixa escala per a totes les direccions, peus a SPRITE_INEU.peus) i
  * l'Ineu hi apareix sense arma. L'arma (bastó, branca del Til·ler o espasa) s'hi afegeix com una capa que segueix la mà
  * fotograma a fotograma (taula ATAC_ARMA a js/atac_arma.js).
@@ -191,11 +191,11 @@ const Grafics = {
             if (CATALEG.some(i => i.key === f.key) && /\.(png|webp)$/.test(f.url)) scene.load.image(f.key + '__jpg', f.url.replace(/\.(png|webp)$/, '.jpg'));
         });
         CATALEG.forEach(item => scene.load.image(item.key, item.file));
-        scene.load.image('ineu_perfil_font', 'assets/sprites/Ineu-walk-v1.webp');
+        scene.load.image('ineu_perfil_font', 'assets/ineu/costat.webp');
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
-            scene.load.spritesheet('ineu_' + dir, `assets/sprites/ineu/${dir}.webp`, mida);
-            scene.load.spritesheet('ineu_atac_' + dir, `assets/sprites/ineu/atac_${dir}.webp`, mida);
+            scene.load.spritesheet('ineu_' + dir, `assets/ineu/${dir}.webp`, mida);
+            scene.load.spritesheet('ineu_atac_' + dir, `assets/ineu/atac_${dir}.webp`, mida);
         });
     },
 

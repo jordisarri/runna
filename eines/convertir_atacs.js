@@ -1,12 +1,12 @@
 /**
  * Converteix les fulles d'atac de l'Ineu i l'espasa a WebP amb transparència i pèrdua, fent servir el Chrome del sistema
  * (sense instal·lar res). Cal tenir el joc servit (python serveix.py):  node eines/convertir_atacs.js
- *  - art/sprites_png/ineu/Ineu-iso_attack_<dir>*.png  ->  assets/sprites/ineu/atac_<dir>.webp
+ *  - art/ineu/atac/Ineu-iso_attack_<dir>*.png  ->  assets/ineu/atac_<dir>.webp
  *    Les fulles (4x4 fotogrames de 256, l'Ineu sense arma) es normalitzen: mateix factor d'escala per a totes les direccions
  *    (cos de ATAC_ALT píxels), centrades i amb els peus a y = PEUS, igual que les fulles de caminar.
- *    L'atac amunt no surt d'aquí: és la fulla ja normalitzada i retocada a mà (assets/sprites/ineu/atac_up.png),
+ *    L'atac amunt no surt d'aquí: és la fulla ja normalitzada i retocada a mà (assets/ineu/atac_up.png),
  *    passada directament a WebP:  ffmpeg -i atac_up.png -c:v libwebp -quality 90 -pix_fmt yuva420p atac_up.webp
- *  - art/fonts_png/espasa.jpg  ->  assets/armes/espasa.webp (fons blanc fet transparent, retallada i reduïda a AMPLADA_ESPASA * RES)
+ *  - art/armes/espasa.jpg  ->  assets/armes/espasa.webp (fons blanc fet transparent, retallada i reduïda a AMPLADA_ESPASA * RES)
  */
 const { spawn } = require('child_process');
 const fs = require('fs'), path = require('path');
@@ -41,7 +41,7 @@ const alWebp = async (canvas, q) => {
 window.fulles = async (fitxers, q) => {
     const dades = {};
     for (const [dir, f] of Object.entries(fitxers)) {
-        const im = await carrega('/art/sprites_png/ineu/' + f);
+        const im = await carrega('/art/ineu/atac/' + f);
         const c = document.createElement('canvas'); c.width = im.width; c.height = im.height;
         const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0);
         const d = x.getImageData(0, 0, c.width, c.height);
@@ -74,7 +74,7 @@ window.fulles = async (fitxers, q) => {
     return { sortida, info };
 };
 window.espasa = async (fitxer, ample, q) => {
-    const im = await carrega('/art/fonts_png/' + fitxer);
+    const im = await carrega('/art/armes/' + fitxer);
     const c = document.createElement('canvas'); c.width = im.width; c.height = im.height;
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0);
     const d = x.getImageData(0, 0, c.width, c.height);
@@ -121,9 +121,9 @@ const dorm = ms => new Promise(r => setTimeout(r, ms));
         const { sortida, info } = await executa(`window.fulles(${JSON.stringify(FULLES)}, ${QUALITAT})`);
         let total = 0;
         for (const [dir, b64] of Object.entries(sortida)) {
-            const dest = path.join(ARREL, 'assets/sprites/ineu', `atac_${dir}.webp`);
+            const dest = path.join(ARREL, 'assets/ineu', `atac_${dir}.webp`);
             fs.writeFileSync(dest, Buffer.from(b64, 'base64'));
-            const a = fs.statSync(path.join(ARREL, 'art/sprites_png/ineu', FULLES[dir])).size, d = fs.statSync(dest).size;
+            const a = fs.statSync(path.join(ARREL, 'art/ineu/atac', FULLES[dir])).size, d = fs.statSync(dest).size;
             total += d;
             console.log(`atac_${dir}.webp`.padEnd(24), (a / 1024).toFixed(0).padStart(5), 'KB ->', (d / 1024).toFixed(0).padStart(4), 'KB', JSON.stringify(info[dir]));
         }

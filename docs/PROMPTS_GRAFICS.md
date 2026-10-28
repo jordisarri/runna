@@ -61,9 +61,9 @@ botó de copiar a dalt a la dreta de cada bloc) i enganxar-lo al generador.
 indicada. Per això: fons blanc pur i res de blanc a la vora de l'objecte.
 
 **Referències ja fetes** (si el generador admet imatge de referència, pujeu-la i digueu "same art style"):
-`assets/edificis/esglesia.png` (edifici), `assets/natura/roure.png` (arbre), `assets/sprites/ineu/down.png` (personatge), i `art/monjo aventurer.png` (referència d'estil per a tot).
+`assets/edificis/esglesia.png` (edifici), `assets/natura/roure.png` (arbre), `assets/ineu/down.webp` (personatge), i `art/ineu/monjo aventurer.png` (referència d'estil per a tot).
 
-**Estil gràfic:** tots els prompts (menys els del Pròleg) estan adaptats a l'estil de `art/monjo aventurer.png`: il·lustració de conte *cartoon* rodona i grassoneta, contorn marró fosc gruixut i uniforme, ombrejat tipus *cel-shading* suau amb una mica de gra, paleta càlida i saturada de marrons, crema i ocres. **Pugeu sempre aquesta imatge com a referència** i digueu «same art style as the reference image».
+**Estil gràfic:** tots els prompts (menys els del Pròleg) estan adaptats a l'estil de `art/ineu/monjo aventurer.png`: il·lustració de conte *cartoon* rodona i grassoneta, contorn marró fosc gruixut i uniforme, ombrejat tipus *cel-shading* suau amb una mica de gra, paleta càlida i saturada de marrons, crema i ocres. **Pugeu sempre aquesta imatge com a referència** i digueu «same art style as the reference image».
 
 **Perspectiva:** els **edificis** es veuen com a *A Link to the Past*: façana de cara i teulada visible des de dalt, sense parets laterals. La resta d'objectes, vista 3/4 des de dalt (uns 30°) i de cara a la càmera.
 Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està inclòs a cada prompt.
@@ -595,16 +595,16 @@ Cinc quadres de la intro, tots **vitralls de catedral medieval vistos dins la se
 Cada un va a `assets/proleg/<nom>.webp`, **vertical 9:16** (idealment 1536 × 2752; el joc la redueix a 1152 d'ample), imatge **sencera, sense retallar**.
 
 **Com es veuen al joc:** no hi ha cap quadre que avanci sol. La imatge omple la pantalla i fa un **zoom enrere (Ken Burns, uns 8 s)**: comença a sobre l'escena del vitrall, centrada a la part de dalt, i s'allunya fins a mostrar tota la finestra de la catedral (el **text** es posa a sobre, al quart de baix). Per això:
-- **El vitrall ha d'estar al centre exacte de la imatge** (centre del vidre a ~50 % de l'ample i ~50 % de l'alçada), i ocupar uns **36 % de l'ample i 44 % de l'alçada** de la imatge, igual que `art/intro_ocellaire.jpg`. Així el zoom sempre el mostra sencer.
+- **El vitrall ha d'estar al centre exacte de la imatge** (centre del vidre a ~50 % de l'ample i ~50 % de l'alçada), i ocupar uns **36 % de l'ample i 44 % de l'alçada** de la imatge, igual que `art/proleg/ocellaire.jpg`. Així el zoom sempre el mostra sencer.
 - Al voltant, **pedra de catedral gòtica** (carreus vells d'arenisca, arc apuntat, traceria, una mica de columna als costats), amb llum tènue i ambient. La finestra ha de ser **clarament una finestra de catedral**, però pot ser d'un **tipus diferent** a cada quadre (llançada, doble, romànica…): és el que s'indica a cada prompt.
 - **Dins del vitrall, l'escena sencera ha de quedar-hi i ser molt simple i reconeixible** (poques figures grans, siluetes clares).
 - **Res d'animació ni de text pintat:** el joc només mou la càmera.
 
-**Referència d'estil (obligatòria):** pugeu `art/intro_ocellaire.jpg` al generador i digueu «same stained-glass style, same cathedral wall and lighting as the reference image, but a different window and scene». És el vitrall bo: vidres plans de colors joia, línies de plom negres i gruixudes, figures de dibuix net i cares mínimes.
+**Referència d'estil (obligatòria):** pugeu `art/proleg/ocellaire.jpg` al generador i digueu «same stained-glass style, same cathedral wall and lighting as the reference image, but a different window and scene». És el vitrall bo: vidres plans de colors joia, línies de plom negres i gruixudes, figures de dibuix net i cares mínimes.
 
 **Bloc d'estil del vitrall (és el primer paràgraf de cada prompt):** vidres de colors saturats (blau cobalt, vermell rubí, groc d'or, verd maragda, violeta ametista), plom negre gruixut, formes grans i simples, una mica de textura de vidre i de resplendor com si la llum el travessés.
 
-### `proleg/ocellaire.webp` — 1. L'Ocellaire a la fira, amb els nens — **FET** (`art/intro_ocellaire.jpg`, ja a `assets/proleg/ocellaire.webp`)
+### `proleg/ocellaire.webp` — 1. L'Ocellaire a la fira, amb els nens — **FET** (`art/proleg/ocellaire.jpg`, ja a `assets/proleg/ocellaire.webp`)
 
 ### `proleg/segell.webp` — 2. Sota terra: el tanquen a la gàbia i un monjo segella la porta amb Runna *(finestra: llançada alta d'arc apuntat amb un petit òcul rodó a sobre)*
 

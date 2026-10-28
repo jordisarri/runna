@@ -1,5 +1,5 @@
 /**
- * DIÀLEGS (extrets de GUIO.md)
+ * DIÀLEGS (extrets de docs/GUIO.md)
  * Cada entrada és una funció que rep l'Estat i retorna { pagines: [{qui, text}], enAcabar? }.
  * Així cada personatge diu una cosa o una altra segons el progrés (flags).
  * qui: nom que surt a la caixa ('' = narrador / sistema).

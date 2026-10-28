@@ -354,7 +354,7 @@ $('desa').onclick = async () => {
 };
 
 async function inicia() {
-    for (const v of VISTES) imatges[v] = await carrega('../assets/sprites/ineu/atac_' + v + '.webp');
+    for (const v of VISTES) imatges[v] = await carrega('../assets/ineu/atac_' + v + '.webp');
     for (const a of Object.values(ARMES)) a.img = await carrega(a.fitxer);
     mostraConfig(); refresca();
     requestAnimationFrame(tick);

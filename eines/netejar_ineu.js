@@ -1,6 +1,6 @@
 /**
- * Converteix les fulles de l'Ineu amb fons blanc (assets/sprites/Ineu-iso_walk_<dir>-v1.png)
- * en PNG amb fons transparent a assets/sprites/ineu/<dir>.png.
+ * Converteix les fulles de l'Ineu amb fons blanc (art/ineu/caminar/Ineu-iso_walk_<dir>-v1.png)
+ * en PNG amb fons transparent a art/ineu/caminar/transparents/<dir>.png.
  * Cal tenir el joc servit (python serveix.py) i puppeteer-core:  node eines/netejar_ineu.js
  */
 const puppeteer = require('puppeteer-core');
@@ -17,10 +17,10 @@ const noms = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwes
     const p = await b.newPage();
     await p.goto('http://localhost:8000/index.html');
     await p.evaluate(m);
-    fs.mkdirSync(root + '/assets/sprites/ineu', { recursive: true });
+    fs.mkdirSync(root + '/art/ineu/caminar/transparents', { recursive: true });
     for (const n of noms) {
         const url = await p.evaluate(async (n) => {
-            const img = new Image(); img.src = `/assets/sprites/Ineu-iso_walk_${n}-v1.png`;
+            const img = new Image(); img.src = `/art/ineu/caminar/Ineu-iso_walk_${n}-v1.png`;
             await img.decode();
             const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
             const ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0);
@@ -29,7 +29,7 @@ const noms = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwes
             ctx.putImageData(d, 0, 0);
             return c.toDataURL('image/png');
         }, n);
-        fs.writeFileSync(`${root}/assets/sprites/ineu/${n}.png`, Buffer.from(url.split(',')[1], 'base64'));
+        fs.writeFileSync(`${root}/art/ineu/caminar/transparents/${n}.png`, Buffer.from(url.split(',')[1], 'base64'));
         console.log('ok', n);
     }
     await b.close();

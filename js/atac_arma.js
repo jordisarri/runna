@@ -13,7 +13,7 @@ const ARMES_ATAC = {
 
 /**
  * POSICIÓ DE L'ARMA DURANT L'ATAC DE L'INEU
- * Les fulles d'atac (assets/sprites/ineu/atac_<vista>.webp) mostren l'Ineu sense arma. El joc hi afegeix l'arma
+ * Les fulles d'atac (assets/ineu/atac_<vista>.webp) mostren l'Ineu sense arma. El joc hi afegeix l'arma
  * (bastó, branca del Til·ler o espasa) com una capa que segueix la mà fotograma a fotograma amb aquesta taula.
  *
  * Una entrada per cada fotograma de ATAC_INEU.fotogrames (0-5 i 12-15), en aquest ordre:

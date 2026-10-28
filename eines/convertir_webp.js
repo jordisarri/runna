@@ -16,13 +16,22 @@ const treureFonsBlanc = ctx.f;
 
 const items = [...font.matchAll(/key:\s*'(\w+)',\s*file:\s*'([^']+)',\s*amplada:\s*(\d+)/g)].map(m => ({ key: m[1], file: m[2], amplada: +m[3] }));
 
+// Cerca l'origen d'una imatge a art/<categoria>/<nom>.(png|jpg|jpeg|webp)
+const fontArt = (categoria, stem) => {
+    for (const ext of ['png', 'jpg', 'jpeg', 'webp']) {
+        const p = path.join(ARREL, 'art', categoria, stem + '.' + ext);
+        if (fs.existsSync(p)) return p;
+    }
+    return null;
+};
+
 const mb = n => (n / 1048576).toFixed(2) + ' MB';
 let abans = 0, despres = 0;
 
 async function catalog(it) {
     const stem = path.basename(it.file).replace(/\.\w+$/, '');
-    const src = path.join(ARREL, 'art/fonts_png', stem + '.png');       // els PNG d'origen són a art/fonts_png
-    if (!fs.existsSync(src)) return;
+    const src = fontArt(path.dirname(it.file).replace(/^assets\//, ''), stem);       // l'origen és a art/<categoria>/ (mirall d'assets/)
+    if (!src) return;
     const { data, info } = await sharp(src).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     treureFonsBlanc(data, info.width, info.height);
     // Caixa del contingut
@@ -44,9 +53,9 @@ async function catalog(it) {
 }
 
 // Fulles de l'Ineu: mateixa mida i quadrícula, només canvia el format
-async function fulla(rel, qualitat) {
+async function fulla(rel, dest, qualitat) {
     const src = path.join(ARREL, rel);
-    const dest = src.replace(/\.png$/, '.webp');
+    dest = path.join(ARREL, dest);
     const r = await sharp(src).webp({ quality: qualitat, alphaQuality: 100, effort: 6 }).toFile(dest);
     const a = fs.statSync(src).size;
     abans += a; despres += r.size;
@@ -55,7 +64,7 @@ async function fulla(rel, qualitat) {
 
 (async () => {
     for (const it of items) await catalog(it);
-    for (const d of ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast']) await fulla(`assets/sprites/ineu/${d}.png`, 90);
-    await fulla('assets/sprites/Ineu-walk-v1.png', 95);   // té fons blanc: el joc el treu en carregar-la
+    for (const d of ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast']) await fulla(`art/ineu/caminar/transparents/${d}.png`, `assets/ineu/${d}.webp`, 90);
+    await fulla('art/ineu/caminar/Ineu-walk-v1.png', 'assets/ineu/costat.webp', 95);   // té fons blanc: el joc el treu en carregar-la
     console.log('TOTAL', mb(abans), '->', mb(despres));
 })();

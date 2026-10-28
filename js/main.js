@@ -102,7 +102,7 @@ const Joc = {
     },
 
     // Músiques opcionals: es fan servir si el fitxer assets/musica/<fitxer>.m4a existeix; si no, sona la de reserva ('fallback').
-    // Així es poden anar afegint cançons una a una sense tocar res més (vegeu art/INSTRUCCIONS_MUSICA.md).
+    // Així es poden anar afegint cançons una a una sense tocar res més (vegeu docs/INSTRUCCIONS_MUSICA.md).
     MUSICA_OPCIONAL: {
         musica_proleg:     { fitxer: 'light book', fallback: 'musica_intro' },
         musica_celles:     { fitxer: 'celles',     fallback: 'musica_intro' },
