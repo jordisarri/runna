@@ -178,7 +178,7 @@ const DIALEGS = {
                 { fer: (z, fet) => z.seq([c => z.bombolla('ciscu', '!', c, 600), c => z.npcSalta('ciscu', c, 1)], fet) },
                 { qui: 'Siscu', text: 'No diguis res a la mare! Sóc el Siscu, el de la Carmen, la de la Taverna. Des que hi ha boira, ella dorm tot el dia i l\'Eva em fa fregar gots.' },
                 { qui: 'Siscu', text: 'Aquí ningú no em busca i puc jugar al solitari tranquil. Les cartes són de l\'avi. Li falta el set d\'oros, però faig veure que hi és.' },
-                { qui: 'Siscu', text: 'De nit he vist el Germà Andreu picar tres cops a la porta de ferro de darrere la Taverna, la del soterrani. No té clau, d\'aquesta: la porta s\'obre sola, com si de dins l\'esperessin. A baix n\'hi ha una altra, amb un pany petit.' },
+                { qui: 'Siscu', text: 'De nit he vist el Germà Andreu picar tres cops a la porta de ferro de la Sala de les Gírgoles, al camí de l\'est del Pati del Celler. No té clau, d\'aquesta: la porta s\'obre sola, com si de dins l\'esperessin. A baix n\'hi ha una altra, amb un pany petit.' },
                 ...clau
             ],
             enAcabar: donar
@@ -321,7 +321,8 @@ const DIALEGS = {
     }),
 
     cartellRuinesPingpong: E => ({ pagines: [{ qui: 'Cartell', text: "← Camí de la Desaparició\n→ Cementiri\n↑ Cel·les\n↓ El Celler i la Plaça" }] }),
-    cartellCeller: E => ({ pagines: [{ qui: 'Cartell', text: "← El Celler (ping-pong)\n↑ Les Runes\n↓ Plaça" }] }),
+    cartellCeller: E => ({ pagines: [{ qui: 'Cartell', text: "← El Celler (ping-pong)\n→ Sala de les Gírgoles\n↑ Les Runes\n↓ Plaça" }] }),
+    cartellGirgoles: E => ({ pagines: [{ qui: 'Cartell', text: "Sala de les Gírgoles" }] }),
 
     juli: E => ({
         pagines: [

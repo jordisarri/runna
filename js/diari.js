@@ -27,7 +27,7 @@ const DIARI_PASSOS = {
     cambra: ['La cambra secreta', 'ZonaPassadis'], palanca: ["La palanca d'en Jordi", 'ZonaJordi'],
     raim: ['L\'Home del Raïm', 'ZonaCasaGranInt'], cripta: ['La Cripta', 'ZonaCasaCripta'],
     segell: ['La tomba dels monjos', 'ZonaCementiri'], cantMiracle: ['El Cant del Miracle', 'ZonaEsglesia'],
-    soterrani: ['El soterrani de la Taverna', 'ZonaTaverna'], clauCiscu: ['La clau del Siscu', 'ZonaCabanaCami'],
+    soterrani: ['La porta de les Gírgoles', 'ZonaGirgolesFora'], clauCiscu: ['La clau del Siscu', 'ZonaCabanaCami'],
     portaFerro: ['La porta de ferro', 'ZonaSotaTaverna'], girgoles: ['Les gírgoles', 'ZonaGirgoles'],
     rastell: ['El rastell', 'ZonaTortura'], tortura: ['El mur d\'esbarzers', 'ZonaTortura'],
     pont: ['El pont de pedra', 'ZonaGabia'], ocellaire: ["L'Ocellaire", 'ZonaGabia'],

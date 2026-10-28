@@ -15,7 +15,8 @@ class ZonaCellerFora extends ZonaBase {
             entrades: {
                 placa:    { x: 800, y: 1040, dir: 'amunt' },
                 runes:    { x: 800, y: 70,   dir: 'avall' },
-                pingpong: { x: 400, y: 960,  dir: 'avall' }
+                pingpong: { x: 400, y: 960,  dir: 'avall' },
+                girgoles: { x: 1530, y: 505, dir: 'esquerra' }
             }
         });
     }
@@ -24,6 +25,7 @@ class ZonaCellerFora extends ZonaBase {
         this.terra('herba', 0, 0, 1600, 1100, -1100);
         this.terra('cami', 700, 0, 200, 1100);          // de la Plaça (sud) a les Runes (nord)
         this.terra('pedra', 150, 900, 640, 120);        // esplanada de pedra davant la porta del Celler
+        this.terra('cami', 900, 440, 700, 130);         // el camí cap a l'est, entre els arbres: duu a la Sala de les Gírgoles
 
         const PORTA_X = 400, BASE_Y = 900, PORTA_AMPLE = 98;
         const sala = this.posar('sala_pingpong', 0, BASE_Y, { fonsY: BASE_Y - 20 });
@@ -40,13 +42,14 @@ class ZonaCellerFora extends ZonaBase {
 
         // Barrils i una bóta vella vora la porta; a l'altra banda del camí, un pati d'herba amb arbres
         [[560, 930], [612, 948], [190, 940]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
-        this.cartell(1000, 960, DIALEGS.cartellCeller);
-        this.arbres([[1100, 200], [1350, 120], [1500, 380], [1150, 560], [1450, 700], [1250, 900], [1520, 1020], [1050, 1040]]);
+        this.cartell(960, 640, DIALEGS.cartellCeller);
+        this.arbres([[1100, 200], [1350, 120], [1500, 380], [1150, 690], [1450, 700], [1250, 900], [1520, 1020], [1050, 1040]]);
         [[1300, 420], [1180, 820]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: -800, escala: 0.6 }));
 
         this.enemic('escolopendra', 1300, 600);
         this.sortida(700, 1086, 200, 14, 'ZonaPlaca', 'ruines');
         this.sortida(700, 0, 200, 14, 'ZonaRuines', 'celler');
+        this.sortida(1586, 440, 14, 130, 'ZonaGirgolesFora', 'celler');
     }
 }
 

@@ -119,7 +119,7 @@ class ZonaCementiri extends ZonaBase {
             if (this.boiraTomba) { this.boiraTomba.stop(); this.time.delayedCall(1800, () => this.boiraTomba && this.boiraTomba.destroy()); }
             if (this.llumTomba) this.tweens.add({ targets: this.llumTomba, alpha: 0, duration: 1200 });
         });
-        Estat.posaObjectiu(Estat.te('clau_ferro') ? "Troba la porta de ferro, darrere de la Taverna, a la part de sota: és l'entrada a la Sala de les Gírgoles."
+        Estat.posaObjectiu(Estat.te('clau_ferro') ? "Troba la porta de ferro de la Sala de les Gírgoles, a l'est del Pati del Celler."
                                                  : "La tomba descansa. A la Casa Gran, sota l'escalinata, hi ha la Clau de ferro dels monjos.");
         Estat.desar();
     }

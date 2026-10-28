@@ -455,7 +455,7 @@ class ZonaTaverna extends ZonaBase {
             nom: 'La Taverna',
             amplada: 1600,
             alcada: 1100,
-            entrades: { jardi: { x: 60, y: 960, dir: 'dreta' }, casagran: { x: 1540, y: 960, dir: 'esquerra' }, interior: { x: 800, y: 820, dir: 'avall' }, soterrani: { x: 1340, y: 880, dir: 'avall' } }
+            entrades: { jardi: { x: 60, y: 960, dir: 'dreta' }, casagran: { x: 1540, y: 960, dir: 'esquerra' }, interior: { x: 800, y: 820, dir: 'avall' } }
         });
     }
 
@@ -483,53 +483,8 @@ class ZonaTaverna extends ZonaBase {
         this.cartell(260, 860, () => ({ pagines: [{ qui: 'Cartell', text: '← L\'Hostatgeria i l\'Era\n→ Els arcs de la Casa Gran' }] }));
         this.arbres([[130, 250], [200, 560], [1460, 330], [1450, 600], [60, 1070], [1180, 1050]]);   // cap arbre davant el cartell
 
-        // La porta de ferro del soterrani, per fora, al darrere de la Taverna (a la dreta de la façana): la Clau de ferro l'obre
-        this.portaSot = this.add.graphics().setDepth(780);
-        this.pintarPortaSoterrani(Estat.flag('portaSoterraniOberta'));
-        this.colisio(1340, 765, 130, 40);
-        this.boiraSot = this.boira(1340, 790, 60, 14, 0.5);
-        if (Estat.flag('portaSoterraniOberta')) this.sortida(1290, 780, 100, 30, 'ZonaSotaTaverna', 'exterior');
-        else this.interactiu(1340, 830, 90, DIALEGS.portaSoterrani, { altura: 90, actiu: () => !Estat.flag('portaSoterraniOberta'), enTancar: () => this.obrirSoterrani() });
-
         this.sortida(0, 900, 14, 130, 'ZonaJardi', 'taverna');
         this.sortida(1586, 900, 14, 130, 'ZonaCasaGran', 'oest');
-    }
-
-    // Porta de ferro inclinada (de soterrani): dues fulles amb reblons sobre un marc de pedra; oberta, es veu l'escala
-    pintarPortaSoterrani(oberta) {
-        const g = this.portaSot, x = 1340, y = 790;
-        g.clear();
-        g.fillStyle(0x000000, 0.3).fillEllipse(x, y + 6, 170, 30);
-        g.fillStyle(0x7a6a58, 1).fillRect(x - 78, y - 60, 156, 66).lineStyle(3, 0x2a1e14, 1).strokeRect(x - 78, y - 60, 156, 66);
-        if (oberta) {
-            g.fillStyle(0x0a0608, 1).fillRect(x - 64, y - 50, 128, 50);
-            for (let k = 0; k < 4; k++) g.fillStyle(0x4a4450 - k * 0x080808, 1).fillRect(x - 54 + k * 4, y - 46 + k * 12, 108 - k * 8, 9);
-            g.fillStyle(0x2a2a30, 1).fillRect(x - 96, y - 74, 30, 70).fillRect(x + 66, y - 74, 30, 70);
-        } else {
-            [-1, 1].forEach(s => {
-                g.fillStyle(0x2a2a30, 1).fillRect(x + (s < 0 ? -64 : 0), y - 50, 64, 50).lineStyle(2, 0x111114, 1).strokeRect(x + (s < 0 ? -64 : 0), y - 50, 64, 50);
-                for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) g.fillStyle(0x5a5a62, 1).fillCircle(x + (s < 0 ? -54 : 10) + c * 20, y - 42 + r * 16, 3);
-            });
-            g.fillStyle(0x8a7a40, 1).fillRect(x - 8, y - 32, 16, 18).fillStyle(0x0a0808, 1).fillRect(x - 3, y - 27, 6, 9);
-        }
-    }
-
-    obrirSoterrani() {
-        if (!Estat.flag('clauFerro') || Estat.flag('portaSoterraniOberta')) return;
-        Estat.posaFlag('portaSoterraniOberta');
-        Sfx.secret(); this.cameras.main.shake(300, 0.003);
-        this.pintarPortaSoterrani(true);
-        // Les dues fulles de ferro s'obren cap als costats (giren sobre la frontissa de fora) i descobreixen l'escala
-        [-1, 1].forEach(s => {
-            const f = this.add.graphics().setDepth(781).setPosition(1340 + s * 64, 790);   // l'origen és la frontissa (vora de fora)
-            const x0 = s < 0 ? 0 : -64;
-            f.fillStyle(0x2a2a30, 1).fillRect(x0, -50, 64, 50).lineStyle(2, 0x111114, 1).strokeRect(x0, -50, 64, 50);
-            for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) f.fillStyle(0x5a5a62, 1).fillCircle(x0 + 10 + c * 20, -42 + r * 16, 3);
-            this.tweens.add({ targets: f, scaleX: 0.08, duration: 900, ease: 'Sine.easeInOut', onComplete: () => f.destroy() });
-        });
-        this.sortida(1290, 780, 100, 30, 'ZonaSotaTaverna', 'exterior');
-        Estat.posaObjectiu('Baixa al soterrani de la Taverna per la porta de ferro de fora.');
-        Estat.desar();
     }
 
     // L'Eva treu el cap per l'aparador de l'esquerra, mira a banda i banda, i torna a dins

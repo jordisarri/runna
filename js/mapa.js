@@ -29,6 +29,7 @@ const MAPA = {
         { id: 'ZonaCementiri',     nom: 'El Cementiri',             x: 1050, y: 300 },
         { id: 'ZonaCellerFora',    nom: 'Pati del Celler',          x: 800,  y: 385 },
         { id: 'ZonaPingpong',      nom: 'El Celler',                x: 640,  y: 390 },
+        { id: 'ZonaGirgolesFora',  nom: 'Sala de les Gírgoles (porta)', x: 1090, y: 385 },
         { id: 'ZonaGolfes',         nom: 'Sala del Rellotge',       x: 930,  y: 335 },
         { id: 'ZonaEsglesia',      nom: 'Santuari',                 x: 930,  y: 390 },
         { id: 'ZonaEra',           nom: 'L\'Era',                   x: 300,  y: 390 },
@@ -67,9 +68,9 @@ const MAPA = {
     enllacos: [
         ['ZonaPlaca', 'ZonaCreu', 'S', 'N'], ['ZonaPlaca', 'ZonaCasaGran', 'W', 'E'], ['ZonaCasaGran', 'ZonaCasaGranInt'], ['ZonaCasaGranInt', 'ZonaCasaCripta'], ['ZonaCasaGranInt', 'ZonaCasaTresor'], ['ZonaCasaTresor', 'ZonaPassadis'], ['ZonaPassadis', 'ZonaPingpong'],
         ['ZonaPlaca', 'ZonaEsglesia'], ['ZonaEsglesia', 'ZonaGolfes'], ['ZonaPlaca', 'ZonaMonestir', 'E', 'W'], ['ZonaPlaca', 'ZonaCellerFora', 'N', 'S'], ['ZonaCellerFora', 'ZonaRuines', 'N', 'S'],
-        ['ZonaCellerFora', 'ZonaPingpong'], ['ZonaRuines', 'ZonaCami', 'W', 'E'], ['ZonaCami', 'ZonaErmita', 'W', 'E'], ['ZonaCami', 'ZonaCabanaCami'],
+        ['ZonaCellerFora', 'ZonaPingpong'], ['ZonaCellerFora', 'ZonaGirgolesFora', 'E', 'W'], ['ZonaGirgolesFora', 'ZonaSotaTaverna'], ['ZonaRuines', 'ZonaCami', 'W', 'E'], ['ZonaCami', 'ZonaErmita', 'W', 'E'], ['ZonaCami', 'ZonaCabanaCami'],
         ['ZonaErmita', 'ZonaErmitaInt'], ['ZonaErmita', 'ZonaEra', 'S', 'N'], ['ZonaEra', 'ZonaJardi', 'E', 'W'],
-        ['ZonaJardi', 'ZonaTaverna', 'E', 'W'], ['ZonaJardi', 'ZonaHostatgeriaInt'], ['ZonaJardi', 'ZonaSoterraniHost'], ['ZonaSoterraniHost', 'ZonaHostatgeriaInt'], ['ZonaHostatgeriaInt', 'ZonaCambraPains'], ['ZonaHostatgeriaInt', 'ZonaCambraPhili'], ['ZonaHostatgeriaInt', 'ZonaCambraCharm'], ['ZonaTaverna', 'ZonaCasaGran', 'E', 'W'], ['ZonaTaverna', 'ZonaTavernaInt'], ['ZonaTaverna', 'ZonaSotaTaverna'], ['ZonaSotaTaverna', 'ZonaGirgoles'], ['ZonaGirgoles', 'ZonaTortura'], ['ZonaTortura', 'ZonaGabia'], ['ZonaMonestir', 'ZonaMonestirRebedor'], ['ZonaMonestirRebedor', 'ZonaBiblioteca'],
+        ['ZonaJardi', 'ZonaTaverna', 'E', 'W'], ['ZonaJardi', 'ZonaHostatgeriaInt'], ['ZonaJardi', 'ZonaSoterraniHost'], ['ZonaSoterraniHost', 'ZonaHostatgeriaInt'], ['ZonaHostatgeriaInt', 'ZonaCambraPains'], ['ZonaHostatgeriaInt', 'ZonaCambraPhili'], ['ZonaHostatgeriaInt', 'ZonaCambraCharm'], ['ZonaTaverna', 'ZonaCasaGran', 'E', 'W'], ['ZonaTaverna', 'ZonaTavernaInt'], ['ZonaSotaTaverna', 'ZonaGirgoles'], ['ZonaGirgoles', 'ZonaTortura'], ['ZonaTortura', 'ZonaGabia'], ['ZonaMonestir', 'ZonaMonestirRebedor'], ['ZonaMonestirRebedor', 'ZonaBiblioteca'],
         ['ZonaRuines', 'ZonaCementiri', 'E', 'W'], ['ZonaCementiri', 'ZonaMonestir', 'S', 'N'], ['ZonaMonestir', 'ZonaSantAntoni', 'E', 'W'], ['ZonaSantAntoni', 'ZonaCelaStAntoni'],
         ['ZonaRuines', 'ZonaCelles', 'N', 'S'], ['ZonaCelles', 'ZonaBosc', 'W', 'E'], ['ZonaBosc', 'ZonaCabana'], ['ZonaCabana', 'ZonaCabanaInt'],
         ['ZonaCelles', 'ZonaTiller', 'N', 'S'], ['ZonaTiller', 'ZonaJordi', 'W', 'E'], ['ZonaJordi', 'ZonaCasetaJoc'], ['ZonaJordi', 'ZonaCasaJordi'], ['ZonaTiller', 'ZonaCamiCirosa', 'N', 'S'], ['ZonaCamiCirosa', 'ZonaCirosa', 'N', 'S'], ['ZonaCirosa', 'ZonaMasiaCirosa'],
@@ -93,7 +94,7 @@ const MAPA = {
     REGIONS: [
         { nom: 'La Cirosa', color: 0xe0b050, ids: ['ZonaCirosa', 'ZonaMasiaCirosa', 'ZonaCamiCirosa'] },
         { nom: 'Bosc de Sant Joan', color: 0x58b878, ids: ['ZonaCabanaInt', 'ZonaCabana', 'ZonaBosc', 'ZonaJordi', 'ZonaCasaJordi', 'ZonaCasetaJoc', 'ZonaTiller', 'ZonaCelles'] },
-        { nom: 'Les Runes', color: 0x78a8d8, ids: ['ZonaRuines', 'ZonaCellerFora', 'ZonaCementiri', 'ZonaPingpong', 'ZonaCami', 'ZonaCabanaCami', 'ZonaErmita', 'ZonaErmitaInt'] },
+        { nom: 'Les Runes', color: 0x78a8d8, ids: ['ZonaRuines', 'ZonaCellerFora', 'ZonaGirgolesFora', 'ZonaCementiri', 'ZonaPingpong', 'ZonaCami', 'ZonaCabanaCami', 'ZonaErmita', 'ZonaErmitaInt'] },
         { nom: 'El Poble', color: 0xd09a58, ids: ['ZonaEra', 'ZonaJardi', 'ZonaHostatgeriaInt', 'ZonaCambraPains', 'ZonaCambraPhili', 'ZonaCambraCharm', 'ZonaTaverna', 'ZonaTavernaInt', 'ZonaCasaGran', 'ZonaCasaGranInt', 'ZonaPlaca', 'ZonaCreu', 'ZonaEsglesia', 'ZonaGolfes'] },
         { nom: 'El Monestir', color: 0xd8704a, ids: ['ZonaMonestir', 'ZonaSantAntoni', 'ZonaCelaStAntoni', 'ZonaMonestirRebedor', 'ZonaBiblioteca'] },
         { nom: 'La Rovellonera', color: 0xc08848, ids: ['ZonaCamiRov', 'ZonaRovellonera', 'ZonaGabriel', 'ZonaDipositos', 'ZonaDolmen'] },
