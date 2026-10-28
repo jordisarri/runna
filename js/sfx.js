@@ -170,11 +170,6 @@ const Sfx = {
         if (!this.ok('orgue', 200)) return;
         notes.forEach(f => { this.to(f, f, durada, 'sawtooth', 0.04); this.to(f * 2, f * 2, durada, 'sine', 0.05); });
     },
-    pet() {                      // un tub de l'orgue que fa una nota de pega
-        if (!this.ok('pet', 300)) return;
-        this.to(110, 70, 0.7, 'sawtooth', 0.2);
-        this.to(116, 60, 0.7, 'square', 0.08);
-    },
     cura() {
         if (!this.ok('cura', 150)) return;
         [523, 659, 784, 1047].forEach((f, i) => this.to(f, f, 0.22, 'sine', 0.14, i * 0.07));

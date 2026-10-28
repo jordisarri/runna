@@ -108,8 +108,6 @@ bombo i tamborí, pandereta, acordió (només a la Taverna), tenora o gralla (no
   sintetitzat que sigui ben petit) i va creixent fins a un cor de poble i l'orgue a ple.
 - **Estructura (80 compassos):** 8 arpa i flauta soles → 16 entrada d'una veu coral «hmm» + violoncel → 16 tema complet amb orgue
   (el Cant del Miracle en major) → 16 cor de poble (aah, a l'unísson i en tercera) → 16 baixada tranquil·la amb campanes → 8 retorn a l'arpa (bucle).
-- **Detall de joc:** hi ha una escena on **un tub de l'orgue fa una nota de pega**: això el joc ho fa amb un so propi; per tant l'orgue de la música
-  ha de sonar **ben net i bonic**, sense cap «pet» fora de lloc.
 - **Prompt:**
   > instrumental warm hopeful ending theme, gentle chamber folk, 84 bpm, E major, solo harp and flute, cello, growing into village choir
   > singing "aah" and a church organ, bells, joyful and tender, children's laughter feeling, relief after darkness, not cheesy,

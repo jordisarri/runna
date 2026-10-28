@@ -785,8 +785,8 @@ class ZonaGabia extends ZonaBase {
             f => z.invocarOcellaire(ap, f),
             f => { Sfx.rugit(); cam.shake(900, 0.008); ui.titolBoss("L'OCELLAIRE", "L'Home de la Gàbia"); z.esperar(vist ? 1600 : 2600, f); },
             ...(vist ? [] : [
-                f => z.bombolla('ocellaire', 'Un nen que riu...', f, 1500),
-                f => z.bombolla('ocellaire', 'El teu riure també serà meu!', f, 1800)
+                f => z.bombolla('ocellaire', 'Un nen que riu... Fa segles que no en sento cap.', f, 1900),
+                f => z.bombolla('ocellaire', 'La gàbia és plena de riures robats. Encara hi cap el teu.', f, 2300)
             ]),
             f => { z.npcVa('germa_andreu', gx + 330, base + 40, null, 220); z.amagarAndreu(); cam.pan(this.ineu.x, this.ineu.y, 700, 'Sine.easeInOut', false, (cm, p) => { if (p === 1) { cam.startFollow(this.ineu, true, 0.12, 0.12); f(); } }); },
             f => { ui.franges(false); f(); }

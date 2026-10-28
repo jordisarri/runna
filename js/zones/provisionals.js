@@ -77,7 +77,7 @@ class ZonaEsglesia extends ZonaBase {
     }
 
     // ---------------- EPÍLEG: «Torna el cant» ----------------
-    // Tothom és al Santuari: els nens riuen, l'orgue torna a sonar, el poble canta... i un tub de l'orgue salta.
+    // Tothom és al Santuari: els nens riuen, l'orgue torna a sonar, el poble canta.
     prepararEpileg() {
         this.epileg = true;
         const R = ESG.retY;
@@ -111,33 +111,17 @@ class ZonaEsglesia extends ZonaBase {
                 acords.forEach((a, i) => this.time.delayedCall(i * 750, () => Sfx.orgue(a, 0.9)));
                 this.esperar(4400, f);
             },
-            // ... i un tub fa una nota de pega i surt disparat
-            f => {
-                Sfx.pet();
-                this.cameras.main.shake(300, 0.006);
-                const o = this.orgue, x0 = o.x + 30, y0 = o.y - o.displayHeight + 10;
-                const tub = this.add.rectangle(x0, y0, 12, 46, 0xd8b860).setStrokeStyle(2, 0x5a4020).setDepth(99000);
-                this.boiraPuf(x0, y0);
-                this.tweens.add({ targets: tub, x: 700, duration: 1100, ease: 'Linear' });
-                this.tweens.add({ targets: tub, y: y0 - 160, duration: 450, ease: 'Quad.easeOut', yoyo: false, onComplete: () => {
-                    this.tweens.add({ targets: tub, y: R + 340, duration: 650, ease: 'Bounce.easeOut', onComplete: () => { Sfx.cop(false); this.tub = tub; } });
-                } });
-                this.tweens.add({ targets: tub, angle: 540, duration: 1100 });
-                tots.forEach(k => this.bombolla(k, '!', null, 900));
-                this.esperar(1700, f);
-            },
             f => riure(tots, f),
             f => z.npcVa('pare_jordi', 720, R + 330, f, 120),
             f => z.npcMira('pare_jordi', 'ineu', f),
-            f => z.bombolla('pare_jordi', 'Començaràs reparant-lo.', f, 2600),
-            f => z.bombolla('ineu', '...!', f, 1000),
+            f => z.bombolla('pare_jordi', 'Benvingut a casa, Ineu.', f, 2600),
             f => riure(tots, f),
             f => { this.cameras.main.fadeOut(1800, 0, 0, 0); this.esperar(1900, f); }
         ], fet) }] }, () => {
             Estat.posaFlag('epilegFet');
             Estat.posaFlag('epilegPendent', false);
             Estat.dades.zona = 'ZonaEsglesia'; Estat.dades.entrada = 'porta'; Estat.dades.x = null; Estat.dades.y = null;
-            Estat.posaObjectiu("El Santuari torna a cantar. (I l'orgue té un tub de menys.)");
+            Estat.posaObjectiu("El Santuari torna a cantar.");
             Estat.desar();
             this.canviant = true;
             Joc.aturarTot(this);

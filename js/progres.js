@@ -156,7 +156,7 @@ const PROGRES = {
         if (p && l) return p.pista(E) + " Mentrestant: " + l.pista(E);
         if (p) return p.pista(E);
         if (l) return "Els nens tornen a riure i l'orgue sona (gairebé bé). Si encara vols feina: " + l.pista(E);
-        return "Els nens tornen a riure i l'orgue sona (gairebé bé). Ho has fet tot, fill. Ara, a reparar aquell tub.";
+        return "Els nens tornen a riure i l'orgue sona (gairebé bé). Ho has fet tot, fill.";
     },
 
     // Pista només fins a Runna (null quan ja la tens): la fan servir el Pare Jordi, el Pare Alcuí i el Til·ler
