@@ -503,7 +503,7 @@ const DIALEGS = {
                     { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
                     { qui: "Pare Alcuí", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." }
                 ],
-                enAcabar: () => { E.posaFlag("tombaLlegida"); E.posaObjectiu("Segella amb Runna la tomba esquerdada del Cementiri (colpeja-la)."); }
+                enAcabar: () => { E.posaFlag("tombaLlegida"); E.posaObjectiu("Segella amb Runna la tomba esquerdada del Cementiri."); }
             };
         }
         if (E.flag("fragment3") && E.flag("benedicioMonjo") && !E.flag("saber")) {

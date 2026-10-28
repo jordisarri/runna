@@ -101,7 +101,7 @@ const PROGRES = {
           pista: E => "Vençut l'Home del Raïm, la trapa de sota l'escalinata baixa a la Cripta dels monjos: hi ha la Clau de ferro." },
         { id: 'segell', marca: ['tombaLlegida', 'tombaSegellada'], fet: E => E.flag('tombaSegellada'),
           pista: E => E.flag('tombaLlegida') || !E.flag('relTretes')
-              ? "La tomba esquerdada del Cementiri (darrere el Santuari i el Monestir) encara treu boira. La llum que va tancar la porta la pot tancar: colpeja-la amb Runna. I guarda la Clau de ferro: obre la porta de sota la Taverna."
+              ? "La tomba esquerdada del Cementiri (darrere el Santuari i el Monestir) encara treu boira. La llum que va tancar la porta la pot tancar: acosta-hi Runna. I guarda la Clau de ferro: obre la porta de sota la Taverna."
               : "La tomba dels monjos del Cementiri treu boira. El Pare Alcuí, a la Biblioteca, deu trobar a la Crònica què s'hi ha de fer. I guarda la Clau de ferro: obre la porta de sota la Taverna." },        // ---- Sota la Taverna ----
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
           pista: E => "Al darrere de la Taverna (per fora, a la dreta de la façana) hi ha una porta de ferro baixa: la del soterrani, la que el Germà Andreu tanca cada nit. La Clau de ferro l'obre." },
