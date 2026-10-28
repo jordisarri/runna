@@ -267,7 +267,7 @@ const PROLEG_QUADRES = [
     { text: "Els pastors de la Cirosa i els monjos el van tancar dins la seva pròpia gàbia, sota terra. Un monjo va segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la va deixar dormint entre pedres.", dibuix: 'segell', vitrall: [0.515, 0.50, 1.95] },
     { text: "Ara, fa tres nits, una boira freda i lila surt de sota terra. Marceix els horts, entela l'aigua i fa callar l'orgue del Santuari.", dibuix: 'boira', vitrall: [0.513, 0.497, 1.95] },
     { text: "I cada nit falta un nen.\nL'Huri i el Flami, de Sant Benet.\nI aquesta nit... el Sardi, el nebot de les sacerdotesses.", dibuix: 'nens', vitrall: [0.51, 0.4475, 1.6] },
-    { text: "Matí. Al Monestir, l'Ineu, el monjo més jove, es desperta.\nEl Pare Jordi el busca a la Plaça.", dibuix: 'mati', vitrall: [0.50, 0.48, 1.45] }
+    { text: "Matí. Al Monestir, l'Ineu, el monjo més jove, es desperta.\nEl Pare Jordi el busca a la Plaça.", dibuix: 'mati', vitrall: [0.502, 0.515, 2.2] }
 ];
 
 const PAPER_X = 30, PAPER_W = AMPLE - 60, PAPER_H = 285, PAPER_Y = ALT - 365;      // full de paper vell del text del pròleg
