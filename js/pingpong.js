@@ -77,7 +77,7 @@ class EscenaPingPong extends Phaser.Scene {
         // ---- Jugadors ----
         // En Josep levita, cames creuades, darrere la taula; la pala és a la seva mà
         this.spJosep = this.add.image(360, PP.fonsY - 14, 'josep_levita').setOrigin(0.5, 1).setDepth(1);
-        this.spJosep.setScale(205 / this.spJosep.height);                 // entre el marcador i la taula
+        this.spJosep.setScale(300 / this.spJosep.height);                 // gran: ocupa tot el fons de dalt, el marcador és a un costat
         this.josepY = this.spJosep.y;
         this.reposJosep();
         const ineuTex = this.textures.exists('ineu_up') ? 'ineu_up' : 'ineu_avall';
@@ -103,9 +103,9 @@ class EscenaPingPong extends Phaser.Scene {
         this.pilota = this.add.circle(0, 0, 10, 0xfff6e0, 1).setStrokeStyle(2, 0xd8c8a0).setDepth(16).setVisible(false);       // sempre per davant d'en Josep (i dels seus braços)
 
         // ---- Marcador, missatges i servei màgic ----
-        this.add.rectangle(AMPLE / 2, 58, 460, 84, 0x1a120b, 0.85).setStrokeStyle(3, 0xd4af37);
-        this.marcador = this.add.text(AMPLE / 2, 40, '', estilText(34, '#f2e6c8', { fontStyle: 'bold' })).setOrigin(0.5);
-        this.servei = this.add.text(AMPLE / 2, 80, '', estilText(20, '#d8c8a0', { fontStyle: 'italic' })).setOrigin(0.5);
+        this.add.rectangle(100, 64, 184, 104, 0x1a120b, 0.85).setStrokeStyle(3, 0xd4af37);          // el marcador és a l'esquerra: en Josep queda lliure al mig
+        this.marcador = this.add.text(100, 46, '', estilText(30, '#f2e6c8', { fontStyle: 'bold', align: 'center', lineSpacing: 4 })).setOrigin(0.5);
+        this.servei = this.add.text(100, 96, '', estilText(17, '#d8c8a0', { fontStyle: 'italic' })).setOrigin(0.5);
         this.missatge = this.add.text(AMPLE / 2, 470, '', estilText(30, '#ffd34d', { fontStyle: 'bold', align: 'center', stroke: '#1a120b', strokeThickness: 6, wordWrap: { width: 640 } })).setOrigin(0.5).setDepth(20);
         this.seq = this.add.text(AMPLE / 2, 640, '', estilText(84, '#d8b0ff', { fontStyle: 'bold', stroke: '#1a0a2a', strokeThickness: 10 })).setOrigin(0.5).setDepth(20);
 
@@ -113,14 +113,15 @@ class EscenaPingPong extends Phaser.Scene {
         const k = this.input.keyboard.addKeys('LEFT,DOWN,RIGHT,A,S,D,SPACE,ESC');
         [['LEFT', 0], ['A', 0], ['DOWN', 1], ['S', 1], ['SPACE', 1], ['RIGHT', 2], ['D', 2]].forEach(([tecla, c]) => k[tecla].on('down', () => this.entrada(c)));
         k.ESC.on('down', () => this.sortir());
-        this.botons = ['◀', '●', '▶'].map((s, c) => {
+        this.botons = [-90, 0, 90].map((angle, c) => {            // fletxa a l'esquerra, a dalt (el carril del mig) i a la dreta
             const x = PP.xProp[c], y = ALT_PP - 60;
             const b = this.add.circle(x, y, 52, 0x1a120b, 0.8).setStrokeStyle(3, 0xd4af37).setDepth(30).setInteractive({ useHandCursor: true });
-            this.add.text(x, y, s, estilText(40, '#f2e6c8')).setOrigin(0.5).setDepth(31);
+            const f = this.fletxaBoto(x, y, angle).setDepth(31);
             b.setInteractive(new Phaser.Geom.Circle(52, 52, 92), Phaser.Geom.Circle.Contains);   // zona de toc generosa, més gran que el botó
-            b.on('pointerdown', () => { b.setFillStyle(0x4a3a20, 0.95); this.entrada(c); });
-            b.on('pointerup', () => b.setFillStyle(0x1a120b, 0.8));
-            b.on('pointerout', () => b.setFillStyle(0x1a120b, 0.8));
+            const premut = on => { b.setFillStyle(on ? 0x4a3a20 : 0x1a120b, on ? 0.95 : 0.8); f.setScale(on ? 0.88 : 1); };
+            b.on('pointerdown', () => { premut(true); this.entrada(c); });
+            b.on('pointerup', () => premut(false));
+            b.on('pointerout', () => premut(false));
             return b;
         });
         this.add.text(AMPLE - 16, 120, 'Sortir ✕', estilText(26, '#f2e6c8', { backgroundColor: '#1a120bcc', padding: { x: 12, y: 6 } }))
@@ -130,6 +131,18 @@ class EscenaPingPong extends Phaser.Scene {
         this.actualitzarMarcador();
         this.avis('En Josep contra l\'Ineu\nA set punts', 1600);
         this.time.delayedCall(1800, () => this.seguentPunt());
+    }
+
+    // Fletxa gruixuda dels botons dels carrils: cos arrodonit crema amb vora fosca, ombra i un reflex; angle 0 = cap amunt
+    fletxaBoto(x, y, angle) {
+        const g = this.add.graphics().setPosition(x, y).setAngle(angle);
+        const pts = [{ x: 0, y: -30 }, { x: 26, y: -2 }, { x: 11, y: -2 }, { x: 11, y: 28 }, { x: -11, y: 28 }, { x: -11, y: -2 }, { x: -26, y: -2 }];
+        const desplaca = (dx, dy) => pts.map(q => ({ x: q.x + dx, y: q.y + dy }));
+        g.fillStyle(0x000000, 0.4).fillPoints(desplaca(2, 4), true);
+        g.fillStyle(0xf2e6c8, 1).fillPoints(pts, true);
+        g.lineStyle(4, 0x4a2e10, 1).strokePoints(pts, true);
+        g.fillStyle(0xffffff, 0.35).fillPoints(pts.map(q => ({ x: q.x * 0.6, y: q.y * 0.6 - 4 })), true);       // reflex interior
+        return g;
     }
 
     // ---------------- Icones màgiques dels tres carrils: lluna (esquerra), sol (mig) i estel (dreta), amb resplendor ----------------
@@ -228,7 +241,7 @@ class EscenaPingPong extends Phaser.Scene {
     // ---------------- Marcador i servei ----------------
     serveixIneu() { return Math.floor((this.ineu + this.josep) / 2) % 2 === 0; }
     actualitzarMarcador() {
-        this.marcador.setText(`Ineu  ${this.ineu}  –  ${this.josep}  Josep`);
+        this.marcador.setText(`Ineu  ${this.ineu}\nJosep  ${this.josep}`);
         this.servei.setText(this.serveixIneu() ? 'Serveixes tu' : 'Serveix en Josep');
     }
     avis(text, ms = 1100, color = '#ffd34d') {
