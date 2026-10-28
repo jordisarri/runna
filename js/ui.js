@@ -2,7 +2,27 @@
  * ESCENA UI: corre sempre per sobre de la zona activa.
  * HUD (rosari d'energia, objectiu), caixa de diàleg, menú de pausa i controls tàctils.
  */
-const AMPLE = 720, ALT = 1280;
+const AMPLE = 720;
+// L'ample del llenç és fix; l'alçada s'adapta a la proporció de la pantalla (així el llenç l'omple sense barres laterals).
+// Va de 900 (tauleta, 4:5) a 1600 (mòbil molt llarg); més enllà, el llenç es queda dins la pantalla amb barres. ?alt=1500 la força (proves).
+const ALT_MIN = 900, ALT_MAX = 1600;
+function calcularAlt() {
+    const q = +new URLSearchParams(location.search).get('alt');
+    if (q) return Math.min(ALT_MAX, Math.max(ALT_MIN, Math.round(q)));
+    const el = document.getElementById('joc');
+    const r = el ? el.getBoundingClientRect() : null;
+    const w = (r && r.width) || window.innerWidth, h = (r && r.height) || window.innerHeight;
+    if (!w || !h) return 1280;
+    return Math.min(ALT_MAX, Math.max(ALT_MIN, Math.round(AMPLE * h / w)));
+}
+const ALT = calcularAlt();
+
+// Escenes dissenyades per a una alçada fixa (el ping-pong, de 1280): el disseny es centra a la pantalla i, si aquesta és més baixa, es redueix
+function encaixarDisseny(scene, alt0 = 1280) {
+    const cam = scene.cameras.main;
+    cam.setZoom(Math.min(1, ALT / alt0));
+    cam.centerOn(AMPLE / 2, alt0 / 2);
+}
 const ALT_HUD = 170;   // franja de dalt reservada per al HUD: l'escenari es dibuixa només per sota
 const FONT = 'Georgia, "Times New Roman", serif';
 

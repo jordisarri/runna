@@ -9,6 +9,7 @@
  * - El teu servei: prem el carril des d'on vols servir (la pilota hi surt d'aquell carril).
  * - Set punts; a 6-6, cal guanyar de dos. Es canvia de servei cada dos punts.
  */
+const ALT_PP = 1280;      // alçada per a la qual està dissenyada l'escena (encaixarDisseny la centra o la redueix segons la pantalla)
 const PP = {
     PUNTS: 7,
     CARRILS: 3,
@@ -38,9 +39,11 @@ class EscenaPingPong extends Phaser.Scene {
         this.acabat = false;
 
         // ---- Escenari: la paret de pedra del celler, llum de les espelmes i la taula verda en perspectiva ----
-        this.add.rectangle(0, 0, AMPLE, ALT, 0x140e0a, 1).setOrigin(0);
-        if (this.textures.exists('mur_pedra')) this.add.tileSprite(0, 0, AMPLE, 300, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setTint(0x8a7a6a);
-        this.add.rectangle(0, 300, AMPLE, ALT - 300, 0x2a221c, 1).setOrigin(0);
+        encaixarDisseny(this, ALT_PP);
+        const MARGE = 500;       // el fons passa de la zona dissenyada perquè en pantalles més altes o més baixes no quedin vores
+        this.add.rectangle(-MARGE, -MARGE, AMPLE + 2 * MARGE, ALT_PP + 2 * MARGE, 0x140e0a, 1).setOrigin(0);
+        if (this.textures.exists('mur_pedra')) this.add.tileSprite(-MARGE, -MARGE, AMPLE + 2 * MARGE, 300 + MARGE, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setTint(0x8a7a6a);
+        this.add.rectangle(-MARGE, 300, AMPLE + 2 * MARGE, ALT_PP - 300 + MARGE, 0x2a221c, 1).setOrigin(0);
         const llum = this.add.graphics();
         llum.fillStyle(0xffd38a, 0.06).fillEllipse(AMPLE / 2, 640, 900, 900);
         llum.fillStyle(0xffd38a, 0.05).fillEllipse(AMPLE / 2, 640, 600, 600);
@@ -78,10 +81,10 @@ class EscenaPingPong extends Phaser.Scene {
         this.josepY = this.spJosep.y;
         this.reposJosep();
         const ineuTex = this.textures.exists('ineu_up') ? 'ineu_up' : 'ineu_avall';
-        this.spIneu = this.add.sprite(360, ALT - 100, ineuTex, 0).setOrigin(0.5, 1).setDepth(5);
+        this.spIneu = this.add.sprite(360, ALT_PP - 100, ineuTex, 0).setOrigin(0.5, 1).setDepth(5);
         this.spIneu.setScale(((this.textures.get(ineuTex).customData || {}).escala || 0.5) * 1.6);
         // La pala a la mà de l'Ineu: gira cap al carril on colpeja. El pivot és la mà (el mànec cap avall).
-        this.pala = this.add.container(360 + 46, ALT - 150).setDepth(4.5).setAngle(20);      // darrere del cos de l'Ineu: només en surt la part que el seu cos no tapa
+        this.pala = this.add.container(360 + 46, ALT_PP - 150).setDepth(4.5).setAngle(20);      // darrere del cos de l'Ineu: només en surt la part que el seu cos no tapa
         const gp = this.add.graphics();
         gp.fillStyle(0x5a3a1e, 1).fillRoundedRect(-4, -34, 8, 40, 3).lineStyle(2, 0x1a0e06, 1).strokeRoundedRect(-4, -34, 8, 40, 3);
         gp.fillStyle(0x8a1a1a, 1).fillEllipse(0, -62, 52, 62).lineStyle(3, 0x1a0e06, 1).strokeEllipse(0, -62, 52, 62);
@@ -111,7 +114,7 @@ class EscenaPingPong extends Phaser.Scene {
         [['LEFT', 0], ['A', 0], ['DOWN', 1], ['S', 1], ['SPACE', 1], ['RIGHT', 2], ['D', 2]].forEach(([tecla, c]) => k[tecla].on('down', () => this.entrada(c)));
         k.ESC.on('down', () => this.sortir());
         this.botons = ['◀', '●', '▶'].map((s, c) => {
-            const x = PP.xProp[c], y = ALT - 60;
+            const x = PP.xProp[c], y = ALT_PP - 60;
             const b = this.add.circle(x, y, 52, 0x1a120b, 0.8).setStrokeStyle(3, 0xd4af37).setDepth(30).setInteractive({ useHandCursor: true });
             this.add.text(x, y, s, estilText(40, '#f2e6c8')).setOrigin(0.5).setDepth(31);
             b.setInteractive(new Phaser.Geom.Circle(52, 52, 92), Phaser.Geom.Circle.Contains);   // zona de toc generosa, més gran que el botó

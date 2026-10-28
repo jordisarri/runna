@@ -549,3 +549,18 @@ const game = new Phaser.Game({
             ZonaCementiri, ZonaCasaGranInt, ZonaCabana, ZonaCabanaInt, ZonaCamiRov, ZonaRovellonera, ZonaGabriel, ZonaGabrielInt, ZonaDipositos, ZonaDolmen, ZonaTresor, ZonaGolfes, ZonaPassadis, ZonaCasaTresor, ZonaCabanaCami, ZonaCasaCripta, ZonaTorre, ZonaSantAntoni, ZonaTaverna, ZonaJordi, ZonaCasaJordi, ZonaCasetaJoc, ZonaSoterraniHost, ZonaHostatgeriaInt, ZonaCambraPains, ZonaCambraPhili, ZonaCambraCharm,
             EscenaUI, EscenaMusica, EscenaEstels, EscenaPingPong, EscenaCredits]
 });
+
+// Si la pantalla canvia de proporció (es gira el mòbil, es redimensiona la finestra) i l'alçada ideal canvia molt, es desa i es
+// recarrega: totes les escenes es construeixen amb l'alçada del llenç, que només es calcula en arrencar.
+let tempsResize = null;
+window.addEventListener('resize', () => {
+    clearTimeout(tempsResize);
+    tempsResize = setTimeout(() => {
+        if (Math.abs(calcularAlt() - ALT) <= 40) return;
+        try {
+            const z = game.scene.getScenes(true).find(sc => typeof sc.guardarPosicio === 'function');
+            if (z) { z.guardarPosicio(); Estat.desar(); }
+        } catch (e) { /* si no es pot desar, es recarrega igualment */ }
+        location.reload();
+    }, 900);
+});

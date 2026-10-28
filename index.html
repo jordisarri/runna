@@ -14,9 +14,19 @@
             overflow: hidden;
             touch-action: none;
         }
+        /* El joc ocupa l'àrea visible (sense la barra del navegador ni el notch); l'alçada del llenç s'adapta a la seva proporció (js/ui.js) */
         #joc {
-            width: 100%;
-            height: 100%;
+            position: fixed;
+            top: env(safe-area-inset-top, 0px);
+            right: env(safe-area-inset-right, 0px);
+            bottom: env(safe-area-inset-bottom, 0px);
+            left: env(safe-area-inset-left, 0px);
+        }
+        @supports (height: 100dvh) {
+            #joc {
+                bottom: auto;
+                height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+            }
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,46 +53,46 @@
     <div id="joc"></div>
 
     <!-- L'ordre importa: cada fitxer fa servir coses dels anteriors -->
-    <script src="js/sfx.js?v=1793217722"></script>
-    <script src="js/partida.js?v=1793217722"></script>
-    <script src="js/progres.js?v=1793217722"></script>
-    <script src="js/dibuixos.js?v=1793217722"></script>
-    <script src="js/icones.js?v=1793217722"></script>
-    <script src="js/dibuixos_biblio.js?v=1793217722"></script>
-    <script src="js/dibuixos_cela.js?v=1793217722"></script>
-    <script src="js/dibuixos_ermita.js?v=1793217722"></script>
-    <script src="js/dibuixos_casa.js?v=1793217722"></script>
-    <script src="js/dibuixos_proleg.js?v=1793217722"></script>
-    <script src="js/dibuixos_pingpong.js?v=1793217722"></script>
-    <script src="js/assets.js?v=1793217722"></script>
-    <script src="js/dialegs.js?v=1793217722"></script>
-    <script src="js/ui.js?v=1793217722"></script>
-    <script src="js/zona_base.js?v=1793217722"></script>
-    <script src="js/atac_arma.js?v=1793217722"></script>
-    <script src="js/combat.js?v=1793217722"></script>
-    <script src="js/musica.js?v=1793217722"></script>
-    <script src="js/zones/placa.js?v=1793217722"></script>
-    <script src="js/zones/provisionals.js?v=1793217722"></script>
-    <script src="js/zones/nord.js?v=1793217722"></script>
-    <script src="js/zones/cirosa.js?v=1793217722"></script>
-    <script src="js/estels.js?v=1793217722"></script>
-    <script src="js/pingpong.js?v=1793217722"></script>
-    <script src="js/credits.js?v=1793217722"></script>
-    <script src="js/zones/oest.js?v=1793217722"></script>
-    <script src="js/zones/cementiri.js?v=1793217722"></script>
-    <script src="js/zones/casa.js?v=1793217722"></script>
-    <script src="js/zones/cabana.js?v=1793217722"></script>
-    <script src="js/zones/cami.js?v=1793217722"></script>
-    <script src="js/zones/torre.js?v=1793217722"></script>
-    <script src="js/zones/hostatgeria.js?v=1793217722"></script>
-    <script src="js/zones/taverna.js?v=1793217722"></script>
-    <script src="js/zones/gabia.js?v=1793217722"></script>
-    <script src="js/zones/biblioteca.js?v=1793217722"></script>
-    <script src="js/zones/rebedor.js?v=1793217722"></script>
-    <script src="js/zones/cela.js?v=1793217722"></script>
-    <script src="js/diari.js?v=1793217722"></script>
-    <script src="js/mapa.js?v=1793217722"></script>
-    <script src="js/intro.js?v=1793217722"></script>
-    <script src="js/main.js?v=1793217722"></script>
+    <script src="js/sfx.js?v=1793218369"></script>
+    <script src="js/partida.js?v=1793218369"></script>
+    <script src="js/progres.js?v=1793218369"></script>
+    <script src="js/dibuixos.js?v=1793218369"></script>
+    <script src="js/icones.js?v=1793218369"></script>
+    <script src="js/dibuixos_biblio.js?v=1793218369"></script>
+    <script src="js/dibuixos_cela.js?v=1793218369"></script>
+    <script src="js/dibuixos_ermita.js?v=1793218369"></script>
+    <script src="js/dibuixos_casa.js?v=1793218369"></script>
+    <script src="js/dibuixos_proleg.js?v=1793218369"></script>
+    <script src="js/dibuixos_pingpong.js?v=1793218369"></script>
+    <script src="js/assets.js?v=1793218369"></script>
+    <script src="js/dialegs.js?v=1793218369"></script>
+    <script src="js/ui.js?v=1793218369"></script>
+    <script src="js/zona_base.js?v=1793218369"></script>
+    <script src="js/atac_arma.js?v=1793218369"></script>
+    <script src="js/combat.js?v=1793218369"></script>
+    <script src="js/musica.js?v=1793218369"></script>
+    <script src="js/zones/placa.js?v=1793218369"></script>
+    <script src="js/zones/provisionals.js?v=1793218369"></script>
+    <script src="js/zones/nord.js?v=1793218369"></script>
+    <script src="js/zones/cirosa.js?v=1793218369"></script>
+    <script src="js/estels.js?v=1793218369"></script>
+    <script src="js/pingpong.js?v=1793218369"></script>
+    <script src="js/credits.js?v=1793218369"></script>
+    <script src="js/zones/oest.js?v=1793218369"></script>
+    <script src="js/zones/cementiri.js?v=1793218369"></script>
+    <script src="js/zones/casa.js?v=1793218369"></script>
+    <script src="js/zones/cabana.js?v=1793218369"></script>
+    <script src="js/zones/cami.js?v=1793218369"></script>
+    <script src="js/zones/torre.js?v=1793218369"></script>
+    <script src="js/zones/hostatgeria.js?v=1793218369"></script>
+    <script src="js/zones/taverna.js?v=1793218369"></script>
+    <script src="js/zones/gabia.js?v=1793218369"></script>
+    <script src="js/zones/biblioteca.js?v=1793218369"></script>
+    <script src="js/zones/rebedor.js?v=1793218369"></script>
+    <script src="js/zones/cela.js?v=1793218369"></script>
+    <script src="js/diari.js?v=1793218369"></script>
+    <script src="js/mapa.js?v=1793218369"></script>
+    <script src="js/intro.js?v=1793218369"></script>
+    <script src="js/main.js?v=1793218369"></script>
 </body>
 </html>
