@@ -601,7 +601,7 @@ class ZonaTiller extends ZonaBase {
             const d = DIALEGS.tiller(E);
             if (this.tillerCara || !d.pagines || !d.pagines.length) return d;
             return Object.assign({}, d, { pagines: [{ fer: (z, fet) => z.despertarTiller(fet) }, ...d.pagines] });
-        }, { altura: 400 });
+        }, { altura: 230 });            // el «!» a l'alçada de la cara (més amunt quedava fora de la pantalla)
 
         // Després del sopar queden quatre espelmes vora les arrels del Til·ler
         if (Estat.flag('soparFet')) this.posarEspelmes();
