@@ -762,8 +762,12 @@ class ZonaDolmen extends ZonaBase {
     passos(llista, fet) {
         const I = this.ineu, dir4 = { up: 'amunt', down: 'avall', left: 'esquerra', right: 'dreta' };
         let i = 0;
+        // les passes sonen com quan camina (una cada 300 ms, alternant el peu)
+        const sona = () => { this.altrePas = !this.altrePas; Sfx.pas(this.altrePas); };
+        sona();
+        const so = this.time.addEvent({ delay: 300, loop: true, callback: sona });
         const seg = () => {
-            if (i >= llista.length) { if (fet) fet(); return; }
+            if (i >= llista.length) { so.remove(); if (fet) fet(); return; }
             const [x, y, v, ms] = llista[i++];
             this.posarDireccio(dir4[v], true, v);
             this.tweens.add({ targets: I, x, y, duration: ms, ease: 'Sine.easeInOut', onComplete: seg });
