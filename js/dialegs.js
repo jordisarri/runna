@@ -818,9 +818,9 @@ const DIALEGS = {
         if (E.flag("soparObert") && !E.flag("floresIsidre")) {
             return {
                 pagines: [
-                    { qui: "Isidre", text: "Sopar del Til·ler, eh? Cada any se n'omple el cap amb escudelles i s'obliden de les flors. Jo hi fico flors des que tenia dos peus bons." },
+                    { qui: "Isidre", text: "Sopar del Til·ler, eh? Cada any se n'omple el cap amb escudelles i s'obliden de les flors. Jo hi fico flors des que era jove." },
                     { fer: (z, fet) => { const i = z.npcs.isidre, x0 = i.x, y0 = i.y; z.seq([c => z.npcVa('isidre', x0 - 140, y0 - 30, c, 80), c => z.npcFeina('isidre', 1300, 'fulles', c), c => z.npcVa('isidre', x0, y0, c, 80), c => z.objecteVola('isidre', c, 'flors')], fet); } },
-                    { qui: "Isidre", text: "Les flors de lluna són pels que falten. Posa-les al mig de la taula. Jo no podré ser-hi, que el peu em ballaria... però seré a cada pètal." },
+                    { qui: "Isidre", text: "Les flors de lluna són pels que falten. Posa-les al mig de la taula. Jo no podré ser-hi, que algú ha de quedar-se al jardí... però seré a cada pètal." },
                     { avis: "Has obtingut les FLORS DE L'ISIDRE." }
                 ],
                 enAcabar: () => { E.dona("flors_isidre"); E.posaFlag("floresIsidre"); objectiuSopar(E); }
@@ -837,11 +837,11 @@ const DIALEGS = {
             };
         }
         if (E.flag('llosaOberta')) {
-            return { pagines: [{ qui: 'Isidre', text: 'La flor de lluna ja ha florit sobre la llosa. Em fa mal el peu, però no deixaré de cuidar-la.' }] };
+            return { pagines: [{ qui: 'Isidre', text: 'La flor de lluna ja ha florit sobre la llosa. No deixaré de cuidar-la.' }] };
         }
         if (E.te('llavorLluna')) {
             return {
-                pagines: [{ qui: 'Isidre', text: 'Una Llavor de Lluna! Fa trenta anys que no en veia cap. Deixa-me-la, monjo, que el peu em fa mal però encara sé cavar un clot.' }],
+                pagines: [{ qui: 'Isidre', text: 'Una Llavor de Lluna! Fa trenta anys que no en veia cap. Deixa-me-la, monjo, que encara sé cavar un clot.' }],
                 enAcabar: () => {
                     E.treu('llavorLluna');
                     const z = Joc.zonaActiva(game.scene.getScene('UI'));
@@ -851,17 +851,17 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: 'Isidre', text: 'Bon dia, monjo! Perdona que no m\'aixequi: el peu, ja saps. Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l\'Hostatgeria, aquí al costat, que s\'hi aguanta al darrere.' },
-                { qui: 'Isidre', text: 'Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s\'obre amb una flor de lluna, i la llavor, ves a saber... potser la tingui la venedora de verdura, la Sansa.' },
-                { qui: 'Isidre', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí era del meu fill, el Sardi. Des que la boira se\'l va endur, el cuido perquè, quan torni, ho trobi tot tal com ho va deixar.' }
+                { qui: 'Isidre', text: 'Bon dia, monjo! Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l\'Hostatgeria, aquí al costat, que s\'hi aguanta al darrere.' },
+                { qui: 'Isidre', text: 'Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s\'obre amb una flor de lluna, i la llavor, ves a saber... potser la gent de les cel·les en sap alguna cosa més, d\'aquesta llosa.' },
+                { qui: 'Isidre', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí, el Sardi el cuidava molt. Des que la boira se\'l va endur, el cuido jo perquè, quan torni, ho trobi tot tal com ho va deixar.' }
             ],
-            enAcabar: () => { E.posaFlag('isidreSansa'); E.posaObjectiu('Busca la Sansa, la venedora de verdura: potser té una Llavor de Lluna per a la llosa del jardí.'); }
+            enAcabar: () => { E.posaFlag('isidreSansa'); E.posaObjectiu('Pregunta a la gent de les Cel·les, al nord-est: potser en saben alguna cosa més de la llosa del jardí.'); }
         };
     },
     // La Sansa passa per les cel·les un sol cop: et ven la Llavor de Lluna i se'n va
     sansa: E => ({
         pagines: [
-            { qui: 'Sansa', text: 'Verdures fresques, fruita de la rodalia! ...Ai, ets el monjo de l' + String.fromCharCode(39) + 'Isidre? M' + String.fromCharCode(39) + 'ha dit que buscaves una cosa especial.' },
+            { qui: 'Sansa', text: 'Verdures fresques, fruita de la rodalia! ...Ai, ets el monjo que pregunta per la llosa del jardí? Aleshores potser busques una cosa especial.' },
             { qui: 'Sansa', text: 'Una Llavor de Lluna. Fa anys que la guardo al fons del carro, entre les cebes, i no sé ni per què. Pren, és teva. Que floreixi a qui sàpiga cuidar-la.' },
             { avis: 'Has obtingut la LLAVOR DE LLUNA.' },
             { qui: 'Sansa', text: 'Bé, jo ja he d' + String.fromCharCode(39) + 'anar fent camí. Avui encara em queden tres pobles per davant. Adéu, monjo!' }
@@ -911,7 +911,7 @@ const DIALEGS = {
             pagines: [
                 { qui: 'Pains', text: 'Oh, mon petit! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Pains.' },
                 { qui: 'Pains', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb abric d\'ocells que s\'enduia els nens del poble, rient baixet.' },
-                { qui: 'Pains', text: 'Si passes pel jardí, saluda l\'Isidre, el marit de la nostra germana. Un bon home, amb el peu malmès i el cor més malmès encara des que ens va faltar el petit.' },
+                { qui: 'Pains', text: 'Si passes pel jardí, saluda l\'Isidre, el marit de la nostra germana. Un bon home, amb el cor malmès des que ens va faltar el petit.' },
                 { qui: 'Pains', text: 'Pren això, fill. El rosari d\'aquesta casa és vell i fort: que et doni una mica de la seva claror.' }
             ],
             enAcabar: () => premiMonja('Pains', 'premiPains')

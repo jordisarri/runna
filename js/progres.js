@@ -145,7 +145,7 @@ const PROGRES = {
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
           pista: E => "La Nena de les Trenes, al camí de la Rovellonera, encara espera els seus dos llaços: tots dos colgats sota pedres: una roca del camí i una pedra de la primera clariana de la Rovellonera. Posa't darrere la pedra i camina contra ella per empènyer-la." },
         { id: 'monges', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'mongesTrobades'], obert: E => E.flag('isidreSansa'), fet: E => E.flag('mongesTrobades'),
-          pista: E => !E.flag('llavorSansa') && !E.flag('llosaOberta') ? "La Sansa, la de les verdures, passa per les Cel·les: l'Isidre diu que té una Llavor de Lluna."
+          pista: E => !E.flag('llavorSansa') && !E.flag('llosaOberta') ? "Pregunta a la gent de les Cel·les, al nord-est: potser en saben alguna cosa més de la llosa del jardí de l'Hostatgeria."
               : !E.flag('llosaOberta') ? "Porta la Llavor de Lluna a l'Isidre, al jardí de l'Hostatgeria."
               : "Sota la llosa del jardí de l'Hostatgeria hi ha un soterrani que puja a les cambres de les sacerdotesses. Per alliberar-les et caldran el Cant de l'Aurora, els Guants de Poder i Runna." }
     ],

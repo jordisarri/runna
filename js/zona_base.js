@@ -119,6 +119,7 @@ class ZonaBase extends Phaser.Scene {
         this.construir();
         this.obrirPortes();
         this.ampliarSud();
+        this.ponFonsContinu();
         this.construirCamins();
         this.crearIneu();
         this.posarBoiraSortides();
@@ -176,7 +177,19 @@ class ZonaBase extends Phaser.Scene {
         }
         const t = this.add.tileSprite(x, y, w, h, key).setOrigin(0).setTileScale(1 / RES).setDepth(profunditat);
         this.sols.push(t);
+        if (profunditat === -1100 && x === 0 && y === 0 && !this.fonsTex) { this.fonsTex = key; this.fonsSprite = t; }      // el terra de tota la zona: és el que es continua fora dels límits
         return t;
+    }
+
+    // Fora dels límits de la zona (quan la càmera s'allunya o es mou fora, com en un diàleg) es veu el mateix terra, continuant-lo, i no un color pla.
+    // Els interiors (sales fosques) es queden amb el seu color de fons.
+    ponFonsContinu() {
+        if (!this.fonsTex || this.esInterior() || !this.textures.exists(this.fonsTex)) return;
+        const c = this.config, MARGE = 1600;
+        const per = Math.max(8, this.textures.get(this.fonsTex).getSourceImage().width / RES);        // el que fa una rajola al món: la quadrícula queda alineada amb la del terra
+        const m = Math.ceil(MARGE / per) * per;
+        const f = this.add.tileSprite(-m, -m, c.amplada + 2 * m, c.alcada + this.extraSud + 2 * m, this.fonsTex).setOrigin(0).setTileScale(1 / RES).setDepth(-1500);
+        if (this.fonsSprite && this.fonsSprite.isTinted) f.setTint(this.fonsSprite.tintTopLeft);
     }
 
     // Interior = sala fosca (colorFons molt fosc): es dibuixa centrada i no s'allarga

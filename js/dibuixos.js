@@ -636,11 +636,17 @@ function dibuixarAlzinaBuida(c, w) {
 }
 
 function dibuixarLlosa(c, w) {
-    lienc(c, w, w * 0.6, (ctx, W, H) => {
-        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN;
-        ctx.fillStyle = '#8a8478'; ctx.beginPath(); ctx.ellipse(W / 2, H / 2, W * 0.44, H * 0.4, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    // Llosa QUADRADA de pedra (tapa del passadís cap al soterrani): cara de dalt quadrada, gruix al davant i una creu gravada
+    lienc(c, w, w * 0.98, (ctx, W, H) => {
+        const g = W * 0.07, cara = W - 6;
+        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.lineJoin = 'round';
+        ctx.fillStyle = '#5e594f'; ctx.beginPath(); ctx.roundRect(3, 3 + g, cara, cara, W * 0.05); ctx.fill(); ctx.stroke();          // gruix
+        ctx.fillStyle = '#928c80'; ctx.beginPath(); ctx.roundRect(3, 3, cara, cara, W * 0.05); ctx.fill(); ctx.stroke();               // cara de dalt
+        ctx.fillStyle = 'rgba(255,255,255,0.14)'; ctx.fillRect(W * 0.1, W * 0.08, W * 0.8, W * 0.05);
         ctx.strokeStyle = '#4a463e'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(W * 0.3, H * 0.5); ctx.lineTo(W * 0.7, H * 0.5); ctx.moveTo(W * 0.5, H * 0.25); ctx.lineTo(W * 0.5, H * 0.75); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(W * 0.3, W * 0.5); ctx.lineTo(W * 0.7, W * 0.5); ctx.moveTo(W * 0.5, W * 0.3); ctx.lineTo(W * 0.5, W * 0.7); ctx.stroke();
+        ctx.lineWidth = 1.4; ctx.strokeStyle = 'rgba(40,36,30,0.6)';
+        ctx.beginPath(); ctx.moveTo(W * 0.18, W * 0.78); ctx.lineTo(W * 0.3, W * 0.7); ctx.lineTo(W * 0.27, W * 0.62); ctx.moveTo(W * 0.78, W * 0.2); ctx.lineTo(W * 0.7, W * 0.3); ctx.stroke();
     });
 }
 

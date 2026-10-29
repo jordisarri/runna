@@ -274,7 +274,7 @@ class ZonaJardi extends ZonaBase {
             nom: "L'Hostatgeria",
             amplada: 1800,
             alcada: 1100,
-            entrades: { era: { x: 60, y: 960, dir: 'dreta' }, taverna: { x: 1740, y: 960, dir: 'esquerra' }, llosa: { x: 512, y: 590, dir: 'avall' }, hostatgeria: { x: 1339, y: 800, dir: 'avall' } }
+            entrades: { era: { x: 60, y: 960, dir: 'dreta' }, taverna: { x: 1740, y: 960, dir: 'esquerra' }, llosa: { x: 664, y: 658, dir: 'avall' }, hostatgeria: { x: 1339, y: 800, dir: 'avall' } }
         });
     }
 
@@ -343,7 +343,7 @@ class ZonaJardi extends ZonaBase {
         this.interactiu(PX, PY + 5, RADI_GRAN, DIALEGS.prunera, { altura: 400 });
 
         // La llosa del passadís cap al soterrani de l'Hostatgeria, entre les columnes (ben visible). S'obre quan hi creix la flor de lluna
-        const LX = 512, LY = 492;      // al buit entre les files de columnes: ni les arcades ni les columnes la tapen
+        const LX = 664, LY = 560;      // dins la pèrgola, entre les dues últimes columnes (les arcades que toquen a la casa): ni les arcades ni les columnes la tapen
         this.llosaPos = { x: LX, y: LY };
         this.foratLlosa = this.add.graphics().setDepth(-705);                // el forat amb l'escala, tapat per la llosa fins que s'obre
         this.dibuixaForat(LX, LY);
@@ -353,7 +353,7 @@ class ZonaJardi extends ZonaBase {
 
         // --- Gespa amb flors: només dins la pèrgola (cap flor fora). Un rectangle clar fa de gespa ben cuidada ---
         this.add.rectangle((COLS[0] + COLS[COLS.length - 1]) / 2, (YB + YF) / 2, COLS[COLS.length - 1] - COLS[0], YF - YB, 0xc4f08c, 0.14).setDepth(-1090);
-        const lliure = (x, y) => Math.hypot(x - PX, (y - PY) * 1.6) > 70 && Math.hypot(x - LX, (y - LY) * 1.6) > 130 && Math.hypot(x - (LX + 84), (y - LY) * 1.6) > 70;
+        const lliure = (x, y) => Math.hypot(x - PX, (y - PY) * 1.6) > 70 && Math.hypot(x - LX, (y - LY) * 1.6) > 130 && Math.hypot(x - (LX - 92), (y - LY) * 1.6) > 70;
         for (let n = 0, intents = 0; n < 46 && intents < 600; intents++) {
             const x = COLS[0] + 20 + rnd() * (COLS[COLS.length - 1] - COLS[0] - 40), y = YB + 20 + rnd() * (YF - YB - 30);
             if (!lliure(x, y)) continue;
@@ -363,13 +363,13 @@ class ZonaJardi extends ZonaBase {
         }
 
         // L'Isidre, davant l'entrada de la pèrgola (si la llosa ja és oberta, es queda al costat del forat)
-        this.isidre = this.npc('isidre', 510, 915, DIALEGS.isidre);
+        this.isidre = this.npc('isidre', 664, 915, DIALEGS.isidre);
         if (Estat.flag('llosaOberta')) {
-            this.llosa.setPosition(LX + 84, LY + 6).setRotation(0.12);
+            this.llosa.setPosition(LX - 92, LY + 4).setRotation(-0.1);
             this.florLluna.setVisible(true);
             this.posarEntradaForat();
-            this.isidre.setPosition(LX + 70, LY + 62).ombra.setPosition(LX + 70, LY + 62);
-            this.isidre.punt.x = LX + 70; this.isidre.punt.y = LY + 52;
+            this.isidre.setPosition(LX - 74, LY + 62).ombra.setPosition(LX - 74, LY + 62);
+            this.isidre.punt.x = LX - 74; this.isidre.punt.y = LY + 52;
         }
 
         this.cartell(1500, 860, () => ({ pagines: [{ qui: 'Cartell', text: '→ La Taverna\n← L\'Era' }] }));
@@ -381,17 +381,17 @@ class ZonaJardi extends ZonaBase {
     dibuixaForat(x, y) {
         const g = this.foratLlosa;
         g.clear();
-        g.fillStyle(0x5a5448, 1).fillRoundedRect(x - 44, y - 34, 88, 68, 8).lineStyle(3, 0x120c08, 1).strokeRoundedRect(x - 44, y - 34, 88, 68, 8);
-        g.fillStyle(0x0a0604, 1).fillRect(x - 34, y - 26, 68, 52);
+        g.fillStyle(0x5a5448, 1).fillRoundedRect(x - 45, y - 45, 90, 90, 6).lineStyle(3, 0x120c08, 1).strokeRoundedRect(x - 45, y - 45, 90, 90, 6);
+        g.fillStyle(0x0a0604, 1).fillRect(x - 37, y - 37, 74, 74);
         [0x14100c, 0x241c14, 0x3a2e22, 0x5a4a36, 0x7a6648, 0x9a8460].forEach((c, i) => {
-            const sy = y - 26 + i * 8.6;
-            g.fillStyle(c, 1).fillRect(x - 34, sy, 68, 8.6).lineStyle(1.2, 0x0a0604, 0.9).lineBetween(x - 34, sy + 8.6, x + 34, sy + 8.6);
+            const sy = y - 37 + i * 12.3;
+            g.fillStyle(c, 1).fillRect(x - 37, sy, 74, 12.3).lineStyle(1.2, 0x0a0604, 0.9).lineBetween(x - 37, sy + 12.3, x + 37, sy + 12.3);
         });
     }
 
     posarEntradaForat() {
         const { x, y } = this.llosaPos;
-        this.sortidaEscala(x - 34, y - 26, 68, 52, 'ZonaSoterraniHost', 'entrada', y + 30);   // l'Ineu baixa l'escala abans de canviar de zona
+        this.sortidaEscala(x - 37, y - 37, 74, 74, 'ZonaSoterraniHost', 'entrada', y + 42);   // l'Ineu baixa l'escala abans de canviar de zona
     }
 
     // L'Isidre porta la llavor a la llosa, la planta, la flor creix i la llosa s'aparta i deixa veure l'escala. Tot es veu, no s'explica.
@@ -415,7 +415,7 @@ class ZonaJardi extends ZonaBase {
         (async () => {
             cam.stopFollow(); cam.pan(LX, LY + 130, 700, 'Sine.easeInOut');
             await espera(750);
-            await mou({ x: 512, y: 780 }, 1400);                    // surt per l'obertura de la pèrgola
+            await mou({ x: LX, y: 780 }, 1400);                    // surt per l'obertura de la pèrgola
             await mou({ x: LX - 14, y: LY + 66 }, 1000);            // fins a la llosa
             this.tweens.add({ targets: I, scaleY: base * 0.78, duration: 450, ease: 'Sine.easeOut' });   // s'ajup a cavar
             [0, 350, 700].forEach(t => this.time.delayedCall(t, () => pols(LX - 14, LY + 68, [0x8a6a44, 0x6a4a2c])));
@@ -425,10 +425,10 @@ class ZonaJardi extends ZonaBase {
             const llum = this.add.particles(LX - 66, LY + 8, 'espurna', { x: { min: -20, max: 20 }, speedY: { min: -40, max: -10 }, lifespan: 1400, scale: { start: 0.4, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xbfe8ff, 0xffffff], frequency: 120, blendMode: 'ADD' }).setDepth(9000);
             await espera(1500);
             this.tweens.add({ targets: I, scaleY: base, duration: 350 });
-            await mou({ x: LX + 70, y: LY + 62 }, 900);             // s'aparta cap a la dreta
+            await mou({ x: LX - 74, y: LY + 62 }, 900);             // s'aparta cap a l'esquerra (a la dreta hi ha la paret de la casa)
             Sfx.secret(); cam.shake(500, 0.004);
-            this.tweens.add({ targets: this.llosa, x: LX + 84, y: LY + 6, rotation: 0.12, duration: 1500, ease: 'Cubic.easeInOut' });   // la llosa llisca i descobreix l'escala
-            pols(LX + 20, LY, [0xa89878, 0x8a8478]);
+            this.tweens.add({ targets: this.llosa, x: LX - 92, y: LY + 4, rotation: -0.1, duration: 1500, ease: 'Cubic.easeInOut' });   // la llosa llisca i descobreix l'escala
+            pols(LX - 20, LY, [0xa89878, 0x8a8478]);
             await espera(1800);
             llum.stop(); this.time.delayedCall(1500, () => llum.destroy());
             Estat.posaFlag('llosaOberta');
