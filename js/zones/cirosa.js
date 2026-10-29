@@ -159,7 +159,11 @@ class ZonaCirosa extends ZonaBase {
             this.andreuOmbra = this.add.image(1400, 640, 'ombra').setScale(0.5).setDepth(-500);
             this.andreuNpc.ombra = this.andreuOmbra;
             (this.npcs = this.npcs || {}).andreu = this.andreuNpc;
-            this.interactiu(1400, 630, RADI_NPC, DIALEGS.andreuPastor, { altura: this.andreuNpc.displayHeight + 6, actiu: () => !this.bossIniciat });
+            this.andreuPunt = this.interactiu(1400, 630, RADI_NPC, DIALEGS.andreuPastor, { altura: this.andreuNpc.displayHeight + 6, actiu: () => !this.bossIniciat });
+            this.andreuPunt.npc = this.andreuNpc;
+            // Sura sobre la boira, i l'ombra s'encongeix quan puja
+            this.andreuFlota = this.tweens.add({ targets: this.andreuNpc, y: 626, yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut',
+                onUpdate: () => this.andreuOmbra.setScale(0.5 - (640 - this.andreuNpc.y) * 0.008) });
         }
 
         this.arbres([[100, 150], [260, 90], [500, 120], [800, 100], [900, 280], [140, 420], [40, 1100], [820, 1100],
@@ -169,6 +173,16 @@ class ZonaCirosa extends ZonaBase {
 
         this.sortida(500, 1186, 160, 14, 'ZonaCamiCirosa', 'cirosa');
         this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x3a1a55, lila ? 0.12 : 0).setScrollFactor(0).setDepth(90000);
+    }
+
+    // El Pastor no espera que l'Ineu s'hi acosti a parlar: quan el veu entrar a la pastura, el crida
+    actualitzar() {
+        if (!this.andreuPunt || this.andreuHaCridat || this.bossIniciat) return;
+        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1400, 640) > 240) return;
+        this.andreuHaCridat = true;
+        this.ineu.body.setVelocity(0);
+        this.flotant(1400, 500, 'Ineu!', '#e0a0ff');
+        this.time.delayedCall(500, () => { if (!this.bossIniciat && !this.ui().dialeg) this.interactuar(this.andreuPunt); });
     }
 
     // Pou de pedra baix, amb corriola de fusta
@@ -262,9 +276,10 @@ class ZonaCirosa extends ZonaBase {
     iniciarBoss() {
         if (this.bossIniciat) return;
         this.bossIniciat = true;
+        this.andreuFlota.pause();
         this.andreuNpc.setVisible(false); this.andreuOmbra.setVisible(false);
         const e = this.enemic('pastor', 1400, 570);
-        if (!e) { this.bossIniciat = false; this.andreuNpc.setVisible(true); this.andreuOmbra.setVisible(true); return; }
+        if (!e) { this.bossIniciat = false; this.andreuNpc.setVisible(true); this.andreuOmbra.setVisible(true); this.andreuFlota.resume(); return; }
         this.cameras.main.shake(300, 0.005);
         this.tancarArena();
         this.flotant(1400, 520, 'Be-e-e-e!', '#e0a0ff');

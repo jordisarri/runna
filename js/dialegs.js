@@ -1067,8 +1067,8 @@ const DIALEGS = {
 
     andreuPastor: E => ({
         pagines: [
-            { fer: (z, fet) => z.seq([c => z.npcSalta('andreu', c, 1), c => z.llum(z.npcs.andreu.x, z.npcs.andreu.y - 90, 0xb88aff, c)], fet) },
-            { qui: "Germà Andreu", text: "Ineu! Has pujat fins aquí... Mira'ls. Mira com em segueixen. Ningú no m'havia seguit mai." },
+            { fer: (z, fet) => z.seq([c => { z.andreuFlota.pause(); z.npcs.andreu.y = 640; z.andreuOmbra.setScale(0.5); c(); }, c => z.npcSalta('andreu', c, 1), c => z.llum(z.npcs.andreu.x, z.npcs.andreu.y - 90, 0xb88aff, c)], fet) },
+            { qui: "Germà Andreu", text: "Has pujat fins aquí... Mira'ls. Mira com em segueixen. Ningú no m'havia seguit mai." },
             { qui: "Germà Andreu", text: "El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» Jo no el trobo a faltar: l'admiro. I ara sóc el seu pastor. El PASTOR!" },
             { qui: "Ineu", text: "Andreu, això que et parla no és bo. Encara pots tornar enrere." },
             { qui: "Germà Andreu", text: "Tornar enrere? Mai! El Mestre em va veure, quan ningú més no ho feia. Calla! Be-e-e!" }
