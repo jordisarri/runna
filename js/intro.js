@@ -14,7 +14,7 @@ const FONT_PLACA = '"Cinzel", Georgia, serif';                                  
 const MUSICA_FANFARRIA = 17;
 const FOSA_BUCLE = 500;
 // Si el vídeo no avança en aquest temps (el mòbil l'ha bloquejat), passem directament al bucle
-const ESPERA_VIDEO = 2500;
+const ESPERA_VIDEO = 5000;
 
 class EscenaTitol extends Phaser.Scene {
     constructor() { super('Titol'); }
@@ -87,10 +87,7 @@ class EscenaTitol extends Phaser.Scene {
             v.setVisible(true);
             if (v.video) v.video.currentTime = 0;
             v.play(false);
-            // El mòbil només deixa engegar un vídeo dins d'un gest: el bucle ja corre, tapat per la intro
-            this.videoBucle.setVisible(true);
-            this.videoBucle.play(true);
-            this.bucleEngegat = true;
+            // Només corre la intro: dos vídeos alhora ofegaven el mòbil (la intro s'encallava). El bucle arrenca en acabar-la o en saltar-la
             this.iniciIntro = this.time.now;
             return;
         }
