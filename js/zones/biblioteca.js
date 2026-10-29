@@ -110,7 +110,7 @@ class ZonaBiblioteca extends ZonaBase {
         });
 
         // El Pare Alcuí, entre la taula i el faristol
-        this.npc('pare_alcui', 760, 330, DIALEGS.pareAlcui, { flipX: true, radi: 200 });
+        this.npc('pare_alcui', 760, 330, DIALEGS.pareAlcui, { flipX: true, radi: 110 });
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffd38a, 0.06).setDepth(80000);
         this.sortida(510, H - 22, 80, 14, 'ZonaMonestirRebedor', 'biblioteca');

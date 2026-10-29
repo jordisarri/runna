@@ -85,7 +85,7 @@ class ZonaRovellonera extends ZonaBase {
         if (pas === 0) {
             this.llac = this.posar('llac', 1100, 300, { fonsY: 300 });
             this.tweens.add({ targets: this.llac, y: 294, yoyo: true, repeat: -1, duration: 700 });
-            this.interactiu(1100, 300, 70, DIALEGS.llac(2), { altura: 50, actiu: () => this.llac2Lliure() });
+            this.interactiu(1100, 300, RADI_OBJECTE, DIALEGS.llac(2), { altura: 50, actiu: () => this.llac2Lliure() });
             this.roca2 = this.pedraMobil(1100, 310, 'llac2', 110, 0,
                 'Una roca grossa entre els pins, coberta de molsa. Per sota en surt un tros de cinta rosa.');
         }
@@ -93,7 +93,7 @@ class ZonaRovellonera extends ZonaBase {
         // Cercle de bolets (segona clariana): portal màgic cap a la cabana de la Jaumeta, un cop descobert
         if (pas === 1) {
             this.posar('cercle_bolets', 1000, 870, { fonsY: -800 });
-            this.interactiu(1000, 870, 90, DIALEGS.cercleRovellonera, {
+            this.interactiu(1000, 870, RADI_OBJECTE, DIALEGS.cercleRovellonera, {
                 altura: 40,
                 enTancar: () => { if (Estat.flag('portalJaumeta')) { Estat.dades.portalTorna = 'rov'; this.canviarZona('ZonaCabana', 'portal'); } }
             });
@@ -218,12 +218,12 @@ class ZonaCamiRov extends ZonaBase {
             this.nena = this.posar('nena_trenes', 880, 880, { fonsY: 880 }).setAlpha(0.72);
             this.resplendorNena = this.add.circle(880, 820, 90, 0xcfd8ff, 0.12).setDepth(879);
             this.tweens.add({ targets: [this.nena, this.resplendorNena], y: '-=10', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
-            this.interactiu(880, 880, 100, DIALEGS.nenaTrenes, { altura: 105 });
+            this.interactiu(880, 880, RADI_NPC, DIALEGS.nenaTrenes, { altura: 105 });
         }
         // Primer llaç: amagat sota una roca que cal empènyer
         this.llac = this.posar('llac', 1300, 830, { fonsY: 830 });
         this.tweens.add({ targets: this.llac, y: 824, yoyo: true, repeat: -1, duration: 700 });
-        this.interactiu(1300, 830, 70, DIALEGS.llac(1), { altura: 50, actiu: () => this.llacLliure() });
+        this.interactiu(1300, 830, RADI_OBJECTE, DIALEGS.llac(1), { altura: 50, actiu: () => this.llacLliure() });
         this.roca1 = this.pedraMobil(1300, 840, 'llac1', 110, 0,
             'Una roca grossa a la vora del camí, amb l\'herba aixafada al voltant. Sota seu hi brilla una cosa rosada.');
 
@@ -421,7 +421,7 @@ class ZonaGabrielInt extends ZonaBase {
             [[-6, 10, 0xe8c050], [4, 6, 0xd84a3a], [7, 14, 0xe8c050], [-2, 4, 0xf4f0e0]].forEach(([fx, fy, c]) => t.fillStyle(c, 1).fillCircle(cx + dx + fx, grao + fy, 2.5));
             t.fillStyle(0xa0563a, 1).fillEllipse(cx + dx, grao + 22, 26, 10).lineStyle(1.5, 0x4a2414, 1).strokeEllipse(cx + dx, grao + 22, 26, 10);
         });
-        this.interactiu(cx, grao + 40, 90, DIALEGS.altarGabriel, { altura: 140 });
+        this.interactiu(cx, grao + 40, RADI_OBJECTE, DIALEGS.altarGabriel, { altura: 140 });
 
         // Parets i porta
         this.colisio(x0 / 2, H / 2, x0, H);
@@ -473,7 +473,7 @@ class ZonaDipositos extends ZonaBase {
         mir.lineStyle(10, 0x8e887a, 1).strokePoints(ampit.map(p => ({ x: p.x, y: p.y - 8 })));
         const muntat = Estat.flag('telescopiMuntat') || Estat.flag('estelsPart1') || Estat.flag('estelLlorenc');
         this.tripode = this.posar(muntat ? 'telescopi_mon' : 'tripode', MX, MY + 10, { col: { w: 36, h: 16 } });
-        this.interactiu(MX, MY + 15, 95, DIALEGS.telescopiMon, { altura: 120 });
+        this.interactiu(MX, MY + 15, RADI_OBJECTE, DIALEGS.telescopiMon, { altura: 120 });
         // Cartell a la vora del camí, sense cap arbre al davant
         this.cartell(230, 500, () => ({ pagines: [{ qui: 'Cartell', text: '→ Dolmen\n← Ermita de Sant Gabriel' }] }));
 
@@ -488,7 +488,7 @@ class ZonaDipositos extends ZonaBase {
         }
 
         // La llum de l'estel al dipòsit de llevant (quan s'han comptat els estels i encara no s'ha recollit)
-        this.interactiu(DIP.estelX, 350, 120, DIALEGS.estelDiposit, { altura: 200, actiu: () => !!this.llumEstel });
+        this.interactiu(DIP.estelX, 350, RADI_GRAN, DIALEGS.estelDiposit, { altura: 200, actiu: () => !!this.llumEstel });
         // La boira que tapa el camí del Dolmen
         if (this.boiraTapa()) this.posarBoiraDolmen();
         else this.sortida(1586, 520, 14, 130, 'ZonaDolmen', 'diposits');
@@ -524,7 +524,7 @@ class ZonaDipositos extends ZonaBase {
         this.colBoira = this.colisio(X + 30, Y, 140, 240);
         this.foscBoira = this.add.ellipse(X + 40, Y, 260, 300, 0x2a3050, 0.5).setDepth(Y + 60);
         this.boiraDolmen = [-80, 0, 80].map(dy => this.boira(X + 40, Y + dy, 170, 110, 2.4, 0xc8d0ff));
-        this.interactiu(X - 50, Y, 110, DIALEGS.boiraDolmen, {
+        this.interactiu(X - 50, Y, RADI_GRAN, DIALEGS.boiraDolmen, {
             altura: 150, actiu: () => !!this.boiraDolmen,
             enTancar: () => { if (Estat.te('estel_llorenc')) this.esvairBoiraDolmen(); }
         });
@@ -594,7 +594,7 @@ class ZonaDolmen extends ZonaBase {
         this.espasaY = this.espY;
         this.resplendor = this.add.circle(this.espX, this.espY - 55, 90, 0xd8e8ff, Estat.te('runna') ? 0 : 0.12).setDepth(sy + 1).setBlendMode('ADD');
         if (!Estat.te('runna')) this.tweens.add({ targets: this.resplendor, alpha: 0.28, yoyo: true, repeat: -1, duration: 1200 });
-        this.interactiu(sx, sy + 15, 110, () => Estat.te('runna') ? DIALEGS.dolmenBuit(Estat) : DIALEGS.dolmen(Estat), { altura: 380 });
+        this.interactiu(sx, sy + 15, RADI_GRAN, () => Estat.te('runna') ? DIALEGS.dolmenBuit(Estat) : DIALEGS.dolmen(Estat), { altura: 380 });
         this.posarEscales(wy(DOLMEN_DIB.ly));
         this.escales.espY = this.espY;                                                 // no es pot caminar més enllà de la base de l'espasa
         // Des de la llosa, al costat de l'espasa, també es pot parlar amb la pedra

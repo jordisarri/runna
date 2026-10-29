@@ -28,7 +28,8 @@ class EscenaTitol extends Phaser.Scene {
         this.cameras.main.setBackgroundColor('#000000');
 
         // El títol (primer fotograma del bucle) com a imatge: es veu sempre, encara que el mòbil no engegui el vídeo
-        this.portadaTitol = this.add.image(AMPLE / 2, ALT / 2, 'titol_portada').setDisplaySize(AMPLE, ALT).setDepth(-1).setVisible(false);
+        this.portadaTitol = this.add.image(AMPLE / 2, ALT / 2, 'titol_portada').setDepth(-1).setVisible(false);
+        this.portadaTitol.setScale(this.escalaVertical(this.portadaTitol.width, this.portadaTitol.height));
         this.videoBucle = this.crearVideo('video_bucle', 0).setVisible(false);
         this.videoIntro = this.crearVideo('video_intro', 1).setVisible(false);
         this.construirMenu();
@@ -51,12 +52,17 @@ class EscenaTitol extends Phaser.Scene {
         }
     }
 
+    escalaVertical(w, h) {
+        return ALT < h * AMPLE / w ? Math.min(AMPLE / w, ALT / h) : ALT / h;
+    }
+
     // Vídeo a pantalla completa (s'adapta a la mida quan el vídeo ja té dimensions)
     crearVideo(key, profunditat) {
         const v = this.add.video(AMPLE / 2, ALT / 2, key).setOrigin(0.5).setDepth(profunditat);
         v.setMute(true);
-        // Els vídeos són verticals (720x1280, com el joc): s'ajusten a pantalla completa
-        const ajusta = () => { if (v.width > 0) v.setDisplaySize(AMPLE, ALT); };
+        // Els vídeos són verticals (9:16): mai s'estiren. Si la pantalla és més baixa (PC) es veuen sencers amb barres;
+        // si és més alta (mòbil llarg) omplen l'alçada i es retallen una mica els costats
+        const ajusta = () => { if (v.width > 0) v.setScale(this.escalaVertical(v.width, v.height)); };
         v.on('created', ajusta);
         v.on('playing', ajusta);
         ajusta();

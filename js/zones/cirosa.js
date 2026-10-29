@@ -76,7 +76,7 @@ class ZonaCamiCirosa extends ZonaBase {
 
         // Cartells a cada tram del camí i un banc de pedra a mig pujar (hi reposes i es desa la partida)
         this.posar('banc', 560, 1228, { col: { w: 130, h: 22 } });
-        this.interactiu(560, 1238, 95, DIALEGS.bancCami, { altura: 70 });
+        this.interactiu(560, 1238, RADI_OBJECTE, DIALEGS.bancCami, { altura: 70 });
 
         // Ramat: de boira i hostil fins que el Pastor cau; després, ovelles blanques que pasturen tranquil·les
         const net = Estat.flag('pastorVencut');
@@ -159,7 +159,7 @@ class ZonaCirosa extends ZonaBase {
             this.andreuOmbra = this.add.image(1400, 640, 'ombra').setScale(0.5).setDepth(-500);
             this.andreuNpc.ombra = this.andreuOmbra;
             (this.npcs = this.npcs || {}).andreu = this.andreuNpc;
-            this.interactiu(1400, 630, 95, DIALEGS.andreuPastor, { altura: this.andreuNpc.displayHeight + 6, actiu: () => !this.bossIniciat });
+            this.interactiu(1400, 630, RADI_NPC, DIALEGS.andreuPastor, { altura: this.andreuNpc.displayHeight + 6, actiu: () => !this.bossIniciat });
         }
 
         this.arbres([[100, 150], [260, 90], [500, 120], [800, 100], [900, 280], [140, 420], [40, 1100], [820, 1100],
@@ -317,25 +317,25 @@ class ZonaMasiaCirosa extends ZonaBase {
         this.foc = this.posar('foc', 450, 126, { fonsY: 126, col: { w: 60, h: 16 } });
         this.tweens.add({ targets: this.foc, scaleY: this.foc.scaleY * 1.08, yoyo: true, repeat: -1, duration: 260 });
         this.add.circle(450, 150, 140, 0xff9a30, 0.12).setDepth(300);
-        this.interactiu(450, 170, 100, DIALEGS.masiaLlar, { altura: 100 });
+        this.interactiu(450, 170, RADI_OBJECTE, DIALEGS.masiaLlar, { altura: 100 });
         this.posar('olla', 560, 170, { col: { w: 56, h: 22 } });
 
         // Biga amb ganxos buits (per les esquelles) a la paret de la dreta
         const biga = this.add.graphics().setDepth(-940);
         biga.fillStyle(0x3a2412, 1).fillRect(600, 58, 200, 10).lineStyle(2, 0x120a04, 1).strokeRect(600, 58, 200, 10);
         [630, 670, 710, 750, 780].forEach(x => biga.lineStyle(3, 0x2a2a2e, 1).lineBetween(x, 68, x, 78).strokeCircle(x, 82, 4));
-        this.interactiu(700, 100, 100, DIALEGS.masiaEsquelles, { altura: 60 });
+        this.interactiu(700, 100, RADI_OBJECTE, DIALEGS.masiaEsquelles, { altura: 60 });
 
         // El llibre del ramat, sobre un prestatge, a l'esquerra
         const pres = this.add.graphics().setDepth(-940);
         pres.fillStyle(0x4a2c14, 1).fillRect(110, 56, 150, 8).lineStyle(2, 0x120a04, 1).strokeRect(110, 56, 150, 8);
         pres.fillStyle(0x7a2a1a, 1).fillRect(132, 34, 38, 22).fillStyle(0x3a4a6a, 1).fillRect(176, 28, 22, 28).fillStyle(0x5a3a1e, 1).fillRect(204, 38, 44, 18);
-        this.interactiu(180, 100, 90, DIALEGS.masiaLlibre, { altura: 60 });
+        this.interactiu(180, 100, RADI_OBJECTE, DIALEGS.masiaLlibre, { altura: 60 });
 
         // Taula llarga i tamborets
         this.posar('taula', 330, 330, { col: { w: 170, h: 30 } });
         [[270, 370], [330, 372], [390, 370]].forEach(([x, y]) => this.posar('tamboret', x, y, { col: { w: 36, h: 14 } }));
-        this.interactiu(330, 345, 110, DIALEGS.masiaTaula, { altura: 60 });
+        this.interactiu(330, 345, RADI_GRAN, DIALEGS.masiaTaula, { altura: 60 });
 
         // Jaços de palla amb manta, a la dreta
         [[690, 300], [690, 440]].forEach(([x, y], i) => {

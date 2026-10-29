@@ -34,8 +34,8 @@ const RETRATS = {
     'Pare Alcuí': 'pare_alcui', 'Eva': 'eva', 'Josep': 'josep', 'Frederic': 'frederic', 'Juli': 'juli', 'Garf': 'garf', 'Isidre': 'isidre',
     'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
-    'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Jordi': 'jordi_caseta', 'Sansa': 'sansa', 'Home del Raïm': 'home_raim', 'Daniel': 'daniel_t',
-    'Yordi': 'yordi', 'Turbo': 'turbo', 'Judit': 'judit', 'Home del Carruatge Verd': 'home_carruatge'
+    'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Jordi': 'jordi_caseta', 'Sansa': 'sansa', 'Home del Raïm': 'home_raim',
+    'Carry': 'carry', 'Home del Carruatge Verd': 'home_carruatge', 'El Gran Til·ler': 'tiller'
 };
 const MIDA_RETRAT = 170;          // costat del retrat a la caixa de diàleg (px de joc)
 // Retocs del retall per a dibuixos amb una altra proporció (alt: fracció de la figura que fa el cap; per defecte 0,4)
@@ -46,6 +46,22 @@ function retratDe(scene, qui) {
     if (!key) return null;
     const clau = 'retrat_' + key;
     if (scene.textures.exists(clau)) return clau;
+    // Retrat dibuixat de tres quarts (assets/retrats/<clau>.webp): es posa sobre el fons de pergamí, amb el tall d'espatlles a baix
+    if (scene.textures.exists('retratimg_' + key) && !Grafics.faltants.includes('retratimg_' + key)) {
+        try {
+            const im = scene.textures.get('retratimg_' + key).getSourceImage();
+            const N = MIDA_RETRAT * RES, out = document.createElement('canvas'); out.width = N; out.height = N;
+            const c = out.getContext('2d');
+            c.beginPath(); c.roundRect(0, 0, N, N, N * 0.12); c.clip();
+            const g = c.createLinearGradient(0, 0, 0, N); g.addColorStop(0, '#d8c08a'); g.addColorStop(1, '#a8885a');
+            c.fillStyle = g; c.fillRect(0, 0, N, N);
+            const k = Math.min(N * 0.96 / im.width, N * 0.96 / im.height), dw = im.width * k, dh = im.height * k;
+            c.imageSmoothingQuality = 'high';
+            c.drawImage(im, (N - dw) / 2, N - dh, dw, dh);
+            scene.textures.addCanvas(clau, out);
+            return clau;
+        } catch (e) { /* si falla, el retall del sprite */ }
+    }
     const nomTex = key === 'ineu' ? 'ineu_down' : key;
     if (!scene.textures.exists(nomTex)) return null;
     try {
@@ -98,7 +114,8 @@ const CATALEG_OBJECTES = {
     flauta:           ['Flauta', 'Es toca amb ESPAI allà on la música pot fer efecte.'],
     basto:            ['Bastó de pelegrí', 'Per caminar... i per defensar-se.'],
     basto_tiller:     ['Branca del Til·ler', 'Més lleugera i àgil que el bastó de pelegrí.'],
-    clau_campanar:    ['Clau del campanar', 'Obre la porta de la dreta del retaule, la que duu a la torre del rellotge. La guardaven les Venerables Sàvies.'],
+    clau_campanar:    ['Clau del campanar', 'Obre la porta de la dreta del retaule, la que duu a la torre del rellotge. Era del campaner, el marit de la Carry.'],
+    pallofa:          ['El Pallofa', 'El gos de la Carry: petit, prim, borni i ple de puces. Duu-lo a casa seva.'],
     clau_sagrari:     ['Clau del sagrari', 'Petita, gairebé de joguina. Guardada a l\'ermita.'],
     aigua_sj:         ['Aigua de la Font del Bisbe', 'Aigua beneïda, clara com el vidre.'],
     cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Garf en sabrà fer alguna cosa.'],

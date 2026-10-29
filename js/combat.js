@@ -246,6 +246,10 @@ const ENEMICS = {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const fase3 = e.vida <= this.vida / 3, fase2 = e.vida <= this.vida * 2 / 3;      // tres fases de dos terços de vida cadascuna: 36 → 24 → 12
             if (!e.proxAtac) { e.proxAtac = ara + 1800; e.estat = 'sura'; e.nAtac = 0; }
+            // Idle: respira (1 → 2 → 1 → 3) mentre sura; pose de rugit als canvis de fase; en la resta d'estats, el sprite base
+            const clauIdle = e.estat === 'rugit' ? 'ocellaire_rugit'
+                : e.estat === 'sura' ? ['ocellaire', 'ocellaire_idle2', 'ocellaire', 'ocellaire_idle3'][Math.floor(ara / 260) % 4] : 'ocellaire';
+            if (e.spr.texture.key !== clauIdle && z.textures.exists(clauIdle)) e.spr.setTexture(clauIdle);
             // Cada canvi de fase: rugit, ona que l'empeny, els ocells s'apaguen i tot va més de pressa (la 3a crema el terra)
             if ((fase3 && !e.fase3) || (fase2 && !e.fase2)) {
                 const f = fase3 ? 3 : 2;

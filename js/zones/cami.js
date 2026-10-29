@@ -27,7 +27,7 @@ class ZonaCami extends ZonaBase {
         for (let i = 0; i < 12; i++) {
             const x = 2540 - i * 190, y = i % 2 === 0 ? 370 : 575;   // la columna 1 és la més propera a les Runes (est)
             this.posar('columna_proces_' + i, x, y, { col: { w: 34, h: 14 } });
-            this.interactiu(x, y + 6, 85, DIALEGS.columna(i + 1), { altura: 120 });
+            this.interactiu(x, y + 6, RADI_OBJECTE, DIALEGS.columna(i + 1), { altura: 120 });
         }
 
         [[700, 450], [1250, 450], [1950, 440], [2500, 460]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
@@ -77,11 +77,11 @@ class ZonaErmita extends ZonaBase {
         this.portaAnimada({ x: 500, top: 391, bottom: 570, ample: 124, fons: 580, color: 0xa8543a, vora: 0x3a1a0c, ferro: true });   // la porta de fusta vermella, amb ferros
         // Xiprers alts als costats de l'ermita (com a la capella real)
         [[130, 600, 1.5], [870, 600, 1.5], [60, 560, 1.35], [940, 560, 1.35], [100, 500, 1.2], [900, 500, 1.2], [30, 620, 1.3], [970, 620, 1.3]].forEach(([x, y, e]) => this.posar('xiprer', x, y, { escala: e, col: { w: 26, h: 12 } }));
-        this.interactiu(500, 640, 70, DIALEGS.ermitaPorta, { altura: 190, actiu: () => false });
+        this.interactiu(500, 640, RADI_OBJECTE, DIALEGS.ermitaPorta, { altura: 190, actiu: () => false });
 
         // Creu de la Desaparició, davant la finestra de la dreta de l'ermita i a l'altra banda del camí (no té cap paper a la trama: només es pot llegir)
         this.posar('creu_desaparicio', 660, 840, { escala: 1.9, col: { w: 70, h: 26 } });
-        this.interactiu(660, 850, 95, DIALEGS.creuDesaparicio, { altura: 300 });
+        this.interactiu(660, 850, RADI_OBJECTE, DIALEGS.creuDesaparicio, { altura: 300 });
 
         this.cartell(1120, 610, DIALEGS.sortidaErmita);
         this.arbres([[120, 200], [900, 160], [1150, 240], [1300, 160], [150, 520],
@@ -136,14 +136,14 @@ class ZonaErmitaInt extends ZonaBase {
 
         // Dues taules de pedra al fons, darrere l'altar
         this.posar('taula_pedra', 340, 190, { col: { w: 100, h: 20 } });
-        this.interactiu(340, 210, 90, DIALEGS.taulaPedra(1), { altura: 170 });
+        this.interactiu(340, 210, RADI_OBJECTE, DIALEGS.taulaPedra(1), { altura: 170 });
         this.posar('taula_pedra2', 660, 190, { col: { w: 100, h: 20 } });
-        this.interactiu(660, 210, 90, DIALEGS.taulaPedra(2), { altura: 170 });
+        this.interactiu(660, 210, RADI_OBJECTE, DIALEGS.taulaPedra(2), { altura: 170 });
 
         // Altar de pedra nua, amb dos peus de ferro amb les espelmes apagades. Amb les dotze paraules, l'Ineu hi diu la frase i apareix un cofre
         this.posar('altar_ermita', 500, 300, { col: { w: 140, h: 36 } });
         const totes = () => Array.from({ length: 12 }, (_, i) => Estat.flag('col' + (i + 1))).every(Boolean);
-        this.interactiu(500, 335, 90, DIALEGS.altarErmita, { altura: 100, actiu: () => totes() && !Estat.flag('cofreAltar') });
+        this.interactiu(500, 335, RADI_OBJECTE, DIALEGS.altarErmita, { altura: 100, actiu: () => totes() && !Estat.flag('cofreAltar') });
         if (Estat.flag('cofreAltar') && !Estat.flag('missatgeDesxifrat')) this.posarCofreAltar();
         [[392, 352], [608, 352]].forEach(([x, y]) => {          // dos peus de ferro amb l'espelma apagada
             this.add.image(x, y, 'candelabre_apagat').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
@@ -166,7 +166,7 @@ class ZonaErmitaInt extends ZonaBase {
     // El cofre de la clau del sagrari, davant els graons de l'altar
     posarCofreAltar(y = 420) {
         this.cofreAltar = this.posar('cofre', 500, y, { col: { w: 50, h: 20 } });
-        this.interactiu(500, y + 6, 85, DIALEGS.cofreAltar, { altura: 80, actiu: () => !Estat.flag('missatgeDesxifrat') });
+        this.interactiu(500, y + 6, RADI_OBJECTE, DIALEGS.cofreAltar, { altura: 80, actiu: () => !Estat.flag('missatgeDesxifrat') });
     }
 
     apareixCofreAltar(fet) {
@@ -220,7 +220,7 @@ class ZonaEra extends ZonaBase {
         this.garf.setDepth(ERA_BANC_N + 1);                       // assegut: el banc queda darrere seu
         // L'Ineu s'asseu i s'hi queda fins que es vulgui aixecar (movent-se)
         this.assegut = false;
-        this.interactiu(ERA_BANC_X, ERA_BANC_S, 100, () => { this.seure(); return DIALEGS.garf(Estat); }, { altura: 150 });
+        this.interactiu(ERA_BANC_X, ERA_BANC_S, RADI_NPC, () => { this.seure(); return DIALEGS.garf(Estat); }, { altura: 150 });
 
         // L'Home del Carruatge Verd, a la vora sud-oest
         this.posar('carruatge', 260, 1230, { col: { w: 190, h: 50 } });
@@ -298,7 +298,7 @@ class ZonaJardi extends ZonaBase {
             this.portaAnimada({ x: 1338, top: 582, bottom: 719, ample: 90, fons: 640, unic: true, retall: casa });   // la mateixa porta del gràfic, que s'obre
         } else {
             this.colisio(1338, 700, 90, 40);
-            this.interactiu(1339, 775, 90, DIALEGS.hostatgeria, { altura: 180 });
+            this.interactiu(1339, 775, RADI_OBJECTE, DIALEGS.hostatgeria, { altura: 180 });
         }
 
         // --- Pèrgola de pedra enganxada al lateral esquerre: dues files de columnes unides per arcades ---
@@ -340,7 +340,7 @@ class ZonaJardi extends ZonaBase {
             scale: { start: 0.55, end: 0 }, tint: [0xffd060, 0xfff0b0], frequency: 220, alpha: { start: 0.9, end: 0 }
         }).setDepth(8001);
         [[-110, -190], [-60, -250], [0, -300], [70, -260], [120, -200], [-140, -140], [40, -170], [-20, -210], [100, -130], [-90, -100]].forEach(([dx, dy]) => this.add.circle(PX + dx, PY + dy, 10, 0xf0b830).setStrokeStyle(2, 0x7a5010).setDepth(PY + 1));
-        this.interactiu(PX, PY + 5, 110, DIALEGS.prunera, { altura: 400 });
+        this.interactiu(PX, PY + 5, RADI_GRAN, DIALEGS.prunera, { altura: 400 });
 
         // La llosa del passadís cap al soterrani de l'Hostatgeria, entre les columnes (ben visible). S'obre quan hi creix la flor de lluna
         const LX = 512, LY = 492;      // al buit entre les files de columnes: ni les arcades ni les columnes la tapen
@@ -349,7 +349,7 @@ class ZonaJardi extends ZonaBase {
         this.dibuixaForat(LX, LY);
         this.llosa = this.posar('llosa', LX, LY, { fonsY: -700 });
         this.florLluna = this.posar('flors', LX - 66, LY + 22, { escala: 0.8 }).setVisible(false);
-        this.interactiu(LX, LY + 5, 80, DIALEGS.llosaJardi, { altura: 60, actiu: () => !Estat.flag('llosaOberta') });
+        this.interactiu(LX, LY + 5, RADI_OBJECTE, DIALEGS.llosaJardi, { altura: 60, actiu: () => !Estat.flag('llosaOberta') });
 
         // --- Gespa amb flors: només dins la pèrgola (cap flor fora). Un rectangle clar fa de gespa ben cuidada ---
         this.add.rectangle((COLS[0] + COLS[COLS.length - 1]) / 2, (YB + YF) / 2, COLS[COLS.length - 1] - COLS[0], YF - YB, 0xc4f08c, 0.14).setDepth(-1090);
@@ -472,7 +472,7 @@ class ZonaTaverna extends ZonaBase {
         // La porta (l'arc del mig): tancada fins que l'Eva l'obre des de dins
         this.colPorta = this.colisio(800, 705, 80, 90);
         if (Estat.flag('tavernaOberta')) { this.obrirPorta(); this.portaTavernaAnim(); }
-        else this.interactiu(800, 765, 90, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() });
+        else this.interactiu(800, 765, RADI_OBJECTE, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() });
 
         // Barrils a la dreta, taula i banc a l'esquerra, contra la façana
         this.posar('barril', 1150, 800, { col: { w: 40, h: 16 } });
@@ -596,14 +596,14 @@ class ZonaCabanaCami extends ZonaBase {
             if (!tapada) cartes.fillStyle([0xc8a030, 0x2a5aa0, 0xb83a3a, 0x3a8a3a][c % 4], 1).fillCircle(x + 7.5, y + 10, 3);
         }
         cartes.fillStyle(0x8a2a2a, 1).fillRect(520, 420, 15, 21).lineStyle(1, 0x3a2410, 1).strokeRect(520, 420, 15, 21);
-        this.interactiu(450, 440, 70, DIALEGS.solitari, { altura: 60 });
+        this.interactiu(450, 440, RADI_OBJECTE, DIALEGS.solitari, { altura: 60 });
         this.npc('ciscu', 520, 560, DIALEGS.ciscu, { flipX: true });
         this.posar('llenya', 735, 410, { col: { w: 110, h: 26 } });
         this.posar('tronc_tall', 160, 540, { col: { w: 70, h: 24 } });
 
         // Un cofre petit entre dues espelmes
         this.posar('cofre', 690, 250, { col: { w: 50, h: 20 } });
-        this.interactiu(690, 255, 85, DIALEGS.cofreCabanaCami, { altura: 80 });
+        this.interactiu(690, 255, RADI_OBJECTE, DIALEGS.cofreCabanaCami, { altura: 80 });
         [[630, 258], [750, 258]].forEach(([x, y], i) => {
             const e = this.posar('espelma', x, y, { fonsY: y });
             this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 350 + i * 90 });

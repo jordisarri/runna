@@ -9,6 +9,13 @@
  *       construir() { ... }
  *   }
  */
+// Distància a partir de la qual es pot interactuar: l'Ineu ha d'estar a menys del 80% del «radi» del punt (vegeu puntProper).
+// Tres mides, perquè tot s'activi més o menys a la mateixa distància (uns 72-88 px dels peus de l'Ineu al punt):
+const RADI_NPC = 100;        // personatges: 80 px, la mateixa distància a la qual es queda l'Ineu en parlar-hi (separarDeNpc)
+const RADI_OBJECTE = 90;     // cartells, cofres, portes, pedres, taules...: 72 px
+const RADI_GRAN = 110;       // objectes grans (arbres, fonts, dolmen...), amb el punt al centre: 88 px
+// Els objectes enormes (el pantà, les bardisses, la gàbia gran...) fan servir el seu propi radi, més gran.
+
 // Zoom de la càmera de les zones: 1,25 per defecte (al mòbil els personatges es veien massa petits). Es pot canviar amb ?zoom=1.1
 // (de 1 a 1,6) a l'adreça: es recorda fins que se'n posi un altre
 const ZOOM_CAMERA = (() => {
@@ -364,7 +371,7 @@ class ZonaBase extends Phaser.Scene {
         img.escalaBase = img.scaleY;
         // Respiració suau perquè sembli viu
         img.respira = this.tweens.add({ targets: img, scaleY: img.scaleY * 1.02, yoyo: true, repeat: -1, duration: 1100 + Math.random() * 400 });
-        img.punt = this.interactiu(x, y - 10, opts.radi || 85, dialeg, { altura: img.displayHeight + 6 });
+        img.punt = this.interactiu(x, y - 10, opts.radi || RADI_NPC, dialeg, { altura: img.displayHeight + 6 });
         img.punt.npc = img;                                  // en parlar-hi, l'Ineu es fa enrere i no se solapen (vegeu separarDeNpc)
         (this.npcs = this.npcs || {})[key] = img;
         return img;
@@ -601,7 +608,7 @@ class ZonaBase extends Phaser.Scene {
 
     cartell(x, y, dialeg) {
         this.posar('cartell', x, y, { col: { w: 20, h: 10 } });
-        return this.interactiu(x, y, 70, dialeg, { altura: 70 });
+        return this.interactiu(x, y, RADI_OBJECTE, dialeg, { altura: 70 });
     }
 
     // Les parets d'un interior que barren la porta es parteixen perquè hi quedi un pas lliure (la porta s'ha de poder traspassar)
@@ -806,7 +813,7 @@ class ZonaBase extends Phaser.Scene {
         o.col = this.colisio(o.x, o.y - 13, 70, 26);
         if (!mogut) {
             const cap = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'la dreta' : "l'esquerra") : (dy > 0 ? 'avall' : 'amunt');
-            this.interactiu(x, y + 24, 90, { pagines: [{ qui: 'Ineu', text: '(Si m\'hi recolzo i l\'empenyo cap a ' + cap + ', potser cedirà.)' }] },
+            this.interactiu(x, y + 24, RADI_OBJECTE, { pagines: [{ qui: 'Ineu', text: '(Si m\'hi recolzo i l\'empenyo cap a ' + cap + ', potser cedirà.)' }] },
                 { altura: 70, actiu: () => !o.mogut });
             (this.pedresMobils = this.pedresMobils || []).push(o);
         }

@@ -147,7 +147,7 @@ class ZonaGirgoles extends ZonaBase {
         const sacs = this.add.graphics().setDepth(1050);
         [[1050, 1080], [1095, 1100], [1070, 1050], [300, 1100], [340, 1120]].forEach(([x, y]) => sacs.fillStyle(0x7a6a4a, 1).fillEllipse(x, y, 66, 44).lineStyle(2, 0x3a3020, 1).strokeEllipse(x, y, 66, 44).lineStyle(2, 0x3a3020, 1).lineBetween(x - 8, y - 20, x + 8, y - 20));
         this.colisio(1075, 1090, 110, 40); this.colisio(320, 1110, 90, 30);
-        this.interactiu(1075, 1140, 90, DIALEGS.sacsGirgoles, { altura: 80 });
+        this.interactiu(1075, 1140, RADI_OBJECTE, DIALEGS.sacsGirgoles, { altura: 80 });
         [[1180, 1180], [230, 1190]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 46, h: 20 } }));
 
         // Gotes que cauen de la volta i fan cercles als bassals
@@ -169,7 +169,7 @@ class ZonaGirgoles extends ZonaBase {
 
         // Inscripció dels monjos
         this.posar('pergami_paret', 460, 230, { fonsY: 250, escala: 0.6 });
-        this.interactiu(460, 270, 80, DIALEGS.girgolesInscripcio, { altura: 90 });
+        this.interactiu(460, 270, RADI_OBJECTE, DIALEGS.girgolesInscripcio, { altura: 90 });
 
         // ---- El puzle: cinc mates de gírgoles lluminoses en rotllana ----
         this.mates = [];
@@ -184,7 +184,7 @@ class ZonaGirgoles extends ZonaBase {
             girgoles(g, x - 26, y - 6, 4, 0xd8fff0, 0x4a9a7a); girgoles(g, x + 2, y - 10, 5, 0xe8fff8, 0x4a9a7a); girgoles(g, x + 28, y - 4, 3, 0xd8fff0, 0x4a9a7a);
             const m = { i, x, y, halo, g, on: !!inici[i] };
             this.colisio(x, y - 2, 80, 22);
-            this.interactiu(x, y + 30, 80, () => null, { altura: 80, actiu: () => !Estat.flag('girgolesEnceses'), enTancar: () => this.tocarMata(i) });
+            this.interactiu(x, y + 30, RADI_OBJECTE, () => null, { altura: 80, actiu: () => !Estat.flag('girgolesEnceses'), enTancar: () => this.tocarMata(i) });
             this.mates.push(m);
         }
         this.pintarMates();
@@ -196,7 +196,7 @@ class ZonaGirgoles extends ZonaBase {
         if (resolt) this.cortina.setVisible(false);
         else {
             this.colCortina = this.colisio(700, 170, 120, 40);
-            this.interactiu(700, 230, 90, DIALEGS.cortinaMicel, { altura: 90, actiu: () => !Estat.flag('girgolesEnceses') });
+            this.interactiu(700, 230, RADI_OBJECTE, DIALEGS.cortinaMicel, { altura: 90, actiu: () => !Estat.flag('girgolesEnceses') });
         }
 
         // Ratpenats de boira que pengen de la volta
@@ -304,14 +304,14 @@ class ZonaTortura extends ZonaBase {
         g.fillStyle(0x2a1a10, 1).fillRect(250, 1580, 150, 50).fillRect(258, 1630, 12, 40).fillRect(380, 1630, 12, 40);
         g.fillStyle(0x4a4a50, 1).fillCircle(250, 1605, 16).fillCircle(400, 1605, 16).lineStyle(3, 0x8a7a5a, 1).lineBetween(266, 1600, 384, 1610);
         this.colisio(325, 1620, 160, 60);
-        this.interactiu(325, 1690, 90, DIALEGS.instrumentsTortura(0), { altura: 90 });
+        this.interactiu(325, 1690, RADI_OBJECTE, DIALEGS.instrumentsTortura(0), { altura: 90 });
         // Donzella de ferro (tram 1, dreta)
         const dz = this.add.graphics().setDepth(1560);
         dz.fillStyle(0x3a3a40, 1).fillRoundedRect(570, 1400, 90, 160, 40).fillStyle(0x1a1a1e, 1).fillRoundedRect(582, 1414, 66, 140, 30);
         dz.fillStyle(0x9a9aa0, 1).fillCircle(615, 1440, 18).fillStyle(0x1a1a1e, 1).fillCircle(608, 1436, 3).fillCircle(622, 1436, 3);
         for (let k = 0; k < 6; k++) dz.fillStyle(0xd8d0c0, 0.8).fillEllipse(590 + k * 9, 1530 - (k % 2) * 8, 6, 14);
         this.colisio(615, 1540, 90, 30);
-        this.interactiu(560, 1580, 90, DIALEGS.instrumentsTortura(1), { altura: 140 });
+        this.interactiu(560, 1580, RADI_OBJECTE, DIALEGS.instrumentsTortura(1), { altura: 140 });
 
         // ---- Rastell rovellat amb el torn (Guants de Poder) ----
         const YR = 1180;
@@ -328,7 +328,7 @@ class ZonaTortura extends ZonaBase {
         if (Estat.flag('rastellObert')) this.rastell.y = -150;
         else {
             this.colRastell = this.colisio(450, YR - 10, 420, 30);
-            this.interactiu(620, YR + 90, 90, DIALEGS.tornRastell, { altura: 100, actiu: () => !Estat.flag('rastellObert'), enTancar: () => { if (Estat.te('guants')) this.alcarRastell(); } });
+            this.interactiu(620, YR + 90, RADI_OBJECTE, DIALEGS.tornRastell, { altura: 100, actiu: () => !Estat.flag('rastellObert'), enTancar: () => { if (Estat.te('guants')) this.alcarRastell(); } });
         }
 
         // Roda i eines (tram 2)
@@ -337,7 +337,7 @@ class ZonaTortura extends ZonaBase {
         for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; rd.lineStyle(5, 0x4a3020, 1).lineBetween(300, 850, 300 + Math.cos(a) * 60, 850 + Math.sin(a) * 60); }
         rd.fillStyle(0x2a2a2e, 1).fillCircle(300, 850, 10).fillRect(296, 850, 8, 60);
         this.colisio(300, 900, 120, 26);
-        this.interactiu(300, 960, 90, DIALEGS.instrumentsTortura(2), { altura: 130 });
+        this.interactiu(300, 960, RADI_OBJECTE, DIALEGS.instrumentsTortura(2), { altura: 130 });
         // Gàbies d'ocell que pengen del sostre, gronxant-se
         [[560, 640], [620, 820], [520, 900], [380, 560]].forEach(([x, y], i) => {
             const c = this.add.container(x, y).setDepth(y + 200);
@@ -348,7 +348,7 @@ class ZonaTortura extends ZonaBase {
             c.add(gb);
             this.tweens.add({ targets: c, angle: { from: -6, to: 6 }, yoyo: true, repeat: -1, duration: 1400 + i * 300, ease: 'Sine.easeInOut' });
         });
-        this.interactiu(560, 700, 80, DIALEGS.instrumentsTortura(3), { altura: 80 });
+        this.interactiu(560, 700, RADI_OBJECTE, DIALEGS.instrumentsTortura(3), { altura: 80 });
 
         // ---- Mur d'esbarzers negres al darrer tram (cal Runna) ----
         [270, 360, 450, 540, 630].forEach((x, i) => {
@@ -454,7 +454,7 @@ class ZonaGabia extends ZonaBase {
             this.colPont = this.colisio(bx, y1 + A / 2, bw, A);
         }
         this.yPont = y1 + A + 60;
-        this.interactiu(bx, this.yPont, 110, DIALEGS.pontGabia, { altura: 90, enTancar: () => Estat.posaFlag('flauta_pont') });
+        this.interactiu(bx, this.yPont, RADI_GRAN, DIALEGS.pontGabia, { altura: 90, enTancar: () => Estat.posaFlag('flauta_pont') });
         this.llocFlauta('pont', bx, this.yPont, 220, true, () => !Estat.flag('pontGabia'));
 
         // ---- La gàbia gegant, al fons de la plataforma ----

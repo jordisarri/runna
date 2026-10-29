@@ -253,7 +253,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.reixa.lineStyle(7, 0x3a3834, 1).lineBetween(640, 982, 760, 982);
         if (oberta) { this.reixa.setAlpha(0.45); this.sortida(640, 986, 120, 14, 'ZonaCasaGran', 'porxo'); return; }
         this.colReixa = this.colisio(700, 990, 120, 26);
-        this.interactiu(700, 940, 90, DIALEGS.reixaDins, {
+        this.interactiu(700, 940, RADI_OBJECTE, DIALEGS.reixaDins, {
             altura: 120, actiu: () => !Estat.flag('reixaObertaDins'),
             enTancar: () => {
                 this.obstacles.remove(this.colReixa, true, true);
@@ -274,7 +274,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // Rosa dels vents de pedra, gran, a terra davant l'estàtua: amb el sol que neix i el raïm a l'est
         const cx = 700, cy = 590;
         this.add.image(cx, cy, 'rosa_vents').setScale(1 / RES).setDepth(-960);
-        this.interactiu(cx, cy + 50, 70, DIALEGS.rosaVents, { altura: 70, actiu: () => !Estat.flag('raimDesperta') });
+        this.interactiu(cx, cy + 50, RADI_OBJECTE, DIALEGS.rosaVents, { altura: 70, actiu: () => !Estat.flag('raimDesperta') });
 
         // La fletxa de pedra: indica cap on mira el cap de l'estàtua
         this.fletxa = this.add.image(618, 452, 'fletxa_raim').setScale(1 / RES * 0.9).setDepth(515);
@@ -291,11 +291,11 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.colEstatua = this.colisio(700, 461, 46, 18);
         }
         // Mirar l'estàtua només fa falta si encara no tens la palanca: et diu on és
-        this.interactiu(700, 478, 55, DIALEGS.homeRaimInt, { altura: 190, actiu: () => !Estat.flag('raimDesperta') && !Estat.te('palanca') });
+        this.interactiu(700, 478, 75, DIALEGS.homeRaimInt, { altura: 190, actiu: () => !Estat.flag('raimDesperta') && !Estat.te('palanca') });
 
         // Forat quadrat de la base: aquí s'encaixa la palanca i es gira el cap
         if (!derrotat) this.add.rectangle(618, 505, 26, 22, 0x1a1410).setStrokeStyle(3, 0x8a7a5e).setDepth(500);
-        this.interactiu(618, 505, 55, E => {
+        this.interactiu(618, 505, 75, E => {
             if (!E.te('palanca')) return { pagines: [] };
             this.raimDir = (this.raimDir + 1) % 4;
             this.actualitzarRaim(true);
@@ -310,7 +310,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.trapa.fillStyle(0x0a0705, 1).fillRect(650, 676, 100, 46).lineStyle(4, 0x8a7a5e, 1).strokeRect(650, 676, 100, 46);
         this.trapa.fillStyle(0x3a2c22, 1).fillRect(654, 684, 92, 8).fillRect(654, 700, 92, 8);
         this.trapa.setVisible(derrotat);
-        this.interactiu(700, 730, 75, DIALEGS.trapaCripta, {
+        this.interactiu(700, 730, RADI_OBJECTE, DIALEGS.trapaCripta, {
             altura: 60, actiu: () => Estat.flag('raimDerrotat'),
             enTancar: () => this.canviarZona('ZonaCasaCripta', 'porta')
         });
@@ -390,7 +390,7 @@ class ZonaCasaCripta extends ZonaCasaBase {
         // Llosa amb la clau de ferro sota un raig de llum tènue, i dos candelabres
         this.llosaCripta = this.add.image(500, 340, Estat.flag('relTretes') ? 'llosa_cripta_buida' : 'llosa_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(340);
         this.colisio(500, 316, 180, 36);
-        this.interactiu(500, 372, 95, DIALEGS.cofreCripta, { altura: 130, enTancar: () => { if (Estat.flag('relTretes')) this.llosaCripta.setTexture('llosa_cripta_buida'); } });
+        this.interactiu(500, 372, RADI_OBJECTE, DIALEGS.cofreCripta, { altura: 130, enTancar: () => { if (Estat.flag('relTretes')) this.llosaCripta.setTexture('llosa_cripta_buida'); } });
         [[400, 360], [600, 360]].forEach(([x, y], i) => {
             this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
             this.colisio(x, y - 8, 24, 14);
@@ -489,7 +489,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
         this.add.image(500, 178, 'graons_ermita').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-990);
         this.cofre = this.add.image(500, 218, 'cofre_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(218);
         this.colisio(500, 205, 100, 24);
-        this.interactiu(500, 262, 95, DIALEGS.cofreCambra, { altura: 110 });
+        this.interactiu(500, 262, RADI_OBJECTE, DIALEGS.cofreCambra, { altura: 110 });
         [[390, 262], [610, 262]].forEach(([x, y], i) => {
             this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
             this.colisio(x, y - 8, 24, 14);
@@ -511,7 +511,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
         this.anella = this.add.graphics().setDepth(391);
         this.anella.fillStyle(0x1a1008, 1).fillEllipse(810, 392, 46, 16).lineStyle(4, 0x8a8478, 1).strokeCircle(810, 391, 8).lineStyle(3, 0x5a554c, 1).lineBetween(810, 399, 810, 405);
         this.anella.setVisible(jaOberta);
-        this.interactiu(810, 424, 80, DIALEGS.botaTresor, { altura: 90, actiu: () => !Estat.flag('portaTresorOberta'), enTancar: () => { if (Estat.flag('botaAlcada')) this.alcarBota(); } });
+        this.interactiu(810, 424, RADI_OBJECTE, DIALEGS.botaTresor, { altura: 90, actiu: () => !Estat.flag('portaTresorOberta'), enTancar: () => { if (Estat.flag('botaAlcada')) this.alcarBota(); } });
 
         // La porta del fons, a la dreta: de pedra amb ferros; no s'obre fins que no s'ha estirat l'anella
         this.portaFons = this.portaAnimada({ x: 760, top: 20, bottom: 162, ample: 92, fons: -990, arc: true, unic: true, color: 0x5a4a38, vora: 0x140a04, ferro: true, bloq: () => !Estat.flag('portaTresorOberta') });
@@ -705,7 +705,7 @@ class ZonaGolfes extends ZonaCasaBase {
         this.add.circle(cx, cy, 3, 0x2a1608).setDepth(-869);
         this.agullaMinuts.rotation = Math.PI / 2;           // 3:15
         this.agullaHores.rotation = Math.PI / 2 + 0.13;
-        this.interactiu(500, GOLFES_PARET + 10, 70, DIALEGS.golfesRellotge, { altura: 170 });
+        this.interactiu(500, GOLFES_PARET + 10, RADI_OBJECTE, DIALEGS.golfesRellotge, { altura: 170 });
 
         // Mecanisme: un bastidor de fusta dret a terra, a l'esquerra, amb tres engranatges (cada interacció en canvia la mida).
         // Està separat de la paret perquè el rellotge i cada engranatge tinguin el seu punt d'ESPAI.
@@ -747,7 +747,7 @@ class ZonaGolfes extends ZonaCasaBase {
         }));
         GOLFES_ENG_X.forEach((x, i) => {
             this.dibuixaEngranatge(i);
-            this.interactiu(x, B + 26, 48, () => this.girarEngranatge(i), { altura: 190, actiu: () => !this.reparat });
+            this.interactiu(x, B + 26, 64, () => this.girarEngranatge(i), { altura: 190, actiu: () => !this.reparat });
         });
         if (this.reparat) this.encaixaEngranatges();
         // Plaques de posició (I, II, III) al travesser de baix. Cap llum ni avís: el puzle només es resol quan tots tres són bons.
@@ -758,7 +758,7 @@ class ZonaGolfes extends ZonaCasaBase {
 
         // Nota del campaner (la pista del puzle), clavada a la paret de l'esquerra: pergamí desplegat i gastat
         this.posar('pergami_paret', 175, 360, { fonsY: -850, escala: 1.15 });
-        this.interactiu(175, GOLFES_PARET + 10, 70, DIALEGS.golfesNota, { altura: 90 });
+        this.interactiu(175, GOLFES_PARET + 10, RADI_OBJECTE, DIALEGS.golfesNota, { altura: 90 });
 
         // Caixa del pèndol, al costat dret: el pèndol batega quan el rellotge camina
         const caixa = this.add.graphics().setDepth(522);
@@ -777,7 +777,7 @@ class ZonaGolfes extends ZonaCasaBase {
         vidre.fillStyle(0xbfe6ff, 0.1).fillRoundedRect(780, 380, 60, 124, 3);
         vidre.fillStyle(0xffffff, 0.14).fillPoints([{ x: 784, y: 384 }, { x: 800, y: 384 }, { x: 784, y: 440 }], true);
         this.colisio(810, 516, 96, 22);
-        this.interactiu(810, 545, 60, DIALEGS.golfesPendol, { altura: 100 });
+        this.interactiu(810, 545, RADI_OBJECTE, DIALEGS.golfesPendol, { altura: 100 });
 
         this.aplic(320, 290, 0); this.aplic(680, 290, 1);           // dos aplics a la paret, entre les cadenes i el rellotge
         this.sortida(440, 686, 120, 14, 'ZonaTorre', 'dalt');

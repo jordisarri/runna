@@ -124,7 +124,7 @@ class ZonaTavernaInt extends ZonaBase {
         [[170, 160], [230, 158], [400, 160]].forEach(([x, y]) => t.fillStyle(0xd8e8f0, 0.8).fillRect(x, y, 14, 18).lineStyle(1, 0x5a6a7a, 1).strokeRect(x, y, 14, 18));
         t.fillStyle(0xc87a3a, 1).fillEllipse(320, 166, 50, 14);                                   // plat de coca
         this.colisio(310, 215, 410, 70);
-        this.interactiu(310, 270, 90, DIALEGS.taulellTaverna, { altura: 90 });
+        this.interactiu(310, 270, RADI_OBJECTE, DIALEGS.taulellTaverna, { altura: 90 });
         const zz = this.add.text(330, 70, 'z z Z', estilText(26, '#f2e6c8', { fontStyle: 'italic' })).setDepth(400);
         this.tweens.add({ targets: zz, y: 50, alpha: 0.2, yoyo: true, repeat: -1, duration: 1400 });
 
@@ -150,7 +150,7 @@ class ZonaTavernaInt extends ZonaBase {
         const ac = this.add.graphics().setDepth(390);
         ac.fillStyle(0x8a1a1a, 1).fillRoundedRect(130, 360, 40, 30, 4);
         for (let k = 0; k < 5; k++) ac.fillStyle(k % 2 ? 0xf2ecdc : 0x2a2a2a, 1).fillRect(134 + k * 7, 362, 5, 26);
-        this.interactiu(150, 410, 70, DIALEGS.acordio, { altura: 60 });
+        this.interactiu(150, 410, RADI_OBJECTE, DIALEGS.acordio, { altura: 60 });
 
         // L'Eva, al costat de la llar
         this.npc('eva', 650, 290, DIALEGS.eva, { flipX: true });
@@ -161,7 +161,7 @@ class ZonaTavernaInt extends ZonaBase {
         pf.fillStyle(0x5a3a1e, 1).fillRect(818, 36, 84, 100);
         for (let k = 1; k < 4; k++) pf.lineStyle(2, 0x2a1608, 1).lineBetween(818 + k * 21, 36, 818 + k * 21, 136);
         pf.fillStyle(0x2a2a2e, 1).fillRect(830, 82, 60, 8).fillCircle(892, 92, 4);
-        this.interactiu(860, 175, 70, DIALEGS.rebostTaverna, { altura: 90 });
+        this.interactiu(860, 175, RADI_OBJECTE, DIALEGS.rebostTaverna, { altura: 90 });
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffc070, 0.07).setDepth(80000);
         this.sortida(460, H - 22, 80, 14, 'ZonaTaverna', 'interior');
@@ -211,7 +211,7 @@ class ZonaSotaTaverna extends ZonaBase {
         this.boira(300, 420, 160, 40, 0.5);
         this.boira(520, 600, 160, 40, 0.5);
         this.fullaPorta = pf;
-        this.interactiu(400, 220, 120, DIALEGS.portaFerro, { altura: 170, actiu: () => !Estat.flag('portaFerroOberta'), enTancar: () => { if (Estat.te('clau_girgoles') && Estat.flag('cantMiracle')) this.obrirPortaFerro(); } });
+        this.interactiu(400, 220, RADI_GRAN, DIALEGS.portaFerro, { altura: 170, actiu: () => !Estat.flag('portaFerroOberta'), enTancar: () => { if (Estat.te('clau_girgoles') && Estat.flag('cantMiracle')) this.obrirPortaFerro(); } });
         if (Estat.flag('portaFerroOberta')) this.obrirPortaFerro(true);
 
         // Sacs i botes de vi, i petjades a la pols
@@ -304,7 +304,7 @@ class ZonaGirgolesFora extends ZonaBase {
         else {
             this.colPorta = this.colisio(PX, 200, 160, 200);
             this.boiraPorta = this.boira(PX, BASE - 8, 140, 14, 0.6);
-            this.interactiu(PX, 340, 90, DIALEGS.portaSoterrani, { altura: 120, actiu: () => !Estat.flag('portaSoterraniOberta'), enTancar: () => this.obrirPorta() });
+            this.interactiu(PX, 340, RADI_OBJECTE, DIALEGS.portaSoterrani, { altura: 120, actiu: () => !Estat.flag('portaSoterraniOberta'), enTancar: () => this.obrirPorta() });
         }
 
         // Pocs arbres i escampats amb naturalitat: cap no arriba a tocar l'edifici (les capçades fan uns 280 d'alt: els de dalt, més petits)

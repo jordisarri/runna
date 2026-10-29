@@ -233,7 +233,7 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         // Bloqueig de la capella (porta de la dreta): dues mates d'esbarzers negres, i un mur invisible al darrere perquè no es pugui vorejar
         this.esbarzer(880, 215, 'host_cap1'); this.esbarzer(924, 215, 'host_cap2');
         this.colCapella = this.colisio(902, 190, 190, 50);
-        this.interactiu(900, 255, 90, DIALEGS.esbarzersCapella, { altura: 90, actiu: () => this.esbarzers.some(o => o.viu) });
+        this.interactiu(900, 255, RADI_OBJECTE, DIALEGS.esbarzersCapella, { altura: 90, actiu: () => this.esbarzers.some(o => o.viu) });
 
         // Escala que baixa al soterrani, arraconada a baix a l'esquerra, entre la paret i una barana de fusta:
         // els graons s'enfosqueixen cap a baix i no hi arriba la catifa
@@ -257,7 +257,7 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
 
         // Una taula d'infusions: lloc de repòs un cop les sacerdotesses són lliures
         this.posar('taula', 1040, 560, { escala: 0.9, col: { w: 100, h: 24 } });
-        this.interactiu(1040, 590, 85, () => this.descans(), { altura: 90, actiu: () => Estat.flag('mongesTrobades') });
+        this.interactiu(1040, 590, RADI_OBJECTE, () => this.descans(), { altura: 90, actiu: () => Estat.flag('mongesTrobades') });
         this.boira(600, 450, 900, 260, 1.2);
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.1).setDepth(80000);
     }

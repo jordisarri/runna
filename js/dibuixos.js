@@ -1328,6 +1328,28 @@ function dibuixarConill(c, w) {
     });
 }
 
+// El Pallofa: gos petit i prim, blanc amb taques marrons, borni (li falta l'ull dret) i ple de puces. Vist de costat, mira a la dreta
+function dibuixarGos(c, w) {
+    lienc(c, w, w * 0.8, (ctx, W, H) => {
+        const u = W / 50;
+        ctx.lineWidth = 2 * u; ctx.strokeStyle = CONTORN; ctx.lineJoin = 'round';
+        ctx.fillStyle = '#f4f0e8';
+        ctx.beginPath(); ctx.ellipse(22 * u, 24 * u, 15 * u, 7 * u, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();         // cos magre
+        ctx.beginPath(); ctx.moveTo(8 * u, 22 * u); ctx.quadraticCurveTo(3 * u, 14 * u, 5 * u, 9 * u); ctx.stroke();      // cua fina
+        [[14, 33], [19, 33], [28, 33], [33, 33]].forEach(([x, y]) => { ctx.fillRect(x * u, y * u - 6 * u, 3 * u, 8 * u); ctx.strokeRect(x * u, y * u - 6 * u, 3 * u, 8 * u); });   // potes primes
+        ctx.beginPath(); ctx.ellipse(38 * u, 17 * u, 7 * u, 6 * u, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();          // cap
+        ctx.beginPath(); ctx.ellipse(43.5 * u, 20 * u, 4 * u, 3 * u, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();        // morro
+        ctx.fillStyle = '#7a4a2a';
+        ctx.beginPath(); ctx.ellipse(33 * u, 12 * u, 3 * u, 6 * u, -0.3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();         // orella caiguda
+        ctx.beginPath(); ctx.ellipse(18 * u, 22 * u, 5 * u, 3 * u, 0, 0, Math.PI * 2); ctx.fill();                          // taca del llom
+        ctx.beginPath(); ctx.arc(40 * u, 14 * u, 3 * u, 0, Math.PI * 2); ctx.fill();                                        // taca de l'ull
+        ctx.fillStyle = CONTORN; ctx.beginPath(); ctx.arc(41 * u, 16 * u, 1.3 * u, 0, Math.PI * 2); ctx.fill();            // l'únic ull
+        ctx.beginPath(); ctx.arc(46 * u, 19 * u, 1.3 * u, 0, Math.PI * 2); ctx.fill();                                      // nas
+        ctx.fillStyle = '#3a2412';
+        [[12, 18], [24, 16], [29, 28], [22, 29], [40, 9]].forEach(([x, y]) => ctx.fillRect(x * u, y * u, 1.1 * u, 1.1 * u));   // les puces
+    });
+}
+
 // Esquirol vist de costat (mira a la dreta), amb la cua gran i arrissada
 function dibuixarEsquirol(c, w) {
     lienc(c, w, w * 0.9, (ctx, W, H) => {

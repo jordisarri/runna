@@ -19,16 +19,19 @@ function objectiuFont(n) {
 function pistaRunna(E) { return PROGRES.pistaRunna(E); }
 function pistaActual(E) { return PROGRES.pista(E); }
 
+// La clau de la porta del retaule que duu a la torre del rellotge és de la Carry (la vídua del campaner); les Venerables només t'hi envien.
+// Les partides velles que ja tenen la clau, o que ja han pujat a la torre, no la necessiten.
+function senseClauCampanar(E) { return !E.te('clau_campanar') && !E.flag('portaCampanarOberta') && !E.flag('rellotgeReparat') && !E.flag('visitada_ZonaTorre') && !E.flag('clauCampanar'); }
+
 function consellVenerables(E) {
-    // El rellotge del campanar: són elles qui tenen la clau de la porta del retaule (les partides velles que ja han pujat a la torre no la necessiten)
-    if (!E.te('clau_campanar') && !E.flag('portaCampanarOberta') && !E.flag('rellotgeReparat') && !E.flag('visitada_ZonaTorre')) {
+    if (senseClauCampanar(E)) {
         return {
             pagines: [
-                { qui: 'Les Venerables Sàvies', text: "Ai, fill, has vist que el rellotge del campanar s'ha aturat? La porta del retaule que duu a la torre fa anys que és tancada: des que el campaner se'n va, la clau la guardem nosaltres." },
-                { qui: 'Les Venerables Sàvies', text: "Pren-la. Puja per la torre i mira què se li ha espatllat al pobre rellotge, que sense hora tot es fa més llarg." },
-                { avis: 'Has obtingut la CLAU DEL CAMPANAR.' }
-            ],
-            enAcabar: () => { E.dona('clau_campanar'); E.posaFlag('clauCampanar'); }
+                { qui: 'Les Venerables Sàvies', text: "Ai, fill, has vist que el rellotge del campanar s'ha aturat? La porta del retaule que duu a la torre fa anys que és tancada: des que el campaner se'n va, la clau la guarda la seva vídua, la Carry, aquí a Nostra Senyora." },
+                { qui: 'Les Venerables Sàvies', text: E.flag('carryParlat')
+                    ? "Pobreta, no té el cap per res: fa tres nits que busca el seu gos, el Pallofa. Si el trobes i li'l portes, segur que et dona la clau."
+                    : "Parla-hi, però amb paciència: la pobreta no és la mateixa des que va pujar la boira. Potser et pot necessitar." }
+            ]
         };
     }
     return { pagines: [{ qui: 'Les Venerables Sàvies', text: "Ai, fill, torna a seure. A veure... " + pistaActual(E) }] };
@@ -429,13 +432,51 @@ const DIALEGS = {
 
     venerables: E => consellVenerables(E),
 
-    yordi: E => ({ pagines: [{ qui: 'Yordi', text: 'Hola, Ineu! Si veus la meva germana Judit, digues-li que em deu un gelat.' }] }),
-    judit: E => ({ pagines: [{ qui: 'Judit', text: 'Bon dia! Jo no li dec cap gelat a en Yordi. Que ho sàpigues.' }] }),
-    danielT: E => ({ pagines: [
-        { qui: 'Daniel', text: 'Ineu... L\'Huri, el nen de la porta de la dreta, va ser el primer. Fa tres nits el seu llit era buit i la finestra, tancada per dins. Ell no sortia mai sol de nit: li feia por la fosca.' },
-        { qui: 'Daniel', text: 'La nit següent va ser el Flami, el de la porta de l\'esquerra. Jo em quedo amb el Turbo, el meu nebot: no el deixo sortir d\'aquí.' }
-    ] }),
-    turbo: E => ({ pagines: [{ qui: 'Turbo', text: 'L\'Huri em va dir que els ocells de nit canten el seu nom. Jo no els he sentit mai. Però jo corro més que tu!' }] }),
+    // La Carry, anciana molt prima i pàl·lida de Nostra Senyora, vídua del campaner: busca el seu gos, el Pallofa, que passeja per Sant Antoni
+    // un cop has parlat amb ella. En portar-li, et dona la clau del campanar i et conta com van desaparèixer l'Huri i el Flami.
+    carry: E => {
+        if (E.flag('pallofaTornat')) return { pagines: [
+            { qui: 'Carry', text: "El Pallofa no em deixa ni a sol ni a ombra, ara. Gràcies, Ineu. I no t'oblidis del rellotge: sense hora, tot es fa més llarg." }
+        ] };
+        if (E.te('pallofa')) {
+            const clau = senseClauCampanar(E);
+            const pagines = [
+                { qui: 'Carry', text: "Pallofa! Pallofa meu! On t'havies ficat, bestiola? Mira't: més prim que jo i ple de puces." },
+                { qui: 'Carry', text: "Gràcies, Ineu, gràcies. Diners no en tinc, però et dec una cosa. Aquelles nits vaig veure, des de la finestra, el que no hauria de veure ningú." },
+                { qui: 'Carry', text: "L'Huri, el petit de la porta de la dreta de Sant Benet, va ser el primer. El seu llit va quedar buit i la finestra, tancada per dins. Ell no sortia mai sol de nit: li feia por la fosca." },
+                { qui: 'Carry', text: "La nit següent va ser el Flami, el de la porta de l'esquerra. El Pallofa va lladrar a la boira, com si veiés algú que jo no veia, i va marxar darrere seu. Per això he tingut tanta por." }
+            ];
+            if (clau) pagines.push(
+                { qui: 'Carry', text: "El meu home era el campaner. Des que se'n va, la clau de la torre la guardo jo, i fa anys que ningú no hi puja. Pren-la. Aquell rellotge s'ha aturat a les tres i quart, i ningú no s'ha adonat que el temps ja no passa." },
+                { avis: 'Has obtingut la CLAU DEL CAMPANAR.' });
+            return {
+                pagines,
+                enAcabar: () => {
+                    E.treu('pallofa'); E.posaFlag('pallofaTornat');
+                    if (clau) { E.dona('clau_campanar'); E.posaFlag('clauCampanar'); E.posaObjectiu("Amb la clau del campanar, obre la porta de la dreta del retaule del Santuari i puja a la torre del rellotge."); }
+                    E.desar();
+                }
+            };
+        }
+        if (E.flag('carryParlat')) return { pagines: [
+            { qui: 'Carry', text: "Encara no l'has vist? És petitó, prim i borni, i no sap estar-se quiet. Diuen que passeja per Sant Antoni, a llevant del Monestir. Agafa'l amb compte: està ple de puces." }
+        ] };
+        return {
+            pagines: [
+                { qui: 'Carry', text: "Ai, Ineu... no, no t'has de preocupar per mi. Bé, sí. Busco el Pallofa, el meu gos." },
+                { qui: 'Carry', text: "És petit i prim, blanc amb taques marrons, i li falta un ull: diuen que se'l va menjar un gat. Va marxar fa tres nits, quan va pujar la boira, i no ha tornat." },
+                { qui: 'Carry', text: "A ell li agrada passejar. Si el trobes, porta'l-me. Diners no en tinc, però a casa guardo una cosa que potser et farà falta." }
+            ],
+            enAcabar: () => { E.posaFlag('carryParlat'); E.posaObjectiu("Busca el Pallofa, el gos de la Carry: passeja per Sant Antoni, a llevant del Monestir. Porta'l a la Carry (Nostra Senyora, a l'oest de les Cel·les)."); E.desar(); }
+        };
+    },
+    pallofa: E => ({
+        pagines: [
+            { qui: '', text: "Un gos petit, prim i borni, ple de puces, et mira amb l'únic ull que li queda. Al collaret de cuir hi ha una placa: «PALLOFA»." },
+            { avis: 'Has agafat el PALLOFA. Duu-lo a la Carry.' }
+        ],
+        enAcabar: () => { E.dona('pallofa'); E.posaObjectiu("Duu el Pallofa a la Carry, a Nostra Senyora (a l'oest de les Cel·les)."); }
+    }),
 
     tiller: E => {
         if (E.te("basto") && !E.flag("tutorialCombat")) { E.posaFlag("tutorialCombat"); E.posaFlag("combatActiu"); }   // partides velles

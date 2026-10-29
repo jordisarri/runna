@@ -71,6 +71,20 @@ const ICONES_OBJECTES = {
         });
     },
     clau_campanar: ctx => iconaClau(ctx, '#c8a858', '#7a5a22'),
+    pallofa: ctx => {
+        ctx.lineWidth = 3; ctx.lineJoin = 'round';
+        ctx.fillStyle = '#f4f0e8';
+        ctx.beginPath(); ctx.ellipse(44, 58, 28, 13, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(18, 54); ctx.quadraticCurveTo(8, 38, 14, 28); ctx.stroke();
+        ctx.beginPath(); ctx.ellipse(66, 38, 14, 12, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.ellipse(77, 44, 8, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#7a4a2a';
+        ctx.beginPath(); ctx.ellipse(56, 30, 6, 11, -0.3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.ellipse(34, 54, 9, 5, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#2a1608'; ctx.beginPath(); ctx.arc(70, 36, 2.6, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(82, 42, 2.6, 0, Math.PI * 2); ctx.fill();
+        [[28, 46], [48, 48], [58, 62], [40, 63]].forEach(([x, y]) => ctx.fillRect(x, y, 2.4, 2.4));
+        ctx.fillStyle = '#f4f0e8'; [[28, 66], [38, 68], [56, 68], [64, 66]].forEach(([x, y]) => { ctx.fillRect(x - 3, y - 6, 6, 18); ctx.strokeRect(x - 3, y - 6, 6, 18); });
+    },
     clau_sagrari: ctx => iconaClau(ctx, '#e8c050', '#a07a20'),
     clau_girgoles: ctx => iconaClau(ctx, '#a8603a', '#6a3418'),
     clau_ferro: ctx => iconaClau(ctx, '#6a6a72', '#3a3a40', true),
@@ -236,6 +250,7 @@ const US_OBJECTES = {
     basto: E => E.te('basto_tiller') || E.te('runna') ? 'record' : 'sempre',
     basto_tiller: E => !E.flag('camiCirosaObert') ? 'cal' : E.te('runna') ? 'record' : 'sempre',
     clau_campanar: E => E.flag('rellotgeReparat') ? 'record' : 'cal',
+    pallofa: () => 'cal',
     clau_sagrari: E => E.flag('fragment2') ? 'record' : 'cal',
     escudella: E => E.flag('soparFet') ? 'record' : 'cal',
     flors_isidre: E => E.flag('soparFet') ? 'record' : 'cal',

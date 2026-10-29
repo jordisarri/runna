@@ -46,10 +46,10 @@ class ZonaEsglesia extends ZonaBase {
         // s'obre la de la dreta, que duu a la torre i a la Sala del Rellotge. L'esquerra continua tancada.
         this.portaRellotge = false;
         this.obrirPortaRellotge(false);
-        this.interactiu(ESG.portaEsq, ESG.retY + 50, 90, () => ({
+        this.interactiu(ESG.portaEsq, ESG.retY + 50, RADI_OBJECTE, () => ({
             pagines: [{ qui: 'Ineu', text: 'Tancada amb clau.' }]
         }), { altura: 150 });
-        this.interactiu(ESG.portaDx, ESG.retY + 50, 90, () => Estat.te('clau_campanar') ? ({
+        this.interactiu(ESG.portaDx, ESG.retY + 50, RADI_OBJECTE, () => Estat.te('clau_campanar') ? ({
             pagines: [{ qui: 'Ineu', text: 'La clau del campanar encaixa al pany. La porta s\'obre.' }],
             enAcabar: () => { Estat.posaFlag('portaCampanarOberta'); Sfx.secret(); this.obrirPortaRellotge(false); }
         }) : ({
@@ -58,7 +58,7 @@ class ZonaEsglesia extends ZonaBase {
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daniel, que dirigeix el cor
         this.orgue = this.posar('orgue', 975, ESG.retY + 250, { col: { w: 110, h: 50 } });
-        this.npc('pianista', 975, ESG.retY + 320, DIALEGS.pianista, { flipX: true, radi: 200 });
+        this.npc('pianista', 975, ESG.retY + 320, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
         this.npc('pare_daniel', 360, ESG.retY + 190, DIALEGS.pareDaniel, { flipX: false });
 
         // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar
@@ -264,7 +264,7 @@ class ZonaCreu extends ZonaBase {
 
         // Creu de l'Aparició (sense cap tanca ni mur al darrere)
         this.posar('creu', 1010, 900, { col: { w: 56, h: 24 } });
-        this.interactiu(1010, 905, 95, DIALEGS.creu, { altura: 400 });
+        this.interactiu(1010, 905, RADI_OBJECTE, DIALEGS.creu, { altura: 400 });
         [[760, 860], [1260, 860]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xcfe08a));   // plàtans
 
         // Bassadòria: una bassa molt gran (520 d'ample, uns quatre Ineus), sense mur al darrere; plàtans de tardor als costats
@@ -363,7 +363,7 @@ class ZonaCasaGran extends ZonaBase {
             // Un cop vençut l'Ocellaire, la reixa s'obre també per fora (els batents giren en acostar-s'hi) i es pot entrar a la Casa Gran
             this.portaReixaFora = this.portaAnimada({ x: 700, top: 400, bottom: 573, ample: 107, fons: 560, arc: true, retall: facana });
             this.sortida(650, 574, 100, 30, 'ZonaCasaGranInt', 'porxo');
-        } else this.interactiu(700, 585, 85, DIALEGS.portaReixa, { altura: 190 });
+        } else this.interactiu(700, 585, RADI_OBJECTE, DIALEGS.portaReixa, { altura: 190 });
 
         // Cartell que indica la Taverna, a la vora de la sortida de l'esquerra
         this.cartell(170, 880, () => ({ pagines: [{ qui: 'Cartell', text: '← La Taverna i l\'Hostatgeria\n→ La Plaça del Santuari' }] }));
@@ -404,7 +404,7 @@ class ZonaTresor extends ZonaBase {
 
         // Tresor del monjo que va obrir aquest racó: un cofre vell entre espelmes
         this.posar('cofre', 500, 250, { col: { w: 50, h: 20 } });
-        this.interactiu(500, 255, 85, DIALEGS.cofreTresor, { altura: 80 });
+        this.interactiu(500, 255, RADI_OBJECTE, DIALEGS.cofreTresor, { altura: 80 });
         [[400, 260], [600, 260]].forEach(([x, y], i) => {
             const e = this.posar('espelma', x, y, { fonsY: y });
             this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 350 + i * 90 });

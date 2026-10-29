@@ -40,7 +40,7 @@ class ZonaCementiri extends ZonaBase {
 
         // La tomba de l'àngel, on el Germà Francesc porta flors: l'àngel que plora al cap i un gerro als peus
         this.tombaAngel = this.posar(Estat.flag('florsCreu') ? 'tomba_angel_flors' : 'tomba_angel', 1370, 600, { col: { w: 124, h: 44 } });
-        this.interactiu(1370, 615, 110, DIALEGS.creuCementiri, { altura: 230, enTancar: () => this.posarRam() });
+        this.interactiu(1370, 615, RADI_GRAN, DIALEGS.creuCementiri, { altura: 230, enTancar: () => this.posarRam() });
         this.fanalet(1285, 600); this.fanalet(1455, 600);
         this.arbres([[1250, 470], [1495, 470]], 'xiprer');            // dos xiprers emmarquen l'àngel
 
@@ -63,7 +63,7 @@ class ZonaCementiri extends ZonaBase {
             fila.forEach(key => {
                 const w = AMPLADA[key], cx = x + w / 2, tomba = key.startsWith('tomba');
                 this.posar(key, cx, y, { col: tomba ? { w: w - 14, h: 40 } : { w: w - 16, h: 14 } });
-                if (n % 3 === 1) this.interactiu(cx, y + 6, tomba ? 75 : 55, DIALEGS.lapida(n), { altura: tomba ? 100 : 90 });
+                if (n % 3 === 1) this.interactiu(cx, y + 6, RADI_OBJECTE, DIALEGS.lapida(n), { altura: tomba ? 100 : 90 });
                 n++;
                 x += w + pas;
             });

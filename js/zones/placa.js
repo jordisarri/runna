@@ -51,7 +51,7 @@ class ZonaPlaca extends ZonaBase {
         [0, 1, 2].forEach(k => this.forat.fillStyle(0x3a2c4a, 1 - k * 0.25).fillRect(PX - 20 + k * 3, 410 + k * 5 - 8, 40 - k * 6, 4));
         this.forat.fillStyle(0xa070ff, 0.18).fillEllipse(PX, 405, 60, 52);
         this.pedraSecreta = this.add.rectangle(PX, 405, 44, 34, 0x9a7a54).setStrokeStyle(3, 0x4a3420).setDepth(460);
-        this.interactiu(PX, 480, 85, DIALEGS.pedraSecreta, {
+        this.interactiu(PX, 480, RADI_OBJECTE, DIALEGS.pedraSecreta, {
             altura: 90,
             actiu: () => Estat.flag('tresorObert'),
             enTancar: () => this.canviarZona('ZonaTresor', 'porta')
