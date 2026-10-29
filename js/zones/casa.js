@@ -242,35 +242,58 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.colisio(950, 400, 24, 430);
         // Un raig de claror que cau de la volta sobre l'estàtua
         this.add.graphics().setDepth(-950).fillStyle(0xfff0c0, 0.07).fillPoints([{ x: 620, y: 0 }, { x: 800, y: 0 }, { x: 900, y: 600 }, { x: 540, y: 600 }], true);
-        // Sacs de gra sota l'escala, vora la porta camuflada
-        this.add.image(260, 810, 'sacs_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(810);
-        this.colisio(260, 798, 130, 24);
 
         // Porta camuflada (esquerra): torna a la sala del tresor
         this.porta(115, 740, 20, 110, 0x6a4a2c);
         this.sortida(116, 690, 14, 100, 'ZonaCasaTresor', 'escala');
 
-        this.espelmes([[330, 760], [1070, 760]]);
         this.reixaPorxo();
 
         this.puzleRaim();
     }
 
-    // La reixa del porxo vista per dins: tancada amb una barra; aixecant-la es pot sortir a la plaça (de fora no s'obre)
+    // La reixa del porxo vista per dins, a baix de tot: una reixa de ferro entre dos brancals de pedra, amb la claror de la plaça
+    // que entra entre els barrots i una barra de fusta travessada. Aixecant la barra s'obre, i des de llavors s'hi entra i se surt
     reixaPorxo() {
         const oberta = Estat.flag('reixaObertaDins') || Estat.flag('ocellaireVencut');
-        this.reixa = this.add.graphics().setDepth(960);
-        this.reixa.fillStyle(0x16100a, 1).fillRect(640, 962, 120, 38).lineStyle(4, 0x6a625a, 1);
-        for (let x = 648; x <= 752; x += 16) this.reixa.lineBetween(x, 962, x, 1000);
-        this.reixa.lineStyle(7, 0x3a3834, 1).lineBetween(640, 982, 760, 982);
-        if (oberta) { this.reixa.setAlpha(0.45); this.sortida(640, 986, 120, 14, 'ZonaCasaGran', 'porxo'); return; }
-        this.colReixa = this.colisio(700, 990, 120, 26);
-        this.interactiu(700, 940, RADI_OBJECTE, DIALEGS.reixaDins, {
-            altura: 120, actiu: () => !Estat.flag('reixaObertaDins'),
+        const X0 = 630, X1 = 770, Y0 = 930, Y1 = 1000;
+        // la claror de fora: darrere dels barrots i escampada pel terra cap amunt
+        const llum = this.add.graphics().setDepth(-940).setBlendMode('ADD');
+        llum.fillStyle(0xfff0c0, 0.06).fillPoints([{ x: X0 + 10, y: Y1 }, { x: X1 - 10, y: Y1 }, { x: X1 + 90, y: Y0 - 230 }, { x: X0 - 90, y: Y0 - 230 }], true);
+        llum.fillStyle(0xfff0c0, 0.06).fillPoints([{ x: X0 + 30, y: Y1 }, { x: X1 - 30, y: Y1 }, { x: X1 + 30, y: Y0 - 150 }, { x: X0 - 30, y: Y0 - 150 }], true);
+        this.tweens.add({ targets: llum, alpha: 0.6, yoyo: true, repeat: -1, duration: 1800, ease: 'Sine.easeInOut' });
+        const g = this.add.graphics().setDepth(Y1);
+        g.fillStyle(0xf4e2b0, 1).fillRect(X0, Y0, X1 - X0, Y1 - Y0);                                     // la plaça, a fora, de dia
+        g.fillStyle(0xd8c090, 1).fillRect(X0, Y1 - 22, X1 - X0, 22);
+        [[X0 - 22, 22], [X1, 22]].forEach(([x, w]) => {                                               // brancals de pedra
+            g.fillStyle(0xb5a58a, 1).fillRect(x, Y0 - 16, w, Y1 - Y0 + 16).lineStyle(2.5, 0x1c1610, 1).strokeRect(x, Y0 - 16, w, Y1 - Y0 + 16);
+            g.fillStyle(0xffffff, 0.2).fillRect(x + 3, Y0 - 14, 4, Y1 - Y0 + 12);
+        });
+        g.fillStyle(0xcdbd9e, 1).fillRect(X0 - 26, Y0 - 24, X1 - X0 + 52, 12).lineStyle(2.5, 0x1c1610, 1).strokeRect(X0 - 26, Y0 - 24, X1 - X0 + 52, 12);   // llinda
+        this.barrots = this.add.graphics().setDepth(Y1 + 1);
+        this.barrots.lineStyle(5, 0x2a2622, 1);
+        for (let x = X0 + 10; x <= X1 - 10; x += 15) this.barrots.lineBetween(x, Y0, x, Y1);
+        this.barrots.lineStyle(4, 0x2a2622, 1).lineBetween(X0, Y0 + 8, X1, Y0 + 8).lineBetween(X0, Y1 - 10, X1, Y1 - 10);
+        this.barrots.lineStyle(1.5, 0x8a8278, 0.8);
+        for (let x = X0 + 9; x <= X1 - 10; x += 15) this.barrots.lineBetween(x, Y0 + 2, x, Y1 - 2);
+        // la barra de fusta amb abraçadores de ferro, travessada als brancals
+        this.barra = this.add.graphics().setDepth(Y1 + 2);
+        this.barra.fillStyle(0x6a4424, 1).fillRect(X0 - 30, Y0 + 26, X1 - X0 + 60, 14).lineStyle(2.5, 0x1c1006, 1).strokeRect(X0 - 30, Y0 + 26, X1 - X0 + 60, 14);
+        this.barra.fillStyle(0x9a6a3a, 1).fillRect(X0 - 28, Y0 + 28, X1 - X0 + 56, 3);
+        [X0 - 12, X1 + 4].forEach(x => this.barra.fillStyle(0x3a3a40, 1).fillRect(x, Y0 + 22, 8, 22).lineStyle(1.5, 0x111114, 1).strokeRect(x, Y0 + 22, 8, 22));
+        const obrir = () => {
+            this.barra.setVisible(false);
+            this.barrots.setAlpha(0.35);
+            this.sortida(X0 + 10, Y1 - 14, X1 - X0 - 20, 14, 'ZonaCasaGran', 'porxo');
+        };
+        if (oberta) { obrir(); return; }
+        this.colReixa = this.colisio(700, Y0 + 14, X1 - X0 + 44, 28);
+        // El punt és a la mateixa reixa i el «!» hi surt a sobre, als barrots (no damunt de l'Ineu, que s'hi posa al davant)
+        this.interactiu(700, Y0 + 30, 96, DIALEGS.reixaDins, {
+            altura: -40, actiu: () => !Estat.flag('reixaObertaDins'),
             enTancar: () => {
                 this.obstacles.remove(this.colReixa, true, true);
-                this.reixa.setAlpha(0.45);
-                this.sortida(640, 986, 120, 14, 'ZonaCasaGran', 'porxo');
+                this.tweens.add({ targets: this.barra, y: -18, alpha: 0, duration: 500, ease: 'Sine.easeIn', onComplete: obrir });
             }
         });
     }

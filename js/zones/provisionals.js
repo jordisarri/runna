@@ -360,8 +360,8 @@ class ZonaCasaGran extends ZonaBase {
         this.colisio(170, 699 + D, 190, 58);        // part baixa del sòcol (l'escalinata s'eixampla)
         this.colisio(1230, 699 + D, 190, 58);
         // La reixa del porxo, tancada des de fa generacions: per fora no hi ha manera d'entrar
-        if (Estat.flag('ocellaireVencut')) {
-            // Un cop vençut l'Ocellaire, la reixa s'obre també per fora (els batents giren en acostar-s'hi) i es pot entrar a la Casa Gran
+        if (Estat.flag('reixaObertaDins') || Estat.flag('ocellaireVencut')) {
+            // Un cop s'ha aixecat la barra per dins, la reixa queda oberta (els batents giren en acostar-s'hi) i es pot entrar a la Casa Gran
             this.portaReixaFora = this.portaAnimada({ x: 700, top: 400 + D, bottom: 573 + D, ample: 107, fons: 560 + D, arc: true, retall: facana });
             this.sortida(650, 574 + D, 100, 30, 'ZonaCasaGranInt', 'porxo');
         } else this.interactiu(700, 585 + D, RADI_OBJECTE, DIALEGS.portaReixa, { altura: 190 });

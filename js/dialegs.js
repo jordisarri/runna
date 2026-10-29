@@ -1275,7 +1275,7 @@ const DIALEGS = {
     // ---------------- LA CASA GRAN ----------------
     portaReixa: E => ({
         pagines: [
-            { qui: "Ineu", text: E.flag("reixaObertaDins") ? "Per dins hi ha la barra aixecada, però les cadenes de fora no cedeixen. Aquí no s'hi entra." : "Fa generacions que ningú no obre això. Haurà d'haver-hi una altra manera d'entrar-hi." }
+            { qui: "Ineu", text: "Fa generacions que ningú no obre això. Haurà d'haver-hi una altra manera d'entrar-hi." }
         ]
     }),
 
@@ -1283,7 +1283,7 @@ const DIALEGS = {
     reixaDins: E => ({
         pagines: [
             { fer: (z, fet) => { z.cameras.main.shake(250, 0.004); z.agafar(fet, null, 0x8a8a90); } },
-            { qui: "Ineu", text: "(Ara puc sortir a la plaça per aquí. De fora, la reixa continua tancada.)" }
+            { qui: "Ineu", text: "(La barra fora: ara puc entrar i sortir per la plaça.)" }
         ],
         enAcabar: () => E.posaFlag("reixaObertaDins")
     }),
