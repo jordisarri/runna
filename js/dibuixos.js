@@ -2305,60 +2305,127 @@ function dibuixarPiPinyer(c, w) {
     });
 }
 
-// La Caseta: una cabana de fusta aixecada sobre pilars de fusta (com una cabana d'arbre, però sense arbre), amb una terrassa
-// amb barana, la porta al mig i una escala de fusta que baixa fins a terra
+// La Caseta: una cabana de fusta aixecada sobre pilars de troncs (com una cabana d'arbre, però sense arbre). Terrassa amb barana i una
+// garlanda de banderetes, teulada de llates amb molsa i un penó, dues finestres (una amb test de flors), un fanalet, un gronxador
+// sota la plataforma i l'escala de fusta al mig. La porta i la plataforma no es mouen: hi ha l'animació de la porta (ZonaJordi).
 function dibuixarCasetaJoc(c, w) {
     lienc(c, w, w * 1.22, (ctx, W, H) => {
+        let llavor = 19;
+        const r = () => (llavor = (llavor * 16807) % 2147483647) / 2147483647;
         ombraTerra(ctx, W / 2, H - 6, W * 0.46, 9);
         ctx.lineJoin = 'round'; ctx.lineCap = 'round';
         const terra = H - 8, plat = H * 0.6, x0 = W * 0.12, x1 = W * 0.88, sostre = H * 0.27;
-        const fusta = '#8a5a30', fosca = '#5a3a1e';
-        // Pilars i creus de reforç (darrere l'escala)
-        [W * 0.16, W * 0.38, W * 0.62, W * 0.84].forEach(x => {
-            ctx.fillStyle = fosca; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
-            ctx.fillRect(x - 9, plat, 18, terra - plat); ctx.strokeRect(x - 9, plat, 18, terra - plat);
-            ctx.strokeStyle = 'rgba(30,16,6,0.5)'; ctx.lineWidth = 1.2; for (let y = plat + 10; y < terra; y += 16) { ctx.beginPath(); ctx.moveTo(x - 6, y); ctx.lineTo(x + 5, y + 6); ctx.stroke(); }
-        });
-        ctx.strokeStyle = fosca; ctx.lineWidth = 7;
-        [[0.16, 0.38], [0.62, 0.84]].forEach(([a, b]) => { ctx.beginPath(); ctx.moveTo(W * a, plat + 10); ctx.lineTo(W * b, terra - 12); ctx.moveTo(W * b, plat + 10); ctx.lineTo(W * a, terra - 12); ctx.stroke(); });
-        // Plataforma de taulons
-        ctx.fillStyle = '#9a6a3a'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.5;
+        const tronc = (xa, ya, xb, yb, g) => {            // tronc arrodonit amb escorça
+            const ang = Math.atan2(yb - ya, xb - xa), L = Math.hypot(xb - xa, yb - ya);
+            ctx.save(); ctx.translate(xa, ya); ctx.rotate(ang);
+            const gr = ctx.createLinearGradient(0, -g / 2, 0, g / 2); gr.addColorStop(0, '#5a3a1e'); gr.addColorStop(0.45, '#9a6a3a'); gr.addColorStop(1, '#4a2e16');
+            ctx.fillStyle = gr; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.6;
+            ctx.beginPath(); ctx.roundRect(0, -g / 2, L, g, g * 0.3); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(30,16,6,0.5)'; ctx.lineWidth = 1.2;
+            for (let k = 0; k < L / 12; k++) { const p = r() * L; ctx.beginPath(); ctx.moveTo(p, -g * 0.3 + r() * g * 0.2); ctx.lineTo(p + 6 + r() * 8, -g * 0.2 + r() * g * 0.4); ctx.stroke(); }
+            ctx.restore();
+        };
+        // Gronxador penjat de la plataforma (darrere dels pilars de davant)
+        ctx.strokeStyle = '#c8b080'; ctx.lineWidth = 2.4;
+        ctx.beginPath(); ctx.moveTo(W * 0.21, plat + 10); ctx.lineTo(W * 0.21, terra - 34); ctx.moveTo(W * 0.33, plat + 10); ctx.lineTo(W * 0.33, terra - 34); ctx.stroke();
+        ctx.fillStyle = '#b07a42'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.roundRect(W * 0.19, terra - 38, W * 0.16, 8, 3); ctx.fill(); ctx.stroke();
+        // Pilars de troncs amb creus de reforç
+        [[0.16, 0.38], [0.62, 0.84]].forEach(([a, b]) => { tronc(W * a, plat + 14, W * b, terra - 14, 9); tronc(W * b, plat + 14, W * a, terra - 14, 9); });
+        [W * 0.16, W * 0.38, W * 0.62, W * 0.84].forEach(x => tronc(x, plat - 6, x, terra, 19));
+        // Plataforma de taulons amb el cantell de davant
+        ctx.fillStyle = '#a0703c'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.5;
         ctx.fillRect(W * 0.04, plat - 10, W * 0.92, 22); ctx.strokeRect(W * 0.04, plat - 10, W * 0.92, 22);
-        ctx.strokeStyle = 'rgba(40,20,8,0.55)'; ctx.lineWidth = 1.4; for (let x = W * 0.08; x < W * 0.96; x += W * 0.06) { ctx.beginPath(); ctx.moveTo(x, plat - 8); ctx.lineTo(x, plat + 10); ctx.stroke(); }
-        // Parets de troncs horitzontals
+        ctx.fillStyle = 'rgba(255,220,160,0.25)'; ctx.fillRect(W * 0.04 + 2, plat - 8, W * 0.92 - 4, 3);
+        ctx.strokeStyle = 'rgba(40,20,8,0.55)'; ctx.lineWidth = 1.4;
+        for (let x = W * 0.08; x < W * 0.96; x += W * 0.06) { ctx.beginPath(); ctx.moveTo(x, plat - 8); ctx.lineTo(x, plat + 10); ctx.stroke(); ctx.fillStyle = '#3a2a1a'; ctx.beginPath(); ctx.arc(x + 4, plat + 6, 1.4, 0, Math.PI * 2); ctx.fill(); }
+        // Parets de troncs horitzontals, amb veta, i els caps tallats a les cantonades
         for (let y = sostre + 4, k = 0; y < plat - 10; y += 15, k++) {
-            ctx.fillStyle = k % 2 ? '#a0703c' : '#94643a'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2;
+            const gr = ctx.createLinearGradient(0, y, 0, y + 15); gr.addColorStop(0, k % 2 ? '#b8854a' : '#a8784a'); gr.addColorStop(1, k % 2 ? '#8a5a2e' : '#7e5230');
+            ctx.fillStyle = gr; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2;
             ctx.beginPath(); ctx.roundRect(x0, y, x1 - x0, 15, 7); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(50,26,10,0.35)'; ctx.lineWidth = 1;
+            for (let n = 0; n < 6; n++) { const px = x0 + 14 + r() * (x1 - x0 - 40); ctx.beginPath(); ctx.moveTo(px, y + 7 + (r() - 0.5) * 4); ctx.quadraticCurveTo(px + 10, y + 5 + r() * 5, px + 22, y + 7 + (r() - 0.5) * 4); ctx.stroke(); }
         }
-        [x0 - 4, x1 - 6].forEach(x => { ctx.fillStyle = '#c89a5a'; for (let y = sostre + 4; y < plat - 10; y += 15) { ctx.beginPath(); ctx.arc(x + 5, y + 7.5, 6.5, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = CONTORN; ctx.lineWidth = 1.5; ctx.stroke(); } });
-        // Teulada de dues aigües de taulons, amb ràfec
-        ctx.fillStyle = '#6a4224'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 4;
-        ctx.beginPath(); ctx.moveTo(W * 0.02, sostre + 14); ctx.lineTo(W * 0.5, H * 0.03); ctx.lineTo(W * 0.98, sostre + 14); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.strokeStyle = 'rgba(20,10,4,0.5)'; ctx.lineWidth = 1.5;
-        for (let k = 1; k < 7; k++) { const f = k / 7; ctx.beginPath(); ctx.moveTo(W * 0.5 - (W * 0.48) * f, H * 0.03 + (sostre + 14 - H * 0.03) * f); ctx.lineTo(W * 0.5 + (W * 0.48) * f, H * 0.03 + (sostre + 14 - H * 0.03) * f); ctx.stroke(); }
-        // Finestra amb porticons i un test de flors
+        [x0 - 4, x1 - 6].forEach(x => {
+            for (let y = sostre + 4; y < plat - 10; y += 15) {
+                ctx.fillStyle = '#d8aa6a'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.arc(x + 5, y + 7.5, 6.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+                ctx.strokeStyle = 'rgba(120,70,30,0.7)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x + 5, y + 7.5, 3.2, 0, Math.PI * 2); ctx.stroke();
+            }
+        });
+        // Teulada de dues aigües: llates rectangulars en fileres, amb molsa, i un ràfec pintat
+        const apex = H * 0.03, ral = sostre + 14;
+        const teulada = new Path2D(); teulada.moveTo(W * 0.02, ral); teulada.lineTo(W * 0.5, apex); teulada.lineTo(W * 0.98, ral); teulada.closePath();
+        ctx.fillStyle = '#7a4a2a'; ctx.fill(teulada);
+        ctx.save(); ctx.clip(teulada);
+        for (let y = apex + 8, f = 0; y < ral + 4; y += 10, f++) {
+            for (let x = (f % 2) * 9; x < W; x += 18) {
+                const t = 0.85 + r() * 0.3;
+                ctx.fillStyle = `rgb(${Math.round(150 * t)},${Math.round(90 * t)},${Math.round(50 * t)})`;
+                ctx.beginPath(); ctx.roundRect(x + 1, y, 16, 11, [0, 0, 5, 5]); ctx.fill();
+                ctx.strokeStyle = 'rgba(30,14,4,0.55)'; ctx.lineWidth = 1.1; ctx.stroke();
+            }
+        }
+        for (let k = 0; k < 9; k++) { ctx.fillStyle = r() < 0.5 ? 'rgba(110,150,60,0.75)' : 'rgba(80,120,50,0.75)'; ctx.beginPath(); ctx.ellipse(W * (0.1 + r() * 0.8), apex + 30 + r() * (ral - apex - 34), 6 + r() * 10, 3 + r() * 4, 0, 0, Math.PI * 2); ctx.fill(); }
+        ctx.restore();
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 4; ctx.stroke(teulada);
+        ctx.strokeStyle = '#e8d8a8'; ctx.lineWidth = 3;            // ràfec amb dents pintades
+        ctx.beginPath(); ctx.moveTo(W * 0.04, ral - 2); ctx.lineTo(W * 0.5, apex + 3); ctx.lineTo(W * 0.96, ral - 2); ctx.stroke();
+        // Penó al capdamunt
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(W * 0.5, apex + 2); ctx.lineTo(W * 0.5, apex - H * 0.035); ctx.stroke();
+        ctx.fillStyle = '#e8463a'; ctx.beginPath(); ctx.moveTo(W * 0.5, apex - H * 0.035); ctx.lineTo(W * 0.58, apex - H * 0.025); ctx.lineTo(W * 0.5, apex - H * 0.012); ctx.closePath(); ctx.fill(); ctx.lineWidth = 1.5; ctx.stroke();
+        // Finestra de l'esquerra: porticons, cortinetes i un test de flors
         const fx = W * 0.2, fy = sostre + 24, fw = W * 0.14, fh = W * 0.12;
-        ctx.fillStyle = '#f2d890'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.fillRect(fx, fy, fw, fh); ctx.strokeRect(fx, fy, fw, fh);
-        ctx.beginPath(); ctx.moveTo(fx + fw / 2, fy); ctx.lineTo(fx + fw / 2, fy + fh); ctx.moveTo(fx, fy + fh / 2); ctx.lineTo(fx + fw, fy + fh / 2); ctx.stroke();
-        ctx.fillStyle = '#4a7a98'; ctx.fillRect(fx - fw * 0.4, fy, fw * 0.38, fh); ctx.strokeRect(fx - fw * 0.4, fy, fw * 0.38, fh);
-        ctx.fillStyle = '#b8502e'; ctx.fillRect(fx + 4, fy + fh + 2, fw - 8, 10); ctx.fillStyle = '#d8434a'; [0.25, 0.5, 0.75].forEach(f => { ctx.beginPath(); ctx.arc(fx + fw * f, fy + fh, 4, 0, Math.PI * 2); ctx.fill(); });
-        // Porta al mig, de taulons, amb un cor tallat
+        ctx.fillStyle = '#f6dc90'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.fillRect(fx, fy, fw, fh); ctx.strokeRect(fx, fy, fw, fh);
+        ctx.fillStyle = '#e86a6a'; ctx.beginPath(); ctx.moveTo(fx + 2, fy + 2); ctx.quadraticCurveTo(fx + fw * 0.3, fy + fh * 0.4, fx + 2, fy + fh - 2); ctx.closePath(); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(fx + fw - 2, fy + 2); ctx.quadraticCurveTo(fx + fw * 0.7, fy + fh * 0.4, fx + fw - 2, fy + fh - 2); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(fx + fw / 2, fy); ctx.lineTo(fx + fw / 2, fy + fh); ctx.moveTo(fx, fy + fh / 2); ctx.lineTo(fx + fw, fy + fh / 2); ctx.stroke();
+        ctx.fillStyle = '#4a7a98'; ctx.lineWidth = 2.5; ctx.fillRect(fx - fw * 0.42, fy, fw * 0.38, fh); ctx.strokeRect(fx - fw * 0.42, fy, fw * 0.38, fh);
+        ctx.strokeStyle = 'rgba(20,40,60,0.5)'; ctx.lineWidth = 1.2; for (let k = 1; k < 4; k++) { ctx.beginPath(); ctx.moveTo(fx - fw * 0.42, fy + fh * k / 4); ctx.lineTo(fx - fw * 0.04, fy + fh * k / 4); ctx.stroke(); }
+        ctx.fillStyle = '#b8502e'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.fillRect(fx + 2, fy + fh + 2, fw - 4, 10); ctx.strokeRect(fx + 2, fy + fh + 2, fw - 4, 10);
+        [[0.2, '#e84a5a'], [0.45, '#ffd84a'], [0.7, '#e84a5a'], [0.9, '#f0f0ff']].forEach(([f, col]) => { ctx.fillStyle = '#4a8a3a'; ctx.beginPath(); ctx.arc(fx + fw * f, fy + fh, 3, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(fx + fw * f, fy + fh - 3, 3.4, 0, Math.PI * 2); ctx.fill(); });
+        // Finestra rodona de la dreta, amb un estel enganxat
+        const rx = W * 0.75, ry = sostre + 36, rr = W * 0.055;
+        ctx.fillStyle = '#f6dc90'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(rx, ry, rr, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = '#7a4e28'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(rx, ry, rr + 3, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(rx - rr, ry); ctx.lineTo(rx + rr, ry); ctx.moveTo(rx, ry - rr); ctx.lineTo(rx, ry + rr); ctx.stroke();
+        ctx.fillStyle = '#ffd84a'; ctx.beginPath(); for (let k = 0; k < 10; k++) { const a = -Math.PI / 2 + k * Math.PI / 5, q = k % 2 ? 2.2 : 5; ctx.lineTo(rx + rr * 0.45 + Math.cos(a) * q, ry - rr * 0.45 + Math.sin(a) * q); } ctx.closePath(); ctx.fill();
+        // Porta al mig (no es mou de lloc: la porta animada en retalla aquest tros), amb un travesser en Z, un cor i una anella
         const pw = W * 0.18, px = W / 2 - pw / 2, pt = sostre + 20;
         ctx.fillStyle = '#5a3a1e'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.fillRect(px, pt, pw, plat - 10 - pt); ctx.strokeRect(px, pt, pw, plat - 10 - pt);
         ctx.strokeStyle = 'rgba(20,10,4,0.6)'; ctx.lineWidth = 1.4; for (let k = 1; k < 4; k++) { ctx.beginPath(); ctx.moveTo(px + pw * k / 4, pt); ctx.lineTo(px + pw * k / 4, plat - 10); ctx.stroke(); }
+        ctx.strokeStyle = '#3a2410'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(px + 3, pt + 34); ctx.lineTo(px + pw - 3, pt + 34); ctx.lineTo(px + 3, plat - 22); ctx.lineTo(px + pw - 3, plat - 22); ctx.stroke();
         ctx.fillStyle = '#1a0e06'; ctx.beginPath(); ctx.moveTo(W / 2, pt + 24); ctx.bezierCurveTo(W / 2 - 12, pt + 12, W / 2 - 6, pt + 4, W / 2, pt + 12); ctx.bezierCurveTo(W / 2 + 6, pt + 4, W / 2 + 12, pt + 12, W / 2, pt + 24); ctx.fill();
-        // Barana de la terrassa (a banda i banda de la porta)
+        ctx.strokeStyle = '#c8a040'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.arc(px + pw - 9, (pt + plat) / 2, 4, 0, Math.PI * 2); ctx.stroke();
+        // Fanalet penjat del ràfec, a la dreta de la porta
+        const lx = px + pw + 16, ly = pt + 6;
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(lx, ral - 4); ctx.lineTo(lx, ly - 4); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,200,90,0.35)'; ctx.beginPath(); ctx.arc(lx, ly + 7, 14, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#ffd070'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(lx - 5, ly, 10, 14, 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#3a2a1a'; ctx.fillRect(lx - 6, ly - 3, 12, 3); ctx.fillRect(lx - 6, ly + 14, 12, 3);
+        // Barana de la terrassa amb una garlanda de banderetes de colors
         ctx.strokeStyle = '#c89a5a'; ctx.lineWidth = 4;
         [[W * 0.05, px - 6], [px + pw + 6, W * 0.95]].forEach(([a, b]) => {
-            ctx.beginPath(); ctx.moveTo(a, plat - 34); ctx.lineTo(b, plat - 34); ctx.stroke();
-            for (let x = a; x <= b; x += 14) { ctx.beginPath(); ctx.moveTo(x, plat - 34); ctx.lineTo(x, plat - 10); ctx.stroke(); }
+            ctx.strokeStyle = CONTORN; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(a, plat - 34); ctx.lineTo(b, plat - 34); ctx.stroke();
+            ctx.strokeStyle = '#d8aa6a'; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.moveTo(a, plat - 34); ctx.lineTo(b, plat - 34); ctx.stroke();
+            for (let x = a; x <= b; x += 14) { ctx.strokeStyle = CONTORN; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(x, plat - 34); ctx.lineTo(x, plat - 10); ctx.stroke(); ctx.strokeStyle = '#c89a5a'; ctx.lineWidth = 2.6; ctx.stroke(); }
+            const cols = ['#e8463a', '#ffd84a', '#4aa0d0', '#6ab84a', '#e88ad0'];
+            ctx.strokeStyle = '#f2e6c8'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(a, plat - 44); ctx.quadraticCurveTo((a + b) / 2, plat - 30, b, plat - 44); ctx.stroke();
+            for (let k = 0, n = Math.max(2, Math.floor((b - a) / 14)); k < n; k++) {
+                const t = (k + 0.5) / n, x = a + (b - a) * t, y = plat - 44 + 14 * 4 * t * (1 - t) * 0.5;
+                ctx.fillStyle = cols[k % cols.length]; ctx.strokeStyle = CONTORN; ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(x - 5, y); ctx.lineTo(x + 5, y); ctx.lineTo(x, y + 9); ctx.closePath(); ctx.fill(); ctx.stroke();
+            }
         });
-        // Escala de fusta: de la porta fins a terra
+        // Escala de fusta: de la porta fins a terra, amb una corda de passamà
         const ex0 = W / 2 - W * 0.11, ex1 = W / 2 + W * 0.11;
         ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.fillStyle = '#7a4e28';
         ctx.fillRect(ex0 - 6, plat - 6, 10, terra - plat + 4); ctx.strokeRect(ex0 - 6, plat - 6, 10, terra - plat + 4);
         ctx.fillRect(ex1 - 4, plat - 6, 10, terra - plat + 4); ctx.strokeRect(ex1 - 4, plat - 6, 10, terra - plat + 4);
-        for (let y = plat + 10; y < terra - 2; y += 18) { ctx.fillStyle = '#b07a42'; ctx.fillRect(ex0, y, ex1 - ex0, 8); ctx.strokeRect(ex0, y, ex1 - ex0, 8); }
+        for (let y = plat + 10; y < terra - 2; y += 18) {
+            ctx.fillStyle = '#b07a42'; ctx.fillRect(ex0, y, ex1 - ex0, 8); ctx.strokeRect(ex0, y, ex1 - ex0, 8);
+            ctx.fillStyle = 'rgba(255,220,160,0.3)'; ctx.fillRect(ex0 + 2, y + 1, ex1 - ex0 - 4, 2);
+        }
+        ctx.strokeStyle = '#c8b080'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(ex1 + 4, plat - 30); ctx.quadraticCurveTo(ex1 + 14, (plat + terra) / 2, ex1 + 6, terra - 6); ctx.stroke();
         // Una corda amb un cubell, penjada d'una biga
         ctx.strokeStyle = '#c8b080'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(W * 0.86, sostre + 16); ctx.lineTo(W * 0.86, plat + 60); ctx.stroke();
         ctx.fillStyle = '#4aa0d0'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(W * 0.82, plat + 60); ctx.lineTo(W * 0.9, plat + 60); ctx.lineTo(W * 0.885, plat + 82); ctx.lineTo(W * 0.835, plat + 82); ctx.closePath(); ctx.fill(); ctx.stroke();

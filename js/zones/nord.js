@@ -825,74 +825,63 @@ class ZonaCasaJordi extends ZonaBase {
 
     construir() {
         const A = 900, H = 700;
-        this.terra('rajola', 100, 40, 700, 660, -1100).setTint(0xc89a6a);
-        // Parets emblanquinades amb sòcol de rajola i bigues de fusta
-        const p = this.add.graphics().setDepth(-990);
-        p.fillStyle(0x120a04, 1).fillRect(58, 0, 784, 110);
-        p.fillStyle(0xeee2c8, 1).fillRect(60, 0, 780, 106);
-        for (let x = 60; x < 840; x += 26) p.fillStyle((x / 26) % 2 ? 0xd8b04a : 0x3a7a5a, 1).fillRect(x, 80, 26, 26);
-        p.fillStyle(0x5a3a1e, 1).fillRect(60, 0, 780, 10);
-        [180, 450, 720].forEach(x => p.fillStyle(0x5a3a1e, 1).fillRect(x - 8, 0, 16, 24));
-        p.fillStyle(0x4a3018, 1).fillRect(30, 0, 30, H).fillRect(840, 0, 30, H);
+        this.terra('rajola', 60, 40, 780, 660, -1100).setTint(0xc89a6a);
+        // Paret de la masia: calç, bigues i sòcol de rajola blava i groga
+        this.add.image(60, 0, 'paret_masia').setOrigin(0).setScale(1 / RES).setDepth(-995);
+        const lat = this.add.graphics().setDepth(-990);
+        lat.fillStyle(0x3a2412, 1).fillRect(30, 0, 30, H).fillRect(840, 0, 30, H);
+        lat.fillStyle(0x000000, 0.25).fillRect(60, 200, 24, H - 200).fillRect(816, 200, 24, H - 200);
         this.colisio(30, H / 2, 60, H);
         this.colisio(A - 30, H / 2, 60, H);
-        this.colisio(A / 2, 60, A - 120, 120);
+        this.colisio(A / 2, 100, A - 120, 200);
         this.colisio(270, H - 10, 340, 20);
         this.colisio(630, H - 10, 340, 20);
+        this.add.image(450, 470, 'estora_cela').setOrigin(0.5).setScale(1.2 / RES).setDepth(-1040);
 
-        // Llar de foc a l'esquerra, amb lleixa i rajola
-        const ll = this.add.graphics().setDepth(-960);
-        ll.fillStyle(0x120a04, 1).fillRect(110, 14, 170, 104);
-        ll.fillStyle(0xd8c8a8, 1).fillRect(116, 20, 158, 96);
-        ll.fillStyle(0x1a0e06, 1).fillRect(140, 44, 110, 72);
-        ll.fillStyle(0x5a3a1e, 1).fillRect(104, 12, 182, 10);
-        ll.fillStyle(0x3a7a9a, 1).fillRect(176, 0, 40, 12);
-        const foc = this.posar('foc', 195, 110, { escala: 0.8, fonsY: 110 });
-        this.tweens.add({ targets: foc, scaleY: foc.scaleY * 1.08, yoyo: true, repeat: -1, duration: 300 });
-        this.add.circle(195, 140, 120, 0xff9a30, 0.1).setDepth(300);
-        this.interactiu(195, 160, RADI_OBJECTE, DIALEGS.casaJordiLlar, { altura: 90 });
+        // Llar de foc de pedra amb l'olla, a l'esquerra, i la seva resplendor
+        this.add.image(200, 214, 'llar_cela').setOrigin(0.5, 1).setScale(1.1 / RES).setDepth(-960);
+        const foc = this.posar('foc', 200, 198, { fonsY: 212 });
+        this.tweens.add({ targets: foc, scaleY: foc.scaleY * 1.1, scaleX: foc.scaleX * 0.94, yoyo: true, repeat: -1, duration: 260 });
+        const resplendor = this.add.circle(200, 222, 170, 0xff9a30, 0.13).setDepth(300);
+        this.tweens.add({ targets: resplendor, alpha: 0.22, scale: 1.05, yoyo: true, repeat: -1, duration: 430 });
+        this.interactiu(200, 250, RADI_OBJECTE, DIALEGS.casaJordiLlar, { altura: 90 });
 
-        // Tauler d'eines (un buit amb forma de maneta)
-        const te = this.add.graphics().setDepth(-950);
-        te.fillStyle(0x7a5a3a, 1).fillRect(560, 10, 220, 64).lineStyle(2, 0x2a1608, 1).strokeRect(560, 10, 220, 64);
-        te.lineStyle(3, 0x2a2a2e, 1).lineBetween(580, 20, 580, 64).lineBetween(572, 22, 588, 22);
-        te.fillStyle(0x8a8a90, 1).fillTriangle(600, 20, 640, 20, 600, 60);
-        te.lineStyle(4, 0x5a3a1e, 1).lineBetween(660, 20, 660, 64); te.fillStyle(0x6a6a70, 1).fillRect(650, 18, 22, 10);
-        te.lineStyle(2, 0xd8d0b0, 0.7).strokeRect(690, 16, 12, 52);                                  // silueta buida: la maneta
-        te.lineStyle(4, 0x6a4a2a, 1).lineBetween(730, 20, 760, 64); te.fillStyle(0x6a6a70, 1).fillRect(752, 56, 20, 10);
-        this.interactiu(670, 140, RADI_OBJECTE, DIALEGS.casaJordiEines, { altura: 100 });
+        // Finestra amb un feix de llum, ristres d'alls i pebrots a la biga, i el tauler d'eines (amb el buit de la maneta)
+        this.add.image(385, 178, 'finestra_cela').setOrigin(0.5, 1).setScale(1 / RES).setDepth(-990);
+        const llum = this.add.graphics().setDepth(-900).setBlendMode('ADD');
+        llum.fillGradientStyle(0xfff0c0, 0xfff0c0, 0xfff0c0, 0xfff0c0, 0.15, 0.15, 0, 0).fillTriangle(355, 178, 415, 178, 520, 470);
+        llum.fillGradientStyle(0xfff0c0, 0xfff0c0, 0xfff0c0, 0xfff0c0, 0.15, 0, 0, 0).fillTriangle(355, 178, 520, 470, 430, 470);
+        this.tweens.add({ targets: llum, alpha: 0.65, yoyo: true, repeat: -1, duration: 3600, ease: 'Sine.easeInOut' });
+        this.add.image(480, 16, 'penjolls').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-985);
+        this.add.image(662, 40, 'tauler_eines').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-985);
+        this.interactiu(662, 214, RADI_OBJECTE, DIALEGS.casaJordiEines, { altura: 110 });
 
-        // Penjolls: alls i pebrots
-        const pj = this.add.graphics().setDepth(-940);
-        [[330, 0xf2ecdc], [370, 0xb8402e], [410, 0xf2ecdc]].forEach(([x, c]) => {
-            pj.lineStyle(2, 0x8a6a3a, 1).lineBetween(x, 10, x, 34);
-            for (let k = 0; k < 4; k++) pj.fillStyle(c, 1).fillEllipse(x + (k % 2 ? 5 : -5), 38 + k * 10, 10, 13);
+        // Taula de la cuina amb dues cadires, al mig
+        this.add.image(450, 412, 'taula_cela').setOrigin(0.5, 1).setScale(1.3 / RES).setDepth(412);
+        this.colisio(450, 390, 146, 40);
+        [[362, 456, false], [538, 456, true]].forEach(([x, y, flip]) => {
+            this.add.image(x, y, 'cadira_cela').setOrigin(0.5, 1).setScale(1.25 / RES).setFlipX(flip).setDepth(y);
+            this.colisio(x, y - 8, 42, 16);
         });
+        this.interactiu(450, 430, RADI_GRAN, DIALEGS.casaJordiTaula, { altura: 80 });
 
-        // Taula de la cuina amb cadires
-        this.posar('taula', 450, 330, { col: { w: 170, h: 30 } });
-        [[380, 370], [520, 370]].forEach(([x, y]) => this.posar('tamboret', x, y, { col: { w: 36, h: 14 } }));
-        this.interactiu(450, 345, RADI_GRAN, DIALEGS.casaJordiTaula, { altura: 70 });
+        // El llit, contra la paret de la dreta
+        this.add.image(770, 440, 'llit_cela').setOrigin(0.5, 1).setScale(1.15 / RES).setDepth(440);
+        this.colisio(770, 348, 130, 190);
 
-        // Llit amb manta de quadres i una catifa
-        const cat = this.add.graphics().setDepth(-1050);
-        cat.fillStyle(0x8a3a3a, 1).fillEllipse(450, 520, 300, 120).lineStyle(3, 0xd8b04a, 1).strokeEllipse(450, 520, 280, 104);
-        const llit = this.add.graphics().setDepth(300);
-        llit.fillStyle(0x3a2412, 1).fillRoundedRect(680, 200, 130, 190, 10);
-        llit.fillStyle(0xf2ecdc, 1).fillRoundedRect(690, 210, 110, 40, 8);
-        for (let r = 0; r < 4; r++) for (let c2 = 0; c2 < 3; c2++) llit.fillStyle((r + c2) % 2 ? 0x3a6a9a : 0xe8d8b0, 1).fillRect(690 + c2 * 37, 256 + r * 32, 36, 31);
-        this.colisio(745, 300, 130, 190);
+        // El gat, adormit al cove, i un barril
+        this.add.image(170, 590, 'gat_cove').setOrigin(0.5, 1).setScale(1 / RES).setDepth(590);
+        this.colisio(170, 575, 96, 26);
+        this.interactiu(170, 620, RADI_OBJECTE, DIALEGS.casaJordiGat, { altura: 70 });
+        this.posar('barril', 790, 600, { col: { w: 46, h: 20 } });
 
-        // Un gat dormint en un cove i una gerra amb flors
-        const gat = this.add.graphics().setDepth(560);
-        gat.fillStyle(0x8a6a3a, 1).fillEllipse(180, 560, 90, 40).fillStyle(0x6a6a70, 1).fillEllipse(180, 550, 60, 30).fillCircle(205, 545, 13);
-        gat.fillStyle(0x6a6a70, 1).fillTriangle(198, 534, 204, 524, 208, 536).fillTriangle(208, 534, 214, 524, 216, 538);
-        this.colisio(180, 555, 90, 30);
-        this.interactiu(180, 600, RADI_OBJECTE, DIALEGS.casaJordiGat, { altura: 60 });
-        this.posar('flors', 450, 300, { fonsY: 360 });
-        this.posar('barril', 790, 560, { col: { w: 46, h: 20 } });
-
-        this.add.rectangle(A / 2, H / 2, A, H, 0xffd38a, 0.06).setDepth(80000);
+        // Pols dins la llum de la finestra i un to càlid
+        this.add.particles(0, 0, 'espurna', {
+            emitZone: { type: 'random', source: new Phaser.Geom.Rectangle(360, 200, 160, 260) },
+            speedX: { min: -5, max: 5 }, speedY: { min: -6, max: 3 }, lifespan: 4200, scale: { start: 0.12, end: 0 }, alpha: { start: 0.7, end: 0 },
+            tint: [0xfff0c0], frequency: 320, blendMode: 'ADD'
+        }).setDepth(9000);
+        this.add.rectangle(A / 2, H / 2, A, H, 0xffd38a, 0.05).setDepth(80000);
         this.sortida(410, H - 22, 80, 14, 'ZonaJordi', 'casa');
     }
 }
@@ -943,7 +932,7 @@ class ZonaCasetaJoc extends ZonaBase {
         this.posar('llenya', 540, 400, { escala: 0.6, col: { w: 70, h: 20 } });
 
         // El cofre dels joguets, amb la maneta d'en Jordi a sota
-        this.posar('cofre', 510, 220, { col: { w: 50, h: 20 } });
+        this.posar('cofre_joguines', 510, 222, { col: { w: 56, h: 20 } });
         this.interactiu(510, 225, RADI_OBJECTE, DIALEGS.cofreManeta, { altura: 80 });
 
         this.add.rectangle(320, 260, 640, 520, 0xffd38a, 0.05).setDepth(80000);

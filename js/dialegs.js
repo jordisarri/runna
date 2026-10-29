@@ -161,7 +161,6 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: 'Nota', text: '«Per al qui sap escoltar les pedres.»' },
-                { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xf0c040), c => z.beure(c, 0xf0c040)], fet) },
                 { avis: "+1 GRA AL ROSARI i rosari ple." }
             ],
             enAcabar: () => { E.posaFlag('cofreTresor'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
@@ -201,7 +200,6 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: 'Nota', text: "«Per a qui es perd pel camí i el troba.»" },
-                { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xf0c040), c => z.beure(c, 0xf0c040)], fet) },
                 { avis: "+1 GRA AL ROSARI i rosari ple." }
             ],
             enAcabar: () => { E.posaFlag('cofreCabanaCami'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
@@ -1261,7 +1259,6 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: "Nota", text: "«Per al qui vingui amb l'espasa.»" },
-                { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xffb8c8), c => z.beure(c, 0xffb8c8)], fet) },
                 { avis: "+1 GRA AL ROSARI i rosari ple." }
             ],
             enAcabar: () => { E.posaFlag("cofreBosc"); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
@@ -1384,7 +1381,6 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { fer: (z, fet) => z.agafar(fet, null, 0x8a8a90) },
                 { avis: "Has obtingut la MANETA." }
             ],
             enAcabar: () => {
