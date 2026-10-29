@@ -499,7 +499,9 @@ const DIALEGS = {
         }
         if (E.flag("soparFet")) {
             const pas = pistaRunna(E);
-            return { pagines: [{ qui: "El Gran Til·ler", text: "El permís és teu, petit monjo, i les espelmes continuen enceses. Recorda a taula qui hi falta." + (pas ? " Ara, per despertar l'espasa: " + pas : " Que Runna et sigui lleu.") }] };
+            const pagines = [{ qui: "El Gran Til·ler", text: "El permís és teu, petit monjo, i les espelmes continuen enceses. Recorda a taula qui hi falta." + (pas ? "" : " Que Runna et sigui lleu.") }];
+            if (pas) pagines.push({ qui: "El Gran Til·ler", text: "Ara, per despertar l'espasa: " + pas });      // la pista, a part: tota junta no cabia a la caixa
+            return { pagines };
         }
         if (E.flag("esquelles") && !E.flag("soparObert")) return DIALEGS.tillerSoparIntro(E);
         if (E.flag("soparObert") && !E.flag("soparFet")) {
