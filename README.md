@@ -43,3 +43,5 @@ Joc web fet amb Phaser 3. Per provar-lo en local: `python serveix.py` i obre `ht
 - `generar_sprites.html`, `ajust_arma.html`, `netejar_ineu.js`, `prova_progres.js`: utilitats de desenvolupament.
 
 Per afegir un gràfic: deixa l'original a `art/<carpeta>/<nom>.png|jpg`, afegeix-lo a `js/assets.js` i executa `node eines/convertir_webp.js`.
+
+**Mode de proves:** obre `http://localhost:8000/?proves`. El botó 🧪 (a l'esquerra) permet començar just abans de qualsevol pas de la història, amb tot l'anterior fet (Runna, objectes, flags), o anar a qualsevol zona. Aquesta partida es desa a part i no toca la partida de veritat.
