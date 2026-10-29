@@ -482,7 +482,7 @@ class ZonaTaverna extends ZonaBase {
         this.enemic('visitant', 1000, 960);        // un visitant trastocat per la boira, que ha vingut a la Taverna
 
         this.cartell(260, 860, () => ({ pagines: [{ qui: 'Cartell', text: '← L\'Hostatgeria i l\'Era\n→ Els arcs de la Casa Gran' }] }));
-        this.arbres([[130, 250], [200, 560], [1460, 330], [1450, 600], [60, 1070], [1180, 1050]]);   // cap arbre davant el cartell
+        this.arbres([[130, 250], [200, 560], [1460, 330], [1450, 600], [60, 830], [1180, 1050]]);   // cap arbre davant el cartell
 
         this.sortida(0, 900, 14, 130, 'ZonaJardi', 'taverna');
         this.sortida(1586, 900, 14, 130, 'ZonaCasaGran', 'oest');
