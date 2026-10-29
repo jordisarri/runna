@@ -58,7 +58,6 @@ Object.assign(DIALEGS, {
     } : { pagines: [
         { qui: 'Ineu', text: "(Em caldrien unes mans molt més fortes: els guants dels picapedrers del Germà Francesc.)" }
     ] },
-    instrumentsTortura: n => E => ({ pagines: [] }),
     pontGabia: E => E.flag('pontGabia') ? { pagines: [] } : {
         pagines: [
             { qui: 'Inscripció', text: "Gravada a la pedra, una paraula antiga: PEDRES." },
@@ -306,14 +305,12 @@ class ZonaTortura extends ZonaBase {
         g.fillStyle(0x2a1a10, 1).fillRect(250, 1580, 150, 50).fillRect(258, 1630, 12, 40).fillRect(380, 1630, 12, 40);
         g.fillStyle(0x4a4a50, 1).fillCircle(250, 1605, 16).fillCircle(400, 1605, 16).lineStyle(3, 0x8a7a5a, 1).lineBetween(266, 1600, 384, 1610);
         this.colisio(325, 1620, 160, 60);
-        this.interactiu(325, 1690, RADI_OBJECTE, DIALEGS.instrumentsTortura(0), { altura: 90 });
         // Donzella de ferro (tram 1, dreta)
         const dz = this.add.graphics().setDepth(1560);
         dz.fillStyle(0x3a3a40, 1).fillRoundedRect(570, 1400, 90, 160, 40).fillStyle(0x1a1a1e, 1).fillRoundedRect(582, 1414, 66, 140, 30);
         dz.fillStyle(0x9a9aa0, 1).fillCircle(615, 1440, 18).fillStyle(0x1a1a1e, 1).fillCircle(608, 1436, 3).fillCircle(622, 1436, 3);
         for (let k = 0; k < 6; k++) dz.fillStyle(0xd8d0c0, 0.8).fillEllipse(590 + k * 9, 1530 - (k % 2) * 8, 6, 14);
         this.colisio(615, 1540, 90, 30);
-        this.interactiu(560, 1580, RADI_OBJECTE, DIALEGS.instrumentsTortura(1), { altura: 140 });
 
         // ---- Rastell rovellat amb el torn (Guants de Poder) ----
         const YR = 1180;
@@ -322,15 +319,24 @@ class ZonaTortura extends ZonaBase {
         this.rastell.lineStyle(7, 0x5a4a40, 1);
         for (let x = 254; x <= 646; x += 28) { this.rastell.lineBetween(x, YR - 140, x, YR); this.rastell.fillStyle(0x5a4a40, 1).fillTriangle(x - 5, YR, x + 5, YR, x, YR + 14); }
         this.rastell.lineStyle(5, 0x4a3e36, 1).lineBetween(240, YR - 90, 660, YR - 90).lineBetween(240, YR - 40, 660, YR - 40);
+        // El torn: un bastidor de fusta amb un tambor on s'enrotlla la corda del rastell i una maneta de ferro
         const torn = this.add.graphics().setDepth(YR + 60);
-        torn.fillStyle(0x2a2420, 1).fillRect(640, YR + 20, 40, 40).fillStyle(0x5a4a40, 1).fillCircle(660, YR + 30, 20);
-        torn.lineStyle(5, 0x8a7a5a, 1).lineBetween(660, YR + 30, 690, YR + 6);
-        torn.lineStyle(2, 0x6a6a70, 1).lineBetween(660, YR + 20, 660, YR - 150);
-        this.colTorn = this.colisio(660, YR + 50, 44, 20);
+        torn.lineStyle(3, 0xc8b890, 1).lineBetween(662, YR + 14, 662, YR - 150);                                        // la corda, fins al rastell
+        torn.fillStyle(0x000000, 0.35).fillEllipse(662, YR + 62, 76, 16);
+        torn.fillStyle(0x6a4424, 1).fillRect(628, YR + 6, 10, 54).fillRect(686, YR + 6, 10, 54).lineStyle(2, 0x1a0c04, 1).strokeRect(628, YR + 6, 10, 54).strokeRect(686, YR + 6, 10, 54);
+        torn.fillStyle(0x9a7040, 1).fillRoundedRect(636, YR + 10, 52, 30, 8).lineStyle(2.5, 0x1a0c04, 1).strokeRoundedRect(636, YR + 10, 52, 30, 8);   // tambor
+        torn.fillStyle(0xc8b890, 1); for (let k = 0; k < 5; k++) torn.fillRect(642 + k * 9, YR + 12, 4, 26);                            // voltes de corda
+        torn.fillStyle(0x4a4a52, 1).fillCircle(700, YR + 25, 7).lineStyle(2, 0x111114, 1).strokeCircle(700, YR + 25, 7);
+        torn.lineStyle(6, 0x111114, 1).lineBetween(700, YR + 25, 716, YR + 2).lineStyle(4, 0x8a8a94, 1).lineBetween(700, YR + 25, 716, YR + 2);    // maneta
+        torn.fillStyle(0x7a4a24, 1).fillRoundedRect(711, YR - 8, 12, 14, 3).lineStyle(2, 0x1a0c04, 1).strokeRoundedRect(711, YR - 8, 12, 14, 3);
+        const llumTorn = this.add.circle(670, YR + 26, 60, 0xffb060, 0.12).setDepth(YR + 59).setBlendMode('ADD');
+        if (!Estat.flag('rastellObert')) this.tweens.add({ targets: llumTorn, alpha: 0.04, yoyo: true, repeat: -1, duration: 1100 });
+        else llumTorn.setVisible(false);
+        this.colTorn = this.colisio(662, YR + 52, 72, 20);
         if (Estat.flag('rastellObert')) this.rastell.y = -150;
         else {
             this.colRastell = this.colisio(450, YR - 10, 420, 30);
-            this.interactiu(620, YR + 90, RADI_OBJECTE, DIALEGS.tornRastell, { altura: 100, actiu: () => !Estat.flag('rastellObert'), enTancar: () => { if (Estat.te('guants')) this.alcarRastell(); } });
+            this.interactiu(650, YR + 92, RADI_OBJECTE, DIALEGS.tornRastell, { altura: 110, actiu: () => !Estat.flag('rastellObert'), enTancar: () => { if (Estat.te('guants')) this.alcarRastell(); } });
         }
 
         // Roda i eines (tram 2)
@@ -339,7 +345,6 @@ class ZonaTortura extends ZonaBase {
         for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; rd.lineStyle(5, 0x4a3020, 1).lineBetween(300, 850, 300 + Math.cos(a) * 60, 850 + Math.sin(a) * 60); }
         rd.fillStyle(0x2a2a2e, 1).fillCircle(300, 850, 10).fillRect(296, 850, 8, 60);
         this.colisio(300, 900, 120, 26);
-        this.interactiu(300, 960, RADI_OBJECTE, DIALEGS.instrumentsTortura(2), { altura: 130 });
         // Gàbies d'ocell que pengen del sostre, gronxant-se
         [[560, 640], [620, 820], [520, 900], [380, 560]].forEach(([x, y], i) => {
             const c = this.add.container(x, y).setDepth(y + 200);
@@ -350,7 +355,6 @@ class ZonaTortura extends ZonaBase {
             c.add(gb);
             this.tweens.add({ targets: c, angle: { from: -6, to: 6 }, yoyo: true, repeat: -1, duration: 1400 + i * 300, ease: 'Sine.easeInOut' });
         });
-        this.interactiu(560, 700, RADI_OBJECTE, DIALEGS.instrumentsTortura(3), { altura: 80 });
 
         // ---- Mur d'esbarzers negres al darrer tram (cal Runna) ----
         [270, 360, 450, 540, 630].forEach((x, i) => {
@@ -374,10 +378,16 @@ class ZonaTortura extends ZonaBase {
         this.sortida(410, H - 22, 80, 14, 'ZonaGirgoles', 'tortura');
     }
 
+    // En entrar, l'objectiu diu què toca fer al passadís (el rastell, i després els esbarzers)
+    enEntrar() {
+        if (!Estat.flag('torturaNet')) Estat.posaObjectiu(PROGRES.pista(Estat));
+    }
+
     alcarRastell() {
         if (Estat.flag('rastellObert')) return;
         Estat.posaFlag('rastellObert');
         if (this.colRastell) this.obstacles.remove(this.colRastell, true, true);
+        Estat.posaObjectiu(PROGRES.pista(Estat));
         Sfx.secret();
         this.cameras.main.shake(500, 0.004);
         this.tweens.add({ targets: this.rastell, y: -150, duration: 1800, ease: 'Sine.easeInOut' });
