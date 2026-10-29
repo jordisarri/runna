@@ -464,7 +464,7 @@ const DIALEGS = {
             pagines: [
                 { qui: 'Carry', text: "Ai, Ineu... no, no t'has de preocupar per mi. Bé, sí. Busco el Pallofa, el meu gos." },
                 { qui: 'Carry', text: "És petit i prim, blanc amb taques marrons, i li falta un ull: diuen que se'l va menjar un gat. Va marxar fa tres nits, quan va pujar la boira, i no ha tornat." },
-                { qui: 'Carry', text: "A ell li agrada passejar. Si el trobes, porta'l-me. Diners no en tinc, però a casa guardo una cosa que potser et farà falta." }
+                { qui: 'Carry', text: "A ell li agrada passejar. Si el trobes, porta-me'l. Diners no en tinc, però a casa guardo una cosa que potser et farà falta." }
             ],
             enAcabar: () => { E.posaFlag('carryParlat'); E.posaObjectiu("Busca el Pallofa, el gos de la Carry: passeja per Sant Antoni, a llevant del Monestir. Porta'l a la Carry (Nostra Senyora, a l'oest de les Cel·les)."); E.desar(); }
         };
@@ -1389,7 +1389,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { fer: (z, fet) => z.mostrarObjecte('maneta', fet, 0xd8c8a0) },
-                { avis: "Has obtingut la MANETA D'EN JORDI." }
+                { avis: "Has obtingut la MANETA D'ENGRANATGE." }
             ],
             enAcabar: () => {
                 E.dona("maneta"); E.posaFlag("maneta");

@@ -135,7 +135,7 @@ const CATALEG_OBJECTES = {
     runna:            ['Runna', 'L\'espasa de llum del monjo.'],
     ram:              ['Ram de flors', 'Del Germà Francesc, per a la tomba de l\'àngel.'],
     guants:           ['Guants de Poder', 'Per moure el que pesa massa.'],
-    maneta:           ['Maneta d\'en Jordi', 'De ferro: encaixa en volants i rodes vells.'],
+    maneta:           ['Maneta d\'engranatge', 'De ferro: encaixa en volants i rodes vells.'],
     clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Andreu li va caure; el Siscu te l\'ha donada.'],
     fragment1:        ['Pergamí partit (1/2)', 'La meitat d\'un pergamí esquinçat, trobada a les Runes.'],
     pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.» Al revers: «Qui busqui sortida, que alci la bóta marcada amb la creu.»'],
