@@ -273,10 +273,10 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     }
 
     // ---- L'Home del Raïm i el volant de ferro ----
-    // El cap de pedra comença girat del tot (mirant a ponent, d'esquena a l'escala). Amb la maneta d'en Jordi, el volant de ferro de la base
-    // (amb engranatges) gira el cap un quart de volta cada cop: a la tercera volta et mira de cara (migdia) i el guardià es desperta.
+    // El cap de pedra comença girat del tot (d'esquena). Amb la maneta d'en Jordi, el volant de ferro del pedestal (amb engranatges) li
+    // fa girar el cap un pas cada volta: d'esquena, de tres quarts, de perfil i, a la tercera volta, de cara: el guardià es desperta.
     puzleRaim() {
-        this.raimDir = 3;      // 0 N, 1 E, 2 S (de cara a l'Ineu), 3 O: comença d'esquena, girat del tot
+        this.raimPas = 0;      // 0 d'esquena, 1 tres quarts, 2 perfil, 3 de cara (CAPS_RAIM)
         const derrotat = Estat.flag('raimDerrotat');
         const desperta = Estat.flag('raimDesperta');
 
@@ -294,10 +294,10 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // El volant de ferro amb engranatges, encastat a la cara del pedestal: amb la maneta, cada volta gira el cap un quart
         if (!derrotat) this.dibuixarVolant(700, Math.round(470 - this.estatua.displayHeight * 0.17));
         this.interactiu(700, 500, 75, E => {
-            this.raimDir = (this.raimDir + 1) % 4;
+            this.raimPas = Math.min(3, this.raimPas + 1);
             this.girarVolant();
             this.girarEstatua();
-            this.volDespertar = this.raimDir === 2 && this.teArma();
+            this.volDespertar = this.raimPas === 3 && this.teArma();
             return { pagines: [] };
         }, { altura: 70, actiu: () => !Estat.flag('raimDesperta') && Estat.te('maneta'),
              enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.time.delayedCall(500, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => this.despertarRaim())); } } });
@@ -352,17 +352,17 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.cameras.main.shake(260, 0.003);
         this.tweens.add({ targets: this.volant, rotation: this.volant.rotation + Math.PI * 2, duration: 900, ease: 'Sine.easeInOut', onUpdate: () => this.posarManeta() });
         this.tweens.add({ targets: this.engranatge, rotation: this.engranatge.rotation - Math.PI * 3.8, duration: 900, ease: 'Sine.easeInOut' });
-        if (this.raimDir === 2) this.time.delayedCall(950, () => this.llum(700, 330, 0xffe08a));
+        if (this.raimPas === 3) this.time.delayedCall(950, () => this.llum(700, 330, 0xffe08a));
     }
 
     runes() {
         [[670, 468], [730, 472], [700, 458]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 50, h: 20 } }));
-        this.raimDir = 2;
+        this.raimPas = 3;
     }
 
-    // Imatge de l'estàtua segons cap on mira el cap (0 N, 1 E, 2 S, 3 O). El sud (de cara) és la imatge base
+    // Imatge de l'estàtua segons com té girat el cap (de cara és la imatge base)
     texRaim() {
-        const k = ['home_raim_n', 'home_raim_e', 'home_raim', 'home_raim_o'][this.raimDir];
+        const k = ['home_raim_n', 'home_raim_ne', 'home_raim_e', 'home_raim'][this.raimPas];
         return this.textures.exists(k) && !Grafics.faltants.includes(k) ? k : 'home_raim';
     }
 
