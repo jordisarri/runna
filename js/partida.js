@@ -79,6 +79,9 @@ const Estat = {
         if (!resultat.flags.bastoObtingut) resultat.objectes = resultat.objectes.filter(o => o !== 'basto');
         // Si ja se sap el Cant de l'Aurora, la flauta hi ha de ser (alguna versió antiga no la donava)
         if (resultat.flags.cantAurora && !resultat.objectes.includes('flauta')) resultat.objectes.push('flauta');
+        // La palanca d'en Jordi ara és una maneta (el volant de l'Home del Raïm)
+        resultat.objectes = resultat.objectes.map(o => o === 'palanca' ? 'maneta' : o);
+        [['palanca', 'maneta'], ['jordiPalanca', 'jordiManeta']].forEach(([vell, nou]) => { if (resultat.flags[vell]) { resultat.flags[nou] = resultat.flags[vell]; delete resultat.flags[vell]; } });
         // Migracions futures: if (resultat.versio < 2) { ... }
         resultat.versio = this.VERSIO;
         this.dades = resultat;

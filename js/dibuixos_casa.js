@@ -1,5 +1,5 @@
 /**
- * LA CASA GRAN PER DINS: passadís secret, cambra del tresor, cripta i rosa dels vents de l'Home del Raïm.
+ * LA CASA GRAN PER DINS: passadís secret, cambra del tresor, cripta i l'Escalinata de l'Home del Raïm.
  * Es pinten en coordenades de disseny (ctx, w, h) i assets.js les converteix en textures.
  * Fan servir carreusErmita (dibuixos_ermita.js) i els ajudants de dibuixos_biblio.js.
  */
@@ -168,43 +168,6 @@ function pintarBotaCreu(ctx, w, h) {
     ctx.beginPath(); ctx.moveTo(w / 2, h * 0.34); ctx.lineTo(w / 2, h * 0.7); ctx.moveTo(w / 2 - 12, h * 0.46); ctx.lineTo(w / 2 + 12, h * 0.46); ctx.stroke();
     ctx.strokeStyle = 'rgba(255,200,170,0.5)'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(w / 2 - 1.5, h * 0.35); ctx.lineTo(w / 2 - 1.5, h * 0.68); ctx.stroke();
 }
-// ---------- Rosa dels vents de pedra (davant l'Home del Raïm): mosaic amb estrella de vuit puntes i els quatre punts cardinals ----------
-function pintarRosaVents(ctx, w, h) {
-    ctx.lineJoin = 'round';
-    const cx = w / 2, cy = h / 2;
-    ctx.save(); ctx.translate(cx, cy); ctx.scale(1, h / w);                         // perspectiva: cercle aixafat
-    const R = w / 2 - 6;
-    const g = ctx.createRadialGradient(0, 0, 4, 0, 0, R); g.addColorStop(0, '#b4a88c'); g.addColorStop(1, '#7e725a');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = CASA_C; ctx.stroke();
-    ctx.lineWidth = 3; ctx.strokeStyle = '#3a2c1a'; ctx.beginPath(); ctx.arc(0, 0, R * 0.82, 0, Math.PI * 2); ctx.stroke();
-    // Estrella: quatre puntes llargues (cardinals) i quatre de curtes
-    for (let k = 0; k < 8; k++) {
-        const an = k * Math.PI / 4 - Math.PI / 2, long = k % 2 === 0, rr = long ? R * 0.8 : R * 0.5;
-        ctx.fillStyle = long ? (k === 2 ? '#e0b83a' : '#d8cdb0') : '#a89c80';
-        ctx.beginPath(); ctx.moveTo(Math.cos(an) * rr, Math.sin(an) * rr); ctx.lineTo(Math.cos(an + 0.3) * R * 0.2, Math.sin(an + 0.3) * R * 0.2); ctx.lineTo(Math.cos(an - 0.3) * R * 0.2, Math.sin(an - 0.3) * R * 0.2); ctx.closePath(); ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = CASA_C; ctx.stroke();
-    }
-    ctx.fillStyle = '#3a2c1a'; ctx.beginPath(); ctx.arc(0, 0, R * 0.1, 0, Math.PI * 2); ctx.fill();
-    ctx.restore();
-    // Lletres dels punts cardinals i, a l'est, un sol que neix i un raïm
-    ctx.font = `bold ${Math.round(h * 0.17)}px serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineWidth = 4; ctx.strokeStyle = '#1a0e06'; ctx.fillStyle = '#f2e6c8';
-    [['N', cx, h * 0.06], ['E', w - 16, cy], ['S', cx, h * 0.94], ['O', 16, cy]].forEach(([t, x, y]) => { ctx.strokeText(t, x, y); ctx.fillText(t, x, y); });
-    const sx = w - 44, sy = cy - 24;
-    ctx.fillStyle = '#e8b830'; ctx.strokeStyle = '#6a3a0a'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(sx, sy, 8, Math.PI, 0); ctx.fill(); ctx.stroke();
-    for (let a = 0; a < 5; a++) { const an = Math.PI + a / 4 * Math.PI; ctx.beginPath(); ctx.moveTo(sx + Math.cos(an) * 11, sy + Math.sin(an) * 11); ctx.lineTo(sx + Math.cos(an) * 17, sy + Math.sin(an) * 17); ctx.stroke(); }
-    [[sx - 6, sy + 18], [sx + 6, sy + 18], [sx, sy + 26]].forEach(([x, y]) => { ctx.fillStyle = '#7a3a9a'; ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
-}
-
-// ---------- Fletxa de pedra amb daurats que indica cap on mira l'Home del Raïm (apunta cap amunt; es gira amb l'angle) ----------
-function pintarFletxaRaim(ctx, w, h) {
-    ctx.lineJoin = 'round';
-    const cx = w / 2, cy = h / 2;
-    const gl = ctx.createRadialGradient(cx, cy, 4, cx, cy, w / 2); gl.addColorStop(0, 'rgba(255,224,140,0.55)'); gl.addColorStop(1, 'rgba(255,224,140,0)');
-    ctx.fillStyle = gl; ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = '#6a604e'; ctx.beginPath(); ctx.arc(cx, cy, w * 0.34, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = CASA_C; ctx.stroke();
-    ctx.fillStyle = '#e8c040'; ctx.beginPath(); ctx.moveTo(cx, cy - w * 0.3); ctx.lineTo(cx + w * 0.17, cy + w * 0.02); ctx.lineTo(cx + w * 0.06, cy + w * 0.02); ctx.lineTo(cx + w * 0.06, cy + w * 0.26); ctx.lineTo(cx - w * 0.06, cy + w * 0.26); ctx.lineTo(cx - w * 0.06, cy + w * 0.02); ctx.lineTo(cx - w * 0.17, cy + w * 0.02); ctx.closePath(); ctx.fill(); ctx.lineWidth = 2.4; ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.fillRect(cx - w * 0.04, cy - w * 0.08, 3, w * 0.28);
-}
-
 // ---------- Escalinata de la Casa Gran (fons de 1140x640): a partir de les fotos de l'Home del Raïm real ----------
 // Una volta d'arc rebaixat amb nervis i un balcó amb dues columnes estriades de capitell corinti; a l'esquerra, l'escala de pedra
 // que puja amb la seva barana massissa; a la dreta, un mur de carreus amb una porta oberta a la claror; al mig, el paviment de lloses.

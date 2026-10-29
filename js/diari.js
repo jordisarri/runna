@@ -24,7 +24,7 @@ const DIARI_PASSOS = {
     estelLlorenc: ['L\'Estel de Sant Llorenç', 'ZonaDipositos'], runna: ['Runna', 'ZonaDolmen'],
     josep: ['El partit contra en Jusef', 'ZonaPingpong'],
     guants: ['Els Guants de Poder', 'ZonaSantAntoni'], roda: ['La roda del Celler', 'ZonaPingpong'],
-    cambra: ['La cambra secreta', 'ZonaPassadis'], palanca: ["La palanca d'en Jordi", 'ZonaJordi'],
+    cambra: ['La cambra secreta', 'ZonaPassadis'], maneta: ["La maneta d'en Jordi", 'ZonaJordi'],
     raim: ['L\'Home del Raïm', 'ZonaCasaGranInt'], cripta: ['La Cripta', 'ZonaCasaCripta'],
     segell: ['La tomba dels monjos', 'ZonaCementiri'], cantMiracle: ['El Cant del Miracle', 'ZonaEsglesia'],
     soterrani: ['La porta de les Gírgoles', 'ZonaGirgolesFora'], clauCiscu: ['La clau del Siscu', 'ZonaCabanaCami'],

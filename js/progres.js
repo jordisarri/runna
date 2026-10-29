@@ -91,12 +91,12 @@ const PROGRES = {
           pista: E => "La roda de carruatge del Celler amaga el túnel dels monjos: amb els guants posats, empeny-la des d'un costat, caminant-hi en contra." },
         { id: 'cambra', marca: ['cofreCambra', 'obj:pergami_monjo'], fet: E => E.flag('cofreCambra'),
           pista: E => "Baixa pel passadís de darrere la roda: talla amb Runna el mur d'esbarzers negres (llueixen violeta entre quatre espelmes) i arribaràs a la Cambra secreta dels monjos, amb un cofre." },
-        { id: 'palanca', marca: ['jordiPalanca', 'palanca', 'obj:palanca'], fet: E => E.flag('palanca') || E.te('palanca'),
-          pista: E => E.flag('jordiPalanca')
-              ? "La palanca d'en Jordi és al cofre de les joguines, dalt de la caseta aixecada sobre pals, a la Caseta (a l'oest del Gran Til·ler)."
-              : "Per fer girar l'Home del Raïm cal una palanca. En Jordi de la Caseta, a l'oest del Gran Til·ler, en té una: parla-hi." },
+        { id: 'maneta', marca: ['jordiManeta', 'maneta', 'obj:maneta'], fet: E => E.flag('maneta') || E.te('maneta'),
+          pista: E => E.flag('jordiManeta')
+              ? "La maneta d'en Jordi és al cofre de les joguines, dalt de la caseta aixecada sobre pals, a la Caseta (a l'oest del Gran Til·ler)."
+              : "El volant de ferro de l'Home del Raïm no té maneta. En Jordi de la Caseta, a l'oest del Gran Til·ler, en té una: parla-hi." },
         { id: 'raim', marca: ['raimDesperta', 'raimDerrotat'], fet: E => E.flag('raimDerrotat'),
-          pista: E => "A la gran escalinata de la Casa Gran, l'Home del Raïm. Recorda el pergamí del monjo: gira-li el cap amb la palanca cap a on neix el sol (la rosa dels vents t'ho diu) i prem-li el raïm." },
+          pista: E => "A la gran escalinata de la Casa Gran, l'Home del Raïm té el cap girat. Encaixa la maneta d'en Jordi al volant de ferro de la base i fes-lo girar fins que el guardià et miri a la cara." },
         { id: 'cripta', marca: ['relTretes', 'clauFerro', 'obj:clau_ferro'], fet: E => E.flag('relTretes'),
           pista: E => "Vençut l'Home del Raïm, la trapa de sota l'escalinata baixa a la Cripta dels monjos: hi ha la Clau de ferro." },
         { id: 'segell', marca: ['tombaLlegida', 'tombaSegellada'], fet: E => E.flag('tombaSegellada'),

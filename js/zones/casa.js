@@ -3,14 +3,13 @@
  *   Entrada: només la secreta, des d'El Celler (el ping-pong; darrere la roda de carruatge, amb Runna): passadís amb escolopendres
  *            i un esbarzer negre, sala del tresor (la cambra secreta dels monjos) i una porta cap a l'Escalinata. La reixa del porxo
  *            (plaça) és tancada des de fora; només es pot obrir per dins, com a drecera de tornada.
- *   Escalinata: l'Home del Raïm. Amb la Palanca (és a la caseta d'en Jordi, a la Caseta) es gira el cap cap a llevant:
- *               l'estàtua cobra vida (BOSS). Derrotada, s'obre la trapa de la cripta.
+ *   Escalinata: l'Home del Raïm, amb el cap girat. Amb la Maneta d'en Jordi (és a la caseta, a la Caseta) es fa girar el volant de
+ *               ferro de la base: tres voltes i el cap et mira de cara; llavors l'estàtua cobra vida (BOSS). Derrotada, s'obre la trapa.
  *   Cripta: la Clau de ferro (i un paper: la llum de Runna segella la tomba esquerdada del Cementiri),
  *           que obre la porta de ferro de la Sala de les Gírgoles (a sota de la Taverna, no pas des d'aquí).
  */
 
 // ---------------- DIÀLEGS ----------------
-const NOMS_DIR = ["cap al nord (cap a l'escala)", "cap a llevant (E)", "cap a migdia (S)", "cap a ponent (O)"];
 
 Object.assign(DIALEGS, {
     homeRaimInt: E => {
@@ -19,16 +18,10 @@ Object.assign(DIALEGS, {
         }
         return {
             pagines: [
-                { qui: 'Ineu', text: "Mira cap amunt i de costat, com si vigilés el balcó de sobre l'escala. A la base hi ha un forat quadrat, com per encaixar-hi una palanca... En Jordi, a la Caseta, sempre porta eines." }
+                { qui: 'Ineu', text: "Té el cap girat del tot. Al costat hi ha un volant de ferro amb engranatges, però li falta la maneta... En Jordi, a la Caseta, sempre porta eines." }
             ]
         };
     },
-
-    rosaVents: E => ({
-        pagines: [
-            { qui: 'Ineu', text: "«On neix el sol, el raïm madura.» A la E hi ha tallats un sol que neix i un raïm. L'Home del Raïm hauria de mirar cap a llevant: la fletxa de pedra de la seva base em dirà cap on mira ara." }
-        ]
-    }),
 
     raimDesperta: {
         pagines: [
@@ -66,24 +59,24 @@ Object.assign(DIALEGS, {
         }
     },
 
-    // El Jordi de la Caseta (a l'oest del Til·ler): diu on té la palanca, dins la caseta aixecada del jardí
+    // El Jordi de la Caseta (a l'oest del Til·ler): diu on té la maneta, dins la caseta aixecada del jardí
     jordiCaseta: E => {
-        if (E.te('palanca') || E.flag('palanca')) {
+        if (E.te('maneta') || E.flag('maneta')) {
             return { pagines: [{ qui: 'Jordi', text: "Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes." }] };
         }
-        if (E.flag('jordiPalanca')) {
-            return { pagines: [{ qui: 'Jordi', text: "La caseta és aquí al costat: puja per l'escala. Al cofre de les joguines, la palanca és a sota. Que no se't cansi el braç!" }] };
+        if (E.flag('jordiManeta')) {
+            return { pagines: [{ qui: 'Jordi', text: "La caseta és aquí al costat: puja per l'escala. Al cofre de les joguines, la maneta és a sota. Que no se't cansi el braç!" }] };
         }
         return {
             pagines: [
                 { qui: 'Jordi', text: "Ei, monjo! Sóc en Jordi, el de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
-                { qui: 'Ineu', text: "Jordi, em diuen que en saps, d'eines. De vegades cal moure una cosa pesada i no hi ha manera." },
-                { qui: 'Jordi', text: "Una palanca! En tinc una de ferro, de les bones. Per moure roques, per obrir reixes... i, si cal, per girar el cap a una estàtua tossuda." },
+                { qui: 'Ineu', text: "Jordi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar." },
+                { qui: 'Jordi', text: "Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda." },
                 { qui: 'Jordi', text: "Però la vaig amagar dalt de la caseta dels nens, la que està aixecada sobre pals, al cofre de les joguines: ningú no la hi buscarà. Puja per l'escala, que la porta no té clau, i agafa-la." }
             ],
             enAcabar: () => {
-                E.posaFlag('jordiPalanca');
-                E.posaObjectiu("Agafa la palanca d'en Jordi: és al cofre de les joguines, dalt de la caseta aixecada sobre pals (a la Caseta).");
+                E.posaFlag('jordiManeta');
+                E.posaObjectiu("Agafa la maneta d'en Jordi: és al cofre de les joguines, dalt de la caseta aixecada sobre pals (a la Caseta).");
             }
         };
     }
@@ -279,24 +272,13 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         });
     }
 
-    // ---- L'Home del Raïm i la rosa dels vents ----
-    // El cap de pedra mira cap a una direcció (la fletxa de pedra del costat de l'estàtua ho mostra). La palanca, al forat de la base, el gira un quart de volta
-    // cada cop. Quan mira a llevant (E, on neix el sol), el guardià es desperta.
+    // ---- L'Home del Raïm i el volant de ferro ----
+    // El cap de pedra comença girat del tot (mirant a ponent, d'esquena a l'escala). Amb la maneta d'en Jordi, el volant de ferro de la base
+    // (amb engranatges) gira el cap un quart de volta cada cop: a la tercera volta et mira de cara (migdia) i el guardià es desperta.
     puzleRaim() {
-        this.raimDir = 3;      // comença girat cap a ponent (el cap "girat enrere")
+        this.raimDir = 3;      // 0 N, 1 E, 2 S (de cara a l'Ineu), 3 O: comença d'esquena, girat del tot
         const derrotat = Estat.flag('raimDerrotat');
         const desperta = Estat.flag('raimDesperta');
-
-        // Rosa dels vents de pedra, gran, a terra davant l'estàtua: amb el sol que neix i el raïm a l'est
-        const cx = 700, cy = 590;
-        this.add.image(cx, cy, 'rosa_vents').setScale(1 / RES).setDepth(-960);
-        this.interactiu(cx, cy + 50, RADI_OBJECTE, DIALEGS.rosaVents, { altura: 70, actiu: () => !Estat.flag('raimDesperta') });
-
-        // La fletxa de pedra: indica cap on mira el cap de l'estàtua
-        this.fletxa = this.add.image(618, 452, 'fletxa_raim').setScale(1 / RES * 0.9).setDepth(515);
-        this.fletxa.setAngle(this.raimDir * 90);
-        this.fletxa.setVisible(!derrotat);
-        this.actualitzarRaim();
 
         // L'estàtua (o, si ja ha estat vençuda, un munt de pedres)
         this.estatua = null;
@@ -306,20 +288,19 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.estatua = this.posar(this.texRaim(), 700, 470);
             this.colEstatua = this.colisio(700, 461, 46, 18);
         }
-        // Mirar l'estàtua només fa falta si encara no tens la palanca: et diu on és
-        this.interactiu(700, 478, 75, DIALEGS.homeRaimInt, { altura: 190, actiu: () => !Estat.flag('raimDesperta') && !Estat.te('palanca') });
+        // Mirar l'estàtua només fa falta si encara no tens la maneta: et diu on és
+        this.interactiu(700, 478, 75, DIALEGS.homeRaimInt, { altura: 190, actiu: () => !Estat.flag('raimDesperta') && !Estat.te('maneta') });
 
-        // Forat quadrat de la base: aquí s'encaixa la palanca i es gira el cap
-        if (!derrotat) this.add.rectangle(618, 505, 26, 22, 0x1a1410).setStrokeStyle(3, 0x8a7a5e).setDepth(500);
-        this.interactiu(618, 505, 75, E => {
-            if (!E.te('palanca')) return { pagines: [] };
+        // El volant de ferro amb engranatges, encastat a la cara del pedestal: amb la maneta, cada volta gira el cap un quart
+        if (!derrotat) this.dibuixarVolant(700, Math.round(470 - this.estatua.displayHeight * 0.17));
+        this.interactiu(700, 500, 75, E => {
             this.raimDir = (this.raimDir + 1) % 4;
-            this.actualitzarRaim(true);
-            const llevant = this.raimDir === 1;
-            this.volDespertar = llevant && this.teArma();
-            return { pagines: [{ avis: llevant ? "El cap de pedra mira a llevant." : "El cap de pedra mira " + NOMS_DIR[this.raimDir] + "." }] };
-        }, { altura: 90, actiu: () => !Estat.flag('raimDesperta'),
-             enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.ui().obrirDialeg(DIALEGS.raimDesperta, () => this.despertarRaim()); } } });
+            this.girarVolant();
+            this.girarEstatua();
+            this.volDespertar = this.raimDir === 2 && this.teArma();
+            return { pagines: [] };
+        }, { altura: 70, actiu: () => !Estat.flag('raimDesperta') && Estat.te('maneta'),
+             enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.time.delayedCall(500, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => this.despertarRaim())); } } });
 
         // Trapa de la cripta, a sota de l'escalinata, un cop vençut el guardià
         this.trapa = this.add.graphics().setDepth(-958);
@@ -335,13 +316,51 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (desperta && !derrotat) this.despertarRaim(true);
     }
 
-    runes() {
-        [[670, 468], [730, 472], [700, 458]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 50, h: 20 } }));
-        this.raimDir = 1;
-        if (this.fletxa) this.fletxa.setVisible(false);
+    // Volant de ferro amb radis i un engranatge petit que hi engrana (el que mou el cap); la maneta s'hi veu quan la tens
+    dibuixarVolant(x, y) {
+        const roda = (g, r, dents, gruix) => {
+            const pts = [];
+            for (let k = 0; k < dents * 2; k++) { const a = k * Math.PI / dents, rr = k % 2 ? r : r + gruix; pts.push({ x: Math.cos(a) * rr, y: Math.sin(a) * rr }); }
+            g.fillStyle(0x3a3a42, 1).fillPoints(pts, true).lineStyle(2, 0x111114, 1).strokePoints(pts, true);
+            g.fillStyle(0x5a5a64, 1).fillCircle(0, 0, r * 0.55).fillStyle(0x1a1a1e, 1).fillCircle(0, 0, r * 0.18);
+        };
+        this.engranatge = this.add.graphics().setPosition(x + 24, y - 16).setDepth(471);
+        roda(this.engranatge, 11, 8, 4);
+        const v = this.add.graphics().setPosition(x, y).setDepth(472);
+        v.lineStyle(7, 0x111114, 1).strokeCircle(0, 0, 21).lineStyle(4, 0x6a6a74, 1).strokeCircle(0, 0, 21);
+        for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3; v.lineStyle(4, 0x4a4a54, 1).lineBetween(0, 0, Math.cos(a) * 20, Math.sin(a) * 20); }
+        v.fillStyle(0x8a7a40, 1).fillCircle(0, 0, 6).lineStyle(2, 0x111114, 1).strokeCircle(0, 0, 6);
+        this.volant = v;
+        // La maneta (d'en Jordi), clavada a la vora del volant
+        this.manetaVolant = this.add.graphics().setDepth(473);
+        this.manetaVolant.lineStyle(5, 0x111114, 1).lineBetween(0, 0, 0, -12).lineStyle(3, 0x8a6a3a, 1).lineBetween(0, 0, 0, -12);
+        this.manetaVolant.fillStyle(0x8a6a3a, 1).fillRoundedRect(-3, -20, 6, 10, 2);
+        this.manetaVolant.setVisible(Estat.te('maneta'));
+        this.posarManeta();
+    }
+    posarManeta() {
+        if (!this.manetaVolant || !this.volant) return;
+        const a = this.volant.rotation;
+        this.manetaVolant.setPosition(this.volant.x + Math.cos(a) * 18, this.volant.y + Math.sin(a) * 18);
     }
 
-    // Imatge de l'estàtua segons cap on mira el cap (0 N, 1 E, 2 S, 3 O). El sud és la imatge base; les altres són opcionals i, si no hi són, no es nota cap canvi
+    // Una volta del volant: gira (i l'engranatge, al revés), grinyola i sacseja
+    girarVolant() {
+        if (!this.volant) return;
+        if (this.manetaVolant) this.manetaVolant.setVisible(true);
+        Sfx.porta();
+        this.cameras.main.shake(260, 0.003);
+        this.tweens.add({ targets: this.volant, rotation: this.volant.rotation + Math.PI * 2, duration: 900, ease: 'Sine.easeInOut', onUpdate: () => this.posarManeta() });
+        this.tweens.add({ targets: this.engranatge, rotation: this.engranatge.rotation - Math.PI * 3.8, duration: 900, ease: 'Sine.easeInOut' });
+        if (this.raimDir === 2) this.time.delayedCall(950, () => this.llum(700, 330, 0xffe08a));
+    }
+
+    runes() {
+        [[670, 468], [730, 472], [700, 458]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 50, h: 20 } }));
+        this.raimDir = 2;
+    }
+
+    // Imatge de l'estàtua segons cap on mira el cap (0 N, 1 E, 2 S, 3 O). El sud (de cara) és la imatge base
     texRaim() {
         const k = ['home_raim_n', 'home_raim_e', 'home_raim', 'home_raim_o'][this.raimDir];
         return this.textures.exists(k) && !Grafics.faltants.includes(k) ? k : 'home_raim';
@@ -353,20 +372,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (!e || !e.active || e.texture.key === k) return;
         const esc = (this.textures.get(k).customData && this.textures.get(k).customData.escala) || 1 / RES;
         const nova = this.add.image(e.x, e.y, k).setOrigin(e.originX, e.originY).setScale(esc).setDepth(e.depth + 1).setAlpha(0);
-        this.tweens.add({ targets: nova, alpha: 1, duration: 380, ease: 'Sine.easeInOut', onComplete: () => { e.setTexture(k).setScale(esc); nova.destroy(); } });
-    }
-
-    // Gira la fletxa de pedra fins a la direcció actual (animada si es pot)
-    actualitzarRaim(animat) {
-        const ang = this.raimDir * 90;
-        if (animat) this.girarEstatua();
-        if (!this.fletxa) return;
-        if (!animat) { this.fletxa.setAngle(ang); return; }
-        Sfx.porta();
-        this.cameras.main.shake(120, 0.002);
-        const des = Phaser.Math.Angle.ShortestBetween(this.fletxa.angle, ang);
-        this.tweens.add({ targets: this.fletxa, angle: this.fletxa.angle + des, duration: 420, ease: 'Back.easeOut',
-            onComplete: () => { this.fletxa.setAngle(ang); if (this.raimDir === 1) this.llum(this.fletxa.x, this.fletxa.y, 0xffe08a); } });
+        this.tweens.add({ targets: nova, alpha: 1, duration: 380, delay: 300, ease: 'Sine.easeInOut', onComplete: () => { e.setTexture(k).setScale(esc); nova.destroy(); } });
     }
 
     // L'estàtua cobra vida: s'esquerda i tremola, esclata en llum lila, el guardià salta del pedestal (que es queda) i alça la maça rugint

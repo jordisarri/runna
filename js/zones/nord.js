@@ -764,7 +764,7 @@ class ZonaTiller extends ZonaBase {
 
 // ---------------- LA CASETA (a l'oest del Til·ler): on viu el Jordi de la Caseta ----------------
 // Escenari petit: en Jordi al jardí, la seva casa (es pot entrar: només decorada) i la caseta aixecada sobre pilars
-// de fusta, amb el cofre de les joguines on hi ha la palanca.
+// de fusta, amb el cofre de les joguines on hi ha la maneta.
 class ZonaJordi extends ZonaBase {
     constructor() {
         super('ZonaJordi', {
@@ -785,7 +785,7 @@ class ZonaJordi extends ZonaBase {
         this.portaMasia(masiaJordi, 380, 480);
         this.npc('jordi_caseta', 560, 590, DIALEGS.jordiCaseta);
 
-        // La caseta, aixecada sobre pilars de fusta: s'hi puja per l'escala del mig (la palanca és a dins)
+        // La caseta, aixecada sobre pilars de fusta: s'hi puja per l'escala del mig (la maneta és a dins)
         const caseta = this.edifici('caseta_joc', 860, 500, 250, 64, 'ZonaCasetaJoc', 'porta', { alt: 80 });
         const kT = 500 - caseta.displayHeight;      // la porta és a la terrassa, damunt dels pilars: s'obre quan l'Ineu s'acosta a l'escala
         this.portaAnimada({ x: 860, top: kT + caseta.displayHeight * 0.27 + 10, bottom: kT + caseta.displayHeight * 0.6 - 5, ample: caseta.displayWidth * 0.18, fons: 480, unic: true, retall: caseta });
@@ -852,13 +852,13 @@ class ZonaCasaJordi extends ZonaBase {
         this.add.circle(195, 140, 120, 0xff9a30, 0.1).setDepth(300);
         this.interactiu(195, 160, RADI_OBJECTE, DIALEGS.casaJordiLlar, { altura: 90 });
 
-        // Tauler d'eines (un buit amb forma de palanca)
+        // Tauler d'eines (un buit amb forma de maneta)
         const te = this.add.graphics().setDepth(-950);
         te.fillStyle(0x7a5a3a, 1).fillRect(560, 10, 220, 64).lineStyle(2, 0x2a1608, 1).strokeRect(560, 10, 220, 64);
         te.lineStyle(3, 0x2a2a2e, 1).lineBetween(580, 20, 580, 64).lineBetween(572, 22, 588, 22);
         te.fillStyle(0x8a8a90, 1).fillTriangle(600, 20, 640, 20, 600, 60);
         te.lineStyle(4, 0x5a3a1e, 1).lineBetween(660, 20, 660, 64); te.fillStyle(0x6a6a70, 1).fillRect(650, 18, 22, 10);
-        te.lineStyle(2, 0xd8d0b0, 0.7).strokeRect(690, 16, 12, 52);                                  // silueta buida: la palanca
+        te.lineStyle(2, 0xd8d0b0, 0.7).strokeRect(690, 16, 12, 52);                                  // silueta buida: la maneta
         te.lineStyle(4, 0x6a4a2a, 1).lineBetween(730, 20, 760, 64); te.fillStyle(0x6a6a70, 1).fillRect(752, 56, 20, 10);
         this.interactiu(670, 140, RADI_OBJECTE, DIALEGS.casaJordiEines, { altura: 100 });
 
@@ -942,9 +942,9 @@ class ZonaCasetaJoc extends ZonaBase {
         this.posar('barril', 110, 220, { escala: 0.8, col: { w: 40, h: 18 } });
         this.posar('llenya', 540, 400, { escala: 0.6, col: { w: 70, h: 20 } });
 
-        // El cofre dels joguets, amb la palanca d'en Jordi a sota
+        // El cofre dels joguets, amb la maneta d'en Jordi a sota
         this.posar('cofre', 510, 220, { col: { w: 50, h: 20 } });
-        this.interactiu(510, 225, RADI_OBJECTE, DIALEGS.cofrePalanca, { altura: 80 });
+        this.interactiu(510, 225, RADI_OBJECTE, DIALEGS.cofreManeta, { altura: 80 });
 
         this.add.rectangle(320, 260, 640, 520, 0xffd38a, 0.05).setDepth(80000);
         this.sortida(280, 492, 80, 22, 'ZonaJordi', 'caseta');

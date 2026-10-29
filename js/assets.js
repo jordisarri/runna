@@ -900,9 +900,7 @@ const Grafics = {
         crea('monedes_tresor', 110, 50, pintarMonedesTresor);
         crea('bota_creu', 64, 84, pintarBotaCreu);
         crea('cofre_tresor', 110, 80, pintarCofre);
-        crea('rosa_vents', 380, 200, pintarRosaVents);
         crea('escalinata_fons', 1140, 640, pintarEscalinata);
-        crea('fletxa_raim', 90, 90, pintarFletxaRaim);
         // Ermita de la Desaparició (js/dibuixos_ermita.js)
         crea('paret_ermita', 800, 170, pintarParetErmita);
         crea('mur_ermita', 40, 700, pintarMurErmita);

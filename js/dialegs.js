@@ -1290,7 +1290,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { avis: "Has obtingut el PERGAMÍ DEL MONJO." },
-                { qui: "Ineu", text: "«La clau de ferro és sota l'escala, murada amb els meus germans. Un guardià de pedra la vigila: ningú no hi baixa si no li gira el cap cap al sol que neix. On neix el sol, el raïm madura.»" },
+                { qui: "Ineu", text: "«La clau de ferro és sota l'escala, murada amb els meus germans. Un guardià de pedra la vigila d'esquena: ningú no hi baixa fins que no et mira a la cara.»" },
                 { qui: "Ineu", text: "I al revers, amb una altra lletra: «Qui busqui sortida, que alci la bóta marcada amb la creu.»" }
             ],
             enAcabar: () => {
@@ -1303,7 +1303,7 @@ const DIALEGS = {
     // La bóta marcada de la cambra secreta: en alçar-la, deixa a la vista l'anella que obre la porta del fons
     botaTresor: E => ({
         pagines: [{ qui: "Ineu", text: "Una bóta amb una creu vermella. Pesa molt menys que les altres... i a sota hi ha una anella de ferro." }],
-        enAcabar: () => { E.posaFlag("botaAlcada"); E.posaObjectiu("Puja a l'escalinata de la Casa Gran per la porta del fons de la cambra: gira el cap de l'Home del Raïm cap a llevant amb la palanca."); }
+        enAcabar: () => { E.posaFlag("botaAlcada"); E.posaObjectiu("Puja a l'escalinata de la Casa Gran per la porta del fons de la cambra: fes girar el cap de l'Home del Raïm amb el volant de la base fins que et miri a la cara."); }
     }),
 
     homeRaimInt: E => ({
@@ -1372,12 +1372,12 @@ const DIALEGS = {
     },
 
 
-    // El cofre de les joguines de la caseta: la palanca és a sota
-    cofrePalanca: E => {
-        if (E.te("palanca") || E.flag("palanca")) {
+    // El cofre de les joguines de la caseta: la maneta d'en Jordi és a sota
+    cofreManeta: E => {
+        if (E.te("maneta") || E.flag("maneta")) {
             return { pagines: [] };
         }
-        if (!E.flag("jordiPalanca")) {
+        if (!E.flag("jordiManeta")) {
             return { pagines: [
                 { qui: "Ineu", text: "No és meva... Millor preguntar a en Jordi abans d'agafar-la." }
             ] };
@@ -1385,11 +1385,11 @@ const DIALEGS = {
         return {
             pagines: [
                 { fer: (z, fet) => z.agafar(fet, null, 0x8a8a90) },
-                { avis: "Has obtingut la PALANCA." }
+                { avis: "Has obtingut la MANETA." }
             ],
             enAcabar: () => {
-                E.dona("palanca"); E.posaFlag("palanca");
-                if (E.flag("cofreCambra")) E.posaObjectiu("Porta la palanca a l'Home del Raïm, al mig de l'escalinata de la Casa Gran.");
+                E.dona("maneta"); E.posaFlag("maneta");
+                if (E.flag("cofreCambra")) E.posaObjectiu("Porta la maneta al volant de ferro de l'Home del Raïm, al mig de l'escalinata de la Casa Gran.");
             }
         };
     },

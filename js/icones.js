@@ -194,11 +194,14 @@ const ICONES_OBJECTES = {
         ctx.fillStyle = '#c8a040'; ctx.beginPath(); ctx.rect(28, 74, 40, 12); ctx.fill(); ctx.stroke();
         ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fillRect(34, 46, 6, 24);
     },
-    palanca: ctx => {
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = CONTORN; ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(22, 84); ctx.lineTo(66, 22); ctx.quadraticCurveTo(74, 10, 84, 18); ctx.stroke();
-        ctx.strokeStyle = '#6a6e78'; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(22, 84); ctx.lineTo(66, 22); ctx.quadraticCurveTo(74, 10, 84, 18); ctx.stroke();
-        ctx.strokeStyle = 'rgba(255,255,255,0.45)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(26, 78); ctx.lineTo(62, 26); ctx.stroke();
+    maneta: ctx => {         // maneta de ferro en forma de colze, amb el puny de fusta
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        const forma = () => { ctx.beginPath(); ctx.moveTo(24, 30); ctx.lineTo(24, 58); ctx.lineTo(62, 58); ctx.stroke(); };
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 14; forma();
+        ctx.strokeStyle = '#6a6e78'; ctx.lineWidth = 8; forma();
+        ctx.fillStyle = '#4a4e58'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.beginPath(); ctx.rect(14, 18, 20, 14); ctx.fill(); ctx.stroke();      // encaix quadrat
+        ctx.fillStyle = '#9a6a3a'; ctx.beginPath(); ctx.roundRect(58, 48, 26, 20, 7); ctx.fill(); ctx.stroke();                                   // puny
+        ctx.strokeStyle = 'rgba(255,255,255,0.45)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(22, 34); ctx.lineTo(22, 54); ctx.stroke();
     },
     fragment1: ctx => {
         ctx.lineWidth = 3; ctx.fillStyle = '#e8d8a8';
@@ -262,7 +265,7 @@ const US_OBJECTES = {
     telescopi: E => E.flag('telescopiMuntat') || E.flag('estelsPart1') ? 'record' : 'cal',
     estel_llorenc: E => E.flag('boiraDolmenNeta') ? 'record' : 'cal',
     guants: E => E.flag('rodaMoguda') && E.flag('refetorObert') && E.flag('rastellObert') ? 'record' : 'cal',
-    palanca: E => E.flag('raimDerrotat') ? 'record' : 'cal',
+    maneta: E => E.flag('raimDerrotat') ? 'record' : 'cal',
     fragment1: E => E.flag('benedicioMonjo') ? 'record' : 'cal',
     pergami_monjo: E => E.flag('raimDerrotat') ? 'record' : 'cal',
     clau_girgoles: E => E.flag('portaFerroOberta') ? 'record' : 'cal',

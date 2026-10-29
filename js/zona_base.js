@@ -53,7 +53,7 @@ function nivellBoira() {
 }
 
 // Un punt interactiu sense res a dir (diàleg buit i sense efecte) no és interactiu. Només es mira als diàlegs del registre DIALEGS (funcions pures
-// de l'estat): les funcions que fan alguna cosa en cridar-les (girar un engranatge, la palanca...) no s'han d'executar mai per mirar-ho.
+// de l'estat): les funcions que fan alguna cosa en cridar-les (girar un engranatge, el volant de l'Home del Raïm...) no s'han d'executar mai per mirar-ho.
 let _dialegsPurs = null;
 function esDialegBuit(dialeg) {
     let d = dialeg;
