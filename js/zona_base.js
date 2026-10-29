@@ -9,14 +9,15 @@
  *       construir() { ... }
  *   }
  */
-// Zoom de la càmera de les zones (1 = mida de disseny). Es pot provar amb ?zoom=1.25 a l'adreça: es recorda fins que es posi ?zoom=1
+// Zoom de la càmera de les zones: 1,25 per defecte (al mòbil els personatges es veien massa petits). Es pot canviar amb ?zoom=1.1
+// (de 1 a 1,6) a l'adreça: es recorda fins que se'n posi un altre
 const ZOOM_CAMERA = (() => {
     let z = parseFloat(new URLSearchParams(location.search).get('zoom'));
     try {
         if (z >= 1 && z <= 1.6) localStorage.setItem('runna_zoom', String(z));
         else z = parseFloat(localStorage.getItem('runna_zoom'));
     } catch (e) { }
-    return z >= 1 && z <= 1.6 ? z : 1;
+    return z >= 1 && z <= 1.6 ? z : 1.25;
 })();
 // Inici tancat: fins que l'Ineu no ha parlat amb el Pare Jordi i no té el bastó de pelegrí, només pot anar pel Monestir i la Plaça
 const ZONES_INICI = ['ZonaMonestir', 'ZonaMonestirRebedor', 'ZonaBiblioteca', 'ZonaPlaca'];
