@@ -174,42 +174,46 @@ class ZonaRuines extends ZonaBase {
 }
 
 // ---------------- EL CELLER (interior; el ping-pong hi és una prova circumstancial) ----------------
-const ALCADA_CELLER = 1100;
+// Una sala petita, que es veu sencera d'una ullada: l'arcada amb la roda i la porta secreta al fons, una taula de ping-pong al mig
+// amb en Juli i en Frederic, i en Jusef al costat
+const ALCADA_CELLER = 900, AMPLE_CELLER = 600;
 
 class ZonaPingpong extends ZonaBase {
     constructor() {
         super('ZonaPingpong', {
             nom: 'El Celler',
-            amplada: 1280,
+            amplada: AMPLE_CELLER,
             alcada: ALCADA_CELLER,
             colorFons: '#140e0a',
             pacifica: true,
-            entrades: { porta: { x: 640, y: ALCADA_CELLER - 80, dir: 'amunt' }, passadis: { x: 640, y: 392, dir: 'avall' } }
+            entrades: { porta: { x: AMPLE_CELLER / 2, y: ALCADA_CELLER - 80, dir: 'amunt' }, passadis: { x: AMPLE_CELLER / 2, y: 352, dir: 'avall' } }
         });
     }
 
     construir() {
-        const A = ALCADA_CELLER, YP = 300;                 // YP: peu de la paret del fons (arcada i porta)
+        const A = ALCADA_CELLER, W = AMPLE_CELLER, M = 28, YP = 260;    // M: gruix de les parets dels costats; YP: peu de la paret del fons
+        const X0 = M, X1 = W - M, AI = X1 - X0;                         // l'interior
         // ---- Terra de ciment i parets de pedra ----
-        this.terra('ciment', 100, YP, 1080, A - YP, -1100);
-        this.add.tileSprite(100, 0, 1080, YP, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setDepth(-1000);
-        this.add.tileSprite(60, 0, 40, A, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setDepth(-1000).setTint(0x8a8078);
-        this.add.tileSprite(1180, 0, 40, A, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setDepth(-1000).setTint(0x8a8078);
+        this.terra('ciment', X0, YP, AI, A - YP, -1100);
+        this.add.tileSprite(X0, 0, AI, YP, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setDepth(-1000);
+        this.add.tileSprite(0, 0, M, A, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setDepth(-1000).setTint(0x8a8078);
+        this.add.tileSprite(X1, 0, M, A, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setDepth(-1000).setTint(0x8a8078);
         const mur = this.add.graphics().setDepth(-995);
-        mur.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.65, 0.65, 0, 0).fillRect(100, 0, 1080, 130);       // la volta s'enfosqueix a dalt
-        mur.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0, 0, 0.45, 0.45).fillRect(100, YP - 34, 1080, 34);  // ombra al peu de la paret
-        mur.fillStyle(0x6a6054, 1).fillRect(100, YP - 14, 1080, 14);                                                           // sòcol de pedra
-        mur.fillStyle(0xcfc4ae, 0.55).fillRect(100, YP - 14, 1080, 2);
-        mur.lineStyle(2, 0x1c1610, 1).strokeRect(100, YP - 14, 1080, 14);
-        mur.fillStyle(0x000000, 0.35).fillRect(60, 0, 8, A).fillRect(1172, 0, 8, A);                                           // els costats, en ombra
-        this.colisio(30, A / 2, 60, A);
-        this.colisio(1250, A / 2, 60, A);
-        this.colisio(640, (YP + 20) / 2, 1080, YP + 20);
-        this.colisio(340, A - 10, 500, 20);
-        this.colisio(940, A - 10, 500, 20);
+        mur.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.65, 0.65, 0, 0).fillRect(X0, 0, AI, 110);         // la volta s'enfosqueix a dalt
+        mur.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0, 0, 0.45, 0.45).fillRect(X0, YP - 34, AI, 34);    // ombra al peu de la paret
+        mur.fillStyle(0x6a6054, 1).fillRect(X0, YP - 14, AI, 14);                                                          // sòcol de pedra
+        mur.fillStyle(0xcfc4ae, 0.55).fillRect(X0, YP - 14, AI, 2);
+        mur.lineStyle(2, 0x1c1610, 1).strokeRect(X0, YP - 14, AI, 14);
+        mur.fillStyle(0x000000, 0.35).fillRect(0, 0, 8, A).fillRect(X1 - 8, 0, 8, A);                                     // els costats, en ombra
+        this.colisio(M / 2, A / 2, M, A);
+        this.colisio(W - M / 2, A / 2, M, A);
+        this.colisio(W / 2, (YP + 20) / 2, AI, YP + 20);
+        this.colisio((X0 + W / 2 - 40) / 2, A - 10, W / 2 - 40 - X0, 20);
+        this.colisio((W / 2 + 40 + X1) / 2, A - 10, X1 - W / 2 - 40, 20);
 
-        // ---- Gran arcada del fons: pilars, dovelles i una fornícula fosca amb la porta tapada ----
-        const AX = 640, AY = 170, AR = 150;                // centre de la volta, y de naixement i radi
+        // ---- Arcada del fons: pilars, dovelles i una fornícula fosca amb la porta tapada ----
+        const AX = W / 2, AR = 120, AY = YP - 100;          // centre de la volta, radi i y de naixement
+        this.AX = AX; this.YP = YP;
         const buit = this.make.graphics({ x: 0, y: 0, add: false });
         buit.fillStyle(0xffffff, 1).beginPath().arc(AX, AY, AR, Math.PI, 0, false).lineTo(AX + AR, YP).lineTo(AX - AR, YP).closePath().fillPath();
         const fons = this.add.tileSprite(AX - AR, AY - AR, AR * 2, YP - AY + AR, 'mur_pedra').setOrigin(0).setTileScale(1 / RES).setDepth(-990).setTint(0x4c443b);
@@ -217,9 +221,9 @@ class ZonaPingpong extends ZonaBase {
         const arc = this.add.graphics().setDepth(-985);
         arc.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.7, 0.7, 0.1, 0.1).fillRect(AX - AR, AY - AR, AR * 2, YP - AY + AR);   // fondària de la fornícula
         // dovelles (pedres de l'arc) i clau
-        const N = 13;
+        const N = 11;
         for (let i = 0; i < N; i++) {
-            const a0 = Math.PI + i * Math.PI / N, a1 = Math.PI + (i + 1) * Math.PI / N, r0 = AR, r1 = AR + 34;
+            const a0 = Math.PI + i * Math.PI / N, a1 = Math.PI + (i + 1) * Math.PI / N, r0 = AR, r1 = AR + 30;
             const pts = [[r0, a0], [r1, a0], [r1, a1], [r0, a1]].map(([r, a]) => ({ x: AX + Math.cos(a) * r, y: AY + Math.sin(a) * r }));
             const clau = i === (N - 1) / 2;
             arc.fillStyle(clau ? 0xd8ceb8 : i % 2 ? 0xa89c86 : 0xbcb09a, 1).fillPoints(pts, true);
@@ -227,57 +231,59 @@ class ZonaPingpong extends ZonaBase {
             if (clau) { arc.fillStyle(0xe8dfca, 0.55).fillRect(AX - 6, AY - r1 + 2, 12, 5); }
         }
         // pilars amb cimaci i base
-        [AX - AR - 30, AX + AR].forEach(x => {
-            arc.fillStyle(0xb4a892, 1).fillRect(x, AY - 8, 30, YP - AY + 8).lineStyle(2, 0x1c1610, 1).strokeRect(x, AY - 8, 30, YP - AY + 8);
+        [AX - AR - 26, AX + AR].forEach(x => {
+            arc.fillStyle(0xb4a892, 1).fillRect(x, AY - 8, 26, YP - AY + 8).lineStyle(2, 0x1c1610, 1).strokeRect(x, AY - 8, 26, YP - AY + 8);
             arc.fillStyle(0xffffff, 0.22).fillRect(x + 2, AY - 6, 5, YP - AY);
-            arc.fillStyle(0x000000, 0.22).fillRect(x + 22, AY - 6, 6, YP - AY);
-            arc.fillStyle(0xcdc1ab, 1).fillRect(x - 5, AY - 20, 40, 14).lineStyle(2, 0x1c1610, 1).strokeRect(x - 5, AY - 20, 40, 14);         // cimaci
-            arc.fillStyle(0xcdc1ab, 1).fillRect(x - 4, YP - 12, 38, 12).lineStyle(2, 0x1c1610, 1).strokeRect(x - 4, YP - 12, 38, 12);        // base
-            for (let k = 1; k < 5; k++) arc.lineStyle(1, 0x1c1610, 0.35).lineBetween(x + 1, AY - 8 + k * 26, x + 29, AY - 8 + k * 26);
+            arc.fillStyle(0x000000, 0.22).fillRect(x + 19, AY - 6, 5, YP - AY);
+            arc.fillStyle(0xcdc1ab, 1).fillRect(x - 5, AY - 20, 36, 14).lineStyle(2, 0x1c1610, 1).strokeRect(x - 5, AY - 20, 36, 14);         // cimaci
+            arc.fillStyle(0xcdc1ab, 1).fillRect(x - 4, YP - 12, 34, 12).lineStyle(2, 0x1c1610, 1).strokeRect(x - 4, YP - 12, 34, 12);        // base
+            for (let k = 1; k < 4; k++) arc.lineStyle(1, 0x1c1610, 0.35).lineBetween(x + 1, AY - 8 + k * 26, x + 25, AY - 8 + k * 26);
         });
         // porta secreta: una porta de pedra que es confon amb la paret de la fornícula; només es veuen unes juntes molt fines. Quan la roda
         // ja no la tapa, les juntes s'il·luminen i la porta s'obre amb animació cada cop que l'Ineu s'hi acosta.
-        const PX0 = AX - 82, PX1 = AX + 82, PY = 210;
+        const PR = 72, PX0 = AX - PR, PX1 = AX + PR, PY = YP - 70;
         const juntes = this.add.graphics().setDepth(-981);
         const forma = [{ x: PX0, y: YP }, { x: PX0, y: PY }];
-        for (let k = 1; k <= 10; k++) { const a = Math.PI + k / 10 * Math.PI; forma.push({ x: AX + Math.cos(a) * 82, y: PY + Math.sin(a) * 48 }); }
+        for (let k = 1; k <= 10; k++) { const a = Math.PI + k / 10 * Math.PI; forma.push({ x: AX + Math.cos(a) * PR, y: PY + Math.sin(a) * 44 }); }
         forma.push({ x: PX1, y: PY }, { x: PX1, y: YP });
-        juntes.lineStyle(2, 0x0a0806, 0.5).strokePoints(forma, false).lineBetween(AX, PY - 48, AX, YP);
+        juntes.lineStyle(2, 0x0a0806, 0.5).strokePoints(forma, false).lineBetween(AX, PY - 44, AX, YP);
         juntes.lineStyle(1.5, 0x8a8070, 0.18).strokePoints(forma.map(p => ({ x: p.x + 2, y: p.y + 1 })), false);
         this.juntesPorta = juntes;
-        this.portaSecreta = this.portaAnimada({ x: AX, top: PY - 48, bottom: YP, ample: 164, arc: 48, fons: -979, color: 0x5e574c, vora: 0x1a1612, bloq: () => !this.rodaMoguda });
-        // fanals a banda i banda de l'arcada (flama que tremola)
-        [AX - AR - 110, AX + AR + 110].forEach((x, k) => {
-            const y = 150, f = this.add.graphics().setDepth(-975);
+        this.portaSecreta = this.portaAnimada({ x: AX, top: PY - 44, bottom: YP, ample: PR * 2, arc: 44, fons: -979, color: 0x5e574c, vora: 0x1a1612, bloq: () => !this.rodaMoguda });
+        // un fanal a l'esquerra de l'arcada (flama que tremola)
+        [X0 + 92].forEach((x, k) => {
+            const y = 130, f = this.add.graphics().setDepth(-975);
             f.fillStyle(0x2a2118, 1).fillRect(x - 6, y, 12, 26).fillStyle(0x4a3a24, 1).fillRect(x - 11, y - 2, 22, 6).lineStyle(1.5, 0x120a04, 1).strokeRect(x - 11, y - 2, 22, 6);
             const flama = this.add.graphics().setDepth(-974);
             flama.fillStyle(0xff9a2a, 1).fillPoints([{ x: x - 7, y: y - 2 }, { x, y: y - 26 }, { x: x + 7, y: y - 2 }], true);
             flama.fillStyle(0xffe080, 1).fillPoints([{ x: x - 3.5, y: y - 2 }, { x, y: y - 15 }, { x: x + 3.5, y: y - 2 }], true);
             const resp = this.add.graphics().setDepth(-973).setBlendMode(Phaser.BlendModes.ADD);
-            for (let q = 0; q < 7; q++) resp.fillStyle(0xffa040, 0.05 + q * 0.01).fillCircle(x, y - 10, 130 * (1 - q / 7));
+            for (let q = 0; q < 7; q++) resp.fillStyle(0xffa040, 0.05 + q * 0.01).fillCircle(x, y - 10, 120 * (1 - q / 7));
             this.tweens.add({ targets: [flama, resp], alpha: 0.62, scaleY: 0.96, yoyo: true, repeat: -1, duration: 260 + k * 70, ease: 'Sine.easeInOut' });
         });
-        // fornícules amb prestatges i gerros, a la paret dels costats
-        [250, 1030].forEach(x => {
-            const nx = this.add.graphics().setDepth(-990);
-            const forma = [{ x: x - 62, y: YP - 20 }, { x: x - 62, y: 170 }];
-            for (let k = 1; k <= 8; k++) { const a = Math.PI + k / 8 * Math.PI; forma.push({ x: x + Math.cos(a) * 62, y: 170 + Math.sin(a) * 38 }); }
-            forma.push({ x: x + 62, y: 170 }, { x: x + 62, y: YP - 20 });
-            nx.fillStyle(0xb4a892, 1).fillPoints(forma.map(p => ({ x: x + (p.x - x) * 1.12, y: p.y - (p.y < 170 ? 4 : 0) })), true);
+        // una fornícula amb prestatges i gerros a la dreta de l'arcada
+        [X1 - 62].forEach(x => {
+            const R = 44, T = 150, nx = this.add.graphics().setDepth(-990);
+            const forma = [{ x: x - R, y: YP - 20 }, { x: x - R, y: T }];
+            for (let k = 1; k <= 8; k++) { const a = Math.PI + k / 8 * Math.PI; forma.push({ x: x + Math.cos(a) * R, y: T + Math.sin(a) * 30 }); }
+            forma.push({ x: x + R, y: T }, { x: x + R, y: YP - 20 });
+            nx.fillStyle(0xb4a892, 1).fillPoints(forma.map(p => ({ x: x + (p.x - x) * 1.14, y: p.y - (p.y < T ? 4 : 0) })), true);
             nx.fillStyle(0x15100c, 1).fillPoints(forma, true);
-            nx.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.6, 0.6, 0, 0).fillRect(x - 62, 132, 124, 60);
-            [YP - 66, YP - 124].forEach(y => { nx.fillStyle(0x5a3a1e, 1).fillRect(x - 62, y, 124, 7).lineStyle(1.5, 0x120a04, 1).strokeRect(x - 62, y, 124, 7); });
-            [[-38, 0], [0, 1], [38, 2]].forEach(([dx, t], k) => { this.posar('gerro_' + t, x + dx, YP - 66, { fonsY: -985 }); this.posar('gerro_' + ((t + k + 1) % 3), x + dx + 6, YP - 124 + (k % 2 ? 0 : 0), { fonsY: -985, escala: 0.8 }); });
+            nx.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.6, 0.6, 0, 0).fillRect(x - R, T - 30, R * 2, 50);
+            [YP - 60, YP - 106].forEach(y => { nx.fillStyle(0x5a3a1e, 1).fillRect(x - R, y, R * 2, 7).lineStyle(1.5, 0x120a04, 1).strokeRect(x - R, y, R * 2, 7); });
+            [[-20, 0], [20, 1]].forEach(([dx, t], k) => { this.posar('gerro_' + t, x + dx, YP - 60, { fonsY: -985, escala: 0.85 }); this.posar('gerro_' + ((t + k + 1) % 3), x + dx, YP - 106, { fonsY: -985, escala: 0.7 }); });
         });
 
         // Un cartell de paper clavat a la paret (esquerra): es veu nítid a la paret; en examinar-lo, el zoom automàtic només el fa més gran
-        const cp = this.add.image(144, 248, 'cartell_llums_petit').setOrigin(0.5, 1).setDepth(-960);
-        cp.setScale(56 / this.textures.get('cartell_llums_petit').getSourceImage().width);
-        this.add.rectangle(144, 250, cp.displayWidth + 8, 5, 0x000000, 0.25).setDepth(-961);
-        this.interactiu(144, 300, RADI_OBJECTE, () => ({ pagines: [{ fer: (z, fet) => z.mostrarImatge('cartell_llums', 144, 248 - cp.displayHeight / 2, cp.displayWidth, null, fet) }] }), { altura: 110 });
+        const CX = X0 + 36, cp = this.add.image(CX, YP - 30, 'cartell_llums_petit').setOrigin(0.5, 1).setDepth(-960);
+        cp.setScale(48 / this.textures.get('cartell_llums_petit').getSourceImage().width);
+        this.add.rectangle(CX, YP - 28, cp.displayWidth + 8, 5, 0x000000, 0.25).setDepth(-961);
+        this.interactiu(CX + 10, YP + 30, RADI_OBJECTE, () => ({ pagines: [{ fer: (z, fet) => z.mostrarImatge('cartell_llums', CX, YP - 30 - cp.displayHeight / 2, cp.displayWidth, null, fet) }] }), { altura: 110 });
 
         // ---- La roda de carruatge davant la porta (s'empeny des d'un costat; cal Runna) ----
-        this.rodaX = Estat.dades.flags.rodaX || AX;
+        let rx = Estat.dades.flags.rodaX;
+        if (rx === 450 || rx === 830) rx = Estat.dades.flags.rodaX = AX + Math.sign(rx - 640) * 150;     // partides desades amb el celler gran
+        this.rodaX = rx || AX;
         this.rodaMoguda = Estat.flag('rodaMoguda');
         this.roda = this.posar('roda_carruatge', this.rodaX, YP + 24, { fonsY: YP + 28 });   // recolzada a la paret, just davant del sòcol
         this.roda.setOrigin(0.5, 0.5).setY(YP + 24 - this.roda.displayHeight / 2);          // gira sobre el seu centre (si no, en rodar quedaria separada de la paret)
@@ -288,34 +294,16 @@ class ZonaPingpong extends ZonaBase {
         if (this.rodaMoguda) this.obrirPassadis();
 
         // ---- Mobiliari del celler ----
-        // Barrils contra la paret, a banda i banda
-        [[1130, YP + 44], [1074, YP + 56]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
-        // Una taula de fusta amb tamborets a l'esquerra i una altra amb un banc a la dreta (taules que no són de ping-pong)
-        this.posar('taula', 205, 520, { col: { w: 160, h: 30 } });
-        this.posar('tamboret', 150, 590, { col: { w: 40, h: 16 } });
-        this.posar('tamboret', 262, 590, { col: { w: 40, h: 16 } });
-        this.posar('taula', 1075, 520, { col: { w: 160, h: 30 } });
-        this.posar('banc', 1075, 612, { col: { w: 140, h: 16 } });
-        [[205, 480], [1075, 480]].forEach(([x, y], k) => {
-            const e = this.posar('espelma', x, y, { fonsY: y + 30 });
-            this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 330 + k * 80 });
-        });
-        // Bancs per seure al fons de la sala
-        this.posar('banc_davant', 320, 1030, { col: { w: 140, h: 16 } });
-        this.posar('banc_davant', 960, 1030, { col: { w: 140, h: 16 } });
-        [[132, 1050], [188, 1064], [1148, 1050]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
+        [[X1 - 40, 470], [X1 - 44, 525], [X0 + 42, A - 70]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
 
-        // ---- Taules de ping-pong (verdes), ben separades de la roda ----
-        this.posar('taula_pp', 410, 760, { col: { w: 220, h: 40 } });
-        this.posar('taula_pp', 870, 760, { col: { w: 220, h: 40 } });
+        // ---- La taula de ping-pong (verda) al mig, i els jugadors ----
+        this.posar('taula_pp', AX, 600, { col: { w: 220, h: 40 } });
+        this.npc('juli', AX - 160, 600, DIALEGS.juli);
+        this.npc('frederic', AX + 160, 600, DIALEGS.frederic, { flipX: true });
+        this.npc('josep', AX + 170, 740, DIALEGS.josep, { flipX: true });
 
-        // ---- Jugadors ----
-        this.npc('juli', 262, 760, DIALEGS.juli);
-        this.npc('frederic', 1030, 760, DIALEGS.frederic, { flipX: true });
-        this.npc('josep', 705, 780, DIALEGS.josep);
-
-        this.add.rectangle(640, A / 2, 1080, A, 0xffe9a8, 0.04).setDepth(80000);
-        this.sortida(600, A - 30, 80, 20, 'ZonaCellerFora', 'pingpong');
+        this.add.rectangle(W / 2, A / 2, AI, A, 0xffe9a8, 0.04).setDepth(80000);
+        this.sortida(W / 2 - 40, A - 30, 80, 20, 'ZonaCellerFora', 'pingpong');
     }
 
     enEntrar() {
@@ -343,7 +331,7 @@ class ZonaPingpong extends ZonaBase {
 
     mouRoda(dir) {
         this.rodaMoguda = true;
-        const x = this.roda.x + dir * 190;
+        const x = this.roda.x + dir * 150;              // (la sala fa 600: la roda queda a 150 o a 450, sense tapar el cartell)
         Estat.posaFlag('rodaMoguda');
         Estat.dades.flags.rodaX = x;
         this.cameras.main.shake(350, 0.003);
@@ -363,8 +351,8 @@ class ZonaPingpong extends ZonaBase {
     // L'obertura de la paret descoberta: porta al passadís (sortida sense llum ni fletxa, perquè és una troballa)
     obrirPassadis() {
 
-        this.sortides.push({ r: new Phaser.Geom.Rectangle(590, 318, 100, 32), desti: 'ZonaPassadis', entrada: 'porta' });
-        this.tweens.add({ targets: this.add.circle(640, 260, 80, 0xa070ff, 0.12).setDepth(-970), alpha: 0.03, yoyo: true, repeat: -1, duration: 900 });
+        this.sortides.push({ r: new Phaser.Geom.Rectangle(this.AX - 50, this.YP + 18, 100, 32), desti: 'ZonaPassadis', entrada: 'porta' });
+        this.tweens.add({ targets: this.add.circle(this.AX, this.YP - 40, 70, 0xa070ff, 0.12).setDepth(-970), alpha: 0.03, yoyo: true, repeat: -1, duration: 900 });
     }
 }
 

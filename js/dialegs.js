@@ -377,7 +377,7 @@ const DIALEGS = {
     }) : ({
         pagines: [
             { qui: 'Jusef', text: '...Me l\'has tornat. El servei. Algú, per fi, l\'ha aturat de debò.' },
-            { fer: (z, fet) => z.npcVa('josep', z.ineu.x + 60, z.ineu.y, fet) },
+            { fer: (z, fet) => z.npcVa('josep', z.ineu.x + (z.ineu.x < z.config.amplada / 2 ? 60 : -60), z.ineu.y, fet) },
             { qui: 'Jusef', text: 'Això és per a tu: una llanterna. Als passadissos dels monjos hi fa una fosca que no perdona, i amb la seva llum hi veuràs.' },
             { fer: (z, fet) => z.objecteVola('josep', fet) },
             { avis: 'Has obtingut la LLANTERNA.' },
