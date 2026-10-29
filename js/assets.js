@@ -887,6 +887,12 @@ const Grafics = {
         crea('penjolls', 96, 120, pintarPenjolls);
         crea('gat_cove', 110, 80, pintarGatCove);
         crea('cofre_joguines', 96, 84, pintarCofreJoguines);
+        // L'oratori amagat de darrere la pedra que escolta (js/dibuixos_oratori.js)
+        crea('paret_oratori', 640, 250, pintarParetOratori);
+        crea('reliquiari', 150, 170, (ctx, w, h) => pintarReliquiari(ctx, w, h, false));
+        crea('reliquiari_obert', 150, 170, (ctx, w, h) => pintarReliquiari(ctx, w, h, true));
+        crea('canelobre', 44, 130, pintarCanelobre);
+        crea('faristol', 80, 110, pintarFaristol);
         // Pròleg (js/dibuixos_proleg.js): els cinc quadres pintats
         crea('proleg_ocellaire', 720, 950, pintarProlegOcellaire);
         crea('proleg_segell', 720, 950, pintarProlegSegell);

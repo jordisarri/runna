@@ -162,10 +162,14 @@ const DIALEGS = {
     pedraSecretaOberta: { pagines: [
         { qui: 'Ineu', text: 'Un passatge entre el Monestir i el Santuari! Els monjos antics sí que en sabien, d\'amagar coses.' }
     ] },
+    faristolOratori: E => ({ pagines: [
+        { qui: 'Ineu', text: "«Les pedres guarden el que se'ls diu. Qui calla prou estona, les sent respondre.»" }
+    ] }),
     cofreTresor: E => {
         if (E.flag('cofreTresor')) return { pagines: [] };
         return {
             pagines: [
+                { fer: (z, fet) => z.obrirReliquiari ? z.obrirReliquiari(fet) : fet() },
                 { qui: 'Nota', text: '«Per al qui sap escoltar les pedres.»' },
                 { avis: "+1 GRA AL ROSARI i rosari ple." }
             ],
