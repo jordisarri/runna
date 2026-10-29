@@ -61,7 +61,7 @@ class ZonaPlaca extends ZonaBase {
             altura: 90, actiu: () => !Estat.flag('tresorObert'),
             enTancar: () => Estat.posaFlag('flauta_pedra')
         });
-        this.llocFlauta('pedra', PX, 480, 150, true);
+        this.llocFlauta('pedra', PX, 480, 150, true, () => !Estat.flag('tresorObert'));    // un cop oberta, ESPAI hi entra
 
         // --- Reixes del terra per on surt la boira ---
         [[600, 625], [1080, 650], [870, 975]].forEach(([x, y]) => {
