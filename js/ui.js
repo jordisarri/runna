@@ -249,13 +249,6 @@ class EscenaUI extends Phaser.Scene {
         this.botoMenu = this.add.text(AMPLE - 46, ALT_HUD / 2, '☰', estilText(40, '#3a2412', { backgroundColor: '#8a5a2a44', padding: { x: 16, y: 8 } }))
             .setOrigin(1, 0.5).setInteractive({ useHandCursor: true })
             .on('pointerdown', () => this.menuObert ? this.tancarMenu() : this.obrirMenu());
-
-        if (!this.sys.game.device.input.touch) {
-            this.textAjuda = this.add.text(AMPLE - 16, ALT - 12, 'Fletxes/WASD: moure · ESPAI: parlar o atacar · I: sarró · ESC: menú',
-                estilText(12, '#f2e6c8')).setOrigin(1, 1).setAlpha(0.55);
-            // Només al principi: després s'esvaeix perquè no es quedi a la pantalla tota l'estona
-            this.tweens.add({ targets: this.textAjuda, alpha: 0, delay: 9000, duration: 1500 });
-        }
     }
 
     actualitzarHUD() {
@@ -284,7 +277,6 @@ class EscenaUI extends Phaser.Scene {
         let mida = 20;
         this.textObjectiu.setFontSize(mida);
         while (this.textObjectiu.height > 52 && mida > 14) this.textObjectiu.setFontSize(--mida);
-        if (this.textAjuda) this.textAjuda.setText('Fletxes/WASD: moure · ESPAI: parlar o atacar' + ' · I: sarró · ESC: menú');
     }
 
     // Quan queda un sol gra o menys, l'últim gra bategueja

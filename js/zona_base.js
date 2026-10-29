@@ -52,8 +52,6 @@ function nivellBoira() {
     return 1 - (1 - BOIRA_MINIM) * fets / BOIRA_PASSOS.length;
 }
 
-// Durant un diàleg, els peus de l'Ineu (i de qui li parla) han de quedar per sobre d'aquesta y de la pantalla: la caixa de text puja fins a ALT-370, la cinta del nom fins a ALT-406 i el retrat de qui parla fins a ALT-494; es deixa un marge.
-const LIM_PEUS_DIALEG = () => ALT - 570;
 // Un punt interactiu sense res a dir (diàleg buit i sense efecte) no és interactiu. Només es mira als diàlegs del registre DIALEGS (funcions pures
 // de l'estat): les funcions que fan alguna cosa en cridar-les (girar un engranatge, la palanca...) no s'han d'executar mai per mirar-ho.
 let _dialegsPurs = null;
@@ -938,37 +936,69 @@ class ZonaBase extends Phaser.Scene {
         f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(this.assegut ? 0 : i.alpha * 0.38);   // assegut: el banc el tapa de debò
     }
 
-    // Quan hi ha un diàleg, la caixa de text tapa la part de baix de la pantalla: si l'Ineu (o qui li parla) hi queda a sobre perquè la càmera
-    // s'ha aturat contra la vora de baix de la zona, la càmera baixa només el just (fora de la zona), a poc a poc, perquè tots dos quedin
-    // per sobre de la caixa; en acabar torna a lloc igual de suau.
+    // Quan hi ha un diàleg, la caixa de text (i el retrat de qui parla) tapen la part de baix de la pantalla i el HUD la de dalt. Els dos que parlen
+    // (l'Ineu i qui li parla) s'han de veure SENCERS entre les dues coses: si no hi cap bé, la càmera es mou just el que cal i, si encara així no hi caben
+    // (cos alt o dos personatges molt separats), s'allunya una mica (zoom) fins que hi caben. En acabar torna a lloc igual de suau.
     camaraDialeg(obert) {
         const cam = this.cameras.main;
         if (obert) {
             if (this.camDialeg) return;
-            const I = this.ineu, p = this.dialegDePunt ? this.puntActiu : null, baix = Math.max(I.y, p && p.npc ? p.npc.y : 0);
-            const falta = ALT_HUD + (baix - cam.worldView.y) * ZOOM_CAMERA - LIM_PEUS_DIALEG();      // y real dels peus a la pantalla (el zoom és al voltant del centre: scrollY no és el cim de la vista)
-            if (falta <= 0) return;
-            const extra = Math.ceil(falta / ZOOM_CAMERA);
+            const p = this.dialegDePunt ? this.puntActiu : null;
+            const cossos = [this.ineu];
+            if (p && p.npc && p.npc.active && p.npc.visible) cossos.push(p.npc);
+            const TOP = ALT_HUD + 8;                                    // sota el HUD
+            const LIM = ALT - 420;                                      // sobre la cinta del nom (la caixa comença a ALT-370)
+            const LIM_RETRAT = ALT - 520;                               // el retrat de qui parla (a l'esquerra) puja fins a ALT-494
+            const Z = cam.zoom, wv = cam.worldView, H = ALT - ALT_HUD;
+            const mides = cossos.map(o => {
+                const b = o.getBounds(), esq = (b.x - wv.x) * Z, dre = (b.right - wv.x) * Z;
+                return { dalt: b.y, baix: b.bottom, lim: esq < 200 && dre > 10 ? LIM_RETRAT : LIM };
+            });
+            // On queden ara (y de pantalla del cap i dels peus)
+            const pantalla = (m, z, wy) => ({ dalt: ALT_HUD + (m.dalt - wy) * z, baix: ALT_HUD + (m.baix - wy) * z });
+            const be = (z, wy) => mides.every(m => { const q = pantalla(m, z, wy); return q.dalt >= TOP && q.baix <= m.lim; });
+            if (be(Z, wv.y)) return;                                    // ja es veuen bé: la càmera no es mou
+            // Es busca el zoom més gran (fins a 0,6) en què hi caben; la y de la vista s'escull perquè els peus més baixos quedin just al seu límit
+            let z2 = Z, wy2 = wv.y, trobat = false;
+            for (let z = Z; z >= 0.6 - 1e-6 && !trobat; z -= 0.05) {
+                const wy = Math.max(...mides.map(m => m.baix - (m.lim - ALT_HUD) / z));            // els peus més exigents al seu límit
+                if (be(z, wy)) { z2 = z; wy2 = wy; trobat = true; }
+            }
+            if (!trobat) { z2 = 0.6; wy2 = Math.max(...mides.map(m => m.baix - (m.lim - ALT_HUD) / z2)); }      // no hi cap enlloc: es prioritza que no els tapi la caixa
+            this.camDialeg = { sy: cam.scrollY, z: ZOOM_CAMERA };
             if (!this.boundsCamOrig) { const b = cam.getBounds(); this.boundsCamOrig = { x: b.x, y: b.y, w: b.width, h: b.height }; }
-            const o = this.boundsCamOrig;
-            this.camDialeg = { extra };
+            cam.removeBounds(); cam.stopFollow();
             if (this.twCamDialeg) this.twCamDialeg.stop();
-            cam.setBounds(o.x, o.y, o.w, o.h + extra);
-            cam.stopFollow();
-            this.twCamDialeg = this.tweens.add({ targets: cam, scrollY: cam.scrollY + extra, duration: 1100, ease: 'Sine.easeInOut' });
+            const sy2 = wy2 - (H - H / z2) / 2;                         // scrollY que dona aquesta y de la vista amb aquest zoom
+            const v = { u: 0 }, sy0 = cam.scrollY, z0 = cam.zoom;
+            this.twCamDialeg = this.tweens.add({ targets: v, u: 1, duration: 1000, ease: 'Sine.easeInOut', onUpdate: () => { cam.setZoom(Phaser.Math.Linear(z0, z2, v.u)); cam.setScroll(cam.scrollX, Phaser.Math.Linear(sy0, sy2, v.u)); this.ajustarSuperposicions(); } });
         } else if (this.camDialeg) {
             const d = this.camDialeg, o = this.boundsCamOrig;
             this.camDialeg = null;
             if (this.twCamDialeg) this.twCamDialeg.stop();
+            const v = { u: 0 }, sy0 = cam.scrollY, z0 = cam.zoom;
             this.twCamDialeg = this.tweens.add({
-                targets: cam, scrollY: cam.scrollY - d.extra, duration: 900, ease: 'Sine.easeInOut',
+                targets: v, u: 1, duration: 800, ease: 'Sine.easeInOut',
+                onUpdate: () => { cam.setZoom(Phaser.Math.Linear(z0, d.z, v.u)); cam.setScroll(cam.scrollX, Phaser.Math.Linear(sy0, d.sy, v.u)); this.ajustarSuperposicions(); },
                 onComplete: () => {
-                    cam.setBounds(o.x, o.y, o.w, o.h);
+                    cam.setZoom(d.z); this.ajustarSuperposicions();
+                    if (o) cam.setBounds(o.x, o.y, o.w, o.h);
                     cam.startFollow(this.ineu, true, 0.12, 0.12);
                     this.boundsCamOrig = null;
                 }
             });
         }
+    }
+
+    // Els vels de color i la boira (fixos a la pantalla: scrollFactor 0) es dibuixen amb la mida del zoom habitual; si la càmera s'allunya, es fan més grans
+    // en la mateixa proporció perquè continuïn cobrint tota la pantalla
+    ajustarSuperposicions() {
+        const k = ZOOM_CAMERA / this.cameras.main.zoom;
+        this.children.list.forEach(o => {
+            if (o.scrollFactorX !== 0 || o.scrollFactorY !== 0 || !o.setScale || o.displayWidth < 300) return;
+            if (!o.__esc0) o.__esc0 = { x: o.scaleX, y: o.scaleY };
+            o.setScale(o.__esc0.x * k, o.__esc0.y * k);
+        });
     }
 
     cicle(time, delta) {
