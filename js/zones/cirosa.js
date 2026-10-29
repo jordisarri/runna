@@ -92,7 +92,7 @@ class ZonaCamiCirosa extends ZonaBase {
         this.boira(700, 1400, 500, 120, 0.8);
         this.sortida(620, 2186, 160, 14, 'ZonaTiller', 'cirosa');
         this.sortida(500, 0, 160, 14, 'ZonaCirosa', 'cami');
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, net ? 0 : 0.09).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x3a1a55, net ? 0 : 0.09).setScrollFactor(0).setDepth(90000);
     }
 
     // Repòs al banc: es cura i es desa la partida
@@ -168,7 +168,7 @@ class ZonaCirosa extends ZonaBase {
         this.muralla(700, 1186, 1020, 1186, 90, 'arbre', false);
 
         this.sortida(500, 1186, 160, 14, 'ZonaCamiCirosa', 'cirosa');
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, lila ? 0.12 : 0).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x3a1a55, lila ? 0.12 : 0).setScrollFactor(0).setDepth(90000);
     }
 
     // Pou de pedra baix, amb corriola de fusta

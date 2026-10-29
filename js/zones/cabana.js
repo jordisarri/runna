@@ -166,7 +166,7 @@ class ZonaCabana extends ZonaBase {
             const l = this.add.circle(x, y, 2.4, 0xd8ff7a, 0.9).setDepth(85000);
             this.tweens.add({ targets: l, x: x + (Math.random() - 0.5) * 120, y: y + (Math.random() - 0.5) * 90, alpha: 0.15, yoyo: true, repeat: -1, duration: 1800 + Math.random() * 1800, delay: Math.random() * 1500, ease: 'Sine.easeInOut' });
         }
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x0a3010, 0.12).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x0a3010, 0.12).setScrollFactor(0).setDepth(90000);
     }
 }
 

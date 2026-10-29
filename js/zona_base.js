@@ -52,7 +52,8 @@ function nivellBoira() {
     return 1 - (1 - BOIRA_MINIM) * fets / BOIRA_PASSOS.length;
 }
 
-const LIM_PEUS_DIALEG = 850;       // durant un diàleg, els peus de l'Ineu (i de qui li parla) han de quedar per sobre d'aquesta y de la pantalla (la caixa de text comença a ~910 i la cinta del nom a ~880): només es mou la càmera el just
+// Durant un diàleg, els peus de l'Ineu (i de qui li parla) han de quedar per sobre d'aquesta y de la pantalla: la caixa de text puja fins a ALT-370, la cinta del nom fins a ALT-406 i el retrat de qui parla fins a ALT-494; es deixa un marge.
+const LIM_PEUS_DIALEG = () => ALT - 570;
 // Un punt interactiu sense res a dir (diàleg buit i sense efecte) no és interactiu. Només es mira als diàlegs del registre DIALEGS (funcions pures
 // de l'estat): les funcions que fan alguna cosa en cridar-les (girar un engranatge, la palanca...) no s'han d'executar mai per mirar-ho.
 let _dialegsPurs = null;
@@ -696,14 +697,14 @@ class ZonaBase extends Phaser.Scene {
     posarBoiraGeneral() {
         if (this.esInterior() || this.config.senseBoira) return;
         const dens = this.config.densitatBoira || 1;
-        const W = AMPLE / ZOOM_CAMERA + 4, H = ALT / ZOOM_CAMERA + 4;
+        const W = AMPLE / ZOOM_CAMERA + 4, H = (ALT - ALT_HUD) / ZOOM_CAMERA + 4, CY = (ALT - ALT_HUD) / 2;      // la càmera mira per una finestra més baixa que el llenç (sota el HUD): el centre és el d'aquesta finestra
         const parts = [];                                               // { o, alfa }: el que val cada peça amb la boira al màxim
-        const vel = this.add.rectangle(AMPLE / 2, ALT / 2, W, H, 0x3a1a55, 1).setScrollFactor(0).setDepth(90000).setAlpha(0);
+        const vel = this.add.rectangle(AMPLE / 2, CY, W, H, 0x3a1a55, 1).setScrollFactor(0).setDepth(90000).setAlpha(0);
         parts.push({ o: vel, alfa: Math.min(0.34, 0.14 * dens) });
         if (this.textures.exists('boira')) {
             const n = Math.round(4 + 2 * dens);
             for (let i = 0; i < n; i++) {
-                const x = AMPLE / 2 + (i / (n - 1) - 0.5) * W * 0.9, y = ALT / 2 + (((i * 37) % 7) / 7 - 0.5) * H * 0.9;
+                const x = AMPLE / 2 + (i / (n - 1) - 0.5) * W * 0.9, y = CY + (((i * 37) % 7) / 7 - 0.5) * H * 0.9;
                 const b = this.add.image(x, y, 'boira').setTint(0xa878ec).setScrollFactor(0).setDepth(89990 + i * 0.01).setAlpha(0).setDisplaySize(W * 0.7, H * 0.28);
                 parts.push({ o: b, alfa: 0.3 * Math.min(dens, 1.6) });
                 this.tweens.add({ targets: b, x: x + (i % 2 ? 60 : -60), duration: 9000 + i * 1300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
@@ -944,8 +945,8 @@ class ZonaBase extends Phaser.Scene {
         const cam = this.cameras.main;
         if (obert) {
             if (this.camDialeg) return;
-            const I = this.ineu, p = this.puntActiu, baix = Math.max(I.y, p && p.npc ? p.npc.y : 0);
-            const falta = ALT_HUD + (baix - cam.scrollY) * ZOOM_CAMERA - LIM_PEUS_DIALEG;
+            const I = this.ineu, p = this.dialegDePunt ? this.puntActiu : null, baix = Math.max(I.y, p && p.npc ? p.npc.y : 0);
+            const falta = ALT_HUD + (baix - cam.worldView.y) * ZOOM_CAMERA - LIM_PEUS_DIALEG();      // y real dels peus a la pantalla (el zoom és al voltant del centre: scrollY no és el cim de la vista)
             if (falta <= 0) return;
             const extra = Math.ceil(falta / ZOOM_CAMERA);
             if (!this.boundsCamOrig) { const b = cam.getBounds(); this.boundsCamOrig = { x: b.x, y: b.y, w: b.width, h: b.height }; }
@@ -1207,11 +1208,13 @@ class ZonaBase extends Phaser.Scene {
 
     interactuar(punt) {
         this.puntActiu = punt;
+        this.dialegDePunt = true;       // la càmera del diàleg només té en compte qui parla quan el diàleg ve d'una interacció
         const dialeg = typeof punt.dialeg === 'function' ? punt.dialeg(Estat) : punt.dialeg;
-        if (!dialeg) { if (punt.enTancar) punt.enTancar(); return; }   // accions sense diàleg (només un efecte a l'escena)
+        if (!dialeg) { this.dialegDePunt = false; if (punt.enTancar) punt.enTancar(); return; }   // accions sense diàleg (només un efecte a l'escena)
         const obre = () => this.ui().obrirDialeg(dialeg, () => {
             if (punt.enTancar) punt.enTancar();
             Estat.desar();
+            this.dialegDePunt = false;
         });
         if (punt.npc && dialeg.pagines && dialeg.pagines.length) this.separarDeNpc(punt.npc, obre); else obre();
     }
@@ -1276,7 +1279,11 @@ class ZonaBase extends Phaser.Scene {
         const b = this.ineu.body;
         const peus = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
         for (const s of this.sortides) {
-            if (s.peu ? s.r.contains(b.center.x, b.bottom) : Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r)) {
+            // Per una porta s'hi entra pel buit: el centre del cos ha d'estar dins l'amplada (o l'alçada, a les vores laterals) de la sortida, no només tocar-la amb la vora del cos
+            // (el cos fa 72 d'ample: si no, s'hi entrava tocant el marc de la porta per un costat)
+            const ample = s.r.width >= s.r.height, c = b.center;
+            const centrat = ample ? c.x >= s.r.x + 6 && c.x <= s.r.right - 6 : c.y >= s.r.y + 6 && c.y <= s.r.bottom - 6;
+            if (s.peu ? s.r.contains(b.center.x, b.bottom) : (centrat && Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r))) {
                 if (s.pendentLlum) continue;                             // encara tancada: no és una sortida (sense llum; es camina contra el marge)
                 if (s.baixar !== undefined) this.baixarEscala(s);
                 else this.canviarZona(s.desti, s.entrada, this.dirSortida(s.r));

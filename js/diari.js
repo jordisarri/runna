@@ -22,7 +22,7 @@ const DIARI_PASSOS = {
     saber: ['Les Paraules del Saber', 'ZonaBiblioteca'], benediccio: ['La benedicció', 'ZonaPlaca'],
     telescopi: ['El telescopi del Garf', 'ZonaEra'], estels: ['Els estels', 'ZonaDipositos'],
     estelLlorenc: ['L\'Estel de Sant Llorenç', 'ZonaDipositos'], runna: ['Runna', 'ZonaDolmen'],
-    josep: ['El partit contra en Josep', 'ZonaPingpong'],
+    josep: ['El partit contra en Jusef', 'ZonaPingpong'],
     guants: ['Els Guants de Poder', 'ZonaSantAntoni'], roda: ['La roda del Celler', 'ZonaPingpong'],
     cambra: ['La cambra secreta', 'ZonaPassadis'], palanca: ["La palanca d'en Jordi", 'ZonaJordi'],
     raim: ['L\'Home del Raïm', 'ZonaCasaGranInt'], cripta: ['La Cripta', 'ZonaCasaCripta'],

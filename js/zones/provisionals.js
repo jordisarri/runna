@@ -220,7 +220,7 @@ class ZonaMonestir extends ZonaBase {
         this.posar('xiprer', 1165, 450 + D, { escala: 1.9, col: { w: 30, h: 12 } });
 
         this.cartell(1368, 450 + D, () => ({ pagines: [{ qui: 'Cartell', text: '→ Cel·les de Sant Antoni\n↑ El Cementiri (darrere el Monestir i el Santuari)' }] }));
-        this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720], [420, 770], [1520, 760], [1090, 770], [750, 780]].map(([x, y]) => [x, y + D]));
+        this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720], [420, 770], [1090, 770], [750, 780]].map(([x, y]) => [x, y + D]));
 
         // La boira violeta que surt de sota terra jeu a la plaça, davant del Monestir i al peu de l'escalinata (vegeu posarBoiraGeneral):
         // aquí és on és més espessa, i va marxant a mesura que es resolen les missions

@@ -315,7 +315,7 @@ const DIALEGS = {
     // ---------------- RUÏNES I PING-PONG ----------------
     ruines: E => ({
         pagines: [
-            { qui: 'Pergamí', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de Runna i la va deixar dormint a la pedra. Després va amagar la clau de la porta allà on ningú no la trobés.»" },
+            { qui: 'Pergamí', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de l'espasa Runna i la va deixar dormint a la pedra. Després va amagar la clau de la porta allà on ningú no la trobés.»" },
             { fer: (z, fet) => z.agafarPergamiRunes ? z.agafarPergamiRunes(fet) : fet() },
             { qui: 'Ineu', text: "Falta l'altre fragment. Potser a l'església... I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." },
             { fer: (z, fet) => z.aparicioOmbra ? z.aparicioOmbra(fet) : fet() },
@@ -330,74 +330,74 @@ const DIALEGS = {
 
     juli: E => ({
         pagines: [
-            { qui: 'Juli', text: 'Ei, Ineu! Aquí tot gira al voltant d\'en Josep i del seu servei. Si vols jugar, parla-hi.' },
-            { qui: 'Juli', text: 'El meu pare, en Frederic, juga amb una pala de pedra. De pedra! I em guanya igualment. Frikis de mena.' }
+            { qui: 'July', text: 'Ei, Ineu! El repte més gran del Miracle és derrotar el Jusef i el seu servei màgic. T\'hi atreveixes?' },
+            { qui: 'July', text: 'El Senyor Perers juga amb una pala de pedra. De pedra! I tot i així, em guanya fàcilment.' }
         ]
     }),
 
     frederic: E => ({
         pagines: [
-            { qui: 'Frederic', text: 'Calma, noi. La pilota no s\'ha de perseguir, s\'ha d\'esperar.' },
-            { qui: 'Frederic', text: 'Jo jugo amb una pala de pedra. De pedra, sí: pesa com un maó i no té goma ni res. Quan jugueu a la taula, no em veuràs ni a mi ni la pala; no cal.' },
-            { qui: 'Frederic', text: 'Perquè amb què es juga és igual. La pala només és la mà allargada. El que compta és l\'esperit del joc que portes dins: el talent, o la màgia, que a la teva edat és gairebé el mateix.' }
+            { qui: 'Senyor Perers', text: 'Calma, noi. La pilota no s\'ha de perseguir, s\'ha d\'esperar.' },
+            { qui: 'Senyor Perers', text: 'Jo jugo amb una pala de pedra. De pedra, sí: pesa com un maó i no té goma ni res. Quan jugueu a la taula, no em veuràs ni a mi ni la pala; no cal.' },
+            { qui: 'Senyor Perers', text: 'Perquè amb què es juga és igual. La pala només és una extensió de l\'ànima. El que compta és l\'esperit del joc, la màgia que portes dins.' }
         ]
     }),
 
     josep: E => E.flag('josepVencut') ? {
         pagines: [
-            { qui: 'Josep', text: 'La taula és teva quan vulguis, noi. Vols provar de tornar-me el servei un altre cop?' },
+            { qui: 'Jusef', text: 'La taula és teva quan vulguis, noi. Vols provar de tornar-me el servei un altre cop?' },
             { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaPP = i; fet(); }) }
         ],
         enAcabar: () => { if (DIALEGS._triaPP === 0) game.scene.start('PingPong'); DIALEGS._triaPP = null; }
     } : {
         pagines: [
-            { qui: 'Josep', text: 'Benvingut al Celler, viatger. Les pales i la pilota només són l\'escorça: el que jo practico aquí és màgia blanca.' },
-            { qui: 'Josep', text: 'Aquest és el meu servei màgic. La pilota hi porta tres llums que s\'encenen una a una, i fins ara ningú no ha sabut aturar-lo.' },
-            { qui: 'Josep', text: 'Vols provar-ho? Una partida, a set punts.' },
+            { qui: 'Jusef', text: 'Benvingut al Celler, viatger. Les pales i la pilota només són l\'escorça: el que jo practico aquí és màgia blanca.' },
+            { qui: 'Jusef', text: 'Aquest és el meu servei màgic. La pilota desprèn tres llums que s\'encenen una a una. Fins ara ningú ha aconseguit aturar-lo.' },
+            { qui: 'Jusef', text: 'Vols provar-ho? Una partida, a set punts.' },
             { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaPP = i; fet(); }) }
         ],
         enAcabar: () => {
             const triat = DIALEGS._triaPP; DIALEGS._triaPP = null;
             const ui = game.scene.getScene('UI');
             if (triat === 0) ui.obrirDialeg(DIALEGS.josepRegles(E), () => game.scene.start('PingPong'));
-            else ui.obrirDialeg({ pagines: [{ qui: 'Josep', text: 'Com vulguis. La taula ja no se\'n va enlloc.' }] });
+            else ui.obrirDialeg({ pagines: [{ qui: 'Jusef', text: 'Com vulguis. La taula ja no se\'n va enlloc.' }] });
         }
     },
 
-    // Les úniques explicacions de com es juga: les dóna en Josep, i curtes
+    // Les úniques explicacions de com es juga: les dóna en Jusef, i curtes
     josepRegles: E => ({
         pagines: [
-            { qui: 'Josep', text: 'Mira per on ve la pilota: quan el cercle es posi verd, prem el seu carril (← ↓ → o els botons) i la tornaràs.' },
-            { qui: 'Josep', text: 'I quan jo faci el servei màgic, mira els tres signes i repeteix-los en el mateix ordre.' }
+            { qui: 'Jusef', text: 'Mira per on ve la pilota: quan el cercle es posi verd, prem el seu carril (← ↓ → o els botons) i la tornaràs.' },
+            { qui: 'Jusef', text: 'I quan jo faci el servei màgic, mira els tres signes i repeteix-los en el mateix ordre.' }
         ]
     }),
 
     josepGuanyat: E => E.flag('josepVencut') ? ({
         pagines: [
-            { qui: 'Josep', text: 'Un altre cop me l\'has tornat... El servei és teu, noi. Quan vulguis, tornem-hi.' }
+            { qui: 'Jusef', text: 'Un altre cop me l\'has tornat... El servei és teu, noi. Quan vulguis, tornem-hi.' }
         ]
     }) : ({
         pagines: [
-            { qui: 'Josep', text: '...Me l\'has tornat. El servei. Algú, per fi, l\'ha aturat de debò.' },
+            { qui: 'Jusef', text: '...Me l\'has tornat. El servei. Algú, per fi, l\'ha aturat de debò.' },
             { fer: (z, fet) => z.npcVa('josep', z.ineu.x + 60, z.ineu.y, fet) },
-            { qui: 'Josep', text: 'Això és per a tu: una llanterna. Als passadissos dels monjos hi fa una fosca que no perdona, i amb la seva llum hi veuràs.' },
+            { qui: 'Jusef', text: 'Això és per a tu: una llanterna. Als passadissos dels monjos hi fa una fosca que no perdona, i amb la seva llum hi veuràs.' },
             { fer: (z, fet) => z.objecteVola('josep', fet) },
             { avis: 'Has obtingut la LLANTERNA.' },
-            { qui: 'Josep', text: 'I un secret, per qui sap tornar un servei: aquella roda de carruatge del pati no és decoració. Darrere hi ha el túnel dels monjos cap a la Casa Gran. Però pesa com un carro ple.' }
+            { qui: 'Jusef', text: 'I un secret, per qui sap tornar un servei: aquella roda de carruatge del pati no és decoració. Darrere hi ha el túnel dels monjos cap a la Casa Gran. Però pesa com un carro ple.' }
         ],
         enAcabar: () => {
             E.posaFlag('josepVencut');
             if (!E.te('llanterna')) { E.dona('llanterna'); E.posaFlag('llanterna'); }
             const ui = game.scene.getScene('UI'); if (ui) ui.actualitzarHUD();
-            E.posaObjectiu(!E.flag('runna') ? 'Has guanyat en Josep. Segueix buscant Runna.'
+            E.posaObjectiu(!E.flag('runna') ? 'Has guanyat en Jusef. Segueix buscant Runna.'
                 : E.te('guants') ? 'Empeny amb els Guants la roda de carruatge del Celler: amaga el túnel dels monjos (Runna en talla els esbarzers).'
                 : 'La roda del Celler pesa massa: el Germà Francesc, a Sant Antoni, té uns guants que mouen el que pesa.');
         }
     }),
 
     josepPerdut: (E, abandonat) => ({
-        pagines: [{ qui: 'Josep', text: abandonat ? 'Ja te\'n vas? La taula no fuig. Torna quan vulguis.' : 'Bona partida, monjo. Però el servei encara és meu. Torna-hi quan vulguis: el Juli diu que la segona vegada sempre surt millor.' }],
-        enAcabar: () => { if (!E.flag('josepVencut')) E.posaObjectiu('Guanya en Josep a ping-pong, al Celler: parla-hi per jugar.'); }
+        pagines: [{ qui: 'Jusef', text: abandonat ? 'Ja te\'n vas? La taula no fuig. Torna quan vulguis.' : 'Bona partida, monjo. Però el servei encara és meu. Torna-hi quan vulguis: el July diu que la segona vegada sempre surt millor.' }],
+        enAcabar: () => { if (!E.flag('josepVencut')) E.posaObjectiu('Guanya en Jusef a ping-pong, al Celler: parla-hi per jugar.'); }
     }),
 
 
@@ -567,7 +567,7 @@ const DIALEGS = {
         if (f1 && f2) {
             return {
                 pagines: [
-                    { qui: "Pare Alcuí", text: "Has trobat els dos fragments! Deixa'm llegir-los... Sí. Ho explica la Crònica que guardo a la biblioteca: un monjo va segellar la foscor amb la llum de Runna." },
+                    { qui: "Pare Alcuí", text: "Has trobat els dos fragments! Deixa'm llegir-los... Sí. Ho explica la Crònica que guardo a la biblioteca: un monjo va segellar la foscor amb la llum de l'espasa Runna." },
                     { fer: (z, fet) => z.npcVa('pare_alcui', 812, 372, fet, 120) },
                     { qui: "Crònica", text: "«Des que la tercera església va quedar inacabada, l'ombra del monjo es veu clarament sobre el mur de les Runes: mig corbat, amb les mans unides, com si pregués. Apareix cada nit.»" },
                     { qui: "Pare Alcuí", text: "L'ombra del monjo... No fa mal a ningú, Ineu. Crec que és el monjo que va segellar la foscor amb la llum de Runna. Ves a veure'l, de nit, a les Runes." }
@@ -1308,7 +1308,7 @@ const DIALEGS = {
 
     homeRaimInt: E => ({
         pagines: [
-            { qui: "Ineu", text: "Té el cap girat cap enrere, com si vigilés la porta de sota l'escala. Sembla que guardi alguna cosa." },
+            { qui: "Ineu", text: "Mira cap amunt i de costat, com si vigilés el balcó de sobre l'escala. Sembla que guardi alguna cosa." },
         ]
     }),
 
@@ -1396,7 +1396,7 @@ const DIALEGS = {
 
     // ---------------- EL CEMENTIRI ----------------
     tombaMonjos: E => ({
-        pagines: [{ qui: "Ineu", text: "«Ací reposen els qui van tancar la porta.»" }],
+        pagines: [{ qui: "Ineu", text: "«Aquí reposen els qui van tancar la porta.»" }],
         enAcabar: () => E.posaFlag("tombaVista")
     }),
 

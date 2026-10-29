@@ -363,7 +363,7 @@ class ZonaTortura extends ZonaBase {
         // Boira lila que baixa de la Sala de la Gàbia
         this.boira(450, 200, 260, 60, 1.2);
         this.boira(450, 700, 200, 40, 0.4);
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x1a0a20, 0.3).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a20, 0.3).setScrollFactor(0).setDepth(90000);
 
         // Ferralla viva: les eines dels torturadors s'aixequen i barren el pas
         [[330, 1420], [580, 1300], [420, 860], [350, 640]].forEach(([x, y]) => this.enemic('ferralla', x, y));
@@ -536,7 +536,7 @@ class ZonaGabia extends ZonaBase {
             speedY: { min: -30, max: -10 }, lifespan: 3000, scale: { start: 0.2, end: 0 }, alpha: { start: 0.8, end: 0 },
             tint: net ? [0xffe8a0, 0xffffff] : [0xb88aff, 0xe0c8ff], frequency: net ? 400 : 120, blendMode: 'ADD'
         }).setDepth(9000);
-        this.velLila = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x1a0a30, net ? 0.06 : 0.22).setScrollFactor(0).setDepth(90000);
+        this.velLila = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a30, net ? 0.06 : 0.22).setScrollFactor(0).setDepth(90000);
 
         this.sortida(860, H - 22, 80, 14, 'ZonaTortura', 'gabia');
 

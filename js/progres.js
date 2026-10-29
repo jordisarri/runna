@@ -82,7 +82,7 @@ const PROGRES = {
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
           pista: E => "Ara que portes Runna, torna al Santuari: la Pianista t'ha d'ensenyar l'últim cant, el Cant del Miracle. Els barrots de la gàbia només l'escolten a ell." },
         { id: 'josep', marca: ['josepVencut', 'obj:llanterna'], fet: E => E.flag('josepVencut'),
-          pista: E => "Al Celler, entre la Plaça i les Runes, en Josep és el millor jugador de ping-pong. Allà els secrets es guanyen a la taula: parla amb en Josep i guanya-li el partit. (Quan la pilota bota i s'enlaira, espera que el cercle es posi verd i prem el carril de la pilota.)" },
+          pista: E => "Al Celler, entre la Plaça i les Runes, en Jusef és el millor jugador de ping-pong. Allà els secrets es guanyen a la taula: parla amb en Jusef i guanya-li el partit. (Quan la pilota bota i s'enlaira, espera que el cercle es posi verd i prem el carril de la pilota.)" },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
           pista: E => E.flag('florsCreu') ? "Torna a Sant Antoni, fill: el Germà Francesc t'espera."
               : E.te('ram') ? "El ram del Germà Francesc va a la tomba de l'àngel del Cementiri."

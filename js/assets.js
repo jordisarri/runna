@@ -25,7 +25,16 @@ const CATALEG = [
     { key: 'germa_francesc', file: 'assets/personatges/germa_francesc.webp', amplada: 92, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
     { key: 'pare_alcui',   file: 'assets/personatges/pare_alcui.webp',   amplada: 84, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
     // Elements
-    { key: 'home_raim',    file: 'assets/personatges/home_raim.png',    amplada: 110, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },
+    { key: 'home_raim',    file: 'assets/personatges/home_raim.webp',    amplada: 78, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua (abans del combat)
+    { key: 'home_raim_desperta', file: 'assets/personatges/home_raim_desperta.webp', amplada: 85, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // el guardià despert (boss de l'Escalinata)
+    { key: 'home_raim_n',  file: 'assets/personatges/home_raim_n.webp', amplada: 78, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap mirant al nord (d'esquena) (opcional: si no hi és, es fa servir home_raim; el sud és home_raim)
+    { key: 'tomba_angel', file: 'assets/objectes/tomba_angel.webp', amplada: 140, provisional: (c, w) => lienc(c, w, w * 226 / 140, (ctx, W, H) => { ctx.scale(W / 140, H / 226); pintarTombaAngel(ctx, 140, 226, false); }) },   // la tomba de l'àngel, amb el ram marcit
+    { key: 'tomba_angel_flors', file: 'assets/objectes/tomba_angel_flors.webp', amplada: 140, provisional: (c, w) => lienc(c, w, w * 226 / 140, (ctx, W, H) => { ctx.scale(W / 140, H / 226); pintarTombaAngel(ctx, 140, 226, true); }) },   // la mateixa, amb flors fresques i una espelmeta (mateixa amplada: es canvia la textura sense canviar l'escala)
+    { key: 'tomba_esquerdada', file: 'assets/objectes/tomba_esquerdada.webp', amplada: 240, provisional: (c, w) => lienc(c, w, w * 0.625, (ctx, W, H) => { ctx.scale(W / 240, H / 150); pintarTombaMonjos(ctx, 240, 150, true); }) },   // la tomba dels monjos, esquerdada i oberta
+    { key: 'tomba_tancada', file: 'assets/objectes/tomba_tancada.webp', amplada: 240, provisional: (c, w) => lienc(c, w, w * 0.625, (ctx, W, H) => { ctx.scale(W / 240, H / 150); pintarTombaMonjos(ctx, 240, 150, false); }) },   // la mateixa, segellada (mateixa amplada: es canvia la textura sense canviar l'escala)
+    { key: 'home_raim_pedestal', file: 'assets/personatges/home_raim_pedestal.webp', amplada: 78, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // només el pedestal (queda quan el guardià es desperta i baixa)
+    { key: 'home_raim_e',  file: 'assets/personatges/home_raim_e.webp', amplada: 78, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap mirant a llevant (opcional: si no hi és, es fa servir home_raim; el sud és home_raim)
+    { key: 'home_raim_o',  file: 'assets/personatges/home_raim_o.webp', amplada: 78, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap mirant a ponent (opcional: si no hi és, es fa servir home_raim; el sud és home_raim)
     { key: 'creu',         file: 'assets/objectes/creu.webp',        amplada: 150,  provisional: (c, w) => dibuixarCreuAparicio(c, w) },
     { key: 'creu_desaparicio', file: 'assets/objectes/creu.webp', amplada: 105, provisional: (c, w) => dibuixarCreuDesaparicio(c, w) },
     { key: 'bassadoria',   file: 'assets/objectes/bassadoria.webp',   amplada: 620, cru: true, provisional: (c, w) => dibuixarBassadoriaReixa(c, w) },   // aigua neta
@@ -54,7 +63,7 @@ const CATALEG = [
     { key: 'frederic',  file: 'assets/personatges/frederic.webp',  amplada: 77, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'frederic') },
     { key: 'eloi',      file: 'assets/personatges/eloi.png',      amplada: 104, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'eloi') },
     { key: 'josep',     file: 'assets/personatges/josep.webp',     amplada: 82, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },
-    { key: 'josep_levita', file: 'assets/personatges/josep_levita.webp', amplada: 134, cru: true, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },   // en Josep levitant amb la pala (minijoc de ping-pong)
+    { key: 'josep_levita', file: 'assets/personatges/josep_levita.webp', amplada: 134, cru: true, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },   // en Jusef levitant amb la pala (minijoc de ping-pong)
     { key: 'garf',      file: 'assets/personatges/garf.webp',      amplada: 55, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#d9b45a', alt: 0.92, ample: 1.35, cap: 17 }) },
     { key: 'carry',     file: 'assets/personatges/carry.webp',     amplada: 58, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a7a', cabell: '#f0f0f0', pell: '#ece4dc', dona: true, alt: 1.0, ample: 0.7 }) },   // la Carry, anciana molt prima i pàl·lida, de cabells blancs curts i faldilla (busca el Pallofa)
     { key: 'pallofa',   file: 'assets/personatges/pallofa.webp',   amplada: 60, cru: true,  provisional: (c, w) => dibuixarGos(c, w) },   // el Pallofa, gos petit i prim, blanc amb taques marrons, borni i ple de puces
@@ -148,6 +157,7 @@ const CATALEG = [
     { key: 'arma_espasa', file: 'assets/armes/espasa.webp',      amplada: 28, provisional: (c, w) => dibuixarEspasaProvisional(c, w) },   // l'espasa de Runna
     { key: 'cartell_llums', file: 'assets/objectes/cartell_llums.webp', amplada: 560, cru: true },            // cartell de paper (es mostra tal com és, amb el fons blanc)
     { key: 'cartell_llums_borros', file: 'assets/objectes/cartell_llums_borros.webp', amplada: 56, cru: true },   // la mateixa imatge, borrosa i petita, per a la paret
+    { key: 'cartell_llums_petit', file: 'assets/objectes/cartell_llums_petit.webp', amplada: 56, cru: true },   // la mateixa imatge, nítida i petita, per a la paret (en examinar-lo es mostra la gran)
     { key: 'espurna',      file: 'assets/objectes/espurna.png',      amplada: 32, provisional: (c, w) => dibuixarPuntSegell(c, w) }
 ];
 
@@ -328,7 +338,8 @@ const Grafics = {
             // Els fotogrames originals no estan ben alineats entre ells: el cap puja i baixa sense ordre (fins a 4 px)
             // i l'alçada del cos varia (159-164 px). Es mesura cada fotograma per separat (vores amb cobertura, no un
             // sol píxel solt, i centre del cap ponderat per l'alfa) i es redibuixa perquè el cap i els peus quedin
-            // sempre a la mateixa alçada i el cap a la mateixa x. Així al caminar no tremola.
+            // el cap a la mateixa x, UNA sola escala per a tots els fotogrames (reescalar cada un per separat feia tremolar el cos de dalt a baix)
+            // i els peus només corregeixen la meitat del rebot natural del pas. Així al caminar no tremola.
             const mides = [];
             for (let i = 0; i < N; i++) {
                 const cx = (i % COLS) * CEL, cy = Math.floor(i / COLS) * CEL;
@@ -352,6 +363,7 @@ const Grafics = {
             const alt = mediana(mides.map(m => m.baix - m.dalt));
             const centre = caixes.reduce((t, c) => t + (c.ax + c.bx) / 2, 0) / N;
             const desvCap = centre - mides.reduce((t, m) => t + m.cap, 0) / N;      // el cos queda on era abans
+            const baixMed = mediana(mides.map(m => m.baix));
             const e = (SPRITE_INEU.peus - 8) / alt;      // mateixa alçada que les altres fulles (~225 de 256)
             // Fotograma de repòs: aquell en què les cames estan més juntes (caixa més estreta)
             Grafics.quietPerfil = caixes.reduce((m, c, i) => (c.bx - c.ax < caixes[m].bx - caixes[m].ax ? i : m), 0);
@@ -364,11 +376,11 @@ const Grafics = {
                 for (let i = 0; i < N; i++) {
                     const cel = document.createElement('canvas');
                     cel.width = CEL; cel.height = CEL;
-                    const m = mides[i], ey = e * alt / (m.baix - m.dalt);      // escala vertical pròpia: cap i peus a lloc
+                    const m = mides[i];
                     const cc = cel.getContext('2d');
                     cc.imageSmoothingQuality = 'high';
                     cc.drawImage(c0, (i % COLS) * CEL, Math.floor(i / COLS) * CEL, CEL, CEL,
-                        CEL / 2 - (m.cap + desvCap) * e, SPRITE_INEU.peus - m.baix * ey, CEL * e, CEL * ey);
+                        CEL / 2 - (m.cap + desvCap) * e, SPRITE_INEU.peus - (baixMed + 0.5 * (m.baix - baixMed)) * e, CEL * e, CEL * e);
                     const dx = (i % COLS) * CEL, dy = Math.floor(i / COLS) * CEL;
                     if (mirall) { o.save(); o.translate(dx + CEL, dy); o.scale(-1, 1); o.drawImage(cel, 0, 0); o.restore(); }
                     else o.drawImage(cel, dx, dy);
@@ -678,10 +690,6 @@ const Grafics = {
         crea('tomba_flors', 110, 96, (ctx, w, h) => pintarTombaVorada(ctx, w, h, 'flors', 13));
         crea('tomba_herba', 110, 96, (ctx, w, h) => pintarTombaVorada(ctx, w, h, 'herba', 19));
         crea('tomba_creu', 140, 112, pintarTombaCreu);
-        crea('tomba_angel', 140, 226, (ctx, w, h) => pintarTombaAngel(ctx, w, h, false));
-        crea('tomba_angel_flors', 140, 226, (ctx, w, h) => pintarTombaAngel(ctx, w, h, true));
-        crea('tomba_esquerdada', 240, 150, (ctx, w, h) => pintarTombaMonjos(ctx, w, h, true));
-        crea('tomba_tancada', 240, 150, (ctx, w, h) => pintarTombaMonjos(ctx, w, h, false));
         crea('fanalet', 24, 46, pintarFanalet);
         // Banc de fusta de jardí: tres taulons de seient, cantell frontal, potes amb travesser i ombra al terra
         const banc = (ctx, alt, respatller) => {
@@ -845,7 +853,7 @@ const Grafics = {
             ctx.strokeStyle = 'rgba(70,40,14,0.5)'; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.ellipse(29, 19, 15, 7, 0, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.ellipse(29, 19, 7, 3.4, 0, 0, Math.PI * 2); ctx.stroke();
         });
-        // En Josep al partit de ping-pong: el cos i el cap sense braços (els braços i la pala són a part i es mouen)
+        // En Jusef al partit de ping-pong: el cos i el cap sense braços (els braços i la pala són a part i es mouen)
         // Biblioteca del Monestir (js/dibuixos_biblio.js)
         [['prestatge_a', 162, 4, 3], ['prestatge_b', 212, 4, 11], ['prestatge_c', 162, 4, 17]].forEach(([k, w, files, llavor]) => crea(k, w, 202, (ctx, w2, h2) => pintarPrestatgeBiblio(ctx, w2, h2, files, llavor)));
         [['prestatge_l1', 132, 31], ['prestatge_l2', 132, 37], ['prestatge_l3', 162, 41], ['prestatge_l4', 132, 43], ['prestatge_l5', 132, 47], ['prestatge_l6', 162, 53]].forEach(([k, w, llavor]) => crea(k, w, 170, (ctx, w2, h2) => pintarPrestatgeBiblio(ctx, w2, h2, 3, llavor)));
@@ -873,7 +881,6 @@ const Grafics = {
         crea('creu_cela', 36, 60, pintarCreuCela);
         crea('habit_cela', 60, 110, pintarHabitCela);
         crea('estora_cela', 230, 110, pintarEstoraCela);
-        crea('cofre_cela', 90, 66, pintarCofre);
         // Pròleg (js/dibuixos_proleg.js): els cinc quadres pintats
         crea('proleg_ocellaire', 720, 950, pintarProlegOcellaire);
         crea('proleg_segell', 720, 950, pintarProlegSegell);
@@ -894,6 +901,7 @@ const Grafics = {
         crea('bota_creu', 64, 84, pintarBotaCreu);
         crea('cofre_tresor', 110, 80, pintarCofre);
         crea('rosa_vents', 380, 200, pintarRosaVents);
+        crea('escalinata_fons', 1140, 640, pintarEscalinata);
         crea('fletxa_raim', 90, 90, pintarFletxaRaim);
         // Ermita de la Desaparició (js/dibuixos_ermita.js)
         crea('paret_ermita', 800, 170, pintarParetErmita);

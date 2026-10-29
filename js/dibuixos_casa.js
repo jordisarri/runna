@@ -204,3 +204,105 @@ function pintarFletxaRaim(ctx, w, h) {
     ctx.fillStyle = '#e8c040'; ctx.beginPath(); ctx.moveTo(cx, cy - w * 0.3); ctx.lineTo(cx + w * 0.17, cy + w * 0.02); ctx.lineTo(cx + w * 0.06, cy + w * 0.02); ctx.lineTo(cx + w * 0.06, cy + w * 0.26); ctx.lineTo(cx - w * 0.06, cy + w * 0.26); ctx.lineTo(cx - w * 0.06, cy + w * 0.02); ctx.lineTo(cx - w * 0.17, cy + w * 0.02); ctx.closePath(); ctx.fill(); ctx.lineWidth = 2.4; ctx.stroke();
     ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.fillRect(cx - w * 0.04, cy - w * 0.08, 3, w * 0.28);
 }
+
+// ---------- Escalinata de la Casa Gran (fons de 1140x640): a partir de les fotos de l'Home del Raïm real ----------
+// Una volta d'arc rebaixat amb nervis i un balcó amb dues columnes estriades de capitell corinti; a l'esquerra, l'escala de pedra
+// que puja amb la seva barana massissa; a la dreta, un mur de carreus amb una porta oberta a la claror; al mig, el paviment de lloses.
+function pintarEscalinata(ctx, w, h) {
+    ctx.lineJoin = 'round';
+    const r = rndBib(77);
+    const cx = 570, rx = 250;
+    carreusErmita(ctx, 0, 0, w, h, 901, [158, 138, 108], 32);
+
+    // Volta: un arc gran, fosc per dins, amb dovelles, nervis i una claror que entra per dalt
+    const arc = () => { ctx.beginPath(); ctx.moveTo(cx - rx, 344); ctx.lineTo(cx - rx, 150); ctx.ellipse(cx, 150, rx, 150, 0, Math.PI, 0); ctx.lineTo(cx + rx, 344); ctx.closePath(); };
+    ctx.fillStyle = gradVBib(ctx, 0, 344, [[0, '#0d0907'], [0.5, '#2a1f15'], [1, '#4a3a28']]); arc(); ctx.fill();
+    ctx.save(); arc(); ctx.clip();
+    const lluna = ctx.createRadialGradient(cx + 40, 0, 10, cx + 40, 0, 200); lluna.addColorStop(0, 'rgba(255,248,220,0.6)'); lluna.addColorStop(1, 'rgba(255,248,220,0)');
+    ctx.fillStyle = lluna; ctx.fillRect(cx - rx, 0, rx * 2, 344);
+    ctx.strokeStyle = '#6b5c44'; ctx.lineWidth = 6;                                          // nervis de la volta
+    ctx.beginPath(); ctx.moveTo(cx - rx + 8, 170); ctx.quadraticCurveTo(cx - 70, 30, cx, 12); ctx.quadraticCurveTo(cx + 70, 30, cx + rx - 8, 170); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx - 60, 176); ctx.quadraticCurveTo(cx - 36, 70, cx, 12); ctx.moveTo(cx + 60, 176); ctx.quadraticCurveTo(cx + 36, 70, cx, 12); ctx.stroke();
+    [[cx - 168, 70], [cx + 134, 70]].forEach(([x, y]) => {                                  // dues espitlleres fosques
+        ctx.fillStyle = '#0a0705'; ctx.fillRect(x, y, 34, 66); ctx.strokeStyle = '#8a7e66'; ctx.lineWidth = 4; ctx.strokeRect(x, y, 34, 66);
+    });
+    ctx.restore();
+    ctx.strokeStyle = '#d2c7a8'; ctx.lineWidth = 20; arc(); ctx.stroke();                    // anell de dovelles
+    ctx.strokeStyle = CASA_C; ctx.lineWidth = 1.6; arc(); ctx.stroke();
+    for (let k = 0; k <= 16; k++) {
+        const a = Math.PI + k / 16 * Math.PI, c = Math.cos(a), s = Math.sin(a);
+        ctx.beginPath(); ctx.moveTo(cx + c * (rx - 10), 150 + s * 140); ctx.lineTo(cx + c * (rx + 10), 150 + s * 160); ctx.stroke();
+    }
+
+    // Dues columnes estriades amb capitell, sobre el balcó
+    [cx - 60, cx + 60].forEach(x => {
+        ctx.fillStyle = gradHBib(ctx, x - 12, x + 12, [[0, '#cfc6ae'], [0.45, '#f0e9d4'], [1, '#a99f86']]); ctx.fillRect(x - 12, 66, 24, 120);
+        ctx.strokeStyle = CASA_C; ctx.lineWidth = 1.6; ctx.strokeRect(x - 12, 66, 24, 120);
+        ctx.strokeStyle = 'rgba(110,98,76,0.55)'; ctx.lineWidth = 1.2;
+        [-6, 0, 6].forEach(d => { ctx.beginPath(); ctx.moveTo(x + d, 70); ctx.lineTo(x + d, 182); ctx.stroke(); });
+        ctx.fillStyle = '#e4dcc4'; ctx.strokeStyle = CASA_C; ctx.lineWidth = 1.8;
+        ctx.beginPath(); ctx.moveTo(x - 12, 66); ctx.lineTo(x - 22, 40); ctx.lineTo(x + 22, 40); ctx.lineTo(x + 12, 66); ctx.closePath(); ctx.fill(); ctx.stroke();           // capitell
+        ctx.fillStyle = '#cfc6ae'; ctx.fillRect(x - 25, 32, 50, 10); ctx.strokeRect(x - 25, 32, 50, 10);
+        [-18, 18].forEach(d => { ctx.fillStyle = '#d8cfb6'; ctx.beginPath(); ctx.arc(x + d, 52, 6, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });                          // volutes
+    });
+    // Balcó: llosa clara, barana amb plafons i mènsules
+    ctx.fillStyle = '#ddd3b8'; ctx.fillRect(cx - 200, 178, 400, 26); ctx.strokeStyle = CASA_C; ctx.lineWidth = 2; ctx.strokeRect(cx - 200, 178, 400, 26);
+    ctx.fillStyle = '#bdb296'; ctx.fillRect(cx - 190, 204, 380, 40); ctx.strokeRect(cx - 190, 204, 380, 40);
+    for (let i = 0; i < 5; i++) { ctx.fillStyle = '#a89d83'; ctx.fillRect(cx - 176 + i * 74, 212, 56, 24); ctx.strokeStyle = 'rgba(20,10,4,0.6)'; ctx.lineWidth = 1.4; ctx.strokeRect(cx - 176 + i * 74, 212, 56, 24); }
+    [cx - 190, cx - 60, cx + 60, cx + 190 - 32].forEach(x => { ctx.fillStyle = '#cfc4a8'; ctx.beginPath(); ctx.moveTo(x, 244); ctx.lineTo(x + 32, 244); ctx.lineTo(x + 24, 272); ctx.lineTo(x + 8, 272); ctx.closePath(); ctx.fill(); ctx.strokeStyle = CASA_C; ctx.lineWidth = 1.6; ctx.stroke(); });
+    ctx.fillStyle = gradVBib(ctx, 244, 300, [[0, 'rgba(0,0,0,0.5)'], [1, 'rgba(0,0,0,0)']]); ctx.fillRect(cx - 190, 244, 380, 56);
+
+    // Escala de pedra de l'esquerra (puja cap al nord) amb la barana massissa
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 190, 322, 450); ctx.clip();
+    ctx.fillStyle = '#6f624c'; ctx.fillRect(0, 190, 322, 450);
+    for (let i = 0; i < 9; i++) {
+        const y = 640 - (i + 1) * 50, f = 1 - i * 0.045;
+        ctx.fillStyle = `rgb(${Math.round(207 * f)},${Math.round(195 * f)},${Math.round(164 * f)})`; ctx.fillRect(0, y, 322, 32);
+        ctx.fillStyle = `rgb(${Math.round(141 * f)},${Math.round(127 * f)},${Math.round(102 * f)})`; ctx.fillRect(0, y + 32, 322, 18);
+        ctx.fillStyle = 'rgba(255,248,224,0.35)'; ctx.fillRect(0, y, 322, 3);
+        ctx.strokeStyle = 'rgba(25,16,8,0.6)'; ctx.lineWidth = 1.6; ctx.strokeRect(0, y, 322, 50);
+        for (let k = 0; k < 3; k++) { ctx.fillStyle = 'rgba(20,12,6,0.18)'; ctx.fillRect(r() * 300, y + 8 + r() * 18, 14 + r() * 20, 3); }                        // picats de la pedra
+    }
+    ctx.fillStyle = gradVBib(ctx, 190, 290, [[0, 'rgba(10,6,3,0.9)'], [1, 'rgba(10,6,3,0)']]); ctx.fillRect(0, 190, 322, 100);                                // la volta fa ombra
+    ctx.restore();
+    ctx.fillStyle = '#a89c80'; ctx.fillRect(310, 196, 26, 444); ctx.strokeStyle = CASA_C; ctx.lineWidth = 2; ctx.strokeRect(310, 196, 26, 444);                // barana
+    ctx.fillStyle = 'rgba(255,248,224,0.4)'; ctx.fillRect(312, 198, 4, 440);
+    ctx.strokeStyle = 'rgba(25,16,8,0.5)'; ctx.lineWidth = 1.4; for (let y = 240; y < 640; y += 48) { ctx.beginPath(); ctx.moveTo(310, y); ctx.lineTo(336, y); ctx.stroke(); }
+    ctx.fillStyle = '#c9bf9f'; ctx.fillRect(306, 190, 34, 10); ctx.strokeStyle = CASA_C; ctx.strokeRect(306, 190, 34, 10);
+
+    // Mur de carreus de la dreta amb una porta oberta a la claror
+    carreusErmita(ctx, 830, 190, 310, 450, 311, [122, 106, 84], 30);
+    ctx.fillStyle = gradVBib(ctx, 190, 290, [[0, 'rgba(10,6,3,0.9)'], [1, 'rgba(10,6,3,0)']]); ctx.fillRect(830, 190, 310, 100);
+    const pX = 930, pY = 372, pW = 100, pH = 230;
+    const porta = () => { ctx.beginPath(); ctx.moveTo(pX, pY + pH); ctx.lineTo(pX, pY + pW / 2); ctx.arc(pX + pW / 2, pY + pW / 2, pW / 2, Math.PI, 0); ctx.lineTo(pX + pW, pY + pH); ctx.closePath(); };
+    ctx.strokeStyle = '#cdbf9c'; ctx.lineWidth = 14; porta(); ctx.stroke();
+    ctx.fillStyle = gradVBib(ctx, pY, pY + pH, [[0, '#fff6d8'], [1, '#e2c887']]); porta(); ctx.fill();
+    ctx.strokeStyle = CASA_C; ctx.lineWidth = 2; porta(); ctx.stroke();
+    ctx.fillStyle = '#6a5d48'; ctx.fillRect(830, 620, 310, 20); ctx.strokeRect(830, 620, 310, 20);
+    ctx.fillStyle = gradHBib(ctx, 830, 880, [[0, 'rgba(0,0,0,0.5)'], [1, 'rgba(0,0,0,0)']]); ctx.fillRect(830, 190, 50, 450);
+
+    // Terra de lloses grans i el seu llindar de paret
+    ctx.save(); ctx.beginPath(); ctx.rect(336, 344, 494, 296); ctx.clip();
+    ctx.fillStyle = '#a89d86'; ctx.fillRect(336, 344, 494, 296);
+    for (let fila = 0, y = 358; y < 640; fila++, y += 60) {
+        for (let x = 336 - (fila % 2) * 60; x < 830; x += 120) {
+            const t = 0.9 + r() * 0.2;
+            ctx.fillStyle = `rgb(${Math.round(176 * t)},${Math.round(165 * t)},${Math.round(138 * t)})`; ctx.fillRect(x + 1.5, y + 1.5, 117, 57);
+            ctx.fillStyle = 'rgba(255,248,224,0.16)'; ctx.fillRect(x + 4, y + 3, 110, 2.6);
+            ctx.strokeStyle = 'rgba(25,16,8,0.55)'; ctx.lineWidth = 1.5; ctx.strokeRect(x + 1.5, y + 1.5, 117, 57);
+        }
+    }
+    const llum = ctx.createRadialGradient(cx, 470, 20, cx, 470, 230); llum.addColorStop(0, 'rgba(255,246,214,0.3)'); llum.addColorStop(1, 'rgba(255,246,214,0)');
+    ctx.fillStyle = llum; ctx.fillRect(336, 344, 494, 296);
+    ctx.fillStyle = gradVBib(ctx, 344, 430, [[0, 'rgba(10,6,3,0.55)'], [1, 'rgba(10,6,3,0)']]); ctx.fillRect(336, 344, 494, 86);
+    ctx.fillStyle = gradHBib(ctx, 336, 400, [[0, 'rgba(10,6,3,0.4)'], [1, 'rgba(10,6,3,0)']]); ctx.fillRect(336, 344, 64, 296);
+    ctx.fillStyle = gradHBib(ctx, 780, 830, [[0, 'rgba(10,6,3,0)'], [1, 'rgba(10,6,3,0.4)']]); ctx.fillRect(780, 344, 50, 296);
+    ctx.fillStyle = 'rgba(255,240,190,0.18)'; ctx.beginPath(); ctx.moveTo(830, 560); ctx.lineTo(830, 640); ctx.lineTo(640, 640); ctx.lineTo(720, 560); ctx.closePath(); ctx.fill();   // claror de la porta
+    ctx.restore();
+    ctx.fillStyle = '#6a5d48'; ctx.fillRect(320, 330, 510, 14); ctx.strokeStyle = CASA_C; ctx.lineWidth = 1.6; ctx.strokeRect(320, 330, 510, 14);
+
+    // El terra del mig es fon amb el de la sala de sota
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = gradVBib(ctx, 592, 640, [[0, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,1)']]); ctx.fillRect(336, 592, 494, 48);
+    ctx.globalCompositeOperation = 'source-over';
+}

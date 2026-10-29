@@ -1,7 +1,7 @@
 /**
  * LA CEL·LA DE SANT ANTONI (interior)
  * Una cel·la de monjo, buida però ben cuidada: llar de foc amb olla penjada, llit amb manta de llana, taula amb cadires, finestra amb porticons,
- * prestatge, creu i hàbit penjat de la paret, cofre i estora. Ningú no hi viu ara (han baixat a ajudar a buscar els nens): és un lloc per mirar.
+ * prestatge, creu i hàbit penjat de la paret i estora. Ningú no hi viu ara (han baixat a ajudar a buscar els nens): és un lloc per mirar.
  */
 
 class ZonaCelaStAntoni extends ZonaBase {
@@ -40,11 +40,9 @@ class ZonaCelaStAntoni extends ZonaBase {
         this.add.image(548, 44, 'prestatge_cela').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-985);
         this.add.image(676, 40, 'habit_cela').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-985);
 
-        // El llit contra la paret de l'esquerra, amb un cofre als peus
+        // El llit contra la paret de l'esquerra
         this.add.image(112, 414, 'llit_cela').setOrigin(0.5, 1).setScale(1.15 / RES).setDepth(414);
         this.colisio(112, 322, 130, 190);
-        this.add.image(112, 492, 'cofre_cela').setOrigin(0.5, 1).setScale(1.1 / RES).setDepth(492);
-        this.colisio(112, 482, 96, 22);
 
         // Taula amb dues cadires, a la dreta
         this.add.image(560, 406, 'taula_cela').setOrigin(0.5, 1).setScale(1.3 / RES).setDepth(406);

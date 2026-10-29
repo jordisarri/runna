@@ -34,7 +34,7 @@ class ZonaMonestirRebedor extends ZonaBase {
         marc.lineStyle(3, 0x120a04, 1); forma(82); marc.strokePath(); forma(66); marc.strokePath();
         marc.fillStyle(0xcdbd9c, 1).fillRect(CX - 96, 206, 192, 10).lineStyle(2, 0x120a04, 1).strokeRect(CX - 96, 206, 192, 10);    // llinda de pedra al terra
         this.portaAnimada({ x: CX, top: 60, bottom: 212, ample: 120, arc: true, fons: -991, color: 0x6a4328, panell: 0x7a5233, vora: 0x2a1608, ferro: true });
-        this.sortida(CX - 60, 222, 120, 30, 'ZonaBiblioteca', 'porta');
+        this.sortida(CX - 60, 222, 120, 14, 'ZonaBiblioteca', 'porta');      // just al peu del portal (el buit real): s'hi entra en tocar-lo, no abans
 
         // Vitralls a banda i banda i els seus feixos de llum
         [250, 850].forEach((cx, i) => {

@@ -48,14 +48,14 @@ function completarLliço(nom) {
             { qui: 'La Pianista', text: 'Això mateix, fill! El Cant del Miracle. Els ocells el cantaven a l\'alba, abans que l\'Ocellaire se\'l quedés i el tanqués a la seva gàbia.' },
             { qui: 'La Pianista', text: 'Diu la meva mare que aquella gàbia només s\'obre amb el cant que li van robar. Si els nens hi són a dins, toca\'l davant els barrots i no tindran més remei que obrir-se.' }
         ];
-        E.posaObjectiu(!E.flag('josepVencut') ? 'Ves al Celler (entre la Plaça i les Runes) i guanya en Josep a ping-pong: allà els secrets es guanyen a la taula.'
+        E.posaObjectiu(!E.flag('josepVencut') ? 'Ves al Celler (entre la Plaça i les Runes) i guanya en Jusef a ping-pong: allà els secrets es guanyen a la taula.'
             : !E.flag('rodaMoguda') ? 'Empeny amb els Guants la roda de carruatge del Celler: amaga el túnel dels monjos.' : 'Segueix el túnel dels monjos fins a la Casa Gran.');
     }
     if (ui) ui.obrirDialeg({ pagines }, () => E.desar());
 }
 
 // Mides del pergamí de la flauta (a baix de la pantalla; el joc es continua veient a sobre)
-const MUS_W = 680, MUS_H = 370, MUS_T = ALT - 385;
+const MUS_W = 680, MUS_H = 440, MUS_T = ALT - 455;
 
 class EscenaMusica extends Phaser.Scene {
     constructor() { super('Musica'); }
@@ -93,7 +93,8 @@ class EscenaMusica extends Phaser.Scene {
         this.estat = add(this.add.text(cx, T + 86, '', { ...llibre, fontSize: '25px', fontStyle: 'italic', color: '#3a2412', align: 'center', wordWrap: { width: 580 } }).setOrigin(0.5));
 
         // Fila de notes (es van omplint amb el color de cada nota)
-        const nSlots = llico ? this.melodia.notes.length : 5;
+        // En mode lliure, tantes caselles com notes té el cant més llarg que coneixes (3 si encara no en coneixes cap: només hi ha tres notes)
+        const nSlots = llico ? this.melodia.notes.length : Math.max(3, ...Object.values(MELODIES).filter(m => Estat.flag(m.flag)).map(m => m.notes.length));
         this.slots = [];
         for (let i = 0; i < nSlots; i++) {
             const x = cx + (i - (nSlots - 1) / 2) * 44, y = T + 128;
@@ -123,7 +124,7 @@ class EscenaMusica extends Phaser.Scene {
             add(this.add.circle(x, by, 46).setStrokeStyle(3, 0x000000, 0.35));
             add(this.add.ellipse(x - 14, by - 20, 26, 14, 0xffffff, 0.35));                                           // reflex
             add(this.add.text(x, by + 2, String(n), { fontFamily: FONT_TITOL, fontSize: '40px', fontStyle: 'bold', color: '#ffffff', stroke: '#2a1608', strokeThickness: 6, resolution: 2 }).setOrigin(0.5));
-            add(this.add.text(x, by + 76, ['', '←', 'ESPAI', '→'][n], { ...llibre, fontSize: '20px', color: '#5a3a1a' }).setOrigin(0.5));
+            add(this.add.text(x, by + 74, ['', '←', 'ESPAI', '→'][n], { ...llibre, fontSize: '20px', color: '#5a3a1a' }).setOrigin(0.5));
             return { x, by, base, gemma, forat, halo };
         });
 
@@ -140,9 +141,9 @@ class EscenaMusica extends Phaser.Scene {
             this.titol.setText('La flauta d\'en Mamet');
             this.estat.setText('Toca les notes: 1, 2, 3 (o ← ESPAI →)');
             const sabudes = Object.values(MELODIES).filter(m => Estat.flag(m.flag));
-            add(this.add.text(cx, T + MUS_H - 38, sabudes.length
-                ? sabudes.map(m => `${m.nom}: ${m.notes.join('-')}`).join('   ·   ')
-                : 'Encara no coneixes cap cant.', { ...llibre, fontSize: '19px', fontStyle: 'italic', color: '#6a4a28', align: 'center', wordWrap: { width: 600 } }).setOrigin(0.5));
+            // Els cants que coneixes, un per línia (en una sola línia s'enrotllaven i es trepitjaven amb les etiquetes dels botons)
+            const llista = sabudes.length ? sabudes.map(m => `${m.nom}: ${m.notes.join('-')}`) : ['Encara no coneixes cap cant.'];
+            llista.forEach((t, i) => add(this.add.text(cx, T + 356 + i * 26, t, { ...llibre, fontSize: '20px', fontStyle: 'italic', color: '#6a4a28', align: 'center' }).setOrigin(0.5)));
             add(this.add.text(cx + MUS_W / 2 - 34, T + 40, '✕', { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#6a1f12', padding: { x: 8, y: 4 }, resolution: 2 })
                 .setOrigin(0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => this.tancar(false)));
             this.lastTime = 0;

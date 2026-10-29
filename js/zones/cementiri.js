@@ -33,8 +33,8 @@ class ZonaCementiri extends ZonaBase {
         // Amb Runna a la mà, ESPAI ja no llegeix la làpida: colpeja (i segella) la tomba
         this.interactiu(700, 480, 130, DIALEGS.tombaMonjos, { altura: 150, actiu: () => !Estat.te('runna') || Estat.flag('tombaSegellada') });
         if (!tancada) {
-            this.boiraTomba = this.boira(712, 360, 90, 40, 1.6);
-            this.llumTomba = this.add.circle(712, 380, 120, 0xa070ff, 0.10).setDepth(390);
+            this.boiraTomba = this.boira(700, 345, 70, 40, 1.6);
+            this.llumTomba = this.add.circle(700, 400, 120, 0xa070ff, 0.10).setDepth(390);
         }
         this.fanalet(585, 500); this.fanalet(818, 500);
 
@@ -90,7 +90,7 @@ class ZonaCementiri extends ZonaBase {
 
         this.sortida(0, 520, 14, 130, 'ZonaRuines', 'cementiri');
         this.sortida(1010, 1086, 150, 14, 'ZonaMonestir', 'cementiri');
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x201040, 0.14).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x201040, 0.14).setScrollFactor(0).setDepth(90000);
     }
 
     // Fanalet de tomba amb la flama que tremola
@@ -109,7 +109,7 @@ class ZonaCementiri extends ZonaBase {
         Sfx.secret();
         this.cameras.main.shake(600, 0.004);
         const esq = this.add.graphics().setDepth(this.tomba.depth + 1).setBlendMode('ADD');
-        esq.lineStyle(6, 0xcfe0ff, 1).beginPath(); esq.moveTo(650, 420); esq.lineTo(690, 432); esq.lineTo(705, 418); esq.lineTo(745, 430); esq.strokePath();
+        esq.lineStyle(6, 0xcfe0ff, 1).beginPath(); esq.moveTo(700, 345); esq.lineTo(710, 372); esq.lineTo(692, 396); esq.lineTo(708, 422); esq.lineTo(699, 456); esq.strokePath();
         esq.setAlpha(0);
         this.tweens.add({ targets: esq, alpha: 1, duration: 300, yoyo: true, hold: 500, onComplete: () => esq.destroy() });
         this.llum(700, 410, 0xd8e8ff);

@@ -1,11 +1,11 @@
 /**
- * EL CELLER: el partit de ping-pong contra en Josep (un sol partit, obligatori: el Frederic no parla de la roda fins que el guanyes)
- * Vista des de darrere de l'Ineu: la taula en perspectiva, en Josep a l'altra banda.
+ * EL CELLER: el partit de ping-pong contra en Jusef (un sol partit, obligatori: el Senyor Perers no parla de la roda fins que el guanyes)
+ * Vista des de darrere de l'Ineu: la taula en perspectiva, en Jusef a l'altra banda.
  * - Cops: la pilota ve per un dels tres carrils (esquerra, centre, dreta). Un cercle es fa petit fins a l'anell del carril:
  *   quan el toca (és el moment en què la pilota, després del bot a la taula, arriba al punt més alt), prem el carril bo (← ↓ →, A S D,
  *   o el botó de sota). Hi ha un marge ampli abans i després: perfecte = cop fort; bé = cop normal. Només el carril de la pilota
  *   la toca: un altre carril fa que l'Ineu hi vagi i faci el gest en fals (un instant d'espera). Només perds el punt si no hi arribes.
- * - Servei màgic d'en Josep: mostra tres carrils amb calma; repeteix-los en ordre per tornar-lo (hi ha dos intents).
+ * - Servei màgic d'en Jusef: mostra tres carrils amb calma; repeteix-los en ordre per tornar-lo (hi ha dos intents).
  * - El teu servei: prem el carril des d'on vols servir (la pilota hi surt d'aquell carril).
  * - Set punts; a 6-6, cal guanyar de dos. Es canvia de servei cada dos punts.
  */
@@ -16,7 +16,7 @@ const PP = {
     // Càmera de perspectiva (pinhole) darrere l'Ineu, mirant la taula: x = 360 + F·X/Z, y = HY + (K − F·alçada)/Z (X, Z i alçada en metres)
     F: 1236, HY: -414, K: 4299, ZN: 3.04, L: 2.74, AMPLE_TAULA: 0.7625,
     LANE: [-0.5, 0, 0.5],                    // X (m) del centre de cada carril
-    FA: 0.94, FB: 0.68,                      // posició (0 fons d'en Josep, 1 vora de l'Ineu) on la pilota fa l'ALÇADA MÀXIMA després del bot (el moment del cop) i on bota
+    FA: 0.94, FB: 0.68,                      // posició (0 fons d'en Jusef, 1 vora de l'Ineu) on la pilota fa l'ALÇADA MÀXIMA després del bot (el moment del cop) i on bota
     PERFECTE: 150, BE: 330
 };
 PP.ZF = PP.ZN + PP.L;
@@ -75,16 +75,31 @@ class EscenaPingPong extends Phaser.Scene {
         [[-1, a1, b1], [1, a2, b2]].forEach(([sg, a, b]) => { t.lineStyle(7, 0x2a2a2e, 1).lineBetween(a.x + sg * 8, a.y, b.x + sg * 8, b.y - 8); });
 
         // ---- Jugadors ----
-        // En Josep levita, cames creuades, darrere la taula; la pala és a la seva mà
+        // En Jusef levita, cames creuades, darrere la taula; la pala és a la seva mà
         this.spJosep = this.add.image(360, PP.fonsY - 14, 'josep_levita').setOrigin(0.5, 1).setDepth(1);
         this.spJosep.setScale(300 / this.spJosep.height);                 // gran: ocupa tot el fons de dalt, el marcador és a un costat
         this.josepY = this.spJosep.y;
+        this.jo = { x: 0, y: 0, angle: 0 };               // el que hi afegeixen els cops (el flotar continu s'hi suma a update)
+        // Aura lila darrere seu, ombra a la taula i espurnes que pugen: es veu que no toca res
+        this.auraJosep = this.add.ellipse(360, this.josepY - 150, 300, 330, 0xb890ff, 0.14).setDepth(0.6);
+        this.ombraJosep = this.add.ellipse(360, PP.fonsY + 4, 190, 26, 0x000000, 0.35).setDepth(0.8);
+        if (this.textures.exists('espurna')) {
+            this.add.particles(360, this.josepY - 6, 'espurna', {
+                x: { min: -80, max: 80 }, speedY: { min: 14, max: 36 }, speedX: { min: -8, max: 8 }, lifespan: 1300,
+                scale: { start: 0.35, end: 0 }, alpha: { start: 0.8, end: 0 }, tint: [0xd8b0ff, 0xffe08a, 0xffffff], frequency: 140, quantity: 1
+            }).setDepth(0.9);
+        }
         this.reposJosep();
         const ineuTex = this.textures.exists('ineu_up') ? 'ineu_up' : 'ineu_avall';
-        this.spIneu = this.add.sprite(360, ALT_PP - 100, ineuTex, 0).setOrigin(0.5, 1).setDepth(5);
-        this.spIneu.setScale(((this.textures.get(ineuTex).customData || {}).escala || 0.5) * 1.6);
+        // Gran i només de cintura en amunt: el full és de 256 de costat i el personatge puja fins a ~y16; es retalla per sota de la cintura (~y150)
+        this.spIneu = this.add.sprite(360, 0, ineuTex, 0).setOrigin(0.5, 1).setDepth(5);
+        this.escIneu = ((this.textures.get(ineuTex).customData || {}).escala || 0.5) * 3.4;
+        this.spIneu.setScale(this.escIneu).setCrop(0, 0, this.spIneu.width, 150);
+        this.spIneu.y = 1215 + (this.spIneu.height - 150) * this.escIneu;           // el tall de la cintura queda just damunt dels botons
+        this.ombroIneu = this.spIneu.y - (this.spIneu.height - 85) * this.escIneu;  // alçada de l'espatlla (y85 del full)
         // La pala a la mà de l'Ineu: gira cap al carril on colpeja. El pivot és la mà (el mànec cap avall).
-        this.pala = this.add.container(360 + 46, ALT_PP - 150).setDepth(4.5).setAngle(20);      // darrere del cos de l'Ineu: només en surt la part que el seu cos no tapa
+        this.palaDx = 62;
+        this.pala = this.add.container(360 + this.palaDx, this.ombroIneu + 100).setDepth(4.5).setAngle(20).setScale(1.35);      // darrere del cos de l'Ineu: només en surt la part que el seu cos no tapa
         const gp = this.add.graphics();
         gp.fillStyle(0x5a3a1e, 1).fillRoundedRect(-4, -34, 8, 40, 3).lineStyle(2, 0x1a0e06, 1).strokeRoundedRect(-4, -34, 8, 40, 3);
         gp.fillStyle(0x8a1a1a, 1).fillEllipse(0, -62, 52, 62).lineStyle(3, 0x1a0e06, 1).strokeEllipse(0, -62, 52, 62);
@@ -99,10 +114,10 @@ class EscenaPingPong extends Phaser.Scene {
 
         // ---- Pilota amb ombra ----
         this.ombra = this.add.ellipse(0, 0, 22, 8, 0x000000, 0.35).setDepth(0.5).setVisible(false);
-        this.pilota = this.add.circle(0, 0, 10, 0xfff6e0, 1).setStrokeStyle(2, 0xd8c8a0).setDepth(16).setVisible(false);       // sempre per davant d'en Josep (i dels seus braços)
+        this.pilota = this.add.circle(0, 0, 10, 0xfff6e0, 1).setStrokeStyle(2, 0xd8c8a0).setDepth(16).setVisible(false);       // sempre per davant d'en Jusef (i dels seus braços)
 
         // ---- Marcador, missatges i servei màgic ----
-        this.add.rectangle(100, 64, 184, 104, 0x1a120b, 0.85).setStrokeStyle(3, 0xd4af37);          // el marcador és a l'esquerra: en Josep queda lliure al mig
+        this.add.rectangle(100, 64, 184, 104, 0x1a120b, 0.85).setStrokeStyle(3, 0xd4af37);          // el marcador és a l'esquerra: en Jusef queda lliure al mig
         this.marcador = this.add.text(100, 46, '', estilText(30, '#f2e6c8', { fontStyle: 'bold', align: 'center', lineSpacing: 4 })).setOrigin(0.5);
         this.servei = this.add.text(100, 96, '', estilText(17, '#d8c8a0', { fontStyle: 'italic' })).setOrigin(0.5);
         this.missatge = this.add.text(AMPLE / 2, 470, '', estilText(30, '#ffd34d', { fontStyle: 'bold', align: 'center', stroke: '#1a120b', strokeThickness: 6, wordWrap: { width: 640 } })).setOrigin(0.5).setDepth(20);
@@ -128,7 +143,7 @@ class EscenaPingPong extends Phaser.Scene {
 
         this.creaIconesCarril();
         this.actualitzarMarcador();
-        this.avis('En Josep contra l\'Ineu\nA set punts', 1600);
+        this.avis('En Jusef contra l\'Ineu\nA set punts', 1600);
         this.time.delayedCall(1800, () => this.seguentPunt());
     }
 
@@ -185,34 +200,33 @@ class EscenaPingPong extends Phaser.Scene {
         this.tweens.add({ targets: s.ic, scale: { from: s.ic.scale * 1.5, to: s.ic.scale }, duration: 260, ease: 'Back.easeOut' });
     }
 
-    // ---------------- En Josep: sura amunt i avall; als cops s'inclina cap al carril ----------------
+    // ---------------- En Jusef: sura amunt i avall; als cops s'inclina cap al carril ----------------
     // On és la pala (al dibuix, a la seva mà dreta): d'allà surten els orbes
     puntPala() { const sj = this.spJosep; return { x: sj.x + (0.885 - 0.5) * sj.displayWidth, y: sj.y - (1 - 0.575) * sj.displayHeight }; }
     reposJosep() {
         const sj = this.spJosep;
-        this.tweens.killTweensOf(sj);
-        this.tweens.add({ targets: sj, angle: 0, x: 360, duration: 220, ease: 'Sine.easeOut' });
-        this.tweens.add({ targets: sj, y: this.josepY - 8, yoyo: true, repeat: -1, duration: 1400, ease: 'Sine.easeInOut' });
+        this.tweens.killTweensOf(this.jo);
+        this.tweens.add({ targets: this.jo, angle: 0, x: 0, y: 0, duration: 260, ease: 'Sine.easeOut' });
     }
-    // Servei màgic: en Josep s'eleva una mica més, com si llancés l'orbe
+    // Servei màgic: en Jusef s'eleva una mica més, com si llancés l'orbe
     copJosepMagic(c) {
-        const sj = this.spJosep;
+        const sj = this.jo;
         this.tweens.killTweensOf(sj);
-        this.tweens.add({ targets: sj, y: this.josepY - 22, angle: (c - 1) * 5, duration: 170, ease: 'Sine.easeOut',
-            onComplete: () => this.tweens.add({ targets: sj, y: this.josepY - 6, duration: 160, ease: 'Quad.easeIn',
+        this.tweens.add({ targets: sj, y: -16, angle: (c - 1) * 5, duration: 170, ease: 'Sine.easeOut',
+            onComplete: () => this.tweens.add({ targets: sj, y: -2, duration: 160, ease: 'Quad.easeIn',
                 onComplete: () => this.time.delayedCall(200, () => this.reposJosep()) }) });
     }
-    // Cop d'en Josep: s'inclina i es desplaça cap al carril c i torna al repòs (el contacte és als ~220 ms)
+    // Cop d'en Jusef: s'inclina i es desplaça cap al carril c i torna al repòs (el contacte és als ~220 ms)
     cop_josep(c) {
-        const sj = this.spJosep;
+        const sj = this.jo;
         this.tweens.killTweensOf(sj);
         this.tweens.add({ targets: sj, angle: -4, duration: 120, ease: 'Sine.easeOut',
-            onComplete: () => this.tweens.add({ targets: sj, angle: (c - 1) * 9, x: 360 + (c - 1) * 26, duration: 100, ease: 'Quad.easeIn',
+            onComplete: () => this.tweens.add({ targets: sj, angle: (c - 1) * 9, x: (c - 1) * 26, duration: 100, ease: 'Quad.easeIn',
                 onComplete: () => this.time.delayedCall(220, () => this.reposJosep()) }) });
     }
 
     // ---------------- Perspectiva ----------------
-    // f: 0 vora d'en Josep, 1 vora de l'Ineu (es compta en metres de taula); X: metres a banda i banda del centre; h: alçada sobre la taula
+    // f: 0 vora d'en Jusef, 1 vora de l'Ineu (es compta en metres de taula); X: metres a banda i banda del centre; h: alçada sobre la taula
     proj(X, f, h = 0) { const Z = PP.ZF - f * PP.L; return { x: 360 + PP.F * X / Z, y: PP.HY + (PP.K - PP.F * h) / Z, k: PP.F / Z }; }
     // Col·loca la pilota (i la seva ombra sobre la taula) amb la mida que toca pel seu lloc en la perspectiva
     posaPilota(X, f, h, alfa = 1) {
@@ -220,7 +234,7 @@ class EscenaPingPong extends Phaser.Scene {
         this.pilota.setVisible(true).setPosition(p.x, p.y).setScale(p.k * 0.05 / 10).setAlpha(alfa);
         this.ombra.setVisible(true).setPosition(g.x, g.y).setScale(p.k * 0.07 / 11 * (1 - Math.min(0.5, h * 0.6)), p.k * 0.07 / 11 * 0.45).setAlpha(alfa * (h > -0.02 ? 1 : 0.2));
     }
-    // Pilota que ve cap a l'Ineu pel carril c: baixa des d'en Josep, BOTA a la taula (FB) i s'enlaira fins a l'alçada màxima (FA), que és el moment del cop
+    // Pilota que ve cap a l'Ineu pel carril c: baixa des d'en Jusef, BOTA a la taula (FB) i s'enlaira fins a l'alçada màxima (FA), que és el moment del cop
     pilotaEntrant(c, t, tA) {
         const tb = tA * PP.FB / PP.FA, fr = PP.FA * t / tA;
         let h;
@@ -228,7 +242,7 @@ class EscenaPingPong extends Phaser.Scene {
         else { const s2 = (t - tb) / (tA - tb); h = 0.30 * (2 * s2 - s2 * s2); }
         return { X: PP.LANE[c] * (0.3 + 0.7 * Math.min(fr / PP.FA, 1.4)), f: fr, h };
     }
-    // Pilota que torna cap a en Josep, des del carril c: passa per damunt la xarxa, bota a la meitat d'en Josep i hi arriba
+    // Pilota que torna cap a en Jusef, des del carril c: passa per damunt la xarxa, bota a la meitat d'en Jusef i hi arriba
     pilotaTornant(c, u) {
         const fr = PP.FA - (PP.FA - 0.02) * u, ub = (PP.FA - 0.32) / (PP.FA - 0.02);
         let h;
@@ -241,7 +255,7 @@ class EscenaPingPong extends Phaser.Scene {
     serveixIneu() { return Math.floor((this.ineu + this.josep) / 2) % 2 === 0; }
     actualitzarMarcador() {
         this.marcador.setText(`Ineu  ${this.ineu}\nJosep  ${this.josep}`);
-        this.servei.setText(this.serveixIneu() ? 'Serveixes tu' : 'Serveix en Josep');
+        this.servei.setText(this.serveixIneu() ? 'Serveixes tu' : 'Serveix en Jusef');
     }
     avis(text, ms = 1100, color = '#ffd34d') {
         this.missatge.setText(text).setColor(color).setAlpha(1).setScale(1);
@@ -254,7 +268,7 @@ class EscenaPingPong extends Phaser.Scene {
         if (this.acabat) return;
         this.rally = 0;
         this.tweens.add({ targets: this.spIneu, x: 360, duration: 350, ease: 'Sine.easeInOut' });
-        this.tweens.add({ targets: this.pala, x: 360 + 46, duration: 350, ease: 'Sine.easeInOut' });
+        this.tweens.add({ targets: this.pala, x: 360 + this.palaDx, duration: 350, ease: 'Sine.easeInOut' });
         this.actualitzarMarcador();
         if (this.serveixIneu()) {
             this.estat = 'serveiIneu';
@@ -265,11 +279,11 @@ class EscenaPingPong extends Phaser.Scene {
         }
     }
 
-    // ---------------- Servei màgic d'en Josep: tres carrils que s'han de repetir ----------------
+    // ---------------- Servei màgic d'en Jusef: tres carrils que s'han de repetir ----------------
     serveiMagic() {
         this.intents = 2;
         this.ordre = Array.from({ length: 3 }, () => Phaser.Math.Between(0, 2));
-        this.avis('Servei màgic d\'en Josep: memoritza!', 1200, '#d8b0ff');
+        this.avis('Servei màgic d\'en Jusef: memoritza!', 1200, '#d8b0ff');
         this.mostrarOrdre(900);
     }
 
@@ -280,7 +294,7 @@ class EscenaPingPong extends Phaser.Scene {
         this.reiniciaSlots();
         const n = this.ordre.length, ms = Math.max(700, 940 - (this.ineu + this.josep) * 14);
         const COL = [0x6ac8ff, 0xffd34d, 0xff7ad8], { x: hx, y: hy } = this.puntPala();
-        // En Josep concentra la màgia: aura de fum lila i espurnes al voltant de les mans durant tot el servei
+        // En Jusef concentra la màgia: aura de fum lila i espurnes al voltant de les mans durant tot el servei
         this.time.delayedCall(Math.max(0, retard - 500), () => {
             if (this.acabat) return;
             this.auraFum = this.add.particles(hx, hy, 'boira', { speed: { min: 20, max: 60 }, angle: { min: 190, max: 350 }, lifespan: 1500, frequency: 50, quantity: 2,
@@ -290,7 +304,7 @@ class EscenaPingPong extends Phaser.Scene {
         });
         this.ordre.forEach((c, i) => this.time.delayedCall(retard + i * ms, () => {
             if (this.acabat) return;
-            // Gest d'en Josep: s'alça una mica i en surt un orbe màgic que vola fins al carril, deixant una cua de llum
+            // Gest d'en Jusef: s'alça una mica i en surt un orbe màgic que vola fins al carril, deixant una cua de llum
             this.copJosepMagic(c);
             this.so(3 + c);
             const orbe = this.add.container(hx, hy).setDepth(14);
@@ -375,7 +389,7 @@ class EscenaPingPong extends Phaser.Scene {
                 this.estat = 'res';
                 this.ocultaSlots(600);
                 this.avis('Servei màgic tornat!', 900, '#9fe0a0');
-                this.time.delayedCall(260, () => { this.cop(c, true); this.tornada(1, c); });      // la pilota màgica es veu sortir cap a en Josep, que la torna
+                this.time.delayedCall(260, () => { this.cop(c, true); this.tornada(1, c); });      // la pilota màgica es veu sortir cap a en Jusef, que la torna
             }
             return;
         }
@@ -396,20 +410,20 @@ class EscenaPingPong extends Phaser.Scene {
         this.tornada(perfecte ? 0.42 - this.rally * 0.06 : 0.86 - this.rally * 0.1, c);
     }
 
-    // La pilota se'n va cap a en Josep; ell la torna o no (prob = probabilitat que la torni)
+    // La pilota se'n va cap a en Jusef; ell la torna o no (prob = probabilitat que la torni)
     tornada(prob, c = Phaser.Math.Between(0, 2)) {                 // c: el carril des d'on l'Ineu ha colpejat: la pilota en surt
         this.estat = 'res';
         this.rally++;
         this.tornant = { t0: this.time.now, dur: 900, c };
         this.carrilSeguent = Phaser.Math.Between(0, 2);
-        this.time.delayedCall(690, () => { if (!this.acabat) this.cop_josep(this.carrilSeguent); });     // en Josep avança el braç perquè el cop coincideixi amb l'arribada de la pilota
+        this.time.delayedCall(690, () => { if (!this.acabat) this.cop_josep(this.carrilSeguent); });     // en Jusef avança el braç perquè el cop coincideixi amb l'arribada de la pilota
         this.time.delayedCall(940, () => {
             this.tornant = null;
             if (this.acabat) return;
             if (Math.random() < Math.max(0.15, prob)) { this.so(2); this.copEntrant(); }
-            else {                                                      // en Josep no la torna: la pilota se'n va per darrere seu
+            else {                                                      // en Jusef no la torna: la pilota se'n va per darrere seu
                 this.fugJosep = { t0: this.time.now, c };
-                this.time.delayedCall(850, () => { this.fugJosep = null; if (!this.acabat) this.puntIneu('En Josep no hi arriba!'); });
+                this.time.delayedCall(850, () => { this.fugJosep = null; if (!this.acabat) this.puntIneu('En Jusef no hi arriba!'); });
             }
         });
     }
@@ -421,7 +435,7 @@ class EscenaPingPong extends Phaser.Scene {
         this.tweens.add({ targets: this.spIneu, x, duration: 150, ease: 'Sine.easeOut' });
         const repos = 20, colp = c === 0 ? -75 : c === 2 ? 75 : -35;
         this.pala.setAngle(repos + (c === 0 ? 40 : c === 2 ? -40 : 0));
-        this.tweens.add({ targets: this.pala, x: x + 46, angle: colp, duration: 130, ease: 'Quad.easeOut',
+        this.tweens.add({ targets: this.pala, x: x + this.palaDx, angle: colp, duration: 130, ease: 'Quad.easeOut',
             onComplete: () => this.tweens.add({ targets: this.pala, angle: repos, duration: 260, ease: 'Sine.easeInOut' }) });
         if (encert) {
             this.impacte.setPosition(x, PP.copY).setVisible(true).setScale(0.6).setAlpha(1);
@@ -448,9 +462,15 @@ class EscenaPingPong extends Phaser.Scene {
     }
 
     update(time) {
+        // En Jusef flota sense parar: balanceig suau de pujar i baixar, una mica de costat i de gir; els cops s'hi sumen
+        const sj = this.spJosep, fy = -(12 + Math.sin(time / 820) * 9 + Math.sin(time / 1310) * 3), fx = Math.sin(time / 1500) * 6, fa = Math.sin(time / 1900) * 1.8;
+        sj.setPosition(360 + this.jo.x + fx, this.josepY + this.jo.y + fy).setAngle(this.jo.angle + fa);
+        const alt = (this.jo.y + fy) / -21;                                  // 0..1: com més amunt, més petita i clara l'ombra
+        this.ombraJosep.setPosition(360 + this.jo.x + fx, PP.fonsY + 4).setScale(1 - 0.25 * alt, 1 - 0.3 * alt).setAlpha(0.42 - 0.2 * alt);
+        this.auraJosep.setPosition(360 + this.jo.x + fx, this.josepY + this.jo.y + fy - 150).setAlpha(0.1 + 0.07 * Math.sin(time / 600));
         // Braç de l'Ineu: de l'espatlla a la pala (segueix el desplaçament i el gir de la pala)
-        const bi = this.bracIneu, sx = this.spIneu.x + 24, sy = this.spIneu.y - 120, hx = this.pala.x, hy = this.pala.y;
-        bi.clear().lineStyle(28, 0x140a04, 1).lineBetween(sx, sy, hx, hy).lineStyle(21, 0x6a4a2e, 1).lineBetween(sx, sy, hx, hy);
+        const bi = this.bracIneu, sx = this.spIneu.x + 40, sy = this.ombroIneu, hx = this.pala.x, hy = this.pala.y;
+        bi.clear().lineStyle(40, 0x140a04, 1).lineBetween(sx, sy, hx, hy).lineStyle(31, 0x6a4a2e, 1).lineBetween(sx, sy, hx, hy);
         // Pilota que ve: bota a la meitat de l'Ineu i s'enlaira; al punt més alt és el moment del cop
         if (this.estat === 'cop' && !this.respost) {
             const t = time - this.t0, f = t / this.durada;
@@ -477,7 +497,7 @@ class EscenaPingPong extends Phaser.Scene {
             const u = Phaser.Math.Clamp((time - this.tornant.t0) / this.tornant.dur, 0, 1), q = this.pilotaTornant(this.tornant.c, u);
             this.posaPilota(q.X, q.f, q.h);
         }
-        if (this.fugJosep) {                                       // en Josep no hi arriba: la pilota segueix cap al fons, baixa i s'esvaeix
+        if (this.fugJosep) {                                       // en Jusef no hi arriba: la pilota segueix cap al fons, baixa i s'esvaeix
             const u = Phaser.Math.Clamp((time - this.fugJosep.t0) / 850, 0, 1);
             const q = this.pilotaTornant(this.fugJosep.c, 1);
             this.posaPilota(q.X * (1 + 0.5 * u), q.f - 0.16 * u, q.h * (1 - u) - 0.5 * u * u, 1 - u * 0.9);
@@ -487,7 +507,7 @@ class EscenaPingPong extends Phaser.Scene {
     final(guanyat) {
         this.acabat = true;
         this.estat = 'res';
-        this.avis(guanyat ? 'Has guanyat en Josep!' : 'En Josep guanya el partit', 2400, guanyat ? '#9fe0a0' : '#ff9a8a');
+        this.avis(guanyat ? 'Has guanyat en Jusef!' : 'En Jusef guanya el partit', 2400, guanyat ? '#9fe0a0' : '#ff9a8a');
         if (guanyat) [1, 3, 5].forEach((n, i) => this.time.delayedCall(i * 220, () => this.so(n)));
         this.time.delayedCall(2600, () => this.tancar(guanyat));
     }

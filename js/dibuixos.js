@@ -3497,22 +3497,55 @@ function pintarTombaMonjos(ctx, W, H, oberta = true) {
     const cxT = (x0 + x1) / 2 + 4, cyT = yt - fons / 2;
     ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.fillRect(cxT - 40, cyT - 3, 80, 6); ctx.fillRect(cxT - 20, cyT - 11, 7, 22);
     ctx.strokeStyle = 'rgba(40,36,30,0.6)'; ctx.lineWidth = 1; ctx.strokeRect(cxT - 40, cyT - 3, 80, 6); ctx.strokeRect(cxT - 20, cyT - 11, 7, 22);
-    // L'esquerda
-    const esq = [[cxT + 18, yt - fons], [cxT + 12, yt - fons + 8], [cxT + 20, yt - fons + 14], [cxT + 10, yt - fons + 22], [cxT + 16, yt]];
-    const linia = () => { ctx.beginPath(); esq.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); };
-    if (oberta) {
-        ctx.shadowColor = 'rgba(200,150,255,0.95)'; ctx.shadowBlur = 10;
-        ctx.strokeStyle = '#e6cfff'; ctx.lineWidth = 3.4; linia();
-        ctx.shadowBlur = 0; ctx.strokeStyle = '#7a3ac0'; ctx.lineWidth = 1.2; linia();
+    // L'esquerda: una fenda en cunya (més ampla al mig) que travessa la tapa i baixa per la cara del davant.
+    // Oberta: fosca per dins, amb llum lila que en surt i trossos de pedra desprès. Reparada (tancada): la mateixa línia, ara una cicatriu de llum daurada amb grapes.
+    const fenda = (pts, wmax) => {
+        const E1 = [], D1 = [];
+        pts.forEach(([x, y], i) => { const t = i / (pts.length - 1), w = (1.2 + wmax * Math.sin(Math.PI * t)) / 2; E1.push([x - w, y]); D1.push([x + w, y]); });
+        ctx.beginPath(); E1.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); D1.reverse().forEach(([x, y]) => ctx.lineTo(x, y)); ctx.closePath();
+    };
+    const fendaTapa = [[cxT + 20, yt - fons], [cxT + 11, yt - fons + 7], [cxT + 23, yt - fons + 13], [cxT + 8, yt - fons + 21], [cxT + 16, yt]];
+    const fendaCara = [[cxT + 16, yt], [cxT + 8, yt + 13], [cxT + 20, yt + 25], [cxT + 9, yt + 38], [cxT + 15, yb - 2]];
+    const centreFenda = pts => { ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); };
+    const pintaFenda = pts => {
+        if (oberta) {
+            ctx.shadowColor = 'rgba(210,160,255,0.95)'; ctx.shadowBlur = 14;
+            fenda(pts, 11); ctx.fillStyle = '#150523'; ctx.fill(); ctx.shadowBlur = 0;
+            ctx.strokeStyle = '#0a0310'; ctx.lineWidth = 1.8; ctx.stroke();
+            ctx.save(); fenda(pts, 11); ctx.clip();                                       // llum lila a dins, que vessa cap a fora
+            const llum = ctx.createLinearGradient(0, pts[0][1], 0, pts[pts.length - 1][1]); llum.addColorStop(0, '#e8d0ff'); llum.addColorStop(0.5, '#a05ae0'); llum.addColorStop(1, '#5a1aa0');
+            ctx.fillStyle = llum; ctx.globalAlpha = 0.85; fenda(pts, 5); ctx.fill(); ctx.restore();
+        } else {
+            ctx.strokeStyle = 'rgba(30,26,20,0.85)'; ctx.lineWidth = 3; centreFenda(pts);
+            ctx.shadowColor = 'rgba(255,226,140,0.95)'; ctx.shadowBlur = 8;
+            ctx.strokeStyle = '#f8e8a8'; ctx.lineWidth = 1.7; centreFenda(pts); ctx.shadowBlur = 0;
+            ctx.strokeStyle = '#d8a838'; ctx.lineWidth = 2.6;                              // grapes de llum que cusen la fenda
+            for (let i = 1; i < pts.length - 1; i++) { const [x, y] = pts[i]; ctx.beginPath(); ctx.moveTo(x - 5, y - 2); ctx.lineTo(x + 5, y + 2); ctx.stroke(); }
+        }
+    };
+    pintaFenda(fendaTapa);
+    if (oberta) {                                                          // resplendor lila a la tapa i trossos de pedra que se'n desprenen
+        const res = ctx.createRadialGradient(cxT + 14, yt - fons + 12, 2, cxT + 14, yt - fons + 12, 46);
+        res.addColorStop(0, 'rgba(210,150,255,0.65)'); res.addColorStop(1, 'rgba(210,150,255,0)');
+        ctx.fillStyle = res; ctx.fillRect(cxT - 40, yt - fons - 6, 100, fons + 12);
     } else {
-        ctx.strokeStyle = 'rgba(30,26,20,0.8)'; ctx.lineWidth = 1.3; linia();
+        const res = ctx.createRadialGradient(cxT + 14, yt - fons + 12, 2, cxT + 14, yt - fons + 12, 40);
+        res.addColorStop(0, 'rgba(255,230,150,0.45)'); res.addColorStop(1, 'rgba(255,230,150,0)');
+        ctx.fillStyle = res; ctx.fillRect(cxT - 40, yt - fons - 6, 100, fons + 12);
     }
     ctx.restore();
     ctx.strokeStyle = PEDRA_TOMBA.linia; ctx.lineWidth = 2.2; camiPunts(ctx, tp); ctx.stroke();
-    if (oberta) {                                                        // l'esquerda baixa per la cara del davant
-        ctx.shadowColor = 'rgba(200,150,255,0.9)'; ctx.shadowBlur = 8;
-        ctx.strokeStyle = '#d8b8ff'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(cxT + 16, yt + 6); ctx.lineTo(cxT + 11, yt + 20); ctx.lineTo(cxT + 15, yt + 30); ctx.stroke();
-        ctx.shadowBlur = 0;
+    pintaFenda(fendaCara);                                                // la fenda baixa per la cara del davant
+    if (oberta) {
+        // Trossos de pedra esquerdats vora la fenda, i alguns que cauen
+        ctx.lineWidth = 1.4; ctx.strokeStyle = PEDRA_TOMBA.linia;
+        [[cxT + 30, yt + 8, 7], [cxT - 2, yt + 24, 6], [cxT + 34, yt + 34, 5], [cxT + 2, yt - 6, 5]].forEach(([x, y, r], i) => {
+            ctx.fillStyle = i % 2 ? '#9e9a8c' : '#b4af9f'; ctx.beginPath(); ctx.moveTo(x, y - r); ctx.lineTo(x + r, y + r * 0.6); ctx.lineTo(x - r * 0.7, y + r); ctx.closePath(); ctx.fill(); ctx.stroke();
+        });
+        ctx.fillStyle = '#a8a496'; [[cxT + 40, yb + 6, 4], [cxT - 14, yb + 8, 3], [cxT + 26, yb + 10, 3]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.moveTo(x, y - r); ctx.lineTo(x + r, y + r); ctx.lineTo(x - r, y + r); ctx.closePath(); ctx.fill(); ctx.stroke(); });
+        ctx.fillStyle = 'rgba(210,160,255,0.9)'; [[cxT + 12, yt - fons - 6, 2.2], [cxT + 24, yt - fons - 14, 1.6], [cxT + 4, yt - fons - 20, 1.4], [cxT + 18, yt - fons - 28, 1.2]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); });   // espurnes lila que pugen
+        const rs = ctx.createRadialGradient(cxT + 14, yt + 20, 2, cxT + 14, yt + 20, 40); rs.addColorStop(0, 'rgba(210,150,255,0.4)'); rs.addColorStop(1, 'rgba(210,150,255,0)');
+        ctx.fillStyle = rs; ctx.fillRect(cxT - 30, yt - 6, 90, 70);
     }
     // Heura que s'enfila pel cantó esquerre
     ctx.lineCap = 'round';

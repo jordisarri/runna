@@ -31,7 +31,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
     'Ineu': 'ineu', 'Pare Jordi': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Germà Francesc': 'germa_francesc', 'Pare Daniel': 'pare_daniel',
-    'Pare Alcuí': 'pare_alcui', 'Eva': 'eva', 'Josep': 'josep', 'Frederic': 'frederic', 'Juli': 'juli', 'Garf': 'garf', 'Isidre': 'isidre',
+    'Pare Alcuí': 'pare_alcui', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'July': 'juli', 'Garf': 'garf', 'Isidre': 'isidre',
     'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
     'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Jordi': 'jordi_caseta', 'Sansa': 'sansa', 'Home del Raïm': 'home_raim',
@@ -189,16 +189,13 @@ class EscenaUI extends Phaser.Scene {
     }
 
     // ---------------- SARRÓ (inventari) ----------------
-    // Un medalló petit a la dreta del HUD obre el sarró (també la tecla I). Quan l'Ineu és en un lloc on la flauta fa
-    // efecte, al costat hi brilla la flauta: l'acció (ESPAI o tocar la meitat dreta de la pantalla) la toca.
-    // Vegeu ZonaBase.flautaActiva.
+    // Un medalló petit a la dreta del HUD obre el sarró (també la tecla I). La flauta es toca amb ESPAI (o tocant la meitat dreta
+    // de la pantalla) als llocs on té efecte (ZonaBase.flautaActiva); no hi ha cap icona al HUD: només s'obre la seva interfície.
     crearObjectes() {
         const x = 548, y = ALT_HUD / 2, commuta = () => this.inventariObert ? this.tancarInventari() : this.obrirInventari();
         this.fonsSarro = this.add.image(x, y, 'medallo').setScale(0.62 / RES).setVisible(false)
             .setInteractive({ useHandCursor: true }).on('pointerdown', commuta);
         this.iconaSarro = this.add.image(x, y, 'icona_sarro').setScale(0.62 / RES).setVisible(false);
-        this.haloFlauta = this.add.circle(x - 68, y, 30, 0xffe08a, 0).setVisible(false);
-        this.iconaFlauta = this.add.image(x - 68, y, 'icona_flauta').setScale(0.75 / RES).setVisible(false);
         this.input.keyboard.on('keydown-I', commuta);
         this.input.keyboard.on('keydown-M', () => this.inventariObert ? this.tancarInventari() : this.obrirInventari('mapa'));
         ['LEFT', 'A'].forEach(k => this.input.keyboard.on('keydown-' + k, () => this.inventariObert && DIARI.moure(this, -1)));
@@ -211,11 +208,6 @@ class EscenaUI extends Phaser.Scene {
         if (!this.fonsSarro) return;
         const vis = !!Estat.dades && !this.menuObert && !this.mapaObert;
         this.fonsSarro.setVisible(vis); this.iconaSarro.setVisible(vis);
-        const lliure = vis && !this.dialeg && !this.inventariObert;
-        const zona = lliure ? Joc.zonaActiva(this) : null;
-        const flauta = !!zona && Estat.te('flauta') && !!zona.flautaActiva();
-        this.iconaFlauta.setVisible(flauta);
-        this.haloFlauta.setVisible(flauta).setFillStyle(0xffe08a, flauta ? 0.3 + 0.25 * Math.sin(this.time.now / 180) : 0);
     }
 
     // El sarró obre el Diari de l'Ineu (js/diari.js): missió, encàrrecs, objectes i mapa

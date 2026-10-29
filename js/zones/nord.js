@@ -107,7 +107,7 @@ class ZonaRuines extends ZonaBase {
         this.llocFlauta('ombra', 1100, 610, 160, true);
         this.tweens.add({ targets: this.ombraMonjo, y: 564, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
         // Ambient de nit quan la llegenda s'ha començat a descobrir
-        this.nit = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x0a0a30, 0.22).setScrollFactor(0).setDepth(89000).setVisible(false);
+        this.nit = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x0a0a30, 0.22).setScrollFactor(0).setDepth(89000).setVisible(false);
 
         this.cartell(620, 960, DIALEGS.cartellRuinesPingpong);
 
@@ -270,11 +270,11 @@ class ZonaPingpong extends ZonaBase {
             [[-38, 0], [0, 1], [38, 2]].forEach(([dx, t], k) => { this.posar('gerro_' + t, x + dx, YP - 66, { fonsY: -985 }); this.posar('gerro_' + ((t + k + 1) % 3), x + dx + 6, YP - 124 + (k % 2 ? 0 : 0), { fonsY: -985, escala: 0.8 }); });
         });
 
-        // Un cartell de paper clavat a la paret (esquerra): de lluny és una taca blanca borrosa; en examinar-lo, el zoom automàtic el mostra sencer
-        const cp = this.add.image(144, 248, 'cartell_llums_borros').setOrigin(0.5, 1).setDepth(-960);
-        cp.setScale(56 / this.textures.get('cartell_llums_borros').getSourceImage().width);
+        // Un cartell de paper clavat a la paret (esquerra): es veu nítid a la paret; en examinar-lo, el zoom automàtic només el fa més gran
+        const cp = this.add.image(144, 248, 'cartell_llums_petit').setOrigin(0.5, 1).setDepth(-960);
+        cp.setScale(56 / this.textures.get('cartell_llums_petit').getSourceImage().width);
         this.add.rectangle(144, 250, cp.displayWidth + 8, 5, 0x000000, 0.25).setDepth(-961);
-        this.interactiu(144, 300, RADI_OBJECTE, () => ({ pagines: [{ fer: (z, fet) => z.mostrarImatge('cartell_llums', 144, 248 - cp.displayHeight / 2, cp.displayWidth, 'cartell_llums_borros', fet) }] }), { altura: 110 });
+        this.interactiu(144, 300, RADI_OBJECTE, () => ({ pagines: [{ fer: (z, fet) => z.mostrarImatge('cartell_llums', 144, 248 - cp.displayHeight / 2, cp.displayWidth, null, fet) }] }), { altura: 110 });
 
         // ---- La roda de carruatge davant la porta (s'empeny des d'un costat; cal Runna) ----
         this.rodaX = Estat.dades.flags.rodaX || AX;
@@ -702,7 +702,7 @@ class ZonaTiller extends ZonaBase {
 
     // Escena del sopar del Til·ler: cau el dia, la gent de les cel·les puja del sud i els pastors baixen del camí de la Cirosa
     fesSopar() {
-        const vel = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x2a1000, 1).setScrollFactor(0).setDepth(89500).setAlpha(0);
+        const vel = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x2a1000, 1).setScrollFactor(0).setDepth(89500).setAlpha(0);
         this.tweens.add({ targets: vel, alpha: 0.38, duration: 1600 });
         const taula = this.posar('taula_sopar', 400, 810, { fonsY: 800 }).setAlpha(0);
         this.tweens.add({ targets: taula, alpha: 1, duration: 1200 });
@@ -1045,9 +1045,9 @@ class ZonaBosc extends ZonaBase {
                 if (Math.hypot(gx - AX, gy - AY) < 260) continue;                            // l'Alzina Buida és un lloc a part: aire net
                 this.boires.push(this.boira(gx + rnd() * 120, gy + rnd() * 90, 260, 110, 0.8));
             }
-            this.llumLila = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x3a1a55, 0.17).setScrollFactor(0).setDepth(90001);
+            this.llumLila = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x3a1a55, 0.17).setScrollFactor(0).setDepth(90001);
         }
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x102810, 0.18).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x102810, 0.18).setScrollFactor(0).setDepth(90000);
     }
 
     actualitzar(ara) {

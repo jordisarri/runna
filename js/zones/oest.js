@@ -106,7 +106,7 @@ class ZonaRovellonera extends ZonaBase {
         escolo.forEach(([x, y]) => this.enemic('escolopendra', x, y));
 
         this.boira(800, 550, 700, 300, 1.2);
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x1a0a30, 0.14).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a30, 0.14).setScrollFactor(0).setDepth(90000);
     }
 
     // Grup de rovellons als peus d'una parella de pins, pegat a la sortida correcta
@@ -234,7 +234,7 @@ class ZonaCamiRov extends ZonaBase {
         this.boira(900, 900, 400, 160, 1);
         this.sortida(2786, 240, 14, 140, 'ZonaEra', 'rovellonera');
         this.sortida(0, 1160, 14, 140, 'ZonaRovellonera', 'cami');
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x1a0a30, 0.1).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a30, 0.1).setScrollFactor(0).setDepth(90000);
     }
 
     actualitzar() {
@@ -282,7 +282,7 @@ class ZonaGabriel extends ZonaBase {
 
         this.sortida(700, 0, 200, 14, 'ZonaRovellonera', 'gabriel');
         this.sortida(1586, 650, 14, 130, 'ZonaDipositos', 'gabriel');
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x1a0a30, 0.1).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a30, 0.1).setScrollFactor(0).setDepth(90000);
     }
 }
 
@@ -482,7 +482,7 @@ class ZonaDipositos extends ZonaBase {
         [[330, 440], [1290, 440]].forEach(([x, y]) => this.enemic('gripau', x, y));       // gripaus: a prop de l'aigua dels dipòsits
 
         // Cel de nit estrellat sobre el paisatge
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x060a28, 0.30).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x060a28, 0.30).setScrollFactor(0).setDepth(90000);
         for (let i = 0; i < 40; i++) {
             const e = this.add.circle(AMPLE / 2 + (Math.random() - 0.5) * AMPLE / ZOOM_CAMERA, -213 + Math.random() * 400, 1.5, 0xffffff, 0.8).setScrollFactor(0).setDepth(90001);
             this.tweens.add({ targets: e, alpha: 0.2, yoyo: true, repeat: -1, duration: 700 + Math.random() * 1500 });
@@ -683,7 +683,7 @@ class ZonaDolmen extends ZonaBase {
         this.properCreuament = 0;
 
         this.sortida(0, baixY, 14, baixH, 'ZonaDipositos', 'dolmen');
-        this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x0a2010, 0.08).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x0a2010, 0.08).setScrollFactor(0).setDepth(90000);
     }
 
     enEntrar() {
