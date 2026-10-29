@@ -82,9 +82,12 @@ Object.assign(DIALEGS, {
     }
 });
 
+// On és l'Home del Raïm a l'Escalinata (peu del pedestal) i quant més gran és que el dibuix original del volant
+const RAIM = { x: 700, y: 560, f: 1.35 };
+
 // ---------------- BOSS: L'HOME DEL RAÏM VIU ----------------
 ENEMICS.raim = {
-    tex: 'home_raim_desperta', vida: 16, vel: 300, mal: 1, radi: 30, cos: [50, 24], ombra: 0.5,
+    tex: 'home_raim_desperta', vida: 16, vel: 300, mal: 1, radi: 38, cos: [66, 30], ombra: 0.65,
     robust: true,
     perill: e => e.estat === 'carrega',
     // Trossos de marbre i pols que cauen del guardià
@@ -277,7 +280,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     // fa girar el cap un pas cada volta: d'esquena, de tres quarts, de perfil i, a la tercera volta, de cara: el guardià es desperta.
     puzleRaim() {
         this.raimPas = 0;      // 0 d'esquena, 1 tres quarts, 2 perfil, 3 de cara (CAPS_RAIM)
-        const derrotat = Estat.flag('raimDerrotat');
+        const derrotat = Estat.flag('raimDerrotat'), { x: RX, y: RY } = RAIM;
         const desperta = Estat.flag('raimDesperta');
 
         // L'estàtua (o, si ja ha estat vençuda, un munt de pedres)
@@ -285,15 +288,15 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (derrotat) {
             this.runes();
         } else {
-            this.estatua = this.posar(this.texRaim(), 700, 470);
-            this.colEstatua = this.colisio(700, 461, 46, 18);
+            this.estatua = this.posar(this.texRaim(), RX, RY);
+            this.colEstatua = this.colisio(RX, RY - 10, 62, 24);
         }
         // Mirar l'estàtua només fa falta si encara no tens la maneta: et diu on és
-        this.interactiu(700, 478, 75, DIALEGS.homeRaimInt, { altura: 190, actiu: () => !Estat.flag('raimDesperta') && !Estat.te('maneta') });
+        this.interactiu(RX, RY + 10, 90, DIALEGS.homeRaimInt, { altura: 250, actiu: () => !Estat.flag('raimDesperta') && !Estat.te('maneta') });
 
         // El volant de ferro amb engranatges, encastat a la cara del pedestal: amb la maneta, cada volta gira el cap un quart
-        if (!derrotat) this.dibuixarVolant(700, Math.round(470 - this.estatua.displayHeight * 0.17));
-        this.interactiu(700, 500, 75, E => {
+        if (!derrotat) this.dibuixarVolant(RX, Math.round(RY - this.estatua.displayHeight * 0.17));
+        this.interactiu(RX, RY + 32, 90, E => {
             this.raimPas = Math.min(3, this.raimPas + 1);
             this.girarVolant();
             this.girarEstatua();
@@ -324,15 +327,15 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             g.fillStyle(0x3a3a42, 1).fillPoints(pts, true).lineStyle(2, 0x111114, 1).strokePoints(pts, true);
             g.fillStyle(0x5a5a64, 1).fillCircle(0, 0, r * 0.55).fillStyle(0x1a1a1e, 1).fillCircle(0, 0, r * 0.18);
         };
-        this.engranatge = this.add.graphics().setPosition(x + 24, y - 16).setDepth(471);
+        this.engranatge = this.add.graphics().setPosition(x + 24 * RAIM.f, y - 16 * RAIM.f).setScale(RAIM.f).setDepth(RAIM.y + 1);
         roda(this.engranatge, 11, 8, 4);
-        const v = this.add.graphics().setPosition(x, y).setDepth(472);
+        const v = this.add.graphics().setPosition(x, y).setScale(RAIM.f).setDepth(RAIM.y + 2);
         v.lineStyle(7, 0x111114, 1).strokeCircle(0, 0, 21).lineStyle(4, 0x6a6a74, 1).strokeCircle(0, 0, 21);
         for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3; v.lineStyle(4, 0x4a4a54, 1).lineBetween(0, 0, Math.cos(a) * 20, Math.sin(a) * 20); }
         v.fillStyle(0x8a7a40, 1).fillCircle(0, 0, 6).lineStyle(2, 0x111114, 1).strokeCircle(0, 0, 6);
         this.volant = v;
         // La maneta (d'en Jordi), clavada a la vora del volant
-        this.manetaVolant = this.add.graphics().setDepth(473);
+        this.manetaVolant = this.add.graphics().setScale(RAIM.f).setDepth(RAIM.y + 3);
         this.manetaVolant.lineStyle(5, 0x111114, 1).lineBetween(0, 0, 0, -12).lineStyle(3, 0x8a6a3a, 1).lineBetween(0, 0, 0, -12);
         this.manetaVolant.fillStyle(0x8a6a3a, 1).fillRoundedRect(-3, -20, 6, 10, 2);
         this.manetaVolant.setVisible(Estat.te('maneta'));
@@ -341,7 +344,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     posarManeta() {
         if (!this.manetaVolant || !this.volant) return;
         const a = this.volant.rotation;
-        this.manetaVolant.setPosition(this.volant.x + Math.cos(a) * 18, this.volant.y + Math.sin(a) * 18);
+        this.manetaVolant.setPosition(this.volant.x + Math.cos(a) * 18 * RAIM.f, this.volant.y + Math.sin(a) * 18 * RAIM.f);
     }
 
     // Una volta del volant: gira (i l'engranatge, al revés), grinyola i sacseja
@@ -352,11 +355,11 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.cameras.main.shake(260, 0.003);
         this.tweens.add({ targets: this.volant, rotation: this.volant.rotation + Math.PI * 2, duration: 900, ease: 'Sine.easeInOut', onUpdate: () => this.posarManeta() });
         this.tweens.add({ targets: this.engranatge, rotation: this.engranatge.rotation - Math.PI * 3.8, duration: 900, ease: 'Sine.easeInOut' });
-        if (this.raimPas === 3) this.time.delayedCall(950, () => this.llum(700, 330, 0xffe08a));
+        if (this.raimPas === 3) this.time.delayedCall(950, () => this.llum(RAIM.x, RAIM.y - 190, 0xffe08a));
     }
 
     runes() {
-        [[670, 468], [730, 472], [700, 458]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 50, h: 20 } }));
+        [[-30, -2], [30, 2], [0, -12]].forEach(([dx, dy]) => this.posar('roca', RAIM.x + dx, RAIM.y + dy, { col: { w: 50, h: 20 } }));
         this.raimPas = 3;
     }
 
@@ -378,12 +381,12 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     // L'estàtua cobra vida: s'esquerda i tremola, esclata en llum lila, el guardià salta del pedestal (que es queda) i alça la maça rugint
     despertarRaim(sense = false) {
         if (!sense) Estat.posaFlag('raimDesperta');
-        const boss = this.enemic('raim', 700, sense ? 545 : 400);
+        const { x: RX, y: RY } = RAIM, boss = this.enemic('raim', RX, sense ? RY + 85 : RY - 70);
         if (!boss) return;
         this.boss = boss;
         const ponPedestal = () => {
             const t = this.textures.get('home_raim_pedestal');
-            this.pedestal = this.add.image(700, 470, 'home_raim_pedestal').setOrigin(0.5, 1).setScale((t.customData && t.customData.escala) || 1 / RES).setDepth(470);
+            this.pedestal = this.add.image(RX, RY, 'home_raim_pedestal').setOrigin(0.5, 1).setScale((t.customData && t.customData.escala) || 1 / RES).setDepth(RY);
         };
         if (this.estatua) this.estatua.setVisible(false);
         if (sense || !this.estatua) { ponPedestal(); return; }
@@ -398,28 +401,28 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.tweens.add({ targets: est, x: est.x + 3, duration: 55, yoyo: true, repeat: 13 });
         let lila = false;
         this.time.addEvent({ delay: 140, repeat: 5, callback: () => { lila = !lila; if (est.active) est.setTint(lila ? 0xb890ff : 0xe0c8ff); } });
-        this.time.delayedCall(250, () => ENEMICS.raim.trossos(this, 700, 430, 8));
-        this.time.delayedCall(550, () => ENEMICS.raim.trossos(this, 700, 400, 8));
+        this.time.delayedCall(250, () => ENEMICS.raim.trossos(this, RX, RY - 40, 8));
+        this.time.delayedCall(550, () => ENEMICS.raim.trossos(this, RX, RY - 70, 8));
         this.time.delayedCall(850, () => {
             est.setVisible(false); ponPedestal();
             this.cameras.main.flash(260, 200, 160, 255);
-            this.boiraPuf(700, 380);
+            this.boiraPuf(RX, RY - 90);
             spr.setAlpha(1).setScale(boss.escalaBase * 0.85, boss.escalaBase * 1.1);
             boss.ombra.setAlpha(1);
             // Salta del pedestal i cau al davant
             this.tweens.addCounter({
                 from: 0, to: 1, duration: 620, ease: 'Bounce.easeOut',
-                onUpdate: tw => { if (spr.active && !boss.mort) spr.body.reset(700, 400 + 145 * tw.getValue()); },
+                onUpdate: tw => { if (spr.active && !boss.mort) spr.body.reset(RX, RY - 70 + 155 * tw.getValue()); },
                 onComplete: () => {
                     if (!spr.active || boss.mort) return;
-                    spr.body.reset(700, 545);
+                    spr.body.reset(RX, RY + 85);
                     this.cameras.main.shake(320, 0.009);
                     Sfx.cop(true);
-                    ENEMICS.raim.trossos(this, 700, 570, 12);
+                    ENEMICS.raim.trossos(this, RX, RY + 110, 12);
                     // Rugit: es tira enrere amb la maça alçada i torna endreçat
                     spr.setScale(boss.escalaBase * 1.15, boss.escalaBase * 0.85);
                     this.tweens.add({ targets: spr, scaleX: boss.escalaBase, scaleY: boss.escalaBase, duration: 260, ease: 'Back.out' });
-                    this.tweens.add({ targets: spr, rotation: -0.32, duration: 420, ease: 'Sine.easeOut', yoyo: true, hold: 500, onYoyo: () => { Sfx.carrega(); this.esquitxar(700, 470); } });
+                    this.tweens.add({ targets: spr, rotation: -0.32, duration: 420, ease: 'Sine.easeOut', yoyo: true, hold: 500, onYoyo: () => { Sfx.carrega(); this.esquitxar(RX, RY); } });
                 }
             });
         });
@@ -432,7 +435,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.ui().actualitzarHUD();
         this.tweens.add({ targets: e.spr, angle: 70, duration: 400 });
         if (this.pedestal) {                // el pedestal s'esmicola
-            ENEMICS.raim.trossos(this, 700, 470, 14);
+            ENEMICS.raim.trossos(this, RAIM.x, RAIM.y, 14);
             this.tweens.add({ targets: this.pedestal, alpha: 0, duration: 700, onComplete: () => { this.pedestal.destroy(); this.pedestal = null; } });
             if (this.colEstatua) { this.obstacles.remove(this.colEstatua, true, true); this.colEstatua = null; }
         }
@@ -585,7 +588,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
             this.colisio(x, y - h / 2, w, h);
         });
         [[190, 215], [190, 450], [250, 215]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
-        [[810, 300], [810, 484], [750, 215]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
+        [[810, 300], [810, 484]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
 
         // La bóta de la creu vermella: s'alça i, a sota, hi ha l'anella que obre la porta del fons
         const jaOberta = Estat.flag('portaTresorOberta');
