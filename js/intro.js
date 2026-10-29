@@ -52,8 +52,12 @@ class EscenaTitol extends Phaser.Scene {
         }
     }
 
+    // Vídeos i portada (9:16) a pantalla completa. Si la pantalla és una mica més baixa que el vídeo, es retalla una franja a dalt i a baix
+    // en lloc de deixar barres negres als costats; només si ho és molt (tauleta), es redueix sencer perquè no es talli el títol
     escalaVertical(w, h) {
-        return ALT < h * AMPLE / w ? Math.min(AMPLE / w, ALT / h) : ALT / h;
+        const alt = h * AMPLE / w;                       // alçada del vídeo ajustat a l'ample
+        if (ALT >= alt) return ALT / h;                  // pantalla més llarga: omple l'alçada (es retalla pels costats)
+        return ALT >= alt * 0.88 ? AMPLE / w : Math.min(AMPLE / w, ALT / h);
     }
 
     // Vídeo a pantalla completa (s'adapta a la mida quan el vídeo ja té dimensions)
