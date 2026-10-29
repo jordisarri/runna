@@ -397,6 +397,11 @@ class ZonaBase extends Phaser.Scene {
         seguent();
     }
     esperar(ms, fet) { this.time.delayedCall(ms, fet); }
+    // Dins d'una pàgina d'acció: es queda així fins que el jugador prem (ESPAI, ENTER o un toc), com per passar una pàgina
+    esperarClic(fet) {
+        const d = this.ui().dialeg;
+        if (d) d.alClic = fet; else fet();
+    }
 
     // Un personatge camina fins a (x, y), balancejant-se, i s'hi gira
     npcVa(key, x, y, fet, vel = 150) {

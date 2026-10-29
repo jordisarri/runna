@@ -1201,20 +1201,15 @@ const DIALEGS = {
         ] },
 
     // ---------------- DOLMEN ----------------
+    // Runna és dalt de la llosa: s'hi puja per darrere (el camí de margarides). Dalt, darrere l'espasa, l'Ineu diu les Paraules del Saber
     dolmen: E => {
-        const falta = [];
-        if (!E.flag("fullaTiler")) falta.push("el permís del Til·ler (la Fulla)");
-        if (!E.flag("saber")) falta.push("les Paraules del Saber (Pare Alcuí)");
-        if (!E.flag("benediccio")) falta.push("la Benedicció del prior (Pare Jordi)");
-        if (falta.length) {
-            return { pagines: [
-                { qui: "Ineu", text: "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré." }
-            ] };
-        }
-        // Tot és acció: l'Ineu s'agenolla, la Fulla vola a la pedra, crida la paraula i Runna s'allibera (ZonaDolmen.despertarRunna)
+        if (E.te("runna")) return { pagines: [] };
+        const falta = DIALEGS.faltaRunna(E);
+        if (falta.length) return { pagines: [{ qui: "Ineu", text: "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré." }] };
         return {
             pagines: [
-                { fer: (z, fet) => z.despertarRunna(fet) },
+                { qui: "Ineu", text: "La foscor tem la llum, però més encara el riure!" },
+                { fer: (z, fet) => z.alcarRunna(fet) },
                 { qui: "Runna", text: "Fa molt que dormo. Hi torna a haver una gàbia, oi? Anem-hi." },
                 { qui: "Ineu", text: "Runna... Em parles al cap!" },
                 { qui: "Runna", text: "Feia tres-cents anys que ningú no em deia que el riure espanta la foscor. Es veu que encara és veritat." }
@@ -1227,9 +1222,21 @@ const DIALEGS = {
         };
     },
 
-    dolmenBuit: E => ({
-        pagines: []
-    }),
+    // Des de baix: l'espasa és dalt de la llosa
+    dolmenBaix: E => {
+        if (E.te("runna")) return { pagines: [] };
+        const falta = DIALEGS.faltaRunna(E);
+        return { pagines: [{ qui: "Ineu", text: falta.length ? "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré."
+            : "(Runna és dalt de la llosa. Les margarides fan camí cap al darrere: per allà hi pujaré.)" }] };
+    },
+
+    faltaRunna: E => {
+        const falta = [];
+        if (!E.flag("fullaTiler")) falta.push("el permís del Til·ler (la Fulla)");
+        if (!E.flag("saber")) falta.push("les Paraules del Saber (Pare Alcuí)");
+        if (!E.flag("benediccio")) falta.push("la Benedicció del prior (Pare Jordi)");
+        return falta;
+    },
 
     objectiuRunna: E => {
         const falta = [];

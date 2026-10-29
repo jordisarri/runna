@@ -525,7 +525,12 @@ class EscenaUI extends Phaser.Scene {
     }
 
     avancar() {
-        if (!this.dialeg || this.dialeg.fent) return;
+        if (!this.dialeg) return;
+        if (this.dialeg.fent) {                                  // una pàgina d'acció que espera un clic (ZonaBase.esperarClic)
+            const f = this.dialeg.alClic;
+            if (f) { this.dialeg.alClic = null; f(); }
+            return;
+        }
         if (this.timerText) { this.acabarEscriptura(); return; }
         this.dialeg.pagina++;
         Sfx.pagina();
