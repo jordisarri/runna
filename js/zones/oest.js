@@ -875,7 +875,7 @@ class ZonaDolmen extends ZonaBase {
         this.pujada = { vora, dalt: vora + 10, fins: this.espY - 18, cx: sx, cy: lyMon, rx: 150, ry: 38, x0: sx - 176, x1: sx + 176, esglaons: 85 };
     }
 
-    // Unes poques margarides a l'herba just darrere del dolmen, on comencen els esglaons amagats: un passadís que gairebé no es veu
+    // Unes margarides a l'herba just darrere del dolmen, en semicercle al voltant d'on comencen els esglaons amagats
     margaridesPas() {
         const P = this.pujada, f = this.add.graphics().setDepth(-790);
         let sd = 11; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
@@ -883,14 +883,13 @@ class ZonaDolmen extends ZonaBase {
             for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2; f.fillStyle(0xf4f0e0, 0.9).fillEllipse(x + Math.cos(a) * 3 * e, y + Math.sin(a) * 2 * e, 4.5 * e, 3 * e); }
             f.fillStyle(0xe8b830, 1).fillCircle(x, y, 1.6 * e);
         };
-        // a banda i banda dels esglaons, desordenades i més espesses a tocar de la llosa
-        [-1, 1].forEach(c => {
-            for (let k = 0; k < 6; k++) {
-                const t = r() ** 1.6, y = P.vora - 16 - t * 110, x = P.cx + c * (P.esglaons - 10 + r() * 40 + t * 20);
-                margarida(x, y, 0.8 + r() * 0.5);
-                if (r() < 0.35) margarida(x + (r() - 0.5) * 14, y + 6 + r() * 4, 0.7);
-            }
-        });
+        // un semicercle obert cap a la llosa, al voltant d'on comencen els esglaons, una mica desordenat
+        for (let k = 0; k <= 16; k++) {
+            const a = Math.PI * (1 + k / 16) + (r() - 0.5) * 0.08, R = P.esglaons + 10 + (r() - 0.5) * 16;
+            const x = P.cx + Math.cos(a) * R, y = P.vora - 6 + Math.sin(a) * R * 0.7;
+            margarida(x, y, 0.8 + r() * 0.5);
+            if (r() < 0.3) margarida(x + (r() - 0.5) * 16, y + (r() - 0.5) * 10, 0.7);
+        }
     }
 
     // Les Paraules del Saber ja s'han dit: Runna surt de la pedra i és a la mà de l'Ineu, que l'alça. Raigs de llum blanca i el rètol
