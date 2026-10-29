@@ -376,7 +376,7 @@ class ZonaCelles extends ZonaBase {
 
     construir() {
         this.terra('herba', 0, 0, 1800, 1100, -1100);
-        this.terra('cami', 0, 640, 1500, 130);           // camí est-oest: del bosc de Sant Joan fins a Sant Benet (a l'est no hi ha res més)
+        this.terra('cami', 0, 640, 1800, 130);           // camí est-oest: del bosc de Sant Joan fins a Sant Benet (a l'est no hi ha res més)
         this.terra('cami', 800, 770, 200, 330);          // cap a les Runes
         this.terra('cami', 1000, 0, 140, 640);           // cap al nord, al Gran Til·ler
 
@@ -384,10 +384,13 @@ class ZonaCelles extends ZonaBase {
         const ns = this.posar('cel_ntrasra', 520, 600, { col: { w: 840, h: 100 } });
         this.blocDarrere(520, 840, 495, Math.max(0, 600 - ns.displayHeight));
         this.interactiu(520, 625, RADI_OBJECTE, DIALEGS.cel_ntrasra, { altura: 140 });
-        const sb = this.posar('cel_stbenet', 1380, 600, { col: { w: 550, h: 90 } });
-        this.blocDarrere(1380, 550, 505, Math.max(0, 600 - sb.displayHeight));
-        this.interactiu(1352, 620, RADI_OBJECTE, DIALEGS.portaFlam, { altura: 140 });         // porta de l'esquerra: on dormia el Flami
-        this.interactiu(1537, 620, RADI_OBJECTE, DIALEGS.portaUri, { altura: 140 });          // porta de la dreta: on dormia l'Huri
+        // Sant Benet, a la mida dels personatges (portes una mica més baixes que l'Ineu): és tan llarg que surt per la dreta de l'escena.
+        // Comença passat el camí del Til·ler; només se'n veu la porta de l'esquerra (la de la dreta queda fora)
+        const SB0 = 1160, sb = this.posar('cel_stbenet', SB0, 600);
+        sb.setX(SB0 + sb.displayWidth / 2);
+        this.colisio((SB0 + 1800) / 2, 555, 1800 - SB0, 90);
+        this.blocDarrere((SB0 + 1800) / 2, 1800 - SB0, 505, Math.max(0, 600 - sb.displayHeight));
+        this.interactiu(SB0 + sb.displayWidth * 0.251, 620, RADI_OBJECTE, DIALEGS.portaFlam, { altura: 140 });    // porta de l'esquerra: on dormia el Flami
 
         // Sant Benet (est): la Neus i el seu marit, el senyor Moliner, veïns de Sant Benet
         this.npc('neus', 1250, 680, DIALEGS.neus);
@@ -402,7 +405,7 @@ class ZonaCelles extends ZonaBase {
 
         this.cartell(130, 625, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler' }] }));
 
-        this.arbres([[1700, 220], [1640, 420], [1750, 540], [260, 1000], [300, 1040],
+        this.arbres([[260, 1000], [300, 1040],
                      [560, 1000], [1250, 1020], [1480, 960], [1700, 1030]]);
 
         this.sortida(800, 1086, 200, 14, 'ZonaRuines', 'celles');

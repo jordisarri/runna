@@ -48,7 +48,7 @@ const CATALEG = [
 
     // ---- Edificis nous ----
     { key: 'sala_pingpong', file: 'assets/edificis/sala_pingpong.webp', amplada: 1200, provisional: (c, w) => dibuixarEdifici(c, w, w * 0.62, '#d8c8a8', '#3a5a8a', 'Sala del Ping-pong') },
-    { key: 'cel_stbenet',   file: 'assets/edificis/cel_stbenet.webp',   amplada: 560, provisional: (c, w) => dibuixarCelSantBenet(c, w) },
+    { key: 'cel_stbenet',   file: 'assets/edificis/cel_stbenet.webp',   amplada: 1250, provisional: (c, w) => dibuixarCelSantBenet(c, w) },
     { key: 'cel_ntrasra',   file: 'assets/edificis/cel_ntrasra.webp',   amplada: 900, provisional: (c, w) => dibuixarCelNostraSenyora(c, w) },
     { key: 'ermita',        file: 'assets/edificis/ermita.webp',        amplada: 620, provisional: (c, w) => dibuixarErmitaDesaparicio(c, w) },
     { key: 'hostatgeria',    file: 'assets/edificis/hostatgeria.webp',    amplada: 1100, provisional: (c, w) => dibuixarHostatgeria(c, w) },
