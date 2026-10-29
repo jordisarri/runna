@@ -1388,7 +1388,8 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { avis: "Has obtingut la MANETA." }
+                { fer: (z, fet) => z.mostrarObjecte('maneta', fet, 0xd8c8a0) },
+                { avis: "Has obtingut la MANETA D'EN JORDI." }
             ],
             enAcabar: () => {
                 E.dona("maneta"); E.posaFlag("maneta");

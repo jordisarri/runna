@@ -546,6 +546,28 @@ class ZonaBase extends Phaser.Scene {
         this.tweens.add({ targets: o, x: x1, y: y1, duration: 650, ease: 'Sine.easeInOut', onComplete: () => { o.destroy(); if (fet) fet(); } });
     }
 
+    // Un objecte surt del punt amb què s'interactua (un cofre...): la seva icona puja amb una claror, s'hi queda un moment i vola fins
+    // a l'Ineu (que no fa res), on s'encén amb la fanfara d'objecte
+    mostrarObjecte(id, fet, color = 0xffe8a0) {
+        const p = this.puntActiu || { x: this.ineu.x, y: this.ineu.y - 60 }, key = iconaObjecte(this, id);
+        const o = key ? this.add.image(p.x, p.y - 20, key).setScale(0.2) : this.add.circle(p.x, p.y - 20, 9, color, 1);
+        const halo = this.add.circle(p.x, p.y - 20, 40, color, 0.5).setBlendMode('ADD');
+        o.setDepth(99001); halo.setDepth(99000).setScale(0.3);
+        Joc.fanfaraObjecte(this);
+        this.tweens.add({ targets: [o, halo], y: p.y - 160, duration: 600, ease: 'Back.easeOut' });
+        this.tweens.add({ targets: o, scale: key ? 0.9 : 1.6, duration: 600, ease: 'Back.easeOut' });
+        this.tweens.add({ targets: halo, scale: 1.4, alpha: 0.25, yoyo: true, repeat: 1, duration: 450 });
+        this.time.delayedCall(1300, () => {
+            const x1 = this.ineu.x, y1 = this.ineu.y - 70;
+            this.tweens.add({ targets: [o, halo], x: x1, y: y1, duration: 450, ease: 'Sine.easeIn' });
+            this.tweens.add({ targets: o, scale: key ? 0.3 : 0.8, duration: 450, onComplete: () => {
+                o.destroy(); halo.destroy();
+                this.llum(x1, y1, color);
+                this.esperar(350, fet);
+            } });
+        });
+    }
+
     // L'Ineu camina fins a (x, y)
     ineuVa(x, y, fet, vel = 180) {
         const dx = x - this.ineu.x, dy = y - this.ineu.y, dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'esquerra' : 'dreta') : (dy < 0 ? 'amunt' : 'avall');
