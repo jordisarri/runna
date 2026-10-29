@@ -461,8 +461,9 @@ class ZonaDipositos extends ZonaBase {
 
         // Dos dipòsits d'aigua, de pedra
         [[420, 330], [DIP.estelX, 330]].forEach(([x, y]) => this.posar('diposit', x, y, { col: { w: 270, h: 50 } }));
-        // El mirador: una plataforma rodona de pedra amb un ampit baix, i el trípode del telescopi
-        const MX = 1000, MY = 760, mir = this.add.graphics().setDepth(-1000);
+        // El mirador, entre els dos dipòsits (des del telescopi es veu caure l'estel a l'aigua): una plataforma rodona de pedra
+        // amb un ampit baix, i el trípode del telescopi
+        const MX = 800, MY = 440, mir = this.add.graphics().setDepth(-1000);
         mir.fillStyle(0x000000, 0.25).fillEllipse(MX + 6, MY + 8, 250, 104);
         mir.fillStyle(0x8a8478, 1).fillEllipse(MX, MY, 240, 96).lineStyle(4, 0x2a2620, 1).strokeEllipse(MX, MY, 240, 96);
         mir.fillStyle(0xa49e90, 1).fillEllipse(MX, MY - 4, 220, 82);
@@ -478,7 +479,7 @@ class ZonaDipositos extends ZonaBase {
         this.cartell(230, 500, () => ({ pagines: [{ qui: 'Cartell', text: '→ Dolmen\n← Ermita de Sant Gabriel' }] }));
 
         this.arbres([[100, 150], [250, 90], [800, 100], [1450, 140], [1350, 900], [1500, 960], [120, 960], [560, 960], [660, 820]]);
-        [[1250, 800], [450, 800], [800, 440]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[1250, 800], [450, 800], [900, 820]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         [[330, 440], [1290, 440]].forEach(([x, y]) => this.enemic('gripau', x, y));       // gripaus: a prop de l'aigua dels dipòsits
 
         // Cel de nit estrellat sobre el paisatge
@@ -500,24 +501,64 @@ class ZonaDipositos extends ZonaBase {
 
     actualitzar() {
         const E = Estat;
-        if (!this.llumEstel && E.flag('estelsFets') && !E.te('estel_llorenc')) this.posarLlumEstel();
+        if (!this.llumEstel && !this.estelCaient && E.flag('estelsFets') && !E.te('estel_llorenc')) this.posarLlumEstel();
         if (this.llumEstel && E.te('estel_llorenc')) { this.llumEstel.forEach(o => o.destroy()); this.llumEstel = null; }
         if (!this.tripodeMuntat && (E.flag('telescopiMuntat') || E.flag('estelsPart1'))) { this.tripodeMuntat = true; this.tripode.setTexture('telescopi_mon'); }
     }
 
-    // Una columna de llum freda baixa del cel fins a l'aigua del dipòsit, i hi queda un punt brillant amb espurnes
+    // En sortir del telescopi amb la constel·lació feta: la càmera mira el dipòsit de llevant, l'últim estel hi cau del cel i
+    // hi deixa la llum; després torna a l'Ineu. Mentrestant no es pot moure ningú
+    caureEstel(fet) {
+        const { estelX: x, estelY: y } = DIP, cam = this.cameras.main, ui = this.ui();
+        this.estelCaient = true;
+        ui.bloquejatFins = ui.time.now + 4500;
+        cam.stopFollow();
+        cam.pan(x - 60, y + 120, 900, 'Sine.easeInOut');
+        this.esperar(1000, () => {
+            const x0 = x - 300, y0 = Math.max(10, y - 420), cap = this.add.circle(x0, y0, 7, 0xffffff, 1).setDepth(90003);
+            const cua = this.add.graphics().setDepth(90002).setBlendMode('ADD');
+            Sfx.secret();
+            this.tweens.add({ targets: cap, x, y, duration: 900, ease: 'Quad.easeIn',
+                onUpdate: () => {
+                    const l = Math.hypot(x - x0, y - y0), ux = (x - x0) / l, uy = (y - y0) / l;
+                    cua.clear().lineStyle(4, 0xffffff, 0.35).lineBetween(cap.x, cap.y, cap.x - ux * 140, cap.y - uy * 140)
+                        .lineStyle(2, 0xffffff, 0.9).lineBetween(cap.x, cap.y, cap.x - ux * 50, cap.y - uy * 50);
+                },
+                onComplete: () => {
+                    cap.destroy(); cua.destroy();
+                    cam.flash(300, 216, 232, 255);
+                    const esq = this.add.particles(x, y, 'espurna', { speed: { min: 60, max: 200 }, angle: { min: 200, max: 340 }, lifespan: 900, gravityY: 300,
+                        scale: { start: 0.45, end: 0 }, tint: [0xd8e8ff, 0xffffff], blendMode: 'ADD', emitting: false }).setDepth(90003);
+                    esq.explode(30);
+                    this.time.delayedCall(1200, () => esq.destroy());
+                    this.posarLlumEstel();
+                    this.esperar(1100, () => {
+                        cam.pan(this.ineu.x, this.ineu.y, 800, 'Sine.easeInOut');
+                        this.esperar(850, () => { cam.startFollow(this.ineu, true, 0.12, 0.12); this.estelCaient = false; if (fet) fet(); });
+                    });
+                } });
+        });
+    }
+
+    // Una columna de llum freda baixa del cel fins a l'aigua del dipòsit, i hi queda un punt brillant amb espurnes. Va per sobre
+    // del vel de nit (si no, no es veu) i té un estel que parpelleja damunt del dipòsit, perquè es vegi de lluny
     posarLlumEstel() {
-        const { estelX: x, estelY: y } = DIP;
-        const raig = this.add.rectangle(x, y, 60, 900, 0xd8e8ff, 0.12).setOrigin(0.5, 1).setDepth(400).setBlendMode('ADD');
-        const halo = this.add.ellipse(x, y, 120, 34, 0xd8e8ff, 0.5).setDepth(400).setBlendMode('ADD');
-        const punt = this.add.circle(x, y, 8, 0xffffff, 1).setDepth(401);
-        this.tweens.add({ targets: [raig, halo], alpha: '*=0.4', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
+        const { estelX: x, estelY: y } = DIP, D = 90002;
+        const raig = this.add.rectangle(x, y, 70, 900, 0xd8e8ff, 0.2).setOrigin(0.5, 1).setDepth(D).setBlendMode('ADD');
+        const nucli = this.add.rectangle(x, y, 16, 900, 0xffffff, 0.35).setOrigin(0.5, 1).setDepth(D).setBlendMode('ADD');
+        const halo = this.add.ellipse(x, y, 140, 40, 0xd8e8ff, 0.6).setDepth(D).setBlendMode('ADD');
+        const punt = this.add.circle(x, y, 9, 0xffffff, 1).setDepth(D + 1);
+        const estel = this.add.graphics({ x, y: y - 90 }).setDepth(D + 1).setBlendMode('ADD');
+        estel.fillStyle(0xffffff, 0.95).fillPoints([{ x: 0, y: -26 }, { x: 5, y: -5 }, { x: 26, y: 0 }, { x: 5, y: 5 }, { x: 0, y: 26 }, { x: -5, y: 5 }, { x: -26, y: 0 }, { x: -5, y: -5 }], true);
+        estel.fillStyle(0xd8e8ff, 0.5).fillCircle(0, 0, 10);
+        this.tweens.add({ targets: [raig, nucli, halo], alpha: '*=0.5', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
         this.tweens.add({ targets: punt, scale: 1.5, yoyo: true, repeat: -1, duration: 700 });
+        this.tweens.add({ targets: estel, scale: { from: 0.7, to: 1.15 }, angle: 45, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
         const esp = this.add.particles(x, y, 'espurna', {
             x: { min: -50, max: 50 }, y: { min: -8, max: 8 }, speedY: { min: -40, max: -10 }, lifespan: 1400,
             scale: { start: 0.35, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xd8e8ff, 0xffffff], frequency: 120, blendMode: 'ADD'
-        }).setDepth(402);
-        this.llumEstel = [raig, halo, punt, esp];
+        }).setDepth(D + 2);
+        this.llumEstel = [raig, nucli, halo, punt, estel, esp];
     }
 
     posarBoiraDolmen() {

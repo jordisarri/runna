@@ -1,6 +1,7 @@
 /**
  * ELS DIPÒSITS: "Les Llàgrimes de Sant Llorenç"
- * Mirant pel telescopi del Garf. Part 1: compta 7 estels fugaços (apunta amb el cursor i prem ESPAI o clic).
+ * Mirant pel telescopi del Garf. Part 1: compta 7 estels fugaços blancs, les llàgrimes (apunta amb el cursor i prem ESPAI o clic);
+ * en cauen també de blaus i daurats, que no ho són: tocar-ne un en resta un del compte.
  * Part 2: uneix els 7 punts en ordre i apareix la constel·lació amagada: un ocell que s'escapa d'una gàbia oberta
  * (la gàbia són uns altres estels, més febles, que ja hi són; en acabar s'uneixen sols).
  * Controls: ratolí o fletxes/WASD per moure el cercle; ESPAI/ENTER/clic per triar; ESC per sortir (es desa el progrés).
@@ -17,11 +18,12 @@ const ESTELS_GABIA_LINIES = [['a', 'b'], ['a', 'c'], ['c', 'e'], ['e', 'd'], ['d
 function completarEstels() {
     const E = Estat;
     E.posaFlag("estelsFets");
-    const ui = game.scene.getScene("UI");
+    const ui = game.scene.getScene("UI"), z = game.scene.getScene("ZonaDipositos");
     E.posaObjectiu("S'ha encès una llum a l'aigua del dipòsit de llevant: ves-hi.");
-    if (ui) ui.obrirDialeg({ pagines: [
+    const dialeg = () => { if (ui) ui.obrirDialeg({ pagines: [
         { qui: "Ineu", text: "Set estels... i un ocell que s'escapa d'una gàbia oberta. És la nit de les llàgrimes de Sant Llorenç!" },
-    ] }, () => E.desar());
+    ] }, () => E.desar()); };
+    if (z && z.scene.isActive() && z.caureEstel) z.caureEstel(dialeg); else dialeg();
 }
 
 class EscenaEstels extends Phaser.Scene {
@@ -67,15 +69,19 @@ class EscenaEstels extends Phaser.Scene {
 
     // ---------- Part 1: estels fugaços ----------
     iniciarPart1() {
-        this.info.setText(`Compta els estels fugaços: toca quan en creuï un.   ${this.compte}/7`);
+        this.textCompte();
         this.propEstrella = this.time.now + 900;
     }
 
-    // Cada estel fugaç neix en un punt qualsevol del cel (no sempre al mateix racó) i cau en diagonal cap a un costat o l'altre
+    textCompte() { this.info.setText(`Toca les llàgrimes de Sant Llorenç: només els estels BLANCS.   ${this.compte}/7`); }
+
+    // Cada estel fugaç neix en un punt qualsevol del cel (no sempre al mateix racó) i cau en diagonal cap a un costat o l'altre.
+    // Un de cada tres és blau o daurat: no és una llàgrima
     nouEstel() {
-        const esquerra = Math.random() < 0.5, a0 = 0.3 + Math.random() * 0.45, a = esquerra ? Math.PI - a0 : a0, v = 340 + Math.random() * 160;
+        const esquerra = Math.random() < 0.5, a0 = 0.3 + Math.random() * 0.45, a = esquerra ? Math.PI - a0 : a0, v = 520 + Math.random() * 220;
         const x = esquerra ? AMPLE * (0.3 + Math.random() * 0.75) : AMPLE * (-0.05 + Math.random() * 0.75);
-        this.estrelles.push({ x, y: 170 + Math.random() * ALT * 0.55, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vida: 1500 + Math.random() * 600 });
+        const color = Math.random() < 0.34 ? (Math.random() < 0.5 ? 0x7fb0ff : 0xffc840) : 0xffffff;
+        this.estrelles.push({ x, y: 170 + Math.random() * ALT * 0.55, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vida: 1100 + Math.random() * 400, color });
     }
 
     // ---------- Part 2: constel·lació ----------
@@ -96,7 +102,19 @@ class EscenaEstels extends Phaser.Scene {
     triar() {
         if (this.tancat) return;
         if (this.part === 1) {
-            const e = this.estrelles.find(s => Phaser.Math.Distance.Between(s.x, s.y, this.rx, this.ry) < 80);
+            const d = s => Phaser.Math.Distance.Between(s.x, s.y, this.rx, this.ry);
+            const e = this.estrelles.filter(s => d(s) < 60).sort((p, q) => d(p) - d(q))[0];
+            if (e && e.color !== 0xffffff) {                     // no és una llàgrima: en resta una
+                e.vida = 0;
+                this.compte = Math.max(0, this.compte - 1);
+                Estat.dades.flags.estelsCompt = this.compte;
+                const flaix = this.add.circle(e.x, e.y, 10, e.color, 0.9);
+                this.tweens.add({ targets: flaix, radius: 50, alpha: 0, duration: 350, onComplete: () => flaix.destroy() });
+                this.cameras.main.shake(120, 0.004);
+                this.missatge.setText("Aquest no és una llàgrima.");
+                this.textCompte();
+                return;
+            }
             if (e) {
                 e.vida = 0;
                 this.compte++;
@@ -104,7 +122,8 @@ class EscenaEstels extends Phaser.Scene {
                 const flaix = this.add.circle(e.x, e.y, 10, 0xffffff, 0.9);
                 this.tweens.add({ targets: flaix, radius: 70, alpha: 0, duration: 450, onComplete: () => flaix.destroy() });
                 this.so(this.compte);
-                this.info.setText(`Compta els estels fugaços: toca quan en creuï un.   ${this.compte}/7`);
+                this.missatge.setText("");
+                this.textCompte();
                 if (this.compte >= 7) {
                     Estat.posaFlag("estelsPart1");
                     this.estrelles = [];
@@ -214,15 +233,15 @@ class EscenaEstels extends Phaser.Scene {
         if (this.part === 1) {
             if (this.time.now > this.propEstrella) {
                 this.nouEstel();
-                this.propEstrella = this.time.now + 1100 + Math.random() * 900;
+                this.propEstrella = this.time.now + 800 + Math.random() * 700;
             }
             this.cel.clear();
             this.estrelles.forEach(s => {
                 s.x += s.vx * delta / 1000; s.y += s.vy * delta / 1000; s.vida -= delta;
                 const l = Math.hypot(s.vx, s.vy);
-                this.cel.lineStyle(3, 0xffffff, 0.35).lineBetween(s.x, s.y, s.x - s.vx / l * 110, s.y - s.vy / l * 110);
-                this.cel.lineStyle(2, 0xffffff, 0.8).lineBetween(s.x, s.y, s.x - s.vx / l * 40, s.y - s.vy / l * 40);
-                this.cel.fillStyle(0xffffff, 1).fillCircle(s.x, s.y, 4);
+                this.cel.lineStyle(3, s.color, 0.35).lineBetween(s.x, s.y, s.x - s.vx / l * 110, s.y - s.vy / l * 110);
+                this.cel.lineStyle(2, s.color, 0.8).lineBetween(s.x, s.y, s.x - s.vx / l * 40, s.y - s.vy / l * 40);
+                this.cel.fillStyle(s.color, 1).fillCircle(s.x, s.y, 4);
             });
             this.estrelles = this.estrelles.filter(s => s.vida > 0);
         }
