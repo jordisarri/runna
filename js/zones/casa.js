@@ -547,15 +547,19 @@ class ZonaPassadis extends ZonaCasaBase {
 
         this.espelmes([[230, 1250], [570, 1250], [230, 820], [570, 820], [230, 360], [570, 360]]);
 
-        // Un mur d'esbarzers negres a mig passadís: només es talla amb Runna. Fosc sobre pedra fosca no es veuria: llueixen violeta
-        // i hi ha dues espelmes a cada costat perquè es vegin de lluny.
+        // Un mur d'esbarzers negres a mig passadís: només es talla amb Runna. Negre sobre pedra fosca no es veuria: al darrere hi ha
+        // una claror lila (es retallen a contrallum), cada esbarzer té una vora lluminosa i hi ha dues espelmes a cada costat.
         this.espelmes([[225, 770], [575, 770]]);
+        if (!['passadis0', 'passadis1', 'passadis2', 'passadis3', 'passadis4'].every(id => Estat.flag('esb_' + id))) {
+            this.contrallum = this.add.ellipse(400, 712, 420, 110, 0xc8a0ff, 0.45).setDepth(738).setBlendMode('ADD');
+            this.tweens.add({ targets: this.contrallum, alpha: 0.25, yoyo: true, repeat: -1, duration: 1400, ease: 'Sine.easeInOut' });
+        }
         [240, 320, 400, 480, 560].forEach((x, i) => {
             const o = this.esbarzer(x, 740, 'passadis' + i);
             if (!o) return;
-            o.img.setTint(0xc8a0ff);
-            const halo = this.add.ellipse(x, 722, 96, 60, 0x9a50ff, 0.32).setDepth(739);
-            this.tweens.add({ targets: halo, alpha: 0.1, scale: 1.2, yoyo: true, repeat: -1, duration: 900 + i * 110 });
+            if (o.img.preFX) o.img.preFX.addGlow(0xe8d0ff, 5, 0, false, 0.1, 10);
+            const halo = this.add.ellipse(x, 722, 96, 60, 0xb070ff, 0.4).setDepth(739).setBlendMode('ADD');
+            this.tweens.add({ targets: halo, alpha: 0.15, scale: 1.2, yoyo: true, repeat: -1, duration: 900 + i * 110 });
             o.halo = halo;
         });
 
@@ -571,6 +575,13 @@ class ZonaPassadis extends ZonaCasaBase {
 
     actualitzar() {
         this.esbarzers.forEach(o => { if (!o.viu && o.halo) { o.halo.destroy(); o.halo = null; } });
+        if (this.contrallum && this.esbarzers.every(o => !o.viu)) { this.contrallum.destroy(); this.contrallum = null; }
+        // Les escolopendres, fosques sobre pedra fosca: una vora ambre i una mica de llum al terra perquè es vegin
+        this.enemics.forEach(e => {
+            if (e.mort || !e.spr || !e.spr.active) { if (e.llumTerra) { e.llumTerra.destroy(); e.llumTerra = null; } return; }
+            if (!e.ressaltat) { e.ressaltat = true; if (e.spr.preFX) e.spr.preFX.addGlow(0xffc070, 4, 0, false, 0.1, 10); e.llumTerra = this.add.ellipse(0, 0, 90, 44, 0xffb060, 0.22).setBlendMode('ADD'); }
+            if (e.llumTerra) e.llumTerra.setPosition(e.spr.x, e.spr.y - 4).setDepth(e.spr.depth - 1).setAlpha(e.spr.alpha * 0.22);
+        });
         if (Estat.flag('passadisNet')) return;
         if (this.enemics.every(e => e.mort) && this.esbarzers.every(o => !o.viu)) Estat.posaFlag('passadisNet');
     }
