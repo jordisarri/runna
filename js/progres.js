@@ -101,15 +101,15 @@ const PROGRES = {
           pista: E => "Vençut l'Home del Raïm, la trapa de sota l'escalinata baixa a la Cripta dels monjos: hi ha la Clau de ferro." },
         { id: 'segell', marca: ['tombaLlegida', 'tombaSegellada'], fet: E => E.flag('tombaSegellada'),
           pista: E => E.flag('tombaLlegida') || !E.flag('relTretes')
-              ? "La tomba esquerdada del Cementiri (darrere el Santuari i el Monestir) encara treu boira. La llum que va tancar la porta la pot tancar: acosta-hi Runna. I guarda la Clau de ferro: obre la porta de sota la Taverna."
-              : "La tomba dels monjos del Cementiri treu boira. El Pare Alcuí, a la Biblioteca, deu trobar a la Crònica què s'hi ha de fer. I guarda la Clau de ferro: obre la porta de sota la Taverna." },        // ---- Sota la Taverna ----
+              ? "La tomba esquerdada del Cementiri (darrere el Santuari i el Monestir) encara treu boira. La llum que va tancar la porta la pot tancar: acosta-hi Runna. I guarda la Clau de ferro: obre la porta de ferro de la Sala de les Gírgoles, a l'est del Pati del Celler."
+              : "La tomba dels monjos del Cementiri treu boira. El Pare Alcuí, a la Biblioteca, deu trobar a la Crònica què s'hi ha de fer. I guarda la Clau de ferro: obre la porta de ferro de la Sala de les Gírgoles, a l'est del Pati del Celler." },        // ---- Sota la Taverna ----
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
           pista: E => "A l'est del Pati del Celler, pel camí entre els arbres, hi ha la Sala de les Gírgoles: una porta de ferro, la que el Germà Andreu tanca cada nit. La Clau de ferro l'obre." },
         { id: 'clauCiscu', marca: ['ciscuTrobat', 'clauGirgoles', 'obj:clau_girgoles'], fet: E => E.te('clau_girgoles') || E.flag('portaFerroOberta'),
           pista: E => E.flag('ciscuTrobat') ? "Torna a la cabana amagada: el Siscu té una clau rovellada per a tu."
-              : "La porta de ferro del fons del soterrani té un pany petit: la Clau de ferro no hi entra. El Siscu, el fill de la Carmen, va veure el Germà Andreu entrar-hi de nit. L'Eva diu que s'escapa pel camí de la Desaparició, per un forat entre els arbres." },
+              : "La porta de ferro del fons del soterrani té un pany petit: la Clau de ferro no hi entra. El Siscu, el fill de la Carmen, s'escapa de nit: segur que ha vist el Germà Andreu. Surt pel camí de la Desaparició (a l'oest de les Runes) i s'amaga per un forat entre els arbres «per on els grans no hi caben»." },
         { id: 'portaFerro', marca: ['portaFerroOberta'], fet: E => E.flag('portaFerroOberta'),
-          pista: E => "Al soterrani de la Taverna, la clau rovellada del Siscu obre la porta de ferro del fons, d'on surt la boira." },
+          pista: E => "Al soterrani de la Sala de les Gírgoles (a l'est del Pati del Celler), la clau rovellada del Siscu obre la porta de ferro del fons, d'on surt la boira." },
         { id: 'girgoles', marca: ['girgolesEnceses'], fet: E => E.flag('girgolesEnceses'),
           pista: E => "A la Sala de les Gírgoles, sota la porta de ferro, fes que les cinc mates de gírgoles lluminoses brillin alhora: cada una que toques canvia ella i les dues del costat." },
         { id: 'rastell', marca: ['rastellObert'], fet: E => E.flag('rastellObert'),

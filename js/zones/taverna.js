@@ -30,8 +30,11 @@ Object.assign(DIALEGS, {
             ],
             enAcabar: () => { E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La porta de ferro de la Sala de les Gírgoles, a l\'est del Pati del Celler, baixa al soterrani: la Clau de ferro l\'obre.' : E.dades.objectiu); }
         };
+        if (E.flag('portaPetitaVista') && !E.flag('ciscuTrobat')) return { pagines: [
+            { qui: 'Eva', text: 'El Siscu? Ja t\'ho vaig dir: surt pel camí de la Desaparició, a l\'oest de les Runes, i s\'amaga per un forat entre els arbres «per on els grans no hi caben». Si el trobes, digues-li que torni a sopar.' }
+        ] };
         if (E.flag('clauFerro')) return { pagines: [
-            { qui: 'Eva', text: 'Aquesta clau... és de ferro vell, com la porta de fora, la del soterrani! L\'has trobada a la Casa Gran? Surt i dona la volta a la Taverna: és a la dreta, de cara al camí.' },
+            { qui: 'Eva', text: 'Aquesta clau... és de ferro vell, com la porta de fora, la del soterrani! L\'has trobada a la Casa Gran? La porta és a la Sala de les Gírgoles: des del Pati del Celler, el camí de l\'est, entre els arbres.' },
             { qui: 'Eva', text: E.flag('cantMiracle') ? 'I la Pianista t\'ha ensenyat el cant. Vés amb compte, allà baix.' : 'Abans de baixar, passa pel Santuari: la Pianista sempre diu que hi ha un cant per a cada porta.' }
         ] };
         if (E.flag('runna')) return { pagines: [
@@ -62,9 +65,14 @@ Object.assign(DIALEGS, {
         if (E.te('clau_girgoles')) return { pagines: [
             { qui: 'Ineu', text: '(Tinc Runna i el Cant del Miracle. Endavant.)' }
         ] };
-        return { pagines: [
-            { qui: 'Ineu', text: E.flag('clauFerro') ? '(La Clau de ferro dels monjos no hi entra: és massa grossa. El Germà Andreu en deu tenir una altra, de petita. Algú l\'ha vist entrar de nit?)' : '(Aquí és d\'on surt tot. Em falta l\'espasa que la va segellar... i una clau.)' }
+        if (!E.flag('clauFerro')) return { pagines: [
+            { qui: 'Ineu', text: '(Aquí és d\'on surt tot. Em falta l\'espasa que la va segellar... i una clau.)' }
         ] };
+        // Sense la clau petita: l'Ineu recorda qui s'escapa de nit (el Siscu) i l'objectiu l'hi porta
+        return { pagines: [
+            { qui: 'Ineu', text: '(La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Andreu en deu tenir una altra.)' },
+            { qui: 'Ineu', text: '(Algú l\'hauria d\'haver vist baixar de nit... El Siscu, el fill de la Carmen! L\'Eva va dir que s\'escapa pel camí de la Desaparició, per un forat entre els arbres.)' }
+        ], enAcabar: () => { E.posaFlag('portaPetitaVista'); E.posaObjectiu(PROGRES.pista(E)); } };
     }
 });
 
@@ -222,7 +230,7 @@ class ZonaSotaTaverna extends ZonaBase {
     obrirPortaFerro(ja = false) {
         if (this.portaOberta) return;
         this.portaOberta = true;
-        if (!ja) { Estat.posaFlag('portaFerroOberta'); Sfx.secret(); this.cameras.main.shake(400, 0.004); Estat.posaObjectiu('Baixa per la porta de ferro, al soterrani de la Taverna.'); Estat.desar(); }
+        if (!ja) { Estat.posaFlag('portaFerroOberta'); Sfx.secret(); this.cameras.main.shake(400, 0.004); Estat.posaObjectiu('Baixa per la porta de ferro del fons del soterrani, cap a la Sala de les Gírgoles.'); Estat.desar(); }
         const forat = this.add.graphics().setDepth(-945);
         forat.fillStyle(0x000000, 1).fillRect(312, 20, 176, 140);
         for (let k = 0; k < 5; k++) forat.fillStyle(0x2a2430 - k * 0x040404, 1).fillRect(330 + k * 6, 40 + k * 22, 140 - k * 12, 18);
@@ -333,6 +341,7 @@ class ZonaGirgolesFora extends ZonaBase {
         if (!Estat.flag('clauFerro') || Estat.flag('portaSoterraniOberta')) return;
         const x = this.PX, b = this.BASE;
         Estat.posaFlag('portaSoterraniOberta');
+        Estat.posaObjectiu('Baixa al soterrani per la porta de ferro de la Sala de les Gírgoles.');
         Sfx.secret(); this.cameras.main.shake(300, 0.003);
         this.pintarPorta(true);
         [-1, 1].forEach(sg => {

@@ -185,7 +185,7 @@ const DIALEGS = {
             { qui: 'Siscu', text: 'Té, a tu et servirà més que a mi. Però no diguis a la mare que jo era a fora de nit!' },
             { avis: 'Has obtingut la CLAU ROVELLADA' }
         ];
-        const donar = () => { E.posaFlag('ciscuTrobat'); E.posaFlag('clauGirgoles'); E.dona('clau_girgoles'); };
+        const donar = () => { E.posaFlag('ciscuTrobat'); E.posaFlag('clauGirgoles'); E.dona('clau_girgoles'); E.posaObjectiu(PROGRES.pista(E)); };
         if (!E.flag('ciscuTrobat')) return {
             pagines: [
                 { fer: (z, fet) => z.seq([c => z.bombolla('ciscu', '!', c, 600), c => z.npcSalta('ciscu', c, 1)], fet) },

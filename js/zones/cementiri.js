@@ -131,8 +131,7 @@ class ZonaCementiri extends ZonaBase {
         this.time.delayedCall(2400, () => this.ui().obrirDialeg({ pagines: [
             { qui: 'Ineu', text: "(L'esquerda s'ha tancat i ja no en surt boira. Els qui van tancar la porta tornen a descansar.)" }
         ] }, () => Estat.desar()));
-        Estat.posaObjectiu(Estat.te('clau_ferro') ? "Troba la porta de ferro de la Sala de les Gírgoles, a l'est del Pati del Celler."
-                                                 : "La tomba descansa. A la Casa Gran, sota l'escalinata, hi ha la Clau de ferro dels monjos.");
+        Estat.posaObjectiu(PROGRES.pista(Estat));
         Estat.desar();
     }
 
