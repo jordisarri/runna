@@ -1,6 +1,6 @@
 /**
  * Converteix els PNG del catàleg (js/assets.js) a WebP amb pèrdua i transparència.
- *   node eines/convertir_webp.js            (cal tenir "sharp" instal·lat)
+ *   node eines/convertir_webp.js [clau]     (cal tenir "sharp" instal·lat; amb clau, només aquella imatge)
  * Per a cada imatge: treu el fons blanc (el mateix algorisme que el joc), retalla les vores buides i
  * redueix a l'amplada que el joc usa de debò (amplada * RES). També passa a WebP les fulles de l'Ineu.
  */
@@ -76,7 +76,9 @@ async function fullaMirall(rel, dest, qualitat) {
 }
 
 (async () => {
-    for (const it of items) await catalog(it);
+    const nomes = process.argv[2];      // opcional: només aquesta clau del catàleg (p. ex. taverna)
+    for (const it of items) if (!nomes || it.key === nomes) await catalog(it);
+    if (nomes) return;
     for (const d of ['down', 'up', 'right', 'southwest', 'southeast', 'northwest', 'northeast']) await fulla(`art/ineu/caminar/transparents/${d}.png`, `assets/ineu/${d}.webp`, 90);
     await fullaMirall('art/ineu/caminar/transparents/right.png', 'assets/ineu/left.webp', 90);
     await fulla('art/ineu/caminar/Ineu-iso_walk_right-v2.png', 'assets/ineu/costat.webp', 95);   // té fons blanc: el joc el treu en carregar-la

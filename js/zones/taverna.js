@@ -12,7 +12,6 @@ Object.assign(DIALEGS, {
         pagines: [
             { qui: 'Nota', text: '«Avui no servim. — Carmen»' },
             { qui: 'Ineu', text: 'Des de dins se sent un fil de música d\'acordió, molt baixet... i una olor de fregit.' },
-            { fer: (z, fet) => z.evaFinestra ? z.evaFinestra(fet) : fet() },
             { qui: 'Eva', text: 'Psst! Tu ets l\'Ineu, oi? El monjo que pregunta pels nens. Entra, de pressa, que la Carmen dorm i no vull que ens vegin.' },
             { fer: (z, fet) => z.obrirPortaAnim ? z.obrirPortaAnim(fet) : fet() }
         ],
@@ -45,7 +44,6 @@ Object.assign(DIALEGS, {
         ] };
     },
 
-    rebostTaverna: E => ({ pagines: [] }),
 
     // La porta de ferro de la Sala de les Gírgoles (a l'est del Pati del Celler): la del soterrani, que el Germà Andreu tanca amb clau cada nit
     portaSoterrani: E => E.flag('clauFerro') ? { pagines: [
@@ -153,15 +151,7 @@ class ZonaTavernaInt extends ZonaBase {
         this.interactiu(150, 410, RADI_OBJECTE, DIALEGS.acordio, { altura: 60 });
 
         // L'Eva, al costat de la llar
-        this.npc('eva', 650, 290, DIALEGS.eva, { flipX: true });
-
-        // La porta del rebost, a la paret del fons a la dreta: tancada (des d'aquí no es baixa al soterrani)
-        const pf = this.add.graphics().setDepth(-950);
-        pf.fillStyle(0x120a04, 1).fillRect(812, 30, 96, 106);
-        pf.fillStyle(0x5a3a1e, 1).fillRect(818, 36, 84, 100);
-        for (let k = 1; k < 4; k++) pf.lineStyle(2, 0x2a1608, 1).lineBetween(818 + k * 21, 36, 818 + k * 21, 136);
-        pf.fillStyle(0x2a2a2e, 1).fillRect(830, 82, 60, 8).fillCircle(892, 92, 4);
-        this.interactiu(860, 175, RADI_OBJECTE, DIALEGS.rebostTaverna, { altura: 90 });
+        this.npc('eva', 650, 350, DIALEGS.eva, { flipX: true });
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffc070, 0.07).setDepth(80000);
         this.sortida(460, H - 22, 80, 14, 'ZonaTaverna', 'interior');

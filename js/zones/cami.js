@@ -466,13 +466,13 @@ class ZonaTaverna extends ZonaBase {
 
         // Façana (900 d'ample, tres plantes): la porta és l'arc del mig
         const t = this.taverna = this.posar('taverna', 800, 750, { fonsY: 640 });
-        this.colisio(555, 705, 410, 90);
-        this.colisio(1045, 705, 410, 90);
+        this.colisio(603, 705, 355, 90);
+        this.colisio(1040, 705, 340, 90);
         this.blocDarrere(800, 900, 660, Math.max(0, 750 - t.displayHeight));
-        // La porta (l'arc del mig): tancada fins que l'Eva l'obre des de dins
-        this.colPorta = this.colisio(800, 705, 80, 90);
+        // La porta (l'arc del mig): tancada fins que s'hi parla (l'Eva l'obre des de dins)
+        this.colPorta = this.colisio(825, 705, 90, 90);
         if (Estat.flag('tavernaOberta')) { this.obrirPorta(); this.portaTavernaAnim(); }
-        else this.interactiu(800, 765, RADI_OBJECTE, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() });
+        else this.interactiu(825, 765, RADI_OBJECTE, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() });
 
         // Barrils a la dreta, taula i banc a l'esquerra, contra la façana
         this.posar('barril', 1150, 800, { col: { w: 40, h: 16 } });
@@ -488,16 +488,6 @@ class ZonaTaverna extends ZonaBase {
         this.sortida(1586, 900, 14, 130, 'ZonaCasaGran', 'oest');
     }
 
-    // L'Eva treu el cap per l'aparador de l'esquerra, mira a banda i banda, i torna a dins
-    evaFinestra(fet) {
-        const eva = this.add.image(548, 700, 'eva').setOrigin(0.5, 1).setDepth(800).setAlpha(0);
-        eva.setScale(((this.textures.get('eva').customData || {}).escala || 0.5) * 0.9);
-        this.tweens.add({ targets: eva, alpha: 1, y: 690, duration: 500, onComplete: () => {
-            this.tweens.add({ targets: eva, scaleX: -eva.scaleX, yoyo: true, repeat: 1, duration: 300, delay: 200, onComplete: () => {
-                this.tweens.add({ targets: eva, alpha: 0, delay: 300, duration: 400, onComplete: () => { eva.destroy(); fet(); } });
-            } });
-        } });
-    }
     // Se sent el forrellat i la porta del mig s'obre (es veu fosc a dins)
     obrirPortaAnim(fet) {
         Sfx.secret && Sfx.secret();
@@ -508,14 +498,14 @@ class ZonaTaverna extends ZonaBase {
 
     // L'arc del mig de la façana: els batents són el tros del mateix gràfic i giren cap endins quan l'Ineu s'hi acosta
     portaTavernaAnim() {
-        return this.portaTaverna || (this.portaTaverna = this.portaAnimada({ x: 800, top: 555, bottom: 745, ample: 112, fons: 640, unic: true, arc: true, retall: this.taverna }));
+        return this.portaTaverna || (this.portaTaverna = this.portaAnimada({ x: 825, top: 590, bottom: 746, ample: 105, fons: 640, unic: true, arc: 46, retall: this.taverna }));
     }
 
     obrirPorta() {
         if (!Estat.flag('tavernaOberta') || this.portaOberta) return;
         this.portaOberta = true;
         this.obstacles.remove(this.colPorta, true, true);
-        this.sortida(762, 690, 76, 56, 'ZonaTavernaInt', 'porta');
+        this.sortida(787, 690, 76, 56, 'ZonaTavernaInt', 'porta');
     }
 }
 
