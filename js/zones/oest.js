@@ -479,6 +479,7 @@ class ZonaDipositos extends ZonaBase {
 
         this.arbres([[100, 150], [250, 90], [800, 100], [1450, 140], [1350, 900], [1500, 960], [120, 960], [560, 960], [660, 820]]);
         [[1250, 800], [450, 800], [800, 440]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[330, 440], [1290, 440]].forEach(([x, y]) => this.enemic('gripau', x, y));       // gripaus: a prop de l'aigua dels dipòsits
 
         // Cel de nit estrellat sobre el paisatge
         this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE / ZOOM_CAMERA + 4, ALT / ZOOM_CAMERA + 4, 0x060a28, 0.30).setScrollFactor(0).setDepth(90000);

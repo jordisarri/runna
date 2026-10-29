@@ -47,6 +47,7 @@ class ZonaCellerFora extends ZonaBase {
         [[1300, 420], [1180, 820]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: -800, escala: 0.6 }));
 
         this.enemic('escolopendra', 1300, 600);
+        this.enemic('visitant', 1000, 700);        // un visitant trastocat per la boira, que ha pujat a veure el Celler
         this.sortida(700, 1086, 200, 14, 'ZonaPlaca', 'ruines');
         this.sortida(700, 0, 200, 14, 'ZonaRuines', 'celler');
         this.sortida(1586, 440, 14, 130, 'ZonaGirgolesFora', 'celler');
@@ -539,24 +540,27 @@ class ZonaSantAntoni extends ZonaBase {
         this.cartell(170, 800, () => ({ pagines: [{ qui: 'Cartell', text: '← El Monestir i la Plaça' }] }));
         this.arbres([[1250, 300], [1320, 560], [1340, 1060], [160, 300], [360, 220]]);   // cap arbre davant el cartell ni el Germà Francesc
 
-        this.enemic('escolopendra', 420, 1010);
-        this.enemic('escolopendra', 1200, 900);
         this.sortida(0, 820, 14, 140, 'ZonaMonestir', 'santantoni');   // surts per l'est del Monestir
     }
 
-    // Va i ve pel camí, a salts menuts; en agafar-lo, passa al sarró
+    // Va i ve pel camí caminant (full de 16 fotogrames cap a la dreta; es gira per tornar); en agafar-lo, passa al sarró
     posarPallofa() {
-        const g = this.posar('pallofa', 420, 905);
+        const animat = this.textures.exists('pallofa_cami') && this.textures.get('pallofa_cami').frameTotal > 2;
+        let g;
+        if (animat) {
+            if (!this.anims.exists('pallofa_camina')) this.anims.create({ key: 'pallofa_camina', frames: this.anims.generateFrameNumbers('pallofa_cami', { start: 0, end: 15 }), frameRate: 14, repeat: -1 });
+            g = this.add.sprite(420, 905, 'pallofa_cami', 0).setOrigin(0.5, 1).setScale(1 / RES).setDepth(905);
+            g.play('pallofa_camina');
+        } else g = this.posar('pallofa', 420, 905);
         const ombra = this.add.image(g.x, g.y, 'ombra').setScale(0.2).setDepth(-500);
         const punt = this.interactiu(g.x, g.y - 8, RADI_NPC, DIALEGS.pallofa, { altura: g.displayHeight + 6 });
-        this.tweens.add({ targets: g, x: 900, duration: 5200, yoyo: true, repeat: -1, ease: 'Sine.easeInOut',
+        this.tweens.add({ targets: g, x: 900, duration: 6500, yoyo: true, repeat: -1, ease: 'Linear',
             onYoyo: () => g.setFlipX(true), onRepeat: () => g.setFlipX(false),
             onUpdate: () => { ombra.x = g.x; punt.x = g.x; } });
-        this.tweens.add({ targets: g, y: g.y - 6, duration: 130, yoyo: true, repeat: -1,
-            onUpdate: () => { g.setDepth(ombra.y); punt.y = g.y - 8; } });
         punt.enTancar = () => {
             punt.actiu = () => false;
             this.tweens.killTweensOf(g);
+            if (g.anims) g.anims.stop();
             this.tweens.add({ targets: [g, ombra], alpha: 0, duration: 400, onComplete: () => { g.destroy(); ombra.destroy(); } });
         };
     }
@@ -1021,6 +1025,7 @@ class ZonaBosc extends ZonaBase {
         }
 
         [[600, 400], [1300, 300], [1200, 900], [1550, 450]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[450, 720], [1400, 720]].forEach(([x, y]) => this.enemic('bolet', x, y));        // bolets: al bosc
         // Amagatall tancat amb esbarzers negres (cal Runna): un cofre
         for (let i = 0; i < 6; i++) {
             const a = i / 6 * Math.PI * 2;

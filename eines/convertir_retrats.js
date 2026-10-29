@@ -10,7 +10,7 @@ const font=fs.readFileSync(A+'/js/assets.js','utf8');
 const ctx={};
 vm.runInNewContext(font.slice(font.indexOf('function treureFonsBlanc'),font.indexOf('// ---------- Dibuixos provisionals'))+'; this.f = treureFonsBlanc;',ctx);
 // fitxer (sense _retrat.jpg) -> clau del sprite
-const MAPA={charm:'monja_charm',eva:'eva',frederic:'frederic',garf:'garf',germaandreu:'germa_andreu',germafrancesc:'germa_francesc',ineu:'ineu',isidre:'isidre',jaumeta:'jaumeta',josep:'josep',nena_trenes:'nena_trenes',pains:'monja_pains',parealcui:'pare_alcui',paredaniel:'pare_daniel',parejordi:'pare_jordi',pastor_a:'pastor_a',pastor_b:'pastor_b',pastor_vell:'pastor_vell',phili:'monja_phili',pianista:'pianista',siscu:'ciscu',juli:'juli',tiller:'tiller',venerables:'venerables'};
+const MAPA={charm:'monja_charm',eva:'eva',frederic:'frederic',garf:'garf',germaandreu:'germa_andreu',germafrancesc:'germa_francesc',ineu:'ineu',isidre:'isidre',jaumeta:'jaumeta',josep:'josep',nena_trenes:'nena_trenes',pains:'monja_pains',parealcui:'pare_alcui',paredaniel:'pare_daniel',parejordi:'pare_jordi',pastor_a:'pastor_a',pastor_b:'pastor_b',pastor_vell:'pastor_vell',phili:'monja_phili',pianista:'pianista',siscu:'ciscu',juli:'juli',tiller:'tiller',carry:'carry',venerables:'venerables'};
 (async()=>{
  for(const [f,k] of Object.entries(MAPA)){
   const src=A+'/art/retrats/'+f+'_retrat.jpg';

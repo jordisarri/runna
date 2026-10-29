@@ -101,7 +101,8 @@ const DIALEGS = {
         }
         if (E.flag("combatActiu")) {
             return { pagines: [
-                { qui: "Pare Jordi", text: "Les bestioles han sortit pels camins, Ineu. Fins i tot alguns visitants vagaregen com sonàmbuls. No els facis mal de debò: només fes-los dormir." },
+                { qui: "Pare Jordi", text: "Les bestioles han sortit pels camins, Ineu. Fins i tot alguns visitants, que pujaven al Miracle a fer fotos, vagaregen amb la pell verdosa i la mirada perduda: la boira els ha trastocat i no saben ni qui són. Si en veus pel Santuari o pel Cementiri, no t'espantis." },
+                { qui: "Pare Jordi", text: "No són dolents, pobrets: només fes-los dormir i es despertaran sense recordar res. Quan la boira se'n vagi, tornaran a ser turistes." },
                 { qui: "Pare Jordi", text: "I torna abans que es faci fosc." }
             ] };
         }

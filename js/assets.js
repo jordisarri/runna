@@ -56,8 +56,8 @@ const CATALEG = [
     { key: 'josep',     file: 'assets/personatges/josep.webp',     amplada: 82, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },
     { key: 'josep_levita', file: 'assets/personatges/josep_levita.webp', amplada: 134, cru: true, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },   // en Josep levitant amb la pala (minijoc de ping-pong)
     { key: 'garf',      file: 'assets/personatges/garf.webp',      amplada: 55, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#d9b45a', alt: 0.92, ample: 1.35, cap: 17 }) },
-    { key: 'carry',     file: 'assets/personatges/carry.webp',     amplada: 70, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a7a', cabell: '#f0f0f0', pell: '#ece4dc', dona: true, alt: 1.0, ample: 0.7 }) },   // la Carry, anciana molt prima i pàl·lida, de cabells blancs curts i faldilla (busca el Pallofa)
-    { key: 'pallofa',   file: 'assets/personatges/pallofa.webp',   amplada: 44, cru: true,  provisional: (c, w) => dibuixarGos(c, w) },   // el Pallofa, gos petit i prim, blanc amb taques marrons, borni i ple de puces
+    { key: 'carry',     file: 'assets/personatges/carry.webp',     amplada: 58, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a7a', cabell: '#f0f0f0', pell: '#ece4dc', dona: true, alt: 1.0, ample: 0.7 }) },   // la Carry, anciana molt prima i pàl·lida, de cabells blancs curts i faldilla (busca el Pallofa)
+    { key: 'pallofa',   file: 'assets/personatges/pallofa.webp',   amplada: 60, cru: true,  provisional: (c, w) => dibuixarGos(c, w) },   // el Pallofa, gos petit i prim, blanc amb taques marrons, borni i ple de puces
     { key: 'isidre',    file: 'assets/personatges/isidre.webp',    amplada: 93, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { isidre: true, calb: true, roba: '#f4f1e8', cabell: '#000000', alt: 0.94 }) },
     { key: 'jordi_caseta', file: 'assets/personatges/jordi_caseta.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a7a3a', cabell: '#4a3a2a', alt: 0.97, extra: 'gorra' }) },
     { key: 'sansa',     file: 'assets/personatges/sansa.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
@@ -154,7 +154,7 @@ const CATALEG = [
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
 ['ineu', 'pare_jordi', 'germa_andreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'garf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
- 'nena_trenes', 'venerables', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller']
+ 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
 /**
@@ -199,6 +199,8 @@ const Grafics = {
         });
         CATALEG.forEach(item => scene.load.image(item.key, item.file));
         scene.load.image('ineu_perfil_font', 'assets/ineu/costat.webp');
+        scene.load.spritesheet('visitant_zombi', 'assets/enemics/visitant_zombi.webp', { frameWidth: 127, frameHeight: 209 });      // el visitant (turista zombi) caminant, de cara (4x4 fotogrames): serveix per a totes les direccions
+        scene.load.spritesheet('pallofa_cami', 'assets/personatges/pallofa_cami.webp', { frameWidth: 135, frameHeight: 140 });      // el Pallofa caminant cap a la dreta (4x4 fotogrames); es gira per anar cap a l'esquerra
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, `assets/ineu/${dir}.webp`, mida);
@@ -389,6 +391,10 @@ const Grafics = {
         // L'escolopendra caminant (ondula el cos i les potes)
         if (!scene.anims.exists('cempeus') && scene.textures.get('escolopendra').has(0)) {
             scene.anims.create({ key: 'cempeus', frames: scene.anims.generateFrameNumbers('escolopendra', { start: 0, end: 7 }), frameRate: 16, repeat: -1 });
+        }
+        // El visitant (turista trastocat per la boira): cicle de caminar de 16 fotogrames, el mateix per a totes les direccions
+        if (!scene.anims.exists('visitant_camina') && scene.textures.exists('visitant_zombi') && scene.textures.get('visitant_zombi').frameTotal > 2) {
+            scene.anims.create({ key: 'visitant_camina', frames: scene.anims.generateFrameNumbers('visitant_zombi', { start: 0, end: 15 }), frameRate: 13, repeat: -1 });
         }
         (Grafics.atacsVista || []).forEach(dir => {
             const key = 'atac_' + dir;

@@ -472,7 +472,7 @@ const ENEMICS = {
     },
 
     visitant: {
-        tex: 'visitant', vida: 4, vel: 58, mal: 1, radi: 24, cos: [40, 22], ombra: 0.42,
+        tex: 'visitant_zombi', texAlt: 'visitant', escala: 0.6, vida: 4, vel: 58, mal: 1, radi: 24, cos: [40, 22], ombra: 0.42,
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
@@ -485,7 +485,13 @@ const ENEMICS = {
                 vx = e.pausa ? 0 : Math.cos(e.ang) * this.vel * 0.5; vy = e.pausa ? 0 : Math.sin(e.ang) * this.vel * 0.5;
             }
             e.spr.body.setVelocity(vx, vy);
-            if (Math.abs(vx) > 5) e.spr.setFlipX(vx < 0);
+            if (e.spr.texture.key === 'visitant_zombi' && z.anims.exists('visitant_camina')) {
+                // El full és de cara i serveix per a totes les direccions (sense girar-lo); s'atura quan es queda quiet
+                const quiet = vx === 0 && vy === 0;
+                if (!quiet && !e.spr.anims.isPlaying) e.spr.play('visitant_camina', true);
+                else if (quiet && e.spr.anims.isPlaying) e.spr.anims.pause();
+                else if (!quiet && e.spr.anims.isPaused) e.spr.anims.resume();
+            } else if (Math.abs(vx) > 5) e.spr.setFlipX(vx < 0);
             e.spr.rotation = Math.sin(ara / 220) * 0.05;     // caminar de zombi
         }
     }
@@ -498,9 +504,12 @@ Object.assign(ZonaBase.prototype, {
         if (def.preparar) def.preparar(this);
         // Fins que l'Ineu no ha acabat el tutorial del bastó, la boira no ha despertat les bestioles
         if (!Estat.flag('combatActiu')) return null;
-        const tex = this.textures.get(def.tex);
-        const esc = ((tex.customData && tex.customData.escala) || 1 / RES);
-        const spr = this.physics.add.sprite(x, y, def.tex, tex.has(0) ? 0 : undefined).setScale(esc);   // (els fulls d'animació, al fotograma 0)
+        // Amb full de caminar (def.tex) i la imatge de reserva (def.texAlt): si el full no s'ha pogut carregar, es fa servir la de reserva
+        const animada = !!def.texAlt && this.textures.exists(def.tex) && this.textures.get(def.tex).frameTotal > 2;
+        const clauTex = def.texAlt && !animada ? def.texAlt : def.tex;
+        const tex = this.textures.get(clauTex);
+        const esc = animada && def.escala ? def.escala : ((tex.customData && tex.customData.escala) || 1 / RES);
+        const spr = this.physics.add.sprite(x, y, clauTex, tex.has(0) ? 0 : undefined).setScale(esc);   // (els fulls d'animació, al fotograma 0)
         spr.setDepth(y + spr.displayHeight / 2);       // ja des del primer moment (mentre hi ha un diàleg no s'actualitza: sense això el decorat el tapava)
         const fw = spr.width, fh = spr.height;
         spr.body.setSize(def.cos[0] / esc, def.cos[1] / esc);
@@ -864,6 +873,8 @@ Object.assign(ZonaBase.prototype, {
         if (e.def.alDerrotar) { e.def.alDerrotar(this, e); return; }
 
         if (e.tipus === 'visitant') {            // cau adormit i es desperta confús
+            if (e.spr.anims) e.spr.anims.stop();
+            if (!Estat.flag('visitantDormit')) { Estat.posaFlag('visitantDormit'); this.missatge('La boira els ha trastocat: només dormen. Es despertaran sense recordar res.'); }
             this.tweens.add({ targets: e.spr, angle: 90, duration: 300 });
             this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 700, delay: 1500, onComplete: () => this.retirar(e) });
         } else {

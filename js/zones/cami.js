@@ -479,6 +479,7 @@ class ZonaTaverna extends ZonaBase {
         this.posar('barril', 1200, 812, { col: { w: 40, h: 16 } });
         this.posar('banc', 520, 790, { col: { w: 130, h: 22 } });
         this.posar('taula', 400, 805, { escala: 0.7, col: { w: 110, h: 22 } });
+        this.enemic('visitant', 1000, 960);        // un visitant trastocat per la boira, que ha vingut a la Taverna
 
         this.cartell(260, 860, () => ({ pagines: [{ qui: 'Cartell', text: '← L\'Hostatgeria i l\'Era\n→ Els arcs de la Casa Gran' }] }));
         this.arbres([[130, 250], [200, 560], [1460, 330], [1450, 600], [60, 1070], [1180, 1050]]);   // cap arbre davant el cartell
