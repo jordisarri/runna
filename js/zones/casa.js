@@ -674,10 +674,17 @@ Object.assign(DIALEGS, {
 
     golfesPendol: E => ({ pagines: [] }),
 
-    golfesPremi: {
+    // Els engranatges en ordre: el rellotge arrenca, toca les hores i l'Ineu ho celebra
+    golfesReparat: {
         pagines: [
-            { avis: "+1 GRA AL ROSARI i rosari ple." }
-        ]
+            { fer: (z, fet) => z.arrencarRellotge(fet) },
+            { qui: 'Ineu', text: "(Torna a caminar! Ara se sentirà per tot el poble.)" }
+        ],
+        enAcabar: () => {
+            Estat.posaFlag('rellotgeReparat');
+            Estat.posaObjectiu('El rellotge del Santuari torna a caminar. Explica-ho al Pare Daniel.');
+            Estat.desar();
+        }
     }
 });
 
@@ -937,19 +944,24 @@ class ZonaGolfes extends ZonaCasaBase {
         Sfx.menu();
         const bé = this.mides.every((m, k) => m === GOLFES_SOLUCIO[k]);
         if (!bé) return null;
-        return {
-            pagines: DIALEGS.golfesPremi.pagines,
-            enAcabar: () => {
-                this.reparat = true; Estat.posaFlag('rellotgeReparat');
-                this.encaixaEngranatges();
-                this.cameras.main.shake(300, 0.003); Sfx.secret();
-                const E = Estat;
-                E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;
-                E.posaObjectiu('El rellotge del Santuari torna a caminar. Explica-ho al Pare Daniel.');
-                this.ui().actualitzarHUD();
-                E.desar();
-            }
-        };
+        return DIALEGS.golfesReparat;
+    }
+
+    // Les rodes encaixen, les agulles corren des d'un quart de quatre fins a les cinc, el pèndol arrenca i sonen cinc campanades
+    arrencarRellotge(fet) {
+        this.encaixaEngranatges();
+        this.cameras.main.shake(300, 0.003); Sfx.secret();
+        const PI2 = Math.PI * 2;
+        this.tweens.add({ targets: this.agullaMinuts, rotation: PI2 * 2, duration: 1800, ease: 'Cubic.easeInOut' });
+        this.tweens.add({ targets: this.agullaHores, rotation: PI2 * 5 / 12, duration: 1800, ease: 'Cubic.easeInOut', onComplete: () => {
+            this.agullaMinuts.rotation = 0;
+            this.reparat = true;                                  // a partir d'ara, engranatges, agulles i pèndol es mouen (actualitzar)
+            let n = 0;
+            this.time.addEvent({ delay: 750, repeat: 4, callback: () => {
+                Sfx.campana(); this.cameras.main.shake(160, 0.0025);
+                if (++n === 5) this.esperar(1200, fet);
+            } });
+        } });
     }
 
     actualitzar(ara, delta) {
