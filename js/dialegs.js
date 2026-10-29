@@ -153,6 +153,12 @@ const DIALEGS = {
 
     cartellPlaca: E => ({ pagines: [{ qui: 'Cartell', text: "↑ El Celler i les Runes\n← Casa Gran\n↓ La Bassadòria" }] }),
     pedraSecreta: E => ({ pagines: [] }),
+    // La pedra de la cantonada de la façana, abans d'obrir-la: no lliga amb les altres i sembla que escolti
+    pedraEscolta: E => ({ pagines: E.flag('tresorObert') ? [] : [
+        { qui: 'Ineu', text: E.flag('cantPedres')
+            ? "(Aquesta pedra no lliga amb la resta de la façana. Hi poso l'orella i sembla que escolti... Potser vol sentir el Cant de les Pedres.)"
+            : "(Aquesta pedra no lliga amb la resta de la façana. Hi poso l'orella i sembla que escolti... però no sé què vol sentir.)" }
+    ] }),
     pedraSecretaOberta: { pagines: [
         { qui: 'Ineu', text: 'Un passatge entre el Monestir i el Santuari! Els monjos antics sí que en sabien, d\'amagar coses.' }
     ] },
