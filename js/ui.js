@@ -26,6 +26,63 @@ function encaixarDisseny(scene, alt0 = 1280) {
 const ALT_HUD = 170;   // franja de dalt reservada per al HUD: l'escenari es dibuixa només per sota
 const FONT = 'Georgia, "Times New Roman", serif';
 
+// ---------- Retrat de qui parla (a la caixa de diàleg) ----------
+// El cap retallat del sprite del personatge: es fa una sola vegada i es desa com a textura 'retrat_<clau>'.
+// Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
+const RETRATS = {
+    'Ineu': 'ineu', 'Pare Jordi': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Germà Francesc': 'germa_francesc', 'Pare Daniel': 'pare_daniel',
+    'Pare Alcuí': 'pare_alcui', 'Eva': 'eva', 'Josep': 'josep', 'Frederic': 'frederic', 'Juli': 'juli', 'Garf': 'garf', 'Isidre': 'isidre',
+    'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
+    'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
+    'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Jordi': 'jordi_caseta', 'Sansa': 'sansa', 'Home del Raïm': 'home_raim', 'Daniel': 'daniel_t',
+    'Yordi': 'yordi', 'Turbo': 'turbo', 'Judit': 'judit', 'Home del Carruatge Verd': 'home_carruatge'
+};
+const MIDA_RETRAT = 170;          // costat del retrat a la caixa de diàleg (px de joc)
+// Retocs del retall per a dibuixos amb una altra proporció (alt: fracció de la figura que fa el cap; per defecte 0,4)
+const AJUST_RETRAT = { pianista: { alt: 0.5 } };
+
+function retratDe(scene, qui) {
+    const key = RETRATS[qui];
+    if (!key) return null;
+    const clau = 'retrat_' + key;
+    if (scene.textures.exists(clau)) return clau;
+    const nomTex = key === 'ineu' ? 'ineu_down' : key;
+    if (!scene.textures.exists(nomTex)) return null;
+    try {
+        const tex = scene.textures.get(nomTex), fr = key === 'ineu' ? tex.get(SPRITE_INEU.quiet) : tex.get();
+        const fw = fr.cutWidth, fh = fr.cutHeight;
+        const tmp = document.createElement('canvas'); tmp.width = fw; tmp.height = fh;
+        const tc = tmp.getContext('2d', { willReadFrequently: true });
+        tc.drawImage(fr.source.image, fr.cutX, fr.cutY, fw, fh, 0, 0, fw, fh);
+        const d = tc.getImageData(0, 0, fw, fh).data;
+        // Caixa del personatge
+        let x0 = fw, y0 = fh, x1 = -1, y1 = -1;
+        for (let y = 0; y < fh; y++) for (let x = 0; x < fw; x++) if (d[(y * fw + x) * 4 + 3] > 40) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+        if (x1 < 0) return null;
+        const bw = x1 - x0 + 1, bh = y1 - y0 + 1, grup = bw > bh * 0.8;      // grup: les dues Venerables, agafades del braç
+        // Retall del cap: el terç de dalt (els personatges són xibi, de cap gran), centrat on hi ha més figura
+        const alt = bh * (grup ? 0.4 : (AJUST_RETRAT[key] && AJUST_RETRAT[key].alt) || 0.4);
+        let sx = 0, sa = 0;
+        for (let y = y0; y < y0 + alt * 0.8; y++) for (let x = x0; x <= x1; x++) { const a = d[(y * fw + x) * 4 + 3]; sx += x * a; sa += a; }
+        const cx = grup ? (x0 + x1) / 2 : (sa ? sx / sa : (x0 + x1) / 2);
+        const rw = grup ? bw * 0.92 : alt * 1.1, rh = grup ? alt * 1.05 : alt * 1.1;
+        const rx = cx - rw / 2, ry = y0 - bh * 0.03;
+        // Retrat: fons de pergamí fosc arrodonit i el cap ajustat a dins
+        const N = MIDA_RETRAT * RES, out = document.createElement('canvas'); out.width = N; out.height = N;
+        const c = out.getContext('2d');
+        c.beginPath(); c.roundRect(0, 0, N, N, N * 0.12); c.clip();
+        const g = c.createLinearGradient(0, 0, 0, N); g.addColorStop(0, '#d8c08a'); g.addColorStop(1, '#a8885a');
+        c.fillStyle = g; c.fillRect(0, 0, N, N);
+        const k = Math.min(N / rw, N / rh), dw = rw * k, dh = rh * k;
+        c.imageSmoothingQuality = 'high';
+        c.drawImage(tmp, rx, ry, rw, rh, (N - dw) / 2, grup ? (N - dh) / 2 : N - dh, dw, dh);      // el grup, centrat; la resta, amb el coll a baix
+        scene.textures.addCanvas(clau, out);
+        return clau;
+    } catch (e) {
+        return null;           // sense lectura de píxels (fitxer obert sense servidor): sense retrat
+    }
+}
+
 function estilText(mida, color = '#fff8e7', extra = {}) {
     return Object.assign({ fontFamily: FONT, fontSize: mida + 'px', color, resolution: 2 }, extra);
 }
@@ -393,7 +450,16 @@ class EscenaUI extends Phaser.Scene {
         this.textDialeg = this.add.text(-316, -146, '', estilText(28, '#2a170b', { wordWrap: { width: 632 }, lineSpacing: 5 }));
         this.indicador = this.add.text(318, 152, '▼', estilText(26, '#7a3a14')).setOrigin(1, 1);
         this.tweens.add({ targets: this.indicador, y: 158, yoyo: true, repeat: -1, duration: 400 });
-        this.caixa.add([ombra, fons, this.cintaNom, this.plaquetaNom, this.textDialeg, this.indicador]);
+        // Retrat de qui parla: dalt a l'esquerra, sobresortint de la caixa (el text conserva tot l'ample)
+        const RX = -352 + 14 + MIDA_RETRAT / 2, RY = -180 + 26 - MIDA_RETRAT / 2;
+        this.retratImg = this.add.image(RX, RY, '__WHITE').setDisplaySize(MIDA_RETRAT, MIDA_RETRAT).setVisible(false);
+        this.marcRetrat = this.add.graphics().setVisible(false);
+        this.marcRetrat.fillStyle(0x000000, 0.35).fillRoundedRect(RX - MIDA_RETRAT / 2 + 4, RY - MIDA_RETRAT / 2 + 7, MIDA_RETRAT, MIDA_RETRAT, MIDA_RETRAT * 0.12);
+        const marc = this.add.graphics().setVisible(false);
+        marc.lineStyle(7, 0x2a0a0e, 1).strokeRoundedRect(RX - MIDA_RETRAT / 2, RY - MIDA_RETRAT / 2, MIDA_RETRAT, MIDA_RETRAT, MIDA_RETRAT * 0.12);
+        marc.lineStyle(4, 0xd4af37, 1).strokeRoundedRect(RX - MIDA_RETRAT / 2, RY - MIDA_RETRAT / 2, MIDA_RETRAT, MIDA_RETRAT, MIDA_RETRAT * 0.12);
+        this.marcRetratVora = marc;
+        this.caixa.add([ombra, fons, this.marcRetrat, this.retratImg, marc, this.cintaNom, this.plaquetaNom, this.textDialeg, this.indicador]);
     }
 
     // dialeg = { pagines: [{qui, text}], enAcabar? }
@@ -425,8 +491,13 @@ class EscenaUI extends Phaser.Scene {
             return;
         }
         this.caixa.setVisible(true);
-        this.plaquetaNom.setText(p.qui || '').setVisible(!!p.qui).setX(-318 + 44);
-        this.cintaNom.setVisible(!!p.qui);
+        // Retrat (si qui parla és un personatge amb sprite): la cinta del nom es desplaça a la seva dreta
+        const retrat = p.qui ? retratDe(this, p.qui) : null;
+        [this.retratImg, this.marcRetrat, this.marcRetratVora].forEach(o => o.setVisible(!!retrat));
+        if (retrat) this.retratImg.setTexture(retrat).setDisplaySize(MIDA_RETRAT, MIDA_RETRAT);
+        const xCinta = retrat ? -352 + 14 + MIDA_RETRAT + 10 : -318;
+        this.plaquetaNom.setText(p.qui || '').setVisible(!!p.qui).setX(xCinta + 44);
+        this.cintaNom.setVisible(!!p.qui).setX(xCinta);
         if (p.qui) this.cintaNom.setSize((this.plaquetaNom.width + 88) * RES, 60 * RES);
         this.textComplet = p.text;
         this.lletres = 0;
