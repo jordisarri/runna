@@ -15,8 +15,6 @@ const MUSICA_FANFARRIA = 17;
 const FOSA_BUCLE = 500;
 // Si el vídeo no avança en aquest temps (el mòbil l'ha bloquejat), passem directament al bucle
 const ESPERA_VIDEO = 2500;
-// Després de saltar la intro, temps màxim que s'espera el bucle abans de mostrar el menú sobre l'últim fotograma de la intro
-const ESPERA_BUCLE = 3000;
 
 class EscenaTitol extends Phaser.Scene {
     constructor() { super('Titol'); }
@@ -29,6 +27,8 @@ class EscenaTitol extends Phaser.Scene {
         this.fase = 'espera';
         this.cameras.main.setBackgroundColor('#000000');
 
+        // El títol (primer fotograma del bucle) com a imatge: es veu sempre, encara que el mòbil no engegui el vídeo
+        this.portadaTitol = this.add.image(AMPLE / 2, ALT / 2, 'titol_portada').setDisplaySize(AMPLE, ALT).setDepth(-1).setVisible(false);
         this.videoBucle = this.crearVideo('video_bucle', 0).setVisible(false);
         this.videoIntro = this.crearVideo('video_intro', 1).setVisible(false);
         this.construirMenu();
@@ -103,37 +103,28 @@ class EscenaTitol extends Phaser.Scene {
         }
     }
 
-    // Salta (o acaba) la intro: el bucle amb el títol passa a ser el fons i el menú hi apareix a sobre.
-    // El canvi és immediat en saltar-la: si el mòbil no ha pogut engegar el bucle, es veu el seu primer fotograma (ja porta el títol)
-    // i un toc el reintenta; la intro mai es queda congelada sota el menú.
+    // Salta (o acaba) la intro: el títol (imatge del primer fotograma del bucle) es veu a l'instant, el menú hi surt a sobre i el
+    // bucle en vídeo hi apareix quan el navegador el deixa córrer (amb un toc es reintenta). La intro mai es queda ni congelada ni esperant.
     anarAlBucle(fosa) {
         if (this.fase === 'menu') return;
         this.fase = 'menu';
-        this.fosaMenu = fosa;
-        this.iniciEspera = this.time.now;
         const b = this.videoBucle.video;
-        if (!this.bucleEngegat || !b || b.paused) {
-            if (b && b.readyState >= 2) b.currentTime = 0;
-            this.videoBucle.setVisible(true);
-            this.videoBucle.play(true);            // dins del gest de l'usuari quan ve d'un toc
+        const corria = this.bucleCorre();
+        this.portadaTitol.setVisible(true);
+        if (!corria) {
+            this.videoBucle.setVisible(false);                  // sense fotogrames: el títol en imatge fa de fons
+            if (!b || b.paused) this.videoBucle.play(true);     // dins del gest de l'usuari quan ve d'un toc
         }
-        this.esperaBucle = true;                    // update() fa el relleu quan el bucle ja té fotograma per mostrar
-    }
-
-    bucleLlest() { const b = this.videoBucle.video; return !!b && b.readyState >= 2; }
-    bucleCorre() { const b = this.videoBucle.video; return !!b && !b.paused && b.readyState >= 2 && b.currentTime > 0.05; }
-
-    // El bucle ja es pot veure: la intro es fon (si el bucle corre) o es treu a l'instant, i el menú apareix sobre el bucle
-    relleuBucle() {
-        this.esperaBucle = false;
-        const corre = this.bucleCorre();
         if (this.videoIntro.visible) {
-            if (this.fosaMenu && corre) {
+            if (fosa && corria) {                                // el bucle ja corre sota la intro: es fonen
                 this.tweens.add({ targets: this.videoIntro, alpha: 0, duration: FOSA_BUCLE, onComplete: () => { this.videoIntro.stop(); this.videoIntro.setVisible(false); } });
             } else { this.videoIntro.stop(); this.videoIntro.setVisible(false); }
         }
-        this.mostrarMenu(this.fosaMenu && corre ? FOSA_BUCLE : 0);
+        this.esperaBucle = !corria;
+        this.mostrarMenu(fosa && corria ? FOSA_BUCLE : 0);
     }
+
+    bucleCorre() { const b = this.videoBucle.video; return !!b && !b.paused && b.readyState >= 2 && b.currentTime > 0.05; }
 
     mostrarMenu(retard = 0) {
         if (this.menuMostrat) return;
@@ -144,9 +135,10 @@ class EscenaTitol extends Phaser.Scene {
     // Quan la intro arriba al final, passem al bucle
     update() {
         const v = this.videoIntro.video;
-        if (this.esperaBucle) {
-            if (this.bucleLlest()) this.relleuBucle();
-            else if (this.time.now - this.iniciEspera > ESPERA_BUCLE && !this.menuMostrat) this.mostrarMenu(0);   // el bucle no carrega: el menú surt igualment
+        if (this.esperaBucle && this.bucleCorre()) {             // el bucle ha arrencat: apareix sobre el títol en imatge
+            this.esperaBucle = false;
+            this.videoBucle.setAlpha(0).setVisible(true);
+            this.tweens.add({ targets: this.videoBucle, alpha: 1, duration: 400 });
         }
         if (this.fase === 'espera') {
             // Phaser a vegades engega els vídeos sols: mentre som a la portada, quiets

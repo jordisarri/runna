@@ -235,6 +235,7 @@ class EscenaCarrega extends Phaser.Scene {
         this.load.on('loaderror', f => console.warn("No s'ha pogut carregar", f.key));
         Grafics.carregar(this);
         // Vídeos de la intro (sense el seu so: sona la música del joc)
+        this.load.image('titol_portada', 'assets/video/bucle_portada.webp');       // primer fotograma del bucle: el títol, sempre a punt encara que el vídeo no arrenqui
         this.load.video('video_intro', 'assets/video/intro_runna_vertical.mp4', true);
         this.load.video('video_bucle', 'assets/video/intro_runna_bucle_vertical.mp4', true);
     }
