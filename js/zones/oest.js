@@ -11,6 +11,7 @@ const ROV_OPOSAT = { N: 'S', S: 'N', E: 'W', W: 'E' };
 class ZonaRovellonera extends ZonaBase {
     constructor() {
         super('ZonaRovellonera', {
+            fosca: true,
             pins: { pi: 0.6 },
             nom: 'Rovellonera',
             amplada: 1600,
@@ -159,6 +160,7 @@ class ZonaRovellonera extends ZonaBase {
 class ZonaCamiRov extends ZonaBase {
     constructor() {
         super('ZonaCamiRov', {
+            fosca: true,
             pins: { pi: 0.5 },
             nom: 'Camí de la Rovellonera',
             amplada: 2800,
@@ -249,6 +251,7 @@ class ZonaCamiRov extends ZonaBase {
 class ZonaGabriel extends ZonaBase {
     constructor() {
         super('ZonaGabriel', {
+            fosca: true,
             pins: { pinyer: 0.3 },
             nom: 'Ermita de Sant Gabriel',
             amplada: 1600,
@@ -443,6 +446,7 @@ const DIP = { estelX: 1180, estelY: 175, boiraX: 1500 };
 class ZonaDipositos extends ZonaBase {
     constructor() {
         super('ZonaDipositos', {
+            fosca: true,
             pins: { pi: 0.5 },
             nom: 'Els Dipòsits',
             amplada: 1600,

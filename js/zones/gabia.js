@@ -93,6 +93,7 @@ const GIRG_CERCLE = { x: 700, y: 640, r: 280 };
 class ZonaGirgoles extends ZonaBase {
     constructor() {
         super('ZonaGirgoles', {
+            fosca: true,
             nom: 'Sala de les Gírgoles',
             amplada: 1400,
             alcada: 1300,
@@ -258,6 +259,7 @@ class ZonaGirgoles extends ZonaBase {
 class ZonaTortura extends ZonaBase {
     constructor() {
         super('ZonaTortura', {
+            fosca: true,
             nom: 'Passadís de tortura',
             amplada: 900,
             alcada: 1900,

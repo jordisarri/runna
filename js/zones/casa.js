@@ -519,6 +519,7 @@ class ZonaCasaCripta extends ZonaCasaBase {
 class ZonaPassadis extends ZonaCasaBase {
     constructor() {
         super('ZonaPassadis', {
+            fosca: true,
             nom: 'Passadís secret',
             amplada: 800,
             alcada: 1400,
@@ -576,12 +577,6 @@ class ZonaPassadis extends ZonaCasaBase {
     actualitzar() {
         this.esbarzers.forEach(o => { if (!o.viu && o.halo) { o.halo.destroy(); o.halo = null; } });
         if (this.contrallum && this.esbarzers.every(o => !o.viu)) { this.contrallum.destroy(); this.contrallum = null; }
-        // Les escolopendres, fosques sobre pedra fosca: una vora ambre i una mica de llum al terra perquè es vegin
-        this.enemics.forEach(e => {
-            if (e.mort || !e.spr || !e.spr.active) { if (e.llumTerra) { e.llumTerra.destroy(); e.llumTerra = null; } return; }
-            if (!e.ressaltat) { e.ressaltat = true; if (e.spr.preFX) e.spr.preFX.addGlow(0xffc070, 4, 0, false, 0.1, 10); e.llumTerra = this.add.ellipse(0, 0, 90, 44, 0xffb060, 0.22).setBlendMode('ADD'); }
-            if (e.llumTerra) e.llumTerra.setPosition(e.spr.x, e.spr.y - 4).setDepth(e.spr.depth - 1).setAlpha(e.spr.alpha * 0.22);
-        });
         if (Estat.flag('passadisNet')) return;
         if (this.enemics.every(e => e.mort) && this.esbarzers.every(o => !o.viu)) Estat.posaFlag('passadisNet');
     }

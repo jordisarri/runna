@@ -60,6 +60,7 @@ class ZonaCellerFora extends ZonaBase {
 class ZonaRuines extends ZonaBase {
     constructor() {
         super('ZonaRuines', {
+            fosca: function () { return this.nit && this.nit.visible; },
             nom: 'Les Runes',
             amplada: 1600,
             alcada: 1100,
@@ -932,6 +933,7 @@ class ZonaCasetaJoc extends ZonaBase {
 class ZonaBosc extends ZonaBase {
     constructor() {
         super('ZonaBosc', {
+            fosca: true,
             nom: 'Bosc de Sant Joan',
             amplada: 1800,
             alcada: 1200,

@@ -9,6 +9,7 @@ const SOT = { cel: 120, cols: 13, files: 9, oy: 120 };
 class ZonaSoterraniHost extends ZonaBase {
     constructor() {
         super('ZonaSoterraniHost', {
+            fosca: 'total',
             nom: "Soterrani de l'Hostatgeria",
             amplada: SOT.cols * SOT.cel,
             alcada: SOT.oy + SOT.files * SOT.cel,

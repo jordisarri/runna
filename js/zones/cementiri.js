@@ -8,6 +8,7 @@
 class ZonaCementiri extends ZonaBase {
     constructor() {
         super('ZonaCementiri', {
+            fosca: true,
             nom: 'El Cementiri',
             amplada: 1600,
             alcada: 1100,

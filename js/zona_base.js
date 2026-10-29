@@ -65,6 +65,9 @@ function esDialegBuit(dialeg) {
     return !!(d && d.pagines && !d.pagines.length && !d.enAcabar);
 }
 
+// Les bestioles que es ressalten als llocs foscos (ZonaBase.ressaltarEnemics)
+const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'ratpenat'];
+
 const PAS_PORTA = 44;       // en passar una porta (o qualsevol sortida), l'Ineu camina aquests píxels més cap a la foscor abans de canviar d'escena, i en arribar en camina altres tants cap endins
 const MS_PAS_PORTA = 450;
 const TOPE_Y = 100;   // els peus de l'Ineu no passen d'aquí amunt: sempre se li veu el cos (la càmera s'atura a y=0)
@@ -397,6 +400,27 @@ class ZonaBase extends Phaser.Scene {
         seguent();
     }
     esperar(ms, fet) { this.time.delayedCall(ms, fet); }
+    // Als llocs foscos (config.fosca), les bestioles fosques no es veurien sobre el terra: tenen una vora lluminosa ambre i una mica
+    // de llum al terra. Amb fosca: 'total' (una foscor que ho tapa tot fora dels cercles de llum), la llum del terra va per sobre
+    // de la foscor, perquè se sàpiga on són. fosca pot ser una funció (la foscor de les Runes només hi és de nit).
+    ressaltarEnemics() {
+        const f = this.config.fosca;
+        if (!f || !this.enemics) return;
+        const actiu = typeof f === 'function' ? f.call(this) : true;
+        this.enemics.forEach(e => {
+            const viu = !e.mort && e.spr && e.spr.active && BESTIOLES_FOSQUES.includes(e.tipus);
+            if (!viu || !actiu) {
+                if (e.llumTerra) { e.llumTerra.destroy(); e.llumTerra = null; }
+                if (e.glow && e.spr && e.spr.preFX) { e.spr.preFX.remove(e.glow); e.glow = null; }
+                return;
+            }
+            if (!e.llumTerra) {
+                if (e.spr.preFX && !e.glow) e.glow = e.spr.preFX.addGlow(0xffc070, 4, 0, false, 0.1, 10);
+                e.llumTerra = this.add.ellipse(0, 0, 90, 44, 0xffb060, 0.22).setBlendMode('ADD');
+            }
+            e.llumTerra.setPosition(e.spr.x, e.spr.y - 4).setDepth(f === 'total' ? 85001 : e.spr.depth - 1).setAlpha(e.spr.alpha * (f === 'total' ? 0.3 : 0.22));
+        });
+    }
     // Dins d'una pàgina d'acció: es queda així fins que el jugador prem (ESPAI, ENTER o un toc), com per passar una pàgina
     esperarClic(fet) {
         const d = this.ui().dialeg;
@@ -1055,6 +1079,7 @@ class ZonaBase extends Phaser.Scene {
         else if (accio || T(this.tecles.J)) this.atacar();
         time = this.time.now;   // un sol rellotge per a tot el combat
         this.actualitzarCombat(time);
+        this.ressaltarEnemics();
         this.comprovarSortides();
         if (this.actualitzar) this.actualitzar(time, delta);
         this.actualitzarPortes(delta);
