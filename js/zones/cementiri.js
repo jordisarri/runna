@@ -109,6 +109,7 @@ class ZonaCementiri extends ZonaBase {
         Estat.posaFlag('tombaSegellada');
         Sfx.secret();
         this.cameras.main.shake(600, 0.004);
+        this.ui().bloquejatFins = this.ui().time.now + 2600;                // mentre la tomba es tanca, l'Ineu s'ho mira
         const esq = this.add.graphics().setDepth(this.tomba.depth + 1).setBlendMode('ADD');
         esq.lineStyle(6, 0xcfe0ff, 1).beginPath(); esq.moveTo(700, 345); esq.lineTo(710, 372); esq.lineTo(692, 396); esq.lineTo(708, 422); esq.lineTo(699, 456); esq.strokePath();
         esq.setAlpha(0);
@@ -119,7 +120,17 @@ class ZonaCementiri extends ZonaBase {
             this.tweens.add({ targets: nova, alpha: 1, duration: 900, onComplete: () => { this.tomba.setTexture('tomba_tancada'); nova.destroy(); } });
             if (this.boiraTomba) { this.boiraTomba.stop(); this.time.delayedCall(1800, () => this.boiraTomba && this.boiraTomba.destroy()); }
             if (this.llumTomba) this.tweens.add({ targets: this.llumTomba, alpha: 0, duration: 1200 });
+            // Una columna de llum blanca puja de la tomba i s'apaga; les escolopendres de la terra esquerdada s'hi enfonsen
+            const raig = this.add.rectangle(700, 420, 70, 10, 0xe8f0ff, 0.6).setOrigin(0.5, 1).setDepth(this.tomba.depth + 2).setBlendMode('ADD');
+            this.tweens.add({ targets: raig, height: 700, duration: 700, ease: 'Cubic.easeOut', onComplete: () => this.tweens.add({ targets: raig, alpha: 0, scaleX: 0.2, duration: 900, onComplete: () => raig.destroy() }) });
+            this.enemics.filter(e => !e.mort && e.tipus === 'escolopendra').forEach(e => {
+                e.mort = true; if (e.spr.body) e.spr.body.enable = false;
+                this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, scaleY: 0.2, duration: 900, delay: 300, onComplete: () => this.retirar(e) });
+            });
         });
+        this.time.delayedCall(2400, () => this.ui().obrirDialeg({ pagines: [
+            { qui: 'Ineu', text: "(L'esquerda s'ha tancat i ja no en surt boira. Els qui van tancar la porta tornen a descansar.)" }
+        ] }, () => Estat.desar()));
         Estat.posaObjectiu(Estat.te('clau_ferro') ? "Troba la porta de ferro de la Sala de les Gírgoles, a l'est del Pati del Celler."
                                                  : "La tomba descansa. A la Casa Gran, sota l'escalinata, hi ha la Clau de ferro dels monjos.");
         Estat.desar();
