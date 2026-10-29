@@ -1227,7 +1227,7 @@ const DIALEGS = {
         if (E.te("runna")) return { pagines: [] };
         const falta = DIALEGS.faltaRunna(E);
         return { pagines: [{ qui: "Ineu", text: falta.length ? "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré."
-            : "(Runna és dalt de la llosa. Les margarides fan camí cap al darrere: per allà hi pujaré.)" }] };
+            : "(Runna és dalt de la llosa. Potser s'hi pot pujar per darrere.)" }] };
     },
 
     faltaRunna: E => {

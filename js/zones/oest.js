@@ -639,7 +639,7 @@ class ZonaDolmen extends ZonaBase {
         this.interactiu(sx, sy + 15, RADI_GRAN, DIALEGS.dolmenBaix, { altura: 380, actiu: () => !this.alt });
         // Damunt la llosa, darrere l'espasa: les Paraules del Saber
         this.interactiu(this.espX, this.espY - 12, RADI_OBJECTE, DIALEGS.dolmen, { altura: 150, actiu: () => this.alt && !this.cinema });
-        this.florsCami();
+        this.margaridesPas();
 
         // Com a la pantalla del títol: una pedra dreta, una tanca de fusta vella, falgueres, roques i flors roses
         const det = this.add.graphics().setDepth(sy + 120);
@@ -760,7 +760,7 @@ class ZonaDolmen extends ZonaBase {
 
     // Uns quants passos sense col·lisions: [x, y, vista, ms]. Si vista és 'quiet', es queda dret mirant on mirava
     passos(llista, fet) {
-        const I = this.ineu, dir4 = { up: 'amunt', down: 'avall' };
+        const I = this.ineu, dir4 = { up: 'amunt', down: 'avall', left: 'esquerra', right: 'dreta' };
         let i = 0;
         const seg = () => {
             if (i >= llista.length) { if (fet) fet(); return; }
@@ -779,11 +779,14 @@ class ZonaDolmen extends ZonaBase {
         I.setDepth(this.dolmen.depth - 1);                     // la llosa el tapa: per sota del dolmen
     }
 
+    // Es pot començar a pujar per tota l'esquena del dolmen (no s'hi queda encallat): si és massa al costat, primer es
+    // desplaça fins als esglaons
     pujar() {
-        const I = this.ineu, P = this.pujada, x = I.x;
+        const I = this.ineu, P = this.pujada, x = Phaser.Math.Clamp(I.x, P.cx - P.esglaons, P.cx + P.esglaons);
         this.començarPas();
         const pas = (y, ms) => [x, y, 'down', ms];
-        this.passos([pas(P.vora + 26, 520),                                                 // la llosa li tapa les cames
+        const costat = Math.abs(x - I.x) > 2 ? [[x, I.y, x < I.x ? 'left' : 'right', Math.abs(x - I.x) / VELOCITAT_INEU * 1000]] : [];
+        this.passos([...costat, pas(P.vora + 26, 520),                                                 // la llosa li tapa les cames
             pas(P.vora + 16, 300), pas(P.vora + 7, 300), pas(P.vora - 2, 300)], () => {    // tres esglaons amunt
             I.setDepth(DOL.sy + 5);
             this.ombraIneu.setVisible(true).setDepth(DOL.sy + 4);
@@ -863,29 +866,27 @@ class ZonaDolmen extends ZonaBase {
         this.grupLlosa = this.physics.add.staticGroup();
         const bloc = this.add.zone(sx, (vora - 8 + sy - 40) / 2, 352, sy - 40 - (vora - 8));
         this.physics.add.existing(bloc, true); this.grupLlosa.add(bloc);
-        // vora: la vora de darrere; dalt..fins: la franja de la cara de dalt on es pot estar (darrere l'espasa); x0..x1: per on es puja
-        this.pujada = { vora, dalt: vora + 10, fins: this.espY - 18, cx: sx, cy: lyMon, rx: 150, ry: 38, x0: sx - 90, x1: sx + 90 };
+        // vora: la vora de darrere; dalt..fins: la franja de la cara de dalt on es pot estar (darrere l'espasa); x0..x1: tota l'esquena
+        // del bloc (prement cap avall s'hi comença a pujar); esglaons: fins on arriben els esglaons amagats des del mig
+        this.pujada = { vora, dalt: vora + 10, fins: this.espY - 18, cx: sx, cy: lyMon, rx: 150, ry: 38, x0: sx - 176, x1: sx + 176, esglaons: 85 };
     }
 
-    // Un rastre de margarides i herba trepitjada que rodeja el dolmen per la dreta fins al darrere: per allà s'hi puja
-    florsCami() {
-        const P = this.pujada, punts = [[530, 985], [610, 900], [680, 810], [715, 700], [705, 580], [640, P.vora - 70], [540, P.vora - 60], [DOL.sx, P.vora - 36]];
-        const corba = new Phaser.Curves.Spline(punts.map(([x, y]) => new Phaser.Math.Vector2(x, y)));
-        const g = this.add.graphics().setDepth(-1080);
-        g.lineStyle(48, 0xc8d890, 0.3).strokePoints(corba.getPoints(80));
-        g.lineStyle(24, 0xd8d0a0, 0.3).strokePoints(corba.getPoints(80));
-        const f = this.add.graphics().setDepth(-790);
+    // Unes poques margarides a l'herba just darrere del dolmen, on comencen els esglaons amagats: un passadís que gairebé no es veu
+    margaridesPas() {
+        const P = this.pujada, f = this.add.graphics().setDepth(-790);
+        let sd = 11; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
         const margarida = (x, y, e) => {
-            f.fillStyle(0x2e5a22, 0.8).fillEllipse(x, y + 5 * e, 10 * e, 4 * e);
-            for (let k = 0; k < 6; k++) { const a = k / 6 * Math.PI * 2; f.fillStyle(0xfdfbf0, 1).fillEllipse(x + Math.cos(a) * 4 * e, y + Math.sin(a) * 2.6 * e, 6 * e, 4 * e); }
-            f.fillStyle(0xf0c030, 1).fillCircle(x, y, 2.2 * e);
+            for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2; f.fillStyle(0xf4f0e0, 0.9).fillEllipse(x + Math.cos(a) * 3 * e, y + Math.sin(a) * 2 * e, 4.5 * e, 3 * e); }
+            f.fillStyle(0xe8b830, 1).fillCircle(x, y, 1.6 * e);
         };
-        const n = 30;
-        for (let i = 1; i < n; i++) {
-            const t = i / n, p = corba.getPoint(t), d = corba.getTangent(t), nx = -d.y, ny = d.x, cara = i % 2 ? 1 : -1;
-            margarida(p.x + nx * 32 * cara, p.y + ny * 32 * cara, 1.6);
-            if (i % 2 === 0) margarida(p.x + nx * 44 * cara + d.x * 12, p.y + ny * 44 * cara + d.y * 12, 1.2);
-        }
+        // a banda i banda dels esglaons, desordenades i més espesses a tocar de la llosa
+        [-1, 1].forEach(c => {
+            for (let k = 0; k < 6; k++) {
+                const t = r() ** 1.6, y = P.vora - 16 - t * 110, x = P.cx + c * (P.esglaons - 10 + r() * 40 + t * 20);
+                margarida(x, y, 0.8 + r() * 0.5);
+                if (r() < 0.35) margarida(x + (r() - 0.5) * 14, y + 6 + r() * 4, 0.7);
+            }
+        });
     }
 
     // Les Paraules del Saber ja s'han dit: Runna surt de la pedra i és a la mà de l'Ineu, que l'alça. Raigs de llum blanca i el rètol
