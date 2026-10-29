@@ -23,7 +23,8 @@ function encaixarDisseny(scene, alt0 = 1280) {
     cam.setZoom(Math.min(1, ALT / alt0));
     cam.centerOn(AMPLE / 2, alt0 / 2);
 }
-const ALT_HUD = 170;   // franja de dalt reservada per al HUD: l'escenari es dibuixa només per sota
+const ALT_HUD = 196;   // franja de dalt reservada per al HUD: l'escenari es dibuixa només per sota
+const Y_BOTONS_HUD = 52;   // el sarró i el menú van a la fila del rosari: l'objectiu ocupa tot l'ample de sota
 const FONT = 'Georgia, "Times New Roman", serif';
 
 // ---------- Retrat de qui parla (a la caixa de diàleg) ----------
@@ -192,10 +193,10 @@ class EscenaUI extends Phaser.Scene {
     // Un medalló petit a la dreta del HUD obre el sarró (també la tecla I). La flauta es toca amb ESPAI (o tocant la meitat dreta
     // de la pantalla) als llocs on té efecte (ZonaBase.flautaActiva); no hi ha cap icona al HUD: només s'obre la seva interfície.
     crearObjectes() {
-        const x = 548, y = ALT_HUD / 2, commuta = () => this.inventariObert ? this.tancarInventari() : this.obrirInventari();
-        this.fonsSarro = this.add.image(x, y, 'medallo').setScale(0.62 / RES).setVisible(false)
+        const x = 566, y = Y_BOTONS_HUD, commuta = () => this.inventariObert ? this.tancarInventari() : this.obrirInventari();
+        this.fonsSarro = this.add.image(x, y, 'medallo').setScale(0.52 / RES).setVisible(false)
             .setInteractive({ useHandCursor: true }).on('pointerdown', commuta);
-        this.iconaSarro = this.add.image(x, y, 'icona_sarro').setScale(0.62 / RES).setVisible(false);
+        this.iconaSarro = this.add.image(x, y, 'icona_sarro').setScale(0.52 / RES).setVisible(false);
         this.input.keyboard.on('keydown-I', commuta);
         this.input.keyboard.on('keydown-M', () => this.inventariObert ? this.tancarInventari() : this.obrirInventari('mapa'));
         ['LEFT', 'A'].forEach(k => this.input.keyboard.on('keydown-' + k, () => this.inventariObert && DIARI.moure(this, -1)));
@@ -238,7 +239,7 @@ class EscenaUI extends Phaser.Scene {
         this.cordo = this.add.graphics();
         this.creuRosari = this.add.image(38, 62, 'creu_rosari').setScale(1 / RES);
         this.cors = [];     // els grans del rosari (es creen a mesura que n'hi ha més)
-        this.textObjectiu = this.add.text(48, 86, '', estilText(20, '#3a2412', { fontStyle: 'italic', wordWrap: { width: 400 } }));
+        this.textObjectiu = this.add.text(34, 86, '', estilText(26, '#3a2412', { fontStyle: 'italic', wordWrap: { width: AMPLE - 68 }, lineSpacing: -2 }));
 
         this.bannerZona = this.add.text(AMPLE / 2, 236, '', estilText(42, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
             .setOrigin(0.5).setAlpha(0);
@@ -246,7 +247,7 @@ class EscenaUI extends Phaser.Scene {
             .setOrigin(0.5).setAlpha(0).setDepth(50);
 
         // Botó de menú (ratolí i pantalla tàctil)
-        this.botoMenu = this.add.text(AMPLE - 46, ALT_HUD / 2, '☰', estilText(40, '#3a2412', { backgroundColor: '#8a5a2a44', padding: { x: 16, y: 8 } }))
+        this.botoMenu = this.add.text(AMPLE - 34, Y_BOTONS_HUD, '☰', estilText(34, '#3a2412', { backgroundColor: '#8a5a2a44', padding: { x: 14, y: 4 } }))
             .setOrigin(1, 0.5).setInteractive({ useHandCursor: true })
             .on('pointerdown', () => this.menuObert ? this.tancarMenu() : this.obrirMenu());
     }
@@ -274,9 +275,9 @@ class EscenaUI extends Phaser.Scene {
         this.gestionarLatidor();
         this.textObjectiu.setText('Objectiu: ' + (d.objectiu || ''));
         // L'objectiu ha de cabre dins del marc fix de la franja: si és llarg, es redueix la lletra
-        let mida = 20;
+        let mida = 26;
         this.textObjectiu.setFontSize(mida);
-        while (this.textObjectiu.height > 52 && mida > 14) this.textObjectiu.setFontSize(--mida);
+        while (this.textObjectiu.height > ALT_HUD - 100 && mida > 18) this.textObjectiu.setFontSize(--mida);
     }
 
     // Quan queda un sol gra o menys, l'últim gra bategueja
