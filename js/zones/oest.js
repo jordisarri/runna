@@ -913,7 +913,7 @@ class ZonaDolmen extends ZonaBase {
             c => {
                 this.esp.destroy(); this.esp = null;
                 I.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
-                this.ineuAlt = this.add.image(I.x, I.y + 2, 'ineu_aixeca').setOrigin(0.5, 1).setScale(ESC_AIX).setDepth(99100);
+                this.ineuAlt = this.add.image(I.x, I.y + 2, 'ineu_aixeca').setOrigin(0.5, 1).setScale(ESC_AIX).setDepth(85000);       // sota la boira (89990+), per sobre de la resta
                 this.tweens.add({ targets: this.ineuAlt, y: this.ineuAlt.y - 14, yoyo: true, duration: 240, ease: 'Quad.easeOut' });
                 cam.flash(700, 255, 255, 255);
                 cam.shake(500, 0.01);

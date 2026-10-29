@@ -139,7 +139,7 @@ const PROGRES = {
               : E.te('pallofa') ? "Duu el Pallofa a la Carry, a Nostra Senyora (a l'oest de les Cel·les)."
               : "El Pallofa, el gos de la Carry, passeja per Sant Antoni (a llevant del Monestir). Si el trobes, duu-lo a la Carry: guarda la clau del campanar." },
         { id: 'rellotge', marca: ['rellotgeReparat'], obert: E => E.te('clau_campanar') || E.flag('portaCampanarOberta') || E.flag('clauCampanar'), fet: E => E.flag('rellotgeReparat'),
-          pista: E => "El rellotge del campanar s'ha aturat a les tres i quart. Amb la clau del campanar que et va donar la Carry, obre la porta de la dreta del retaule del Santuari, puja per la torre fins a la Sala del Rellotge i posa els engranatges en ordre." },
+          pista: E => "El rellotge del campanar s'ha aturat a un quart de quatre. Amb la clau del campanar que et va donar la Carry, obre la porta de la dreta del retaule del Santuari, puja per la torre fins a la Sala del Rellotge i posa els engranatges en ordre." },
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta el Cant de les Pedres." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),

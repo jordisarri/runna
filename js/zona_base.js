@@ -469,7 +469,7 @@ class ZonaBase extends Phaser.Scene {
         if (this.ineuAlt) this.ineuAlt.destroy();
         I.setVisible(false);
         if (this.fantasma) this.fantasma.setVisible(false);          // la silueta translúcida de l'Ineu també: un dibuix desapareix i l'altre apareix, sense transparències
-        this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(99100);       // per sobre de tothom (també del Germà Andreu)
+        this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(85000);       // per sobre de tothom (també del Germà Andreu), però SOTA la boira (89990+): si no, quedava il·luminat
         this.llum(I.x - 8, I.y - 190, 0xffe8a0);
         Joc.fanfaraObjecte(this);
         if (fet) fet();

@@ -299,7 +299,7 @@ const Grafics = {
         Grafics.animacions(scene);
     },
 
-    // Caminar cap a l'esquerra i la dreta: una sola fulla (Ineu-walk-v1.png: 16 fotogrames en 4x4, mirant a la dreta, fons blanc).
+    // Caminar cap a l'esquerra i la dreta: una sola fulla (art/ineu/caminar/Ineu-iso_walk_right-v2.png: 16 fotogrames en 4x4, mirant a la dreta, fons blanc).
     // Es neteja, s'escala i es centra com les altres fulles (cel·les de 256, peus a y=240) i se'n fa el mirall per a l'esquerra.
     perfilIneu(scene) {
         Grafics.perfilNou = false;

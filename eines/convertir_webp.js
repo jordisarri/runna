@@ -62,9 +62,23 @@ async function fulla(rel, dest, qualitat) {
     console.log(rel.padEnd(34), mb(a).padStart(9), '->', mb(r.size).padStart(9));
 }
 
+// La fulla de l'esquerra és sempre el mirall de la de la dreta (fotograma a fotograma, cel·les de 256): el mateix caminar per als dos costats
+async function fullaMirall(rel, dest, qualitat) {
+    const CEL = 256, N = 4;
+    const src = path.join(ARREL, rel);
+    const parts = [];
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+        parts.push({ input: await sharp(src).extract({ left: c * CEL, top: r * CEL, width: CEL, height: CEL }).flop().png().toBuffer(), left: c * CEL, top: r * CEL });
+    }
+    const out = await sharp({ create: { width: CEL * N, height: CEL * N, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } }).composite(parts)
+        .webp({ quality: qualitat, alphaQuality: 100, effort: 6 }).toFile(path.join(ARREL, dest));
+    console.log(`${rel} (mirall)`.padEnd(34), mb(out.size).padStart(9));
+}
+
 (async () => {
     for (const it of items) await catalog(it);
-    for (const d of ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast']) await fulla(`art/ineu/caminar/transparents/${d}.png`, `assets/ineu/${d}.webp`, 90);
-    await fulla('art/ineu/caminar/Ineu-walk-v1.png', 'assets/ineu/costat.webp', 95);   // té fons blanc: el joc el treu en carregar-la
+    for (const d of ['down', 'up', 'right', 'southwest', 'southeast', 'northwest', 'northeast']) await fulla(`art/ineu/caminar/transparents/${d}.png`, `assets/ineu/${d}.webp`, 90);
+    await fullaMirall('art/ineu/caminar/transparents/right.png', 'assets/ineu/left.webp', 90);
+    await fulla('art/ineu/caminar/Ineu-iso_walk_right-v2.png', 'assets/ineu/costat.webp', 95);   // té fons blanc: el joc el treu en carregar-la
     console.log('TOTAL', mb(abans), '->', mb(despres));
 })();
