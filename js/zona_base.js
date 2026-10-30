@@ -68,7 +68,7 @@ function esDialegBuit(dialeg) {
 // Les bestioles que es ressalten als llocs foscos (ZonaBase.ressaltarEnemics)
 const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'ratpenat', 'ferralla'];
 
-// VIATGE RÀPID: el carruatge de vapor de l'Home del Carruatge Verd (el va fer el Garf). A cada parada hi ha el carruatge i l'home;
+// VIATGE RÀPID: la tartana de vapor (al codi, 'carruatge') de l'Home de la Tartana Verda (el va fer el Garf). A cada parada hi ha el carruatge i l'home;
 // parlant-hi la primera vegada la parada queda desbloquejada (flag parada_<id>) i després s'hi pot viatjar entre les desbloquejades.
 // c: peu del carruatge · h: l'home · a: on apareix l'Ineu en arribar
 const PARADES = [

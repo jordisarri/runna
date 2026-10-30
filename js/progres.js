@@ -153,7 +153,7 @@ const PROGRES = {
                   !(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? " A la capella del fons, la Charm és tancada darrere uns esbarzers negres: només Runna els talla." : ''
               ].join('') },
         { id: 'carruatge', marca: ['carruatgeObert'], obert: E => E.flag('epilegFet'), fet: E => E.flag('carruatgeObert'),
-          pista: E => "L'Home del Carruatge Verd, a l'Era, deia que obriria el carruatge quan la boira marxés del tot." }
+          pista: E => "L'Home de la Tartana Verda, a l'Era, deia que obriria la tartana quan la boira marxés del tot." }
     ],
 
     // El primer pas de la història que encara no és fet

@@ -223,7 +223,7 @@ class ZonaEra extends ZonaBase {
         this.assegut = false;
         this.interactiu(ERA_BANC_X, ERA_BANC_S, RADI_NPC, () => { this.seure(); return DIALEGS.garf(Estat); }, { altura: 150 });
 
-        // L'Home del Carruatge Verd i el seu carruatge de vapor, a la vora sud-oest: és la parada de l'Era (PARADES, js/zona_base.js)
+        // L'Home de la Tartana Verda i la seva tartana de vapor, a la vora sud-oest: és la parada de l'Era (PARADES, js/zona_base.js)
 
         this.cartell(470, 485, DIALEGS.cartellEra);
         // Poca cosa més: uns quants arbres a la vora del nord, lluny de les sortides i del cartell, perquè els dos roures siguin els protagonistes

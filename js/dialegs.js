@@ -734,12 +734,12 @@ const DIALEGS = {
     cartellBosc: E => ({ pagines: [{ qui: "Cartell", text: "Bosc de Sant Joan.\n«Qui busca la font, que segueixi l'aigua... i qui no, que no es perdi.»" }] }),
     cartellCirosa: E => ({ pagines: [{ qui: "Cartell", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí a munt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\n← La Caseta" }] }),
 
-    // ---------------- L'HOME DEL CARRUATGE VERD: VIATGE RÀPID ----------------
-    // Condueix el carruatge de vapor que li va fer el Garf. A cada parada (PARADES, js/zona_base.js) la primera conversa la
+    // ---------------- L'HOME DE LA TARTANA VERDA: VIATGE RÀPID ----------------
+    // Condueix la tartana de vapor que li va fer el Garf (al codi, 'carruatge'). A cada parada (PARADES, js/zona_base.js) la primera conversa la
     // desbloqueja; després pregunta on anem. La seva història (els ocells que porta tapats al darrere, que els seus avis van
     // recollir quan van tancar l'Ocellaire) queda per a l'epíleg: a l'Era, quan la boira ha marxat, obre la gàbia.
     cotxer: (E, id) => {
-        const nom = 'Home del Carruatge Verd';
+        const nom = 'Home de la Tartana Verda';
         if (id === 'era' && E.flag('epilegFet') && !E.flag('carruatgeObert')) {
             return {
                 pagines: [

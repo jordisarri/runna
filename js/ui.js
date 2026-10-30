@@ -36,7 +36,7 @@ const RETRATS = {
     'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
     'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Jordi': 'jordi_caseta', 'Sansa': 'sansa', 'Home del Raïm': 'home_raim',
-    'Carry': 'carry', 'Home del Carruatge Verd': 'home_carruatge', 'El Gran Til·ler': 'tiller'
+    'Carry': 'carry', 'Home de la Tartana Verda': 'home_carruatge', 'El Gran Til·ler': 'tiller'
 };
 const MIDA_RETRAT = 170;          // costat del retrat a la caixa de diàleg (px de joc)
 // Retocs del retall per a dibuixos amb una altra proporció (alt: fracció de la figura que fa el cap; per defecte 0,4)
