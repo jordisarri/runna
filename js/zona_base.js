@@ -1101,6 +1101,16 @@ class ZonaBase extends Phaser.Scene {
         if (!f || !i) return;
         if (f.texture.key !== i.texture.key || f.frame.name !== i.frame.name) f.setTexture(i.texture.key, i.frame.name);
         f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(this.assegut ? 0 : i.alpha * 0.38);   // assegut: el banc el tapa de debò
+        // Els personatges no es transparenten com els arbres: si un que és davant de l'Ineu el tapa, la silueta s'amaga on hi ha el personatge
+        const ib = i.getBounds();
+        const davant = this.npcs && Object.values(this.npcs).find(n => n && n.active && n.visible && n.depth > i.depth
+            && Phaser.Geom.Intersects.RectangleToRectangle(n.getBounds(), ib));
+        if (davant !== this.npcDavant) {
+            this.npcDavant = davant;
+            if (davant && !davant.mascaraInv) { davant.mascaraInv = new Phaser.Display.Masks.BitmapMask(this, davant); davant.mascaraInv.invertAlpha = true; }
+            if (davant) f.setMask(davant.mascaraInv);
+            else f.clearMask();
+        }
     }
 
     // Quan hi ha un diàleg, la caixa de text (i el retrat de qui parla) tapen la part de baix de la pantalla i el HUD la de dalt. Els dos que parlen
