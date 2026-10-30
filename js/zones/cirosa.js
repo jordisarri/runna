@@ -144,13 +144,22 @@ class ZonaCirosa extends ZonaBase {
         // La pastura de la dreta: oberta del tot. Només es tanca amb unes tanques de fusta quan comença el combat contra el Pastor
         this.terra('herba', 1032, 160, 740, 860, -1050).setTint(0xcdeaa0);
 
-        // Ovelles del ramat (decoratives): lila i adormides mentre el Pastor hi és
+        // El ramat. Mentre el Pastor hi és, totes les ovelles són de boira (enemigues): tres d'adormides a la pastura, que es
+        // desperten quan comença el combat (i el Pastor en crida més, fins a quatre alhora). Vençut, ovelles blanques que pasturen.
         const lila = !Estat.flag('pastorVencut');
-        [[1200, 330], [1500, 420], [1650, 700], [1350, 880], [1580, 930], [1250, 560], [1700, 300], [1100, 840]].forEach(([x, y]) => {
-            const o = this.posar('ovella', x, y, { fonsY: y });
-            if (lila) o.setTint(0xcdb8e8);
-            else this.pasturar(o, 90);
-        });
+        this.ramat = [];
+        if (lila) {
+            [[1220, 360], [1640, 640], [1330, 880]].forEach(([x, y]) => {
+                const o = this.enemic('ovella', x, y);
+                if (!o) return;
+                o.estat = 'repos'; o.fins = Infinity;          // adormida fins al combat
+                this.ramat.push(o);
+            });
+        } else {
+            [[1200, 330], [1500, 420], [1650, 700], [1350, 880], [1580, 930], [1250, 560], [1700, 300], [1100, 840]].forEach(([x, y]) => {
+                this.pasturar(this.posar('ovella', x, y, { fonsY: y }), 90);
+            });
+        }
 
         // El Germà Andreu, de Pastor de Boira, al mig de la pastura
         if (lila) {
@@ -282,6 +291,8 @@ class ZonaCirosa extends ZonaBase {
         if (!e) { this.bossIniciat = false; this.andreuNpc.setVisible(true); this.andreuOmbra.setVisible(true); this.andreuFlota.resume(); return; }
         this.cameras.main.shake(300, 0.005);
         this.tancarArena();
+        // El ramat adormit es desperta, una ovella rere l'altra
+        this.ramat.forEach((o, i) => { if (!o.mort) o.fins = this.time.now + 700 + i * 500; });
         this.flotant(1400, 520, 'Be-e-e-e!', '#e0a0ff');
     }
 }

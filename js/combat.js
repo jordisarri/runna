@@ -223,7 +223,7 @@ const ENEMICS = {
                     if (vius < 4) {
                         z.flotant(c.x, c.y - 120, 'Be-e-e!', '#e0a0ff');
                         Sfx.be();
-                        [-1, 1].forEach(s => { const o = z.enemic('ovella', c.x + s * 150, c.y + 60); if (o) { z.boiraPuf(o.spr.x, o.spr.y); o.fins = ara + 900; } });
+                        [-1, 1].slice(0, 4 - vius).forEach(s => { const o = z.enemic('ovella', c.x + s * 150, c.y + 60); if (o) { z.boiraPuf(o.spr.x, o.spr.y); o.fins = ara + 900; } });   // mai més de quatre alhora
                     }
                 } else if (ara > e.proxCarrega && dist < 440) {
                     e.estat = 'apunta'; e.fins = ara + (fase2 ? 400 : 620); e.ang = cap;
@@ -770,6 +770,7 @@ Object.assign(ZonaBase.prototype, {
         // Alguns bosses no deixen que els colpegis seguit: després d'un cop, un instant sense dany
         if (e.def.immune && ara < (e.immuneFins || 0)) { Sfx.escut(); return; }
         if (e.def.immune) e.immuneFins = ara + e.def.immune;
+        if (e.fins === Infinity) e.fins = this.time.now + 300;          // una bèstia adormida (el ramat del Pastor) es desperta si la piquen
         e.vida -= dany;
         const mort = e.vida <= 0;
         if (e.def.robust) {             // els bosses no perden el torn ni surten volant
