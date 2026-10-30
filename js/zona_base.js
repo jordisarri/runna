@@ -73,7 +73,7 @@ const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'ratpenat', 'ferra
 // c: peu del carruatge · h: l'home · a: on apareix l'Ineu en arribar
 const PARADES = [
     { id: 'era',       zona: 'ZonaEra',        nom: "L'Era",              c: [260, 1230], h: [450, 1250], a: [450, 1170] },
-    { id: 'placa',     zona: 'ZonaPlaca',      nom: 'Plaça del Santuari', c: [190, 720],  h: [370, 735],  a: [370, 810] },
+    { id: 'bassadoria', zona: 'ZonaCreu',      nom: 'La Bassadòria',      c: [250, 900],  h: [430, 915],  a: [540, 880] },
     { id: 'celles',    zona: 'ZonaCelles',     nom: 'Les Cel·les',        c: [560, 960],  h: [740, 975],  a: [740, 880] },
     { id: 'cirosa',    zona: 'ZonaCirosa',     nom: 'La Cirosa',          c: [1260, 1120], h: [1440, 1135], a: [1440, 1060] },
     { id: 'santantoni', zona: 'ZonaSantAntoni', nom: 'Sant Antoni',       c: [260, 1010], h: [440, 1025], a: [440, 940] },

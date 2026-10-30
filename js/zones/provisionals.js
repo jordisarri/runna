@@ -280,14 +280,14 @@ class ZonaCreu extends ZonaBase {
 
 
         this.cartell(1180, 480, () => ({ pagines: [{ qui: 'Cartell', text: '↑ Plaça del Santuari' }] }));
-        this.arbres([[150, 180], [320, 260], [1450, 220], [90, 900], [1500, 780], [100, 520], [190, 640], [1400, 440], [1480, 600], [260, 440]]);
+        this.arbres([[150, 180], [320, 260], [1450, 220], [1500, 780], [100, 520], [190, 640], [1400, 440], [1480, 600], [260, 440]]);
 
         this.enemic('escolopendra', 1350, 300);
         // Els gripaus corromputs s'escapen de la Bassadòria: n'hi ha per tota l'escena i, a mesura que en caiguin,
         // en surten de nous de la bassa. Quan la boira se'n va (aigua neta) ja no en surten més.
         this.propGripau = this.time.now + 2500;
         if (!Estat.flag('bassadoriaNeta')) {
-            [[560, 600], [1330, 620], [640, 830], [1180, 300]].forEach(([x, y]) => this.enemic('gripau', x, y));
+            [[560, 600], [1330, 620], [800, 860], [1180, 300]].forEach(([x, y]) => this.enemic('gripau', x, y));
         }
         this.sortida(1100, 0, 160, 14, 'ZonaPlaca', 'creu');
     }
