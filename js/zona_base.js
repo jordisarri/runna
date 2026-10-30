@@ -72,12 +72,12 @@ const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'ratpenat', 'ferra
 // parlant-hi la primera vegada la parada queda desbloquejada (flag parada_<id>) i després s'hi pot viatjar entre les desbloquejades.
 // c: peu del carruatge · h: l'home · a: on apareix l'Ineu en arribar
 const PARADES = [
-    { id: 'era',       zona: 'ZonaEra',        nom: "L'Era",              c: [260, 1230], h: [450, 1250],  a: [560, 1215] },
-    { id: 'bassadoria', zona: 'ZonaCreu',      nom: 'La Bassadòria',      c: [250, 900],  h: [430, 915],  a: [540, 880] },
-    { id: 'celles',    zona: 'ZonaCelles',     nom: 'Les Cel·les',        c: [560, 960],  h: [740, 975],  a: [850, 940] },
-    { id: 'cirosa',    zona: 'ZonaCirosa',     nom: 'La Cirosa',          c: [1260, 1120], h: [1440, 1135],  a: [1550, 1100] },
-    { id: 'santantoni', zona: 'ZonaSantAntoni', nom: 'Sant Antoni',       c: [260, 1010], h: [440, 1025],  a: [550, 990] },
-    { id: 'diposits',  zona: 'ZonaDipositos',  nom: 'Els Dipòsits',       c: [300, 830],  h: [480, 845],  a: [590, 810] }
+    { id: 'era',       zona: 'ZonaEra',        nom: "L'Era",              c: [260, 1230],  h: [410, 1245],  a: [300, 1285] },
+    { id: 'bassadoria', zona: 'ZonaCreu',      nom: 'La Bassadòria',      c: [250, 900],  h: [400, 915],  a: [290, 955] },
+    { id: 'celles',    zona: 'ZonaCelles',     nom: 'Les Cel·les',        c: [610, 960],  h: [760, 975],  a: [650, 1015] },
+    { id: 'cirosa',    zona: 'ZonaCirosa',     nom: 'La Cirosa',          c: [1310, 1120],  h: [1460, 1135],  a: [1350, 1175] },
+    { id: 'santantoni', zona: 'ZonaSantAntoni', nom: 'Sant Antoni',       c: [260, 1010],  h: [410, 1025],  a: [300, 1065] },
+    { id: 'diposits',  zona: 'ZonaDipositos',  nom: 'Els Dipòsits',       c: [300, 830],  h: [450, 845],  a: [340, 885] }
 ];
 
 const PAS_PORTA = 44;       // en passar una porta (o qualsevol sortida), l'Ineu camina aquests píxels més cap a la foscor abans de canviar d'escena, i en arribar en camina altres tants cap endins
@@ -223,7 +223,7 @@ class ZonaBase extends Phaser.Scene {
     // ---------------- Viatge ràpid ----------------
     parada(pd) {
         const [cx, cy] = pd.c, [hx, hy] = pd.h;
-        const carro = this.posar('carruatge', cx, cy, { col: { w: 230, h: 46 } }).setFlipX(true);     // girat: el davant mira cap a l'escena
+        const carro = this.posar('carruatge', cx, cy, { col: { w: 190, h: 40 } }).setFlipX(true);     // girat: el davant mira cap a l'escena
         // una mica de vapor que surt de la xemeneia (a un terç de l'ample, a dalt; el carruatge és girat)
         const fx = cx + carro.displayWidth * 0.2, fy = cy - carro.displayHeight * 0.86;
         this.add.particles(fx, fy, 'boira', { speedY: { min: -30, max: -14 }, speedX: { min: -14, max: -4 }, lifespan: 1800, scale: { start: 0.25, end: 0.7 },
@@ -253,7 +253,7 @@ class ZonaBase extends Phaser.Scene {
         this.canviant = true;
         this.ineu.body.setVelocity(0);
         Sfx.vapor();
-        if (this.paradaAqui) this.boiraPuf(this.paradaAqui.c[0] - 60, this.paradaAqui.c[1] - 120);
+        if (this.paradaAqui) this.boiraPuf(this.paradaAqui.c[0] + 45, this.paradaAqui.c[1] - 110);
         Estat.dades.zona = pd.zona; Estat.dades.entrada = null;
         Estat.dades.x = pd.a[0]; Estat.dades.y = pd.a[1];
         Estat.arribadaCarruatge = pd.id;
