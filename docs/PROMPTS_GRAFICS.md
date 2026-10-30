@@ -79,7 +79,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 **Pendents** (el joc encara fa servir el dibuix provisional): `altar`, `cabana`, `carro_sansa`, `carruatge`, `caseta_joc`, `cel_ntrasra`, `cel_stbenet`, `cofre`, `columna`, `columna_proces`, `daniel_t`, `diposit`, `eloi`, `escolopendra`, `espelma`, `farigola`, `flors`, `foc`, `font_sj`, `gripau`, `herba_sj`, `home_carruatge`, `home_raim`, `jordi_caseta`, `judit`, `lapida`, `llac`, `llosa`, `marit_neus`, `masia`, `neus`, `ocell`, `olla`, `ombra_monjo`, `ovella`, `ovella_boira`, `pastor_a`, `pastor_b`, `pastor_vell`, `pergami`, `pergola`, `porxo`, `romani`, `runna_pedra`, `sansa`, `taula_pedra`, `taula_pp`, `taula_sopar`, `taverna`, `telescopi_mon`, `tomba_esquerdada`, `turbo`, `visitant`, `yordi`, `venerables`, `mare_nena`.
 
-**Nous, encara sense ús al joc** (preparats per a quan es facin): `andreu_guardia`, `arbre_sec`, `ferralla`, `gabia`, `gabia_oberta`, `guants_poder`, `home_raim_desperta`, `ocell_boira`, `ram_flors`, `ratpenat_boira`, `runes_ombra`.
+**Nous, encara sense ús al joc** (preparats per a quan es facin): `ineu_inconscient`, `jordi_desperta`, `andreu_guardia`, `arbre_sec`, `ferralla`, `gabia`, `gabia_oberta`, `guants_poder`, `home_raim_desperta`, `ocell_boira`, `ram_flors`, `ratpenat_boira`, `runes_ombra`.
 
 Els prompts de sota són només dels pendents i dels nous (els fets només es llisten dalt de tot).
 
@@ -512,6 +512,26 @@ Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style,
 ```
 Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A translucent ghost of an old monk in dark blue light. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
 ```
+
+---
+
+## Escenes de l'Ineu
+
+Quan l'Ineu cau i desperta a la Plaça: primer surt `ineu_inconscient` (l'Ineu a terra, sol), i de cop, sense transició, `jordi_desperta` (el Pare Jordi agenollat al seu costat); llavors el diàleg «Ineu! Que et trobo a terra!...» i, en tancar-lo, l'Ineu torna al seu gràfic normal. Perquè el canvi no faci cap salt, l'Ineu ha de ser IDÈNTIC i al mateix lloc a les dues imatges: genera primer la 1 i adjunta-la a la 2. Totes dues apaïsades i de la mateixa mida (el fons blanc es treu després).
+
+### `ineu_inconscient.png` *(L'Ineu estirat a terra, inconscient, a la Plaça. Adjunta: `assets/ineu/costat.webp` (cos, hàbit i proporcions) i `assets/retrats/ineu.webp` (la cara).)*
+
+```
+Charming 2D cartoon game asset in the exact art style of the attached reference images (the adventurer monk Ineu): chunky hand-inked storybook cartoon illustration, thick clean dark-brown outline of even weight, soft cel-shaded colouring with gentle gradients and a subtle worn paper grain, warm saturated earthy palette (chocolate and chestnut browns, cream, ochre), rounded friendly shapes, light from the upper left, isolated on a plain pure white background, no ground, no shadow, no text, 3/4 top-down view like a classic JRPG. The same young monk Ineu from the references, with identical face, tonsured brown hair, brown wool habit with rope belt and sandals, lying unconscious on the ground on his back, stretched out horizontally with his head to the left and his feet to the right, eyes closed, mouth slightly open, peaceful but exhausted, one arm resting on his chest and the other fallen beside him, a few small dust puffs and a tiny dizzy swirl of three little stars above his head. Chunky chibi proportions exactly like the reference (big round head, short plump body). Whole body visible and centered, wide horizontal image with empty white space above the body, a single character, no weapon.
+```
+
+### `jordi_desperta.png` *(El Pare Jordi agenollat al costat de l'Ineu, despertant-lo. Adjunta: el resultat de `ineu_inconscient` (el més important: l'Ineu ha de quedar idèntic i al mateix lloc), `assets/personatges/pare_jordi.webp` i, si el tens, `assets/retrats/pare_jordi.webp`.)*
+
+```
+Charming 2D cartoon game asset in the exact art style of the attached reference images: chunky hand-inked storybook cartoon illustration, thick clean dark-brown outline of even weight, soft cel-shaded colouring with gentle gradients and a subtle worn paper grain, warm saturated earthy palette, light from the upper left, isolated on a plain pure white background, no ground, no shadow, no text, 3/4 top-down view like a classic JRPG. Keep the first attached image EXACTLY as it is: the unconscious young monk Ineu lying on his back, same pose, same size and same position in the frame, but without the dizzy stars. Add Father Jordi, the elderly prior from the second reference (identical face, hair, beard and dark habit), kneeling on one knee just behind Ineu on the upper side of the image, leaning over him, one hand gently on Ineu's shoulder and the other on his forehead, with a worried, kind, fatherly expression, as if calling his name to wake him up. Chunky chibi proportions like the references. Both characters fully visible, same wide horizontal canvas as the first image, Ineu's position unchanged.
+```
+
+Si el Pare Jordi surt davant de l'Ineu, demana-ho així: «behind Ineu, on the far side» (en vista de dalt, el que és darrere queda més amunt a la imatge).
 
 ---
 
