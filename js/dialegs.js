@@ -750,7 +750,7 @@ const DIALEGS = {
                         for (let i = 0; i < 10; i++) z.time.delayedCall(i * 170, () => {
                             const g = z.add.graphics().setDepth(90000);
                             g.lineStyle(3, 0x2a1a10, 1).beginPath().moveTo(-9, 2).lineTo(0, -5).lineTo(9, 2).strokePath();
-                            g.setPosition(cx + 80 + Math.random() * 50, cy - 90);
+                            g.setPosition(cx - 80 - Math.random() * 50, cy - 90);      // la gàbia és al darrere (el carruatge és girat)
                             z.tweens.add({ targets: g, scaleY: { from: 1, to: -0.6 }, yoyo: true, repeat: -1, duration: 160 + Math.random() * 60 });
                             z.tweens.add({ targets: g, x: cx + (Math.random() - 0.5) * 700, y: cy - 700 - Math.random() * 250, alpha: 0, duration: 2400 + Math.random() * 600, ease: 'Sine.easeOut', onComplete: () => g.destroy() });
                         });

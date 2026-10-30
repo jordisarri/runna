@@ -222,10 +222,10 @@ class ZonaBase extends Phaser.Scene {
     // ---------------- Viatge ràpid ----------------
     parada(pd) {
         const [cx, cy] = pd.c, [hx, hy] = pd.h;
-        const carro = this.posar('carruatge', cx, cy, { col: { w: 230, h: 46 } });
-        // una mica de vapor que surt de la xemeneia (a un terç de l'ample, a dalt)
-        const fx = cx - carro.displayWidth * 0.2, fy = cy - carro.displayHeight * 0.86;
-        this.add.particles(fx, fy, 'boira', { speedY: { min: -30, max: -14 }, speedX: { min: 4, max: 14 }, lifespan: 1800, scale: { start: 0.25, end: 0.7 },
+        const carro = this.posar('carruatge', cx, cy, { col: { w: 230, h: 46 } }).setFlipX(true);     // girat: el davant mira cap a l'escena
+        // una mica de vapor que surt de la xemeneia (a un terç de l'ample, a dalt; el carruatge és girat)
+        const fx = cx + carro.displayWidth * 0.2, fy = cy - carro.displayHeight * 0.86;
+        this.add.particles(fx, fy, 'boira', { speedY: { min: -30, max: -14 }, speedX: { min: -14, max: -4 }, lifespan: 1800, scale: { start: 0.25, end: 0.7 },
             alpha: { start: 0.45, end: 0 }, frequency: 650, tint: 0xffffff }).setDepth(cy + 1);
         this.npc('home_carruatge', hx, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true });     // girat: mira cap a l'escena, no cap al carruatge
         this.paradaAqui = pd;
