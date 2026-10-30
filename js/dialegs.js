@@ -734,45 +734,47 @@ const DIALEGS = {
     cartellBosc: E => ({ pagines: [{ qui: "Cartell", text: "Bosc de Sant Joan.\n«Qui busca la font, que segueixi l'aigua... i qui no, que no es perdi.»" }] }),
     cartellCirosa: E => ({ pagines: [{ qui: "Cartell", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí a munt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\n← La Caseta" }] }),
 
-    // ---------------- CARRUATGE VERD (només a l'Era) ----------------
-    // És l'últim d'una nissaga de cuidadors d'ocells: quan els pastors i els monjos van tancar l'Ocellaire, els seus avis van recollir els ocells
-    // que ell havia engabiat. Des d'aleshores els porten al carruatge, perquè la boira (l'alè de l'Ocellaire) els fa callar allà on s'assenta.
-    // No els pot deixar anar fins que la boira marxi del tot: a l'epíleg, obre el carruatge.
-    homeCarruatge: E => {
+    // ---------------- L'HOME DEL CARRUATGE VERD: VIATGE RÀPID ----------------
+    // Condueix el carruatge de vapor que li va fer el Garf. A cada parada (PARADES, js/zona_base.js) la primera conversa la
+    // desbloqueja; després pregunta on anem. La seva història (els ocells que porta tapats al darrere, que els seus avis van
+    // recollir quan van tancar l'Ocellaire) queda per a l'epíleg: a l'Era, quan la boira ha marxat, obre la gàbia.
+    cotxer: (E, id) => {
         const nom = 'Home del Carruatge Verd';
-        if (E.flag('carruatgeObert')) return { pagines: [{ qui: nom, text: "Cada matí vénen a cantar aquí, a l'Era. Diuen que és per tu, monjo." }] };
-        if (E.flag('epilegFet')) {
+        if (id === 'era' && E.flag('epilegFet') && !E.flag('carruatgeObert')) {
             return {
                 pagines: [
-                    { qui: nom, text: "La boira se n'ha anat del tot. Ara sí que puc obrir-lo, monjo." },
-                    { qui: nom, text: "Dins hi ha els ocells que l'Ocellaire va tancar fa segles. Els meus avis els van recollir i els han guardat de generació en generació, perquè amb la boira no volien cantar." },
+                    { qui: nom, text: "La boira se n'ha anat del tot, monjo. Abans de tornar a la carretera, deixa'm obrir la gàbia del darrere." },
+                    { qui: nom, text: "Hi porto els ocells que l'Ocellaire va tancar fa segles. Els meus avis els van recollir i els hem guardat de pare a fill, perquè amb la boira no volien cantar." },
                     { fer: (z, fet) => {
+                        const [cx, cy] = z.paradaAqui ? z.paradaAqui.c : [260, 1230];
                         for (let i = 0; i < 10; i++) z.time.delayedCall(i * 170, () => {
                             const g = z.add.graphics().setDepth(90000);
                             g.lineStyle(3, 0x2a1a10, 1).beginPath().moveTo(-9, 2).lineTo(0, -5).lineTo(9, 2).strokePath();
-                            g.setPosition(250 + Math.random() * 50, 1170);
+                            g.setPosition(cx + 80 + Math.random() * 50, cy - 90);
                             z.tweens.add({ targets: g, scaleY: { from: 1, to: -0.6 }, yoyo: true, repeat: -1, duration: 160 + Math.random() * 60 });
-                            z.tweens.add({ targets: g, x: 250 + (Math.random() - 0.5) * 700, y: 1170 - 650 - Math.random() * 250, alpha: 0, duration: 2400 + Math.random() * 600, ease: 'Sine.easeOut', onComplete: () => g.destroy() });
+                            z.tweens.add({ targets: g, x: cx + (Math.random() - 0.5) * 700, y: cy - 700 - Math.random() * 250, alpha: 0, duration: 2400 + Math.random() * 600, ease: 'Sine.easeOut', onComplete: () => g.destroy() });
                         });
                         z.esperar(2400, fet);
                     } },
                     { qui: nom, text: "Ja poden cantar. Gràcies per tornar-los el cant." }
                 ],
-                enAcabar: () => E.posaFlag('carruatgeObert')
+                enAcabar: () => { E.posaFlag('carruatgeObert'); E.posaFlag('parada_era'); }
             };
         }
-        if (E.flag('cantMiracle')) {
-            return { pagines: [{ qui: nom, text: "Aquest cant que portes a la flauta és el seu, dels ocells: fa generacions que cap no el canta. Quan la boira marxi del tot, obriré el carruatge i ho veuràs." }] };
+        const conegudes = PARADES.filter(pd => E.flag('parada_' + pd.id)).length;
+        if (!E.flag('parada_' + id)) {
+            return {
+                pagines: [{ qui: nom, text: conegudes
+                    ? "Mira qui hi ha! Ara ja saps que també paro aquí."
+                    : "Eh, monjo! Aquest trasto me'l va fer el Garf: va amb vapor i no es cansa mai. Si has d'anar lluny, puja. Això sí: només paro allà on ja m'hagis trobat." }],
+                enAcabar: () => E.posaFlag('parada_' + id)
+            };
         }
-        if (E.te('flauta')) {
-            return { pagines: [{ qui: nom, text: "Ets el monjo de la flauta, oi? Els meus ocells s'han mogut quan t'han sentit passar. Encara no els puc deixar anar: mentre hi hagi boira, no cantarien." }] };
-        }
-        const frases = [
-            "Shh... baixa la veu, monjo. Al carruatge porto ocells. Fa dies que no canten: la boira els fa callar.",
-            "Camino amb el carruatge d'un lloc a l'altre perquè la boira no se m'assenti al damunt. Els ocells només estan tranquils quan es mouen."
-        ];
-        const n = E.dades.flags.carruatge || 0;
-        return { pagines: [{ qui: nom, text: frases[n % frases.length] }], enAcabar: () => E.posaFlag('carruatge', n + 1) };
+        if (conegudes < 2) return { pagines: [{ qui: nom, text: "De moment només conec aquest lloc, monjo. Quan em trobis en un altre, t'hi portaré." }] };
+        return { pagines: [
+            { qui: nom, text: "On anem?" },
+            { fer: (z, fet) => z.triarViatge(fet) }
+        ] };
     },
 
     // ---------------- CAMÍ DE LA DESAPARICIÓ ----------------

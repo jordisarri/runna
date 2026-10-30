@@ -585,6 +585,38 @@ class EscenaUI extends Phaser.Scene {
         pinta();
     }
 
+    // Tria d'una llista vertical (el viatge ràpid): botons grans un sota l'altre; ↑ ↓ i ESPAI/ENTER, o tocar-los. cb(i)
+    triarLlista(opcions, cb) {
+        const ample = 520, alt = 84, sep = 14, total = opcions.length * alt + (opcions.length - 1) * sep;
+        const y0 = Math.max(ALT_HUD + 80, ALT - 400 - total) + alt / 2;
+        const cont = this.add.container(0, 0).setDepth(70);
+        let sel = 0, fet = false;
+        const botons = opcions.map((t, i) => {
+            const y = y0 + i * (alt + sep);
+            const fons = marcPergami(this, AMPLE / 2, y, ample, alt);
+            const txt = this.add.text(AMPLE / 2, y, t, { fontFamily: FONT_PLACA, fontSize: '36px', fontStyle: 'bold', color: '#3a1a0c', resolution: 2 }).setOrigin(0.5);
+            const zona = this.add.rectangle(AMPLE / 2, y, ample, alt, 0xffffff, 0.001).setInteractive({ useHandCursor: true });
+            zona.on('pointerdown', () => tria(i)); zona.on('pointerover', () => { sel = i; pinta(); });
+            cont.add([fons, txt, zona]);
+            return { txt, fons };
+        });
+        const pinta = () => botons.forEach((b, i) => { b.txt.setText((i === sel ? '▸ ' : '') + opcions[i]).setColor(i === sel ? '#a01c10' : '#3a1a0c'); b.fons.setAlpha(i === sel ? 1 : 0.82); });
+        const tecla = ev => {
+            if (['ArrowUp', 'KeyW', 'ArrowLeft', 'KeyA'].includes(ev.code)) { sel = (sel + opcions.length - 1) % opcions.length; pinta(); }
+            else if (['ArrowDown', 'KeyS', 'ArrowRight', 'KeyD'].includes(ev.code)) { sel = (sel + 1) % opcions.length; pinta(); }
+            else if (['Space', 'Enter'].includes(ev.code)) tria(sel);
+        };
+        const tria = i => {
+            if (fet) return; fet = true;
+            this.input.keyboard.off('keydown', tecla);
+            cont.destroy();
+            this.bloquejatFins = this.time.now + 250;
+            cb(i);
+        };
+        this.time.delayedCall(150, () => this.input.keyboard.on('keydown', tecla));      // que l'ESPAI que obre la llista no triï res
+        pinta();
+    }
+
     // ---------------- MENÚ ----------------
     crearMenu() {
         this.menu = this.add.container(0, 0).setVisible(false).setDepth(60);

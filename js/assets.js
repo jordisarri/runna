@@ -74,7 +74,7 @@ const CATALEG = [
     { key: 'sansa',     file: 'assets/personatges/sansa.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
     { key: 'ciscu',     file: 'assets/personatges/ciscu.webp',    amplada: 52, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#c8a040', cabell: '#5a3a1e', alt: 0.74, cap: 17, extra: 'gorra' }) },
     { key: 'eva',       file: 'assets/personatges/eva.webp',       amplada: 67, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7a5a', cabell: '#e8cc66', dona: true, alt: 0.95 }) },
-    { key: 'home_carruatge', file: 'assets/personatges/home_carruatge.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2f6b3d', cabell: '#222', alt: 1.04, extra: 'gorra' }) },
+    { key: 'home_carruatge', file: 'assets/personatges/home_carruatge.webp', amplada: 92, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2f6b3d', cabell: '#222', alt: 1.04, extra: 'gorra' }) },
 
     // ---- Escenari nou ----
     { key: 'runes',     file: 'assets/edificis/runes.webp',     amplada: 760, provisional: (c, w) => dibuixarRunes(c, w) },
@@ -87,7 +87,7 @@ const CATALEG = [
     { key: 'taula_pedra', file: 'assets/objectes/taula_pedra.png', amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 0) },
     { key: 'taula_pedra2', file: 'assets/objectes/taula_pedra2.png', amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
     { key: 'font_sj',   file: 'assets/objectes/font_sj.png',   amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w) },
-    { key: 'carruatge', file: 'assets/objectes/carruatge.png', amplada: 230, provisional: (c, w) => dibuixarCarruatge(c, w) },
+    { key: 'carruatge', file: 'assets/objectes/carruatge.webp', amplada: 300, provisional: (c, w) => dibuixarCarruatge(c, w) },
     { key: 'carro_sansa', file: 'assets/objectes/carro_sansa.png', amplada: 220, provisional: (c, w) => dibuixarCarroSansa(c, w) },
     { key: 'pergola',   file: 'assets/edificis/pergola.png',   amplada: 260, provisional: (c, w) => dibuixarPergola(c, w) },
     { key: 'flors',     file: 'assets/natura/flors.png',     amplada: 90,  provisional: (c, w) => dibuixarFlors(c, w) },

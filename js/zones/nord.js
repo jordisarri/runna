@@ -406,7 +406,7 @@ class ZonaCelles extends ZonaBase {
         this.cartell(130, 625, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler' }] }));
 
         this.arbres([[260, 1000], [300, 1040],
-                     [560, 1000], [1250, 1020], [1480, 960], [1700, 1030]]);
+                     [1250, 1020], [1480, 960], [1700, 1030]]);
 
         this.sortida(800, 1086, 200, 14, 'ZonaRuines', 'celles');
         this.sortida(0, 640, 14, 130, 'ZonaBosc', 'celles');

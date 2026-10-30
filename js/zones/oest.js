@@ -485,8 +485,8 @@ class ZonaDipositos extends ZonaBase {
         // Cartell a la vora del camí, sense cap arbre al davant
         this.cartell(230, 500, () => ({ pagines: [{ qui: 'Cartell', text: '→ Dolmen\n← Ermita de Sant Gabriel' }] }));
 
-        this.arbres([[100, 150], [250, 90], [800, 100], [1450, 140], [1350, 900], [1500, 960], [120, 960], [560, 960], [660, 820]]);
-        [[1250, 800], [450, 800], [900, 820]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        this.arbres([[100, 150], [250, 90], [800, 100], [1450, 140], [1350, 900], [1500, 960], [660, 820]]);      // (la parada del carruatge és a baix a l'esquerra)
+        [[1250, 800], [1050, 880], [900, 820]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         [[330, 440], [1290, 440]].forEach(([x, y]) => this.enemic('gripau', x, y));       // gripaus: a prop de l'aigua dels dipòsits
 
         // Cel de nit estrellat sobre el paisatge

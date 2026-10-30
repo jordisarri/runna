@@ -195,6 +195,11 @@ const Sfx = {
         [330, 415, 494, 659, 988].forEach(f => { this.to(f, f, 1.6, 'triangle', 0.09, 0.48); this.to(f * 2, f * 2, 1.2, 'sine', 0.04, 0.48); });
         this.to(1319, 1319, 1.4, 'sine', 0.08, 0.5);
     },
+    vapor() {                    // el carruatge de vapor arrenca: xiulet i xup-xup
+        if (!this.ok('vapor', 800)) return;
+        this.to(880, 920, 0.5, 'sine', 0.12);
+        [0, 0.22, 0.44, 0.66].forEach(t => this.xiu(0.16, 0.12, 'bandpass', 900, 500, 1, 0.3 + t));
+    },
     campana(retard = 0) {        // una campanada del rellotge: to greu amb harmònics de campana que s'apaguen a poc a poc
         if (!this.ok('campana', 300)) return;
         [[220, 0.22], [440, 0.12], [528, 0.08], [660, 0.06], [880, 0.04]].forEach(([f, v]) => this.to(f, f * 0.995, 2.6, 'sine', v, retard));

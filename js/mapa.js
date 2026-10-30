@@ -249,6 +249,12 @@ const MAPA = {
                 const st = add(scene.add.text(x + w / 2 - 2, y - h / 2 + 2, '★', estilText(38, '#ff7a4a', { stroke: '#2a0a04', strokeThickness: 6 })).setOrigin(0.5), mon);
                 anima({ targets: st, scale: 1.3, yoyo: true, repeat: -1, duration: 500 });
             }
+            // Parada del carruatge de vapor (viatge ràpid) ja desbloquejada: el carruatge petit a la cantonada de baix
+            const pd = typeof PARADES !== 'undefined' && PARADES.find(q => q.zona === n.id && Estat.flag('parada_' + q.id));
+            if (pd && n.v && scene.textures.exists('carruatge')) {
+                const ic = add(scene.add.image(x + w / 2 - 6, y + h / 2 - 2, 'carruatge').setOrigin(1, 1), mon);
+                ic.setScale(46 / ic.width);
+            }
             if (encarrecs[n.id]) {
                 add(scene.add.circle(x - w / 2 + 2, y - h / 2 + 2, 14, 0x1a3a66, 1).setStrokeStyle(3, 0x7ab8ff, 1), mon);
                 add(scene.add.text(x - w / 2 + 2, y - h / 2 + 2, '!', estilText(24, '#bfe0ff', { fontStyle: 'bold' })).setOrigin(0.5), mon);

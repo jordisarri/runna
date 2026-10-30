@@ -68,6 +68,18 @@ function esDialegBuit(dialeg) {
 // Les bestioles que es ressalten als llocs foscos (ZonaBase.ressaltarEnemics)
 const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'ratpenat', 'ferralla'];
 
+// VIATGE RÀPID: el carruatge de vapor de l'Home del Carruatge Verd (el va fer el Garf). A cada parada hi ha el carruatge i l'home;
+// parlant-hi la primera vegada la parada queda desbloquejada (flag parada_<id>) i després s'hi pot viatjar entre les desbloquejades.
+// c: peu del carruatge · h: l'home · a: on apareix l'Ineu en arribar
+const PARADES = [
+    { id: 'era',       zona: 'ZonaEra',        nom: "L'Era",              c: [260, 1230], h: [450, 1250], a: [450, 1170] },
+    { id: 'placa',     zona: 'ZonaPlaca',      nom: 'Plaça del Santuari', c: [190, 720],  h: [370, 735],  a: [370, 810] },
+    { id: 'celles',    zona: 'ZonaCelles',     nom: 'Les Cel·les',        c: [560, 960],  h: [740, 975],  a: [740, 880] },
+    { id: 'cirosa',    zona: 'ZonaCirosa',     nom: 'La Cirosa',          c: [1260, 1120], h: [1440, 1135], a: [1440, 1060] },
+    { id: 'santantoni', zona: 'ZonaSantAntoni', nom: 'Sant Antoni',       c: [260, 1010], h: [440, 1025], a: [440, 940] },
+    { id: 'diposits',  zona: 'ZonaDipositos',  nom: 'Els Dipòsits',       c: [300, 830],  h: [480, 845],  a: [480, 770] }
+];
+
 const PAS_PORTA = 44;       // en passar una porta (o qualsevol sortida), l'Ineu camina aquests píxels més cap a la foscor abans de canviar d'escena, i en arribar en camina altres tants cap endins
 const MS_PAS_PORTA = 450;
 const TOPE_Y = 100;   // els peus de l'Ineu no passen d'aquí amunt: sempre se li veu el cos (la càmera s'atura a y=0)
@@ -120,6 +132,7 @@ class ZonaBase extends Phaser.Scene {
         this.portesAnim = [];
         Grafics.epoca++;
         this.construir();
+        PARADES.filter(pd => pd.zona === this.scene.key).forEach(pd => this.parada(pd));     // el carruatge de vapor, si aquí n'hi ha parada
         this.obrirPortes();
         this.ampliarSud();
         this.ponFonsContinu();
@@ -205,6 +218,47 @@ class ZonaBase extends Phaser.Scene {
     }
 
     ui() { return this.scene.get('UI'); }
+
+    // ---------------- Viatge ràpid ----------------
+    parada(pd) {
+        const [cx, cy] = pd.c, [hx, hy] = pd.h;
+        const carro = this.posar('carruatge', cx, cy, { col: { w: 230, h: 46 } });
+        // una mica de vapor que surt de la xemeneia (a un terç de l'ample, a dalt)
+        const fx = cx - carro.displayWidth * 0.2, fy = cy - carro.displayHeight * 0.86;
+        this.add.particles(fx, fy, 'boira', { speedY: { min: -30, max: -14 }, speedX: { min: 4, max: 14 }, lifespan: 1800, scale: { start: 0.25, end: 0.7 },
+            alpha: { start: 0.45, end: 0 }, frequency: 650, tint: 0xffffff }).setDepth(cy + 1);
+        this.npc('home_carruatge', hx, hy, () => DIALEGS.cotxer(Estat, pd.id));
+        this.paradaAqui = pd;
+        if (Estat.arribadaCarruatge === pd.id) {                       // hi acabem d'arribar: bufada de vapor
+            Estat.arribadaCarruatge = null;
+            this.time.delayedCall(250, () => { this.boiraPuf(fx, fy + 30); this.boiraPuf(pd.a[0], pd.a[1]); });
+        }
+    }
+
+    // Tria el destí entre les parades desbloquejades i hi viatja
+    triarViatge(fet) {
+        const aqui = this.paradaAqui, ui = this.ui();
+        const destins = PARADES.filter(pd => pd !== aqui && Estat.flag('parada_' + pd.id));
+        const perill = (this.enemics || []).some(e => !e.mort && Phaser.Math.Distance.Between(e.spr.x, e.spr.y, this.ineu.x, this.ineu.y) < 260);
+        if (perill) { fet(); this.missatge('Ara no: hi ha bèsties a prop.'); return; }
+        ui.triarLlista([...destins.map(pd => pd.nom), 'Res, gràcies'], i => {
+            fet();
+            if (i < destins.length) this.time.delayedCall(200, () => this.viatjar(destins[i]));
+        });
+    }
+
+    viatjar(pd) {
+        if (this.canviant) return;
+        this.canviant = true;
+        this.ineu.body.setVelocity(0);
+        Sfx.vapor();
+        if (this.paradaAqui) this.boiraPuf(this.paradaAqui.c[0] - 60, this.paradaAqui.c[1] - 120);
+        Estat.dades.zona = pd.zona; Estat.dades.entrada = null;
+        Estat.dades.x = pd.a[0]; Estat.dades.y = pd.a[1];
+        Estat.arribadaCarruatge = pd.id;
+        this.cameras.main.fadeOut(700, 235, 240, 235);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start(pd.zona, { restaurar: true }));
+    }
 
     // ---------------- Construcció ----------------
     // Fons repetit (herba, llambordes...) en una àrea
