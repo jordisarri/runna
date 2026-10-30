@@ -10,6 +10,8 @@ from PIL import Image, ImageFilter
 ARREL = Path(__file__).resolve().parent.parent
 AMPLADA = 115 * 2
 LLINDAR = 228
+BLANC_PUR = 238          # forats tancats: blanc gairebé pur
+FORAT_MIN = 2500         # i prou grans (en píxels de l'original), perquè no es buidin els reflexos
 
 def treure_fons(im):
     im = im.convert('RGBA'); w, h = im.size; px = im.load()
@@ -23,6 +25,23 @@ def treure_fons(im):
         for nx, ny in ((x+1,y),(x-1,y),(x,y+1),(x,y-1)):
             if 0 <= nx < w and 0 <= ny < h and not fons[ny*w+nx] and blanc(nx, ny):
                 fons[ny*w+nx] = 1; q.append((nx, ny))
+    # Forats blancs tancats (entre un braç i el cos...): el fons no hi arriba des de les vores. Les taques de blanc gairebé pur
+    # prou grans també són fons (l'hàbit del Pare Jordi és crema i no hi entra)
+    vist = bytearray(w * h)
+    for y0 in range(h):
+        for x0 in range(w):
+            k = y0 * w + x0
+            if fons[k] or vist[k] or min(px[x0, y0][:3]) < BLANC_PUR: continue
+            comp, q = [k], deque([(x0, y0)]); vist[k] = 1
+            while q:
+                x, y = q.popleft()
+                for nx, ny in ((x+1,y),(x-1,y),(x,y+1),(x,y-1)):
+                    if 0 <= nx < w and 0 <= ny < h:
+                        kk = ny * w + nx
+                        if not vist[kk] and not fons[kk] and min(px[nx, ny][:3]) >= BLANC_PUR:
+                            vist[kk] = 1; comp.append(kk); q.append((nx, ny))
+            if len(comp) >= FORAT_MIN:
+                for kk in comp: fons[kk] = 1
     mask = Image.frombytes('L', (w, h), bytes(0 if f else 255 for f in fons)).filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(0.8))
     im.putalpha(mask)
     return im
