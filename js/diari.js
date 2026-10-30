@@ -18,7 +18,7 @@ const DIARI_PASSOS = {
     pastor: ['El Pastor de Boira', 'ZonaCirosa'], esquelles: ['Les esquelles', 'ZonaCirosa'],
     soparObert: ['Tornar al Til·ler', 'ZonaTiller'], sopar: ['El sopar del Til·ler', 'ZonaTiller'],
     fragment1: ['El primer fragment', 'ZonaRuines'], clauSagrari: ['La clau del sagrari', 'ZonaCami'], fragment2: ['El sagrari', 'ZonaEsglesia'],
-    fragment3: ['Els fragments del Pare Alcuí', 'ZonaBiblioteca'], ombra: ["L'ombra del monjo", 'ZonaRuines'],
+    alcuiLlegit: ['Els fragments del Pare Alcuí', 'ZonaBiblioteca'], ombra: ["L'ombra del monjo", 'ZonaRuines'],
     saber: ['Les Paraules del Saber', 'ZonaBiblioteca'], benediccio: ['La benedicció', 'ZonaPlaca'],
     telescopi: ['El telescopi del Garf', 'ZonaEra'], estels: ['Els estels', 'ZonaDipositos'],
     estelLlorenc: ['L\'Estel de Sant Llorenç', 'ZonaDipositos'], runna: ['Runna', 'ZonaDolmen'],
@@ -39,7 +39,8 @@ const DIARI_LATERALS = {
     rellotge: ['El rellotge aturat', 'ZonaGolfes', '+1 cor'],
     tresor: ['La pedra que escolta', 'ZonaPlaca', '+1 cor'],
     nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Llaç de la Nena (absorbeix un cop per zona)'],
-    monges: ["Les sacerdotesses de l'Hostatgeria", 'ZonaJardi', '+1 cor per cada sacerdotessa i un lloc de repòs']
+    monges: ["Les sacerdotesses de l'Hostatgeria", 'ZonaJardi', null],
+    carruatge: ['Els ocells del carruatge verd', 'ZonaEra', null]
 };
 const DIARI_ACTES = [
     { nom: 'Acte 1 · La boira', des: 'clauer' },
@@ -276,7 +277,7 @@ const DIARI = {
         const E = Estat, X = this.MX;
         let y = 170;
         const seg = PROGRES.seguent(E);
-        y = this.titol(ui, c, X, y, 'Ara toca');
+        y = this.titol(ui, c, X, y, 'El fil del camí');
         if (seg) {
             const [nom, zona] = DIARI_PASSOS[seg.id] || [seg.id, null];
             y = this.text(ui, c, X, y, '★ ' + nom, 27, VERMELL, { fontStyle: 'bold' });
@@ -289,11 +290,10 @@ const DIARI = {
         const fets = PROGRES.laterals.filter(l => l.fet(E));
         if (!oberts.length) y = this.text(ui, c, X, y, fets.length ? 'No tens cap encàrrec pendent.' : 'Encara ningú no t\'ha demanat res. Parla amb la gent!', 22, TINTA_SUAU, { fontStyle: 'italic' }) + 20;
         oberts.forEach(l => {
-            const [nom, zona, premi] = DIARI_LATERALS[l.id] || [l.id, null];
+            const [nom, zona] = DIARI_LATERALS[l.id] || [l.id, null];
             y = this.text(ui, c, X, y, '! ' + nom, 25, '#2a4a7a', { fontStyle: 'bold' });
             if (zona) y = this.text(ui, c, X + 26, y + 2, this.nomZona(zona), 19, TINTA_SUAU, { fontStyle: 'italic' });
             y = this.text(ui, c, X + 26, y + 6, l.pista(E), 21, TINTA);
-            if (premi) y = this.text(ui, c, X + 26, y + 4, 'Premi: ' + premi, 19, '#3a7a3a', { fontStyle: 'italic' });
             y += 22;
         });
         if (fets.length) {

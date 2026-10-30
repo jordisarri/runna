@@ -31,7 +31,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // El cap retallat del sprite del personatge: es fa una sola vegada i es desa com a textura 'retrat_<clau>'.
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
-    'Ineu': 'ineu', 'Pare Jordi': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Germà Francesc': 'germa_francesc', 'Pare Daniel': 'pare_daniel',
+    'Ineu': 'ineu', 'Pare Jordi': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Pastor de Boira': 'pastor_boira', 'Germà Francesc': 'germa_francesc', 'Pare Daniel': 'pare_daniel',
     'Pare Alcuí': 'pare_alcui', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'July': 'juli', 'Garf': 'garf', 'Isidre': 'isidre',
     'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
@@ -122,12 +122,13 @@ const CATALEG_OBJECTES = {
     cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Garf en sabrà fer alguna cosa.'],
     pruna:            ['Pruna daurada', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en vol una.'],
     beuratge:         ['Beuratge de la Jaumeta', 'Fa fugir la boira dolenta. No te\'l beguis!'],
-    escudella:        ['Escudella de la Neus', 'Amb la cullerada de més, la del que falta.'],
+    escudella:        ['Escudella de la Neus', 'Encara calenta, com cada any per al sopar del Til·ler.'],
     flors_isidre:     ['Flors de l\'Isidre', 'Un ram embolicat amb un tros de pergamí.'],
     pa_pastor:        ['Pa dels pastors', 'Una barra baixa i fosca, cuita sota la cendra.'],
     esquelles:        ['Esquelles dels pastors', 'Amb elles, els cants antics sonen més clars.'],
     fulla_tiler:      ['Fulla del Til·ler', 'Un record del sopar sota el Gran Til·ler.'],
     cinta_nena:       ['Llaç de la Nena', 'Absorbeix un cop cada vegada que entres a una zona.'],
+    benedicio_fraterna:  ['Benedicció fraterna', 'Una pau antiga et cura del tot en entrar dins d\'una ermita, al Santuari o dins del Monestir.'],
     llac_nena:        ['Llaç de cinta', 'Rosa i descolorit. És de la Nena de les Trenes.'],
     llanterna:        ['Llanterna', 'Fa més llum a les foscors de sota terra.'],
     telescopi:        ['Telescopi del Garf', 'Per mirar els estels als Dipòsits.'],
@@ -140,7 +141,7 @@ const CATALEG_OBJECTES = {
     fragment1:        ['Pergamí partit (1/2)', 'La meitat d\'un pergamí esquinçat, trobada a les Runes.'],
     pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.» Al revers: «Qui busqui sortida, que alci la bóta marcada amb la creu.»'],
     calze:            ['Calze de Rosada', "De plata, antic. A l'altar de Sant Gabriel, cada cop que hi beus l'aigua de rosada, el rosari et queda ple."],
-    clau_ferro:       ['Clau de ferro', 'Obre la porta de ferro de la Sala de les Gírgoles.'],
+    clau_ferro:       ['Clau de ferro', 'Obre la Porta de les Gírgoles.'],
     llavorLluna:      ['Llavor de Lluna', 'De la Sansa. L\'Isidre sap on plantar-la.'],
 };
 

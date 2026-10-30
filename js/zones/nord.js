@@ -143,7 +143,7 @@ class ZonaRuines extends ZonaBase {
         if (nom !== 'pedres' || !Estat.flag('fragment1')) return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1100, 600) > 300) return false;
         if (Estat.flag('benedicioMonjo')) { this.missatge("L'ombra assenteix."); return true; }
-        if (!['fragment1', 'fragment2', 'fragment3'].every(f => Estat.flag(f))) return false;
+        if (!['fragment1', 'fragment2', 'alcuiLlegit'].every(f => Estat.flag(f))) return false;
         this.ui().obrirDialeg(DIALEGS.benedicioMonjo(Estat), () => Estat.desar());
         return true;
     }
@@ -438,7 +438,7 @@ class ZonaCelles extends ZonaBase {
         Sfx.secret();
         this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
         this.missatge('El camí del Til·ler és lliure.');
-        Estat.posaObjectiu("Puja al Gran Til·ler: és al nord de les Cel·les, pel camí que s'ha aclarit.");
+        Estat.posaObjectiu("El camí al nord de les Cel·les s'ha aclarit: el Gran Til·ler hi és al capdamunt.");
         Estat.desar();
     }
 
@@ -483,7 +483,7 @@ Object.assign(DIALEGS, {
             ],
             enAcabar: () => {
                 E.dona('guants');
-                if (E.flag('josepVencut') && !E.flag('rodaMoguda')) E.posaObjectiu('Amb els Guants de Poder, empeny la roda de carruatge del Celler (entre la Plaça i les Runes).');
+                if (E.flag('josepVencut') && !E.flag('rodaMoguda')) E.posaObjectiu("Els Guants de Poder deuen poder amb la roda de carruatge del Celler, entre la Plaça i les Runes.");
             }
         };
         if (E.te('ram')) return { pagines: [
@@ -498,7 +498,7 @@ Object.assign(DIALEGS, {
                 { qui: 'Germà Francesc', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },
                 { avis: 'Has obtingut un RAM DE FLORS.' }
             ],
-            enAcabar: () => { E.dona('ram'); E.posaObjectiu('Deixa el ram del Germà Francesc a la tomba de l\'àngel del Cementiri.'); }
+            enAcabar: () => { E.dona('ram'); E.posaObjectiu("El ram del Germà Francesc és per a la tomba de l'àngel, al Cementiri."); }
         };
     }
 });
@@ -595,7 +595,7 @@ class ZonaTiller extends ZonaBase {
             return Object.assign({}, d, { pagines: [{ fer: (z, fet) => z.despertarTiller(fet) }, ...d.pagines] });
         }, { altura: 230 });            // el «!» a l'alçada de la cara (més amunt quedava fora de la pantalla)
 
-        // Després del sopar queden quatre espelmes vora les arrels del Til·ler
+        // Després del sopar queden tres espelmes vora les arrels del Til·ler
         if (Estat.flag('soparFet')) this.posarEspelmes();
 
         // La branca del Til·ler: el bastó
@@ -680,12 +680,12 @@ class ZonaTiller extends ZonaBase {
         Sfx.secret();
         this.cameras.main.shake(1200, 0.004);
         this.sortida(1100, 0, 140, 14, 'ZonaCamiCirosa', 'tiller');
-        Estat.posaObjectiu('Puja a la Cirosa pel camí del nord-est: els pastors desterrats guarden les esquelles dels seus avis.');
+        Estat.posaObjectiu("Els pastors desterrats de la Cirosa, pel camí del nord-est, guarden les esquelles dels seus avis.");
         Estat.desar();
     }
 
     posarEspelmes() {
-        [TIL_X - 60, TIL_X - 15, TIL_X + 30, TIL_X + 75].forEach((x, i) => {
+        [TIL_X - 40, TIL_X + 15, TIL_X + 70].forEach((x, i) => {
             const e = this.posar('espelma', x, TIL_Y + 68 + (i % 2) * 6, { fonsY: TIL_Y + 20 });
             this.tweens.add({ targets: e, alpha: 0.8, yoyo: true, repeat: -1, duration: 300 + i * 70, delay: i * 90 });
         });
@@ -716,7 +716,7 @@ class ZonaTiller extends ZonaBase {
         this.sopar = { vel, taula, pastors: imatges, espelmes: [] };
     }
 
-    // L'Ineu encén les espelmes (índexs 0-3) una a una, sobre la taula
+    // L'Ineu encén les espelmes (índexs 0-2) una a una, sobre la taula
     encendreEspelmes(llista, fet) {
         if (!this.sopar) { fet(); return; }
         this.seq(llista.map(i => c => {

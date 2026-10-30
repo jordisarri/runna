@@ -246,11 +246,11 @@ class ZonaGirgoles extends ZonaBase {
 
     actualitzar() {
         const t = this.time.now, resolt = Estat.flag('girgolesEnceses');
-        const llums = [[this.ineu.x, this.ineu.y - 40, Estat.te('llanterna') ? 330 : 230]];
+        const llums = [[this.ineu.x, this.ineu.y - 40, Estat.te('llanterna') ? 450 : 330]];
         this.mates.forEach(m => { if (m.on) llums.push([m.x, m.y - 20, 200 * (1 + 0.05 * Math.sin(t / 300 + m.i))]); });
         if (resolt) llums.push([700, 640, 520]);
         this.bassals.forEach(b => llums.push([b.x, b.y, 60]));
-        this.foscor.pintar(resolt ? 0.5 : 0.88, llums);
+        this.foscor.pintar(resolt ? 0.3 : 0.72, llums);
     }
 }
 
@@ -269,7 +269,7 @@ class ZonaTortura extends ZonaBase {
 
     construir() {
         const W = 900, H = 1900;
-        this.terra('pedra', 200, 0, 500, H, -1100).setTint(0x5a4a48);
+        this.terra('pedra', 200, 0, 500, H, -1100).setTint(0x9a8a86);        // més clara: les ferralles i els esbarzers hi contrasten
         // Murs alts de carreus foscos amb arcs cada tram
         const m = this.add.graphics().setDepth(-990);
         m.fillStyle(0x1a1414, 1).fillRect(0, 0, 200, H).fillRect(700, 0, 200, H);
@@ -361,7 +361,7 @@ class ZonaTortura extends ZonaBase {
             const o = this.esbarzer(x, 420, 'tortura' + i);
             if (!o) return;
             o.img.setTint(0xc8a0ff);
-            o.halo = this.add.ellipse(x, 402, 96, 60, 0x9a50ff, 0.3).setDepth(419);
+            o.halo = this.add.ellipse(x, 402, 110, 70, 0xb070ff, 0.5).setDepth(419).setBlendMode('ADD');
             this.tweens.add({ targets: o.halo, alpha: 0.1, yoyo: true, repeat: -1, duration: 900 + i * 110 });
         });
         if (this.esbarzers.length) this.interactiu(450, 470, 300, DIALEGS.murEsbarzers, { altura: 70, actiu: () => this.esbarzers.some(o => o.viu) });
@@ -369,7 +369,7 @@ class ZonaTortura extends ZonaBase {
         // Boira lila que baixa de la Sala de la Gàbia
         this.boira(450, 200, 260, 60, 1.2);
         this.boira(450, 700, 200, 40, 0.4);
-        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a20, 0.3).setScrollFactor(0).setDepth(90000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a20, 0.1).setScrollFactor(0).setDepth(90000);
 
         // Ferralla viva: les eines dels torturadors s'aixequen i barren el pas
         [[330, 1420], [580, 1300], [420, 860], [350, 640]].forEach(([x, y]) => this.enemic('ferralla', x, y));
@@ -763,7 +763,7 @@ class ZonaGabia extends ZonaBase {
         this.blocs.forEach((b, i) => this.tweens.add({ targets: b, alpha: 1, scale: 1, delay: i * 400, duration: 700, ease: 'Back.easeOut' }));
         this.time.delayedCall(1300, () => { if (this.colPont) this.obstacles.remove(this.colPont, true, true); });
         this.missatge('Les pedres es desperten.');
-        Estat.posaObjectiu('Creua el pont de pedra fins a la gàbia.');
+        Estat.posaObjectiu("El pont de pedra porta fins a la gàbia.");
         Estat.desar();
     }
 
@@ -918,7 +918,7 @@ class ZonaGabia extends ZonaBase {
             this.bossActiu = false;
             this.tornarColorCova();
             Estat.posaFlag('ocellaireVencut');
-            Estat.posaObjectiu("L'Ocellaire ha caigut. Toca el Cant del Miracle (1-3-2-3-1) davant la gàbia.");
+            Estat.posaObjectiu("L'Ocellaire ha caigut. Els barrots de la gàbia només escolten el Cant del Miracle.");
             this.guardarPosicio();
             Estat.desar();
         }));
@@ -964,7 +964,7 @@ class ZonaGabia extends ZonaBase {
             }
         ], fet) }] }, () => {
             Estat.posaFlag('gabiaOberta');
-            Estat.posaObjectiu('La gàbia és oberta! Trenca els tres capolls de boira amb Runna.');
+            Estat.posaObjectiu("La gàbia és oberta! Als capolls de boira hi dormen els tres nens.");
             Estat.desar();
         });
     }

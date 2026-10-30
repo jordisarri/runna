@@ -14,7 +14,7 @@ Object.assign(DIALEGS, {
     ] }),
 
     masiaLlibre: E => ({ pagines: [
-        { qui: 'Llibre', text: "«L'Ocellaire baixava cada primavera amb els seus ocells enjaulats. Els nens reien amb ells; després ja no reien amb res. Hi va haver anys de plors a les cases.»" },
+        { qui: 'Llibre', text: "«L'Ocellaire baixava cada primavera amb els seus ocells engabiats. Els nens reien amb ells; després ja no reien amb res. Hi va haver anys de plors a les cases.»" },
         { qui: 'Llibre', text: "«Els pastors i els monjos el vam tancar dins la seva gàbia, sota terra, i un monjo va segellar la porta amb la llum de l'espasa. El poble va estar content tres dies. Després va voler algú a qui culpar, i ens va culpar a nosaltres.»" },
         { qui: 'Llibre', text: "«Que qui trobi això no ens oblidi: vam obrir els ulls abans que ningú. Només vam fer el que calia.»" }
     ] }),

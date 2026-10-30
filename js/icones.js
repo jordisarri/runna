@@ -145,6 +145,19 @@ const ICONES_OBJECTES = {
         ctx.bezierCurveTo(60, 70, 50, 44, 26, 62); ctx.lineTo(10, 50); ctx.lineTo(18, 40); ctx.closePath(); ctx.fill(); ctx.stroke();
         ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.beginPath(); ctx.moveTo(18, 34); ctx.bezierCurveTo(32, 22, 46, 50, 62, 38); ctx.stroke();
     },
+    benedicio_fraterna: ctx => {                                // una creu al mig d'una aurèola daurada, amb raigs de claror i dos cors petits als costats
+        ctx.lineWidth = 3;
+        ctx.fillStyle = 'rgba(255,220,120,0.35)'; ctx.beginPath(); ctx.arc(48, 48, 40, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#e8b830'; ctx.lineWidth = 3;
+        for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6; ctx.beginPath(); ctx.moveTo(48 + Math.cos(a) * 30, 48 + Math.sin(a) * 30); ctx.lineTo(48 + Math.cos(a) * 42, 48 + Math.sin(a) * 42); ctx.stroke(); }
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.fillStyle = '#f6e6a8';
+        ctx.beginPath(); ctx.arc(48, 48, 28, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#d4af37';
+        ctx.fillRect(43, 28, 10, 40); ctx.fillRect(32, 38, 32, 10); ctx.strokeRect(43, 28, 10, 40); ctx.strokeRect(32, 38, 32, 10);
+        ctx.fillStyle = '#d4af37'; ctx.fillRect(44, 39, 8, 8);
+        ctx.fillStyle = '#c8442a';
+        [[22, 78], [74, 78]].forEach(([x, y]) => { ctx.beginPath(); ctx.moveTo(x, y + 7); ctx.bezierCurveTo(x - 12, y - 2, x - 5, y - 10, x, y - 3); ctx.bezierCurveTo(x + 5, y - 10, x + 12, y - 2, x, y + 7); ctx.fill(); ctx.stroke(); });
+    },
     llac_nena: (ctx, cv) => { const t = document.createElement('canvas'); dibuixarLlac(t, 80); ctx.drawImage(t, 8, (96 - t.height) / 2); },
     llanterna: ctx => {
         ctx.lineWidth = 3;
@@ -260,6 +273,7 @@ const US_OBJECTES = {
     esquelles: E => E.flag('soparFet') ? 'record' : 'cal',
     fulla_tiler: E => E.flag('benediccio') ? 'record' : 'cal',
     cinta_nena: () => 'sempre',
+    benedicio_fraterna: () => 'sempre',
     llanterna: () => 'sempre',
     runna: () => 'sempre',
     telescopi: E => E.flag('telescopiMuntat') || E.flag('estelsPart1') ? 'record' : 'cal',

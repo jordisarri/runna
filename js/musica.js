@@ -37,19 +37,19 @@ function completarLliço(nom) {
                            { avis: 'Has obtingut LA FLAUTA D\'EN MAMET!' }] : []),
             { qui: 'La Pianista', text: 'Toca\'l davant l\'aigua de la Bassadòria, la que surt tèrbola. Allà la boira té l\'arrel.' }
         ];
-        E.posaObjectiu('Toca el Cant de l\'Aurora (1-2-3) davant la Bassadòria, a l\'oest de la Plaça.');
+        E.posaObjectiu("La Bassadòria, al sud de la Plaça, quedarà neta amb el Cant de l'Aurora.");
     } else if (nom === 'pedres') {
         pagines = [
             { qui: 'La Pianista', text: 'El Cant de les Pedres: 3-1-2-1. Les pedres antigues sempre l\'han entès. Toca\'l davant l\'ombra del monjo.' }
         ];
-        E.posaObjectiu('Toca el Cant de les Pedres (3-1-2-1) davant l\'ombra del monjo, a les Runes.');
+        E.posaObjectiu("El Cant de les Pedres farà parlar l'ombra del monjo, a les Runes.");
     } else {
         pagines = [
             { qui: 'La Pianista', text: 'Això mateix, fill! El Cant del Miracle. Els ocells el cantaven a l\'alba, abans que l\'Ocellaire se\'l quedés i el tanqués a la seva gàbia.' },
             { qui: 'La Pianista', text: 'Diu la meva mare que aquella gàbia només s\'obre amb el cant que li van robar. Si els nens hi són a dins, toca\'l davant els barrots i no tindran més remei que obrir-se.' }
         ];
-        E.posaObjectiu(!E.flag('josepVencut') ? 'Ves al Celler (entre la Plaça i les Runes) i guanya en Jusef a ping-pong: allà els secrets es guanyen a la taula.'
-            : !E.flag('rodaMoguda') ? 'Empeny amb els Guants la roda de carruatge del Celler: amaga el túnel dels monjos.' : 'Segueix el túnel dels monjos fins a la Casa Gran.');
+        E.posaObjectiu(!E.flag('josepVencut') ? "Al Celler, entre la Plaça i les Runes, els secrets es guanyen a la taula."
+            : !E.flag('rodaMoguda') ? "La roda de carruatge del Celler amaga el túnel dels monjos." : 'Segueix el túnel dels monjos fins a la Casa Gran.');
     }
     if (ui) ui.obrirDialeg({ pagines }, () => E.desar());
 }

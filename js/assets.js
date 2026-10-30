@@ -166,7 +166,7 @@ const CATALEG = [
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
 ['ineu', 'pare_jordi', 'germa_andreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'garf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
- 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller']
+ 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
 /**
@@ -783,34 +783,56 @@ const Grafics = {
         // ---- Mobiliari i terra de fusta (cabanes) ----
         const FUSTA_CONTORN = '#2a1608';
         crea('taulons', 256, 256, (ctx, w, h) => {
+            // Rajola repetible sense tall: a cada fila els taulons sumen exactament l'amplada de la rajola i es dibuixen també desplaçats
+            // una amplada enrere, de manera que un taulò que surt per la dreta continua per l'esquerra, amb el mateix color i la mateixa veta.
             let llavor = 61;
             const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
             const COLORS = ['#a8763f', '#9a6a36', '#b4814a', '#8e6030', '#a06e3a'];
             const FILES = 8, fh = h / FILES;
             ctx.fillStyle = '#2a1608'; ctx.fillRect(0, 0, w, h);
             for (let f = 0; f < FILES; f++) {
-                let x = -rnd() * 60;
-                while (x < w) {
-                    const pw = 50 + rnd() * 50, y0 = f * fh;
-                    const col = COLORS[Math.floor(rnd() * COLORS.length)];
-                    ctx.fillStyle = col; ctx.fillRect(x + 1, y0 + 1, pw - 2, fh - 2);
-                    const g = ctx.createLinearGradient(0, y0, 0, y0 + fh);
-                    g.addColorStop(0, 'rgba(255,230,180,0.22)'); g.addColorStop(0.5, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.25)');
-                    ctx.fillStyle = g; ctx.fillRect(x + 1, y0 + 1, pw - 2, fh - 2);
-                    ctx.strokeStyle = 'rgba(60,34,14,0.45)'; ctx.lineWidth = 0.8;       // veta de la fusta
-                    for (let k = 0; k < 4; k++) {
-                        const yy = y0 + 4 + rnd() * (fh - 8);
-                        ctx.beginPath(); ctx.moveTo(x + 2, yy); ctx.bezierCurveTo(x + pw * 0.3, yy + (rnd() - 0.5) * 4, x + pw * 0.6, yy + (rnd() - 0.5) * 4, x + pw - 2, yy); ctx.stroke();
-                    }
-                    if (rnd() < 0.3) {                                                   // nus
-                        const kx = x + 8 + rnd() * (pw - 16), ky = y0 + 6 + rnd() * (fh - 12);
-                        ctx.fillStyle = 'rgba(50,28,10,0.55)'; ctx.beginPath(); ctx.ellipse(kx, ky, 3, 2, 0, 0, Math.PI * 2); ctx.fill();
-                        ctx.strokeStyle = 'rgba(50,28,10,0.5)'; ctx.beginPath(); ctx.ellipse(kx, ky, 5.5, 3.6, 0, 0, Math.PI * 2); ctx.stroke();
-                    }
-                    ctx.fillStyle = 'rgba(30,18,8,0.7)';                                  // claus a les juntes
-                    ctx.fillRect(x + 3, y0 + 4, 1.5, 1.5); ctx.fillRect(x + 3, y0 + fh - 6, 1.5, 1.5);
-                    x += pw;
-                }
+                const y0 = f * fh;
+                // Amplades: uns 4 taulons per fila (de 44 a 84 px), escalats perquè sumin w
+                const amples = [];
+                let suma = 0;
+                while (suma < w - 44) { const q = 44 + rnd() * 40; amples.push(q); suma += q; }
+                amples.push(Math.max(30, w - suma));
+                const tot = amples.reduce((u, v) => u + v, 0);
+                const escala = w / tot;
+                const peces = amples.map(q => {
+                    const pw = q * escala, nus = rnd() < 0.3;
+                    return {
+                        pw, col: COLORS[Math.floor(rnd() * COLORS.length)],
+                        veta: Array.from({ length: 4 }, () => [4 + rnd() * (fh - 8), (rnd() - 0.5) * 4, (rnd() - 0.5) * 4]),
+                        nus: nus ? [8 + rnd() * (pw - 16), 6 + rnd() * (fh - 12)] : null
+                    };
+                });
+                let x = rnd() * w;                                                    // cada fila comença en un lloc diferent: les juntes no s'alineen
+                peces.forEach(pc => {
+                    const dibuixa = xx => {
+                        const pw = pc.pw;
+                        ctx.fillStyle = pc.col; ctx.fillRect(xx + 1, y0 + 1, pw - 2, fh - 2);
+                        const g = ctx.createLinearGradient(0, y0, 0, y0 + fh);
+                        g.addColorStop(0, 'rgba(255,230,180,0.22)'); g.addColorStop(0.5, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.25)');
+                        ctx.fillStyle = g; ctx.fillRect(xx + 1, y0 + 1, pw - 2, fh - 2);
+                        ctx.strokeStyle = 'rgba(60,34,14,0.45)'; ctx.lineWidth = 0.8;       // veta de la fusta
+                        pc.veta.forEach(([dy, c1, c2]) => {
+                            const yy = y0 + dy;
+                            ctx.beginPath(); ctx.moveTo(xx + 2, yy); ctx.bezierCurveTo(xx + pw * 0.3, yy + c1, xx + pw * 0.6, yy + c2, xx + pw - 2, yy); ctx.stroke();
+                        });
+                        if (pc.nus) {                                                        // nus
+                            const kx = xx + pc.nus[0], ky = y0 + pc.nus[1];
+                            ctx.fillStyle = 'rgba(50,28,10,0.55)'; ctx.beginPath(); ctx.ellipse(kx, ky, 3, 2, 0, 0, Math.PI * 2); ctx.fill();
+                            ctx.strokeStyle = 'rgba(50,28,10,0.5)'; ctx.beginPath(); ctx.ellipse(kx, ky, 5.5, 3.6, 0, 0, Math.PI * 2); ctx.stroke();
+                        }
+                        ctx.fillStyle = 'rgba(30,18,8,0.7)';                                  // claus a les juntes
+                        ctx.fillRect(xx + 3, y0 + 4, 1.5, 1.5); ctx.fillRect(xx + 3, y0 + fh - 6, 1.5, 1.5);
+                    };
+                    const xx = x % w;
+                    dibuixa(xx);
+                    if (xx + pc.pw > w) dibuixa(xx - w);                                  // la part que surt per la dreta entra per l'esquerra
+                    x += pc.pw;
+                });
             }
         });
         // Taula de fusta, vista de tres quarts, amb un bol i una tassa

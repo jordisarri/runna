@@ -22,13 +22,13 @@ Object.assign(DIALEGS, {
         if (!E.flag('evaParlat')) return {
             pagines: [
                 { qui: 'Eva', text: 'Sóc l\'Eva. Ajudo la Carmen... bé, faig la feina de la Carmen. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
-                { qui: 'Eva', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Andreu pica tres cops a la porta de ferro de la Sala de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola. Baixa al soterrani. Diu que va a buscar vi. Mai no puja amb cap ampolla.' },
+                { qui: 'Eva', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Andreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola. Baixa al soterrani. Diu que va a buscar vi. Mai no puja amb cap ampolla.' },
                 { qui: 'Eva', text: 'Des d\'aquí dins no s\'hi pot baixar: el soterrani només té aquella porta de fora. I a baix, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Sota terra, Ineu. Ocells.' },
                 { qui: 'Eva', text: 'I el Siscu, el fill de la Carmen, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
                 { qui: 'Eva', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
                 { qui: 'Eva', text: 'El Sardi hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve.' },
             ],
-            enAcabar: () => { E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La porta de ferro de la Sala de les Gírgoles, a l\'est del Pati del Celler, baixa al soterrani: la Clau de ferro l\'obre.' : E.dades.objectiu); }
+            enAcabar: () => { E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La Porta de les Gírgoles, a l\'est del Pati del Celler, baixa al soterrani: la Clau de ferro l\'obre.' : E.dades.objectiu); }
         };
         if (E.flag('portaPetitaVista') && !E.flag('ciscuTrobat')) return { pagines: [
             { qui: 'Eva', text: 'El Siscu? Ja t\'ho vaig dir: surt pel camí de la Desaparició, a l\'oest de les Runes, i s\'amaga per un forat entre els arbres «per on els grans no hi caben». Si el trobes, digues-li que torni a sopar.' }
@@ -48,7 +48,7 @@ Object.assign(DIALEGS, {
     },
 
 
-    // La porta de ferro de la Sala de les Gírgoles (a l'est del Pati del Celler): la del soterrani, que el Germà Andreu tanca amb clau cada nit
+    // La Porta de les Gírgoles (a l'est del Pati del Celler): la del soterrani, que el Germà Andreu tanca amb clau cada nit
     portaSoterrani: E => E.flag('clauFerro') ? { pagines: [
     ] } : { pagines: [
         { qui: 'Ineu', text: "Tancada amb clau." }
@@ -230,7 +230,7 @@ class ZonaSotaTaverna extends ZonaBase {
     obrirPortaFerro(ja = false) {
         if (this.portaOberta) return;
         this.portaOberta = true;
-        if (!ja) { Estat.posaFlag('portaFerroOberta'); Sfx.secret(); this.cameras.main.shake(400, 0.004); Estat.posaObjectiu('Baixa per la porta de ferro del fons del soterrani, cap a la Sala de les Gírgoles.'); Estat.desar(); }
+        if (!ja) { Estat.posaFlag('portaFerroOberta'); Sfx.secret(); this.cameras.main.shake(400, 0.004); Estat.posaObjectiu("La porta de ferro del fons del soterrani dóna a la Sala de les Gírgoles."); Estat.desar(); }
         const forat = this.add.graphics().setDepth(-945);
         forat.fillStyle(0x000000, 1).fillRect(312, 20, 176, 140);
         for (let k = 0; k < 5; k++) forat.fillStyle(0x2a2430 - k * 0x040404, 1).fillRect(330 + k * 6, 40 + k * 22, 140 - k * 12, 18);
@@ -255,7 +255,7 @@ class ZonaSotaTaverna extends ZonaBase {
 class ZonaGirgolesFora extends ZonaBase {
     constructor() {
         super('ZonaGirgolesFora', {
-            nom: 'Sala de les Gírgoles',
+            nom: 'Porta de les Gírgoles',
             amplada: 800,
             alcada: 1100,
             entrades: { celler: { x: 60, y: 620, dir: 'dreta' }, porta: { x: 400, y: 360, dir: 'avall' } }
@@ -325,13 +325,14 @@ class ZonaGirgolesFora extends ZonaBase {
             return;
         }
         // La part de dalt de l'arc, enreixada
-        g.lineStyle(3, 0x3a3a42, 1);
+        g.lineStyle(3, 0x7a2620, 1);
         for (let dx = -60; dx <= 60; dx += 20) g.lineBetween(x + dx, b - 175 - 35 * Math.sqrt(1 - (dx / 80) ** 2), x + dx, b - 175);
         [-1, 1].forEach(sg => {
             const x0 = sg < 0 ? x - 80 : x;
-            g.fillStyle(0x2a2a30, 1).fillRect(x0, b - 175, 80, 175).lineStyle(2, 0x111114, 1).strokeRect(x0, b - 175, 80, 175);
-            for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) g.fillStyle(0x5a5a62, 1).fillCircle(x0 + 16 + c * 24, b - 150 + r * 40, 3.5);
-            g.fillStyle(0x1a1a1e, 1).fillRect(x0, b - 120, 80, 8).fillRect(x0, b - 50, 80, 8);
+            g.fillStyle(0x9a2e26, 1).fillRect(x0, b - 175, 80, 175).lineStyle(2, 0x3a0e0a, 1).strokeRect(x0, b - 175, 80, 175);
+            g.fillStyle(0xc04a3a, 0.35).fillRect(x0 + 3, b - 172, 6, 169);                   // un filet de llum al ferro vermell
+            for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) g.fillStyle(0xd88a6a, 1).fillCircle(x0 + 16 + c * 24, b - 150 + r * 40, 3.5);
+            g.fillStyle(0x5a1812, 1).fillRect(x0, b - 120, 80, 8).fillRect(x0, b - 50, 80, 8);
         });
         g.fillStyle(0x8a7a40, 1).fillRect(x - 10, b - 95, 20, 28).fillStyle(0x0a0808, 1).fillRect(x - 3, b - 88, 6, 12);
     }
@@ -341,7 +342,7 @@ class ZonaGirgolesFora extends ZonaBase {
         if (!Estat.flag('clauFerro') || Estat.flag('portaSoterraniOberta')) return;
         const x = this.PX, b = this.BASE;
         Estat.posaFlag('portaSoterraniOberta');
-        Estat.posaObjectiu('Baixa al soterrani per la porta de ferro de la Sala de les Gírgoles.');
+        Estat.posaObjectiu("El soterrani de la Sala de les Gírgoles s'obre rere la porta de ferro.");
         Sfx.secret(); this.cameras.main.shake(300, 0.003);
         this.pintarPorta(true);
         [-1, 1].forEach(sg => {
@@ -354,7 +355,7 @@ class ZonaGirgolesFora extends ZonaBase {
         if (this.colPorta) { this.obstacles.remove(this.colPorta, true, true); this.colPorta = null; }
         if (this.boiraPorta) { this.boiraPorta.stop(); this.time.delayedCall(1800, () => this.boiraPorta && this.boiraPorta.destroy()); }
         this.sortida(x - 80, 230, 160, 70, 'ZonaSotaTaverna', 'exterior');
-        Estat.posaObjectiu('Baixa pel soterrani de la porta de ferro oberta: porta a la Sala de les Gírgoles.');
+        Estat.posaObjectiu("La porta de ferro oberta del soterrani porta a la Sala de les Gírgoles.");
         Estat.desar();
     }
 }

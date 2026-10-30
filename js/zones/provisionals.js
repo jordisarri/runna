@@ -278,9 +278,6 @@ class ZonaCreu extends ZonaBase {
         this.llocFlauta('bassadoria', 700, 470, 340, true, () => !Estat.flag('bassadoriaNeta'));
         if (!Estat.flag('bassadoriaNeta')) this.boiraBass = this.boira(700, 360, 480, 120, 3.5);
 
-        // L'Home del Carruatge Verd, a la vora del camí
-        this.posar('carruatge', 330, 880, { col: { w: 190, h: 50 } });
-        this.npc('home_carruatge', 440, 910, DIALEGS.homeCarruatge);
 
         this.cartell(1180, 480, () => ({ pagines: [{ qui: 'Cartell', text: '↑ Plaça del Santuari' }] }));
         this.arbres([[150, 180], [320, 260], [1450, 220], [90, 900], [1500, 780], [100, 520], [190, 640], [1400, 440], [1480, 600], [260, 440]]);

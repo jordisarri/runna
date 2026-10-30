@@ -150,9 +150,9 @@ class ZonaSoterraniHost extends ZonaBase {
 
     actualitzar(ara) {
         const f = this.foscor, p = this.pinzell, t = this.time.now;
-        f.clear(); f.fill(0x000000, 0.96);
+        f.clear(); f.fill(0x000000, 0.82);
         const llum = (x, y, rad) => { p.setScale(rad / 256); f.erase(p, x, y); };
-        llum(this.ineu.x, this.ineu.y - 40, Estat.te('llanterna') ? 340 : 240);
+        llum(this.ineu.x, this.ineu.y - 40, Estat.te('llanterna') ? 450 : 340);
         this.llums.forEach(l => llum(l.x, l.y, l.r * (1 + 0.05 * Math.sin(t / 170 + l.f))));
     }
 }
@@ -161,7 +161,7 @@ class ZonaSoterraniHost extends ZonaBase {
 //   esquerra (dormitori, la Pains): oberta, però la sacerdotessa dorm dins un capoll de boira → Cant de l'Aurora (flauta)
 //   mig (refetor, la Phili): una taula pesadíssima barra la porta → Guants de Poder
 //   dreta (capella, la Charm): esbarzers negres → Runna
-// En alliberar les tres, obren la porta de l'Hostatgeria per dins (el vestíbul esdevé un lloc de repòs).
+// En alliberar les tres, obren la porta de l'Hostatgeria per dins (al vestíbul apareix un cofre amb el Benedicció fraterna).
 class ZonaHostatgeriaInt extends ZonaCasaBase {
     constructor() {
         super('ZonaHostatgeriaInt', {
@@ -256,9 +256,12 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         this.porta(600, 884, 120, 30, 0x4a2c16);
         this.sortida(540, 872, 120, 28, 'ZonaJardi', 'hostatgeria');
 
-        // Una taula d'infusions: lloc de repòs un cop les sacerdotesses són lliures
+        // Una taula d'infusions, de decoració; i, un cop les tres sacerdotesses són lliures, el cofre del seu premi sobre la catifa
         this.posar('taula', 1040, 560, { escala: 0.9, col: { w: 100, h: 24 } });
-        this.interactiu(1040, 590, RADI_OBJECTE, () => this.descans(), { altura: 90, actiu: () => Estat.flag('mongesTrobades') });
+        if (Estat.flag('mongesTrobades')) {
+            this.posar('cofre', 600, 520, { col: { w: 50, h: 20 } });
+            this.interactiu(600, 525, RADI_OBJECTE, DIALEGS.cofreMonges, { altura: 70 });
+        }
         this.boira(600, 450, 900, 260, 1.2);
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.1).setDepth(80000);
     }
@@ -293,16 +296,6 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         Sfx.secret();
         this.cameras.main.shake(300, 0.003);
         this.tweens.add({ targets: this.taulaPorta, x: this.taulaPorta.x + dir * 200, duration: 1400, ease: 'Sine.easeInOut', onComplete: () => Estat.desar() });
-    }
-
-    descans() {
-        return {
-            pagines: [{ qui: 'Charm', text: 'Seu, fill, que et prepararem una infusió de farigola. Aquí dins no entra la boira.' }],
-            enAcabar: () => {
-                Estat.dades.vida = Estat.dades.corsMax * 2;
-                this.ui().actualitzarHUD(); this.guardarPosicio(); Estat.desar();
-            }
-        };
     }
 }
 

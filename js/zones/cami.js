@@ -210,8 +210,9 @@ class ZonaEra extends ZonaBase {
         this.terra('cami', 0, 500, 1800, 130);            // de la Rovellonera (oest) al Jardí (est)
 
         // Dos roures enormes amb dos bancs al mig, un davant de l'altre: el Garf seu al del nord i l'Ineu pot seure al del sud
-        this.posar('roure', 520, 1080, { escala: 1.7, col: { w: 90, h: 36 } });
-        this.posar('roure', 1400, 1080, { escala: 1.7, col: { w: 90, h: 36 } });
+        // Més grans i sols a la clariana: les copes (de 800 d'ample) emmarquen els bancs i no toquen el camí (queden per sota de y 630) ni les sortides
+        this.posar('roure', 480, 1130, { escala: 1.9, col: { w: 100, h: 40 } });
+        this.posar('roure', 1440, 1130, { escala: 1.9, col: { w: 100, h: 40 } });
         this.posar('banc_respatller', ERA_BANC_X, ERA_BANC_N, { col: { w: 140, h: 16 } });
         this.bancSud = this.posar('banc_davant', ERA_BANC_X, ERA_BANC_S, { col: { w: 140, h: 16 } });   // sempre amb respatller (vist per darrere)
 
@@ -227,9 +228,8 @@ class ZonaEra extends ZonaBase {
         this.npc('home_carruatge', 390, 1250, DIALEGS.homeCarruatge);
 
         this.cartell(470, 485, DIALEGS.cartellEra);
-        this.arbres([[70, 200], [560, 150], [760, 230], [1000, 170], [1250, 230], [1500, 160], [1700, 260],
-                     [600, 380], [900, 400], [1200, 390], [1550, 400], [1540, 740], [300, 800], [90, 1000],
-                     [1700, 1100], [1700, 1270], [1000, 1270], [700, 1270], [120, 1280]]);
+        // Poca cosa més: uns quants arbres a la vora del nord, lluny de les sortides i del cartell, perquè els dos roures siguin els protagonistes
+        this.arbres([[70, 200], [560, 150], [1000, 170], [1500, 160], [1700, 260], [600, 380], [1200, 390]]);
 
         this.sortida(240, 0, 160, 14, 'ZonaErmita', 'era');
         this.sortida(1786, 500, 14, 130, 'ZonaJardi', 'era');
@@ -239,7 +239,6 @@ class ZonaEra extends ZonaBase {
     // L'Ineu s'asseu al banc del sud, de cara al Garf, i hi continua assegut després de parlar: només s'aixeca
     // quan el jugador es mou (vegeu ZonaBase.moure). El respatller del banc el tapa per darrere.
     seure() {
-        const nou = !this.assegut;
         this.assegut = true;
         Estat.posaFlag('garfBancSegut');
         this.ineu.body.checkCollision.none = true;
@@ -248,17 +247,15 @@ class ZonaEra extends ZonaBase {
         this.ineu.setDepth(ERA_BANC_S - 1);                       // el banc es dibuixa per sobre: el respatller el tapa
         this.vista8Manual = true;
         this.posarDireccio('amunt', false, 'up');                 // sempre de cara al Garf, vingui d'on vingui
-        if (nou) {
-            this.flotant(ERA_BANC_X, ERA_BANC_S - 150, "L'Ineu s'asseu al banc", '#f2e6c8');
-            this.ui().notifica("Mou-te per aixecar-te");
-        }
     }
 
-    alcar() {
+    // S'aixeca cap al costat on es mou el jugador: amunt (cap al Garf) per davant del seient, a banda i banda pels costats, i avall per darrere del respatller
+    alcar(dir = 'avall') {
         this.assegut = false;
         this.ineu.body.checkCollision.none = false;
-        this.ineu.body.reset(ERA_BANC_X, ERA_BANC_S + 48);
-        this.posarDireccio('avall', false);
+        const pos = { amunt: [ERA_BANC_X, ERA_BANC_S - 60], esquerra: [ERA_BANC_X - 110, ERA_BANC_S - 14], dreta: [ERA_BANC_X + 110, ERA_BANC_S - 14] }[dir] || [ERA_BANC_X, ERA_BANC_S + 48];
+        this.ineu.body.reset(pos[0], pos[1]);
+        this.posarDireccio(dir, false);
     }
 }
 
@@ -340,14 +337,14 @@ class ZonaJardi extends ZonaBase {
             scale: { start: 0.55, end: 0 }, tint: [0xffd060, 0xfff0b0], frequency: 220, alpha: { start: 0.9, end: 0 }
         }).setDepth(8001);
         [[-110, -190], [-60, -250], [0, -300], [70, -260], [120, -200], [-140, -140], [40, -170], [-20, -210], [100, -130], [-90, -100]].forEach(([dx, dy]) => this.add.circle(PX + dx, PY + dy, 10, 0xf0b830).setStrokeStyle(2, 0x7a5010).setDepth(PY + 1));
-        this.interactiu(PX, PY + 5, RADI_GRAN, DIALEGS.prunera, { altura: 400 });
+        this.interactiu(PX, PY + 40, RADI_GRAN * 1.5, DIALEGS.prunera, { altura: 150 });       // el punt, a la vora sud del tronc (on s'hi pot arribar) i amb el «!» a l'altura de l'Ineu
 
         // La llosa del passadís cap al soterrani de l'Hostatgeria, entre les columnes (ben visible). S'obre quan hi creix la flor de lluna
         const LX = 664, LY = 560;      // dins la pèrgola, entre les dues últimes columnes (les arcades que toquen a la casa): ni les arcades ni les columnes la tapen
         this.llosaPos = { x: LX, y: LY };
         this.foratLlosa = this.add.graphics().setDepth(-705);                // el forat amb l'escala, tapat per la llosa fins que s'obre
         this.dibuixaForat(LX, LY);
-        this.llosa = this.posar('llosa', LX, LY, { fonsY: -700 });
+        this.llosa = this.posar('llosa', LX, LY, { fonsY: -700 }).setOrigin(0.5, 0.5);        // centrada sobre el forat (si no, per sota se'n veurien mig forat i les escales)
         this.florLluna = this.posar('flors', LX - 66, LY + 22, { escala: 0.8 }).setVisible(false);
         this.interactiu(LX, LY + 5, RADI_OBJECTE, DIALEGS.llosaJardi, { altura: 60, actiu: () => !Estat.flag('llosaOberta') });
 
@@ -435,7 +432,7 @@ class ZonaJardi extends ZonaBase {
             this.posarEntradaForat();
             I.punt.x = I.x; I.punt.y = I.y - 10;
             this.tweens.add({ targets: I, scaleY: base * 1.02, yoyo: true, repeat: -1, duration: 1200 });
-            Estat.posaObjectiu("Baixa per l'escala oberta a la llosa del jardí: és el soterrani de l'Hostatgeria.");
+            Estat.posaObjectiu("La llosa del jardí s'ha obert i deixa veure una escala cap al soterrani de l'Hostatgeria.");
             Estat.desar();
             cam.pan(this.ineu.x, this.ineu.y, 700, 'Sine.easeInOut');
             await espera(750);

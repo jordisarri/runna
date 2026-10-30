@@ -6,7 +6,7 @@
  *   Escalinata: l'Home del Raïm, amb el cap girat. Amb la Maneta d'en Jordi (és a la caseta, a la Caseta) es fa girar el volant de
  *               ferro de la base: tres voltes i el cap et mira de cara; llavors l'estàtua cobra vida (BOSS). Derrotada, s'obre la trapa.
  *   Cripta: la Clau de ferro (i un paper: la llum de Runna segella la tomba esquerdada del Cementiri),
- *           que obre la porta de ferro de la Sala de les Gírgoles (a sota de la Taverna, no pas des d'aquí).
+ *           que obre la Porta de les Gírgoles (a sota de la Taverna, no pas des d'aquí).
  */
 
 // ---------------- DIÀLEGS ----------------
@@ -54,7 +54,7 @@ Object.assign(DIALEGS, {
         ],
         enAcabar: () => {
             E.dona('clau_ferro'); E.posaFlag('relTretes'); E.posaFlag('clauFerro');
-            E.posaObjectiu(E.flag('tombaSegellada') ? "Troba la porta de ferro de la Sala de les Gírgoles, a l'est del Pati del Celler."
+            E.posaObjectiu(E.flag('tombaSegellada') ? "Troba la Porta de les Gírgoles, a l'est del Pati del Celler."
                                                    : "Porta la Clau de ferro al Pare Alcuí, a la Biblioteca: la Crònica deu dir què fer amb la tomba dels monjos.");
         }
     },
@@ -76,7 +76,7 @@ Object.assign(DIALEGS, {
             ],
             enAcabar: () => {
                 E.posaFlag('jordiManeta');
-                E.posaObjectiu("Agafa la maneta d'en Jordi: és al cofre de les joguines, dalt de la caseta aixecada sobre pals (a la Caseta).");
+                E.posaObjectiu("La maneta d'en Jordi és al cofre de les joguines, dalt de la caseta aixecada sobre pals.");
             }
         };
     }
@@ -466,7 +466,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
             this.runes();
             this.trapa.setVisible(true);
-            Estat.posaObjectiu("Baixa per la trapa de sota l'escalinata, a la cripta dels monjos.");
+            Estat.posaObjectiu("Sota l'escalinata hi ha una trapa que baixa a la cripta dels monjos.");
             Estat.desar();
         }));
     }
@@ -532,7 +532,7 @@ class ZonaPassadis extends ZonaCasaBase {
     }
 
     construir() {
-        this.terra('pedra', 200, 100, 400, 1300, -1100).setTint(0x6a6058);
+        this.terra('pedra', 200, 100, 400, 1300, -1100).setTint(0xa89c8c);        // pedra clara: els esbarzers negres i les bestioles fosques hi contrasten
         this.add.image(160, 0, 'mur_passadis').setOrigin(0).setScale(1 / RES).setDepth(-995);
         this.add.image(600, 0, 'mur_passadis').setOrigin(0).setScale(1 / RES).setDepth(-995).setFlipX(true);
         this.add.image(200, 0, 'fons_passadis').setOrigin(0).setScale(1 / RES).setDepth(-994);
@@ -552,7 +552,7 @@ class ZonaPassadis extends ZonaCasaBase {
         // una claror lila (es retallen a contrallum), cada esbarzer té una vora lluminosa i hi ha dues espelmes a cada costat.
         this.espelmes([[225, 770], [575, 770]]);
         if (!['passadis0', 'passadis1', 'passadis2', 'passadis3', 'passadis4'].every(id => Estat.flag('esb_' + id))) {
-            this.contrallum = this.add.ellipse(400, 712, 420, 110, 0xc8a0ff, 0.45).setDepth(738).setBlendMode('ADD');
+            this.contrallum = this.add.ellipse(400, 712, 460, 130, 0xc8a0ff, 0.55).setDepth(738).setBlendMode('ADD');
             this.tweens.add({ targets: this.contrallum, alpha: 0.25, yoyo: true, repeat: -1, duration: 1400, ease: 'Sine.easeInOut' });
         }
         [240, 320, 400, 480, 560].forEach((x, i) => {
@@ -569,7 +569,7 @@ class ZonaPassadis extends ZonaCasaBase {
             [[330, 1150], [470, 1000], [350, 880], [440, 520], [340, 330]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         }
 
-        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x000018, 0.32).setScrollFactor(0).setDepth(80000);
+        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x000018, 0.12).setScrollFactor(0).setDepth(80000);
         this.sortida(340, 1386, 120, 14, 'ZonaPingpong', 'passadis');
         this.sortida(340, 92, 120, 40, 'ZonaCasaTresor', 'porta');
     }
@@ -911,7 +911,7 @@ class ZonaGolfes extends ZonaCasaBase {
     objectiuGolfes() {
         const E = Estat;
         if (this.reparat) return;
-        E.posaObjectiu("Posa els engranatges del rellotge en ordre.");
+        E.posaObjectiu("Els engranatges del rellotge esperen ordre.");
         const ui = this.ui(); if (ui && ui.actualitzarHUD) ui.actualitzarHUD();
     }
 

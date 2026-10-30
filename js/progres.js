@@ -12,142 +12,144 @@ const PROGRES = {
     passos: [
         // ---- ACTE 1 ----
         { id: 'clauer', marca: ['clauerNovici'], fet: E => E.flag('clauerNovici'),
-          pista: E => "Fill, ves a la Plaça: el Pare Jordi et busca." },
+          pista: E => "El Pare Jordi t'ha fet cridar. Deu ser a la Plaça." },
         { id: 'basto', marca: ['bastoObtingut', 'obj:basto'], fet: E => E.flag('bastoObtingut'),
-          pista: E => "El Germà Andreu, vora els xiprers de la Plaça, té un bastó de pelegrí per a tu. Amb les bestioles que corren, et farà falta." },
+          pista: E => "El Germà Andreu, vora els xiprers de la Plaça, diu que un pelegrí no hauria d'anar amb les mans buides amb tantes bestioles corrent." },
         { id: 'cantAurora', marca: ['cantAurora', 'obj:flauta'], fet: E => E.flag('cantAurora'),
-          pista: E => "Al Santuari, la Pianista encara sap un cant que la boira no li pot prendre. Fes-te'l ensenyar." },
+          pista: E => "Al Santuari, la Pianista guarda un cant que la boira no ha sabut prendre-li." },
         { id: 'bassadoria', marca: ['bassadoriaNeta'], fet: E => E.flag('bassadoriaNeta'),
-          pista: E => "Davant la Bassadòria, al sud de la Plaça, prem ESPAI i tria tocar la flauta: 1-2-3." },
+          pista: E => "La Bassadòria, al sud de la Plaça, raja tèrbola. Potser el Cant de l'Aurora la deixaria neta." },
         // ---- ACTE 2: el camí del Til·ler ----
         { id: 'font', marca: ['fontNeta', 'cristallGel', 'obj:cristall_gel', 'obj:aigua_sj'], fet: E => E.flag('fontNeta'),
-          pista: E => "Al bosc de l'oest, a tocar de les Cel·les, hi ha una Font del Bisbe que s'ha adormit. Porta-li l'herba de Sant Joan i el romaní, que brillen entre els arbres com espurnes, i una pruna de la Prunera Màgica del jardí de l'Hostatgeria." },
+          pista: E => "Al bosc de l'oest, a tocar de les Cel·les, la Font del Bisbe s'ha adormit. Les herbes que espurnegen entre els arbres i la fruita de la Prunera Màgica de l'Hostatgeria la farien despertar." },
         { id: 'jaumeta', marca: ['jaumetaVista', 'obj:beuratge'], fet: E => E.flag('jaumetaVista') || E.flag('parlatTiler'),
-          pista: E => "Amb l'aigua de la Font del Bisbe, l'Alzina Buida del bosc, la més grossa de la clariana, s'obre com un portal. Allà viu la Jaumeta, que és vident i et donarà alguna cosa per al camí del Til·ler." },
+          pista: E => "Amb l'aigua de la font, l'Alzina Buida de la clariana s'obre com un portal. Dins hi viu una vident que té un regal per al camí del Til·ler." },
         { id: 'boiraTiller', marca: ['boiraTillerNeta'], fet: E => E.flag('boiraTillerNeta') || E.flag('parlatTiler'),
-          pista: E => "El Gran Til·ler és al nord de les Cel·les, però una boira espessa tapa el camí. Aboca-hi el beuratge de la Jaumeta i es desfarà." },
+          pista: E => "Una boira espessa tapa el camí al nord de les Cel·les. El beuratge de la vident la desfaria." },
         { id: 'tiller', marca: ['parlatTiler', 'tillerBranca'], fet: E => E.flag('parlatTiler'),
-          pista: E => "Pel camí que s'ha aclarit, al nord de les Cel·les, hi ha el Gran Til·ler. Parla-hi: ell sap què fer amb les bestioles que desperten." },
+          pista: E => "El camí al nord de les Cel·les ja és clar. Al capdamunt hi ha un arbre que sap què fer amb les bestioles que desperten." },
         { id: 'branca', marca: ['obj:basto_tiller'], fet: E => E.te('basto_tiller'),
-          pista: E => "Agafa la branca que ha caigut al peu del Til·ler: és més àgil que el bastó de pelegrí que portes." },
+          pista: E => "Al peu del Til·ler ha caigut alguna cosa que et serviria més que el bastó de pelegrí." },
         { id: 'bardissa', marca: ['camiCirosaObert'], fet: E => E.flag('camiCirosaObert'),
-          pista: E => "Al Gran Til·ler, el camí del nord-est és tancat per les arrels de l'arbre. Colpeja-les amb la branca del Til·ler i s'enfonsaran." },
+          pista: E => "Al nord-est del Til·ler, unes arrels tanquen el pas. Són de fusta: potser cedirien als cops d'una branca amiga." },
         { id: 'pastor', marca: ['pastorVencut'], fet: E => E.flag('pastorVencut'),
-          pista: E => "Puja a la Cirosa pel camí que han obert les arrels. El Germà Andreu ja no és a la Plaça: és a la pastura, a la dreta de la tanca, fet Pastor de Boira. L'has de vèncer." },
+          pista: E => "Més enllà de les arrels, a la pastura de la Cirosa, la boira s'ha endut el Germà Andreu. Ara fa de pastor, i ja no és el mateix." },
         { id: 'esquelles', marca: ['esquelles', 'obj:esquelles'], fet: E => E.flag('esquelles'),
-          pista: E => "A la Cirosa, parla amb el pastor vell, vora el foc: t'ha de donar les esquelles dels seus avis." },
+          pista: E => "El pastor vell, vora el foc de la Cirosa, guarda les esquelles dels seus avis." },
         { id: 'soparObert', marca: ['soparObert'], fet: E => E.flag('soparObert'),
-          pista: E => "Torna al Gran Til·ler amb les esquelles: et vol parlar d'un sopar." },
+          pista: E => "Amb les esquelles al sarró, el Til·ler tindrà ganes de parlar-te d'un sopar." },
         { id: 'sopar', marca: ['escudella', 'floresIsidre', 'pastorsConvencuts', 'soparFet', 'fullaTiler', 'obj:fulla_tiler'], fet: E => E.flag('soparFet'),
           pista: E => {
               const f = [];
-              if (!E.flag('escudella')) f.push("l'escudella de la Neus (Sant Benet, a les cel·les)");
-              if (!E.flag('floresIsidre')) f.push("les flors de l'Isidre (jardí de l'Hostatgeria)");
-              if (!E.flag('pastorsConvencuts')) f.push("els pastors de la Cirosa (toca la flauta vora el seu foc)");
-              return f.length ? "Per al sopar del Til·ler et falta: " + f.join(', ') + "." : "Ja ho tens tot: torna al Gran Til·ler i que es faci el sopar.";
+              if (!E.flag('escudella')) f.push("l'escudella de la Neus (a les cel·les)");
+              if (!E.flag('floresIsidre')) f.push("les flors de l'Isidre (al jardí de l'Hostatgeria)");
+              if (!E.flag('pastorsConvencuts')) f.push("el pa que pasten els pastors de la Cirosa (potser una música vora el seu foc els recordaria com fer-lo)");
+              return f.length ? "Al sopar del Til·ler encara hi falta: " + f.join(', ') + "." : "Ja ho tens tot: el Gran Til·ler espera la taula parada.";
           } },
         // ---- ACTE 2: el Saber i les benediccions ----
         { id: 'fragment1', marca: ['fragment1'], fet: E => E.flag('fragment1'),
-          pista: E => "A les Runes, entre dues pedres, hi ha un pergamí esquinçat (fragment 1). Mira-hi bé." },
+          pista: E => "A les Runes, entre dues pedres, algú va deixar un pergamí esquinçat. Val la pena mirar-hi bé." },
         { id: 'clauSagrari', marca: ['missatgeDesxifrat', 'obj:clau_sagrari'], fet: E => E.flag('missatgeDesxifrat') || E.te('clau_sagrari') || E.flag('fragment2'),
           pista: E => {
               const cols = Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).filter(Boolean).length;
-              return cols < 12 ? "El sagrari del Santuari guarda el fragment 2, però és tancat amb una clau petita que els monjos van deixar a l'ermita de la Desaparició. Al camí de la Desaparició hi ha dotze columnes, i cada una t'explica una paraula (" + cols + "/12). Apunta-les totes!"
-                  : "Ja tens les dotze paraules. A l'ermita de la Desaparició, llegeix les taules de pedra i digues la frase sencera davant l'altar: apareixerà un cofre amb la clau petita del sagrari.";
+              return cols < 12 ? "El sagrari del Santuari amaga un altre pergamí, però té pany, i la clau la van deixar els monjos a l'ermita de la Desaparició. Pel camí que hi porta, dotze columnes parlen (" + cols + "/12): convé recordar el que diuen."
+                  : "Les dotze paraules formen una frase. Les taules de pedra de l'ermita de la Desaparició esperen que algú la digui davant l'altar.";
           } },
         { id: 'fragment2', marca: ['fragment2'], fet: E => E.flag('fragment2'),
-          pista: E => "Ja tens la clau petita: el sagrari és al mig del retaule del Santuari i guarda el fragment 2." },
-        { id: 'fragment3', marca: ['fragment3'], fet: E => E.flag('fragment3'),
-          pista: E => "Porta els dos fragments al Pare Alcuí, a la biblioteca del Monestir: te'ls llegirà." },
+          pista: E => "La clau petita encaixa al sagrari, al mig del retaule del Santuari." },
+        { id: 'alcuiLlegit', marca: ['alcuiLlegit'], fet: E => E.flag('alcuiLlegit'),
+          pista: E => "Els dos pergamins són en un llatí molt vell. El Pare Alcuí, entre els llibres del Monestir, el sap llegir." },
         { id: 'ombra', marca: ['ombraDemanaCant', 'cantPedres', 'benedicioMonjo'], fet: E => E.flag('benedicioMonjo'),
-          pista: E => !E.flag('ombraDemanaCant') ? "Parla amb l'ombra del monjo, a les Runes (a la dreta del replà de pedra): et dirà què vol."
-              : !E.flag('cantPedres') ? "La Pianista, al Santuari, t'ensenya el Cant de les Pedres. Després toca'l amb la flauta davant l'ombra del monjo, a les Runes."
-              : "Toca el Cant de les Pedres amb la flauta (3-1-2-1) davant l'ombra del monjo, a les Runes." },
+          pista: E => !E.flag('ombraDemanaCant') ? "A les Runes, a la dreta del replà de pedra, hi ha una ombra de monjo que vol dir-te alguna cosa."
+              : !E.flag('cantPedres') ? "L'ombra del monjo demana un cant que les pedres entenen. La Pianista, al Santuari, el coneix."
+              : "L'ombra del monjo, a les Runes, només escoltarà el Cant de les Pedres." },
         { id: 'saber', marca: ['saber'], fet: E => E.flag('saber'),
-          pista: E => "Ara que l'ombra t'ha beneït, el Pare Alcuí, a la biblioteca, et dirà les Paraules del Saber." },
+          pista: E => "Ara que l'ombra t'ha beneït, el Pare Alcuí tindrà paraules per a tu, a la biblioteca." },
         { id: 'benediccio', marca: ['benediccio'], fet: E => E.flag('benediccio'),
-          pista: E => "El Pare Jordi, a la Plaça, vol donar-te la benedicció ara que tens el permís del Til·ler." },
+          pista: E => "El Pare Jordi, a la Plaça, voldria posar-te la mà al cap ara que el Til·ler t'ha donat permís." },
         // ---- ACTE 2: el camí del Dolmen ----
         { id: 'telescopi', marca: ['garfBancSegut', 'telescopi', 'obj:telescopi'], fet: E => E.flag('telescopi') || E.flag('estelLlorenc'),
           pista: E => !E.flag('garfBancSegut')
-              ? "A l'Era (camí de les Runes cap a l'oest, passada l'Ermita) hi ha el Garf, l'inventor. Seu al banc de davant seu i parla-hi: amb el cristall de gel de la Font del Bisbe et farà una cosa per mirar el cel."
-              : "Porta al Garf, a l'Era, el cristall de gel de la Font del Bisbe: et construirà un telescopi." },
+              ? "A l'Era, passada l'Ermita, un inventor anomenat Garf mira el cel. Potser et deixa seure al seu banc."
+              : "El Garf, a l'Era, sabria fer un tub per mirar els estels si li portessis un cristall de gel de la Font del Bisbe." },
         { id: 'estels', marca: ['telescopiMuntat', 'estelsFets'], fet: E => E.flag('estelsFets') || E.flag('estelLlorenc'),
-          pista: E => "Amb el telescopi, ves als Dipòsits: de l'Era cap a l'oest, la Rovellonera (on hi ha rovellons sota els pins hi ha camí: sud, ponent i sud), Sant Gabriel i, a llevant, els Dipòsits. Munta el telescopi al mirador i compta els estels." },
+          pista: E => "Amb el telescopi cal un lloc alt i fosc per comptar els estels: de l'Era cap a ponent, passada la Rovellonera i Sant Gabriel, hi ha els Dipòsits." },
         { id: 'estelLlorenc', marca: ['estelLlorenc', 'obj:estel_llorenc'], fet: E => E.flag('estelLlorenc'),
-          pista: E => "L'últim estel ha caigut a l'aigua del dipòsit de llevant, als Dipòsits. Enfila't per l'escala de ferro i agafa la seva llum." },
+          pista: E => "L'últim estel ha caigut a l'aigua del dipòsit de llevant. Algú n'hauria de pujar a collir la llum." },
         { id: 'runna', marca: ['runna', 'obj:runna'], fet: E => E.flag('runna'),
-          pista: E => "Amb l'Estel de Sant Llorenç, la boira del camí de llevant dels Dipòsits s'aparta. Al final hi ha el Dolmen: amb la Fulla, el Saber i la Benedicció, Runna es despertarà." },
+          pista: E => "Amb la llum de l'estel, la boira a llevant dels Dipòsits s'aparta. Al final del camí hi ha un dolmen que espera la Fulla, el Saber i la Benedicció." },
         // ---- ACTE 3 ----
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
-          pista: E => "Ara que portes Runna, torna al Santuari: la Pianista t'ha d'ensenyar l'últim cant, el Cant del Miracle. Els barrots de la gàbia només l'escolten a ell." },
+          pista: E => "Runna ja és amb tu. Els barrots de la gàbia només escolten un cant que la Pianista encara no t'ha ensenyat." },
         { id: 'josep', marca: ['josepVencut', 'obj:llanterna'], fet: E => E.flag('josepVencut'),
-          pista: E => "Al Celler, entre la Plaça i les Runes, en Jusef és el millor jugador de ping-pong. Allà els secrets es guanyen a la taula: parla amb en Jusef i guanya-li el partit. (Quan la pilota bota i s'enlaira, espera que el cercle es posi verd i prem el carril de la pilota.)" },
+          pista: E => "Al Celler, entre la Plaça i les Runes, hi ha un jugador de ping-pong que guarda secrets. Allà es guanyen a la taula, i amb bon ritme." },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
-          pista: E => E.flag('florsCreu') ? "Torna a Sant Antoni, fill: el Germà Francesc t'espera."
-              : E.te('ram') ? "El ram del Germà Francesc va a la tomba de l'àngel del Cementiri."
-              : "El Germà Francesc, que passeja per Sant Antoni (a llevant del Monestir), té uns guants que mouen el que pesa. Fes-li un favor i te'ls deixarà." },
+          pista: E => E.flag('florsCreu') ? "El Germà Francesc t'espera a Sant Antoni, content."
+              : E.te('ram') ? "El ram del Germà Francesc és per a algú que ja no el pot rebre: la tomba de l'àngel, al Cementiri."
+              : "El Germà Francesc, que passeja per Sant Antoni (a llevant del Monestir), té uns guants que mouen el que pesa. Potser un favor els hi deixaria." },
         { id: 'roda', marca: ['rodaMoguda'], fet: E => E.flag('rodaMoguda'),
-          pista: E => "La roda de carruatge del Celler amaga el túnel dels monjos: amb els guants posats, empeny-la des d'un costat, caminant-hi en contra." },
+          pista: E => "La roda de carruatge del Celler tapa el túnel dels monjos. Amb uns guants, es deixaria empènyer." },
         { id: 'cambra', marca: ['cofreCambra', 'obj:pergami_monjo'], fet: E => E.flag('cofreCambra'),
-          pista: E => "Baixa pel passadís de darrere la roda: talla amb Runna el mur d'esbarzers negres (llueixen violeta entre quatre espelmes) i arribaràs a la Cambra secreta dels monjos, amb un cofre." },
+          pista: E => "Rere la roda, un passadís baixa a una cambra secreta, amb un cofre. Abans, un mur d'esbarzers negres que llueixen violeta només cedeix a Runna." },
         { id: 'maneta', marca: ['jordiManeta', 'maneta', 'obj:maneta'], fet: E => E.flag('maneta') || E.te('maneta'),
           pista: E => E.flag('jordiManeta')
-              ? "La maneta d'en Jordi és al cofre de les joguines, dalt de la caseta aixecada sobre pals, a la Caseta (a l'oest del Gran Til·ler)."
-              : "El volant de ferro de l'Home del Raïm no té maneta. En Jordi de la Caseta, a l'oest del Gran Til·ler, en té una: parla-hi." },
+              ? "La maneta d'en Jordi és al cofre de les joguines, dalt de la caseta de pals, a la Caseta."
+              : "El volant de ferro de l'Home del Raïm no té maneta. En Jordi de la Caseta, a l'oest del Gran Til·ler, en deu saber alguna cosa." },
         { id: 'raim', marca: ['raimDesperta', 'raimDerrotat'], fet: E => E.flag('raimDerrotat'),
-          pista: E => "A la gran escalinata de la Casa Gran, l'Home del Raïm té el cap girat. Encaixa la maneta d'en Jordi al volant de ferro de la base i fes-lo girar fins que el guardià et miri a la cara." },
+          pista: E => "A la gran escalinata de la Casa Gran, l'Home del Raïm té el cap girat cap a un altre costat. El volant de ferro de la base, amb la maneta, el faria mirar-te." },
         { id: 'cripta', marca: ['relTretes', 'clauFerro', 'obj:clau_ferro'], fet: E => E.flag('relTretes'),
-          pista: E => "Vençut l'Home del Raïm, la trapa de sota l'escalinata baixa a la Cripta dels monjos: hi ha la Clau de ferro." },
+          pista: E => "Vençut l'Home del Raïm, la trapa de sota l'escalinata baixa a la Cripta dels monjos. Allà hi ha una clau de ferro." },
         { id: 'segell', marca: ['tombaLlegida', 'tombaSegellada'], fet: E => E.flag('tombaSegellada'),
           pista: E => E.flag('tombaLlegida') || !E.flag('relTretes')
-              ? "La tomba esquerdada del Cementiri (darrere el Santuari i el Monestir) encara treu boira. La llum que va tancar la porta la pot tancar: acosta-hi Runna. I guarda la Clau de ferro: obre la porta de ferro de la Sala de les Gírgoles, a l'est del Pati del Celler."
-              : "La tomba dels monjos del Cementiri treu boira. El Pare Alcuí, a la Biblioteca, deu trobar a la Crònica què s'hi ha de fer. I guarda la Clau de ferro: obre la porta de ferro de la Sala de les Gírgoles, a l'est del Pati del Celler." },        // ---- Sota la Taverna ----
+              ? "La tomba esquerdada del Cementiri (darrere el Santuari i el Monestir) encara treu boira; la llum que va tancar la porta la podria tancar. I la clau de ferro vol una porta de ferro que el Germà Andreu visita cada nit, a l'est del Pati del Celler."
+              : "La tomba dels monjos del Cementiri treu boira. El Pare Alcuí, a la Biblioteca, deu trobar a la Crònica què s'hi ha de fer. I la clau de ferro vol una porta de ferro que el Germà Andreu visita cada nit, a l'est del Pati del Celler." },        // ---- Sota la Taverna ----
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
-          pista: E => "A l'est del Pati del Celler, pel camí entre els arbres, hi ha la Sala de les Gírgoles: una porta de ferro, la que el Germà Andreu tanca cada nit. La Clau de ferro l'obre." },
+          pista: E => "A l'est del Pati del Celler, pel camí entre els arbres, hi ha una porta de ferro. La clau de ferro n'és amiga." },
         { id: 'clauCiscu', marca: ['ciscuTrobat', 'clauGirgoles', 'obj:clau_girgoles'], fet: E => E.te('clau_girgoles') || E.flag('portaFerroOberta'),
-          pista: E => E.flag('ciscuTrobat') ? "Torna a la cabana amagada: el Siscu té una clau rovellada per a tu."
-              : "La porta de ferro del fons del soterrani té un pany petit: la Clau de ferro no hi entra. El Siscu, el fill de la Carmen, s'escapa de nit: segur que ha vist el Germà Andreu. Surt pel camí de la Desaparició (a l'oest de les Runes) i s'amaga per un forat entre els arbres «per on els grans no hi caben»." },
+          pista: E => E.flag('ciscuTrobat') ? "El Siscu t'espera a la cabana amagada: té una clau rovellada per a tu."
+              : "La porta del fons del soterrani té un pany massa petit per a la clau de ferro. El Siscu, el fill de la Carmen, se n'escapa de nit i segur que ha vist el Germà Andreu. Cerca'l pel camí de la Desaparició, on hi ha forats «per on els grans no hi caben»." },
         { id: 'portaFerro', marca: ['portaFerroOberta'], fet: E => E.flag('portaFerroOberta'),
-          pista: E => "Al soterrani de la Sala de les Gírgoles (a l'est del Pati del Celler), la clau rovellada del Siscu obre la porta de ferro del fons, d'on surt la boira." },
+          pista: E => "Al fons del soterrani de la Sala de les Gírgoles, la clau rovellada del Siscu té una porta de ferro que treu boira." },
         { id: 'girgoles', marca: ['girgolesEnceses'], fet: E => E.flag('girgolesEnceses'),
-          pista: E => "A la Sala de les Gírgoles, sota la porta de ferro, fes que les cinc mates de gírgoles lluminoses brillin alhora: cada una que toques canvia ella i les dues del costat." },
+          pista: E => "Sota la porta de ferro, cinc mates de gírgoles lluminoses voldrien brillar alhora, però cada una desperta les veïnes." },
         { id: 'rastell', marca: ['rastellObert'], fet: E => E.flag('rastellObert'),
-          pista: E => "Al passadís de tortura, un rastell rovellat barra el pas. Gira el torn de la dreta amb els Guants de Poder." },
+          pista: E => "Al passadís de tortura, un rastell rovellat barra el pas. Els Guants de Poder saben de torns." },
         { id: 'tortura', marca: ['torturaNet'], fet: E => E.flag('torturaNet'),
-          pista: E => "Al final del passadís de tortura, talla amb Runna el mur d'esbarzers negres." },
+          pista: E => "Al final del passadís de tortura, un mur d'esbarzers negres es deixa tallar per Runna." },
         { id: 'pont', marca: ['pontGabia'], fet: E => E.flag('pontGabia'),
-          pista: E => "A la Sala de la Gàbia, la gàbia penja sobre un avenc. Al marge, toca el Cant de les Pedres (3-1-2-1) i els blocs del fons s'aixecaran fent un pont." },
+          pista: E => "Davant l'avenc de la Sala de la Gàbia, els blocs del fons dormen. Un cant de pedres els faria aixecar." },
         { id: 'ocellaire', marca: ['ocellaireVencut'], fet: E => E.flag('ocellaireVencut'),
-          pista: E => E.flag('ocellaireVist') ? "L'Ocellaire fa girar el bàcul per treure'n ocells de foc. Talla els ocells amb Runna, aparta't quan el bàcul gira de pressa i colpeja'l quan s'alenteix."
-              : "Creua el pont fins a la gàbia. El Germà Andreu hi fa guàrdia... i no hi és sol." },
+          pista: E => E.flag('ocellaireVist') ? "L'Ocellaire fa girar el bàcul i en surten ocells de foc. Cal tallar-los, apartar-se quan el bàcul va de pressa i colpejar quan s'alenteix."
+              : "Més enllà del pont, a la gàbia, el Germà Andreu fa guàrdia... i no hi és sol." },
         { id: 'gabia', marca: ['gabiaOberta'], fet: E => E.flag('gabiaOberta'),
-          pista: E => "L'Ocellaire ha caigut. Davant dels barrots de la gàbia, toca el Cant del Miracle (1-3-2-3-1)." },
+          pista: E => "L'Ocellaire ha caigut. Els barrots de la gàbia només escolten el Cant del Miracle." },
         { id: 'nens', marca: ['rescatUri', 'rescatFlam', 'rescatSardin'], fet: E => E.flag('rescatUri') && E.flag('rescatFlam') && E.flag('rescatSardin'),
-          pista: E => "La gàbia és oberta. Trenca amb Runna els capolls de boira on dormen l'Huri, el Flami i el Sardi." },
+          pista: E => "La gàbia és oberta. Als capolls de boira hi dormen l'Huri, el Flami i el Sardi; Runna els sap trencar." },
         { id: 'final', marca: ['andreuTancat', 'epilegFet'], fet: E => E.flag('epilegFet'),
           pista: E => E.flag('andreuTancat') ? "Els nens tornen a riure. Al Santuari t'esperen tots."
-              : "Els tres nens són lliures. Torna a la Sala de la Gàbia: encara t'esperen allà." }
+              : "Els tres nens són lliures, però a la Sala de la Gàbia encara hi ha algú que t'espera." },
     ],
 
     // Missions laterals: no barren el camí. Les Tietes les recorden quan ja s'han pogut començar.
     laterals: [
         { id: 'taverna', marca: ['tavernaOberta', 'evaParlat'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('evaParlat'),
-          pista: E => "El Sardi berenava cada tarda a la Taverna amb l'Eva. La porta és tancada, però truca: potser l'Eva et deixa entrar." },
+          pista: E => "El Sardi berenava cada tarda a la Taverna amb l'Eva. La porta és tancada, però una trucada potser l'obriria." },
         { id: 'carry', marca: ['carryParlat', 'pallofaTornat', 'obj:pallofa', 'obj:clau_campanar'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('pallofaTornat'),
-          pista: E => !E.flag('carryParlat') ? "La Carry, a Nostra Senyora (a l'oest de les Cel·les), té cara de patir per alguna cosa: parla-hi."
-              : E.te('pallofa') ? "Duu el Pallofa a la Carry, a Nostra Senyora (a l'oest de les Cel·les)."
-              : "El Pallofa, el gos de la Carry, passeja per Sant Antoni (a llevant del Monestir). Si el trobes, duu-lo a la Carry: guarda la clau del campanar." },
+          pista: E => !E.flag('carryParlat') ? "La Carry, a Nostra Senyora (a l'oest de les Cel·les), té cara de patir per alguna cosa."
+              : E.te('pallofa') ? "El Pallofa ja és amb tu, i la Carry el deu trobar a faltar a Nostra Senyora."
+              : "El Pallofa, el gos de la Carry, passeja per Sant Antoni (a llevant del Monestir). La Carry, que guarda la clau del campanar, li'n sabria agrair el retrobament." },
         { id: 'rellotge', marca: ['rellotgeReparat'], obert: E => E.te('clau_campanar') || E.flag('portaCampanarOberta') || E.flag('clauCampanar'), fet: E => E.flag('rellotgeReparat'),
-          pista: E => "El rellotge del campanar s'ha aturat a un quart de quatre. Amb la clau del campanar que et va donar la Carry, obre la porta de la dreta del retaule del Santuari, puja per la torre fins a la Sala del Rellotge i posa els engranatges en ordre." },
+          pista: E => "El rellotge del campanar s'ha aturat a un quart de quatre. La clau de la Carry obre una porta del retaule del Santuari; dalt la torre, uns engranatges esperen ordre." },
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),
-          pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta el Cant de les Pedres." },
+          pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta cants antics." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
-          pista: E => "La Nena de les Trenes, al camí de la Rovellonera, encara espera els seus dos llaços: tots dos colgats sota pedres: una roca del camí i una pedra de la primera clariana de la Rovellonera. Posa't darrere la pedra i camina contra ella per empènyer-la." },
+          pista: E => "La Nena de les Trenes, al camí de la Rovellonera, encara espera els seus dos llaços, colgats sota pedres: un a la roca del camí i l'altre a la primera clariana de la Rovellonera." },
         { id: 'monges', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'mongesTrobades'], obert: E => E.flag('isidreSansa'), fet: E => E.flag('mongesTrobades'),
           pista: E => !E.flag('llavorSansa') && !E.flag('llosaOberta') ? "Pregunta a la gent de les Cel·les, al nord-est: potser en saben alguna cosa més de la llosa del jardí de l'Hostatgeria."
-              : !E.flag('llosaOberta') ? "Porta la Llavor de Lluna a l'Isidre, al jardí de l'Hostatgeria."
-              : "Sota la llosa del jardí de l'Hostatgeria hi ha un soterrani que puja a les cambres de les sacerdotesses. Per alliberar-les et caldran el Cant de l'Aurora, els Guants de Poder i Runna." }
+              : !E.flag('llosaOberta') ? "La Llavor de Lluna és per a l'Isidre, al jardí de l'Hostatgeria."
+              : "Sota la llosa del jardí de l'Hostatgeria hi ha un soterrani que puja a les cambres de les sacerdotesses. Per alliberar-les et caldran un cant antic, uns guants i Runna." },
+        { id: 'carruatge', marca: ['carruatgeObert'], obert: E => E.flag('epilegFet'), fet: E => E.flag('carruatgeObert'),
+          pista: E => "L'Home del Carruatge Verd, a l'Era, deia que obriria el carruatge quan la boira marxés del tot." }
     ],
 
     // El primer pas de la història que encara no és fet

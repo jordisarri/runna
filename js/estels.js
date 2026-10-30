@@ -19,7 +19,7 @@ function completarEstels() {
     const E = Estat;
     E.posaFlag("estelsFets");
     const ui = game.scene.getScene("UI"), z = game.scene.getScene("ZonaDipositos");
-    E.posaObjectiu("S'ha encès una llum a l'aigua del dipòsit de llevant: ves-hi.");
+    E.posaObjectiu("S'ha encès una llum a l'aigua del dipòsit de llevant.");
     const dialeg = () => { if (ui) ui.obrirDialeg({ pagines: [
         { qui: "Ineu", text: "Set estels... i un ocell que s'escapa d'una gàbia oberta. És la nit de les llàgrimes de Sant Llorenç!" },
     ] }, () => E.desar()); };

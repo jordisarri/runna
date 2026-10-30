@@ -209,7 +209,10 @@ class ZonaCamiRov extends ZonaBase {
                 if (tram.some(([tx, ty, tw, th]) => px > tx - 90 && px < tx + tw + 90 && py > ty - 70 && py < ty + th + 90)) continue;
                 if (Math.abs(px - 2640) < 240 && py > 330 && py < 880) continue;   // que cap arbre tapi el cartell
                 if (Phaser.Math.Distance.Between(px, py, 880, 880) < 170 || Phaser.Math.Distance.Between(px, py, 1300, 830) < 120) continue;
-                this.posar(rnd() < 0.6 ? 'pi' : 'arbre', px, py, { col: { w: 30, h: 14 } });
+                const tipus = rnd() < 0.6 ? 'pi' : 'arbre';                       // (es tria abans de descartar: així la resta del bosc queda igual)
+                // La roca del primer llaç: cap arbre al voltant ni al davant (les copes pugen i la tapen), ni a la banda on s'empeny
+                if (Math.abs(px - 1300) < 240 && py > 760 && py < 1140) continue;
+                this.posar(tipus, px, py, { col: { w: 30, h: 14 } });
             }
         }
         [[2300, 460], [1500, 770], [1100, 560], [620, 1100], [500, 1330], [900, 1000]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 70, h: 26 } }));

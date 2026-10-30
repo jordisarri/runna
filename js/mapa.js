@@ -29,7 +29,7 @@ const MAPA = {
         { id: 'ZonaCementiri',     nom: 'El Cementiri',             x: 1050, y: 300 },
         { id: 'ZonaCellerFora',    nom: 'Pati del Celler',          x: 800,  y: 385 },
         { id: 'ZonaPingpong',      nom: 'El Celler',                x: 640,  y: 390 },
-        { id: 'ZonaGirgolesFora',  nom: 'Sala de les Gírgoles (porta)', x: 1090, y: 385 },
+        { id: 'ZonaGirgolesFora',  nom: 'Porta de les Gírgoles', x: 1090, y: 385 },
         { id: 'ZonaGolfes',         nom: 'Sala del Rellotge',       x: 930,  y: 335 },
         { id: 'ZonaEsglesia',      nom: 'Santuari',                 x: 930,  y: 390 },
         { id: 'ZonaEra',           nom: 'L\'Era',                   x: 300,  y: 390 },
@@ -90,7 +90,24 @@ const MAPA = {
     // ---------------- Mapa a l'estil metroidvania ----------------
     // El món es dibuixa en coordenades ampliades i es mira per una finestra: s'arrossega per desplaçar-lo i es fa zoom
     // amb la rodeta, pessigant o amb els botons +/−. Cada regió té el seu color i el seu nom.
-    mon(z) { return { x: (z.x - 150) * 2, y: (z.y - 80) * 3 }; },
+    // Cada lloc ocupa una casella [columna, fila] de la graella: els veïns queden enganxats i només els separa un camí curt.
+    GRAELLA: {
+        ZonaCirosa: [5, 0], ZonaCamiCirosa: [5, 1], ZonaTiller: [5, 2], ZonaJordi: [4, 2], ZonaCelles: [5, 3], ZonaBosc: [4, 3], ZonaCabana: [3, 3],
+        ZonaRuines: [5, 4], ZonaCami: [4, 4], ZonaErmita: [3, 4], ZonaCementiri: [6, 4],
+        ZonaCellerFora: [5, 5], ZonaGirgolesFora: [4, 5],
+        ZonaEra: [2, 5], ZonaJardi: [2, 6], ZonaTaverna: [3, 6], ZonaCasaGran: [4, 6], ZonaPlaca: [5, 6], ZonaMonestir: [6, 6], ZonaSantAntoni: [7, 6], ZonaCreu: [5, 7],
+        ZonaCamiRov: [1, 5], ZonaRovellonera: [0, 5], ZonaGabriel: [0, 6], ZonaDipositos: [1, 6], ZonaDolmen: [1, 7]
+    },
+    // Els interiors i els llocs sota terra no es dibuixen al mapa: compten com l'exterior on s'entra (per l'«ets aquí», l'objectiu i els encàrrecs)
+    PARE: {
+        ZonaCabanaInt: 'ZonaCabana', ZonaCasaJordi: 'ZonaJordi', ZonaCasetaJoc: 'ZonaJordi', ZonaMasiaCirosa: 'ZonaCirosa', ZonaErmitaInt: 'ZonaErmita', ZonaCabanaCami: 'ZonaCami',
+        ZonaPingpong: 'ZonaCellerFora', ZonaGolfes: 'ZonaPlaca', ZonaEsglesia: 'ZonaPlaca', ZonaHostatgeriaInt: 'ZonaJardi', ZonaCambraPains: 'ZonaJardi', ZonaCambraPhili: 'ZonaJardi',
+        ZonaCambraCharm: 'ZonaJardi', ZonaSoterraniHost: 'ZonaJardi', ZonaTavernaInt: 'ZonaTaverna', ZonaSotaTaverna: 'ZonaTaverna', ZonaGirgoles: 'ZonaGirgolesFora', ZonaTortura: 'ZonaGirgolesFora',
+        ZonaGabia: 'ZonaGirgolesFora', ZonaCelaStAntoni: 'ZonaSantAntoni', ZonaMonestirRebedor: 'ZonaMonestir', ZonaBiblioteca: 'ZonaMonestir', ZonaCasaGranInt: 'ZonaCasaGran',
+        ZonaCasaCripta: 'ZonaCasaGran', ZonaCasaTresor: 'ZonaCasaGran', ZonaPassadis: 'ZonaCasaGran'
+    },
+    TW: 164, TH: 68, PX: 196, PY: 100,                                  // mida de la fitxa i pas de la graella (la diferència és la longitud del camí)
+    mon(z) { const g = MAPA.GRAELLA[z.id] || [0, 0]; return { x: g[0] * MAPA.PX, y: g[1] * MAPA.PY }; },
     REGIONS: [
         { nom: 'La Cirosa', color: 0xe0b050, ids: ['ZonaCirosa', 'ZonaMasiaCirosa', 'ZonaCamiCirosa'] },
         { nom: 'Bosc de Sant Joan', color: 0x58b878, ids: ['ZonaCabanaInt', 'ZonaCabana', 'ZonaBosc', 'ZonaJordi', 'ZonaCasaJordi', 'ZonaCasetaJoc', 'ZonaTiller', 'ZonaCelles'] },
@@ -113,16 +130,18 @@ const MAPA = {
         const anima = cfg => { const t = scene.tweens.add(cfg); anims.push(t); return t; };
 
         // Lloc de l'objectiu i encàrrecs oberts
+        const amunt = id => MAPA.PARE[id] || id;
+        actual = actual && amunt(actual);
         const seg = PROGRES.seguent(E);
-        const zObj = seg && DIARI_PASSOS[seg.id] ? DIARI_PASSOS[seg.id][1] : null;
+        const zObj = seg && DIARI_PASSOS[seg.id] ? amunt(DIARI_PASSOS[seg.id][1]) : null;
         const encarrecs = {};
-        PROGRES.laterals.filter(l => l.obert(E) && !l.fet(E)).forEach(l => { const d = DIARI_LATERALS[l.id]; if (d) (encarrecs[d[1]] = encarrecs[d[1]] || []).push(d[0]); });
-        const vis = id => MAPA.visitada(id);
+        PROGRES.laterals.filter(l => l.obert(E) && !l.fet(E)).forEach(l => { const d = DIARI_LATERALS[l.id]; if (d) (encarrecs[amunt(d[1])] = encarrecs[amunt(d[1])] || []).push(d[0]); });
+        const vis = id => MAPA.visitada(id) || Object.keys(MAPA.PARE).some(k => MAPA.PARE[k] === id && MAPA.visitada(k));
         // Llocs per explorar: no visitats però al costat d'un de visitat (o on és l'objectiu)
         const conegut = id => vis(id) || id === zObj || MAPA.enllacos.some(([a, b]) => (a === id && vis(b)) || (b === id && vis(a)));
-        const nodes = MAPA.zones.filter(z => conegut(z.id)).map(z => {
+        const nodes = MAPA.zones.filter(z => MAPA.GRAELLA[z.id] && conegut(z.id)).map(z => {
             const p = MAPA.mon(z), t = MAPA.tipus(z.id), v = vis(z.id);
-            const [w, h] = !v ? [46, 34] : t === 'ext' ? [78, 46] : [56, 38];
+            const w = MAPA.TW, h = MAPA.TH;
             return { z, id: z.id, x: p.x, y: p.y, t, v, w, h, ara: z.id === actual, reg: MAPA.regio(z.id) };
         });
         const nodeDe = id => nodes.find(n => n.id === id);
@@ -169,23 +188,24 @@ const MAPA = {
         // fan corba fins a l'altra; les portes (sense direcció) són un traç recte.
         const g = add(scene.add.graphics(), mon);
         const DIR = { N: [0, -1], S: [0, 1], E: [1, 0], W: [-1, 0] };
-        const tracat = (na, nb, da, db) => {
-            if (!da || !db) return [{ x: na.x, y: na.y }, { x: nb.x, y: nb.y }];
-            const [ax, ay] = DIR[da], [bx, by] = DIR[db];
-            const p0 = new Phaser.Math.Vector2(na.x + ax * na.w / 2, na.y + ay * na.h / 2), p3 = new Phaser.Math.Vector2(nb.x + bx * nb.w / 2, nb.y + by * nb.h / 2);
-            const L = Math.max(50, p0.distance(p3) * 0.45);
-            return new Phaser.Curves.CubicBezier(p0, new Phaser.Math.Vector2(p0.x + ax * L, p0.y + ay * L), new Phaser.Math.Vector2(p3.x + bx * L, p3.y + by * L), p3).getPoints(24);
+        // Camins: un traç curt recte d'una vora de fitxa a la de la veïna (a les cantonades si són en diagonal)
+        const tracat = (na, nb) => {
+            const dx = nb.x - na.x, dy = nb.y - na.y;
+            const s = n => Math.min(Math.abs(dx) > 0 ? n.w / 2 / Math.abs(dx) : Infinity, Math.abs(dy) > 0 ? n.h / 2 / Math.abs(dy) : Infinity);
+            const sa = s(na), sb = s(nb);
+            return [{ x: na.x + dx * sa, y: na.y + dy * sa }, { x: nb.x - dx * sb, y: nb.y - dy * sb }];
         };
-        MAPA.enllacos.forEach(([a, b, da, db]) => {
+        MAPA.enllacos.forEach(([a, b]) => {
             const na = nodeDe(a), nb = nodeDe(b);
             if (!na || !nb || (!na.v && !nb.v)) return;
-            const pts = tracat(na, nb, da, db);
-            if (na.v && nb.v) { g.lineStyle(9, 0x000000, 0.55).strokePoints(pts.map(p => ({ x: p.x, y: p.y + 2 }))); g.lineStyle(5, 0xb09a74, 1).strokePoints(pts); }
-            else {                                                       // camí a un lloc encara per explorar: puntejat
+            const pts = tracat(na, nb);
+            const secret = a === 'ZonaPassadis' || b === 'ZonaPassadis';
+            if (na.v && nb.v && !secret) { g.lineStyle(14, 0x000000, 0.6).strokePoints(pts.map(p => ({ x: p.x, y: p.y + 2 }))); g.lineStyle(9, 0xc4ad82, 1).strokePoints(pts); }
+            else {                                                       // camí secret o a un lloc encara per explorar: puntejat
                 const corba = new Phaser.Curves.Spline(pts.map(p => new Phaser.Math.Vector2(p.x, p.y)));
-                const n = Math.max(2, Math.floor(corba.getLength() / 22));
-                g.fillStyle(0x8a7a62, 0.95);
-                corba.getSpacedPoints(n).slice(1, -1).forEach(p => g.fillCircle(p.x, p.y, 3.5));
+                const n = Math.max(2, Math.floor(corba.getLength() / 18));
+                g.fillStyle(secret ? 0xa888e8 : 0x8a7a62, 0.95);
+                corba.getSpacedPoints(n).slice(secret ? 0 : 1, secret ? undefined : -1).forEach(p => g.fillCircle(p.x, p.y, 4));
             }
         });
 
@@ -195,7 +215,9 @@ const MAPA = {
         nodes.forEach(n => {
             const { x, y, w, h } = n;
             if (n.v) trobats++;
-            const [fons, vora] = n.v ? MAPA.COLORS[n.t] : [0x1c1712, 0x5a4a3a];
+            const rc = n.reg ? n.reg.color : 0x8a7a62;                  // la fitxa pren el color de la seva regió
+            const fosc = (c, k) => ((((c >> 16) & 255) * k) << 16) | ((((c >> 8) & 255) * k) << 8) | ((c & 255) * k);
+            const [fons, vora] = n.v ? [fosc(rc, 0.42) & 0xffffff, rc] : [0x1c1712, 0x5a4a3a];
             const f = add(scene.add.graphics(), mon);
             const forma = (dx = 0, dy = 0, ww = w, hh = h) => {
                 if (n.t === 'sota' && n.v) { const c = 10, x0 = x - ww / 2 + dx, y0 = y - hh / 2 + dy, x1 = x0 + ww, y1 = y0 + hh; return [{ x: x0 + c, y: y0 }, { x: x1 - c, y: y0 }, { x: x1, y: y0 + c }, { x: x1, y: y1 - c }, { x: x1 - c, y: y1 }, { x: x0 + c, y: y1 }, { x: x0, y: y1 - c }, { x: x0, y: y0 + c }]; }
@@ -211,7 +233,7 @@ const MAPA = {
             if (n.v) { f.lineStyle(1.5, vora, 0.35); if (!poli) f.strokeRoundedRect(x - w / 2 + 6, y - h / 2 + 6, w - 12, h - 12, 7); }
             if (!n.v) add(scene.add.text(x, y, '?', estilText(28, '#8a7a68', { fontStyle: 'bold' })).setOrigin(0.5), mon);
             else {
-                const t = add(scene.add.text(x, y + h / 2 + 6, n.z.nom, estilText(22, n.ara ? '#ffe9a8' : '#efe3c4', { fontStyle: 'bold', align: 'center', wordWrap: { width: 200 }, stroke: '#0b0805', strokeThickness: 6, lineSpacing: -2 })).setOrigin(0.5, 0), mon);
+                const t = add(scene.add.text(x, y, n.z.nom, estilText(18, n.ara ? '#ffe9a8' : '#f4ead0', { fontStyle: 'bold', align: 'center', wordWrap: { width: w - 16 }, stroke: '#0b0805', strokeThickness: 4, lineSpacing: -3 })).setOrigin(0.5), mon);
                 if (!n.ara) etiquetesLloc.push(t);
             }
             if (n.ara) {                                                // halo daurat que batega i xinxeta que bota
@@ -256,12 +278,12 @@ const MAPA = {
         add(scene.add.rectangle(X0 + 2, baix - 46, VW - 4, 44, 0x000000, 1).setOrigin(0));
         const ly = baix - 24;
         let lx = X0 + 14;
-        [['■', '#6ac09a', 'Fora'], ['■', '#d8a868', 'Dins'], ['■', '#a888e8', 'Sota terra'], ['★', '#ff7a4a', 'Objectiu'], ['!', '#7ab8ff', 'Encàrrec'], ['?', '#8a7a68', 'Per explorar']].forEach(([s, col, t]) => {
+        [['★', '#ff7a4a', 'Objectiu'], ['!', '#7ab8ff', 'Encàrrec'], ['?', '#8a7a68', 'Per explorar']].forEach(([s, col, t]) => {
             const a = add(scene.add.text(lx, ly, s, estilText(20, col, { fontStyle: 'bold' })).setOrigin(0, 0.5));
             const b = add(scene.add.text(lx + a.width + 5, ly, t, estilText(17, '#c8b898')).setOrigin(0, 0.5));
             lx = b.x + b.width + 14;
         });
-        add(scene.add.text(X0 + 16, top + 12, `${trobats}/${MAPA.zones.length} llocs`, estilText(22, '#c8b898', { fontStyle: 'italic', stroke: '#0b0805', strokeThickness: 4 })).setDepth(2));
+        add(scene.add.text(X0 + 16, top + 12, `${trobats}/${Object.keys(MAPA.GRAELLA).length} llocs`, estilText(22, '#c8b898', { fontStyle: 'italic', stroke: '#0b0805', strokeThickness: 4 })).setDepth(2));
         const ajuda = add(scene.add.text(X0 + 16, top + 42, 'arrossega · pessiga o rodeta per fer zoom', estilText(17, '#a89878', { stroke: '#0b0805', strokeThickness: 3 })));
         anima({ targets: ajuda, alpha: 0, delay: 5000, duration: 800 });
         add(scene.add.rectangle(X0, top, VW, VH, 0, 0).setOrigin(0).setStrokeStyle(3, 0xb89a50, 0.9));
@@ -273,7 +295,7 @@ const MAPA = {
             V.cx = bx1 - bx0 <= 2 * mx ? (bx0 + bx1) / 2 : Math.min(bx1 - mx, Math.max(bx0 + mx, V.cx));
             V.cy = by1 - by0 <= 2 * my ? (by0 + by1) / 2 : Math.min(by1 - my, Math.max(by0 + my, V.cy));
             mon.setScale(V.z).setPosition(X0 + VW / 2 - V.cx * V.z, top + VH2 / 2 - V.cy * V.z);
-            etiquetesLloc.forEach(t => t.setVisible(V.z >= 0.6));
+            etiquetesLloc.forEach(t => t.setVisible(V.z >= 0.25));
             etiquetes.forEach(t => t.setAlpha(V.z > 1.2 ? 0.12 : 0.3));
         };
         const mon2 = p => ({ x: V.cx + (p.x - (X0 + VW / 2)) / V.z, y: V.cy + (p.y - (top + VH2 / 2)) / V.z });

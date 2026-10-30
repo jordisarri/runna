@@ -66,7 +66,7 @@ function esDialegBuit(dialeg) {
 }
 
 // Les bestioles que es ressalten als llocs foscos (ZonaBase.ressaltarEnemics)
-const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'ratpenat'];
+const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'ratpenat', 'ferralla'];
 
 const PAS_PORTA = 44;       // en passar una porta (o qualsevol sortida), l'Ineu camina aquests píxels més cap a la foscor abans de canviar d'escena, i en arribar en camina altres tants cap endins
 const MS_PAS_PORTA = 450;
@@ -157,11 +157,25 @@ class ZonaBase extends Phaser.Scene {
         Estat.desar();
 
         if (this.enEntrar) this.enEntrar();
+        this.curaSagrada();
         if (this.dadesEntrada.entrada && !this.dadesEntrada.restaurar && !Estat.caigut && !this.entradaPropia) this.pasEntrada(this.posEntrada);
         if (Estat.caigut) {
             Estat.caigut = false;
             this.despertarCaigut();
         }
+    }
+
+    // Benedicció fraterna: en entrar a un lloc sagrat, cura del tot (un sol cop fins que se surt a un lloc que no ho sigui)
+    curaSagrada() {
+        const sagrat = ['ZonaErmitaInt', 'ZonaGabrielInt', 'ZonaEsglesia', 'ZonaMonestirRebedor', 'ZonaBiblioteca'].includes(this.scene.key);
+        if (!sagrat) { Estat.sagratCurat = false; return; }
+        if (Estat.sagratCurat || !Estat.te('benedicio_fraterna')) return;
+        Estat.sagratCurat = true;
+        const d = Estat.dades;
+        if (d.vida >= d.corsMax * 2) return;
+        d.vida = d.corsMax * 2;
+        const ui = this.ui(); ui.actualitzarHUD(); ui.missatge('La benedicció fraterna et cura');
+        Sfx.cura();
     }
 
     // Després d'una derrota: l'Ineu a terra, i de cop el Pare Jordi agenollat al seu costat; en tancar el diàleg l'Ineu s'aixeca
@@ -179,11 +193,14 @@ class ZonaBase extends Phaser.Scene {
         this.canviant = true;
         this.time.delayedCall(1300, () => {
             terra.setTexture('jordi_desperta');
+            this.despertarImg = terra;
             ui.obrirDialeg(dialeg, () => {
+                this.despertarImg = null;
                 terra.destroy();
                 veu.forEach(o => o.setVisible(true));
-                this.canviant = false;
+                this.canviant = false;           // (el cicle torna a córrer i la càmera del diàleg es restableix sola)
             });
+            this.camaraDialeg(true);             // el cicle no corre mentre dura aquesta escena: cal buscar-hi la càmera aquí, perquè el diàleg no tapi el Pare Jordi
         });
     }
 
@@ -437,9 +454,9 @@ class ZonaBase extends Phaser.Scene {
             }
             if (!e.llumTerra) {
                 if (e.spr.preFX && !e.glow) e.glow = e.spr.preFX.addGlow(0xffc070, 4, 0, false, 0.1, 10);
-                e.llumTerra = this.add.ellipse(0, 0, 90, 44, 0xffb060, 0.22).setBlendMode('ADD');
+                e.llumTerra = this.add.ellipse(0, 0, 110, 54, 0xffb060, 0.3).setBlendMode('ADD');
             }
-            e.llumTerra.setPosition(e.spr.x, e.spr.y - 4).setDepth(f === 'total' ? 85001 : e.spr.depth - 1).setAlpha(e.spr.alpha * (f === 'total' ? 0.3 : 0.22));
+            e.llumTerra.setPosition(e.spr.x, e.spr.y - 4).setDepth(f === 'total' ? 85001 : e.spr.depth - 1).setAlpha(e.spr.alpha * (f === 'total' ? 0.35 : 0.3));
         });
     }
     // Dins d'una pàgina d'acció: es queda així fins que el jugador prem (ESPAI, ENTER o un toc), com per passar una pàgina
@@ -887,43 +904,53 @@ class ZonaBase extends Phaser.Scene {
         return o;
     }
 
-    // Roca que l'Ineu empeny de debò cap a (dx, dy) per descobrir el que hi ha a sota: s'hi ha de posar a l'altra banda
-    // i caminar contra ella. ESPAI només l'examina (i diu cap on s'ha d'empènyer).
-    pedraMobil(x, y, id, dx, dy, textPista) {
-        const mogut = Estat.flag('pedra_' + id);
-        const dist = Math.hypot(dx, dy);
-        const o = { id, mogut, x: x + (mogut ? dx : 0), y: y + (mogut ? dy : 0), ux: dx / dist, uy: dy / dist, dist, fet: 0, empenta: 0 };
+    // Roca que l'Ineu empeny de debò, des de qualsevol costat (dalt, baix, esquerra o dreta), per descobrir el que hi ha a sota:
+    // s'hi ha de posar a un costat i caminar contra ella; ella s'aparta 'dist' píxels cap a l'altra banda. ESPAI només l'examina.
+    // El costat per on s'ha empès es desa al flag ('E', 'O', 'S' o 'N') perquè en tornar-hi la roca sigui on l'has deixada.
+    pedraMobil(x, y, id, dist, extra, textPista) {
+        const flag = Estat.dades.flags['pedra_' + id];
+        const DIR = { E: [1, 0], O: [-1, 0], S: [0, 1], N: [0, -1] };
+        const d0 = DIR[flag] || [1, 0];                                   // les partides velles només guardaven «true»: la roca era a la dreta
+        const mogut = !!flag;
+        const o = { id, mogut, x: x + (mogut ? d0[0] * dist : 0), y: y + (mogut ? d0[1] * dist : 0), dist, fet: 0, empenta: 0, dir: null };
         o.img = this.posar('roca', o.x, o.y);
         o.col = this.colisio(o.x, o.y - 13, 70, 26);
         if (!mogut) {
-            const cap = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'la dreta' : "l'esquerra") : (dy > 0 ? 'avall' : 'amunt');
-            this.interactiu(x, y + 24, RADI_OBJECTE, { pagines: [{ qui: 'Ineu', text: '(Si m\'hi recolzo i l\'empenyo cap a ' + cap + ', potser cedirà.)' }] },
+            this.interactiu(x, y + 24, RADI_OBJECTE, { pagines: [{ qui: 'Ineu', text: "(Si m'hi recolzo i l'empenyo, potser cedirà.)" }] },
                 { altura: 70, actiu: () => !o.mogut });
             (this.pedresMobils = this.pedresMobils || []).push(o);
         }
         return o;
     }
 
-    // Cada fotograma: si l'Ineu toca la roca pel costat de darrere i camina cap on s'ha d'empènyer, la roca avança a poc a poc
+    // Cada fotograma: si l'Ineu toca la roca per un costat i camina contra ella, la roca avança a poc a poc cap a l'altre costat
     actualitzarPedres(delta) {
         if (!this.pedresMobils) return;
-        const b = this.ineu.body, v = b.velocity;
+        const b = this.ineu.body, v = b.velocity, V = VELOCITAT_INEU * 0.5, M = 10;
         this.pedresMobils.forEach(o => {
             if (o.mogut) return;
-            const c = o.col.body, M = 10;
-            const toca = o.ux ? (o.ux > 0 ? Math.abs(b.right - c.left) < M : Math.abs(b.left - c.right) < M) && b.bottom > c.top + 2 && b.top < c.bottom - 2
-                              : (o.uy > 0 ? Math.abs(b.bottom - c.top) < M : Math.abs(b.top - c.bottom) < M) && b.right > c.left + 4 && b.left < c.right - 4;
-            const empeny = toca && (v.x * o.ux + v.y * o.uy) > VELOCITAT_INEU * 0.5;
+            const c = o.col.body;
+            const entreY = b.bottom > c.top + 2 && b.top < c.bottom - 2, entreX = b.right > c.left + 4 && b.left < c.right - 4;
+            let dir = null;
+            if (o.dir) dir = o.dir;                                         // un cop començada, segueix cap a la mateixa banda
+            else if (entreY && Math.abs(b.right - c.left) < M && v.x > V) dir = { c: 'E', x: 1, y: 0 };
+            else if (entreY && Math.abs(b.left - c.right) < M && v.x < -V) dir = { c: 'O', x: -1, y: 0 };
+            else if (entreX && Math.abs(b.bottom - c.top) < M && v.y > V) dir = { c: 'S', x: 0, y: 1 };
+            else if (entreX && Math.abs(b.top - c.bottom) < M && v.y < -V) dir = { c: 'N', x: 0, y: -1 };
+            const toca = !!dir && (o.dir ? (o.dir.x ? entreY && Math.abs((o.dir.x > 0 ? b.right - c.left : b.left - c.right)) < M : entreX && Math.abs((o.dir.y > 0 ? b.bottom - c.top : b.top - c.bottom)) < M) : true);
+            const empeny = toca && (v.x * dir.x + v.y * dir.y) > V;
             o.empenta = empeny ? o.empenta + delta : 0;
+            if (!empeny && o.fet === 0) o.dir = null;
             if (o.empenta < 220) return;                                    // primer s'hi recolza una mica
+            o.dir = dir;
             const pas = Math.min(o.dist - o.fet, 75 * delta / 1000);
             o.fet += pas;
-            o.img.x += o.ux * pas; o.img.y += o.uy * pas; o.img.setDepth(o.img.y);
+            o.img.x += dir.x * pas; o.img.y += dir.y * pas; o.img.setDepth(o.img.y);
             o.col.setPosition(o.img.x, o.img.y - 13); c.updateFromGameObject();
             if (this.time.now > (o.proxSo || 0)) { o.proxSo = this.time.now + 260; Sfx.pas(true); this.cameras.main.shake(80, 0.0015); }
             if (o.fet >= o.dist - 0.5) {
                 o.mogut = true;
-                Estat.posaFlag('pedra_' + o.id);
+                Estat.posaFlag('pedra_' + o.id, dir.c);
                 Sfx.secret();
                 Estat.desar();
             }
@@ -1030,6 +1057,7 @@ class ZonaBase extends Phaser.Scene {
             if (this.camDialeg) return;
             const p = this.dialegDePunt ? this.puntActiu : null;
             const cossos = [this.ineu];
+            if (this.despertarImg && this.despertarImg.active) cossos.push(this.despertarImg);       // el dibuix gran del despertar, que no es pot tapar
             if (p && p.npc && p.npc.active && p.npc.visible) cossos.push(p.npc);
             const TOP = ALT_HUD + 8;                                    // sota el HUD
             const LIM = ALT - 420;                                      // sobre la cinta del nom (la caixa comença a ALT-370)
@@ -1259,7 +1287,10 @@ class ZonaBase extends Phaser.Scene {
             const vol = c.left.isDown || c.right.isDown || c.up.isDown || c.down.isDown ||
                 t.A.isDown || t.D.isDown || t.W.isDown || t.S.isDown || Math.hypot(ui.vectorTactil.x, ui.vectorTactil.y) > 0.15;
             if (!vol) { this.ineu.body.setVelocity(0); return; }
-            this.alcar();
+            // Cap a on vol anar el jugador: s'aixeca pel costat on mira, no pel de darrere el banc
+            const vx = (c.right.isDown || t.D.isDown ? 1 : 0) - (c.left.isDown || t.A.isDown ? 1 : 0) + ui.vectorTactil.x;
+            const vy = (c.down.isDown || t.S.isDown ? 1 : 0) - (c.up.isDown || t.W.isDown ? 1 : 0) + ui.vectorTactil.y;
+            this.alcar(Math.abs(vy) >= Math.abs(vx) ? (vy < 0 ? 'amunt' : 'avall') : (vx < 0 ? 'esquerra' : 'dreta'));
         }
         // Empenta forçada (retrocés quan et fan mal): el jugador no la controla
         if (this.forcat && this.time.now < this.forcat.fins) {
