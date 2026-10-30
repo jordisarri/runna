@@ -147,7 +147,11 @@ const PROGRES = {
         { id: 'monges', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'mongesTrobades'], obert: E => E.flag('isidreSansa'), fet: E => E.flag('mongesTrobades'),
           pista: E => !E.flag('llavorSansa') && !E.flag('llosaOberta') ? "Pregunta a la gent de les Cel·les, al nord-est: potser en saben alguna cosa més de la llosa del jardí de l'Hostatgeria."
               : !E.flag('llosaOberta') ? "La Llavor de Lluna és per a l'Isidre, al jardí de l'Hostatgeria."
-              : "Sota la llosa del jardí de l'Hostatgeria hi ha un soterrani que puja a les cambres de les sacerdotesses. Per alliberar-les et caldran un cant antic, uns guants i Runna." },
+              : "Sota la llosa del jardí de l'Hostatgeria hi ha un soterrani que puja a les cambres de les sacerdotesses." + [
+                  !E.flag('lliurePains') ? " La Pains dorm al dormitori: un cant antic la pot despertar." : '',
+                  !E.flag('refetorObert') ? " Una taula molt pesant barra la porta del refetor: et caldran uns guants." : '',
+                  !(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? " A la capella del fons, la Charm és tancada darrere uns esbarzers negres: només Runna els talla." : ''
+              ].join('') },
         { id: 'carruatge', marca: ['carruatgeObert'], obert: E => E.flag('epilegFet'), fet: E => E.flag('carruatgeObert'),
           pista: E => "L'Home del Carruatge Verd, a l'Era, deia que obriria el carruatge quan la boira marxés del tot." }
     ],

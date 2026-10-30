@@ -969,6 +969,8 @@ const DIALEGS = {
                 { qui: 'Pains', text: 'Oh, mon petit! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Pains.' },
                 { qui: 'Pains', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb abric d\'ocells que s\'enduia els nens del poble, rient baixet.' },
                 { qui: 'Pains', text: 'Si passes pel jardí, saluda l\'Isidre, el marit de la nostra germana. Un bon home, amb el cor malmès des que ens va faltar el petit.' },
+                ...(!(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? [{ qui: 'Pains', text: 'La Charm, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d\'aquests que no els talla ni la falç. Diuen que només cedeixen davant d\'una espasa de llum.'
+                    + (E.te('runna') ? ' Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho.' : '') }] : []),
                 { qui: 'Pains', text: 'Vés amb compte, fill. El rosari d\'aquesta casa és vell i fort: que et guardi.' },
                 ...(ultimaMonja('Pains') ? [avisPremiMonja('Pains')] : [])
             ],
