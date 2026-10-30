@@ -28,6 +28,7 @@ const Proves = {
         PROGRES.passos.slice(0, fins).forEach(p => marca(p.marca));
         if (laterals) PROGRES.laterals.forEach(l => marca(l.marca));
         if (Estat.flag('bastoObtingut')) { Estat.posaFlag('tutorialCombat'); Estat.posaFlag('combatActiu'); }
+        PARADES.forEach(pd => Estat.posaFlag('parada_' + pd.id));                                 // a proves, totes les parades del carruatge ja conegudes
         Estat.dades.corsMax = Math.min(8, 3 + Math.floor(fins / 8) + (laterals ? 3 : 0));        // aproximadament els grans que hi hauria
         Estat.dades.vida = Estat.dades.corsMax * 2;
         const p = PROGRES.passos[fins];
