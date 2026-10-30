@@ -8,7 +8,7 @@ from collections import deque
 from PIL import Image, ImageFilter
 
 ARREL = Path(__file__).resolve().parent.parent
-AMPLADA = 115 * 2
+AMPLADA = 190 * 2
 LLINDAR = 228
 BLANC_PUR = 238          # forats tancats: blanc gairebé pur
 FORAT_MIN = 2500         # i prou grans (en píxels de l'original), perquè no es buidin els reflexos
