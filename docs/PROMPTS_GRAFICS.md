@@ -777,4 +777,4 @@ Usa el prompt genèric dels retrats (secció «Retrats dels diàlegs») amb l'sp
 Character: the Man of the Green Tartana, a short, thin, slightly hunched old man, completely bald on top with tufts of messy grey hair over his very big ears, a big round red nose, bushy grey eyebrows, small lively eyes and a cheeky, warm grin with deep smile wrinkles; a dark green frock coat with the collar turned up over a lighter green waistcoat and a pale green shirt, a pair of brass steampunk driving goggles with round dark-green lenses hanging around his neck. No hat, no glasses on his face. NOTE: in the reference he faces the viewer's LEFT; in the portrait he must face the viewer's RIGHT.
 ```
 
-Quan el tinguis a `art/retrats/`, afegeix `home_carruatge:'home_carruatge'` a la taula de `eines/convertir_retrats.js`, la clau `'home_carruatge'` a la llista de retrats de `js/assets.js` i executa `node eines/convertir_retrats.js`.
+**Ja aplicat al joc:** l'original és a `art/retrats/home_carruatge_retrat.jpg` i convertit a `assets/retrats/home_carruatge.webp` (`node eines/convertir_retrats.js home_carruatge`).

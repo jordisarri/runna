@@ -1,6 +1,6 @@
 /**
  * Converteix els retrats de art/retrats/<nom>_retrat.jpg a WebP transparent retallat (max. 340 px) a assets/retrats/<clau>.webp.
- *   node eines/convertir_retrats.js     (cal tenir "sharp" instal·lat)
+ *   node eines/convertir_retrats.js [fitxer ...]    (cal tenir "sharp" instal·lat; amb noms, només converteix aquells)
  * La taula MAPA diu a quina clau del joc correspon cada fitxer.
  */
 const fs=require('fs'),vm=require('vm');
@@ -10,9 +10,11 @@ const font=fs.readFileSync(A+'/js/assets.js','utf8');
 const ctx={};
 vm.runInNewContext(font.slice(font.indexOf('function treureFonsBlanc'),font.indexOf('// ---------- Dibuixos provisionals'))+'; this.f = treureFonsBlanc;',ctx);
 // fitxer (sense _retrat.jpg) -> clau del sprite
-const MAPA={charm:'monja_charm',eva:'eva',frederic:'frederic',garf:'garf',germaandreu:'germa_andreu',germafrancesc:'germa_francesc',ineu:'ineu',isidre:'isidre',jaumeta:'jaumeta',josep:'josep',nena_trenes:'nena_trenes',pains:'monja_pains',parealcui:'pare_alcui',paredaniel:'pare_daniel',parejordi:'pare_jordi',pastor_a:'pastor_a',pastor_b:'pastor_b',pastor_vell:'pastor_vell',phili:'monja_phili',pianista:'pianista',siscu:'ciscu',juli:'juli',tiller:'tiller',carry:'carry',venerables:'venerables',pastor_boira:'pastor_boira'};
+const MAPA={charm:'monja_charm',eva:'eva',frederic:'frederic',garf:'garf',germaandreu:'germa_andreu',germafrancesc:'germa_francesc',ineu:'ineu',isidre:'isidre',jaumeta:'jaumeta',josep:'josep',nena_trenes:'nena_trenes',pains:'monja_pains',parealcui:'pare_alcui',paredaniel:'pare_daniel',parejordi:'pare_jordi',pastor_a:'pastor_a',pastor_b:'pastor_b',pastor_vell:'pastor_vell',phili:'monja_phili',pianista:'pianista',siscu:'ciscu',juli:'juli',tiller:'tiller',carry:'carry',venerables:'venerables',pastor_boira:'pastor_boira',home_carruatge:'home_carruatge'};
 (async()=>{
+ const nomes=process.argv.slice(2);
  for(const [f,k] of Object.entries(MAPA)){
+  if(nomes.length && !nomes.includes(f)) continue;
   const src=A+'/art/retrats/'+f+'_retrat.jpg';
   const {data,info}=await sharp(src).ensureAlpha().raw().toBuffer({resolveWithObject:true});
   ctx.f(data,info.width,info.height);
