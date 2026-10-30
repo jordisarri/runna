@@ -24,7 +24,7 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat q
 | **La Pianista** | Santuari | Ensenya els **cants** (Aurora, Pedres, Miracle). |
 | **Pare Daniel** | Santuari | Dirigeix el cor; rialler. |
 | **Germà Francesc** | Viu al Monestir; passeja per Sant Antoni | Monjo vell, prim i alt, amb una llarga barba blanca. Cuida les flors de la tomba de l'àngel del Cementiri; si li fas el favor de portar-hi el seu ram, et dona els **Guants de Poder** (els dels picapedrers dels monjos), que mouen la roda del Celler. |
-| **El Jordi de la Caseta** | La Caseta, a l'oest del Til·ler | Pagès eixerit, sempre al jardí: té la **Maneta** de ferro amagada al cofre de les joguines, dins la caseta aixecada sobre pals; et deixa agafar-la. |
+| **En Jordi de la Caseta** | La Caseta, a l'oest del Til·ler | Un nen eixerit que juga sempre al jardí. La caseta aixecada sobre pals i el cofre de joguines són seus: hi té la **Maneta** de ferro amagada i ningú no hi toca (crida «MAI! MAI!»), però a l'Ineu, per una cosa seriosa, el deixa agafar-la. Es diu *en Jordi de la Caseta* (no «el de la Caseta»). |
 | **El Gran Til·ler** | Gran Til·ler | Esperit savi: dona la **Fulla** (permís) i el **bastó**. |
 | **Germà Andreu** | Plaça, Cirosa, Gàbia | Antagonista: **servent i admirador de l'Ocellaire**, simpàtic en aparença i dolent de debò; mini-boss «Pastor de Boira»; a la Gàbia crida el seu Mestre i, al final, s'hi queda tancat. |
 | **L'Ocellaire** | Sala de la Gàbia | Boss final: hàbit de monjo negre i esparracat **lligat amb cadenes**, **calb**, amb els **ulls lila que brillen**, una gàbia petita al cinturó i un **bàcul** que fa girar per invocar **ocells de foc**. |

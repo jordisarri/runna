@@ -778,7 +778,10 @@ class ZonaJordi extends ZonaBase {
         this.npc('jordi_caseta', 560, 590, DIALEGS.jordiCaseta);
 
         // La caseta, aixecada sobre pilars de fusta: s'hi puja per l'escala del mig (la maneta és a dins)
-        const caseta = this.edifici('caseta_joc', 860, 500, 250, 64, 'ZonaCasetaJoc', 'porta', { alt: 80 });
+        // L'escala es puja caminant (paret a banda i banda i el dintell dalt, a l'altura de la terrassa); l'entrada a l'interior és dalt,
+        // davant de la porta, no al peu de l'escala: allà és on hi ha la llum de la sortida
+        const caseta = this.edifici('caseta_joc', 860, 500, 250, 64, null, null, { alt: 140 });
+        this.sortida(860 - 32, 370, 64, 26, 'ZonaCasetaJoc', 'porta');
         const kT = 500 - caseta.displayHeight;      // la porta és a la terrassa, damunt dels pilars: s'obre quan l'Ineu s'acosta a l'escala
         this.portaAnimada({ x: 860, top: kT + caseta.displayHeight * 0.27 + 10, bottom: kT + caseta.displayHeight * 0.6 - 5, ample: caseta.displayWidth * 0.18, fons: 480, unic: true, retall: caseta });
 
@@ -791,6 +794,17 @@ class ZonaJordi extends ZonaBase {
 
         this.arbres([[80, 180], [250, 120], [600, 100], [1040, 160], [90, 680], [250, 760], [850, 760], [1040, 760]]);
         this.sortida(1086, 510, 14, 130, 'ZonaTiller', 'jordi');
+    }
+
+    // A l'escala de la caseta l'Ineu es veu per sobre de la façana (si no, el gràfic el tapa mentre puja)
+    actualitzar() {
+        const I = this.ineu;
+        this.enEscala = !!I && I.x > 826 && I.x < 894 && I.y < 504 && I.y > 360;
+        if (this.enEscala) { I.setDepth(481); if (this.ombraIneu) this.ombraIneu.setDepth(480.5); }
+    }
+    sincroFantasma() {
+        super.sincroFantasma();
+        if (this.enEscala && this.fantasma) this.fantasma.setAlpha(0);        // a l'escala es veu de debò, no per transparència
     }
 }
 
@@ -899,19 +913,56 @@ class ZonaCasetaJoc extends ZonaBase {
         murs.lineStyle(2, 0x8a5a20, 0.5); for (let x = 74; x < 580; x += 16) murs.lineBetween(x, 6, x, 124);
         murs.fillStyle(0xd86a5a, 1).fillRect(60, 124, 520, 10);
         murs.fillStyle(0x4a7a98, 1).fillRect(30, 0, 30, 520).fillRect(580, 0, 30, 520);
+        // Paret de baix amb la porta al mig (x 280-360): el terra acaba a y 480 i la paret es veu i es toca des d'allà
+        murs.fillStyle(0xe8c860, 1).fillRect(60, 480, 520, 40);
+        murs.lineStyle(2, 0x8a5a20, 0.5); for (let x = 74; x < 580; x += 16) murs.lineBetween(x, 484, x, 518);
+        murs.fillStyle(0xd86a5a, 1).fillRect(60, 480, 520, 6);
+        murs.fillStyle(0x2a1a0c, 1).fillRect(280, 480, 80, 40);                                   // la porta, oberta
+        murs.fillStyle(0xffd38a, 0.35).fillRect(284, 486, 72, 34);
+        murs.lineStyle(5, 0x5a3a1e, 1).strokeRect(280, 480, 80, 40);
         this.colisio(30, 260, 60, 520);
         this.colisio(610, 260, 60, 520);
-        this.colisio(320, 60, 640, 120);
-        this.colisio(160, 510, 200, 20);
-        this.colisio(480, 510, 200, 20);
+        this.colisio(320, 65, 640, 130);                                                          // la paret del fons (pintada fins a y 130)
+        this.colisio(170, 500, 220, 40);
+        this.colisio(470, 500, 220, 40);
 
-        // Dibuixos d'infant penjats a la paret i una finestreta
-        const dib = this.add.graphics().setDepth(-980);
-        [[110, 20, 0xd8434a], [200, 28, 0x4aa0d0], [450, 20, 0x6ab04a], [530, 30, 0xf0b040]].forEach(([x, y, col]) => {
-            dib.fillStyle(0xfff6e0, 1).fillRect(x, y, 50, 40).lineStyle(2, 0x3a2410, 1).strokeRect(x, y, 50, 40);
-            dib.fillStyle(col, 1).fillCircle(x + 25, y + 20, 11);
+        // Dos dibuixos d'infant penjats a la paret, a banda i banda de la finestreta, fets amb ceres: la família davant de casa i un arc de Sant Martí
+        const paper = (x, y, w, h, rot, pinta) => {
+            const g = this.add.graphics().setDepth(-980).setPosition(x + w / 2, y + h / 2).setRotation(rot);
+            g.fillStyle(0xfff6e0, 1).fillRect(-w / 2, -h / 2, w, h).lineStyle(2, 0x3a2410, 1).strokeRect(-w / 2, -h / 2, w, h);
+            g.fillStyle(0xe8c8a0, 0.9).fillRect(-9, -h / 2 - 4, 18, 9).fillRect(-9, h / 2 - 5, 18, 9);       // cinta adhesiva
+            pinta(g, w, h);
+        };
+        const cera = (g, col, gruix) => g.lineStyle(gruix, col, 1);
+        // 1. «La meva família»: sol amb cara, casa de teulada vermella, tres figures de pals de mides diferents, herba i una flor
+        paper(112, 14, 78, 62, -0.04, (g, w, h) => {
+            g.fillStyle(0xffd23a, 1).fillCircle(-24, -16, 9);
+            cera(g, 0xffa81a, 2); for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; g.lineBetween(-24 + Math.cos(a) * 12, -16 + Math.sin(a) * 12, -24 + Math.cos(a) * 18, -16 + Math.sin(a) * 18); }
+            g.fillStyle(0x3a2410, 1).fillCircle(-27, -18, 1.2).fillCircle(-21, -18, 1.2); cera(g, 0x3a2410, 1.2); g.beginPath(); g.arc(-24, -14, 4, 0.2, Math.PI - 0.2); g.strokePath();
+            g.fillStyle(0xe8603a, 1).fillRect(2, -2, 22, 18).fillStyle(0x9a3a2a, 1).fillTriangle(0, -2, 26, -2, 13, -16);
+            g.fillStyle(0x4aa0d0, 1).fillRect(6, 3, 6, 6).fillStyle(0x7a4a2a, 1).fillRect(15, 7, 5, 9);
+            g.fillStyle(0x6ab04a, 1).fillRect(-w / 2 + 3, h / 2 - 14, w - 6, 11);
+            [[-28, 4, 1], [-16, 6, 0.8], [-4, 8, 0.55]].forEach(([x, y, e]) => {                              // pare, mare i nen (de pals)
+                cera(g, 0x2a2a6a, 1.6); g.strokeCircle(x, y - 14 * e, 4 * e); g.lineBetween(x, y - 10 * e, x, y + 4 * e);
+                g.lineBetween(x - 6 * e, y - 5 * e, x + 6 * e, y - 5 * e); g.lineBetween(x, y + 4 * e, x - 4 * e, y + 12 * e); g.lineBetween(x, y + 4 * e, x + 4 * e, y + 12 * e);
+            });
+            g.fillStyle(0xe84a8a, 1).fillCircle(28, h / 2 - 10, 3).lineStyle(1.5, 0x3a7a2a, 1).lineBetween(28, h / 2 - 7, 28, h / 2 - 2);
         });
-        dib.fillStyle(0x9ad0e8, 1).fillRect(290, 22, 60, 50).lineStyle(4, 0x5a3a1e, 1).strokeRect(290, 22, 60, 50).lineBetween(320, 22, 320, 72);
+        // 2. «El meu gat al Sant Martí»: un arc de set colors (el nen no sap comptar-los i en fa cinc), un núvol i un gat taronja amb bigotis
+        paper(448, 18, 78, 62, 0.05, (g, w, h) => {
+            ['#e8463a', '#f08a2a', '#ffd23a', '#6ab04a', '#4aa0d0'].forEach((c, i) => {
+                g.lineStyle(3, Phaser.Display.Color.HexStringToColor(c).color, 1); g.beginPath(); g.arc(0, 10, 28 - i * 4, Math.PI, 0); g.strokePath();
+            });
+            g.fillStyle(0xffffff, 1).lineStyle(1.6, 0x6a8ab0, 1);
+            [[-30, 10, 8], [-23, 8, 6], [-35, 12, 5]].forEach(([x, y, r]) => { g.fillCircle(x, y, r); g.strokeCircle(x, y, r); });
+            [[30, 10, 8], [23, 8, 6], [35, 12, 5]].forEach(([x, y, r]) => { g.fillCircle(x, y, r); g.strokeCircle(x, y, r); });
+            g.fillStyle(0xf0902a, 1).fillCircle(0, 16, 9).fillTriangle(-9, 10, -4, 3, -2, 10).fillTriangle(9, 10, 4, 3, 2, 10);      // el gat: cap amb dues orelles
+            g.fillStyle(0x3a2410, 1).fillCircle(-3.5, 15, 1.3).fillCircle(3.5, 15, 1.3).fillStyle(0xe8607a, 1).fillCircle(0, 18, 1.2);
+            cera(g, 0x3a2410, 1); g.lineBetween(-5, 18, -13, 16).lineBetween(-5, 19, -13, 20).lineBetween(5, 18, 13, 16).lineBetween(5, 19, 13, 20);
+            g.fillStyle(0xffd23a, 1); for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3 - Math.PI / 2; g.fillTriangle(0, -26, 4, -22, -4, -22); }   // un estel gran a dalt
+        });
+        const fin = this.add.graphics().setDepth(-980);
+        fin.fillStyle(0x9ad0e8, 1).fillRect(290, 22, 60, 50).lineStyle(4, 0x5a3a1e, 1).strokeRect(290, 22, 60, 50).lineBetween(320, 22, 320, 72);
 
         // Catifa i joguines: taula i tamborets de la mida d'un nen, un cavallet i el cofre dels tresors
         const catifa = this.add.graphics().setDepth(-950);
@@ -920,8 +971,6 @@ class ZonaCasetaJoc extends ZonaBase {
         this.posar('taula', 320, 330, { escala: 0.7, col: { w: 110, h: 22 } });
         this.posar('tamboret', 240, 360, { escala: 0.7, col: { w: 28, h: 12 } });
         this.posar('tamboret', 400, 360, { escala: 0.7, col: { w: 28, h: 12 } });
-        this.posar('barril', 110, 220, { escala: 0.8, col: { w: 40, h: 18 } });
-        this.posar('llenya', 540, 400, { escala: 0.6, col: { w: 70, h: 20 } });
 
         // El cofre dels joguets, amb la maneta d'en Jordi a sota
         this.posar('cofre_joguines', 510, 222, { col: { w: 56, h: 20 } });

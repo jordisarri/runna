@@ -65,14 +65,15 @@ Object.assign(DIALEGS, {
             return { pagines: [{ qui: 'Jordi', text: "Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes." }] };
         }
         if (E.flag('jordiManeta')) {
-            return { pagines: [{ qui: 'Jordi', text: "La caseta és aquí al costat: puja per l'escala. Al cofre de les joguines, la maneta és a sota. Que no se't cansi el braç!" }] };
+            return { pagines: [{ qui: 'Jordi', text: "La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!" }] };
         }
         return {
             pagines: [
-                { qui: 'Jordi', text: "Ei, monjo! Sóc en Jordi, el de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
+                { qui: 'Jordi', text: "Ei, monjo! Sóc en Jordi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
                 { qui: 'Ineu', text: "Jordi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar." },
                 { qui: 'Jordi', text: "Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda." },
-                { qui: 'Jordi', text: "Però la vaig amagar dalt de la caseta dels nens, la que està aixecada sobre pals, al cofre de les joguines: ningú no la hi buscarà. Puja per l'escala, que la porta no té clau, i agafa-la." }
+                { qui: 'Jordi', text: "Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!" },
+                { qui: 'Jordi', text: "Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la." }
             ],
             enAcabar: () => {
                 E.posaFlag('jordiManeta');
