@@ -364,7 +364,6 @@ class ZonaTortura extends ZonaBase {
             o.halo = this.add.ellipse(x, 402, 110, 70, 0xb070ff, 0.5).setDepth(419).setBlendMode('ADD');
             this.tweens.add({ targets: o.halo, alpha: 0.1, yoyo: true, repeat: -1, duration: 900 + i * 110 });
         });
-        if (this.esbarzers.length) this.interactiu(450, 470, 300, DIALEGS.murEsbarzers, { altura: 70, actiu: () => this.esbarzers.some(o => o.viu) });
 
         // Boira lila que baixa de la Sala de la Gàbia
         this.boira(450, 200, 260, 60, 1.2);

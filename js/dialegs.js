@@ -960,15 +960,6 @@ const DIALEGS = {
         : { pagines: [
             { qui: 'Ineu', text: 'No la puc moure amb les mans soles. Ni dues persones... Necessito molta més força.' }] },
     // El mur d'esbarzers del passadís secret (Celler → Cambra secreta)
-    murEsbarzers: E => ({ pagines: E.te('runna') ? [
-        { qui: 'Ineu', text: "Runna els talla: situa't davant de cada un i ataca (ESPAI). Són cinc. Mata també les escolopendres, que després tornen." }
-    ] : [
-        { qui: 'Ineu', text: "Ni el bastó de pelegrí ni la branca del Til·ler no els tallen: només Runna. Primer cal despertar-la al Dolmen. Torna quan la tinguis." }
-    ] }),
-
-    esbarzersCapella: E => ({ pagines: [
-        { qui: 'Ineu', text: 'El bastó no els talla. Només Runna ho aconsegueix.' }] }),
-
     // ---------------- LES SACERDOTESSES DE L'HOSTATGERIA ----------------
     monjaPains: E => {
         if (!E.flag('lliurePains')) return { pagines: [

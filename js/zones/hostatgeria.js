@@ -234,7 +234,6 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         // Bloqueig de la capella (porta de la dreta): dues mates d'esbarzers negres, i un mur invisible al darrere perquè no es pugui vorejar
         this.esbarzer(880, 215, 'host_cap1'); this.esbarzer(924, 215, 'host_cap2');
         this.colCapella = this.colisio(902, 190, 190, 50);
-        this.interactiu(900, 255, RADI_OBJECTE, DIALEGS.esbarzersCapella, { altura: 90, actiu: () => this.esbarzers.some(o => o.viu) });
 
         // Escala que baixa al soterrani, arraconada a baix a l'esquerra, entre la paret i una barana de fusta:
         // els graons s'enfosqueixen cap a baix i no hi arriba la catifa
