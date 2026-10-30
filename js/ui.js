@@ -31,7 +31,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // El cap retallat del sprite del personatge: es fa una sola vegada i es desa com a textura 'retrat_<clau>'.
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
-    'Ineu': 'ineu', 'Pare Jordi': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Pastor de Boira': 'pastor_boira', 'Germà Francesc': 'germa_francesc', 'Pare Daniel': 'pare_daniel',
+    'Ineu': 'ineu', 'Pare Jordi': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Pastor de Boira': 'pastor_boira', 'Andreu, Pastor de Boira': 'pastor_boira', 'Germà Francesc': 'germa_francesc', 'Pare Daniel': 'pare_daniel',
     'Pare Alcuí': 'pare_alcui', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'July': 'juli', 'Garf': 'garf', 'Isidre': 'isidre',
     'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
