@@ -72,12 +72,12 @@ const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'ratpenat', 'ferra
 // parlant-hi la primera vegada la parada queda desbloquejada (flag parada_<id>) i després s'hi pot viatjar entre les desbloquejades.
 // c: peu del carruatge · h: l'home · a: on apareix l'Ineu en arribar
 const PARADES = [
-    { id: 'era',       zona: 'ZonaEra',        nom: "L'Era",              c: [260, 1230], h: [450, 1250], a: [450, 1170] },
+    { id: 'era',       zona: 'ZonaEra',        nom: "L'Era",              c: [260, 1230], h: [450, 1250],  a: [560, 1215] },
     { id: 'bassadoria', zona: 'ZonaCreu',      nom: 'La Bassadòria',      c: [250, 900],  h: [430, 915],  a: [540, 880] },
-    { id: 'celles',    zona: 'ZonaCelles',     nom: 'Les Cel·les',        c: [560, 960],  h: [740, 975],  a: [740, 880] },
-    { id: 'cirosa',    zona: 'ZonaCirosa',     nom: 'La Cirosa',          c: [1260, 1120], h: [1440, 1135], a: [1440, 1060] },
-    { id: 'santantoni', zona: 'ZonaSantAntoni', nom: 'Sant Antoni',       c: [260, 1010], h: [440, 1025], a: [440, 940] },
-    { id: 'diposits',  zona: 'ZonaDipositos',  nom: 'Els Dipòsits',       c: [300, 830],  h: [480, 845],  a: [480, 770] }
+    { id: 'celles',    zona: 'ZonaCelles',     nom: 'Les Cel·les',        c: [560, 960],  h: [740, 975],  a: [850, 940] },
+    { id: 'cirosa',    zona: 'ZonaCirosa',     nom: 'La Cirosa',          c: [1260, 1120], h: [1440, 1135],  a: [1550, 1100] },
+    { id: 'santantoni', zona: 'ZonaSantAntoni', nom: 'Sant Antoni',       c: [260, 1010], h: [440, 1025],  a: [550, 990] },
+    { id: 'diposits',  zona: 'ZonaDipositos',  nom: 'Els Dipòsits',       c: [300, 830],  h: [480, 845],  a: [590, 810] }
 ];
 
 const PAS_PORTA = 44;       // en passar una porta (o qualsevol sortida), l'Ineu camina aquests píxels més cap a la foscor abans de canviar d'escena, i en arribar en camina altres tants cap endins
@@ -227,7 +227,7 @@ class ZonaBase extends Phaser.Scene {
         const fx = cx - carro.displayWidth * 0.2, fy = cy - carro.displayHeight * 0.86;
         this.add.particles(fx, fy, 'boira', { speedY: { min: -30, max: -14 }, speedX: { min: 4, max: 14 }, lifespan: 1800, scale: { start: 0.25, end: 0.7 },
             alpha: { start: 0.45, end: 0 }, frequency: 650, tint: 0xffffff }).setDepth(cy + 1);
-        this.npc('home_carruatge', hx, hy, () => DIALEGS.cotxer(Estat, pd.id));
+        this.npc('home_carruatge', hx, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true });     // girat: mira cap a l'escena, no cap al carruatge
         this.paradaAqui = pd;
         if (Estat.arribadaCarruatge === pd.id) {                       // hi acabem d'arribar: bufada de vapor
             Estat.arribadaCarruatge = null;
