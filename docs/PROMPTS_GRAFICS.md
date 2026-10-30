@@ -769,6 +769,10 @@ Character: Carry, a very old, very thin and pale little woman with short white h
 
 Quan el tinguis a `art/retrats/`, afegeix `carry:'carry'` a la taula de `eines/convertir_retrats.js`, la clau `'carry'` a la llista de retrats de `js/assets.js` i executa `node eines/convertir_retrats.js`.
 
+### Retrat d'en Jordi de la Caseta — `art/retrats/jordi_caseta_retrat.png`
+
+**Ja aplicat al joc:** no s'ha generat: és el cap i les espatlles retallats del gràfic original (`art/personatges/jordi_caseta.jpg`), de cara i no de tres quarts, amb el fons fet transparent → `assets/retrats/jordi_caseta.webp`. Si en fas un amb el prompt genèric dels retrats, substitueix aquest.
+
 ### Retrat de l'Home de la Tartana Verda — `art/retrats/home_carruatge_retrat.jpg`
 
 Usa el prompt genèric dels retrats (secció «Retrats dels diàlegs») amb l'sprite de l'home (`art/personatges/home_carruatge.jpg`) com a referència i aquesta última línia:
