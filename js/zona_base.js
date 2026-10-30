@@ -160,10 +160,31 @@ class ZonaBase extends Phaser.Scene {
         if (this.dadesEntrada.entrada && !this.dadesEntrada.restaurar && !Estat.caigut && !this.entradaPropia) this.pasEntrada(this.posEntrada);
         if (Estat.caigut) {
             Estat.caigut = false;
-            this.time.delayedCall(600, () => ui.obrirDialeg({ pagines: [
-                { qui: 'Pare Jordi', text: 'Ineu! Que et trobo a terra! Respira, fill. Has de tenir més cura. Ja estàs bé?' }
-            ] }));
+            this.despertarCaigut();
         }
+    }
+
+    // Després d'una derrota: l'Ineu a terra, i de cop el Pare Jordi agenollat al seu costat; en tancar el diàleg l'Ineu s'aixeca
+    despertarCaigut() {
+        const ui = this.ui(), I = this.ineu;
+        const dialeg = { pagines: [{ qui: 'Pare Jordi', text: 'Ineu! Que et trobo a terra! Respira, fill. Has de tenir més cura. Ja estàs bé?' }] };
+        if (!this.textures.exists('ineu_inconscient') || !this.textures.exists('jordi_desperta')) {
+            this.time.delayedCall(600, () => ui.obrirDialeg(dialeg));
+            return;
+        }
+        const esc = this.textures.get('ineu_inconscient').customData.escala || 1 / RES;
+        const terra = this.add.image(I.x, I.y, 'ineu_inconscient').setOrigin(0.5, 0.85).setScale(esc).setDepth(I.y + 1);
+        const veu = [I, this.fantasma, this.ombraIneu].filter(Boolean);
+        veu.forEach(o => o.setVisible(false));
+        this.canviant = true;
+        this.time.delayedCall(1300, () => {
+            terra.setTexture('jordi_desperta');
+            ui.obrirDialeg(dialeg, () => {
+                terra.destroy();
+                veu.forEach(o => o.setVisible(true));
+                this.canviant = false;
+            });
+        });
     }
 
     ui() { return this.scene.get('UI'); }

@@ -79,7 +79,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 **Pendents** (el joc encara fa servir el dibuix provisional): `altar`, `cabana`, `carro_sansa`, `carruatge`, `caseta_joc`, `cel_ntrasra`, `cel_stbenet`, `cofre`, `columna`, `columna_proces`, `daniel_t`, `diposit`, `eloi`, `escolopendra`, `espelma`, `farigola`, `flors`, `foc`, `font_sj`, `gripau`, `herba_sj`, `home_carruatge`, `home_raim`, `jordi_caseta`, `judit`, `lapida`, `llac`, `llosa`, `marit_neus`, `masia`, `neus`, `ocell`, `olla`, `ombra_monjo`, `ovella`, `ovella_boira`, `pastor_a`, `pastor_b`, `pastor_vell`, `pergami`, `pergola`, `porxo`, `romani`, `runna_pedra`, `sansa`, `taula_pedra`, `taula_pp`, `taula_sopar`, `taverna`, `telescopi_mon`, `tomba_esquerdada`, `turbo`, `visitant`, `yordi`, `venerables`, `mare_nena`.
 
-**Nous, encara sense ús al joc** (preparats per a quan es facin): `ineu_inconscient`, `jordi_desperta`, `andreu_guardia`, `arbre_sec`, `ferralla`, `gabia`, `gabia_oberta`, `guants_poder`, `home_raim_desperta`, `ocell_boira`, `ram_flors`, `ratpenat_boira`, `runes_ombra`.
+**Nous, encara sense ús al joc** (preparats per a quan es facin): `andreu_guardia`, `arbre_sec`, `ferralla`, `gabia`, `gabia_oberta`, `guants_poder`, `home_raim_desperta`, `ocell_boira`, `ram_flors`, `ratpenat_boira`, `runes_ombra`.
 
 Els prompts de sota són només dels pendents i dels nous (els fets només es llisten dalt de tot).
 
