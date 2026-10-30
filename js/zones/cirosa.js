@@ -185,13 +185,21 @@ class ZonaCirosa extends ZonaBase {
     }
 
     // El Pastor no espera que l'Ineu s'hi acosti a parlar: quan el veu entrar a la pastura, el crida
-    actualitzar() {
-        if (!this.andreuPunt || this.andreuHaCridat || this.bossIniciat) return;
+    // Si en aquell moment no pot parlar (un altre diàleg, un cop, un pas...), ho torna a provar al cap d'una estona mentre l'Ineu sigui a prop:
+    // fins que no parlen, el combat no comença (abans, si la crida fallava, ja no tornava a cridar)
+    actualitzar(time) {
+        if (!this.andreuPunt || this.bossIniciat || time < (this.properaCrida || 0)) return;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1400, 640) > 240) return;
-        this.andreuHaCridat = true;
-        this.ineu.body.setVelocity(0);
-        this.flotant(1400, 500, 'Ineu!', '#e0a0ff');
-        this.time.delayedCall(500, () => { if (!this.bossIniciat && !this.ui().dialeg) this.interactuar(this.andreuPunt); });
+        this.properaCrida = time + 2500;
+        if (!this.andreuHaCridat) {
+            this.andreuHaCridat = true;
+            this.ineu.body.setVelocity(0);
+            this.flotant(1400, 500, 'Ineu!', '#e0a0ff');
+        }
+        this.time.delayedCall(500, () => {
+            const ui = this.ui();
+            if (!this.bossIniciat && !ui.dialeg && !ui.bloquejat && !this.canviant) this.interactuar(this.andreuPunt);
+        });
     }
 
     // Pou de pedra baix, amb corriola de fusta

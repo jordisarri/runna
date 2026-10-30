@@ -1458,9 +1458,10 @@ class ZonaBase extends Phaser.Scene {
         this.canviant = true;                                                                // no es pot moure mentre fa el pas
         I.body.setVelocity(0);
         this.cara(n);
-        this.tweens.add({ targets: I, x: millor.x, y: millor.y, duration: 170, ease: 'Sine.easeOut', onComplete: () => {
-            I.body.reset(I.x, I.y); this.canviant = false; this.cara(n); fet();
-        } });
+        let fet2 = false;
+        const acaba = () => { if (fet2) return; fet2 = true; I.body.reset(I.x, I.y); this.canviant = false; this.cara(n); fet(); };
+        this.tweens.add({ targets: I, x: millor.x, y: millor.y, duration: 170, ease: 'Sine.easeOut', onComplete: acaba });
+        this.time.delayedCall(600, acaba);              // si el pas s'interromp (un cop...), no es queda mai encallat
     }
     // L'Ineu es gira cap a algú
     cara(n) {
