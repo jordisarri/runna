@@ -132,6 +132,7 @@ class ZonaBase extends Phaser.Scene {
         this.portesAnim = [];
         Grafics.epoca++;
         this.construir();
+        if (Proves.actiu) PARADES.forEach(pd => Estat.posaFlag('parada_' + pd.id));      // a proves, totes les parades conegudes (també amb partides de proves velles)
         PARADES.filter(pd => pd.zona === this.scene.key).forEach(pd => this.parada(pd));     // el carruatge de vapor, si aquí n'hi ha parada
         this.obrirPortes();
         this.ampliarSud();
