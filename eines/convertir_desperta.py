@@ -8,9 +8,9 @@ from collections import deque
 from PIL import Image, ImageFilter
 
 ARREL = Path(__file__).resolve().parent.parent
-AMPLADA = 190 * 2
+AMPLADA = 170 * 2
 LLINDAR = 228
-BLANC_PUR = 238          # forats tancats: blanc gairebé pur
+BLANC_PUR = 228          # forats tancats: blanc gairebé pur (també el vidre de la lent que surt de la cara)
 FORAT_MIN = 2500         # i prou grans (en píxels de l'original), perquè no es buidin els reflexos
 
 def treure_fons(im):
@@ -46,11 +46,32 @@ def treure_fons(im):
     im.putalpha(mask)
     return im
 
+# L'hàbit del Pare Jordi, aquí més fosc i groguenc que al seu sprite: s'aclareix cap al blanc de l'sprite (de mitjana
+# (225,199,176) -> (245,233,219)) mantenint les ombres. Només els colors poc saturats i clars de la zona del seu cos
+# (no la cara ni els cabells, ni l'hàbit marró de l'Ineu)
+GUANY = (0.33, 0.39, 0.46)
+def hàbit_blanc(im):
+    w, h = im.size; px = im.load()
+    suau = lambda v: max(0.0, min(1.0, v))
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = px[x, y]
+            if a < 10: continue
+            fx, fy = x / w, y / h
+            if 0.12 <= fx <= 0.62 and fy <= 0.28: continue                      # el cap (cara, cabells i ulleres)
+            sat, lum = max(r, g, b) - min(r, g, b), (r + g + b) / 3
+            k = suau((62 - sat) / 24) * suau((lum - 105) / 45)                  # com més blanc-crema, més s'aclareix (sense salts)
+            if k <= 0: continue
+            nr, ng, nb = (255 - (255 - c) * gu for c, gu in zip((r, g, b), GUANY))
+            px[x, y] = (round(r + (nr - r) * k), round(g + (ng - g) * k), round(b + (nb - b) * k), a)
+    return im
+
 jordi = treure_fons(Image.open(ARREL / 'art/personatges/jordi_desperta.jpg'))
 caixa = jordi.getchannel('A').point(lambda a: 255 if a > 24 else 0).getbbox()
 for nom, im in (('jordi_desperta', jordi), ('ineu_inconscient', treure_fons(Image.open(ARREL / 'art/personatges/ineu_inconscient.jpg')))):
     r = im.crop(caixa)
     r = r.resize((AMPLADA, round(r.height * AMPLADA / r.width)), Image.LANCZOS)
+    if nom == 'jordi_desperta': r = hàbit_blanc(r)
     dest = ARREL / f'assets/personatges/{nom}.webp'
     r.save(dest, 'WEBP', quality=85, method=6)
     print(nom, r.size, dest.stat().st_size, 'caixa', caixa)
