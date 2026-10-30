@@ -30,6 +30,11 @@
     #wrapG.amp { overflow: hidden; aspect-ratio: 1 / 1; }
     #wrapG.amp #inner { position: absolute; width: 400%; }
     #pad button { min-width: 44px; }
+    /* Animació gran: la vista triada en moviment, al mateix requadre que el fotograma (quadrat) */
+    #prev { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: none; background: #46603a; touch-action: manipulation; }
+    #wrapG.anim { overflow: hidden; aspect-ratio: 1 / 1; }
+    #wrapG.anim #prev { display: block; }
+    #modeVista button.actiu { background: #ffe08a; color: #2a1608; font-weight: bold; }
     #pad .fi { display: inline-flex; align-items: center; gap: 4px; }
     /* Pantalles estretes: tot en una columna, controls grans per als dits */
     @media (max-width: 900px) {
@@ -62,7 +67,7 @@
     <button id="copia" title="Copia les dades al porta-retalls (per si no es pot desar des d'aquest dispositiu)">Copia les dades</button>
     <span id="estat"></span>
 </div>
-<div class="barra"><small class="mob">Al mòbil: obre l'eina des de l'adreça de l'ordinador (python serveix.py, p. ex. http://192.168.x.x:8000/eines/ajust_arma.html). Toca o arrossega sobre el fotograma per posar la mà i fes servir els botons de sota: fletxes, gir, mida i desfés.</small></div>
+<details class="barra mob"><summary>Ajuda</summary><small>Al mòbil: obre l'eina des de l'adreça de l'ordinador (python serveix.py, p. ex. http://192.168.x.x:8000/eines/ajust_arma.html). Toca o arrossega sobre el fotograma per posar la mà i fes servir els botons de sota: fletxes, gir, mida i desfés. «▶ Animació gran» mostra la vista triada en moviment al mateix requadre (toca-la per tornar a editar).</small></details>
 <div class="barra"><small class="desk">Graella: clic o arrossega = mou la mà · roda = gira · fletxes = 1 px (Maj = 0,25) · [ ] = mida (només a «aquesta arma») · Supr = esborra · D = davant/darrere de l'Ineu (per fotograma; a «aquesta arma» només per a l'arma triada) · , . = fotograma anterior/següent · Espai = reprodueix/pausa · Ctrl+Z = desfés · Ctrl+S = desa</small></div>
 
 <div class="barra">
@@ -73,8 +78,12 @@
     <label title="Dibuixa per sobre l'estela en mitja lluna que fa el joc en atacar: mostra cap a quin costat es mou l'arma"><input id="arcOn" type="checkbox" checked> Arc del cop</label>
     <small class="desk">Graella: els 16 fotogrames de la vista triada (el requadre groc fi és el que s'està reproduint) · Tira de sota: les 8 vistes en moviment amb la mateixa arma</small>
 </div>
+<div class="barra" id="modeVista">
+    <button id="bEdita" class="actiu">✎ Edita</button><button id="bAnima">▶ Animació gran</button>
+    <small class="desk">A «Animació gran» es veu la vista triada en moviment, al mateix lloc; amb la pausa, el fotograma triat. Toca-la per tornar a editar.</small>
+</div>
 <div id="alt">
-    <div id="wrapG"><div id="inner"><canvas id="c"></canvas><canvas id="arcG"></canvas><div id="cursor"></div></div></div>
+    <div id="wrapG"><div id="inner"><canvas id="c"></canvas><canvas id="arcG"></canvas><div id="cursor"></div></div><canvas id="prev"></canvas></div>
     <div id="panell">
         <h3>Fotograma seleccionat <span id="titolFrame"></span></h3>
         <div id="resum"></div>
@@ -227,7 +236,29 @@ arcC.width = c.width; arcC.height = c.height;
 const MARGE = 220;     // marge al voltant de la cel·la (en píxels de cel·la) perquè l'arma es vegi sencera a la tira
 const S_TIRA = 0.33, CAIXA_TIRA = Math.round((256 + 2 * MARGE) * S_TIRA);
 const tira = $('tira');
-tira.width = CAIXA_TIRA * VISTES.length; tira.height = CAIXA_TIRA;
+// Al mòbil, la tira va en dues files de quatre (cada vista el doble de gran); a l'ordinador, en una sola fila
+const mobil = matchMedia('(max-width: 900px)');
+let COLS_TIRA = 8;
+function layoutTira() {
+    COLS_TIRA = mobil.matches ? 4 : 8;
+    tira.width = CAIXA_TIRA * COLS_TIRA; tira.height = CAIXA_TIRA * Math.ceil(VISTES.length / COLS_TIRA);
+}
+layoutTira();
+mobil.addEventListener('change', layoutTira);
+// L'animació gran: la vista triada, amb marge perquè l'arma hi càpiga sencera
+const prev = $('prev'), pg = prev.getContext('2d'), MARGE_P = 70;
+prev.width = prev.height = 640;
+const S_PREV = prev.width / (256 + 2 * MARGE_P);
+let animGran = false;
+function posaAnimGran(on) {
+    animGran = on;
+    $('wrapG').classList.toggle('anim', on);
+    $('bAnima').classList.toggle('actiu', on); $('bEdita').classList.toggle('actiu', !on);
+    refresca();
+}
+$('bAnima').onclick = () => posaAnimGran(true);
+$('bEdita').onclick = () => posaAnimGran(false);
+prev.addEventListener('click', () => posaAnimGran(false));
 let jugant = true, velocitat = 1, t0 = performance.now();
 function estatAnimacio(ara) {
     const n = FOTOGRAMES.length, msFot = 1000 / FPS;
@@ -261,17 +292,27 @@ function tick(ara) {
     $('quadre').textContent = 'fotograma #' + idx + (efectiu(w, v, idx) ? '' : ' (mà buida)');
     tc.clearRect(0, 0, tira.width, tira.height);
     VISTES.forEach((vv, k) => {
-        const bx = k * CAIXA_TIRA;
-        dibuixaCela(tc, vv, idx, w, bx + MARGE * S_TIRA, MARGE * S_TIRA, S_TIRA);
-        if (arcOn) dibuixaArc(tc, vv, w, bx + MARGE * S_TIRA, MARGE * S_TIRA, S_TIRA, tJoc);
-        tc.fillStyle = vv === v ? '#ffe08a' : '#fff'; tc.font = '14px sans-serif'; tc.fillText(vv, bx + 8, 18);
-        tc.strokeStyle = vv === v ? '#ffe08a' : 'rgba(255,255,255,.2)'; tc.lineWidth = vv === v ? 2 : 1; tc.strokeRect(bx + 1, 1, CAIXA_TIRA - 2, CAIXA_TIRA - 2);
+        const bx = (k % COLS_TIRA) * CAIXA_TIRA, by = Math.floor(k / COLS_TIRA) * CAIXA_TIRA;
+        dibuixaCela(tc, vv, idx, w, bx + MARGE * S_TIRA, by + MARGE * S_TIRA, S_TIRA);
+        if (arcOn) dibuixaArc(tc, vv, w, bx + MARGE * S_TIRA, by + MARGE * S_TIRA, S_TIRA, tJoc);
+        tc.fillStyle = vv === v ? '#ffe08a' : '#fff'; tc.font = '14px sans-serif'; tc.fillText(vv, bx + 8, by + 18);
+        tc.strokeStyle = vv === v ? '#ffe08a' : 'rgba(255,255,255,.2)'; tc.lineWidth = vv === v ? 2 : 1; tc.strokeRect(bx + 1, by + 1, CAIXA_TIRA - 2, CAIXA_TIRA - 2);
     });
+    // l'animació gran de la vista triada
+    if (animGran) {
+        pg.clearRect(0, 0, prev.width, prev.height);
+        pg.strokeStyle = 'rgba(255,255,255,.1)'; pg.lineWidth = 1;
+        for (let gg = 0; gg <= 256; gg += 32) { const q = MARGE_P * S_PREV + gg * S_PREV; pg.beginPath(); pg.moveTo(q, 0); pg.lineTo(q, prev.height); pg.moveTo(0, q); pg.lineTo(prev.width, q); pg.stroke(); }
+        dibuixaCela(pg, v, idx, w, MARGE_P * S_PREV, MARGE_P * S_PREV, S_PREV);
+        if (arcOn) dibuixaArc(pg, v, w, MARGE_P * S_PREV, MARGE_P * S_PREV, S_PREV, tJoc);
+        pg.fillStyle = '#ffe08a'; pg.font = 'bold 26px sans-serif';
+        pg.fillText(v + ' · #' + idx + (jugant ? '' : ' (pausa)'), 14, 34);
+    }
     // requadre que marca, a la graella, el fotograma que s'està reproduint
     const r = c.getBoundingClientRect(), cw = r.width / COLS, ch = r.height / FILES, cur = $('cursor');
     cur.style.width = cw + 'px'; cur.style.height = ch + 'px';
     cur.style.left = (idx % COLS) * cw + 'px'; cur.style.top = Math.floor(idx / COLS) * ch + 'px';
-    cur.style.display = jugant && !$('amp').checked ? '' : 'none';
+    cur.style.display = jugant && !$('amp').checked && !animGran ? '' : 'none';
     // l'arc també sobre el fotograma de la graella que s'està reproduint
     arcG.clearRect(0, 0, arcC.width, arcC.height);
     if (arcOn) dibuixaArc(arcG, v, w, (idx % COLS) * 256 * ESCALA, Math.floor(idx / COLS) * 256 * ESCALA, ESCALA, tJoc);
