@@ -422,6 +422,9 @@ class ZonaGabia extends ZonaBase {
     }
 
     construir() {
+        // L'escena es reaprofita a cada visita: si l'Ineu va caure lluitant, el combat ha de tornar a començar de zero
+        this.combatIniciat = false; this.bossActiu = false; this.boss = null; this.bossCaigut = null; this.finalEngegat = false;
+        this.tambor = null; this.avisCant = 0; this.anellsAvis = []; this.focs = [];
         const W = 1800, H = 1640, G = GABIA;
         const x0 = G.x - G.platW / 2, x1 = G.x + G.platW / 2, y0 = G.y - G.platH / 2, y1 = G.y + G.platH / 2, A = G.avenc;
         this.terra('pedra', 0, 0, W, H, -1100).setTint(0x4a4058);

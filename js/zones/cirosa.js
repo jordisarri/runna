@@ -115,6 +115,8 @@ class ZonaCirosa extends ZonaBase {
     }
 
     construir() {
+        // L'escena es reaprofita a cada visita: l'estat del combat d'una visita anterior (p. ex. si l'Ineu va caure lluitant) no ha de quedar
+        this.bossIniciat = false; this.andreuHaCridat = false; this.properaCrida = 0; this.tanques = null; this.bossCaigut = null;
         this.terra('herba', 0, 0, 1800, 1200, -1100);
         this.terra('cami', 500, 500, 160, 700);           // des del camí llarg
         this.terra('cami', 200, 500, 800, 140);           // davant la masia i cap a la pastura

@@ -94,6 +94,7 @@ class ZonaBase extends Phaser.Scene {
         this.dadesEntrada = data || {};
         this.canviant = false;
         this.camDialeg = null;
+        this.npcs = {}; this.npcDavant = null;          // (l'escena es reaprofita: res de la visita anterior)
         this.boundsCamOrig = null;
         this.twCamDialeg = null;
         this.entradaPropia = false;
