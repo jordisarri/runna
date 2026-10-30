@@ -30,6 +30,9 @@
     #wrapG.amp { overflow: hidden; aspect-ratio: 1 / 1; }
     #wrapG.amp #inner { position: absolute; width: 400%; }
     #pad button { min-width: 44px; }
+    /* Al mòbil: tocar de pressa un botó no ha de fer zoom, i mantenir-lo premut no ha de seleccionar text ni obrir el menú de l'iPhone */
+    html { touch-action: manipulation; }
+    button { touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
     /* Animació gran: la vista triada en moviment, al mateix requadre que el fotograma (quadrat) */
     #prev { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: none; background: #46603a; touch-action: manipulation; }
     #wrapG.anim { overflow: hidden; aspect-ratio: 1 / 1; }
@@ -67,7 +70,7 @@
     <button id="copia" title="Copia les dades al porta-retalls (per si no es pot desar des d'aquest dispositiu)">Copia les dades</button>
     <span id="estat"></span>
 </div>
-<details class="barra mob"><summary>Ajuda</summary><small>Al mòbil: obre l'eina des de l'adreça de l'ordinador (python serveix.py, p. ex. http://192.168.x.x:8000/eines/ajust_arma.html). Toca o arrossega sobre el fotograma per posar la mà i fes servir els botons de sota: fletxes, gir, mida i desfés. «▶ Animació gran» mostra la vista triada en moviment al mateix requadre (toca-la per tornar a editar).</small></details>
+<details class="barra mob"><summary>Ajuda</summary><small>Al mòbil: obre l'eina des de l'adreça de l'ordinador (python serveix.py, p. ex. http://192.168.x.x:8000/eines/ajust_arma.html). Toca o arrossega sobre el fotograma per posar la mà i fes servir els botons de sota: fletxes, gir, mida i desfés (mantén premudes les fletxes, el gir i la mida per anar seguit). «▶ Animació gran» mostra la vista triada en moviment al mateix requadre (toca-la per tornar a editar).</small></details>
 <div class="barra"><small class="desk">Graella: clic o arrossega = mou la mà · roda = gira · fletxes = 1 px (Maj = 0,25) · [ ] = mida (només a «aquesta arma») · Supr = esborra · D = davant/darrere de l'Ineu (per fotograma; a «aquesta arma» només per a l'arma triada) · , . = fotograma anterior/següent · Espai = reprodueix/pausa · Ctrl+Z = desfés · Ctrl+S = desa</small></div>
 
 <div class="barra">
@@ -427,8 +430,8 @@ addEventListener('beforeunload', ev => { if (brut) { ev.preventDefault(); ev.ret
 try { const g = localStorage.getItem('ajustArmaAmp'); $('amp').checked = g === null ? matchMedia('(max-width: 900px)').matches : g === '1'; } catch (e) { $('amp').checked = matchMedia('(max-width: 900px)').matches; }
 $('amp').onchange = () => { try { localStorage.setItem('ajustArmaAmp', $('amp').checked ? '1' : '0'); } catch (e) { } refresca(); };
 addEventListener('resize', ajustaZoom);
-document.querySelectorAll('#pad button').forEach(b => b.addEventListener('click', () => {
-    const act = b.dataset.act, { v, w, i, mode } = sel(), e = efectiu(w, v, i), fi = $('fi').checked, pas = fi ? 0.25 : 1, gir = fi ? 1 : 5, n = FOTOGRAMES.length;
+function accioPad(act) {
+    const { v, w, i, mode } = sel(), e = efectiu(w, v, i), fi = $('fi').checked, pas = fi ? 0.25 : 1, gir = fi ? 1 : 5, n = FOTOGRAMES.length;
     if (act === 'prev' || act === 'next') { $('frame').value = (i + (act === 'next' ? 1 : n - 1)) % n; refresca(); return; }
     if (act === 'undo') { desfes(); return; }
     if (act === 'redo') { refes(); return; }
@@ -443,7 +446,23 @@ document.querySelectorAll('#pad button').forEach(b => b.addEventListener('click'
         if (mode !== 'arma') { $('estat').textContent = "La mida només es canvia en el mode «Només aquesta arma»."; $('estat').style.color = '#ffd34d'; return; }
         canvia(() => posaEfectiu({ e: e.e + (act === 'bigger' ? 0.02 : -0.02) }), true);
     }
-}));
+}
+// Botons del pad: un toc fa una passa; mantenint-los premuts (fletxes, gir i mida) es repeteix contínuament
+const REPETEIX = ['up', 'down', 'left', 'right', 'rotm', 'rotp', 'smaller', 'bigger'];
+document.querySelectorAll('#pad button').forEach(b => {
+    let espera = null, cada = null;
+    const para = () => { clearTimeout(espera); clearInterval(cada); espera = cada = null; };
+    b.addEventListener('pointerdown', ev => {
+        ev.preventDefault();
+        b.setPointerCapture && b.setPointerCapture(ev.pointerId);
+        para();
+        accioPad(b.dataset.act);
+        if (REPETEIX.includes(b.dataset.act)) espera = setTimeout(() => { cada = setInterval(() => accioPad(b.dataset.act), 60); }, 350);
+    });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(t => b.addEventListener(t, para));
+    b.addEventListener('contextmenu', ev => ev.preventDefault());
+    b.addEventListener('click', ev => { if (ev.detail === 0) accioPad(b.dataset.act); });      // amb el teclat (Enter/Espai sobre el botó)
+});
 $('copia').onclick = async () => {
     const txt = JSON.stringify({ taula, ajust, llarg, armes: Object.fromEntries(NOMS.map(k => [k, { agafa: ARMES[k].agafa }])) });
     const estat = $('estat');
