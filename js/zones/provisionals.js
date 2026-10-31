@@ -23,6 +23,7 @@ class ZonaEsglesia extends ZonaBase {
 
     construir() {
         const A = ESG.alcada;
+        this.epileg = false; this.epilegEngegat = false;          // (l'escena es reaprofita: l'epíleg d'una altra partida no compta)
         // Terra i murs
         this.terra('rajola', 240, 0, 800, A, -1100);
         const murs = this.add.graphics().setDepth(-1000);
@@ -99,7 +100,7 @@ class ZonaEsglesia extends ZonaBase {
         const R = ESG.retY, nens = ['nen_uri', 'nen_flam', 'nen_sardin'];
         const gent = Object.keys(this.npcs).filter(k => !nens.includes(k) && k !== 'pianista' && k !== 'pare_jordi');
         const tots = Object.keys(this.npcs).filter(k => k !== 'pianista');
-        const riure = (llista, f) => { Sfx.riure(); llista.forEach((k, i) => { this.npcSalta(k, null, 2); this.bombolla(k, ['Ha ha!', 'Ha ha ha!', 'Hi hi!'][i % 3], null, 1300); }); this.esperar(1500, f); };
+        const riure = (llista, f) => { Sfx.riure(); llista.forEach(k => this.npcSalta(k, null, 2)); this.esperar(1500, f); };
         this.ui().obrirDialeg({ pagines: [{ fer: (z, fet) => z.seq([
             f => z.ineuVa(640, R + 330, f, 150),
             f => riure(nens, f),
@@ -113,8 +114,10 @@ class ZonaEsglesia extends ZonaBase {
             },
             f => riure(tots, f),
             f => z.npcVa('pare_jordi', 720, R + 330, f, 120),
-            f => z.npcMira('pare_jordi', 'ineu', f),
-            f => z.bombolla('pare_jordi', 'Benvingut a casa, Ineu.', f, 2600),
+            f => z.npcMira('pare_jordi', 'ineu', f)
+        ], fet) },
+            { qui: 'Pare Jordi', text: 'Benvingut a casa, Ineu.' },
+            { fer: (z, fet) => z.seq([
             f => riure(tots, f),
             f => { this.cameras.main.fadeOut(1800, 0, 0, 0); this.esperar(1900, f); }
         ], fet) }] }, () => {

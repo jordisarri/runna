@@ -73,6 +73,9 @@ function preparaOcellFoc(scene) {
     }
 }
 
+// L'Ocellaire ajupit, cansat (assets/enemics/ocellaire_cansat.webp): si encara no hi és, la zona del cap baixa sense canviar el dibuix
+function teCansatOcellaire(z) { return z.textures.exists('ocellaire_cansat') && !Grafics.faltants.includes('ocellaire_cansat'); }
+
 const ENEMICS = {
     escolopendra: {
         tex: 'escolopendra', vida: 2, vel: 95, mal: 1, radi: 20, cos: [40, 16], ombra: 0, centrat: true,   // l'ombra ja és al dibuix; vista de dalt, el cos és al mig
@@ -248,6 +251,7 @@ const ENEMICS = {
             if (!e.proxAtac) { e.proxAtac = ara + 1800; e.estat = 'sura'; e.nAtac = 0; }
             // Idle: respira (1 → 2 → 1 → 3) mentre sura; pose de rugit als canvis de fase; en la resta d'estats, el sprite base
             const clauIdle = e.estat === 'rugit' ? 'ocellaire_rugit'
+                : e.estat === 'cansat' && teCansatOcellaire(z) ? 'ocellaire_cansat'
                 : e.estat === 'sura' ? ['ocellaire', 'ocellaire_idle2', 'ocellaire', 'ocellaire_idle3'][Math.floor(ara / 260) % 4] : 'ocellaire';
             if (e.spr.texture.key !== clauIdle && z.textures.exists(clauIdle)) e.spr.setTexture(clauIdle);
             // Cada canvi de fase: rugit, ona que l'empeny, els ocells s'apaguen i tot va més de pressa (la 3a crema el terra)
@@ -360,10 +364,10 @@ const ENEMICS = {
                 b.gir = Math.max(0.02, b.gir * 0.94);
                 if (ara > e.fins) { e.estat = 'sura'; e.proxAtac = ara + (fase3 ? 900 : fase2 ? 1400 : 2400); e.puntSura = null; }
             }
-            // S'ajup (o es redreça) suaument: el cap, que és el seu únic punt feble, baixa fins a l'abast de l'espasa
+            // Cansat, el cap (el seu únic punt feble) baixa fins a l'abast de l'espasa (vegeu puntsCop). El dibuix no s'aixafa:
+            // si hi ha el dibuix 'ocellaire_cansat', es veu ajupit; si no, només baixa la zona del cap
             if (e.estat !== 'cansat') e.baixaObj = 0;
             e.baixa = (e.baixa || 0) + ((e.baixaObj || 0) - (e.baixa || 0)) * 0.2;
-            e.spr.setScale(e.escalaBase, e.escalaBase * (1 - 0.38 * e.baixa));
             e.spr.setFlipX(jo.x < c.x);
             z.moureBasto(e);
         },
@@ -747,7 +751,10 @@ Object.assign(ZonaBase.prototype, {
         const c = e.spr.body.center;
         if (!e.def.soloCap) return [{ x: c.x, y: c.y, r: e.def.radi }];
         const s = e.spr, h = s.displayHeight, dalt = s.y - h / 2;
-        return [{ x: s.x, y: dalt + h * 0.17, r: 36, cap: true },        // el cap és la bola del dibuix, al 17% des de dalt
+        // El cap és la bola del dibuix, al 17% des de dalt; ajupit (dibuix 'ocellaire_cansat'), al 45%. Sense aquest dibuix, la zona del cap
+        // baixa igual mentre està cansat (el que abans feia l'aixafament), perquè l'espasa hi arribi
+        const fc = s.texture.key === 'ocellaire_cansat' ? 0.45 : teCansatOcellaire(this) ? 0.17 : 0.17 + 0.32 * (e.baixa || 0);
+        return [{ x: s.x, y: dalt + h * fc, r: 36, cap: true },
                 { x: s.x, y: dalt + h * 0.42, r: 44 }, { x: s.x, y: dalt + h * 0.66, r: 44 }, { x: s.x, y: c.y, r: 44 }];
     },
     zonaCop(e) {                    // on surten les espurnes del cop
@@ -762,7 +769,6 @@ Object.assign(ZonaBase.prototype, {
         Sfx.escut();
         this.cameras.main.shake(70, 0.0015, true);
         this.impacte(q.x, q.y, { x: -d.x, y: -d.y }, 0);
-        if (!(ara < (e.ultimAvis || 0))) { e.ultimAvis = ara + 2500; this.flotant(q.x, q.y - 150, 'Al cap!', '#ffe08a'); }
     },
 
     colpejar(e, dany, d) {

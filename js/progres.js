@@ -122,7 +122,7 @@ const PROGRES = {
           pista: E => E.flag('ocellaireVist') ? "L'Ocellaire fa girar el bàcul i en surten ocells de foc. Cal tallar-los, apartar-se quan el bàcul va de pressa i colpejar quan s'alenteix."
               : "Més enllà del pont, a la gàbia, el Germà Andreu fa guàrdia... i no hi és sol." },
         { id: 'gabia', marca: ['gabiaOberta'], fet: E => E.flag('gabiaOberta'),
-          pista: E => "L'Ocellaire ha caigut. Els barrots de la gàbia només escolten el Cant del Miracle." },
+          pista: E => "L'Home de la Gàbia ha caigut. Els barrots de la gàbia només escolten el Cant del Miracle." },
         { id: 'nens', marca: ['rescatUri', 'rescatFlam', 'rescatSardin'], fet: E => E.flag('rescatUri') && E.flag('rescatFlam') && E.flag('rescatSardin'),
           pista: E => "La gàbia és oberta. Als capolls de boira hi dormen l'Huri, el Flami i el Sardi; Runna els sap trencar." },
         { id: 'final', marca: ['andreuTancat', 'epilegFet'], fet: E => E.flag('epilegFet'),

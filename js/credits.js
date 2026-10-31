@@ -25,6 +25,7 @@ class EscenaCredits extends Phaser.Scene {
     constructor() { super('Credits'); }
 
     create() {
+        this.sortint = false;                 // (l'escena es reaprofita: si es tornen a veure els crèdits, s'ha de poder sortir)
         this.cameras.main.setBackgroundColor('#06040a');
         Joc.iniciarMusica(this, 0, 'musica_credits');
         this.cameras.main.fadeIn(1200, 0, 0, 0);

@@ -94,7 +94,7 @@ class ZonaBase extends Phaser.Scene {
         this.dadesEntrada = data || {};
         this.canviant = false;
         this.camDialeg = null;
-        this.npcs = {}; this.npcDavant = null;          // (l'escena es reaprofita: res de la visita anterior)
+        this.npcs = {}; this.npcDavant = null; this.camCinema = false;          // (l'escena es reaprofita: res de la visita anterior)
         this.boundsCamOrig = null;
         this.twCamDialeg = null;
         this.entradaPropia = false;
@@ -1119,6 +1119,7 @@ class ZonaBase extends Phaser.Scene {
     // (cos alt o dos personatges molt separats), s'allunya una mica (zoom) fins que hi caben. En acabar torna a lloc igual de suau.
     camaraDialeg(obert) {
         const cam = this.cameras.main;
+        if (this.camCinema) return;                  // una escena (enquadrar) porta la càmera ella mateixa
         if (obert) {
             if (this.camDialeg) return;
             const p = this.dialegDePunt ? this.puntActiu : null;
