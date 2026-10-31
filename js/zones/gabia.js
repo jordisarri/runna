@@ -822,7 +822,7 @@ class ZonaGabia extends ZonaBase {
         const cam = this.cameras.main, ui = this.ui(), A = 'Andreu, Pastor de Boira', O = "L'Home de la Gàbia";
         const pagines = [
             { fer: (z, fet) => z.seq([
-                f => { ui.franges(true); z.ineuVa(this.ineu.x, Math.max(this.ineu.y, base + 300), null, 160); z.enquadrar(gx + 90, base - 60, 0.8, 1000, f); },
+                f => { z.ineuVa(this.ineu.x, Math.max(this.ineu.y, base + 300), null, 160); z.enquadrar(gx + 90, base - 60, 0.8, 1000, f); },
                 f => z.npcMira('germa_andreu', 'ineu', f)
             ], fet) },
             { qui: A, text: vist ? "Una altra vegada, monjo? El Mestre no es cansa mai." : "Mestre! Mestre, ja és aquí! El monjo que us vol prendre els nens!" },
@@ -836,8 +836,7 @@ class ZonaGabia extends ZonaBase {
                 { qui: O, text: "La gàbia és plena de riures robats. Encara hi cap el teu." }
             ]),
             { fer: (z, fet) => z.seq([
-                f => { z.npcVa('germa_andreu', gx + 330, base + 40, null, 220); z.amagarAndreu(); z.alliberarCamera(800, f); },
-                f => { ui.franges(false); f(); }
+                f => { z.npcVa('germa_andreu', gx + 330, base + 40, null, 220); z.amagarAndreu(); z.alliberarCamera(800, f); }
             ], fet) }
         ];
         this.ui().obrirDialeg({ pagines }, () => this.començarBoss(ap));
@@ -931,7 +930,6 @@ class ZonaGabia extends ZonaBase {
         this.hitStop(450);
         cam.flash(700, 255, 255, 255);
         Sfx.rugit();
-        ui.franges(true);
         if (e.ulls) this.tweens.add({ targets: e.ulls, alpha: 0, duration: 2200, onComplete: () => e.ulls.destroy() });
         // Els ocells de foc s'apaguen tots alhora
         this.enemics.filter(o => o.tipus === 'ocellFoc' && !o.mort).forEach(o => this.apagarOcell(o));
@@ -974,7 +972,6 @@ class ZonaGabia extends ZonaBase {
                 f => z.alliberarCamera(800, f)
             ], fet) }
         ] }, () => {
-            ui.franges(false);
             this.bossActiu = false;
             this.tornarColorCova();
             Estat.posaFlag('ocellaireVencut');
