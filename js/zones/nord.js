@@ -60,7 +60,6 @@ class ZonaCellerFora extends ZonaBase {
 class ZonaRuines extends ZonaBase {
     constructor() {
         super('ZonaRuines', {
-            fosca: function () { return this.nit && this.nit.visible; },
             nom: 'Les Runes',
             amplada: 1600,
             alcada: 1100,
@@ -100,16 +99,15 @@ class ZonaRuines extends ZonaBase {
             this.interactiu(1275, 500, RADI_OBJECTE, DIALEGS.ruines, { altura: 60, actiu: () => !Estat.flag('fragment1') });
         } else if (!Estat.te('fragment1')) Estat.dona('fragment1');          // partides desades d'abans del pergamí físic
 
-        // L'ombra del monjo: només es veu quan has llegit el primer fragment del pergamí
+        // L'ombra del monjo: apareix quan es troba el primer fragment del pergamí i, un cop ha beneït l'Ineu, se'n va a descansar en pau
         this.apareix = 1;            // 0..1: com de present és l'ombra (la primera vegada es materialitza lentament)
         this.ombraMonjo = this.add.image(1100, 560, 'ombra_monjo').setOrigin(0.5, 1)
             .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(560).setAlpha(0);
-        this.puntOmbra = this.interactiu(1100, 600, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1'), enTancar: () => Estat.posaFlag('flauta_ombra') });
+        this.puntOmbra = this.interactiu(1100, 600, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1') && !Estat.flag('benedicioMonjo'), enTancar: () => Estat.posaFlag('flauta_ombra') });
         this.ombraHaCridat = false;
-        this.llocFlauta('ombra', 1100, 610, 160, true, () => !Estat.flag('benedicioMonjo'));    // un cop t'ha beneït, ESPAI hi parla
+        this.llocFlauta('ombra', 1100, 610, 160, true, () => !Estat.flag('benedicioMonjo'));
         this.tweens.add({ targets: this.ombraMonjo, y: 564, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
-        // Ambient de nit quan la llegenda s'ha començat a descobrir
-        this.nit = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x0a0a30, 0.22).setScrollFactor(0).setDepth(89000).setVisible(false);
+        this.ombraVista = false; this.ombraMarxa = false;
 
         this.cartell(620, 960, DIALEGS.cartellRuinesPingpong);
 
@@ -143,20 +141,32 @@ class ZonaRuines extends ZonaBase {
     enMelodia(nom) {
         if (nom !== 'pedres' || !Estat.flag('fragment1')) return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1100, 600) > 300) return false;
-        if (Estat.flag('benedicioMonjo')) { this.missatge("L'ombra assenteix."); return true; }
+        if (Estat.flag('benedicioMonjo')) return false;                 // ja descansa
         if (!['fragment1', 'fragment2', 'alcuiLlegit'].every(f => Estat.flag(f))) return false;
         this.ui().obrirDialeg(DIALEGS.benedicioMonjo(Estat), () => Estat.desar());
         return true;
     }
 
-    // El moment en què es llegeix el primer fragment: cau la nit de cop i l'ombra del monjo es materialitza sobre el mur
+    // El moment en què es troba el primer fragment: l'ombra del monjo es materialitza sobre el mur
     aparicioOmbra(fet) {
         this.apareix = 0; this.ombraVista = true;
         Sfx.secret && Sfx.secret();
         this.cameras.main.shake(400, 0.002);
-        this.nit.setVisible(true).setAlpha(0);
-        this.tweens.add({ targets: this.nit, alpha: 0.5, duration: 1600, onComplete: () => this.tweens.add({ targets: this.nit, alpha: 0.22, duration: 1600 }) });   // cau la nit de cop i s'assosseguen
         this.tweens.add({ targets: this, apareix: 1, duration: 3000, delay: 400, onStart: () => this.llum(this.ombraMonjo.x, this.ombraMonjo.y - 150, 0xd8c8ff), onComplete: () => { if (fet) fet(); } });
+    }
+    // Ha fet el seu paper: l'ombra s'enlaira, es desfà en llum i descansa en pau
+    ombraDescansa(fet) {
+        this.ombraMarxa = true;
+        Sfx.secret && Sfx.secret();
+        this.tweens.killTweensOf(this.ombraMonjo);
+        this.llum(this.ombraMonjo.x, this.ombraMonjo.y - 150, 0xfff0d0);
+        const p = this.add.particles(this.ombraMonjo.x, this.ombraMonjo.y - 120, 'espurna', { speedY: { min: -90, max: -30 }, speedX: { min: -20, max: 20 }, lifespan: 1600,
+            scale: { start: 0.35, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xfff0d0, 0xd8c8ff, 0xffffff], blendMode: 'ADD', frequency: 40 }).setDepth(9000);
+        this.tweens.add({ targets: this.ombraMonjo, y: this.ombraMonjo.y - 90, alpha: 0, duration: 2600, ease: 'Sine.easeIn', onComplete: () => {
+            p.stop(); this.time.delayedCall(1700, () => p.destroy());
+            this.ombraMonjo.setVisible(false);
+            this.esperar(400, fet);
+        } });
     }
 
     // L'ombra aixeca el cap i es fa més clara un moment
@@ -174,8 +184,8 @@ class ZonaRuines extends ZonaBase {
             this.ineu.body.setVelocity(0);
             this.interactuar(this.puntOmbra);
         }
-        const visible = Estat.flag('fragment1') || this.ombraVista;
-        this.nit.setVisible(visible);
+        if (this.ombraMarxa) return;                                        // se'n va (ombraDescansa porta l'alfa)
+        const visible = (Estat.flag('fragment1') || this.ombraVista) && !Estat.flag('benedicioMonjo');
         // L'ombra apareix i desapareix lentament, com una respiració
         const alfa = visible ? (this.ombraForta ? 0.95 : 0.55 + 0.25 * Math.sin(this.time.now / 900)) * this.apareix : 0;
         this.ombraMonjo.setAlpha(Math.max(0, alfa));

@@ -656,6 +656,8 @@ const DIALEGS = {
             { qui: "Monjo", text: "Sota terra hi ha una gàbia, petit monjo, i una cosa que no ha oblidat cap cant ni cap nen. Jo només puc vigilar. Tu pots tornar a tancar-ho." },
             { qui: "Monjo", text: "L'espasa dorm al sud-est, entre pedres, allà on el sol s'atura. Rep la meva benedicció, que no pesa ni es veu, i recorda: la foscor tem la llum, però més encara el riure." },
             { qui: "Monjo", text: "Jo només puc dir-te les paraules; el Pare Alcuí sabrà entendre-les. Quan les cridis davant l'espasa, la meva benedicció farà que et reconegui." },
+            { qui: "Monjo", text: "Ara ja puc descansar." },
+            { fer: (z, fet) => z.ombraDescansa ? z.ombraDescansa(fet) : fet() },
             { avis: "Has rebut la BENEDICCIÓ DEL MONJO." }
         ],
         enAcabar: () => {
