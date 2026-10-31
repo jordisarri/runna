@@ -71,6 +71,7 @@ class ZonaTorre extends Phaser.Scene {
 
         this.cursors = this.input.keyboard.createCursorKeys();
         this.tecles = this.input.keyboard.addKeys('W,A,S,D');
+        fixarDecorat(this);                                 // el decorat fix, a una imatge (js/zona_base.js)
 
         const ui = this.ui();
         ui.actualitzarHUD();

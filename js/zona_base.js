@@ -84,6 +84,56 @@ const PAS_PORTA = 44;       // en passar una porta (o qualsevol sortida), l'Ineu
 const MS_PAS_PORTA = 450;
 const TOPE_Y = 100;   // els peus de l'Ineu no passen d'aquí amunt: sempre se li veu el cos (la càmera s'atura a y=0)
 
+// ---------- Rendiment: el decorat dibuixat amb codi, a una imatge ----------
+// Un Graphics es torna a dibuixar sencer (totes les seves ordres) a cada fotograma: amb molts traços (parets de cova, terres
+// fets de lloses, plomes...) costa molt als mòbils justets. Quan la zona ja és construïda, els Graphics grans i fixos es passen
+// a una imatge (RenderTexture) un sol cop, al mateix lloc i a la mateixa profunditat; es veuen igual i no cal descarregar res.
+// Només es toquen els que segur que no canvien: els que l'escena no guarda enlloc (cap propietat ni llista seva), sense tweens,
+// visibles i opacs, sense màscara, gir, escala, mode de fusió ni contenidor, i sense transformacions dins del dibuix.
+const ARGS_ORDRE_GRAFIC = { 0: 7, 1: 0, 2: 0, 3: 4, 4: 2, 5: 2, 6: 3, 7: 2, 8: 0, 9: 0, 10: 6, 11: 6, 14: 0, 15: 0, 21: 8, 22: 6 };
+function limitsGrafic(g) {
+    const c = g.commandBuffer;
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity, gruix = 0;
+    const pt = (x, y, r = 0) => { x0 = Math.min(x0, x - r); y0 = Math.min(y0, y - r); x1 = Math.max(x1, x + r); y1 = Math.max(y1, y + r); };
+    for (let i = 0; i < c.length; ) {
+        const o = c[i], n = ARGS_ORDRE_GRAFIC[o];
+        if (n === undefined) return null;                       // translate, scale, rotate o una ordre desconeguda: no es toca
+        if (o === 0) pt(c[i + 1], c[i + 2], c[i + 3]);
+        else if (o === 3) { pt(c[i + 1], c[i + 2]); pt(c[i + 1] + c[i + 3], c[i + 2] + c[i + 4]); }
+        else if (o === 4 || o === 5) pt(c[i + 1], c[i + 2]);
+        else if (o === 10 || o === 11) { pt(c[i + 1], c[i + 2]); pt(c[i + 3], c[i + 4]); pt(c[i + 5], c[i + 6]); }
+        else if (o === 6 || o === 22) gruix = Math.max(gruix, c[i + 1]);
+        i += 1 + n;
+    }
+    if (x0 === Infinity) return null;
+    const m = gruix / 2 + 3;
+    return { x: Math.floor(x0 - m), y: Math.floor(y0 - m), w: Math.ceil(x1 - x0 + 2 * m), h: Math.ceil(y1 - y0 + 2 * m) };
+}
+function fixarDecorat(escena, minim = 200) {
+    if (!escena.sys.game.renderer || escena.sys.game.renderer.type !== Phaser.WEBGL) return;
+    // Tot el que l'escena guarda (propietats, llistes i objectes simples, fins a quatre nivells): això pot canviar més endavant
+    const guardats = new Set(), vist = new Set();
+    const cerca = (v, n) => {
+        if (!v || typeof v !== 'object' || vist.has(v) || n > 4) return;
+        vist.add(v);
+        if (v instanceof Phaser.GameObjects.GameObject) { guardats.add(v); if (!(v instanceof Phaser.GameObjects.Container)) return; v.list.forEach(x => cerca(x, n + 1)); return; }
+        if (Array.isArray(v)) { v.forEach(x => cerca(x, n + 1)); return; }
+        if (Object.getPrototypeOf(v) === Object.prototype) Object.values(v).forEach(x => cerca(x, n + 1));
+    };
+    Object.keys(escena).forEach(k => cerca(escena[k], 0));
+    escena.children.list.filter(o => o.type === 'Graphics').forEach(g => {
+        if (g.commandBuffer.length < minim || guardats.has(g) || !g.visible || g.alpha !== 1 || g.blendMode !== 0 || g.mask || g.parentContainer
+            || g.rotation || g.scaleX !== 1 || g.scaleY !== 1 || g.scrollFactorX !== 1 || g.scrollFactorY !== 1 || g.depth >= 85000 || escena.tweens.getTweensOf(g).length) return;
+        const b = limitsGrafic(g);
+        if (!b || b.w > 2048 || b.h > 2048 || b.w < 1 || b.h < 1) return;
+        const x = g.x + b.x, y = g.y + b.y;
+        const rt = escena.add.renderTexture(x, y, b.w, b.h).setOrigin(0).setDepth(g.depth);
+        rt.draw(g, -x, -y);
+        escena.children.moveTo(rt, escena.children.getIndex(g));          // mateix lloc a la llista: el mateix ordre de dibuix
+        g.destroy();
+    });
+}
+
 class ZonaBase extends Phaser.Scene {
     constructor(key, config) {
         super(key);
@@ -178,6 +228,7 @@ class ZonaBase extends Phaser.Scene {
             Estat.caigut = false;
             this.despertarCaigut();
         }
+        fixarDecorat(this);
     }
 
     // Benedicció fraterna: en entrar a un lloc sagrat, cura del tot (un sol cop fins que se surt a un lloc que no ho sigui)
