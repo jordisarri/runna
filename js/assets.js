@@ -204,13 +204,23 @@ const Grafics = {
     pixelsBloquejats: false,
     faltants: [],
 
-    carregar(scene) {
-        scene.load.on('loaderror', f => {
-            Grafics.faltants.push(f.key);
-            // Si no hi ha el PNG, provem el mateix nom en JPG (amb una clau a part)
-            if (CATALEG.some(i => i.key === f.key) && /\.(png|webp)$/.test(f.url)) scene.load.image(f.key + '__jpg', f.url.replace(/\.(png|webp)$/, '.jpg'));
-        });
-        CATALEG.forEach(item => scene.load.image(item.key, item.file));
+    // ---- CÀRREGA EN DUES PARTS ----
+    // 'inici': només el que fan servir la portada i el pròleg (la pantalla de càrrega és curta). 'resta': tot el joc, en segon pla
+    // mentre es veuen la portada i el pròleg (EscenaCarrega es queda viva fent-ho). Abans d'entrar a jugar, Joc.esperarRecursos.
+    INICIALS: ['esglesia', 'monestir'],
+    esInicial(item) { return Grafics.INICIALS.includes(item.key); },
+
+    carregar(scene, part = 'inici') {
+        if (!scene.__escoltaErrors) {
+            scene.__escoltaErrors = true;
+            scene.load.on('loaderror', f => {
+                Grafics.faltants.push(f.key);
+                // Si no hi ha el PNG, provem el mateix nom en JPG (amb una clau a part)
+                if (CATALEG.some(i => i.key === f.key) && /\.(png|webp)$/.test(f.url)) scene.load.image(f.key + '__jpg', f.url.replace(/\.(png|webp)$/, '.jpg'));
+            });
+        }
+        CATALEG.filter(item => Grafics.esInicial(item) === (part === 'inici')).forEach(item => scene.load.image(item.key, item.file));
+        if (part === 'inici') return;
         scene.load.image('ineu_perfil_font', 'assets/ineu/costat.webp');
         scene.load.spritesheet('visitant_zombi', 'assets/enemics/visitant_zombi.webp', { frameWidth: 127, frameHeight: 209 });      // el visitant (turista zombi) caminant, de cara (4x4 fotogrames): serveix per a totes les direccions
         scene.load.spritesheet('pallofa_cami', 'assets/personatges/pallofa_cami.webp', { frameWidth: 135, frameHeight: 140 });      // el Pallofa caminant cap a la dreta (4x4 fotogrames); es gira per anar cap a l'esquerra
@@ -284,32 +294,48 @@ const Grafics = {
         });
     },
 
-    // Processa tots els PNG carregats i crea marcadors/textures generades
-    preparar(scene) {
-        CATALEG.forEach(item => {
-            // Gràfic carregat com a JPG: passa a ser el gràfic oficial
-            if (scene.textures.exists(item.key + '__jpg')) {
-                if (scene.textures.exists(item.key)) scene.textures.remove(item.key);
-                scene.textures.renameTexture(item.key + '__jpg', item.key);
-                Grafics.faltants = Grafics.faltants.filter(k => k !== item.key);
-            }
-            const existeix = scene.textures.exists(item.key) && !Grafics.faltants.includes(item.key);
-            if (existeix && !item.fotogrames) {                  // les imatges grans només es construeixen quan una zona les fa servir
-                const img = scene.textures.get(item.key).getSourceImage();
-                if (img.width * img.height * 4 >= Grafics.MIDA_GRAN) { Grafics.fesPerezos(scene.textures, item, img); return; }
-            }
-            if (existeix && item.cru) scene.textures.get(item.key).customData.escala = item.amplada / scene.textures.get(item.key).getSourceImage().width;      // sense treure el fons
-            else if (existeix) Grafics.netejarPNG(scene, item);
-            else if (item.amplada * RES >= 1400) {                // marcador gran (l'art encara no hi és): també a demanda
-                Grafics.perezosos[item.key] = { construir: t => Grafics.crearProvisional({ textures: t }, item) };
-                Grafics.ocupat = true; try { if (scene.textures.list[item.key]) scene.textures.remove(item.key); } finally { Grafics.ocupat = false; }
-            } else Grafics.crearProvisional(scene, item);
-        });
-        Grafics.texturesGenerades(scene);
-        Grafics.instalarPerezosos();
-        Grafics.perfilIneu(scene);
-        Grafics.atacsVista = new Set(DIRS_INEU.filter(d => scene.textures.exists('ineu_atac_' + d) && !Grafics.faltants.includes('ineu_atac_' + d)));
-        Grafics.animacions(scene);
+    // Processa els PNG carregats i crea marcadors/textures generades. 'inici': els inicials i les textures de codi; 'resta': la resta,
+    // a trossos de pocs mil·lisegons per fotograma perquè la portada i el pròleg no s'encallin, i en acabar crida fet()
+    preparar(scene, part = 'inici', fet) {
+        if (part === 'inici') {
+            CATALEG.filter(item => Grafics.esInicial(item)).forEach(item => Grafics.prepararItem(scene, item));
+            Grafics.texturesGenerades(scene);
+            Grafics.instalarPerezosos();
+            return;
+        }
+        const items = CATALEG.filter(item => !Grafics.esInicial(item));
+        let k = 0;
+        const tros = () => {
+            const t0 = performance.now();
+            while (k < items.length && performance.now() - t0 < 10) Grafics.prepararItem(scene, items[k++]);
+            if (k < items.length) { scene.time.delayedCall(0, tros); return; }
+            Grafics.perfilIneu(scene);
+            Grafics.atacsVista = new Set(DIRS_INEU.filter(d => scene.textures.exists('ineu_atac_' + d) && !Grafics.faltants.includes('ineu_atac_' + d)));
+            Grafics.animacions(scene);
+            if (fet) fet();
+        };
+        tros();
+    },
+
+    // Un element del catàleg ja carregat (o que no s'ha pogut carregar: el dibuix provisional)
+    prepararItem(scene, item) {
+        // Gràfic carregat com a JPG: passa a ser el gràfic oficial
+        if (scene.textures.exists(item.key + '__jpg')) {
+            if (scene.textures.exists(item.key)) scene.textures.remove(item.key);
+            scene.textures.renameTexture(item.key + '__jpg', item.key);
+            Grafics.faltants = Grafics.faltants.filter(k => k !== item.key);
+        }
+        const existeix = scene.textures.exists(item.key) && !Grafics.faltants.includes(item.key);
+        if (existeix && !item.fotogrames) {                  // les imatges grans només es construeixen quan una zona les fa servir
+            const img = scene.textures.get(item.key).getSourceImage();
+            if (img.width * img.height * 4 >= Grafics.MIDA_GRAN) { Grafics.fesPerezos(scene.textures, item, img); return; }
+        }
+        if (existeix && item.cru) scene.textures.get(item.key).customData.escala = item.amplada / scene.textures.get(item.key).getSourceImage().width;      // sense treure el fons
+        else if (existeix) Grafics.netejarPNG(scene, item);
+        else if (item.amplada * RES >= 1400) {                // marcador gran (l'art encara no hi és): també a demanda
+            Grafics.perezosos[item.key] = { construir: t => Grafics.crearProvisional({ textures: t }, item) };
+            Grafics.ocupat = true; try { if (scene.textures.list[item.key]) scene.textures.remove(item.key); } finally { Grafics.ocupat = false; }
+        } else Grafics.crearProvisional(scene, item);
     },
 
     // Caminar cap a l'esquerra i la dreta: una sola fulla (art/ineu/caminar/Ineu-iso_walk_right-v2.png: 16 fotogrames en 4x4, mirant a la dreta, fons blanc).

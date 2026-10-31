@@ -203,7 +203,24 @@ const Joc = {
     },
 
     // Comença (o reprèn) la partida que hi ha a Estat.dades
+    // Abans d'entrar a jugar, tot ha d'estar carregat (es carrega en segon pla durant la portada i el pròleg): si encara no, un avís
+    // amb el percentatge a l'escena on s'és, i s'entra tot sol quan acaba. Durant el joc ja no hi ha mai cap càrrega.
+    recursosLlestos: false,
+    progresRecursos: 0,
+    esperarRecursos(scene, fet) {
+        if (Joc.recursosLlestos) { fet(); return; }
+        (Joc.esperantRecursos = Joc.esperantRecursos || []).push(fet);
+        if (scene.avisRecursos && scene.avisRecursos.active) return;
+        scene.add.rectangle(AMPLE / 2, ALT / 2, AMPLE * 3, ALT * 3, 0x000000, 1).setDepth(99999).setScrollFactor(0).setInteractive();   // tapa el que hi hagi (i els tocs)
+        const t = scene.avisRecursos = scene.add.text(AMPLE / 2, ALT / 2, '', estilText(26, '#f2e6c8', { stroke: '#000000', strokeThickness: 6, align: 'center' }))
+            .setOrigin(0.5).setDepth(100000).setScrollFactor(0);
+        const posa = () => t.active && t.setText('Preparant el Miracle...\n' + Math.round((Joc.progresRecursos || 0) * 100) + ' %');
+        posa();
+        scene.time.addEvent({ delay: 150, loop: true, callback: posa });
+    },
+
     continuar(scene) {
+        if (!Joc.recursosLlestos) { Joc.esperarRecursos(scene, () => Joc.continuar(scene)); return; }
         const m = scene.game.scene;
         Joc.aturarTot(scene);
         if (!m.isActive('UI')) m.start('UI');
@@ -233,7 +250,7 @@ class EscenaCarrega extends Phaser.Scene {
         this.load.on('progress', v => { barra.width = 500 * v; });
         this.load.on('fileprogress', f => detall.setText(f.key));
         this.load.on('loaderror', f => console.warn("No s'ha pogut carregar", f.key));
-        Grafics.carregar(this);
+        Grafics.carregar(this, 'inici');             // només el que fan servir la portada i el pròleg; la resta, després (carregarResta)
         // Vídeos de la intro (sense el seu so: sona la música del joc)
         this.load.image('titol_portada', 'assets/video/bucle_portada.webp');       // primer fotograma del bucle: el títol, sempre a punt encara que el vídeo no arrenqui
         this.load.video('video_intro', 'assets/video/intro_runna_vertical.mp4', true);
@@ -241,7 +258,7 @@ class EscenaCarrega extends Phaser.Scene {
     }
 
     create() {
-        Grafics.preparar(this);
+        Grafics.preparar(this, 'inici');
         // Esperem les fonts de Google (màxim 3 s) perquè el títol es dibuixi amb la lletra bona
         const fonts = document.fonts ? Promise.all([
             document.fonts.load(`900 64px ${FONT_TITOL}`),
@@ -255,7 +272,24 @@ class EscenaCarrega extends Phaser.Scene {
         ]) : Promise.resolve();
         Promise.race([fonts, new Promise(r => setTimeout(r, 3000))])
             .catch(() => {})
-            .then(() => this.scene.start('Titol', { mode: 'intro' }));
+            .then(() => {
+                // L'escena de càrrega es queda viva (sense res a la pantalla) i carrega tota la resta mentre es veuen la portada i el pròleg
+                this.children.removeAll(true);
+                this.scene.launch('Titol', { mode: 'intro' });
+                this.carregarResta();
+            });
+    }
+
+    carregarResta() {
+        this.load.off('progress'); this.load.off('fileprogress');
+        this.load.on('progress', v => { Joc.progresRecursos = v * 0.9; });
+        Grafics.carregar(this, 'resta');
+        this.load.once('complete', () => Grafics.preparar(this, 'resta', () => {
+            Joc.recursosLlestos = true; Joc.progresRecursos = 1;
+            (Joc.esperantRecursos || []).splice(0).forEach(f => f());
+            this.scene.stop();
+        }));
+        this.load.start();
     }
 }
 

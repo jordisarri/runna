@@ -41,7 +41,7 @@ const Proves = {
         Estat.dades.entrada = entrada;
         Estat.dades.x = Estat.dades.y = null;
         Estat.desar();
-        const sc = game.scene.getScenes(true).find(s => s.scene.key !== 'UI') || game.scene.getScene('Titol');
+        const sc = game.scene.getScenes(true).find(s => !['UI', 'Carrega'].includes(s.scene.key)) || game.scene.getScene('Titol');
         Joc.continuar(sc);
     },
 
