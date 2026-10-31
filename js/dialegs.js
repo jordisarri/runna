@@ -236,10 +236,13 @@ const DIALEGS = {
                 enAcabar: () => { E.posaFlag("parlatPianista"); iniciarLliço("aurora"); }
             };
         }
-        if (E.flag("ombraDemanaCant") && !E.flag("cantPedres")) {
+        // El Cant de les Pedres: quan l'ombra l'ha demanat, o ja abans si el Pare Alcuí ha llegit els fragments (no s'ha de quedar encallat)
+        if ((E.flag("ombraDemanaCant") || E.flag("alcuiLlegit")) && !E.flag("cantPedres")) {
             return {
                 pagines: [
-                    { qui: "La Pianista", text: "El monjo de les Runes vol sentir el Cant de les Pedres? Ai, fill, aquest és molt vell. Me'l va ensenyar la meva mare. Vine, escolta." }
+                    { qui: "La Pianista", text: E.flag("ombraDemanaCant")
+                        ? "El monjo de les Runes vol sentir el Cant de les Pedres? Ai, fill, aquest és molt vell. Me'l va ensenyar la meva mare. Vine, escolta."
+                        : "Vas a veure l'ombra de les Runes? Diuen que només escolta el Cant de les Pedres. És molt vell: me'l va ensenyar la meva mare. Vine, escolta." }
                 ],
                 enAcabar: () => iniciarLliço("pedres")
             };
