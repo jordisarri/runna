@@ -415,30 +415,48 @@ class EscenaUI extends Phaser.Scene {
     }
 
     // Barra de vida del boss, a baix de la pantalla
-    barraBoss(nom) {
-        this.amagarBarraBoss();
-        const y = ALT - 64, w = AMPLE - 120, x = 60;
-        const c = this.add.container(0, 0).setAlpha(0);
-        c.add(this.add.rectangle(x - 4, y - 4, w + 8, 26, 0x1a0408).setOrigin(0).setStrokeStyle(3, 0xb89a50));
-        const fons = this.add.rectangle(x, y, w, 18, 0x3a1010).setOrigin(0);
-        const ple = this.add.rectangle(x, y, w, 18, 0xe03a2a).setOrigin(0);
-        const brill = this.add.rectangle(x, y, w, 6, 0xffb0a0, 0.5).setOrigin(0);
-        c.add([fons, ple, brill]);
-        c.add(this.add.text(AMPLE / 2, y - 12, nom, estilText(24, '#ffe9a8', { stroke: '#1a0408', strokeThickness: 5 })).setOrigin(0.5, 1));
-        this.tweens.add({ targets: c, alpha: 1, duration: 500 });
-        this.boss = { c, ple, brill, w };
+    // Barra de vida del boss: fixa a dalt, just sota el HUD (a baix hi ha el polze i el joystick, i sobre el cap es perdria entre els
+    // efectes). Feedback de cada cop: la barra tremola i fa un flaix, la part perduda es queda un instant en blanc i després es buida, i
+    // quan queda poca vida batega. 'fases': fraccions on el boss canvia de fase (marques a la barra).
+    barraBoss(nom, fases = []) {
+        this.amagarBarraBoss(true);
+        const w = AMPLE - 100, h = 22, x = (AMPLE - w) / 2, y = ALT_HUD + 44;
+        const c = this.add.container(0, 0).setAlpha(0).setDepth(30);
+        c.add(this.add.rectangle(AMPLE / 2, y + h / 2, w + 16, h + 14, 0x120306, 0.92).setStrokeStyle(3, 0xb89a50));
+        c.add(this.add.rectangle(x, y, w, h, 0x3a1010).setOrigin(0));
+        const fantasma = this.add.rectangle(x, y, w, h, 0xfff0c0).setOrigin(0);           // el tros que s'acaba de perdre
+        const ple = this.add.rectangle(x, y, w, h, 0xe03a2a).setOrigin(0);
+        const brill = this.add.rectangle(x, y + 2, w, 6, 0xffb0a0, 0.55).setOrigin(0);
+        c.add([fantasma, ple, brill]);
+        fases.forEach(f => c.add(this.add.rectangle(x + w * f, y + h / 2, 3, h + 6, 0xffe9a8, 0.85)));
+        const flaix = this.add.rectangle(x, y, w, h, 0xffffff, 0).setOrigin(0);
+        c.add(flaix);
+        c.add(this.add.text(AMPLE / 2, y - 10, nom, estilText(26, '#ffe9a8', { stroke: '#1a0408', strokeThickness: 6, fontStyle: 'bold' })).setOrigin(0.5, 1));
+        c.y = -20;
+        this.tweens.add({ targets: c, alpha: 1, y: 0, duration: 500, ease: 'Back.out' });
+        this.boss = { c, ple, brill, fantasma, flaix, w, fr: 1 };
     }
     vidaBoss(fr) {
         if (!this.boss) return;
         const b = this.boss, ww = Math.max(0, fr) * b.w;
-        this.tweens.add({ targets: [b.ple, b.brill], width: ww, duration: 250, ease: 'Cubic.out' });
-        b.ple.setFillStyle(0xffffff);
-        this.time.delayedCall(80, () => b.ple.setFillStyle(fr > 0.5 ? 0xe03a2a : 0xff6a20));
+        b.fr = fr;
+        this.tweens.killTweensOf([b.ple, b.brill, b.fantasma, b.flaix]);
+        b.ple.width = ww; b.brill.width = ww;
+        this.tweens.add({ targets: b.fantasma, width: ww, duration: 450, delay: 380, ease: 'Cubic.in' });
+        b.flaix.setAlpha(0.75);
+        this.tweens.add({ targets: b.flaix, alpha: 0, duration: 220 });
+        this.tweens.add({ targets: b.c, x: { from: -7, to: 0 }, duration: 260, ease: 'Elastic.out' });
+        b.ple.setFillStyle(fr > 0.5 ? 0xe03a2a : fr > 0.25 ? 0xff6a20 : 0xffa020);
+        if (fr <= 0.25 && fr > 0) {                                                       // poca vida: batega
+            b.ple.setAlpha(1);
+            this.tweens.add({ targets: b.ple, alpha: 0.55, yoyo: true, repeat: -1, duration: 300 });
+        }
     }
-    amagarBarraBoss() {
+    amagarBarraBoss(depressa) {
         if (!this.boss) return;
         const c = this.boss.c; this.boss = null;
-        this.tweens.add({ targets: c, alpha: 0, duration: 500, onComplete: () => c.destroy() });
+        if (depressa) { c.destroy(); return; }
+        this.tweens.add({ targets: c, alpha: 0, y: -20, duration: 700, delay: 500, onComplete: () => c.destroy() });
     }
 
     // ---------------- DIÀLEG ----------------

@@ -186,7 +186,7 @@ const ENEMICS = {
     // BOSS: el Germà Andreu convertit en Pastor de Boira. Crida ovelles i carrega amb la caiada.
     pastor: {
         tex: 'pastor_boira', vida: 18, vel: 360, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 520,
-        robust: true,
+        robust: true, barra: true,
         perill: e => e.estat === 'carrega',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
@@ -925,6 +925,7 @@ Object.assign(ZonaBase.prototype, {
     // Final del combat contra el Pastor de Boira
     pastorDerrotat(e) {
         const c = e.spr.body.center;
+        this.ui().amagarBarraBoss();
         this.bossCaigut = e;
         if (this.treureTanques) this.treureTanques();
         this.enemics.filter(x => x.tipus === 'ovella' && !x.mort).forEach(o => {

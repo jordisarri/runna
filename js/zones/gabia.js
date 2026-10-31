@@ -910,7 +910,7 @@ class ZonaGabia extends ZonaBase {
         };
         this.events.on('postupdate', seguir);
         this.events.once('shutdown', () => this.events.off('postupdate', seguir));
-        this.ui().barraBoss("L'Home de la Gàbia");
+        this.ui().barraBoss("L'Home de la Gàbia", [1 / 3, 2 / 3]);            // els canvis de fase
         Joc.iniciarMusica(this, 0, 'musica_boss');
         this.invulnerableFins = this.time.now + 1500;
         this.tambors(560);

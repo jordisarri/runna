@@ -298,6 +298,7 @@ class ZonaCirosa extends ZonaBase {
         this.andreuFlota.pause();
         this.andreuNpc.setVisible(false); this.andreuOmbra.setVisible(false);
         const e = this.enemic('pastor', 1400, 570);
+        if (e) this.ui().barraBoss('Andreu, Pastor de Boira', [0.5]);              // a la meitat, la segona fase
         if (!e) { this.bossIniciat = false; this.andreuNpc.setVisible(true); this.andreuOmbra.setVisible(true); this.andreuFlota.resume(); return; }
         this.cameras.main.shake(300, 0.005);
         this.tancarArena();
