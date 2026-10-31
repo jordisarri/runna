@@ -602,9 +602,9 @@ const DIALEGS = {
                     { qui: "Pare Alcuí", text: "Has trobat els dos fragments! Deixa'm llegir-los... Sí. Ho explica la Crònica que guardo a la biblioteca: un monjo va segellar la foscor amb la llum de l'espasa Runna." },
                     { fer: (z, fet) => z.npcVa('pare_alcui', 812, 372, fet, 120) },
                     { qui: "Crònica", text: "«Des que la tercera església va quedar inacabada, l'ombra del monjo es veu clarament sobre el mur de les Runes: mig corbat, amb les mans unides, com si pregués. Apareix cada nit.»" },
-                    { qui: "Pare Alcuí", text: "L'ombra del monjo... No fa mal a ningú, Ineu. Crec que és el monjo que va segellar la foscor amb la llum de Runna. Ves a veure'l, de nit, a les Runes." }
+                    { qui: "Pare Alcuí", text: "L'ombra del monjo... No fa mal a ningú, Ineu. Crec que és el monjo que va segellar la foscor amb la llum de Runna. Ves a les Runes, passat el Pati del Celler: és sobre el mur de l'església inacabada. Parla-hi." }
                 ],
-                enAcabar: () => { E.posaFlag("alcuiLlegit"); E.posaFlag("parlatAlcui"); E.posaObjectiu("L'ombra del monjo et deu esperar a les Runes, a l'est de la plaça, de nit."); }
+                enAcabar: () => { E.posaFlag("alcuiLlegit"); E.posaFlag("parlatAlcui"); E.posaObjectiu("A les Runes, passat el Pati del Celler, l'ombra del monjo és sobre el mur de l'església inacabada. Parla-hi."); }
             };
         }
         return {

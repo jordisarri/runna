@@ -60,7 +60,7 @@ const PROGRES = {
         { id: 'alcuiLlegit', marca: ['alcuiLlegit'], fet: E => E.flag('alcuiLlegit'),
           pista: E => "Els dos pergamins són en un llatí molt vell. El Pare Alcuí, entre els llibres del Monestir, el sap llegir." },
         { id: 'ombra', marca: ['ombraDemanaCant', 'cantPedres', 'benedicioMonjo'], fet: E => E.flag('benedicioMonjo'),
-          pista: E => !E.flag('ombraDemanaCant') ? "A les Runes, a la dreta del replà de pedra, hi ha una ombra de monjo que vol dir-te alguna cosa."
+          pista: E => !E.flag('ombraDemanaCant') ? "A les Runes, passat el Pati del Celler, l'ombra del monjo és sobre el mur de l'església inacabada. Parla-hi."
               : !E.flag('cantPedres') ? "L'ombra del monjo demana un cant que les pedres entenen. La Pianista, al Santuari, el coneix."
               : "L'ombra del monjo, a les Runes, només escoltarà el Cant de les Pedres." },
         { id: 'saber', marca: ['saber'], fet: E => E.flag('saber'),

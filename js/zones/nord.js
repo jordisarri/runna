@@ -104,7 +104,8 @@ class ZonaRuines extends ZonaBase {
         this.apareix = 1;            // 0..1: com de present és l'ombra (la primera vegada es materialitza lentament)
         this.ombraMonjo = this.add.image(1100, 560, 'ombra_monjo').setOrigin(0.5, 1)
             .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(560).setAlpha(0);
-        this.interactiu(1100, 600, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1'), enTancar: () => Estat.posaFlag('flauta_ombra') });
+        this.puntOmbra = this.interactiu(1100, 600, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1'), enTancar: () => Estat.posaFlag('flauta_ombra') });
+        this.ombraHaCridat = false;
         this.llocFlauta('ombra', 1100, 610, 160, true, () => !Estat.flag('benedicioMonjo'));    // un cop t'ha beneït, ESPAI hi parla
         this.tweens.add({ targets: this.ombraMonjo, y: 564, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
         // Ambient de nit quan la llegenda s'ha començat a descobrir
@@ -166,6 +167,13 @@ class ZonaRuines extends ZonaBase {
     }
 
     actualitzar() {
+        // Quan el Pare Alcuí ja ha llegit els fragments, l'ombra parla a l'Ineu el primer cop que s'hi acosta (li diu què vol sentir)
+        if (!this.ombraHaCridat && Estat.flag('alcuiLlegit') && Estat.flag('fragment2') && !Estat.flag('ombraDemanaCant')
+            && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1100, 600) < 260 && !this.ui().dialeg) {
+            this.ombraHaCridat = true;
+            this.ineu.body.setVelocity(0);
+            this.interactuar(this.puntOmbra);
+        }
         const visible = Estat.flag('fragment1') || this.ombraVista;
         this.nit.setVisible(visible);
         // L'ombra apareix i desapareix lentament, com una respiració
