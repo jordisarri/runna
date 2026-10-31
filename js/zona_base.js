@@ -201,7 +201,7 @@ class ZonaBase extends Phaser.Scene {
         const vw = AMPLE / ZOOM_CAMERA, vh = (ALT - ALT_HUD) / ZOOM_CAMERA, alcadaMon = c.alcada + this.extraSud;
         const bx = Math.max(0, (vw - c.amplada) / 2), by = Math.max(0, (vh - alcadaMon) / 2);
         cam.setBounds(-bx, -by, c.amplada + 2 * bx, alcadaMon + 2 * by);
-        cam.startFollow(this.ineu, true, 0.12, 0.12);
+        cam.startFollow(this.ineu, false, 0.12, 0.12);
         cam.setBackgroundColor(c.colorFons || '#2d4a22');
         cam.fadeIn(350, 0, 0, 0);
 
@@ -1008,7 +1008,12 @@ class ZonaBase extends Phaser.Scene {
         const vista = this.vista8;
         if (this.atacantFins && this.time.now < this.atacantFins) return;      // l'animació de l'atac no es talla
         if (caminant) {
-            this.ineu.anims.play('caminar_' + vista, true);
+            // En canviar de vista caminant, el pas continua pel mateix fotograma (no torna a començar: es veia un salt)
+            const a = this.ineu.anims, clau = 'caminar_' + vista, ara = a.isPlaying && a.currentAnim;
+            if (ara && ara.key !== clau && ara.key.startsWith('caminar_') && a.currentFrame && this.anims.exists(clau)) {
+                const n = this.anims.get(clau).frames.length;
+                a.play({ key: clau, startFrame: Math.min(n - 1, a.currentFrame.index - 1) });
+            } else a.play(clau, true);
         } else {
             this.ineu.anims.stop();
             this.ineu.setTexture('ineu_' + vista, quietIneu(vista));
@@ -1229,7 +1234,7 @@ class ZonaBase extends Phaser.Scene {
                 onComplete: () => {
                     cam.setZoom(d.z); this.ajustarSuperposicions();
                     if (o) cam.setBounds(o.x, o.y, o.w, o.h);
-                    cam.startFollow(this.ineu, true, 0.12, 0.12);
+                    cam.startFollow(this.ineu, false, 0.12, 0.12);
                     this.boundsCamOrig = null;
                 }
             });
@@ -1455,7 +1460,11 @@ class ZonaBase extends Phaser.Scene {
         if (movent) {
             if (this.time.now > (this.proxPas || 0)) { this.proxPas = this.time.now + 300; this.altrePas = !this.altrePas; Sfx.pas(this.altrePas); }
             const dir = Math.abs(vx) > Math.abs(vy) * 1.1 ? (vx < 0 ? 'esquerra' : 'dreta') : (vy < 0 ? 'amunt' : 'avall');
-            const oct = (Math.round(Math.atan2(vy, vx) / (Math.PI / 4)) + 8) % 8;
+            // Vista de 8 direccions, amb una mica d'histèresi: caminant en diagonal amb el joystick, l'angle balla a prop del límit
+            // entre dues vistes i l'Ineu canviava de fulla a cada moment (parpellejava). No es canvia fins que s'allunya ~10° del sector
+            const ang = Math.atan2(vy, vx), actual = OCTANTS_INEU.indexOf(this.vista8);
+            let oct = (Math.round(ang / (Math.PI / 4)) + 8) % 8;
+            if (actual >= 0 && this.ineu.anims.isPlaying && Math.abs(Phaser.Math.Angle.Wrap(ang - actual * Math.PI / 4)) < Math.PI / 8 + 0.17) oct = actual;
             this.vista8Manual = true;
             this.posarDireccio(dir, true, OCTANTS_INEU[oct]);
         } else if (this.ineu.anims.isPlaying) {

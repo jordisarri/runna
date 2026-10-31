@@ -434,7 +434,7 @@ class ZonaJardi extends ZonaBase {
             Estat.desar();
             cam.pan(this.ineu.x, this.ineu.y, 700, 'Sine.easeInOut');
             await espera(750);
-            cam.startFollow(this.ineu, true, 0.12, 0.12);
+            cam.startFollow(this.ineu, false, 0.12, 0.12);
             ui.bloquejatFins = 0;
             this.obrintLlosa = false;
         })();

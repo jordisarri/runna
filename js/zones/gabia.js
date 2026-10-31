@@ -806,7 +806,7 @@ class ZonaGabia extends ZonaBase {
             onUpdate: () => this.ajustarSuperposicions(), onComplete: () => {
                 const b = this.boundsCinema;
                 if (b) cam.setBounds(b.x, b.y, b.w, b.h);
-                cam.startFollow(I, true, 0.12, 0.12);
+                cam.startFollow(I, false, 0.12, 0.12);
                 this.camCinema = false; this.ajustarSuperposicions();
                 if (fet) fet();
             } });

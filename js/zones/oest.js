@@ -541,7 +541,7 @@ class ZonaDipositos extends ZonaBase {
                     this.posarLlumEstel();
                     this.esperar(1100, () => {
                         cam.pan(this.ineu.x, this.ineu.y, 800, 'Sine.easeInOut');
-                        this.esperar(850, () => { cam.startFollow(this.ineu, true, 0.12, 0.12); this.estelCaient = false; if (fet) fet(); });
+                        this.esperar(850, () => { cam.startFollow(this.ineu, false, 0.12, 0.12); this.estelCaient = false; if (fet) fet(); });
                     });
                 } });
         });
