@@ -182,7 +182,11 @@ const SPRITE_INEU = {
     fps: 14,
     // Les vistes cardinals tenen més passos dins els 16 fotogrames i amb 14 fps les cames fan passetes curtes i ràpides: van més lentes
     fpsVista: { down: 8, up: 8, left: 8, right: 8 },
-    quiet: 2              // fotograma de repòs de cada direcció
+    quiet: 2,             // fotograma de repòs de cada direcció
+    // Memòria: les fulles (1024x1024, cel·les de 256) es redueixen en carregar a cel·les de 192 (Grafics.reduirIneu): de 4 a 2,25 MB
+    // cadascuna. Totes les mides d'aquí (i les de l'arma, atac_arma.js) continuen en píxels de la cel·la de 256; on cal píxels de la
+    // textura de veritat, es multiplica per k
+    k: 0.75
 };
 /**
  * ATACS DE L'INEU: una fulla per direcció (assets/ineu/atac_<direccio>.webp, 4x4 fotogrames de 256, fons transparent).
@@ -239,7 +243,7 @@ const Grafics = {
     usos: {},               // clau → època de l'última petició
     epoca: 0,               // puja cada cop que s'entra a una zona
     ocupat: false,          // mentre és true, els ganxos no fan res (les pròpies operacions no s'han de reconstruir)
-    MIDA_GRAN: 2.5 * 1048576,
+    MIDA_GRAN: 1.1 * 1048576,          // (les rajoles de terra, d'1 MB, que fan servir gairebé totes les zones, es queden sempre fetes)
 
     fesPerezos(tm, item, img) {
         const cru = item.cru || /\.webp$/.test(item.file);       // els WebP ja venen nets i retallats (eines/convertir_webp.js)
@@ -250,6 +254,23 @@ const Grafics = {
             if (cru) t.list[item.key].customData.escala = item.amplada / img.width;
             else Grafics.netejarPNG({ textures: t }, item);
         } };
+    },
+
+    // Un TileSprite fa un llenç de la seva mida que, amb WebGL, no es fa servir mai (dibuixa el patró amb fillPattern): però ocupa
+    // memòria (Safari la compta tota). Amb WebGL, el llenç es queda d'1x1.
+    instalarTileSpriteLleuger() {
+        const TS = Phaser.GameObjects.TileSprite.prototype;
+        if (TS.__lleuger) return;
+        TS.__lleuger = true;
+        const orig = TS.updateCanvas;
+        TS.updateCanvas = function () {
+            if (!(this.renderer && this.renderer.gl)) return orig.call(this);
+            if (this.canvas.width !== 1 || this.canvas.height !== 1) {
+                this.canvas.width = 1; this.canvas.height = 1;
+                if (this.texture && this.texture.refresh) this.texture.refresh();
+            }
+            this.dirty = false;
+        };
     },
 
     instalarPerezosos() {
@@ -301,6 +322,7 @@ const Grafics = {
             CATALEG.filter(item => Grafics.esInicial(item)).forEach(item => Grafics.prepararItem(scene, item));
             Grafics.texturesGenerades(scene);
             Grafics.instalarPerezosos();
+            Grafics.instalarTileSpriteLleuger();
             return;
         }
         const items = CATALEG.filter(item => !Grafics.esInicial(item));
@@ -310,6 +332,7 @@ const Grafics = {
             while (k < items.length && performance.now() - t0 < 10) Grafics.prepararItem(scene, items[k++]);
             if (k < items.length) { scene.time.delayedCall(0, tros); return; }
             Grafics.perfilIneu(scene);
+            Grafics.reduirIneu(scene);
             Grafics.atacsVista = new Set(DIRS_INEU.filter(d => scene.textures.exists('ineu_atac_' + d) && !Grafics.faltants.includes('ineu_atac_' + d)));
             Grafics.animacions(scene);
             if (fet) fet();
@@ -335,7 +358,15 @@ const Grafics = {
         else if (item.amplada * RES >= 1400) {                // marcador gran (l'art encara no hi és): també a demanda
             Grafics.perezosos[item.key] = { construir: t => Grafics.crearProvisional({ textures: t }, item) };
             Grafics.ocupat = true; try { if (scene.textures.list[item.key]) scene.textures.remove(item.key); } finally { Grafics.ocupat = false; }
-        } else Grafics.crearProvisional(scene, item);
+        } else {
+            Grafics.crearProvisional(scene, item);
+            // Si el dibuix ha sortit gran, també a demanda (es tornarà a dibuixar quan una zona el demani)
+            const t = scene.textures.list[item.key], src = t && t.source[0];
+            if (src && src.width * src.height * 4 >= Grafics.MIDA_GRAN) {
+                Grafics.perezosos[item.key] = { construir: tm => Grafics.crearProvisional({ textures: tm }, item) };
+                Grafics.descarta(scene.textures, item.key);
+            }
+        }
     },
 
     // Caminar cap a l'esquerra i la dreta: una sola fulla (art/ineu/caminar/Ineu-iso_walk_right-v2.png: 16 fotogrames en 4x4, mirant a la dreta, fons blanc).
@@ -425,6 +456,26 @@ const Grafics = {
         } catch (e) {
             Grafics.pixelsBloquejats = true;      // sense lectura de píxels: es queden les fulles antigues
         }
+    },
+
+    // Redueix les fulles de l'Ineu a SPRITE_INEU.k (vegeu SPRITE_INEU), i treu la imatge font de les de perfil, que ja no cal
+    reduirIneu(scene) {
+        const tm = scene.textures, k = SPRITE_INEU.k, CEL = SPRITE_INEU.ample, C2 = Math.round(CEL * k);
+        DIRS_INEU.forEach(dir => ['ineu_' + dir, 'ineu_atac_' + dir].forEach(clau => {
+            if (!tm.exists(clau) || Grafics.faltants.includes(clau)) return;
+            const font = tm.get(clau).getSourceImage(), cols = Math.round(font.width / CEL), files = Math.round(font.height / CEL);
+            if (font.width !== cols * CEL) return;                    // ja reduïda, o d'una altra mida
+            const cv = document.createElement('canvas');
+            cv.width = cols * C2; cv.height = files * C2;
+            const c = cv.getContext('2d');
+            c.imageSmoothingQuality = 'high';
+            c.drawImage(font, 0, 0, cv.width, cv.height);
+            tm.remove(clau);
+            if (font instanceof HTMLCanvasElement) { font.width = 0; font.height = 0; }
+            const t = tm.addCanvas(clau, cv);
+            for (let i = 0; i < cols * files; i++) t.add(i, 0, (i % cols) * C2, Math.floor(i / cols) * C2, C2, C2);
+        }));
+        if (tm.exists('ineu_perfil_font') && Grafics.perfilNou) tm.remove('ineu_perfil_font');
     },
 
     // Animacions de caminar de l'Ineu (són globals: es creen una sola vegada)

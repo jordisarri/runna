@@ -331,13 +331,26 @@ class ZonaBase extends Phaser.Scene {
 
     // Fora dels límits de la zona (quan la càmera s'allunya o es mou fora, com en un diàleg) es veu el mateix terra, continuant-lo, i no un color pla.
     // Els interiors (sales fosques) es queden amb el seu color de fons.
+    // Memòria: un TileSprite fa un llenç de la seva mida (Safari el compta encara que no s'hi dibuixi); el de tota la zona més 1600 px
+    // per banda eren ~95 MB. Ara és de la mida de la vista (i creix si la càmera s'allunya, com als diàlegs) i segueix la càmera saltant
+    // de rajola en rajola: es veu igual.
     ponFonsContinu() {
         if (!this.fonsTex || this.esInterior() || !this.textures.exists(this.fonsTex)) return;
-        const c = this.config, MARGE = 1600;
         const per = Math.max(8, this.textures.get(this.fonsTex).getSourceImage().width / RES);        // el que fa una rajola al món: la quadrícula queda alineada amb la del terra
-        const m = Math.ceil(MARGE / per) * per;
-        const f = this.add.tileSprite(-m, -m, c.amplada + 2 * m, c.alcada + this.extraSud + 2 * m, this.fonsTex).setOrigin(0).setTileScale(1 / RES).setDepth(-1500);
+        const cam = this.cameras.main;
+        const mida = z => [(Math.ceil(AMPLE / z / per) + 2) * per, (Math.ceil((ALT - ALT_HUD) / z / per) + 2) * per];
+        const [w0, h0] = mida(Math.min(ZOOM_CAMERA, cam.zoom));
+        const f = this.add.tileSprite(0, 0, w0, h0, this.fonsTex).setOrigin(0).setTileScale(1 / RES).setDepth(-1500);
         if (this.fonsSprite && this.fonsSprite.isTinted) f.setTint(this.fonsSprite.tintTopLeft);
+        const seguir = () => {
+            const [w, h] = mida(cam.zoom);
+            if (w > f.width || h > f.height) f.setSize(Math.max(w, f.width), Math.max(h, f.height));
+            const cx = cam.scrollX + cam.width / 2, cy = cam.scrollY + cam.height / 2;              // el centre de la vista, al món
+            f.setPosition(Math.floor((cx - f.width / 2) / per) * per, Math.floor((cy - f.height / 2) / per) * per);
+        };
+        seguir();
+        this.events.on('postupdate', seguir);
+        this.events.once('shutdown', () => this.events.off('postupdate', seguir));
     }
 
     // Interior = sala fosca (colorFons molt fosc): es dibuixa centrada i no s'allarga
@@ -465,14 +478,16 @@ class ZonaBase extends Phaser.Scene {
         }
         mctx.putImageData(px, 0, 0);
 
-        // Es talla en blocs perquè cap textura passi del límit de la targeta gràfica
-        const peca = this.textures.get('cami').getSourceImage(), LIM = 2048;
+        // Es talla en blocs perquè cap textura passi del límit de la targeta gràfica. Memòria: es dibuixa a 3/4 de la mida del món
+        // (ESC) i la imatge s'amplia: ocupa poc més de la meitat i, amb la vora difuminada i la terra, no es nota
+        const peca = this.textures.get('cami').getSourceImage(), LIM = 2048, ESC = 0.75;
         let n = 0;
         for (let cy = 0; cy < H; cy += LIM) for (let cx = 0; cx < W; cx += LIM) {
             const cw = Math.min(LIM, W - cx), ch = Math.min(LIM, H - cy);
             const cv = document.createElement('canvas');
-            cv.width = cw; cv.height = ch;
+            cv.width = Math.ceil(cw * ESC); cv.height = Math.ceil(ch * ESC);
             const ctx = cv.getContext('2d');
+            ctx.scale(ESC, ESC);
             for (let ty = Math.floor(cy / 64) * 64; ty < cy + ch; ty += 64) {
                 for (let tx = Math.floor(cx / 64) * 64; tx < cx + cw; tx += 64) ctx.drawImage(peca, tx - cx, ty - cy, 64, 64);
             }
@@ -482,7 +497,7 @@ class ZonaBase extends Phaser.Scene {
             const clau = 'camins_' + this.scene.key + '_' + (n++);
             if (this.textures.exists(clau)) this.textures.remove(clau);
             this.textures.addCanvas(clau, cv);
-            this.add.image(cx, cy, clau).setOrigin(0).setDepth(-1040);
+            this.add.image(cx, cy, clau).setOrigin(0).setScale(1 / ESC).setDepth(-1040);
         }
     }
 
@@ -968,14 +983,14 @@ class ZonaBase extends Phaser.Scene {
         this.ombraIneu = this.add.image(pos.x, pos.y, 'ombra').setScale(0.4).setDepth(-500);
         const S = SPRITE_INEU;
         this.ineu = this.physics.add.sprite(pos.x, pos.y, 'ineu_down', S.quiet).setOrigin(0.5, S.peus / S.alt);
-        this.ineu.setScale(S.alcada / S.alt);
+        this.ineu.setScale(S.alcada / (S.alt * S.k));
         // Silueta fantasma: sempre per sobre de tot; on no hi ha res davant, es confon amb l'Ineu,
         // però si un edifici o un arbre el tapa, se'n veu un contorn translúcid.
         this.fantasma = this.add.sprite(pos.x, pos.y, 'ineu_down', S.quiet).setOrigin(0.5, S.peus / S.alt)
-            .setScale(S.alcada / S.alt).setDepth(87000);
-        // Caixa de col·lisió petita als peus (en píxels de textura)
-        this.ineu.body.setSize(72, 30);
-        this.ineu.body.setOffset((S.ample - 72) / 2, S.peus - 30);
+            .setScale(S.alcada / (S.alt * S.k)).setDepth(87000);
+        // Caixa de col·lisió petita als peus (en píxels de textura: els de la cel·la de 256 per k)
+        this.ineu.body.setSize(72 * S.k, 30 * S.k);
+        this.ineu.body.setOffset((S.ample - 72) / 2 * S.k, (S.peus - 30) * S.k);
         this.ineu.setCollideWorldBounds(true);
         this.physics.add.collider(this.ineu, this.obstacles);
         this.direccio = pos.dir || 'avall';

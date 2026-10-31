@@ -647,7 +647,7 @@ Object.assign(ZonaBase.prototype, {
             if (!e) { arma.setVisible(false); return; }
             const aj = ajustos[frame.index - 1] || { dx: 0, dy: 0, a: 0, e: 1 };
             const davant = aj.d == null ? e.d : aj.d;
-            const jo = this.ineu, s = jo.scaleX;
+            const jo = this.ineu, s = jo.scaleX * SPRITE_INEU.k;          // (la taula és en píxels de la cel·la de 256)
             arma.setVisible(true).setPosition(jo.x + (e.x + aj.dx - SPRITE_INEU.ample / 2) * s, jo.y + (e.y + aj.dy - SPRITE_INEU.peus) * s)
                 .setAngle(e.a + aj.a).setScale(escalaBase * aj.e).setDepth(jo.depth + (davant ? 1 : -1));
         };

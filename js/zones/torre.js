@@ -51,7 +51,7 @@ class ZonaTorre extends Phaser.Scene {
 
         const S = SPRITE_INEU;
         this.ombra = this.add.image(this.cx, T.peuY, 'ombra').setScale(0.42).setDepth(4);
-        this.ineu = this.add.sprite(this.cx, T.peuY, 'ineu_right', quietIneu('right')).setOrigin(0.5, S.peus / S.alt).setScale(S.alcada / S.alt).setDepth(5);
+        this.ineu = this.add.sprite(this.cx, T.peuY, 'ineu_right', quietIneu('right')).setOrigin(0.5, S.peus / S.alt).setScale(S.alcada / (S.alt * S.k)).setDepth(5);
         this.dirVista = 1;
 
         // Pols en suspensió, a la llum de les finestres
