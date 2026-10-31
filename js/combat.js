@@ -2,7 +2,7 @@
  * COMBAT (fase 2)
  * S'afegeix a ZonaBase (carregar després de zona_base.js). Cada zona crida this.enemic(tipus, x, y).
  *   Atac: J, ESPAI o ENTER/E (si no hi ha res per parlar)
- * Vida del jugador en meitats de cor (Estat.dades.vida). Bastó = 1 de dany; Runna = 2.
+ * Vida del jugador en meitats de cor (Estat.dades.vida). Mal de les armes: bastó 1, branca del Til·ler 2, Runna 3.
  * Cap enemic "mor": es desfà en boira lila (els visitants cauen adormits).
  */
 const DIRS = { avall: { x: 0, y: 1 }, amunt: { x: 0, y: -1 }, esquerra: { x: -1, y: 0 }, dreta: { x: 1, y: 0 } };
@@ -173,7 +173,7 @@ const ENEMICS = {
                 if (ara > e.canviFins) { e.ang = Math.random() * Math.PI * 2; e.canviFins = ara + 900 + Math.random() * 800; }
                 vel(35);
                 if (dist < 380 && ara > e.fins) {
-                    e.estat = 'apunta'; e.fins = ara + 650;
+                    e.estat = 'apunta'; e.fins = ara + 800;
                     e.ang = Math.atan2(jo.y - c.y, jo.x - c.x);
                     e.spr.setTint(0xffa8ff);
                     Sfx.carrega();
@@ -185,31 +185,39 @@ const ENEMICS = {
 
     // BOSS: el Germà Andreu convertit en Pastor de Boira. Crida ovelles i carrega amb la caiada.
     pastor: {
-        tex: 'pastor_boira', vida: 18, vel: 360, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 520,
+        tex: 'pastor_boira', vida: 24, vel: 320, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 520,
         robust: true, barra: true,
         perill: e => e.estat === 'carrega',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
-            const fase2 = e.vida <= 9;
-            if (!e.proxCrida) { e.proxCrida = ara + 2500; e.proxCarrega = ara + 2600; e.proxBat = ara + 1800; }
+            const fase2 = e.vida <= this.vida / 2;
+            if (!e.proxCrida) { e.proxCrida = ara + 3500; e.proxCarrega = ara + 2600; e.proxBat = ara + 1800; }
             const cap = Math.atan2(jo.y - c.y, jo.x - c.x);
             if (e.estat === 'apunta') {
                 e.spr.body.setVelocity(0);
                 if (ara > e.fins) { e.estat = 'carrega'; e.fins = ara + 340; e.spr.clearTint(); e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel); }
             } else if (e.estat === 'carrega') {
-                if (ara > e.fins) { e.estat = 'cansat'; e.fins = ara + (fase2 ? 650 : 950); e.spr.body.setVelocity(0); e.proxCarrega = ara + (fase2 ? 1800 : 2600); }
+                if (ara > e.fins) { e.estat = 'cansat'; e.fins = ara + (fase2 ? 950 : 1300); e.spr.body.setVelocity(0); e.proxCarrega = ara + (fase2 ? 2200 : 3000); }
             } else if (e.estat === 'bat') {
-                // Cop de caiada en arc: s'avisa amb un instant de pausa i colpeja tot al seu voltant
+                // Cop de caiada en arc: mentre s'atura, un oval a terra s'omple i marca exactament l'àrea on farà mal (els peus de l'Ineu
+                // a dins); en acabar, l'ona que surt és el mateix oval
                 e.spr.body.setVelocity(0);
+                const R = 125, RY = R * 0.55;
+                if (!e.avisBat) {
+                    e.avisBat = z.add.ellipse(c.x, c.y, R * 2, RY * 2, 0xffd080, 0.06).setStrokeStyle(4, 0xffd080, 0.9).setDepth(c.y - 400);
+                    z.tweens.add({ targets: e.avisBat, fillAlpha: 0.32, duration: e.fins - ara, ease: 'Quad.in' });
+                }
                 if (ara > e.fins) {
                     e.spr.clearTint();
+                    z.tweens.killTweensOf(e.avisBat); e.avisBat.destroy(); e.avisBat = null;
                     z.cameras.main.shake(120, 0.004);
                     Sfx.cop(true);
-                    const arc = z.add.circle(c.x, c.y, 40, 0xffe0a0, 0.35).setStrokeStyle(4, 0xffffff, 0.8).setDepth(99980);
-                    z.tweens.add({ targets: arc, scale: 3.4, alpha: 0, duration: 260, onComplete: () => arc.destroy() });
-                    if (Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y) < 150) z.ferIneu(1, { x: c.x, y: c.y });
-                    e.estat = 'cansat'; e.fins = ara + 500; e.proxBat = ara + (fase2 ? 1700 : 2400);
+                    const ona = z.add.ellipse(c.x, c.y, R * 2, RY * 2, 0xfff0b0, 0.35).setStrokeStyle(6, 0xffffff, 0.9).setDepth(c.y - 399).setScale(0.4);
+                    z.tweens.add({ targets: ona, scale: 1, alpha: 0, duration: 280, ease: 'Cubic.out', onComplete: () => ona.destroy() });
+                    const dx = (jo.x - c.x) / R, dy = (jo.y - c.y) / RY;
+                    if (dx * dx + dy * dy < 1) z.ferIneu(1, { x: c.x, y: c.y });
+                    e.estat = 'cansat'; e.fins = ara + 700; e.proxBat = ara + (fase2 ? 2200 : 3000);
                 }
             } else if (e.estat === 'cansat') {
                 e.spr.body.setVelocity(0);
@@ -219,17 +227,17 @@ const ENEMICS = {
                 const v = dist > 95 ? (fase2 ? 85 : 66) : 0;
                 e.spr.body.setVelocity(Math.cos(cap) * v, Math.sin(cap) * v);
                 e.spr.setFlipX(Math.cos(cap) < 0);
-                if (dist < 130 && ara > e.proxBat) { e.estat = 'bat'; e.fins = ara + (fase2 ? 380 : 520); e.spr.setTint(0xffe080); }
+                if (dist < 130 && ara > e.proxBat) { e.estat = 'bat'; e.fins = ara + (fase2 ? 550 : 750); e.spr.setTint(0xffe080); }
                 if (ara > e.proxCrida) {
-                    e.proxCrida = ara + (fase2 ? 4200 : 6500);
+                    e.proxCrida = ara + (fase2 ? 6000 : 8500);
                     const vius = z.enemics.filter(x => x.tipus === 'ovella' && !x.mort).length;
-                    if (vius < 4) {
+                    if (vius < 2) {
                         z.flotant(c.x, c.y - 120, 'Be-e-e!', '#e0a0ff');
                         Sfx.be();
-                        [-1, 1].slice(0, 4 - vius).forEach(s => { const o = z.enemic('ovella', c.x + s * 150, c.y + 60); if (o) { z.boiraPuf(o.spr.x, o.spr.y); o.fins = ara + 900; } });   // mai més de quatre alhora
+                        [-1, 1].slice(0, 2 - vius).forEach(s => { const o = z.enemic('ovella', c.x + s * 150, c.y + 60); if (o) { z.boiraPuf(o.spr.x, o.spr.y); o.fins = ara + 900; } });   // mai més de dues alhora
                     }
                 } else if (ara > e.proxCarrega && dist < 440) {
-                    e.estat = 'apunta'; e.fins = ara + (fase2 ? 400 : 620); e.ang = cap;
+                    e.estat = 'apunta'; e.fins = ara + (fase2 ? 550 : 800); e.ang = cap;
                     e.spr.setTint(0xff8080);
                     Sfx.carrega();
                 }
@@ -242,12 +250,12 @@ const ENEMICS = {
     // que li volten al voltant i després es llancen contra l'Ineu (Runna els talla). A la segona meitat llança el bàcul
     // com un remolí i desapareix en boira per tornar a sortir en un altre lloc.
     ocellaire: {
-        tex: 'ocellaire', vida: 36, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8, soloCap: true,
+        tex: 'ocellaire', vida: 45, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8, soloCap: true,
         robust: true, barra: true,
         perill: e => !e.amagat && e.estat !== 'apareix',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
-            const fase3 = e.vida <= this.vida / 3, fase2 = e.vida <= this.vida * 2 / 3;      // tres fases de dos terços de vida cadascuna: 36 → 24 → 12
+            const fase3 = e.vida <= this.vida / 3, fase2 = e.vida <= this.vida * 2 / 3;      // tres fases d'un terç de vida cadascuna: 45 → 30 → 15
             if (!e.proxAtac) { e.proxAtac = ara + 1800; e.estat = 'sura'; e.nAtac = 0; }
             // Idle: respira (1 → 2 → 1 → 3) mentre sura; pose de rugit als canvis de fase; en la resta d'estats, el sprite base
             const clauIdle = e.estat === 'rugit' ? 'ocellaire_rugit'
@@ -602,7 +610,7 @@ Object.assign(ZonaBase.prototype, {
         this.tallBasto(jo, d, runna, agil);
         if (!this.animarAtac(d, runna, agil)) { this.atacantFins = ara + 260; this.armaCop(d, runna, agil); }       // amb fulla d'atac, l'arma és una capa que segueix la mà
         // Finestra de cop activa mentre dura l'animació: cada enemic només rep un cop per atac
-        this.cop = { fins: ara + 200, d, L, ample: agil ? 34 : 28, dany: runna ? 2 : 1, tocats: new Set(), runna };
+        this.cop = { fins: ara + 200, d, L, ample: agil ? 34 : 28, dany: runna ? 3 : agil ? 2 : 1, tocats: new Set(), runna };
         this.comprovarCop();
         // Runna talla els esbarzers negres
         if (runna) {
@@ -926,6 +934,7 @@ Object.assign(ZonaBase.prototype, {
     pastorDerrotat(e) {
         const c = e.spr.body.center;
         this.ui().amagarBarraBoss();
+        if (e.avisBat) { this.tweens.killTweensOf(e.avisBat); e.avisBat.destroy(); e.avisBat = null; }
         this.bossCaigut = e;
         if (this.treureTanques) this.treureTanques();
         this.enemics.filter(x => x.tipus === 'ovella' && !x.mort).forEach(o => {

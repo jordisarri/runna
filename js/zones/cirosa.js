@@ -146,12 +146,12 @@ class ZonaCirosa extends ZonaBase {
         // La pastura de la dreta: oberta del tot. Només es tanca amb unes tanques de fusta quan comença el combat contra el Pastor
         this.terra('herba', 1032, 160, 740, 860, -1050).setTint(0xcdeaa0);
 
-        // El ramat. Mentre el Pastor hi és, totes les ovelles són de boira (enemigues): tres d'adormides a la pastura, que es
-        // desperten quan comença el combat (i el Pastor en crida més, fins a quatre alhora). Vençut, ovelles blanques que pasturen.
+        // El ramat. Mentre el Pastor hi és, totes les ovelles són de boira (enemigues): dues d'adormides a la pastura, que es
+        // desperten quan comença el combat (i el Pastor en crida més, fins a dues alhora). Vençut, ovelles blanques que pasturen.
         const lila = !Estat.flag('pastorVencut');
         this.ramat = [];
         if (lila) {
-            [[1220, 360], [1640, 640], [1330, 880]].forEach(([x, y]) => {
+            [[1220, 360], [1640, 640]].forEach(([x, y]) => {
                 const o = this.enemic('ovella', x, y);
                 if (!o) return;
                 o.estat = 'repos'; o.fins = Infinity;          // adormida fins al combat
