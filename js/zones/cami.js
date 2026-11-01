@@ -443,7 +443,7 @@ class ZonaJardi extends ZonaBase {
 
 // ---------------- LA TAVERNA (entre l'Hostatgeria i els arcs de la Casa Gran) ----------------
 // Una sola escena de poble: el camí d'est a oest passa per davant la façana de la Taverna. La porta és tancada
-// (la Carmen no obre a ningú aquests dies; el pas del fons, a la banda de sota, encara no existeix).
+// (la Càren no obre a ningú aquests dies; el pas del fons, a la banda de sota, encara no existeix).
 class ZonaTaverna extends ZonaBase {
     constructor() {
         super('ZonaTaverna', {
@@ -464,7 +464,7 @@ class ZonaTaverna extends ZonaBase {
         this.colisio(603, 705, 355, 90);
         this.colisio(1040, 705, 340, 90);
         this.blocDarrere(800, 900, 660, Math.max(0, 750 - t.displayHeight));
-        // La porta (l'arc del mig): tancada fins que s'hi parla (l'Eva l'obre des de dins)
+        // La porta (l'arc del mig): tancada fins que s'hi parla (l\'Eve l'obre des de dins)
         this.colPorta = this.colisio(825, 705, 90, 90);
         if (Estat.flag('tavernaOberta')) { this.obrirPorta(); this.portaTavernaAnim(); }
         else this.interactiu(825, 765, RADI_OBJECTE, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() });
@@ -574,7 +574,7 @@ class ZonaCabanaCami extends ZonaBase {
         this.posar('taula', 450, 470, { col: { w: 160, h: 30 } });
         this.posar('tamboret', 340, 505, { col: { w: 40, h: 16 } });
         this.posar('tamboret', 565, 505, { col: { w: 40, h: 16 } });
-        // El solitari del Siscu, estirat sobre la taula, i el Siscu (el fill de la Carmen) al costat
+        // El solitari de l'Iscu, estirat sobre la taula, i l'Iscu (el fill de la Càren) al costat
         const cartes = this.add.graphics().setDepth(480);
         for (let c = 0; c < 7; c++) for (let f = 0; f <= Math.min(c, 3); f++) {
             const x = 386 + c * 19, y = 418 + f * 7, tapada = f < Math.min(c, 3);

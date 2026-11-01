@@ -24,22 +24,22 @@ const DIARI_PASSOS = {
     estelLlorenc: ['L\'Estel de Sant Llorenç', 'ZonaDipositos'], runna: ['Runna', 'ZonaDolmen'],
     josep: ['El partit contra en Jusef', 'ZonaPingpong'],
     guants: ['Els Guants de Poder', 'ZonaSantAntoni'], roda: ['La roda del Celler', 'ZonaPingpong'],
-    cambra: ['La cambra secreta', 'ZonaPassadis'], maneta: ["La maneta d'en Jordi", 'ZonaJordi'],
+    cambra: ['La cambra secreta', 'ZonaPassadis'], maneta: ["La maneta d\'en Georgi", 'ZonaJordi'],
     raim: ['L\'Home del Raïm', 'ZonaCasaGranInt'], cripta: ['La Cripta', 'ZonaCasaCripta'],
     segell: ['La tomba dels monjos', 'ZonaCementiri'], cantMiracle: ['El Cant del Miracle', 'ZonaEsglesia'],
-    soterrani: ['La porta de les Gírgoles', 'ZonaGirgolesFora'], clauCiscu: ['La clau del Siscu', 'ZonaCabanaCami'],
+    soterrani: ['La porta de les Gírgoles', 'ZonaGirgolesFora'], clauCiscu: ['La clau de l\'Iscu', 'ZonaCabanaCami'],
     portaFerro: ['La porta de ferro', 'ZonaSotaTaverna'], girgoles: ['Les gírgoles', 'ZonaGirgoles'],
     rastell: ['El rastell', 'ZonaTortura'], tortura: ['El mur d\'esbarzers', 'ZonaTortura'],
+    benediccioFraterna: ['La Benedicció Fraterna', 'ZonaJardi'],
     pont: ['El pont de pedra', 'ZonaGabia'], ocellaire: ["L'Ocellaire", 'ZonaGabia'],
     gabia: ['La gàbia', 'ZonaGabia'], nens: ['Els tres capolls', 'ZonaGabia'], final: ['Torna el cant', 'ZonaEsglesia']
 };
 const DIARI_LATERALS = {
-    taverna: ["L'Eva de la Taverna", 'ZonaTaverna', null],
+    taverna: ["L\'Eve de la Taverna", 'ZonaTaverna', null],
     carry: ['La Carry i el Pallofa', 'ZonaCelles', 'Clau del campanar i el relat de les desaparicions'],
     rellotge: ['El rellotge aturat', 'ZonaGolfes', '+1 cor'],
     tresor: ['La pedra que escolta', 'ZonaPlaca', '+1 cor'],
     nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Llaç de la Nena (absorbeix un cop per zona)'],
-    monges: ["Les sacerdotesses de l'Hostatgeria", 'ZonaJardi', null],
     carruatge: ['Els ocells de la tartana verda', 'ZonaEra', null]
 };
 const DIARI_ACTES = [
@@ -244,7 +244,7 @@ const DIARI = {
         // Nens rescatats
         y = this.titol(ui, c, X, y, 'Els nens');
         const colNens = AV >= 520, ampleNen = (AV - 2 * X - 20) / 3;
-        [['Huri', 'rescatUri'], ['Flami', 'rescatFlam'], ['Sardi', 'rescatSardin']].forEach(([n, f], i) => {
+        [['Huri', 'rescatUri'], ['Fram', 'rescatFlam'], ['Sardi', 'rescatSardin']].forEach(([n, f], i) => {
             const ok = E.flag(f), x = colNens ? X + 20 + i * ampleNen : X + 20, yy = colNens ? y : y + i * 48;
             c.add(ui.add.circle(x + 18, yy + 20, 18, ok ? 0x3a7a3a : 0x8a5a2a, ok ? 0.9 : 0.25).setStrokeStyle(2, 0x3a2412, 0.6));
             c.add(ui.add.text(x + 18, yy + 20, ok ? '✓' : '?', estilText(23, ok ? '#ffffff' : TINTA_SUAU, { fontStyle: 'bold' })).setOrigin(0.5));

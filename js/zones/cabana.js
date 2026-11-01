@@ -131,14 +131,18 @@ class ZonaCabana extends ZonaBase {
         this.add.ellipse(AX, AY + 40, 760, 300, 0x8fe08a, 0.13).setDepth(-1090);
         this.add.ellipse(AX, AY + 40, 480, 180, 0xb8f0a0, 0.13).setDepth(-1089);
         this.alzina = this.posar('alzina_buida', AX, AY, { col: { w: 150, h: 46 } });
-        this.claror = this.add.ellipse(AX - 18, AY - 128, 78, 104, 0x6aff9a, 0.3).setDepth(AY + 1);
-        this.tweens.add({ targets: this.claror, alpha: 0.12, scaleX: 1.2, scaleY: 1.12, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
+        this.claror = this.add.ellipse(AX - 18, AY - 128, 78, 104, 0x6aff9a, 0.45).setDepth(AY + 1);
+        this.tweens.add({ targets: this.claror, alpha: 0.18, scaleX: 1.2, scaleY: 1.12, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
+        // Halo que batega al voltant del forat: crida l'atenció sense tapar el dibuix
+        const halo = this.add.circle(AX - 18, AY - 128, 70, 0xb8ffc0, 0).setStrokeStyle(4, 0xd8ffd0, 0.8).setBlendMode(Phaser.BlendModes.ADD).setDepth(AY + 2);
+        this.tweens.add({ targets: halo, scale: { from: 0.55, to: 1.5 }, alpha: { from: 0.9, to: 0 }, repeat: -1, duration: 1900, ease: 'Sine.easeOut' });
         this.add.particles(AX, AY - 90, 'espurna', {
             x: { min: -230, max: 230 }, y: { min: -120, max: 60 }, speedX: { min: -8, max: 8 }, speedY: { min: -14, max: -3 }, lifespan: 3200,
             scale: { start: 0.28, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xbaffb0, 0xf2ffc0], frequency: 260, blendMode: 'ADD'
         }).setDepth(AY + 2);
-        this.interactiu(AX, AY + 20, 130, DIALEGS.portalTornada, {
-            altura: 330,
+        // El punt d'interacció és el forat del tronc (la «!» surt just damunt seu); el radi permet tocar-lo des del peu de l'alzina
+        this.interactiu(AX - 18, AY - 128, 235, DIALEGS.portalTornada, {
+            altura: 56,
             enTancar: () => {
                 const rov = Estat.dades.portalTorna === 'rov';
                 this.canviarZona(rov ? 'ZonaRovellonera' : 'ZonaBosc', 'portal');

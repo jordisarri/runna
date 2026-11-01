@@ -32,12 +32,12 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
     'Ineu': 'ineu', 'Pare Jordi': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Pastor de Boira': 'pastor_boira', 'Andreu, Pastor de Boira': 'pastor_boira', 'Germà Francesc': 'germa_francesc', 'Pare Daniel': 'pare_daniel',
-    'Pare Alcuí': 'pare_alcui', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'July': 'juli', 'Garf': 'garf', 'Isidre': 'isidre',
-    'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
+    'Pare Alcuí': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Garf': 'garf', 'Isidre': 'isidre',
+    'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
-    'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Jordi': 'jordi_caseta', 'Sansa': 'sansa', 'Home del Raïm': 'home_raim',
+    'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Jordi': 'jordi_caseta', 'Sansa': 'sansa', 'Home del Raïm': 'home_raim',
     'Carry': 'carry', 'Home de la Tartana Verda': 'home_carruatge', 'El Gran Til·ler': 'tiller',
-    "L'Home de la Gàbia": 'ocellaire', 'Huri': 'nen_uri', 'Flami': 'nen_flam', 'Sardi': 'nen_sardin'
+    "L'Home de la Gàbia": 'ocellaire', 'Huri': 'nen_uri', 'Fram': 'nen_flam', 'Flami': 'nen_flam', 'Sardi': 'nen_sardin'
 };
 const MIDA_RETRAT = 170;          // costat del retrat a la caixa de diàleg (px de joc)
 // Retocs del retall per a dibuixos amb una altra proporció (alt: fracció de la figura que fa el cap; per defecte 0,4)
@@ -129,7 +129,7 @@ const CATALEG_OBJECTES = {
     esquelles:        ['Esquelles dels pastors', 'Amb elles, els cants antics sonen més clars.'],
     fulla_tiler:      ['Fulla del Til·ler', 'Un record del sopar sota el Gran Til·ler.'],
     cinta_nena:       ['Llaç de la Nena', 'Absorbeix un cop cada vegada que entres a una zona.'],
-    benedicio_fraterna:  ['Benedicció fraterna', 'Una pau antiga et cura del tot en entrar dins d\'una ermita, al Santuari o dins del Monestir.'],
+    benedicio_fraterna:  ['Benedicció fraterna', 'La protecció sagrada de les tres sacerdotesses de l\'Hostatgeria. Dissipa la boira verinosa de la Sala de la Gàbia.'],
     llac_nena:        ['Llaç de cinta', 'Rosa i descolorit. És de la Nena de les Trenes.'],
     llanterna:        ['Llanterna', 'Fa més llum a les foscors de sota terra.'],
     telescopi:        ['Telescopi del Garf', 'Per mirar els estels als Dipòsits.'],
@@ -138,7 +138,7 @@ const CATALEG_OBJECTES = {
     ram:              ['Ram de flors', 'Del Germà Francesc, per a la tomba de l\'àngel.'],
     guants:           ['Guants de Poder', 'Per moure el que pesa massa.'],
     maneta:           ['Maneta d\'engranatge', 'De ferro: encaixa en volants i rodes vells.'],
-    clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Andreu li va caure; el Siscu te l\'ha donada.'],
+    clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Andreu li va caure; l\'Iscu te l\'ha donada.'],
     fragment1:        ['Pergamí partit (1/2)', 'La meitat d\'un pergamí esquinçat, trobada a les Runes.'],
     pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.» Al revers: «Qui busqui sortida, que alci la bóta marcada amb la creu.»'],
     calze:            ['Calze de Rosada', "De plata, antic. A l'altar de Sant Gabriel, cada cop que hi beus l'aigua de rosada, el rosari et queda ple."],
@@ -405,11 +405,23 @@ class EscenaUI extends Phaser.Scene {
         this.tweens.add({ targets: b, y: on ? ALT - h : ALT, duration: ms, ease: 'Sine.easeInOut' });
     }
 
-    // Rètol gran amb el nom del boss: apareix, s'hi queda i s'esvaeix
+    // Rètol amb el nom del boss: apareix, s'hi queda i s'esvaeix (ajustat a l'amplada perquè no desbordi)
     titolBoss(nom, sub) {
-        const t1 = this.add.text(AMPLE / 2, ALT * 0.42, nom, { fontFamily: typeof FONT_TITOL !== 'undefined' ? FONT_TITOL : 'Georgia', fontSize: '76px', fontStyle: 'bold', color: '#ff6a5a', stroke: '#1a0408', strokeThickness: 10, align: 'center' }).setOrigin(0.5).setAlpha(0).setScale(1.4);
-        const t2 = this.add.text(AMPLE / 2, ALT * 0.42 - 70, sub, estilText(30, '#f2e6c8', { fontStyle: 'italic', stroke: '#1a0408', strokeThickness: 6 })).setOrigin(0.5).setAlpha(0);
-        this.tweens.add({ targets: t1, alpha: 1, scale: 1, duration: 500, ease: 'Back.easeOut' });
+        const maxW = AMPLE - 80;
+        const t1 = this.add.text(AMPLE / 2, ALT * 0.42, nom, {
+            fontFamily: typeof FONT_TITOL !== 'undefined' ? FONT_TITOL : 'Georgia',
+            fontSize: '44px',
+            fontStyle: 'bold',
+            color: '#ff6a5a',
+            stroke: '#1a0408',
+            strokeThickness: 8,
+            align: 'center'
+        }).setOrigin(0.5).setAlpha(0);
+        if (t1.width > maxW) t1.setScale(maxW / t1.width);
+        const escBase = t1.scaleX;
+        t1.setScale(escBase * 1.15);
+        const t2 = this.add.text(AMPLE / 2, ALT * 0.42 - 56, sub, estilText(26, '#f2e6c8', { fontStyle: 'italic', stroke: '#1a0408', strokeThickness: 5 })).setOrigin(0.5).setAlpha(0);
+        this.tweens.add({ targets: t1, alpha: 1, scale: escBase, duration: 500, ease: 'Back.easeOut' });
         this.tweens.add({ targets: t2, alpha: 1, duration: 600, delay: 250 });
         this.tweens.add({ targets: [t1, t2], alpha: 0, duration: 700, delay: 2600, onComplete: () => { t1.destroy(); t2.destroy(); } });
     }

@@ -103,7 +103,7 @@ const CATALEG = [
     { key: 'pergami',      file: 'assets/objectes/pergami.png',      amplada: 70, provisional: (c, w) => dibuixarPergami(c, w) },
     { key: 'pergami_partit', file: 'assets/objectes/pergami_partit.png', amplada: 80, provisional: (c, w) => dibuixarPergamiPartit(c, w) },
     { key: 'pergami_paret', file: 'assets/objectes/pergami_paret.png', amplada: 62, provisional: (c, w) => dibuixarPergamiParet(c, w) },   // el mateix pergamí, desplegat i clavat a la paret
-    { key: 'ombra_monjo',  file: 'assets/enemics/ombra_monjo.png',  amplada: 150, provisional: (c, w) => dibuixarOmbraMonjo(c, w) },
+    { key: 'ombra_monjo',  file: 'assets/enemics/ombra_monjo.webp', amplada: 140, cru: true },
     { key: 'ovella',         file: 'assets/enemics/ovella.png',         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },
     { key: 'ovella_boira',   file: 'assets/enemics/ovella_boira.png',   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
     { key: 'roca',           file: 'assets/natura/roca.webp',           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w) },
@@ -157,6 +157,7 @@ const CATALEG = [
     { key: 'ineu_aixeca', file: 'assets/ineu/aixeca_espasa.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant Runna, mirant amunt (ja amb fons transparent)
     { key: 'ineu_aixeca_basto', file: 'assets/ineu/aixeca_basto.webp', amplada: 83, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // el mateix, alçant el bastó de pelegrí que li dona el Germà Andreu
     { key: 'ineu_aixeca_tiler', file: 'assets/ineu/aixeca_tiler.webp', amplada: 96, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // ... i alçant la branca del Gran Til·ler
+    { key: 'ineu_flauta', file: 'assets/ineu/flauta.webp', amplada: 58, cru: true },   // l'Ineu tocant la flauta, de cara a la càmera
     { key: 'arma_espasa', file: 'assets/armes/espasa.webp',      amplada: 28, provisional: (c, w) => dibuixarEspasaProvisional(c, w) },   // l'espasa de Runna
     { key: 'cartell_llums', file: 'assets/objectes/cartell_llums.webp', amplada: 560, cru: true },            // cartell de paper (es mostra tal com és, amb el fons blanc)
     { key: 'cartell_llums_borros', file: 'assets/objectes/cartell_llums_borros.webp', amplada: 56, cru: true },   // la mateixa imatge, borrosa i petita, per a la paret
@@ -167,7 +168,8 @@ const CATALEG = [
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
 ['ineu', 'pare_jordi', 'germa_andreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'garf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
- 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta']
+ 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta',
+ 'nen_uri', 'nen_flam', 'nen_sardin', 'ocellaire', 'home_raim', 'sansa', 'neus', 'marit_neus']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
 /**
@@ -228,6 +230,11 @@ const Grafics = {
         scene.load.image('ineu_perfil_font', 'assets/ineu/costat.webp');
         scene.load.spritesheet('visitant_zombi', 'assets/enemics/visitant_zombi.webp', { frameWidth: 127, frameHeight: 209 });      // el visitant (turista zombi) caminant, de cara (4x4 fotogrames): serveix per a totes les direccions
         scene.load.spritesheet('pallofa_cami', 'assets/personatges/pallofa_cami.webp', { frameWidth: 135, frameHeight: 140 });      // el Pallofa caminant cap a la dreta (4x4 fotogrames); es gira per anar cap a l'esquerra
+        scene.load.spritesheet('pare_jordi_camina', 'assets/personatges/pare_jordi_camina.webp', { frameWidth: 200, frameHeight: 290 });
+        scene.load.spritesheet('germa_andreu_camina', 'assets/personatges/germa_andreu_camina.webp', { frameWidth: 180, frameHeight: 265 });
+        scene.load.spritesheet('germa_andreu_ne', 'assets/personatges/germa_andreu_ne.webp', { frameWidth: 180, frameHeight: 265 });
+        scene.load.spritesheet('josep_camina', 'assets/personatges/josep_camina.webp', { frameWidth: 190, frameHeight: 300 });
+        scene.load.spritesheet('isidre_camina', 'assets/personatges/isidre_camina.webp', { frameWidth: 190, frameHeight: 285 });
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, `assets/ineu/${dir}.webp`, mida);
@@ -487,6 +494,21 @@ const Grafics = {
         // El visitant (turista trastocat per la boira): cicle de caminar de 16 fotogrames, el mateix per a totes les direccions
         if (!scene.anims.exists('visitant_camina') && scene.textures.exists('visitant_zombi') && scene.textures.get('visitant_zombi').frameTotal > 2) {
             scene.anims.create({ key: 'visitant_camina', frames: scene.anims.generateFrameNumbers('visitant_zombi', { start: 0, end: 15 }), frameRate: 13, repeat: -1 });
+        }
+        if (!scene.anims.exists('pare_jordi_camina') && scene.textures.exists('pare_jordi_camina')) {
+            scene.anims.create({ key: 'pare_jordi_camina', frames: scene.anims.generateFrameNumbers('pare_jordi_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
+        }
+        if (!scene.anims.exists('germa_andreu_camina') && scene.textures.exists('germa_andreu_camina')) {
+            scene.anims.create({ key: 'germa_andreu_camina', frames: scene.anims.generateFrameNumbers('germa_andreu_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
+        }
+        if (!scene.anims.exists('germa_andreu_ne') && scene.textures.exists('germa_andreu_ne')) {
+            scene.anims.create({ key: 'germa_andreu_ne', frames: scene.anims.generateFrameNumbers('germa_andreu_ne', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
+        }
+        if (!scene.anims.exists('josep_camina') && scene.textures.exists('josep_camina')) {
+            scene.anims.create({ key: 'josep_camina', frames: scene.anims.generateFrameNumbers('josep_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
+        }
+        if (!scene.anims.exists('isidre_camina') && scene.textures.exists('isidre_camina')) {
+            scene.anims.create({ key: 'isidre_camina', frames: scene.anims.generateFrameNumbers('isidre_camina', { start: 0, end: 15 }), frameRate: 12, repeat: -1 });
         }
         (Grafics.atacsVista || []).forEach(dir => {
             const key = 'atac_' + dir;

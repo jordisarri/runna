@@ -1,18 +1,18 @@
 /**
  * LA TAVERNA PER DINS i el SOTERRANI DE LA PORTA DE FERRO
- * La Carmen (mandrosa) dorm darrere el taulell; l'Eva (amiga fidel) obre la porta a l'Ineu i li explica què passa de nit.
+ * La Càren (mandrosa) dorm darrere el taulell; l'Eve (amiga fidel) obre la porta a l'Ineu i li explica què passa de nit.
  * Des de dins NO es pot baixar al soterrani: s'hi entra per la porta de ferro exterior de la Sala de les Gírgoles, a l'est del Pati del Celler (la que fa servir
  * el Germà Andreu cada nit), que s'obre amb la Clau de ferro. Al soterrani, una segona porta de ferro, de pany petit, baixa a la
- * Sala de les Gírgoles: l'obre la clau rovellada que el Siscu va trobar (al Germà Andreu li va caure).
+ * Sala de les Gírgoles: l'obre la clau rovellada que l\'Iscu va trobar (al Germà Andreu li va caure).
  */
 
 Object.assign(DIALEGS, {
-    // La porta de la Taverna (des de fora): la primera vegada, l'Eva obre d'amagat
+    // La porta de la Taverna (des de fora): la primera vegada, l\'Eve obre d'amagat
     portaTaverna: E => E.flag('tavernaOberta') ? { pagines: [] } : {
         pagines: [
-            { qui: 'Nota', text: '«Avui no servim. — Carmen»' },
+            { qui: 'Nota', text: '«Avui no servim. — Càren»' },
             { qui: 'Ineu', text: 'Des de dins se sent un fil de música d\'acordió, molt baixet... i una olor de fregit.' },
-            { qui: 'Eva', text: 'Psst! Tu ets l\'Ineu, oi? El monjo que pregunta pels nens. Entra, de pressa, que la Carmen dorm i no vull que ens vegin.' },
+            { qui: 'Eve', text: 'Psst! Tu ets l\'Ineu, oi? El monjo que pregunta pels nens. Entra, de pressa, que la Càren dorm i no vull que ens vegin.' },
             { fer: (z, fet) => z.obrirPortaAnim ? z.obrirPortaAnim(fet) : fet() }
         ],
         enAcabar: () => { E.posaFlag('tavernaOberta'); E.desar(); }
@@ -21,29 +21,29 @@ Object.assign(DIALEGS, {
     eva: E => {
         if (!E.flag('evaParlat')) return {
             pagines: [
-                { qui: 'Eva', text: 'Sóc l\'Eva. Ajudo la Carmen... bé, faig la feina de la Carmen. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
-                { qui: 'Eva', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Andreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola. Baixa al soterrani. Diu que va a buscar vi. Mai no puja amb cap ampolla.' },
-                { qui: 'Eva', text: 'Des d\'aquí dins no s\'hi pot baixar: el soterrani només té aquella porta de fora. I a baix, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Sota terra, Ineu. Ocells.' },
-                { qui: 'Eva', text: 'I el Siscu, el fill de la Carmen, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
-                { qui: 'Eva', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
-                { qui: 'Eva', text: 'El Sardi hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve.' },
+                { qui: 'Eve', text: 'Sóc l\'Eve. Ajudo la Càren... bé, faig la feina de la Càren. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
+                { qui: 'Eve', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Andreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola. Baixa al soterrani. Diu que va a buscar vi. Mai no puja amb cap ampolla.' },
+                { qui: 'Eve', text: 'Des d\'aquí dins no s\'hi pot baixar: el soterrani només té aquella porta de fora. I a baix, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Sota terra, Ineu. Ocells.' },
+                { qui: 'Eve', text: 'I l\'Iscu, el fill de la Càren, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
+                { qui: 'Eve', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
+                { qui: 'Eve', text: 'El Sardi hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve.' },
             ],
             enAcabar: () => { E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La Porta de les Gírgoles, a l\'est del Pati del Celler, baixa al soterrani: la Clau de ferro l\'obre.' : E.dades.objectiu); }
         };
         if (E.flag('portaPetitaVista') && !E.flag('ciscuTrobat')) return { pagines: [
-            { qui: 'Eva', text: 'El Siscu? Ja t\'ho vaig dir: surt pel camí de la Desaparició, a l\'oest de les Runes, i s\'amaga per un forat entre els arbres «per on els grans no hi caben». Si el trobes, digues-li que torni a sopar.' }
+            { qui: 'Eve', text: 'L\'Iscu? Ja t\'ho vaig dir: surt pel camí de la Desaparició, a l\'oest de les Runes, i s\'amaga per un forat entre els arbres «per on els grans no hi caben». Si el trobes, digues-li que torni a sopar.' }
         ] };
         if (E.flag('clauFerro')) return { pagines: [
-            { qui: 'Eva', text: 'Aquesta clau... és de ferro vell, com la porta de fora, la del soterrani! L\'has trobada a la Casa Gran? La porta és a la Sala de les Gírgoles: des del Pati del Celler, el camí de l\'est, entre els arbres.' },
-            { qui: 'Eva', text: E.flag('cantMiracle') ? 'I la Pianista t\'ha ensenyat el cant. Vés amb compte, allà baix.' : 'Abans de baixar, passa pel Santuari: la Pianista sempre diu que hi ha un cant per a cada porta.' }
+            { qui: 'Eve', text: 'Aquesta clau... és de ferro vell, com la porta de fora, la del soterrani! L\'has trobada a la Casa Gran? La porta és a la Sala de les Gírgoles: des del Pati del Celler, el camí de l\'est, entre els arbres.' },
+            { qui: 'Eve', text: E.flag('cantMiracle') ? 'I la Pianista t\'ha ensenyat el cant. Vés amb compte, allà baix.' : 'Abans de baixar, passa pel Santuari: la Pianista sempre diu que hi ha un cant per a cada porta.' }
         ] };
         if (E.flag('runna')) return { pagines: [
-            { qui: 'Eva', text: 'Aquesta espasa brilla com si estigués contenta. Amb això potser obriríem la porta... però el pany és de clau. Una clau de ferro, grossa.' },
-            { qui: 'Eva', text: 'L\'Isidre diu que els monjos ho amagaven tot a la Casa Gran. Potser la clau també.' }
+            { qui: 'Eve', text: 'Aquesta espasa brilla com si estigués contenta. Amb això potser obriríem la porta... però el pany és de clau. Una clau de ferro, grossa.' },
+            { qui: 'Eve', text: 'L\'Isidre diu que els monjos ho amagaven tot a la Casa Gran. Potser la clau també.' }
         ] };
         return { pagines: [
-            { qui: 'Eva', text: 'No et puc ajudar a obrir la porta de ferro: no té pany per a cap clau que hi hagi a la Taverna. Diuen que els monjos la van tancar amb una espasa que brilla.' },
-            { qui: 'Eva', text: 'Busca aquesta espasa, Ineu. Jo em quedo aquí, fent veure que treballo.' }
+            { qui: 'Eve', text: 'No et puc ajudar a obrir la porta de ferro: no té pany per a cap clau que hi hagi a la Taverna. Diuen que els monjos la van tancar amb una espasa que brilla.' },
+            { qui: 'Eve', text: 'Busca aquesta espasa, Ineu. Jo em quedo aquí, fent veure que treballo.' }
         ] };
     },
 
@@ -68,10 +68,10 @@ Object.assign(DIALEGS, {
         if (!E.flag('clauFerro')) return { pagines: [
             { qui: 'Ineu', text: '(Aquí és d\'on surt tot. Em falta l\'espasa que la va segellar... i una clau.)' }
         ] };
-        // Sense la clau petita: l'Ineu recorda qui s'escapa de nit (el Siscu) i l'objectiu l'hi porta
+        // Sense la clau petita: l'Ineu recorda qui s'escapa de nit (l\'Iscu) i l'objectiu l'hi porta
         return { pagines: [
             { qui: 'Ineu', text: '(La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Andreu en deu tenir una altra.)' },
-            { qui: 'Ineu', text: '(Algú l\'hauria d\'haver vist baixar de nit... El Siscu, el fill de la Carmen! L\'Eva va dir que s\'escapa pel camí de la Desaparició, per un forat entre els arbres.)' }
+            { qui: 'Ineu', text: '(Algú l\'hauria d\'haver vist baixar de nit... L\'Iscu, el fill de la Càren! L\'Eve va dir que s\'escapa pel camí de la Desaparició, per un forat entre els arbres.)' }
         ], enAcabar: () => { E.posaFlag('portaPetitaVista'); E.posaObjectiu(PROGRES.pista(E)); } };
     }
 });
@@ -121,7 +121,7 @@ class ZonaTavernaInt extends ZonaBase {
         pr.fillStyle(0x5a3a1e, 1).fillCircle(560, 50, 26).fillStyle(0xf2ecdc, 1).fillCircle(560, 50, 20);
         pr.lineStyle(2, 0x1a1008, 1).lineBetween(560, 50, 560, 36).lineBetween(560, 50, 570, 54);
 
-        // El taulell (llarg, de fusta amb sobre de marbre) i la Carmen dormint al darrere
+        // El taulell (llarg, de fusta amb sobre de marbre) i la Càren dormint al darrere
         const t = this.add.graphics().setDepth(250);
         t.fillStyle(0x000000, 0.25).fillRect(110, 248, 400, 14);
         t.fillStyle(0x6a4224, 1).fillRect(110, 180, 400, 70);
@@ -158,7 +158,7 @@ class ZonaTavernaInt extends ZonaBase {
         for (let k = 0; k < 5; k++) ac.fillStyle(k % 2 ? 0xf2ecdc : 0x2a2a2a, 1).fillRect(134 + k * 7, 362, 5, 26);
         this.interactiu(150, 410, RADI_OBJECTE, DIALEGS.acordio, { altura: 60 });
 
-        // L'Eva, al costat de la llar
+        // L\'Eve, al costat de la llar
         this.npc('eva', 650, 350, DIALEGS.eva, { flipX: true });
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffc070, 0.07).setDepth(80000);

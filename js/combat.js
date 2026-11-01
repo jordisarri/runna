@@ -123,7 +123,7 @@ const ENEMICS = {
                 e.estat = 'salt'; e.fins = ara + (dist < 340 ? 430 : 300);
                 e.spr.body.setVelocity(Math.cos(cap) * vel, Math.sin(cap) * vel);
                 e.spr.setFlipX(Math.cos(cap) < 0);
-                e.spr.setScale(e.escalaBase * 1.18, e.escalaBase * 1.18);
+                e.spr.setScale(e.escalaBase);
                 Sfx.salt();
             }
         }
@@ -422,7 +422,7 @@ const ENEMICS = {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
             if (!e.casa) e.casa = { x: c.x, y: c.y };
-            e.spr.setScale(e.escalaBase, e.escalaBase * (0.75 + 0.25 * Math.abs(Math.sin(ara / 70))));     // aleteig
+            e.spr.setScale(e.escalaBase);
             if (e.estat === 'ataca') {
                 const a = Math.atan2(jo.y - c.y, jo.x - c.x), zz = Math.sin(ara / 110) * 0.9;
                 e.spr.body.setVelocity(Math.cos(a + zz) * this.vel, Math.sin(a + zz) * this.vel);
@@ -462,7 +462,7 @@ const ENEMICS = {
                     e.estat = 'salta'; e.fins = ara + 330;
                     const a = Math.atan2(jo.y - c.y, jo.x - c.x);
                     e.spr.body.setVelocity(Math.cos(a) * this.vel, Math.sin(a) * this.vel);
-                    z.tweens.add({ targets: e.spr, y: e.spr.y - 1, scaleY: e.escalaBase * 1.15, yoyo: true, duration: 160 });
+                    z.tweens.add({ targets: e.spr, y: e.spr.y - 12, yoyo: true, duration: 160 });
                 }
             } else {
                 e.spr.body.setVelocity(0);
@@ -534,9 +534,9 @@ Object.assign(ZonaBase.prototype, {
             ang: Math.random() * Math.PI * 2, canviFins: 0, estat: 'repos', fins: this.time.now + 600 + Math.random() * 600
         };
         if (opts.sortida) {                 // surt de l'aigua (gripaus de la Bassadòria)
-            spr.setAlpha(0).setScale(0.1);
+            spr.setAlpha(0).setScale(esc);
             e.atorditFins = this.time.now + 600;
-            this.tweens.add({ targets: spr, alpha: 1, scale: esc, duration: 450, ease: 'Back.out' });
+            this.tweens.add({ targets: spr, alpha: 1, duration: 450, ease: 'Sine.easeOut' });
             this.esquitxar(x, y);
             if (opts.salt) {                // i s'escapa d'un salt cap a un punt de l'escena
                 const t = opts.salt, dur = 900;
@@ -795,12 +795,11 @@ Object.assign(ZonaBase.prototype, {
             e.estat = 'repos'; e.fins = ara + 700;
             e.spr.body.setVelocity(d.x * 380, d.y * 380);      // retrocés fort
         }
-        // Flaix blanc, esclafament i sacsejada de l'enemic
+        // Flaix blanc, retrocés i sacsejada de l'enemic (sense deformar el sprite)
         e.spr.setTintFill(0xffffff);
         this.time.delayedCall(100, () => { if (e.spr.active) e.spr.clearTint(); });
         this.tweens.killTweensOf(e.spr);
-        e.spr.setScale(e.escalaBase * 1.3, e.escalaBase * 0.72);
-        this.tweens.add({ targets: e.spr, scaleX: e.escalaBase, scaleY: e.escalaBase, duration: 200, ease: 'Back.out' });
+        e.spr.setScale(e.escalaBase);
         const c = this.zonaCop(e);
         this.impacte(c.x, c.y - 10, d, mort ? 2 : dany > 1 ? 1 : 0);
         Sfx.cop(mort || dany > 1);
@@ -893,7 +892,7 @@ Object.assign(ZonaBase.prototype, {
             this.tweens.add({ targets: e.spr, angle: 90, duration: 300 });
             this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 700, delay: 1500, onComplete: () => this.retirar(e) });
         } else {
-            this.tweens.add({ targets: e.spr, scale: 0.05, alpha: 0, angle: e.spr.angle + 180, duration: 320, onComplete: () => this.retirar(e) });
+            this.tweens.add({ targets: e.spr, alpha: 0, duration: 320, onComplete: () => this.retirar(e) });
             e.ombra.setVisible(false);
         }
 

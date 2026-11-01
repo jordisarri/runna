@@ -47,9 +47,9 @@ function objectiuSopar(E) {
 }
 
 // Quan s'allibera la tercera sacerdotessa (sigui quina sigui) el rosari guanya un gra (+1 cor) i l'Hostatgeria obre la porta per dins;
-// la mateixa sacerdotessa avisa que al vestíbul hi ha aparegut el premi (un cofre amb el Benedicció fraterna)
+// la mateixa sacerdotessa avisa que al vestíbul hi ha aparegut el premi (un cofre amb la Benedicció fraterna)
 const ultimaMonja = nom => ['Pains', 'Phili', 'Charm'].filter(n => n !== nom).every(n => Estat.flag('premi' + n));
-const avisPremiMonja = nom => ({ qui: nom, text: "Al vestíbul hi ha aparegut el teu premi, fill. Per a tu: ho hem guardat per a qui ens tornés la llum." });
+const avisPremiMonja = nom => ({ qui: nom, text: "Al vestíbul t'hem deixat la Benedicció Fraterna, fill. T'ajudarà a protegir-te de la boira de l'avenc i salvar els nens segrestats." });
 function premiMonja(nom, flag) {
     const E = Estat;
     E.posaFlag(flag);
@@ -74,7 +74,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pare Jordi", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
-                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira violeta surt de sota terra, i cada nit falta un nen: l'Huri i el Flami, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el nebot de les sacerdotesses de l'Hostatgeria." },
+                    { qui: "Pare Jordi", text: "No et vull espantar. Fa tres nits que una boira violeta surt de sota terra, i cada nit falta un nen: l'Huri i el Fram, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el nebot de les sacerdotesses de l'Hostatgeria." },
                     { qui: "Pare Jordi", text: "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada." },
                     { qui: "Pare Jordi", text: "Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot. Ves amb compte pels camins, Ineu." }
                 ],
@@ -180,29 +180,29 @@ const DIALEGS = {
         };
     },
 
-    // El Siscu, el fill de la Carmen, s'ha escapat a la cabana amagada a jugar al solitari
+    // L'Iscu, el fill de la Càren, s'ha escapat a la cabana amagada a jugar al solitari
     ciscu: E => {
-        // La clau rovellada: al Germà Andreu li va caure a la porta de ferro, i el Siscu se la va quedar
+        // La clau rovellada: al Germà Andreu li va caure a la porta de ferro, i l'Iscu se la va quedar
         const clau = [
-            { qui: 'Siscu', text: 'I mira què vaig trobar: una nit, al Germà Andreu li va caure aquesta clau davant la porta de ferro, i no se n\'adonà. És petita i rovellada. Me la vaig quedar per jugar a pirates.' },
-            { qui: 'Siscu', text: 'Té, a tu et servirà més que a mi. Però no diguis a la mare que jo era a fora de nit!' },
+            { qui: 'Iscu', text: 'I mira què vaig trobar: una nit, al Germà Andreu li va caure aquesta clau davant la porta de ferro, i no se n\'adonà. És petita i rovellada. Me la vaig quedar per jugar a pirates.' },
+            { qui: 'Iscu', text: 'Té, a tu et servirà més que a mi. Però no diguis a la mare que jo era a fora de nit!' },
             { avis: 'Has obtingut la CLAU ROVELLADA' }
         ];
         const donar = () => { E.posaFlag('ciscuTrobat'); E.posaFlag('clauGirgoles'); E.dona('clau_girgoles'); E.posaObjectiu(PROGRES.pista(E)); };
         if (!E.flag('ciscuTrobat')) return {
             pagines: [
                 { fer: (z, fet) => z.seq([c => z.bombolla('ciscu', '!', c, 600), c => z.npcSalta('ciscu', c, 1)], fet) },
-                { qui: 'Siscu', text: 'No diguis res a la mare! Sóc el Siscu, el de la Carmen, la de la Taverna. Des que hi ha boira, ella dorm tot el dia i l\'Eva em fa fregar gots.' },
-                { qui: 'Siscu', text: 'Aquí ningú no em busca i puc jugar al solitari tranquil. Les cartes són de l\'avi. Li falta el set d\'oros, però faig veure que hi és.' },
-                { qui: 'Siscu', text: 'De nit he vist el Germà Andreu picar tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler. No té clau, d\'aquesta: la porta s\'obre sola, com si de dins l\'esperessin. A baix n\'hi ha una altra, amb un pany petit.' },
+                { qui: 'Iscu', text: 'No diguis res a la mare! Sóc l\'Iscu, el de la Càren, la de la Taverna. Des que hi ha boira, ella dorm tot el dia i l\'Eve em fa fregar gots.' },
+                { qui: 'Iscu', text: 'Aquí ningú no em busca i puc jugar al solitari tranquil. Les cartes són de l\'avi. Li falta el set d\'oros, però faig veure que hi és.' },
+                { qui: 'Iscu', text: 'De nit he vist el Germà Andreu picar tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler. No té clau, d\'aquesta: la porta s\'obre sola, com si de dins l\'esperessin. A baix n\'hi ha una altra, amb un pany petit.' },
                 ...clau
             ],
             enAcabar: donar
         };
         if (!E.flag('clauGirgoles')) return { pagines: clau, enAcabar: donar };
         return { pagines: [
-            { qui: 'Siscu', text: (E.flag('tombaSegellada')) ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el set d\'oros de paper. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
-            { qui: 'Siscu', text: 'Si veus la mare, no li diguis on sóc. Bé... si et pregunta molt, sí.' }
+            { qui: 'Iscu', text: (E.flag('tombaSegellada')) ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el set d\'oros de paper. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
+            { qui: 'Iscu', text: 'Si veus la mare, no li diguis on sóc. Bé... si et pregunta molt, sí.' }
         ] };
     },
 
@@ -313,7 +313,7 @@ const DIALEGS = {
     },
     // La primera missió lateral pendent, dita pel Pare Daniel (null si no en queda cap). La de la Carry ja és feta: sense ella no hi ha rellotge
     encarrecDaniel: E => {
-        if (!E.flag('evaParlat')) return "L'Eva de la Taverna va molt amoïnada: el Sardi berenava cada tarda amb ella. La porta és tancada, però si hi truques, a tu t'obrirà.";
+        if (!E.flag('evaParlat')) return "L\'Eve de la Taverna va molt amoïnada: el Sardi berenava cada tarda amb ella. La porta és tancada, però si hi truques, a tu t'obrirà.";
         if (!E.flag('nenaAlliberada')) return "Al camí de la Rovellonera, passat l'Era, hi ha una nena amb trenes que espera algú. Ningú no sap de qui és.";
         if (!E.flag('mongesTrobades')) return "Les sacerdotesses de l'Hostatgeria fa dies que no surten de les cambres. L'Isidre, que cuida el jardí, en sap alguna cosa: pregunta-li per la llosa.";
         if (!E.flag('tresorObert')) return "Diuen que a la façana del Santuari hi ha una pedra que escolta. Quan sàpigues el Cant de les Pedres, canta-li i veuràs.";
@@ -364,8 +364,8 @@ const DIALEGS = {
 
     juli: E => ({
         pagines: [
-            { qui: 'July', text: 'Ei, Ineu! El repte més gran del Miracle és derrotar el Jusef i el seu servei màgic. T\'hi atreveixes?' },
-            { qui: 'July', text: 'El Senyor Perers juga amb una pala de pedra. De pedra! I tot i així, em guanya fàcilment.' }
+            { qui: 'Julius', text: 'Ei, Ineu! El repte més gran del Miracle és derrotar el Jusef i el seu servei màgic. T\'hi atreveixes?' },
+            { qui: 'Julius', text: 'El Senyor Perers juga amb una pala de pedra. De pedra! I tot i així, em guanya fàcilment.' }
         ]
     }),
 
@@ -430,7 +430,7 @@ const DIALEGS = {
     }),
 
     josepPerdut: (E, abandonat) => ({
-        pagines: [{ qui: 'Jusef', text: abandonat ? 'Ja te\'n vas? La taula no fuig. Torna quan vulguis.' : 'Bona partida, monjo. Però el servei encara és meu. Torna-hi quan vulguis: el July diu que la segona vegada sempre surt millor.' }],
+        pagines: [{ qui: 'Jusef', text: abandonat ? 'Ja te\'n vas? La taula no fuig. Torna quan vulguis.' : 'Bona partida, monjo. Però el servei encara és meu. Torna-hi quan vulguis: el Julius diu que la segona vegada sempre surt millor.' }],
         enAcabar: () => { if (!E.flag('josepVencut')) E.posaObjectiu("En Jusef, al Celler, sempre té ganes d'una partida."); }
     }),
 
@@ -450,7 +450,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: "Neus", text: "Ineu, fill, no t'hi quedis plantat! L'Huri i el Flami dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!" },
+                { qui: "Neus", text: "Ineu, fill, no t'hi quedis plantat! L'Huri i el Fram dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!" },
                 { qui: "Senyor Moliner", text: "Neus, deixa'l respirar..." },
                 { qui: "Neus", text: "Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls." }
             ],
@@ -468,7 +468,7 @@ const DIALEGS = {
     venerables: E => consellVenerables(E),
 
     // La Carry, anciana molt prima i pàl·lida de Nostra Senyora, vídua del campaner: busca el seu gos, el Pallofa, que passeja per Sant Antoni
-    // un cop has parlat amb ella. En portar-li, et dona la clau del campanar i et conta com van desaparèixer l'Huri i el Flami.
+    // un cop has parlat amb ella. En portar-li, et dona la clau del campanar i et conta com van desaparèixer l'Huri i el Fram.
     carry: E => {
         if (E.flag('pallofaTornat')) return { pagines: [
             { qui: 'Carry', text: "El Pallofa no em deixa ni a sol ni a ombra, ara. Gràcies, Ineu. I no t'oblidis del rellotge: sense hora, tot es fa més llarg." }
@@ -479,7 +479,7 @@ const DIALEGS = {
                 { qui: 'Carry', text: "Pallofa! Pallofa meu! On t'havies ficat, bestiola? Mira't: més prim que jo i ple de puces." },
                 { qui: 'Carry', text: "Gràcies, Ineu, gràcies. Diners no en tinc, però et dec una cosa. Aquelles nits vaig veure, des de la finestra, el que no hauria de veure ningú." },
                 { qui: 'Carry', text: "L'Huri, el petit de la porta de la dreta de Sant Benet, va ser el primer. El seu llit va quedar buit i la finestra, tancada per dins. Ell no sortia mai sol de nit: li feia por la fosca." },
-                { qui: 'Carry', text: "La nit següent va ser el Flami, el de la porta de l'esquerra. El Pallofa va lladrar a la boira, com si veiés algú que jo no veia, i va marxar darrere seu. Per això he tingut tanta por." }
+                { qui: 'Carry', text: "La nit següent va ser el Fram, el de la porta de l'esquerra. El Pallofa va lladrar a la boira, com si veiés algú que jo no veia, i va marxar darrere seu. Per això he tingut tanta por." }
             ];
             if (clau) pagines.push(
                 { qui: 'Carry', text: "El meu home era el campaner. Des que se'n va, la clau de la torre la guardo jo, i fa anys que ningú no hi puja. Pren-la. Aquell rellotge s'ha aturat a un quart de quatre, i ningú no s'ha adonat que el temps ja no passa." },
@@ -898,9 +898,9 @@ const DIALEGS = {
         if (E.flag('mongesTrobades') && !E.flag('isidreSap')) {
             return {
                 pagines: [
-                    { qui: 'Isidre', text: 'He sentit com s\'obria la porta de l\'Hostatgeria. Són elles, oi? La Pains, la Phili, la Charm... les germanes de la meva dona.' },
-                    { qui: 'Isidre', text: 'Tres nits tancades a vint passes de mi, i jo aquí amb les flors, sense saber-ne res. Ella em deia sempre: «cuida-les, que elles no saben cuidar-se».' },
-                    { qui: 'Isidre', text: 'I el Sardi... el nostre Sardi. Té set anys, monjo. Cada tarda s\'enfilava a la prunera i es manxava de prunes fins a no poder dir ni mu. Si el trobes, digues-li que el seu pare no ha deixat de regar la prunera.' }
+                    { qui: 'Isidre', text: 'He sentit com s\'obria la porta de l\'Hostatgeria. Són elles, oi? La Pains, la Phili, la Charm... les sacerdotesses de la nostra casa.' },
+                    { qui: 'Isidre', text: 'Tres nits tancades a vint passes de mi, i jo aquí amb les flors, sense saber-ne res. La seva pregària sempre ha mantingut la pau a aquesta terra.' },
+                    { qui: 'Isidre', text: 'I el Sardi... el meu fill Sardi. Té set anys, monjo. Cada tarda s\'enfilava a la prunera i es manxava de prunes fins a no poder dir ni mu. Si el trobes, digues-li que el seu pare no ha deixat de regar la prunera.' }
                 ],
                 enAcabar: () => E.posaFlag('isidreSap')
             };
@@ -976,7 +976,7 @@ const DIALEGS = {
             pagines: [
                 { qui: 'Pains', text: 'Oh, mon petit! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Pains.' },
                 { qui: 'Pains', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb abric d\'ocells que s\'enduia els nens del poble, rient baixet.' },
-                { qui: 'Pains', text: 'Si passes pel jardí, saluda l\'Isidre, el marit de la nostra germana. Un bon home, amb el cor malmès des que ens va faltar el petit.' },
+                { qui: 'Pains', text: 'Si passes pel jardí, saluda l\'Isidre, el jardiner d\'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.' },
                 ...(!(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? [{ qui: 'Pains', text: 'La Charm, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d\'aquests que no els talla ni la falç. Diuen que només cedeixen davant d\'una espasa de llum.'
                     + (E.te('runna') ? ' Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho.' : '') }] : []),
                 { qui: 'Pains', text: 'Vés amb compte, fill. El rosari d\'aquesta casa és vell i fort: que et guardi.' },
@@ -991,7 +991,7 @@ const DIALEGS = {
             pagines: [
                 { qui: 'Phili', text: 'Per fi! Tres nits que colpejo aquesta porta! Soc la Phili, i no, no m\'he estat quieta ni un minut.' },
                 { qui: 'Phili', text: 'T\'ho dic perquè ho vaig veure: el Germà Andreu, el de la pilota, baixava a la Taverna cada nit, al soterrani, amb una clau petita i rovellada. Mai no li he cregut el somriure.' },
-                { qui: 'Phili', text: 'I si veus el Sardi, el meu nebot... digues-li que la tieta Phili ha après a no cridar tant. Només una mica.' },
+                { qui: 'Phili', text: 'Tots aquests nens innocents segrestats per aquesta maleïda boira... Troba\'ls, monjo! Salva\'ls a tots!' },
                 { qui: 'Phili', text: 'Gràcies per les molèsties! Que no se t\'acabin les forces!' },
                 ...(ultimaMonja('Phili') ? [avisPremiMonja('Phili')] : [])
             ],
@@ -1003,7 +1003,7 @@ const DIALEGS = {
         if (!E.flag('premiCharm')) return {
             pagines: [
                 { qui: 'Charm', text: 'Benvingut, fill de Déu. Sóc la Charm, la gran sacerdotessa d\'aquesta casa. Havíem perdut l\'esperança, però no la pregària.' },
-                { qui: 'Charm', text: 'El nostre nebot, el Sardi, el fill de la nostra germana i de l\'Isidre, el jardiner d\'aquí al costat, passava aquí la tardor amb nosaltres. La nit que la boira ens va tancar a les cambres, el seu llit va quedar buit. Porta\'l a casa, fill: a ell, i a tots els altres.' },
+                { qui: 'Charm', text: 'Els infants d\'aquesta terra han estat arrossegats a la foscor d\'un avenc profund. La nit que la boira ens va tancar a les cambres, els seus llits van quedar buits. Salva\'ls, fill: porta a casa tots els nens segrestats.' },
                 { qui: 'Charm', text: E.flag('cantMiracle')
                     ? "Als llibres d'aquesta casa he llegit que l'Ocellaire va robar el cant dels ocells, i que només aquest mateix cant obre la seva gàbia. El que has après amb la Pianista, fill, és el que ell va robar. No el deixis anar."
                     : "Als llibres d'aquesta casa he llegit que l'Ocellaire va robar el cant dels ocells, i que només aquest mateix cant obre la seva gàbia. Tu l'aprendràs: la Pianista el recorda." },
@@ -1017,13 +1017,13 @@ const DIALEGS = {
 
     portaHostatgeria: E => ({ pagines: [] }),
 
-    // El premi de les sacerdotesses, al vestíbul: una passiva que cura en entrar a un lloc sagrat
+    // El premi de les sacerdotesses, al vestíbul: la Benedicció Fraterna per resistir la boira verinosa de la Sala de la Gàbia
     cofreMonges: E => {
         if (E.flag('cofreMonges')) return { pagines: [] };
         return {
             pagines: [
                 { qui: 'Nota', text: '«Per a qui ha tornat la llum a aquesta casa.»' },
-                { avis: "Has obtingut la BENEDICCIÓ FRATERNA. En entrar dins d'una ermita, al Santuari o dins del Monestir, et curarà del tot." }
+                { avis: "Has obtingut la BENEDICCIÓ FRATERNA. La protecció sagrada de les tres sacerdotesses dissipa la boira verinosa de la Sala de la Gàbia per salvar els infants." }
             ],
             enAcabar: () => { E.posaFlag('cofreMonges'); E.dona('benedicio_fraterna'); E.desar(); }
         };
@@ -1124,11 +1124,11 @@ const DIALEGS = {
         enAcabar: () => game.scene.getScene("ZonaTiller").fesSopar()
     }),
 
-    // El ritual: s'encén una espelma per cada nen que falta (l'Huri, el Flami i el Sardi)
+    // El ritual: s'encén una espelma per cada nen que falta (l'Huri, el Fram i el Sardi)
     tillerSoparRitual: E => ({
         pagines: [
             { qui: "Neus", text: "Aquest any m'he descuidat de fer-hi cantar ningú. Que ens ho perdonin els tres, allà on siguin." },
-            { qui: "Les Venerables Sàvies", text: "Sempre fem el mateix, fill: una espelma per cada cadira buida a la taula. Enguany en són tres: l'Huri, el Flami i el Sardi. Encén-les tu, que ets qui ho ha de portar a terme." },
+            { qui: "Les Venerables Sàvies", text: "Sempre fem el mateix, fill: una espelma per cada cadira buida a la taula. Enguany en són tres: l'Huri, el Fram i el Sardi. Encén-les tu, que ets qui ho ha de portar a terme." },
             { fer: (z, fet) => z.encendreEspelmes([0, 1, 2], fet) },
             { qui: "Pastor vell", text: "Fa molts anys que a nosaltres ningú no ens guardava cap cadira a cap taula. Gràcies per asseure'ns, fill." },
             { qui: "El Gran Til·ler", text: "Aquesta és la saviesa que et volia donar, petit monjo: ningú no es perd del tot mentre algú el recorda a taula. La gàbia de l'Ocellaire només s'omple de qui s'ha quedat sol." },
@@ -1157,7 +1157,7 @@ const DIALEGS = {
             { qui: "Ineu", text: "Germà Andreu?!" },
             { qui: "Andreu, Pastor de Boira", text: "L'Andreu era un monjo que ningú no mirava. Ara sóc el Pastor de Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai." },
             { qui: "Andreu, Pastor de Boira", text: "El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» Jo no el trobo a faltar: l'admiro. I ara sóc el seu pastor. El PASTOR!" },
-            { qui: "Ineu", text: "On són l'Huri, el Flami i el Sardi?" },
+            { qui: "Ineu", text: "On són l'Huri, el Fram i el Sardi?" },
             { qui: "Andreu, Pastor de Boira", text: "Dormen. Els vaig portar jo al Mestre, un per un, de nit. Allà dins ja no tenen por de res." },
             { qui: "Ineu", text: "Andreu, això que et parla no és bo. Encara pots tornar enrere." },
             { qui: "Andreu, Pastor de Boira", text: "Tornar enrere? Mai! El Mestre em va veure, quan ningú més no ho feia. Calla! Be-e-e!" }

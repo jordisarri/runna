@@ -82,7 +82,7 @@ Tots en anglès i **sense lletra** (afegeix «instrumental, no lyrics» si el ge
 
 ### Llocs (recomanades; si en falta alguna, no passa res)
 
-**`taverna`** (~1:45): alegre però una mica forçada; la Carmen dorm i hi ha un nen desaparegut.
+**`taverna`** (~1:45): alegre però una mica forçada; la Càren dorm i hi ha un nen desaparegut.
 > instrumental Catalan tavern folk waltz, accordion lead, village fiddle, tenora reed melody, tambourine and bass drum, A minor, cozy but slightly uneasy, no lyrics
 
 **`cirosa`** (~2 min): pastors desterrats; flabiol, pandereta, bordó de gaita i campanes d'esquelles.

@@ -301,7 +301,7 @@ const PROLEG_QUADRES = [
     { text: "Fa tres segles, quan el món encara tremolava de pregàries, un firaire de capa negra pujava cada primavera al Miracle amb gàbies d'ocells que cantaven amb veu de persona: l'Ocellaire. I els nens que l'escoltaven perdien el riure per sempre.", dibuix: 'ocellaire', vitrall: [0.515, 0.50, 1.95] },
     { text: "Pastors i monjos s'alçaren contra ell i el van tancar dins la seva pròpia gàbia, al més profund de la terra. Els monjos van segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la van fer dormir entre pedres, a l'espera del dia en què la foscor tornés.", dibuix: 'segell', vitrall: [0.515, 0.50, 1.95] },
     { text: "Però la foscor no oblida. Fa tres nits, una boira violeta i glaçada s'ha alçat de sota terra: marceix els horts, enterboleix les aigües i ha fet emmudir l'orgue sagrat del Santuari.", dibuix: 'boira', vitrall: [0.512, 0.67, 2.5] },
-    { text: "I cada nit, la boira reclama un nen.\nPrimer l'Huri i el Flami, a Sant Benet.\nI ara, en aquesta nit maleïda... el Sardi, el nebot de les sacerdotesses.", dibuix: 'nens', vitrall: [0.56, 0.555, 3.2] },
+    { text: "I cada nit, la boira reclama un nen.\nPrimer l'Huri i el Fram, a Sant Benet.\nI ara, en aquesta nit maleïda... el Sardi, el nebot de les sacerdotesses.", dibuix: 'nens', vitrall: [0.56, 0.555, 3.2] },
     { text: "Quan l'alba torna a incendiar el cel del Miracle, un jove monjo desperta al Monestir: l'Ineu.\nEl destí l'ha triat, encara que ell no ho sàpiga. El Pare Jordi l'espera a la Plaça.", dibuix: 'mati', vitrall: [0.502, 0.58, 3.0] }
 ];
 
@@ -521,7 +521,7 @@ class EscenaProleg extends Phaser.Scene {
     // 4. Tres finestres que s'apaguen i l'ombra que s'endú un nen cap a la Taverna
     dibuix_nens(c) {
         this.fons(c, 'proleg_nens');
-        const cases = [[40, 741, 200, 230, 'Huri'], [270, 722, 190, 250, 'Flami'], [490, 741, 200, 230, 'Sardi']];
+        const cases = [[40, 741, 200, 230, 'Huri'], [270, 722, 190, 250, 'Fram'], [490, 741, 200, 230, 'Sardi']];
         cases.forEach(([x, y, w, h, nom], i) => {
             const f = this.add.rectangle(x + w * 0.29, y - h * 0.57, w * 0.26 - 4, h * 0.3 - 4, 0xffc860, 1); c.add(f);
             const llum = this.add.circle(x + w * 0.29, y - h * 0.57, 60, 0xffc860, 0.18).setBlendMode(Phaser.BlendModes.ADD); c.add(llum);

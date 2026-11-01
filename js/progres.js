@@ -93,8 +93,8 @@ const PROGRES = {
           pista: E => "Rere la roda, un passadís baixa a una cambra secreta, amb un cofre. Abans, un mur d'esbarzers negres que llueixen violeta només cedeix a Runna." },
         { id: 'maneta', marca: ['jordiManeta', 'maneta', 'obj:maneta'], fet: E => E.flag('maneta') || E.te('maneta'),
           pista: E => E.flag('jordiManeta')
-              ? "La maneta d'en Jordi és al cofre de les joguines, dalt de la caseta de pals, a la Caseta."
-              : "El volant de ferro de l'Home del Raïm no té maneta. En Jordi de la Caseta, a l'oest del Gran Til·ler, en deu saber alguna cosa." },
+              ? "La maneta d\'en Georgi és al cofre de les joguines, dalt de la caseta de pals, a la Caseta."
+              : "El volant de ferro de l'Home del Raïm no té maneta. En Georgi de la Caseta, a l'oest del Gran Til·ler, en deu saber alguna cosa." },
         { id: 'raim', marca: ['raimDesperta', 'raimDerrotat'], fet: E => E.flag('raimDerrotat'),
           pista: E => "A la gran escalinata de la Casa Gran, l'Home del Raïm té el cap girat cap a un altre costat. El volant de ferro de la base, amb la maneta, el faria mirar-te." },
         { id: 'cripta', marca: ['relTretes', 'clauFerro', 'obj:clau_ferro'], fet: E => E.flag('relTretes'),
@@ -106,16 +106,22 @@ const PROGRES = {
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
           pista: E => "A l'est del Pati del Celler, pel camí entre els arbres, hi ha una porta de ferro. La clau de ferro n'és amiga." },
         { id: 'clauCiscu', marca: ['ciscuTrobat', 'clauGirgoles', 'obj:clau_girgoles'], fet: E => E.te('clau_girgoles') || E.flag('portaFerroOberta'),
-          pista: E => E.flag('ciscuTrobat') ? "El Siscu t'espera a la cabana amagada: té una clau rovellada per a tu."
-              : "La porta del fons del soterrani té un pany massa petit per a la clau de ferro. El Siscu, el fill de la Carmen, se n'escapa de nit i segur que ha vist el Germà Andreu. Cerca'l pel camí de la Desaparició, on hi ha forats «per on els grans no hi caben»." },
+          pista: E => E.flag('ciscuTrobat') ? "L\'Iscu t'espera a la cabana amagada: té una clau rovellada per a tu."
+              : "La porta del fons del soterrani té un pany massa petit per a la clau de ferro. L\'Iscu, el fill de la Càren, se n'escapa de nit i segur que ha vist el Germà Andreu. Cerca'l pel camí de la Desaparició, on hi ha forats «per on els grans no hi caben»." },
         { id: 'portaFerro', marca: ['portaFerroOberta'], fet: E => E.flag('portaFerroOberta'),
-          pista: E => "Al fons del soterrani de la Sala de les Gírgoles, la clau rovellada del Siscu té una porta de ferro que treu boira." },
+          pista: E => "Al fons del soterrani de la Sala de les Gírgoles, la clau rovellada de l\'Iscu té una porta de ferro que treu boira." },
         { id: 'girgoles', marca: ['girgolesEnceses'], fet: E => E.flag('girgolesEnceses'),
           pista: E => "Sota la porta de ferro, cinc mates de gírgoles lluminoses voldrien brillar alhora, però cada una desperta les veïnes." },
         { id: 'rastell', marca: ['rastellObert'], fet: E => E.flag('rastellObert'),
           pista: E => "Al passadís de tortura, un rastell rovellat barra el pas. Els Guants de Poder saben de torns." },
         { id: 'tortura', marca: ['torturaNet'], fet: E => E.flag('torturaNet'),
           pista: E => "Al final del passadís de tortura, un mur d'esbarzers negres es deixa tallar per Runna." },
+        { id: 'benediccioFraterna', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'lliurePains', 'refetorObert', 'esb_host_cap1', 'esb_host_cap2', 'mongesTrobades', 'premiPains', 'premiPhili', 'premiCharm', 'cofreMonges', 'obj:benedicio_fraterna'], fet: E => E.te('benedicio_fraterna'),
+          pista: E => !E.flag('llosaOberta')
+              ? "Per creuar l'avenc de la Sala de la Gàbia cal la Benedicció Fraterna de les tres sacerdotesses de l'Hostatgeria. Parla amb la gent de les Cel·les per esbrinar el secret de la llosa del jardí de l'Isidre."
+              : !E.flag('mongesTrobades')
+                  ? "Sota la llosa del jardí de l'Hostatgeria hi ha les cambres de les sacerdotesses. Desperta la Pains, empeny la taula de la Phili amb els Guants i talla els esbarzers de la Charm amb Runna."
+                  : "Les tres sacerdotesses són lliures: recull la Benedicció Fraterna al cofre del vestíbul de l'Hostatgeria per poder resistir la boira verinosa de la Sala de la Gàbia." },
         { id: 'pont', marca: ['pontGabia'], fet: E => E.flag('pontGabia'),
           pista: E => "Davant l'avenc de la Sala de la Gàbia, els blocs del fons dormen. Un cant de pedres els faria aixecar." },
         { id: 'ocellaire', marca: ['ocellaireVencut'], fet: E => E.flag('ocellaireVencut'),
@@ -124,7 +130,7 @@ const PROGRES = {
         { id: 'gabia', marca: ['gabiaOberta'], fet: E => E.flag('gabiaOberta'),
           pista: E => "L'Home de la Gàbia ha caigut. Els barrots de la gàbia només escolten el Cant del Miracle." },
         { id: 'nens', marca: ['rescatUri', 'rescatFlam', 'rescatSardin'], fet: E => E.flag('rescatUri') && E.flag('rescatFlam') && E.flag('rescatSardin'),
-          pista: E => "La gàbia és oberta. Als capolls de boira hi dormen l'Huri, el Flami i el Sardi; Runna els sap trencar." },
+          pista: E => "La gàbia és oberta. Als capolls de boira hi dormen l'Huri, el Fram i el Sardi; Runna els sap trencar." },
         { id: 'final', marca: ['andreuTancat', 'epilegFet'], fet: E => E.flag('epilegFet'),
           pista: E => E.flag('andreuTancat') ? "Els nens tornen a riure. Al Santuari t'esperen tots."
               : "Els tres nens són lliures, però a la Sala de la Gàbia encara hi ha algú que t'espera." },
@@ -133,7 +139,7 @@ const PROGRES = {
     // Missions laterals: no barren el camí. Les Tietes les recorden quan ja s'han pogut començar.
     laterals: [
         { id: 'taverna', marca: ['tavernaOberta', 'evaParlat'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('evaParlat'),
-          pista: E => "El Sardi berenava cada tarda a la Taverna amb l'Eva. La porta és tancada, però una trucada potser l'obriria." },
+          pista: E => "El Sardi berenava cada tarda a la Taverna amb l\'Eve. La porta és tancada, però una trucada potser l'obriria." },
         { id: 'carry', marca: ['carryParlat', 'pallofaTornat', 'obj:pallofa', 'obj:clau_campanar'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('pallofaTornat'),
           pista: E => !E.flag('carryParlat') ? "La Carry, a Nostra Senyora (a l'oest de les Cel·les), té cara de patir per alguna cosa."
               : E.te('pallofa') ? "El Pallofa ja és amb tu, i la Carry el deu trobar a faltar a Nostra Senyora."
@@ -144,14 +150,6 @@ const PROGRES = {
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta cants antics." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
           pista: E => "La Nena de les Trenes, al camí de la Rovellonera, encara espera els seus dos llaços, colgats sota pedres: un a la roca del camí i l'altre a la primera clariana de la Rovellonera." },
-        { id: 'monges', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'mongesTrobades'], obert: E => E.flag('isidreSansa'), fet: E => E.flag('mongesTrobades'),
-          pista: E => !E.flag('llavorSansa') && !E.flag('llosaOberta') ? "Pregunta a la gent de les Cel·les, al nord-est: potser en saben alguna cosa més de la llosa del jardí de l'Hostatgeria."
-              : !E.flag('llosaOberta') ? "La Llavor de Lluna és per a l'Isidre, al jardí de l'Hostatgeria."
-              : "Sota la llosa del jardí de l'Hostatgeria hi ha un soterrani que puja a les cambres de les sacerdotesses." + [
-                  !E.flag('lliurePains') ? " La Pains dorm al dormitori: un cant antic la pot despertar." : '',
-                  !E.flag('refetorObert') ? " Una taula molt pesant barra la porta del refetor: et caldran uns guants." : '',
-                  !(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? " A la capella del fons, la Charm és tancada darrere uns esbarzers negres: només Runna els talla." : ''
-              ].join('') },
         { id: 'carruatge', marca: ['carruatgeObert'], obert: E => E.flag('epilegFet'), fet: E => E.flag('carruatgeObert'),
           pista: E => "L'Home de la Tartana Verda, a l'Era, deia que obriria la tartana quan la boira marxés del tot." }
     ],

@@ -61,7 +61,11 @@ Object.assign(DIALEGS, {
     pontGabia: E => E.flag('pontGabia') ? { pagines: [] } : {
         pagines: [
             { qui: 'Inscripció', text: "Gravada a la pedra, una paraula antiga: PEDRES." },
-            { qui: 'Ineu', text: E.flag('cantPedres') ? "(Les pedres... L'ombra del monjo es va despertar amb el Cant de les Pedres. Potser aquestes també: 3-1-2-1.)" : "(Pedres que dormen. Hi deu haver un cant per despertar-les.)" }
+            { qui: 'Ineu', text: !E.te('benedicio_fraterna')
+                ? "(L'aire de l'avenc és carregat d'una boira verinosa... Encara que aixequi el pont, em caldrà la Benedicció Fraterna de les tres sacerdotesses per resistir i salvar els nens segrestats.)"
+                : E.flag('cantPedres')
+                    ? "(Les pedres... L'ombra del monjo es va despertar amb el Cant de les Pedres. Potser aquestes també: 3-1-2-1.)"
+                    : "(Pedres que dormen. Hi deu haver un cant per despertar-les.)" }
         ]
     },
     gabiaGran: E => ({ pagines: E.flag('andreuTancat') ? [
@@ -83,8 +87,8 @@ Object.assign(DIALEGS, {
     gentEpileg: E => ({ pagines: [{ qui: 'Gent', text: "Avui tothom canta, encara que l'orgue faci una nota de pega." }] }),
     nenGabia: nom => E => ({ pagines: [{ qui: nom, text: {
         Huri: "Ineu! Somiava que era un ocell dins d'una gàbia... i ara tinc unes ganes de riure!",
-        Flami: "On és l'home dels ocells? L'has fet fugir tu? Ha ha ha! Quina cara que feia!",
-        Sardi: "Les tietes deuen estar fent un sidral... Anem a casa, Ineu?"
+        Fram: "On és l'home dels ocells? L'has fet fugir tu? Ha ha ha! Quina cara que feia!",
+        Sardi: "El pare deu estar amoïnat regant la prunera... Anem a casa, Ineu?"
     }[nom] }] })
 });
 
@@ -407,7 +411,7 @@ class ZonaTortura extends ZonaBase {
 const GABIA = { x: 900, y: 720, platW: 900, platH: 600, avenc: 130 };
 const NENS_GABIA = [
     { id: 'Huri', key: 'nen_uri', nom: "l'Huri", flag: 'rescatUri', dx: -80 },
-    { id: 'Flami', key: 'nen_flam', nom: 'el Flami', flag: 'rescatFlam', dx: 0 },
+    { id: 'Fram', key: 'nen_flam', nom: 'el Fram', flag: 'rescatFlam', dx: 0 },
     { id: 'Sardi', key: 'nen_sardin', nom: 'el Sardi', flag: 'rescatSardin', dx: 80 }
 ];
 
@@ -743,7 +747,7 @@ class ZonaGabia extends ZonaBase {
         o.mort = true; o.spr.body.enable = false;
         Sfx.flama();
         this.impacte(o.spr.x, o.spr.y, { x: 0, y: -1 }, 0);
-        this.tweens.add({ targets: o.spr, alpha: 0, scale: 0.05, duration: 220, onComplete: () => this.retirar(o) });
+        this.tweens.add({ targets: o.spr, alpha: 0, duration: 220, onComplete: () => this.retirar(o) });
     }
 
     // ---------------- Música ----------------
@@ -771,7 +775,13 @@ class ZonaGabia extends ZonaBase {
     actualitzar() {
         // L'Ineu trepitja la plataforma: l'Andreu crida el seu Mestre
         if (!this.combatIniciat && Estat.flag('pontGabia') && !Estat.flag('ocellaireVencut') && this.ineu.y < GABIA.y + GABIA.platH / 2 - 30) {
-            if (!Estat.flag('cantMiracle')) {                                         // sense el Cant del Miracle no es pot entrar al combat
+            if (!Estat.te('benedicio_fraterna')) {
+                this.ineu.setY(GABIA.y + GABIA.platH / 2 - 10);
+                if (this.time.now > (this.avisCant || 0)) {
+                    this.avisCant = this.time.now + 4000;
+                    this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text: "(Una boira verinosa puja de l'avenc... Sense la Benedicció Fraterna de les tres sacerdotesses de l'Hostatgeria, no podré resistir per salvar els nens segrestats.)" }] });
+                }
+            } else if (!Estat.flag('cantMiracle')) {                                         // sense el Cant del Miracle no es pot entrar al combat
                 this.ineu.setY(GABIA.y + GABIA.platH / 2 - 10);
                 if (this.time.now > (this.avisCant || 0)) { this.avisCant = this.time.now + 4000; this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text: "(Una força invisible no em deixa passar. Sense el Cant del Miracle, els barrots no m'escoltaran. La Pianista, al Santuari, me l'ha d'ensenyar.)" }] }); }
             } else this.iniciarCombatFinal();
@@ -781,36 +791,6 @@ class ZonaGabia extends ZonaBase {
     // Durant el combat final no es pot parlar amb ningú ni tocar la flauta
     sensePunts() { return !!this.bossActiu; }
 
-    // ---------------- Càmera de les escenes ----------------
-    // Pla de cinema: la càmera deixa de seguir l'Ineu i enquadra (x, y) al mig de la part de la pantalla que el quadre de diàleg no tapa
-    enquadrar(x, y, zoom, ms, fet) {
-        const cam = this.cameras.main;
-        if (!this.camCinema) {
-            this.camCinema = true;
-            if (this.twCamDialeg) this.twCamDialeg.stop();
-            const b = cam.getBounds(); this.boundsCinema = { x: b.x, y: b.y, w: b.width, h: b.height };
-            cam.stopFollow(); cam.removeBounds();
-        }
-        const W = AMPLE, H = ALT - ALT_HUD, lliure = Math.max(240, H - 370);       // la caixa de diàleg tapa uns 370 px de baix
-        const sx = x - W / 2, sy = y - (lliure / 2) / zoom - H / 2 + H / (2 * zoom);
-        if (this.twCinema) this.twCinema.stop();
-        this.twCinema = this.tweens.add({ targets: cam, scrollX: sx, scrollY: sy, zoom, duration: ms, ease: 'Sine.easeInOut',
-            onUpdate: () => this.ajustarSuperposicions(), onComplete: () => { this.ajustarSuperposicions(); if (fet) fet(); } });
-    }
-    // Torna a l'Ineu i el torna a seguir
-    alliberarCamera(ms, fet) {
-        const cam = this.cameras.main, I = this.ineu, H = ALT - ALT_HUD;
-        if (!this.camCinema) { if (fet) fet(); return; }
-        if (this.twCinema) this.twCinema.stop();
-        this.twCinema = this.tweens.add({ targets: cam, scrollX: I.x - AMPLE / 2, scrollY: I.y - H / 2, zoom: ZOOM_CAMERA, duration: ms, ease: 'Sine.easeInOut',
-            onUpdate: () => this.ajustarSuperposicions(), onComplete: () => {
-                const b = this.boundsCinema;
-                if (b) cam.setBounds(b.x, b.y, b.w, b.h);
-                cam.startFollow(I, false, 0.12, 0.12);
-                this.camCinema = false; this.ajustarSuperposicions();
-                if (fet) fet();
-            } });
-    }
 
     iniciarCombatFinal() {
         this.combatIniciat = true;
@@ -1034,7 +1014,7 @@ class ZonaGabia extends ZonaBase {
     capollTrencat(e) {
         const n = e.nen, x = e.spr.x, y = e.spr.y + 40;
         Estat.posaFlag(n.flag);
-        this.tweens.add({ targets: e.spr, alpha: 0, scale: e.escalaBase * 1.6, duration: 300, onComplete: () => this.retirar(e) });
+        this.tweens.add({ targets: e.spr, alpha: 0, duration: 300, onComplete: () => this.retirar(e) });
         e.ombra.setVisible(false);
         this.llum(x, y - 60, 0xffe8a0);
         const nen = this.posarNen(n, x, y);

@@ -1,9 +1,9 @@
 /**
- * ELS PERSONATGES DEL CELLER (ping-pong): Senyor Perers, Eloi, Jusef i July, tots en estil xibi (cap gran, cos petit) i amb molt de detall.
+ * ELS PERSONATGES DEL CELLER (ping-pong): Senyor Perers, Eloi, Jusef i Julius, tots en estil xibi (cap gran, cos petit) i amb molt de detall.
  *  - Senyor Perers: senyor alt i panxut d'uns 50 anys, amb molt de cabell, ulleres i la pala de pedra.
  *  - Eloi: atleta alt i musculós.
  *  - Jusef: una mena de gurú alt i prim, amb ulleres, cabell curt i barba taronges.
- *  - July: cap enorme, ulleres i molt prim; porta la samarreta dels angelets.
+ *  - Julius: cap enorme, ulleres i molt prim; porta la samarreta dels angelets.
  * Cada funció pinta en un llenç de 100 unitats d'ample (ctx ja escalat); dibuixarNpcPingpong ho prepara per al catàleg d'assets.
  */
 

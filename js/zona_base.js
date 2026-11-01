@@ -144,7 +144,7 @@ class ZonaBase extends Phaser.Scene {
         this.dadesEntrada = data || {};
         this.canviant = false;
         this.camDialeg = null;
-        this.npcs = {}; this.npcDavant = null; this.camCinema = false;          // (l'escena es reaprofita: res de la visita anterior)
+        this.npcs = {}; this.npcDavant = null; this.camCinema = false; this.ineuFlautaImg = null;          // (l'escena es reaprofita: res de la visita anterior)
         this.boundsCamOrig = null;
         this.twCamDialeg = null;
         this.entradaPropia = false;
@@ -222,26 +222,12 @@ class ZonaBase extends Phaser.Scene {
         Estat.desar();
 
         if (this.enEntrar) this.enEntrar();
-        this.curaSagrada();
         if (this.dadesEntrada.entrada && !this.dadesEntrada.restaurar && !Estat.caigut && !this.entradaPropia) this.pasEntrada(this.posEntrada);
         if (Estat.caigut) {
             Estat.caigut = false;
             this.despertarCaigut();
         }
         fixarDecorat(this);
-    }
-
-    // Benedicció fraterna: en entrar a un lloc sagrat, cura del tot (un sol cop fins que se surt a un lloc que no ho sigui)
-    curaSagrada() {
-        const sagrat = ['ZonaErmitaInt', 'ZonaGabrielInt', 'ZonaEsglesia', 'ZonaMonestirRebedor', 'ZonaBiblioteca'].includes(this.scene.key);
-        if (!sagrat) { Estat.sagratCurat = false; return; }
-        if (Estat.sagratCurat || !Estat.te('benedicio_fraterna')) return;
-        Estat.sagratCurat = true;
-        const d = Estat.dades;
-        if (d.vida >= d.corsMax * 2) return;
-        d.vida = d.corsMax * 2;
-        const ui = this.ui(); ui.actualitzarHUD(); ui.missatge('La benedicció fraterna et cura');
-        Sfx.cura();
     }
 
     // Després d'una derrota: l'Ineu a terra, i de cop el Pare Jordi agenollat al seu costat; en tancar el diàleg l'Ineu s'aixeca
@@ -539,7 +525,10 @@ class ZonaBase extends Phaser.Scene {
 
     // Personatge quiet amb diàleg (es pot moure amb npcVa: les accions dels diàlegs es fan caminant, no explicant-les)
     npc(key, x, y, dialeg, opts = {}) {
-        const img = this.posar(key, x, y);
+        const tex = this.textures.get(key);
+        const escala = (tex.customData && tex.customData.escala) || 1 / RES;
+        const img = this.add.sprite(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
+        img.setDepth(opts.fonsY !== undefined ? opts.fonsY : y);
         img.col = this.colisio(x, y - 9, opts.colAmple || 40, 18);
         img.ombra = this.add.image(x, y, 'ombra').setScale(0.42).setDepth(-500);
         if (opts.flipX) img.setFlipX(true);
@@ -587,15 +576,32 @@ class ZonaBase extends Phaser.Scene {
         if (d) d.alClic = fet; else fet();
     }
 
-    // Un personatge camina fins a (x, y), balancejant-se, i s'hi gira
+    // Un personatge es desplaça fins a (x, y); si té animació de caminar, la reprodueix
     npcVa(key, x, y, fet, vel = 150) {
         const img = this.npcs && this.npcs[key];
         if (!img) { if (fet) fet(); return; }
         const dist = Phaser.Math.Distance.Between(img.x, img.y, x, y), dur = Math.max(150, dist / vel * 1000);
-        if (Math.abs(x - img.x) > 4) img.setFlipX(x < img.x);
-        const pas = this.tweens.add({ targets: img, angle: { from: -4, to: 4 }, yoyo: true, repeat: -1, duration: 160 });
+        const dx = x - img.x, dy = y - img.y;
+        let animClau = null;
+        if (key === 'germa_andreu' && dy < -15 && Math.abs(dx) > 10 && this.anims.exists('germa_andreu_ne')) {
+            animClau = 'germa_andreu_ne';
+            img.setFlipX(dx < 0);
+        } else {
+            if (Math.abs(dx) > 4) img.setFlipX(dx < 0);
+            animClau = [key + '_camina', key + '_caminar', key + '_walk'].find(k => this.anims.exists(k));
+        }
+        if (animClau && img.anims) {
+            if (img.respira) img.respira.pause();
+            img.setScale(img.escalaBase);
+            img.play(animClau, true);
+        }
         this.tweens.add({ targets: [img, img.ombra].filter(Boolean), x, y, duration: dur, ease: 'Sine.easeInOut', onUpdate: () => img.setDepth(img.y), onComplete: () => {
-            pas.stop(); img.setAngle(0);
+            if (animClau && img.anims) {
+                img.anims.stop();
+                img.setTexture(key);
+                if (img.respira) img.respira.resume();
+            }
+            img.setAngle(0);
             if (img.col) { img.col.setPosition(img.x, img.y - 9); img.col.body.updateFromGameObject(); }
             if (img.punt) { img.punt.x = img.x; img.punt.y = img.y - 10; }
             if (fet) fet();
@@ -681,6 +687,17 @@ class ZonaBase extends Phaser.Scene {
         if (this.fantasma) this.fantasma.setVisible(true);
         if (fet) fet();
     }
+    // Mentre es toca la flauta, l'Ineu es veu de cara a la càmera tocant-la (art 'ineu_flauta'); en acabar torna el sprite normal.
+    // Si el gràfic encara no és al joc, no es canvia res.
+    ineuFlauta(on) {
+        if (!this.ineu || !this.sys || !this.sys.isActive()) return;
+        if (!on) { if (this.ineuFlautaImg) { this.ineuFlautaImg.destroy(); this.ineuFlautaImg = null; this.ineuBaixa(); } return; }
+        if (this.ineuFlautaImg || this.ineuAlt || !this.textures.exists('ineu_flauta') || Grafics.faltants.includes('ineu_flauta')) return;
+        const I = this.ineu, esc = (this.textures.get('ineu_flauta').customData || {}).escala || 0.5;
+        I.setVisible(false);
+        if (this.fantasma) this.fantasma.setVisible(false);
+        this.ineuFlautaImg = this.add.image(I.x, I.y + 2, 'ineu_flauta').setOrigin(0.5, 1).setScale(esc).setDepth(I.depth);
+    }
     // ---- Accions de l'Ineu sobre el punt amb què interactua (this.puntActiu) ----
     // Agafar: l'objecte (o una llum) vola del punt a l'Ineu, que s'ajup
     agafar(fet, key, color = 0xffe8a0) {
@@ -735,12 +752,12 @@ class ZonaBase extends Phaser.Scene {
         const dur = Math.max(150, Math.hypot(dx, dy) / vel * 1000);
         this.tweens.add({ targets: this.ineu, x, y, duration: dur, onComplete: () => { this.posarDireccio(dir, false); if (fet) fet(); } });
     }
-    // L'Ineu (o un personatge) s'ajup/agenolla un moment
+    // L'Ineu (o un personatge) s'inclina lleugerament (sense deformar mai el sprite)
     ajupir(qui, fet, ms = 900) {
         const img = qui === 'ineu' ? this.ineu : this.npcs && this.npcs[qui];
         if (!img) { if (fet) fet(); return; }
-        const s = img.scaleY;
-        this.tweens.add({ targets: img, scaleY: s * 0.8, duration: 300, yoyo: true, hold: ms, onComplete: () => { img.scaleY = s; if (fet) fet(); } });
+        const y0 = img.y;
+        this.tweens.add({ targets: img, y: y0 + 6, duration: 250, yoyo: true, hold: ms, onComplete: () => { img.y = y0; if (fet) fet(); } });
     }
     // Un esclat de llum suau en un punt (benediccions, màgia)
     llum(x, y, color = 0xffe8a0, fet) {
@@ -1241,6 +1258,42 @@ class ZonaBase extends Phaser.Scene {
         }
     }
 
+    // Pla de cinema: la càmera deixa de seguir l'Ineu i enquadra (x, y) al mig de la part de la pantalla que el quadre de diàleg no tapa
+    enquadrar(x, y, zoom, ms = 800, fet) {
+        const cam = this.cameras.main;
+        if (!this.camCinema) {
+            this.camCinema = true;
+            if (this.twCamDialeg) this.twCamDialeg.stop();
+            const b = cam.getBounds(); this.boundsCinema = { x: b.x, y: b.y, w: b.width, h: b.height };
+            cam.stopFollow(); cam.removeBounds();
+        }
+        const W = AMPLE, H = ALT - ALT_HUD, lliure = Math.max(240, H - 470);
+        const sx = x - W / 2, sy = y - (lliure / 2) / zoom - H / 2 + H / (2 * zoom);
+        if (this.twCinema) this.twCinema.stop();
+        if (ms <= 0) {
+            cam.setScroll(sx, sy); cam.setZoom(zoom);
+            this.ajustarSuperposicions();
+            if (fet) fet();
+            return;
+        }
+        this.twCinema = this.tweens.add({ targets: cam, scrollX: sx, scrollY: sy, zoom, duration: ms, ease: 'Sine.easeInOut',
+            onUpdate: () => this.ajustarSuperposicions(), onComplete: () => { this.ajustarSuperposicions(); if (fet) fet(); } });
+    }
+    // Torna a l'Ineu i el torna a seguir
+    alliberarCamera(ms = 800, fet) {
+        const cam = this.cameras.main, I = this.ineu, H = ALT - ALT_HUD;
+        if (!this.camCinema) { if (fet) fet(); return; }
+        if (this.twCinema) this.twCinema.stop();
+        this.twCinema = this.tweens.add({ targets: cam, scrollX: I.x - AMPLE / 2, scrollY: I.y - H / 2, zoom: ZOOM_CAMERA, duration: ms, ease: 'Sine.easeInOut',
+            onUpdate: () => this.ajustarSuperposicions(), onComplete: () => {
+                const b = this.boundsCinema;
+                if (b) cam.setBounds(b.x, b.y, b.w, b.h);
+                cam.startFollow(I, false, 0.12, 0.12);
+                this.camCinema = false; this.ajustarSuperposicions();
+                if (fet) fet();
+            } });
+    }
+
     // Els vels de color i la boira (fixos a la pantalla: scrollFactor 0) es dibuixen amb la mida del zoom habitual; si la càmera s'allunya, es fan més grans
     // en la mateixa proporció perquè continuïn cobrint tota la pantalla
     ajustarSuperposicions() {
@@ -1498,6 +1551,7 @@ class ZonaBase extends Phaser.Scene {
     interactuar(punt) {
         this.puntActiu = punt;
         this.dialegDePunt = true;       // la càmera del diàleg només té en compte qui parla quan el diàleg ve d'una interacció
+        if (punt.enInteractuar) punt.enInteractuar();
         const dialeg = typeof punt.dialeg === 'function' ? punt.dialeg(Estat) : punt.dialeg;
         if (!dialeg) { this.dialegDePunt = false; if (punt.enTancar) punt.enTancar(); return; }   // accions sense diàleg (només un efecte a l'escena)
         const obre = () => this.ui().obrirDialeg(dialeg, () => {

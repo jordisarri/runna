@@ -69,6 +69,8 @@ class EscenaMusica extends Phaser.Scene {
         this.entrada = [];
         this.bloquejat = false;
         this.tancat = false;
+        const zonaFl = Joc.zonaActiva(this);
+        if (zonaFl && zonaFl.ineuFlauta) zonaFl.ineuFlauta(true);          // l'Ineu es veu de cara, tocant la flauta
 
         const cx = AMPLE / 2, T = MUS_T;
         const llibre = { fontFamily: FONT_LLIBRE, resolution: 2 };
@@ -260,6 +262,8 @@ class EscenaMusica extends Phaser.Scene {
         const ui = this.scene.get('UI');
         if (ui) ui.bloquejatFins = ui.time.now + 300;
         const nom = this.llico ? this.dades.melodia : null;
+        const zonaFl = Joc.zonaActiva(this);
+        if (zonaFl && zonaFl.ineuFlauta) zonaFl.ineuFlauta(false);
         this.scene.stop();
         if (this.llico && exit) completarLliço(nom);
         if (melodiaTocada) {

@@ -88,6 +88,9 @@ class ZonaEsglesia extends ZonaBase {
          ['venerables', 810, R + 360], ['frederic', 420, R + 510], ['josep', 520, R + 510],
          ['garf', 760, R + 510], ['isidre', 860, R + 510], ['jaumeta', 1000, R + 520]
         ].forEach(([k, x, y]) => { if (this.textures.exists(k) && !(this.npcs && this.npcs[k])) this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 }); });
+        // Enquadra tot el Santuari (del retaule i els nens fins a l'últim banc i les parets laterals)
+        // per damunt del quadre de diàleg i el retrat, de manera que tothom es vegi sencer i ningú quedi tallat
+        this.enquadrar(640, R + 340, 0.67, 0);
         this.cameras.main.fadeIn(1200, 0, 0, 0);
     }
 

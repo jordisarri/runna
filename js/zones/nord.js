@@ -92,21 +92,21 @@ class ZonaRuines extends ZonaBase {
             .forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 60 * e, h: 22 * e } }));
         // El pergamí partit entre dues pedres: s'agafa i passa al sarró
         if (!Estat.flag('fragment1')) {
-            // Dins de les runes, sobre els carreus caiguts davant del portal esfondrat (per sobre de l'sprite de les runes)
-            this.pergamiRunes = this.posar('pergami_partit', 1275, 452, { fonsY: 480, escala: 0.75 });
-            this.pergamiBrill = this.add.circle(1275, 430, 40, 0xffe8a0, 0.2).setDepth(479).setBlendMode('ADD');
+            // Dins de les runes, sobre els carreus caiguts a la dreta del portal (perquè no se solapi amb l'ombra del mur de l'esquerra)
+            this.pergamiRunes = this.posar('pergami_partit', 1380, 455, { fonsY: 480, escala: 0.75 });
+            this.pergamiBrill = this.add.circle(1380, 435, 40, 0xffe8a0, 0.2).setDepth(479).setBlendMode('ADD');
             this.tweens.add({ targets: this.pergamiBrill, alpha: 0.05, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
-            this.interactiu(1275, 500, RADI_OBJECTE, DIALEGS.ruines, { altura: 60, actiu: () => !Estat.flag('fragment1') });
+            this.interactiu(1380, 495, RADI_OBJECTE, DIALEGS.ruines, { altura: 60, actiu: () => !Estat.flag('fragment1') });
         } else if (!Estat.te('fragment1')) Estat.dona('fragment1');          // partides desades d'abans del pergamí físic
 
-        // L'ombra del monjo: apareix quan es troba el primer fragment del pergamí i, un cop ha beneït l'Ineu, se'n va a descansar en pau
+        // L'ombra del monjo: projectada al mur a l'esquerra del portal de les runes
         this.apareix = 1;            // 0..1: com de present és l'ombra (la primera vegada es materialitza lentament)
-        this.ombraMonjo = this.add.image(1100, 560, 'ombra_monjo').setOrigin(0.5, 1)
-            .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(560).setAlpha(0);
-        this.puntOmbra = this.interactiu(1100, 600, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 210, actiu: () => Estat.flag('fragment1') && !Estat.flag('benedicioMonjo'), enTancar: () => Estat.posaFlag('flauta_ombra') });
+        this.ombraMonjo = this.add.image(1205, 425, 'ombra_monjo').setOrigin(0.5, 1)
+            .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(471).setAlpha(0);
+        this.puntOmbra = this.interactiu(1205, 465, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 140, actiu: () => Estat.flag('fragment1') && !Estat.flag('benedicioMonjo'), enTancar: () => Estat.posaFlag('flauta_ombra') });
         this.ombraHaCridat = false;
-        this.llocFlauta('ombra', 1100, 610, 160, true, () => !Estat.flag('benedicioMonjo'));
-        this.tweens.add({ targets: this.ombraMonjo, y: 564, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
+        this.llocFlauta('ombra', 1205, 475, 160, true, () => !Estat.flag('benedicioMonjo'));
+        this.tweens.add({ targets: this.ombraMonjo, y: 428, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
         this.ombraVista = false; this.ombraMarxa = false;
 
         this.cartell(620, 960, DIALEGS.cartellRuinesPingpong);
@@ -140,7 +140,7 @@ class ZonaRuines extends ZonaBase {
     // El Cant de les Pedres, tocat davant l'ombra, li desperta la memòria
     enMelodia(nom) {
         if (nom !== 'pedres' || !Estat.flag('fragment1')) return false;
-        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1100, 600) > 300) return false;
+        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, this.puntOmbra.x, this.puntOmbra.y) > 300) return false;
         if (Estat.flag('benedicioMonjo')) return false;                 // ja descansa
         if (!['fragment1', 'fragment2', 'alcuiLlegit'].every(f => Estat.flag(f))) return false;
         this.ui().obrirDialeg(DIALEGS.benedicioMonjo(Estat), () => Estat.desar());
@@ -179,7 +179,7 @@ class ZonaRuines extends ZonaBase {
     actualitzar() {
         // Quan el Pare Alcuí ja ha llegit els fragments, l'ombra parla a l'Ineu el primer cop que s'hi acosta (li diu què vol sentir)
         if (!this.ombraHaCridat && Estat.flag('alcuiLlegit') && Estat.flag('fragment2') && !Estat.flag('ombraDemanaCant')
-            && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1100, 600) < 260 && !this.ui().dialeg) {
+            && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, this.puntOmbra.x, this.puntOmbra.y) < 260 && !this.ui().dialeg) {
             this.ombraHaCridat = true;
             this.ineu.body.setVelocity(0);
             this.interactuar(this.puntOmbra);
@@ -194,7 +194,7 @@ class ZonaRuines extends ZonaBase {
 
 // ---------------- EL CELLER (interior; el ping-pong hi és una prova circumstancial) ----------------
 // Una sala petita, que es veu sencera d'una ullada: l'arcada amb la roda i la porta secreta al fons, una taula de ping-pong al mig
-// amb en Juli i en Frederic, i en Jusef al costat
+// amb en Julius i en Frederic, i en Jusef al costat
 const ALCADA_CELLER = 900, AMPLE_CELLER = 600;
 
 class ZonaPingpong extends ZonaBase {
@@ -408,7 +408,7 @@ class ZonaCelles extends ZonaBase {
         sb.setX(SB0 + sb.displayWidth / 2);
         this.colisio((SB0 + 1800) / 2, 555, 1800 - SB0, 90);
         this.blocDarrere((SB0 + 1800) / 2, 1800 - SB0, 505, Math.max(0, 600 - sb.displayHeight));
-        this.interactiu(SB0 + sb.displayWidth * 0.251, 620, RADI_OBJECTE, DIALEGS.portaFlam, { altura: 140 });    // porta de l'esquerra: on dormia el Flami
+        this.interactiu(SB0 + sb.displayWidth * 0.251, 620, RADI_OBJECTE, DIALEGS.portaFlam, { altura: 140 });    // porta de l'esquerra: on dormia el Fram
 
         // Sant Benet (est): la Neus i el seu marit, el senyor Moliner, veïns de Sant Benet
         this.npc('neus', 1250, 680, DIALEGS.neus);
@@ -563,8 +563,14 @@ class ZonaSantAntoni extends ZonaBase {
             g.play('pallofa_camina');
         } else g = this.posar('pallofa', 420, 905);
         const ombra = this.add.image(g.x, g.y, 'ombra').setScale(0.2).setDepth(-500);
-        const punt = this.interactiu(g.x, g.y - 8, RADI_NPC, DIALEGS.pallofa, { altura: g.displayHeight + 6 });
-        this.tweens.add({ targets: g, x: 900, duration: 6500, yoyo: true, repeat: -1, ease: 'Linear',
+        let tw;
+        const punt = this.interactiu(g.x, g.y - 8, RADI_NPC, () => {
+            if (tw) tw.pause();
+            if (g.anims) { g.anims.stop(); if (g.setFrame) g.setFrame(0); }
+            if (this.ineu) g.setFlipX(this.ineu.x < g.x);
+            return DIALEGS.pallofa(Estat);
+        }, { altura: g.displayHeight + 6 });
+        tw = this.tweens.add({ targets: g, x: 900, duration: 6500, yoyo: true, repeat: -1, ease: 'Linear',
             onYoyo: () => g.setFlipX(true), onRepeat: () => g.setFlipX(false),
             onUpdate: () => { ombra.x = g.x; punt.x = g.x; } });
         punt.enTancar = () => {
@@ -772,7 +778,7 @@ class ZonaTiller extends ZonaBase {
     }
 }
 
-// ---------------- LA CASETA (a l'oest del Til·ler): on viu el Jordi de la Caseta ----------------
+// ---------------- LA CASETA (a l'oest del Til·ler): on viu el Georgi de la Caseta ----------------
 // Escenari petit: en Jordi al jardí, la seva casa (es pot entrar: només decorada) i la caseta aixecada sobre pilars
 // de fusta, amb el cofre de les joguines on hi ha la maneta.
 class ZonaJordi extends ZonaBase {
@@ -1029,13 +1035,17 @@ class ZonaBosc extends ZonaBase {
         this.add.ellipse(AX, AY + 40, 760, 380, 0x8fe08a, 0.13).setDepth(-1090);
         this.add.ellipse(AX, AY + 40, 480, 220, 0xb8f0a0, 0.13).setDepth(-1089);
         this.alzina = this.posar('alzina_buida', AX, AY, { col: { w: 150, h: 46 } });
-        this.interactiu(AX, AY + 20, 130, DIALEGS.alzinaBuida, {
-            altura: 330,
+        // El punt d'interacció és el forat del tronc (la «!» surt just damunt seu); el radi permet tocar-lo des del peu de l'alzina
+        this.interactiu(AX - 18, AY - 128, 235, DIALEGS.alzinaBuida, {
+            altura: 56,
             enTancar: () => { if (Estat.flag('portalJaumeta')) { Estat.dades.portalTorna = 'bosc'; this.canviarZona('ZonaCabana', 'portal'); } }
         });
         [[-250, 75, 0.7], [255, 45, 0.55], [-120, 120, 0.4]].forEach(([dx, dy, e]) => this.posar('roca', AX + dx, AY + dy, { escala: e, col: { w: 34, h: 14 } }));
-        this.claror = this.add.ellipse(AX - 18, AY - 128, 78, 104, 0x6aff9a, 0.3).setDepth(AY + 1);
-        this.tweens.add({ targets: this.claror, alpha: 0.12, scaleX: 1.2, scaleY: 1.12, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
+        this.claror = this.add.ellipse(AX - 18, AY - 128, 78, 104, 0x6aff9a, 0.45).setDepth(AY + 1);
+        this.tweens.add({ targets: this.claror, alpha: 0.18, scaleX: 1.2, scaleY: 1.12, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
+        // Halo que batega al voltant del forat: crida l'atenció sense tapar el dibuix
+        const halo = this.add.circle(AX - 18, AY - 128, 70, 0xb8ffc0, 0).setStrokeStyle(4, 0xd8ffd0, 0.8).setBlendMode(Phaser.BlendModes.ADD).setDepth(AY + 2);
+        this.tweens.add({ targets: halo, scale: { from: 0.55, to: 1.5 }, alpha: { from: 0.9, to: 0 }, repeat: -1, duration: 1900, ease: 'Sine.easeOut' });
         this.add.particles(AX, AY - 90, 'espurna', {
             x: { min: -230, max: 230 }, y: { min: -120, max: 60 }, speedX: { min: -8, max: 8 }, speedY: { min: -14, max: -3 }, lifespan: 3200,
             scale: { start: 0.28, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xbaffb0, 0xf2ffc0], frequency: 260, blendMode: 'ADD'
@@ -1063,7 +1073,7 @@ class ZonaBosc extends ZonaBase {
         // Bosc dens: arbres en graella amb petits desplaçaments, deixant lliures el camí i els llocs importants
         // (els arbres es dibuixen davant segons la y: una herba o un cartell queda tapat per les copes dels arbres que té al sud,
         // per això les clarianes són amples i el cartell en té una de més a sota)
-        const lliure = [[200, 180, 170], [900, 650, 250], [AX, AY - 60, 330], [720, 290, 210], [1380, 990, 210], [560, 1020, 210], [1700, 700, 240], [1520, 600, 190], [1520, 830, 210]];
+        const lliure = [[200, 180, 170], [900, 650, 250], [AX, AY - 40, 480], [720, 290, 210], [1380, 990, 210], [560, 1020, 210], [1700, 700, 240], [1520, 600, 190], [1520, 830, 210]];
         for (let y = 80; y < 1180; y += 150) {
             for (let x = 70; x < 1760; x += 170) {
                 const px = x + (rnd() - 0.5) * 90, py = y + (rnd() - 0.5) * 70;

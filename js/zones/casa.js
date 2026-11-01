@@ -59,25 +59,25 @@ Object.assign(DIALEGS, {
         }
     },
 
-    // El Jordi de la Caseta (a l'oest del Til·ler): diu on té la maneta, dins la caseta aixecada del jardí
+    // El Georgi de la Caseta (a l'oest del Til·ler): diu on té la maneta, dins la caseta aixecada del jardí
     jordiCaseta: E => {
         if (E.te('maneta') || E.flag('maneta')) {
-            return { pagines: [{ qui: 'Jordi', text: "Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes." }] };
+            return { pagines: [{ qui: 'Georgi', text: "Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes." }] };
         }
         if (E.flag('jordiManeta')) {
-            return { pagines: [{ qui: 'Jordi', text: "La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!" }] };
+            return { pagines: [{ qui: 'Georgi', text: "La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!" }] };
         }
         return {
             pagines: [
-                { qui: 'Jordi', text: "Ei, monjo! Sóc en Jordi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
+                { qui: 'Georgi', text: "Ei, monjo! Sóc en Georgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
                 { qui: 'Ineu', text: "Jordi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar." },
-                { qui: 'Jordi', text: "Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda." },
-                { qui: 'Jordi', text: "Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!" },
-                { qui: 'Jordi', text: "Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la." }
+                { qui: 'Georgi', text: "Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda." },
+                { qui: 'Georgi', text: "Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!" },
+                { qui: 'Georgi', text: "Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la." }
             ],
             enAcabar: () => {
                 E.posaFlag('jordiManeta');
-                E.posaObjectiu("La maneta d'en Jordi és al cofre de les joguines, dalt de la caseta aixecada sobre pals.");
+                E.posaObjectiu("La maneta d\'en Georgi és al cofre de les joguines, dalt de la caseta aixecada sobre pals.");
             }
         };
     }
@@ -431,7 +431,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             est.setVisible(false); ponPedestal();
             this.cameras.main.flash(260, 200, 160, 255);
             this.boiraPuf(RX, RY - 90);
-            spr.setAlpha(1).setScale(boss.escalaBase * 0.85, boss.escalaBase * 1.1);
+            spr.setAlpha(1).setScale(boss.escalaBase);
             boss.ombra.setAlpha(1);
             // Salta del pedestal i cau al davant
             this.tweens.addCounter({
@@ -443,9 +443,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
                     this.cameras.main.shake(320, 0.009);
                     Sfx.cop(true);
                     ENEMICS.raim.trossos(this, RX, RY + 110, 12);
-                    // Rugit: es tira enrere amb la maça alçada i torna endreçat
-                    spr.setScale(boss.escalaBase * 1.15, boss.escalaBase * 0.85);
-                    this.tweens.add({ targets: spr, scaleX: boss.escalaBase, scaleY: boss.escalaBase, duration: 260, ease: 'Back.out' });
+                    // Rugit: es tira enrere amb la maça alçada i torna endreçat (sense deformar el sprite)
+                    spr.setScale(boss.escalaBase);
                     this.tweens.add({ targets: spr, rotation: -0.32, duration: 420, ease: 'Sine.easeOut', yoyo: true, hold: 500, onYoyo: () => { Sfx.carrega(); this.esquitxar(RX, RY); } });
                 }
             });
