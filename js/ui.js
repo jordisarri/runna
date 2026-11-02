@@ -122,7 +122,7 @@ const CATALEG_OBJECTES = {
     aigua_sj:         ['Aigua de la Font del Bisbe', 'Aigua beneïda, clara com el vidre.'],
     cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Garf en sabrà fer alguna cosa.'],
     pruna:            ['Pruna daurada', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en vol una.'],
-    beuratge:         ['Beuratge de la Jaumeta', 'Fa fugir la boira dolenta. No te\'l beguis!'],
+    beuratge:         ['Beuratge de la Jaumeta', 'Dissipa la boira del camí cap al Til·ler; no protegeix de la boira verinosa.'],
     escudella:        ['Escudella de la Neus', 'Encara calenta, com cada any per al sopar del Til·ler.'],
     flors_isidre:     ['Flors de l\'Isidre', 'Un ram embolicat amb un tros de pergamí.'],
     pa_pastor:        ['Pa dels pastors', 'Una barra baixa i fosca, cuita sota la cendra.'],

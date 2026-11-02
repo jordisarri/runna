@@ -18,8 +18,9 @@ Object.assign(DIALEGS, {
         }
         return {
             pagines: [
-                { qui: 'Ineu', text: "Té el cap girat del tot. Al costat hi ha un volant de ferro amb engranatges, però li falta la maneta... En Jordi, a la Caseta, sempre porta eines." }
-            ]
+                { qui: 'Ineu', text: "Té el cap girat del tot. Al costat hi ha un volant de ferro amb engranatges, però li falta la maneta... En Georgi, a la Caseta, sempre porta eines." }
+            ],
+            enAcabar: () => E.posaFlag('raimVolantVist')
         };
     },
 
@@ -64,13 +65,22 @@ Object.assign(DIALEGS, {
         if (E.te('maneta') || E.flag('maneta')) {
             return { pagines: [{ qui: 'Georgi', text: "Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes." }] };
         }
+        if (!E.flag('raimVolantVist')) {
+            return {
+                pagines: [
+                    { qui: 'Georgi', text: "Ei, monjo! Sóc en Georgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
+                    { qui: 'Ineu', text: "M'anirà bé saber-ho. De moment només passava a saludar." },
+                    { qui: 'Georgi', text: "Doncs ja saps on trobar-me si algun dia et cal un cop de mà." }
+                ]
+            };
+        }
         if (E.flag('jordiManeta')) {
             return { pagines: [{ qui: 'Georgi', text: "La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!" }] };
         }
         return {
             pagines: [
                 { qui: 'Georgi', text: "Ei, monjo! Sóc en Georgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
-                { qui: 'Ineu', text: "Jordi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar." },
+                { qui: 'Ineu', text: "Georgi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar." },
                 { qui: 'Georgi', text: "Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda." },
                 { qui: 'Georgi', text: "Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!" },
                 { qui: 'Georgi', text: "Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la." }

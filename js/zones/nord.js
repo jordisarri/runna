@@ -623,7 +623,7 @@ class ZonaTiller extends ZonaBase {
         if (Estat.flag('soparFet')) this.posarEspelmes();
 
         // La branca del Til·ler: el bastó
-        this.branca = this.posar('branca', TIL_X + 100, TIL_Y + 110, { fonsY: TIL_Y });
+        this.branca = this.posar('arma_tiller', TIL_X + 100, TIL_Y + 110, { fonsY: TIL_Y });
         this.interactiu(TIL_X + 100, TIL_Y + 115, RADI_OBJECTE, DIALEGS.branca, { altura: 60, actiu: () => Estat.flag('tillerBranca') && !Estat.te('basto_tiller') });
 
         this.cartell(980, 470, DIALEGS.cartellCirosa);
@@ -797,7 +797,7 @@ class ZonaJordi extends ZonaBase {
         this.terra('cami', 330, 500, 770, 150);            // del Til·ler (est) a la porta de la casa
 
         // La casa d'en Jordi (520 d'ample): la porta del mig duu a dins
-        const masiaJordi = this.edifici('masia', 380, 480, 500, 90, 'ZonaCasaJordi', 'porta', { alt: 90 });
+        const masiaJordi = this.edifici('masia', 380, 480, 500, 76, 'ZonaCasaJordi', 'porta', { alt: 90 });
         this.portaMasia(masiaJordi, 380, 480);
         this.npc('jordi_caseta', 560, 590, DIALEGS.jordiCaseta);
 
@@ -837,14 +837,13 @@ class ZonaJordi extends ZonaBase {
 Object.assign(DIALEGS, {
     casaJordiEines: E => ({ pagines: [] }),
     casaJordiTaula: E => ({ pagines: [] }),
-    casaJordiLlar: E => ({ pagines: [{ qui: 'Inscripció', text: "«A la Caseta, la porta mai no té clau.»" }] }),
     casaJordiGat: E => ({ pagines: [] })
 });
 
 class ZonaCasaJordi extends ZonaBase {
     constructor() {
         super('ZonaCasaJordi', {
-            nom: "Casa d'en Jordi",
+            nom: "Masia d'en Georgi",
             amplada: 900,
             alcada: 700,
             colorFons: '#140e0a',
@@ -874,8 +873,6 @@ class ZonaCasaJordi extends ZonaBase {
         this.tweens.add({ targets: foc, scaleY: foc.scaleY * 1.1, scaleX: foc.scaleX * 0.94, yoyo: true, repeat: -1, duration: 260 });
         const resplendor = this.add.circle(200, 222, 170, 0xff9a30, 0.13).setDepth(300);
         this.tweens.add({ targets: resplendor, alpha: 0.22, scale: 1.05, yoyo: true, repeat: -1, duration: 430 });
-        this.interactiu(200, 250, RADI_OBJECTE, DIALEGS.casaJordiLlar, { altura: 90 });
-
         // Finestra amb un feix de llum, ristres d'alls i pebrots a la biga, i el tauler d'eines (amb el buit de la maneta)
         this.add.image(385, 178, 'finestra_cela').setOrigin(0.5, 1).setScale(1 / RES).setDepth(-990);
         const llum = this.add.graphics().setDepth(-900).setBlendMode('ADD');

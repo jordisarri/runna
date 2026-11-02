@@ -224,7 +224,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `andreu_guardia`, `basto_ocellaire`, `carro_sansa`, `escolopendra`, `ferralla`, `gabia`, `gabia_oberta`, `gripau`, `marit_neus`, `neus`, `ocellaire_cansat`, `ocell_boira`, `ovella`, `ovella_boira`, `ratpenat_boira`, `sansa`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `andreu_guardia`, `arrels_tiller`, `basto_ocellaire`, `carro_sansa`, `escolopendra`, `ferralla`, `gabia`, `gabia_oberta`, `gripau`, `marit_neus`, `neus`, `ocellaire_cansat`, `ocell_boira`, `ovella`, `ovella_boira`, `ratpenat_boira`, `sansa`.
 
 
 
@@ -242,7 +242,13 @@ Els prompts de sota són només dels pendents i dels nous (els fets només es ll
 
 ## Elements d'escenari
 
+### `arrels_tiller.png` (amplada 440)
 
+```
+
+Charming 2D cartoon game environment asset in the 'Chibi Adventure Environment' style, matching the attached reference images: crisp vector-like illustration with bold clean dark-brown outlines, soft cel shading, rich earthy colors, and the same 3/4 top-down JRPG camera. Create ONE wide, irregular cluster of ancient living roots from a huge linden tree, viewed from slightly above. The roots have thick twisted trunks and smaller branching roots, deep bark grooves, moss, a few heart-shaped linden leaves, and clumps of disturbed earth at their bases. They rise from the ground and interlock into a dense natural barrier that completely blocks a woodland path; the silhouette is broad and low (about 2.5 times wider than tall), with uneven root tips and visible gaps only between the upper branches, not enough to walk through at ground level. The roots should look old, powerful, magical, and organic, not like a fence, a wall, a hedge, or a bundle of thin sticks. Match the game's existing trees and forest palette. Single centered object, full silhouette visible, isolated on a pure white background (#FFFFFF) for automatic background removal; no scenery, no path, no characters, no text, no cast shadow.
+
+```
 
 ### `carro_sansa.png` (amplada 220)
 

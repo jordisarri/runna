@@ -63,7 +63,7 @@ class ZonaCabana extends ZonaBase {
             alcada: 1000,
             colorFons: '#14301a',
             entrades: {
-                portal:   { x: 330, y: 975, dir: 'amunt' },
+                portal:   { x: 330, y: 975, dir: 'avall' },
                 interior: { x: 800, y: 640, dir: 'avall' }
             }
         });
@@ -160,7 +160,7 @@ class ZonaCabana extends ZonaBase {
         [[1100, 880], [400, 780]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 60, h: 24 } }));
 
         this.arbres([[120, 150], [300, 90], [520, 130], [820, 90], [1050, 130], [1280, 160], [90, 520],
-                     [1000, 980], [1280, 880], [1300, 560], [200, 340], [1180, 280]]);
+                     [1280, 880], [1300, 560], [200, 340], [1180, 280]]);
         // Les bestioles no arriben tan lluny: només algun bolet mal-humorat
         this.enemic('bolet', 1150, 880);
 
@@ -208,11 +208,14 @@ class ZonaCabanaInt extends ZonaBase {
         const feix = this.add.graphics().setDepth(-900);
         feix.fillStyle(0xc6f090, 0.12).fillPoints([{ x: 186, y: 92 }, { x: 252, y: 92 }, { x: 330, y: 330 }, { x: 230, y: 330 }], true);
 
-        // Prestatge amb pots i ampolles, a la dreta del fons, i manats d'herbes penjats de les bigues
+        // Prestatges atapeïts de pocions, i manats d'herbes penjats de les bigues
         const pres = this.add.graphics().setDepth(-980);
         pres.fillStyle(0x4a2c14, 1).fillRect(540, 56, 190, 8).lineStyle(2, 0x120a04, 1).strokeRect(540, 56, 190, 8);
         pres.fillStyle(0x3a220e, 1).fillRect(552, 64, 6, 10).fillRect(712, 64, 6, 10);
         [[565, 0], [600, 1], [635, 2], [670, 0], [705, 1]].forEach(([x, t]) => this.posar('gerro_' + t, x, 56, { fonsY: -970 }));
+        pres.fillStyle(0x4a2c14, 1).fillRect(548, 174, 226, 8).lineStyle(2, 0x120a04, 1).strokeRect(548, 174, 226, 8);
+        pres.fillStyle(0x3a220e, 1).fillRect(558, 182, 6, 12).fillRect(758, 182, 6, 12);
+        [[570, 2], [606, 1], [642, 0], [678, 2], [714, 1], [750, 0]].forEach(([x, t], i) => this.posar('gerro_' + t, x, 174, { fonsY: -960, escala: 0.82 + (i % 2) * 0.08 }));
         [[320, 38], [370, 46], [420, 36], [470, 44]].forEach(([x, y], i) => manatHerbes(this, x, y, 34 + (i % 2) * 8, [[0x5f9a3a, 0x7a5ab0, 0x4c8430], [0xc86a3a, 0x8a9a3a, 0xd8b84a]][i % 2]));
         this.posar('pergami_paret', 770, 118, { fonsY: -900, escala: 0.62 });                   // una nota clavada a la paret
         teranyina(this, 100, 92, 100, 140, 150, 92);
@@ -225,6 +228,11 @@ class ZonaCabanaInt extends ZonaBase {
         [[-70, 0x8a3a3a], [0, 0xc8a050], [70, 0x8a3a3a]].forEach(([dx, col]) => { catifa.fillStyle(col, 0.6).fillCircle(430 + dx, 330, 9); });
         this.posar('olla', 450, 300, { col: { w: 60, h: 24 } });
         this.add.circle(450, 240, 70, 0x9ae060, 0.12).setDepth(300);
+        this.add.particles(450, 255, 'espurna', {
+            speedX: { min: -8, max: 8 }, speedY: { min: -30, max: -12 }, lifespan: 1000,
+            scale: { start: 0.35, end: 0 }, alpha: { start: 0.85, end: 0 },
+            tint: [0x9ae060, 0xc86aff, 0xd8b84a], frequency: 320, blendMode: 'ADD'
+        }).setDepth(305);
 
         const llit = this.add.graphics().setDepth(-950);
         llit.fillStyle(0x2a1608, 1).fillRoundedRect(130, 110, 170, 108, 12);
@@ -243,10 +251,12 @@ class ZonaCabanaInt extends ZonaBase {
         this.posar('llenya', 730, 610, { col: { w: 110, h: 26 } });
         [[300, 520], [350, 580], [250, 470]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
         [[160, 330], [700, 250]].forEach(([x, y]) => this.posar('roca', x, y, { escala: 0.6, col: { w: 40, h: 16 } }));
-        [[250, 110], [560, 100], [680, 110]].forEach(([x, y], i) => {
-            const o = this.posar('ocell', x, y, { fonsY: y });
+        [[250, 170], [430, 145], [565, 155], [660, 185], [710, 245]].forEach(([x, y], i) => {
+            const o = this.posar('ocell', x, y, { fonsY: y, escala: 1.5 });
             this.tweens.add({ targets: o, y: y - 5, yoyo: true, repeat: -1, duration: 700 + i * 150 });
         });
+        const gat = this.add.image(660, 560, 'gat_cove').setOrigin(0.5, 1).setScale(0.65 / RES).setDepth(560);
+        this.colisio(gat.x, gat.y - 10, 48, 16);
         [[650, 300], [715, 305]].forEach(([x, y], i) => {
             const e = this.posar('espelma', x, y, { fonsY: y + 20 });
             this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 350 + i * 90 });
