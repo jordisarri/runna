@@ -600,6 +600,8 @@ class ZonaTiller extends ZonaBase {
                 jordi:  { x: 60,   y: 600, dir: 'dreta' }
             }
         });
+        this.zoomZona = 0.8;
+        this.cameraFollowOffsetY = -440;
     }
 
     construir() {
@@ -611,13 +613,14 @@ class ZonaTiller extends ZonaBase {
         // El Gran Til·ler
         // Fins que l'Ineu hi parla per primer cop és un arbre qualsevol, sense cara; la cara (el mateix dibuix, amb el mateix recorte) apareix a poc a poc
         this.tillerCara = Estat.flag('tillerCara') || Estat.flag('parlatTiler');          // les partides velles ja el coneixen
-        this.posar('tiller_arbre', TIL_X, TIL_Y, { col: { w: 230, h: 44 } });             // gran i solemne: ell sol, sense arbres al voltant
-        this.tillerAmbCara = this.posar('tiller', TIL_X, TIL_Y).setDepth(TIL_Y + 0.1).setAlpha(this.tillerCara ? 1 : 0);
-        this.interactiu(TIL_X, TIL_Y + 25, 120, E => {
+        this.posar('tiller_arbre', TIL_X, TIL_Y, { escala: 0.8, col: { w: 190, h: 300 } }); // escala per veure'n la capçada; hitbox de tot el tronc
+        this.tillerAmbCara = this.posar('tiller', TIL_X, TIL_Y, { escala: 0.8 }).setDepth(TIL_Y + 0.1).setAlpha(this.tillerCara ? 1 : 0);
+        const puntTiller = this.interactiu(TIL_X, TIL_Y + 25, 120, E => {
             const d = DIALEGS.tiller(E);
             if (this.tillerCara || !d.pagines || !d.pagines.length) return d;
             return Object.assign({}, d, { pagines: [{ fer: (z, fet) => z.despertarTiller(fet) }, ...d.pagines] });
         }, { altura: 230 });            // el «!» a l'alçada de la cara (més amunt quedava fora de la pantalla)
+        puntTiller.cameraCossos = [this.tillerAmbCara];
 
         // Després del sopar queden tres espelmes vora les arrels del Til·ler
         if (Estat.flag('soparFet')) this.posarEspelmes();

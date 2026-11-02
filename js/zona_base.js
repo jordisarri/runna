@@ -196,12 +196,13 @@ class ZonaBase extends Phaser.Scene {
 
         const cam = this.cameras.main;
         cam.setViewport(0, ALT_HUD, AMPLE, ALT - ALT_HUD);   // la franja de dalt és per al HUD: no s'hi dibuixa escenari
-        cam.setZoom(ZOOM_CAMERA);
+        const zoomZona = this.zoomZona || ZOOM_CAMERA;
+        cam.setZoom(zoomZona);
         // Si el món és més petit que la pantalla (interiors), es centra en lloc de quedar enganxat a una vora
-        const vw = AMPLE / ZOOM_CAMERA, vh = (ALT - ALT_HUD) / ZOOM_CAMERA, alcadaMon = c.alcada + this.extraSud;
+        const vw = AMPLE / zoomZona, vh = (ALT - ALT_HUD) / zoomZona, alcadaMon = c.alcada + this.extraSud;
         const bx = Math.max(0, (vw - c.amplada) / 2), by = Math.max(0, (vh - alcadaMon) / 2);
         cam.setBounds(-bx, -by, c.amplada + 2 * bx, alcadaMon + 2 * by);
-        cam.startFollow(this.ineu, false, 0.12, 0.12);
+        cam.startFollow(this.ineu, false, 0.12, 0.12, 0, this.cameraFollowOffsetY || 0);
         cam.setBackgroundColor(c.colorFons || '#2d4a22');
         cam.fadeIn(350, 0, 0, 0);
 
@@ -518,7 +519,7 @@ class ZonaBase extends Phaser.Scene {
 
     // Punt on es pot prémer ESPAI. dialeg = funció de DIALEGS o funció pròpia que retorna un diàleg.
     interactiu(x, y, radi, dialeg, opts = {}) {
-        const punt = { x, y, radi, dialeg, altura: opts.altura || 60, enTancar: opts.enTancar, actiu: opts.actiu };
+        const punt = { x, y, radi, dialeg, altura: opts.altura || 60, enTancar: opts.enTancar, actiu: opts.actiu, senseMirada: opts.senseMirada };
         this.interactius.push(punt);
         return punt;
     }
@@ -1224,9 +1225,11 @@ class ZonaBase extends Phaser.Scene {
             const cossos = [this.ineu];
             if (this.despertarImg && this.despertarImg.active) cossos.push(this.despertarImg);       // el dibuix gran del despertar, que no es pot tapar
             if (p && p.npc && p.npc.active && p.npc.visible) cossos.push(p.npc);
+            if (p && p.cameraCossos) cossos.push(...p.cameraCossos.filter(o => o && o.active && o.visible));
             const TOP = ALT_HUD + 8;                                    // sota el HUD
-            const LIM = ALT - 420;                                      // sobre la cinta del nom (la caixa comença a ALT-370)
-            const LIM_RETRAT = ALT - 520;                               // el retrat de qui parla (a l'esquerra) puja fins a ALT-494
+            const alcadaCaixa = this.ui().alcadaCaixaDialeg || 360;
+            const LIM = ALT - alcadaCaixa - 60;                         // 50 px sobre la vora superior del quadre
+            const LIM_RETRAT = ALT - alcadaCaixa - 160;                 // sobre el retrat, que sobresurt per damunt del quadre
             const Z = cam.zoom, wv = cam.worldView, H = ALT - ALT_HUD;
             const mides = cossos.map(o => {
                 const b = o.getBounds(), esq = (b.x - wv.x) * Z, dre = (b.right - wv.x) * Z;
@@ -1243,7 +1246,7 @@ class ZonaBase extends Phaser.Scene {
                 if (be(z, wy)) { z2 = z; wy2 = wy; trobat = true; }
             }
             if (!trobat) { z2 = 0.6; wy2 = Math.max(...mides.map(m => m.baix - (m.lim - ALT_HUD) / z2)); }      // no hi cap enlloc: es prioritza que no els tapi la caixa
-            this.camDialeg = { sy: cam.scrollY, z: ZOOM_CAMERA };
+            this.camDialeg = { sy: cam.scrollY, z: cam.zoom };
             if (!this.boundsCamOrig) { const b = cam.getBounds(); this.boundsCamOrig = { x: b.x, y: b.y, w: b.width, h: b.height }; }
             cam.removeBounds(); cam.stopFollow();
             if (this.twCamDialeg) this.twCamDialeg.stop();
@@ -1261,7 +1264,7 @@ class ZonaBase extends Phaser.Scene {
                 onComplete: () => {
                     cam.setZoom(d.z); this.ajustarSuperposicions();
                     if (o) cam.setBounds(o.x, o.y, o.w, o.h);
-                    cam.startFollow(this.ineu, false, 0.12, 0.12);
+                    cam.startFollow(this.ineu, false, 0.12, 0.12, 0, this.cameraFollowOffsetY || 0);
                     this.boundsCamOrig = null;
                 }
             });
@@ -1294,11 +1297,12 @@ class ZonaBase extends Phaser.Scene {
         const cam = this.cameras.main, I = this.ineu, H = ALT - ALT_HUD;
         if (!this.camCinema) { if (fet) fet(); return; }
         if (this.twCinema) this.twCinema.stop();
-        this.twCinema = this.tweens.add({ targets: cam, scrollX: I.x - AMPLE / 2, scrollY: I.y - H / 2, zoom: ZOOM_CAMERA, duration: ms, ease: 'Sine.easeInOut',
+        const zoom = this.zoomZona || ZOOM_CAMERA, objectiuY = I.y + (this.cameraFollowOffsetY || 0);
+        this.twCinema = this.tweens.add({ targets: cam, scrollX: I.x - AMPLE / (2 * zoom), scrollY: objectiuY - H / (2 * zoom), zoom, duration: ms, ease: 'Sine.easeInOut',
             onUpdate: () => this.ajustarSuperposicions(), onComplete: () => {
                 const b = this.boundsCinema;
                 if (b) cam.setBounds(b.x, b.y, b.w, b.h);
-                cam.startFollow(I, false, 0.12, 0.12);
+                cam.startFollow(I, false, 0.12, 0.12, 0, this.cameraFollowOffsetY || 0);
                 this.camCinema = false; this.ajustarSuperposicions();
                 if (fet) fet();
             } });
@@ -1552,7 +1556,7 @@ class ZonaBase extends Phaser.Scene {
             if (!p.enTancar && esDialegBuit(p.dialeg)) continue;                                        // sense res a dir: no és interactiu
             const dx = p.x - this.ineu.x, dy = p.y - this.ineu.y, d = Math.hypot(dx, dy);
             if (d > p.radi * 0.8 || d >= millorDist) continue;
-            if (d > 36 && (dx * dv.x + dy * dv.y) / d < 0.34) continue;          // no el mira
+            if (!p.senseMirada && d > 36 && (dx * dv.x + dy * dv.y) / d < 0.34) continue; // no el mira
             millor = p; millorDist = d;
         }
         return millor;

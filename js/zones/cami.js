@@ -213,7 +213,7 @@ class ZonaEra extends ZonaBase {
         // Més grans i sols a la clariana: les copes (de 800 d'ample) emmarquen els bancs i no toquen el camí (queden per sota de y 630) ni les sortides
         this.posar('roure', 480, 1130, { escala: 1.9, col: { w: 100, h: 40 } });
         this.posar('roure', 1440, 1130, { escala: 1.9, col: { w: 100, h: 40 } });
-        this.posar('banc_respatller', ERA_BANC_X, ERA_BANC_N, { col: { w: 140, h: 16 } });
+        this.bancNord = this.posar('banc_respatller', ERA_BANC_X, ERA_BANC_N, { col: { w: 140, h: 16 } });
         this.bancSud = this.posar('banc_davant', ERA_BANC_X, ERA_BANC_S, { col: { w: 140, h: 16 } });   // sempre amb respatller (vist per darrere)
 
         // El Garf, savi inventor: jove, grassonet i ros, assegut al banc de dalt
@@ -221,7 +221,9 @@ class ZonaEra extends ZonaBase {
         this.garf.setDepth(ERA_BANC_N + 1);                       // assegut: el banc queda darrere seu
         // L'Ineu s'asseu i s'hi queda fins que es vulgui aixecar (movent-se)
         this.assegut = false;
-        this.interactiu(ERA_BANC_X, ERA_BANC_S, RADI_NPC, () => { this.seure(); return DIALEGS.garf(Estat); }, { altura: 150 });
+        const puntBanc = this.interactiu(ERA_BANC_X, ERA_BANC_S, RADI_NPC, () => { this.seure(); return DIALEGS.garf(Estat); }, { altura: 150 });
+        puntBanc.npc = this.garf;
+        puntBanc.cameraCossos = [this.bancNord, this.bancSud];
 
         // L'Home de la Tartana Verda i la seva tartana de vapor, a la vora sud-oest: és la parada de l'Era (PARADES, js/zona_base.js)
 
@@ -335,7 +337,7 @@ class ZonaJardi extends ZonaBase {
             scale: { start: 0.55, end: 0 }, tint: [0xffd060, 0xfff0b0], frequency: 220, alpha: { start: 0.9, end: 0 }
         }).setDepth(8001);
         [[-110, -190], [-60, -250], [0, -300], [70, -260], [120, -200], [-140, -140], [40, -170], [-20, -210], [100, -130], [-90, -100]].forEach(([dx, dy]) => this.add.circle(PX + dx, PY + dy, 10, 0xf0b830).setStrokeStyle(2, 0x7a5010).setDepth(PY + 1));
-        this.interactiu(PX, PY + 40, RADI_GRAN * 1.5, DIALEGS.prunera, { altura: 150 });       // el punt, a la vora sud del tronc (on s'hi pot arribar) i amb el «!» a l'altura de l'Ineu
+        this.interactiu(PX, PY + 40, RADI_GRAN * 1.5, DIALEGS.prunera, { altura: 150, senseMirada: true }); // es pot collir la pruna des de qualsevol costat de l'arbre
 
         // La llosa del passadís cap al soterrani de l'Hostatgeria, entre les columnes (ben visible). S'obre quan hi creix la flor de lluna
         const LX = 664, LY = 560;      // dins la pèrgola, entre les dues últimes columnes (les arcades que toquen a la casa): ni les arcades ni les columnes la tapen

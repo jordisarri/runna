@@ -475,8 +475,9 @@ class EscenaUI extends Phaser.Scene {
     // ---------------- DIÀLEG ----------------
     crearCaixaDialeg() {
         this.caixa = this.add.container(AMPLE / 2, ALT - 190).setVisible(false).setDepth(40);
-        const ombra = this.add.rectangle(4, 8, 704, 360, 0x000000, 0.35);
-        const fons = marcPergami(this, 0, 0, 704, 360);
+        this.alcadaCaixaDialeg = 360;
+        this.ombraCaixaDialeg = this.add.rectangle(4, 8, 704, 360, 0x000000, 0.35);
+        this.fonsCaixaDialeg = marcPergami(this, 0, 0, 704, 360);
         // Cinta amb el nom de qui parla, penjada de la vora de dalt
         this.cintaNom = this.add.nineslice(-318, -186, 'cinta_nom', undefined, 160 * RES, 60 * RES, 26 * RES, 26 * RES)
             .setScale(1 / RES).setOrigin(0, 0.5);
@@ -486,7 +487,8 @@ class EscenaUI extends Phaser.Scene {
         this.indicador = this.add.text(318, 152, '▼', estilText(26, '#7a3a14')).setOrigin(1, 1);
         this.tweens.add({ targets: this.indicador, y: 158, yoyo: true, repeat: -1, duration: 400 });
         // Retrat de qui parla: dalt a l'esquerra, sobresortint de la caixa (el text conserva tot l'ample)
-        const RX = -352 + 14 + MIDA_RETRAT / 2, RY = -180 + 26 - MIDA_RETRAT / 2;
+        const RX = -352 + 14 + MIDA_RETRAT / 2, RY = -180 - MIDA_RETRAT / 2;
+        this.retratYBase = RY;
         this.retratImg = this.add.image(RX, RY, '__WHITE').setDisplaySize(MIDA_RETRAT, MIDA_RETRAT).setVisible(false);
         this.marcRetrat = this.add.graphics().setVisible(false);
         this.marcRetrat.fillStyle(0x000000, 0.35).fillRoundedRect(RX - MIDA_RETRAT / 2 + 4, RY - MIDA_RETRAT / 2 + 7, MIDA_RETRAT, MIDA_RETRAT, MIDA_RETRAT * 0.12);
@@ -494,7 +496,34 @@ class EscenaUI extends Phaser.Scene {
         marc.lineStyle(7, 0x2a0a0e, 1).strokeRoundedRect(RX - MIDA_RETRAT / 2, RY - MIDA_RETRAT / 2, MIDA_RETRAT, MIDA_RETRAT, MIDA_RETRAT * 0.12);
         marc.lineStyle(4, 0xd4af37, 1).strokeRoundedRect(RX - MIDA_RETRAT / 2, RY - MIDA_RETRAT / 2, MIDA_RETRAT, MIDA_RETRAT, MIDA_RETRAT * 0.12);
         this.marcRetratVora = marc;
-        this.caixa.add([ombra, fons, this.marcRetrat, this.retratImg, marc, this.cintaNom, this.plaquetaNom, this.textDialeg, this.indicador]);
+        this.caixa.add([this.ombraCaixaDialeg, this.fonsCaixaDialeg, this.marcRetrat, this.retratImg, marc, this.cintaNom, this.plaquetaNom, this.textDialeg, this.indicador]);
+    }
+
+    ajustarAlcadaCaixaDialeg(pagines) {
+        let alcadaText = 0;
+        for (const pagina of pagines) {
+            if (!pagina) continue;
+            const text = pagina.avis !== undefined ? pagina.avis : pagina.text;
+            if (typeof text !== 'string') continue;
+            this.textDialeg.setFontStyle(pagina.qui || pagina.avis !== undefined ? 'normal' : 'italic').setText(text);
+            alcadaText = Math.max(alcadaText, this.textDialeg.height);
+        }
+        this.textDialeg.setText('');
+
+        const alcada = Math.max(230, Math.ceil(alcadaText + 104));
+        this.alcadaCaixaDialeg = alcada;
+        this.caixa.setY(ALT - 10 - alcada / 2);
+        this.ombraCaixaDialeg.setSize(704, alcada);
+        this.fonsCaixaDialeg.setSize(704 * RES, alcada * RES);
+        this.textDialeg.setPosition(-316, -alcada / 2 + 34);
+        this.cintaNom.setY(-alcada / 2 - 6);
+        this.plaquetaNom.setY(-alcada / 2 - 6);
+        this.indicador.setY(alcada / 2 - 28);
+        const retratY = -alcada / 2 - MIDA_RETRAT / 2;
+        const desplacamentRetrat = retratY - this.retratYBase;
+        this.retratImg.setY(retratY);
+        this.marcRetrat.setY(desplacamentRetrat);
+        this.marcRetratVora.setY(desplacamentRetrat);
     }
 
     // dialeg = { pagines: [{qui, text}], enAcabar? }
@@ -502,6 +531,7 @@ class EscenaUI extends Phaser.Scene {
         if (!dialeg || !dialeg.pagines) return;
         if (!dialeg.pagines.length) { if (dialeg.enAcabar) dialeg.enAcabar(); if (enTancar) enTancar(); return; }    // sense text: només l'efecte
         this.dialeg = { dades: dialeg, pagina: 0, enTancar };
+        this.ajustarAlcadaCaixaDialeg(dialeg.pagines);
         this.caixa.setVisible(true);
         this.mostrarPagina();
     }

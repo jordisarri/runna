@@ -76,8 +76,6 @@ class ZonaRovellonera extends ZonaBase {
             this.add.particles(800, 550, 'espurna', { speed: { min: 170, max: 200 }, angle: { min: ang - 6, max: ang + 6 }, lifespan: 1500, scale: { start: 0.75, end: 0 },
                 alpha: { start: 1, end: 0 }, tint: [0xffe08a, 0xfff2c0], frequency: 110, blendMode: 'ADD' }).setDepth(3000);
         }
-        this.hintLlanterna = Estat.te('llanterna');
-
         // Sortides
         const mapaSortides = { N: [700, 0, 200, 14], S: [700, 1086, 200, 14], W: [0, 440, 14, 220], E: [1586, 440, 14, 220] };
         Object.entries(mapaSortides).forEach(([d, r]) => this.sortida(r[0], r[1], r[2], r[3], 'ZonaRovellonera', 'x_' + d));
@@ -113,13 +111,9 @@ class ZonaRovellonera extends ZonaBase {
     // Grup de rovellons als peus d'una parella de pins, pegat a la sortida correcta
     rovellons(D) {
         const base = { N: [800, 190], S: [800, 910], W: [190, 550], E: [1410, 550] }[D];
-        this.rovelloGrup = [];
-        const halo = this.add.ellipse(base[0], base[1] + 10, 150, 60, 0xffd890, 0.22).setDepth(base[1] - 2).setBlendMode('ADD');
-        this.tweens.add({ targets: halo, alpha: 0.08, yoyo: true, repeat: -1, duration: 900 });
         [[-38, 0], [38, 6], [0, 22], [-18, -16], [22, -14]].forEach(([dx, dy]) => {
             const r = this.add.image(base[0] + dx, base[1] + dy, 'rovello').setScale(0.2).setDepth(base[1] + dy).setAlpha(0.95);
             this.tweens.add({ targets: r, scale: 0.23, yoyo: true, repeat: -1, duration: 900 + dx });
-            this.rovelloGrup.push(r);
         });
         this.xipresHint = [this.posar('xiprer', base[0] - 100, base[1] - 20, { col: { w: 24, h: 12 } }),
                            this.posar('xiprer', base[0] + 100, base[1] - 20, { col: { w: 24, h: 12 } })];
@@ -146,9 +140,6 @@ class ZonaRovellonera extends ZonaBase {
     }
 
     actualitzar() {
-        // Els rovellons es veuen millor amb la llanterna (revela el que la boira amaga)
-        const clar = Estat.te('llanterna');
-        (this.rovelloGrup || []).forEach(r => r.setAlpha(clar ? 1 : 0.35));
         if (this.llac) this.llac.setVisible(this.llac2Lliure());
     }
 

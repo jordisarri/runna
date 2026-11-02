@@ -1189,7 +1189,7 @@ const DIALEGS = {
         if (!E.flag("nenaVista")) {
             return {
                 pagines: [
-                    { qui: "Nena de les Trenes", text: "No et facis enrere, si us plau... No vull espantar ningú. Només que, quan arriba algú, sempre fuig." },
+                    { qui: "Nena de les Trenes", text: "No fugis, si us plau. Tothom que em veu s'espanta i fuig de mi. No vull espantar-te; només m'agradaria parlar amb algú." },
                     { qui: "Nena de les Trenes", text: "Vaig venir a collir rovellons amb la mare. Ella deia que els rovellons creixen sempre vora el bon camí, i que qui se'n fia no es perd mai pel bosc. Em vaig perdre perquè em vaig oblidar de mirar a terra." },
                     { qui: "Nena de les Trenes", text: "Em va lligar les dues trenes amb dos llaços rosa, i em vaig perdre pel bosc. Fa molts, molts anys. No he pogut marxar d'aquí." },
                     { qui: "Nena de les Trenes", text: "Els llaços van caure mentre corria, i les pedres els van colgar: un és aquí al camí, sota una roca grossa a la vora, i l'altre a la Rovellonera, a la primera clariana, sota una altra pedra. Sense ells, no sento les mans de la mare. Si me'ls tornessis a lligar..." },
