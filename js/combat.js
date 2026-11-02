@@ -887,11 +887,10 @@ Object.assign(ZonaBase.prototype, {
         this.ondaMort(c.x, c.y);
         if (e.def.alDerrotar) { e.def.alDerrotar(this, e); return; }
 
-        if (e.tipus === 'visitant') {            // cau adormit i es desperta confús
+        if (e.tipus === 'visitant') {
             if (e.spr.anims) e.spr.anims.stop();
-            if (!Estat.flag('visitantDormit')) { Estat.posaFlag('visitantDormit'); this.missatge('La boira els ha trastocat: només dormen. Es despertaran sense recordar res.'); }
             this.tweens.add({ targets: e.spr, angle: 90, duration: 300 });
-            this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 700, delay: 1500, onComplete: () => this.retirar(e) });
+            this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 700, onComplete: () => this.retirar(e) });
         } else {
             this.tweens.add({ targets: e.spr, alpha: 0, duration: 320, onComplete: () => this.retirar(e) });
             e.ombra.setVisible(false);

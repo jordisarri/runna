@@ -354,14 +354,10 @@ class ZonaCasaGran extends ZonaBase {
         // Parets: tot el que és darrere el terra de les arcades (y<572) és mur; les piles i els sòcols laterals també.
         // Només es pot pujar per l'escalinata (x 355-1050) i entrar a les arcades pels buits entre piles.
         this.blocDarrere(700, 1250, 572 + D);
-        this.colisio(227, 592 + D, 305, 40);        // mur esquerre + pila exterior (arcades)
-        this.colisio(1172, 592 + D, 305, 40);       // mur dret + pila exterior
+        this.colisio(227, 650 + D, 305, 156);     // mur lateral esquerre recte, sense graons al hitbox
+        this.colisio(1172, 650 + D, 305, 156);    // mur lateral dret recte
         this.colisio(585, 592 + D, 60, 40);         // pila entre l'arc esquerre i el del mig
         this.colisio(817, 592 + D, 55, 40);         // pila entre l'arc del mig i el dret
-        this.colisio(215, 641 + D, 280, 58);        // sòcol de pedra a l'esquerra de l'escalinata
-        this.colisio(1190, 641 + D, 270, 58);       // sòcol a la dreta
-        this.colisio(170, 699 + D, 190, 58);        // part baixa del sòcol (l'escalinata s'eixampla)
-        this.colisio(1230, 699 + D, 190, 58);
         // La reixa del porxo, tancada des de fa generacions: per fora no hi ha manera d'entrar
         if (Estat.flag('reixaObertaDins') || Estat.flag('ocellaireVencut')) {
             // Un cop s'ha aixecat la barra per dins, la reixa queda oberta (els batents giren en acostar-s'hi) i es pot entrar a la Casa Gran
