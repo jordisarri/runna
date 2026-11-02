@@ -106,6 +106,10 @@ class Tros:
         self.f.close()
 
 class Handler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('directory', ARREL)
+        super().__init__(*args, **kwargs)
+
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store')
         self.send_header('Accept-Ranges', 'bytes')

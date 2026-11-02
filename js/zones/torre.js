@@ -51,7 +51,8 @@ class ZonaTorre extends Phaser.Scene {
 
         const S = SPRITE_INEU;
         this.ombra = this.add.image(this.cx, T.peuY, 'ombra').setScale(0.42).setDepth(4);
-        this.ineu = this.add.sprite(this.cx, T.peuY, 'ineu_right', quietIneu('right')).setOrigin(0.5, S.peus / S.alt).setScale(S.alcada / (S.alt * S.k)).setDepth(5);
+        this.ineu = this.add.sprite(this.cx, T.peuY, 'ineu_right', quietIneu()).setOrigin(0.5, S.peus / S.alt).setScale(S.alcada / (S.alt * S.k)).setDepth(5);
+        if (this.anims.exists('aturat_right')) this.ineu.anims.play('aturat_right', true);
         this.dirVista = 1;
 
         // Pols en suspensió, a la llum de les finestres
@@ -122,13 +123,23 @@ class ZonaTorre extends Phaser.Scene {
             dir = amunt && !avall ? 1 : avall && !amunt ? -1 : 0;
         }
         if (dir) {
+            this.ineu.setFlipX(false);
             this.p += dir * T.velocitat * delta / 1000;
             this.dirVista = dir;
             if (time > this.proxPas) { this.proxPas = time + 260; this.altrePas = !this.altrePas; Sfx.pas(this.altrePas); }
             this.ineu.anims.play(dir > 0 ? 'caminar_right' : 'caminar_left', true);
-        } else if (this.ineu.anims.isPlaying) {
-            this.ineu.anims.stop();
-            this.ineu.setTexture(this.dirVista > 0 ? 'ineu_right' : 'ineu_left', quietIneu('right'));
+        } else {
+            const quiet = 'aturat_' + (this.dirVista > 0 ? 'right' : 'left');
+            if (this.anims.exists(quiet)) {
+                this.ineu.setFlipX(this.dirVista < 0);
+                if (!this.ineu.anims.isPlaying || !this.ineu.anims.currentAnim || this.ineu.anims.currentAnim.key !== quiet) {
+                    this.ineu.anims.play(quiet, true);
+                }
+            } else if (this.ineu.anims.isPlaying) {
+                this.ineu.setFlipX(false);
+                this.ineu.anims.stop();
+                this.ineu.setTexture(this.dirVista > 0 ? 'ineu_right' : 'ineu_left', quietIneu());
+            }
         }
         if (!this.canviant) {
             if (this.p > T.graons + 0.6) this.sortir('ZonaGolfes', 'porta');

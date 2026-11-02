@@ -215,7 +215,7 @@ class EscenaEstels extends Phaser.Scene {
         g.gain.setValueAtTime(0.0001, ctx.currentTime);
         g.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + 0.02);
         g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
-        o.connect(g); g.connect(ctx.destination);
+        o.connect(g); g.connect(Sfx.connect(ctx));
         o.start(); o.stop(ctx.currentTime + 0.65);
     }
 

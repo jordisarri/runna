@@ -20,9 +20,15 @@
 
 - [x] `branca`
 
+- [x] `carruatge`
+
 - [x] `casa_gran`
 
+- [x] `cel_ntrasra`
+
 - [x] `cel_stantoni`
+
+- [x] `cel_stbenet`
 
 - [x] `cercle_bolets`
 
@@ -38,6 +44,10 @@
 
 - [x] `esglesia`
 
+- [x] `eva`
+
+- [x] `flauta`
+
 - [x] `frederic`
 
 - [x] `garf`
@@ -46,11 +56,31 @@
 
 - [x] `germa_francesc`
 
+- [x] `home_carruatge`
+
+- [x] `home_raim`
+
+- [x] `home_raim_desperta`
+
 - [x] `hostatgeria`
+
+- [x] `ineu_inconscient`
 
 - [x] `isidre`
 
 - [x] `jaumeta`
+
+- [x] `jordi_caseta`
+
+- [x] `jordi_desperta`
+
+- [x] `josep`
+
+- [x] `juli`
+
+- [x] `mare_nena`
+
+- [x] `monestir`
 
 - [x] `monja_charm`
 
@@ -58,15 +88,25 @@
 
 - [x] `monja_phili`
 
-- [x] `josep`
+- [x] `nen_flam`
 
-- [x] `juli`
+- [x] `nen_sardin`
 
-- [x] `monestir`
+- [x] `nen_uri`
 
 - [x] `nena_trenes`
 
 - [x] `ocellaire`
+
+- [x] `ocellaire_idle2`
+
+- [x] `ocellaire_idle3`
+
+- [x] `ocellaire_rugit`
+
+- [x] `ombra_monjo`
+
+- [x] `pallofa`
 
 - [x] `pare_alcui`
 
@@ -74,13 +114,29 @@
 
 - [x] `pare_jordi`
 
+- [x] `pastor_a`
+
+- [x] `pastor_b`
+
 - [x] `pastor_boira`
+
+- [x] `pastor_vell`
 
 - [x] `pi`
 
 - [x] `pi_pinyer`
 
 - [x] `pianista`
+
+- [x] `proleg/boira`
+
+- [x] `proleg/mati`
+
+- [x] `proleg/nens`
+
+- [x] `proleg/ocellaire`
+
+- [x] `proleg/segell`
 
 - [x] `retaule`
 
@@ -96,9 +152,21 @@
 
 - [x] `sala_pingpong`
 
+- [x] `taverna`
+
 - [x] `tiller`
 
-- [x] `proleg/ocellaire`
+- [x] `tomba_angel`
+
+- [x] `tomba_angel_flors`
+
+- [x] `tomba_esquerdada`
+
+- [x] `tomba_tancada`
+
+- [x] `venerables`
+
+- [x] `visitant_zombi`
 
 - [x] `xiprer`
 
@@ -142,7 +210,7 @@ indicada. Per això: fons blanc pur i res de blanc a la vora de l'objecte.
 
 
 
-Els prompts d'aquest document són aquests dos JSON passats a text: **si canvieu l'estil, canvieu-lo als JSON i regenereu el bloc d'estil dels prompts**. Si el generador admet JSON, també es pot enganxar tal qual i afegir-hi la descripció del que es vol dibuixar. (Els prompts del Pròleg, els de vitralls, tenen el seu estil propi i no s'han tocat.)
+Els prompts d'aquest document són aquests dos JSON passats a text: **si canvieu l'estil, canvieu-lo als JSON i regenereu el bloc d'estil dels prompts**. Si el generador admet JSON, també es pot enganxar tal qual i afegir-hi la descripció del que es vol dibuixar.
 
 
 
@@ -156,11 +224,11 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc encara fa servir el dibuix provisional): `altar`, `cabana`, `carro_sansa`, `caseta_joc`, `cel_ntrasra`, `cel_stbenet`, `cofre`, `columna`, `columna_proces`, `daniel_t`, `diposit`, `eloi`, `escolopendra`, `espelma`, `farigola`, `flors`, `foc`, `font_sj`, `gripau`, `herba_sj`, `home_raim`, `judit`, `lapida`, `llac`, `llosa`, `marit_neus`, `masia`, `neus`, `ocell`, `olla`, `ombra_monjo`, `ovella`, `ovella_boira`, `pastor_a`, `pastor_b`, `pastor_vell`, `pergami`, `pergola`, `porxo`, `romani`, `runna_pedra`, `sansa`, `taula_pedra`, `taula_pp`, `taula_sopar`, `taverna`, `telescopi_mon`, `tomba_esquerdada`, `turbo`, `visitant`, `yordi`, `venerables`, `mare_nena`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `andreu_guardia`, `basto_ocellaire`, `carro_sansa`, `escolopendra`, `ferralla`, `gabia`, `gabia_oberta`, `gripau`, `marit_neus`, `neus`, `ocellaire_cansat`, `ocell_boira`, `ovella`, `ovella_boira`, `ratpenat_boira`, `sansa`.
 
 
 
-**Nous, encara sense ús al joc** (preparats per a quan es facin): `andreu_guardia`, `arbre_sec`, `ferralla`, `gabia`, `gabia_oberta`, `guants_poder`, `home_raim_desperta`, `ocell_boira`, `ram_flors`, `ratpenat_boira`, `runes_ombra`.
+**Nous, encara sense ús al joc** (preparats per a quan s’implementin): `andreu_guardia`, `ferralla`, `gabia`, `gabia_oberta`, `ocell_boira`, `ratpenat_boira`.
 
 
 
@@ -172,241 +240,7 @@ Els prompts de sota són només dels pendents i dels nous (els fets només es ll
 
 
 
-## Edificis
-
-
-
-### `taverna.png` (amplada 640) *(La Taverna, entre l'Hostatgeria i els arcs de la Casa Gran. Edifici de poble de dues plantes, amb una ensenya de ferro. La porta és tancada: la Càren no obre. El joc l'espera a `assets/edificis/taverna.webp`; si el poses com a PNG, passa'l amb eines/convertir_webp.js.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. The front facade of an old village tavern with two floors: ground floor of rough ochre sandstone blocks with two small barred windows on each side, a central round-arched wooden door with a stone frame and a small iron lantern, a wrought-iron bracket sign hanging to the right of the door showing a golden beer mug on a cream disc (no text); the upper floor in warm cream plaster with five windows with open green wooden shutters and warm light inside; stone corner quoins, a wooden beam cornice with visible beam ends under a low pitched roof of terracotta tiles. A couple of wooden barrels stacked beside the door. Cozy, slightly weathered. About 1.6:1 width to height. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above, with the roof planes sloping away from the viewer in perspective (you can see the roof surface and ridge). EVERY roof is a pitched, sloped roof covered with visible rows of terracotta clay tiles, NEVER a flat roof. Strictly NO side walls visible, the building is symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
-
-```
-
-
-
-### `cel_stbenet.png` (amplada 420) *(Cel·les de Sant Benet (referència: la foto de Sant Benet). Edifici petit.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. The front facade of a small plain sandstone residence building in warm ochre stone with orange brick details: a gabled front with a stepped cornice, a small round window in the gable, two tall round-arched windows with brick-orange frames and dark shutters, a small low wooden door; modest, simple and calm. About 1.4:1 width to height. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above, with the roof planes sloping away from the viewer in perspective (you can see the roof surface and ridge). EVERY roof is a pitched, sloped roof covered with visible rows of terracotta clay tiles, NEVER a flat roof. Strictly NO side walls visible, the building is symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
-
-```
-
-
-
-### `cel_ntrasra.png` (amplada 560) *(Cel·les de Nostra Senyora (referència: les fotos de Nostra Senyora). És l'edifici GRAN, i Sant Benet és el petit que té al costat.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. The front facade of a large three-storey rectangular block of rough brown fieldstone masonry with pale stone corner quoins, a low-pitched roof of orange terracotta tiles with slightly projecting eaves; the two upper floors each have a regular row of exactly six round-arched windows, evenly spaced, each with a light stone frame and brown wooden shutters; the ground floor has NO row of large windows: it has a single central wooden door with a light stone frame and, one on each side of the door, a small square window with a black iron grille (only these two small windows); austere and quiet. About 1.3:1 width to height. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above, with the roof planes sloping away from the viewer in perspective (you can see the roof surface and ridge). EVERY roof is a pitched, sloped roof covered with visible rows of terracotta clay tiles, NEVER a flat roof. Strictly NO side walls visible, the building is symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
-
-```
-
-
-
-### `runes_ombra.png` (amplada 760) *(Les Runes amb l'ombra del monjo ja projectada al mur. És l'edició del gràfic `runes` que ja tens: puja'l al generador com a imatge de referència i demana aquest canvi. Surt a `assets/edificis/runes_ombra.png`; el joc el mostrarà superposat a `runes` i li farà «respirar» l'opacitat.)*
-
-
-
-**Com ha de ser l'ombra (perquè sigui convincent):**
-
-- **On:** al llenç llis de pedra a l'ESQUERRA de la porta fosca d'arc (entre l'arc lateral amb el xiprer i la porta), aproximadament entre el 36% i el 47% de l'ample i entre el 52% i el 78% de l'alçada. Així no tapa la porta, ni les finestres, ni s'enfonsa a la zona que ja és d'ombra natural a la dreta de la porta (allà no es llegiria).
-
-- **Què:** un monjo encaputxat, de perfil cap a la porta, agenollat i corbat endavant amb les mans unides, com si pregués. Silueta clara i llegible d'un cop d'ull (la caputxa punxeguda i les mans unides són el que la fa «monjo»).
-
-- **Mida:** uns 28% de l'alçada de la imatge (una mica més que l'Ineu en pantalla).
-
-- **Com és d'«ombra de mur»:** els carreus la «trenquen» (la silueta fa un petit salt a les juntes de les pedres) i les línies de pedra es continuen veient a través; vora suau però definida; color índigo-violeta profund translúcid (≈55% d'opacitat), mai negre pla. Una molt tènue llum violeta a la vora la fa sobrenatural: **no hi ha cap objecte que la projecti** (la llum de l'escena ve de dalt a l'esquerra, i aquesta ombra no hi obeeix).
-
-- **Estil:** el mateix d'aquest gràfic (pintat a mà, cel·shading suau); l'ombra no té contorn marró.
-
-
-
-```
-
-Use the attached image of the ruined church facade as the exact base (image-to-image edit). Keep EVERYTHING identical: same canvas size and aspect ratio, same composition, the same lines, colors, outlines, lighting, vegetation and the plain pure white background. Do not redraw, crop, shift, rescale or restyle anything. Change only one thing: add the cast shadow of a praying monk on the large flat sandstone wall to the LEFT of the dark arched doorway (between the left arched side-vault with the cypress and the doorway), spanning roughly 36%-47% of the image width and 52%-78% of its height, clearly clear of the doorway and the windows. The shadow is the silhouette of a hooded monk in a long habit seen in profile facing the doorway, kneeling and bowed forward with his hands joined in prayer, pointed hood, about 28% of the image height tall. Make it look truly cast on the wall: it breaks slightly at the joints of the stone blocks and the stone lines stay visible through it, soft but defined edges, translucent deep indigo-violet at about 55% opacity (never flat black), no brown outline, with a very faint violet glow along its edge so that it feels uncanny, as if nothing is casting it. Same flat hand-painted cel-shaded storybook style as the base image. No extra characters, no text, no light rays, no changes anywhere else.
-
-```
-
-
-
-**Variant per superposar amb animació (opcional, millor per al joc):** si prefereixes tenir l'ombra com a capa a part (així el joc la pot fer aparèixer, desaparèixer i respirar sense duplicar tot el gràfic), demana això després de l'anterior:
-
-
-
-```
-
-Using the previous result, output a second image with the EXACT same canvas size, aspect ratio and framing, containing ONLY the monk's shadow, at exactly the same position and size, on a plain pure white (#FFFFFF) background: no wall, no building, no ground, no other elements. Keep the shadow's translucent deep indigo-violet color, its soft edges and its faint violet glow. Do not move or resize it.
-
-```
-
-
-
-### `caseta_joc.png` (amplada 240) *(Caseta de joc del jardí de la masia d'en Jordi. Dins hi ha la palanca. Ja té un dibuix provisional al joc.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. The front facade of a small wooden playhouse for children in a farm garden: walls of vertical planks painted warm yellow with a red painted base strip, a small round window with a cross-shaped frame, a small arched red wooden door with a golden knob, a little pitched roof of blue-painted wooden shingles, a tiny red pennant flag on the ridge, a toy blue bucket and a small wooden spade leaning at the side; cozy, a bit worn, child-sized (looks only slightly taller than a person). About 1.05:1 width to height. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above. Strictly NO side walls visible, symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
-
-```
-
-
-
-### `masia.png` (amplada 520)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A Catalan masia farmhouse, wide stone walls, a low gabled roof, an arched doorway, an outdoor stone bench. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above, with the roof planes sloping away from the viewer in perspective (you can see the roof surface and ridge). EVERY roof is a pitched, sloped roof covered with visible rows of terracotta clay tiles, NEVER a flat roof. Strictly NO side walls visible, the building is symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
-
-```
-
-
-
-### `cabana.png` (amplada 330)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A small dry-stone shepherd's hut with a flat stone roof, a wooden door, a bundle of firewood. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above, with the roof planes sloping away from the viewer in perspective (you can see the roof surface and ridge). EVERY roof is a pitched, sloped roof covered with visible rows of terracotta clay tiles, NEVER a flat roof. Strictly NO side walls visible, the building is symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
-
-```
-
-
-
-### `diposit.png` (amplada 300)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A round stone water tank (cistern) with a domed top, a rusty iron hatch and a pipe. Camera angle like The Legend of Zelda: A Link to the Past, classic 3/4 top-down, camera looking down at about 35-40 degrees: the main facade faces the viewer straight on and is clearly visible, and ABOVE it the roof is visible from above, with the roof planes sloping away from the viewer in perspective (you can see the roof surface and ridge). EVERY roof is a pitched, sloped roof covered with visible rows of terracotta clay tiles, NEVER a flat roof. Strictly NO side walls visible, the building is symmetrical left to right, not rotated, not isometric, a flat ground line along the bottom edge of the image.
-
-```
-
-
-
----
-
-
-
 ## Elements d'escenari
-
-
-
-### `font_sj.png` (amplada 190) *(Font del Bisbe, al Bosc de Sant Joan: centre de la clariana. Antiga font de pedra adormida, que torna a rajar quan es fa la missió de les herbes)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. An old ornate stone fountain, the 'Bishop's Fountain', centered and symmetric, built in warm pale grey sandstone: two wide round stepped tiers at the base, a large round basin with a thick carved rim and, on the front of the basin, a bishop's mitre carved in relief; the basin holds dark murky still water with a faint lilac tint and a few ripples; from the middle of the basin rises a fluted stone pedestal carrying a smaller upper bowl, topped by a small finial with a mitre and a cross; the fountain is dry and neglected: green moss on the steps and rim, ivy climbing the pedestal, small cracks in the stone, a few drifting wisps of violet mist at its base. Rich craftsmanship, readable at small size, about 1:1 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `herba_sj.png` (amplada 70) *(Herba de Sant Joan (hipèric): la primera de les tres herbes de la font del bosc. Es veu des de lluny: ha de ser clara i vistosa)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A small clump of Saint John's wort (hypericum): six slender green stems fanning out with small oval opposite leaves and, at the tip of each stem, a bright golden-yellow five-petal flower with orange stamens; fresh and lively, slightly luminous, very readable at small size, about 1:1.1 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `romani.png` (amplada 70) *(Romaní: substitueix la ruda com a segona herba de la font)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A small bushy sprig of rosemary: several woody brown stems rising with dense narrow dark-green needle-like leaves along them and clusters of tiny pale blue-lilac flowers near the tips; aromatic, silvery-green tones, very readable at small size, about 1:1.1 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `farigola.png` (amplada 70) *(Farigola: la tercera herba de la font)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A low round cushion of wild thyme: a dense dome of tiny grey-green round leaves covered in small pink-lilac flowers, a few thin woody stems at the base; compact, soft, very readable at small size, about 1.4:1 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-### `columna_proces.png` (amplada 64) *(Columna de la processó del camí de la Desaparició (referència: la foto del camí). Una de sola, serveix per a les 12: el signe de cada una es mostra al quadre de diàleg. Es fa servir a les 12 columnes del camí de la Desaparició.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A short wayside shrine pillar of rough grey fieldstone masonry with a slightly crooked, hand-built look, lichen and moss on the stone, a flat stone cap on top; on its front face a rectangular ceramic tile panel (azulejo) set into the stone with a thin yellow-ochre and blue border, painted in warm folk-art colours (cobalt blue, mustard yellow, terracotta) showing a simple abstract pilgrim sign in the middle; the panel is slightly weathered. About 1:2 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `columna.png` (amplada 58) *(Columna de la pèrgola del Jardí de l'Hostatgeria (esvelta, de pedra; no és la del camí de la Desaparició). Es fa servir a les dues files de la pèrgola, escalada ×1,4: ha de ser ALTA i estreta, perquè les arcades arribin a l'alçada de la planta baixa de la casa.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A tall slender round stone column of pale grey sandstone seen from the front: a square plinth base, a smooth shaft with subtle vertical shading and a bit of moss near the bottom, and a plain square capital with a small cornice on top, ready to carry an arch on both sides. Height about 2.4 times its width, symmetric, the base sits flat at the bottom of the image. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-### `altar.png` (amplada 150)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A bare rough stone altar with an old iron cross, candle stubs and small children's offerings (pebbles, feathers). Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `taula_pedra.png` (amplada 110)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A large standing stone tablet with rows of carved mysterious symbols. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `carruatge.png` (amplada 260) *(La tartana de l'Home de la Tartana Verda: un vehicle de vapor que li va construir el Garf, l'inventor de l'Era (el mateix del telescopi). Servirà de viatge ràpid entre llocs llunyans del mapa. Al darrere hi porta, tapats, els ocells que allibera a l'epíleg. Adjunta: `assets/edificis/taverna.webp` (estil d'escenari) i `assets/personatges/garf.webp` (el seu inventor, perquè el vehicle tingui el seu aire).)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference images (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions, soft rounded corners, nothing sharp or photorealistic, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per material, two-tone cel shading with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A small homemade STEAMPUNK steam carriage built by a village inventor, with no horses: a rounded coach body of green-painted wooden planks with riveted iron bands, mounted on two big spoked wheels at the back and two smaller ones at the front; a round copper boiler at the front with a tall crooked brass chimney puffing a little white cloud of steam, brass pipes, two pressure gauges and a couple of exposed cogwheels; a driver's bench with a padded green seat, two long levers and a little steering wheel; a brass lantern hanging at the front; at the back, a compartment of brass bars covered by a patched green canvas (where small birds are kept, not visible); mismatched patches, bolts and a few clumsy repairs that show it was built by hand from scraps, charming and a bit wobbly. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the vehicle seen from its side at a slight 3/4 angle with the front pointing to the left, not isometric, no strong perspective distortion, the wheels sit flat at the bottom of the image.
-
-```
 
 
 
@@ -422,381 +256,7 @@ Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, match
 
 
 
-### `pergola.png` (amplada 260)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A stone pergola with round columns and a roof woven with ivy. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `taula_pp.png` (amplada 240)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A ping-pong table, dark green, with a net, paddles and a white ball. Camera angle: classic JRPG 3/4 top-down, seen from about 45 degrees above, the top surface clearly visible, not isometric, no strong perspective distortion.
-
-```
-
-
-
-### `llosa.png` (amplada 90)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A square stone slab set in the ground with a hidden-flower carving. Camera angle: classic JRPG 3/4 top-down, seen from about 45 degrees above, the top surface clearly visible, not isometric, no strong perspective distortion.
-
-```
-
-
-
-### `telescopi_mon.png` (amplada 80)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A brass telescope on a wooden tripod, pointing to the sky. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `runna_pedra.png` (amplada 110)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A pale stone with a legendary sword stuck in it, soft glow. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `espelma.png` (amplada 20)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A single lit candle in a small iron holder. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `taula_sopar.png` (amplada 380)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A long rustic dining table with plates, bread, jugs and candles. Camera angle: classic JRPG 3/4 top-down, seen from about 45 degrees above, the top surface clearly visible, not isometric, no strong perspective distortion.
-
-```
-
-
-
-### `cofre.png` (amplada 70)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A wooden treasure chest with iron bands and a gold lock. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `olla.png` (amplada 110)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A big black iron pot on a small campfire, steam rising. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `foc.png` (amplada 80)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A crackling campfire with logs and sparks. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `pergami.png` (amplada 70) *(Rotlle tancat, LLARG i estret, amb lacre vermell i cinteta. És l'objecte dels fragments de la crònica del monjo.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A long closed parchment scroll lying slightly diagonal, clearly LONGER than it is thick (about 2.3:1 length to thickness): a thin rolled sheet of cream-and-ochre vellum, the right end showing the visible spiral of the rolled layers, the left end slightly frayed and curling, a few faint brown age stains; a narrow crimson silk ribbon wraps once around the middle and is tied in a small bow, with two ribbon tails hanging down; on top of the ribbon a round blob of melted red sealing wax with uneven dripping edges, a small cross pressed into it and a glossy highlight. Rich detail but very clear shapes. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-### `lapida.png` (amplada 40)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A small mossy gravestone with a tiny cross. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `tomba_esquerdada.png` (amplada 240) *(La tomba dels monjos amb l'esquerda gran i la llum lila. Al joc és dibuixada per codi: aquest prompt només serviria per fer-ne un PNG.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A large grey stone sarcophagus of the first monks: a long lid with a big relief cross, a row of four blind arches with small crosses on the front, small columns at the corners, a stepped stone base, a little ivy and moss. STATE: SPLIT OPEN AND DESTROYED. The sarcophagus has burst: a huge jagged gaping fissure splits the whole tomb in two from the top of the lid to the base, wide open (about a quarter of the tomb's width in the middle), pitch-black deep inside with a bright violet-lilac light and lilac mist pouring out of it and glowing on the surrounding stone. The two halves of the lid have broken apart and slid out of place, one half tilted and lifted, the relief cross split in two; the front wall is collapsed and shattered around the fissure, big broken chunks and heaps of rubble lie on the base and the ground in front, stone flying away, dust and violet sparks rising. Dramatic, ruined, eerie but family-friendly. VIEW: strictly FRONT-FACING, like a classic JRPG overworld sprite (Zelda: A Link to the Past, Pokemon): the long side of the tomb faces the camera straight on and is perfectly horizontal and symmetrical, the front face is seen flat, and the lid is seen only as a thin foreshortened band on top of it. NOT isometric, NOT seen from a corner or a diagonal, no 3D box look, no visible side wall, no diagonal edges, no strong perspective. Wide image (about 8:5), the base of the tomb sits flat at the bottom of the image.
-
-```
-
-
-
-### `tomba_tancada.png` (amplada 240) *(La mateixa tomba, ja segellada amb la llum de Runna.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A large grey stone sarcophagus of the first monks: a long lid with a big relief cross, a row of four blind arches with small crosses on the front, small columns at the corners, a stepped stone base, a little ivy and moss. STATE: REPAIRED AND SEALED. Exactly the same tomb, same composition, same size and same position as the broken version, now whole and intact: the lid is in one piece with the relief cross unbroken, the front wall is whole, no rubble, no chunks, no mist, no purple. Only a very thin hairline seam of faint warm golden light runs along the old zigzag path of the fissure from the lid down the front, hardly noticeable, like a healed scar (no clamps, no staples, no metal parts, no bright glow). Calm and peaceful. VIEW: strictly FRONT-FACING, like a classic JRPG overworld sprite (Zelda: A Link to the Past, Pokemon): the long side of the tomb faces the camera straight on and is perfectly horizontal and symmetrical, the front face is seen flat, and the lid is seen only as a thin foreshortened band on top of it. NOT isometric, NOT seen from a corner or a diagonal, no 3D box look, no visible side wall, no diagonal edges, no strong perspective. Wide image (about 8:5), the base of the tomb sits flat at the bottom of the image.
-
-```
-
-
-
-### `tomba_angel.png` (amplada 140) *(La tomba de l'àngel del Cementiri, abandonada, amb el ram marcit. Al joc és dibuixada per codi: aquest prompt només serviria per fer-ne un PNG.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A small old village-cemetery grave with a stone curb and a low grassy mound, and at its head a tall weathered stone ANGEL statue, standing and weeping, the head bowed and the face hidden in one hand, long folded wings and long robe, on a small plinth, a little moss and ivy on the stone; a small bronze plaque on the front of the curb; at the foot of the grave, in front, a small stone vase. STATE: NEGLECTED. The vase holds a withered bouquet of dead, brown, drooping flowers and dry leaves hanging over the rim, no candle, the grass a bit dry and the whole grave sad and forgotten. VIEW: strictly FRONT-FACING, like a classic JRPG overworld sprite (Zelda: A Link to the Past, Pokemon): the grave and the statue face the camera straight on, symmetrical, the grassy mound seen only as a thin foreshortened band. NOT isometric, NOT seen from a corner or a diagonal, no strong perspective. Tall image (about 5:8), the base of the grave sits flat at the bottom of the image.
-
-```
-
-
-
-### `tomba_angel_flors.png` (amplada 140) *(La mateixa tomba, després que el Germà Francesc hi hagi portat el ram: flors fresques i una espelmeta.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A small old village-cemetery grave with a stone curb and a low grassy mound, and at its head a tall weathered stone ANGEL statue, standing and weeping, the head bowed and the face hidden in one hand, long folded wings and long robe, on a small plinth, a little moss and ivy on the stone; a small bronze plaque on the front of the curb; at the foot of the grave, in front, a small stone vase. STATE: TENDED. Exactly the same grave, statue, vase, composition, size and position as the neglected version, but the vase now holds a fresh, bright bouquet of colourful flowers (white, yellow and pink) with green leaves, and a tiny lit candle with a small warm flame stands beside the vase; the grass is fresh and green. Warm, tender and peaceful. VIEW: strictly FRONT-FACING, like a classic JRPG overworld sprite (Zelda: A Link to the Past, Pokemon): the grave and the statue face the camera straight on, symmetrical, the grassy mound seen only as a thin foreshortened band. NOT isometric, NOT seen from a corner or a diagonal, no strong perspective. Tall image (about 5:8), the base of the grave sits flat at the bottom of the image.
-
-```
-
-
-
-
-
-
-
-### `guants_poder.png` (amplada 40) *(Guants de Poder del Germà Francesc (objecte; també serveix d'icona). Permeten moure la roda del Celler.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A pair of old heavy stonemason work gloves made of thick worn brown leather, reinforced with riveted iron plates on the knuckles and a broad cuff, a faint warm golden glow around them as if they held ancient strength, lying one over the other. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `ram_flors.png` (amplada 34) *(El ram que el Germà Francesc demana portar a la creu del Cementiri.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A small hand-tied bunch of wild mountain flowers (white daisies, lilac thyme, yellow broom and a red poppy) wrapped with a piece of twine. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `flors.png` (amplada 90) *(Mata de flors decorativa (es repeteix per l'escenari).)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A small low clump of wild flowers in the grass: white daisies, lilac thyme and yellow broom, with a few green leaves, no pot. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `porxo.png` (amplada 340) *(Porxo de la Casa Gran amb la reixa tancada.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. The front of a rustic stone porch of a big old manor house: two thick stone pillars with a wooden beam and a small terracotta tiled roof above, an iron gate between the pillars closed with a wooden bar. About 1.5:1 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-### `ocell.png` (amplada 34)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A small brown bird. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `llac.png` (amplada 36)
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A small crystal lake stone / ice shard. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
----
-
-
-
 ## Personatges
-
-
-
-### `monja_pains.png` (amplada 110) *(La Pains, la velleta de l'Hostatgeria. Va en CADIRA DE RODES: el sprite ha de ser un personatge assegut a la cadira (no cal vista de la resta))*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A tiny very old nun in a WHEELCHAIR: frail, wrinkled kind face, white hair under a short white coif, dark blue-grey habit with a white bib, a red wool blanket over her knees, a rosary in her lap, a large old wooden wheelchair with two big spoked wheels, gentle sweet smile. Shown seated in the wheelchair, whole chair visible. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `monja_charm.png` (amplada 110) *(La Charm, gran sacerdotessa de l'Hostatgeria. Grassoneta, cabells curts)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A plump, round, cheerful mother superior nun: wide friendly face with rosy cheeks, SHORT brown hair showing at the temples under a white coif and short veil, a dark blue-grey habit with a white bib and a big wooden cross on a cord, a heavy rosary belt, warm authoritative smile. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `monja_phili.png` (amplada 96) *(La Phili, sacerdotessa de l'Hostatgeria. Prima, espavilada, amb ulleres i cabells curts)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A thin, tall, quick-witted young nun: narrow alert face, round wire glasses, SHORT dark hair showing at the temples under a white coif and short veil, a dark blue-grey habit with a white bib, arms slightly raised as if about to speak, a sharp little grin, energetic stance. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-### `venerables.png` (amplada 160) *(Les dues Venerables Sàvies de les Cel·les: un SOL gràfic amb les dues velletes juntes, agafades del braç. No tenen sprite per separat. Donen la pista del moment. Substitueixen les antigues «tietes».)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. TWO elderly women in ONE picture, standing side by side walking arm-in-arm: their inner arms are linked (each holds the other's arm at the elbow), the outer arms hang by their sides. Both are old, short and plump, with short hair, in plain modest long village dresses: two wise, kind and slightly stern village elders ("the two Venerable Wise Women"). LEFT: the plumper of the two, big round thick-rimmed glasses, short grey hair, blue dress. RIGHT: a bit less plump, very short snow-white hair, narrow slanted almond-shaped eyes, a calm little smile, wine-red dress. Chunky chibi proportions like the reference image (big round heads with friendly expressive faces, short plump bodies, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full bodies, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), both whole bodies visible, feet at the bottom of the image. Wide composition: the two women together fill the picture, about 5:4 (wider than tall).
-
-```
-
-
-
-### `mare_nena.png` (amplada 80) *(La mare de la Nena de les Trenes: una visió de llum, sense rostre, que apareix a la corba del camí del Rovelló. Es mostra translúcida, amb un to blavós.)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A gentle motherly ghost-like vision of a woman standing, long simple pale dress, long hair, her FACE is a soft blank glow with no features, gentle open arms as if waiting to hug a child. Chunky chibi proportions like the reference image (big round head with a smooth blank glowing face and no features at all, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `germa_francesc.png` (amplada 78) *(Germà Francesc, de les cel·les de Sant Antoni: monjo vell, prim i alt, amb una llarga barba blanca i el cap gros (a l'estil de l'Andreu, perquè se li vegi la cara al mòbil). Cuida les flors de la tomba de l'àngel del Cementiri i dona els Guants de Poder. Ja té gràfic al joc; aquest prompt és per regenerar-lo o afinar-lo.)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. An old tall monk, the Germà Francesc, caretaker of the angel's tomb flowers at the Cementiri and the keeper of the stonemasons' gloves: tall and slim but with a HUGE head: the head is about 40% of his total height, as big and round as the Germà Andreu's head (very big chibi head, clearly bigger than the body is wide), so that his FACE reads clearly even at tiny size on a phone screen. Big expressive face filling the head: large wide-open kind eyes with clear dark pupils, thick white bushy eyebrows, a visible friendly nose and a gentle smile partly seen above the beard, deep but soft wrinkles; a LONG straight white beard that stays narrow and does NOT hide the mouth or cheeks (it starts below the lips and reaches his chest), a thin ring of white hair around a bald crown, a small body under the big head, a dark chocolate-brown hooded monk's habit with the hood pushed back on his shoulders, a plain hemp rope belt with a wooden rosary hanging from it, a tiny posy of small wild flowers tucked into the rope, large calm hands loosely clasped in front of him, simple leather sandals over bare feet. Chunky chibi proportions like the reference image (very big round head with a friendly expressive face, slim body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `eva.png` (amplada 96) *(L'Eve de la Taverna: amiga fidel, fa la feina de la Càren perquè aquesta dorm. Obre la porta a l'Ineu i li explica què passa de nit. Dins la Taverna, al costat de la llar.)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A young woman, the tavern worker Eve, about 25-30 years old: a loyal, practical, quick-witted friend, with a warm freckled face, alert and slightly conspiratorial eyes and a friendly half-smile, long blonde hair falling loose past her shoulders (golden straw-blonde, tucked behind her ears), a forest-green long-sleeved village dress with the sleeves rolled up, a cream apron tied at the waist, a dish cloth over one shoulder, sturdy brown shoes. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `ocellaire.png` (amplada 110) *(L'Ocellaire, boss final de la Sala de la Gàbia. Versió nova: vestit de PLOMES NEGRES en lloc de l'hàbit de monjo, i SENSE barret ni caputxa. Surt a `assets/enemics/ocellaire.webp` (original a `art/enemics/ocellaire.jpg`); puja la imatge actual com a referència d'estil i demana aquest canvi de vestit. El bàcul no hi surt: el joc el dibuixa a part.)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head, compact torso, short stout limbs, simplified hands), large glowing eyes with a dark outline, minimalist facial lines, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. The Ocellaire, the sinister bird-catcher and final boss: a bald, pale, wrinkled old man with a HUGE round bald head (the head is about 40% of his height), pointed ears, a heavy frowning brow, glowing violet-lilac eyes that shine with a purple light, and a thin crooked, unsettling smile. NO hat, NO hood, NO cap, NO hair: the bare bald head is fully visible. He wears a full-body costume made entirely of BLACK FEATHERS instead of a monk's habit: a tunic and long skirt covered in overlapping glossy black feathers (blue-black and violet sheen on the highlights, in layered rows like a raven's plumage), a high ruffled collar of long black feathers rising around his neck and framing the head, sleeves ending in long ragged black wing-feathers that hang past his wrists, and a ragged hem of long uneven feather tips at the bottom, like a tattered crow's cloak. Heavy iron shackles on both wrists with short broken chains dangling, a chain across the chest with a golden padlock, a plain hemp rope belt with a small golden bird cage hanging from it. Pale thin hands with long fingers, held slightly open. Swirling purple mist and small purple flames at his feet. Chunky chibi proportions like the reference image, thick dark outline, full body, front-facing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, a single character.
-
-```
-
-
-
-### `ocellaire_rugit.png` (amplada 110) *(Pose de rugit de l'Ocellaire als canvis de fase del combat final. Surt a `assets/enemics/ocellaire_rugit.webp`. Puja el sprite NOU de l'Ocellaire (el de plomes negres) com a referència i demana només el canvi de pose: mateixa mida, mateix to, mateix vestit.)*
-
-
-
-```
-
-Edit the attached reference image of the Ocellaire. Keep EXACTLY the same character, the same bald head with no hat or hood, the same black feather costume, the same chains, padlock and small golden cage, the same chibi proportions, the same outline and colouring, the same front-facing 3/4 top-down view, the same size and framing, and the same pure white background (#FFFFFF), no text. Change ONLY the pose: he is ROARING in rage. His head is thrown slightly back and his mouth is wide open in a furious shout, showing his teeth, with his violet eyes blazing brighter than before (a stronger purple glow around them). Both arms are thrown wide open and slightly raised, the hands clawed, the long black wing-feathers of his sleeves fully spread like a raven's wings, the broken chains on his wrists flying outward, the feathers of his collar and skirt bristling and lifted as if blown by a shock wave. A bigger swirl of purple mist and flames rising around his feet. A single character, full body, whole body visible.
-
-```
 
 
 
@@ -807,66 +267,6 @@ Edit the attached reference image of the Ocellaire. Keep EXACTLY the same charac
 ```
 
 Edit the attached reference image of the Ocellaire. Keep EXACTLY the same character, the same bald head with no hat or hood, the same black feather costume, the same chains, padlock and small golden cage, the same chibi proportions, the same outline and colouring, the same front-facing 3/4 top-down view, the same image size and framing with the feet at exactly the same place at the bottom, and the same pure white background (#FFFFFF), no text. Change ONLY the pose: he is EXHAUSTED after an attack, crouching low and bent forward, knees bent, both pale hands resting on his knees, shoulders dropped, panting. His big bald head hangs low and forward: the TOP of his head is at about 35% of the image height from the top, and the centre of his head at about 45%, so the whole figure is much lower than in the reference. His violet eyes are dim and half-closed, his mouth open, gasping. The feathers of his collar and sleeves droop down, the broken chains hang limp, the purple mist at his feet is small and weak. A single character, full body, whole body visible.
-
-```
-
-
-
-### `ocellaire_idle1.png` / `ocellaire_idle2.png` / `ocellaire_idle3.png` (amplada 110) *(Idle de l'Ocellaire: 3 fotogrames en bucle (1 → 2 → 3 → 2 → 1) que fan «respirar» les plomes i brillar els ulls. Surten a `assets/enemics/`. Cal que SIGUIN gairebé idèntics al sprite base: genera'ls un per un des del mateix sprite de referència, sense canviar mida ni posició, o es veuran saltets. El fotograma 1 és el sprite base tal qual.)*
-
-
-
-```
-
-Fotograma 1: el sprite base tal qual (no cal generar-lo).
-
-
-
-Fotograma 2 (prompt):
-
-Edit the attached reference image of the Ocellaire. Keep EXACTLY the same character, pose, size, framing, outline, colours and pure white background (#FFFFFF), no text, no hat, no hood. Change ONLY these tiny details, as the second frame of a breathing idle loop: the whole body is about 3 pixels higher and the chest slightly expanded, the feathers of the high collar and the long wing-feathers of the sleeves swaying slightly outward, the ragged feather tips of the hem lifted a little to one side, the broken chains on the wrists swinging slightly outward, the violet glow of his eyes a bit brighter, the purple mist at his feet slightly bigger and its small flames leaning to the left. Everything else identical. A single character, full body.
-
-
-
-Fotograma 3 (prompt):
-
-Edit the attached reference image of the Ocellaire. Keep EXACTLY the same character, pose, size, framing, outline, colours and pure white background (#FFFFFF), no text, no hat, no hood. Change ONLY these tiny details, as the third frame of a breathing idle loop: the whole body is about 3 pixels lower and the chest slightly relaxed, the feathers of the collar and the wing-feathers of the sleeves drooping slightly inward, the ragged feather tips of the hem lowered and swaying to the other side, the broken chains on the wrists swinging slightly inward, the violet glow of his eyes a bit dimmer, the purple mist at his feet slightly smaller and its small flames leaning to the right. Everything else identical. A single character, full body.
-
-```
-
-
-
-### `nen_uri.png` (amplada 112) *(L'Huri, un dels nens desapareguts (de Sant Benet). Surt a la Sala de la Gàbia i a l'epíleg.)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. Huri, a boy of about 8 from the village of Sant Benet: the SMALLEST of the three missing children, tiny and wiry, VERY ACTIVE and restless (caught mid-bounce, on his toes, as if he cannot stand still), messy fair blond hair (light golden-ginger blond, sticking up), a cheeky gap-toothed grin, bright curious eyes, a royal-blue wool jumper with rolled-up sleeves, patched brown shorts, scuffed boots, a scraped knee. Small child proportions (clearly the shortest of the three boys). Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `nen_flam.png` (amplada 112) *(El Fram, un dels nens desapareguts (de Sant Benet). Surt a la Sala de la Gàbia i a l'epíleg.)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. Fram, a boy of about 8 from the village of Sant Benet: THIN and wiry, medium height among the three boys, straight jet-black hair, a LONG pointed nose, big wide-open adventurous eyes and an excited smile, a red wool tunic, short dark trousers, and funny shoes with the TIPS CURLED UP (pointed, upturned toes, like little elf shoes). Small child proportions. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `nen_sardin.png` (amplada 112) *(El Sardi, el tercer nen desaparegut (fill de l'Isidre). Surt a la Sala de la Gàbia i a l'epíleg.)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. Sardi, a boy of about 9, the TALLEST of the three missing children, nephew of the three priestesses, who loves bread with chocolate: dark brown, nearly black short hair (a brunette, tanned skin), round glasses with thin frames, GREEN eyes behind the lenses, full plump lips in a shy happy smile, a green knitted jumper, short brown trousers and sturdy shoes. Small child proportions, but visibly taller than the other two boys. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
 
 ```
 
@@ -896,66 +296,6 @@ Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style,
 
 
 
-### `carry.png` (amplada 70) *(La Carry, anciana de Nostra Senyora, vídua del campaner: molt vella, molt prima i pàl·lida. Busca el seu gos Pallofa. Ocupa el lloc del Yordi i la Judit. Surt a `assets/personatges/carry.webp`.)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A very old, very thin little woman, Carry, the widow of the village bell-ringer: frail and bony, with a long thin neck, narrow sloping shoulders and thin arms, a pale, almost ashen complexion, a small wrinkled face with soft deep-but-gentle folds, sad kind eyes with dark rings under them, a worried small smile, short white hair cut close and slightly messy, no hat, no glasses. She wears a long plain faded dark-plum woollen skirt that reaches her ankles, a pale grey-lilac long-sleeved blouse buttoned to the neck with a small knitted shawl over the shoulders, a worn apron with a mended patch and sturdy old black shoes. Her thin hands are clasped in front of her chest, anxiously. Chunky chibi proportions like the reference image but with a slim fragile body (big round head with an expressive face, very slim body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `pallofa.png` (amplada 44) *(El Pallofa, el gos de la Carry: petit, prim, blanc amb taques marrons, borni i ple de puces. Passeja per Sant Antoni fins que l'Ineu l'agafa. També fa de **icona del sarró**: la mateixa imatge, o el cap sol, serveix. Surt a `assets/personatges/pallofa.webp`.)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A tiny, skinny stray dog, Pallofa, an old mongrel: small body, visible ribs and thin little legs, short white fur with irregular chocolate-brown patches (one big patch over the back, a patch over the left ear and one around the left eye), floppy ears, a thin tail, a plain worn leather collar with a tiny round name tag. He is MISSING HIS RIGHT EYE: the right eye is a closed, flat scar of fur with a small old line (clearly drawn, not gory, cartoonish), and his left eye is large, round, glossy and very expressive, with a sad, hopeful, loyal look. He is covered in FLEAS: a few tiny dark specks on his fur and a couple of tiny hopping fleas around him, with a small itchy-scratch expression, one hind leg lifted slightly as if about to scratch. Slightly messy fur with a few tufts. The dog stands on all fours, seen in a slightly three-quarter view facing to the viewer's right but with the head turned toward the viewer, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character, small and cute.
-
-```
-
-
-
-### `eloi.png` (amplada 110)
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. Big strong man in a red shirt. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `garf.png` (amplada 96)
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. Young chubby blond inventor in a brown tunic, goggles on the head. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `jordi_caseta.png` (amplada 66) — **ja aplicat** (`art/personatges/jordi_caseta.jpg` → `assets/personatges/jordi_caseta.webp`, amb `eines/treure_fons.py ... 66 --forats 400`) *(En Georgi de la Caseta: cap molt gros, moreno, les dents de dalt sortides com un ratolinet, vestit de pagès. Adjunta: `assets/personatges/garf.webp` i `assets/personatges/pare_jordi.webp` (estil dels personatges).)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. Jordi of the little house, a cheerful Catalan farmer: an EXTRA-LARGE head, noticeably bigger than the usual chibi head (about half of his total height), dark-haired and tanned, with thick messy dark-brown almost black hair, dark bushy eyebrows, lively dark eyes and a big friendly grin that shows two prominent upper front teeth sticking out over the lower lip like a little mouse; dressed as a traditional Catalan farmer (pagès): an off-white linen shirt with the sleeves rolled up, an open dark olive-green waistcoat, a wide red cloth sash (faixa) wrapped around the waist, brown corduroy trousers and rope-soled espadrilles (espardenyes) laced around the ankles. No hat. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
 ### `sansa.png` (amplada 96)
 
 
@@ -965,142 +305,6 @@ Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style,
 Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. Woman with auburn hair in a golden dress. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
 
 ```
-
-
-
-### `home_carruatge.png` (amplada 96) *(L'Home de la Tartana Verda: baixet, prim i geperut, calb, amb unes orelles grans i el nas gros; va tot vestit de verds. Condueix la tartana de vapor del Garf. Adjunta: `assets/personatges/garf.webp` i `assets/personatges/pare_jordi.webp` (estil dels personatges).)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference images: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact torso, short limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, minimalist facial lines (age shown through shape and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. The Man of the Green Carriage, a middle-aged coachman: SHORT and THIN, with a hunched back and slightly stooped shoulders (a little hump), completely BALD with a shiny head, very BIG ears sticking out, a BIG round nose, small kind sly eyes, a crooked half-smile; dressed entirely in shades of green: a bottle-green long coat with brass buttons, a mossy green waistcoat, a pale green shirt, dark green trousers and dark green boots, with a pair of brass driving goggles hanging around his neck and a small oil can in one hand. Visibly shorter than the monk Ineu. Chunky chibi proportions like the reference images (big round head with an expressive face, small thin body), cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `jaumeta.png` (amplada 96)
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A young forest witch and seer, the Jaumeta: an olive-green dress with a small patched shawl hung with tiny charms and little crystals, a red rose in her tousled hair, a knowing mischievous smile, fingers ready to snap as if about to work a little magic, bare ankles and simple sandals. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `pastor_a.png` (amplada 96)
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A shepherd man of the Cirosa mountain pastures, about 40 years old, weathered tanned face with a short dark beard, kind but wary eyes, a brown wool vest over a cream linen shirt, rough dark trousers wrapped with leather gaiters, a flat felt cap, a long wooden shepherd's crook in one hand and a small brass sheep bell (esquella) on a leather strap at his belt. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `pastor_b.png` (amplada 96)
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A shepherd woman of the Cirosa mountain pastures, about 35 years old, strong and calm, rosy windburnt cheeks, a long dark braid over one shoulder, a plum-coloured wool shawl over a mustard-yellow blouse, a long brown skirt, leather gaiters and sturdy boots, a wooden shepherd's crook in one hand and a small brass sheep bell (esquella) tied at her waist, wary but kind eyes. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `pastor_vell.png` (amplada 96)
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A very old bearded shepherd of the Cirosa, with a long white beard and bushy white eyebrows, kind tired eyes, wrinkled face, a brown wool hooded cloak (hood down) over a patched grey tunic, a woolly cap, leaning on a gnarled wooden walking cane, a large old brass sheep bell (esquella) hanging from his belt; the wise elder of the exiled shepherds. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `ombra_monjo.png` (amplada 150)
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A translucent ghost of an old monk in dark blue light. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
----
-
-
-
-## Escenes de l'Ineu
-
-
-
-Quan l'Ineu cau i desperta a la Plaça: primer surt `ineu_inconscient` (l'Ineu a terra, sol), i de cop, sense transició, `jordi_desperta` (el Pare Jordi agenollat al seu costat); llavors el diàleg «Ineu! Que et trobo a terra!...» i, en tancar-lo, l'Ineu torna al seu gràfic normal. Perquè el canvi no faci cap salt, l'Ineu ha de ser IDÈNTIC i al mateix lloc a les dues imatges: genera primer la 1 i adjunta-la a la 2. Totes dues apaïsades i de la mateixa mida (el fons blanc es treu després).
-
-
-
-### `ineu_inconscient.png` *(L'Ineu estirat a terra, inconscient, a la Plaça. Adjunta: `assets/ineu/costat.webp` (cos, hàbit i proporcions) i `assets/retrats/ineu.webp` (la cara).)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the exact art style of the attached reference images (the adventurer monk Ineu): chunky hand-inked storybook cartoon illustration, thick clean dark-brown outline of even weight, soft cel-shaded colouring with gentle gradients and a subtle worn paper grain, warm saturated earthy palette (chocolate and chestnut browns, cream, ochre), rounded friendly shapes, light from the upper left, isolated on a plain pure white background, no ground, no shadow, no text, 3/4 top-down view like a classic JRPG. The same young monk Ineu from the references, with identical face, tonsured brown hair, brown wool habit with rope belt and sandals, lying unconscious on the ground on his back, stretched out horizontally with his head to the left and his feet to the right, eyes closed, mouth slightly open, peaceful but exhausted, one arm resting on his chest and the other fallen beside him, a few small dust puffs and a tiny dizzy swirl of three little stars above his head. Chunky chibi proportions exactly like the reference (big round head, short plump body). Whole body visible and centered, wide horizontal image with empty white space above the body, a single character, no weapon.
-
-```
-
-
-
-### `jordi_desperta.png` *(El Pare Jordi agenollat al costat de l'Ineu, despertant-lo. Adjunta: el resultat de `ineu_inconscient` (el més important: l'Ineu ha de quedar idèntic i al mateix lloc), `assets/personatges/pare_jordi.webp` i, si el tens, `assets/retrats/pare_jordi.webp`.)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the exact art style of the attached reference images: chunky hand-inked storybook cartoon illustration, thick clean dark-brown outline of even weight, soft cel-shaded colouring with gentle gradients and a subtle worn paper grain, warm saturated earthy palette, light from the upper left, isolated on a plain pure white background, no ground, no shadow, no text, 3/4 top-down view like a classic JRPG. Keep the first attached image EXACTLY as it is: the unconscious young monk Ineu lying on his back, same pose, same size and same position in the frame, but without the dizzy stars. Add Father Jordi, the elderly prior from the second reference (identical face, hair, beard and dark habit), kneeling on one knee just behind Ineu on the upper side of the image, leaning over him, one hand gently on Ineu's shoulder and the other on his forehead, with a worried, kind, fatherly expression, as if calling his name to wake him up. Chunky chibi proportions like the references. Both characters fully visible, same wide horizontal canvas as the first image, Ineu's position unchanged.
-
-```
-
-
-
-Si el Pare Jordi surt davant de l'Ineu, demana-ho així: «behind Ineu, on the far side» (en vista de dalt, el que és darrere queda més amunt a la imatge).
-
-
-
-### `flauta.jpg` (amplada 85) *(L'Ineu tocant la flauta d'en Mamet, DE CARA a la càmera. Es mostra mentre la interfície de la flauta és oberta (js/musica.js), i en tancar-la torna el sprite normal. Adjunta: `assets/ineu/aixeca_basto.webp` (l'Ineu ja de cara, perquè mantingui exactament el personatge, l'hàbit i la proporció) i `assets/retrats/ineu.webp` (la cara). Surt a `art/ineu/aixeca/flauta.jpg` (amb els altres «aixeca_*») i es converteix a `assets/ineu/flauta.webp` igual que ells (fons blanc transparent, retallat). Si el fitxer no hi és, el joc es queda amb el sprite normal.)*
-
-
-
-El gràfic ha de tenir els peus a la mateixa alçada que els altres sprites de l'Ineu (peus al marge inferior, sense ombra) i el cos centrat, perquè en canviar de sprite no faci cap salt.
-
-
-
-```
-
-Edit the attached reference image into a new pose of the SAME character, the young monk Ineu. Keep EXACTLY the same character and the same 'Chibi Adventure Sprite' style: the same big round head, the same face and tonsured brown hair, the same brown wool habit with the rope belt and the sandals, the same chunky chibi proportions, the same bold clean black outline, medium-to-fine clean dark inner lines, two-tone cel shading with subtle smooth gradient highlights, no sketchy texture. New pose: Ineu stands FACING THE VIEWER, looking straight at the camera (a front view, the whole body symmetrical, both feet visible), playing a small simple wooden reed flute (a thin cane flute with three finger holes, pale yellow-ochre, with darker nodes), held horizontally across his face at mouth level, the mouthpiece at his lips, the flute pointing slightly to the viewer's left, held with both hands (the fingers of the near hands resting on the finger holes). His eyes are gently closed (or softly half-closed), his cheeks slightly puffed, his eyebrows relaxed and peaceful, as if he were playing a soft old melody; the head tilted a few degrees to the side. The elbows slightly out. Show two or three small simple musical notes floating up and to the side next to him, drawn in the same outline style, pale gold with a thin dark outline. No weapon, no staff, no bag in the hands. Whole body visible, centered, standing on the ground with his feet at the bottom of the image, the same size and scale as the reference sprite. Clean light from the top-front, no cast shadow, no ground. Isolated on a pure white background (#FFFFFF), no frame, no border, no text, no logo. A single character.
-
-```
-
-
-
-**Nota:** la flauta del joc és «la flauta d'en Mamet»: de canya, simple, amb tres forats (les notes 1, 2 i 3), sense adorns. Si en vols una variant mirant a un costat, demana-ho a part: el joc només fa servir aquesta, de cara.
-
-
-
----
 
 
 
@@ -1136,18 +340,6 @@ Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, 
 
 
 
-### `visitant.png` (amplada 96) *(Visitant: lent i adormit; en vèncer-lo cau dormint. Plaça, Monestir.)*
-
-
-
-```
-
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A sleepwalking day-tripper tourist possessed by the mist: orange short-sleeved shirt, beige shorts, baseball cap, round glasses, camera on a strap, grey-green skin, arms stretched forward like a zombie but comical, half-closed glowing violet eyes, mouth open in a yawn, wisps of lilac mist around the feet. Chibi proportions like the other characters. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
-
-```
-
-
-
 ### `ovella_boira.png` (amplada 76) *(Ovella de boira: embesteix i queda cansada. Camí de la Cirosa.)*
 
 
@@ -1167,30 +359,6 @@ Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, 
 ```
 
 Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A fluffy friendly white mountain sheep with a black face and legs, calm pose. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `home_raim.png` (amplada 78) *(L'Home del Raïm com a estàtua (abans del combat).)*
-
-
-
-```
-
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A white-grey baroque marble statue of a man standing on a rough rocky lump, in a relaxed contrapposto pose with the weight on one leg, seen full-length from the front: thick curly hair, a moustache and a short curly beard, a calm slightly upturned face looking up and a little to one side, bare muscular chest and shoulders, a heavy cloth draped over the left shoulder and wrapped around the hips falling down to the feet with a fringed edge and deep folds, the arms crossed in front of the chest and one hand holding a small bunch of grapes with a short vine stem. He stands on top of a tall square stone pillar-pedestal in the same warm grey as the Escalinata stones: a stepped base, a plain shaft with a recessed rectangular panel with chamfered (octagonal) corners on the front, and a projecting cornice on top under the rocky lump. Pale marble with subtle grey veins and soft cel shading, the pedestal slightly darker, calm and completely still, no colour except the grapes (muted purple). Tall narrow image (about 1:2.4), the whole statue and pedestal visible, the base of the pedestal at the bottom of the image. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### `home_raim_desperta.png` (amplada 85) *(L'Home del Raïm despert (boss de l'Escalinata).)*
-
-
-
-```
-
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. Boss: the same marble man from the pedestal statue come to life and stepped down, no pedestal: the same curly hair, moustache and short beard, bare chest, the same cloth draped over the left shoulder and around the hips with the fringed edge, but the marble is cracked all over and violet-lilac light glows through the cracks, two burning red eyes, an angry open mouth, standing on the same small rocky lump (stone feet fused with it) and swinging the grapes, now a huge heavy marble bunch of grapes the size of a club, in one fist raised over the shoulder, the other arm out for balance; small pieces of marble falling off. Same pale grey-white marble as the statue so they are recognisable as the same figure, whole body visible, front-facing or slightly three-quarter, feet at the bottom of the image. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
 
 ```
 
@@ -1330,30 +498,6 @@ Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, 
 
 
 
-## Arbre mort
-
-
-
-Els pins ja són fets (`pi`, `pi_pinyer`). Falta aquest, que encara no s'usa:
-
-
-
-### `arbre_sec.png` (amplada 220) *(Arbre mort)*
-
-
-
-```
-
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions (thick walls, oversized roofs, doors and windows, soft rounded corners, nothing sharp or photorealistic), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text, 3/4 top-down view like a classic JRPG. A dead old tree: a gnarled twisted grey trunk and a few bare crooked branches, a few last dry brown leaves hanging, peeling bark, a small hole in the trunk. About 1:1.2 width to height. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the whole tree facing the camera straight on, trunk base and roots visible at the bottom of the image, no ground, no grass, no cast shadow, not isometric, a single tree, same art style, line weight and color treatment as the existing `arbre` and `roure` trees.
-
-```
-
-
-
----
-
-
-
 ## Consells
 
 - Genereu cada gràfic **a part**, amb fons blanc pur; el joc ja treu el fons.
@@ -1367,295 +511,3 @@ Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, match
 
 
 ---
-
-
-
-## Pròleg
-
-
-
-Cinc quadres de la intro, tots **vitralls de catedral medieval vistos dins la seva finestra**, a la paret de pedra d'una catedral gòtica.
-
-Cada un va a `assets/proleg/<nom>.webp`, **vertical 9:16** (idealment 1536 × 2752; el joc la redueix a 1152 d'ample), imatge **sencera, sense retallar**.
-
-
-
-**Com es veuen al joc:** no hi ha cap quadre que avanci sol. La imatge omple la pantalla i fa un **zoom enrere (Ken Burns, uns 8 s)**: comença a sobre l'escena del vitrall, centrada a la part de dalt, i s'allunya fins a mostrar tota la finestra de la catedral (el **text** es posa a sobre, al quart de baix). Per això:
-
-- **El vitrall ha d'estar al centre exacte de la imatge** (centre del vidre a ~50 % de l'ample i ~50 % de l'alçada), i ocupar uns **36 % de l'ample i 44 % de l'alçada** de la imatge, igual que `art/proleg/ocellaire.jpg`. Així el zoom sempre el mostra sencer.
-
-- Al voltant, **pedra de catedral gòtica** (carreus vells d'arenisca, arc apuntat, traceria, una mica de columna als costats), amb llum tènue i ambient. La finestra ha de ser **clarament una finestra de catedral**, però pot ser d'un **tipus diferent** a cada quadre (llançada, doble, romànica…): és el que s'indica a cada prompt.
-
-- **Dins del vitrall, l'escena sencera ha de quedar-hi i ser molt simple i reconeixible** (poques figures grans, siluetes clares).
-
-- **Res d'animació ni de text pintat:** el joc només mou la càmera.
-
-
-
-**Referència d'estil (obligatòria):** pugeu `art/proleg/ocellaire.jpg` al generador i digueu «same stained-glass style, same cathedral wall and lighting as the reference image, but a different window and scene». És el vitrall bo: vidres plans de colors joia, línies de plom negres i gruixudes, figures de dibuix net i cares mínimes.
-
-
-
-**Bloc d'estil del vitrall (és el primer paràgraf de cada prompt):** vidres de colors saturats (blau cobalt, vermell rubí, groc d'or, verd maragda, violeta ametista), plom negre gruixut, formes grans i simples, una mica de textura de vidre i de resplendor com si la llum el travessés.
-
-
-
-### `proleg/ocellaire.webp` — 1. L'Ocellaire a la fira, amb els nens — **FET** (`art/proleg/ocellaire.jpg`, ja a `assets/proleg/ocellaire.webp`)
-
-
-
-### `proleg/segell.webp` — 2. Sota terra: el tanquen a la gàbia i un monjo segella la porta amb Runna *(finestra: llançada alta d'arc apuntat amb un petit òcul rodó a sobre)*
-
-
-
-```
-
-Photograph of the interior of a medieval Gothic cathedral, vertical portrait 9:16: a weathered sandstone wall with slim columns at the sides and, exactly in the centre of the image, a tall narrow lancet window with a simple pointed arch and a small round oculus above it, dim moody light. The stained-glass panel fills the window and is centred in the image, about 36% of the image width and 44% of its height, fully visible. Same stained-glass style, same cathedral wall and lighting as the reference image.
-
-The stained glass itself: flat saturated jewel-coloured glass panes (deep indigo, violet, black, a little ruby and orange) separated by thick black lead lines, simple bold shapes, a few large panes per figure, slight glass texture, no fine detail, minimal faces. Scene, very simple: an underground cave of dark indigo and violet glass with a few triangular stalactites at the top. On the left, a big bell-shaped black iron cage drawn with thick bars over a glowing violet background, inside it the dark silhouette of a tall gaunt man in a feather coat and wide-brimmed hat with two glowing amber eyes. On the right, a heavy iron door in the rock wall, with two brown-robed monks and a shepherd with a crook pushing it shut. In the foreground, centre, a young hooded monk seen from behind, raising a short sword high: the sword is a bright white-blue glass shape, with white and pale-yellow rays crossing the door and glowing white runes sealing it. Mood: solemn, tense. Palette: indigo, violet, black, icy white-blue, a few small orange lantern accents.
-
-```
-
-
-
-### `proleg/boira.webp` — 3. Ara: el Monestir de nit i la boira lila que surt de terra *(finestra: doble llançada amb un trèvol a sobre, separada per un muntant de pedra)*
-
-
-
-```
-
-Photograph of the interior of a medieval Gothic cathedral, vertical portrait 9:16: a weathered sandstone wall and, exactly in the centre of the image, a tall twin-lancet window (two pointed arches side by side separated by a slim stone mullion, a quatrefoil tracery opening above them), dim moody light. The stained-glass panel fills both lancets, with the picture continuing across the thin mullion, centred in the image, about 36% of the image width and 44% of its height, fully visible. Same stained-glass style, same cathedral wall and lighting as the reference image.
-
-The stained glass itself: flat saturated jewel-coloured glass panes (midnight blue, indigo, amethyst, lilac, moon-cream) separated by thick black lead lines, simple bold shapes, a few large panes per object, slight glass texture, no fine detail. Scene, very simple: a Romanesque monastery at night seen from the front, centred: a plain rectangular two-storey building in blue-grey and dull ochre glass, low red-brown gable roof, a round-arched portal with a dark door, a staircase of grey panes leading up to it, a few tall narrow arched windows, ALL of them dark blue glass. On each side, one round dark-green tree and a tall dark cypress. From the ground and from under the trees, a cold lilac-violet fog made of wavy amethyst and lilac panes creeps up the staircase and the foot of the walls, with a few thin glowing violet cracks on the ground. Sky: deep midnight-blue glass, a big pale cream moon with concentric halo rings at upper right, a few small yellow diamond-shaped stars, dark violet mountains behind the roof. Mood: silent, ominous, beautiful.
-
-```
-
-
-
-### `proleg/nens.webp` — 4. Cada nit falta un nen: tres cases i un nen que se l'endú una ombra *(finestra: arc de mig punt romànic, gruixut i sense traceria)*
-
-
-
-```
-
-Photograph of the interior of an old Romanesque-Gothic cathedral, vertical portrait 9:16: a weathered sandstone wall and, exactly in the centre of the image, a tall round-arched (semicircular) window with a thick stone frame and no tracery, dim moody light. The stained-glass panel fills the window, centred in the image, about 36% of the image width and 44% of its height, fully visible. Same stained-glass style, same cathedral wall and lighting as the reference image.
-
-The stained glass itself: flat saturated jewel-coloured glass panes (midnight blue, indigo, lilac, stone grey, a little warm amber and red) separated by thick black lead lines, simple bold shapes, a few large panes per object, slight glass texture, no fine detail, minimal faces. Scene, very simple: a quiet village street at night. Three small stone houses side by side in a row, each a simple shape with a red-brown tiled roof, a wooden door and one window: the first two windows are dark dark-blue glass, the third one still glows warm amber. In the street in front, on the right, a tall dark hooded figure in a monk's habit, in black and violet glass with no face, walks away holding the hand of a small child in a pale tunic, both walking toward the right edge into a low bank of lilac fog glass. Behind the houses a round dark tree and two tall cypresses; high on the hill a small ochre monastery with dark windows; midnight-blue sky with a pale moon and a few yellow diamond stars. Mood: a village holding its breath.
-
-```
-
-
-
-### `proleg/mati.webp` — 5. Matí: surt el sol darrere del Monestir i la boira lila s'esvaeix *(finestra: llançada alta amb una gran rosassa a sobre)*
-
-
-
-```
-
-Photograph of the interior of a medieval Gothic cathedral, vertical portrait 9:16: a weathered sandstone wall and, exactly in the centre of the image, a tall lancet window with a pointed arch and a round rose window above it, warm morning light. The stained-glass panel fills the lancet, centred in the image, about 36% of the image width and 44% of its height, fully visible. Same stained-glass style, same cathedral wall and lighting as the reference image.
-
-The stained glass itself: flat saturated jewel-coloured glass panes (golden yellow, orange, rose, sky blue, emerald green, a little ruby) separated by thick black lead lines, simple bold shapes, a few large panes per object, slight glass texture, no fine detail, minimal faces. Scene, very simple, with NO people: the Romanesque monastery seen from the front, centred, a plain rectangular two-storey building in honey-ochre glass with a low red roof, a round-arched portal with a closed dark door, a staircase of beige panes, a few tall narrow arched windows. A big golden sun rising exactly behind the roof, half hidden by the building, with long straight yellow and orange rays fanning across a pale blue-pink sky, and two blue-violet mountains at the sides. Thin wavy lilac fog glass lies low around the foot of the monastery and in the valleys, thinning out and pale where the sun touches it. Mood: hopeful, gentle, the dawn after the dark nights.
-
-```
-
-
-
-## Retrats dels diàlegs (genèric, per a tots els personatges)
-
-
-
-Retrat de qui parla a la caixa de diàleg: el cap i les espatlles del personatge **de tres quarts**, mirant cap a la dreta (cap al text). Se li passa al generador **la imatge de l'sprite original** com a referència i es fa servir el mateix prompt per a tots; només cal canviar la línia final (`CHARACTER`) si el generador no reconeix prou bé el personatge. Surt quadrat a `art/retrats/<clau>.png` (un per personatge, amb el mateix nom que la clau del sprite).
-
-
-
-```
-
-Edit the attached reference image into a DIALOGUE PORTRAIT of the SAME character. Keep EXACTLY the same character identity and the same 'Chibi Adventure Sprite' style: the same face, eyes, eyebrows, nose, mouth, skin tone, hair (or baldness), beard, glasses, hat or hood, headwear, jewellery, clothes, colours and costume details, the same big rounded chibi head with large glossy expressive eyes, the same bold clean black outline, medium-to-fine clean dark inner lines, two-tone cel shading with subtle smooth gradient highlights, no sketchy texture. Change ONLY the framing and the head angle: a bust portrait, head and shoulders only (the cut is at the upper chest), square 1:1 image, the head filling about 75% of the image height and centered; the head turned in a THREE-QUARTER VIEW to the viewer's right (about 35-40 degrees: the face and both eyes still clearly visible, the nose and cheek in profile-ish perspective, the far ear mostly hidden, the near shoulder closer to the viewer), the gaze directed to the right, slightly raised chin, a natural speaking expression that fits the character (mouth slightly open as if talking). Clean light from the top-front, no cast shadow. The character's hands, props and weapons are NOT shown. Isolated on a pure white background (#FFFFFF), no frame, no border, no text, no logo. A single character. Character: <NOM I UNA PARAULA DEL PERSONATGE, p. ex. "the monk Ineu">.
-
-```
-
-
-
-**Consells d'ús**
-
-- Puja l'sprite del personatge com a imatge de referència (la de `art/personatges/<clau>.jpg`) i **no** canviïs res més del prompt: així tots els retrats surten amb el mateix estil i angle.
-
-- Els personatges amb ulleres, barba o barret (Phili, Germà Francesc...) i els de rostre especial (la mare de la Nena, de llum i sense rostre) poden necessitar afegir-ho a la línia `Character:`.
-
-- Si surt de cara o de perfil del tot, repeteix amb «three-quarter view, NOT frontal, NOT full profile» a la frase de l'angle.
-
-- Perquè el joc el pugui fer servir cal que tots tinguin el **mateix enquadrament** (cap al 75 % de l'alçada, centrat). Si algun surt més petit o més gran, regenera'l.
-
-
-
-### Retrat de les Venerables Sàvies (parella) — `art/venerables_retrat.png`
-
-
-
-Variant del retrat genèric per a les dues velletes juntes. Puja `art/personatges/venerables.jpg` com a referència (surten les dues, agafades del braç).
-
-
-
-```
-
-Edit the attached reference image into a DIALOGUE PORTRAIT of the SAME TWO characters together, the two Venerable Wise Old Women. Keep EXACTLY the same two characters and the same 'Chibi Adventure Sprite' style: for EACH of them the same face, eyes, eyebrows, nose, mouth, skin tone, hair, glasses, headwear, clothes, colours and costume details, the same big rounded chibi heads with large glossy expressive eyes, the same bold clean black outline, medium-to-fine clean dark inner lines, two-tone cel shading with subtle smooth gradient highlights, no sketchy texture. Keep their relative positions as in the reference (which one is on the left, which on the right) and their different heights and builds. Change ONLY the framing and the head angles: a bust portrait of the pair, heads and shoulders only (the cut is at the upper chest), square 1:1 image, the two heads side by side, close together and slightly overlapping at the shoulders as if arm in arm, both heads filling about 70% of the image height and the pair centered; BOTH heads turned in the SAME THREE-QUARTER VIEW to the viewer's right (about 35-40 degrees: the faces and both eyes of each clearly visible, the far ears mostly hidden), BOTH gazing in the same direction to the right, chins slightly raised, wise, kind and slightly amused expressions, mouths slightly open as if one of them is talking. The woman on the right is slightly behind the other. Clean light from the top-front, no cast shadow. Hands, props and arms are NOT shown. Isolated on a pure white background (#FFFFFF), no frame, no border, no text, no logo. Exactly two characters.
-
-```
-
-
-
-Si el generador els fa mirar a costats diferents o en fa un de perfil, repeteix amb «BOTH looking to the RIGHT, same direction, neither looks at the viewer» al final.
-
-
-
-### `tiller.png` (amplada 640) — NOVA VERSIÓ coherent amb els personatges *(El Gran Til·ler, l'arbre vell i savi de Cirosa. Substitueix el dibuix actual (`art/personatges/tiller`, realista) per un d'estil chibi, com la resta. Puja el dibuix actual com a referència de la CARA, del bigoti de molsa i de l'estructura de l'arbre, i el sprite d'un personatge qualsevol (p. ex. el Germà Francesc) com a referència de l'ESTIL.)*
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the second attached reference image (the chibi character): chibi super-deformed proportions, an enlarged rounded face with soft cheeks, large expressive glossy eyes with a dark outline and detailed irises, a warm friendly expression, minimalist facial lines, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. The Great Linden Tree, the Gran Til·ler, a giant ancient talking linden tree that is also a gentle old wise man: keep the same character as the first reference image (the same kind, wise, slightly amused old face, the same thick moss eyebrows and moss moustache, the long beard made of hanging roots and bark that reaches the base, the same overall structure: a wide short trunk with a big canopy). Redraw it in the chibi style: the face is HUGE and fills most of the trunk (the face is about 45% of the tree's total height, as big and round as a chibi head), very expressive large friendly eyes with clear dark pupils, soft rounded cheeks, a visible nose and a warm smile under the moss moustache, only a few soft bark wrinkles (never deep). A short stout trunk, two short thick branch-arms raised slightly to the sides, a big rounded canopy of heart-shaped linden leaves in fresh yellow-green and darker green, painted as clean solid leaf clusters with a simple highlight (not a realistic leaf-by-leaf texture), thick roots spreading at the bottom like feet, small tufts of moss and a few small pale linden blossoms. Whole tree visible, front-facing, seen from slightly above (classic JRPG 3/4 top-down), the roots at the bottom of the image, a single character, wide format (about 4:3).
-
-```
-
-
-
-### `tiller_retrat.png` — retrat de diàleg del Til·ler *(Versió del retrat genèric per a l'arbre. Puja el sprite NOU del Til·ler (el chibi) com a referència i, si pot ser, un retrat ja fet (p. ex. `art/germafrancesc_retrat.jpg`) per fixar l'estil i l'enquadrament. Surt a `art/tiller_retrat.png`; el joc el farà servir quan l'afegim a la taula de retrats.)*
-
-
-
-```
-
-Edit the attached reference image into a DIALOGUE PORTRAIT of the SAME character, the Gran Til·ler, the giant talking linden tree with a kind old wise man's face. Keep EXACTLY the same character and the same 'Chibi Adventure Sprite' style: the same big round friendly face carved in the bark, the same large glossy eyes, the thick moss eyebrows, the moss moustache, the root-and-bark beard, the same bark colours, the same bold clean black outline, medium-to-fine clean dark inner lines, two-tone cel shading with subtle smooth gradient highlights, no sketchy texture. Change ONLY the framing and the angle: a bust portrait, the face and the upper trunk only (the cut is at the top of the beard, where the trunk widens), square 1:1 image, the face filling about 75% of the image height and centered, with a part of the leafy canopy and one short branch-arm at the top and side of the frame; the face turned in a THREE-QUARTER VIEW to the viewer's right (about 35-40 degrees: both eyes still clearly visible, the nose and cheek in profile-ish perspective, the near side of the trunk closer to the viewer), the gaze directed to the right, a natural speaking expression (the mouth slightly open under the moss moustache, kind and slightly amused). Clean light from the top-front, no cast shadow. Isolated on a pure white background (#FFFFFF), no frame, no border, no text, no logo. A single character.
-
-```
-
-
-
-### Retrat del Pastor de Boira (el Germà Andreu transformat) — `art/retrats/pastor_boira.png`
-
-
-
-Per als diàlegs de la Cirosa i de la Gàbia, quan l'Andreu ja és el servent de l'Ocellaire. Adjunta **dues imatges**: (1) `assets/enemics/pastor_boira.webp` (el sprite del Pastor de Boira: dóna el personatge, la bufanda de boira, els ulls i les ulleres lluminoses i l'hàbit esquinçat) i (2) `assets/retrats/germa_andreu.webp` (el retrat normal de l'Andreu: dóna només l'**enquadrament, l'angle de tres quarts i la mida del cap**, perquè els dos retrats es vegin coherents en canviar de l'un a l'altre).
-
-
-
-```
-
-Edit the first attached reference image (the 'Fog Shepherd' sprite) into a DIALOGUE PORTRAIT of the SAME character: Brother Andreu after the fog has taken him, the Pastor de Boira. Keep EXACTLY the same character identity and the same 'Chibi Adventure Sprite' style as the first image: the same elderly face with the short grey hair, the same round glasses whose lenses glow a luminous lilac-violet (the eyes shining softly behind them), the same dark purple-black torn habit with the hood down, the same thick fluffy lilac scarf made of fog around the neck, the same small wisps of lilac mist drifting around the head and shoulders, the same bold clean black outline, medium-to-fine clean dark inner lines, two-tone cel shading with subtle smooth gradient highlights, no sketchy texture. The expression: the kind smile of the normal Brother Andreu has turned into a calm, wide, slightly too-perfect and unsettling smile, sure of himself and proud (the second attached image shows the normal Andreu: use it ONLY for the framing, the three-quarter angle and the head size, NOT for the colours or the clothes). Change ONLY the framing and the head angle: a bust portrait, head and shoulders only (the cut is at the upper chest), square 1:1 image, the head filling about 75% of the image height and centered; the head turned in a THREE-QUARTER VIEW to the viewer's right (about 35-40 degrees: the face and both glowing eyes still clearly visible, the far ear mostly hidden, the near shoulder closer to the viewer), the gaze directed to the right, slightly raised chin, the mouth slightly open as if speaking. Clean light from the top-front, no cast shadow; the only extra light is the soft lilac glow of the eyes and of the mist. The staff, the lantern and the hands are NOT shown. Isolated on a pure white background (#FFFFFF), no frame, no border, no text, no logo. A single character. Character: Brother Andreu as the Fog Shepherd, an elderly monk with grey hair and round glasses with glowing lilac lenses, a torn dark purple habit and a fluffy lilac fog scarf.
-
-```
-
-
-
-**Ja aplicat al joc:** el retrat és a `art/retrats/pastor_boira_retrat.jpg` i convertit a `assets/retrats/pastor_boira.webp` (fons i boires blanques tancades fets transparents). Surt als diàlegs de la Cirosa (quan puges i quan el venços), amb el parlant «Pastor de Boira»; als diàlegs de la Gàbia l'Andreu continua amb el retrat normal.
-
-
-
-### Retrat de la Carry — `art/retrats/carry_retrat.jpg`
-
-
-
-Usa el prompt genèric dels retrats (secció «Retrats dels diàlegs») amb l'sprite de la Carry (`art/personatges/carry.jpg`) com a referència i aquesta última línia:
-
-
-
-```
-
-Character: Carry, a very old, very thin and pale little woman with short white hair, a frail face with soft gentle wrinkles, sad kind eyes with dark rings and a worried small smile, a pale grey-lilac blouse buttoned to the neck with a small knitted shawl. Her cheekbones and neck are bony. No hat, no glasses.
-
-```
-
-
-
-Quan el tinguis a `art/retrats/`, afegeix `carry:'carry'` a la taula de `eines/convertir_retrats.js`, la clau `'carry'` a la llista de retrats de `js/assets.js` i executa `node eines/convertir_retrats.js`.
-
-
-
-### Retrat d'en Georgi de la Caseta — `art/retrats/jordi_caseta_retrat.png`
-
-
-
-**Ja aplicat al joc:** no s'ha generat: és el cap i les espatlles retallats del gràfic original (`art/personatges/jordi_caseta.jpg`), de cara i no de tres quarts, amb el fons fet transparent → `assets/retrats/jordi_caseta.webp`. Si en fas un amb el prompt genèric dels retrats, substitueix aquest.
-
-
-
-### Retrat de l'Home de la Tartana Verda — `art/retrats/home_carruatge_retrat.jpg`
-
-
-
-Usa el prompt genèric dels retrats (secció «Retrats dels diàlegs») amb l'sprite de l'home (`art/personatges/home_carruatge.jpg`) com a referència i aquesta última línia:
-
-
-
-```
-
-Character: the Man of the Green Tartana, a short, thin, slightly hunched old man, completely bald on top with tufts of messy grey hair over his very big ears, a big round red nose, bushy grey eyebrows, small lively eyes and a cheeky, warm grin with deep smile wrinkles; a dark green frock coat with the collar turned up over a lighter green waistcoat and a pale green shirt, a pair of brass steampunk driving goggles with round dark-green lenses hanging around his neck. No hat, no glasses on his face. NOTE: in the reference he faces the viewer's LEFT; in the portrait he must face the viewer's RIGHT.
-
-```
-
-
-
-**Ja aplicat al joc:** l'original és a `art/retrats/home_carruatge_retrat.jpg` i convertit a `assets/retrats/home_carruatge.webp` (`node eines/convertir_retrats.js home_carruatge`).
-
-### Retrat d'en Huri (el nen petit) — `art/retrats/nen_uri_retrat.jpg`
-
-Usa el prompt genèric dels retrats (secció «Retrats dels diàlegs») amb l'sprite d'en Huri (`art/personatges/nen_uri.jpg`) com a referència i aquesta última línia:
-
-```
-Character: Huri, a cheerful little young boy with tousled blond hair, large bright expressive chibi eyes, soft rosy cheeks and a warm innocent smile, wearing a simple medieval peasant boy's sky-blue tunic with a rounded collar.
-```
-
-Quan el tinguis a `art/retrats/`, executa `node eines/convertir_retrats.js nen_uri`.
-
-### Retrat d'en Fram (el nen valent) — `art/retrats/nen_flam_retrat.jpg`
-
-Usa el prompt genèric dels retrats (secció «Retrats dels diàlegs») amb l'sprite d'en Fram (`art/personatges/nen_flam.jpg`) com a referència i aquesta última línia:
-
-```
-Character: Fram, a lively and determined young boy with short spiky dark black hair, expressive dark chibi eyes, a bold, slightly cheeky grin, wearing a rustic medieval red tunic with a simple neckline.
-```
-
-Quan el tinguis a `art/retrats/`, executa `node eines/convertir_retrats.js nen_flam`.
-
-### Retrat d'en Sardi (el nen de les ulleres) — `art/retrats/nen_sardin_retrat.jpg`
-
-Usa el prompt genèric dels retrats (secció «Retrats dels diàlegs») amb l'sprite d'en Sardi (`art/personatges/nen_sardin.jpg`) com a referència i aquesta última línia:
-
-```
-Character: Sardi, a thoughtful and clever young boy with neat dark brown hair, round wire-rimmed spectacles/glasses, observant kind eyes shining behind the lenses, a gentle knowing smile, wearing a rustic dark green buttoned tunic.
-```
-
-Quan el tinguis a `art/retrats/`, executa `node eines/convertir_retrats.js nen_sardin`.
-
-### Retrat de l'Home de la Gàbia (l'Ocellaire) — `art/retrats/ocellaire_retrat.jpg`
-
-Boss final de la Gàbia. Adjunta dues imatges: (1) `assets/enemics/ocellaire.webp` (per a l'aparença, la gàbia-casc, els ulls lluminosos i la roba) i (2) un retrat de referència com `assets/retrats/germa_andreu.webp` (només per a l'enquadrament de bust 1:1, l'angle de tres quarts i la posició del cap).
-
-```
-Edit the first attached reference image (the Ocellaire / Cage Man) into a DIALOGUE PORTRAIT of the SAME character. Keep EXACTLY the same character identity and the same 'Chibi Adventure Sprite' style: a hulking, eerie hooded figure with an iron dome-shaped birdcage fitted over his head like an iron helmet/cage; through the dark iron bars of the cage, two pale-yellow eyes glow intensely in the darkness inside; heavy rustic iron collar and tattered dark purple-grey garments with chains across the shoulders; bold clean black outline, medium-to-fine clean dark inner lines, two-tone cel shading with subtle smooth gradient highlights, no sketchy texture. Change ONLY the framing and the angle: a bust portrait, head and shoulders only (the cut is at the upper chest), square 1:1 image, the cage-helmet filling about 75% of the image height and centered; the head turned in a THREE-QUARTER VIEW to the viewer's right (about 35-40 degrees: the cage structure in 3/4 perspective, both glowing yellow eyes clearly visible through the front bars), the gaze directed to the right, an ominous, mysterious, slightly tragic aura. Clean light from the top-front with the eerie glow emanating from inside the cage. The bone mace, hands and weapons are NOT shown. Isolated on a pure white background (#FFFFFF), no frame, no border, no text, no logo. A single character.
-```
-
-Quan el tinguis a `art/retrats/`, executa `node eines/convertir_retrats.js ocellaire`.
-
-### Retrat de l'Home del Raïm — `art/retrats/home_raim_retrat.jpg`
-
-Boss de l'Escalinata de la Casa Gran. Usa el prompt genèric dels retrats amb `art/personatges/home_raim.jpg` (o `home_raim_desperta.jpg`) com a referència:
-
-```
-Edit the attached reference image into a DIALOGUE PORTRAIT of the SAME character: the Grape Man (l'Home del Raïm), an ancient living stone-and-marble statue guardian. Keep EXACTLY the same character identity and 'Chibi Adventure Sprite' style: a noble, weathered sculpted marble face with chiseled features, blank ancient carved stone eyes, solemn stern expression (mouth slightly open as if speaking ancient words), curly stone hair crowned with sculpted marble grape clusters and vine leaves woven into his hair and short stone beard; broad carved stone shoulders and tunic collar; subtle stone crack lines and faint moss accents; bold clean black outline, cel-shaded stone tones (pale cream marble and ochre-grey shadows). Bust portrait, head and shoulders only, square 1:1 image, head filling about 75% of the image height and centered; turned in a THREE-QUARTER VIEW to the viewer's right (35-40 degrees), gaze to the right. No weapons or hands shown. Isolated on a pure white background (#FFFFFF), no frame, no text. A single character.
-```
-
-Quan el tinguis a `art/retrats/`, executa `node eines/convertir_retrats.js home_raim`.
-
-### Retrats pendents de personatges secundaris: Sansa, Neus i Senyor Moliner
-
-Si també en vols fer per a la resta de personatges que parlen al poble:
-
-- **Sansa** (`art/retrats/sansa_retrat.jpg`): el taverner i cuiner de la taverna de l'Hostatgeria.
-  `Character: Sansa, a hearty, stout, cheerful medieval tavernkeeper and cook, round ruddy face with thick dark eyebrows, bushy black moustache, broad welcoming smile, a white cook's apron over a brown rustic vest with an open collar.`
-- **Neus** (`art/retrats/neus_retrat.jpg`): mare de família de la plaça de Sant Antoni.
-  `Character: Neus, a kind and hardworking middle-aged village woman, dark brown hair gathered in a neat practical bun, warm caring brown eyes with gentle smile wrinkles, a humble terracotta-brown dress with a cream shawl pinned at the chest.`
-- **Senyor Moliner** (`art/retrats/marit_neus_retrat.jpg`): el moliner del poble, marit de la Neus.
-  `Character: Senyor Moliner, a sturdy and friendly village miller, short grey-flecked hair and light stubble dusted with a faint hint of white flour, warm lively eyes with crinkles, a durable coarse linen tunic with a loose collar.`
-

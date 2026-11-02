@@ -1025,6 +1025,7 @@ class ZonaBase extends Phaser.Scene {
         const vista = this.vista8;
         if (this.atacantFins && this.time.now < this.atacantFins) return;      // l'animació de l'atac no es talla
         if (caminant) {
+            this.ineu.setFlipX(false);
             // En canviar de vista caminant, el pas continua pel mateix fotograma (no torna a començar: es veia un salt)
             const a = this.ineu.anims, clau = 'caminar_' + vista, ara = a.isPlaying && a.currentAnim;
             if (ara && ara.key !== clau && ara.key.startsWith('caminar_') && a.currentFrame && this.anims.exists(clau)) {
@@ -1032,8 +1033,17 @@ class ZonaBase extends Phaser.Scene {
                 a.play({ key: clau, startFrame: Math.min(n - 1, a.currentFrame.index - 1) });
             } else a.play(clau, true);
         } else {
-            this.ineu.anims.stop();
-            this.ineu.setTexture('ineu_' + vista, quietIneu(vista));
+            const quiet = 'aturat_' + vista;
+            if (this.anims.exists(quiet)) {
+                this.ineu.setFlipX(DIRS_IDLE_MIRALL.has(vista));
+                if (!this.ineu.anims.isPlaying || !this.ineu.anims.currentAnim || this.ineu.anims.currentAnim.key !== quiet) {
+                    this.ineu.anims.play(quiet, true);
+                }
+            } else {
+                this.ineu.setFlipX(false);
+                this.ineu.anims.stop();
+                this.ineu.setTexture('ineu_' + vista, quietIneu());
+            }
         }
     }
 

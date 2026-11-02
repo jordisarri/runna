@@ -160,6 +160,7 @@ class EscenaUI extends Phaser.Scene {
         this.crearHUD();
         this.crearCaixaDialeg();
         this.crearMenu();
+        Sfx.init();
         this.crearControlsTactils();
         this.crearObjectes();
 
@@ -659,14 +660,27 @@ class EscenaUI extends Phaser.Scene {
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
             { text: 'Diari i mapa', fn: () => { this.tancarMenu(); this.obrirInventari('mapa'); } },
-            { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
+            { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } },
+            { text: 'Àudio', fn: () => {
+                Sfx.commutarSilenci();
+                Sfx.actualitzarIconaAltaveu(this.iconaAudio, AMPLE / 2 - 86, ALT / 2 + 172, 0x3a2412);
+                this.pintarSeleccio();
+            } }
         ];
         this.textOpcions = this.opcions.map((o, i) => {
-            const t = this.add.text(AMPLE / 2, ALT / 2 - 80 + i * 84, o.text, { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#3a2412', resolution: 2 })
-                .setOrigin(0.5).setInteractive({ useHandCursor: true })
+            const audio = i === 3, y = ALT / 2 - 80 + i * 84;
+            const t = this.add.text(audio ? AMPLE / 2 - 48 : AMPLE / 2, y, o.text, { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#3a2412', resolution: 2 })
+                .setOrigin(audio ? 0 : 0.5).setInteractive({ useHandCursor: true })
                 .on('pointerover', () => { this.seleccio = i; this.pintarSeleccio(); })
                 .on('pointerdown', () => this.executarOpcio(i));
             this.menu.add(t);
+            if (audio) {
+                this.iconaAudio = Sfx.crearIconaAltaveu(this, AMPLE / 2 - 86, y, 0x3a2412);
+                this.iconaAudio.setInteractive(new Phaser.Geom.Rectangle(AMPLE / 2 - 106, y - 20, 40, 40), Phaser.Geom.Rectangle.Contains)
+                    .on('pointerover', () => { this.seleccio = i; this.pintarSeleccio(); })
+                    .on('pointerdown', () => this.executarOpcio(i));
+                this.menu.add(this.iconaAudio);
+            }
             return t;
         });
         this.seleccio = 0;

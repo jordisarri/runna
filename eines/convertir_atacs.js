@@ -4,8 +4,8 @@
  *  - art/ineu/atac/Ineu-iso_attack_<dir>*.png  ->  assets/ineu/atac_<dir>.webp
  *    Les fulles (4x4 fotogrames de 256, l'Ineu sense arma) es normalitzen: mateix factor d'escala per a totes les direccions
  *    (cos de ATAC_ALT píxels), centrades i amb els peus a y = PEUS, igual que les fulles de caminar.
- *    L'atac amunt no surt d'aquí: és la fulla ja normalitzada i retocada a mà (assets/ineu/atac_up.png),
- *    passada directament a WebP:  ffmpeg -i atac_up.png -c:v libwebp -quality 90 -pix_fmt yuva420p atac_up.webp
+ *    Es desatura lleugerament la gamma dels marrons perquè l'hàbit encaixi amb caminar i idle. L'atac amunt es conserva
+ *    a partir de la còpia retocada a mà art/ineu/atac/atac_up-abans-colors.webp.
  *  - art/armes/espasa.jpg  ->  assets/armes/espasa.webp (fons blanc fet transparent, retallada i reduïda a AMPLADA_ESPASA * RES)
  */
 const { spawn } = require('child_process');
@@ -30,6 +30,24 @@ const treureFonsBlanc = font.slice(i0, font.indexOf('// ---------- Dibuixos prov
 const pagina = `
 ${treureFonsBlanc}
 const CEL = ${CEL}, COLS = 4, N = 16;
+const ajustarMarrons = pixels => {
+    for (let i = 0; i < pixels.length; i += 4) {
+        if (!pixels[i + 3]) continue;
+        const r = pixels[i], g = pixels[i + 1], b = pixels[i + 2];
+        const max = Math.max(r, g, b), min = Math.min(r, g, b), delta = max - min;
+        if (!delta) continue;
+        const v = max / 255, s = delta / max;
+        let h;
+        if (max === r) h = 60 * (((g - b) / delta) % 6);
+        else if (max === g) h = 60 * ((b - r) / delta + 2);
+        else h = 60 * ((r - g) / delta + 4);
+        if (h < 0) h += 360;
+        if (h < 8 || h > 35 || s < 0.25 || v < 0.2 || v > 0.68) continue;
+        pixels[i] = Math.round(max - (max - r) * 0.82);
+        pixels[i + 1] = Math.round(max - (max - g) * 0.82);
+        pixels[i + 2] = Math.round(max - (max - b) * 0.82);
+    }
+};
 const mediana = v => v.slice().sort((a, b) => a - b)[Math.floor(v.length / 2)];
 const carrega = async url => { const im = new Image(); im.src = url; await im.decode(); return im; };
 const alWebp = async (canvas, q) => {
@@ -45,6 +63,8 @@ window.fulles = async (fitxers, q) => {
         const c = document.createElement('canvas'); c.width = im.width; c.height = im.height;
         const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0);
         const d = x.getImageData(0, 0, c.width, c.height);
+        ajustarMarrons(d.data);
+        x.putImageData(d, 0, 0);
         const cs = c.width / COLS, peus = [], alts = [];
         for (let i = 4; i < N; i++) {                      // sense els fotogrames d'alçar el braç: mesura el cos sol
             const cx = (i % COLS) * cs, cy = Math.floor(i / COLS) * cs;
@@ -72,6 +92,15 @@ window.fulles = async (fitxers, q) => {
         info[dir] = { peus: f.peus, alt: f.alt, escala: +e.toFixed(3) };
     }
     return { sortida, info };
+};
+window.atacAmuntWebp = async (url, q) => {
+    const im = await carrega(url);
+    const c = document.createElement('canvas'); c.width = im.width; c.height = im.height;
+    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0);
+    const d = x.getImageData(0, 0, c.width, c.height);
+    ajustarMarrons(d.data);
+    x.putImageData(d, 0, 0);
+    return alWebp(c, q);
 };
 window.espasa = async (fitxer, ample, q) => {
     const im = await carrega('/art/armes/' + fitxer);
@@ -127,6 +156,12 @@ const dorm = ms => new Promise(r => setTimeout(r, ms));
             total += d;
             console.log(`atac_${dir}.webp`.padEnd(24), (a / 1024).toFixed(0).padStart(5), 'KB ->', (d / 1024).toFixed(0).padStart(4), 'KB', JSON.stringify(info[dir]));
         }
+        const amunt = await executa(`window.atacAmuntWebp('/art/ineu/atac/atac_up-abans-colors.webp', ${QUALITAT})`);
+        const destAmunt = path.join(ARREL, 'assets/ineu', 'atac_up.webp');
+        fs.writeFileSync(destAmunt, Buffer.from(amunt, 'base64'));
+        const midaAmunt = fs.statSync(destAmunt).size;
+        total += midaAmunt;
+        console.log('atac_up.webp'.padEnd(24), 'còpia manual ->', (midaAmunt / 1024).toFixed(0).padStart(4), 'KB');
         console.log('Total atacs:', (total / 1024).toFixed(0), 'KB');
 
         const e = await executa(`window.espasa('espasa.jpg', ${AMPLADA_ESPASA * RES}, ${QUALITAT})`);

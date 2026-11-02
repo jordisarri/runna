@@ -14,18 +14,19 @@ class MusicaStream {
         const ctx = game.sound && game.sound.context;
         if (ctx) {
             try {
+                Sfx.init();
                 this.gain = ctx.createGain(); this.gain.gain.value = volum;
-                ctx.createMediaElementSource(a).connect(this.gain); this.gain.connect(ctx.destination);
+                ctx.createMediaElementSource(a).connect(this.gain); this.gain.connect(Sfx.connect(ctx));
             } catch (e) { this.gain = null; }
         }
-        if (!this.gain) a.volume = Math.min(1, volum);
+        if (!this.gain) a.volume = Sfx.silenciat ? 0 : Math.min(1, volum);
         this.engega();
     }
     get volume() { return this.volum; }
     get isPlaying() { return !this.destruida; }
     setVolume(v) {
         this.volum = v;
-        if (this.gain) this.gain.gain.value = v; else this.el.volume = Math.min(1, Math.max(0, v));
+        if (this.gain) this.gain.gain.value = v; else this.el.volume = Sfx.silenciat ? 0 : Math.min(1, Math.max(0, v));
     }
     // El navegador no deixa sonar fins que l'usuari toca alguna cosa: s'hi torna a provar al primer toc o tecla
     engega() {
@@ -211,10 +212,22 @@ const Joc = {
         if (Joc.recursosLlestos) { fet(); return; }
         (Joc.esperantRecursos = Joc.esperantRecursos || []).push(fet);
         if (scene.avisRecursos && scene.avisRecursos.active) return;
-        scene.add.rectangle(AMPLE / 2, ALT / 2, AMPLE * 3, ALT * 3, 0x000000, 1).setDepth(99999).setScrollFactor(0).setInteractive();   // tapa el que hi hagi (i els tocs)
-        const t = scene.avisRecursos = scene.add.text(AMPLE / 2, ALT / 2, '', estilText(26, '#f2e6c8', { stroke: '#000000', strokeThickness: 6, align: 'center' }))
+        // Deixa visible la portada o el pròleg mentre es completa la càrrega iniciada en segon pla.
+        const centreY = scene.scene.key === 'Titol' ? ALT * 0.58 : ALT - 70;
+        scene.add.rectangle(AMPLE / 2, ALT / 2, AMPLE * 3, ALT * 3, 0x000000, 0.001).setDepth(99999).setScrollFactor(0).setInteractive();
+        scene.add.rectangle(AMPLE / 2, centreY, 440, 94, 0x1a120b, 0.92).setDepth(100000).setScrollFactor(0);
+        const t = scene.avisRecursos = scene.add.text(AMPLE / 2, centreY - 19, '', estilText(22, '#f2e6c8', { align: 'center' }))
             .setOrigin(0.5).setDepth(100000).setScrollFactor(0);
-        const posa = () => t.active && t.setText('Preparant el Miracle...\n' + Math.round((Joc.progresRecursos || 0) * 100) + ' %');
+        scene.add.rectangle(AMPLE / 2 - 175, centreY + 22, 350, 8, 0x5a4934)
+            .setOrigin(0, 0.5).setDepth(100001).setScrollFactor(0);
+        const barra = scene.add.rectangle(AMPLE / 2 - 175, centreY + 22, 0, 8, 0xd4af37)
+            .setOrigin(0, 0.5).setDepth(100002).setScrollFactor(0);
+        const posa = () => {
+            if (!t.active) return;
+            const progr = Math.max(0, Math.min(1, Joc.progresRecursos || 0));
+            t.setText('Preparant el Miracle... ' + Math.round(progr * 100) + ' %');
+            barra.width = 350 * progr;
+        };
         posa();
         scene.time.addEvent({ delay: 150, loop: true, callback: posa });
     },
@@ -301,7 +314,7 @@ const PROLEG_QUADRES = [
     { text: "Fa tres segles, quan el món encara tremolava de pregàries, un firaire de capa negra pujava cada primavera al Miracle amb gàbies d'ocells que cantaven amb veu de persona: l'Ocellaire. I els nens que l'escoltaven perdien el riure per sempre.", dibuix: 'ocellaire', vitrall: [0.515, 0.50, 1.95] },
     { text: "Pastors i monjos s'alçaren contra ell i el van tancar dins la seva pròpia gàbia, al més profund de la terra. Els monjos van segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la van fer dormir entre pedres, a l'espera del dia en què la foscor tornés.", dibuix: 'segell', vitrall: [0.515, 0.50, 1.95] },
     { text: "Però la foscor no oblida. Fa tres nits, una boira violeta i glaçada s'ha alçat de sota terra: marceix els horts, enterboleix les aigües i ha fet emmudir l'orgue sagrat del Santuari.", dibuix: 'boira', vitrall: [0.512, 0.67, 2.5] },
-    { text: "I cada nit, la boira reclama un nen.\nPrimer l'Huri i el Fram, a Sant Benet.\nI ara, en aquesta nit maleïda... el Sardi, el nebot de les sacerdotesses.", dibuix: 'nens', vitrall: [0.56, 0.555, 3.2] },
+    { text: "I cada nit, la boira reclama un nen.\nPrimer l'Huri i el Fram, a Sant Benet.\nI ara, en aquesta nit maleïda... el Sardi.", dibuix: 'nens', vitrall: [0.56, 0.555, 3.2] },
     { text: "Quan l'alba torna a incendiar el cel del Miracle, un jove monjo desperta al Monestir: l'Ineu.\nEl destí l'ha triat, encara que ell no ho sàpiga. El Pare Jordi l'espera a la Plaça.", dibuix: 'mati', vitrall: [0.502, 0.58, 3.0] }
 ];
 

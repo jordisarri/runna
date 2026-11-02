@@ -628,6 +628,7 @@ Object.assign(ZonaBase.prototype, {
         this.atacantFins = 0;
         this.vista8Manual = true;
         this.posarDireccio(this.direccio, false, vista);
+        this.ineu.setFlipX(false);
         this.atacantFins = this.time.now + ATAC_INEU.fotogrames.length / ATAC_INEU.fps * 1000;
         const net = this.capaArma(vista, runna, agil);
         this.ineu.anims.play('atac_' + vista, true);

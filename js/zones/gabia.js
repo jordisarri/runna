@@ -247,7 +247,7 @@ class ZonaGirgoles extends ZonaBase {
         const o = ctx.createOscillator(), g = ctx.createGain();
         o.type = 'sine'; o.frequency.value = 260 + n * 70;
         g.gain.setValueAtTime(0.0001, ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.7);
-        o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime + 0.75);
+        o.connect(g); g.connect(Sfx.connect(ctx)); o.start(); o.stop(ctx.currentTime + 0.75);
     }
 
     actualitzar() {

@@ -33,6 +33,7 @@ class EscenaTitol extends Phaser.Scene {
         this.videoBucle = this.crearVideo('video_bucle', 0).setVisible(false);
         this.videoIntro = this.crearVideo('video_intro', 1).setVisible(false);
         this.construirMenu();
+        Sfx.init();
         Joc.precarregarMusiques(this);       // la resta de cançons, en segon pla mentre es mira la intro
 
         this.input.keyboard.on('keydown', e => this.tecla(e));
@@ -81,10 +82,20 @@ class EscenaTitol extends Phaser.Scene {
         const fons = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000).setOrigin(0);
         const t = this.add.text(AMPLE / 2, ALT / 2, 'Toca la pantalla per començar',
             { fontFamily: FONT_TEXT, fontSize: '44px', fontStyle: 'bold', color: '#e8d9b0', resolution: 2 }).setOrigin(0.5);
-        const so = this.add.text(AMPLE / 2, ALT / 2 + 56, '♪ amb so',
-            { fontFamily: FONT_TEXT, fontSize: '28px', fontStyle: 'italic', color: '#8a8070', resolution: 2 }).setOrigin(0.5);
+        const so = this.add.text(AMPLE / 2 + 18, ALT * 0.68, '',
+            { fontFamily: FONT_TEXT, fontSize: '28px', fontStyle: 'italic', color: '#c4b38f', resolution: 2 })
+            .setOrigin(0.5).setInteractive({ useHandCursor: true });
+        const iconaSo = Sfx.crearIconaAltaveu(this, AMPLE / 2 - 132, ALT * 0.68, 0xc4b38f);
+        const actualitzarSo = () => {
+            so.setText(Sfx.silenciat ? 'Àudio desactivat' : 'Àudio activat');
+            Sfx.actualitzarIconaAltaveu(iconaSo, AMPLE / 2 - 132, ALT * 0.68, 0xc4b38f);
+        };
+        iconaSo.setInteractive(new Phaser.Geom.Rectangle(AMPLE / 2 - 152, ALT * 0.68 - 20, 40, 40), Phaser.Geom.Rectangle.Contains)
+            .on('pointerdown', (pointer, x, y, event) => { event.stopPropagation(); Sfx.commutarSilenci(); actualitzarSo(); });
+        so.on('pointerdown', () => { Sfx.commutarSilenci(); actualitzarSo(); });
+        actualitzarSo();
         this.tweens.add({ targets: t, alpha: 0.35, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
-        this.portada.add([fons, t, so]);
+        this.portada.add([fons, t, iconaSo, so]);
     }
 
     tecla(e) {

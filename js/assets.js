@@ -1,9 +1,7 @@
 /**
  * GRÀFICS
- * - CATALEG: PNG que el joc intenta carregar de la carpeta assets/.
- *   Si un PNG no hi és, es dibuixa un marcador provisional (funció `provisional`).
- *   Quan hi posis el PNG definitiu (encara que tingui fons blanc), apareixerà sol.
- * - Els PNG es redueixen a la mida de joc i se'ls treu el fons blanc automàticament.
+ * - CATALEG: imatges de la carpeta assets/. Si una entrada no té fitxer o no es pot carregar, es dibuixa el provisional.
+ * - Els gràfics amb fons blanc es netegen; els WebP ja venen nets i retallats.
  * - Les textures es creen a resolució RES (x2) i es mostren a escala 1/RES perquè es vegin nítides.
  */
 const RES = 2;
@@ -118,7 +116,7 @@ const CATALEG = [
     { key: 'ocellaire_idle2', file: 'assets/enemics/ocellaire_idle2.webp', amplada: 90, cru: true },      // idle: fotogrames 2 i 3 (el 1 és el sprite base); mateixa mida i recorte
     { key: 'ocellaire_idle3', file: 'assets/enemics/ocellaire_idle3.webp', amplada: 90, cru: true },
     { key: 'ocellaire_rugit', file: 'assets/enemics/ocellaire_rugit.webp', amplada: 90, cru: true },      // pose de rugit (canvis de fase), al mateix llenç de 180x329 que l'idle
-    { key: 'ocellaire_cansat', file: 'assets/enemics/ocellaire_cansat.webp', amplada: 90, cru: true },    // ajupit i cansat (el moment de colpejar-li el cap), al mateix llenç; si no hi és, no passa res
+    { key: 'ocellaire_cansat', file: null, amplada: 90, cru: true },    // gràfic opcional; si no hi és, no passa res
     { key: 'ratpenat',       file: 'assets/enemics/ratpenat.png',       amplada: 64, provisional: (c, w) => dibuixarRatpenat(c, w) },
     { key: 'ferralla',       file: 'assets/enemics/ferralla.png',       amplada: 70, provisional: (c, w) => dibuixarFerralla(c, w) },
     { key: 'capoll',         file: 'assets/enemics/capoll.png',         amplada: 70, provisional: (c, w) => dibuixarCapoll(c, w) },
@@ -153,7 +151,6 @@ const CATALEG = [
     { key: 'jaumeta',        file: 'assets/personatges/jaumeta.webp',        amplada: 89, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
     { key: 'arma_tiller', file: 'assets/armes/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/armes/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
-    { key: 'espasa_dib', file: 'assets/armes/espasa_dib.webp', amplada: 17, provisional: (c, w) => dibuixarEspasaSola(c, w) },   // Runna dibuixada a mà (la mateixa que va clavada al dolmen), per quan vola
     { key: 'ineu_aixeca', file: 'assets/ineu/aixeca_espasa.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant Runna, mirant amunt (ja amb fons transparent)
     { key: 'ineu_aixeca_basto', file: 'assets/ineu/aixeca_basto.webp', amplada: 83, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // el mateix, alçant el bastó de pelegrí que li dona el Germà Andreu
     { key: 'ineu_aixeca_tiler', file: 'assets/ineu/aixeca_tiler.webp', amplada: 96, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // ... i alçant la branca del Gran Til·ler
@@ -168,25 +165,30 @@ const CATALEG = [
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
 ['ineu', 'pare_jordi', 'germa_andreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'garf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
- 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta',
- 'nen_uri', 'nen_flam', 'nen_sardin', 'ocellaire', 'home_raim', 'sansa', 'neus', 'marit_neus']
+ 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
 /**
  * SPRITES DE L'INEU: 8 direccions (assets/ineu/<direccio>.webp, fons transparent).
- * Cada fulla és una quadrícula 4x4 de 16 fotogrames de 256x256 (cicle de caminar) amb els peus a y~240.
- * Els originals (Ineu-iso_walk_<dir>-v1.png, amb fons blanc) es van processar amb eines/netejar_ineu.js.
+ * Cada fulla és una quadrícula 4x2 de 8 fotogrames de 256x256 (cicle de caminar).
+ * Els originals són a art/ineu_caminar/ i es converteixen amb eines/convertir_webp.js.
  */
 const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast'];
+const IDLE_INEU = {
+    down: 'down', up: 'up', left: 'right', right: 'right',
+    southwest: 'southeast', southeast: 'southeast', northwest: 'northeast', northeast: 'northeast'
+};
+const DIRS_IDLE_MIRALL = new Set(['left', 'southwest', 'northwest']);
 const SPRITE_INEU = {
     ample: 256, alt: 256, peus: 240,
     alcada: 142,          // alçada del fotograma en píxels de joc (el personatge fa uns 125)
     fps: 14,
-    // Les vistes cardinals tenen més passos dins els 16 fotogrames i amb 14 fps les cames fan passetes curtes i ràpides: van més lentes
-    fpsVista: { down: 8, up: 8, left: 8, right: 8 },
+    fpsAturat: 3,
+    // Les vistes laterals tenen 16 fotogrames; mantenim una durada de cicle semblant a les altres vistes cardinals.
+    fpsVista: { down: 8, up: 8, left: 16, right: 16 },
     quiet: 2,             // fotograma de repòs de cada direcció
-    // Memòria: les fulles (1024x1024, cel·les de 256) es redueixen en carregar a cel·les de 192 (Grafics.reduirIneu): de 4 a 2,25 MB
-    // cadascuna. Totes les mides d'aquí (i les de l'arma, atac_arma.js) continuen en píxels de la cel·la de 256; on cal píxels de la
+    // Memòria: les fulles de l'Ineu es redueixen en carregar a cel·les de 192.
+    // Totes les mides d'aquí (i les de l'arma, atac_arma.js) continuen en píxels de la cel·la de 256; on cal píxels de la
     // textura de veritat, es multiplica per k
     k: 0.75
 };
@@ -201,8 +203,8 @@ const ATAC_INEU = {
     fps: 40                                                              // 16 fotogrames a 40 fps = 0,4 s (el mateix que abans amb 10 a 28)
 };
 // Octants de moviment (angle en pantalla, y cap avall) -> direcció del sprite
-// Fotograma de repòs d'una vista (a la fulla de perfil és el de les cames més juntes, calculat en carregar-la)
-function quietIneu(vista) { return (vista === 'left' || vista === 'right') && Grafics.perfilNou ? Grafics.quietPerfil : SPRITE_INEU.quiet; }
+// Fotograma de repòs de les vistes de caminar
+function quietIneu() { return SPRITE_INEU.quiet; }
 const OCTANTS_INEU = ['right', 'southeast', 'down', 'southwest', 'left', 'northwest', 'up', 'northeast'];
 
 const Grafics = {
@@ -225,9 +227,11 @@ const Grafics = {
                 if (CATALEG.some(i => i.key === f.key) && /\.(png|webp)$/.test(f.url)) scene.load.image(f.key + '__jpg', f.url.replace(/\.(png|webp)$/, '.jpg'));
             });
         }
-        CATALEG.filter(item => Grafics.esInicial(item) === (part === 'inici')).forEach(item => scene.load.image(item.key, item.file));
+        CATALEG.filter(item => Grafics.esInicial(item) === (part === 'inici')).forEach(item => {
+            if (item.file) scene.load.image(item.key, item.file);
+            else if (!Grafics.faltants.includes(item.key)) Grafics.faltants.push(item.key);
+        });
         if (part === 'inici') return;
-        scene.load.image('ineu_perfil_font', 'assets/ineu/costat.webp');
         scene.load.spritesheet('visitant_zombi', 'assets/enemics/visitant_zombi.webp', { frameWidth: 127, frameHeight: 209 });      // el visitant (turista zombi) caminant, de cara (4x4 fotogrames): serveix per a totes les direccions
         scene.load.spritesheet('pallofa_cami', 'assets/personatges/pallofa_cami.webp', { frameWidth: 135, frameHeight: 140 });      // el Pallofa caminant cap a la dreta (4x4 fotogrames); es gira per anar cap a l'esquerra
         scene.load.spritesheet('pare_jordi_camina', 'assets/personatges/pare_jordi_camina.webp', { frameWidth: 200, frameHeight: 290 });
@@ -237,8 +241,12 @@ const Grafics = {
         scene.load.spritesheet('isidre_camina', 'assets/personatges/isidre_camina.webp', { frameWidth: 190, frameHeight: 285 });
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
-            scene.load.spritesheet('ineu_' + dir, `assets/ineu/${dir}.webp`, mida);
-            scene.load.spritesheet('ineu_atac_' + dir, `assets/ineu/atac_${dir}.webp`, mida);
+            scene.load.spritesheet('ineu_' + dir, `assets/ineu/${dir}.webp?v=2611021121`, mida);
+            scene.load.spritesheet('ineu_atac_' + dir, `assets/ineu/atac_${dir}.webp?v=2611021132`, mida);
+        });
+        [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
+            const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
+            scene.load.spritesheet('ineu_idle_' + dir, `assets/ineu/idle_${dir}.webp?v=2611021121`, mida);
         });
     },
 
@@ -338,7 +346,6 @@ const Grafics = {
             const t0 = performance.now();
             while (k < items.length && performance.now() - t0 < 10) Grafics.prepararItem(scene, items[k++]);
             if (k < items.length) { scene.time.delayedCall(0, tros); return; }
-            Grafics.perfilIneu(scene);
             Grafics.reduirIneu(scene);
             Grafics.atacsVista = new Set(DIRS_INEU.filter(d => scene.textures.exists('ineu_atac_' + d) && !Grafics.faltants.includes('ineu_atac_' + d)));
             Grafics.animacions(scene);
@@ -376,102 +383,15 @@ const Grafics = {
         }
     },
 
-    // Caminar cap a l'esquerra i la dreta: una sola fulla (art/ineu/caminar/Ineu-iso_walk_right-v2.png: 16 fotogrames en 4x4, mirant a la dreta, fons blanc).
-    // Es neteja, s'escala i es centra com les altres fulles (cel·les de 256, peus a y=240) i se'n fa el mirall per a l'esquerra.
-    perfilIneu(scene) {
-        Grafics.perfilNou = false;
-        if (!scene.textures.exists('ineu_perfil_font') || Grafics.faltants.includes('ineu_perfil_font')) return;
-        try {
-            const font = scene.textures.get('ineu_perfil_font').getSourceImage();
-            const CEL = 256, COLS = 4, N = 16;
-            const c0 = document.createElement('canvas');
-            c0.width = font.width; c0.height = font.height;
-            const x0 = c0.getContext('2d', { willReadFrequently: true });
-            x0.drawImage(font, 0, 0);
-            const img = x0.getImageData(0, 0, c0.width, c0.height);
-            treureFonsBlanc(img.data, c0.width, c0.height);
-            x0.putImageData(img, 0, 0);
-
-            // Caixa del personatge a cada fotograma
-            const caixes = [];
-            for (let i = 0; i < N; i++) {
-                const cx = (i % COLS) * CEL, cy = Math.floor(i / COLS) * CEL;
-                let ax = CEL, ay = CEL, bx = -1, by = -1;
-                for (let y = 0; y < CEL; y++) for (let x = 0; x < CEL; x++) {
-                    if (img.data[((cy + y) * c0.width + cx + x) * 4 + 3] > 24) { if (x < ax) ax = x; if (x > bx) bx = x; if (y < ay) ay = y; if (y > by) by = y; }
-                }
-                caixes.push({ ax, ay, bx, by });
-            }
-            // Els fotogrames originals no estan ben alineats entre ells: el cap puja i baixa sense ordre (fins a 4 px)
-            // i l'alçada del cos varia (159-164 px). Es mesura cada fotograma per separat (vores amb cobertura, no un
-            // sol píxel solt, i centre del cap ponderat per l'alfa) i es redibuixa perquè el cap i els peus quedin
-            // el cap a la mateixa x, UNA sola escala per a tots els fotogrames (reescalar cada un per separat feia tremolar el cos de dalt a baix)
-            // i els peus només corregeixen la meitat del rebot natural del pas. Així al caminar no tremola.
-            const mides = [];
-            for (let i = 0; i < N; i++) {
-                const cx = (i % COLS) * CEL, cy = Math.floor(i / COLS) * CEL;
-                const fila = [];
-                for (let y = 0; y < CEL; y++) {
-                    let s = 0;
-                    for (let x = 0; x < CEL; x++) s += img.data[((cy + y) * c0.width + cx + x) * 4 + 3];
-                    fila.push(s / 255);
-                }
-                const dalt = fila.findIndex(v => v >= 10);
-                let baix = CEL - 1;
-                while (baix > dalt && fila[baix] < 10) baix--;
-                let sx = 0, sa = 0;
-                for (let y = dalt; y < dalt + 35; y++) for (let x = 0; x < CEL; x++) {
-                    const a = img.data[((cy + y) * c0.width + cx + x) * 4 + 3];
-                    sx += x * a; sa += a;
-                }
-                mides.push({ dalt, baix, cap: sx / sa });
-            }
-            const mediana = v => v.slice().sort((a, b) => a - b)[Math.floor(v.length / 2)];
-            const alt = mediana(mides.map(m => m.baix - m.dalt));
-            const centre = caixes.reduce((t, c) => t + (c.ax + c.bx) / 2, 0) / N;
-            const desvCap = centre - mides.reduce((t, m) => t + m.cap, 0) / N;      // el cos queda on era abans
-            const baixMed = mediana(mides.map(m => m.baix));
-            const e = (SPRITE_INEU.peus - 8) / alt;      // mateixa alçada que les altres fulles (~225 de 256)
-            // Fotograma de repòs: aquell en què les cames estan més juntes (caixa més estreta)
-            Grafics.quietPerfil = caixes.reduce((m, c, i) => (c.bx - c.ax < caixes[m].bx - caixes[m].ax ? i : m), 0);
-
-            const fes = mirall => {
-                const out = document.createElement('canvas');
-                out.width = COLS * CEL; out.height = Math.ceil(N / COLS) * CEL;
-                const o = out.getContext('2d');
-                o.imageSmoothingQuality = 'high';
-                for (let i = 0; i < N; i++) {
-                    const cel = document.createElement('canvas');
-                    cel.width = CEL; cel.height = CEL;
-                    const m = mides[i];
-                    const cc = cel.getContext('2d');
-                    cc.imageSmoothingQuality = 'high';
-                    cc.drawImage(c0, (i % COLS) * CEL, Math.floor(i / COLS) * CEL, CEL, CEL,
-                        CEL / 2 - (m.cap + desvCap) * e, SPRITE_INEU.peus - (baixMed + 0.5 * (m.baix - baixMed)) * e, CEL * e, CEL * e);
-                    const dx = (i % COLS) * CEL, dy = Math.floor(i / COLS) * CEL;
-                    if (mirall) { o.save(); o.translate(dx + CEL, dy); o.scale(-1, 1); o.drawImage(cel, 0, 0); o.restore(); }
-                    else o.drawImage(cel, dx, dy);
-                }
-                return out;
-            };
-            [['ineu_right', false], ['ineu_left', true]].forEach(([clau, mirall]) => {
-                if (scene.textures.exists(clau)) scene.textures.remove(clau);
-                const t = scene.textures.addCanvas(clau, fes(mirall));
-                for (let i = 0; i < N; i++) t.add(i, 0, (i % COLS) * CEL, Math.floor(i / COLS) * CEL, CEL, CEL);
-            });
-            Grafics.perfilNou = true;
-        } catch (e) {
-            Grafics.pixelsBloquejats = true;      // sense lectura de píxels: es queden les fulles antigues
-        }
-    },
-
-    // Redueix les fulles de l'Ineu a SPRITE_INEU.k (vegeu SPRITE_INEU), i treu la imatge font de les de perfil, que ja no cal
+    // Redueix les fulles de l'Ineu a SPRITE_INEU.k (vegeu SPRITE_INEU).
     reduirIneu(scene) {
         const tm = scene.textures, k = SPRITE_INEU.k, CEL = SPRITE_INEU.ample, C2 = Math.round(CEL * k);
-        DIRS_INEU.forEach(dir => ['ineu_' + dir, 'ineu_atac_' + dir].forEach(clau => {
+        const claus = DIRS_INEU.reduce((llista, dir) => llista.concat(['ineu_' + dir, 'ineu_atac_' + dir]), []);
+        [...new Set(Object.values(IDLE_INEU))].forEach(dir => claus.push('ineu_idle_' + dir));
+        claus.forEach(clau => {
             if (!tm.exists(clau) || Grafics.faltants.includes(clau)) return;
             const font = tm.get(clau).getSourceImage(), cols = Math.round(font.width / CEL), files = Math.round(font.height / CEL);
-            if (font.width !== cols * CEL) return;                    // ja reduïda, o d'una altra mida
+            if (font.width !== cols * CEL) return; // ja reduïda, o d'una altra mida
             const cv = document.createElement('canvas');
             cv.width = cols * C2; cv.height = files * C2;
             const c = cv.getContext('2d');
@@ -481,8 +401,7 @@ const Grafics = {
             if (font instanceof HTMLCanvasElement) { font.width = 0; font.height = 0; }
             const t = tm.addCanvas(clau, cv);
             for (let i = 0; i < cols * files; i++) t.add(i, 0, (i % cols) * C2, Math.floor(i / cols) * C2, C2, C2);
-        }));
-        if (tm.exists('ineu_perfil_font') && Grafics.perfilNou) tm.remove('ineu_perfil_font');
+        });
     },
 
     // Animacions de caminar de l'Ineu (són globals: es creen una sola vegada)
@@ -523,10 +442,21 @@ const Grafics = {
         DIRS_INEU.forEach(dir => {
             const key = 'caminar_' + dir;
             if (scene.anims.exists(key) || !scene.textures.exists('ineu_' + dir)) return;
+            const fotogrames = dir === 'left' || dir === 'right' ? 16 : 8;
             scene.anims.create({
                 key,
-                frames: scene.anims.generateFrameNumbers('ineu_' + dir, { start: 0, end: 15 }),
+                frames: scene.anims.generateFrameNumbers('ineu_' + dir, { start: 0, end: fotogrames - 1 }),
                 frameRate: SPRITE_INEU.fpsVista[dir] || SPRITE_INEU.fps,
+                repeat: -1
+            });
+        });
+        DIRS_INEU.forEach(dir => {
+            const key = 'aturat_' + dir, textura = 'ineu_idle_' + IDLE_INEU[dir];
+            if (scene.anims.exists(key) || !scene.textures.exists(textura)) return;
+            scene.anims.create({
+                key,
+                frames: scene.anims.generateFrameNumbers(textura, { start: 0, end: 7 }),
+                frameRate: SPRITE_INEU.fpsAturat,
                 repeat: -1
             });
         });

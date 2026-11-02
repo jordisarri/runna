@@ -537,7 +537,7 @@ class EscenaPingPong extends Phaser.Scene {
         g.gain.setValueAtTime(0.0001, ctx.currentTime);
         g.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.01);
         g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + (n <= 2 ? 0.12 : 0.4));
-        o.connect(g); g.connect(ctx.destination);
+        o.connect(g); g.connect(Sfx.connect(ctx));
         o.start(); o.stop(ctx.currentTime + 0.45);
     }
 }

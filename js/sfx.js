@@ -6,25 +6,75 @@
 const Sfx = {
     ctx: null,
     mestre: null,
+    sortida: null,
+    silenciat: null,
     soroll: null,
     ultim: {},
 
+    carregarPreferencia() {
+        if (this.silenciat !== null) return;
+        try { this.silenciat = localStorage.getItem('runna_silenciat') === 'true'; }
+        catch (e) { this.silenciat = false; }
+    },
+
     init() {
+        this.carregarPreferencia();
         if (this.mestre) return true;
         const c = (typeof game !== 'undefined' && game.sound && game.sound.context) || null;
         if (!c) return false;
         this.ctx = c;
+        this.sortida = c.createGain();
+        this.sortida.gain.value = this.silenciat ? 0 : 1;
+        this.sortida.connect(c.destination);
         const comp = c.createDynamicsCompressor();
         const g = c.createGain();
         g.gain.value = 0.7;
         g.connect(comp);
-        comp.connect(c.destination);
+        comp.connect(this.sortida);
         this.mestre = g;
+        if (game.sound) game.sound.setMute(this.silenciat);
         const b = c.createBuffer(1, c.sampleRate, c.sampleRate);
         const d = b.getChannelData(0);
         for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
         this.soroll = b;
         return true;
+    },
+
+    connect(ctx) {
+        return this.init() && this.ctx === ctx ? this.sortida : ctx.destination;
+    },
+
+    crearIconaAltaveu(scene, x, y, color) {
+        const icona = scene.add.graphics();
+        return this.actualitzarIconaAltaveu(icona, x, y, color);
+    },
+
+    actualitzarIconaAltaveu(icona, x, y, color) {
+        icona.clear();
+        icona.fillStyle(color, 1);
+        icona.fillPoints([
+            { x: x - 13, y: y - 5 }, { x: x - 7, y: y - 5 },
+            { x: x + 1, y: y - 12 }, { x: x + 1, y: y + 12 },
+            { x: x - 7, y: y + 5 }, { x: x - 13, y: y + 5 }
+        ], true);
+        if (this.silenciat) {
+            icona.lineStyle(3, color, 1).lineBetween(x - 15, y - 14, x + 14, y + 14);
+        } else {
+            icona.lineStyle(2, color, 1);
+            icona.beginPath().arc(x, y, 9, -0.8, 0.8, false).strokePath();
+            icona.beginPath().arc(x, y, 15, -0.8, 0.8, false).strokePath();
+        }
+        return icona;
+    },
+
+    commutarSilenci() {
+        this.carregarPreferencia();
+        this.silenciat = !this.silenciat;
+        if (this.init()) this.sortida.gain.value = this.silenciat ? 0 : 1;
+        if (typeof game !== 'undefined' && game.sound) game.sound.setMute(this.silenciat);
+        if (typeof Joc !== 'undefined' && Joc.musica) Joc.musica.setVolume(Joc.musica.volume);
+        try { localStorage.setItem('runna_silenciat', String(this.silenciat)); }
+        catch (e) { console.warn('No s’ha pogut desar la preferència de so', e); }
     },
 
     // Evita apilar el mateix so massa seguit i no sona mentre el navegador té l'àudio bloquejat
