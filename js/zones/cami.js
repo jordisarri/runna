@@ -263,7 +263,7 @@ class ZonaEra extends ZonaBase {
 // Un gran edifici de pedra a la dreta i, enganxada al seu lateral esquerre, una pèrgola d'arcades de pedra: és un jardí
 // de gespa amb flors (només allà dins n'hi ha). Les arcades del davant són a la mateixa línia que la façana de la casa i
 // tan altes com la seva planta baixa, perquè la façana i la pèrgola es llegeixin com una sola obra. Dins hi ha la Prunera
-// Màgica i la llosa del passadís secret de la masmorra; davant l'entrada, l'Isidre. El camí de l'Era i de la Taverna
+// Màgica i la llosa del passadís secret de la masmorra; davant l'entrada, l'Isildren. El camí de l'Era i de la Taverna
 // passa per davant (sud). L'id de la zona continua sent ZonaJardi (les partides desades hi compten).
 class ZonaJardi extends ZonaBase {
     constructor() {
@@ -359,7 +359,7 @@ class ZonaJardi extends ZonaBase {
             n++;
         }
 
-        // L'Isidre, davant l'entrada de la pèrgola (si la llosa ja és oberta, es queda al costat del forat)
+        // L'Isildren, davant l'entrada de la pèrgola (si la llosa ja és oberta, es queda al costat del forat)
         this.isidre = this.npc('isidre', 664, 915, DIALEGS.isidre);
         if (Estat.flag('llosaOberta')) {
             this.llosa.setPosition(LX - 92, LY + 4).setRotation(-0.1);
@@ -391,7 +391,7 @@ class ZonaJardi extends ZonaBase {
         this.sortidaEscala(x - 37, y - 37, 74, 74, 'ZonaSoterraniHost', 'entrada', y + 42);   // l'Ineu baixa l'escala abans de canviar de zona
     }
 
-    // L'Isidre porta la llavor a la llosa, la planta, la flor creix i la llosa s'aparta i deixa veure l'escala. Tot es veu, no s'explica.
+    // L'Isildren porta la llavor a la llosa, la planta, la flor creix i la llosa s'aparta i deixa veure l'escala. Tot es veu, no s'explica.
     obrirLlosa() {
         if (this.obrintLlosa || Estat.flag('llosaOberta')) return;
         this.obrintLlosa = true;

@@ -62,6 +62,12 @@
 
 - [x] `home_raim_desperta`
 
+- [x] `home_raim_n`
+
+- [x] `home_raim_ne`
+
+- [x] `home_raim_e`
+
 - [x] `hostatgeria`
 
 - [x] `ineu_inconscient`
@@ -224,11 +230,11 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `andreu_guardia`, `arrels_tiller`, `basto_ocellaire`, `carro_sansa`, `escolopendra`, `ferralla`, `gabia`, `gabia_oberta`, `gripau`, `marit_neus`, `neus`, `ocellaire_cansat`, `ocell_boira`, `ovella`, `ovella_boira`, `ratpenat_boira`, `sansa`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `andreu_guardia`, `arrels_tiller`, `basto_ocellaire`, `carro_sansa`, `gabia`, `gabia_oberta`, `home_raim_o`, `marit_neus`, `neus`, `ocellaire_cansat`, `sansa`.
 
 
 
-**Nous, encara sense ús al joc** (preparats per a quan s’implementin): `andreu_guardia`, `ferralla`, `gabia`, `gabia_oberta`, `ocell_boira`, `ratpenat_boira`.
+**Nous, encara sense ús al joc** (preparats per a quan s’implementin): `andreu_guardia`, `gabia`, `gabia_oberta`.
 
 
 
@@ -322,79 +328,7 @@ Tots els enemics són bestioles o persones **corrompudes per la boira lila**: ha
 
 
 
-### `escolopendra.png` (amplada 64) *(Escolopendra: erràtica, surt de l'esquerda del Cementiri. Camins, Runes, Passadís, Cementiri, Bosc.)*
-
-
-
-```
-
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A large giant centipede the length of a forearm, glossy segmented reddish-brown armored body with darker bands, many thin orange legs, two long curved antennae and sharp yellow pincers raised in a threatening S-curve pose, faint lilac mist trailing from its joints, small glowing violet eyes. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
-
-```
-
-
-
-### `gripau.png` (amplada 56) *(Gripau corromput: salta i només fa mal mentre salta. Bassadòria.)*
-
-
-
-```
-
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A swollen corrupted toad, warty olive-green skin turning sickly purple on the back, puffed throat sac, crouched ready to leap, big glowing violet eyes, a few drops of murky water and lilac mist dripping from it. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
-
-```
-
-
-
-### `ovella_boira.png` (amplada 76) *(Ovella de boira: embesteix i queda cansada. Camí de la Cirosa.)*
-
-
-
-```
-
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A sheep possessed by the mist: thick dirty-grey wool with lilac smoky tips, black face with angry lowered head ready to charge, small curled horns, glowing violet eyes, hooves scraping the ground, violet fog leaking from the wool. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
-
-```
-
-
-
-### `ovella.png` (amplada 70) *(Ovella normal (sense boira).)*
-
-
-
-```
-
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A fluffy friendly white mountain sheep with a black face and legs, calm pose. Camera angle: classic JRPG 3/4 top-down, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
-
-```
-
-
-
-### Caps girats de l'estàtua: `home_raim_n.png`, `home_raim_e.png`, `home_raim_o.png` (amplada 78) *(Opcionals: el puzle gira el cap de l'estàtua amb cada volta de la palanca. El sud és `home_raim.png`. Es fan editant la imatge de l'estàtua; si no hi són, l'estàtua no canvia de cap i només es mou la fletxa.)*
-
-
-
-#### `home_raim_n.png` — cap cap al nord (d'esquena)
-
-
-
-```
-
-Edit the attached image: keep the statue, the rocky lump, the pedestal, the pose of the body and arms, the cloth, the grapes, the colours, the outline style, the image size and the exact position and size of every part IDENTICAL, pixel for pixel; change ONLY the direction the head (face and curly hair) is turned. Isolated on a pure white background (#FFFFFF), no text, no shadow. The statue now has the head turned away from the viewer, as if it were looking up the staircase, seen from behind and slightly from the side (three-quarter back view). The head keeps EXACTLY the same size, height and shape as before: a normal human head, NOT a bigger or rounder ball of hair. We see the back of the skull covered by the same tight curls (short curly hair following the shape of the skull, hairline at the nape), a clearly visible short neck with the nape, both ears (the near ear fully visible, the far ear partly), and just a sliver of the cheek and the curly beard on the side that is turned slightly towards us. No face is visible from the front. The shoulders, chest, arms, cloth, grapes, rocky lump and pedestal stay exactly as in the attached image.
-
-```
-
-
-
-#### `home_raim_e.png` — cap cap al llevant (dreta)
-
-
-
-```
-
-Edit the attached image: keep the statue, the rocky lump, the pedestal, the pose of the body and arms, the cloth, the grapes, the colours, the outline style, the image size and the exact position and size of every part IDENTICAL, pixel for pixel; change ONLY the direction the head (face and curly hair) is turned. Isolated on a pure white background (#FFFFFF), no text, no shadow. The statue now has the head turned in pure profile to the viewer's right, looking to the right, a little upwards, the curly hair, the nose and the beard in profile.
-
-```
+### Cap girat de l'estàtua: `home_raim_o.png` (amplada 78) *(Opcional: el puzle gira el cap de l'estàtua amb cada volta de la palanca. Les variants nord, nord-est i est ja estan fetes; el sud és `home_raim.png`. Si no hi ha aquesta variant, l'estàtua no canvia de cap i només es mou la fletxa.)*
 
 
 
@@ -413,42 +347,6 @@ Edit the attached image: keep the statue, the rocky lump, the pedestal, the pose
 
 
 ### Enemics futurs (Acte 3)
-
-
-
-### `ratpenat_boira.png` (amplada 60) *(Ratpenat de boira: Sala de les Gírgoles, sota la Taverna.)*
-
-
-
-```
-
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A bat made of dark violet mist with leathery wings spread wide, small fangs, glowing violet eyes, the edges of the wings dissolving into smoke. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
-
-```
-
-
-
-### `ocell_boira.png` (amplada 50) *(Ocell de boira: fase 1 del combat final (els ocells robats per l'Ocellaire).)*
-
-
-
-```
-
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A small songbird made of grey-violet fog, sharp beak, ragged smoky feathers, glowing violet eyes, diving pose. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
-
-```
-
-
-
-### `ferralla.png` (amplada 90) *(Ferralla viva: passadís sota la Taverna.)*
-
-
-
-```
-
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A clanking creature assembled from rusty old iron tools (chains, pincers, a cogwheel, hooks) animated by violet mist, two glowing violet eyes in an iron pot used as a head, menacing but not gory. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
-
-```
 
 
 

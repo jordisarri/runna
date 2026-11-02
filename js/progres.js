@@ -42,7 +42,7 @@ const PROGRES = {
           pista: E => {
               const f = [];
               if (!E.flag('escudella')) f.push("l'escudella de la Neus (a les cel·les)");
-              if (!E.flag('floresIsidre')) f.push("les flors de l'Isidre (al jardí de l'Hostatgeria)");
+              if (!E.flag('floresIsidre')) f.push("les flors d'Isildren (al jardí de l'Hostatgeria)");
               if (!E.flag('pastorsConvencuts')) f.push("el pa que pasten els pastors de la Cirosa (potser una música vora el seu foc els recordaria com fer-lo)");
               return f.length ? "Al sopar del Til·ler encara hi falta: " + f.join(', ') + "." : "Ja ho tens tot: el Gran Til·ler espera la taula parada.";
           } },
@@ -118,7 +118,7 @@ const PROGRES = {
           pista: E => "Al final del passadís de tortura, un mur d'esbarzers negres es deixa tallar per Runna." },
         { id: 'benediccioFraterna', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'lliurePains', 'refetorObert', 'esb_host_cap1', 'esb_host_cap2', 'mongesTrobades', 'premiPains', 'premiPhili', 'premiCharm', 'cofreMonges', 'obj:benedicio_fraterna'], fet: E => E.te('benedicio_fraterna'),
           pista: E => !E.flag('llosaOberta')
-              ? "Per creuar l'avenc de la Sala de la Gàbia cal la Benedicció Fraterna de les tres sacerdotesses de l'Hostatgeria. Parla amb la gent de les Cel·les per esbrinar el secret de la llosa del jardí de l'Isidre."
+              ? "Per creuar l'avenc de la Sala de la Gàbia cal la Benedicció Fraterna de les tres sacerdotesses de l'Hostatgeria. Parla amb la gent de les Cel·les per esbrinar el secret de la llosa del jardí d'Isildren."
               : !E.flag('mongesTrobades')
                   ? "Sota la llosa del jardí de l'Hostatgeria hi ha les cambres de les sacerdotesses. Desperta la Pains, empeny la taula de la Phili amb els Guants i talla els esbarzers de la Charm amb Runna."
                   : "Les tres sacerdotesses són lliures: recull la Benedicció Fraterna al cofre del vestíbul de l'Hostatgeria per poder resistir la boira verinosa de la Sala de la Gàbia." },

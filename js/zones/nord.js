@@ -418,7 +418,7 @@ class ZonaCelles extends ZonaBase {
         // Nostra Senyora (oest): la Carry, vídua del campaner, que busca el seu gos Pallofa (el trobaràs a Sant Antoni)
         this.npc('carry', 360, 690, DIALEGS.carry);
 
-        // La Sansa i el seu carro de verdures: passa per aquí un sol cop, quan l'Isidre te n'ha parlat, i se'n va un cop t'ha donat la llavor
+        // La Sansa i el seu carro de verdures: passa per aquí un sol cop, quan l'Isildren te n'ha parlat, i se'n va un cop t'ha donat la llavor
         if (Estat.flag('isidreSansa') && !Estat.flag('llavorSansa')) this.posarSansa();
 
         this.cartell(130, 625, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler' }] }));
@@ -660,22 +660,28 @@ class ZonaTiller extends ZonaBase {
         let sd = 11; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
         this.colArrels = this.colisio(1190, Y - 20, 440, 50);
         this.muralla(0, 150, 960, 150, 110, 'arbre', true, x => x > 230);   // fins aquí, una paret invisible tanca el pas per l'oest (arbres només al canton, perquè el Til·ler quedi sol)
-        for (let i = 0; i < 11; i++) {
-            const x = 1020 + i * 31 + r() * 10, y = Y + (i % 2) * 10, s = i % 2 ? 1 : -1;
-            const amp = Math.min(50 + r() * 25, s > 0 ? 1380 - x : x - 980), alt = 60 + r() * 70;
-            const g = this.add.graphics({ x, y }).setDepth(y);
-            const pts = new Phaser.Curves.CubicBezier(new Phaser.Math.Vector2(0, 0), new Phaser.Math.Vector2(s * amp * 0.1, -alt * 1.3),
-                new Phaser.Math.Vector2(s * amp * 0.9, -alt * 1.3), new Phaser.Math.Vector2(s * amp, 0)).getPoints(18);
-            g.fillStyle(0x000000, 0.3).fillEllipse(0, 2, 34, 10).fillEllipse(s * amp, 2, 30, 9);   // la terra remoguda als peus
-            g.lineStyle(20, 0x120c08, 1).strokePoints(pts);
-            g.lineStyle(14, 0x5e3e24, 1).strokePoints(pts);
-            g.lineStyle(4, 0x8a6440, 0.9).strokePoints(pts.map(p => ({ x: p.x - 3, y: p.y - 3 })));
-            const cim = pts[9];                                                  // fulles de til·ler, en forma de cor
-            [[-10, -6, 0x5a8a32], [8, -10, 0x6a9a3a], [2, 2, 0x4e7a2c]].forEach(([fx, fy, c]) => {
-                g.fillStyle(c, 1).fillCircle(cim.x + fx - 3, cim.y + fy, 5).fillCircle(cim.x + fx + 3, cim.y + fy, 5).fillTriangle(cim.x + fx - 8, cim.y + fy + 2, cim.x + fx + 8, cim.y + fy + 2, cim.x + fx, cim.y + fy + 11);
-            });
-            this.arrels.push(g);
-            this.tweens.add({ targets: g, scaleY: 1.04, yoyo: true, repeat: -1, duration: 1400 + i * 130, ease: 'Sine.easeInOut' });   // respiren
+        if (this.textures.exists('arrels_tiller') && !Grafics.faltants.includes('arrels_tiller')) {
+            const imatge = this.posar('arrels_tiller', 1190, Y);
+            this.arrels.push(imatge);
+            this.tweens.add({ targets: imatge, scaleY: imatge.scaleY * 1.04, yoyo: true, repeat: -1, duration: 1600, ease: 'Sine.easeInOut' });
+        } else {
+            for (let i = 0; i < 11; i++) {
+                const x = 1020 + i * 31 + r() * 10, y = Y + (i % 2) * 10, s = i % 2 ? 1 : -1;
+                const amp = Math.min(50 + r() * 25, s > 0 ? 1380 - x : x - 980), alt = 60 + r() * 70;
+                const g = this.add.graphics({ x, y }).setDepth(y);
+                const pts = new Phaser.Curves.CubicBezier(new Phaser.Math.Vector2(0, 0), new Phaser.Math.Vector2(s * amp * 0.1, -alt * 1.3),
+                    new Phaser.Math.Vector2(s * amp * 0.9, -alt * 1.3), new Phaser.Math.Vector2(s * amp, 0)).getPoints(18);
+                g.fillStyle(0x000000, 0.3).fillEllipse(0, 2, 34, 10).fillEllipse(s * amp, 2, 30, 9);
+                g.lineStyle(20, 0x120c08, 1).strokePoints(pts);
+                g.lineStyle(14, 0x5e3e24, 1).strokePoints(pts);
+                g.lineStyle(4, 0x8a6440, 0.9).strokePoints(pts.map(p => ({ x: p.x - 3, y: p.y - 3 })));
+                const cim = pts[9];
+                [[-10, -6, 0x5a8a32], [8, -10, 0x6a9a3a], [2, 2, 0x4e7a2c]].forEach(([fx, fy, c]) => {
+                    g.fillStyle(c, 1).fillCircle(cim.x + fx - 3, cim.y + fy, 5).fillCircle(cim.x + fx + 3, cim.y + fy, 5).fillTriangle(cim.x + fx - 8, cim.y + fy + 2, cim.x + fx + 8, cim.y + fy + 2, cim.x + fx, cim.y + fy + 11);
+                });
+                this.arrels.push(g);
+                this.tweens.add({ targets: g, scaleY: 1.04, yoyo: true, repeat: -1, duration: 1400 + i * 130, ease: 'Sine.easeInOut' });
+            }
         }
         // Sense la branca, les arrels només es poden mirar; amb ella, es colpegen com qualsevol cosa (ESPAI)
         this.interactiu(960, Y + 25, 130, DIALEGS.arrelsTiller, { altura: 110, actiu: () => !Estat.flag('camiCirosaObert') && !Estat.te('basto_tiller') });

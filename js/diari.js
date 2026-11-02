@@ -252,7 +252,7 @@ const DIARI = {
         });
         y += colNens ? 62 : 3 * 48 + 14;
         // Cants apresos, amb les notes per tocar-los
-        y = this.titol(ui, c, X, y, 'Cants de la flauta');
+        y = this.titol(ui, c, X, y, 'Cants de la tarota');
         Object.values(MELODIES).forEach(m => {
             const sap = E.flag(m.flag), nn = sap ? m.notes.length : 0;
             const junt = AV - 2 * X - nn * 46 > 270;                     // si no hi caben, les notes baixen a sota del nom

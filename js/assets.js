@@ -57,8 +57,8 @@ const CATALEG = [
     { key: 'pianista',  file: 'assets/personatges/pianista.webp',  amplada: 115, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
     { key: 'venerables', file: 'assets/personatges/venerables.webp', amplada: 147, cru: true, provisional: (c, w) => dibuixarVenerables(c, w) },   // les dues Venerables Sàvies de les Cel·les, agafades del braç (un sol gràfic)
     { key: 'mare_nena', file: 'assets/personatges/mare_nena.webp', amplada: 77, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#cfd6ee', cabell: '#e8e8f2', dona: true, ample: 1.1, alt: 0.9 }) },   // la mare de la Nena de les Trenes (visió de llum, sense rostre)
-    { key: 'neus',      file: 'assets/personatges/neus.png',      amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
-    { key: 'marit_neus', file: 'assets/personatges/marit_neus.png', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a6a7a', cabell: '#5a4636', alt: 0.98, calb: true }) },
+    { key: 'neus',      file: 'assets/personatges/neus.webp',      amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
+    { key: 'marit_neus', file: 'assets/personatges/marit_neus.webp', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a6a7a', cabell: '#5a4636', alt: 0.98, calb: true }) },
     { key: 'juli',      file: 'assets/personatges/juli.webp',      amplada: 72, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'juli') },
     { key: 'frederic',  file: 'assets/personatges/frederic.webp',  amplada: 77, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'frederic') },
     { key: 'eloi',      file: 'assets/personatges/eloi.png',      amplada: 104, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'eloi') },
@@ -81,6 +81,7 @@ const CATALEG = [
     { key: 'roure',     file: 'assets/natura/roure.webp',     amplada: 420, provisional: (c, w) => dibuixarRoure(c, w) },
     { key: 'tiller_arbre', file: 'assets/personatges/tiller_arbre.webp', amplada: 540, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },   // el Til·ler com un arbre qualsevol, sense cara: així el veus abans de parlar-hi (mateix recorte que `tiller`)
     { key: 'tiller',    file: 'assets/personatges/tiller.webp',    amplada: 540, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },
+    { key: 'arrels_tiller', file: 'assets/natura/arrels_tiller.webp', amplada: 440 },
     { key: 'altar',     file: 'assets/objectes/altar.png',     amplada: 150, provisional: (c, w) => dibuixarAltar(c, w) },
     { key: 'taula_pedra', file: 'assets/objectes/taula_pedra.png', amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 0) },
     { key: 'taula_pedra2', file: 'assets/objectes/taula_pedra2.png', amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
@@ -105,6 +106,7 @@ const CATALEG = [
     { key: 'ovella',         file: 'assets/enemics/ovella.png',         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },
     { key: 'ovella_boira',   file: 'assets/enemics/ovella_boira.png',   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
     { key: 'roca',           file: 'assets/natura/roca.webp',           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w) },
+    { key: 'basto_ocellaire', file: 'assets/armes/basto_ocellaire.webp', amplada: 92 },
     { key: 'masia',          file: 'assets/edificis/masia.png',          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },
     { key: 'pastor_a',       file: 'assets/personatges/pastor_a.webp',       amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a48', cabell: '#8a7a60', alt: 0.9, ample: 0.95, calb: true }) },
     { key: 'pastor_b',       file: 'assets/personatges/pastor_b.webp',       amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a4a58', cabell: '#7a7a7a', dona: true, alt: 0.88, ample: 0.95 }) },
@@ -116,7 +118,7 @@ const CATALEG = [
     { key: 'ocellaire_idle2', file: 'assets/enemics/ocellaire_idle2.webp', amplada: 90, cru: true },      // idle: fotogrames 2 i 3 (el 1 és el sprite base); mateixa mida i recorte
     { key: 'ocellaire_idle3', file: 'assets/enemics/ocellaire_idle3.webp', amplada: 90, cru: true },
     { key: 'ocellaire_rugit', file: 'assets/enemics/ocellaire_rugit.webp', amplada: 90, cru: true },      // pose de rugit (canvis de fase), al mateix llenç de 180x329 que l'idle
-    { key: 'ocellaire_cansat', file: null, amplada: 90, cru: true },    // gràfic opcional; si no hi és, no passa res
+    { key: 'ocellaire_cansat', file: 'assets/enemics/ocellaire_cansat.webp', amplada: 90, cru: true },    // pose ajupida; si no hi és, es manté el sprite base
     { key: 'ratpenat',       file: 'assets/enemics/ratpenat.png',       amplada: 64, provisional: (c, w) => dibuixarRatpenat(c, w) },
     { key: 'ferralla',       file: 'assets/enemics/ferralla.png',       amplada: 70, provisional: (c, w) => dibuixarFerralla(c, w) },
     { key: 'capoll',         file: 'assets/enemics/capoll.png',         amplada: 70, provisional: (c, w) => dibuixarCapoll(c, w) },

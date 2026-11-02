@@ -47,11 +47,33 @@ function iconaFlors(ctx, colors) {
 const ICONES_OBJECTES = {
     flauta: ctx => {
         ctx.save(); ctx.translate(48, 48); ctx.rotate(-Math.PI / 4);
-        ctx.fillStyle = '#b8864a'; ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.roundRect(-40, -7, 80, 14, 6); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#7a4e26'; ctx.fillRect(-40, 2, 80, 4);
-        ctx.fillStyle = CONTORN; [-18, -6, 6, 18].forEach(x => { ctx.beginPath(); ctx.arc(x, -1, 2.8, 0, Math.PI * 2); ctx.fill(); });
-        ctx.fillStyle = '#d8a868'; ctx.beginPath(); ctx.rect(-40, -7, 10, 14); ctx.fill(); ctx.stroke();
+        ctx.lineWidth = 3;
+        ctx.fillStyle = '#3a2412';
+        ctx.beginPath();
+        ctx.moveTo(-44, -3); ctx.lineTo(-34, -5); ctx.lineTo(22, -9);
+        ctx.lineTo(40, -17); ctx.lineTo(40, 17); ctx.lineTo(22, 9); ctx.lineTo(-34, 5);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+        const fusta = ctx.createLinearGradient(0, -10, 0, 10);
+        fusta.addColorStop(0, '#e0b766'); fusta.addColorStop(0.55, '#a66b32'); fusta.addColorStop(1, '#70401f');
+        ctx.fillStyle = fusta;
+        ctx.beginPath();
+        ctx.moveTo(-37, -2); ctx.lineTo(-32, -3); ctx.lineTo(21, -7);
+        ctx.lineTo(36, -13); ctx.lineTo(36, 13); ctx.lineTo(21, 7); ctx.lineTo(-32, 3);
+        ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = '#f0d184'; ctx.lineWidth = 2.5;
+        [-24, -2, 18, 30].forEach((x, i) => {
+            const y = x > 20 ? 0 : -3 + (x + 24) * -0.07;
+            ctx.beginPath(); ctx.moveTo(x, y - 4); ctx.lineTo(x + (i === 3 ? 0 : 1), y + 4); ctx.stroke();
+        });
+        ctx.fillStyle = '#2c1a10'; ctx.strokeStyle = '#21140d'; ctx.lineWidth = 1.5;
+        [-17, -4, 9, 20].forEach(x => {
+            const y = -1 - (x + 17) * 0.06;
+            ctx.beginPath(); ctx.ellipse(x, y, 2.2, 1.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        });
+        ctx.strokeStyle = '#f2dc9b'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(-33, -2); ctx.lineTo(20, -7); ctx.lineTo(34, -12); ctx.stroke();
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(-45, -3); ctx.lineTo(-50, -5); ctx.moveTo(-45, 3); ctx.lineTo(-50, 5); ctx.stroke();
         ctx.restore();
     },
     basto: ctx => {

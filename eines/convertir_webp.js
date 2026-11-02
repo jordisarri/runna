@@ -22,6 +22,10 @@ const fontArt = (categoria, stem) => {
         const p = path.join(ARREL, 'art', categoria, stem + '.' + ext);
         if (fs.existsSync(p)) return p;
     }
+    for (const ext of ['png', 'jpg', 'jpeg', 'webp']) {
+        const p = path.join(ARREL, 'art', stem + '.' + ext);
+        if (fs.existsSync(p)) return p;
+    }
     return null;
 };
 

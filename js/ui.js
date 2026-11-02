@@ -32,7 +32,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
     'Ineu': 'ineu', 'Pare Jordi': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Pastor de Boira': 'pastor_boira', 'Andreu, Pastor de Boira': 'pastor_boira', 'Germà Francesc': 'germa_francesc', 'Pare Daniel': 'pare_daniel',
-    'Pare Alcuí': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Garf': 'garf', 'Isidre': 'isidre',
+    'Pare Alcuí': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Garf': 'garf', 'Isildren': 'isidre',
     'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
     'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Jordi': 'jordi_caseta', 'Sansa': 'sansa', 'Home del Raïm': 'home_raim',
@@ -113,7 +113,7 @@ function marcPergami(scene, x, y, w, h, clau = 'marc_gran') {
 
 // El sarró de l'Ineu (inventari): nom i una línia de cada objecte que es pot portar
 const CATALEG_OBJECTES = {
-    flauta:           ['Flauta', 'Es toca amb ESPAI allà on la música pot fer efecte.'],
+    flauta:           ['La tarota del Cortiner', 'Les seves notes desperten allò que dorm sota la boira, les arrels i la pedra.'],
     basto:            ['Bastó de pelegrí', 'Per caminar... i per defensar-se.'],
     basto_tiller:     ['Branca del Til·ler', 'Més lleugera i àgil que el bastó de pelegrí.'],
     clau_campanar:    ['Clau del campanar', 'Obre la porta de la dreta del retaule, la que duu a la torre del rellotge. Era del campaner, el marit de la Carry.'],
@@ -124,7 +124,7 @@ const CATALEG_OBJECTES = {
     pruna:            ['Pruna daurada', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en vol una.'],
     beuratge:         ['Beuratge de la Jaumeta', 'Dissipa la boira del camí cap al Til·ler; no protegeix de la boira verinosa.'],
     escudella:        ['Escudella de la Neus', 'Encara calenta, com cada any per al sopar del Til·ler.'],
-    flors_isidre:     ['Flors de l\'Isidre', 'Un ram embolicat amb un tros de pergamí.'],
+    flors_isidre:     ['Flors d\'Isildren', 'Un ram embolicat amb un tros de pergamí.'],
     pa_pastor:        ['Pa dels pastors', 'Una barra baixa i fosca, cuita sota la cendra.'],
     esquelles:        ['Esquelles dels pastors', 'Amb elles, els cants antics sonen més clars.'],
     fulla_tiler:      ['Fulla del Til·ler', 'Un record del sopar sota el Gran Til·ler.'],
@@ -143,7 +143,7 @@ const CATALEG_OBJECTES = {
     pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.» Al revers: «Qui busqui sortida, que alci la bóta marcada amb la creu.»'],
     calze:            ['Calze de Rosada', "De plata, antic. A l'altar de Sant Gabriel, cada cop que hi beus l'aigua de rosada, el rosari et queda ple."],
     clau_ferro:       ['Clau de ferro', 'Obre la Porta de les Gírgoles.'],
-    llavorLluna:      ['Llavor de Lluna', 'De la Sansa. L\'Isidre sap on plantar-la.'],
+    llavorLluna:      ['Llavor de Lluna', 'De la Sansa. L\'Isildren sap on plantar-la.'],
 };
 
 class EscenaUI extends Phaser.Scene {
@@ -193,7 +193,7 @@ class EscenaUI extends Phaser.Scene {
     }
 
     // ---------------- SARRÓ (inventari) ----------------
-    // Un medalló petit a la dreta del HUD obre el sarró (també la tecla I). La flauta es toca amb ESPAI (o tocant la meitat dreta
+    // Un medalló petit a la dreta del HUD obre el sarró (també la tecla I). La tarota es toca amb ESPAI (o tocant la meitat dreta
     // de la pantalla) als llocs on té efecte (ZonaBase.flautaActiva); no hi ha cap icona al HUD: només s'obre la seva interfície.
     crearObjectes() {
         const x = 566, y = Y_BOTONS_HUD, commuta = () => this.inventariObert ? this.tancarInventari() : this.obrirInventari();

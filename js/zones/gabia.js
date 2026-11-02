@@ -586,16 +586,21 @@ class ZonaGabia extends ZonaBase {
         return e;
     }
 
-    // El bàcul de l'Ocellaire: un pal llarg de fusta negra amb el ganxo d'or i una flama lila a cada punta
+    // El bàcul de l'Ocellaire: la imatge inclou les dues flames i els ganxos daurats.
     crearBasto(e) {
-        const g = this.add.graphics();
-        g.fillStyle(0x2a1a14, 1).fillRoundedRect(-80, -5, 160, 10, 4);
-        g.lineStyle(2, 0x0a0606, 1).strokeRoundedRect(-80, -5, 160, 10, 4);
-        g.fillStyle(0xb89a50, 1).fillRect(-14, -7, 28, 14);
-        g.lineStyle(6, 0xd8b860, 1); g.beginPath(); g.arc(-92, -10, 14, 0.2, Math.PI * 1.6); g.strokePath();
-        g.lineStyle(6, 0xd8b860, 1); g.beginPath(); g.arc(92, 10, 14, Math.PI + 0.2, Math.PI * 2.6); g.strokePath();
-        g.fillStyle(0xff9a40, 0.9).fillCircle(-92, -10, 7).fillCircle(92, 10, 7);
-        g.fillStyle(0xffffff, 0.9).fillCircle(-92, -10, 3).fillCircle(92, 10, 3);
+        let g;
+        if (this.textures.exists('basto_ocellaire') && !Grafics.faltants.includes('basto_ocellaire')) {
+            g = this.add.image(0, 0, 'basto_ocellaire').setDisplaySize(184, 46);
+        } else {
+            g = this.add.graphics();
+            g.fillStyle(0x2a1a14, 1).fillRoundedRect(-80, -5, 160, 10, 4);
+            g.lineStyle(2, 0x0a0606, 1).strokeRoundedRect(-80, -5, 160, 10, 4);
+            g.fillStyle(0xb89a50, 1).fillRect(-14, -7, 28, 14);
+            g.lineStyle(6, 0xd8b860, 1); g.beginPath(); g.arc(-92, -10, 14, 0.2, Math.PI * 1.6); g.strokePath();
+            g.lineStyle(6, 0xd8b860, 1); g.beginPath(); g.arc(92, 10, 14, Math.PI + 0.2, Math.PI * 2.6); g.strokePath();
+            g.fillStyle(0xff9a40, 0.9).fillCircle(-92, -10, 7).fillCircle(92, 10, 7);
+            g.fillStyle(0xffffff, 0.9).fillCircle(-92, -10, 3).fillCircle(92, 10, 3);
+        }
         const b = { g, x: e.spr.x, y: e.spr.y - 70, rot: 0, gir: 0.04, volant: false };
         e.basto = b;
         e.flama = this.add.particles(0, 0, 'espurna', {
