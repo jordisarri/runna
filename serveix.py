@@ -161,7 +161,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(cos)
 
-socketserver.ThreadingTCPServer.allow_reuse_address = True
 with socketserver.ThreadingTCPServer(('', 8000), Handler) as s:
     print('Joc a http://localhost:8000/')
     s.serve_forever()
