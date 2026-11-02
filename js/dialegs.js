@@ -562,7 +562,7 @@ const DIALEGS = {
 
     branca: E => ({
         pagines: [
-            { fer: (z, fet) => { z.brancaAgafada = true; z.agafar(() => z.ineuAixeca('ineu_aixeca_tiler', fet), 'branca', 0xd8f0a0); } },
+            { fer: (z, fet) => { z.brancaAgafada = true; z.agafar(() => z.ineuAixeca('ineu_aixeca_tiler', fet), 'arma_tiller', 0xd8f0a0); } },
             { avis: "Has obtingut la BRANCA DEL TIL·LER!" },
             { fer: (z, fet) => z.ineuBaixa(fet) }
         ],
@@ -1337,14 +1337,6 @@ const DIALEGS = {
 
     // ---------------- NENA DE LES TRENES (sense creu) ----------------
     // (la missió es resol parlant-hi: l'Ineu li lliga els llaços a les trenes)
-
-    cercleRovellonera: E => ({
-        pagines: E.flag("portalJaumeta") ? [
-            { qui: "Ineu", text: "És l'altra banda del portal de la Jaumeta. Si hi entro, arribaré a la seva cabana." }
-        ] : [
-            { qui: "Ineu", text: "Estrany... Em fa la sensació que és una porta, però no sé de què." }
-        ]
-    }),
 
     portalTornada: E => ({
         pagines: []

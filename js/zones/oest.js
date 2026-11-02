@@ -89,15 +89,6 @@ class ZonaRovellonera extends ZonaBase {
                 'Una roca grossa entre els pins, coberta de molsa. Per sota en surt un tros de cinta rosa.');
         }
 
-        // Cercle de bolets (segona clariana): portal màgic cap a la cabana de la Jaumeta, un cop descobert
-        if (pas === 1) {
-            this.posar('cercle_bolets', 1000, 870, { fonsY: -800 });
-            this.interactiu(1000, 870, RADI_OBJECTE, DIALEGS.cercleRovellonera, {
-                altura: 40,
-                enTancar: () => { if (Estat.flag('portalJaumeta')) { Estat.dades.portalTorna = 'rov'; this.canviarZona('ZonaCabana', 'portal'); } }
-            });
-        }
-
         // Enemics: bolets bruts i escolopendres
         const bolets = [[[420, 380], [1200, 760]], [[500, 300], [1150, 380], [650, 850]], [[420, 420], [1100, 300], [500, 820]]][pas];
         const escolo = [[[1150, 780], [450, 780]], [[1250, 760]], [[1250, 480], [300, 560]]][pas];

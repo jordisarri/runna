@@ -674,15 +674,31 @@ class ZonaBase extends Phaser.Scene {
     // (el diàleg ho fa quan s'avança després del missatge d'obtenció). Continua de seguida (fet).
     ineuAixeca(key, fet, ox = 0.5) {
         const I = this.ineu, esc = (this.textures.get(key).customData || {}).escala || 0.5;
+        if (this.ineuAixecaEfecte) { this.ineuAixecaEfecte.destroy(); this.ineuAixecaEfecte = null; }
+        if (this.ineuAixecaAura) { this.ineuAixecaAura.destroy(); this.ineuAixecaAura = null; }
         if (this.ineuAlt) this.ineuAlt.destroy();
         I.setVisible(false);
         if (this.fantasma) this.fantasma.setVisible(false);          // la silueta translúcida de l'Ineu també: un dibuix desapareix i l'altre apareix, sense transparències
         this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(85000);       // per sobre de tothom (també del Germà Andreu), però SOTA la boira (89990+): si no, quedava il·luminat
+        if (key === 'ineu_aixeca_tiler') {
+            const x = I.x - this.ineuAlt.displayWidth * 0.16;
+            const y = I.y + 2 - this.ineuAlt.displayHeight * 0.97;
+            this.ineuAixecaAura = this.add.circle(x, y, 24, 0xb9e879, 0.2).setBlendMode('ADD').setDepth(84999);
+            this.tweens.add({ targets: this.ineuAixecaAura, scale: { from: 0.7, to: 1.2 }, alpha: { from: 0.12, to: 0.34 }, yoyo: true, repeat: -1, duration: 850, ease: 'Sine.easeInOut' });
+            this.ineuAixecaEfecte = this.add.particles(x, y, 'espurna', {
+                x: { min: -12, max: 12 }, y: { min: -10, max: 10 },
+                angle: { min: 220, max: 320 }, speed: { min: 8, max: 24 }, lifespan: 850,
+                scale: { start: 0.24, end: 0 }, alpha: { start: 0.9, end: 0 },
+                tint: [0xb9e879, 0xffe890, 0xffffff], blendMode: 'ADD', frequency: 110
+            }).setDepth(84999);
+        }
         this.llum(I.x - 8, I.y - 190, 0xffe8a0);
         Joc.fanfaraObjecte(this);
         if (fet) fet();
     }
     ineuBaixa(fet) {
+        if (this.ineuAixecaEfecte) { this.ineuAixecaEfecte.destroy(); this.ineuAixecaEfecte = null; }
+        if (this.ineuAixecaAura) { this.ineuAixecaAura.destroy(); this.ineuAixecaAura = null; }
         if (this.ineuAlt) { this.ineuAlt.destroy(); this.ineuAlt = null; }
         this.ineu.setVisible(true);
         if (this.fantasma) this.fantasma.setVisible(true);

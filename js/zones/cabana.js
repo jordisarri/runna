@@ -1,6 +1,6 @@
 /**
- * LA CABANA DE LA JAUMETA: molt lluny, al mig del bosc. Només s'hi arriba per un portal màgic:
- * l'Alzina Buida del Bosc de Sant Joan (cal portar-hi aigua de la font) o el cercle de bolets de la Rovellonera. La tornada és sempre per l'Alzina Buida de la cabana.
+ * LA CABANA DE LA JAUMETA: molt lluny, al mig del bosc. Només s'hi arriba pel portal màgic
+ * de l'Alzina Buida del Bosc de Sant Joan (cal portar-hi aigua de la font).
  */
 
 // Parets de troncs d'un interior petit (900x700): al fons quatre fileres de troncs horitzontals i als costats les puntes
@@ -85,14 +85,6 @@ class ZonaCabana extends ZonaBase {
 
     construir() {
         this.terra('herba_fosca', 0, 0, 1400, 1000, -1100).setTint(0xb8e0a8);
-        this.terra('cami', 760, 620, 90, 380).setAlpha(0.8);
-
-        // Pedres planes al llindar i vora del camí
-        const pedres = this.add.graphics().setDepth(-1000);
-        [[775, 650, 22, 9], [832, 664, 20, 8], [790, 700, 24, 9], [818, 756, 18, 8], [770, 820, 22, 9], [840, 880, 20, 8]].forEach(([x, y, rx, ry]) => {
-            pedres.fillStyle(0x8c8a82, 1).fillEllipse(x, y, rx * 2, ry * 2).lineStyle(2, 0x2a2824, 0.8).strokeEllipse(x, y, rx * 2, ry * 2);
-            pedres.fillStyle(0xffffff, 0.18).fillEllipse(x - 4, y - 2, rx, ry * 0.7);
-        });
 
         // La cabana, bruta i deixada
         const cabana = this.edifici('cabana', 800, 590, 360, 80, 'ZonaCabanaInt', 'porta', { alt: 95 });
@@ -143,10 +135,7 @@ class ZonaCabana extends ZonaBase {
         // El punt d'interacció és el forat del tronc (la «!» surt just damunt seu); el radi permet tocar-lo des del peu de l'alzina
         this.interactiu(AX - 18, AY - 128, 235, DIALEGS.portalTornada, {
             altura: 56,
-            enTancar: () => {
-                const rov = Estat.dades.portalTorna === 'rov';
-                this.canviarZona(rov ? 'ZonaRovellonera' : 'ZonaBosc', 'portal');
-            }
+            enTancar: () => this.canviarZona('ZonaBosc', 'portal')
         });
 
         // Ocells als arbres (la Jaumeta hi parla)

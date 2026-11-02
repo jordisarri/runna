@@ -600,8 +600,6 @@ class ZonaTiller extends ZonaBase {
                 jordi:  { x: 60,   y: 600, dir: 'dreta' }
             }
         });
-        this.zoomZona = 0.8;
-        this.cameraFollowOffsetY = -440;
     }
 
     construir() {
@@ -613,8 +611,8 @@ class ZonaTiller extends ZonaBase {
         // El Gran Til·ler
         // Fins que l'Ineu hi parla per primer cop és un arbre qualsevol, sense cara; la cara (el mateix dibuix, amb el mateix recorte) apareix a poc a poc
         this.tillerCara = Estat.flag('tillerCara') || Estat.flag('parlatTiler');          // les partides velles ja el coneixen
-        this.posar('tiller_arbre', TIL_X, TIL_Y, { escala: 0.8, col: { w: 190, h: 300 } }); // escala per veure'n la capçada; hitbox de tot el tronc
-        this.tillerAmbCara = this.posar('tiller', TIL_X, TIL_Y, { escala: 0.8 }).setDepth(TIL_Y + 0.1).setAlpha(this.tillerCara ? 1 : 0);
+        this.posar('tiller_arbre', TIL_X, TIL_Y, { col: { w: 230, h: 44 } });
+        this.tillerAmbCara = this.posar('tiller', TIL_X, TIL_Y).setDepth(TIL_Y + 0.1).setAlpha(this.tillerCara ? 1 : 0);
         const puntTiller = this.interactiu(TIL_X, TIL_Y + 25, 120, E => {
             const d = DIALEGS.tiller(E);
             if (this.tillerCara || !d.pagines || !d.pagines.length) return d;
@@ -627,6 +625,11 @@ class ZonaTiller extends ZonaBase {
 
         // La branca del Til·ler: el bastó
         this.branca = this.posar('arma_tiller', TIL_X + 100, TIL_Y + 110, { fonsY: TIL_Y });
+        this.branca.setOrigin(0.5, 0.5).setAngle(68).setTint(0xffe8b0).setScale(this.branca.scaleX * 1.18);
+        this.brancaAura = this.add.ellipse(this.branca.x, this.branca.y, 100, 24, 0xffd060, 0.25)
+            .setAngle(this.branca.angle).setDepth(TIL_Y - 1);
+        this.tweens.add({ targets: this.brancaAura, alpha: { from: 0.15, to: 0.38 }, scaleX: { from: 0.85, to: 1.15 }, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
+        this.tweens.add({ targets: this.branca, alpha: { from: 0.65, to: 1 }, yoyo: true, repeat: -1, duration: 800, ease: 'Sine.easeInOut' });
         this.interactiu(TIL_X + 100, TIL_Y + 115, RADI_OBJECTE, DIALEGS.branca, { altura: 60, actiu: () => Estat.flag('tillerBranca') && !Estat.te('basto_tiller') });
 
         this.cartell(980, 470, DIALEGS.cartellCirosa);
@@ -652,14 +655,14 @@ class ZonaTiller extends ZonaBase {
     // Arrels del Til·ler: grans arcs nuosos que surten de terra i tanquen el camí, amb fulles de til·ler a dalt.
     // L'arbre les hi va fer créixer perquè la boira no pugés; quan hi acostes la seva branca, la reconeixen i s'enfonsen.
     posarArrels() {
-        const Y = 190;                                   // prou amunt perquè no hi hagi manera de vorejar-les
+        const Y = 280;                                   // marge per veure les arrels senceres dins l'escena
         this.arrelsY = Y;
         let sd = 11; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
         this.colArrels = this.colisio(1190, Y - 20, 440, 50);
         this.muralla(0, 150, 960, 150, 110, 'arbre', true, x => x > 230);   // fins aquí, una paret invisible tanca el pas per l'oest (arbres només al canton, perquè el Til·ler quedi sol)
         for (let i = 0; i < 11; i++) {
-            const x = 990 + i * 38 + r() * 10, y = Y + (i % 2) * 10, s = i % 2 ? 1 : -1;
-            const amp = 50 + r() * 40, alt = 60 + r() * 70;
+            const x = 1020 + i * 31 + r() * 10, y = Y + (i % 2) * 10, s = i % 2 ? 1 : -1;
+            const amp = Math.min(50 + r() * 25, s > 0 ? 1380 - x : x - 980), alt = 60 + r() * 70;
             const g = this.add.graphics({ x, y }).setDepth(y);
             const pts = new Phaser.Curves.CubicBezier(new Phaser.Math.Vector2(0, 0), new Phaser.Math.Vector2(s * amp * 0.1, -alt * 1.3),
                 new Phaser.Math.Vector2(s * amp * 0.9, -alt * 1.3), new Phaser.Math.Vector2(s * amp, 0)).getPoints(18);
@@ -675,7 +678,7 @@ class ZonaTiller extends ZonaBase {
             this.tweens.add({ targets: g, scaleY: 1.04, yoyo: true, repeat: -1, duration: 1400 + i * 130, ease: 'Sine.easeInOut' });   // respiren
         }
         // Sense la branca, les arrels només es poden mirar; amb ella, es colpegen com qualsevol cosa (ESPAI)
-        this.interactiu(1190, Y + 60, 130, DIALEGS.arrelsTiller, { altura: 110, actiu: () => !Estat.flag('camiCirosaObert') && !Estat.te('basto_tiller') });
+        this.interactiu(960, Y + 25, 130, DIALEGS.arrelsTiller, { altura: 110, actiu: () => !Estat.flag('camiCirosaObert') && !Estat.te('basto_tiller') });
     }
 
     // Cop de l'Ineu (combat.js) amb la branca del Til·ler a prop de les arrels
@@ -775,9 +778,15 @@ class ZonaTiller extends ZonaBase {
         this.sopar = null;
     }
 
+    sincroFantasma() {
+        if (this.fantasma) this.fantasma.setVisible(false);
+    }
+
     actualitzar() {
         // La branca només es veu mentre encara no l'has agafada (i després que el Til·ler te l'hagi indicat)
-        this.branca.setVisible(Estat.flag('tillerBranca') && !Estat.te('basto_tiller') && !this.brancaAgafada);
+        const visible = Estat.flag('tillerBranca') && !Estat.te('basto_tiller') && !this.brancaAgafada;
+        this.branca.setVisible(visible);
+        this.brancaAura.setVisible(visible);
     }
 }
 
@@ -1027,7 +1036,7 @@ class ZonaBosc extends ZonaBase {
 
         // Font del Bisbe (missió de la font)
         this.posar('font_sj', 910, 610, { col: { w: 150, h: 50 } });
-        this.interactiu(910, 625, RADI_GRAN, DIALEGS.fontSJ, { altura: 170 });
+        this.interactiu(910, 625, RADI_GRAN * 1.5, DIALEGS.fontSJ, { altura: 170 });
 
         // Alzina Buida: el portal ocult cap a la cabana de la Jaumeta. És el doble de gran que els altres arbres, té la seva
         // pròpia clariana (llum verda a terra, llumenetes i pedres) i el forat del tronc fa claror: no es pot confondre amb la resta.
@@ -1038,7 +1047,7 @@ class ZonaBosc extends ZonaBase {
         // El punt d'interacció és el forat del tronc (la «!» surt just damunt seu); el radi permet tocar-lo des del peu de l'alzina
         this.interactiu(AX - 18, AY - 128, 235, DIALEGS.alzinaBuida, {
             altura: 56,
-            enTancar: () => { if (Estat.flag('portalJaumeta')) { Estat.dades.portalTorna = 'bosc'; this.canviarZona('ZonaCabana', 'portal'); } }
+            enTancar: () => { if (Estat.flag('portalJaumeta')) this.canviarZona('ZonaCabana', 'portal'); }
         });
         [[-250, 75, 0.7], [255, 45, 0.55], [-120, 120, 0.4]].forEach(([dx, dy, e]) => this.posar('roca', AX + dx, AY + dy, { escala: e, col: { w: 34, h: 14 } }));
         this.claror = this.add.ellipse(AX - 18, AY - 128, 78, 104, 0x6aff9a, 0.45).setDepth(AY + 1);
