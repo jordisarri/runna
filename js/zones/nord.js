@@ -27,14 +27,14 @@ class ZonaCellerFora extends ZonaBase {
         this.terra('pedra', 150, 900, 640, 120);        // esplanada de pedra davant la porta del Celler
         this.terra('cami', 900, 440, 700, 130);         // el camí cap a l'est, entre els arbres: duu a la Sala de les Gírgoles
 
-        const PORTA_X = 400, BASE_Y = 900, PORTA_AMPLE = 98;
+        const PORTA_X = 400, BASE_Y = 900, PORTA_AMPLE = 98, ALT_PARET = 90;
         const sala = this.posar('sala_pingpong', 0, BASE_Y, { fonsY: BASE_Y - 20 });
         const mig = PORTA_X - 0.748 * sala.displayWidth;             // x de la vora esquerra de la imatge (la porta és al 74,8% de l'ample)
         sala.setX(mig + sala.displayWidth / 2);
         sala.setCrop(-mig / sala.scaleX, 0, sala.width + mig / sala.scaleX, sala.height);
-        const dreta = mig + sala.displayWidth * 0.99;                 // vora dreta de la paret
-        this.colisio((PORTA_X - PORTA_AMPLE / 2) / 2, BASE_Y - 45, PORTA_X - PORTA_AMPLE / 2, 90);
-        this.colisio((PORTA_X + PORTA_AMPLE / 2 + dreta) / 2, BASE_Y - 45, dreta - PORTA_X - PORTA_AMPLE / 2, 90);
+        const dreta = mig + sala.displayWidth;                       // vora dreta del gràfic
+        this.colisio((PORTA_X - PORTA_AMPLE / 2) / 2, BASE_Y - ALT_PARET / 2, PORTA_X - PORTA_AMPLE / 2, ALT_PARET);
+        this.colisio((PORTA_X + PORTA_AMPLE / 2 + dreta) / 2, BASE_Y - ALT_PARET / 2, dreta - PORTA_X - PORTA_AMPLE / 2, ALT_PARET);
         this.colisio(PORTA_X, BASE_Y - 100, PORTA_AMPLE, 20);
         this.sortida(PORTA_X - PORTA_AMPLE / 2, BASE_Y - 80, PORTA_AMPLE, 76, 'ZonaPingpong', 'porta');
         this.portaAnimada({ x: 404, top: 703, bottom: 862, ample: 102, fons: BASE_Y - 20, arc: true, color: 0xa84a30, vora: 0x3a1408 });   // la porta d'arc del Celler
