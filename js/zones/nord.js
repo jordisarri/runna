@@ -417,7 +417,7 @@ class ZonaCelles extends ZonaBase {
         this.blocDarrere((SB0 + 1800) / 2, 1800 - SB0, 505, Math.max(0, 600 - sb.displayHeight));
         this.interactiu(SB0 + sb.displayWidth * 0.251, 620, RADI_OBJECTE, DIALEGS.portaFlam, { altura: 140 });    // porta de l'esquerra: on dormia el Fram
 
-        // Sant Benet (est): la Neus i el seu marit, el senyor Moliner, veïns de Sant Benet
+        // Sant Benet (est): la Meus i el seu marit, el senyor Molner, veïns de Sant Benet
         this.npc('neus', 1250, 680, DIALEGS.neus);
         this.npc('marit_neus', 1320, 700, DIALEGS.maritNeus);
         // Les dues Venerables Sàvies (agafades del braç, un sol gràfic): donen consells

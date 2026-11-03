@@ -41,7 +41,7 @@ const PROGRES = {
         { id: 'sopar', marca: ['escudella', 'floresIsidre', 'pastorsConvencuts', 'soparFet', 'fullaTiler', 'obj:fulla_tiler'], fet: E => E.flag('soparFet'),
           pista: E => {
               const f = [];
-              if (!E.flag('escudella')) f.push("l'escudella de la Neus (a les cel·les)");
+              if (!E.flag('escudella')) f.push("l'escudella de la Meus (a les cel·les)");
               if (!E.flag('floresIsidre')) f.push("les flors d'Isildren (al jardí de l'Hostatgeria)");
               if (!E.flag('pastorsConvencuts')) f.push("el pa que pasten els pastors de la Cirosa (potser una música vora el seu foc els recordaria com fer-lo)");
               return f.length ? "Al sopar del Til·ler encara hi falta: " + f.join(', ') + "." : "Ja ho tens tot: el Gran Til·ler espera la taula parada.";

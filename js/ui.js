@@ -35,7 +35,7 @@ const RETRATS = {
     'Pare Alcuí': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Garf': 'garf', 'Isildren': 'isidre',
     'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
-    'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Jordi': 'jordi_caseta', 'Rosansa': 'sansa', 'Home del Raïm': 'home_raim',
+    'Meus': 'neus', 'Senyor Molner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Jordi': 'jordi_caseta', 'Rosansa': 'sansa', 'Home del Raïm': 'home_raim',
     'Carry': 'carry', 'Follet del Carro Verd': 'home_carruatge', 'El Gran Til·ler': 'tiller',
     "L'Home de la Gàbia": 'ocellaire', 'Huri': 'nen_uri', 'Fram': 'nen_flam', 'Flami': 'nen_flam', 'Sardi': 'nen_sardin'
 };
@@ -123,7 +123,7 @@ const CATALEG_OBJECTES = {
     cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Garf en sabrà fer alguna cosa.'],
     pruna:            ['Pruna daurada', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en vol una.'],
     beuratge:         ['Beuratge de la Jaumeta', 'Dissipa la boira del camí cap al Til·ler; no protegeix de la boira verinosa.'],
-    escudella:        ['Escudella de la Neus', 'Encara calenta, com cada any per al sopar del Til·ler.'],
+    escudella:        ['Escudella de la Meus', 'Encara calenta, com cada any per al sopar del Til·ler.'],
     flors_isidre:     ['Flors d\'Isildren', 'Un ram embolicat amb un tros de pergamí.'],
     pa_pastor:        ['Pa dels pastors', 'Una barra baixa i fosca, cuita sota la cendra.'],
     esquelles:        ['Esquelles dels pastors', 'Amb elles, els cants antics sonen més clars.'],

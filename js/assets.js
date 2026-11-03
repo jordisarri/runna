@@ -57,8 +57,8 @@ const CATALEG = [
     { key: 'pianista',  file: 'assets/personatges/pianista.webp',  amplada: 115, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
     { key: 'venerables', file: 'assets/personatges/venerables.webp', amplada: 147, cru: true, provisional: (c, w) => dibuixarVenerables(c, w) },   // les dues Venerables Sàvies de les Cel·les, agafades del braç (un sol gràfic)
     { key: 'mare_nena', file: 'assets/personatges/mare_nena.webp', amplada: 77, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#cfd6ee', cabell: '#e8e8f2', dona: true, ample: 1.1, alt: 0.9 }) },   // la mare de la Nena de les Trenes (visió de llum, sense rostre)
-    { key: 'neus',      file: 'assets/personatges/neus.webp',      amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
-    { key: 'marit_neus', file: 'assets/personatges/marit_neus.webp', amplada: 96, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a6a7a', cabell: '#5a4636', alt: 0.98, calb: true }) },
+    { key: 'neus',      file: 'assets/personatges/neus.webp',      amplada: 68,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
+    { key: 'marit_neus', file: 'assets/personatges/marit_neus.webp', amplada: 90, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a6a7a', cabell: '#5a4636', alt: 0.98, calb: true }) },
     { key: 'juli',      file: 'assets/personatges/juli.webp',      amplada: 72, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'juli') },
     { key: 'frederic',  file: 'assets/personatges/frederic.webp',  amplada: 77, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'frederic') },
     { key: 'eloi',      file: 'assets/personatges/eloi.png',      amplada: 104, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'eloi') },
@@ -69,7 +69,7 @@ const CATALEG = [
     { key: 'pallofa',   file: 'assets/personatges/pallofa.webp',   amplada: 60, cru: true,  provisional: (c, w) => dibuixarGos(c, w) },   // el Pallofa, gos petit i prim, blanc amb taques marrons, borni i ple de puces
     { key: 'isidre',    file: 'assets/personatges/isidre.webp',    amplada: 93, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { isidre: true, calb: true, roba: '#f4f1e8', cabell: '#000000', alt: 0.94 }) },
     { key: 'jordi_caseta', file: 'assets/personatges/jordi_caseta.webp', amplada: 66, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a7a3a', cabell: '#4a3a2a', alt: 0.97, extra: 'gorra' }) },
-    { key: 'sansa',     file: 'assets/personatges/sansa.webp',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
+    { key: 'sansa',     file: 'assets/personatges/sansa.webp',     amplada: 86,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
     { key: 'ciscu',     file: 'assets/personatges/ciscu.webp',    amplada: 52, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#c8a040', cabell: '#5a3a1e', alt: 0.74, cap: 17, extra: 'gorra' }) },
     { key: 'eva',       file: 'assets/personatges/eva.webp',       amplada: 67, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7a5a', cabell: '#e8cc66', dona: true, alt: 0.95 }) },
     { key: 'home_carruatge', file: 'assets/personatges/home_carruatge.webp', amplada: 68, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2f6b3d', cabell: '#222', alt: 1.04, extra: 'gorra' }) },
@@ -168,7 +168,7 @@ const CATALEG = [
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
 ['ineu', 'pare_jordi', 'germa_andreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'garf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
- 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta', 'sansa']
+ 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta', 'sansa', 'neus', 'marit_neus']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
 /**

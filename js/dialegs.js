@@ -40,7 +40,7 @@ function consellVenerables(E) {
 // Objectiu viu del sopar del Til·ler: diu què falta
 function objectiuSopar(E) {
     const f = [];
-    if (!E.flag("escudella")) f.push("l'escudella de la Neus");
+    if (!E.flag("escudella")) f.push("l'escudella de la Meus");
     if (!E.flag("floresIsidre")) f.push("les flors d'Isildren (Hostatgeria)");
     if (!E.flag("pastorsConvencuts")) f.push("el pa dels pastors de la Cirosa (una música vora el seu foc els recordaria com es pasta)");
     E.posaObjectiu(f.length ? "El sopar del Til·ler: falta " + f.join(", ") + "." : "Tot a punt: torna al Gran Til·ler per al sopar.");
@@ -440,9 +440,9 @@ const DIALEGS = {
         if (E.flag("soparObert") && !E.flag("escudella")) {
             return {
                 pagines: [
-                    { qui: "Neus", text: "El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb tres nens que falten..." },
-                    { qui: "Neus", text: "...Però el Til·ler té raó, maleït sigui. No es pot deixar de fer el que s'ha fet sempre, ni quan el cor fa mal. Pren l'escudella, i no la vessis!" },
-                    { qui: "Neus", text: "És l'escudella de cada any, la de les nostres àvies, però enguany té un gust que no voldria explicar. Tu tingues-ne cura de portar-la sencera." },
+                    { qui: "Meus", text: "El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb tres nens que falten..." },
+                    { qui: "Meus", text: "...Però el Til·ler té raó, maleït sigui. No es pot deixar de fer el que s'ha fet sempre, ni quan el cor fa mal. Pren l'escudella, i no la vessis!" },
+                    { qui: "Meus", text: "És l'escudella de cada any, la de les nostres àvies, però enguany té un gust que no voldria explicar. Tu tingues-ne cura de portar-la sencera." },
                     { avis: "Has obtingut L'ESCUDELLA DE LA NEUS." }
                 ],
                 enAcabar: () => { E.dona("escudella"); E.posaFlag("escudella"); objectiuSopar(E); }
@@ -450,9 +450,9 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: "Neus", text: "Ineu, fill, no t'hi quedis plantat! L'Huri i el Fram dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!" },
-                { qui: "Senyor Moliner", text: "Neus, deixa'l respirar..." },
-                { qui: "Neus", text: "Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls." }
+                { qui: "Meus", text: "Ineu, fill, no t'hi quedis plantat! L'Huri i el Fram dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!" },
+                { qui: "Senyor Molner", text: "Meus, deixa'l respirar..." },
+                { qui: "Meus", text: "Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls." }
             ],
             enAcabar: () => E.posaFlag("parlatSantBenet")
         };
@@ -460,8 +460,8 @@ const DIALEGS = {
 
     maritNeus: E => ({
         pagines: [
-            { qui: 'Senyor Moliner', text: 'Sí, Neus. No, Neus. Ara vinc, Neus.' },
-            { qui: 'Senyor Moliner', text: '...Ah, Ineu. Ets tu. Fes cas del que digui ella. Sempre té raó. Sempre.' }
+            { qui: 'Senyor Molner', text: 'Sí, Meus. No, Meus. Ara vinc, Meus.' },
+            { qui: 'Senyor Molner', text: '...Ah, Ineu. Ets tu. Fes cas del que digui ella. Sempre té raó. Sempre.' }
         ]
     }),
 
@@ -1107,7 +1107,7 @@ const DIALEGS = {
             { qui: "El Gran Til·ler", text: "Un cop l'any, a la tardor, la gent de les cel·les s'asseu sota les meves branques i menja plegada. Ho anomeneu el sopar del Til·ler. Jo no menjo, però escolto. Tota la saviesa d'un arbre és escoltar la gent que menja junta." },
             { qui: "El Gran Til·ler", text: "Aquest any ningú no té ganes de taula: tres cadires buides, i el poble amb por. La boira s'alimenta de la solitud, petit monjo. I no val a mitges: la taula ha d'estar plena." },
             { qui: "El Gran Til·ler", text: "Fa tres-cents anys, quan van tancar la gàbia, els pastors de la Cirosa s'asseien aquí amb els monjos i els pelegrins. Després els van foragitar, i van oblidar que també eren de la casa. Que vingui el menjar de cada llar, també el seu. I que hi hagi flors." },
-            { qui: "El Gran Til·ler", text: "Porta l'escudella de la Neus, les flors d'Isildren i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís." }
+            { qui: "El Gran Til·ler", text: "Porta l'escudella de la Meus, les flors d'Isildren i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís." }
         ],
         enAcabar: () => { E.posaFlag("soparObert"); objectiuSopar(E); }
     }),
@@ -1127,7 +1127,7 @@ const DIALEGS = {
     // El ritual: s'encén una espelma per cada nen que falta (l'Huri, el Fram i el Sardi)
     tillerSoparRitual: E => ({
         pagines: [
-            { qui: "Neus", text: "Aquest any m'he descuidat de fer-hi cantar ningú. Que ens ho perdonin els tres, allà on siguin." },
+            { qui: "Meus", text: "Aquest any m'he descuidat de fer-hi cantar ningú. Que ens ho perdonin els tres, allà on siguin." },
             { qui: "Les Venerables Sàvies", text: "Sempre fem el mateix, fill: una espelma per cada cadira buida a la taula. Enguany en són tres: l'Huri, el Fram i el Sardi. Encén-les tu, que ets qui ho ha de portar a terme." },
             { fer: (z, fet) => z.encendreEspelmes([0, 1, 2], fet) },
             { qui: "Pastor vell", text: "Fa molts anys que a nosaltres ningú no ens guardava cap cadira a cap taula. Gràcies per asseure'ns, fill." },

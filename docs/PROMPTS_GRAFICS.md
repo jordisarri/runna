@@ -306,7 +306,7 @@ Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style,
 
 
 
-### `retrats/sansa_retrat.jpg` (retrat de la Rosansa als diàlegs) *(Puja com a referències `art/personatges/sansa.png` i un retrat fet, p. ex. `art/retrats/eva_retrat.jpg`. Xat nou i sense noms. Es converteix amb `eines/convertir_retrats.js sansa`. Ara hi ha un retrat provisional retallat del sprite.)*
+### Retrat de la Rosansa: `retrats/sansa_retrat.jpg` (als diàlegs) *(Puja com a referències `art/personatges/sansa.png` i un retrat fet, p. ex. `art/retrats/eva_retrat.jpg`. Xat nou i sense noms. Es converteix amb `eines/convertir_retrats.js sansa`. Ara hi ha un retrat provisional retallat del sprite.)*
 
 ```
 Charming 2D cartoon character PORTRAIT for the dialogue box of a game, in exactly the same style as the attached reference portrait (bold clean black outline, soft cel shading with subtle gradient highlights, warm earthy colours, slightly chibi rounded features, big expressive glossy eyes). Draw the SAME woman as in the attached full-body character image: a cheerful middle-aged travelling market vendor with a round rosy face, big warm brown eyes, a wide friendly smile, soft smile lines, dark brown hair in a thick braid over one shoulder, a green-and-white checked headscarf tied at the nape, a moss-green wool dress and a brown knitted shawl over the shoulders. Head and shoulders only (bust, cut just below the shoulders like the reference portrait), head turned three-quarters towards the RIGHT, looking at someone she is talking to, lively and kind expression, mouth slightly open as if chatting. Single character, centered, isolated on a pure white background (#FFFFFF), no hands, no basket, no text, no frame, no cast shadow. Square format.
