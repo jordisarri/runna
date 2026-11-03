@@ -46,7 +46,7 @@
 
 - [x] `eva`
 
-- [x] `flauta`
+- [x] `flauta` → `ineu/tarota`
 
 - [x] `frederic`
 
@@ -230,7 +230,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ineu/tarota`, `ineu/tarota_gran`, `andreu_guardia`, `arrels_tiller`, `basto_ocellaire`, `carro_sansa`, `gabia`, `gabia_oberta`, `home_raim_o`, `marit_neus`, `neus`, `ocellaire_cansat`, `sansa`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ineu/tarota_gran`, `andreu_guardia`, `arrels_tiller`, `basto_ocellaire`, `carro_sansa`, `gabia`, `gabia_oberta`, `home_raim_o`, `marit_neus`, `neus`, `ocellaire_cansat`, `sansa`.
 
 
 
@@ -268,13 +268,7 @@ Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, match
 
 
 
-### `ineu/tarota.png` → `assets/ineu/flauta.webp` (amplada 58) *(L'Ineu tocant, de cara, al mapa. És l'art actual `art/ineu/flauta.jpg` amb la flauta canviada per una **tarota**. Puja com a 1a imatge `art/ineu/flauta.jpg` i, si en tens, com a 2a imatge una **foto d'una tarota de veritat** (ajuda molt: el generador no sap gaire què és una tarota i tendeix a fer una flauta dolça). Si encara surt una flauta, repeteix-ho afegint: «make the instrument twice as long, with a big flared bell at the bottom».)*
-
-```
-Edit the FIRST attached image. Keep EXACTLY the same monk character: the same face with closed eyes, the same tonsured brown hair, the same brown hooded habit, rope belt with tassels, wooden rosary with cross, sandals, the same chibi proportions, the same outline, colouring and shading, the same front-facing standing pose, the same framing and image size, the same pure white background (#FFFFFF), no text. Change ONLY the instrument: replace the wooden recorder with a TAROTA, the traditional Catalan double-reed shawm: a long straight conical wooden pipe of dark turned boxwood, about as long as the monk's forearm and hand together, narrow at the top and gradually widening downwards, with a few thin decorative turned rings, seven finger holes in a line on the front, ending at the bottom in a wide flared trumpet-like bell; at the top a short thin brass tube (staple) carries a tiny flat double reed made of cane, and ONLY that small reed goes between his lips. It is held pointing DOWN and forward at about 45 degrees (never sideways like a transverse flute), with the left hand on the upper holes and the right hand on the lower holes, fingers covering the holes. It is NOT a recorder, NOT a tin whistle, NOT a flute, NOT a clarinet: it is clearly longer, darker and conical with a big flared bell. If a second image is attached, it is a photo of a real tarota: copy its shape, but draw it in the same cartoon style as the monk. His cheeks are slightly puffed as he blows into the reed, eyes closed, peaceful and concentrated. Keep the few small golden music notes floating next to him. A single character, full body, whole body visible.
-```
-
-### `ineu/tarota_gran.png` → `assets/ineu/tarota_gran.webp` (amplada 420) *(Primer pla gran de l'Ineu tocant la tarota, que surt per sobre de l'escenari mentre és obert el pergamí de la música. Puja com a referències `art/ineu/flauta.jpg` (o la nova `tarota.png`) i la foto de la tarota. La part de baix queda tapada pel pergamí: no cal que s'hi vegin les mans senceres, però sí la tarota fins a la campana. Fins que no hi sigui, el joc fa servir un retall ampliat de l'art de la flauta.)*
+### `ineu/tarota_gran.png` → `assets/ineu/tarota_gran.webp` (amplada 420) *(Primer pla gran de l'Ineu tocant la tarota, que surt per sobre de l'escenari mentre és obert el pergamí de la música. Puja com a referència `art/ineu/tarota.png`. La part de baix queda tapada pel pergamí: no cal que s'hi vegin les mans senceres, però sí la tarota fins a la campana. Fins que no hi sigui, el joc fa servir un retall ampliat de `art/ineu/tarota.png`, que ja queda prou bé.)*
 
 ```
 Charming 2D cartoon illustration in exactly the same style as the attached reference image of the monk (bold clean dark outline, soft cel shading, warm earthy colours, chibi features). A CLOSE-UP, half-length portrait of the SAME monk character (same face, same tonsured brown hair, same brown hooded habit and wooden rosary), seen from the front, from the top of his head down to his waist, the head big and filling the upper half of the image. He is playing a TAROTA, the traditional Catalan double-reed shawm: a long straight conical wooden pipe of dark turned boxwood, about as long as the monk's forearm and hand together, narrow at the top and gradually widening downwards, with a few thin decorative turned rings, seven finger holes in a line on the front, ending at the bottom in a wide flared trumpet-like bell; at the top a short thin brass tube (staple) carries a tiny flat double reed made of cane, and ONLY that small reed goes between his lips. It is held pointing DOWN and forward at about 45 degrees (never sideways like a transverse flute), with the left hand on the upper holes and the right hand on the lower holes, fingers covering the holes. It is NOT a recorder, NOT a tin whistle, NOT a flute, NOT a clarinet: it is clearly longer, darker and conical with a big flared bell. Eyes closed, eyebrows lifted with feeling, cheeks puffed, completely absorbed in the music, a slight tilt of the head. The bell of the tarota reaches the lower right part of the image. A few small golden music notes come out of the bell. Single character, centered, isolated on a pure white background (#FFFFFF), no scenery, no text, no frame, no cast shadow. Portrait format (about 4:5).
