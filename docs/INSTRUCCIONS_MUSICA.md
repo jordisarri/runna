@@ -42,7 +42,7 @@ Si només en fas set, que siguin les imprescindibles: el combat final i el despe
 
 Tot ha de sonar de la mateixa família que les quatre del món base: **fantasia acústica de cambra, càlida, una mica fosca, amb ànima de poble**. Flauta i flabiol, arpa, violí, violoncel, orgue d'església, cors sense paraules, tambors i campanes; acordió i tenora només a la Taverna i la Cirosa. Res de guitarres elèctriques, de bateries de rock ni de veu amb lletra. Si el generador deixa pujar una referència, puja-hi una de les quatre del món base.
 
-Tonalitat base: **Mi menor**. Si un generador no respecta el to, no passa res; el motiu dels cants de sota és un detall que, si no surt, afegeixo jo amb una flauta.
+Tonalitat: el tema del joc (`intro_runna.mp3`) és en **Do major**; els prompts que diuen «E minor/E major» poden anar en Do (C major / A minor) perquè lliguin amb el tema. Si un generador no respecta el to, no passa res; el motiu dels cants de sota és un detall que, si no surt, afegeixo jo amb una flauta.
 
 ### Els tres cants (només si el generador deixa guiar la melodia)
 
