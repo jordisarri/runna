@@ -1298,14 +1298,10 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: "Ineu", text: "La foscor tem la llum, però més encara el riure!" },
-                { fer: (z, fet) => z.alcarRunna(fet) },
-                { qui: "Runna", text: "Fa molt que dormo. Hi torna a haver una gàbia, oi? Anem-hi." },
-                { qui: "Ineu", text: "Runna... Em parles al cap!" },
-                { qui: "Runna", text: "Feia tres-cents anys que ningú no em deia que el riure espanta la foscor. Es veu que encara és veritat." }
+                { fer: (z, fet) => z.alcarRunna(fet) }
             ],
             enAcabar: () => {
                 E.dona("runna"); E.posaFlag("runna");
-                const ui = game.scene.getScene("UI"); if (ui) ui.missatge("Runna: 2 de dany. Talla els esbarzers negres.");
                 E.posaObjectiu("Torna al Santuari: la Pianista t'ha d'ensenyar l'últim cant, el Cant del Miracle.");
             }
         };
