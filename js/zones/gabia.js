@@ -302,15 +302,6 @@ class ZonaTortura extends ZonaBase {
             this.tweens.add({ targets: [fl, ll], scaleY: 1.15, alpha: 0.75, yoyo: true, repeat: -1, duration: 160 + i * 23 });
         });
 
-        // Instruments de tortura
-        const g = this.add.graphics();
-        // Donzella de ferro (tram 1, dreta)
-        const dz = this.add.graphics().setDepth(1560);
-        dz.fillStyle(0x3a3a40, 1).fillRoundedRect(570, 1400, 90, 160, 40).fillStyle(0x1a1a1e, 1).fillRoundedRect(582, 1414, 66, 140, 30);
-        dz.fillStyle(0x9a9aa0, 1).fillCircle(615, 1440, 18).fillStyle(0x1a1a1e, 1).fillCircle(608, 1436, 3).fillCircle(622, 1436, 3);
-        for (let k = 0; k < 6; k++) dz.fillStyle(0xd8d0c0, 0.8).fillEllipse(590 + k * 9, 1530 - (k % 2) * 8, 6, 14);
-        this.colisio(615, 1540, 90, 30);
-
         // ---- Rastell rovellat amb el torn (Guants de Poder) ----
         const YR = 1180;
         this.rastell = this.add.graphics().setDepth(YR);
