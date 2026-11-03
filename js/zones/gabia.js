@@ -586,11 +586,12 @@ class ZonaGabia extends ZonaBase {
         return e;
     }
 
-    // El bàcul de l'Ocellaire: la imatge inclou les dues flames i els ganxos daurats.
+    // El bàcul de l'Ocellaire: la imatge (assets/armes/basto_ocellaire.webp) té els ganxos daurats; les flames de les puntes, quan gira de pressa, són partícules.
     crearBasto(e) {
         let g;
         if (this.textures.exists('basto_ocellaire') && !Grafics.faltants.includes('basto_ocellaire')) {
-            g = this.add.image(0, 0, 'basto_ocellaire').setDisplaySize(184, 46);
+            g = this.add.image(0, 0, 'basto_ocellaire');
+            g.setDisplaySize(184, 184 * g.height / g.width);                    // de punta a punta, ±92 (on surten les flames)
         } else {
             g = this.add.graphics();
             g.fillStyle(0x2a1a14, 1).fillRoundedRect(-80, -5, 160, 10, 4);
