@@ -51,5 +51,5 @@ La música de fons s'abaixa mentre sona (`Joc.leitmotiv`).
 
 ## Prompt pendent: `celles`
 
-**`celles`** (bucle, ~2 min): les cel·les de descans del Santuari, amb famílies, la Meus, les Venerables Sàvies i la Carry vídua. Una vida tranquil·la i casolana amb la boira que s'hi escola: càlida però una mica trista, sense perill. **Sense adjunt** (color propi del lloc).
-> instrumental quiet pilgrim lodging at dusk, gentle chamber folk, slow, A minor drifting to C major, solo cello and soft wooden flute, harp arpeggios, faint harmonium, a distant single church bell, a thin cold mist creeping in, homely and a little melancholic, sparse and even dynamics, seamless loop, no drums, no lyrics
+**`celles`** (bucle, ~2 min): les cel·les de descans del Santuari, unes cases plenes de vida: veïns que van i vénen, la Meus amb l'escudella al foc, les Venerables Sàvies xerrant, criatures corrent. Alegre i enjogassada, amb mig compàs de passeig; només una petita ombra de la boira al fons. **Sense adjunt** (color propi del lloc).
+> instrumental lively village homestead theme, cheerful Catalan folk, mid-tempo around 110 bpm, G major, bright wooden flute and violin trading a playful melody, plucked harp and pizzicato strings, light frame drum and tambourine, a little accordion, small bells, bustling and warm like neighbours chatting and children playing, upbeat with a tiny hint of mystery, seamless loop, no lyrics
