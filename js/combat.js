@@ -1022,7 +1022,7 @@ Object.assign(ZonaBase.prototype, {
         if (d.vida <= 0) this.caure();
     },
 
-    // L'Ineu cau: el Pare Jordi el recull a la Plaça amb tota la vida
+    // L'Ineu cau: el Pare Jordà el recull a la Plaça amb tota la vida
     caure() {
         this.caient = true; this.canviant = true;
         this.ineu.body.setVelocity(0);

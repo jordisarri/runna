@@ -179,7 +179,7 @@ class ZonaRuines extends ZonaBase {
     }
 
     actualitzar() {
-        // Quan el Pare Alcuí ja ha llegit els fragments, l'ombra parla a l'Ineu el primer cop que s'hi acosta (li diu què vol sentir)
+        // Quan el Pare Alcoví ja ha llegit els fragments, l'ombra parla a l'Ineu el primer cop que s'hi acosta (li diu què vol sentir)
         if (!this.ombraHaCridat && Estat.flag('alcuiLlegit') && Estat.flag('fragment2') && !Estat.flag('ombraDemanaCant')
             && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, this.puntOmbra.x, this.puntOmbra.y) < 260 && !this.ui().dialeg) {
             this.ombraHaCridat = true;
@@ -435,7 +435,7 @@ class ZonaCelles extends ZonaBase {
 
         this.sortida(800, 1086, 200, 14, 'ZonaRuines', 'celles');
         this.sortida(0, 640, 14, 130, 'ZonaBosc', 'celles');
-        // El camí del Gran Til·ler, al nord, és tapat per una boira espessa que no marxa amb el vent: la desfà el beuratge de la Jaumeta
+        // El camí del Gran Til·ler, al nord, és tapat per una boira espessa que no marxa amb el vent: la desfà el beuratge de la Jacmeta
         this.boiraTiller = null;
         if (Estat.flag('boiraTillerNeta') || Estat.flag('parlatTiler')) this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
         else this.posarBoiraTiller();
@@ -488,7 +488,7 @@ class ZonaCelles extends ZonaBase {
 }
 
 // ---------------- CEL·LES DE SANT ANTONI ----------------
-// A llevant del Monestir. Hi passeja el Germà Francesc, monjo del Monestir que cuida les flors del cementiri: per un favor
+// A llevant del Monestir. Hi passeja el Germà Francí, monjo del Monestir que cuida les flors del cementiri: per un favor
 // (portar-hi el seu ram), et dona els Guants de Poder, els que mouen la roda del Celler. L'Huri, el primer nen desaparegut, hi venia a robar figues.
 Object.assign(DIALEGS, {
     portaFlam: E => ({ pagines: [] }),
@@ -498,14 +498,14 @@ Object.assign(DIALEGS, {
 
     germaFrancesc: E => {
         if (E.te('guants')) return { pagines: [
-            { qui: 'Germà Francesc', text: 'Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.' }
+            { qui: 'Germà Francí', text: 'Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.' }
         ] };
         if (E.flag('florsCreu')) return {
             pagines: [
-                { qui: 'Germà Francesc', text: 'Les has deixades a l\'àngel? Que Déu t\'ho pagui, fill. Els monjos d\'abans ja deuen estar contents: algú encara se\'n recorda.' },
-                { qui: 'Germà Francesc', text: 'Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.' },
+                { qui: 'Germà Francí', text: 'Les has deixades a l\'àngel? Que Déu t\'ho pagui, fill. Els monjos d\'abans ja deuen estar contents: algú encara se\'n recorda.' },
+                { qui: 'Germà Francí', text: 'Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.' },
                 { avis: 'Has obtingut els GUANTS DE PODER!' },
-                { qui: 'Germà Francesc', text: 'Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.' }
+                { qui: 'Germà Francí', text: 'Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.' }
             ],
             enAcabar: () => {
                 E.dona('guants');
@@ -513,18 +513,18 @@ Object.assign(DIALEGS, {
             }
         };
         if (E.te('ram')) return { pagines: [
-            { qui: 'Germà Francesc', text: 'El ram, a la tomba de l\'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.' }
+            { qui: 'Germà Francí', text: 'El ram, a la tomba de l\'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.' }
         ] };
         return {
             pagines: [
-                { qui: 'Germà Francesc', text: 'Ineu... Bon dia, fill. Ja et deixen créixer?' },
-                { qui: 'Germà Francesc', text: 'Perdona que no camini de pressa: aquests genolls ja tenen més anys que el campanar.' },
-                { qui: 'Germà Francesc', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L\'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
-                { qui: 'Germà Francesc', text: 'Cada setmana porto flors a l\'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
-                { qui: 'Germà Francesc', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },
+                { qui: 'Germà Francí', text: 'Ineu... Bon dia, fill. Ja et deixen créixer?' },
+                { qui: 'Germà Francí', text: 'Perdona que no camini de pressa: aquests genolls ja tenen més anys que el campanar.' },
+                { qui: 'Germà Francí', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L\'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
+                { qui: 'Germà Francí', text: 'Cada setmana porto flors a l\'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
+                { qui: 'Germà Francí', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },
                 { avis: 'Has obtingut un RAM DE FLORS.' }
             ],
-            enAcabar: () => { E.dona('ram'); E.posaObjectiu("El ram del Germà Francesc és per a la tomba de l'àngel, al Cementiri."); }
+            enAcabar: () => { E.dona('ram'); E.posaObjectiu("El ram del Germà Francí és per a la tomba de l'àngel, al Cementiri."); }
         };
     }
 });
@@ -556,7 +556,7 @@ class ZonaSantAntoni extends ZonaBase {
         // El Pallofa, el gos de la Carry: només hi passeja un cop has parlat amb ella, fins que l'agafes
         if (Estat.flag('carryParlat') && !Estat.te('pallofa') && !Estat.flag('pallofaTornat')) this.posarPallofa();
         this.cartell(170, 800, () => ({ pagines: [{ qui: 'Cartell', text: '← El Monestir i la Plaça' }] }));
-        this.arbres([[1250, 300], [1320, 560], [1340, 1060], [160, 300], [360, 220]]);   // cap arbre davant el cartell ni el Germà Francesc
+        this.arbres([[1250, 300], [1320, 560], [1340, 1060], [160, 300], [360, 220]]);   // cap arbre davant el cartell ni el Germà Francí
 
         this.sortida(0, 820, 14, 140, 'ZonaMonestir', 'santantoni');   // surts per l'est del Monestir
     }
@@ -868,7 +868,7 @@ class ZonaJordi extends ZonaBase {
     }
 }
 
-// ---------------- CASA D'EN JORDI (interior) ----------------
+// ---------------- CASA D'EN GEORGI (interior) ----------------
 // Una casa de pagès endreçada i plena de vida, però buida: en Georgi és al jardí. Només es mira.
 Object.assign(DIALEGS, {
     casaJordiEines: E => ({ pagines: [] }),
@@ -1062,7 +1062,7 @@ class ZonaBosc extends ZonaBase {
         this.posar('font_sj', 910, 610, { col: { w: 150, h: 50 } });
         this.interactiu(910, 625, RADI_GRAN * 1.5, DIALEGS.fontSJ, { altura: 170 });
 
-        // Alzina Buida: el portal ocult cap a la cabana de la Jaumeta. És el doble de gran que els altres arbres, té la seva
+        // Alzina Buida: el portal ocult cap a la cabana de la Jacmeta. És el doble de gran que els altres arbres, té la seva
         // pròpia clariana (llum verda a terra, llumenetes i pedres) i el forat del tronc fa claror: no es pot confondre amb la resta.
         const AX = 330, AY = 780;
         this.add.ellipse(AX, AY + 40, 760, 380, 0x8fe08a, 0.13).setDepth(-1090);

@@ -26,7 +26,7 @@ const ZOOM_CAMERA = (() => {
     } catch (e) { }
     return z >= 1 && z <= 1.6 ? z : 1.2;
 })();
-// Inici tancat: fins que l'Ineu no ha parlat amb el Pare Jordi i no té el bastó de pelegrí, només pot anar pel Monestir i la Plaça
+// Inici tancat: fins que l'Ineu no ha parlat amb el Pare Jordà i no té el bastó de pelegrí, només pot anar pel Monestir i la Plaça
 const ZONES_INICI = ['ZonaMonestir', 'ZonaMonestirRebedor', 'ZonaBiblioteca', 'ZonaPlaca'];
 const BANDA_SUD = 120;   // franja de baix (vora sud, sortides) que es desplaça cap avall en ampliar la zona
 const VELOCITAT_INEU = 230;
@@ -39,7 +39,7 @@ const MARGE_TEULADA = 62;   // mig cos de l'Ineu: la col·lisió d'un edifici co
 const BOIRA_PASSOS = [
     E => E.flag('bassadoriaNeta'),                                         // Bassadòria: Cant de l'Aurora
     E => E.flag('fontNeta'),                                               // Font del Bisbe: les tres ofrenes
-    E => E.flag('boiraTillerNeta'),                                        // Camí del Gran Til·ler: beuratge de la Jaumeta
+    E => E.flag('boiraTillerNeta'),                                        // Camí del Gran Til·ler: beuratge de la Jacmeta
     E => E.flag('pastorVencut'),                                           // Cirosa: Pastor de Boira
     E => E.flag('boiraDolmenNeta'),                                        // Camí del Dolmen: Estel de Sant Llorenç
     E => E.flag('tombaSegellada')         // Cementiri: Runna segella la tomba
@@ -231,10 +231,10 @@ class ZonaBase extends Phaser.Scene {
         fixarDecorat(this);
     }
 
-    // Després d'una derrota: l'Ineu a terra, i de cop el Pare Jordi agenollat al seu costat; en tancar el diàleg l'Ineu s'aixeca
+    // Després d'una derrota: l'Ineu a terra, i de cop el Pare Jordà agenollat al seu costat; en tancar el diàleg l'Ineu s'aixeca
     despertarCaigut() {
         const ui = this.ui(), I = this.ineu;
-        const dialeg = { pagines: [{ qui: 'Pare Jordi', text: 'Ineu! Que et trobo a terra! Respira, fill. Has de tenir més cura. Ja estàs bé?' }] };
+        const dialeg = { pagines: [{ qui: 'Pare Jordà', text: 'Ineu! Que et trobo a terra! Respira, fill. Has de tenir més cura. Ja estàs bé?' }] };
         if (!this.textures.exists('ineu_inconscient') || !this.textures.exists('jordi_desperta')) {
             this.time.delayedCall(600, () => ui.obrirDialeg(dialeg));
             return;
@@ -253,7 +253,7 @@ class ZonaBase extends Phaser.Scene {
                 veu.forEach(o => o.setVisible(true));
                 this.canviant = false;           // (el cicle torna a córrer i la càmera del diàleg es restableix sola)
             });
-            this.camaraDialeg(true);             // el cicle no corre mentre dura aquesta escena: cal buscar-hi la càmera aquí, perquè el diàleg no tapi el Pare Jordi
+            this.camaraDialeg(true);             // el cicle no corre mentre dura aquesta escena: cal buscar-hi la càmera aquí, perquè el diàleg no tapi el Pare Jordà
         });
     }
 
@@ -1637,14 +1637,14 @@ class ZonaBase extends Phaser.Scene {
     }
 
     // ---- Inici tancat ----
-    // L'aventura s'obre en tenir parlat amb el Pare Jordi i el bastó de pelegrí (les partides que ja han anat més enllà, també queden obertes)
+    // L'aventura s'obre en tenir parlat amb el Pare Jordà i el bastó de pelegrí (les partides que ja han anat més enllà, també queden obertes)
     iniciObert() {
         return (Estat.flag('clauerNovici') && Estat.flag('bastoObtingut')) ||
             ['cantAurora', 'visitada_ZonaRuines', 'visitada_ZonaCreu', 'visitada_ZonaCasaGran', 'visitada_ZonaCelles', 'visitada_ZonaEsglesia'].some(f => Estat.flag(f));
     }
     sortidaTancada(s) { return !this.iniciObert() && ZONES_INICI.includes(this.scene.key) && !ZONES_INICI.includes(s.desti); }
 
-    // Les sortides tancades de l'inici no tenen llum: en obrir-se el camí (bastó + Pare Jordi), apareix la llum i ja es pot passar
+    // Les sortides tancades de l'inici no tenen llum: en obrir-se el camí (bastó + Pare Jordà), apareix la llum i ja es pot passar
     posarBoiraSortides() {
         const pendents = this.sortides.filter(s => s.pendentLlum);
         if (!pendents.length) return;

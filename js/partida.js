@@ -18,7 +18,7 @@ const Estat = {
             y: null,
             vida: 6,          // en meitats de gra del rosari (6 = 3 grans encesos)
             corsMax: 3,
-            objectiu: 'Parla amb el Pare Jordi a la Plaça.',
+            objectiu: 'Parla amb el Pare Jordà a la Plaça.',
             objectes: [],
             flags: {},
             pingpongVictories: 0

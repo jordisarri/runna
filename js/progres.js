@@ -12,7 +12,7 @@ const PROGRES = {
     passos: [
         // ---- ACTE 1 ----
         { id: 'clauer', marca: ['clauerNovici'], fet: E => E.flag('clauerNovici'),
-          pista: E => "El Pare Jordi t'ha fet cridar. Deu ser a la Plaça." },
+          pista: E => "El Pare Jordà t'ha fet cridar. Deu ser a la Plaça." },
         { id: 'basto', marca: ['bastoObtingut', 'obj:basto'], fet: E => E.flag('bastoObtingut'),
           pista: E => "El Germà Andreu, vora els xiprers de la Plaça, diu que un pelegrí no hauria d'anar amb les mans buides amb tantes bestioles corrent." },
         { id: 'cantAurora', marca: ['cantAurora', 'obj:flauta'], fet: E => E.flag('cantAurora'),
@@ -58,15 +58,15 @@ const PROGRES = {
         { id: 'fragment2', marca: ['fragment2'], fet: E => E.flag('fragment2'),
           pista: E => "La clau petita encaixa al sagrari, al mig del retaule del Santuari." },
         { id: 'alcuiLlegit', marca: ['alcuiLlegit'], fet: E => E.flag('alcuiLlegit'),
-          pista: E => "Els dos pergamins són en un llatí molt vell. El Pare Alcuí, entre els llibres del Monestir, el sap llegir." },
+          pista: E => "Els dos pergamins són en un llatí molt vell. El Pare Alcoví, entre els llibres del Monestir, el sap llegir." },
         { id: 'ombra', marca: ['ombraDemanaCant', 'cantPedres', 'benedicioMonjo'], fet: E => E.flag('benedicioMonjo'),
           pista: E => !E.flag('ombraDemanaCant') ? "A les Runes, passat el Pati del Celler, l'ombra del monjo és sobre el mur de l'església inacabada. Parla-hi."
               : !E.flag('cantPedres') ? "L'ombra del monjo demana un cant que les pedres entenen. La Pianista, al Santuari, el coneix."
               : "L'ombra del monjo, a les Runes, només escoltarà el Cant de les Pedres." },
         { id: 'saber', marca: ['saber'], fet: E => E.flag('saber'),
-          pista: E => "Ara que l'ombra t'ha beneït, el Pare Alcuí tindrà paraules per a tu, a la biblioteca." },
+          pista: E => "Ara que l'ombra t'ha beneït, el Pare Alcoví tindrà paraules per a tu, a la biblioteca." },
         { id: 'benediccio', marca: ['benediccio'], fet: E => E.flag('benediccio'),
-          pista: E => "El Pare Jordi, a la Plaça, voldria posar-te la mà al cap ara que el Til·ler t'ha donat permís." },
+          pista: E => "El Pare Jordà, a la Plaça, voldria posar-te la mà al cap ara que el Til·ler t'ha donat permís." },
         // ---- ACTE 2: el camí del Dolmen ----
         { id: 'telescopi', marca: ['garfBancSegut', 'telescopi', 'obj:telescopi'], fet: E => E.flag('telescopi') || E.flag('estelLlorenc'),
           pista: E => !E.flag('garfBancSegut')
@@ -84,9 +84,9 @@ const PROGRES = {
         { id: 'josep', marca: ['josepVencut', 'obj:llanterna'], fet: E => E.flag('josepVencut'),
           pista: E => "Al Celler, entre la Plaça i les Runes, hi ha un jugador de ping-pong que guarda secrets. Allà es guanyen a la taula, i amb bon ritme." },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
-          pista: E => E.flag('florsCreu') ? "El Germà Francesc t'espera a Sant Antoni, content."
-              : E.te('ram') ? "El ram del Germà Francesc és per a algú que ja no el pot rebre: la tomba de l'àngel, al Cementiri."
-              : "El Germà Francesc, que passeja per Sant Antoni (a llevant del Monestir), té uns guants que mouen el que pesa. Potser un favor els hi deixaria." },
+          pista: E => E.flag('florsCreu') ? "El Germà Francí t'espera a Sant Antoni, content."
+              : E.te('ram') ? "El ram del Germà Francí és per a algú que ja no el pot rebre: la tomba de l'àngel, al Cementiri."
+              : "El Germà Francí, que passeja per Sant Antoni (a llevant del Monestir), té uns guants que mouen el que pesa. Potser un favor els hi deixaria." },
         { id: 'roda', marca: ['rodaMoguda'], fet: E => E.flag('rodaMoguda'),
           pista: E => "La roda de carruatge del Celler tapa el túnel dels monjos. Amb uns guants, es deixaria empènyer." },
         { id: 'cambra', marca: ['cofreCambra', 'obj:pergami_monjo'], fet: E => E.flag('cofreCambra'),
@@ -102,7 +102,7 @@ const PROGRES = {
         { id: 'segell', marca: ['tombaLlegida', 'tombaSegellada'], fet: E => E.flag('tombaSegellada'),
           pista: E => E.flag('tombaLlegida') || !E.flag('relTretes')
               ? "La tomba esquerdada del Cementiri (darrere el Santuari i el Monestir) encara treu boira; la llum que va tancar la porta la podria tancar. I la clau de ferro vol una porta de ferro que el Germà Andreu visita cada nit, a l'est del Pati del Celler."
-              : "La tomba dels monjos del Cementiri treu boira. El Pare Alcuí, a la Biblioteca, deu trobar a la Crònica què s'hi ha de fer. I la clau de ferro vol una porta de ferro que el Germà Andreu visita cada nit, a l'est del Pati del Celler." },        // ---- Sota la Taverna ----
+              : "La tomba dels monjos del Cementiri treu boira. El Pare Alcoví, a la Biblioteca, deu trobar a la Crònica què s'hi ha de fer. I la clau de ferro vol una porta de ferro que el Germà Andreu visita cada nit, a l'est del Pati del Celler." },        // ---- Sota la Taverna ----
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
           pista: E => "A l'est del Pati del Celler, pel camí entre els arbres, hi ha una porta de ferro. La clau de ferro n'és amiga." },
         { id: 'clauCiscu', marca: ['ciscuTrobat', 'clauGirgoles', 'obj:clau_girgoles'], fet: E => E.te('clau_girgoles') || E.flag('portaFerroOberta'),
@@ -168,7 +168,7 @@ const PROGRES = {
         return "Els nens tornen a riure i l'orgue sona (gairebé bé). Ho has fet tot, fill.";
     },
 
-    // Pista només fins a Runna (null quan ja la tens): la fan servir el Pare Jordi, el Pare Alcuí i el Til·ler
+    // Pista només fins a Runna (null quan ja la tens): la fan servir el Pare Jordà, el Pare Alcoví i el Til·ler
     pistaRunna(E) {
         if (E.flag('runna')) return null;
         const p = this.seguent(E);

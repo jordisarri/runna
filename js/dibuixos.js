@@ -1428,7 +1428,7 @@ function dibuixarCabana(c, w) {
     lienc(c, w, H * RES, ctx => { ctx.scale(RES, RES); pintarCabana(ctx, L, H); });
 }
 
-// Cabana de la Jaumeta: parets de troncs amb fang, teulat de palla amb molsa i bolets, xemeneia de pedra, porta amb ferros,
+// Cabana de la Jacmeta: parets de troncs amb fang, teulat de palla amb molsa i bolets, xemeneia de pedra, porta amb ferros,
 // finestra amb porticons i llum verdosa, pila de llenya, farol i manats d'herbes penjats
 function pintarCabana(ctx, W, H) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
@@ -3410,7 +3410,7 @@ function pintarTombaCreu(ctx, W, H) {
     });
 }
 
-// La tomba de l'àngel on el Germà Francesc porta flors (140 x 226): l'àngel que plora al cap de la tomba i, als peus,
+// La tomba de l'àngel on el Germà Francí porta flors (140 x 226): l'àngel que plora al cap de la tomba i, als peus,
 // un gerro amb el ram (marcit o fresc, amb una espelmeta encesa)
 function pintarTombaAngel(ctx, W, H, fresc) {
     pintarTombaRam(ctx, W, H, fresc, (rnd, cx, sb) => {

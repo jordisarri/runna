@@ -31,9 +31,9 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // El cap retallat del sprite del personatge: es fa una sola vegada i es desa com a textura 'retrat_<clau>'.
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
-    'Ineu': 'ineu', 'Pare Jordi': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Pastor de Boira': 'pastor_boira', 'Andreu, Pastor de Boira': 'pastor_boira', 'Germà Francesc': 'germa_francesc', 'Pare Daniel': 'pare_daniel',
-    'Pare Alcuí': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Garf': 'garf', 'Isildren': 'isidre',
-    'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
+    'Ineu': 'ineu', 'Pare Jordà': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Pastor de Boira': 'pastor_boira', 'Andreu, Pastor de Boira': 'pastor_boira', 'Germà Francí': 'germa_francesc', 'Pare Daniel': 'pare_daniel',
+    'Pare Alcoví': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Garf': 'garf', 'Isildren': 'isidre',
+    'La Pianista': 'pianista', 'La Jacmeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
     'Meus': 'neus', 'Senyor Molner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Rosansa': 'sansa', 'Home del Raïm': 'home_raim',
     'Carry': 'carry', 'Follet del Carro Verd': 'home_carruatge', 'El Gran Til·ler': 'tiller',
@@ -122,7 +122,7 @@ const CATALEG_OBJECTES = {
     aigua_sj:         ['Aigua de la Font del Bisbe', 'Aigua beneïda, clara com el vidre.'],
     cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Garf en sabrà fer alguna cosa.'],
     pruna:            ['Pruna daurada', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en vol una.'],
-    beuratge:         ['Beuratge de la Jaumeta', 'Dissipa la boira del camí cap al Til·ler; no protegeix de la boira verinosa.'],
+    beuratge:         ['Beuratge de la Jacmeta', 'Dissipa la boira del camí cap al Til·ler; no protegeix de la boira verinosa.'],
     escudella:        ['Escudella de la Meus', 'Encara calenta, com cada any per al sopar del Til·ler.'],
     flors_isidre:     ['Flors d\'Isildren', 'Un ram embolicat amb un tros de pergamí.'],
     pa_pastor:        ['Pa dels pastors', 'Una barra baixa i fosca, cuita sota la cendra.'],
@@ -135,7 +135,7 @@ const CATALEG_OBJECTES = {
     telescopi:        ['Telescopi del Garf', 'Per mirar els estels als Dipòsits.'],
     estel_llorenc:    ['Estel de Sant Llorenç', 'Un bocí de llum caigut del cel.'],
     runna:            ['Runna', 'L\'espasa de llum del monjo.'],
-    ram:              ['Ram de flors', 'Del Germà Francesc, per a la tomba de l\'àngel.'],
+    ram:              ['Ram de flors', 'Del Germà Francí, per a la tomba de l\'àngel.'],
     guants:           ['Guants de Poder', 'Per moure el que pesa massa.'],
     maneta:           ['Maneta d\'engranatge', 'De ferro: encaixa en volants i rodes vells.'],
     clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Andreu li va caure; l\'Iscu te l\'ha donada.'],

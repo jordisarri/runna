@@ -56,7 +56,7 @@ Object.assign(DIALEGS, {
         pagines: [
         ]
     } : { pagines: [
-        { qui: 'Ineu', text: "(Em caldrien unes mans molt més fortes: els guants dels picapedrers del Germà Francesc.)" }
+        { qui: 'Ineu', text: "(Em caldrien unes mans molt més fortes: els guants dels picapedrers del Germà Francí.)" }
     ] },
     pontGabia: E => E.flag('pontGabia') ? { pagines: [] } : {
         pagines: [

@@ -2,7 +2,7 @@
  * LA BIBLIOTECA DEL MONESTIR
  * Sala alta de prestatgeries fins al sostre, dos vitralls que tenyeixen el terra de colors, pols que balla dins la llum,
  * una taula llarga de lectura amb espelmes, el faristol amb la Crònica, un globus terraqüi i una escala de mà.
- * Hi treballa el Pare Alcuí, que llegeix els fragments i dona el Saber.
+ * Hi treballa el Pare Alcoví, que llegeix els fragments i dona el Saber.
  */
 
 class ZonaBiblioteca extends ZonaBase {
@@ -109,7 +109,7 @@ class ZonaBiblioteca extends ZonaBase {
             ar.fillStyle(0xffc040, 0.9).fillEllipse(550 + dx, 55, 5, 8).fillStyle(0xffe890, 0.5).fillCircle(550 + dx, 55, 10);
         });
 
-        // El Pare Alcuí, entre la taula i el faristol
+        // El Pare Alcoví, entre la taula i el faristol
         this.npc('pare_alcui', 760, 330, DIALEGS.pareAlcui, { flipX: true, radi: 110 });
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffd38a, 0.06).setDepth(80000);

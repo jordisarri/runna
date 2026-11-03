@@ -39,7 +39,7 @@ class ZonaCementiri extends ZonaBase {
         }
         this.fanalet(585, 500); this.fanalet(818, 500);
 
-        // La tomba de l'àngel, on el Germà Francesc porta flors: l'àngel que plora al cap i un gerro als peus
+        // La tomba de l'àngel, on el Germà Francí porta flors: l'àngel que plora al cap i un gerro als peus
         this.tombaAngel = this.posar(Estat.flag('florsCreu') ? 'tomba_angel_flors' : 'tomba_angel', 1370, 600, { col: { w: 124, h: 44 } });
         this.interactiu(1370, 615, RADI_GRAN, DIALEGS.creuCementiri, { altura: 230, enTancar: () => this.posarRam() });
         this.fanalet(1285, 600); this.fanalet(1455, 600);
@@ -135,7 +135,7 @@ class ZonaCementiri extends ZonaBase {
         Estat.desar();
     }
 
-    // Quan el ram del Germà Francesc ja és als peus de l'àngel, la tomba canvia de gràfic amb un fos
+    // Quan el ram del Germà Francí ja és als peus de l'àngel, la tomba canvia de gràfic amb un fos
     posarRam() {
         if (!Estat.flag('florsCreu') || this.tombaAngel.texture.key === 'tomba_angel_flors') return;
         const nova = this.add.image(this.tombaAngel.x, this.tombaAngel.y, 'tomba_angel_flors').setOrigin(0.5, 1)

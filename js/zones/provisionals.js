@@ -79,7 +79,7 @@ class ZonaEsglesia extends ZonaBase {
     }
 
     // ---------------- EPÍLEG: «Torna el cant» ----------------
-    // Tothom és al Santuari, dins del pla (la càmera hi veu de x≈340 a x≈940): els nens davant l'altar, la Pianista i el Pare Jordi
+    // Tothom és al Santuari, dins del pla (la càmera hi veu de x≈340 a x≈940): els nens davant l'altar, la Pianista i el Pare Jordà
     // a banda i banda, i el poble entre els bancs, deixant lliure el passadís del mig per on puja l'Ineu.
     prepararEpileg() {
         this.epileg = true;
@@ -150,7 +150,7 @@ class ZonaEsglesia extends ZonaBase {
                 f => z.npcVa('pare_jordi', 720, R + 330, f, 120),
                 f => z.npcMira('pare_jordi', 'ineu', f)
             ]),
-            { qui: 'Pare Jordi', text: 'Benvingut a casa, Ineu.' },
+            { qui: 'Pare Jordà', text: 'Benvingut a casa, Ineu.' },
             { fer: (z, fet) => z.seq([
             f => riure(tots, f),
             f => { this.cameras.main.fadeOut(1800, 0, 0, 0); this.esperar(1900, f); }
@@ -231,7 +231,7 @@ class ZonaMonestir extends ZonaBase {
         this.time.delayedCall(700, () => {
             this.ui().obrirDialeg({
                 pagines: [
-                    { qui: 'Ineu', text: 'Una altra nit de boira... i aquest fred que no marxa. El Pare Jordi em deu estar esperant a la Plaça.' }
+                    { qui: 'Ineu', text: 'Una altra nit de boira... i aquest fred que no marxa. El Pare Jordà em deu estar esperant a la Plaça.' }
                 ]
             }, () => Estat.desar());
         });
@@ -244,7 +244,7 @@ class ZonaMonestir extends ZonaBase {
         this.terra('cami', 1400, 0, 160, 460 + D);         // cap al cementiri (darrere el Monestir i el Santuari)
 
         // 800 d'ample: la façana surt per dalt de la pantalla i només es veu a partir de les últimes fileres de teula
-        // La façana: el portal del mig duu a la biblioteca (on treballa el Pare Alcuí)
+        // La façana: el portal del mig duu a la biblioteca (on treballa el Pare Alcoví)
         // La imatge va al fons (fonsY): l'Ineu puja l'escalinata per davant i arriba a la porta, que es veu obrir-se i el duu al Rebedor
         this.posar('monestir', 800, 440 + D, { fonsY: 330 });
         this.colisio(577, 387, 354, 115);

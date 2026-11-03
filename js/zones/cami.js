@@ -524,7 +524,7 @@ class ZonaCabanaCami extends ZonaBase {
     construir() {
         this.terra('taulons', 100, 40, 700, 660, -1100);
 
-        // --- Parets de troncs (les mateixes que fa servir la cabana de la Jaumeta) ---
+        // --- Parets de troncs (les mateixes que fa servir la cabana de la Jacmeta) ---
         paretsTroncs(this);
         this.colisio(30, 350, 60, 700);
         this.colisio(870, 350, 60, 700);

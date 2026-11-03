@@ -15,7 +15,7 @@ const CATALEG = [
     { key: 'casa_gran',    file: 'assets/edificis/casa_gran.webp',    amplada: 1250, provisional: (c, w) => dibuixarCasaGran(c, w) },
     // Personatges
     { key: 'ineu_inconscient', file: 'assets/personatges/ineu_inconscient.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu a terra després d'una derrota (mateix retall que jordi_desperta)
-    { key: 'jordi_desperta', file: 'assets/personatges/jordi_desperta.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },   // el Pare Jordi agenollat al seu costat, despertant-lo
+    { key: 'jordi_desperta', file: 'assets/personatges/jordi_desperta.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },   // el Pare Jordà agenollat al seu costat, despertant-lo
     { key: 'pare_jordi',   file: 'assets/personatges/pare_jordi.webp',   amplada: 90, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
     { key: 'germa_andreu', file: 'assets/personatges/germa_andreu.webp', amplada: 79, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
     { key: 'pare_daniel',  file: 'assets/personatges/pare_daniel.webp',  amplada: 94, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
@@ -717,7 +717,7 @@ const Grafics = {
             ctx.beginPath(); ctx.moveTo(11, 3); ctx.lineTo(17, 3); ctx.lineTo(17, 11); ctx.lineTo(25, 11); ctx.lineTo(25, 17); ctx.lineTo(17, 17); ctx.lineTo(17, 37); ctx.lineTo(11, 37); ctx.lineTo(11, 17); ctx.lineTo(3, 17); ctx.lineTo(3, 11); ctx.lineTo(11, 11); ctx.closePath(); ctx.fill(); ctx.stroke();
             ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fillRect(12.5, 5, 1.6, 30); ctx.fillRect(5, 12.5, 18, 1.4);
         });
-        // Cementiri (dibuixos.js): làpides, tombes amb vorada, la creueta, la tomba de l'àngel (on el Germà Francesc porta flors) i els fanalets
+        // Cementiri (dibuixos.js): làpides, tombes amb vorada, la creueta, la tomba de l'àngel (on el Germà Francí porta flors) i els fanalets
         crea('lapida', 56, 80, (ctx, w, h) => pintarLapidaArc(ctx, w, h, 3));
         crea('lapida_b', 56, 80, (ctx, w, h) => pintarLapidaArc(ctx, w, h, 17));
         crea('lapida_creu', 54, 90, (ctx, w, h) => pintarLapidaCreu(ctx, w, h));

@@ -10,7 +10,7 @@
 
 // Títol i zona de cada pas de la història (la zona marca l'estrella de l'objectiu al mapa)
 const DIARI_PASSOS = {
-    clauer: ['El Pare Jordi et busca', 'ZonaPlaca'], basto: ['El bastó de pelegrí', 'ZonaPlaca'],
+    clauer: ['El Pare Jordà et busca', 'ZonaPlaca'], basto: ['El bastó de pelegrí', 'ZonaPlaca'],
     cantAurora: ["El Cant de l'Aurora", 'ZonaEsglesia'], bassadoria: ['La Bassadòria tèrbola', 'ZonaCreu'],
     font: ['La Font del Bisbe', 'ZonaBosc'], jaumeta: ["L'Alzina Buida", 'ZonaBosc'],
     boiraTiller: ['La boira del Til·ler', 'ZonaCelles'], tiller: ['El Gran Til·ler', 'ZonaTiller'],
@@ -18,7 +18,7 @@ const DIARI_PASSOS = {
     pastor: ['El Pastor de Boira', 'ZonaCirosa'], esquelles: ['Les esquelles', 'ZonaCirosa'],
     soparObert: ['Tornar al Til·ler', 'ZonaTiller'], sopar: ['El sopar del Til·ler', 'ZonaTiller'],
     fragment1: ['El primer fragment', 'ZonaRuines'], clauSagrari: ['La clau del sagrari', 'ZonaCami'], fragment2: ['El sagrari', 'ZonaEsglesia'],
-    alcuiLlegit: ['Els fragments del Pare Alcuí', 'ZonaBiblioteca'], ombra: ["L'ombra del monjo", 'ZonaRuines'],
+    alcuiLlegit: ['Els fragments del Pare Alcoví', 'ZonaBiblioteca'], ombra: ["L'ombra del monjo", 'ZonaRuines'],
     saber: ['Les Paraules del Saber', 'ZonaBiblioteca'], benediccio: ['La benedicció', 'ZonaPlaca'],
     telescopi: ['El telescopi del Garf', 'ZonaEra'], estels: ['Els estels', 'ZonaDipositos'],
     estelLlorenc: ['L\'Estel de Sant Llorenç', 'ZonaDipositos'], runna: ['Runna', 'ZonaDolmen'],
