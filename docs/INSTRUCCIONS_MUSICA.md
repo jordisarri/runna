@@ -4,7 +4,7 @@ Cada cançó és **opcional**: quan el fitxer existeix a `assets/musica/`, sona;
 
 ## On sona cada peça
 
-Fetes (✔): totes menys el tema `poble` definitiu (el prompt és al final); mentrestant sona el provisional.
+Fetes (✔): totes.
 
 | Fitxer | On sona | Tipus | Reserva mentrestant | Prioritat |
 |---|---|---|---|---|
@@ -15,7 +15,7 @@ Fetes (✔): totes menys el tema `poble` definitiu (el prompt és al final); men
 | ✔ `credits` | Crèdits | bucle | `epileg` | **Imprescindible** |
 | ✔ `jingle_boss` | Quan cau l'Ocellaire | peça única | silenci | **Imprescindible** |
 | ✔ `jingle_runna` | Quan Runna es desperta al Dolmen | peça única | silenci | **Imprescindible** |
-| `poble` (tema principal) | Tot l'exterior del poble, Cel·les incloses (Plaça, Monestir, Runes, Celler, Era, Jardí, Cementiri, Sant Antoni, Cel·les...) | bucle | el tema provisional / el del títol | **Molt recomanada** |
+| ✔ `poble` (tema principal) | Tot l'exterior del poble, Cel·les incloses (Plaça, Monestir, Runes, Celler, Era, Jardí, Cementiri, Sant Antoni, Cel·les...) | bucle | el tema del títol | **Molt recomanada** |
 | ✔ `santuari` | El Santuari per dins | bucle | interiors | Recomanada |
 | ✔ `taverna` | La Taverna per dins | bucle | interiors | Recomanada |
 | ✔ `cirosa` | Camí de la Cirosa, pastura i Mas | bucle | bosc | Recomanada |
@@ -47,8 +47,3 @@ La música de fons s'abaixa mentre sona (`Joc.leitmotiv`).
 - `jingle_arma` sona quan l'Ineu alça una arma nova o surt un objecte d'un cofre (`jingle_objecte` és la reserva); la música de zona baixa de volum uns segons.
 - Les cançons de fons van en streaming (no es descodifiquen senceres: al mòbil, quatre cançons descodificades eren ~280 MB). Per això el `.m4a` ha de tenir l'índex al principi; `eines/comprimir_media.sh` ja ho fa.
 - Els combats ja porten un tambor sintètic (`Sfx.tambor`) per sobre; el bombo de `boss` convé que sigui net perquè no s'acumulin.
-
-## Prompt pendent: `poble` (el tema principal)
-
-**`poble`** (bucle, ~2:30-3 min): l'*overworld theme* del joc, el que sonarà més estona (tot l'exterior, Cel·les incloses). Ha de ser la tonada de l'`intro_runna` en versió d'aventura: viva, valenta i càlida, amb un ritme de marxa lleugera que dóna ganes d'explorar, però sense clímax ni intensitat de combat, per poder sentir-la hores. Dues parts que s'alternen (A: la tonada, B: una variació més tranquil·la) perquè no cansi. **Adjunta `art/musica/motiu/fanfarra_sola.mp3`** (Cover, amb la influència de l'àudio alta i *weirdness* baixa), no `intro_runna`: és la tonada sola, sense acompanyament, i el generador la manté millor. Si encara es perd, puja-la com a *Extend* o *Reference* i repeteix la tonada al prompt amb les notes (ja hi són).
-> instrumental adventure overworld theme, the main melody must stay clearly recognizable and repeat often: C E E E F G C, then C D E F F E D C D, played plainly and singably, carried by bright wooden flute and violin, answered by french horn and harp, C major, march-like mid-tempo around 112 bpm, light snare and frame drum, pizzicato strings and bass, sparkling bells, acoustic chamber folk orchestra, A section with the main melody and B section a calmer variation, sense of open road and curiosity, never too intense, seamless loop, no lyrics
