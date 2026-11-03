@@ -50,6 +50,14 @@
 
 - [x] `frederic`
 
+- [x] `arrels_tiller`
+
+- [x] `basto_ocellaire`
+
+- [x] `ocellaire_cansat`
+
+- [x] `neus` (Meus) i `marit_neus` (senyor Molner)
+
 - [x] `carro_sansa` (Rosansa)
 
 - [x] `sansa` (Rosansa) i el seu retrat
@@ -234,7 +242,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ineu/tarota_gran`, `andreu_guardia`, `arrels_tiller`, `basto_ocellaire`, `gabia`, `gabia_oberta`, `home_raim_o`, `marit_neus`, `neus`, `ocellaire_cansat`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ocellaire_genolls`, `ineu/tarota_gran`, `andreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
 
 
 
@@ -252,14 +260,6 @@ Els prompts de sota són només dels pendents i dels nous (els fets només es ll
 
 ## Elements d'escenari
 
-### `arrels_tiller.png` (amplada 440)
-
-```
-
-Charming 2D cartoon game environment asset in the 'Chibi Adventure Environment' style, matching the attached reference images: crisp vector-like illustration with bold clean dark-brown outlines, soft cel shading, rich earthy colors, and the same 3/4 top-down JRPG camera. Create ONE wide, irregular cluster of ancient living roots from a huge linden tree, viewed from slightly above. The roots have thick twisted trunks and smaller branching roots, deep bark grooves, moss, a few heart-shaped linden leaves, and clumps of disturbed earth at their bases. They rise from the ground and interlock into a dense natural barrier that completely blocks a woodland path; the silhouette is broad and low (about 2.5 times wider than tall), with uneven root tips and visible gaps only between the upper branches, not enough to walk through at ground level. The roots should look old, powerful, magical, and organic, not like a fence, a wall, a hedge, or a bundle of thin sticks. Match the game's existing trees and forest palette. Single centered object, full silhouette visible, isolated on a pure white background (#FFFFFF) for automatic background removal; no scenery, no path, no characters, no text, no cast shadow.
-
-```
-
 ## Personatges
 
 
@@ -270,41 +270,11 @@ Charming 2D cartoon game environment asset in the 'Chibi Adventure Environment' 
 Charming 2D cartoon illustration in exactly the same style as the attached reference image of the monk (bold clean dark outline, soft cel shading, warm earthy colours, chibi features). A CLOSE-UP, half-length portrait of the SAME monk character (same face, same tonsured brown hair, same brown hooded habit and wooden rosary), seen from the front, from the top of his head down to his waist, the head big and filling the upper half of the image. He is playing a TAROTA, the traditional Catalan double-reed shawm: a long straight conical wooden pipe of dark turned boxwood, about as long as the monk's forearm and hand together, narrow at the top and gradually widening downwards, with a few thin decorative turned rings, seven finger holes in a line on the front, ending at the bottom in a wide flared trumpet-like bell; at the top a short thin brass tube (staple) carries a tiny flat double reed made of cane, and ONLY that small reed goes between his lips. It is held pointing DOWN and forward at about 45 degrees (never sideways like a transverse flute), with the left hand on the upper holes and the right hand on the lower holes, fingers covering the holes. It is NOT a recorder, NOT a tin whistle, NOT a flute, NOT a clarinet: it is clearly longer, darker and conical with a big flared bell. Eyes closed, eyebrows lifted with feeling, cheeks puffed, completely absorbed in the music, a slight tilt of the head. The bell of the tarota reaches the lower right part of the image. A few small golden music notes come out of the bell. Single character, centered, isolated on a pure white background (#FFFFFF), no scenery, no text, no frame, no cast shadow. Portrait format (about 4:5).
 ```
 
-### `ocellaire_cansat.png` (amplada 110) *(L'Ocellaire cansat i ajupit: el moment del combat en què se li pot colpejar el cap. Ara el joc no l'aixafa amb codi: mentre no hi hagi aquest dibuix, es veu el sprite base i només baixa la zona del cap. Surt a `assets/enemics/ocellaire_cansat.webp`, al mateix llenç que l'idle i el rugit (180x329, peus al mateix lloc). Puja el sprite base de l'Ocellaire com a referència.)*
-
-
+### `ocellaire_genolls.png` → `assets/enemics/ocellaire_genolls.webp` (amplada 90) *(L'Ocellaire **de genolls**, esgotat, amb el cap ben avall: és l'únic moment del combat en què se li pot colpejar el cap. Puja com a referència `art/enemics/ocellaire_cansat.png` (ha de sortir al mateix llenç: mateixa mida d'imatge, mateix enquadrament, el personatge centrat i la base on ara té els peus). Si l'aixeca massa, repeteix-ho afegint: «the top of his head must be at the middle of the image height».)*
 
 ```
-
-Edit the attached reference image of the Ocellaire. Keep EXACTLY the same character, the same bald head with no hat or hood, the same black feather costume, the same chains, padlock and small golden cage, the same chibi proportions, the same outline and colouring, the same front-facing 3/4 top-down view, the same image size and framing with the feet at exactly the same place at the bottom, and the same pure white background (#FFFFFF), no text. Change ONLY the pose: he is EXHAUSTED after an attack, crouching low and bent forward, knees bent, both pale hands resting on his knees, shoulders dropped, panting. His big bald head hangs low and forward: the TOP of his head is at about 35% of the image height from the top, and the centre of his head at about 45%, so the whole figure is much lower than in the reference. His violet eyes are dim and half-closed, his mouth open, gasping. The feathers of his collar and sleeves droop down, the broken chains hang limp, the purple mist at his feet is small and weak. A single character, full body, whole body visible.
-
+Edit the attached reference image of this character. Keep EXACTLY the same character: the same big bald pale head with pointed ears, the same violet glowing eyes, the same black feather costume, the same broken iron shackles and chains on both wrists, the same golden padlock on his chest, the same rope belt with the small golden birdcage, the same chibi proportions, the same bold outline and cel colouring, the same front-facing view seen slightly from above, the same image size and framing, centered, and the same pure white background (#FFFFFF), no text. Change ONLY the pose: he has fallen to his KNEES, exhausted and defeated for a moment. Both knees on the ground at the bottom of the image (where his feet were in the reference), the feathered robe spread out on the floor around his knees like a dark puddle of feathers, his body bent forward, both pale hands flat on the ground in front of his knees supporting him, the chains lying slack on the floor. His big bald head hangs down low and forward between his shoulders, so we clearly see the TOP of his bald head: the top of his head is at about the middle of the image height, the whole figure much lower and wider than in the reference. His face looks down, the violet eyes dim and half-closed, mouth open, gasping for breath. The feathers of his collar droop, a thin wisp of weak purple mist rises from his back. A single character, whole body visible, nothing cropped.
 ```
-
-
-
-### `neus.png` (amplada 96)
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A woman with dark hair in a red dress. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
-
-### `marit_neus.png` (amplada 96)
-
-
-
-```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A man in a teal shirt, her husband, dark hair. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
-```
-
-
 
 ## Enemics
 
@@ -343,18 +313,6 @@ Edit the attached image: keep the statue, the rocky lump, the pedestal, the pose
 ```
 
 Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A young monk with dark hair, black habit with violet mist clinging to it, holding a wooden staff like a guard, smug smile, faintly glowing violet eyes. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
-
-```
-
-
-
-### `basto_ocellaire.png` (amplada 180) *(Bàcul de l'Ocellaire com a imatge: `assets/armes/basto_ocellaire.png`; ara el joc el dibuixa amb codi.)*
-
-
-
-```
-
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A long horizontal sinister staff of black twisted wood with a golden band in the middle, and at EACH END a curled golden hook holding a small glowing orange flame with a white core (so it looks the same when it spins). Violet wisps curl around the wood. Seen flat from the side, perfectly horizontal and symmetrical left-right, aspect ratio about 12:1.
 
 ```
 
