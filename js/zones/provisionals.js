@@ -142,7 +142,7 @@ class ZonaEsglesia extends ZonaBase {
                     // L'orgue torna a sonar i tothom canta
                     z.npcFeina('pianista', 4200, 'notes');
                     gent.forEach(k => z.npcFeina(k, 3800, 'notes'));
-                    const acords = [[330, 415, 494], [494, 622, 740], [392, 494, 587], [494, 622, 740], [330, 415, 494]];
+                    const acords = [[262, 330, 392], [349, 440, 523], [392, 494, 587], [349, 440, 523], [262, 330, 392]];      // Do major, com la música de l'epíleg (Do – Fa – Sol – Fa – Do)
                     acords.forEach((a, i) => this.time.delayedCall(i * 750, () => Sfx.orgue(a, 0.9)));
                     this.esperar(4400, f);
                 },
