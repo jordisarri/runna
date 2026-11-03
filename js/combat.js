@@ -73,7 +73,7 @@ function preparaOcellFoc(scene) {
     }
 }
 
-// L'Ocellaire ajupit, cansat (assets/enemics/ocellaire_cansat.webp): si encara no hi és, la zona del cap baixa sense canviar el dibuix
+// L'Ocellaire cansat (assets/enemics/ocellaire_cansat.webp), si hi és
 function teCansatOcellaire(z) { return z.textures.exists('ocellaire_cansat') && !Grafics.faltants.includes('ocellaire_cansat'); }
 
 const ENEMICS = {
@@ -250,7 +250,8 @@ const ENEMICS = {
     // que li volten al voltant i després es llancen contra l'Ineu (Runna els talla). A la segona meitat llança el bàcul
     // com un remolí i desapareix en boira per tornar a sortir en un altre lloc.
     ocellaire: {
-        tex: 'ocellaire', vida: 45, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8, soloCap: true,
+        tex: 'ocellaire', vida: 45, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8,
+        cap: { y: 0.19, r: 40, nomesCansat: true },          // el punt feble: el cap (al 19% del dibuix des de dalt), i només quan està cansat
         robust: true, barra: true,
         perill: e => !e.amagat && e.estat !== 'apareix',
         ia(z, e, ara) {
@@ -368,14 +369,9 @@ const ENEMICS = {
                 if (ara > e.fins) { e.amagat = false; e.estat = 'invoca'; e.fins = ara + 1400; e.nOcells = 0; e.proxOcell = ara + 150; }
             } else {   // cansat: el bàcul s'alenteix, abaixa el cap i és el moment de colpejar-lo
                 e.spr.body.setVelocity(0);
-                e.baixaObj = 1;
                 b.gir = Math.max(0.02, b.gir * 0.94);
                 if (ara > e.fins) { e.estat = 'sura'; e.proxAtac = ara + (fase3 ? 900 : fase2 ? 1400 : 2400); e.puntSura = null; }
             }
-            // Cansat, el cap (el seu únic punt feble) baixa fins a l'abast de l'espasa (vegeu puntsCop). El dibuix no s'aixafa:
-            // si hi ha el dibuix 'ocellaire_cansat', es veu ajupit; si no, només baixa la zona del cap
-            if (e.estat !== 'cansat') e.baixaObj = 0;
-            e.baixa = (e.baixa || 0) + ((e.baixaObj || 0) - (e.baixa || 0)) * 0.2;
             e.spr.setFlipX(jo.x < c.x);
             z.moureBasto(e);
         },
@@ -686,13 +682,15 @@ Object.assign(ZonaBase.prototype, {
             const tocats = this.puntsCop(e).filter(c => {
                 const rx = c.x - jo.x, ry = c.y - jo.y;
                 const t = rx * d.x + ry * d.y;                      // distància al llarg del cop
-                if (t < -12 || t > k.L + c.r) return false;
+                // Contra el cap d'un boss alt, un cop cap amunt (l'arma per sobre del cap) arriba més amunt
+                const extra = c.cap && d.y < -0.4 ? 75 : 0;
+                if (t < -12 || t > k.L + c.r + extra) return false;
                 const lat = Math.abs(rx * d.y - ry * d.x);          // distància lateral
                 return lat < c.r + k.ample;
             });
             if (!tocats.length) return;
             k.tocats.add(e);
-            if (e.def.soloCap && !tocats.some(c => c.cap)) { this.copRebutjat(e, d); return; }
+            if (e.def.cap && (!tocats.some(c => c.cap) || (e.def.cap.nomesCansat && e.estat !== 'cansat'))) { this.copRebutjat(e, d); return; }
             this.colpejar(e, k.dany, d); encertats++;
         });
     },
@@ -752,24 +750,23 @@ Object.assign(ZonaBase.prototype, {
         this.time.delayedCall(350, () => p.destroy());
     },
 
-    // On cal colpejar un enemic: el cos físic (que bloqueja i fa mal) és als peus, però un enemic alt (el boss final) es colpeja
-    // per tot el cos, dels peus al cap: la zona de cop és una cadena de cercles que puja 'copDy' píxels, amb el radi 'copRadi'.
-    // Amb 'soloCap' (el boss final) només fa mal el cap: la resta del cos rebutja el cop. Les zones segueixen el sprite
-    // dibuixat (s'abaixa quan s'ajup), de manera que el cap només s'abasta amb l'espasa quan l'Ocellaire abaixa el cap.
+    // On cal colpejar un enemic: el cos físic (que bloqueja i fa mal) és als peus. Els bosses alts amb 'cap' (l'Home de la Gàbia, l'Home
+    // del Raïm) només es poden ferir al cap: és on el dibuix el té (def.cap.y: fracció de l'alçada des de dalt), i la resta del cos
+    // (una cadena de cercles fins als peus) rebutja el cop. Si el sprite està inclinat, el cap el segueix.
     puntsCop(e) {
         const c = e.spr.body.center;
-        if (!e.def.soloCap) return [{ x: c.x, y: c.y, r: e.def.radi }];
-        const s = e.spr, h = s.displayHeight, dalt = s.y - h / 2;
-        // El cap és la bola del dibuix, al 17% des de dalt; ajupit (dibuix 'ocellaire_cansat'), al 45%. Sense aquest dibuix, la zona del cap
-        // baixa igual mentre està cansat (el que abans feia l'aixafament), perquè l'espasa hi arribi
-        const fc = s.texture.key === 'ocellaire_cansat' ? 0.45 : teCansatOcellaire(this) ? 0.17 : 0.17 + 0.32 * (e.baixa || 0);
-        return [{ x: s.x, y: dalt + h * fc, r: 36, cap: true },
-                { x: s.x, y: dalt + h * 0.42, r: 44 }, { x: s.x, y: dalt + h * 0.66, r: 44 }, { x: s.x, y: c.y, r: 44 }];
+        if (!e.def.cap) return [{ x: c.x, y: c.y, r: e.def.radi }];
+        const s = e.spr, h = s.displayHeight, cp = e.def.cap;
+        const punt = (f, r, cap) => {
+            const oy = -h / 2 + h * f, a = s.rotation || 0;
+            return { x: s.x - Math.sin(a) * oy, y: s.y + Math.cos(a) * oy, r, cap };
+        };
+        return [punt(cp.y, cp.r, true), punt(0.45, 44), punt(0.7, 44), { x: s.x, y: c.y, r: 44 }];
     },
     zonaCop(e) {                    // on surten les espurnes del cop
         const c = e.spr.body.center;
-        if (!e.def.soloCap) return { x: c.x, y: c.y, r: e.def.radi };
-        const q = this.puntsCop(e)[e.baixa > 0.5 ? 0 : 1];
+        if (!e.def.cap) return { x: c.x, y: c.y, r: e.def.radi };
+        const q = this.puntsCop(e)[0];
         return { x: q.x, y: q.y, r: q.r };
     },
     // El cop ha caigut al cos, no al cap: no fa mal

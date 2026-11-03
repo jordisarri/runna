@@ -99,7 +99,8 @@ const RAIM = { x: 700, y: 560, f: 1.35 };
 // ---------------- BOSS: L'HOME DEL RAÏM VIU ----------------
 ENEMICS.raim = {
     tex: 'home_raim_desperta', vida: 16, vel: 300, mal: 1, radi: 38, cos: [66, 30], ombra: 0.65,
-    robust: true,
+    cap: { y: 0.27, r: 46 },                  // el punt feble: el cap (al 27% del dibuix des de dalt; a sobre hi ha el raïm alçat)
+    robust: true, barra: true,
     perill: e => e.estat === 'carrega',
     // Trossos de marbre i pols que cauen del guardià
     trossos(z, x, y, n = 7) {
@@ -418,6 +419,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         const { x: RX, y: RY } = RAIM, boss = this.enemic('raim', RX, sense ? RY + 85 : RY - 70);
         if (!boss) return;
         this.boss = boss;
+        this.ui().barraBoss("L'Home del Raïm", [6 / 16]);                       // a 6 de vida, la segona fase
         const ponPedestal = () => {
             const t = this.textures.get('home_raim_pedestal');
             this.pedestal = this.add.image(RX, RY, 'home_raim_pedestal').setOrigin(0.5, 1).setScale((t.customData && t.customData.escala) || 1 / RES).setDepth(RY);
@@ -463,6 +465,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
 
     raimDerrotat(e) {
         const c = e.spr.body.center;
+        this.ui().amagarBarraBoss();
         Estat.posaFlag('raimDerrotat');
         ENEMICS.raim.trossos(this, c.x, c.y, 22);
         this.ui().actualitzarHUD();

@@ -152,7 +152,9 @@ class ZonaRuines extends ZonaBase {
         this.apareix = 0; this.ombraVista = true;
         Sfx.secret && Sfx.secret();
         this.cameras.main.shake(400, 0.002);
-        this.tweens.add({ targets: this, apareix: 1, duration: 3000, delay: 400, onStart: () => this.llum(this.ombraMonjo.x, this.ombraMonjo.y - 150, 0xd8c8ff), onComplete: () => { if (fet) fet(); } });
+        // (passa dins d'un diàleg, quan el cicle de la zona no corre: l'ombra s'actualitza aquí mateix)
+        this.tweens.add({ targets: this, apareix: 1, duration: 3000, delay: 400, onStart: () => this.llum(this.ombraMonjo.x, this.ombraMonjo.y - 150, 0xd8c8ff),
+            onUpdate: () => this.pintarOmbra(), onComplete: () => { this.pintarOmbra(); if (fet) fet(); } });
     }
     // Ha fet el seu paper: l'ombra s'enlaira, es desfà en llum i descansa en pau
     ombraDescansa(fet) {
@@ -172,7 +174,7 @@ class ZonaRuines extends ZonaBase {
     // L'ombra aixeca el cap i es fa més clara un moment
     ombraReacciona(fet) {
         this.ombraForta = true;
-        this.tweens.add({ targets: this.ombraMonjo, scaleX: this.ombraMonjo.scaleX * 1.06, scaleY: this.ombraMonjo.scaleY * 1.06, yoyo: true, duration: 700, onComplete: () => { this.ombraForta = false; if (fet) fet(); } });
+        this.tweens.add({ targets: this.ombraMonjo, scaleX: this.ombraMonjo.scaleX * 1.06, scaleY: this.ombraMonjo.scaleY * 1.06, yoyo: true, duration: 700, onUpdate: () => this.pintarOmbra(), onComplete: () => { this.ombraForta = false; this.pintarOmbra(); if (fet) fet(); } });
         this.llum(this.ombraMonjo.x, this.ombraMonjo.y - 150, 0xd8c8ff);
     }
 
@@ -184,10 +186,15 @@ class ZonaRuines extends ZonaBase {
             this.ineu.body.setVelocity(0);
             this.interactuar(this.puntOmbra);
         }
+        this.pintarOmbra();
+    }
+
+    // Com de visible és l'ombra (també es crida des de l'aparició, que passa dins d'un diàleg)
+    pintarOmbra() {
         if (this.ombraMarxa) return;                                        // se'n va (ombraDescansa porta l'alfa)
         const visible = (Estat.flag('fragment1') || this.ombraVista) && !Estat.flag('benedicioMonjo');
         // L'ombra apareix i desapareix lentament, com una respiració
-        const alfa = visible ? (this.ombraForta ? 0.95 : 0.55 + 0.25 * Math.sin(this.time.now / 900)) * this.apareix : 0;
+        const alfa = visible ? (this.ombraForta ? 1 : 0.8 + 0.1 * Math.sin(this.time.now / 900)) * this.apareix : 0;
         this.ombraMonjo.setAlpha(Math.max(0, alfa));
     }
 }
