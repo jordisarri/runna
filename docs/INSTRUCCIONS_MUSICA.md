@@ -4,7 +4,7 @@ Cada cançó és **opcional**: quan el fitxer existeix a `assets/musica/`, sona;
 
 ## On sona cada peça
 
-Fetes (✔): totes menys `celles` (el prompt és al final).
+Fetes (✔): totes menys el tema `poble` definitiu (el prompt és al final); mentrestant sona el provisional.
 
 | Fitxer | On sona | Tipus | Reserva mentrestant | Prioritat |
 |---|---|---|---|---|
@@ -15,7 +15,7 @@ Fetes (✔): totes menys `celles` (el prompt és al final).
 | ✔ `credits` | Crèdits | bucle | `epileg` | **Imprescindible** |
 | ✔ `jingle_boss` | Quan cau l'Ocellaire | peça única | silenci | **Imprescindible** |
 | ✔ `jingle_runna` | Quan Runna es desperta al Dolmen | peça única | silenci | **Imprescindible** |
-| ✔ `poble` | Exteriors del poble (Plaça, Monestir, Runes, Celler, Era, Jardí, Cementiri, Sant Antoni...) | bucle | el tema del títol | **Molt recomanada** |
+| `poble` (tema principal) | Tot l'exterior del poble, Cel·les incloses (Plaça, Monestir, Runes, Celler, Era, Jardí, Cementiri, Sant Antoni, Cel·les...) | bucle | el tema provisional / el del títol | **Molt recomanada** |
 | ✔ `santuari` | El Santuari per dins | bucle | interiors | Recomanada |
 | ✔ `taverna` | La Taverna per dins | bucle | interiors | Recomanada |
 | ✔ `cirosa` | Camí de la Cirosa, pastura i Mas | bucle | bosc | Recomanada |
@@ -24,9 +24,8 @@ Fetes (✔): totes menys `celles` (el prompt és al final).
 | ✔ `girgoles` | Sala de les Gírgoles | bucle | masmorra | Recomanada |
 | ✔ `jingle_arma` | Quan l'Ineu alça una arma nova (el bastó, la branca del Til·ler) | peça única | `jingle_objecte` | **Recomanada** |
 | `jingle_objecte` (no es fa servir: els objectes sonen amb `jingle_arma`) | Quan l'Ineu alça el bastó o la branca | peça única | fanfara sintetitzada | Recomanada |
-| `celles` | Les Cel·les (Sant Benet, Nostra Senyora, Sant Antoni), exterior | bucle | el tema del poble | Recomanada |
 
-`celles` encara no hi és (mentrestant sona `poble`); la resta de peces que ja hi ha: *The Hero's Ascension* (títol i, fins que hi hagi `poble`, el poble), *Woodland Path* (boscos, la Caseta i els Dipòsits), *Inside All* (interiors i, fins que hi hagi `santuari`, el Santuari), *Deep Dungeon Stillness* (masmorres) i *light book* (pròleg). El Celler (la sala del ping-pong) fa servir `taverna`.
+Les Cel·les comparteixen `poble`; la resta de peces que ja hi ha: *The Hero's Ascension* (títol i, fins que hi hagi `poble`, el poble), *Woodland Path* (boscos, la Caseta i els Dipòsits), *Inside All* (interiors i, fins que hi hagi `santuari`, el Santuari), *Deep Dungeon Stillness* (masmorres) i *light book* (pròleg). El Celler (la sala del ping-pong) fa servir `taverna`.
 
 ## El leitmotiv (la fanfàrria d'`intro_runna`)
 
@@ -49,7 +48,7 @@ La música de fons s'abaixa mentre sona (`Joc.leitmotiv`).
 - Les cançons de fons van en streaming (no es descodifiquen senceres: al mòbil, quatre cançons descodificades eren ~280 MB). Per això el `.m4a` ha de tenir l'índex al principi; `eines/comprimir_media.sh` ja ho fa.
 - Els combats ja porten un tambor sintètic (`Sfx.tambor`) per sobre; el bombo de `boss` convé que sigui net perquè no s'acumulin.
 
-## Prompt pendent: `celles`
+## Prompt pendent: `poble` (el tema principal)
 
-**`celles`** (bucle, ~2 min): les cel·les de descans del Santuari, unes cases plenes de vida: veïns que van i vénen, la Meus amb l'escudella al foc, les Venerables Sàvies xerrant, criatures corrent. Alegre i enjogassada, amb mig compàs de passeig; només una petita ombra de la boira al fons. **Sense adjunt** (color propi del lloc).
-> instrumental lively village homestead theme, cheerful Catalan folk, mid-tempo around 110 bpm, G major, bright wooden flute and violin trading a playful melody, plucked harp and pizzicato strings, light frame drum and tambourine, a little accordion, small bells, bustling and warm like neighbours chatting and children playing, upbeat with a tiny hint of mystery, seamless loop, no lyrics
+**`poble`** (bucle, ~2:30-3 min): l'*overworld theme* del joc, el que sonarà més estona (tot l'exterior, Cel·les incloses). Ha de ser la tonada de l'`intro_runna` en versió d'aventura: viva, valenta i càlida, amb un ritme de marxa lleugera que dóna ganes d'explorar, però sense clímax ni intensitat de combat, per poder sentir-la hores. Dues parts que s'alternen (A: la tonada, B: una variació més tranquil·la) perquè no cansi. **Adjunta `art/musica/intro_runna.mp3`** (Cover): la melodia s'ha de reconèixer clarament des del primer compàs.
+> instrumental adventure overworld theme, heroic yet warm and playful, a clear memorable main melody carried by bright wooden flute and violin, answered by french horn and harp, C major, march-like mid-tempo around 112 bpm, light snare and frame drum, pizzicato strings and bass, sparkling bells, acoustic chamber folk orchestra, A section with the main melody and B section a calmer variation, sense of open road and curiosity, never too intense, seamless loop, no lyrics
