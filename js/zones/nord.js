@@ -425,7 +425,7 @@ class ZonaCelles extends ZonaBase {
         // Nostra Senyora (oest): la Carry, vídua del campaner, que busca el seu gos Pallofa (el trobaràs a Sant Antoni)
         this.npc('carry', 360, 690, DIALEGS.carry);
 
-        // La Sansa i el seu carro de verdures: passa per aquí un sol cop, quan l'Isildren te n'ha parlat, i se'n va un cop t'ha donat la llavor
+        // La Rosansa i el seu carro de verdures: passa per aquí un sol cop, quan l'Isildren te n'ha parlat, i se'n va un cop t'ha donat la llavor
         if (Estat.flag('isidreSansa') && !Estat.flag('llavorSansa')) this.posarSansa();
 
         this.cartell(130, 625, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler' }] }));
@@ -665,10 +665,11 @@ class ZonaTiller extends ZonaBase {
         const Y = 280;                                   // marge per veure les arrels senceres dins l'escena
         this.arrelsY = Y;
         let sd = 11; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
-        this.colArrels = this.colisio(1190, Y - 20, 440, 50);
+        // Tota la mata d'arrels és sòlida (i arriba fins a la paret d'arbres de l'oest): no es pot passar per darrere
+        this.colArrels = this.colisio(1140, Y - 67, 520, 144);
         this.muralla(0, 150, 960, 150, 110, 'arbre', true, x => x > 230);   // fins aquí, una paret invisible tanca el pas per l'oest (arbres només al canton, perquè el Til·ler quedi sol)
         if (this.textures.exists('arrels_tiller') && !Grafics.faltants.includes('arrels_tiller')) {
-            const imatge = this.posar('arrels_tiller', 1190, Y);
+            const imatge = this.posar('arrels_tiller', 1180, Y);            // (de 960 a 1400: sencera dins l'escena i tapant tot el camí)
             this.arrels.push(imatge);
             this.tweens.add({ targets: imatge, scaleY: imatge.scaleY * 1.04, yoyo: true, repeat: -1, duration: 1600, ease: 'Sine.easeInOut' });
         } else {
@@ -691,20 +692,20 @@ class ZonaTiller extends ZonaBase {
             }
         }
         // Sense la branca, les arrels només es poden mirar; amb ella, es colpegen com qualsevol cosa (ESPAI)
-        this.interactiu(960, Y + 25, 130, DIALEGS.arrelsTiller, { altura: 110, actiu: () => !Estat.flag('camiCirosaObert') && !Estat.te('basto_tiller') });
+        this.interactiu(1170, Y + 25, 130, DIALEGS.arrelsTiller, { altura: 150, actiu: () => !Estat.flag('camiCirosaObert') && !Estat.te('basto_tiller') });
     }
 
     // Cop de l'Ineu (combat.js) amb la branca del Til·ler a prop de les arrels
     alAtacar(jo, d) {
         if (!this.arrelsY || Estat.flag('camiCirosaObert') || !Estat.te('basto_tiller')) return;
         const px = jo.x + d.x * 60, py = jo.y + d.y * 60;
-        if (Math.abs(px - 1190) > 280 || Math.abs(py - (this.arrelsY - 20)) > 110) return;
+        if (Math.abs(px - 1180) > 280 || Math.abs(py - (this.arrelsY - 20)) > 110) return;
         Sfx.puf();
         this.arrels.forEach((g, i) => { this.tweens.add({ targets: g, scaleX: 1.12, yoyo: true, duration: 140, delay: i * 25 }); });
         this.cameras.main.shake(140, 0.003);
         this.impacte(px, py, d, 0);
         if (Estat.flag('bassadoriaNeta')) this.apartarArrels();
-        else if (!this.avisArrels) { this.avisArrels = true; this.missatge('Les arrels s\'estremeixen en reconèixer la branca, però no cedeixen: encara esperen alguna cosa.'); }
+        else if (!this.avisArrels) { this.avisArrels = true; this.ui().obrirDialeg({ pagines: [DIALEGS.arrelsTiller(Estat).pagines[1]] }); }       // (s'estremeixen però no cedeixen: l'Ineu ho diu)
     }
 
     apartarArrels() {
@@ -712,7 +713,16 @@ class ZonaTiller extends ZonaBase {
         Estat.posaFlag('camiCirosaObert');
         this.arrels.forEach((g, i) => {
             this.tweens.killTweensOf(g);
-            this.tweens.add({ targets: g, scaleY: 0, duration: 1300, delay: i * 140, ease: 'Sine.easeIn' });
+            if (g.setCrop) {
+                // S'enfonsen de debò: la imatge baixa i la part que queda sota la línia de terra es retalla
+                const Y = g.y, H = g.frame.height, esc = g.scaleY;
+                g.setScale(g.scaleX, esc);
+                const v = { t: 0 };
+                this.tweens.add({ targets: v, t: 1, duration: 1800, delay: i * 140, ease: 'Sine.easeIn',
+                    onUpdate: () => { g.setCrop(0, 0, g.frame.width, H * (1 - v.t)); g.y = Y + H * esc * v.t; },
+                    onComplete: () => g.setVisible(false) });
+                this.tweens.add({ targets: g, x: { from: g.x - 3, to: g.x + 3 }, yoyo: true, repeat: 8, duration: 90 });   // tremolen mentre baixen
+            } else this.tweens.add({ targets: g, scaleY: 0, duration: 1300, delay: i * 140, ease: 'Sine.easeIn' });
         });
         const terra = this.add.particles(1190, this.arrelsY, 'espurna', {
             x: { min: -120, max: 120 }, speedY: { min: -80, max: -20 }, speedX: { min: -30, max: 30 }, lifespan: 700,

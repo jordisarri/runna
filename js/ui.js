@@ -35,7 +35,7 @@ const RETRATS = {
     'Pare Alcuí': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Garf': 'garf', 'Isildren': 'isidre',
     'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
-    'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Jordi': 'jordi_caseta', 'Sansa': 'sansa', 'Home del Raïm': 'home_raim',
+    'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Jordi': 'jordi_caseta', 'Rosansa': 'sansa', 'Home del Raïm': 'home_raim',
     'Carry': 'carry', 'Follet del Carro Verd': 'home_carruatge', 'El Gran Til·ler': 'tiller',
     "L'Home de la Gàbia": 'ocellaire', 'Huri': 'nen_uri', 'Fram': 'nen_flam', 'Flami': 'nen_flam', 'Sardi': 'nen_sardin'
 };
@@ -143,7 +143,7 @@ const CATALEG_OBJECTES = {
     pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.» Al revers: «Qui busqui sortida, que alci la bóta marcada amb la creu.»'],
     calze:            ['Calze de Rosada', "De plata, antic. A l'altar de Sant Gabriel, cada cop que hi beus l'aigua de rosada, el rosari et queda ple."],
     clau_ferro:       ['Clau de ferro', 'Obre la Porta de les Gírgoles.'],
-    llavorLluna:      ['Llavor de Lluna', 'De la Sansa. L\'Isildren sap on plantar-la.'],
+    llavorLluna:      ['Llavor de Lluna', 'De la Rosansa. L\'Isildren sap on plantar-la.'],
 };
 
 class EscenaUI extends Phaser.Scene {

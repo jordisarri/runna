@@ -927,13 +927,13 @@ const DIALEGS = {
             enAcabar: () => { E.posaFlag('isidreSansa'); E.posaObjectiu('Pregunta a la gent de les Cel·les, al nord-est: potser en saben alguna cosa més de la llosa del jardí.'); }
         };
     },
-    // La Sansa passa per les cel·les un sol cop: et ven la Llavor de Lluna i se'n va
+    // La Rosansa passa per les cel·les un sol cop: et ven la Llavor de Lluna i se'n va
     sansa: E => ({
         pagines: [
-            { qui: 'Sansa', text: 'Verdures fresques, fruita de la rodalia! ...Ai, ets el monjo que pregunta per la llosa del jardí? Aleshores potser busques una cosa especial.' },
-            { qui: 'Sansa', text: 'Una Llavor de Lluna. Fa anys que la guardo al fons del carro, entre les cebes, i no sé ni per què. Pren, és teva. Que floreixi a qui sàpiga cuidar-la.' },
+            { qui: 'Rosansa', text: 'Verdures fresques, fruita de la rodalia! ...Ai, ets el monjo que pregunta per la llosa del jardí? Aleshores potser busques una cosa especial.' },
+            { qui: 'Rosansa', text: 'Una Llavor de Lluna. Fa anys que la guardo al fons del carro, entre les cebes, i no sé ni per què. Pren, és teva. Que floreixi a qui sàpiga cuidar-la.' },
             { avis: 'Has obtingut la LLAVOR DE LLUNA.' },
-            { qui: 'Sansa', text: 'Bé, jo ja he d' + String.fromCharCode(39) + 'anar fent camí. Avui encara em queden tres pobles per davant. Adéu, monjo!' }
+            { qui: 'Rosansa', text: 'Bé, jo ja he d' + String.fromCharCode(39) + 'anar fent camí. Avui encara em queden tres pobles per davant. Adéu, monjo!' }
         ],
         enAcabar: () => { E.dona('llavorLluna'); E.posaFlag('llavorSansa'); E.posaObjectiu('Porta la Llavor de Lluna a l' + String.fromCharCode(39) + 'Isildren, a l' + String.fromCharCode(39) + 'Hostatgeria.'); }
     }),
