@@ -700,7 +700,7 @@ class ZonaBase extends Phaser.Scene {
             }).setDepth(84999);
         }
         this.llum(I.x - 8, I.y - 190, 0xffe8a0);
-        Joc.fanfaraObjecte(this);
+        Joc.fanfaraArma(this);
         if (fet) fet();
     }
     ineuBaixa(fet) {

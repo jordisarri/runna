@@ -32,6 +32,7 @@ Fetes (✔): totes les imprescindibles (`boss`, `boss_final`, `gabia`, `epileg`,
 | ✔ `biblioteca` | Biblioteca del Monestir | bucle | interiors | Recomanada |
 | ✔ `hostatgeria` | Hostatgeria i les tres cambres | bucle | interiors | Recomanada |
 | ✔ `girgoles` | Sala de les Gírgoles | bucle | masmorra | Recomanada |
+| `jingle_arma` | Quan l'Ineu alça una arma nova (el bastó, la branca del Til·ler) | peça única | `jingle_objecte` | **Recomanada** |
 | ✔ `jingle_objecte` | Quan l'Ineu alça el bastó o la branca | peça única | fanfara sintetitzada | Recomanada |
 
 `celles` (Les Cel·les) la fas tu a part; la resta de peces que ja hi ha: *The Hero's Ascension* (títol i, fins que hi hagi `poble`, el poble), *Woodland Path* (boscos, la Caseta i els Dipòsits), *Inside All* (interiors i, fins que hi hagi `santuari`, el Santuari), *Deep Dungeon Stillness* (masmorres) i *light book* (pròleg). El Celler (la sala del ping-pong) fa servir `taverna`.
@@ -93,6 +94,9 @@ Tots en anglès i **sense lletra** (afegeix «instrumental, no lyrics» si el ge
 
 **`jingle_runna`** (~22 s): el despertar de l'espasa. Puja des d'un drone d'orgue fins a un cop fort de timbal i cor, i acaba lluminós en Mi major amb arpa i campanes. Els temps exactes dels cops (≈ 12 s) els ajusto jo tallant i muntant, o ajusto la cinemàtica a la peça. **Adjunta `art/musica/intro_runna.mp3`** (Cover): n'agafo el tros on la melodia entra amb força, just al cop de l'espasa. Pot sortir llarga; ja la tallo jo.
 > cinematic fantasy awakening sting, building from a dark organ drone and tremolo, solo flute playing a simple four-note melody, massive timpani hit and choir shout, then luminous resolution to E major with harp glissando, bells and choir, long reverb tail
+
+**`jingle_arma`** (~5–6 s): l'Ineu alça una arma nova. La mateixa per a totes les armes. Heroica però curta: una crida que puja i un acord que ressona. En **Do major**, perquè lligui amb el tema. **Sense adjunt.** Suno en farà una peça llarga: jo n'agafo els primers segons, fins que l'acord ressona.
+> short heroic fantasy fanfare for obtaining a new weapon, C major, solo trumpet and horns playing a bright rising call C–E–G–C, answered by a full orchestral C major chord with timpani roll and cymbal swell, harp glissando, sparkling bells and a wooden flute trill on top, medieval and noble, a clear ending that rings out, no drum loop, no vocals, no lyrics
 
 **`jingle_objecte`** (~4 s): arpegi ascendent de Mi major que s'obre en un acord amb una campaneta. Petita i humil. **Sense adjunt.** Si vols que siguin les primeres notes del tema, no cal generar res: les tallo jo d'`intro_runna.mp3`.
 > short fantasy item fanfare, acoustic, ascending E major arpeggio on harp and wooden flute, opens into a warm sustained chord, small bell shimmer, gentle, no drums

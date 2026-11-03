@@ -122,7 +122,8 @@ const Joc = {
         musica_credits:    { fitxer: 'credits',    fallback: 'musica_epileg' },
         jingle_runna:      { fitxer: 'jingle_runna', fallback: null, jingle: true },
         jingle_boss:       { fitxer: 'jingle_boss',  fallback: null, jingle: true },
-        jingle_objecte:    { fitxer: 'jingle_objecte', fallback: null, jingle: true }
+        jingle_objecte:    { fitxer: 'jingle_objecte', fallback: null, jingle: true },
+        jingle_arma:       { fitxer: 'jingle_arma',  fallback: null, jingle: true }      // l'Ineu alça una arma nova (bastó, branca)
     },
     musicaDisponible: new Set(),
     musicaDeteccio: null,
@@ -158,6 +159,16 @@ const Joc = {
         const m = Joc.musica;
         if (m && m.isPlaying) { m.setVolume(0.2); scene.time.delayedCall(4200, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
         Joc.detectarMusica().then(() => { if (Joc.musicaDisponible.has('jingle_objecte')) Joc.jingle(scene, 'jingle_objecte'); else Sfx.fanfara(); });
+    },
+
+    // L'Ineu alça una arma nova: la seva fanfàrria (jingle_arma); mentre no hi sigui, la d'objecte
+    fanfaraArma(scene) {
+        Joc.detectarMusica().then(() => {
+            if (!Joc.musicaDisponible.has('jingle_arma')) { Joc.fanfaraObjecte(scene); return; }
+            const m = Joc.musica;
+            if (m && m.isPlaying) { m.setVolume(0.15); scene.time.delayedCall(6000, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
+            Joc.jingle(scene, 'jingle_arma');
+        });
     },
 
     // El leitmotiv (la fanfàrria d'intro_runna) tocat per algú dins del joc: la música de fons s'abaixa mentre sona
