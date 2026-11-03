@@ -254,7 +254,7 @@ class EscenaPingPong extends Phaser.Scene {
     // ---------------- Marcador i servei ----------------
     serveixIneu() { return Math.floor((this.ineu + this.josep) / 2) % 2 === 0; }
     actualitzarMarcador() {
-        this.marcador.setText(`Ineu  ${this.ineu}\nJosep  ${this.josep}`);
+        this.marcador.setText(`Ineu  ${this.ineu}\nJusef  ${this.josep}`);
         this.servei.setText(this.serveixIneu() ? 'Serveixes tu' : 'Serveix en Jusef');
     }
     avis(text, ms = 1100, color = '#ffd34d') {

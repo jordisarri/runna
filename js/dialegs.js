@@ -738,7 +738,7 @@ const DIALEGS = {
     },
 
     cartellBosc: E => ({ pagines: [{ qui: "Cartell", text: "Bosc de Sant Joan.\n«Qui busca la font, que segueixi l'aigua... i qui no, que no es perdi.»" }] }),
-    cartellCirosa: E => ({ pagines: [{ qui: "Cartell", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí a munt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\n← La Caseta" }] }),
+    cartellCirosa: E => ({ pagines: [{ qui: "Cartell", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí amunt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\n← La Caseta" }] }),
 
     // ---------------- EL FOLLET DEL CARRO VERD: VIATGE RÀPID ----------------
     // Condueix el carro de vapor que li va fer el Garf (al codi, 'carruatge'). A cada parada (PARADES, js/zona_base.js) la primera conversa la
