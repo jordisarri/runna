@@ -52,7 +52,7 @@
 
 - [x] `carro_sansa` (Rosansa)
 
-- [x] `sansa` (Rosansa)
+- [x] `sansa` (Rosansa) i el seu retrat
 
 - [x] `garf`
 
@@ -234,7 +234,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ineu/tarota_gran`, `andreu_guardia`, `arrels_tiller`, `basto_ocellaire`, `gabia`, `gabia_oberta`, `home_raim_o`, `marit_neus`, `neus`, `ocellaire_cansat`, `retrat_rosansa`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ineu/tarota_gran`, `andreu_guardia`, `arrels_tiller`, `basto_ocellaire`, `gabia`, `gabia_oberta`, `home_raim_o`, `marit_neus`, `neus`, `ocellaire_cansat`.
 
 
 
@@ -302,14 +302,6 @@ Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style,
 
 Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A man in a teal shirt, her husband, dark hair. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
 
-```
-
-
-
-### Retrat de la Rosansa: `retrats/sansa_retrat.jpg` (als diàlegs) *(Puja com a referències `art/personatges/sansa.png` i un retrat fet, p. ex. `art/retrats/eva_retrat.jpg`. Xat nou i sense noms. Es converteix amb `eines/convertir_retrats.js sansa`. Ara hi ha un retrat provisional retallat del sprite.)*
-
-```
-Charming 2D cartoon character PORTRAIT for the dialogue box of a game, in exactly the same style as the attached reference portrait (bold clean black outline, soft cel shading with subtle gradient highlights, warm earthy colours, slightly chibi rounded features, big expressive glossy eyes). Draw the SAME woman as in the attached full-body character image: a cheerful middle-aged travelling market vendor with a round rosy face, big warm brown eyes, a wide friendly smile, soft smile lines, dark brown hair in a thick braid over one shoulder, a green-and-white checked headscarf tied at the nape, a moss-green wool dress and a brown knitted shawl over the shoulders. Head and shoulders only (bust, cut just below the shoulders like the reference portrait), head turned three-quarters towards the RIGHT, looking at someone she is talking to, lively and kind expression, mouth slightly open as if chatting. Single character, centered, isolated on a pure white background (#FFFFFF), no hands, no basket, no text, no frame, no cast shadow. Square format.
 ```
 
 
