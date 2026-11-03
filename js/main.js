@@ -158,13 +158,14 @@ const Joc = {
     fanfaraObjecte(scene) {
         const m = Joc.musica;
         if (m && m.isPlaying) { m.setVolume(0.2); scene.time.delayedCall(4200, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
-        Joc.detectarMusica().then(() => { if (Joc.musicaDisponible.has('jingle_objecte')) Joc.jingle(scene, 'jingle_objecte'); else Sfx.fanfara(); });
+        // De moment, els objectes fan servir la mateixa fanfàrria que les armes (jingle_arma); si no hi és, la sintetitzada
+        Joc.detectarMusica().then(() => { const c = ['jingle_arma', 'jingle_objecte'].find(k => Joc.musicaDisponible.has(k)); if (c) Joc.jingle(scene, c); else Sfx.fanfara(); });
     },
 
     // L'Ineu alça una arma nova: la seva fanfàrria (jingle_arma); mentre no hi sigui, la d'objecte
     fanfaraArma(scene) {
         Joc.detectarMusica().then(() => {
-            if (!Joc.musicaDisponible.has('jingle_arma')) { Joc.fanfaraObjecte(scene); return; }
+            if (!Joc.musicaDisponible.has('jingle_arma')) { Joc.fanfaraObjecte(scene); return; }       // (mentrestant, la sintetitzada)
             const m = Joc.musica;
             if (m && m.isPlaying) { m.setVolume(0.15); scene.time.delayedCall(6000, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
             Joc.jingle(scene, 'jingle_arma');
