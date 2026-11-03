@@ -4,7 +4,7 @@ Cada cançó és **opcional**: quan el fitxer existeix a `assets/musica/`, sona;
 
 ## On sona cada peça
 
-Fetes (✔): totes menys `celles`.
+Fetes (✔): totes menys `celles` (el prompt és al final).
 
 | Fitxer | On sona | Tipus | Reserva mentrestant | Prioritat |
 |---|---|---|---|---|
@@ -24,8 +24,9 @@ Fetes (✔): totes menys `celles`.
 | ✔ `girgoles` | Sala de les Gírgoles | bucle | masmorra | Recomanada |
 | ✔ `jingle_arma` | Quan l'Ineu alça una arma nova (el bastó, la branca del Til·ler) | peça única | `jingle_objecte` | **Recomanada** |
 | `jingle_objecte` (no es fa servir: els objectes sonen amb `jingle_arma`) | Quan l'Ineu alça el bastó o la branca | peça única | fanfara sintetitzada | Recomanada |
+| `celles` | Les Cel·les (Sant Benet, Nostra Senyora, Sant Antoni), exterior | bucle | el tema del poble | Recomanada |
 
-`celles` (Les Cel·les) la fas tu a part; la resta de peces que ja hi ha: *The Hero's Ascension* (títol i, fins que hi hagi `poble`, el poble), *Woodland Path* (boscos, la Caseta i els Dipòsits), *Inside All* (interiors i, fins que hi hagi `santuari`, el Santuari), *Deep Dungeon Stillness* (masmorres) i *light book* (pròleg). El Celler (la sala del ping-pong) fa servir `taverna`.
+`celles` encara no hi és (mentrestant sona `poble`); la resta de peces que ja hi ha: *The Hero's Ascension* (títol i, fins que hi hagi `poble`, el poble), *Woodland Path* (boscos, la Caseta i els Dipòsits), *Inside All* (interiors i, fins que hi hagi `santuari`, el Santuari), *Deep Dungeon Stillness* (masmorres) i *light book* (pròleg). El Celler (la sala del ping-pong) fa servir `taverna`.
 
 ## El leitmotiv (la fanfàrria d'`intro_runna`)
 
@@ -47,3 +48,8 @@ La música de fons s'abaixa mentre sona (`Joc.leitmotiv`).
 - `jingle_arma` sona quan l'Ineu alça una arma nova o surt un objecte d'un cofre (`jingle_objecte` és la reserva); la música de zona baixa de volum uns segons.
 - Les cançons de fons van en streaming (no es descodifiquen senceres: al mòbil, quatre cançons descodificades eren ~280 MB). Per això el `.m4a` ha de tenir l'índex al principi; `eines/comprimir_media.sh` ja ho fa.
 - Els combats ja porten un tambor sintètic (`Sfx.tambor`) per sobre; el bombo de `boss` convé que sigui net perquè no s'acumulin.
+
+## Prompt pendent: `celles`
+
+**`celles`** (bucle, ~2 min): les cel·les de descans del Santuari, amb famílies, la Meus, les Venerables Sàvies i la Carry vídua. Una vida tranquil·la i casolana amb la boira que s'hi escola: càlida però una mica trista, sense perill. **Sense adjunt** (color propi del lloc).
+> instrumental quiet pilgrim lodging at dusk, gentle chamber folk, slow, A minor drifting to C major, solo cello and soft wooden flute, harp arpeggios, faint harmonium, a distant single church bell, a thin cold mist creeping in, homely and a little melancholic, sparse and even dynamics, seamless loop, no drums, no lyrics
