@@ -1017,13 +1017,13 @@ const DIALEGS = {
 
     portaHostatgeria: E => ({ pagines: [] }),
 
-    // El premi de les sacerdotesses, al vestíbul: la Benedicció Fraterna per resistir la boira verinosa de la Sala de la Gàbia
+    // El premi de les sacerdotesses, al vestíbul: la Benedicció Fraterna per travessar la boira verinosa que barra el camí de la Sala de la Gàbia
     cofreMonges: E => {
         if (E.flag('cofreMonges')) return { pagines: [] };
         return {
             pagines: [
                 { qui: 'Nota', text: '«Per a qui ha tornat la llum a aquesta casa.»' },
-                { avis: "Has obtingut la BENEDICCIÓ FRATERNA. La protecció sagrada de les tres sacerdotesses dissipa la boira verinosa de la Sala de la Gàbia per salvar els infants." }
+                { avis: "Has obtingut la BENEDICCIÓ FRATERNA. La protecció sagrada de les tres sacerdotesses dissipa la boira verinosa que barra el camí de la Sala de la Gàbia." }
             ],
             enAcabar: () => { E.posaFlag('cofreMonges'); E.dona('benedicio_fraterna'); E.desar(); }
         };

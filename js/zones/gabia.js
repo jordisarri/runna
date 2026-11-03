@@ -61,9 +61,7 @@ Object.assign(DIALEGS, {
     pontGabia: E => E.flag('pontGabia') ? { pagines: [] } : {
         pagines: [
             { qui: 'Inscripció', text: "Gravada a la pedra, una paraula antiga: PEDRES." },
-            { qui: 'Ineu', text: !E.te('benedicio_fraterna')
-                ? "(L'aire de l'avenc és carregat d'una boira verinosa... Encara que aixequi el pont, em caldrà la Benedicció Fraterna de les tres sacerdotesses per resistir i salvar els nens segrestats.)"
-                : E.flag('cantPedres')
+            { qui: 'Ineu', text: E.flag('cantPedres')
                     ? "(Les pedres... L'ombra del monjo es va despertar amb el Cant de les Pedres. Potser aquestes també: 3-1-2-1.)"
                     : "(Pedres que dormen. Hi deu haver un cant per despertar-les.)" }
         ]
@@ -379,7 +377,7 @@ class ZonaTortura extends ZonaBase {
         // Ferralla viva: les eines dels torturadors s'aixequen i barren el pas
         [[330, 1420], [580, 1300], [420, 860], [350, 640]].forEach(([x, y]) => this.enemic('ferralla', x, y));
 
-        this.sortida(390, 120, 120, 30, 'ZonaGabia', 'tortura');
+        this.sortida(390, 120, 120, 30, 'ZonaBoira', 'tortura');
         this.sortida(410, H - 22, 80, 14, 'ZonaGirgoles', 'tortura');
     }
 
@@ -403,6 +401,119 @@ class ZonaTortura extends ZonaBase {
         this.esbarzers.forEach(o => { if (!o.viu && o.halo) { o.halo.destroy(); o.halo = null; } });
         if (!Estat.flag('torturaNet') && this.esbarzers.length && this.esbarzers.every(o => !o.viu)) { Estat.posaFlag('torturaNet'); Estat.desar(); }
         if (!Estat.flag('torturaNet') && !this.esbarzers.length) Estat.posaFlag('torturaNet');
+    }
+}
+
+// ---------------- LA GALERIA DE LA BOIRA VERINOSA ----------------
+// Entre el passadís de tortura i la Sala de la Gàbia: una galeria llarga, mig enfonsada, plena d'una boira verda i lila que crema.
+// Només la Benedicció Fraterna de les tres sacerdotesses la dissipa; sense, l'Ineu no hi pot entrar.
+const BOIRA_V = { y0: 360, y1: 940 };
+class ZonaBoira extends ZonaBase {
+    constructor() {
+        super('ZonaBoira', {
+            fosca: true,
+            nom: 'Galeria de la boira',
+            amplada: 900,
+            alcada: 1400,
+            colorFons: '#070608',
+            entrades: { tortura: { x: 450, y: 1300, dir: 'amunt' }, gabia: { x: 450, y: 220, dir: 'avall' } }
+        });
+    }
+
+    construir() {
+        const W = 900, H = 1400, B = BOIRA_V;
+        this.terra('pedra', 200, 0, 500, H, -1100).setTint(0x7a8478);
+        const m = this.add.graphics().setDepth(-990);
+        m.fillStyle(0x141816, 1).fillRect(0, 0, 200, H).fillRect(700, 0, 200, H);
+        m.fillStyle(0x2c3430, 1).fillRect(170, 0, 30, H).fillRect(700, 0, 30, H);
+        m.lineStyle(1.5, 0x0c100e, 0.8);
+        for (let y = 0; y < H; y += 30) { m.lineBetween(170, y, 200, y); m.lineBetween(700, y, 730, y); }
+        m.fillStyle(0x070608, 1).fillRect(200, 0, 500, 120);
+        // Esquerdes del terra per on puja la boira, i ossos d'ocell escampats
+        m.lineStyle(3, 0x2a3a28, 0.9);
+        [[300, 520, 380, 600], [520, 700, 600, 640], [380, 820, 440, 900], [560, 450, 500, 520]].forEach(([a, b, c, d]) => m.lineBetween(a, b, c, d));
+        m.fillStyle(0xd8d0c0, 0.5);
+        [[260, 1100], [620, 1180], [330, 300], [600, 260]].forEach(([x, y]) => m.fillEllipse(x, y, 14, 4).fillEllipse(x + 8, y + 4, 10, 3));
+        [[700, 760], [200, 760]].forEach(([x, y]) => { m.fillStyle(0x2c3430, 1).fillRect(x - (x > 400 ? 0 : 40), y - 30, 40, 40); });
+        m.lineStyle(14, 0x2c3430, 1).beginPath(); m.arc(450, 1100 + 140, 250, Math.PI * 1.18, Math.PI * 1.82); m.strokePath();
+        this.colisio(100, H / 2, 200, H);
+        this.colisio(800, H / 2, 200, H);
+        this.colisio(450, 60, 500, 120);
+        this.colisio(270, H - 10, 140, 20);
+        this.colisio(630, H - 10, 140, 20);
+        // Torxes a l'entrada, que la boira apaga més amunt
+        [[215, 1180], [685, 1180], [215, 240], [685, 240]].forEach(([x, y], i) => {
+            const t = this.add.graphics().setDepth(y);
+            t.fillStyle(0x3a2a1a, 1).fillRect(x - 4, y - 10, 8, 30).fillStyle(0x2a2a2e, 1).fillRect(x - 8, y - 14, 16, 6);
+            const fl = this.add.ellipse(x, y - 24, 14, 24, 0xffa040, 1).setDepth(y + 1);
+            const ll = this.add.container(x, y - 20).setDepth(y + 2);
+            [[90, 0.05], [55, 0.07], [28, 0.1]].forEach(([rr, a]) => ll.add(this.add.circle(0, 0, rr, 0xff9040, a).setBlendMode('ADD')));
+            this.tweens.add({ targets: [fl, ll], scaleY: 1.15, alpha: 0.75, yoyo: true, repeat: -1, duration: 170 + i * 29 });
+        });
+
+        // La boira verinosa: capes de boira verda i lila que es mouen i fumegen per les esquerdes
+        this.boiraV = [];
+        const obert = Estat.flag('boiraVerinosaOberta');
+        if (!obert) {
+            if (!this.textures.exists('boira_suau')) {                 // una taca rodona i difuminada, per tenyir
+                const c = this.textures.createCanvas('boira_suau', 256, 256), ctx = c.getContext();
+                const gr = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+                gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.5, 'rgba(255,255,255,0.55)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+                ctx.fillStyle = gr; ctx.fillRect(0, 0, 256, 256); c.refresh();
+            }
+            for (let k = 0; k < 14; k++) {
+                const y = B.y0 + (B.y1 - B.y0) * (k / 13), x = 280 + ((k * 137) % 340);
+                const e = this.add.image(x, y, 'boira_suau').setTint(k % 2 ? 0x7ab050 : 0x8a58c0).setAlpha(0.42).setDepth(90010);     // per sobre de la foscor
+                e.setScale((300 + (k % 3) * 80) / e.width, (140 + (k % 4) * 30) / e.height);
+                this.tweens.add({ targets: e, x: x + (k % 2 ? 60 : -60), scaleX: e.scaleX * 1.15, alpha: 0.26, yoyo: true, repeat: -1, duration: 2600 + k * 170, ease: 'Sine.easeInOut' });
+                this.boiraV.push(e);
+            }
+            [[330, 520], [570, 660], [420, 840], [500, 420]].forEach(([x, y]) => this.boiraV.push(this.boira(x, y, 160, 60, 1.6, 0x9ad070)));
+            this.colBoira = this.colisio(450, B.y1 + 40, 500, 20);
+        }
+        this.boira(450, 180, 260, 60, 0.8);                    // la boira lila de la Sala de la Gàbia, que baixa per dalt
+
+        this.sortida(390, 120, 120, 30, 'ZonaGabia', 'tortura');
+        this.sortida(410, H - 22, 80, 14, 'ZonaTortura', 'gabia');
+    }
+
+    enEntrar() {
+        if (!Estat.flag('boiraVerinosaOberta')) Estat.posaObjectiu(Estat.te('benedicio_fraterna')
+            ? "La Benedicció Fraterna et protegeix: travessa la boira verinosa fins a la Sala de la Gàbia."
+            : PROGRES.pista(Estat));
+    }
+
+    actualitzar() {
+        if (Estat.flag('boiraVerinosaOberta') || this.canviant) return;
+        if (this.ineu.y > BOIRA_V.y1 + 110) return;
+        if (Estat.te('benedicio_fraterna')) { this.obrirBoira(); return; }
+        // Sense la Benedicció, la boira crema: l'Ineu tus i es fa enrere
+        this.ineu.body.setVelocity(0, 260);
+        this.forcat = { vx: 0, vy: 420, fins: this.time.now + 260 };
+        if (this.time.now > (this.avisBoira || 0)) {
+            this.avisBoira = this.time.now + 5000;
+            Sfx.puf();
+            this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text: "(Aquesta boira crema la gola... Sense la Benedicció Fraterna de les tres sacerdotesses de l'Hostatgeria no la podré travessar.)" }] });
+        }
+    }
+
+    // La Benedicció Fraterna s'encén al voltant de l'Ineu i la boira s'aparta i s'esvaeix
+    obrirBoira() {
+        Estat.posaFlag('boiraVerinosaOberta');
+        const I = this.ineu;
+        I.body.setVelocity(0);
+        Sfx.secret();
+        this.cameras.main.flash(500, 255, 240, 200);
+        const aura = this.add.circle(I.x, I.y - 50, 40, 0xffe8a0, 0.5).setBlendMode('ADD').setDepth(99000);
+        this.tweens.add({ targets: aura, radius: 420, alpha: 0, duration: 1800, ease: 'Cubic.out', onComplete: () => aura.destroy() });
+        this.boiraV.forEach(o => {
+            this.tweens.killTweensOf(o);
+            if (o.stop) { o.stop(); this.time.delayedCall(4500, () => o.destroy()); }
+            else this.tweens.add({ targets: o, alpha: 0, scaleX: 1.6, scaleY: 1.4, duration: 2200, delay: Math.random() * 500, onComplete: () => o.destroy() });
+        });
+        if (this.colBoira) { this.obstacles.remove(this.colBoira, true, true); this.colBoira = null; }
+        Estat.posaObjectiu("La boira s'ha esvaït. Més amunt, la Sala de la Gàbia.");
+        Estat.desar();
     }
 }
 
@@ -556,7 +667,7 @@ class ZonaGabia extends ZonaBase {
         this.velLila = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a30, net ? 0.06 : 0.22).setScrollFactor(0).setDepth(90000);
 
         this.decorarSala();                                                           // (js/zones/gabia_decor.js)
-        this.sortida(860, H - 22, 80, 14, 'ZonaTortura', 'gabia');
+        this.sortida(860, H - 22, 80, 14, 'ZonaBoira', 'gabia');
 
         // Capolls que encara no s'han trencat, si la gàbia ja és oberta (s'havia sortit a mig alliberament)
         if (Estat.flag('gabiaOberta')) NENS_GABIA.forEach((n, i) => { if (!Estat.flag(n.flag)) this.crearCapoll(n, gx - 200 + i * 200, base + 160); });
@@ -804,13 +915,7 @@ class ZonaGabia extends ZonaBase {
     actualitzar() {
         // L'Ineu trepitja la plataforma: l'Andreu crida el seu Mestre
         if (!this.combatIniciat && Estat.flag('pontGabia') && !Estat.flag('ocellaireVencut') && this.ineu.y < GABIA.y + GABIA.platH / 2 - 30) {
-            if (!Estat.te('benedicio_fraterna')) {
-                this.ineu.setY(GABIA.y + GABIA.platH / 2 - 10);
-                if (this.time.now > (this.avisCant || 0)) {
-                    this.avisCant = this.time.now + 4000;
-                    this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text: "(Una boira verinosa puja de l'avenc... Sense la Benedicció Fraterna de les tres sacerdotesses de l'Hostatgeria, no podré resistir per salvar els nens segrestats.)" }] });
-                }
-            } else if (!Estat.flag('cantMiracle')) {                                         // sense el Cant del Miracle no es pot entrar al combat
+            if (!Estat.flag('cantMiracle')) {                                         // sense el Cant del Miracle no es pot entrar al combat
                 this.ineu.setY(GABIA.y + GABIA.platH / 2 - 10);
                 if (this.time.now > (this.avisCant || 0)) { this.avisCant = this.time.now + 4000; this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text: "(Una força invisible no em deixa passar. Sense el Cant del Miracle, els barrots no m'escoltaran. La Pianista, al Santuari, me l'ha d'ensenyar.)" }] }); }
             } else this.iniciarCombatFinal();

@@ -118,10 +118,10 @@ const PROGRES = {
           pista: E => "Al final del passadís de tortura, un mur d'esbarzers negres es deixa tallar per Runna." },
         { id: 'benediccioFraterna', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'lliurePains', 'refetorObert', 'esb_host_cap1', 'esb_host_cap2', 'mongesTrobades', 'premiPains', 'premiPhili', 'premiCharm', 'cofreMonges', 'obj:benedicio_fraterna'], fet: E => E.te('benedicio_fraterna'),
           pista: E => !E.flag('llosaOberta')
-              ? "Per creuar l'avenc de la Sala de la Gàbia cal la Benedicció Fraterna de les tres sacerdotesses de l'Hostatgeria. Parla amb la gent de les Cel·les per esbrinar el secret de la llosa del jardí d'Isildren."
+              ? "Més enllà del passadís de tortura, una boira verinosa barra el camí de la Sala de la Gàbia: cal la Benedicció Fraterna de les tres sacerdotesses de l'Hostatgeria. Parla amb la gent de les Cel·les per esbrinar el secret de la llosa del jardí d'Isildren."
               : !E.flag('mongesTrobades')
                   ? "Sota la llosa del jardí de l'Hostatgeria hi ha les cambres de les sacerdotesses. Desperta la Pains, empeny la taula de la Phili amb els Guants i talla els esbarzers de la Charm amb Runna."
-                  : "Les tres sacerdotesses són lliures: recull la Benedicció Fraterna al cofre del vestíbul de l'Hostatgeria per poder resistir la boira verinosa de la Sala de la Gàbia." },
+                  : "Les tres sacerdotesses són lliures: recull la Benedicció Fraterna al cofre del vestíbul de l'Hostatgeria per poder travessar la boira verinosa que barra el camí de la Sala de la Gàbia." },
         { id: 'pont', marca: ['pontGabia'], fet: E => E.flag('pontGabia'),
           pista: E => "Davant l'avenc de la Sala de la Gàbia, els blocs del fons dormen. Un cant de pedres els faria aixecar." },
         { id: 'ocellaire', marca: ['ocellaireVencut'], fet: E => E.flag('ocellaireVencut'),

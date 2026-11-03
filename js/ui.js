@@ -35,7 +35,7 @@ const RETRATS = {
     'Pare Alcoví': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Garf': 'garf', 'Isildren': 'isidre',
     'La Pianista': 'pianista', 'La Jacmeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
-    'Meus': 'neus', 'Senyor Molner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Rosansa': 'sansa', 'Home del Raïm': 'home_raim',
+    'Meus': 'neus', 'Senyor Molner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Rosansa': 'sansa', 'Monjo': 'ombra_monjo', 'Home del Raïm': 'home_raim',
     'Carry': 'carry', 'Follet del Carro Verd': 'home_carruatge', 'El Gran Til·ler': 'tiller',
     "L'Home de la Gàbia": 'ocellaire', 'Huri': 'nen_uri', 'Fram': 'nen_flam', 'Flami': 'nen_flam', 'Sardi': 'nen_sardin'
 };
@@ -129,7 +129,7 @@ const CATALEG_OBJECTES = {
     esquelles:        ['Esquelles dels pastors', 'Amb elles, els cants antics sonen més clars.'],
     fulla_tiler:      ['Fulla del Til·ler', 'Un record del sopar sota el Gran Til·ler.'],
     cinta_nena:       ['Llaç de la Nena', 'Absorbeix un cop cada vegada que entres a una zona.'],
-    benedicio_fraterna:  ['Benedicció fraterna', 'La protecció sagrada de les tres sacerdotesses de l\'Hostatgeria. Dissipa la boira verinosa de la Sala de la Gàbia.'],
+    benedicio_fraterna:  ['Benedicció fraterna', 'La protecció sagrada de les tres sacerdotesses de l\'Hostatgeria. Dissipa la boira verinosa de la galeria que porta a la Sala de la Gàbia.'],
     llac_nena:        ['Llaç de cinta', 'Rosa i descolorit. És de la Nena de les Trenes.'],
     llanterna:        ['Llanterna', 'Fa més llum a les foscors de sota terra.'],
     telescopi:        ['Telescopi del Garf', 'Per mirar els estels als Dipòsits.'],

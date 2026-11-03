@@ -81,7 +81,7 @@ const MAPA = {
     visitada(id) { return Estat.flag('visitada_' + id); },
 
     // Tipus de lloc (color de la fitxa): exterior, interior o sota terra
-    SOTA: ['ZonaSotaTaverna', 'ZonaGirgoles', 'ZonaTortura', 'ZonaGabia', 'ZonaCasaCripta', 'ZonaSoterraniHost', 'ZonaPassadis', 'ZonaCasaTresor'],
+    SOTA: ['ZonaSotaTaverna', 'ZonaGirgoles', 'ZonaTortura', 'ZonaBoira', 'ZonaGabia', 'ZonaCasaCripta', 'ZonaSoterraniHost', 'ZonaPassadis', 'ZonaCasaTresor'],
     INTERIOR: ['ZonaCabanaInt', 'ZonaCasaJordi', 'ZonaCasetaJoc', 'ZonaMasiaCirosa', 'ZonaErmitaInt', 'ZonaPingpong', 'ZonaGolfes', 'ZonaEsglesia',
                'ZonaHostatgeriaInt', 'ZonaCambraPains', 'ZonaCambraPhili', 'ZonaCambraCharm', 'ZonaTavernaInt', 'ZonaCelaStAntoni', 'ZonaMonestirRebedor', 'ZonaBiblioteca', 'ZonaCasaGranInt', 'ZonaCabanaCami'],
     COLORS: { ext: [0x24453a, 0x6ac09a], int: [0x4a3220, 0xd8a868], sota: [0x2e2248, 0xa888e8] },
@@ -102,7 +102,7 @@ const MAPA = {
     PARE: {
         ZonaCabanaInt: 'ZonaCabana', ZonaCasaJordi: 'ZonaJordi', ZonaCasetaJoc: 'ZonaJordi', ZonaMasiaCirosa: 'ZonaCirosa', ZonaErmitaInt: 'ZonaErmita', ZonaCabanaCami: 'ZonaCami',
         ZonaPingpong: 'ZonaCellerFora', ZonaGolfes: 'ZonaPlaca', ZonaEsglesia: 'ZonaPlaca', ZonaHostatgeriaInt: 'ZonaJardi', ZonaCambraPains: 'ZonaJardi', ZonaCambraPhili: 'ZonaJardi',
-        ZonaCambraCharm: 'ZonaJardi', ZonaSoterraniHost: 'ZonaJardi', ZonaTavernaInt: 'ZonaTaverna', ZonaSotaTaverna: 'ZonaTaverna', ZonaGirgoles: 'ZonaGirgolesFora', ZonaTortura: 'ZonaGirgolesFora',
+        ZonaCambraCharm: 'ZonaJardi', ZonaSoterraniHost: 'ZonaJardi', ZonaTavernaInt: 'ZonaTaverna', ZonaSotaTaverna: 'ZonaTaverna', ZonaGirgoles: 'ZonaGirgolesFora', ZonaTortura: 'ZonaGirgolesFora', ZonaBoira: 'ZonaGirgolesFora',
         ZonaGabia: 'ZonaGirgolesFora', ZonaCelaStAntoni: 'ZonaSantAntoni', ZonaMonestirRebedor: 'ZonaMonestir', ZonaBiblioteca: 'ZonaMonestir', ZonaCasaGranInt: 'ZonaCasaGran',
         ZonaCasaCripta: 'ZonaCasaGran', ZonaCasaTresor: 'ZonaCasaGran', ZonaPassadis: 'ZonaCasaGran'
     },
@@ -115,7 +115,7 @@ const MAPA = {
         { nom: 'El Poble', color: 0xd09a58, ids: ['ZonaEra', 'ZonaJardi', 'ZonaHostatgeriaInt', 'ZonaCambraPains', 'ZonaCambraPhili', 'ZonaCambraCharm', 'ZonaTaverna', 'ZonaTavernaInt', 'ZonaCasaGran', 'ZonaCasaGranInt', 'ZonaPlaca', 'ZonaCreu', 'ZonaEsglesia', 'ZonaGolfes'] },
         { nom: 'El Monestir', color: 0xd8704a, ids: ['ZonaMonestir', 'ZonaSantAntoni', 'ZonaCelaStAntoni', 'ZonaMonestirRebedor', 'ZonaBiblioteca'] },
         { nom: 'La Rovellonera', color: 0xc08848, ids: ['ZonaCamiRov', 'ZonaRovellonera', 'ZonaGabriel', 'ZonaDipositos', 'ZonaDolmen'] },
-        { nom: 'Sota terra', color: 0x9070e0, etiqueta: false, ids: ['ZonaSotaTaverna', 'ZonaGirgoles', 'ZonaTortura', 'ZonaGabia', 'ZonaCasaCripta', 'ZonaSoterraniHost', 'ZonaPassadis', 'ZonaCasaTresor'] }
+        { nom: 'Sota terra', color: 0x9070e0, etiqueta: false, ids: ['ZonaSotaTaverna', 'ZonaGirgoles', 'ZonaTortura', 'ZonaBoira', 'ZonaGabia', 'ZonaCasaCripta', 'ZonaSoterraniHost', 'ZonaPassadis', 'ZonaCasaTresor'] }
     ],
     regio(id) { return MAPA.REGIONS.find(r => r.ids.includes(id)); },
 
