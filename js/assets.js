@@ -106,7 +106,7 @@ const CATALEG = [
     { key: 'ovella',         file: 'assets/enemics/ovella.png',         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },
     { key: 'ovella_boira',   file: 'assets/enemics/ovella_boira.png',   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
     { key: 'roca',           file: 'assets/natura/roca.webp',           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w) },
-    { key: 'basto_ocellaire', file: 'assets/armes/basto_ocellaire.webp', amplada: 184, cru: true },      // (art/basto_ocellaire2.png: sense flames; les flames les posa el joc quan gira de pressa)
+    { key: 'basto_ocellaire', file: 'assets/armes/basto_ocellaire.webp', amplada: 184, cru: true },      // (art/armes/basto_ocellaire.png, sense flames: les posa el joc quan gira de pressa; la versió amb flames és basto_ocellaire_flames.png)
     { key: 'masia',          file: 'assets/edificis/masia.png',          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },
     { key: 'pastor_a',       file: 'assets/personatges/pastor_a.webp',       amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a48', cabell: '#8a7a60', alt: 0.9, ample: 0.95, calb: true }) },
     { key: 'pastor_b',       file: 'assets/personatges/pastor_b.webp',       amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a4a58', cabell: '#7a7a7a', dona: true, alt: 0.88, ample: 0.95 }) },
