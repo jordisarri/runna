@@ -40,7 +40,7 @@ const DIARI_LATERALS = {
     rellotge: ['El rellotge aturat', 'ZonaGolfes', '+1 cor'],
     tresor: ['La pedra que escolta', 'ZonaPlaca', '+1 cor'],
     nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Llaç de la Nena (absorbeix un cop per zona)'],
-    carruatge: ['Els ocells de la tartana verda', 'ZonaEra', null]
+    carruatge: ['Els ocells del carro verd', 'ZonaEra', null]
 };
 const DIARI_ACTES = [
     { nom: 'Acte 1 · La boira', des: 'clauer' },

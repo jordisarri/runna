@@ -151,7 +151,7 @@ const PROGRES = {
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
           pista: E => "La Nena de les Trenes, al camí de la Rovellonera, encara espera els seus dos llaços, colgats sota pedres: un a la roca del camí i l'altre a la primera clariana de la Rovellonera." },
         { id: 'carruatge', marca: ['carruatgeObert'], obert: E => E.flag('epilegFet'), fet: E => E.flag('carruatgeObert'),
-          pista: E => "L'Home de la Tartana Verda, a l'Era, deia que obriria la tartana quan la boira marxés del tot." }
+          pista: E => "El Follet del Carro Verd, a l'Era, deia que obriria el carro quan la boira marxés del tot." }
     ],
 
     // El primer pas de la història que encara no és fet

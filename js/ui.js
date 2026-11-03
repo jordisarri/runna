@@ -36,7 +36,7 @@ const RETRATS = {
     'La Pianista': 'pianista', 'La Jaumeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Charm': 'monja_charm', 'Phili': 'monja_phili', 'Pains': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
     'Neus': 'neus', 'Senyor Moliner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Jordi': 'jordi_caseta', 'Sansa': 'sansa', 'Home del Raïm': 'home_raim',
-    'Carry': 'carry', 'Home de la Tartana Verda': 'home_carruatge', 'El Gran Til·ler': 'tiller',
+    'Carry': 'carry', 'Follet del Carro Verd': 'home_carruatge', 'El Gran Til·ler': 'tiller',
     "L'Home de la Gàbia": 'ocellaire', 'Huri': 'nen_uri', 'Fram': 'nen_flam', 'Flami': 'nen_flam', 'Sardi': 'nen_sardin'
 };
 const MIDA_RETRAT = 170;          // costat del retrat a la caixa de diàleg (px de joc)

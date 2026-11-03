@@ -225,7 +225,7 @@ class ZonaEra extends ZonaBase {
         puntBanc.npc = this.garf;
         puntBanc.cameraCossos = [this.bancNord, this.bancSud];
 
-        // L'Home de la Tartana Verda i la seva tartana de vapor, a la vora sud-oest: és la parada de l'Era (PARADES, js/zona_base.js)
+        // El Follet del Carro Verd i el seu carro de vapor, a la vora sud-oest: és la parada de l'Era (PARADES, js/zona_base.js)
 
         this.cartell(470, 485, DIALEGS.cartellEra);
         // Poca cosa més: uns quants arbres a la vora del nord, lluny de les sortides i del cartell, perquè els dos roures siguin els protagonistes
