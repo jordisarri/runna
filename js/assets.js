@@ -69,7 +69,7 @@ const CATALEG = [
     { key: 'pallofa',   file: 'assets/personatges/pallofa.webp',   amplada: 60, cru: true,  provisional: (c, w) => dibuixarGos(c, w) },   // el Pallofa, gos petit i prim, blanc amb taques marrons, borni i ple de puces
     { key: 'isidre',    file: 'assets/personatges/isidre.webp',    amplada: 93, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { isidre: true, calb: true, roba: '#f4f1e8', cabell: '#000000', alt: 0.94 }) },
     { key: 'jordi_caseta', file: 'assets/personatges/jordi_caseta.webp', amplada: 66, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a7a3a', cabell: '#4a3a2a', alt: 0.97, extra: 'gorra' }) },
-    { key: 'sansa',     file: 'assets/personatges/sansa.png',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
+    { key: 'sansa',     file: 'assets/personatges/sansa.webp',     amplada: 96,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
     { key: 'ciscu',     file: 'assets/personatges/ciscu.webp',    amplada: 52, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#c8a040', cabell: '#5a3a1e', alt: 0.74, cap: 17, extra: 'gorra' }) },
     { key: 'eva',       file: 'assets/personatges/eva.webp',       amplada: 67, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7a5a', cabell: '#e8cc66', dona: true, alt: 0.95 }) },
     { key: 'home_carruatge', file: 'assets/personatges/home_carruatge.webp', amplada: 68, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2f6b3d', cabell: '#222', alt: 1.04, extra: 'gorra' }) },
@@ -87,7 +87,7 @@ const CATALEG = [
     { key: 'taula_pedra2', file: 'assets/objectes/taula_pedra2.png', amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
     { key: 'font_sj',   file: 'assets/objectes/font_sj.png',   amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w) },
     { key: 'carruatge', file: 'assets/objectes/carruatge.webp', amplada: 250, provisional: (c, w) => dibuixarCarruatge(c, w) },
-    { key: 'carro_sansa', file: 'assets/objectes/carro_sansa.png', amplada: 220, provisional: (c, w) => dibuixarCarroSansa(c, w) },
+    { key: 'carro_sansa', file: 'assets/objectes/carro_sansa.webp', amplada: 280, provisional: (c, w) => dibuixarCarroSansa(c, w) },
     { key: 'pergola',   file: 'assets/edificis/pergola.png',   amplada: 260, provisional: (c, w) => dibuixarPergola(c, w) },
     { key: 'flors',     file: 'assets/natura/flors.png',     amplada: 90,  provisional: (c, w) => dibuixarFlors(c, w) },
     { key: 'taula_pp',  file: 'assets/objectes/taula_pp.png',  amplada: 240, provisional: (c, w) => dibuixarTaulaPP(c, w) },
@@ -168,7 +168,7 @@ const CATALEG = [
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
 ['ineu', 'pare_jordi', 'germa_andreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'garf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
- 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta']
+ 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta', 'sansa']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
 /**

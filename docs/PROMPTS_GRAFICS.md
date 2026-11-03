@@ -50,6 +50,10 @@
 
 - [x] `frederic`
 
+- [x] `carro_sansa` (Rosansa)
+
+- [x] `sansa` (Rosansa)
+
 - [x] `garf`
 
 - [x] `germa_andreu`
@@ -230,7 +234,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ineu/tarota_gran`, `andreu_guardia`, `arrels_tiller`, `basto_ocellaire`, `carro_sansa`, `gabia`, `gabia_oberta`, `home_raim_o`, `marit_neus`, `neus`, `ocellaire_cansat`, `sansa`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ineu/tarota_gran`, `andreu_guardia`, `arrels_tiller`, `basto_ocellaire`, `gabia`, `gabia_oberta`, `home_raim_o`, `marit_neus`, `neus`, `ocellaire_cansat`, `retrat_rosansa`.
 
 
 
@@ -255,14 +259,6 @@ Els prompts de sota són només dels pendents i dels nous (els fets només es ll
 Charming 2D cartoon game environment asset in the 'Chibi Adventure Environment' style, matching the attached reference images: crisp vector-like illustration with bold clean dark-brown outlines, soft cel shading, rich earthy colors, and the same 3/4 top-down JRPG camera. Create ONE wide, irregular cluster of ancient living roots from a huge linden tree, viewed from slightly above. The roots have thick twisted trunks and smaller branching roots, deep bark grooves, moss, a few heart-shaped linden leaves, and clumps of disturbed earth at their bases. They rise from the ground and interlock into a dense natural barrier that completely blocks a woodland path; the silhouette is broad and low (about 2.5 times wider than tall), with uneven root tips and visible gaps only between the upper branches, not enough to walk through at ground level. The roots should look old, powerful, magical, and organic, not like a fence, a wall, a hedge, or a bundle of thin sticks. Match the game's existing trees and forest palette. Single centered object, full silhouette visible, isolated on a pure white background (#FFFFFF) for automatic background removal; no scenery, no path, no characters, no text, no cast shadow.
 
 ```
-
-### `carro_sansa.png` (amplada 220) *(El carro de mercat de la Rosansa, vist **només de costat** (perfil pur, sense el davant ni el darrere). Puja com a referència d'estil un objecte ja fet, p. ex. `art/objectes/carruatge.jpg`. Si encara surt en perspectiva, repeteix-lo afegint al final: «flat side elevation, like a technical drawing, both wheels perfect circles».)*
-
-```
-Charming 2D cartoon game asset in the 'Chibi Adventure Environment' style, matching the attached reference image (same rendering as the chibi character sprites): digital vector-like 2D cartoon illustration, cel-shaded with soft ambient occlusion and a crisp finish, chunky rounded stout shapes with exaggerated proportions, soft rounded corners, nothing sharp or photorealistic, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette (chocolate and chestnut browns, cream, ochre, moss green, slate blue) in distinct solid colour blocks per material, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, a hint of eerie Catalan mountain-village mood, single object centered, isolated on a pure white background (#FFFFFF), no ground shadow, no cast shadow, no text. A small wooden two-wheeled market cart: a low wooden box bed on a single axle, two long wooden shafts (handles) sticking out horizontally to the left, wicker baskets full of vegetables (cabbages, carrots, onions, red peppers) on the bed, and a small striped red-and-cream fabric awning on two thin poles above it. VIEW: a pure SIDE VIEW (orthographic side elevation, profile), the camera exactly level with the cart and perpendicular to its long side: we see ONLY the long left side of the cart, from the tips of the shafts on the left to the back of the bed on the right. The near wheel is a perfect full circle seen face-on (not an ellipse) and hides the far wheel completely. The front and the back of the cart are NOT visible at all, no top of the bed visible, no 3/4 view, no isometric view, no perspective, no vanishing point, no depth: everything is flat and parallel to the picture plane. The bottom of the wheel touches the bottom of the image. Wide horizontal format (about 2:1).
-```
-
-
 
 ## Personatges
 
@@ -310,14 +306,10 @@ Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style,
 
 
 
-### `sansa.png` (amplada 96)  *(La Rosansa, venedora del carro de verdures. Si el generador es nega, comença un xat nou i no hi posis cap nom.)*
-
-
+### `retrats/sansa_retrat.jpg` (retrat de la Rosansa als diàlegs) *(Puja com a referències `art/personatges/sansa.png` i un retrat fet, p. ex. `art/retrats/eva_retrat.jpg`. Xat nou i sense noms. Es converteix amb `eines/convertir_retrats.js sansa`. Ara hi ha un retrat provisional retallat del sprite.)*
 
 ```
-
-Charming 2D cartoon game character sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (head to body about 1:2 to 1:2.5, enlarged rounded head with soft cheeks, compact slightly stocky torso, short stout limbs, simplified hands, rounded shoes), large expressive glossy eyes with a dark outline and detailed irises, warm friendly expression, minimalist facial lines (age shown through hair colour and shape, glasses and subtle folds, never deep wrinkles), bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks per garment, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, strictly front-facing eye-level view, full body standing centered, ground-planted, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A cheerful middle-aged travelling market vendor from a Catalan mountain village: a round rosy face with a big warm smile, dark brown hair in a thick braid under a green-and-white checked headscarf tied at the nape, a moss-green wool dress with the sleeves rolled up, a long cream apron with two big pockets (a carrot and a leek sticking out of one), a brown knitted shawl over the shoulders, sturdy brown wooden clogs, and a wicker basket full of vegetables hooked on one arm. Chunky chibi proportions like the reference image (big round head with a friendly expressive face, short plump body, small hands and feet), thick dark-brown outline, cloth with soft worn texture and visible folds, full body, front-facing standing pose, seen from slightly above (classic JRPG 3/4 top-down), whole body visible, feet at the bottom of the image, a single character.
-
+Charming 2D cartoon character PORTRAIT for the dialogue box of a game, in exactly the same style as the attached reference portrait (bold clean black outline, soft cel shading with subtle gradient highlights, warm earthy colours, slightly chibi rounded features, big expressive glossy eyes). Draw the SAME woman as in the attached full-body character image: a cheerful middle-aged travelling market vendor with a round rosy face, big warm brown eyes, a wide friendly smile, soft smile lines, dark brown hair in a thick braid over one shoulder, a green-and-white checked headscarf tied at the nape, a moss-green wool dress and a brown knitted shawl over the shoulders. Head and shoulders only (bust, cut just below the shoulders like the reference portrait), head turned three-quarters towards the RIGHT, looking at someone she is talking to, lively and kind expression, mouth slightly open as if chatting. Single character, centered, isolated on a pure white background (#FFFFFF), no hands, no basket, no text, no frame, no cast shadow. Square format.
 ```
 
 

@@ -431,7 +431,7 @@ class ZonaCelles extends ZonaBase {
         this.cartell(130, 625, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler' }] }));
 
         this.arbres([[260, 1000], [300, 1040],
-                     [1250, 1020], [1480, 960], [1700, 1030]]);
+                     [1560, 1060], [1480, 960], [1700, 1030]]);      // (el de l'est del camí de les Runes es queda lluny: hi para el carro de la Rosansa)
 
         this.sortida(800, 1086, 200, 14, 'ZonaRuines', 'celles');
         this.sortida(0, 640, 14, 130, 'ZonaBosc', 'celles');
@@ -468,12 +468,13 @@ class ZonaCelles extends ZonaBase {
     }
 
     posarSansa() {
-        this.carroSansa = this.posar('carro_sansa', 1060, 880);
-        this.colCarro = this.colisio(1060, 855, 200, 50);
-        this.sansa = this.posar('sansa', 1160, 890);
-        this.colSansa = this.colisio(1160, 881, 40, 18);
-        this.add.image(1160, 890, 'ombra').setScale(0.42).setDepth(-500);
-        const punt = this.interactiu(1160, 880, RADI_NPC, DIALEGS.sansa, { altura: this.sansa.displayHeight + 6 });
+        // Els braços del carro miren a l'est: la Rosansa s'hi posa al davant i, en marxar, l'estira cap a l'est
+        this.carroSansa = this.posar('carro_sansa', 1060, 880).setFlipX(true);
+        this.colCarro = this.colisio(1000, 855, 160, 50);
+        this.sansa = this.posar('sansa', 1228, 892);
+        this.colSansa = this.colisio(1228, 883, 40, 18);
+        this.add.image(1228, 892, 'ombra').setScale(0.42).setDepth(-500);
+        const punt = this.interactiu(1228, 882, RADI_NPC, DIALEGS.sansa, { altura: this.sansa.displayHeight + 6 });
         punt.enTancar = () => this.marxaSansa(punt);
     }
 
