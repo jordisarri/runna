@@ -75,7 +75,7 @@ const Joc = {
         });
     },
 
-    // Música: 'musica_intro' (overworld: intro, títol i exteriors) i 'musica_bosc' (parts de bosc)
+    // Música: 'musica_intro' (títol i, mentre no hi hagi 'poble', exteriors) i 'musica_bosc' (parts de bosc)
     musica: null,
     musicaClau: null,
     // Cançó de cada zona (les que no hi són, queden en silenci)
@@ -85,14 +85,15 @@ const Joc = {
         ZonaGabriel: 'musica_bosc', ZonaBosc: 'musica_bosc', ZonaCamiCirosa: 'musica_bosc', ZonaCirosa: 'musica_cirosa', ZonaMasiaCirosa: 'musica_cirosa', ZonaTavernaInt: 'musica_taverna', ZonaSotaTaverna: 'musica_masmorra', ZonaGirgoles: 'musica_girgoles', ZonaTortura: 'musica_masmorra', ZonaGabia: 'musica_gabia', ZonaBiblioteca: 'musica_biblioteca', ZonaMonestirRebedor: 'musica_biblioteca', ZonaCelaStAntoni: 'musica_casa',
         ZonaDolmen: 'musica_bosc', ZonaTiller: 'musica_bosc', ZonaCabana: 'musica_bosc',
         // Exteriors (overworld)
-        ZonaPlaca: 'musica_intro', ZonaMonestir: 'musica_intro', ZonaCreu: 'musica_intro', ZonaCasaGran: 'musica_intro',
-        ZonaRuines: 'musica_intro', ZonaCellerFora: 'musica_intro', ZonaGirgolesFora: 'musica_intro', ZonaCelles: 'musica_celles', ZonaSantAntoni: 'musica_intro', ZonaTaverna: 'musica_intro', ZonaJordi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaJordi: 'musica_casa', ZonaEra: 'musica_intro', ZonaJardi: 'musica_intro', ZonaCementiri: 'musica_intro',
+        ZonaPlaca: 'musica_poble', ZonaMonestir: 'musica_poble', ZonaCreu: 'musica_poble', ZonaCasaGran: 'musica_poble',
+        ZonaRuines: 'musica_poble', ZonaCellerFora: 'musica_poble', ZonaGirgolesFora: 'musica_poble', ZonaCelles: 'musica_celles', ZonaSantAntoni: 'musica_poble', ZonaTaverna: 'musica_poble', ZonaJordi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaJordi: 'musica_casa', ZonaEra: 'musica_poble', ZonaJardi: 'musica_poble', ZonaCementiri: 'musica_poble',
         // Interiors de cases
-        ZonaEsglesia: 'musica_casa', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
+        ZonaEsglesia: 'musica_santuari', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
         ZonaCabanaCami: 'musica_casa', ZonaGolfes: 'musica_casa', ZonaTorre: 'musica_casa',
         // Masmorres
-        ZonaCasaGranInt: 'musica_masmorra', ZonaPingpong: 'musica_masmorra', ZonaCasaCripta: 'musica_masmorra', ZonaPassadis: 'musica_masmorra',
-        ZonaCasaTresor: 'musica_masmorra', ZonaSoterraniHost: 'musica_masmorra', ZonaHostatgeriaInt: 'musica_hostatgeria', ZonaCambraPains: 'musica_hostatgeria', ZonaCambraPhili: 'musica_hostatgeria', ZonaCambraCharm: 'musica_hostatgeria', ZonaTresor: 'musica_masmorra', ZonaDipositos: 'musica_masmorra'
+        ZonaCasaGranInt: 'musica_masmorra', ZonaPingpong: 'musica_taverna',      // el Celler: gent i ping-pong, no una masmorra
+        ZonaCasaCripta: 'musica_masmorra', ZonaPassadis: 'musica_masmorra',
+        ZonaCasaTresor: 'musica_masmorra', ZonaSoterraniHost: 'musica_masmorra', ZonaHostatgeriaInt: 'musica_hostatgeria', ZonaCambraPains: 'musica_hostatgeria', ZonaCambraPhili: 'musica_hostatgeria', ZonaCambraCharm: 'musica_hostatgeria', ZonaTresor: 'musica_masmorra', ZonaDipositos: 'musica_bosc'      // els Dipòsits: un prat de nit, a l'aire lliure
     },
 
     // Fitxers de cada cançó (AAC .m4a, comprimides amb eines/comprimir_media.sh). Només 'musica_intro' es carrega
@@ -106,6 +107,8 @@ const Joc = {
     // Així es poden anar afegint cançons una a una sense tocar res més (vegeu docs/INSTRUCCIONS_MUSICA.md).
     MUSICA_OPCIONAL: {
         musica_proleg:     { fitxer: 'light book', fallback: 'musica_intro' },
+        musica_poble:      { fitxer: 'poble',      fallback: 'musica_intro' },      // exteriors del poble (fins ara, la mateixa que el títol)
+        musica_santuari:   { fitxer: 'santuari',   fallback: 'musica_casa' },
         musica_celles:     { fitxer: 'celles',     fallback: 'musica_intro' },
         musica_taverna:    { fitxer: 'taverna',    fallback: 'musica_casa' },
         musica_cirosa:     { fitxer: 'cirosa',     fallback: 'musica_bosc' },

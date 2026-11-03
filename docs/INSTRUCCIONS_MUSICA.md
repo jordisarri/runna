@@ -14,7 +14,7 @@ Si en generes diverses versions, deixa-les totes (`boss_a.mp3`, `boss_b.mp3`) i 
 
 ## Què cal, per ordre
 
-Fetes (✔): totes les imprescindibles (`boss`, `boss_final`, `gabia`, `epileg`, `credits`, `jingle_boss`, `jingle_runna`) i `taverna`, `cirosa` i `jingle_objecte`. Falten `biblioteca`, `hostatgeria`, `girgoles` i `celles`. Els originals són a `art/musica/cru/`; `jingle_runna` comença al cop fort de la cançó (9,7 s), que és quan l'Ineu alça l'espasa.
+Fetes (✔): totes les imprescindibles (`boss`, `boss_final`, `gabia`, `epileg`, `credits`, `jingle_boss`, `jingle_runna`) i `taverna`, `cirosa` i `jingle_objecte`. Falten `poble`, `santuari`, `biblioteca`, `hostatgeria`, `girgoles` i `celles`. Els originals són a `art/musica/cru/`; `jingle_runna` comença al cop fort de la cançó (9,7 s), que és quan l'Ineu alça l'espasa.
 
 | Fitxer | On sona | Tipus | Reserva mentrestant | Prioritat |
 |---|---|---|---|---|
@@ -25,6 +25,8 @@ Fetes (✔): totes les imprescindibles (`boss`, `boss_final`, `gabia`, `epileg`,
 | ✔ `credits` | Crèdits | bucle | `epileg` | **Imprescindible** |
 | ✔ `jingle_boss` | Quan cau l'Ocellaire | peça única | silenci | **Imprescindible** |
 | ✔ `jingle_runna` | Quan Runna es desperta al Dolmen | peça única | silenci | **Imprescindible** |
+| `poble` | Exteriors del poble (Plaça, Monestir, Runes, Celler, Era, Jardí, Cementiri, Sant Antoni...) | bucle | el tema del títol | **Molt recomanada** |
+| `santuari` | El Santuari per dins | bucle | interiors | Recomanada |
 | ✔ `taverna` | La Taverna per dins | bucle | interiors | Recomanada |
 | ✔ `cirosa` | Camí de la Cirosa, pastura i Mas | bucle | bosc | Recomanada |
 | `biblioteca` | Biblioteca del Monestir | bucle | interiors | Recomanada |
@@ -32,7 +34,7 @@ Fetes (✔): totes les imprescindibles (`boss`, `boss_final`, `gabia`, `epileg`,
 | `girgoles` | Sala de les Gírgoles | bucle | masmorra | Recomanada |
 | ✔ `jingle_objecte` | Quan l'Ineu alça el bastó o la branca | peça única | fanfara sintetitzada | Recomanada |
 
-`celles` (Les Cel·les) la fas tu a part; la resta de peces que ja hi ha: *The Hero's Ascension* (plaça i poble), *Woodland Path* (boscos), *Inside All* (interiors), *Deep Dungeon Stillness* (masmorres) i *light book*.
+`celles` (Les Cel·les) la fas tu a part; la resta de peces que ja hi ha: *The Hero's Ascension* (títol i, fins que hi hagi `poble`, el poble), *Woodland Path* (boscos, la Caseta i els Dipòsits), *Inside All* (interiors i, fins que hi hagi `santuari`, el Santuari), *Deep Dungeon Stillness* (masmorres) i *light book* (pròleg). El Celler (la sala del ping-pong) fa servir `taverna`.
 
 Si només en fas set, que siguin les imprescindibles: el combat final i el despertar de Runna són els moments on més es nota que falta música.
 
@@ -85,6 +87,12 @@ Tots en anglès i **sense lletra** (afegeix «instrumental, no lyrics» si el ge
 > short fantasy item fanfare, acoustic, ascending E major arpeggio on harp and wooden flute, opens into a warm sustained chord, small bell shimmer, gentle, no drums
 
 ### Llocs (recomanades; si en falta alguna, no passa res)
+
+**`poble`** (bucle, ~2:30): el poble de dia, on l'Ineu passa més estona. Ara hi sona la mateixa que al títol (*The Hero's Ascension*), que és massa èpica per caminar-hi hores i fa que el títol i el joc sonin igual. Ha de ser la melodia del joc, però tranquil·la, sense clímax, per sentir-la molta estona sense cansar. **Adjunta `art/musica/intro_runna.mp3`** (Cover): la melodia, però en versió de passeig.
+> instrumental gentle village daytime theme, warm acoustic chamber folk, around 88 bpm, E minor with moments of G major, solo wooden flute and harp carrying the melody softly, light pizzicato strings, soft frame drum, a little accordion, peaceful with a faint hint of mystery, even dynamics, no big climax, seamless loop, no lyrics
+
+**`santuari`** (bucle, ~2 min): el Santuari per dins, amb l'orgue que la boira ha emmudit. Recollit i una mica trist. **Sense adjunt.**
+> instrumental sacred sanctuary ambience, soft wordless choir, a church organ that sounds faint and hesitant as if muted by fog, harp, distant bells, slow, E minor, reverent and a little sad, long reverb, no drums, no lyrics
 
 **`taverna`** (~1:45): alegre però una mica forçada; la Càren dorm i hi ha un nen desaparegut. **Sense adjunt** (color propi del lloc).
 > instrumental Catalan tavern folk waltz, accordion lead, village fiddle, tenora reed melody, tambourine and bass drum, A minor, cozy but slightly uneasy, no lyrics
