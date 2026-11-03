@@ -58,7 +58,7 @@ function completarLliço(nom) {
 }
 
 // Mides del pergamí de la tarota (a baix de la pantalla; el joc es continua veient a sobre)
-const MUS_W = 688, MUS_H = 540, MUS_T = ALT - 555;
+const MUS_W = 688, MUS_H = 570, MUS_T = ALT - 585;
 
 class EscenaMusica extends Phaser.Scene {
     constructor() { super('Musica'); }
@@ -165,16 +165,16 @@ class EscenaMusica extends Phaser.Scene {
             const sabudes = Object.values(MELODIES).filter(m => Estat.flag(m.flag));
             if (sabudes.length) {
                 sabudes.forEach((m, i) => {
-                    const y = T + 386 + i * 43, x = cx - 307;
+                    const y = T + 392 + i * 48, x = cx - 307;
                     const fila = add(this.add.graphics());
-                    fila.fillStyle(i % 2 ? 0xe1cf9f : 0xe9d9b2, 0.88).fillRoundedRect(x, y, 614, 36, 8);
-                    fila.lineStyle(1.5, 0x987244, 0.8).strokeRoundedRect(x, y, 614, 36, 8);
-                    add(this.add.text(x + 14, y + 18, m.nom, { ...llibre, fontSize: '17px', color: '#3a2412' }).setOrigin(0, 0.5));
-                    const inici = cx + 74;
+                    fila.fillStyle(i % 2 ? 0xe1cf9f : 0xe9d9b2, 0.88).fillRoundedRect(x, y, 614, 44, 8);
+                    fila.lineStyle(1.5, 0x987244, 0.8).strokeRoundedRect(x, y, 614, 44, 8);
+                    add(this.add.text(x + 14, y + 22, m.nom, { ...llibre, fontSize: '21px', color: '#3a2412' }).setOrigin(0, 0.5));
+                    const inici = cx + 86;
                     m.notes.forEach((n, j) => {
-                        const nx = inici + j * 34;
-                        add(this.add.circle(nx, y + 18, 13, COLOR_NOTA).setStrokeStyle(2, 0x3a2412, 1));
-                        add(this.add.text(nx, y + 18, String(n), { ...llibre, fontSize: '15px', fontStyle: 'bold', color: '#3a2412' }).setOrigin(0.5));
+                        const nx = inici + j * 42;
+                        add(this.add.circle(nx, y + 22, 18, COLOR_NOTA).setStrokeStyle(2, 0x3a2412, 1));
+                        add(this.add.text(nx, y + 22, String(n), { ...llibre, fontSize: '24px', fontStyle: 'bold', color: '#3a2412' }).setOrigin(0.5));
                     });
                 });
             } else {
