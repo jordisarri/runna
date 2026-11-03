@@ -526,6 +526,11 @@ class ZonaBase extends Phaser.Scene {
 
     // Personatge quiet amb diàleg (es pot moure amb npcVa: les accions dels diàlegs es fan caminant, no explicant-les)
     npc(key, x, y, dialeg, opts = {}) {
+        // Un cop acabada la història, cadascú té una frase nova (DIALEGS_FINAL); si no en té o encara té feina oberta, la de sempre
+        if (typeof DIALEGS_FINAL !== 'undefined' && DIALEGS_FINAL[key] && Estat.flag('epilegFet') && dialeg !== DIALEGS.gentEpileg) {
+            const final = DIALEGS_FINAL[key], abans = dialeg;
+            dialeg = E => final(E) || (typeof abans === 'function' ? abans(E) : abans);
+        }
         const tex = this.textures.get(key);
         const escala = (tex.customData && tex.customData.escala) || 1 / RES;
         const img = this.add.sprite(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
@@ -1215,7 +1220,7 @@ class ZonaBase extends Phaser.Scene {
 
     sincroFantasma() {
         const f = this.fantasma, i = this.ineu;
-        if (!f || !i) return;
+        if (!f || !i || !f.active || !i.active) return;             // (en tancar l'escena ja no hi són)
         if (f.texture.key !== i.texture.key || f.frame.name !== i.frame.name) f.setTexture(i.texture.key, i.frame.name);
         f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(this.assegut ? 0 : i.alpha * 0.38);   // assegut: el banc el tapa de debò
         // Els personatges no es transparenten com els arbres: si un que és davant de l'Ineu el tapa, la silueta s'amaga on hi ha el personatge

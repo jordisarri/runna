@@ -1509,3 +1509,27 @@ const DIALEGS = {
         return { pagines: [{ qui: "Làpida", text: mots[n % mots.length] }] };
     }
 };
+
+// ---------------- DESPRÉS DE L'EPÍLEG ----------------
+// Quan ja s'ha acabat la història (epilegFet), la gent diu una cosa nova. Si la funció torna null (té una lateral encara oberta),
+// es manté el seu diàleg de sempre. Les que donen pistes (Pare Jordi, Tietes, Alcuí, Til·ler) no canvien: ja saben dir que tot és fet.
+const DIALEGS_FINAL = {
+    pianista: E => ({ pagines: [{ qui: 'La Pianista', text: "Has sentit l'orgue? Encara li falla el re, però canta. I tu, fill, no deixis mai la tarota al calaix." }] }),
+    neus: E => ({ pagines: [
+        { qui: 'Meus', text: "Ja els tinc a casa, i ja els he renyat tres vegades. Dues més i potser els deixo sortir a jugar." },
+        { qui: 'Meus', text: "Gràcies, Ineu. No ho diré gaires cops, així que escolta'm bé: gràcies." }] }),
+    marit_neus: E => ({ pagines: [
+        { qui: 'Senyor Molner', text: "Des que han tornat els nens, la Meus canta mentre renta. Desafina, però canta." },
+        { qui: 'Senyor Molner', text: "No li diguis que t'ho he dit." }] }),
+    monja_pains: E => ({ pagines: [{ qui: 'Pains', text: "El Sardi ja torna a robar galetes del rebost. Senyal que està bé del tot." }] }),
+    monja_phili: E => ({ pagines: [{ qui: 'Phili', text: "Hem posat una espelma per tu a cada cambra, Ineu. I una altra per si de cas." }] }),
+    monja_charm: E => ({ pagines: [{ qui: 'Charm', text: "Les tres te'n devem una. I nosaltres sempre paguem els deutes... amb pastissos." }] }),
+    isidre: E => ({ pagines: [{ qui: 'Isildren', text: "Les flors de lluna ja s'obren de dia. Diria que és el riure dels nens, que les enganya." }] }),
+    jaumeta: E => ({ pagines: [{ qui: 'La Jaumeta', text: "L'olla ja no fa bombolles liles. Ara fa olor de farigola, com ha de ser." }] }),
+    garf: E => ({ pagines: [{ qui: 'Garf', text: "Des del telescopi es veu tot el poble, i aquesta nit no hi ha ni un fil de boira." }] }),
+    germa_francesc: E => ({ pagines: [{ qui: 'Germà Francesc', text: "La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui." }] }),
+    ciscu: E => ({ pagines: [{ qui: 'Iscu', text: "M'ha sortit el solitari! Sense trampes! ...Bé, amb una de petita." }] }),
+    eva: E => E.flag('evaParlat') ? ({ pagines: [{ qui: 'Eve', text: "El Sardi ja torna a berenar aquí cada tarda. La Càren encara dorm, però ronca més contenta." }] }) : null,
+    carry: E => E.flag('pallofaTornat') ? ({ pagines: [{ qui: 'Carry', text: "El Pallofa ja no s'escapa: des que no hi ha boira, no té res a perseguir." }] }) : null,
+    pastor_vell: E => ({ pagines: [{ qui: 'Pastor vell', text: "Les ovelles tornen a ser blanques. Alguna encara té les orelles una mica liles, però ja li passarà." }] })
+};

@@ -59,8 +59,9 @@ class ZonaEsglesia extends ZonaBase {
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daniel, que dirigeix el cor
         this.orgue = this.posar('orgue', 975, ESG.retY + 250, { col: { w: 110, h: 50 } });
-        this.npc('pianista', 975, ESG.retY + 320, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
-        this.npc('pare_daniel', 360, ESG.retY + 190, DIALEGS.pareDaniel, { flipX: false });
+        const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daniel es posen amb la resta
+        if (!epileg) this.npc('pianista', 975, ESG.retY + 320, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
+        if (!epileg) this.npc('pare_daniel', 360, ESG.retY + 190, DIALEGS.pareDaniel, { flipX: false });
 
         // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar
         // (files ben separades: entre banc i banc es veu el terra i s'hi pot passar)
@@ -78,15 +79,19 @@ class ZonaEsglesia extends ZonaBase {
     }
 
     // ---------------- EPÍLEG: «Torna el cant» ----------------
-    // Tothom és al Santuari: els nens riuen, l'orgue torna a sonar, el poble canta.
+    // Tothom és al Santuari, dins del pla (la càmera hi veu de x≈340 a x≈940): els nens davant l'altar, la Pianista i el Pare Jordi
+    // a banda i banda, i el poble entre els bancs, deixant lliure el passadís del mig per on puja l'Ineu.
     prepararEpileg() {
         this.epileg = true;
         const R = ESG.retY;
-        [['nen_uri', 560, R + 160], ['nen_flam', 640, R + 175], ['nen_sardin', 720, R + 160],
-         ['pare_jordi', 800, R + 200], ['germa_francesc', 470, R + 205], ['pare_alcui', 400, R + 270],
-         ['monja_pains', 420, R + 360], ['monja_phili', 520, R + 360], ['monja_charm', 470, R + 300],
-         ['venerables', 810, R + 360], ['frederic', 420, R + 510], ['josep', 520, R + 510],
-         ['garf', 760, R + 510], ['isidre', 860, R + 510], ['jaumeta', 1000, R + 520]
+        [['nen_uri', 575, R + 168], ['nen_flam', 640, R + 180], ['nen_sardin', 705, R + 168],
+         ['pianista', 470, R + 205], ['pare_jordi', 810, R + 205],
+         ['marit_neus', 400, R + 300], ['neus', 465, R + 300], ['ciscu', 535, R + 300],
+         ['pare_daniel', 745, R + 300], ['monja_charm', 810, R + 300], ['monja_phili', 875, R + 300],
+         ['carry', 400, R + 450], ['pare_alcui', 465, R + 450], ['eva', 535, R + 450],
+         ['venerables', 815, R + 450], ['monja_pains', 885, R + 450],
+         ['frederic', 400, R + 600], ['josep', 465, R + 600], ['germa_francesc', 535, R + 600],
+         ['jaumeta', 745, R + 600], ['garf', 810, R + 600], ['isidre', 880, R + 600]
         ].forEach(([k, x, y]) => { if (this.textures.exists(k) && !(this.npcs && this.npcs[k])) this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 }); });
         // Enquadra tot el Santuari (del retaule i els nens fins a l'últim banc i les parets laterals)
         // per damunt del quadre de diàleg i el retrat, de manera que tothom es vegi sencer i ningú quedi tallat
@@ -102,23 +107,49 @@ class ZonaEsglesia extends ZonaBase {
     ferEpileg() {
         const R = ESG.retY, nens = ['nen_uri', 'nen_flam', 'nen_sardin'];
         const gent = Object.keys(this.npcs).filter(k => !nens.includes(k) && k !== 'pianista' && k !== 'pare_jordi');
-        const tots = Object.keys(this.npcs).filter(k => k !== 'pianista');
-        const riure = (llista, f) => { Sfx.riure(); llista.forEach(k => this.npcSalta(k, null, 2)); this.esperar(1500, f); };
-        this.ui().obrirDialeg({ pagines: [{ fer: (z, fet) => z.seq([
-            f => z.ineuVa(640, R + 330, f, 150),
-            f => riure(nens, f),
-            // L'orgue torna a sonar (el Cant del Miracle) i tothom canta
-            f => {
-                z.npcFeina('pianista', 4200, 'notes');
-                gent.forEach(k => z.npcFeina(k, 3800, 'notes'));
-                const acords = [[330, 415, 494], [494, 622, 740], [392, 494, 587], [494, 622, 740], [330, 415, 494]];
-                acords.forEach((a, i) => this.time.delayedCall(i * 750, () => Sfx.orgue(a, 0.9)));
-                this.esperar(4400, f);
-            },
-            f => riure(tots, f),
-            f => z.npcVa('pare_jordi', 720, R + 330, f, 120),
-            f => z.npcMira('pare_jordi', 'ineu', f)
-        ], fet) },
+        const tots = Object.keys(this.npcs);
+        const hi = k => !!this.npcs[k];
+        const riure = (llista, f) => { Sfx.riure(); llista.filter(hi).forEach(k => this.npcSalta(k, null, 2)); this.esperar(1500, f); };
+        const accio = pas => ({ fer: (z, fet) => z.seq(pas(z), fet) });
+        this.ui().obrirDialeg({ pagines: [
+            accio(z => [f => z.ineuVa(640, R + 330, f, 150), f => riure(nens, f)]),
+            // La Meus corre a buscar l'Huri i el Fram
+            accio(z => [f => z.npcVa('neus', 600, R + 225, f, 190), f => z.npcMira('neus', 575, f), f => z.bombolla('neus', '♥', f, 900),
+                        f => { z.npcSalta('nen_uri', null, 2); z.npcSalta('nen_flam', f, 2); }]),
+            { qui: 'Meus', text: "Huri! Fram! Bruts com dos esquirols i amb cara de no haver dormit en tres nits... Veniu aquí, que no us deixo anar mai més!" },
+            { qui: 'Senyor Molner', text: 'Ja són aquí, Meus. Ja són aquí.' },
+            { qui: 'Meus', text: "I tu, Ineu, no et pensis que t'escapes de l'abraçada." },
+            // Les sacerdotesses i el seu nebot
+            accio(z => [f => { z.npcVa('monja_phili', 770, R + 232, null, 170); z.npcVa('monja_charm', 735, R + 222, f, 170); },
+                        f => z.npcMira('monja_charm', 705, f), f => z.bombolla('monja_charm', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
+            { qui: 'Charm', text: 'Sardi! Tres nits sense dormir, les tres. La Pains ha resat tants rosaris que ja no li queden dits.' },
+            { qui: 'Pains', text: 'I els tornaria a resar tots. Gràcies, Ineu.' },
+            { qui: 'Sardi', text: 'Tia Phili, he volat amb ocells de foc!' },
+            { qui: 'Phili', text: "Doncs ara aterraràs a la banyera, que fas olor de gàbia." },
+            // L'Iscu, que s'ha escapat de la Taverna per ser-hi
+            ...(hi('ciscu') ? [accio(z => [f => z.npcSalta('ciscu', f, 2)]),
+                { qui: 'Iscu', text: 'La mare encara dorm. Però quan es desperti li ho explicaré tot! Bé... gairebé tot.' }] : []),
+            // La Pianista dona l'entrada: l'Ineu comença el Cant del Miracle amb la tarota i l'orgue el segueix
+            accio(z => [f => z.npcVa('pianista', 545, R + 245, f, 140), f => z.npcMira('pianista', 'ineu', f)]),
+            { qui: 'La Pianista', text: "Ara sí. Ineu, la tarota: avui el Cant del Miracle el comences tu, i l'orgue et seguirà." },
+            accio(z => [
+                f => {
+                    z.ineuFlauta(true);
+                    MELODIES.miracle.notes.forEach((n, i) => this.time.delayedCall(i * 420, () => { Sfx.to(FREQ_NOTA[n], FREQ_NOTA[n], 0.38, 'square', 0.05); z.bombolla('ineu', '♪', null, 380); }));
+                    this.esperar(MELODIES.miracle.notes.length * 420 + 300, f);
+                },
+                f => {
+                    // L'orgue torna a sonar i tothom canta
+                    z.npcFeina('pianista', 4200, 'notes');
+                    gent.forEach(k => z.npcFeina(k, 3800, 'notes'));
+                    const acords = [[330, 415, 494], [494, 622, 740], [392, 494, 587], [494, 622, 740], [330, 415, 494]];
+                    acords.forEach((a, i) => this.time.delayedCall(i * 750, () => Sfx.orgue(a, 0.9)));
+                    this.esperar(4400, f);
+                },
+                f => { z.ineuFlauta(false); riure(tots, f); },
+                f => z.npcVa('pare_jordi', 720, R + 330, f, 120),
+                f => z.npcMira('pare_jordi', 'ineu', f)
+            ]),
             { qui: 'Pare Jordi', text: 'Benvingut a casa, Ineu.' },
             { fer: (z, fet) => z.seq([
             f => riure(tots, f),
