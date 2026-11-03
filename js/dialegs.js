@@ -1512,7 +1512,7 @@ const DIALEGS = {
 
 // ---------------- DESPRÉS DE L'EPÍLEG ----------------
 // Quan ja s'ha acabat la història (epilegFet), la gent diu una cosa nova. Si la funció torna null (té una lateral encara oberta),
-// es manté el seu diàleg de sempre. Les que donen pistes (Pare Jordi, Tietes, Alcuí, Til·ler) no canvien: ja saben dir que tot és fet.
+// es manté el seu diàleg de sempre. Les que donen pistes (Pare Jordi, Venerables Sàvies, Alcuí, Til·ler) no canvien: ja saben dir que tot és fet.
 const DIALEGS_FINAL = {
     pianista: E => ({ pagines: [{ qui: 'La Pianista', text: "Has sentit l'orgue? Encara li falla el re, però canta. I tu, fill, no deixis mai la tarota al calaix." }] }),
     neus: E => ({ pagines: [

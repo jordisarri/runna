@@ -136,7 +136,7 @@ const PROGRES = {
               : "Els tres nens són lliures, però a la Sala de la Gàbia encara hi ha algú que t'espera." },
     ],
 
-    // Missions laterals: no barren el camí. Les Tietes les recorden quan ja s'han pogut començar.
+    // Missions laterals: no barren el camí. Les Venerables Sàvies les recorden quan ja s'han pogut començar.
     laterals: [
         { id: 'taverna', marca: ['tavernaOberta', 'evaParlat'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('evaParlat'),
           pista: E => "El Sardi berenava cada tarda a la Taverna amb l\'Eve. La porta és tancada, però una trucada potser l'obriria." },
