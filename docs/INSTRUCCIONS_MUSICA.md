@@ -8,6 +8,8 @@ Cada cançó és **opcional**: quan el fitxer existeix a `assets/musica/`, sona;
 2. Deixa l'MP3 **tal com surt** a `art/musica/cru/` amb el nom de la taula (`boss.mp3`, `gabia.mp3`…). No cal que sigui un bucle perfecte ni que duri exacte.
 3. Digues-m'ho i **jo la tallo**: busco un tros que tanqui, hi faig un fondut d'enllaç perquè el bucle no es noti, la deixo a ≈ −16 LUFS, la passo a `.m4a` (amb l'índex al principi, perquè vagi en streaming) i la provo al joc.
 
+**Cançó adjunta.** A cada peça de sota hi diu si cal adjuntar-hi una cançó. Quan cal, és gairebé sempre **`art/musica/intro_runna.mp3`**, la primera prova, on la melodia del joc es sent més clara (la resta de músiques en són variacions). Al generador (Suno: *Upload* → *Cover*) puja-la i enganxa el prompt com a estil: així conserva la melodia i canvia l'instrumentació i l'ànim. El tema principal només surt a l'epíleg, als crèdits i al despertar de Runna: si sonés a totes les peces noves, al final ja no faria l'efecte de «torna la melodia».
+
 Si en generes diverses versions, deixa-les totes (`boss_a.mp3`, `boss_b.mp3`) i en trio la que encaixa millor.
 
 ## Què cal, per ordre
@@ -54,47 +56,47 @@ Tots en anglès i **sense lletra** (afegeix «instrumental, no lyrics» si el ge
 
 ### Combat i final
 
-**`boss`** (bucle, ~2 min): persecució gòtica però elegant, ritme de vals fosc, tambors de guerra.
+**`boss`** (bucle, ~2 min): persecució gòtica però elegant, ritme de vals fosc, tambors de guerra. **Sense adjunt** (l'Ocellaire té música pròpia, no la de l'heroi).
 > instrumental dark fantasy boss battle, gothic chamber orchestra, around 130 bpm, E minor, waltz-like triplet feel, urgent staccato strings, cello ostinato, war drums, church organ, piccolo flute birdsong trills, wordless choir, spooky but elegant, Catalan folk color, no electric guitar, no synths, no lyrics
 
-**`boss_final`** (bucle, ~1:30): la mateixa peça en versió desesperada, més ràpida i plena.
+**`boss_final`** (bucle, ~1:30): la mateixa peça en versió desesperada, més ràpida i plena. **Adjunta el teu `boss`** quan el tinguis (Cover): ha de ser la mateixa melodia, més ràpida i desesperada.
 > instrumental epic final boss battle, desperate and fiery, around 150 bpm, E minor, tremolo strings, timpani and war drums, church organ at full power, wordless choir with short shouts, brass stabs, relentless, same melody as a dark gothic waltz but faster, no lyrics, no guitars
 
-**`gabia`** (bucle, ~2 min): cova enorme sobre un avenc; sense ritme.
+**`gabia`** (bucle, ~2 min): cova enorme sobre un avenc; sense ritme. **Sense adjunt** (ambient sense melodia).
 > instrumental dark ambient fantasy cavern, very slow, E minor, deep church organ drone, detuned bells, sparse haunting flute with a simple distant melody, long reverb, sense of vast space, ominous but fragile, no drums, no lyrics
 
-**`epileg`** (bucle, ~2:30): alleujament, un poble que canta; comença molt suau i creix.
+**`epileg`** (bucle, ~2:30): alleujament, un poble que canta; comença molt suau i creix. **Adjunta `art/musica/intro_runna.mp3`** (Cover): torna la melodia del joc, ara en Mi major i amb el poble cantant. És on més s'ha de reconèixer.
 > instrumental warm hopeful ending theme, gentle chamber folk, around 84 bpm, E major, solo harp and flute, cello, growing into a wordless village choir and church organ, bells, joyful and tender, relief after darkness, not cheesy, Catalan village feel, no lyrics
 
-**`credits`** (bucle, ~2:30): com un «adéu» a un viatge, més ampli i nostàlgic que `epileg`.
+**`credits`** (bucle, ~2:30): com un «adéu» a un viatge, més ampli i nostàlgic que `epileg`. **Adjunta `art/musica/intro_runna.mp3`** (Cover): el tema sencer, de comiat.
 > instrumental nostalgic ending credits theme, slow, E major, solo flute playing three simple melodies, harp arpeggios, string ensemble swelling, soft organ pad, bells, bittersweet and thankful, cinematic but intimate, no lyrics
 
 ### Peces úniques (genera'n 20-30 s i jo n'agafo el tros bo)
 
-**`jingle_boss`** (~8 s): l'Ocellaire cau. Un cop sec de timbal, un silenci, una resolució lenta cap a Mi major, cua de campana. Alleujament cansat, no festa.
+**`jingle_boss`** (~8 s): l'Ocellaire cau. Un cop sec de timbal, un silenci, una resolució lenta cap a Mi major, cua de campana. Alleujament cansat, no festa. **Sense adjunt.**
 > short orchestral sting, boss defeated, heavy timpani hit with a chain, a moment of silence, slow resolve from E minor to E major with harp and soft choir, single bell tail
 
-**`jingle_runna`** (~22 s): el despertar de l'espasa. Puja des d'un drone d'orgue fins a un cop fort de timbal i cor, i acaba lluminós en Mi major amb arpa i campanes. Els temps exactes dels cops (≈ 12 s) els ajusto jo tallant i muntant, o ajusto la cinemàtica a la peça.
+**`jingle_runna`** (~22 s): el despertar de l'espasa. Puja des d'un drone d'orgue fins a un cop fort de timbal i cor, i acaba lluminós en Mi major amb arpa i campanes. Els temps exactes dels cops (≈ 12 s) els ajusto jo tallant i muntant, o ajusto la cinemàtica a la peça. **Adjunta `art/musica/intro_runna.mp3`** (Cover): n'agafo el tros on la melodia entra amb força, just al cop de l'espasa. Pot sortir llarga; ja la tallo jo.
 > cinematic fantasy awakening sting, building from a dark organ drone and tremolo, solo flute playing a simple four-note melody, massive timpani hit and choir shout, then luminous resolution to E major with harp glissando, bells and choir, long reverb tail
 
-**`jingle_objecte`** (~4 s): arpegi ascendent de Mi major que s'obre en un acord amb una campaneta. Petita i humil.
+**`jingle_objecte`** (~4 s): arpegi ascendent de Mi major que s'obre en un acord amb una campaneta. Petita i humil. **Sense adjunt.** Si vols que siguin les primeres notes del tema, no cal generar res: les tallo jo d'`intro_runna.mp3`.
 > short fantasy item fanfare, acoustic, ascending E major arpeggio on harp and wooden flute, opens into a warm sustained chord, small bell shimmer, gentle, no drums
 
 ### Llocs (recomanades; si en falta alguna, no passa res)
 
-**`taverna`** (~1:45): alegre però una mica forçada; la Càren dorm i hi ha un nen desaparegut.
+**`taverna`** (~1:45): alegre però una mica forçada; la Càren dorm i hi ha un nen desaparegut. **Sense adjunt** (color propi del lloc).
 > instrumental Catalan tavern folk waltz, accordion lead, village fiddle, tenora reed melody, tambourine and bass drum, A minor, cozy but slightly uneasy, no lyrics
 
-**`cirosa`** (~2 min): pastors desterrats; flabiol, pandereta, bordó de gaita i campanes d'esquelles.
+**`cirosa`** (~2 min): pastors desterrats; flabiol, pandereta, bordó de gaita i campanes d'esquelles. **Sense adjunt** (color propi del lloc).
 > instrumental shepherd folk ballad, solo wooden flabiol flute and frame drum, bagpipe drone, sheep bell chimes, slow 3/4, D minor to F major, windy and lonely, tender, no lyrics
 
-**`biblioteca`** (~2 min): monjos que taral·legen, clavecí i un violoncel sol; pols dins la llum.
+**`biblioteca`** (~2 min): monjos que taral·legen, clavecí i un violoncel sol; pols dins la llum. **Sense adjunt** (color propi del lloc).
 > instrumental quiet monastery library, soft wordless Gregorian humming, harpsichord arpeggios, solo cello, slow, E dorian, dust in sunlight, calm, no drums, no lyrics
 
-**`hostatgeria`** (~1:45): calma, càlida i una mica còmica (tres sacerdotesses).
+**`hostatgeria`** (~1:45): calma, càlida i una mica còmica (tres sacerdotesses). **Sense adjunt** (color propi del lloc).
 > instrumental cozy convent music, harp and flute, harmonium, small hand bell, light pizzicato strings, G major, warm and slightly humorous, no lyrics
 
-**`girgoles`** (~2 min): cova humida i fosforescent, gotes i espores; l'única peça que admet pad sintètic.
+**`girgoles`** (~2 min): cova humida i fosforescent, gotes i espores; l'única peça que admet pad sintètic. **Sense adjunt** (ambient sense melodia).
 > instrumental eerie bioluminescent cave ambience, dripping water, soft marimba and vibraphone, glassy pads, very slow, E phrygian, sparse, mysterious and calm, no drums, no lyrics
 
 ## Què fa el joc amb cada peça
