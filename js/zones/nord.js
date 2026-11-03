@@ -591,7 +591,7 @@ class ZonaSantAntoni extends ZonaBase {
 }
 
 // ---------------- EL GRAN TIL·LER (escenari petit: només l'arbre amb qui es parla) ----------------
-// Hi arriba el camí del sud (les cel·les). Cap a l'oest, un camí duu a la Caseta (on viu en Jordi); cap al nord-est, a la Cirosa, tancat
+// Hi arriba el camí del sud (les cel·les). Cap a l'oest, un camí duu a la Caseta (on viu en Georgi); cap al nord-est, a la Cirosa, tancat
 // per les arrels del Til·ler, que només s'enfonsen davant la seva branca.
 const TIL_X = 520, TIL_Y = 510;
 
@@ -815,7 +815,7 @@ class ZonaTiller extends ZonaBase {
 }
 
 // ---------------- LA CASETA (a l'oest del Til·ler): on viu el Georgi de la Caseta ----------------
-// Escenari petit: en Jordi al jardí, la seva casa (es pot entrar: només decorada) i la caseta aixecada sobre pilars
+// Escenari petit: en Georgi al jardí, la seva casa (es pot entrar: només decorada) i la caseta aixecada sobre pilars
 // de fusta, amb el cofre de les joguines on hi ha la maneta.
 class ZonaJordi extends ZonaBase {
     constructor() {
@@ -832,7 +832,7 @@ class ZonaJordi extends ZonaBase {
         this.terra('herba', 0, 0, 1100, 800, -1100);
         this.terra('cami', 330, 500, 770, 150);            // del Til·ler (est) a la porta de la casa
 
-        // La casa d'en Jordi (520 d'ample): la porta del mig duu a dins
+        // La casa d'en Georgi (520 d'ample): la porta del mig duu a dins
         const masiaJordi = this.edifici('masia', 380, 480, 500, 76, 'ZonaCasaJordi', 'porta', { alt: 90 });
         this.portaMasia(masiaJordi, 380, 480);
         this.npc('jordi_caseta', 560, 590, DIALEGS.jordiCaseta);
@@ -869,7 +869,7 @@ class ZonaJordi extends ZonaBase {
 }
 
 // ---------------- CASA D'EN JORDI (interior) ----------------
-// Una casa de pagès endreçada i plena de vida, però buida: en Jordi és al jardí. Només es mira.
+// Una casa de pagès endreçada i plena de vida, però buida: en Georgi és al jardí. Només es mira.
 Object.assign(DIALEGS, {
     casaJordiEines: E => ({ pagines: [] }),
     casaJordiTaula: E => ({ pagines: [] }),
@@ -1029,7 +1029,7 @@ class ZonaCasetaJoc extends ZonaBase {
         this.posar('tamboret', 240, 360, { escala: 0.7, col: { w: 28, h: 12 } });
         this.posar('tamboret', 400, 360, { escala: 0.7, col: { w: 28, h: 12 } });
 
-        // El cofre dels joguets, amb la maneta d'en Jordi a sota
+        // El cofre dels joguets, amb la maneta d'en Georgi a sota
         this.posar('cofre_joguines', 510, 222, { col: { w: 56, h: 20 } });
         this.interactiu(510, 225, RADI_OBJECTE, DIALEGS.cofreManeta, { altura: 80 });
 

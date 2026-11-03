@@ -939,7 +939,7 @@ const Grafics = {
         crea('creu_cela', 36, 60, pintarCreuCela);
         crea('habit_cela', 60, 110, pintarHabitCela);
         crea('estora_cela', 230, 110, pintarEstoraCela);
-        // Casa d'en Jordi i la caseta de joc (js/dibuixos_jordi.js)
+        // Casa d'en Georgi i la caseta de joc (js/dibuixos_jordi.js)
         crea('paret_masia', 780, 200, pintarParetMasia);
         crea('tauler_eines', 270, 72, pintarTaulerEines);
         crea('penjolls', 96, 120, pintarPenjolls);

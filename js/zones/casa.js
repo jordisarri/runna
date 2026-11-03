@@ -3,7 +3,7 @@
  *   Entrada: només la secreta, des d'El Celler (el ping-pong; darrere la roda de carruatge, amb Runna): passadís amb escolopendres
  *            i un esbarzer negre, sala del tresor (la cambra secreta dels monjos) i una porta cap a l'Escalinata. La reixa del porxo
  *            (plaça) és tancada des de fora; només es pot obrir per dins, com a drecera de tornada.
- *   Escalinata: l'Home del Raïm, amb el cap girat. Amb la Maneta d'en Jordi (és a la caseta, a la Caseta) es fa girar el volant de
+ *   Escalinata: l'Home del Raïm, amb el cap girat. Amb la Maneta d'en Georgi (és a la caseta, a la Caseta) es fa girar el volant de
  *               ferro de la base: tres voltes i el cap et mira de cara; llavors l'estàtua cobra vida (BOSS). Derrotada, s'obre la trapa.
  *   Cripta: la Clau de ferro (i un paper: la llum de Runna segella la tomba esquerdada del Cementiri),
  *           que obre la Porta de les Gírgoles (a sota de la Taverna, no pas des d'aquí).
@@ -312,7 +312,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     }
 
     // ---- L'Home del Raïm i el volant de ferro ----
-    // El cap de pedra comença girat del tot (d'esquena). Amb la maneta d'en Jordi, el volant de ferro del pedestal (amb engranatges) li
+    // El cap de pedra comença girat del tot (d'esquena). Amb la maneta d'en Georgi, el volant de ferro del pedestal (amb engranatges) li
     // fa girar el cap un pas cada volta: d'esquena, de tres quarts, de perfil i, a la tercera volta, de cara: el guardià es desperta.
     puzleRaim() {
         this.raimPas = 0;      // 0 d'esquena, 1 tres quarts, 2 perfil, 3 de cara (CAPS_RAIM)
@@ -370,7 +370,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3; v.lineStyle(4, 0x4a4a54, 1).lineBetween(0, 0, Math.cos(a) * 20, Math.sin(a) * 20); }
         v.fillStyle(0x8a7a40, 1).fillCircle(0, 0, 6).lineStyle(2, 0x111114, 1).strokeCircle(0, 0, 6);
         this.volant = v;
-        // La maneta (d'en Jordi), clavada a la vora del volant
+        // La maneta (d'en Georgi), clavada a la vora del volant
         this.manetaVolant = this.add.graphics().setScale(RAIM.f).setDepth(RAIM.y + 3);
         this.manetaVolant.lineStyle(5, 0x111114, 1).lineBetween(0, 0, 0, -12).lineStyle(3, 0x8a6a3a, 1).lineBetween(0, 0, 0, -12);
         this.manetaVolant.fillStyle(0x8a6a3a, 1).fillRoundedRect(-3, -20, 6, 10, 2);
