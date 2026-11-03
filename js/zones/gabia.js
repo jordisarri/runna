@@ -679,6 +679,29 @@ class ZonaGabia extends ZonaBase {
         (this.anellsAvis = this.anellsAvis || []).push(g);
         return g;
     }
+    // L'Ocellaire cau de genolls (el bàcul buit): comença la pausa en què se li pot picar el cap
+    genollsOcellaire(e, ms) {
+        e.estat = 'cansat'; e.fins = this.time.now + ms; e.copsRebuts = 0;
+        if (teGenollsOcellaire(this)) e.spr.setTexture('ocellaire_genolls');          // de cop, sense passar pel sprite dret
+        const c = e.spr.body.center;
+        Sfx.puf();
+        this.cameras.main.shake(120, 0.003, true);
+        const pols = this.ovalTerra(c.x, c.y, 50, 0x9a7acf, 0.35, 4);
+        this.tweens.add({ targets: pols, scaleX: 2, scaleY: 2, alpha: 0, duration: 500, ease: 'Cubic.out', onComplete: () => pols.destroy() });
+    }
+    // S'aixeca d'una revolada després de tres cops al cap: una ona curta que empeny l'Ineu (sense fer-li mal)
+    aixecaOcellaire(e) {
+        const c = e.spr.body.center, R = 170;
+        Sfx.rugit();
+        this.cameras.main.shake(180, 0.006, true);
+        const ona = this.ovalTerra(c.x, c.y, R * 0.5, 0xc8a8ff, 0.3, 5);
+        this.tweens.add({ targets: ona, scaleX: 2.1, scaleY: 2.1, alpha: 0, duration: 380, ease: 'Cubic.out', onComplete: () => ona.destroy() });
+        const jo = this.ineu.body.center;
+        if (this.dinsOval(c.x, c.y, R, jo)) {
+            const dx = jo.x - c.x, dy = jo.y - c.y, l = Math.hypot(dx, dy) || 1;
+            this.forcat = { vx: dx / l * 600, vy: dy / l * 600, fins: this.time.now + 260 };
+        }
+    }
     colpAnell(e, R) {
         const c = e.spr.body.center;
         if (e.avisCercle) { this.tweens.killTweensOf(e.avisCercle); e.avisCercle.destroy(); e.avisCercle = null; }
