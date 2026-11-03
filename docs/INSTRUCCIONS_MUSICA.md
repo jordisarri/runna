@@ -14,6 +14,8 @@ Si en generes diverses versions, deixa-les totes (`boss_a.mp3`, `boss_b.mp3`) i 
 
 ## Què cal, per ordre
 
+Fetes (✔): `taverna`, `cirosa` i `jingle_objecte` (els originals són a `art/musica/cru/`).
+
 | Fitxer | On sona | Tipus | Reserva mentrestant | Prioritat |
 |---|---|---|---|---|
 | `boss` | Combat contra l'Ocellaire, fases 1 i 2 | bucle | masmorra | **Imprescindible** |
@@ -23,12 +25,12 @@ Si en generes diverses versions, deixa-les totes (`boss_a.mp3`, `boss_b.mp3`) i 
 | `credits` | Crèdits | bucle | `epileg` | **Imprescindible** |
 | `jingle_boss` | Quan cau l'Ocellaire | peça única | silenci | **Imprescindible** |
 | `jingle_runna` | Quan Runna es desperta al Dolmen | peça única | silenci | **Imprescindible** |
-| `taverna` | La Taverna per dins | bucle | interiors | Recomanada |
-| `cirosa` | Camí de la Cirosa, pastura i Mas | bucle | bosc | Recomanada |
+| ✔ `taverna` | La Taverna per dins | bucle | interiors | Recomanada |
+| ✔ `cirosa` | Camí de la Cirosa, pastura i Mas | bucle | bosc | Recomanada |
 | `biblioteca` | Biblioteca del Monestir | bucle | interiors | Recomanada |
 | `hostatgeria` | Hostatgeria i les tres cambres | bucle | interiors | Recomanada |
 | `girgoles` | Sala de les Gírgoles | bucle | masmorra | Recomanada |
-| `jingle_objecte` | Quan l'Ineu alça el bastó o la branca | peça única | fanfara sintetitzada | Recomanada |
+| ✔ `jingle_objecte` | Quan l'Ineu alça el bastó o la branca | peça única | fanfara sintetitzada | Recomanada |
 
 `celles` (Les Cel·les) la fas tu a part; la resta de peces que ja hi ha: *The Hero's Ascension* (plaça i poble), *Woodland Path* (boscos), *Inside All* (interiors), *Deep Dungeon Stillness* (masmorres) i *light book*.
 
