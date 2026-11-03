@@ -8,7 +8,7 @@ Estat a la revisió 198. La història es pot jugar de principi a fi (la prova `e
 
 Només cau de genolls (art `ocellaire_genolls`) quan ha llançat tots els ocells o ha cremat el terra; com a molt 3 cops al cap per pausa (al tercer s'aixeca i empeny l'Ineu); 54 de vida, dues pauses per fase. Cal provar-lo a mà per afinar la durada de les pauses (2,2 / 1,9 / 1,6 s).
 
-## 2. Música (fetes: totes les imprescindibles, `taverna`, `cirosa` i `jingle_objecte`; falten `biblioteca`, `hostatgeria`, `girgoles` i `celles`)
+## 2. Música (fetes: totes menys `poble`, `santuari` i `celles`)
 
 Totes són opcionals (sona la de reserva), però les set primeres són les que més es noten. Prompts a `docs/INSTRUCCIONS_MUSICA.md`. Deixa els MP3 a `art/musica/cru/` i jo els tallo i els poso.
 
