@@ -58,7 +58,7 @@ function premiMonja(nom, flag) {
         E.posaFlag('mongesTrobades');
         E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;      // un sol gra pel conjunt de les tres germanes
         if (ui) { ui.actualitzarHUD(); ui.missatge('+1 gra al rosari: les tres germanes'); }
-        E.posaObjectiu("Les tres sacerdotesses són lliures i han obert la porta de l'Hostatgeria per dins. Al vestíbul hi ha aparegut el teu premi.");
+        E.posaObjectiu("Les sacerdotesses són lliures. Al vestíbul de l'Hostatgeria t'espera el premi.");
     } else {
         const f = ['Pains', 'Phili', 'Charm'].filter(n => !E.flag('premi' + n));
         E.posaObjectiu('Encara hi ha sacerdotesses per trobar: ' + f.join(', ') + '.');
@@ -695,7 +695,7 @@ const DIALEGS = {
                 ],
                 enAcabar: () => {
                     E.posaFlag('fontNeta'); E.treu('pruna'); E.dona('aigua_sj'); E.dona('cristall_gel'); E.posaFlag('cristallGel');
-                    E.posaObjectiu("L'aigua de la Font del Bisbe obriria l'Alzina Buida, la més grossa del bosc. (El Cristall de Gel potser interessa al Garf, a l'Era.)");
+                    E.posaObjectiu("L'aigua de la Font del Bisbe obriria l'Alzina Buida. (I el Cristall de Gel, potser el vol el Garf, a l'Era.)");
                 }
             };
         }
@@ -1022,8 +1022,8 @@ const DIALEGS = {
         if (E.flag('cofreMonges')) return { pagines: [] };
         return {
             pagines: [
-                { qui: 'Nota', text: '«Per a qui ha tornat la llum a aquesta casa.»' },
-                { avis: "Has obtingut la BENEDICCIÓ FRATERNA. La protecció sagrada de les tres sacerdotesses dissipa la boira verinosa que barra el camí de la Sala de la Gàbia." }
+                { qui: 'Nota', text: "«Per a qui ha tornat la llum a aquesta casa. Sota la Taverna, abans d'arribar a la gàbia, hi ha una boira que crema: la nostra benedicció l'esvairà al teu pas.» — Pains, Phili i Charm" },
+                { avis: "Has obtingut la BENEDICCIÓ FRATERNA: et protegeix de la boira verinosa que barra el camí de la Sala de la Gàbia." }
             ],
             enAcabar: () => { E.posaFlag('cofreMonges'); E.dona('benedicio_fraterna'); E.desar(); }
         };
@@ -1197,7 +1197,7 @@ const DIALEGS = {
                 ],
                 enAcabar: () => {
                     E.posaFlag("nenaVista");
-                    E.posaObjectiu("Els dos llaços de la Nena de les Trenes són colgats sota pedres: un sota una roca del camí, l'altre a la primera clariana de la Rovellonera.");
+                    E.posaObjectiu("Els llaços de la Nena són sota pedres: una roca del camí i la primera clariana de la Rovellonera.");
                 }
             };
         }

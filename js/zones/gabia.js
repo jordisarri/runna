@@ -468,7 +468,28 @@ class ZonaBoira extends ZonaBase {
                 this.tweens.add({ targets: e, x: x + (k % 2 ? 60 : -60), scaleX: e.scaleX * 1.15, alpha: 0.26, yoyo: true, repeat: -1, duration: 2600 + k * 170, ease: 'Sine.easeInOut' });
                 this.boiraV.push(e);
             }
-            [[330, 520], [570, 660], [420, 840], [500, 420]].forEach(([x, y]) => this.boiraV.push(this.boira(x, y, 160, 60, 1.6, 0x9ad070)));
+            // Fumeroles que pugen de les esquerdes del terra, verdes i liles
+            [[340, 560], [560, 670], [410, 860], [530, 480], [300, 760], [600, 860]].forEach(([x, y], i) => {
+                const pr = this.add.particles(x, y, 'boira_suau', {
+                    x: { min: -40, max: 40 }, speedY: { min: -38, max: -14 }, speedX: { min: -10, max: 10 },
+                    scale: { start: 0.25, end: 1.1 }, alpha: { start: 0.45, end: 0 }, lifespan: { min: 2600, max: 4200 },
+                    tint: i % 2 ? [0x9ad070, 0x7ab050] : [0xb080e0, 0x8a58c0], frequency: 220
+                }).setDepth(90011);
+                this.boiraV.push(pr);
+            });
+            // Bombolles verinoses que creixen a les esquerdes i esclaten
+            this.bombollesV = this.time.addEvent({ delay: 380, loop: true, callback: () => {
+                const x = 260 + Math.random() * 380, y = B.y0 + 40 + Math.random() * (B.y1 - B.y0 - 40);
+                const b = this.add.circle(x, y, 4, 0xb8f080, 0.8).setStrokeStyle(1.5, 0xe0ffc0, 0.9).setDepth(90012);
+                this.tweens.add({ targets: b, scale: 2.6, y: y - 8, duration: 700 + Math.random() * 500, ease: 'Sine.easeOut', onComplete: () => {
+                    this.tweens.add({ targets: b, scale: 3.4, alpha: 0, duration: 140, onComplete: () => b.destroy() });
+                } });
+            } });
+            // Un vel verdós a ras de terra, que fa la zona més densa
+            const vel = this.add.image(450, (B.y0 + B.y1) / 2, 'boira_suau').setTint(0x5a8a3a).setAlpha(0.35).setDepth(90009);
+            vel.setScale(620 / vel.width, (B.y1 - B.y0 + 200) / vel.height);
+            this.tweens.add({ targets: vel, alpha: 0.22, yoyo: true, repeat: -1, duration: 3000, ease: 'Sine.easeInOut' });
+            this.boiraV.push(vel);
             this.colBoira = this.colisio(450, B.y1 + 40, 500, 20);
         }
         this.boira(450, 180, 260, 60, 0.8);                    // la boira lila de la Sala de la Gàbia, que baixa per dalt
@@ -506,6 +527,7 @@ class ZonaBoira extends ZonaBase {
         this.cameras.main.flash(500, 255, 240, 200);
         const aura = this.add.circle(I.x, I.y - 50, 40, 0xffe8a0, 0.5).setBlendMode('ADD').setDepth(99000);
         this.tweens.add({ targets: aura, radius: 420, alpha: 0, duration: 1800, ease: 'Cubic.out', onComplete: () => aura.destroy() });
+        if (this.bombollesV) { this.bombollesV.remove(); this.bombollesV = null; }
         this.boiraV.forEach(o => {
             this.tweens.killTweensOf(o);
             if (o.stop) { o.stop(); this.time.delayedCall(4500, () => o.destroy()); }
