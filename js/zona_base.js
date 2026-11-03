@@ -236,7 +236,7 @@ class ZonaBase extends Phaser.Scene {
         const ui = this.ui(), I = this.ineu;
         const dialeg = { pagines: [{ qui: 'Pare Jordà', text: 'Ineu! Que et trobo a terra! Respira, fill. Has de tenir més cura. Ja estàs bé?' }] };
         if (!this.textures.exists('ineu_inconscient') || !this.textures.exists('jordi_desperta')) {
-            this.time.delayedCall(600, () => ui.obrirDialeg(dialeg));
+            this.time.delayedCall(600, () => { Joc.leitmotiv(this, 'trista', true); ui.obrirDialeg(dialeg); });
             return;
         }
         const esc = this.textures.get('ineu_inconscient').customData.escala || 1 / RES;
@@ -247,6 +247,7 @@ class ZonaBase extends Phaser.Scene {
         this.time.delayedCall(1300, () => {
             terra.setTexture('jordi_desperta');
             this.despertarImg = terra;
+            Joc.leitmotiv(this, 'trista', true);          // el començament del tema, lent i suau, quan arriba el Pare Jordà
             ui.obrirDialeg(dialeg, () => {
                 this.despertarImg = null;
                 terra.destroy();

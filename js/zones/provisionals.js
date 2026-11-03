@@ -139,12 +139,11 @@ class ZonaEsglesia extends ZonaBase {
                     this.esperar(MELODIES.miracle.notes.length * 420 + 300, f);
                 },
                 f => {
-                    // L'orgue torna a sonar i tothom canta
-                    z.npcFeina('pianista', 4200, 'notes');
-                    gent.forEach(k => z.npcFeina(k, 3800, 'notes'));
-                    const acords = [[262, 330, 392], [349, 440, 523], [392, 494, 587], [349, 440, 523], [262, 330, 392]];      // Do major, com la música de l'epíleg (Do – Fa – Sol – Fa – Do)
-                    acords.forEach((a, i) => this.time.delayedCall(i * 750, () => Sfx.orgue(a, 0.9)));
-                    this.esperar(4400, f);
+                    // L'orgue torna a sonar: la fanfàrria del joc sencera, amb els acords, i tothom canta
+                    const d = Joc.leitmotiv(this, 'orgue') || 4;
+                    z.npcFeina('pianista', d * 1000, 'notes');
+                    gent.forEach(k => z.npcFeina(k, d * 1000 - 400, 'notes'));
+                    this.esperar(d * 1000 + 300, f);
                 },
                 f => { z.ineuFlauta(false); riure(tots, f); },
                 f => z.npcVa('pare_jordi', 720, R + 330, f, 120),

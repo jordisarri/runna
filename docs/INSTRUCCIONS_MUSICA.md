@@ -38,6 +38,17 @@ Fetes (✔): totes les imprescindibles (`boss`, `boss_final`, `gabia`, `epileg`,
 
 Si només en fas set, que siguin les imprescindibles: el combat final i el despertar de Runna són els moments on més es nota que falta música.
 
+## El leitmotiv (la fanfàrria d'`intro_runna`)
+
+Do Mi Mi Mi Fa Sol Do · Do Re Mi Fa Fa Mi Re Do Re (notes i ritme a `art/musica/motiu/`; `Sfx.FANFARRA` a `js/sfx.js`). A més de sonar a les cançons, el joc el toca en moments curts:
+- **Objecte nou** (`jingle_objecte`): el principi de la fanfàrria, retallat de la mateixa `intro_runna.mp3` (3,35–7,45 s).
+- **Quan l'Ineu cau** i el Pare Jordà el recull: el principi, lent i suau, amb flauta.
+- **El cofre de joguines de la Caseta**: una capsa de música hi toca el principi abans de treure'n la Maneta.
+- **L'orgue de l'epíleg**: després del Cant del Miracle, la fanfàrria sencera amb els acords de l'original.
+- **La Pianista, després del final**: si hi parles, la toca a l'orgue.
+
+La música de fons s'abaixa mentre sona (`Joc.leitmotiv`).
+
 ## L'estil comú
 
 Tot ha de sonar de la mateixa família que les quatre del món base: **fantasia acústica de cambra, càlida, una mica fosca, amb ànima de poble**. Flauta i flabiol, arpa, violí, violoncel, orgue d'església, cors sense paraules, tambors i campanes; acordió i tenora només a la Taverna i la Cirosa. Res de guitarres elèctriques, de bateries de rock ni de veu amb lletra. Si el generador deixa pujar una referència, puja-hi una de les quatre del món base.

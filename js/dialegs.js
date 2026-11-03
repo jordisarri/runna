@@ -1469,6 +1469,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
+                { fer: (z, fet) => { const d = Joc.leitmotiv(z, 'capsa', true); z.esperar(d * 1000 + 300, fet); } },     // en obrir el cofre, la capsa de música de dins toca el tema
                 { fer: (z, fet) => z.mostrarObjecte('maneta', fet, 0xd8c8a0) },
                 { avis: "Has obtingut la MANETA D'ENGRANATGE." }
             ],
@@ -1514,7 +1515,10 @@ const DIALEGS = {
 // Quan ja s'ha acabat la història (epilegFet), la gent diu una cosa nova. Si la funció torna null (té una lateral encara oberta),
 // es manté el seu diàleg de sempre. Les que donen pistes (Pare Jordà, Venerables Sàvies, Alcoví, Til·ler) no canvien: ja saben dir que tot és fet.
 const DIALEGS_FINAL = {
-    pianista: E => ({ pagines: [{ qui: 'La Pianista', text: "Has sentit l'orgue? Encara li falla el re, però canta. I tu, fill, no deixis mai la tarota al calaix." }] }),
+    pianista: E => ({ pagines: [
+        { qui: 'La Pianista', text: "Has sentit l'orgue? Encara li falla el re, però canta. Escolta." },
+        { fer: (z, fet) => { const d = Joc.leitmotiv(z, 'orgue') || 4; z.npcFeina('pianista', d * 1000, 'notes'); z.esperar(d * 1000 + 300, fet); } },
+        { qui: 'La Pianista', text: "I tu, fill, no deixis mai la tarota al calaix." }] }),
     neus: E => ({ pagines: [
         { qui: 'Meus', text: "Ja els tinc a casa, i ja els he renyat tres vegades. Dues més i potser els deixo sortir a jugar." },
         { qui: 'Meus', text: "Gràcies, Ineu. No ho diré gaires cops, així que escolta'm bé: gràcies." }] }),

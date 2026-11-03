@@ -101,6 +101,55 @@ const Sfx = {
         o.start(t); o.stop(t + dur + 0.02);
     },
 
+    // ---- El leitmotiv del joc: la fanfàrria d'intro_runna (Do Mi Mi Mi Fa Sol Do · Do Re Mi Fa Fa Mi Re Do Re) ----
+    // Notes en MIDI i durades en segons, tretes del MIDI de la cançó (art/musica/motiu/). Els acords són els del baix de l'original.
+    FANFARRA: [[60, .53], [64, .95], [64, .22], [64, .47], [65, .41], [67, .31], [60, 1.17],
+               [60, .79], [62, .13], [64, .18], [65, .88], [65, .28], [64, .43], [62, .44], [60, .31], [62, 1.6]],
+    FANFARRA_ACORDS: [[0, [48, 55, 64]], [1.70, [47, 55, 62]], [2.89, [45, 57, 64]], [4.06, [43, 55, 64]], [5.16, [41, 57, 65]], [6.32, [48, 55, 64]], [7.50, [43, 59, 62]]],
+    // Una nota sostinguda (atac, ple, caiguda), no un cop que s'apaga: per a melodies
+    notaLlarga(freq, t, dur, tipus, vol, caiguda = 0.08) {
+        const c = this.ctx, o = c.createOscillator(), g = c.createGain();
+        o.type = tipus; o.frequency.setValueAtTime(freq, t);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.linearRampToValueAtTime(vol, t + 0.03);
+        g.gain.setValueAtTime(vol, t + Math.max(0.04, dur - caiguda));
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur + caiguda);
+        o.connect(g); g.connect(this.mestre);
+        o.start(t); o.stop(t + dur + caiguda + 0.05);
+    },
+    // Toca la fanfàrria. tipus: 'orgue' (amb acords), 'flauta', 'trista' (flauta lenta i suau) o 'capsa' (capsa de música, aguda i
+    // picada). curta: només el començament (Do Mi Mi Mi Fa Sol Do). Torna quants segons dura.
+    leitmotiv(tipus = 'flauta', curta = false) {
+        if (!this.ok('leitmotiv', 500)) return 0;
+        const notes = curta ? this.FANFARRA.slice(0, 7) : this.FANFARRA;
+        const vel = tipus === 'trista' ? 1.45 : tipus === 'capsa' ? 0.85 : 1;
+        const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+        const t0 = this.ctx.currentTime + 0.05;
+        let t = t0;
+        notes.forEach(([m, d], i) => {
+            const dur = d * vel * (curta && i === notes.length - 1 ? 1.4 : 1);
+            if (tipus === 'orgue') {
+                this.notaLlarga(hz(m), t, dur, 'sawtooth', 0.045); this.notaLlarga(hz(m + 12), t, dur, 'sine', 0.06);
+            } else if (tipus === 'capsa') {
+                this.to(hz(m + 24), hz(m + 24), Math.min(0.9, dur + 0.5), 'sine', 0.12, t - this.ctx.currentTime);
+                this.to(hz(m + 36), hz(m + 36), 0.25, 'sine', 0.025, t - this.ctx.currentTime);
+            } else {
+                const v = tipus === 'trista' ? 0.07 : 0.1;
+                this.notaLlarga(hz(m + 12), t, dur * 0.95, 'triangle', v, 0.12); this.notaLlarga(hz(m + 24), t, dur * 0.95, 'sine', v * 0.25, 0.12);
+            }
+            t += dur;
+        });
+        if (tipus === 'orgue') {
+            const fi = t - t0;
+            this.FANFARRA_ACORDS.forEach(([ini, acord], i) => {
+                if (ini >= fi) return;
+                const seg = this.FANFARRA_ACORDS[i + 1], fins = Math.min(fi + 0.6, seg ? seg[0] : fi + 0.6);
+                acord.forEach(m => this.notaLlarga(hz(m), t0 + ini, fins - ini, 'sawtooth', 0.022, 0.25));
+            });
+        }
+        return t - t0;
+    },
+
     // Soroll filtrat; el filtre llisca de f1 a f2
     xiu(dur, vol, filtre, f1, f2, q = 1, retard = 0) {
         const c = this.ctx, t = c.currentTime + retard;

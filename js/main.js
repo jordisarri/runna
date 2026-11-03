@@ -156,8 +156,16 @@ const Joc = {
     // Si encara no hi ha el fitxer jingle_objecte.m4a, sona una fanfara sintetitzada.
     fanfaraObjecte(scene) {
         const m = Joc.musica;
-        if (m && m.isPlaying) { m.setVolume(0.2); scene.time.delayedCall(2600, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
+        if (m && m.isPlaying) { m.setVolume(0.2); scene.time.delayedCall(4200, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
         Joc.detectarMusica().then(() => { if (Joc.musicaDisponible.has('jingle_objecte')) Joc.jingle(scene, 'jingle_objecte'); else Sfx.fanfara(); });
+    },
+
+    // El leitmotiv (la fanfàrria d'intro_runna) tocat per algú dins del joc: la música de fons s'abaixa mentre sona
+    leitmotiv(scene, tipus, curta) {
+        const durada = Sfx.leitmotiv(tipus, curta);
+        const m = Joc.musica;
+        if (durada && m && m.isPlaying) { m.setVolume(0.12); scene.time.delayedCall(durada * 1000 + 600, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
+        return durada;
     },
 
     carregarMusica(scene, clau) {
