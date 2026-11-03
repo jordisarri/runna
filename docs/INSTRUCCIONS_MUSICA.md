@@ -14,17 +14,17 @@ Si en generes diverses versions, deixa-les totes (`boss_a.mp3`, `boss_b.mp3`) i 
 
 ## Què cal, per ordre
 
-Fetes (✔): `taverna`, `cirosa` i `jingle_objecte` (els originals són a `art/musica/cru/`).
+Fetes (✔): totes les imprescindibles (`boss`, `boss_final`, `gabia`, `epileg`, `credits`, `jingle_boss`, `jingle_runna`) i `taverna`, `cirosa` i `jingle_objecte`. Falten `biblioteca`, `hostatgeria`, `girgoles` i `celles`. Els originals són a `art/musica/cru/`; `jingle_runna` comença al cop fort de la cançó (9,7 s), que és quan l'Ineu alça l'espasa.
 
 | Fitxer | On sona | Tipus | Reserva mentrestant | Prioritat |
 |---|---|---|---|---|
-| `boss` | Combat contra l'Ocellaire, fases 1 i 2 | bucle | masmorra | **Imprescindible** |
-| `boss_final` | Combat, fase 3 (el terra crema) | bucle | `boss` | **Imprescindible** |
-| `gabia` | Sala de la Gàbia, abans i després del combat | bucle | masmorra | **Imprescindible** |
-| `epileg` | Alliberament dels nens i epíleg al Santuari | bucle | tema de la plaça | **Imprescindible** |
-| `credits` | Crèdits | bucle | `epileg` | **Imprescindible** |
-| `jingle_boss` | Quan cau l'Ocellaire | peça única | silenci | **Imprescindible** |
-| `jingle_runna` | Quan Runna es desperta al Dolmen | peça única | silenci | **Imprescindible** |
+| ✔ `boss` | Combat contra l'Ocellaire, fases 1 i 2 | bucle | masmorra | **Imprescindible** |
+| ✔ `boss_final` | Combat, fase 3 (el terra crema) | bucle | `boss` | **Imprescindible** |
+| ✔ `gabia` | Sala de la Gàbia, abans i després del combat | bucle | masmorra | **Imprescindible** |
+| ✔ `epileg` | Alliberament dels nens i epíleg al Santuari | bucle | tema de la plaça | **Imprescindible** |
+| ✔ `credits` | Crèdits | bucle | `epileg` | **Imprescindible** |
+| ✔ `jingle_boss` | Quan cau l'Ocellaire | peça única | silenci | **Imprescindible** |
+| ✔ `jingle_runna` | Quan Runna es desperta al Dolmen | peça única | silenci | **Imprescindible** |
 | ✔ `taverna` | La Taverna per dins | bucle | interiors | Recomanada |
 | ✔ `cirosa` | Camí de la Cirosa, pastura i Mas | bucle | bosc | Recomanada |
 | `biblioteca` | Biblioteca del Monestir | bucle | interiors | Recomanada |
