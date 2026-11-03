@@ -76,6 +76,7 @@ class EscenaMusica extends Phaser.Scene {
         if (zonaFl && zonaFl.ineuFlauta) zonaFl.ineuFlauta(true);          // l'Ineu es veu de cara, tocant la flauta
 
         const cx = AMPLE / 2, T = MUS_T;
+        this.primerPla(T);
         const llibre = { fontFamily: FONT_LLIBRE, resolution: 2 };
         this.panell = this.add.container(0, 30).setAlpha(0);
         const add = o => { this.panell.add(o); return o; };
@@ -186,6 +187,38 @@ class EscenaMusica extends Phaser.Scene {
         this.tweens.add({ targets: this.panell, alpha: 1, y: 0, duration: 350, ease: 'Sine.easeOut' });
     }
 
+    // Primer pla de l'Ineu tocant la tarota, gran i per sobre de l'escenari (el pergamí li tapa la part de baix)
+    primerPla(T) {
+        if (!this.textures.exists('ineu_tarota_gran') || Grafics.faltants.includes('ineu_tarota_gran')) return;
+        const cx = AMPLE / 2, alt = Math.min(620, T + 60 - 205);          // el cap no queda sota la barra de dalt
+        if (alt < 260) return;
+        this.velPrimerPla = this.add.rectangle(cx, ALT / 2, AMPLE, ALT, 0x140c06, 0).setDepth(-2);           // l'escenari s'enfosqueix una mica
+        this.auraPrimerPla = this.add.circle(cx, T + 40 - alt * 0.55, alt * 0.55, 0xffe2a0, 0).setBlendMode(Phaser.BlendModes.ADD).setDepth(-1);
+        const img = this.add.image(cx, T + 60, 'ineu_tarota_gran').setOrigin(0.5, 1).setDepth(-1);
+        img.setScale(alt / img.height);
+        this.escPrimerPla = img.scale;
+        this.imgPrimerPla = img;
+        img.setAlpha(0).y += 40;
+        this.tweens.add({ targets: img, alpha: 1, y: T + 60, duration: 380, ease: 'Back.easeOut' });
+        this.tweens.add({ targets: this.velPrimerPla, fillAlpha: 0.38, duration: 380 });
+        this.tweens.add({ targets: this.auraPrimerPla, fillAlpha: 0.16, duration: 600 });
+        this.tweens.add({ targets: img, angle: { from: -1.5, to: 1.5 }, yoyo: true, repeat: -1, duration: 1600, ease: 'Sine.easeInOut' });   // es gronxa tocant
+        this.posBroc = { x: cx + img.displayWidth * 0.2, y: T + 60 - alt * 0.38 };      // per on surten les notes
+    }
+    // Cada nota de l'Ineu: el primer pla fa un petit impuls i en surt una nota musical que puja
+    impulsPrimerPla(n) {
+        const img = this.imgPrimerPla;
+        if (!img || !img.active) return;
+        const e = this.escPrimerPla;
+        this.tweens.add({ targets: img, scale: { from: e * 1.04, to: e }, duration: 260, ease: 'Back.easeOut' });
+        this.tweens.add({ targets: this.auraPrimerPla, fillAlpha: { from: 0.34, to: 0.16 }, duration: 420 });
+        const p = this.posBroc, x = p.x + (n - 2) * 36;
+        const t = this.add.text(x, p.y, n === 2 ? '♫' : '♪', { fontFamily: FONT_TITOL, fontSize: '54px', fontStyle: 'bold', color: '#ffe08a', stroke: '#5a3410', strokeThickness: 5, resolution: 2 })
+            .setOrigin(0.5).setDepth(0).setScale(0.4);
+        this.tweens.add({ targets: t, y: p.y - 150 - Math.random() * 60, x: x + (n - 2) * 50 + (Math.random() - 0.5) * 40, scale: 1, angle: (Math.random() - 0.5) * 40, duration: 1300, ease: 'Sine.easeOut' });
+        this.tweens.add({ targets: t, alpha: 0, delay: 800, duration: 500, onComplete: () => t.destroy() });
+    }
+
     // ---- So i imatge de cada nota ----
     so(n) {
         const ctx = this.sound && this.sound.context;
@@ -248,6 +281,7 @@ class EscenaMusica extends Phaser.Scene {
     nota(n, humana) {
         if (this.bloquejat || this.tancat) return;
         this.llum(n);
+        this.impulsPrimerPla(n);
         this.entrada.push(n);
 
         if (this.llico) {

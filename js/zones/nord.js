@@ -662,7 +662,7 @@ class ZonaTiller extends ZonaBase {
     // Arrels del Til·ler: grans arcs nuosos que surten de terra i tanquen el camí, amb fulles de til·ler a dalt.
     // L'arbre les hi va fer créixer perquè la boira no pugés; quan hi acostes la seva branca, la reconeixen i s'enfonsen.
     posarArrels() {
-        const Y = 280;                                   // marge per veure les arrels senceres dins l'escena
+        const Y = 214;                                   // a dalt de tot: la part de dalt de les arrels toca la vora del món i tapa la sortida
         this.arrelsY = Y;
         let sd = 11; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
         // Tota la mata d'arrels és sòlida (i arriba fins a la paret d'arbres de l'oest): no es pot passar per darrere
