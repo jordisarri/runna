@@ -119,16 +119,16 @@ class ZonaEsglesia extends ZonaBase {
             { qui: 'Meus', text: "Huri! Fram! Bruts com dos esquirols i amb cara de no haver dormit en tres nits... Veniu aquí, que no us deixo anar mai més!" },
             { qui: 'Senyor Molner', text: 'Ja són aquí, Meus. Ja són aquí.' },
             { qui: 'Meus', text: "I tu, Ineu, no et pensis que t'escapes de l'abraçada." },
-            // Les sacerdotesses i el seu nebot
+            // Les sacerdotesses i el seu protegit
             accio(z => [f => { z.npcVa('monja_phili', 770, R + 232, null, 170); z.npcVa('monja_charm', 735, R + 222, f, 170); },
                         f => z.npcMira('monja_charm', 705, f), f => z.bombolla('monja_charm', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
             { qui: 'Charm', text: 'Sardi! Tres nits sense dormir, les tres. La Pains ha resat tants rosaris que ja no li queden dits.' },
             { qui: 'Pains', text: 'I els tornaria a resar tots. Gràcies, Ineu.' },
-            { qui: 'Sardi', text: 'Tia Phili, he volat amb ocells de foc!' },
+            { qui: 'Sardi', text: 'Phili, Phili! He volat amb ocells de foc!' },
             { qui: 'Phili', text: "Doncs ara aterraràs a la banyera, que fas olor de gàbia." },
-            // L'Iscu, que s'ha escapat de la Taverna per ser-hi
+            // L'Iscu, que avui no ha de fregar gots
             ...(hi('ciscu') ? [accio(z => [f => z.npcSalta('ciscu', f, 2)]),
-                { qui: 'Iscu', text: 'La mare encara dorm. Però quan es desperti li ho explicaré tot! Bé... gairebé tot.' }] : []),
+                { qui: 'Iscu', text: "L'Eve m'ha deixat venir sense fregar ni un got! Avui és festa grossa." }] : []),
             // La Pianista dona l'entrada: l'Ineu comença el Cant del Miracle amb la tarota i l'orgue el segueix
             accio(z => [f => z.npcVa('pianista', 545, R + 245, f, 140), f => z.npcMira('pianista', 'ineu', f)]),
             { qui: 'La Pianista', text: "Ara sí. Ineu, la tarota: avui el Cant del Miracle el comences tu, i l'orgue et seguirà." },

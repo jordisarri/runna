@@ -107,7 +107,7 @@ const PROGRES = {
           pista: E => "A l'est del Pati del Celler, pel camí entre els arbres, hi ha una porta de ferro. La clau de ferro n'és amiga." },
         { id: 'clauCiscu', marca: ['ciscuTrobat', 'clauGirgoles', 'obj:clau_girgoles'], fet: E => E.te('clau_girgoles') || E.flag('portaFerroOberta'),
           pista: E => E.flag('ciscuTrobat') ? "L\'Iscu t'espera a la cabana amagada: té una clau rovellada per a tu."
-              : "La porta del fons del soterrani té un pany massa petit per a la clau de ferro. L\'Iscu, el fill de la Càren, se n'escapa de nit i segur que ha vist el Germà Andreu. Cerca'l pel camí de la Desaparició, on hi ha forats «per on els grans no hi caben»." },
+              : "La porta del fons del soterrani té un pany massa petit per a la clau de ferro. L\'Iscu, el noi de la Taverna, se n'escapa de nit i segur que ha vist el Germà Andreu. Cerca'l pel camí de la Desaparició, on hi ha forats «per on els grans no hi caben»." },
         { id: 'portaFerro', marca: ['portaFerroOberta'], fet: E => E.flag('portaFerroOberta'),
           pista: E => "Al fons del soterrani de la Sala de les Gírgoles, la clau rovellada de l\'Iscu té una porta de ferro que treu boira." },
         { id: 'girgoles', marca: ['girgolesEnceses'], fet: E => E.flag('girgolesEnceses'),

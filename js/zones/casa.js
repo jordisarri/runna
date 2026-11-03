@@ -99,6 +99,7 @@ const RAIM = { x: 700, y: 560, f: 1.35 };
 // ---------------- BOSS: L'HOME DEL RAÏM VIU ----------------
 ENEMICS.raim = {
     tex: 'home_raim_desperta', vida: 16, vel: 300, mal: 1, radi: 38, cos: [66, 30], ombra: 0.65,
+    arma: 'runna',                            // només Runna li fa mal
     cap: { y: 0.27, r: 46 },                  // el punt feble: el cap (al 27% del dibuix des de dalt; a sobre hi ha el raïm alçat)
     robust: true, barra: true,
     perill: e => e.estat === 'carrega',

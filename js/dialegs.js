@@ -185,14 +185,14 @@ const DIALEGS = {
         // La clau rovellada: al Germà Andreu li va caure a la porta de ferro, i l'Iscu se la va quedar
         const clau = [
             { qui: 'Iscu', text: 'I mira què vaig trobar: una nit, al Germà Andreu li va caure aquesta clau davant la porta de ferro, i no se n\'adonà. És petita i rovellada. Me la vaig quedar per jugar a pirates.' },
-            { qui: 'Iscu', text: 'Té, a tu et servirà més que a mi. Però no diguis a la mare que jo era a fora de nit!' },
+            { qui: 'Iscu', text: 'Té, a tu et servirà més que a mi. Però no diguis a l\'Eve que jo era a fora de nit!' },
             { avis: 'Has obtingut la CLAU ROVELLADA' }
         ];
         const donar = () => { E.posaFlag('ciscuTrobat'); E.posaFlag('clauGirgoles'); E.dona('clau_girgoles'); E.posaObjectiu(PROGRES.pista(E)); };
         if (!E.flag('ciscuTrobat')) return {
             pagines: [
                 { fer: (z, fet) => z.seq([c => z.bombolla('ciscu', '!', c, 600), c => z.npcSalta('ciscu', c, 1)], fet) },
-                { qui: 'Iscu', text: 'No diguis res a la mare! Sóc l\'Iscu, el de la Càren, la de la Taverna. Des que hi ha boira, ella dorm tot el dia i l\'Eve em fa fregar gots.' },
+                { qui: 'Iscu', text: 'No diguis res a l\'Eve! Sóc l\'Iscu, el de la Taverna. Des que hi ha boira, l\'Eve em fa fregar gots tot el dia.' },
                 { qui: 'Iscu', text: 'Aquí ningú no em busca i puc jugar al solitari tranquil. Les cartes són de l\'avi. Li falta el set d\'oros, però faig veure que hi és.' },
                 { qui: 'Iscu', text: 'De nit he vist el Germà Andreu picar tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler. No té clau, d\'aquesta: la porta s\'obre sola, com si de dins l\'esperessin. A baix n\'hi ha una altra, amb un pany petit.' },
                 ...clau
@@ -202,7 +202,7 @@ const DIALEGS = {
         if (!E.flag('clauGirgoles')) return { pagines: clau, enAcabar: donar };
         return { pagines: [
             { qui: 'Iscu', text: (E.flag('tombaSegellada')) ? 'Ja m\'ha sortit el solitari! Bé, una mica. He fet una trampa petita amb el set d\'oros de paper. No ho diguis.' : 'Encara no m\'ha sortit. La sota d\'espases sempre queda a sota de tot... com jo a la Taverna.' },
-            { qui: 'Iscu', text: 'Si veus la mare, no li diguis on sóc. Bé... si et pregunta molt, sí.' }
+            { qui: 'Iscu', text: 'Si veus l\'Eve, no li diguis on sóc. Bé... si et pregunta molt, sí.' }
         ] };
     },
 

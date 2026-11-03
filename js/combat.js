@@ -74,6 +74,8 @@ function preparaOcellFoc(scene) {
 }
 
 // L'Ocellaire cansat (assets/enemics/ocellaire_cansat.webp), si hi és
+// L'arma amb què pica l'Ineu: sempre la millor que té
+function armaIneu() { return Estat.te('runna') ? 'runna' : Estat.te('basto_tiller') ? 'tiller' : 'basto'; }
 function teCansatOcellaire(z) { return z.textures.exists('ocellaire_cansat') && !Grafics.faltants.includes('ocellaire_cansat'); }
 // L'Ocellaire de genolls (assets/enemics/ocellaire_genolls.webp): la pausa en què se li pot picar el cap
 function teGenollsOcellaire(z) { return z.textures.exists('ocellaire_genolls') && !Grafics.faltants.includes('ocellaire_genolls'); }
@@ -188,7 +190,7 @@ const ENEMICS = {
     // BOSS: el Germà Andreu convertit en Pastor de Boira. Crida ovelles i carrega amb la caiada.
     pastor: {
         tex: 'pastor_boira', vida: 24, vel: 320, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 520,
-        robust: true, barra: true,
+        robust: true, barra: true, arma: 'tiller',          // només cedeix a la branca del Til·ler
         perill: e => e.estat === 'carrega',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
@@ -255,7 +257,8 @@ const ENEMICS = {
         tex: 'ocellaire', vida: 54, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8,
         cap: { y: 0.19, r: 40, nomesCansat: true },          // el punt feble: el cap (al 19% del dibuix des de dalt), i només quan està cansat
         capTex: { ocellaire_genolls: { x: 0.15, y: 0.32, r: 40, nomesCansat: true } },   // de genolls, el cap és més avall i decantat
-        copsPausa: 3,                                        // a la tercera, s'aixeca d'una revolada i t'empeny
+        copsPausa: 3,
+        arma: 'runna',                                       // només Runna li fa mal                                        // a la tercera, s'aixeca d'una revolada i t'empeny
         robust: true, barra: true,
         perill: e => !e.amagat && e.estat !== 'apareix',
         ia(z, e, ara) {
@@ -700,6 +703,9 @@ Object.assign(ZonaBase.prototype, {
             });
             if (!tocats.length) return;
             k.tocats.add(e);
+            // Cada boss té la seva arma (el Pastor, la branca del Til·ler; l'Home del Raïm i l'Ocellaire, Runna): amb una altra, el cop rebota.
+            // (La història ja ho garanteix, perquè l'Ineu sempre fa servir la millor arma que té; això n'és la xarxa de seguretat.)
+            if (e.def.arma && e.def.arma !== armaIneu()) { this.copRebutjat(e, d); return; }
             if (e.def.cap && (!tocats.some(c => c.cap) || (this.capDe(e).nomesCansat && e.estat !== 'cansat'))) { this.copRebutjat(e, d); return; }
             this.colpejar(e, k.dany, d); encertats++;
             // Bosses amb un màxim de cops per pausa: a l'últim, la pausa s'acaba
