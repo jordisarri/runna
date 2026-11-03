@@ -14,7 +14,7 @@ Si en generes diverses versions, deixa-les totes (`boss_a.mp3`, `boss_b.mp3`) i 
 
 ## Què cal, per ordre
 
-Fetes (✔): totes les imprescindibles (`boss`, `boss_final`, `gabia`, `epileg`, `credits`, `jingle_boss`, `jingle_runna`) i `taverna`, `cirosa`, `biblioteca`, `hostatgeria`, `girgoles` i `jingle_objecte`. Falten `poble`, `santuari` i `celles`. Els originals són a `art/musica/cru/`; `jingle_runna` comença al cop fort de la cançó (9,7 s), que és quan l'Ineu alça l'espasa.
+Fetes (✔): totes les imprescindibles (`boss`, `boss_final`, `gabia`, `epileg`, `credits`, `jingle_boss`, `jingle_runna`) i `taverna`, `cirosa`, `biblioteca`, `hostatgeria`, `girgoles`, `poble`, `santuari`, `jingle_arma` i `jingle_objecte`. Falta només `celles`. Els originals són a `art/musica/cru/`.
 
 | Fitxer | On sona | Tipus | Reserva mentrestant | Prioritat |
 |---|---|---|---|---|
@@ -25,14 +25,14 @@ Fetes (✔): totes les imprescindibles (`boss`, `boss_final`, `gabia`, `epileg`,
 | ✔ `credits` | Crèdits | bucle | `epileg` | **Imprescindible** |
 | ✔ `jingle_boss` | Quan cau l'Ocellaire | peça única | silenci | **Imprescindible** |
 | ✔ `jingle_runna` | Quan Runna es desperta al Dolmen | peça única | silenci | **Imprescindible** |
-| `poble` | Exteriors del poble (Plaça, Monestir, Runes, Celler, Era, Jardí, Cementiri, Sant Antoni...) | bucle | el tema del títol | **Molt recomanada** |
-| `santuari` | El Santuari per dins | bucle | interiors | Recomanada |
+| ✔ `poble` | Exteriors del poble (Plaça, Monestir, Runes, Celler, Era, Jardí, Cementiri, Sant Antoni...) | bucle | el tema del títol | **Molt recomanada** |
+| ✔ `santuari` | El Santuari per dins | bucle | interiors | Recomanada |
 | ✔ `taverna` | La Taverna per dins | bucle | interiors | Recomanada |
 | ✔ `cirosa` | Camí de la Cirosa, pastura i Mas | bucle | bosc | Recomanada |
 | ✔ `biblioteca` | Biblioteca del Monestir | bucle | interiors | Recomanada |
 | ✔ `hostatgeria` | Hostatgeria i les tres cambres | bucle | interiors | Recomanada |
 | ✔ `girgoles` | Sala de les Gírgoles | bucle | masmorra | Recomanada |
-| `jingle_arma` | Quan l'Ineu alça una arma nova (el bastó, la branca del Til·ler) | peça única | `jingle_objecte` | **Recomanada** |
+| ✔ `jingle_arma` | Quan l'Ineu alça una arma nova (el bastó, la branca del Til·ler) | peça única | `jingle_objecte` | **Recomanada** |
 | `jingle_objecte` (no es fa servir: els objectes sonen amb `jingle_arma`) | Quan l'Ineu alça el bastó o la branca | peça única | fanfara sintetitzada | Recomanada |
 
 `celles` (Les Cel·les) la fas tu a part; la resta de peces que ja hi ha: *The Hero's Ascension* (títol i, fins que hi hagi `poble`, el poble), *Woodland Path* (boscos, la Caseta i els Dipòsits), *Inside All* (interiors i, fins que hi hagi `santuari`, el Santuari), *Deep Dungeon Stillness* (masmorres) i *light book* (pròleg). El Celler (la sala del ping-pong) fa servir `taverna`.
