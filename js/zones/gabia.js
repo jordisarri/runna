@@ -304,11 +304,6 @@ class ZonaTortura extends ZonaBase {
 
         // Instruments de tortura
         const g = this.add.graphics();
-        // Potro (tram 1)
-        g.setDepth(1660);
-        g.fillStyle(0x2a1a10, 1).fillRect(250, 1580, 150, 50).fillRect(258, 1630, 12, 40).fillRect(380, 1630, 12, 40);
-        g.fillStyle(0x4a4a50, 1).fillCircle(250, 1605, 16).fillCircle(400, 1605, 16).lineStyle(3, 0x8a7a5a, 1).lineBetween(266, 1600, 384, 1610);
-        this.colisio(325, 1620, 160, 60);
         // Donzella de ferro (tram 1, dreta)
         const dz = this.add.graphics().setDepth(1560);
         dz.fillStyle(0x3a3a40, 1).fillRoundedRect(570, 1400, 90, 160, 40).fillStyle(0x1a1a1e, 1).fillRoundedRect(582, 1414, 66, 140, 30);
@@ -349,17 +344,6 @@ class ZonaTortura extends ZonaBase {
         for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; rd.lineStyle(5, 0x4a3020, 1).lineBetween(300, 850, 300 + Math.cos(a) * 60, 850 + Math.sin(a) * 60); }
         rd.fillStyle(0x2a2a2e, 1).fillCircle(300, 850, 10).fillRect(296, 850, 8, 60);
         this.colisio(300, 900, 120, 26);
-        // Gàbies d'ocell que pengen del sostre, gronxant-se
-        [[560, 640], [620, 820], [520, 900], [380, 560]].forEach(([x, y], i) => {
-            const c = this.add.container(x, y).setDepth(y + 200);
-            const gb = this.add.graphics();
-            gb.lineStyle(2, 0x6a6a70, 1).lineBetween(0, -200, 0, -40);
-            gb.lineStyle(2, 0x8a7a5a, 1).strokeEllipse(0, 0, 40, 10); gb.beginPath(); gb.arc(0, -20, 20, Math.PI, 0); gb.strokePath();
-            for (let k = -2; k <= 2; k++) gb.lineBetween(k * 8, 0, k * 8, -18 + Math.abs(k) * 2);
-            c.add(gb);
-            this.tweens.add({ targets: c, angle: { from: -6, to: 6 }, yoyo: true, repeat: -1, duration: 1400 + i * 300, ease: 'Sine.easeInOut' });
-        });
-
         // ---- Mur d'esbarzers negres al darrer tram (cal Runna) ----
         [270, 360, 450, 540, 630].forEach((x, i) => {
             const o = this.esbarzer(x, 420, 'tortura' + i);
@@ -374,8 +358,8 @@ class ZonaTortura extends ZonaBase {
         this.boira(450, 700, 200, 40, 0.4);
         this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a20, 0.1).setScrollFactor(0).setDepth(90000);
 
-        // Ferralla viva: les eines dels torturadors s'aixequen i barren el pas
-        [[330, 1420], [580, 1300], [420, 860], [350, 640]].forEach(([x, y]) => this.enemic('ferralla', x, y));
+        // Gàbies vives: pengen del sostre i, quan passes, deixen anar un ocell de boira
+        [[560, 1430], [340, 1300], [580, 800], [330, 660]].forEach(([x, y]) => this.enemic('gabiaViva', x, y));
 
         this.sortida(390, 120, 120, 30, 'ZonaBoira', 'tortura');
         this.sortida(410, H - 22, 80, 14, 'ZonaGirgoles', 'tortura');

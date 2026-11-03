@@ -72,6 +72,95 @@ function preparaOcellFoc(scene) {
         scene.anims.create({ key: 'ocell_foc_vola', frames: [0, 1, 2, 1].map(f => ({ key: 'ocell_foc', frame: f })), frameRate: 16, repeat: -1 });
     }
 }
+// L'ocell de boira de les gàbies vives: el mateix ocell, refet en boira lila (de violeta fosc a blanc lilós segons la llum)
+function preparaOcellBoira(scene) {
+    preparaOcellFoc(scene);
+    const FW = 160, FH = 120;
+    if (!scene.textures.exists('ocell_boira')) {
+        const src = scene.textures.get('ocell_foc').getSourceImage();
+        const tex = scene.textures.createCanvas('ocell_boira', FW * 4, FH), ctx = tex.getContext();
+        ctx.drawImage(src, 0, 0);
+        const im = ctx.getImageData(0, 0, FW * 4, FH), d = im.data;
+        for (let i = 0; i < d.length; i += 4) {
+            if (!d[i + 3]) continue;
+            const l = (0.3 * d[i] + 0.55 * d[i + 1] + 0.15 * d[i + 2]) / 255;
+            d[i] = 70 + l * 185; d[i + 1] = 30 + l * 190; d[i + 2] = 130 + l * 125;
+            d[i + 3] = Math.min(255, d[i + 3] * 0.92);
+        }
+        ctx.putImageData(im, 0, 0);
+        tex.refresh();
+        for (let i = 0; i < 4; i++) tex.add(i, 0, i * FW, 0, FW, FH);
+        tex.customData.escala = 1 / RES;
+    }
+    if (!scene.anims.exists('ocell_boira_vola')) {
+        scene.anims.create({ key: 'ocell_boira_vola', frames: [0, 1, 2, 1].map(f => ({ key: 'ocell_boira', frame: f })), frameRate: 14, repeat: -1 });
+    }
+}
+
+// La gàbia viva (passadís de tortura): una gàbia d'ocell de llautó que penja del sostre amb una cadena, amb boira lila i dos ulls
+// a dins. Es dibuixa amb codi, tancada i oberta (la porteta girada i la boira que surt). El llenç té espai buit a sota: el cos
+// físic (a terra, amb l'ombra) queda sota la gàbia, que es veu penjant.
+function preparaGabiaViva(scene) {
+    if (scene.textures.exists('gabia_viva')) return;
+    const W = 180, H = 400;                 // a RES 2: es veu de 90x200
+    ['gabia_viva', 'gabia_viva_oberta'].forEach((clau, oberta) => {
+        const t = scene.textures.createCanvas(clau, W, H), c = t.getContext();
+        const cx = W / 2, top = 64, base = 254, R = 62;      // la cúpula comença a 'top', la base és a 'base'
+        const llauto = (x0, x1) => { const g = c.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, '#6a4410'); g.addColorStop(0.35, '#f2d488'); g.addColorStop(0.6, '#c8902e'); g.addColorStop(1, '#5a3608'); return g; };
+        c.lineCap = 'round'; c.lineJoin = 'round';
+        // Cadena del sostre
+        for (let k = 0; k < 5; k++) { c.lineWidth = 4; c.strokeStyle = '#2a2a30'; c.beginPath(); c.ellipse(cx, 6 + k * 11, k % 2 ? 3 : 5, 6, 0, 0, Math.PI * 2); c.stroke();
+            c.lineWidth = 2; c.strokeStyle = '#8a8a96'; c.stroke(); }
+        // Anella de dalt
+        c.lineWidth = 7; c.strokeStyle = '#2a1a06'; c.beginPath(); c.arc(cx, top - 6, 11, 0, Math.PI * 2); c.stroke();
+        c.lineWidth = 4; c.strokeStyle = llauto(cx - 12, cx + 12); c.stroke();
+        // Boira lila de dins, amb resplendor
+        const gl = c.createRadialGradient(cx, top + 90, 6, cx, top + 90, R + 10);
+        gl.addColorStop(0, oberta ? 'rgba(230,200,255,0.75)' : 'rgba(210,170,255,0.95)'); gl.addColorStop(0.45, 'rgba(150,90,230,0.6)'); gl.addColorStop(1, 'rgba(90,40,160,0)');
+        c.fillStyle = gl; c.beginPath(); c.ellipse(cx, top + 92, R - 4, 88, 0, 0, Math.PI * 2); c.fill();
+        // Els dos ulls de la boira (a la gàbia tancada: l'ocell encara hi és)
+        if (!oberta) {
+            [[-16, 0], [16, 0]].forEach(([dx]) => { const ey = top + 84;
+                const ge = c.createRadialGradient(cx + dx, ey, 0, cx + dx, ey, 11); ge.addColorStop(0, '#ffffff'); ge.addColorStop(0.4, '#e8c8ff'); ge.addColorStop(1, 'rgba(180,120,255,0)');
+                c.fillStyle = ge; c.beginPath(); c.arc(cx + dx, ey, 11, 0, Math.PI * 2); c.fill();
+                c.fillStyle = '#3a1060'; c.beginPath(); c.ellipse(cx + dx, ey + 1, 2.5, 4.5, 0, 0, Math.PI * 2); c.fill(); });
+        }
+        // Barrots: de la cúpula a la base (els del darrere més prims i foscos)
+        const nb = 9;
+        for (let pas = 0; pas < 2; pas++) for (let i = 0; i < nb; i++) {
+            const a = (i / (nb - 1)) * Math.PI, x = cx - Math.cos(a) * R, darrere = i % 2 === 1;
+            if ((pas === 0) !== darrere) continue;
+            if (oberta && !darrere && (i === 4)) continue;                    // a la porteta oberta hi falta el barrot del mig
+            const xt = cx - Math.cos(a) * R * 0.35;
+            c.lineWidth = darrere ? 4 : 7; c.strokeStyle = '#2a1a06';
+            c.beginPath(); c.moveTo(xt, top + 8); c.quadraticCurveTo(x, top + 18, x, top + 70); c.lineTo(x, base); c.stroke();
+            c.lineWidth = darrere ? 2 : 4; c.strokeStyle = darrere ? '#7a5418' : llauto(x - 3, x + 3); c.stroke();
+        }
+        // Cèrcols horitzontals
+        [top + 70, top + 130].forEach(y => { c.lineWidth = 7; c.strokeStyle = '#2a1a06'; c.beginPath(); c.ellipse(cx, y, R, 8, 0, 0, Math.PI * 2); c.stroke();
+            c.lineWidth = 4; c.strokeStyle = llauto(cx - R, cx + R); c.stroke(); });
+        // Base: un plat de llautó amb sanefa i un floró a sota
+        c.fillStyle = llauto(cx - R - 8, cx + R + 8); c.strokeStyle = '#2a1a06'; c.lineWidth = 4;
+        c.beginPath(); c.ellipse(cx, base, R + 8, 13, 0, 0, Math.PI * 2); c.fill(); c.stroke();
+        c.fillStyle = 'rgba(255,240,190,0.55)'; c.beginPath(); c.ellipse(cx - 18, base - 4, 22, 3.5, 0, 0, Math.PI * 2); c.fill();
+        c.fillStyle = '#7a4a14'; for (let k = -3; k <= 3; k++) { c.beginPath(); c.arc(cx + k * 16, base + 4, 2.5, 0, Math.PI * 2); c.fill(); }
+        c.fillStyle = llauto(cx - 9, cx + 9); c.beginPath(); c.moveTo(cx - 10, base + 10); c.lineTo(cx + 10, base + 10); c.lineTo(cx, base + 34); c.closePath(); c.fill(); c.stroke();
+        // La porteta: tancada, amb un cadenat; oberta, girada cap a fora a la dreta
+        if (!oberta) {
+            c.lineWidth = 3; c.strokeStyle = '#2a1a06'; c.strokeRect(cx - 18, top + 96, 36, 56);
+            c.fillStyle = '#d8a83a'; c.beginPath(); c.arc(cx, top + 126, 7, 0, Math.PI * 2); c.fill(); c.stroke();
+            c.fillStyle = '#2a1a06'; c.fillRect(cx - 1.5, top + 124, 3, 6);
+        } else {
+            c.save(); c.translate(cx + 20, top + 96); c.transform(0.45, 0.18, 0, 1, 0, 0);
+            c.lineWidth = 6; c.strokeStyle = '#2a1a06'; c.strokeRect(0, 0, 40, 56); for (let k = 1; k < 4; k++) { c.beginPath(); c.moveTo(k * 10, 0); c.lineTo(k * 10, 56); c.stroke(); }
+            c.lineWidth = 3; c.strokeStyle = '#e0b850'; c.strokeRect(0, 0, 40, 56); for (let k = 1; k < 4; k++) { c.beginPath(); c.moveTo(k * 10, 0); c.lineTo(k * 10, 56); c.stroke(); }
+            c.restore();
+            const gs = c.createRadialGradient(cx + 10, top + 122, 0, cx + 10, top + 122, 40); gs.addColorStop(0, 'rgba(230,200,255,0.8)'); gs.addColorStop(1, 'rgba(160,100,255,0)');
+            c.fillStyle = gs; c.beginPath(); c.arc(cx + 10, top + 122, 40, 0, Math.PI * 2); c.fill();
+        }
+        t.refresh();
+    });
+}
 
 // L'Ocellaire cansat (assets/enemics/ocellaire_cansat.webp), si hi és
 // L'arma amb què pica l'Ineu: sempre la millor que té
@@ -419,6 +508,69 @@ const ENEMICS = {
                 e.spr.setFlipX(Math.cos(e.ang) < 0);
                 const bl = e.spr.body.blocked;
                 if (ara > e.morFins || bl.left || bl.right || bl.up || bl.down) z.apagarOcell(e);
+            }
+        }
+    },
+
+    // Gàbia viva (passadís de tortura): penja del sostre i es gronxa. Quan l'Ineu s'acosta, la porteta s'obre i en surt un ocell de
+    // boira que el busca en picat i després torna a la gàbia. Tres cops la trenquen (i el seu ocell s'esvaeix).
+    gabiaViva: {
+        tex: 'gabia_viva', vida: 3, vel: 0, mal: 1, radi: 34, cos: [44, 20], ombra: 0.5, robust: true,
+        preparar: z => { preparaGabiaViva(z); preparaOcellBoira(z); },
+        perill: e => false,
+        ia(z, e, ara) {
+            if (!e.base) { e.base = { x: e.spr.x, y: e.spr.y }; e.proxObre = ara + 700 + Math.random() * 800; }
+            if (Math.abs(e.spr.x - e.base.x) + Math.abs(e.spr.y - e.base.y) > 1) e.spr.body.reset(e.base.x, e.base.y);
+            e.spr.body.setVelocity(0);
+            e.spr.angle = Math.sin(ara / 520 + e.base.x) * 3.5;
+            const jo = z.ineu.body.center, d = Phaser.Math.Distance.Between(e.base.x, e.base.y, jo.x, jo.y);
+            if (e.ocell && e.ocell.mort) { e.ocell = null; e.proxObre = ara + 2200; e.spr.setTexture('gabia_viva'); }
+            if (!e.ocell && ara > e.proxObre && d < 340) {
+                e.spr.setTexture('gabia_viva_oberta');
+                z.tweens.add({ targets: e.spr, scaleX: e.escalaBase * 1.08, yoyo: true, duration: 120 });
+                Sfx.xiscle();
+                const o = z.enemic('ocellGabia', e.spr.x, e.spr.y - 120);
+                if (o) { o.amo = e; o.estat = 'surt'; o.fins = ara + 650; o.ang0 = Math.random() * Math.PI * 2; e.ocell = o; }
+                else e.proxObre = ara + 2000;
+            }
+        },
+        alDerrotar(z, e) {
+            if (e.ocell && !e.ocell.mort) z.derrotar(e.ocell);
+            const c = { x: e.spr.x, y: e.spr.y - 110 };
+            const pl = z.add.particles(c.x, c.y, 'espurna', { speed: { min: 60, max: 200 }, lifespan: 700, scale: { start: 0.35, end: 0 }, tint: [0xf2d488, 0xc8902e, 0xc8a0ff], quantity: 18, emitting: false }).setDepth(99990);
+            pl.explode(18); z.time.delayedCall(800, () => pl.destroy());
+            z.tweens.add({ targets: e.spr, y: e.spr.y + 30, angle: 25, alpha: 0, duration: 450, ease: 'Quad.easeIn', onComplete: () => z.retirar(e) });
+            e.ombra.setVisible(false);
+            z.ui().actualitzarHUD();
+        }
+    },
+
+    // Ocell de boira de la gàbia viva: surt voltant, es llança en picat contra l'Ineu i torna a la seva gàbia
+    ocellGabia: {
+        tex: 'ocell_boira', vida: 1, vel: 300, mal: 1, radi: 18, cos: [26, 20], ombra: 0.15, centrat: true,
+        preparar: z => preparaOcellBoira(z),
+        perill: e => e.estat === 'picat',
+        ia(z, e, ara) {
+            if (!e.vestit) { e.vestit = true; e.spr.anims.play('ocell_boira_vola'); e.spr.setAlpha(0.92); }
+            const jo = z.ineu.body.center, c = e.spr.body.center, amo = e.amo;
+            if (!amo || amo.mort) { if (!e.mort) { e.mort = true; e.spr.body.enable = false; z.tweens.add({ targets: e.spr, alpha: 0, duration: 300, onComplete: () => z.retirar(e) }); } return; }
+            const casa = { x: amo.spr.x, y: amo.spr.y - 120 };
+            if (e.estat === 'surt') {                 // voltant la gàbia, pujant
+                const t = e.ang0 + ara / 220;
+                e.spr.body.setVelocity((casa.x + Math.cos(t) * 70 - c.x) * 4, (casa.y - 20 + Math.sin(t) * 40 - c.y) * 4);
+                e.spr.setFlipX(Math.sin(t) > 0);
+                if (ara > e.fins) { e.estat = 'picat'; e.fins = ara + 950; e.ang = Math.atan2(jo.y - 30 - c.y, jo.x - c.x); }
+            } else if (e.estat === 'picat') {
+                if (ara < e.fins - 650) { const a = Math.atan2(jo.y - 30 - c.y, jo.x - c.x); e.ang += Phaser.Math.Clamp(Phaser.Math.Angle.Wrap(a - e.ang), -0.07, 0.07); }
+                e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel);
+                e.spr.setFlipX(Math.cos(e.ang) < 0);
+                const bl = e.spr.body.blocked;
+                if (ara > e.fins || bl.left || bl.right || bl.up || bl.down) e.estat = 'torna';
+            } else {                                  // torna a la gàbia i s'hi fica
+                const dx = casa.x - c.x, dy = casa.y - c.y, l = Math.hypot(dx, dy) || 1;
+                e.spr.body.setVelocity(dx / l * 200, dy / l * 200);
+                e.spr.setFlipX(dx < 0);
+                if (l < 22) { e.mort = true; e.spr.body.enable = false; z.tweens.add({ targets: e.spr, alpha: 0, scale: e.escalaBase * 0.4, duration: 220, onComplete: () => z.retirar(e) }); }
             }
         }
     },
