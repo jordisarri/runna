@@ -1384,8 +1384,7 @@ const DIALEGS = {
 
     // La bóta marcada de la cambra secreta: en alçar-la, deixa a la vista l'anella que obre la porta del fons
     botaTresor: E => ({
-        pagines: [{ qui: "Ineu", text: "Una bóta amb una creu vermella. Pesa molt menys que les altres... i a sota hi ha una anella de ferro." }],
-        enAcabar: () => { E.posaFlag("botaAlcada"); E.posaObjectiu("L'Home del Raïm, a l'escalinata de la Casa Gran, té el cap girat; el volant de la base el mou."); }
+        pagines: [{ qui: "Ineu", text: "(Una bóta amb una creu vermella. Pesa molt menys que les altres... La faré rodar.)" }]
     }),
 
     homeRaimInt: E => ({
