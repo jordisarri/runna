@@ -274,9 +274,11 @@ const DIALEGS = {
     },
 
     pareDaniel: E => {
-        // La primera conversa també parla del sagrari si l'Ineu ja té el primer pergamí
-        const sagrari = !E.te('clau_sagrari') && !E.flag('fragment2') && (E.flag('fragment1') || E.flag('sagrariVist'));
+        // Del sagrari només en parla quan l'Ineu ja té el primer pergamí (que el diu): llavors és com si li ho preguntés ell.
+        // A la primera conversa només hi ha el cor i el rellotge aturat.
+        const sagrari = !E.te('clau_sagrari') && !E.flag('fragment2') && E.flag('fragment1');
         const paginesSagrari = [
+            { qui: 'Ineu', text: "Pare Daimiel, el pergamí que he trobat a les Runes diu que l'altra meitat és al sagrari. Sap on és la clau?" },
             { qui: 'Pare Daimiel', text: 'El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se\'ls mengi. Si el Pare Alcoví els busca, ja era hora que algú els llegís!' },
             { qui: 'Pare Daimiel', text: 'Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l\'ermita de la Desaparició, camí de l\'Era, a l\'oest de les Runes. Potser allà.' }
         ];
@@ -288,9 +290,8 @@ const DIALEGS = {
                     { qui: 'Pare Daimiel', text: 'No et preocupis: si la música s\'ha amagat, la cantarem perquè torni! Riure és la primera pregària.' },
                     { qui: 'Pare Daimiel', text: 'Ah, i una cosa que em preocupa: el rellotge del campanar s\'ha aturat a un quart de quatre, la nit que va arribar la boira.' },
                     { qui: 'Pare Daimiel', text: 'La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' },
-                    ...(sagrari ? paginesSagrari : [])
                 ],
-                enAcabar: () => { E.posaFlag('parlatDaniel'); E.posaFlag('rellotgeDit'); if (sagrari) E.posaFlag('clauSagrariDita'); }
+                enAcabar: () => { E.posaFlag('parlatDaniel'); E.posaFlag('rellotgeDit'); }
             };
         }
         // El rellotge encara aturat: ho recorda sempre (també quan parla del sagrari)
@@ -333,8 +334,7 @@ const DIALEGS = {
         if (E.flag("fragment2")) return { pagines: [] };
         if (!E.te("clau_sagrari")) {
             return {
-                pagines: [{ qui: "Ineu", text: "El sagrari és tancat amb una clau molt petita." }],
-                enAcabar: () => E.posaFlag("sagrariVist")
+                pagines: [{ qui: "Ineu", text: "El sagrari és tancat amb una clau molt petita." }]
             };
         }
         return {
