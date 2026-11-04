@@ -98,9 +98,12 @@ const RAIM = { x: 700, y: 560, f: 1.35 };
 
 // ---------------- BOSS: L'HOME DEL RAÏM VIU ----------------
 ENEMICS.raim = {
-    tex: 'home_raim_desperta', vida: 16, vel: 300, mal: 1, radi: 38, cos: [66, 30], ombra: 0.65,
+    tex: 'home_raim_desperta', vida: 24, vel: 320, mal: 1, radi: 38, cos: [66, 30], ombra: 0.65,
     arma: 'runna',                            // només Runna li fa mal
-    cap: { y: 0.27, r: 46 },                  // el punt feble: el cap (al 27% del dibuix des de dalt; a sobre hi ha el raïm alçat)
+    // El punt feble és el cap (al 27% del dibuix des de dalt), i només quan ha caigut de morros després d'una envestida:
+    // llavors el cap queda a terra, a l'abast (sense cap abast extra cap amunt)
+    cap: { y: 0.27, r: 42, nomesCansat: true, senseAbast: true },
+    copsPausa: 3,                             // a terra, com a molt tres cops: al tercer s'aixeca
     robust: true, barra: true,
     perill: e => e.estat === 'carrega',
     // Trossos de marbre i pols que cauen del guardià
@@ -112,47 +115,71 @@ ENEMICS.raim = {
         p.explode(n);
         z.time.delayedCall(800, () => p.destroy());
     },
+    // On queda el cap quan és a terra (el sprite gira pels peus)
+    capATerra(z, e) { return z.puntsCop(e)[0]; },
     ia(z, e, ara) {
         const jo = z.ineu.body.center, c = e.spr.body.center;
         const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
-        const fase2 = e.vida <= 6;
+        const fase2 = e.vida <= 9;
         const estatAbans = e.estat;
-        if (!e.proxCarrega) e.proxCarrega = ara + 2500;
+        if (!e.proxCarrega) e.proxCarrega = ara + 2200;
         const cap = Math.atan2(jo.y - c.y, jo.x - c.x);
         if (e.estat === 'apunta') {
             e.spr.body.setVelocity(0);
-            if (ara > e.fins) { e.estat = 'carrega'; e.fins = ara + 380; e.spr.clearTint(); e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel); }
+            if (ara > e.fins) { e.estat = 'carrega'; e.fins = ara + (fase2 ? 460 : 400); e.spr.clearTint(); e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel); }
         } else if (e.estat === 'carrega') {
-            if (ara > e.fins) {
-                e.estat = 'cansat'; e.fins = ara + (fase2 ? 700 : 1100); e.spr.body.setVelocity(0);
-                e.proxCarrega = ara + (fase2 ? 1900 : 3200);
-                z.cameras.main.shake(180, 0.004);          // el pes de la pedra
+            const bl = e.spr.body.blocked;
+            if (ara > e.fins || bl.left || bl.right || bl.up || bl.down) {
+                e.spr.body.setVelocity(0);
+                // A la fase 2, de vegades encadena una segona envestida abans de caure
+                if (fase2 && !e.segona && Math.random() < 0.6) { e.segona = true; e.estat = 'apunta'; e.fins = ara + 380; e.ang = cap; e.spr.setTint(0xff8080); }
+                else {
+                    e.segona = false;
+                    e.estat = 'cansat'; e.fins = ara + (fase2 ? 1700 : 2300); e.copsRebuts = 0;
+                    e.cauDreta = Math.cos(e.ang) >= 0;
+                    e.proxCarrega = ara + (fase2 ? 1500 : 2600);
+                }
             }
-        } else if (e.estat === 'cansat') {
+        } else if (e.estat === 'cansat') {                 // de morros a terra
+            e.spr.body.setVelocity(0);
+            if (ara > e.fins) { e.estat = 'aixeca'; e.fins = ara + 550; }
+        } else if (e.estat === 'aixeca') {
             e.spr.body.setVelocity(0);
             if (ara > e.fins) e.estat = 'camina';
         } else {
             e.estat = 'camina';
-            const v = dist > 120 ? (fase2 ? 70 : 48) : 0;
+            const v = dist > 120 ? (fase2 ? 80 : 56) : 0;
             e.spr.body.setVelocity(Math.cos(cap) * v, Math.sin(cap) * v);
             e.spr.setFlipX(Math.cos(cap) < 0);
-            if (ara > e.proxCarrega && dist < 460) {
-                e.estat = 'apunta'; e.fins = ara + (fase2 ? 450 : 700); e.ang = cap;
+            if (ara > e.proxCarrega && dist < 480) {
+                e.estat = 'apunta'; e.fins = ara + (fase2 ? 420 : 650); e.ang = cap;
                 e.spr.setTint(0xff8080);
             }
         }
-        // Cos de pedra: camina balancejant-se, es fa enrere i alça la maça en apuntar, s'inclina endavant en carregar i s'afluixa quan es cansa
-        const s = Math.cos(e.estat === 'apunta' || e.estat === 'carrega' ? e.ang : cap) < 0 ? -1 : 1;
-        let rot;
+        // Cos de pedra (gira pels peus): camina balancejant-se, es tira enrere en apuntar, s'inclina en carregar,
+        // cau de morros quan s'ha cansat i es redreça a poc a poc
+        const s = e.estat === 'cansat' || e.estat === 'aixeca' ? (e.cauDreta ? 1 : -1) : Math.cos(e.estat === 'apunta' || e.estat === 'carrega' ? e.ang : cap) < 0 ? -1 : 1;
+        let rot, lerp = 0.25;
         if (e.estat === 'apunta') rot = -s * 0.2 + Math.sin(ara / 28) * 0.025;
-        else if (e.estat === 'carrega') rot = s * 0.2;
-        else if (e.estat === 'cansat') rot = s * 0.08 + Math.sin(ara / 140) * 0.03;
+        else if (e.estat === 'carrega') rot = s * 0.22;
+        else if (e.estat === 'cansat') { rot = s * 1.28 + Math.sin(ara / 160) * 0.02; lerp = 0.35; }
+        else if (e.estat === 'aixeca') { rot = 0; lerp = 0.12; }
         else rot = Math.sin(ara / (fase2 ? 190 : 260)) * 0.06;
-        e.spr.rotation = Phaser.Math.Linear(e.spr.rotation, rot, 0.25);
+        e.spr.rotation = Phaser.Math.Linear(e.spr.rotation, rot, lerp);
         if (e.estat !== estatAbans) {
             if (e.estat === 'apunta') { z.esquitxar(c.x, c.y - 60); Sfx.carrega(); }
             else if (e.estat === 'carrega') this.trossos(z, c.x, c.y, 5);
-            else if (e.estat === 'cansat') this.trossos(z, c.x, c.y, 10);
+            else if (e.estat === 'cansat') {
+                // Quan el cap toca a terra: cop sec, pols i, si l'Ineu hi era a sota, li fa mal
+                z.time.delayedCall(220, () => {
+                    if (e.mort) return;
+                    const q = this.capATerra(z, e);
+                    z.cameras.main.shake(260, 0.008); Sfx.cop(true);
+                    this.trossos(z, q.x, q.y + 30, 14);
+                    const jo2 = z.ineu.body.center;
+                    if (Phaser.Math.Distance.Between(q.x, q.y + 30, jo2.x, jo2.y) < 70) z.ferIneu(1, { x: q.x, y: q.y });
+                });
+            } else if (e.estat === 'aixeca') this.trossos(z, c.x, c.y, 6);
         }
     },
     alDerrotar(z, e) { z.raimDerrotat(e); }
@@ -261,6 +288,15 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.sortida(116, 690, 14, 100, 'ZonaCasaTresor', 'escala');
 
         this.reixaPorxo();
+        // Paret de baix, a banda i banda de la reixa: un sòcol de pedra fosca que tanca la sala (abans s'hi podia ficar l'Ineu)
+        const sc = this.add.graphics().setDepth(1003);
+        [[130, 478], [792, 478]].forEach(([x, w]) => {
+            sc.fillStyle(0x2a1f18, 1).fillRect(x, 950, w, 50);
+            sc.fillStyle(0x6a5a48, 1).fillRect(x, 946, w, 8).lineStyle(2, 0x1c1610, 1).strokeRect(x, 946, w, 8);
+            sc.lineStyle(1.5, 0x1c1610, 0.8);
+            for (let k = x + 60; k < x + w; k += 60) sc.lineBetween(k, 954, k, 1000);
+            this.colisio(x + w / 2, 973, w, 54);
+        });
 
         this.puzleRaim();
     }
@@ -300,7 +336,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.sortida(X0 + 10, Y1 - 14, X1 - X0 - 20, 14, 'ZonaCasaGran', 'porxo');
         };
         if (oberta) { obrir(); return; }
-        this.colReixa = this.colisio(700, Y0 + 14, X1 - X0 + 44, 28);
+        this.colReixa = this.colisio(700, Y0 - 2, X1 - X0 + 44, 52);         // des de la llinda: l'Ineu no es fica dins la reixa
         // El punt és a la mateixa reixa i el «!» hi surt a sobre, als barrots (no damunt de l'Ineu, que s'hi posa al davant)
         this.interactiu(700, Y0 + 30, 96, DIALEGS.reixaDins, {
             altura: -40, actiu: () => !Estat.flag('reixaObertaDins'),
@@ -341,18 +377,55 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         }, { altura: 70, actiu: () => !Estat.flag('raimDesperta') && Estat.te('maneta'),
              enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.time.delayedCall(500, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => this.despertarRaim())); } } });
 
-        // Trapa de la cripta, a sota de l'escalinata, un cop vençut el guardià
-        this.trapa = this.add.graphics().setDepth(-958);
-        this.trapa.fillStyle(0x0a0705, 1).fillRect(650, 676, 100, 46).lineStyle(4, 0x8a7a5e, 1).strokeRect(650, 676, 100, 46);
-        this.trapa.fillStyle(0x3a2c22, 1).fillRect(654, 684, 92, 8).fillRect(654, 700, 92, 8);
-        this.trapa.setVisible(derrotat);
+        // Trapa de la cripta, a sota de l'escalinata: una llosa amb una creu gravada; vençut el guardià, es fa a un costat i
+        // deixa veure l'escala que baixa
+        this.dibuixarTrapa(derrotat);
         this.interactiu(700, 730, RADI_OBJECTE, DIALEGS.trapaCripta, {
-            altura: 60, actiu: () => Estat.flag('raimDerrotat'),
+            altura: 70, actiu: () => Estat.flag('raimDerrotat'),
             enTancar: () => this.canviarZona('ZonaCasaCripta', 'porta')
         });
 
         // Si el guardià ja estava despert (has sortit i tornat), segueix aquí
         if (desperta && !derrotat) this.despertarRaim(true);
+    }
+
+    // La boca de la cripta (marc de pedra, foscor i graons) i la llosa que la tapa. oberta: la llosa ja és apartada
+    dibuixarTrapa(oberta) {
+        const X0 = 640, Y0 = 668, W = 120, H = 58;
+        const boca = this.add.graphics().setDepth(-958);
+        boca.fillStyle(0x8a7a5e, 1).fillRect(X0 - 8, Y0 - 8, W + 16, H + 16).lineStyle(2.5, 0x2a2018, 1).strokeRect(X0 - 8, Y0 - 8, W + 16, H + 16);
+        boca.fillStyle(0x050302, 1).fillRect(X0, Y0, W, H);
+        [[0, 0.62], [14, 0.42], [26, 0.26], [36, 0.14]].forEach(([dy, a], k) => {               // graons que s'enfonsen a la foscor
+            boca.fillStyle(0x9a8a70, a).fillRect(X0 + 6 + k * 6, Y0 + 6 + dy, W - 12 - k * 12, 8);
+        });
+        this.llumTrapa = this.add.ellipse(X0 + W / 2, Y0 + H / 2, W, H, 0x9ab8ff, 0).setBlendMode('ADD').setDepth(-957);
+        // La llosa
+        const ll = this.add.graphics().setDepth(-956);
+        ll.fillStyle(0xb5a58a, 1).fillRect(0, 0, W, H).lineStyle(3, 0x2a2018, 1).strokeRect(0, 0, W, H);
+        ll.fillStyle(0xffffff, 0.18).fillRect(3, 3, W - 6, 5);
+        ll.lineStyle(4, 0x6a5a44, 1).lineBetween(W / 2, 10, W / 2, H - 10).lineBetween(W / 2 - 18, 22, W / 2 + 18, 22);     // creu gravada
+        ll.fillStyle(0x4a4038, 1).fillCircle(10, H / 2, 4).fillCircle(W - 10, H / 2, 4);                                   // anelles
+        ll.setPosition(X0, Y0);
+        this.llosaTrapa = ll;
+        if (oberta) { ll.setPosition(X0 + W + 14, Y0 + 6); this.llumTrapa.setFillStyle(0x9ab8ff, 0.12); }
+    }
+    // Vençut el guardià: la càmera mira la llosa, la terra tremola i la llosa llisca a un costat; de sota en surt claror freda i pols
+    obrirTrapa(fet) {
+        const cam = this.cameras.main, X0 = 640, Y0 = 668, W = 120;
+        cam.stopFollow();
+        cam.pan(700, 650, 700, 'Sine.easeInOut');
+        this.time.delayedCall(750, () => {
+            cam.shake(900, 0.005); Sfx.porta();
+            this.tweens.add({ targets: this.llosaTrapa, x: X0 + W + 14, y: Y0 + 6, duration: 1300, ease: 'Sine.easeInOut', onComplete: () => {
+                Sfx.secret();
+                this.tweens.add({ targets: this.llumTrapa, fillAlpha: 0.28, duration: 500, yoyo: true, onComplete: () => this.llumTrapa.setFillStyle(0x9ab8ff, 0.12) });
+                this.boira(700, 690, 100, 30, 0.6);
+                this.time.delayedCall(700, () => { cam.startFollow(this.ineu, true, 0.1, 0.1); if (fet) fet(); });
+            } });
+            const pols = this.add.particles(700, 700, 'espurna', { x: { min: -60, max: 60 }, speedY: { min: -60, max: -20 }, lifespan: 900, scale: { start: 0.5, end: 0 },
+                tint: [0xd8d2c0, 0xb9b3a2], frequency: 40, alpha: { start: 0.7, end: 0 } }).setDepth(99990);
+            this.time.delayedCall(1300, () => pols.destroy());
+        });
     }
 
     // Volant de ferro amb radis i un engranatge petit que hi engrana (el que mou el cap); la maneta s'hi veu quan la tens
@@ -420,7 +493,10 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         const { x: RX, y: RY } = RAIM, boss = this.enemic('raim', RX, sense ? RY + 85 : RY - 70);
         if (!boss) return;
         this.boss = boss;
-        this.ui().barraBoss("L'Home del Raïm", [6 / 16]);                       // a 6 de vida, la segona fase
+        // L'origen del sprite passa als peus: així, quan cau de morros, gira pels peus i el cap toca a terra
+        const hh = boss.spr.displayHeight / 2;
+        boss.spr.setOrigin(0.5, 1); boss.spr.y += hh;
+        this.ui().barraBoss("L'Home del Raïm", [9 / 24]);                       // a 9 de vida, la segona fase
         const ponPedestal = () => {
             const t = this.textures.get('home_raim_pedestal');
             this.pedestal = this.add.image(RX, RY, 'home_raim_pedestal').setOrigin(0.5, 1).setScale((t.customData && t.customData.escala) || 1 / RES).setDepth(RY);
@@ -449,10 +525,10 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             // Salta del pedestal i cau al davant
             this.tweens.addCounter({
                 from: 0, to: 1, duration: 620, ease: 'Bounce.easeOut',
-                onUpdate: tw => { if (spr.active && !boss.mort) spr.body.reset(RX, RY - 70 + 155 * tw.getValue()); },
+                onUpdate: tw => { if (spr.active && !boss.mort) spr.body.reset(RX, RY - 70 + hh + 155 * tw.getValue()); },
                 onComplete: () => {
                     if (!spr.active || boss.mort) return;
-                    spr.body.reset(RX, RY + 85);
+                    spr.body.reset(RX, RY + 85 + hh);
                     this.cameras.main.shake(320, 0.009);
                     Sfx.cop(true);
                     ENEMICS.raim.trossos(this, RX, RY + 110, 12);
@@ -471,6 +547,9 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         ENEMICS.raim.trossos(this, c.x, c.y, 22);
         this.ui().actualitzarHUD();
         this.tweens.add({ targets: e.spr, angle: 70, duration: 400 });
+        // El volant, l'engranatge i la maneta cauen amb el pedestal
+        [this.volant, this.engranatge, this.manetaVolant].forEach(o => { if (o) this.tweens.add({ targets: o, y: o.y + 40, alpha: 0, duration: 600, ease: 'Quad.easeIn', onComplete: () => o.destroy() }); });
+        this.volant = null; this.engranatge = null; this.manetaVolant = null;
         if (this.pedestal) {                // el pedestal s'esmicola
             ENEMICS.raim.trossos(this, RAIM.x, RAIM.y, 14);
             this.tweens.add({ targets: this.pedestal, alpha: 0, duration: 700, onComplete: () => { this.pedestal.destroy(); this.pedestal = null; } });
@@ -479,9 +558,9 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.time.delayedCall(900, () => this.ui().obrirDialeg(DIALEGS.raimDerrotat, () => {
             this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
             this.runes();
-            this.trapa.setVisible(true);
-            Estat.posaObjectiu("Sota l'escalinata hi ha una trapa que baixa a la cripta dels monjos.");
+            Estat.posaObjectiu("La llosa de sota l'escalinata s'ha obert: baixa a la cripta dels monjos.");
             Estat.desar();
+            this.obrirTrapa();
         }));
     }
 }

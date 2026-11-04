@@ -848,7 +848,7 @@ Object.assign(ZonaBase.prototype, {
                 const rx = c.x - jo.x, ry = c.y - jo.y;
                 const t = rx * d.x + ry * d.y;                      // distància al llarg del cop
                 // Contra el cap d'un boss alt, un cop cap amunt (l'arma per sobre del cap) arriba més amunt
-                const extra = c.cap && d.y < -0.4 ? 75 : 0;
+                const extra = c.cap && d.y < -0.4 && !this.capDe(e).senseAbast ? 75 : 0;
                 if (t < -12 || t > k.L + c.r + extra) return false;
                 const lat = Math.abs(rx * d.y - ry * d.x);          // distància lateral
                 return lat < c.r + k.ample;
@@ -928,7 +928,7 @@ Object.assign(ZonaBase.prototype, {
         if (!e.def.cap) return [{ x: c.x, y: c.y, r: e.def.radi }];
         const s = e.spr, h = s.displayHeight, cp = this.capDe(e);
         const punt = (f, r, cap, fx = 0) => {
-            const oy = -h / 2 + h * f, ox = fx * s.displayWidth * (s.flipX ? -1 : 1), a = s.rotation || 0;
+            const oy = -h * s.originY + h * f, ox = fx * s.displayWidth * (s.flipX ? -1 : 1), a = s.rotation || 0;
             return { x: s.x + Math.cos(a) * ox - Math.sin(a) * oy, y: s.y + Math.sin(a) * ox + Math.cos(a) * oy, r, cap };
         };
         return [punt(cp.y, cp.r, true, cp.x || 0), punt(0.45, 44), punt(0.7, 44), { x: s.x, y: c.y, r: 44 }];
