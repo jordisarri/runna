@@ -683,9 +683,14 @@ class EscenaUI extends Phaser.Scene {
     crearMenu() {
         this.menu = this.add.container(0, 0).setVisible(false).setDepth(60);
         const vel = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.65).setOrigin(0).setInteractive();
-        const panell = marcPergami(this, AMPLE / 2, ALT / 2, 640, 470);
+        const panell = marcPergami(this, AMPLE / 2, ALT / 2, 640, 570);
         const titol = this.add.text(AMPLE / 2, ALT / 2 - 160, 'Pausa', { fontFamily: FONT_PLACA, fontSize: '44px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5);
         this.menu.add([vel, panell, titol]);
+        // El que portes fet: percentatge del joc, barra i el detall (història i missions laterals)
+        this.txtCompletat = this.add.text(AMPLE / 2, ALT / 2 + 190, '', { fontFamily: FONT_PLACA, fontSize: '27px', fontStyle: 'bold', color: '#3a2412', resolution: 2 }).setOrigin(0.5);
+        this.barraCompletat = this.add.graphics();
+        this.txtDetall = this.add.text(AMPLE / 2, ALT / 2 + 244, '', { fontFamily: FONT_LLIBRE, fontSize: '20px', color: '#5a3a22', align: 'center', resolution: 2 }).setOrigin(0.5);
+        this.menu.add([this.txtCompletat, this.barraCompletat, this.txtDetall]);
 
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
@@ -715,11 +720,24 @@ class EscenaUI extends Phaser.Scene {
         this.seleccio = 0;
     }
 
+    // Posa al menú el recompte del que portes fet
+    actualitzarCompletat() {
+        const c = PROGRES.completat(Estat), x0 = AMPLE / 2 - 230, y = ALT / 2 + 210, w = 460, h = 16;
+        this.txtCompletat.setText('Joc completat: ' + c.percent + '%');
+        const g = this.barraCompletat.clear();
+        g.fillStyle(0x3a2412, 0.25).fillRoundedRect(x0, y, w, h, 8);
+        g.fillStyle(c.percent === 100 ? 0xe8c040 : 0xb8782a, 1).fillRoundedRect(x0, y, Math.max(h, w * c.percent / 100), h, 8);
+        g.fillStyle(0xffffff, 0.3).fillRoundedRect(x0 + 3, y + 2, Math.max(h - 6, w * c.percent / 100 - 6), 4, 2);
+        g.lineStyle(2, 0x3a2412, 0.9).strokeRoundedRect(x0, y, w, h, 8);
+        this.txtDetall.setText('Història ' + c.historia[0] + '/' + c.historia[1] + '  ·  Missions laterals ' + c.laterals[0] + '/' + c.laterals[1]);
+    }
+
     obrirMenu() {
         if (this.dialeg || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
         this.menuObert = true;
         this.seleccio = 0;
         this.premut = false;
+        this.actualitzarCompletat();
         this.pintarSeleccio();
         this.menu.setVisible(true).setAlpha(0);
         this.tweens.add({ targets: this.menu, alpha: 1, duration: 140 });

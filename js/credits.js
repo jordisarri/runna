@@ -37,7 +37,10 @@ class EscenaCredits extends Phaser.Scene {
         }
         const c = this.add.container(AMPLE / 2, ALT + 40);
         let y = 0;
-        CREDITS.forEach(([t, mida, color]) => {
+        // Abans del «FI», el que ha completat el jugador
+        const linies = CREDITS.slice(), pos = linies.findIndex(l => l[0] === 'GRÀCIES PER JUGAR');
+        if (pos >= 0) { const cmp = PROGRES.completat(Estat); linies.splice(pos + 1, 0, ['', 16], ['Has completat el ' + cmp.percent + '% del joc', 26, cmp.percent === 100 ? '#ffe08a' : '#fff8e7']); }
+        linies.forEach(([t, mida, color]) => {
             if (t) c.add(this.add.text(0, y, t, estilText(mida, color || '#d8ccb8', { align: 'center', fontStyle: mida > 28 ? 'bold' : 'normal' })).setOrigin(0.5, 0));
             y += mida * 1.6;
         });

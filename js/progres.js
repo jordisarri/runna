@@ -159,6 +159,15 @@ const PROGRES = {
     // El primer pas de la història que encara no és fet
     seguent(E) { return this.passos.find(p => !p.fet(E)) || null; },
 
+    // Recompte de joc completat (menú de pausa i crèdits): la història principal val un 70% i les missions laterals un 30%.
+    // El 100% només hi és quan tot és fet (no s'arrodoneix cap amunt).
+    completat(E) {
+        const fets = this.passos.filter(p => p.fet(E)).length, lat = this.laterals.filter(l => l.fet(E)).length;
+        const tp = this.passos.length, tl = this.laterals.length;
+        const tot = fets === tp && lat === tl;
+        return { percent: tot ? 100 : Math.min(99, Math.floor(70 * fets / tp + 30 * lat / tl)), historia: [fets, tp], laterals: [lat, tl] };
+    },
+
     // Pista del pas següent; si la història principal està aturada en una part encara per fer, recorda una lateral
     pista(E) {
         const p = this.seguent(E);
