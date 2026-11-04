@@ -138,7 +138,6 @@ const Joc = {
         musica_credits:    { fitxer: 'credits',    fallback: 'musica_epileg' },
         jingle_runna:      { fitxer: 'jingle_runna', fallback: null, jingle: true },
         jingle_boss:       { fitxer: 'jingle_boss',  fallback: null, jingle: true },
-        jingle_objecte:    { fitxer: 'jingle_objecte', fallback: null, jingle: true },
         jingle_arma:       { fitxer: 'jingle_arma',  fallback: null, jingle: true }      // l'Ineu alça una arma nova (bastó, branca)
     },
     musicaDisponible: new Set(),
@@ -174,12 +173,12 @@ const Joc = {
     },
 
     // L'Ineu alça una arma nova (el bastó, la branca del Til·ler): sempre la mateixa fanfara. La música de fons s'abaixa mentre sona.
-    // Si encara no hi ha el fitxer jingle_objecte.m4a, sona una fanfara sintetitzada.
+    // Si encara no hi ha el fitxer jingle_arma.m4a, sona una fanfara sintetitzada.
     fanfaraObjecte(scene) {
         const m = Joc.musica;
         if (m && m.isPlaying) { m.setVolume(Joc.VOLUM_MUSICA_ABAIXADA); scene.time.delayedCall(4200, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
         // De moment, els objectes fan servir la mateixa fanfàrria que les armes (jingle_arma); si no hi és, la sintetitzada
-        Joc.detectarMusica().then(() => { const c = ['jingle_arma', 'jingle_objecte'].find(k => Joc.musicaDisponible.has(k)); if (c) Joc.jingle(scene, c); else Sfx.fanfara(); });
+        Joc.detectarMusica().then(() => { if (Joc.musicaDisponible.has('jingle_arma')) Joc.jingle(scene, 'jingle_arma'); else Sfx.fanfara(); });
     },
 
     // L'Ineu alça una arma nova: la seva fanfàrria (jingle_arma); mentre no hi sigui, la d'objecte
