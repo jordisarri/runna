@@ -43,7 +43,7 @@ class ZonaEsglesia extends ZonaBase {
         this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });     // el sagrari, al mig del retaule (fragment 2)
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
 
-        // Portes del peu del retaule: totes dues tancades. Quan el Pare Daniel diu que el rellotge s'ha aturat (rellotgeDit)
+        // Portes del peu del retaule: totes dues tancades. Quan el Pare Daimiel diu que el rellotge s'ha aturat (rellotgeDit)
         // s'obre la de la dreta, que duu a la torre i a la Sala del Rellotge. L'esquerra continua tancada.
         this.portaRellotge = false;
         this.obrirPortaRellotge(false);
@@ -57,9 +57,9 @@ class ZonaEsglesia extends ZonaBase {
             pagines: [{ qui: 'Ineu', text: 'Tancada amb clau.' }]
         }), { altura: 150, actiu: () => !this.portaRellotge });
 
-        // Orgue (la Pianista seu a l'orgue) i el Pare Daniel, que dirigeix el cor
+        // Orgue (la Pianista seu a l'orgue) i el Pare Daimiel, que dirigeix el cor
         this.orgue = this.posar('orgue', 975, ESG.retY + 250, { col: { w: 110, h: 50 } });
-        const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daniel es posen amb la resta
+        const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daimiel es posen amb la resta
         if (!epileg) this.npc('pianista', 975, ESG.retY + 320, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
         if (!epileg) this.npc('pare_daniel', 360, ESG.retY + 190, DIALEGS.pareDaniel, { flipX: false });
 
@@ -195,7 +195,7 @@ class ZonaEsglesia extends ZonaBase {
         });
     }
 
-    // Obre la porta de la dreta del retaule si el Pare Daniel ja ha parlat del rellotge (també a mitja visita)
+    // Obre la porta de la dreta del retaule si el Pare Daimiel ja ha parlat del rellotge (també a mitja visita)
     obrirPortaRellotge(avis) {
         if (this.portaRellotge || !(Estat.flag('portaCampanarOberta') || Estat.flag('rellotgeReparat') || Estat.flag('visitada_ZonaTorre'))) return;   // (partides velles: ja hi havien pujat)
         this.portaRellotge = true;                // el batent de la porta (portaRetaule) ja no queda bloquejat: s'obre quan l'Ineu s'hi acosta
