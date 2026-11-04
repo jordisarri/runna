@@ -86,7 +86,7 @@ const Joc = {
         ZonaDolmen: 'musica_bosc', ZonaTiller: 'musica_bosc', ZonaCabana: 'musica_bosc',
         // Exteriors (overworld)
         ZonaPlaca: 'musica_poble', ZonaMonestir: 'musica_poble', ZonaCreu: 'musica_poble', ZonaCasaGran: 'musica_poble',
-        ZonaRuines: 'musica_poble', ZonaCellerFora: 'musica_poble', ZonaGirgolesFora: 'musica_poble', ZonaCelles: 'musica_celles', ZonaSantAntoni: 'musica_poble', ZonaTaverna: 'musica_poble', ZonaJordi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaJordi: 'musica_casa', ZonaEra: 'musica_poble', ZonaJardi: 'musica_poble', ZonaCementiri: 'musica_poble',
+        ZonaRuines: 'musica_poble', ZonaCellerFora: 'musica_poble', ZonaGirgolesFora: 'musica_poble', ZonaCelles: 'musica_poble', ZonaSantAntoni: 'musica_poble', ZonaTaverna: 'musica_poble', ZonaJordi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaJordi: 'musica_casa', ZonaEra: 'musica_poble', ZonaJardi: 'musica_poble', ZonaCementiri: 'musica_poble',
         // Interiors de cases
         ZonaEsglesia: 'musica_santuari', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
         ZonaCabanaCami: 'musica_casa', ZonaGolfes: 'musica_casa', ZonaTorre: 'musica_casa',
@@ -109,7 +109,6 @@ const Joc = {
         musica_proleg:     { fitxer: 'light book', fallback: 'musica_intro' },
         musica_poble:      { fitxer: 'poble',      fallback: 'musica_intro' },      // exteriors del poble (fins ara, la mateixa que el títol)
         musica_santuari:   { fitxer: 'santuari',   fallback: 'musica_casa' },
-        musica_celles:     { fitxer: 'celles',     fallback: 'musica_intro' },
         musica_taverna:    { fitxer: 'taverna',    fallback: 'musica_casa' },
         musica_cirosa:     { fitxer: 'cirosa',     fallback: 'musica_bosc' },
         musica_biblioteca: { fitxer: 'biblioteca', fallback: 'musica_casa' },
