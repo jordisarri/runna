@@ -58,7 +58,7 @@ class ZonaCelaStAntoni extends ZonaBase {
         this.time.addEvent({ delay: 2600, loop: true, callback: () => { v1.explode(10); this.time.delayedCall(900, () => v2.explode(7)); } });
 
         // Bombetes penjades de la biga, amb llum càlida que parpelleja
-        [[150, 62], [560, 54]].forEach(([x, y], i) => {
+        [[150, 62], [470, 54]].forEach(([x, y], i) => {
             const g = this.add.graphics().setDepth(9001);
             g.lineStyle(2, 0x1a1a1e, 1).lineBetween(x, 0, x, y - 10).fillStyle(0x6a4a1a, 1).fillRect(x - 5, y - 12, 10, 6);
             g.fillStyle(0xfff0b0, 1).fillCircle(x, y, 7).lineStyle(1.5, 0x8a6a2a, 1).strokeCircle(x, y, 7);
@@ -87,7 +87,7 @@ class ZonaCelaStAntoni extends ZonaBase {
         this.colisio(540, 588, 140, 26);
 
         // Els plànols de la paret: l'única cosa que l'Ineu es mira
-        this.interactiu(580, 380, RADI_OBJECTE, () => ({ pagines: [{ qui: 'Ineu', text: "(Semblen els plànols d'una mena d'artefacte per mirar les estrelles.)" }] }), { altura: 290 });
+        this.interactiu(582, 380, RADI_OBJECTE, () => ({ pagines: [{ qui: 'Ineu', text: "(Semblen els plànols d'una mena d'artefacte per mirar les estrelles.)" }] }), { altura: 356 });     // l'indicador, just a sobre dels plànols
 
         // Parets i col·lisions (obertura de sortida a baix, al mig)
         this.colisio(20, H / 2, 40, H);
