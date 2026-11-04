@@ -158,9 +158,9 @@ class ZonaSoterraniHost extends ZonaBase {
 }
 
 // El vestíbul de l'Hostatgeria. Tres portes duen a les cambres de les sacerdotesses; cada una té el seu bloqueig:
-//   esquerra (dormitori, la Pains): oberta, però la sacerdotessa dorm dins un capoll de boira → Cant de l'Aurora (flauta)
-//   mig (refetor, la Phili): una taula pesadíssima barra la porta → Guants de Poder
-//   dreta (capella, la Charm): esbarzers negres → Runna
+//   esquerra (dormitori, la Dolora): oberta, però la sacerdotessa dorm dins un capoll de boira → Cant de l'Aurora (flauta)
+//   mig (refetor, la Pilària): una taula pesadíssima barra la porta → Guants de Poder
+//   dreta (capella, la Carmèlia): esbarzers negres → Runna
 // En alliberar les tres, obren la porta de l'Hostatgeria per dins (al vestíbul apareix un cofre amb l'Empara Fraternal).
 class ZonaHostatgeriaInt extends ZonaCasaBase {
     constructor() {
@@ -418,17 +418,17 @@ class CambraMonja extends ZonaCasaBase {
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.08).setDepth(80100);
     }
 
-    // Cant de l'Aurora davant el capoll: la boira s'esvaeix i la Pains es desperta
+    // Cant de l'Aurora davant el capoll: la boira s'esvaeix i la Dolora es desperta
     enMelodia(nom) {
         if (this.monja !== 'pains' || nom !== 'aurora') return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 520, 460) > 320) return false;
-        if (Estat.flag('lliurePains')) { this.missatge('La Pains ja és desperta.'); return true; }
+        if (Estat.flag('lliurePains')) { this.missatge('La Dolora ja és desperta.'); return true; }
         Estat.posaFlag('lliurePains');
         this.alliberada(false);
         Sfx.secret();
         this.cameras.main.shake(300, 0.003);
         Estat.desar();
-        this.time.delayedCall(1900, () => { if (!Estat.flag('premiPains')) this.ui().obrirDialeg(DIALEGS.monjaPains(Estat)); });   // la Pains es desperta i parla
+        this.time.delayedCall(1900, () => { if (!Estat.flag('premiPains')) this.ui().obrirDialeg(DIALEGS.monjaPains(Estat)); });   // la Dolora es desperta i parla
         return true;
     }
 

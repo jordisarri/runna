@@ -122,10 +122,10 @@ class ZonaEsglesia extends ZonaBase {
             // Les sacerdotesses i el seu protegit
             accio(z => [f => { z.npcVa('monja_phili', 770, R + 232, null, 170); z.npcVa('monja_charm', 735, R + 222, f, 170); },
                         f => z.npcMira('monja_charm', 705, f), f => z.bombolla('monja_charm', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
-            { qui: 'Charm', text: 'Sardi! Tres nits sense dormir, les tres. La Pains ha resat tants rosaris que ja no li queden dits.' },
-            { qui: 'Pains', text: 'I els tornaria a resar tots. Gràcies, Ineu.' },
-            { qui: 'Sardi', text: 'Phili, Phili! He volat amb ocells de foc!' },
-            { qui: 'Phili', text: "Doncs ara aterraràs a la banyera, que fas olor de gàbia." },
+            { qui: 'Carmèlia', text: 'Sardi! Tres nits sense dormir, les tres. La Dolora ha resat tants rosaris que ja no li queden dits.' },
+            { qui: 'Dolora', text: 'I els tornaria a resar tots. Gràcies, Ineu.' },
+            { qui: 'Sardi', text: 'Pilària, Pilària! He volat amb ocells de foc!' },
+            { qui: 'Pilària', text: "Doncs ara aterraràs a la banyera, que fas olor de gàbia." },
             // L'Iscu, que avui no ha de fregar gots
             ...(hi('ciscu') ? [accio(z => [f => z.npcSalta('ciscu', f, 2)]),
                 { qui: 'Iscu', text: "L'Eve m'ha deixat venir sense fregar ni un got! Avui és festa grossa." }] : []),

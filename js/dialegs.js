@@ -49,7 +49,8 @@ function objectiuSopar(E) {
 // Quan s'allibera la tercera sacerdotessa (sigui quina sigui) el rosari guanya un gra (+1 cor) i l'Hostatgeria obre la porta per dins;
 // la mateixa sacerdotessa avisa que al vestíbul hi ha aparegut el premi (un cofre amb l'Empara Fraternal)
 const ultimaMonja = nom => ['Pains', 'Phili', 'Charm'].filter(n => n !== nom).every(n => Estat.flag('premi' + n));
-const avisPremiMonja = nom => ({ qui: nom, text: "Al vestíbul t'hem deixat la nostra Empara, fill. T'ajudarà a protegir-te de la boira de l'avenc i salvar els nens segrestats." });
+const NOMS_MONJA = { Pains: 'Dolora', Phili: 'Pilària', Charm: 'Carmèlia' };      // els identificadors (premiPains...) es queden; aquests són els noms que es veuen
+const avisPremiMonja = nom => ({ qui: NOMS_MONJA[nom], text: "Al vestíbul t'hem deixat la nostra Empara, fill. T'ajudarà a protegir-te de la boira de l'avenc i salvar els nens segrestats." });
 function premiMonja(nom, flag) {
     const E = Estat;
     E.posaFlag(flag);
@@ -61,7 +62,7 @@ function premiMonja(nom, flag) {
         E.posaObjectiu("Les sacerdotesses són lliures. Al vestíbul de l'Hostatgeria t'espera el premi.");
     } else {
         const f = ['Pains', 'Phili', 'Charm'].filter(n => !E.flag('premi' + n));
-        E.posaObjectiu('Encara hi ha sacerdotesses per trobar: ' + f.join(', ') + '.');
+        E.posaObjectiu('Encara hi ha sacerdotesses per trobar: ' + f.map(n => NOMS_MONJA[n]).join(', ') + '.');
     }
     E.desar();
 }
@@ -342,7 +343,7 @@ const DIALEGS = {
                 { qui: "Pergamí", text: "Fragment 2 de 2:\n«El monjo va guardar el segell fins al darrer dia. Des d'aleshores la seva ombra torna cada nit al mur de les Runes a vigilar. La clau de ferro és on ell la va deixar, amb els seus germans, sota la mirada d'un guardià de pedra.»" },
                 { qui: "Pergamí", text: "«Qui busqui la clau, que no oblidi mai on neix el sol.»" }
             ],
-            enAcabar: () => E.posaFlag("fragment2")
+            enAcabar: () => { E.posaFlag("fragment2"); E.posaObjectiu("Ja tens els dos fragments: porta'ls al Pare Alcoví, a la biblioteca del Monestir."); }
         };
     },
 
@@ -451,7 +452,7 @@ const DIALEGS = {
                     { qui: "Meus", text: "El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb tres nens que falten..." },
                     { qui: "Meus", text: "...Però el Til·ler té raó, maleït sigui. No es pot deixar de fer el que s'ha fet sempre, ni quan el cor fa mal. Pren l'escudella, i no la vessis!" },
                     { qui: "Meus", text: "És l'escudella de cada any, la de les nostres àvies, però enguany té un gust que no voldria explicar. Tu tingues-ne cura de portar-la sencera." },
-                    { avis: "Has obtingut L'ESCUDELLA DE LA NEUS." }
+                    { avis: "Has obtingut L'ESCUDELLA DE LA MEUS." }
                 ],
                 enAcabar: () => { E.dona("escudella"); E.posaFlag("escudella"); objectiuSopar(E); }
             };
@@ -598,7 +599,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pare Alcoví", text: "Has parlat amb l'ombra, oi? Fa temps que ho sospitava. A la Crònica hi ha un marge que no vaig saber llegir: una paraula esborrada, de la mateixa mà que va escriure els fragments." },
-                    { qui: "Pare Alcoví", text: "Amb el que m'expliques, ara ho entenc. «La foscor tem la llum, però més encara el riure.» Aquestes són les paraules que desperten Runna, fill: no és un conjur, és una veritat. Digues-les davant l'espasa, senceres i amb tot el cor." },
+                    { qui: "Pare Alcoví", text: "Amb la paraula que t'ha donat, ara ho entenc. «La foscor tem la llum, però més encara el riure.» Aquestes són les paraules que desperten Runna, fill: no és un conjur, és una veritat. Digues-les davant l'espasa, senceres i amb tot el cor." },
                     { avis: "Has après les PARAULES DEL SABER." }
                 ],
                 enAcabar: () => { E.posaFlag("saber"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
@@ -673,7 +674,7 @@ const DIALEGS = {
         ],
         enAcabar: () => {
             E.posaFlag("benedicioMonjo");
-            E.posaObjectiu("Troba Runna, al sud-est del Santuari, entre pedres, on el sol s'atura.");
+            E.posaObjectiu("Ara que l'ombra t'ha parlat, el Pare Alcoví tindrà paraules per a tu, a la biblioteca.");
         }
     }),
 
@@ -906,7 +907,7 @@ const DIALEGS = {
         if (E.flag('mongesTrobades') && !E.flag('isidreSap')) {
             return {
                 pagines: [
-                    { qui: 'Isildren', text: 'He sentit com s\'obria la porta de l\'Hostatgeria. Són elles, oi? La Pains, la Phili, la Charm... les sacerdotesses de la nostra casa.' },
+                    { qui: 'Isildren', text: 'He sentit com s\'obria la porta de l\'Hostatgeria. Són elles, oi? La Dolora, la Pilària, la Carmèlia... les sacerdotesses de la nostra casa.' },
                     { qui: 'Isildren', text: 'Tres nits tancades a vint passes de mi, i jo aquí amb les flors, sense saber-ne res. La seva pregària sempre ha mantingut la pau a aquesta terra.' },
                     { qui: 'Isildren', text: 'I el Sardi... el meu fill Sardi. Té set anys, monjo. Cada tarda s\'enfilava a la prunera i es manxava de prunes fins a no poder dir ni mu. Si el trobes, digues-li que el seu pare no ha deixat de regar la prunera.' }
                 ],
@@ -968,7 +969,7 @@ const DIALEGS = {
         };
     },
     hostatgeria: E => E.flag('mongesTrobades')
-        ? { pagines: [{ qui: 'Charm', text: 'Entra, fill: aquesta casa torna a ser teva.' }] }
+        ? { pagines: [{ qui: 'Carmèlia', text: 'Entra, fill: aquesta casa torna a ser teva.' }] }
         : { pagines: [{ qui: 'Ineu', text: 'La porta està tancada per dins.' }] },
     sortidaMonges: E => ({ pagines: [] }),
     taulaRefetor: E => E.te('guants')
@@ -982,45 +983,45 @@ const DIALEGS = {
             { qui: 'Ineu', text: "Una música lleugera, de tres notes, potser la desperta." }] };
         if (!E.flag('premiPains')) return {
             pagines: [
-                { qui: 'Pains', text: 'Oh, mon petit! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Pains.' },
-                { qui: 'Pains', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb abric d\'ocells que s\'enduia els nens del poble, rient baixet.' },
-                { qui: 'Pains', text: 'Si passes pel jardí, saluda l\'Isildren, el jardiner d\'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.' },
-                ...(!(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? [{ qui: 'Pains', text: 'La Charm, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d\'aquests que no els talla ni la falç. Diuen que només cedeixen davant d\'una espasa de llum.'
+                { qui: 'Dolora', text: 'Oh, mon petit! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Dolora.' },
+                { qui: 'Dolora', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb abric d\'ocells que s\'enduia els nens del poble, rient baixet.' },
+                { qui: 'Dolora', text: 'Si passes pel jardí, saluda l\'Isildren, el jardiner d\'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.' },
+                ...(!(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? [{ qui: 'Dolora', text: 'La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d\'aquests que no els talla ni la falç. Diuen que només cedeixen davant d\'una espasa de llum.'
                     + (E.te('runna') ? ' Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho.' : '') }] : []),
-                { qui: 'Pains', text: 'Vés amb compte, fill. El rosari d\'aquesta casa és vell i fort: que et guardi.' },
+                { qui: 'Dolora', text: 'Vés amb compte, fill. El rosari d\'aquesta casa és vell i fort: que et guardi.' },
                 ...(ultimaMonja('Pains') ? [avisPremiMonja('Pains')] : [])
             ],
             enAcabar: () => premiMonja('Pains', 'premiPains')
         };
-        return { pagines: [{ qui: 'Pains', text: 'Vés amb Déu, fill. La cadira em fa mal als ossos, però encara tinc bones orelles.' }] };
+        return { pagines: [{ qui: 'Dolora', text: 'Vés amb Déu, fill. La cadira em fa mal als ossos, però encara tinc bones orelles.' }] };
     },
     monjaPhili: E => {
         if (!E.flag('premiPhili')) return {
             pagines: [
-                { qui: 'Phili', text: 'Per fi! Tres nits que colpejo aquesta porta! Soc la Phili, i no, no m\'he estat quieta ni un minut.' },
-                { qui: 'Phili', text: 'T\'ho dic perquè ho vaig veure: el Germà Andreu, el de la pilota, anava cada nit a la Porta de les Gírgoles, a l\'est del Celler, amb una clau petita i rovellada. Mai no li he cregut el somriure.' },
-                { qui: 'Phili', text: 'Tots aquests nens innocents segrestats per aquesta maleïda boira... Troba\'ls, monjo! Salva\'ls a tots!' },
-                { qui: 'Phili', text: 'Gràcies per les molèsties! Que no se t\'acabin les forces!' },
+                { qui: 'Pilària', text: 'Per fi! Tres nits que colpejo aquesta porta! Soc la Pilària, i no, no m\'he estat quieta ni un minut.' },
+                { qui: 'Pilària', text: 'T\'ho dic perquè ho vaig veure: el Germà Andreu, el de la pilota, anava cada nit a la Porta de les Gírgoles, a l\'est del Celler, i la porta se li obria sola. Mai no li he cregut el somriure.' },
+                { qui: 'Pilària', text: 'Tots aquests nens innocents segrestats per aquesta maleïda boira... Troba\'ls, monjo! Salva\'ls a tots!' },
+                { qui: 'Pilària', text: 'Gràcies per les molèsties! Que no se t\'acabin les forces!' },
                 ...(ultimaMonja('Phili') ? [avisPremiMonja('Phili')] : [])
             ],
             enAcabar: () => premiMonja('Phili', 'premiPhili')
         };
-        return { pagines: [{ qui: 'Phili', text: 'Si necessites algú que miri amb els ulls ben oberts, ja saps on trobar-me.' }] };
+        return { pagines: [{ qui: 'Pilària', text: 'Si necessites algú que miri amb els ulls ben oberts, ja saps on trobar-me.' }] };
     },
     monjaCharm: E => {
         if (!E.flag('premiCharm')) return {
             pagines: [
-                { qui: 'Charm', text: 'Benvingut, fill de Déu. Sóc la Charm, la gran sacerdotessa d\'aquesta casa. Havíem perdut l\'esperança, però no la pregària.' },
-                { qui: 'Charm', text: 'Els infants d\'aquesta terra han estat arrossegats a la foscor d\'un avenc profund. La nit que la boira ens va tancar a les cambres, els seus llits van quedar buits. Salva\'ls, fill: porta a casa tots els nens segrestats.' },
-                { qui: 'Charm', text: E.flag('cantMiracle')
+                { qui: 'Carmèlia', text: 'Benvingut, fill de Déu. Sóc la Carmèlia, la gran sacerdotessa d\'aquesta casa. Havíem perdut l\'esperança, però no la pregària.' },
+                { qui: 'Carmèlia', text: 'Els infants d\'aquesta terra han estat arrossegats a la foscor d\'un avenc profund. La nit que la boira ens va tancar a les cambres, els seus llits van quedar buits. Salva\'ls, fill: porta a casa tots els nens segrestats.' },
+                { qui: 'Carmèlia', text: E.flag('cantMiracle')
                     ? "Als llibres d'aquesta casa he llegit que l'Ocellaire va robar el cant dels ocells, i que només aquest mateix cant obre la seva gàbia. El que has après amb la Pianista, fill, és el que ell va robar. No el deixis anar."
                     : "Als llibres d'aquesta casa he llegit que l'Ocellaire va robar el cant dels ocells, i que només aquest mateix cant obre la seva gàbia. Tu l'aprendràs: la Pianista el recorda." },
-                { qui: 'Charm', text: 'Que la paciència t\'acompanyi, fill.' },
+                { qui: 'Carmèlia', text: 'Que la paciència t\'acompanyi, fill.' },
                 ...(ultimaMonja('Charm') ? [avisPremiMonja('Charm')] : [])
             ],
             enAcabar: () => premiMonja('Charm', 'premiCharm')
         };
-        return { pagines: [{ qui: 'Charm', text: 'Que la llum del Miracle t\'acompanyi, fill.' }] };
+        return { pagines: [{ qui: 'Carmèlia', text: 'Que la llum del Miracle t\'acompanyi, fill.' }] };
     },
 
     portaHostatgeria: E => ({ pagines: [] }),
@@ -1030,7 +1031,7 @@ const DIALEGS = {
         if (E.flag('cofreMonges')) return { pagines: [] };
         return {
             pagines: [
-                { qui: 'Nota', text: "«Per a qui ha tornat la llum a aquesta casa. Al fons de les Gírgoles, abans d'arribar a la gàbia, hi ha una boira que crema: la nostra benedicció l'esvairà al teu pas.» — Pains, Phili i Charm" },
+                { qui: 'Nota', text: "«Per a qui ha tornat la llum a aquesta casa. Al fons de les Gírgoles, abans d'arribar a la gàbia, hi ha una boira que crema: la nostra empara l'esvairà al teu pas.» — Dolora, Pilària i Carmèlia" },
                 { avis: "Has obtingut l'EMPARA FRATERNAL: et protegeix de la boira verinosa que barra el camí de la Sala de la Gàbia." }
             ],
             enAcabar: () => { E.posaFlag('cofreMonges'); E.dona('benedicio_fraterna'); E.desar(); }
@@ -1227,7 +1228,7 @@ const DIALEGS = {
             ],
             enAcabar: () => {
                 E.posaFlag("nenaAlliberada"); E.posaFlag("trenesNena"); E.dona("cinta_nena"); E.treu("llac_nena");
-                E.posaObjectiu("Segueix el camí cap al sud-oest: la Rovellonera, Sant Gabriel, els Dipòsits i, a l'extrem sud-est, el Dolmen.");
+                E.posaObjectiu(PROGRES.pista(E));
             }
         };
     },
@@ -1337,7 +1338,9 @@ const DIALEGS = {
         if (!E.flag("saber")) falta.push("les Paraules del Saber (Pare Alcoví)");
         if (!E.flag("benediccio")) falta.push("la Benedicció del Pare Jordà");
         if (!E.flag("fullaTiler")) falta.push("la Fulla del Til·ler (sopar)");
-        return falta.length ? "Per despertar Runna falta: " + falta.join(", ") + "." : "Ho tens tot: ves al Dolmen (sud-est, passats els Dipòsits) i desperta Runna.";
+        if (falta.length) return "Per despertar Runna falta: " + falta.join(", ") + ".";
+        if (!E.flag("estelLlorenc")) return PROGRES.pista(E);                  // el camí del Dolmen encara és tapat per la boira: primer l'estel
+        return "Ho tens tot: ves al Dolmen (sud-est, passats els Dipòsits) i desperta Runna.";
     },
 
     // ---------------- NENA DE LES TRENES (sense creu) ----------------
@@ -1405,7 +1408,7 @@ const DIALEGS = {
                     { qui: "La Jacmeta", text: "Aigua... de la Font del Bisbe?! Dona'm aixòooo! Fa trenta anys que no en tinc ni una gota neta." },
                     { fer: (z, fet) => z.seq([c => z.npcVa('jaumeta', 500, 360, c, 200), c => z.llum(450, 290, 0x6aff6a, c), c => z.npcVa('jaumeta', 560, 420, c, 200)], fet) },
                     { qui: "La Jacmeta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? No és al nord de sempre, com et diuen: és al nord de les Cel·les, i han tapat el camí amb una boira que no marxa amb el vent." },
-                    { qui: "La Jacmeta", text: "Mira, he barrejat l'aigua que queda amb farigola, romaní i herba de Sant Joan. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
+                    { qui: "La Jacmeta", text: "Mira, he barrejat l'aigua que queda amb romaní, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
                     { avis: "Has obtingut el BEURATGE DE LA JACMETA." }
                 ],
                 enAcabar: () => {
@@ -1519,9 +1522,9 @@ const DIALEGS_FINAL = {
     marit_neus: E => ({ pagines: [
         { qui: 'Senyor Molner', text: "Des que han tornat els nens, la Meus canta mentre renta. Desafina, però canta." },
         { qui: 'Senyor Molner', text: "No li diguis que t'ho he dit." }] }),
-    monja_pains: E => ({ pagines: [{ qui: 'Pains', text: "El Sardi ja torna a robar galetes del rebost. Senyal que està bé del tot." }] }),
-    monja_phili: E => ({ pagines: [{ qui: 'Phili', text: "Hem posat una espelma per tu a cada cambra, Ineu. I una altra per si de cas." }] }),
-    monja_charm: E => ({ pagines: [{ qui: 'Charm', text: "Les tres te'n devem una. I nosaltres sempre paguem els deutes... amb pastissos." }] }),
+    monja_pains: E => ({ pagines: [{ qui: 'Dolora', text: "El Sardi ja torna a robar galetes del rebost. Senyal que està bé del tot." }] }),
+    monja_phili: E => ({ pagines: [{ qui: 'Pilària', text: "Hem posat una espelma per tu a cada cambra, Ineu. I una altra per si de cas." }] }),
+    monja_charm: E => ({ pagines: [{ qui: 'Carmèlia', text: "Les tres te'n devem una. I nosaltres sempre paguem els deutes... amb pastissos." }] }),
     isidre: E => ({ pagines: [{ qui: 'Isildren', text: "Les flors de lluna ja s'obren de dia. Diria que és el riure dels nens, que les enganya." }] }),
     jaumeta: E => ({ pagines: [{ qui: 'La Jacmeta', text: "L'olla ja no fa bombolles liles. Ara fa olor de farigola, com ha de ser." }] }),
     garf: E => ({ pagines: [{ qui: 'Garf', text: "Des del telescopi es veu tot el poble, i aquesta nit no hi ha ni un fil de boira." }] }),
