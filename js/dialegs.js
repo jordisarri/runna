@@ -273,6 +273,12 @@ const DIALEGS = {
     },
 
     pareDaniel: E => {
+        // La primera conversa també parla del sagrari si l'Ineu ja té el primer pergamí
+        const sagrari = !E.te('clau_sagrari') && !E.flag('fragment2') && (E.flag('fragment1') || E.flag('sagrariVist'));
+        const paginesSagrari = [
+            { qui: 'Pare Daimiel', text: 'El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se\'ls mengi. Si el Pare Alcoví els busca, ja era hora que algú els llegís!' },
+            { qui: 'Pare Daimiel', text: 'Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l\'ermita de la Desaparició, camí de l\'Era, a l\'oest de les Runes. Potser allà.' }
+        ];
         if (!E.flag('parlatDaniel')) {
             return {
                 pagines: [
@@ -280,20 +286,20 @@ const DIALEGS = {
                     { qui: 'Pare Daimiel', text: 'La Pianista i jo som amics de tota la vida. Ella toca com ningú, i jo... jo només canto i faig el ximple amb els nens. Però la música es queda sense orgue, ja ho veus.' },
                     { qui: 'Pare Daimiel', text: 'No et preocupis: si la música s\'ha amagat, la cantarem perquè torni! Riure és la primera pregària.' },
                     { qui: 'Pare Daimiel', text: 'Ah, i una cosa que em preocupa: el rellotge del campanar s\'ha aturat a un quart de quatre, la nit que va arribar la boira.' },
-                    { qui: 'Pare Daimiel', text: 'La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' }
+                    { qui: 'Pare Daimiel', text: 'La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' },
+                    ...(sagrari ? paginesSagrari : [])
                 ],
-                enAcabar: () => { E.posaFlag('parlatDaniel'); E.posaFlag('rellotgeDit'); }
+                enAcabar: () => { E.posaFlag('parlatDaniel'); E.posaFlag('rellotgeDit'); if (sagrari) E.posaFlag('clauSagrariDita'); }
             };
         }
-        if (!E.te('clau_sagrari') && !E.flag('fragment2') && (E.flag('fragment1') || E.flag('sagrariVist'))) {
-            return {
-                pagines: [
-                    { qui: 'Pare Daimiel', text: 'El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se\'ls mengi. Si el Pare Alcoví els busca, ja era hora que algú els llegís!' },
-                    { qui: 'Pare Daimiel', text: 'Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l\'ermita de la Desaparició, camí de l\'Era, a l\'oest de les Runes. Potser allà.' }
-                ],
-                enAcabar: () => E.posaFlag('clauSagrariDita')
-            };
-        }
+        // El rellotge encara aturat: ho recorda sempre (també quan parla del sagrari)
+        const textRellotge = E.te('clau_campanar') || E.flag('portaCampanarOberta')
+            ? 'La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s\'ho pensarà dues vegades.'
+            : 'La porta de la dreta del retaule és tancada, fill: la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Si algú fa caminar el rellotge, potser la boira s\'ho pensarà dues vegades.';
+        if (sagrari) return {
+            pagines: [...paginesSagrari, ...(E.flag('rellotgeReparat') ? [] : [{ qui: 'Pare Daimiel', text: 'I no t\'oblidis del rellotge, Ineu. ' + textRellotge }])],
+            enAcabar: () => E.posaFlag('clauSagrariDita')
+        };
         if (!E.flag('rellotgeReparat')) {
             return { pagines: [{ qui: 'Pare Daimiel', text: E.te('clau_campanar') || E.flag('portaCampanarOberta')
                 ? 'La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s\'ho pensarà dues vegades.'
