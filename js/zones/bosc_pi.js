@@ -279,12 +279,16 @@ class ZonaBoscPi extends ZonaBase {
         if (!PI3_BRANQUES[nom]) return false;
         if (this.ineu.x < PI3.barX + 40 || Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, PI3.plX, PI3.plY) > 260) return false;
         const flag = 'pi' + nom[0].toUpperCase() + nom.slice(1);
-        if (Estat.flag(flag)) { this.missatge('♪ ' + MELODIES[nom].nom + '\nAquesta branca ja canta.'); return true; }
+        const pensa = (text, ms = 0) => this.time.delayedCall(ms, () => this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text }] }));
+        if (Estat.flag(flag)) { pensa("(Aquesta branca ja canta. Li cal un altre cant.)"); return true; }
         Estat.posaFlag('pi' + nom[0].toUpperCase() + nom.slice(1));         // (= flag; escrit així perquè la prova de progrés el vegi)
         this.camPiFins = this.time.now + 2800;                           // la càmera es queda un moment al pi
         this.encendreBranca(nom);
         const n = ['piAurora', 'piPedres', 'piMiracle'].filter(f => Estat.flag(f)).length;
-        if (n < 3) { this.missatge('♪ ' + MELODIES[nom].nom + '\nUna branca ha respost... (' + n + '/3)'); Estat.desar(); }
+        if (n < 3) {                                                     // es deixa veure la branca que s'encén i després ho diu l'Ineu
+            pensa(n === 1 ? "(Una branca ha respost al cant! Les altres dues encara dormen.)" : "(Ja en canten dues. Només en falta una.)", 1300);
+            Estat.desar();
+        }
         else this.time.delayedCall(1700, () => this.obrirPi());
         return true;
     }
