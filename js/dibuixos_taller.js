@@ -234,55 +234,88 @@ function pintarLabTaller(ctx, w, h) {
     [['#e04848', w - 22], ['#48c0e0', w - 13]].forEach(([c, x]) => vidre(() => { ctx.beginPath(); ctx.roundRect(x - 3, top - 36, 6, 34, 3); }, [c, top - 20]));
 }
 
-// ---------- El llit del Garf: una màrfega petita amb un edredó de retalls i un llibre ----------
+// ---------- El llit del Garf (vist de dalt, allargat): capçal a l'esquerra, coixí al peu del capçal, llençol gris i manta fosca ----------
 function pintarLlitGarf(ctx, w, h) {
-    const r = rndBib(9);
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 5, w / 2 - 4, 8, 0, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 2.5;
-    ctx.fillStyle = '#5a3a1e'; ctx.fillRect(6, 20, w - 12, h - 30); ctx.strokeRect(6, 20, w - 12, h - 30);                     // estructura
-    ctx.fillStyle = '#e8dcc0'; ctx.beginPath(); ctx.roundRect(12, 24, 40, 28, 8); ctx.fill(); ctx.stroke();                       // coixí
-    const cols = ['#b04a3a', '#3a6a8a', '#d8a83a', '#5a8a4a', '#8a5a9a', '#c87a3a'];
-    for (let y = 30; y < h - 16; y += 14) for (let x = 56; x < w - 10; x += 16) { ctx.fillStyle = cols[Math.floor(r() * cols.length)]; ctx.fillRect(x, y, 16, 14); }
-    ctx.strokeStyle = 'rgba(255,240,210,0.5)'; ctx.lineWidth = 1; ctx.setLineDash([2, 2]);
-    for (let y = 30; y < h - 16; y += 14) { ctx.beginPath(); ctx.moveTo(56, y); ctx.lineTo(w - 10, y); ctx.stroke(); }
-    for (let x = 56; x < w - 10; x += 16) { ctx.beginPath(); ctx.moveTo(x, 30); ctx.lineTo(x, h - 16); ctx.stroke(); }
-    ctx.setLineDash([]); ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 2; ctx.strokeRect(56, 30, w - 66, h - 46);
-    ctx.fillStyle = '#7a2a20'; ctx.fillRect(20, h - 26, 26, 18); ctx.strokeRect(20, h - 26, 26, 18); ctx.fillStyle = '#f0e6c8'; ctx.fillRect(22, h - 24, 22, 3);   // llibre
+    ctx.fillStyle = '#4a2e18'; [[10, h - 22], [w - 24, h - 22]].forEach(([x, y]) => { ctx.fillRect(x, y, 14, 18); ctx.strokeRect(x, y, 14, 18); });   // potes del davant
+    // Bastiment i capçal alt a l'esquerra
+    ctx.fillStyle = '#5a3a1e'; ctx.fillRect(6, 24, w - 12, h - 42); ctx.strokeRect(6, 24, w - 12, h - 42);
+    ctx.fillStyle = gradHBib(ctx, 2, 30, [[0, '#6a4426'], [1, '#3a2210']]); ctx.beginPath(); ctx.roundRect(2, 10, 26, h - 26, 5); ctx.fill(); ctx.stroke();
+    // Llençol gris
+    ctx.fillStyle = gradVBib(ctx, 28, h - 22, [[0, '#8a8e96'], [1, '#6a6e78']]); ctx.beginPath(); ctx.roundRect(26, 28, w - 36, h - 50, 4); ctx.fill(); ctx.stroke();
+    // Coixí: allargat en vertical, perpendicular al llit, contra el capçal
+    ctx.fillStyle = gradHBib(ctx, 30, 62, [[0, '#a8acb2'], [1, '#80848c']]); ctx.beginPath(); ctx.roundRect(30, 34, 32, h - 62, 9); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(46, 44); ctx.quadraticCurveTo(50, h / 2 - 4, 46, h - 38); ctx.stroke();
+    // Manta de llana gris carbó, des del coixí cap al peu, amb la vora del llençol doblegada
+    ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 2.5;
+    ctx.fillStyle = gradVBib(ctx, 28, h - 20, [[0, '#4a4e58'], [1, '#2e3138']]); ctx.beginPath(); ctx.roundRect(68, 28, w - 80, h - 50, 5); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#6a6e78'; ctx.fillRect(69, 29, 7, h - 52);
+    ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.lineWidth = 1.2;
+    for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.moveTo(82, 42 + k * 18); ctx.quadraticCurveTo(w / 2 + 10, 48 + k * 18, w - 20, 42 + k * 18); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.moveTo(82, 47 + k * 18); ctx.quadraticCurveTo(w / 2 + 10, 53 + k * 18, w - 20, 47 + k * 18); ctx.stroke(); }
+    ctx.fillStyle = '#1e2026'; ctx.fillRect(w - 18, 29, 6, h - 52);                                                                                        // vora del peu
 }
 
-// ---------- Un telescopi de llautó sobre un trípode de fusta ----------
-function pintarTelescopiTaller(ctx, w, h) {
+// ---------- Una enclusa de ferro sobre un tronc, amb un martell i un ferro roent ----------
+function pintarEnclusaTaller(ctx, w, h) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 6, 40, 8, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 3;
-    const cx = w / 2, cy = h * 0.42;
-    [[cx - 34, h - 6], [cx + 34, h - 6], [cx + 4, h - 2]].forEach(([x, y]) => { ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(cx, cy + 8); ctx.lineTo(x, y); ctx.stroke(); ctx.strokeStyle = '#8a5a2e'; ctx.lineWidth = 4; ctx.stroke(); });
-    ctx.save(); ctx.translate(cx, cy); ctx.rotate(-0.55);
-    ctx.fillStyle = llautoTaller(ctx, 0, -12, 0, 12); ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 2.5;
-    ctx.beginPath(); ctx.moveTo(-40, -8); ctx.lineTo(44, -13); ctx.lineTo(44, 13); ctx.lineTo(-40, 8); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#5a3a1e'; ctx.fillRect(-10, -10, 14, 20); ctx.strokeRect(-10, -10, 14, 20);
-    ctx.fillStyle = llautoTaller(ctx, 0, -16, 0, 16); ctx.fillRect(40, -16, 10, 32); ctx.strokeRect(40, -16, 10, 32);
-    ctx.fillStyle = '#a8d0ff'; ctx.beginPath(); ctx.ellipse(50, 0, 3, 13, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#2a2a30'; ctx.fillRect(-50, -5, 10, 10); ctx.strokeRect(-50, -5, 10, 10);
+    ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 2.5;
+    const cx = w / 2;
+    // Tronc
+    ctx.fillStyle = gradHBib(ctx, cx - 32, cx + 32, [[0, '#8a5a2c'], [0.5, '#a67442'], [1, '#4a2a14']]);
+    ctx.beginPath(); ctx.moveTo(cx - 30, h - 70); ctx.lineTo(cx - 34, h - 10); ctx.quadraticCurveTo(cx, h - 2, cx + 34, h - 10); ctx.lineTo(cx + 30, h - 70); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#c89a62'; ctx.beginPath(); ctx.ellipse(cx, h - 70, 30, 9, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(60,30,10,0.6)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.ellipse(cx, h - 70, 18, 5, 0, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.ellipse(cx, h - 70, 8, 2.4, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.lineWidth = 1.2; for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.moveTo(cx - 22 + k * 15, h - 62); ctx.lineTo(cx - 24 + k * 16, h - 14); ctx.stroke(); }
+    // Enclusa: cara plana, banya, cintura i base
+    ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 2.5;
+    ctx.fillStyle = gradVBib(ctx, h - 120, h - 72, [[0, '#8a909c'], [0.4, '#5a6068'], [1, '#2e3238']]);
+    ctx.beginPath();
+    ctx.moveTo(cx - 40, h - 118); ctx.lineTo(cx + 26, h - 118); ctx.quadraticCurveTo(cx + 54, h - 116, cx + 56, h - 106);
+    ctx.quadraticCurveTo(cx + 30, h - 104, cx + 18, h - 98); ctx.lineTo(cx + 16, h - 88);
+    ctx.lineTo(cx + 28, h - 78); ctx.lineTo(cx + 28, h - 72); ctx.lineTo(cx - 28, h - 72); ctx.lineTo(cx - 28, h - 78); ctx.lineTo(cx - 14, h - 88);
+    ctx.lineTo(cx - 16, h - 98); ctx.quadraticCurveTo(cx - 28, h - 104, cx - 40, h - 104); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(cx - 38, h - 117, 62, 3);
+    ctx.fillStyle = '#1a1c20'; ctx.beginPath(); ctx.arc(cx - 26, h - 111, 2.4, 0, Math.PI * 2); ctx.fill();
+    // Ferro roent a la cara
+    ctx.fillStyle = '#ff7a30'; ctx.beginPath(); ctx.roundRect(cx - 32, h - 124, 22, 5, 2); ctx.fill();
+    // Martell recolzat a la dreta de la cara
+    ctx.save(); ctx.translate(cx + 14, h - 120); ctx.rotate(-0.18);
+    ctx.fillStyle = '#7a4a20'; ctx.fillRect(-3, -36, 6, 36); ctx.strokeRect(-3, -36, 6, 36);
+    ctx.fillStyle = '#6a6e78'; ctx.fillRect(-12, -44, 24, 12); ctx.strokeRect(-12, -44, 24, 12);
     ctx.restore();
-    rebloTaller(ctx, cx, cy + 6, 4);
 }
 
-// ---------- Trastos: una caixa d'eines, una caixa de fusta i un munt d'engranatges ----------
+// ---------- Trastos: un barril amb eines, una caixa de fusta amb engranatges ----------
 function pintarTrastosTaller(ctx, w, h) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 5, w / 2 - 4, 8, 0, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 2.5;
-    // Caixa de fusta
-    ctx.fillStyle = '#9a7040'; ctx.fillRect(6, 24, 70, h - 32); ctx.strokeRect(6, 24, 70, h - 32);
-    ctx.strokeStyle = '#5a3a1e'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(6, 24); ctx.lineTo(76, h - 8); ctx.moveTo(76, 24); ctx.lineTo(6, h - 8); ctx.stroke();
-    ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 2.5; ctx.strokeRect(6, 24, 70, h - 32);
-    // Caixa d'eines vermella
-    ctx.fillStyle = '#b0302a'; ctx.fillRect(82, h - 40, 60, 32); ctx.strokeRect(82, h - 40, 60, 32);
-    ctx.fillStyle = '#8a8a94'; ctx.fillRect(100, h - 50, 24, 6); ctx.strokeRect(100, h - 50, 24, 6);
-    ctx.fillStyle = '#d8b060'; ctx.fillRect(108, h - 28, 8, 6);
-    // Engranatges apilats damunt la caixa
-    [[30, 18, 13], [52, 14, 9], [42, 6, 7]].forEach(([x, y, rr]) => {
-        ctx.fillStyle = llautoTaller(ctx, x - rr, y - rr, x + rr, y + rr); ctx.lineWidth = 1.6;
-        ctx.beginPath(); for (let k = 0; k < 20; k++) { const a = k / 20 * Math.PI * 2, r2 = k % 2 ? rr : rr * 0.8; ctx.lineTo(x + Math.cos(a) * r2, y + Math.sin(a) * r2 * 0.6); } ctx.closePath(); ctx.fill(); ctx.stroke();
+    // Eines que surten del barril: mànec de serra i un martell
+    ctx.fillStyle = '#7a4a20'; ctx.fillRect(18, 2, 8, 24); ctx.strokeRect(18, 2, 8, 24);
+    ctx.save(); ctx.translate(46, 24); ctx.rotate(0.25);
+    ctx.fillStyle = '#7a4a20'; ctx.fillRect(-3, -22, 6, 24); ctx.strokeRect(-3, -22, 6, 24);
+    ctx.fillStyle = '#6a6e78'; ctx.fillRect(-9, -28, 18, 9); ctx.strokeRect(-9, -28, 18, 9);
+    ctx.restore();
+    // Barril
+    ctx.fillStyle = gradHBib(ctx, 6, 66, [[0, '#8a5a2c'], [0.4, '#b0804a'], [1, '#4a2a14']]);
+    ctx.beginPath(); ctx.moveTo(8, 26); ctx.quadraticCurveTo(0, 56, 8, h - 10); ctx.lineTo(64, h - 10); ctx.quadraticCurveTo(72, 56, 64, 26); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#c89a62'; ctx.beginPath(); ctx.ellipse(36, 26, 28, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#2a1608'; ctx.beginPath(); ctx.ellipse(36, 27, 22, 4, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#2a2a30'; [38, h - 24].forEach(y => { ctx.fillRect(3, y, 66, 7); ctx.strokeRect(3, y, 66, 7); });
+    // Caixa de fusta amb cantoneres de ferro i engranatges a sobre
+    ctx.fillStyle = gradVBib(ctx, 38, h - 8, [[0, '#b08850'], [1, '#7a5428']]); ctx.fillRect(80, 38, 62, h - 46); ctx.strokeRect(80, 38, 62, h - 46);
+    ctx.strokeStyle = 'rgba(40,20,6,0.55)'; ctx.lineWidth = 1.2; for (let y = 52; y < h - 10; y += 12) { ctx.beginPath(); ctx.moveTo(80, y); ctx.lineTo(142, y); ctx.stroke(); }
+    ctx.fillStyle = '#2a2a30'; ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 2;
+    [[80, 38], [130, 38], [80, h - 18], [130, h - 18]].forEach(([x, y]) => { ctx.fillRect(x, y, 12, 10); ctx.strokeRect(x, y, 12, 10); });
+    [[100, 30, 13], [124, 33, 9]].forEach(([x, y, rr]) => {
+        ctx.fillStyle = llautoTaller(ctx, x - rr, y - rr, x + rr, y + rr); ctx.lineWidth = 1.8;
+        ctx.beginPath(); for (let k = 0; k < 20; k++) { const a = k / 20 * Math.PI * 2, r2 = k % 2 ? rr : rr * 0.78; ctx.lineTo(x + Math.cos(a) * r2, y + Math.sin(a) * r2 * 0.55); } ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#1a1006'; ctx.beginPath(); ctx.arc(x, y, rr * 0.2, 0, Math.PI * 2); ctx.fill();
     });
 }
 

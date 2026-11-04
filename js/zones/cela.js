@@ -2,7 +2,7 @@
  * EL TALLER DEL GARF (la cel·la de Sant Antoni, interior)
  * La casa del Garf, l'inventor: un taller-laboratori de llautó i coure. Caldera amb el forn encès, canonades amb manòmetres que
  * tremolen, engranatges que giren a la paret, plànols d'un telescopi, banc de treball amb un ocell mecànic a mig fer,
- * alambins que bombollegen, un telescopi i el seu llit petit. Només s'hi poden mirar els plànols (els gràfics, a js/dibuixos_taller.js).
+ * alambins que bombollegen, una enclusa i el seu llit petit. Només s'hi poden mirar els plànols (els gràfics, a js/dibuixos_taller.js).
  */
 
 class ZonaCelaStAntoni extends ZonaBase {
@@ -81,7 +81,7 @@ class ZonaCelaStAntoni extends ZonaBase {
         // El llit del Garf, el telescopi i els trastos
         this.add.image(140, 582, 'llit_garf').setOrigin(0.5, 1).setScale(E).setDepth(582);
         this.colisio(140, 545, 150, 70);
-        this.add.image(662, 590, 'telescopi_taller').setOrigin(0.5, 1).setScale(E).setDepth(590);
+        this.add.image(662, 590, 'enclusa_taller').setOrigin(0.5, 1).setScale(E).setDepth(590);
         this.colisio(662, 578, 70, 18);
         this.add.image(540, 602, 'trastos_taller').setOrigin(0.5, 1).setScale(E).setDepth(602);
         this.colisio(540, 588, 140, 26);
@@ -90,8 +90,8 @@ class ZonaCelaStAntoni extends ZonaBase {
         // Es pot mirar des de davant de la taula del laboratori o des de sota mateix del plànol (entre la paret i la taula);
         // l'indicador surt sempre just a sobre dels plànols
         const planols = () => ({ pagines: [{ qui: 'Ineu', text: "(Semblen els plànols d'una mena d'artefacte per mirar les estrelles.)" }] });
-        this.interactiu(582, 380, RADI_OBJECTE, planols, { altura: 356 });
-        this.interactiu(582, 236, RADI_OBJECTE, planols, { altura: 212 });
+        this.interactiu(582, 380, RADI_OBJECTE, planols, { altura: 300 });
+        this.interactiu(582, 236, RADI_OBJECTE, planols, { altura: 156 });
 
         // Parets i col·lisions (obertura de sortida a baix, al mig)
         this.colisio(20, H / 2, 40, H);

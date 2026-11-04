@@ -943,7 +943,7 @@ const Grafics = {
         crea('banc_taller', 250, 150, pintarBancTaller);
         crea('lab_taller', 230, 170, pintarLabTaller);
         crea('llit_garf', 160, 110, pintarLlitGarf);
-        crea('telescopi_taller', 120, 170, pintarTelescopiTaller);
+        crea('enclusa_taller', 120, 170, pintarEnclusaTaller);
         crea('trastos_taller', 150, 90, pintarTrastosTaller);
         crea('catifa_taller', 240, 120, pintarCatifaTaller);
         // Casa d'en Georgi i la caseta de joc (js/dibuixos_jordi.js)

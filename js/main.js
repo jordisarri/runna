@@ -5,8 +5,10 @@
 // Una cançó de fons en streaming: un <audio> que passa pel context d'àudio de Phaser (el volum es porta amb un GainNode, que també va a l'iPhone).
 // Phaser descodifica les cançons senceres a memòria (unes 4 cançons = ~280 MB) i el mòbil acabava tancant la pestanya.
 class MusicaStream {
-    constructor(fitxer, volum, seek = 0) {
-        this.volum = volum; this.destruida = false; this.gest = null;
+    // fade: ms d'entrada progressiva. Amb fade la cançó arrenca muda i el volum només puja quan ja s'ha saltat al punt (seek), perquè no se senti
+    // el que hi ha abans d'aquest punt.
+    constructor(fitxer, volum, seek = 0, fade = 0) {
+        this.volum = fade ? 0 : volum; this.destruida = false; this.gest = null;
         const a = this.el = new Audio();
         a.loop = true; a.preload = 'auto';
         a.src = encodeURI(`assets/musica/${fitxer}.m4a`);
@@ -15,11 +17,26 @@ class MusicaStream {
         if (ctx) {
             try {
                 Sfx.init();
-                this.gain = ctx.createGain(); this.gain.gain.value = volum;
+                this.gain = ctx.createGain(); this.gain.gain.value = this.volum;
                 ctx.createMediaElementSource(a).connect(this.gain); this.gain.connect(Sfx.connect(ctx));
             } catch (e) { this.gain = null; }
         }
-        if (!this.gain) a.volume = Sfx.silenciat ? 0 : Math.min(1, volum);
+        if (!this.gain) a.volume = Sfx.silenciat ? 0 : Math.min(1, this.volum);
+        if (fade) {
+            let fet = false;
+            const puja = () => {
+                if (fet || this.destruida) return; fet = true;
+                const t0 = performance.now();
+                const pas = setInterval(() => {
+                    const k = Math.min(1, (performance.now() - t0) / fade);
+                    if (this.destruida) { clearInterval(pas); return; }
+                    this.setVolume(volum * k);
+                    if (k >= 1) clearInterval(pas);
+                }, 40);
+            };
+            if (seek) { a.addEventListener('seeked', puja, { once: true }); setTimeout(puja, 2500); }      // si el servidor no deixa saltar, puja igualment
+            else puja();
+        }
         this.engega();
     }
     get volume() { return this.volum; }
@@ -189,10 +206,10 @@ const Joc = {
     // Les cançons de fons van en streaming (MusicaStream); només les peces curtes (jingles) passen per Phaser
     precarregarMusiques() {},
 
-    iniciarMusica(scene, seek = 0, clau = 'musica_intro') {
+    iniciarMusica(scene, seek = 0, clau = 'musica_intro', fade = 0) {
         if (Joc.MUSICA_OPCIONAL[clau] && !Joc.musicaDeteccio) {           // encara no sabem quins fitxers hi ha: s'espera un instant
             Joc.musicaPendent = clau;
-            Joc.detectarMusica().then(() => { if (Joc.musicaPendent === clau) Joc.iniciarMusica(scene, seek, clau); });
+            Joc.detectarMusica().then(() => { if (Joc.musicaPendent === clau) Joc.iniciarMusica(scene, seek, clau, fade); });
             return;
         }
         clau = Joc.resoldreMusica(clau);
@@ -202,7 +219,7 @@ const Joc = {
         Joc.aturarMusica();
         if (!fitxer) return;
         Joc.musicaClau = clau;
-        Joc.musica = new MusicaStream(fitxer, 0.6, seek);       // en streaming: no es carrega a memòria
+        Joc.musica = new MusicaStream(fitxer, 0.6, seek, fade);       // en streaming: no es carrega a memòria
     },
 
     // Cada zona demana la seva música; els interiors queden en silenci
@@ -286,10 +303,9 @@ class EscenaCarrega extends Phaser.Scene {
         this.load.on('fileprogress', f => detall.setText(f.key));
         this.load.on('loaderror', f => console.warn("No s'ha pogut carregar", f.key));
         Grafics.carregar(this, 'inici');             // només el que fan servir la portada i el pròleg; la resta, després (carregarResta)
-        // Vídeos de la intro (sense el seu so: sona la música del joc)
-        this.load.image('titol_portada', 'assets/video/bucle_portada.webp');       // primer fotograma del bucle: el títol, sempre a punt encara que el vídeo no arrenqui
-        this.load.video('video_intro', 'assets/video/intro_runna_vertical.mp4', true);
-        this.load.video('video_bucle', 'assets/video/intro_runna_bucle_vertical.mp4', true);
+        // Foto i logo de la intro
+        this.load.image('portada_intro', 'assets/video/intro.webp');       // la foto quadrada de la intro (sense títol): s'hi fa el desplaçament amb zoom
+        this.load.image('logo_runna', 'assets/video/logo_runna.webp');             // el logo, que es posa per codi sobre la foto
     }
 
     create() {

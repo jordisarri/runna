@@ -1,8 +1,8 @@
 /**
- * INTRO I PANTALLA DE TÍTOL (amb vídeo)
+ * INTRO I PANTALLA DE TÍTOL (sobre una foto, sense vídeo)
  *   1. Portada "prem una tecla" (cal un gest perquè el navegador deixi sonar la música)
- *   2. assets/video/intro_runna_vertical.mp4 (10 s), sense el so del vídeo: sona la música del joc
- *   3. assets/video/intro_runna_bucle_vertical.mp4 en bucle, amb el menú a sobre
+ *   2. Desplaçament de 10 s sobre assets/video/intro.webp (sol → espasa → foto sencera), amb la música del joc
+ *   3. La foto sencera amb el logo (assets/video/logo_runna.webp) i el menú a sobre; la vegetació i la boira es mouen per codi
  * Qualsevol tecla o clic durant la intro salta directament al bucle i al menú.
  */
 const FONT_TITOL = '"Cinzel Decorative", Georgia, serif';
@@ -12,9 +12,14 @@ const FONT_PLACA = '"Cinzel", Georgia, serif';                                  
 
 // The Hero's Ascension: la fanfarria comença al segon 17 de la cançó. La música arrenca d'aquí, des del primer segon de la intro.
 const MUSICA_FANFARRIA = 17;
-const FOSA_BUCLE = 500;
-// Si el vídeo no avança en aquest temps (el mòbil l'ha bloquejat), passem directament al bucle
-const ESPERA_VIDEO = 5000;
+// L'ease «ease-in-out» del CSS: cubic-bezier(.42, 0, .58, 1)
+const EASE_CSS = (() => {
+    const bx = t => 3 * (1 - t) * (1 - t) * t * 0.42 + 3 * (1 - t) * t * t * 0.58 + t * t * t;
+    const by = t => 3 * (1 - t) * t * t + t * t * t;                       // els punts de control en y són 0 i 1
+    return x => { let a = 0, b = 1; for (let i = 0; i < 24; i++) { const m = (a + b) / 2; if (bx(m) < x) a = m; else b = m; } return by((a + b) / 2); };
+})();
+const FADE_MUSICA = 1200;     // la música entra progressivament, perquè no se senti la nota d'abans de la fanfàrria
+const FOSA_TITOL = 900;       // la foto sencera es fon cap al títol amb el logo
 
 class EscenaTitol extends Phaser.Scene {
     constructor() { super('Titol'); }
@@ -27,53 +32,64 @@ class EscenaTitol extends Phaser.Scene {
         this.fase = 'espera';
         this.cameras.main.setBackgroundColor('#000000');
 
-        // El títol (primer fotograma del bucle) com a imatge: es veu sempre, encara que el mòbil no engegui el vídeo
-        this.portadaTitol = this.add.image(AMPLE / 2, ALT / 2, 'titol_portada').setDepth(-1).setVisible(false);
-        this.portadaTitol.setScale(this.escalaVertical(this.portadaTitol.width, this.portadaTitol.height));
-        this.videoBucle = this.crearVideo('video_bucle', 0).setVisible(false);
-        this.videoIntro = this.crearVideo('video_intro', 1).setVisible(false);
+        this.construirMon();
         this.construirMenu();
         Sfx.init();
         Joc.precarregarMusiques(this);       // la resta de cançons, en segon pla mentre es mira la intro
 
         this.input.keyboard.on('keydown', e => this.tecla(e));
-        this.input.on('pointerdown', (p, objs) => {
-            // Menú sobre la intro congelada: un toc és un gest nou, reintentem engegar el bucle
-            if (this.fase === 'menu' && this.videoBucle.video && this.videoBucle.video.paused) this.videoBucle.play(true);
-            if (!objs.length) this.tecla(null);
-        });
+        this.input.on('pointerdown', (p, objs) => { if (!objs.length) this.tecla(null); });
 
         if (this.mode === 'intro') {
             this.construirPortada();
         } else {
-            Joc.iniciarMusica(this, MUSICA_FANFARRIA);
-            this.videoIntro.setVisible(false);
+            Joc.iniciarMusica(this, MUSICA_FANFARRIA, 'musica_intro', FADE_MUSICA);
             this.anarAlBucle(false);
             this.cameras.main.fadeIn(600);
         }
     }
 
-    // Vídeos i portada (9:16) a pantalla completa. Si la pantalla és una mica més baixa que el vídeo, es retalla una franja a dalt i a baix
-    // en lloc de deixar barres negres als costats; només si ho és molt (tauleta), es redueix sencer perquè no es talli el títol
-    escalaVertical(w, h) {
-        const alt = h * AMPLE / w;                       // alçada del vídeo ajustat a l'ample
-        if (ALT >= alt) return ALT / h;                  // pantalla més llarga: omple l'alçada (es retalla pels costats)
-        return ALT >= alt * 0.88 ? AMPLE / w : Math.min(AMPLE / w, ALT / h);
+    // Foto quadrada que cobreix tota la pantalla (mai hi ha franges negres): omple l'alçada i es retalla pels costats, o al revés
+    escalaVertical(w, h) { return Math.max(AMPLE / w, ALT / h); }
+
+    // El món de la portada: la foto fixa dins d'un contenidor, que és el que fa el zoom.
+    construirMon() {
+        const foto = this.add.image(0, 0, 'portada_intro');
+        const W = this.fw = foto.width, H = this.fh = foto.height;
+        this.mon = this.add.container(AMPLE / 2, ALT / 2, [foto]).setDepth(1).setVisible(false);
+
+        // Boirina transparent que passa per sobre de la foto: dues capes suaus que avancen en sentits oposats (dins del contenidor, fan el zoom)
+        if (!this.textures.exists('boira_intro')) {
+            const cv = this.textures.createCanvas('boira_intro', 512, 256), c = cv.getContext(), r = (n => () => (n = (n * 16807) % 2147483647) / 2147483647)(5);
+            for (let k = 0; k < 26; k++) {
+                const x = r() * 512, y = 40 + r() * 176, rx = 60 + r() * 90, ry = 18 + r() * 36;
+                for (const dx of [-512, 0, 512]) {                                     // repetit a banda i banda: la textura encaixa en horitzontal
+                    c.save(); c.translate(x + dx, y); c.scale(rx / ry, 1);
+                    const g = c.createRadialGradient(0, 0, 0, 0, 0, ry);
+                    g.addColorStop(0, 'rgba(255,255,255,0.55)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+                    c.fillStyle = g; c.beginPath(); c.arc(0, 0, ry, 0, Math.PI * 2); c.fill(); c.restore();
+                }
+            }
+            cv.refresh();
+        }
+        this.boires = [[0.50, 0.30, 0.42, 30, 0xffd6a0], [0.38, 0.22, 0.32, -20, 0xffc890], [0.66, 0.22, 0.24, 14, 0xffe0b8]].map(([cy, alt, alfa, vel, tint]) => {
+            const t = this.add.tileSprite(0, (cy - 0.5) * H, W, alt * H, 'boira_intro').setBlendMode('ADD').setAlpha(alfa).setTint(tint).setTileScale(W / 512 * 0.9, alt * H / 256);
+            this.mon.add(t);
+            return { t, vel };
+        });
+
+        // El logo, per codi, a sobre de la foto (surt en acabar la intro)
+        this.logo = this.add.image(AMPLE / 2, ALT * 0.06, 'logo_runna').setOrigin(0.5, 0).setDepth(5).setAlpha(0);
+        this.logo.setScale(AMPLE * 0.62 / this.logo.width);           // centrat, amb marges als costats i a dalt
+        this.c = { z: 1, x: 0.5, y: 0.5 };
+        this.posaMon();
     }
 
-    // Vídeo a pantalla completa (s'adapta a la mida quan el vídeo ja té dimensions)
-    crearVideo(key, profunditat) {
-        const v = this.add.video(AMPLE / 2, ALT / 2, key).setOrigin(0.5).setDepth(profunditat);
-        v.setMute(true);
-        // Els vídeos són verticals (9:16): mai s'estiren. Si la pantalla és més baixa (PC) es veuen sencers amb barres;
-        // si és més alta (mòbil llarg) omplen l'alçada i es retallen una mica els costats
-        const ajusta = () => { if (v.width > 0) v.setScale(this.escalaVertical(v.width, v.height)); };
-        v.on('created', ajusta);
-        v.on('playing', ajusta);
-        ajusta();
-        // Phaser engega sol els vídeos de la memòria cau: els aturem i rebobinem fins que toqui
-        if (v.video) { v.video.pause(); v.video.currentTime = 0; }
-        return v;
+    // Posa el contenidor segons el zoom i el punt enfocat (fraccions de la foto); mai no es veuen les vores
+    posaMon() {
+        const c = this.c, sc = this.escalaVertical(this.fw, this.fh) * c.z, dw = this.fw * sc, dh = this.fh * sc;
+        const centra = (f, dim, pant) => dim <= pant ? pant / 2 : Phaser.Math.Clamp(pant / 2 - (f - 0.5) * dim, pant - dim / 2, dim / 2);
+        this.mon.setScale(sc).setPosition(centra(c.x, dw, AMPLE), centra(c.y, dh, ALT));
     }
 
     // ---------- Portada ----------
@@ -103,13 +119,8 @@ class EscenaTitol extends Phaser.Scene {
             this.fase = 'intro';
             this.portada.destroy();
             // Tot dins del gest de l'usuari: el mòbil bloqueja play() si s'espera al desbloqueig de l'àudio
-            Joc.iniciarMusica(this, MUSICA_FANFARRIA);
-            const v = this.videoIntro;
-            v.setVisible(true);
-            if (v.video) v.video.currentTime = 0;
-            v.play(false);
-            // Només corre la intro: dos vídeos alhora ofegaven el mòbil (la intro s'encallava). El bucle arrenca en acabar-la o en saltar-la
-            this.iniciIntro = this.time.now;
+            Joc.iniciarMusica(this, MUSICA_FANFARRIA, 'musica_intro', FADE_MUSICA);
+            this.comencaDesplacament();
             return;
         }
         if (this.fase === 'intro') { this.anarAlBucle(true); return; }
@@ -121,28 +132,31 @@ class EscenaTitol extends Phaser.Scene {
         }
     }
 
-    // Salta (o acaba) la intro: el títol (imatge del primer fotograma del bucle) es veu a l'instant, el menú hi surt a sobre i el
-    // bucle en vídeo hi apareix quan el navegador el deixa córrer (amb un toc es reintenta). La intro mai es queda ni congelada ni esperant.
+    // Acaba (o salta) la intro: la foto s'obre del tot, el logo hi surt a sobre, el menú apareix. La intro mai es queda ni congelada ni esperant.
     anarAlBucle(fosa) {
         if (this.fase === 'menu') return;
         this.fase = 'menu';
-        const b = this.videoBucle.video;
-        const corria = this.bucleCorre();
-        this.portadaTitol.setVisible(true);
-        if (!corria) {
-            this.videoBucle.setVisible(false);                  // sense fotogrames: el títol en imatge fa de fons
-            if (!b || b.paused) this.videoBucle.play(true);     // dins del gest de l'usuari quan ve d'un toc
-        }
-        if (this.videoIntro.visible) {
-            if (fosa && corria) {                                // el bucle ja corre sota la intro: es fonen
-                this.tweens.add({ targets: this.videoIntro, alpha: 0, duration: FOSA_BUCLE, onComplete: () => { this.videoIntro.stop(); this.videoIntro.setVisible(false); } });
-            } else { this.videoIntro.stop(); this.videoIntro.setVisible(false); }
-        }
-        this.esperaBucle = !corria;
-        this.mostrarMenu(fosa && corria ? FOSA_BUCLE : 0);
+        this.mon.setVisible(true);
+        if (this.cinta) { this.cinta.remove ? this.cinta.remove() : this.cinta.stop(); this.cinta = null; }
+        if (fosa && (this.c.z > 1.001)) this.tweens.add({ targets: this.c, z: 1, x: 0.5, y: 0.5, duration: 800, ease: 'Sine.easeInOut', onUpdate: () => this.posaMon() });
+        else { this.c.z = 1; this.c.x = this.c.y = 0.5; this.posaMon(); }
+        this.tweens.add({ targets: this.logo, alpha: 1, duration: fosa ? 1100 : 500, delay: fosa ? 500 : 0 });
+        this.mostrarMenu(fosa ? 900 : 0);
     }
 
-    bucleCorre() { const b = this.videoBucle.video; return !!b && !b.paused && b.readyState >= 2 && b.currentTime > 0.05; }
+    // Intro, com una animació CSS «scale(10) translate(-17%, 16%) → scale(1)» de 5 s amb ease-in-out: comença enfocant només el sol, molt
+    // gran, i s'allunya fins a la foto sencera. El zoom és lineal (no logarítmic) i l'ease és el cubic-bezier(.42, 0, .58, 1) del CSS.
+    comencaDesplacament() {
+        const z0 = 8, x0 = 0.627, y0 = 0.34;               // el sol de la foto quadrada
+        Object.assign(this.c, { z: z0, x: x0, y: y0 });
+        this.posaMon();
+        this.mon.setAlpha(1).setVisible(true);
+        this.cameras.main.fadeIn(1200, 255, 236, 190);                                  // el sol enlluernant
+        const p = { v: 0 };
+        this.cinta = this.tweens.add({ targets: p, v: 1, delay: 1200, duration: 5000, ease: EASE_CSS,
+            onUpdate: () => { this.c.z = z0 + (1 - z0) * p.v; const m = p.v * p.v * p.v; this.c.x = x0 + (0.5 - x0) * m; this.c.y = y0 + (0.5 - y0) * m; this.posaMon(); },
+            onComplete: () => { this.cinta = null; this.anarAlBucle(true); } });
+    }
 
     mostrarMenu(retard = 0) {
         if (this.menuMostrat) return;
@@ -150,27 +164,8 @@ class EscenaTitol extends Phaser.Scene {
         this.tweens.add({ targets: this.menu, alpha: 1, duration: 900, delay: retard });
     }
 
-    // Quan la intro arriba al final, passem al bucle
-    update() {
-        const v = this.videoIntro.video;
-        if (this.esperaBucle && this.bucleCorre()) {             // el bucle ha arrencat: apareix sobre el títol en imatge
-            this.esperaBucle = false;
-            this.videoBucle.setAlpha(0).setVisible(true);
-            this.tweens.add({ targets: this.videoBucle, alpha: 1, duration: 400 });
-        }
-        if (this.fase === 'espera') {
-            // Phaser a vegades engega els vídeos sols: mentre som a la portada, quiets
-            [v, this.videoBucle.video].forEach(e => { if (e && !e.paused) { e.pause(); e.currentTime = 0; } });
-            return;
-        }
-        if (this.fase !== 'intro' || !v) return;
-        // Vídeo bloquejat pel navegador: reintentem i, si no hi ha manera, anem al bucle
-        if (!v.ended && (v.paused || v.currentTime < 0.05) && this.time.now - this.iniciIntro > ESPERA_VIDEO) {
-            if (!this.reintentat) { this.reintentat = true; this.iniciIntro = this.time.now; this.videoIntro.play(false); }
-            else this.anarAlBucle(false);
-            return;
-        }
-        if (v.ended || (v.duration && v.currentTime >= v.duration - 0.08)) this.anarAlBucle(true);
+    update(temps, dt) {
+        if (this.boires && this.mon.visible) for (const b of this.boires) b.t.tilePositionX += b.vel * dt / 1000 * 3;
     }
 
     // ---------- Menú (a baix, per no tapar el títol del vídeo) ----------
