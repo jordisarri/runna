@@ -49,7 +49,10 @@ Object.assign(DIALEGS, {
 
 
     // La Porta de les Gírgoles (a l'est del Pati del Celler): la de la galeria, que el Germà Andreu tanca amb clau cada nit
-    portaSoterrani: E => E.flag('clauFerro') ? { pagines: [
+    // El pany el van fer els monjos del campanar: la clau de ferro l'obre, però només si el campanar toca les hores (cal el rellotge caminant)
+    portaSoterrani: E => E.flag('clauFerro') && E.flag('rellotgeReparat') ? { pagines: [
+    ] } : E.flag('clauFerro') ? { pagines: [
+        { qui: 'Ineu', text: "(La clau de ferro hi entra, però el pany no gira: a dins s'hi nota un mecanisme que espera. Al marc hi ha gravat un campanar... Fins que el campanar no toqui, no cedirà.)" }
     ] } : { pagines: [
         { qui: 'Ineu', text: "Tancada amb clau." }
     ] },
@@ -339,9 +342,10 @@ class ZonaGirgolesFora extends ZonaBase {
 
     // La Clau de ferro obre les dues fulles, que giren sobre les frontisses de fora i descobreixen l'escala
     obrirPorta() {
-        if (!Estat.flag('clauFerro') || Estat.flag('portaSoterraniOberta')) return;
+        if (!Estat.flag('clauFerro') || !Estat.flag('rellotgeReparat') || Estat.flag('portaSoterraniOberta')) return;
         const x = this.PX, b = this.BASE;
         Estat.posaFlag('portaSoterraniOberta');
+        [0, 1, 2].forEach(k => this.time.delayedCall(k * 750, () => Sfx.campana()));          // el campanar toca i el pany gira
         Estat.posaObjectiu("La galeria de la Sala de les Gírgoles s'obre rere la porta de ferro.");
         Sfx.secret(); this.cameras.main.shake(300, 0.003);
         this.pintarPorta(true);

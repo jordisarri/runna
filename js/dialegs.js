@@ -590,7 +590,11 @@ const DIALEGS = {
                     { qui: "Pare Alcoví", text: "Has baixat a la cripta, oi? Una clau de ferro, i la tomba dels monjos que no para de treure boira... Deixa'm mirar la Crònica." },
                     { fer: (z, fet) => z.npcVa('pare_alcui', 812, 372, fet, 120) },
                     { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
-                    { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." }
+                    { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." },
+                    { qui: "Crònica", text: "«La porta de ferro la van tancar els monjos del campanar: el seu pany només gira quan el campanar toca les hores.»" },
+                    ...(E.flag("rellotgeReparat")
+                        ? [{ qui: "Pare Alcoví", text: "I el rellotge del Santuari ja camina, així que el pany obeirà. Bona feina, fill." }]
+                        : [{ qui: "Pare Alcoví", text: "Ara el rellotge del Santuari és aturat: sense el campanar, el pany no cedirà. La Carry, a Nostra Senyora, guarda la clau de la torre. Fes-lo caminar de nou." }])
                 ],
                 enAcabar: () => { E.posaFlag("tombaLlegida"); E.posaObjectiu("La tomba esquerdada del Cementiri espera la llum de Runna."); }
             };
