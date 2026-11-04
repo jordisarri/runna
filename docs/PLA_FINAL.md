@@ -39,6 +39,10 @@ Totes són opcionals (sona la de reserva), però les set primeres són les que m
 - **L'Iscu:** la cabana amagada és oberta des del principi i dona la clau rovellada el primer cop que hi parles: es pot trobar quan es vulgui.
 - El viatge ràpid amb el carro del Follet ja existeix. Cal comprovar que hi ha parada a prop de cada punt de l'Acte 3 (Celler, Cementiri, Sant Antoni).
 
+## 6a. Prova automàtica de les zones ✔ (revisió 235)
+
+`eines/prova_zones.js` carrega les 56 zones per cada entrada (131 càrregues) i `eines/informe_zones.py` en fa el resum: errors de JavaScript, sortides trencades, sortides i punts d'interacció inabastables i espai per moure's. **Resultat:** cap error de JavaScript, totes les sortides porten a una zona i entrada que existeixen, i totes les sortides i punts d'interacció són abastables amb l'estat final. Té limitacions: no veu els problemes de ritme, de pistes ni de combat. Això només ho troba una partida.
+
 ## 6. Revisió de combats i puzles
 
 - **Pastor de Boira** (vida 24) i **Home del Raïm**: provar-los amb el bastó i amb la branca per veure si costen el mateix que l'Ocellaire nou.
