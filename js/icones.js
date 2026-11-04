@@ -45,42 +45,45 @@ function iconaFlors(ctx, colors) {
 }
 
 const ICONES_OBJECTES = {
+    // La tarota (instrument de canya doble catalana): cos cònic de fusta fosca amb el pavelló obert, forats i anelles de llautó, bocal i canya
     flauta: ctx => {
         ctx.save(); ctx.translate(48, 48); ctx.rotate(-Math.PI / 4);
-        ctx.lineWidth = 3;
-        ctx.fillStyle = '#3a2412';
-        ctx.beginPath();
-        ctx.moveTo(-44, -3); ctx.lineTo(-34, -5); ctx.lineTo(22, -9);
-        ctx.lineTo(40, -17); ctx.lineTo(40, 17); ctx.lineTo(22, 9); ctx.lineTo(-34, 5);
-        ctx.closePath(); ctx.fill(); ctx.stroke();
-        const fusta = ctx.createLinearGradient(0, -10, 0, 10);
-        fusta.addColorStop(0, '#e0b766'); fusta.addColorStop(0.55, '#a66b32'); fusta.addColorStop(1, '#70401f');
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.lineWidth = 3; ctx.strokeStyle = CONTORN;
+        const llauto = ctx.createLinearGradient(0, -8, 0, 8);
+        llauto.addColorStop(0, '#f6dc8a'); llauto.addColorStop(0.5, '#c8942e'); llauto.addColorStop(1, '#7a5418');
+        // Cos de fusta: cònic, s'obre en un pavelló a l'extrem
+        const fusta = ctx.createLinearGradient(0, -16, 0, 16);
+        fusta.addColorStop(0, '#b0683a'); fusta.addColorStop(0.5, '#7a3e1c'); fusta.addColorStop(1, '#3e1e0c');
         ctx.fillStyle = fusta;
         ctx.beginPath();
-        ctx.moveTo(-37, -2); ctx.lineTo(-32, -3); ctx.lineTo(21, -7);
-        ctx.lineTo(36, -13); ctx.lineTo(36, 13); ctx.lineTo(21, 7); ctx.lineTo(-32, 3);
-        ctx.closePath(); ctx.fill();
-        ctx.strokeStyle = '#f0d184'; ctx.lineWidth = 2.5;
-        [-24, -2, 18, 30].forEach((x, i) => {
-            const y = x > 20 ? 0 : -3 + (x + 24) * -0.07;
-            ctx.beginPath(); ctx.moveTo(x, y - 4); ctx.lineTo(x + (i === 3 ? 0 : 1), y + 4); ctx.stroke();
-        });
-        ctx.fillStyle = '#2c1a10'; ctx.strokeStyle = '#21140d'; ctx.lineWidth = 1.5;
-        [-17, -4, 9, 20].forEach(x => {
-            const y = -1 - (x + 17) * 0.06;
-            ctx.beginPath(); ctx.ellipse(x, y, 2.2, 1.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        });
-        ctx.strokeStyle = '#f2dc9b'; ctx.lineWidth = 1.5;
-        ctx.beginPath(); ctx.moveTo(-33, -2); ctx.lineTo(20, -7); ctx.lineTo(34, -12); ctx.stroke();
-        ctx.strokeStyle = CONTORN; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(-45, -3); ctx.lineTo(-50, -5); ctx.moveTo(-45, 3); ctx.lineTo(-50, 5); ctx.stroke();
+        ctx.moveTo(-44, -17); ctx.quadraticCurveTo(-36, -9, -26, -8); ctx.lineTo(18, -5);
+        ctx.lineTo(18, 5); ctx.lineTo(-26, 8); ctx.quadraticCurveTo(-36, 9, -44, 17);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+        // Vora de llautó del pavelló
+        ctx.fillStyle = llauto; ctx.beginPath(); ctx.roundRect(-47, -18, 6, 36, 2); ctx.fill(); ctx.stroke();
+        // Anelles de llautó
+        [[-14, 7.5], [8, 5.8]].forEach(([x, h]) => { ctx.fillStyle = llauto; ctx.beginPath(); ctx.roundRect(x - 2.5, -h - 1, 5, 2 * h + 2, 1.5); ctx.fill(); ctx.stroke(); });
+        // Forats
+        ctx.fillStyle = '#1a0c06'; ctx.lineWidth = 1.2;
+        [[-32, 3.2], [-23, 3], [-6, 2.6], [1, 2.4], [13, 2.2]].forEach(([x, r]) => { ctx.beginPath(); ctx.ellipse(x, -0.5, r, r * 0.8, 0, 0, Math.PI * 2); ctx.fill(); });
+        // Llum al llom de la fusta
+        ctx.strokeStyle = 'rgba(255,220,170,0.45)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(-34, -9); ctx.lineTo(16, -4.2); ctx.stroke();
+        // Bocal de llautó, pirueta (el disc) i canya
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+        ctx.fillStyle = llauto; ctx.beginPath(); ctx.moveTo(18, -3.4); ctx.lineTo(33, -2); ctx.lineTo(33, 2); ctx.lineTo(18, 3.4); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = llauto; ctx.beginPath(); ctx.ellipse(33, 0, 2.6, 8, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#ecd89c'; ctx.beginPath(); ctx.roundRect(34, -2.6, 10, 5.2, 2); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(120,90,40,0.7)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(36, 0); ctx.lineTo(42, 0); ctx.stroke();
         ctx.restore();
     },
+    // El bastó de pelegrí: una vara amb el cap en forma de ganxo (com una mangala), i un casquet de metall a la punta
     basto: ctx => {
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = CONTORN; ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(20, 86); ctx.lineTo(74, 12); ctx.stroke();
-        ctx.strokeStyle = '#8a5a32'; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(20, 86); ctx.lineTo(74, 12); ctx.stroke();
-        ctx.fillStyle = '#6a4024'; ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.beginPath(); ctx.arc(74, 12, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        const camí = () => { ctx.beginPath(); ctx.moveTo(30, 86); ctx.lineTo(58, 36); ctx.bezierCurveTo(66, 22, 60, 8, 44, 9); ctx.bezierCurveTo(33, 10, 28, 20, 31, 29); };
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 13; camí(); ctx.stroke();
+        ctx.strokeStyle = '#a2643a'; ctx.lineWidth = 8; camí(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,215,160,0.45)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(28, 82); ctx.lineTo(55, 36); ctx.stroke();
+        ctx.fillStyle = '#9aa0aa'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(29.6, 87, 5.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     },
     basto_tiller: ctx => {
         ctx.lineCap = 'round';

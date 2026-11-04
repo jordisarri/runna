@@ -73,10 +73,9 @@ const DIARI = {
             c.add([fons, t]);
             return { id, fons, t };
         });
-        // Peu, dins del pergamí (el marc fa 44 px): a l'esquerra, la mida de la lletra; a la dreta, la llegenda de les tecles
+        // Peu, dins del pergamí (el marc fa 44 px): a l'esquerra, la mida de la lletra; (sense llegenda de tecles)
         const yPeu = this.PEU;
         c.add(ui.add.rectangle(AMPLE / 2, yPeu - 34, AMPLE - 120, 2, 0x8a5a2a, 0.35));
-        c.add(ui.add.text(AMPLE - 64, yPeu, '◀ ▶ pestanya · I o ✕ tanca', estilText(19, '#7a5a3a')).setOrigin(1, 0.5));
         // Mida de la lletra: A− / A+ (també es pot pessigar o Ctrl + rodeta)
         this.botonsText = [];
         [['A−', 90, 1 / 1.15], ['A+', 146, 1.15]].forEach(([t, x, f]) => {
@@ -261,8 +260,8 @@ const DIARI = {
             const yn = junt ? y + 20 : y + t.height + 26;
             if (sap) m.notes.forEach((n, k) => {
                 const x = junt ? AV - X - (m.notes.length - k) * 46 + 16 : X + 18 + k * 46;
-                c.add(ui.add.circle(x, yn, 18, COLORS_NOTA[n], 1).setStrokeStyle(2, 0x2a1808, 0.8));
-                c.add(ui.add.text(x, yn, String(n), estilText(22, '#ffffff', { fontStyle: 'bold' })).setOrigin(0.5));
+                c.add(ui.add.circle(x, yn, 18, COLOR_NOTA, 1).setStrokeStyle(2, 0x2a1808, 0.8));
+                c.add(ui.add.text(x, yn, String(n), estilText(22, '#3a2412', { fontStyle: 'bold' })).setOrigin(0.5));
             });
             y += Math.max(52, junt ? t.height + 14 : t.height + (sap ? 62 : 14));
         });
