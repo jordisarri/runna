@@ -87,7 +87,11 @@ class ZonaCelaStAntoni extends ZonaBase {
         this.colisio(540, 588, 140, 26);
 
         // Els plànols de la paret: l'única cosa que l'Ineu es mira
-        this.interactiu(582, 380, RADI_OBJECTE, () => ({ pagines: [{ qui: 'Ineu', text: "(Semblen els plànols d'una mena d'artefacte per mirar les estrelles.)" }] }), { altura: 356 });     // l'indicador, just a sobre dels plànols
+        // Es pot mirar des de davant de la taula del laboratori o des de sota mateix del plànol (entre la paret i la taula);
+        // l'indicador surt sempre just a sobre dels plànols
+        const planols = () => ({ pagines: [{ qui: 'Ineu', text: "(Semblen els plànols d'una mena d'artefacte per mirar les estrelles.)" }] });
+        this.interactiu(582, 380, RADI_OBJECTE, planols, { altura: 356 });
+        this.interactiu(582, 236, RADI_OBJECTE, planols, { altura: 212 });
 
         // Parets i col·lisions (obertura de sortida a baix, al mig)
         this.colisio(20, H / 2, 40, H);
