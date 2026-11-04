@@ -72,17 +72,24 @@ function pintarParetTaller(ctx, w, h) {
     eina(122, 52, 58, 0.06, '#9aa0aa', 4); eina(132, 52, 58, -0.06, '#9aa0aa', 4); ctx.fillStyle = '#b02a1a'; ctx.fillRect(118, 88, 8, 22); ctx.fillRect(130, 88, 8, 22);   // alicates
     ctx.strokeStyle = '#c8902e'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(166, 76, 14, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.arc(166, 76, 7, 0, Math.PI * 2); ctx.stroke();   // un rotlle de fil
     for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; ctx.fillStyle = '#c8902e'; ctx.fillRect(166 + Math.cos(a) * 15 - 2, 76 + Math.sin(a) * 15 - 2, 4, 4); }
-    // Plànols blaus clavats a la paret (el carro de vapor del Follet)
+    // Plànols blaus clavats a la paret: un telescopi, amb el tub, les lents, el trípode, cotes i una estrella
     const px = 500, py = 30, pw = 124, ph = 92;
     ctx.save(); ctx.translate(px + pw / 2, py + ph / 2); ctx.rotate(-0.03); ctx.translate(-pw / 2, -ph / 2);
     ctx.fillStyle = '#244a8a'; ctx.fillRect(0, 0, pw, ph); ctx.strokeStyle = '#0e1e3e'; ctx.lineWidth = 2; ctx.strokeRect(0, 0, pw, ph);
     ctx.strokeStyle = 'rgba(200,220,255,0.18)'; ctx.lineWidth = 0.8; for (let x = 8; x < pw; x += 8) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, ph); ctx.stroke(); } for (let y = 8; y < ph; y += 8) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(pw, y); ctx.stroke(); }
     ctx.strokeStyle = '#e8f0ff'; ctx.lineWidth = 1.4;
-    ctx.strokeRect(18, 30, 62, 28); ctx.beginPath(); ctx.arc(32, 64, 10, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.arc(70, 64, 10, 0, Math.PI * 2); ctx.stroke();   // el carro
-    ctx.strokeRect(60, 16, 8, 14); ctx.beginPath(); ctx.moveTo(80, 44); ctx.lineTo(102, 44); ctx.stroke();
-    ctx.beginPath(); ctx.arc(100, 22, 9, 0, Math.PI * 2); ctx.stroke(); for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; ctx.beginPath(); ctx.moveTo(100 + Math.cos(a) * 9, 22 + Math.sin(a) * 9); ctx.lineTo(100 + Math.cos(a) * 12, 22 + Math.sin(a) * 12); ctx.stroke(); }
-    ctx.setLineDash([3, 2]); ctx.beginPath(); ctx.moveTo(18, 82); ctx.lineTo(80, 82); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = '#e8f0ff'; ctx.font = 'italic 8px serif'; ctx.fillText('carro de vapor', 70, 86);
+    ctx.save(); ctx.translate(46, 40); ctx.rotate(-0.45);                                 // el tub, inclinat cap al cel
+    ctx.beginPath(); ctx.moveTo(-30, -4); ctx.lineTo(30, -7); ctx.lineTo(30, 7); ctx.lineTo(-30, 4); ctx.closePath(); ctx.stroke();
+    ctx.strokeRect(30, -9, 6, 18); ctx.beginPath(); ctx.ellipse(37, 0, 2, 8, 0, 0, Math.PI * 2); ctx.stroke();      // la lent gran
+    ctx.strokeRect(-38, -3, 8, 6); ctx.beginPath(); ctx.moveTo(-8, -5); ctx.lineTo(-8, 5); ctx.moveTo(8, -6); ctx.lineTo(8, 6); ctx.stroke();
+    ctx.restore();
+    ctx.beginPath(); ctx.moveTo(46, 44); ctx.lineTo(28, 84); ctx.moveTo(46, 44); ctx.lineTo(64, 84); ctx.moveTo(46, 44); ctx.lineTo(48, 86); ctx.stroke();   // trípode
+    ctx.setLineDash([3, 2]); ctx.beginPath(); ctx.moveTo(14, 18); ctx.lineTo(76, 6); ctx.stroke(); ctx.setLineDash([]);                                     // cota
+    ctx.beginPath(); ctx.moveTo(84, 30); ctx.lineTo(100, 30); ctx.moveTo(84, 30); ctx.lineTo(88, 27); ctx.moveTo(84, 30); ctx.lineTo(88, 33); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(106, 52, 10, 14, 0, 0, Math.PI * 2); ctx.stroke(); ctx.beginPath(); ctx.ellipse(106, 52, 3, 14, 0, 0, Math.PI * 2); ctx.stroke();   // la lent, de perfil
+    const est = (x, y, r) => { ctx.beginPath(); for (let k = 0; k < 10; k++) { const a = -Math.PI / 2 + k * Math.PI / 5, rr = k % 2 ? r * 0.45 : r; ctx.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } ctx.closePath(); ctx.stroke(); };
+    est(104, 14, 7); est(88, 10, 3);
+    ctx.beginPath(); ctx.moveTo(84, 78); ctx.lineTo(116, 78); ctx.moveTo(84, 84); ctx.lineTo(108, 84); ctx.stroke();
     [[2, 2], [pw - 6, 2], [2, ph - 6], [pw - 6, ph - 6]].forEach(([x, y]) => { ctx.fillStyle = '#c8302a'; ctx.beginPath(); ctx.arc(x + 2, y + 2, 2.6, 0, Math.PI * 2); ctx.fill(); });
     ctx.restore();
     // Canonades de coure: una de llarga a dalt, que baixa a la caldera i als manòmetres

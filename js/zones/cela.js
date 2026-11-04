@@ -1,8 +1,8 @@
 /**
  * EL TALLER DEL GARF (la cel·la de Sant Antoni, interior)
  * La casa del Garf, l'inventor: un taller-laboratori de llautó i coure. Caldera amb el forn encès, canonades amb manòmetres que
- * tremolen, engranatges que giren a la paret, plànols del carro de vapor, banc de treball amb un ocell mecànic a mig fer,
- * alambins que bombollegen, un telescopi i el seu llit petit. És un lloc per mirar (els gràfics, a js/dibuixos_taller.js).
+ * tremolen, engranatges que giren a la paret, plànols d'un telescopi, banc de treball amb un ocell mecànic a mig fer,
+ * alambins que bombollegen, un telescopi i el seu llit petit. Només s'hi poden mirar els plànols (els gràfics, a js/dibuixos_taller.js).
  */
 
 class ZonaCelaStAntoni extends ZonaBase {
@@ -86,12 +86,8 @@ class ZonaCelaStAntoni extends ZonaBase {
         this.add.image(540, 602, 'trastos_taller').setOrigin(0.5, 1).setScale(E).setDepth(602);
         this.colisio(540, 588, 140, 26);
 
-        // Coses que l'Ineu es mira
-        const mira = text => () => ({ pagines: [{ qui: 'Ineu', text }] });
-        this.interactiu(400, 270, RADI_OBJECTE, mira("(La caldera bull i xiula com una tetera gegant. Al Garf li agrada que tot faci soroll.)"), { altura: 260 });
-        this.interactiu(188, 382, RADI_OBJECTE, mira("(Un ocell de llautó a mig fer. Li falten plomes, però l'ull ja li brilla.)"), { altura: 170 });
-        this.interactiu(612, 382, RADI_OBJECTE, mira("(Alambins, serps de coure i matrassos que bullen. A la paret, els plànols del carro de vapor del Follet.)"), { altura: 190 });
-        this.interactiu(662, 606, RADI_OBJECTE, mira("(Un altre telescopi. El Garf en deu tenir un per a cada estel.)"), { altura: 180 });
+        // Els plànols de la paret: l'única cosa que l'Ineu es mira
+        this.interactiu(580, 380, RADI_OBJECTE, () => ({ pagines: [{ qui: 'Ineu', text: "(Semblen els plànols d'una mena d'artefacte per mirar les estrelles.)" }] }), { altura: 290 });
 
         // Parets i col·lisions (obertura de sortida a baix, al mig)
         this.colisio(20, H / 2, 40, H);
