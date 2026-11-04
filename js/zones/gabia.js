@@ -69,7 +69,7 @@ Object.assign(DIALEGS, {
     gabiaGran: E => ({ pagines: E.flag('andreuTancat') ? [
     ] : E.flag('gabiaOberta') ? [
     ] : E.flag('ocellaireVencut') ? [
-        { qui: 'Ineu', text: "(Ara. El Cant del Miracle: 1-3-2-3-1.)" }
+        { qui: 'Ineu', text: "(Ara. El Cant del Miracle: 1-2-2-2-3-1.)" }
     ] : [
         { qui: 'Ineu', text: "(Els barrots no tenen pany. Només un cant els pot obrir: el Cant del Miracle.)" }
     ] }),

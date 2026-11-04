@@ -48,7 +48,7 @@ const DIARI_ACTES = [
     { nom: 'Acte 2 · El Til·ler i el Saber', des: 'font' },
     { nom: 'Acte 3 · La Sala de la Gàbia', des: 'cantMiracle' }
 ];
-const DIARI_PESTANYES = [['missio', 'Missió'], ['encarrecs', 'Encàrrecs'], ['sarro', 'Sarró'], ['mapa', 'Mapa']];
+const DIARI_PESTANYES = [['missio', 'Missió'], ['encarrecs', 'Encàrrecs'], ['sarro', 'Sarró'], ['cants', 'Cants'], ['mapa', 'Mapa']];
 
 const TINTA = '#3a2412', TINTA_SUAU = '#6a4a2a', VERMELL = '#8a2a14';
 
@@ -65,7 +65,7 @@ const DIARI = {
         c.add(tanca);
         // Pestanyes
         this.botons = DIARI_PESTANYES.map(([id, nom], i) => {
-            const w = (AMPLE - 80) / 4, x = 40 + w * i + w / 2, y = 120;
+            const w = (AMPLE - 80) / DIARI_PESTANYES.length, x = 40 + w * i + w / 2, y = 120;
             const fons = ui.add.rectangle(x, y, w - 8, 60, 0x8a5a2a, 0.15).setStrokeStyle(2, 0x8a5a2a, 0.6).setInteractive({ useHandCursor: true })
                 .on('pointerdown', () => this.mostrar(ui, id));
             const t = ui.add.text(x, y, nom, { fontFamily: FONT_PLACA, fontSize: '27px', fontStyle: 'bold', color: TINTA, resolution: 2 }).setOrigin(0.5);
@@ -122,7 +122,7 @@ const DIARI = {
 
     moure(ui, d) {
         const i = DIARI_PESTANYES.findIndex(p => p[0] === this.actual);
-        this.mostrar(ui, DIARI_PESTANYES[(i + d + 4) % 4][0]);
+        this.mostrar(ui, DIARI_PESTANYES[(i + d + DIARI_PESTANYES.length) % DIARI_PESTANYES.length][0]);
     },
 
     // ---------------- Mida de la lletra i scroll ----------------
@@ -251,25 +251,34 @@ const DIARI = {
             c.add(ui.add.text(x + 46, yy + 4, n, estilText(26, ok ? TINTA : TINTA_SUAU, { fontStyle: ok ? 'bold' : 'normal' })));
         });
         y += colNens ? 62 : 3 * 48 + 14;
-        // Cants apresos, amb les notes per tocar-los
-        y = this.titol(ui, c, X, y, 'Cants de la tarota');
-        Object.values(MELODIES).forEach(m => {
-            const sap = E.flag(m.flag), nn = sap ? m.notes.length : 0;
-            const junt = AV - 2 * X - nn * 46 > 270;                     // si no hi caben, les notes baixen a sota del nom
-            const t = ui.add.text(X, y + 4, sap ? m.nom : '— encara no el saps —', estilText(23, sap ? TINTA : TINTA_SUAU, { fontStyle: sap ? 'bold' : 'italic', wordWrap: { width: junt ? AV - 2 * X - nn * 46 - 6 : AV - 2 * X } }));
-            c.add(t);
-            const yn = junt ? y + 20 : y + t.height + 26;
-            if (sap) m.notes.forEach((n, k) => {
-                const x = junt ? AV - X - (m.notes.length - k) * 46 + 16 : X + 18 + k * 46;
-                c.add(ui.add.circle(x, yn, 18, COLOR_NOTA, 1).setStrokeStyle(2, 0x2a1808, 0.8));
-                c.add(ui.add.text(x, yn, String(n), estilText(22, '#3a2412', { fontStyle: 'bold' })).setOrigin(0.5));
-            });
-            y += Math.max(52, junt ? t.height + 14 : t.height + (sap ? 62 : 14));
-        });
         y += 8;
         y = this.titol(ui, c, X, y, 'L\'Ineu');
         const d = E.dades;
         this.text(ui, c, X, y, `Grans del rosari: ${d.corsMax}\nBestioles calmades: ${d.flags.derrotats || 0}\nLlocs trobats: ${MAPA.zones.filter(z => MAPA.visitada(z.id)).length}/${MAPA.zones.length}`, 23, TINTA_SUAU, { lineSpacing: 6 });
+    },
+
+    // ---------------- Cants ----------------
+    // Les notes dels cants apresos només surten aquí: a la tarota no es mostren, així cal recordar-los (i el pergamí de la tarota ocupa menys pantalla)
+    cants(ui, c) {
+        const E = Estat, AV = this.AV, X = this.MX;
+        let y = this.titol(ui, c, X, 170, 'Cants de la tarota');
+        y = this.text(ui, c, X, y + 4, 'Les notes no es veuen a la tarota: cal tocar-les de memòria. 1, 2 i 3 són les tres notes (←, ESPAI i → al teclat).', 20, TINTA_SUAU, { fontStyle: 'italic' }) + 18;
+        let n = 0;
+        Object.values(MELODIES).forEach(m => {
+            const sap = E.flag(m.flag), nn = sap ? m.notes.length : 0;
+            if (sap) n++;
+            const junt = AV - 2 * X - nn * 46 > 270;                     // si no hi caben, les notes baixen a sota del nom
+            const t = ui.add.text(X, y + 4, sap ? m.nom : '— encara no el saps —', estilText(23, sap ? TINTA : TINTA_SUAU, { fontStyle: sap ? 'bold' : 'italic', wordWrap: { width: junt ? AV - 2 * X - nn * 46 - 6 : AV - 2 * X } }));
+            c.add(t);
+            const yn = junt ? y + 20 : y + t.height + 26;
+            if (sap) m.notes.forEach((q, k) => {
+                const x = junt ? AV - X - (m.notes.length - k) * 46 + 16 : X + 18 + k * 46;
+                c.add(ui.add.circle(x, yn, 18, COLOR_NOTA, 1).setStrokeStyle(2, 0x2a1808, 0.8));
+                c.add(ui.add.text(x, yn, String(q), estilText(22, '#3a2412', { fontStyle: 'bold' })).setOrigin(0.5));
+            });
+            y += Math.max(52, junt ? t.height + 14 : t.height + (sap ? 62 : 14));
+        });
+        if (!n) this.text(ui, c, X, y + 10, 'Encara no coneixes cap cant. La Pianista, al Santuari, te n\'ensenyarà.', 22, TINTA_SUAU, { fontStyle: 'italic' });
     },
 
     // ---------------- Encàrrecs ----------------

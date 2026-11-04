@@ -198,7 +198,7 @@ class ZonaBoscPi extends ZonaBase {
 
     enquadrarPi() {
         if (this.camCinema || !this.pi || !this.pi.active || this.ineu.x < PI3.barX + 40) return;
-        const H = ALT - ALT_HUD, reserva = 585 * Math.min(1, (ALT - 440) / 585);      // el pergamí de la tarota tapa els px de baix (més petit en pantalles baixes)
+        const H = ALT - ALT_HUD, reserva = 435 * Math.min(1, (ALT - 440) / 435);      // el pergamí de la tarota tapa els px de baix (més petit en pantalles baixes)
         const dalt = this.pi.y - this.pi.displayHeight - 20, baix = Math.max(this.ineu.y, PI3.plY) + 30;
         const z = Math.min(ZOOM_CAMERA, (H - reserva - 30) / (baix - dalt));
         this.camPi = true;

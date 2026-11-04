@@ -7,11 +7,13 @@
 const MELODIES = {
     aurora:  { nom: 'Cant de l\'Aurora',  notes: [1, 2, 3],       flag: 'cantAurora' },
     pedres:  { nom: 'Cant de les Pedres', notes: [3, 1, 2, 1],    flag: 'cantPedres' },
-    miracle: { nom: 'Cant del Miracle',   notes: [1, 3, 2, 3, 1], flag: 'cantMiracle' }
+    miracle: { nom: 'Cant del Miracle',   notes: [1, 2, 2, 2, 3, 1], flag: 'cantMiracle' }
 };
 
 const COLOR_NOTA = 0xd7ae58;
-const FREQ_NOTA = [0, 330, 392, 494];
+// Les tres notes són Do, Mi i Sol (Do major, com el tema principal): el Cant del Miracle (Do Mi Mi Mi Sol Do) imita l'obertura del leitmotiv
+// (Do Mi Mi Mi Fa Sol Do), amb un Sol on hi hauria el Fa perquè la tarota només té tres notes.
+const FREQ_NOTA = [0, 262, 330, 392];
 
 // Posa en marxa una lliçó des d'un diàleg (la Pianista)
 function iniciarLliço(nom) {
@@ -58,7 +60,7 @@ function completarLliço(nom) {
 }
 
 // Mides del pergamí de la tarota (a baix de la pantalla; el joc es continua veient a sobre)
-const MUS_W = 688, MUS_H = 570, MUS_T = ALT - 585;
+const MUS_W = 688, MUS_H = 420, MUS_T = ALT - 435;
 
 class EscenaMusica extends Phaser.Scene {
     constructor() { super('Musica'); }
@@ -77,9 +79,9 @@ class EscenaMusica extends Phaser.Scene {
 
         const cx = AMPLE / 2, T = MUS_T;
         // En pantalles baixes (ALT petit) el pergamí es fa una mica més petit (ancorat a baix) perquè sobri lloc per al primer pla de l'Ineu tocant
-        const f = Math.min(1, (ALT - 440) / 585);
+        const f = Math.min(1, (ALT - 440) / 435);
         this.escPergami = f;
-        this.primerPla(ALT - 585 * f);
+        this.primerPla(ALT - 435 * f);
         const llibre = { fontFamily: FONT_LLIBRE, resolution: 2 };
         this.panell = this.add.container(AMPLE / 2 * (1 - f), ALT * (1 - f) + 30).setScale(f).setAlpha(0);
         const add = o => { this.panell.add(o); return o; };
@@ -164,23 +166,8 @@ class EscenaMusica extends Phaser.Scene {
             this.time.delayedCall(700, () => this.reproduir());
         } else {
             this.titol.setText('La tarota del Cortiner');
-            this.estat.setText('Tria un cant après i toca’n la seqüència.');
-            const sabudes = Object.values(MELODIES).filter(m => Estat.flag(m.flag));
-            if (sabudes.length) {
-                sabudes.forEach((m, i) => {
-                    const y = T + 392 + i * 48, x = cx - 307;
-                    const fila = add(this.add.graphics());
-                    fila.fillStyle(i % 2 ? 0xe1cf9f : 0xe9d9b2, 0.88).fillRoundedRect(x, y, 614, 44, 8);
-                    fila.lineStyle(1.5, 0x987244, 0.8).strokeRoundedRect(x, y, 614, 44, 8);
-                    add(this.add.text(x + 14, y + 22, m.nom, { ...llibre, fontSize: '21px', color: '#3a2412' }).setOrigin(0, 0.5));
-                    const inici = cx + 86;
-                    m.notes.forEach((n, j) => {
-                        const nx = inici + j * 42;
-                        add(this.add.circle(nx, y + 22, 18, COLOR_NOTA).setStrokeStyle(2, 0x3a2412, 1));
-                        add(this.add.text(nx, y + 22, String(n), { ...llibre, fontSize: '24px', fontStyle: 'bold', color: '#3a2412' }).setOrigin(0.5));
-                    });
-                });
-            } else {
+            this.estat.setText('Toca un cant que recordis (les notes són al Diari).');
+            if (!Object.values(MELODIES).some(m => Estat.flag(m.flag))) {
                 this.estat.setText('Encara no coneixes cap cant.');
             }
             add(this.add.text(cx + MUS_W / 2 - 34, T + 40, '✕', { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#6a1f12', padding: { x: 8, y: 4 }, resolution: 2 })

@@ -59,7 +59,11 @@ const Proves = {
         d.id = 'panellProves';
         d.style.cssText = 'position:fixed;inset:56px 8px 8px 8px;z-index:21;overflow:auto;background:#1a120bf2;color:#f2e6c8;border:2px solid #d4af37;border-radius:10px;padding:10px;font:15px Georgia,serif';
         const estil = 'display:block;width:100%;text-align:left;margin:3px 0;padding:9px 10px;font:inherit;color:inherit;background:#3a2a1a;border:1px solid #6a5030;border-radius:6px;cursor:pointer';
-        d.innerHTML = '<b>Proves</b> · la partida de proves es desa a part<br>' +
+        const tanca = () => { d.remove(); document.removeEventListener('keydown', alEsc, true); };
+        const alEsc = e => { if (e.key === 'Escape') tanca(); };
+        document.addEventListener('keydown', alEsc, true);
+        d.innerHTML = '<button id="provesTanca" title="Tanca" style="position:sticky;top:0;float:right;font:bold 20px Georgia,serif;padding:2px 12px;color:#f2e6c8;background:#6a1f12;border:1px solid #d4af37;border-radius:6px;cursor:pointer">✕</button>' +
+            '<b>Proves</b> · la partida de proves es desa a part<br>' +
             '<label style="display:inline-block;margin:8px 0"><input type="checkbox" id="provesLaterals" checked> amb totes les missions laterals fetes</label><br>' +
             '<label style="display:inline-block;margin:0 0 8px"><input type="checkbox" id="provesMapa" checked> amb tot el mapa desbloquejat (tots els escenaris visibles)</label><br>' +
             '<label style="display:inline-block;margin:0 0 8px"><input type="checkbox" id="provesMelodies" checked> amb totes les melodies apreses (Aurora, Pedres i Miracle)</label>' +
@@ -83,11 +87,11 @@ const Proves = {
             if (e.passa !== undefined) {
                 const p = PROGRES.passos[e.passa], info = DIARI_PASSOS[p.id];
                 b.textContent = (n + 1) + '. ' + (info ? info[0] : p.id) + (info ? '  ·  ' + info[1].replace(/^Zona/, '') : '');
-                b.onclick = () => { const [l, m, me] = opcions(); d.remove(); this.saltar(e.passa, l, m, me); };
+                b.onclick = () => { const [l, m, me] = opcions(); tanca(); this.saltar(e.passa, l, m, me); };
             } else {
                 b.textContent = (n + 1) + '. ' + e.text + '  ·  BoscPi';
                 b.onclick = () => {
-                    const [l, m] = opcions(); d.remove();
+                    const [l, m] = opcions(); tanca();
                     this.estatFins(iMiracle + 1, l, m, true);                       // fins al Cant del Miracle inclòs, amb les tres melodies apreses
                     FLAGS_PI.forEach(f => { delete Estat.dades.flags[f]; });
                     e.flags.forEach(f => Estat.posaFlag(f));
@@ -107,8 +111,9 @@ const Proves = {
         const anar = document.createElement('button');
         anar.textContent = 'Ves-hi';
         anar.style.cssText = 'font:inherit;padding:8px 14px;margin-left:6px';
-        anar.onclick = () => { d.remove(); if (!Estat.dades) Estat.carregar() || this.estatFins(0); this.anar(s.value); };
+        anar.onclick = () => { tanca(); if (!Estat.dades) Estat.carregar() || this.estatFins(0); this.anar(s.value); };
         d.append(s, anar);
+        d.querySelector('#provesTanca').onclick = tanca;
         document.body.appendChild(d);
     }
 };
