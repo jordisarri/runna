@@ -928,17 +928,24 @@ const Grafics = {
         crea('parquet_biblio', 64, 64, pintarParquetBiblio);
         crea('paret_biblio', 984, 214, pintarParetBiblio);
         crea('lloses_rebedor', 128, 128, pintarLosesRebedor);
-        // Cel·la de Sant Antoni (js/dibuixos_cela.js)
-        crea('paret_cela', 760, 200, pintarParetCela);
+        // Mobles de cel·la (js/dibuixos_cela.js), que fa servir la casa d'en Georgi
         crea('llar_cela', 200, 170, pintarLlarCela);
         crea('llit_cela', 120, 180, pintarLlitCela);
         crea('taula_cela', 120, 90, pintarTaulaCela);
         crea('cadira_cela', 48, 70, pintarCadiraCela);
         crea('finestra_cela', 80, 110, pintarFinestraCela);
-        crea('prestatge_cela', 130, 100, pintarPrestatgeCela);
-        crea('creu_cela', 36, 60, pintarCreuCela);
-        crea('habit_cela', 60, 110, pintarHabitCela);
         crea('estora_cela', 230, 110, pintarEstoraCela);
+        // El taller del Garf, a la cel·la de Sant Antoni (js/dibuixos_taller.js)
+        crea('paret_taller', 760, 200, pintarParetTaller);
+        crea('caldera_taller', 200, 240, pintarCalderaTaller);
+        crea('engr_gran', 100, 100, (ctx, w, h) => pintarEngranatgeTaller(ctx, w, h, 14));
+        crea('engr_petit', 60, 60, (ctx, w, h) => pintarEngranatgeTaller(ctx, w, h, 9));
+        crea('banc_taller', 250, 150, pintarBancTaller);
+        crea('lab_taller', 230, 170, pintarLabTaller);
+        crea('llit_garf', 160, 110, pintarLlitGarf);
+        crea('telescopi_taller', 120, 170, pintarTelescopiTaller);
+        crea('trastos_taller', 150, 90, pintarTrastosTaller);
+        crea('catifa_taller', 240, 120, pintarCatifaTaller);
         // Casa d'en Georgi i la caseta de joc (js/dibuixos_jordi.js)
         crea('paret_masia', 780, 200, pintarParetMasia);
         crea('tauler_eines', 270, 72, pintarTaulerEines);
