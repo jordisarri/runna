@@ -142,7 +142,9 @@ const DIALEGS = {
         };
     },
 
-    bassadoria: E => E.flag("bassadoriaNeta") ? ({ pagines: [] }) : ({
+    bassadoria: E => E.flag("bassadoriaNeta") ? ({
+        pagines: [{ qui: "Ineu", text: "L'aigua ja és neta: torna a ser clara i tranquil·la, i la boira violeta s'ha esvaït. Ara sí que se sent com canta." }]
+    }) : ({
         pagines: [
             { qui: "Ineu", text: "L'aigua sempre ha estat clara... Ara és tèrbola i fa olor de soterrani. I en surten aquests gripaus enverinats i una boira violeta, a glopades." }
         ]
@@ -266,7 +268,7 @@ const DIALEGS = {
             };
         }
         return { pagines: [{ qui: "La Pianista", text: E.flag("bassadoriaNeta")
-            ? "Se sent l'aigua cantar des d'aquí, fill. Ho has aconseguit. Torna'm quan hi hagi un altre cant per aprendre."
+            ? "Se sent l'aigua cantar des d'aquí, fill. Ho has aconseguit. Torna a veure'm quan tinguis un altre cant per aprendre."
             : "Si trobes la manera de tornar la música, porta-me-la. Jo no em moc d'aquest banc, ni que s'acabi el món. Toca el cant amb la tarota quan siguis al lloc on cal." }] };
     },
 
@@ -771,14 +773,14 @@ const DIALEGS = {
         if (!E.flag('parada_' + id)) {
             return {
                 pagines: [{ qui: nom, text: conegudes
-                    ? "Mira qui hi ha! Ara ja saps que també paro aquí."
+                    ? "Mira qui hi ha! Ara ja saps que també paro aquí. Recorda: només puc parar allà on ja ens hàgim trobat."
                     : "Eh, monjo! Aquest trasto me'l va fer el Garf: va amb vapor i no es cansa mai. Si has d'anar lluny, puja. Això sí: només paro allà on ja m'hagis trobat." }],
                 enAcabar: () => E.posaFlag('parada_' + id)
             };
         }
         if (conegudes < 2) return { pagines: [{ qui: nom, text: "De moment només conec aquest lloc, monjo. Quan em trobis en un altre, t'hi portaré." }] };
         return { pagines: [
-            { qui: nom, text: "On anem?" },
+            { qui: nom, text: "On anem? Recorda que només puc parar allà on ja ens hàgim trobat." },
             { fer: (z, fet) => z.triarViatge(fet) }
         ] };
     },

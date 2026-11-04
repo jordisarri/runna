@@ -54,7 +54,7 @@ const CATALEG = [
     { key: 'hostatgeria',    file: 'assets/edificis/hostatgeria.webp',    amplada: 1100, provisional: (c, w) => dibuixarHostatgeria(c, w) },
 
     // ---- Personatges nous ----
-    { key: 'pianista',  file: 'assets/personatges/pianista.webp',  amplada: 115, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
+    { key: 'pianista',  file: 'assets/personatges/pianista.webp',  amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
     { key: 'venerables', file: 'assets/personatges/venerables.webp', amplada: 147, cru: true, provisional: (c, w) => dibuixarVenerables(c, w) },   // les dues Venerables Sàvies de les Cel·les, agafades del braç (un sol gràfic)
     { key: 'mare_nena', file: 'assets/personatges/mare_nena.webp', amplada: 77, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#cfd6ee', cabell: '#e8e8f2', dona: true, ample: 1.1, alt: 0.9 }) },   // la mare de la Nena de les Trenes (visió de llum, sense rostre)
     { key: 'neus',      file: 'assets/personatges/neus.webp',      amplada: 68,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },

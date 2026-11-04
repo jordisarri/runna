@@ -159,11 +159,15 @@ const Joc = {
         while (Joc.MUSICA_OPCIONAL[k] && !Joc.musicaDisponible.has(k)) k = Joc.MUSICA_OPCIONAL[k].fallback;
         return k;
     },
+    // Volums: la música de fons sona a 0,6; els jingles (fanfàrries) van a aquest nivell, perquè no sobresurtin (tenen la mateixa sonoritat de fitxer)
+    VOLUM_JINGLE: 0.45,
+    VOLUM_MUSICA_ABAIXADA: 0.3,           // la música de fons mentre sona un jingle
+
     // Una peça curta que sona una sola vegada per sobre de tot (no talla la música de fons)
     jingle(scene, clau) {
         Joc.detectarMusica().then(() => {
             if (!Joc.musicaDisponible.has(clau)) return;
-            const play = () => { const s = scene.sound.add(clau, { volume: 0.9 }); s.once('complete', () => s.destroy()); s.play(); };
+            const play = () => { const s = scene.sound.add(clau, { volume: Joc.VOLUM_JINGLE }); s.once('complete', () => s.destroy()); s.play(); };
             if (scene.cache.audio.exists(clau)) play();
             else { scene.load.once('filecomplete-audio-' + clau, play); Joc.carregarMusica(scene, clau); scene.load.start(); }
         });
@@ -173,7 +177,7 @@ const Joc = {
     // Si encara no hi ha el fitxer jingle_objecte.m4a, sona una fanfara sintetitzada.
     fanfaraObjecte(scene) {
         const m = Joc.musica;
-        if (m && m.isPlaying) { m.setVolume(0.2); scene.time.delayedCall(4200, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
+        if (m && m.isPlaying) { m.setVolume(Joc.VOLUM_MUSICA_ABAIXADA); scene.time.delayedCall(4200, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
         // De moment, els objectes fan servir la mateixa fanfàrria que les armes (jingle_arma); si no hi és, la sintetitzada
         Joc.detectarMusica().then(() => { const c = ['jingle_arma', 'jingle_objecte'].find(k => Joc.musicaDisponible.has(k)); if (c) Joc.jingle(scene, c); else Sfx.fanfara(); });
     },
@@ -183,7 +187,7 @@ const Joc = {
         Joc.detectarMusica().then(() => {
             if (!Joc.musicaDisponible.has('jingle_arma')) { Joc.fanfaraObjecte(scene); return; }       // (mentrestant, la sintetitzada)
             const m = Joc.musica;
-            if (m && m.isPlaying) { m.setVolume(0.15); scene.time.delayedCall(6000, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
+            if (m && m.isPlaying) { m.setVolume(Joc.VOLUM_MUSICA_ABAIXADA); scene.time.delayedCall(6000, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
             Joc.jingle(scene, 'jingle_arma');
         });
     },
