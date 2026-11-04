@@ -280,7 +280,7 @@ class ZonaBoscPi extends ZonaBase {
         if (this.ineu.x < PI3.barX + 40 || Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, PI3.plX, PI3.plY) > 260) return false;
         const flag = 'pi' + nom[0].toUpperCase() + nom.slice(1);
         if (Estat.flag(flag)) { this.missatge('♪ ' + MELODIES[nom].nom + '\nAquesta branca ja canta.'); return true; }
-        Estat.posaFlag(flag);
+        Estat.posaFlag('pi' + nom[0].toUpperCase() + nom.slice(1));         // (= flag; escrit així perquè la prova de progrés el vegi)
         this.camPiFins = this.time.now + 2800;                           // la càmera es queda un moment al pi
         this.encendreBranca(nom);
         const n = ['piAurora', 'piPedres', 'piMiracle'].filter(f => Estat.flag(f)).length;
