@@ -394,6 +394,8 @@ class EscenaProleg extends Phaser.Scene {
     create() {
         this.acabat = false;
         this.index = -1;
+        // L'escena es reutilitza si es torna a començar partida: sense això, el quadre de l'altra vegada (ja destruït) feia petar seguent()
+        this.quadre = null; this.kenBurns = null; this.escrivint = null; this.textCont = null;
         this.cameras.main.setBackgroundColor('#000000');
         Joc.iniciarMusica(this, 0, 'musica_proleg');
 

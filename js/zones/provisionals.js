@@ -316,7 +316,7 @@ class ZonaCreu extends ZonaBase {
         this.colisio(700, 400, 600, 170);             // l'anella de pedra (una el·lipse feta de tres franges)
         this.colisio(700, 290, 430, 60);
         this.colisio(705, 515, 390, 80);              // portella, jardinera i abeurador
-        this.interactiu(700, 480, 260, DIALEGS.bassadoria, { altura: 110, enTancar: () => Estat.posaFlag('flauta_bassadoria') });
+        this.interactiu(700, 480, 260, DIALEGS.bassadoria, { altura: 110, enTancar: () => Estat.posaFlag('flauta_bassadoria') });    // la tarota s'obre sola en acabar el text (zona_base: tarotaDespresDeText)
         this.llocFlauta('bassadoria', 700, 470, 340, true, () => !Estat.flag('bassadoriaNeta'));
         if (!Estat.flag('bassadoriaNeta')) this.boiraBass = this.boira(700, 360, 480, 120, 3.5);
 
@@ -332,6 +332,10 @@ class ZonaCreu extends ZonaBase {
             [[560, 600], [1330, 620], [800, 860], [1180, 300]].forEach(([x, y]) => this.enemic('gripau', x, y));
         }
         this.sortida(1100, 0, 160, 14, 'ZonaPlaca', 'creu');
+    }
+
+    teEfecteMelodia(nom) {
+        return nom === 'aurora' && !Estat.flag('bassadoriaNeta') && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 700, 470) < 520;
     }
 
     // La Bassadòria reacciona al Cant de l'Aurora (només quan l'Ineu és a prop)

@@ -3,7 +3,7 @@
  * Un bosc molt llarg, amb un camí pel mig i enemics. S'hi entra pel nord, des de Sant Antoni (a l'est); el camí baixa i gira cap a l'oest fins al
  * Dolmen (sortida a l'extrem oest, a la mateixa alçada que l'entrada est del Dolmen). A mig camí hi ha una clariana amb el Pi dels Tres Cants.
  *
- * El pi barra el pas amb les seves branques baixes i només deixa passar qui li porta els tres cants (Aurora, Pedres i Miracle) amb la tarota:
+ * El pi barra el pas amb les seves branques baixes i només deixa passar qui li porta els tres cants (Aurora, Vespres i Miracle) amb la tarota:
  * cada cant il·lumina una de les tres branques. Només es pot fer des de l'est (Sant Antoni): des del Dolmen, el camí s'acaba contra les branques
  * i l'Ineu entén que cal anar per l'altre costat. El premi, a banda d'obrir el camí, és la història del pi: d'on van sortir els tres cants.
  */
@@ -274,6 +274,11 @@ class ZonaBoscPi extends ZonaBase {
         }
     }
 
+    teEfecteMelodia(nom) {
+        if (!PI3_BRANQUES[nom] || this.ineu.x < PI3.barX + 40 || Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, PI3.plX, PI3.plY) > 260) return false;
+        return !Estat.flag('pi' + nom[0].toUpperCase() + nom.slice(1));         // la branca encara no canta
+    }
+
     // Un dels tres cants sona davant el pi: la seva branca s'il·lumina. Amb els tres, el pi s'obre.
     enMelodia(nom) {
         if (!PI3_BRANQUES[nom]) return false;
@@ -351,7 +356,7 @@ Object.assign(DIALEGS, {
             { qui: 'El Pi', text: "No t'espantis, petit. Els pins parlem poc, però ens ho recordem tot. Cada agulla meva és un record." },
             { qui: 'El Pi', text: "Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantaven tots alhora, i aquell cant feia viure la terra: el Cant del Miracle." },
             { qui: 'El Pi', text: "Un home sol, l'Ocellaire, el va voler per a ell. Va tancar els ocells en una gàbia i se'n va endur el cant. I amb el cant se'n va anar l'alba, i va començar la boira." },
-            { qui: 'El Pi', text: "Hi havia dos cants més, germans d'aquell: el de l'Aurora, que fa fugir la boira, i el de les Pedres, que la terra escolta. Van tenir por que també se'ls emportés." },
+            { qui: 'El Pi', text: "Hi havia dos cants més, germans d'aquell: el de l'Aurora, que fa fugir la boira, i el de Vespres, que la terra escolta. Van tenir por que també se'ls emportés." },
             { qui: 'El Pi', text: "Van venir a amagar-se aquí, a les meves branques: un a cada una. Jo els he guardat muts, com un nen guarda un secret, fins avui." },
             { qui: 'El Pi', text: "El Cortiner va ser qui els va posar notes. Va arribar un vespre, cansat, i es va asseure sota meu. Em va escoltar i els va escriure en tres sons: un, dos i tres. Els de la tarota. Cada nota és una de les meves branques." },
             { qui: 'El Pi', text: "Només deixo passar qui porta els tres cants, perquè només qui els porta els pot tornar als ocells." },

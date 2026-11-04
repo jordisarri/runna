@@ -134,6 +134,35 @@ function fixarDecorat(escena, minim = 200) {
     });
 }
 
+// ATRIBUTS A REINICIAR cada vegada que s'entra en una zona. Phaser reutilitza la mateixa escena (el constructor només corre un cop), de manera que tot el que
+// una visita deixa guardat a l'escena (objectes ja destruïts, indicadors d'una cinemàtica a mig fer...) tornaria a la visita següent i la trencaria.
+// Aquí hi ha el que es crea només en alguns casos o dins d'un esdeveniment i després es consulta amb «if (this.x)»; la resta es refà a construir().
+const REINICI_BASE = {
+    despertarImg: null, dialegDePunt: false, puntActiu: null, twCinema: null, boundsCinema: null, paradaAqui: null,
+    ineuAlt: null, ineuAltObjecte: null, ineuAixecaEfecte: null, ineuAixecaAura: null, fonsTex: null, fonsSprite: null, proxPas: 0, altrePas: false
+};
+const REINICI_ZONES = {
+    ZonaTaverna: { portaTaverna: null, portaOberta: false },
+    ZonaSotaTaverna: { portaOberta: false },
+    ZonaJardi: { obrintLlosa: false },
+    ZonaCasaGranInt: { volDespertar: false, raimPas: 0, colReixa: null, barrots: null, barra: null, estatua: null, colEstatua: null, llosaTrapa: null, llumTrapa: null, engranatge: null, manetaVolant: null, volant: null, pedestal: null, boss: null },
+    ZonaBosc: { fontBrilla: null, llumLila: null },
+    ZonaRuines: { ombraForta: false, pergamiBrill: null },
+    ZonaTiller: { avisArrels: false, sopar: null },
+    ZonaDipositos: { tripodeMuntat: false, llumEstel: null, estelCaient: false, colBoira: null, boiraDolmen: null },
+    ZonaBoscPi: { guspiresPi: null, camPi: false, camPiFins: 0 },
+    ZonaCirosa: { andreuPunt: null },
+    ZonaPassadis: { contrallum: null },
+    ZonaCementiri: { boiraTomba: null, llumTomba: null },
+    ZonaGirgoles: { colCortina: null },
+    ZonaTortura: { colRastell: null },
+    ZonaBoira: { bombollesV: null, colBoira: null, avisBoira: 0 },
+    ZonaGabia: { colPont: null, llumCapolls: null, espurnesCapolls: null },
+    ZonaGirgolesFora: { colPorta: null, boiraPorta: null },
+    ZonaCelles: { colBoira: null, fosc: null, colCarro: null, colSansa: null, sansa: null, carroSansa: null },
+    ZonaCambraPains: { pains: null, boiraCapoll: null, capoll: null }
+};
+
 class ZonaBase extends Phaser.Scene {
     constructor(key, config) {
         super(key);
@@ -141,6 +170,7 @@ class ZonaBase extends Phaser.Scene {
     }
 
     init(data) {
+        Object.assign(this, REINICI_BASE, REINICI_ZONES[this.constructor.name]);
         this.dadesEntrada = data || {};
         this.canviant = false;
         this.camDialeg = null;
@@ -697,6 +727,7 @@ class ZonaBase extends Phaser.Scene {
         if (this.ineuAixecaEfecte) { this.ineuAixecaEfecte.destroy(); this.ineuAixecaEfecte = null; }
         if (this.ineuAixecaAura) { this.ineuAixecaAura.destroy(); this.ineuAixecaAura = null; }
         if (this.ineuAlt) this.ineuAlt.destroy();
+        if (this.ineuAltObjecte) { this.ineuAltObjecte.forEach(o => { this.tweens.killTweensOf(o); o.destroy(); }); this.ineuAltObjecte = null; }
         I.setVisible(false);
         if (this.fantasma) this.fantasma.setVisible(false);          // la silueta translúcida de l'Ineu també: un dibuix desapareix i l'altre apareix, sense transparències
         this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(85000);       // per sobre de tothom (també del Germà Andreu), però SOTA la boira (89990+): si no, quedava il·luminat
@@ -716,7 +747,30 @@ class ZonaBase extends Phaser.Scene {
         Joc.fanfaraArma(this);
         if (fet) fet();
     }
+    // L'Ineu REP un objecte (el ram, els guants, una clau...): alça el braç amb la mà oberta, l'objecte vola del qui el dona (el punt amb què s'interactua)
+    // fins a la seva mà i hi queda, brillant, fins que es crida ineuBaixa() (la UI ho fa en passar la pàgina d'avís { avis, obj: 'id' }). Sona la fanfara.
+    // Si no es pot (no hi ha el dibuix, l'Ineu és assegut o ocult, ja alça una altra cosa), no fa res: l'avís es mostra igualment.
+    ineuRep(id) {
+        const I = this.ineu, KEY = 'ineu_aixeca_buit';
+        if (!I || !I.visible || this.assegut || this.ineuAlt || this.ineuFlautaImg || !this.textures.exists(KEY) || Grafics.faltants.includes(KEY)) return false;
+        const OX = 0.556;                                          // on cau el cos de l'Ineu dins del dibuix (centre dels peus)
+        this.ineuAixeca(KEY, null, OX);
+        const A = this.ineuAlt, dw = A.displayWidth, dh = A.displayHeight;
+        const mx = I.x - OX * dw + 0.11 * dw, my = I.y + 2 - dh + 0.065 * dh - 24;          // sobre la palma de la mà alçada
+        const color = 0xffe8a0, icona = iconaObjecte(this, id), p = this.puntActiu || { x: mx, y: my + 80 };
+        const obj = icona ? this.add.image(p.x, p.y - 30, icona).setScale(0.22) : this.add.circle(p.x, p.y - 30, 9, color, 1);
+        const halo = this.add.circle(p.x, p.y - 30, 34, color, 0.45).setBlendMode('ADD').setScale(0.4);
+        obj.setDepth(85002); halo.setDepth(85001);
+        const fins = icona ? 0.5 : 1.4;
+        this.tweens.add({ targets: [obj, halo], x: mx, y: my, duration: 700, ease: 'Sine.easeOut' });
+        this.tweens.add({ targets: obj, scale: fins, duration: 700, ease: 'Back.easeOut' });
+        this.tweens.add({ targets: halo, scale: 1, duration: 700, ease: 'Sine.easeOut', onComplete: () => this.tweens.add({ targets: halo, alpha: 0.2, scale: 1.25, yoyo: true, repeat: -1, duration: 700, ease: 'Sine.easeInOut' }) });
+        this.tweens.add({ targets: obj, y: my - 5, delay: 700, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });        // sura una mica a la mà
+        this.ineuAltObjecte = [obj, halo];
+        return true;
+    }
     ineuBaixa(fet) {
+        if (this.ineuAltObjecte) { this.ineuAltObjecte.forEach(o => { this.tweens.killTweensOf(o); o.destroy(); }); this.ineuAltObjecte = null; }
         if (this.ineuAixecaEfecte) { this.ineuAixecaEfecte.destroy(); this.ineuAixecaEfecte = null; }
         if (this.ineuAixecaAura) { this.ineuAixecaAura.destroy(); this.ineuAixecaAura = null; }
         if (this.ineuAlt) { this.ineuAlt.destroy(); this.ineuAlt = null; }
@@ -1185,6 +1239,10 @@ class ZonaBase extends Phaser.Scene {
         this.game.scene.bringToTop('Musica');
     }
 
+    // Té efecte aquest cant aquí i ara? Si sí, la tarota el toca sencer (peça completa, vegeu musica.js) abans que passi res; si no, només el missatge curt.
+    // Cada zona que té un enMelodia(nom) amb efecte ho reflecteix aquí (les mateixes condicions, sense fer res).
+    teEfecteMelodia(nom) { return false; }
+
     // Una melodia ha sonat bé. La zona pot gestionar-la amb enMelodia(nom) -> true
     melodiaTocada(nom) {
         const gestionada = this.enMelodia ? this.enMelodia(nom) : false;
@@ -1381,18 +1439,13 @@ class ZonaBase extends Phaser.Scene {
         this.moure(ui, delta);
         this.actualitzarPedres(delta);
         const proper = this.puntProper();
-        // La tarota només s'obre davant un punt d'interacció visible (el «!»): si hi ha un enemic a prop, ESPAI és per atacar i no hi ha punt
-        // La flauta passa davant només del punt del mateix lloc (la bassa, la pedra...): un cartell o algú proper es llegeix/escolta
-        const lloc = this.flautaActiva();
-        const enemicProper = lloc && this.enemics.some(e => !e.mort && e.spr && Phaser.Math.Distance.Between(e.spr.x, e.spr.y, this.ineu.x, this.ineu.y) < 320);
-        const flautaTria = !!lloc && !enemicProper && (lloc.prioritat || !proper || Phaser.Math.Distance.Between(proper.x, proper.y, lloc.x, lloc.y) < 80);
-        const ambLloc = flautaTria && (lloc.prioritat || !proper);                 // el «!» és al lloc de la flauta (si no, ja és al seu punt)
-        const mostra = ambLloc ? { x: lloc.x, y: lloc.y, altura: 90 } : proper;
+        // La tarota NO s'obre mai directament amb ESPAI: cada lloc de tarota té un punt d'interacció (el «!») amb el seu text, i la tarota s'obre
+        // en acabar-lo (vegeu tarotaDespresDeText). Així els enemics de prop no hi interfereixen.
+        const mostra = proper;
         this.indicador.setVisible(!!mostra);
         if (mostra) this.indicador.setPosition(mostra.x, mostra.y - mostra.altura);
         const T = Phaser.Input.Keyboard.JustDown;
-        if (accio && flautaTria) this.obrirMusica();
-        else if (accio && proper) this.interactuar(proper);
+        if (accio && proper) this.interactuar(proper);
         else if (accio || T(this.tecles.J)) this.atacar();
         time = this.time.now;   // un sol rellotge per a tot el combat
         this.actualitzarCombat(time);
@@ -1608,13 +1661,24 @@ class ZonaBase extends Phaser.Scene {
         this.dialegDePunt = true;       // la càmera del diàleg només té en compte qui parla quan el diàleg ve d'una interacció
         if (punt.enInteractuar) punt.enInteractuar();
         const dialeg = typeof punt.dialeg === 'function' ? punt.dialeg(Estat) : punt.dialeg;
-        if (!dialeg) { this.dialegDePunt = false; if (punt.enTancar) punt.enTancar(); return; }   // accions sense diàleg (només un efecte a l'escena)
+        if (!dialeg) { this.dialegDePunt = false; if (punt.enTancar) punt.enTancar(); this.tarotaDespresDeText(punt); return; }   // accions sense diàleg (només un efecte a l'escena)
         const obre = () => this.ui().obrirDialeg(dialeg, () => {
             if (punt.enTancar) punt.enTancar();
             Estat.desar();
             this.dialegDePunt = false;
+            this.tarotaDespresDeText(punt);
         });
         if (punt.npc && dialeg.pagines && dialeg.pagines.length) this.separarDeNpc(punt.npc, obre); else obre();
+    }
+
+    // Sempre primer el text i després la tarota: si el punt llegit és al lloc d'una tarota activa (la bassa, la pedra...), en acabar el diàleg
+    // s'obre la interfície de tocar. Així no depèn dels enemics de prop (amb ells, ESPAI ataca).
+    tarotaDespresDeText(punt) {
+        this.time.delayedCall(400, () => {
+            if (this.canviant || this.ui().dialeg || this.ui().bloquejat) return;
+            const lloc = this.flautaActiva();
+            if (lloc && Phaser.Math.Distance.Between(punt.x, punt.y, lloc.x, lloc.y) < 80) this.obrirMusica();
+        });
     }
 
     // Parlar amb algú: l'Ineu fa un pas enrere perquè els dos dibuixos no se solapin («parlen a una petita distància, sense tocar-se»).

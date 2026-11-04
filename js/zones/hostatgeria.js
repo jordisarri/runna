@@ -159,9 +159,11 @@ class ZonaSoterraniHost extends ZonaBase {
 
 // El vestíbul de l'Hostatgeria. Tres portes duen a les cambres de les sacerdotesses; cada una té el seu bloqueig:
 //   esquerra (dormitori, la Dolora): oberta, però la sacerdotessa dorm dins un capoll de boira → Cant de l'Aurora (flauta)
-//   mig (refetor, la Pilària): una taula pesadíssima barra la porta → Guants de Poder
+//   mig (refetor, la Pilària): un àngel de pedra massís barra la porta → Guants de Poder (s'empeny des d'un costat)
 //   dreta (capella, la Carmèlia): esbarzers negres → Runna
 // En alliberar les tres, obren la porta de l'Hostatgeria per dins (al vestíbul apareix un cofre amb l'Empara Fraternal).
+// On queda l'àngel de pedra un cop empès: justament fora de la porta del mig (que s'obre a 560-640) i lluny de les altres dues (a 300 i 900)
+const ESTATUA_X_ESQ = 470, ESTATUA_X_DRE = 730;
 class ZonaHostatgeriaInt extends ZonaCasaBase {
     constructor() {
         super('ZonaHostatgeriaInt', {
@@ -215,21 +217,28 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         // Paret de baix: forat de l'escala del soterrani (140-260, al racó) i de la porta de l'Hostatgeria (540-660)
         [[0, 140], [260, 540], [660, A]].forEach(([a, b]) => this.colisio((a + b) / 2, H - 10, b - a, 20));
 
-        // Portes del fons: l'obertura s'omple amb la porta de fusta; la de les cambres és la sortida
+        // Portes del fons: d'arc, amb dos batents que s'obren cap endins quan l'Ineu s'hi acosta (com les altres portes del joc). Les bloquegen
+        // la taula del refetor i els esbarzers de la capella: mentre hi són, la porta no s'obre.
+        const blocs = [null, () => !Estat.flag('refetorObert'), () => (this.esbarzers || []).some(o => o.viu)];
+        const fustes = [[0x6a4328, 0x7a5233], [0x5a3a20, 0x6a4628], [0x4e3030, 0x5e3c3c]];
         PX.forEach((x, i) => {
-            this.porta(x, 78, 90, 120, i === 0 ? 0x4a2c16 : 0x3a2412);
+            this.portaAnimada({ x, top: 22, bottom: 124, ample: 84, arc: true, fons: -987, color: fustes[i][0], panell: fustes[i][1], vora: 0x1a0e06, ferro: true, bloq: blocs[i] });
+            this.marcPorta(x);
             this.sortida(x - 40, 120, 80, 40, ['ZonaCambraPains', 'ZonaCambraPhili', 'ZonaCambraCharm'][i], 'porta');
         });
+        this.decorarVestibul(A, H);
 
-        // Bloqueig del refetor (porta del mig): una taula enorme de roure; amb els Guants de Poder s'empeny cap al costat
-        this.taulaPorta = null;
+        // Bloqueig del refetor (porta del mig): un àngel de pedra massís. Amb els Guants de Poder s'empeny des de qualsevol dels dos costats i es desplaça
+        // just el necessari per deixar la porta lliure (sense arribar a les altres dues). Un cop empès, es queda al costat on l'han deixat.
+        this.estatua = null; this.colEstatua = []; this.empentaMs = 0; this.pistaEstatua = 0;
         if (!Estat.flag('refetorObert')) {
-            this.taulaPorta = this.posar('taula', 600, 232, { escala: 1.5, col: { w: 150, h: 36 } });
-            this.colTaula = this.obstacles.getChildren()[this.obstacles.getChildren().length - 1];
-            this.obstacles.remove(this.colTaula);          // el bloqueig de la taula té el seu propi col·lisionador, que avisa quan l'Ineu hi empeny
-            // Entre la taula i la paret no s'hi pot passar: només es pot obrir la porta empenyent la taula des d'un costat
-            this.colDarrereTaula = this.colisio(600, 182, 200, 30);
-            this.empentaMs = 0; this.contacteTaula = 0; this.costatTaula = 1; this.pistaTaula = false;
+            this.estatua = this.crearEstatua(600, 250);
+            // Un cos sota els peus i un tros de paret al darrere: ni es pot vorejar per darrere ni passar entre l'àngel i la porta
+            this.colEstatua = [this.colisio(600, 236, 100, 40), this.colisio(600, 192, 150, 36)];
+            this.interactiu(600, 262, 130, DIALEGS.taulaRefetor, { altura: 200, senseMirada: true, actiu: () => !Estat.flag('refetorObert') });
+        } else {
+            const e = this.crearEstatua(Estat.flag('estatuaEsquerra') ? ESTATUA_X_ESQ : ESTATUA_X_DRE, 250);       // ja empès: es queda al costat
+            this.colisio(e.x, 236, 100, 40);
         }
         // Bloqueig de la capella (porta de la dreta): dues mates d'esbarzers negres, i un mur invisible al darrere perquè no es pugui vorejar
         this.esbarzer(880, 215, 'host_cap1'); this.esbarzer(924, 215, 'host_cap2');
@@ -265,36 +274,160 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.1).setDepth(80000);
     }
 
-    enEntrar() {
-        if (this.taulaPorta) this.colliderTaula = this.physics.add.collider(this.ineu, this.colTaula, (ineu, t) => { this.contacteTaula = this.time.now; this.costatTaula = ineu.x < t.x ? 1 : -1; });
+    // Marc de pedra d'una porta d'arc: muntants, arc amb dovella central i una petita llinda de fusta
+    marcPorta(x) {
+        const g = this.add.graphics().setDepth(-984);
+        const traç = (amp, color, alfa = 1) => {
+            g.lineStyle(amp, color, alfa).beginPath().moveTo(x - 47, 128).lineTo(x - 47, 62);
+            g.arc(x, 62, 47, Math.PI, Math.PI * 2, false);
+            g.lineTo(x + 47, 128).strokePath();
+        };
+        traç(15, 0x1c120a);                  // vora fosca
+        traç(11, 0x84735e);                  // pedra
+        traç(3, 0xa8977c, 0.7);              // llum a la cara
+        g.fillStyle(0x6a5a48, 1).fillRoundedRect(x - 8, 6, 16, 18, 3).lineStyle(2, 0x1c120a, 1).strokeRoundedRect(x - 8, 6, 16, 18, 3);       // dovella
+        g.fillStyle(0x6a5a48, 1).fillRect(x - 56, 120, 18, 10).fillRect(x + 38, 120, 18, 10).lineStyle(1.5, 0x1c120a, 1).strokeRect(x - 56, 120, 18, 10).strokeRect(x + 38, 120, 18, 10);   // sòcols
+        g.fillStyle(0x000000, 0.28).fillRect(x - 42, 124, 84, 6);                                // ombra del llindar
     }
 
-    // L'Ineu empeny la taula si és a un costat i avança contra ella; amb els Guants de Poder es mou
+    // Peces de decoració del vestíbul: paviment amb escacat i vora, catifa amb dibuixos i serrells, canelobres de peu, test de plantes i raigs de llum
+    decorarVestibul(A, H) {
+        // Paviment: escacat suau i una vora fosca vora les parets
+        const pav = this.add.graphics().setDepth(-1060);
+        for (let j = 0; j < 13; j++) for (let i = 0; i < 17; i++) if ((i + j) % 2) pav.fillStyle(0x000000, 0.1).fillRect(140 + i * 60, 170 + j * 60, 60, 60);
+        pav.fillStyle(0x000000, 0.18).fillRect(130, 120, 14, H - 120).fillRect(A - 144, 120, 14, H - 120);
+        pav.lineStyle(2, 0x3a2a1a, 0.5).lineBetween(144, 130, 144, H).lineBetween(A - 144, 130, A - 144, H);
+        // Catifa: dibuix de rombes daurats, medalló al mig i serrells als caps
+        const cat = this.add.graphics().setDepth(-1049);
+        for (let y = 360; y < 880; y += 56) cat.fillStyle(0xc8a050, 0.55).fillTriangle(600, y, 584, y + 28, 616, y + 28).fillTriangle(600, y + 56, 584, y + 28, 616, y + 28);
+        for (let x = 300; x < 900; x += 56) if (Math.abs(x - 600) > 60) cat.fillStyle(0xc8a050, 0.55).fillTriangle(x, 258, x - 14, 275, x + 14, 275).fillTriangle(x, 292, x - 14, 275, x + 14, 275);
+        cat.fillStyle(0x3e1216, 1).fillCircle(600, 275, 36).lineStyle(3, 0xc8a050, 1).strokeCircle(600, 275, 36).strokeCircle(600, 275, 26);
+        cat.fillStyle(0xc8a050, 1).fillCircle(600, 275, 7);
+        cat.lineStyle(2, 0xc8a050, 0.9);
+        for (let y = 236; y < 320; y += 6) { cat.lineBetween(256, y, 262, y); cat.lineBetween(938, y, 944, y); }
+        for (let x = 544; x < 658; x += 6) cat.lineBetween(x, 886, x, 892);
+        // Raigs de llum de lluna de les finestres
+        [450, 750].forEach(x => {
+            const l = this.add.graphics().setDepth(-1045).setBlendMode(Phaser.BlendModes.ADD);
+            l.fillStyle(0x9ab8ff, 0.07).fillPoints([{ x: x - 22, y: 124 }, { x: x + 22, y: 124 }, { x: x + 92, y: 340 }, { x: x - 38, y: 340 }], true);
+            l.fillStyle(0x9ab8ff, 0.05).fillEllipse(x + 26, 350, 130, 36);
+        });
+        // Canelobres de peu al llarg de la catifa
+        [[510, 400], [690, 400], [510, 650], [690, 650]].forEach(([x, y], i) => this.canelobre(x, y, i));
+        // Testos amb plantes als racons
+        [[170, 205], [1030, 205], [1040, 790]].forEach(([x, y]) => this.testPlanta(x, y));
+        // Motllura a la part alta de la paret i un crucifix de fusta entre els aplics
+        const mot = this.add.graphics().setDepth(-989);
+        mot.fillStyle(0x3a2412, 1).fillRect(130, 74, A - 260, 5).fillStyle(0xc8a050, 0.45).fillRect(130, 74, A - 260, 1.5);
+        mot.fillStyle(0x4a2e1a, 1).fillRect(596, 28, 8, 40).fillRect(584, 38, 32, 8).lineStyle(1.5, 0x120c08, 1).strokeRect(596, 28, 8, 40).strokeRect(584, 38, 32, 8);
+    }
+
+    canelobre(x, y, i) {
+        this.colisio(x, y + 8, 22, 12);
+        const g = this.add.graphics().setDepth(y + 12);
+        g.fillStyle(0x000000, 0.28).fillEllipse(x, y + 16, 34, 10);
+        g.fillStyle(0x2a2420, 1).fillEllipse(x, y + 12, 26, 8).fillRect(x - 3, y - 36, 6, 48).fillEllipse(x, y - 36, 22, 6);
+        g.lineStyle(2.5, 0x2a2420, 1).beginPath().arc(x - 9, y - 36, 9, Math.PI * 0.5, Math.PI, false).strokePath().beginPath().arc(x + 9, y - 36, 9, 0, Math.PI * 0.5, false).strokePath();
+        [-9, 0, 9].forEach(dx => g.fillStyle(0xeee2c4, 1).fillRect(x + dx - 2, y - 52 - (dx === 0 ? 8 : 0), 4, 16 + (dx === 0 ? 8 : 0)));
+        const llum = this.add.circle(x, y - 54, 52, 0xffc060, 0.1).setDepth(y + 13).setBlendMode(Phaser.BlendModes.ADD);
+        this.tweens.add({ targets: llum, alpha: 0.18, scale: 1.1, yoyo: true, repeat: -1, duration: 600 + i * 130 });
+        [-9, 0, 9].forEach((dx, k) => {
+            const f = this.add.ellipse(x + dx, y - 58 - (dx === 0 ? 8 : 0), 5, 10, 0xffc860, 1).setDepth(y + 14);
+            this.tweens.add({ targets: f, scaleY: 0.78, alpha: 0.8, yoyo: true, repeat: -1, duration: 260 + k * 70 + i * 40 });
+        });
+    }
+
+    testPlanta(x, y) {
+        this.colisio(x, y + 8, 40, 16);
+        const g = this.add.graphics().setDepth(y + 14);
+        g.fillStyle(0x000000, 0.25).fillEllipse(x, y + 20, 56, 12);
+        g.fillStyle(0x9a5a38, 1).fillPoints([{ x: x - 22, y: y - 6 }, { x: x + 22, y: y - 6 }, { x: x + 15, y: y + 22 }, { x: x - 15, y: y + 22 }], true);
+        g.lineStyle(2, 0x3a1a0c, 1).strokePoints([{ x: x - 22, y: y - 6 }, { x: x + 22, y: y - 6 }, { x: x + 15, y: y + 22 }, { x: x - 15, y: y + 22 }], true);
+        g.fillStyle(0xb87048, 1).fillRect(x - 24, y - 10, 48, 8).lineStyle(2, 0x3a1a0c, 1).strokeRect(x - 24, y - 10, 48, 8);
+        for (let k = -3; k <= 3; k++) {                                                                  // fulles que surten del test, en ventall
+            const a = -Math.PI / 2 + k * 0.38, l = 40 + (3 - Math.abs(k)) * 7;
+            g.lineStyle(7, k % 2 ? 0x3e7a42 : 0x4e9050, 1).lineBetween(x, y - 8, x + Math.cos(a) * l, y - 8 + Math.sin(a) * l);
+        }
+    }
+
+    // L'àngel de pedra: una escultura de 100 px d'ample amb peanya, ales plegades, caputxa i mans juntes. (x, y) són els peus.
+    crearEstatua(x, y) {
+        const c = this.add.container(x, y).setDepth(y);
+        const g = this.add.graphics();
+        const PEDRA = 0x9a9484, MITJA = 0x7c7668, FOSCA = 0x5a5448, VORA = 0x24201a;
+        g.fillStyle(0x000000, 0.3).fillEllipse(0, 6, 128, 20);
+        // ales plegades al darrere
+        [-1, 1].forEach(sg => {
+            const ala = [{ x: sg * 12, y: -124 }, { x: sg * 54, y: -170 }, { x: sg * 66, y: -122 }, { x: sg * 52, y: -82 }, { x: sg * 28, y: -50 }];
+            g.fillStyle(MITJA, 1).fillPoints(ala, true).lineStyle(2, VORA, 1).strokePoints(ala, true);
+            g.lineStyle(1.5, FOSCA, 0.9);
+            for (let k = 1; k <= 4; k++) g.lineBetween(sg * 14, -122 + k * 12, sg * (50 + k * 4), -150 + k * 16);
+        });
+        // túnica: plecs i cara d'ombra a la dreta
+        const roba = [{ x: -30, y: -44 }, { x: -21, y: -122 }, { x: 21, y: -122 }, { x: 30, y: -44 }];
+        g.fillStyle(PEDRA, 1).fillPoints(roba, true);
+        g.fillStyle(MITJA, 1).fillPoints([{ x: 4, y: -122 }, { x: 21, y: -122 }, { x: 30, y: -44 }, { x: 10, y: -44 }], true);
+        g.lineStyle(2, VORA, 1).strokePoints(roba, true);
+        g.lineStyle(1.5, FOSCA, 0.85);
+        [-14, -4, 8, 18].forEach(fx => g.lineBetween(fx * 0.7, -112, fx * 1.35, -46));
+        g.fillStyle(FOSCA, 1).fillRect(-30, -62, 60, 4).fillRect(-4, -62, 8, 22);                    // cinta i cordó
+        // mans joves en pregària
+        g.fillStyle(PEDRA, 1).fillPoints([{ x: -9, y: -98 }, { x: 0, y: -116 }, { x: 9, y: -98 }, { x: 5, y: -86 }, { x: -5, y: -86 }], true).lineStyle(1.5, VORA, 1).strokePoints([{ x: -9, y: -98 }, { x: 0, y: -116 }, { x: 9, y: -98 }, { x: 5, y: -86 }, { x: -5, y: -86 }], true);
+        // cap amb caputxa i aurèola de pedra
+        g.fillStyle(PEDRA, 1).fillCircle(0, -136, 17).lineStyle(2, VORA, 1).strokeCircle(0, -136, 17);
+        g.fillStyle(MITJA, 1).fillPoints([{ x: -19, y: -126 }, { x: -17, y: -148 }, { x: 0, y: -158 }, { x: 17, y: -148 }, { x: 19, y: -126 }, { x: 10, y: -134 }, { x: -10, y: -134 }], true);
+        g.lineStyle(2, VORA, 1).strokePoints([{ x: -19, y: -126 }, { x: -17, y: -148 }, { x: 0, y: -158 }, { x: 17, y: -148 }, { x: 19, y: -126 }], false);
+        g.fillStyle(FOSCA, 0.7).fillEllipse(-5, -132, 4, 3).fillEllipse(5, -132, 4, 3).fillRect(-2, -128, 4, 5);                    // ulls i nas gairebé esborrats
+        g.lineStyle(3, 0xb8b09c, 0.8).strokeEllipse(0, -164, 42, 12);
+        // peanya de dos graons
+        g.fillStyle(MITJA, 1).fillRect(-54, -18, 108, 20).lineStyle(2, VORA, 1).strokeRect(-54, -18, 108, 20);
+        g.fillStyle(PEDRA, 1).fillRect(-46, -42, 92, 26).lineStyle(2, VORA, 1).strokeRect(-46, -42, 92, 26);
+        g.fillStyle(0xb4ac98, 1).fillRect(-50, -48, 100, 8).lineStyle(2, VORA, 1).strokeRect(-50, -48, 100, 8);
+        g.lineStyle(1.5, FOSCA, 0.9).lineBetween(-20, -40, -14, -28).lineBetween(-14, -28, -22, -18).lineBetween(24, -16, 30, -4);       // esquerdes
+        // molsa
+        g.fillStyle(0x5a7a4a, 0.7).fillEllipse(-36, -6, 22, 8).fillEllipse(30, -30, 14, 6).fillEllipse(-8, -118, 10, 5);
+        c.add(g);
+        return c;
+    }
+
+    // L'Ineu empeny l'àngel si és a un costat, a prop, i avança contra ell (no cal cap punt exacte: qualsevol lloc del seu lateral serveix)
     actualitzar(ara, delta) {
         if (this.colCapella && this.esbarzers.every(o => !o.viu)) { this.obstacles.remove(this.colCapella, true, true); this.colCapella = null; }
-        if (!this.taulaPorta || Estat.flag('refetorObert')) return;
-        const ui = this.ui(), c = this.cursors, t = this.tecles;
-        const dirX = (c.right.isDown || t.D.isDown ? 1 : 0) - (c.left.isDown || t.A.isDown ? 1 : 0) || Math.sign(ui.vectorTactil.x > 0.3 ? 1 : ui.vectorTactil.x < -0.3 ? -1 : 0);
-        const toca = this.time.now - this.contacteTaula < 120 && Math.abs(this.ineu.x - this.taulaPorta.x) > 70 && dirX === this.costatTaula;
-        this.empentaMs = toca ? this.empentaMs + delta : 0;
-        if (this.empentaMs < 600) return;
+        const E = this.estatua;
+        if (!E || Estat.flag('refetorObert')) return;
+        const ui = this.ui(), c = this.cursors, t = this.tecles, I = this.ineu;
+        const dx = I.x - E.x, vora = Math.abs(dx) > 40 && Math.abs(dx) < 100 && Math.abs(I.y - 236) < 56;       // al costat (a l'alçada de la peanya)
+        const dirX = (c.right.isDown || t.D.isDown ? 1 : 0) - (c.left.isDown || t.A.isDown ? 1 : 0) || (ui.vectorTactil.x > 0.3 ? 1 : ui.vectorTactil.x < -0.3 ? -1 : 0);
+        const empeny = vora && dirX === (dx < 0 ? 1 : -1);                                                      // camina cap a l'àngel
+        this.empentaMs = empeny ? this.empentaMs + delta : 0;
+        E.x = 600 + (empeny && Estat.te('guants') ? Math.sin(ara / 45) * 1.6 : 0);                              // tremola quan s'hi fa força
+        if (this.empentaMs < 450) return;
         this.empentaMs = 0;
         if (!Estat.te('guants')) {
-            if (!this.pistaTaula) { this.pistaTaula = true; this.ineuDiu("Una taula de roure massissa barra la porta del mig. Des de l'altra banda, una veu fina i enrabiada colpeja la fusta. Pesa massa: calen unes mans més fortes."); }
+            if (ara > this.pistaEstatua) { this.pistaEstatua = ara + 7000; this.ineuDiu("L'àngel de pedra no es belluga ni un pèl. Pesa massa: calen unes mans més fortes."); }
             return;
         }
-        this.empenyTaula(this.costatTaula);
+        this.empenyEstatua(dx < 0 ? 1 : -1);
     }
 
-    empenyTaula(dir = 1) {
-        if (Estat.flag('refetorObert') || !this.taulaPorta) return;
+    empenyEstatua(dir = 1) {
+        const E = this.estatua;
+        if (Estat.flag('refetorObert') || !E) return;
         Estat.posaFlag('refetorObert');
-        if (this.colliderTaula) this.colliderTaula.destroy();
-        this.colTaula.destroy();
-        if (this.colDarrereTaula) { this.obstacles.remove(this.colDarrereTaula, true, true); this.colDarrereTaula = null; }
+        if (dir < 0) Estat.posaFlag('estatuaEsquerra');
+        this.colEstatua.forEach(z => this.obstacles.remove(z, true, true));
+        this.colEstatua = [];
         Sfx.secret();
-        this.cameras.main.shake(300, 0.003);
-        this.tweens.add({ targets: this.taulaPorta, x: this.taulaPorta.x + dir * 200, duration: 1400, ease: 'Sine.easeInOut', onComplete: () => Estat.desar() });
+        this.cameras.main.shake(400, 0.003);
+        const fi = dir < 0 ? ESTATUA_X_ESQ : ESTATUA_X_DRE;
+        const pols = this.boira(E.x, 240, 110, 20, 3, 0xcfc4b0);
+        this.tweens.add({ targets: E, x: fi, duration: 1700, ease: 'Sine.easeInOut', onComplete: () => {
+            this.colisio(fi, 236, 100, 40);                                  // un cop al seu lloc, torna a fer de mur
+            pols.stop(); this.time.delayedCall(1200, () => pols.destroy());
+            this.estatua = null;
+            Estat.desar();
+        } });
+        this.tweens.add({ targets: pols, x: fi, duration: 1700, ease: 'Sine.easeInOut' });
     }
 }
 
@@ -334,6 +467,11 @@ class CambraMonja extends ZonaCasaBase {
             fin.fillStyle(0x4a2e1a, 1).fillRect(368, 56, 64, 6);
         }
 
+        if (m !== 'charm') {                                           // raig de llum de lluna de la finestra
+            const raig = this.add.graphics().setDepth(-1045).setBlendMode(Phaser.BlendModes.ADD);
+            raig.fillStyle(0x9ab8ff, 0.07).fillPoints([{ x: 380, y: 92 }, { x: 420, y: 92 }, { x: 500, y: 330 }, { x: 330, y: 330 }], true);
+            raig.fillStyle(0x9ab8ff, 0.05).fillEllipse(415, 340, 190, 40);
+        }
         if (m === 'pains') {                                           // dormitori: quatre llits estrets amb capçal, coixí i flassada
             const llits = this.add.graphics().setDepth(-950);
             const flassades = [0x5a6a8e, 0x6a8a5a, 0xa0784a, 0x9a5a6a];
@@ -364,9 +502,9 @@ class CambraMonja extends ZonaCasaBase {
             cat.fillStyle(0x8a6a3a, 1).fillRoundedRect(430, 410, 180, 120, 10).lineStyle(3, 0x5a3a1a, 1).strokeRoundedRect(438, 418, 164, 104, 8);
             this.colisio(200, 330, 80, 130); this.colisio(420, 330, 80, 130); this.colisio(620, 330, 80, 130); this.colisio(200, 500, 80, 130);
             this.pains = this.npc('monja_pains', 520, 470, DIALEGS.monjaPains);
-            this.capoll = this.add.ellipse(520, 420, 130, 150, 0xa070ff, 0.5).setDepth(9000).setStrokeStyle(3, 0x6a40b0, 0.8);
-            this.tweens.add({ targets: this.capoll, alpha: 0.28, scaleX: 1.08, scaleY: 1.06, yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
-            this.boiraCapoll = this.boira(520, 430, 120, 110, 1.4);
+            this.capoll = this.crearCapoll(this.pains);
+            this.pains.setTint(0xd6c8ff);                                          // atrapada: es veu a través de la seda lila
+            this.boiraCapoll = this.boira(this.capoll.x, this.capoll.y, this.capoll.rx * 1.4, this.capoll.ry * 1.2, 1.4);
             this.llocFlauta('pains', 520, 480, 300, false, () => !Estat.flag('lliurePains'));
             if (Estat.flag('lliurePains')) this.alliberada(true);
         } else if (m === 'phili') {                                    // refetor: taula llarga, aparador amb plats, faristol i rastells d'alls
@@ -397,7 +535,7 @@ class CambraMonja extends ZonaCasaBase {
                 for (let k = 0; k < 6; k++) alls.fillStyle(0xf0e8d8, 1).fillCircle(x + (k % 2 ? 5 : -5), 14 + k * 7, 5).lineStyle(1, 0x8a7a64, 1).strokeCircle(x + (k % 2 ? 5 : -5), 14 + k * 7, 5);
             });
             alls.fillStyle(0xa0503a, 1).fillEllipse(480, 36, 26, 44).lineStyle(2, 0x3a1a0c, 1).strokeEllipse(480, 36, 26, 44).lineBetween(480, 0, 480, 14);
-            this.npc('monja_phili', 400, 470, DIALEGS.monjaPhili);
+            this.npc('monja_phili', 400, 272, DIALEGS.monjaPhili, { radi: 190 });          // al seu lloc, darrere la taula del refetor (hi parles per sobre de la taula)
         } else {                                                       // capella: rosetó, altar, catifa fins a l'altar, bancs i dues fornícules
             const cat = this.add.graphics().setDepth(-1050);
             cat.fillStyle(0x6a1f24, 1).fillRect(360, 270, 80, 340);
@@ -418,6 +556,59 @@ class CambraMonja extends ZonaCasaBase {
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.08).setDepth(80100);
     }
 
+    // El capoll de seda de boira: un ou llarg que embolcalla la sacerdotessa sencera (des dels peus fins al cap), amb meridians de fils, anells i
+    // fils que l'ancoren a terra. Es mida amb el dibuix de la monja; es veu a través i batega suaument.
+    crearCapoll(nun) {
+        const h = nun.displayHeight, w = nun.displayWidth;
+        const rx = Math.max(w * 0.72, 84), ry = h * 0.62;
+        const c = this.add.container(nun.x, nun.y - h * 0.5).setDepth(nun.depth + 1);
+        c.rx = rx; c.ry = ry;
+        const g = this.add.graphics();
+        // resplendor lila al voltant
+        g.fillStyle(0xb890ff, 0.1).fillEllipse(0, 0, rx * 2.6, ry * 2.3).fillStyle(0xb890ff, 0.12).fillEllipse(0, 0, rx * 2.2, ry * 2.1);
+        // fils que l'ancoren a terra i al sostre
+        g.lineStyle(2, 0xe8dcff, 0.55);
+        [-1, 1].forEach(s => { [0.55, 0.8].forEach(f => g.lineBetween(s * rx * 0.85, ry * 0.4, s * rx * (1 + f * 0.8), ry * 1.02)); g.lineBetween(s * rx * 0.3, -ry * 0.95, s * rx * 0.6, -ry * 1.22); });
+        // cos del capoll: capes de seda translúcida
+        g.fillStyle(0x8a68e0, 0.34).fillEllipse(0, 0, rx * 2, ry * 2);
+        g.fillStyle(0xb89cff, 0.2).fillEllipse(0, ry * 0.08, rx * 1.7, ry * 1.8);
+        g.fillStyle(0xffffff, 0.14).fillEllipse(-rx * 0.34, -ry * 0.36, rx * 0.7, ry * 0.7);                        // brillantor
+        // meridians de fil: de pol a pol, passant per l'equador
+        for (let k = -5; k <= 5; k++) {
+            const f = k / 5, pts = [];
+            for (let t = 0; t <= 24; t++) { const a = t / 24 * Math.PI; pts.push({ x: rx * f * Math.sin(a) * 0.98, y: -Math.cos(a) * ry * 0.98 }); }
+            g.lineStyle(k % 2 ? 1.2 : 1.9, 0xf0e6ff, k % 2 ? 0.4 : 0.6).strokePoints(pts, false);
+        }
+        // anells de fils que s'hi enrotllen
+        [-0.62, -0.32, 0, 0.32, 0.62].forEach(l => {
+            const pts = [], ex = Math.sqrt(1 - l * l);
+            for (let u = -20; u <= 20; u++) { const x = u / 20; pts.push({ x: x * rx * ex, y: l * ry + 0.09 * ry * (1 - x * x) }); }
+            g.lineStyle(1.3, 0xe0d2ff, 0.5).strokePoints(pts, false);
+        });
+        g.lineStyle(3, 0x5a3aa0, 0.85).strokeEllipse(0, 0, rx * 2, ry * 2);
+        g.lineStyle(1.5, 0xffffff, 0.35).strokeEllipse(0, 0, rx * 1.92, ry * 1.92);
+        // flocs de seda que sobresurten dalt i baix
+        [[0, -ry], [0, ry]].forEach(([x, y]) => { g.fillStyle(0xe8dcff, 0.8).fillEllipse(x, y, 26, 14); g.fillStyle(0x5a3aa0, 0.8).fillEllipse(x, y, 10, 6); });
+        c.add(g);
+        // fils solts que se separen una mica i es belluguen
+        const fils = this.add.graphics();
+        fils.lineStyle(1.5, 0xf4ecff, 0.6);
+        for (let k = 0; k < 7; k++) {
+            const a = -Math.PI * 0.9 + k * 0.5, r0 = 1.0;
+            const pts = [];
+            for (let t = 0; t <= 10; t++) pts.push({ x: Math.cos(a) * rx * (r0 + t * 0.018) + Math.sin(t * 0.9 + k) * 4, y: Math.sin(a) * ry * (r0 + t * 0.02) });
+            fils.strokePoints(pts, false);
+        }
+        c.add(fils);
+        this.tweens.add({ targets: c, alpha: { from: 1, to: 0.8 }, scaleX: { from: 1, to: 1.025 }, scaleY: { from: 1, to: 1.035 }, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
+        this.tweens.add({ targets: fils, angle: { from: -1.2, to: 1.2 }, yoyo: true, repeat: -1, duration: 2200, ease: 'Sine.easeInOut' });
+        return c;
+    }
+
+    teEfecteMelodia(nom) {
+        return this.monja === 'pains' && nom === 'aurora' && !Estat.flag('lliurePains') && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 520, 460) <= 320;
+    }
+
     // Cant de l'Aurora davant el capoll: la boira s'esvaeix i la Dolora es desperta
     enMelodia(nom) {
         if (this.monja !== 'pains' || nom !== 'aurora') return false;
@@ -434,8 +625,10 @@ class CambraMonja extends ZonaCasaBase {
 
     alliberada(directe) {
         if (this.boiraCapoll) this.boiraCapoll.stop();
-        if (directe) { this.capoll.destroy(); return; }
-        this.tweens.add({ targets: this.capoll, alpha: 0, scale: 1.7, duration: 1800, onComplete: () => this.capoll.destroy() });
+        if (this.pains) this.pains.clearTint();
+        if (directe) { this.tweens.killTweensOf(this.capoll); this.capoll.destroy(); return; }
+        this.tweens.killTweensOf(this.capoll);
+        this.tweens.add({ targets: this.capoll, alpha: 0, scaleX: 1.5, scaleY: 1.7, duration: 1800, ease: 'Sine.easeOut', onComplete: () => this.capoll.destroy() });
     }
 }
 

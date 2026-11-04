@@ -140,7 +140,12 @@ class ZonaRuines extends ZonaBase {
     // Ja es pot tocar davant l'ombra: els dos fragments són al sarró, el Pare Alcoví els ha llegit i l'ombra ha demanat el cant
     ombraCantOberta() { return ['fragment1', 'fragment2', 'alcuiLlegit', 'ombraDemanaCant'].every(f => Estat.flag(f)); }
 
-    // El Cant de les Pedres, tocat davant l'ombra, li desperta la memòria
+    teEfecteMelodia(nom) {
+        return nom === 'pedres' && Estat.flag('fragment1') && !Estat.flag('benedicioMonjo') && ['fragment1', 'fragment2', 'alcuiLlegit'].every(f => Estat.flag(f)) &&
+            Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, this.puntOmbra.x, this.puntOmbra.y) <= 300;
+    }
+
+    // El Cant de Vespres, tocat davant l'ombra, li desperta la memòria
     enMelodia(nom) {
         if (nom !== 'pedres' || !Estat.flag('fragment1')) return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, this.puntOmbra.x, this.puntOmbra.y) > 300) return false;
@@ -507,12 +512,14 @@ Object.assign(DIALEGS, {
             pagines: [
                 { qui: 'Germà Francí', text: 'Les has deixades a l\'àngel? Que Déu t\'ho pagui, fill. Els monjos d\'abans ja deuen estar contents: algú encara se\'n recorda.' },
                 { qui: 'Germà Francí', text: 'Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.' },
-                { avis: 'Has obtingut els GUANTS DE PODER!' },
+                { avis: 'Has obtingut els GUANTS DE PODER!', obj: 'guants' },
                 { qui: 'Germà Francí', text: 'Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.' }
             ],
             enAcabar: () => {
                 E.dona('guants');
-                if (E.flag('josepVencut') && !E.flag('rodaMoguda')) E.posaObjectiu("Els Guants de Poder deuen poder amb la roda de carruatge del Celler, entre la Plaça i les Runes.");
+                E.posaObjectiu(E.flag('josepVencut') && !E.flag('rodaMoguda')
+                    ? "Els Guants de Poder deuen poder amb la roda de carruatge del Celler, entre la Plaça i les Runes."
+                    : PROGRES.pista(E));                                    // (abans es quedava «el Germà Francí t'espera amb una cosa» tot i haver-la rebuda)
             }
         };
         if (E.te('ram')) return { pagines: [
@@ -525,7 +532,7 @@ Object.assign(DIALEGS, {
                 { qui: 'Germà Francí', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L\'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
                 { qui: 'Germà Francí', text: 'Cada setmana porto flors a l\'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
                 { qui: 'Germà Francí', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },
-                { avis: 'Has obtingut un RAM DE FLORS.' }
+                { avis: 'Has obtingut un RAM DE FLORS.', obj: 'ram' }
             ],
             enAcabar: () => { E.dona('ram'); E.posaObjectiu("El ram del Germà Francí és per a la tomba de l'àngel, al Cementiri."); }
         };

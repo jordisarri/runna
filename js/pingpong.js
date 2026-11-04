@@ -37,6 +37,9 @@ class EscenaPingPong extends Phaser.Scene {
         this.estat = 'res';
         this.rally = 0;
         this.acabat = false;
+        // (l'escena es reaprofita: res d'una partida anterior pot quedar a mig fer)
+        this.fug = null; this.tornant = null; this.fugJosep = null; this.limitServei = null;
+        this.bloqFins = 0; this.carrilSeguent = undefined; this.respost = false; this.entrat = []; this.intents = 0;
 
         // ---- Escenari: la paret de pedra del celler, llum de les espelmes i la taula verda en perspectiva ----
         encaixarDisseny(this, ALT_PP);

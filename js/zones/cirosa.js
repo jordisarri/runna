@@ -138,7 +138,10 @@ class ZonaCirosa extends ZonaBase {
         this.tweens.add({ targets: this.foc, scaleY: this.foc.scaleY * 1.08, yoyo: true, repeat: -1, duration: 260 });
         this.resplendor = this.add.circle(280, 680, 130, 0xff9a30, 0.12).setDepth(940);
         this.tweens.add({ targets: this.resplendor, alpha: 0.2, yoyo: true, repeat: -1, duration: 400 });
-        this.llocFlauta('foc', 280, 715, 200, false, () => Estat.flag('soparObert') && !Estat.flag('pastorsConvencuts'), true);   // només quan toca convèncer els pastors; passa davant d'ells   // música vora el foc dels pastors
+        const tocaFoc = () => Estat.flag('soparObert') && !Estat.flag('pastorsConvencuts');       // només quan toca convèncer els pastors
+        this.llocFlauta('foc', 280, 715, 200, false, tocaFoc, true);                              // música vora el foc dels pastors
+        this.interactiu(280, 715, 120, { pagines: [{ qui: 'Ineu', text: "(El foc crepita i els pastors callen. Un cant antic vora les brases, el de Vespres, els podria obrir el cor...)" }] },
+            { altura: 90, actiu: tocaFoc, senseMirada: true });                                    // el text previ a tocar la tarota
         this.npc('pastor_a', 200, 740, DIALEGS.pastorA, { flipX: false });
         this.npc('pastor_b', 370, 755, DIALEGS.pastorB, { flipX: true });
         this.npc('pastor_vell', 285, 650, DIALEGS.pastorVell);
@@ -225,9 +228,14 @@ class ZonaCirosa extends ZonaBase {
         this.colisio(x, y - 8, 40, 18);
     }
 
+    teEfecteMelodia(nom) {
+        return nom === 'pedres' && Estat.flag('soparObert') && !Estat.flag('pastorsConvencuts') && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 280, 720) <= 380;
+    }
+
     // Els pastors escolten música vora el foc: es convencen d'anar al sopar del Til·ler
     enMelodia(nom) {
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 280, 720) > 380) return false;
+        if (nom !== 'pedres' && Estat.flag('soparObert') && !Estat.flag('pastorsConvencuts')) { this.ineuDiu("Els pastors m'escolten, però això no els recorda casa. Un cant antic, de les esquelles: el de Vespres."); return true; }
         if (!Estat.flag('soparObert')) {
             this.ineuDiu("Els pastors m'escolten en silenci... Encara no és el moment: primer cal parlar amb el Til·ler.");
             return true;

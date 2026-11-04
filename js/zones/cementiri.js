@@ -136,11 +136,23 @@ class ZonaCementiri extends ZonaBase {
     }
 
     // Quan el ram del Germà Francí ja és als peus de l'àngel, la tomba canvia de gràfic amb un fos
-    posarRam() {
-        if (!Estat.flag('florsCreu') || this.tombaAngel.texture.key === 'tomba_angel_flors') return;
+    posarRam(ara = false) {
+        if ((!ara && !Estat.flag('florsCreu')) || this.tombaAngel.texture.key === 'tomba_angel_flors') return;
         const nova = this.add.image(this.tombaAngel.x, this.tombaAngel.y, 'tomba_angel_flors').setOrigin(0.5, 1)
             .setScale(this.tombaAngel.scaleX).setDepth(this.tombaAngel.depth + 1).setAlpha(0);
         this.tweens.add({ targets: nova, alpha: 1, duration: 900, onComplete: () => { this.tombaAngel.setTexture('tomba_angel_flors'); nova.destroy(); } });
+    }
+
+    // El ram acaba de ser deixat (en mig del diàleg): el gerro es farceix de flors a la vista, hi surt una llum rosada i pètals que pugen
+    ramDeixat() {
+        const t = this.tombaAngel;
+        if (!t || t.texture.key === 'tomba_angel_flors') return;
+        this.posarRam(true);
+        Sfx.objecte();
+        const x = t.x, y = t.y - 20;
+        this.llum(x, y, 0xffd8e8);
+        const p = this.add.particles(x, y, 'espurna', { speedY: { min: -70, max: -25 }, speedX: { min: -25, max: 25 }, lifespan: 1800, scale: { start: 0.45, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xffd8e8, 0xfff0f4, 0xffc0d4], blendMode: 'ADD', frequency: 70 }).setDepth(t.depth + 5);
+        this.time.delayedCall(2600, () => { p.stop(); this.time.delayedCall(2000, () => p.destroy()); });
     }
 
     // Puntets de llum que suren i s'encenen i s'apaguen entre les tombes

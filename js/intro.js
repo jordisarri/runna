@@ -26,6 +26,10 @@ class EscenaTitol extends Phaser.Scene {
 
     init(data) {
         this.mode = (data && data.mode) || 'directe';
+        // L'escena es reutilitza (no es torna a construir) en tornar al títol des del joc: l'estat de l'anterior vegada s'ha de netejar,
+        // si no, mostrarMenu() creu que el menú ja és a la pantalla i el deixa invisible
+        this.menuMostrat = false;
+        this.cinta = null;
     }
 
     create() {

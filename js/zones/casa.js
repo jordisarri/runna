@@ -51,7 +51,7 @@ Object.assign(DIALEGS, {
         pagines: []
     } : {
         pagines: [
-            { avis: "Has obtingut la CLAU DE FERRO." }
+            { avis: "Has obtingut la CLAU DE FERRO.", obj: 'clau_ferro' }
         ],
         enAcabar: () => {
             E.dona('clau_ferro'); E.posaFlag('relTretes'); E.posaFlag('clauFerro');

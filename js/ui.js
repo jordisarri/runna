@@ -156,6 +156,8 @@ class EscenaUI extends Phaser.Scene {
         this.bloquejatFins = 0;
         this.vectorTactil = { x: 0, y: 0 };
         this.accioTactil = false;
+        // (l'escena es reaprofita en tornar del títol: els objectes de l'altra vegada ja són destruïts)
+        this.frangesG = null; this.boss = null; this.inventariObert = false; this.inventari = null; this.ineuAlcat = false;
 
         this.crearHUD();
         this.crearCaixaDialeg();
@@ -538,6 +540,8 @@ class EscenaUI extends Phaser.Scene {
 
     mostrarPagina() {
         let p = this.dialeg.dades.pagines[this.dialeg.pagina];
+        // Pàgina d'avís amb objecte ({ avis: '...', obj: 'ram' }): l'Ineu alça el braç i rep l'objecte mentre es veu; en passar-la, el baixa
+        if (p.avis !== undefined && p.obj) { const zr = Joc.zonaActiva(this); this.ineuAlcat = !!(zr && zr.ineuRep && zr.ineuRep(p.obj)); }
         // Pàgina d'avís ({ avis: 'Has obtingut...' }): es veu a la caixa de text, sense nom, i es passa amb un clic com la resta
         if (p.avis !== undefined) p = { qui: '', text: p.avis, avis: true };
         // Pàgina d'acció: no hi ha text, el personatge ho fa (camina, salta, dona una cosa...) i després es continua
@@ -595,13 +599,23 @@ class EscenaUI extends Phaser.Scene {
             return;
         }
         if (this.timerText) { this.acabarEscriptura(); return; }
+        this.baixarIneu();
         this.dialeg.pagina++;
         Sfx.pagina();
         if (this.dialeg.pagina < this.dialeg.dades.pagines.length) { this.mostrarPagina(); return; }
         this.tancarDialeg();
     }
 
+    // Si l'Ineu alçava un objecte rebut (pàgina d'avís amb obj), el torna a la pose normal
+    baixarIneu() {
+        if (!this.ineuAlcat) return;
+        this.ineuAlcat = false;
+        const z = Joc.zonaActiva(this);
+        if (z && z.ineuBaixa) z.ineuBaixa();
+    }
+
     tancarDialeg() {
+        this.baixarIneu();
         const { dades, enTancar } = this.dialeg;
         this.dialeg = null;
         this.caixa.setVisible(false);

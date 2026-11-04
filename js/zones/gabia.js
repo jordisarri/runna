@@ -5,7 +5,7 @@
  *   Gírgoles: cova fosca i humida. Cinc mates de gírgoles lluminoses en rotllana: en tocar-ne una, s'encén o s'apaga ella i les
  *             dues veïnes. Quan les cinc brillen, la cortina de micel·li que tapa el túnel del nord es desfà.
  *   Tortura:  un rastell rovellat barra el pas: el torn només el giren els Guants de Poder. Més amunt, un mur d'esbarzers negres (Runna).
- *   Gàbia:    la gàbia penja al mig d'un avenc. Els blocs de pedra del pont dormen al fons: el Cant de les Pedres els aixeca.
+ *   Gàbia:    la gàbia penja al mig d'un avenc. Els blocs de pedra del pont dormen al fons: el Cant de Vespres els aixeca.
  *             Combat final contra l'Ocellaire (bàcul que gira i ocells de foc). Vençut, el Cant del Miracle aixeca la gàbia,
  *             Runna trenca els capolls dels nens i l'Andreu s'hi queda tancat. Després, l'epíleg al Santuari.
  */
@@ -62,7 +62,7 @@ Object.assign(DIALEGS, {
         pagines: [
             { qui: 'Inscripció', text: "Gravada a la pedra, una paraula antiga: PEDRES." },
             { qui: 'Ineu', text: E.flag('cantPedres')
-                    ? "(Les pedres... L'ombra del monjo es va despertar amb el Cant de les Pedres. Potser aquestes també: 3-1-2-1.)"
+                    ? "(Les pedres... L'ombra del monjo es va despertar amb el Cant de Vespres. Potser aquestes també: 3-1-2-1.)"
                     : "(Pedres que dormen. Hi deu haver un cant per despertar-les.)" }
         ]
     },
@@ -572,7 +572,7 @@ class ZonaGabia extends ZonaBase {
         this.colisio((bx + bw / 2 + x1 + A) / 2, y1 + A / 2, x1 + A - (bx + bw / 2), A);
         this.limits = { x0: x0 + 70, x1: x1 - 70, y0: y0 + 90, y1: y1 - 40 };
 
-        // El pont: blocs de pedra que dormen al fons i el Cant de les Pedres aixeca
+        // El pont: blocs de pedra que dormen al fons i el Cant de Vespres aixeca
         this.blocs = [];
         for (let k = 0; k < 3; k++) {
             const b = this.blocPont(bx, y1 + 20 + k * 38, bw - 6, 34);              // (js/zones/gabia_decor.js)
@@ -888,6 +888,12 @@ class ZonaGabia extends ZonaBase {
     }
 
     // ---------------- Música ----------------
+    teEfecteMelodia(nom) {
+        const d = (x, y) => Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, x, y);
+        if (nom === 'pedres') return !Estat.flag('pontGabia') && d(GABIA.x, this.yPont) < 260;
+        return nom === 'miracle' && d(this.gx, this.base + 60) < 300 && !(this.boss && !this.boss.mort) && Estat.flag('ocellaireVencut') && !Estat.flag('gabiaOberta');
+    }
+
     enMelodia(nom) {
         const d = (x, y) => Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, x, y);
         if (nom === 'pedres' && !Estat.flag('pontGabia') && d(GABIA.x, this.yPont) < 260) { this.aixecarPont(); return true; }

@@ -161,6 +161,7 @@ const CATALEG = [
     { key: 'arma_basto',  file: 'assets/armes/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
     { key: 'ineu_aixeca', file: 'assets/ineu/aixeca_espasa.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant Runna, mirant amunt (ja amb fons transparent)
     { key: 'ineu_aixeca_basto', file: 'assets/ineu/aixeca_basto.webp', amplada: 83, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // el mateix, alçant el bastó de pelegrí que li dona el Germà Andreu
+    { key: 'ineu_aixeca_buit', file: 'assets/ineu/aixeca_buit.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant el braç amb la mà buida i oberta: l'objecte rebut hi surt damunt per codi (ZonaBase.ineuRep)
     { key: 'ineu_aixeca_tiler', file: 'assets/ineu/aixeca_tiler.webp', amplada: 96, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // ... i alçant la branca del Gran Til·ler
     { key: 'ineu_flauta', file: 'assets/ineu/tarota.webp', amplada: 65, cru: true },   // l'Ineu tocant la tarota, de cara a la càmera
     { key: 'ineu_tarota_gran', file: 'assets/ineu/tarota_gran.webp', amplada: 420, cru: true },   // primer pla de l'Ineu tocant la tarota (pantalla de la música)

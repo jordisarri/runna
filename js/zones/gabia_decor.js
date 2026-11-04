@@ -271,7 +271,7 @@ Object.assign(ZonaGabia.prototype, {
         });
     },
 
-    // Un bloc de pedra del pont, amb una runa que brilla quan el Cant de les Pedres el desperta
+    // Un bloc de pedra del pont, amb una runa que brilla quan el Cant de Vespres el desperta
     blocPont(x, y, w, h) {
         const g = this.add.graphics().setPosition(x, y).setDepth(-1045);
         g.fillStyle(0x1a1424, 1).fillRect(-w / 2, -h / 2 + 4, w, h);

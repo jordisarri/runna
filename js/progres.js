@@ -62,7 +62,7 @@ const PROGRES = {
         { id: 'ombra', marca: ['ombraDemanaCant', 'cantPedres', 'benedicioMonjo'], fet: E => E.flag('benedicioMonjo'),
           pista: E => !E.flag('ombraDemanaCant') ? "A les Runes, passat el Pati del Celler, l'ombra del monjo és sobre el mur de l'església inacabada. Parla-hi."
               : !E.flag('cantPedres') ? "L'ombra del monjo demana un cant que les pedres entenen. La Pianista, al Santuari, el coneix."
-              : "L'ombra del monjo, a les Runes, només escoltarà el Cant de les Pedres." },
+              : "L'ombra del monjo, a les Runes, només escoltarà el Cant de Vespres." },
         { id: 'saber', marca: ['saber'], fet: E => E.flag('saber'),
           pista: E => "Ara que l'ombra t'ha parlat, el Pare Alcoví tindrà paraules per a tu, a la biblioteca." },
         { id: 'benediccio', marca: ['benediccio'], fet: E => E.flag('benediccio'),
@@ -120,7 +120,7 @@ const PROGRES = {
           pista: E => !E.flag('llosaOberta')
               ? "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. La gent de les Cel·les sap el secret de la llosa del jardí."
               : !E.flag('mongesTrobades')
-                  ? "Sota la llosa, les sacerdotesses: desperta la Dolora, empeny la taula de la Pilària i talla els esbarzers de la Carmèlia."
+                  ? "Sota la llosa, les sacerdotesses: desperta la Dolora, empeny l'àngel de pedra que barra la porta de la Pilària i talla els esbarzers de la Carmèlia."
                   : "Les sacerdotesses són lliures: la seva Empara Fraternal t'espera al cofre del vestíbul de l'Hostatgeria." },
         { id: 'pont', marca: ['pontGabia'], fet: E => E.flag('pontGabia'),
           pista: E => "Davant l'avenc de la Sala de la Gàbia, els blocs del fons dormen. Un cant de pedres els faria aixecar." },

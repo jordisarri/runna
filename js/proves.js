@@ -66,7 +66,7 @@ const Proves = {
             '<b>Proves</b> · la partida de proves es desa a part<br>' +
             '<label style="display:inline-block;margin:8px 0"><input type="checkbox" id="provesLaterals" checked> amb totes les missions laterals fetes</label><br>' +
             '<label style="display:inline-block;margin:0 0 8px"><input type="checkbox" id="provesMapa" checked> amb tot el mapa desbloquejat (tots els escenaris visibles)</label><br>' +
-            '<label style="display:inline-block;margin:0 0 8px"><input type="checkbox" id="provesMelodies" checked> amb totes les melodies apreses (Aurora, Pedres i Miracle)</label>' +
+            '<label style="display:inline-block;margin:0 0 8px"><input type="checkbox" id="provesMelodies" checked> amb totes les melodies apreses (Aurora, Vespres i Miracle)</label>' +
             '<div style="margin:6px 0 2px;opacity:.8">Comença just abans de… (tot l\'anterior ja és fet)</div>';
         // Les etapes del Pi dels Tres Cants (Bosc del Pi, al sud de Sant Antoni) van just després del Cant del Miracle: ja es tenen els tres cants
         // i es pot donar la volta per Sant Antoni. La resta de la història queda feta només fins aquí.
@@ -76,7 +76,7 @@ const Proves = {
         PROGRES.passos.forEach((p, i) => {
             entrades.push({ passa: i });
             if (i === iMiracle) [['Pi adormit: cap cant tocat encara', []],
-                ['Pi a mig despertar: Aurora i Pedres tocats (falta el Miracle)', ['piAurora', 'piPedres', 'flauta_pi']],
+                ['Pi a mig despertar: Aurora i Vespres tocats (falta el Miracle)', ['piAurora', 'piPedres', 'flauta_pi']],
                 ["Pi despert: les branques s'han alçat i el camí és lliure", ['piAurora', 'piPedres', 'piMiracle', 'piObert', 'piVist', 'flauta_pi']]
             ].forEach(([text, flags]) => entrades.push({ text, flags }));
         });

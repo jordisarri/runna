@@ -5,10 +5,20 @@
  * (la zona implementa enMelodia(nom) i retorna true si l'ha gestionada).
  */
 const MELODIES = {
-    aurora:  { nom: 'Cant de l\'Aurora',  notes: [1, 2, 3],       flag: 'cantAurora' },
-    pedres:  { nom: 'Cant de les Pedres', notes: [3, 1, 2, 1],    flag: 'cantPedres' },
-    miracle: { nom: 'Cant del Miracle',   notes: [1, 2, 2, 2, 3, 1], flag: 'cantMiracle' }
+    aurora:  { nom: 'Cant de l\'Aurora',  notes: [1, 2, 3],       flag: 'cantAurora', bpm: 108 },
+    pedres:  { nom: 'Cant de Vespres', notes: [3, 1, 2, 1],    flag: 'cantPedres', bpm: 80 },
+    miracle: { nom: 'Cant del Miracle',   notes: [1, 2, 2, 2, 3, 1], flag: 'cantMiracle', bpm: 92 }
 };
+
+// LA PEÇA COMPLETA de cada cant: el jugador toca només la «clau» (les notes de dalt) i la tarota segueix tota sola amb la resta, mentre l'Ineu toca en
+// primer pla; l'efecte del lloc arriba en acabar (només si el cant té efecte allà: zona.teEfecteMelodia). [nota, durada en temps]. Les notes
+// que no són dels tres botons (Re, Fa, La, Si, Do agut, Sol/La greus) només les toca la tarota.
+const NOTES_FREQ = { Sol3: 196, La3: 220, Do: 262, Re: 294, Mi: 330, Fa: 349, Sol: 392, La: 440, Si: 494, Do2: 523 };
+MELODIES.aurora.peca = [['Do', 1], ['Mi', 1], ['Sol', 2], ['Do2', 1], ['Si', 1], ['Sol', 1], ['La', 1], ['Sol', 2], ['Mi', 1], ['Re', 1], ['Do', 4]];
+MELODIES.pedres.peca = [['Sol', 1], ['Do', 1], ['Mi', 1], ['Do', 2], ['Re', 1], ['Mi', 1], ['Re', 1], ['Do', 2], ['La3', 1], ['Do', 1], ['La3', 1], ['Sol3', 4]];
+MELODIES.miracle.peca = [['Do', 1], ['Mi', 0.5], ['Mi', 0.5], ['Mi', 1], ['Sol', 1], ['Do', 2], ['Mi', 1], ['Fa', 1], ['Sol', 1], ['La', 1], ['Sol', 1], ['Do2', 4]];
+// Quin dels tres botons s'il·lumina per a cada altura
+const BOTO_DE = f => f <= 262 ? 1 : f <= 349 ? 2 : 3;
 
 const COLOR_NOTA = 0xd7ae58;
 // Les tres notes són Do, Mi i Sol (Do major, com el tema principal): el Cant del Miracle (Do Mi Mi Mi Sol Do) imita l'obertura del leitmotiv
@@ -38,16 +48,16 @@ function completarLliço(nom) {
             ...(primera ? [
                 { qui: 'La Pianista', text: 'Pren aquesta tarota. Era del Cortiner, el músic que feia sonar les representacions del Santuari. Deia que les cortines més importants no eren de vellut.' },
                 { qui: 'La Pianista', text: 'La boira, les bardisses i les pedres també són vels: les notes adequades poden despertar allò que amaguen. Jo no he sabut fer-la sonar com ell. Potser a tu t\'escoltarà.' },
-                { avis: 'Has obtingut LA TAROTA DEL CORTINER!' }
+                { avis: 'Has obtingut LA TAROTA DEL CORTINER!', obj: 'flauta' }
             ] : []),
             { qui: 'La Pianista', text: 'Toca\'l davant l\'aigua de la Bassadòria, la que surt tèrbola. Allà la boira té l\'arrel.' }
         ];
         E.posaObjectiu("La Bassadòria, al sud de la Plaça, quedarà neta amb el Cant de l'Aurora.");
     } else if (nom === 'pedres') {
         pagines = [
-            { qui: 'La Pianista', text: 'El Cant de les Pedres: 3-1-2-1. Les pedres antigues sempre l\'han entès. Toca\'l davant l\'ombra del monjo.' }
+            { qui: 'La Pianista', text: 'El Cant de Vespres: 3-1-2-1. Les pedres antigues sempre l\'han entès. Toca\'l davant l\'ombra del monjo.' }
         ];
-        E.posaObjectiu("El Cant de les Pedres farà parlar l'ombra del monjo, a les Runes.");
+        E.posaObjectiu("El Cant de Vespres farà parlar l'ombra del monjo, a les Runes.");
     } else {
         pagines = [
             { qui: 'La Pianista', text: 'Això mateix, fill! El Cant del Miracle. Els ocells el cantaven a l\'alba, abans que l\'Ocellaire se\'l quedés i el tanqués a la seva gàbia.' },
@@ -74,6 +84,13 @@ class EscenaMusica extends Phaser.Scene {
         this.entrada = [];
         this.bloquejat = false;
         this.tancat = false;
+        this.actuant = null; this.alFinalActuacio = null; this.slots = null;       // (l'escena es reaprofita: res de l'altra vegada; si actuant quedés posat, ESC donaria l'efecte sense tocar)
+        // La música de fons gairebé s'apaga mentre sona la tarota (i torna al volum de sempre en tancar-la), perquè no se sobreposin
+        const mFons = Joc.musica;
+        if (mFons && mFons.isPlaying) {
+            mFons.setVolume(0.05);
+            this.events.once('shutdown', () => { if (Joc.musica === mFons && mFons.isPlaying) mFons.setVolume(0.6); });
+        }
         const zonaFl = Joc.zonaActiva(this);
         if (zonaFl && zonaFl.ineuFlauta) zonaFl.ineuFlauta(true);          // l'Ineu es veu de cara, tocant la flauta
 
@@ -104,14 +121,7 @@ class EscenaMusica extends Phaser.Scene {
         this.estat = add(this.add.text(cx, T + 77, '', { ...llibre, fontSize: '21px', fontStyle: 'italic', color: '#3a2412', align: 'center', wordWrap: { width: 600 } }).setOrigin(0.5));
 
         // Fila de notes per seguir la seqüència mentre s'escolta o es repeteix
-        const nSlots = llico ? this.melodia.notes.length : Math.max(3, ...Object.values(MELODIES).filter(m => Estat.flag(m.flag)).map(m => m.notes.length));
-        this.slots = [];
-        for (let i = 0; i < nSlots; i++) {
-            const x = cx + (i - (nSlots - 1) / 2) * 52, y = T + 129;
-            const ple = add(this.add.circle(x, y, 17, 0x000000, 0.08));
-            const anell = add(this.add.circle(x, y, 17).setStrokeStyle(3, 0x5a3a1a, 0.8));
-            this.slots.push({ ple, anell });
-        }
+        this.creaSlots(llico ? this.melodia.notes.length : Math.max(3, ...Object.values(MELODIES).filter(m => Estat.flag(m.flag)).map(m => m.notes.length)));
 
         // La tarota: llengüeta, cos cònic, forats i campana ampla
         const fy = T + 184, esquerra = cx - 258;
@@ -159,7 +169,7 @@ class EscenaMusica extends Phaser.Scene {
         const k = this.input.keyboard;
         const TECLES = { 1: ['ONE', 'NUMPAD_ONE', 'LEFT', 'A'], 2: ['TWO', 'NUMPAD_TWO', 'SPACE', 'UP', 'DOWN', 'W', 'S'], 3: ['THREE', 'NUMPAD_THREE', 'RIGHT', 'D'] };
         Object.entries(TECLES).forEach(([n, noms]) => noms.forEach(nom => k.on('keydown-' + nom, () => this.nota(Number(n), true))));
-        k.on('keydown-ESC', () => this.tancar(false));
+        k.on('keydown-ESC', () => { if (this.llico && this.actuant) this.tancar(true); else this.tancar(false, this.actuant || undefined); });       // durant la peça completa, ESC la salta i l'efecte es dóna igual
 
         if (llico) {
             this.titol.setText('Lliçó: ' + this.melodia.nom);
@@ -175,6 +185,20 @@ class EscenaMusica extends Phaser.Scene {
             this.lastTime = 0;
         }
         this.tweens.add({ targets: this.panell, alpha: 1, y: ALT * (1 - this.escPergami), duration: 350, ease: 'Sine.easeOut' });
+    }
+
+    // Fila de caselles de notes (es refà quan en cal més: la peça completa en té fins a 12)
+    creaSlots(nSlots) {
+        if (this.slots) this.slots.forEach(sl => { sl.ple.destroy(); sl.anell.destroy(); });
+        const cx = AMPLE / 2, T = MUS_T, pas = nSlots > 10 ? 46 : 52;
+        this.slots = [];
+        for (let i = 0; i < nSlots; i++) {
+            const x = cx + (i - (nSlots - 1) / 2) * pas, y = T + 129;
+            const ple = this.add.circle(x, y, 17, 0x000000, 0.08);
+            const anell = this.add.circle(x, y, 17).setStrokeStyle(3, 0x5a3a1a, 0.8);
+            this.panell.add([ple, anell]);
+            this.slots.push({ ple, anell });
+        }
     }
 
     // Primer pla de l'Ineu tocant la tarota, gran i per sobre de l'escenari (el pergamí li tapa la part de baix)
@@ -210,23 +234,24 @@ class EscenaMusica extends Phaser.Scene {
     }
 
     // ---- So i imatge de cada nota ----
-    so(n) {
+    so(n, freq, dur = 0.55) {
         const ctx = this.sound && this.sound.context;
         if (!ctx) return;
         if (ctx.state === 'suspended') ctx.resume();
-        const o = ctx.createOscillator(), g = ctx.createGain();
-        o.type = 'triangle'; o.frequency.value = FREQ_NOTA[n];
+        const o = ctx.createOscillator(), g = ctx.createGain(), fi = ctx.currentTime + Math.max(0.55, dur);
+        o.type = 'triangle'; o.frequency.value = freq || FREQ_NOTA[n];
         g.gain.setValueAtTime(0.0001, ctx.currentTime);
         g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.02);
-        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.55);
+        if (dur > 0.8) g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + dur * 0.55);       // les notes llargues es mantenen abans d'apagar-se
+        g.gain.exponentialRampToValueAtTime(0.0001, fi);
         o.connect(g); g.connect(Sfx.connect(ctx));
-        o.start(); o.stop(ctx.currentTime + 0.6);
+        o.start(); o.stop(fi + 0.05);
     }
 
     // La gemma s'encén i rebota, el forat de la tarota brilla i una ona surt del botó
-    llum(n) {
+    llum(n, freq, dur) {
         const b = this.botons[n], color = COLOR_NOTA;
-        this.so(n);
+        this.so(n, freq, dur);
         b.gemma.setFillStyle(color, 1);
         this.tweens.add({ targets: [b.base, b.gemma], scale: { from: 1.14, to: 1 }, duration: 260, ease: 'Back.easeOut' });
         this.time.delayedCall(280, () => { if (b.gemma.active) b.gemma.setFillStyle(color, 0.7); });
@@ -286,7 +311,9 @@ class EscenaMusica extends Phaser.Scene {
                 this.bloquejat = true;
                 this.flaixSlots(0xe8c040);
                 this.estat.setText('Perfecte!');
-                this.time.delayedCall(900, () => this.tancar(true));
+                // Després de la clau, la tarota continua tota sola i sona el cant sencer (com al joc); en acabar (o amb ESC), la lliçó queda apresa
+                if (this.melodia.peca) this.time.delayedCall(900, () => this.actuacio(this.dades.melodia, this.melodia, () => this.tancar(true)));
+                else this.time.delayedCall(900, () => this.tancar(true));
             }
             return;
         }
@@ -303,10 +330,35 @@ class EscenaMusica extends Phaser.Scene {
                 this.bloquejat = true;
                 this.flaixSlots(0xe8c040);
                 this.estat.setText('♪ ' + m.nom);
-                this.time.delayedCall(700, () => this.tancar(false, clau));
+                const zona = Joc.zonaActiva(this);
+                if (m.peca && zona && zona.teEfecteMelodia && zona.teEfecteMelodia(clau)) this.time.delayedCall(700, () => this.actuacio(clau, m));
+                else this.time.delayedCall(700, () => this.tancar(false, clau));
                 return;
             }
         }
+    }
+
+    // La peça completa: la tarota toca tota sola (clau + continuació) i, en acabar, el lloc reacciona (ESC la salta)
+    actuacio(clau, m, fi) {
+        if (this.tancat) return;
+        this.actuant = clau;
+        this.alFinalActuacio = fi || null;
+        const temps = 60000 / m.bpm;
+        this.creaSlots(m.peca.length);
+        this.pintaSlots([]);
+        this.estat.setText('♪ ' + m.nom + (fi ? ', sencer' : '') + '   ·   ESC per saltar');
+        let t = 250;
+        m.peca.forEach(([nota, durada], i) => {
+            const f = NOTES_FREQ[nota], boto = BOTO_DE(f);
+            this.time.delayedCall(t, () => {
+                if (this.tancat) return;
+                this.llum(boto, f, durada * temps / 1000);
+                this.impulsPrimerPla(boto);
+                this.pintaSlots(m.peca.slice(0, i + 1).map(() => 1));
+            });
+            t += durada * temps;
+        });
+        this.time.delayedCall(t + 500, () => { if (!this.tancat) (fi ? fi() : this.tancar(false, clau)); });
     }
 
     tancar(exit, melodiaTocada) {

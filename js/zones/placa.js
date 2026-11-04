@@ -93,7 +93,11 @@ class ZonaPlaca extends ZonaBase {
         this.enemic('escolopendra', 1450, 800);
     }
 
-    // El Cant de les Pedres, tocat davant la pedra de la cantonada, la fa girar
+    teEfecteMelodia(nom) {
+        return nom === 'pedres' && !Estat.flag('tresorObert') && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1535, 480) <= 260;
+    }
+
+    // El Cant de Vespres, tocat davant la pedra de la cantonada, la fa girar
     enMelodia(nom) {
         if (nom !== 'pedres') return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1535, 480) > 260) return false;
