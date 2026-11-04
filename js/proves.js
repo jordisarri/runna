@@ -21,15 +21,16 @@ const Proves = {
     },
 
     // Deixa fets els passos de la història anteriors a l'índex 'fins' (i, si cal, totes les missions laterals)
-    estatFins(fins, laterals) {
+    estatFins(fins, laterals, mapa) {
         Estat.nova();
         const marca = llista => llista.forEach(m => m.startsWith('obj:') ? Estat.dona(m.slice(4)) : Estat.posaFlag(m));
         Estat.posaFlag('introVista');
         PROGRES.passos.slice(0, fins).forEach(p => marca(p.marca));
         if (laterals) PROGRES.laterals.forEach(l => marca(l.marca));
+        if (mapa) Joc.ZONES.forEach(z => Estat.posaFlag('visitada_' + z));                        // tot el mapa desbloquejat: totes les escenes visitades
         if (Estat.flag('bastoObtingut')) { Estat.posaFlag('tutorialCombat'); Estat.posaFlag('combatActiu'); }
         PARADES.forEach(pd => Estat.posaFlag('parada_' + pd.id));                                 // a proves, totes les parades del carruatge ja conegudes
-        Estat.dades.corsMax = Math.min(8, 3 + Math.floor(fins / 8) + (laterals ? 3 : 0));        // aproximadament els grans que hi hauria
+        Estat.dades.corsMax = Math.min(7, 3 + Math.floor(fins / 8) + (laterals ? 3 : 0));        // aproximadament els grans que hi hauria (el màxim del joc és 7: 3 + Pastor, sacerdotesses i els dos cofres)
         Estat.dades.vida = Estat.dades.corsMax * 2;
         const p = PROGRES.passos[fins];
         Estat.posaObjectiu(p ? p.pista(Estat) : 'Proves: final de la història.');
@@ -45,9 +46,9 @@ const Proves = {
         Joc.continuar(sc);
     },
 
-    saltar(i, laterals) {
+    saltar(i, laterals, mapa) {
         const p = PROGRES.passos[i];
-        this.estatFins(i, laterals);
+        this.estatFins(i, laterals, mapa);
         this.anar((DIARI_PASSOS[p.id] && DIARI_PASSOS[p.id][1]) || 'ZonaPlaca');
     },
 
@@ -58,14 +59,15 @@ const Proves = {
         d.style.cssText = 'position:fixed;inset:56px 8px 8px 8px;z-index:21;overflow:auto;background:#1a120bf2;color:#f2e6c8;border:2px solid #d4af37;border-radius:10px;padding:10px;font:15px Georgia,serif';
         const estil = 'display:block;width:100%;text-align:left;margin:3px 0;padding:9px 10px;font:inherit;color:inherit;background:#3a2a1a;border:1px solid #6a5030;border-radius:6px;cursor:pointer';
         d.innerHTML = '<b>Proves</b> · la partida de proves es desa a part<br>' +
-            '<label style="display:inline-block;margin:8px 0"><input type="checkbox" id="provesLaterals"> amb totes les missions laterals fetes</label>' +
+            '<label style="display:inline-block;margin:8px 0"><input type="checkbox" id="provesLaterals"> amb totes les missions laterals fetes</label><br>' +
+            '<label style="display:inline-block;margin:0 0 8px"><input type="checkbox" id="provesMapa"> amb tot el mapa desbloquejat (tots els escenaris visibles)</label>' +
             '<div style="margin:6px 0 2px;opacity:.8">Comença just abans de… (tot l\'anterior ja és fet)</div>';
         PROGRES.passos.forEach((p, i) => {
             const b = document.createElement('button');
             const info = DIARI_PASSOS[p.id];
             b.textContent = (i + 1) + '. ' + (info ? info[0] : p.id) + (info ? '  ·  ' + info[1].replace(/^Zona/, '') : '');
             b.style.cssText = estil;
-            b.onclick = () => { const laterals = d.querySelector('#provesLaterals').checked; d.remove(); this.saltar(i, laterals); };
+            b.onclick = () => { const laterals = d.querySelector('#provesLaterals').checked, mapa = d.querySelector('#provesMapa').checked; d.remove(); this.saltar(i, laterals, mapa); };
             d.appendChild(b);
         });
         // Anar a una zona sense canviar l'estat (amb la partida de proves actual)

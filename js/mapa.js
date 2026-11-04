@@ -90,13 +90,65 @@ const MAPA = {
     // ---------------- Mapa a l'estil metroidvania ----------------
     // El món es dibuixa en coordenades ampliades i es mira per una finestra: s'arrossega per desplaçar-lo i es fa zoom
     // amb la rodeta, pessigant o amb els botons +/−. Cada regió té el seu color i el seu nom.
-    // Cada lloc ocupa una casella [columna, fila] de la graella: els veïns queden enganxats i només els separa un camí curt.
-    GRAELLA: {
-        ZonaCirosa: [5, 0], ZonaCamiCirosa: [5, 1], ZonaTiller: [5, 2], ZonaJordi: [4, 2], ZonaCelles: [5, 3], ZonaBosc: [4, 3], ZonaCabana: [3, 3],
-        ZonaRuines: [5, 4], ZonaCami: [4, 4], ZonaErmita: [3, 4], ZonaCementiri: [6, 4],
-        ZonaCellerFora: [5, 5], ZonaGirgolesFora: [4, 5],
-        ZonaEra: [2, 5], ZonaJardi: [2, 6], ZonaTaverna: [3, 6], ZonaCasaGran: [4, 6], ZonaPlaca: [5, 6], ZonaMonestir: [6, 6], ZonaSantAntoni: [7, 6], ZonaCreu: [5, 7],
-        ZonaCamiRov: [1, 5], ZonaRovellonera: [0, 5], ZonaGabriel: [0, 6], ZonaDipositos: [1, 6], ZonaDolmen: [1, 7]
+    // Cada lloc es dibuixa amb la proporció de la seva escena real (amplada x alçada) i col·locat segons per on s'hi surt:
+    // si el camí és a dalt a l'esquerra de l'escena, al mapa també. Cada entrada és [d'on, costat, a on, posició de la sortida a d'on,
+    // posició de l'entrada a on, dx, dy] (posicions en píxels de joc, sobre la vora compartida; dx i dy són un petit desplaçament extra
+    // quan dues escenes no es poden enganxar sense tocar-ne una altra). Les escenes del joc no tanquen del tot els bucles (Runes - Celler -
+    // Plaça - Monestir - Cementiri), així que alguns camins es dibuixen més llargs: són els que ja són a 'enllacos'.
+    MIDES_RESERVA: { ZonaDolmen: [900, 2200], ZonaMonestir: [1600, 950] },
+    ANCLATGES: [
+        ['ZonaPlaca', 'N', 'ZonaCellerFora', 330, 700, 400, 0],
+        ['ZonaCellerFora', 'N', 'ZonaRuines', 700, 700],
+        ['ZonaRuines', 'N', 'ZonaCelles', 700, 800],
+        ['ZonaCelles', 'N', 'ZonaTiller', 1000, 620],
+        ['ZonaTiller', 'N', 'ZonaCamiCirosa', 1100, 620],
+        ['ZonaCamiCirosa', 'N', 'ZonaCirosa', 500, 500],
+        ['ZonaTiller', 'W', 'ZonaJordi', 540, 510],
+        ['ZonaCelles', 'W', 'ZonaBosc', 640, 640],
+        ['ZonaRuines', 'E', 'ZonaCementiri', 520, 520],
+        ['ZonaCellerFora', 'E', 'ZonaGirgolesFora', 440, 560, 0, 100],
+        ['ZonaPlaca', 'E', 'ZonaMonestir', 530, 600],
+        ['ZonaMonestir', 'E', 'ZonaSantAntoni', 640, 820],
+        ['ZonaPlaca', 'S', 'ZonaCreu', 760, 1100],
+        ['ZonaPlaca', 'W', 'ZonaCasaGran', 470, 880],
+        ['ZonaCasaGran', 'W', 'ZonaTaverna', 880, 900],
+        ['ZonaTaverna', 'W', 'ZonaJardi', 900, 900],
+        ['ZonaJardi', 'W', 'ZonaEra', 900, 500],
+        ['ZonaEra', 'N', 'ZonaErmita', 240, 240],
+        ['ZonaErmita', 'E', 'ZonaCami', 640, 380, 0, -780],
+        ['ZonaEra', 'W', 'ZonaCamiRov', 500, 240],
+        ['ZonaCamiRov', 'W', 'ZonaRovellonera', 1160, 550, 0, 700],
+        ['ZonaRovellonera', 'S', 'ZonaGabriel', 800, 800],
+        ['ZonaGabriel', 'E', 'ZonaDipositos', 650, 520],
+        ['ZonaDipositos', 'E', 'ZonaDolmen', 520, 2050, 1050, 0]
+    ],
+    ESCALA: 0.13,            // píxels de mapa per cada píxel de joc
+    SEPARACIO: 220,          // el camí entre dues escenes veïnes, en píxels de joc
+    // Mida real (amplada, alçada) d'una escena, en píxels de joc
+    mida(id) {
+        const sc = typeof game !== 'undefined' && game.scene && game.scene.getScene(id), c = sc && sc.config;
+        if (c && c.amplada > 0 && c.alcada > 0) return [c.amplada, c.alcada];
+        return MAPA.MIDES_RESERVA[id] || [1600, 1100];
+    },
+    // Disposició: { id: { x, y, w, h } } (x, y = centre; tot en píxels de mapa)
+    disposicio() {
+        if (MAPA._disp) return MAPA._disp;
+        const K = MAPA.ESCALA, G = MAPA.SEPARACIO, pos = {};
+        const caixa = id => { const [w, h] = MAPA.mida(id); return { w, h }; };
+        pos.ZonaPlaca = { x: 0, y: 0, ...caixa('ZonaPlaca') };
+        MAPA.ANCLATGES.forEach(([de, costat, a, oDe, oA, dx = 0, dy = 0]) => {
+            const d = pos[de], t = caixa(a);
+            if (!d) return;
+            if (costat === 'E') { t.x = d.x + d.w + G; t.y = d.y + oDe - oA; }
+            else if (costat === 'W') { t.x = d.x - G - t.w; t.y = d.y + oDe - oA; }
+            else if (costat === 'N') { t.y = d.y - G - t.h; t.x = d.x + oDe - oA; }
+            else { t.y = d.y + d.h + G; t.x = d.x + oDe - oA; }
+            t.x += dx; t.y += dy;
+            pos[a] = t;
+        });
+        MAPA._disp = {};
+        Object.keys(pos).forEach(id => { const q = pos[id]; MAPA._disp[id] = { x: (q.x + q.w / 2) * K, y: (q.y + q.h / 2) * K, w: q.w * K, h: q.h * K }; });
+        return MAPA._disp;
     },
     // Els interiors i els llocs sota terra no es dibuixen al mapa: compten com l'exterior on s'entra (per l'«ets aquí», l'objectiu i els encàrrecs)
     PARE: {
@@ -106,8 +158,7 @@ const MAPA = {
         ZonaGabia: 'ZonaGirgolesFora', ZonaCelaStAntoni: 'ZonaSantAntoni', ZonaMonestirRebedor: 'ZonaMonestir', ZonaBiblioteca: 'ZonaMonestir', ZonaCasaGranInt: 'ZonaCasaGran',
         ZonaCasaCripta: 'ZonaCasaGran', ZonaCasaTresor: 'ZonaCasaGran', ZonaPassadis: 'ZonaCasaGran'
     },
-    TW: 164, TH: 68, PX: 196, PY: 100,                                  // mida de la fitxa i pas de la graella (la diferència és la longitud del camí)
-    mon(z) { const g = MAPA.GRAELLA[z.id] || [0, 0]; return { x: g[0] * MAPA.PX, y: g[1] * MAPA.PY }; },
+    mon(z) { const d = MAPA.disposicio()[z.id] || { x: 0, y: 0 }; return { x: d.x, y: d.y }; },
     REGIONS: [
         { nom: 'La Cirosa', color: 0xe0b050, ids: ['ZonaCirosa', 'ZonaMasiaCirosa', 'ZonaCamiCirosa'] },
         { nom: 'Bosc de Sant Joan', color: 0x58b878, ids: ['ZonaCabanaInt', 'ZonaCabana', 'ZonaBosc', 'ZonaJordi', 'ZonaCasaJordi', 'ZonaCasetaJoc', 'ZonaTiller', 'ZonaCelles'] },
@@ -139,10 +190,10 @@ const MAPA = {
         const vis = id => MAPA.visitada(id) || Object.keys(MAPA.PARE).some(k => MAPA.PARE[k] === id && MAPA.visitada(k));
         // Llocs per explorar: no visitats però al costat d'un de visitat (o on és l'objectiu)
         const conegut = id => vis(id) || id === zObj || MAPA.enllacos.some(([a, b]) => (a === id && vis(b)) || (b === id && vis(a)));
-        const nodes = MAPA.zones.filter(z => MAPA.GRAELLA[z.id] && conegut(z.id)).map(z => {
-            const p = MAPA.mon(z), t = MAPA.tipus(z.id), v = vis(z.id);
-            const w = MAPA.TW, h = MAPA.TH;
-            return { z, id: z.id, x: p.x, y: p.y, t, v, w, h, ara: z.id === actual, reg: MAPA.regio(z.id) };
+        const disp = MAPA.disposicio();
+        const nodes = MAPA.zones.filter(z => disp[z.id] && conegut(z.id)).map(z => {
+            const d = disp[z.id], t = MAPA.tipus(z.id), v = vis(z.id);
+            return { z, id: z.id, x: d.x, y: d.y, t, v, w: d.w, h: d.h, ara: z.id === actual, reg: MAPA.regio(z.id) };
         });
         const nodeDe = id => nodes.find(n => n.id === id);
 
@@ -154,8 +205,8 @@ const MAPA = {
 
         // Límits del món conegut (per no perdre's)
         const marge = 190;
-        const bx0 = Math.min(...nodes.map(n => n.x)) - marge, bx1 = Math.max(...nodes.map(n => n.x)) + marge;
-        const by0 = Math.min(...nodes.map(n => n.y)) - marge, by1 = Math.max(...nodes.map(n => n.y)) + marge;
+        const bx0 = Math.min(...nodes.map(n => n.x - n.w / 2)) - marge, bx1 = Math.max(...nodes.map(n => n.x + n.w / 2)) + marge;
+        const by0 = Math.min(...nodes.map(n => n.y - n.h / 2)) - marge, by1 = Math.max(...nodes.map(n => n.y + n.h / 2)) + marge;
         const ZMIN = Math.max(0.24, Math.min(0.7, VW / (bx1 - bx0), VH2 / (by1 - by0))), ZMAX = 1.9;
         const V = MAPA.vista || (MAPA.vista = { z: 0.7 });
         const nAra = nodeDe(actual) || nodeDe(zObj) || nodes[0];
@@ -188,8 +239,29 @@ const MAPA = {
         // fan corba fins a l'altra; les portes (sense direcció) són un traç recte.
         const g = add(scene.add.graphics(), mon);
         const DIR = { N: [0, -1], S: [0, 1], E: [1, 0], W: [-1, 0] };
-        // Camins: un traç curt recte d'una vora de fitxa a la de la veïna (a les cantonades si són en diagonal)
+        // Camins: sempre un traç recte (horitzontal o vertical) d'una vora de fitxa a la de la veïna, per un punt on les dues fitxes es
+        // toquen en l'altre eix i on no hi ha cap altra fitxa pel mig. Si no es poden alinear (cosa que no ha de passar), una recta en diagonal.
+        const totes = Object.values(MAPA.disposicio());
+        const lliure = (x0, y0, x1, y1, na, nb) => !totes.some(q => {
+            if ((Math.abs(q.x - na.x) < 1 && Math.abs(q.y - na.y) < 1) || (Math.abs(q.x - nb.x) < 1 && Math.abs(q.y - nb.y) < 1)) return false;
+            return x1 > q.x - q.w / 2 - 6 && x0 < q.x + q.w / 2 + 6 && y1 > q.y - q.h / 2 - 6 && y0 < q.y + q.h / 2 + 6;
+        });
         const tracat = (na, nb) => {
+            const ox0 = Math.max(na.x - na.w / 2, nb.x - nb.w / 2), ox1 = Math.min(na.x + na.w / 2, nb.x + nb.w / 2);
+            const oy0 = Math.max(na.y - na.h / 2, nb.y - nb.h / 2), oy1 = Math.min(na.y + na.h / 2, nb.y + nb.h / 2);
+            const FRAC = [0.5, 0.35, 0.65, 0.2, 0.8, 0.08, 0.92];
+            if (oy1 - oy0 > 8 && ox1 <= ox0) {                                   // una al costat de l'altra: camí horitzontal
+                const esq = na.x < nb.x ? na : nb, dre = esq === na ? nb : na;
+                const xa = esq.x + esq.w / 2, xb = dre.x - dre.w / 2;
+                const y = FRAC.map(f => oy0 + (oy1 - oy0) * f).find(yy => lliure(xa, yy - 5, xb, yy + 5, na, nb)) ?? (oy0 + oy1) / 2;
+                return esq === na ? [{ x: xa, y }, { x: xb, y }] : [{ x: xb, y }, { x: xa, y }];
+            }
+            if (ox1 - ox0 > 8 && oy1 <= oy0) {                                   // una damunt de l'altra: camí vertical
+                const alt = na.y < nb.y ? na : nb, baix = alt === na ? nb : na;
+                const ya = alt.y + alt.h / 2, yb = baix.y - baix.h / 2;
+                const x = FRAC.map(f => ox0 + (ox1 - ox0) * f).find(xx => lliure(xx - 5, ya, xx + 5, yb, na, nb)) ?? (ox0 + ox1) / 2;
+                return alt === na ? [{ x, y: ya }, { x, y: yb }] : [{ x, y: yb }, { x, y: ya }];
+            }
             const dx = nb.x - na.x, dy = nb.y - na.y;
             const s = n => Math.min(Math.abs(dx) > 0 ? n.w / 2 / Math.abs(dx) : Infinity, Math.abs(dy) > 0 ? n.h / 2 / Math.abs(dy) : Infinity);
             const sa = s(na), sb = s(nb);
@@ -249,11 +321,25 @@ const MAPA = {
                 const st = add(scene.add.text(x + w / 2 - 2, y - h / 2 + 2, '★', estilText(38, '#ff7a4a', { stroke: '#2a0a04', strokeThickness: 6 })).setOrigin(0.5), mon);
                 anima({ targets: st, scale: 1.3, yoyo: true, repeat: -1, duration: 500 });
             }
-            // Parada del carruatge de vapor (viatge ràpid) ja desbloquejada: el carruatge petit a la cantonada de baix
+            // Parada del Follet del Carro Verd (viatge ràpid) ja desbloquejada: el seu retrat, en un medalló a la cantonada de baix
             const pd = typeof PARADES !== 'undefined' && PARADES.find(q => q.zona === n.id && Estat.flag('parada_' + q.id));
-            if (pd && n.v && scene.textures.exists('carruatge')) {
-                const ic = add(scene.add.image(x + w / 2 - 6, y + h / 2 - 2, 'carruatge').setOrigin(1, 1), mon);
-                ic.setScale(46 / ic.width);
+            if (pd && n.v) {
+                const R = 24, cx = x + w / 2 - R - 4, cy = y + h / 2 - R - 4;
+                add(scene.add.circle(cx, cy, R + 3, 0x1a3a22, 1).setStrokeStyle(3, 0xd4af37, 1), mon);
+                // El retrat, retallat en cercle (una textura pròpia: una màscara no segueix el zoom del mapa)
+                if (!scene.textures.exists('mapa_follet')) {
+                    const clau = ['retratimg_home_carruatge', 'home_carruatge'].find(k => scene.textures.exists(k));
+                    if (clau) {
+                        const src = scene.textures.get(clau).getSourceImage(), S = 96, cv = document.createElement('canvas');
+                        cv.width = cv.height = S;
+                        const c2 = cv.getContext('2d'), q = Math.min(src.width, src.height * 0.9);
+                        c2.beginPath(); c2.arc(S / 2, S / 2, S / 2, 0, Math.PI * 2); c2.clip();
+                        c2.fillStyle = '#cfe0b8'; c2.fillRect(0, 0, S, S);
+                        c2.drawImage(src, (src.width - q) / 2, 0, q, q, 0, 0, S, S);
+                        scene.textures.addCanvas('mapa_follet', cv);
+                    }
+                }
+                if (scene.textures.exists('mapa_follet')) add(scene.add.image(cx, cy, 'mapa_follet').setDisplaySize(R * 2, R * 2), mon);
             }
             if (encarrecs[n.id]) {
                 add(scene.add.circle(x - w / 2 + 2, y - h / 2 + 2, 14, 0x1a3a66, 1).setStrokeStyle(3, 0x7ab8ff, 1), mon);
@@ -289,7 +375,7 @@ const MAPA = {
             const b = add(scene.add.text(lx + a.width + 5, ly, t, estilText(17, '#c8b898')).setOrigin(0, 0.5));
             lx = b.x + b.width + 14;
         });
-        add(scene.add.text(X0 + 16, top + 12, `${trobats}/${Object.keys(MAPA.GRAELLA).length} llocs`, estilText(22, '#c8b898', { fontStyle: 'italic', stroke: '#0b0805', strokeThickness: 4 })).setDepth(2));
+        add(scene.add.text(X0 + 16, top + 12, `${trobats}/${Object.keys(MAPA.disposicio()).length} llocs`, estilText(22, '#c8b898', { fontStyle: 'italic', stroke: '#0b0805', strokeThickness: 4 })).setDepth(2));
         const ajuda = add(scene.add.text(X0 + 16, top + 42, 'arrossega · pessiga o rodeta per fer zoom', estilText(17, '#a89878', { stroke: '#0b0805', strokeThickness: 3 })));
         anima({ targets: ajuda, alpha: 0, delay: 5000, duration: 800 });
         add(scene.add.rectangle(X0, top, VW, VH, 0, 0).setOrigin(0).setStrokeStyle(3, 0xb89a50, 0.9));

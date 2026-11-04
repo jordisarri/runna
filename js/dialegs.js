@@ -1340,17 +1340,6 @@ const DIALEGS = {
         pagines: []
     }),
 
-    cofreBosc: E => {
-        if (E.flag("cofreBosc")) return { pagines: [] };
-        return {
-            pagines: [
-                { qui: "Nota", text: "«Per al qui vingui amb l'espasa.»" },
-                { avis: "+1 GRA AL ROSARI i rosari ple." }
-            ],
-            enAcabar: () => { E.posaFlag("cofreBosc"); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
-        };
-    },
-
     // ---------------- LA CASA GRAN ----------------
     portaReixa: E => ({
         pagines: [

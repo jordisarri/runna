@@ -66,7 +66,7 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat q
 | Llanterna | Jusef, en guanyar el partit (Celler) | Il·lumina zones fosques. |
 | Clau del sagrari | Ermita de la Desaparició (taules de pedra, un cop llegides les dotze columnes) | Obre el sagrari del retaule (fragment 2). |
 | Escudella de la Meus, Flors d'Isildren, Pa dels pastors | Meus (cel·les), Isildren (jardí), pastors de la Cirosa (el pasten ells quan una música vora el foc els recorda com fer-lo) | Les tres coses que es posen a taula al sopar del Til·ler; es consumeixen al ritual. |
-| Cors extra | Cofres, ping-pong, rescats | +1 cor màxim. |
+| Cors extra | Pastor de Boira vençut, les tres sacerdotesses, el cofre de la Cambra del Santuari i el cofre de la cabana de l'Iscu | +1 cor màxim cadascun (màxim del joc: 7). |
 | **Benedicció fraterna** | Cofre del vestíbul de l'Hostatgeria, un cop alliberades les tres sacerdotesses | **Obligatòria**: dissipa la boira verinosa de la galeria entre el passadís de tortura i la Sala de la Gàbia. Sense ella, l'Ineu tus i es fa enrere. |
 
 ## A5. Mapa i pantalles
@@ -74,7 +74,7 @@ Vertical: 720 d'ample fix i alçada que s'adapta a la proporció de la pantalla 
 
 - **Plaça del Santuari** (inici): façana gran del **Santuari** (la **pedra secreta** de la façana, amb el Cant de les Pedres, duu a una sala del tresor: +1 cor), camí al Pati del Celler i les Runes (NO), **Monestir** (E), **Casa Gran** (O, amb la reixa del porxo, tancada per fora) i **La Bassadòria** (S; amb la Creu de l'Aparició). Un cartell únic.
 - **Santuari** (interior): Pianista, Pare Daniel, altar de pedra per desar i reposar, i el sagrari al mig del retaule (fragment 2, amb la clau petita que s'aconsegueix a l'ermita de la Desaparició). Les dues portes del peu del retaule són tancades; quan el Pare Daniel explica que el rellotge s'ha aturat (el segon cop que hi parles), s'obre la de la **dreta**, que puja per la **Torre del campanar** (escala de cargol) fins a la **Sala del Rellotge**.
-- **Sala del Rellotge:** el rellotge és aturat a un quart de quatre (l'hora que va arribar la boira). Puzle curt: posar tres engranatges a la mida correcta (la nota del campaner, un pergamí desplegat i clavat a la paret, diu: petit, gran, mitjà) perquè el rellotge torni a caminar (agulles, engranatges i pèndol es mouen). Premi: +1 gra al rosari. (Ja no hi ha campanes al puzle.)
+- **Sala del Rellotge:** el rellotge és aturat a un quart de quatre (l'hora que va arribar la boira). Puzle curt: posar tres engranatges a la mida correcta (la nota del campaner, un pergamí desplegat i clavat a la paret, diu: petit, gran, mitjà) perquè el rellotge torni a caminar (agulles, engranatges i pèndol es mouen). No dona cap gra al rosari. (Ja no hi ha campanes al puzle.)
 - **Monestir**: el portal duu a la **Biblioteca** (prestatgeries fins al sostre, dos vitralls que tenyeixen el terra, pols dins la llum, taula de lectura, faristol amb la **Crònica**, globus i escala): hi treballa el Pare Alcoví. Camí al **Cementiri**.
 - **Els arcs de la Casa Gran**: tot el terra és de pedra (sense gespa); façana gran amb el porxo d'arcs i la reixa tancada per fora; cartell a terra a la dreta de les escales; arbres només a la dreta; les sortides, sota la casa (a l'oest va a la Taverna, a l'est a la Plaça). No hi ha cap font.
 - **La Taverna**: casa gran de tres plantes entre l'Hostatgeria i els arcs de la Casa Gran. La porta és tancada («Avui no servim. — Càren») fins que l'Eve l'obre per la finestra. **Per dins:** taulell amb la Càren adormida, llar de foc, taules, acordió i l'Eve. Des de dins **no** es pot baixar al soterrani (la porta del fons és el rebost). Al **Soterrani de la Taverna** (la Taverna i la gàbia són el mateix edifici, per bandes diferents) només s'hi entra per la **Porta de les Gírgoles**, a l'est del Pati del Celler, la que el Germà Andreu visita cada nit: s'obre amb la **Clau de ferro**. Al soterrani, una segona porta de ferro, de pany petit, baixa a la Sala de les Gírgoles (l'única entrada): l'obre la **clau rovellada** de l'Iscu.
@@ -93,7 +93,7 @@ Vertical: 720 d'ample fix i alçada que s'adapta a la proporció de la pantalla 
 - **La Caseta** (escena petita, a l'oest del Til·ler): en Georgi al jardí; la seva **casa** (es pot entrar: llar de foc, cuina, tauler d'eines amb el buit de la maneta, llit i un gat; no hi ha ningú) i la **caseta**, una cabana de fusta aixecada sobre pilars amb terrassa i escala (com una cabana d'arbre, sense arbre). Dins la caseta, el cofre de les joguines amb la **maneta** (el tresor).
 - **Pins:** el **pi roig** domina la Rovellonera i els boscos del nord-est; el **pi pinyer** els camins de l'oest (Ermita, Era, Desaparició).
 - **Camí i La Cirosa**: camí llarg en zig-zag amb tres cartells i un **banc de pedra** (hi reposes i es desa la partida); ovelles de boira fins que cau el Pastor, i després ovelles blanques. A dalt, la masia, un pou, bales de palla, la pastura i els pastors vora el foc. **El Mas de la Cirosa** (interior): llar (repòs i desat), taula, jaços, biga amb ganxos buits (les esquelles) i el **Llibre del Ramat**, que explica la història de la gàbia des del punt de vista dels pastors.
-- **Bosc de Sant Joan**: Font del Bisbe, Alzina Buida (portal; doble de gran que la resta d'arbres, amb clariana pròpia i claror verda), cofre amagat (cal Runna). Tot el bosc és ple de **boira lila** mentre la font és adormida; en tirar-hi les tres ofrenes (l'**herba de Sant Joan** i el **romaní**, que brillen en dues clarianes, i una **pruna** de la Prunera de l'Hostatgeria) la boira se'n va. **Cabana de la Jacmeta**: hi dona el beuratge per al camí del Til·ler.
+- **Bosc de Sant Joan**: Font del Bisbe, Alzina Buida (portal; doble de gran que la resta d'arbres, amb clariana pròpia i claror verda), Tot el bosc és ple de **boira lila** mentre la font és adormida; en tirar-hi les tres ofrenes (l'**herba de Sant Joan** i el **romaní**, que brillen en dues clarianes, i una **pruna** de la Prunera de l'Hostatgeria) la boira se'n va. **Cabana de la Jacmeta**: hi dona el beuratge per al camí del Til·ler.
 - **Camí de la Desaparició**: 12 columnes; al mur d'arbres del nord, un **forat més ample** (sense marca) duu a la **Cabana amagada** (cofre: +1 cor), on el **Iscu** juga al solitari.
 - **Ermita de la Desaparició** (gran, porta alta; Creu de la Desaparició al davant; interior amb dues taules de pedra), **L'Era** (dos roures, bancs entre ells), **L'Hostatgeria** (edifici gran a la dreta; enganxada al lateral esquerre, una pèrgola d'arcades de pedra i columnes sense sostre amb la llosa; la Prunera Màgica, a l'esquerra de tot; l'Isildren, davant l'entrada de la pèrgola).
 - **Camí de la Rovellonera i Rovellonera** (Nena de les Trenes, laberint de 3 clarianes), **Ermita de Sant Gabriel**, **Dipòsits** i **Dolmen** (extrem SE).
@@ -223,12 +223,12 @@ S'obre amb el medalló del sarró (o **I**; **M** obre el mapa; **◀ ▶** canv
 ## A12. Balanç d'enemics i premis (revisió 26)
 
 **Cors al llarg del joc** (3 al principi; cada gra són 2 punts de vida):
-| Moment | Gra | Total (camí principal) |
+| Moment | Gra | Total |
 |---|---|---|
 | **Pastor de Boira vençut** | +1 | 4 |
 | Cofre de la cabana de l'Iscu | +1 | 5 |
-| Opcionals: cofre de la Cambra del Santuari (Cant de les Pedres), cofre del Bosc, rellotge del Santuari | +3 | fins a 8 |
-| Opcional: les tres sacerdotesses (un sol gra quan les tres són lliures) | +1 | **9** |
+| Opcional: cofre de la Cambra del Santuari (Cant de les Pedres) | +1 | 6 |
+| Opcional: les tres sacerdotesses (un sol gra quan les tres són lliures) | +1 | **7** (màxim) |
 (Ni en Jusef, ni el sopar del Til·ler, ni el cofre de la Cambra secreta, ni l'Home del Raïm no donen gra.)
 
 **Enemics per zona** (les xifres són d'abans de la revisió → ara): Plaça 2 visitants + 1 escolopendra → 1 + 1; Monestir 1 visitant + 2 escolopendres → 1 + 1; Runes 3 → 2; Cementiri 5 + visitant → 4 + visitant; Camí de la Desaparició 5 → 4; Bosc 5 → 4; Camí de la Rovellonera 5 → 4; Camí de la Cirosa 4 → 3; **Bassadòria 8 gripaus → 4** (surten de nous, màxim 5 vius, cada 3,8 s); Gírgoles 5 ratpenats → 4; passadís de tortura 5 ferralles → 4.
@@ -241,7 +241,7 @@ S'obre amb el medalló del sarró (o **I**; **M** obre el mapa; **◀ ▶** canv
 | La pedra que escolta (façana del Santuari) | mitjà | **+1 gra** |
 | Els llaços de la Nena | mitjà | **Llaç de la Nena** (absorbeix un cop per zona) |
 | Les dotze columnes i les taules | llarg | (ara és un pas obligatori de la història: dona la clau del sagrari) |
-| El rellotge del campanar | mitjà | **+1 gra** |
+| El rellotge del campanar | mitjà | cap gra (arrenca el rellotge) |
 | Les sacerdotesses (llosa, Rosansa, tres cambres) | molt llarg | **+1 gra** en alliberar la tercera (sigui quina sigui); aquesta avisa que al vestíbul hi ha aparegut el premi: un cofre amb la **Benedicció fraterna**, que dissipa la boira verinosa de la galeria que porta a la Sala de la Gàbia (obligatòria per arribar al final) |
 El Diari (Encàrrecs) no mostra el premi de cada missió: es descobreix en acabar-la.
 

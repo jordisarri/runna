@@ -664,7 +664,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
 
 // ---------------- LA SALA DEL RELLOTGE (el rellotge del campanar, dalt de la torre del Santuari) ----------------
 // El rellotge és aturat a un quart de quatre (l'hora que va arribar la boira). Puzle: posar tres engranatges a la mida correcta
-// perquè torni a caminar. Arreglar-lo dóna +1 gra al rosari.
+// perquè torni a caminar. (No dona cap gra al rosari.)
 const GOLFES_SOLUCIO = [0, 2, 1];      // 0 petit, 1 mitjà, 2 gran: «el petit va primer, el gran al mig i el mitjà darrere»
 const GOLFES_DENTS = [18, 24, 30];     // radi primitiu = dents * 1.5: totes les rodes tenen el mateix pas de dent i poden engranar
 const GOLFES_NOM = ['petit', 'mitjà', 'gran'];
