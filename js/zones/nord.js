@@ -352,7 +352,7 @@ class ZonaPingpong extends ZonaBase {
         if (this.empentaMs < 600) return;
         this.empentaMs = 0;
         if (!Estat.te('guants')) {
-            if (!this.pistaRoda) { this.pistaRoda = true; this.missatge('Pesa massa... calen unes mans més fortes.'); }
+            if (!this.pistaRoda) { this.pistaRoda = true; this.ineuDiu('Pesa massa... calen unes mans més fortes.'); }
             return;
         }
         this.mouRoda(this.costatRoda);
@@ -465,7 +465,7 @@ class ZonaCelles extends ZonaBase {
         this.cameras.main.shake(400, 0.003);
         Sfx.secret();
         this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
-        this.missatge('El camí del Til·ler és lliure.');
+        this.ineuDiu("El camí del Til·ler és lliure.");
         Estat.posaObjectiu("El camí al nord de les Cel·les s'ha aclarit: el Gran Til·ler hi és al capdamunt.");
         Estat.desar();
     }

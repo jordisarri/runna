@@ -97,7 +97,7 @@ class ZonaPlaca extends ZonaBase {
     enMelodia(nom) {
         if (nom !== 'pedres') return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1535, 480) > 260) return false;
-        if (Estat.flag('tresorObert')) { this.missatge('El passatge ja és obert.'); return true; }
+        if (Estat.flag('tresorObert')) { this.ineuDiu('El passatge ja és obert.'); return true; }
         Estat.posaFlag('tresorObert');
         this.cameras.main.shake(500, 0.004);
         Sfx.secret();

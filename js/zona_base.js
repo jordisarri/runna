@@ -260,6 +260,19 @@ class ZonaBase extends Phaser.Scene {
 
     ui() { return this.scene.get('UI'); }
 
+    // L'Ineu ho pensa en veu alta: un quadre de diàleg amb el seu retrat i entre parèntesis (com els seus pensaments). Si ja n'hi ha un
+    // d'obert, espera que es tanqui (fins a uns 6 s) en lloc d'apilar-ne un altre.
+    ineuDiu(text, fet, intents = 0) {
+        const ui = this.ui();
+        if (!ui) { if (fet) fet(); return; }
+        if (ui.dialeg) {
+            if (intents < 12) this.time.delayedCall(500, () => this.ineuDiu(text, fet, intents + 1));
+            else if (fet) fet();
+            return;
+        }
+        ui.obrirDialeg({ pagines: [{ qui: 'Ineu', text: '(' + text + ')' }] }, fet);
+    }
+
     // ---------------- Viatge ràpid ----------------
     parada(pd) {
         const [cx, cy] = pd.c, [hx, hy] = pd.h;
@@ -281,7 +294,7 @@ class ZonaBase extends Phaser.Scene {
         const aqui = this.paradaAqui, ui = this.ui();
         const destins = PARADES.filter(pd => pd !== aqui && Estat.flag('parada_' + pd.id));
         const perill = (this.enemics || []).some(e => !e.mort && Phaser.Math.Distance.Between(e.spr.x, e.spr.y, this.ineu.x, this.ineu.y) < 260);
-        if (perill) { fet(); this.missatge('Ara no: hi ha bèsties a prop.'); return; }
+        if (perill) { fet(); this.ineuDiu('Ara no: hi ha bèsties a prop.'); return; }
         ui.triarLlista([...destins.map(pd => pd.nom), 'Res, gràcies'], i => {
             fet();
             if (i < destins.length) this.time.delayedCall(200, () => this.viatjar(destins[i]));
@@ -1176,7 +1189,7 @@ class ZonaBase extends Phaser.Scene {
     melodiaTocada(nom) {
         const gestionada = this.enMelodia ? this.enMelodia(nom) : false;
         if (!gestionada) {
-            this.missatge('♪ ' + MELODIES[nom].nom + '\nAquí no passa res...');
+            this.ineuDiu('He tocat el ' + MELODIES[nom].nom + ', però aquí no passa res...');
         }
     }
 

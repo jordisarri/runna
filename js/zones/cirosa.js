@@ -229,10 +229,10 @@ class ZonaCirosa extends ZonaBase {
     enMelodia(nom) {
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 280, 720) > 380) return false;
         if (!Estat.flag('soparObert')) {
-            this.missatge('Els pastors t\'escolten en silenci... (encara no és el moment: parla amb el Til·ler)');
+            this.ineuDiu("Els pastors m'escolten en silenci... Encara no és el moment: primer cal parlar amb el Til·ler.");
             return true;
         }
-        if (Estat.flag('pastorsConvencuts')) { this.missatge('Els pastors somriuen.'); return true; }
+        if (Estat.flag('pastorsConvencuts')) { this.ineuDiu('Els pastors somriuen: aquí ja ha tornat la música.'); return true; }
         this.ui().obrirDialeg(DIALEGS.pastorsConvencuts(Estat), () => Estat.desar());
         return true;
     }

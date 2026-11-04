@@ -280,7 +280,7 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         if (this.empentaMs < 600) return;
         this.empentaMs = 0;
         if (!Estat.te('guants')) {
-            if (!this.pistaTaula) { this.pistaTaula = true; this.missatge('Una taula de roure massissa barra la porta del mig. Des de l\'altra banda, una veu fina i enrabiada colpeja la fusta. Pesa massa: calen unes mans més fortes.'); }
+            if (!this.pistaTaula) { this.pistaTaula = true; this.ineuDiu("Una taula de roure massissa barra la porta del mig. Des de l'altra banda, una veu fina i enrabiada colpeja la fusta. Pesa massa: calen unes mans més fortes."); }
             return;
         }
         this.empenyTaula(this.costatTaula);
@@ -422,7 +422,7 @@ class CambraMonja extends ZonaCasaBase {
     enMelodia(nom) {
         if (this.monja !== 'pains' || nom !== 'aurora') return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 520, 460) > 320) return false;
-        if (Estat.flag('lliurePains')) { this.missatge('La Dolora ja és desperta.'); return true; }
+        if (Estat.flag('lliurePains')) { this.ineuDiu('La Dolora ja és desperta.'); return true; }
         Estat.posaFlag('lliurePains');
         this.alliberada(false);
         Sfx.secret();

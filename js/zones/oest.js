@@ -573,7 +573,7 @@ class ZonaDipositos extends ZonaBase {
         this.obstacles.remove(this.colBoira, true, true);
         Sfx.secret();
         this.sortida(1586, 520, 14, 130, 'ZonaDolmen', 'diposits');
-        this.missatge('El camí del Dolmen és lliure.');
+        this.ineuDiu('El camí del Dolmen és lliure.');
         Estat.posaObjectiu(DIALEGS.objectiuRunna(Estat));
         Estat.desar();
     }

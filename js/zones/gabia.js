@@ -234,7 +234,7 @@ class ZonaGirgoles extends ZonaBase {
         this.cameras.main.shake(300, 0.003);
         if (this.colCortina) this.obstacles.remove(this.colCortina, true, true);
         this.tweens.add({ targets: this.cortina, alpha: 0, duration: 1600 });
-        this.missatge('Les gírgoles canten: el micel·li es desfà.');
+        this.ineuDiu('Les gírgoles canten: el micel·li es desfà!');
         Estat.posaObjectiu('Segueix pel túnel del nord de la Sala de les Gírgoles.');
         Estat.desar();
     }

@@ -58,7 +58,7 @@ function premiMonja(nom, flag) {
     if (E.flag('premiPains') && E.flag('premiPhili') && E.flag('premiCharm')) {
         E.posaFlag('mongesTrobades');
         E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;      // un sol gra pel conjunt de les tres germanes
-        if (ui) { ui.actualitzarHUD(); ui.missatge('+1 gra al rosari: les tres germanes'); }
+        if (ui) { ui.actualitzarHUD(); ui.missatge('Has rebut un GRA DEL ROSARI (+1 cor): les tres germanes.'); }
         E.posaObjectiu("Les sacerdotesses són lliures. Al vestíbul de l'Hostatgeria t'espera el premi.");
     } else {
         const f = ['Pains', 'Phili', 'Charm'].filter(n => !E.flag('premi' + n));
