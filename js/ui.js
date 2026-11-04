@@ -690,27 +690,26 @@ class EscenaUI extends Phaser.Scene {
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
             { text: 'Diari i mapa', fn: () => { this.tancarMenu(); this.obrirInventari('mapa'); } },
-            { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } },
-            { text: 'Àudio', fn: () => {
-                Sfx.commutarSilenci();
-                Sfx.actualitzarIconaAltaveu(this.iconaAudio, AMPLE / 2 - 86, ALT / 2 + 172, 0x3a2412);
-                this.pintarSeleccio();
-            } }
+            { text: 'Àudio', audio: true, fn: () => { Sfx.commutarSilenci(); this.pintarSeleccio(); Sfx.tria(); } },
+            { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];
+        // Cada opció és un botó (contenidor amb fons, text i, a l'Àudio, l'altaveu): s'il·lumina en passar-hi per sobre o seleccionar-lo,
+        // fa un petit «pop» en prémer-lo i sona. L'altaveu i el text van sempre centrats a la mateixa línia.
+        const BTN_W = 460, BTN_H = 64, Y0 = ALT / 2 - 92, PAS = 72;
+        this.botonsMenu = [];
         this.textOpcions = this.opcions.map((o, i) => {
-            const audio = i === 3, y = ALT / 2 - 80 + i * 84;
-            const t = this.add.text(audio ? AMPLE / 2 - 48 : AMPLE / 2, y, o.text, { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#3a2412', resolution: 2 })
-                .setOrigin(audio ? 0 : 0.5).setInteractive({ useHandCursor: true })
-                .on('pointerover', () => { this.seleccio = i; this.pintarSeleccio(); })
+            const y = Y0 + i * PAS;
+            const btn = this.add.container(AMPLE / 2, y);
+            const fons = this.add.graphics();
+            const t = this.add.text(o.audio ? 24 : 0, 0, o.text, { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#3a2412', resolution: 2 }).setOrigin(0.5);
+            btn.add([fons, t]);
+            let icona = null;
+            if (o.audio) { icona = Sfx.crearIconaAltaveu(this, -BTN_W / 2 + 62, 0, 0x3a2412); btn.add(icona); }
+            const zona = this.add.rectangle(AMPLE / 2, y, BTN_W, BTN_H, 0xffffff, 0.001).setInteractive({ useHandCursor: true })
+                .on('pointerover', () => { if (this.seleccio !== i) { this.seleccio = i; Sfx.menu(); } this.pintarSeleccio(); })
                 .on('pointerdown', () => this.executarOpcio(i));
-            this.menu.add(t);
-            if (audio) {
-                this.iconaAudio = Sfx.crearIconaAltaveu(this, AMPLE / 2 - 86, y, 0x3a2412);
-                this.iconaAudio.setInteractive(new Phaser.Geom.Rectangle(AMPLE / 2 - 106, y - 20, 40, 40), Phaser.Geom.Rectangle.Contains)
-                    .on('pointerover', () => { this.seleccio = i; this.pintarSeleccio(); })
-                    .on('pointerdown', () => this.executarOpcio(i));
-                this.menu.add(this.iconaAudio);
-            }
+            this.menu.add([btn, zona]);
+            this.botonsMenu.push({ btn, fons, icona, w: BTN_W, h: BTN_H });
             return t;
         });
         this.seleccio = 0;
@@ -720,8 +719,10 @@ class EscenaUI extends Phaser.Scene {
         if (this.dialeg || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
         this.menuObert = true;
         this.seleccio = 0;
+        this.premut = false;
         this.pintarSeleccio();
-        this.menu.setVisible(true);
+        this.menu.setVisible(true).setAlpha(0);
+        this.tweens.add({ targets: this.menu, alpha: 1, duration: 140 });
     }
 
     tancarMenu() {
@@ -756,17 +757,38 @@ class EscenaUI extends Phaser.Scene {
 
     moureSeleccio(d) {
         this.seleccio = (this.seleccio + d + this.opcions.length) % this.opcions.length;
+        Sfx.menu();
         this.pintarSeleccio();
     }
 
+    // Pinta els botons: el seleccionat (amb el ratolí o el teclat) té el fons daurat, la vora vermella i un ▸; l'Àudio mostra si és activat o no
     pintarSeleccio() {
-        this.textOpcions.forEach((t, i) => {
-            t.setColor(i === this.seleccio ? '#9a1f1f' : '#3a2412');
-            t.setText((i === this.seleccio ? '▸ ' : '') + this.opcions[i].text);
+        this.opcions.forEach((o, i) => {
+            const bt = this.botonsMenu[i], sel = i === this.seleccio, t = this.textOpcions[i];
+            bt.fons.clear();
+            bt.fons.fillStyle(0x000000, sel ? 0.18 : 0.1).fillRoundedRect(-bt.w / 2 + 3, -bt.h / 2 + 5, bt.w, bt.h, 14);
+            bt.fons.fillStyle(sel ? 0xe8c878 : 0xd8c090, sel ? 0.8 : 0.3).fillRoundedRect(-bt.w / 2, -bt.h / 2, bt.w, bt.h, 14);
+            bt.fons.lineStyle(sel ? 3.5 : 2, sel ? 0x9a1f1f : 0x8a5a2a, sel ? 1 : 0.55).strokeRoundedRect(-bt.w / 2, -bt.h / 2, bt.w, bt.h, 14);
+            t.setColor(sel ? '#9a1f1f' : '#3a2412');
+            t.setText(o.audio ? (Sfx.silenciat ? 'Àudio: desactivat' : 'Àudio: activat') : o.text);
+            if (bt.icona) Sfx.actualitzarIconaAltaveu(bt.icona, -bt.w / 2 + 62, 0, sel ? 0x9a1f1f : 0x3a2412);
+            bt.btn.setScale(sel ? 1.03 : 1);
         });
     }
 
-    executarOpcio(i) { this.opcions[i].fn(); }
+    // Prémer una opció: es nota (so i un petit «pop» del botó) i, després d'un instant, fa la seva feina. L'Àudio canvia a l'acte.
+    executarOpcio(i) {
+        if (this.premut) return;
+        const o = this.opcions[i], bt = this.botonsMenu[i];
+        this.seleccio = i;
+        this.pintarSeleccio();
+        const pop = () => this.tweens.add({ targets: bt.btn, scale: { from: 0.94, to: 1.03 }, duration: 130, ease: 'Back.easeOut' });
+        if (o.audio) { pop(); o.fn(); return; }
+        this.premut = true;
+        Sfx.tria();
+        pop();
+        this.time.delayedCall(170, () => { this.premut = false; o.fn(); });
+    }
 
     // Desa la posició actual de l'Ineu (la zona activa la informa)
     desar() {

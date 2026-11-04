@@ -76,9 +76,12 @@ class EscenaMusica extends Phaser.Scene {
         if (zonaFl && zonaFl.ineuFlauta) zonaFl.ineuFlauta(true);          // l'Ineu es veu de cara, tocant la flauta
 
         const cx = AMPLE / 2, T = MUS_T;
-        this.primerPla(T);
+        // En pantalles baixes (ALT petit) el pergamí es fa una mica més petit (ancorat a baix) perquè sobri lloc per al primer pla de l'Ineu tocant
+        const f = Math.min(1, (ALT - 440) / 585);
+        this.escPergami = f;
+        this.primerPla(ALT - 585 * f);
         const llibre = { fontFamily: FONT_LLIBRE, resolution: 2 };
-        this.panell = this.add.container(0, 30).setAlpha(0);
+        this.panell = this.add.container(AMPLE / 2 * (1 - f), ALT * (1 - f) + 30).setScale(f).setAlpha(0);
         const add = o => { this.panell.add(o); return o; };
 
         // Pergamí amb marc de fusta
@@ -184,7 +187,7 @@ class EscenaMusica extends Phaser.Scene {
                 .setOrigin(0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => this.tancar(false)));
             this.lastTime = 0;
         }
-        this.tweens.add({ targets: this.panell, alpha: 1, y: 0, duration: 350, ease: 'Sine.easeOut' });
+        this.tweens.add({ targets: this.panell, alpha: 1, y: ALT * (1 - this.escPergami), duration: 350, ease: 'Sine.easeOut' });
     }
 
     // Primer pla de l'Ineu tocant la tarota, gran i per sobre de l'escenari (el pergamí li tapa la part de baix)

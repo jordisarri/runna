@@ -992,7 +992,7 @@ const DIALEGS = {
         if (!E.flag('premiPhili')) return {
             pagines: [
                 { qui: 'Phili', text: 'Per fi! Tres nits que colpejo aquesta porta! Soc la Phili, i no, no m\'he estat quieta ni un minut.' },
-                { qui: 'Phili', text: 'T\'ho dic perquè ho vaig veure: el Germà Andreu, el de la pilota, baixava a la Taverna cada nit, al soterrani, amb una clau petita i rovellada. Mai no li he cregut el somriure.' },
+                { qui: 'Phili', text: 'T\'ho dic perquè ho vaig veure: el Germà Andreu, el de la pilota, anava cada nit a la Porta de les Gírgoles, a l\'est del Celler, amb una clau petita i rovellada. Mai no li he cregut el somriure.' },
                 { qui: 'Phili', text: 'Tots aquests nens innocents segrestats per aquesta maleïda boira... Troba\'ls, monjo! Salva\'ls a tots!' },
                 { qui: 'Phili', text: 'Gràcies per les molèsties! Que no se t\'acabin les forces!' },
                 ...(ultimaMonja('Phili') ? [avisPremiMonja('Phili')] : [])
@@ -1024,7 +1024,7 @@ const DIALEGS = {
         if (E.flag('cofreMonges')) return { pagines: [] };
         return {
             pagines: [
-                { qui: 'Nota', text: "«Per a qui ha tornat la llum a aquesta casa. Sota la Taverna, abans d'arribar a la gàbia, hi ha una boira que crema: la nostra benedicció l'esvairà al teu pas.» — Pains, Phili i Charm" },
+                { qui: 'Nota', text: "«Per a qui ha tornat la llum a aquesta casa. Al fons de les Gírgoles, abans d'arribar a la gàbia, hi ha una boira que crema: la nostra benedicció l'esvairà al teu pas.» — Pains, Phili i Charm" },
                 { avis: "Has obtingut la BENEDICCIÓ FRATERNA: et protegeix de la boira verinosa que barra el camí de la Sala de la Gàbia." }
             ],
             enAcabar: () => { E.posaFlag('cofreMonges'); E.dona('benedicio_fraterna'); E.desar(); }
@@ -1171,9 +1171,9 @@ const DIALEGS = {
         pagines: [
             { fer: (z, fet) => z.andreuAgenollat(fet) },
             { qui: "Andreu, Pastor de Boira", text: "Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré." },
-            { qui: "Andreu, Pastor de Boira", text: "El Mestre és sota la Taverna, i ja és despert. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells." },
+            { qui: "Andreu, Pastor de Boira", text: "El Mestre és al fons de les Gírgoles, i ja és despert. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells." },
             { fer: (z, fet) => z.andreuMarxa(fet) },
-            { qui: "Ineu", text: "(«Sota la Taverna»... Ara ja sé on mirar.)" }
+            { qui: "Ineu", text: "(«Al fons de les Gírgoles»... Ara ja sé on mirar.)" }
         ],
         enAcabar: () => {
             E.posaFlag("pastorVencut");

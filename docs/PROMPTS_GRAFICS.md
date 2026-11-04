@@ -142,6 +142,8 @@
 
 - [x] `pi`
 
+- [x] `pi_tres_cants` (viu), `pi_tres_cants_mort` (sec, adormit) i `pi_arrels` (la barrera): el pi es transforma del sec al viu quan es desperta
+
 - [x] `pi_pinyer`
 
 - [x] `pianista`
@@ -259,6 +261,49 @@ Els prompts de sota són només dels pendents i dels nous (els fets només es ll
 
 
 ## Elements d'escenari
+
+
+
+### `pi_tres_cants.png` → `assets/natura/pi_tres_cants.webp` (amplada 340) *(El Pi dels Tres Cants, al mig de la clariana del Bosc del Pi dels Tres Cants (`js/zones/bosc_pi.js`). Està inspirat en el **Pi de les Tres Branques**: el tronc es parteix en **tres soques que se separen des de baix**, gairebé des del terra, i cada una puja pel seu compte amb la seva copa. Puja com a referència `art/natura/pi.jpg` (el pinastre del joc) i, si pots, la foto del Pi de les Tres Branques del Museu Etnològic (<https://www.barcelona.cat/museu-etnologic-culturesmon/sites/default/files/wp-images/Pi%20de%20les%20tres%20branques%2001%20x600.jpg>). Imatge **vertical, 2:3** (el joc la fa servir a 340 × 520). El joc hi posa una llum a la copa de cada soca quan sona el seu cant, així que cada copa ha d'estar ben definida i sense res a sobre (ni ocells, ni llums, ni text). Mentre no hi sigui, el joc fa servir un dibuix provisional fet amb codi.)*
+
+
+
+```
+
+Charming 2D cartoon game scenery asset in the same art style as the attached reference image (hand-painted cartoon pine tree): bold clean consistent dark outline around the whole silhouette with medium-to-fine clean inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text, vertical composition with a 2:3 aspect ratio. A single very old, majestic red pine in the shape of the famous 'three-branched pine' (Pi de les Tres Branques): a short, wide, gnarled common base that flares into thick roots on the ground, and from the very bottom of the tree (at about 20% of the image height above the ground) the trunk splits into THREE separate thick trunks that spread apart from each other like the three prongs of a trident: the middle trunk grows straight up and is the tallest, the left trunk and the right trunk lean outward and are a little shorter. Each of the three trunks is a tall reddish-orange trunk with scaly bark, and each one carries its own separate, round, well-defined crown of blue-green needle clouds at the top (the left crown at about 20% of the image height, the middle crown at about 10%, the right crown at about 20%), with clear white space between the three crowns and nothing else around them. The whole tree fills most of the image width, the roots touch the bottom edge of the image. A calm, wise, slightly magical old tree, but no glow, no light effects, no birds, no faces, no symbols. Camera angle: classic JRPG 3/4 view, camera tilted about 30 degrees looking down, the tree facing the camera straight on, not isometric, no strong perspective distortion, the base of the tree sits flat at the bottom of the image.
+
+```
+
+
+
+**Ajust:** si les tres soques surten massa juntes o es fusionen més amunt, afegeix: «the three trunks separate right at the bottom, close to the ground, and stay clearly apart all the way up». Si les copes es toquen: «there must be white space between the three crowns».
+
+
+### `pi_arrels.png` → `assets/natura/pi_arrels.webp` (amplada 150) *(La barrera del camí del Bosc del Pi dels Tres Cants: les arrels del pi, ben tupides, que tanquen el pas. Són les mateixes del Til·ler (`art/natura/arrels_tiller.png`, que has de pujar com a referència), però **en vertical**: una paret estreta i alta, perquè el camí és horitzontal i la barrera el creua d'una banda a l'altra. Imatge **vertical, 1:2** (el joc la fa servir a 150 × 300). El joc l'aixeca i l'esvaeix quan s'obre el pi. Mentre no hi sigui, el joc fa servir un dibuix provisional fet amb codi.)*
+
+
+
+```
+
+Charming 2D cartoon game scenery asset in the same art style as the attached reference image (the tangled roots of the old tree): bold clean consistent dark outline around the whole silhouette with medium-to-fine clean inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text, vertical composition with a 1:2 aspect ratio (twice as tall as wide). A tall, narrow, dense wall of thick, twisted, interwoven reddish-brown tree roots, exactly in the style of the reference roots but standing upright like a living gate: many thick roots rise from the ground and weave over and under each other, so the whole shape is a tall, slim, slightly rounded mass that completely fills a narrow vertical rectangle with no gaps to see through, a few patches of green moss, a few small green leaves and some loose soil crumbs at the base. The base is wider than the top, the sides are irregular with a few root tips sticking out, and the bottom touches the bottom edge of the image. It must clearly read as an impassable barrier made by a huge old pine, not as a bush or a fence. Camera angle: classic JRPG 3/4 view, camera tilted about 30 degrees looking down, the object facing the camera straight on, not isometric, no strong perspective distortion, the base of the object sits flat at the bottom of the image.
+
+```
+
+
+### `placa_pi.png` → `assets/natura/placa_pi.webp` (amplada 70) *(La placa del Pi dels Tres Cants: una **fita de pedra petita i baixa** davant el pi, que explica que cal un cant per cada branca. **No ha de semblar una làpida**: sense creu, sense cap arrodonit, sense lletres ni flors. Ha d'estar vista **completament de cara** (alçat frontal, sense cap perspectiva lateral ni cara de dalt visible): una peça plana, com un rectangle de pedra, a la qual es veu només la cara de davant. Mida al joc: uns 70 × 70 (arriba aproximadament a la cintura de l'Ineu). Mentre no hi sigui, el joc fa servir un dibuix provisional fet amb codi.)*
+
+
+
+```
+
+Charming 2D cartoon game scenery asset in the same art style as the attached reference image (hand-painted cartoon stone object): bold clean consistent dark outline around the whole silhouette with medium-to-fine clean inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text, no letters, no numbers. A small, low, squat stone waymarker shown in a strictly FRONTAL elevation view, exactly head-on, like a flat 2D front drawing: absolutely no side view, no three-quarter view, no perspective, no visible top surface and no visible sides, only the flat front face of the stone is seen. It is a single wide rectangular block of weathered grey stone, a little wider than it is tall (about 1.1 times as wide as high, only about waist-high to a child), with a flat straight top edge and slightly chipped corners, resting on a wide flat low base slab. It is clearly NOT a gravestone: no cross, no rounded or arched top, no epitaph, no flowers, no cemetery feeling. Carved in shallow relief on the upper part of the front face, centered: a small pine tree seen from the front whose single thick trunk starts at the bottom of the carving and, a little above its base, divides into THREE separate trunks that spread apart as they rise, like a trident or the letter Y with three prongs (the three trunks are joined together at the bottom and separate going upwards, never joined at the top), each of the three trunks ending in its own small round crown. Carved below it, in a horizontal row on the same front face: three small circles, the first with one dot inside, the second with two dots and the third with three dots (three notes). A few patches of green moss on the top edge and the base, a few small grass tufts at the foot. The object sits flat at the bottom of the image.
+
+```
+
+
+
+
+
 
 ## Personatges
 

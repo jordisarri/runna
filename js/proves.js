@@ -21,12 +21,13 @@ const Proves = {
     },
 
     // Deixa fets els passos de la història anteriors a l'índex 'fins' (i, si cal, totes les missions laterals)
-    estatFins(fins, laterals, mapa) {
+    estatFins(fins, laterals, mapa, melodies) {
         Estat.nova();
         const marca = llista => llista.forEach(m => m.startsWith('obj:') ? Estat.dona(m.slice(4)) : Estat.posaFlag(m));
         Estat.posaFlag('introVista');
         PROGRES.passos.slice(0, fins).forEach(p => marca(p.marca));
         if (laterals) PROGRES.laterals.forEach(l => marca(l.marca));
+        if (melodies) { Object.values(MELODIES).forEach(m => Estat.posaFlag(m.flag)); Estat.dona('flauta'); }              // totes les melodies apreses (i la tarota)
         if (mapa) Joc.ZONES.forEach(z => Estat.posaFlag('visitada_' + z));                        // tot el mapa desbloquejat: totes les escenes visitades
         if (Estat.flag('bastoObtingut')) { Estat.posaFlag('tutorialCombat'); Estat.posaFlag('combatActiu'); }
         PARADES.forEach(pd => Estat.posaFlag('parada_' + pd.id));                                 // a proves, totes les parades del carruatge ja conegudes
@@ -46,9 +47,9 @@ const Proves = {
         Joc.continuar(sc);
     },
 
-    saltar(i, laterals, mapa) {
+    saltar(i, laterals, mapa, melodies) {
         const p = PROGRES.passos[i];
-        this.estatFins(i, laterals, mapa);
+        this.estatFins(i, laterals, mapa, melodies);
         this.anar((DIARI_PASSOS[p.id] && DIARI_PASSOS[p.id][1]) || 'ZonaPlaca');
     },
 
@@ -59,15 +60,37 @@ const Proves = {
         d.style.cssText = 'position:fixed;inset:56px 8px 8px 8px;z-index:21;overflow:auto;background:#1a120bf2;color:#f2e6c8;border:2px solid #d4af37;border-radius:10px;padding:10px;font:15px Georgia,serif';
         const estil = 'display:block;width:100%;text-align:left;margin:3px 0;padding:9px 10px;font:inherit;color:inherit;background:#3a2a1a;border:1px solid #6a5030;border-radius:6px;cursor:pointer';
         d.innerHTML = '<b>Proves</b> · la partida de proves es desa a part<br>' +
-            '<label style="display:inline-block;margin:8px 0"><input type="checkbox" id="provesLaterals"> amb totes les missions laterals fetes</label><br>' +
-            '<label style="display:inline-block;margin:0 0 8px"><input type="checkbox" id="provesMapa"> amb tot el mapa desbloquejat (tots els escenaris visibles)</label>' +
+            '<label style="display:inline-block;margin:8px 0"><input type="checkbox" id="provesLaterals" checked> amb totes les missions laterals fetes</label><br>' +
+            '<label style="display:inline-block;margin:0 0 8px"><input type="checkbox" id="provesMapa" checked> amb tot el mapa desbloquejat (tots els escenaris visibles)</label><br>' +
+            '<label style="display:inline-block;margin:0 0 8px"><input type="checkbox" id="provesMelodies" checked> amb totes les melodies apreses (Aurora, Pedres i Miracle)</label>' +
             '<div style="margin:6px 0 2px;opacity:.8">Comença just abans de… (tot l\'anterior ja és fet)</div>';
         PROGRES.passos.forEach((p, i) => {
             const b = document.createElement('button');
             const info = DIARI_PASSOS[p.id];
             b.textContent = (i + 1) + '. ' + (info ? info[0] : p.id) + (info ? '  ·  ' + info[1].replace(/^Zona/, '') : '');
             b.style.cssText = estil;
-            b.onclick = () => { const laterals = d.querySelector('#provesLaterals').checked, mapa = d.querySelector('#provesMapa').checked; d.remove(); this.saltar(i, laterals, mapa); };
+            b.onclick = () => { const laterals = d.querySelector('#provesLaterals').checked, mapa = d.querySelector('#provesMapa').checked, melodies = d.querySelector('#provesMelodies').checked; d.remove(); this.saltar(i, laterals, mapa, melodies); };
+            d.appendChild(b);
+        });
+        // Etapes del Pi dels Tres Cants (Bosc del Pi, al sud de Sant Antoni): tota la història feta, el mapa obert i les tres melodies apreses
+        const tp = document.createElement('div');
+        tp.style.cssText = 'margin:12px 0 4px;opacity:.8';
+        tp.textContent = 'Pi dels Tres Cants (entres des de Sant Antoni, amb tota la història feta):';
+        d.appendChild(tp);
+        [['Pi adormit: cap cant tocat encara', []],
+         ['Pi a mig despertar: Aurora i Pedres tocats (falta el Miracle)', ['piAurora', 'piPedres', 'flauta_pi']],
+         ['Pi despert: les branques s\'han alçat i el camí és lliure', ['piAurora', 'piPedres', 'piMiracle', 'piObert', 'piVist', 'flauta_pi']]
+        ].forEach(([text, flags]) => {
+            const b = document.createElement('button');
+            b.textContent = text;
+            b.style.cssText = estil;
+            b.onclick = () => {
+                d.remove();
+                this.estatFins(PROGRES.passos.length, true, true, true);
+                ['piObert', 'piAurora', 'piPedres', 'piMiracle', 'piVist', 'flauta_pi'].forEach(f => { delete Estat.dades.flags[f]; });
+                flags.forEach(f => Estat.posaFlag(f));
+                this.anar('ZonaBoscPi', 'santantoni');
+            };
             d.appendChild(b);
         });
         // Anar a una zona sense canviar l'estat (amb la partida de proves actual)

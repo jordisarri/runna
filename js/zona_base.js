@@ -77,7 +77,7 @@ const PARADES = [
     { id: 'celles',    zona: 'ZonaCelles',     nom: 'Les Cel·les',        c: [610, 960],  h: [760, 975],  a: [650, 1015] },
     { id: 'cirosa',    zona: 'ZonaCirosa',     nom: 'La Cirosa',          c: [1310, 1120],  h: [1460, 1135],  a: [1350, 1175] },
     { id: 'santantoni', zona: 'ZonaSantAntoni', nom: 'Sant Antoni',       c: [260, 1010],  h: [410, 1025],  a: [300, 1065] },
-    { id: 'diposits',  zona: 'ZonaDipositos',  nom: 'Els Dipòsits',       c: [300, 830],  h: [450, 845],  a: [340, 885] }
+    { id: 'diposits',  zona: 'ZonaGabriel',    nom: 'Sant Gabriel',       c: [1150, 990], h: [1300, 1005], a: [1210, 1050] }
 ];
 
 const PAS_PORTA = 44;       // en passar una porta (o qualsevol sortida), l'Ineu camina aquests píxels més cap a la foscor abans de canviar d'escena, i en arribar en camina altres tants cap endins
@@ -1295,7 +1295,7 @@ class ZonaBase extends Phaser.Scene {
     }
 
     // Pla de cinema: la càmera deixa de seguir l'Ineu i enquadra (x, y) al mig de la part de la pantalla que el quadre de diàleg no tapa
-    enquadrar(x, y, zoom, ms = 800, fet) {
+    enquadrar(x, y, zoom, ms = 800, fet, reserva = 470) {
         const cam = this.cameras.main;
         if (!this.camCinema) {
             this.camCinema = true;
@@ -1303,7 +1303,7 @@ class ZonaBase extends Phaser.Scene {
             const b = cam.getBounds(); this.boundsCinema = { x: b.x, y: b.y, w: b.width, h: b.height };
             cam.stopFollow(); cam.removeBounds();
         }
-        const W = AMPLE, H = ALT - ALT_HUD, lliure = Math.max(240, H - 470);
+        const W = AMPLE, H = ALT - ALT_HUD, lliure = Math.max(240, H - reserva);
         const sx = x - W / 2, sy = y - (lliure / 2) / zoom - H / 2 + H / (2 * zoom);
         if (this.twCinema) this.twCinema.stop();
         if (ms <= 0) {

@@ -535,7 +535,7 @@ class ZonaSantAntoni extends ZonaBase {
             nom: 'Cel·les de Sant Antoni',
             amplada: 1400,
             alcada: 1100,
-            entrades: { monestir: { x: 60, y: 880, dir: 'dreta' }, cela: { x: 549, y: 800, dir: 'avall' } }
+            entrades: { monestir: { x: 60, y: 880, dir: 'dreta' }, cela: { x: 549, y: 800, dir: 'avall' }, bosc: { x: 1065, y: 1010, dir: 'amunt' } }
         });
     }
 
@@ -543,6 +543,7 @@ class ZonaSantAntoni extends ZonaBase {
         this.terra('herba', 0, 0, 1400, 1100, -1100);
         this.terra('cami', 0, 810, 1100, 130);             // des del Monestir, davant la façana
         this.terra('pedra', 420, 770, 260, 60);            // replà davant la porta
+        this.terra('cami', 1000, 900, 130, 200);           // el camí gira cap al sud: duu al Bosc del Pi dels Tres Cants
 
         // La casa (900 d'ample): la porta, un pèl més alta que l'Ineu, és al 33% de l'ample, a x≈545
         const sa = this.posar('cel_stantoni', 700, 760);
@@ -559,6 +560,7 @@ class ZonaSantAntoni extends ZonaBase {
         this.arbres([[1250, 300], [1320, 560], [1340, 1060], [160, 300], [360, 220]]);   // cap arbre davant el cartell ni el Germà Francí
 
         this.sortida(0, 820, 14, 140, 'ZonaMonestir', 'santantoni');   // surts per l'est del Monestir
+        this.sortida(1000, 1086, 130, 14, 'ZonaBoscPi', 'santantoni');   // i, al sud, el camí del bosc
     }
 
     // Va i ve pel camí caminant (full de 16 fotogrames cap a la dreta; es gira per tornar); en agafar-lo, passa al sarró

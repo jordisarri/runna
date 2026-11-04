@@ -102,16 +102,16 @@ const PROGRES = {
         { id: 'segell', marca: ['tombaLlegida', 'tombaSegellada'], fet: E => E.flag('tombaSegellada'),
           pista: E => E.flag('tombaLlegida') || !E.flag('relTretes')
               ? "La tomba esquerdada del Cementiri treu boira: la llum de Runna la tancaria. La clau de ferro obre la porta a l'est del Pati del Celler."
-              : "La tomba del Cementiri treu boira: el Pare Alcoví, a la Biblioteca, sabrà què fer-hi. La clau de ferro obre la porta a l'est del Pati del Celler." },        // ---- Sota la Taverna ----
+              : "La tomba del Cementiri treu boira: el Pare Alcoví, a la Biblioteca, sabrà què fer-hi. La clau de ferro obre la porta a l'est del Pati del Celler." },        // ---- Les Gírgoles ----
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
           pista: E => "A l'est del Pati del Celler, pel camí entre els arbres, hi ha una porta de ferro. La clau de ferro n'és amiga." },
         { id: 'clauCiscu', marca: ['ciscuTrobat', 'clauGirgoles', 'obj:clau_girgoles'], fet: E => E.te('clau_girgoles') || E.flag('portaFerroOberta'),
           pista: E => E.flag('ciscuTrobat') ? "L\'Iscu t'espera a la cabana amagada: té una clau rovellada per a tu."
               : "La porta del fons té un pany petit. L\'Iscu, el noi de la Taverna, ho ha vist tot: s'amaga pel camí de la Desaparició." },
         { id: 'portaFerro', marca: ['portaFerroOberta'], fet: E => E.flag('portaFerroOberta'),
-          pista: E => "Al fons del soterrani de la Sala de les Gírgoles, la clau rovellada de l\'Iscu té una porta de ferro que treu boira." },
+          pista: E => "Al fons de la galeria de la Porta de Ferro, la clau rovellada de l\'Iscu té una porta de ferro que treu boira." },
         { id: 'girgoles', marca: ['girgolesEnceses'], fet: E => E.flag('girgolesEnceses'),
-          pista: E => "Sota la porta de ferro, cinc mates de gírgoles lluminoses voldrien brillar alhora, però cada una desperta les veïnes." },
+          pista: E => "Darrere la porta de ferro, cinc mates de gírgoles lluminoses voldrien brillar alhora, però cada una desperta les veïnes." },
         { id: 'rastell', marca: ['rastellObert'], fet: E => E.flag('rastellObert'),
           pista: E => "Al passadís de tortura, un rastell rovellat barra el pas. Els Guants de Poder saben de torns." },
         { id: 'tortura', marca: ['torturaNet'], fet: E => E.flag('torturaNet'),
@@ -150,6 +150,8 @@ const PROGRES = {
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta cants antics." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
           pista: E => "La Nena de les Trenes espera dos llaços colgats sota pedres: un a la roca del camí i l'altre a la primera clariana." },
+        { id: 'pi', marca: ['piObert', 'piAurora', 'piPedres', 'piMiracle', 'piVist'], obert: E => E.flag('cantMiracle'), fet: E => E.flag('piObert'),
+          pista: E => "Al sud de Sant Antoni, un bosc molt llarg amaga un pi vell que sembla escoltar els tres cants. Només s'hi pot arribar des de llevant." },
         { id: 'carruatge', marca: ['carruatgeObert'], obert: E => E.flag('epilegFet'), fet: E => E.flag('carruatgeObert'),
           pista: E => "El Follet del Carro Verd, a l'Era, deia que obriria el carro quan la boira marxés del tot." }
     ],

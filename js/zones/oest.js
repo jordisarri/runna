@@ -262,10 +262,10 @@ class ZonaGabriel extends ZonaBase {
         this.terra('cami', 220, 650, 360, 200);          // esplanada de terra seca davant l'ermita
         // (cap arbre davant la porta ni davant del cartell)
         this.arbres([[150, 200], [1050, 150], [1300, 220], [1480, 160], [50, 470], [160, 880],
-                     [60, 1040], [1250, 1080], [1400, 900], [1200, 330], [1450, 420], [640, 980]]);
+                     [60, 1040], [1450, 1040], [1400, 900], [1200, 330], [1450, 420], [640, 980]]);          // (la parada del carruatge és al sud-est)
         // Pins joves i arbustos prims vora la capella (com a la foto): un turó obert, amb poc arbre
         [[70, 690, 0.5], [740, 560, 0.45]].forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 18, h: 10 } }));
-        [[400, 900], [1250, 880]].forEach(([x, y]) => this.enemic('bolet', x, y));
+        [[400, 900], [950, 760]].forEach(([x, y]) => this.enemic('bolet', x, y));
         [[400, 300], [1250, 300], [800, 900]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
 
         this.sortida(700, 0, 200, 14, 'ZonaRovellonera', 'gabriel');
@@ -467,7 +467,7 @@ class ZonaDipositos extends ZonaBase {
         // Cartell a la vora del camí, sense cap arbre al davant
         this.cartell(230, 500, () => ({ pagines: [{ qui: 'Cartell', text: '→ Dolmen\n← Ermita de Sant Gabriel' }] }));
 
-        this.arbres([[100, 150], [250, 90], [800, 100], [1450, 140], [1350, 900], [1500, 960], [660, 820]]);      // (la parada del carruatge és a baix a l'esquerra)
+        this.arbres([[100, 150], [250, 90], [800, 100], [1450, 140], [1350, 900], [1500, 960], [660, 820]]);      //
         [[1250, 800], [1050, 880], [900, 820]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         [[330, 440], [1290, 440]].forEach(([x, y]) => this.enemic('gripau', x, y));       // gripaus: a prop de l'aigua dels dipòsits
 
@@ -598,7 +598,10 @@ class ZonaDolmen extends ZonaBase {
             alcada: DOL.H,
             colorFons: '#1a2c16',              // prou clar perquè no compti com a interior: camí amb vores difuminades
             pacifica: true,
-            entrades: { diposits: { x: 60, y: DOL.baixY + DOL.baixH / 2, dir: 'dreta' } }
+            entrades: {
+                diposits: { x: 60, y: DOL.baixY + DOL.baixH / 2, dir: 'dreta' },
+                bosc:     { x: DOL.A - 60, y: DOL.baixY + DOL.baixH / 2, dir: 'esquerra' }
+            }
         });
     }
 
@@ -613,6 +616,7 @@ class ZonaDolmen extends ZonaBase {
         cl.fillStyle(0xc8f08a, 0.16).fillEllipse(A / 2, 720, 560, 640);
         // Camí: entra per l'esquerra, fa un colze i puja recte fins a la clariana
         this.terra('cami', 0, baixY, x1, baixH);
+        this.terra('cami', x1, baixY, A - x1, baixH);       // i, a la mateixa alçada, cap a l'est: el Bosc del Pi dels Tres Cants
         this.terra('cami', x0, 1000, ample, baixY + baixH - 1000);
 
         // El dolmen (amb Runna dibuixada, clavada a la llosa). S'hi puja per darrere: els esglaons no es veuen, els tapa la llosa
@@ -681,13 +685,14 @@ class ZonaDolmen extends ZonaBase {
             for (let x = 40; x < A; x += 125) {
                 const px = x + (rnd() - 0.5) * 50, py = y + (rnd() - 0.5) * 40;
                 if (Math.abs(px - cx) < 150) continue;                                       // el tram que puja
-                if (px < x1 + 80 && py > baixY - 30 && py < baixY + baixH + 90) continue;    // el tram de baix
+                if (py > baixY - 30 && py < baixY + baixH + 90) continue;                    // el tram de baix (a l'oest i a l'est)
                 this.posar(rnd() < 0.55 ? 'pi' : 'arbre', px, py, { col: { w: 34, h: 16 } });
             }
         }
         // Parets del bosc: no s'hi pot passar entre els arbres
         this.colisio((x0 - 35) / 2, (peuBosc + baixY) / 2, x0 - 35, baixY - peuBosc);                 // a l'esquerra del tram que puja
-        this.colisio((x1 + 35 + A) / 2, (peuBosc + H) / 2, A - x1 - 35, H - peuBosc);                // a la dreta, fins a baix
+        this.colisio((x1 + 35 + A) / 2, (peuBosc + baixY) / 2, A - x1 - 35, baixY - peuBosc);        // a la dreta, fins al tram de baix
+        this.colisio((x1 + 35 + A) / 2, (baixY + baixH + H) / 2, A - x1 - 35, H - baixY - baixH);     // i per sota
         this.colisio((x1 + 35) / 2, (baixY + baixH + H) / 2 + 10, x1 + 35, H - baixY - baixH);       // sota el tram de baix
 
         // Raigs de llum que baixen entre les capçades fins a l'espasa, i pols daurada que sura
@@ -712,6 +717,7 @@ class ZonaDolmen extends ZonaBase {
         this.properCreuament = 0;
 
         this.sortida(0, baixY, 14, baixH, 'ZonaDipositos', 'dolmen');
+        this.sortida(A - 14, baixY, 14, baixH, 'ZonaBoscPi', 'dolmen');
         this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x0a2010, 0.08).setScrollFactor(0).setDepth(90000);
     }
 

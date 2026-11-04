@@ -40,9 +40,14 @@ const CATALEG = [
     { key: 'bassadoria',   file: 'assets/objectes/bassadoria.webp',   amplada: 620, cru: true, provisional: (c, w) => dibuixarBassadoriaReixa(c, w) },   // aigua neta
     { key: 'bassadoria_boira', file: 'assets/objectes/bassadoria_boira.webp', amplada: 620, cru: true, provisional: (c, w) => dibuixarBassadoriaReixa(c, w) },   // aigua tèrbola amb boira (abans del Cant de l'Aurora)
     { key: 'arbre',        file: 'assets/natura/arbre.webp',        amplada: 300, provisional: (c, w) => dibuixarArbre(c, w) },
+    { key: 'pi_arrels_mortes', file: 'assets/natura/pi_arrels_mortes.webp', amplada: 149 },   // les arrels seques, mentre el pi dorm
+    { key: 'placa_pi',     file: 'assets/natura/placa_pi.webp',     amplada: 100, provisional: (c, w) => lienc(c, w, Math.round(w * 0.95), (ctx, W, H) => pintarPlacaPi(ctx, W, H)) },   // la fita del Pi dels Tres Cants (docs/PROMPTS_GRAFICS.md)
+    { key: 'pi_arrels',    file: 'assets/natura/pi_arrels.webp',    amplada: 150, provisional: (c, w) => lienc(c, w, Math.round(w * 2), (ctx, W, H) => pintarArrelsPi(ctx, W, H)) },   // la barrera d'arrels del Pi dels Tres Cants (docs/PROMPTS_GRAFICS.md)
+    { key: 'pi_tres_cants_mort', file: 'assets/natura/pi_tres_cants_mort.webp', amplada: 333, provisional: (c, w) => lienc(c, w, Math.round(w * 1.53), (ctx, W, H) => pintarPiTresCants(ctx, W, H)) },   // el pi adormit (sec), fins que es desperta del tot
+    { key: 'pi_tres_cants', file: 'assets/natura/pi_tres_cants.webp', amplada: 340, provisional: (c, w) => lienc(c, w, Math.round(w * 1.53), (ctx, W, H) => pintarPiTresCants(ctx, W, H)) },   // el Pi dels Tres Cants (js/zones/bosc_pi.js); prompt a docs/PROMPTS_GRAFICS.md
     { key: 'pi',           file: 'assets/natura/pi.webp',           amplada: 230, provisional: (c, w) => dibuixarPi(c, w) },
     { key: 'pi_pinyer',    file: 'assets/natura/pi_pinyer.webp',    amplada: 470, provisional: (c, w) => dibuixarPiPinyer(c, w) },
-    { key: 'caseta_joc',   file: 'assets/edificis/caseta_joc.png',   amplada: 270, provisional: (c, w) => dibuixarCasetaJoc(c, w) },
+    { key: 'caseta_joc',   file: null,   amplada: 270, provisional: (c, w) => dibuixarCasetaJoc(c, w) },
     { key: 'xiprer',       file: 'assets/natura/xiprer.webp',       amplada: 80,  provisional: (c, w) => dibuixarXiprer(c, w) },
     { key: 'retaule',      file: 'assets/edificis/retaule_tancat.webp', amplada: 800, provisional: (c, w) => dibuixarRetauleBarroc(c, w) },
 
@@ -61,7 +66,7 @@ const CATALEG = [
     { key: 'marit_neus', file: 'assets/personatges/marit_neus.webp', amplada: 90, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a6a7a', cabell: '#5a4636', alt: 0.98, calb: true }) },
     { key: 'juli',      file: 'assets/personatges/juli.webp',      amplada: 72, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'juli') },
     { key: 'frederic',  file: 'assets/personatges/frederic.webp',  amplada: 77, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'frederic') },
-    { key: 'eloi',      file: 'assets/personatges/eloi.png',      amplada: 104, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'eloi') },
+    { key: 'eloi',      file: null,      amplada: 104, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'eloi') },
     { key: 'josep',     file: 'assets/personatges/josep.webp',     amplada: 82, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },
     { key: 'josep_levita', file: 'assets/personatges/josep_levita.webp', amplada: 134, cru: true, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },   // en Jusef levitant amb la pala (minijoc de ping-pong)
     { key: 'garf',      file: 'assets/personatges/garf.webp',      amplada: 55, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#d9b45a', alt: 0.92, ample: 1.35, cap: 17 }) },
@@ -76,81 +81,81 @@ const CATALEG = [
 
     // ---- Escenari nou ----
     { key: 'runes',     file: 'assets/edificis/runes.webp',     amplada: 760, provisional: (c, w) => dibuixarRunes(c, w) },
-    ...Array.from({ length: 12 }, (_, k) => ({ key: 'columna_proces_' + k, file: 'assets/objectes/columna_proces_' + k + '.png', amplada: 64, provisional: (c, w) => dibuixarColumnaProcessio(c, w, k) })),
-    { key: 'columna',   file: 'assets/objectes/columna.png',   amplada: 58,  provisional: (c, w) => dibuixarColumna(c, w) },
+    ...Array.from({ length: 12 }, (_, k) => ({ key: 'columna_proces_' + k, file: null, amplada: 64, provisional: (c, w) => dibuixarColumnaProcessio(c, w, k) })),
+    { key: 'columna',   file: null,   amplada: 58,  provisional: (c, w) => dibuixarColumna(c, w) },
     { key: 'roure',     file: 'assets/natura/roure.webp',     amplada: 420, provisional: (c, w) => dibuixarRoure(c, w) },
     { key: 'tiller_arbre', file: 'assets/personatges/tiller_arbre.webp', amplada: 540, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },   // el Til·ler com un arbre qualsevol, sense cara: així el veus abans de parlar-hi (mateix recorte que `tiller`)
     { key: 'tiller',    file: 'assets/personatges/tiller.webp',    amplada: 540, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },
     { key: 'arrels_tiller', file: 'assets/natura/arrels_tiller.webp', amplada: 440 },
-    { key: 'altar',     file: 'assets/objectes/altar.png',     amplada: 150, provisional: (c, w) => dibuixarAltar(c, w) },
-    { key: 'taula_pedra', file: 'assets/objectes/taula_pedra.png', amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 0) },
-    { key: 'taula_pedra2', file: 'assets/objectes/taula_pedra2.png', amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
-    { key: 'font_sj',   file: 'assets/objectes/font_sj.png',   amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w) },
+    { key: 'altar',     file: null,     amplada: 150, provisional: (c, w) => dibuixarAltar(c, w) },
+    { key: 'taula_pedra', file: null, amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 0) },
+    { key: 'taula_pedra2', file: null, amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
+    { key: 'font_sj',   file: null,   amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w) },
     { key: 'carruatge', file: 'assets/objectes/carruatge.webp', amplada: 250, provisional: (c, w) => dibuixarCarruatge(c, w) },
     { key: 'carro_sansa', file: 'assets/objectes/carro_sansa.webp', amplada: 280, provisional: (c, w) => dibuixarCarroSansa(c, w) },
-    { key: 'pergola',   file: 'assets/edificis/pergola.png',   amplada: 260, provisional: (c, w) => dibuixarPergola(c, w) },
-    { key: 'flors',     file: 'assets/natura/flors.png',     amplada: 90,  provisional: (c, w) => dibuixarFlors(c, w) },
-    { key: 'taula_pp',  file: 'assets/objectes/taula_pp.png',  amplada: 240, provisional: (c, w) => dibuixarTaulaPP(c, w) },
+    { key: 'pergola',   file: null,   amplada: 260, provisional: (c, w) => dibuixarPergola(c, w) },
+    { key: 'flors',     file: null,     amplada: 90,  provisional: (c, w) => dibuixarFlors(c, w) },
+    { key: 'taula_pp',  file: null,  amplada: 240, provisional: (c, w) => dibuixarTaulaPP(c, w) },
     { key: 'alzina_buida', file: 'assets/natura/alzina_buida.webp', amplada: 520, provisional: (c, w) => dibuixarAlzinaBuida(c, w) },
-    { key: 'llosa',     file: 'assets/objectes/llosa.png',     amplada: 90,  provisional: (c, w) => dibuixarLlosa(c, w) },
+    { key: 'llosa',     file: null,     amplada: 90,  provisional: (c, w) => dibuixarLlosa(c, w) },
 
     // ---- Enemics ----
-    { key: 'escolopendra', file: 'assets/enemics/escolopendra.png', amplada: 76, fotogrames: 8, provisional: (c, w) => dibuixarEscolopendra(c, w, 8) },   // full de 8 fotogrames (caminar)
-    { key: 'gripau',       file: 'assets/enemics/gripau.png',       amplada: 56, provisional: (c, w) => dibuixarGripau(c, w) },
-    { key: 'visitant',     file: 'assets/enemics/visitant.png',     amplada: 96, provisional: (c, w) => dibuixarTurista(c, w) },
+    { key: 'escolopendra', file: null, amplada: 76, fotogrames: 8, provisional: (c, w) => dibuixarEscolopendra(c, w, 8) },   // full de 8 fotogrames (caminar)
+    { key: 'gripau',       file: null,       amplada: 56, provisional: (c, w) => dibuixarGripau(c, w) },
+    { key: 'visitant',     file: null,     amplada: 96, provisional: (c, w) => dibuixarTurista(c, w) },
     { key: 'branca',       file: 'assets/natura/branca.webp',       amplada: 80, provisional: (c, w) => dibuixarBranca(c, w) },
-    { key: 'pergami',      file: 'assets/objectes/pergami.png',      amplada: 70, provisional: (c, w) => dibuixarPergami(c, w) },
-    { key: 'pergami_partit', file: 'assets/objectes/pergami_partit.png', amplada: 80, provisional: (c, w) => dibuixarPergamiPartit(c, w) },
-    { key: 'pergami_paret', file: 'assets/objectes/pergami_paret.png', amplada: 62, provisional: (c, w) => dibuixarPergamiParet(c, w) },   // el mateix pergamí, desplegat i clavat a la paret
+    { key: 'pergami',      file: null,      amplada: 70, provisional: (c, w) => dibuixarPergami(c, w) },
+    { key: 'pergami_partit', file: null, amplada: 80, provisional: (c, w) => dibuixarPergamiPartit(c, w) },
+    { key: 'pergami_paret', file: null, amplada: 62, provisional: (c, w) => dibuixarPergamiParet(c, w) },   // el mateix pergamí, desplegat i clavat a la paret
     { key: 'ombra_monjo',  file: 'assets/enemics/ombra_monjo.webp', amplada: 140, cru: true },
-    { key: 'ovella',         file: 'assets/enemics/ovella.png',         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },
-    { key: 'ovella_boira',   file: 'assets/enemics/ovella_boira.png',   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
+    { key: 'ovella',         file: null,         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },
+    { key: 'ovella_boira',   file: null,   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
     { key: 'roca',           file: 'assets/natura/roca.webp',           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w) },
     { key: 'basto_ocellaire', file: 'assets/armes/basto_ocellaire.webp', amplada: 184, cru: true },      // (art/armes/basto_ocellaire.png, sense flames: les posa el joc quan gira de pressa; la versió amb flames és basto_ocellaire_flames.png)
-    { key: 'masia',          file: 'assets/edificis/masia.png',          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },
+    { key: 'masia',          file: null,          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },
     { key: 'pastor_a',       file: 'assets/personatges/pastor_a.webp',       amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a48', cabell: '#8a7a60', alt: 0.9, ample: 0.95, calb: true }) },
     { key: 'pastor_b',       file: 'assets/personatges/pastor_b.webp',       amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a4a58', cabell: '#7a7a7a', dona: true, alt: 0.88, ample: 0.95 }) },
     { key: 'pastor_vell',    file: 'assets/personatges/pastor_vell.webp',    amplada: 96, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a5040', cabell: '#d0d0d0', barba: '#d0d0d0', alt: 0.86, bastoCoix: true }) },
-    { key: 'foc',            file: 'assets/objectes/foc.png',            amplada: 80, provisional: (c, w) => dibuixarFoc(c, w) },
-    { key: 'espelma',        file: 'assets/objectes/espelma.png',        amplada: 20, provisional: (c, w) => dibuixarEspelma(c, w) },
-    { key: 'taula_sopar',    file: 'assets/objectes/taula_sopar.png',    amplada: 380, provisional: (c, w) => dibuixarTaulaSopar(c, w) },
+    { key: 'foc',            file: null,            amplada: 80, provisional: (c, w) => dibuixarFoc(c, w) },
+    { key: 'espelma',        file: null,        amplada: 20, provisional: (c, w) => dibuixarEspelma(c, w) },
+    { key: 'taula_sopar',    file: null,    amplada: 380, provisional: (c, w) => dibuixarTaulaSopar(c, w) },
     { key: 'ocellaire',      file: 'assets/enemics/ocellaire.webp',     amplada: 90, cru: true, provisional: (c, w) => dibuixarOcellaire(c, w) },
     { key: 'ocellaire_idle2', file: 'assets/enemics/ocellaire_idle2.webp', amplada: 90, cru: true },      // idle: fotogrames 2 i 3 (el 1 és el sprite base); mateixa mida i recorte
     { key: 'ocellaire_idle3', file: 'assets/enemics/ocellaire_idle3.webp', amplada: 90, cru: true },
     { key: 'ocellaire_rugit', file: 'assets/enemics/ocellaire_rugit.webp', amplada: 90, cru: true },      // pose de rugit (canvis de fase), al mateix llenç de 180x329 que l'idle
     { key: 'ocellaire_cansat', file: 'assets/enemics/ocellaire_cansat.webp', amplada: 90, cru: true },
     { key: 'ocellaire_genolls', file: 'assets/enemics/ocellaire_genolls.webp', amplada: 90, cru: true },   // esgotat, de genolls i el cap avall: l'única pausa en què se li pot picar el cap (mateix llenç 180x329)    // pose ajupida; si no hi és, es manté el sprite base
-    { key: 'ratpenat',       file: 'assets/enemics/ratpenat.png',       amplada: 64, provisional: (c, w) => dibuixarRatpenat(c, w) },
-    { key: 'ferralla',       file: 'assets/enemics/ferralla.png',       amplada: 70, provisional: (c, w) => dibuixarFerralla(c, w) },
-    { key: 'capoll',         file: 'assets/enemics/capoll.png',         amplada: 70, provisional: (c, w) => dibuixarCapoll(c, w) },
+    { key: 'ratpenat',       file: null,       amplada: 64, provisional: (c, w) => dibuixarRatpenat(c, w) },
+    { key: 'ferralla',       file: null,       amplada: 70, provisional: (c, w) => dibuixarFerralla(c, w) },
+    { key: 'capoll',         file: null,         amplada: 70, provisional: (c, w) => dibuixarCapoll(c, w) },
     { key: 'nen_uri',        file: 'assets/personatges/nen_uri.webp',    amplada: 50, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7ad0', cabell: '#e8c870', alt: 0.56, cap: 17 }) },
     { key: 'nen_flam',       file: 'assets/personatges/nen_flam.webp',   amplada: 54, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d04a3a', cabell: '#14100c', alt: 0.64, cap: 17 }) },
     { key: 'nen_sardin',     file: 'assets/personatges/nen_sardin.webp', amplada: 59, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a9a5a', cabell: '#1e1a16', alt: 0.74, cap: 17, ulleres: true }) },
     { key: 'pastor_boira',   file: 'assets/enemics/pastor_boira.webp',   amplada: 88, provisional: (c, w) => dibuixarPastorBoira(c, w) },
     { key: 'bolet',          file: 'assets/enemics/bolet.webp',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
     { key: 'rovello',        file: 'assets/natura/rovello.webp',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
-    { key: 'llac',           file: 'assets/natura/llac.png',           amplada: 58, provisional: (c, w) => dibuixarLlac(c, w) },
-    { key: 'diposit',        file: 'assets/edificis/diposit.png',        amplada: 300, provisional: (c, w) => dibuixarDiposit(c, w) },
-    { key: 'telescopi_mon',  file: 'assets/objectes/telescopi_mon.png',  amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w) },
-    { key: 'tripode',        file: 'assets/objectes/tripode.png',        amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w, false) },   // el trípode del mirador, sense el telescopi
-    { key: 'dolmen',         file: 'assets/edificis/dolmen.png',         amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w) },   // amb Runna clavada a dalt
-    { key: 'dolmen_buit',    file: 'assets/edificis/dolmen_buit.png',    amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w, 'buit') },     // quan ja no hi ha l'espasa
-    { key: 'dolmen_clavada', file: 'assets/edificis/dolmen_clavada.png', amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w, 'clavada') },   // només Runna clavada (va per davant de l'Ineu)
-    { key: 'dolmen_espasa',  file: 'assets/edificis/dolmen_espasa.png',  amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w, 'espasa') },   // només l'espasa (s'aixeca en despertar-la)
-    { key: 'conill',         file: 'assets/natura/conill.png',         amplada: 44, provisional: (c, w) => dibuixarConill(c, w) },
-    { key: 'esquirol',       file: 'assets/natura/esquirol.png',       amplada: 40, provisional: (c, w) => dibuixarEsquirol(c, w) },
+    { key: 'llac',           file: null,           amplada: 58, provisional: (c, w) => dibuixarLlac(c, w) },
+    { key: 'diposit',        file: null,        amplada: 300, provisional: (c, w) => dibuixarDiposit(c, w) },
+    { key: 'telescopi_mon',  file: null,  amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w) },
+    { key: 'tripode',        file: null,        amplada: 80, provisional: (c, w) => dibuixarTelescopiMon(c, w, false) },   // el trípode del mirador, sense el telescopi
+    { key: 'dolmen',         file: null,         amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w) },   // amb Runna clavada a dalt
+    { key: 'dolmen_buit',    file: null,    amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w, 'buit') },     // quan ja no hi ha l'espasa
+    { key: 'dolmen_clavada', file: null, amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w, 'clavada') },   // només Runna clavada (va per davant de l'Ineu)
+    { key: 'dolmen_espasa',  file: null,  amplada: 380, provisional: (c, w) => dibuixarDolmen(c, w, 'espasa') },   // només l'espasa (s'aixeca en despertar-la)
+    { key: 'conill',         file: null,         amplada: 44, provisional: (c, w) => dibuixarConill(c, w) },
+    { key: 'esquirol',       file: null,       amplada: 40, provisional: (c, w) => dibuixarEsquirol(c, w) },
     { key: 'ermita_gabriel', file: 'assets/edificis/ermita_gabriel.webp', amplada: 560, provisional: (c, w) => dibuixarErmitaGabriel(c, w) },
     { key: 'nena_trenes',    file: 'assets/personatges/nena_trenes.webp',    amplada: 58, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#e8e8f8', pell: '#dfe6ff', cabell: '#5a4636', dona: true, alt: 0.72, cap: 17, extra: 'trenes' }) },
-    { key: 'porxo',          file: 'assets/edificis/porxo.png',          amplada: 340, provisional: (c, w) => dibuixarPorxo(c, w) },
+    { key: 'porxo',          file: null,          amplada: 340, provisional: (c, w) => dibuixarPorxo(c, w) },
     { key: 'esbarzer',       file: 'assets/natura/esbarzer.webp',       amplada: 96, provisional: (c, w) => dibuixarEsbarzer(c, w) },
-    { key: 'cofre',          file: 'assets/objectes/cofre.png',          amplada: 70, provisional: (c, w) => dibuixarCofre(c, w) },
-    { key: 'cabana',         file: 'assets/edificis/cabana.png',         amplada: 400, provisional: (c, w) => dibuixarCabana(c, w) },
-    { key: 'herba_sj',     file: 'assets/natura/herba_sj.png',     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'sj') },
-    { key: 'romani',       file: 'assets/natura/romani.png',       amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'romani') },
-    { key: 'farigola',     file: 'assets/natura/farigola.png',     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'farigola') },
+    { key: 'cofre',          file: null,          amplada: 70, provisional: (c, w) => dibuixarCofre(c, w) },
+    { key: 'cabana',         file: null,         amplada: 400, provisional: (c, w) => dibuixarCabana(c, w) },
+    { key: 'herba_sj',     file: null,     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'sj') },
+    { key: 'romani',       file: null,       amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'romani') },
+    { key: 'farigola',     file: null,     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'farigola') },
     { key: 'cercle_bolets',  file: 'assets/natura/cercle_bolets.webp',  amplada: 150, provisional: (c, w) => dibuixarCercleBolets(c, w) },
-    { key: 'olla',           file: 'assets/objectes/olla.png',           amplada: 110, provisional: (c, w) => dibuixarOlla(c, w) },
-    { key: 'ocell',          file: 'assets/natura/ocell.png',          amplada: 34, provisional: (c, w) => dibuixarOcell(c, w) },
+    { key: 'olla',           file: null,           amplada: 110, provisional: (c, w) => dibuixarOlla(c, w) },
+    { key: 'ocell',          file: null,          amplada: 34, provisional: (c, w) => dibuixarOcell(c, w) },
     { key: 'jaumeta',        file: 'assets/personatges/jaumeta.webp',        amplada: 89, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
     { key: 'arma_tiller', file: 'assets/armes/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/armes/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
@@ -163,7 +168,7 @@ const CATALEG = [
     { key: 'cartell_llums', file: 'assets/objectes/cartell_llums.webp', amplada: 560, cru: true },            // cartell de paper (es mostra tal com és, amb el fons blanc)
     { key: 'cartell_llums_borros', file: 'assets/objectes/cartell_llums_borros.webp', amplada: 56, cru: true },   // la mateixa imatge, borrosa i petita, per a la paret
     { key: 'cartell_llums_petit', file: 'assets/objectes/cartell_llums_petit.webp', amplada: 56, cru: true },   // la mateixa imatge, nítida i petita, per a la paret (en examinar-lo es mostra la gran)
-    { key: 'espurna',      file: 'assets/objectes/espurna.png',      amplada: 32, provisional: (c, w) => dibuixarPuntSegell(c, w) }
+    { key: 'espurna',      file: null,      amplada: 32, provisional: (c, w) => dibuixarPuntSegell(c, w) }
 ];
 
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).

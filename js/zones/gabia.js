@@ -1,6 +1,6 @@
 /**
- * SOTA LA TAVERNA: el camí fins a la Sala de la Gàbia
- *   Soterrani de la Taverna --(porta de ferro: Clau de ferro)--> Sala de les Gírgoles --> Passadís de tortura --> Sala de la Gàbia
+ * LES GÍRGOLES (a l'est del Celler): el camí fins a la Sala de la Gàbia
+ *   Galeria de la Porta de Ferro --(porta de ferro: Clau de ferro)--> Sala de les Gírgoles --> Passadís de tortura --> Sala de la Gàbia
  * Puzles:
  *   Gírgoles: cova fosca i humida. Cinc mates de gírgoles lluminoses en rotllana: en tocar-ne una, s'encén o s'apaga ella i les
  *             dues veïnes. Quan les cinc brillen, la cortina de micel·li que tapa el túnel del nord es desfà.
