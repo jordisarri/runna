@@ -27,7 +27,6 @@ const DIARI_PASSOS = {
     cambra: ['La cambra secreta', 'ZonaPassadis'], maneta: ["La maneta d\'en Georgi", 'ZonaJordi'],
     raim: ['L\'Home del Raïm', 'ZonaCasaGranInt'], cripta: ['La Cripta', 'ZonaCasaCripta'],
     segell: ['La tomba dels monjos', 'ZonaCementiri'], cantMiracle: ['El Cant del Miracle', 'ZonaEsglesia'],
-    carry: ['La Carry i el Pallofa', 'ZonaCelles'], rellotge: ['El rellotge del campanar', 'ZonaGolfes'],
     soterrani: ['La porta de les Gírgoles', 'ZonaGirgolesFora'], clauCiscu: ['La clau de l\'Iscu', 'ZonaCabanaCami'],
     portaFerro: ['La porta de ferro', 'ZonaSotaTaverna'], girgoles: ['Les gírgoles', 'ZonaGirgoles'],
     rastell: ['El rastell', 'ZonaTortura'], tortura: ['El mur d\'esbarzers', 'ZonaTortura'],
@@ -37,6 +36,8 @@ const DIARI_PASSOS = {
 };
 const DIARI_LATERALS = {
     taverna: ["L\'Eve de la Taverna", 'ZonaTaverna', null],
+    carry: ['La Carry i el Pallofa', 'ZonaCelles', 'Clau del campanar i el relat de les desaparicions'],
+    rellotge: ['El rellotge aturat', 'ZonaGolfes', null],
     tresor: ['La pedra que escolta', 'ZonaPlaca', '+1 cor'],
     nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Llaç de la Nena (absorbeix un cop per zona)'],
     pi: ['El Pi dels Tres Cants', 'ZonaBoscPi', 'La història dels tres cants'],

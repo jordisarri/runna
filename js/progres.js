@@ -101,17 +101,10 @@ const PROGRES = {
           pista: E => "Vençut l'Home del Raïm, la trapa de sota l'escalinata baixa a la Cripta dels monjos. Allà hi ha una clau de ferro." },
         { id: 'segell', marca: ['tombaLlegida', 'tombaSegellada'], fet: E => E.flag('tombaSegellada'),
           pista: E => E.flag('tombaLlegida') || !E.flag('relTretes')
-              ? "La tomba esquerdada del Cementiri treu boira: la llum de Runna la tancaria. La porta de ferro a l'est del Pati del Celler vol la clau i el campanar."
-              : "La tomba del Cementiri treu boira: el Pare Alcoví, a la Biblioteca, sabrà què fer-hi. La porta de ferro a l'est del Pati del Celler vol la clau i el campanar." },        // ---- Les Gírgoles ----
-        // El pany de la porta de ferro dels monjos només gira quan el campanar toca les hores: cal fer caminar el rellotge
-        { id: 'carry', marca: ['carryParlat', 'pallofaTornat', 'obj:pallofa', 'obj:clau_campanar'], fet: E => E.flag('pallofaTornat') || E.te('clau_campanar') || E.flag('rellotgeReparat'),
-          pista: E => !E.flag('carryParlat') ? "El pany de la porta de ferro només gira si el campanar toca. La Carry, a Nostra Senyora (a l'oest de les Cel·les), guarda la clau del campanar."
-              : E.te('pallofa') ? "El Pallofa ja és amb tu: la Carry el deu trobar a faltar a Nostra Senyora."
-              : "La Carry vol el Pallofa, el seu gos, que passeja per Sant Antoni. A canvi, et donarà la clau del campanar." },
-        { id: 'rellotge', marca: ['rellotgeReparat'], fet: E => E.flag('rellotgeReparat'),
-          pista: E => "La clau de la Carry obre una porta del retaule; dalt la torre, uns engranatges esperen. Sense el campanar, el pany de la porta de ferro no gira." },
+              ? "La tomba esquerdada del Cementiri treu boira: la llum de Runna la tancaria. La clau de ferro obre la porta a l'est del Pati del Celler."
+              : "La tomba del Cementiri treu boira: el Pare Alcoví, a la Biblioteca, sabrà què fer-hi. La clau de ferro obre la porta a l'est del Pati del Celler." },        // ---- Les Gírgoles ----
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
-          pista: E => "A l'est del Pati del Celler, pel camí entre els arbres, hi ha una porta de ferro. Cal la clau de ferro i que el campanar toqui." },
+          pista: E => "A l'est del Pati del Celler, pel camí entre els arbres, hi ha una porta de ferro. La clau de ferro n'és amiga." },
         { id: 'clauCiscu', marca: ['ciscuTrobat', 'clauGirgoles', 'obj:clau_girgoles'], fet: E => E.te('clau_girgoles') || E.flag('portaFerroOberta'),
           pista: E => E.flag('ciscuTrobat') ? "L\'Iscu t'espera a la cabana amagada: té una clau rovellada per a tu."
               : "La porta del fons té un pany petit. L\'Iscu, el noi de la Taverna, ho ha vist tot: s'amaga pel camí de la Desaparició." },
@@ -147,6 +140,12 @@ const PROGRES = {
     laterals: [
         { id: 'taverna', marca: ['tavernaOberta', 'evaParlat'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('evaParlat'),
           pista: E => "El Sardi berenava cada tarda a la Taverna amb l\'Eve. La porta és tancada, però una trucada potser l'obriria." },
+        { id: 'carry', marca: ['carryParlat', 'pallofaTornat', 'obj:pallofa', 'obj:clau_campanar'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('pallofaTornat'),
+          pista: E => !E.flag('carryParlat') ? "La Carry, a Nostra Senyora (a l'oest de les Cel·les), té cara de patir per alguna cosa."
+              : E.te('pallofa') ? "El Pallofa ja és amb tu, i la Carry el deu trobar a faltar a Nostra Senyora."
+              : "El Pallofa, el gos de la Carry, passeja per Sant Antoni. La Carry, que guarda la clau del campanar, t'ho agrairia." },
+        { id: 'rellotge', marca: ['rellotgeReparat'], obert: E => E.te('clau_campanar') || E.flag('portaCampanarOberta') || E.flag('clauCampanar'), fet: E => E.flag('rellotgeReparat'),
+          pista: E => "El rellotge del campanar s'ha aturat. La clau de la Carry obre una porta del retaule; dalt la torre, uns engranatges esperen." },
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta cants antics." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),

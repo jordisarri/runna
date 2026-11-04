@@ -149,6 +149,12 @@ class ZonaEsglesia extends ZonaBase {
                 f => z.npcVa('pare_jordi', 720, R + 330, f, 120),
                 f => z.npcMira('pare_jordi', 'ineu', f)
             ]),
+            // Només si l'Ineu va fer caminar el rellotge (missió lateral): el campanar torna a tocar les hores
+            ...(Estat.flag('rellotgeReparat') ? [
+                { fer: (z, fet) => { [0, 1, 2].forEach(k => z.time.delayedCall(k * 850, () => Sfx.campana())); z.esperar(3000, fet); } },
+                { qui: 'Pare Daimiel', text: "Sents el campanar, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu." },
+                ...(hi('carry') ? [{ qui: 'Carry', text: "El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill." }] : [])
+            ] : []),
             { qui: 'Pare Jordà', text: 'Benvingut a casa, Ineu.' },
             { fer: (z, fet) => z.seq([
             f => riure(tots, f),
