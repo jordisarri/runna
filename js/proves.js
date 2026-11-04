@@ -64,33 +64,36 @@ const Proves = {
             '<label style="display:inline-block;margin:0 0 8px"><input type="checkbox" id="provesMapa" checked> amb tot el mapa desbloquejat (tots els escenaris visibles)</label><br>' +
             '<label style="display:inline-block;margin:0 0 8px"><input type="checkbox" id="provesMelodies" checked> amb totes les melodies apreses (Aurora, Pedres i Miracle)</label>' +
             '<div style="margin:6px 0 2px;opacity:.8">Comença just abans de… (tot l\'anterior ja és fet)</div>';
+        // Les etapes del Pi dels Tres Cants (Bosc del Pi, al sud de Sant Antoni) van just després del Cant del Miracle: ja es tenen els tres cants
+        // i es pot donar la volta per Sant Antoni. La resta de la història queda feta només fins aquí.
+        const iMiracle = PROGRES.passos.findIndex(p => p.id === 'cantMiracle');
+        const FLAGS_PI = ['piObert', 'piAurora', 'piPedres', 'piMiracle', 'piVist', 'flauta_pi'];
+        const entrades = [];
         PROGRES.passos.forEach((p, i) => {
-            const b = document.createElement('button');
-            const info = DIARI_PASSOS[p.id];
-            b.textContent = (i + 1) + '. ' + (info ? info[0] : p.id) + (info ? '  ·  ' + info[1].replace(/^Zona/, '') : '');
-            b.style.cssText = estil;
-            b.onclick = () => { const laterals = d.querySelector('#provesLaterals').checked, mapa = d.querySelector('#provesMapa').checked, melodies = d.querySelector('#provesMelodies').checked; d.remove(); this.saltar(i, laterals, mapa, melodies); };
-            d.appendChild(b);
+            entrades.push({ passa: i });
+            if (i === iMiracle) [['Pi adormit: cap cant tocat encara', []],
+                ['Pi a mig despertar: Aurora i Pedres tocats (falta el Miracle)', ['piAurora', 'piPedres', 'flauta_pi']],
+                ["Pi despert: les branques s'han alçat i el camí és lliure", ['piAurora', 'piPedres', 'piMiracle', 'piObert', 'piVist', 'flauta_pi']]
+            ].forEach(([text, flags]) => entrades.push({ text, flags }));
         });
-        // Etapes del Pi dels Tres Cants (Bosc del Pi, al sud de Sant Antoni): tota la història feta, el mapa obert i les tres melodies apreses
-        const tp = document.createElement('div');
-        tp.style.cssText = 'margin:12px 0 4px;opacity:.8';
-        tp.textContent = 'Pi dels Tres Cants (entres des de Sant Antoni, amb tota la història feta):';
-        d.appendChild(tp);
-        [['Pi adormit: cap cant tocat encara', []],
-         ['Pi a mig despertar: Aurora i Pedres tocats (falta el Miracle)', ['piAurora', 'piPedres', 'flauta_pi']],
-         ['Pi despert: les branques s\'han alçat i el camí és lliure', ['piAurora', 'piPedres', 'piMiracle', 'piObert', 'piVist', 'flauta_pi']]
-        ].forEach(([text, flags]) => {
+        entrades.forEach((e, n) => {
             const b = document.createElement('button');
-            b.textContent = text;
             b.style.cssText = estil;
-            b.onclick = () => {
-                d.remove();
-                this.estatFins(PROGRES.passos.length, true, true, true);
-                ['piObert', 'piAurora', 'piPedres', 'piMiracle', 'piVist', 'flauta_pi'].forEach(f => { delete Estat.dades.flags[f]; });
-                flags.forEach(f => Estat.posaFlag(f));
-                this.anar('ZonaBoscPi', 'santantoni');
-            };
+            const opcions = () => [d.querySelector('#provesLaterals').checked, d.querySelector('#provesMapa').checked, d.querySelector('#provesMelodies').checked];
+            if (e.passa !== undefined) {
+                const p = PROGRES.passos[e.passa], info = DIARI_PASSOS[p.id];
+                b.textContent = (n + 1) + '. ' + (info ? info[0] : p.id) + (info ? '  ·  ' + info[1].replace(/^Zona/, '') : '');
+                b.onclick = () => { const [l, m, me] = opcions(); d.remove(); this.saltar(e.passa, l, m, me); };
+            } else {
+                b.textContent = (n + 1) + '. ' + e.text + '  ·  BoscPi';
+                b.onclick = () => {
+                    const [l, m] = opcions(); d.remove();
+                    this.estatFins(iMiracle + 1, l, m, true);                       // fins al Cant del Miracle inclòs, amb les tres melodies apreses
+                    FLAGS_PI.forEach(f => { delete Estat.dades.flags[f]; });
+                    e.flags.forEach(f => Estat.posaFlag(f));
+                    this.anar('ZonaBoscPi', 'santantoni');
+                };
+            }
             d.appendChild(b);
         });
         // Anar a una zona sense canviar l'estat (amb la partida de proves actual)

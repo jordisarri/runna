@@ -161,7 +161,7 @@ class ZonaSoterraniHost extends ZonaBase {
 //   esquerra (dormitori, la Pains): oberta, però la sacerdotessa dorm dins un capoll de boira → Cant de l'Aurora (flauta)
 //   mig (refetor, la Phili): una taula pesadíssima barra la porta → Guants de Poder
 //   dreta (capella, la Charm): esbarzers negres → Runna
-// En alliberar les tres, obren la porta de l'Hostatgeria per dins (al vestíbul apareix un cofre amb el Benedicció fraterna).
+// En alliberar les tres, obren la porta de l'Hostatgeria per dins (al vestíbul apareix un cofre amb l'Empara Fraternal).
 class ZonaHostatgeriaInt extends ZonaCasaBase {
     constructor() {
         super('ZonaHostatgeriaInt', {

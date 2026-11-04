@@ -381,7 +381,7 @@ class ZonaTortura extends ZonaBase {
 
 // ---------------- LA GALERIA DE LA BOIRA VERINOSA ----------------
 // Entre el passadís de tortura i la Sala de la Gàbia: una galeria llarga, mig enfonsada, plena d'una boira verda i lila que crema.
-// Només la Benedicció Fraterna de les tres sacerdotesses la dissipa; sense, l'Ineu no hi pot entrar.
+// Només l'Empara Fraternal de les tres sacerdotesses la dissipa; sense, l'Ineu no hi pot entrar.
 const BOIRA_V = { y0: 360, y1: 940 };
 class ZonaBoira extends ZonaBase {
     constructor() {
@@ -475,7 +475,7 @@ class ZonaBoira extends ZonaBase {
 
     enEntrar() {
         if (!Estat.flag('boiraVerinosaOberta')) Estat.posaObjectiu(Estat.te('benedicio_fraterna')
-            ? "La Benedicció Fraterna et protegeix: travessa la boira verinosa fins a la Sala de la Gàbia."
+            ? "L'Empara Fraternal et protegeix: travessa la boira verinosa fins a la Sala de la Gàbia."
             : PROGRES.pista(Estat));
     }
 
@@ -489,11 +489,11 @@ class ZonaBoira extends ZonaBase {
         if (this.time.now > (this.avisBoira || 0)) {
             this.avisBoira = this.time.now + 5000;
             Sfx.puf();
-            this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text: "(Aquesta boira crema la gola... Sense la Benedicció Fraterna de les tres sacerdotesses de l'Hostatgeria no la podré travessar.)" }] });
+            this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text: "(Aquesta boira crema la gola... Sense l'Empara Fraternal de les sacerdotesses de l'Hostatgeria no la podré travessar.)" }] });
         }
     }
 
-    // La Benedicció Fraterna s'encén al voltant de l'Ineu i la boira s'aparta i s'esvaeix
+    // L'Empara Fraternal s'encén al voltant de l'Ineu i la boira s'aparta i s'esvaeix
     obrirBoira() {
         Estat.posaFlag('boiraVerinosaOberta');
         const I = this.ineu;

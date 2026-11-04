@@ -43,7 +43,7 @@ const PROGRES = {
               const f = [];
               if (!E.flag('escudella')) f.push("l'escudella de la Meus (a les cel·les)");
               if (!E.flag('floresIsidre')) f.push("les flors d'Isildren (al jardí de l'Hostatgeria)");
-              if (!E.flag('pastorsConvencuts')) f.push("el pa que pasten els pastors de la Cirosa (potser una música vora el seu foc els recordaria com fer-lo)");
+              if (!E.flag('pastorsConvencuts')) f.push("el pa que pasten els pastors de la Cirosa");
               return f.length ? "Al sopar del Til·ler encara hi falta: " + f.join(', ') + "." : "Ja ho tens tot: el Gran Til·ler espera la taula parada.";
           } },
         // ---- ACTE 2: el Saber i les benediccions ----
@@ -118,10 +118,10 @@ const PROGRES = {
           pista: E => "Al final del passadís de tortura, un mur d'esbarzers negres es deixa tallar per Runna." },
         { id: 'benediccioFraterna', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'lliurePains', 'refetorObert', 'esb_host_cap1', 'esb_host_cap2', 'mongesTrobades', 'premiPains', 'premiPhili', 'premiCharm', 'cofreMonges', 'obj:benedicio_fraterna'], fet: E => E.te('benedicio_fraterna'),
           pista: E => !E.flag('llosaOberta')
-              ? "Per passar la boira verinosa cal la Benedicció de les sacerdotesses. La gent de les Cel·les sap el secret de la llosa del jardí."
+              ? "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. La gent de les Cel·les sap el secret de la llosa del jardí."
               : !E.flag('mongesTrobades')
                   ? "Sota la llosa, les sacerdotesses: desperta la Pains, empeny la taula de la Phili i talla els esbarzers de la Charm."
-                  : "Les sacerdotesses són lliures: la Benedicció Fraterna t'espera al cofre del vestíbul de l'Hostatgeria." },
+                  : "Les sacerdotesses són lliures: la seva Empara Fraternal t'espera al cofre del vestíbul de l'Hostatgeria." },
         { id: 'pont', marca: ['pontGabia'], fet: E => E.flag('pontGabia'),
           pista: E => "Davant l'avenc de la Sala de la Gàbia, els blocs del fons dormen. Un cant de pedres els faria aixecar." },
         { id: 'ocellaire', marca: ['ocellaireVencut'], fet: E => E.flag('ocellaireVencut'),

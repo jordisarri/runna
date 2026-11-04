@@ -210,6 +210,25 @@ const Joc = {
     // Les cançons de fons van en streaming (MusicaStream); només les peces curtes (jingles) passen per Phaser
     precarregarMusiques() {},
 
+    // Baixa les cançons perquè quedin a la memòria cau del navegador i sonin de seguida en entrar a una zona. Les de l'inici (portada, poble,
+    // monestir, església, biblioteca, casa) van primer i es baixen a la vegada que la resta del joc; la partida no comença fins que hi són.
+    // La resta es baixen en segon pla, una darrere l'altra.
+    PRIORITAT_MUSICA: ['musica_intro', 'musica_poble', 'musica_santuari', 'musica_biblioteca', 'musica_casa', 'musica_bosc'],
+    escalfarMusiques(fet) {
+        const fitxerDe = k => Joc.FITXERS_MUSICA[k] || (Joc.MUSICA_OPCIONAL[k] && Joc.MUSICA_OPCIONAL[k].fitxer);
+        const baixa = f => fetch(encodeURI(`assets/musica/${f}.m4a`)).then(r => r.arrayBuffer()).catch(() => {});
+        const prior = [...new Set(Joc.PRIORITAT_MUSICA.map(k => Joc.resoldreMusica(k)).map(fitxerDe).filter(Boolean))];
+        const resta = new Set(Object.values(Joc.FITXERS_MUSICA));
+        Object.entries(Joc.MUSICA_OPCIONAL).forEach(([k, o]) => { if (!o.jingle && Joc.musicaDisponible.has(k)) resta.add(o.fitxer); });
+        prior.forEach(f => resta.delete(f));
+        Promise.all(prior.map(baixa)).then(() => {
+            if (fet) fet();
+            const cua = [...resta];
+            const seguent = () => { const f = cua.shift(); if (f) baixa(f).then(() => setTimeout(seguent, 200)); };
+            seguent();
+        });
+    },
+
     iniciarMusica(scene, seek = 0, clau = 'musica_intro', fade = 0) {
         if (Joc.MUSICA_OPCIONAL[clau] && !Joc.musicaDeteccio) {           // encara no sabem quins fitxers hi ha: s'espera un instant
             Joc.musicaPendent = clau;
@@ -338,13 +357,21 @@ class EscenaCarrega extends Phaser.Scene {
     carregarResta() {
         this.load.off('progress'); this.load.off('fileprogress');
         this.load.on('progress', v => { Joc.progresRecursos = v * 0.9; });
-        Grafics.carregar(this, 'resta');
-        this.load.once('complete', () => Grafics.preparar(this, 'resta', () => {
-            Joc.recursosLlestos = true; Joc.progresRecursos = 1;
-            (Joc.esperantRecursos || []).splice(0).forEach(f => f());
-            this.scene.stop();
-        }));
-        this.load.start();
+        // Les fanfàrries (peces curtes) es carreguen amb la resta, perquè sonin a l'instant quan toquen
+        Joc.detectarMusica().then(() => {
+            Object.entries(Joc.MUSICA_OPCIONAL).forEach(([clau, o]) => { if (o.jingle && Joc.musicaDisponible.has(clau)) Joc.carregarMusica(this, clau); });
+            Grafics.carregar(this, 'resta');
+            let imatges = false, musiques = false;
+            const acabat = () => {
+                if (!imatges || !musiques) return;
+                Joc.recursosLlestos = true; Joc.progresRecursos = 1;
+                (Joc.esperantRecursos || []).splice(0).forEach(f => f());
+                this.scene.stop();
+            };
+            Joc.escalfarMusiques(() => { musiques = true; acabat(); });
+            this.load.once('complete', () => Grafics.preparar(this, 'resta', () => { imatges = true; acabat(); }));
+            this.load.start();
+        });
     }
 }
 

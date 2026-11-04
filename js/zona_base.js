@@ -1368,12 +1368,17 @@ class ZonaBase extends Phaser.Scene {
         this.moure(ui, delta);
         this.actualitzarPedres(delta);
         const proper = this.puntProper();
-        this.indicador.setVisible(!!proper);
-        if (proper) this.indicador.setPosition(proper.x, proper.y - proper.altura);
-        const T = Phaser.Input.Keyboard.JustDown;
+        // La tarota només s'obre davant un punt d'interacció visible (el «!»): si hi ha un enemic a prop, ESPAI és per atacar i no hi ha punt
         // La flauta passa davant només del punt del mateix lloc (la bassa, la pedra...): un cartell o algú proper es llegeix/escolta
-        const flauta = accio && this.flautaActiva();
-        if (flauta && (flauta.prioritat || !proper || Phaser.Math.Distance.Between(proper.x, proper.y, flauta.x, flauta.y) < 80)) this.obrirMusica();
+        const lloc = this.flautaActiva();
+        const enemicProper = lloc && this.enemics.some(e => !e.mort && e.spr && Phaser.Math.Distance.Between(e.spr.x, e.spr.y, this.ineu.x, this.ineu.y) < 320);
+        const flautaTria = !!lloc && !enemicProper && (lloc.prioritat || !proper || Phaser.Math.Distance.Between(proper.x, proper.y, lloc.x, lloc.y) < 80);
+        const ambLloc = flautaTria && (lloc.prioritat || !proper);                 // el «!» és al lloc de la flauta (si no, ja és al seu punt)
+        const mostra = ambLloc ? { x: lloc.x, y: lloc.y, altura: 90 } : proper;
+        this.indicador.setVisible(!!mostra);
+        if (mostra) this.indicador.setPosition(mostra.x, mostra.y - mostra.altura);
+        const T = Phaser.Input.Keyboard.JustDown;
+        if (accio && flautaTria) this.obrirMusica();
         else if (accio && proper) this.interactuar(proper);
         else if (accio || T(this.tecles.J)) this.atacar();
         time = this.time.now;   // un sol rellotge per a tot el combat

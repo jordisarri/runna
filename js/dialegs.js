@@ -42,14 +42,14 @@ function objectiuSopar(E) {
     const f = [];
     if (!E.flag("escudella")) f.push("l'escudella de la Meus");
     if (!E.flag("floresIsidre")) f.push("les flors d'Isildren (Hostatgeria)");
-    if (!E.flag("pastorsConvencuts")) f.push("el pa dels pastors de la Cirosa (una música vora el seu foc els recordaria com es pasta)");
+    if (!E.flag("pastorsConvencuts")) f.push("el pa dels pastors de la Cirosa");
     E.posaObjectiu(f.length ? "El sopar del Til·ler: falta " + f.join(", ") + "." : "Tot a punt: torna al Gran Til·ler per al sopar.");
 }
 
 // Quan s'allibera la tercera sacerdotessa (sigui quina sigui) el rosari guanya un gra (+1 cor) i l'Hostatgeria obre la porta per dins;
-// la mateixa sacerdotessa avisa que al vestíbul hi ha aparegut el premi (un cofre amb la Benedicció fraterna)
+// la mateixa sacerdotessa avisa que al vestíbul hi ha aparegut el premi (un cofre amb l'Empara Fraternal)
 const ultimaMonja = nom => ['Pains', 'Phili', 'Charm'].filter(n => n !== nom).every(n => Estat.flag('premi' + n));
-const avisPremiMonja = nom => ({ qui: nom, text: "Al vestíbul t'hem deixat la Benedicció Fraterna, fill. T'ajudarà a protegir-te de la boira de l'avenc i salvar els nens segrestats." });
+const avisPremiMonja = nom => ({ qui: nom, text: "Al vestíbul t'hem deixat la nostra Empara, fill. T'ajudarà a protegir-te de la boira de l'avenc i salvar els nens segrestats." });
 function premiMonja(nom, flag) {
     const E = Estat;
     E.posaFlag(flag);
@@ -659,11 +659,11 @@ const DIALEGS = {
             { fer: (z, fet) => z.ombraReacciona(fet) },
             { qui: "Monjo", text: "Jo era el qui va tancar la porta. Quan van obrir el cementiri, rient, els meus germans van deixar de descansar i el segell es va esquerdar." },
             { qui: "Monjo", text: "Sota terra hi ha una gàbia, petit monjo, i una cosa que no ha oblidat cap cant ni cap nen. Jo només puc vigilar. Tu pots tornar a tancar-ho." },
-            { qui: "Monjo", text: "L'espasa dorm al sud-est, entre pedres, allà on el sol s'atura. Rep la meva benedicció, que no pesa ni es veu, i recorda: la foscor tem la llum, però més encara el riure." },
-            { qui: "Monjo", text: "Jo només puc dir-te les paraules; el Pare Alcoví sabrà entendre-les. Quan les cridis davant l'espasa, la meva benedicció farà que et reconegui." },
+            { qui: "Monjo", text: "L'espasa dorm al sud-est, entre pedres, allà on el sol s'atura. Rep la meva paraula, que no pesa ni es veu, i recorda: la foscor tem la llum, però més encara el riure." },
+            { qui: "Monjo", text: "Jo només puc dir-te les paraules; el Pare Alcoví sabrà entendre-les. Quan les cridis davant l'espasa, la meva paraula farà que et reconegui." },
             { qui: "Monjo", text: "Ara ja puc descansar en pau." },
             { fer: (z, fet) => z.ombraDescansa ? z.ombraDescansa(fet) : fet() },
-            { avis: "Has rebut la BENEDICCIÓ DEL MONJO." }
+            { avis: "Has rebut la PARAULA DE L'OMBRA." }
         ],
         enAcabar: () => {
             E.posaFlag("benedicioMonjo");
@@ -889,9 +889,9 @@ const DIALEGS = {
         if (E.flag("soparObert") && !E.flag("floresIsidre")) {
             return {
                 pagines: [
-                    { qui: "Isildren", text: "Sopar del Til·ler, eh? Cada any se n'omple el cap amb escudelles i s'obliden de les flors. Jo hi fico flors des que era jove." },
+                    { qui: "Isildren", text: "Sopar del Til·ler, eh? La gent només pensa en el menjar i s'obliden de les flors. Jo hi fico flors des que era jove." },
                     { fer: (z, fet) => { const i = z.npcs.isidre, x0 = i.x, y0 = i.y; z.seq([c => z.npcVa('isidre', x0 - 140, y0 - 30, c, 80), c => z.npcFeina('isidre', 1300, 'fulles', c), c => z.npcVa('isidre', x0, y0, c, 80), c => z.objecteVola('isidre', c, 'flors')], fet); } },
-                    { qui: "Isildren", text: "Les flors de lluna són pels que falten. Posa-les al mig de la taula. Jo no podré ser-hi, que algú ha de quedar-se al jardí... però seré a cada pètal." },
+                    { qui: "Isildren", text: "Les flors de lluna són pels que falten. Posa-les al mig de la taula; jo també vindré a seure-hi." },
                     { avis: "Has obtingut les FLORS D'ISILDREN." }
                 ],
                 enAcabar: () => { E.dona("flors_isidre"); E.posaFlag("floresIsidre"); objectiuSopar(E); }
@@ -1019,13 +1019,13 @@ const DIALEGS = {
 
     portaHostatgeria: E => ({ pagines: [] }),
 
-    // El premi de les sacerdotesses, al vestíbul: la Benedicció Fraterna per travessar la boira verinosa que barra el camí de la Sala de la Gàbia
+    // El premi de les sacerdotesses, al vestíbul: l'Empara Fraternal per travessar la boira verinosa que barra el camí de la Sala de la Gàbia
     cofreMonges: E => {
         if (E.flag('cofreMonges')) return { pagines: [] };
         return {
             pagines: [
                 { qui: 'Nota', text: "«Per a qui ha tornat la llum a aquesta casa. Al fons de les Gírgoles, abans d'arribar a la gàbia, hi ha una boira que crema: la nostra benedicció l'esvairà al teu pas.» — Pains, Phili i Charm" },
-                { avis: "Has obtingut la BENEDICCIÓ FRATERNA: et protegeix de la boira verinosa que barra el camí de la Sala de la Gàbia." }
+                { avis: "Has obtingut l'EMPARA FRATERNAL: et protegeix de la boira verinosa que barra el camí de la Sala de la Gàbia." }
             ],
             enAcabar: () => { E.posaFlag('cofreMonges'); E.dona('benedicio_fraterna'); E.desar(); }
         };
@@ -1129,8 +1129,9 @@ const DIALEGS = {
     // El ritual: s'encén una espelma per cada nen que falta (l'Huri, el Fram i el Sardi)
     tillerSoparRitual: E => ({
         pagines: [
-            { qui: "Meus", text: "Aquest any m'he descuidat de fer-hi cantar ningú. Que ens ho perdonin els tres, allà on siguin." },
-            { qui: "Les Venerables Sàvies", text: "Sempre fem el mateix, fill: una espelma per cada cadira buida a la taula. Enguany en són tres: l'Huri, el Fram i el Sardi. Encén-les tu, que ets qui ho ha de portar a terme." },
+            { qui: "Meus", text: "Aquest any l'escudella té gust de poc, fill: hi falta l'alegria de tres nens. Que ens ho perdonin els tres, allà on siguin." },
+            { qui: "Isildren", text: "He posat les flors de lluna al mig, com cada any. Aquest cop són per l'Huri, pel Fram... i pel meu Sardi." },
+            { qui: "Les Venerables Sàvies", text: "Sempre fem el mateix, fill: una espelma per cada cadira buida a la taula. Enguany en són tres: l'Huri, el Fram i el Sardi. Encén-les tu: ets tu en qui tenim les nostres esperances posades." },
             { fer: (z, fet) => z.encendreEspelmes([0, 1, 2], fet) },
             { qui: "Pastor vell", text: "Fa molts anys que a nosaltres ningú no ens guardava cap cadira a cap taula. Gràcies per asseure'ns, fill." },
             { qui: "El Gran Til·ler", text: "Aquesta és la saviesa que et volia donar, petit monjo: ningú no es perd del tot mentre algú el recorda a taula. La gàbia de l'Ocellaire només s'omple de qui s'ha quedat sol." },
@@ -1142,7 +1143,7 @@ const DIALEGS = {
         enAcabar: () => {
             E.dona("fulla_tiler"); E.posaFlag("fullaTiler"); E.posaFlag("soparFet");
             E.treu("pa_pastor");
-            E.posaObjectiu("Tens la Fulla del Til·ler. Ara falten el Saber del Pare Alcoví i la Benedicció, i trobar Runna al sud-est.");
+            E.posaObjectiu("Tens la Fulla del Til·ler. Ara falten el Saber del Pare Alcoví, la Benedicció del Pare Jordà i trobar Runna més enllà del mirador de les estrelles.");
             const z = game.scene.getScene("ZonaTiller");
             if (z && z.acabarSopar) z.acabarSopar();
         }

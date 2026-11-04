@@ -103,9 +103,9 @@ class ZonaRuines extends ZonaBase {
         this.apareix = 1;            // 0..1: com de present és l'ombra (la primera vegada es materialitza lentament)
         this.ombraMonjo = this.add.image(1205, 425, 'ombra_monjo').setOrigin(0.5, 1)
             .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(471).setAlpha(0);
-        this.puntOmbra = this.interactiu(1205, 465, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 140, actiu: () => Estat.flag('fragment1') && !Estat.flag('benedicioMonjo'), enTancar: () => Estat.posaFlag('flauta_ombra') });
+        this.puntOmbra = this.interactiu(1205, 465, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 140, actiu: () => ['fragment1', 'fragment2', 'alcuiLlegit'].every(f => Estat.flag(f)) && !Estat.flag('benedicioMonjo'), enTancar: () => { if (this.ombraCantOberta()) Estat.posaFlag('flauta_ombra'); } });
         this.ombraHaCridat = false;
-        this.llocFlauta('ombra', 1205, 475, 160, true, () => !Estat.flag('benedicioMonjo'));
+        this.llocFlauta('ombra', 1205, 475, 160, true, () => this.ombraCantOberta() && !Estat.flag('benedicioMonjo'));      // la tarota només es pot tocar quan ja s'han llegit els dos pergamins i l'ombra ha demanat el cant
         this.tweens.add({ targets: this.ombraMonjo, y: 428, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
         this.ombraVista = false; this.ombraMarxa = false;
 
@@ -136,6 +136,9 @@ class ZonaRuines extends ZonaBase {
             this.esperar(300, fet);
         } });
     }
+
+    // Ja es pot tocar davant l'ombra: els dos fragments són al sarró, el Pare Alcoví els ha llegit i l'ombra ha demanat el cant
+    ombraCantOberta() { return ['fragment1', 'fragment2', 'alcuiLlegit', 'ombraDemanaCant'].every(f => Estat.flag(f)); }
 
     // El Cant de les Pedres, tocat davant l'ombra, li desperta la memòria
     enMelodia(nom) {
@@ -757,7 +760,7 @@ class ZonaTiller extends ZonaBase {
         this.npcs = this.npcs || {};
         const gent = [
             ['pastor_a', 1170, 60, 290, 880], ['pastor_b', 1170, 20, 400, 894], ['pastor_vell', 1170, -20, 510, 880],      // pel camí de la Cirosa
-            ['neus', 700, 1000, 300, 760], ['venerables', 700, 1050, 600, 760]                   // des de les cel·les
+            ['neus', 700, 1000, 300, 760], ['venerables', 700, 1050, 600, 760], ['isidre', 700, 1100, 450, 764]                   // des de les cel·les (l'Isildren també hi és)
         ];
         const imatges = gent.map(([k, x0, y0, x, y], i) => {
             const img = this.posar(k, x0, y0, { fonsY: y0 });
