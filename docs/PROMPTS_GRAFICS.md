@@ -64,7 +64,7 @@
 
 - [x] `galf`
 
-- [x] `germa_andreu`
+- [x] `germa_aldreu`
 
 - [x] `germa_francesc`
 
@@ -244,11 +244,11 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ocellaire_genolls`, `ineu/tarota_gran`, `andreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
 
 
 
-**Nous, encara sense ús al joc** (preparats per a quan s’implementin): `andreu_guardia`, `gabia`, `gabia_oberta`.
+**Nous, encara sense ús al joc** (preparats per a quan s’implementin): `aldreu_guardia`, `gabia`, `gabia_oberta`.
 
 
 
@@ -357,7 +357,7 @@ Edit the attached image: keep the statue, the rocky lump, the pedestal, the pose
 
 
 
-### `andreu_guardia.png` (amplada 96) *(El Germà Andreu fent de guàrdia de la Gàbia (segon combat).)*
+### `aldreu_guardia.png` (amplada 96) *(El Germà Aldreu fent de guàrdia de la Gàbia (segon combat).)*
 
 
 

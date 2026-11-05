@@ -31,7 +31,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // El cap retallat del sprite del personatge: es fa una sola vegada i es desa com a textura 'retrat_<clau>'.
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
-    'Ineu': 'ineu', 'Pare Jordà': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Pastor de Boira': 'pastor_boira', 'Andreu, Pastor de Boira': 'pastor_boira', 'Germà Francí': 'germa_francesc', 'Pare Daimiel': 'pare_daniel',
+    'Ineu': 'ineu', 'Pare Jordà': 'pare_jordi', 'Germà Aldreu': 'germa_aldreu', 'Pastor de Boira': 'pastor_boira', 'Aldreu, Pastor de Boira': 'pastor_boira', 'Germà Francí': 'germa_francesc', 'Pare Daimiel': 'pare_daniel',
     'Pare Alcoví': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Galf': 'galf', 'Isildren': 'isidre',
     'La Pianista': 'pianista', 'La Jacmeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Carmèlia': 'monja_charm', 'Pilària': 'monja_phili', 'Dolora': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
@@ -138,7 +138,7 @@ const CATALEG_OBJECTES = {
     ram:              ['Ram de flors', 'Del Germà Francí, per a la tomba de l\'àngel.'],
     guants:           ['Guants de Poder', 'Per moure el que pesa massa.'],
     maneta:           ['Maneta d\'engranatge', 'De ferro: encaixa en volants i rodes vells.'],
-    clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Andreu li va caure; l\'Iscu te l\'ha donada.'],
+    clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Aldreu li va caure; l\'Iscu te l\'ha donada.'],
     fragment1:        ['Pergamí partit (1/2)', 'La meitat d\'un pergamí esquinçat, trobada a les Runes.'],
     pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.» Al revers: «Qui busqui sortida, que alci la bóta marcada amb la creu.»'],
     calze:            ['Calze de Rosada', "De plata, antic. A l'altar de Sant Gabriel, cada cop que hi beus l'aigua de rosada, el rosari et queda ple."],

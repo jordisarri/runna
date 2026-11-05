@@ -2,8 +2,8 @@
  * LA TAVERNA PER DINS i la GALERIA DE LA PORTA DE FERRO (l'entrada de les Gírgoles, a l'est del Celler: res a veure amb la Taverna)
  * La Càren (mandrosa) dorm darrere el taulell; l'Eve (amiga fidel) obre la porta a l'Ineu i li explica què passa de nit.
  * La galeria s'entra per la porta de ferro exterior de la Sala de les Gírgoles, a l'est del Pati del Celler (la que fa servir
- * el Germà Andreu cada nit), que s'obre amb la Clau de ferro. Al fons de la galeria, una segona porta de ferro, de pany petit, dona a la
- * Sala de les Gírgoles: l'obre la clau rovellada que l\'Iscu va trobar (al Germà Andreu li va caure).
+ * el Germà Aldreu cada nit), que s'obre amb la Clau de ferro. Al fons de la galeria, una segona porta de ferro, de pany petit, dona a la
+ * Sala de les Gírgoles: l'obre la clau rovellada que l\'Iscu va trobar (al Germà Aldreu li va caure).
  */
 
 Object.assign(DIALEGS, {
@@ -22,7 +22,7 @@ Object.assign(DIALEGS, {
         if (!E.flag('evaParlat')) return {
             pagines: [
                 { qui: 'Eve', text: 'Sóc l\'Eve. Ajudo la Càren... bé, faig la feina de la Càren. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
-                { qui: 'Eve', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Andreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola. Entra. Diu que va a buscar vi, però a la Taverna mai no ha faltat cap ampolla. I no en torna amb cap.' },
+                { qui: 'Eve', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola. Entra. Diu que va a buscar vi, però a la Taverna mai no ha faltat cap ampolla. I no en torna amb cap.' },
                 { qui: 'Eve', text: 'A dins, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Ocells, Ineu.' },
                 { qui: 'Eve', text: 'I l\'Iscu, el fill de la Càren, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
                 { qui: 'Eve', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
@@ -48,7 +48,7 @@ Object.assign(DIALEGS, {
     },
 
 
-    // La Porta de les Gírgoles (a l'est del Pati del Celler): la de la galeria, que el Germà Andreu tanca amb clau cada nit
+    // La Porta de les Gírgoles (a l'est del Pati del Celler): la de la galeria, que el Germà Aldreu tanca amb clau cada nit
     portaSoterrani: E => E.flag('clauFerro') ? { pagines: [
     ] } : { pagines: [
         { qui: 'Ineu', text: "Tancada amb clau." }
@@ -70,7 +70,7 @@ Object.assign(DIALEGS, {
         ] };
         // Sense la clau petita: l'Ineu recorda qui s'escapa de nit (l\'Iscu) i l'objectiu l'hi porta
         return { pagines: [
-            { qui: 'Ineu', text: '(La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Andreu en deu tenir una altra.)' },
+            { qui: 'Ineu', text: '(La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Aldreu en deu tenir una altra.)' },
             { qui: 'Ineu', text: '(Algú l\'hauria d\'haver vist anar-hi de nit... L\'Iscu, el fill de la Càren! L\'Eve va dir que s\'escapa pel camí de la Desaparició, per un forat entre els arbres.)' }
         ], enAcabar: () => { E.posaFlag('portaPetitaVista'); E.posaObjectiu(PROGRES.pista(E)); } };
     }

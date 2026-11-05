@@ -116,7 +116,7 @@ class ZonaCirosa extends ZonaBase {
 
     construir() {
         // L'escena es reaprofita a cada visita: l'estat del combat d'una visita anterior (p. ex. si l'Ineu va caure lluitant) no ha de quedar
-        this.bossIniciat = false; this.andreuHaCridat = false; this.properaCrida = 0; this.tanques = null; this.bossCaigut = null;
+        this.bossIniciat = false; this.aldreuHaCridat = false; this.properaCrida = 0; this.tanques = null; this.bossCaigut = null;
         this.terra('herba', 0, 0, 1800, 1200, -1100);
         this.terra('cami', 500, 500, 160, 700);           // des del camí llarg
         this.terra('cami', 200, 500, 800, 140);           // davant la masia i cap a la pastura
@@ -166,18 +166,18 @@ class ZonaCirosa extends ZonaBase {
             });
         }
 
-        // El Germà Andreu, de Pastor de Boira, al mig de la pastura
+        // El Germà Aldreu, de Pastor de Boira, al mig de la pastura
         if (lila) {
             // (sense col·lisió: el boss hi apareixerà al mateix lloc)
-            this.andreuNpc = this.posar('pastor_boira', 1400, 640);
-            this.andreuOmbra = this.add.image(1400, 640, 'ombra').setScale(0.5).setDepth(-500);
-            this.andreuNpc.ombra = this.andreuOmbra;
-            (this.npcs = this.npcs || {}).andreu = this.andreuNpc;
-            this.andreuPunt = this.interactiu(1400, 630, RADI_NPC, DIALEGS.andreuPastor, { altura: this.andreuNpc.displayHeight + 6, actiu: () => !this.bossIniciat });
-            this.andreuPunt.npc = this.andreuNpc;
+            this.aldreuNpc = this.posar('pastor_boira', 1400, 640);
+            this.aldreuOmbra = this.add.image(1400, 640, 'ombra').setScale(0.5).setDepth(-500);
+            this.aldreuNpc.ombra = this.aldreuOmbra;
+            (this.npcs = this.npcs || {}).aldreu = this.aldreuNpc;
+            this.aldreuPunt = this.interactiu(1400, 630, RADI_NPC, DIALEGS.aldreuPastor, { altura: this.aldreuNpc.displayHeight + 6, actiu: () => !this.bossIniciat });
+            this.aldreuPunt.npc = this.aldreuNpc;
             // Sura sobre la boira, i l'ombra s'encongeix quan puja
-            this.andreuFlota = this.tweens.add({ targets: this.andreuNpc, y: 626, yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut',
-                onUpdate: () => this.andreuOmbra.setScale(0.5 - (640 - this.andreuNpc.y) * 0.008) });
+            this.aldreuFlota = this.tweens.add({ targets: this.aldreuNpc, y: 626, yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut',
+                onUpdate: () => this.aldreuOmbra.setScale(0.5 - (640 - this.aldreuNpc.y) * 0.008) });
         }
 
         this.arbres([[100, 150], [260, 90], [500, 120], [800, 100], [900, 280], [140, 420], [40, 1100], [820, 1100],
@@ -193,17 +193,17 @@ class ZonaCirosa extends ZonaBase {
     // Si en aquell moment no pot parlar (un altre diàleg, un cop, un pas...), ho torna a provar al cap d'una estona mentre l'Ineu sigui a prop:
     // fins que no parlen, el combat no comença (abans, si la crida fallava, ja no tornava a cridar)
     actualitzar(time) {
-        if (!this.andreuPunt || this.bossIniciat || time < (this.properaCrida || 0)) return;
+        if (!this.aldreuPunt || this.bossIniciat || time < (this.properaCrida || 0)) return;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 1400, 640) > 240) return;
         this.properaCrida = time + 2500;
-        if (!this.andreuHaCridat) {
-            this.andreuHaCridat = true;
+        if (!this.aldreuHaCridat) {
+            this.aldreuHaCridat = true;
             this.ineu.body.setVelocity(0);
             this.flotant(1400, 500, 'Ineu!', '#e0a0ff');
         }
         this.time.delayedCall(500, () => {
             const ui = this.ui();
-            if (!this.bossIniciat && !ui.dialeg && !ui.bloquejat && !this.canviant) this.interactuar(this.andreuPunt);
+            if (!this.bossIniciat && !ui.dialeg && !ui.bloquejat && !this.canviant) this.interactuar(this.aldreuPunt);
         });
     }
 
@@ -246,7 +246,7 @@ class ZonaCirosa extends ZonaBase {
     }
 
     // Vençut, el Pastor cau de genolls i la boira li surt del cos
-    andreuAgenollat(fet) {
+    aldreuAgenollat(fet) {
         const e = this.bossCaigut;
         if (!e || !e.spr.active) { fet(); return; }
         this.tweens.add({ targets: e.spr, angle: 0, scaleY: e.spr.scaleY * 0.78, duration: 500 });
@@ -254,7 +254,7 @@ class ZonaCirosa extends ZonaBase {
         this.time.delayedCall(1500, () => { p.stop(); this.time.delayedCall(1600, () => p.destroy()); fet(); });
     }
     // S'aixeca, riu i se'n va camí avall, cap a la Taverna
-    andreuMarxa(fet) {
+    aldreuMarxa(fet) {
         const e = this.bossCaigut;
         if (!e || !e.spr.active) { fet(); return; }
         this.tweens.add({ targets: e.spr, scaleY: e.spr.scaleY / 0.78, duration: 400, onComplete: () => {
@@ -303,11 +303,11 @@ class ZonaCirosa extends ZonaBase {
     iniciarBoss() {
         if (this.bossIniciat) return;
         this.bossIniciat = true;
-        this.andreuFlota.pause();
-        this.andreuNpc.setVisible(false); this.andreuOmbra.setVisible(false);
+        this.aldreuFlota.pause();
+        this.aldreuNpc.setVisible(false); this.aldreuOmbra.setVisible(false);
         const e = this.enemic('pastor', 1400, 570);
-        if (e) this.ui().barraBoss('Andreu, Pastor de Boira', [0.5]);              // a la meitat, la segona fase
-        if (!e) { this.bossIniciat = false; this.andreuNpc.setVisible(true); this.andreuOmbra.setVisible(true); this.andreuFlota.resume(); return; }
+        if (e) this.ui().barraBoss('Aldreu, Pastor de Boira', [0.5]);              // a la meitat, la segona fase
+        if (!e) { this.bossIniciat = false; this.aldreuNpc.setVisible(true); this.aldreuOmbra.setVisible(true); this.aldreuFlota.resume(); return; }
         this.cameras.main.shake(300, 0.005);
         this.tancarArena();
         // El ramat adormit es desperta, una ovella rere l'altra

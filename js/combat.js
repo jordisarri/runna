@@ -276,7 +276,7 @@ const ENEMICS = {
         }
     },
 
-    // BOSS: el Germà Andreu convertit en Pastor de Boira. Crida ovelles i carrega amb la caiada.
+    // BOSS: el Germà Aldreu convertit en Pastor de Boira. Crida ovelles i carrega amb la caiada.
     pastor: {
         tex: 'pastor_boira', vida: 24, vel: 320, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 520,
         robust: true, barra: true, arma: 'tiller',          // només cedeix a la branca del Til·ler
@@ -1113,7 +1113,7 @@ Object.assign(ZonaBase.prototype, {
         });
         this.tweens.add({ targets: e.spr, angle: 80, duration: 400 });
         this.ui().actualitzarHUD();
-        this.time.delayedCall(900, () => this.ui().obrirDialeg(DIALEGS.andreuDerrotat(Estat), () => {
+        this.time.delayedCall(900, () => this.ui().obrirDialeg(DIALEGS.aldreuDerrotat(Estat), () => {
             this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
             this.granRosari('pastorGra', 'Pastor de Boira vençut');
             Estat.desar();

@@ -7,7 +7,7 @@
  *   Tortura:  un rastell rovellat barra el pas: el torn només el giren els Guants de Poder. Més amunt, un mur d'esbarzers negres (Runna).
  *   Gàbia:    la gàbia penja al mig d'un avenc. Els blocs de pedra del pont dormen al fons: el Cant de Vespres els aixeca.
  *             Combat final contra l'Ocellaire (bàcul que gira i ocells de foc). Vençut, el Cant del Miracle aixeca la gàbia,
- *             Runna trenca els capolls dels nens i l'Andreu s'hi queda tancat. Després, l'epíleg al Santuari.
+ *             Runna trenca els capolls dels nens i l'Aldreu s'hi queda tancat. Després, l'epíleg al Santuari.
  */
 
 // Foscor amb forats de llum (la mateixa tècnica que el soterrani de l'Hostatgeria)
@@ -74,13 +74,13 @@ Object.assign(DIALEGS, {
         { qui: 'Ineu', text: "(Els barrots no tenen pany. Només un cant els pot obrir: el Cant del Miracle.)" }
     ] }),
     capoll: nom => E => ({ pagines: [] }),
-    andreuGabia: E => ({ pagines: E.flag('andreuTancat') ? [
-        { qui: 'Germà Andreu', text: "Ell em va veure, saps? Tothom em passava pel costat. Ell em va veure." },
-        { qui: 'Germà Andreu', text: "Deixa'm aquí. Si mai torna, que em trobi esperant-lo." }
+    aldreuGabia: E => ({ pagines: E.flag('andreuTancat') ? [
+        { qui: 'Germà Aldreu', text: "Ell em va veure, saps? Tothom em passava pel costat. Ell em va veure." },
+        { qui: 'Germà Aldreu', text: "Deixa'm aquí. Si mai torna, que em trobi esperant-lo." }
     ] : E.flag('ocellaireVencut') ? [
-        { qui: 'Germà Andreu', text: "Mestre... no em deixeu..." }
+        { qui: 'Germà Aldreu', text: "Mestre... no em deixeu..." }
     ] : [
-        { qui: 'Andreu, Pastor de Boira', text: "El Mestre ve, monjo. Ja el sents?" }
+        { qui: 'Aldreu, Pastor de Boira', text: "El Mestre ve, monjo. Ja el sents?" }
     ] }),
     gentEpileg: E => ({ pagines: [{ qui: 'Gent', text: "Avui tothom canta, encara que l'orgue faci una nota de pega." }] }),
     nenGabia: nom => E => ({ pagines: [{ qui: nom, text: {
@@ -634,14 +634,14 @@ class ZonaGabia extends ZonaBase {
             this.ocellsBoira.push(o);
         }
 
-        // El Germà Andreu: de guàrdia al costat de la gàbia, fet Pastor de Boira fins que el seu Mestre cau (llavors la boira el deixa),
-        // o tancat a dins quan tot s'ha acabat. De Pastor, al codi també és this.npcs.germa_andreu
-        if (Estat.flag('andreuTancat')) this.npc('germa_andreu', gx, base - 30, DIALEGS.andreuGabia);
+        // El Germà Aldreu: de guàrdia al costat de la gàbia, fet Pastor de Boira fins que el seu Mestre cau (llavors la boira el deixa),
+        // o tancat a dins quan tot s'ha acabat. De Pastor, al codi també és this.npcs.germa_aldreu
+        if (Estat.flag('andreuTancat')) this.npc('germa_aldreu', gx, base - 30, DIALEGS.aldreuGabia);
         else if (!Estat.flag('gabiaOberta')) {
-            if (Estat.flag('ocellaireVencut')) this.npc('germa_andreu', gx + 230, base + 60, DIALEGS.andreuGabia, { flipX: true });
-            else this.npcs.germa_andreu = this.npc('pastor_boira', gx + 230, base + 60, DIALEGS.andreuGabia, { flipX: true });
+            if (Estat.flag('ocellaireVencut')) this.npc('germa_aldreu', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
+            else this.npcs.germa_aldreu = this.npc('pastor_boira', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
         }
-        if (Estat.flag('andreuTancat')) { const a = this.npcs.germa_andreu; a.punt.x = gx; a.punt.y = base + 60; a.setDepth(base - 15); }
+        if (Estat.flag('andreuTancat')) { const a = this.npcs.germa_aldreu; a.punt.x = gx; a.punt.y = base + 60; a.setDepth(base - 15); }
 
         // Columnes de la cova i el sostre
         const cv = this.add.graphics().setDepth(-990);
@@ -668,7 +668,7 @@ class ZonaGabia extends ZonaBase {
 
         // Capolls que encara no s'han trencat, si la gàbia ja és oberta (s'havia sortit a mig alliberament)
         if (Estat.flag('gabiaOberta')) NENS_GABIA.forEach((n, i) => { if (!Estat.flag(n.flag)) this.crearCapoll(n, gx - 200 + i * 200, base + 160); });
-        // Tots alliberats però l'Andreu encara no s'ha tancat: es reprèn el final
+        // Tots alliberats però l'Aldreu encara no s'ha tancat: es reprèn el final
         if (this.totsLliures() && !Estat.flag('andreuTancat')) this.time.delayedCall(600, () => this.finalGabia());
     }
 
@@ -916,7 +916,7 @@ class ZonaGabia extends ZonaBase {
 
     // ---------------- El combat final ----------------
     actualitzar() {
-        // L'Ineu trepitja la plataforma: l'Andreu crida el seu Mestre
+        // L'Ineu trepitja la plataforma: l'Aldreu crida el seu Mestre
         if (!this.combatIniciat && Estat.flag('pontGabia') && !Estat.flag('ocellaireVencut') && this.ineu.y < GABIA.y + GABIA.platH / 2 - 30) {
             if (!Estat.flag('cantMiracle')) {                                         // sense el Cant del Miracle no es pot entrar al combat
                 this.ineu.setY(GABIA.y + GABIA.platH / 2 - 10);
@@ -936,15 +936,15 @@ class ZonaGabia extends ZonaBase {
         const ap = this.add.image(gx, base + 90, 'ocellaire').setAlpha(0).setDepth(base + 90);
         ap.setScale(this.textures.get('ocellaire').customData.escala || 1 / RES);
         this.npcs.ocellaire = ap;
-        const cam = this.cameras.main, ui = this.ui(), A = 'Andreu, Pastor de Boira', O = "L'Home de la Gàbia";
+        const cam = this.cameras.main, ui = this.ui(), A = 'Aldreu, Pastor de Boira', O = "L'Home de la Gàbia";
         const pagines = [
             { fer: (z, fet) => z.seq([
                 f => { z.ineuVa(this.ineu.x, Math.max(this.ineu.y, base + 300), null, 160); z.enquadrar(gx + 90, base - 60, 0.8, 1000, f); },
-                f => z.npcMira('germa_andreu', 'ineu', f)
+                f => z.npcMira('germa_aldreu', 'ineu', f)
             ], fet) },
             { qui: A, text: vist ? "Una altra vegada, monjo? El Mestre no es cansa mai." : "Mestre! Mestre, ja és aquí! El monjo que us vol prendre els nens!" },
             { fer: (z, fet) => z.seq([
-                f => z.npcSalta('germa_andreu', f, 2),
+                f => z.npcSalta('germa_aldreu', f, 2),
                 f => z.invocarOcellaire(ap, f),
                 f => { Sfx.rugit(); cam.shake(900, 0.008); ui.titolBoss("L'HOME DE LA GÀBIA", "L'Ocellaire"); z.esperar(vist ? 1800 : 3000, f); }
             ], fet) },
@@ -953,27 +953,27 @@ class ZonaGabia extends ZonaBase {
                 { qui: O, text: "La gàbia és plena de riures robats. Encara hi cap el teu." }
             ]),
             { fer: (z, fet) => z.seq([
-                f => { z.npcVa('germa_andreu', gx + 330, base + 40, null, 220); z.amagarAndreu(); z.alliberarCamera(800, f); }
+                f => { z.npcVa('germa_aldreu', gx + 330, base + 40, null, 220); z.amagarAldreu(); z.alliberarCamera(800, f); }
             ], fet) }
         ];
         this.ui().obrirDialeg({ pagines }, () => this.començarBoss(ap));
     }
 
-    // L'Andreu fuig i s'amaga durant el combat (després torna)
-    amagarAndreu() {
-        const a = this.npcs.germa_andreu;
+    // L'Aldreu fuig i s'amaga durant el combat (després torna)
+    amagarAldreu() {
+        const a = this.npcs.germa_aldreu;
         if (!a) return;
         this.time.delayedCall(1100, () => this.tweens.add({ targets: [a, a.ombra].filter(Boolean), alpha: 0, duration: 500, onComplete: () => { if (this.bossActiu) { a.setVisible(false); if (a.ombra) a.ombra.setVisible(false); } } }));
     }
-    mostrarAndreu() {
-        const a = this.npcs.germa_andreu;
+    mostrarAldreu() {
+        const a = this.npcs.germa_aldreu;
         if (!a) return;
         this.tweens.killTweensOf(a);
         a.setVisible(true).setAlpha(1); if (a.ombra) a.ombra.setVisible(true).setAlpha(a.ombra.alpha || 1);
     }
-    // Quan el Mestre cau, la boira deixa l'Andreu: el Pastor de Boira torna a ser el Germà Andreu
+    // Quan el Mestre cau, la boira deixa l'Aldreu: el Pastor de Boira torna a ser el Germà Aldreu
     desferPastor() {
-        const a = this.npcs.germa_andreu;
+        const a = this.npcs.germa_aldreu;
         if (!a || a.texture.key !== 'pastor_boira') return;
         const x = a.x, y = a.y, flip = a.flipX;
         Sfx.puf();
@@ -985,8 +985,8 @@ class ZonaGabia extends ZonaBase {
         this.tweens.killTweensOf(a);
         if (a.ombra) a.ombra.destroy();
         a.destroy();
-        delete this.npcs.pastor_boira; delete this.npcs.germa_andreu;
-        this.npc('germa_andreu', x, y, DIALEGS.andreuGabia, { flipX: flip });
+        delete this.npcs.pastor_boira; delete this.npcs.germa_aldreu;
+        this.npc('germa_aldreu', x, y, DIALEGS.aldreuGabia, { flipX: flip });
     }
 
     // La boira baixa de la cúpula, s'arremolina i en surt l'Ocellaire
@@ -1041,7 +1041,7 @@ class ZonaGabia extends ZonaBase {
         Joc.aturarMusica(); Joc.jingle(this, 'jingle_boss');
         this.netejarRonda(e);
         ui.amagarBarraBoss();
-        this.mostrarAndreu();
+        this.mostrarAldreu();
         if (e.spr.texture.key !== 'ocellaire') e.spr.setTexture('ocellaire');
         // El cop final: el món gairebé s'atura i un flaix blanc ho esborra tot
         this.hitStop(450);
@@ -1060,7 +1060,7 @@ class ZonaGabia extends ZonaBase {
         } });
         this.tweens.add({ targets: e.spr, angle: { from: -6, to: 6 }, yoyo: true, repeat: 6, duration: 90 });
         this.ui().actualitzarHUD();
-        // Pla: l'Ocellaire, la gàbia i l'Andreu alhora
+        // Pla: l'Ocellaire, la gàbia i l'Aldreu alhora
         const mx = (e.spr.x + this.gx) / 2, my = Math.min(e.spr.y, this.base + 220) - 110;
         this.time.delayedCall(900, () => this.ui().obrirDialeg({ pagines: [
             { fer: (z, fet) => z.enquadrar(mx, my, 0.8, 900, fet) },
@@ -1079,13 +1079,13 @@ class ZonaGabia extends ZonaBase {
                         f();
                     } });
                 },
-                // La boira deixa l'Andreu
+                // La boira deixa l'Aldreu
                 f => { z.desferPastor(); z.esperar(1100, f); },
-                f => z.npcVa('germa_andreu', this.gx + 90, this.base + 60, f, 260)
+                f => z.npcVa('germa_aldreu', this.gx + 90, this.base + 60, f, 260)
             ], fet) },
-            { qui: 'Germà Andreu', text: "Mestre! No em deixeu!" },
+            { qui: 'Germà Aldreu', text: "Mestre! No em deixeu!" },
             { fer: (z, fet) => z.seq([
-                f => z.ajupir('germa_andreu', f, 1200),
+                f => z.ajupir('germa_aldreu', f, 1200),
                 f => z.alliberarCamera(800, f)
             ], fet) }
         ] }, () => {
@@ -1116,7 +1116,7 @@ class ZonaGabia extends ZonaBase {
                 this.time.addEvent({ delay: 150, repeat: 14, callback: () => this.flotant(gx + Phaser.Math.Between(-150, 150), base - Phaser.Math.Between(60, 380), Phaser.Utils.Array.GetRandom(['♪', '♫', '♩']), '#ffe08a') });
                 this.esperar(1400, f);
             },
-            f => z.npcVa('germa_andreu', gx + 320, base + 140, f, 300),
+            f => z.npcVa('germa_aldreu', gx + 320, base + 140, f, 300),
             f => {
                 Sfx.secret();
                 this.cameras.main.shake(2200, 0.004);
@@ -1164,12 +1164,12 @@ class ZonaGabia extends ZonaBase {
         });
     }
 
-    // Els nens riuen, la boira es desfà i l'Andreu es queda amb el seu Mestre
+    // Els nens riuen, la boira es desfà i l'Aldreu es queda amb el seu Mestre
     finalGabia() {
         if (this.finalEngegat) return;
         this.finalEngegat = true;
         const gx = this.gx, base = this.base;
-        if (!this.npcs.germa_andreu) this.npc('germa_andreu', gx + 320, base + 140, DIALEGS.andreuGabia, { flipX: true });
+        if (!this.npcs.germa_aldreu) this.npc('germa_aldreu', gx + 320, base + 140, DIALEGS.aldreuGabia, { flipX: true });
         const nens = NENS_GABIA.map(n => n.key);
         this.ui().obrirDialeg({ pagines: [
             { fer: (z, fet) => z.seq([
@@ -1191,11 +1191,11 @@ class ZonaGabia extends ZonaBase {
                     this.time.delayedCall(1800, () => llum.destroy());
                     this.esperar(2000, f);
                 },
-                f => z.npcMira('germa_andreu', gx, f)
+                f => z.npcMira('germa_aldreu', gx, f)
             ], fet) },
-            { qui: 'Germà Andreu', text: "El Mestre és aquí dins..." },
-            { fer: (z, fet) => z.npcVa('germa_andreu', gx, base - 30, fet, 120) },
-            { qui: 'Germà Andreu', text: "Jo em quedo amb ell." },
+            { qui: 'Germà Aldreu', text: "El Mestre és aquí dins..." },
+            { fer: (z, fet) => z.npcVa('germa_aldreu', gx, base - 30, fet, 120) },
+            { qui: 'Germà Aldreu', text: "Jo em quedo amb ell." },
             { fer: (z, fet) => z.seq([
                 f => {
                     // La gàbia baixa i el tanca

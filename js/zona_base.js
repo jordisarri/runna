@@ -151,7 +151,7 @@ const REINICI_ZONES = {
     ZonaTiller: { avisArrels: false, sopar: null },
     ZonaDipositos: { tripodeMuntat: false, llumEstel: null, estelCaient: false, colBoira: null, boiraDolmen: null },
     ZonaBoscPi: { guspiresPi: null, camPi: false, camPiFins: 0 },
-    ZonaCirosa: { andreuPunt: null },
+    ZonaCirosa: { aldreuPunt: null },
     ZonaPassadis: { contrallum: null },
     ZonaCementiri: { boiraTomba: null, llumTomba: null },
     ZonaGirgoles: { colCortina: null },
@@ -633,8 +633,8 @@ class ZonaBase extends Phaser.Scene {
         const dist = Phaser.Math.Distance.Between(img.x, img.y, x, y), dur = Math.max(150, dist / vel * 1000);
         const dx = x - img.x, dy = y - img.y;
         let animClau = null;
-        if (key === 'germa_andreu' && dy < -15 && Math.abs(dx) > 10 && this.anims.exists('germa_andreu_ne')) {
-            animClau = 'germa_andreu_ne';
+        if (key === 'germa_aldreu' && dy < -15 && Math.abs(dx) > 10 && this.anims.exists('germa_aldreu_ne')) {
+            animClau = 'germa_aldreu_ne';
             img.setFlipX(dx < 0);
         } else {
             if (Math.abs(dx) > 4) img.setFlipX(dx < 0);
@@ -730,7 +730,7 @@ class ZonaBase extends Phaser.Scene {
         if (this.ineuAltObjecte) { this.ineuAltObjecte.forEach(o => { this.tweens.killTweensOf(o); o.destroy(); }); this.ineuAltObjecte = null; }
         I.setVisible(false);
         if (this.fantasma) this.fantasma.setVisible(false);          // la silueta translúcida de l'Ineu també: un dibuix desapareix i l'altre apareix, sense transparències
-        this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(85000);       // per sobre de tothom (també del Germà Andreu), però SOTA la boira (89990+): si no, quedava il·luminat
+        this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(85000);       // per sobre de tothom (també del Germà Aldreu), però SOTA la boira (89990+): si no, quedava il·luminat
         if (key === 'ineu_aixeca_tiler') {
             const x = I.x - this.ineuAlt.displayWidth * 0.16;
             const y = I.y + 2 - this.ineuAlt.displayHeight * 0.97;

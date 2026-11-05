@@ -182,7 +182,7 @@ Object.assign(ZonaGabia.prototype, {
             if (Math.abs(x - gx) < 200 && Math.abs(y - base) < 70) continue;
             this.ploma(pv, x, y, rr() * Math.PI * 2, 0.7 + rr() * 0.6);
         }
-        // Les joguines dels nens: una baldufa i la pilota del Germà Andreu
+        // Les joguines dels nens: una baldufa i la pilota del Germà Aldreu
         pv.fillStyle(0x000000, 0.25).fillEllipse(x0 + 128, y1 - 66, 30, 9);
         pv.fillStyle(0xc0402a, 1).fillTriangle(x0 + 114, y1 - 86, x0 + 142, y1 - 86, x0 + 128, y1 - 66);
         pv.fillStyle(0xe8c050, 1).fillEllipse(x0 + 128, y1 - 87, 30, 9);

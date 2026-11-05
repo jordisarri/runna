@@ -17,7 +17,7 @@ const CATALEG = [
     { key: 'ineu_inconscient', file: 'assets/personatges/ineu_inconscient.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu a terra després d'una derrota (mateix retall que jordi_desperta)
     { key: 'jordi_desperta', file: 'assets/personatges/jordi_desperta.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },   // el Pare Jordà agenollat al seu costat, despertant-lo
     { key: 'pare_jordi',   file: 'assets/personatges/pare_jordi.webp',   amplada: 90, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
-    { key: 'germa_andreu', file: 'assets/personatges/germa_andreu.webp', amplada: 79, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
+    { key: 'germa_aldreu', file: 'assets/personatges/germa_aldreu.webp', amplada: 79, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
     { key: 'pare_daniel',  file: 'assets/personatges/pare_daniel.webp',  amplada: 94, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
     { key: 'monja_pains',   file: 'assets/personatges/monja_pains.webp', amplada: 94, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },
     { key: 'monja_charm',   file: 'assets/personatges/monja_charm.webp', amplada: 116, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#6a4a2e', ample: 1.45, alt: 0.92 }) },
@@ -160,7 +160,7 @@ const CATALEG = [
     { key: 'arma_tiller', file: 'assets/armes/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/armes/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
     { key: 'ineu_aixeca', file: 'assets/ineu/aixeca_espasa.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant Runna, mirant amunt (ja amb fons transparent)
-    { key: 'ineu_aixeca_basto', file: 'assets/ineu/aixeca_basto.webp', amplada: 83, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // el mateix, alçant el bastó de pelegrí que li dona el Germà Andreu
+    { key: 'ineu_aixeca_basto', file: 'assets/ineu/aixeca_basto.webp', amplada: 83, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // el mateix, alçant el bastó de pelegrí que li dona el Germà Aldreu
     { key: 'ineu_aixeca_buit', file: 'assets/ineu/aixeca_buit.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant el braç amb la mà buida i oberta: l'objecte rebut hi surt damunt per codi (ZonaBase.ineuRep)
     { key: 'ineu_aixeca_tiler', file: 'assets/ineu/aixeca_tiler.webp', amplada: 96, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // ... i alçant la branca del Gran Til·ler
     { key: 'ineu_flauta', file: 'assets/ineu/tarota.webp', amplada: 65, cru: true },   // l'Ineu tocant la tarota, de cara a la càmera
@@ -174,7 +174,7 @@ const CATALEG = [
 
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
-['ineu', 'pare_jordi', 'germa_andreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'galf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
+['ineu', 'pare_jordi', 'germa_aldreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'galf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
  'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta', 'sansa', 'neus', 'marit_neus', 'ombra_monjo']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
@@ -245,8 +245,8 @@ const Grafics = {
         scene.load.spritesheet('visitant_zombi', 'assets/enemics/visitant_zombi.webp', { frameWidth: 127, frameHeight: 209 });      // el visitant (turista zombi) caminant, de cara (4x4 fotogrames): serveix per a totes les direccions
         scene.load.spritesheet('pallofa_cami', 'assets/personatges/pallofa_cami.webp', { frameWidth: 135, frameHeight: 140 });      // el Pallofa caminant cap a la dreta (4x4 fotogrames); es gira per anar cap a l'esquerra
         scene.load.spritesheet('pare_jordi_camina', 'assets/personatges/pare_jordi_camina.webp', { frameWidth: 200, frameHeight: 290 });
-        scene.load.spritesheet('germa_andreu_camina', 'assets/personatges/germa_andreu_camina.webp', { frameWidth: 180, frameHeight: 265 });
-        scene.load.spritesheet('germa_andreu_ne', 'assets/personatges/germa_andreu_ne.webp', { frameWidth: 180, frameHeight: 265 });
+        scene.load.spritesheet('germa_aldreu_camina', 'assets/personatges/germa_aldreu_camina.webp', { frameWidth: 180, frameHeight: 265 });
+        scene.load.spritesheet('germa_aldreu_ne', 'assets/personatges/germa_aldreu_ne.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('josep_camina', 'assets/personatges/josep_camina.webp', { frameWidth: 190, frameHeight: 300 });
         scene.load.spritesheet('isidre_camina', 'assets/personatges/isidre_camina.webp', { frameWidth: 190, frameHeight: 285 });
         DIRS_INEU.forEach(dir => {
@@ -427,11 +427,11 @@ const Grafics = {
         if (!scene.anims.exists('pare_jordi_camina') && scene.textures.exists('pare_jordi_camina')) {
             scene.anims.create({ key: 'pare_jordi_camina', frames: scene.anims.generateFrameNumbers('pare_jordi_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
         }
-        if (!scene.anims.exists('germa_andreu_camina') && scene.textures.exists('germa_andreu_camina')) {
-            scene.anims.create({ key: 'germa_andreu_camina', frames: scene.anims.generateFrameNumbers('germa_andreu_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
+        if (!scene.anims.exists('germa_aldreu_camina') && scene.textures.exists('germa_aldreu_camina')) {
+            scene.anims.create({ key: 'germa_aldreu_camina', frames: scene.anims.generateFrameNumbers('germa_aldreu_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
         }
-        if (!scene.anims.exists('germa_andreu_ne') && scene.textures.exists('germa_andreu_ne')) {
-            scene.anims.create({ key: 'germa_andreu_ne', frames: scene.anims.generateFrameNumbers('germa_andreu_ne', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
+        if (!scene.anims.exists('germa_aldreu_ne') && scene.textures.exists('germa_aldreu_ne')) {
+            scene.anims.create({ key: 'germa_aldreu_ne', frames: scene.anims.generateFrameNumbers('germa_aldreu_ne', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
         }
         if (!scene.anims.exists('josep_camina') && scene.textures.exists('josep_camina')) {
             scene.anims.create({ key: 'josep_camina', frames: scene.anims.generateFrameNumbers('josep_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
