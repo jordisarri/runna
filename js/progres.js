@@ -21,9 +21,17 @@ const PROGRES = {
           pista: E => "La Bassadòria raja tèrbola. Potser el Cant de l'Aurora la deixaria neta." },
         // ---- ACTE 2: el camí del Til·ler ----
         { id: 'font', marca: ['fontNeta', 'cristallGel', 'obj:cristall_gel', 'obj:aigua_sj'], fet: E => E.flag('fontNeta'),
-          pista: E => "La Font del Bisbe dorm. La despertarien les herbes que espurnegen i una pruna de la Prunera de l'Hostatgeria." },
+          pista: E => {
+              // Fins que no s'ha anat a la font (fontVista) no se sap què cal portar-hi: la pista només dona el lloc
+              if (!E.flag('fontVista')) return "La Font del Bisbe, de la qual les Venerables Sàvies diuen que guaria tothom, s'ha quedat adormida. Val la pena anar-hi a mirar.";
+              const n = ['herba1', 'herba2'].filter(h => E.flag(h)).length + (E.te('pruna') || E.flag('herba3') ? 1 : 0);
+              return n === 3 ? "Ja tens totes les ofrenes: torna a la Font del Bisbe."
+                  : "A la Font del Bisbe, les ofrenes que falten (" + n + "/3): l'herba de Sant Joan, el romaní i una pruna de la Prunera de l'Hostatgeria.";
+          } },
         { id: 'jaumeta', marca: ['jaumetaVista', 'obj:beuratge'], fet: E => E.flag('jaumetaVista') || E.flag('parlatTiler'),
-          pista: E => "Amb l'aigua de la font, l'Alzina Buida s'obre com un portal. A dins, la Jacmeta té un regal per al camí del Til·ler." },
+          pista: E => !E.flag('portalJaumeta')
+              ? "Ja tens l'aigua de la Font del Bisbe. L'Alzina Buida del bosc potser en sabria què fer-ne."
+              : "La Jacmeta, a l'altra banda de l'Alzina Buida, té un regal per al camí del Til·ler." },
         { id: 'boiraTiller', marca: ['boiraTillerNeta'], fet: E => E.flag('boiraTillerNeta') || E.flag('parlatTiler'),
           pista: E => "Una boira espessa tapa un camí de les Cel·les. El beuratge de la vident la desfaria." },
         { id: 'tiller', marca: ['parlatTiler', 'tillerBranca'], fet: E => E.flag('parlatTiler'),
