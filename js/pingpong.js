@@ -5,7 +5,7 @@
  *   quan el toca (és el moment en què la pilota, després del bot a la taula, arriba al punt més alt), prem el carril bo (← ↓ →, A S D,
  *   o el botó de sota). Hi ha un marge ampli abans i després: perfecte = cop fort; bé = cop normal. Només el carril de la pilota
  *   la toca: un altre carril fa que l'Ineu hi vagi i faci el gest en fals (un instant d'espera). Només perds el punt si no hi arribes.
- * - Servei màgic d'en Jusef: mostra tres carrils amb calma; repeteix-los en ordre per tornar-lo (hi ha dos intents).
+ * - Servei màgic d'en Jusef: mostra tres carrils amb calma; repeteix-los en ordre per tornar-lo. Si no el tornes (te'n equivoques o es passa el temps), el punt és d'en Jusef: no hi ha segon intent.
  * - El teu servei: prem el carril des d'on vols servir (la pilota hi surt d'aquell carril).
  * - Set punts; a 6-6, cal guanyar de dos. Es canvia de servei cada dos punts.
  */
@@ -284,7 +284,7 @@ class EscenaPingPong extends Phaser.Scene {
 
     // ---------------- Servei màgic d'en Jusef: tres carrils que s'han de repetir ----------------
     serveiMagic() {
-        this.intents = 2;
+        this.intents = 1;                         // un sol intent: si no es torna el servei, és punt d'en Jusef
         this.ordre = Array.from({ length: 3 }, () => Phaser.Math.Between(0, 2));
         this.avis('Servei màgic d\'en Jusef: memoritza!', 1200, '#d8b0ff');
         this.mostrarOrdre(900);
