@@ -221,7 +221,7 @@ const DIARI = {
         const iActe = seg ? DIARI_ACTES.reduce((a, acte, i) => passos.findIndex(p => p.id === acte.des) <= passos.indexOf(seg) ? i : a, 0) : 2;
         let y = 170;
         // L'objectiu, en un requadre
-        const obj = E.dades.objectiu || '';
+        const obj = E.objectiu();
         const tAct = ui.add.text(X + 20, y + 12, seg ? DIARI_ACTES[iActe].nom.toUpperCase() : 'HISTÒRIA ACABADA', estilText(20, VERMELL, { fontStyle: 'bold', wordWrap: { width: AV - 2 * X - 40 } }));
         const tObj = ui.add.text(X + 20, y + 22 + tAct.height, obj, estilText(27, TINTA, { fontStyle: 'italic', wordWrap: { width: AV - 2 * X - 40 } }));
         const h = tAct.height + tObj.height + 44;

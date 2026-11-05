@@ -33,6 +33,9 @@ const Estat = {
     dona(objecte) { if (!this.te(objecte)) { this.dades.objectes.push(objecte); if (typeof Sfx !== 'undefined') Sfx.objecte(); } },
     treu(objecte) { this.dades.objectes = this.dades.objectes.filter(o => o !== objecte); },
     posaObjectiu(text) { this.dades.objectiu = text; },
+    // L'objectiu que es mostra (HUD i Diari) és SEMPRE el del primer pas de la història que encara falta, segons PROGRES (progres.js):
+    // així no depèn de l'ordre en què el jugador fa les coses ni dels textos escrits a mà als diàlegs (posaObjectiu només és un recanvi).
+    objectiu() { return (this.dades && typeof PROGRES !== 'undefined' && PROGRES.pista(this)) || (this.dades && this.dades.objectiu) || ''; },
 
     // ---------- localStorage ----------
     desar() {

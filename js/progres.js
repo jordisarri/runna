@@ -21,7 +21,7 @@ const PROGRES = {
           pista: E => "La Bassadòria raja tèrbola. Potser el Cant de l'Aurora la deixaria neta." },
         // ---- ACTE 2: el camí del Til·ler ----
         { id: 'font', marca: ['fontNeta', 'cristallGel', 'obj:cristall_gel', 'obj:aigua_sj'], fet: E => E.flag('fontNeta'),
-          pista: E => "La Font del Bisbe, al bosc de l'oest, dorm. La despertarien les herbes que espurnegen i una pruna de la Prunera de l'Hostatgeria." },
+          pista: E => "La Font del Bisbe dorm. La despertarien les herbes que espurnegen i una pruna de la Prunera de l'Hostatgeria." },
         { id: 'jaumeta', marca: ['jaumetaVista', 'obj:beuratge'], fet: E => E.flag('jaumetaVista') || E.flag('parlatTiler'),
           pista: E => "Amb l'aigua de la font, l'Alzina Buida s'obre com un portal. A dins, la Jacmeta té un regal per al camí del Til·ler." },
         { id: 'boiraTiller', marca: ['boiraTillerNeta'], fet: E => E.flag('boiraTillerNeta') || E.flag('parlatTiler'),
@@ -31,7 +31,7 @@ const PROGRES = {
         { id: 'branca', marca: ['obj:basto_tiller'], fet: E => E.te('basto_tiller'),
           pista: E => "Al peu del Til·ler ha caigut alguna cosa que et serviria més que el bastó de pelegrí." },
         { id: 'bardissa', marca: ['camiCirosaObert'], fet: E => E.flag('camiCirosaObert'),
-          pista: E => "Al nord-est del Til·ler, unes arrels tanquen el pas. Són de fusta: potser cedirien als cops d'una branca amiga." },
+          pista: E => "Al Til·ler, unes arrels tanquen el pas. Són de fusta: potser cedirien als cops d'una branca amiga." },
         { id: 'pastor', marca: ['pastorVencut'], fet: E => E.flag('pastorVencut'),
           pista: E => "A la pastura de la Cirosa, la boira s'ha endut el Germà Aldreu: ara és el Pastor de Boira." },
         { id: 'esquelles', marca: ['esquelles', 'obj:esquelles'], fet: E => E.flag('esquelles'),
@@ -42,7 +42,7 @@ const PROGRES = {
           pista: E => {
               const f = [];
               if (!E.flag('escudella')) f.push("l'escudella de la Meus (a les cel·les)");
-              if (!E.flag('floresIsidre')) f.push("les flors d'Isildren (al jardí de l'Hostatgeria)");
+              if (!E.flag('floresIsidre')) f.push("les flors d'Isildren (a l'Hostatgeria)");
               if (!E.flag('pastorsConvencuts')) f.push("el pa que pasten els pastors de la Cirosa");
               return f.length ? "Al sopar del Til·ler encara hi falta: " + f.join(', ') + "." : "Ja ho tens tot: el Gran Til·ler espera la taula parada.";
           } },
@@ -60,7 +60,7 @@ const PROGRES = {
         { id: 'alcuiLlegit', marca: ['alcuiLlegit'], fet: E => E.flag('alcuiLlegit'),
           pista: E => "Els dos pergamins són en un llatí molt vell. El Pare Alcoví, entre els llibres del Monestir, el sap llegir." },
         { id: 'ombra', marca: ['ombraDemanaCant', 'cantPedres', 'benedicioMonjo'], fet: E => E.flag('benedicioMonjo'),
-          pista: E => !E.flag('ombraDemanaCant') ? "A les Runes, passat el Pati del Celler, l'ombra del monjo és sobre el mur de l'església inacabada. Parla-hi."
+          pista: E => !E.flag('ombraDemanaCant') ? "A les Runes, l'ombra del monjo és sobre el mur de l'església inacabada. Parla-hi."
               : !E.flag('cantPedres') ? "L'ombra del monjo demana un cant que les pedres entenen. La Pianista, al Santuari, el coneix."
               : "L'ombra del monjo, a les Runes, només escoltarà el Cant de Vespres." },
         { id: 'saber', marca: ['saber'], fet: E => E.flag('saber'),
@@ -75,7 +75,7 @@ const PROGRES = {
         { id: 'estels', marca: ['telescopiMuntat', 'estelsFets'], fet: E => E.flag('estelsFets') || E.flag('estelLlorenc'),
           pista: E => "El telescopi vol un lloc alt i fosc: els Dipòsits." },
         { id: 'estelLlorenc', marca: ['estelLlorenc', 'obj:estel_llorenc'], fet: E => E.flag('estelLlorenc'),
-          pista: E => "L'últim estel ha caigut a l'aigua del dipòsit de llevant. Algú n'hauria de pujar a collir la llum." },
+          pista: E => "L'últim estel ha caigut a l'aigua del dipòsit. Algú n'hauria de pujar a collir la llum." },
         { id: 'runna', marca: ['runna', 'obj:runna'], fet: E => E.flag('runna'),
           pista: E => "L'estel aparta la boira. Al final, el Dolmen espera la Fulla, el Saber i la Benedicció." },
         // ---- ACTE 3 ----

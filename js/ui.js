@@ -278,7 +278,7 @@ class EscenaUI extends Phaser.Scene {
         c.lineStyle(1, 0xb08850, 0.6);
         c.beginPath(); c.moveTo(gx(0), GY - 1); c.lineTo(gx(Math.max(0, d.corsMax - 1)), GY - 1); c.strokePath();
         this.gestionarLatidor();
-        this.textObjectiu.setText('Objectiu: ' + (d.objectiu || ''));
+        this.textObjectiu.setText('Objectiu: ' + Estat.objectiu());
         // L'objectiu ha de cabre dins del marc fix de la franja: si és llarg, es redueix la lletra
         let mida = 26;
         this.textObjectiu.setFontSize(mida);
