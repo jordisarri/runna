@@ -517,9 +517,7 @@ Object.assign(DIALEGS, {
             ],
             enAcabar: () => {
                 E.dona('guants');
-                E.posaObjectiu(E.flag('josepVencut') && !E.flag('rodaMoguda')
-                    ? "Els Guants de Poder deuen poder amb la roda de carruatge del Celler, entre la Plaça i les Runes."
-                    : PROGRES.pista(E));                                    // (abans es quedava «el Germà Francí t'espera amb una cosa» tot i haver-la rebuda)
+                E.posaObjectiu(PROGRES.pista(E));                       // el primer pas de la història que encara falta, en ordre (no se salta cap)
             }
         };
         if (E.te('ram')) return { pagines: [

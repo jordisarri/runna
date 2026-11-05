@@ -432,8 +432,8 @@ const DIALEGS = {
             if (!E.te('llanterna')) { E.dona('llanterna'); E.posaFlag('llanterna'); }
             const ui = game.scene.getScene('UI'); if (ui) ui.actualitzarHUD();
             E.posaObjectiu(!E.flag('runna') ? 'Has guanyat en Jusef. Segueix buscant Runna.'
-                : E.te('guants') ? 'Empeny amb els Guants la roda de carruatge del Celler: amaga el túnel dels monjos (Runna en talla els esbarzers).'
-                : 'La roda del Celler pesa massa: el Germà Francí, a Sant Antoni, té uns guants que mouen el que pesa.');
+                : E.te('guants') ? 'Empeny amb els Guants la roda de carruatge: amaga el túnel dels monjos (Runna en talla els esbarzers).'
+                : 'La roda de carruatge pesa massa: el Germà Francí, a Sant Antoni, té uns guants que mouen el que pesa.');
         }
     }),
 
