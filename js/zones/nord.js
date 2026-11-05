@@ -1109,7 +1109,9 @@ class ZonaBosc extends ZonaBase {
                 x: { min: -30, max: 30 }, y: { min: -10, max: 10 }, speedY: { min: -46, max: -16 }, lifespan: 1600,
                 scale: { start: 0.38, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xfff2a0, 0xffffff], frequency: 260, blendMode: 'ADD'
             }).setDepth(9501);
-            this.interactiu(x, y, RADI_OBJECTE, DIALEGS.herba(n, nom), { altura: 70, actiu: () => !Estat.flag('herba' + n) });
+            // Fins que no es llegeix la font (fontVista) no se sap què cal portar-hi: ni es veuen les herbes ni s'hi pot interactuar
+            espurnes.stop();
+            this.interactiu(x, y, RADI_OBJECTE, DIALEGS.herba(n, nom, key), { altura: 70, actiu: () => !Estat.flag('herba' + n) && Estat.flag('fontVista') });
             this.herbes.push({ img, halo, raig, espurnes, flag: 'herba' + n });
         });
 
@@ -1146,9 +1148,10 @@ class ZonaBosc extends ZonaBase {
 
     actualitzar(ara) {
         this.herbes.forEach(h => {
-            const visible = !Estat.flag(h.flag);
+            const visible = !Estat.flag(h.flag) && Estat.flag('fontVista');
             h.img.setVisible(visible); h.halo.setVisible(visible); h.raig.setVisible(visible);
-            if (!visible && !h.apagada) { h.apagada = true; h.espurnes.stop(); }
+            if (visible && !h.encesa) { h.encesa = true; h.espurnes.start(); }
+            if (!visible && h.encesa && !h.apagada) { h.apagada = true; h.espurnes.stop(); }
         });
         // La font s'ha netejat: la boira lila se'n va (deixa de néixer i el to lila s'esvaeix)
         if (Estat.flag('fontNeta') && this.boires.length) {

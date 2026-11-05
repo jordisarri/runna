@@ -131,6 +131,27 @@ const ICONES_OBJECTES = {
         ctx.lineWidth = 3; ctx.strokeStyle = '#5a3a1a'; ctx.beginPath(); ctx.moveTo(48, 28); ctx.lineTo(52, 12); ctx.stroke();
         ctx.strokeStyle = CONTORN; ctx.fillStyle = '#5a9a32'; ctx.beginPath(); ctx.ellipse(64, 18, 13, 6, -0.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     },
+    herba_sj: ctx => {                                          // herba de Sant Joan: tiges verdes amb flors petites i grogues
+        ctx.lineWidth = 3; ctx.strokeStyle = '#2f6a22';
+        [[48, 84, 48, 30], [48, 84, 30, 36], [48, 84, 66, 38]].forEach(([x0, y0, x1, y1]) => { ctx.beginPath(); ctx.moveTo(x0, y0); ctx.quadraticCurveTo((x0 + x1) / 2 + (x1 - x0) * 0.2, (y0 + y1) / 2, x1, y1); ctx.stroke(); });
+        ctx.strokeStyle = CONTORN; ctx.fillStyle = '#5aa83a';
+        [[40, 66, -0.7], [58, 62, 0.7], [38, 50, -0.9], [60, 50, 0.9]].forEach(([x, y, a]) => { ctx.beginPath(); ctx.ellipse(x, y, 9, 4, a, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+        [[48, 28], [30, 34], [66, 36], [40, 20], [57, 22]].forEach(([x, y]) => {
+            ctx.fillStyle = '#ffd83a'; ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#c88a10'; ctx.beginPath(); ctx.arc(x, y, 2.4, 0, Math.PI * 2); ctx.fill();
+        });
+    },
+    romani: ctx => {                                            // una branqueta de romaní: fulles fines i flors blavoses
+        ctx.lineWidth = 3; ctx.strokeStyle = '#5a4a2a';
+        ctx.beginPath(); ctx.moveTo(34, 86); ctx.quadraticCurveTo(48, 54, 62, 14); ctx.stroke();
+        ctx.strokeStyle = CONTORN; ctx.fillStyle = '#6f9a58';
+        for (let i = 0; i < 6; i++) {
+            const t = i / 6, x = 36 + t * 24, y = 82 - t * 66;
+            [-1, 1].forEach(s => { ctx.beginPath(); ctx.ellipse(x + s * 10, y - 3, 11, 3.4, s * -0.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+        }
+        ctx.fillStyle = '#9ab8f0';
+        [[56, 30], [49, 46], [62, 20]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+    },
     escudella: ctx => {
         ctx.lineWidth = 3;
         ctx.strokeStyle = 'rgba(255,255,255,0.75)'; [36, 48, 60].forEach(x => { ctx.beginPath(); ctx.moveTo(x, 40); ctx.bezierCurveTo(x - 8, 30, x + 8, 22, x, 10); ctx.stroke(); });
@@ -164,12 +185,7 @@ const ICONES_OBJECTES = {
         ctx.lineWidth = 2; ctx.strokeStyle = '#3a6a22'; ctx.beginPath(); ctx.moveTo(48, 86); ctx.lineTo(48, 30);
         [44, 58, 72].forEach(y => { ctx.moveTo(48, y); ctx.lineTo(30, y - 12); ctx.moveTo(48, y); ctx.lineTo(66, y - 12); }); ctx.stroke();
     },
-    cinta_nena: ctx => {
-        ctx.lineWidth = 3; ctx.fillStyle = '#ec8cae';
-        ctx.beginPath(); ctx.moveTo(10, 30); ctx.bezierCurveTo(30, 10, 46, 50, 66, 30); ctx.lineTo(86, 44); ctx.lineTo(76, 52); ctx.lineTo(84, 64);
-        ctx.bezierCurveTo(60, 70, 50, 44, 26, 62); ctx.lineTo(10, 50); ctx.lineTo(18, 40); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.beginPath(); ctx.moveTo(18, 34); ctx.bezierCurveTo(32, 22, 46, 50, 62, 38); ctx.stroke();
-    },
+    cinta_nena: (ctx, cv) => { const t = document.createElement('canvas'); dibuixarLlac(t, 80); ctx.drawImage(t, 8, (96 - t.height) / 2); },      // el mateix llaç que es troba sota les pedres
     benedicio_fraterna: ctx => {                                // una creu al mig d'una aurèola daurada, amb raigs de claror i dos cors petits als costats
         ctx.lineWidth = 3;
         ctx.fillStyle = 'rgba(255,220,120,0.35)'; ctx.beginPath(); ctx.arc(48, 48, 40, 0, Math.PI * 2); ctx.fill();
