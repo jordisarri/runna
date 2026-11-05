@@ -20,7 +20,7 @@ const DIARI_PASSOS = {
     fragment1: ['El primer fragment', 'ZonaRuines'], clauSagrari: ['La clau del sagrari', 'ZonaCami'], fragment2: ['El sagrari', 'ZonaEsglesia'],
     alcuiLlegit: ['Els fragments del Pare Alcoví', 'ZonaBiblioteca'], ombra: ["L'ombra del monjo", 'ZonaRuines'],
     saber: ['Les Paraules del Saber', 'ZonaBiblioteca'], benediccio: ['La benedicció', 'ZonaPlaca'],
-    telescopi: ['El telescopi del Garf', 'ZonaEra'], estels: ['Els estels', 'ZonaDipositos'],
+    telescopi: ['El telescopi del Galf', 'ZonaEra'], estels: ['Els estels', 'ZonaDipositos'],
     estelLlorenc: ['L\'Estel de Sant Llorenç', 'ZonaDipositos'], runna: ['Runna', 'ZonaDolmen'],
     josep: ['El partit contra en Jusef', 'ZonaPingpong'],
     guants: ['Els Guants de Poder', 'ZonaSantAntoni'], roda: ['La roda del Celler', 'ZonaPingpong'],

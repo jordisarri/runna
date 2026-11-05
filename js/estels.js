@@ -1,6 +1,6 @@
 /**
  * ELS DIPÒSITS: "Les Llàgrimes de Sant Llorenç"
- * Mirant pel telescopi del Garf. Part 1: compta 7 estels fugaços blancs, les llàgrimes (apunta amb el cursor i prem ESPAI o clic);
+ * Mirant pel telescopi del Galf. Part 1: compta 7 estels fugaços blancs, les llàgrimes (apunta amb el cursor i prem ESPAI o clic);
  * en cauen també de blaus i daurats, que no ho són: tocar-ne un en resta un del compte.
  * Part 2: uneix els 7 punts en ordre i apareix la constel·lació amagada: un ocell que s'escapa d'una gàbia oberta
  * (la gàbia són uns altres estels, més febles, que ja hi són; en acabar s'uneixen sols).
@@ -47,7 +47,7 @@ class EscenaEstels extends Phaser.Scene {
         this.cel = this.add.graphics();
         this.fletxa = this.add.graphics();
 
-        this.titol = this.add.text(AMPLE / 2, 40, "Telescopi del Garf", estilText(32, "#ffd34d", { fontStyle: "bold" })).setOrigin(0.5);
+        this.titol = this.add.text(AMPLE / 2, 40, "Telescopi del Galf", estilText(32, "#ffd34d", { fontStyle: "bold" })).setOrigin(0.5);
         this.info = this.add.text(AMPLE / 2, 90, "", estilText(26, "#d8e0ff", { fontStyle: "italic", align: "center", wordWrap: { width: 660 } })).setOrigin(0.5);
         this.missatge = this.add.text(AMPLE / 2, ALT - 40, "El progrés es desa en sortir", estilText(22, "#8a90b0")).setOrigin(0.5);
         this.add.text(AMPLE - 16, 16, "Sortir ✕", estilText(28, "#f2e6c8", { backgroundColor: "#1a120bcc", padding: { x: 14, y: 8 } }))

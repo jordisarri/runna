@@ -62,7 +62,7 @@
 
 - [x] `sansa` (Rosansa) i el seu retrat
 
-- [x] `garf`
+- [x] `galf`
 
 - [x] `germa_andreu`
 

@@ -30,7 +30,7 @@ Totes són opcionals (sona la de reserva), però les set primeres són les que m
 ## 4. Històries per tancar ✔ (revisió 200)
 
 - **Epíleg:** la Meus abraça l'Huri i el Fram, les sacerdotesses el Sardi, l'Iscu hi és, la Pianista (ara al mig) dona l'entrada i l'Ineu comença el Cant del Miracle amb la tarota.
-- **Després del final:** frases noves per a la Pianista, la Meus, el senyor Molner, les sacerdotesses, l'Isildren, la Jacmeta, el Garf, el Germà Francí, l'Iscu, el pastor vell, l'Eve i la Carry (aquestes dues, només si ja han fet la seva lateral).
+- **Després del final:** frases noves per a la Pianista, la Meus, el senyor Molner, les sacerdotesses, l'Isildren, la Jacmeta, el Galf, el Germà Francí, l'Iscu, el pastor vell, l'Eve i la Carry (aquestes dues, només si ja han fet la seva lateral).
 - La Càren dorm tot el joc (decidit).
 
 ## 5. Recorregut i desplaçaments

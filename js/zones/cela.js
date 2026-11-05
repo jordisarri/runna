@@ -1,6 +1,6 @@
 /**
- * EL TALLER DEL GARF (la cel·la de Sant Antoni, interior)
- * La casa del Garf, l'inventor: un taller-laboratori de llautó i coure. Caldera amb el forn encès, canonades amb manòmetres que
+ * EL TALLER DEL GALF (la cel·la de Sant Antoni, interior)
+ * La casa del Galf, l'inventor: un taller-laboratori de llautó i coure. Caldera amb el forn encès, canonades amb manòmetres que
  * tremolen, engranatges que giren a la paret, plànols d'un telescopi, banc de treball amb un ocell mecànic a mig fer,
  * alambins que bombollegen, una enclusa i el seu llit petit. Només s'hi poden mirar els plànols (els gràfics, a js/dibuixos_taller.js).
  */
@@ -8,7 +8,7 @@
 class ZonaCelaStAntoni extends ZonaBase {
     constructor() {
         super('ZonaCelaStAntoni', {
-            nom: 'Taller del Garf',
+            nom: 'Taller del Galf',
             amplada: 800,
             alcada: 640,
             colorFons: '#0e0806',
@@ -78,8 +78,8 @@ class ZonaCelaStAntoni extends ZonaBase {
         [[543, 216, 0xa0ff80], [662, 236, 0xe0b0ff]].forEach(([x, y, c]) => this.add.particles(x, y, 'espurna', { x: { min: -6, max: 6 },
             speedY: { min: -26, max: -10 }, lifespan: 900, scale: { start: 0.1, end: 0.02 }, alpha: { start: 0.9, end: 0 }, tint: c, frequency: 220 }).setDepth(363));
 
-        // El llit del Garf, el telescopi i els trastos
-        this.add.image(140, 582, 'llit_garf').setOrigin(0.5, 1).setScale(E).setDepth(582);
+        // El llit del Galf, el telescopi i els trastos
+        this.add.image(140, 582, 'llit_galf').setOrigin(0.5, 1).setScale(E).setDepth(582);
         this.colisio(140, 545, 150, 70);
         this.add.image(662, 590, 'enclusa_taller').setOrigin(0.5, 1).setScale(E).setDepth(590);
         this.colisio(662, 578, 70, 18);

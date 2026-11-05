@@ -704,7 +704,7 @@ const DIALEGS = {
                 ],
                 enAcabar: () => {
                     E.posaFlag('fontNeta'); E.treu('pruna'); E.dona('aigua_sj'); E.dona('cristall_gel'); E.posaFlag('cristallGel');
-                    E.posaObjectiu("L'aigua de la Font del Bisbe obriria l'Alzina Buida. (I el Cristall de Gel, potser el vol el Garf, a l'Era.)");
+                    E.posaObjectiu("L'aigua de la Font del Bisbe obriria l'Alzina Buida. (I el Cristall de Gel, potser el vol el Galf, a l'Era.)");
                 }
             };
         }
@@ -750,7 +750,7 @@ const DIALEGS = {
     cartellCirosa: E => ({ pagines: [{ qui: "Cartell", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí amunt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\n← La Caseta" }] }),
 
     // ---------------- EL FOLLET DEL CARRO VERD: VIATGE RÀPID ----------------
-    // Condueix el carro de vapor que li va fer el Garf (al codi, 'carruatge'). A cada parada (PARADES, js/zona_base.js) la primera conversa la
+    // Condueix el carro de vapor que li va fer el Galf (al codi, 'carruatge'). A cada parada (PARADES, js/zona_base.js) la primera conversa la
     // desbloqueja; després pregunta on anem. La seva història (els ocells que porta tapats al darrere, que els seus avis van
     // recollir quan van tancar l'Ocellaire) queda per a l'epíleg: a l'Era, quan la boira ha marxat, obre la gàbia.
     cotxer: (E, id) => {
@@ -781,7 +781,7 @@ const DIALEGS = {
             return {
                 pagines: [{ qui: nom, text: conegudes
                     ? "Mira qui hi ha! Ara ja saps que també paro aquí. Recorda: només puc parar allà on ja ens hàgim trobat."
-                    : "Eh, monjo! Aquest trasto me'l va fer el Garf: va amb vapor i no es cansa mai. Si has d'anar lluny, puja. Això sí: només paro allà on ja m'hagis trobat." }],
+                    : "Eh, monjo! Aquest trasto me'l va fer el Galf: va amb vapor i no es cansa mai. Si has d'anar lluny, puja. Això sí: només paro allà on ja m'hagis trobat." }],
                 enAcabar: () => E.posaFlag('parada_' + id)
             };
         }
@@ -861,17 +861,17 @@ const DIALEGS = {
     }),
 
     // ---------------- L'ERA ----------------
-    garf: E => {
+    galf: E => {
         if (E.flag('telescopi')) {
-            return { pagines: [{ qui: 'Garf', text: 'Mira bé les estrelles amb el telescopi, noi. Els Dipòsits són el millor mirador de la comarca... quan hi puguis arribar.' }] };
+            return { pagines: [{ qui: 'Galf', text: 'Mira bé les estrelles amb el telescopi, noi. Els Dipòsits són el millor mirador de la comarca... quan hi puguis arribar.' }] };
         }
         if (E.flag('cristallGel')) {
             return {
                 pagines: [
-                    { qui: 'Garf', text: 'Un cristall de gel de la Font del Bisbe! Fa anys que en buscava un. Dóna\'m una estona.' },
-                    { fer: (z, fet) => z.seq([c => z.npcFeina('garf', 1800, 'guspires', c), c => z.npcSalta('garf', c, 1), c => z.objecteVola('garf', c, 'telescopi_mon')], fet) },
-                    { qui: 'Garf', text: 'Un telescopi! Amb això veuràs coses que cap monjo no ha vist. Perquè no se\'t perdi: les estrelles fan camí.' },
-                    { avis: 'Has obtingut el TELESCOPI DEL GARF.', obj: 'telescopi' }
+                    { qui: 'Galf', text: 'Un cristall de gel de la Font del Bisbe! Fa anys que en buscava un. Dóna\'m una estona.' },
+                    { fer: (z, fet) => z.seq([c => z.npcFeina('galf', 1800, 'guspires', c), c => z.npcSalta('galf', c, 1), c => z.objecteVola('galf', c, 'telescopi_mon')], fet) },
+                    { qui: 'Galf', text: 'Un telescopi! Amb això veuràs coses que cap monjo no ha vist. Perquè no se\'t perdi: les estrelles fan camí.' },
+                    { avis: 'Has obtingut el TELESCOPI DEL GALF.', obj: 'telescopi' }
                 ],
                 enAcabar: () => {
                     E.dona('telescopi'); E.posaFlag('telescopi'); E.treu('cristall_gel');
@@ -879,13 +879,13 @@ const DIALEGS = {
                 }
             };
         }
-        // Fins que l'Ineu no s'ha assegut al banc de davant, el Garf només l'hi convida; un cop assegut, passa directament a la conversa
+        // Fins que l'Ineu no s'ha assegut al banc de davant, el Galf només l'hi convida; un cop assegut, passa directament a la conversa
         if (!E.flag('garfBancSegut')) {
-            return { pagines: [{ qui: 'Garf', text: "Mmm? Ah, un monjo! Seu, seu al banc de davant, que per xerrar s'hi està millor." }] };
+            return { pagines: [{ qui: 'Galf', text: "Mmm? Ah, un monjo! Seu, seu al banc de davant, que per xerrar s'hi està millor." }] };
         }
         return { pagines: [
-            { qui: 'Garf', text: "Així sí. Soc el Garf, inventor. Visc a la cel·la de Sant Antoni, però vinc aquí cada dia: és l'únic racó on cap teulada no em tapa el cel. Tinc idees que ni jo entenc." },
-            { qui: 'Garf', text: "Si em portes un cristall de gel (n'hi ha un a la Font del Bisbe, al bosc de l'oest del Til·ler), et construiré un telescopi per mirar el cel." }
+            { qui: 'Galf', text: "Així sí. Soc el Galf, inventor. Visc a la cel·la de Sant Antoni, però vinc aquí cada dia: és l'únic racó on cap teulada no em tapa el cel. Tinc idees que ni jo entenc." },
+            { qui: 'Galf', text: "Si em portes un cristall de gel (n'hi ha un a la Font del Bisbe, al bosc de l'oest del Til·ler), et construiré un telescopi per mirar el cel." }
         ] };
     },
     cartellEra: E => ({ pagines: [{ qui: 'Cartell', text: '↑ Ermita de la Desaparició\n→ Hostatgeria\n← Rovellonera' }] }),
@@ -1266,7 +1266,7 @@ const DIALEGS = {
         }
         if (!E.te("telescopi")) {
             return { pagines: [
-                { qui: "Ineu", text: "Em falta un telescopi. El Garf, a l'Era, segur que en sap construir un." }
+                { qui: "Ineu", text: "Em falta un telescopi. El Galf, a l'Era, segur que en sap construir un." }
             ] };
         }
         return {
@@ -1530,7 +1530,7 @@ const DIALEGS_FINAL = {
     monja_charm: E => ({ pagines: [{ qui: 'Carmèlia', text: "Les tres te'n devem una. I nosaltres sempre paguem els deutes... amb pastissos." }] }),
     isidre: E => ({ pagines: [{ qui: 'Isildren', text: "Les flors de lluna ja s'obren de dia. Diria que és el riure dels nens, que les enganya." }] }),
     jaumeta: E => ({ pagines: [{ qui: 'La Jacmeta', text: "L'olla ja no fa bombolles liles. Ara fa olor de farigola, com ha de ser." }] }),
-    garf: E => ({ pagines: [{ qui: 'Garf', text: "Des del telescopi es veu tot el poble, i aquesta nit no hi ha ni un fil de boira." }] }),
+    galf: E => ({ pagines: [{ qui: 'Galf', text: "Des del telescopi es veu tot el poble, i aquesta nit no hi ha ni un fil de boira." }] }),
     germa_francesc: E => ({ pagines: [{ qui: 'Germà Francí', text: "La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui." }] }),
     ciscu: E => ({ pagines: [{ qui: 'Iscu', text: "M'ha sortit el solitari! Sense trampes! ...Bé, amb una de petita." }] }),
     eva: E => E.flag('evaParlat') ? ({ pagines: [{ qui: 'Eve', text: "El Sardi ja torna a berenar aquí cada tarda. La Càren encara dorm, però ronca més contenta." }] }) : null,

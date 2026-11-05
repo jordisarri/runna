@@ -1122,7 +1122,7 @@ function dibuixarDiposit(c, w) {
     });
 }
 
-// Trípode de fusta del mirador dels Dipòsits, amb abraçadores de llautó. ambTub: amb el telescopi del Garf muntat
+// Trípode de fusta del mirador dels Dipòsits, amb abraçadores de llautó. ambTub: amb el telescopi del Galf muntat
 function dibuixarTelescopiMon(c, w, ambTub = true) {
     lienc(c, w, w * 1.6, (ctx, W, H) => {
         const u = W / 80, cx = W / 2, cap = H * 0.46, peu = H - 8 * u;

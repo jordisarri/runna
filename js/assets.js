@@ -69,7 +69,7 @@ const CATALEG = [
     { key: 'eloi',      file: null,      amplada: 104, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'eloi') },
     { key: 'josep',     file: 'assets/personatges/josep.webp',     amplada: 82, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },
     { key: 'josep_levita', file: 'assets/personatges/josep_levita.webp', amplada: 134, cru: true, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },   // en Jusef levitant amb la pala (minijoc de ping-pong)
-    { key: 'garf',      file: 'assets/personatges/garf.webp',      amplada: 55, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#d9b45a', alt: 0.92, ample: 1.35, cap: 17 }) },
+    { key: 'galf',      file: 'assets/personatges/galf.webp',      amplada: 55, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#d9b45a', alt: 0.92, ample: 1.35, cap: 17 }) },
     { key: 'carry',     file: 'assets/personatges/carry.webp',     amplada: 58, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a7a', cabell: '#f0f0f0', pell: '#ece4dc', dona: true, alt: 1.0, ample: 0.7 }) },   // la Carry, anciana molt prima i pàl·lida, de cabells blancs curts i faldilla (busca el Pallofa)
     { key: 'pallofa',   file: 'assets/personatges/pallofa.webp',   amplada: 60, cru: true,  provisional: (c, w) => dibuixarGos(c, w) },   // el Pallofa, gos petit i prim, blanc amb taques marrons, borni i ple de puces
     { key: 'isidre',    file: 'assets/personatges/isidre.webp',    amplada: 93, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { isidre: true, calb: true, roba: '#f4f1e8', cabell: '#000000', alt: 0.94 }) },
@@ -174,7 +174,7 @@ const CATALEG = [
 
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
-['ineu', 'pare_jordi', 'germa_andreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'garf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
+['ineu', 'pare_jordi', 'germa_andreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'galf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
  'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta', 'sansa', 'neus', 'marit_neus', 'ombra_monjo']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
@@ -941,14 +941,14 @@ const Grafics = {
         crea('cadira_cela', 48, 70, pintarCadiraCela);
         crea('finestra_cela', 80, 110, pintarFinestraCela);
         crea('estora_cela', 230, 110, pintarEstoraCela);
-        // El taller del Garf, a la cel·la de Sant Antoni (js/dibuixos_taller.js)
+        // El taller del Galf, a la cel·la de Sant Antoni (js/dibuixos_taller.js)
         crea('paret_taller', 760, 200, pintarParetTaller);
         crea('caldera_taller', 200, 240, pintarCalderaTaller);
         crea('engr_gran', 100, 100, (ctx, w, h) => pintarEngranatgeTaller(ctx, w, h, 14));
         crea('engr_petit', 60, 60, (ctx, w, h) => pintarEngranatgeTaller(ctx, w, h, 9));
         crea('banc_taller', 250, 150, pintarBancTaller);
         crea('lab_taller', 230, 170, pintarLabTaller);
-        crea('llit_garf', 160, 110, pintarLlitGarf);
+        crea('llit_galf', 160, 110, pintarLlitGalf);
         crea('enclusa_taller', 120, 170, pintarEnclusaTaller);
         crea('trastos_taller', 150, 90, pintarTrastosTaller);
         crea('catifa_taller', 240, 120, pintarCatifaTaller);

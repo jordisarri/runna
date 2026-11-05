@@ -32,7 +32,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
     'Ineu': 'ineu', 'Pare Jordà': 'pare_jordi', 'Germà Andreu': 'germa_andreu', 'Pastor de Boira': 'pastor_boira', 'Andreu, Pastor de Boira': 'pastor_boira', 'Germà Francí': 'germa_francesc', 'Pare Daimiel': 'pare_daniel',
-    'Pare Alcoví': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Garf': 'garf', 'Isildren': 'isidre',
+    'Pare Alcoví': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Galf': 'galf', 'Isildren': 'isidre',
     'La Pianista': 'pianista', 'La Jacmeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Carmèlia': 'monja_charm', 'Pilària': 'monja_phili', 'Dolora': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
     'Meus': 'neus', 'Senyor Molner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Rosansa': 'sansa', 'Monjo': 'ombra_monjo', 'Home del Raïm': 'home_raim',
@@ -120,7 +120,7 @@ const CATALEG_OBJECTES = {
     pallofa:          ['El Pallofa', 'El gos de la Carry: petit, prim, borni i ple de puces. Duu-lo a casa seva.'],
     clau_sagrari:     ['Clau del sagrari', 'Petita, gairebé de joguina. Guardada a l\'ermita.'],
     aigua_sj:         ['Aigua de la Font del Bisbe', 'Aigua beneïda, clara com el vidre.'],
-    cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Garf en sabrà fer alguna cosa.'],
+    cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Galf en sabrà fer alguna cosa.'],
     pruna:            ['Pruna daurada', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en vol una.'],
     beuratge:         ['Beuratge de la Jacmeta', 'Dissipa la boira del camí cap al Til·ler; no protegeix de la boira verinosa.'],
     escudella:        ['Escudella de la Meus', 'Encara calenta, com cada any per al sopar del Til·ler.'],
@@ -132,7 +132,7 @@ const CATALEG_OBJECTES = {
     benedicio_fraterna:  ['Empara fraternal', 'La protecció sagrada de les tres sacerdotesses de l\'Hostatgeria. Dissipa la boira verinosa de la galeria que porta a la Sala de la Gàbia.'],
     llac_nena:        ['Llaç de cinta', 'Rosa i descolorit. És de la Nena de les Trenes.'],
     llanterna:        ['Llanterna', 'Fa més llum a les foscors de sota terra.'],
-    telescopi:        ['Telescopi del Garf', 'Per mirar els estels als Dipòsits.'],
+    telescopi:        ['Telescopi del Galf', 'Per mirar els estels als Dipòsits.'],
     estel_llorenc:    ['Estel de Sant Llorenç', 'Un bocí de llum caigut del cel.'],
     runna:            ['Runna', 'L\'espasa de llum del monjo.'],
     ram:              ['Ram de flors', 'Del Germà Francí, per a la tomba de l\'àngel.'],

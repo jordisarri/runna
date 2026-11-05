@@ -209,20 +209,20 @@ class ZonaEra extends ZonaBase {
         this.terra('cami', 240, 0, 160, 630);             // cap a l'Ermita (nord)
         this.terra('cami', 0, 500, 1800, 130);            // de la Rovellonera (oest) al Jardí (est)
 
-        // Dos roures enormes amb dos bancs al mig, un davant de l'altre: el Garf seu al del nord i l'Ineu pot seure al del sud
+        // Dos roures enormes amb dos bancs al mig, un davant de l'altre: el Galf seu al del nord i l'Ineu pot seure al del sud
         // Més grans i sols a la clariana: les copes (de 800 d'ample) emmarquen els bancs i no toquen el camí (queden per sota de y 630) ni les sortides
         this.posar('roure', 480, 1130, { escala: 1.9, col: { w: 100, h: 40 } });
         this.posar('roure', 1440, 1130, { escala: 1.9, col: { w: 100, h: 40 } });
         this.bancNord = this.posar('banc_respatller', ERA_BANC_X, ERA_BANC_N, { col: { w: 140, h: 16 } });
         this.bancSud = this.posar('banc_davant', ERA_BANC_X, ERA_BANC_S, { col: { w: 140, h: 16 } });   // sempre amb respatller (vist per darrere)
 
-        // El Garf, savi inventor: jove, grassonet i ros, assegut al banc de dalt
-        this.garf = this.npc('garf', ERA_BANC_X, ERA_BANC_N, DIALEGS.garf);
-        this.garf.setDepth(ERA_BANC_N + 1);                       // assegut: el banc queda darrere seu
+        // El Galf, savi inventor: jove, grassonet i ros, assegut al banc de dalt
+        this.galf = this.npc('galf', ERA_BANC_X, ERA_BANC_N, DIALEGS.galf);
+        this.galf.setDepth(ERA_BANC_N + 1);                       // assegut: el banc queda darrere seu
         // L'Ineu s'asseu i s'hi queda fins que es vulgui aixecar (movent-se)
         this.assegut = false;
-        const puntBanc = this.interactiu(ERA_BANC_X, ERA_BANC_S, RADI_NPC, () => { this.seure(); return DIALEGS.garf(Estat); }, { altura: 150 });
-        puntBanc.npc = this.garf;
+        const puntBanc = this.interactiu(ERA_BANC_X, ERA_BANC_S, RADI_NPC, () => { this.seure(); return DIALEGS.galf(Estat); }, { altura: 150 });
+        puntBanc.npc = this.galf;
         puntBanc.cameraCossos = [this.bancNord, this.bancSud];
 
         // El Follet del Carro Verd i el seu carro de vapor, a la vora sud-oest: és la parada de l'Era (PARADES, js/zona_base.js)
@@ -236,7 +236,7 @@ class ZonaEra extends ZonaBase {
         this.sortida(0, 500, 14, 130, 'ZonaCamiRov', 'era');
     }
 
-    // L'Ineu s'asseu al banc del sud, de cara al Garf, i hi continua assegut després de parlar: només s'aixeca
+    // L'Ineu s'asseu al banc del sud, de cara al Galf, i hi continua assegut després de parlar: només s'aixeca
     // quan el jugador es mou (vegeu ZonaBase.moure). El respatller del banc el tapa per darrere.
     seure() {
         this.assegut = true;
@@ -246,10 +246,10 @@ class ZonaEra extends ZonaBase {
         this.ombraIneu.setPosition(ERA_BANC_X, ERA_BANC_S - 4);
         this.ineu.setDepth(ERA_BANC_S - 1);                       // el banc es dibuixa per sobre: el respatller el tapa
         this.vista8Manual = true;
-        this.posarDireccio('amunt', false, 'up');                 // sempre de cara al Garf, vingui d'on vingui
+        this.posarDireccio('amunt', false, 'up');                 // sempre de cara al Galf, vingui d'on vingui
     }
 
-    // S'aixeca cap al costat on es mou el jugador: amunt (cap al Garf) per davant del seient, a banda i banda pels costats, i avall per darrere del respatller
+    // S'aixeca cap al costat on es mou el jugador: amunt (cap al Galf) per davant del seient, a banda i banda pels costats, i avall per darrere del respatller
     alcar(dir = 'avall') {
         this.assegut = false;
         this.ineu.body.checkCollision.none = false;

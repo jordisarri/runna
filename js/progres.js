@@ -70,8 +70,8 @@ const PROGRES = {
         // ---- ACTE 2: el camí del Dolmen ----
         { id: 'telescopi', marca: ['garfBancSegut', 'telescopi', 'obj:telescopi'], fet: E => E.flag('telescopi') || E.flag('estelLlorenc'),
           pista: E => !E.flag('garfBancSegut')
-              ? "A l'Era, passada l'Ermita, un inventor anomenat Garf mira el cel. Potser et deixa seure al seu banc."
-              : "El Garf, a l'Era, sabria fer un tub per mirar els estels si li portessis un cristall de gel de la Font del Bisbe." },
+              ? "A l'Era, passada l'Ermita, un inventor anomenat Galf mira el cel. Potser et deixa seure al seu banc."
+              : "El Galf, a l'Era, sabria fer un tub per mirar els estels si li portessis un cristall de gel de la Font del Bisbe." },
         { id: 'estels', marca: ['telescopiMuntat', 'estelsFets'], fet: E => E.flag('estelsFets') || E.flag('estelLlorenc'),
           pista: E => "El telescopi vol un lloc alt i fosc: els Dipòsits, a ponent, passada la Rovellonera i Sant Gabriel." },
         { id: 'estelLlorenc', marca: ['estelLlorenc', 'obj:estel_llorenc'], fet: E => E.flag('estelLlorenc'),

@@ -1,5 +1,5 @@
 /**
- * EL TALLER DEL GARF (la cel·la de Sant Antoni): un taller-laboratori de llautó i coure, amb vapor, engranatges i plànols.
+ * EL TALLER DEL GALF (la cel·la de Sant Antoni): un taller-laboratori de llautó i coure, amb vapor, engranatges i plànols.
  * Es pinten en coordenades de disseny (ctx, w, h) i assets.js les converteix en textures. Fan servir els ajudants de dibuixos_biblio.js.
  */
 const TALLER_CONTORN = '#1e1206';
@@ -234,8 +234,8 @@ function pintarLabTaller(ctx, w, h) {
     [['#e04848', w - 22], ['#48c0e0', w - 13]].forEach(([c, x]) => vidre(() => { ctx.beginPath(); ctx.roundRect(x - 3, top - 36, 6, 34, 3); }, [c, top - 20]));
 }
 
-// ---------- El llit del Garf (vist de dalt, allargat): capçal a l'esquerra, coixí al peu del capçal, llençol gris i manta fosca ----------
-function pintarLlitGarf(ctx, w, h) {
+// ---------- El llit del Galf (vist de dalt, allargat): capçal a l'esquerra, coixí al peu del capçal, llençol gris i manta fosca ----------
+function pintarLlitGalf(ctx, w, h) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 5, w / 2 - 4, 8, 0, 0, Math.PI * 2); ctx.fill();
     ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 2.5;

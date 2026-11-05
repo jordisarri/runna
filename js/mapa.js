@@ -46,7 +46,7 @@ const MAPA = {
         { id: 'ZonaGirgoles',      nom: 'Sala de les Gírgoles',     x: 930,  y: 596 },
         { id: 'ZonaTortura',       nom: 'Passadís de tortura',      x: 1100, y: 596 },
         { id: 'ZonaGabia',         nom: 'Sala de la Gàbia',         x: 1100, y: 650 },
-        { id: 'ZonaCelaStAntoni',   nom: 'Taller del Garf',            x: 1260, y: 400 },
+        { id: 'ZonaCelaStAntoni',   nom: 'Taller del Galf',            x: 1260, y: 400 },
         { id: 'ZonaMonestirRebedor',  nom: 'Rebedor del Monestir',        x: 1010, y: 514 },
         { id: 'ZonaBiblioteca',    nom: 'Biblioteca del Monestir',  x: 1100, y: 562 },
         { id: 'ZonaCasaGran',      nom: 'Arcs de la Casa Gran',         x: 760,  y: 470 },
