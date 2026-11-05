@@ -155,18 +155,18 @@ class ZonaCamiRov extends ZonaBase {
         });
     }
 
-    // Una dona sense rostre apareix a la corba, de cara a la nena (que mira a la dreta); la nena hi corre i, quan s'abracen, tot es torna llum.
+    // Una dona sense rostre apareix a la corba, a l'esquerra de la nena; la nena hi corre i, quan s'abracen, tot es torna llum.
     // La mare es queda ben visible tota l'estona: apareix, espera, rep la nena i només s'esvaeix després de l'abraçada.
     mareNena(fet) {
         const n = this.nena;
         if (!n) { fet(); return; }
-        const mare = this.add.image(n.x + 160, n.y + 10, 'mare_nena').setOrigin(0.5, 1).setFlipX(true).setTint(0xe8eeff).setAlpha(0).setDepth(80000);       // per sobre dels arbres: que cap copa no la tapi
+        const mare = this.add.image(n.x - 160, n.y + 10, 'mare_nena').setOrigin(0.5, 1).setTint(0xe8eeff).setAlpha(0).setDepth(80000);       // per sobre dels arbres: que cap copa no la tapi
         mare.setScale((this.textures.get('mare_nena').customData || {}).escala || 0.5);
         this.tweens.killTweensOf([n, this.resplendorNena]);
         this.tweens.add({ targets: mare, alpha: 0.85, duration: 1500, onComplete: () => {
             this.time.delayedCall(1800, () => {                                        // un moment mirant-se, abans que la nena hi vagi
-                this.tweens.add({ targets: [n, this.resplendorNena], x: n.x + 100, duration: 1400, ease: 'Sine.easeInOut', onComplete: () => {
-                    this.llum(mare.x - 20, mare.y - 80, 0xfff4e0);
+                this.tweens.add({ targets: [n, this.resplendorNena], x: n.x - 100, duration: 1400, ease: 'Sine.easeInOut', onComplete: () => {
+                    this.llum(mare.x + 20, mare.y - 80, 0xfff4e0);
                     this.time.delayedCall(2600, () => {                                // s'abracen: es queden ben visibles
                         this.tweens.add({ targets: [mare, n, this.resplendorNena], alpha: 0, duration: 2000, onComplete: () => { mare.destroy(); fet(); } });
                     });
