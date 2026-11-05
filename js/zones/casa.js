@@ -55,7 +55,7 @@ Object.assign(DIALEGS, {
         ],
         enAcabar: () => {
             E.dona('clau_ferro'); E.posaFlag('relTretes'); E.posaFlag('clauFerro');
-            E.posaObjectiu(E.flag('tombaSegellada') ? "Troba la Porta de les Gírgoles, a l'est del Pati del Celler."
+            E.posaObjectiu(E.flag('tombaSegellada') ? "Troba la Porta de les Gírgoles, al Pati del Celler."
                                                    : "Porta la Clau de ferro al Pare Alcoví, a la Biblioteca: la Crònica deu dir què fer amb la tomba dels monjos.");
         }
     },

@@ -471,7 +471,7 @@ class ZonaCelles extends ZonaBase {
         Sfx.secret();
         this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
         this.ineuDiu("El camí del Til·ler és lliure.");
-        Estat.posaObjectiu("El camí al nord de les Cel·les s'ha aclarit: el Gran Til·ler hi és al capdamunt.");
+        Estat.posaObjectiu("El camí de les Cel·les s'ha aclarit: el Gran Til·ler hi és al capdamunt.");
         Estat.desar();
     }
 

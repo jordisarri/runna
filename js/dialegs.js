@@ -81,7 +81,7 @@ const DIALEGS = {
                 ],
                 enAcabar: () => {
                     E.posaFlag("clauerNovici");
-                    E.posaObjectiu(E.flag("bastoObtingut") ? "Parla amb la gent del Santuari. Les cel·les són al nord, passant per les Runes." : "Passa a veure el Germà Aldreu, vora els xiprers de la plaça. Després, les cel·les són al nord, passant per les Runes.");
+                    E.posaObjectiu(E.flag("bastoObtingut") ? "Parla amb la gent del Santuari. Després, ves a les cel·les." : "Passa a veure el Germà Aldreu, vora els xiprers de la plaça. Després, ves a les cel·les.");
                 }
             };
         }
@@ -132,7 +132,7 @@ const DIALEGS = {
                 enAcabar: () => {
                     E.posaFlag('parlatAndreu');
                     E.dona('basto'); E.posaFlag('bastoObtingut'); E.posaFlag('tutorialCombat'); E.posaFlag('combatActiu');
-                    if (E.flag('clauerNovici')) E.posaObjectiu('Parla amb la gent del Santuari. Les cel·les són al nord, passant per les Runes.');
+                    if (E.flag('clauerNovici')) E.posaObjectiu('Parla amb la gent del Santuari. Després, ves a les cel·les.');
                 }
             };
         }
@@ -502,7 +502,7 @@ const DIALEGS = {
             };
         }
         if (E.flag('carryParlat')) return { pagines: [
-            { qui: 'Carry', text: "Encara no l'has vist? És petitó, prim i borni, i no sap estar-se quiet. Diuen que passeja per Sant Antoni, a llevant del Monestir. Agafa'l amb compte: està ple de puces." }
+            { qui: 'Carry', text: "Encara no l'has vist? És petitó, prim i borni, i no sap estar-se quiet. Diuen que passeja per Sant Antoni. Agafa'l amb compte: està ple de puces." }
         ] };
         return {
             pagines: [
@@ -510,7 +510,7 @@ const DIALEGS = {
                 { qui: 'Carry', text: "És petit i prim, blanc amb taques marrons, i li falta un ull: diuen que se'l va menjar un gat. Va marxar fa tres nits, quan va pujar la boira, i no ha tornat." },
                 { qui: 'Carry', text: "A ell li agrada passejar. Si el trobes, porta-me'l. Diners no en tinc, però a casa guardo una cosa que potser et farà falta." }
             ],
-            enAcabar: () => { E.posaFlag('carryParlat'); E.posaObjectiu("El Pallofa, el gos de la Carry, passeja per Sant Antoni, a llevant del Monestir."); E.desar(); }
+            enAcabar: () => { E.posaFlag('carryParlat'); E.posaObjectiu("El Pallofa, el gos de la Carry, passeja per Sant Antoni."); E.desar(); }
         };
     },
     pallofa: E => ({
@@ -874,7 +874,7 @@ const DIALEGS = {
                 ],
                 enAcabar: () => {
                     E.dona('telescopi'); E.posaFlag('telescopi'); E.treu('cristall_gel');
-                    E.posaObjectiu("El telescopi vol un mirador alt i fosc: els Dipòsits, passada la Rovellonera i Sant Gabriel.");
+                    E.posaObjectiu("El telescopi vol un mirador alt i fosc: els Dipòsits.");
                 }
             };
         }
@@ -932,7 +932,7 @@ const DIALEGS = {
                 { qui: 'Isildren', text: 'Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s\'obre amb una flor de lluna, i la llavor, ves a saber... potser la gent de les cel·les en sap alguna cosa més, d\'aquesta llosa.' },
                 { qui: 'Isildren', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí, el Sardi el cuidava molt. Des que la boira se\'l va endur, el cuido jo perquè, quan torni, ho trobi tot tal com ho va deixar.' }
             ],
-            enAcabar: () => { E.posaFlag('isidreSansa'); E.posaObjectiu('Pregunta a la gent de les Cel·les, al nord-est: potser en saben alguna cosa més de la llosa del jardí.'); }
+            enAcabar: () => { E.posaFlag('isidreSansa'); E.posaObjectiu('Pregunta a la gent de les Cel·les: potser en saben alguna cosa més de la llosa del jardí.'); }
         };
     },
     // La Rosansa passa per les cel·les un sol cop: et ven la Llavor de Lluna i se'n va
@@ -1286,7 +1286,7 @@ const DIALEGS = {
         ],
         enAcabar: () => {
             E.posaFlag("estelLlorenc"); E.dona("estel_llorenc");
-            E.posaObjectiu("La boira que tapa el camí del Dolmen, a llevant dels Dipòsits, s'apartaria davant l'Estel de Sant Llorenç.");
+            E.posaObjectiu("La boira que tapa el camí del Dolmen s'apartaria davant l'Estel de Sant Llorenç.");
             E.desar();
         }
     }),
@@ -1412,7 +1412,7 @@ const DIALEGS = {
                 ],
                 enAcabar: () => {
                     E.treu("aigua_sj"); E.posaFlag("jaumetaVista"); E.dona("beuratge");
-                    E.posaObjectiu("El beuratge de la Jacmeta desfaria la boira que tapa el camí al nord de les Cel·les, cap al Gran Til·ler.");
+                    E.posaObjectiu("El beuratge de la Jacmeta desfaria la boira que tapa el camí del Gran Til·ler.");
                 }
             };
         }

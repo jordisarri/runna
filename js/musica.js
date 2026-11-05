@@ -52,7 +52,7 @@ function completarLliço(nom) {
             ] : []),
             { qui: 'La Pianista', text: 'Toca\'l davant l\'aigua de la Bassadòria, la que surt tèrbola. Allà la boira té l\'arrel.' }
         ];
-        E.posaObjectiu("La Bassadòria, al sud de la Plaça, quedarà neta amb el Cant de l'Aurora.");
+        E.posaObjectiu("La Bassadòria quedarà neta amb el Cant de l'Aurora.");
     } else if (nom === 'pedres') {
         pagines = [
             { qui: 'La Pianista', text: 'El Cant de Vespres: 3-1-2-1. Les pedres antigues sempre l\'han entès. Toca\'l davant l\'ombra del monjo.' }
@@ -63,7 +63,7 @@ function completarLliço(nom) {
             { qui: 'La Pianista', text: 'Això mateix, fill! El Cant del Miracle. Els ocells el cantaven a l\'alba, abans que l\'Ocellaire se\'l quedés i el tanqués a la seva gàbia.' },
             { qui: 'La Pianista', text: 'Diu la meva mare que aquella gàbia només s\'obre amb el cant que li van robar. Si els nens hi són a dins, toca\'l davant els barrots i no tindran més remei que obrir-se.' }
         ];
-        E.posaObjectiu(!E.flag('josepVencut') ? "Al Celler, entre la Plaça i les Runes, els secrets es guanyen a la taula."
+        E.posaObjectiu(!E.flag('josepVencut') ? "Al Celler, els secrets es guanyen a la taula."
             : !E.flag('rodaMoguda') ? "La roda de carruatge del Celler amaga el túnel dels monjos." : 'Segueix el túnel dels monjos fins a la Casa Gran.');
     }
     if (ui) ui.obrirDialeg({ pagines }, () => E.desar());

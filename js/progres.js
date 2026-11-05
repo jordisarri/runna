@@ -18,16 +18,16 @@ const PROGRES = {
         { id: 'cantAurora', marca: ['cantAurora', 'obj:flauta'], fet: E => E.flag('cantAurora'),
           pista: E => "Al Santuari, la Pianista guarda un cant que la boira no ha sabut prendre-li." },
         { id: 'bassadoria', marca: ['bassadoriaNeta'], fet: E => E.flag('bassadoriaNeta'),
-          pista: E => "La Bassadòria, al sud de la Plaça, raja tèrbola. Potser el Cant de l'Aurora la deixaria neta." },
+          pista: E => "La Bassadòria raja tèrbola. Potser el Cant de l'Aurora la deixaria neta." },
         // ---- ACTE 2: el camí del Til·ler ----
         { id: 'font', marca: ['fontNeta', 'cristallGel', 'obj:cristall_gel', 'obj:aigua_sj'], fet: E => E.flag('fontNeta'),
           pista: E => "La Font del Bisbe, al bosc de l'oest, dorm. La despertarien les herbes que espurnegen i una pruna de la Prunera de l'Hostatgeria." },
         { id: 'jaumeta', marca: ['jaumetaVista', 'obj:beuratge'], fet: E => E.flag('jaumetaVista') || E.flag('parlatTiler'),
           pista: E => "Amb l'aigua de la font, l'Alzina Buida s'obre com un portal. A dins, la Jacmeta té un regal per al camí del Til·ler." },
         { id: 'boiraTiller', marca: ['boiraTillerNeta'], fet: E => E.flag('boiraTillerNeta') || E.flag('parlatTiler'),
-          pista: E => "Una boira espessa tapa el camí al nord de les Cel·les. El beuratge de la vident la desfaria." },
+          pista: E => "Una boira espessa tapa un camí de les Cel·les. El beuratge de la vident la desfaria." },
         { id: 'tiller', marca: ['parlatTiler', 'tillerBranca'], fet: E => E.flag('parlatTiler'),
-          pista: E => "El camí al nord de les Cel·les ja és clar. Al capdamunt hi ha un arbre que sap què fer amb les bestioles que desperten." },
+          pista: E => "El camí de la boira ja és clar. Al capdamunt hi ha un arbre que sap què fer amb les bestioles que desperten." },
         { id: 'branca', marca: ['obj:basto_tiller'], fet: E => E.te('basto_tiller'),
           pista: E => "Al peu del Til·ler ha caigut alguna cosa que et serviria més que el bastó de pelegrí." },
         { id: 'bardissa', marca: ['camiCirosaObert'], fet: E => E.flag('camiCirosaObert'),
@@ -70,23 +70,23 @@ const PROGRES = {
         // ---- ACTE 2: el camí del Dolmen ----
         { id: 'telescopi', marca: ['garfBancSegut', 'telescopi', 'obj:telescopi'], fet: E => E.flag('telescopi') || E.flag('estelLlorenc'),
           pista: E => !E.flag('garfBancSegut')
-              ? "A l'Era, passada l'Ermita, un inventor anomenat Galf mira el cel. Potser et deixa seure al seu banc."
+              ? "A l'Era, un inventor anomenat Galf mira el cel. Potser et deixa seure al seu banc."
               : "El Galf, a l'Era, sabria fer un tub per mirar els estels si li portessis un cristall de gel de la Font del Bisbe." },
         { id: 'estels', marca: ['telescopiMuntat', 'estelsFets'], fet: E => E.flag('estelsFets') || E.flag('estelLlorenc'),
-          pista: E => "El telescopi vol un lloc alt i fosc: els Dipòsits, a ponent, passada la Rovellonera i Sant Gabriel." },
+          pista: E => "El telescopi vol un lloc alt i fosc: els Dipòsits." },
         { id: 'estelLlorenc', marca: ['estelLlorenc', 'obj:estel_llorenc'], fet: E => E.flag('estelLlorenc'),
           pista: E => "L'últim estel ha caigut a l'aigua del dipòsit de llevant. Algú n'hauria de pujar a collir la llum." },
         { id: 'runna', marca: ['runna', 'obj:runna'], fet: E => E.flag('runna'),
-          pista: E => "L'estel aparta la boira a llevant dels Dipòsits. Al final, el Dolmen espera la Fulla, el Saber i la Benedicció." },
+          pista: E => "L'estel aparta la boira. Al final, el Dolmen espera la Fulla, el Saber i la Benedicció." },
         // ---- ACTE 3 ----
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
           pista: E => "Runna ja és amb tu. Els barrots de la gàbia només escolten un cant que la Pianista encara no t'ha ensenyat." },
         { id: 'josep', marca: ['josepVencut', 'obj:llanterna'], fet: E => E.flag('josepVencut'),
-          pista: E => "Al Celler, entre la Plaça i les Runes, en Jusef guarda secrets. Es guanyen a la taula de ping-pong." },
+          pista: E => "Al Celler, en Jusef guarda secrets. Es guanyen a la taula de ping-pong." },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
           pista: E => E.flag('florsCreu') ? "El Germà Francí t'espera a Sant Antoni, content."
               : E.te('ram') ? "El ram del Germà Francí és per a algú que ja no el pot rebre: la tomba de l'àngel, al Cementiri."
-              : "El Germà Francí, a Sant Antoni (a llevant del Monestir), té uns guants que mouen el que pesa. Fes-li un favor." },
+              : "El Germà Francí, a Sant Antoni, té uns guants que mouen el que pesa. Fes-li un favor." },
         { id: 'roda', marca: ['rodaMoguda'], fet: E => E.flag('rodaMoguda'),
           pista: E => "La roda de carruatge de la qual et va parlar en Jusef tapa el túnel dels monjos. Amb els guants, es deixarà empènyer." },
         { id: 'cambra', marca: ['cofreCambra', 'obj:pergami_monjo'], fet: E => E.flag('cofreCambra'),
@@ -94,17 +94,17 @@ const PROGRES = {
         { id: 'maneta', marca: ['jordiManeta', 'maneta', 'obj:maneta'], fet: E => E.flag('maneta') || E.te('maneta'),
           pista: E => E.flag('jordiManeta')
               ? "La maneta d\'en Georgi és al cofre de les joguines, dalt de la caseta de pals, a la Caseta."
-              : "El volant de ferro de l'Home del Raïm no té maneta. En Georgi de la Caseta, a l'oest del Gran Til·ler, en deu saber alguna cosa." },
+              : "El volant de ferro de l'Home del Raïm no té maneta. En Georgi de la Caseta en deu saber alguna cosa." },
         { id: 'raim', marca: ['raimDesperta', 'raimDerrotat'], fet: E => E.flag('raimDerrotat'),
           pista: E => "A l'escalinata de la Casa Gran, l'Home del Raïm té el cap girat. La maneta, al volant de la base, el faria mirar-te." },
         { id: 'cripta', marca: ['relTretes', 'clauFerro', 'obj:clau_ferro'], fet: E => E.flag('relTretes'),
           pista: E => "Vençut l'Home del Raïm, la trapa de sota l'escalinata baixa a la Cripta dels monjos. Allà hi ha una clau de ferro." },
         { id: 'segell', marca: ['tombaLlegida', 'tombaSegellada'], fet: E => E.flag('tombaSegellada'),
           pista: E => E.flag('tombaLlegida') || !E.flag('relTretes')
-              ? "La tomba esquerdada del Cementiri treu boira: la llum de Runna la tancaria. La clau de ferro obre la porta a l'est del Pati del Celler."
-              : "La tomba del Cementiri treu boira: el Pare Alcoví, a la Biblioteca, sabrà què fer-hi. La clau de ferro obre la porta a l'est del Pati del Celler." },        // ---- Les Gírgoles ----
+              ? "La tomba esquerdada del Cementiri treu boira: la llum de Runna la tancaria. La clau de ferro obre la porta del Pati del Celler."
+              : "La tomba del Cementiri treu boira: el Pare Alcoví, a la Biblioteca, sabrà què fer-hi. La clau de ferro obre la porta del Pati del Celler." },        // ---- Les Gírgoles ----
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
-          pista: E => "A l'est del Pati del Celler, pel camí entre els arbres, hi ha una porta de ferro. La clau de ferro n'és amiga." },
+          pista: E => "Al Pati del Celler hi ha una porta de ferro. La clau de ferro n'és amiga." },
         { id: 'clauCiscu', marca: ['ciscuTrobat', 'clauGirgoles', 'obj:clau_girgoles'], fet: E => E.te('clau_girgoles') || E.flag('portaFerroOberta'),
           pista: E => E.flag('ciscuTrobat') ? "L\'Iscu t'espera a la cabana amagada: té una clau rovellada per a tu."
               : "La porta del fons té un pany petit. L\'Iscu, el noi de la Taverna, ho ha vist tot: s'amaga pel camí de la Desaparició." },
@@ -141,7 +141,7 @@ const PROGRES = {
         { id: 'taverna', marca: ['tavernaOberta', 'evaParlat'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('evaParlat'),
           pista: E => "El Sardi berenava cada tarda a la Taverna amb l\'Eve. La porta és tancada, però una trucada potser l'obriria." },
         { id: 'carry', marca: ['carryParlat', 'pallofaTornat', 'obj:pallofa', 'obj:clau_campanar'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('pallofaTornat'),
-          pista: E => !E.flag('carryParlat') ? "La Carry, a Nostra Senyora (a l'oest de les Cel·les), té cara de patir per alguna cosa."
+          pista: E => !E.flag('carryParlat') ? "La Carry, a Nostra Senyora, té cara de patir per alguna cosa."
               : E.te('pallofa') ? "El Pallofa ja és amb tu, i la Carry el deu trobar a faltar a Nostra Senyora."
               : "El Pallofa, el gos de la Carry, passeja per Sant Antoni. La Carry, que guarda la clau del campanar, t'ho agrairia." },
         { id: 'rellotge', marca: ['rellotgeReparat'], obert: E => E.te('clau_campanar') || E.flag('portaCampanarOberta') || E.flag('clauCampanar'), fet: E => E.flag('rellotgeReparat'),
