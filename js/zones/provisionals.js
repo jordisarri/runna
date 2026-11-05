@@ -128,7 +128,7 @@ class ZonaEsglesia extends ZonaBase {
             { qui: 'Pilària', text: "Doncs ara aterraràs a la banyera, que fas olor de gàbia." },
             // L'Iscu, que avui no ha de fregar gots
             ...(hi('ciscu') ? [accio(z => [f => z.npcSalta('ciscu', f, 2)]),
-                { qui: 'Iscu', text: "L'Eve m'ha deixat venir sense fregar ni un got! Avui és festa grossa." }] : []),
+                { qui: 'Iscu', text: "Avui no frego ni un got! La mare dorm i ningú no m'ho pot manar. Festa grossa!" }] : []),
             // La Pianista dona l'entrada: l'Ineu comença el Cant del Miracle amb la tarota i l'orgue el segueix
             accio(z => [f => z.npcVa('pianista', 545, R + 245, f, 140), f => z.npcMira('pianista', 'ineu', f)]),
             { qui: 'La Pianista', text: "Ara sí. Ineu, la tarota: avui el Cant del Miracle el comences tu, i l'orgue et seguirà." },
