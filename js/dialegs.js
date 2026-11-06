@@ -373,15 +373,15 @@ const DIALEGS = {
     juli: E => ({
         pagines: [
             { qui: 'Julius', text: 'Ei, Ineu! El repte més gran del Miracle és derrotar el Jusef i el seu servei màgic. T\'hi atreveixes?' },
-            { qui: 'Julius', text: 'El Senyor Perers juga amb una pala de pedra. De pedra! I tot i així, em guanya fàcilment.' }
+            { qui: 'Julius', text: 'El Senyor Pomers juga amb una pala de pedra. De pedra! I tot i així, em guanya fàcilment.' }
         ]
     }),
 
     frederic: E => ({
         pagines: [
-            { qui: 'Senyor Perers', text: 'Calma, noi. La pilota no s\'ha de perseguir, s\'ha d\'esperar.' },
-            { qui: 'Senyor Perers', text: 'Jo jugo amb una pala de pedra. De pedra, sí: pesa com un maó i no té goma ni res. Quan jugueu a la taula, no em veuràs ni a mi ni la pala; no cal.' },
-            { qui: 'Senyor Perers', text: 'Perquè amb què es juga és igual. La pala només és una extensió de l\'ànima. El que compta és l\'esperit del joc, la màgia que portes dins.' }
+            { qui: 'Senyor Pomers', text: 'Calma, noi. La pilota no s\'ha de perseguir, s\'ha d\'esperar.' },
+            { qui: 'Senyor Pomers', text: 'Jo jugo amb una pala de pedra. De pedra, sí: pesa com un maó i no té goma ni res. Quan jugueu a la taula, no em veuràs ni a mi ni la pala; no cal.' },
+            { qui: 'Senyor Pomers', text: 'Perquè amb què es juga és igual. La pala només és una extensió de l\'ànima. El que compta és l\'esperit del joc, la màgia que portes dins.' }
         ]
     }),
 

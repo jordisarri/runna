@@ -32,7 +32,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
     'Ineu': 'ineu', 'Pare Jordà': 'pare_jordi', 'Germà Aldreu': 'germa_aldreu', 'Pastor de Boira': 'pastor_boira', 'Aldreu, Pastor de Boira': 'pastor_boira', 'Germà Francí': 'germa_francesc', 'Pare Daimiel': 'pare_daniel',
-    'Pare Alcoví': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Perers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Galf': 'galf', 'Isildren': 'isidre',
+    'Pare Alcoví': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Pomers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Galf': 'galf', 'Isildren': 'isidre',
     'La Pianista': 'pianista', 'La Jacmeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Carmèlia': 'monja_charm', 'Pilària': 'monja_phili', 'Dolora': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
     'Meus': 'neus', 'Senyor Molner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Rosansa': 'sansa', 'Monjo': 'ombra_monjo', 'Home del Raïm': 'home_raim',

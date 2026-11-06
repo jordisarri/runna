@@ -1,5 +1,5 @@
 /**
- * EL CELLER: el partit de ping-pong contra en Jusef (un sol partit, obligatori: el Senyor Perers no parla de la roda fins que el guanyes)
+ * EL CELLER: el partit de ping-pong contra en Jusef (un sol partit, obligatori: el Senyor Pomers no parla de la roda fins que el guanyes)
  * Vista des de darrere de l'Ineu: la taula en perspectiva, en Jusef a l'altra banda.
  * - Cops: la pilota ve per un dels tres carrils (esquerra, centre, dreta). Un cercle es fa petit fins a l'anell del carril:
  *   quan el toca (és el moment en què la pilota, després del bot a la taula, arriba al punt més alt), prem el carril bo (← ↓ →, A S D,
