@@ -428,13 +428,13 @@ const Grafics = {
     },
 
     // Animacions de caminar de l'Ineu (són globals: es creen una sola vegada)
-    // Animacions del Pastor de Boira: nom -> [fotogrames, fotogrames per segon, repeticions (-1 = en bucle)]
-    PASTOR_FULLS: { idle: [4, 6, -1], camina: [8, 10, -1], apunta: [4, 8, 0], carrega: [6, 14, -1], bat: [6, 9, 0], crida: [6, 8, 0], cau: [6, 8, 0], aixeca: [6, 8, 0] },
+    // Gràfics del Pastor de Boira: nom -> [fotogrames, fotogrames per segon, repeticions (-1 = en bucle)]
+    PASTOR_FULLS: { camina: [8, 10, -1], atac: [1, 0, 0], cau: [1, 0, 0] },        // camina: full de 8 fotogrames; atac (la caiada alçada) i cau (a terra): un sol dibuix
 
     animacions(scene) {
         Object.entries(Grafics.PASTOR_FULLS).forEach(([n, [fr, fps, rep]]) => {
             const k = 'pastor_' + n;
-            if (!scene.anims.exists(k) && scene.textures.exists(k) && !Grafics.faltants.includes(k) && scene.textures.get(k).frameTotal > fr)
+            if (fr > 1 && !scene.anims.exists(k) && scene.textures.exists(k) && !Grafics.faltants.includes(k) && scene.textures.get(k).frameTotal > fr)
                 scene.anims.create({ key: k, frames: scene.anims.generateFrameNumbers(k, { start: 0, end: fr - 1 }), frameRate: fps, repeat: rep });
         });
         // L'escolopendra caminant (ondula el cos i les potes)

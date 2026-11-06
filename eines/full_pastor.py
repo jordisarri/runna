@@ -2,8 +2,8 @@
 Converteix un full d'animació del Pastor de Boira (art/enemics/pastor_<nom>.png, fons blanc) al WebP transparent del joc
 (assets/enemics/pastor_<nom>.webp): una quadrícula de fotogrames de 300 x 300 (4 columnes).
     python eines/full_pastor.py <nom> [columnes_origen] [files_origen]
-nom: idle (4 fotogrames), camina (8), apunta (4), carrega (6), bat (6), crida (6), cau (6) o aixeca (6).
-columnes_origen / files_origen: la quadrícula de la imatge original (per defecte 4 columnes i les files que calguin).
+nom: camina (full de 8 fotogrames), atac (un sol dibuix: la caiada alçada) o cau (un sol dibuix: a terra).
+columnes_origen / files_origen: la quadrícula de la imatge original (per defecte 4 columnes i les files que calguin; 1 si és un sol dibuix).
 Cada fotograma se separa, se li treu el fons blanc, i es fa servir UN SOL factor d'escala per a tots (el que fa càbrer el més gran
 dins de 300 x 300 amb marge): així el personatge no canvia de mida entre fotogrames. Els peus (la vora de baix del dibuix) queden
 sempre a la mateixa alçada i el cos, centrat. Cal Pillow.
@@ -13,12 +13,12 @@ from PIL import Image
 sys.path.insert(0, os.path.dirname(__file__))
 from treure_fons import treure_fons
 
-FOTOGRAMES = {'idle': 4, 'camina': 8, 'apunta': 4, 'carrega': 6, 'bat': 6, 'crida': 6, 'cau': 6, 'aixeca': 6}
+FOTOGRAMES = {'camina': 8, 'atac': 1, 'cau': 1}
 CEL, COLS, PEUS, MARGE = 300, 4, 276, 12
 
 nom = sys.argv[1]
 n = FOTOGRAMES[nom]
-cols_o = int(sys.argv[2]) if len(sys.argv) > 2 else COLS
+cols_o = int(sys.argv[2]) if len(sys.argv) > 2 else (COLS if n > 1 else 1)
 files_o = int(sys.argv[3]) if len(sys.argv) > 3 else -(-n // cols_o)
 arrel = os.path.join(os.path.dirname(__file__), '..')
 im = Image.open(os.path.join(arrel, 'art/enemics/pastor_%s.png' % nom)).convert('RGB')
@@ -30,12 +30,13 @@ for i in range(n):
     caixa = c.getchannel('A').point(lambda a: 255 if a > 24 else 0).getbbox()
     quadres.append(c.crop(caixa) if caixa else c)
 f = min((CEL - 2 * MARGE) / max(q.width for q in quadres), (PEUS - MARGE) / max(q.height for q in quadres))
-files = -(-n // COLS)
-sortida = Image.new('RGBA', (COLS * CEL, files * CEL), (0, 0, 0, 0))
+cols_s = COLS if n > 1 else 1
+files = -(-n // cols_s)
+sortida = Image.new('RGBA', (cols_s * CEL, files * CEL), (0, 0, 0, 0))
 for i, q in enumerate(quadres):
     q = q.resize((max(1, round(q.width * f)), max(1, round(q.height * f))), Image.LANCZOS)
-    x = (i % COLS) * CEL + (CEL - q.width) // 2
-    y = (i // COLS) * CEL + PEUS - q.height
+    x = (i % cols_s) * CEL + (CEL - q.width) // 2
+    y = (i // cols_s) * CEL + PEUS - q.height
     sortida.alpha_composite(q, (x, y))
 dest = os.path.join(arrel, 'assets/enemics/pastor_%s.webp' % nom)
 sortida.save(dest, 'WEBP', quality=85, method=6)

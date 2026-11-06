@@ -245,21 +245,24 @@ class ZonaCirosa extends ZonaBase {
         return true;
     }
 
-    // Vençut, el Pastor cau a terra (full 'cau': es queda al darrer fotograma) i la boira li surt del cos. Mai es deforma el dibuix.
+    // Vençut, el Pastor cau a terra (gràfic 'cau') i la boira li surt del cos. Mai es deforma ni es gira el dibuix.
     aldreuAgenollat(fet) {
         const e = this.bossCaigut;
         if (!e || !e.spr.active) { fet(); return; }
-        e.spr.setFlipX(e.spr.x > this.ineu.x ? true : false);
+        e.spr.setFlipX(e.spr.x > this.ineu.x);
         this.animaPastor(e, 'cau');
+        this.tweens.add({ targets: e.spr, y: e.spr.y + 8, duration: 120, yoyo: true });
+        this.cameras.main.shake(160, 0.004);
         const p = this.add.particles(e.spr.x, e.spr.y - 60, 'boira', { speed: { min: 20, max: 70 }, lifespan: 1600, scale: { start: 0.8, end: 2.5 }, alpha: { start: 0.6, end: 0 }, tint: [0x9a50ff, 0xb88aff], quantity: 2, frequency: 60 }).setDepth(e.spr.depth + 1);
         this.time.delayedCall(1500, () => { p.stop(); this.time.delayedCall(1600, () => p.destroy()); fet(); });
     }
-    // S'aixeca del terra (full 'aixeca')
+    // S'aixeca del terra: es posa dempeus amb la caiada alçada (gràfic 'atac'), amb un petit salt i una volta de boira
     aldreuAixeca(fet) {
         const e = this.bossCaigut;
         if (!e || !e.spr.active) { fet(); return; }
-        if (this.animaPastor(e, 'aixeca')) e.spr.once('animationcomplete', () => this.esperar(300, fet));
-        else this.esperar(500, fet);
+        this.tweens.add({ targets: e.spr, y: e.spr.y - 14, duration: 220, yoyo: true, delay: 250 });
+        this.time.delayedCall(450, () => { if (e.spr.active) this.animaPastor(e, 'atac'); this.llum(e.spr.x, e.spr.y - 70, 0xb88aff); });
+        this.esperar(1500, fet);
     }
     // Se'n va camí avall, cap a les Gírgoles, caminant (full 'camina'); s'esvaeix a mesura que s'allunya
     aldreuMarxa(fet) {

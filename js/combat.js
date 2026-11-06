@@ -279,7 +279,7 @@ const ENEMICS = {
     // BOSS: el Germà Aldreu convertit en Pastor de Boira. Crida ovelles, carrega amb la caiada i la clava a terra en arc.
     // Fulls d'animació (assets/enemics/pastor_*.webp, vegeu docs/PROMPTS_GRAFICS.md): si no hi són, es veu el dibuix fix de sempre.
     pastor: {
-        tex: 'pastor_idle', texAlt: 'pastor_boira', escala: 0.58, vida: 28, vel: 430, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 440,
+        tex: 'pastor_camina', texAlt: 'pastor_boira', escala: 0.58, vida: 28, vel: 430, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 440,
         robust: true, barra: true, arma: 'tiller',          // només cedeix a la branca del Til·ler
         perill: e => e.estat === 'carrega',
         ia(z, e, ara) {
@@ -329,20 +329,20 @@ const ENEMICS = {
                 if (dist < 150 && ara > e.proxBat) {
                     const tel = fase2 ? 380 : 560;
                     e.estat = 'bat'; e.fins = ara + tel; e.spr.setTint(0xffe080);
-                    z.animaPastor(e, 'bat', Math.round(tel * 1.25));
+                    z.animaPastor(e, 'bat');
                 }
                 if (ara > e.proxCrida) {
                     e.proxCrida = ara + (fase2 ? 4800 : 7000);
                     const vius = z.enemics.filter(x => x.tipus === 'ovella' && !x.mort).length, max = fase2 ? 3 : 2;
                     if (vius < max) {
                         Sfx.be();
-                        z.animaPastor(e, 'crida', 900);
+                        z.animaPastor(e, 'crida'); z.time.delayedCall(900, () => { if (!e.mort && e.estat === 'camina') z.animaPastor(e, 'camina'); });
                         [-1, 1, 0].slice(0, max - vius).forEach(sg => { const o = z.enemic('ovella', c.x + (sg || 1) * (sg ? 150 : 40), c.y + (sg ? 60 : 170)); if (o) { z.boiraPuf(o.spr.x, o.spr.y); o.fins = ara + 900; } });   // mai més de dues (tres a la fase 2) alhora
                     }
                 } else if (ara > e.proxCarrega && dist < 520) {
                     e.estat = 'apunta'; e.fins = ara + (fase2 ? 430 : 620); e.ang = cap;
                     e.spr.setTint(0xff8080);
-                    z.animaPastor(e, 'apunta', Math.round((e.fins - ara) * 1.1));
+                    z.animaPastor(e, 'apunta');
                     Sfx.carrega();
                 }
             }
@@ -1111,13 +1111,25 @@ Object.assign(ZonaBase.prototype, {
         this.enemics = this.enemics.filter(x => x !== e);
     },
 
-    // Posa una animació del full del Pastor de Boira (assets/enemics/pastor_<nom>.webp), si hi és. dur: durada (ms) per ajustar-la al que dura l'atac.
-    animaPastor(e, nom, dur) {
-        const k = 'pastor_' + nom;
-        if (!e || !e.spr || !e.spr.active || !this.anims.exists(k)) return false;
-        if (e.animPastor === nom && !dur && e.spr.anims.isPlaying) return true;
+    // El Pastor de Boira només té tres gràfics (assets/enemics/pastor_camina.webp, pastor_atac.webp i pastor_cau.webp):
+    // 'camina' / 'carrega' (el mateix full, el doble de ràpid) / 'idle' (el primer fotograma del full), i les poses fixes
+    // 'apunta', 'bat' i 'crida' (la caiada alçada) i 'cau' (a terra). Si els gràfics no hi són, no fa res: es veu el dibuix fix.
+    animaPastor(e, nom) {
+        if (!e || !e.spr || !e.spr.active) return false;
+        const sp = e.spr, caminada = this.anims.exists('pastor_camina');
+        const POSA = { apunta: 'atac', bat: 'atac', crida: 'atac', atac: 'atac', cau: 'cau' };
+        if (e.animPastor === nom && (POSA[nom] || sp.anims.isPlaying || nom === 'idle')) return true;
+        if (POSA[nom]) {
+            const k = 'pastor_' + POSA[nom];
+            if (!this.textures.exists(k) || this.textures.get(k).frameTotal < 1) return false;
+            e.animPastor = nom; sp.anims.stop(); sp.setTexture(k, 0);
+            return true;
+        }
+        if (!caminada) return false;
         e.animPastor = nom;
-        e.spr.play(dur ? { key: k, duration: dur } : k, true);
+        if (nom === 'idle') { sp.anims.stop(); sp.setTexture('pastor_camina', 0); return true; }
+        sp.anims.timeScale = nom === 'carrega' ? 2.2 : 1;
+        sp.play('pastor_camina', true);
         return true;
     },
 
