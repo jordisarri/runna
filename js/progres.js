@@ -51,7 +51,7 @@ const PROGRES = {
               const f = [];
               if (!E.flag('escudella')) f.push("l'escudella de la Meus (a les cel·les)");
               if (!E.flag('floresIsidre')) f.push("les flors d'Isildren (a l'Hostatgeria)");
-              if (!E.flag('pastorsConvencuts')) f.push("el pa que pasten els pastors de la Cirosa" + (E.flag('cantPedres') ? "" : " (cal el Cant de Vespres, que ensenya la Pianista al Santuari)"));
+              if (!E.flag('pastorsConvencuts')) f.push("el pa que pasten els pastors de la Cirosa" + (E.flag('cantPedres') ? "" : " (cal una música antiga: la Pianista, al Santuari, en coneix una)"));
               return f.length ? "Al sopar del Til·ler encara hi falta: " + f.join(', ') + "." : "Ja ho tens tot: el Gran Til·ler espera la taula parada.";
           } },
         // ---- ACTE 2: el Saber i les benediccions ----

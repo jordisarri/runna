@@ -1118,7 +1118,9 @@ const DIALEGS = {
             return { pagines: [
                 { qui: "Pastor vell", text: "Un sopar, dius? Al Til·ler? Amb els de les cel·les?... No, fill. Nosaltres no som gent per a asseure's amb la gent." },
                 { qui: "Pastor vell", text: "Fa anys que no sentim música vora el foc, ni pastem el pa que fèiem per a les festes. Si algú en toqués... potser ens recordaria que encara som persones." },
-                { qui: "Ineu", text: "Tinc la tarota. Les esquelles dels seus avis van afinar els cants antics... El Cant de Vespres, 3-1-2-1: el tocaré vora el foc, i que sigui el que Déu vulgui." }
+                E.flag("cantPedres")
+                    ? { qui: "Ineu", text: "Tinc la tarota. Les esquelles dels seus avis van afinar els cants antics... El Cant de Vespres, 3-1-2-1: el tocaré vora el foc, i que sigui el que Déu vulgui." }
+                    : { qui: "Ineu", text: "Tinc la tarota, però només sé uns pocs cants. Els vells els coneixen tots: potser la Pianista, al Santuari, en sap algun que els faci recordar casa." }
             ], enAcabar: () => E.posaObjectiu("Els pastors de la Cirosa escoltarien una música vora el seu foc.") };
         }
         return { pagines: [{ qui: "Pastor vell", text: "Aquesta pastura torna a ser un lloc tranquil. Gràcies per això." }] };
