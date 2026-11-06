@@ -654,7 +654,7 @@ class ZonaDolmen extends ZonaBase {
         const teLesTres = () => !DIALEGS.faltaRunna(Estat).length;
         this.interactiu(sx, sy + 15, RADI_GRAN, DIALEGS.dolmenBaix, { altura: 380, actiu: () => !this.alt && teLesTres() });
         // La placa de pedra davant el dolmen, centrada entre el dolmen i el camí: diu què cal per alçar Runna
-        this.placaDolmen = this.posar('placa_dolmen', sx, sy + 150, { col: { w: 150, h: 16 } });         // (ampla: 190 px; els medallons s'han de veure bé)
+        this.placaDolmen = this.posar('placa_dolmen', sx, sy + 150, { col: { w: 150, h: 16 }, opac: true });         // (ampla: 190 px; els medallons s'han de veure bé)
         this.interactiu(sx, sy + 160, 150, DIALEGS.placaDolmen, { altura: this.placaDolmen.displayHeight + 20, actiu: () => !this.alt });
         // Damunt la llosa, darrere l'espasa: les Paraules del Saber
         this.interactiu(this.espX, this.espY - 12, RADI_OBJECTE, DIALEGS.dolmen, { altura: 150, actiu: () => this.alt && !this.cinema && teLesTres() });

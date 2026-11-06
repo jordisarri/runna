@@ -174,7 +174,7 @@ class ZonaBase extends Phaser.Scene {
         this.dadesEntrada = data || {};
         this.canviant = false;
         this.camDialeg = null;
-        this.npcs = {}; this.npcDavant = null; this.camCinema = false; this.ineuFlautaImg = null; this.ineuAmagat = false;          // (l'escena es reaprofita: res de la visita anterior)
+        this.npcs = {}; this.opacs = []; this.npcDavant = null; this.camCinema = false; this.ineuFlautaImg = null; this.ineuAmagat = false;          // (l'escena es reaprofita: res de la visita anterior)
         this.boundsCamOrig = null;
         this.twCamDialeg = null;
         this.entradaPropia = false;
@@ -586,6 +586,8 @@ class ZonaBase extends Phaser.Scene {
         // Tots els arbres del mateix gràfic tenen el mateix tronc sòlid (arrels incloses), proporcional a l'escala
         if (key === 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: TRONC_ARBRE(opts.escala || 1) });
         if (opts.col) this.colisio(x + (opts.col.dx || 0), y - opts.col.h / 2 + (opts.col.dy || 0), opts.col.w, opts.col.h);
+        // opac: objecte baix (una placa) que no s'ha de veure a través quan l'Ineu hi passa darrere: la silueta translúcida de l'Ineu s'hi amaga com amb els personatges
+        if (opts.opac) (this.opacs = this.opacs || []).push(img);
         return img;
     }
 
@@ -1354,7 +1356,7 @@ class ZonaBase extends Phaser.Scene {
         f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(this.assegut ? 0 : i.alpha * 0.38);   // assegut: el banc el tapa de debò
         // Els personatges no es transparenten com els arbres: si un que és davant de l'Ineu el tapa, la silueta s'amaga on hi ha el personatge
         const ib = i.getBounds();
-        const davant = this.npcs && Object.values(this.npcs).find(n => n && n.active && n.visible && n.depth > i.depth
+        const davant = Object.values(this.npcs || {}).concat(this.opacs || []).find(n => n && n.active && n.visible && n.depth > i.depth
             && Phaser.Geom.Intersects.RectangleToRectangle(n.getBounds(), ib));
         if (davant !== this.npcDavant) {
             this.npcDavant = davant;

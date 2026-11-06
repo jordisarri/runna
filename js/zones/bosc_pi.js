@@ -111,7 +111,7 @@ class ZonaBoscPi extends ZonaBase {
 
         // La placa de pedra, davant el pi: explica què cal fer. Un cop llegida (i amb la tarota), s'obre la tarota per tocar els cants; la tarota només
         // funciona aquí, a prop de la placa. Des de l'oest de la barrera, només s'hi pot llegir què passa.
-        this.placa = this.posar('placa_pi', PI3.plX, PI3.plY, { col: { w: 50, h: 16 } });
+        this.placa = this.posar('placa_pi', PI3.plX, PI3.plY, { col: { w: 50, h: 16 }, opac: true });
         const puntPlaca = this.interactiu(PI3.plX, PI3.plY + 10, 150, () => Estat.flag('piObert') ? DIALEGS.piTresCants(Estat) : DIALEGS.piPlaca(Estat), {
             altura: this.placa.displayHeight + 20,
             actiu: () => this.ineu.x > barX + 40,
