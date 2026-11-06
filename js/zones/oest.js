@@ -658,13 +658,7 @@ class ZonaDolmen extends ZonaBase {
         this.interactiu(this.espX, this.espY - 12, RADI_OBJECTE, DIALEGS.dolmen, { altura: 150, actiu: () => this.alt && !this.cinema });
         this.margaridesPas();
 
-        // Com a la pantalla del títol: una pedra dreta, una tanca de fusta vella, falgueres, roques i flors roses
-        const det = this.add.graphics().setDepth(sy + 120);
-        det.fillStyle(0x000000, 0.25).fillEllipse(200, 902, 60, 16);
-        det.fillStyle(0xa49c8a, 1).fillRoundedRect(178, 760, 44, 140, 8).lineStyle(3, 0x120c08, 1).strokeRoundedRect(178, 760, 44, 140, 8);
-        det.fillStyle(0x7a7466, 1).fillRect(208, 766, 12, 132);
-        det.fillStyle(0x6e9a48, 0.7).fillEllipse(196, 790, 30, 12).fillEllipse(204, 880, 36, 12);
-        this.colisio(200, 890, 50, 20);
+        // Com a la pantalla del títol: una tanca de fusta vella, falgueres, roques i flors roses
         const tanca = (pals, y) => {
             const g = this.add.graphics().setDepth(y + 10);
             g.lineStyle(7, 0x120c08, 1).lineBetween(pals[0], y - 40, pals[pals.length - 1], y - 46).lineBetween(pals[0], y - 18, pals[pals.length - 1], y - 22);
