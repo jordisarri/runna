@@ -93,7 +93,7 @@ const CATALEG = [
     { key: 'tiller_arbre', file: 'assets/personatges/tiller_arbre.webp', amplada: 540, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },   // el Til·ler com un arbre qualsevol, sense cara: així el veus abans de parlar-hi (mateix recorte que `tiller`)
     { key: 'tiller',    file: 'assets/personatges/tiller.webp',    amplada: 540, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },
     { key: 'arrels_tiller', file: 'assets/natura/arrels_tiller.webp', amplada: 440 },
-    { key: 'altar',     file: null,     amplada: 150, provisional: (c, w) => dibuixarAltar(c, w) },
+    { key: 'altar',     file: null,     amplada: 150, provisional: (c, w) => lienc(c, w, Math.round(w * 118 / 150), (ctx, W, H) => { ctx.scale(W / 150, H / 118); pintarAltarPedra(ctx, 150, 118, false); }) },   // l'altar de marbre rosat (Santuari i capella de l'Hostatgeria)
     { key: 'taula_pedra', file: null, amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 0) },
     { key: 'taula_pedra2', file: null, amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
     { key: 'font_sj',   file: null,   amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w) },

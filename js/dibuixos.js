@@ -2833,7 +2833,8 @@ function pintarOlla(ctx, w, h) {
 // ---------------- ALTAR DE PEDRA I PERGAMÍ ----------------
 
 // Altar de pedra amb mantell de lli, dos canelobres de llautó, un calze i un llibre obert. Vista frontal.
-function pintarAltarPedra(ctx, w, h) {
+// ornaments = false: l'altar net del Santuari (només una creu daurada a la llosa); true: amb canelobres, calze i llibre
+function pintarAltarPedra(ctx, w, h, ornaments = true) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.translate(0, 18); h -= 18;                  // marge a dalt per a les flames
     const cx = w / 2, C = '#2a1c10';
@@ -2842,48 +2843,54 @@ function pintarAltarPedra(ctx, w, h) {
         const g = ctx.createLinearGradient(x, y, x + ww, y + hh); g.addColorStop(0, clar); g.addColorStop(1, fosc);
         ctx.fillStyle = g; ctx.fillRect(x, y, ww, hh); ctx.strokeStyle = C; ctx.lineWidth = 1.8; ctx.strokeRect(x, y, ww, hh);
     };
-    // Graó del peu (dues lloses)
-    pedra(6, h - 17, w - 12, 15, '#c8c0b0', '#8e877a');
-    ctx.strokeStyle = 'rgba(40,34,26,0.55)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(cx, h - 17); ctx.lineTo(cx, h - 2); ctx.moveTo(6 + (w - 12) * 0.28, h - 17); ctx.lineTo(6 + (w - 12) * 0.28, h - 2); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(8, h - 16, w - 16, 2);
-    // Sòcol amb motllura
-    pedra(14, h - 27, w - 28, 11, '#b8b0a0', '#7e776b');
-    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.fillRect(16, h - 26, w - 32, 1.6);
-    // Cos de l'altar: carreus, amb un plafó en relleu al mig
-    const x0 = 20, x1 = w - 20, yTop = 38, yBot = h - 27;
-    pedra(x0, yTop, x1 - x0, yBot - yTop, '#d2cab8', '#9a9384');
-    ctx.save(); ctx.beginPath(); ctx.rect(x0 + 1, yTop + 1, x1 - x0 - 2, yBot - yTop - 2); ctx.clip();
-    ctx.strokeStyle = 'rgba(50,42,32,0.5)'; ctx.lineWidth = 1;
-    for (let r = 0; r < 3; r++) {
-        const y = yTop + 9 + r * 11; ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
-        for (let x = x0 + (r % 2 ? 18 : 6); x < x1; x += 24) { ctx.beginPath(); ctx.moveTo(x, y - 11); ctx.lineTo(x, y); ctx.stroke(); }
-    }
+    // Altar de marbre rosat fosc, com el del Santuari: llosa ampla a dalt, cos bombat com un sarcòfag, coll estret i sòcol llis
+    const MC = '#241628';                                        // contorn violeta molt fosc
+    const x0 = 6, x1 = w - 6, yTop = 38, my0 = yTop - 8;         // my0: vora de davant de la taula (hi van els canelobres, el calze i el llibre)
+    let llavor = 7; const az = () => (llavor = (llavor * 16807) % 2147483647) / 2147483647;
+    const tacar = (forma, n) => {                                // taquetes i vetes del marbre, dins d'una forma
+        ctx.save(); forma(); ctx.clip();
+        for (let k = 0; k < n; k++) {
+            const x = az() * w, y = az() * h, r = 0.6 + az() * 1.5;
+            ctx.fillStyle = az() < 0.5 ? '#c9a2b8' : '#2e1b2c'; ctx.globalAlpha = 0.2 + az() * 0.3;
+            ctx.beginPath(); ctx.ellipse(x, y, r * 1.7, r, 0, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.globalAlpha = 1; ctx.restore();
+    };
+    const vertical = (ya, yb, c0, c1) => { const g = ctx.createLinearGradient(0, ya, 0, yb); g.addColorStop(0, c0); g.addColorStop(1, c1); return g; };
+    // Sòcol (llis, més estret que el cos)
+    ctx.fillStyle = vertical(86, 98, '#5e4357', '#35232f'); ctx.fillRect(20, 86, w - 40, 12);
+    ctx.strokeStyle = MC; ctx.lineWidth = 1.8; ctx.strokeRect(20, 86, w - 40, 12);
+    ctx.fillStyle = 'rgba(255,225,240,0.28)'; ctx.fillRect(22, 87, w - 44, 1.6);
+    // Cos bombat: ample a mitja alçada i que es tanca cap al coll
+    const cos = () => {
+        ctx.beginPath(); ctx.moveTo(14, 41); ctx.bezierCurveTo(3, 49, 3, 67, 25, 80); ctx.lineTo(28, 86); ctx.lineTo(w - 28, 86); ctx.lineTo(w - 25, 80);
+        ctx.bezierCurveTo(w - 3, 67, w - 3, 49, w - 14, 41); ctx.closePath();
+    };
+    const gMarbre = ctx.createLinearGradient(0, 0, w, 0); gMarbre.addColorStop(0, '#8a6280'); gMarbre.addColorStop(0.5, '#6a475e'); gMarbre.addColorStop(1, '#44303e');
+    cos(); ctx.fillStyle = gMarbre; ctx.fill();
+    tacar(cos, 90);
+    ctx.save(); cos(); ctx.clip();
+    ctx.fillStyle = vertical(41, 86, 'rgba(24,10,28,0)', 'rgba(24,10,28,0.38)'); ctx.fillRect(0, 41, w, 46);          // s'enfosqueix cap a baix
+    ctx.fillStyle = 'rgba(24,10,28,0.4)'; ctx.fillRect(0, 41, w, 4);                                                // ombra de la llosa
+    ctx.strokeStyle = 'rgba(255,232,246,0.3)'; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(17, 47); ctx.bezierCurveTo(8, 54, 8, 66, 23, 76); ctx.stroke();                     // llum a la panxa de l'esquerra
     ctx.restore();
-    const px0 = cx - 34, pw = 68, py0 = yTop + 5, ph = yBot - yTop - 10;
-    ctx.fillStyle = '#b9b09e'; ctx.beginPath(); ctx.roundRect(px0, py0, pw, ph, 4); ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 1.8; ctx.stroke();
-    ctx.fillStyle = '#a49b88'; ctx.beginPath(); ctx.roundRect(px0 + 4, py0 + 4, pw - 8, ph - 8, 3); ctx.fill(); ctx.strokeStyle = 'rgba(40,34,26,0.7)'; ctx.lineWidth = 1.2; ctx.stroke();
-    // Creu amb cercle (relleu tallat)
-    const ccx = cx, ccy = py0 + ph / 2;
-    ctx.strokeStyle = 'rgba(60,50,38,0.85)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(ccx, ccy, 10, 0, Math.PI * 2); ctx.stroke();
-    ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(ccx, ccy - 10); ctx.lineTo(ccx, ccy + 10); ctx.moveTo(ccx - 10, ccy); ctx.lineTo(ccx + 10, ccy); ctx.stroke();
-    ctx.strokeStyle = 'rgba(255,255,255,0.45)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(ccx - 1, ccy - 9); ctx.lineTo(ccx - 1, ccy + 9); ctx.moveTo(ccx - 9, ccy - 1); ctx.lineTo(ccx + 9, ccy - 1); ctx.stroke();
-    // Cornisa
-    pedra(x0 - 7, yTop - 8, x1 - x0 + 14, 9, '#e0d8c6', '#a69e8e');
-    ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.fillRect(x0 - 5, yTop - 7, x1 - x0 + 10, 1.8);
-    // Mantell de lli que penja pel davant, amb vora daurada i serrells
-    const mx0 = cx - 38, mx1 = cx + 38, my0 = yTop - 8, my1 = yTop + 22;
-    ctx.fillStyle = '#f2ecdc'; ctx.beginPath(); ctx.moveTo(mx0, my0); ctx.lineTo(mx1, my0); ctx.lineTo(mx1 + 1, my1);
-    for (let i = 0; i <= 8; i++) { const x = mx1 - (mx1 - mx0) * i / 8; ctx.lineTo(x, my1 + (i % 2 ? 2.5 : 0)); }
-    ctx.closePath(); ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 1.6; ctx.stroke();
-    ctx.strokeStyle = 'rgba(150,140,120,0.5)'; ctx.lineWidth = 1;
-    [-18, 0, 18].forEach(dx => { ctx.beginPath(); ctx.moveTo(cx + dx, my0 + 3); ctx.quadraticCurveTo(cx + dx + 3, my0 + 14, cx + dx, my1 - 3); ctx.stroke(); });
-    ctx.fillStyle = '#d4a93a'; ctx.fillRect(mx0 + 1, my1 - 6, mx1 - mx0 - 2, 3); ctx.strokeStyle = '#7a5a18'; ctx.lineWidth = 0.8; ctx.strokeRect(mx0 + 1, my1 - 6, mx1 - mx0 - 2, 3);
-    ctx.fillStyle = '#b8892a'; for (let x = mx0 + 4; x < mx1; x += 5) ctx.fillRect(x, my1 + 1, 1.4, 4);
-    ctx.strokeStyle = '#a02830'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx, my0 + 8); ctx.lineTo(cx, my0 + 16); ctx.moveTo(cx - 4, my0 + 11); ctx.lineTo(cx + 4, my0 + 11); ctx.stroke();      // creu brodada
-    // Taula de dalt (cara superior, en perspectiva)
-    ctx.fillStyle = '#e8e0cc'; ctx.beginPath(); ctx.moveTo(x0 - 5, my0 - 1); ctx.lineTo(x0 + 3, my0 - 9); ctx.lineTo(x1 - 3, my0 - 9); ctx.lineTo(x1 + 5, my0 - 1); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = C; ctx.lineWidth = 1.6; ctx.stroke();
-    ctx.fillStyle = '#f7f2e4'; ctx.beginPath(); ctx.moveTo(x0 + 2, my0 - 2); ctx.lineTo(x0 + 8, my0 - 8); ctx.lineTo(x1 - 8, my0 - 8); ctx.lineTo(x1 - 2, my0 - 2); ctx.closePath(); ctx.fill();
+    cos(); ctx.strokeStyle = MC; ctx.lineWidth = 1.8; ctx.stroke();
+    // Llosa: cara de davant i cara de dalt (en perspectiva)
+    ctx.fillStyle = vertical(30, 41, '#94697f', '#5c4254'); ctx.fillRect(x0, 30, x1 - x0, 11);
+    ctx.strokeStyle = MC; ctx.lineWidth = 1.8; ctx.strokeRect(x0, 30, x1 - x0, 11);
+    ctx.fillStyle = 'rgba(255,232,246,0.35)'; ctx.fillRect(x0 + 2, 31, x1 - x0 - 4, 1.6);
+    tacar(() => { ctx.beginPath(); ctx.rect(x0, 30, x1 - x0, 11); }, 22);
+    const taula = () => { ctx.beginPath(); ctx.moveTo(x0, 30); ctx.lineTo(x0 + 8, 21); ctx.lineTo(x1 - 8, 21); ctx.lineTo(x1, 30); ctx.closePath(); };
+    taula(); ctx.fillStyle = vertical(21, 30, '#b08ca2', '#8c677d'); ctx.fill();
+    tacar(taula, 26);
+    taula(); ctx.strokeStyle = MC; ctx.lineWidth = 1.8; ctx.stroke();
+    if (!ornaments) {
+        ctx.fillStyle = '#d8b248'; ctx.strokeStyle = C; ctx.lineWidth = 1.2;
+        ctx.fillRect(cx - 1.8, my0 - 20, 3.6, 17); ctx.strokeRect(cx - 1.8, my0 - 20, 3.6, 17);
+        ctx.fillRect(cx - 6, my0 - 16, 12, 3.4); ctx.strokeRect(cx - 6, my0 - 16, 12, 3.4);
+        return;
+    }
     // Canelobres de llautó amb flama
     const canelobre = x => {
         const yb = my0 - 4;
