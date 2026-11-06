@@ -76,14 +76,67 @@ const ICONES_OBJECTES = {
         ctx.strokeStyle = 'rgba(120,90,40,0.7)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(36, 0); ctx.lineTo(42, 0); ctx.stroke();
         ctx.restore();
     },
-    // El bastó de pelegrí: una vara amb el cap en forma de ganxo (com una mangala), i un casquet de metall a la punta
+    // El bastó de pelegrí, com l'arma del joc (assets/armes/basto.webp): una branca gruixuda i rústica, una mica tortuosa, amb nusos, vetes i
+    // amples que canvien, el cap en ganxo gros i irregular (amb el tall de la branca a la punta) i un casquet de metall abonyegat a baix
     basto: ctx => {
         ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-        const camí = () => { ctx.beginPath(); ctx.moveTo(30, 86); ctx.lineTo(58, 36); ctx.bezierCurveTo(66, 22, 60, 8, 44, 9); ctx.bezierCurveTo(33, 10, 28, 20, 31, 29); };
-        ctx.strokeStyle = CONTORN; ctx.lineWidth = 13; camí(); ctx.stroke();
-        ctx.strokeStyle = '#a2643a'; ctx.lineWidth = 8; camí(); ctx.stroke();
-        ctx.strokeStyle = 'rgba(255,215,160,0.45)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(28, 82); ctx.lineTo(55, 36); ctx.stroke();
-        ctx.fillStyle = '#9aa0aa'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(29.6, 87, 5.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        // Línia central (de la punta de baix al final del ganxo), suavitzada amb una spline de Catmull-Rom
+        const P = [[28, 90], [33, 72], [41, 55], [51, 41], [60, 30], [61, 17], [52, 9], [41, 10], [33, 17], [31, 29]];
+        const mostres = [];
+        for (let k = 0; k < P.length - 1; k++) {
+            const p0 = P[Math.max(0, k - 1)], p1 = P[k], p2 = P[k + 1], p3 = P[Math.min(P.length - 1, k + 2)];
+            for (let t = 0; t < 1; t += 0.1) {
+                const t2 = t * t, t3 = t2 * t;
+                mostres.push([0, 1].map(d => 0.5 * ((2 * p1[d]) + (-p0[d] + p2[d]) * t + (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * t2 + (-p0[d] + 3 * p1[d] - 3 * p2[d] + p3[d]) * t3)));
+            }
+        }
+        mostres.push(P[P.length - 1]);
+        const N = mostres.length;
+        // Ample a cada punt: gruixut de baix, una mica més prim cap al ganxo, amb irregularitats (no és una vara polida)
+        const ample = i => { const u = i / (N - 1); return 12.5 - 3.5 * u + 1.3 * Math.sin(u * 19) + 0.9 * Math.sin(u * 41 + 1); };
+        const normal = i => { const a = mostres[Math.max(0, i - 1)], b = mostres[Math.min(N - 1, i + 1)]; const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; };
+        const esq = [], dre = [];
+        mostres.forEach((m, i) => { const n = normal(i), w = ample(i) / 2; esq.push([m[0] + n[0] * w, m[1] + n[1] * w]); dre.push([m[0] - n[0] * w, m[1] - n[1] * w]); });
+        const forma = () => { ctx.beginPath(); esq.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); for (let i = N - 1; i >= 0; i--) ctx.lineTo(dre[i][0], dre[i][1]); ctx.closePath(); };
+        const FOSC = '#4a2412';
+        const g = ctx.createLinearGradient(20, 90, 66, 8); g.addColorStop(0, '#9a5a2c'); g.addColorStop(0.5, '#c47c40'); g.addColorStop(1, '#a8632f');
+        forma(); ctx.fillStyle = g; ctx.fill();
+        // Vetes de la fusta (llargues, fines i desiguals) i llum al costat esquerre
+        ctx.save(); forma(); ctx.clip();
+        ctx.lineWidth = 1.1;
+        [[-0.22, 0.5], [0.1, 0.4], [0.28, 0.35]].forEach(([desp, alfa], k) => {
+            ctx.strokeStyle = 'rgba(70,32,12,' + alfa + ')'; ctx.beginPath();
+            let primer = true;
+            mostres.forEach((m, i) => {
+                if (i < 2 + k * 3 || i > N - 4 - k * 5) return;
+                const n = normal(i), d = desp * ample(i) + Math.sin(i * 0.9 + k) * 0.5, x = m[0] + n[0] * d, y = m[1] + n[1] * d;
+                if (primer) { ctx.moveTo(x, y); primer = false; } else ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+        });
+        ctx.strokeStyle = 'rgba(255,222,170,0.5)'; ctx.lineWidth = 1.8; ctx.beginPath();
+        esq.forEach((p, i) => { if (i < 1 || i > N - 6) return; const m = mostres[i], n = normal(i); const x = p[0] - n[0] * 2.2, y = p[1] - n[1] * 2.2; i === 1 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }); ctx.stroke();
+        ctx.fillStyle = 'rgba(60,24,8,0.22)'; ctx.beginPath(); dre.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); for (let i = N - 1; i >= 0; i--) { const m = mostres[i], n = normal(i); ctx.lineTo(m[0] - n[0] * 1.5, m[1] - n[1] * 1.5); } ctx.closePath(); ctx.fill();
+        ctx.restore();
+        forma(); ctx.strokeStyle = FOSC; ctx.lineWidth = 2.6; ctx.stroke();
+        // Nusos (on va néixer una branqueta): un a cada costat, amb el centre fosc
+        const nus = (i, costat, r) => {
+            const m = mostres[i], n = normal(i), w = ample(i) / 2, x = m[0] + n[0] * costat * (w - 0.5), y = m[1] + n[1] * costat * (w - 0.5);
+            ctx.fillStyle = '#b86f36'; ctx.strokeStyle = FOSC; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.ellipse(x, y, r, r * 0.8, 0.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#5a2c14'; ctx.beginPath(); ctx.ellipse(x, y, r * 0.45, r * 0.35, 0.5, 0, Math.PI * 2); ctx.fill();
+        };
+        nus(Math.round(N * 0.34), 1, 3.4); nus(Math.round(N * 0.56), -1, 2.8);
+        // El tall de la branca a la punta del ganxo: una elipse clara amb anells
+        const fi = mostres[N - 1], dir = [fi[0] - mostres[N - 3][0], fi[1] - mostres[N - 3][1]], ang = Math.atan2(dir[1], dir[0]);
+        ctx.fillStyle = '#e2aa6a'; ctx.strokeStyle = FOSC; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.ellipse(fi[0], fi[1], 4.6, 3, ang + Math.PI / 2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(110,60,24,0.6)'; ctx.lineWidth = 0.9; ctx.beginPath(); ctx.ellipse(fi[0], fi[1], 2.3, 1.4, ang + Math.PI / 2, 0, Math.PI * 2); ctx.stroke();
+        // Casquet de metall de la punta, vell i abonyegat
+        const b0 = mostres[0], tb = [mostres[2][0] - b0[0], mostres[2][1] - b0[1]], ab = Math.atan2(tb[1], tb[0]);
+        ctx.save(); ctx.translate(b0[0], b0[1]); ctx.rotate(ab - Math.PI / 2);
+        ctx.fillStyle = '#9aa2ac'; ctx.strokeStyle = FOSC; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(-7.5, -1, 15, 9, 3); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fillRect(-5.5, 0.4, 3, 6);
+        ctx.fillStyle = 'rgba(40,40,48,0.55)'; [[2, 3.5, 1.1], [-1, 6, 0.8], [4.6, 5.8, 0.7]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); });
+        ctx.restore();
     },
     basto_tiller: ctx => {
         ctx.lineCap = 'round';
