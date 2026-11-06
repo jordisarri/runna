@@ -1269,8 +1269,12 @@ const DIALEGS = {
             return { pagines: [{ qui: "Ineu", text: "L'últim estel s'ha apagat damunt del dipòsit de llevant. Hi ha una llum a l'aigua: he d'anar-hi." }] };
         }
         if (!E.te("telescopi")) {
+            // El peu del mirador: es veu que hi va alguna cosa. Si el Galf ja li ha parlat del telescopi, l'Ineu hi cau; si no, pensa que potser el Galf n'entén
             return { pagines: [
-                { qui: "Ineu", text: "Em falta un telescopi. El Galf, a l'Era, segur que en sap construir un." }
+                { qui: "Ineu", text: "(Un peu amb tres potes, plantat al mig del mirador. Sembla fet per aguantar alguna cosa... com una mena de trípode.)" },
+                { qui: "Ineu", text: E.flag("garfBancSegut")
+                    ? "(Potser el telescopi del qual m'ha parlat el Galf encaixaria aquí. Cal que me'l construeixi.)"
+                    : "(Algú que entengui d'enginys sabria dir per a què serveix. El Galf, l'inventor de l'Era, potser en sap alguna cosa.)" }
             ] };
         }
         return {
