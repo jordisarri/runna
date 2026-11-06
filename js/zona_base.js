@@ -184,7 +184,8 @@ class ZonaBase extends Phaser.Scene {
         const c = this.config;
         Estat.dades.zona = this.scene.key;
         Estat.posaFlag('visitada_' + this.scene.key); // el mapa només mostra el que s'ha visitat
-        Joc.musicaZona(this);
+        // Si s'hi arriba després d'una derrota (el Pare Jordà et recull), no sona res fins que es tanca el diàleg; llavors entra la música de la zona
+        if (Estat.caigut) { Joc.musicaPendent = null; Joc.aturarMusica(); } else Joc.musicaZona(this);
         const uiB = this.ui();                         // si es venia d'un combat de boss (o s'hi ha caigut), fora barra i franges
         if (uiB && uiB.boss) uiB.amagarBarraBoss(true);
         if (uiB && uiB.frangesG) uiB.franges(false, 10);
@@ -266,7 +267,7 @@ class ZonaBase extends Phaser.Scene {
         const ui = this.ui(), I = this.ineu;
         const dialeg = { pagines: [{ qui: 'Pare Jordà', text: 'Ineu! Que et trobo a terra! Respira, fill. Has de tenir més cura. Ja estàs bé?' }] };
         if (!this.textures.exists('ineu_inconscient') || !this.textures.exists('jordi_desperta')) {
-            this.time.delayedCall(600, () => { Joc.leitmotiv(this, 'trista', true); ui.obrirDialeg(dialeg); });
+            this.time.delayedCall(600, () => ui.obrirDialeg(dialeg, () => Joc.musicaZona(this, 3000)));
             return;
         }
         const esc = this.textures.get('ineu_inconscient').customData.escala || 1 / RES;
@@ -277,12 +278,12 @@ class ZonaBase extends Phaser.Scene {
         this.time.delayedCall(1300, () => {
             terra.setTexture('jordi_desperta');
             this.despertarImg = terra;
-            Joc.leitmotiv(this, 'trista', true);          // el començament del tema, lent i suau, quan arriba el Pare Jordà
             ui.obrirDialeg(dialeg, () => {
                 this.despertarImg = null;
                 terra.destroy();
                 veu.forEach(o => o.setVisible(true));
                 this.canviant = false;           // (el cicle torna a córrer i la càmera del diàleg es restableix sola)
+                Joc.musicaZona(this, 3000);      // ara sí: la música de la zona, que entra poc a poc
             });
             this.camaraDialeg(true);             // el cicle no corre mentre dura aquesta escena: cal buscar-hi la càmera aquí, perquè el diàleg no tapi el Pare Jordà
         });

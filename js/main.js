@@ -245,10 +245,10 @@ const Joc = {
     },
 
     // Cada zona demana la seva música; els interiors queden en silenci
-    musicaZona(scene) {
+    musicaZona(scene, fade = 0) {
         let clau = Joc.MUSICA_ZONES[scene.scene.key];
         if (scene.scene.key === 'ZonaEsglesia' && Estat.flag('epilegPendent') && !Estat.flag('epilegFet')) clau = 'musica_epileg';   // l'epíleg té el seu tema
-        if (clau) Joc.iniciarMusica(scene, 0, clau);
+        if (clau) Joc.iniciarMusica(scene, 0, clau, fade);
         else { Joc.musicaPendent = null; Joc.aturarMusica(); }
     },
 
