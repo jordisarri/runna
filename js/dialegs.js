@@ -1018,7 +1018,7 @@ const DIALEGS = {
                 { qui: 'Dolora', text: 'Si passes pel jardí, saluda l\'Isildren, el jardiner d\'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.' },
                 ...(!(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? [{ qui: 'Dolora', text: 'La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d\'aquests que no els talla ni la falç. Diuen que només cedeixen davant d\'una espasa de llum.'
                     + (E.te('runna') ? ' Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho.' : '') }] : []),
-                { qui: 'Dolora', text: 'Vés amb compte, fill. Entre les tres germanes guardem el rosari d\'aquesta casa, un gra cadascuna. Quan siguem lliures les tres, el rosari tornarà a estar sencer i et guardarà.' },
+                { qui: 'Dolora', text: 'Vés amb compte, fill. Entre les tres germanes guardem un gra del rosari d\'aquesta casa i la nostra Empara. Quan siguem lliures les tres, seran teus.' },
                 ...(ultimaMonja('Pains') ? [avisPremiMonja('Pains')] : [])
             ],
             enAcabar: () => premiMonja('Pains', 'premiPains')
