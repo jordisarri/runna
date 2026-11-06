@@ -61,65 +61,67 @@ class ZonaRuines extends ZonaBase {
     constructor() {
         super('ZonaRuines', {
             nom: 'Les Runes',
-            amplada: 1600,
+            amplada: 1300,
             alcada: 1100,
             entrades: {
-                celler:   { x: 800,  y: 1040, dir: 'amunt' },
-                placa:    { x: 800,  y: 1040, dir: 'amunt' },   // (partides desades d'abans del Pati del Celler)
-                pingpong: { x: 800,  y: 1040, dir: 'amunt' },
-                celles:   { x: 800,  y: 70,   dir: 'avall' },
+                celler:   { x: 500,  y: 1040, dir: 'amunt' },
+                placa:    { x: 500,  y: 1040, dir: 'amunt' },   // (partides desades d'abans del Pati del Celler)
+                pingpong: { x: 500,  y: 1040, dir: 'amunt' },
+                celles:   { x: 500,  y: 70,   dir: 'avall' },
                 cami:     { x: 60,   y: 915,  dir: 'dreta' },
-                cementiri:{ x: 1530, y: 585,  dir: 'esquerra' }
+                cementiri:{ x: 1230, y: 710,  dir: 'esquerra' }
             }
         });
     }
 
     construir() {
-        this.terra('herba', 0, 0, 1600, 1100, -1100);
-        this.terra('pedra', 150, 640, 1300, 320);       // replà de pedra
-        this.terra('cami', 700, 0, 200, 660);           // cap al nord (cel·les i Til·ler)
-        this.terra('cami', 700, 940, 200, 160);         // cap al Pati del Celler i la Plaça
-        this.terra('cami', 0, 850, 800, 130);           // camí de la Desaparició (oest)
-        this.terra('cami', 1100, 520, 500, 130);        // cap al cementiri (est, darrere el Santuari)
+        // L'escena és ara més estreta (1300 en lloc de 1600: s'ha tret la part de ponent, que era buida) i la façana de les runes i el camí de l'est
+        // han baixat 125 px perquè la façana es vegi sencera (abans sortia per dalt del món)
+        this.terra('herba', 0, 0, 1300, 1100, -1100);
+        this.terra('pedra', 0, 640, 1150, 320);         // replà de pedra
+        this.terra('cami', 400, 0, 200, 660);           // cap al nord (cel·les i Til·ler)
+        this.terra('cami', 400, 940, 200, 160);         // cap al Pati del Celler i la Plaça
+        this.terra('cami', 0, 850, 500, 130);           // camí de la Desaparició (oest)
+        this.terra('cami', 800, 645, 500, 130);         // cap al cementiri (est, darrere el Santuari)
 
         // Les runes, a la dreta; el camí passa per davant
-        this.terra('pedra', 900, 400, 700, 240);         // replà de pedra de les runes
-        // Façana gran (760 d'ample): surt per dalt de la pantalla, no importa que no es vegi sencera
-        this.posar('runes', 1300, 470, { col: { w: 640, h: 80 } });
-        this.blocDarrere(1270, 660, 390);               // no es pot passar per darrere de les runes
+        this.terra('pedra', 600, 525, 700, 240);         // replà de pedra de les runes
+        // Façana gran (760 d'ample i 575 d'alt): la base és a y=595, així que la part de dalt (y=20) es veu sencera
+        this.posar('runes', 920, 595, { col: { w: 640, h: 80 } });
+        this.blocDarrere(890, 660, 515);                // no es pot passar per darrere de les runes
         // Pedres caigudes davant i, a ponent, carreus escampats de l'església que mai no es va acabar
-        [[950, 525, 0.6], [1570, 530, 0.5], [240, 700, 0.8], [420, 760, 0.55], [330, 1040, 0.7], [560, 640, 0.5], [130, 560, 0.65]]
+        [[570, 650, 0.6], [1190, 655, 0.5], [90, 700, 0.8], [120, 760, 0.55], [60, 1040, 0.7], [260, 640, 0.5], [60, 560, 0.65]]
             .forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 60 * e, h: 22 * e } }));
         // El pergamí partit entre dues pedres: s'agafa i passa al sarró
         if (!Estat.flag('fragment1')) {
             // Dins de les runes, sobre els carreus caiguts a la dreta del portal (perquè no se solapi amb l'ombra del mur de l'esquerra)
-            this.pergamiRunes = this.posar('pergami_partit', 1380, 455, { fonsY: 480, escala: 0.75 });
-            this.pergamiBrill = this.add.circle(1380, 435, 40, 0xffe8a0, 0.2).setDepth(479).setBlendMode('ADD');
+            this.pergamiRunes = this.posar('pergami_partit', 1000, 580, { fonsY: 605, escala: 0.75 });
+            this.pergamiBrill = this.add.circle(1000, 560, 40, 0xffe8a0, 0.2).setDepth(604).setBlendMode('ADD');
             this.tweens.add({ targets: this.pergamiBrill, alpha: 0.05, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
-            this.interactiu(1380, 495, RADI_OBJECTE, DIALEGS.ruines, { altura: 60, actiu: () => !Estat.flag('fragment1') });
+            this.interactiu(1000, 620, RADI_OBJECTE, DIALEGS.ruines, { altura: 60, actiu: () => !Estat.flag('fragment1') });
         } else if (!Estat.te('fragment1')) Estat.dona('fragment1');          // partides desades d'abans del pergamí físic
 
         // L'ombra del monjo: projectada al mur a l'esquerra del portal de les runes
         this.apareix = 1;            // 0..1: com de present és l'ombra (la primera vegada es materialitza lentament)
-        this.ombraMonjo = this.add.image(1205, 425, 'ombra_monjo').setOrigin(0.5, 1)
-            .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(471).setAlpha(0);
-        this.puntOmbra = this.interactiu(1205, 465, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 140, actiu: () => ['fragment1', 'fragment2', 'alcuiLlegit'].every(f => Estat.flag(f)) && !Estat.flag('benedicioMonjo'), enTancar: () => { if (this.ombraCantOberta()) Estat.posaFlag('flauta_ombra'); } });
+        this.ombraMonjo = this.add.image(825, 550, 'ombra_monjo').setOrigin(0.5, 1)
+            .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(596).setAlpha(0);
+        this.puntOmbra = this.interactiu(825, 590, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 140, actiu: () => ['fragment1', 'fragment2', 'alcuiLlegit'].every(f => Estat.flag(f)) && !Estat.flag('benedicioMonjo'), enTancar: () => { if (this.ombraCantOberta()) Estat.posaFlag('flauta_ombra'); } });
         this.ombraHaCridat = false;
-        this.llocFlauta('ombra', 1205, 475, 160, true, () => this.ombraCantOberta() && !Estat.flag('benedicioMonjo'));      // la tarota només es pot tocar quan ja s'han llegit els dos pergamins i l'ombra ha demanat el cant
-        this.tweens.add({ targets: this.ombraMonjo, y: 428, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
+        this.llocFlauta('ombra', 825, 600, 160, true, () => this.ombraCantOberta() && !Estat.flag('benedicioMonjo'));      // la tarota només es pot tocar quan ja s'han llegit els dos pergamins i l'ombra ha demanat el cant
+        this.tweens.add({ targets: this.ombraMonjo, y: 553, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
         this.ombraVista = false; this.ombraMarxa = false;
 
-        this.cartell(620, 960, DIALEGS.cartellRuinesPingpong);
+        this.cartell(320, 960, DIALEGS.cartellRuinesPingpong);
 
-        this.arbres([[1530, 1020], [1100, 1030], [120, 180], [380, 120], [250, 420], [1500, 160]]);
+        this.arbres([[1230, 1020], [800, 1030], [80, 150], [1200, 160], [100, 430]]);
 
         // Animalets del cementiri esquerdat
-        this.enemic('escolopendra', 300, 600);
-        this.enemic('escolopendra', 1350, 620);
-        this.sortida(700, 1086, 200, 14, 'ZonaCellerFora', 'runes');
-        this.sortida(700, 0, 200, 14, 'ZonaCelles', 'ruines');
+        this.enemic('escolopendra', 150, 600);
+        this.enemic('escolopendra', 1050, 745);
+        this.sortida(400, 1086, 200, 14, 'ZonaCellerFora', 'runes');
+        this.sortida(400, 0, 200, 14, 'ZonaCelles', 'ruines');
         this.sortida(0, 850, 14, 130, 'ZonaCami', 'runes');
-        this.sortida(1586, 520, 14, 130, 'ZonaCementiri', 'runes');
+        this.sortida(1286, 645, 14, 130, 'ZonaCementiri', 'runes');
     }
 
     // El pergamí vola cap a l'Ineu i passa al sarró
