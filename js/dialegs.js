@@ -240,15 +240,18 @@ const DIALEGS = {
                 enAcabar: () => { E.posaFlag("parlatPianista"); iniciarLliço("aurora"); }
             };
         }
-        // El Cant de Vespres: quan l'ombra l'ha demanat, o ja abans si el Pare Alcoví ha llegit els fragments (no s'ha de quedar encallat)
-        if ((E.flag("ombraDemanaCant") || E.flag("alcuiLlegit") || E.flag("soparObert")) && !E.flag("cantPedres")) {
+        // El Cant de Vespres: l'Ineu el demana a la Pianista, o perquè l'ombra del monjo ha dit que qui toca l'orgue el coneix, o perquè el Til·ler l'hi
+        // ha remès pels pastors de la Cirosa. Ella no sap res de l'ombra ni dels pastors: ho sap pel que l'Ineu li explica.
+        if ((E.flag("ombraDemanaCant") || E.flag("soparObert")) && !E.flag("cantPedres")) {
+            const perOmbra = E.flag("ombraDemanaCant");
             return {
                 pagines: [
-                    { qui: "La Pianista", text: E.flag("ombraDemanaCant")
-                        ? "El monjo de les Runes vol sentir el Cant de Vespres? Ai, fill, aquest és molt vell. Me'l va ensenyar la meva mare. Vine, escolta."
-                        : E.flag("alcuiLlegit")
-                            ? "Vas a veure l'ombra de les Runes? Diuen que només escolta el Cant de Vespres. És molt vell: me'l va ensenyar la meva mare. Vine, escolta."
-                            : "Els pastors de la Cirosa fa anys que no senten música vora el foc? Tinc un cant molt vell que potser els recordaria casa: el Cant de Vespres. Me'l va ensenyar la meva mare. Vine, escolta." }
+                    { qui: "Ineu", text: perOmbra
+                        ? "Una ombra de monjo, a les Runes, diu que vostè coneix un cant que les pedres entenen."
+                        : "Els pastors de la Cirosa fa anys que no senten música vora el foc. El Gran Til·ler diu que vostè guarda un cant tan vell com ells." },
+                    { qui: "La Pianista", text: perOmbra
+                        ? "Un cant que les pedres entenen? Ai, fill... Potser és el de Vespres: és molt vell, me'l va ensenyar la meva mare. Vine, escolta."
+                        : "Un cant tan vell com ells? Tinc el de Vespres, fill: molt vell, me'l va ensenyar la meva mare. Potser els recorda casa. Vine, escolta." }
                 ],
                 enAcabar: () => iniciarLliço("pedres")
             };

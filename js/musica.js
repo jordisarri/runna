@@ -56,9 +56,9 @@ function completarLliço(nom) {
     } else if (nom === 'pedres') {
         pagines = [
             { qui: 'La Pianista', text: E.flag('ombraDemanaCant')
-                ? 'El Cant de Vespres: 3-1-2-1. Les pedres antigues sempre l\'han entès. Toca\'l davant l\'ombra del monjo, a les Runes.'
+                ? 'El Cant de Vespres: 3-1-2-1. Si aquest monjo l\'espera, toca\'l davant seu: les pedres antigues sempre l\'han entès.'
                 : (E.flag('soparObert') && !E.flag('pastorsConvencuts'))
-                    ? 'El Cant de Vespres: 3-1-2-1. Toca\'l vora el foc dels pastors, a la Cirosa: un cant tan vell potser els recorda casa.'
+                    ? 'El Cant de Vespres: 3-1-2-1. Toca\'l vora el foc dels pastors: un cant tan vell potser els recorda casa.'
                     : 'El Cant de Vespres: 3-1-2-1. És molt vell: les pedres antigues sempre l\'han entès.' }
         ];
         E.posaObjectiu(E.flag('ombraDemanaCant') ? "El Cant de Vespres farà parlar l'ombra del monjo, a les Runes." : "Toca el Cant de Vespres vora el foc dels pastors, a la Cirosa.");
