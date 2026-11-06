@@ -1013,7 +1013,7 @@ const DIALEGS = {
             { qui: 'Ineu', text: "Una música lleugera, de tres notes, potser la desperta." }] };
         if (!E.flag('premiPains')) return {
             pagines: [
-                { qui: 'Dolora', text: 'Oh, mon petit! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Dolora.' },
+                { qui: 'Dolora', text: 'Oh, jove monjo! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Dolora.' },
                 { qui: 'Dolora', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb hàbit i ocells a l\'espatlla que s\'enduia els nens del poble, rient baixet.' },
                 { qui: 'Dolora', text: 'Si passes pel jardí, saluda l\'Isildren, el jardiner d\'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.' },
                 ...(!(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? [{ qui: 'Dolora', text: 'La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d\'aquests que no els talla ni la falç. Diuen que només cedeixen davant d\'una espasa de llum.'
