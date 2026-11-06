@@ -251,15 +251,37 @@ const ICONES_OBJECTES = {
         ctx.fillStyle = '#ddd2b6'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.4;                                    // ploma
         ctx.beginPath(); ctx.moveTo(66, 36); ctx.quadraticCurveTo(84, 8, 90, 6); ctx.quadraticCurveTo(88, 26, 70, 40); ctx.closePath(); ctx.fill(); ctx.stroke();
     },
+    // La Benedicció: una mà oberta alçada, de palmell, sobre una aura daurada amb raigs. Els dits són traços gruixuts de punta rodona (primer el contorn fosc i
+    // després la pell), així la mà surt d'una sola peça, sense juntes; la mànega de monjo la tanca per baix
     benediccio: ctx => {
         ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-        ctx.strokeStyle = '#e8b830'; ctx.lineWidth = 3.4;                                                             // raigs sobre els dits
-        [[28, 22, 22, 10], [40, 16, 38, 4], [52, 14, 52, 2], [64, 16, 68, 4], [74, 24, 82, 13]].forEach(([x, y, x2, y2]) => { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2); ctx.stroke(); });
-        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.fillStyle = '#f0c8a0';
-        [[31, 28, 11, 34], [43, 24, 11, 38], [55, 24, 11, 38], [67, 28, 11, 34]].forEach(([x, y, w, h]) => { ctx.beginPath(); ctx.roundRect(x, y, w, h, 5); ctx.fill(); ctx.stroke(); });      // dits
-        ctx.beginPath(); ctx.roundRect(28, 54, 52, 34, 10); ctx.fill(); ctx.stroke();                                                                                              // palmell
-        ctx.beginPath(); ctx.moveTo(30, 66); ctx.quadraticCurveTo(10, 62, 12, 48); ctx.quadraticCurveTo(14, 42, 22, 48); ctx.lineTo(34, 62); ctx.closePath(); ctx.fill(); ctx.stroke();             // polze
-        ctx.strokeStyle = 'rgba(150,90,50,0.5)'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(44, 62); ctx.lineTo(44, 80); ctx.moveTo(56, 62); ctx.lineTo(56, 80); ctx.stroke();
+        const aura = ctx.createRadialGradient(48, 46, 6, 48, 46, 47);
+        aura.addColorStop(0, 'rgba(255,236,160,0.95)'); aura.addColorStop(0.55, 'rgba(255,208,90,0.42)'); aura.addColorStop(1, 'rgba(255,200,80,0)');
+        ctx.fillStyle = aura; ctx.beginPath(); ctx.arc(48, 46, 47, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#f2c040'; ctx.lineWidth = 3.2;
+        for (let k = 0; k < 14; k++) {
+            const a = k / 14 * Math.PI * 2, r0 = 36, r1 = k % 2 ? 43 : 47;
+            ctx.beginPath(); ctx.moveTo(48 + Math.cos(a) * r0, 46 + Math.sin(a) * r0); ctx.lineTo(48 + Math.cos(a) * r1, 46 + Math.sin(a) * r1); ctx.stroke();
+        }
+        const dits = [[40, 66, 35, 24], [47, 64, 46, 14], [55, 65, 58, 21], [61, 69, 69, 34], [38, 72, 19, 52]];           // [x0, y0, x1, y1]: cinc dits (l'últim, el polze)
+        const palmell = (r) => { ctx.beginPath(); ctx.ellipse(49, 68, r, r * 0.95, 0, 0, Math.PI * 2); ctx.fill(); };
+        ctx.strokeStyle = CONTORN; ctx.fillStyle = CONTORN; ctx.lineWidth = 16;
+        dits.forEach(([x0, y0, x1, y1]) => { ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke(); });
+        palmell(22);
+        ctx.strokeStyle = '#f2c9a0'; ctx.fillStyle = '#f2c9a0'; ctx.lineWidth = 10;
+        dits.forEach(([x0, y0, x1, y1]) => { ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke(); });
+        palmell(19.5);
+        // ombra a la vora dreta de cada dit i del palmell, i una llum a l'esquerra
+        ctx.strokeStyle = 'rgba(170,100,60,0.45)'; ctx.lineWidth = 2.4;
+        dits.slice(0, 4).forEach(([x0, y0, x1, y1]) => { ctx.beginPath(); ctx.moveTo(x0 + 3.4, y0 - 4); ctx.lineTo(x1 + 3.2, y1 + 3); ctx.stroke(); });
+        ctx.strokeStyle = 'rgba(255,240,215,0.6)'; ctx.lineWidth = 2;
+        dits.slice(0, 4).forEach(([x0, y0, x1, y1]) => { ctx.beginPath(); ctx.moveTo(x0 - 2.6, y0 - 6); ctx.lineTo(x1 - 2.6, y1 + 4); ctx.stroke(); });
+        ctx.strokeStyle = 'rgba(150,90,50,0.55)'; ctx.lineWidth = 1.6;                                                   // línies del palmell
+        ctx.beginPath(); ctx.moveTo(38, 66); ctx.quadraticCurveTo(46, 74, 60, 64); ctx.moveTo(44, 60); ctx.quadraticCurveTo(50, 70, 56, 78); ctx.stroke();
+        // mànega
+        ctx.fillStyle = '#6a4426'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.roundRect(32, 84, 34, 13, 3); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,215,160,0.35)'; ctx.fillRect(35, 86, 4, 8);
     },
     cinta_nena: (ctx, cv) => { const t = document.createElement('canvas'); dibuixarLlac(t, 80); ctx.drawImage(t, 8, (96 - t.height) / 2); },      // el mateix llaç que es troba sota les pedres
     benedicio_fraterna: ctx => {                                // una creu al mig d'una aurèola daurada, amb raigs de claror i dos cors petits als costats
