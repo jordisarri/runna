@@ -25,6 +25,7 @@ function encaixarDisseny(scene, alt0 = 1280) {
 }
 const ALT_HUD = 0;      // ja no hi ha franja reservada: l'escenari ocupa tota la pantalla i el HUD hi flota per sobre
 const TOP_HUD = 116;    // alçada que ocupen el rosari i els botons flotants: el que ha de quedar visible (boss, tria, càmera de diàleg) hi queda per sota
+const ALCADA_CAIXA_MIN = 150;   // alçada mínima de la caixa de text (una sola línia)
 const Y_BOTONS_HUD = 52;   // el rosari, els consells, el sarró i el menú van a la mateixa fila
 const FONT = 'Georgia, "Times New Roman", serif';
 
@@ -158,7 +159,7 @@ class EscenaUI extends Phaser.Scene {
         this.vectorTactil = { x: 0, y: 0 };
         this.accioTactil = false;
         // (l'escena es reaprofita en tornar del títol: els objectes de l'altra vegada ja són destruïts)
-        this.frangesG = null; this.boss = null; this.consellsObert = false; this.contConsells = null; this.inventariObert = false; this.inventari = null; this.ineuAlcat = false;
+        this.frangesG = null; this.boss = null; this.consellsObert = false; this.contConsells = null; this.tapaConsells = null; this.inventariObert = false; this.inventari = null; this.ineuAlcat = false;
 
         this.crearHUD();
         this.crearCaixaDialeg();
@@ -237,18 +238,27 @@ class EscenaUI extends Phaser.Scene {
         const cos = this.add.text(AMPLE / 2, 0, text, estilText(28, '#3a2412', { fontStyle: 'italic', wordWrap: { width: w - 90 }, align: 'center', lineSpacing: 2 })).setOrigin(0.5, 0);
         const peu = this.add.text(AMPLE / 2, 0, 'Toca per tancar', estilText(22, '#7a5a38')).setOrigin(0.5, 0);
         const h = Math.max(220, 40 + titol.height + 14 + cos.height + 18 + peu.height + 38), y0 = TOP_HUD + 24;
-        const tapa = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.35).setOrigin(0).setInteractive().on('pointerdown', () => this.tancarConsells());
+        const tapa = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0).setOrigin(0).setInteractive().setDepth(79).on('pointerdown', () => this.tancarConsells());
+        this.tapaConsells = tapa;
+        this.tweens.add({ targets: tapa, fillAlpha: 0.35, duration: 220 });
         const fons = marcPergami(this, (AMPLE - w) / 2, y0, w, h).setOrigin(0);
         titol.setY(y0 + 38); cos.setY(titol.y + titol.height + 14); peu.setY(y0 + h - 22 - peu.height);
-        cont.add([tapa, fons, titol, cos, peu]);
+        cont.add([fons, titol, cos, peu]);
         this.contConsells = cont;
+        // El panell creix des del seu centre amb un petit rebot (Back.easeOut) i un fade in; la mida es fa servir com a pivot de l'escala
+        const cx = AMPLE / 2, cy = y0 + h / 2, pop = { v: 0.82 };
+        const posa = () => cont.setScale(pop.v).setPosition(cx * (1 - pop.v), cy * (1 - pop.v));
+        posa(); cont.setAlpha(0);
+        this.tweens.add({ targets: pop, v: 1, duration: 340, ease: 'Back.easeOut', onUpdate: posa });
+        this.tweens.add({ targets: cont, alpha: 1, duration: 180 });
         if (Sfx.objecte) Sfx.objecte();
     }
 
     tancarConsells() {
         if (!this.consellsObert) return;
         this.consellsObert = false;
-        if (this.contConsells) { this.contConsells.destroy(); this.contConsells = null; }
+        if (this.contConsells) { this.tweens.killTweensOf(this.contConsells); this.contConsells.destroy(); this.contConsells = null; }
+        if (this.tapaConsells) { this.tweens.killTweensOf(this.tapaConsells); this.tapaConsells.destroy(); this.tapaConsells = null; }
         this.bloquejatFins = this.time.now + 200;
     }
 
@@ -303,9 +313,13 @@ class EscenaUI extends Phaser.Scene {
             this.cors.push(this.add.image(0, 0, 'gra_ple').setScale(1 / RES));
         }
         const gx = i => 78 + i * 46, GY = 52;
+        const pops = [];
         this.cors.forEach((img, i) => {
             const v = d.vida - i * 2;
             const tex = v >= 2 ? 'gra_ple' : v === 1 ? 'gra_mig' : 'gra_buit';
+            const nivell = t => t === 'gra_ple' ? 2 : t === 'gra_mig' ? 1 : 0;
+            if (img.texAnt && nivell(tex) > nivell(img.texAnt) && i < d.corsMax) pops.push(i);       // guanya vida (no és la primera vegada; perdre'n ho anima animarPerdua)
+            img.texAnt = tex;
             img.setVisible(i < d.corsMax).setPosition(gx(i), GY).setTexture(tex);
             this.ombresGrans[i].setVisible(i < d.corsMax).setPosition(gx(i) + 2.5, GY + 3.5).setTexture(tex);
         });
@@ -323,6 +337,20 @@ class EscenaUI extends Phaser.Scene {
         c.lineStyle(5.5, 0x000000, 0.45); traç(2, 3);
         c.lineStyle(2.6, 0xe6cf98, 1); traç(0, 0);
         this.gestionarLatidor();
+        // Guanyar vida: el gra salta gran i s'hi assenta amb un rebot (Back.easeOut); si en guanya més d'un, salten en cascada
+        // (el gra que bategueja i els que s'animen en perdre vida ja tenen la seva animació)
+        pops.forEach((i, k) => {
+            if (i === this.latidorIdx || this.animantCor) return;
+            [[this.cors[i], 1], [this.ombresGrans[i], 1.1]].forEach(([im, base]) => {
+                this.tweens.killTweensOf(im);
+                const salta = () => {
+                    if (!im.active) return;
+                    im.setScale(1.7 * base / RES);
+                    this.tweens.add({ targets: im, scale: base / RES, duration: 520, ease: 'Back.easeOut' });
+                };
+                if (k > 0) this.time.delayedCall(k * 70, salta); else salta();
+            });
+        });
     }
 
     // Quan queda un sol gra o menys, l'últim gra bategueja
@@ -541,19 +569,20 @@ class EscenaUI extends Phaser.Scene {
         this.caixa.add([this.ombraCaixaDialeg, this.fonsCaixaDialeg, this.marcRetrat, this.retratImg, marc, this.cintaNom, this.plaquetaNom, this.textDialeg, this.indicador]);
     }
 
-    ajustarAlcadaCaixaDialeg(pagines) {
-        let alcadaText = 0;
-        for (const pagina of pagines) {
-            if (!pagina) continue;
-            const text = pagina.avis !== undefined ? pagina.avis : pagina.text;
-            if (typeof text !== 'string') continue;
-            this.textDialeg.setFontStyle(pagina.qui || pagina.avis !== undefined ? 'normal' : 'italic').setText(text);
-            alcadaText = Math.max(alcadaText, this.textDialeg.height);
-        }
+    // Alçada que necessita la caixa per a UNA pàgina (el text de la pàgina més un marge): les pàgines curtes es veuen en una caixa baixa
+    alcadaPaginaDialeg(pagina) {
+        if (!pagina || pagina.fer) return 0;
+        const text = pagina.avis !== undefined ? pagina.avis : pagina.text;
+        if (typeof text !== 'string') return 0;
+        this.textDialeg.setFontStyle(pagina.qui || pagina.avis !== undefined ? 'normal' : 'italic').setText(text);
+        const h = this.textDialeg.height;
         this.textDialeg.setText('');
+        return Math.max(ALCADA_CAIXA_MIN, Math.ceil(h + 104));
+    }
 
-        const alcada = Math.max(230, Math.ceil(alcadaText + 104));
-        this.alcadaCaixaDialeg = alcada;
+    // Posa la caixa (i tot el que hi va penjat) a l'alçada indicada, ancorada a la vora de baix de la pantalla
+    colocarCaixaDialeg(alcada) {
+        this.alcadaCaixaActual = alcada;
         this.caixa.setY(ALT - 10 - alcada / 2);
         this.ombraCaixaDialeg.setSize(704, alcada);
         this.fonsCaixaDialeg.setSize(704 * RES, alcada * RES);
@@ -566,6 +595,23 @@ class EscenaUI extends Phaser.Scene {
         this.retratImg.setY(retratY);
         this.marcRetrat.setY(desplacamentRetrat);
         this.marcRetratVora.setY(desplacamentRetrat);
+    }
+
+    // Mesura totes les pàgines. alcadaCaixaDialeg és la més alta (la càmera dels diàleg la té en compte per reservar lloc); cada pàgina,
+    // però, es mostra a la seva pròpia alçada (vegeu mostrarPagina)
+    ajustarAlcadaCaixaDialeg(pagines) {
+        const alcades = pagines.map(p => this.alcadaPaginaDialeg(p));
+        this.alcadesPagines = alcades;
+        this.alcadaCaixaDialeg = Math.max(ALCADA_CAIXA_MIN, ...alcades);
+        this.colocarCaixaDialeg(alcades.find(a => a > 0) || ALCADA_CAIXA_MIN);
+    }
+
+    // En passar d'una pàgina a una altra, la caixa creix o s'encongeix amb un petit moviment
+    canviarAlcadaCaixa(alcada) {
+        if (!alcada || alcada === this.alcadaCaixaActual) return;
+        if (this.twAlcadaCaixa) this.twAlcadaCaixa.stop();
+        const v = { h: this.alcadaCaixaActual };
+        this.twAlcadaCaixa = this.tweens.add({ targets: v, h: alcada, duration: 160, ease: 'Sine.easeOut', onUpdate: () => this.colocarCaixaDialeg(v.h), onComplete: () => this.colocarCaixaDialeg(alcada) });
     }
 
     // dialeg = { pagines: [{qui, text}], enAcabar? }
@@ -600,6 +646,7 @@ class EscenaUI extends Phaser.Scene {
             return;
         }
         this.caixa.setVisible(true);
+        this.canviarAlcadaCaixa((this.alcadesPagines || [])[this.dialeg.pagina]);
         // Retrat (si qui parla és un personatge amb sprite): la cinta del nom es desplaça a la seva dreta
         const retrat = p.qui ? retratDe(this, p.qui) : null;
         [this.retratImg, this.marcRetrat, this.marcRetratVora].forEach(o => o.setVisible(!!retrat));
