@@ -698,12 +698,12 @@ const DIALEGS = {
             return {
                 pagines: [
                     { fer: (z, fet) => z.seq([c => z.deixar(c, 'herba_sj'), c => z.deixar(c, 'romani'), c => z.deixar(c, null, 0xffd060)], fet) },
-                    { qui: 'Ineu', text: 'Ha funcionat! Al fons de la pica hi ha un cristall que sembla de gel...' },
-                    { avis: 'Has obtingut l\'AIGUA DE LA FONT DEL BISBE i un CRISTALL DE GEL.', obj: 'aigua_sj' }
+                    { qui: 'Ineu', text: 'Ha funcionat! L\'aigua de la pica torna a ser clara com el vidre.' },
+                    { avis: 'Has obtingut l\'AIGUA DE LA FONT DEL BISBE.', obj: 'aigua_sj' }
                 ],
                 enAcabar: () => {
-                    E.posaFlag('fontNeta'); E.treu('pruna'); E.dona('aigua_sj'); E.dona('cristall_gel'); E.posaFlag('cristallGel');
-                    E.posaObjectiu("L'aigua de la Font del Bisbe obriria l'Alzina Buida. (I el Cristall de Gel, potser el vol el Galf, a l'Era.)");
+                    E.posaFlag('fontNeta'); E.treu('pruna'); E.dona('aigua_sj');
+                    E.posaObjectiu("L'aigua de la Font del Bisbe obriria l'Alzina Buida.");
                 }
             };
         }
@@ -867,7 +867,7 @@ const DIALEGS = {
         if (E.flag('cristallGel')) {
             return {
                 pagines: [
-                    { qui: 'Galf', text: 'Un cristall de gel de la Font del Bisbe! Fa anys que en buscava un. Dóna\'m una estona.' },
+                    { qui: 'Galf', text: 'Un cristall de gel de debò! Fa anys que en buscava un. Dóna\'m una estona.' },
                     { fer: (z, fet) => z.seq([c => z.npcFeina('galf', 1800, 'guspires', c), c => z.npcSalta('galf', c, 1), c => z.objecteVola('galf', c, 'telescopi_mon')], fet) },
                     { qui: 'Galf', text: 'Un telescopi! Amb això veuràs coses que cap monjo no ha vist. Perquè no se\'t perdi: les estrelles fan camí.' },
                     { avis: 'Has obtingut el TELESCOPI DEL GALF.', obj: 'telescopi' }
@@ -884,7 +884,7 @@ const DIALEGS = {
         }
         return { pagines: [
             { qui: 'Galf', text: "Així sí. Soc el Galf, inventor. Visc a la cel·la de Sant Antoni, però vinc aquí cada dia: és l'únic racó on cap teulada no em tapa el cel. Tinc idees que ni jo entenc." },
-            { qui: 'Galf', text: "Si em portes un cristall de gel (n'hi ha un a la Font del Bisbe, al bosc de l'oest del Til·ler), et construiré un telescopi per mirar el cel." }
+            { qui: 'Galf', text: "Si em portes un cristall de gel (diuen que n'hi ha un a l'ermita de Sant Gabriel), et construiré un telescopi per mirar el cel." }
         ] };
     },
     cartellEra: E => ({ pagines: [{ qui: 'Cartell', text: '↑ Ermita de la Desaparició\n→ Hostatgeria\n← Rovellonera' }] }),
@@ -1243,17 +1243,13 @@ const DIALEGS = {
     }),
 
     // ---------------- SANT GABRIEL ----------------
-    altarGabriel: E => ({
+    // El cofre de l'ermita de Sant Gabriel: hi ha el cristall de gel que demana el Galf (només es veu un cop el Galf n'ha parlat)
+    cofreGabriel: E => E.flag("cristallGel") || E.te("cristall_gel") ? { pagines: [] } : ({
         pagines: [
-            ...(E.flag("calze") ? [] : [{ avis: "Has obtingut el CALZE DE ROSADA.", obj: 'calze' }]),
-            { fer: (z, fet) => z.beure(fet, 0xd8e8ff) },
+            { qui: "Ineu", text: "Un cofre petit, tan fred que em fa mal a les mans. El pany és ple de gel i cedeix en tocar-lo. A la tapa hi ha gravat: «La rosada de l'alba no es fon ni a l'estiu.»" },
+            { avis: "Has obtingut el CRISTALL DE GEL.", obj: "cristall_gel" }
         ],
-        enAcabar: () => {
-            if (!E.flag("calze")) { E.dona("calze"); E.posaFlag("calze"); }
-            E.dades.vida = E.dades.corsMax * 2;
-            const z = Joc.zonaActiva(game.scene.scenes[0]);
-            if (z) z.flotant(z.ineu.x, z.ineu.y - 150, "✦ Rosari ple", "#ffd894");
-        }
+        enAcabar: () => { E.dona("cristall_gel"); E.posaFlag("cristallGel"); }
     }),
 
     telescopiMon: E => {

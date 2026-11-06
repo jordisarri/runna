@@ -141,7 +141,6 @@ const CATALEG_OBJECTES = {
     clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Aldreu li va caure; l\'Iscu te l\'ha donada.'],
     fragment1:        ['Pergamí partit (1/2)', 'La meitat d\'un pergamí esquinçat, trobada a les Runes.'],
     pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.» Al revers: «Qui busqui sortida, que alci la bóta marcada amb la creu.»'],
-    calze:            ['Calze de Rosada', "De plata, antic. A l'altar de Sant Gabriel, cada cop que hi beus l'aigua de rosada, el rosari et queda ple."],
     clau_ferro:       ['Clau de ferro', 'Obre la Porta de les Gírgoles.'],
     llavorLluna:      ['Llavor de Lluna', 'De la Rosansa. L\'Isildren sap on plantar-la.'],
 };

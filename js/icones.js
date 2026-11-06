@@ -270,12 +270,6 @@ const ICONES_OBJECTES = {
         ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 2; [32, 42, 52, 62].forEach(y => { ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(66 - (y % 20), y); ctx.stroke(); });
         ctx.fillStyle = '#9a2a1a'; ctx.beginPath(); ctx.arc(62, 66, 6, 0, Math.PI * 2); ctx.fill();
     },
-    calze: ctx => {
-        ctx.lineWidth = 3; ctx.fillStyle = '#d0d4dc';
-        ctx.beginPath(); ctx.moveTo(22, 14); ctx.lineTo(74, 14); ctx.bezierCurveTo(72, 44, 60, 50, 52, 52); ctx.lineTo(52, 70); ctx.lineTo(68, 84); ctx.lineTo(28, 84); ctx.lineTo(44, 70); ctx.lineTo(44, 52); ctx.bezierCurveTo(36, 50, 24, 44, 22, 14); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#9ac8ff'; ctx.beginPath(); ctx.ellipse(48, 16, 25, 5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fillRect(30, 22, 5, 18);
-    },
     llavorLluna: ctx => {
         const g = ctx.createRadialGradient(48, 52, 2, 48, 52, 42); g.addColorStop(0, 'rgba(230,230,255,0.8)'); g.addColorStop(1, 'rgba(200,200,255,0)');
         ctx.fillStyle = g; ctx.fillRect(0, 0, 96, 96);
@@ -325,7 +319,6 @@ const US_OBJECTES = {
     pergami_monjo: E => E.flag('raimDerrotat') ? 'record' : 'cal',
     clau_girgoles: E => E.flag('portaFerroOberta') ? 'record' : 'cal',
     clau_ferro: E => E.flag('portaSoterraniOberta') ? 'record' : 'cal',
-    calze: () => 'sempre'
     // La resta (aigua, cristall, pruna, beuratge, pa, llaç, ram, llavor) es gasten en fer-los servir: si els portes, encara et calen
 };
 const US_TEXTOS = {

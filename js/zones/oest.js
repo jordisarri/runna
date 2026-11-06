@@ -282,7 +282,7 @@ class ZonaGabriel extends ZonaBase {
 // ---------------- ERMITA DE SANT GABRIEL (interior) ----------------
 // Com l'ermita de debò: una sola nau estreta, de carreus ocres, amb volta apuntada; la paret del fons, de carreus més
 // vermellosos, amb l'arcàngel Gabriel de mosaic. Al davant, sobre un graó de pedra clara, l'altar de blocs amb una creu i
-// dos canelobres de ferro (i el Calze de Rosada), dos testos de flors i un terra de lloses grans i gastades.
+// dos canelobres de ferro, dos testos de flors i un terra de lloses grans i gastades.
 // Una espitllera a la paret de la dreta deixa entrar un raig de llum.
 const GAB = { A: 720, H: 1000, x0: 170, x1: 550, fons: 300, grao: 420 };
 
@@ -394,13 +394,12 @@ class ZonaGabrielInt extends ZonaBase {
         al.fillStyle(0xe4dece, 1).fillRect(cx - 64, ay - 58, 128, 58).lineStyle(2, 0x6a6458, 1).strokeRect(cx - 64, ay - 58, 128, 58);
         al.lineStyle(1.2, 0x9a9282, 1).lineBetween(cx - 64, ay - 29, cx + 64, ay - 29).lineBetween(cx - 20, ay - 58, cx - 20, ay - 29).lineBetween(cx + 24, ay - 58, cx + 24, ay - 29).lineBetween(cx, ay - 29, cx, ay);
         al.fillStyle(0xf0ebdf, 1).fillRect(cx - 74, ay - 72, 148, 14).lineStyle(2, 0x6a6458, 1).strokeRect(cx - 74, ay - 72, 148, 14);
-        // Damunt l'altar: creu i canelobres de ferro, i el calze
+        // Damunt l'altar: creu i canelobres de ferro
         al.fillStyle(0x1e1c1a, 1).fillRect(cx - 2, ay - 132, 4, 60).fillRect(cx - 16, ay - 118, 32, 4).fillRect(cx - 10, ay - 76, 20, 4);
         [-44, 44].forEach(dx => {
             al.fillStyle(0x1e1c1a, 1).fillRect(cx + dx - 1.5, ay - 94, 3, 22).fillRect(cx + dx - 8, ay - 76, 16, 4).fillRect(cx + dx - 7, ay - 96, 14, 3);
             al.fillStyle(0xf4f0e4, 1).fillRect(cx + dx - 3, ay - 112, 6, 16);
         });
-        al.fillStyle(0xc8ccd4, 1).fillRect(cx - 28, ay - 84, 10, 4).fillTriangle(cx - 30, ay - 96, cx - 16, ay - 96, cx - 23, ay - 86).fillRect(cx - 24, ay - 86, 2, 4);
         [-44, 44].forEach((dx, i) => {
             const fl = this.add.ellipse(cx + dx, ay - 118, 6, 11, 0xffc860).setDepth(396);
             this.tweens.add({ targets: fl, scaleY: 1.25, alpha: 0.75, yoyo: true, repeat: -1, duration: 300 + i * 110 });
@@ -414,7 +413,14 @@ class ZonaGabrielInt extends ZonaBase {
             [[-6, 10, 0xe8c050], [4, 6, 0xd84a3a], [7, 14, 0xe8c050], [-2, 4, 0xf4f0e0]].forEach(([fx, fy, c]) => t.fillStyle(c, 1).fillCircle(cx + dx + fx, grao + fy, 2.5));
             t.fillStyle(0xa0563a, 1).fillEllipse(cx + dx, grao + 22, 26, 10).lineStyle(1.5, 0x4a2414, 1).strokeEllipse(cx + dx, grao + 22, 26, 10);
         });
-        this.interactiu(cx, grao + 40, RADI_OBJECTE, DIALEGS.altarGabriel, { altura: 140 });
+        // El cofre del cristall de gel, al peu de l'altar: només hi és quan el Galf ja ha demanat el cristall (i fins que l'Ineu se l'emporta)
+        if (Estat.flag('garfBancSegut') && !Estat.flag('cristallGel') && !Estat.te('cristall_gel') && !Estat.flag('telescopi')) {
+            const cy = grao + 70;
+            this.posar('cofre', cx, cy, { col: { w: 50, h: 20 } });
+            const gel = this.add.circle(cx, cy - 30, 36, 0xbfe6ff, 0.2).setBlendMode('ADD').setDepth(cy + 2);       // una claror blavosa de gel
+            this.tweens.add({ targets: gel, alpha: 0.06, scale: 1.3, yoyo: true, repeat: -1, duration: 1300 });
+            this.interactiu(cx, cy + 6, RADI_OBJECTE, DIALEGS.cofreGabriel, { altura: 80 });
+        }
 
         // Parets i porta
         this.colisio(x0 / 2, H / 2, x0, H);

@@ -20,7 +20,7 @@ const PROGRES = {
         { id: 'bassadoria', marca: ['bassadoriaNeta'], fet: E => E.flag('bassadoriaNeta'),
           pista: E => "La Bassadòria raja tèrbola. Potser el Cant de l'Aurora la deixaria neta." },
         // ---- ACTE 2: el camí del Til·ler ----
-        { id: 'font', marca: ['fontNeta', 'cristallGel', 'obj:cristall_gel', 'obj:aigua_sj'], fet: E => E.flag('fontNeta'),
+        { id: 'font', marca: ['fontNeta', 'obj:aigua_sj'], fet: E => E.flag('fontNeta'),
           pista: E => {
               // Fins que no s'ha anat a la font (fontVista) no se sap què cal portar-hi: la pista només dona el lloc
               if (!E.flag('fontVista')) return "La Font del Bisbe, de la qual les Venerables Sàvies diuen que guaria tothom, s'ha quedat adormida. Val la pena anar-hi a mirar.";
@@ -79,7 +79,8 @@ const PROGRES = {
         { id: 'telescopi', marca: ['garfBancSegut', 'telescopi', 'obj:telescopi'], fet: E => E.flag('telescopi') || E.flag('estelLlorenc'),
           pista: E => !E.flag('garfBancSegut')
               ? "A l'Era, un inventor anomenat Galf mira el cel. Potser et deixa seure al seu banc."
-              : "El Galf, a l'Era, sabria fer un tub per mirar els estels si li portessis un cristall de gel de la Font del Bisbe." },
+              : E.te('cristall_gel') ? "Ja tens el cristall de gel: el Galf, a l'Era, en farà un tub per mirar els estels."
+              : "El Galf, a l'Era, sabria fer un tub per mirar els estels si li portessis un cristall de gel de l'ermita de Sant Gabriel." },
         { id: 'estels', marca: ['telescopiMuntat', 'estelsFets'], fet: E => E.flag('estelsFets') || E.flag('estelLlorenc'),
           pista: E => "El telescopi vol un lloc alt i fosc: els Dipòsits." },
         { id: 'estelLlorenc', marca: ['estelLlorenc', 'obj:estel_llorenc'], fet: E => E.flag('estelLlorenc'),
