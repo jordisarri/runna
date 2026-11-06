@@ -178,7 +178,7 @@
 
 - [x] `tomba_angel`
 
-- [x] `tomba_angel_flors`
+- [x] `tomba_angel_content`
 
 - [x] `tomba_esquerdada`
 
@@ -244,7 +244,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `boto_sarro`, `boto_consells` (HUD), `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
 
 
 

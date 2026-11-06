@@ -1492,7 +1492,7 @@ const DIALEGS = {
             pagines: [gravat,
                 { qui: "Ineu", text: "Aquest ram és del Germà Francí, per als monjos que dormen aquí. El deixo als peus de l'àngel." },
                 { fer: (z, fet) => z.deixar(() => { if (z.ramDeixat) z.ramDeixat(); fet(); }, 'flors', 0xffd8e8) },       // les flors es veuen al gerro mentre es parla
-                { qui: "Ineu", text: "(Els pètals tremolen, com si algú respirés a prop. L'àngel ja no sembla plorar sol.)" },
+                { qui: "Ineu", text: "(Els pètals tremolen, com si algú respirés a prop. L'àngel, que mirava a terra, alça la cara al cel i somriu: ja no plora sol.)" },
                 { qui: "Ineu", text: "El Germà Francí es posarà content. Va dir que, en tornar, tindria alguna cosa per a mi a Sant Antoni." },
                 { avis: "Has deixat el RAM DE FLORS als peus de l'àngel." }
             ],
