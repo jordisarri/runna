@@ -1428,7 +1428,7 @@ function dibuixarCabana(c, w) {
     lienc(c, w, H * RES, ctx => { ctx.scale(RES, RES); pintarCabana(ctx, L, H); });
 }
 
-// Cabana de la Jacmeta: parets de troncs amb fang, teulat de palla amb molsa i bolets, xemeneia de pedra, porta amb ferros,
+// Cabana de la Jauneta: parets de troncs amb fang, teulat de palla amb molsa i bolets, xemeneia de pedra, porta amb ferros,
 // finestra amb porticons i llum verdosa, pila de llenya, farol i manats d'herbes penjats
 function pintarCabana(ctx, W, H) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';

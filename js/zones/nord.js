@@ -445,7 +445,7 @@ class ZonaCelles extends ZonaBase {
 
         this.sortida(800, 1086, 200, 14, 'ZonaRuines', 'celles');
         this.sortida(0, 640, 14, 130, 'ZonaBosc', 'celles');
-        // El camí del Gran Til·ler, al nord, és tapat per una boira espessa que no marxa amb el vent: la desfà el beuratge de la Jacmeta
+        // El camí del Gran Til·ler, al nord, és tapat per una boira espessa que no marxa amb el vent: la desfà el beuratge de la Jauneta
         this.boiraTiller = null;
         if (Estat.flag('boiraTillerNeta') || Estat.flag('parlatTiler')) this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
         else this.posarBoiraTiller();
@@ -477,22 +477,35 @@ class ZonaCelles extends ZonaBase {
     }
 
     posarSansa() {
-        // Els braços del carro miren a l'est: la Rosansa s'hi posa al davant i, en marxar, l'estira cap a l'est
+        // Els braços del carro miren a l'est. La Rosansa és una mica més a l'est, davant del carro: quan ha parlat s'hi acosta, es gira, agafa els braços i se l'enduu cap a l'est
         this.carroSansa = this.posar('carro_sansa', 1060, 880).setFlipX(true);
         this.colCarro = this.colisio(1000, 855, 160, 50);
-        this.sansa = this.posar('sansa', 1228, 892);
-        this.colSansa = this.colisio(1228, 883, 40, 18);
-        this.add.image(1228, 892, 'ombra').setScale(0.42).setDepth(-500);
-        const punt = this.interactiu(1228, 882, RADI_NPC, DIALEGS.sansa, { altura: this.sansa.displayHeight + 6 });
+        this.sansa = this.posar('sansa', 1310, 892);
+        this.colSansa = this.colisio(1310, 883, 40, 18);
+        this.ombraSansa = this.add.image(1310, 892, 'ombra').setScale(0.34).setDepth(-500);
+        const punt = this.interactiu(1310, 882, RADI_NPC, DIALEGS.sansa, { altura: this.sansa.displayHeight + 6 });
         punt.enTancar = () => this.marxaSansa(punt);
     }
 
+    // Se'n va: s'apropa al carro, es gira cap a ell, agafa els braços, es gira cap a l'est i se l'enduu, caminant, fins que s'esvaeixen pel camí
     marxaSansa(punt) {
         punt.actiu = () => false;
         this.obstacles.remove(this.colCarro, true, true);
         this.obstacles.remove(this.colSansa, true, true);
-        this.tweens.add({ targets: [this.sansa, this.carroSansa], alpha: 0, x: '+=140', duration: 1800, ease: 'Sine.easeIn',
-            onComplete: () => { this.sansa.destroy(); this.carroSansa.destroy(); } });
+        const s = this.sansa, c = this.carroSansa, o = this.ombraSansa, y0 = s.y;
+        const pas = (dur, n) => this.tweens.add({ targets: s, y: y0 - 4, duration: dur, yoyo: true, repeat: n });        // el trontolleig de caminar
+        const seq = [
+            f => { pas(180, 5); this.tweens.add({ targets: [s, o], x: 1228, duration: 1100, ease: 'Sine.easeInOut', onComplete: () => f() }); },             // s'acosta als braços del carro
+            f => { s.setFlipX(true); this.esperar(500, f); },                                                                                              // es gira cap al carro
+            f => { this.tweens.add({ targets: s, y: y0 + 5, duration: 260, yoyo: true, hold: 300, onComplete: () => f() }); },                              // agafa els braços
+            f => { s.setFlipX(false); this.esperar(400, f); },                                                                                             // es gira cap a l'est
+            f => {                                                                                                                                         // marxen
+                pas(220, 14);
+                this.tweens.add({ targets: [s, o, c], x: '+=520', duration: 3600, ease: 'Sine.easeIn' });
+                this.tweens.add({ targets: [s, o, c], alpha: 0, delay: 2200, duration: 1400, onComplete: () => { s.destroy(); c.destroy(); o.destroy(); f(); } });
+            }
+        ];
+        this.seq(seq);
     }
 }
 
@@ -1113,7 +1126,7 @@ class ZonaBosc extends ZonaBase {
         this.posar('font_sj', 910, 610, { col: { w: 150, h: 50 } });
         this.interactiu(910, 625, RADI_GRAN * 1.5, DIALEGS.fontSJ, { altura: 170 });
 
-        // Alzina Buida: el portal ocult cap a la cabana de la Jacmeta. És el doble de gran que els altres arbres, té la seva
+        // Alzina Buida: el portal ocult cap a la cabana de la Jauneta. És el doble de gran que els altres arbres, té la seva
         // pròpia clariana (llum verda a terra, llumenetes i pedres) i el forat del tronc fa claror: no es pot confondre amb la resta.
         const AX = 330, AY = 780;
         this.add.ellipse(AX, AY + 40, 760, 380, 0x8fe08a, 0.13).setDepth(-1090);

@@ -13,7 +13,7 @@ const MAPA = {
         { id: 'ZonaMasiaCirosa',   nom: 'El Mas de la Cirosa',     x: 1070,  y: 0 },
         { id: 'ZonaCamiCirosa',    nom: 'Camí de la Cirosa',        x: 850,  y: 65 },
         { id: 'ZonaCabanaInt',     nom: 'Dins la cabana',           x: 200,  y: 110 },
-        { id: 'ZonaCabana',        nom: 'Cabana de la Jacmeta',     x: 370,  y: 110 },
+        { id: 'ZonaCabana',        nom: 'Cabana de la Jauneta',     x: 370,  y: 110 },
         { id: 'ZonaBosc',          nom: 'Bosc de Sant Joan',        x: 520,  y: 200 },
         { id: 'ZonaJordi',          nom: 'La Caseta',                x: 630,  y: 130 },
         { id: 'ZonaCasaJordi',     nom: 'Masia d\'en Georgi',       x: 470,  y: 80 },

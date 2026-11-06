@@ -35,7 +35,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 const RETRATS = {
     'Ineu': 'ineu', 'Pare Jordà': 'pare_jordi', 'Germà Aldreu': 'germa_aldreu', 'Pastor de Boira': 'pastor_boira', 'Aldreu, Pastor de Boira': 'pastor_boira', 'Germà Francí': 'germa_francesc', 'Pare Daimiel': 'pare_daniel',
     'Pare Alcoví': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Pomers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Galf': 'galf', 'Isildren': 'isidre',
-    'La Pianista': 'pianista', 'La Jacmeta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
+    'La Pianista': 'pianista', 'La Jauneta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Carmèlia': 'monja_charm', 'Pilària': 'monja_phili', 'Dolora': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
     'Meus': 'neus', 'Senyor Molner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Rosansa': 'sansa', 'Monjo': 'ombra_monjo', 'Home del Raïm': 'home_raim',
     'Carry': 'carry', 'Follet del Carro Verd': 'home_carruatge', 'El Gran Til·ler': 'tiller',
@@ -124,7 +124,7 @@ const CATALEG_OBJECTES = {
     aigua_sj:         ['Aigua de la Font del Bisbe', 'Aigua beneïda, clara com el vidre.'],
     cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Galf en sabrà fer alguna cosa.'],
     pruna:            ['Pruna daurada', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en vol una.'],
-    beuratge:         ['Beuratge de la Jacmeta', 'Dissipa la boira del camí cap al Til·ler; no protegeix de la boira verinosa.'],
+    beuratge:         ['Beuratge de la Jauneta', 'Dissipa la boira del camí cap al Til·ler; no protegeix de la boira verinosa.'],
     escudella:        ['Escudella de la Meus', 'Encara calenta, com cada any per al sopar del Til·ler.'],
     flors_isidre:     ['Flors d\'Isildren', 'Un ram embolicat amb un tros de pergamí.'],
     pa_pastor:        ['Pa dels pastors', 'Una barra baixa i fosca, cuita sota la cendra.'],

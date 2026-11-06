@@ -756,9 +756,9 @@ const DIALEGS = {
                 pagines: [
                     { qui: "Ineu", text: "Duc aigua de la Font del Bisbe. Potser..." },
                     { fer: (z, fet) => z.deixar(fet, null, 0x8fe0ff) },
-                    { qui: "Veu del bosc", text: "...Qui ens porta... l'aigua... bona... Passa, passa, fill... Només la Jacmeta... sap on acabes." },
+                    { qui: "Veu del bosc", text: "...Qui ens porta... l'aigua... bona... Passa, passa, fill... Només la Jauneta... sap on acabes." },
                 ],
-                enAcabar: () => { E.posaFlag("portalJaumeta"); E.posaObjectiu("L'Alzina Buida s'ha obert: la cabana de la Jacmeta, la bruixa del bosc, és a l'altra banda."); }
+                enAcabar: () => { E.posaFlag("portalJaumeta"); E.posaObjectiu("L'Alzina Buida s'ha obert: la cabana de la Jauneta, la bruixa del bosc, és a l'altra banda."); }
             };
         }
         return { pagines: [
@@ -1436,37 +1436,37 @@ const DIALEGS = {
 
 
     // ---------------- LA CABANA DE LA JACMETA ----------------
-    // La Jacmeta, bruixa del bosc: una curiositat. Hi vas pel portal de l'Alzina Buida i et diu la pista del moment (és vident)
+    // La Jauneta, bruixa del bosc: una curiositat. Hi vas pel portal de l'Alzina Buida i et diu la pista del moment (és vident)
     jaumeta: E => {
         const pista = pistaActual(E).replace(/^Fill, /, "");
         if (!E.flag("jaumetaVista")) {
             return {
                 pagines: [
                     { fer: (z, fet) => z.seq([c => z.npcFeina('jaumeta', 1400, 'bombolles', c), c => z.bombolla('jaumeta', '!', c, 700)], fet) },
-                    { qui: "La Jacmeta", text: "Ei! Tu! Qui coi t'ha dit que podies entrar? Els frares no veniu mai per aquí! Fot el camp o et faig créixer bolets a les orelles!" },
+                    { qui: "La Jauneta", text: "Ei! Tu! Qui coi t'ha dit que podies entrar? Els frares no veniu mai per aquí! Fot el camp o et faig créixer bolets a les orelles!" },
                     { qui: "Ineu", text: "Perdoni... He arribat per l'alzina. Duc aigua de la Font del Bisbe." },
-                    { qui: "La Jacmeta", text: "Aigua... de la Font del Bisbe?! Dona'm aixòooo! Fa trenta anys que no en tinc ni una gota neta." },
+                    { qui: "La Jauneta", text: "Aigua... de la Font del Bisbe?! Dona'm aixòooo! Fa trenta anys que no en tinc ni una gota neta." },
                     { fer: (z, fet) => z.seq([c => z.npcVa('jaumeta', 500, 360, c, 200), c => z.llum(450, 290, 0x6aff6a, c), c => z.npcVa('jaumeta', 560, 420, c, 200)], fet) },
-                    { qui: "La Jacmeta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? No és al nord de sempre, com et diuen: és al nord de les Cel·les, i han tapat el camí amb una boira que no marxa amb el vent." },
-                    { qui: "La Jacmeta", text: "Mira, he barrejat l'aigua que queda amb romaní, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
+                    { qui: "La Jauneta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? No és al nord de sempre, com et diuen: és al nord de les Cel·les, i han tapat el camí amb una boira que no marxa amb el vent." },
+                    { qui: "La Jauneta", text: "Mira, he barrejat l'aigua que queda amb romaní, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
                     { avis: "Has obtingut el BEURATGE DE LA JACMETA.", obj: 'beuratge' }
                 ],
                 enAcabar: () => {
                     E.treu("aigua_sj"); E.posaFlag("jaumetaVista"); E.dona("beuratge");
-                    E.posaObjectiu("El beuratge de la Jacmeta desfaria la boira que tapa el camí del Gran Til·ler.");
+                    E.posaObjectiu("El beuratge de la Jauneta desfaria la boira que tapa el camí del Gran Til·ler.");
                 }
             };
         }
         return { pagines: [
-            { qui: "La Jacmeta", text: "Ja tornes, xaval? Els ocells m'ho diuen tot. Escolta: " + pista },
-            { qui: "La Jacmeta", text: "Ara fot el camp, que tinc feina amb la sopa. I no li diguis a ningú on visc, o et converteixo en bolet." }
+            { qui: "La Jauneta", text: "Ja tornes, xaval? Els ocells m'ho diuen tot. Escolta: " + pista },
+            { qui: "La Jauneta", text: "Ara fot el camp, que tinc feina amb la sopa. I no li diguis a ningú on visc, o et converteixo en bolet." }
         ] };
     },
 
     // La boira que tapa el camí al Til·ler (nord de les Cel·les)
     boiraTiller: E => E.te("beuratge") ? {
         pagines: [
-            { qui: "Ineu", text: "Aquesta boira no marxa amb el vent... Provaré d'abocar-hi el beuratge." },
+            { qui: "Ineu", text: "Provaré amb el beuratge de la Jauneta." },
             { fer: (z, fet) => z.seq([c => z.deixar(c, iconaObjecte(z, 'beuratge'), 0x9a6aff), c => z.esvairBoira(c)], fet) },
             { qui: "Ineu", text: "Ha funcionat! El camí del Gran Til·ler torna a ser net." }
         ]
@@ -1570,7 +1570,7 @@ const DIALEGS_FINAL = {
     monja_phili: E => ({ pagines: [{ qui: 'Pilària', text: "Hem posat una espelma per tu a cada cambra, Ineu. I una altra per si de cas." }] }),
     monja_charm: E => ({ pagines: [{ qui: 'Carmèlia', text: "Les tres te'n devem una. I nosaltres sempre paguem els deutes... amb pastissos." }] }),
     isidre: E => ({ pagines: [{ qui: 'Isildren', text: "Les flors de lluna ja s'obren de dia. Diria que és el riure dels nens, que les enganya." }] }),
-    jaumeta: E => ({ pagines: [{ qui: 'La Jacmeta', text: "L'olla ja no fa bombolles liles. Ara fa olor de farigola, com ha de ser." }] }),
+    jaumeta: E => ({ pagines: [{ qui: 'La Jauneta', text: "L'olla ja no fa bombolles liles. Ara fa olor de farigola, com ha de ser." }] }),
     galf: E => ({ pagines: [{ qui: 'Galf', text: "Des del telescopi es veu tot el poble, i aquesta nit no hi ha ni un fil de boira." }] }),
     germa_francesc: E => ({ pagines: [{ qui: 'Germà Francí', text: "La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui." }] }),
     ciscu: E => ({ pagines: [{ qui: 'Iscu', text: "M'ha sortit el solitari! Sense trampes! ...Bé, amb una de petita. No ho diguis a la mare." }] }),
