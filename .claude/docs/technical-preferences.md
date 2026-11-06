@@ -10,10 +10,10 @@
 
 ## Engine & Language
 
-- **Engine**: [TO BE CONFIGURED — run /setup-engine]
-- **Language**: [TO BE CONFIGURED]
-- **Rendering**: [TO BE CONFIGURED]
-- **Physics**: [TO BE CONFIGURED]
+- **Engine**: Phaser 3.80.1 (web, sense bundler; `js/lib/phaser.min.js`)
+- **Language**: JavaScript (vanilla, scripts carregats des d'`index.html`)
+- **Rendering**: Phaser.AUTO (WebGL amb fallback a Canvas)
+- **Physics**: Arcade Physics
 
 ## Input & Platform
 
