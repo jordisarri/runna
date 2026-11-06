@@ -654,7 +654,7 @@ class ZonaDolmen extends ZonaBase {
         const teLesTres = () => !DIALEGS.faltaRunna(Estat).length;
         this.interactiu(sx, sy + 15, RADI_GRAN, DIALEGS.dolmenBaix, { altura: 380, actiu: () => !this.alt && teLesTres() });
         // La placa de pedra davant el dolmen, centrada entre el dolmen i el camí: diu què cal per alçar Runna
-        this.placaDolmen = this.posar('placa_dolmen', sx, sy + 150, { col: { w: 50, h: 16 } });
+        this.placaDolmen = this.posar('placa_dolmen', sx, sy + 150, { col: { w: 150, h: 16 } });         // (ampla: 190 px; els medallons s'han de veure bé)
         this.interactiu(sx, sy + 160, 150, DIALEGS.placaDolmen, { altura: this.placaDolmen.displayHeight + 20, actiu: () => !this.alt });
         // Damunt la llosa, darrere l'espasa: les Paraules del Saber
         this.interactiu(this.espX, this.espY - 12, RADI_OBJECTE, DIALEGS.dolmen, { altura: 150, actiu: () => this.alt && !this.cinema && teLesTres() });
@@ -909,25 +909,23 @@ class ZonaDolmen extends ZonaBase {
 
     // Les Paraules del Saber ja s'han dit: Runna surt de la pedra i és a la mà de l'Ineu, que l'alça. Raigs de llum blanca i el rètol
     // es queden fins que el jugador prem; després s'esvaeixen i l'Ineu torna a la seva pose, mirant avall
-    // Les tres coses que calen per alçar Runna es mostren a la pantalla, una darrere l'altra, amb el seu nom; després volen cap a l'espasa i es fonen en una llum
+    // Les tres coses que calen per alçar Runna es mostren a la pantalla, una darrere l'altra (només els medallons, sense text); després volen cap a l'espasa i es fonen en una llum
     mostrarTresCoses(fet) {
         const I = this.ineu, cx = I.x, cy = I.y - 250;
         const coses = [['emblema_arbre', "El permís de l'arbre sagrat"], ['emblema_saber', 'Les paraules del saber'], ['emblema_benedicio', 'La benedicció divina']];
         const peces = [];
-        coses.forEach(([id, text], k) => {
+        coses.forEach(([id], k) => {
             const x = cx + (k - 1) * 155, y = cy + (k === 1 ? -30 : 0), clau = this.textures.exists(id) ? id : null;
             const esc = clau ? ((this.textures.get(id).customData || {}).escala || 110 / this.textures.get(id).getSourceImage().width) : 1;       // escala que mostra l'emblema a 110 px de joc
             const halo = this.add.circle(x, y, 50, 0xffe8a0, 0.5).setDepth(99000).setBlendMode('ADD').setAlpha(0).setScale(0.3);
             const ico = (clau ? this.add.image(x, y, clau).setScale(esc * 0.4) : this.add.circle(x, y, 20, 0xffe8a0)).setDepth(99001).setAlpha(0);
-            const nom = this.add.text(x, y + 62, text, estilText(24, '#fff3c8', { stroke: '#1a120b', strokeThickness: 5, align: 'center', wordWrap: { width: 145 } })).setOrigin(0.5, 0).setDepth(99001).setAlpha(0);
             this.time.delayedCall(300 + k * 800, () => {
                 Sfx.objecte();
                 this.tweens.add({ targets: ico, alpha: 1, scale: clau ? esc : 1.6, duration: 500, ease: 'Back.easeOut' });
                 this.tweens.add({ targets: halo, alpha: 0.55, scale: 1, duration: 500 });
-                this.tweens.add({ targets: nom, alpha: 1, duration: 500 });
                 this.llum(x, y, 0xffe8a0);
             });
-            peces.push(ico, halo, nom);
+            peces.push(ico, halo);
         });
         // Mostrades les tres, es queden un moment i volen cap a l'espasa
         this.time.delayedCall(300 + 2 * 800 + 500 + 1600, () => {

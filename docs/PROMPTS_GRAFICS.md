@@ -244,7 +244,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `emblema_arbre`, `emblema_saber`, `emblema_benedicio`, `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
 
 
 
@@ -305,7 +305,7 @@ Charming 2D cartoon game scenery asset in the same art style as the attached ref
 
 
 
-### `placa_dolmen.png` → `assets/natura/placa_dolmen.webp` (amplada 100) *(La placa de pedra **davant el Dolmen** (`js/zones/oest.js`, `ZonaDolmen`): diu què cal per alçar Runna: el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. És germana de la placa del Pi dels Tres Cants: **puja-hi `art/natura/placa_pi.png` com a referència** (la mateixa fita de pedra, vista de cara, amb el mateix gruix i la mateixa base), però amb una talla diferent: l'espasa dalt i tres medallons a baix (una fulla, un llibre amb una ploma i una mà que beneeix). Imatge **apaïsada, uns 1,1:1** (el joc la fa servir a uns 100 px d'ample). Desa-la com `art/natura/placa_dolmen.png` i passa-la amb `node eines/convertir_webp.js placa_dolmen`. Mentre no hi sigui, el joc fa servir el dibuix provisional de la placa del Pi.)*
+### `placa_dolmen.png` → `assets/natura/placa_dolmen.webp` (amplada 190; fet: placa ampla amb l'espasa en horitzontal) *(La placa de pedra **davant el Dolmen** (`js/zones/oest.js`, `ZonaDolmen`): diu què cal per alçar Runna: el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. És germana de la placa del Pi dels Tres Cants: **puja-hi `art/natura/placa_pi.png` com a referència** (la mateixa fita de pedra, vista de cara, amb el mateix gruix i la mateixa base), però amb una talla diferent: l'espasa dalt i tres medallons a baix (una fulla, un llibre amb una ploma i una mà que beneeix). Imatge **apaïsada, uns 1,1:1** (el joc la fa servir a uns 100 px d'ample). Desa-la com `art/natura/placa_dolmen.png` i passa-la amb `node eines/convertir_webp.js placa_dolmen`. Mentre no hi sigui, el joc fa servir el dibuix provisional de la placa del Pi.)*
 
 
 
