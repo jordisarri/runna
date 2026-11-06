@@ -312,7 +312,9 @@ class EscenaUI extends Phaser.Scene {
             this.ombresGrans.push(this.add.image(0, 0, 'gra_ple').setScale(1.1 / RES).setTintFill(0x000000).setAlpha(0.5));
             this.cors.push(this.add.image(0, 0, 'gra_ple').setScale(1 / RES));
         }
-        const gx = i => 78 + i * 46, GY = 52;
+        // Rosari irregular, com un de veritat: els grans pengen a alçades i separacions una mica diferents (sempre les mateixes, perquè no es moguin)
+        const DX = [0, 2, -2, 1, -1, 2, -2], DY = [0, 5, -3, 6, -2, 4, -5];
+        const gx = i => 78 + i * 46 + (DX[i] || 0), gy = i => 52 + (DY[i] || 0);
         const pops = [];
         this.cors.forEach((img, i) => {
             const v = d.vida - i * 2;
@@ -320,17 +322,17 @@ class EscenaUI extends Phaser.Scene {
             const nivell = t => t === 'gra_ple' ? 2 : t === 'gra_mig' ? 1 : 0;
             if (img.texAnt && nivell(tex) > nivell(img.texAnt) && i < d.corsMax) pops.push(i);       // guanya vida (no és la primera vegada; perdre'n ho anima animarPerdua)
             img.texAnt = tex;
-            img.setVisible(i < d.corsMax).setPosition(gx(i), GY).setTexture(tex);
-            this.ombresGrans[i].setVisible(i < d.corsMax).setPosition(gx(i) + 2.5, GY + 3.5).setTexture(tex);
+            img.setVisible(i < d.corsMax).setPosition(gx(i), gy(i)).setTexture(tex);
+            this.ombresGrans[i].setVisible(i < d.corsMax).setPosition(gx(i) + 2.5, gy(i) + 3.5).setTexture(tex);
         });
         // Cordó: de la creueta al primer gra i, entre gra i gra, una mica penjant
         const c = this.cordo.clear();
         // El cordó es dibuixa dues vegades: la primera, ample i fosc, fa d'ombra; la segona, clara, es llegeix sobre qualsevol fons
         const traç = (dx, dy) => {
             c.beginPath(); c.moveTo(38 + dx, 44 + dy);
-            for (let k = 1; k <= 8; k++) { const t = k / 8; c.lineTo(38 + (gx(0) - 38) * t + dx, 44 + (GY - 44) * t + Math.sin(Math.PI * t) * 5 + dy); }
+            for (let k = 1; k <= 8; k++) { const t = k / 8; c.lineTo(38 + (gx(0) - 38) * t + dx, 44 + (gy(0) - 44) * t + Math.sin(Math.PI * t) * 5 + dy); }
             for (let i = 0; i < d.corsMax - 1; i++) {
-                for (let k = 1; k <= 6; k++) { const t = k / 6; c.lineTo(gx(i) + 46 * t + dx, GY + Math.sin(Math.PI * t) * 4 + dy); }
+                for (let k = 1; k <= 6; k++) { const t = k / 6; c.lineTo(gx(i) + (gx(i + 1) - gx(i)) * t + dx, gy(i) + (gy(i + 1) - gy(i)) * t + Math.sin(Math.PI * t) * 4 + dy); }
             }
             c.strokePath();
         };
