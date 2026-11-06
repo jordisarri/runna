@@ -603,6 +603,13 @@ const Grafics = {
             g.addColorStop(1, 'rgba(30,15,50,0)');
             ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
         });
+        // Un núvol de boira (blanc, per tintar-lo): moltes taques suaus encavalcades, de vora irregular. Serveix per a les parets de boira (ZonaBase.boiraParet)
+        crea('boira_nuvol', 256, 256, (ctx, w, h) => {
+            let s = 17; const r = () => (s = s * 16807 % 2147483647) / 2147483647;
+            const taca = (x, y, rad, a) => { const g = ctx.createRadialGradient(x, y, 0, x, y, rad); g.addColorStop(0, `rgba(255,255,255,${a})`); g.addColorStop(0.65, `rgba(255,255,255,${a * 0.62})`); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(x - rad, y - rad, rad * 2, rad * 2); };
+            taca(128, 128, 126, 0.3);
+            for (let k = 0; k < 18; k++) taca(128 + (r() - 0.5) * 130, 128 + (r() - 0.5) * 96, 30 + r() * 40, 0.4 + r() * 0.35);
+        });
         crea('ombra', 64, 24, (ctx, w, h) => {
             ctx.fillStyle = 'rgba(0,0,0,0.28)';
             ctx.beginPath(); ctx.ellipse(32, 12, 30, 10, 0, 0, Math.PI * 2); ctx.fill();

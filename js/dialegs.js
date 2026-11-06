@@ -960,10 +960,12 @@ const DIALEGS = {
     // La Rosansa passa per les cel·les un sol cop: et ven la Llavor de Lluna i se'n va
     sansa: E => ({
         pagines: [
-            { qui: 'Rosansa', text: 'Verdures fresques, fruita de la rodalia! ...Ai, ets el monjo que pregunta per la llosa del jardí? Aleshores potser busques una cosa especial.' },
-            { qui: 'Rosansa', text: 'Una Llavor de Lluna. Fa anys que la guardo al fons del carro, entre les cebes, i no sé ni per què. Pren, és teva. Que floreixi a qui sàpiga cuidar-la.' },
+            { qui: 'Rosansa', text: 'Verdures fresques, fruita de la rodalia! Cebes, raves, cols... Què et poso, monjo?' },
+            { qui: 'Ineu', text: "Res de menjar, gràcies. Busco una llavor: la d'una flor de lluna, per a la llosa del jardí de l'Hostatgeria." },
+            { qui: 'Rosansa', text: 'Una flor de lluna? Mmm... Fa anys que porto una llavor estranya al fons del carro, entre les cebes. Ningú no sap què és, ni jo.' },
+            { qui: 'Rosansa', text: 'Tingues, és teva. Que floreixi a qui sàpiga cuidar-la.' },
             { avis: 'Has obtingut la LLAVOR DE LLUNA.', obj: 'llavorLluna' },
-            { qui: 'Rosansa', text: 'Bé, jo ja he d' + String.fromCharCode(39) + 'anar fent camí. Avui encara em queden tres pobles per davant. Adéu, monjo!' }
+            { qui: 'Rosansa', text: 'Ara me n\'he d\'anar, que avui encara em queden tres pobles per davant. Adéu, monjo!' }
         ],
         enAcabar: () => { E.dona('llavorLluna'); E.posaFlag('llavorSansa'); E.posaObjectiu('Porta la Llavor de Lluna a l' + String.fromCharCode(39) + 'Isildren, a l' + String.fromCharCode(39) + 'Hostatgeria.'); }
     }),
@@ -1461,12 +1463,13 @@ const DIALEGS = {
     // La boira que tapa el camí al Til·ler (nord de les Cel·les)
     boiraTiller: E => E.te("beuratge") ? {
         pagines: [
-            { fer: (z, fet) => z.deixar(fet, null, 0x6aff6a) },
+            { qui: "Ineu", text: "Aquesta boira no marxa amb el vent... Provaré d'abocar-hi el beuratge." },
+            { fer: (z, fet) => z.seq([c => z.deixar(c, iconaObjecte(z, 'beuratge'), 0x9a6aff), c => z.esvairBoira(c)], fet) },
             { qui: "Ineu", text: "Ha funcionat! El camí del Gran Til·ler torna a ser net." }
         ]
     } : {
         pagines: [
-            { qui: "Ineu", text: "No hi puc passar... Aquesta boira no és de les que marxen amb el vent. Algú que en sàpiga, de bruixeries, potser la Jacmeta, del bosc, tindria alguna cosa per desfer-la." }
+            { qui: "Ineu", text: "No hi puc passar. Aquesta boira no és de les que marxen amb el vent: per desfer-la em caldria algun líquid, una poció... alguna cosa que no tinc." }
         ]
     },
 

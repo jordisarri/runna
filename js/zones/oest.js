@@ -574,8 +574,7 @@ class ZonaDipositos extends ZonaBase {
     posarBoiraDolmen() {
         const X = DIP.boiraX, Y = 585;
         this.colBoira = this.colisio(X + 30, Y, 140, 240);
-        this.foscBoira = this.add.ellipse(X + 40, Y, 260, 300, 0x2a3050, 0.5).setDepth(Y + 60);
-        this.boiraDolmen = [-80, 0, 80].map(dy => this.boira(X + 40, Y + dy, 170, 110, 2.4, 0xc8d0ff));
+        this.boiraDolmen = this.boiraParet(X + 40, Y, 220, 330, { to: 0xd2dcff, fosc: 0x2c3460 });
         this.interactiu(X - 50, Y, RADI_GRAN, DIALEGS.boiraDolmen, {
             altura: 150, actiu: () => !!this.boiraDolmen,
             enTancar: () => { if (Estat.te('estel_llorenc')) this.esvairBoiraDolmen(); }
@@ -588,9 +587,8 @@ class ZonaDipositos extends ZonaBase {
         Estat.posaFlag('boiraDolmenNeta');
         const llum = this.add.circle(this.ineu.x, this.ineu.y - 60, 20, 0xe8f0ff, 0.9).setDepth(9000).setBlendMode('ADD');
         this.tweens.add({ targets: llum, radius: 420, alpha: 0, duration: 1600, onComplete: () => llum.destroy() });
-        this.boiraDolmen.forEach(b => b.stop());
+        this.boiraDolmen.dissipar();
         this.boiraDolmen = null;
-        this.tweens.add({ targets: this.foscBoira, alpha: 0, duration: 2200, onComplete: () => this.foscBoira.destroy() });
         this.obstacles.remove(this.colBoira, true, true);
         Sfx.secret();
         this.sortida(1586, 520, 14, 130, 'ZonaDolmen', 'diposits');

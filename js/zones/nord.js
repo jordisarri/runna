@@ -454,27 +454,26 @@ class ZonaCelles extends ZonaBase {
     posarBoiraTiller() {
         const X = 1070, Y = 300;
         this.colBoira = this.colisio(X, Y, 360, 90);
-        this.fosc = this.add.ellipse(X, Y, 470, 190, 0x2a1550, 0.42).setDepth(Y + 40);
-        this.boiraTiller = [-150, -50, 50, 150].map(dx => this.boira(X + dx, Y, 190, 120, 2.4));
-        this.interactiu(X, Y + 80, RADI_GRAN, DIALEGS.boiraTiller, {
-            altura: 150, actiu: () => !!this.boiraTiller,
-            enTancar: () => { if (Estat.te('beuratge')) this.esvairBoira(); }
-        });
+        this.boiraTiller = this.boiraParet(X, Y, 400, 170);
+        // El punt d'interacció és a la boira mateixa: sense el beuratge diu que hi falta alguna cosa; amb ell, l'Ineu l'aboca i la boira s'esvaeix
+        this.interactiu(X, Y + 70, RADI_GRAN, DIALEGS.boiraTiller, { altura: 150, actiu: () => !!this.boiraTiller });
     }
 
-    esvairBoira() {
-        if (!this.boiraTiller) return;
+    // fet: quan la boira ja s'ha esvaït del tot (l'anim. és llarga: s'esfilagarsa a poc a poc)
+    esvairBoira(fet) {
+        if (!this.boiraTiller) { if (fet) fet(); return; }
         Estat.posaFlag('boiraTillerNeta'); Estat.treu('beuratge');
-        this.boiraTiller.forEach(b => b.stop());
+        const b = this.boiraTiller;
         this.boiraTiller = null;
-        this.tweens.add({ targets: this.fosc, alpha: 0, duration: 2600, onComplete: () => this.fosc.destroy() });
         this.obstacles.remove(this.colBoira, true, true);
         this.cameras.main.shake(400, 0.003);
         Sfx.secret();
-        this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
-        this.ineuDiu("El camí del Til·ler és lliure.");
-        Estat.posaObjectiu("El camí de les Cel·les s'ha aclarit: el Gran Til·ler hi és al capdamunt.");
-        Estat.desar();
+        b.dissipar(() => {
+            this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
+            Estat.posaObjectiu("El camí de les Cel·les s'ha aclarit: el Gran Til·ler hi és al capdamunt.");
+            Estat.desar();
+            if (fet) fet();
+        });
     }
 
     posarSansa() {

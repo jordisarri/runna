@@ -1121,6 +1121,52 @@ class ZonaBase extends Phaser.Scene {
         }).setDepth(y + 40);
     }
 
+    // Una paret de boira espessa i creïble que tapa un pas: moltes capes de núvols grans i suaus, de colors i fondàries diferents, que
+    // s'inflen i van a la deriva a poc a poc (el nucli, més fosc; la vora, més clara i esfilagarsada), amb volves que se'n desprenen.
+    // o.to (color de la vora), o.fosc (color del nucli), o.dens (1 = normal). Torna { dissipar(fet), objectes } (dissipar: s'esfilagarsa i s'esvaeix).
+    boiraParet(x, y, ample, alt, o = {}) {
+        const clar = Phaser.Display.Color.IntegerToColor(o.to || 0xc9bde6), fosc = Phaser.Display.Color.IntegerToColor(o.fosc || 0x3a2468);
+        const D = Math.min(ample * 0.5, alt * 1.2), dep = y + 70, objs = [];                       // D: diàmetre d'un núvol
+        const n = Math.max(6, Math.round(ample * alt / (D * D * 0.55) * (o.dens || 1)));          // núvols per capa
+        const ombra = this.add.ellipse(x, y, ample * 1.05, alt * 1.15, o.fosc || 0x3a2468, 0.28).setDepth(dep - 2);          // la foscor que fa la boira a terra
+        objs.push(ombra);
+        const puff = (f, capa) => {                                         // f: 0 = nucli (fosc), 1 = vora (clar)
+            const c = Phaser.Display.Color.Interpolate.ColorWithColor(fosc, clar, 100, Math.round(100 * f));
+            const px = x + (Math.random() - 0.5) * ample * (0.9 - 0.25 * (1 - f)), py = y + (Math.random() - 0.5) * alt * (0.9 - 0.25 * (1 - f));
+            const e = D / 256 * (0.75 + Math.random() * 0.55);
+            const im = this.add.image(px, py, 'boira_nuvol').setTint(Phaser.Display.Color.GetColor(c.r, c.g, c.b)).setScale(e * 1.25, e * 0.95)
+                .setAlpha(0.5 + 0.3 * (1 - f) + Math.random() * 0.15).setAngle(Math.random() * 360).setDepth(dep + capa);
+            im.baseAlpha = im.alpha;
+            this.tweens.add({ targets: im, x: px + (Math.random() - 0.5) * 70, y: py + (Math.random() - 0.5) * 26, angle: im.angle + (Math.random() - 0.5) * 50, scaleX: im.scaleX * (0.88 + Math.random() * 0.26), scaleY: im.scaleY * (0.88 + Math.random() * 0.26),
+                duration: 4500 + Math.random() * 4500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: Math.random() * 3000 });
+            this.tweens.add({ targets: im, alpha: im.alpha * (0.6 + Math.random() * 0.25), duration: 3000 + Math.random() * 3500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: Math.random() * 2000 });
+            objs.push(im);
+        };
+        for (let i = 0; i < n; i++) puff(0.05 + 0.25 * Math.random(), 0);                 // nucli fosc, al fons
+        for (let i = 0; i < n; i++) puff(0.35 + 0.35 * Math.random(), 1);                 // cos mitjà
+        for (let i = 0; i < Math.round(n * 0.7); i++) puff(0.7 + 0.3 * Math.random(), 2); // vora clara, al davant
+        // Volves que se'n desprenen i s'enlairen
+        const volves = this.add.particles(x, y, 'boira_nuvol', {
+            x: { min: -ample / 2, max: ample / 2 }, y: { min: -alt / 2, max: alt / 2 }, speedX: { min: -14, max: 14 }, speedY: { min: -26, max: -8 },
+            scale: { start: D / 500, end: D / 250 }, alpha: { start: 0.25, end: 0 }, lifespan: { min: 3500, max: 6000 }, frequency: 420,
+            tint: o.to || 0xc9bde6, rotate: { min: 0, max: 360 }
+        }).setDepth(dep + 3);
+        return {
+            objectes: objs,
+            dissipar: fet => {
+                volves.stop();
+                objs.forEach(im => {
+                    this.tweens.killTweensOf(im);
+                    const d = Math.random() * 900;
+                    this.tweens.add({ targets: im, alpha: 0, scaleX: im.scaleX * 1.7, scaleY: im.scaleY * 1.5, x: im.x + (Math.random() - 0.5) * 160, y: im.y - 40 - Math.random() * 110, delay: d, duration: 1900 + Math.random() * 900, ease: 'Sine.easeIn',
+                        onComplete: () => im.destroy() });
+                });
+                this.time.delayedCall(3200, () => { volves.destroy(); if (fet) fet(); });
+            },
+            stop: () => { volves.stop(); }
+        };
+    }
+
     // ---------------- Ineu ----------------
     // Una posició desada és bona si és dins la zona i els peus no queden dins d'un obstacle (si l'escena ha canviat
     // des que es va desar, la posició pot haver quedat dins d'una paret: llavors l'Ineu surt per l'entrada)
