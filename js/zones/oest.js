@@ -650,12 +650,14 @@ class ZonaDolmen extends ZonaBase {
         this.resplendor = this.add.circle(this.espX, this.espY - 55, 90, 0xd8e8ff, Estat.te('runna') ? 0 : 0.12).setDepth(sy + 1).setBlendMode('ADD');
         if (!Estat.te('runna')) this.tweens.add({ targets: this.resplendor, alpha: 0.28, yoyo: true, repeat: -1, duration: 1200 });
         this.posarPujada(wy(DOLMEN_DIB.ly), kD);
-        this.interactiu(sx, sy + 15, RADI_GRAN, DIALEGS.dolmenBaix, { altura: 380, actiu: () => !this.alt });
-        // La placa de pedra davant el dolmen, a la vora del camí: diu què cal per alçar Runna
-        this.placaDolmen = this.posar('placa_dolmen', sx + 120, sy + 150, { col: { w: 50, h: 16 } });
-        this.interactiu(sx + 120, sy + 160, 150, DIALEGS.placaDolmen, { altura: this.placaDolmen.displayHeight + 20, actiu: () => !this.alt });
+        // El dolmen i l'espasa no responen fins que l'Ineu té les tres coses (el permís del Til·ler, les paraules del Saber i la benedicció): abans, cap punt d'interacció
+        const teLesTres = () => !DIALEGS.faltaRunna(Estat).length;
+        this.interactiu(sx, sy + 15, RADI_GRAN, DIALEGS.dolmenBaix, { altura: 380, actiu: () => !this.alt && teLesTres() });
+        // La placa de pedra davant el dolmen, centrada entre el dolmen i el camí: diu què cal per alçar Runna
+        this.placaDolmen = this.posar('placa_dolmen', sx, sy + 150, { col: { w: 50, h: 16 } });
+        this.interactiu(sx, sy + 160, 150, DIALEGS.placaDolmen, { altura: this.placaDolmen.displayHeight + 20, actiu: () => !this.alt });
         // Damunt la llosa, darrere l'espasa: les Paraules del Saber
-        this.interactiu(this.espX, this.espY - 12, RADI_OBJECTE, DIALEGS.dolmen, { altura: 150, actiu: () => this.alt && !this.cinema });
+        this.interactiu(this.espX, this.espY - 12, RADI_OBJECTE, DIALEGS.dolmen, { altura: 150, actiu: () => this.alt && !this.cinema && teLesTres() });
         this.margaridesPas();
 
         // Com a la pantalla del títol: una tanca de fusta vella, falgueres, roques i flors roses
@@ -907,6 +909,38 @@ class ZonaDolmen extends ZonaBase {
 
     // Les Paraules del Saber ja s'han dit: Runna surt de la pedra i és a la mà de l'Ineu, que l'alça. Raigs de llum blanca i el rètol
     // es queden fins que el jugador prem; després s'esvaeixen i l'Ineu torna a la seva pose, mirant avall
+    // Les tres coses que calen per alçar Runna es mostren a la pantalla, una darrere l'altra, amb el seu nom; després volen cap a l'espasa i es fonen en una llum
+    mostrarTresCoses(fet) {
+        const I = this.ineu, cx = I.x, cy = I.y - 250;
+        const coses = [['fulla_tiler', "El permís de l'arbre sagrat"], ['saber', 'Les paraules del saber'], ['benediccio', 'La benedicció divina']];
+        const peces = [];
+        coses.forEach(([id, text], k) => {
+            const x = cx + (k - 1) * 155, y = cy + (k === 1 ? -30 : 0), clau = iconaObjecte(this, id);
+            const halo = this.add.circle(x, y, 50, 0xffe8a0, 0.5).setDepth(99000).setBlendMode('ADD').setAlpha(0).setScale(0.3);
+            const ico = (clau ? this.add.image(x, y, clau).setScale(0.4) : this.add.circle(x, y, 20, 0xffe8a0)).setDepth(99001).setAlpha(0);
+            const nom = this.add.text(x, y + 62, text, estilText(24, '#fff3c8', { stroke: '#1a120b', strokeThickness: 5, align: 'center', wordWrap: { width: 145 } })).setOrigin(0.5, 0).setDepth(99001).setAlpha(0);
+            this.time.delayedCall(300 + k * 800, () => {
+                Sfx.objecte();
+                this.tweens.add({ targets: ico, alpha: 1, scale: clau ? 1 : 1.6, duration: 500, ease: 'Back.easeOut' });
+                this.tweens.add({ targets: halo, alpha: 0.55, scale: 1, duration: 500 });
+                this.tweens.add({ targets: nom, alpha: 1, duration: 500 });
+                this.llum(x, y, 0xffe8a0);
+            });
+            peces.push(ico, halo, nom);
+        });
+        // Mostrades les tres, es queden un moment i volen cap a l'espasa
+        this.time.delayedCall(300 + 2 * 800 + 500 + 1600, () => {
+            const px = this.espX, py = this.espY - 40;
+            Sfx.secret();
+            this.tweens.add({ targets: peces, x: px, y: py, scale: 0.15, alpha: 0, duration: 750, ease: 'Sine.easeIn', onComplete: () => {
+                peces.forEach(o => o.destroy());
+                this.llum(px, py, 0xffffff);
+                this.cameras.main.flash(300, 255, 255, 255);
+                this.esperar(500, fet);
+            } });
+        });
+    }
+
     alcarRunna(fet) {
         const I = this.ineu, cam = this.cameras.main, ui = this.ui(), { sx, sy } = DOL;
         Joc.jingle(this, 'jingle_runna');

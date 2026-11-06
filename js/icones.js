@@ -239,6 +239,28 @@ const ICONES_OBJECTES = {
         ctx.lineWidth = 2; ctx.strokeStyle = '#3a6a22'; ctx.beginPath(); ctx.moveTo(48, 86); ctx.lineTo(48, 30);
         [44, 58, 72].forEach(y => { ctx.moveTo(48, y); ctx.lineTo(30, y - 12); ctx.moveTo(48, y); ctx.lineTo(66, y - 12); }); ctx.stroke();
     },
+    // Les tres coses que calen per alçar Runna (només es veuen a l'animació del Dolmen; no són objectes del sarró): la Fulla del Til·ler (fulla_tiler), les Paraules del Saber i la Benedicció
+    saber: ctx => {
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = 3; ctx.strokeStyle = CONTORN;
+        ctx.fillStyle = '#7a1c24'; ctx.beginPath(); ctx.roundRect(8, 30, 80, 48, 5); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#f2e6c4';
+        ctx.beginPath(); ctx.moveTo(48, 34); ctx.quadraticCurveTo(30, 26, 13, 32); ctx.lineTo(13, 70); ctx.quadraticCurveTo(30, 64, 48, 73); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(48, 34); ctx.quadraticCurveTo(66, 26, 83, 32); ctx.lineTo(83, 70); ctx.quadraticCurveTo(66, 64, 48, 73); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(80,46,20,0.7)'; ctx.lineWidth = 1.6;
+        [[20, 42, 40], [20, 49, 38], [20, 56, 40], [56, 42, 76], [56, 49, 74], [56, 56, 76]].forEach(([x, y, x2]) => { ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo((x + x2) / 2, y - 2, x2, y); ctx.stroke(); });
+        ctx.fillStyle = '#ddd2b6'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.4;                                    // ploma
+        ctx.beginPath(); ctx.moveTo(66, 36); ctx.quadraticCurveTo(84, 8, 90, 6); ctx.quadraticCurveTo(88, 26, 70, 40); ctx.closePath(); ctx.fill(); ctx.stroke();
+    },
+    benediccio: ctx => {
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        ctx.strokeStyle = '#e8b830'; ctx.lineWidth = 3.4;                                                             // raigs sobre els dits
+        [[28, 22, 22, 10], [40, 16, 38, 4], [52, 14, 52, 2], [64, 16, 68, 4], [74, 24, 82, 13]].forEach(([x, y, x2, y2]) => { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y2); ctx.stroke(); });
+        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.fillStyle = '#f0c8a0';
+        [[31, 28, 11, 34], [43, 24, 11, 38], [55, 24, 11, 38], [67, 28, 11, 34]].forEach(([x, y, w, h]) => { ctx.beginPath(); ctx.roundRect(x, y, w, h, 5); ctx.fill(); ctx.stroke(); });      // dits
+        ctx.beginPath(); ctx.roundRect(28, 54, 52, 34, 10); ctx.fill(); ctx.stroke();                                                                                              // palmell
+        ctx.beginPath(); ctx.moveTo(30, 66); ctx.quadraticCurveTo(10, 62, 12, 48); ctx.quadraticCurveTo(14, 42, 22, 48); ctx.lineTo(34, 62); ctx.closePath(); ctx.fill(); ctx.stroke();             // polze
+        ctx.strokeStyle = 'rgba(150,90,50,0.5)'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(44, 62); ctx.lineTo(44, 80); ctx.moveTo(56, 62); ctx.lineTo(56, 80); ctx.stroke();
+    },
     cinta_nena: (ctx, cv) => { const t = document.createElement('canvas'); dibuixarLlac(t, 80); ctx.drawImage(t, 8, (96 - t.height) / 2); },      // el mateix llaç que es troba sota les pedres
     benedicio_fraterna: ctx => {                                // una creu al mig d'una aurèola daurada, amb raigs de claror i dos cors petits als costats
         ctx.lineWidth = 3;

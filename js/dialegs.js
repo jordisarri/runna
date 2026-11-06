@@ -1327,9 +1327,10 @@ const DIALEGS = {
     dolmen: E => {
         if (E.te("runna")) return { pagines: [] };
         const falta = DIALEGS.faltaRunna(E);
-        if (falta.length) return { pagines: [{ qui: "Ineu", text: DIALEGS.sapQueFalta(E) ? "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré." : DIALEGS.dolmenSensePista }] };
+        if (falta.length) return { pagines: [] };            // (a l'espasa no hi ha punt d'interacció fins que es tenen les tres coses: aquí no s'arriba)
         return {
             pagines: [
+                { fer: (z, fet) => z.mostrarTresCoses(fet) },      // les tres coses es mostren a la pantalla i volen cap a l'espasa
                 { qui: "Ineu", text: "La foscor tem la llum, però més encara el riure!" },
                 { fer: (z, fet) => z.alcarRunna(fet) }
             ],
@@ -1343,14 +1344,9 @@ const DIALEGS = {
     // Des de baix: l'espasa és dalt de la llosa
     dolmenBaix: E => {
         if (E.te("runna")) return { pagines: [] };
-        const falta = DIALEGS.faltaRunna(E);
-        return { pagines: [{ qui: "Ineu", text: falta.length ? (DIALEGS.sapQueFalta(E) ? "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré." : DIALEGS.dolmenSensePista)
-            : "(Runna és dalt de la llosa. Potser s'hi pot pujar per darrere.)" }] };
+        if (DIALEGS.faltaRunna(E).length) return { pagines: [] };            // fins que no es tenen les tres coses, el dolmen no diu res
+        return { pagines: [{ qui: "Ineu", text: "(Runna és dalt de la llosa. Potser s'hi pot pujar per darrere.)" }] };
     },
-
-    // L'Ineu només sap què calen per alçar Runna si ho ha llegit a la placa del Dolmen o si ja ha anat reunint alguna de les tres coses (el Pare Jordà i el Til·ler li ho diuen)
-    sapQueFalta: E => !!(E.flag("placaDolmen") || E.flag("fullaTiler") || E.flag("saber") || E.flag("benediccio")),
-    dolmenSensePista: "(Una espasa clavada a la llosa d'un dolmen, entre llums que no sé d'on surten. No sé com es desperta... potser la placa que hi ha davant el diu.)",
 
     // La placa de pedra davant el dolmen: diu què cal per alçar Runna. L'Ineu no ho entén del tot i va a preguntar-ho al Pare Alcoví (la Crònica ho explica)
     placaDolmen: E => ({
