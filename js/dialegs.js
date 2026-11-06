@@ -587,6 +587,19 @@ const DIALEGS = {
 
     pareAlcui: E => {
         const f1 = E.flag("fragment1"), f2 = E.flag("fragment2");
+        // Ha llegit la placa del Dolmen i li ho pregunta: la Crònica diu què calen per alçar Runna i qui ho dona
+        if (E.flag("placaDolmen") && !E.flag("alcuiPlacaDita")) {
+            const pas = pistaRunna(E);
+            const pagines = [
+                { qui: "Ineu", text: "Pare Alcoví, a la placa del Dolmen hi diu que només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. Què vol dir?" },
+                { qui: "Pare Alcoví", text: "Això ho tinc a la Crònica, fill. Deixa'm que t'ho llegeixi." },
+                { fer: (z, fet) => z.npcVa('pare_alcui', 812, 372, fet, 120) },
+                { qui: "Crònica", text: "«Per alçar l'espasa calen tres coses: el permís de l'arbre més vell, que seu a taula amb tothom; les paraules que el monjo va deixar, que només entén qui ha parlat amb la seva ombra; i la benedicció del prior, que és la de Déu passada per les mans dels homes.»" },
+                { qui: "Pare Alcoví", text: "L'arbre sagrat és el Gran Til·ler, el de les cel·les: la seva Fulla és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jordà, el prior." }
+            ];
+            if (pas) pagines.push({ qui: "Pare Alcoví", text: "I ara, el que et toca: " + pas });
+            return { pagines, enAcabar: () => { E.posaFlag("alcuiPlacaDita"); E.desar(); } };
+        }
         if (E.flag("runna") && E.flag("relTretes") && !E.flag("tombaSegellada") && !E.flag("tombaLlegida")) {
             return {
                 pagines: [
@@ -1314,7 +1327,7 @@ const DIALEGS = {
     dolmen: E => {
         if (E.te("runna")) return { pagines: [] };
         const falta = DIALEGS.faltaRunna(E);
-        if (falta.length) return { pagines: [{ qui: "Ineu", text: "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré." }] };
+        if (falta.length) return { pagines: [{ qui: "Ineu", text: DIALEGS.sapQueFalta(E) ? "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré." : DIALEGS.dolmenSensePista }] };
         return {
             pagines: [
                 { qui: "Ineu", text: "La foscor tem la llum, però més encara el riure!" },
@@ -1331,9 +1344,23 @@ const DIALEGS = {
     dolmenBaix: E => {
         if (E.te("runna")) return { pagines: [] };
         const falta = DIALEGS.faltaRunna(E);
-        return { pagines: [{ qui: "Ineu", text: falta.length ? "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré."
+        return { pagines: [{ qui: "Ineu", text: falta.length ? (DIALEGS.sapQueFalta(E) ? "Em falta: " + falta.join(", ") + ". Quan ho tingui, tornaré." : DIALEGS.dolmenSensePista)
             : "(Runna és dalt de la llosa. Potser s'hi pot pujar per darrere.)" }] };
     },
+
+    // L'Ineu només sap què calen per alçar Runna si ho ha llegit a la placa del Dolmen o si ja ha anat reunint alguna de les tres coses (el Pare Jordà i el Til·ler li ho diuen)
+    sapQueFalta: E => !!(E.flag("placaDolmen") || E.flag("fullaTiler") || E.flag("saber") || E.flag("benediccio")),
+    dolmenSensePista: "(Una espasa clavada a la llosa d'un dolmen, entre llums que no sé d'on surten. No sé com es desperta... potser la placa que hi ha davant el diu.)",
+
+    // La placa de pedra davant el dolmen: diu què cal per alçar Runna. L'Ineu no ho entén del tot i va a preguntar-ho al Pare Alcoví (la Crònica ho explica)
+    placaDolmen: E => ({
+        pagines: [
+            { qui: "Placa", text: "Només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina." }
+        ].concat(E.flag("alcuiPlacaDita") ? [] : [
+            { qui: "Ineu", text: "(El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alcoví deu saber-ho: ho tindrà escrit a la Crònica.)" }
+        ]),
+        enAcabar: () => { E.posaFlag("placaDolmen"); E.desar(); }
+    }),
 
     faltaRunna: E => {
         const falta = [];
