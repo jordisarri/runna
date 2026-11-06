@@ -153,7 +153,9 @@ const DIALEGS = {
 
     creu: E => ({
         pagines: [
-            { qui: 'Ineu', text: 'Avui les flors estan pansides. Com si la boira se\'n begués el color.' }
+            { qui: 'Ineu', text: E.flag('bassadoriaNeta')
+                ? 'Les flors del peu de la creu s\'han redreçat. Ara que l\'aigua torna a ser clara, també elles tornen a tenir color.'
+                : 'Avui les flors estan pansides. Com si la boira se\'n begués el color.' }
         ]
     }),
 
@@ -858,7 +860,7 @@ const DIALEGS = {
     sortidaErmita: E => ({ pagines: [{ qui: 'Cartell', text: '← L\'Era\n→ Camí de la Desaparició' }] }),
     creuDesaparicio: E => ({
         pagines: [
-            { qui: 'Inscripció', text: "«Els qui se'n van no s'obliden; només esperen que algú els cridi pel nom.»" }
+            { qui: 'Inscripció', text: "«Dotze paraules guarda el camí. Qui les escolti, trobarà el nom dels que callen.»" }
         ]
     }),
 
