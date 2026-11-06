@@ -882,10 +882,14 @@ const DIALEGS = {
         if (!E.flag('garfBancSegut')) {
             return { pagines: [{ qui: 'Galf', text: "Mmm? Ah, un monjo! Seu, seu al banc de davant, que per xerrar s'hi està millor." }] };
         }
+        const clauDonada = E.flag('clauGabrielDonada') || E.te('clau_gabriel') || E.flag('portaGabrielOberta');
+        if (clauDonada) return { pagines: [{ qui: 'Galf', text: "Torna quan tinguis el cristall de gel, noi. L'ermita de Sant Gabriel s'obre amb la clau que t'he donat." }] };
         return { pagines: [
             { qui: 'Galf', text: "Així sí. Soc el Galf, inventor. Visc a la cel·la de Sant Antoni, però vinc aquí cada dia: és l'únic racó on cap teulada no em tapa el cel. Tinc idees que ni jo entenc." },
-            { qui: 'Galf', text: "Si em portes un cristall de gel (diuen que n'hi ha un a l'ermita de Sant Gabriel), et construiré un telescopi per mirar el cel." }
-        ] };
+            { qui: 'Galf', text: "Si em portes un cristall de gel, et construiré un telescopi per mirar el cel. N'hi ha un a l'ermita de Sant Gabriel." },
+            { qui: 'Galf', text: "Però l'ermita és tancada, i la clau la guardo jo des que el sagristà va marxar. Té: no te la deixis perdre." },
+            { avis: "Has obtingut la CLAU DE SANT GABRIEL.", obj: 'clau_gabriel' }
+        ], enAcabar: () => { E.dona('clau_gabriel'); E.posaFlag('clauGabrielDonada'); } };
     },
     cartellEra: E => ({ pagines: [{ qui: 'Cartell', text: '↑ Ermita de la Desaparició\n→ Hostatgeria\n← Rovellonera' }] }),
 

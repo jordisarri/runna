@@ -113,6 +113,7 @@ const ICONES_OBJECTES = {
     clau_sagrari: ctx => iconaClau(ctx, '#e8c050', '#a07a20'),
     clau_girgoles: ctx => iconaClau(ctx, '#a8603a', '#6a3418'),
     clau_ferro: ctx => iconaClau(ctx, '#6a6a72', '#3a3a40', true),
+    clau_gabriel: ctx => iconaClau(ctx, '#9fb8cc', '#4a6278'),
     aigua_sj: ctx => iconaFlasco(ctx, '#6ab0e8', '#c8e8ff'),
     beuratge: ctx => iconaFlasco(ctx, '#8a5ac8', '#c8a0ff'),
     cristall_gel: ctx => {
@@ -319,6 +320,7 @@ const US_OBJECTES = {
     pergami_monjo: E => E.flag('raimDerrotat') ? 'record' : 'cal',
     clau_girgoles: E => E.flag('portaFerroOberta') ? 'record' : 'cal',
     clau_ferro: E => E.flag('portaSoterraniOberta') ? 'record' : 'cal',
+    clau_gabriel: E => E.flag('portaGabrielOberta') ? 'record' : 'cal',
     // La resta (aigua, cristall, pruna, beuratge, pa, llaç, ram, llavor) es gasten en fer-los servir: si els portes, encara et calen
 };
 const US_TEXTOS = {

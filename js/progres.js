@@ -80,7 +80,7 @@ const PROGRES = {
           pista: E => !E.flag('garfBancSegut')
               ? "A l'Era, un inventor anomenat Galf mira el cel. Potser et deixa seure al seu banc."
               : E.te('cristall_gel') ? "Ja tens el cristall de gel: el Galf, a l'Era, en farà un tub per mirar els estels."
-              : "El Galf, a l'Era, sabria fer un tub per mirar els estels si li portessis un cristall de gel de l'ermita de Sant Gabriel." },
+              : "El Galf, a l'Era, farà un tub per mirar els estels si li portes un cristall de gel. L'ermita de Sant Gabriel s'obre amb la clau que ell t'ha donat." },
         { id: 'estels', marca: ['telescopiMuntat', 'estelsFets'], fet: E => E.flag('estelsFets') || E.flag('estelLlorenc'),
           pista: E => "El telescopi vol un lloc alt i fosc: els Dipòsits." },
         { id: 'estelLlorenc', marca: ['estelLlorenc', 'obj:estel_llorenc'], fet: E => E.flag('estelLlorenc'),

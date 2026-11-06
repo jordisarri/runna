@@ -260,8 +260,18 @@ class ZonaGabriel extends ZonaBase {
         this.terra('cami', 300, 650, 1300, 130);         // camí davant l'ermita, cap als Dipòsits (est)
 
         // L'ermita, prou gran perquè la porta (d'arc rebaixat) sigui una mica més alta que l'Ineu; la porta s'obre en acostar-s'hi
-        const ermita = this.edifici('ermita_gabriel', 400, 640, 520, 88, 'ZonaGabrielInt', 'porta', { alt: 90 });
-        this.portaAnimada({ x: 400, top: 493, bottom: 625, ample: 88, fons: 620, unic: true, arc: 26, retall: ermita });
+        // L'ermita és tancada amb clau: la clau la dona el Galf (quan demana el cristall de gel). Sense la porta oberta no hi ha sortida cap a l'interior.
+        const ermita = this.edifici('ermita_gabriel', 400, 640, 520, 88, null, null, { alt: 90 });
+        this.ermitaOberta = Estat.flag('portaGabrielOberta');
+        const obreErmita = () => { this.ermitaOberta = true; this.sortida(400 - 44, 640 - 90 + 10, 88, 86, 'ZonaGabrielInt', 'porta'); };
+        if (this.ermitaOberta) obreErmita();
+        this.portaAnimada({ x: 400, top: 493, bottom: 625, ample: 88, fons: 620, unic: true, arc: 26, retall: ermita, bloq: () => !this.ermitaOberta });
+        this.interactiu(400, 655, RADI_OBJECTE, () => Estat.te('clau_gabriel') ? ({
+            pagines: [{ qui: 'Ineu', text: "La clau del Galf encaixa al pany. La porta de l'ermita s'obre." }],
+            enAcabar: () => { Estat.posaFlag('portaGabrielOberta'); Sfx.secret(); obreErmita(); }
+        }) : ({
+            pagines: [{ qui: 'Ineu', text: "L'ermita de Sant Gabriel és tancada amb clau." }]
+        }), { altura: 110, actiu: () => !this.ermitaOberta });
         this.cartell(930, 800, () => ({ pagines: [{ qui: 'Cartell', text: '→ Dipòsits\n↑ La Rovellonera' }] }));
 
         this.terra('cami', 220, 650, 360, 200);          // esplanada de terra seca davant l'ermita

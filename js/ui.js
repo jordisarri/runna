@@ -142,6 +142,7 @@ const CATALEG_OBJECTES = {
     fragment1:        ['Pergamí partit (1/2)', 'La meitat d\'un pergamí esquinçat, trobada a les Runes.'],
     pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.» Al revers: «Qui busqui sortida, que alci la bóta marcada amb la creu.»'],
     clau_ferro:       ['Clau de ferro', 'Obre la Porta de les Gírgoles.'],
+    clau_gabriel:     ['Clau de Sant Gabriel', "Te l'ha donada el Galf. Obre l'ermita de Sant Gabriel."],
     llavorLluna:      ['Llavor de Lluna', 'De la Rosansa. L\'Isildren sap on plantar-la.'],
 };
 
