@@ -55,9 +55,13 @@ function completarLliço(nom) {
         E.posaObjectiu("La Bassadòria quedarà neta amb el Cant de l'Aurora.");
     } else if (nom === 'pedres') {
         pagines = [
-            { qui: 'La Pianista', text: 'El Cant de Vespres: 3-1-2-1. Les pedres antigues sempre l\'han entès. Toca\'l davant l\'ombra del monjo.' }
+            { qui: 'La Pianista', text: E.flag('ombraDemanaCant')
+                ? 'El Cant de Vespres: 3-1-2-1. Les pedres antigues sempre l\'han entès. Toca\'l davant l\'ombra del monjo, a les Runes.'
+                : (E.flag('soparObert') && !E.flag('pastorsConvencuts'))
+                    ? 'El Cant de Vespres: 3-1-2-1. Toca\'l vora el foc dels pastors, a la Cirosa: un cant tan vell potser els recorda casa.'
+                    : 'El Cant de Vespres: 3-1-2-1. És molt vell: les pedres antigues sempre l\'han entès.' }
         ];
-        E.posaObjectiu("El Cant de Vespres farà parlar l'ombra del monjo, a les Runes.");
+        E.posaObjectiu(E.flag('ombraDemanaCant') ? "El Cant de Vespres farà parlar l'ombra del monjo, a les Runes." : "Toca el Cant de Vespres vora el foc dels pastors, a la Cirosa.");
     } else {
         pagines = [
             { qui: 'La Pianista', text: 'Això mateix, fill! El Cant del Miracle. Els ocells el cantaven a l\'alba, abans que l\'Ocellaire se\'l quedés i el tanqués a la seva gàbia.' },
