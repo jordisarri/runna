@@ -42,7 +42,7 @@ function objectiuSopar(E) {
     const f = [];
     if (!E.flag("escudella")) f.push("l'escudella de la Meus");
     if (!E.flag("floresIsidre")) f.push("les flors d'Isildren (Hostatgeria)");
-    if (!E.flag("pastorsConvencuts")) f.push("el pa dels pastors de la Cirosa");
+    if (!E.flag("pastorsConvencuts")) f.push(E.flag("cantPedres") ? "el pa dels pastors de la Cirosa (toca'ls el cant vora el foc)" : "el pa dels pastors (primer, una música antiga: la Pianista)");
     E.posaObjectiu(f.length ? "El sopar del Til·ler: falta " + f.join(", ") + "." : "Tot a punt: torna al Gran Til·ler per al sopar.");
 }
 
@@ -1145,7 +1145,8 @@ const DIALEGS = {
             { qui: "El Gran Til·ler", text: "Un cop l'any, a la tardor, la gent de les cel·les s'asseu sota les meves branques i menja plegada. Ho anomeneu el sopar del Til·ler. Jo no menjo, però escolto. Tota la saviesa d'un arbre és escoltar la gent que menja junta." },
             { qui: "El Gran Til·ler", text: "Aquest any ningú no té ganes de taula: tres cadires buides, i el poble amb por. La boira s'alimenta de la solitud, petit monjo. I no val a mitges: la taula ha d'estar plena." },
             { qui: "El Gran Til·ler", text: "Fa tres-cents anys, quan van tancar la gàbia, els pastors de la Cirosa s'asseien aquí amb els monjos i els pelegrins. Després els van foragitar, i van oblidar que també eren de la casa. Que vingui el menjar de cada llar, també el seu. I que hi hagi flors." },
-            { qui: "El Gran Til·ler", text: "Porta l'escudella de la Meus, les flors d'Isildren i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís." }
+            { qui: "El Gran Til·ler", text: "Porta l'escudella de la Meus, les flors d'Isildren i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís." },
+            { qui: "El Gran Til·ler", text: "Però els pastors no s'asseuran a taula només amb paraules: fa anys que no senten música vora el foc. Abans de tornar-hi, ves a veure la Pianista del Santuari: guarda un cant tan vell com ells." }
         ],
         enAcabar: () => { E.posaFlag("soparObert"); objectiuSopar(E); }
     }),
