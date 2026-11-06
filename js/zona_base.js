@@ -780,10 +780,11 @@ class ZonaBase extends Phaser.Scene {
     }
     // L'Ineu REP un objecte (el ram, els guants, una clau...): alça el braç amb la mà oberta, l'objecte vola del qui el dona (el punt amb què s'interactua)
     // fins a la seva mà i hi queda, brillant, fins que es crida ineuBaixa() (la UI ho fa en passar la pàgina d'avís { avis, obj: 'id' }). Sona la fanfara.
-    // Si no es pot (no hi ha el dibuix, l'Ineu és assegut o ocult, ja alça una altra cosa), no fa res: l'avís es mostra igualment.
+    // Si no es pot (no hi ha el dibuix, l'Ineu és ocult, ja alça una altra cosa), no fa res: l'avís es mostra igualment. Assegut en un banc sí que es pot (el Galf et dona
+    // la clau): el dibuix de l'Ineu dret alça el braç al lloc del seient i, en acabar, torna el de l'Ineu assegut: no s'aixeca del banc (this.assegut no es toca).
     ineuRep(id) {
         const I = this.ineu, KEY = 'ineu_aixeca_buit';
-        if (!I || !I.visible || this.assegut || this.ineuAlt || this.ineuFlautaImg || !this.textures.exists(KEY) || Grafics.faltants.includes(KEY)) return false;
+        if (!I || !I.visible || this.ineuAlt || this.ineuFlautaImg || !this.textures.exists(KEY) || Grafics.faltants.includes(KEY)) return false;
         const OX = 0.556;                                          // on cau el cos de l'Ineu dins del dibuix (centre dels peus)
         this.ineuAixeca(KEY, null, OX);
         const A = this.ineuAlt, dw = A.displayWidth, dh = A.displayHeight;
