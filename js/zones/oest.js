@@ -644,6 +644,7 @@ class ZonaDolmen extends ZonaBase {
         this.dolmen = this.posar('dolmen_buit', sx, sy, { col: { w: 300, h: 40 } });
         // Runna és una capa a part, per davant de l'Ineu quan és damunt la llosa (sempre és darrere l'espasa)
         if (!Estat.te('runna')) this.espClavada = this.add.image(this.dolmen.x, this.dolmen.y, 'dolmen_clavada').setOrigin(0.5, 1).setScale(this.dolmen.scaleX).setDepth(sy + 8);
+        if (this.espClavada) (this.opacs = this.opacs || []).push(this.espClavada);       // l'espasa és opaca: la silueta translúcida de l'Ineu no s'hi veu a través quan hi passa darrere
         const kD = this.dolmen.displayWidth / DOLMEN_DIB.W, topD = this.dolmen.y - this.dolmen.displayHeight;
         const wx = tx => this.dolmen.x + (tx - DOLMEN_DIB.W / 2) * kD, wy = ty => topD + (ty + DOLMEN_DIB.dy) * kD;
         this.espX = wx(DOLMEN_DIB.ex); this.espY = wy(DOLMEN_DIB.ey);          // on s'enfonsa la punta de la fulla
