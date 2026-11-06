@@ -45,6 +45,7 @@ const CATALEG = [
     { key: 'arbre',        file: 'assets/natura/arbre.webp',        amplada: 300, provisional: (c, w) => dibuixarArbre(c, w) },
     { key: 'pi_arrels_mortes', file: 'assets/natura/pi_arrels_mortes.webp', amplada: 149 },   // les arrels seques, mentre el pi dorm
     { key: 'placa_pi',     file: 'assets/natura/placa_pi.webp',     amplada: 100, provisional: (c, w) => lienc(c, w, Math.round(w * 0.95), (ctx, W, H) => pintarPlacaPi(ctx, W, H)) },   // la fita del Pi dels Tres Cants (docs/PROMPTS_GRAFICS.md)
+    { key: 'placa_dolmen',  file: 'assets/natura/placa_dolmen.webp',     amplada: 100, provisional: (c, w) => lienc(c, w, Math.round(w * 0.95), (ctx, W, H) => pintarPlacaPi(ctx, W, H)) },   // la placa davant el Dolmen (què cal per alçar Runna); prompt a docs/PROMPTS_GRAFICS.md
     { key: 'pi_arrels',    file: 'assets/natura/pi_arrels.webp',    amplada: 150, provisional: (c, w) => lienc(c, w, Math.round(w * 2), (ctx, W, H) => pintarArrelsPi(ctx, W, H)) },   // la barrera d'arrels del Pi dels Tres Cants (docs/PROMPTS_GRAFICS.md)
     // Els quatre estats del pi (es retallen tots amb la mateixa caixa: en canviar de dibuix no es mouen). Un cant = una branca viva
     { key: 'pi_tres_cants_mort', file: 'assets/natura/pi_tres_cants_mort.webp', amplada: 340, provisional: (c, w) => lienc(c, w, Math.round(w * 1.53), (ctx, W, H) => pintarPiTresCants(ctx, W, H)) },   // sec, adormit

@@ -652,7 +652,7 @@ class ZonaDolmen extends ZonaBase {
         this.posarPujada(wy(DOLMEN_DIB.ly), kD);
         this.interactiu(sx, sy + 15, RADI_GRAN, DIALEGS.dolmenBaix, { altura: 380, actiu: () => !this.alt });
         // La placa de pedra davant el dolmen, a la vora del camí: diu què cal per alçar Runna
-        this.placaDolmen = this.posar('placa_pi', sx + 120, sy + 150, { col: { w: 50, h: 16 } });
+        this.placaDolmen = this.posar('placa_dolmen', sx + 120, sy + 150, { col: { w: 50, h: 16 } });
         this.interactiu(sx + 120, sy + 160, 150, DIALEGS.placaDolmen, { altura: this.placaDolmen.displayHeight + 20, actiu: () => !this.alt });
         // Damunt la llosa, darrere l'espasa: les Paraules del Saber
         this.interactiu(this.espX, this.espY - 12, RADI_OBJECTE, DIALEGS.dolmen, { altura: 150, actiu: () => this.alt && !this.cinema });

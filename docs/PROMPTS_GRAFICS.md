@@ -244,7 +244,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `placa_dolmen`, `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
 
 
 
@@ -302,6 +302,20 @@ Charming 2D cartoon game scenery asset in the same art style as the attached ref
 
 
 
+
+
+
+### `placa_dolmen.png` → `assets/natura/placa_dolmen.webp` (amplada 100) *(La placa de pedra **davant el Dolmen** (`js/zones/oest.js`, `ZonaDolmen`): diu què cal per alçar Runna: el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. És germana de la placa del Pi dels Tres Cants: **puja-hi `art/natura/placa_pi.png` com a referència** (la mateixa fita de pedra, vista de cara, amb el mateix gruix i la mateixa base), però amb una talla diferent: l'espasa dalt i tres medallons a baix (una fulla, un llibre amb una ploma i una mà que beneeix). Imatge **apaïsada, uns 1,1:1** (el joc la fa servir a uns 100 px d'ample). Desa-la com `art/natura/placa_dolmen.png` i passa-la amb `node eines/convertir_webp.js placa_dolmen`. Mentre no hi sigui, el joc fa servir el dibuix provisional de la placa del Pi.)*
+
+
+
+```
+
+Charming 2D cartoon game scenery asset in the same art style as the attached reference image (hand-painted cartoon stone object): bold clean consistent dark outline around the whole silhouette with medium-to-fine clean inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text, no letters, no numbers. A small, low, squat stone waymarker shown in a strictly FRONTAL elevation view, exactly head-on, like a flat 2D front drawing: absolutely no side view, no three-quarter view, no perspective, no visible top surface and no visible sides, only the flat front face of the stone is seen. It is a single wide rectangular block of weathered grey stone, a little wider than it is tall (about 1.1 times as wide as high, only about waist-high to a child), with a flat straight top edge and slightly chipped corners, resting on a wide flat low base slab. It is clearly NOT a gravestone: no cross, no rounded or arched top, no epitaph, no flowers, no cemetery feeling. Carved in shallow relief on the front face, centered, on two levels. On the upper part: a single small straight sword seen from the front, upright, with its point at the bottom thrust into a small simple rock, and three short straight rays of light carved around its hilt (the legendary sword waiting to be raised). Below it, in a horizontal row on the same front face: three small equal carved circles (medallions), evenly spaced, each with one simple bold symbol carved inside. The first medallion holds a single large oak leaf on a short stem (the permission of the sacred tree). The second holds a small open book seen from the front with a tiny feather quill leaning on it, the pages showing only wavy lines, never letters (the words of wisdom). The third holds an open hand raised in blessing, seen from the front, with three short rays above the fingers (the divine blessing). The three symbols are large, simple and bold enough to read clearly when the whole image is shown at only 100 pixels wide. A few patches of green moss on the top edge and the base, a few small grass tufts at the foot. The object sits flat at the bottom of the image.
+
+```
+
+**Ajust:** si els tres medallons es llegeixen malament, afegeix: «each medallion is a large deep-carved circle with one big simple symbol, no tiny details». Si hi surt text, repeteix amb: «the pages of the book show only abstract wavy lines, never letters». Si l'espasa surt massa petita, afegeix: «the sword takes up about a third of the height of the front face».
 
 
 
