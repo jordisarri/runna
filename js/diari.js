@@ -335,6 +335,11 @@ const DIARI = {
                 const clau = iconaObjecte(ui, o);
                 if (clau) c.add(ui.add.image(x + W / 2, y + 12 + IC / 2, clau).setDisplaySize(IC, IC).setAlpha(us === 'record' ? 0.6 : 1));
                 if (us !== 'sempre') c.add(ui.add.text(x + W - 8, y + 6, us === 'cal' ? '★' : '✓', estilText(22, US_TEXTOS[us][1], { fontStyle: 'bold' })).setOrigin(1, 0));
+                const q = quantitatObjecte(Estat, o);
+                if (q > 1) {                                                // més d'un: un número dins el quadre (cantonada de dalt a l'esquerra)
+                    c.add(ui.add.circle(x + 20, y + 20, 15, 0x4a2412, 1).setStrokeStyle(2, 0xd9b441, 1));
+                    c.add(ui.add.text(x + 20, y + 20, String(q), estilText(22, '#f6e9c4', { fontStyle: 'bold' })).setOrigin(0.5));
+                }
                 c.add(tn);
                 caixes.push({ o, x, y, w: W, h });
             });
@@ -349,7 +354,8 @@ const DIARI = {
     // Fitxa d'un objecte, damunt del sarró: icona gran, nom, descripció i si encara farà falta. Es tanca tocant-la.
     fitxaObjecte(ui, o) {
         if (this.fitxa) this.fitxa.destroy();
-        const [nom, desc] = CATALEG_OBJECTES[o], [txtUs, colUs] = US_TEXTOS[usObjecte(Estat, o)];
+        const [nom0, desc] = CATALEG_OBJECTES[o], [txtUs, colUs] = US_TEXTOS[usObjecte(Estat, o)];
+        const qt = quantitatObjecte(Estat, o), nom = qt > 1 ? nom0 + ' ×' + qt : nom0;
         const W = AMPLE - 140, x0 = (AMPLE - W) / 2, f = this.fitxa = ui.add.container(0, 0);
         const tn = ui.add.text(AMPLE / 2, 0, nom, { fontFamily: FONT_PLACA, fontSize: '34px', fontStyle: 'bold', color: VERMELL, align: 'center', wordWrap: { width: W - 48 }, resolution: 2 }).setOrigin(0.5, 0);
         const td = ui.add.text(AMPLE / 2, 0, desc, estilText(25, TINTA, { fontStyle: 'italic', align: 'center', wordWrap: { width: W - 48 } })).setOrigin(0.5, 0);

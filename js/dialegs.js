@@ -1243,7 +1243,7 @@ const DIALEGS = {
     },
 
     llac: k => E => ({
-        pagines: [{ avis: "Has trobat un llaç de la nena (" + (["llac1", "llac2"].filter(f => E.flag(f) || f === "llac" + k).length) + "/2)." }],
+        pagines: [{ avis: "Has trobat un llaç de la nena (" + (["llac1", "llac2"].filter(f => E.flag(f) || f === "llac" + k).length) + "/2).", obj: 'llac_nena' }],      // (amb obj, l'Ineu alça el llaç)
         enAcabar: () => {
             E.posaFlag("llac" + k); E.dona("llac_nena");
             const n = ["llac1", "llac2"].filter(f => E.flag(f)).length;

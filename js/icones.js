@@ -382,3 +382,7 @@ const US_TEXTOS = {
     record: ['✓ Ja l\'has fet servir. Te\'l pots quedar de record.', '#3a7a3a']
 };
 function usObjecte(E, id) { return (US_OBJECTES[id] || (() => 'cal'))(E); }
+
+// Objectes que es poden tenir més d'un cop (són una sola entrada al sarró): quants se'n porten. El sarró ho mostra amb un número al quadre.
+const QUANTITAT_OBJECTES = { llac_nena: E => ['llac1', 'llac2'].filter(f => E.flag(f)).length };
+function quantitatObjecte(E, id) { const f = QUANTITAT_OBJECTES[id]; return f ? Math.max(1, f(E)) : 1; }
