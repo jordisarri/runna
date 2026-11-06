@@ -4,16 +4,18 @@
  * Dolmen (sortida a l'extrem oest, a la mateixa alçada que l'entrada est del Dolmen). A mig camí hi ha una clariana amb el Pi dels Tres Cants.
  *
  * El pi barra el pas amb les seves branques baixes i només deixa passar qui li porta els tres cants (Aurora, Vespres i Miracle) amb la tarota:
- * cada cant il·lumina una de les tres branques. Només es pot fer des de l'est (Sant Antoni): des del Dolmen, el camí s'acaba contra les branques
+ * cada cant fa reviure una de les tres branques (la imatge del pi canvia amb un fade). Només es pot fer des de l'est (Sant Antoni): des del Dolmen, el camí s'acaba contra les branques
  * i l'Ineu entén que cal anar per l'altre costat. El premi, a banda d'obrir el camí, és la història del pi: d'on van sortir els tres cants.
  */
 const PI3 = { A: 2800, H: 1000, camiY: 600, camiH: 140, vx: 2490, barX: 1150, piX: 1500, piY: 545, plX: 1500, plY: 598 };
-// Branques del pi (fraccions de la imatge) on s'encén la llum de cada cant
-// Llocs (fraccions de la imatge) on s'encén la llum de cada cant: les puntes de les tres soques del pi sec (adormit) i les copes del pi viu (despert)
-const PI3_BRANQUES = { aurora: [0.251, 0.174], pedres: [0.731, 0.164], miracle: [0.495, 0.095] };
-const PI3_BRANQUES_VIU = { aurora: [0.25, 0.184], pedres: [0.758, 0.189], miracle: [0.496, 0.062] };
-const PI3_ALCADA = 400;      // alçada del pi a l'escena, igual per al sec i el viu (el que canvia és la imatge, no la mida)
-const PI3_COLORS = { aurora: 0xffb860, pedres: 0xa8c8ff, miracle: 0xfff0a0 };
+// Cada cant que sona davant el pi en fa reviure una branca: la imatge canvia amb un fade, sense llums ni efectes.
+// Estats: 0 pi sec · 1 només la branca esquerra viva · 2 també la dreta · 3 tot l'arbre viu.
+const PI3_ESTATS = ['pi_tres_cants_mort', 'pi_tres_cants_esq', 'pi_tres_cants_dos', 'pi_tres_cants'];
+const PI3_CANTS = { aurora: { flag: 'piAurora' }, pedres: { flag: 'piPedres' }, miracle: { flag: 'piMiracle' } };      // el flag que posa cada cant en sonar davant el pi
+const PI3_FLAGS_LLISTA = Object.values(PI3_CANTS).map(c => c.flag);
+const PI3_ALCADA = 400;      // alçada del pi a l'escena, igual per a tots els estats (el que canvia és la imatge, no la mida)
+const PI3_ZOOM_MIN = 0.9;     // el zoom més allunyat en llegir la placa o tocar un cant (sense el HUD de dalt ja no cal allunyar tant)
+const PI3_FADE = 2200;       // durada del canvi d'una imatge a la següent
 
 class ZonaBoscPi extends ZonaBase {
     constructor() {
@@ -93,23 +95,10 @@ class ZonaBoscPi extends ZonaBase {
 
         this.cameraFollowOffsetY = -150;           // la càmera mira una mica més amunt: així es veu la part de dalt del pi des del camí
 
-        // El Pi dels Tres Cants, al mig de la clariana
-        // (el pi sec, adormit, fins que el desperten els tres cants; llavors es transforma en el viu)
-        this.pi = this.posar(Estat.flag('piObert') ? 'pi_tres_cants' : 'pi_tres_cants_mort', piX, piY, { col: { w: 80, h: 34 } });
+        // El Pi dels Tres Cants, al mig de la clariana: sec, o amb tantes branques vives com cants hagin sonat (tot viu un cop obert)
+        this.estatPi = Estat.flag('piObert') ? 3 : PI3_FLAGS_LLISTA.filter(f => Estat.flag(f)).length;
+        this.pi = this.posar(PI3_ESTATS[this.estatPi], piX, piY, { col: { w: 80, h: 34 } });
         this.pi.setScale(PI3_ALCADA / this.pi.height);
-        this.llumsPi = {};
-        Object.keys(PI3_BRANQUES).forEach(nom => {
-            const [x, y] = this.anclaLlum(nom, this.pi, Estat.flag('piObert'));
-            if (!this.textures.exists('halo_pi')) {                          // una llum suau: degradat radial blanc que es tinta de cada color
-                const cv = this.textures.createCanvas('halo_pi', 128, 128), c = cv.getContext(), g = c.createRadialGradient(64, 64, 0, 64, 64, 64);
-                g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.35, 'rgba(255,255,255,0.55)'); g.addColorStop(1, 'rgba(255,255,255,0)');
-                c.fillStyle = g; c.fillRect(0, 0, 128, 128); cv.refresh();
-            }
-            const l = this.add.image(x, y, 'halo_pi').setTint(PI3_COLORS[nom]).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0).setDepth(piY + 20);
-            l.base = 260 / 128; l.setScale(l.base);
-            this.llumsPi[nom] = l;
-            if (!Estat.flag('piObert') && Estat.flag('pi' + nom[0].toUpperCase() + nom.slice(1))) this.encendreBranca(nom, true);
-        });
 
         // Les branques baixes que barren el camí (a l'oest de la clariana), mentre el pi no s'ha obert
         if (!Estat.flag('piObert')) this.posarBarrera();
@@ -129,7 +118,7 @@ class ZonaBoscPi extends ZonaBase {
             enTancar: () => {
                 if (Estat.flag('piObert') || !Estat.te('flauta')) return;
                 Estat.posaFlag('flauta_pi');
-                this.time.delayedCall(1100, () => this.obrirMusica());            // després que la càmera hagi tornat a lloc
+                this.obrirMusica();                                               // just en acabar el text: l'Ineu no es pot moure entremig
             }
         });
         Object.defineProperty(puntPlaca, 'cameraCossos', { get: () => [this.pi] });         // en llegir la placa, el pi es veu sencer (la càmera s'allunya si cal)
@@ -202,7 +191,7 @@ class ZonaBoscPi extends ZonaBase {
         const dalt = this.pi.y - this.pi.displayHeight - 20, baix = Math.max(this.ineu.y, PI3.plY) + 30;
         const z = Math.min(ZOOM_CAMERA, (H - reserva - 30) / (baix - dalt));
         this.camPi = true;
-        this.enquadrar(PI3.piX, (dalt + baix) / 2, Math.max(0.8, z), 800, null, reserva);
+        this.enquadrar(PI3.piX, (dalt + baix) / 2, Math.max(PI3_ZOOM_MIN, z), 800, null, reserva);
     }
 
     desenquadrarPi() {
@@ -214,99 +203,49 @@ class ZonaBoscPi extends ZonaBase {
         this.alliberarCamera(900);
     }
 
-    // On és la llum d'un cant sobre la imatge del pi (sec o viu)
-    anclaLlum(nom, img, viu) {
-        const [fx, fy] = (viu ? PI3_BRANQUES_VIU : PI3_BRANQUES)[nom];
-        return [img.x + (fx - 0.5) * img.displayWidth, img.y - img.displayHeight + fy * img.displayHeight];
-    }
-
-    // El pi es desperta del tot: la imatge seca es fon cap a la viva (amb les copes verdes) i les llums se'n van a les noves copes
-    despertarPi() {
-        const sec = this.pi;
-        if (!sec || sec.texture.key === 'pi_tres_cants') return;
-        const viu = this.add.image(sec.x, sec.y, 'pi_tres_cants').setOrigin(0.5, 1).setDepth(sec.depth + 0.1).setAlpha(0);
-        viu.setScale(PI3_ALCADA / viu.height);                              // la mateixa alçada que el sec
-        this.tweens.add({ targets: viu, alpha: 1, duration: 2600, ease: 'Sine.easeInOut' });
-        this.tweens.add({ targets: sec, alpha: 0, duration: 2600, ease: 'Sine.easeInOut', onComplete: () => sec.destroy() });
-        this.pi = viu;
-        Object.keys(this.llumsPi).forEach(nom => {
-            const [x, y] = this.anclaLlum(nom, viu, true);
-            this.tweens.add({ targets: this.llumsPi[nom], x, y, duration: 2600, ease: 'Sine.easeInOut' });
-            if (this.guspiresPi && this.guspiresPi[nom]) this.tweens.add({ targets: this.guspiresPi[nom], x, y, duration: 2600, ease: 'Sine.easeInOut' });
-        });
-        this.time.delayedCall(2700, () => this.apagarLlums());
-    }
-
-    // Amb el pi salvat ja no hi ha llums: es difuminen i s'eliminen (també les guspires)
-    apagarLlums() {
-        Object.keys(this.llumsPi).forEach(nom => {
-            const l = this.llumsPi[nom];
-            this.tweens.killTweensOf(l);
-            this.tweens.add({ targets: l, alpha: 0, duration: 1200, onComplete: () => l.destroy() });
-            const g = this.guspiresPi && this.guspiresPi[nom];
-            if (g) { g.stop(); this.time.delayedCall(2000, () => g.destroy()); }
-        });
-        this.guspiresPi = {};
-    }
-
-    encendreBranca(nom, silenci = false) {
-        const l = this.llumsPi[nom];
-        if (!l) return;
-        l.base = 400 / 128;                                                   // una llum gran, que es nota de lluny
-        l.setScale(l.base).setAlpha(silenci ? 0.7 : 0);
-        this.tweens.add({ targets: l, alpha: { from: silenci ? 0.7 : 0, to: 0.9 }, duration: silenci ? 1 : 900 });
-        this.tweens.add({ targets: l, scale: l.base * 1.12, alpha: 0.55, yoyo: true, repeat: -1, duration: 1400, delay: 900, ease: 'Sine.easeInOut' });
-        // Guspires que surten sense parar de la copa il·luminada
-        this.guspiresPi = this.guspiresPi || {};
-        if (!this.guspiresPi[nom]) {
-            this.guspiresPi[nom] = this.add.particles(l.x, l.y, 'espurna', {
-                x: { min: -70, max: 70 }, y: { min: -50, max: 50 }, speedY: { min: -30, max: -8 }, speedX: { min: -12, max: 12 }, lifespan: 1700,
-                scale: { start: 0.26, end: 0 }, alpha: { start: 1, end: 0 }, tint: PI3_COLORS[nom], blendMode: 'ADD', frequency: 90
-            }).setDepth(PI3.piY + 31);
-        }
-        if (!silenci) {
-            this.llum(l.x, l.y, PI3_COLORS[nom]);
-            const ona = this.add.circle(l.x, l.y, 40).setStrokeStyle(6, PI3_COLORS[nom], 1).setBlendMode(Phaser.BlendModes.ADD).setDepth(PI3.piY + 32);
-            this.tweens.add({ targets: ona, scale: 6, alpha: 0, duration: 1100, ease: 'Sine.easeOut', onComplete: () => ona.destroy() });
-            const guspires = this.add.particles(l.x, l.y, 'espurna', { speed: { min: 70, max: 220 }, lifespan: 1200, scale: { start: 0.4, end: 0 }, alpha: { start: 1, end: 0 }, tint: PI3_COLORS[nom], blendMode: 'ADD', emitting: false }).setDepth(PI3.piY + 33);
-            guspires.explode(40);
-            this.time.delayedCall(1500, () => guspires.destroy());
-        }
+    // El pi passa a l'estat n (vegeu PI3_ESTATS): la imatge nova apareix poc a poc per sobre de l'anterior i, quan és del tot visible, l'anterior desapareix
+    canviarPi(n, ms = PI3_FADE) {
+        const antic = this.pi;
+        if (!antic || !antic.active || this.estatPi === n) return;
+        this.estatPi = n;
+        const nou = this.add.image(antic.x, antic.y, PI3_ESTATS[n]).setOrigin(0.5, 1).setDepth(antic.depth + 0.1).setAlpha(0);
+        nou.setScale(PI3_ALCADA / nou.height);                              // la mateixa alçada que l'anterior
+        this.pi = nou;
+        this.tweens.add({ targets: nou, alpha: 1, duration: ms, ease: 'Sine.easeInOut', onComplete: () => { nou.setDepth(antic.depth); antic.destroy(); } });
     }
 
     teEfecteMelodia(nom) {
-        if (!PI3_BRANQUES[nom] || this.ineu.x < PI3.barX + 40 || Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, PI3.plX, PI3.plY) > 260) return false;
-        return !Estat.flag('pi' + nom[0].toUpperCase() + nom.slice(1));         // la branca encara no canta
+        if (!PI3_CANTS[nom] || this.ineu.x < PI3.barX + 40 || Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, PI3.plX, PI3.plY) > 260) return false;
+        return !Estat.flag(PI3_CANTS[nom].flag);                                     // la branca encara no canta
     }
 
-    // Un dels tres cants sona davant el pi: la seva branca s'il·lumina. Amb els tres, el pi s'obre.
+    // Un dels tres cants sona davant el pi: reviu una branca (primer l'esquerra, després la dreta). Amb el tercer, reviu tot l'arbre i el pi s'obre.
     enMelodia(nom) {
-        if (!PI3_BRANQUES[nom]) return false;
+        if (!PI3_CANTS[nom]) return false;
         if (this.ineu.x < PI3.barX + 40 || Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, PI3.plX, PI3.plY) > 260) return false;
-        const flag = 'pi' + nom[0].toUpperCase() + nom.slice(1);
+        const flag = PI3_CANTS[nom].flag;
         const pensa = (text, ms = 0) => this.time.delayedCall(ms, () => this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text }] }));
         if (Estat.flag(flag)) { pensa("(Aquesta branca ja canta. Li cal un altre cant.)"); return true; }
-        Estat.posaFlag('pi' + nom[0].toUpperCase() + nom.slice(1));         // (= flag; escrit així perquè la prova de progrés el vegi)
-        this.camPiFins = this.time.now + 2800;                           // la càmera es queda un moment al pi
-        this.encendreBranca(nom);
-        const n = ['piAurora', 'piPedres', 'piMiracle'].filter(f => Estat.flag(f)).length;
-        if (n < 3) {                                                     // es deixa veure la branca que s'encén i després ho diu l'Ineu
-            pensa(n === 1 ? "(Una branca ha respost al cant! Les altres dues encara dormen.)" : "(Ja en canten dues. Només en falta una.)", 1300);
+        Estat.posaFlag(flag);
+        this.camPiFins = this.time.now + PI3_FADE + 800;                 // la càmera es queda al pi mentre reviu la branca
+        const n = PI3_FLAGS_LLISTA.filter(f => Estat.flag(f)).length;
+        if (n < 3) {                                                     // es deixa veure com reviu la branca i després ho diu l'Ineu
+            this.canviarPi(n);
+            pensa(n === 1 ? "(Una branca ha respost al cant! Les altres dues encara dormen.)" : "(Ja en canten dues. Només en falta una.)", PI3_FADE + 300);
             Estat.desar();
         }
-        else this.time.delayedCall(1700, () => this.obrirPi());
+        else this.obrirPi();
         return true;
     }
 
-    // Els tres cants han sonat: les branques s'aixequen, el pi explica d'on vénen els cants i el camí queda lliure
+    // Els tres cants han sonat: tot l'arbre reviu, les branques s'aixequen, el pi explica d'on vénen els cants i el camí queda lliure
     obrirPi() {
         if (Estat.flag('piObert')) return;
         Estat.posaFlag('piObert');
         this.camPiFins = Infinity;                                        // la càmera es queda al pi mentre es desperta i parla
         Sfx.secret();
         this.cameras.main.shake(500, 0.004);
-        this.despertarPi();
-        Object.values(this.llumsPi).forEach(l => this.tweens.add({ targets: l, alpha: 1, scale: l.base * 1.5, duration: 900, yoyo: true }));
+        this.canviarPi(3);
         this.despertarBarrera();
         this.time.delayedCall(5400, () => this.ui().obrirDialeg(DIALEGS.piHistoria(Estat), () => {
             Estat.posaObjectiu(PROGRES.pista(Estat));

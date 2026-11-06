@@ -29,7 +29,7 @@ const CATALEG = [
     { key: 'home_raim_desperta', file: 'assets/personatges/home_raim_desperta.webp', amplada: 115, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // el guardià despert (boss de l'Escalinata)
     { key: 'home_raim_n',  file: 'assets/personatges/home_raim_n.webp', amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap d'esquena (inici del puzle del volant)
     { key: 'tomba_angel', file: 'assets/objectes/tomba_angel.webp', amplada: 140, provisional: (c, w) => lienc(c, w, w * 226 / 140, (ctx, W, H) => { ctx.scale(W / 140, H / 226); pintarTombaAngel(ctx, 140, 226, false); }) },   // la tomba de l'àngel, amb el ram marcit
-    { key: 'tomba_angel_flors', file: 'assets/objectes/tomba_angel_flors.webp', amplada: 140, provisional: (c, w) => lienc(c, w, w * 226 / 140, (ctx, W, H) => { ctx.scale(W / 140, H / 226); pintarTombaAngel(ctx, 140, 226, true); }) },   // la mateixa, amb flors fresques i una espelmeta (mateixa amplada: es canvia la textura sense canviar l'escala)
+    { key: 'tomba_angel_content', file: 'assets/objectes/tomba_angel_content.webp', amplada: 140, provisional: (c, w) => lienc(c, w, w * 226 / 140, (ctx, W, H) => { ctx.scale(W / 140, H / 226); pintarTombaAngel(ctx, 140, 226, true); }) },   // la mateixa, amb flors fresques i una espelmeta (mateixa amplada: es canvia la textura sense canviar l'escala)
     { key: 'tomba_esquerdada', file: 'assets/objectes/tomba_esquerdada.webp', amplada: 240, provisional: (c, w) => lienc(c, w, w * 0.625, (ctx, W, H) => { ctx.scale(W / 240, H / 150); pintarTombaMonjos(ctx, 240, 150, true); }) },   // la tomba dels monjos, esquerdada i oberta
     { key: 'tomba_tancada', file: 'assets/objectes/tomba_tancada.webp', amplada: 240, provisional: (c, w) => lienc(c, w, w * 0.625, (ctx, W, H) => { ctx.scale(W / 240, H / 150); pintarTombaMonjos(ctx, 240, 150, false); }) },   // la mateixa, segellada (mateixa amplada: es canvia la textura sense canviar l'escala)
     { key: 'home_raim_pedestal', file: 'assets/personatges/home_raim_pedestal.webp', amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // només el pedestal (queda quan el guardià es desperta i baixa)
@@ -37,13 +37,19 @@ const CATALEG = [
     { key: 'home_raim_ne', file: 'assets/personatges/home_raim_ne.webp', amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap de tres quarts d'esquena (segon pas del volant)
     { key: 'creu',         file: 'assets/objectes/creu.webp',        amplada: 150,  provisional: (c, w) => dibuixarCreuAparicio(c, w) },
     { key: 'creu_desaparicio', file: 'assets/objectes/creu.webp', amplada: 105, provisional: (c, w) => dibuixarCreuDesaparicio(c, w) },
+    // Botons del HUD (rodons, amb el marc inclòs). Mentre no hi hagi el PNG es veu el dibuix provisional (medalló + icona)
+    { key: 'boto_sarro',    file: 'assets/ui/boto_sarro.webp',    amplada: 72, cru: true, provisional: (c, w) => lienc(c, w, w, (ctx, W) => pintarBoto(ctx, W, pintarIconaSarro)) },
+    { key: 'boto_consells', file: 'assets/ui/boto_consells.webp', amplada: 72, cru: true, provisional: (c, w) => lienc(c, w, w, (ctx, W) => pintarBoto(ctx, W, pintarIconaConsells)) },
     { key: 'bassadoria',   file: 'assets/objectes/bassadoria.webp',   amplada: 620, cru: true, provisional: (c, w) => dibuixarBassadoriaReixa(c, w) },   // aigua neta
     { key: 'bassadoria_boira', file: 'assets/objectes/bassadoria_boira.webp', amplada: 620, cru: true, provisional: (c, w) => dibuixarBassadoriaReixa(c, w) },   // aigua tèrbola amb boira (abans del Cant de l'Aurora)
     { key: 'arbre',        file: 'assets/natura/arbre.webp',        amplada: 300, provisional: (c, w) => dibuixarArbre(c, w) },
     { key: 'pi_arrels_mortes', file: 'assets/natura/pi_arrels_mortes.webp', amplada: 149 },   // les arrels seques, mentre el pi dorm
     { key: 'placa_pi',     file: 'assets/natura/placa_pi.webp',     amplada: 100, provisional: (c, w) => lienc(c, w, Math.round(w * 0.95), (ctx, W, H) => pintarPlacaPi(ctx, W, H)) },   // la fita del Pi dels Tres Cants (docs/PROMPTS_GRAFICS.md)
     { key: 'pi_arrels',    file: 'assets/natura/pi_arrels.webp',    amplada: 150, provisional: (c, w) => lienc(c, w, Math.round(w * 2), (ctx, W, H) => pintarArrelsPi(ctx, W, H)) },   // la barrera d'arrels del Pi dels Tres Cants (docs/PROMPTS_GRAFICS.md)
-    { key: 'pi_tres_cants_mort', file: 'assets/natura/pi_tres_cants_mort.webp', amplada: 333, provisional: (c, w) => lienc(c, w, Math.round(w * 1.53), (ctx, W, H) => pintarPiTresCants(ctx, W, H)) },   // el pi adormit (sec), fins que es desperta del tot
+    // Els quatre estats del pi (es retallen tots amb la mateixa caixa: en canviar de dibuix no es mouen). Un cant = una branca viva
+    { key: 'pi_tres_cants_mort', file: 'assets/natura/pi_tres_cants_mort.webp', amplada: 340, provisional: (c, w) => lienc(c, w, Math.round(w * 1.53), (ctx, W, H) => pintarPiTresCants(ctx, W, H)) },   // sec, adormit
+    { key: 'pi_tres_cants_esq', file: 'assets/natura/pi_tres_cants_esq.webp', amplada: 340, provisional: (c, w) => lienc(c, w, Math.round(w * 1.53), (ctx, W, H) => pintarPiTresCants(ctx, W, H)) },   // només la branca esquerra viva (després del primer cant)
+    { key: 'pi_tres_cants_dos', file: 'assets/natura/pi_tres_cants_dos.webp', amplada: 340, provisional: (c, w) => lienc(c, w, Math.round(w * 1.53), (ctx, W, H) => pintarPiTresCants(ctx, W, H)) },   // la branca esquerra i la dreta vives (després del segon cant)
     { key: 'pi_tres_cants', file: 'assets/natura/pi_tres_cants.webp', amplada: 340, provisional: (c, w) => lienc(c, w, Math.round(w * 1.53), (ctx, W, H) => pintarPiTresCants(ctx, W, H)) },   // el Pi dels Tres Cants (js/zones/bosc_pi.js); prompt a docs/PROMPTS_GRAFICS.md
     { key: 'pi',           file: 'assets/natura/pi.webp',           amplada: 230, provisional: (c, w) => dibuixarPi(c, w) },
     { key: 'pi_pinyer',    file: 'assets/natura/pi_pinyer.webp',    amplada: 470, provisional: (c, w) => dibuixarPiPinyer(c, w) },
@@ -225,7 +231,7 @@ const Grafics = {
     // ---- CÀRREGA EN DUES PARTS ----
     // 'inici': només el que fan servir la portada i el pròleg (la pantalla de càrrega és curta). 'resta': tot el joc, en segon pla
     // mentre es veuen la portada i el pròleg (EscenaCarrega es queda viva fent-ho). Abans d'entrar a jugar, Joc.esperarRecursos.
-    INICIALS: ['esglesia', 'monestir'],
+    INICIALS: ['esglesia', 'monestir', 'boto_sarro', 'boto_consells'],
     esInicial(item) { return Grafics.INICIALS.includes(item.key); },
 
     carregar(scene, part = 'inici') {
@@ -1043,29 +1049,11 @@ const Grafics = {
             ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, w / 2, 0, Math.PI * 2); ctx.fill();
         });
         // Medalló d'objecte (HUD, dreta). La icona de la tarota del sarró la crea js/icones.js (clau 'icona_flauta'); aquí no s'ha de duplicar
-        crea('medallo', 88, 88, (ctx, w) => {
-            const c = w / 2;
-            const fusta = ctx.createLinearGradient(0, 0, w, w);
-            fusta.addColorStop(0, '#6e4626'); fusta.addColorStop(1, '#3e2410');
-            ctx.fillStyle = '#1e1008'; ctx.beginPath(); ctx.arc(c, c, c - 1, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = fusta; ctx.beginPath(); ctx.arc(c, c, c - 3.5, 0, Math.PI * 2); ctx.fill();
-            ctx.strokeStyle = '#d9b441'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(c, c, c - 4, 0, Math.PI * 2); ctx.stroke();
-            const pergami = ctx.createRadialGradient(c, c, 2, c, c, c - 10);
-            pergami.addColorStop(0, '#f1e3b6'); pergami.addColorStop(1, '#d6bd82');
-            ctx.fillStyle = pergami; ctx.beginPath(); ctx.arc(c, c, c - 10, 0, Math.PI * 2); ctx.fill();
-            ctx.strokeStyle = 'rgba(112,72,30,0.8)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(c, c, c - 14, 0, Math.PI * 2); ctx.stroke();
-        });
+        crea('medallo', 88, 88, pintarMedallo);
         // Icona del sarró (inventari): bossa de cuir amb solapa, sivella i corretja
-        crea('icona_sarro', 64, 64, ctx => {
-            ctx.strokeStyle = '#3a2412'; ctx.lineWidth = 2.4; ctx.lineJoin = 'round';
-            ctx.beginPath(); ctx.moveTo(18, 26); ctx.quadraticCurveTo(32, 2, 46, 26); ctx.stroke();
-            ctx.fillStyle = '#9a6a3a'; ctx.beginPath(); ctx.roundRect(12, 24, 40, 32, 8); ctx.fill(); ctx.stroke();
-            ctx.fillStyle = '#7a4e28'; ctx.beginPath(); ctx.moveTo(12, 30); ctx.quadraticCurveTo(12, 24, 20, 24); ctx.lineTo(44, 24);
-            ctx.quadraticCurveTo(52, 24, 52, 30); ctx.lineTo(50, 40); ctx.quadraticCurveTo(32, 48, 14, 40); ctx.closePath(); ctx.fill(); ctx.stroke();
-            ctx.fillStyle = '#d9b441'; ctx.beginPath(); ctx.arc(32, 42, 3.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-            ctx.strokeStyle = 'rgba(240,210,160,0.6)'; ctx.lineWidth = 1.4; ctx.setLineDash([2, 3]);
-            ctx.beginPath(); ctx.moveTo(17, 51); ctx.lineTo(47, 51); ctx.stroke(); ctx.setLineDash([]);
-        });
+        crea('icona_sarro', 64, 64, pintarIconaSarro);
+        // Icona dels consells: un pergamí enrotllat amb unes línies d'escriptura
+        crea('icona_consells', 64, 64, pintarIconaConsells);
         // Altar de pedra del presbiteri (desar partida i reposar)
         crea('altar', 150, 118, pintarAltarPedra);
         crea('orgue', 120, 150, (ctx, w, h) => {
@@ -1079,6 +1067,44 @@ const Grafics = {
         });
     }
 };
+
+// ---------- Botons del HUD (medalló, sarró i consells) ----------
+// Es fan servir com a dibuix provisional de `boto_sarro` i `boto_consells` (vegeu CATALEG) mentre no hi hagi el PNG definitiu.
+function pintarMedallo(ctx, w) {
+        const c = w / 2;
+        const fusta = ctx.createLinearGradient(0, 0, w, w);
+        fusta.addColorStop(0, '#6e4626'); fusta.addColorStop(1, '#3e2410');
+        ctx.fillStyle = '#1e1008'; ctx.beginPath(); ctx.arc(c, c, c - 1, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = fusta; ctx.beginPath(); ctx.arc(c, c, c - 3.5, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#d9b441'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(c, c, c - 4, 0, Math.PI * 2); ctx.stroke();
+        const pergami = ctx.createRadialGradient(c, c, 2, c, c, c - 10);
+        pergami.addColorStop(0, '#f1e3b6'); pergami.addColorStop(1, '#d6bd82');
+        ctx.fillStyle = pergami; ctx.beginPath(); ctx.arc(c, c, c - 10, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = 'rgba(112,72,30,0.8)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(c, c, c - 14, 0, Math.PI * 2); ctx.stroke();
+}
+// Icona del sarró (inventari): bossa de cuir amb solapa, sivella i corretja
+function pintarIconaSarro(ctx) {
+        ctx.strokeStyle = '#3a2412'; ctx.lineWidth = 2.4; ctx.lineJoin = 'round';
+        ctx.beginPath(); ctx.moveTo(18, 26); ctx.quadraticCurveTo(32, 2, 46, 26); ctx.stroke();
+        ctx.fillStyle = '#9a6a3a'; ctx.beginPath(); ctx.roundRect(12, 24, 40, 32, 8); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#7a4e28'; ctx.beginPath(); ctx.moveTo(12, 30); ctx.quadraticCurveTo(12, 24, 20, 24); ctx.lineTo(44, 24);
+        ctx.quadraticCurveTo(52, 24, 52, 30); ctx.lineTo(50, 40); ctx.quadraticCurveTo(32, 48, 14, 40); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#d9b441'; ctx.beginPath(); ctx.arc(32, 42, 3.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(240,210,160,0.6)'; ctx.lineWidth = 1.4; ctx.setLineDash([2, 3]);
+        ctx.beginPath(); ctx.moveTo(17, 51); ctx.lineTo(47, 51); ctx.stroke(); ctx.setLineDash([]);
+}
+// Icona dels consells: un pergamí enrotllat amb unes línies d'escriptura
+function pintarIconaConsells(ctx) {
+        ctx.strokeStyle = '#3a2412'; ctx.lineWidth = 2.4; ctx.lineJoin = 'round';
+        ctx.fillStyle = '#f1e3b6'; ctx.beginPath(); ctx.roundRect(16, 12, 32, 40, 4); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#d6bd82'; ctx.beginPath(); ctx.ellipse(32, 12, 18, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.ellipse(32, 52, 18, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(58,36,18,0.75)'; ctx.lineWidth = 2;
+        [[22, 24, 42], [22, 31, 40], [22, 38, 36]].forEach(([x, y, x2]) => { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y); ctx.stroke(); });
+}
+function pintarBoto(ctx, W, icona) {
+    ctx.scale(W / 88, W / 88); pintarMedallo(ctx, 88); ctx.translate(12, 12); icona(ctx);
+}
 
 // ---------- Marc de pergamí ----------
 // Quadrat de (2C + 20) px: les cantonades (C px) porten els ornaments i la resta es pot estirar sense que es noti.

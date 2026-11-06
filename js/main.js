@@ -601,7 +601,7 @@ class EscenaProleg extends Phaser.Scene {
         boira.fastForward(4000);
     }
 
-    // 4. Tres finestres que s'apaguen i l'ombra que s'endú un nen cap a la Taverna
+    // 4. Tres finestres que s'apaguen i l'ombra que s'endú un nen cap a les Gírgoles
     dibuix_nens(c) {
         this.fons(c, 'proleg_nens');
         const cases = [[40, 741, 200, 230, 'Huri'], [270, 722, 190, 250, 'Fram'], [490, 741, 200, 230, 'Sardi']];
@@ -612,7 +612,7 @@ class EscenaProleg extends Phaser.Scene {
             this.tweens.add({ targets: [f, llum], alpha: 0.03, delay: 900 + i * 1300, duration: 700 });
             this.tweens.add({ targets: t, alpha: 0.35, delay: 900 + i * 1300, duration: 700 });
         });
-        // L'ombra amb hàbit i el nen, caminant cap a la Taverna dins la boira
+        // L'ombra amb hàbit i el nen, caminant cap a les Gírgoles dins la boira
         const sil = this.add.graphics();
         sil.fillStyle(0x000000, 1).fillTriangle(0, -150, -42, 0, 42, 0).fillCircle(0, -152, 22);
         sil.lineStyle(2, 0xb88aff, 0.7).strokeTriangle(0, -150, -42, 0, 42, 0).strokeCircle(0, -152, 22).strokeCircle(60, -78, 14);

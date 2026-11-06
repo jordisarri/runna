@@ -23,7 +23,7 @@ const PROGRES = {
         { id: 'font', marca: ['fontNeta', 'obj:aigua_sj'], fet: E => E.flag('fontNeta'),
           pista: E => {
               // Fins que no s'ha anat a la font (fontVista) no se sap què cal portar-hi: la pista només dona el lloc
-              if (!E.flag('fontVista')) return "La Font del Bisbe, de la qual les Venerables Sàvies diuen que guaria tothom, s'ha quedat adormida. Val la pena anar-hi a mirar.";
+              if (!E.flag('fontVista')) return "La Font del Bisbe, que diuen que guaria tothom, s'ha quedat adormida. Val la pena anar-hi a mirar.";
               const n = ['herba1', 'herba2'].filter(h => E.flag(h)).length + (E.te('pruna') || E.flag('herba3') ? 1 : 0);
               return n === 3 ? "Ja tens totes les ofrenes: torna a la Font del Bisbe."
                   : "A la Font del Bisbe, les ofrenes que falten (" + n + "/3): l'herba de Sant Joan, el romaní i una pruna de la Prunera de l'Hostatgeria.";
@@ -31,9 +31,9 @@ const PROGRES = {
         { id: 'jaumeta', marca: ['jaumetaVista', 'obj:beuratge'], fet: E => E.flag('jaumetaVista') || E.flag('parlatTiler'),
           pista: E => !E.flag('portalJaumeta')
               ? "Ja tens l'aigua de la Font del Bisbe. L'Alzina Buida del bosc potser en sabria què fer-ne."
-              : "La Jacmeta, a l'altra banda de l'Alzina Buida, té un regal per al camí del Til·ler." },
+              : "A l'altra banda de l'Alzina Buida hi ha un regal per al camí del Til·ler." },
         { id: 'boiraTiller', marca: ['boiraTillerNeta'], fet: E => E.flag('boiraTillerNeta') || E.flag('parlatTiler'),
-          pista: E => "Una boira espessa tapa un camí de les Cel·les. El beuratge de la vident la desfaria." },
+          pista: E => "Una boira espessa tapa un camí de les Cel·les. Un beuratge la desfaria." },
         { id: 'tiller', marca: ['parlatTiler', 'tillerBranca'], fet: E => E.flag('parlatTiler'),
           pista: E => "El camí de la boira ja és clar. Al capdamunt hi ha un arbre que sap què fer amb les bestioles que desperten." },
         { id: 'branca', marca: ['obj:basto_tiller'], fet: E => E.te('basto_tiller'),
@@ -41,7 +41,7 @@ const PROGRES = {
         { id: 'bardissa', marca: ['camiCirosaObert'], fet: E => E.flag('camiCirosaObert'),
           pista: E => "Al Til·ler, unes arrels tanquen el pas. Són de fusta: potser cedirien als cops d'una branca amiga." },
         { id: 'pastor', marca: ['pastorVencut'], fet: E => E.flag('pastorVencut'),
-          pista: E => "A la pastura de la Cirosa, la boira s'ha endut el Germà Aldreu: ara és el Pastor de Boira." },
+          pista: E => "A la pastura de la Cirosa, el Germà Aldreu s'ha deixat dur per la boira: ara és el Pastor de Boira." },
         { id: 'esquelles', marca: ['esquelles', 'obj:esquelles'], fet: E => E.flag('esquelles'),
           pista: E => "El pastor vell, vora el foc de la Cirosa, guarda les esquelles dels seus avis." },
         { id: 'soparObert', marca: ['soparObert'], fet: E => E.flag('soparObert'),
@@ -51,7 +51,7 @@ const PROGRES = {
               const f = [];
               if (!E.flag('escudella')) f.push("l'escudella de la Meus (a les cel·les)");
               if (!E.flag('floresIsidre')) f.push("les flors d'Isildren (a l'Hostatgeria)");
-              if (!E.flag('pastorsConvencuts')) f.push("el pa que pasten els pastors de la Cirosa");
+              if (!E.flag('pastorsConvencuts')) f.push("el pa que pasten els pastors de la Cirosa" + (E.flag('cantPedres') ? "" : " (cal el Cant de Vespres, que ensenya la Pianista al Santuari)"));
               return f.length ? "Al sopar del Til·ler encara hi falta: " + f.join(', ') + "." : "Ja ho tens tot: el Gran Til·ler espera la taula parada.";
           } },
         // ---- ACTE 2: el Saber i les benediccions ----
@@ -72,9 +72,9 @@ const PROGRES = {
               : !E.flag('cantPedres') ? "L'ombra del monjo demana un cant que les pedres entenen. La Pianista, al Santuari, el coneix."
               : "L'ombra del monjo, a les Runes, només escoltarà el Cant de Vespres." },
         { id: 'saber', marca: ['saber'], fet: E => E.flag('saber'),
-          pista: E => "Ara que l'ombra t'ha parlat, el Pare Alcoví tindrà paraules per a tu, a la biblioteca." },
+          pista: E => "Ara que l'ombra t'ha parlat, a la biblioteca del Monestir hi ha paraules per a tu." },
         { id: 'benediccio', marca: ['benediccio'], fet: E => E.flag('benediccio'),
-          pista: E => "El Pare Jordà, a la Plaça, voldria posar-te la mà al cap ara que el Til·ler t'ha donat permís." },
+          pista: E => "Ara que el Til·ler t'ha donat permís, a la Plaça et poden posar la mà al cap: la benedicció del prior." },
         // ---- ACTE 2: el camí del Dolmen ----
         { id: 'telescopi', marca: ['garfBancSegut', 'telescopi', 'obj:telescopi'], fet: E => E.flag('telescopi') || E.flag('estelLlorenc'),
           pista: E => !E.flag('garfBancSegut')

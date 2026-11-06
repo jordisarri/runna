@@ -150,7 +150,7 @@ const REINICI_ZONES = {
     ZonaRuines: { ombraForta: false, pergamiBrill: null },
     ZonaTiller: { avisArrels: false, sopar: null },
     ZonaDipositos: { tripodeMuntat: false, llumEstel: null, estelCaient: false, colBoira: null, boiraDolmen: null },
-    ZonaBoscPi: { guspiresPi: null, camPi: false, camPiFins: 0 },
+    ZonaBoscPi: { camPi: false, camPiFins: 0 },
     ZonaCirosa: { aldreuPunt: null },
     ZonaPassadis: { contrallum: null },
     ZonaCementiri: { boiraTomba: null, llumTomba: null },
@@ -174,7 +174,7 @@ class ZonaBase extends Phaser.Scene {
         this.dadesEntrada = data || {};
         this.canviant = false;
         this.camDialeg = null;
-        this.npcs = {}; this.npcDavant = null; this.camCinema = false; this.ineuFlautaImg = null;          // (l'escena es reaprofita: res de la visita anterior)
+        this.npcs = {}; this.npcDavant = null; this.camCinema = false; this.ineuFlautaImg = null; this.ineuAmagat = false;          // (l'escena es reaprofita: res de la visita anterior)
         this.boundsCamOrig = null;
         this.twCamDialeg = null;
         this.entradaPropia = false;
@@ -782,12 +782,26 @@ class ZonaBase extends Phaser.Scene {
     // Si el gràfic encara no és al joc, no es canvia res.
     ineuFlauta(on) {
         if (!this.ineu || !this.sys || !this.sys.isActive()) return;
-        if (!on) { if (this.ineuFlautaImg) { this.ineuFlautaImg.destroy(); this.ineuFlautaImg = null; this.ineuBaixa(); } return; }
+        if (!on) {
+            if (this.ineuFlautaImg) { this.ineuFlautaImg.destroy(); this.ineuFlautaImg = null; this.ineuBaixa(); }
+            if (this.ineuAmagat) {                                  // s'havia amagat mentre sortia gran tocant: torna amb un fade in
+                this.ineuAmagat = false;
+                this.ineu.setVisible(true).setAlpha(0);              // (la silueta de darrere l'Ineu en segueix l'alfa)
+                this.tweens.add({ targets: this.ineu, alpha: 1, duration: 500 });
+            }
+            return;
+        }
         if (this.ineuFlautaImg || this.ineuAlt || !this.textures.exists('ineu_flauta') || Grafics.faltants.includes('ineu_flauta')) return;
         const I = this.ineu, esc = (this.textures.get('ineu_flauta').customData || {}).escala || 0.5;
         I.setVisible(false);
         if (this.fantasma) this.fantasma.setVisible(false);
         this.ineuFlautaImg = this.add.image(I.x, I.y + 2, 'ineu_flauta').setOrigin(0.5, 1).setScale(esc).setDepth(I.depth);
+    }
+    // Mentre l'Ineu surt gran tocant la tarota (primer pla de la música), el de l'escenari desapareix amb un fade out; ineuFlauta(false) el torna amb un fade in
+    amagarIneuFlauta(ms = 350) {
+        if (this.ineuAmagat || !this.ineu) return;
+        this.ineuAmagat = true;
+        this.tweens.add({ targets: this.ineuFlautaImg || this.ineu, alpha: 0, duration: ms });
     }
     // ---- Accions de l'Ineu sobre el punt amb què interactua (this.puntActiu) ----
     // Agafar: l'objecte (o una llum) vola del punt a l'Ineu, que s'ajup
@@ -1320,7 +1334,7 @@ class ZonaBase extends Phaser.Scene {
             if (this.despertarImg && this.despertarImg.active) cossos.push(this.despertarImg);       // el dibuix gran del despertar, que no es pot tapar
             if (p && p.npc && p.npc.active && p.npc.visible) cossos.push(p.npc);
             if (p && p.cameraCossos) cossos.push(...p.cameraCossos.filter(o => o && o.active && o.visible));
-            const TOP = ALT_HUD + 8;                                    // sota el HUD
+            const TOP = TOP_HUD + 8;                                    // sota el HUD flotant
             const alcadaCaixa = this.ui().alcadaCaixaDialeg || 360;
             const LIM = ALT - alcadaCaixa - 60;                         // 50 px sobre la vora superior del quadre
             const LIM_RETRAT = ALT - alcadaCaixa - 160;                 // sobre el retrat, que sobresurt per damunt del quadre
@@ -1371,7 +1385,10 @@ class ZonaBase extends Phaser.Scene {
         if (!this.camCinema) {
             this.camCinema = true;
             if (this.twCamDialeg) this.twCamDialeg.stop();
-            const b = cam.getBounds(); this.boundsCinema = { x: b.x, y: b.y, w: b.width, h: b.height };
+            // Si la càmera del diàleg ja ha tret els límits (en tancar-se un diàleg que ha mogut la càmera), els límits de veritat són els que va guardar
+            const o = this.boundsCamOrig, b = o ? { x: o.x, y: o.y, width: o.w, height: o.h } : cam.getBounds();
+            this.boundsCinema = { x: b.x, y: b.y, w: b.width, h: b.height };
+            this.boundsCamOrig = null; this.camDialeg = null;
             cam.stopFollow(); cam.removeBounds();
         }
         const W = AMPLE, H = ALT - ALT_HUD, lliure = Math.max(240, H - reserva);
@@ -1391,8 +1408,16 @@ class ZonaBase extends Phaser.Scene {
         const cam = this.cameras.main, I = this.ineu, H = ALT - ALT_HUD;
         if (!this.camCinema) { if (fet) fet(); return; }
         if (this.twCinema) this.twCinema.stop();
-        const zoom = this.zoomZona || ZOOM_CAMERA, objectiuY = I.y + (this.cameraFollowOffsetY || 0);
-        this.twCinema = this.tweens.add({ targets: cam, scrollX: I.x - AMPLE / (2 * zoom), scrollY: objectiuY - H / (2 * zoom), zoom, duration: ms, ease: 'Sine.easeInOut',
+        // On es posaria la càmera en seguir l'Ineu: a Phaser el centre de la vista és scroll + la meitat de la finestra (sigui quin sigui el zoom) i el
+        // desplaçament del seguiment es resta. S'hi aplica també el límit del món, perquè en tornar a posar-lo no hi hagi cap salt.
+        const zoom = this.zoomZona || ZOOM_CAMERA, b = this.boundsCinema, dw = AMPLE / zoom, dh = H / zoom;
+        let destiX = I.x - AMPLE / 2, destiY = I.y - (this.cameraFollowOffsetY || 0) - H / 2;
+        if (b) {
+            const bx = b.x + (dw - AMPLE) / 2, by = b.y + (dh - H) / 2;
+            destiX = Phaser.Math.Clamp(destiX, bx, Math.max(bx, bx + b.w - dw));
+            destiY = Phaser.Math.Clamp(destiY, by, Math.max(by, by + b.h - dh));
+        }
+        this.twCinema = this.tweens.add({ targets: cam, scrollX: destiX, scrollY: destiY, zoom, duration: ms, ease: 'Sine.easeInOut',
             onUpdate: () => this.ajustarSuperposicions(), onComplete: () => {
                 const b = this.boundsCinema;
                 if (b) cam.setBounds(b.x, b.y, b.w, b.h);

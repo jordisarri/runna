@@ -253,7 +253,7 @@ class ZonaCirosa extends ZonaBase {
         const p = this.add.particles(e.spr.x, e.spr.y - 60, 'boira', { speed: { min: 20, max: 70 }, lifespan: 1600, scale: { start: 0.8, end: 2.5 }, alpha: { start: 0.6, end: 0 }, tint: [0x9a50ff, 0xb88aff], quantity: 2, frequency: 60 }).setDepth(e.spr.depth + 1);
         this.time.delayedCall(1500, () => { p.stop(); this.time.delayedCall(1600, () => p.destroy()); fet(); });
     }
-    // S'aixeca, riu i se'n va camí avall, cap a la Taverna
+    // S'aixeca, riu i se'n va camí avall, cap a les Gírgoles
     aldreuMarxa(fet) {
         const e = this.bossCaigut;
         if (!e || !e.spr.active) { fet(); return; }

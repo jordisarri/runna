@@ -23,8 +23,9 @@ function encaixarDisseny(scene, alt0 = 1280) {
     cam.setZoom(Math.min(1, ALT / alt0));
     cam.centerOn(AMPLE / 2, alt0 / 2);
 }
-const ALT_HUD = 196;   // franja de dalt reservada per al HUD: l'escenari es dibuixa només per sota
-const Y_BOTONS_HUD = 52;   // el sarró i el menú van a la fila del rosari: l'objectiu ocupa tot l'ample de sota
+const ALT_HUD = 0;      // ja no hi ha franja reservada: l'escenari ocupa tota la pantalla i el HUD hi flota per sobre
+const TOP_HUD = 116;    // alçada que ocupen el rosari i els botons flotants: el que ha de quedar visible (boss, tria, càmera de diàleg) hi queda per sota
+const Y_BOTONS_HUD = 52;   // el rosari, els consells, el sarró i el menú van a la mateixa fila
 const FONT = 'Georgia, "Times New Roman", serif';
 
 // ---------- Retrat de qui parla (a la caixa de diàleg) ----------
@@ -157,7 +158,7 @@ class EscenaUI extends Phaser.Scene {
         this.vectorTactil = { x: 0, y: 0 };
         this.accioTactil = false;
         // (l'escena es reaprofita en tornar del títol: els objectes de l'altra vegada ja són destruïts)
-        this.frangesG = null; this.boss = null; this.inventariObert = false; this.inventari = null; this.ineuAlcat = false;
+        this.frangesG = null; this.boss = null; this.consellsObert = false; this.contConsells = null; this.inventariObert = false; this.inventari = null; this.ineuAlcat = false;
 
         this.crearHUD();
         this.crearCaixaDialeg();
@@ -168,7 +169,8 @@ class EscenaUI extends Phaser.Scene {
 
         this.input.keyboard.on('keydown-ESC', () => {
             if (this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
-            if (this.inventariObert) this.tancarInventari();
+            if (this.consellsObert) this.tancarConsells();
+            else if (this.inventariObert) this.tancarInventari();
             else if (this.mapaObert) this.tancarMapa();
             else if (this.menuObert) this.tancarMenu();
             else this.obrirMenu();
@@ -199,9 +201,17 @@ class EscenaUI extends Phaser.Scene {
     // de la pantalla) als llocs on té efecte (ZonaBase.flautaActiva); no hi ha cap icona al HUD: només s'obre la seva interfície.
     crearObjectes() {
         const x = 566, y = Y_BOTONS_HUD, commuta = () => this.inventariObert ? this.tancarInventari() : this.obrirInventari();
-        this.fonsSarro = this.add.image(x, y, 'medallo').setScale(0.52 / RES).setVisible(false)
-            .setInteractive({ useHandCursor: true }).on('pointerdown', commuta);
-        this.iconaSarro = this.add.image(x, y, 'icona_sarro').setScale(0.52 / RES).setVisible(false);
+        // Cada botó és una sola imatge rodona (`boto_sarro`, `boto_consells`: vegeu CATALEG), que es mostra a 72 px de joc
+        const boto = (cx, clau, fn) => {
+            const im = this.add.image(cx, y, clau).setVisible(false).setInteractive({ useHandCursor: true }).on('pointerdown', fn);
+            im.setScale(this.textures.get(clau).customData.escala || 1 / RES);
+            return im;
+        };
+        this.fonsSarro = boto(x, 'boto_sarro', commuta);
+        // Consells: un medalló amb un pergamí (tecla O) que obre l'objectiu actual
+        const xc = x - 92, commutaConsells = () => this.consellsObert ? this.tancarConsells() : this.obrirConsells();
+        this.fonsConsells = boto(xc, 'boto_consells', commutaConsells);
+        this.input.keyboard.on('keydown-O', commutaConsells);
         this.input.keyboard.on('keydown-I', commuta);
         this.input.keyboard.on('keydown-M', () => this.inventariObert ? this.tancarInventari() : this.obrirInventari('mapa'));
         ['LEFT', 'A'].forEach(k => this.input.keyboard.on('keydown-' + k, () => this.inventariObert && DIARI.moure(this, -1)));
@@ -213,7 +223,33 @@ class EscenaUI extends Phaser.Scene {
     refrescaObjectes() {
         if (!this.fonsSarro) return;
         const vis = !!Estat.dades && !this.menuObert && !this.mapaObert;
-        this.fonsSarro.setVisible(vis); this.iconaSarro.setVisible(vis);
+        this.fonsSarro.setVisible(vis);
+        this.fonsConsells.setVisible(vis && !this.inventariObert);
+    }
+
+    // ---------------- CONSELLS (l'objectiu, només quan es vol consultar) ----------------
+    obrirConsells() {
+        if (this.consellsObert || this.dialeg || this.menuObert || this.inventariObert || this.mapaObert || !Estat.dades || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
+        this.consellsObert = true;
+        const w = 640, text = Estat.objectiu() || 'De moment no tens cap encàrrec. Passeja i parla amb la gent.';
+        const cont = this.add.container(0, 0).setDepth(80);
+        const titol = this.add.text(AMPLE / 2, 0, 'Objectiu', estilText(32, '#3a2412', { fontStyle: 'bold' })).setOrigin(0.5, 0);
+        const cos = this.add.text(AMPLE / 2, 0, text, estilText(28, '#3a2412', { fontStyle: 'italic', wordWrap: { width: w - 90 }, align: 'center', lineSpacing: 2 })).setOrigin(0.5, 0);
+        const peu = this.add.text(AMPLE / 2, 0, 'Toca per tancar', estilText(22, '#7a5a38')).setOrigin(0.5, 0);
+        const h = Math.max(220, 40 + titol.height + 14 + cos.height + 18 + peu.height + 38), y0 = TOP_HUD + 24;
+        const tapa = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.35).setOrigin(0).setInteractive().on('pointerdown', () => this.tancarConsells());
+        const fons = marcPergami(this, (AMPLE - w) / 2, y0, w, h).setOrigin(0);
+        titol.setY(y0 + 38); cos.setY(titol.y + titol.height + 14); peu.setY(y0 + h - 22 - peu.height);
+        cont.add([tapa, fons, titol, cos, peu]);
+        this.contConsells = cont;
+        if (Sfx.objecte) Sfx.objecte();
+    }
+
+    tancarConsells() {
+        if (!this.consellsObert) return;
+        this.consellsObert = false;
+        if (this.contConsells) { this.contConsells.destroy(); this.contConsells = null; }
+        this.bloquejatFins = this.time.now + 200;
     }
 
     // El sarró obre el Diari de l'Ineu (js/diari.js): missió, encàrrecs, objectes i mapa
@@ -233,26 +269,28 @@ class EscenaUI extends Phaser.Scene {
 
     // La zona consulta això per saber si l'Ineu pot moure's
     get bloquejat() {
-        return !!this.dialeg || this.menuObert || this.inventariObert || this.time.now < this.bloquejatFins || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong');
+        return !!this.dialeg || this.menuObert || this.inventariObert || this.consellsObert || this.time.now < this.bloquejatFins || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong');
     }
 
     // ---------------- HUD ----------------
     crearHUD() {
-        // Franja de dalt: un sol llenç de pergamí enmarcat a tot l'ample; l'escenari comença just a sota
-        this.fonsHUD = marcPergami(this, 0, 0, AMPLE, ALT_HUD, 'marc_peti').setOrigin(0);
+        // Ja no hi ha franja: una ombra suau a dalt de tot perquè el rosari i els botons es llegeixin sobre qualsevol escenari
+        this.fonsHUD = this.add.graphics();
+        this.fonsHUD.fillGradientStyle(0x0a0604, 0x0a0604, 0x0a0604, 0x0a0604, 0.55, 0.55, 0, 0).fillRect(0, 0, AMPLE, 128);
         // Rosari d'energia: un cordó amb una creueta i un gra per cada punt (cada gra són dues meitats)
         this.cordo = this.add.graphics();
+        this.ombraCreu = this.add.image(41, 66, 'creu_rosari').setScale(1.12 / RES).setTintFill(0x000000).setAlpha(0.5);
         this.creuRosari = this.add.image(38, 62, 'creu_rosari').setScale(1 / RES);
+        this.ombresGrans = [];     // l'ombra de cada gra
         this.cors = [];     // els grans del rosari (es creen a mesura que n'hi ha més)
-        this.textObjectiu = this.add.text(34, 86, '', estilText(26, '#3a2412', { fontStyle: 'italic', wordWrap: { width: AMPLE - 68 }, lineSpacing: -2 }));
 
-        this.bannerZona = this.add.text(AMPLE / 2, 236, '', estilText(42, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
+        this.bannerZona = this.add.text(AMPLE / 2, 180, '', estilText(42, '#ffe9a8', { stroke: '#1a120b', strokeThickness: 7 }))
             .setOrigin(0.5).setAlpha(0);
-        this.toast = this.add.text(AMPLE / 2, 300, '', estilText(28, '#ffffff', { backgroundColor: '#1a120bdd', padding: { x: 16, y: 10 }, wordWrap: { width: 640 }, align: 'center' }))
+        this.toast = this.add.text(AMPLE / 2, 250, '', estilText(28, '#ffffff', { backgroundColor: '#1a120bdd', padding: { x: 16, y: 10 }, wordWrap: { width: 640 }, align: 'center' }))
             .setOrigin(0.5).setAlpha(0).setDepth(50);
 
         // Botó de menú (ratolí i pantalla tàctil)
-        this.botoMenu = this.add.text(AMPLE - 34, Y_BOTONS_HUD, '☰', estilText(34, '#3a2412', { backgroundColor: '#8a5a2a44', padding: { x: 14, y: 4 } }))
+        this.botoMenu = this.add.text(AMPLE - 34, Y_BOTONS_HUD, '☰', estilText(36, '#f1e3b6', { backgroundColor: '#1e1008d9', padding: { x: 17, y: 10 } }))
             .setOrigin(1, 0.5).setInteractive({ useHandCursor: true })
             .on('pointerdown', () => this.menuObert ? this.tancarMenu() : this.obrirMenu());
     }
@@ -260,29 +298,31 @@ class EscenaUI extends Phaser.Scene {
     actualitzarHUD() {
         const d = Estat.dades;
         if (!d) return;
-        while (this.cors.length < d.corsMax) this.cors.push(this.add.image(0, 0, 'gra_ple').setScale(1 / RES));
+        while (this.cors.length < d.corsMax) {
+            this.ombresGrans.push(this.add.image(0, 0, 'gra_ple').setScale(1.1 / RES).setTintFill(0x000000).setAlpha(0.5));
+            this.cors.push(this.add.image(0, 0, 'gra_ple').setScale(1 / RES));
+        }
         const gx = i => 78 + i * 46, GY = 52;
         this.cors.forEach((img, i) => {
             const v = d.vida - i * 2;
-            img.setVisible(i < d.corsMax).setPosition(gx(i), GY).setTexture(v >= 2 ? 'gra_ple' : v === 1 ? 'gra_mig' : 'gra_buit');
+            const tex = v >= 2 ? 'gra_ple' : v === 1 ? 'gra_mig' : 'gra_buit';
+            img.setVisible(i < d.corsMax).setPosition(gx(i), GY).setTexture(tex);
+            this.ombresGrans[i].setVisible(i < d.corsMax).setPosition(gx(i) + 2.5, GY + 3.5).setTexture(tex);
         });
         // Cordó: de la creueta al primer gra i, entre gra i gra, una mica penjant
         const c = this.cordo.clear();
-        c.lineStyle(2.4, 0x3a2412, 0.95);
-        c.beginPath(); c.moveTo(38, 44);
-        for (let k = 1; k <= 8; k++) { const t = k / 8; c.lineTo(38 + (gx(0) - 38) * t, 44 + (GY - 44) * t + Math.sin(Math.PI * t) * 5); }
-        for (let i = 0; i < d.corsMax - 1; i++) {
-            for (let k = 1; k <= 6; k++) { const t = k / 6; c.lineTo(gx(i) + 46 * t, GY + Math.sin(Math.PI * t) * 4); }
-        }
-        c.strokePath();
-        c.lineStyle(1, 0xb08850, 0.6);
-        c.beginPath(); c.moveTo(gx(0), GY - 1); c.lineTo(gx(Math.max(0, d.corsMax - 1)), GY - 1); c.strokePath();
+        // El cordó es dibuixa dues vegades: la primera, ample i fosc, fa d'ombra; la segona, clara, es llegeix sobre qualsevol fons
+        const traç = (dx, dy) => {
+            c.beginPath(); c.moveTo(38 + dx, 44 + dy);
+            for (let k = 1; k <= 8; k++) { const t = k / 8; c.lineTo(38 + (gx(0) - 38) * t + dx, 44 + (GY - 44) * t + Math.sin(Math.PI * t) * 5 + dy); }
+            for (let i = 0; i < d.corsMax - 1; i++) {
+                for (let k = 1; k <= 6; k++) { const t = k / 6; c.lineTo(gx(i) + 46 * t + dx, GY + Math.sin(Math.PI * t) * 4 + dy); }
+            }
+            c.strokePath();
+        };
+        c.lineStyle(5.5, 0x000000, 0.45); traç(2, 3);
+        c.lineStyle(2.6, 0xe6cf98, 1); traç(0, 0);
         this.gestionarLatidor();
-        this.textObjectiu.setText('Objectiu: ' + Estat.objectiu());
-        // L'objectiu ha de cabre dins del marc fix de la franja: si és llarg, es redueix la lletra
-        let mida = 26;
-        this.textObjectiu.setFontSize(mida);
-        while (this.textObjectiu.height > ALT_HUD - 100 && mida > 18) this.textObjectiu.setFontSize(--mida);
     }
 
     // Quan queda un sol gra o menys, l'últim gra bategueja
@@ -435,7 +475,7 @@ class EscenaUI extends Phaser.Scene {
     // quan queda poca vida batega. 'fases': fraccions on el boss canvia de fase (marques a la barra).
     barraBoss(nom, fases = []) {
         this.amagarBarraBoss(true);
-        const w = AMPLE - 100, h = 22, x = (AMPLE - w) / 2, y = ALT_HUD + 44;
+        const w = AMPLE - 100, h = 22, x = (AMPLE - w) / 2, y = TOP_HUD + 8;
         const c = this.add.container(0, 0).setAlpha(0).setDepth(30);
         c.add(this.add.rectangle(AMPLE / 2, y + h / 2, w + 16, h + 14, 0x120306, 0.92).setStrokeStyle(3, 0xb89a50));
         c.add(this.add.rectangle(x, y, w, h, 0x3a1010).setOrigin(0));
@@ -664,7 +704,7 @@ class EscenaUI extends Phaser.Scene {
     // Tria d'una llista vertical (el viatge ràpid): botons grans un sota l'altre; ↑ ↓ i ESPAI/ENTER, o tocar-los. cb(i)
     triarLlista(opcions, cb) {
         const ample = 520, alt = 84, sep = 14, total = opcions.length * alt + (opcions.length - 1) * sep;
-        const y0 = Math.max(ALT_HUD + 80, ALT - 400 - total) + alt / 2;
+        const y0 = Math.max(TOP_HUD + 80, ALT - 400 - total) + alt / 2;
         const cont = this.add.container(0, 0).setDepth(70);
         let sel = 0, fet = false;
         const botons = opcions.map((t, i) => {

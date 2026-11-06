@@ -218,6 +218,8 @@ class EscenaMusica extends Phaser.Scene {
         this.tweens.add({ targets: this.auraPrimerPla, fillAlpha: 0.16, duration: 600 });
         this.tweens.add({ targets: img, angle: { from: -1.5, to: 1.5 }, yoyo: true, repeat: -1, duration: 1600, ease: 'Sine.easeInOut' });   // es gronxa tocant
         this.posBroc = { x: cx + img.displayWidth * 0.2, y: T + 60 - alt * 0.38 };      // per on surten les notes
+        const zonaPla = Joc.zonaActiva(this);
+        if (zonaPla && zonaPla.amagarIneuFlauta) zonaPla.amagarIneuFlauta();           // l'Ineu de l'escenari desapareix mentre surt aquest
     }
     // Cada nota de l'Ineu: el primer pla fa un petit impuls i en surt una nota musical que puja
     impulsPrimerPla(n) {
@@ -364,16 +366,24 @@ class EscenaMusica extends Phaser.Scene {
     tancar(exit, melodiaTocada) {
         if (this.tancat) return;
         this.tancat = true;
-        const ui = this.scene.get('UI');
-        if (ui) ui.bloquejatFins = ui.time.now + 300;
         const nom = this.llico ? this.dades.melodia : null;
         const zonaFl = Joc.zonaActiva(this);
-        if (zonaFl && zonaFl.ineuFlauta) zonaFl.ineuFlauta(false);
-        this.scene.stop();
-        if (this.llico && exit) completarLliço(nom);
-        if (melodiaTocada) {
-            const zona = Joc.zonaActiva(this);
-            if (zona) zona.melodiaTocada(melodiaTocada);
-        }
+        const acabar = () => {
+            const ui = this.scene.get('UI');
+            if (ui) ui.bloquejatFins = ui.time.now + 300;
+            if (zonaFl && zonaFl.ineuFlauta) zonaFl.ineuFlauta(false);          // l'Ineu de l'escenari torna (amb un fade in si s'havia amagat)
+            this.scene.stop();
+            if (this.llico && exit) completarLliço(nom);
+            if (melodiaTocada) {
+                const zona = Joc.zonaActiva(this);
+                if (zona) zona.melodiaTocada(melodiaTocada);
+            }
+        };
+        if (this.imgPrimerPla && this.imgPrimerPla.active) {                     // el primer pla s'esvaeix abans de tancar
+            const fons = [this.imgPrimerPla, this.velPrimerPla, this.auraPrimerPla].filter(o => o && o.active);
+            fons.forEach(o => this.tweens.killTweensOf(o));
+            this.tweens.add({ targets: fons, alpha: 0, duration: 260 });
+            this.time.delayedCall(280, acabar);
+        } else acabar();
     }
 }

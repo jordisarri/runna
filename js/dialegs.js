@@ -29,7 +29,7 @@ function consellVenerables(E) {
             pagines: [
                 { qui: 'Les Venerables Sàvies', text: "Ai, fill, has vist que el rellotge del campanar s'ha aturat? La porta del retaule que duu a la torre fa anys que és tancada: des que el campaner se'n va, la clau la guarda la seva vídua, la Carry, aquí a Nostra Senyora." },
                 { qui: 'Les Venerables Sàvies', text: E.flag('carryParlat')
-                    ? "Pobreta, no té el cap per res: fa tres nits que busca el seu gos, el Pallofa. Si el trobes i li'l portes, segur que et dona la clau."
+                    ? "Pobreta, no té el cap per res: fa dues nits que busca el seu gos, el Pallofa. Si el trobes i li'l portes, segur que et dona la clau."
                     : "Parla-hi, però amb paciència: la pobreta no és la mateixa des que va pujar la boira. Potser et pot necessitar." }
             ]
         };
@@ -153,7 +153,9 @@ const DIALEGS = {
 
     creu: E => ({
         pagines: [
-            { qui: 'Ineu', text: 'Avui les flors estan pansides. Com si la boira se\'n begués el color.' }
+            { qui: 'Ineu', text: E.flag('bassadoriaNeta')
+                ? 'Les flors del peu de la creu s\'han redreçat. Ara que l\'aigua torna a ser clara, també elles tornen a tenir color.'
+                : 'Avui les flors estan pansides. Com si la boira se\'n begués el color.' }
         ]
     }),
 
@@ -239,12 +241,14 @@ const DIALEGS = {
             };
         }
         // El Cant de Vespres: quan l'ombra l'ha demanat, o ja abans si el Pare Alcoví ha llegit els fragments (no s'ha de quedar encallat)
-        if ((E.flag("ombraDemanaCant") || E.flag("alcuiLlegit")) && !E.flag("cantPedres")) {
+        if ((E.flag("ombraDemanaCant") || E.flag("alcuiLlegit") || E.flag("soparObert")) && !E.flag("cantPedres")) {
             return {
                 pagines: [
                     { qui: "La Pianista", text: E.flag("ombraDemanaCant")
                         ? "El monjo de les Runes vol sentir el Cant de Vespres? Ai, fill, aquest és molt vell. Me'l va ensenyar la meva mare. Vine, escolta."
-                        : "Vas a veure l'ombra de les Runes? Diuen que només escolta el Cant de Vespres. És molt vell: me'l va ensenyar la meva mare. Vine, escolta." }
+                        : E.flag("alcuiLlegit")
+                            ? "Vas a veure l'ombra de les Runes? Diuen que només escolta el Cant de Vespres. És molt vell: me'l va ensenyar la meva mare. Vine, escolta."
+                            : "Els pastors de la Cirosa fa anys que no senten música vora el foc? Tinc un cant molt vell que potser els recordaria casa: el Cant de Vespres. Me'l va ensenyar la meva mare. Vine, escolta." }
                 ],
                 enAcabar: () => iniciarLliço("pedres")
             };
@@ -425,7 +429,7 @@ const DIALEGS = {
             { qui: 'Jusef', text: 'Això és per a tu: una llanterna. Als passadissos dels monjos hi fa una fosca que no perdona, i amb la seva llum hi veuràs.' },
             { fer: (z, fet) => z.objecteVola('josep', fet) },
             { avis: 'Has obtingut la LLANTERNA.', obj: 'llanterna' },
-            { qui: 'Jusef', text: 'I un secret, per qui sap tornar un servei: aquella roda de carruatge del pati no és decoració. Darrere hi ha el túnel dels monjos cap a la Casa Gran. Però pesa com un carro ple.' }
+            { qui: 'Jusef', text: 'I un secret, per qui sap tornar un servei: aquella roda de carruatge del Celler no és decoració. Darrere hi ha el túnel dels monjos cap a la Casa Gran. Però pesa com un carro ple.' }
         ],
         enAcabar: () => {
             E.posaFlag('josepVencut');
@@ -507,7 +511,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: 'Carry', text: "Ai, Ineu... no, no t'has de preocupar per mi. Bé, sí. Busco el Pallofa, el meu gos." },
-                { qui: 'Carry', text: "És petit i prim, blanc amb taques marrons, i li falta un ull: diuen que se'l va menjar un gat. Va marxar fa tres nits, quan va pujar la boira, i no ha tornat." },
+                { qui: 'Carry', text: "És petit i prim, blanc amb taques marrons, i li falta un ull: diuen que se'l va menjar un gat. Va marxar fa dues nits, darrere el Fram, i no ha tornat." },
                 { qui: 'Carry', text: "A ell li agrada passejar. Si el trobes, porta-me'l. Diners no en tinc, però a casa guardo una cosa que potser et farà falta." }
             ],
             enAcabar: () => { E.posaFlag('carryParlat'); E.posaObjectiu("El Pallofa, el gos de la Carry, passeja per Sant Antoni."); E.desar(); }
@@ -556,7 +560,7 @@ const DIALEGS = {
                     { qui: "El Gran Til·ler", text: "Sento l'aigua cantar de lluny... La Bassadòria és neta. Has fet bé, petit monjo." },
                     { qui: "El Gran Til·ler", text: "El camí del nord-est cap a la Cirosa el vaig tancar jo amb les meves arrels, perquè la boira no hi pugés. Ara que l'aigua respira, pots passar: les arrels només reconeixen la meva branca. Colpeja-les amb ella i s'enfonsaran." },
                     { qui: "El Gran Til·ler", text: "A la Cirosa viuen uns pastors desterrats que guarden les esquelles dels seus avis: amb elles es van afinar els cants antics. Tracta'ls amb dolçor, que ja han patit prou." },
-                    { qui: "El Gran Til·ler", text: "I vés amb compte: el Germà Aldreu hi ha pujat aquests dies, i porta la boira a dins. L'Home de la Gàbia li parla a cau d'orella, i ell l'escolta." }
+                    { qui: "El Gran Til·ler", text: "I vés amb compte: el Germà Aldreu hi puja de nit per un pas que jo no vigilo, i porta la boira a dins. L'Home de la Gàbia li parla a cau d'orella, i ell l'escolta." }
                 ],
                 enAcabar: () => {
                     E.posaObjectiu("Les arrels que tanquen el camí del nord-est, a la dreta del Til·ler, cediran als cops de la branca.");
@@ -586,7 +590,8 @@ const DIALEGS = {
         if (E.flag("runna") && E.flag("relTretes") && !E.flag("tombaSegellada") && !E.flag("tombaLlegida")) {
             return {
                 pagines: [
-                    { qui: "Pare Alcoví", text: "Has baixat a la cripta, oi? Una clau de ferro, i la tomba dels monjos que no para de treure boira... Deixa'm mirar la Crònica." },
+                    { qui: "Ineu", text: "Pare Alcoví, he baixat a la cripta de la Casa Gran. Hi havia una clau de ferro, i la tomba dels monjos no para de treure boira." },
+                    { qui: "Pare Alcoví", text: "Una clau de ferro, i una tomba que no calla... Deixa'm mirar la Crònica." },
                     { fer: (z, fet) => z.npcVa('pare_alcui', 812, 372, fet, 120) },
                     { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
                     { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." }
@@ -639,16 +644,16 @@ const DIALEGS = {
                 ]
             };
         }
-        if (!E.flag("cantPedres")) {
+        if (!E.flag("ombraDemanaCant")) {
             return {
                 pagines: [
                     { fer: (z, fet) => z.ombraReacciona(fet) },
                     { qui: "Monjo", text: "Fa segles que no sento parlar cap llengua que no siguin les pedres. Només el cant de les pedres em desperta del tot." },
-                    { qui: "Monjo", text: "Qui toca l'orgue el coneix. Aprèn-lo, petit monjo, i torna a cantar-me'l aquí." }
+                    { qui: "Monjo", text: E.flag("cantPedres") ? "Qui toca l'orgue el coneix, i tu ja el portes a la tarota. Canta-me'l aquí, petit monjo." : "Qui toca l'orgue el coneix. Aprèn-lo, petit monjo, i torna a cantar-me'l aquí." }
                 ],
                 enAcabar: () => {
                     E.posaFlag("ombraDemanaCant");
-                    E.posaObjectiu("La Pianista, al Santuari, coneix un cant que les pedres entenen; l'ombra del monjo el voldria sentir.");
+                    E.posaObjectiu(E.flag("cantPedres") ? "L'ombra del monjo vol sentir, a les Runes, el Cant de Vespres que ja saps." : "La Pianista, al Santuari, coneix un cant que les pedres entenen; l'ombra del monjo el voldria sentir.");
                 }
             };
         }
@@ -855,7 +860,7 @@ const DIALEGS = {
     sortidaErmita: E => ({ pagines: [{ qui: 'Cartell', text: '← L\'Era\n→ Camí de la Desaparició' }] }),
     creuDesaparicio: E => ({
         pagines: [
-            { qui: 'Inscripció', text: "«Els qui se'n van no s'obliden; només esperen que algú els cridi pel nom.»" }
+            { qui: 'Inscripció', text: "«Dotze paraules guarda el camí. Qui les escolti, trobarà el nom dels que callen.»" }
         ]
     }),
 
@@ -988,7 +993,7 @@ const DIALEGS = {
         if (!E.flag('premiPains')) return {
             pagines: [
                 { qui: 'Dolora', text: 'Oh, mon petit! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Dolora.' },
-                { qui: 'Dolora', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb abric d\'ocells que s\'enduia els nens del poble, rient baixet.' },
+                { qui: 'Dolora', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb hàbit i ocells a l\'espatlla que s\'enduia els nens del poble, rient baixet.' },
                 { qui: 'Dolora', text: 'Si passes pel jardí, saluda l\'Isildren, el jardiner d\'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.' },
                 ...(!(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? [{ qui: 'Dolora', text: 'La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d\'aquests que no els talla ni la falç. Diuen que només cedeixen davant d\'una espasa de llum.'
                     + (E.te('runna') ? ' Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho.' : '') }] : []),
@@ -1003,7 +1008,7 @@ const DIALEGS = {
         if (!E.flag('premiPhili')) return {
             pagines: [
                 { qui: 'Pilària', text: 'Per fi! Tres nits que colpejo aquesta porta! Soc la Pilària, i no, no m\'he estat quieta ni un minut.' },
-                { qui: 'Pilària', text: 'T\'ho dic perquè ho vaig veure: el Germà Aldreu, aquell pesat que sempre anava jugant amb els nens, anava cada nit a la Porta de les Gírgoles, a l\'est del Celler, i la porta se li obria sola. Mai no li he cregut el somriure.' },
+                { qui: 'Pilària', text: 'T\'ho dic perquè ho vaig veure: el Germà Aldreu, aquell pesat que sempre anava jugant amb els nens, abans que la boira ens tanqués, anava moltes nits a la Porta de les Gírgoles, a l\'est del Celler, i la porta se li obria sola. Mai no li he cregut el somriure.' },
                 { qui: 'Pilària', text: 'Tots aquests nens innocents segrestats per aquesta maleïda boira... Troba\'ls, monjo! Salva\'ls a tots!' },
                 { qui: 'Pilària', text: 'Gràcies per les molèsties! Que no se t\'acabin les forces!' },
                 ...(ultimaMonja('Phili') ? [avisPremiMonja('Phili')] : [])
@@ -1067,7 +1072,7 @@ const DIALEGS = {
         if (!E.flag("pastorVencut")) {
             return {
                 pagines: [
-                    { qui: "Pastor vell", text: "Fill, el Germà Aldreu no era mala persona. Però la boira se li ha ficat a dins: l'Ocellaire, l'Home de la Gàbia, l'ha encegat prometent-li que tothom el seguiria." },
+                    { qui: "Pastor vell", text: "Fill, el Germà Aldreu feia bona cara, però això ja ho portava dins. L'Ocellaire, l'Home de la Gàbia, només li va prometre que tothom el seguiria, i ell se'l va creure." },
                     { qui: "Pastor vell", text: "I no només les ovelles. Fa unes nits el vam veure baixar cap al poble amb un nen adormit als braços. Els nens que falten, fill, se'ls ha endut ell." },
                     { qui: "Pastor vell", text: "Els nostres avis van tancar aquella gàbia sota terra fa segles, i el poble ens va pagar amb oblit." },
                     { qui: "Pastor vell", text: "Si trobes la manera de treure-li aquesta cosa, ho agrairem. Hi ha unes esquelles que van ser dels nostres avis: te les donarem, però el ramat és a la pastura, i ell hi és." }
@@ -1487,7 +1492,7 @@ const DIALEGS = {
             pagines: [gravat,
                 { qui: "Ineu", text: "Aquest ram és del Germà Francí, per als monjos que dormen aquí. El deixo als peus de l'àngel." },
                 { fer: (z, fet) => z.deixar(() => { if (z.ramDeixat) z.ramDeixat(); fet(); }, 'flors', 0xffd8e8) },       // les flors es veuen al gerro mentre es parla
-                { qui: "Ineu", text: "(Els pètals tremolen, com si algú respirés a prop. L'àngel ja no sembla plorar sol.)" },
+                { qui: "Ineu", text: "(Els pètals tremolen, com si algú respirés a prop. L'àngel, que mirava a terra, alça la cara al cel i somriu: ja no plora sol.)" },
                 { qui: "Ineu", text: "El Germà Francí es posarà content. Va dir que, en tornar, tindria alguna cosa per a mi a Sant Antoni." },
                 { avis: "Has deixat el RAM DE FLORS als peus de l'àngel." }
             ],
