@@ -47,11 +47,14 @@ class EscenaEstels extends Phaser.Scene {
         this.cel = this.add.graphics();
         this.fletxa = this.add.graphics();
 
-        this.titol = this.add.text(AMPLE / 2, 40, "Telescopi del Galf", estilText(32, "#ffd34d", { fontStyle: "bold" })).setOrigin(0.5);
+        this.titol = this.add.text(AMPLE / 2, 40, "Les Llàgrimes de Sant Llorenç", estilText(32, "#ffd34d", { fontStyle: "bold" })).setOrigin(0.5);
         this.info = this.add.text(AMPLE / 2, 90, "", estilText(26, "#d8e0ff", { fontStyle: "italic", align: "center", wordWrap: { width: 660 } })).setOrigin(0.5);
         this.missatge = this.add.text(AMPLE / 2, ALT - 40, "El progrés es desa en sortir", estilText(22, "#8a90b0")).setOrigin(0.5);
-        this.add.text(AMPLE - 16, 16, "Sortir ✕", estilText(28, "#f2e6c8", { backgroundColor: "#1a120bcc", padding: { x: 14, y: 8 } }))
+        const sortir = this.add.text(AMPLE - 16, 16, "Sortir ✕", estilText(28, "#f2e6c8", { backgroundColor: "#1a120bcc", padding: { x: 14, y: 8 } }))
             .setOrigin(1, 0).setDepth(20).setInteractive({ useHandCursor: true }).on("pointerdown", () => this.tancar(false));
+        // El títol (centrat) no ha de passar per sota del botó de sortir: si és massa llarg, es fa més petit fins que hi cap
+        let midaTitol = 32;
+        while (this.titol.getBounds().right > sortir.getBounds().left - 10 && midaTitol > 18) this.titol.setFontSize(--midaTitol);
 
         // Cercle d'apuntar
         this.rx = AMPLE / 2; this.ry = ALT / 2;

@@ -223,9 +223,17 @@ class EscenaUI extends Phaser.Scene {
 
     refrescaObjectes() {
         if (!this.fonsSarro) return;
-        const vis = !!Estat.dades && !this.menuObert && !this.mapaObert;
+        // Als minijocs de pantalla sencera (el telescopi dels Dipòsits, el ping-pong) el HUD de dalt s'amaga: tapava el títol i el seu botó de sortir
+        const minijoc = this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong');
+        const vis = !!Estat.dades && !this.menuObert && !this.mapaObert && !minijoc;
         this.fonsSarro.setVisible(vis);
         this.fonsConsells.setVisible(vis && !this.inventariObert);
+        if (this.minijocAmagat !== minijoc) {
+            this.minijocAmagat = minijoc;
+            [this.fonsHUD, this.cordo, this.creuRosari, this.ombraCreu, this.botoMenu].forEach(o => o && o.setVisible(!minijoc));
+            this.cors.forEach((c, i) => { c.setVisible(!minijoc && i < (Estat.dades ? Estat.dades.corsMax : 0)); });
+            this.ombresGrans.forEach((c, i) => { c.setVisible(!minijoc && i < (Estat.dades ? Estat.dades.corsMax : 0)); });
+        }
     }
 
     // ---------------- CONSELLS (l'objectiu, només quan es vol consultar) ----------------
