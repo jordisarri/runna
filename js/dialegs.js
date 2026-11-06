@@ -530,9 +530,12 @@ const DIALEGS = {
         if (!E.flag("parlatTiler")) {
             return {
                 pagines: [
-                    { qui: "El Gran Til·ler", text: "Fa tres-cents anys que vaig veure aquella gàbia baixar a la foscor, petit monjo." },
-                    { qui: "El Gran Til·ler", text: "Sento que la terra s'esquerda a sota. Ja en surten, d'animalons dels vells cementiris, i no vénen amb bones intencions." },
-                    { qui: "El Gran Til·ler", text: "El bastó de pelegrí aguanta per a un camí tranquil, però no et farà prou. Una branca meva ha caigut al peu del tronc: agafa-la, serà el teu bastó, més àgil i més ràpid." },
+                    { qui: "El Gran Til·ler", text: "Fa tres-cents anys vaig veure aquella gàbia baixar a la foscor, petit monjo. I des d'aleshores no he tancat mai els ulls." },
+                    { qui: "El Gran Til·ler", text: "Ara sento la terra esquerdar-se sota les meves arrels. Els vells cementiris s'obren, i en surt tot allò que hi dormia: no ve amb bones intencions." },
+                    { qui: "El Gran Til·ler", text: "El teu bastó de pelegrí és bo per a un camí tranquil. Aquest ja no ho és. Alça els ulls, petit monjo." },
+                    { fer: (z, fet) => z.brancaCau ? z.brancaCau(fet) : fet() },
+                    { qui: "El Gran Til·ler", text: "Una branca meva, enfortida per tres segles de vent i de pena. Agafa-la: serà més àgil i més viva que cap bastó." },
+                    { qui: "El Gran Til·ler", text: "L'arbre que dona una branca no mor. Va créixer per a aquest dia: que et guardi com m'ha guardat a mi." }
                 ],
                 enAcabar: () => {
                     E.posaFlag("parlatTiler"); E.posaFlag("tillerBranca");

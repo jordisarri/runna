@@ -650,6 +650,9 @@ class ZonaTiller extends ZonaBase {
         this.tweens.add({ targets: this.brancaAura, alpha: { from: 0.15, to: 0.38 }, scaleX: { from: 0.85, to: 1.15 }, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
         this.tweens.add({ targets: this.branca, alpha: { from: 0.65, to: 1 }, yoyo: true, repeat: -1, duration: 800, ease: 'Sine.easeInOut' });
         this.interactiu(TIL_X + 100, TIL_Y + 115, RADI_OBJECTE, DIALEGS.branca, { altura: 60, actiu: () => Estat.flag('tillerBranca') && !Estat.te('basto_tiller') });
+        // (només es veu un cop ha caigut: si no, en entrar es veuria un instant abans que el primer fotograma l'amagués)
+        const brancaVisible = Estat.flag('tillerBranca') && !Estat.te('basto_tiller');
+        this.branca.setVisible(brancaVisible); this.brancaAura.setVisible(brancaVisible);
 
         this.cartell(980, 470, DIALEGS.cartellCirosa);
 
@@ -665,6 +668,43 @@ class ZonaTiller extends ZonaBase {
     }
 
     // La primera vegada que l'examines: la cara es va dibuixant sobre l'escorça (un fos de transparència, lent)
+    // La branca es desprèn de les capçades i cau: el Til·ler cruix, plouen fulles, la branca gira en l'aire, rebota a terra i s'hi queda amb una claror
+    brancaCau(fet) {
+        const x1 = this.branca.x, y1 = this.branca.y, x0 = TIL_X + 150, y0 = TIL_Y - 390;
+        this.brancaCaient = true;
+        const b = this.add.image(x0, y0, 'arma_tiller').setScale(this.branca.scaleX).setTint(0xffe8b0).setAngle(-30).setDepth(99000);
+        // El cruixit de les capçades
+        Sfx.xiu(1.6, 0.18, 'bandpass', 380, 1400, 1.4);
+        this.cameras.main.shake(1100, 0.0022);
+        for (let i = 0; i < 14; i++) {                                       // pluja de fulles
+            const f = this.add.ellipse(TIL_X + (Math.random() - 0.5) * 260, TIL_Y - 340 + Math.random() * 60, 12, 20, i % 3 ? 0x6a9a3a : 0xe0b840, 1).setStrokeStyle(1.5, 0x4a5a1a).setDepth(99000).setAngle(Math.random() * 360);
+            this.tweens.add({ targets: f, y: TIL_Y + 60 + Math.random() * 160, angle: f.angle + 360 + Math.random() * 360, duration: 1800 + Math.random() * 1400, delay: Math.random() * 900, ease: 'Sine.easeIn' });
+            this.tweens.add({ targets: f, x: f.x + (Math.random() - 0.5) * 140, duration: 900, yoyo: true, repeat: 3, delay: Math.random() * 900, ease: 'Sine.easeInOut' });
+            this.tweens.add({ targets: f, alpha: 0, delay: 2400 + Math.random() * 800, duration: 700, onComplete: () => f.destroy() });
+        }
+        this.time.delayedCall(1000, () => {
+            Sfx.to(950, 160, 0.14, 'square', 0.22);                          // crac: la branca es trenca
+            this.tweens.add({ targets: b, angle: { from: -30, to: 68 + 360 }, duration: 1150, ease: 'Quad.easeIn' });
+            this.tweens.add({ targets: b, x: { from: x0, to: x1 }, duration: 1150, ease: 'Sine.easeOut' });
+            this.tweens.add({ targets: b, y: y1, duration: 1150, ease: 'Quad.easeIn', onComplete: () => {
+                Sfx.cop(true);                                                // impacte
+                this.cameras.main.shake(260, 0.004);
+                for (let k = 0; k < 7; k++) {                                // pols
+                    const d = this.add.circle(x1 + (Math.random() - 0.5) * 60, y1 + 6, 10 + Math.random() * 8, 0xc8b890, 0.5).setDepth(y1 + 5);
+                    this.tweens.add({ targets: d, x: d.x + (Math.random() - 0.5) * 120, y: d.y - 18 - Math.random() * 26, scale: 2.4, alpha: 0, duration: 900, onComplete: () => d.destroy() });
+                }
+                this.tweens.add({ targets: b, y: y1 - 34, angle: b.angle + 18, duration: 170, yoyo: true, ease: 'Sine.easeOut', onComplete: () => {
+                    this.llum(x1, y1 - 14, 0xffe090);
+                    Estat.posaFlag('tillerBranca');                          // ara ja hi és: es mostra la branca de terra (amb la seva claror) i es treu la que ha caigut
+                    this.brancaCaient = false;
+                    this.actualitzar();
+                    b.destroy();
+                    this.esperar(900, fet);
+                } });
+            } });
+        });
+    }
+
     despertarTiller(fet) {
         Sfx.secret();
         this.tweens.add({ targets: this.tillerAmbCara, alpha: 1, duration: 3200, ease: 'Sine.easeInOut',
@@ -819,7 +859,7 @@ class ZonaTiller extends ZonaBase {
 
     actualitzar() {
         // La branca només es veu mentre encara no l'has agafada (i després que el Til·ler te l'hagi indicat)
-        const visible = Estat.flag('tillerBranca') && !Estat.te('basto_tiller') && !this.brancaAgafada;
+        const visible = Estat.flag('tillerBranca') && !Estat.te('basto_tiller') && !this.brancaAgafada && !this.brancaCaient;
         this.branca.setVisible(visible);
         this.brancaAura.setVisible(visible);
     }
