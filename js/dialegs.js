@@ -1214,7 +1214,8 @@ const DIALEGS = {
             { fer: (z, fet) => z.aldreuAixeca(fet) },
             { qui: "Aldreu, Pastor de Boira", text: "Je, je, je... Ens veurem allà baix, monjo." },
             { fer: (z, fet) => z.aldreuMarxa(fet) },
-            { qui: "Ineu", text: "(«Al fons de les Gírgoles»... Ara ja sé on mirar.)" }
+            { qui: "Ineu", text: "(«Al fons de les Gírgoles»... Ara ja sé on mirar.)" },
+            { qui: "Ineu", text: "(I el pastor vell em va prometre les esquelles dels seus avis. Aniré a veure'l vora el foc.)" }
         ],
         enAcabar: () => {
             E.posaFlag("pastorVencut");
