@@ -966,7 +966,7 @@ const DIALEGS = {
             { qui: 'Isildren', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardi en menjava deu cada tarda i no n\'hi tenia mai prou...' },
             { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xffd060), c => z.beure(c, 0xffd060)], fet) },
         ];
-        const perFont = E.flag('fontVista') && !E.flag('fontNeta') && !E.te('pruna') && !E.flag('herba3');      // només es guarda si la font ja ha dit què calen
+        const perFont = !E.flag('fontNeta') && !E.te('pruna') && !E.flag('herba3');      // en collir-ne una, se'n guarda una al sarró per a la Font del Bisbe (encara que la font no hagi dit què calen)
         if (perFont) pagines.push({ avis: 'Has obtingut una PRUNA DAURADA.', obj: 'pruna' });
         return {
             pagines,
