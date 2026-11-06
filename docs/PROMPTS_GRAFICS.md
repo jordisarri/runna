@@ -244,7 +244,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `emblema_arbre`, `emblema_saber`, `emblema_benedicio`, `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
 
 
 
@@ -316,6 +316,40 @@ Charming 2D cartoon game scenery asset in the same art style as the attached ref
 ```
 
 **Ajust:** si els tres medallons es llegeixen malament, afegeix: «each medallion is a large deep-carved circle with one big simple symbol, no tiny details». Si hi surt text, repeteix amb: «the pages of the book show only abstract wavy lines, never letters». Si l'espasa surt massa petita, afegeix: «the sword takes up about a third of the height of the front face».
+
+
+
+### Els tres emblemes de l'animació del Dolmen: `emblema_arbre`, `emblema_saber` i `emblema_benedicio`
+
+Les tres coses que calen per alçar Runna surten a la pantalla, una darrere l'altra, abans que l'Ineu alci l'espasa (`mostrarTresCoses`, `js/zones/oest.js`). Són **medallons de pedra amb la mateixa talla que els tres de la placa del Dolmen** (`art/natura/placa_dolmen.png`): **puja la placa com a referència** i digues «same art style as the reference image». Cada gràfic és **un sol medalló rodó, quadrat 1:1**, amb el cercle tocant les quatre vores i fons blanc pur. El joc els mostra a **110 px**: els símbols han de ser grans i senzills.
+
+**On desar-los:** `art/ui/emblema_arbre.png`, `art/ui/emblema_saber.png` i `art/ui/emblema_benedicio.png`. Després, `node eines/convertir_webp.js emblema_arbre` (i els altres dos) els treu el fons blanc i els passa a `assets/ui/*.webp`. Mentre no hi siguin, el joc fa servir les icones dibuixades amb codi. No cal tocar res més.
+
+#### `emblema_arbre.png` → `assets/ui/emblema_arbre.webp` (amplada 110) *(La fulla del Gran Til·ler (el permís de l'arbre sagrat))*
+
+```
+
+Charming 2D cartoon game emblem in the same art style as the attached reference image (a hand-painted cartoon carved stone plaque with round carved medallions): a single round carved stone medallion seen strictly from the front, perfectly flat like a 2D front drawing, no perspective, no tilt, the circle filling almost the whole square image and centered, made of weathered grey-green stone with a thin clean dark outline around the whole disc and a second thin inner ring just inside the rim like a coin, two-tone cel shading (base stone tone plus a soft flat shadow plane) with a subtle lighter highlight on the edges of the carving, clean light from the top-front, muted earthy stone palette, a few tiny patches of green moss on the rim, the symbol is carved in shallow relief in the centre of the disc using thin, clean dark lines with soft inner shading, exactly like the medallions on the reference plaque, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text, no letters, no numbers, square image with a 1:1 aspect ratio. The carved symbol is a single large leaf of the sacred linden tree, heart-shaped, pointing upwards, with a short curved stem at the bottom, a clean central vein and three or four pairs of thin side veins, simple and bold (the permission of the sacred tree). It fills about 60% of the disc. No other symbols.
+
+```
+
+#### `emblema_saber.png` → `assets/ui/emblema_saber.webp` (amplada 110) *(El llibre obert (les paraules del saber))*
+
+```
+
+Charming 2D cartoon game emblem in the same art style as the attached reference image (a hand-painted cartoon carved stone plaque with round carved medallions): a single round carved stone medallion seen strictly from the front, perfectly flat like a 2D front drawing, no perspective, no tilt, the circle filling almost the whole square image and centered, made of weathered grey-green stone with a thin clean dark outline around the whole disc and a second thin inner ring just inside the rim like a coin, two-tone cel shading (base stone tone plus a soft flat shadow plane) with a subtle lighter highlight on the edges of the carving, clean light from the top-front, muted earthy stone palette, a few tiny patches of green moss on the rim, the symbol is carved in shallow relief in the centre of the disc using thin, clean dark lines with soft inner shading, exactly like the medallions on the reference plaque, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text, no letters, no numbers, square image with a 1:1 aspect ratio. The carved symbol is a large open book seen from the front, with two slightly curved pages meeting at the spine and a thin cover edge, each page showing only a few thin straight horizontal lines like lines of writing, never real letters (the words of wisdom). No quill, no candle, no other objects. It fills about 65% of the disc.
+
+```
+
+#### `emblema_benedicio.png` → `assets/ui/emblema_benedicio.webp` (amplada 110) *(La mà alçada (la benedicció divina))*
+
+```
+
+Charming 2D cartoon game emblem in the same art style as the attached reference image (a hand-painted cartoon carved stone plaque with round carved medallions): a single round carved stone medallion seen strictly from the front, perfectly flat like a 2D front drawing, no perspective, no tilt, the circle filling almost the whole square image and centered, made of weathered grey-green stone with a thin clean dark outline around the whole disc and a second thin inner ring just inside the rim like a coin, two-tone cel shading (base stone tone plus a soft flat shadow plane) with a subtle lighter highlight on the edges of the carving, clean light from the top-front, muted earthy stone palette, a few tiny patches of green moss on the rim, the symbol is carved in shallow relief in the centre of the disc using thin, clean dark lines with soft inner shading, exactly like the medallions on the reference plaque, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text, no letters, no numbers, square image with a 1:1 aspect ratio. The carved symbol is a single open right hand raised in blessing, seen from the front with the palm facing the viewer, five fingers slightly spread, the thumb on the left, a simple clean outline with two or three thin palm lines (the divine blessing). No rays, no sleeve, no other objects. It fills about 65% of the disc.
+
+```
+
+**Ajust (els tres):** si el símbol surt massa petit, afegeix: «the symbol fills about 70% of the disc». Si surt en color, afegeix: «the whole medallion is in muted grey-green stone tones, no bright colours». Si hi surt text al llibre, repeteix amb: «the pages show only abstract thin lines, never letters». Si la mà surt amb més o menys de cinc dits: «the hand has exactly five fingers: four fingers and one thumb».
 
 
 

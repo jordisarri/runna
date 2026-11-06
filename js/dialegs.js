@@ -588,7 +588,7 @@ const DIALEGS = {
     pareAlcui: E => {
         const f1 = E.flag("fragment1"), f2 = E.flag("fragment2");
         // Ha llegit la placa del Dolmen i li ho pregunta: la Crònica diu què calen per alçar Runna i qui ho dona
-        if (E.flag("placaDolmen") && !E.flag("alcuiPlacaDita")) {
+        if (E.flag("placaDolmen") && !E.flag("alcuiPlacaDita") && DIALEGS.faltaRunna(E).length === 3) {
             const pas = pistaRunna(E);
             const pagines = [
                 { qui: "Ineu", text: "Pare Alcoví, a la placa del Dolmen hi diu que només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. Què vol dir?" },
@@ -1352,9 +1352,12 @@ const DIALEGS = {
     placaDolmen: E => ({
         pagines: [
             { qui: "Placa", text: "Només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina." }
-        ].concat(E.flag("alcuiPlacaDita") ? [] : [
-            { qui: "Ineu", text: "(El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alcoví deu saber-ho: ho tindrà escrit a la Crònica.)" }
-        ]),
+        ].concat((() => {
+            const falta = DIALEGS.faltaRunna(E);
+            if (!falta.length) return [{ qui: "Ineu", text: "(El permís de l'arbre sagrat, les paraules del saber i la benedicció divina... Ja ho tinc tot. Només em falta alçar l'espasa.)" }];
+            if (falta.length < 3) return [{ qui: "Ineu", text: "(Ja en tinc una part. Em falta: " + falta.join(", ") + ".)" }];
+            return E.flag("alcuiPlacaDita") ? [] : [{ qui: "Ineu", text: "(El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alcoví deu saber-ho: ho tindrà escrit a la Crònica.)" }];
+        })()),
         enAcabar: () => { E.posaFlag("placaDolmen"); E.desar(); }
     }),
 

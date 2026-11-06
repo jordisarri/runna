@@ -912,16 +912,17 @@ class ZonaDolmen extends ZonaBase {
     // Les tres coses que calen per alçar Runna es mostren a la pantalla, una darrere l'altra, amb el seu nom; després volen cap a l'espasa i es fonen en una llum
     mostrarTresCoses(fet) {
         const I = this.ineu, cx = I.x, cy = I.y - 250;
-        const coses = [['fulla_tiler', "El permís de l'arbre sagrat"], ['saber', 'Les paraules del saber'], ['benediccio', 'La benedicció divina']];
+        const coses = [['emblema_arbre', "El permís de l'arbre sagrat"], ['emblema_saber', 'Les paraules del saber'], ['emblema_benedicio', 'La benedicció divina']];
         const peces = [];
         coses.forEach(([id, text], k) => {
-            const x = cx + (k - 1) * 155, y = cy + (k === 1 ? -30 : 0), clau = iconaObjecte(this, id);
+            const x = cx + (k - 1) * 155, y = cy + (k === 1 ? -30 : 0), clau = this.textures.exists(id) ? id : null;
+            const esc = clau ? ((this.textures.get(id).customData || {}).escala || 110 / this.textures.get(id).getSourceImage().width) : 1;       // escala que mostra l'emblema a 110 px de joc
             const halo = this.add.circle(x, y, 50, 0xffe8a0, 0.5).setDepth(99000).setBlendMode('ADD').setAlpha(0).setScale(0.3);
-            const ico = (clau ? this.add.image(x, y, clau).setScale(0.4) : this.add.circle(x, y, 20, 0xffe8a0)).setDepth(99001).setAlpha(0);
+            const ico = (clau ? this.add.image(x, y, clau).setScale(esc * 0.4) : this.add.circle(x, y, 20, 0xffe8a0)).setDepth(99001).setAlpha(0);
             const nom = this.add.text(x, y + 62, text, estilText(24, '#fff3c8', { stroke: '#1a120b', strokeThickness: 5, align: 'center', wordWrap: { width: 145 } })).setOrigin(0.5, 0).setDepth(99001).setAlpha(0);
             this.time.delayedCall(300 + k * 800, () => {
                 Sfx.objecte();
-                this.tweens.add({ targets: ico, alpha: 1, scale: clau ? 1 : 1.6, duration: 500, ease: 'Back.easeOut' });
+                this.tweens.add({ targets: ico, alpha: 1, scale: clau ? esc : 1.6, duration: 500, ease: 'Back.easeOut' });
                 this.tweens.add({ targets: halo, alpha: 0.55, scale: 1, duration: 500 });
                 this.tweens.add({ targets: nom, alpha: 1, duration: 500 });
                 this.llum(x, y, 0xffe8a0);
@@ -932,7 +933,7 @@ class ZonaDolmen extends ZonaBase {
         this.time.delayedCall(300 + 2 * 800 + 500 + 1600, () => {
             const px = this.espX, py = this.espY - 40;
             Sfx.secret();
-            this.tweens.add({ targets: peces, x: px, y: py, scale: 0.15, alpha: 0, duration: 750, ease: 'Sine.easeIn', onComplete: () => {
+            this.tweens.add({ targets: peces, x: px, y: py, scale: 0.12, alpha: 0, duration: 750, ease: 'Sine.easeIn', onComplete: () => {
                 peces.forEach(o => o.destroy());
                 this.llum(px, py, 0xffffff);
                 this.cameras.main.flash(300, 255, 255, 255);
