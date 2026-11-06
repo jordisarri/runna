@@ -1066,6 +1066,15 @@ const Grafics = {
             ctx.strokeStyle = 'rgba(240,210,160,0.6)'; ctx.lineWidth = 1.4; ctx.setLineDash([2, 3]);
             ctx.beginPath(); ctx.moveTo(17, 51); ctx.lineTo(47, 51); ctx.stroke(); ctx.setLineDash([]);
         });
+        // Icona dels consells: un pergamí enrotllat amb unes línies d'escriptura
+        crea('icona_consells', 64, 64, ctx => {
+            ctx.strokeStyle = '#3a2412'; ctx.lineWidth = 2.4; ctx.lineJoin = 'round';
+            ctx.fillStyle = '#f1e3b6'; ctx.beginPath(); ctx.roundRect(16, 12, 32, 40, 4); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#d6bd82'; ctx.beginPath(); ctx.ellipse(32, 12, 18, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.beginPath(); ctx.ellipse(32, 52, 18, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = 'rgba(58,36,18,0.75)'; ctx.lineWidth = 2;
+            [[22, 24, 42], [22, 31, 40], [22, 38, 36]].forEach(([x, y, x2]) => { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2, y); ctx.stroke(); });
+        });
         // Altar de pedra del presbiteri (desar partida i reposar)
         crea('altar', 150, 118, pintarAltarPedra);
         crea('orgue', 120, 150, (ctx, w, h) => {

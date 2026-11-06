@@ -1320,7 +1320,7 @@ class ZonaBase extends Phaser.Scene {
             if (this.despertarImg && this.despertarImg.active) cossos.push(this.despertarImg);       // el dibuix gran del despertar, que no es pot tapar
             if (p && p.npc && p.npc.active && p.npc.visible) cossos.push(p.npc);
             if (p && p.cameraCossos) cossos.push(...p.cameraCossos.filter(o => o && o.active && o.visible));
-            const TOP = ALT_HUD + 8;                                    // sota el HUD
+            const TOP = TOP_HUD + 8;                                    // sota el HUD flotant
             const alcadaCaixa = this.ui().alcadaCaixaDialeg || 360;
             const LIM = ALT - alcadaCaixa - 60;                         // 50 px sobre la vora superior del quadre
             const LIM_RETRAT = ALT - alcadaCaixa - 160;                 // sobre el retrat, que sobresurt per damunt del quadre
