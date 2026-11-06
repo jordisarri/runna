@@ -1191,6 +1191,7 @@ const DIALEGS = {
     aldreuPastor: E => ({
         pagines: [
             { fer: (z, fet) => z.seq([c => { z.aldreuFlota.pause(); z.npcs.aldreu.y = 640; z.aldreuOmbra.setScale(0.5); c(); }, c => z.npcSalta('aldreu', c, 1), c => z.llum(z.npcs.aldreu.x, z.npcs.aldreu.y - 90, 0xb88aff, c)], fet) },
+            { qui: "Aldreu, Pastor de Boira", text: "Ineu!" },
             { qui: "Ineu", text: "Germà Aldreu?!" },
             { qui: "Aldreu, Pastor de Boira", text: "L'Aldreu era un monjo que ningú no mirava. Ara sóc el Pastor de Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai." },
             { qui: "Aldreu, Pastor de Boira", text: "El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» Jo no el trobo a faltar: l'admiro. I ara sóc el seu pastor. El PASTOR!" },
@@ -1207,6 +1208,8 @@ const DIALEGS = {
             { fer: (z, fet) => z.aldreuAgenollat(fet) },
             { qui: "Aldreu, Pastor de Boira", text: "Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré." },
             { qui: "Aldreu, Pastor de Boira", text: "El Mestre és al fons de les Gírgoles, i ja és despert. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells." },
+            { fer: (z, fet) => z.aldreuAixeca(fet) },
+            { qui: "Aldreu, Pastor de Boira", text: "Je, je, je... Ens veurem allà baix, monjo." },
             { fer: (z, fet) => z.aldreuMarxa(fet) },
             { qui: "Ineu", text: "(«Al fons de les Gírgoles»... Ara ja sé on mirar.)" }
         ],
@@ -1252,7 +1255,9 @@ const DIALEGS = {
                 { qui: "Nena de les Trenes", text: "Els sento... són les mans de la mare lligant-me'ls. Mare...? Mare, ets tu? M'has trobat?" },
                 { fer: (z, fet) => z.mareNena(fet) },
                 { qui: "Nena de les Trenes", text: "Ja no tinc por. Gràcies, monjo. Et deixo un dels llaços: guarda'l, que protegeix els qui es perden." },
-                { avis: "Has obtingut el LLAÇ DE LA NENA.", obj: 'cinta_nena' }
+                { avis: "Has obtingut el LLAÇ DE LA NENA.", obj: 'cinta_nena' },
+                { qui: "Nena de les Trenes", text: "La mare me'l va lligar perquè res de dolent no em fes mal. Ara et servirà a tu: cada vegada que entris a un lloc nou, el llaç aguantarà el primer cop que rebis, i no et farà mal." },
+                { qui: "Nena de les Trenes", text: "Només aguanta un cop per lloc. Quan surtis i tornis a entrar en un altre, el llaç es renova." }
             ],
             enAcabar: () => {
                 E.posaFlag("nenaAlliberada"); E.posaFlag("trenesNena"); E.dona("cinta_nena"); E.treu("llac_nena");

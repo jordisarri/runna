@@ -256,6 +256,8 @@ const Grafics = {
         scene.load.spritesheet('visitant_zombi', 'assets/enemics/visitant_zombi.webp', { frameWidth: 127, frameHeight: 209 });      // el visitant (turista zombi) caminant, de cara (4x4 fotogrames): serveix per a totes les direccions
         scene.load.spritesheet('pallofa_cami', 'assets/personatges/pallofa_cami.webp', { frameWidth: 135, frameHeight: 140 });      // el Pallofa caminant cap a la dreta (4x4 fotogrames); es gira per anar cap a l'esquerra
         scene.load.spritesheet('pare_jordi_camina', 'assets/personatges/pare_jordi_camina.webp', { frameWidth: 200, frameHeight: 290 });
+        // Fulls d'animació del Pastor de Boira (boss de la Cirosa): quadrícula de fotogrames de 300 x 300; si no hi són, es veu el dibuix fix (vegeu docs/PROMPTS_GRAFICS.md)
+        Object.keys(Grafics.PASTOR_FULLS).forEach(n => scene.load.spritesheet('pastor_' + n, `assets/enemics/pastor_${n}.webp`, { frameWidth: 300, frameHeight: 300 }));
         scene.load.spritesheet('germa_aldreu_camina', 'assets/personatges/germa_aldreu_camina.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('germa_aldreu_ne', 'assets/personatges/germa_aldreu_ne.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('josep_camina', 'assets/personatges/josep_camina.webp', { frameWidth: 190, frameHeight: 300 });
@@ -426,7 +428,15 @@ const Grafics = {
     },
 
     // Animacions de caminar de l'Ineu (són globals: es creen una sola vegada)
+    // Animacions del Pastor de Boira: nom -> [fotogrames, fotogrames per segon, repeticions (-1 = en bucle)]
+    PASTOR_FULLS: { idle: [4, 6, -1], camina: [8, 10, -1], apunta: [4, 8, 0], carrega: [6, 14, -1], bat: [6, 9, 0], crida: [6, 8, 0], cau: [6, 8, 0], aixeca: [6, 8, 0] },
+
     animacions(scene) {
+        Object.entries(Grafics.PASTOR_FULLS).forEach(([n, [fr, fps, rep]]) => {
+            const k = 'pastor_' + n;
+            if (!scene.anims.exists(k) && scene.textures.exists(k) && !Grafics.faltants.includes(k) && scene.textures.get(k).frameTotal > fr)
+                scene.anims.create({ key: k, frames: scene.anims.generateFrameNumbers(k, { start: 0, end: fr - 1 }), frameRate: fps, repeat: rep });
+        });
         // L'escolopendra caminant (ondula el cos i les potes)
         if (!scene.anims.exists('cempeus') && scene.textures.get('escolopendra').has(0)) {
             scene.anims.create({ key: 'cempeus', frames: scene.anims.generateFrameNumbers('escolopendra', { start: 0, end: 7 }), frameRate: 16, repeat: -1 });

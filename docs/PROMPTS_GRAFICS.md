@@ -244,7 +244,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): els vuit fulls del **Pastor de Boira** (`pastor_*`, vegeu Enemics), `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
 
 
 
@@ -400,6 +400,30 @@ Edit the attached image: keep the statue, the rocky lump, the pedestal, the pose
 
 
 
+
+### Pastor de Boira: fulls d'animació (`pastor_idle`, `pastor_camina`, `pastor_apunta`, `pastor_carrega`, `pastor_bat`, `pastor_crida`, `pastor_cau`, `pastor_aixeca`) *(El boss de la Cirosa (el Germà Aldreu fet Pastor de Boira). Ara es veu un sol dibuix fix; amb aquests vuit fulls es mou de debò i **ja no es deforma** ni es gira: cau a terra, s'aixeca i se'n va caminant. **Puja sempre `art/enemics/pastor_boira.jpg` com a referència.** Cada full és una **quadrícula de 4 columnes** de fotogrames (els fotogrames, d'esquerra a dreta i de dalt a baix) i fons blanc pur. Desa'ls com `art/enemics/pastor_<nom>.png` i passa'ls amb `python eines/full_pastor.py <nom>` (separa els fotogrames, treu el fons, els posa tots a la mateixa mida i amb els peus a la mateixa alçada, i en fa `assets/enemics/pastor_<nom>.webp`, de fotogrames de 300 × 300). Fins que no hi siguin, el joc fa servir el dibuix fix i no s'anima res. Si algun full surt amb files desiguals, digue'm la quadrícula real i la passo amb `python eines/full_pastor.py <nom> <columnes> <files>`.)*
+
+**Prompt comú** (afegeix-hi, al final, el text de cada full):
+
+```
+Using the attached reference image, create a SPRITE SHEET of this exact same character. Keep EXACTLY the same character in every frame: the same elderly man with short white hair and round glasses with glowing violet eyes and a gentle sly smile, the same dark violet torn monk habit with a rope belt, the same fluffy lilac wool scarf around his neck, the same wooden shepherd's crook with a small bronze bell and a glowing lilac lantern hanging from the hook, the same sandals, the same lilac mist swirls around his feet, the same chibi proportions, the same bold dark outline and cartoon cel-shading. The character is seen in a 3/4 view facing RIGHT (the game mirrors it for left). Layout: a grid with 4 columns, the frames ordered left to right and top to bottom, every frame in an invisible square cell of the same size, the character centred in each cell and always the same size, with the soles of his feet on the same horizontal line in every frame (about 90% of the cell height), nothing touching the edge of its cell. Pure white background, no text, no numbers, no grid lines, no shadows on the ground. Each frame is a clean separate pose of the same animation:
+```
+
+**`pastor_idle` — 4 fotogrames (1 fila):** `IDLE LOOP, 4 frames: he floats and breathes, a tiny bob up and down of the whole body, the robe hem and the lilac mist swaying, the crook held upright beside him, the lantern glowing; the loop must be seamless (frame 4 leads back to frame 1).`
+
+**`pastor_camina` — 8 fotogrames (2 files):** `WALK CYCLE, 8 frames, walking towards the right with slow heavy steps: contact, down, passing and up poses for each leg, the crook planted on the ground every second step and used as a walking stick, the robe and the scarf swaying, mist trailing behind him; a seamless loop.`
+
+**`pastor_apunta` — 4 fotogrames (1 fila):** `CHARGE WIND-UP, 4 frames: he crouches and leans back, pulling the crook back and low behind him with both hands, the violet eyes flaring brighter, lilac mist gathering around his feet and being sucked towards him; frame 4 is the fully coiled pose, ready to lunge forward.`
+
+**`pastor_carrega` — 6 fotogrames (2 files):** `CHARGING RUN, 6 frames, a seamless loop: he rushes forward to the right, body leaning far forward, the crook held out in front of him like a lance, the robe and the scarf flying backwards, mouth open shouting, a trail of lilac mist behind him, alternating strides.`
+
+**`pastor_bat` — 6 fotogrames (2 files):** `STAFF SLAM ATTACK, 6 frames: frames 1 to 3 raise the crook slowly overhead with both hands (anticipation, leaning back, eyes flaring); frame 4 is the IMPACT: he slams the crook down onto the ground in front of him and a ring-shaped shockwave of lilac mist bursts outwards from the point of impact; frames 5 and 6 recover, the crook resting on the ground, the mist dissipating.`
+
+**`pastor_crida` — 6 fotogrames (2 files):** `CALLING THE FLOCK, 6 frames: he lifts the crook high with one hand and shakes it so that the bronze bell rings (draw small motion lines near the bell), head thrown back, mouth wide open shouting "Baaa!", lilac mist swirling outwards from his feet; the last frame holds the pose with the mist at its widest.`
+
+**`pastor_cau` — 6 fotogrames (2 files):** `DEFEATED, FALLING TO THE GROUND, 6 frames: frame 1 he flinches from a hit, the glasses slipping, the violet glow flickering; frame 2 he staggers back, the crook slipping from his hand; frame 3 he drops to his knees, the glow almost out, the lilac mist leaving his body; frame 4 he topples sideways; frame 5 he hits the ground; frame 6 he lies flat on the ground on his side, eyes closed, the eye glow completely off (normal eyes), the crook on the ground beside him, almost no mist left. The body lying down stays inside the cell and rests on the same baseline.`
+
+**`pastor_aixeca` — 6 fotogrames (2 files):** `GETTING UP AND LEAVING, 6 frames: frame 1 he lies on the ground exactly as in the last frame of the defeat animation; frame 2 he pushes himself up with one hand, the eyes opening and starting to glow again; frame 3 he kneels and grabs the crook; frame 4 he rises using the crook; frame 5 he stands, shaking the dust off, a sly smile; frame 6 he stands upright in the same pose as the first frame of the idle animation, the violet eyes glowing and a small curl of lilac mist at his feet.`
 
 ### Enemics futurs (Acte 3)
 

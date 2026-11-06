@@ -276,27 +276,32 @@ const ENEMICS = {
         }
     },
 
-    // BOSS: el Germà Aldreu convertit en Pastor de Boira. Crida ovelles i carrega amb la caiada.
+    // BOSS: el Germà Aldreu convertit en Pastor de Boira. Crida ovelles, carrega amb la caiada i la clava a terra en arc.
+    // Fulls d'animació (assets/enemics/pastor_*.webp, vegeu docs/PROMPTS_GRAFICS.md): si no hi són, es veu el dibuix fix de sempre.
     pastor: {
-        tex: 'pastor_boira', vida: 24, vel: 320, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 520,
+        tex: 'pastor_idle', texAlt: 'pastor_boira', escala: 0.58, vida: 28, vel: 430, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 440,
         robust: true, barra: true, arma: 'tiller',          // només cedeix a la branca del Til·ler
         perill: e => e.estat === 'carrega',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
             const fase2 = e.vida <= this.vida / 2;
-            if (!e.proxCrida) { e.proxCrida = ara + 3500; e.proxCarrega = ara + 2600; e.proxBat = ara + 1800; }
+            if (!e.proxCrida) { e.proxCrida = ara + 3200; e.proxCarrega = ara + 1700; e.proxBat = ara + 900; }
             const cap = Math.atan2(jo.y - c.y, jo.x - c.x);
             if (e.estat === 'apunta') {
                 e.spr.body.setVelocity(0);
-                if (ara > e.fins) { e.estat = 'carrega'; e.fins = ara + 340; e.spr.clearTint(); e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel); }
+                e.spr.setFlipX(Math.cos(e.ang) < 0);
+                if (ara > e.fins) {
+                    e.estat = 'carrega'; e.fins = ara + (fase2 ? 560 : 480); e.spr.clearTint(); z.animaPastor(e, 'carrega');
+                    e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel);
+                }
             } else if (e.estat === 'carrega') {
-                if (ara > e.fins) { e.estat = 'cansat'; e.fins = ara + (fase2 ? 950 : 1300); e.spr.body.setVelocity(0); e.proxCarrega = ara + (fase2 ? 2200 : 3000); }
+                if (ara > e.fins) { e.estat = 'cansat'; e.fins = ara + (fase2 ? 650 : 950); e.spr.body.setVelocity(0); e.proxCarrega = ara + (fase2 ? 1500 : 2300); z.animaPastor(e, 'idle'); }
             } else if (e.estat === 'bat') {
                 // Cop de caiada en arc: mentre s'atura, un oval a terra s'omple i marca exactament l'àrea on farà mal (els peus de l'Ineu
                 // a dins); en acabar, l'ona que surt és el mateix oval
                 e.spr.body.setVelocity(0);
-                const R = 125, RY = R * 0.55;
+                const R = 140, RY = R * 0.55;
                 if (!e.avisBat) {
                     e.avisBat = z.add.ellipse(c.x, c.y, R * 2, RY * 2, 0xffd080, 0.06).setStrokeStyle(4, 0xffd080, 0.9).setDepth(c.y - 400);
                     z.tweens.add({ targets: e.avisBat, fillAlpha: 0.32, duration: e.fins - ara, ease: 'Quad.in' });
@@ -310,28 +315,34 @@ const ENEMICS = {
                     z.tweens.add({ targets: ona, scale: 1, alpha: 0, duration: 280, ease: 'Cubic.out', onComplete: () => ona.destroy() });
                     const dx = (jo.x - c.x) / R, dy = (jo.y - c.y) / RY;
                     if (dx * dx + dy * dy < 1) z.ferIneu(1, { x: c.x, y: c.y });
-                    e.estat = 'cansat'; e.fins = ara + 700; e.proxBat = ara + (fase2 ? 2200 : 3000);
+                    e.estat = 'cansat'; e.fins = ara + 450; e.proxBat = ara + (fase2 ? 1300 : 1900);
                 }
             } else if (e.estat === 'cansat') {
                 e.spr.body.setVelocity(0);
                 if (ara > e.fins) e.estat = 'camina';
             } else {   // camina cap a l'Ineu i crida el ramat
                 e.estat = 'camina';
-                const v = dist > 95 ? (fase2 ? 85 : 66) : 0;
+                const v = dist > 90 ? (fase2 ? 125 : 95) : 0;
                 e.spr.body.setVelocity(Math.cos(cap) * v, Math.sin(cap) * v);
                 e.spr.setFlipX(Math.cos(cap) < 0);
-                if (dist < 130 && ara > e.proxBat) { e.estat = 'bat'; e.fins = ara + (fase2 ? 550 : 750); e.spr.setTint(0xffe080); }
+                z.animaPastor(e, v > 0 ? 'camina' : 'idle');
+                if (dist < 150 && ara > e.proxBat) {
+                    const tel = fase2 ? 380 : 560;
+                    e.estat = 'bat'; e.fins = ara + tel; e.spr.setTint(0xffe080);
+                    z.animaPastor(e, 'bat', Math.round(tel * 1.25));
+                }
                 if (ara > e.proxCrida) {
-                    e.proxCrida = ara + (fase2 ? 6000 : 8500);
-                    const vius = z.enemics.filter(x => x.tipus === 'ovella' && !x.mort).length;
-                    if (vius < 2) {
-                        z.flotant(c.x, c.y - 120, 'Be-e-e!', '#e0a0ff');
+                    e.proxCrida = ara + (fase2 ? 4800 : 7000);
+                    const vius = z.enemics.filter(x => x.tipus === 'ovella' && !x.mort).length, max = fase2 ? 3 : 2;
+                    if (vius < max) {
                         Sfx.be();
-                        [-1, 1].slice(0, 2 - vius).forEach(s => { const o = z.enemic('ovella', c.x + s * 150, c.y + 60); if (o) { z.boiraPuf(o.spr.x, o.spr.y); o.fins = ara + 900; } });   // mai més de dues alhora
+                        z.animaPastor(e, 'crida', 900);
+                        [-1, 1, 0].slice(0, max - vius).forEach(sg => { const o = z.enemic('ovella', c.x + (sg || 1) * (sg ? 150 : 40), c.y + (sg ? 60 : 170)); if (o) { z.boiraPuf(o.spr.x, o.spr.y); o.fins = ara + 900; } });   // mai més de dues (tres a la fase 2) alhora
                     }
-                } else if (ara > e.proxCarrega && dist < 440) {
-                    e.estat = 'apunta'; e.fins = ara + (fase2 ? 550 : 800); e.ang = cap;
+                } else if (ara > e.proxCarrega && dist < 520) {
+                    e.estat = 'apunta'; e.fins = ara + (fase2 ? 430 : 620); e.ang = cap;
                     e.spr.setTint(0xff8080);
+                    z.animaPastor(e, 'apunta', Math.round((e.fins - ara) * 1.1));
                     Sfx.carrega();
                 }
             }
@@ -1100,6 +1111,16 @@ Object.assign(ZonaBase.prototype, {
         this.enemics = this.enemics.filter(x => x !== e);
     },
 
+    // Posa una animació del full del Pastor de Boira (assets/enemics/pastor_<nom>.webp), si hi és. dur: durada (ms) per ajustar-la al que dura l'atac.
+    animaPastor(e, nom, dur) {
+        const k = 'pastor_' + nom;
+        if (!e || !e.spr || !e.spr.active || !this.anims.exists(k)) return false;
+        if (e.animPastor === nom && !dur && e.spr.anims.isPlaying) return true;
+        e.animPastor = nom;
+        e.spr.play(dur ? { key: k, duration: dur } : k, true);
+        return true;
+    },
+
     // Final del combat contra el Pastor de Boira
     pastorDerrotat(e) {
         const c = e.spr.body.center;
@@ -1111,11 +1132,13 @@ Object.assign(ZonaBase.prototype, {
             o.mort = true; o.spr.body.enable = false; this.boiraPuf(o.spr.x, o.spr.y);
             this.tweens.add({ targets: [o.spr, o.ombra], alpha: 0, duration: 500, onComplete: () => this.retirar(o) });
         });
-        this.tweens.add({ targets: e.spr, angle: 80, duration: 400 });
+        e.spr.clearTint(); e.spr.body.setVelocity(0);
         this.ui().actualitzarHUD();
-        this.time.delayedCall(900, () => this.ui().obrirDialeg(DIALEGS.aldreuDerrotat(Estat), () => {
+        // (la música de boss continua durant la conversa, fins que el Pastor se'n va)
+        this.time.delayedCall(700, () => this.ui().obrirDialeg(DIALEGS.aldreuDerrotat(Estat), () => {
             this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
             this.granRosari('pastorGra', 'Pastor de Boira vençut');
+            Joc.musicaZona(this, 1500);
             Estat.desar();
         }));
     },
@@ -1139,7 +1162,7 @@ Object.assign(ZonaBase.prototype, {
         if (Estat.te('cinta_nena') && !this.cintaGastada) {
             this.cintaGastada = true;
             this.invulnerableFins = ara + 1100;
-            this.flotant(this.ineu.x, this.ineu.y - 150, 'El llaç et protegeix', '#e0a0c0');
+            this.llum(this.ineu.x, this.ineu.y - 70, 0xf0a8c8);          // (sense text: el Llaç s'explica quan te'l dona la Nena)
             Sfx.escut();
             return;
         }

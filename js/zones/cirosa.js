@@ -199,7 +199,7 @@ class ZonaCirosa extends ZonaBase {
         if (!this.aldreuHaCridat) {
             this.aldreuHaCridat = true;
             this.ineu.body.setVelocity(0);
-            this.flotant(1400, 500, 'Ineu!', '#e0a0ff');
+            Joc.iniciarMusica(this, 0, 'musica_boss', 600);          // la música de boss comença quan el Pastor et crida, i dura fins que se'n va
         }
         this.time.delayedCall(500, () => {
             const ui = this.ui();
@@ -245,25 +245,32 @@ class ZonaCirosa extends ZonaBase {
         return true;
     }
 
-    // Vençut, el Pastor cau de genolls i la boira li surt del cos
+    // Vençut, el Pastor cau a terra (full 'cau': es queda al darrer fotograma) i la boira li surt del cos. Mai es deforma el dibuix.
     aldreuAgenollat(fet) {
         const e = this.bossCaigut;
         if (!e || !e.spr.active) { fet(); return; }
-        this.tweens.add({ targets: e.spr, angle: 0, scaleY: e.spr.scaleY * 0.78, duration: 500 });
+        e.spr.setFlipX(e.spr.x > this.ineu.x ? true : false);
+        this.animaPastor(e, 'cau');
         const p = this.add.particles(e.spr.x, e.spr.y - 60, 'boira', { speed: { min: 20, max: 70 }, lifespan: 1600, scale: { start: 0.8, end: 2.5 }, alpha: { start: 0.6, end: 0 }, tint: [0x9a50ff, 0xb88aff], quantity: 2, frequency: 60 }).setDepth(e.spr.depth + 1);
         this.time.delayedCall(1500, () => { p.stop(); this.time.delayedCall(1600, () => p.destroy()); fet(); });
     }
-    // S'aixeca, riu i se'n va camí avall, cap a les Gírgoles
+    // S'aixeca del terra (full 'aixeca')
+    aldreuAixeca(fet) {
+        const e = this.bossCaigut;
+        if (!e || !e.spr.active) { fet(); return; }
+        if (this.animaPastor(e, 'aixeca')) e.spr.once('animationcomplete', () => this.esperar(300, fet));
+        else this.esperar(500, fet);
+    }
+    // Se'n va camí avall, cap a les Gírgoles, caminant (full 'camina'); s'esvaeix a mesura que s'allunya
     aldreuMarxa(fet) {
         const e = this.bossCaigut;
         if (!e || !e.spr.active) { fet(); return; }
-        this.tweens.add({ targets: e.spr, scaleY: e.spr.scaleY / 0.78, duration: 400, onComplete: () => {
-            this.flotant(e.spr.x, e.spr.y - 160, 'je, je, je...', '#d8c8ff');
-            if (e.spr.body) e.spr.body.enable = false;
-            this.tweens.add({ targets: e.spr, angle: { from: -4, to: 4 }, yoyo: true, repeat: -1, duration: 160 });
-            this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), x: 580, y: 1150, duration: 2600, onComplete: () => {
-                this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), alpha: 0, duration: 400, onComplete: fet });
-            } });
+        if (e.spr.body) e.spr.body.enable = false;
+        const x1 = 580, y1 = 1150;
+        e.spr.setFlipX(x1 < e.spr.x);
+        this.animaPastor(e, 'camina');
+        this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), x: x1, y: y1, duration: 3000, onComplete: () => {
+            this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), alpha: 0, duration: 400, onComplete: fet });
         } });
     }
 
@@ -312,7 +319,6 @@ class ZonaCirosa extends ZonaBase {
         this.tancarArena();
         // El ramat adormit es desperta, una ovella rere l'altra
         this.ramat.forEach((o, i) => { if (!o.mort) o.fins = this.time.now + 700 + i * 500; });
-        this.flotant(1400, 520, 'Be-e-e-e!', '#e0a0ff');
     }
 }
 
