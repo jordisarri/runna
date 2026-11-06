@@ -184,8 +184,8 @@ class ZonaBase extends Phaser.Scene {
         const c = this.config;
         Estat.dades.zona = this.scene.key;
         Estat.posaFlag('visitada_' + this.scene.key); // el mapa només mostra el que s'ha visitat
-        // Si s'hi arriba després d'una derrota (el Pare Jordà et recull), no sona res fins que es tanca el diàleg; llavors entra la música de la zona
-        if (Estat.caigut) { Joc.musicaPendent = null; Joc.aturarMusica(); } else Joc.musicaZona(this);
+        // Si s'hi arriba després d'una derrota (el Pare Jordà et recull), sona la música de l'església durant tota l'escena; en acabar entra la de la zona
+        if (Estat.caigut) Joc.iniciarMusica(this, 0, Joc.MUSICA_ZONES.ZonaEsglesia, 1500); else Joc.musicaZona(this);
         const uiB = this.ui();                         // si es venia d'un combat de boss (o s'hi ha caigut), fora barra i franges
         if (uiB && uiB.boss) uiB.amagarBarraBoss(true);
         if (uiB && uiB.frangesG) uiB.franges(false, 10);
@@ -275,18 +275,46 @@ class ZonaBase extends Phaser.Scene {
         const veu = [I, this.fantasma, this.ombraIneu].filter(Boolean);
         veu.forEach(o => o.setVisible(false));
         this.canviant = true;
-        this.time.delayedCall(1300, () => {
-            terra.setTexture('jordi_desperta');
-            this.despertarImg = terra;
-            ui.obrirDialeg(dialeg, () => {
-                this.despertarImg = null;
-                terra.destroy();
-                veu.forEach(o => o.setVisible(true));
-                this.canviant = false;           // (el cicle torna a córrer i la càmera del diàleg es restableix sola)
-                Joc.musicaZona(this, 3000);      // ara sí: la música de la zona, que entra poc a poc
-            });
-            this.camaraDialeg(true);             // el cicle no corre mentre dura aquesta escena: cal buscar-hi la càmera aquí, perquè el diàleg no tapi el Pare Jordà
-        });
+        // L'Ineu és a terra i no passa res fins que el jugador fa clic, toca la pantalla o prem ESPAI/ENTER: llavors apareix el Pare Jordà i comença el diàleg
+        let fase = 0;                                   // 0: a terra, esperant · 1: diàleg · 2: acabat
+        const llest = this.time.now + 900;              // un instant perquè un toc o una tecla d'abans no es salti l'escena
+        const avis = ui.add.text(AMPLE / 2, ALT - 230, 'Toca la pantalla o prem ESPAI', estilText(24, '#f1e3b6', { stroke: '#1a120b', strokeThickness: 5 })).setOrigin(0.5).setAlpha(0).setDepth(60);
+        ui.tweens.add({ targets: avis, alpha: 0.9, duration: 700, delay: 1200, yoyo: true, repeat: -1, hold: 500 });
+        const tecles = ['SPACE', 'ENTER', 'E'];
+        let alAccio;
+        const neteja = () => {
+            tecles.forEach(k => this.input.keyboard.off('keydown-' + k, alAccio));
+            ui.input.off('pointerdown', alAccio);
+            if (avis.active) { ui.tweens.killTweensOf(avis); avis.destroy(); }
+        };
+        alAccio = ev => {
+            const esTecla = !!(ev && ev.key !== undefined);
+            if (esTecla && ev.repeat) return;
+            if (fase === 0) {
+                if (this.time.now < llest) return;
+                fase = 1;
+                if (avis.active) { ui.tweens.killTweensOf(avis); avis.destroy(); }
+                // un instant després, perquè el mateix toc no avanci també la primera pàgina
+                this.time.delayedCall(30, () => {
+                    terra.setTexture('jordi_desperta');
+                    this.despertarImg = terra;
+                    ui.obrirDialeg(dialeg, () => {
+                        fase = 2;
+                        neteja();
+                        this.despertarImg = null;
+                        terra.destroy();
+                        veu.forEach(o => o.setVisible(true));
+                        this.canviant = false;           // (el cicle torna a córrer i la càmera del diàleg es restableix sola)
+                        ui.accioTactil = false;          // un toc que hagi quedat pendent no ha de fer cap acció en tornar el control
+                        Joc.musicaZona(this, 3000);      // ara la música de la zona, que entra poc a poc
+                    });
+                    this.camaraDialeg(true);             // el cicle no corre mentre dura aquesta escena: cal buscar-hi la càmera aquí, perquè el diàleg no tapi el Pare Jordà
+                });
+            } else if (fase === 1 && esTecla && ui.dialeg && !ui.menuObert) ui.avancar();      // el cicle de la zona no corre mentre dura l'escena: el teclat s'ha de llegir aquí (el toc ja el llegeix la UI)
+        };
+        tecles.forEach(k => this.input.keyboard.on('keydown-' + k, alAccio));
+        ui.input.on('pointerdown', alAccio);
+        this.events.once('shutdown', neteja);
     }
 
     ui() { return this.scene.get('UI'); }

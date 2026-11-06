@@ -2843,46 +2843,46 @@ function pintarAltarPedra(ctx, w, h, ornaments = true) {
         const g = ctx.createLinearGradient(x, y, x + ww, y + hh); g.addColorStop(0, clar); g.addColorStop(1, fosc);
         ctx.fillStyle = g; ctx.fillRect(x, y, ww, hh); ctx.strokeStyle = C; ctx.lineWidth = 1.8; ctx.strokeRect(x, y, ww, hh);
     };
-    // Altar de marbre rosat fosc, com el del Santuari: llosa ampla a dalt, cos bombat com un sarcòfag, coll estret i sòcol llis
-    const MC = '#241628';                                        // contorn violeta molt fosc
+    // Altar de marbre rosat (de to taronja i marró clar), com el del Santuari: llosa ampla a dalt, cos bombat com un sarcòfag, coll estret i sòcol llis
+    const MC = '#3a1f10';                                        // contorn marró molt fosc
     const x0 = 6, x1 = w - 6, yTop = 38, my0 = yTop - 8;         // my0: vora de davant de la taula (hi van els canelobres, el calze i el llibre)
     let llavor = 7; const az = () => (llavor = (llavor * 16807) % 2147483647) / 2147483647;
     const tacar = (forma, n) => {                                // taquetes i vetes del marbre, dins d'una forma
         ctx.save(); forma(); ctx.clip();
         for (let k = 0; k < n; k++) {
             const x = az() * w, y = az() * h, r = 0.6 + az() * 1.5;
-            ctx.fillStyle = az() < 0.5 ? '#c9a2b8' : '#2e1b2c'; ctx.globalAlpha = 0.2 + az() * 0.3;
+            ctx.fillStyle = az() < 0.5 ? '#f3cfa4' : '#6a3418'; ctx.globalAlpha = 0.2 + az() * 0.3;
             ctx.beginPath(); ctx.ellipse(x, y, r * 1.7, r, 0, 0, Math.PI * 2); ctx.fill();
         }
         ctx.globalAlpha = 1; ctx.restore();
     };
     const vertical = (ya, yb, c0, c1) => { const g = ctx.createLinearGradient(0, ya, 0, yb); g.addColorStop(0, c0); g.addColorStop(1, c1); return g; };
     // Sòcol (llis, més estret que el cos)
-    ctx.fillStyle = vertical(86, 98, '#5e4357', '#35232f'); ctx.fillRect(20, 86, w - 40, 12);
+    ctx.fillStyle = vertical(86, 98, '#b4703f', '#7a4424'); ctx.fillRect(20, 86, w - 40, 12);
     ctx.strokeStyle = MC; ctx.lineWidth = 1.8; ctx.strokeRect(20, 86, w - 40, 12);
-    ctx.fillStyle = 'rgba(255,225,240,0.28)'; ctx.fillRect(22, 87, w - 44, 1.6);
+    ctx.fillStyle = 'rgba(255,232,196,0.35)'; ctx.fillRect(22, 87, w - 44, 1.6);
     // Cos bombat: ample a mitja alçada i que es tanca cap al coll
     const cos = () => {
         ctx.beginPath(); ctx.moveTo(14, 41); ctx.bezierCurveTo(3, 49, 3, 67, 25, 80); ctx.lineTo(28, 86); ctx.lineTo(w - 28, 86); ctx.lineTo(w - 25, 80);
         ctx.bezierCurveTo(w - 3, 67, w - 3, 49, w - 14, 41); ctx.closePath();
     };
-    const gMarbre = ctx.createLinearGradient(0, 0, w, 0); gMarbre.addColorStop(0, '#8a6280'); gMarbre.addColorStop(0.5, '#6a475e'); gMarbre.addColorStop(1, '#44303e');
+    const gMarbre = ctx.createLinearGradient(0, 0, w, 0); gMarbre.addColorStop(0, '#dc9660'); gMarbre.addColorStop(0.5, '#b87040'); gMarbre.addColorStop(1, '#85502c');
     cos(); ctx.fillStyle = gMarbre; ctx.fill();
     tacar(cos, 90);
     ctx.save(); cos(); ctx.clip();
-    ctx.fillStyle = vertical(41, 86, 'rgba(24,10,28,0)', 'rgba(24,10,28,0.38)'); ctx.fillRect(0, 41, w, 46);          // s'enfosqueix cap a baix
-    ctx.fillStyle = 'rgba(24,10,28,0.4)'; ctx.fillRect(0, 41, w, 4);                                                // ombra de la llosa
-    ctx.strokeStyle = 'rgba(255,232,246,0.3)'; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
+    ctx.fillStyle = vertical(41, 86, 'rgba(70,28,8,0)', 'rgba(70,28,8,0.34)'); ctx.fillRect(0, 41, w, 46);          // s'enfosqueix cap a baix
+    ctx.fillStyle = 'rgba(70,28,8,0.38)'; ctx.fillRect(0, 41, w, 4);                                                // ombra de la llosa
+    ctx.strokeStyle = 'rgba(255,238,208,0.38)'; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
     ctx.beginPath(); ctx.moveTo(17, 47); ctx.bezierCurveTo(8, 54, 8, 66, 23, 76); ctx.stroke();                     // llum a la panxa de l'esquerra
     ctx.restore();
     cos(); ctx.strokeStyle = MC; ctx.lineWidth = 1.8; ctx.stroke();
     // Llosa: cara de davant i cara de dalt (en perspectiva)
-    ctx.fillStyle = vertical(30, 41, '#94697f', '#5c4254'); ctx.fillRect(x0, 30, x1 - x0, 11);
+    ctx.fillStyle = vertical(30, 41, '#e2a068', '#a8683a'); ctx.fillRect(x0, 30, x1 - x0, 11);
     ctx.strokeStyle = MC; ctx.lineWidth = 1.8; ctx.strokeRect(x0, 30, x1 - x0, 11);
-    ctx.fillStyle = 'rgba(255,232,246,0.35)'; ctx.fillRect(x0 + 2, 31, x1 - x0 - 4, 1.6);
+    ctx.fillStyle = 'rgba(255,238,208,0.42)'; ctx.fillRect(x0 + 2, 31, x1 - x0 - 4, 1.6);
     tacar(() => { ctx.beginPath(); ctx.rect(x0, 30, x1 - x0, 11); }, 22);
     const taula = () => { ctx.beginPath(); ctx.moveTo(x0, 30); ctx.lineTo(x0 + 8, 21); ctx.lineTo(x1 - 8, 21); ctx.lineTo(x1, 30); ctx.closePath(); };
-    taula(); ctx.fillStyle = vertical(21, 30, '#b08ca2', '#8c677d'); ctx.fill();
+    taula(); ctx.fillStyle = vertical(21, 30, '#f0bc88', '#d0975e'); ctx.fill();
     tacar(taula, 26);
     taula(); ctx.strokeStyle = MC; ctx.lineWidth = 1.8; ctx.stroke();
     if (!ornaments) {
