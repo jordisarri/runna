@@ -244,7 +244,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `boto_sarro`, `boto_consells` (HUD), `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
 
 
 
@@ -395,6 +395,47 @@ Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, 
 
 ---
 
+
+
+## Interfície (HUD)
+
+
+Els dos botons rodons de dalt a la dreta de la pantalla (el sarró i els consells). **Cada gràfic és el botó sencer: el marc rodó i el dibuix a dins**, tot en una sola imatge quadrada (1:1) amb el cercle tocant les quatre vores. El joc els mostra a **72 px** de joc (uns 48 px en un mòbil estret): si el dibuix té massa detall, no es llegirà. Després de generar-los, comprova que es reconeixen reduïts a 72 px.
+
+
+**Referència d'estil:** puja `art/objectes/creu.jpg` o `art/objectes/cartell.png` (objectes ja fets, amb el mateix contorn i l'ombreig a dos tons) i digues «same art style as the reference image». El marc ha de lligar amb la resta de la interfície (caixes de diàleg i menús amb vores de fusta fosca i daurat), però el botó és rodó.
+
+
+**On desar-los:** `art/ui/boto_sarro.png` i `art/ui/boto_consells.png` (la carpeta `art/ui/` és nova). Després, `node eines/convertir_webp.js boto_sarro` i `node eines/convertir_webp.js boto_consells` els treuen el fons blanc i els passen a `assets/ui/*.webp`. Mentre no hi siguin, el joc fa servir el dibuix provisional d'ara (medalló més icona fets amb codi). No cal tocar res més: apareixen sols.
+
+
+### `boto_sarro.png` → `assets/ui/boto_sarro.webp` (amplada 72) *(El botó del sarró (l'inventari i el Diari de l'Ineu; tecla I): un medalló rodó amb una bossa de cuir de monjo a dins.)*
+
+
+```
+
+Charming 2D cartoon game UI button in the same art style as the attached reference image (hand-painted cartoon game object): bold clean consistent dark outline around the whole silhouette with medium-to-fine clean inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct colour blocks (chocolate and chestnut browns, cream parchment, ochre, antique gold), two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text, no letters, square image with a 1:1 aspect ratio, the whole button is a perfect circle that touches the four edges of the image. The button is a round medallion seen straight from the front (flat, no perspective): a thick rim of dark chestnut wood with a thin antique-gold ring inside it, and inside the ring a disc of warm cream parchment with a slightly darker ochre edge, like an old Catalan monastery manuscript. Chunky, rounded, slightly squashed chibi shapes; simplified details that stay readable when the image is shown at only 72 pixels wide: few large shapes, no tiny ornaments, no fine texture. The drawing sits in the centre of the parchment disc and fills about 65% of it, with clear empty parchment all around it. Warm Catalan mountain village mood with a hint of eerie mist; never grim, never realistic. In the centre of the parchment disc: a small chunky leather satchel (a monk's shoulder bag) seen from the front: a rounded tan-brown leather bag with a big rounded flap that folds over the top, a round antique-gold buckle in the middle of the flap, a short stitched seam along the flap edge, and a thick leather strap that loops over the top of the bag like a handle. Two-tone leather (light tan and darker brown). No glow, no light effects, no symbols, no hands.
+
+```
+
+
+**Ajust:** si la bossa surt massa petita dins del disc, afegeix: «the satchel fills about 70% of the parchment disc». Si el marc surt massa gruixut o amb ornaments, afegeix: «the rim is a plain smooth wooden ring with no carvings and no gems».
+
+
+### `boto_consells.png` → `assets/ui/boto_consells.webp` (amplada 72) *(El botó de consells (l'objectiu actual; tecla O): un medalló rodó amb un pergamí enrotllat a dins.)*
+
+
+```
+
+Charming 2D cartoon game UI button in the same art style as the attached reference image (hand-painted cartoon game object): bold clean consistent dark outline around the whole silhouette with medium-to-fine clean inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct colour blocks (chocolate and chestnut browns, cream parchment, ochre, antique gold), two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text, no letters, square image with a 1:1 aspect ratio, the whole button is a perfect circle that touches the four edges of the image. The button is a round medallion seen straight from the front (flat, no perspective): a thick rim of dark chestnut wood with a thin antique-gold ring inside it, and inside the ring a disc of warm cream parchment with a slightly darker ochre edge, like an old Catalan monastery manuscript. Chunky, rounded, slightly squashed chibi shapes; simplified details that stay readable when the image is shown at only 72 pixels wide: few large shapes, no tiny ornaments, no fine texture. The drawing sits in the centre of the parchment disc and fills about 65% of it, with clear empty parchment all around it. Warm Catalan mountain village mood with a hint of eerie mist; never grim, never realistic. In the centre of the parchment disc: a rolled-up old parchment scroll lying slightly tilted, seen from the front: a cream sheet partly unrolled with a rounded roll at the top and another at the bottom, tied with a short thin red ribbon with a small bow around the middle, and three short wavy dark-brown ink lines on the sheet as if it were handwriting (no real letters, no words). Optionally a tiny goose feather quill leaning on the right side. No glow, no light effects, no symbols, no hands.
+
+```
+
+
+**Ajust:** si el pergamí es confon amb la bossa a mida petita, afegeix: «make the scroll tall and thin, clearly different from a bag, with the red ribbon as the only bright colour». Si surt text real, repeteix amb: «the lines on the scroll are only abstract wavy strokes, never letters».
+
+
+---
 
 
 ## Consells

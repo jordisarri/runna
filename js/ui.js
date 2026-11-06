@@ -201,14 +201,16 @@ class EscenaUI extends Phaser.Scene {
     // de la pantalla) als llocs on té efecte (ZonaBase.flautaActiva); no hi ha cap icona al HUD: només s'obre la seva interfície.
     crearObjectes() {
         const x = 566, y = Y_BOTONS_HUD, commuta = () => this.inventariObert ? this.tancarInventari() : this.obrirInventari();
-        this.fonsSarro = this.add.image(x, y, 'medallo').setScale(0.52 / RES).setVisible(false)
-            .setInteractive({ useHandCursor: true }).on('pointerdown', commuta);
-        this.iconaSarro = this.add.image(x, y, 'icona_sarro').setScale(0.52 / RES).setVisible(false);
+        // Cada botó és una sola imatge rodona (`boto_sarro`, `boto_consells`: vegeu CATALEG), que es mostra a 72 px de joc
+        const boto = (cx, clau, fn) => {
+            const im = this.add.image(cx, y, clau).setVisible(false).setInteractive({ useHandCursor: true }).on('pointerdown', fn);
+            im.setScale(this.textures.get(clau).customData.escala || 1 / RES);
+            return im;
+        };
+        this.fonsSarro = boto(x, 'boto_sarro', commuta);
         // Consells: un medalló amb un pergamí (tecla O) que obre l'objectiu actual
-        const xc = x - 88, commutaConsells = () => this.consellsObert ? this.tancarConsells() : this.obrirConsells();
-        this.fonsConsells = this.add.image(xc, y, 'medallo').setScale(0.52 / RES).setVisible(false)
-            .setInteractive({ useHandCursor: true }).on('pointerdown', commutaConsells);
-        this.iconaConsells = this.add.image(xc, y, 'icona_consells').setScale(0.52 / RES).setVisible(false);
+        const xc = x - 92, commutaConsells = () => this.consellsObert ? this.tancarConsells() : this.obrirConsells();
+        this.fonsConsells = boto(xc, 'boto_consells', commutaConsells);
         this.input.keyboard.on('keydown-O', commutaConsells);
         this.input.keyboard.on('keydown-I', commuta);
         this.input.keyboard.on('keydown-M', () => this.inventariObert ? this.tancarInventari() : this.obrirInventari('mapa'));
@@ -221,9 +223,8 @@ class EscenaUI extends Phaser.Scene {
     refrescaObjectes() {
         if (!this.fonsSarro) return;
         const vis = !!Estat.dades && !this.menuObert && !this.mapaObert;
-        this.fonsSarro.setVisible(vis); this.iconaSarro.setVisible(vis);
-        const visC = vis && !this.inventariObert;
-        this.fonsConsells.setVisible(visC); this.iconaConsells.setVisible(visC);
+        this.fonsSarro.setVisible(vis);
+        this.fonsConsells.setVisible(vis && !this.inventariObert);
     }
 
     // ---------------- CONSELLS (l'objectiu, només quan es vol consultar) ----------------
