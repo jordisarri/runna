@@ -221,6 +221,8 @@ class ZonaBase extends Phaser.Scene {
         this.ponFonsContinu();
         this.construirCamins();
         this.crearIneu();
+        this.events.on('postupdate', this.postFisica, this);              // (es treu en tancar l'escena: l'escena es reaprofita)
+        this.events.once('shutdown', () => this.events.off('postupdate', this.postFisica, this));
         this.posarBoiraSortides();
         this.posarBoiraGeneral();
         Grafics.alliberar(this.textures, this.scene.key);      // fora les textures grans de la zona anterior (vegeu Grafics, a assets.js)
@@ -1304,6 +1306,11 @@ class ZonaBase extends Phaser.Scene {
     // ---------------- Bucle ----------------
     update(time, delta) {
         this.cicle(time, delta);
+    }
+
+    // Les siluetes translúcides (la de l'Ineu i les dels enemics darrere les capçades) es col·loquen DESPRÉS que la física hagi mogut els cossos: si es feia dins d'update(),
+    // copiaven la posició d'abans i anaven sempre un fotograma enrere, i en caminar es veia l'Ineu amb la cara doble, tremolosa i borrosa
+    postFisica() {
         this.sincroFantasma();
         this.transparenciaCopes();
     }
