@@ -697,7 +697,7 @@ class ZonaDolmen extends ZonaBase {
             }
         };
         [[140, 1060, 1.2], [260, 1090, 1], [650, 1070, 1.1], [780, 1050, 1.25], [120, 820, 0.9], [790, 840, 1], [330, 960, 0.8], [580, 950, 0.85]].forEach(([x, y, e]) => falguera(x, y, e));
-        [[690, 900, 0.6], [140, 640, 0.7], [800, 500, 0.55]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 50, h: 18 } }));
+        [[690, 900, 0.6], [800, 500, 0.55]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 50, h: 18 } }));
         for (let n = 0, i = 0; n < 34 && i < 400; i++) {
             const x = 110 + rnd() * 680, y = 520 + rnd() * 520;
             if (Math.abs(x - sx) < 190 && y < sy + 50 && y > sy - 120) continue;            // no damunt del dolmen
