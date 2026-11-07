@@ -833,12 +833,26 @@ Object.assign(ZonaBase.prototype, {
             arma.setVisible(true).setPosition(jo.x + (e.x + aj.dx - SPRITE_INEU.ample / 2) * s, jo.y + (e.y + aj.dy - SPRITE_INEU.peus) * s)
                 .setAngle(e.a + aj.a).setScale(escalaBase * aj.e).setDepth(jo.depth + (davant ? 1 : -1));
         };
-        const alActualitzar = (anim, frame) => posa(frame);
+        // Moviment suau (js/atac_arma.js, ARMA_SUAU): l'arma es recalcula a cada imatge de pantalla, seguint una corba entre els fotogrames, en lloc de saltar d'una posició a la
+        // següent només quan canvia el fotograma de l'Ineu. Es pot treure amb ARMA_SUAU.actiu = false (o provar-ho amb ?arma=classica).
+        const suau = armaSuauActiu(), msFot = 1000 / ATAC_INEU.fps;
+        let idx = 0, tIdx = this.time.now;
+        const pintaSuau = () => {
+            if (!arma.active || !this.ineu.active) return;
+            const q = armaPosa(vista, nom, idx + Math.min(1, (this.time.now - tIdx) / msFot));
+            if (!q) { arma.setVisible(false); return; }
+            const jo = this.ineu, s = jo.scaleX * SPRITE_INEU.k;
+            arma.setVisible(true).setPosition(jo.x + (q.x - SPRITE_INEU.ample / 2) * s, jo.y + (q.y - SPRITE_INEU.peus) * s)
+                .setAngle(q.a).setScale(escalaBase * q.e).setDepth(jo.depth + (q.d ? 1 : -1));
+        };
+        const alActualitzar = (anim, frame) => { if (suau) { idx = frame.index - 1; tIdx = this.time.now; pintaSuau(); } else posa(frame); };
         this.ineu.on('animationstart', alActualitzar);
         this.ineu.on('animationupdate', alActualitzar);
+        if (suau) this.events.on('postupdate', pintaSuau);
         const net = () => {
             this.ineu.off('animationstart', alActualitzar);
             this.ineu.off('animationupdate', alActualitzar);
+            this.events.off('postupdate', pintaSuau);
             if (arma.active) arma.destroy();
             if (this.armaNet === net) this.armaNet = null;
         };

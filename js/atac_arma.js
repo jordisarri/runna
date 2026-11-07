@@ -57,3 +57,64 @@ const ATAC_AJUST = {
     tiller: {},
     espasa: {}
 };
+
+/**
+ * MOVIMENT SUAU DE L'ARMA
+ * Fins ara l'arma saltava d'una posició ajustada a mà a la següent, una per fotograma (40 per segon), i els girs grans (p. ex. de 330° a 125°) podien fer la volta llarga.
+ * Amb el mode suau, l'arma es calcula a CADA imatge de pantalla (no només a cada fotograma de l'Ineu), seguint una corba entre les posicions dels fotogrames
+ * (Catmull-Rom, amb els angles pel camí curt) just a l'instant en què es veu cada fotograma de l'Ineu. Les posicions ajustades a mà no es toquen: només es
+ * suavitzen una mica (suavitat) i s'interpolen entre elles.
+ *
+ * COM TIRAR-HO ENRERE: posa `actiu: false` aquí sota (tornes al moviment d'abans, tal com el tenies ajustat), o prova-ho sense tocar res obrint el joc amb
+ * `?arma=classica` a l'adreça (i `?arma=suau` per forçar el nou). `suavitat` va de 0 (només interpola) a 1 (esborra molt els tremolors).
+ */
+const ARMA_SUAU = { actiu: true, suavitat: 0.5 };
+
+function armaSuauActiu() {
+    const q = (typeof location !== 'undefined' && location.search) || '';
+    if (/[?&]arma=classica/.test(q)) return false;
+    if (/[?&]arma=suau/.test(q)) return true;
+    return ARMA_SUAU.actiu;
+}
+
+// Les posicions efectives de l'arma (la taula comuna + l'ajust fi d'aquesta arma) per fotograma, amb els angles continus i una mica suavitzades.
+// Retorna una llista (un element per fotograma): null si la mà és buida, o { x, y, a, e, d }. (es guarda a la memòria cau)
+const _armaPosesCache = {};
+function armaPoses(vista, nom, suavitat = ARMA_SUAU.suavitat) {
+    const clau = vista + '|' + nom + '|' + suavitat;
+    if (_armaPosesCache[clau]) return _armaPosesCache[clau];
+    const taula = ATAC_ARMA[vista] || [], aj = (ATAC_AJUST[nom] && ATAC_AJUST[nom][vista]) || [];
+    let ant = null;
+    const poses = taula.map((e, i) => {
+        if (!e) { ant = null; return null; }
+        const a = aj[i] || { dx: 0, dy: 0, a: 0, e: 1 };
+        let ang = e.a + a.a;
+        if (ant !== null) ang = ant + ((((ang - ant) % 360) + 540) % 360 - 180);              // angle continu: sempre pel camí curt
+        ant = ang;
+        return { x: e.x + a.dx, y: e.y + a.dy, a: ang, e: a.e == null ? 1 : a.e, d: a.d == null ? e.d : a.d };
+    });
+    const fi = poses.map((q, i) => {
+        if (!q || !suavitat) return q && { ...q };
+        const prev = poses[i - 1], seg = poses[i + 1];
+        if (!prev || !seg) return { ...q };                                                  // els extrems i el que té la mà buida al costat, tal qual
+        const m = k => 0.25 * prev[k] + 0.5 * q[k] + 0.25 * seg[k];
+        return { x: q.x + (m('x') - q.x) * suavitat, y: q.y + (m('y') - q.y) * suavitat, a: q.a + (m('a') - q.a) * suavitat, e: q.e, d: q.d };
+    });
+    return (_armaPosesCache[clau] = fi);
+}
+
+// La posició de l'arma a l'instant f (en fotogrames, amb decimals: 0 = principi del fotograma 0, 1 = principi del 1...). El fotograma i és «de debò» al seu mig (i + 0,5).
+// Retorna null si no s'ha de veure.
+function armaPosa(vista, nom, f, suavitat = ARMA_SUAU.suavitat) {
+    const P = armaPoses(vista, nom, suavitat), n = P.length;
+    if (!n) return null;
+    const x = Math.min(n - 1, Math.max(0, f - 0.5)), i = Math.min(n - 2, Math.floor(x)), t = x - i;
+    const a = P[i], b = P[i + 1];
+    if (!a || !b) { const q = t < 0.5 ? a : b; return q ? { ...q } : null; }                  // vora de la mà buida: la del fotograma més proper, sense interpolar
+    const p0 = P[i - 1] || a, p3 = P[i + 2] || b;                                        // (si no n'hi ha, es repeteix el de la vora)
+    const cr = k => {                                                                      // Catmull-Rom entre a i b
+        const y0 = p0[k], y1 = a[k], y2 = b[k], y3 = p3[k];
+        return 0.5 * (2 * y1 + (-y0 + y2) * t + (2 * y0 - 5 * y1 + 4 * y2 - y3) * t * t + (-y0 + 3 * y1 - 3 * y2 + y3) * t * t * t);
+    };
+    return { x: cr('x'), y: cr('y'), a: cr('a'), e: a.e + (b.e - a.e) * t, d: t < 0.5 ? a.d : b.d };
+}
