@@ -628,7 +628,7 @@ class ZonaDolmen extends ZonaBase {
     construir() {
         const { A, H, sx, sy, cx, ample, baixY, baixH, peuBosc } = DOL, x0 = cx - ample / 2, x1 = cx + ample / 2;
         Joc.detectarMusica().then(() => { if (Joc.musicaDisponible.has('jingle_runna') && !this.cache.audio.exists('jingle_runna')) { Joc.carregarMusica(this, 'jingle_runna'); this.load.start(); } });       // la fanfàrria de Runna, ja carregada quan toca
-        this.camAmunt = false;
+        this.pesCam = 0;
         this.aura = null;                      // (l'escena es reutilitza: l'aura d'una visita anterior ja no hi és)
         let llavor = 23;
         const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
@@ -920,21 +920,21 @@ class ZonaDolmen extends ZonaBase {
 
     // Les Paraules del Saber ja s'han dit: Runna surt de la pedra i és a la mà de l'Ineu, que l'alça. Raigs de llum blanca i el rètol
     // es queden fins que el jugador prem; després s'esvaeixen i l'Ineu torna a la seva pose, mirant avall
-    // Quan l'Ineu arriba a l'alçada de la placa (just quan apareix el símbol d'interacció), la càmera puja SENSE canviar el zoom: mostra el dolmen, l'espasa, les flors i un
-    // tros dels peus dels arbres de darrere; quan se n'allunya (o puja a la llosa), torna a seguir-lo.
+    // Quan l'Ineu s'acosta a la placa (on apareix el símbol d'interacció), la càmera puja de mica en mica SENSE canviar el zoom, per veure el dolmen, l'espasa i les flors;
+    // si se n'allunya (o puja a la llosa) torna a seguir-lo. És un desplaçament continu del seguiment, sense interruptors, perquè no faci salts.
     camPlaca() {
         const g = this.placaGeo; if (!g) return;
-        const I = this.ineu, d = Phaser.Math.Distance.Between(I.x, I.y, g.sx, g.PY + 12);
+        const I = this.ineu, cam = this.cameras.main;
+        if (this.camCinema) { this.pesCam = 0; return; }                          // una altra escena porta la càmera: no hi toquem
+        const d = Phaser.Math.Distance.Between(I.x, I.y, g.sx, g.PY + 12);
         const lliure = !this.alt && !this.cinema && !this.canviant;
-        if (!this.camAmunt && lliure && d < 135) {
-            this.camAmunt = true;
-            const zoom = this.zoomZona || ZOOM_CAMERA, vis = (ALT - ALT_HUD) / zoom;
-            const cy = (this.espY - 195) + vis / 2;                                  // el cim de la vista, just damunt l'espasa i les flors (sense arbres)
-            this.enquadrar(DOL.sx, cy, zoom, 1100, null, 0);
-        } else if (this.camAmunt && (!lliure || d > 180)) {
-            this.camAmunt = false;
-            this.alliberarCamera(900);
-        }
+        // Pes de l'enquadrament (0 = segueix l'Ineu com sempre, 1 = vista alta): puja i baixa de mica en mica amb la distància, sense interruptors ni salts
+        const t = lliure ? 1 - Phaser.Math.Clamp((d - 135) / 190, 0, 1) : 0, ease = t * t * (3 - 2 * t);
+        this.pesCam = (this.pesCam || 0) + (ease - (this.pesCam || 0)) * 0.08;
+        const zoom = this.zoomZona || ZOOM_CAMERA, vis = (ALT - ALT_HUD) / zoom;
+        const cy = (this.espY - 195) + vis / 2;                                     // el cim de la vista, just damunt l'espasa i les flors (sense arbres)
+        const base = this.cameraFollowOffsetY || 0;
+        cam.followOffset.y = base + this.pesCam * ((I.y - cy) - base);
     }
 
     // Dibuixa (fix) un medalló de pedra a la placa, al seu cercle, amb una llum suau del seu color
