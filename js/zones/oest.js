@@ -1012,7 +1012,8 @@ class ZonaDolmen extends ZonaBase {
 
     alcarRunna(fet) {
         const I = this.ineu, cam = this.cameras.main, ui = this.ui(), { sx, sy } = DOL;
-        Joc.jingleRunna(this);
+        let fanfaraAcabada = false;                                           // fins que no acaba la fanfàrria no es pot passar l'escena
+        Joc.jingleRunna(this, () => { fanfaraAcabada = true; });
         if (this.espClavada) { this.espClavada.destroy(); this.espClavada = null; }
         this.tweens.killTweensOf(this.resplendor); this.resplendor.setAlpha(0);
         if (this.aura) { this.aura.forEach(a => { this.tweens.killTweensOf(a); if (a.stop) a.stop(); this.tweens.add({ targets: a, alpha: 0, duration: 600, onComplete: () => a.destroy() }); }); this.aura = null; }
@@ -1041,7 +1042,7 @@ class ZonaDolmen extends ZonaBase {
         const t2 = ui.add.text(AMPLE / 2, ALT * 0.3 + 86, "l'espasa del Miracle", estilText(36, '#f2e6c8', { fontStyle: 'italic', stroke: '#2a1808', strokeThickness: 6 })).setOrigin(0.5).setDepth(500).setAlpha(0);
         ui.tweens.add({ targets: [t1, t2], alpha: 1, duration: 700 });
         ui.tweens.add({ targets: t1, scale: { from: 0.8, to: 1 }, duration: 900, ease: 'Back.easeOut' });
-        this.esperar(900, () => this.esperarClic(() => {
+        const alClic = () => {
             const coses = [raigs, halo, fosc];
             this.tweens.killTweensOf(halo);
             this.tweens.add({ targets: coses, alpha: 0, duration: 700, onComplete: () => coses.forEach(o => o.destroy()) });
@@ -1052,6 +1053,7 @@ class ZonaDolmen extends ZonaBase {
                 this.posarDireccio('avall', false, 'down');
                 this.esperar(400, fet);
             });
-        }));
+        };
+        this.esperar(900, () => { const espera = () => { if (fanfaraAcabada) this.esperarClic(alClic); else this.time.delayedCall(150, espera); }; espera(); });
     }
 }

@@ -172,14 +172,30 @@ const Joc = {
         });
     },
 
-    // La fanfàrria de Runna (jingle_runna) en alçar l'espasa: la música de fons s'abaixa del tot mentre sona i el jingle sona fort; si el fitxer no hi és, sona la
-    // fanfàrria del joc sintetitzada (el leitmotiv amb orgue)
-    jingleRunna(scene) {
+    // La fanfàrria de Runna (jingle_runna) en alçar l'espasa: mentre dura, la música de fons NO se sent (volum 0) i, en acabar, torna. fi() es crida quan la
+    // fanfàrria ha acabat (l'escena no es pot passar fins llavors). Si el fitxer no hi és, sona la fanfàrria del joc sintetitzada (el leitmotiv amb orgue).
+    jingleRunna(scene, fi) {
+        const m = Joc.musica;
+        let acabat = false;
+        const acaba = () => {
+            if (acabat) return; acabat = true;
+            if (m && Joc.musica === m && m.isPlaying) m.setVolume(0.6);
+            if (fi) fi();
+        };
+        if (m && m.isPlaying) m.setVolume(0);
+        scene.time.delayedCall(30000, acaba);                                  // (per seguretat: mai no es queda encallat)
         Joc.detectarMusica().then(() => {
-            const m = Joc.musica;
-            if (m && m.isPlaying) { m.setVolume(0.08); scene.time.delayedCall(9000, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
-            if (!Joc.musicaDisponible.has('jingle_runna')) { Sfx.fanfara(); Joc.leitmotiv(scene, 'orgue'); return; }
-            const play = () => { const s = scene.sound.add('jingle_runna', { volume: 0.9 }); s.once('complete', () => s.destroy()); s.play(); };
+            if (!Joc.musicaDisponible.has('jingle_runna')) {
+                Sfx.fanfara();
+                const d = Joc.leitmotiv(scene, 'orgue', true) || 4;      // (la versió curta)
+                scene.time.delayedCall(d * 1000 + 500, acaba);
+                return;
+            }
+            const play = () => {
+                const s = scene.sound.add('jingle_runna', { volume: 0.9 });
+                s.once('complete', () => { s.destroy(); scene.time.delayedCall(300, acaba); });
+                s.play();
+            };
             if (scene.cache.audio.exists('jingle_runna')) play();
             else { scene.load.once('filecomplete-audio-jingle_runna', play); Joc.carregarMusica(scene, 'jingle_runna'); scene.load.start(); }
         });
