@@ -122,6 +122,7 @@ class ZonaBoscPi extends ZonaBase {
             }
         });
         Object.defineProperty(puntPlaca, 'cameraCossos', { get: () => [this.pi] });         // en llegir la placa, el pi es veu sencer (la càmera s'allunya si cal)
+        puntPlaca.centrarCamera = true;                                                     // i la càmera panegi suau fins que el pi (i l'Ineu) queden centrats entre el HUD i el quadre de text
         this.interactiu(barX, camiY, 190, () => DIALEGS.piOest(Estat), { altura: 150, actiu: () => !Estat.flag('piObert') && this.ineu.x < barX + 40 });
         // (la tarota no es pot tocar lliurement a prop del pi: només s'obre en llegir la placa, quan se'n tanca el diàleg)
 
@@ -185,13 +186,18 @@ class ZonaBoscPi extends ZonaBase {
         else this.time.delayedCall(120, () => this.desenquadrarPi());
     }
 
-    enquadrarPi() {
-        if (this.camCinema || !this.pi || !this.pi.active || this.ineu.x < PI3.barX + 40) return;
-        const H = ALT - ALT_HUD, reserva = 435 * Math.min(1, (ALT - 440) / 435);      // el pergamí de la tarota tapa els px de baix (més petit en pantalles baixes)
-        const dalt = this.pi.y - this.pi.displayHeight - 20, baix = Math.max(this.ineu.y, PI3.plY) + 30;
-        const z = Math.min(ZOOM_CAMERA, (H - reserva - 30) / (baix - dalt));
+    // El pi es posa al MIG de l'espai lliure (entre el HUD de dalt i el pergamí de la tarota, o el quadre de text quan parla), amb un paneig suau: abans quedava enganxat a dalt
+    // i amb molt de buit a sota. Amb la tarota oberta es centra només el pi (l'Ineu surt gran en primer pla); amb el quadre de text, el pi i l'Ineu.
+    enquadrarPi(ambTexte) {
+        if ((this.camCinema && !this.camPi) || !this.pi || !this.pi.active || this.ineu.x < PI3.barX + 40) return;      // (si ja som al pla del pi, només es reenquadra)
+        const H = ALT - ALT_HUD, ui = this.ui();
+        const reserva = ambTexte ? (ui.alcadaCaixaDialeg || 360) + 40 : 435 * Math.min(1, (ALT - 440) / 435);      // el pergamí de la tarota (més petit en pantalles baixes) o el quadre de text
+        const dalt = this.pi.y - this.pi.displayHeight - 20, baix = ambTexte ? Math.max(this.ineu.y, PI3.plY) + 30 : PI3.plY + 20;
+        const top = TOP_HUD + 10, lliure = H - reserva - top - 10;
+        const z = Math.min(ZOOM_CAMERA, lliure / (baix - dalt));
         this.camPi = true;
-        this.enquadrar(PI3.piX, (dalt + baix) / 2, Math.max(PI3_ZOOM_MIN, z), 800, null, reserva);
+        // enquadrar() posa el punt a la meitat de [0, H - reserva]; es compensa el HUD perquè el centre sigui el de [TOP_HUD, H - reserva]
+        this.enquadrar(PI3.piX, (dalt + baix) / 2 - top / (2 * Math.max(PI3_ZOOM_MIN, z)), Math.max(PI3_ZOOM_MIN, z), 1000, null, reserva);
     }
 
     desenquadrarPi() {
@@ -247,12 +253,15 @@ class ZonaBoscPi extends ZonaBase {
         this.cameras.main.shake(500, 0.004);
         this.canviarPi(3);
         this.despertarBarrera();
-        this.time.delayedCall(5400, () => this.ui().obrirDialeg(DIALEGS.piHistoria(Estat), () => {
-            Estat.posaObjectiu(PROGRES.pista(Estat));
-            Estat.desar();
-            this.camPiFins = 0;
-            this.desenquadrarPi();
-        }));
+        this.time.delayedCall(5400, () => {
+            this.ui().obrirDialeg(DIALEGS.piHistoria(Estat), () => {
+                Estat.posaObjectiu(PROGRES.pista(Estat));
+                Estat.desar();
+                this.camPiFins = 0;
+                this.desenquadrarPi();
+            });
+            this.enquadrarPi(true);                                         // quan parla, el pi queda centrat a l'espai que deixa el quadre de text
+        });
     }
 }
 

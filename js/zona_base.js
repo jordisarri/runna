@@ -1437,9 +1437,16 @@ class ZonaBase extends Phaser.Scene {
             // On queden ara (y de pantalla del cap i dels peus)
             const pantalla = (m, z, wy) => ({ dalt: ALT_HUD + (m.dalt - wy) * z, baix: ALT_HUD + (m.baix - wy) * z });
             const be = (z, wy) => mides.every(m => { const q = pantalla(m, z, wy); return q.dalt >= TOP && q.baix <= m.lim; });
-            if (be(Z, wv.y)) return;                                    // ja es veuen bé: la càmera no es mou
+            const centrar = !!(p && p.centrarCamera);                   // (el pi: tot el conjunt es posa al mig de l'espai lliure, entre el HUD i el quadre)
+            if (!centrar && be(Z, wv.y)) return;                        // ja es veuen bé: la càmera no es mou
             // Es busca el zoom més gran (fins a 0,6) en què hi caben; la y de la vista s'escull perquè els peus més baixos quedin just al seu límit
             let z2 = Z, wy2 = wv.y, trobat = false;
+            if (centrar) {
+                const dalt = Math.min(...mides.map(m => m.dalt)), baix = Math.max(...mides.map(m => m.baix));
+                z2 = Phaser.Math.Clamp((LIM - TOP) / (baix - dalt), 0.6, Z);
+                wy2 = (dalt + baix) / 2 - ((TOP + LIM) / 2 - ALT_HUD) / z2;
+                trobat = true;
+            }
             for (let z = Z; z >= 0.6 - 1e-6 && !trobat; z -= 0.05) {
                 const wy = Math.max(...mides.map(m => m.baix - (m.lim - ALT_HUD) / z));            // els peus més exigents al seu límit
                 if (be(z, wy)) { z2 = z; wy2 = wy; trobat = true; }

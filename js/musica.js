@@ -173,7 +173,7 @@ class EscenaMusica extends Phaser.Scene {
         const k = this.input.keyboard;
         const TECLES = { 1: ['ONE', 'NUMPAD_ONE', 'LEFT', 'A'], 2: ['TWO', 'NUMPAD_TWO', 'SPACE', 'UP', 'DOWN', 'W', 'S'], 3: ['THREE', 'NUMPAD_THREE', 'RIGHT', 'D'] };
         Object.entries(TECLES).forEach(([n, noms]) => noms.forEach(nom => k.on('keydown-' + nom, () => this.nota(Number(n), true))));
-        k.on('keydown-ESC', () => { if (this.llico && this.actuant) this.tancar(true); else this.tancar(false, this.actuant || undefined); });       // durant la peça completa, ESC la salta i l'efecte es dóna igual
+        k.on('keydown-ESC', () => { if (this.capaPerSobre()) return; if (this.llico && this.actuant) this.tancar(true); else this.tancar(false, this.actuant || undefined); });       // durant la peça completa, ESC la salta i l'efecte es dóna igual
 
         if (llico) {
             this.titol.setText('Lliçó: ' + this.melodia.nom);
@@ -185,10 +185,16 @@ class EscenaMusica extends Phaser.Scene {
                 this.estat.setText('Encara no coneixes cap cant.');
             }
             add(this.add.text(cx + MUS_W / 2 - 34, T + 40, '✕', { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#6a1f12', padding: { x: 8, y: 4 }, resolution: 2 })
-                .setOrigin(0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => this.tancar(false)));
+                .setOrigin(0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => { if (!this.capaPerSobre()) this.tancar(false); }));
             this.lastTime = 0;
         }
         this.tweens.add({ targets: this.panell, alpha: 1, y: ALT * (1 - this.escPergami), duration: 350, ease: 'Sine.easeOut' });
+    }
+
+    // Hi ha el menú, el diari o l'objectiu oberts a sobre (o s'acaben de tancar): la tarota no ha de rebre ni tecles ni clics
+    capaPerSobre() {
+        const ui = this.scene.get('UI');
+        return !!ui && (ui.capaOberta || ui.time.now < ui.bloquejatFins);
     }
 
     // Fila de caselles de notes (es refà quan en cal més: la peça completa en té fins a 12)
@@ -300,7 +306,7 @@ class EscenaMusica extends Phaser.Scene {
     }
 
     nota(n, humana) {
-        if (this.bloquejat || this.tancat) return;
+        if (this.bloquejat || this.tancat || this.capaPerSobre()) return;
         this.llum(n);
         this.impulsPrimerPla(n);
         this.entrada.push(n);

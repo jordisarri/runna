@@ -171,7 +171,8 @@ class EscenaUI extends Phaser.Scene {
         this.crearObjectes();
 
         this.input.keyboard.on('keydown-ESC', () => {
-            if (this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
+            if (this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
+            if (this.game.scene.isActive('Musica') && !this.capaOberta) return;          // amb la tarota oberta, ESC és de la tarota (tret que hi hagi el diari o el menú a sobre)
             if (this.consellsObert) this.tancarConsells();
             else if (this.inventariObert) this.tancarInventari();
             else if (this.mapaObert) this.tancarMapa();
@@ -240,7 +241,7 @@ class EscenaUI extends Phaser.Scene {
 
     // ---------------- CONSELLS (l'objectiu, només quan es vol consultar) ----------------
     obrirConsells() {
-        if (this.consellsObert || this.dialeg || this.menuObert || this.inventariObert || this.mapaObert || !Estat.dades || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
+        if (this.consellsObert || this.dialeg || this.menuObert || this.inventariObert || this.mapaObert || !Estat.dades || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
         this.consellsObert = true;
         const w = 640, text = Estat.objectiu() || 'De moment no tens cap encàrrec. Passeja i parla amb la gent.';
         const cont = this.add.container(0, 0).setDepth(80);
@@ -274,7 +275,7 @@ class EscenaUI extends Phaser.Scene {
 
     // El sarró obre el Diari de l'Ineu (js/diari.js): missió, encàrrecs, objectes i mapa
     obrirInventari(pestanya) {
-        if (this.dialeg || this.menuObert || !Estat.dades || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
+        if (this.dialeg || this.menuObert || !Estat.dades || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
         DIARI.obrir(this, pestanya);
     }
 
@@ -285,7 +286,20 @@ class EscenaUI extends Phaser.Scene {
         this.bloquejatFins = this.time.now + 200;
     }
 
-    update() { this.refrescaObjectes(); }
+    // El menú, el diari i l'objectiu es poden obrir també amb la tarota oberta (per consultar els cants): mentre són oberts, el HUD passa per damunt de la tarota
+    // (que no rep tecles ni clics) i, en tancar-los, la tarota torna al davant
+    get capaOberta() { return !!(this.menuObert || this.inventariObert || this.consellsObert || this.mapaObert); }
+
+    ordreMusica() {
+        const m = this.game.scene;
+        if (!m.isActive('Musica')) { this.musicaDavant = null; return; }
+        const damunt = this.capaOberta;
+        if (this.musicaDavant === damunt) return;
+        this.musicaDavant = damunt;
+        m.bringToTop(damunt ? 'UI' : 'Musica');
+    }
+
+    update() { this.refrescaObjectes(); this.ordreMusica(); }
 
     // La zona consulta això per saber si l'Ineu pot moure's
     get bloquejat() {
@@ -849,7 +863,7 @@ class EscenaUI extends Phaser.Scene {
     }
 
     obrirMenu() {
-        if (this.dialeg || this.game.scene.isActive('Musica') || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
+        if (this.dialeg || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
         this.menuObert = true;
         this.seleccio = 0;
         this.premut = false;
