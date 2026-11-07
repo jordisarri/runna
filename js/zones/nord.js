@@ -883,12 +883,15 @@ class ZonaTiller extends ZonaBase {
         }), fet);
     }
 
-    // Una fulla daurada es desprèn de la branca més alta i cau, giravoltant, fins a l'Ineu
+    // El medalló de pedra que el Til·ler custodiava entre les branques cau de la capçada, giravoltant, fins a l'Ineu
     fullaCau(fet) {
-        const f = this.add.ellipse(TIL_X, TIL_Y - 330, 18, 28, 0xf0c040, 1).setStrokeStyle(2, 0x8a6a10).setDepth(99000);
+        const clau = this.textures.exists('emblema_arbre') ? 'emblema_arbre' : null;
+        const f = clau ? this.add.image(TIL_X, TIL_Y - 330, clau).setDisplaySize(52, 52).setDepth(99000) : this.add.circle(TIL_X, TIL_Y - 330, 18, 0xb8b2a4, 1).setDepth(99000);
+        Sfx.xiu(1.0, 0.12, 'bandpass', 500, 1600, 1.4); this.cameras.main.shake(500, 0.0015);
+        const cua = this.add.particles(0, 0, 'espurna', { follow: f, speed: { min: 5, max: 25 }, lifespan: 600, scale: { start: 0.35, end: 0 }, alpha: { start: 0.8, end: 0 }, tint: [0xd8f0a0, 0xffffff], frequency: 40, blendMode: 'ADD' }).setDepth(98999);
         this.tweens.add({ targets: f, angle: 720, duration: 2400 });
-        this.tweens.add({ targets: f, x: { value: this.ineu.x, ease: 'Sine.easeInOut' }, y: this.ineu.y - 70, duration: 2400, onComplete: () => {
-            f.destroy(); this.llum(this.ineu.x, this.ineu.y - 70, 0xf0c040, fet);
+        this.tweens.add({ targets: f, x: { value: this.ineu.x, ease: 'Sine.easeInOut' }, y: this.ineu.y - 70, duration: 2400, ease: 'Quad.easeIn', onComplete: () => {
+            f.destroy(); cua.stop(); this.time.delayedCall(700, () => cua.destroy()); Sfx.cop(false); this.llum(this.ineu.x, this.ineu.y - 70, 0xd8f0a0, fet);
         } });
     }
 

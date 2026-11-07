@@ -604,8 +604,8 @@ class ZonaDipositos extends ZonaBase {
 // llum, falgueres, flors i una tanca vella. Al mig, el dolmen de la pantalla del títol, amb Runna clavada a dalt de la
 // llosa i animalons al voltant que s'escapen quan l'Ineu s'hi acosta.
 const DOL = {
-    A: 900, H: 2200, sx: 450, sy: 760,                  // el dolmen (peu) al mig de la clariana
-    cx: 450, ample: 150, baixY: 1980, baixH: 140,       // camí: tram que puja (centre x i amplada) i tram de baix (y i gruix)
+    A: 900, H: 2050, sx: 450, sy: 760,                  // el dolmen (peu) al mig de la clariana
+    cx: 450, ample: 150, baixY: 1830, baixH: 140,       // camí: tram que puja (centre x i amplada) i tram de baix (y i gruix)
     peuBosc: 1260                                       // on s'acaba el bosc i comença la clariana
 };
 
@@ -626,6 +626,7 @@ class ZonaDolmen extends ZonaBase {
 
     construir() {
         const { A, H, sx, sy, cx, ample, baixY, baixH, peuBosc } = DOL, x0 = cx - ample / 2, x1 = cx + ample / 2;
+        this.aura = null;                      // (l'escena es reutilitza: l'aura d'una visita anterior ja no hi és)
         let llavor = 23;
         const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
         this.terra('herba_fosca', 0, 0, A, H, -1100);
@@ -653,18 +654,15 @@ class ZonaDolmen extends ZonaBase {
         const teLesTres = () => Estat.flag('placaCompleta');                  // l'espasa respon quan els tres medallons són a la placa
         this.interactiu(sx, sy + 15, RADI_GRAN, DIALEGS.dolmenBaix, { altura: 380, actiu: () => !this.alt && teLesTres() });
         // La placa de pedra davant el dolmen, centrada entre el dolmen i el camí: diu què cal per alçar Runna
-        // La placa de pedra, més gran (300 px) i ben separada del dolmen perquè no el tapi: hi van els tres medallons (un per cercle) i es veu el procés
-        const PY = sy + 215;
-        this.placaDolmen = this.posar('placa_dolmen', sx, PY, { escala: 300 / 190, col: { w: 200, h: 16 }, opac: true });
+        // La placa de pedra (230 px: més gran que abans, però no tanca el camí), separada del dolmen i de les valles i els arbres: hi van els tres medallons (un per cercle)
+        const PY = sy + 145;
+        this.placaDolmen = this.posar('placa_dolmen', sx, PY, { escala: 230 / 190, col: { w: 150, h: 16 }, opac: true });
         const PW = this.placaDolmen.displayWidth, PH = this.placaDolmen.displayHeight, PTOP = PY - PH;
         this.placaGeo = { sx, PY, PW, PH, PTOP, cercles: { placaArbre: [sx - PW / 2 + PW * 0.295, PTOP + PH * 0.54], placaSaber: [sx - PW / 2 + PW * 0.515, PTOP + PH * 0.54], placaBenedicio: [sx - PW / 2 + PW * 0.69, PTOP + PH * 0.53] } };
-        this.interactiu(sx, PY + 12, 170, DIALEGS.placaDolmen, { altura: PH + 20, actiu: () => !this.alt });
+        this.interactiu(sx, PY + 12, 130, DIALEGS.placaDolmen, { altura: PH + 20, actiu: () => !this.alt });
         this.medallonsPlaca = [];
         [['placaArbre', 'emblema_arbre', 0x8fd060], ['placaSaber', 'emblema_saber', 0x7ab8ff], ['placaBenedicio', 'emblema_benedicio', 0xffd860]].forEach(([flag, emb, color]) => { if (Estat.flag(flag)) this.dibuixaMedalloPlaca(flag, emb, color); });
-        if (Estat.flag('placaCompleta') && !Estat.te('runna')) {                       // Runna ja s'ha il·luminat: l'halo és més viu
-            this.tweens.killTweensOf(this.resplendor); this.resplendor.setScale(1.25).setAlpha(0.35);
-            this.tweens.add({ targets: this.resplendor, alpha: 0.55, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
-        }
+        if (Estat.flag('placaCompleta') && !Estat.te('runna')) this.ferAuraRunna(false);       // Runna ja s'ha il·luminat: l'aura daurada i verda es queda
         // Damunt la llosa, darrere l'espasa: les Paraules del Saber
         this.interactiu(this.espX, this.espY - 12, RADI_OBJECTE, DIALEGS.dolmen, { altura: 150, actiu: () => this.alt && !this.cinema && teLesTres() });
         this.margaridesPas();
@@ -966,12 +964,7 @@ class ZonaDolmen extends ZonaBase {
                 this.cameras.main.flash(350, 255, 255, 255);
                 this.cameras.main.shake(300, 0.004);
                 Sfx.fanfara();
-                // Runna s'encén: l'halo creix i es queda més viu
-                this.tweens.killTweensOf(this.resplendor);
-                this.tweens.add({ targets: this.resplendor, alpha: 0.7, scale: 1.6, duration: 600, yoyo: true, onComplete: () => {
-                    this.resplendor.setScale(1.25).setAlpha(0.35);
-                    this.tweens.add({ targets: this.resplendor, alpha: 0.55, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
-                } });
+                this.ferAuraRunna(true);                                           // Runna s'encén: aura daurada i verda, pilar de llum, anells al terra
                 Estat.posaFlag('placaCompleta');
                 Estat.posaObjectiu("Els tres medallons són a la placa: l'espasa del Dolmen espera, dalt de la llosa.");
                 Estat.desar();
@@ -980,11 +973,39 @@ class ZonaDolmen extends ZonaBase {
         });
     }
 
+    // L'aura de Runna quan els tres medallons són a la placa: un halo daurat amb un nucli verd, un pilar de llum que puja entre les capçades, raigs que giren,
+    // espurnes daurades i verdes que pugen i (a l'encesa) anells de llum que s'expandeixen pel terra des del dolmen. Es queda mentre l'espasa és clavada.
+    ferAuraRunna(encesa) {
+        if (this.aura) return;
+        const x = this.espX, y = this.espY - 50, { sx, sy } = DOL, ADD = Phaser.BlendModes.ADD;
+        const o = this.aura = [];
+        const afegeix = (obj, ...t) => { o.push(obj); t.forEach(cfg => this.tweens.add({ targets: obj, ...cfg })); return obj; };
+        this.tweens.killTweensOf(this.resplendor); this.resplendor.setAlpha(0);
+        afegeix(this.add.circle(x, y, 135, 0xffd24a, 0.42).setBlendMode(ADD).setDepth(sy + 1), { scale: 1.3, alpha: 0.2, yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
+        afegeix(this.add.circle(x, y, 78, 0x9fe85a, 0.5).setBlendMode(ADD).setDepth(sy + 2), { scale: 1.25, alpha: 0.22, yoyo: true, repeat: -1, duration: 950, ease: 'Sine.easeInOut' });
+        afegeix(this.add.circle(x, y, 30, 0xfff3c0, 0.3).setBlendMode(ADD).setDepth(sy + 3), { scale: 1.4, yoyo: true, repeat: -1, duration: 700, ease: 'Sine.easeInOut' });
+        afegeix(this.add.rectangle(x, y - 380, 120, 800, 0xffe08a, 0.1).setBlendMode(ADD).setDepth(9400), { fillAlpha: 0.2, yoyo: true, repeat: -1, duration: 1700, ease: 'Sine.easeInOut' });       // pilar daurat
+        afegeix(this.add.rectangle(x, y - 380, 44, 800, 0xcfff90, 0.16).setBlendMode(ADD).setDepth(9401), { fillAlpha: 0.32, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });        // nucli verd
+        const raigs = this.add.graphics({ x, y }).setBlendMode(ADD).setDepth(sy + 1).setAlpha(0.5);
+        for (let k = 0; k < 20; k++) { const a = k / 20 * Math.PI * 2, L = 150 + (k % 3) * 70; raigs.lineStyle(2 + (k % 2) * 2, k % 2 ? 0xb8f070 : 0xffe08a, 0.45).lineBetween(Math.cos(a) * 26, Math.sin(a) * 26, Math.cos(a) * L, Math.sin(a) * L); }
+        afegeix(raigs, { angle: 360, duration: 50000, repeat: -1 });
+        const espurnes = this.add.particles(x, y + 20, 'espurna', { x: { min: -28, max: 28 }, speedY: { min: -90, max: -30 }, speedX: { min: -15, max: 15 }, lifespan: 2200, scale: { start: 0.5, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xffe08a, 0xb8f070, 0xffffff, 0xffd060], frequency: 70, blendMode: 'ADD' }).setDepth(sy + 4);
+        o.push(espurnes);
+        if (encesa) {
+            [0xffe08a, 0xb8f070, 0xffe08a].forEach((c, i) => {
+                const anell = this.add.ellipse(sx, sy - 10, 60, 28).setStrokeStyle(6 - i, c, 0.9).setBlendMode(ADD).setDepth(sy - 1);
+                this.tweens.add({ targets: anell, scaleX: 12, scaleY: 12, alpha: 0, duration: 1500 + i * 350, delay: i * 320, ease: 'Cubic.easeOut', onComplete: () => anell.destroy() });
+            });
+            this.cameras.main.flash(550, 255, 236, 170);
+        }
+    }
+
     alcarRunna(fet) {
         const I = this.ineu, cam = this.cameras.main, ui = this.ui(), { sx, sy } = DOL;
         Joc.jingle(this, 'jingle_runna');
         if (this.espClavada) { this.espClavada.destroy(); this.espClavada = null; }
         this.tweens.killTweensOf(this.resplendor); this.resplendor.setAlpha(0);
+        if (this.aura) { this.aura.forEach(a => { this.tweens.killTweensOf(a); if (a.stop) a.stop(); this.tweens.add({ targets: a, alpha: 0, duration: 600, onComplete: () => a.destroy() }); }); this.aura = null; }
         const ESC_AIX = (this.textures.get('ineu_aixeca').customData || {}).escala || 0.5;
         I.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
         this.ineuAlt = this.add.image(I.x, I.y + 2, 'ineu_aixeca').setOrigin(0.5, 1).setScale(ESC_AIX).setDepth(85000);

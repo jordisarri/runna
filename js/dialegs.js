@@ -92,7 +92,7 @@ const DIALEGS = {
                     { qui: "Pare Jordà", text: "Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és voler bé de debò. Ajup el cap." },
                     { fer: (z, fet) => z.seq([c => z.npcVa('pare_jordi', z.ineu.x + 60, z.ineu.y + 4, c), c => z.npcMira('pare_jordi', 'ineu', c), c => { z.ajupir('ineu'); z.llum(z.ineu.x, z.ineu.y - 90, 0xffe8a0, c); }], fet) },
                     { qui: "Pare Jordà", text: "No vas sol, Ineu. Vas amb tot el Miracle darrere teu." },
-                    { qui: "Pare Jordà", text: "Pren aquest medalló, el de la benedicció del prior: una mà oberta, tallada en pedra. Duu-lo a la placa del Dolmen." },
+                    { qui: "Pare Jordà", text: "I pren això. És un medalló de pedra, amb una mà oberta tallada, que ha passat de mà en mà per les generacions de priors del Miracle. Ara ha de ser teu: duu-lo a la placa del Dolmen." },
                     { avis: "Has obtingut el MEDALLÓ DE LA BENEDICCIÓ!", obj: 'medallo_benedicio' }
                 ],
                 enAcabar: () => { E.dona("medallo_benedicio"); E.posaFlag("benediccio"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
@@ -624,7 +624,8 @@ const DIALEGS = {
                 pagines: [
                     { qui: "Pare Alcoví", text: "Has parlat amb l'ombra, oi? Fa temps que ho sospitava. A la Crònica hi ha un marge que no vaig saber llegir: una paraula esborrada, de la mateixa mà que va escriure els fragments." },
                     { qui: "Pare Alcoví", text: "Amb la paraula que t'ha donat, ara ho entenc. «La foscor tem la llum, però més encara el riure.» Aquestes són les paraules que desperten Runna, fill: no és un conjur, és una veritat. Digues-les davant l'espasa, senceres i amb tot el cor." },
-                    { qui: "Pare Alcoví", text: "Té. L'he tallat en una pedra del claustre, perquè no se't perdi: un llibre obert. Porta'l a la placa del Dolmen, i guarda les paraules dins teu per al moment de dir-les." },
+                    { qui: "Pare Alcoví", text: "I una cosa més, fill. Fa anys, a la biblioteca, vaig trobar un compartiment secret dins el llibre més antic de tots, i hi havia això: un medalló de pedra amb un llibre obert tallat. Té centenars d'anys." },
+                    { qui: "Pare Alcoví", text: "No sabia per a què servia. Ara sí: porta'l a la placa del Dolmen, i guarda les paraules dins teu per al moment de dir-les." },
                     { avis: "Has obtingut el MEDALLÓ DEL SABER!", obj: 'medallo_saber' }
                 ],
                 enAcabar: () => { E.dona("medallo_saber"); E.posaFlag("saber"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
@@ -1180,8 +1181,8 @@ const DIALEGS = {
             { qui: "Pastor vell", text: "Fa molts anys que a nosaltres ningú no ens guardava cap cadira a cap taula. Gràcies per asseure'ns, fill." },
             { qui: "El Gran Til·ler", text: "Aquesta és la saviesa que et volia donar, petit monjo: ningú no es perd del tot mentre algú el recorda a taula. La gàbia de l'Ocellaire només s'omple de qui s'ha quedat sol." },
             { qui: "El Gran Til·ler", text: "Rep el meu permís. Que et sigui lleu, i que no et faci oblidar mai que vas menjar amb tots." },
+            { qui: "El Gran Til·ler", text: "Entre les meves branques hi custodio, des de temps immemorials, un medalló de pedra amb una fulla tallada: el permís de l'arbre. Fa segles que espera algú que s'assegui a taula amb tothom. Agafa'l." },
             { fer: (z, fet) => z.fullaCau(fet) },
-            { qui: "Ineu", text: "(La fulla s'ha fet pedra a les meves mans: un medalló de pedra amb una fulla tallada.)" },
             { avis: "Has obtingut el MEDALLÓ DE L'ARBRE!", obj: 'medallo_arbre' },
             { fer: (z, fet) => { ['sopar_pastor_a', 'sopar_pastor_b', 'sopar_pastor_vell'].forEach(k => z.bombolla(k, '♪', null, 1400)); z.esperar(1500, fet); } },
         ],
@@ -1380,7 +1381,6 @@ const DIALEGS = {
         if (!E.flag("placaCompleta")) return { pagines: [] };            // (a l'espasa no hi ha punt d'interacció fins que els tres medallons són a la placa: aquí no s'arriba)
         return {
             pagines: [
-                { qui: "Ineu", text: "Els tres medallons són a la placa i l'espasa em reconeix. Ara, les paraules del monjo..." },
                 { qui: "Ineu", text: "La foscor tem la llum, però més encara el riure!" },
                 { fer: (z, fet) => z.alcarRunna(fet) }
             ],
@@ -1415,7 +1415,6 @@ const DIALEGS = {
         const totsPlacats = MEDALLONS.every(([, placat]) => E.flag(placat) || portats.some(p => p[1] === placat));
         if (totsPlacats && !E.flag('placaCompleta')) {
             pagines.push({ fer: (z, fet) => z.placaCompleta(fet) });
-            pagines.push({ qui: "Ineu", text: "(Els tres cercles brillen alhora i una llum puja de la placa cap al dolmen... L'espasa m'ha reconegut. Ara puc pujar-hi.)" });
         } else if (!totsPlacats && portats.length) {
             pagines.push({ qui: "Ineu", text: "(Encara em falta " + (aviat === 1 ? "un medalló" : aviat + " medallons") + " per omplir la placa.)" });
         } else if (E.flag('placaCompleta')) {
