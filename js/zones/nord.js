@@ -402,7 +402,7 @@ class ZonaCelles extends ZonaBase {
             amplada: 2440,
             alcada: 1100,
             entrades: {
-                ruines: { x: 900, y: 1040, dir: 'amunt' },
+                ruines: { x: 1070, y: 1040, dir: 'amunt' },
                 bosc:   { x: 60,  y: 705,  dir: 'dreta' },
                 tiller: { x: 1070, y: 90,  dir: 'avall' }
             }
@@ -412,7 +412,7 @@ class ZonaCelles extends ZonaBase {
     construir() {
         this.terra('herba', 0, 0, 2440, 1100, -1100);
         this.terra('cami', 0, 640, 2200, 130);           // camí est-oest: del bosc de Sant Joan fins a la porta de la Mandu, on s'acaba (no segueix més a l'est)
-        this.terra('cami', 800, 770, 200, 330);          // cap a les Runes
+        this.terra('cami', 1000, 770, 140, 330);         // cap a les Runes (just sota del camí del Til·ler: un encreuament recte)
         this.terra('cami', 1000, 0, 140, 640);           // cap al nord, al Gran Til·ler
 
         // Nostra Senyora (oest, l'edifici més gran: la porta és més alta que l'Ineu) i Sant Benet (est)
@@ -457,12 +457,12 @@ class ZonaCelles extends ZonaBase {
         // La Rosansa i el seu carro de verdures: passa per aquí un sol cop, quan l'Isildren te n'ha parlat, i se'n va un cop t'ha donat la llavor
         if (Estat.flag('isidreSansa') && !Estat.flag('llavorSansa')) this.posarSansa();
 
-        this.cartell(130, 625, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler' }] }));
+        this.cartell(965, 612, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler\n↓ Les Runes\n→ Sant Benet' }] }));       // vora l'encreuament
 
         this.arbres([[260, 1000], [300, 1040],
-                     [1560, 1060], [1480, 960], [1700, 1030]]);      // (el de l'est del camí de les Runes es queda lluny: hi para el carro de la Rosansa)
+                     [1840, 1060], [1760, 960], [1900, 1030]]);      // (el de l'est del camí de les Runes es queda lluny: hi para el carro de la Rosansa)
 
-        this.sortida(800, 1086, 200, 14, 'ZonaRuines', 'celles');
+        this.sortida(1000, 1086, 140, 14, 'ZonaRuines', 'celles');
         this.sortida(0, 640, 14, 130, 'ZonaBosc', 'celles');
         // El camí del Gran Til·ler, al nord, és tapat per una boira espessa que no marxa amb el vent: la desfà el beuratge de la Jauneta
         this.boiraTiller = null;
@@ -517,12 +517,12 @@ class ZonaCelles extends ZonaBase {
 
     posarSansa() {
         // Els braços del carro miren a l'est. La Rosansa és una mica més a l'est, davant del carro: quan ha parlat s'hi acosta, es gira, agafa els braços i se l'enduu cap a l'est
-        this.carroSansa = this.posar('carro_sansa', 1060, 880).setFlipX(true);
-        this.colCarro = this.colisio(1000, 855, 160, 50);
-        this.sansa = this.posar('sansa', 1310, 892);
-        this.colSansa = this.colisio(1310, 883, 40, 18);
-        this.ombraSansa = this.add.image(1310, 892, 'ombra').setScale(0.34).setDepth(-500);
-        const punt = this.interactiu(1310, 882, RADI_NPC, DIALEGS.sansa, { altura: this.sansa.displayHeight + 6 });
+        this.carroSansa = this.posar('carro_sansa', 1300, 880).setFlipX(true);
+        this.colCarro = this.colisio(1240, 855, 160, 50);
+        this.sansa = this.posar('sansa', 1550, 892);
+        this.colSansa = this.colisio(1550, 883, 40, 18);
+        this.ombraSansa = this.add.image(1550, 892, 'ombra').setScale(0.34).setDepth(-500);
+        const punt = this.interactiu(1550, 882, RADI_NPC, DIALEGS.sansa, { altura: this.sansa.displayHeight + 6 });
         punt.enTancar = () => this.marxaSansa(punt);
     }
 
@@ -534,7 +534,7 @@ class ZonaCelles extends ZonaBase {
         const s = this.sansa, c = this.carroSansa, o = this.ombraSansa, y0 = s.y;
         const pas = (dur, n) => this.tweens.add({ targets: s, y: y0 - 4, duration: dur, yoyo: true, repeat: n });        // el trontolleig de caminar
         const seq = [
-            f => { pas(180, 5); this.tweens.add({ targets: [s, o], x: 1228, duration: 1100, ease: 'Sine.easeInOut', onComplete: () => f() }); },             // s'acosta als braços del carro
+            f => { pas(180, 5); this.tweens.add({ targets: [s, o], x: 1468, duration: 1100, ease: 'Sine.easeInOut', onComplete: () => f() }); },             // s'acosta als braços del carro
             f => { s.setFlipX(true); this.esperar(500, f); },                                                                                              // es gira cap al carro
             f => { this.tweens.add({ targets: s, y: y0 + 5, duration: 260, yoyo: true, hold: 300, onComplete: () => f() }); },                              // agafa els braços
             f => { s.setFlipX(false); this.esperar(400, f); },                                                                                             // es gira cap a l'est
