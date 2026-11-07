@@ -123,7 +123,7 @@ const CATALEG_OBJECTES = {
     clau_sagrari:     ['Clau del sagrari', 'Petita, gairebé de joguina. Guardada a l\'ermita.'],
     aigua_sj:         ['Aigua de la Font del Bisbe', 'Aigua beneïda, clara com el vidre.'],
     cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Galf en sabrà fer alguna cosa.'],
-    pruna:            ['Pruna daurada', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en vol una.'],
+    pruna:            ['Pruna daurada', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en demana una; un cop oferta, te la quedes de record.'],
     beuratge:         ['Beuratge de la Jauneta', 'Dissipa la boira del camí cap al Til·ler; no protegeix de la boira verinosa.'],
     escudella:        ['Escudella de la Meus', 'Encara calenta, com cada any per al sopar del Til·ler.'],
     flors_isidre:     ['Flors d\'Isildren', 'Un ram embolicat amb un tros de pergamí.'],

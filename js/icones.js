@@ -445,7 +445,8 @@ const US_OBJECTES = {
     clau_ferro: E => E.flag('portaSoterraniOberta') ? 'record' : 'cal',
     clau_gabriel: E => E.flag('portaGabrielOberta') ? 'record' : 'cal',
     carta_cortiner: E => 'record',
-    // La resta (aigua, cristall, pruna, beuratge, pa, llaç, ram, llavor) es gasten en fer-los servir: si els portes, encara et calen
+    pruna: E => E.flag('fontNeta') ? 'record' : 'cal',               // un cop oferta a la font, es queda al sarró de record
+    // La resta (aigua, cristall, beuratge, pa, llaç, ram, llavor) es gasten en fer-los servir: si els portes, encara et calen
 };
 const US_TEXTOS = {
     cal: ['★ Encara et farà falta.', '#8a2a14'],

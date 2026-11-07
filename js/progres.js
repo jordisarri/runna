@@ -20,7 +20,7 @@ const PROGRES = {
         { id: 'bassadoria', marca: ['bassadoriaNeta'], fet: E => E.flag('bassadoriaNeta'),
           pista: E => "La Bassadòria raja tèrbola. Potser el Cant de l'Aurora la deixaria neta." },
         // ---- ACTE 2: el camí del Til·ler ----
-        { id: 'font', marca: ['fontNeta', 'obj:aigua_sj'], fet: E => E.flag('fontNeta'),
+        { id: 'font', marca: ['fontNeta', 'obj:aigua_sj', 'obj:pruna'], fet: E => E.flag('fontNeta'),
           pista: E => {
               // Fins que no s'ha anat a la font (fontVista) no se sap què cal portar-hi: la pista només dona el lloc
               if (!E.flag('fontVista')) return "La Font del Bisbe, que diuen que guaria tothom, s'ha quedat adormida. Val la pena anar-hi a mirar.";

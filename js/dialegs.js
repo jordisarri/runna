@@ -729,7 +729,7 @@ const DIALEGS = {
                     { avis: 'Has obtingut l\'AIGUA DE LA FONT DEL BISBE.', obj: 'aigua_sj' }
                 ],
                 enAcabar: () => {
-                    E.posaFlag('fontNeta'); E.treu('pruna'); E.dona('aigua_sj');
+                    E.posaFlag('fontNeta'); E.dona('aigua_sj');                  // (la pruna es queda al sarró, de record)
                     E.posaObjectiu("L'aigua de la Font del Bisbe obriria l'Alzina Buida.");
                 }
             };
