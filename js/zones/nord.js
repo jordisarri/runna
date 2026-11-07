@@ -411,7 +411,7 @@ class ZonaCelles extends ZonaBase {
 
     construir() {
         this.terra('herba', 0, 0, 2440, 1100, -1100);
-        this.terra('cami', 0, 640, 2440, 130);           // camí est-oest: del bosc de Sant Joan fins al final de Sant Benet (a l'est no hi ha res més)
+        this.terra('cami', 0, 640, 2200, 130);           // camí est-oest: del bosc de Sant Joan fins a la porta de la Mandu, on s'acaba (no segueix més a l'est)
         this.terra('cami', 800, 770, 200, 330);          // cap a les Runes
         this.terra('cami', 1000, 0, 140, 640);           // cap al nord, al Gran Til·ler
 
@@ -432,6 +432,17 @@ class ZonaCelles extends ZonaBase {
         const PDX = SB0 + sb.displayWidth * 0.754;
         this.manduY = 692;
         this.mandu = this.npc('mandu', PDX, this.manduY, DIALEGS.mandu);
+        // El camí s'acaba a la porta de la Mandu: més enllà, un jardinet de flors i arbres baixos que el tanquen (no sembla que continuï)
+        let sd = 19; const rn = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        [[2290, 640, 0.58], [2330, 735, 0.6], [2270, 835, 0.55], [2380, 690, 0.52], [2390, 800, 0.5], [2160, 880, 0.5], [2020, 930, 0.48]]
+            .forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 22, h: 12 } }));          // arbres baixos
+        this.colisio(2320, 790, 260, 12);                                                   // (i res no s'hi pot passar pel mig)
+        for (let n = 0; n < 34; n++) {                                                      // flors: pels dos costats del final del camí i davant la porta
+            const x = 1960 + rn() * 420, y = 810 + rn() * 190;
+            if (Math.hypot(x - PDX, y - this.manduY) < 40) continue;
+            this.posar('flors', x, y, { fonsY: -800, escala: 0.42 + rn() * 0.36 }).setTint([0xffffff, 0xffd6e6, 0xfff2b0, 0xd6e8ff][Math.floor(rn() * 4)]);
+        }
+        for (let n = 0; n < 14; n++) this.posar('flors', 2170 + rn() * 230, 610 + rn() * 26, { fonsY: -800, escala: 0.4 + rn() * 0.3 }).setTint([0xffffff, 0xffd6e6, 0xfff2b0][Math.floor(rn() * 3)]);      // vora la paret, a la dreta del camí
         if (Estat.flag('manduNinaTrencada') && !Estat.flag('epilegFet')) this.mandu.setTexture('mandu_trencada');
         else this.jugaMandu();
 
