@@ -1417,6 +1417,8 @@ const DIALEGS = {
             pagines.push({ fer: (z, fet) => z.placaCompleta(fet) });
         } else if (!totsPlacats && portats.length) {
             pagines.push({ qui: "Ineu", text: "(Encara em falta " + (aviat === 1 ? "un medalló" : aviat + " medallons") + " per omplir la placa.)" });
+        } else if (E.te('runna') || E.flag('runna')) {
+            pagines.push({ qui: "Ineu", text: "(Els tres medallons continuen al seu lloc, a la placa. L'espasa ja és meva: Runna.)" });
         } else if (E.flag('placaCompleta')) {
             pagines.push({ qui: "Ineu", text: "(Els tres medallons són al seu lloc. Només em falta alçar l'espasa.)" });
         } else {
