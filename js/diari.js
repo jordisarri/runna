@@ -267,7 +267,7 @@ const DIARI = {
         Object.values(MELODIES).forEach(m => {
             const sap = E.flag(m.flag), nn = sap ? m.notes.length : 0;
             if (sap) n++;
-            const junt = AV - 2 * X - nn * 46 > 270;                     // si no hi caben, les notes baixen a sota del nom
+            const junt = false;                                          // el títol a una línia i les notes a la línia següent
             const t = ui.add.text(X, y + 4, sap ? m.nom : '— encara no el saps —', estilText(23, sap ? TINTA : TINTA_SUAU, { fontStyle: sap ? 'bold' : 'italic', wordWrap: { width: junt ? AV - 2 * X - nn * 46 - 6 : AV - 2 * X } }));
             c.add(t);
             const yn = junt ? y + 20 : y + t.height + 26;
