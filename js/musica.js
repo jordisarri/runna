@@ -227,7 +227,7 @@ class EscenaMusica extends Phaser.Scene {
         this.tweens.add({ targets: this.velPrimerPla, fillAlpha: 0.38, duration: 380 });
         this.tweens.add({ targets: this.auraPrimerPla, fillAlpha: 0.16, duration: 600 });
         this.tweens.add({ targets: img, angle: { from: -1.5, to: 1.5 }, yoyo: true, repeat: -1, duration: 1600, ease: 'Sine.easeInOut' });   // es gronxa tocant
-        this.posBroc = { x: cx + img.displayWidth * 0.2, y: T + 60 - alt * 0.38 };      // per on surten les notes
+        this.posBroc = { x: cx + img.displayWidth * 0.38, y: T + 60 - alt * 0.19 };      // per on surten les notes: la campana de la tarota (a baix a la dreta), no els forats que tapen els dits
         const zonaPla = Joc.zonaActiva(this);
         if (zonaPla && zonaPla.amagarIneuFlauta) zonaPla.amagarIneuFlauta();           // l'Ineu de l'escenari desapareix mentre surt aquest
     }
@@ -238,10 +238,10 @@ class EscenaMusica extends Phaser.Scene {
         const e = this.escPrimerPla;
         this.tweens.add({ targets: img, scale: { from: e * 1.04, to: e }, duration: 260, ease: 'Back.easeOut' });
         this.tweens.add({ targets: this.auraPrimerPla, fillAlpha: { from: 0.34, to: 0.16 }, duration: 420 });
-        const p = this.posBroc, x = p.x + (n - 2) * 36;
+        const p = this.posBroc, x = p.x + (n - 2) * 18;
         const t = this.add.text(x, p.y, n === 2 ? '♫' : '♪', { fontFamily: FONT_TITOL, fontSize: '54px', fontStyle: 'bold', color: '#ffe08a', stroke: '#5a3410', strokeThickness: 5, resolution: 2 })
             .setOrigin(0.5).setDepth(0).setScale(0.4);
-        this.tweens.add({ targets: t, y: p.y - 150 - Math.random() * 60, x: x + (n - 2) * 50 + (Math.random() - 0.5) * 40, scale: 1, angle: (Math.random() - 0.5) * 40, duration: 1300, ease: 'Sine.easeOut' });
+        this.tweens.add({ targets: t, y: p.y - 150 - Math.random() * 60, x: x + 25 + Math.random() * 45, scale: 1, angle: (Math.random() - 0.5) * 40, duration: 1300, ease: 'Sine.easeOut' });
         this.tweens.add({ targets: t, alpha: 0, delay: 800, duration: 500, onComplete: () => t.destroy() });
     }
 
