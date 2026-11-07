@@ -91,8 +91,10 @@ class ZonaEsglesia extends ZonaBase {
          ['carry', 400, R + 450], ['pare_alcui', 465, R + 450], ['eva', 535, R + 450],
          ['venerables', 815, R + 450], ['monja_pains', 885, R + 450],
          ['frederic', 400, R + 600], ['josep', 465, R + 600], ['germa_francesc', 535, R + 600],
-         ['jaumeta', 745, R + 600], ['galf', 810, R + 600], ['isidre', 880, R + 600]
+         ['jaumeta', 745, R + 600], ['galf', 810, R + 600], ['isidre', 880, R + 600],
+         ['mandu', 430, R + 375]
         ].forEach(([k, x, y]) => { if (this.textures.exists(k) && !(this.npcs && this.npcs[k])) this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 }); });
+        if (this.npcs && this.npcs.mandu && Estat.flag('manduNinaTrencada')) this.npcs.mandu.setTexture('mandu_trencada');            // la nina, encara sense cap
         // Enquadra tot el Santuari (del retaule i els nens fins a l'últim banc i les parets laterals)
         // per damunt del quadre de diàleg i el retrat, de manera que tothom es vegi sencer i ningú quedi tallat
         this.enquadrar(640, R + 340, 0.67, 0);
@@ -102,6 +104,16 @@ class ZonaEsglesia extends ZonaBase {
     actualitzar() {
         this.obrirPortaRellotge(true);
         if (this.epileg && !this.epilegEngegat) { this.epilegEngegat = true; this.time.delayedCall(900, () => this.ferEpileg()); }
+    }
+
+    // El Fram cus el cap de la nina de la Mandu: una brillantor daurada i la nina torna a estar sencera
+    arreglaNina(fet) {
+        const m = this.npcs.mandu, f = this.npcs.nen_flam;
+        if (!m) { fet(); return; }
+        if (f) this.npcSalta('nen_flam', null, 1);
+        Sfx.objecte();
+        this.llum(m.x, m.y - m.displayHeight * 0.4, 0xffe8a0);
+        this.esperar(500, () => { m.setTexture('mandu'); this.npcSalta('mandu', null, 1); this.esperar(900, fet); });
     }
 
     ferEpileg() {
@@ -119,6 +131,13 @@ class ZonaEsglesia extends ZonaBase {
             { qui: 'Meus', text: "Huri! Fram! Bruts com dos esquirols i amb cara de no haver dormit en tres nits... Veniu aquí, que no us deixo anar mai més!" },
             { qui: 'Senyor Molner', text: 'Ja són aquí, Meus. Ja són aquí.' },
             { qui: 'Meus', text: "I tu, Ineu, no et pensis que t'escapes de l'abraçada." },
+            // La Mandu corre cap al seu germà amb la nina sense cap: el Fram l'hi cus (només ell la sap arreglar)
+            ...(hi('mandu') && Estat.flag('manduNinaTrencada') ? [
+                accio(z => [f => z.npcVa('mandu', 610, R + 232, f, 190), f => z.npcMira('mandu', 640, f)]),
+                { qui: 'Fram', text: "Mandu! Què li ha passat a la nina? Dona-me-la, que només jo sé cosir caps de nina." },
+                { fer: (z, fet) => z.arreglaNina(fet) },
+                { qui: 'Mandu', text: "Gràcies, Fram! Ja torna a tenir cap... i tu ja no te n'aniràs mai més, oi?" }
+            ] : []),
             // Les sacerdotesses i el seu protegit
             accio(z => [f => { z.npcVa('monja_phili', 770, R + 232, null, 170); z.npcVa('monja_charm', 735, R + 222, f, 170); },
                         f => z.npcMira('monja_charm', 705, f), f => z.bombolla('monja_charm', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),

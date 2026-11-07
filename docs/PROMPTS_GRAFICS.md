@@ -244,7 +244,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): els tres gràfics del **Pastor de Boira** (`pastor_camina`, `pastor_atac`, `pastor_cau`) i `home_raim_caigut` (vegeu Enemics), `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): `mandu` i `mandu_trencada` (la nena de les Cel·les amb la nina sencera i sense cap), els tres gràfics del **Pastor de Boira** (`pastor_camina`, `pastor_atac`, `pastor_cau`) i `home_raim_caigut` (vegeu Enemics), `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
 
 
 
@@ -354,6 +354,20 @@ Charming 2D cartoon game emblem in the same art style as the attached reference 
 
 
 ## Personatges
+
+### `mandu.png` i `mandu_trencada.png` → `assets/personatges/mandu.webp` i `mandu_trencada.webp` (amplada 52) *(La **Mandu**, la germana petita del Fram (`js/zones/nord.js`, Les Cel·les, davant la porta de la dreta de Sant Benet): una nena d'uns sis anys que juga amb una nina de drap. Calen **dues imatges idèntiques**, en el **mateix llenç**, amb el mateix enquadrament, mida i pose, que només es diferencien en la nina: 1) `mandu.png`, amb la **nina sencera** (el joc la fa servir al principi i després de l'epíleg, quan el Fram la hi cus); 2) `mandu_trencada.png`, amb la **nina sense cap** (el cap de la nina és arrencat: se li veu el coll de drap trencat, amb una mica de cotó que surt, i el cap **no es veu enlloc**; la nena la té igualment a les mans). El joc canvia de l'una a l'altra en una escena (la nena, enrabiada, arrenca el cap a la nina), així que han de coincidir tot el que no sigui la nina. **Puja com a referència `art/personatges/nena_trenes.png`** (l'estil i la mida d'una nena) i `art/personatges/nen_flam.jpg` (el seu germà: cabell negre i samarreta vermella). Descripció: nena de sis anys, cabell negre curt amb una cinta vermella (que s'assembli al Fram, però no a la Nena de les Trenes: res de trenes), vestit groc mostassa amb un davantal blanc lleugerament brut, sabates fosques. **Pose:** dempeus, mirant de cara i una mica cap a la dreta, i sostenint la nina amb les dues mans davant seu, com si la fes ballar. **Nina:** de drap, amb cabells de llana vermella, ulls de botó, vestidet de pedaços de colors. Format vertical, relació uns 0,6, cos sencer amb els peus a baix de la imatge, fons blanc pur (el trec jo). Desa-les com `art/personatges/mandu.png` i `art/personatges/mandu_trencada.png` i passa-les amb `node eines/convertir_webp.js mandu` i `node eines/convertir_webp.js mandu_trencada`. El retrat dels diàlegs es retalla sol del cap de `mandu`. Mentre no hi siguin, el joc fa servir un dibuix provisional fet amb codi.)*
+
+**Prompt de `mandu.png`** (amb les imatges de referència adjuntes):
+
+```
+Create a new character in the same art style as the attached reference of the girl with braids: a cute chibi little girl of about six years old, the same bold dark outline, soft cartoon cel-shading and warm colours. Short straight black hair with a red headband (no braids), big brown eyes, a mustard-yellow dress with a slightly dirty white apron, dark shoes. She stands facing the viewer, turned slightly to the right, holding a small rag doll in both hands in front of her as if making it dance. The rag doll has red wool hair, button eyes and a little dress made of colourful patches. Full body, the feet at the bottom of the image, vertical image, pure white background, no ground shadow, no text. She has a similar look to the boy in the second reference image (black hair, red clothes): they are brother and sister.
+```
+
+**Prompt de `mandu_trencada.png`** (adjunta `mandu.png` com a referència i, si pots, genera-la **editant-la**):
+
+```
+Edit the attached reference image. Keep EXACTLY the same girl, in the same pose, with the same size, framing, clothes, hair, headband, expression and the same position of her hands. The only change: the rag doll she holds has had its head torn off. Show the doll's headless body with a ragged torn neck and a little white cotton stuffing sticking out of it. The doll's head is NOT visible anywhere in the image. Her face looks a little sad and shocked (eyes wide, mouth slightly open), but everything else is identical. Pure white background, no text.
+```
 
 ### `ineu/aixeca_buit.png` → `assets/ineu/aixeca_buit.webp` (amplada 84) *(L'Ineu **alçant el braç amb la mà buida**, per als moments en què algú li dona un objecte que no és una arma (el ram de flors, els Guants de Poder, una clau, una carta...). És la mateixa pose que `aixeca_basto` i `aixeca_espasa`, però sense res a la mà: el joc hi posa l'objecte per codi, damunt la mà, amb una llum i la fanfara. **Puja dues referències, en aquest ordre:** 1) `art/ineu/aixeca/aixeca_basto.jpg` (la pose i l'enquadrament exactes) i 2) `art/ineu/aixeca/aixeca_espasa.jpg` (el mateix personatge, amb el braç més alt). Format vertical, **mateix llenç i mateixa mida que la primera** (uns 166 × 365, relació 0,45), fons blanc pur (el trec jo), cos sencer amb els peus a la mateixa alçada que a la referència: així, en canviar de dibuix, l'Ineu no salta de lloc. Deixa lliure l'aire damunt la mà (res a sobre, ni llums, ni estrelles, ni text), perquè l'objecte hi surti. Desa'l com `art/ineu/aixeca/aixeca_buit.jpg`. Quan hi sigui, ho connecto a `ineuAixeca` i a les pàgines «Has obtingut…» (ram, guants i la resta).)*
 

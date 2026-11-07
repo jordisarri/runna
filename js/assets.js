@@ -141,6 +141,8 @@ const CATALEG = [
     { key: 'capoll',         file: null,         amplada: 70, provisional: (c, w) => dibuixarCapoll(c, w) },
     { key: 'nen_uri',        file: 'assets/personatges/nen_uri.webp',    amplada: 50, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7ad0', cabell: '#e8c870', alt: 0.56, cap: 17 }) },
     { key: 'nen_flam',       file: 'assets/personatges/nen_flam.webp',   amplada: 54, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d04a3a', cabell: '#14100c', alt: 0.64, cap: 17 }) },
+    { key: 'mandu',          file: 'assets/personatges/mandu.webp',          amplada: 52, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8a0c0', cabell: '#8a5a2a', dona: true, alt: 0.62, cap: 17 }) },       // la Mandu, la germana del Fram, amb la nina sencera
+    { key: 'mandu_trencada', file: 'assets/personatges/mandu_trencada.webp', amplada: 52, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8a0c0', cabell: '#8a5a2a', dona: true, alt: 0.62, cap: 17 }) },       // la mateixa, amb la nina sense cap (fins que el Fram torni)
     { key: 'nen_sardin',     file: 'assets/personatges/nen_sardin.webp', amplada: 59, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a9a5a', cabell: '#1e1a16', alt: 0.74, cap: 17, ulleres: true }) },
     { key: 'pastor_boira',   file: 'assets/enemics/pastor_boira.webp',   amplada: 88, provisional: (c, w) => dibuixarPastorBoira(c, w) },
     { key: 'bolet',          file: 'assets/enemics/bolet.webp',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
@@ -619,6 +621,24 @@ const Grafics = {
             const taca = (x, y, rad, a) => { const g = ctx.createRadialGradient(x, y, 0, x, y, rad); g.addColorStop(0, `rgba(255,255,255,${a})`); g.addColorStop(0.65, `rgba(255,255,255,${a * 0.62})`); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(x - rad, y - rad, rad * 2, rad * 2); };
             taca(128, 128, 126, 0.3);
             for (let k = 0; k < 18; k++) taca(128 + (r() - 0.5) * 130, 128 + (r() - 0.5) * 96, 30 + r() * 40, 0.4 + r() * 0.35);
+        });
+        // Una fulla d'heura (blanca, per tintar-la de verd): tres lòbuls punxeguts i les nervadures. Serveix per a la coberta de la pèrgola de l'Hostatgeria
+        crea('fulla_heura', 96, 96, (ctx, w, h) => {
+            ctx.translate(48, 48);
+            const f = (sx, sy) => ctx.bezierCurveTo(sx[0], sx[1], sy[0], sy[1], sy[2], sy[3]);
+            ctx.beginPath(); ctx.moveTo(0, 40);                                            // la punta de baix (on s'uneix al peu)
+            f([-6, 30], [-40, 30, -38, 8]); f([-44, -4], [-30, -4, -26, -10]);                // lòbul esquerre
+            f([-30, -24], [-14, -24, -6, -30]); f([-4, -42], [0, -46, 0, -46]);                // el lòbul de dalt, punxegut
+            f([0, -46], [4, -42, 6, -30]); f([14, -24], [30, -24, 26, -10]);
+            f([30, -4], [44, -4, 38, 8]); f([40, 30], [6, 30, 0, 40]);                         // lòbul dret
+            ctx.closePath();
+            const g = ctx.createRadialGradient(0, 0, 4, 0, 0, 46); g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(1, 'rgba(235,235,235,0.9)');
+            ctx.fillStyle = g; ctx.fill();
+            ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(40,70,30,0.6)'; ctx.stroke();
+            ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(40,70,30,0.45)';                      // nervadures
+            ctx.beginPath(); ctx.moveTo(0, 38); ctx.lineTo(0, -40);
+            ctx.moveTo(0, 20); ctx.lineTo(-30, 6); ctx.moveTo(0, 20); ctx.lineTo(30, 6);
+            ctx.moveTo(0, 4); ctx.lineTo(-22, -10); ctx.moveTo(0, 4); ctx.lineTo(22, -10); ctx.stroke();
         });
         crea('ombra', 64, 24, (ctx, w, h) => {
             ctx.fillStyle = 'rgba(0,0,0,0.28)';

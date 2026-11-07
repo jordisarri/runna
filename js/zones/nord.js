@@ -399,7 +399,7 @@ class ZonaCelles extends ZonaBase {
         super('ZonaCelles', {
             pins: { pinyer: 0.3 },
             nom: 'Les Cel·les',
-            amplada: 1800,
+            amplada: 2440,
             alcada: 1100,
             entrades: {
                 ruines: { x: 900, y: 1040, dir: 'amunt' },
@@ -410,8 +410,8 @@ class ZonaCelles extends ZonaBase {
     }
 
     construir() {
-        this.terra('herba', 0, 0, 1800, 1100, -1100);
-        this.terra('cami', 0, 640, 1800, 130);           // camí est-oest: del bosc de Sant Joan fins a Sant Benet (a l'est no hi ha res més)
+        this.terra('herba', 0, 0, 2440, 1100, -1100);
+        this.terra('cami', 0, 640, 2440, 130);           // camí est-oest: del bosc de Sant Joan fins al final de Sant Benet (a l'est no hi ha res més)
         this.terra('cami', 800, 770, 200, 330);          // cap a les Runes
         this.terra('cami', 1000, 0, 140, 640);           // cap al nord, al Gran Til·ler
 
@@ -419,13 +419,21 @@ class ZonaCelles extends ZonaBase {
         const ns = this.posar('cel_ntrasra', 520, 600, { col: { w: 840, h: 100 } });
         this.blocDarrere(520, 840, 495, Math.max(0, 600 - ns.displayHeight));
         this.interactiu(520, 625, RADI_OBJECTE, DIALEGS.cel_ntrasra, { altura: 140 });
-        // Sant Benet, a la mida dels personatges (portes una mica més baixes que l'Ineu): és tan llarg que surt per la dreta de l'escena.
-        // Comença passat el camí del Til·ler; només se'n veu la porta de l'esquerra (la de la dreta queda fora)
+        // Sant Benet, a la mida dels personatges (portes una mica més baixes que l'Ineu): és molt llarg, i l'escena s'allarga cap a la dreta perquè càpiga sencer.
+        // Comença passat el camí del Til·ler; té dues portes: la de l'esquerra (on dormia el Fram) i la de la dreta
         const SB0 = 1160, sb = this.posar('cel_stbenet', SB0, 600);
         sb.setX(SB0 + sb.displayWidth / 2);
-        this.colisio((SB0 + 1800) / 2, 555, 1800 - SB0, 90);
-        this.blocDarrere((SB0 + 1800) / 2, 1800 - SB0, 505, Math.max(0, 600 - sb.displayHeight));
+        this.colisio((SB0 + 2440) / 2, 555, 2440 - SB0, 90);
+        this.blocDarrere((SB0 + 2440) / 2, 2440 - SB0, 505, Math.max(0, 600 - sb.displayHeight));
         this.interactiu(SB0 + sb.displayWidth * 0.251, 620, RADI_OBJECTE, DIALEGS.portaFlam, { altura: 140 });    // porta de l'esquerra: on dormia el Fram
+
+        // La porta de la dreta de Sant Benet: la Mandu, la germana petita del Fram, juga amb una nina. Quan en parla, se li trenca el cap de la nina (de ràbia
+        // i de pena) i la nina es queda així fins a l'epíleg, quan el Fram li la cus (només ell la pot arreglar: no deixa que ningú la toqui).
+        const PDX = SB0 + sb.displayWidth * 0.754;
+        this.manduY = 692;
+        this.mandu = this.npc('mandu', PDX, this.manduY, DIALEGS.mandu);
+        if (Estat.flag('manduNinaTrencada') && !Estat.flag('epilegFet')) this.mandu.setTexture('mandu_trencada');
+        else this.jugaMandu();
 
         // Sant Benet (est): la Meus i el seu marit, el senyor Molner, veïns de Sant Benet
         this.npc('neus', 1250, 680, DIALEGS.neus);
@@ -449,6 +457,26 @@ class ZonaCelles extends ZonaBase {
         this.boiraTiller = null;
         if (Estat.flag('boiraTillerNeta') || Estat.flag('parlatTiler')) this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
         else this.posarBoiraTiller();
+    }
+
+    // La Mandu juga amb la nina: la fa ballar, es gronxa i hi parla (un lleuger vaivé)
+    jugaMandu() {
+        const m = this.mandu;
+        this.manduJoc = this.tweens.add({ targets: m, angle: { from: -3, to: 3 }, y: this.manduY - 3, yoyo: true, repeat: -1, duration: 520, ease: 'Sine.easeInOut' });
+    }
+
+    // La Mandu, enrabiada, arrenca el cap a la nina: trencall, cotó pels aires i la nina es queda sense cap (queda així fins a l'epíleg)
+    manduTrencaNina(fet) {
+        const m = this.mandu;
+        if (this.manduJoc) { this.manduJoc.stop(); this.manduJoc = null; }
+        this.tweens.killTweensOf(m); m.setAngle(0); m.y = this.manduY;
+        Sfx.talla(); this.cameras.main.shake(160, 0.003);
+        const p = this.add.particles(m.x, m.y - m.displayHeight * 0.4, 'espurna', { speed: { min: 40, max: 150 }, angle: { min: 180, max: 360 }, gravityY: 320, lifespan: 750, scale: { start: 0.55, end: 0 }, tint: [0xffffff, 0xf2e8d2, 0xe8d8b8], quantity: 16, emitting: false }).setDepth(99000);
+        p.explode(16); this.time.delayedCall(900, () => p.destroy());
+        m.setTexture('mandu_trencada');
+        this.tweens.add({ targets: m, x: m.x + 3, yoyo: true, repeat: 5, duration: 40 });
+        Estat.posaFlag('manduNinaTrencada');
+        this.esperar(800, fet);
     }
 
     posarBoiraTiller() {

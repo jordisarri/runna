@@ -444,9 +444,15 @@ class CambraMonja extends ZonaCasaBase {
         this.sortida(350, H - 22, 100, 14, 'ZonaHostatgeriaInt', { pains: 'cambra1', phili: 'cambra2', charm: 'cambra3' }[m]);
         // Paret del fons: arrebossat amb taques de calç, un sòcol de fusta i dos aplics
         const paret = this.add.graphics().setDepth(-995);
-        paret.fillStyle(m === 'charm' ? 0x5a4a40 : 0x6a5646, 1).fillRect(130, 0, A - 260, 90);
+        // La paret arriba fins a la cornisa (molt per sobre de la finestra): així la finestra hi és sencera i la paret no queda tallada
+        const TOP = -150;
+        paret.fillStyle(m === 'charm' ? 0x5a4a40 : 0x6a5646, 1).fillRect(130, TOP, A - 260, 90 - TOP);
         let sd = m.length * 7; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
-        for (let k = 0; k < 14; k++) paret.fillStyle(0xffffff, 0.04 + r() * 0.05).fillEllipse(150 + r() * 500, 8 + r() * 50, 30 + r() * 50, 10 + r() * 14);
+        for (let k = 0; k < 22; k++) paret.fillStyle(0xffffff, 0.04 + r() * 0.05).fillEllipse(150 + r() * 500, TOP + 20 + r() * (70 - TOP), 30 + r() * 50, 10 + r() * 14);
+        paret.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.35, 0.35, 0, 0).fillRect(130, TOP, A - 260, 60);          // la part de dalt, a l'ombra
+        paret.fillStyle(0x3a2412, 1).fillRect(122, TOP - 6, A - 244, 22).fillStyle(0x5a3a1e, 1).fillRect(122, TOP + 12, A - 244, 5);      // cornisa de fusta
+        paret.fillStyle(0xffd9a0, 0.14).fillRect(122, TOP - 6, A - 244, 3);
+        paret.fillStyle(0x2a1f18, 1).fillRect(90, TOP - 6, 40, -TOP + 6).fillRect(A - 130, TOP - 6, 40, -TOP + 6);        // els murs laterals pugen amb la paret
         paret.fillStyle(0x4a2e1a, 1).fillRect(130, 64, A - 260, 26);
         paret.fillStyle(0xffd9a0, 0.18).fillRect(130, 64, A - 260, 3);
         for (let x = 150; x < A - 130; x += 36) paret.lineStyle(1, 0x2a1a0c, 0.7).lineBetween(x, 68, x, 88);
@@ -472,11 +478,11 @@ class CambraMonja extends ZonaCasaBase {
             raig.fillStyle(0x9ab8ff, 0.07).fillPoints([{ x: 380, y: 92 }, { x: 420, y: 92 }, { x: 500, y: 330 }, { x: 330, y: 330 }], true);
             raig.fillStyle(0x9ab8ff, 0.05).fillEllipse(415, 340, 190, 40);
         }
-        if (m === 'pains') {                                           // dormitori: quatre llits estrets amb capçal, coixí i flassada
+        if (m === 'pains') {                                           // dormitori: tres llits (un per germana) estrets amb capçal, coixí i flassada
             const llits = this.add.graphics().setDepth(-950);
             const flassades = [0x5a6a8e, 0x6a8a5a, 0xa0784a, 0x9a5a6a];
             const capcal = { tl: 10, tr: 10, bl: 0, br: 0 };
-            [[200, 260], [420, 260], [620, 260], [200, 430]].forEach(([x, y], i) => {
+            [[200, 260], [420, 260], [620, 260]].forEach(([x, y], i) => {
                 llits.fillStyle(0x000000, 0.25).fillRect(x - 38, y + 106, 84, 10);
                 llits.fillStyle(0x4a2e18, 1).fillRoundedRect(x - 44, y - 34, 88, 26, capcal).lineStyle(2, 0x120c08, 1).strokeRoundedRect(x - 44, y - 34, 88, 26, capcal);
                 llits.fillStyle(0x6a4424, 1).fillRect(x - 36, y - 28, 72, 4);
@@ -500,7 +506,7 @@ class CambraMonja extends ZonaCasaBase {
             });
             const cat = this.add.graphics().setDepth(-1050);                                     // estora entre els llits
             cat.fillStyle(0x8a6a3a, 1).fillRoundedRect(430, 410, 180, 120, 10).lineStyle(3, 0x5a3a1a, 1).strokeRoundedRect(438, 418, 164, 104, 8);
-            this.colisio(200, 330, 80, 130); this.colisio(420, 330, 80, 130); this.colisio(620, 330, 80, 130); this.colisio(200, 500, 80, 130);
+            this.colisio(200, 330, 80, 130); this.colisio(420, 330, 80, 130); this.colisio(620, 330, 80, 130);
             this.pains = this.npc('monja_pains', 520, 470, DIALEGS.monjaPains);
             this.capoll = this.crearCapoll(this.pains);
             this.pains.setTint(0xd6c8ff);                                          // atrapada: es veu a través de la seda lila

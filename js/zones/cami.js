@@ -306,24 +306,21 @@ class ZonaJardi extends ZonaBase {
         const tex = this.textures.get('columna'), escalaBase = (tex.customData && tex.customData.escala) || 1 / RES;
         const colH = tex.getSourceImage().height * escalaBase;            // alçada d'una columna sense escalar
         const ESC = 1.4, ALT_COL = Math.round(colH * ESC), COL_W = Math.round(tex.getSourceImage().width * escalaBase * ESC);
-        const pedra = 0xb8b2a4, ombra = 0x6a6458;
-        const arcades = this.add.graphics().setDepth(YF + 1);     // arcades del davant (per sobre de l'Ineu si és a dins)
-        const darrere = this.add.graphics().setDepth(YB + 1);
-        const bigues = this.add.graphics().setDepth(YB + 1);      // bigues transversals: l'Ineu hi passa per davant
-        const arc = (g, x1, x2, y) => {
-            const cx = (x1 + x2) / 2, y0 = y - ALT_COL, r = (x2 - x1 - COL_W) / 2 + 7;
-            g.lineStyle(20, 0x120c08, 1).beginPath().arc(cx, y0, r, Math.PI, Math.PI * 2).strokePath();
-            g.lineStyle(14, pedra, 1).beginPath().arc(cx, y0, r, Math.PI, Math.PI * 2).strokePath();
-            g.lineStyle(3, ombra, 0.6).beginPath().arc(cx, y0, r - 4, Math.PI, Math.PI * 2).strokePath();
-            g.fillStyle(0xcfc9ba, 1).fillRect(cx - 7, y0 - r - 9, 14, 16);                    // clau de l'arc
-            g.lineStyle(2, 0x120c08, 1).strokeRect(cx - 7, y0 - r - 9, 14, 16);
+        // Sense arcades ni bigues: només les columnes, i al damunt una coberta d'heura (fulles transparents, amb una mica de moviment) que s'enfila per les columnes
+        const heura = (x, y, esc, alfa, prof, ang) => {
+            if (Math.hypot(x - 664, (y - 560) * 1.2) < 120) return null;          // la llosa i el seu entorn queden lliures d'heura (es veu l'escena de l'obertura)
+            const l = this.add.image(x, y, 'fulla_heura').setScale(esc).setAlpha(alfa).setDepth(prof).setAngle(ang);
+            l.setTint([0x4f8f35, 0x6aac3e, 0x7cbc4a, 0x3f7a30, 0x92cc58][Math.floor(rnd() * 5)]);
+            if (rnd() < 0.5) this.tweens.add({ targets: l, angle: ang + (rnd() < 0.5 ? -7 : 7), alpha: alfa * 0.8, duration: 2200 + rnd() * 2600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: rnd() * 2000 });
+            return l;
         };
-        for (let i = 0; i < COLS.length - 1; i++) { arc(arcades, COLS[i], COLS[i + 1], YF); arc(darrere, COLS[i], COLS[i + 1], YB); }
+        const x0 = COLS[0] - 14, x1 = COLS[COLS.length - 1] + 14, yTop = YB - ALT_COL - 14, yBaix = YF - ALT_COL + 18;
+        for (let i = 0; i < 150; i++) heura(x0 + rnd() * (x1 - x0), yTop + rnd() * (yBaix - yTop), 0.3 + rnd() * 0.26, 0.26 + rnd() * 0.18, 700, rnd() * 360);
+        for (let i = 0; i < 40; i++) heura(x0 + rnd() * (x1 - x0), yBaix - 8 + rnd() * 30, 0.26 + rnd() * 0.2, 0.34 + rnd() * 0.18, 701, 160 + rnd() * 40);       // la franja que penja al davant
         COLS.forEach(x => {
-            bigues.lineStyle(16, 0x120c08, 1).lineBetween(x, YB - ALT_COL - 4, x, YF - ALT_COL - 4);
-            bigues.lineStyle(10, pedra, 1).lineBetween(x, YB - ALT_COL - 4, x, YF - ALT_COL - 4);
             this.posar('columna', x, YB, { escala: ESC, col: { w: 34, h: 14 } });
             this.posar('columna', x, YF, { escala: ESC, col: { w: 34, h: 14 } });
+            [YB, YF].forEach(y => { for (let k = 0; k < 7; k++) heura(x + (rnd() - 0.5) * 36, y - 18 - k * (ALT_COL / 8) - rnd() * 14, 0.22 + rnd() * 0.14, 0.45 + rnd() * 0.2, y + 2, rnd() * 360); });   // l'heura puja per les columnes
         });
         this.pergola = { x0: COLS[0], x1: COLS[COLS.length - 1], yb: YB, yf: YF, planta: PLANTA };
 
@@ -391,54 +388,82 @@ class ZonaJardi extends ZonaBase {
         this.sortidaEscala(x - 37, y - 37, 74, 74, 'ZonaSoterraniHost', 'entrada', y + 42);   // l'Ineu baixa l'escala abans de canviar de zona
     }
 
-    // L'Isildren porta la llavor a la llosa, la planta, la flor creix i la llosa s'aparta i deixa veure l'escala. Tot es veu, no s'explica.
-    obrirLlosa() {
-        if (this.obrintLlosa || Estat.flag('llosaOberta')) return;
+    // L'Isildren porta la llavor a la llosa: la deixa caure, hi brota una flor de lluna i una columna de llum lunar baixa fins a ella; sobre la llosa
+    // s'encén un cercle de runes, tot tremola i la llosa s'alça i s'aparta, i deixa veure l'escala. Tot es veu (res no s'ajup ni es deforma).
+    // fet: quan l'escena ha acabat (es crida des d'una pàgina d'acció del diàleg de l'Isildren).
+    obrirLlosa(fet) {
+        if (this.obrintLlosa || Estat.flag('llosaOberta')) { if (fet) fet(); return; }
         this.obrintLlosa = true;
-        const ui = this.ui(), cam = this.cameras.main, I = this.isidre, { x: LX, y: LY } = this.llosaPos;
-        const base = I.scaleX;
+        const cam = this.cameras.main, I = this.isidre, { x: LX, y: LY } = this.llosaPos;
         this.tweens.killTweensOf(I);
-        ui.bloquejatFins = this.time.now + 16000;
         const espera = ms => new Promise(res => this.time.delayedCall(ms, res));
-        const mou = (dest, ms, coix = true) => new Promise(res => {
-            const balanceig = coix ? this.tweens.add({ targets: I, angle: { from: -4, to: 4 }, yoyo: true, repeat: -1, duration: 260 }) : null;
+        const mou = (dest, ms) => new Promise(res => {
+            const balanceig = this.tweens.add({ targets: I, angle: { from: -4, to: 4 }, yoyo: true, repeat: -1, duration: 260 });
             this.tweens.add({
                 targets: [I, I.ombra], ...dest, duration: ms, ease: 'Sine.easeInOut',
                 onUpdate: () => { I.setDepth(I.y); I.punt.x = I.x; I.punt.y = I.y - 10; },
-                onComplete: () => { if (balanceig) { balanceig.stop(); I.setAngle(0); } res(); }
+                onComplete: () => { balanceig.stop(); I.setAngle(0); res(); }
             });
         });
-        const pols = (x, y, tints) => { const p = this.add.particles(x, y, 'espurna', { speed: { min: 20, max: 70 }, angle: { min: 200, max: 340 }, lifespan: 600, scale: { start: 0.35, end: 0 }, tint: tints, quantity: 8, emitting: false }).setDepth(9000); p.explode(10); this.time.delayedCall(800, () => p.destroy()); };
+        const pols = (x, y, tints, n = 8) => { const p = this.add.particles(x, y, 'espurna', { speed: { min: 20, max: 70 }, angle: { min: 200, max: 340 }, lifespan: 600, scale: { start: 0.35, end: 0 }, tint: tints, quantity: n, emitting: false }).setDepth(99000); p.explode(n); this.time.delayedCall(800, () => p.destroy()); };
+        const FX = LX - 66, FY = LY + 22;                                  // on creix la flor
         (async () => {
-            cam.stopFollow(); cam.pan(LX, LY + 130, 700, 'Sine.easeInOut');
+            cam.stopFollow(); cam.pan(LX - 30, LY + 110, 700, 'Sine.easeInOut');
             await espera(750);
-            await mou({ x: LX, y: 780 }, 1400);                    // surt per l'obertura de la pèrgola
-            await mou({ x: LX - 14, y: LY + 66 }, 1000);            // fins a la llosa
-            this.tweens.add({ targets: I, scaleY: base * 0.78, duration: 450, ease: 'Sine.easeOut' });   // s'ajup a cavar
-            [0, 350, 700].forEach(t => this.time.delayedCall(t, () => pols(LX - 14, LY + 68, [0x8a6a44, 0x6a4a2c])));
-            await espera(1100);
-            this.florLluna.setVisible(true).setScale(0.04);          // la llavor brota
-            this.tweens.add({ targets: this.florLluna, scale: 0.8, duration: 1100, ease: 'Back.easeOut' });
-            const llum = this.add.particles(LX - 66, LY + 8, 'espurna', { x: { min: -20, max: 20 }, speedY: { min: -40, max: -10 }, lifespan: 1400, scale: { start: 0.4, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xbfe8ff, 0xffffff], frequency: 120, blendMode: 'ADD' }).setDepth(9000);
-            await espera(1500);
-            this.tweens.add({ targets: I, scaleY: base, duration: 350 });
-            await mou({ x: LX - 74, y: LY + 62 }, 900);             // s'aparta cap a l'esquerra (a la dreta hi ha la paret de la casa)
-            Sfx.secret(); cam.shake(500, 0.004);
-            this.tweens.add({ targets: this.llosa, x: LX - 92, y: LY + 4, rotation: -0.1, duration: 1500, ease: 'Cubic.easeInOut' });   // la llosa llisca i descobreix l'escala
-            pols(LX - 20, LY, [0xa89878, 0x8a8478]);
+            await mou({ x: LX, y: 780 }, 1300);                            // surt per l'obertura de la pèrgola
+            await mou({ x: FX + 46, y: FY + 40 }, 1100);                   // fins al lloc de la flor
+            // 1. La llavor surt de la mà de l'Isildren i cau a terra
+            const icona = iconaObjecte(this, 'llavorLluna');
+            const llavor = icona ? this.add.image(I.x - 12, I.y - 70, icona).setScale(0.28).setDepth(99000) : this.add.circle(I.x - 12, I.y - 70, 6, 0xe8e4f8, 1).setDepth(99000);
+            await new Promise(res => { this.tweens.add({ targets: llavor, x: FX, y: FY + 6, duration: 700, ease: 'Quad.easeIn', onComplete: res }); });
+            pols(FX, FY + 6, [0x8a6a44, 0x6a4a2c], 6);
+            this.tweens.add({ targets: llavor, scale: 0, alpha: 0, delay: 200, duration: 400, onComplete: () => llavor.destroy() });
+            await espera(700);
+            // 2. Una tija verda creix i, al capdamunt, s'obre la flor de lluna
+            const tija = this.add.graphics().setDepth(FY + 4), alt = { v: 0 };
+            this.tweens.add({ targets: alt, v: 1, duration: 1100, ease: 'Sine.easeOut', onUpdate: () => {
+                tija.clear().lineStyle(4, 0x3f7a30, 1).lineBetween(FX, FY + 8, FX + Math.sin(alt.v * 3) * 3, FY + 8 - alt.v * 34);
+                if (alt.v > 0.4) tija.fillStyle(0x5aa83a, 1).fillEllipse(FX - 8, FY - 6, 12 * alt.v, 5).fillEllipse(FX + 8, FY - 14, 12 * alt.v, 5);
+            } });
+            await espera(1000);
+            this.florLluna.setVisible(true).setScale(0.04).setPosition(FX, FY + 4).setAlpha(1);          // la flor s'obre
+            this.tweens.add({ targets: this.florLluna, scale: 0.8, duration: 1300, ease: 'Back.easeOut' });
+            Sfx.xiu(1.2, 0.1, 'bandpass', 900, 2200, 3); Sfx.to(880, 1320, 0.5, 'sine', 0.12);
+            // 3. La llum de la lluna baixa del cel fins a la flor (una columna pàl·lida, amb borrissol de llum)
+            const raig = this.add.rectangle(FX, FY - 150, 90, 340, 0xcfe4ff, 0).setBlendMode(Phaser.BlendModes.ADD).setDepth(FY + 30);
+            this.tweens.add({ targets: raig, fillAlpha: 0.2, duration: 900, yoyo: false });
+            const llum = this.add.particles(FX, FY - 10, 'espurna', { x: { min: -34, max: 34 }, speedY: { min: -70, max: -20 }, lifespan: 1700, scale: { start: 0.45, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xbfe8ff, 0xffffff, 0xe0d0ff], frequency: 60, blendMode: 'ADD' }).setDepth(FY + 31);
             await espera(1800);
-            llum.stop(); this.time.delayedCall(1500, () => llum.destroy());
+            // 4. Sobre la llosa s'encén un cercle de runes; tot tremola
+            const cercle = this.add.graphics().setDepth(LY + 6).setAlpha(0);
+            cercle.lineStyle(3, 0xbfe8ff, 1).strokeCircle(LX, LY, 34).strokeCircle(LX, LY, 22);
+            for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; cercle.lineBetween(LX + Math.cos(a) * 22, LY + Math.sin(a) * 22, LX + Math.cos(a) * 34, LY + Math.sin(a) * 34); }
+            cercle.fillStyle(0xbfe8ff, 0.18).fillCircle(LX, LY, 34);
+            this.tweens.add({ targets: cercle, alpha: 1, duration: 900 });
+            this.tweens.add({ targets: this.llosa, x: { from: LX - 1.5, to: LX + 1.5 }, yoyo: true, repeat: 10, duration: 60 });
+            cam.shake(1100, 0.0025); Sfx.secret();
+            await espera(1300);
+            // 5. La llosa s'alça una mica i llisca cap a l'esquerra, i deixa veure l'escala
+            this.tweens.add({ targets: this.llosa, scale: this.llosa.scale * 1.05, duration: 350, yoyo: true });
+            await espera(380);
+            await mou({ x: FX + 40, y: FY + 70 }, 500);
+            this.tweens.add({ targets: this.llosa, x: LX - 92, y: LY + 4, rotation: -0.1, duration: 1500, ease: 'Cubic.easeInOut' });
+            cam.shake(500, 0.004); pols(LX - 20, LY, [0xa89878, 0x8a8478], 10);
+            this.tweens.add({ targets: cercle, alpha: 0, duration: 1200 });
+            await espera(1800);
+            raig.destroy(); llum.stop(); this.time.delayedCall(1700, () => llum.destroy());
+            await mou({ x: LX - 74, y: LY + 62 }, 700);                     // s'aparta cap a l'esquerra (a la dreta hi ha la paret de la casa)
             Estat.posaFlag('llosaOberta');
             this.posarEntradaForat();
             I.punt.x = I.x; I.punt.y = I.y - 10;
-            this.tweens.add({ targets: I, scaleY: base * 1.02, yoyo: true, repeat: -1, duration: 1200 });
+            tija.destroy();
             Estat.posaObjectiu("La llosa del jardí s'ha obert i deixa veure una escala cap al soterrani de l'Hostatgeria.");
             Estat.desar();
             cam.pan(this.ineu.x, this.ineu.y, 700, 'Sine.easeInOut');
             await espera(750);
             cam.startFollow(this.ineu, false, 0.12, 0.12);
-            ui.bloquejatFins = 0;
             this.obrintLlosa = false;
+            if (fet) fet();
         })();
     }
 }

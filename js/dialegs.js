@@ -946,12 +946,14 @@ const DIALEGS = {
         }
         if (E.te('llavorLluna')) {
             return {
-                pagines: [{ qui: 'Isildren', text: 'Una Llavor de Lluna! Fa trenta anys que no en veia cap. Deixa-me-la, monjo, que encara sé cavar un clot.' }],
-                enAcabar: () => {
-                    E.treu('llavorLluna');
-                    const z = Joc.zonaActiva(game.scene.getScene('UI'));
-                    if (z && z.obrirLlosa) z.obrirLlosa(); else E.posaFlag('llosaOberta');
-                }
+                pagines: [
+                    { qui: 'Ineu', text: "Isildren, mira què duc. La Rosansa me l'ha donada: diu que és una Llavor de Lluna." },
+                    { qui: 'Isildren', text: "Una Llavor de Lluna! Fa trenta anys que no en veia cap. Floreix de nit, amb la llum de la lluna, i només si la planta algú que no ha perdut l'esperança." },
+                    { qui: 'Isildren', text: "El meu Sardi s'asseia aquí a esperar que s'obrissin, i deia que les flors de lluna canten quan floreixen. Deixa-me-la, monjo: encara sé cavar un clot. I mira bé." },
+                    { fer: (z, fet) => { E.treu('llavorLluna'); if (z && z.obrirLlosa) z.obrirLlosa(fet); else { E.posaFlag('llosaOberta'); fet(); } } },
+                    { qui: 'Isildren', text: "La llosa s'ha apartat... Sota hi ha el camí que els monjos feien servir per portar menjar a les cel·les del soterrani de la casa. Fa segles que ningú no el trepitja." },
+                    { qui: 'Isildren', text: "Baixa-hi amb compte, fill. I si trobes el meu Sardi... digue-li que les flors de lluna han tornat a obrir-se." }
+                ]
             };
         }
         return {
@@ -1018,7 +1020,7 @@ const DIALEGS = {
                 { qui: 'Dolora', text: 'Si passes pel jardí, saluda l\'Isildren, el jardiner d\'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.' },
                 ...(!(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? [{ qui: 'Dolora', text: 'La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d\'aquests que no els talla ni la falç. Diuen que només cedeixen davant d\'una espasa de llum.'
                     + (E.te('runna') ? ' Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho.' : '') }] : []),
-                { qui: 'Dolora', text: 'Vés amb compte, fill. Entre les tres germanes guardem un gra del rosari d\'aquesta casa i la nostra Empara. Quan siguem lliures les tres, seran teus.' },
+                { qui: 'Dolora', text: 'Vés amb compte, fill. Entre les tres germanes guardem l\'Empara d\'aquesta casa. Quan siguem lliures les tres, serà teva.' },
                 ...(ultimaMonja('Pains') ? [avisPremiMonja('Pains')] : [])
             ],
             enAcabar: () => premiMonja('Pains', 'premiPains')
@@ -1031,7 +1033,7 @@ const DIALEGS = {
                 { qui: 'Pilària', text: 'Per fi! Tres nits que colpejo aquesta porta! Soc la Pilària, i no, no m\'he estat quieta ni un minut.' },
                 { qui: 'Pilària', text: 'T\'ho dic perquè ho vaig veure: el Germà Aldreu, aquell pesat que sempre anava jugant amb els nens, abans que la boira ens tanqués, anava moltes nits a la Porta de les Gírgoles, a l\'est del Celler, i la porta se li obria sola. Mai no li he cregut el somriure.' },
                 { qui: 'Pilària', text: 'Tots aquests nens innocents segrestats per aquesta maleïda boira... Troba\'ls, monjo! Salva\'ls a tots!' },
-                { qui: 'Pilària', text: 'Gràcies per les molèsties! Que no se t\'acabin les forces!' },
+                { qui: 'Pilària', text: 'Gràcies pel teu coratge! Que no se t\'acabin les forces!' },
                 ...(ultimaMonja('Phili') ? [avisPremiMonja('Phili')] : [])
             ],
             enAcabar: () => premiMonja('Phili', 'premiPhili')
@@ -1226,6 +1228,35 @@ const DIALEGS = {
             E.posaObjectiu("El pastor vell de la Cirosa guarda les esquelles dels seus avis.");
         }
     }),
+
+    // ---------------- LES CEL·LES: LA MANDU, LA GERMANA DEL FRAM ----------------
+    // Juga amb una nina davant la porta de la dreta de Sant Benet. A la primera conversa, la pena i la ràbia li fan arrencar el cap a la nina; no deixa que ningú
+    // la toqui: només la pot arreglar el Fram (a l'epíleg).
+    mandu: E => {
+        if (E.flag('epilegFet')) return { pagines: [{ qui: 'Mandu', text: "El Fram m'ha cosit el cap de la nina! Diu que ara és una nina valenta. I jo ja no el deixo marxar enlloc." }] };
+        if (E.flag('manduNinaTrencada')) return { pagines: [
+            { qui: 'Mandu', text: "No la toquis, eh? Només el Fram sap cosir caps de nina." },
+            { qui: 'Mandu', text: "La nina espera. Jo també espero." }
+        ] };
+        return {
+            pagines: [
+                { qui: 'Mandu', text: "Zuuum! La nina vola per sobre dels núvols... i aterra a la lluna! Ui... un monjo." },
+                { qui: 'Ineu', text: "Hola. Jo sóc l'Ineu. Com et dius?" },
+                { qui: 'Mandu', text: "Mandu. I ella és la nina. Sempre juguem aquí, davant la porta, esperant el Fram." },
+                { qui: 'Ineu', text: "El Fram és el teu germà?" },
+                { qui: 'Mandu', text: "Sí. Dormíem porta amb porta. Fa tres nits que la seva porta és oberta i ell no hi és. Sempre em diu on va, i aquesta vegada..." },
+                { qui: 'Mandu', text: "La Meus diu que la boira se l'ha endut. Però jo li vaig dir que no se n'anés! Li ho vaig dir! I ell se n'ha anat igualment! PER QUÈ NO TORNA?!" },
+                { fer: (z, fet) => z.manduTrencaNina ? z.manduTrencaNina(fet) : fet() },
+                { qui: 'Mandu', text: "...Ai. El cap de la nina. Se m'ha trencat el cap." },
+                { qui: 'Ineu', text: "Tranquil·la, Mandu. Deixa'm veure-la: potser el puc cosir." },
+                { qui: 'Mandu', text: "No! No la toquis! Només el Fram sap cosir caps de nina: ell m'arregla tot el que es trenca." },
+                { qui: 'Ineu', text: "Doncs el trobaré i te'l portaré. I et cosirà la nina." },
+                { qui: 'Mandu', text: "...Promès?" },
+                { qui: 'Ineu', text: "Promès." }
+            ],
+            enAcabar: () => E.posaFlag('manduParlat')
+        };
+    },
 
     // ---------------- ROVELLONERA: LA NENA DE LES TRENES ----------------
     nenaTrenes: E => {
