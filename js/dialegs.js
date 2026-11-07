@@ -825,11 +825,10 @@ const DIALEGS = {
         const total = () => Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).filter(Boolean).length;
         return {
             pagines: [
-                { qui: 'Inscripció', text: `Columna ${n} de 12. Signe gravat: ${signe}` },
+                // Un sol quadre de text per columna: el signe, la paraula i quantes en porta apuntades
                 { qui: 'Ineu', text: E.flag('col' + n)
-                    ? `Ja el vaig apuntar: ${signe} vol dir «${paraula}».`
-                    : `Sota el signe, amb lletra petita: «${paraula}». ${signe} = «${paraula}». Ho apunto.` },
-                { avis: `Paraules apuntades: ${total() + (E.flag('col' + n) ? 0 : 1)}/12.` }
+                    ? `Columna ${n} de 12: ${signe} vol dir «${paraula}». Ja ho tenia apuntat (${total()}/12).`
+                    : `Columna ${n} de 12. Sota el signe ${signe}, amb lletra petita: «${paraula}». Ho apunto (${total() + 1}/12).` }
             ],
             enAcabar: () => {
                 E.posaFlag('col' + n);
