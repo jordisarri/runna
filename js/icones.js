@@ -372,12 +372,18 @@ const ICONES_OBJECTES = {
         ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 2; [32, 42, 52, 62].forEach(y => { ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(66 - (y % 20), y); ctx.stroke(); });
         ctx.fillStyle = '#9a2a1a'; ctx.beginPath(); ctx.arc(62, 66, 6, 0, Math.PI * 2); ctx.fill();
     },
-    carta_cortiner: ctx => {
-        ctx.lineWidth = 3; ctx.fillStyle = '#efe0b4';
-        ctx.beginPath(); ctx.rect(20, 24, 56, 50); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(20, 24); ctx.lineTo(48, 52); ctx.lineTo(76, 24); ctx.stroke();                 // la solapa d'un plec de carta
-        ctx.fillStyle = '#2a5a8a'; ctx.beginPath(); ctx.arc(48, 52, 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();      // el segell blau
-        ctx.fillStyle = '#e8c060'; [[44, 52], [48, 49], [52, 52]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 1.6, 0, Math.PI * 2); ctx.fill(); });  // les tres notes
+    carta_cortiner: ctx => {                      // un pergamí enrotllat, lligat amb una cinta blava
+        ctx.save(); ctx.translate(48, 48); ctx.rotate(-0.35); ctx.translate(-48, -48);
+        ctx.lineWidth = 3; ctx.lineJoin = 'round'; ctx.fillStyle = '#efe0b4';
+        ctx.beginPath(); ctx.rect(18, 34, 60, 30); ctx.fill(); ctx.stroke();                                              // el cos del rotlle
+        ctx.fillStyle = '#d9c48a'; ctx.beginPath(); ctx.rect(18, 55, 60, 9); ctx.fill();                                // ombra de baix
+        ctx.beginPath(); ctx.moveTo(18, 64); ctx.lineTo(78, 64); ctx.stroke();
+        ctx.fillStyle = '#c8b070'; [18, 78].forEach(x => { ctx.beginPath(); ctx.ellipse(x, 49, 7, 15, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });   // les dues puntes enrotllades
+        ctx.lineWidth = 2; ctx.strokeStyle = '#6a4a2a'; [18, 78].forEach(x => { ctx.beginPath(); ctx.ellipse(x, 49, 3.5, 8, 0, 0, Math.PI * 2); ctx.stroke(); });
+        ctx.fillStyle = '#2a5a8a'; ctx.strokeStyle = '#1c3c5c'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.rect(42, 32, 11, 34); ctx.fill(); ctx.stroke();                                              // la cinta
+        ctx.beginPath(); ctx.moveTo(47, 66); ctx.lineTo(41, 78); ctx.lineTo(47, 74); ctx.lineTo(53, 78); ctx.closePath(); ctx.fill(); ctx.stroke();   // els caps penjant
+        ctx.restore();
     },
     llavorLluna: ctx => {
         const g = ctx.createRadialGradient(48, 52, 2, 48, 52, 42); g.addColorStop(0, 'rgba(230,230,255,0.8)'); g.addColorStop(1, 'rgba(200,200,255,0)');

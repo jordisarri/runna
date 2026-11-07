@@ -251,11 +251,12 @@ class ZonaBoscPi extends ZonaBase {
     posarOcellsPi(animat, fet) {
         const pi = this.pi, X = pi.x, alt = pi.displayHeight;
         this.ocellsPi = this.ocellsPi || [];
+        const colors = ['ocell', 'ocell_roig', 'ocell_groc', 'ocell_verd', 'ocell_lila', 'ocell_taronja'];       // un de cada color
         const esc = ((this.textures.get('ocell').customData || {}).escala || 1 / RES) * 0.9;           // la mida de la resta d'ocells del joc
         const llocs = [[-125, 0.55], [-72, 0.8], [8, 0.97], [86, 0.76], [132, 0.55], [42, 0.62]];
         llocs.forEach(([dx, k], i) => {
             const x = X + dx, y = pi.y - alt * k, dreta = dx > 0;
-            const o = this.add.image(animat ? X + (dreta ? 520 : -520) : x, animat ? y - 380 - i * 30 : y, 'ocell').setDepth(pi.y + 400).setFlipX(!dreta).setScale(esc);
+            const o = this.add.image(animat ? X + (dreta ? 520 : -520) : x, animat ? y - 380 - i * 30 : y, colors[i % colors.length]).setDepth(pi.y + 400).setFlipX(!dreta).setScale(esc);
             this.ocellsPi.push(o);
             const salta = () => this.tweens.add({ targets: o, y: y - 5, yoyo: true, duration: 140, repeat: 1, delay: 1800 + Math.random() * 5000, onComplete: salta });
             if (!animat) { salta(); return; }

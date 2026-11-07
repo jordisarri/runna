@@ -169,6 +169,12 @@ const CATALEG = [
     { key: 'cercle_bolets',  file: 'assets/natura/cercle_bolets.webp',  amplada: 150, provisional: (c, w) => dibuixarCercleBolets(c, w) },
     { key: 'olla',           file: null,           amplada: 110, provisional: (c, w) => dibuixarOlla(c, w) },
     { key: 'ocell',          file: null,          amplada: 34, provisional: (c, w) => dibuixarOcell(c, w) },
+    // Ocells de colors per al Pi dels Tres Cants (provisionals: els ocells que hi tornen són tots diferents)
+    { key: 'ocell_roig',     file: null, amplada: 34, provisional: (c, w) => dibuixarOcell(c, w, ['#d4473a', '#f0705a', '#a8352a']) },
+    { key: 'ocell_groc',     file: null, amplada: 34, provisional: (c, w) => dibuixarOcell(c, w, ['#e8c030', '#f7e070', '#c09a20']) },
+    { key: 'ocell_verd',     file: null, amplada: 34, provisional: (c, w) => dibuixarOcell(c, w, ['#4aa84a', '#7ad07a', '#388038']) },
+    { key: 'ocell_lila',     file: null, amplada: 34, provisional: (c, w) => dibuixarOcell(c, w, ['#9a5ad0', '#b98af0', '#7a3ab0']) },
+    { key: 'ocell_taronja',  file: null, amplada: 34, provisional: (c, w) => dibuixarOcell(c, w, ['#e8802a', '#f5a860', '#c06018']) },
     { key: 'jaumeta',        file: 'assets/personatges/jaumeta.webp',        amplada: 89, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
     { key: 'arma_tiller', file: 'assets/armes/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/armes/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },

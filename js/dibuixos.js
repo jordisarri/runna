@@ -1600,14 +1600,14 @@ function dibuixarOlla(c, w) {
     lienc(c, w, L * RES, ctx => { ctx.scale(RES, RES); pintarOlla(ctx, L, L); });
 }
 
-function dibuixarOcell(c, w) {
+function dibuixarOcell(c, w, colors = ['#4a8ad4', '#6aa8f0', '#3a6ab0']) {
     lienc(c, w, w * 0.8, (ctx, W, H) => {
         ctx.lineWidth = 2.5; ctx.strokeStyle = CONTORN;
-        ctx.fillStyle = '#4a8ad4'; ctx.beginPath(); ctx.ellipse(W * 0.5, H * 0.55, W * 0.3, H * 0.28, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#6aa8f0'; ctx.beginPath(); ctx.arc(W * 0.72, H * 0.38, W * 0.16, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = colors[0]; ctx.beginPath(); ctx.ellipse(W * 0.5, H * 0.55, W * 0.3, H * 0.28, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = colors[1]; ctx.beginPath(); ctx.arc(W * 0.72, H * 0.38, W * 0.16, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         ctx.fillStyle = '#e8a030'; ctx.beginPath(); ctx.moveTo(W * 0.86, H * 0.38); ctx.lineTo(W * 0.98, H * 0.42); ctx.lineTo(W * 0.86, H * 0.46); ctx.closePath(); ctx.fill(); ctx.stroke();
         ctx.fillStyle = CONTORN; ctx.fillRect(W * 0.74, H * 0.32, 3, 3);
-        ctx.fillStyle = '#3a6ab0'; ctx.beginPath(); ctx.moveTo(W * 0.22, H * 0.55); ctx.lineTo(0, H * 0.4); ctx.lineTo(W * 0.2, H * 0.7); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = colors[2]; ctx.beginPath(); ctx.moveTo(W * 0.22, H * 0.55); ctx.lineTo(0, H * 0.4); ctx.lineTo(W * 0.2, H * 0.7); ctx.closePath(); ctx.fill(); ctx.stroke();
         ctx.strokeStyle = '#8a5a2a'; ctx.beginPath(); ctx.moveTo(W * 0.4, H * 0.8); ctx.lineTo(W * 0.4, H * 0.95); ctx.moveTo(W * 0.56, H * 0.8); ctx.lineTo(W * 0.56, H * 0.95); ctx.stroke();
     });
 }
