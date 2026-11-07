@@ -802,7 +802,7 @@ Object.assign(ZonaBase.prototype, {
         this.vista8Manual = true;
         this.posarDireccio(this.direccio, false, vista);
         this.ineu.setFlipX(false);
-        this.atacantFins = this.time.now + ATAC_INEU.fotogrames.length / ATAC_INEU.fps * 1000;
+        this.atacantFins = this.time.now + fotogramesAtac(vista).length / ATAC_INEU.fps * 1000;
         const net = this.capaArma(vista, runna, agil);
         this.ineu.anims.play('atac_' + vista, true);
         this.ineu.once('animationcomplete', () => {
@@ -857,7 +857,7 @@ Object.assign(ZonaBase.prototype, {
             if (this.armaNet === net) this.armaNet = null;
         };
         this.armaNet = net;
-        this.time.delayedCall(ATAC_INEU.fotogrames.length / ATAC_INEU.fps * 1000 + 150, net);       // per si l'animació s'interromp
+        this.time.delayedCall(fotogramesAtac(vista).length / ATAC_INEU.fps * 1000 + 150, net);       // per si l'animació s'interromp
         return net;
     },
 

@@ -229,8 +229,12 @@ const SPRITE_INEU = {
  */
 const ATAC_INEU = {
     fotogrames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],   // els 16 de la fulla: alçada, cop, posició i tornada
-    fps: 40                                                              // 16 fotogrames a 40 fps = 0,4 s (el mateix que abans amb 10 a 28)
+    fps: 40,                                                             // 16 fotogrames a 40 fps = 0,4 s (el mateix que abans amb 10 a 28)
+    // Vistes que només fan servir una part de la fulla (la fulla de assets/ no es toca: per recuperar-ho, treu l'entrada). 'up': sense els quatre últims, que
+    // eren la tornada del cos cap a la posició de partida; l'atac acaba just després del gir cap a l'esquerra.
+    perVista: { up: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }
 };
+function fotogramesAtac(vista) { return ATAC_INEU.perVista[vista] || ATAC_INEU.fotogrames; }
 // Octants de moviment (angle en pantalla, y cap avall) -> direcció del sprite
 // Fotograma de repòs de les vistes de caminar
 function quietIneu() { return SPRITE_INEU.quiet; }
@@ -473,7 +477,7 @@ const Grafics = {
             if (scene.anims.exists(key)) scene.anims.remove(key);
             scene.anims.create({
                 key,
-                frames: ATAC_INEU.fotogrames.map(f => ({ key: 'ineu_atac_' + dir, frame: f })),
+                frames: fotogramesAtac(dir).map(f => ({ key: 'ineu_atac_' + dir, frame: f })),
                 frameRate: ATAC_INEU.fps,
                 repeat: 0
             });
