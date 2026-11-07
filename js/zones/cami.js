@@ -85,7 +85,8 @@ class ZonaErmita extends ZonaBase {
 
         this.cartell(1120, 610, DIALEGS.sortidaErmita);
         this.arbres([[120, 200], [900, 160], [1150, 240], [1300, 160], [150, 520],
-                     [100, 860], [1200, 880], [1320, 480]]);
+                     [100, 860], [1320, 480]]);
+        this.posar('xiprer', 1260, 900, { escala: 1.2, col: { w: 26, h: 12 } });       // (abans hi havia un pi pinyer ample que tapava el cartell i el camí)
         this.muralla(0, 330, 0, 800, 100);
 
         this.enemic('escolopendra', 700, 800);
