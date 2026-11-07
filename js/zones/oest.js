@@ -628,6 +628,7 @@ class ZonaDolmen extends ZonaBase {
     construir() {
         const { A, H, sx, sy, cx, ample, baixY, baixH, peuBosc } = DOL, x0 = cx - ample / 2, x1 = cx + ample / 2;
         Joc.detectarMusica().then(() => { if (Joc.musicaDisponible.has('jingle_runna') && !this.cache.audio.exists('jingle_runna')) { Joc.carregarMusica(this, 'jingle_runna'); this.load.start(); } });       // la fanfàrria de Runna, ja carregada quan toca
+        this.camAmunt = false;
         this.aura = null;                      // (l'escena es reutilitza: l'aura d'una visita anterior ja no hi és)
         let llavor = 23;
         const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
@@ -850,6 +851,7 @@ class ZonaDolmen extends ZonaBase {
     actualitzar(ara) {
         const I = this.ineu;
         this.actualitzarLlosa();
+        this.camPlaca();
         // Els animals del dolmen fugen quan l'Ineu s'hi acosta i tornen quan és lluny
         this.animals.forEach(a => {
             const d = Phaser.Math.Distance.Between(I.x, I.y, a.x, a.y);
@@ -918,12 +920,22 @@ class ZonaDolmen extends ZonaBase {
 
     // Les Paraules del Saber ja s'han dit: Runna surt de la pedra i és a la mà de l'Ineu, que l'alça. Raigs de llum blanca i el rètol
     // es queden fins que el jugador prem; després s'esvaeixen i l'Ineu torna a la seva pose, mirant avall
-    // En interactuar amb la placa, la càmera puja i s'allunya: es veuen la placa i l'Ineu a baix i el dolmen amb Runna a dalt (es torna a posar en acabar el diàleg)
-    enquadrarPlaca(fet) {
-        const H = ALT - ALT_HUD, lliure = Math.max(240, H - 470);
-        const dalt = this.espY - 170, baix = this.ineu.y + 70, tram = baix - dalt + 40;
-        const zoom = Math.min(this.zoomZona || ZOOM_CAMERA, lliure / tram);
-        this.enquadrar(DOL.sx, (dalt + baix) / 2, zoom, 900, fet);
+    // Quan l'Ineu arriba a l'alçada de la placa (just quan apareix el símbol d'interacció), la càmera puja SENSE canviar el zoom: mostra el dolmen, l'espasa, les flors i un
+    // tros dels peus dels arbres de darrere; quan se n'allunya (o puja a la llosa), torna a seguir-lo.
+    camPlaca() {
+        const g = this.placaGeo; if (!g) return;
+        const I = this.ineu, d = Phaser.Math.Distance.Between(I.x, I.y, g.sx, g.PY + 12);
+        const lliure = !this.alt && !this.cinema && !this.canviant;
+        if (!this.camAmunt && lliure && d < 135) {
+            this.camAmunt = true;
+            const zoom = this.zoomZona || ZOOM_CAMERA, vis = (ALT - ALT_HUD) / zoom;
+            let cy = (this.espY - 330) + vis / 2;                                  // el cim de la vista, damunt l'espasa i els peus dels arbres
+            cy = Math.min(cy, g.PY + 340 - vis / 2);                                // però sempre amb la placa i l'Ineu a la vista, per damunt del quadre de diàleg
+            this.enquadrar(DOL.sx, cy, zoom, 1100, null, 0);
+        } else if (this.camAmunt && (!lliure || d > 180)) {
+            this.camAmunt = false;
+            this.alliberarCamera(900);
+        }
     }
 
     // Dibuixa (fix) un medalló de pedra a la placa, al seu cercle, amb una llum suau del seu color

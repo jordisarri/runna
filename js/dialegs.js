@@ -1405,7 +1405,7 @@ const DIALEGS = {
                            ['medallo_saber', 'placaSaber', 'del saber', "Les paraules del monjo: el llibre tallat entra al seu cercle i la pedra s'escalfa un instant."],
                            ['medallo_benedicio', 'placaBenedicio', 'de la benedicció', "La benedicció del prior: la mà oberta s'acobla al seu cercle, i la pedra brilla amb una llum daurada."]];
         const portats = MEDALLONS.filter(([obj, placat]) => E.te(obj) && !E.flag(placat));
-        const pagines = [{ fer: (z, fet) => z.enquadrarPlaca ? z.enquadrarPlaca(fet) : fet() }];          // la càmera puja i enquadra la placa i l'Ineu amb el dolmen i Runna
+        const pagines = [];
         if (!E.flag('placaCompleta')) pagines.push({ qui: "Placa", text: "Només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina." });
         portats.forEach(([obj, placat, nom, text]) => {
             pagines.push({ fer: (z, fet) => z.posarMedallo(obj, placat, fet) });
@@ -1425,7 +1425,7 @@ const DIALEGS = {
             if (falta.length === 3) { if (!E.flag("alcuiPlacaDita")) pagines.push({ qui: "Ineu", text: "(El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alcoví deu saber-ho: ho tindrà escrit a la Crònica.)" }); }
             else pagines.push({ qui: "Ineu", text: "(Tres cercles buits: un per a cada medalló. Em falta: " + falta.join(", ") + ".)" });
         }
-        return { pagines, enAcabar: () => { E.posaFlag("placaDolmen"); E.desar(); const z = Joc.zonaActiva(game.scene.getScene('UI')); if (z && z.alliberarCamera) z.alliberarCamera(800); } };
+        return { pagines, enAcabar: () => { E.posaFlag("placaDolmen"); E.desar(); } };
     },
 
     faltaRunna: E => {
