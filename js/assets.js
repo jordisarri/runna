@@ -232,9 +232,18 @@ const ATAC_INEU = {
     fps: 40,                                                             // 16 fotogrames a 40 fps = 0,4 s (el mateix que abans amb 10 a 28)
     // Vistes que només fan servir una part de la fulla (la fulla de assets/ no es toca: per recuperar-ho, treu l'entrada). 'up': sense els quatre últims, que
     // eren la tornada del cos cap a la posició de partida; l'atac acaba just després del gir cap a l'esquerra.
-    perVista: { up: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }
+    perVista: { up: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+    // Fotogrames de transició (es fabriquen en carregar, amb canvas; no hi ha cap fitxer): entre l'últim fotograma de l'atac i l'Ineu quiet, una barreja d'un i altre
+    // que va passant del primer al segon, per no fer un salt en acabar el cop. Número de fotogrames per vista; 0 o treure l'entrada = sense transició.
+    transicio: { up: 3 }
 };
-function fotogramesAtac(vista) { return ATAC_INEU.perVista[vista] || ATAC_INEU.fotogrames; }
+// Els fotogrames de l'animació d'atac d'una vista: { key, frame } (els de la fulla i, si n'hi ha, els de transició)
+function fotogramesAtac(vista) {
+    const llista = (ATAC_INEU.perVista[vista] || ATAC_INEU.fotogrames).map(f => ({ key: 'ineu_atac_' + vista, frame: f }));
+    const n = (Grafics.transicionsFetes && Grafics.transicionsFetes[vista]) || 0;
+    for (let i = 0; i < n; i++) llista.push({ key: 'ineu_atac_' + vista + '_trans', frame: i });
+    return llista;
+}
 // Octants de moviment (angle en pantalla, y cap avall) -> direcció del sprite
 // Fotograma de repòs de les vistes de caminar
 function quietIneu() { return SPRITE_INEU.quiet; }
@@ -382,6 +391,7 @@ const Grafics = {
             while (k < items.length && performance.now() - t0 < 10) Grafics.prepararItem(scene, items[k++]);
             if (k < items.length) { scene.time.delayedCall(0, tros); return; }
             Grafics.reduirIneu(scene);
+            Grafics.fabricarTransicions(scene);
             Grafics.atacsVista = new Set(DIRS_INEU.filter(d => scene.textures.exists('ineu_atac_' + d) && !Grafics.faltants.includes('ineu_atac_' + d)));
             Grafics.animacions(scene);
             if (fet) fet();
@@ -439,6 +449,50 @@ const Grafics = {
         });
     },
 
+    // Fotogrames de transició de l'atac (ATAC_INEU.transicio): una barreja de l'últim fotograma de l'atac i de l'Ineu quiet (el primer de l'idle), amb els centres
+    // dels dos cossos anant d'un a l'altre. Només es mouen i s'esvaeixen píxels (res no es deforma). Si el navegador no deixa llegir els píxels, no se'n fan.
+    transicionsFetes: {},
+    fabricarTransicions(scene) {
+        const tm = scene.textures, C2 = Math.round(SPRITE_INEU.ample * SPRITE_INEU.k);
+        Object.entries(ATAC_INEU.transicio || {}).forEach(([vista, n]) => {
+            const kA = 'ineu_atac_' + vista, kB = 'ineu_idle_' + IDLE_INEU[vista], kT = kA + '_trans';
+            if (!n || tm.exists(kT) || !tm.exists(kA) || !tm.exists(kB) || Grafics.faltants.includes(kA) || Grafics.faltants.includes(kB)) return;
+            try {
+                const ult = (ATAC_INEU.perVista[vista] || ATAC_INEU.fotogrames).slice(-1)[0];
+                const llegeix = (clau, frame) => {
+                    const t = tm.get(clau), f = t.get(frame), cv = document.createElement('canvas');
+                    cv.width = cv.height = C2;
+                    const c = cv.getContext('2d', { willReadFrequently: true });
+                    c.drawImage(t.getSourceImage(), f.cutX, f.cutY, f.cutWidth, f.cutHeight, 0, 0, C2, C2);
+                    return c.getImageData(0, 0, C2, C2).data;
+                };
+                const A = llegeix(kA, ult), B = llegeix(kB, 0);
+                const centre = d => { let sx = 0, sa = 0; for (let y = 0; y < C2; y++) for (let x = 0; x < C2; x++) { const a = d[(y * C2 + x) * 4 + 3]; sx += x * a; sa += a; } return sa ? sx / sa : C2 / 2; };
+                const cA = centre(A), cB = centre(B), m = (cA + cB) / 2;
+                const cv = document.createElement('canvas');
+                cv.width = n * C2; cv.height = C2;
+                const c = cv.getContext('2d');
+                for (let i = 0; i < n; i++) {
+                    const w = (i + 1) / (n + 1);                                                // 0 = l'atac, 1 = l'Ineu quiet
+                    const dA = Math.round((cA + (cB - cA) * w) - cA), dB = Math.round((cA + (cB - cA) * w) - cB);          // el centre de cada cos va cap al punt intermedi
+                    const img = c.createImageData(C2, C2), o = img.data;
+                    for (let y = 0; y < C2; y++) for (let x = 0; x < C2; x++) {
+                        const xa = x - dA, xb = x - dB;
+                        let ra = 0, ga = 0, ba = 0, aa = 0, rb = 0, gb = 0, bb = 0, ab = 0;
+                        if (xa >= 0 && xa < C2) { const j = (y * C2 + xa) * 4; aa = A[j + 3] / 255; ra = A[j] * aa; ga = A[j + 1] * aa; ba = A[j + 2] * aa; }
+                        if (xb >= 0 && xb < C2) { const j = (y * C2 + xb) * 4; ab = B[j + 3] / 255; rb = B[j] * ab; gb = B[j + 1] * ab; bb = B[j + 2] * ab; }
+                        const a = aa * (1 - w) + ab * w, k = (y * C2 + x) * 4;
+                        if (a > 0.003) { o[k] = (ra * (1 - w) + rb * w) / a; o[k + 1] = (ga * (1 - w) + gb * w) / a; o[k + 2] = (ba * (1 - w) + bb * w) / a; o[k + 3] = a * 255; }
+                    }
+                    c.putImageData(img, i * C2, 0);
+                }
+                const t = tm.addCanvas(kT, cv);
+                for (let i = 0; i < n; i++) t.add(i, 0, i * C2, 0, C2, C2);
+                Grafics.transicionsFetes[vista] = n;
+            } catch (e) { /* sense píxels (file://): l'atac acaba sense transició */ }
+        });
+    },
+
     // Animacions de caminar de l'Ineu (són globals: es creen una sola vegada)
     // Gràfics del Pastor de Boira: nom -> [fotogrames, fotogrames per segon, repeticions (-1 = en bucle)]
     PASTOR_FULLS: { camina: [8, 10, -1], atac: [1, 0, 0], cau: [1, 0, 0] },        // camina: full de 8 fotogrames; atac (la caiada alçada) i cau (a terra): un sol dibuix
@@ -477,7 +531,7 @@ const Grafics = {
             if (scene.anims.exists(key)) scene.anims.remove(key);
             scene.anims.create({
                 key,
-                frames: fotogramesAtac(dir).map(f => ({ key: 'ineu_atac_' + dir, frame: f })),
+                frames: fotogramesAtac(dir),
                 frameRate: ATAC_INEU.fps,
                 repeat: 0
             });
