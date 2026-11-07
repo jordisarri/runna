@@ -432,17 +432,15 @@ class ZonaCelles extends ZonaBase {
         const PDX = SB0 + sb.displayWidth * 0.754;
         this.manduY = 692;
         this.mandu = this.npc('mandu', PDX, this.manduY, DIALEGS.mandu);
-        // El camí s'acaba a la porta de la Mandu: més enllà, un jardinet de flors i arbres baixos que el tanquen (no sembla que continuï)
+        // El camí s'acaba a la porta de la Mandu. Decoració mínima i amb intenció: dues petites jardineres que abracen la porta (vora la paret), unes quantes
+        // taques de flors a l'herba del sud que menen la vista cap al final del camí, i dos arbres baixos que tanquen el final (no sembla que continuï).
         let sd = 19; const rn = () => (sd = sd * 16807 % 2147483647) / 2147483647;
-        [[2330, 640, 0.58], [2390, 770, 0.55], [2250, 850, 0.5]]
-            .forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 22, h: 12 } }));          // només tres arbres baixos
-        this.colisio(2320, 790, 260, 12);                                                   // (i res no s'hi pot passar pel mig)
-        for (let n = 0; n < 110; n++) {                                                     // flors, moltes: pels dos costats del final del camí i davant la porta
-            const x = 1900 + rn() * 500, y = 800 + rn() * 230;
-            if (Math.hypot(x - PDX, y - this.manduY) < 40) continue;
-            this.posar('flors', x, y, { fonsY: -800, escala: 0.42 + rn() * 0.36 }).setTint([0xffffff, 0xffd6e6, 0xfff2b0, 0xd6e8ff][Math.floor(rn() * 4)]);
-        }
-        for (let n = 0; n < 36; n++) this.posar('flors', 2150 + rn() * 260, 606 + rn() * 30, { fonsY: -800, escala: 0.4 + rn() * 0.3 }).setTint([0xffffff, 0xffd6e6, 0xfff2b0][Math.floor(rn() * 3)]);      // vora la paret, a la dreta del camí
+        const TINTS = [0xffffff, 0xffd6e6, 0xfff2b0, 0xd6e8ff];
+        const taca = (cx, cy, n, r) => { for (let k = 0; k < n; k++) { const a = rn() * Math.PI * 2, d = Math.sqrt(rn()) * r; this.posar('flors', cx + Math.cos(a) * d, cy + Math.sin(a) * d * 0.6, { fonsY: -800, escala: 0.4 + rn() * 0.3 }).setTint(TINTS[Math.floor(rn() * 4)]); } };
+        taca(PDX - 62, 626, 6, 22); taca(PDX + 62, 626, 6, 22);                          // les jardineres, a banda i banda de la porta
+        taca(1990, 900, 8, 38); taca(2120, 960, 8, 38); taca(2270, 905, 7, 34);          // taques de flors a l'herba del sud
+        [[2285, 700, 0.58], [2345, 810, 0.5]].forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 22, h: 12 } }));          // els dos arbres que tanquen el final
+        this.colisio(2350, 780, 190, 360);                                                // ... i no es pot passar més enllà
         if (Estat.flag('manduNinaTrencada') && !Estat.flag('epilegFet')) this.mandu.setTexture('mandu_trencada');
         else this.jugaMandu();
 
