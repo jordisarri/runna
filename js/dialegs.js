@@ -92,14 +92,15 @@ const DIALEGS = {
                     { qui: "Pare Jordà", text: "Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és voler bé de debò. Ajup el cap." },
                     { fer: (z, fet) => z.seq([c => z.npcVa('pare_jordi', z.ineu.x + 60, z.ineu.y + 4, c), c => z.npcMira('pare_jordi', 'ineu', c), c => { z.ajupir('ineu'); z.llum(z.ineu.x, z.ineu.y - 90, 0xffe8a0, c); }], fet) },
                     { qui: "Pare Jordà", text: "No vas sol, Ineu. Vas amb tot el Miracle darrere teu." },
-                    { avis: "Has rebut la BENEDICCIÓ DEL PARE JORDÀ." }
+                    { qui: "Pare Jordà", text: "Pren aquest medalló, el de la benedicció del prior: una mà oberta, tallada en pedra. Duu-lo a la placa del Dolmen." },
+                    { avis: "Has obtingut el MEDALLÓ DE LA BENEDICCIÓ!", obj: 'medallo_benedicio' }
                 ],
-                enAcabar: () => { E.posaFlag("benediccio"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
+                enAcabar: () => { E.dona("medallo_benedicio"); E.posaFlag("benediccio"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
             };
         }
         if (E.te("basto_tiller") && !E.flag("runna")) {
             return { pagines: [
-                { qui: "Pare Jordà", text: "Ineu, la gent diu que has parlat amb el Gran Til·ler. Per despertar Runna et calen tres coses: el permís de l'arbre (la Fulla), les Paraules del Saber del Pare Alcoví i la meva benedicció." },
+                { qui: "Pare Jordà", text: "Ineu, la gent diu que has parlat amb el Gran Til·ler. Per despertar Runna et calen tres coses: el permís de l'arbre (el seu medalló), les Paraules del Saber del Pare Alcoví i la meva benedicció." },
                 { qui: "Pare Jordà", text: pistaRunna(E) }
             ] };
         }
@@ -601,7 +602,7 @@ const DIALEGS = {
                 { qui: "Pare Alcoví", text: "Això ho tinc a la Crònica, fill. Deixa'm que t'ho llegeixi." },
                 { fer: (z, fet) => z.npcVa('pare_alcui', 812, 372, fet, 120) },
                 { qui: "Crònica", text: "«Per alçar l'espasa calen tres coses: el permís de l'arbre més vell, que seu a taula amb tothom; les paraules que el monjo va deixar, que només entén qui ha parlat amb la seva ombra; i la benedicció del prior, que és la de Déu passada per les mans dels homes.»" },
-                { qui: "Pare Alcoví", text: "L'arbre sagrat és el Gran Til·ler, el de les cel·les: la seva Fulla és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jordà, el prior." }
+                { qui: "Pare Alcoví", text: "L'arbre sagrat és el Gran Til·ler, el de les cel·les: el seu medalló és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jordà, el prior." }
             ];
             if (pas) pagines.push({ qui: "Pare Alcoví", text: "I ara, el que et toca: " + pas });
             return { pagines, enAcabar: () => { E.posaFlag("alcuiPlacaDita"); E.desar(); } };
@@ -623,9 +624,10 @@ const DIALEGS = {
                 pagines: [
                     { qui: "Pare Alcoví", text: "Has parlat amb l'ombra, oi? Fa temps que ho sospitava. A la Crònica hi ha un marge que no vaig saber llegir: una paraula esborrada, de la mateixa mà que va escriure els fragments." },
                     { qui: "Pare Alcoví", text: "Amb la paraula que t'ha donat, ara ho entenc. «La foscor tem la llum, però més encara el riure.» Aquestes són les paraules que desperten Runna, fill: no és un conjur, és una veritat. Digues-les davant l'espasa, senceres i amb tot el cor." },
-                    { avis: "Has après les PARAULES DEL SABER." }
+                    { qui: "Pare Alcoví", text: "Té. L'he tallat en una pedra del claustre, perquè no se't perdi: un llibre obert. Porta'l a la placa del Dolmen, i guarda les paraules dins teu per al moment de dir-les." },
+                    { avis: "Has obtingut el MEDALLÓ DEL SABER!", obj: 'medallo_saber' }
                 ],
-                enAcabar: () => { E.posaFlag("saber"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
+                enAcabar: () => { E.dona("medallo_saber"); E.posaFlag("saber"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
             };
         }
         if (E.flag("alcuiLlegit")) {
@@ -1179,13 +1181,14 @@ const DIALEGS = {
             { qui: "El Gran Til·ler", text: "Aquesta és la saviesa que et volia donar, petit monjo: ningú no es perd del tot mentre algú el recorda a taula. La gàbia de l'Ocellaire només s'omple de qui s'ha quedat sol." },
             { qui: "El Gran Til·ler", text: "Rep el meu permís. Que et sigui lleu, i que no et faci oblidar mai que vas menjar amb tots." },
             { fer: (z, fet) => z.fullaCau(fet) },
-            { avis: "Has obtingut la FULLA DEL TIL·LER!", obj: 'fulla_tiler' },
+            { qui: "Ineu", text: "(La fulla s'ha fet pedra a les meves mans: un medalló de pedra amb una fulla tallada.)" },
+            { avis: "Has obtingut el MEDALLÓ DE L'ARBRE!", obj: 'medallo_arbre' },
             { fer: (z, fet) => { ['sopar_pastor_a', 'sopar_pastor_b', 'sopar_pastor_vell'].forEach(k => z.bombolla(k, '♪', null, 1400)); z.esperar(1500, fet); } },
         ],
         enAcabar: () => {
-            E.dona("fulla_tiler"); E.posaFlag("fullaTiler"); E.posaFlag("soparFet");
+            E.dona("medallo_arbre"); E.posaFlag("fullaTiler"); E.posaFlag("soparFet");
             E.treu("pa_pastor");
-            E.posaObjectiu("Tens la Fulla del Til·ler. Ara falten el Saber del Pare Alcoví, la Benedicció del Pare Jordà i trobar Runna més enllà del mirador de les estrelles.");
+            E.posaObjectiu("Tens el Medalló de l'Arbre. Ara falten el Saber del Pare Alcoví, la Benedicció del Pare Jordà i trobar Runna més enllà del mirador de les estrelles.");
             const z = game.scene.getScene("ZonaTiller");
             if (z && z.acabarSopar) z.acabarSopar();
         }
@@ -1374,11 +1377,10 @@ const DIALEGS = {
     // Runna és dalt de la llosa: s'hi puja per darrere (el camí de margarides). Dalt, darrere l'espasa, l'Ineu diu les Paraules del Saber
     dolmen: E => {
         if (E.te("runna")) return { pagines: [] };
-        const falta = DIALEGS.faltaRunna(E);
-        if (falta.length) return { pagines: [] };            // (a l'espasa no hi ha punt d'interacció fins que es tenen les tres coses: aquí no s'arriba)
+        if (!E.flag("placaCompleta")) return { pagines: [] };            // (a l'espasa no hi ha punt d'interacció fins que els tres medallons són a la placa: aquí no s'arriba)
         return {
             pagines: [
-                { fer: (z, fet) => z.mostrarTresCoses(fet) },      // les tres coses es mostren a la pantalla i volen cap a l'espasa
+                { qui: "Ineu", text: "Els tres medallons són a la placa i l'espasa em reconeix. Ara, les paraules del monjo..." },
                 { qui: "Ineu", text: "La foscor tem la llum, però més encara el riure!" },
                 { fer: (z, fet) => z.alcarRunna(fet) }
             ],
@@ -1392,28 +1394,46 @@ const DIALEGS = {
     // Des de baix: l'espasa és dalt de la llosa
     dolmenBaix: E => {
         if (E.te("runna")) return { pagines: [] };
-        if (DIALEGS.faltaRunna(E).length) return { pagines: [] };            // fins que no es tenen les tres coses, el dolmen no diu res
+        if (!E.flag("placaCompleta")) return { pagines: [] };            // fins que no són els tres medallons a la placa, el dolmen no diu res
         return { pagines: [{ qui: "Ineu", text: "(Runna és dalt de la llosa. Potser s'hi pot pujar per darrere.)" }] };
     },
 
-    // La placa de pedra davant el dolmen: diu què cal per alçar Runna. L'Ineu no ho entén del tot i va a preguntar-ho al Pare Alcoví (la Crònica ho explica)
-    placaDolmen: E => ({
-        pagines: [
-            { qui: "Placa", text: "Només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina." }
-        ].concat((() => {
+    // La placa de pedra davant el dolmen: diu què cal per alçar Runna i hi van els tres medallons de pedra (el de l'Arbre, el del Saber i el de la Benedicció).
+    // L'Ineu col·loca, un per un, els que porta; quan hi són els tres, la placa s'il·lumina i el dolmen respon (apareix el punt d'interacció a l'espasa).
+    placaDolmen: E => {
+        const MEDALLONS = [['medallo_arbre', 'placaArbre', "de l'arbre", "El permís del Gran Til·ler: la fulla tallada encaixa al seu lloc amb un clic de pedra."],
+                           ['medallo_saber', 'placaSaber', 'del saber', "Les paraules del monjo: el llibre tallat entra al seu cercle i la pedra s'escalfa un instant."],
+                           ['medallo_benedicio', 'placaBenedicio', 'de la benedicció', "La benedicció del prior: la mà oberta s'acobla al seu cercle, i la pedra brilla amb una llum daurada."]];
+        const portats = MEDALLONS.filter(([obj, placat]) => E.te(obj) && !E.flag(placat));
+        const pagines = [];
+        if (!E.flag('placaCompleta')) pagines.push({ qui: "Placa", text: "Només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina." });
+        portats.forEach(([obj, placat, nom, text]) => {
+            pagines.push({ fer: (z, fet) => z.posarMedallo(obj, placat, fet) });
+            pagines.push({ qui: "Ineu", text: "(El medalló " + nom + ". " + text + ")" });
+        });
+        const aviat = MEDALLONS.filter(([, placat]) => !E.flag(placat) && !portats.some(p => p[1] === placat)).length;      // els que encara falten
+        const totsPlacats = MEDALLONS.every(([, placat]) => E.flag(placat) || portats.some(p => p[1] === placat));
+        if (totsPlacats && !E.flag('placaCompleta')) {
+            pagines.push({ fer: (z, fet) => z.placaCompleta(fet) });
+            pagines.push({ qui: "Ineu", text: "(Els tres cercles brillen alhora i una llum puja de la placa cap al dolmen... L'espasa m'ha reconegut. Ara puc pujar-hi.)" });
+        } else if (!totsPlacats && portats.length) {
+            pagines.push({ qui: "Ineu", text: "(Encara em falta " + (aviat === 1 ? "un medalló" : aviat + " medallons") + " per omplir la placa.)" });
+        } else if (E.flag('placaCompleta')) {
+            pagines.push({ qui: "Ineu", text: "(Els tres medallons són al seu lloc. Només em falta alçar l'espasa.)" });
+        } else {
+            // Sense cap medalló a les mans: què cal i què falta
             const falta = DIALEGS.faltaRunna(E);
-            if (!falta.length) return [{ qui: "Ineu", text: "(El permís de l'arbre sagrat, les paraules del saber i la benedicció divina... Ja ho tinc tot. Només em falta alçar l'espasa.)" }];
-            if (falta.length < 3) return [{ qui: "Ineu", text: "(Ja en tinc una part. Em falta: " + falta.join(", ") + ".)" }];
-            return E.flag("alcuiPlacaDita") ? [] : [{ qui: "Ineu", text: "(El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alcoví deu saber-ho: ho tindrà escrit a la Crònica.)" }];
-        })()),
-        enAcabar: () => { E.posaFlag("placaDolmen"); E.desar(); }
-    }),
+            if (falta.length === 3) { if (!E.flag("alcuiPlacaDita")) pagines.push({ qui: "Ineu", text: "(El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alcoví deu saber-ho: ho tindrà escrit a la Crònica.)" }); }
+            else pagines.push({ qui: "Ineu", text: "(Tres cercles buits: un per a cada medalló. Em falta: " + falta.join(", ") + ".)" });
+        }
+        return { pagines, enAcabar: () => { E.posaFlag("placaDolmen"); E.desar(); } };
+    },
 
     faltaRunna: E => {
         const falta = [];
-        if (!E.flag("fullaTiler")) falta.push("el permís del Til·ler (la Fulla)");
-        if (!E.flag("saber")) falta.push("les Paraules del Saber (Pare Alcoví)");
-        if (!E.flag("benediccio")) falta.push("la Benedicció del prior (Pare Jordà)");
+        if (!E.flag("fullaTiler")) falta.push("el permís del Til·ler (el Medalló de l'Arbre)");
+        if (!E.flag("saber")) falta.push("les Paraules del Saber (Medalló del Saber, Pare Alcoví)");
+        if (!E.flag("benediccio")) falta.push("la Benedicció del prior (Medalló de la Benedicció, Pare Jordà)");
         return falta;
     },
 
@@ -1421,10 +1441,10 @@ const DIALEGS = {
         const falta = [];
         if (!E.flag("saber")) falta.push("les Paraules del Saber (Pare Alcoví)");
         if (!E.flag("benediccio")) falta.push("la Benedicció del Pare Jordà");
-        if (!E.flag("fullaTiler")) falta.push("la Fulla del Til·ler (sopar)");
+        if (!E.flag("fullaTiler")) falta.push("el Medalló de l'Arbre (sopar)");
         if (falta.length) return "Per despertar Runna falta: " + falta.join(", ") + ".";
         if (!E.flag("estelLlorenc")) return PROGRES.pista(E);                  // el camí del Dolmen encara és tapat per la boira: primer l'estel
-        return "Ho tens tot: ves al Dolmen (sud-est, passats els Dipòsits) i desperta Runna.";
+        return "Ho tens tot: porta els tres medallons a la placa del Dolmen i desperta Runna.";
     },
 
     // ---------------- NENA DE LES TRENES (sense creu) ----------------

@@ -52,6 +52,16 @@ const Estat = {
         try { return !!localStorage.getItem(this.CLAU); } catch (e) { return false; }
     },
 
+    // Partides de versions velles: els tres medallons del Dolmen (abans només eren flags; la Fulla del Til·ler era un objecte)
+    migrar() {
+        const d = this.dades, f = d.flags;
+        if (f.runna || f.placaCompleta || (d.objectes || []).includes('runna')) return;
+        [['fullaTiler', 'medallo_arbre', 'placaArbre'], ['saber', 'medallo_saber', 'placaSaber'], ['benediccio', 'medallo_benedicio', 'placaBenedicio']].forEach(([flag, obj, placat]) => {
+            if (f[flag] && !f[placat] && !d.objectes.includes(obj)) d.objectes.push(obj);
+        });
+        d.objectes = d.objectes.filter(o => o !== 'fulla_tiler');
+    },
+
     carregar() {
         try {
             const text = localStorage.getItem(this.CLAU);
@@ -59,6 +69,7 @@ const Estat = {
             const d = this.validar(JSON.parse(text));
             if (!d) return false;
             this.dades = d;
+            this.migrar();
             return true;
         } catch (e) {
             console.warn('Partida desada il·legible', e);

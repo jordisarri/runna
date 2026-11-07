@@ -29,6 +29,7 @@ const Proves = {
         if (laterals) PROGRES.laterals.forEach(l => marca(l.marca));
         if (melodies) { Object.values(MELODIES).forEach(m => Estat.posaFlag(m.flag)); Estat.dona('flauta'); }              // totes les melodies apreses (i la tarota)
         if (mapa) Joc.ZONES.forEach(z => Estat.posaFlag('visitada_' + z));                        // tot el mapa desbloquejat: totes les escenes visitades
+        if (Estat.flag('placaCompleta')) ['medallo_arbre', 'medallo_saber', 'medallo_benedicio'].forEach(o => Estat.treu(o));        // els medallons ja són a la placa
         if (Estat.flag('bastoObtingut')) { Estat.posaFlag('tutorialCombat'); Estat.posaFlag('combatActiu'); }
         PARADES.forEach(pd => Estat.posaFlag('parada_' + pd.id));                                 // a proves, totes les parades del carruatge ja conegudes
         Estat.dades.corsMax = Math.min(7, 3 + Math.floor(fins / 8) + (laterals ? 3 : 0));        // aproximadament els grans que hi hauria (el màxim del joc és 7: 3 + Pastor, sacerdotesses i els dos cofres)

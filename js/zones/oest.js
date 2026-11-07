@@ -650,11 +650,21 @@ class ZonaDolmen extends ZonaBase {
         if (!Estat.te('runna')) this.tweens.add({ targets: this.resplendor, alpha: 0.28, yoyo: true, repeat: -1, duration: 1200 });
         this.posarPujada(wy(DOLMEN_DIB.ly), kD);
         // El dolmen i l'espasa no responen fins que l'Ineu té les tres coses (el permís del Til·ler, les paraules del Saber i la benedicció): abans, cap punt d'interacció
-        const teLesTres = () => !DIALEGS.faltaRunna(Estat).length;
+        const teLesTres = () => Estat.flag('placaCompleta');                  // l'espasa respon quan els tres medallons són a la placa
         this.interactiu(sx, sy + 15, RADI_GRAN, DIALEGS.dolmenBaix, { altura: 380, actiu: () => !this.alt && teLesTres() });
         // La placa de pedra davant el dolmen, centrada entre el dolmen i el camí: diu què cal per alçar Runna
-        this.placaDolmen = this.posar('placa_dolmen', sx, sy + 150, { col: { w: 150, h: 16 }, opac: true });         // (ampla: 190 px; els medallons s'han de veure bé)
-        this.interactiu(sx, sy + 160, 150, DIALEGS.placaDolmen, { altura: this.placaDolmen.displayHeight + 20, actiu: () => !this.alt });
+        // La placa de pedra, més gran (300 px) i ben separada del dolmen perquè no el tapi: hi van els tres medallons (un per cercle) i es veu el procés
+        const PY = sy + 215;
+        this.placaDolmen = this.posar('placa_dolmen', sx, PY, { escala: 300 / 190, col: { w: 200, h: 16 }, opac: true });
+        const PW = this.placaDolmen.displayWidth, PH = this.placaDolmen.displayHeight, PTOP = PY - PH;
+        this.placaGeo = { sx, PY, PW, PH, PTOP, cercles: { placaArbre: [sx - PW / 2 + PW * 0.295, PTOP + PH * 0.54], placaSaber: [sx - PW / 2 + PW * 0.515, PTOP + PH * 0.54], placaBenedicio: [sx - PW / 2 + PW * 0.69, PTOP + PH * 0.53] } };
+        this.interactiu(sx, PY + 12, 170, DIALEGS.placaDolmen, { altura: PH + 20, actiu: () => !this.alt });
+        this.medallonsPlaca = [];
+        [['placaArbre', 'emblema_arbre', 0x8fd060], ['placaSaber', 'emblema_saber', 0x7ab8ff], ['placaBenedicio', 'emblema_benedicio', 0xffd860]].forEach(([flag, emb, color]) => { if (Estat.flag(flag)) this.dibuixaMedalloPlaca(flag, emb, color); });
+        if (Estat.flag('placaCompleta') && !Estat.te('runna')) {                       // Runna ja s'ha il·luminat: l'halo és més viu
+            this.tweens.killTweensOf(this.resplendor); this.resplendor.setScale(1.25).setAlpha(0.35);
+            this.tweens.add({ targets: this.resplendor, alpha: 0.55, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
+        }
         // Damunt la llosa, darrere l'espasa: les Paraules del Saber
         this.interactiu(this.espX, this.espY - 12, RADI_OBJECTE, DIALEGS.dolmen, { altura: 150, actiu: () => this.alt && !this.cinema && teLesTres() });
         this.margaridesPas();
@@ -908,33 +918,64 @@ class ZonaDolmen extends ZonaBase {
 
     // Les Paraules del Saber ja s'han dit: Runna surt de la pedra i és a la mà de l'Ineu, que l'alça. Raigs de llum blanca i el rètol
     // es queden fins que el jugador prem; després s'esvaeixen i l'Ineu torna a la seva pose, mirant avall
-    // Les tres coses que calen per alçar Runna es mostren a la pantalla, una darrere l'altra (només els medallons, sense text); després volen cap a l'espasa i es fonen en una llum
-    mostrarTresCoses(fet) {
-        const I = this.ineu, cx = I.x, cy = I.y - 250;
-        const coses = [['emblema_arbre', "El permís de l'arbre sagrat"], ['emblema_saber', 'Les paraules del saber'], ['emblema_benedicio', 'La benedicció divina']];
-        const peces = [];
-        coses.forEach(([id], k) => {
-            const x = cx + (k - 1) * 155, y = cy + (k === 1 ? -30 : 0), clau = this.textures.exists(id) ? id : null;
-            const esc = clau ? ((this.textures.get(id).customData || {}).escala || 110 / this.textures.get(id).getSourceImage().width) : 1;       // escala que mostra l'emblema a 110 px de joc
-            const halo = this.add.circle(x, y, 50, 0xffe8a0, 0.5).setDepth(99000).setBlendMode('ADD').setAlpha(0).setScale(0.3);
-            const ico = (clau ? this.add.image(x, y, clau).setScale(esc * 0.4) : this.add.circle(x, y, 20, 0xffe8a0)).setDepth(99001).setAlpha(0);
-            this.time.delayedCall(300 + k * 800, () => {
-                Sfx.objecte();
-                this.tweens.add({ targets: ico, alpha: 1, scale: clau ? esc : 1.6, duration: 500, ease: 'Back.easeOut' });
-                this.tweens.add({ targets: halo, alpha: 0.55, scale: 1, duration: 500 });
-                this.llum(x, y, 0xffe8a0);
-            });
-            peces.push(ico, halo);
-        });
-        // Mostrades les tres, es queden un moment i volen cap a l'espasa
-        this.time.delayedCall(300 + 2 * 800 + 500 + 1600, () => {
-            const px = this.espX, py = this.espY - 40;
-            Sfx.secret();
-            this.tweens.add({ targets: peces, x: px, y: py, scale: 0.12, alpha: 0, duration: 750, ease: 'Sine.easeIn', onComplete: () => {
-                peces.forEach(o => o.destroy());
-                this.llum(px, py, 0xffffff);
-                this.cameras.main.flash(300, 255, 255, 255);
-                this.esperar(500, fet);
+    // Dibuixa (fix) un medalló de pedra a la placa, al seu cercle, amb una llum suau del seu color
+    dibuixaMedalloPlaca(flag, emb, color) {
+        const g = this.placaGeo, [x, y] = g.cercles[flag], D = g.PW * 0.185;
+        const halo = this.add.circle(x, y, D * 0.8, color, 0.28).setBlendMode(Phaser.BlendModes.ADD).setDepth(g.PY + 3);
+        this.tweens.add({ targets: halo, alpha: 0.12, yoyo: true, repeat: -1, duration: 1400, ease: 'Sine.easeInOut' });
+        const im = this.textures.exists(emb) ? this.add.image(x, y, emb).setDisplaySize(D, D).setDepth(g.PY + 4) : this.add.circle(x, y, D / 2, color).setDepth(g.PY + 4);
+        this.medallonsPlaca.push({ flag, halo, im, color });
+        return { halo, im, x, y, D };
+    }
+
+    // L'Ineu posa un medalló a la placa: la pedra vola de la mà de l'Ineu al seu cercle i encaixa amb un clic i una llum
+    posarMedallo(obj, flag, fet) {
+        const emb = { medallo_arbre: 'emblema_arbre', medallo_saber: 'emblema_saber', medallo_benedicio: 'emblema_benedicio' }[obj];
+        const color = { placaArbre: 0x8fd060, placaSaber: 0x7ab8ff, placaBenedicio: 0xffd860 }[flag];
+        const g = this.placaGeo, [x, y] = g.cercles[flag], icona = iconaObjecte(this, obj);
+        this.ajupir('ineu', null, 400);
+        const vol = icona ? this.add.image(this.ineu.x, this.ineu.y - 80, icona).setScale(0.5).setDepth(99000) : this.add.circle(this.ineu.x, this.ineu.y - 80, 14, color).setDepth(99000);
+        this.tweens.add({ targets: vol, x, y, scale: icona ? g.PW * 0.185 / 96 : 1, duration: 750, ease: 'Sine.easeInOut', onComplete: () => {
+            vol.destroy();
+            Estat.treu(obj);
+            if (flag === 'placaArbre') Estat.posaFlag('placaArbre'); else if (flag === 'placaSaber') Estat.posaFlag('placaSaber'); else Estat.posaFlag('placaBenedicio');
+            const m = this.dibuixaMedalloPlaca(flag, emb, color);
+            m.im.setAlpha(0).setScale(m.im.scaleX * 1.4); this.tweens.add({ targets: m.im, alpha: 1, scale: m.D / (this.textures.exists(emb) ? this.textures.get(emb).getSourceImage().width : 1), duration: 260, ease: 'Back.easeOut' });
+            m.halo.setAlpha(0.8);
+            Sfx.cop(false); Sfx.to(1100, 1650, 0.3, 'sine', 0.1);
+            this.llum(x, y, color);
+            this.cameras.main.shake(90, 0.0015);
+            Estat.desar();
+            this.esperar(700, fet);
+        } });
+    }
+
+    // Els tres medallons són a la placa: els tres cercles s'encenen, una llum puja de la placa cap a l'espasa i Runna s'il·lumina (apareix el punt d'interacció a l'espasa)
+    placaCompleta(fet) {
+        const g = this.placaGeo, ms = this.medallonsPlaca;
+        Sfx.secret();
+        ms.forEach(m => { this.tweens.killTweensOf(m.halo); this.tweens.add({ targets: m.halo, alpha: 0.9, scale: 1.8, duration: 700, yoyo: true, ease: 'Sine.easeInOut' }); });
+        this.llum(g.sx, g.PTOP + g.PH * 0.24, 0xe8f2ff);
+        this.esperar(900, () => {
+            // La llum puja de la placa (de la talla de l'espasa) fins a l'espasa de debò, deixant una cua
+            const orbe = this.add.circle(g.sx, g.PTOP + g.PH * 0.24, 12, 0xffffff, 0.95).setBlendMode(Phaser.BlendModes.ADD).setDepth(99000);
+            const cua = this.add.particles(0, 0, 'espurna', { follow: orbe, speed: { min: 5, max: 30 }, lifespan: 700, scale: { start: 0.5, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xe8f2ff, 0xffe8a0], frequency: 18, blendMode: 'ADD' }).setDepth(98999);
+            this.tweens.add({ targets: orbe, x: this.espX, y: this.espY - 40, duration: 1500, ease: 'Sine.easeIn', onComplete: () => {
+                orbe.destroy(); cua.stop(); this.time.delayedCall(800, () => cua.destroy());
+                this.llum(this.espX, this.espY - 40, 0xffffff);
+                this.cameras.main.flash(350, 255, 255, 255);
+                this.cameras.main.shake(300, 0.004);
+                Sfx.fanfara();
+                // Runna s'encén: l'halo creix i es queda més viu
+                this.tweens.killTweensOf(this.resplendor);
+                this.tweens.add({ targets: this.resplendor, alpha: 0.7, scale: 1.6, duration: 600, yoyo: true, onComplete: () => {
+                    this.resplendor.setScale(1.25).setAlpha(0.35);
+                    this.tweens.add({ targets: this.resplendor, alpha: 0.55, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
+                } });
+                Estat.posaFlag('placaCompleta');
+                Estat.posaObjectiu("Els tres medallons són a la placa: l'espasa del Dolmen espera, dalt de la llosa.");
+                Estat.desar();
+                this.esperar(1500, fet);
             } });
         });
     }

@@ -46,7 +46,7 @@ const PROGRES = {
           pista: E => "El pastor vell, vora el foc de la Cirosa, guarda les esquelles dels seus avis." },
         { id: 'soparObert', marca: ['soparObert'], fet: E => E.flag('soparObert'),
           pista: E => "Amb les esquelles al sarró, el Til·ler tindrà ganes de parlar-te d'un sopar." },
-        { id: 'sopar', marca: ['escudella', 'floresIsidre', 'pastorsConvencuts', 'soparFet', 'fullaTiler', 'obj:fulla_tiler'], fet: E => E.flag('soparFet'),
+        { id: 'sopar', marca: ['escudella', 'floresIsidre', 'pastorsConvencuts', 'soparFet', 'fullaTiler', 'obj:medallo_arbre'], fet: E => E.flag('soparFet'),
           pista: E => {
               const f = [];
               if (!E.flag('escudella')) f.push("l'escudella de la Meus (a les cel·les)");
@@ -71,9 +71,9 @@ const PROGRES = {
           pista: E => !E.flag('ombraDemanaCant') ? "A les Runes, l'ombra del monjo és sobre el mur de l'església inacabada. Parla-hi."
               : !E.flag('cantPedres') ? "L'ombra del monjo demana un cant que les pedres entenen. La Pianista, al Santuari, el coneix."
               : "L'ombra del monjo, a les Runes, només escoltarà el Cant de Vespres." },
-        { id: 'saber', marca: ['saber'], fet: E => E.flag('saber'),
+        { id: 'saber', marca: ['saber', 'obj:medallo_saber'], fet: E => E.flag('saber'),
           pista: E => "Ara que l'ombra t'ha parlat, a la biblioteca del Monestir hi ha paraules per a tu." },
-        { id: 'benediccio', marca: ['benediccio'], fet: E => E.flag('benediccio'),
+        { id: 'benediccio', marca: ['benediccio', 'obj:medallo_benedicio'], fet: E => E.flag('benediccio'),
           pista: E => "Ara que el Til·ler t'ha donat permís, a la Plaça et poden posar la mà al cap: la benedicció del prior." },
         // ---- ACTE 2: el camí del Dolmen ----
         { id: 'telescopi', marca: ['garfBancSegut', 'telescopi', 'obj:telescopi'], fet: E => E.flag('telescopi') || E.flag('estelLlorenc'),
@@ -85,8 +85,10 @@ const PROGRES = {
           pista: E => "El telescopi vol un lloc alt i fosc: els Dipòsits." },
         { id: 'estelLlorenc', marca: ['estelLlorenc', 'obj:estel_llorenc'], fet: E => E.flag('estelLlorenc'),
           pista: E => "L'últim estel ha caigut a l'aigua del dipòsit. Algú n'hauria de pujar a collir la llum." },
-        { id: 'runna', marca: ['runna', 'obj:runna'], fet: E => E.flag('runna'),
-          pista: E => "L'estel aparta la boira. Al final, el Dolmen espera la Fulla, el Saber i la Benedicció." },
+        { id: 'runna', marca: ['runna', 'obj:runna', 'placaArbre', 'placaSaber', 'placaBenedicio', 'placaCompleta'], fet: E => E.flag('runna'),
+          pista: E => E.flag('placaCompleta')
+              ? "Els tres medallons són a la placa: l'espasa del Dolmen espera, dalt de la llosa."
+              : "L'estel aparta la boira. Al final, la placa del Dolmen espera els medallons de l'Arbre, del Saber i de la Benedicció." },
         // ---- ACTE 3 ----
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
           pista: E => "Runna ja és amb tu. Els barrots de la gàbia només escolten un cant que la Pianista encara no t'ha ensenyat." },

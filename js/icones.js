@@ -233,6 +233,10 @@ const ICONES_OBJECTES = {
             ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(x, y - 22 * s, 7 * s, Math.PI, 0); ctx.stroke(); ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
         });
     },
+    // Els tres medallons de pedra de la placa del Dolmen (la mateixa imatge dels emblemes): el permís de l'Arbre, el Saber i la Benedicció
+    medallo_arbre: (ctx, cv, scene) => dibuixaEmblemaIcona(ctx, scene, 'emblema_arbre'),
+    medallo_saber: (ctx, cv, scene) => dibuixaEmblemaIcona(ctx, scene, 'emblema_saber'),
+    medallo_benedicio: (ctx, cv, scene) => dibuixaEmblemaIcona(ctx, scene, 'emblema_benedicio'),
     fulla_tiler: ctx => {
         ctx.lineWidth = 3; ctx.fillStyle = '#6a9a3a';
         ctx.beginPath(); ctx.moveTo(48, 86); ctx.bezierCurveTo(4, 56, 18, 8, 48, 26); ctx.bezierCurveTo(78, 8, 92, 56, 48, 86); ctx.fill(); ctx.stroke();
@@ -377,6 +381,12 @@ const ICONES_OBJECTES = {
     }
 };
 
+function dibuixaEmblemaIcona(ctx, scene, clau) {
+    if (!scene || !scene.textures.exists(clau)) return;
+    const im = scene.textures.get(clau).getSourceImage(), m = 4;
+    ctx.drawImage(im, m, m, ICONA_MIDA - 2 * m, ICONA_MIDA - 2 * m);
+}
+
 // Clau de la textura de la icona (es crea el primer cop que cal); null si l'objecte no en té
 function iconaObjecte(scene, id) {
     const dib = ICONES_OBJECTES[id];
@@ -387,7 +397,7 @@ function iconaObjecte(scene, id) {
         cv.width = cv.height = ICONA_MIDA;
         const ctx = cv.getContext('2d');
         ctx.lineJoin = 'round'; ctx.strokeStyle = CONTORN;
-        dib(ctx, cv);
+        dib(ctx, cv, scene);
         scene.textures.addCanvas(clau, cv);
     }
     return clau;
@@ -405,6 +415,9 @@ const US_OBJECTES = {
     flors_isidre: E => E.flag('soparFet') ? 'record' : 'cal',
     esquelles: E => E.flag('soparFet') ? 'record' : 'cal',
     fulla_tiler: E => E.flag('benediccio') ? 'record' : 'cal',
+    medallo_arbre: () => 'cal',
+    medallo_saber: () => 'cal',
+    medallo_benedicio: () => 'cal',
     cinta_nena: () => 'sempre',
     benedicio_fraterna: () => 'sempre',
     llanterna: () => 'sempre',
