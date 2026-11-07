@@ -80,7 +80,8 @@ class ZonaCementiri extends ZonaBase {
         this.arbres([[200, 1070], [440, 1070], [640, 1070], [860, 1070], [1300, 1070], [1460, 1070]], 'xiprer');
 
         // Boira baixa entre les tombes i cuques de llum
-        [[320, 840], [640, 300], [1300, 900], [480, 260]].forEach(([x, y]) => this.boira(x, y, 260, 50, 0.35));
+        // (un cop la tomba és segellada, la boira baixa ja no hi és: era la que sortia de l'esquerda)
+        this.boiresBaixes = tancada ? [] : [[320, 840], [640, 300], [1300, 900], [480, 260]].map(([x, y]) => this.boira(x, y, 260, 50, 0.35));
         this.cuquesLlum(14);
 
         // Animalets que surten de la terra esquerdada
@@ -91,7 +92,7 @@ class ZonaCementiri extends ZonaBase {
 
         this.sortida(0, 520, 14, 130, 'ZonaRuines', 'cementiri');
         this.sortida(1010, 1086, 150, 14, 'ZonaMonestir', 'cementiri');
-        this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x201040, 0.14).setScrollFactor(0).setDepth(90000);
+        this.velLila = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x201040, tancada ? 0.04 : 0.14).setScrollFactor(0).setDepth(90000);       // el vel lila de la boira de la tomba
     }
 
     // Fanalet de tomba amb la flama que tremola
@@ -120,6 +121,10 @@ class ZonaCementiri extends ZonaBase {
             this.tweens.add({ targets: nova, alpha: 1, duration: 900, onComplete: () => { this.tomba.setTexture('tomba_tancada'); nova.destroy(); } });
             if (this.boiraTomba) { this.boiraTomba.stop(); this.time.delayedCall(1800, () => this.boiraTomba && this.boiraTomba.destroy()); }
             if (this.llumTomba) this.tweens.add({ targets: this.llumTomba, alpha: 0, duration: 1200 });
+            // La resta de la boira del cementiri també marxa: la boira baixa entre les tombes s'esvaeix i el vel lila s'aclareix
+            (this.boiresBaixes || []).forEach(b => { b.stop(); this.time.delayedCall(4200, () => b.destroy()); });
+            this.boiresBaixes = [];
+            if (this.velLila) this.tweens.add({ targets: this.velLila, fillAlpha: 0.04, duration: 4000 });
             // Una columna de llum blanca puja de la tomba i s'apaga; les escolopendres de la terra esquerdada s'hi enfonsen
             const raig = this.add.rectangle(700, 420, 70, 10, 0xe8f0ff, 0.6).setOrigin(0.5, 1).setDepth(this.tomba.depth + 2).setBlendMode('ADD');
             this.tweens.add({ targets: raig, height: 700, duration: 700, ease: 'Cubic.easeOut', onComplete: () => this.tweens.add({ targets: raig, alpha: 0, scaleX: 0.2, duration: 900, onComplete: () => raig.destroy() }) });
