@@ -1174,8 +1174,8 @@ Object.assign(ZonaBase.prototype, {
     granRosari(flag, motiu) {
         if (Estat.flag(flag)) return false;
         Estat.posaFlag(flag);
-        Estat.dades.corsMax += 1; Estat.dades.vida = Estat.dades.corsMax * 2;
-        const ui = this.ui(); ui.actualitzarHUD(); ui.missatge('Has rebut un GRA DEL ROSARI (+1 cor): ' + motiu + '.');
+        const nou = Estat.afegirGra();
+        const ui = this.ui(); ui.actualitzarHUD(); ui.missatge(nou ? 'Has rebut un GRA DEL ROSARI (+1 cor): ' + motiu + '.' : motiu + ': el rosari queda ple.');
         Sfx.cura();
         this.llum(this.ineu.x, this.ineu.y - 70, 0xf0c040);
         return true;

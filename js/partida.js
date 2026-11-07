@@ -26,6 +26,17 @@ const Estat = {
         return this.dades;
     },
 
+    // ---------- Rosari ----------
+    // Els grans del rosari (els cors) són 3 al principi i mai poden passar de GRANS_MAX: 3 + el Pastor de Boira, les tres sacerdotesses, el cofre de l'oratori i el de la cabana
+    GRANS_MAX: 7,
+    // Un gran més (cura del tot). Retorna fals si ja n'hi ha el màxim (només es cura).
+    afegirGra() {
+        const d = this.dades, nou = d.corsMax < this.GRANS_MAX;
+        if (nou) d.corsMax += 1;
+        d.vida = d.corsMax * 2;
+        return nou;
+    },
+
     // ---------- Flags i objectes ----------
     flag(nom) { return !!(this.dades && this.dades.flags[nom]); },
     posaFlag(nom, valor = true) { this.dades.flags[nom] = valor; },
@@ -86,6 +97,8 @@ const Estat = {
         if (!d || typeof d !== 'object' || typeof d.versio !== 'number') return null;
         const base = this.nova();
         const resultat = Object.assign({}, base, d);
+        resultat.corsMax = Math.max(1, Math.min(this.GRANS_MAX, Number(resultat.corsMax) || base.corsMax));      // (partides amb més grans dels que toca)
+        resultat.vida = Math.min(resultat.vida, resultat.corsMax * 2);
         resultat.flags = Object.assign({}, d.flags || {});
         resultat.objectes = Array.isArray(d.objectes) ? d.objectes.slice() : base.objectes;
         if (typeof d.vida !== 'number') resultat.vida = (typeof d.cors === 'number' ? d.cors : resultat.corsMax) * 2;

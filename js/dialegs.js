@@ -57,8 +57,8 @@ function premiMonja(nom, flag) {
     const ui = game.scene.getScene('UI');
     if (E.flag('premiPains') && E.flag('premiPhili') && E.flag('premiCharm')) {
         E.posaFlag('mongesTrobades');
-        E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2;      // un sol gra pel conjunt de les tres germanes
-        if (ui) { ui.actualitzarHUD(); ui.missatge('Has rebut un GRA DEL ROSARI (+1 cor): les tres germanes.'); }
+        const nou = E.afegirGra();      // un sol gra pel conjunt de les tres germanes
+        if (ui) { ui.actualitzarHUD(); ui.missatge(nou ? 'Has rebut un GRA DEL ROSARI (+1 cor): les tres germanes.' : 'Les tres germanes: el rosari queda ple.'); }
         E.posaObjectiu("Les sacerdotesses són lliures. Al vestíbul de l'Hostatgeria t'espera el premi.");
     } else {
         const f = ['Pains', 'Phili', 'Charm'].filter(n => !E.flag('premi' + n));
@@ -180,9 +180,9 @@ const DIALEGS = {
             pagines: [
                 { fer: (z, fet) => z.obrirReliquiari ? z.obrirReliquiari(fet) : fet() },
                 { qui: 'Nota', text: '«Per al qui sap escoltar les pedres.»' },
-                { avis: "+1 GRA AL ROSARI i rosari ple." }
+                { avis: E.dades.corsMax < E.GRANS_MAX ? "+1 GRA AL ROSARI i rosari ple." : "El rosari ja té tots els grans: queda ple." }
             ],
-            enAcabar: () => { E.posaFlag('cofreTresor'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
+            enAcabar: () => { E.posaFlag('cofreTresor'); E.afegirGra(); }
         };
     },
 
@@ -219,9 +219,9 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: 'Nota', text: "«Per a qui es perd pel camí i el troba.»" },
-                { avis: "+1 GRA AL ROSARI i rosari ple." }
+                { avis: E.dades.corsMax < E.GRANS_MAX ? "+1 GRA AL ROSARI i rosari ple." : "El rosari ja té tots els grans: queda ple." }
             ],
-            enAcabar: () => { E.posaFlag('cofreCabanaCami'); E.dades.corsMax += 1; E.dades.vida = E.dades.corsMax * 2; }
+            enAcabar: () => { E.posaFlag('cofreCabanaCami'); E.afegirGra(); }
         };
     },
 
