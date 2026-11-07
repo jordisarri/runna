@@ -1244,7 +1244,7 @@ const DIALEGS = {
                 { qui: 'Ineu', text: "Hola. Jo sóc l'Ineu. Com et dius?" },
                 { qui: 'Mandu', text: "Mandu. I ella és la nina. Sempre juguem aquí, davant la porta, esperant el Fram." },
                 { qui: 'Ineu', text: "El Fram és el teu germà?" },
-                { qui: 'Mandu', text: "Sí. Dormíem porta amb porta. Fa tres nits que la seva porta és oberta i ell no hi és. Sempre em diu on va, i aquesta vegada..." },
+                { qui: 'Mandu', text: "Sí. Dormíem a la mateixa habitació. Una nit em vaig adormir amb ell al costat, i al matí el seu llit era buit. Sempre em diu on va, i aquesta vegada..." },
                 { qui: 'Mandu', text: "La Meus diu que la boira se l'ha endut. Però jo li vaig dir que no se n'anés! Li ho vaig dir! I ell se n'ha anat igualment! PER QUÈ NO TORNA?!" },
                 { fer: (z, fet) => z.manduTrencaNina ? z.manduTrencaNina(fet) : fet() },
                 { qui: 'Mandu', text: "...Ai. El cap de la nina. Se m'ha trencat el cap." },
