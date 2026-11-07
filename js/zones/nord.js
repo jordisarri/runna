@@ -457,7 +457,9 @@ class ZonaCelles extends ZonaBase {
 
         this.cartell(958, 830, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler\n↓ Les Runes\n→ Sant Benet' }] }));       // vora l'encreuament (a la cantonada sud-oest)
 
-        this.arbres([[230, 1010], [1400, 1010], [1690, 1055], [1960, 985]]);      // ben repartits: un a l'oest i tres al sud, davant la porta de la Meus i de Sant Benet (abans, tres junts a l'oest i l'espai buit)      // (el de l'est del camí de les Runes es queda lluny: hi para el carro de la Rosansa)
+        this.arbres([[230, 1010]]);
+        // Els tres de l'est, més petits i més al sud, perquè no tapin la Rosansa (ni el carro) ni el camí per on se'n va
+        [[1400, 1070, 0.62], [1730, 1075, 0.6], [1990, 1060, 0.62]].forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 34, h: 16 } }));      // ben repartits: un a l'oest i tres al sud, davant la porta de la Meus i de Sant Benet (abans, tres junts a l'oest i l'espai buit)      // (el de l'est del camí de les Runes es queda lluny: hi para el carro de la Rosansa)
 
         this.sortida(1000, 1086, 140, 14, 'ZonaRuines', 'celles');
         this.sortida(0, 640, 14, 130, 'ZonaBosc', 'celles');
