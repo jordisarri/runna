@@ -929,8 +929,7 @@ class ZonaDolmen extends ZonaBase {
         if (!this.camAmunt && lliure && d < 135) {
             this.camAmunt = true;
             const zoom = this.zoomZona || ZOOM_CAMERA, vis = (ALT - ALT_HUD) / zoom;
-            let cy = (this.espY - 330) + vis / 2;                                  // el cim de la vista, damunt l'espasa i els peus dels arbres
-            cy = Math.min(cy, g.PY + 340 - vis / 2);                                // però sempre amb la placa i l'Ineu a la vista, per damunt del quadre de diàleg
+            const cy = (this.espY - 195) + vis / 2;                                  // el cim de la vista, just damunt l'espasa i les flors (sense arbres)
             this.enquadrar(DOL.sx, cy, zoom, 1100, null, 0);
         } else if (this.camAmunt && (!lliure || d > 180)) {
             this.camAmunt = false;
