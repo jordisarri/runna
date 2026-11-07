@@ -201,14 +201,14 @@ const DIALEGS = {
                 { fer: (z, fet) => z.seq([c => z.bombolla('ciscu', '!', c, 600), c => z.npcSalta('ciscu', c, 1)], fet) },
                 { qui: 'Iscu', text: 'Xxt! Baixa la veu! Si la mare em troba, em fa fregar gots fins a Nadal.' },
                 { qui: 'Iscu', text: 'Em dic Iscu. Vaig trobar el forat entre els arbres «per on els grans no hi caben» i aquesta cabana. Ningú més no la coneix: aquí ningú em mana res!' },
-                { qui: 'Iscu', text: 'Hi havia una baralla vella damunt la taula i m\'he posat a fer solitaris. Però hi falta el set d\'oros, i així no em surt mai. Tant se val: més val això que fregar gots.' },
+                { qui: 'Iscu', text: 'Hi havia una baralla vella damunt la taula, i m\'encanta fer solitaris amb les cartes. Més val això que fregar gots!' },
                 ...clau
             ],
             enAcabar: donar
         };
         if (!E.flag('clauGirgoles')) return { pagines: clau, enAcabar: donar };
         return { pagines: [
-            { qui: 'Iscu', text: 'Encara no em surt el solitari: hi falta el set d\'oros. Però aquí, almenys, no hi ha gots per fregar.' }
+            { qui: 'Iscu', text: 'Em passaria tot el dia fent solitaris amb aquestes cartes. I aquí, almenys, no hi ha gots per fregar.' }
         ] };
     },
 
@@ -1638,7 +1638,7 @@ const DIALEGS_FINAL = {
     jaumeta: E => ({ pagines: [{ qui: 'La Jauneta', text: "L'olla ja no fa bombolles liles. Ara fa olor de farigola, com ha de ser." }] }),
     galf: E => ({ pagines: [{ qui: 'Galf', text: "Des del telescopi es veu tot el poble, i aquesta nit no hi ha ni un fil de boira." }] }),
     germa_francesc: E => ({ pagines: [{ qui: 'Germà Francí', text: "La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui." }] }),
-    ciscu: E => ({ pagines: [{ qui: 'Iscu', text: "M'ha sortit el solitari! He posat un tap de botella en lloc del set d'oros,: compta igual, oi?" }] }),
+    ciscu: E => ({ pagines: [{ qui: 'Iscu', text: "M'ha sortit el solitari! M'encanta això de les cartes. Ara ja no cal que m'amagui tant..." }] }),
     eva: E => E.flag('evaParlat') ? ({ pagines: [{ qui: 'Eve', text: "El Sardi ja torna a berenar aquí cada tarda. La Càren encara dorm, però ronca més contenta." }] }) : null,
     carry: E => E.flag('pallofaTornat') ? ({ pagines: [{ qui: 'Carry', text: "El Pallofa ja no s'escapa: des que no hi ha boira, no té res a perseguir." }] }) : null,
     pastor_vell: E => ({ pagines: [{ qui: 'Pastor vell', text: "Les ovelles tornen a ser blanques. Alguna encara té les orelles una mica liles, però ja li passarà." }] })
