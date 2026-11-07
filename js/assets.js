@@ -162,6 +162,7 @@ const CATALEG = [
     { key: 'porxo',          file: null,          amplada: 340, provisional: (c, w) => dibuixarPorxo(c, w) },
     { key: 'esbarzer',       file: 'assets/natura/esbarzer.webp',       amplada: 96, provisional: (c, w) => dibuixarEsbarzer(c, w) },
     { key: 'cofre',          file: null,          amplada: 70, provisional: (c, w) => dibuixarCofre(c, w) },
+    { key: 'cofre_obert',    file: null,          amplada: 70, provisional: (c, w) => dibuixarCofre(c, w, true) },        // el mateix cofre, obert i buit (un cop agafat el contingut)
     { key: 'cabana',         file: null,         amplada: 400, provisional: (c, w) => dibuixarCabana(c, w) },
     { key: 'herba_sj',     file: null,     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'sj') },
     { key: 'romani',       file: null,       amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'romani') },
@@ -1069,7 +1070,8 @@ const Grafics = {
         crea('tauler_eines', 270, 72, pintarTaulerEines);
         crea('penjolls', 96, 120, pintarPenjolls);
         crea('gat_cove', 110, 80, pintarGatCove);
-        crea('cofre_joguines', 96, 84, pintarCofreJoguines);
+        crea('cofre_joguines', 96, 84, (ctx, w, h) => pintarCofreJoguines(ctx, w, h, false));
+        crea('cofre_joguines_obert', 96, 84, (ctx, w, h) => pintarCofreJoguines(ctx, w, h, true));
         // L'oratori amagat de darrere la pedra que escolta (js/dibuixos_oratori.js)
         crea('paret_oratori', 640, 250, pintarParetOratori);
         crea('reliquiari', 150, 170, (ctx, w, h) => pintarReliquiari(ctx, w, h, false));
@@ -1094,7 +1096,8 @@ const Grafics = {
         crea('sacs_tresor', 140, 90, pintarSacsTresor);
         crea('monedes_tresor', 110, 50, pintarMonedesTresor);
         crea('bota_creu', 64, 84, pintarBotaCreu);
-        crea('cofre_tresor', 110, 80, pintarCofre);
+        crea('cofre_tresor', 110, 80, (ctx, w, h) => pintarCofre(ctx, w, h, false));
+        crea('cofre_tresor_obert', 110, 80, (ctx, w, h) => pintarCofre(ctx, w, h, true));
         crea('escalinata_fons', 1140, 640, pintarEscalinata);
         // Ermita de la Desaparició (js/dibuixos_ermita.js)
         crea('paret_ermita', 800, 170, pintarParetErmita);

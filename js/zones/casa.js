@@ -695,9 +695,9 @@ class ZonaCasaTresor extends ZonaCasaBase {
         // Estora, tarima del cofre i el cofre
         this.add.image(500, 690, 'catifa_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(-1050);
         this.add.image(500, 178, 'graons_ermita').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-990);
-        this.cofre = this.add.image(500, 218, 'cofre_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(218);
+        this.cofre = this.add.image(500, 218, Estat.flag('cofreCambra') ? 'cofre_tresor_obert' : 'cofre_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(218);
         this.colisio(500, 205, 100, 24);
-        this.interactiu(500, 262, RADI_OBJECTE, DIALEGS.cofreCambra, { altura: 110 });
+        this.interactiu(500, 262, RADI_OBJECTE, DIALEGS.cofreCambra, { altura: 110, enTancar: () => { if (Estat.flag('cofreCambra')) this.cofre.setTexture('cofre_tresor_obert'); } });
         [[390, 262], [610, 262]].forEach(([x, y], i) => {
             this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
             this.colisio(x, y - 8, 24, 14);

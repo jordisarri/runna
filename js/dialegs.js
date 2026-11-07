@@ -186,28 +186,29 @@ const DIALEGS = {
         };
     },
 
-    // L'Iscu, el fill de la Càren, s'ha escapat a la cabana amagada a jugar al solitari
+    // L'Iscu, el fill de la Càren, s'ha escapat de fregar gots i s'amaga a la cabana del camí de la Desaparició, on ha trobat una baralla vella
     ciscu: E => {
-        // La clau rovellada: al Germà Aldreu li va caure a la porta de ferro, i l'Iscu se la va quedar
+        // La clau rovellada: al Germà Aldreu li va caure davant la porta de ferro, i l'Iscu la va trobar
         const clau = [
-            { qui: 'Iscu', text: 'Mira, a tu et va bé una clau. Una nit, al Germà Aldreu li va caure davant la porta de ferro i ni se\'n va adonar. És rovellada, però encara obre. Te la dono.' },
+            { qui: 'Iscu', text: 'Ei, espera. Tinc una cosa que potser et va bé. Una nit, passant per davant la porta de ferro de les Gírgoles, vaig veure una clau a terra: li havia caigut al Germà Aldreu i ni se\'n va adonar.' },
+            { qui: 'Iscu', text: 'És rovellada, però encara gira. Te la dono: jo no tinc res a obrir.' },
             { avis: 'Has obtingut la CLAU ROVELLADA', obj: 'clau_girgoles' },
-            { qui: 'Iscu', text: 'És per a la porta petita del fons, la del pany petit. I no diguis a la mare que de nit vaig sortir!' }
+            { qui: 'Iscu', text: 'Crec que és per a la porta petita del fons, la del pany petit. I tu no m\'has vist, eh?' }
         ];
         const donar = () => { E.posaFlag('ciscuTrobat'); E.posaFlag('clauGirgoles'); E.dona('clau_girgoles'); E.posaObjectiu(PROGRES.pista(E)); };
         if (!E.flag('ciscuTrobat')) return {
             pagines: [
                 { fer: (z, fet) => z.seq([c => z.bombolla('ciscu', '!', c, 600), c => z.npcSalta('ciscu', c, 1)], fet) },
-                { qui: 'Iscu', text: 'Xxt! Que no et senti la mare! ...Bé, dorm, però sempre se n\'assabenta de tot.' },
-                { qui: 'Iscu', text: 'Sóc l\'Iscu. Me n\'he escapat de fregar gots. Aquí amb les cartes de l\'avi ningú no em troba.' },
-                { qui: 'Iscu', text: 'Veus? Falta el set d\'oros. Faig veure que hi és, i ja m\'està bé.' },
+                { qui: 'Iscu', text: 'Xxt! Baixa la veu! Si la mare em troba, em fa fregar gots fins a Nadal.' },
+                { qui: 'Iscu', text: 'Em dic Iscu. Vaig trobar el forat entre els arbres «per on els grans no hi caben» i aquesta cabana. Ningú més no la coneix: aquí ningú em mana res!' },
+                { qui: 'Iscu', text: 'Hi havia una baralla vella damunt la taula i m\'he posat a fer solitaris. Però hi falta el set d\'oros, i així no em surt mai. Tant se val: més val això que fregar gots.' },
                 ...clau
             ],
             enAcabar: donar
         };
         if (!E.flag('clauGirgoles')) return { pagines: clau, enAcabar: donar };
         return { pagines: [
-            { qui: 'Iscu', text: (E.flag('tombaSegellada')) ? 'Em surt, em surt! Bé, amb una trampa petita. No ho diguis a la mare.' : 'Encara no em surt. La sota d\'espases sempre queda a sota de tot.' }
+            { qui: 'Iscu', text: 'Encara no em surt el solitari: hi falta el set d\'oros. Però aquí, almenys, no hi ha gots per fregar.' }
         ] };
     },
 
@@ -1637,7 +1638,7 @@ const DIALEGS_FINAL = {
     jaumeta: E => ({ pagines: [{ qui: 'La Jauneta', text: "L'olla ja no fa bombolles liles. Ara fa olor de farigola, com ha de ser." }] }),
     galf: E => ({ pagines: [{ qui: 'Galf', text: "Des del telescopi es veu tot el poble, i aquesta nit no hi ha ni un fil de boira." }] }),
     germa_francesc: E => ({ pagines: [{ qui: 'Germà Francí', text: "La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui." }] }),
-    ciscu: E => ({ pagines: [{ qui: 'Iscu', text: "M'ha sortit el solitari! Sense trampes! ...Bé, amb una de petita. No ho diguis a la mare." }] }),
+    ciscu: E => ({ pagines: [{ qui: 'Iscu', text: "M'ha sortit el solitari! He posat un tap de botella en lloc del set d'oros,: compta igual, oi?" }] }),
     eva: E => E.flag('evaParlat') ? ({ pagines: [{ qui: 'Eve', text: "El Sardi ja torna a berenar aquí cada tarda. La Càren encara dorm, però ronca més contenta." }] }) : null,
     carry: E => E.flag('pallofaTornat') ? ({ pagines: [{ qui: 'Carry', text: "El Pallofa ja no s'escapa: des que no hi ha boira, no té res a perseguir." }] }) : null,
     pastor_vell: E => ({ pagines: [{ qui: 'Pastor vell', text: "Les ovelles tornen a ser blanques. Alguna encara té les orelles una mica liles, però ja li passarà." }] })

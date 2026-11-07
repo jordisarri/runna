@@ -145,7 +145,7 @@ class ZonaErmitaInt extends ZonaBase {
         this.posar('altar_ermita', 500, 300, { col: { w: 140, h: 36 } });
         const totes = () => Array.from({ length: 12 }, (_, i) => Estat.flag('col' + (i + 1))).every(Boolean);
         this.interactiu(500, 335, RADI_OBJECTE, DIALEGS.altarErmita, { altura: 100, actiu: () => totes() && !Estat.flag('cofreAltar') });
-        if (Estat.flag('cofreAltar') && !Estat.flag('missatgeDesxifrat')) this.posarCofreAltar();
+        if (Estat.flag('cofreAltar')) this.posarCofreAltar();
         [[392, 352], [608, 352]].forEach(([x, y]) => {          // dos peus de ferro amb l'espelma apagada
             this.add.image(x, y, 'candelabre_apagat').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
             this.colisio(x, y - 8, 20, 14);
@@ -166,8 +166,9 @@ class ZonaErmitaInt extends ZonaBase {
 
     // El cofre de la clau del sagrari, davant els graons de l'altar
     posarCofreAltar(y = 420) {
-        this.cofreAltar = this.posar('cofre', 500, y, { col: { w: 50, h: 20 } });
-        this.interactiu(500, y + 6, RADI_OBJECTE, DIALEGS.cofreAltar, { altura: 80, actiu: () => !Estat.flag('missatgeDesxifrat') });
+        this.cofreAltar = this.posar(Estat.flag('missatgeDesxifrat') ? 'cofre_obert' : 'cofre', 500, y, { col: { w: 50, h: 20 } });      // obert i buit un cop agafada la clau
+        this.interactiu(500, y + 6, RADI_OBJECTE, DIALEGS.cofreAltar, { altura: 80, actiu: () => !Estat.flag('missatgeDesxifrat'),
+            enTancar: () => { if (Estat.flag('missatgeDesxifrat')) this.cofreAltar.setTexture('cofre_obert'); } });
     }
 
     apareixCofreAltar(fet) {
@@ -616,8 +617,8 @@ class ZonaCabanaCami extends ZonaBase {
         this.posar('tronc_tall', 160, 540, { col: { w: 70, h: 24 } });
 
         // Un cofre petit entre dues espelmes
-        this.posar('cofre', 690, 250, { col: { w: 50, h: 20 } });
-        this.interactiu(690, 255, RADI_OBJECTE, DIALEGS.cofreCabanaCami, { altura: 80 });
+        const cofreCab = this.posar(Estat.flag('cofreCabanaCami') ? 'cofre_obert' : 'cofre', 690, 250, { col: { w: 50, h: 20 } });
+        this.interactiu(690, 255, RADI_OBJECTE, DIALEGS.cofreCabanaCami, { altura: 80, enTancar: () => { if (Estat.flag('cofreCabanaCami')) cofreCab.setTexture('cofre_obert'); } });
         [[630, 258], [750, 258]].forEach(([x, y], i) => {
             const e = this.posar('espelma', x, y, { fonsY: y });
             this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 350 + i * 90 });

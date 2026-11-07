@@ -1133,8 +1133,9 @@ class ZonaCasetaJoc extends ZonaBase {
         this.posar('tamboret', 400, 360, { escala: 0.7, col: { w: 28, h: 12 } });
 
         // El cofre dels joguets, amb la maneta d'en Georgi a sota
-        this.posar('cofre_joguines', 510, 222, { col: { w: 56, h: 20 } });
-        this.interactiu(510, 225, RADI_OBJECTE, DIALEGS.cofreManeta, { altura: 80 });
+        const maneta = () => Estat.te('maneta') || Estat.flag('maneta');
+        const cofreJ = this.posar(maneta() ? 'cofre_joguines_obert' : 'cofre_joguines', 510, 222, { col: { w: 56, h: 20 } });       // tancat fins que se'n treu la maneta
+        this.interactiu(510, 225, RADI_OBJECTE, DIALEGS.cofreManeta, { altura: 80, enTancar: () => { if (maneta()) cofreJ.setTexture('cofre_joguines_obert'); } });
 
         this.add.rectangle(320, 260, 640, 520, 0xffd38a, 0.05).setDepth(80000);
         this.sortida(280, 492, 80, 22, 'ZonaJordi', 'caseta');

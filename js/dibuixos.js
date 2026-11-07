@@ -1418,9 +1418,9 @@ function dibuixarEsbarzer(c, w) {
     });
 }
 
-function dibuixarCofre(c, w) {
+function dibuixarCofre(c, w, obert = false) {
     const L = w / RES, H = Math.round(L * 0.75);
-    lienc(c, w, H * RES, ctx => { ctx.scale(RES, RES); pintarCofre(ctx, L, H); });
+    lienc(c, w, H * RES, ctx => { ctx.scale(RES, RES); pintarCofre(ctx, L, H, obert); });
 }
 
 function dibuixarCabana(c, w) {
@@ -2677,7 +2677,7 @@ function pintarTroncDestral(ctx, w, h) {
 
 // COFRE (el mateix per a tots els cofres del joc, a qualsevol mida): fusta a taulons amb veta, tapa bombada amb vora daurada,
 // bandes de ferro amb reblons, escaires daurats a les cantonades i un pany daurat gran amb forat de clau.
-function pintarCofre(ctx, w, h) {
+function pintarCofre(ctx, w, h, obert = false) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     const x0 = Math.round(w * 0.06), x1 = w - x0, yBaix = h - 6;
     const yCos = h * 0.44, yTapa = h * 0.06, gruix = Math.max(1.8, w / 40);
@@ -2685,6 +2685,19 @@ function pintarCofre(ctx, w, h) {
     const rnd = () => (llavor = (llavor * 16807) % 2147483647) / 2147483647;
     // Ombra al terra
     ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.beginPath(); ctx.ellipse(w / 2 + 2, h - 3.5, w * 0.48, h * 0.065, 0, 0, Math.PI * 2); ctx.fill();
+
+    // Obert: la tapa s'ha alçat cap enrere i es veu per darrere del cos (la cara de dins, més fosca, amb les bandes de ferro)
+    if (obert) {
+        const lb = new Path2D();
+        lb.moveTo(x0 + 1, yCos + 1); lb.lineTo(x0 + 5, yTapa - h * 0.02); lb.quadraticCurveTo(w / 2, yTapa - h * 0.1, x1 - 5, yTapa - h * 0.02); lb.lineTo(x1 - 1, yCos + 1); lb.closePath();
+        const gl = ctx.createLinearGradient(0, yTapa, 0, yCos); gl.addColorStop(0, '#5a3a1c'); gl.addColorStop(1, '#3c2410');
+        ctx.fillStyle = gl; ctx.fill(lb);
+        ctx.save(); ctx.clip(lb);
+        const amp = Math.max(6, w * 0.115);
+        [w * 0.2, w * 0.8].forEach(cx => { ctx.fillStyle = '#383a42'; ctx.fillRect(cx - amp / 2, yTapa - h * 0.1, amp, yCos - yTapa + h * 0.1); ctx.fillStyle = '#5a5c66'; ctx.fillRect(cx - amp / 2, yTapa - h * 0.1, amp * 0.3, yCos - yTapa + h * 0.1); });
+        ctx.restore();
+        ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix; ctx.stroke(lb);
+    }
 
     // Cos: taulons horitzontals amb degradat, veta i una vora de llum dalt i d'ombra baix
     const cos = new Path2D(); cos.roundRect(x0, yCos, x1 - x0, yBaix - yCos, 3);
@@ -2702,9 +2715,16 @@ function pintarCofre(ctx, w, h) {
     ctx.fillStyle = 'rgba(0,0,0,0.22)'; ctx.fillRect(x0, yBaix - 4, x1 - x0, 4);               // ombra de baix
     ctx.restore();
     ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix; ctx.stroke(cos);
+    if (obert) {                                                                                  // l'obertura: l'interior, buit i fosc
+        const io = new Path2D(); io.roundRect(x0 + 2, yCos - 5, x1 - x0 - 4, 9, 2);
+        ctx.fillStyle = '#1a0e06'; ctx.fill(io);
+        ctx.fillStyle = 'rgba(120,70,30,0.35)'; ctx.fillRect(x0 + 4, yCos + 1, x1 - x0 - 8, 2);
+        ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix * 0.7; ctx.stroke(io);
+    }
 
-    // Tapa bombada
+    // Tapa bombada (només tancat)
     const caiguda = h * 0.05, tapa = new Path2D();
+    if (!obert) {
     tapa.moveTo(x0, yCos + 1); tapa.lineTo(x0, yCos - caiguda); tapa.quadraticCurveTo(w / 2, yTapa - h * 0.1, x1, yCos - caiguda); tapa.lineTo(x1, yCos + 1); tapa.closePath();
     const gt = ctx.createLinearGradient(0, yTapa, 0, yCos); gt.addColorStop(0, '#e0aa66'); gt.addColorStop(0.45, '#bb8446'); gt.addColorStop(1, '#8c5a2a');
     ctx.fillStyle = gt; ctx.fill(tapa);
@@ -2726,6 +2746,7 @@ function pintarCofre(ctx, w, h) {
         ctx.fillStyle = '#d9c26a';
         [top + 4, yCos + 5, yBaix - 7].forEach(y => { ctx.beginPath(); ctx.arc(cx, y, Math.max(1.3, w / 60), 0, Math.PI * 2); ctx.fill(); });
     });
+    }
     // Vora daurada entre la tapa i el cos
     ctx.fillStyle = '#c99a32'; ctx.fillRect(x0 - 1, yCos - 2.5, x1 - x0 + 2, 5.5);
     ctx.fillStyle = 'rgba(255,245,190,0.7)'; ctx.fillRect(x0 - 1, yCos - 2.5, x1 - x0 + 2, 1.4);

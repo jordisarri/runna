@@ -131,11 +131,12 @@ function pintarGatCove(ctx, w, h) {
 
 // ---------- Cofre de les joguines de la caseta: pintat de blau amb estels i una lluna, ribets vermells, nanses de corda
 //            i la tapa una mica oberta, amb les joguines que treuen el cap (una pilota, una espasa de fusta, l'orella d'un ós) ----------
-function pintarCofreJoguines(ctx, w, h) {
+function pintarCofreJoguines(ctx, w, h, obert = true) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     const x0 = 8, x1 = w - 8, yCos = h * 0.48, yBaix = h - 6, C = BIB_CONTORN;
     ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2 + 2, h - 3, w * 0.48, 5, 0, 0, Math.PI * 2); ctx.fill();
-    // Les joguines dins, darrere la tapa oberta
+    // Les joguines dins, darrere la tapa oberta (només obert)
+    if (obert) {
     ctx.fillStyle = '#1e140c'; ctx.beginPath(); ctx.ellipse(w / 2, yCos - 4, (x1 - x0) / 2 - 2, 10, 0, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#e8463a'; ctx.strokeStyle = C; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(w * 0.68, yCos - 8, 10, Math.PI, Math.PI * 2.05); ctx.fill(); ctx.stroke();
     ctx.strokeStyle = '#ffe080'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(w * 0.68, yCos - 8, 6, Math.PI * 1.1, Math.PI * 1.7); ctx.stroke();
@@ -143,6 +144,7 @@ function pintarCofreJoguines(ctx, w, h) {
     ctx.beginPath(); ctx.rect(w * 0.36 - 2, yCos - 30, 5, 26); ctx.fill(); ctx.stroke();
     ctx.beginPath(); ctx.rect(w * 0.36 - 8, yCos - 12, 17, 4); ctx.fill(); ctx.stroke();
     ctx.fillStyle = '#9a6a3a'; ctx.beginPath(); ctx.arc(w * 0.22, yCos - 6, 6, Math.PI, Math.PI * 2); ctx.fill(); ctx.stroke();
+    }
     // Cos pintat de blau, amb taulons
     const cos = new Path2D(); cos.roundRect(x0, yCos, x1 - x0, yBaix - yCos, 4);
     ctx.fillStyle = gradVBib(ctx, yCos, yBaix, [[0, '#4a7ac8'], [1, '#2a4e8a']]); ctx.fill(cos);
@@ -159,6 +161,19 @@ function pintarCofreJoguines(ctx, w, h) {
     ctx.strokeStyle = C; ctx.lineWidth = 1.4; ctx.strokeRect(x0, yCos, x1 - x0, 5); ctx.strokeRect(x0, yBaix - 5, x1 - x0, 5);
     // Nanses de corda als costats
     ctx.strokeStyle = '#d8b878'; ctx.lineWidth = 3.5; [[x0, -1], [x1, 1]].forEach(([x, s]) => { ctx.beginPath(); ctx.arc(x + s * 1, yCos + 16, 6, s > 0 ? -Math.PI / 2 : Math.PI / 2, s > 0 ? Math.PI / 2 : Math.PI * 1.5); ctx.stroke(); });
+    if (!obert) {                                                                // tancat: la tapa, bombada, reposa damunt del cos
+        const tw0 = (x1 - x0) / 2 + 1, tc = new Path2D();
+        ctx.save(); ctx.translate(w / 2, yCos);
+        tc.moveTo(-tw0, 0); tc.lineTo(-tw0, -5); tc.quadraticCurveTo(0, -h * 0.34, tw0, -5); tc.lineTo(tw0, 0); tc.closePath();
+        ctx.fillStyle = gradVBib(ctx, -h * 0.3, 0, [[0, '#e8564a'], [1, '#a82820']]); ctx.fill(tc);
+        ctx.save(); ctx.clip(tc); ctx.strokeStyle = '#ffd84a'; ctx.lineWidth = 3;
+        for (let x = -tw0 + 8; x < tw0; x += 14) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, -h * 0.34); ctx.stroke(); }
+        ctx.restore();
+        ctx.strokeStyle = C; ctx.lineWidth = 2.4; ctx.stroke(tc);
+        ctx.fillStyle = '#d8b878'; ctx.beginPath(); ctx.arc(0, -2, 3.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();           // el tancador
+        ctx.restore();
+        return;
+    }
     // Tapa oberta, inclinada cap enrere (vermella amb ratlles grogues)
     ctx.save(); ctx.translate(w / 2 - 3, yCos - 15); ctx.rotate(-0.1);          // alçada: deixa veure les joguines per l'escletxa
     const tw = (x1 - x0) / 2 + 2, tapa = new Path2D();
