@@ -231,6 +231,13 @@ const Sfx = {
         if (!this.ok('basto', 140)) return;
         this.xiu(0.13, 0.16, 'bandpass', 380, 900, 3);
     },
+    piulet() {                   // un ocell petit que piula (els ocells tornen al pi)
+        if (!this.ok('piulet', 120)) return;
+        const f = 2600 + Math.random() * 900;
+        this.to(f, f * 1.25, 0.07, 'sine', 0.05);
+        this.to(f * 1.1, f * 0.9, 0.08, 'sine', 0.045, 0.1);
+        this.to(f * 1.3, f * 1.5, 0.06, 'sine', 0.04, 0.2);
+    },
     xiscle() {                   // els ocells de foc es llancen
         if (!this.ok('xiscle', 300)) return;
         this.to(1400, 2600, 0.18, 'sawtooth', 0.06);

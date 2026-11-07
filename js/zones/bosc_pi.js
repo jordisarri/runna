@@ -5,7 +5,7 @@
  *
  * El pi barra el pas amb les seves branques baixes i només deixa passar qui li porta els tres cants (Aurora, Vespres i Miracle) amb la tarota:
  * cada cant fa reviure una de les tres branques (la imatge del pi canvia amb un fade). Només es pot fer des de l'est (Sant Antoni): des del Dolmen, el camí s'acaba contra les branques
- * i l'Ineu entén que cal anar per l'altre costat. El premi, a banda d'obrir el camí, és la història del pi: d'on van sortir els tres cants.
+ * i l'Ineu entén que cal anar per l'altre costat. El pi no parla: el premi, a banda d'obrir el camí, és la carta que el Cortiner hi va deixar al tronc, amb la història dels tres cants.
  */
 const PI3 = { A: 2800, H: 1000, camiY: 600, camiH: 140, vx: 2490, barX: 1150, piX: 1500, piY: 545, plX: 1500, plY: 598 };
 // Cada cant que sona davant el pi en fa reviure una branca: la imatge canvia amb un fade, sense llums ni efectes.
@@ -99,6 +99,8 @@ class ZonaBoscPi extends ZonaBase {
         this.estatPi = Estat.flag('piObert') ? 3 : PI3_FLAGS_LLISTA.filter(f => Estat.flag(f)).length;
         this.pi = this.posar(PI3_ESTATS[this.estatPi], piX, piY, { col: { w: 80, h: 34 } });
         this.pi.setScale(PI3_ALCADA / this.pi.height);
+
+        if (Estat.flag('piObert')) this.posarOcellsPi(false);            // el pi ja és viu: hi ha ocells a les branques
 
         // Les branques baixes que barren el camí (a l'oest de la clariana), mentre el pi no s'ha obert
         if (!Estat.flag('piObert')) this.posarBarrera();
@@ -245,22 +247,61 @@ class ZonaBoscPi extends ZonaBase {
     }
 
     // Els tres cants han sonat: tot l'arbre reviu, les branques s'aixequen, el pi explica d'on vénen els cants i el camí queda lliure
+    // Els ocells tornen al pi: volen des de fora de la pantalla fins a les branques i s'hi posen (a partir d'ara hi són sempre). Sense text.
+    posarOcellsPi(animat, fet) {
+        const pi = this.pi, X = pi.x, alt = pi.displayHeight;
+        this.ocellsPi = this.ocellsPi || [];
+        const esc = ((this.textures.get('ocell').customData || {}).escala || 1 / RES) * 0.9;           // la mida de la resta d'ocells del joc
+        const llocs = [[-125, 0.55], [-72, 0.8], [8, 0.97], [86, 0.76], [132, 0.55], [42, 0.62]];
+        llocs.forEach(([dx, k], i) => {
+            const x = X + dx, y = pi.y - alt * k, dreta = dx > 0;
+            const o = this.add.image(animat ? X + (dreta ? 520 : -520) : x, animat ? y - 380 - i * 30 : y, 'ocell').setDepth(pi.y + 400).setFlipX(!dreta).setScale(esc);
+            this.ocellsPi.push(o);
+            const salta = () => this.tweens.add({ targets: o, y: y - 5, yoyo: true, duration: 140, repeat: 1, delay: 1800 + Math.random() * 5000, onComplete: salta });
+            if (!animat) { salta(); return; }
+            const bat = this.tweens.add({ targets: o, scaleY: o.scaleY * 0.5, yoyo: true, repeat: -1, duration: 110 });
+            this.tweens.add({ targets: o, x, y, delay: i * 420, duration: 1500, ease: 'Sine.easeOut',
+                onStart: () => Sfx.piulet(),
+                onComplete: () => { bat.stop(); o.setScale(o.scaleX, Math.abs(o.scaleX)); Sfx.piulet(); salta(); } });
+        });
+        if (animat) this.esperar(llocs.length * 420 + 2300, fet); else if (fet) fet();
+    }
+
+    // Els tres cants han sonat: tot l'arbre reviu. Es deixa veure (la càmera panega fins a les arrels, que s'enfonsen a terra, i torna al pi), els ocells hi tornen
+    // i, de dins el tronc, surt la carta que hi va deixar el Cortiner: és ella qui explica d'on vénen els cants (el pi no parla, és un símbol)
     obrirPi() {
         if (Estat.flag('piObert')) return;
         Estat.posaFlag('piObert');
-        this.camPiFins = Infinity;                                        // la càmera es queda al pi mentre es desperta i parla
+        this.camPiFins = Infinity;                                        // la càmera es queda al pi fins que acaba tota l'escena
+        this.camPi = true;                                                // (a partir d'ara la porta aquesta escena: enquadrarPi la pot reenquadrar)
         Sfx.secret();
         this.cameras.main.shake(500, 0.004);
         this.canviarPi(3);
-        this.despertarBarrera();
-        this.time.delayedCall(5400, () => {
+        const { barX, camiY, piX, piY } = PI3;
+        this.seq([
+            c => this.esperar(2900, c),                                                              // el pi reviu (fade)
+            c => this.enquadrar(barX, camiY - 30, ZOOM_CAMERA, 1600, () => this.esperar(400, c), 0),   // paneig fins a la barrera d'arrels
+            c => { this.despertarBarrera(); this.esperar(5200, c); },                                // les arrels reviscolen i s'enfonsen
+            c => { this.enquadrarPi(true); this.esperar(1500, c); },                                 // torna al pi
+            c => this.posarOcellsPi(true, c),                                                        // els ocells tornen a les branques
+            c => {                                                                                   // la carta del Cortiner surt de dins el tronc
+                const x = piX + 62, y = piY - 6, key = iconaObjecte(this, 'carta_cortiner');
+                const halo = this.add.circle(x, y - 10, 34, 0xffe8a0, 0.5).setBlendMode('ADD').setDepth(piY + 600).setScale(0.3);
+                const carta = key ? this.add.image(x, y, key).setScale(0.2).setDepth(piY + 601) : this.add.circle(x, y, 9, 0xffe8a0, 1).setDepth(piY + 601);
+                Sfx.secret();
+                this.tweens.add({ targets: [carta, halo], y: '-=26', duration: 900, ease: 'Back.easeOut' });
+                this.tweens.add({ targets: carta, scale: key ? 0.5 : 1.4, duration: 900, ease: 'Back.easeOut' });
+                this.tweens.add({ targets: halo, scale: 1.2, alpha: 0.2, yoyo: true, repeat: 1, duration: 600 });
+                this.esperar(1700, () => { carta.destroy(); halo.destroy(); c(); });
+            }
+        ], () => {
             this.ui().obrirDialeg(DIALEGS.piHistoria(Estat), () => {
                 Estat.posaObjectiu(PROGRES.pista(Estat));
                 Estat.desar();
                 this.camPiFins = 0;
                 this.desenquadrarPi();
             });
-            this.enquadrarPi(true);                                         // quan parla, el pi queda centrat a l'espai que deixa el quadre de text
+            this.enquadrarPi(true);                                         // el pi queda centrat a l'espai que deixa el quadre de text
         });
     }
 }
@@ -293,24 +334,26 @@ Object.assign(DIALEGS, {
 
     // Quan el pi ja és despert: només respira
     piTresCants: E => {
-        if (E.flag('piObert')) return { pagines: [{ qui: 'Ineu', text: "(El pi es mou una mica, com si respirés. Sembla content.)" }] };
+        if (E.flag('piObert') && !E.te('carta_cortiner')) {                // (partides que ja havien obert el pi abans de la carta: encara la poden trobar)
+            const h = DIALEGS.piHistoria(E);
+            return { pagines: [{ qui: 'Ineu', text: "(Entre dues arrels del tronc hi ha un plec de paper, guardat com un tresor.)" }, ...h.pagines], enAcabar: h.enAcabar };
+        }
+        if (E.flag('piObert')) return { pagines: [{ qui: 'Ineu', text: "(Els ocells piulen entre les branques i el pi es mou una mica, com si respirés. Sembla content.)" }] };
         return { pagines: [{ qui: 'Ineu', text: "(Un pi vell, amb tres soques que s'obren com tres braços. Sembla que escolta.)" }] };
     },
 
-    // El premi del pi: la història dels tres cants
+    // El premi del pi: la carta que hi va deixar el Cortiner, amb la història dels tres cants (el pi no parla: és un símbol, un tresor que torna a viure)
     piHistoria: E => ({
         pagines: [
-            { qui: 'El Pi', text: "Fa molt de temps que espero això: tres cants davant meu, i tots tres de la mateixa boca." },
-            { qui: 'El Pi', text: "No t'espantis, petit. Els pins parlem poc, però ens ho recordem tot. Cada agulla meva és un record." },
-            { qui: 'El Pi', text: "Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantaven tots alhora, i aquell cant feia viure la terra: el Cant del Miracle." },
-            { qui: 'El Pi', text: "Un home sol, l'Ocellaire, el va voler per a ell. Va tancar els ocells en una gàbia i se'n va endur el cant. I amb el cant se'n va anar l'alba, i va començar la boira." },
-            { qui: 'El Pi', text: "Hi havia dos cants més, germans d'aquell: el de l'Aurora, que fa fugir la boira, i el de Vespres, que la terra escolta. Van tenir por que també se'ls emportés." },
-            { qui: 'El Pi', text: "Van venir a amagar-se aquí, a les meves branques: un a cada una. Jo els he guardat muts, com un nen guarda un secret, fins avui." },
-            { qui: 'El Pi', text: "El Cortiner va ser qui els va posar notes. Va arribar un vespre, cansat, i es va asseure sota meu. Em va escoltar i els va escriure en tres sons: un, dos i tres. Els de la tarota. Cada nota és una de les meves branques." },
-            { qui: 'El Pi', text: "Només deixo passar qui porta els tres cants, perquè només qui els porta els pot tornar als ocells." },
-            { qui: 'El Pi', text: "Quan la boira se'n vagi del tot, que els qui guarden els ocells robats vinguin aquí. Aquest bosc és casa seva. Ja ho saben, de cor." },
-            { qui: 'Ineu', text: "(Les arrels s'han enfonsat a terra com un respir llarg. El camí d'aquí al Dolmen ha quedat lliure.)" }
-        ]
+            { avis: "Has trobat la CARTA DEL CORTINER.", obj: 'carta_cortiner' },
+            { qui: 'Carta del Cortiner', text: "«A qui sigui que torni a sentir aquest pi respirar:\n\nAbans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantaven tots alhora, i aquell cant feia viure la terra: el Cant del Miracle.»" },
+            { qui: 'Carta del Cortiner', text: "«Un home sol, l'Ocellaire, el va voler per a ell. Va tancar els ocells en una gàbia i se'n va endur el cant. I amb el cant se'n va anar l'alba, i va començar la boira.»" },
+            { qui: 'Carta del Cortiner', text: "«Hi havia dos cants més, germans d'aquell: el de l'Aurora, que fa fugir la boira, i el de Vespres, que la terra escolta. Van tenir por que també se'ls emportés, i van venir a amagar-se aquí, a les branques d'aquest pi: un a cada una. Muts, com un nen que guarda un secret.»" },
+            { qui: 'Carta del Cortiner', text: "«Una tarda, cansat, em vaig asseure sota seu. Els vaig escoltar i els vaig escriure en tres sons: un, dos i tres. Són els de la tarota. Cada nota és una de les branques.»" },
+            { qui: 'Carta del Cortiner', text: "«El pi només deixa passar qui porta els tres cants, perquè només qui els porta els pot tornar als ocells. Quan la boira se'n vagi del tot, que els qui guarden els ocells robats vinguin aquí. Aquest bosc és casa seva.\n\n— El Cortiner»" },
+            { qui: 'Ineu', text: "(Les arrels s'han enfonsat a terra com un respir llarg, i els ocells han tornat a les branques. El camí d'aquí al Dolmen ha quedat lliure.)" }
+        ],
+        enAcabar: () => { E.dona('carta_cortiner'); E.desar(); }
     })
 });
 

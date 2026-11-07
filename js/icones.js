@@ -372,6 +372,13 @@ const ICONES_OBJECTES = {
         ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 2; [32, 42, 52, 62].forEach(y => { ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(66 - (y % 20), y); ctx.stroke(); });
         ctx.fillStyle = '#9a2a1a'; ctx.beginPath(); ctx.arc(62, 66, 6, 0, Math.PI * 2); ctx.fill();
     },
+    carta_cortiner: ctx => {
+        ctx.lineWidth = 3; ctx.fillStyle = '#efe0b4';
+        ctx.beginPath(); ctx.rect(20, 24, 56, 50); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(20, 24); ctx.lineTo(48, 52); ctx.lineTo(76, 24); ctx.stroke();                 // la solapa d'un plec de carta
+        ctx.fillStyle = '#2a5a8a'; ctx.beginPath(); ctx.arc(48, 52, 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke();      // el segell blau
+        ctx.fillStyle = '#e8c060'; [[44, 52], [48, 49], [52, 52]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 1.6, 0, Math.PI * 2); ctx.fill(); });  // les tres notes
+    },
     llavorLluna: ctx => {
         const g = ctx.createRadialGradient(48, 52, 2, 48, 52, 42); g.addColorStop(0, 'rgba(230,230,255,0.8)'); g.addColorStop(1, 'rgba(200,200,255,0)');
         ctx.fillStyle = g; ctx.fillRect(0, 0, 96, 96);
@@ -431,6 +438,7 @@ const US_OBJECTES = {
     clau_girgoles: E => E.flag('portaFerroOberta') ? 'record' : 'cal',
     clau_ferro: E => E.flag('portaSoterraniOberta') ? 'record' : 'cal',
     clau_gabriel: E => E.flag('portaGabrielOberta') ? 'record' : 'cal',
+    carta_cortiner: E => 'record',
     // La resta (aigua, cristall, pruna, beuratge, pa, llaç, ram, llavor) es gasten en fer-los servir: si els portes, encara et calen
 };
 const US_TEXTOS = {
