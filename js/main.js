@@ -172,6 +172,19 @@ const Joc = {
         });
     },
 
+    // La fanfàrria de Runna (jingle_runna) en alçar l'espasa: la música de fons s'abaixa del tot mentre sona i el jingle sona fort; si el fitxer no hi és, sona la
+    // fanfàrria del joc sintetitzada (el leitmotiv amb orgue)
+    jingleRunna(scene) {
+        Joc.detectarMusica().then(() => {
+            const m = Joc.musica;
+            if (m && m.isPlaying) { m.setVolume(0.08); scene.time.delayedCall(9000, () => { if (Joc.musica === m) m.setVolume(0.6); }); }
+            if (!Joc.musicaDisponible.has('jingle_runna')) { Sfx.fanfara(); Joc.leitmotiv(scene, 'orgue'); return; }
+            const play = () => { const s = scene.sound.add('jingle_runna', { volume: 0.9 }); s.once('complete', () => s.destroy()); s.play(); };
+            if (scene.cache.audio.exists('jingle_runna')) play();
+            else { scene.load.once('filecomplete-audio-jingle_runna', play); Joc.carregarMusica(scene, 'jingle_runna'); scene.load.start(); }
+        });
+    },
+
     // L'Ineu alça una arma nova (el bastó, la branca del Til·ler): sempre la mateixa fanfara. La música de fons s'abaixa mentre sona.
     // Si encara no hi ha el fitxer jingle_arma.m4a, sona una fanfara sintetitzada.
     fanfaraObjecte(scene) {

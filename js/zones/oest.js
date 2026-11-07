@@ -626,6 +626,7 @@ class ZonaDolmen extends ZonaBase {
 
     construir() {
         const { A, H, sx, sy, cx, ample, baixY, baixH, peuBosc } = DOL, x0 = cx - ample / 2, x1 = cx + ample / 2;
+        Joc.detectarMusica().then(() => { if (Joc.musicaDisponible.has('jingle_runna') && !this.cache.audio.exists('jingle_runna')) { Joc.carregarMusica(this, 'jingle_runna'); this.load.start(); } });       // la fanfàrria de Runna, ja carregada quan toca
         this.aura = null;                      // (l'escena es reutilitza: l'aura d'una visita anterior ja no hi és)
         let llavor = 23;
         const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
@@ -1010,7 +1011,7 @@ class ZonaDolmen extends ZonaBase {
 
     alcarRunna(fet) {
         const I = this.ineu, cam = this.cameras.main, ui = this.ui(), { sx, sy } = DOL;
-        Joc.jingle(this, 'jingle_runna');
+        Joc.jingleRunna(this);
         if (this.espClavada) { this.espClavada.destroy(); this.espClavada = null; }
         this.tweens.killTweensOf(this.resplendor); this.resplendor.setAlpha(0);
         if (this.aura) { this.aura.forEach(a => { this.tweens.killTweensOf(a); if (a.stop) a.stop(); this.tweens.add({ targets: a, alpha: 0, duration: 600, onComplete: () => a.destroy() }); }); this.aura = null; }

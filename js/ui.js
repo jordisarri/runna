@@ -672,6 +672,9 @@ class EscenaUI extends Phaser.Scene {
         this.textDialeg.setText('');
         // La veu del narrador, en cursiva i en un to vermellós; els personatges, en tinta fosca
         this.textDialeg.setColor(p.qui || p.avis ? '#2a170b' : '#5a2410').setFontStyle(p.qui || p.avis ? 'normal' : 'italic');
+        // Pàgina de versos (p.vers): lletra més gran, en negreta i centrada (per a les paraules solemnes, com les del Saber davant l'espasa)
+        if (p.vers) this.textDialeg.setFontSize(34).setFontStyle('bold').setColor('#5a1a10').setAlign('center').setX(-316).setLineSpacing(10);
+        else this.textDialeg.setFontSize(28).setAlign('left').setLineSpacing(5);
         this.indicador.setVisible(false);
         if (this.timerText) this.timerText.remove();
         this.timerText = this.time.addEvent({

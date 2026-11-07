@@ -1381,7 +1381,7 @@ const DIALEGS = {
         if (!E.flag("placaCompleta")) return { pagines: [] };            // (a l'espasa no hi ha punt d'interacció fins que els tres medallons són a la placa: aquí no s'arriba)
         return {
             pagines: [
-                { qui: "Ineu", text: "La foscor tem la llum, però més encara el riure!" },
+                { qui: "Ineu", vers: true, text: "LA FOSCOR TEM LA LLUM,\nPERÒ MÉS ENCARA EL RIURE!" },
                 { fer: (z, fet) => z.alcarRunna(fet) }
             ],
             enAcabar: () => {
