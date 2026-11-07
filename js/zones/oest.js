@@ -916,6 +916,14 @@ class ZonaDolmen extends ZonaBase {
 
     // Les Paraules del Saber ja s'han dit: Runna surt de la pedra i és a la mà de l'Ineu, que l'alça. Raigs de llum blanca i el rètol
     // es queden fins que el jugador prem; després s'esvaeixen i l'Ineu torna a la seva pose, mirant avall
+    // En interactuar amb la placa, la càmera puja i s'allunya: es veuen la placa i l'Ineu a baix i el dolmen amb Runna a dalt (es torna a posar en acabar el diàleg)
+    enquadrarPlaca(fet) {
+        const H = ALT - ALT_HUD, lliure = Math.max(240, H - 470);
+        const dalt = this.espY - 170, baix = this.ineu.y + 70, tram = baix - dalt + 40;
+        const zoom = Math.min(this.zoomZona || ZOOM_CAMERA, lliure / tram);
+        this.enquadrar(DOL.sx, (dalt + baix) / 2, zoom, 900, fet);
+    }
+
     // Dibuixa (fix) un medalló de pedra a la placa, al seu cercle, amb una llum suau del seu color
     dibuixaMedalloPlaca(flag, emb, color) {
         const g = this.placaGeo, [x, y] = g.cercles[flag], D = g.PW * 0.185;
