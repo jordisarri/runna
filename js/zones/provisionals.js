@@ -340,7 +340,7 @@ class ZonaCreu extends ZonaBase {
         if (!Estat.flag('bassadoriaNeta')) this.boiraBass = this.boira(700, 360, 480, 120, 3.5);
 
 
-        this.cartell(1180, 480, () => ({ pagines: [{ qui: 'Cartell', text: '↑ Plaça del Santuari' }] }));
+        this.cartell(1065, 440, () => ({ pagines: [{ qui: 'Cartell', text: '↑ Plaça del Santuari' }] }));      // a la vora esquerra del camí, no al mig
         this.arbres([[150, 180], [320, 260], [1450, 220], [1500, 780], [100, 520], [190, 640], [1400, 440], [1480, 600], [260, 440]]);
 
         this.enemic('escolopendra', 1350, 300);
