@@ -662,7 +662,7 @@ class ZonaDolmen extends ZonaBase {
         this.placaDolmen = this.posar('placa_dolmen', sx, PY, { escala: 230 / 190, col: { w: 150, h: 16 }, opac: true });
         const PW = this.placaDolmen.displayWidth, PH = this.placaDolmen.displayHeight, PTOP = PY - PH;
         this.placaGeo = { sx, PY, PW, PH, PTOP, cercles: { placaArbre: [sx - PW / 2 + PW * 0.295, PTOP + PH * 0.54], placaSaber: [sx - PW / 2 + PW * 0.515, PTOP + PH * 0.54], placaBenedicio: [sx - PW / 2 + PW * 0.69, PTOP + PH * 0.53] } };
-        this.interactiu(sx, PY + 12, 130, DIALEGS.placaDolmen, { altura: PH + 20, actiu: () => !this.alt });
+        this.interactiu(sx, PY + 12, 130, DIALEGS.placaDolmen, { altura: PH + 20, actiu: () => !this.alt && this.davantPlaca() });
         this.medallonsPlaca = [];
         [['placaArbre', 'emblema_arbre', 0x8fd060], ['placaSaber', 'emblema_saber', 0x7ab8ff], ['placaBenedicio', 'emblema_benedicio', 0xffd860]].forEach(([flag, emb, color]) => { if (Estat.flag(flag)) this.dibuixaMedalloPlaca(flag, emb, color); });
         if (Estat.flag('placaCompleta') && !Estat.te('runna')) this.ferAuraRunna(false);       // Runna ja s'ha il·luminat: l'aura daurada i verda es queda
@@ -922,12 +922,18 @@ class ZonaDolmen extends ZonaBase {
     // es queden fins que el jugador prem; després s'esvaeixen i l'Ineu torna a la seva pose, mirant avall
     // Quan l'Ineu s'acosta a la placa (on apareix el símbol d'interacció), la càmera puja de mica en mica SENSE canviar el zoom, per veure el dolmen, l'espasa i les flors;
     // si se n'allunya (o puja a la llosa) torna a seguir-lo. És un desplaçament continu del seguiment, sense interruptors, perquè no faci salts.
+    // Només s'hi pot interactuar des de davant (al sud i dins l'amplada de la placa), no pels costats ni per darrere
+    davantPlaca() {
+        const g = this.placaGeo, I = this.ineu; if (!g || !I) return false;
+        return I.y > g.PY + 4 && Math.abs(I.x - g.sx) < g.PW / 2 + 15;
+    }
+
     camPlaca() {
         const g = this.placaGeo; if (!g) return;
         const I = this.ineu, cam = this.cameras.main;
         if (this.camCinema) { this.pesCam = 0; return; }                          // una altra escena porta la càmera: no hi toquem
         const d = Phaser.Math.Distance.Between(I.x, I.y, g.sx, g.PY + 12);
-        const lliure = !this.alt && !this.cinema && !this.canviant;
+        const lliure = !this.alt && !this.cinema && !this.canviant && this.davantPlaca();
         // Pes de l'enquadrament (0 = segueix l'Ineu com sempre, 1 = vista alta): puja i baixa de mica en mica amb la distància, sense interruptors ni salts
         const t = lliure ? 1 - Phaser.Math.Clamp((d - 135) / 190, 0, 1) : 0, ease = t * t * (3 - 2 * t);
         this.pesCam = (this.pesCam || 0) + (ease - (this.pesCam || 0)) * 0.08;
