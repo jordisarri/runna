@@ -617,6 +617,7 @@ class ZonaDolmen extends ZonaBase {
             alcada: DOL.H,
             colorFons: '#1a2c16',              // prou clar perquè no compti com a interior: camí amb vores difuminades
             pacifica: true,
+            provaArma: true,                   // pacífic (cap enemic), però en tenir Runna l'Ineu hi pot provar l'espasa
             entrades: {
                 diposits: { x: 60, y: DOL.baixY + DOL.baixH / 2, dir: 'dreta' },
                 bosc:     { x: DOL.A - 60, y: DOL.baixY + DOL.baixH / 2, dir: 'esquerra' }

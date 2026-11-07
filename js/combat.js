@@ -755,7 +755,8 @@ Object.assign(ZonaBase.prototype, {
 
     atacar() {
         const ara = this.time.now;
-        if (!this.teArma() || this.config.pacifica || ara < (this.atacFins || 0) || this.caient || this.assegut) return;
+        const pacifica = this.config.pacifica && !(this.config.provaArma && Estat.te('runna'));          // (el Dolmen és pacífic, però un cop tens Runna hi pots provar l'espasa)
+        if (!this.teArma() || pacifica || ara < (this.atacFins || 0) || this.caient || this.assegut || this.cinema || this.ineuAlt) return;
         const runna = Estat.te('runna');
         const agil = runna || Estat.te('basto_tiller');          // la branca del Til·ler (i Runna) són més ràpids i amb més abast
         this.atacFins = ara + (agil ? 270 : 380);
