@@ -207,10 +207,10 @@ class ZonaCamiRov extends ZonaBase {
 
         // La segona corba, ben endins del camí, on espera la Nena de les Trenes
         if (!Estat.flag('nenaAlliberada')) {
-            this.nena = this.posar('nena_trenes', 880, 880, { fonsY: 880 }).setAlpha(0.72);
-            this.resplendorNena = this.add.circle(880, 820, 90, 0xcfd8ff, 0.12).setDepth(879);
+            this.nena = this.posar('nena_trenes', 880, 880, { fonsY: 880 }).setAlpha(0.92);          // més gran i ben visible (és un esperit, però no s'ha de perdre)
+            this.resplendorNena = this.add.circle(880, 815, 52, 0xcfd8ff, 0.07).setDepth(879);      // un halo molt discret
             this.tweens.add({ targets: [this.nena, this.resplendorNena], y: '-=10', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
-            this.interactiu(880, 880, RADI_NPC, DIALEGS.nenaTrenes, { altura: 105 });
+            this.interactiu(880, 880, RADI_NPC, DIALEGS.nenaTrenes, { altura: 145 });
         }
         // Primer llaç: amagat sota una roca que cal empènyer
         this.llac = this.posar('llac', 1300, 830, { fonsY: 830 });
