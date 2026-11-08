@@ -62,10 +62,10 @@ const DIARI = {
         c.add(marcPergami(ui, AMPLE / 2, ALT / 2, AMPLE - 16, ALT - 16));
         c.add(ui.add.text(AMPLE / 2, 54, "Diari de l'Ineu", { fontFamily: FONT_PLACA, fontSize: '40px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5));
         // El botó de tancar: un cercle amb una creu dibuixada, ben separat dels ornaments de la cantonada del marc
-        const tx = AMPLE - 88, ty = 66, tg = ui.add.graphics();
-        tg.fillStyle(0xf1e3b6, 1).fillCircle(tx, ty, 24).lineStyle(2.5, 0x6a1f12, 1).strokeCircle(tx, ty, 24);
-        tg.lineStyle(4, 0x6a1f12, 1).lineBetween(tx - 9, ty - 9, tx + 9, ty + 9).lineBetween(tx + 9, ty - 9, tx - 9, ty + 9);
-        const tanca = ui.add.circle(tx, ty, 28, 0xffffff, 0.001).setInteractive({ useHandCursor: true }).on('pointerdown', () => ui.tancarInventari());
+        const tx = AMPLE - 84, ty = 56, tg = ui.add.graphics();
+        tg.fillStyle(0xf1e3b6, 1).fillCircle(tx, ty, 16).lineStyle(2, 0x6a1f12, 1).strokeCircle(tx, ty, 16);
+        tg.lineStyle(3, 0x6a1f12, 1).lineBetween(tx - 6, ty - 6, tx + 6, ty + 6).lineBetween(tx + 6, ty - 6, tx - 6, ty + 6);
+        const tanca = ui.add.circle(tx, ty, 26, 0xffffff, 0.001).setInteractive({ useHandCursor: true }).on('pointerdown', () => ui.tancarInventari());
         c.add([tg, tanca]);
         // Pestanyes
         this.botons = DIARI_PESTANYES.map(([id, nom], i) => {
