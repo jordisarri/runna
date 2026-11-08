@@ -184,6 +184,10 @@ class EscenaTitol extends Phaser.Scene {
         this.opcions = [];
         if (hiHa) this.opcions.push({ text: 'Continuar', fn: () => { if (Estat.carregar()) Joc.continuar(this); } });
         this.opcions.push({ text: 'Nova partida', fn: () => this.novaPartida(hiHa) });
+        this.opcions.push({ text: 'Carrega d\'un fitxer', fn: () => Estat.importar(ok => {
+            if (ok) Joc.continuar(this);
+            else this.menu.add(this.add.text(AMPLE / 2, ALT - 330, 'No he pogut llegir aquest fitxer com a partida.', estilText(20, '#ffb0a0', { backgroundColor: '#1a120bcc', padding: { x: 10, y: 5 } })).setOrigin(0.5));
+        }) });
 
         const separacio = 72;
         const y0 = ALT - 70 - (this.opcions.length - 1) * separacio;
@@ -200,6 +204,10 @@ class EscenaTitol extends Phaser.Scene {
         this.seleccio = 0;
         this.pintar();
 
+        if (!Estat.emmagatzematgeOk()) {                       // mode privat o emmagatzematge bloquejat: no es pot desar enlloc
+            this.menu.add(this.add.text(AMPLE / 2, ALT - 300, 'Aquest navegador no deixa desar la partida (mode privat?). Pots baixar-la a un fitxer des del menú de pausa i carregar-la aquí.',
+                estilText(19, '#ffd8a0', { backgroundColor: '#1a120bcc', padding: { x: 10, y: 5 }, wordWrap: { width: 640 }, align: 'center' })).setOrigin(0.5));
+        }
         if (location.protocol === 'file:' || Grafics.pixelsBloquejats) {
             this.menu.add(this.add.text(AMPLE / 2, 16,
                 'Atenció: obre el joc amb un servidor local (Live Server de VS Code) perquè tot funcioni bé.',

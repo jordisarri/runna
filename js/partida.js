@@ -59,6 +59,51 @@ const Estat = {
         }
     },
 
+    // ---------- Desa i carrega a un fitxer ----------
+    // Per a qui juga en mode privat/incògnit (el navegador esborra el que es desa en tancar-lo, o no deixa desar): la partida es pot baixar a un fitxer i tornar-la a carregar.
+    emmagatzematgeOk() {
+        try { const k = this.CLAU + '_prova'; localStorage.setItem(k, '1'); localStorage.removeItem(k); return true; } catch (e) { return false; }
+    },
+
+    // Baixa la partida actual com a fitxer .json
+    exportar() {
+        const text = JSON.stringify({ joc: 'runna', versio: this.VERSIO, desatEl: new Date().toISOString(), dades: this.dades });
+        const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+        const a = document.createElement('a'), d = new Date(), z = n => String(n).padStart(2, '0');
+        a.href = url; a.download = `runna-partida-${d.getFullYear()}${z(d.getMonth() + 1)}${z(d.getDate())}-${z(d.getHours())}${z(d.getMinutes())}.json`;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
+    },
+
+    // Obre el selector de fitxers i, si el fitxer és una partida vàlida, la deixa com a partida actual (i la desa si es pot). fet(ok): ok és cert si s'ha carregat.
+    importar(fet) {
+        const inp = document.createElement('input');
+        inp.type = 'file'; inp.accept = '.json,application/json'; inp.style.display = 'none';
+        document.body.appendChild(inp);
+        let acabat = false;
+        const acaba = ok => { if (acabat) return; acabat = true; inp.remove(); if (fet) fet(ok); };
+        inp.addEventListener('change', () => {
+            const f = inp.files && inp.files[0];
+            if (!f) return acaba(false);
+            const lector = new FileReader();
+            lector.onload = () => {
+                try {
+                    const obj = JSON.parse(String(lector.result));
+                    const d = this.validar(obj && obj.dades ? obj.dades : obj);
+                    if (!d || !d.flags || !Array.isArray(d.objectes)) return acaba(false);
+                    this.dades = d;
+                    this.migrar();
+                    this.desar();
+                    acaba(true);
+                } catch (e) { acaba(false); }
+            };
+            lector.onerror = () => acaba(false);
+            lector.readAsText(f);
+        });
+        inp.addEventListener('cancel', () => acaba(false));
+        inp.click();
+    },
+
     hiHaPartida() {
         try { return !!localStorage.getItem(this.CLAU); } catch (e) { return false; }
     },

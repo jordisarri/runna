@@ -814,24 +814,32 @@ class EscenaUI extends Phaser.Scene {
     crearMenu() {
         this.menu = this.add.container(0, 0).setVisible(false).setDepth(60);
         const vel = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.65).setOrigin(0).setInteractive();
-        const panell = marcPergami(this, AMPLE / 2, ALT / 2, 640, 570);
-        const titol = this.add.text(AMPLE / 2, ALT / 2 - 160, 'Pausa', { fontFamily: FONT_PLACA, fontSize: '44px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5);
+        const panell = marcPergami(this, AMPLE / 2, ALT / 2, 640, 700);
+        const titol = this.add.text(AMPLE / 2, ALT / 2 - 290, 'Pausa', { fontFamily: FONT_PLACA, fontSize: '44px', fontStyle: 'bold', color: '#6a1f12', resolution: 2 }).setOrigin(0.5);
         this.menu.add([vel, panell, titol]);
         // El que portes fet: percentatge del joc, barra i el detall (història i missions laterals)
-        this.txtCompletat = this.add.text(AMPLE / 2, ALT / 2 + 190, '', { fontFamily: FONT_PLACA, fontSize: '27px', fontStyle: 'bold', color: '#3a2412', resolution: 2 }).setOrigin(0.5);
+        this.txtCompletat = this.add.text(AMPLE / 2, ALT / 2 + 230, '', { fontFamily: FONT_PLACA, fontSize: '27px', fontStyle: 'bold', color: '#3a2412', resolution: 2 }).setOrigin(0.5);
         this.barraCompletat = this.add.graphics();
-        this.txtDetall = this.add.text(AMPLE / 2, ALT / 2 + 244, '', { fontFamily: FONT_LLIBRE, fontSize: '20px', color: '#5a3a22', align: 'center', resolution: 2 }).setOrigin(0.5);
+        this.txtDetall = this.add.text(AMPLE / 2, ALT / 2 + 296, '', { fontFamily: FONT_LLIBRE, fontSize: '20px', color: '#5a3a22', align: 'center', resolution: 2 }).setOrigin(0.5);
         this.menu.add([this.txtCompletat, this.barraCompletat, this.txtDetall]);
+        this.avisDesar = this.add.text(AMPLE / 2, ALT / 2 - 250, 'Aquest navegador no deixa desar (mode privat?). Baixa la partida a un fitxer.',
+            { fontFamily: FONT_LLIBRE, fontSize: '19px', fontStyle: 'bold', color: '#8a2a14', align: 'center', wordWrap: { width: 560 }, resolution: 2 }).setOrigin(0.5).setVisible(false);
+        this.menu.add(this.avisDesar);
 
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
             { text: 'Diari i mapa', fn: () => { this.tancarMenu(); this.obrirInventari('mapa'); } },
             { text: 'Àudio', audio: true, fn: () => { Sfx.commutarSilenci(); this.pintarSeleccio(); Sfx.tria(); } },
+            { text: 'Desa a un fitxer', fn: () => { Estat.exportar(); this.missatge('Partida baixada: guarda el fitxer. Amb «Carrega d\'un fitxer» la recuperaràs.'); } },
+            { text: 'Carrega d\'un fitxer', fn: () => Estat.importar(ok => {
+                if (!ok) { this.missatge('No he pogut llegir aquest fitxer com a partida.'); return; }
+                this.tancarMenu(); Joc.continuar(this);
+            }) },
             { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];
         // Cada opció és un botó (contenidor amb fons, text i, a l'Àudio, l'altaveu): s'il·lumina en passar-hi per sobre o seleccionar-lo,
         // fa un petit «pop» en prémer-lo i sona. L'altaveu i el text van sempre centrats a la mateixa línia.
-        const BTN_W = 460, BTN_H = 64, Y0 = ALT / 2 - 92, PAS = 72;
+        const BTN_W = 460, BTN_H = 58, Y0 = ALT / 2 - 205, PAS = 66;
         this.botonsMenu = [];
         this.textOpcions = this.opcions.map((o, i) => {
             const y = Y0 + i * PAS;
@@ -853,7 +861,7 @@ class EscenaUI extends Phaser.Scene {
 
     // Posa al menú el recompte del que portes fet
     actualitzarCompletat() {
-        const c = PROGRES.completat(Estat), x0 = AMPLE / 2 - 230, y = ALT / 2 + 210, w = 460, h = 16;
+        const c = PROGRES.completat(Estat), x0 = AMPLE / 2 - 230, y = ALT / 2 + 256, w = 460, h = 16;
         this.txtCompletat.setText('Joc completat: ' + c.percent + '%');
         const g = this.barraCompletat.clear();
         g.fillStyle(0x3a2412, 0.25).fillRoundedRect(x0, y, w, h, 8);
@@ -866,6 +874,7 @@ class EscenaUI extends Phaser.Scene {
     obrirMenu() {
         if (this.dialeg || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
         this.menuObert = true;
+        this.avisDesar.setVisible(!Estat.emmagatzematgeOk());
         this.seleccio = 0;
         this.premut = false;
         this.actualitzarCompletat();
