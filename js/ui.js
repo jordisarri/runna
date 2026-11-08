@@ -34,7 +34,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
     'Ineu': 'ineu', 'Pare Jordà': 'pare_jordi', 'Germà Aldreu': 'germa_aldreu', 'Pastor de Boira': 'pastor_boira', 'Aldreu, Pastor de Boira': 'pastor_boira', 'Germà Francí': 'germa_francesc', 'Pare Daimiel': 'pare_daniel',
-    'Pare Alcoví': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Pomers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Galf': 'galf', 'Isildren': 'isidre',
+    'Pare Alcoví': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Pomers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Galf': 'galf', 'Isílder': 'isidre',
     'La Pianista': 'pianista', 'La Jauneta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Carmèlia': 'monja_charm', 'Pilària': 'monja_phili', 'Dolora': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
     'Meus': 'neus', 'Senyor Molner': 'marit_neus', 'Georgi': 'jordi_caseta', 'Rosansa': 'sansa', 'Monjo': 'ombra_monjo', 'Home del Raïm': 'home_raim',
@@ -127,7 +127,7 @@ const CATALEG_OBJECTES = {
     pruna:            ['Pruna daurada', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en demana una; un cop oferta, te la quedes de record.'],
     beuratge:         ['Beuratge de la Jauneta', 'Dissipa la boira del camí cap al Til·ler; no protegeix de la boira verinosa.'],
     escudella:        ['Escudella de la Meus', 'Encara calenta, com cada any per al sopar del Til·ler.'],
-    flors_isidre:     ['Flors d\'Isildren', 'Un ram embolicat amb un tros de pergamí.'],
+    flors_isidre:     ['Flors d\'Isílder', 'Un ram embolicat amb un tros de pergamí.'],
     pa_pastor:        ['Pa dels pastors', 'Una barra baixa i fosca, cuita sota la cendra.'],
     esquelles:        ['Esquelles dels pastors', 'Amb elles, els cants antics sonen més clars.'],
     medallo_arbre:    ["Medalló de l'Arbre", "De pedra, amb una fulla tallada: el permís del Gran Til·ler. Va a la placa del Dolmen."],
@@ -149,7 +149,7 @@ const CATALEG_OBJECTES = {
     carta_cortiner:   ['Carta del Cortiner', 'La va deixar al tronc del Pi dels Tres Cants: explica d\'on van sortir els tres cants i què els cal per tornar als ocells.'],
     clau_ferro:       ['Clau de ferro', 'Obre la Porta de les Gírgoles.'],
     clau_gabriel:     ['Clau de Sant Gabriel', "Te l'ha donada el Galf. Obre l'ermita de Sant Gabriel."],
-    llavorLluna:      ['Llavor de Lluna', 'De la Rosansa. L\'Isildren sap on plantar-la.'],
+    llavorLluna:      ['Llavor de Lluna', 'De la Rosansa. L\'Isílder sap on plantar-la.'],
 };
 
 class EscenaUI extends Phaser.Scene {

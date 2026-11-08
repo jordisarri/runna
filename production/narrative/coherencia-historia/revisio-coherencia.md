@@ -8,7 +8,7 @@ Auditoria de només lectura (cap fitxer del joc modificat). Canon: `docs/GUIO.md
 | # | Gravetat | Troballa | On |
 |---|---|---|---|
 | 1 | Alta | Al sopar del Til·ler l'Ineu toca el Cant de Vespres, que encara no pot saber | dialegs.js:1098 vs progres.js (ordre) i dialegs.js:242 |
-| 2 | Alta | El Sardi: fill de l'Isildren (codi) vs «protegit, cap parentiu» (guió, rev. 201) | dialegs.js:915, 1144, 937; gabia.js:89 vs GUIO rev. 201, A3 |
+| 2 | Alta | El Sardi: fill de l'Isílder (codi) vs «protegit, cap parentiu» (guió, rev. 201) | dialegs.js:915, 1144, 937; gabia.js:89 vs GUIO rev. 201, A3 |
 | 3 | Mitjana | On és el Mestre/la gàbia: Taverna (A2, A6 Acte 2, A5 Pilària, pròleg) vs Gírgoles (codi) | GUIO A2/A5/A6; dialegs.js:1186; main.js:604 |
 | 4 | Mitjana | Pilària diu que ha vist l'Aldreu cada nit estant tancada tres nits | dialegs.js:1005-1006 |
 | 5 | Mitjana | Carry: el Pallofa marxa «fa tres nits» però va darrere del segrest del Fram (2a nit) | dialegs.js:510 vs 490 |
@@ -41,10 +41,10 @@ Auditoria de només lectura (cap fitxer del joc modificat). Canon: `docs/GUIO.md
 - **Contradicció**: a `progres.js` el sopar és abans del fragment 1 i de l'ombra. La Pianista només ensenya Vespres si `ombraDemanaCant || alcuiLlegit` (`dialegs.js:242`). Al sopar l'Ineu només sap l'Aurora. L'Ineu anomena un cant que encara no coneix.
 - **Proposta mínima**: a `dialegs.js:1098` canviar «El Cant de Vespres, 3-1-2-1» per una referència al cant que sí que sap en aquell moment (Aurora). Cal comprovar què exigeix la foguera a `js/zones/cirosa.js` (no llegit).
 
-### 2. El Sardi, fill de l'Isildren
-- **On**: Isildren «el meu fill Sardi. Té set anys» (`dialegs.js:915`) i «pel meu Sardi» (`:1144`). Sardi alliberat: «El pare deu estar amoïnat regant la prunera» (`gabia.js:89`). Guió: rev. 201 «cap parentiu»; A3 l.41 i A6 «protegit de les sacerdotesses»; però A3 l.38 diu «el seu fill, el Sardi».
+### 2. El Sardi, fill de l'Isílder
+- **On**: Isílder «el meu fill Sardi. Té set anys» (`dialegs.js:915`) i «pel meu Sardi» (`:1144`). Sardi alliberat: «El pare deu estar amoïnat regant la prunera» (`gabia.js:89`). Guió: rev. 201 «cap parentiu»; A3 l.41 i A6 «protegit de les sacerdotesses»; però A3 l.38 diu «el seu fill, el Sardi».
 - **Contradicció**: el codi i A3 l.38 diuen fill; rev. 201, Jordà (`dialegs.js:78`) i A3 l.41 diuen protegit sense parentiu. El joc ha usat «fill».
-- **Proposta mínima**: decidir amb narrative-director. Si el fill és canònic, corregir la rev. 201 i A3 l.41 (el Sardi és fill de l'Isildren i viu protegit a l'Hostatgeria). Si no, canviar les 4 línies del codi.
+- **Proposta mínima**: decidir amb narrative-director. Si el fill és canònic, corregir la rev. 201 i A3 l.41 (el Sardi és fill de l'Isílder i viu protegit a l'Hostatgeria). Si no, canviar les 4 línies del codi.
 
 ## Detall — gravetat MITJANA
 

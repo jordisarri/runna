@@ -189,7 +189,7 @@ Convencions: Resultat real i Pass/Fail en blanc. Els noms de zona de la llista d
 **Passos**:
 1. Parla amb les Venerables Sàvies (ZonaCelles, **NO CONFIRMAT** la zona exacta) o llegeix l'objectiu del sopar.
 2. Anota el text de la pista.
-**Resultat esperat**: sense cantPedres: «Al sopar del Til·ler encara hi falta: l'escudella de la Meus (a les cel·les), les flors d'Isildren (a l'Hostatgeria), el pa que pasten els pastors de la Cirosa (cal el Cant de Vespres, que ensenya la Pianista al Santuari).». Amb cantPedres: igual però sense el parèntesi.
+**Resultat esperat**: sense cantPedres: «Al sopar del Til·ler encara hi falta: l'escudella de la Meus (a les cel·les), les flors d'Isílder (a l'Hostatgeria), el pa que pasten els pastors de la Cirosa (cal el Cant de Vespres, que ensenya la Pianista al Santuari).». Amb cantPedres: igual però sense el parèntesi.
 **Resultat real**:
 **Pass/Fail**:
 

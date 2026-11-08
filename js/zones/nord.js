@@ -452,7 +452,7 @@ class ZonaCelles extends ZonaBase {
         // Nostra Senyora (oest): la Carry, vídua del campaner, que busca el seu gos Pallofa (el trobaràs a Sant Antoni)
         this.npc('carry', 360, 690, DIALEGS.carry);
 
-        // La Rosansa i el seu carro de verdures: passa per aquí un sol cop, quan l'Isildren te n'ha parlat, i se'n va un cop t'ha donat la llavor
+        // La Rosansa i el seu carro de verdures: passa per aquí un sol cop, quan l'Isílder te n'ha parlat, i se'n va un cop t'ha donat la llavor
         if (Estat.flag('isidreSansa') && !Estat.flag('llavorSansa')) this.posarSansa();
 
         this.cartell(958, 830, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler\n↓ Les Runes\n→ Sant Benet' }] }));       // vora l'encreuament (a la cantonada sud-oest)
@@ -865,7 +865,7 @@ class ZonaTiller extends ZonaBase {
         this.npcs = this.npcs || {};
         const gent = [
             ['pastor_a', 1170, 60, 290, 880], ['pastor_b', 1170, 20, 400, 894], ['pastor_vell', 1170, -20, 510, 880],      // pel camí de la Cirosa
-            ['neus', 700, 1000, 300, 760], ['venerables', 700, 1050, 600, 760], ['isidre', 700, 1100, 450, 764]                   // des de les cel·les (l'Isildren també hi és)
+            ['neus', 700, 1000, 300, 760], ['venerables', 700, 1050, 600, 760], ['isidre', 700, 1100, 450, 764]                   // des de les cel·les (l'Isílder també hi és)
         ];
         const imatges = gent.map(([k, x0, y0, x, y], i) => {
             const img = this.posar(k, x0, y0, { fonsY: y0 });

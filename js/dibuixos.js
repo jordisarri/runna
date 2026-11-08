@@ -255,7 +255,7 @@ function dibuixarMonja(canvas, w, o) {
     ctx.lineWidth = 1.8; ctx.beginPath(); ctx.arc(m, capY + 20.5, 3.2, 0.25, Math.PI - 0.25); ctx.stroke();
 }
 
-// Cos d'Isildren: camisa blanca de màniga curta, pantalons marrons, cama de fusta a la dreta i un bastó
+// Cos d'Isílder: camisa blanca de màniga curta, pantalons marrons, cama de fusta a la dreta i un bastó
 function dibuixarCosIsildren(ctx, m, capY) {
     const PELL = '#e0a878', CAMISA = '#f4f1e8', PANTALO = '#6b4a2a', SABATA = '#3b2a1e', FUSTA = '#a8794a';
     ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.lineJoin = 'round';

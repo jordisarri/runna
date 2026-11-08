@@ -39,7 +39,7 @@ Object.assign(DIALEGS, {
         ] };
         if (E.flag('runna')) return { pagines: [
             { qui: 'Eve', text: 'Aquesta espasa brilla com si estigués contenta. Amb això potser obriríem la porta... però el pany és de clau. Una clau de ferro, grossa.' },
-            { qui: 'Eve', text: 'L\'Isildren diu que els monjos ho amagaven tot a la Casa Gran. Potser la clau també.' }
+            { qui: 'Eve', text: 'L\'Isílder diu que els monjos ho amagaven tot a la Casa Gran. Potser la clau també.' }
         ] };
         return { pagines: [
             { qui: 'Eve', text: 'No et puc ajudar a obrir la porta de ferro: no té pany per a cap clau que hi hagi a la Taverna. Diuen que els monjos la van tancar amb una espasa que brilla.' },

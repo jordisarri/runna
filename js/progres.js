@@ -50,7 +50,7 @@ const PROGRES = {
           pista: E => {
               const f = [];
               if (!E.flag('escudella')) f.push("l'escudella de la Meus (a les cel·les)");
-              if (!E.flag('floresIsidre')) f.push("les flors d'Isildren (a l'Hostatgeria)");
+              if (!E.flag('floresIsidre')) f.push("les flors d'Isílder (a l'Hostatgeria)");
               if (!E.flag('pastorsConvencuts')) f.push(E.flag('cantPedres') ? "el pa que pasten els pastors de la Cirosa (toca'ls el cant vora el foc)" : "el pa dels pastors de la Cirosa: primer cal una música antiga per a ells, i la Pianista, al Santuari, en coneix una");
               return f.length ? "Al sopar del Til·ler encara hi falta: " + f.join(', ') + "." : "Ja ho tens tot: el Gran Til·ler espera la taula parada.";
           } },

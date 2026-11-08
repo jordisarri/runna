@@ -265,7 +265,7 @@ class ZonaEra extends ZonaBase {
 // Un gran edifici de pedra a la dreta i, enganxada al seu lateral esquerre, una pèrgola d'arcades de pedra: és un jardí
 // de gespa amb flors (només allà dins n'hi ha). Les arcades del davant són a la mateixa línia que la façana de la casa i
 // tan altes com la seva planta baixa, perquè la façana i la pèrgola es llegeixin com una sola obra. Dins hi ha la Prunera
-// Màgica i la llosa del passadís secret de la masmorra; davant l'entrada, l'Isildren. El camí de l'Era i de la Taverna
+// Màgica i la llosa del passadís secret de la masmorra; davant l'entrada, l'Isílder. El camí de l'Era i de la Taverna
 // passa per davant (sud). L'id de la zona continua sent ZonaJardi (les partides desades hi compten).
 class ZonaJardi extends ZonaBase {
     constructor() {
@@ -358,7 +358,7 @@ class ZonaJardi extends ZonaBase {
             n++;
         }
 
-        // L'Isildren, davant l'entrada de la pèrgola (si la llosa ja és oberta, es queda al costat del forat)
+        // L'Isílder, davant l'entrada de la pèrgola (si la llosa ja és oberta, es queda al costat del forat)
         this.isidre = this.npc('isidre', 664, 915, DIALEGS.isidre);
         if (Estat.flag('llosaOberta')) {
             this.llosa.setPosition(LX - 92, LY + 4).setRotation(-0.1);
@@ -390,9 +390,9 @@ class ZonaJardi extends ZonaBase {
         this.sortidaEscala(x - 37, y - 37, 74, 74, 'ZonaSoterraniHost', 'entrada', y + 42);   // l'Ineu baixa l'escala abans de canviar de zona
     }
 
-    // L'Isildren porta la llavor a la llosa: la deixa caure, hi brota una flor de lluna i una columna de llum lunar baixa fins a ella; sobre la llosa
+    // L'Isílder porta la llavor a la llosa: la deixa caure, hi brota una flor de lluna i una columna de llum lunar baixa fins a ella; sobre la llosa
     // s'encén un cercle de runes, tot tremola i la llosa s'alça i s'aparta, i deixa veure l'escala. Tot es veu (res no s'ajup ni es deforma).
-    // fet: quan l'escena ha acabat (es crida des d'una pàgina d'acció del diàleg de l'Isildren).
+    // fet: quan l'escena ha acabat (es crida des d'una pàgina d'acció del diàleg de l'Isílder).
     obrirLlosa(fet) {
         if (this.obrintLlosa || Estat.flag('llosaOberta')) { if (fet) fet(); return; }
         this.obrintLlosa = true;
@@ -414,7 +414,7 @@ class ZonaJardi extends ZonaBase {
             await espera(750);
             await mou({ x: LX, y: 780 }, 1300);                            // surt per l'obertura de la pèrgola
             await mou({ x: FX + 46, y: FY + 40 }, 1100);                   // fins al lloc de la flor
-            // 1. La llavor surt de la mà de l'Isildren i cau a terra
+            // 1. La llavor surt de la mà de l'Isílder i cau a terra
             const icona = iconaObjecte(this, 'llavorLluna');
             const llavor = icona ? this.add.image(I.x - 12, I.y - 70, icona).setScale(0.28).setDepth(99000) : this.add.circle(I.x - 12, I.y - 70, 6, 0xe8e4f8, 1).setDepth(99000);
             await new Promise(res => { this.tweens.add({ targets: llavor, x: FX, y: FY + 6, duration: 700, ease: 'Quad.easeIn', onComplete: res }); });
