@@ -434,7 +434,7 @@ class EscenaProleg extends Phaser.Scene {
         this.punts = this.add.text(AMPLE / 2, ALT - 58, '', estilText(26, '#d4af37')).setOrigin(0.5).setDepth(51);
         // El botó de saltar: una pastilla de fusta fosca amb la vora d'or (com el botó del menú) i dues fletxes dibuixades, en lloc d'una icona de lletra
         const txtSalta = this.add.text(0, 0, 'Salta', { fontFamily: FONT_PLACA, fontSize: '26px', fontStyle: 'bold', color: '#f2e6c8', resolution: 2 }).setOrigin(0, 0.5);
-        const bw = 28 + txtSalta.width + 16 + 34 + 18, bh = 54, bx = AMPLE - 20 - bw, by = 20;
+        const bw = 28 + txtSalta.width + 16 + 34 + 18, bh = 54, bx = AMPLE - 20 - bw, by = 20 + SAFE_TOP;       // (sota l'illa dinàmica de l'iPhone)
         const fonsSalta = this.add.graphics();
         fonsSalta.fillStyle(0x1e1008, 0.88).fillRoundedRect(bx, by, bw, bh, 14).lineStyle(2.5, 0xd9b441, 1).strokeRoundedRect(bx, by, bw, bh, 14)
             .lineStyle(1.2, 0xb08a2c, 0.8).strokeRoundedRect(bx + 5, by + 5, bw - 10, bh - 10, 10);
@@ -446,7 +446,6 @@ class EscenaProleg extends Phaser.Scene {
             .on('pointerout', () => txtSalta.setColor('#f2e6c8'))
             .on('pointerdown', (p, x, y, ev) => { if (ev) ev.stopPropagation(); this.acabar(); });
         [fonsSalta, txtSalta, fletxes, zonaSalta].forEach(o => o.setDepth(60));
-        this.add.text(30, ALT - 22, 'Toca per continuar', estilText(20, '#8a8070')).setOrigin(0, 1).setDepth(60);
 
         this.input.keyboard.on('keydown-SPACE', () => this.seguent());
         this.input.keyboard.on('keydown-ENTER', () => this.seguent());

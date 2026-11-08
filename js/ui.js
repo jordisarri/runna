@@ -36,14 +36,23 @@ function calcularSafe() {
         document.body.appendChild(sonda);
         const cs = getComputedStyle(sonda), top = parseFloat(cs.paddingTop) || 0, baix = parseFloat(cs.paddingBottom) || 0;
         sonda.remove();
+        // A l'iPhone instal·lat (mode «aplicació»), si el navegador encara diu 0 però la pantalla és d'un mòbil amb notch o illa dinàmica (proporció > 2), es fan servir uns marges típics
+        if (!top && !baix && window.navigator.standalone === true && screen.height / screen.width > 2) return { top: Math.round(54 * k), baix: Math.round(21 * k) };
         return { top: Math.round(top * k), baix: Math.round(baix * k) };
     } catch (e) { return { top: 0, baix: 0 }; }
 }
-const SAFE = calcularSafe(), SAFE_TOP = SAFE.top, SAFE_BAIX = SAFE.baix;
+let SAFE_TOP = 0, SAFE_BAIX = 0, TOP_HUD = 128, Y_BOTONS_HUD = 60;
+// Es torna a mesurar quan convé (a l'iPhone els valors poden no ser a punt en carregar, ni després de girar la pantalla). Torna cert si han canviat.
+function refrescarSafe() {
+    const m = calcularSafe(), canvi = m.top !== SAFE_TOP || m.baix !== SAFE_BAIX;
+    SAFE_TOP = m.top; SAFE_BAIX = m.baix;
+    TOP_HUD = 128 + SAFE_TOP;           // alçada que ocupen el rosari i els botons flotants: el que ha de quedar visible (boss, tria, càmera de diàleg) hi queda per sota
+    Y_BOTONS_HUD = 60 + SAFE_TOP;       // el rosari, els consells, el sarró i el menú van a la mateixa fila
+    return canvi;
+}
+refrescarSafe();
 const ALT_HUD = 0;      // ja no hi ha franja reservada: l'escenari ocupa tota la pantalla i el HUD hi flota per sobre
-const TOP_HUD = 128 + SAFE_TOP;    // alçada que ocupen el rosari i els botons flotants: el que ha de quedar visible (boss, tria, càmera de diàleg) hi queda per sota
 const ALCADA_CAIXA_MIN = 150;   // alçada mínima de la caixa de text (una sola línia)
-const Y_BOTONS_HUD = 60 + SAFE_TOP;   // el rosari, els consells, el sarró i el menú van a la mateixa fila
 const ESC_HUD = 1.25;      // mida del HUD respecte a la d'abans (més gran, perquè es vegi bé; hi caben els 7 grans del rosari)
 const ESC_GRA = ESC_HUD / RES;        // escala d'un gra del rosari
 const BOTO_HUD = 88;       // diàmetre (px de joc) dels medallons del sarró i dels consells
@@ -220,6 +229,21 @@ class EscenaUI extends Phaser.Scene {
             if (this.dialeg && !this.menuObert) this.avancar();
         });
 
+        this.actualitzarHUD();
+        // Les àrees segures de l'iPhone poden no ser a punt en carregar: es tornen a mirar uns instants després i en girar/canviar la finestra
+        const rem = () => this.reposicionarHUD();
+        [300, 1200, 3000].forEach(ms => this.time.delayedCall(ms, rem));
+        window.addEventListener('resize', rem); window.addEventListener('orientationchange', rem); window.addEventListener('pageshow', rem);
+        this.events.once('shutdown', () => { window.removeEventListener('resize', rem); window.removeEventListener('orientationchange', rem); window.removeEventListener('pageshow', rem); });
+    }
+
+    // Torna a posar el HUD si les àrees segures han canviat (vegeu refrescarSafe)
+    reposicionarHUD() {
+        if (!refrescarSafe() || !this.fonsHUD) return;
+        this.fonsHUD.clear().fillGradientStyle(0x0a0604, 0x0a0604, 0x0a0604, 0x0a0604, 0.55, 0.55, 0, 0).fillRect(0, 0, AMPLE, 140 + SAFE_TOP);
+        this.ombraCreu.setY(Y_BOTONS_HUD + 18); this.creuRosari.setY(Y_BOTONS_HUD + 14);
+        this.botoMenu.setY(Y_BOTONS_HUD);
+        if (this.fonsSarro) { this.fonsSarro.setY(Y_BOTONS_HUD); this.fonsConsells.setY(Y_BOTONS_HUD); }
         this.actualitzarHUD();
     }
 
