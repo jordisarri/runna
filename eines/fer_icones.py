@@ -62,12 +62,15 @@ def icones_de_l_art():
                               ('apple-touch-icon.png', 180, 1), ('favicon.png', 64, 1)]:
         if escala == 1:
             im = art.resize((mida, mida), Image.LANCZOS)
-        else:                                                            # la «maskable»: la mateixa imatge més petita, fosa amb el color del fons
-            im = Image.new('RGB', (mida, mida), fons_c)
+        else:                                                            # la «maskable»: la mateixa imatge més petita; el que l'envolta és la seva vora allargada i desenfocada (sense salts de color)
+            import numpy as np
             petita = art.resize((int(mida * escala), int(mida * escala)), Image.LANCZOS)
-            mascara = Image.new('L', petita.size, 0)
-            ImageDraw.Draw(mascara).rectangle([petita.width // 12, petita.height // 12, petita.width - petita.width // 12, petita.height - petita.height // 12], fill=255)
-            im.paste(petita, ((mida - petita.width) // 2, (mida - petita.height) // 2), mascara.filter(ImageFilter.GaussianBlur(mida / 30)))
+            marge = (mida - petita.width) // 2
+            ample = np.pad(np.array(petita), ((marge, mida - petita.height - marge), (marge, mida - petita.width - marge), (0, 0)), mode='edge')
+            vora = Image.fromarray(ample).filter(ImageFilter.GaussianBlur(mida / 14))
+            mascara = Image.new('L', (mida, mida), 0)
+            ImageDraw.Draw(mascara).rectangle([marge + 6, marge + 6, marge + petita.width - 6, marge + petita.height - 6], fill=255)
+            im = Image.composite(Image.fromarray(ample), vora, mascara.filter(ImageFilter.GaussianBlur(mida / 60)))
         im.save(os.path.join(SORTIDA, nom), optimize=True)
         print('fet', nom, '(de art/pwa/icona.png)')
 
