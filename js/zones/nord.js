@@ -336,7 +336,7 @@ class ZonaPingpong extends ZonaBase {
         this.posar('taula_pp', AX, 600, { col: { w: 220, h: 40 } });
         this.npc('juli', AX - 160, 600, DIALEGS.juli);
         this.npc('frederic', AX + 160, 600, DIALEGS.frederic, { flipX: true });
-        this.npc('josep', AX + 170, 740, DIALEGS.josep, { flipX: true });
+        this.npc('josep', AX, 750, DIALEGS.josep);          // centrat davant la taula (abans era davant del Frederic)
 
         this.add.rectangle(W / 2, A / 2, AI, A, 0xffe9a8, 0.04).setDepth(80000);
         this.sortida(W / 2 - 40, A - 30, 80, 20, 'ZonaCellerFora', 'pingpong');
