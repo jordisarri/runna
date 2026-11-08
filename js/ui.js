@@ -831,6 +831,8 @@ class EscenaUI extends Phaser.Scene {
             { text: 'Continuar', fn: () => this.tancarMenu() },
             { text: 'Diari i mapa', fn: () => { this.tancarMenu(); this.obrirInventari('mapa'); } },
             { text: 'Àudio', audio: true, fn: () => { Sfx.commutarSilenci(); this.pintarSeleccio(); Sfx.tria(); } },
+            // Controls tàctils (només en pantalles tàctils): dretà (joystick a l'esquerra, acció a la dreta), esquerrà (al revés) o automàtic (tota la pantalla: un toc = acció, arrossegar = joystick)
+            ...(this.sys.game.device.input.touch ? [{ text: 'Mà', commuta: true, etiqueta: () => 'Mà: ' + ({ dreta: 'dretana', esquerra: 'esquerrana', auto: 'automàtic' })[this.mans], fn: () => { this.canviarMans(); this.pintarSeleccio(); Sfx.tria(); } }] : []),
             { text: 'Desa a un fitxer', fn: () => { Estat.exportar(); this.missatge('Partida baixada: guarda el fitxer. Amb «Carrega d\'un fitxer» la recuperaràs.'); } },
             { text: 'Carrega d\'un fitxer', fn: () => Estat.importar(ok => {
                 if (!ok) { this.missatge('No he pogut llegir aquest fitxer com a partida.'); return; }
@@ -840,7 +842,7 @@ class EscenaUI extends Phaser.Scene {
         ];
         // Cada opció és un botó (contenidor amb fons, text i, a l'Àudio, l'altaveu): s'il·lumina en passar-hi per sobre o seleccionar-lo,
         // fa un petit «pop» en prémer-lo i sona. L'altaveu i el text van sempre centrats a la mateixa línia.
-        const BTN_W = 460, BTN_H = 58, Y0 = ALT / 2 - 205, PAS = 66;
+        const BTN_W = 460, BTN_H = 54, Y0 = ALT / 2 - 205, PAS = 62;
         this.botonsMenu = [];
         this.textOpcions = this.opcions.map((o, i) => {
             const y = Y0 + i * PAS;
@@ -929,7 +931,7 @@ class EscenaUI extends Phaser.Scene {
             bt.fons.fillStyle(sel ? 0xe8c878 : 0xd8c090, sel ? 0.8 : 0.3).fillRoundedRect(-bt.w / 2, -bt.h / 2, bt.w, bt.h, 14);
             bt.fons.lineStyle(sel ? 3.5 : 2, sel ? 0x9a1f1f : 0x8a5a2a, sel ? 1 : 0.55).strokeRoundedRect(-bt.w / 2, -bt.h / 2, bt.w, bt.h, 14);
             t.setColor(sel ? '#9a1f1f' : '#3a2412');
-            t.setText(o.audio ? (Sfx.silenciat ? 'Àudio: desactivat' : 'Àudio: activat') : o.text);
+            t.setText(o.etiqueta ? o.etiqueta() : o.audio ? (Sfx.silenciat ? 'Àudio: desactivat' : 'Àudio: activat') : o.text);
             if (bt.icona) Sfx.actualitzarIconaAltaveu(bt.icona, -bt.w / 2 + 62, 0, sel ? 0x9a1f1f : 0x3a2412);
             bt.btn.setScale(sel ? 1.03 : 1);
         });
@@ -942,7 +944,7 @@ class EscenaUI extends Phaser.Scene {
         this.seleccio = i;
         this.pintarSeleccio();
         const pop = () => this.tweens.add({ targets: bt.btn, scale: { from: 0.94, to: 1.03 }, duration: 130, ease: 'Back.easeOut' });
-        if (o.audio) { pop(); o.fn(); return; }
+        if (o.audio || o.commuta) { pop(); o.fn(); return; }
         this.premut = true;
         Sfx.tria();
         pop();
@@ -957,6 +959,24 @@ class EscenaUI extends Phaser.Scene {
     }
 
     // ---------------- CONTROLS TÀCTILS ----------------
+    // Quina mà domina als controls tàctils: 'dreta' (joystick a la meitat esquerra, acció a la dreta), 'esquerra' (al revés) o 'auto' (tota la pantalla: un toc = acció,
+    // tocar i arrossegar = joystick, i un segon dit mentre es mou = acció). Es recorda al navegador; per defecte, dretà.
+    get mans() {
+        if (!this._mans) { try { this._mans = localStorage.getItem('runna_mans'); } catch (e) { /* res */ } if (!['dreta', 'esquerra', 'auto'].includes(this._mans)) this._mans = 'dreta'; }
+        return this._mans;
+    }
+    canviarMans() {
+        const ordre = ['dreta', 'esquerra', 'auto'];
+        this._mans = ordre[(ordre.indexOf(this.mans) + 1) % ordre.length];
+        try { localStorage.setItem('runna_mans', this._mans); } catch (e) { /* res */ }
+        this.amagarJoystick();
+    }
+    amagarJoystick() {
+        this.joyPunter = null; this.candidat = null;
+        this.vectorTactil = { x: 0, y: 0 };
+        if (this.joyBase) { this.joyBase.setVisible(false); this.joyBola.setVisible(false); }
+    }
+
     crearControlsTactils() {
         if (!this.sys.game.device.input.touch) return;
         this.input.addPointer(2);
@@ -964,21 +984,34 @@ class EscenaUI extends Phaser.Scene {
         this.joyBase = this.add.circle(0, 0, 70, 0xffffff, 0.12).setStrokeStyle(3, 0xffffff, 0.4).setVisible(false);
         this.joyBola = this.add.circle(0, 0, 32, 0xffffff, 0.35).setVisible(false);
         this.joyPunter = null;
+        this.candidat = null;                        // mode automàtic: el dit que encara no se sap si és un toc o l'inici d'un arrossegament
+        const LLINDAR_MOURE = 14, TEMPS_TOC = 350;   // px que cal moure'l (o ms com a molt) perquè sigui un toc i no un arrossegament
 
-        // Cap botó visible: tocar la meitat dreta de la pantalla = acció (parlar, atacar, avançar diàleg)
+        const poseJoystick = p => {
+            this.joyPunter = p.id; this.candidat = null;
+            this.joyBase.setPosition(p.x, p.y).setVisible(true);
+            this.joyBola.setPosition(p.x, p.y).setVisible(true);
+        };
+        // Cap botó visible: segons la mà, una meitat de la pantalla és el joystick i l'altra l'acció; en automàtic, tota la pantalla fa les dues coses
         this.input.on('pointerdown', (p, objectes) => {
             if (objectes.length) return;
             if (this.menuObert || this.mapaObert) return;
             if (p.y < ALT_HUD) return;   // la franja del HUD no mou l'Ineu
-            if (p.x >= AMPLE * 0.5) {
-                if (!this.dialeg) this.accioTactil = true;
-            } else if (!this.dialeg) {
-                this.joyPunter = p.id;
-                this.joyBase.setPosition(p.x, p.y).setVisible(true);
-                this.joyBola.setPosition(p.x, p.y).setVisible(true);
+            if (this.dialeg) return;
+            const mans = this.mans;
+            if (mans === 'auto') {
+                if (this.joyPunter !== null || this.candidat) { this.accioTactil = true; return; }      // un segon dit mentre es mou (o s'aguanta el primer): acció
+                this.candidat = { id: p.id, x: p.x, y: p.y };
+                return;
             }
+            const meitatAccio = mans === 'dreta' ? p.x >= AMPLE * 0.5 : p.x < AMPLE * 0.5;
+            if (meitatAccio) this.accioTactil = true;
+            else if (this.joyPunter === null) poseJoystick(p);
         });
         this.input.on('pointermove', p => {
+            if (this.candidat && p.id === this.candidat.id && Math.hypot(p.x - this.candidat.x, p.y - this.candidat.y) > LLINDAR_MOURE) {
+                poseJoystick({ id: p.id, x: this.candidat.x, y: this.candidat.y });                      // era un arrossegament: el joystick surt d'on s'havia tocat
+            }
             if (p.id !== this.joyPunter) return;
             const dx = p.x - this.joyBase.x, dy = p.y - this.joyBase.y;
             const dist = Math.min(70, Math.hypot(dx, dy));
@@ -987,15 +1020,17 @@ class EscenaUI extends Phaser.Scene {
             const f = dist < 12 ? 0 : dist / 70;
             this.vectorTactil = { x: Math.cos(ang) * f, y: Math.sin(ang) * f };
         });
-        const amagar = p => {
+        const deixar = p => {
+            if (this.candidat && p.id === this.candidat.id) {                                             // un toc curt, sense moure's: acció
+                if ((p.upTime - p.downTime) <= TEMPS_TOC && !this.dialeg && !this.menuObert && !this.mapaObert) this.accioTactil = true;
+                this.candidat = null;
+                return;
+            }
             if (p.id !== this.joyPunter) return;
-            this.joyPunter = null;
-            this.vectorTactil = { x: 0, y: 0 };
-            this.joyBase.setVisible(false);
-            this.joyBola.setVisible(false);
+            this.amagarJoystick();
         };
-        this.input.on('pointerup', amagar);
-        this.input.on('pointerupoutside', amagar);
+        this.input.on('pointerup', deixar);
+        this.input.on('pointerupoutside', deixar);
     }
 
     consumirAccioTactil() {
