@@ -1,10 +1,15 @@
 /**
- * SERVICE WORKER (perquè el joc es pugui instal·lar com a aplicació i, un cop jugat, tornar-hi sense connexió)
- * Estratègia: SEMPRE la xarxa primer (així es veu sempre l'última versió del joc, sense versions velles enganxades) i, si no hi ha connexió, el que s'hagi
- * guardat la vegada anterior. No hi ha cap llista de fitxers: es guarda el que el joc va demanant mentre es juga (uns 50 MB com a molt).
+ * SERVICE WORKER (perquè el joc es pugui instal·lar com a aplicació i, un cop jugat, tornar-hi sense connexió i gastant molt poca xarxa)
+ * Estratègies:
+ *  - la pàgina, aquest fitxer i el manifest: la xarxa primer (així sempre es veu l'última versió; sense connexió, la còpia guardada);
+ *  - els fitxers amb versió a l'adreça (?v=...: el codi del joc) i l'àudio/vídeo (que pesen molt i no canvien): primer la còpia guardada, sense tornar-los a baixar
+ *    (el codi canvia d'adreça quan canvia; si canvia un àudio o un vídeo, puja VERSIO);
+ *  - tota la resta (imatges, àudio, vídeo...): primer la còpia guardada i, en segon pla, es comprova si ha canviat (una petició molt petita, sense tornar a baixar res si no ha canviat);
+ *    si ha canviat, s'hi veu la propera vegada.
+ * No hi ha cap llista de fitxers: es guarda el que el joc va demanant mentre es juga (uns 50 MB com a molt).
  * Per esborrar el que ha guardat: puja el número de VERSIO (es buida la memòria de les versions anteriors).
  */
-const VERSIO = 'runna-1';
+const VERSIO = 'runna-3';
 
 self.addEventListener('install', () => self.skipWaiting());
 
@@ -16,21 +21,34 @@ self.addEventListener('activate', ev => {
     })());
 });
 
+const guarda = (cache, req, resposta) => {
+    if (resposta && resposta.status === 200 && resposta.type === 'basic') cache.put(req, resposta.clone()).catch(() => { /* sense lloc: res */ });
+    return resposta;
+};
+
 self.addEventListener('fetch', ev => {
     const req = ev.request, url = new URL(req.url);
     // Només lectures del mateix lloc, i sense peticions parcials (àudio/vídeo amb Range: la memòria cau no les guarda bé)
     if (req.method !== 'GET' || url.origin !== self.location.origin || req.headers.has('range')) return;
+    const mateixa = url.pathname.endsWith('/') || /\/(index\.html|sw\.js|manifest\.json)$/.test(url.pathname) || req.mode === 'navigate';
+    // L'àudio i el vídeo pesen molt i no canvien: primer la còpia guardada i mai es tornen a baixar (si en canvia algun, puja VERSIO)
+    const ambVersio = url.searchParams.has('v') || /\.(m4a|mp3|ogg|wav|mp4|webm)$/i.test(url.pathname);
     ev.respondWith((async () => {
         const cache = await caches.open(VERSIO);
-        try {
-            const resposta = await fetch(req);
-            if (resposta && resposta.status === 200 && resposta.type === 'basic') cache.put(req, resposta.clone()).catch(() => { /* sense lloc: res */ });
-            return resposta;
-        } catch (e) {
-            const guardada = await cache.match(req, { ignoreSearch: false }) || await cache.match(req, { ignoreSearch: true });
-            if (guardada) return guardada;
-            if (req.mode === 'navigate') { const inici = await cache.match('./') || await cache.match('index.html'); if (inici) return inici; }
-            throw e;
+        if (mateixa) {                                                          // xarxa primer
+            try { return guarda(cache, req, await fetch(req)); }
+            catch (e) {
+                const guardada = await cache.match(req) || await cache.match(req, { ignoreSearch: true });
+                if (guardada) return guardada;
+                if (req.mode === 'navigate') { const inici = await cache.match('./') || await cache.match('index.html'); if (inici) return inici; }
+                throw e;
+            }
         }
+        const guardada = await cache.match(req);
+        if (guardada) {
+            if (!ambVersio) ev.waitUntil(fetch(req, { cache: 'no-cache' }).then(r => guarda(cache, req, r)).catch(() => { /* sense connexió: ens quedem amb la còpia */ }));      // en segon pla: ha canviat?
+            return guardada;
+        }
+        return guarda(cache, req, await fetch(req));
     })());
 });
