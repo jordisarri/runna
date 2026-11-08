@@ -43,11 +43,12 @@ const RETRATS = {
 };
 const MIDA_RETRAT = 170;          // costat del retrat a la caixa de diàleg (px de joc)
 // Retocs del retall per a dibuixos amb una altra proporció (alt: fracció de la figura que fa el cap; per defecte 0,4)
-const AJUST_RETRAT = { pianista: { alt: 0.5 } };
+const AJUST_RETRAT = { pianista: { alt: 0.5 }, mandu_trencada: { alt: 0.375 } };
 
 function retratDe(scene, qui) {
-    const key = RETRATS[qui];
+    let key = RETRATS[qui];
     if (!key) return null;
+    if (key === 'mandu' && Estat.dades && Estat.flag('manduNinaTrencada') && !Estat.flag('epilegFet')) key = 'mandu_trencada';      // enfadada, fins que el Fram li cus el cap a la nina
     const clau = 'retrat_' + key;
     if (scene.textures.exists(clau)) return clau;
     // Retrat dibuixat de tres quarts (assets/retrats/<clau>.webp): es posa sobre el fons de pergamí, amb el tall d'espatlles a baix
