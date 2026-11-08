@@ -23,10 +23,27 @@ function encaixarDisseny(scene, alt0 = 1280) {
     cam.setZoom(Math.min(1, ALT / alt0));
     cam.centerOn(AMPLE / 2, alt0 / 2);
 }
+// Àrees segures de l'iPhone (notch o illa dinàmica a dalt, barra d'inici a baix), en píxels de joc. El llenç ocupa TOTA la pantalla (també per sota del notch) i només el
+// HUD i el quadre de diàleg s'hi aparten. ?safe=59,34 (px de CSS: dalt, baix) les força per fer proves en un ordinador.
+function calcularSafe() {
+    try {
+        const q = new URLSearchParams(location.search).get('safe');
+        const r = (document.getElementById('joc') || document.body).getBoundingClientRect();
+        const k = AMPLE / (r.width || window.innerWidth || AMPLE);
+        if (q) { const [t, b] = q.split(',').map(Number); return { top: Math.round((t || 0) * k), baix: Math.round((b || 0) * k) }; }
+        const sonda = document.createElement('div');
+        sonda.style.cssText = 'position:fixed;left:0;top:0;width:0;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)';
+        document.body.appendChild(sonda);
+        const cs = getComputedStyle(sonda), top = parseFloat(cs.paddingTop) || 0, baix = parseFloat(cs.paddingBottom) || 0;
+        sonda.remove();
+        return { top: Math.round(top * k), baix: Math.round(baix * k) };
+    } catch (e) { return { top: 0, baix: 0 }; }
+}
+const SAFE = calcularSafe(), SAFE_TOP = SAFE.top, SAFE_BAIX = SAFE.baix;
 const ALT_HUD = 0;      // ja no hi ha franja reservada: l'escenari ocupa tota la pantalla i el HUD hi flota per sobre
-const TOP_HUD = 128;    // alçada que ocupen el rosari i els botons flotants: el que ha de quedar visible (boss, tria, càmera de diàleg) hi queda per sota
+const TOP_HUD = 128 + SAFE_TOP;    // alçada que ocupen el rosari i els botons flotants: el que ha de quedar visible (boss, tria, càmera de diàleg) hi queda per sota
 const ALCADA_CAIXA_MIN = 150;   // alçada mínima de la caixa de text (una sola línia)
-const Y_BOTONS_HUD = 60;   // el rosari, els consells, el sarró i el menú van a la mateixa fila
+const Y_BOTONS_HUD = 60 + SAFE_TOP;   // el rosari, els consells, el sarró i el menú van a la mateixa fila
 const ESC_HUD = 1.25;      // mida del HUD respecte a la d'abans (més gran, perquè es vegi bé; hi caben els 7 grans del rosari)
 const ESC_GRA = ESC_HUD / RES;        // escala d'un gra del rosari
 const BOTO_HUD = 88;       // diàmetre (px de joc) dels medallons del sarró i dels consells
@@ -316,7 +333,7 @@ class EscenaUI extends Phaser.Scene {
     crearHUD() {
         // Ja no hi ha franja: una ombra suau a dalt de tot perquè el rosari i els botons es llegeixin sobre qualsevol escenari
         this.fonsHUD = this.add.graphics();
-        this.fonsHUD.fillGradientStyle(0x0a0604, 0x0a0604, 0x0a0604, 0x0a0604, 0.55, 0.55, 0, 0).fillRect(0, 0, AMPLE, 140);
+        this.fonsHUD.fillGradientStyle(0x0a0604, 0x0a0604, 0x0a0604, 0x0a0604, 0.55, 0.55, 0, 0).fillRect(0, 0, AMPLE, 140 + SAFE_TOP);
         // Rosari d'energia: un cordó amb una creueta i un gra per cada punt (cada gra són dues meitats)
         this.cordo = this.add.graphics();
         this.ombraCreu = this.add.image(45, Y_BOTONS_HUD + 18, 'creu_rosari').setScale(1.12 * ESC_GRA).setTintFill(0x000000).setAlpha(0.5);
@@ -576,7 +593,7 @@ class EscenaUI extends Phaser.Scene {
 
     // ---------------- DIÀLEG ----------------
     crearCaixaDialeg() {
-        this.caixa = this.add.container(AMPLE / 2, ALT - 190).setVisible(false).setDepth(40);
+        this.caixa = this.add.container(AMPLE / 2, ALT - SAFE_BAIX - 190).setVisible(false).setDepth(40);
         this.alcadaCaixaDialeg = 360;
         this.ombraCaixaDialeg = this.add.rectangle(4, 8, 704, 360, 0x000000, 0.35);
         this.fonsCaixaDialeg = marcPergami(this, 0, 0, 704, 360);
@@ -615,7 +632,7 @@ class EscenaUI extends Phaser.Scene {
     // Posa la caixa (i tot el que hi va penjat) a l'alçada indicada, ancorada a la vora de baix de la pantalla
     colocarCaixaDialeg(alcada) {
         this.alcadaCaixaActual = alcada;
-        this.caixa.setY(ALT - 10 - alcada / 2);
+        this.caixa.setY(ALT - SAFE_BAIX - 10 - alcada / 2);
         this.ombraCaixaDialeg.setSize(704, alcada);
         this.fonsCaixaDialeg.setSize(704 * RES, alcada * RES);
         this.textDialeg.setPosition(-316, -alcada / 2 + 34);

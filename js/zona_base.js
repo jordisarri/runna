@@ -1443,8 +1443,8 @@ class ZonaBase extends Phaser.Scene {
             if (p && p.cameraCossos) cossos.push(...p.cameraCossos.filter(o => o && o.active && o.visible));
             const TOP = TOP_HUD + 8;                                    // sota el HUD flotant
             const alcadaCaixa = this.ui().alcadaCaixaDialeg || 360;
-            const LIM = ALT - alcadaCaixa - 60;                         // 50 px sobre la vora superior del quadre
-            const LIM_RETRAT = ALT - alcadaCaixa - 160;                 // sobre el retrat, que sobresurt per damunt del quadre
+            const LIM = ALT - SAFE_BAIX - alcadaCaixa - 60;                         // 50 px sobre la vora superior del quadre
+            const LIM_RETRAT = ALT - SAFE_BAIX - alcadaCaixa - 160;                 // sobre el retrat, que sobresurt per damunt del quadre
             const Z = cam.zoom, wv = cam.worldView, H = ALT - ALT_HUD;
             const mides = cossos.map(o => {
                 const b = o.getBounds(), esq = (b.x - wv.x) * Z, dre = (b.right - wv.x) * Z;
