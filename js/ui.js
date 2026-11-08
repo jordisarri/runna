@@ -24,9 +24,13 @@ function encaixarDisseny(scene, alt0 = 1280) {
     cam.centerOn(AMPLE / 2, alt0 / 2);
 }
 const ALT_HUD = 0;      // ja no hi ha franja reservada: l'escenari ocupa tota la pantalla i el HUD hi flota per sobre
-const TOP_HUD = 116;    // alçada que ocupen el rosari i els botons flotants: el que ha de quedar visible (boss, tria, càmera de diàleg) hi queda per sota
+const TOP_HUD = 128;    // alçada que ocupen el rosari i els botons flotants: el que ha de quedar visible (boss, tria, càmera de diàleg) hi queda per sota
 const ALCADA_CAIXA_MIN = 150;   // alçada mínima de la caixa de text (una sola línia)
-const Y_BOTONS_HUD = 52;   // el rosari, els consells, el sarró i el menú van a la mateixa fila
+const Y_BOTONS_HUD = 60;   // el rosari, els consells, el sarró i el menú van a la mateixa fila
+const ESC_HUD = 1.25;      // mida del HUD respecte a la d'abans (més gran, perquè es vegi bé; hi caben els 7 grans del rosari)
+const ESC_GRA = ESC_HUD / RES;        // escala d'un gra del rosari
+const BOTO_HUD = 88;       // diàmetre (px de joc) dels medallons del sarró i dels consells
+const GRA_X0 = 92, GRA_PAS = 50;      // on comença el rosari (després de la creueta) i la separació entre grans
 const FONT = 'Georgia, "Times New Roman", serif';
 
 // ---------- Retrat de qui parla (a la caixa de diàleg) ----------
@@ -206,16 +210,16 @@ class EscenaUI extends Phaser.Scene {
     // Un medalló petit a la dreta del HUD obre el sarró (també la tecla I). La tarota es toca amb ESPAI (o tocant la meitat dreta
     // de la pantalla) als llocs on té efecte (ZonaBase.flautaActiva); no hi ha cap icona al HUD: només s'obre la seva interfície.
     crearObjectes() {
-        const x = 566, y = Y_BOTONS_HUD, commuta = () => this.inventariObert ? this.tancarInventari() : this.obrirInventari();
+        const x = 572, y = Y_BOTONS_HUD, commuta = () => this.inventariObert ? this.tancarInventari() : this.obrirInventari();
         // Cada botó és una sola imatge rodona (`boto_sarro`, `boto_consells`: vegeu CATALEG), que es mostra a 72 px de joc
         const boto = (cx, clau, fn) => {
             const im = this.add.image(cx, y, clau).setVisible(false).setInteractive({ useHandCursor: true }).on('pointerdown', fn);
-            im.setScale(this.textures.get(clau).customData.escala || 1 / RES);
+            im.setScale((this.textures.get(clau).customData.escala || 1 / RES) * BOTO_HUD / 72);
             return im;
         };
         this.fonsSarro = boto(x, 'boto_sarro', commuta);
         // Consells: un medalló amb un pergamí (tecla O) que obre l'objectiu actual
-        const xc = x - 92, commutaConsells = () => this.consellsObert ? this.tancarConsells() : this.obrirConsells();
+        const xc = x - (BOTO_HUD + 10), commutaConsells = () => this.consellsObert ? this.tancarConsells() : this.obrirConsells();
         this.fonsConsells = boto(xc, 'boto_consells', commutaConsells);
         this.input.keyboard.on('keydown-O', commutaConsells);
         this.input.keyboard.on('keydown-I', commuta);
@@ -312,11 +316,11 @@ class EscenaUI extends Phaser.Scene {
     crearHUD() {
         // Ja no hi ha franja: una ombra suau a dalt de tot perquè el rosari i els botons es llegeixin sobre qualsevol escenari
         this.fonsHUD = this.add.graphics();
-        this.fonsHUD.fillGradientStyle(0x0a0604, 0x0a0604, 0x0a0604, 0x0a0604, 0.55, 0.55, 0, 0).fillRect(0, 0, AMPLE, 128);
+        this.fonsHUD.fillGradientStyle(0x0a0604, 0x0a0604, 0x0a0604, 0x0a0604, 0.55, 0.55, 0, 0).fillRect(0, 0, AMPLE, 140);
         // Rosari d'energia: un cordó amb una creueta i un gra per cada punt (cada gra són dues meitats)
         this.cordo = this.add.graphics();
-        this.ombraCreu = this.add.image(41, 66, 'creu_rosari').setScale(1.12 / RES).setTintFill(0x000000).setAlpha(0.5);
-        this.creuRosari = this.add.image(38, 62, 'creu_rosari').setScale(1 / RES);
+        this.ombraCreu = this.add.image(45, Y_BOTONS_HUD + 18, 'creu_rosari').setScale(1.12 * ESC_GRA).setTintFill(0x000000).setAlpha(0.5);
+        this.creuRosari = this.add.image(42, Y_BOTONS_HUD + 14, 'creu_rosari').setScale(ESC_GRA);
         this.ombresGrans = [];     // l'ombra de cada gra
         this.cors = [];     // els grans del rosari (es creen a mesura que n'hi ha més)
 
@@ -326,7 +330,7 @@ class EscenaUI extends Phaser.Scene {
             .setOrigin(0.5).setAlpha(0).setDepth(50);
 
         // Botó de menú (ratolí i pantalla tàctil)
-        this.botoMenu = this.add.text(AMPLE - 34, Y_BOTONS_HUD, '☰', estilText(36, '#f1e3b6', { backgroundColor: '#1e1008d9', padding: { x: 17, y: 10 } }))
+        this.botoMenu = this.add.text(AMPLE - 12, Y_BOTONS_HUD, '☰', estilText(46, '#f1e3b6', { backgroundColor: '#1e1008d9', padding: { x: 18, y: 10 } }))
             .setOrigin(1, 0.5).setInteractive({ useHandCursor: true })
             .on('pointerdown', () => this.menuObert ? this.tancarMenu() : this.obrirMenu());
     }
@@ -335,12 +339,12 @@ class EscenaUI extends Phaser.Scene {
         const d = Estat.dades;
         if (!d) return;
         while (this.cors.length < d.corsMax) {
-            this.ombresGrans.push(this.add.image(0, 0, 'gra_ple').setScale(1.1 / RES).setTintFill(0x000000).setAlpha(0.5));
-            this.cors.push(this.add.image(0, 0, 'gra_ple').setScale(1 / RES));
+            this.ombresGrans.push(this.add.image(0, 0, 'gra_ple').setScale(1.1 * ESC_GRA).setTintFill(0x000000).setAlpha(0.5));
+            this.cors.push(this.add.image(0, 0, 'gra_ple').setScale(ESC_GRA));
         }
         // Rosari irregular, com un de veritat: els grans pengen a alçades i separacions una mica diferents (sempre les mateixes, perquè no es moguin)
         const DX = [0, 2, -2, 1, -1, 2, -2], DY = [0, 5, -3, 6, -2, 4, -5];
-        const gx = i => 78 + i * 46 + (DX[i] || 0), gy = i => 52 + (DY[i] || 0);
+        const gx = i => GRA_X0 + i * GRA_PAS + (DX[i] || 0) * ESC_HUD, gy = i => Y_BOTONS_HUD + (DY[i] || 0) * ESC_HUD;
         const pops = [];
         this.cors.forEach((img, i) => {
             const v = d.vida - i * 2;
@@ -355,8 +359,8 @@ class EscenaUI extends Phaser.Scene {
         const c = this.cordo.clear();
         // El cordó es dibuixa dues vegades: la primera, ample i fosc, fa d'ombra; la segona, clara, es llegeix sobre qualsevol fons
         const traç = (dx, dy) => {
-            c.beginPath(); c.moveTo(38 + dx, 44 + dy);
-            for (let k = 1; k <= 8; k++) { const t = k / 8; c.lineTo(38 + (gx(0) - 38) * t + dx, 44 + (gy(0) - 44) * t + Math.sin(Math.PI * t) * 5 + dy); }
+            c.beginPath(); c.moveTo(42 + dx, Y_BOTONS_HUD - 6 + dy);
+            for (let k = 1; k <= 8; k++) { const t = k / 8; c.lineTo(42 + (gx(0) - 42) * t + dx, (Y_BOTONS_HUD - 6) + (gy(0) - (Y_BOTONS_HUD - 6)) * t + Math.sin(Math.PI * t) * 5 + dy); }
             for (let i = 0; i < d.corsMax - 1; i++) {
                 for (let k = 1; k <= 6; k++) { const t = k / 6; c.lineTo(gx(i) + (gx(i + 1) - gx(i)) * t + dx, gy(i) + (gy(i + 1) - gy(i)) * t + Math.sin(Math.PI * t) * 4 + dy); }
             }
@@ -373,8 +377,8 @@ class EscenaUI extends Phaser.Scene {
                 this.tweens.killTweensOf(im);
                 const salta = () => {
                     if (!im.active) return;
-                    im.setScale(1.7 * base / RES);
-                    this.tweens.add({ targets: im, scale: base / RES, duration: 520, ease: 'Back.easeOut' });
+                    im.setScale(1.7 * base * ESC_GRA);
+                    this.tweens.add({ targets: im, scale: base * ESC_GRA, duration: 520, ease: 'Back.easeOut' });
                 };
                 if (k > 0) this.time.delayedCall(k * 70, salta); else salta();
             });
@@ -390,12 +394,12 @@ class EscenaUI extends Phaser.Scene {
         if (this.latidorTween) {
             this.latidorTween.stop(); this.latidorTween = null;
             const a = this.cors[this.latidorIdx];
-            if (a) a.setScale(1 / RES);
+            if (a) a.setScale(ESC_GRA);
         }
         this.latidorIdx = idx;
         if (idx >= 0 && this.cors[idx]) {
             this.latidorTween = this.tweens.add({
-                targets: this.cors[idx], scale: { from: 1 / RES, to: 1.2 / RES }, yoyo: true, repeat: -1, duration: 380, ease: 'Sine.inOut'
+                targets: this.cors[idx], scale: { from: ESC_GRA, to: 1.2 * ESC_GRA }, yoyo: true, repeat: -1, duration: 380, ease: 'Sine.inOut'
             });
         }
     }
@@ -403,7 +407,7 @@ class EscenaUI extends Phaser.Scene {
     // Grans que perden alguna meitat entre "abans" i "ara": s'esquerden, en cau un tros i la resta fa una onada
     animarPerdua(abans, ara) {
         const valor = (v, i) => Math.max(0, Math.min(2, v - i * 2));
-        const base = 1 / RES;
+        const base = ESC_GRA;
         this.animantCor = true;
         if (this.latidorTween) { this.latidorTween.stop(); this.latidorTween = null; }
         this.latidorIdx = -1;
@@ -448,7 +452,7 @@ class EscenaUI extends Phaser.Scene {
     // Grans que es tornen a encendre: bot i espurnes daurades
     animarGuany(abans, ara) {
         const valor = (v, i) => Math.max(0, Math.min(2, v - i * 2));
-        const base = 1 / RES;
+        const base = ESC_GRA;
         this.cors.forEach((img, i) => {
             if (!img.visible || valor(ara, i) <= valor(abans, i)) return;
             this.tweens.killTweensOf(img);
