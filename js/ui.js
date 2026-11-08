@@ -3,9 +3,55 @@
  * HUD (rosari d'energia, objectiu), caixa de diàleg, menú de pausa i controls tàctils.
  */
 const AMPLE = 720;
-const ALT = 1280;       // Format 9:16 fix a tots els dispositius (omple l'ample als mòbils i queda centrat verticalment amb el mateix espai a dalt i a baix)
+// L'alçada màxima del llenç és 1280 (format 9:16): a les pantalles llargues (mòbil en mode accés directe) es queda en 9:16,
+// omple tot l'ample i queda centrat amb el mateix espai a dalt i a baix. Si el navegador (p. ex. Chrome amb barres) deixa
+// un espai una mica més baix que 9:16, l'alçada s'ajusta (fins a 900) perquè continuï omplint tot l'ample sense franges laterals.
+const ALT_MIN = 900, ALT_MAX = 1280;
+function ajustarContenidorJoc() {
+    const el = document.getElementById('joc');
+    if (!el) return;
+    const standalone = window.navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    const w = window.innerWidth, h = window.innerHeight;
+    // A iOS en mode accés directe (black-translucent), y=0 és dalt de tot de la pantalla física però innerHeight/100% descompta
+    // l'alçada de la barra d'estat (~59 px), deixant molt més espai negre a baix que a dalt. Donem a #joc l'alçada física real.
+    if (standalone && window.screen && w && h && w < h) {
+        const sw = Math.min(window.screen.width, window.screen.height), sh = Math.max(window.screen.width, window.screen.height);
+        const hReal = sw > 0 ? Math.round(w * sh / sw) : h;
+        if (hReal > h) {
+            el.style.height = hReal + 'px';
+            el.style.bottom = 'auto';
+            return;
+        }
+    }
+    el.style.height = '';
+    el.style.bottom = '0';
+}
+function calcularAlt() {
+    ajustarContenidorJoc();
+    const q = +new URLSearchParams(location.search).get('alt');
+    if (q) return Math.min(1600, Math.max(ALT_MIN, Math.round(q)));
+    const el = document.getElementById('joc');
+    const r = el ? el.getBoundingClientRect() : null;
+    const w = (r && r.width) || window.innerWidth, h = (r && r.height) || window.innerHeight;
+    if (!w || !h || w >= h) return ALT_MAX;
+    return Math.min(ALT_MAX, Math.max(ALT_MIN, Math.round(AMPLE * h / w)));
+}
+const ALT = calcularAlt();
+const refrescarEscalat = () => {
+    ajustarContenidorJoc();
+    if (typeof game !== 'undefined' && game && game.scale) {
+        game.scale.getParentBounds();
+        game.scale.refresh();
+    }
+};
+if (typeof window !== 'undefined' && window.addEventListener) {
+    [100, 400, 1200].forEach(ms => setTimeout(refrescarEscalat, ms));
+    window.addEventListener('resize', refrescarEscalat);
+    window.addEventListener('orientationchange', refrescarEscalat);
+    window.addEventListener('pageshow', refrescarEscalat);
+}
 
-// Escenes dissenyades per a una alçada fixa (1280): encaixa la càmera al llenç 9:16
+// Escenes dissenyades per a una alçada fixa (el ping-pong, de 1280): el disseny es centra a la pantalla i, si aquesta és més baixa, es redueix
 function encaixarDisseny(scene, alt0 = 1280) {
     const cam = scene.cameras.main;
     cam.setZoom(Math.min(1, ALT / alt0));
@@ -193,11 +239,7 @@ class EscenaUI extends Phaser.Scene {
         });
 
         this.actualitzarHUD();
-        // Quan el mòbil acaba d'ajustar la finestra o es gira, es refresca l'escalat de Phaser perquè el llenç 9:16 quedi sempre ben centrat
-        const rem = () => { if (this.scale) this.scale.refresh(); };
-        [300, 1200, 3000].forEach(ms => this.time.delayedCall(ms, rem));
-        window.addEventListener('resize', rem); window.addEventListener('orientationchange', rem); window.addEventListener('pageshow', rem);
-        this.events.once('shutdown', () => { window.removeEventListener('resize', rem); window.removeEventListener('orientationchange', rem); window.removeEventListener('pageshow', rem); });
+        refrescarEscalat();
     }
 
     // ---------------- SARRÓ (inventari) ----------------
