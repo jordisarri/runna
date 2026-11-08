@@ -15,7 +15,7 @@ LOGO = os.path.join(ARREL, 'art', 'titol', 'logo_runna.png')
 ESPASA = os.path.join(ARREL, 'art', 'armes', 'espasa.jpg')
 SORTIDA = os.path.join(ARREL, 'assets', 'pwa')
 ICONA_ART = os.path.join(ARREL, 'art', 'pwa', 'icona.png')      # si hi és (vegeu docs/PROMPTS_GRAFICS.md), es fa servir aquesta imatge en lloc de la composició
-RETALL = 0.05                                                  # la part de cada costat de la imatge feta a mà que es retalla (vora del paper)
+RETALL = (62, 35, 1002, 975)    # el que es queda de la imatge feta a mà (en píxels d'una de 1024 × 1024): quadrat ajustat al dibuix, amb un petit marge a l'espasa, que és el que més ocupa
 R_CAIXA = (100, 120, 840, 1070)          # la R (amb els sarments) dins el logo, en píxels de l'original
 # La R toca la U al logo: només es queda el que cau dins d'aquest polígon (la vora dreta passa pel buit que hi ha entre la pota de la R i la U)
 R_POLIGON = [(95, 100), (648, 100), (648, 700), (690, 750), (720, 890), (775, 980), (832, 1012), (845, 1075), (95, 1075)]
@@ -55,14 +55,14 @@ def icona(r, espasa, mida, escala):
 
 
 def icones_de_l_art():
-    """Les icones a partir de la imatge feta a mà (quadrada, amb el fons inclòs). Si la imatge té marge o vora estripada (el paper del pergamí), se'n retalla la vora
-    (RETALL: fracció de cada costat) i el que envolta el dibuix s'omple allargant la seva vora i desenfocant-la, sense salts de color."""
+    """Les icones a partir de la imatge feta a mà (quadrada, amb el fons inclòs). Se'n retalla el que sobra al voltant del dibuix (RETALL) perquè la R i l'espasa surtin el més grans possible
+    sense tallar-se; a la «maskable», que es retalla en cercle, es fa més petita i el que l'envolta s'omple allargant la seva vora i desenfocant-la."""
     import numpy as np
     art = Image.open(ICONA_ART).convert('RGB')
-    w = art.width
-    art = art.crop((int(w * RETALL), int(w * RETALL), int(w * (1 - RETALL)), int(w * (1 - RETALL))))
-    for nom, mida, escala in [('icona-512.png', 512, 0.94), ('icona-192.png', 192, 0.94), ('icona-maskable-512.png', 512, 0.72),
-                              ('apple-touch-icon.png', 180, 0.94), ('favicon.png', 64, 0.94)]:
+    k = art.width / 1024
+    art = art.crop(tuple(int(v * k) for v in RETALL))
+    for nom, mida, escala in [('icona-512.png', 512, 1), ('icona-192.png', 192, 1), ('icona-maskable-512.png', 512, 0.72),
+                              ('apple-touch-icon.png', 180, 1), ('favicon.png', 64, 1)]:
         petita = art.resize((int(mida * escala), int(mida * escala)), Image.LANCZOS)
         marge = (mida - petita.width) // 2
         ample = np.pad(np.array(petita), ((marge, mida - petita.height - marge), (marge, mida - petita.width - marge), (0, 0)), mode='edge')
