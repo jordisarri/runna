@@ -348,7 +348,7 @@ class ZonaBase extends Phaser.Scene {
         const fx = cx + carro.displayWidth * 0.2, fy = cy - carro.displayHeight * 0.86;
         this.add.particles(fx, fy, 'boira', { speedY: { min: -30, max: -14 }, speedX: { min: -14, max: -4 }, lifespan: 1800, scale: { start: 0.25, end: 0.7 },
             alpha: { start: 0.45, end: 0 }, frequency: 650, tint: 0xffffff }).setDepth(cy + 1);
-        this.npc('home_carruatge', hx, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true });     // girat: mira cap a l'escena, no cap al carruatge
+        this.npc('home_carruatge', hx, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true, colAmple: 48 });     // girat: mira cap a l'escena, no cap al carruatge
         this.paradaAqui = pd;
         if (Estat.arribadaCarruatge === pd.id) {                       // hi acabem d'arribar: bufada de vapor
             Estat.arribadaCarruatge = null;
@@ -576,7 +576,8 @@ class ZonaBase extends Phaser.Scene {
         if (key === 'arbre' && this.config.pins && !opts.escala) {
             const h = Math.abs(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453) % 1, P = this.config.pins;
             if (h < (P.pi || 0)) key = 'pi'; else if (h < (P.pi || 0) + (P.pinyer || 0)) key = 'pi_pinyer';
-            if (key !== 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: { w: key === 'pi' ? 30 : 46, h: 16 } });
+            // El tronc dels pins no és al mig del dibuix (el pi, uns 8 px a l'esquerra; el pinyer, uns 34): la caixa de col·lisió s'hi ajusta, i és prou ampla per cobrir les arrels
+            if (key !== 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: key === 'pi' ? { w: 62, h: 18, dx: -8 } : { w: 84, h: 18, dx: -34 } });
         }
         const tex = this.textures.get(key);
         const escala = (tex.customData && tex.customData.escala) || 1 / RES;
