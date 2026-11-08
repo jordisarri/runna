@@ -960,9 +960,9 @@ class EscenaUI extends Phaser.Scene {
 
     // ---------------- CONTROLS TÀCTILS ----------------
     // Quina mà domina als controls tàctils: 'dreta' (joystick a la meitat esquerra, acció a la dreta), 'esquerra' (al revés) o 'auto' (tota la pantalla: un toc = acció,
-    // tocar i arrossegar = joystick, i un segon dit mentre es mou = acció). Es recorda al navegador; per defecte, dretà.
+    // tocar i arrossegar = joystick, i un segon dit mentre es mou = acció). Es recorda al navegador; per defecte, automàtic.
     get mans() {
-        if (!this._mans) { try { this._mans = localStorage.getItem('runna_mans'); } catch (e) { /* res */ } if (!['dreta', 'esquerra', 'auto'].includes(this._mans)) this._mans = 'dreta'; }
+        if (!this._mans) { try { this._mans = localStorage.getItem('runna_mans'); } catch (e) { /* res */ } if (!['dreta', 'esquerra', 'auto'].includes(this._mans)) this._mans = 'auto'; }
         return this._mans;
     }
     canviarMans() {
