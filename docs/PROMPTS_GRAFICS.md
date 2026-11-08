@@ -481,6 +481,16 @@ Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, 
 
 
 
+## Icona de l'aplicació
+
+### `pwa/icona.png` → `assets/pwa/icona-*.png` *(La icona de l'aplicació instal·lable (PWA): la **R** de Runna, de pedra amb molsa i sarments, amb l'**espasa** que l'atravessa de dalt a baix. **Puja dues referències:** 1) `art/titol/logo_runna.png` (la R: mateixa pedra, mateixos sarments i fulles) i 2) `art/armes/espasa.jpg` (la mateixa espasa: fulla blava d'acer, guarda corbada de bronze, empunyadura de cuir fosc amb anells). Format **quadrat 1:1**, i aquí **sí que vull fons** (no blanc): un degradat radial marró fosc càlid, més clar al centre i molt fosc a les vores, **ben uniforme i sense cap detall a les cantonades**. Tot el que importa (la R i l'espasa) ha d'anar dins el **60% central** de la imatge, perquè Android retalla la icona en cercle o quadrat arrodonit. Desa-la com `art/pwa/icona.png` (2048 × 2048 millor) i digues-m'ho: `python eines/fer_icones.py` la fa servir al lloc de la composició actual i en treu totes les mides.)*
+
+```text
+Charming 2D cartoon game app icon in the same art style as the attached reference images (the carved mossy stone letter R from the Runna game logo, and the steel sword): bold clean consistent dark outline around every shape with medium-to-fine clean inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, centered, no text, no extra letters, no numbers, perfectly square 1:1 composition. The background is a smooth, perfectly uniform warm dark brown radial gradient (lighter warm brown in the centre, almost black brown at the edges and corners), with NO texture, NO objects, NO vignette artefacts and NO details in the corners. In the centre stands the single capital letter R carved in chunky weathered grey stone with cracks and patches of green moss, exactly like the R of the reference logo, with a few thin green vines and small green leaves curling around its left side and base. A medieval sword passes through the letter exactly vertically from the top to the bottom, seen head-on: the pommel and the black leather grip with bronze rings are at the top, above the letter, then the curved bronze crossguard, and the long straight blue-steel blade runs straight down in front of the letter and its point ends below the foot of the letter, as if it were thrust through it; the sword is slightly to the right of the centre of the R, crossing the bowl and the leg. A soft warm golden glow around the sword. Everything important (the whole R and the whole sword) stays inside the central 60% of the image, with generous dark empty margin all around. Camera angle: flat frontal view, like an emblem, no perspective, no isometric.
+```
+
+---
+
 ## Interfície (HUD)
 
 
