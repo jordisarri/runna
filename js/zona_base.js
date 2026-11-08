@@ -1530,8 +1530,9 @@ class ZonaBase extends Phaser.Scene {
     ajustarSuperposicions() {
         const k = ZOOM_CAMERA / this.cameras.main.zoom;
         this.children.list.forEach(o => {
-            if (o.scrollFactorX !== 0 || o.scrollFactorY !== 0 || !o.setScale || o.displayWidth < 300) return;
-            if (!o.__esc0) o.__esc0 = { x: o.scaleX, y: o.scaleY };
+            if (o.scrollFactorX !== 0 || o.scrollFactorY !== 0 || !o.setScale) return;
+            // (només els velums grans; però un cop apuntat, s'ha de poder tornar a ajustar encara que ara, amb molt de zoom, sigui més petit de 300 px: abans es quedava petit i deixava un quadre fosc)
+            if (!o.__esc0) { if (o.displayWidth < 300) return; o.__esc0 = { x: o.scaleX, y: o.scaleY }; }
             o.setScale(o.__esc0.x * k, o.__esc0.y * k);
         });
     }
