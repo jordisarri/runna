@@ -9,7 +9,7 @@
  * No hi ha cap llista de fitxers: es guarda el que el joc va demanant mentre es juga (uns 50 MB com a molt).
  * Per esborrar el que ha guardat: puja el número de VERSIO (es buida la memòria de les versions anteriors).
  */
-const VERSIO = 'runna-3';
+const VERSIO = 'runna-4';
 
 self.addEventListener('install', () => self.skipWaiting());
 
@@ -20,6 +20,21 @@ self.addEventListener('activate', ev => {
         await self.clients.claim();
     })());
 });
+
+// La xarxa del mòbil a vegades talla una de les molts peticions simultànies (sobretot en carregar els ~60 fitxers de codi): es torna a provar un parell de vegades abans de donar-la per perduda
+const baixa = async (req, intents = 3) => {
+    let ultim;
+    for (let i = 0; i < intents; i++) {
+        try {
+            const r = await fetch(i ? new Request(req, { cache: 'reload' }) : req);
+            if (r && (r.status === 200 || r.status === 304 || i === intents - 1)) return r;     // (un 404 o un 5xx també es repeteix: pot ser un desplegament a mig fer)
+            ultim = r;
+        } catch (e) { ultim = e; }
+        await new Promise(res => setTimeout(res, 350 * (i + 1)));
+    }
+    if (ultim instanceof Response) return ultim;
+    throw ultim;
+};
 
 const guarda = (cache, req, resposta) => {
     if (resposta && resposta.status === 200 && resposta.type === 'basic') cache.put(req, resposta.clone()).catch(() => { /* sense lloc: res */ });
@@ -36,7 +51,7 @@ self.addEventListener('fetch', ev => {
     ev.respondWith((async () => {
         const cache = await caches.open(VERSIO);
         if (mateixa) {                                                          // xarxa primer
-            try { return guarda(cache, req, await fetch(req)); }
+            try { return guarda(cache, req, await baixa(req, 2)); }
             catch (e) {
                 const guardada = await cache.match(req) || await cache.match(req, { ignoreSearch: true });
                 if (guardada) return guardada;
@@ -49,6 +64,6 @@ self.addEventListener('fetch', ev => {
             if (!ambVersio) ev.waitUntil(fetch(req, { cache: 'no-cache' }).then(r => guarda(cache, req, r)).catch(() => { /* sense connexió: ens quedem amb la còpia */ }));      // en segon pla: ha canviat?
             return guardada;
         }
-        return guarda(cache, req, await fetch(req));
+        return guarda(cache, req, await baixa(req));
     })());
 });
