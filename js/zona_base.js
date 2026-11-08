@@ -18,6 +18,7 @@ const RADI_GRAN = 110;       // objectes grans (arbres, fonts, dolmen...), amb e
 
 // Zoom de la càmera de les zones: 1,2 per defecte (al mòbil els personatges es veien massa petits). Es pot canviar amb ?zoom=1.1
 // (de 1 a 1,6) a l'adreça: es recorda fins que se'n posi un altre
+const ZOOM_NPC = 1.12;      // acostament suau de la càmera en parlar amb un personatge (1 = res)
 const ZOOM_CAMERA = (() => {
     let z = parseFloat(new URLSearchParams(location.search).get('zoom'));
     try {
@@ -1446,9 +1447,25 @@ class ZonaBase extends Phaser.Scene {
             const pantalla = (m, z, wy) => ({ dalt: ALT_HUD + (m.dalt - wy) * z, baix: ALT_HUD + (m.baix - wy) * z });
             const be = (z, wy) => mides.every(m => { const q = pantalla(m, z, wy); return q.dalt >= TOP && q.baix <= m.lim; });
             const centrar = !!(p && p.centrarCamera);                   // (el pi: tot el conjunt es posa al mig de l'espai lliure, entre el HUD i el quadre)
-            if (!centrar && be(Z, wv.y)) return;                        // ja es veuen bé: la càmera no es mou
+            // Parlant amb un personatge, la càmera s'hi acosta una mica (ZOOM_NPC) i es centra entre els dos, dins l'espai que deixen el HUD i el quadre de text:
+            // un zoom suau (els gràfics tenen resolució de sobra, no es veu borrós) que en acabar el diàleg torna a lloc. Si no hi caben amb aquest zoom, es fa l'ajust de sempre.
+            let z2 = Z, wy2 = wv.y, trobat = false, sx2 = cam.scrollX;
+            const conversa = !centrar && !!(p && p.npc && p.npc.active && p.npc.visible);
+            if (conversa) {
+                const zt = Math.min(1.6, Z * ZOOM_NPC);
+                const dalt = Math.min(...mides.map(m => m.dalt)), baix = Math.max(...mides.map(m => m.baix));
+                const wyC = (dalt + baix) / 2 - ((TOP + LIM) / 2 - ALT_HUD) / zt;
+                if (be(zt, wyC)) {
+                    z2 = zt; wy2 = wyC; trobat = true;
+                    const esq = Math.min(...cossos.map(o => o.getBounds().x)), dre = Math.max(...cossos.map(o => o.getBounds().right));
+                    let cx = (esq + dre) / 2;
+                    const ob = this.boundsCamOrig || (() => { const bb = cam.getBounds(); return { x: bb.x, w: bb.width }; })();
+                    if (ob.w) cx = Phaser.Math.Clamp(cx, ob.x + AMPLE / (2 * zt), Math.max(ob.x + AMPLE / (2 * zt), ob.x + ob.w - AMPLE / (2 * zt)));
+                    sx2 = cx - AMPLE / 2;
+                }
+            }
+            if (!trobat && !centrar && be(Z, wv.y)) return;             // ja es veuen bé: la càmera no es mou
             // Es busca el zoom més gran (fins a 0,6) en què hi caben; la y de la vista s'escull perquè els peus més baixos quedin just al seu límit
-            let z2 = Z, wy2 = wv.y, trobat = false;
             if (centrar) {
                 const dalt = Math.min(...mides.map(m => m.dalt)), baix = Math.max(...mides.map(m => m.baix));
                 z2 = Phaser.Math.Clamp((LIM - TOP) / (baix - dalt), 0.6, Z);
@@ -1460,21 +1477,21 @@ class ZonaBase extends Phaser.Scene {
                 if (be(z, wy)) { z2 = z; wy2 = wy; trobat = true; }
             }
             if (!trobat) { z2 = 0.6; wy2 = Math.max(...mides.map(m => m.baix - (m.lim - ALT_HUD) / z2)); }      // no hi cap enlloc: es prioritza que no els tapi la caixa
-            this.camDialeg = { sy: cam.scrollY, z: cam.zoom };
+            this.camDialeg = { sx: cam.scrollX, sy: cam.scrollY, z: cam.zoom };
             if (!this.boundsCamOrig) { const b = cam.getBounds(); this.boundsCamOrig = { x: b.x, y: b.y, w: b.width, h: b.height }; }
             cam.removeBounds(); cam.stopFollow();
             if (this.twCamDialeg) this.twCamDialeg.stop();
             const sy2 = wy2 - (H - H / z2) / 2;                         // scrollY que dona aquesta y de la vista amb aquest zoom
-            const v = { u: 0 }, sy0 = cam.scrollY, z0 = cam.zoom;
-            this.twCamDialeg = this.tweens.add({ targets: v, u: 1, duration: 1000, ease: 'Sine.easeInOut', onUpdate: () => { cam.setZoom(Phaser.Math.Linear(z0, z2, v.u)); cam.setScroll(cam.scrollX, Phaser.Math.Linear(sy0, sy2, v.u)); this.ajustarSuperposicions(); } });
+            const v = { u: 0 }, sx0 = cam.scrollX, sy0 = cam.scrollY, z0 = cam.zoom;
+            this.twCamDialeg = this.tweens.add({ targets: v, u: 1, duration: 1000, ease: 'Sine.easeInOut', onUpdate: () => { cam.setZoom(Phaser.Math.Linear(z0, z2, v.u)); cam.setScroll(Phaser.Math.Linear(sx0, sx2, v.u), Phaser.Math.Linear(sy0, sy2, v.u)); this.ajustarSuperposicions(); } });
         } else if (this.camDialeg) {
             const d = this.camDialeg, o = this.boundsCamOrig;
             this.camDialeg = null;
             if (this.twCamDialeg) this.twCamDialeg.stop();
-            const v = { u: 0 }, sy0 = cam.scrollY, z0 = cam.zoom;
+            const v = { u: 0 }, sx0 = cam.scrollX, sy0 = cam.scrollY, z0 = cam.zoom;
             this.twCamDialeg = this.tweens.add({
                 targets: v, u: 1, duration: 800, ease: 'Sine.easeInOut',
-                onUpdate: () => { cam.setZoom(Phaser.Math.Linear(z0, d.z, v.u)); cam.setScroll(cam.scrollX, Phaser.Math.Linear(sy0, d.sy, v.u)); this.ajustarSuperposicions(); },
+                onUpdate: () => { cam.setZoom(Phaser.Math.Linear(z0, d.z, v.u)); cam.setScroll(Phaser.Math.Linear(sx0, d.sx == null ? sx0 : d.sx, v.u), Phaser.Math.Linear(sy0, d.sy, v.u)); this.ajustarSuperposicions(); },
                 onComplete: () => {
                     cam.setZoom(d.z); this.ajustarSuperposicions();
                     if (o) cam.setBounds(o.x, o.y, o.w, o.h);
