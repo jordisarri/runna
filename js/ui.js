@@ -3,54 +3,17 @@
  * HUD (rosari d'energia, objectiu), caixa de diàleg, menú de pausa i controls tàctils.
  */
 const AMPLE = 720;
-// L'ample del llenç és fix; l'alçada s'adapta a la proporció de la pantalla (així el llenç l'omple sense barres laterals).
-// Va de 900 (tauleta, 4:5) a 1600 (mòbil molt llarg); més enllà, el llenç es queda dins la pantalla amb barres. ?alt=1500 la força (proves).
-const ALT_MIN = 900, ALT_MAX = 1600;
-function calcularAlt() {
-    const q = +new URLSearchParams(location.search).get('alt');
-    if (q) return Math.min(ALT_MAX, Math.max(ALT_MIN, Math.round(q)));
-    const el = document.getElementById('joc');
-    const r = el ? el.getBoundingClientRect() : null;
-    const w = (r && r.width) || window.innerWidth, h = (r && r.height) || window.innerHeight;
-    if (!w || !h) return 1280;
-    return Math.min(ALT_MAX, Math.max(ALT_MIN, Math.round(AMPLE * h / w)));
-}
-const ALT = calcularAlt();
+const ALT = 1280;       // Format 9:16 fix a tots els dispositius (omple l'ample als mòbils i queda centrat verticalment amb el mateix espai a dalt i a baix)
 
-// Escenes dissenyades per a una alçada fixa (el ping-pong, de 1280): el disseny es centra a la pantalla i, si aquesta és més baixa, es redueix
+// Escenes dissenyades per a una alçada fixa (1280): encaixa la càmera al llenç 9:16
 function encaixarDisseny(scene, alt0 = 1280) {
     const cam = scene.cameras.main;
     cam.setZoom(Math.min(1, ALT / alt0));
     cam.centerOn(AMPLE / 2, alt0 / 2);
 }
-// Àrees segures de l'iPhone (notch o illa dinàmica a dalt, barra d'inici a baix), en píxels de joc. El llenç ocupa TOTA la pantalla (també per sota del notch) i només el
-// HUD i el quadre de diàleg s'hi aparten. ?safe=59,34 (px de CSS: dalt, baix) les força per fer proves en un ordinador.
-function calcularSafe() {
-    try {
-        const q = new URLSearchParams(location.search).get('safe');
-        const r = (document.getElementById('joc') || document.body).getBoundingClientRect();
-        const k = AMPLE / (r.width || window.innerWidth || AMPLE);
-        if (q) { const [t, b] = q.split(',').map(Number); return { top: Math.round((t || 0) * k), baix: Math.round((b || 0) * k) }; }
-        const sonda = document.createElement('div');
-        sonda.style.cssText = 'position:fixed;left:0;top:0;width:0;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)';
-        document.body.appendChild(sonda);
-        const cs = getComputedStyle(sonda), top = parseFloat(cs.paddingTop) || 0, baix = parseFloat(cs.paddingBottom) || 0;
-        sonda.remove();
-        // A l'iPhone instal·lat (mode «aplicació»), si el navegador encara diu 0 però la pantalla és d'un mòbil amb notch o illa dinàmica (proporció > 2), es fan servir uns marges típics
-        if (!top && !baix && window.navigator.standalone === true && screen.height / screen.width > 2) return { top: Math.round(54 * k), baix: Math.round(21 * k) };
-        return { top: Math.round(top * k), baix: Math.round(baix * k) };
-    } catch (e) { return { top: 0, baix: 0 }; }
-}
-let SAFE_TOP = 0, SAFE_BAIX = 0, TOP_HUD = 128, Y_BOTONS_HUD = 60;
-// Es torna a mesurar quan convé (a l'iPhone els valors poden no ser a punt en carregar, ni després de girar la pantalla). Torna cert si han canviat.
-function refrescarSafe() {
-    const m = calcularSafe(), canvi = m.top !== SAFE_TOP || m.baix !== SAFE_BAIX;
-    SAFE_TOP = m.top; SAFE_BAIX = m.baix;
-    TOP_HUD = 128 + SAFE_TOP;           // alçada que ocupen el rosari i els botons flotants: el que ha de quedar visible (boss, tria, càmera de diàleg) hi queda per sota
-    Y_BOTONS_HUD = 60 + SAFE_TOP;       // el rosari, els consells, el sarró i el menú van a la mateixa fila
-    return canvi;
-}
-refrescarSafe();
+const SAFE_TOP = 0, SAFE_BAIX = 0;      // En mantenir 9:16 centrat, el llenç ja queda fora del notch/rellotge i de la barra inferior
+const TOP_HUD = 128;                    // alçada que ocupen el rosari i els botons flotants: el que ha de quedar visible (boss, tria, càmera de diàleg) hi queda per sota
+const Y_BOTONS_HUD = 60;                // el rosari, els consells, el sarró i el menú van a la mateixa fila
 const ALT_HUD = 0;      // ja no hi ha franja reservada: l'escenari ocupa tota la pantalla i el HUD hi flota per sobre
 const ALCADA_CAIXA_MIN = 150;   // alçada mínima de la caixa de text (una sola línia)
 const ESC_HUD = 1.25;      // mida del HUD respecte a la d'abans (més gran, perquè es vegi bé; hi caben els 7 grans del rosari)
@@ -230,21 +193,11 @@ class EscenaUI extends Phaser.Scene {
         });
 
         this.actualitzarHUD();
-        // Les àrees segures de l'iPhone poden no ser a punt en carregar: es tornen a mirar uns instants després i en girar/canviar la finestra
-        const rem = () => this.reposicionarHUD();
+        // Quan el mòbil acaba d'ajustar la finestra o es gira, es refresca l'escalat de Phaser perquè el llenç 9:16 quedi sempre ben centrat
+        const rem = () => { if (this.scale) this.scale.refresh(); };
         [300, 1200, 3000].forEach(ms => this.time.delayedCall(ms, rem));
         window.addEventListener('resize', rem); window.addEventListener('orientationchange', rem); window.addEventListener('pageshow', rem);
         this.events.once('shutdown', () => { window.removeEventListener('resize', rem); window.removeEventListener('orientationchange', rem); window.removeEventListener('pageshow', rem); });
-    }
-
-    // Torna a posar el HUD si les àrees segures han canviat (vegeu refrescarSafe)
-    reposicionarHUD() {
-        if (!refrescarSafe() || !this.fonsHUD) return;
-        this.fonsHUD.clear().fillGradientStyle(0x0a0604, 0x0a0604, 0x0a0604, 0x0a0604, 0.55, 0.55, 0, 0).fillRect(0, 0, AMPLE, 140 + SAFE_TOP);
-        this.ombraCreu.setY(Y_BOTONS_HUD + 18); this.creuRosari.setY(Y_BOTONS_HUD + 14);
-        this.botoMenu.setY(Y_BOTONS_HUD);
-        if (this.fonsSarro) { this.fonsSarro.setY(Y_BOTONS_HUD); this.fonsConsells.setY(Y_BOTONS_HUD); }
-        this.actualitzarHUD();
     }
 
     // ---------------- SARRÓ (inventari) ----------------
