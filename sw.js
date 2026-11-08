@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SERVICE WORKER (perquè el joc es pugui instal·lar com a aplicació i, un cop jugat, tornar-hi sense connexió i gastant molt poca xarxa)
  * Estratègies:
  *  - la pàgina, aquest fitxer i el manifest: la xarxa primer (així sempre es veu l'última versió; sense connexió, la còpia guardada);
@@ -9,7 +9,7 @@
  * No hi ha cap llista de fitxers: es guarda el que el joc va demanant mentre es juga (uns 50 MB com a molt).
  * Per esborrar el que ha guardat: puja el número de VERSIO (es buida la memòria de les versions anteriors).
  */
-const VERSIO = 'runna-4';
+const VERSIO = 'runna-5';
 
 self.addEventListener('install', () => self.skipWaiting());
 

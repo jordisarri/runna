@@ -61,7 +61,7 @@ const SAFE_TOP = 0, SAFE_BAIX = 0;      // En mantenir 9:16 centrat, el llenç j
 const TOP_HUD = 128;                    // alçada que ocupen el rosari i els botons flotants: el que ha de quedar visible (boss, tria, càmera de diàleg) hi queda per sota
 const Y_BOTONS_HUD = 60;                // el rosari, els consells, el sarró i el menú van a la mateixa fila
 const ALT_HUD = 0;      // ja no hi ha franja reservada: l'escenari ocupa tota la pantalla i el HUD hi flota per sobre
-const ALCADA_CAIXA_MIN = 150;   // alçada mínima de la caixa de text (una sola línia)
+const ALCADA_CAIXA_MIN = 410;   // alçada fixa per a tots els quadres de diàleg: la que necessita el text més llarg del joc (el pergamí del fragment 1, de 8 línies)
 const ESC_HUD = 1.25;      // mida del HUD respecte a la d'abans (més gran, perquè es vegi bé; hi caben els 7 grans del rosari)
 const ESC_GRA = ESC_HUD / RES;        // escala d'un gra del rosari
 const BOTO_HUD = 88;       // diàmetre (px de joc) dels medallons del sarró i dels consells

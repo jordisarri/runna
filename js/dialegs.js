@@ -288,13 +288,13 @@ const DIALEGS = {
         const paginesSagrari = [
             { qui: 'Ineu', text: "Pare Daimiel, el pergamí que he trobat a les Runes diu que l'altra meitat és al sagrari. Sap on és la clau?" },
             { qui: 'Pare Daimiel', text: 'El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se\'ls mengi. Si el Pare Alcoví els busca, ja era hora que algú els llegís!' },
-            { qui: 'Pare Daimiel', text: 'Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l\'ermita de la Desaparició, camí de l\'Era, a l\'oest de les Runes. Potser allà.' }
+            { qui: 'Pare Daimiel', text: 'Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l\'ermita de la Desaparició. Potser és allà.' }
         ];
         if (!E.flag('parlatDaniel')) {
             return {
                 pagines: [
-                    { qui: 'Pare Daimiel', text: 'Ineu! Quina alegria de veure\'t! Vine, vine, que dirigeixo el cor i necessito una veu més.' },
-                    { qui: 'Pare Daimiel', text: 'La Pianista i jo som amics de tota la vida. Ella toca com ningú, i jo... jo només canto i faig el ximple amb els nens. Però la música es queda sense orgue, ja ho veus.' },
+                    { qui: 'Pare Daimiel', text: 'Ineu! Quina alegria de veure\'t! Vine, que necessito veus noves per al cor.' },
+                    { qui: 'Pare Daimiel', text: 'La Pianista i jo som amics de tota la vida. Ella toca com ningú, i jo dirigeixo els cants. Però la música es queda sense orgue, ja ho veus.' },
                     { qui: 'Pare Daimiel', text: 'No et preocupis: si la música s\'ha amagat, la cantarem perquè torni! Riure és la primera pregària.' },
                     { qui: 'Pare Daimiel', text: 'Ah, i una cosa que em preocupa: el rellotge del campanar s\'ha aturat a un quart de quatre, la nit que va arribar la boira.' },
                     { qui: 'Pare Daimiel', text: 'La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' },
