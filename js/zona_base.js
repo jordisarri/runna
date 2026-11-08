@@ -220,11 +220,15 @@ class ZonaBase extends Phaser.Scene {
         this.portesInt = [];
         this.portesAnim = [];
         Grafics.epoca++;
+        this.llumsDiferides = [];
+        this.llumsSortida = [];
         this.construir();
         if (Proves.actiu) PARADES.forEach(pd => Estat.posaFlag('parada_' + pd.id));      // a proves, totes les parades conegudes (també amb partides de proves velles)
         PARADES.filter(pd => pd.zona === this.scene.key).forEach(pd => this.parada(pd));     // el carruatge de vapor, si aquí n'hi ha parada
         this.obrirPortes();
         this.ampliarSud();
+        const diferides = this.llumsDiferides; this.llumsDiferides = null;
+        diferides.forEach(sd => { if (!sd.pendentLlum) this.marcarSortida(sd.r); });          // les llums de les sortides, ja a la seva posició definitiva
         this.ponFonsContinu();
         this.construirCamins();
         this.crearIneu();
@@ -1031,6 +1035,7 @@ class ZonaBase extends Phaser.Scene {
         // Sortida encara tancada (l'inici del joc): ni llum ni paret invisible. Es camina contra el marge com a la resta de l'escenari;
         // la llum apareix quan s'obre el camí (vegeu posarBoiraSortides)
         if (this.sortidaTancada(s)) s.pendentLlum = true;
+        else if (this.llumsDiferides) this.llumsDiferides.push(s);        // la llum es fa quan la zona ja és ampliada (ampliarSud mou les sortides de la vora sud)
         else this.marcarSortida(r);
         if (Joc.debug) this.add.rectangle(x, y, w, h).setOrigin(0).setStrokeStyle(2, 0x00ffff).setDepth(99998);
         return s;
@@ -1039,15 +1044,17 @@ class ZonaBase extends Phaser.Scene {
     // Sortida: una llum càlida i suau que s'esvaeix cap a dins i una remor de llumetes (focs follets) que s'enlairen
     // cap a la sortida i s'hi esvaeixen. Sense fletxes: la llum "crida" sola, d'acord amb la boira màgica del Miracle.
     marcarSortida(r) {
-        const c = this.config, vora = 20;
+        const c = this.config, vora = 20, fonsMon = c.alcada + (this.extraSud || 0);          // (la vora sud real: ampliarSud allarga el món)
         let dir = 'amunt', ex = r.centerX, ey = r.centerY, span = r.width, fons = 100;
-        if (r.x <= vora) { dir = 'esquerra'; ex = 4; ey = r.centerY; span = Math.max(r.height, 90); }
-        else if (r.right >= c.amplada - vora) { dir = 'dreta'; ex = c.amplada - 4; ey = r.centerY; span = Math.max(r.height, 90); }
-        else if (r.bottom >= c.alcada - vora) { dir = 'avall'; ex = r.centerX; ey = c.alcada - 4; span = Math.max(r.width, 90); }
-        else if (r.y < TOPE_Y) { dir = 'amunt'; ex = r.centerX; ey = r.y <= 20 ? 4 : TOPE_Y - 14; span = Math.max(r.width, 90); }   // vora superior de la pantalla
+        // Cada llum és on l'Ineu arriba de debò: els peus no passen de TOPE_Y per dalt ni dels límits del món pels costats i per baix
+        if (r.x <= vora) { dir = 'esquerra'; ex = 10; ey = r.centerY; span = Math.max(r.height, 90); }
+        else if (r.right >= c.amplada - vora) { dir = 'dreta'; ex = c.amplada - 10; ey = r.centerY; span = Math.max(r.height, 90); }
+        else if (r.bottom >= fonsMon - vora) { dir = 'avall'; ex = r.centerX; ey = fonsMon - 10; span = Math.max(r.width, 90); }
+        else if (r.y < TOPE_Y) { dir = 'amunt'; ex = r.centerX; ey = TOPE_Y - 14; span = Math.max(r.width, 90); }   // vora superior de la pantalla
         else { dir = 'amunt'; ex = r.centerX; ey = r.y + r.height * 0.7; span = Math.min(Math.max(r.width, 70), 150); fons = 70; }   // porta d'un edifici
         const v = { dreta: [1, 0], avall: [0, 1], esquerra: [-1, 0], amunt: [0, -1] }[dir];   // cap a fora
         const angle = Math.atan2(v[1], v[0]);
+        (this.llumsSortida = this.llumsSortida || []).push({ r, ex, ey, dir });              // (per revisar que cada llum queda a la sortida)
 
         // Resplendor: capes ovalades superposades, ben suaus, que neixen a la vora
         const llum = this.add.container(ex, ey).setRotation(angle).setDepth(-940);
