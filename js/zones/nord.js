@@ -349,13 +349,18 @@ class ZonaPingpong extends ZonaBase {
         });
     }
 
-    // L'Ineu empeny la roda si és a un costat i avança contra ella; amb els Guants de Poder es mou, sense pesa massa
+    // L'Ineu empeny la roda si és a un costat i avança cap a ella; amb els Guants de Poder es mou, sense pesa massa.
+    // Igual que amb les pedres mòbils: compta cap a on VOL anar el jugador (n'hi ha prou amb ~30% cap a la roda, també amb el joystick en diagonal),
+    // basta estar-hi a tocar (no cal xocar-hi exactament) i mentre s'empeny no es llisca pels costats.
     actualitzar(ara, delta) {
         if (this.rodaMoguda) return;
-        const ui = this.ui(), c = this.cursors, t = this.tecles;
-        const dirX = (c.right.isDown || t.D.isDown ? 1 : 0) - (c.left.isDown || t.A.isDown ? 1 : 0) || Math.sign(ui.vectorTactil.x > 0.3 ? 1 : ui.vectorTactil.x < -0.3 ? -1 : 0);
-        const toca = this.time.now - this.contacteRoda < 120 && Math.abs(this.ineu.x - this.colRoda.x) > 50 && dirX === this.costatRoda;
-        this.empentaMs = toca ? this.empentaMs + delta : 0;
+        const b = this.ineu.body, c = this.colRoda.body, I = this.intent || { x: 0, y: 0 };
+        const costat = this.ineu.x < this.colRoda.x ? 1 : -1;
+        const entreY = b.bottom > c.top - 10 && b.top < c.bottom + 10;
+        const buit = costat > 0 ? c.left - b.right : b.left - c.right;                       // la distància que queda fins a la roda
+        const toca = entreY && buit > -6 && buit < 14 && Math.abs(this.ineu.x - this.colRoda.x) > 50 && I.x * costat > 0.3;
+        if (toca) { b.setVelocityY(0); this.costatRoda = costat; }
+        this.empentaMs = toca ? this.empentaMs + delta : Math.max(0, this.empentaMs - delta * 2);
         if (this.empentaMs < 600) return;
         this.empentaMs = 0;
         if (!Estat.te('guants')) {

@@ -163,10 +163,12 @@ class ZonaCamiRov extends ZonaBase {
         const mare = this.add.image(n.x - 160, n.y + 10, 'mare_nena').setOrigin(0.5, 1).setTint(0xe8eeff).setAlpha(0).setDepth(80000);       // per sobre dels arbres: que cap copa no la tapi
         mare.setScale((this.textures.get('mare_nena').customData || {}).escala || 0.5);
         this.tweens.killTweensOf([n, this.resplendorNena]);
+        this.cara(n);                                                                   // l'Ineu mira la nena des que apareix la mare
         this.tweens.add({ targets: mare, alpha: 0.85, duration: 1500, onComplete: () => {
             this.time.delayedCall(1800, () => {                                        // un moment mirant-se, abans que la nena hi vagi
-                this.tweens.add({ targets: [n, this.resplendorNena], x: n.x - 100, duration: 1400, ease: 'Sine.easeInOut', onComplete: () => {
+                this.tweens.add({ targets: [n, this.resplendorNena], x: n.x - 100, duration: 1400, ease: 'Sine.easeInOut', onUpdate: () => this.cara(n), onComplete: () => {      // l'Ineu la va seguint amb la mirada
                     this.llum(mare.x + 20, mare.y - 80, 0xfff4e0);
+                    this.cara(n);
                     this.time.delayedCall(2600, () => {                                // s'abracen: es queden ben visibles
                         this.tweens.add({ targets: [mare, n, this.resplendorNena], alpha: 0, duration: 2000, onComplete: () => { mare.destroy(); fet(); } });
                     });
@@ -207,7 +209,7 @@ class ZonaCamiRov extends ZonaBase {
 
         // La segona corba, ben endins del camí, on espera la Nena de les Trenes
         if (!Estat.flag('nenaAlliberada')) {
-            this.nena = this.posar('nena_trenes', 880, 880, { fonsY: 880 }).setAlpha(0.92);          // més gran i ben visible (és un esperit, però no s'ha de perdre)
+            this.nena = this.posar('nena_trenes', 880, 880, { fonsY: 880 });          // sempre al 100% d'opacitat: ben visible
             this.resplendorNena = this.add.circle(880, 815, 52, 0xcfd8ff, 0.07).setDepth(879);      // un halo molt discret
             this.tweens.add({ targets: [this.nena, this.resplendorNena], y: '-=10', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
             this.interactiu(880, 880, RADI_NPC, DIALEGS.nenaTrenes, { altura: 145 });

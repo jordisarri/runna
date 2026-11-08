@@ -397,9 +397,12 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         if (!E || Estat.flag('refetorObert')) return;
         const ui = this.ui(), c = this.cursors, t = this.tecles, I = this.ineu;
         const dx = I.x - E.x, vora = Math.abs(dx) > 40 && Math.abs(dx) < 100 && Math.abs(I.y - 236) < 56;       // al costat (a l'alçada de la peanya)
-        const dirX = (c.right.isDown || t.D.isDown ? 1 : 0) - (c.left.isDown || t.A.isDown ? 1 : 0) || (ui.vectorTactil.x > 0.3 ? 1 : ui.vectorTactil.x < -0.3 ? -1 : 0);
-        const empeny = vora && dirX === (dx < 0 ? 1 : -1);                                                      // camina cap a l'àngel
-        this.empentaMs = empeny ? this.empentaMs + delta : 0;
+        // Generós amb la direcció (com a les pedres mòbils): compta cap a on VOL anar el jugador, n'hi ha prou amb ~30% cap a l'àngel (també en diagonal i amb el
+        // joystick) i mentre s'empeny no es llisca pels costats; si el dit tremola un instant, no es perd tot el que s'havia recolzat
+        const I2 = this.intent || { x: 0, y: 0 };
+        const empeny = vora && I2.x * (dx < 0 ? 1 : -1) > 0.3;                                                // vol anar cap a l'àngel
+        if (empeny) I.body.setVelocityY(0);
+        this.empentaMs = empeny ? this.empentaMs + delta : Math.max(0, this.empentaMs - delta * 2);
         E.x = 600 + (empeny && Estat.te('guants') ? Math.sin(ara / 45) * 1.6 : 0);                              // tremola quan s'hi fa força
         if (this.empentaMs < 450) return;
         this.empentaMs = 0;

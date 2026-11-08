@@ -894,9 +894,10 @@ class ZonaBase extends Phaser.Scene {
     // L'Ineu camina fins a (x, y)
     ineuVa(x, y, fet, vel = 180) {
         const dx = x - this.ineu.x, dy = y - this.ineu.y, dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'esquerra' : 'dreta') : (dy < 0 ? 'amunt' : 'avall');
+        this.vista8Manual = false; this.vista8 = null;
         this.posarDireccio(dir, true);
         const dur = Math.max(150, Math.hypot(dx, dy) / vel * 1000);
-        this.tweens.add({ targets: this.ineu, x, y, duration: dur, onComplete: () => { this.posarDireccio(dir, false); if (fet) fet(); } });
+        this.tweens.add({ targets: this.ineu, x, y, duration: dur, onComplete: () => { this.vista8Manual = false; this.vista8 = null; this.posarDireccio(dir, false); if (fet) fet(); } });
     }
     // L'Ineu (o un personatge) s'inclina lleugerament (sense deformar mai el sprite)
     ajupir(qui, fet, ms = 900) {
@@ -1849,6 +1850,7 @@ class ZonaBase extends Phaser.Scene {
     // L'Ineu es gira cap a algú
     cara(n) {
         const dx = n.x - this.ineu.x, dy = n.y - this.ineu.y;
+        this.vista8Manual = false; this.vista8 = null;                // (si no, es quedava la vista de 8 direccions de l'últim tram caminat, i mirava cap a un altre costat)
         this.posarDireccio(Math.abs(dx) > Math.abs(dy) * 0.9 ? (dx < 0 ? 'esquerra' : 'dreta') : (dy < 0 ? 'amunt' : 'avall'), false);
     }
 
