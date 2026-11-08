@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Runna: l'espasa del Miracle</title>
+    <!-- Aplicació instal·lable (PWA): manifest, icones i service worker (sw.js) -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0d0b09">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Runna">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="icon" type="image/png" href="assets/pwa/favicon.png">
+    <link rel="apple-touch-icon" href="assets/pwa/apple-touch-icon.png">
     <style>
         html, body {
             margin: 0;
@@ -53,52 +62,58 @@
     <div id="joc"></div>
 
     <!-- L'ordre importa: cada fitxer fa servir coses dels anteriors -->
-    <script src="js/sfx.js?v=2611080913"></script>
-    <script src="js/partida.js?v=2611080913"></script>
-    <script src="js/progres.js?v=2611080913"></script>
-    <script src="js/dibuixos.js?v=2611080913"></script>
-    <script src="js/icones.js?v=2611080913"></script>
-    <script src="js/dibuixos_biblio.js?v=2611080913"></script>
-    <script src="js/dibuixos_cela.js?v=2611080913"></script>
-    <script src="js/dibuixos_taller.js?v=2611080913"></script>
-    <script src="js/dibuixos_jordi.js?v=2611080913"></script>
-    <script src="js/dibuixos_oratori.js?v=2611080913"></script>
-    <script src="js/dibuixos_ermita.js?v=2611080913"></script>
-    <script src="js/dibuixos_casa.js?v=2611080913"></script>
-    <script src="js/dibuixos_proleg.js?v=2611080913"></script>
-    <script src="js/dibuixos_pingpong.js?v=2611080913"></script>
-    <script src="js/assets.js?v=2611080913"></script>
-    <script src="js/dialegs.js?v=2611080913"></script>
-    <script src="js/ui.js?v=2611080913"></script>
-    <script src="js/zona_base.js?v=2611080913"></script>
-    <script src="js/atac_arma.js?v=2611080913"></script>
-    <script src="js/combat.js?v=2611080913"></script>
-    <script src="js/musica.js?v=2611080913"></script>
-    <script src="js/zones/placa.js?v=2611080913"></script>
-    <script src="js/zones/provisionals.js?v=2611080913"></script>
-    <script src="js/zones/nord.js?v=2611080913"></script>
-    <script src="js/zones/cirosa.js?v=2611080913"></script>
-    <script src="js/estels.js?v=2611080913"></script>
-    <script src="js/pingpong.js?v=2611080913"></script>
-    <script src="js/credits.js?v=2611080913"></script>
-    <script src="js/zones/oest.js?v=2611080913"></script>
-    <script src="js/zones/bosc_pi.js?v=2611080913"></script>
-    <script src="js/zones/cementiri.js?v=2611080913"></script>
-    <script src="js/zones/casa.js?v=2611080913"></script>
-    <script src="js/zones/cabana.js?v=2611080913"></script>
-    <script src="js/zones/cami.js?v=2611080913"></script>
-    <script src="js/zones/torre.js?v=2611080913"></script>
-    <script src="js/zones/hostatgeria.js?v=2611080913"></script>
-    <script src="js/zones/taverna.js?v=2611080913"></script>
-    <script src="js/zones/gabia.js?v=2611080913"></script>
-    <script src="js/zones/gabia_decor.js?v=2611080913"></script>
-    <script src="js/zones/biblioteca.js?v=2611080913"></script>
-    <script src="js/zones/rebedor.js?v=2611080913"></script>
-    <script src="js/zones/cela.js?v=2611080913"></script>
-    <script src="js/diari.js?v=2611080913"></script>
-    <script src="js/mapa.js?v=2611080913"></script>
-    <script src="js/proves.js?v=2611080913"></script>
-    <script src="js/intro.js?v=2611080913"></script>
-    <script src="js/main.js?v=2611080913"></script>
+    <script src="js/sfx.js?v=2611080935"></script>
+    <script src="js/partida.js?v=2611080935"></script>
+    <script src="js/progres.js?v=2611080935"></script>
+    <script src="js/dibuixos.js?v=2611080935"></script>
+    <script src="js/icones.js?v=2611080935"></script>
+    <script src="js/dibuixos_biblio.js?v=2611080935"></script>
+    <script src="js/dibuixos_cela.js?v=2611080935"></script>
+    <script src="js/dibuixos_taller.js?v=2611080935"></script>
+    <script src="js/dibuixos_jordi.js?v=2611080935"></script>
+    <script src="js/dibuixos_oratori.js?v=2611080935"></script>
+    <script src="js/dibuixos_ermita.js?v=2611080935"></script>
+    <script src="js/dibuixos_casa.js?v=2611080935"></script>
+    <script src="js/dibuixos_proleg.js?v=2611080935"></script>
+    <script src="js/dibuixos_pingpong.js?v=2611080935"></script>
+    <script src="js/assets.js?v=2611080935"></script>
+    <script src="js/dialegs.js?v=2611080935"></script>
+    <script src="js/ui.js?v=2611080935"></script>
+    <script src="js/zona_base.js?v=2611080935"></script>
+    <script src="js/atac_arma.js?v=2611080935"></script>
+    <script src="js/combat.js?v=2611080935"></script>
+    <script src="js/musica.js?v=2611080935"></script>
+    <script src="js/zones/placa.js?v=2611080935"></script>
+    <script src="js/zones/provisionals.js?v=2611080935"></script>
+    <script src="js/zones/nord.js?v=2611080935"></script>
+    <script src="js/zones/cirosa.js?v=2611080935"></script>
+    <script src="js/estels.js?v=2611080935"></script>
+    <script src="js/pingpong.js?v=2611080935"></script>
+    <script src="js/credits.js?v=2611080935"></script>
+    <script src="js/zones/oest.js?v=2611080935"></script>
+    <script src="js/zones/bosc_pi.js?v=2611080935"></script>
+    <script src="js/zones/cementiri.js?v=2611080935"></script>
+    <script src="js/zones/casa.js?v=2611080935"></script>
+    <script src="js/zones/cabana.js?v=2611080935"></script>
+    <script src="js/zones/cami.js?v=2611080935"></script>
+    <script src="js/zones/torre.js?v=2611080935"></script>
+    <script src="js/zones/hostatgeria.js?v=2611080935"></script>
+    <script src="js/zones/taverna.js?v=2611080935"></script>
+    <script src="js/zones/gabia.js?v=2611080935"></script>
+    <script src="js/zones/gabia_decor.js?v=2611080935"></script>
+    <script src="js/zones/biblioteca.js?v=2611080935"></script>
+    <script src="js/zones/rebedor.js?v=2611080935"></script>
+    <script src="js/zones/cela.js?v=2611080935"></script>
+    <script src="js/diari.js?v=2611080935"></script>
+    <script src="js/mapa.js?v=2611080935"></script>
+    <script src="js/proves.js?v=2611080935"></script>
+    <script src="js/intro.js?v=2611080935"></script>
+    <script src="js/main.js?v=2611080935"></script>
+    <script>
+        // Service worker: només amb http(s) (no obrint el fitxer directament) i sense fer fallar el joc si no pot ser
+        if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+            window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => { /* sense service worker: el joc va igual */ }); });
+        }
+    </script>
 </body>
 </html>

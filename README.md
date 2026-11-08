@@ -6,7 +6,7 @@ Joc web fet amb Phaser 3. Per provar-lo en local: `python serveix.py` i obre `ht
 
 | Carpeta | Què hi ha |
 |---|---|
-| `index.html`, `js/` | El joc. `js/zones/` té una escena per cada lloc; `js/assets.js` és el catàleg d'imatges. |
+| `index.html`, `manifest.json`, `sw.js`, `js/` | El joc (i l'aplicació instal·lable: `manifest.json`, el service worker `sw.js` i les icones d'`assets/pwa/`, que fa `eines/fer_icones.py`). `js/zones/` té una escena per cada lloc; `js/assets.js` és el catàleg d'imatges. |
 | `assets/` | El que carrega el joc (WebP, M4A, MP4), ja comprimit. |
 | `art/` | Els originals (JPG/PNG/MP3/MP4) a resolució completa. **No es carrega al joc.** |
 | `docs/` | Guió (`GUIO.md`), prompts dels gràfics i instruccions de la música. |
