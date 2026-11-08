@@ -271,14 +271,24 @@ class ZonaMonestir extends ZonaBase {
         // La façana: el portal del mig duu a la biblioteca (on treballa el Pare Alcoví)
         // La imatge va al fons (fonsY): l'Ineu puja l'escalinata per davant i arriba a la porta, que es veu obrir-se i el duu al Rebedor
         this.posar('monestir', 800, 440 + D, { fonsY: 330 });
-        this.colisio(577, 387, 354, 115);
-        this.colisio(1023, 387, 354, 115);
-        this.blocDarrere(800, 790, 405);
-        this.sortida(754, 440, 92, 30, 'ZonaMonestirRebedor', 'porta');
-        this.portaAnimada({ x: 800, top: 325, bottom: 435, ample: 74, fons: 335, color: 0x6a4328, panell: 0x7a5233, vora: 0x2a1608, ferro: true });   // el portal romànic: els batents de fusta s'obren cap endins
-        // Xiprers alts a l'esquerra del portal i una conífera a la dreta (com a la foto del monestir)
-        [[440, 445, 1.7], [492, 452, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y + D, { escala: e, col: { w: 26, h: 12 } }));
-        this.posar('xiprer', 1165, 450 + D, { escala: 1.9, col: { w: 30, h: 12 } });
+        // Murs de la façana: als costats de l'escalinata la paret arriba fins a y=535; dalt de l'escalinata el mur i la porta són a y=438
+        this.colisio(531, 267.5, 238, 535);
+        this.colisio(1069, 267.5, 238, 535);
+        this.colisio(704, 219, 108, 438);
+        this.colisio(896, 219, 108, 438);
+        this.colisio(800, 212.5, 84, 425);
+        // Baranes de pedra en pendent als dos costats de l'escalinata (de y=438 a y=588)
+        for (let i = 0; i < 6; i++) {
+            const cy = 450.5 + i * 25, t = (i + 0.5) / 6;
+            const lx0 = Math.round(655 + (552 - 655) * t), lx1 = Math.round(695 + (592 - 695) * t), w = lx1 - lx0, cx = (lx0 + lx1) / 2;
+            this.colisio(cx, cy, w, 25);
+            this.colisio(1600 - cx, cy, w, 25);
+        }
+        this.sortida(758, 428, 84, 28, 'ZonaMonestirRebedor', 'porta');
+        this.portaAnimada({ x: 800, top: 344, bottom: 435, ample: 74, fons: 335, color: 0x6a4328, panell: 0x7a5233, vora: 0x2a1608, ferro: true });   // el portal romànic: els batents de fusta s'obren cap endins
+        // Xiprers alts a l'esquerra del portal i una conífera a la dreta (al peu de la façana, y=535)
+        [[440, 392, 1.7], [492, 398, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y + D, { escala: e, col: { w: 26, h: 12 } }));
+        this.posar('xiprer', 1165, 395 + D, { escala: 1.9, col: { w: 30, h: 12 } });
 
         this.cartell(1368, 450 + D, () => ({ pagines: [{ qui: 'Cartell', text: '→ Cel·les de Sant Antoni\n↑ El Cementiri' }] }));
         this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720], [420, 770], [1090, 770], [750, 780]].map(([x, y]) => [x, y + D]));

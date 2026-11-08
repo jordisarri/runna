@@ -84,7 +84,7 @@ class EscenaTitol extends Phaser.Scene {
 
         // El logo, per codi, a sobre de la foto (surt en acabar la intro)
         this.logo = this.add.image(AMPLE / 2, ALT * 0.06, 'logo_runna').setOrigin(0.5, 0).setDepth(5).setAlpha(0);
-        this.logo.setScale(AMPLE * 0.62 / this.logo.width);           // centrat, amb marges als costats i a dalt
+        this.logo.setScale(AMPLE * 0.9 / this.logo.width);            // centrat, ocupant el 90% de l'ample de la pantalla
         this.c = { z: 1, x: 0.5, y: 0.5 };
         this.posaMon();
     }
