@@ -312,7 +312,7 @@ class ZonaJardi extends ZonaBase {
         // una biga al llarg de cada fila de columnes i una de travessera a cada columna, entre la fila del davant i la del darrere
         const heura = (x, y, esc, alfa, prof, ang) => {
             if (Math.hypot(x - 664, (y - 560) * 1.2) < 120) return null;          // la llosa i el seu entorn queden lliures d'heura (es veu l'escena de l'obertura)
-            if (Math.abs(x - 290) < 215 && y > 640 - 470 && y < 640 + 20) return null;      // sobre la Prunera (la capçada és gran) no hi ha fulles: s'ha de veure bé
+            if (Math.abs(x - 290) < 215 && y > 640 - 470 && y < 640 + 20) prof = 100;       // a la zona de la Prunera (capçada gran) les fulles queden SOTA l'arbre: la biga hi arriba, però l'arbre es veu bé
             const l = this.add.image(x, y, 'fulla_heura').setScale(esc).setAlpha(alfa).setDepth(prof).setAngle(ang);
             l.setTint([0x4f8f35, 0x6aac3e, 0x7cbc4a, 0x3f7a30, 0x92cc58][Math.floor(rnd() * 5)]);
             if (rnd() < 0.25) this.tweens.add({ targets: l, angle: ang + (rnd() < 0.5 ? -6 : 6), duration: 2200 + rnd() * 2600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: rnd() * 2000 });
@@ -320,10 +320,10 @@ class ZonaJardi extends ZonaBase {
         };
         const yTopB = YB - ALT_COL + 10, yTopF = YF - ALT_COL + 10;               // el capdamunt de les columnes de cada fila
         const biga = (xa, ya, xb, yb) => {                                          // una biga de fulles de (xa, ya) a (xb, yb) (només fulles, sense tija)
-            const llarg = Math.hypot(xb - xa, yb - ya), n = Math.round(llarg / 6), ang = Math.atan2(yb - ya, xb - xa);
+            const llarg = Math.hypot(xb - xa, yb - ya), n = Math.round(llarg / 7), ang = Math.atan2(yb - ya, xb - xa);
             for (let i = 0; i <= n; i++) {
-                const t = i / n, cx = xa + (xb - xa) * t, cy = ya + (yb - ya) * t, perp = (rnd() - 0.5) * 20;
-                heura(cx - Math.sin(ang) * perp + (rnd() - 0.5) * 6, cy + Math.cos(ang) * perp + (rnd() - 0.5) * 6, 0.17 + rnd() * 0.1, 0.82 + rnd() * 0.16, 700, rnd() * 360);
+                const t = i / n, cx = xa + (xb - xa) * t, cy = ya + (yb - ya) * t, perp = (rnd() - 0.5) * 12;      // una línia estreta de fulles
+                heura(cx - Math.sin(ang) * perp + (rnd() - 0.5) * 6, cy + Math.cos(ang) * perp + (rnd() - 0.5) * 6, 0.15 + rnd() * 0.09, 0.85 + rnd() * 0.13, 700, rnd() * 360);
             }
         };
         biga(COLS[0], yTopB, COLS[COLS.length - 1], yTopB);                         // la biga de la fila del darrere
