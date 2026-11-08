@@ -1268,25 +1268,31 @@ class ZonaBase extends Phaser.Scene {
         return o;
     }
 
-    // Cada fotograma: si l'Ineu toca la roca per un costat i camina contra ella, la roca avança a poc a poc cap a l'altre costat
+    // Cada fotograma: si l'Ineu és a tocar de la roca per un costat i vol anar cap a ella, l'empeny a poc a poc cap a l'altre costat.
+    // És generós amb la direcció: compta cap a on VOL anar el jugador (no la velocitat física, que el xoc amb la roca anul·la) i n'hi ha prou amb una component
+    // cap a la roca d'un ~30% (fins a uns 70° de biaix, també amb el joystick); no cal estar perfectament alineat (vores i cantonades compten) i, mentre
+    // s'empeny, no es llisca pels costats de la roca: la component lateral s'anul·la.
     actualitzarPedres(delta) {
         if (!this.pedresMobils) return;
-        const b = this.ineu.body, v = b.velocity, V = VELOCITAT_INEU * 0.5, M = 10;
+        const b = this.ineu.body, I = this.intent || { x: 0, y: 0 }, M = 14, MARGE = 0.3, MANTENIR = 0.12;
         this.pedresMobils.forEach(o => {
             if (o.mogut) return;
             const c = o.col.body;
-            const entreY = b.bottom > c.top + 2 && b.top < c.bottom - 2, entreX = b.right > c.left + 4 && b.left < c.right - 4;
+            const entreY = b.bottom > c.top - 10 && b.top < c.bottom + 10, entreX = b.right > c.left - 14 && b.left < c.right + 14;
+            const costats = [
+                { c: 'E', x: 1, y: 0, toca: entreY && Math.abs(b.right - c.left) < M, comp: I.x },
+                { c: 'O', x: -1, y: 0, toca: entreY && Math.abs(b.left - c.right) < M, comp: -I.x },
+                { c: 'S', x: 0, y: 1, toca: entreX && Math.abs(b.bottom - c.top) < M, comp: I.y },
+                { c: 'N', x: 0, y: -1, toca: entreX && Math.abs(b.top - c.bottom) < M, comp: -I.y }
+            ];
             let dir = null;
-            if (o.dir) dir = o.dir;                                         // un cop començada, segueix cap a la mateixa banda
-            else if (entreY && Math.abs(b.right - c.left) < M && v.x > V) dir = { c: 'E', x: 1, y: 0 };
-            else if (entreY && Math.abs(b.left - c.right) < M && v.x < -V) dir = { c: 'O', x: -1, y: 0 };
-            else if (entreX && Math.abs(b.bottom - c.top) < M && v.y > V) dir = { c: 'S', x: 0, y: 1 };
-            else if (entreX && Math.abs(b.top - c.bottom) < M && v.y < -V) dir = { c: 'N', x: 0, y: -1 };
-            const toca = !!dir && (o.dir ? (o.dir.x ? entreY && Math.abs((o.dir.x > 0 ? b.right - c.left : b.left - c.right)) < M : entreX && Math.abs((o.dir.y > 0 ? b.bottom - c.top : b.top - c.bottom)) < M) : true);
-            const empeny = toca && (v.x * dir.x + v.y * dir.y) > V;
-            o.empenta = empeny ? o.empenta + delta : 0;
+            if (o.dir) { const k = costats.find(q => q.c === o.dir.c); if (k && k.toca && k.comp > MANTENIR) dir = o.dir; }        // un cop començada, segueix cap a la mateixa banda (encara que es biaixi una mica)
+            else dir = costats.filter(q => q.toca && q.comp > MARGE).sort((p, q) => q.comp - p.comp)[0] || null;
+            if (dir) { if (dir.x) b.setVelocityY(0); else b.setVelocityX(0); }                      // no s'esllavissa pels costats de la roca
+            const empeny = !!dir;
+            o.empenta = empeny ? o.empenta + delta : Math.max(0, o.empenta - delta * 2);            // si el dit tremola un instant, no es perd tot el que s'havia recolzat
             if (!empeny && o.fet === 0) o.dir = null;
-            if (o.empenta < 220) return;                                    // primer s'hi recolza una mica
+            if (!dir || o.empenta < 220) return;                            // primer s'hi recolza una mica
             o.dir = dir;
             const pas = Math.min(o.dist - o.fet, 75 * delta / 1000);
             o.fet += pas;
@@ -1704,6 +1710,7 @@ class ZonaBase extends Phaser.Scene {
     }
 
     moure(ui, delta) {
+        this.intent = { x: 0, y: 0 };                                                // cap a on vol anar el jugador (el fan servir l'empenta de les pedres)
         // Assegut en un banc: es queda quiet fins que el jugador es mou (llavors s'aixeca i continua caminant)
         if (this.assegut) {
             const c = this.cursors, t = this.tecles;
@@ -1739,6 +1746,7 @@ class ZonaBase extends Phaser.Scene {
 
         const len = Math.hypot(vx, vy);
         if (len > 1) { vx /= len; vy /= len; }
+        this.intent = { x: vx, y: vy };
         this.ineu.body.setVelocity(vx * VELOCITAT_INEU, vy * VELOCITAT_INEU);
 
         const movent = Math.hypot(vx, vy) > 0.15;
