@@ -476,6 +476,14 @@ class ZonaCelles extends ZonaBase {
     }
 
     // La Mandu, enrabiada, arrenca el cap a la nina: trencall, cotó pels aires i la nina es queda sense cap (queda així fins a l'epíleg)
+    // Un primer pla per veure bé el dibuix: la càmera s'acosta a la Mandu des d'abans que arrenqui el cap i hi és fins que acaba la conversa (enTancar del seu punt)
+    enquadrarMandu(fet) {
+        const m = this.mandu;
+        this.manduCam = true;
+        this.mandu.punt.enTancar = () => { if (this.manduCam) { this.manduCam = false; this.alliberarCamera(900); } };
+        this.enquadrar(m.x, m.y - m.displayHeight * 0.48, 2.6, 900, fet);
+    }
+
     manduTrencaNina(fet) {
         const m = this.mandu;
         if (this.manduJoc) { this.manduJoc.stop(); this.manduJoc = null; }

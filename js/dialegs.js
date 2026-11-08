@@ -1250,7 +1250,7 @@ const DIALEGS = {
                 { qui: 'Ineu', text: "El Fram és el teu germà?" },
                 { qui: 'Mandu', text: "Sí. Dormíem a la mateixa habitació. Una nit em vaig adormir amb ell al costat, i al matí el seu llit era buit. Sempre em diu on va, i aquesta vegada..." },
                 { qui: 'Mandu', text: "La Meus diu que la boira se l'ha endut. Però jo li vaig dir que no se n'anés! Li ho vaig dir! I ell se n'ha anat igualment! PER QUÈ NO TORNA?!" },
-                { fer: (z, fet) => z.seq([c => z.bombolla('mandu', '!!', c, 500), c => z.manduTrencaNina ? z.manduTrencaNina(c) : c()], fet) },
+                { fer: (z, fet) => z.seq([c => z.enquadrarMandu ? z.enquadrarMandu(c) : c(), c => z.bombolla('mandu', '!!', c, 500), c => z.manduTrencaNina ? z.manduTrencaNina(c) : c()], fet) },
                 { qui: 'Mandu', text: "Ja n'hi ha prou! LI HE ARRENCAT EL CAP A LA NINA! I m'és igual: així el Fram haurà de tornar per cosir-lo!" },
                 { qui: 'Ineu', text: "Tranquil·la, Mandu. Deixa'm veure-la: potser el puc cosir." },
                 { qui: 'Mandu', text: "No! No la toquis! Només el Fram sap cosir caps de nina: ell m'arregla tot el que es trenca." },

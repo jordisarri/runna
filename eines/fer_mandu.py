@@ -4,7 +4,7 @@ Passa els dibuixos de la Mandu a webp:
   - art/retrats/mandu_retrat.jpg i mandu_trencada_retrat.jpg -> assets/retrats/mandu.webp i mandu_trencada.webp (els retrats dels diàlegs, 340 px)
     python eines/fer_mandu.py
 Treu el fons blanc, neteja les escletxes blanques que queden entre els cabells i el contorn (zones ZONES_BLANC, en píxels de l'original de 687 × 1024),
-i els deixa AL MATEIX llenç i a la mateixa escala (la unió dels dos), perquè en canviar de l'un a l'altre la nena no salti. Amplada de la Mandu al joc: 52 px (× 2).
+i els deixa AL MATEIX llenç i a la mateixa escala (la unió dels dos), perquè en canviar de l'un a l'altre la nena no salti. Amplada de la Mandu al joc: 62 px (× 2).
 """
 import os, sys
 import numpy as np
@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from treure_fons import treure_fons
 
 ARREL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
-AMPLADA = 52
+AMPLADA = 62
 # (x0, y0, x1, y1): zones on el blanc clar que queda és de fons (entre els cabells i la vora), no del dibuix
 ZONES_BLANC = [(40, 330, 135, 640), (535, 300, 600, 470)]
 
