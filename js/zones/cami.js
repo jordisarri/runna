@@ -381,7 +381,7 @@ class ZonaJardi extends ZonaBase {
             this.isidre.punt.x = LX - 74; this.isidre.punt.y = LY + 52;
         }
 
-        this.cartell(1500, 860, () => ({ pagines: [{ qui: 'Cartell', text: '→ La Taverna\n← L\'Era' }] }));
+        this.cartell(1500, 860, () => ({ pagines: [{ qui: 'Cartell', text: 'L\'Hostatgeria\n→ La Taverna\n← L\'Era' }] }));
         this.sortida(0, 900, 14, 130, 'ZonaEra', 'jardi');
         this.sortida(1786, 900, 14, 130, 'ZonaTaverna', 'jardi');
     }
