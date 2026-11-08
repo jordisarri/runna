@@ -308,21 +308,32 @@ class ZonaJardi extends ZonaBase {
         const tex = this.textures.get('columna'), escalaBase = (tex.customData && tex.customData.escala) || 1 / RES;
         const colH = tex.getSourceImage().height * escalaBase;            // alçada d'una columna sense escalar
         const ESC = 1.4, ALT_COL = Math.round(colH * ESC), COL_W = Math.round(tex.getSourceImage().width * escalaBase * ESC);
-        // Sense arcades ni bigues: només les columnes, i al damunt una coberta d'heura (fulles transparents, amb una mica de moviment) que s'enfila per les columnes
+        // Sense arcades: només les columnes, i unes bigues de fulles d'heura (petites i ben opaques, amb una mica de moviment) que les uneixen pel capdamunt:
+        // una biga al llarg de cada fila de columnes i una de travessera a cada columna, entre la fila del davant i la del darrere
         const heura = (x, y, esc, alfa, prof, ang) => {
             if (Math.hypot(x - 664, (y - 560) * 1.2) < 120) return null;          // la llosa i el seu entorn queden lliures d'heura (es veu l'escena de l'obertura)
             const l = this.add.image(x, y, 'fulla_heura').setScale(esc).setAlpha(alfa).setDepth(prof).setAngle(ang);
             l.setTint([0x4f8f35, 0x6aac3e, 0x7cbc4a, 0x3f7a30, 0x92cc58][Math.floor(rnd() * 5)]);
-            if (rnd() < 0.5) this.tweens.add({ targets: l, angle: ang + (rnd() < 0.5 ? -7 : 7), alpha: alfa * 0.8, duration: 2200 + rnd() * 2600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: rnd() * 2000 });
+            if (rnd() < 0.25) this.tweens.add({ targets: l, angle: ang + (rnd() < 0.5 ? -6 : 6), duration: 2200 + rnd() * 2600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: rnd() * 2000 });
             return l;
         };
-        const x0 = COLS[0] - 14, x1 = COLS[COLS.length - 1] + 14, yTop = YB - ALT_COL - 14, yBaix = YF - ALT_COL + 18;
-        for (let i = 0; i < 150; i++) heura(x0 + rnd() * (x1 - x0), yTop + rnd() * (yBaix - yTop), 0.3 + rnd() * 0.26, 0.26 + rnd() * 0.18, 700, rnd() * 360);
-        for (let i = 0; i < 40; i++) heura(x0 + rnd() * (x1 - x0), yBaix - 8 + rnd() * 30, 0.26 + rnd() * 0.2, 0.34 + rnd() * 0.18, 701, 160 + rnd() * 40);       // la franja que penja al davant
+        const yTopB = YB - ALT_COL + 10, yTopF = YF - ALT_COL + 10;               // el capdamunt de les columnes de cada fila
+        const biga = (xa, ya, xb, yb) => {                                          // una biga de fulles de (xa, ya) a (xb, yb)
+            const llarg = Math.hypot(xb - xa, yb - ya), n = Math.round(llarg / 6), ang = Math.atan2(yb - ya, xb - xa);
+            const tija = this.add.graphics().setDepth(699);                         // la tija de l'heura, fosca, sota les fulles
+            tija.lineStyle(5, 0x2e4a1e, 0.95).lineBetween(xa, ya, xb, yb);
+            for (let i = 0; i <= n; i++) {
+                const t = i / n, cx = xa + (xb - xa) * t, cy = ya + (yb - ya) * t, perp = (rnd() - 0.5) * 20;
+                heura(cx - Math.sin(ang) * perp + (rnd() - 0.5) * 6, cy + Math.cos(ang) * perp + (rnd() - 0.5) * 6, 0.17 + rnd() * 0.1, 0.82 + rnd() * 0.16, 700, rnd() * 360);
+            }
+        };
+        biga(COLS[0], yTopB, COLS[COLS.length - 1], yTopB);                         // la biga de la fila del darrere
+        biga(COLS[0], yTopF, COLS[COLS.length - 1], yTopF);                         // la biga de la fila del davant
+        COLS.forEach(x => biga(x, yTopB, x, yTopF));                                // una de travessera a cada columna
         COLS.forEach(x => {
             this.posar('columna', x, YB, { escala: ESC, col: { w: 34, h: 14 } });
             this.posar('columna', x, YF, { escala: ESC, col: { w: 34, h: 14 } });
-            [YB, YF].forEach(y => { for (let k = 0; k < 7; k++) heura(x + (rnd() - 0.5) * 36, y - 18 - k * (ALT_COL / 8) - rnd() * 14, 0.22 + rnd() * 0.14, 0.45 + rnd() * 0.2, y + 2, rnd() * 360); });   // l'heura puja per les columnes
+            [YB, YF].forEach(y => { for (let k = 0; k < 6; k++) heura(x + (rnd() - 0.5) * 30, y - 18 - k * (ALT_COL / 7) - rnd() * 12, 0.15 + rnd() * 0.08, 0.85 + rnd() * 0.12, y + 2, rnd() * 360); });   // l'heura puja per les columnes
         });
         this.pergola = { x0: COLS[0], x1: COLS[COLS.length - 1], yb: YB, yf: YF, planta: PLANTA };
 
@@ -350,13 +361,16 @@ class ZonaJardi extends ZonaBase {
         // --- Gespa amb flors: només dins la pèrgola (cap flor fora). Un rectangle clar fa de gespa ben cuidada ---
         this.add.rectangle((COLS[0] + COLS[COLS.length - 1]) / 2, (YB + YF) / 2, COLS[COLS.length - 1] - COLS[0], YF - YB, 0xc4f08c, 0.14).setDepth(-1090);
         const lliure = (x, y) => Math.hypot(x - PX, (y - PY) * 1.6) > 70 && Math.hypot(x - LX, (y - LY) * 1.6) > 130 && Math.hypot(x - (LX - 92), (y - LY) * 1.6) > 70;
-        for (let n = 0, intents = 0; n < 46 && intents < 600; intents++) {
+        // Un jardí de debò: moltes flors, de colors diferents, escampades per tota la gespa i en mates més denses a les voreres i al peu de les columnes
+        const COLORS_FLORS = [0xffffff, 0xffd6e6, 0xfff2b0, 0xd6e8ff, 0xffb0c8, 0xffcf80, 0xd0b0ff, 0xff9a9a, 0xb0f0d0];
+        const flor = (x, y, esc) => { const f = this.posar('flors', x, y, { fonsY: -800, escala: esc }); f.setTint(COLORS_FLORS[Math.floor(rnd() * COLORS_FLORS.length)]); };
+        for (let n = 0, intents = 0; n < 130 && intents < 1500; intents++) {
             const x = COLS[0] + 20 + rnd() * (COLS[COLS.length - 1] - COLS[0] - 40), y = YB + 20 + rnd() * (YF - YB - 30);
             if (!lliure(x, y)) continue;
-            const f = this.posar('flors', x, y, { fonsY: -800, escala: 0.55 + rnd() * 0.5 });
-            f.setTint([0xffffff, 0xffd6e6, 0xfff2b0, 0xd6e8ff][Math.floor(rnd() * 4)]);
+            flor(x, y, 0.5 + rnd() * 0.5);
             n++;
         }
+        COLS.forEach(cx => [YB, YF].forEach(cy => { for (let k = 0; k < 5; k++) { const x = cx + (rnd() - 0.5) * 90, y = cy + 6 + rnd() * 26; if (lliure(x, y)) flor(x, y, 0.45 + rnd() * 0.4); } }));       // mates al peu de les columnes
 
         // L'Isílder, davant l'entrada de la pèrgola (si la llosa ja és oberta, es queda al costat del forat)
         this.isidre = this.npc('isidre', 664, 915, DIALEGS.isidre);
