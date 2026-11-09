@@ -489,8 +489,8 @@ class ZonaCelles extends ZonaBase {
         // Nostra Senyora (oest): la Carry, vídua del campaner, que busca el seu gos Pallofa (el trobaràs a Sant Antoni)
         this.npc('carry', 360, 690, DIALEGS.carry);
 
-        // La Rosansa i el seu carro de verdures: passa per aquí un sol cop, quan l'Isílder te n'ha parlat, i se'n va un cop t'ha donat la llavor
-        if (Estat.flag('isidreSansa') && !Estat.flag('llavorSansa')) this.posarSansa();
+        // La Rosansa i el seu carro de verdures: hi és des del principi fins que et dona la llavor i se'n va
+        if (!Estat.flag('llavorSansa')) this.posarSansa();
 
         this.cartell(958, 830, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler\n↓ Les Runes\n→ Sant Benet' }] }));       // vora l'encreuament (a la cantonada sud-oest)
 
@@ -560,29 +560,28 @@ class ZonaCelles extends ZonaBase {
     }
 
     posarSansa() {
-        // Els braços del carro miren a l'est. La Rosansa és una mica més a l'est, davant del carro: quan ha parlat s'hi acosta, es gira, agafa els braços i se l'enduu cap a l'est
+        // Els braços del carro miren a l'est. La Rosansa és una mica més a l'est, davant del carro: quan ha parlat s'hi acosta, agafa els braços, es gira cap a l'est i se l'enduu
         this.carroSansa = this.posar('carro_sansa', 1300, 880).setFlipX(true);
         this.colCarro = this.colisio(1240, 855, 160, 50);
         this.sansa = this.posar('sansa', 1550, 892);
         this.colSansa = this.colisio(1550, 883, 40, 18);
-        this.ombraSansa = this.add.image(1550, 892, 'ombra').setScale(0.34).setDepth(-500);
+        this.ombraSansa = this.add.image(1550, 892, 'ombra').setScale(0.42).setDepth(-500);
         const punt = this.interactiu(1550, 882, RADI_NPC, DIALEGS.sansa, { altura: this.sansa.displayHeight + 6 });
         punt.enTancar = () => this.marxaSansa(punt);
     }
 
-    // Se'n va: s'apropa al carro, es gira cap a ell, agafa els braços, es gira cap a l'est i se l'enduu, caminant, fins que s'esvaeixen pel camí
+    // Se'n va: s'apropa al carro mirant a l'oest, s'ajup a agafar els braços, es gira cap a l'est (la direcció del camí) i tibant se l'enduu
     marxaSansa(punt) {
         punt.actiu = () => false;
         this.obstacles.remove(this.colCarro, true, true);
         this.obstacles.remove(this.colSansa, true, true);
         const s = this.sansa, c = this.carroSansa, o = this.ombraSansa, y0 = s.y;
-        const pas = (dur, n) => this.tweens.add({ targets: s, y: y0 - 4, duration: dur, yoyo: true, repeat: n });        // el trontolleig de caminar
+        const pas = (dur, n) => this.tweens.add({ targets: s, y: y0 - 4, duration: dur, yoyo: true, repeat: n });
         const seq = [
-            f => { pas(180, 5); this.tweens.add({ targets: [s, o], x: 1468, duration: 1100, ease: 'Sine.easeInOut', onComplete: () => f() }); },             // s'acosta als braços del carro
-            f => { s.setFlipX(true); this.esperar(500, f); },                                                                                              // es gira cap al carro
-            f => { this.tweens.add({ targets: s, y: y0 + 5, duration: 260, yoyo: true, hold: 300, onComplete: () => f() }); },                              // agafa els braços
-            f => { s.setFlipX(false); this.esperar(400, f); },                                                                                             // es gira cap a l'est
-            f => {                                                                                                                                         // marxen
+            f => { pas(180, 5); s.setFlipX(false); this.tweens.add({ targets: [s, o], x: 1468, duration: 1100, ease: 'Sine.easeInOut', onComplete: () => f() }); }, // camina cap a l'oest cap als braços del carro (mirant a l'oest)
+            f => { this.tweens.add({ targets: s, y: y0 + 5, duration: 260, yoyo: true, hold: 300, onComplete: () => f() }); },                                        // s'ajupa per agafar els braços
+            f => { s.setFlipX(true); this.esperar(400, f); },                                                                                                            // es gira cap a l'est (cap on marxarà)
+            f => {                                                                                                                                                       // marxen cap a l'est, amb la Rosansa caminant endavant (mirant a l'est)
                 pas(220, 14);
                 this.tweens.add({ targets: [s, o, c], x: '+=520', duration: 3600, ease: 'Sine.easeIn' });
                 this.tweens.add({ targets: [s, o, c], alpha: 0, delay: 2200, duration: 1400, onComplete: () => { s.destroy(); c.destroy(); o.destroy(); f(); } });

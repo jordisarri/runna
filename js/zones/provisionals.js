@@ -427,6 +427,12 @@ class ZonaCreu extends ZonaBase {
             .setDepth(this.bassa.depth + 0.1);
         this.bassa.setVisible(false);
 
+        // Màscara ovalada que s'ajusta exactament a la silueta de la Bassadòria:
+        // impedeix que cap píxel ni vora quadrada pugui sortir fora de l'oval
+        const mascG = this.make.graphics({ x: 0, y: 0, add: false });
+        mascG.fillStyle(0xffffff, 1).fillEllipse(700, 560 - H_DISP * 0.46, W_DISP * 0.96, H_DISP * 0.88);
+        sprTrans.setMask(mascG.createGeometryMask());
+
         // Espurnes de llum mística sobre la làmina d'aigua ovalada de la bassa
         const espurnes = this.add.particles(700, 420, 'espurna', {
             emitZone: { type: 'random', source: new Phaser.Geom.Ellipse(0, 0, 360, 120) },
@@ -457,6 +463,12 @@ class ZonaCreu extends ZonaBase {
             ease: 'Linear',
             onUpdate: () => {
                 ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+                ctx.save();
+                // Retalla estrictament a l'oval de la bassadòria: elimina qualsevol caixa o vora quadrada
+                ctx.beginPath();
+                ctx.ellipse(CANVAS_W / 2, CANVAS_H * 0.54, W_DISP * 0.48, H_DISP * 0.44, 0, 0, Math.PI * 2);
+                ctx.clip();
+
                 const k = anim.prog;
                 // Amplitud d'ona sinusoïdal: arrenca a 0, arriba a ~26px al punt central i decau a 0
                 const amp = Math.sin(k * Math.PI) * 26;
@@ -486,17 +498,7 @@ class ZonaCreu extends ZonaBase {
                         ctx.drawImage(imgNeta, 0, syN, swNeta, sHN, dx, y, W_DISP, pas);
                     }
                 }
-
-                // Centelleig mística que s'ajusta exactament a la silueta de la bassadòria
-                // (source-atop: només il·lumina els píxels dibuixats, sense tocar mai el fons transparent)
-                if (amp > 8) {
-                    ctx.save();
-                    ctx.globalCompositeOperation = 'source-atop';
-                    ctx.globalAlpha = ((amp - 8) / 18) * 0.32;
-                    ctx.fillStyle = '#ffffff';
-                    ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-                    ctx.restore();
-                }
+                ctx.restore();
                 ctx.globalAlpha = 1.0;
                 this.textures.get(texKey).refresh();
             },

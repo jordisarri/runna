@@ -974,10 +974,10 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: 'Isílder', text: 'Bon dia, monjo! Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l\'Hostatgeria, aquí al costat, que s\'hi aguanta al darrere.' },
-                { qui: 'Isílder', text: 'Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s\'obre amb una flor de lluna, i la llavor, ves a saber... potser la gent de les cel·les en sap alguna cosa més, d\'aquesta llosa.' },
+                { qui: 'Isílder', text: "Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s'obre amb una flor de lluna. La Rosansa, la venedora de verdures, en deu tenir alguna llavor estranya." },
                 { qui: 'Isílder', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí, el Sardi el cuidava molt. Des que la boira se\'l va endur, el cuido jo perquè, quan torni, ho trobi tot tal com ho va deixar.' }
             ],
-            enAcabar: () => { E.posaFlag('isidreSansa'); E.posaObjectiu('Pregunta a la gent de les Cel·les: potser en saben alguna cosa més de la llosa del jardí.'); }
+            enAcabar: () => { E.posaFlag('isidreSansa'); E.posaObjectiu('Pregunta a la venedora de verdures per la llavor d\'una flor de lluna.'); }
         };
     },
     // La Rosansa passa per les cel·les un sol cop: et ven la Llavor de Lluna i se'n va
@@ -996,7 +996,7 @@ const DIALEGS = {
         pagines: [{ qui: 'Ineu', text: E.te('llavorLluna')
             ? "Una llosa de pedra amb una creu gravada. La Llavor de Lluna voldria terra aquí vora, però cal algú que conegui el jardí: l'Isílder."
             : E.flag('isidreSansa')
-                ? "Una llosa de pedra amb una creu gravada, ben encaixada a terra. No es mou ni un pam. Potser a les cel·les en saben alguna cosa."
+                ? "Una llosa de pedra amb una creu gravada, ben encaixada a terra. Cal la llavor d'una flor de lluna: la venedora de verdures en deu tenir."
                 : "Una llosa de pedra amb una creu gravada, ben encaixada a terra. No es mou ni un pam." }]
     }),
     prunera: E => {

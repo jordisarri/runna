@@ -1172,10 +1172,11 @@ Object.assign(ZonaBase.prototype, {
     animaPastor(e, nom) {
         if (!e || !e.spr || !e.spr.active) return false;
         const sp = e.spr, caminada = this.anims.exists('pastor_camina');
-        const POSA = { apunta: 'atac', bat: 'atac', crida: 'atac', atac: 'atac', cau: 'cau' };
+        const POSA = { apunta: 'atac', bat: 'atac', crida: 'atac', atac: 'atac', cau: 'cau', derrota: 'derrota' };
         if (e.animPastor === nom && (POSA[nom] || sp.anims.isPlaying || nom === 'idle')) return true;
         if (POSA[nom]) {
-            const k = 'pastor_' + POSA[nom];
+            let k = 'pastor_' + POSA[nom];
+            if (!this.textures.exists(k) && (nom === 'cau' || nom === 'derrota')) k = 'pastor_derrota';
             if (!this.textures.exists(k) || this.textures.get(k).frameTotal < 1) return false;
             e.animPastor = nom; sp.anims.stop(); sp.setTexture(k, 0);
             return true;

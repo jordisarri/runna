@@ -129,7 +129,9 @@ const PROGRES = {
           pista: E => "Al final del passadís de tortura, un mur d'esbarzers negres es deixa tallar per Runna." },
         { id: 'benediccioFraterna', marca: ['isidreSansa', 'llavorSansa', 'llosaOberta', 'lliurePains', 'refetorObert', 'esb_host_cap1', 'esb_host_cap2', 'mongesTrobades', 'premiPains', 'premiPhili', 'premiCharm', 'cofreMonges', 'obj:benedicio_fraterna'], fet: E => E.te('benedicio_fraterna'),
           pista: E => !E.flag('llosaOberta')
-              ? "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. La gent de les Cel·les sap el secret de la llosa del jardí."
+              ? (E.te('llavorLluna')
+                  ? "Ja tens la Llavor de Lluna. Porta-la a l'Isílder, al jardí de l'Hostatgeria, perquè l'ajudi a florir damunt la llosa."
+                  : "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. Si busques com obrir la llosa del jardí, parla amb la venedora de verdures.")
               : !E.flag('mongesTrobades')
                   ? "Sota la llosa, les sacerdotesses: desperta la Dolora, empeny l'àngel de pedra que barra la porta de la Pilària i talla els esbarzers de la Carmèlia."
                   : "Les sacerdotesses són lliures: la seva Empara Fraternal t'espera al cofre del vestíbul de l'Hostatgeria." },

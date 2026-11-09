@@ -142,6 +142,8 @@
 
 - [x] `pastor_boira`
 
+- [ ] `pastor_derrota`
+
 - [x] `pastor_vell`
 
 - [x] `pi`
@@ -452,6 +454,14 @@ Edit the attached image: keep the statue, the rocky lump, the pedestal, the pose
 
 
 
+
+### `pastor_derrota.png` → `assets/enemics/pastor_derrota.webp` (amplada 104) *(El Pastor de Boira **derrotat**, caigut de quatre potes a terra i profundament emprenyat. Quan el derrotem a la Cirosa, cau en aquesta posició de genolls i mans a terra mentre dura el discurs de derrota; quan acaba de parlar, s'aixeca i torna a l'sprite dempeus normal. Puja com a referència `art/enemics/pastor_boira.jpg` o `assets/enemics/pastor_boira.webp`. Fons blanc pur (#FFFFFF), proporcions chibi i mateix estil cel-shading que la resta del joc.)*
+
+```
+Edit the attached reference image of this character or draw him in this new pose. Keep EXACTLY the same character: the same elderly man with short white hair, round glasses with glowing violet eyes, the same dark purple-violet torn monk habit with rope belt and tassels, the same fluffy lilac wool scarf, the same chibi proportions, bold dark outline, and warm cartoon cel-shading. Centered, isolated on a pure white background (#FFFFFF), no ground, no ground shadow, no text.
+
+Change the pose completely: he has just been DEFEATED in combat and has collapsed to the ground on ALL FOURS (both hands flat on the floor in front, knees on the ground behind, body hunched low in a crouch facing 3/4 right). His head is raised, glaring upwards and forward towards the viewer with an intensely FURIOUS, frustrated, and spiteful grimace: thick eyebrows angled sharply down in a deep scowl, teeth clenched and bared, violet eyes burning with intense purple rage. His wooden shepherd's crook has fallen from his hands and lies dropped flat on the ground beside him, its small bronze bell resting still and the lilac lantern extinguished. Thin wisps of dark lilac fog and purple mist puff out from around his trembling clenched fists on the ground. Full body visible, wide and low silhouette resting on a single horizontal ground line.
+```
 
 ### Pastor de Boira: tres gràfics (`pastor_camina`, `pastor_atac`, `pastor_cau`) *(El boss de la Cirosa (el Germà Aldreu fet Pastor de Boira). Ara es veu un sol dibuix fix; amb aquests tres es mou de debò i **ja no es deforma** ni es gira: camina (i, més de pressa, carrega), alça la caiada (per apuntar, clavar-la i cridar el ramat), cau a terra derrotat, s'aixeca (torna a la pose de la caiada alçada) i se'n va caminant. **Puja sempre `art/enemics/pastor_boira.jpg` com a referència.** Fons blanc pur. Desa'ls com `art/enemics/pastor_<nom>.png` i passa'ls amb `python eines/full_pastor.py <nom>` (separa els fotogrames, treu el fons, els posa a la mateixa mida i amb els peus a la mateixa alçada, i en fa `assets/enemics/pastor_<nom>.webp`, de fotogrames de 300 × 300). Fins que no hi siguin, el joc fa servir el dibuix fix i no s'anima res.)*
 

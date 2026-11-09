@@ -4166,6 +4166,115 @@ function dibuixarPastorBoira(canvas, w) {
     [[20, 122, 14], [44, 126, 18], [68, 122, 13]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.ellipse(x, y, r, 4, 0, 0, Math.PI * 2); ctx.fill(); });
 }
 
+// Pastor de Boira derrotat: de quatre potes a terra, panteixant i profundament emprenyat
+function dibuixarPastorDerrota(canvas, w) {
+    const h = Math.round(w * 80 / 104);
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    const s = w / 104;
+    ctx.scale(s, s);
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.lineWidth = 2.6; ctx.strokeStyle = CONTORN;
+    const E = (x, y, rx, ry, rot, fons) => { ctx.fillStyle = fons; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, rot, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); };
+
+    // Ombra a terra
+    ombraTerra(ctx, 52, 73, 44, 6);
+
+    // Caiada caiguda a terra, al fons
+    ctx.strokeStyle = CONTORN; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(8, 71); ctx.lineTo(92, 73); ctx.stroke();
+    ctx.strokeStyle = '#7a5230'; ctx.lineWidth = 3.6; ctx.beginPath(); ctx.moveTo(8, 71); ctx.lineTo(92, 73); ctx.stroke();
+    // Ganxo de la caiada
+    ctx.strokeStyle = CONTORN; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(14, 66, 8, 0.4, Math.PI * 1.3, true); ctx.stroke();
+    ctx.strokeStyle = '#7a5230'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(14, 66, 8, 0.4, Math.PI * 1.3, true); ctx.stroke();
+    // Esquella i fanal caigut (apagat)
+    ctx.strokeStyle = CONTORN; ctx.lineWidth = 2;
+    ctx.fillStyle = '#b8782a'; ctx.beginPath(); ctx.moveTo(22, 69); ctx.lineTo(28, 69); ctx.lineTo(29, 75); ctx.lineTo(21, 75); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#4a3055'; ctx.beginPath(); ctx.arc(10, 68, 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+    // Genolls i cames a terra al darrere (esquerra)
+    E(22, 68, 10, 6, 0.1, '#241a34');
+    E(34, 69, 9, 5, -0.1, '#2a203c');
+
+    // Túnica arrugada i gepa del cos inclinat de quatre potes
+    const hab = ctx.createLinearGradient(20, 36, 70, 72);
+    hab.addColorStop(0, '#3a2c52'); hab.addColorStop(1, '#1e1530');
+    ctx.fillStyle = hab; ctx.beginPath();
+    ctx.moveTo(18, 66);
+    ctx.quadraticCurveTo(24, 38, 44, 36);       // esquena arquejada
+    ctx.quadraticCurveTo(62, 36, 68, 44);       // espatlla
+    ctx.lineTo(66, 62);
+    ctx.quadraticCurveTo(46, 66, 26, 70);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+
+    // Plecs foscos a la roba
+    ctx.strokeStyle = 'rgba(10,6,22,0.7)'; ctx.lineWidth = 1.8;
+    [[30, 48, 32, 68], [42, 42, 46, 66], [54, 44, 58, 62]].forEach(([x0, y0, x1, y1]) => {
+        ctx.beginPath(); ctx.moveTo(x0, y0); ctx.quadraticCurveTo((x0 + x1) / 2 + 3, (y0 + y1) / 2, x1, y1); ctx.stroke();
+    });
+
+    // Cordó de monjo caigut a terra
+    ctx.strokeStyle = '#b8a070'; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(40, 56); ctx.quadraticCurveTo(46, 66, 52, 71); ctx.stroke();
+    ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.6;
+
+    // Braç esquerre recolzat a terra
+    E(54, 54, 6.5, 12, 0.2, '#32254a');
+    // Mà esquerra plana / puny a terra
+    ctx.fillStyle = '#d8b090'; ctx.beginPath(); ctx.roundRect(50, 67, 10, 6, 3); ctx.fill(); ctx.stroke();
+
+    // Braç dret recolzat a terra (més endavant)
+    E(70, 55, 6.5, 12, -0.25, '#32254a');
+    // Mà dreta recolzada amb ràbia
+    ctx.fillStyle = '#d8b090'; ctx.beginPath(); ctx.roundRect(68, 68, 11, 6, 3); ctx.fill(); ctx.stroke();
+
+    // Caputxa caiguda darrere el coll
+    ctx.fillStyle = '#221832'; ctx.beginPath(); ctx.ellipse(54, 38, 12, 8, -0.3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+    // Bufanda de llana lila rebregada
+    E(60, 40, 11, 6, 0.2, '#c8b4ec');
+    E(52, 42, 7, 5, -0.1, '#e0d0f8');
+    E(66, 42, 6, 5, 0.3, '#c8b4ec');
+
+    // Cap alçat mirant endavant/amunt amb ràbia
+    E(68, 25, 13, 14, 0.05, '#e0b896');
+
+    // Cabell blanc/gris despentinat
+    ctx.fillStyle = '#d8d8dc'; ctx.beginPath();
+    ctx.moveTo(56, 22); ctx.quadraticCurveTo(58, 10, 68, 10); ctx.quadraticCurveTo(80, 11, 81, 23);
+    ctx.quadraticCurveTo(76, 17, 68, 17); ctx.quadraticCurveTo(60, 17, 56, 22);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+
+    // Ulleres rodones tortes
+    ctx.strokeStyle = '#2a1608'; ctx.lineWidth = 1.6;
+    ctx.strokeCircle(63.5, 24.5, 4); ctx.strokeCircle(73.5, 25, 4);
+    ctx.beginPath(); ctx.moveTo(67.5, 24.5); ctx.lineTo(69.5, 24.8); ctx.stroke();
+
+    // Ulls lila brillants d'emprenyament (estrets i furiosos)
+    [-1, 1].forEach(sd => {
+        const ox = 68.5 + sd * 5;
+        ctx.save(); ctx.shadowColor = '#d060ff'; ctx.shadowBlur = 6;
+        ctx.fillStyle = '#e8a0ff'; ctx.beginPath(); ctx.ellipse(ox, 24.5, 2.6, 1.8, sd * 0.2, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+        ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(ox, 24.3, 0.8, 0, Math.PI * 2); ctx.fill();
+    });
+
+    // Celles molt arrufades (emprenyat!)
+    ctx.strokeStyle = '#2a1608'; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(59, 20.5); ctx.lineTo(66, 23); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(78, 21); ctx.lineTo(71, 23.2); ctx.stroke();
+
+    // Boca: ganyota amb dents serrades de ràbia
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.roundRect(64, 30, 9, 4.5, 2); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = '#6a2a2a'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(64.5, 32.2); ctx.lineTo(72.5, 32.2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(67, 30.5); ctx.lineTo(67, 34); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(70, 30.5); ctx.lineTo(70, 34); ctx.stroke();
+
+    // Bafarades de boira/vapor que bufa per la boca i de terra
+    ctx.fillStyle = 'rgba(180,120,255,0.4)';
+    [[76, 32, 5, 2.5], [83, 33, 4, 2], [50, 72, 8, 3], [70, 73, 9, 3.5], [26, 73, 11, 3.5]].forEach(([bx, by, rx, ry]) => {
+        ctx.beginPath(); ctx.ellipse(bx, by, rx, ry, 0, 0, Math.PI * 2); ctx.fill();
+    });
+}
+
 // Pergamí partit pel mig, amb el mateix estil detallat de la Sala de les Gírgoles:
 // vora dreta estripada/esquinçada, paper envellit, taques, plecs, cal·ligrafia antiga i caplletra
 function dibuixarPergamiPartit(c, w) {

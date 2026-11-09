@@ -18,7 +18,7 @@ Object.assign(DIALEGS, {
         }
         return {
             pagines: [
-                { qui: 'Ineu', text: "Té el cap girat del tot. Al costat hi ha un volant de ferro amb engranatges, però li falta la maneta... En Georgi, a la Caseta, sempre porta eines." }
+                { qui: 'Ineu', text: "L'estàtua té el cap completament girat d'esquena, mirant la paret. A la base del pedestal hi ha un volant de ferro amb engranatges, però li falta la maneta per poder-lo fer girar." }
             ],
             enAcabar: () => E.posaFlag('raimVolantVist')
         };
@@ -26,20 +26,21 @@ Object.assign(DIALEGS, {
 
     raimDesperta: {
         pagines: [
-            { qui: 'Home del Raïm', text: "NINGÚ... NO... BAIXA... A LA... PORTA." },
-            { qui: 'Ineu', text: "Un guardià! És ell, el que vigila la cripta. Haig d'aturar-lo!" }
+            { qui: 'Home del Raïm', text: "Cinquanta anys de pedra... Qui gosa despertar el guardià del silenci?" },
+            { qui: 'Ineu', text: "S'ha mogut! La pedra ha cobrat vida!" },
+            { qui: 'Home del Raïm', text: "Mentre jo alci aquesta maça, cap mortal posarà els peus a la cripta!" }
         ]
     },
 
     raimSenseArma: {
         pagines: [
-            { qui: 'Ineu', text: "Si això desperta alguna cosa, no tinc res amb què defensar-me. Millor tornar amb el bastó." }
+            { qui: 'Ineu', text: "Si això desperta el guardià de pedra, no podré resistir la seva maça amb les mans nues. Caldrà tornar amb una arma." }
         ]
     },
 
     raimDerrotat: {
         pagines: [
-            { qui: 'Home del Raïm', text: "Ja... us... podeu... ... endur-les." },
+            { qui: 'Home del Raïm', text: "El pes dels segles... s'esmicola... Baixeu, doncs... i afronteu el que reposa a la foscor." },
         ]
     },
 
