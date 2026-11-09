@@ -236,10 +236,20 @@ class EscenaUI extends Phaser.Scene {
 
         // Interacció amb els diàlegs: tap per avançar, gest de pessigar (dos dits) per canviar mida, i arrossegar/roda per scroll discret
         let pIniciDialeg = null, d0PinchDialeg = 0, scrollIniciDialeg = 0, haMogutDialeg = false;
+        let tempsUltimPinch = 0;
 
         this.input.on('pointerdown', (p, objectes) => {
             if (objectes.length) return;
             if (this.dialeg && !this.menuObert) {
+                const p1 = this.input.pointer1, p2 = this.input.pointer2;
+                const esMultitouch = (p1 && p1.isDown && p !== p1) || (p2 && p2.isDown && p !== p2) || (this.input.totalActivePointers > 1);
+                if (esMultitouch || (Date.now() - tempsUltimPinch < 600)) {
+                    haMogutDialeg = true;
+                    tempsUltimPinch = Date.now();
+                    pIniciDialeg = null;
+                    d0PinchDialeg = 0;
+                    return;
+                }
                 pIniciDialeg = { x: p.x, y: p.y };
                 scrollIniciDialeg = this.scrollDialeg || 0;
                 haMogutDialeg = false;
@@ -251,18 +261,25 @@ class EscenaUI extends Phaser.Scene {
             if (!this.dialeg || this.menuObert) return;
             const p1 = this.input.pointer1, p2 = this.input.pointer2;
             if (p1 && p2 && p1.isDown && p2.isDown) {
+                haMogutDialeg = true;
+                tempsUltimPinch = Date.now();
+                pIniciDialeg = null;
                 const d = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-                if (!d0PinchDialeg) d0PinchDialeg = d;
-                else if (Math.abs(d / d0PinchDialeg - 1) > 0.05) {
+                if (!d0PinchDialeg) {
+                    d0PinchDialeg = d;
+                } else if (Math.abs(d / d0PinchDialeg - 1) > 0.015) {
                     const r = d / d0PinchDialeg;
                     d0PinchDialeg = d;
-                    pIniciDialeg = null;
-                    haMogutDialeg = true;
                     this.canviarEscalaDialeg(this.escalaDialeg * r);
                 }
                 return;
             }
             d0PinchDialeg = 0;
+            if (Date.now() - tempsUltimPinch < 600) {
+                haMogutDialeg = true;
+                pIniciDialeg = null;
+                return;
+            }
             if (pIniciDialeg && p.isDown && this.maxScrollDialeg > 0) {
                 const dy = p.y - pIniciDialeg.y;
                 const dx = p.x - pIniciDialeg.x;
@@ -276,6 +293,18 @@ class EscenaUI extends Phaser.Scene {
 
         this.input.on('pointerup', p => {
             if (!this.dialeg || this.menuObert) { pIniciDialeg = null; return; }
+            const p1 = this.input.pointer1, p2 = this.input.pointer2;
+            const quedaAlcunPunter = (p1 && p1.isDown && p1 !== p) || (p2 && p2.isDown && p2 !== p) || (this.input.totalActivePointers > 1);
+            const eraPinchRecent = (Date.now() - tempsUltimPinch < 600);
+
+            if (quedaAlcunPunter || eraPinchRecent) {
+                haMogutDialeg = true;
+                tempsUltimPinch = Date.now();
+                pIniciDialeg = null;
+                d0PinchDialeg = 0;
+                return;
+            }
+
             const vaMoure = haMogutDialeg;
             pIniciDialeg = null;
             haMogutDialeg = false;
@@ -285,9 +314,16 @@ class EscenaUI extends Phaser.Scene {
             }
         });
 
+        this.input.on('pointerupoutside', () => {
+            pIniciDialeg = null;
+            d0PinchDialeg = 0;
+        });
+
         this.input.on('wheel', (p, o, dx, dy, dz, ev) => {
             if (!this.dialeg || this.menuObert) return;
             if ((ev && ev.ctrlKey) || (p.event && p.event.ctrlKey)) {
+                tempsUltimPinch = Date.now();
+                haMogutDialeg = true;
                 this.canviarEscalaDialeg(this.escalaDialeg * (dy > 0 ? 0.92 : 1.09));
             } else if (this.maxScrollDialeg > 0) {
                 this.scrollDialeg = Math.min(this.maxScrollDialeg, Math.max(0, (this.scrollDialeg || 0) + dy));
@@ -680,7 +716,7 @@ class EscenaUI extends Phaser.Scene {
         })();
         this.scrollDialeg = 0;
         this.maxScrollDialeg = 0;
-        if (!this.input.pointer2) this.input.addPointer(1);
+        if (!this.input.pointer2) this.input.addPointer(2);
 
         this.ombraCaixaDialeg = this.add.rectangle(4, 8, 704, 360, 0x000000, 0.35);
         this.fonsCaixaDialeg = marcPergami(this, 0, 0, 704, 360);
