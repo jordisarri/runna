@@ -495,7 +495,7 @@ class ZonaCreu extends ZonaBase {
 
         // Màscara ovalada ajustada exactament a la vora de pedra de la bassa
         const mascG = this.make.graphics({ x: 0, y: 0, add: false });
-        mascG.fillStyle(0xffffff, 1).beginPath().ellipse(cx, cy, 244, 82, 0, 0, Math.PI * 2).fillPath();
+        mascG.fillStyle(0xffffff, 1).fillEllipse(cx, cy, 488, 164);
         this.contenidorAigua.setMask(mascG.createGeometryMask());
         this.onaMagica = 0;
     }
