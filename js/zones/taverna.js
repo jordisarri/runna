@@ -189,7 +189,9 @@ class ZonaSotaTaverna extends ZonaBase {
         m.fillStyle(0x1a1620, 1).fillRect(30, 0, 70, H).fillRect(700, 0, 70, H);
         this.colisio(50, H / 2, 100, H);
         this.colisio(A - 50, H / 2, 100, H);
-        this.colisio(A / 2, 90, A, 180);
+        this.colisio(155, 90, 310, 180);                                                 // paret nord esquerra
+        this.colisio(645, 90, 310, 180);                                                 // paret nord dreta
+        this.colisio(400, 70, 180, 140);                                                 // dintell sobre la porta de ferro
         this.colisio(220, H - 10, 280, 20);
         this.colisio(580, H - 10, 280, 20);
 
@@ -243,7 +245,7 @@ class ZonaSotaTaverna extends ZonaBase {
         f.fillStyle(0x8a7a40, 1).fillRect(150, 70, 18, 26).fillStyle(0x0a0808, 1).fillRect(156, 78, 6, 12);
         if (ja) f.scaleX = 0.1;
         else this.tweens.add({ targets: f, scaleX: 0.1, duration: 1100, ease: 'Sine.easeInOut' });
-        this.sortida(340, 170, 120, 30, 'ZonaGirgoles', 'porta');
+        this.sortida(346, 146, 108, 20, 'ZonaGirgoles', 'porta');
     }
 }
 
@@ -298,7 +300,7 @@ class ZonaGirgolesFora extends ZonaBase {
         this.colisio((PX + 80 + A) / 2, BASE / 2, A - PX - 80, BASE);
         this.colisio(PX, 205, 160, 20);                                      // res no passa per darrere de l'obertura
         this.cartell(PX - 130, 345, DIALEGS.cartellGirgoles);
-        if (oberta) this.sortida(PX - 80, 230, 160, 70, 'ZonaSotaTaverna', 'exterior');
+        if (oberta) this.sortida(PX - 72, 230, 144, 52, 'ZonaSotaTaverna', 'exterior');
         else {
             this.colPorta = this.colisio(PX, 200, 160, 200);
             this.boiraPorta = this.boira(PX, BASE - 8, 140, 14, 0.6);
@@ -354,7 +356,7 @@ class ZonaGirgolesFora extends ZonaBase {
         });
         if (this.colPorta) { this.obstacles.remove(this.colPorta, true, true); this.colPorta = null; }
         if (this.boiraPorta) { this.boiraPorta.stop(); this.time.delayedCall(1800, () => this.boiraPorta && this.boiraPorta.destroy()); }
-        this.sortida(x - 80, 230, 160, 70, 'ZonaSotaTaverna', 'exterior');
+        this.sortida(x - 72, 230, 144, 52, 'ZonaSotaTaverna', 'exterior');
         Estat.posaObjectiu("La porta de ferro oberta porta a la Sala de les Gírgoles.");
         Estat.desar();
     }

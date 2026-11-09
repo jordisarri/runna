@@ -39,9 +39,11 @@ function calcularAlt() {
 const ALT = calcularAlt();
 const refrescarEscalat = () => {
     ajustarContenidorJoc();
-    if (typeof game !== 'undefined' && game && game.scale) {
-        game.scale.getParentBounds();
-        game.scale.refresh();
+    if (typeof game !== 'undefined' && game && game.isBooted && game.scale && game.scale.canvas) {
+        try {
+            game.scale.getParentBounds();
+            game.scale.refresh();
+        } catch (e) { /* silencia si Phaser encara s'està inicialitzant */ }
     }
 };
 if (typeof window !== 'undefined' && window.addEventListener) {

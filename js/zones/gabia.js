@@ -285,7 +285,7 @@ class ZonaGirgoles extends ZonaBase {
 
         this.foscor = crearFoscor(this, W, H);
         // La sortida del nord (i les seves llumetes) només s'activa quan el puzle de les gírgoles ja és resolt
-        if (resolt) this.sortida(650, 130, 100, 30, 'ZonaTortura', 'girgoles');
+        if (resolt) this.sortida(656, 130, 88, 24, 'ZonaTortura', 'girgoles');
         this.sortida(660, H - 22, 80, 14, 'ZonaSotaTaverna', 'girgoles');
     }
 
@@ -312,7 +312,7 @@ class ZonaGirgoles extends ZonaBase {
         this.cameras.main.shake(300, 0.003);
         if (this.colCortina) this.obstacles.remove(this.colCortina, true, true);
         this.tweens.add({ targets: this.cortina, alpha: 0, duration: 1600 });
-        this.sortida(650, 130, 100, 30, 'ZonaTortura', 'girgoles');
+        this.sortida(656, 130, 88, 24, 'ZonaTortura', 'girgoles');
         this.ineuDiu('Les gírgoles canten: el micel·li es desfà!');
         Estat.posaObjectiu('Segueix pel túnel del nord de la Sala de les Gírgoles.');
         Estat.desar();
@@ -370,7 +370,9 @@ class ZonaTortura extends ZonaBase {
         });
         this.colisio(100, H / 2, 200, H);
         this.colisio(800, H / 2, 200, H);
-        this.colisio(450, 60, 500, 120);
+        this.colisio(295, 60, 190, 120);                                              // paret nord esquerra
+        this.colisio(605, 60, 190, 120);                                              // paret nord dreta
+        this.colisio(450, 45, 120, 90);                                               // dintell sobre l'obertura del nord
         this.colisio(270, H - 10, 140, 20);
         this.colisio(630, H - 10, 140, 20);
 
@@ -434,7 +436,7 @@ class ZonaTortura extends ZonaBase {
         // Gàbies vives: pengen del sostre i, quan passes, deixen anar un ocell de boira
         [[560, 1430], [340, 1300], [580, 800], [330, 660]].forEach(([x, y]) => this.enemic('gabiaViva', x, y));
 
-        this.sortida(390, 120, 120, 30, 'ZonaBoira', 'tortura');
+        this.sortida(398, 94, 104, 16, 'ZonaBoira', 'tortura');
         this.sortida(410, H - 22, 80, 14, 'ZonaGirgoles', 'tortura');
     }
 
@@ -495,7 +497,9 @@ class ZonaBoira extends ZonaBase {
         m.lineStyle(14, 0x2c3430, 1).beginPath(); m.arc(450, 1100 + 140, 250, Math.PI * 1.18, Math.PI * 1.82); m.strokePath();
         this.colisio(100, H / 2, 200, H);
         this.colisio(800, H / 2, 200, H);
-        this.colisio(450, 60, 500, 120);
+        this.colisio(295, 60, 190, 120);                                              // paret nord esquerra
+        this.colisio(605, 60, 190, 120);                                              // paret nord dreta
+        this.colisio(450, 45, 120, 90);                                               // dintell sobre l'obertura del nord
         this.colisio(270, H - 10, 140, 20);
         this.colisio(630, H - 10, 140, 20);
         // Torxes a l'entrada, que la boira apaga més amunt
@@ -551,7 +555,7 @@ class ZonaBoira extends ZonaBase {
         }
         this.boira(450, 180, 260, 60, 0.8);                    // la boira lila de la Sala de la Gàbia, que baixa per dalt
 
-        this.sortida(390, 120, 120, 30, 'ZonaGabia', 'tortura');
+        this.sortida(398, 94, 104, 16, 'ZonaGabia', 'tortura');
         this.sortida(410, H - 22, 80, 14, 'ZonaTortura', 'gabia');
     }
 

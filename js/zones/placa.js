@@ -34,11 +34,14 @@ class ZonaPlaca extends ZonaBase {
         vora.lineStyle(4, 0x8a7658, 1).strokeRect(360, 420, 1240, 590);
 
         // --- Santuari i Runes (nord) ---
-        // Façana gran (1100 d'ample) que acaba a la vora est del món: la porta, a x=661, fa ~165 d'alt (l'Ineu ~125)
+        // Façana gran (1100 d'ample) que acaba a la vora est del món: la porta, a x=683, fa ~165 d'alt (l'Ineu ~125)
         // i el cap de l'edifici surt per dalt de la pantalla.
-        this.posar('esglesia', 1050, 463, { fonsY: 452, col: { w: 1100, h: 150, dy: -8 } });
+        this.posar('esglesia', 1050, 463, { fonsY: 452 });
+        this.colisio(569, 380, 138, 150);                                                                                       // paret esquerra de la façana
+        this.colisio(1164, 380, 872, 150);                                                                                      // paret dreta de la façana
+        this.colisio(683, 345, 90, 80);                                                                                         // dintell sobre la porta
         this.blocDarrere(1050, 1100, 300);
-        this.sortida(612, 440, 98, 22, 'ZonaEsglesia', 'porta');
+        this.sortida(644, 420, 78, 16, 'ZonaEsglesia', 'porta');
         this.portaAnimada({ x: 683, top: 291, bottom: 450, ample: 90, fons: 452, color: 0x2c524a, panell: 0x3a6a5e, vora: 0x0f1e1a, finestra: true });   // la porta verda del Santuari
         this.posar('xiprer', 1285, 455, { col: { w: 24, h: 12 } });
         this.posar('xiprer', 1305, 490, { col: { w: 24, h: 12 } });

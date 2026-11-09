@@ -551,7 +551,8 @@ class ZonaTaverna extends ZonaBase {
         if (!Estat.flag('tavernaOberta') || this.portaOberta) return;
         this.portaOberta = true;
         this.obstacles.remove(this.colPorta, true, true);
-        this.sortida(787, 690, 76, 56, 'ZonaTavernaInt', 'porta');
+        this.colisio(825, 660, 90, 20);      // dintell
+        this.sortida(793, 680, 64, 40, 'ZonaTavernaInt', 'porta');
     }
 }
 

@@ -975,7 +975,10 @@ class ZonaBase extends Phaser.Scene {
         this.colisio(x - porta / 2 - costat / 2, y - alt / 2, costat, alt);
         this.colisio(x + porta / 2 + costat / 2, y - alt / 2, costat, alt);
         this.colisio(x, y - alt - 10, porta, 20);   // dintell
-        if (desti) this.sortida(x - porta / 2, y - alt + 10, porta, alt - 4, desti, entrada);
+        if (desti) {
+            const hSortida = Math.min(20, Math.max(12, alt * 0.25));
+            this.sortida(x - porta / 2 + 6, y - alt + 8, porta - 12, hSortida, desti, entrada);
+        }
         this.blocDarrere(x, ample, y - alt - 20, Math.max(0, y - img.displayHeight));
         return img;
     }
@@ -1023,7 +1026,7 @@ class ZonaBase extends Phaser.Scene {
     // Les parets d'un interior que barren la porta es parteixen perquè hi quedi un pas lliure (la porta s'ha de poder traspassar)
     obrirPortes() {
         (this.portesInt || []).forEach(p => {
-            const x0 = p.x - 8, x1 = p.x + p.w + 8;
+            const x0 = p.x - 4, x1 = p.x + p.w + 4;
             this.obstacles.getChildren().slice().forEach(o => {
                 const b = o.body;
                 if (!b || b.x >= x1 || b.x + b.width <= x0 || b.y >= p.y + 60 || b.y + b.height <= p.y - 40) return;
@@ -1033,6 +1036,10 @@ class ZonaBase extends Phaser.Scene {
                 if (x < x0) this.colisio((x + x0) / 2, y + h / 2, x0 - x, h);
                 if (x + w > x1) this.colisio((x1 + x + w) / 2, y + h / 2, x + w - x1, h);
             });
+            // Brancals als dos costats de la sortida sud perquè només s'hi pugui entrar pel buit de la porta
+            const hJ = PROFUNDITAT_PORTA + 60;
+            this.colisio(x0 - 15, p.y + hJ / 2, 30, hJ);
+            this.colisio(x1 + 15, p.y + hJ / 2, 30, hJ);
         });
     }
 
@@ -1241,6 +1248,7 @@ class ZonaBase extends Phaser.Scene {
         if (vista8) this.vista8 = vista8;
         else if (!this.vista8 || !this.vista8Manual) this.vista8 = per4[dir];
         const vista = this.vista8;
+        if (!this.ineu || !this.ineu.anims) return;
         if (this.atacantFins && this.time.now < this.atacantFins) return;      // l'animació de l'atac no es talla
         if (caminant) {
             this.ineu.setFlipX(false);
@@ -1594,7 +1602,7 @@ class ZonaBase extends Phaser.Scene {
                       Phaser.Input.Keyboard.JustDown(this.tecles.E) ||
                       ui.consumirAccioTactil();
 
-        if (!this.caminantAuto && (ui.dialeg || ui.bloquejat) && this.ineu.anims.isPlaying) this.posarDireccio(this.direccio, false);
+        if (!this.caminantAuto && (ui.dialeg || ui.bloquejat) && this.ineu && this.ineu.anims && this.ineu.anims.isPlaying) this.posarDireccio(this.direccio, false);
         this.camaraDialeg(!!ui.dialeg);
         if (ui.dialeg) {
             this.ineu.body.setVelocity(0);
@@ -1918,14 +1926,18 @@ class ZonaBase extends Phaser.Scene {
         const b = this.ineu.body;
         const peus = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
         for (const s of this.sortides) {
-            // Per una porta s'hi entra pel buit: el centre del cos ha d'estar dins l'amplada (o l'alçada, a les vores laterals) de la sortida, no només tocar-la amb la vora del cos
-            // (el cos fa 72 d'ample: si no, s'hi entrava tocant el marc de la porta per un costat)
-            const ample = s.r.width >= s.r.height, c = b.center;
-            const centrat = ample ? c.x >= s.r.x + 6 && c.x <= s.r.right - 6 : c.y >= s.r.y + 6 && c.y <= s.r.bottom - 6;
+            // Per una porta només s'hi entra pel buit: el centre del cos ha d'estar dins l'amplada de la porta (o alçada en sortides laterals)
+            const dir = this.dirSortida(s.r);
+            const horitz = dir === 'amunt' || dir === 'avall';
+            const c = b.center;
+            const mx = Math.min(22, Math.max(8, s.r.width * 0.22));
+            const my = Math.min(22, Math.max(8, s.r.height * 0.22));
+            const centrat = horitz ? (c.x >= s.r.x + mx && c.x <= s.r.right - mx)
+                                   : (c.y >= s.r.y + my && c.y <= s.r.bottom - my);
             if (s.peu ? s.r.contains(b.center.x, b.bottom) : (centrat && Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r))) {
                 if (s.pendentLlum) continue;                             // encara tancada: no és una sortida (sense llum; es camina contra el marge)
                 if (s.baixar !== undefined) this.baixarEscala(s);
-                else this.canviarZona(s.desti, s.entrada, this.dirSortida(s.r));
+                else this.canviarZona(s.desti, s.entrada, dir);
                 return;
             }
         }

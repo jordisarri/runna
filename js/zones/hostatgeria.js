@@ -224,7 +224,8 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         PX.forEach((x, i) => {
             this.portaAnimada({ x, top: 22, bottom: 124, ample: 84, arc: true, fons: -987, color: fustes[i][0], panell: fustes[i][1], vora: 0x1a0e06, ferro: true, bloq: blocs[i] });
             this.marcPorta(x);
-            this.sortida(x - 40, 120, 80, 40, ['ZonaCambraPains', 'ZonaCambraPhili', 'ZonaCambraCharm'][i], 'porta');
+            this.colisio(x, 50, 90, 100);                                        // dintell sobre cada porta
+            this.sortida(x - 34, 110, 68, 30, ['ZonaCambraPains', 'ZonaCambraPhili', 'ZonaCambraCharm'][i], 'porta');
         });
         this.decorarVestibul(A, H);
 

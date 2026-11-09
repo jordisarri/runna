@@ -58,18 +58,19 @@ class ZonaEsglesia extends ZonaBase {
         }), { altura: 150, actiu: () => !this.portaRellotge });
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daimiel, que dirigeix el cor
-        this.orgue = this.posar('orgue', 975, ESG.retY + 250, { col: { w: 110, h: 50 } });
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daimiel es posen amb la resta
+        if (!epileg) this.orgue = this.posar('orgue', 975, ESG.retY + 250, { col: { w: 110, h: 50 } });
         if (!epileg) this.npc('pianista', 975, ESG.retY + 320, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
         if (!epileg) this.npc('pare_daniel', 360, ESG.retY + 190, DIALEGS.pareDaniel, { flipX: false });
 
-        // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar
-        // (files ben separades: entre banc i banc es veu el terra i s'hi pot passar)
-        const bancs = [ESG.retY + 230, ESG.retY + 380, ESG.retY + 530];
-        bancs.forEach(y => {
-            this.posar('banc_esglesia', 470, y, { col: { w: 140, h: 16 } });
-            this.posar('banc_esglesia', 810, y, { col: { w: 140, h: 16 } });
-        });
+        // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar (a l'epíleg es retiren perquè tothom tingui lloc sense tapar-se)
+        if (!epileg) {
+            const bancs = [ESG.retY + 230, ESG.retY + 380, ESG.retY + 530];
+            bancs.forEach(y => {
+                this.posar('banc_esglesia', 470, y, { col: { w: 140, h: 16 } });
+                this.posar('banc_esglesia', 810, y, { col: { w: 140, h: 16 } });
+            });
+        }
 
         // Llum de les vidrieres
         this.add.rectangle(640, A / 2, 800, A, 0xffd38a, 0.05).setDepth(80000);
@@ -79,23 +80,26 @@ class ZonaEsglesia extends ZonaBase {
     }
 
     // ---------------- EPÍLEG: «Torna el cant» ----------------
-    // Tothom és al Santuari, dins del pla (la càmera hi veu de x≈340 a x≈940): els nens davant l'altar, la Pianista i el Pare Jordà
-    // a banda i banda, i el poble entre els bancs, deixant lliure el passadís del mig per on puja l'Ineu.
+    // Tothom és al Santuari, ben distribuït per la nau sense bancs ni orgue perquè ningú es tapi:
+    // els nens davant l'altar, la Pianista i el Pare Jordà a banda i banda, i el poble repartit en files
+    // deixant un passadís ample al mig per on puja l'Ineu, que es queda mirant de cara a la càmera.
     prepararEpileg() {
         this.epileg = true;
         const R = ESG.retY;
         [['nen_uri', 575, R + 168], ['nen_flam', 640, R + 180], ['nen_sardin', 705, R + 168],
-         ['pianista', 470, R + 205], ['pare_jordi', 810, R + 205],
-         ['marit_neus', 400, R + 300], ['neus', 465, R + 300], ['ciscu', 535, R + 300],
-         ['pare_daniel', 745, R + 300], ['monja_charm', 810, R + 300], ['monja_phili', 875, R + 300],
-         ['carry', 400, R + 450], ['pare_alcui', 465, R + 450], ['eva', 535, R + 450],
-         ['venerables', 815, R + 450], ['monja_pains', 885, R + 450],
-         ['frederic', 400, R + 600], ['josep', 465, R + 600], ['germa_francesc', 535, R + 600],
-         ['jaumeta', 745, R + 600], ['galf', 810, R + 600], ['isidre', 880, R + 600],
-         ['mandu', 430, R + 375]
+         ['pianista', 450, R + 205], ['pare_jordi', 830, R + 205],
+         ['marit_neus', 380, R + 290], ['neus', 450, R + 290], ['ciscu', 520, R + 290],
+         ['pare_daniel', 760, R + 290], ['monja_charm', 830, R + 290], ['monja_phili', 900, R + 290],
+         ['carry', 380, R + 410], ['pare_alcui', 450, R + 410], ['eva', 520, R + 410],
+         ['venerables', 770, R + 410], ['monja_pains', 850, R + 410],
+         ['mandu', 485, R + 350],
+         ['frederic', 380, R + 530], ['josep', 450, R + 530], ['germa_francesc', 520, R + 530],
+         ['jaumeta', 760, R + 530], ['galf', 830, R + 530], ['isidre', 900, R + 530]
         ].forEach(([k, x, y]) => { if (this.textures.exists(k) && !(this.npcs && this.npcs[k])) this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 }); });
         if (this.npcs && this.npcs.mandu && Estat.flag('manduNinaTrencada')) this.npcs.mandu.setTexture('mandu_trencada');            // la nina, encara sense cap
-        // Enquadra tot el Santuari (del retaule i els nens fins a l'últim banc i les parets laterals)
+        this.direccio = 'avall';
+        if (this.ineu) this.posarDireccio('avall', false);
+        // Enquadra tot el Santuari (del retaule i els nens fins a l'últim grup i les parets laterals)
         // per damunt del quadre de diàleg i el retrat, de manera que tothom es vegi sencer i ningú quedi tallat
         this.enquadrar(640, R + 340, 0.67, 0);
         this.cameras.main.fadeIn(1200, 0, 0, 0);
@@ -103,7 +107,11 @@ class ZonaEsglesia extends ZonaBase {
 
     actualitzar() {
         this.obrirPortaRellotge(true);
-        if (this.epileg && !this.epilegEngegat) { this.epilegEngegat = true; this.time.delayedCall(900, () => this.ferEpileg()); }
+        if (this.epileg && !this.epilegEngegat) {
+            this.epilegEngegat = true;
+            if (this.ineu) this.posarDireccio('avall', false);
+            this.time.delayedCall(900, () => this.ferEpileg());
+        }
     }
 
     // El Fram cus el cap de la nina de la Mandu: una brillantor daurada i la nina torna a estar sencera
@@ -124,7 +132,16 @@ class ZonaEsglesia extends ZonaBase {
         const riure = (llista, f) => { Sfx.riure(); llista.filter(hi).forEach(k => this.npcSalta(k, null, 2)); this.esperar(1500, f); };
         const accio = pas => ({ fer: (z, fet) => z.seq(pas(z), fet) });
         this.ui().obrirDialeg({ pagines: [
-            accio(z => [f => z.ineuVa(640, R + 330, f, 150), f => riure(nens, f)]),
+            accio(z => [
+                f => z.ineuVa(640, R + 330, () => {
+                    z.posarDireccio('avall', false);
+                    f();
+                }, 150),
+                f => {
+                    z.posarDireccio('avall', false);
+                    riure(nens, f);
+                }
+            ]),
             // La Meus corre a buscar l'Huri i el Fram
             accio(z => [f => z.npcVa('neus', 600, R + 225, f, 190), f => z.npcMira('neus', 575, f), f => z.bombolla('neus', '♥', f, 900),
                         f => { z.npcSalta('nen_uri', null, 2); z.npcSalta('nen_flam', f, 2); }]),
@@ -164,8 +181,12 @@ class ZonaEsglesia extends ZonaBase {
                     gent.forEach(k => z.npcFeina(k, d * 1000 - 400, 'notes'));
                     this.esperar(d * 1000 + 300, f);
                 },
-                f => { z.ineuFlauta(false); riure(tots, f); },
-                f => z.npcVa('pare_jordi', 720, R + 330, f, 120),
+                f => {
+                    z.ineuFlauta(false);
+                    z.posarDireccio('avall', false);
+                    riure(tots, f);
+                },
+                f => z.npcVa('pare_jordi', 740, R + 330, f, 120),
                 f => z.npcMira('pare_jordi', 'ineu', f)
             ]),
             // Només si l'Ineu va fer caminar el rellotge (missió lateral): el campanar torna a tocar les hores
@@ -175,10 +196,13 @@ class ZonaEsglesia extends ZonaBase {
                 ...(hi('carry') ? [{ qui: 'Carry', text: "El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill." }] : [])
             ] : []),
             { qui: 'Pare Jordà', text: 'Benvingut a casa, Ineu.' },
-            { fer: (z, fet) => z.seq([
-            f => riure(tots, f),
-            f => { this.cameras.main.fadeOut(1800, 0, 0, 0); this.esperar(1900, f); }
-        ], fet) }] }, () => {
+            { fer: (z, fet) => {
+                z.posarDireccio('avall', false);
+                z.seq([
+                    f => riure(tots, f),
+                    f => { this.cameras.main.fadeOut(1800, 0, 0, 0); this.esperar(1900, f); }
+                ], fet);
+            } }] }, () => {
             Estat.posaFlag('epilegFet');
             Estat.posaFlag('epilegPendent', false);
             Estat.dades.zona = 'ZonaEsglesia'; Estat.dades.entrada = 'porta'; Estat.dades.x = null; Estat.dades.y = null;
@@ -224,7 +248,7 @@ class ZonaEsglesia extends ZonaBase {
     obrirPortaRellotge(avis) {
         if (this.portaRellotge || !(Estat.flag('portaCampanarOberta') || Estat.flag('rellotgeReparat') || Estat.flag('visitada_ZonaTorre'))) return;   // (partides velles: ja hi havien pujat)
         this.portaRellotge = true;                // el batent de la porta (portaRetaule) ja no queda bloquejat: s'obre quan l'Ineu s'hi acosta
-        this.sortida(ESG.portaDx - 36, ESG.retY - 14, 72, 20, 'ZonaTorre', 'baix');
+        this.sortida(ESG.portaDx - 30, ESG.retY - 20, 60, 18, 'ZonaTorre', 'baix');
         if (avis) {
             Sfx.secret();
             this.ineuDiu('La porta de la dreta del retaule ja és oberta.');
@@ -276,7 +300,7 @@ class ZonaMonestir extends ZonaBase {
         this.colisio(1069, 267.5, 238, 535);
         this.colisio(704, 219, 108, 438);
         this.colisio(896, 219, 108, 438);
-        this.colisio(800, 212.5, 84, 425);
+        this.colisio(800, 208, 84, 416);
         // Baranes de pedra en pendent als dos costats de l'escalinata (de y=438 a y=588)
         for (let i = 0; i < 6; i++) {
             const cy = 450.5 + i * 25, t = (i + 0.5) / 6;
@@ -284,7 +308,7 @@ class ZonaMonestir extends ZonaBase {
             this.colisio(cx, cy, w, 25);
             this.colisio(1600 - cx, cy, w, 25);
         }
-        this.sortida(758, 428, 84, 28, 'ZonaMonestirRebedor', 'porta');
+        this.sortida(764, 416, 72, 14, 'ZonaMonestirRebedor', 'porta');
         this.portaAnimada({ x: 800, top: 344, bottom: 435, ample: 74, fons: 335, color: 0x6a4328, panell: 0x7a5233, vora: 0x2a1608, ferro: true });   // el portal romànic: els batents de fusta s'obren cap endins
         // Xiprers alts a l'esquerra del portal i una conífera a la dreta (al peu de la façana, y=535)
         [[440, 392, 1.7], [492, 398, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y + D, { escala: e, col: { w: 26, h: 12 } }));
@@ -422,7 +446,9 @@ class ZonaCasaGran extends ZonaBase {
         const facana = this.posar('casa_gran', 700, 727 + D, { fonsY: 560 + D });
         // Parets: tot el que és darrere el terra de les arcades (y<572) és mur; les piles i els sòcols laterals també.
         // Només es pot pujar per l'escalinata (x 355-1050) i entrar a les arcades pels buits entre piles.
-        this.blocDarrere(700, 1250, 572 + D);
+        this.blocDarrere(362, 575, 572 + D);                                                               // paret darrere l'arcada esquerra
+        this.blocDarrere(1037, 575, 572 + D);                                                              // paret darrere l'arcada dreta
+        this.blocDarrere(700, 100, 544 + D);                                                               // dintell sobre la reixa del porxo
         this.colisio(227, 650 + D, 305, 156);     // mur lateral esquerre recte, sense graons al hitbox
         this.colisio(1172, 650 + D, 305, 156);    // mur lateral dret recte
         this.colisio(585, 592 + D, 60, 40);         // pila entre l'arc esquerre i el del mig
@@ -431,7 +457,7 @@ class ZonaCasaGran extends ZonaBase {
         if (Estat.flag('reixaObertaDins') || Estat.flag('ocellaireVencut')) {
             // Un cop s'ha aixecat la barra per dins, la reixa queda oberta (els batents giren en acostar-s'hi) i es pot entrar a la Casa Gran
             this.portaReixaFora = this.portaAnimada({ x: 700, top: 400 + D, bottom: 573 + D, ample: 107, fons: 560 + D, arc: true, retall: facana });
-            this.sortida(650, 574 + D, 100, 30, 'ZonaCasaGranInt', 'porxo');
+            this.sortida(658, 548 + D, 84, 16, 'ZonaCasaGranInt', 'porxo');
         } else this.interactiu(700, 585 + D, RADI_OBJECTE, DIALEGS.portaReixa, { altura: 190 });
 
         // Cartell que indica la Taverna, a la vora de la sortida de l'esquerra

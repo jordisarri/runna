@@ -636,6 +636,7 @@ class ZonaPassadis extends ZonaCasaBase {
         this.colisio(700, 700, 200, 1400);
         this.colisio(270, 60, 140, 120);
         this.colisio(530, 60, 140, 120);
+        this.colisio(400, 40, 120, 80);                                       // dintell sobre la porta nord
         this.colisio(270, 1395, 140, 30);
         this.colisio(530, 1395, 140, 30);
 
@@ -664,7 +665,7 @@ class ZonaPassadis extends ZonaCasaBase {
 
         this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x000018, 0.12).setScrollFactor(0).setDepth(80000);
         this.sortida(340, 1386, 120, 14, 'ZonaPingpong', 'passadis');
-        this.sortida(340, 92, 120, 40, 'ZonaCasaTresor', 'porta');
+        this.sortida(348, 86, 104, 22, 'ZonaCasaTresor', 'porta');
     }
 
     actualitzar() {
@@ -762,7 +763,8 @@ class ZonaCasaTresor extends ZonaCasaBase {
         this.colBota = this.obstacles.getChildren()[this.obstacles.getChildren().length - 1];
         if (oberta) { this.llosaPorta.y = PT - H; }
         else this.colPorta = this.colisio(PX, PB - 6, PW + 10, 24);     // tancada, no es passa
-        this.sortida(716, 150, 88, 26, 'ZonaCasaGranInt', 'secreta');
+        this.colisio(760, 65, 90, 130);                                 // dintell sobre la llosa
+        this.sortida(722, 136, 76, 22, 'ZonaCasaGranInt', 'secreta');
 
         // Inspeccionar la porta tancada
         this.interactiu(PX, PB + 46, RADI_OBJECTE, E => ({ pagines: [{ qui: 'Ineu', text: E.flag('botaAlcada')

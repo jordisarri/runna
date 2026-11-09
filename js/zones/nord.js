@@ -36,7 +36,7 @@ class ZonaCellerFora extends ZonaBase {
         this.colisio((PORTA_X - PORTA_AMPLE / 2) / 2, BASE_Y - ALT_PARET / 2, PORTA_X - PORTA_AMPLE / 2, ALT_PARET);
         this.colisio((PORTA_X + PORTA_AMPLE / 2 + dreta) / 2, BASE_Y - ALT_PARET / 2, dreta - PORTA_X - PORTA_AMPLE / 2, ALT_PARET);
         this.colisio(PORTA_X, BASE_Y - 100, PORTA_AMPLE, 20);
-        this.sortida(PORTA_X - PORTA_AMPLE / 2, BASE_Y - 80, PORTA_AMPLE, 76, 'ZonaPingpong', 'porta');
+        this.sortida(PORTA_X - PORTA_AMPLE / 2 + 6, BASE_Y - 80, PORTA_AMPLE - 12, 56, 'ZonaPingpong', 'porta');
         this.portaAnimada({ x: 404, top: 703, bottom: 862, ample: 102, fons: BASE_Y - 20, arc: true, color: 0xa84a30, vora: 0x3a1408 });   // la porta d'arc del Celler
         this.blocDarrere((0 + dreta) / 2, dreta, BASE_Y - 110);   // ni darrere de l'edifici
 
@@ -644,7 +644,7 @@ class ZonaSantAntoni extends ZonaBase {
         this.colisio((260 + 503) / 2, 715, 503 - 260, 90);          // façana a banda i banda de la porta (503-595)
         this.colisio((595 + 1140) / 2, 715, 1140 - 595, 90);
         this.blocDarrere(700, 880, 670, Math.max(0, 760 - sa.displayHeight));
-        this.sortida(503, 738, 92, 32, 'ZonaCelaStAntoni', 'porta');
+        this.sortida(509, 730, 80, 16, 'ZonaCelaStAntoni', 'porta');
         this.portaAnimada({ x: 549, top: 600, bottom: 755, ample: 92, fons: 761, color: 0x5a3a20, panell: 0x6a4628, vora: 0x2a1608, ferro: true });   // la porta de la cel·la, de fusta amb ferros
 
         this.npc('germa_francesc', 1010, 870, DIALEGS.germaFrancesc, { flipX: true });
