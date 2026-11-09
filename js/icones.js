@@ -438,6 +438,48 @@ const ICONES_OBJECTES = {
         ctx.lineWidth = 3; ctx.fillStyle = '#e8e4f8';
         ctx.beginPath(); ctx.ellipse(48, 54, 18, 26, 0.3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         ctx.fillStyle = '#b8b0e0'; ctx.beginPath(); ctx.arc(44, 50, 10, 0.5, Math.PI * 1.5); ctx.arc(48, 46, 8, Math.PI * 1.5, 0.5, true); ctx.fill();
+    },
+    gra_rosari: ctx => {
+        ctx.lineJoin = 'round';
+        // Aura radiant daurada
+        const h = ctx.createRadialGradient(48, 48, 10, 48, 48, 44);
+        h.addColorStop(0, 'rgba(255, 235, 150, 0.65)');
+        h.addColorStop(0.5, 'rgba(255, 180, 50, 0.28)');
+        h.addColorStop(1, 'rgba(255, 140, 20, 0)');
+        ctx.fillStyle = h; ctx.beginPath(); ctx.arc(48, 48, 44, 0, Math.PI * 2); ctx.fill();
+
+        // Gra d'olivera
+        const r = 30;
+        const g = ctx.createRadialGradient(40, 38, 4, 48, 48, r);
+        g.addColorStop(0, '#ffe4a0');
+        g.addColorStop(0.4, '#c88238');
+        g.addColorStop(1, '#5a2a0c');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(48, 48, r, 0, Math.PI * 2); ctx.fill();
+
+        // Vetis de fusta
+        ctx.save();
+        ctx.beginPath(); ctx.arc(48, 48, r, 0, Math.PI * 2); ctx.clip();
+        ctx.strokeStyle = 'rgba(70, 30, 8, 0.35)'; ctx.lineWidth = 2.5;
+        for (let dy = -20; dy <= 20; dy += 10) {
+            ctx.beginPath();
+            ctx.moveTo(18, 48 + dy - 6);
+            ctx.quadraticCurveTo(48, 48 + dy + 8, 78, 48 + dy - 4);
+            ctx.stroke();
+        }
+        // Brillantor de fusta envernissada
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+        ctx.beginPath(); ctx.ellipse(39, 36, 9, 5, -0.6, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.beginPath(); ctx.arc(58, 60, 3.5, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+
+        // Contorn i forats del cordó
+        ctx.lineWidth = 3.2; ctx.strokeStyle = CONTORN;
+        ctx.beginPath(); ctx.arc(48, 48, r, 0, Math.PI * 2); ctx.stroke();
+        ctx.fillStyle = CONTORN;
+        [48 - r + 2.5, 48 + r - 2.5].forEach(x => {
+            ctx.beginPath(); ctx.ellipse(x, 48, 3, 5, 0, 0, Math.PI * 2); ctx.fill();
+        });
     }
 };
 

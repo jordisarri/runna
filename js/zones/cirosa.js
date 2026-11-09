@@ -290,20 +290,13 @@ class ZonaCirosa extends ZonaBase {
     // Se'n va camí avall, cap a les Gírgoles, caminant; s'esvaeix a mesura que s'allunya
     aldreuMarxa(fet) {
         const e = this.bossCaigut;
-        if (!e || !e.spr.active) {
-            if (this.camCinema) this.alliberarCamera(800, fet);
-            else fet();
-            return;
-        }
+        if (!e || !e.spr.active) { fet(); return; }
         if (e.spr.body) e.spr.body.enable = false;
         const x1 = 580, y1 = 1150;
         const ang = Math.atan2(y1 - e.spr.y, x1 - e.spr.x);
         this.animaPastor(e, 'camina', ang);
         this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), x: x1, y: y1, duration: 3000, onComplete: () => {
-            this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), alpha: 0, duration: 400, onComplete: () => {
-                if (this.camCinema) this.alliberarCamera(800, fet);
-                else fet();
-            } });
+            this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), alpha: 0, duration: 400, onComplete: fet });
         } });
     }
 

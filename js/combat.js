@@ -1269,22 +1269,33 @@ Object.assign(ZonaBase.prototype, {
         this.ui().actualitzarHUD();
         // (la música de boss continua durant la conversa, fins que el Pastor se'n va)
         this.time.delayedCall(700, () => this.ui().obrirDialeg(DIALEGS.aldreuDerrotat(Estat), () => {
-            if (this.camCinema) this.alliberarCamera(800);
             this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
-            this.granRosari('pastorGra', 'Pastor de Boira vençut');
-            Joc.musicaZona(this, 1500);
-            Estat.desar();
+            this.granRosari('pastorGra', 'Pastor de Boira vençut', () => {
+                if (this.camCinema) this.alliberarCamera(800);
+                Joc.musicaZona(this, 1500);
+                Estat.desar();
+            });
         }));
     },
 
     // Un gra més al rosari (un cor més) com a premi, una sola vegada per cada 'flag'. Cura del tot.
-    granRosari(flag, motiu) {
-        if (Estat.flag(flag)) return false;
+    granRosari(flag, motiu, cb) {
+        if (Estat.flag(flag)) { if (cb) cb(); return false; }
         Estat.posaFlag(flag);
-        const nou = Estat.afegirGra();
-        const ui = this.ui(); ui.actualitzarHUD(); ui.missatge(nou ? 'Has rebut un GRA DEL ROSARI (+1 cor): ' + motiu + '.' : motiu + ': el rosari queda ple.');
-        Sfx.cura();
-        this.llum(this.ineu.x, this.ineu.y - 70, 0xf0c040);
+        const z = this;
+        z.ui().obrirDialeg({
+            pagines: [
+                { avis: "Has obtingut un GRA DEL ROSARI: " + motiu + " (+1 cor).", obj: 'gra_rosari' }
+            ],
+            enAcabar: () => {
+                Estat.afegirGra();
+                z.ui().actualitzarHUD();
+                Sfx.cura();
+                z.llum(z.ineu.x, z.ineu.y - 70, 0xf0c040);
+                Estat.desar();
+                if (cb) cb();
+            }
+        });
         return true;
     },
 

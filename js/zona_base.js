@@ -803,7 +803,8 @@ class ZonaBase extends Phaser.Scene {
         this.ineuAixeca(KEY, null, OX);
         const A = this.ineuAlt, dw = A.displayWidth, dh = A.displayHeight;
         const mx = I.x - OX * dw + 0.11 * dw, my = I.y + 2 - dh + 0.065 * dh - 24;          // sobre la palma de la mà alçada
-        const color = 0xffe8a0, icona = iconaObjecte(this, id), p = this.puntActiu || { x: mx, y: my + 80 };
+        const color = 0xffe8a0, icona = iconaObjecte(this, id);
+        const p = (this.puntActiu && Phaser.Math.Distance.Between(this.puntActiu.x, this.puntActiu.y, I.x, I.y) < 250) ? this.puntActiu : { x: mx, y: my + 80 };
         const obj = icona ? this.add.image(p.x, p.y - 30, icona).setScale(0.22) : this.add.circle(p.x, p.y - 30, 9, color, 1);
         const halo = this.add.circle(p.x, p.y - 30, 34, color, 0.45).setBlendMode('ADD').setScale(0.4);
         obj.setDepth(85002); halo.setDepth(85001);
@@ -813,10 +814,38 @@ class ZonaBase extends Phaser.Scene {
         this.tweens.add({ targets: halo, scale: 1, duration: 700, ease: 'Sine.easeOut', onComplete: () => this.tweens.add({ targets: halo, alpha: 0.2, scale: 1.25, yoyo: true, repeat: -1, duration: 700, ease: 'Sine.easeInOut' }) });
         this.tweens.add({ targets: obj, y: my - 5, delay: 700, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });        // sura una mica a la mà
         this.ineuAltObjecte = [obj, halo];
+        this.esGraRosari = (id === 'gra_rosari');
         return true;
     }
     ineuBaixa(fet) {
-        if (this.ineuAltObjecte) { this.ineuAltObjecte.forEach(o => { this.tweens.killTweensOf(o); o.destroy(); }); this.ineuAltObjecte = null; }
+        if (this.ineuAltObjecte) {
+            const objs = this.ineuAltObjecte;
+            this.ineuAltObjecte = null;
+            if (this.esGraRosari) {
+                this.esGraRosari = false;
+                const cam = this.cameras.main;
+                const idx = Math.max(0, Estat.dades.corsMax - 1);
+                const hudX = cam.worldView ? (cam.worldView.x + (92 + idx * 50 + 20) / cam.zoom) : (cam.scrollX + 92 + idx * 50);
+                const hudY = cam.worldView ? (cam.worldView.y + 40 / cam.zoom) : (cam.scrollY + 40);
+                objs.forEach(o => this.tweens.killTweensOf(o));
+                this.tweens.add({
+                    targets: objs,
+                    x: hudX,
+                    y: hudY,
+                    scale: 0.28,
+                    alpha: 0.1,
+                    duration: 650,
+                    ease: 'Cubic.easeInOut',
+                    onComplete: () => {
+                        objs.forEach(o => o.destroy());
+                        const ui = this.ui();
+                        if (ui) ui.actualitzarHUD();
+                    }
+                });
+            } else {
+                objs.forEach(o => { this.tweens.killTweensOf(o); o.destroy(); });
+            }
+        }
         if (this.ineuAixecaEfecte) { this.ineuAixecaEfecte.destroy(); this.ineuAixecaEfecte = null; }
         if (this.ineuAixecaAura) { this.ineuAixecaAura.destroy(); this.ineuAixecaAura = null; }
         if (this.ineuAlt) { this.ineuAlt.destroy(); this.ineuAlt = null; }
