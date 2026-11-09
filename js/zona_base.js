@@ -140,7 +140,7 @@ function fixarDecorat(escena, minim = 200) {
 // Aquí hi ha el que es crea només en alguns casos o dins d'un esdeveniment i després es consulta amb «if (this.x)»; la resta es refà a construir().
 const REINICI_BASE = {
     despertarImg: null, dialegDePunt: false, puntActiu: null, twCinema: null, boundsCinema: null, paradaAqui: null,
-    ineuAlt: null, ineuAltObjecte: null, ineuAixecaEfecte: null, ineuAixecaAura: null, fonsTex: null, fonsSprite: null, proxPas: 0, altrePas: false
+    ineuAlt: null, ineuAltObjecte: null, ineuAixecaEfecte: null, ineuAixecaAura: null, fonsTex: null, fonsSprite: null, proxPas: 0, altrePas: false, caminantAuto: false
 };
 const REINICI_ZONES = {
     ZonaTaverna: { portaTaverna: null, portaOberta: false },
@@ -898,11 +898,28 @@ class ZonaBase extends Phaser.Scene {
 
     // L'Ineu camina fins a (x, y)
     ineuVa(x, y, fet, vel = 180) {
-        const dx = x - this.ineu.x, dy = y - this.ineu.y, dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'esquerra' : 'dreta') : (dy < 0 ? 'amunt' : 'avall');
-        this.vista8Manual = false; this.vista8 = null;
-        this.posarDireccio(dir, true);
-        const dur = Math.max(150, Math.hypot(dx, dy) / vel * 1000);
-        this.tweens.add({ targets: this.ineu, x, y, duration: dur, onComplete: () => { this.vista8Manual = false; this.vista8 = null; this.posarDireccio(dir, false); if (fet) fet(); } });
+        const dx = x - this.ineu.x, dy = y - this.ineu.y, dist = Math.hypot(dx, dy);
+        if (dist < 4) { if (fet) fet(); return; }
+        const dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'esquerra' : 'dreta') : (dy < 0 ? 'amunt' : 'avall');
+        const oct = OCTANTS_INEU[(Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) + 8) % 8];
+        this.caminantAuto = true;
+        this.vista8Manual = true;
+        this.posarDireccio(dir, true, oct);
+        const dur = Math.max(150, dist / vel * 1000);
+        this.tweens.add({
+            targets: this.ineu, x, y, duration: dur,
+            onUpdate: () => {
+                this.ineu.setDepth(this.ineu.y);
+                if (this.ombraIneu) this.ombraIneu.setPosition(this.ineu.x, this.ineu.y);
+                if (this.ineu.body) this.ineu.body.reset(this.ineu.x, this.ineu.y);
+            },
+            onComplete: () => {
+                this.caminantAuto = false;
+                this.vista8Manual = false; this.vista8 = null;
+                this.posarDireccio(dir, false);
+                if (fet) fet();
+            }
+        });
     }
     // L'Ineu (o un personatge) s'inclina lleugerament (sense deformar mai el sprite)
     ajupir(qui, fet, ms = 900) {
@@ -1577,7 +1594,7 @@ class ZonaBase extends Phaser.Scene {
                       Phaser.Input.Keyboard.JustDown(this.tecles.E) ||
                       ui.consumirAccioTactil();
 
-        if ((ui.dialeg || ui.bloquejat) && this.ineu.anims.isPlaying) this.posarDireccio(this.direccio, false);
+        if (!this.caminantAuto && (ui.dialeg || ui.bloquejat) && this.ineu.anims.isPlaying) this.posarDireccio(this.direccio, false);
         this.camaraDialeg(!!ui.dialeg);
         if (ui.dialeg) {
             this.ineu.body.setVelocity(0);

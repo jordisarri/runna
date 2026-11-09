@@ -101,10 +101,19 @@ class ZonaRuines extends ZonaBase {
             this.interactiu(1000, 620, RADI_OBJECTE, DIALEGS.ruines, { altura: 60, actiu: () => !Estat.flag('fragment1') });
         } else if (!Estat.te('fragment1')) Estat.dona('fragment1');          // partides desades d'abans del pergamí físic
 
-        // L'ombra del monjo: projectada al mur a l'esquerra del portal de les runes
+        // L'ombra del monjo: projectada al mur a l'esquerra del portal de les runes (dividida en franges horitzontals per a l'efecte d'ondulació espectral)
         this.apareix = 1;            // 0..1: com de present és l'ombra (la primera vegada es materialitza lentament)
-        this.ombraMonjo = this.add.image(825, 550, 'ombra_monjo').setOrigin(0.5, 1)
-            .setScale((this.textures.get('ombra_monjo').customData.escala || 0.5)).setDepth(596).setAlpha(0);
+        this.onaSortida = 0;         // 0..1: amplitud extra quan l'ombra s'enlaira i es desfà
+        const texOmbra = this.textures.get('ombra_monjo'), frOmbra = texOmbra.get();
+        const tw = frOmbra.cutWidth || frOmbra.width, th = frOmbra.cutHeight || frOmbra.height, nFranges = 40;
+        this.frangesOmbra = [];
+        for (let k = 0; k < nFranges; k++) {
+            const y0 = Math.floor(k * th / nFranges), y1 = Math.floor((k + 1) * th / nFranges);
+            const im = this.add.image(0, 0, 'ombra_monjo').setOrigin(0.5, 1).setCrop(0, y0, tw, Math.max(1, y1 - y0));
+            this.frangesOmbra.push(im);
+        }
+        this.ombraMonjo = this.add.container(825, 550, this.frangesOmbra)
+            .setScale((texOmbra.customData && texOmbra.customData.escala) || 0.5).setDepth(596).setAlpha(0);
         this.puntOmbra = this.interactiu(825, 590, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 140, actiu: () => ['fragment1', 'fragment2', 'alcuiLlegit'].every(f => Estat.flag(f)) && !Estat.flag('benedicioMonjo'), enTancar: () => { if (this.ombraCantOberta()) Estat.posaFlag('flauta_ombra'); } });
         this.ombraHaCridat = false;
         this.llocFlauta('ombra', 825, 600, 160, true, () => this.ombraCantOberta() && !Estat.flag('benedicioMonjo'));      // la tarota només es pot tocar quan ja s'han llegit els dos pergamins i l'ombra ha demanat el cant
@@ -168,12 +177,13 @@ class ZonaRuines extends ZonaBase {
     }
     // Ha fet el seu paper: l'ombra s'enlaira, es desfà en llum i descansa en pau
     ombraDescansa(fet) {
-        this.ombraMarxa = true;
+        this.ombraMarxa = true; this.onaSortida = 0;
         Sfx.secret && Sfx.secret();
         this.tweens.killTweensOf(this.ombraMonjo);
         this.llum(this.ombraMonjo.x, this.ombraMonjo.y - 150, 0xfff0d0);
         const p = this.add.particles(this.ombraMonjo.x, this.ombraMonjo.y - 120, 'espurna', { speedY: { min: -90, max: -30 }, speedX: { min: -20, max: 20 }, lifespan: 1600,
             scale: { start: 0.35, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xfff0d0, 0xd8c8ff, 0xffffff], blendMode: 'ADD', frequency: 40 }).setDepth(9000);
+        this.tweens.add({ targets: this, onaSortida: 1, duration: 2600, ease: 'Sine.easeIn', onUpdate: () => this.ondularOmbra() });
         this.tweens.add({ targets: this.ombraMonjo, y: this.ombraMonjo.y - 90, alpha: 0, duration: 2600, ease: 'Sine.easeIn', onComplete: () => {
             p.stop(); this.time.delayedCall(1700, () => p.destroy());
             this.ombraMonjo.setVisible(false);
@@ -199,8 +209,19 @@ class ZonaRuines extends ZonaBase {
         this.pintarOmbra();
     }
 
+    // Ondulació per línies d'escaneig (wave distortion): forta en aparèixer o desfer-se, i molt subtil mentre reposa al mur
+    ondularOmbra() {
+        if (!this.frangesOmbra) return;
+        const t = this.time.now / 180;
+        const amp = (1 - (this.apareix ?? 1)) * 55 + (this.onaSortida || 0) * 65 + (this.ombraForta ? 14 : 3.2);
+        this.frangesOmbra.forEach((im, k) => {
+            im.x = Math.sin(t + k * 0.45) * amp + Math.cos(t * 1.7 - k * 0.25) * (amp * 0.35);
+        });
+    }
+
     // Com de visible és l'ombra (també es crida des de l'aparició, que passa dins d'un diàleg)
     pintarOmbra() {
+        this.ondularOmbra();
         if (this.ombraMarxa) return;                                        // se'n va (ombraDescansa porta l'alfa)
         const visible = (Estat.flag('fragment1') || this.ombraVista) && !Estat.flag('benedicioMonjo');
         // L'ombra apareix i desapareix lentament, com una respiració

@@ -636,17 +636,75 @@ function dibuixarAlzinaBuida(c, w) {
 }
 
 function dibuixarLlosa(c, w) {
-    // Llosa QUADRADA de pedra (tapa del passadís cap al soterrani): cara de dalt quadrada, gruix al davant i una creu gravada
+    // Llosa QUADRADA de pedra antiga (tapa del passadís cap al soterrani): cara cisellada amb marc enfonsat, rosetes als cantons, creu monàstica en relleu, esquerdes i molsa
     lienc(c, w, w * 0.98, (ctx, W, H) => {
-        const g = W * 0.07, cara = W - 6;
-        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.lineJoin = 'round';
-        ctx.fillStyle = '#5e594f'; ctx.beginPath(); ctx.roundRect(3, 3 + g, cara, cara, W * 0.05); ctx.fill(); ctx.stroke();          // gruix
-        ctx.fillStyle = '#928c80'; ctx.beginPath(); ctx.roundRect(3, 3, cara, cara, W * 0.05); ctx.fill(); ctx.stroke();               // cara de dalt
-        ctx.fillStyle = 'rgba(255,255,255,0.14)'; ctx.fillRect(W * 0.1, W * 0.08, W * 0.8, W * 0.05);
-        ctx.strokeStyle = '#4a463e'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.moveTo(W * 0.3, W * 0.5); ctx.lineTo(W * 0.7, W * 0.5); ctx.moveTo(W * 0.5, W * 0.3); ctx.lineTo(W * 0.5, W * 0.7); ctx.stroke();
-        ctx.lineWidth = 1.4; ctx.strokeStyle = 'rgba(40,36,30,0.6)';
-        ctx.beginPath(); ctx.moveTo(W * 0.18, W * 0.78); ctx.lineTo(W * 0.3, W * 0.7); ctx.lineTo(W * 0.27, W * 0.62); ctx.moveTo(W * 0.78, W * 0.2); ctx.lineTo(W * 0.7, W * 0.3); ctx.stroke();
+        const g = W * 0.08, cara = W - 8, x0 = 4, y0 = 3;
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        // Ombra arran de l'herba
+        ctx.fillStyle = 'rgba(0,0,0,0.32)';
+        ctx.beginPath(); ctx.roundRect(x0 - 2, y0 + g + 2, cara + 4, cara + 2, W * 0.06); ctx.fill();
+        // Gruix frontal de la llosa (cantell de pedra)
+        const gf = ctx.createLinearGradient(0, y0 + cara, 0, y0 + cara + g);
+        gf.addColorStop(0, '#6e685c'); gf.addColorStop(1, '#4a453c');
+        ctx.fillStyle = gf; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.roundRect(x0, y0 + g, cara, cara, W * 0.05); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(25,20,14,0.45)'; ctx.lineWidth = 1.4;
+        [0.28, 0.56, 0.78].forEach(t => { ctx.beginPath(); ctx.moveTo(x0 + cara * t, y0 + cara + 1); ctx.lineTo(x0 + cara * t, y0 + cara + g - 1); ctx.stroke(); });
+        // Cara superior de pedra calcària
+        const gc = ctx.createLinearGradient(x0, y0, x0 + cara, y0 + cara);
+        gc.addColorStop(0, '#b8b0a0'); gc.addColorStop(0.5, '#9e9686'); gc.addColorStop(1, '#857d6e');
+        ctx.fillStyle = gc; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.roundRect(x0, y0, cara, cara, W * 0.05); ctx.fill(); ctx.stroke();
+        // Bisell de llum superior i d'ombra inferior
+        ctx.strokeStyle = 'rgba(255,250,235,0.42)'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(x0 + 6, y0 + cara - 8); ctx.lineTo(x0 + 6, y0 + 6); ctx.lineTo(x0 + cara - 8, y0 + 6); ctx.stroke();
+        ctx.strokeStyle = 'rgba(35,30,22,0.4)';
+        ctx.beginPath(); ctx.moveTo(x0 + 8, y0 + cara - 4); ctx.lineTo(x0 + cara - 4, y0 + cara - 4); ctx.lineTo(x0 + cara - 4, y0 + 8); ctx.stroke();
+        // Plafó interior enfonsat amb doble filet cisellat
+        const m = W * 0.12, pw = cara - m * 2;
+        const gp = ctx.createLinearGradient(x0 + m, y0 + m, x0 + m + pw, y0 + m + pw);
+        gp.addColorStop(0, '#847c6d'); gp.addColorStop(1, '#968e7e');
+        ctx.fillStyle = gp; ctx.strokeStyle = '#3e3930'; ctx.lineWidth = 2.2;
+        ctx.beginPath(); ctx.roundRect(x0 + m, y0 + m, pw, pw, W * 0.03); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,250,235,0.28)'; ctx.lineWidth = 1.4;
+        ctx.strokeRect(x0 + m + 3, y0 + m + 3, pw - 6, pw - 6);
+        // Quatre argolles/claus de pedra als cantons del plafó
+        const cOff = m + W * 0.075, cx = x0 + cara / 2, cy = y0 + cara / 2;
+        [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy]) => {
+            const rx = cx + sx * (cara / 2 - cOff), ry = cy + sy * (cara / 2 - cOff);
+            ctx.fillStyle = '#6a6356'; ctx.strokeStyle = '#332e26'; ctx.lineWidth = 1.6;
+            ctx.beginPath(); ctx.arc(rx, ry, W * 0.032, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+            ctx.beginPath(); ctx.arc(rx - 1, ry - 1, W * 0.012, 0, Math.PI * 2); ctx.fill();
+        });
+        // Creu monàstica gravada al centre amb medalló solar/lunar
+        const br = W * 0.23, gr = W * 0.048, pe = W * 0.08;
+        const tracaCreu = (dx, dy) => {
+            ctx.beginPath();
+            ctx.moveTo(cx - br + dx, cy + dy); ctx.lineTo(cx + br + dx, cy + dy);
+            ctx.moveTo(cx + dx, cy - br + dy); ctx.lineTo(cx + dx, cy + br + dy);
+            // Travessers als quatre extrems (creu potençada)
+            ctx.moveTo(cx - br + dx, cy - pe + dy); ctx.lineTo(cx - br + dx, cy + pe + dy);
+            ctx.moveTo(cx + br + dx, cy - pe + dy); ctx.lineTo(cx + br + dx, cy + pe + dy);
+            ctx.moveTo(cx - pe + dx, cy - br + dy); ctx.lineTo(cx + pe + dx, cy - br + dy);
+            ctx.moveTo(cx - pe + dx, cy + br + dy); ctx.lineTo(cx + pe + dx, cy + br + dy);
+            ctx.stroke();
+            ctx.beginPath(); ctx.arc(cx + dx, cy + dy, W * 0.095, 0, Math.PI * 2); ctx.stroke();
+        };
+        ctx.lineWidth = gr; ctx.strokeStyle = 'rgba(255,250,235,0.32)'; tracaCreu(1.2, 1.2);
+        ctx.lineWidth = gr; ctx.strokeStyle = '#433d33'; tracaCreu(0, 0);
+        ctx.fillStyle = '#756d5f'; ctx.strokeStyle = '#383229'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(cx, cy, W * 0.055, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        // Esquerdes velles i taques de molsa a les vores
+        ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(35,30,24,0.65)';
+        ctx.beginPath();
+        ctx.moveTo(x0 + cara * 0.16, y0 + cara * 0.82); ctx.lineTo(x0 + cara * 0.27, y0 + cara * 0.72); ctx.lineTo(x0 + cara * 0.24, y0 + cara * 0.62);
+        ctx.moveTo(x0 + cara * 0.84, y0 + cara * 0.22); ctx.lineTo(x0 + cara * 0.73, y0 + cara * 0.31); ctx.lineTo(x0 + cara * 0.76, y0 + cara * 0.39);
+        ctx.stroke();
+        [[0.12, 0.13, 5, 3.5], [0.18, 0.1, 3.5, 2.5], [0.87, 0.85, 5.5, 3.5], [0.81, 0.89, 4, 2.8], [0.13, 0.87, 4.2, 3]].forEach(([rx, ry, a, b], k) => {
+            ctx.fillStyle = k % 2 ? 'rgba(74,122,52,0.65)' : 'rgba(92,144,62,0.6)';
+            ctx.beginPath(); ctx.ellipse(x0 + cara * rx, y0 + cara * ry, a * (W / 90), b * (W / 90), 0.4 * k, 0, Math.PI * 2); ctx.fill();
+        });
     });
 }
 
@@ -3751,22 +3809,157 @@ function dibuixarOcellaire(c, w) {
     });
 }
 
-// Ratpenat de boira: ales lila translúcides i dos punts vermells
-function dibuixarRatpenat(c, w) {
-    lienc(c, w, w * 0.6, (ctx, W, H) => {
-        ctx.lineWidth = 2.5; ctx.strokeStyle = '#1a0a2a';
-        ctx.fillStyle = 'rgba(120,80,170,0.85)';
+// Ratpenat de boira: membrana nervada amb falanges, pelatge fosc, orelles punxegudes, ullals i ulls roents
+function pintarRatpenatFotograma(ctx, W, H, pose = 'mig') {
+    const cx = W / 2, cy = H * 0.52;
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    // Halo de boira lila al voltant del cos
+    const halo = ctx.createRadialGradient(cx, cy, 4, cx, cy, W * 0.42);
+    halo.addColorStop(0, 'rgba(165,100,240,0.32)'); halo.addColorStop(0.6, 'rgba(90,40,145,0.14)'); halo.addColorStop(1, 'rgba(40,12,70,0)');
+    ctx.fillStyle = halo; ctx.fillRect(0, 0, W, H);
+
+    if (pose === 'penja') {
+        // Penjat cap per avall amb les ales plegades com una capa
+        ctx.strokeStyle = '#180826'; ctx.lineWidth = 2.4;
         [-1, 1].forEach(sd => {
-            ctx.beginPath(); ctx.moveTo(W / 2, H * 0.4);
-            ctx.quadraticCurveTo(W / 2 + sd * W * 0.25, H * 0.0, W / 2 + sd * W * 0.49, H * 0.25);
-            ctx.lineTo(W / 2 + sd * W * 0.4, H * 0.55); ctx.lineTo(W / 2 + sd * W * 0.3, H * 0.45); ctx.lineTo(W / 2 + sd * W * 0.2, H * 0.62);
+            ctx.beginPath(); ctx.moveTo(cx + sd * W * 0.04, H * 0.22);
+            ctx.lineTo(cx + sd * W * 0.06, H * 0.11); ctx.lineTo(cx + sd * W * 0.09, H * 0.15);
+            ctx.stroke();
+        });
+        // Cos i ales plegades
+        const gPleg = ctx.createLinearGradient(cx - W * 0.16, H * 0.2, cx + W * 0.16, H * 0.78);
+        gPleg.addColorStop(0, '#5a3286'); gPleg.addColorStop(0.5, '#341952'); gPleg.addColorStop(1, '#1d0b30');
+        ctx.fillStyle = gPleg; ctx.strokeStyle = '#140620'; ctx.lineWidth = 2.8;
+        ctx.beginPath();
+        ctx.moveTo(cx, H * 0.19);
+        ctx.bezierCurveTo(cx - W * 0.18, H * 0.26, cx - W * 0.21, H * 0.56, cx - W * 0.11, H * 0.74);
+        ctx.lineTo(cx - W * 0.04, H * 0.67); ctx.lineTo(cx, H * 0.76); ctx.lineTo(cx + W * 0.04, H * 0.67); ctx.lineTo(cx + W * 0.11, H * 0.74);
+        ctx.bezierCurveTo(cx + W * 0.21, H * 0.56, cx + W * 0.18, H * 0.26, cx, H * 0.19);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+        // Plecs interns de les ales
+        ctx.strokeStyle = 'rgba(180,130,235,0.45)'; ctx.lineWidth = 1.6;
+        [-1, 1].forEach(sd => {
+            ctx.beginPath(); ctx.moveTo(cx + sd * W * 0.03, H * 0.24);
+            ctx.quadraticCurveTo(cx + sd * W * 0.13, H * 0.45, cx + sd * W * 0.09, H * 0.68);
+            ctx.stroke();
+        });
+        // Orelles cap avall
+        [-1, 1].forEach(sd => {
+            ctx.fillStyle = '#28113e'; ctx.strokeStyle = '#140620'; ctx.lineWidth = 2.2;
+            ctx.beginPath(); ctx.moveTo(cx + sd * W * 0.03, H * 0.7);
+            ctx.lineTo(cx + sd * W * 0.09, H * 0.88); ctx.lineTo(cx + sd * W * 0.11, H * 0.68);
             ctx.closePath(); ctx.fill(); ctx.stroke();
         });
-        ctx.fillStyle = '#3a2050';
-        ctx.beginPath(); ctx.ellipse(W / 2, H * 0.5, W * 0.1, H * 0.25, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(W / 2 - W * 0.07, H * 0.32); ctx.lineTo(W / 2 - W * 0.04, H * 0.14); ctx.lineTo(W / 2, H * 0.3); ctx.lineTo(W / 2 + W * 0.04, H * 0.14); ctx.lineTo(W / 2 + W * 0.07, H * 0.32); ctx.fill();
-        ctx.fillStyle = '#ff4040'; ctx.fillRect(W / 2 - W * 0.05, H * 0.4, W * 0.03, H * 0.06); ctx.fillRect(W / 2 + W * 0.02, H * 0.4, W * 0.03, H * 0.06);
+        // Ulls vermells mig oberts
+        [-1, 1].forEach(sd => {
+            const ex = cx + sd * W * 0.042, ey = H * 0.62;
+            ctx.fillStyle = '#ff3848'; ctx.beginPath(); ctx.ellipse(ex, ey, W * 0.022, H * 0.026, -sd * 0.2, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#fff0b0'; ctx.beginPath(); ctx.arc(ex, ey, W * 0.008, 0, Math.PI * 2); ctx.fill();
+        });
+        return;
+    }
+
+    // Paràmetres de les ales segons el fotograma ('amunt', 'mig', 'avall')
+    const altColze = pose === 'amunt' ? H * 0.08 : pose === 'avall' ? H * 0.44 : H * 0.18;
+    const altPunta = pose === 'amunt' ? H * 0.05 : pose === 'avall' ? H * 0.72 : H * 0.28;
+    const altBaix  = pose === 'amunt' ? H * 0.48 : pose === 'avall' ? H * 0.84 : H * 0.64;
+    const ampPunta = pose === 'avall' ? W * 0.43 : W * 0.48;
+
+    // Ales membranoses amb falanges i vores festonejades
+    [-1, 1].forEach(sd => {
+        const xEsp = cx + sd * W * 0.08, yEsp = cy - H * 0.06;
+        const xCol = cx + sd * W * 0.22, yCol = altColze;
+        const xPta = cx + sd * ampPunta, yPta = altPunta;
+        const xD1 = cx + sd * (ampPunta * 0.78), yD1 = altBaix;
+        const xD2 = cx + sd * (ampPunta * 0.46), yD2 = altBaix + H * 0.04;
+        const xCos = cx + sd * W * 0.08, yCos = cy + H * 0.16;
+
+        const gAla = ctx.createLinearGradient(xEsp, yCol, xPta, yD2);
+        gAla.addColorStop(0, 'rgba(138,82,198,0.94)');
+        gAla.addColorStop(0.55, 'rgba(92,46,148,0.9)');
+        gAla.addColorStop(1, 'rgba(48,20,86,0.88)');
+        ctx.fillStyle = gAla; ctx.strokeStyle = '#160724'; ctx.lineWidth = 2.6;
+
+        ctx.beginPath();
+        ctx.moveTo(xEsp, yEsp);
+        ctx.quadraticCurveTo(cx + sd * W * 0.14, yCol + (yEsp - yCol) * 0.3, xCol, yCol);
+        ctx.quadraticCurveTo((xCol + xPta) / 2, Math.min(yCol, yPta) - H * 0.04, xPta, yPta);
+        ctx.quadraticCurveTo((xPta + xD1) / 2 - sd * W * 0.02, (yPta + yD1) / 2 - H * 0.05, xD1, yD1);
+        ctx.quadraticCurveTo((xD1 + xD2) / 2, yD1 - H * 0.09, xD2, yD2);
+        ctx.quadraticCurveTo((xD2 + xCos) / 2, yD2 - H * 0.08, xCos, yCos);
+        ctx.closePath();
+        ctx.fill(); ctx.stroke();
+
+        // Nervadures (falanges) i urpa del polze
+        ctx.strokeStyle = 'rgba(205,155,255,0.55)'; ctx.lineWidth = 1.7;
+        [[xD1, yD1], [xD2, yD2]].forEach(([tx, ty]) => {
+            ctx.beginPath(); ctx.moveTo(xCol, yCol); ctx.quadraticCurveTo((xCol + tx) / 2, (yCol + ty) / 2 - H * 0.03, tx, ty); ctx.stroke();
+        });
+        // Vora superior més clara
+        ctx.strokeStyle = '#b480f0'; ctx.lineWidth = 1.8;
+        ctx.beginPath(); ctx.moveTo(xEsp, yEsp); ctx.quadraticCurveTo(cx + sd * W * 0.14, yCol + (yEsp - yCol) * 0.3, xCol, yCol); ctx.lineTo(xPta, yPta); ctx.stroke();
+        // Urpa del colze
+        ctx.strokeStyle = '#e0c8ff'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(xCol, yCol); ctx.lineTo(xCol + sd * W * 0.02, yCol - H * 0.07); ctx.stroke();
     });
+
+    // Potes petites a sota
+    ctx.strokeStyle = '#180826'; ctx.lineWidth = 2.2;
+    [-1, 1].forEach(sd => {
+        ctx.beginPath(); ctx.moveTo(cx + sd * W * 0.04, cy + H * 0.2); ctx.lineTo(cx + sd * W * 0.06, cy + H * 0.31); ctx.stroke();
+    });
+
+    // Cos pelut i pitet més clar
+    ctx.fillStyle = '#2d1546'; ctx.strokeStyle = '#140620'; ctx.lineWidth = 2.6;
+    ctx.beginPath(); ctx.ellipse(cx, cy + H * 0.04, W * 0.11, H * 0.22, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#58347e';
+    ctx.beginPath(); ctx.ellipse(cx, cy + H * 0.02, W * 0.075, H * 0.13, 0, 0, Math.PI * 2); ctx.fill();
+
+    // Orelles grans i esculpides amb pavelló interior
+    [-1, 1].forEach(sd => {
+        ctx.fillStyle = '#2a1240'; ctx.strokeStyle = '#140620'; ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.moveTo(cx + sd * W * 0.025, cy - H * 0.14);
+        ctx.quadraticCurveTo(cx + sd * W * 0.04, cy - H * 0.36, cx + sd * W * 0.095, cy - H * 0.4);
+        ctx.quadraticCurveTo(cx + sd * W * 0.125, cy - H * 0.24, cx + sd * W * 0.085, cy - H * 0.08);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#84428e';
+        ctx.beginPath();
+        ctx.moveTo(cx + sd * W * 0.04, cy - H * 0.14);
+        ctx.lineTo(cx + sd * W * 0.082, cy - H * 0.33);
+        ctx.lineTo(cx + sd * W * 0.075, cy - H * 0.11);
+        ctx.closePath(); ctx.fill();
+    });
+
+    // Cap
+    ctx.fillStyle = '#381b56'; ctx.strokeStyle = '#140620'; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.ellipse(cx, cy - H * 0.09, W * 0.095, H * 0.14, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+    // Ulls vermells brillants amb resplendor
+    [-1, 1].forEach(sd => {
+        const ex = cx + sd * W * 0.044, ey = cy - H * 0.11;
+        const gUll = ctx.createRadialGradient(ex, ey, 0, ex, ey, W * 0.045);
+        gUll.addColorStop(0, 'rgba(255,80,100,0.85)'); gUll.addColorStop(1, 'rgba(255,40,80,0)');
+        ctx.fillStyle = gUll; ctx.beginPath(); ctx.arc(ex, ey, W * 0.045, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#ff3048'; ctx.beginPath(); ctx.ellipse(ex, ey, W * 0.024, H * 0.034, sd * 0.22, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#fff4c0'; ctx.beginPath(); ctx.arc(ex - sd * W * 0.005, ey - H * 0.008, W * 0.009, 0, Math.PI * 2); ctx.fill();
+    });
+
+    // Boca i dos ullals blancs
+    ctx.strokeStyle = '#140620'; ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.arc(cx, cy - H * 0.03, W * 0.038, 0.15 * Math.PI, 0.85 * Math.PI); ctx.stroke();
+    ctx.fillStyle = '#f8f0ff';
+    [-1, 1].forEach(sd => {
+        ctx.beginPath();
+        ctx.moveTo(cx + sd * W * 0.014, cy - H * 0.035);
+        ctx.lineTo(cx + sd * W * 0.032, cy - H * 0.035);
+        ctx.lineTo(cx + sd * W * 0.023, cy + H * 0.025);
+        ctx.closePath(); ctx.fill();
+    });
+}
+
+function dibuixarRatpenat(c, w) {
+    lienc(c, w, w * 0.65, (ctx, W, H) => pintarRatpenatFotograma(ctx, W, H, 'mig'));
 }
 
 // Ferralla viva: un garbuix d'eines rovellades (estenalles, un ganxo, una clau de gàbia i cadena) amb un ull lila

@@ -111,7 +111,7 @@ class ZonaRovellonera extends ZonaBase {
     }
 
     // Les sortides no són "zones" normals: decideixen on va l'Ineu segons el camí correcte
-    canviarZona(desti, entrada) {
+    canviarZona(desti, entrada, dir) {
         if (desti === 'ZonaRovellonera' && entrada && entrada.startsWith('x_')) {
             const d = entrada[2];
             let pas = this.pas, dest = 'ZonaRovellonera', ent, perdut = false;
@@ -124,10 +124,74 @@ class ZonaRovellonera extends ZonaBase {
             Estat.dades.rovPas = pas;
             if (perdut) Estat.dades.rovPerdut = (Estat.dades.rovPerdut || 0) + 1;
             if (pas >= 3) Estat.dades.rovPerdut = 0;
-            if (perdut && this.pas !== 0) this.ui().notifica('T\'has perdut entre els pins... tornes a la primera clariana' + ((Estat.dades.rovPerdut || 0) >= 2 ? ' (ara el bosc t\'assenyalarà el camí)' : ''));
-            return super.canviarZona(dest, ent);
+            if (perdut) {
+                return this.transicioPerdut(dest, ent, dir);
+            }
+            return super.canviarZona(dest, ent, dir);
         }
-        return super.canviarZona(desti, entrada);
+        return super.canviarZona(desti, entrada, dir);
+    }
+
+    enEntrar() {
+        if (this.dadesEntrada && this.dadesEntrada.perdut) {
+            const ajuda = (Estat.dades.rovPerdut || 0) >= 2;
+            this.time.delayedCall(MS_PAS_PORTA + 60, () => {
+                if (!this.scene || !this.scene.isActive()) return;
+                this.ui().obrirDialeg({
+                    pagines: [{
+                        qui: 'Ineu',
+                        text: "T'has perdut entre els pins... tornes a la primera clariana." + (ajuda ? " Ara el bosc t'assenyalarà el camí." : "")
+                    }]
+                });
+            });
+        }
+    }
+
+    // Efecte d'ondulació (wave distortion) quan l'Ineu s'equivoca de camí al laberint de la Rovellonera
+    transicioPerdut(desti, entrada, dir) {
+        if (this.canviant) return;
+        this.canviant = true;
+        if (Sfx.secret) Sfx.secret(); else Sfx.porta();
+        this.ineu.body.setVelocity(0);
+        Estat.dades.entrada = entrada;
+        Estat.dades.x = null; Estat.dades.y = null;
+        if (dir) this.pasPorta(dir, null, false);
+        const clauTex = '__rov_ona', cam = this.cameras.main, invZ = 1 / (cam.zoom || 1);
+        this.game.events.once('postrender', () => {
+            if (!this.scene || !this.scene.isActive()) return;
+            try {
+                if (this.textures.exists(clauTex)) this.textures.remove(clauTex);
+                const cv = this.textures.createCanvas(clauTex, AMPLE, ALT);
+                cv.getContext().drawImage(this.game.canvas, 0, 0, AMPLE, ALT);
+                cv.refresh();
+                const fons = this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE + 160, ALT + 40, 0x0e1c0c, 1)
+                    .setScrollFactor(0).setScale(invZ).setDepth(94990);
+                const n = 48, franges = [];
+                for (let k = 0; k < n; k++) {
+                    const y0 = Math.floor(k * ALT / n), y1 = Math.floor((k + 1) * ALT / n);
+                    const im = this.add.image(0, 0, clauTex).setOrigin(0.5, 0.5).setCrop(0, y0, AMPLE, Math.max(1, y1 - y0));
+                    franges.push(im);
+                }
+                const cont = this.add.container(AMPLE / 2, ALT / 2, franges).setScrollFactor(0).setScale(invZ).setDepth(95000);
+                this.tweens.addCounter({
+                    from: 0, to: 1, duration: 1850, ease: 'Sine.easeInOut',
+                    onUpdate: tw => {
+                        const f = tw.getValue(), amp = Math.sin(f * Math.PI) * 58 + f * 24;
+                        franges.forEach((im, k) => {
+                            im.x = Math.sin(k * 0.42 + f * 14) * amp + Math.cos(k * 0.23 - f * 9) * (amp * 0.35);
+                        });
+                        cont.setAlpha(1 - Math.pow(f, 1.6));
+                    },
+                    onComplete: () => {
+                        cont.destroy(); fons.destroy();
+                        if (this.textures.exists(clauTex)) this.textures.remove(clauTex);
+                        this.scene.start(desti, { entrada, perdut: true });
+                    }
+                });
+            } catch (e) {
+                this.scene.start(desti, { entrada, perdut: true });
+            }
+        });
     }
 
     actualitzar() {

@@ -184,7 +184,7 @@ class EscenaTitol extends Phaser.Scene {
         this.opcions = [];
         if (hiHa) this.opcions.push({ text: 'Continuar', fn: () => { if (Estat.carregar()) Joc.continuar(this); } });
         this.opcions.push({ text: 'Nova partida', fn: () => this.novaPartida(hiHa) });
-        this.opcions.push({ text: 'Carrega d\'un fitxer', fn: () => Estat.importar(ok => {
+        this.opcions.push({ text: 'Carrega un fitxer', fn: () => Estat.importar(ok => {
             if (ok) Joc.continuar(this);
             else this.menu.add(this.add.text(AMPLE / 2, ALT - 330, 'No he pogut llegir aquest fitxer com a partida.', estilText(20, '#ffb0a0', { backgroundColor: '#1a120bcc', padding: { x: 10, y: 5 } })).setOrigin(0.5));
         }) });

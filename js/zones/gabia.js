@@ -107,24 +107,89 @@ class ZonaGirgoles extends ZonaBase {
 
     construir() {
         const W = 1400, H = 1300;
+        const resolt = Estat.flag('girgolesEnceses');
         this.terra('pedra', 0, 0, W, H, -1100).setTint(0x4a5a4a);
-        // Fang i bassals al terra
+
+        // Fang, molsa humida, esquerdes, còdols i venes de micel·li al terra
         const fang = this.add.graphics().setDepth(-1050);
         let l = 5; const r = () => (l = l * 16807 % 2147483647) / 2147483647;
-        for (let k = 0; k < 40; k++) fang.fillStyle(0x1a2418, 0.25 + r() * 0.2).fillEllipse(100 + r() * 1200, 150 + r() * 1100, 40 + r() * 120, 14 + r() * 40);
-        this.bassals = [[420, 980, 160], [1000, 900, 200], [560, 420, 120], [950, 360, 140], [300, 640, 110]].map(([x, y, w]) => {
-            const b = this.add.ellipse(x, y, w, w * 0.35, 0x2a4a5a, 0.7).setDepth(-1040);
-            this.add.ellipse(x - w * 0.15, y - w * 0.05, w * 0.4, w * 0.08, 0xbfe0ff, 0.25).setDepth(-1039);
+        for (let k = 0; k < 45; k++) {
+            fang.fillStyle(k % 3 === 0 ? 0x1e3622 : 0x162216, 0.24 + r() * 0.22)
+                .fillEllipse(100 + r() * 1200, 150 + r() * 1100, 40 + r() * 130, 16 + r() * 44);
+        }
+        // Esquerdes de la roca i pedruscall
+        fang.lineStyle(1.5, 0x0e1610, 0.45);
+        for (let k = 0; k < 22; k++) {
+            const cx = 160 + r() * 1080, cy = 220 + r() * 980, a = r() * Math.PI;
+            fang.lineBetween(cx, cy, cx + Math.cos(a) * (35 + r() * 55), cy + Math.sin(a) * (18 + r() * 30));
+        }
+        for (let k = 0; k < 55; k++) {
+            const px = 130 + r() * 1140, py = 200 + r() * 1020, pr = 3 + r() * 5;
+            fang.fillStyle(k % 2 ? 0x2c382c : 0x3d4a3d, 0.7).fillEllipse(px, py, pr * 2, pr * 1.2);
+        }
+        // Filaments de micel·li al terra que connecten les cinc mates en pentàgon i pugen cap a la cortina del nord
+        fang.lineStyle(2, 0x7adbb0, 0.22);
+        for (let i = 0; i < 5; i++) {
+            const a0 = -Math.PI / 2 + i * Math.PI * 2 / 5, a1 = -Math.PI / 2 + ((i + 1) % 5) * Math.PI * 2 / 5;
+            const x0 = GIRG_CERCLE.x + Math.cos(a0) * GIRG_CERCLE.r, y0 = GIRG_CERCLE.y + Math.sin(a0) * GIRG_CERCLE.r * 0.8;
+            const x1 = GIRG_CERCLE.x + Math.cos(a1) * GIRG_CERCLE.r, y1 = GIRG_CERCLE.y + Math.sin(a1) * GIRG_CERCLE.r * 0.8;
+            const mx = (x0 + x1) / 2 + (GIRG_CERCLE.x - (x0 + x1) / 2) * 0.18, my = (y0 + y1) / 2 + (GIRG_CERCLE.y - (y0 + y1) / 2) * 0.18;
+            fang.beginPath(); fang.moveTo(x0, y0); fang.lineTo(mx, my); fang.lineTo(x1, y1); fang.strokePath();
+        }
+        fang.lineBetween(GIRG_CERCLE.x, GIRG_CERCLE.y - GIRG_CERCLE.r * 0.8, 700, 185);
+
+        // Bassals detallats amb vorera de fang, reflexos d'aigua i còdols
+        const bGfx = this.add.graphics().setDepth(-1041);
+        this.bassals = [[420, 980, 175], [1000, 900, 210], [550, 420, 135], [950, 360, 150], [290, 640, 125], [1090, 670, 130], [690, 1050, 145]].map(([x, y, w]) => {
+            const h = w * 0.36;
+            bGfx.fillStyle(0x12201a, 0.55).fillEllipse(x, y + 2, w + 18, h + 10);
+            bGfx.fillStyle(0x1b3848, 0.82).fillEllipse(x, y, w + 6, h + 3);
+            const b = this.add.ellipse(x, y, w, h, 0x2a5266, 0.75).setDepth(-1040);
+            this.add.ellipse(x - w * 0.06, y - h * 0.06, w * 0.68, h * 0.58, 0x3e748c, 0.38).setDepth(-1039);
+            this.add.ellipse(x - w * 0.16, y - h * 0.12, w * 0.36, h * 0.2, 0xc8e8ff, 0.32).setDepth(-1039);
+            this.add.ellipse(x + w * 0.18, y + h * 0.1, w * 0.18, h * 0.1, 0xc8e8ff, 0.2).setDepth(-1039);
+            bGfx.lineStyle(1.5, 0x588ca0, 0.35).strokeEllipse(x, y, w, h);
+            bGfx.fillStyle(0x3a4a44, 0.85).fillEllipse(x - w * 0.44, y + h * 0.22, 12, 7).fillEllipse(x + w * 0.42, y - h * 0.18, 9, 5);
             return b;
         });
-        // Parets de cova (gràfic irregular) i les seves col·lisions
+
+        // Parets de cova amb estrats de roca, relleu i les seves col·lisions
         const cova = this.add.graphics().setDepth(-990);
-        paretCova(cova, [{ x: 0, y: 0 }, { x: 640, y: 0 }, { x: 630, y: 120 }, { x: 560, y: 170 }, { x: 420, y: 150 }, { x: 300, y: 200 }, { x: 170, y: 190 }, { x: 110, y: 300 }, { x: 0, y: 320 }]);
-        paretCova(cova, [{ x: 760, y: 0 }, { x: W, y: 0 }, { x: W, y: 300 }, { x: 1300, y: 290 }, { x: 1250, y: 190 }, { x: 1100, y: 210 }, { x: 960, y: 150 }, { x: 840, y: 170 }, { x: 770, y: 120 }]);
-        paretCova(cova, [{ x: 0, y: 320 }, { x: 110, y: 300 }, { x: 90, y: 600 }, { x: 130, y: 800 }, { x: 80, y: 1050 }, { x: 120, y: H }, { x: 0, y: H }]);
-        paretCova(cova, [{ x: W, y: 300 }, { x: 1300, y: 290 }, { x: 1320, y: 560 }, { x: 1270, y: 820 }, { x: 1320, y: 1080 }, { x: 1280, y: H }, { x: W, y: H }]);
-        // Estalactites a la volta
-        for (let k = 0; k < 18; k++) { const x = 140 + k * 66 + r() * 20; if (x > 600 && x < 800) continue; const y0 = x < 640 ? 150 + r() * 40 : 160 + r() * 40; cova.fillStyle(0x3a3428, 1).fillTriangle(x - 10, y0, x + 10, y0, x + r() * 4, y0 + 30 + r() * 40); }
+        paretCova(cova, [{ x: 0, y: 0 }, { x: 640, y: 0 }, { x: 635, y: 135 }, { x: 565, y: 185 }, { x: 420, y: 168 }, { x: 300, y: 215 }, { x: 175, y: 205 }, { x: 120, y: 310 }, { x: 0, y: 330 }], 0x1a1814, 0x0e0c0a);
+        paretCova(cova, [{ x: 760, y: 0 }, { x: W, y: 0 }, { x: W, y: 310 }, { x: 1290, y: 300 }, { x: 1240, y: 205 }, { x: 1095, y: 225 }, { x: 960, y: 165 }, { x: 835, y: 185 }, { x: 765, y: 135 }], 0x1a1814, 0x0e0c0a);
+        paretCova(cova, [{ x: 0, y: 0 }, { x: 640, y: 0 }, { x: 630, y: 120 }, { x: 560, y: 170 }, { x: 420, y: 150 }, { x: 300, y: 200 }, { x: 170, y: 190 }, { x: 110, y: 300 }, { x: 0, y: 320 }], 0x2e2a22, 0x14120e);
+        paretCova(cova, [{ x: 760, y: 0 }, { x: W, y: 0 }, { x: W, y: 300 }, { x: 1300, y: 290 }, { x: 1250, y: 190 }, { x: 1100, y: 210 }, { x: 960, y: 150 }, { x: 840, y: 170 }, { x: 770, y: 120 }], 0x2e2a22, 0x14120e);
+        paretCova(cova, [{ x: 0, y: 320 }, { x: 110, y: 300 }, { x: 90, y: 600 }, { x: 130, y: 800 }, { x: 80, y: 1050 }, { x: 120, y: H }, { x: 0, y: H }], 0x2a2620, 0x14120e);
+        paretCova(cova, [{ x: W, y: 300 }, { x: 1300, y: 290 }, { x: 1320, y: 560 }, { x: 1270, y: 820 }, { x: 1320, y: 1080 }, { x: 1280, y: H }, { x: W, y: H }], 0x2a2620, 0x14120e);
+        // Facetes de roca i verdet humit a les parets
+        cova.lineStyle(2, 0x3e3a30, 0.65);
+        [[140, 120, 260, 145], [320, 95, 440, 115], [850, 110, 980, 100], [1060, 130, 1200, 115], [40, 480, 75, 560], [1335, 460, 1310, 540], [50, 860, 85, 940], [1320, 870, 1350, 960]]
+            .forEach(([a, b, c, d]) => cova.lineBetween(a, b, c, d));
+
+        // Estalactites de dos tons amb punta humida a la volta i a les vores
+        const estalactita = (x, y0, amp, llarg) => {
+            cova.fillStyle(0x26221b, 1).fillTriangle(x - amp, y0, x + amp, y0, x + 2, y0 + llarg);
+            cova.fillStyle(0x3e382e, 1).fillTriangle(x - amp * 0.85, y0, x + amp * 0.1, y0, x, y0 + llarg * 0.88);
+            cova.lineStyle(1.8, 0x12100c, 0.9).strokeTriangle(x - amp, y0, x + amp, y0, x + 2, y0 + llarg);
+            cova.fillStyle(0x9ad8d0, 0.75).fillCircle(x + 2, y0 + llarg, 2.2);
+        };
+        for (let k = 0; k < 28; k++) {
+            const x = 75 + k * 46 + r() * 18;
+            if (x > 610 && x < 790) continue;
+            const y0 = x < 160 || x > 1240 ? 185 + r() * 50 : 125 + r() * 45;
+            estalactita(x, y0, 8 + r() * 9, 32 + r() * 62);
+        }
+        // Estalagmites de roca que s'alcen a les vores de la cova
+        const estg = this.add.graphics().setDepth(360);
+        [[145, 345, 1.1], [270, 235, 0.85], [1145, 240, 1.0], [1255, 345, 0.95], [135, 690, 0.9], [1265, 710, 1.0], [140, 1020, 0.85], [1255, 1030, 0.9]].forEach(([sx, sy, esc]) => {
+            const w = 18 * esc, h = 54 * esc;
+            estg.fillStyle(0x000000, 0.35).fillEllipse(sx, sy + 2, w * 2.4, 12 * esc);
+            estg.fillStyle(0x2c2820, 1).fillTriangle(sx - w, sy, sx + w, sy, sx, sy - h);
+            estg.fillStyle(0x464034, 1).fillTriangle(sx - w * 0.85, sy, sx + w * 0.1, sy, sx - 1, sy - h * 0.92);
+            estg.lineStyle(2, 0x14120e, 1).strokeTriangle(sx - w, sy, sx + w, sy, sx, sy - h);
+            estg.fillStyle(0x88c8b8, 0.5).fillCircle(sx, sy - h + 2, 2.5);
+        });
+
         this.colisio(300, 90, 600, 180);
         this.colisio(1100, 90, 600, 180);
         this.colisio(55, 800, 110, 1000);
@@ -171,13 +236,21 @@ class ZonaGirgoles extends ZonaBase {
             alpha: { start: 0.8, end: 0 }, tint: [0x9affd0, 0xd0ffe8], frequency: 140, blendMode: 'ADD'
         }).setDepth(9000);
 
-        // Inscripció dels monjos
-        this.posar('pergami_paret', 460, 230, { fonsY: 250, escala: 0.6 });
-        this.interactiu(460, 270, RADI_OBJECTE, DIALEGS.girgolesInscripcio, { altura: 90 });
+        // Inscripció dels monjos: pergamí gran sobre una llosa clavada a la paret, il·luminat per bolets de llum
+        const PX = 470, PY = 228;
+        const marcP = this.add.graphics().setDepth(248);
+        marcP.fillStyle(0x000000, 0.4).fillRoundedRect(PX - 58, PY - 134, 116, 142, 8);
+        marcP.fillStyle(0x3a3228, 1).fillRoundedRect(PX - 54, PY - 132, 108, 136, 6);
+        marcP.lineStyle(2.5, 0x1a1410, 1).strokeRoundedRect(PX - 54, PY - 132, 108, 136, 6);
+        girgoles(marcP, PX - 56, PY - 18, 3, 0xb8ffe0, 0x3a8868);
+        girgoles(marcP, PX + 52, PY - 22, 3, 0xb8ffe0, 0x3a8868);
+        const haloPerg = this.add.ellipse(PX, PY - 64, 150, 160, 0xffe8a8, 0.22).setDepth(249).setBlendMode('ADD');
+        this.tweens.add({ targets: haloPerg, alpha: 0.1, yoyo: true, repeat: -1, duration: 1200 });
+        this.posar('pergami_paret', PX, PY, { fonsY: 250, escala: 1.55 });
+        this.interactiu(PX, PY + 28, RADI_GRAN, DIALEGS.girgolesInscripcio, { altura: 135 });
 
         // ---- El puzle: cinc mates de gírgoles lluminoses en rotllana ----
         this.mates = [];
-        const resolt = Estat.flag('girgolesEnceses');
         const inici = resolt ? [1, 1, 1, 1, 1] : [1, 0, 1, 0, 0];
         for (let i = 0; i < 5; i++) {
             const a = -Math.PI / 2 + i * Math.PI * 2 / 5, x = GIRG_CERCLE.x + Math.cos(a) * GIRG_CERCLE.r, y = GIRG_CERCLE.y + Math.sin(a) * GIRG_CERCLE.r * 0.8;
@@ -195,8 +268,12 @@ class ZonaGirgoles extends ZonaBase {
 
         // La cortina de micel·li que tapa el túnel del nord
         this.cortina = this.add.graphics().setDepth(181);
-        this.cortina.fillStyle(0xe8f0e0, 0.85).fillRect(640, 120, 120, 70);
-        for (let k = 0; k < 14; k++) this.cortina.lineStyle(2, 0xc8d8c0, 0.9).lineBetween(642 + k * 9, 120, 640 + k * 9 + (k % 3) * 4, 192);
+        this.cortina.fillStyle(0xd8ecd8, 0.82).fillRect(640, 118, 120, 72);
+        for (let k = 0; k < 16; k++) {
+            const xk = 642 + k * 7.5;
+            this.cortina.lineStyle(2.5, k % 2 ? 0xf0fff4 : 0xa8ccb0, 0.92).lineBetween(xk, 118, xk + ((k % 3) - 1) * 5, 192);
+        }
+        this.cortina.lineStyle(2, 0xd8ffe8, 0.65).lineBetween(640, 142, 760, 146).lineBetween(642, 168, 758, 164);
         if (resolt) this.cortina.setVisible(false);
         else {
             this.colCortina = this.colisio(700, 170, 120, 40);
@@ -207,7 +284,8 @@ class ZonaGirgoles extends ZonaBase {
         [[420, 520], [980, 560], [360, 900], [1020, 980]].forEach(([x, y]) => { const e = this.enemic('ratpenat', x, y); if (e) e.estat = 'penja'; });
 
         this.foscor = crearFoscor(this, W, H);
-        this.sortida(650, 130, 100, 30, 'ZonaTortura', 'girgoles');
+        // La sortida del nord (i les seves llumetes) només s'activa quan el puzle de les gírgoles ja és resolt
+        if (resolt) this.sortida(650, 130, 100, 30, 'ZonaTortura', 'girgoles');
         this.sortida(660, H - 22, 80, 14, 'ZonaSotaTaverna', 'girgoles');
     }
 
@@ -234,6 +312,7 @@ class ZonaGirgoles extends ZonaBase {
         this.cameras.main.shake(300, 0.003);
         if (this.colCortina) this.obstacles.remove(this.colCortina, true, true);
         this.tweens.add({ targets: this.cortina, alpha: 0, duration: 1600 });
+        this.sortida(650, 130, 100, 30, 'ZonaTortura', 'girgoles');
         this.ineuDiu('Les gírgoles canten: el micel·li es desfà!');
         Estat.posaObjectiu('Segueix pel túnel del nord de la Sala de les Gírgoles.');
         Estat.desar();
@@ -250,10 +329,13 @@ class ZonaGirgoles extends ZonaBase {
 
     actualitzar() {
         const t = this.time.now, resolt = Estat.flag('girgolesEnceses');
-        const llums = [[this.ineu.x, this.ineu.y - 40, Estat.te('llanterna') ? 450 : 330]];
+        const llums = [
+            [this.ineu.x, this.ineu.y - 40, Estat.te('llanterna') ? 450 : 330],
+            [470, 190, 210]
+        ];
         this.mates.forEach(m => { if (m.on) llums.push([m.x, m.y - 20, 200 * (1 + 0.05 * Math.sin(t / 300 + m.i))]); });
         if (resolt) llums.push([700, 640, 520]);
-        this.bassals.forEach(b => llums.push([b.x, b.y, 60]));
+        this.bassals.forEach(b => llums.push([b.x, b.y, 65]));
         this.foscor.pintar(resolt ? 0.3 : 0.72, llums);
     }
 }
@@ -516,7 +598,7 @@ class ZonaBoira extends ZonaBase {
 
 // ---------------- LA SALA DE LA GÀBIA ----------------
 // La gàbia és al fons d'una plataforma gran voltada per un avenc. Al davant hi ha l'espai del combat final.
-const GABIA = { x: 900, y: 720, platW: 900, platH: 600, avenc: 130 };
+const GABIA = { x: 900, y: 800, platW: 1100, platH: 840, avenc: 130 };
 const NENS_GABIA = [
     { id: 'Huri', key: 'nen_uri', nom: "l'Huri", flag: 'rescatUri', dx: -80 },
     { id: 'Fram', key: 'nen_flam', nom: 'el Fram', flag: 'rescatFlam', dx: 0 },
@@ -528,18 +610,18 @@ class ZonaGabia extends ZonaBase {
         super('ZonaGabia', {
             nom: 'Sala de la Gàbia',
             amplada: 1800,
-            alcada: 1640,
+            alcada: 1840,
             colorFons: '#06040a',
             reneix: 'tortura',            // si l'Ineu cau al combat final, torna a l'entrada de la sala
-            entrades: { tortura: { x: 900, y: 1540, dir: 'amunt' } }
+            entrades: { tortura: { x: 900, y: 1740, dir: 'amunt' } }
         });
     }
 
     construir() {
         // L'escena es reaprofita a cada visita: si l'Ineu va caure lluitant, el combat ha de tornar a començar de zero
         this.combatIniciat = false; this.bossActiu = false; this.boss = null; this.bossCaigut = null; this.finalEngegat = false;
-        this.tambor = null; this.avisCant = 0; this.anellsAvis = []; this.focs = [];
-        const W = 1800, H = 1640, G = GABIA;
+        this.tambor = null; this.avisCant = 0; this.anellsAvis = []; this.focs = []; this.colCombatPont = null;
+        const W = 1800, H = 1840, G = GABIA;
         const x0 = G.x - G.platW / 2, x1 = G.x + G.platW / 2, y0 = G.y - G.platH / 2, y1 = G.y + G.platH / 2, A = G.avenc;
         this.terra('pedra', 0, 0, W, H, -1100).setTint(0x4a4058);
         // L'avenc: un anell negre i sense fons al voltant de la plataforma, amb boira lila
@@ -557,9 +639,9 @@ class ZonaGabia extends ZonaBase {
         const pl = this.add.graphics().setDepth(-1050);
         pl.fillStyle(0x2e2838, 1).fillRoundedRect(x0, y0, G.platW, G.platH, 40);
         let ll = 9; const rr = () => (ll = ll * 16807 % 2147483647) / 2147483647;
-        for (let k = 0; k < 110; k++) pl.fillStyle(rr() < 0.5 ? 0x3a3448 : 0x26202e, 1).fillRoundedRect(x0 + 20 + rr() * (G.platW - 80), y0 + 20 + rr() * (G.platH - 60), 40 + rr() * 30, 26 + rr() * 16, 6);
+        for (let k = 0; k < 150; k++) pl.fillStyle(rr() < 0.5 ? 0x3a3448 : 0x26202e, 1).fillRoundedRect(x0 + 20 + rr() * (G.platW - 80), y0 + 20 + rr() * (G.platH - 60), 40 + rr() * 30, 26 + rr() * 16, 6);
         pl.lineStyle(2, 0x14101a, 0.8);
-        for (let k = 0; k < 14; k++) { const cx = x0 + 40 + rr() * (G.platW - 80), cy = y0 + 30 + rr() * (G.platH - 60); pl.lineBetween(cx, cy, cx + 20 + rr() * 30, cy + 10 + rr() * 20); }
+        for (let k = 0; k < 20; k++) { const cx = x0 + 40 + rr() * (G.platW - 80), cy = y0 + 30 + rr() * (G.platH - 60); pl.lineBetween(cx, cy, cx + 20 + rr() * 30, cy + 10 + rr() * 20); }
         pl.lineStyle(3, 0x9a50ff, 0.35).strokeRoundedRect(x0 - 6, y0 - 6, G.platW + 12, G.platH + 12, 44);
         this.fixar([av], x0 - A - 30, y0 - A - 30, G.platW + 2 * A + 60, G.platH + 2 * A + 60);           // (dibuixos fixos: una sola imatge)
         this.fixar([pl], x0 - 10, y0 - 10, G.platW + 20, G.platH + 20);
@@ -570,7 +652,7 @@ class ZonaGabia extends ZonaBase {
         this.colisio(x1 + A / 2, G.y, A, G.platH + 2 * A);
         this.colisio((x0 - A + bx - bw / 2) / 2, y1 + A / 2, bx - bw / 2 - (x0 - A), A);
         this.colisio((bx + bw / 2 + x1 + A) / 2, y1 + A / 2, x1 + A - (bx + bw / 2), A);
-        this.limits = { x0: x0 + 70, x1: x1 - 70, y0: y0 + 90, y1: y1 - 40 };
+        this.limits = { x0: x0 + 70, x1: x1 - 70, y0: y0 + 90, y1: y1 - 45 };
 
         // El pont: blocs de pedra que dormen al fons i el Cant de Vespres aixeca
         this.blocs = [];
@@ -584,19 +666,19 @@ class ZonaGabia extends ZonaBase {
             this.colPont = this.colisio(bx, y1 + A / 2, bw, A);
         }
         this.yPont = y1 + A + 60;
-        this.interactiu(bx, this.yPont, RADI_GRAN, DIALEGS.pontGabia, { altura: 90, enTancar: () => Estat.posaFlag('flauta_pont') });
+        this.interactiu(bx, this.yPont, RADI_GRAN, DIALEGS.pontGabia, { altura: 90, actiu: () => !Estat.flag('pontGabia'), enTancar: () => Estat.posaFlag('flauta_pont') });
         this.llocFlauta('pont', bx, this.yPont, 220, true, () => !Estat.flag('pontGabia'));
 
         // ---- La gàbia gegant, al fons de la plataforma ----
-        const gx = G.x, base = y0 + 250, gw = 300, gh = 420;
+        const gx = G.x, base = y0 + 260, gw = 300, gh = 420;
         this.gx = gx; this.base = base; this.gh = gh;
         const oberta = Estat.flag('gabiaOberta') && !Estat.flag('andreuTancat');
         const dy = oberta ? -560 : 0;                                                 // oberta: penja enlaire, sobre la cova
-        const { gb, brill } = this.dibuixarGabia(gx, base, gw, gh, dy);              // (js/zones/gabia_decor.js)
+        const { gb, gbPost, brill } = this.dibuixarGabia(gx, base, gw, gh, dy);      // (js/zones/gabia_decor.js)
         this.brillGabia = brill;
-        this.gabiaGfx = [gb, this.brillGabia];
+        this.gabiaGfx = [gb, gbPost, this.brillGabia].filter(Boolean);
         if (!oberta) this.colGabia = this.colisio(gx, base - 10, gw + 10, 50);
-        this.interactiu(gx, base + 60, 160, DIALEGS.gabiaGran, { altura: 260, enTancar: () => Estat.posaFlag('flauta_gabia') });
+        this.interactiu(gx, base + 60, 160, DIALEGS.gabiaGran, { altura: 260, actiu: () => !Estat.flag('gabiaOberta'), enTancar: () => Estat.posaFlag('flauta_gabia') });
         this.llocFlauta('gabia', gx, base + 60, 260, true, () => !Estat.flag('gabiaOberta'));
 
         // Els tres capolls de boira (els nens), dins la gàbia mentre no s'obre
@@ -634,12 +716,18 @@ class ZonaGabia extends ZonaBase {
             this.ocellsBoira.push(o);
         }
 
-        // El Germà Aldreu: de guàrdia al costat de la gàbia, fet Pastor de Boira fins que el seu Mestre cau (llavors la boira el deixa),
-        // o tancat a dins quan tot s'ha acabat. De Pastor, al codi també és this.npcs.germa_aldreu
-        if (Estat.flag('andreuTancat')) this.npc('germa_aldreu', gx, base - 30, DIALEGS.aldreuGabia);
+        // El Germà Aldreu: abans del combat no és visible (apareix de cop quan l'Ineu entra a la plataforma);
+        // un cop vençut el Mestre, queda com a Germà Aldreu, i al final resta tancat dins la gàbia.
+        if (Estat.flag('andreuTancat')) this.npc('germa_aldreu', gx, base + 10, DIALEGS.aldreuGabia);
         else if (!Estat.flag('gabiaOberta')) {
             if (Estat.flag('ocellaireVencut')) this.npc('germa_aldreu', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
-            else this.npcs.germa_aldreu = this.npc('pastor_boira', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
+            else {
+                const a = this.npcs.germa_aldreu = this.npc('pastor_boira', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
+                a.setVisible(false).setAlpha(0);
+                if (a.ombra) a.ombra.setVisible(false).setAlpha(0);
+                if (a.col) a.col.body.enable = false;
+                if (a.punt) a.punt.actiu = () => false;
+            }
         }
         if (Estat.flag('andreuTancat')) { const a = this.npcs.germa_aldreu; a.punt.x = gx; a.punt.y = base + 60; a.setDepth(base - 15); }
 
@@ -647,7 +735,7 @@ class ZonaGabia extends ZonaBase {
         const cv = this.add.graphics().setDepth(-990);
         cv.fillStyle(0x1a1424, 1).fillRect(0, 0, W, 120);
         for (let k = 0; k < 18; k++) cv.fillStyle(0x2a2234, 1).fillTriangle(k * 100, 120, k * 100 + 50, 120, k * 100 + 25, 170 + (k % 3) * 20);
-        [[150, 800], [1650, 800], [150, 1350], [1650, 1350]].forEach(([x, y]) => this.columnaCova(x, y));
+        [[135, 820], [1665, 820], [135, 1480], [1665, 1480]].forEach(([x, y]) => this.columnaCova(x, y));
         this.colisio(W / 2, 60, W, 120);
         this.colisio(30, H / 2, 60, H);
         this.colisio(W - 30, H / 2, 60, H);
@@ -757,8 +845,8 @@ class ZonaGabia extends ZonaBase {
     furiaOcellaire(e, fase = 2) {
         const c = e.spr.body.center, cam = this.cameras.main;
         Sfx.rugit();
-        cam.shake(fase === 3 ? 1800 : 1300, fase === 3 ? 0.016 : 0.012);
-        cam.flash(400, 255, fase === 3 ? 140 : 60, 40);
+        cam.shake(fase === 3 ? 1800 : 1300, fase === 3 ? 0.012 : 0.009);
+        cam.flash(220, 255, fase === 3 ? 140 : 60, 40);
         const ona = this.add.circle(c.x, c.y - 30, 30).setStrokeStyle(10, 0xff5030, 0.9).setDepth(99960);
         this.tweens.add({ targets: ona, radius: 520, alpha: 0, duration: 900, ease: 'Cubic.out', onComplete: () => ona.destroy() });
         const jo = this.ineu.body.center, dx = jo.x - c.x, dy = jo.y - c.y, l = Math.hypot(dx, dy) || 1;
@@ -928,10 +1016,25 @@ class ZonaGabia extends ZonaBase {
     // Durant el combat final no es pot parlar amb ningú ni tocar la flauta
     sensePunts() { return !!this.bossActiu; }
 
+    // Tanca (o allibera) la càmera i el pas del pont perquè tot el combat tingui lloc estrictament dins la Sala de la Gàbia,
+    // sense que es vegin mai ni el pont ni les escales d'entrada
+    tancarSalaCombat(actiu) {
+        const G = GABIA, y1 = G.y + G.platH / 2, cam = this.cameras.main;
+        if (actiu) {
+            if (!this.colCombatPont) this.colCombatPont = this.colisio(G.x, y1 + G.avenc / 2, 140, G.avenc);
+            const x0 = G.x - G.platW / 2 - 40, w = G.platW + 80;
+            cam.setBounds(x0, 96, w, y1 - 96);
+            this.boundsCamOrig = null;
+        } else {
+            if (this.colCombatPont) { this.obstacles.remove(this.colCombatPont, true, true); this.colCombatPont = null; }
+            cam.setBounds(0, 0, this.config.amplada, this.config.alcada);
+        }
+    }
 
     iniciarCombatFinal() {
         this.combatIniciat = true;
         this.bossActiu = true;
+        this.tancarSalaCombat(true);
         const gx = this.gx, base = this.base, vist = Estat.flag('ocellaireVist');
         const ap = this.add.image(gx, base + 90, 'ocellaire').setAlpha(0).setDepth(base + 90);
         ap.setScale(this.textures.get('ocellaire').customData.escala || 1 / RES);
@@ -939,14 +1042,40 @@ class ZonaGabia extends ZonaBase {
         const cam = this.cameras.main, ui = this.ui(), A = 'Aldreu, Pastor de Boira', O = "L'Home de la Gàbia";
         const pagines = [
             { fer: (z, fet) => z.seq([
-                f => { z.ineuVa(this.ineu.x, Math.max(this.ineu.y, base + 300), null, 160); z.enquadrar(gx + 90, base - 60, 0.8, 1000, f); },
-                f => z.npcMira('germa_aldreu', 'ineu', f)
+                f => {
+                    z.ineuVa(this.ineu.x, Math.min(this.ineu.y, base + 340), null, 180);
+                    z.enquadrar(gx + 70, base + 70, 1.08, 900, f);
+                },
+                f => {
+                    // El Germà Aldreu (Pastor de Boira) apareix de cop entre una bafarada de boira
+                    const ald = this.npcs.germa_aldreu;
+                    if (ald) {
+                        Sfx.puf();
+                        this.boiraPuf(ald.x, ald.y - 50);
+                        cam.shake(180, 0.004);
+                        ald.setVisible(true).setAlpha(1);
+                        if (ald.ombra) ald.ombra.setVisible(true).setAlpha(0.42);
+                        if (ald.col) ald.col.body.enable = true;
+                    }
+                    z.npcMira('germa_aldreu', 'ineu');
+                    z.esperar(450, f);
+                }
             ], fet) },
-            { qui: A, text: vist ? "Una altra vegada, monjo? El Mestre no es cansa mai." : "Mestre! Mestre, ja és aquí! El monjo que us vol prendre els nens!" },
+            ...(vist ? [
+                { qui: A, text: "Una altra vegada, monjo? El Mestre no es cansa mai." }
+            ] : [
+                { qui: A, text: "Qui t'ha donat permís per trepitjar aquesta sala, monjo?!" },
+                { qui: 'Ineu', text: "Germà Aldreu! Deixeu anar els nens, tot això s'ha d'acabar!" },
+                { qui: A, text: "Tard, massa tard! Mestre! Mestre, ja és aquí! El monjo que us vol prendre els nens!" }
+            ]),
             { fer: (z, fet) => z.seq([
                 f => z.npcSalta('germa_aldreu', f, 2),
                 f => z.invocarOcellaire(ap, f),
-                f => { Sfx.rugit(); cam.shake(900, 0.008); ui.titolBoss("L'HOME DE LA GÀBIA", "L'Ocellaire"); z.esperar(vist ? 1800 : 3000, f); }
+                f => {
+                    if (z.textures.exists('ocellaire_rugit')) { ap.setTexture('ocellaire_rugit'); if (ap.ulls) ap.ulls.setVisible(false); }
+                    Sfx.rugit(); cam.shake(900, 0.008); ui.titolBoss("L'HOME DE LA GÀBIA", "L'Ocellaire");
+                    z.esperar(vist ? 2200 : 3200, () => { ap.setTexture('ocellaire'); if (ap.ulls) ap.ulls.setVisible(true); f(); });
+                }
             ], fet) },
             ...(vist ? [] : [
                 { qui: O, text: "Un nen que riu... Fa segles que no en sento cap." },
@@ -1022,7 +1151,8 @@ class ZonaGabia extends ZonaBase {
         const seguir = () => {
             if (e.ulls && e.ulls.active && e.spr.active) {
                 this.posarUlls(e.ulls, e.spr, e.spr.body.bottom + 1);
-                if (e.spr.texture.key === 'ocellaire_cansat') e.ulls.setVisible(false);
+                const k = e.spr.texture.key;
+                if (k === 'ocellaire_cansat' || k === 'ocellaire_genolls' || k === 'ocellaire_rugit') e.ulls.setVisible(false);
             }
         };
         this.events.on('postupdate', seguir);
@@ -1061,9 +1191,9 @@ class ZonaGabia extends ZonaBase {
         this.tweens.add({ targets: e.spr, angle: { from: -6, to: 6 }, yoyo: true, repeat: 6, duration: 90 });
         this.ui().actualitzarHUD();
         // Pla: l'Ocellaire, la gàbia i l'Aldreu alhora
-        const mx = (e.spr.x + this.gx) / 2, my = Math.min(e.spr.y, this.base + 220) - 110;
+        const mx = (e.spr.x + this.gx) / 2, my = Math.min(e.spr.y, this.base + 220) - 80;
         this.time.delayedCall(900, () => this.ui().obrirDialeg({ pagines: [
-            { fer: (z, fet) => z.enquadrar(mx, my, 0.8, 900, fet) },
+            { fer: (z, fet) => z.enquadrar(mx, my, 1.05, 900, fet) },
             { qui: O, text: "No... el meu riure... Els meus ocells..." },
             { fer: (z, fet) => z.seq([
                 // Es desfà en boira i la gàbia se l'empassa
@@ -1090,6 +1220,7 @@ class ZonaGabia extends ZonaBase {
             ], fet) }
         ] }, () => {
             this.bossActiu = false;
+            this.tancarSalaCombat(false);
             this.tornarColorCova();
             Estat.posaFlag('ocellaireVencut');
             Estat.posaObjectiu("L'Home de la Gàbia ha caigut. Els barrots de la gàbia només escolten el Cant del Miracle.");
@@ -1110,7 +1241,7 @@ class ZonaGabia extends ZonaBase {
         Joc.iniciarMusica(this, 0, 'musica_epileg');
         this.ui().obrirDialeg({ pagines: [{ fer: (z, fet) => z.seq([
             f => {
-                z.enquadrar(gx + 60, base - 70, 0.8, 900, null);
+                z.enquadrar(gx + 60, base - 40, 1.05, 900, null);
                 this.cameras.main.flash(500, 255, 230, 160);
                 this.tweens.add({ targets: this.brillGabia, alpha: 1, duration: 600 });
                 this.time.addEvent({ delay: 150, repeat: 14, callback: () => this.flotant(gx + Phaser.Math.Between(-150, 150), base - Phaser.Math.Between(60, 380), Phaser.Utils.Array.GetRandom(['♪', '♫', '♩']), '#ffe08a') });
@@ -1173,7 +1304,11 @@ class ZonaGabia extends ZonaBase {
         const nens = NENS_GABIA.map(n => n.key);
         this.ui().obrirDialeg({ pagines: [
             { fer: (z, fet) => z.seq([
-                f => { z.ineuVa(gx - 60, base + 330, null, 170); z.enquadrar(gx, base + 20, 0.8, 1000, f); },
+                f => {
+                    let pend = 2; const llest = () => { if (--pend === 0) f(); };
+                    z.ineuVa(gx - 60, base + 330, () => { z.posarDireccio('amunt', false); llest(); }, 210);
+                    z.enquadrar(gx, base + 40, 1.05, 1000, llest);
+                },
                 f => {
                     Sfx.riure();
                     nens.forEach(k => z.npcSalta(k, null, 3));
@@ -1194,7 +1329,7 @@ class ZonaGabia extends ZonaBase {
                 f => z.npcMira('germa_aldreu', gx, f)
             ], fet) },
             { qui: 'Germà Aldreu', text: "El Mestre és aquí dins..." },
-            { fer: (z, fet) => z.npcVa('germa_aldreu', gx, base - 30, fet, 120) },
+            { fer: (z, fet) => z.npcVa('germa_aldreu', gx, base + 10, fet, 120) },
             { qui: 'Germà Aldreu', text: "Jo em quedo amb ell." },
             { fer: (z, fet) => z.seq([
                 f => {

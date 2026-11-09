@@ -130,12 +130,12 @@ const CATALEG = [
     { key: 'foc',            file: null,            amplada: 80, provisional: (c, w) => dibuixarFoc(c, w) },
     { key: 'espelma',        file: null,        amplada: 20, provisional: (c, w) => dibuixarEspelma(c, w) },
     { key: 'taula_sopar',    file: null,    amplada: 380, provisional: (c, w) => dibuixarTaulaSopar(c, w) },
-    { key: 'ocellaire',      file: 'assets/enemics/ocellaire.webp',     amplada: 90, cru: true, provisional: (c, w) => dibuixarOcellaire(c, w) },
-    { key: 'ocellaire_idle2', file: 'assets/enemics/ocellaire_idle2.webp', amplada: 90, cru: true },      // idle: fotogrames 2 i 3 (el 1 és el sprite base); mateixa mida i recorte
-    { key: 'ocellaire_idle3', file: 'assets/enemics/ocellaire_idle3.webp', amplada: 90, cru: true },
-    { key: 'ocellaire_rugit', file: 'assets/enemics/ocellaire_rugit.webp', amplada: 90, cru: true },      // pose de rugit (canvis de fase), al mateix llenç de 180x329 que l'idle
-    { key: 'ocellaire_cansat', file: 'assets/enemics/ocellaire_cansat.webp', amplada: 90, cru: true },
-    { key: 'ocellaire_genolls', file: 'assets/enemics/ocellaire_genolls.webp', amplada: 90, cru: true },   // esgotat, de genolls i el cap avall: l'única pausa en què se li pot picar el cap (mateix llenç 180x329)    // pose ajupida; si no hi és, es manté el sprite base
+    { key: 'ocellaire',      file: 'assets/enemics/ocellaire.webp',     amplada: 130, cru: true, provisional: (c, w) => dibuixarOcellaire(c, w) },
+    { key: 'ocellaire_idle2', file: 'assets/enemics/ocellaire_idle2.webp', amplada: 130, cru: true },      // idle: fotogrames 2 i 3 (el 1 és el sprite base); mateixa mida i recorte
+    { key: 'ocellaire_idle3', file: 'assets/enemics/ocellaire_idle3.webp', amplada: 130, cru: true },
+    { key: 'ocellaire_rugit', file: 'assets/enemics/ocellaire_rugit.webp', amplada: 130, cru: true },      // pose de rugit (canvis de fase), al mateix llenç de 260x329 que l'idle
+    { key: 'ocellaire_cansat', file: 'assets/enemics/ocellaire_cansat.webp', amplada: 130, cru: true },
+    { key: 'ocellaire_genolls', file: 'assets/enemics/ocellaire_genolls.webp', amplada: 130, cru: true },   // esgotat, de genolls i el cap avall: l'única pausa en què se li pot picar el cap (mateix llenç 260x329)
     { key: 'ratpenat',       file: null,       amplada: 64, provisional: (c, w) => dibuixarRatpenat(c, w) },
     { key: 'ferralla',       file: null,       amplada: 70, provisional: (c, w) => dibuixarFerralla(c, w) },
     { key: 'capoll',         file: null,         amplada: 70, provisional: (c, w) => dibuixarCapoll(c, w) },
@@ -185,6 +185,7 @@ const CATALEG = [
     { key: 'ineu_aixeca_tiler', file: 'assets/ineu/aixeca_tiler.webp', amplada: 96, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // ... i alçant la branca del Gran Til·ler
     { key: 'ineu_flauta', file: 'assets/ineu/tarota.webp', amplada: 65, cru: true },   // l'Ineu tocant la tarota, de cara a la càmera
     { key: 'ineu_tarota_gran', file: 'assets/ineu/tarota_gran.webp', amplada: 420, cru: true },   // primer pla de l'Ineu tocant la tarota (pantalla de la música)
+    { key: 'tarota_ui', file: 'assets/ui/tarota.webp', amplada: 520, cru: true },                 // la tarota del pergamí inferior on es toquen les notes (js/musica.js)
     { key: 'arma_espasa', file: 'assets/armes/espasa.webp',      amplada: 28, provisional: (c, w) => dibuixarEspasaProvisional(c, w) },   // l'espasa de Runna
     { key: 'cartell_llums', file: 'assets/objectes/cartell_llums.webp', amplada: 560, cru: true },            // cartell de paper (es mostra tal com és, amb el fons blanc)
     { key: 'cartell_llums_borros', file: 'assets/objectes/cartell_llums_borros.webp', amplada: 56, cru: true },   // la mateixa imatge, borrosa i petita, per a la paret
@@ -195,7 +196,7 @@ const CATALEG = [
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
 ['ineu', 'pare_jordi', 'germa_aldreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'galf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
- 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta', 'sansa', 'neus', 'marit_neus', 'ombra_monjo', 'mandu', 'mandu_trencada']
+ 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta', 'sansa', 'neus', 'marit_neus', 'ombra_monjo', 'mandu', 'mandu_trencada', 'nen_uri', 'nen_flam', 'nen_sardin']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
 /**

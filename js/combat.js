@@ -356,7 +356,7 @@ const ENEMICS = {
     ocellaire: {
         tex: 'ocellaire', vida: 54, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8,
         cap: { y: 0.19, r: 40, nomesCansat: true },          // el punt feble: el cap (al 19% del dibuix des de dalt), i només quan està cansat
-        capTex: { ocellaire_genolls: { x: 0.15, y: 0.32, r: 40, nomesCansat: true } },   // de genolls, el cap és més avall i decantat
+        capTex: { ocellaire_genolls: { x: 0.12, y: 0.30, r: 42, nomesCansat: true } },   // de genolls, el cap és més avall i decantat
         copsPausa: 3,
         arma: 'runna',                                       // només Runna li fa mal                                        // a la tercera, s'aixeca d'una revolada i t'empeny
         robust: true, barra: true,
@@ -366,8 +366,8 @@ const ENEMICS = {
             const fase3 = e.vida <= this.vida / 3, fase2 = e.vida <= this.vida * 2 / 3;      // tres fases d'un terç de vida cadascuna: 54 → 36 → 18 (dues pauses de genolls per fase)
             const pausa = fase3 ? 1600 : fase2 ? 1900 : 2200;     // quant dura de genolls
             if (!e.proxAtac) { e.proxAtac = ara + 1800; e.estat = 'sura'; e.nAtac = 0; }
-            // Idle: respira (1 → 2 → 1 → 3) mentre sura; pose de rugit als canvis de fase; en la resta d'estats, el sprite base
-            const clauIdle = e.estat === 'rugit' ? 'ocellaire_rugit'
+            // Idle: respira (1 → 2 → 1 → 3) mentre sura; pose de rugit als canvis de fase i quan crema el terra; en la resta d'estats, el sprite base
+            const clauIdle = (e.estat === 'rugit' || e.estat === 'foc') ? 'ocellaire_rugit'
                 : e.estat === 'cansat' && teGenollsOcellaire(z) ? 'ocellaire_genolls'
                 : e.estat === 'cansat' && teCansatOcellaire(z) ? 'ocellaire_cansat'
                 : e.estat === 'sura' ? ['ocellaire', 'ocellaire_idle2', 'ocellaire', 'ocellaire_idle3'][Math.floor(ara / 260) % 4] : 'ocellaire';
@@ -378,7 +378,8 @@ const ENEMICS = {
                 e.fase2 = true; if (fase3) e.fase3 = true;
                 z.enemics.filter(o => o.tipus === 'ocellFoc' && !o.mort).forEach(o => z.apagarOcell(o));
                 z.netejarRonda(e);
-                e.estat = 'rugit'; e.fins = ara + 1500; e.basto.volant = false; e.nAtac = 0;
+                e.estat = 'rugit'; e.fins = ara + 2900; e.basto.volant = false; e.nAtac = 0;
+                if (z.textures.exists('ocellaire_rugit')) e.spr.setTexture('ocellaire_rugit');
                 z.tweens.killTweensOf(e.basto);
                 z.furiaOcellaire(e, f);
             }
@@ -386,10 +387,10 @@ const ENEMICS = {
             if (e.estat === 'rugit') {
                 e.spr.body.setVelocity(0);
                 b.gir = 0.5;
-                e.spr.angle = Math.sin(ara / 25) * 3;
+                e.spr.angle = Math.sin(ara / 35) * 1.8;
                 if (ara > e.fins) {
                     e.spr.angle = 0;
-                    if (fase3) { e.estat = 'foc'; e.fins = ara + 950; e.focFet = false; }          // la fase 3 s'obre cremant el terra
+                    if (fase3) { e.estat = 'foc'; e.fins = ara + 1350; e.focFet = false; }          // la fase 3 s'obre cremant el terra
                     else { e.estat = 'invoca'; e.fins = ara + 1500; e.nOcells = 0; e.proxOcell = ara + 150; }
                 }
             } else if (e.estat === 'sura') {
@@ -586,31 +587,67 @@ const ENEMICS = {
         }
     },
 
-    // Ratpenat de boira (Gírgoles): penja quiet a la foscor; quan l'Ineu s'acosta, baixa fent ziga-zaga, i després s'enlaira
+    // Ratpenat de boira (Gírgoles): penja cap per avall amb les ales plegades; quan l'Ineu s'acosta, es desperta amb un xiscle ultrasònic,
+    // desplega les ales i es llança en picat fent ziga-zaga abans de tornar a revoltar
     ratpenat: {
-        tex: 'ratpenat', vida: 2, vel: 190, mal: 1, radi: 20, cos: [34, 20], ombra: 0.2, centrat: true,
+        tex: 'ratpenat', vida: 2, vel: 215, mal: 1, radi: 22, cos: [36, 22], ombra: 0.22, centrat: true,
+        preparar: z => {
+            if (z.textures.exists('ratpenat_penja') || typeof pintarRatpenatFotograma !== 'function') return;
+            const W = 84 * RES, H = Math.round(84 * 0.65 * RES);
+            [['ratpenat_penja', 'penja'], ['ratpenat_amunt', 'amunt'], ['ratpenat_avall', 'avall']].forEach(([clau, pose]) => {
+                const t = z.textures.createCanvas(clau, W, H);
+                pintarRatpenatFotograma(t.getContext(), W, H, pose);
+                t.refresh();
+                t.customData.escala = 1 / RES;
+            });
+        },
         perill: e => e.estat === 'ataca',
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
             if (!e.casa) e.casa = { x: c.x, y: c.y };
             e.spr.setScale(e.escalaBase);
+            if (e.estat === 'desperta') {
+                e.spr.body.setVelocity(0, -25);
+                if (z.textures.exists('ratpenat_amunt')) e.spr.setTexture('ratpenat_amunt');
+                e.spr.angle = Math.sin(ara / 25) * 8;
+                if (ara > e.fins) { e.estat = 'ataca'; e.fins = ara + 1500; e.faseZ = Math.random() * Math.PI * 2; }
+                return;
+            }
+            if (e.estat === 'ataca' || e.estat === 'fuig' || e.estat === 'volta') {
+                const ritme = e.estat === 'ataca' ? 65 : 90;
+                const fot = ['ratpenat_amunt', 'ratpenat', 'ratpenat_avall', 'ratpenat'][Math.floor(ara / ritme) % 4];
+                if (z.textures.exists(fot) && e.spr.texture.key !== fot) e.spr.setTexture(fot);
+            }
             if (e.estat === 'ataca') {
-                const a = Math.atan2(jo.y - c.y, jo.x - c.x), zz = Math.sin(ara / 110) * 0.9;
+                const a = Math.atan2(jo.y - c.y, jo.x - c.x), zz = Math.sin(ara / 95 + (e.faseZ || 0)) * 0.85;
                 e.spr.body.setVelocity(Math.cos(a + zz) * this.vel, Math.sin(a + zz) * this.vel);
-                if (ara > e.fins || dist < 26) { e.estat = 'fuig'; e.fins = ara + 900; e.ang = a + Math.PI + (Math.random() - 0.5); }
+                e.spr.angle = Phaser.Math.Clamp(e.spr.body.velocity.x * 0.05, -14, 14);
+                if (ara > e.fins || dist < 26) { e.estat = 'fuig'; e.fins = ara + 850; e.ang = a + Math.PI + (Math.random() - 0.5) * 1.2; }
             } else if (e.estat === 'fuig') {
-                e.spr.body.setVelocity(Math.cos(e.ang) * 150, Math.sin(e.ang) * 150);
-                if (ara > e.fins) { e.estat = 'volta'; e.fins = ara + 700 + Math.random() * 900; }
+                e.spr.body.setVelocity(Math.cos(e.ang) * 165, Math.sin(e.ang) * 165);
+                e.spr.angle = Phaser.Math.Clamp(e.spr.body.velocity.x * 0.04, -10, 10);
+                if (ara > e.fins) { e.estat = 'volta'; e.fins = ara + 650 + Math.random() * 800; }
             } else if (e.estat === 'volta') {
-                const t = ara / 400;
-                e.spr.body.setVelocity(Math.cos(t) * 70, Math.sin(t * 1.3) * 50);
-                if (ara > e.fins && dist < 330) { e.estat = 'ataca'; e.fins = ara + 1400; Sfx.ratpenat(); }
+                const t = ara / 340 + (e.casa.x * 0.01);
+                e.spr.body.setVelocity(Math.cos(t) * 95, Math.sin(t * 2) * 65);
+                e.spr.angle = Phaser.Math.Clamp(e.spr.body.velocity.x * 0.04, -8, 8);
+                if (ara > e.fins && dist < 350) {
+                    e.estat = 'desperta'; e.fins = ara + 240; Sfx.ratpenat();
+                    const ona = z.add.circle(c.x, c.y, 10).setStrokeStyle(2, 0xd890ff, 0.85).setDepth(c.y + 5);
+                    z.tweens.add({ targets: ona, radius: 75, alpha: 0, duration: 360, onComplete: () => ona.destroy() });
+                }
             } else {   // penja
                 e.spr.body.setVelocity(0);
-                if (dist < 280) { e.estat = 'ataca'; e.fins = ara + 1400; Sfx.ratpenat(); }
+                if (z.textures.exists('ratpenat_penja') && e.spr.texture.key !== 'ratpenat_penja') e.spr.setTexture('ratpenat_penja');
+                e.spr.angle = Math.sin(ara / 460 + e.casa.x) * 2.5;
+                if (dist < 300) {
+                    e.estat = 'desperta'; e.fins = ara + 280; Sfx.ratpenat();
+                    const ona = z.add.circle(c.x, c.y, 12).setStrokeStyle(2.5, 0xff6088, 0.9).setDepth(c.y + 5);
+                    z.tweens.add({ targets: ona, radius: 90, alpha: 0, duration: 400, onComplete: () => ona.destroy() });
+                }
             }
-            e.spr.setFlipX(e.spr.body.velocity.x < 0);
+            if (e.estat !== 'penja') e.spr.setFlipX(e.spr.body.velocity.x < 0);
         }
     },
 

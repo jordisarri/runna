@@ -273,7 +273,7 @@ class ZonaJardi extends ZonaBase {
             nom: "L'Hostatgeria",
             amplada: 1800,
             alcada: 1100,
-            entrades: { era: { x: 60, y: 960, dir: 'dreta' }, taverna: { x: 1740, y: 960, dir: 'esquerra' }, llosa: { x: 664, y: 658, dir: 'avall' }, hostatgeria: { x: 1339, y: 800, dir: 'avall' } }
+            entrades: { era: { x: 60, y: 960, dir: 'dreta' }, taverna: { x: 1740, y: 960, dir: 'esquerra' }, llosa: { x: 664, y: 588, dir: 'avall' }, hostatgeria: { x: 1339, y: 800, dir: 'avall' } }
         });
     }
 
@@ -300,39 +300,40 @@ class ZonaJardi extends ZonaBase {
             this.interactiu(1339, 775, RADI_OBJECTE, DIALEGS.hostatgeria, { altura: 180 });
         }
 
-        // --- Pèrgola de pedra enganxada al lateral esquerre: dues files de columnes unides per arcades ---
-        // Fila del davant a y=760 (la base de la façana); l'alçada de les arcades és la de la planta baixa de la casa
-        // (fins a la cornisa). Fila del darrere 300 més amunt: el jardí hi cap de ple.
-        const COLS = [132, 284, 436, 588, 740], YB = 460, YF = 760;
+        // --- Pèrgola de pedra enganxada al lateral esquerre: dues files de columnes unides per bigues d'heura ---
+        // Fila del davant a y=760 (la base de la façana); fila del darrere a y=410 perquè el jardí i la llosa quedin ben deslliurats.
+        const COLS = [132, 284, 436, 588, 740], YB = 410, YF = 760;
         const PLANTA = Math.round(casa.displayHeight * 0.339);            // alçada de la planta baixa de la façana
         const tex = this.textures.get('columna'), escalaBase = (tex.customData && tex.customData.escala) || 1 / RES;
         const colH = tex.getSourceImage().height * escalaBase;            // alçada d'una columna sense escalar
         const ESC = 1.4, ALT_COL = Math.round(colH * ESC), COL_W = Math.round(tex.getSourceImage().width * escalaBase * ESC);
-        // Sense arcades: només les columnes, i unes bigues de fulles d'heura (petites i ben opaques, amb una mica de moviment) que les uneixen pel capdamunt:
-        // una biga al llarg de cada fila de columnes i una de travessera a cada columna, entre la fila del davant i la del darrere
+        // Bigues de dues files de fulles d'heura (fixes, sense moviment) que uneixen les columnes pel capdamunt fins a tocar les del sud:
+        // una biga al llarg de cada fila de columnes i una de travessera a cada columna, entre la fila del darrere i la del davant
         const heura = (x, y, esc, alfa, prof, ang) => {
-            if (Math.hypot(x - 664, (y - 560) * 1.2) < 120) return null;          // la llosa i el seu entorn queden lliures d'heura (es veu l'escena de l'obertura)
-            if (Math.abs(x - 290) < 215 && y > 640 - 470 && y < 640 + 20) prof = 100;       // a la zona de la Prunera (capçada gran) les fulles queden SOTA l'arbre: la biga hi arriba, però l'arbre es veu bé
+            if (Math.hypot(x - 290, (y - 430) * 1.25) < 195 && y < 545) prof = 638;   // sota la capçada de la Prunera però per damunt de les columnes del nord
             const l = this.add.image(x, y, 'fulla_heura').setScale(esc).setAlpha(alfa).setDepth(prof).setAngle(ang);
             l.setTint([0x4f8f35, 0x6aac3e, 0x7cbc4a, 0x3f7a30, 0x92cc58][Math.floor(rnd() * 5)]);
-            if (rnd() < 0.25) this.tweens.add({ targets: l, angle: ang + (rnd() < 0.5 ? -6 : 6), duration: 2200 + rnd() * 2600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: rnd() * 2000 });
             return l;
         };
-        const yTopB = YB - ALT_COL + 10, yTopF = YF - ALT_COL + 10;               // el capdamunt de les columnes de cada fila
-        const biga = (xa, ya, xb, yb) => {                                          // una biga de fulles de (xa, ya) a (xb, yb) (només fulles, sense tija)
-            const llarg = Math.hypot(xb - xa, yb - ya), n = Math.round(llarg / 7), ang = Math.atan2(yb - ya, xb - xa);
+        const yTopB = YB - ALT_COL + 10, yTopF = YF - ALT_COL + 12;               // el capdamunt (capitell) de les columnes de cada fila
+        const biga = (xa, ya, xb, yb) => {                                          // biga de dues files paral·leles de fulles de (xa, ya) a (xb, yb)
+            const llarg = Math.hypot(xb - xa, yb - ya), n = Math.round(llarg / 10), ang = Math.atan2(yb - ya, xb - xa);
+            const nx = -Math.sin(ang), ny = Math.cos(ang), baseAng = Phaser.Math.RadToDeg(ang) + 90;
             for (let i = 0; i <= n; i++) {
-                const t = i / n, cx = xa + (xb - xa) * t, cy = ya + (yb - ya) * t, perp = (rnd() - 0.5) * 12;      // una línia estreta de fulles
-                heura(cx - Math.sin(ang) * perp + (rnd() - 0.5) * 6, cy + Math.cos(ang) * perp + (rnd() - 0.5) * 6, 0.15 + rnd() * 0.09, 0.85 + rnd() * 0.13, 700, rnd() * 360);
+                [-1, 1].forEach(s => {
+                    const t = Phaser.Math.Clamp((i + (s > 0 ? 0.4 : 0)) / n, 0, 1);
+                    const cx = xa + (xb - xa) * t, cy = ya + (yb - ya) * t, perp = s * 7.5 + (rnd() - 0.5) * 2.2;
+                    heura(cx + nx * perp + (rnd() - 0.5) * 2.5, cy + ny * perp + (rnd() - 0.5) * 2.5, 0.16 + rnd() * 0.07, 0.9 + rnd() * 0.1, YF + 3, baseAng + s * 42 + (rnd() - 0.5) * 32);
+                });
             }
         };
         biga(COLS[0], yTopB, COLS[COLS.length - 1], yTopB);                         // la biga de la fila del darrere
-        biga(COLS[0], yTopF, COLS[COLS.length - 1], yTopF);                         // la biga de la fila del davant
-        COLS.forEach(x => biga(x, yTopB, x, yTopF));                                // una de travessera a cada columna
+        biga(COLS[0], yTopF, COLS[COLS.length - 1], yTopF);                         // la biga de la fila del davant (sobre els capitells del sud)
+        COLS.forEach(x => biga(x, yTopB, x, yTopF));                                // una de travessera a cada columna, de nord a sud
         COLS.forEach(x => {
             this.posar('columna', x, YB, { escala: ESC, col: { w: 34, h: 14 } });
             this.posar('columna', x, YF, { escala: ESC, col: { w: 34, h: 14 } });
-            [YB, YF].forEach(y => { for (let k = 0; k < 6; k++) heura(x + (rnd() - 0.5) * 30, y - 18 - k * (ALT_COL / 7) - rnd() * 12, 0.15 + rnd() * 0.08, 0.85 + rnd() * 0.12, y + 2, rnd() * 360); });   // l'heura puja per les columnes
+            [YB, YF].forEach(y => { for (let k = 0; k < 6; k++) heura(x + (rnd() - 0.5) * 28, y - 18 - k * (ALT_COL / 7) - rnd() * 10, 0.15 + rnd() * 0.07, 0.88 + rnd() * 0.12, y + 2, (rnd() - 0.5) * 90); });   // l'heura puja per les columnes
         });
         this.pergola = { x0: COLS[0], x1: COLS[COLS.length - 1], yb: YB, yf: YF, planta: PLANTA };
 
@@ -348,8 +349,8 @@ class ZonaJardi extends ZonaBase {
         [[-110, -190], [-60, -250], [0, -300], [70, -260], [120, -200], [-140, -140], [40, -170], [-20, -210], [100, -130], [-90, -100]].forEach(([dx, dy]) => this.add.circle(PX + dx, PY + dy, 10, 0xf0b830).setStrokeStyle(2, 0x7a5010).setDepth(PY + 1));
         this.interactiu(PX, PY + 40, RADI_GRAN * 1.5, DIALEGS.prunera, { altura: 150, senseMirada: true }); // es pot collir la pruna des de qualsevol costat de l'arbre
 
-        // La llosa del passadís cap al soterrani de l'Hostatgeria, entre les columnes (ben visible). S'obre quan hi creix la flor de lluna
-        const LX = 664, LY = 560;      // dins la pèrgola, entre les dues últimes columnes (les arcades que toquen a la casa): ni les arcades ni les columnes la tapen
+        // La llosa del passadís cap al soterrani de l'Hostatgeria, entre les columnes i ben amunt perquè les columnes del sud no la tapin gens
+        const LX = 664, LY = 490;
         this.llosaPos = { x: LX, y: LY };
         this.foratLlosa = this.add.graphics().setDepth(-705);                // el forat amb l'escala, tapat per la llosa fins que s'obre
         this.dibuixaForat(LX, LY);
@@ -386,16 +387,24 @@ class ZonaJardi extends ZonaBase {
         this.sortida(1786, 900, 14, 130, 'ZonaTaverna', 'jardi');
     }
 
-    // Forat quadrat a terra amb una escala que baixa cap al nord (els graons del fons són més foscos)
+    // Forat quadrat emmarcat amb carreus de pedra i una escala que baixa cap al nord (els graons del fons són més foscos)
     dibuixaForat(x, y) {
         const g = this.foratLlosa;
         g.clear();
-        g.fillStyle(0x5a5448, 1).fillRoundedRect(x - 45, y - 45, 90, 90, 6).lineStyle(3, 0x120c08, 1).strokeRoundedRect(x - 45, y - 45, 90, 90, 6);
-        g.fillStyle(0x0a0604, 1).fillRect(x - 37, y - 37, 74, 74);
-        [0x14100c, 0x241c14, 0x3a2e22, 0x5a4a36, 0x7a6648, 0x9a8460].forEach((c, i) => {
-            const sy = y - 37 + i * 12.3;
-            g.fillStyle(c, 1).fillRect(x - 37, sy, 74, 12.3).lineStyle(1.2, 0x0a0604, 0.9).lineBetween(x - 37, sy + 12.3, x + 37, sy + 12.3);
+        g.fillStyle(0x000000, 0.28).fillRoundedRect(x - 46, y - 43, 92, 92, 7);
+        g.fillStyle(0x6e6658, 1).fillRoundedRect(x - 44, y - 44, 88, 88, 5).lineStyle(3, 0x18120c, 1).strokeRoundedRect(x - 44, y - 44, 88, 88, 5);
+        g.lineStyle(1.4, 0x3a3228, 0.85);
+        [-22, 0, 22].forEach(d => {
+            g.lineBetween(x + d, y - 44, x + d, y - 36).lineBetween(x + d, y + 36, x + d, y + 44);
+            g.lineBetween(x - 44, y + d, x - 36, y + d).lineBetween(x + 36, y + d, x + 44, y + d);
         });
+        g.fillStyle(0x0a0604, 1).fillRect(x - 36, y - 36, 72, 72);
+        [0x14100c, 0x241c14, 0x3a2e22, 0x5a4a36, 0x7a6648, 0x9a8460].forEach((c, i) => {
+            const sy = y - 36 + i * 12;
+            g.fillStyle(c, 1).fillRect(x - 36, sy, 72, 12).lineStyle(1.4, 0x0a0604, 0.9).lineBetween(x - 36, sy + 12, x + 36, sy + 12);
+            g.fillStyle(0xffffff, 0.08).fillRect(x - 35, sy + 1, 70, 2);
+        });
+        g.lineStyle(2, 0x120c08, 1).strokeRect(x - 36, y - 36, 72, 72);
     }
 
     posarEntradaForat() {

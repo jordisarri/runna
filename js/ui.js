@@ -869,12 +869,11 @@ class EscenaUI extends Phaser.Scene {
 
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
-            { text: 'Diari i mapa', fn: () => { this.tancarMenu(); this.obrirInventari('mapa'); } },
             { text: 'Àudio', audio: true, fn: () => { Sfx.commutarSilenci(); this.pintarSeleccio(); Sfx.tria(); } },
             // Controls tàctils (només en pantalles tàctils): dretà (joystick a l'esquerra, acció a la dreta), esquerrà (al revés) o automàtic (tota la pantalla: un toc = acció, arrossegar = joystick)
             ...(this.sys.game.device.input.touch ? [{ text: 'Mà', commuta: true, etiqueta: () => 'Mà: ' + ({ dreta: 'dretana', esquerra: 'esquerrana', auto: 'automàtic' })[this.mans], fn: () => { this.canviarMans(); this.pintarSeleccio(); Sfx.tria(); } }] : []),
-            { text: 'Desa a un fitxer', fn: () => { Estat.exportar(); this.missatge('Partida baixada: guarda el fitxer. Amb «Carrega d\'un fitxer» la recuperaràs.'); } },
-            { text: 'Carrega d\'un fitxer', fn: () => Estat.importar(ok => {
+            { text: 'Desa a un fitxer', fn: () => { Estat.exportar(); this.missatge('Partida baixada: guarda el fitxer. Amb «Carrega un fitxer» la recuperaràs.'); } },
+            { text: 'Carrega un fitxer', fn: () => Estat.importar(ok => {
                 if (!ok) { this.missatge('No he pogut llegir aquest fitxer com a partida.'); return; }
                 this.tancarMenu(); Joc.continuar(this);
             }) },
@@ -882,7 +881,7 @@ class EscenaUI extends Phaser.Scene {
         ];
         // Cada opció és un botó (contenidor amb fons, text i, a l'Àudio, l'altaveu): s'il·lumina en passar-hi per sobre o seleccionar-lo,
         // fa un petit «pop» en prémer-lo i sona. L'altaveu i el text van sempre centrats a la mateixa línia.
-        const BTN_W = 460, BTN_H = 54, Y0 = ALT / 2 - 205, PAS = 62;
+        const BTN_W = 460, BTN_H = 56, PAS = 66, Y0 = ALT / 2 - 18 - (this.opcions.length - 1) * PAS / 2;
         this.botonsMenu = [];
         this.textOpcions = this.opcions.map((o, i) => {
             const y = Y0 + i * PAS;

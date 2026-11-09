@@ -127,35 +127,28 @@ class EscenaMusica extends Phaser.Scene {
         // Fila de notes per seguir la seqüència mentre s'escolta o es repeteix
         this.creaSlots(llico ? this.melodia.notes.length : Math.max(3, ...Object.values(MELODIES).filter(m => Estat.flag(m.flag)).map(m => m.notes.length)));
 
-        // La tarota: llengüeta, cos cònic, forats i campana ampla
-        const fy = T + 184, esquerra = cx - 258;
-        const fl = add(this.add.graphics());
-        fl.fillStyle(0x3a2412, 1);
-        fl.beginPath();
-        fl.moveTo(esquerra + 22, fy - 8); fl.lineTo(cx + 120, fy - 16);
-        fl.lineTo(cx + 206, fy - 36); fl.lineTo(cx + 242, fy - 48);
-        fl.lineTo(cx + 242, fy + 48); fl.lineTo(cx + 206, fy + 36);
-        fl.lineTo(cx + 120, fy + 16); fl.lineTo(esquerra + 22, fy + 8);
-        fl.closePath(); fl.fillPath();
-        fl.fillStyle(0xb77b3d, 1);
-        fl.beginPath();
-        fl.moveTo(esquerra + 28, fy - 5); fl.lineTo(cx + 119, fy - 12);
-        fl.lineTo(cx + 201, fy - 31); fl.lineTo(cx + 233, fy - 40);
-        fl.lineTo(cx + 233, fy + 40); fl.lineTo(cx + 201, fy + 31);
-        fl.lineTo(cx + 119, fy + 12); fl.lineTo(esquerra + 28, fy + 5);
-        fl.closePath(); fl.fillPath();
-        fl.fillStyle(0x70401f, 1).fillRoundedRect(esquerra - 2, fy - 6, 30, 12, 4);
-        fl.fillStyle(0x24170f, 1).fillCircle(esquerra + 4, fy, 4);
-        fl.lineStyle(3, 0xe3c579, 1);
-        [-148, -54, 42, 133].forEach(x => fl.lineBetween(cx + x, fy - (x > 110 ? 14 : 11), cx + x, fy + (x > 110 ? 14 : 11)));
-        fl.fillStyle(0x2d1b11, 1);
-        [-105, -28, 48, 112].forEach(x => fl.fillEllipse(cx + x, fy - 2 - x * 0.05, 8, 5));
-        fl.lineStyle(2, 0xf2d88e, 0.75).lineBetween(esquerra + 32, fy - 3, cx + 195, fy - 29);
+        // La tarota al pergamí inferior (assets/ui/tarota.webp)
+        const fy = T + 184, teImgTarota = this.textures.exists('tarota_ui') && !Grafics.faltants.includes('tarota_ui');
+        let tw = 520, th = 102;
+        if (teImgTarota) {
+            const imT = add(this.add.image(cx, fy, 'tarota_ui'));
+            imT.setScale(this.textures.get('tarota_ui').customData.escala || 1 / RES);
+            tw = imT.displayWidth; th = imT.displayHeight;
+        } else {
+            const esquerra = cx - 258, fl = add(this.add.graphics());
+            fl.fillStyle(0x3a2412, 1).beginPath();
+            fl.moveTo(esquerra + 22, fy - 8); fl.lineTo(cx + 120, fy - 16); fl.lineTo(cx + 206, fy - 36); fl.lineTo(cx + 242, fy - 48);
+            fl.lineTo(cx + 242, fy + 48); fl.lineTo(cx + 206, fy + 36); fl.lineTo(cx + 120, fy + 16); fl.lineTo(esquerra + 22, fy + 8);
+            fl.closePath(); fl.fillPath();
+        }
+        // Posició dels forats 1r, 3r i 5è sobre la imatge de la tarota (o alineats amb els botons si no hi ha imatge)
+        const FORATS_DX = [0, -0.0838, 0.0348, 0.1547], FORATS_DY = [0, -0.0374, -0.0329, -0.0299];
         this.botons = [null, 1, 2, 3].map(n => {
             if (!n) return null;
             const x = cx + (n - 2) * 168, by = T + 287;
-            const forat = add(this.add.circle(x, fy, 9, 0x2a1608, 1).setStrokeStyle(2, 0x5a3a14, 1));
-            const halo = add(this.add.circle(x, fy, 22, COLOR_NOTA, 0).setBlendMode(Phaser.BlendModes.ADD));
+            const fx = teImgTarota ? cx + FORATS_DX[n] * tw : x, fyForat = teImgTarota ? fy + FORATS_DY[n] * th : fy;
+            const forat = add(this.add.circle(fx, fyForat, 7.5, COLOR_NOTA, 0));
+            const halo = add(this.add.circle(fx, fyForat, 20, COLOR_NOTA, 0).setBlendMode(Phaser.BlendModes.ADD));
             const base = add(this.add.circle(x, by, 56, 0x70451f, 1).setStrokeStyle(4, 0x3a2412, 1).setInteractive({ useHandCursor: true }));
             base.on('pointerdown', () => this.nota(n, true));
             const gemma = add(this.add.circle(x, by, 46, COLOR_NOTA, 1).setStrokeStyle(3, 0x3a2412, 1));
@@ -267,10 +260,10 @@ class EscenaMusica extends Phaser.Scene {
         b.gemma.setFillStyle(color, 1);
         this.tweens.add({ targets: [b.base, b.gemma], scale: { from: 1.14, to: 1 }, duration: 260, ease: 'Back.easeOut' });
         this.time.delayedCall(280, () => { if (b.gemma.active) b.gemma.setFillStyle(color, 0.7); });
-        b.forat.setFillStyle(color, 1);
+        b.forat.setFillStyle(color, 0.95);
         b.halo.setAlpha(0.85);
         this.tweens.add({ targets: b.halo, alpha: 0, scale: { from: 1, to: 1.8 }, duration: 520 });
-        this.time.delayedCall(320, () => { if (b.forat.active) b.forat.setFillStyle(0x2a1608, 1); });
+        this.time.delayedCall(320, () => { if (b.forat.active) b.forat.setFillStyle(color, 0); });
         const ona = this.add.circle(b.x, b.by, 56).setStrokeStyle(4, color, 0.9);
         this.panell.add(ona);
         this.tweens.add({ targets: ona, scale: 1.7, alpha: 0, duration: 520, onComplete: () => ona.destroy() });

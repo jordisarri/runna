@@ -3,7 +3,7 @@
  */
 const CREDITS = [
     ['RUNNA', 64, '#ffe08a'],
-    ["La llegenda de l'Ocellaire", 30, '#e0c8ff'],
+    ["L'espasa del Miracle", 30, '#e0c8ff'],
     ['', 30],
     ['El Santuari torna a cantar.', 26, '#fff8e7'],
     ['', 40],
@@ -29,10 +29,12 @@ class EscenaCredits extends Phaser.Scene {
         this.cameras.main.setBackgroundColor('#06040a');
         Joc.iniciarMusica(this, 0, 'musica_credits');
         this.cameras.main.fadeIn(1200, 0, 0, 0);
-        // Ocells daurats que volen de costat a costat
+        // Ocells daurats en posició de vol que creuen la pantalla aletejant
+        this.preparaOcellVol();
         for (let k = 0; k < 7; k++) {
-            const o = this.add.image(-60, 120 + k * 150, 'ocell').setTintFill(0xffe08a).setAlpha(0.3);
-            o.setScale(50 / o.height);
+            const o = this.add.sprite(-60, 120 + k * 150, 'ocell_vol', k % 4).setAlpha(0.38);
+            o.setScale(58 / 90);
+            o.play({ key: 'ocell_vol_vola', startFrame: k % 4 });
             this.tweens.add({ targets: o, x: AMPLE + 60, y: o.y - 60, duration: 9000 + k * 1300, delay: k * 900, repeat: -1 });
         }
         const c = this.add.container(AMPLE / 2, ALT + 40);
@@ -50,6 +52,47 @@ class EscenaCredits extends Phaser.Scene {
             this.input.once('pointerdown', () => this.sortir());
             this.input.keyboard.once('keydown', () => this.sortir());
         });
+    }
+
+    preparaOcellVol() {
+        const FW = 120, FH = 90;
+        if (!this.textures.exists('ocell_vol')) {
+            const tex = this.textures.createCanvas('ocell_vol', FW * 4, FH), ctx = tex.getContext();
+            const ala = (ox, ang, escala, alfa, color) => {
+                ctx.save();
+                ctx.translate(ox + 62, 46); ctx.rotate(ang); ctx.globalAlpha = alfa;
+                const L = 38 * escala;
+                ctx.fillStyle = color;
+                ctx.beginPath(); ctx.moveTo(-8, 2);
+                ctx.quadraticCurveTo(-20 * escala, -L * 0.48, -8 * escala, -L);
+                [[-3, -L + 6], [2, -L - 2], [7, -L + 7], [12, -L], [16, -L * 0.6]].forEach(([x, y]) => ctx.lineTo(x * escala, y));
+                ctx.quadraticCurveTo(16 * escala, -L * 0.25, 9, 2);
+                ctx.closePath(); ctx.fill();
+                ctx.restore();
+            };
+            [-0.25, -1.15, -2.15, -1.15].forEach((ang, i) => {
+                const ox = i * FW;
+                // Ala llunyana
+                ala(ox, ang * 0.8 + 0.45, 0.78, 0.65, '#d8b45a');
+                // Cua oberta en ventall (posició de vol, sense potes)
+                ctx.fillStyle = '#e8c870';
+                ctx.beginPath(); ctx.moveTo(ox + 42, 47); ctx.lineTo(ox + 14, 38); ctx.lineTo(ox + 18, 48); ctx.lineTo(ox + 12, 57); ctx.lineTo(ox + 42, 53); ctx.closePath(); ctx.fill();
+                // Cos aerodinàmic allargat i cap estirat endavant
+                ctx.fillStyle = '#ffe08a';
+                ctx.beginPath(); ctx.ellipse(ox + 60, 49, 22, 11, -0.1, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(ox + 82, 43, 9.5, 0, Math.PI * 2); ctx.fill();
+                // Bec apuntant endavant
+                ctx.fillStyle = '#fff2b8';
+                ctx.beginPath(); ctx.moveTo(ox + 90, 40); ctx.lineTo(ox + 104, 43); ctx.lineTo(ox + 90, 47); ctx.closePath(); ctx.fill();
+                // Ala propera
+                ala(ox, ang, 1, 1, '#fff0b0');
+            });
+            tex.refresh();
+            for (let i = 0; i < 4; i++) tex.add(i, 0, i * FW, 0, FW, FH);
+        }
+        if (!this.anims.exists('ocell_vol_vola')) {
+            this.anims.create({ key: 'ocell_vol_vola', frames: [0, 1, 2, 3].map(f => ({ key: 'ocell_vol', frame: f })), frameRate: 10, repeat: -1 });
+        }
     }
 
     potSortir() {
