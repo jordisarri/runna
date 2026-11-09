@@ -144,8 +144,11 @@ const CATALEG = [
     { key: 'mandu',          file: 'assets/personatges/mandu.webp',          amplada: 62, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8a0c0', cabell: '#8a5a2a', dona: true, alt: 0.62, cap: 17 }) },       // la Mandu, la germana del Fram, amb la nina sencera
     { key: 'mandu_trencada', file: 'assets/personatges/mandu_trencada.webp', amplada: 62, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8a0c0', cabell: '#8a5a2a', dona: true, alt: 0.62, cap: 17 }) },       // la mateixa, amb la nina sense cap (fins que el Fram torni)
     { key: 'nen_sardin',     file: 'assets/personatges/nen_sardin.webp', amplada: 59, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a9a5a', cabell: '#1e1a16', alt: 0.74, cap: 17, ulleres: true }) },
-    { key: 'pastor_boira',   file: 'assets/enemics/pastor_boira.webp',   amplada: 88, provisional: (c, w) => dibuixarPastorBoira(c, w) },
-    { key: 'pastor_derrota', file: 'assets/enemics/pastor_derrota.webp', amplada: 104, provisional: (c, w) => dibuixarPastorDerrota(c, w) },
+    { key: 'pastor_boira',   file: 'assets/enemics/pastor_boira.webp',   amplada: 88, cru: true, provisional: (c, w) => dibuixarPastorBoira(c, w) },
+    { key: 'pastor_derrota', file: 'assets/enemics/pastor_derrota.webp', amplada: 135, cru: true, provisional: (c, w) => dibuixarPastorDerrota(c, w) },
+    { key: 'pastor_apunta',  file: 'assets/enemics/pastor_apunta.webp',  amplada: 128, cru: true },
+    { key: 'pastor_ataca',   file: 'assets/enemics/pastor_ataca.webp',   amplada: 134, cru: true },
+    { key: 'pastor_enfadat', file: 'assets/enemics/pastor_enfadat.webp', amplada: 86, cru: true },
     { key: 'bolet',          file: 'assets/enemics/bolet.webp',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
     { key: 'rovello',        file: 'assets/natura/rovello.webp',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
     { key: 'llac',           file: null,           amplada: 58, provisional: (c, w) => dibuixarLlac(c, w) },
@@ -504,6 +507,26 @@ const Grafics = {
     PASTOR_FULLS: { camina: [8, 10, -1], atac: [1, 0, 0], cau: [1, 0, 0] },        // camina: full de 8 fotogrames; atac (la caiada alçada) i cau (a terra): un sol dibuix
 
     animacions(scene) {
+        if (scene.textures.exists('pastor_camina') && !scene.anims.exists('pastor_camina')) {
+            const DIRS_PASTOR = [
+                ['nw', 0], ['w', 8], ['sw', 16], ['n', 24],
+                ['e', 32], ['s', 40], ['ne', 48], ['se', 56]
+            ];
+            DIRS_PASTOR.forEach(([d, start]) => {
+                scene.anims.create({
+                    key: 'pastor_camina_' + d,
+                    frames: scene.anims.generateFrameNumbers('pastor_camina', { start, end: start + 7 }),
+                    frameRate: 10,
+                    repeat: -1
+                });
+            });
+            scene.anims.create({
+                key: 'pastor_camina',
+                frames: scene.anims.generateFrameNumbers('pastor_camina', { start: 32, end: 39 }),
+                frameRate: 10,
+                repeat: -1
+            });
+        }
         Object.entries(Grafics.PASTOR_FULLS).forEach(([n, [fr, fps, rep]]) => {
             const k = 'pastor_' + n;
             if (fr > 1 && !scene.anims.exists(k) && scene.textures.exists(k) && !Grafics.faltants.includes(k) && scene.textures.get(k).frameTotal > fr)

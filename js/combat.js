@@ -291,8 +291,11 @@ const ENEMICS = {
             if (e.estat === 'apunta') {
                 e.spr.body.setVelocity(0);
                 e.spr.setFlipX(Math.cos(e.ang) < 0);
+                z.animaPastor(e, 'apunta');
                 if (ara > e.fins) {
-                    e.estat = 'carrega'; e.fins = ara + (fase2 ? 560 : 480); e.spr.clearTint(); z.animaPastor(e, 'carrega');
+                    e.estat = 'carrega'; e.fins = ara + (fase2 ? 560 : 480); e.spr.clearTint();
+                    e.spr.setFlipX(Math.cos(e.ang) < 0);
+                    z.animaPastor(e, 'ataca');
                     e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel);
                 }
             } else if (e.estat === 'carrega') {
@@ -324,19 +327,19 @@ const ENEMICS = {
                 e.estat = 'camina';
                 const v = dist > 90 ? (fase2 ? 125 : 95) : 0;
                 e.spr.body.setVelocity(Math.cos(cap) * v, Math.sin(cap) * v);
-                e.spr.setFlipX(Math.cos(cap) < 0);
-                z.animaPastor(e, v > 0 ? 'camina' : 'idle');
+                z.animaPastor(e, v > 0 ? 'camina' : 'idle', cap);
                 if (dist < 150 && ara > e.proxBat) {
                     const tel = fase2 ? 380 : 560;
                     e.estat = 'bat'; e.fins = ara + tel; e.spr.setTint(0xffe080);
-                    z.animaPastor(e, 'bat');
+                    e.spr.setFlipX(Math.cos(cap) < 0);
+                    z.animaPastor(e, 'ataca');
                 }
                 if (ara > e.proxCrida) {
                     e.proxCrida = ara + (fase2 ? 4800 : 7000);
                     const vius = z.enemics.filter(x => x.tipus === 'ovella' && !x.mort).length, max = fase2 ? 3 : 2;
                     if (vius < max) {
                         Sfx.be();
-                        z.animaPastor(e, 'crida'); z.time.delayedCall(900, () => { if (!e.mort && e.estat === 'camina') z.animaPastor(e, 'camina'); });
+                        z.animaPastor(e, 'crida'); z.time.delayedCall(900, () => { if (!e.mort && e.estat === 'camina') z.animaPastor(e, 'camina', cap); });
                         [-1, 1, 0].slice(0, max - vius).forEach(sg => { const o = z.enemic('ovella', c.x + (sg || 1) * (sg ? 150 : 40), c.y + (sg ? 60 : 170)); if (o) { z.boiraPuf(o.spr.x, o.spr.y); o.fins = ara + 900; } });   // mai més de dues (tres a la fase 2) alhora
                     }
                 } else if (ara > e.proxCarrega && dist < 520) {
@@ -1166,27 +1169,81 @@ Object.assign(ZonaBase.prototype, {
         this.enemics = this.enemics.filter(x => x !== e);
     },
 
-    // El Pastor de Boira només té tres gràfics (assets/enemics/pastor_camina.webp, pastor_atac.webp i pastor_cau.webp):
-    // 'camina' / 'carrega' (el mateix full, el doble de ràpid) / 'idle' (el primer fotograma del full), i les poses fixes
-    // 'apunta', 'bat' i 'crida' (la caiada alçada) i 'cau' (a terra). Si els gràfics no hi són, no fa res: es veu el dibuix fix.
-    animaPastor(e, nom) {
+    // El Pastor de Boira té animacions completes de 8 direccions ('pastor_camina') i poses dedicades per a cada acció
+    animaPastor(e, nom, ang) {
         if (!e || !e.spr || !e.spr.active) return false;
-        const sp = e.spr, caminada = this.anims.exists('pastor_camina');
-        const POSA = { apunta: 'atac', bat: 'atac', crida: 'atac', atac: 'atac', cau: 'cau', derrota: 'derrota' };
-        if (e.animPastor === nom && (POSA[nom] || sp.anims.isPlaying || nom === 'idle')) return true;
+        const sp = e.spr;
+
+        const POSA = {
+            apunta: 'pastor_apunta',
+            prepara: 'pastor_apunta',
+            bat: 'pastor_ataca',
+            ataca: 'pastor_ataca',
+            carrega: 'pastor_ataca',
+            crida: 'pastor_enfadat',
+            enfadat: 'pastor_enfadat',
+            derrota: 'pastor_derrota',
+            cau: 'pastor_derrota',
+            normal: 'pastor_boira'
+        };
+
         if (POSA[nom]) {
-            let k = 'pastor_' + POSA[nom];
-            if (!this.textures.exists(k) && (nom === 'cau' || nom === 'derrota')) k = 'pastor_derrota';
-            if (!this.textures.exists(k) || this.textures.get(k).frameTotal < 1) return false;
-            e.animPastor = nom; sp.anims.stop(); sp.setTexture(k, 0);
+            const k = POSA[nom];
+            if (this.textures.exists(k)) {
+                if (e.animPastor === nom) return true;
+                e.animPastor = nom;
+                sp.anims.stop();
+                sp.setTexture(k);
+                const tex = this.textures.get(k);
+                if (tex && tex.customData && tex.customData.escala) {
+                    sp.setScale(tex.customData.escala);
+                }
+                return true;
+            }
+        }
+
+        const caminada = this.anims.exists('pastor_camina');
+        if (!caminada) return false;
+
+        if (nom === 'idle') {
+            if (e.animPastor === 'idle') return true;
+            e.animPastor = 'idle';
+            sp.anims.stop();
+            sp.setTexture('pastor_camina', 40); // Primer fotograma mirant al sud
+            sp.setScale(0.58);
+            sp.setFlipX(false);
             return true;
         }
-        if (!caminada) return false;
-        e.animPastor = nom;
-        if (nom === 'idle') { sp.anims.stop(); sp.setTexture('pastor_camina', 0); return true; }
-        sp.anims.timeScale = nom === 'carrega' ? 2.2 : 1;
-        sp.play('pastor_camina', true);
-        return true;
+
+        if (nom === 'camina') {
+            let dir = 'e';
+            if (ang !== undefined && ang !== null) {
+                let a = Phaser.Math.Angle.Normalize(ang);
+                if (a > Math.PI) a -= 2 * Math.PI;
+                if (a >= -Math.PI / 8 && a < Math.PI / 8) dir = 'e';
+                else if (a >= Math.PI / 8 && a < 3 * Math.PI / 8) dir = 'se';
+                else if (a >= 3 * Math.PI / 8 && a < 5 * Math.PI / 8) dir = 's';
+                else if (a >= 5 * Math.PI / 8 && a < 7 * Math.PI / 8) dir = 'sw';
+                else if (a >= 7 * Math.PI / 8 || a < -7 * Math.PI / 8) dir = 'w';
+                else if (a >= -7 * Math.PI / 8 && a < -5 * Math.PI / 8) dir = 'nw';
+                else if (a >= -5 * Math.PI / 8 && a < -3 * Math.PI / 8) dir = 'n';
+                else if (a >= -3 * Math.PI / 8 && a < -Math.PI / 8) dir = 'ne';
+            }
+
+            const clauAnim = 'pastor_camina_' + dir;
+            const clau = this.anims.exists(clauAnim) ? clauAnim : 'pastor_camina';
+            if (this.anims.exists(clau)) {
+                const idAnim = nom + '_' + dir;
+                if (e.animPastor === idAnim && sp.anims.isPlaying) return true;
+                e.animPastor = idAnim;
+                sp.setScale(0.58);
+                sp.setFlipX(false);
+                sp.anims.timeScale = 1.0;
+                sp.play(clau, true);
+                return true;
+            }
+        }
+        return false;
     },
 
     // Final del combat contra el Pastor de Boira

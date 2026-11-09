@@ -142,7 +142,15 @@
 
 - [x] `pastor_boira`
 
-- [ ] `pastor_derrota`
+- [x] `pastor_derrota`
+
+- [x] `pastor_camina`
+
+- [x] `pastor_apunta`
+
+- [x] `pastor_ataca`
+
+- [x] `pastor_enfadat`
 
 - [x] `pastor_vell`
 

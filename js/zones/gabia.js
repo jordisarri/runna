@@ -1070,10 +1070,26 @@ class ZonaGabia extends ZonaBase {
             ] : [
                 { qui: A, text: "Qui t'ha donat permís per trepitjar aquesta sala, monjo?!" },
                 { qui: 'Ineu', text: "Germà Aldreu! Deixeu anar els nens, tot això s'ha d'acabar!" },
+                { fer: (z, fet) => {
+                    const ald = z.npcs.germa_aldreu;
+                    if (ald && z.textures.exists('pastor_enfadat')) {
+                        ald.setTexture('pastor_enfadat');
+                        const tex = z.textures.get('pastor_enfadat');
+                        if (tex && tex.customData && tex.customData.escala) ald.setScale(tex.customData.escala);
+                    }
+                    fet();
+                } },
                 { qui: A, text: "Tard, massa tard! Mestre! Mestre, ja és aquí! El monjo que us vol prendre els nens!" }
             ]),
             { fer: (z, fet) => z.seq([
-                f => z.npcSalta('germa_aldreu', f, 2),
+                f => {
+                    const ald = z.npcs.germa_aldreu;
+                    if (ald && z.textures.exists('pastor_boira')) {
+                        ald.setTexture('pastor_boira');
+                        ald.setScale(0.5);
+                    }
+                    z.npcSalta('germa_aldreu', f, 2);
+                },
                 f => z.invocarOcellaire(ap, f),
                 f => {
                     if (z.textures.exists('ocellaire_rugit')) { ap.setTexture('ocellaire_rugit'); if (ap.ulls) ap.ulls.setVisible(false); }

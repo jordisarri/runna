@@ -281,10 +281,8 @@ class ZonaCirosa extends ZonaBase {
         if (!e || !e.spr.active) { fet(); return; }
         if (e.spr.body) e.spr.body.enable = false;
         const x1 = 580, y1 = 1150;
-        e.spr.setFlipX(x1 < e.spr.x);
-        if (!this.animaPastor(e, 'camina')) {
-            e.spr.setTexture('pastor_boira');
-        }
+        const ang = Math.atan2(y1 - e.spr.y, x1 - e.spr.x);
+        this.animaPastor(e, 'camina', ang);
         this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), x: x1, y: y1, duration: 3000, onComplete: () => {
             this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), alpha: 0, duration: 400, onComplete: fet });
         } });
