@@ -1036,10 +1036,12 @@ class ZonaBase extends Phaser.Scene {
                 if (x < x0) this.colisio((x + x0) / 2, y + h / 2, x0 - x, h);
                 if (x + w > x1) this.colisio((x1 + x + w) / 2, y + h / 2, x + w - x1, h);
             });
-            // Brancals als dos costats de la sortida sud perquè només s'hi pugui entrar pel buit de la porta
-            const hJ = PROFUNDITAT_PORTA + 60;
-            this.colisio(x0 - 15, p.y + hJ / 2, 30, hJ);
-            this.colisio(x1 + 15, p.y + hJ / 2, 30, hJ);
+            // Brancals als dos costats de la sortida sud perquè només s'hi pugui entrar pel buit de la porta:
+            // han de començar al llindar inferior (p.y + PROFUNDITAT_PORTA) per no sobresortir dins de l'habitació
+            const yBrancal = p.y + PROFUNDITAT_PORTA;
+            const hJ = 60;
+            this.colisio(x0 - 15, yBrancal + hJ / 2, 30, hJ);
+            this.colisio(x1 + 15, yBrancal + hJ / 2, 30, hJ);
         });
     }
 
@@ -1930,8 +1932,8 @@ class ZonaBase extends Phaser.Scene {
             const dir = this.dirSortida(s.r);
             const horitz = dir === 'amunt' || dir === 'avall';
             const c = b.center;
-            const mx = Math.min(22, Math.max(8, s.r.width * 0.22));
-            const my = Math.min(22, Math.max(8, s.r.height * 0.22));
+            const mx = Math.min(8, Math.max(4, s.r.width * 0.1));
+            const my = Math.min(8, Math.max(4, s.r.height * 0.1));
             const centrat = horitz ? (c.x >= s.r.x + mx && c.x <= s.r.right - mx)
                                    : (c.y >= s.r.y + my && c.y <= s.r.bottom - my);
             if (s.peu ? s.r.contains(b.center.x, b.bottom) : (centrat && Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r))) {

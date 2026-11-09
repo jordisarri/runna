@@ -56,7 +56,7 @@ const PROGRES = {
           } },
         // ---- ACTE 2: el Saber i les benediccions ----
         { id: 'fragment1', marca: ['fragment1'], fet: E => E.flag('fragment1'),
-          pista: E => "A les Runes, entre dues pedres, algú va deixar un pergamí esquinçat. Val la pena mirar-hi bé." },
+          pista: E => "A les Runes hi ha una escletxa fonda i fosca entre els carreus del mur." },
         { id: 'clauSagrari', marca: ['missatgeDesxifrat', 'obj:clau_sagrari'], fet: E => E.flag('missatgeDesxifrat') || E.te('clau_sagrari') || E.flag('fragment2'),
           pista: E => {
               const cols = Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).filter(Boolean).length;
@@ -93,7 +93,7 @@ const PROGRES = {
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
           pista: E => "Runna ja és amb tu. Els barrots de la gàbia només escolten un cant que la Pianista encara no t'ha ensenyat." },
         { id: 'josep', marca: ['josepVencut', 'obj:llanterna'], fet: E => E.flag('josepVencut'),
-          pista: E => "Al Celler, en Jusef guarda secrets. Es guanyen a la taula de ping-pong." },
+          pista: E => "Al Celler, en Jusef guarda el Llum d'en Mamet. Es guanya a la taula de ping-pong." },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
           pista: E => E.flag('florsCreu') ? "El Germà Francí t'espera a Sant Antoni, content."
               : E.te('ram') ? "El ram del Germà Francí és per a algú que ja no el pot rebre: la tomba de l'àngel, al Cementiri."

@@ -364,8 +364,9 @@ const DIALEGS = {
     }),
 
     // ---------------- RUÏNES I PING-PONG ----------------
-    ruines: E => ({
+    ruines: E => E.te('llanterna') ? ({
         pagines: [
+            { qui: 'Ineu', text: "El Llum d'en Mamet forada la tenebra de l'escletxa... Entre els carreus caiguts hi ha un full amagat!" },
             { qui: 'Pergamí', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de l'espasa Runna i la va deixar dormint a la pedra. Després va amagar la clau de la porta allà on ningú no la trobés.\nL'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.»" },
             { fer: (z, fet) => z.agafarPergamiRunes ? z.agafarPergamiRunes(fet) : fet() },
             { qui: 'Ineu', text: "El pergamí s'acaba aquí, però diu que l'altra meitat és sota clau, al sagrari de l'església. I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." },
@@ -373,26 +374,36 @@ const DIALEGS = {
             { qui: 'Ineu', text: "Ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts." }
         ],
         enAcabar: () => { E.posaFlag('fragment1'); E.posaObjectiu("Segons el pergamí, l'altra meitat és sota clau al sagrari de l'església, al Santuari. El Pare Daimiel en sabrà alguna cosa."); }
+    }) : ({
+        pagines: [
+            { qui: 'Ineu', text: "Entre els carreus del mur hi ha una escletxa fonda. Hi fa una foscor tan espessa que no s'hi distingeix res." }
+        ]
     }),
 
     cartellRuinesPingpong: E => ({ pagines: [{ qui: 'Cartell', text: "← Camí de la Desaparició\n→ Cementiri\n↑ Cel·les\n↓ El Celler i la Plaça" }] }),
     cartellCeller: E => ({ pagines: [{ qui: 'Cartell', text: "← El Celler (ping-pong)\n→ Sala de les Gírgoles\n↑ Les Runes\n↓ Plaça" }] }),
     cartellGirgoles: E => ({ pagines: [{ qui: 'Cartell', text: "Porta de les Gírgoles" }] }),
 
-    juli: E => ({
-        pagines: [
-            { qui: 'Julius', text: 'Ei, Ineu! El repte més gran del Miracle és derrotar el Jusef i el seu servei màgic. T\'hi atreveixes?' },
-            { qui: 'Julius', text: 'El Senyor Pomers juga amb una pala de pedra. De pedra! I tot i així, em guanya fàcilment.' }
-        ]
-    }),
+    juli: E => {
+        E.posaFlag('parlatJuli');
+        return {
+            pagines: [
+                { qui: 'Julius', text: 'Ei, Ineu! El repte més gran del Miracle és derrotar el Jusef i el seu servei màgic. T\'hi atreveixes?' },
+                { qui: 'Julius', text: 'El Senyor Pomers juga amb una pala de pedra. De pedra! I tot i així, em guanya fàcilment.' }
+            ]
+        };
+    },
 
-    frederic: E => ({
-        pagines: [
-            { qui: 'Senyor Pomers', text: 'Calma, noi. La pilota no s\'ha de perseguir, s\'ha d\'esperar.' },
-            { qui: 'Senyor Pomers', text: 'Jo jugo amb una pala de pedra. De pedra, sí: pesa com un maó i no té goma ni res. Quan jugueu a la taula, no em veuràs ni a mi ni la pala; no cal.' },
-            { qui: 'Senyor Pomers', text: 'Perquè amb què es juga és igual. La pala només és una extensió de l\'ànima. El que compta és l\'esperit del joc, la màgia que portes dins.' }
-        ]
-    }),
+    frederic: E => {
+        E.posaFlag('parlatFrederic');
+        return {
+            pagines: [
+                { qui: 'Senyor Pomers', text: 'Calma, noi. La pilota no s\'ha de perseguir, s\'ha d\'esperar.' },
+                { qui: 'Senyor Pomers', text: 'Jo jugo amb una pala de pedra. De pedra, sí: pesa com un maó i no té goma ni res. Quan jugueu a la taula, no em veuràs ni a mi ni la pala; no cal.' },
+                { qui: 'Senyor Pomers', text: 'Perquè amb què es juga és igual. La pala només és una extensió de l\'ànima. El que compta és l\'esperit del joc, la màgia que portes dins.' }
+            ]
+        };
+    },
 
     josep: E => E.flag('josepVencut') ? {
         pagines: [
@@ -431,9 +442,10 @@ const DIALEGS = {
         pagines: [
             { qui: 'Jusef', text: '...Me l\'has tornat. El servei. Algú, per fi, l\'ha aturat de debò.' },
             { fer: (z, fet) => z.npcVa('josep', z.ineu.x + (z.ineu.x < z.config.amplada / 2 ? 60 : -60), z.ineu.y, fet) },
-            { qui: 'Jusef', text: 'Això és per a tu: una llanterna. Als passadissos dels monjos hi fa una fosca que no perdona, i amb la seva llum hi veuràs.' },
+            { qui: 'Jusef', text: 'Això és per a tu: el Llum d\'en Mamet. En Mamet era un vell ermità del Miracle que coneixia tots els passos subterranis i les escletxes dels murs.' },
+            { qui: 'Jusef', text: 'La seva flama s\'alimenta d\'un oli antic que mai no s\'apaga. Als passadissos fondos i a la foscor de les pedres velles, la seva claror et farà visible allò que sembla ocult.' },
             { fer: (z, fet) => z.objecteVola('josep', fet) },
-            { avis: 'Has obtingut la LLANTERNA.', obj: 'llanterna' },
+            { avis: "Has obtingut el LLUM D'EN MAMET.", obj: 'llanterna' },
             { qui: 'Jusef', text: 'I un secret, per qui sap tornar un servei: aquella roda de carruatge del Celler no és decoració. Darrere hi ha el túnel dels monjos cap a la Casa Gran. Però pesa com un carro ple.' }
         ],
         enAcabar: () => {

@@ -373,6 +373,8 @@ class ZonaCreu extends ZonaBase {
         this.llocFlauta('bassadoria', 700, 470, 340, true, () => !Estat.flag('bassadoriaNeta'));
         if (!Estat.flag('bassadoriaNeta')) this.boiraBass = this.boira(700, 360, 480, 120, 3.5);
 
+        // Efecte gràfic de reflex i deformació ondulant (raster / sine-wave) a la Bassadòria
+        this.iniciarReflexBassa();
 
         this.cartell(1065, 440, () => ({ pagines: [{ qui: 'Cartell', text: '↑ Plaça del Santuari' }] }));      // a la vora esquerra del camí, no al mig
         this.arbres([[150, 180], [320, 260], [1450, 220], [1500, 780], [100, 520], [190, 640], [1400, 440], [1480, 600], [260, 440]]);
@@ -387,6 +389,129 @@ class ZonaCreu extends ZonaBase {
         this.sortida(1100, 0, 160, 14, 'ZonaPlaca', 'creu');
     }
 
+    crearTexturaReflex(neta) {
+        const key = neta ? 'reflex_bassa_neta' : 'reflex_bassa_boira';
+        if (this.textures.exists(key)) return key;
+        const W = 520, H = 176;
+        const canvas = document.createElement('canvas');
+        canvas.width = W; canvas.height = H;
+        const ctx = canvas.getContext('2d');
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+
+        // Aigua base: gradient
+        const grad = ctx.createLinearGradient(0, 0, 0, H);
+        if (neta) {
+            grad.addColorStop(0, '#244e5c');
+            grad.addColorStop(0.35, '#35697a');
+            grad.addColorStop(0.7, '#20424d');
+            grad.addColorStop(1, '#152d34');
+        } else {
+            grad.addColorStop(0, '#1c1822');
+            grad.addColorStop(0.35, '#283426');
+            grad.addColorStop(0.7, '#1b231a');
+            grad.addColorStop(1, '#101410');
+        }
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
+
+        if (neta) {
+            // Cel i núvols reflectits
+            ctx.fillStyle = 'rgba(215, 238, 248, 0.22)';
+            for (let i = 0; i < 4; i++) {
+                ctx.beginPath();
+                ctx.ellipse(70 + i * 110, 24 + (i % 2) * 14, 55, 14, 0.04, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Reflex invertit dels plàtans de tardor als costats (fullatge daurat/ocre)
+            ctx.fillStyle = 'rgba(215, 175, 75, 0.42)';
+            ctx.beginPath(); ctx.ellipse(85, 52, 45, 28, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = 'rgba(185, 145, 60, 0.38)';
+            ctx.beginPath(); ctx.ellipse(435, 48, 50, 26, 0, 0, Math.PI * 2); ctx.fill();
+
+            // Reflex invertit de la Creu de l'Aparició
+            const cx = 295, cy = 35;
+            ctx.fillStyle = 'rgba(38, 30, 24, 0.52)';
+            ctx.fillRect(cx - 6, cy - 20, 12, 75);
+            ctx.fillRect(cx - 24, cy + 6, 48, 10);
+            ctx.fillRect(cx - 14, cy + 50, 28, 14);
+            ctx.fillRect(cx - 22, cy + 64, 44, 12);
+
+            // Càustiques de llum i ones daurades
+            ctx.strokeStyle = 'rgba(235, 250, 255, 0.35)';
+            ctx.lineWidth = 1.4;
+            for (let y = 16; y < H - 12; y += 13) {
+                ctx.beginPath();
+                ctx.moveTo(35, y);
+                for (let x = 35; x < W - 35; x += 28) {
+                    ctx.quadraticCurveTo(x + 14, y + ((x % 56) ? 2.5 : -2.5), x + 28, y);
+                }
+                ctx.stroke();
+            }
+        } else {
+            // Aigua tèrbola: taques d'oli i corrupció verdoses / violàcies
+            ctx.fillStyle = 'rgba(110, 65, 140, 0.32)';
+            ctx.beginPath(); ctx.ellipse(210, 65, 80, 32, 0.1, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = 'rgba(65, 110, 60, 0.35)';
+            ctx.beginPath(); ctx.ellipse(345, 80, 90, 36, -0.1, 0, Math.PI * 2); ctx.fill();
+
+            // Línies d'escuma i bombolles fosques
+            ctx.strokeStyle = 'rgba(160, 205, 150, 0.25)';
+            ctx.lineWidth = 1.5;
+            for (let y = 22; y < H - 18; y += 20) {
+                ctx.beginPath();
+                ctx.moveTo(50, y);
+                for (let x = 50; x < W - 50; x += 36) {
+                    ctx.quadraticCurveTo(x + 18, y + ((x % 72) ? 3.5 : -3.5), x + 36, y);
+                }
+                ctx.stroke();
+            }
+        }
+
+        this.textures.addCanvas(key, canvas);
+        return key;
+    }
+
+    iniciarReflexBassa() {
+        const neta = Estat.flag('bassadoriaNeta');
+        const key = this.crearTexturaReflex(neta);
+        this.crearTexturaReflex(!neta);
+
+        const cx = 700, cy = 395;
+        const W = 520, H = 176;
+        const nFranges = 28;
+        const hFranja = Math.ceil(H / nFranges);
+
+        this.frangesAigua = [];
+        for (let k = 0; k < nFranges; k++) {
+            const y0 = k * hFranja;
+            const h = Math.min(hFranja, H - y0);
+            const im = this.add.image(0, -H / 2 + y0, key).setOrigin(0.5, 0).setCrop(0, y0, W, h);
+            this.frangesAigua.push(im);
+        }
+
+        this.contenidorAigua = this.add.container(cx, cy, this.frangesAigua)
+            .setDepth(301).setAlpha(0.85);
+
+        // Màscara ovalada ajustada exactament a la vora de pedra de la bassa
+        const mascG = this.make.graphics({ x: 0, y: 0, add: false });
+        mascG.fillStyle(0xffffff, 1).beginPath().ellipse(cx, cy, 244, 82, 0, 0, Math.PI * 2).fillPath();
+        this.contenidorAigua.setMask(mascG.createGeometryMask());
+        this.onaMagica = 0;
+    }
+
+    ondularAigua(ara) {
+        if (!this.frangesAigua) return;
+        const t = ara * 0.0026;
+        const neta = Estat.flag('bassadoriaNeta');
+        const baseAmp = neta ? 4.0 : 6.5;
+        const extra = (this.onaMagica || 0) * 14;
+        const amp = baseAmp + extra;
+        this.frangesAigua.forEach((im, k) => {
+            im.x = Math.sin(t + k * 0.36) * amp + Math.cos(t * 1.5 - k * 0.52) * (amp * 0.38);
+        });
+    }
+
     teEfecteMelodia(nom) {
         return nom === 'aurora' && !Estat.flag('bassadoriaNeta') && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 700, 470) < 520;
     }
@@ -399,6 +524,18 @@ class ZonaCreu extends ZonaBase {
         if (Estat.flag('bassadoriaNeta')) { this.ineuDiu("L'aigua ja és clara."); return true; }
         const neta = this.posar('bassadoria', 700, 560).setDepth(this.bassa.depth + 0.5).setAlpha(0);       // l'aigua s'aclareix a poc a poc
         this.tweens.add({ targets: neta, alpha: 1, duration: 2200, onComplete: () => { this.bassa.destroy(); this.bassa = neta; } });
+        this.tweens.add({
+            targets: this,
+            onaMagica: 1,
+            yoyo: true,
+            duration: 1800,
+            ease: 'Sine.easeInOut',
+            onComplete: () => {
+                if (this.frangesAigua) {
+                    this.frangesAigua.forEach(im => im.setTexture('reflex_bassa_neta'));
+                }
+            }
+        });
         if (this.boiraBass) this.boiraBass.stop();
         this.enemics.filter(e => e.tipus === 'gripau' && !e.mort).forEach(e => {
             e.mort = true; e.spr.body.enable = false;
@@ -410,6 +547,7 @@ class ZonaCreu extends ZonaBase {
     }
 
     actualitzar(ara) {
+        this.ondularAigua(ara);
         if (Estat.flag('bassadoriaNeta') || ara < this.propGripau) return;
         const vius = this.enemics.filter(e => e.tipus === 'gripau' && !e.mort).length;
         if (vius >= 5) return;

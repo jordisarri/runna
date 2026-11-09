@@ -303,14 +303,61 @@ const ICONES_OBJECTES = {
     },
     llac_nena: (ctx, cv) => { const t = document.createElement('canvas'); dibuixarLlac(t, 80); ctx.drawImage(t, 8, (96 - t.height) / 2); },
     llanterna: ctx => {
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        const C = '#1e1a17';
+
+        // Resplendor càlida de la flama
+        const halo = ctx.createRadialGradient(48, 56, 4, 48, 56, 38);
+        halo.addColorStop(0, 'rgba(255, 230, 140, 0.55)');
+        halo.addColorStop(0.45, 'rgba(255, 160, 50, 0.22)');
+        halo.addColorStop(1, 'rgba(255, 140, 30, 0)');
+        ctx.fillStyle = halo; ctx.beginPath(); ctx.arc(48, 56, 38, 0, Math.PI * 2); ctx.fill();
+
+        // Anella de ferro a sobre (per agafar o penjar el fanal)
+        ctx.strokeStyle = C; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.arc(48, 14, 8.5, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = '#5a544e'; ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.arc(48, 13.5, 8.5, -Math.PI * 0.8, -Math.PI * 0.2); ctx.stroke();
+        // Enganxe de l'anella
+        ctx.fillStyle = '#2c2622'; ctx.strokeStyle = C; ctx.lineWidth = 2;
+        ctx.fillRect(44, 21, 8, 4); ctx.strokeRect(44, 21, 8, 4);
+
+        // Capçada / teuladeta de ferro forjat (forma piramidal)
+        ctx.fillStyle = '#342e2a'; ctx.beginPath();
+        ctx.moveTo(38, 25); ctx.lineTo(58, 25); ctx.lineTo(68, 36); ctx.lineTo(28, 36); ctx.closePath();
+        ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 2.5; ctx.stroke();
+        ctx.fillStyle = '#4a423c'; ctx.fillRect(32, 34, 34, 3);
+
+        // Vidre translúcid càlid
+        const vidre = ctx.createLinearGradient(28, 36, 68, 74);
+        vidre.addColorStop(0, '#fff4c2'); vidre.addColorStop(0.5, '#ffd270'); vidre.addColorStop(1, '#f0a840');
+        ctx.fillStyle = vidre; ctx.fillRect(28, 37, 40, 37);
+
+        // Flama i caliu a l'interior
+        ctx.fillStyle = '#ff6010'; ctx.beginPath(); ctx.ellipse(48, 57, 6, 12, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#fff090'; ctx.beginPath(); ctx.ellipse(48, 58, 3.5, 7, 0, 0, Math.PI * 2); ctx.fill();
+
+        // Estructura de ferro: reixa creuada en aspa
+        ctx.strokeStyle = C; ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.moveTo(30, 38); ctx.lineTo(66, 73);
+        ctx.moveTo(66, 38); ctx.lineTo(30, 73);
+        ctx.stroke();
+
+        // Marc de ferro al voltant dels vidres
         ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(255,210,110,0.35)'; ctx.beginPath(); ctx.arc(48, 54, 34, 0, Math.PI * 2); ctx.fill();
-        ctx.strokeStyle = CONTORN; ctx.beginPath(); ctx.arc(48, 18, 9, Math.PI, 0); ctx.stroke();
-        ctx.fillStyle = '#3a3a40'; ctx.beginPath(); ctx.moveTo(30, 28); ctx.lineTo(66, 28); ctx.lineTo(60, 20); ctx.lineTo(36, 20); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#ffd870'; ctx.beginPath(); ctx.rect(32, 28, 32, 44); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#ff9a30'; ctx.beginPath(); ctx.ellipse(48, 52, 6, 11, 0, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.moveTo(48, 28); ctx.lineTo(48, 72); ctx.moveTo(32, 50); ctx.lineTo(64, 50); ctx.stroke();
-        ctx.fillStyle = '#3a3a40'; ctx.beginPath(); ctx.rect(28, 72, 40, 10); ctx.fill(); ctx.stroke();
+        ctx.strokeRect(28, 37, 40, 37);
+        // Barrots cantoners reforçats
+        ctx.fillStyle = '#24201c';
+        ctx.fillRect(26, 36, 4, 39); ctx.strokeRect(26, 36, 4, 39);
+        ctx.fillRect(66, 36, 4, 39); ctx.strokeRect(66, 36, 4, 39);
+
+        // Base de ferro amb motllura i peus
+        ctx.fillStyle = '#342e2a'; ctx.fillRect(24, 74, 48, 8);
+        ctx.strokeStyle = C; ctx.lineWidth = 2.5; ctx.strokeRect(24, 74, 48, 8);
+        ctx.fillStyle = '#24201c';
+        ctx.fillRect(25, 82, 8, 4); ctx.strokeRect(25, 82, 8, 4);
+        ctx.fillRect(63, 82, 8, 4); ctx.strokeRect(63, 82, 8, 4);
     },
     telescopi: ctx => {
         ctx.save(); ctx.translate(48, 50); ctx.rotate(-0.55); ctx.lineWidth = 3;

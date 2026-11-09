@@ -92,12 +92,21 @@ class ZonaRuines extends ZonaBase {
         // Pedres caigudes davant i, a ponent, carreus escampats de l'església que mai no es va acabar
         [[570, 650, 0.6], [1190, 655, 0.5], [90, 700, 0.8], [120, 760, 0.55], [60, 1040, 0.7], [260, 640, 0.5], [60, 560, 0.65]]
             .forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 60 * e, h: 22 * e } }));
-        // El pergamí partit entre dues pedres: s'agafa i passa al sarró
+        // L'escletxa entre els carreus del mur: fornícula de pedra fosca
+        const esc = this.add.graphics().setDepth(578);
+        esc.fillStyle(0x15110d, 0.95).fillRoundedRect(982, 556, 36, 44, { tl: 18, tr: 18, bl: 4, br: 4 });
+        esc.lineStyle(2, 0x3d352b, 1).strokeRoundedRect(982, 556, 36, 44, { tl: 18, tr: 18, bl: 4, br: 4 });
+        esc.fillStyle(0x0a0705, 0.7).fillRect(985, 558, 30, 20);
+
+        // El pergamí partit dins l'escletxa: només es revela si portes el Llum d'en Mamet
         if (!Estat.flag('fragment1')) {
-            // Dins de les runes, sobre els carreus caiguts a la dreta del portal (perquè no se solapi amb l'ombra del mur de l'esquerra)
-            this.pergamiRunes = this.posar('pergami_partit', 1000, 580, { fonsY: 605, escala: 0.75 });
-            this.pergamiBrill = this.add.circle(1000, 560, 40, 0xffe8a0, 0.2).setDepth(604).setBlendMode('ADD');
-            this.tweens.add({ targets: this.pergamiBrill, alpha: 0.05, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
+            if (Estat.te('llanterna')) {
+                // El Llum d'en Mamet il·lumina la fosca de l'escletxa i en revela el pergamí
+                this.llumNinxol = this.add.circle(1000, 578, 44, 0xffd270, 0.22).setDepth(579).setBlendMode('ADD');
+                this.pergamiRunes = this.posar('pergami_partit', 1000, 584, { fonsY: 605, escala: 0.72 });
+                this.pergamiBrill = this.add.circle(1000, 570, 36, 0xffe8a0, 0.28).setDepth(604).setBlendMode('ADD');
+                this.tweens.add({ targets: this.pergamiBrill, alpha: 0.08, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
+            }
             this.interactiu(1000, 620, RADI_OBJECTE, DIALEGS.ruines, { altura: 60, actiu: () => !Estat.flag('fragment1') });
         } else if (!Estat.te('fragment1')) Estat.dona('fragment1');          // partides desades d'abans del pergamí físic
 
@@ -139,6 +148,7 @@ class ZonaRuines extends ZonaBase {
         if (!s) { fet(); return; }
         Sfx.objecte();
         if (this.pergamiBrill) { this.pergamiBrill.destroy(); this.pergamiBrill = null; }
+        if (this.llumNinxol) { this.llumNinxol.destroy(); this.llumNinxol = null; }
         this.ajupir('ineu', null, 300);
         this.tweens.add({ targets: s, x: this.ineu.x, y: this.ineu.y - 70, scale: s.scale * 0.5, alpha: 0.2, duration: 650, ease: 'Sine.easeIn', onComplete: () => {
             s.destroy(); this.pergamiRunes = null;
@@ -354,10 +364,11 @@ class ZonaPingpong extends ZonaBase {
         [[X1 - 40, 470], [X1 - 44, 525], [X0 + 42, A - 70]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
 
         // ---- La taula de ping-pong (verda) al mig, i els jugadors ----
-        this.posar('taula_pp', AX, 600, { col: { w: 220, h: 40 } });
-        this.npc('juli', AX - 160, 600, DIALEGS.juli);
-        this.npc('frederic', AX + 160, 600, DIALEGS.frederic, { flipX: true });
-        this.npc('josep', AX, 750, DIALEGS.josep);          // centrat davant la taula (abans era davant del Frederic)
+        // En Jusef queda a la part nord de la taula; Julius i Frederic als costats de la taula
+        this.npc('josep', AX, 540, DIALEGS.josep);
+        this.posar('taula_pp', AX, 680, { col: { w: 220, h: 40 } });
+        this.npc('juli', AX - 160, 680, DIALEGS.juli);
+        this.npc('frederic', AX + 160, 680, DIALEGS.frederic, { flipX: true });
 
         this.add.rectangle(W / 2, A / 2, AI, A, 0xffe9a8, 0.04).setDepth(80000);
         this.sortida(W / 2 - 40, A - 30, 80, 20, 'ZonaCellerFora', 'pingpong');

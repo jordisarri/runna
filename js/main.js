@@ -158,9 +158,9 @@ const Joc = {
         while (Joc.MUSICA_OPCIONAL[k] && !Joc.musicaDisponible.has(k)) k = Joc.MUSICA_OPCIONAL[k].fallback;
         return k;
     },
-    // Volums: la música de fons sona a 0,6; els jingles (fanfàrries) van a aquest nivell, perquè no sobresurtin (tenen la mateixa sonoritat de fitxer)
-    VOLUM_JINGLE: 0.45,
-    VOLUM_MUSICA_ABAIXADA: 0.3,           // la música de fons mentre sona un jingle
+    // Volums: la música de fons sona a 0,6; els jingles (fanfàrries) van a aquest nivell, equilibrats amb la música
+    VOLUM_JINGLE: 0.35,
+    VOLUM_MUSICA_ABAIXADA: 0,           // la música de fons es silencia completament (0) mentre sona la fanfàrria d'objecte/arma
 
     // Una peça curta que sona una sola vegada per sobre de tot (no talla la música de fons)
     jingle(scene, clau) {
@@ -192,7 +192,7 @@ const Joc = {
                 return;
             }
             const play = () => {
-                const s = scene.sound.add('jingle_runna', { volume: 0.9 });
+                const s = scene.sound.add('jingle_runna', { volume: 0.5 });
                 s.once('complete', () => { s.destroy(); scene.time.delayedCall(300, acaba); });
                 s.play();
             };
@@ -201,11 +201,10 @@ const Joc = {
         });
     },
 
-    // L'Ineu alça una arma nova (el bastó, la branca del Til·ler): sempre la mateixa fanfara. La música de fons s'abaixa mentre sona.
-    // Si encara no hi ha el fitxer jingle_arma.m4a, sona una fanfara sintetitzada.
+    // L'Ineu alça una arma o objecte nou: mentre sona la fanfara la música se silencia completament (0).
     fanfaraObjecte(scene) {
         const m = Joc.musica;
-        if (m && m.isPlaying) { m.setVolume(Joc.VOLUM_MUSICA_ABAIXADA); setTimeout(() => { if (Joc.musica === m) m.setVolume(0.6); }, 4200); }       // (temps real: el rellotge de l'escena es talla en canviar de zona)
+        if (m && m.isPlaying) { m.setVolume(0); setTimeout(() => { if (Joc.musica === m) m.setVolume(0.6); }, 4200); }       // (temps real: el rellotge de l'escena es talla en canviar de zona)
         // De moment, els objectes fan servir la mateixa fanfàrria que les armes (jingle_arma); si no hi és, la sintetitzada
         Joc.detectarMusica().then(() => { if (Joc.musicaDisponible.has('jingle_arma')) Joc.jingle(scene, 'jingle_arma'); else Sfx.fanfara(); });
     },
@@ -215,7 +214,7 @@ const Joc = {
         Joc.detectarMusica().then(() => {
             if (!Joc.musicaDisponible.has('jingle_arma')) { Joc.fanfaraObjecte(scene); return; }       // (mentrestant, la sintetitzada)
             const m = Joc.musica;
-            if (m && m.isPlaying) { m.setVolume(Joc.VOLUM_MUSICA_ABAIXADA); setTimeout(() => { if (Joc.musica === m) m.setVolume(0.6); }, 6000); }
+            if (m && m.isPlaying) { m.setVolume(0); setTimeout(() => { if (Joc.musica === m) m.setVolume(0.6); }, 6000); }
             Joc.jingle(scene, 'jingle_arma');
         });
     },

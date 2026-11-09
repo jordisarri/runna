@@ -177,7 +177,7 @@ const CATALEG_OBJECTES = {
     cinta_nena:       ['Llaç de la Nena', 'Absorbeix un cop cada vegada que entres a una zona.'],
     benedicio_fraterna:  ['Empara fraternal', 'La protecció sagrada de les tres sacerdotesses de l\'Hostatgeria. Dissipa la boira verinosa de la galeria que porta a la Sala de la Gàbia.'],
     llac_nena:        ['Llaç de cinta', 'Rosa i descolorit. És de la Nena de les Trenes.'],
-    llanterna:        ['Llanterna', 'Fa més llum a les foscors de sota terra.'],
+    llanterna:        ["Llum d'en Mamet", "Un antic llum d'oli d'un vell ermità del Miracle. La seva flama clara revela secrets amagats a la foscor i a les escletxes de la pedra."],
     telescopi:        ['Telescopi del Galf', 'Per mirar els estels als Dipòsits.'],
     estel_llorenc:    ['Estel de Sant Llorenç', 'Un bocí de llum caigut del cel.'],
     runna:            ['Runna', 'L\'espasa de llum del monjo.'],
@@ -234,10 +234,65 @@ class EscenaUI extends Phaser.Scene {
         this.input.keyboard.on('keydown-ENTER', confirmar);
         this.input.keyboard.on('keydown-SPACE', confirmar);
 
-        // Tocar/clicar la pantalla avança el diàleg
+        // Interacció amb els diàlegs: tap per avançar, gest de pessigar (dos dits) per canviar mida, i arrossegar/roda per scroll discret
+        let pIniciDialeg = null, d0PinchDialeg = 0, scrollIniciDialeg = 0, haMogutDialeg = false;
+
         this.input.on('pointerdown', (p, objectes) => {
             if (objectes.length) return;
-            if (this.dialeg && !this.menuObert) this.avancar();
+            if (this.dialeg && !this.menuObert) {
+                pIniciDialeg = { x: p.x, y: p.y };
+                scrollIniciDialeg = this.scrollDialeg || 0;
+                haMogutDialeg = false;
+                d0PinchDialeg = 0;
+            }
+        });
+
+        this.input.on('pointermove', p => {
+            if (!this.dialeg || this.menuObert) return;
+            const p1 = this.input.pointer1, p2 = this.input.pointer2;
+            if (p1 && p2 && p1.isDown && p2.isDown) {
+                const d = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+                if (!d0PinchDialeg) d0PinchDialeg = d;
+                else if (Math.abs(d / d0PinchDialeg - 1) > 0.05) {
+                    const r = d / d0PinchDialeg;
+                    d0PinchDialeg = d;
+                    pIniciDialeg = null;
+                    haMogutDialeg = true;
+                    this.canviarEscalaDialeg(this.escalaDialeg * r);
+                }
+                return;
+            }
+            d0PinchDialeg = 0;
+            if (pIniciDialeg && p.isDown && this.maxScrollDialeg > 0) {
+                const dy = p.y - pIniciDialeg.y;
+                const dx = p.x - pIniciDialeg.x;
+                if (Math.hypot(dx, dy) > 8) haMogutDialeg = true;
+                if (haMogutDialeg) {
+                    this.scrollDialeg = Math.min(this.maxScrollDialeg, Math.max(0, scrollIniciDialeg - dy));
+                    this.aplicarScrollDialeg();
+                }
+            }
+        });
+
+        this.input.on('pointerup', p => {
+            if (!this.dialeg || this.menuObert) { pIniciDialeg = null; return; }
+            const vaMoure = haMogutDialeg;
+            pIniciDialeg = null;
+            haMogutDialeg = false;
+            d0PinchDialeg = 0;
+            if (!vaMoure) {
+                this.avancar();
+            }
+        });
+
+        this.input.on('wheel', (p, o, dx, dy, dz, ev) => {
+            if (!this.dialeg || this.menuObert) return;
+            if ((ev && ev.ctrlKey) || (p.event && p.event.ctrlKey)) {
+                this.canviarEscalaDialeg(this.escalaDialeg * (dy > 0 ? 0.92 : 1.09));
+            } else if (this.maxScrollDialeg > 0) {
+                this.scrollDialeg = Math.min(this.maxScrollDialeg, Math.max(0, (this.scrollDialeg || 0) + dy));
+                this.aplicarScrollDialeg();
+            }
         });
 
         this.actualitzarHUD();
@@ -616,6 +671,17 @@ class EscenaUI extends Phaser.Scene {
     crearCaixaDialeg() {
         this.caixa = this.add.container(AMPLE / 2, ALT - SAFE_BAIX - 190).setVisible(false).setDepth(40);
         this.alcadaCaixaDialeg = 360;
+        this.escalaDialeg = (() => {
+            try {
+                const v = parseFloat(localStorage.getItem('runna_dialeg_escala'));
+                if (v >= 0.75 && v <= 1.7) return v;
+            } catch (e) {}
+            return 1.0;
+        })();
+        this.scrollDialeg = 0;
+        this.maxScrollDialeg = 0;
+        if (!this.input.pointer2) this.input.addPointer(1);
+
         this.ombraCaixaDialeg = this.add.rectangle(4, 8, 704, 360, 0x000000, 0.35);
         this.fonsCaixaDialeg = marcPergami(this, 0, 0, 704, 360);
         // Cinta amb el nom de qui parla, penjada de la vora de dalt
@@ -623,7 +689,12 @@ class EscenaUI extends Phaser.Scene {
             .setScale(1 / RES).setOrigin(0, 0.5);
         this.plaquetaNom = this.add.text(-310, -186, '', { fontFamily: FONT_PLACA, fontSize: '32px', fontStyle: 'bold', color: '#fff3c8', stroke: '#2a0a0e', strokeThickness: 4, resolution: 2 })
             .setOrigin(0, 0.5);
-        this.textDialeg = this.add.text(-316, -146, '', estilText(28, '#2a170b', { wordWrap: { width: 632 }, lineSpacing: 5 }));
+        this.textDialeg = this.add.text(-316, -146, '', estilText(Math.round(28 * this.escalaDialeg), '#2a170b', { wordWrap: { width: 632 }, lineSpacing: Math.round(5 * this.escalaDialeg) }));
+        this.barraScrollDialeg = this.add.graphics();
+        this.mascaraDialeg = this.make.graphics({ x: 0, y: 0, add: false });
+        this.mascaraGeomDialeg = this.mascaraDialeg.createGeometryMask();
+        this.textDialeg.setMask(this.mascaraGeomDialeg);
+
         this.indicador = this.add.text(318, 152, '▼', estilText(26, '#7a3a14')).setOrigin(1, 1);
         this.tweens.add({ targets: this.indicador, y: 158, yoyo: true, repeat: -1, duration: 400 });
         // Retrat de qui parla: dalt a l'esquerra, sobresortint de la caixa (el text conserva tot l'ample)
@@ -636,7 +707,64 @@ class EscenaUI extends Phaser.Scene {
         marc.lineStyle(7, 0x2a0a0e, 1).strokeRoundedRect(RX - MIDA_RETRAT / 2, RY - MIDA_RETRAT / 2, MIDA_RETRAT, MIDA_RETRAT, MIDA_RETRAT * 0.12);
         marc.lineStyle(4, 0xd4af37, 1).strokeRoundedRect(RX - MIDA_RETRAT / 2, RY - MIDA_RETRAT / 2, MIDA_RETRAT, MIDA_RETRAT, MIDA_RETRAT * 0.12);
         this.marcRetratVora = marc;
-        this.caixa.add([this.ombraCaixaDialeg, this.fonsCaixaDialeg, this.marcRetrat, this.retratImg, marc, this.cintaNom, this.plaquetaNom, this.textDialeg, this.indicador]);
+        this.caixa.add([this.ombraCaixaDialeg, this.fonsCaixaDialeg, this.marcRetrat, this.retratImg, marc, this.cintaNom, this.plaquetaNom, this.textDialeg, this.barraScrollDialeg, this.indicador]);
+    }
+
+    canviarEscalaDialeg(nova) {
+        nova = Math.min(1.7, Math.max(0.75, Math.round(nova * 100) / 100));
+        if (Math.abs(nova - this.escalaDialeg) < 0.02) return;
+        this.escalaDialeg = nova;
+        try { localStorage.setItem('runna_dialeg_escala', String(nova)); } catch (e) {}
+        const p = this.dialeg && this.dialeg.dades && this.dialeg.dades.pagines[this.dialeg.pagina];
+        const midaBase = (p && p.vers) ? 34 : 28;
+        this.textDialeg.setFontSize(Math.round(midaBase * this.escalaDialeg))
+                       .setLineSpacing(Math.round((p && p.vers ? 10 : 5) * this.escalaDialeg));
+        this.actualitzarScrollDialeg();
+    }
+
+    actualitzarMascaraDialeg(alcada) {
+        if (!this.mascaraDialeg) return;
+        this.mascaraDialeg.clear();
+        const cx = AMPLE / 2, cy = this.caixa.y;
+        this.mascaraDialeg.fillStyle(0xffffff, 1);
+        this.mascaraDialeg.fillRect(cx - 322, cy - alcada / 2 + 24, 644, alcada - 52);
+    }
+
+    actualitzarScrollDialeg() {
+        const alcada = this.alcadaCaixaActual || ALCADA_CAIXA_MIN;
+        const hMax = alcada - 68;
+        const textH = this.textDialeg.height || 0;
+        this.maxScrollDialeg = Math.max(0, textH - hMax + 10);
+        this.scrollDialeg = Math.min(this.maxScrollDialeg, Math.max(0, this.scrollDialeg || 0));
+        this.aplicarScrollDialeg();
+    }
+
+    aplicarScrollDialeg() {
+        const alcada = this.alcadaCaixaActual || ALCADA_CAIXA_MIN;
+        const y0 = -alcada / 2 + 34;
+        this.textDialeg.setY(y0 - (this.scrollDialeg || 0));
+        this.dibuixarBarraScrollDialeg();
+    }
+
+    dibuixarBarraScrollDialeg() {
+        if (!this.barraScrollDialeg) return;
+        this.barraScrollDialeg.clear();
+        if (this.maxScrollDialeg <= 0) return;
+        const alcada = this.alcadaCaixaActual || ALCADA_CAIXA_MIN;
+        const hTrack = alcada - 96;
+        const x = 328;
+        const yTop = -alcada / 2 + 42;
+        // Pista discreta
+        this.barraScrollDialeg.fillStyle(0x7a3a14, 0.18);
+        this.barraScrollDialeg.fillRoundedRect(x - 2, yTop, 4, hTrack, 2);
+        // Tirador de la barra
+        const textH = this.textDialeg.height || 1;
+        const hVis = alcada - 68;
+        const hThumb = Math.max(22, Math.min(hTrack, hTrack * (hVis / textH)));
+        const frac = this.maxScrollDialeg > 0 ? this.scrollDialeg / this.maxScrollDialeg : 0;
+        const yThumb = yTop + (hTrack - hThumb) * frac;
+        this.barraScrollDialeg.fillStyle(0x7a3a14, 0.65);
+        this.barraScrollDialeg.fillRoundedRect(x - 2.5, yThumb, 5, hThumb, 2.5);
     }
 
     // Alçada que necessita la caixa per a UNA pàgina (el text de la pàgina més un marge): les pàgines curtes es veuen en una caixa baixa
@@ -644,7 +772,11 @@ class EscenaUI extends Phaser.Scene {
         if (!pagina || pagina.fer) return 0;
         const text = pagina.avis !== undefined ? pagina.avis : pagina.text;
         if (typeof text !== 'string') return 0;
-        this.textDialeg.setFontStyle(pagina.qui || pagina.avis !== undefined ? 'normal' : 'italic').setText(text);
+        const midaBase = pagina.vers ? 34 : 28;
+        this.textDialeg.setFontSize(Math.round(midaBase * this.escalaDialeg))
+                       .setLineSpacing(Math.round((pagina.vers ? 10 : 5) * this.escalaDialeg))
+                       .setFontStyle(pagina.qui || pagina.avis !== undefined ? (pagina.vers ? 'bold' : 'normal') : 'italic')
+                       .setText(text);
         const h = this.textDialeg.height;
         this.textDialeg.setText('');
         return Math.max(ALCADA_CAIXA_MIN, Math.ceil(h + 104));
@@ -656,7 +788,6 @@ class EscenaUI extends Phaser.Scene {
         this.caixa.setY(ALT - SAFE_BAIX - 10 - alcada / 2);
         this.ombraCaixaDialeg.setSize(704, alcada);
         this.fonsCaixaDialeg.setSize(704 * RES, alcada * RES);
-        this.textDialeg.setPosition(-316, -alcada / 2 + 34);
         this.cintaNom.setY(-alcada / 2 - 6);
         this.plaquetaNom.setY(-alcada / 2 - 6);
         this.indicador.setY(alcada / 2 - 28);
@@ -665,6 +796,8 @@ class EscenaUI extends Phaser.Scene {
         this.retratImg.setY(retratY);
         this.marcRetrat.setY(desplacamentRetrat);
         this.marcRetratVora.setY(desplacamentRetrat);
+        this.actualitzarMascaraDialeg(alcada);
+        this.aplicarScrollDialeg();
     }
 
     // Mesura totes les pàgines. alcadaCaixaDialeg és la més alta (la càmera dels diàleg la té en compte per reservar lloc); cada pàgina,
@@ -731,8 +864,10 @@ class EscenaUI extends Phaser.Scene {
         // La veu del narrador, en cursiva i en un to vermellós; els personatges, en tinta fosca
         this.textDialeg.setColor(p.qui || p.avis ? '#2a170b' : '#5a2410').setFontStyle(p.qui || p.avis ? 'normal' : 'italic');
         // Pàgina de versos (p.vers): lletra més gran, en negreta i centrada (per a les paraules solemnes, com les del Saber davant l'espasa)
-        if (p.vers) this.textDialeg.setFontSize(34).setFontStyle('bold').setColor('#5a1a10').setAlign('center').setX(-316).setLineSpacing(10);
-        else this.textDialeg.setFontSize(28).setAlign('left').setLineSpacing(5);
+        if (p.vers) this.textDialeg.setFontSize(Math.round(34 * this.escalaDialeg)).setFontStyle('bold').setColor('#5a1a10').setAlign('center').setX(-316).setLineSpacing(Math.round(10 * this.escalaDialeg));
+        else this.textDialeg.setFontSize(Math.round(28 * this.escalaDialeg)).setAlign('left').setLineSpacing(Math.round(5 * this.escalaDialeg));
+        this.scrollDialeg = 0;
+        this.actualitzarScrollDialeg();
         this.indicador.setVisible(false);
         if (this.timerText) this.timerText.remove();
         this.timerText = this.time.addEvent({
@@ -740,6 +875,7 @@ class EscenaUI extends Phaser.Scene {
                 this.lletres++;
                 if (this.lletres % 2 === 0 && /\S/.test(this.textComplet[this.lletres - 1] || '')) Sfx.lletra();
                 this.textDialeg.setText(this.textComplet.slice(0, this.lletres));
+                this.actualitzarScrollDialeg();
                 if (this.lletres >= this.textComplet.length) this.acabarEscriptura();
             }
         });
@@ -749,6 +885,7 @@ class EscenaUI extends Phaser.Scene {
         if (this.timerText) { this.timerText.remove(); this.timerText = null; }
         this.textDialeg.setText(this.textComplet);
         this.indicador.setVisible(true);
+        this.actualitzarScrollDialeg();
     }
 
     avancar() {
@@ -778,6 +915,9 @@ class EscenaUI extends Phaser.Scene {
         this.baixarIneu();
         const { dades, enTancar } = this.dialeg;
         this.dialeg = null;
+        this.scrollDialeg = 0;
+        this.maxScrollDialeg = 0;
+        if (this.barraScrollDialeg) this.barraScrollDialeg.clear();
         this.caixa.setVisible(false);
         this.bloquejatFins = this.time.now + 200;
         if (dades.enAcabar) dades.enAcabar();

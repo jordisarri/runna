@@ -875,8 +875,8 @@ function dibuixarBranca(c, w) {
 }
 
 function dibuixarPergami(c, w) {
-    const L = w / RES, H = Math.round(L * 0.46);
-    lienc(c, w, H * RES, ctx => { ctx.scale(RES, RES); pintarPergami(ctx, L, H); });
+    const L = w / RES, H = Math.round(L * 1.28);
+    lienc(c, w, H * RES, ctx => { ctx.scale(RES, RES); pintarPergamiParet(ctx, L, H, { senseClaus: true }); });
 }
 
 // L'ombra del monjo: figura corbada amb les mans unides, com si pregués
@@ -3066,7 +3066,7 @@ function dibuixarPergamiParet(c, w) {
     lienc(c, w, H * RES, ctx => { ctx.scale(RES, RES); pintarPergamiParet(ctx, L, H); });
 }
 
-function pintarPergamiParet(ctx, w, h) {
+function pintarPergamiParet(ctx, w, h, opts = {}) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     let llavor = 17;
     const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
@@ -3140,12 +3140,14 @@ function pintarPergamiParet(ctx, w, h) {
     ctx.strokeStyle = C; ctx.lineWidth = 1; ctx.stroke();
     // Estrip a la vora de l'esquerra
     ctx.strokeStyle = C; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0, h * 0.55); ctx.lineTo(x0 + 9, h * 0.57); ctx.lineTo(x0 + 6, h * 0.6); ctx.stroke();
-    // Tres claus de ferro que el subjecten a la paret, una a cada cantonada de dalt i una a baix
-    [[x0 + 11, y0 + 3.5], [x1 - 6, y0 + 4.5], [x0 + 6, y1 - 6]].forEach(([x, y]) => {
-        ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.arc(x + 1, y + 1.2, 2.4, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#4a4a50'; ctx.strokeStyle = C; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y, 2.3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.fillRect(x - 1, y - 1.2, 1, 1);
-    });
+    // Tres claus de ferro que el subjecten a la paret (si no és un pergamí lliure)
+    if (!opts.senseClaus) {
+        [[x0 + 11, y0 + 3.5], [x1 - 6, y0 + 4.5], [x0 + 6, y1 - 6]].forEach(([x, y]) => {
+            ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.arc(x + 1, y + 1.2, 2.4, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#4a4a50'; ctx.strokeStyle = C; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(x, y, 2.3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = 'rgba(255,255,255,0.55)'; ctx.fillRect(x - 1, y - 1.2, 1, 1);
+        });
+    }
 }
 
 // ---------------- EL CELLER: terra de ciment, paret de pedra i taules de ping-pong ----------------
@@ -4164,27 +4166,103 @@ function dibuixarPastorBoira(canvas, w) {
     [[20, 122, 14], [44, 126, 18], [68, 122, 13]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.ellipse(x, y, r, 4, 0, 0, Math.PI * 2); ctx.fill(); });
 }
 
-// Pergamí partit pel mig, estès a terra: el tall és irregular, amb línies d'escriptura i un racó rosegat
+// Pergamí partit pel mig, amb el mateix estil detallat de la Sala de les Gírgoles:
+// vora dreta estripada/esquinçada, paper envellit, taques, plecs, cal·ligrafia antiga i caplletra
 function dibuixarPergamiPartit(c, w) {
-    lienc(c, w, w * 0.78, (ctx, W, H) => {
+    const L = w / RES, H = Math.round(L * 0.95);
+    lienc(c, w, H * RES, ctx => {
+        ctx.scale(RES, RES);
         ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-        ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(W / 2 + 2, H - 4, W * 0.46, 4, 0, 0, Math.PI * 2); ctx.fill();
-        ctx.save(); ctx.translate(W / 2, H / 2); ctx.rotate(-0.12); ctx.translate(-W / 2, -H / 2);
-        const x0 = W * 0.08, x1 = W * 0.94, y0 = H * 0.1, y1 = H * 0.86;
-        ctx.beginPath(); ctx.moveTo(x0, y0 + 3); ctx.lineTo(x1 - 6, y0);
-        // Vora dreta esquinçada (el tall)
-        const talls = [[x1, y0 + 8], [x1 - 7, y0 + 16], [x1 + 1, y0 + 24], [x1 - 8, y0 + 34], [x1 - 1, y1 - 14], [x1 - 9, y1 - 6], [x1 - 3, y1]];
-        talls.forEach(([x, y]) => ctx.lineTo(x, y));
-        ctx.lineTo(x0 + 6, y1 + 2); ctx.lineTo(x0 - 1, y1 - 12); ctx.lineTo(x0 + 2, y0 + 14); ctx.closePath();
-        const g = ctx.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, '#f2e4b4'); g.addColorStop(0.6, '#e2cd96'); g.addColorStop(1, '#c4a666');
-        ctx.fillStyle = g; ctx.fill(); ctx.lineWidth = 2.4; ctx.strokeStyle = '#2a1608'; ctx.stroke();
-        // Taca d'humitat i vora fosca
-        ctx.fillStyle = 'rgba(120,80,30,0.2)'; ctx.beginPath(); ctx.ellipse(x0 + W * 0.18, y1 - 6, W * 0.16, 5, 0, 0, Math.PI * 2); ctx.fill();
-        // Línies de text (tallades a la dreta) i una caplletra vermella
-        ctx.strokeStyle = '#4a2c14'; ctx.lineWidth = 1.5;
-        const llarg = [0.68, 0.74, 0.6, 0.72, 0.5];
-        llarg.forEach((l, i) => { const y = y0 + 12 + i * ((y1 - y0 - 18) / 5); ctx.beginPath(); ctx.moveTo(x0 + 16, y); ctx.lineTo(x0 + 16 + (x1 - x0 - 24) * l, y + (i % 2 ? 0.6 : -0.4)); ctx.stroke(); });
-        ctx.fillStyle = '#9a2a1a'; ctx.fillRect(x0 + 5, y0 + 8, 9, 9); ctx.strokeStyle = '#2a1608'; ctx.lineWidth = 1; ctx.strokeRect(x0 + 5, y0 + 8, 9, 9);
+        let llavor = 42;
+        const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+        const C = '#2a1608', x0 = 5, x1 = L - 5, y0 = 5, y1 = H - 6;
+
+        // Contorn irregular: dalt, baix i esquerra gastats; dreta esquinçada (el tall del fragment)
+        const vora = [];
+        const costat = (xa, ya, xb, yb, n, amp) => { for (let k = 0; k < n; k++) { const t = k / n; vora.push([xa + (xb - xa) * t + (rnd() - 0.5) * amp, ya + (yb - ya) * t + (rnd() - 0.5) * amp]); } };
+        costat(x0 + 6, y0, x1 - 4, y0 + 1, 8, 2.0);
+        // Vora dreta esquinçada amb talls profunds
+        const nTalls = 14;
+        for (let k = 0; k <= nTalls; k++) {
+            const t = k / nTalls;
+            const y = y0 + (y1 - y0) * t;
+            const x = x1 - 4 + ((k % 2 === 1) ? -10 - rnd() * 8 : (rnd() - 0.5) * 3);
+            vora.push([x, y]);
+        }
+        costat(x1 - 4, y1, x0 + 2, y1 - 1, 8, 2.0);
+        costat(x0 + 1, y1 - 1, x0, y0 + 6, 10, 2.2);
+
+        const trac = () => { ctx.beginPath(); vora.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); };
+
+        // Ombra estesa
+        ctx.save(); ctx.translate(2.5, 3); ctx.fillStyle = 'rgba(0,0,0,0.32)'; trac(); ctx.fill(); ctx.restore();
+
+        // Paper envellit
+        const g = ctx.createLinearGradient(0, y0, L, y1);
+        g.addColorStop(0, '#eadbab'); g.addColorStop(0.5, '#dcc690'); g.addColorStop(1, '#c4a768');
+        ctx.fillStyle = g; trac(); ctx.fill();
+
+        ctx.save(); trac(); ctx.clip();
+        // Taques d'humitat i fum
+        for (let i = 0; i < 7; i++) {
+            const x = x0 + rnd() * (x1 - x0), y = y0 + rnd() * (y1 - y0), r = 4 + rnd() * 9;
+            const m = ctx.createRadialGradient(x, y, 0, x, y, r);
+            m.addColorStop(0, i % 2 ? 'rgba(140,100,40,0.25)' : 'rgba(90,60,24,0.18)'); m.addColorStop(1, 'rgba(140,100,40,0)');
+            ctx.fillStyle = m; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+        }
+        // Vores cremades
+        const cremat = ctx.createLinearGradient(0, 0, 0, H);
+        cremat.addColorStop(0, 'rgba(70,40,14,0.5)'); cremat.addColorStop(0.12, 'rgba(70,40,14,0)');
+        cremat.addColorStop(0.88, 'rgba(70,40,14,0)'); cremat.addColorStop(1, 'rgba(70,40,14,0.55)');
+        ctx.fillStyle = cremat; ctx.fillRect(0, 0, L, H);
+        const lateral = ctx.createLinearGradient(0, 0, L, 0);
+        lateral.addColorStop(0, 'rgba(70,40,14,0.45)'); lateral.addColorStop(0.12, 'rgba(70,40,14,0)');
+        lateral.addColorStop(0.82, 'rgba(70,40,14,0)'); lateral.addColorStop(1, 'rgba(80,35,10,0.6)');
+        ctx.fillStyle = lateral; ctx.fillRect(0, 0, L, H);
+
+        // Caplletra antiga i línies d'escriptura (tallades abruptament a la dreta)
+        ctx.strokeStyle = 'rgba(52,28,8,0.78)'; ctx.fillStyle = 'rgba(52,28,8,0.78)';
+        ctx.lineWidth = 2.2; ctx.beginPath(); ctx.arc(x0 + 11, y0 + 16, 5.5, 0.4, Math.PI * 1.8); ctx.stroke();
+        ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(x0 + 12, y0 + 12); ctx.lineTo(x0 + 12, y0 + 20); ctx.stroke();
+
+        ctx.lineWidth = 1.1;
+        const fil = (ya, xa, xb) => {
+            let x = xa;
+            while (x < xb) {
+                const llarg = Math.min(xb - x, 4 + rnd() * 8);
+                ctx.beginPath(); ctx.moveTo(x, ya); ctx.lineTo(x + llarg, ya + (rnd() - 0.5) * 0.5); ctx.stroke();
+                for (let k = x + 1.2; k < x + llarg - 1; k += 2.4 + rnd() * 1.4) {
+                    ctx.beginPath(); ctx.moveTo(k, ya); ctx.lineTo(k, ya - 1.0 - rnd() * 1.6); ctx.stroke();
+                }
+                x += llarg + 3.2;
+            }
+        };
+        fil(y0 + 13, x0 + 20, x1 - 18);
+        fil(y0 + 19, x0 + 20, x1 - 14);
+        for (let ly = y0 + 27; ly < y1 - 8; ly += 7) {
+            fil(ly, x0 + 6, x1 - 12 - rnd() * 10);
+        }
+
+        // Doblecs
+        const plec = (xa, ya, xb, yb) => {
+            const nx = -(yb - ya), ny = xb - xa, n = Math.hypot(nx, ny), dx = nx / n * 1.4, dy = ny / n * 1.4;
+            ctx.strokeStyle = 'rgba(60,34,10,0.45)'; ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(xa, ya); ctx.lineTo(xb, yb); ctx.stroke();
+            ctx.strokeStyle = 'rgba(255,246,214,0.5)'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(xa - dx, ya - dy); ctx.lineTo(xb - dx, yb - dy); ctx.stroke();
+        };
+        plec(L * 0.45, y0, L * 0.47, y1);
+        plec(x0, H * 0.48, x1 - 10, H * 0.5);
+
+        // Remnant del segell de cera vermell
+        ctx.fillStyle = 'rgba(150,40,40,0.5)'; ctx.beginPath(); ctx.arc(x0 + 18, y1 - 10, 4.5, 0, Math.PI * 2); ctx.fill();
         ctx.restore();
+
+        ctx.strokeStyle = C; ctx.lineWidth = 1.3; trac(); ctx.stroke();
+
+        // Cantonada girada a baix a l'esquerra
+        ctx.fillStyle = 'rgba(0,0,0,0.22)'; ctx.beginPath(); ctx.moveTo(x0 + 1, y1 - 10); ctx.lineTo(x0 + 10, y1); ctx.lineTo(x0 + 1, y1 + 1); ctx.closePath(); ctx.fill();
+        const gir = ctx.createLinearGradient(x0 + 1, y1 - 10, x0 + 10, y1);
+        gir.addColorStop(0, '#a58650'); gir.addColorStop(1, '#cfb67c');
+        ctx.fillStyle = gir; ctx.beginPath(); ctx.moveTo(x0 + 1, y1 - 9); ctx.lineTo(x0 + 9, y1); ctx.lineTo(x0 + 8, y1 - 8); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = C; ctx.lineWidth = 0.9; ctx.stroke();
     });
 }
