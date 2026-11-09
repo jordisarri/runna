@@ -497,14 +497,14 @@ Edit the attached reference image of this character. Keep EXACTLY the same chara
 
 
 
-### `aldreu_guardia.png` (amplada 96) *(El Germà Aldreu fent de guàrdia de la Gàbia (segon combat).)*
-
-
+### `aldreu_guardia.png` (amplada 96) *(El Germà Aldreu fent de guàrdia de la Gàbia (segon combat). Puja com a referència `art/enemics/pastor_boira.jpg` o `assets/enemics/pastor_boira.webp`.)*
 
 ```
+Edit the attached reference image of the Pastor de Boira (Germà Aldreu, `art/enemics/pastor_boira.jpg`). Keep EXACTLY the same character: the elderly monk with a wrinkled, stern face, short white/grey hair, round wire-rimmed spectacles, dark monastic habit with rope cord cincture belt and ragged frayed hem, sandals, and the distinctive fluffy lilac-pink wool fleece scarf collar around his neck. Keep the same wooden shepherd's crook staff with its curved hook, little bronze bell, and hanging lantern containing violet flame.
 
-Charming 2D cartoon game creature sprite in the 'Chibi Adventure Sprite' style, matching the attached reference image: chibi super-deformed proportions (enlarged rounded head or body, compact stocky build, short stout limbs), big expressive glossy eyes, cute but slightly uncanny, bold clean consistent black outline around the whole silhouette with medium-to-fine clean dark inner lines, no sketchy pencil texture, rich saturated yet earthy palette in distinct solid colour blocks, two-tone cel shading (base tone plus solid shadow plane) with subtle smooth gradient highlights, clean light from the top-front, front-facing eye-level view, centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text. A young monk with dark hair, black habit with violet mist clinging to it, holding a wooden staff like a guard, smug smile, faintly glowing violet eyes. Game enemy sprite, readable silhouette at small size, menacing but not gory (family-friendly), the corruption of the mist shown as wisps of violet-lilac fog and softly glowing violet eyes. Seen from slightly above (classic JRPG 3/4 top-down), whole creature visible, facing the camera or three-quarter to the left, feet/base at the bottom of the image, thick dark-brown outline, a single creature, no background, no ground.
+Pose him as an alert dungeon guard standing sentinel: standing firmly upright facing slightly three-quarters forward, grasping his wooden crook staff upright with both hands in a steadfast, vigilant guarding posture in front of him. Menacing possessed expression with eerie glowing violet-purple eyes behind his round glasses and a stern scowl. Subtle wisps of lilac-violet corruption mist swirling around his hem and feet.
 
+Art style: 2D charming game sprite matching the attached reference image, chibi proportions, bold clean dark outline around the silhouette, rich saturated earthy tones, two-tone cel shading, clean light from top-front. Centered, isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text.
 ```
 
 

@@ -1005,8 +1005,8 @@ class ZonaBase extends Phaser.Scene {
         this.colisio(x + porta / 2 + costat / 2, y - alt / 2, costat, alt);
         this.colisio(x, y - alt - 10, porta, 20);   // dintell
         if (desti) {
-            const hSortida = Math.min(20, Math.max(12, alt * 0.25));
-            this.sortida(x - porta / 2 + 6, y - alt + 8, porta - 12, hSortida, desti, entrada);
+            const hSortida = Math.max(36, alt - 16);
+            this.sortida(x - porta / 2 + 4, y - alt + 8, porta - 8, hSortida, desti, entrada);
         }
         this.blocDarrere(x, ample, y - alt - 20, Math.max(0, y - img.displayHeight));
         return img;
@@ -1961,8 +1961,8 @@ class ZonaBase extends Phaser.Scene {
             const dir = this.dirSortida(s.r);
             const horitz = dir === 'amunt' || dir === 'avall';
             const c = b.center;
-            const mx = Math.min(8, Math.max(4, s.r.width * 0.1));
-            const my = Math.min(8, Math.max(4, s.r.height * 0.1));
+            const mx = Math.min(6, Math.max(2, s.r.width * 0.05));
+            const my = Math.min(6, Math.max(2, s.r.height * 0.05));
             const centrat = horitz ? (c.x >= s.r.x + mx && c.x <= s.r.right - mx)
                                    : (c.y >= s.r.y + my && c.y <= s.r.bottom - my);
             if (s.peu ? s.r.contains(b.center.x, b.bottom) : (centrat && Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r))) {
