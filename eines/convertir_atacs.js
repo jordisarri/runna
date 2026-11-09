@@ -97,9 +97,6 @@ window.atacAmuntWebp = async (url, q) => {
     const im = await carrega(url);
     const c = document.createElement('canvas'); c.width = im.width; c.height = im.height;
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0);
-    const d = x.getImageData(0, 0, c.width, c.height);
-    ajustarMarrons(d.data);
-    x.putImageData(d, 0, 0);
     return alWebp(c, q);
 };
 window.espasa = async (fitxer, ample, q) => {
@@ -156,7 +153,7 @@ const dorm = ms => new Promise(r => setTimeout(r, ms));
             total += d;
             console.log(`atac_${dir}.webp`.padEnd(24), (a / 1024).toFixed(0).padStart(5), 'KB ->', (d / 1024).toFixed(0).padStart(4), 'KB', JSON.stringify(info[dir]));
         }
-        const amunt = await executa(`window.atacAmuntWebp('/art/ineu/atac/atac_up-abans-colors.webp', ${QUALITAT})`);
+        const amunt = await executa(`window.atacAmuntWebp('/art/atac_up2.png', ${QUALITAT})`);
         const destAmunt = path.join(ARREL, 'assets/ineu', 'atac_up.webp');
         fs.writeFileSync(destAmunt, Buffer.from(amunt, 'base64'));
         const midaAmunt = fs.statSync(destAmunt).size;

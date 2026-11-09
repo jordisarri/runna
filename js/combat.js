@@ -839,7 +839,8 @@ Object.assign(ZonaBase.prototype, {
         this.vista8Manual = true;
         this.posarDireccio(this.direccio, false, vista);
         this.ineu.setFlipX(false);
-        this.atacantFins = this.time.now + fotogramesAtac(vista).length / ATAC_INEU.fps * 1000;
+        const fps = typeof fpsAtac === 'function' ? fpsAtac(vista) : ATAC_INEU.fps;
+        this.atacantFins = this.time.now + fotogramesAtac(vista).length / fps * 1000;
         const net = this.capaArma(vista, runna, agil);
         this.ineu.anims.play('atac_' + vista, true);
         this.ineu.once('animationcomplete', () => {
@@ -872,7 +873,8 @@ Object.assign(ZonaBase.prototype, {
         };
         // Moviment suau (js/atac_arma.js, ARMA_SUAU): l'arma es recalcula a cada imatge de pantalla, seguint una corba entre els fotogrames, en lloc de saltar d'una posició a la
         // següent només quan canvia el fotograma de l'Ineu. Es pot treure amb ARMA_SUAU.actiu = false (o provar-ho amb ?arma=classica).
-        const suau = armaSuauActiu(), msFot = 1000 / ATAC_INEU.fps;
+        const fps = typeof fpsAtac === 'function' ? fpsAtac(vista) : ATAC_INEU.fps;
+        const suau = armaSuauActiu(), msFot = 1000 / fps;
         let idx = 0, tIdx = this.time.now;
         const pintaSuau = () => {
             if (!arma.active || !this.ineu.active) return;
@@ -894,7 +896,7 @@ Object.assign(ZonaBase.prototype, {
             if (this.armaNet === net) this.armaNet = null;
         };
         this.armaNet = net;
-        this.time.delayedCall(fotogramesAtac(vista).length / ATAC_INEU.fps * 1000 + 150, net);       // per si l'animació s'interromp
+        this.time.delayedCall(fotogramesAtac(vista).length / fps * 1000 + 150, net);       // per si l'animació s'interromp
         return net;
     },
 
@@ -971,8 +973,9 @@ Object.assign(ZonaBase.prototype, {
         [[0, 12, 0.95], [-14, 7, 0.55], [-28, 4, 0.3]].forEach(([dr, gruix, alfa]) => {
             g.lineStyle(gruix, dr ? 0xffffff : color, alfa).beginPath().arc(0, 0, R + dr, ang - 1.05, ang + 1.05).strokePath();
         });
-        g.rotation = -0.45; g.setScale(0.8);
-        this.tweens.add({ targets: g, rotation: 0.35, scale: 1.12, alpha: 0, duration: 200, ease: 'Cubic.out', onComplete: () => g.destroy() });
+        const inv = d.y < -0.7 && Math.abs(d.x) < 0.4 ? -1 : 1;         // cap amunt l'atac va de dreta a esquerra
+        g.rotation = -0.45 * inv; g.setScale(0.8);
+        this.tweens.add({ targets: g, rotation: 0.35 * inv, scale: 1.12, alpha: 0, duration: 200, ease: 'Cubic.out', onComplete: () => g.destroy() });
         // Fragments de vent a la vora de la lluna
         const p = this.add.particles(jo.x + d.x * R * 0.7, jo.y - 62 + d.y * R * 0.7, 'espurna', {
             angle: { min: Phaser.Math.RadToDeg(ang) - 50, max: Phaser.Math.RadToDeg(ang) + 50 },

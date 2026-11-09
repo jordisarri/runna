@@ -203,6 +203,10 @@ function esborraFotograma() {
 }
 
 // ---------- Dibuix ----------
+function nFotogramesVista(v) {
+    const im = imatges[v];
+    return im ? Math.round(im.width / 256) * Math.round(im.height / 256) : FOTOGRAMES.length;
+}
 function dibuixaCela(g, v, i, w, ox, oy, S) {
     const f = FOTOGRAMES[i], e = efectiu(w, v, i), arma = ARMES[w];
     const dibuixaArma = () => {
@@ -214,7 +218,7 @@ function dibuixaCela(g, v, i, w, ox, oy, S) {
     };
     g.fillStyle = 'rgba(0,0,0,.18)'; g.beginPath(); g.ellipse(ox + 128 * S, oy + 240 * S, 40 * S, 7 * S, 0, 0, 7); g.fill();     // ombra als peus
     if (e && !e.d) dibuixaArma();
-    if (imatges[v]) g.drawImage(imatges[v], (f % 4) * 256, Math.floor(f / 4) * 256, 256, 256, ox, oy, 256 * S, 256 * S);
+    if (imatges[v] && f < nFotogramesVista(v)) g.drawImage(imatges[v], (f % 4) * 256, Math.floor(f / 4) * 256, 256, 256, ox, oy, 256 * S, 256 * S);
     if (e && e.d) dibuixaArma();
 }
 function dibuixa() {
@@ -263,9 +267,9 @@ $('bAnima').onclick = () => posaAnimGran(true);
 $('bEdita').onclick = () => posaAnimGran(false);
 prev.addEventListener('click', () => posaAnimGran(false));
 let jugant = true, velocitat = 1, t0 = performance.now();
-function estatAnimacio(ara) {
-    const n = FOTOGRAMES.length, msFot = 1000 / FPS;
-    if (!jugant) { const i = sel().i; return { idx: i, tJoc: i * msFot }; }
+function estatAnimacio(ara, v = sel().v) {
+    const n = nFotogramesVista(v), fps = v === 'up' ? 28 : FPS, msFot = 1000 / fps;
+    if (!jugant) { const i = Math.min(n - 1, sel().i); return { idx: i, tJoc: i * msFot }; }
     const ms = msFot / velocitat, pausa = 500 / velocitat;      // després de l'últim fotograma, una petita pausa abans de repetir
     const t = (ara - t0) % (n * ms + pausa);
     return { idx: Math.min(n - 1, Math.floor(t / ms)), tJoc: t * velocitat };      // tJoc: ms de joc des de l'inici de l'atac
@@ -276,11 +280,11 @@ const DIR_VISTA = { right: [1, 0], southeast: [1, 1], down: [0, 1], southwest: [
 function dibuixaArc(g, v, w, ox, oy, S, tJoc) {
     const p = Math.min(1, tJoc / 200);                      // el joc l'anima 200 ms: gira de -0,45 a 0,35 rad, creix de 0,8 a 1,12 i s'esvaeix (Cubic.out)
     if (p >= 1) return;
-    const e = 1 - Math.pow(1 - p, 3), arc = ARC_ATAC[w], k = S / ESC;
+    const e = 1 - Math.pow(1 - p, 3), arc = ARC_ATAC[w], k = S / ESC, inv = v === 'up' ? -1 : 1;
     const ang = Math.atan2(DIR_VISTA[v][1], DIR_VISTA[v][0]);
     g.save();
     g.translate(ox + 128 * S, oy + (240 - 62 / ESC) * S);       // el centre és al pit de l'Ineu: 62 px de joc sobre els peus
-    g.rotate(-0.45 + 0.8 * e); g.scale(0.8 + 0.32 * e, 0.8 + 0.32 * e);
+    g.rotate((-0.45 + 0.8 * e) * inv); g.scale(0.8 + 0.32 * e, 0.8 + 0.32 * e);
     g.lineCap = 'butt';
     [[0, 12, 0.95], [-14, 7, 0.55], [-28, 4, 0.3]].forEach(([dr, gruix, alfa]) => {
         g.globalAlpha = alfa * (1 - e); g.strokeStyle = dr ? '#ffffff' : arc.color; g.lineWidth = gruix * k;
@@ -295,9 +299,10 @@ function tick(ara) {
     $('quadre').textContent = 'fotograma #' + idx + (efectiu(w, v, idx) ? '' : ' (mà buida)');
     tc.clearRect(0, 0, tira.width, tira.height);
     VISTES.forEach((vv, k) => {
+        const { idx: idxV, tJoc: tJocV } = estatAnimacio(ara, vv);
         const bx = (k % COLS_TIRA) * CAIXA_TIRA, by = Math.floor(k / COLS_TIRA) * CAIXA_TIRA;
-        dibuixaCela(tc, vv, idx, w, bx + MARGE * S_TIRA, by + MARGE * S_TIRA, S_TIRA);
-        if (arcOn) dibuixaArc(tc, vv, w, bx + MARGE * S_TIRA, by + MARGE * S_TIRA, S_TIRA, tJoc);
+        dibuixaCela(tc, vv, idxV, w, bx + MARGE * S_TIRA, by + MARGE * S_TIRA, S_TIRA);
+        if (arcOn) dibuixaArc(tc, vv, w, bx + MARGE * S_TIRA, by + MARGE * S_TIRA, S_TIRA, tJocV);
         tc.fillStyle = vv === v ? '#ffe08a' : '#fff'; tc.font = '14px sans-serif'; tc.fillText(vv, bx + 8, by + 18);
         tc.strokeStyle = vv === v ? '#ffe08a' : 'rgba(255,255,255,.2)'; tc.lineWidth = vv === v ? 2 : 1; tc.strokeRect(bx + 1, by + 1, CAIXA_TIRA - 2, CAIXA_TIRA - 2);
     });

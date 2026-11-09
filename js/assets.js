@@ -232,13 +232,16 @@ const SPRITE_INEU = {
 const ATAC_INEU = {
     fotogrames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],   // els 16 de la fulla: alçada, cop, posició i tornada
     fps: 40,                                                             // 16 fotogrames a 40 fps = 0,4 s (el mateix que abans amb 10 a 28)
-    // Vistes que només fan servir una part de la fulla (la fulla de assets/ no es toca: per recuperar-ho, treu l'entrada). 'up': sense els quatre últims, que
-    // eren la tornada del cos cap a la posició de partida; l'atac acaba just després del gir cap a l'esquerra.
-    perVista: { up: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+    fpsVista: { up: 28 },                                                // 'up' té 8 fotogrames (+ 3 de transició) a 28 fps ≈ 0,39 s
+    // Vistes que tenen menys fotogrames o només fan servir una part de la fulla ('up': fulla de 8 fotogrames, 0-7, de dreta a esquerra).
+    perVista: { up: [0, 1, 2, 3, 4, 5, 6, 7] },
     // Fotogrames de transició (es fabriquen en carregar, amb canvas; no hi ha cap fitxer): entre l'últim fotograma de l'atac i l'Ineu quiet, una barreja d'un i altre
     // que va passant del primer al segon, per no fer un salt en acabar el cop. Número de fotogrames per vista; 0 o treure l'entrada = sense transició.
     transicio: { up: 3 }
 };
+function fpsAtac(vista) {
+    return (ATAC_INEU.fpsVista && ATAC_INEU.fpsVista[vista]) || ATAC_INEU.fps;
+}
 // Els fotogrames de l'animació d'atac d'una vista: { key, frame } (els de la fulla i, si n'hi ha, els de transició)
 function fotogramesAtac(vista) {
     const llista = (ATAC_INEU.perVista[vista] || ATAC_INEU.fotogrames).map(f => ({ key: 'ineu_atac_' + vista, frame: f }));
@@ -288,11 +291,11 @@ const Grafics = {
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, `assets/ineu/${dir}.webp?v=2611021121`, mida);
-            scene.load.spritesheet('ineu_atac_' + dir, `assets/ineu/atac_${dir}.webp?v=2611021132`, mida);
+            scene.load.spritesheet('ineu_atac_' + dir, `assets/ineu/atac_${dir}.webp?v=2611091130`, mida);
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
-            scene.load.spritesheet('ineu_idle_' + dir, `assets/ineu/idle_${dir}.webp?v=2611021121`, mida);
+            scene.load.spritesheet('ineu_idle_' + dir, `assets/ineu/idle_${dir}.webp?v=2611091204`, mida);
         });
     },
 
@@ -534,7 +537,7 @@ const Grafics = {
             scene.anims.create({
                 key,
                 frames: fotogramesAtac(dir),
-                frameRate: ATAC_INEU.fps,
+                frameRate: fpsAtac(dir),
                 repeat: 0
             });
         });
