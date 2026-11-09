@@ -74,7 +74,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // El cap retallat del sprite del personatge: es fa una sola vegada i es desa com a textura 'retrat_<clau>'.
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
-    'Ineu': 'ineu', 'Pare Jordà': 'pare_jordi', 'Germà Aldreu': 'germa_aldreu', 'Pastor de Boira': 'pastor_boira', 'Aldreu, Pastor de Boira': 'pastor_boira', 'Germà Francí': 'germa_francesc', 'Pare Daimiel': 'pare_daniel',
+    'Ineu': 'ineu', 'Pare Jordà': 'pare_jordi', 'Germà Aldreu': 'germa_aldreu', 'Pastor de Boira': 'pastor_boira', 'Aldreu, Pastor de Boira': 'pastor_boira', 'Aldreu, Guàrdia de la Gàbia': 'aldreu_guardia', 'aldreu_guardia': 'aldreu_guardia', 'Germà Francí': 'germa_francesc', 'Pare Daimiel': 'pare_daniel',
     'Pare Alcoví': 'pare_alcui', 'Eve': 'eva', 'Eva': 'eva', 'Jusef': 'josep', 'Senyor Pomers': 'frederic', 'Julius': 'juli', 'July': 'juli', 'Galf': 'galf', 'Isílder': 'isidre',
     'La Pianista': 'pianista', 'La Jauneta': 'jaumeta', 'Iscu': 'ciscu', 'Siscu': 'ciscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Carmèlia': 'monja_charm', 'Pilària': 'monja_phili', 'Dolora': 'monja_pains', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',

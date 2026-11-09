@@ -149,6 +149,7 @@ const CATALEG = [
     { key: 'pastor_apunta',  file: 'assets/enemics/pastor_apunta.webp',  amplada: 174, cru: true },
     { key: 'pastor_ataca',   file: 'assets/enemics/pastor_ataca.webp',   amplada: 174, cru: true },
     { key: 'pastor_enfadat', file: 'assets/enemics/pastor_enfadat.webp', amplada: 174, cru: true },
+    { key: 'aldreu_guardia', file: 'assets/enemics/aldreu_guardia.webp', amplada: 85,  cru: true, provisional: (c, w) => dibuixarPastorBoira(c, w) },
     { key: 'bolet',          file: 'assets/enemics/bolet.webp',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
     { key: 'rovello',        file: 'assets/natura/rovello.webp',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
     { key: 'llac',           file: null,           amplada: 58, provisional: (c, w) => dibuixarLlac(c, w) },

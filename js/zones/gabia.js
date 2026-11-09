@@ -726,7 +726,7 @@ class ZonaGabia extends ZonaBase {
         else if (!Estat.flag('gabiaOberta')) {
             if (Estat.flag('ocellaireVencut')) this.npc('germa_aldreu', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
             else {
-                const a = this.npcs.germa_aldreu = this.npc('pastor_boira', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
+                const a = this.npcs.germa_aldreu = this.npc('aldreu_guardia', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
                 a.setVisible(false).setAlpha(0);
                 if (a.ombra) a.ombra.setVisible(false).setAlpha(0);
                 if (a.col) a.col.body.enable = false;
@@ -1084,7 +1084,11 @@ class ZonaGabia extends ZonaBase {
             { fer: (z, fet) => z.seq([
                 f => {
                     const ald = z.npcs.germa_aldreu;
-                    if (ald && z.textures.exists('pastor_boira')) {
+                    if (ald && z.textures.exists('aldreu_guardia')) {
+                        ald.setTexture('aldreu_guardia');
+                        const tex = z.textures.get('aldreu_guardia');
+                        if (tex && tex.customData && tex.customData.escala) ald.setScale(tex.customData.escala);
+                    } else if (ald && z.textures.exists('pastor_boira')) {
                         ald.setTexture('pastor_boira');
                         ald.setScale(0.5);
                     }
@@ -1123,7 +1127,7 @@ class ZonaGabia extends ZonaBase {
     // Quan el Mestre cau, la boira deixa l'Aldreu: el Pastor de Boira torna a ser el Germà Aldreu
     desferPastor() {
         const a = this.npcs.germa_aldreu;
-        if (!a || a.texture.key !== 'pastor_boira') return;
+        if (!a || (a.texture.key !== 'pastor_boira' && a.texture.key !== 'aldreu_guardia')) return;
         const x = a.x, y = a.y, flip = a.flipX;
         Sfx.puf();
         this.boiraPuf(x, y - 60);
@@ -1134,7 +1138,7 @@ class ZonaGabia extends ZonaBase {
         this.tweens.killTweensOf(a);
         if (a.ombra) a.ombra.destroy();
         a.destroy();
-        delete this.npcs.pastor_boira; delete this.npcs.germa_aldreu;
+        delete this.npcs.pastor_boira; delete this.npcs.germa_aldreu; delete this.npcs.aldreu_guardia;
         this.npc('germa_aldreu', x, y, DIALEGS.aldreuGabia, { flipX: flip });
     }
 

@@ -142,6 +142,8 @@
 
 - [x] `pastor_boira`
 
+- [x] `aldreu_guardia`
+
 - [x] `pastor_derrota`
 
 - [x] `pastor_camina`
@@ -258,11 +260,11 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 
 
-**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): els tres gràfics del **Pastor de Boira** (`pastor_camina`, `pastor_atac`, `pastor_cau`) i `home_raim_caigut` (vegeu Enemics), `ocellaire_genolls`, `ineu/tarota_gran`, `aldreu_guardia`, `gabia`, `gabia_oberta`, `home_raim_o`.
+**Pendents** (el joc fa servir el dibuix provisional o el recurs alternatiu): els tres gràfics del **Pastor de Boira** (`pastor_camina`, `pastor_atac`, `pastor_cau`) i `home_raim_caigut` (vegeu Enemics), `ocellaire_genolls`, `ineu/tarota_gran`, `gabia`, `gabia_oberta`, `home_raim_o`.
 
 
 
-**Nous, encara sense ús al joc** (preparats per a quan s’implementin): `aldreu_guardia`, `gabia`, `gabia_oberta`.
+**Nous, encara sense ús al joc** (preparats per a quan s’implementin): `gabia`, `gabia_oberta`.
 
 
 

@@ -23,7 +23,8 @@ Totes són opcionals (sona la de reserva), però les set primeres són les que m
 - `ocellaire_genolls`: **el més important ara**, lligat al combat final.
 - `ineu/tarota_gran`: opcional, el retall actual ja funciona.
 - `home_raim_o`: opcional, el cap girat de l'estàtua.
-- `gabia`, `gabia_oberta`, `aldreu_guardia`: ara la gàbia es dibuixa amb codi i l'Aldreu fa servir el sprite de Pastor de Boira; només cal si vols un acabat millor.
+- `aldreu_guardia`: ✔ ja integrat a la Gàbia fent de sentinella.
+- `gabia`, `gabia_oberta`: ara la gàbia es dibuixa amb codi; només cal si vols un acabat millor.
 
 **Es queden dibuixats amb codi** (decidit): escolopendra, gripau, visitant, ovelles, ratpenat, ferralla, capoll, dolmen, masia, dipòsits, la Caseta i els objectes petits.
 
