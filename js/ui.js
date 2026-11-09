@@ -1014,11 +1014,7 @@ class EscenaUI extends Phaser.Scene {
             { text: 'Àudio', audio: true, fn: () => { Sfx.commutarSilenci(); this.pintarSeleccio(); Sfx.tria(); } },
             // Controls tàctils (només en pantalles tàctils): dretà (joystick a l'esquerra, acció a la dreta), esquerrà (al revés) o automàtic (tota la pantalla: un toc = acció, arrossegar = joystick)
             ...(this.sys.game.device.input.touch ? [{ text: 'Mà', commuta: true, etiqueta: () => 'Mà: ' + ({ dreta: 'dretana', esquerra: 'esquerrana', auto: 'automàtic' })[this.mans], fn: () => { this.canviarMans(); this.pintarSeleccio(); Sfx.tria(); } }] : []),
-            { text: 'Desa a un fitxer', fn: () => { Estat.exportar(); this.missatge('Partida baixada: guarda el fitxer. Amb «Carrega un fitxer» la recuperaràs.'); } },
-            { text: 'Carrega un fitxer', fn: () => Estat.importar(ok => {
-                if (!ok) { this.missatge('No he pogut llegir aquest fitxer com a partida.'); return; }
-                this.tancarMenu(); Joc.continuar(this);
-            }) },
+            { text: 'Desa a un fitxer', fn: () => { Estat.exportar(); this.missatge('Partida baixada: guarda el fitxer. La podràs carregar des del títol.'); } },
             { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];
         // Cada opció és un botó (contenidor amb fons, text i, a l'Àudio, l'altaveu): s'il·lumina en passar-hi per sobre o seleccionar-lo,
