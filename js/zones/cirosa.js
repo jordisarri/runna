@@ -253,23 +253,35 @@ class ZonaCirosa extends ZonaBase {
         const e = this.bossCaigut;
         if (!e || !e.spr.active) { fet(); return; }
         e.spr.setFlipX(e.spr.x > this.ineu.x);
-        if (!this.animaPastor(e, 'derrota')) {
-            e.spr.setTexture('pastor_derrota');
+        this.animaPastor(e, 'derrota');
+        if (e.ombra) {
+            e.ombra.setPosition(e.spr.x, e.spr.y + (276 - 150) * 0.58 - 2);
+            e.ombra.setScale(0.72, 0.38);
+            e.ombra.setVisible(true);
         }
-        this.tweens.add({ targets: e.spr, y: e.spr.y + 8, duration: 120, yoyo: true });
+        // Zoom cinematogràfic per veure amb detall l'Ineu i el Pastor derrotat
+        const migX = (this.ineu.x + e.spr.x) / 2;
+        const migY = (this.ineu.y + e.spr.y) / 2;
+        this.enquadrar(migX, migY, 1.45, 900);
+
+        this.tweens.add({ targets: e.spr, y: e.spr.y + 6, duration: 120, yoyo: true });
         this.cameras.main.shake(160, 0.004);
         const p = this.add.particles(e.spr.x, e.spr.y - 40, 'boira', { speed: { min: 20, max: 70 }, lifespan: 1600, scale: { start: 0.8, end: 2.5 }, alpha: { start: 0.6, end: 0 }, tint: [0x9a50ff, 0xb88aff], quantity: 2, frequency: 60 }).setDepth(e.spr.depth + 1);
         this.time.delayedCall(1500, () => { p.stop(); this.time.delayedCall(1600, () => p.destroy()); fet(); });
     }
-    // S'aixeca del terra: quan acaba el discurs, s'aixeca i queda l'sprite normal (pastor_boira)
+    // S'aixeca del terra: quan acaba el discurs, s'aixeca i queda l'sprite normal de peu
     aldreuAixeca(fet) {
         const e = this.bossCaigut;
         if (!e || !e.spr.active) { fet(); return; }
         this.tweens.add({ targets: e.spr, y: e.spr.y - 14, duration: 220, yoyo: true, delay: 250 });
         this.time.delayedCall(450, () => {
             if (e.spr.active) {
-                e.animPastor = 'idle';
-                e.spr.setTexture('pastor_boira');
+                this.animaPastor(e, 'idle');
+                e.spr.setFlipX(e.spr.x > this.ineu.x);
+                if (e.ombra) {
+                    e.ombra.setPosition(e.spr.x, e.spr.y + (276 - 150) * 0.58 - 2);
+                    e.ombra.setScale(0.5, 0.35);
+                }
             }
             this.llum(e.spr.x, e.spr.y - 70, 0xb88aff);
         });
@@ -278,13 +290,20 @@ class ZonaCirosa extends ZonaBase {
     // Se'n va camí avall, cap a les Gírgoles, caminant; s'esvaeix a mesura que s'allunya
     aldreuMarxa(fet) {
         const e = this.bossCaigut;
-        if (!e || !e.spr.active) { fet(); return; }
+        if (!e || !e.spr.active) {
+            if (this.camCinema) this.alliberarCamera(800, fet);
+            else fet();
+            return;
+        }
         if (e.spr.body) e.spr.body.enable = false;
         const x1 = 580, y1 = 1150;
         const ang = Math.atan2(y1 - e.spr.y, x1 - e.spr.x);
         this.animaPastor(e, 'camina', ang);
         this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), x: x1, y: y1, duration: 3000, onComplete: () => {
-            this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), alpha: 0, duration: 400, onComplete: fet });
+            this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), alpha: 0, duration: 400, onComplete: () => {
+                if (this.camCinema) this.alliberarCamera(800, fet);
+                else fet();
+            } });
         } });
     }
 

@@ -1194,10 +1194,7 @@ Object.assign(ZonaBase.prototype, {
                 e.animPastor = nom;
                 sp.anims.stop();
                 sp.setTexture(k);
-                const tex = this.textures.get(k);
-                if (tex && tex.customData && tex.customData.escala) {
-                    sp.setScale(tex.customData.escala);
-                }
+                sp.setScale(0.58);
                 return true;
             }
         }
@@ -1248,7 +1245,11 @@ Object.assign(ZonaBase.prototype, {
 
     // Final del combat contra el Pastor de Boira
     pastorDerrotat(e) {
-        const c = e.spr.body.center;
+        e.mort = true;
+        if (e.spr.body) {
+            e.spr.body.setVelocity(0);
+            e.spr.body.enable = false;
+        }
         this.ui().amagarBarraBoss();
         if (e.avisBat) { this.tweens.killTweensOf(e.avisBat); e.avisBat.destroy(); e.avisBat = null; }
         this.bossCaigut = e;
@@ -1257,11 +1258,19 @@ Object.assign(ZonaBase.prototype, {
             o.mort = true; o.spr.body.enable = false; this.boiraPuf(o.spr.x, o.spr.y);
             this.tweens.add({ targets: [o.spr, o.ombra], alpha: 0, duration: 500, onComplete: () => this.retirar(o) });
         });
-        e.spr.clearTint(); e.spr.body.setVelocity(0);
+        e.spr.clearTint();
+        this.animaPastor(e, 'derrota');
+        e.spr.setFlipX(e.spr.x > this.ineu.x);
+        if (e.ombra) {
+            e.ombra.setPosition(e.spr.x, e.spr.y + (276 - 150) * 0.58 - 2);
+            e.ombra.setScale(0.72, 0.38);
+            e.ombra.setVisible(true);
+        }
         this.ui().actualitzarHUD();
         // (la música de boss continua durant la conversa, fins que el Pastor se'n va)
         this.time.delayedCall(700, () => this.ui().obrirDialeg(DIALEGS.aldreuDerrotat(Estat), () => {
-            this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
+            if (this.camCinema) this.alliberarCamera(800);
+            this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
             this.granRosari('pastorGra', 'Pastor de Boira vençut');
             Joc.musicaZona(this, 1500);
             Estat.desar();
