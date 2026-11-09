@@ -427,14 +427,15 @@ class ZonaCreu extends ZonaBase {
             .setDepth(this.bassa.depth + 0.1);
         this.bassa.setVisible(false);
 
-        // Espurnes de llum mística sobre la bassa mentre es purifica
-        const espurnes = this.add.particles(700, 430, 'espurna', {
-            speed: { min: 25, max: 95 },
-            scale: { start: 0.35, end: 0.05 },
+        // Espurnes de llum mística sobre la làmina d'aigua ovalada de la bassa
+        const espurnes = this.add.particles(700, 420, 'espurna', {
+            emitZone: { type: 'random', source: new Phaser.Geom.Ellipse(0, 0, 360, 120) },
+            speed: { min: 20, max: 80 },
+            scale: { start: 0.32, end: 0.05 },
             alpha: { start: 0.9, end: 0 },
             tint: [0xffea88, 0x7ae8ff, 0xffffff],
             lifespan: 1100,
-            frequency: 50,
+            frequency: 45,
             blendMode: 'ADD'
         }).setDepth(this.bassa.depth + 0.5);
 
@@ -467,8 +468,10 @@ class ZonaCreu extends ZonaBase {
                 const aNeta = Math.max(0, Math.min(1, (k - 0.35) / 0.35));
 
                 for (let y = 0; y < H_DISP; y += pas) {
-                    const dx = MARGIN + Math.sin(y * freq + fase) * amp
-                                      + Math.cos(y * freq * 0.45 - fase * 0.8) * (amp * 0.35);
+                    // La base de la bassa toca a terra i queda fixa; el cos i l'aigua de la bassa s'ondulen
+                    const factorFix = Math.min(1, Math.max(0, (H_DISP - 8 - y) / 45));
+                    const dx = MARGIN + (Math.sin(y * freq + fase) * amp
+                                      + Math.cos(y * freq * 0.45 - fase * 0.8) * (amp * 0.35)) * factorFix;
                     const syB = (y / H_DISP) * shBoira;
                     const syN = (y / H_DISP) * shNeta;
                     const sHB = (pas / H_DISP) * shBoira;
@@ -484,11 +487,15 @@ class ZonaCreu extends ZonaBase {
                     }
                 }
 
-                // Centelleig de llum al pic de la transformació
+                // Centelleig mística que s'ajusta exactament a la silueta de la bassadòria
+                // (source-atop: només il·lumina els píxels dibuixats, sense tocar mai el fons transparent)
                 if (amp > 8) {
-                    ctx.globalAlpha = ((amp - 8) / 18) * 0.28;
+                    ctx.save();
+                    ctx.globalCompositeOperation = 'source-atop';
+                    ctx.globalAlpha = ((amp - 8) / 18) * 0.32;
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+                    ctx.restore();
                 }
                 ctx.globalAlpha = 1.0;
                 this.textures.get(texKey).refresh();
