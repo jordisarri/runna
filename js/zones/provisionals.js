@@ -392,80 +392,62 @@ class ZonaCreu extends ZonaBase {
     crearTexturaReflex(neta) {
         const key = neta ? 'reflex_bassa_neta' : 'reflex_bassa_boira';
         if (this.textures.exists(key)) return key;
-        const W = 520, H = 176;
+        const W = 500, H = 160;
         const canvas = document.createElement('canvas');
         canvas.width = W; canvas.height = H;
         const ctx = canvas.getContext('2d');
         ctx.lineJoin = 'round'; ctx.lineCap = 'round';
 
-        // Aigua base: gradient
-        const grad = ctx.createLinearGradient(0, 0, 0, H);
-        if (neta) {
-            grad.addColorStop(0, '#244e5c');
-            grad.addColorStop(0.35, '#35697a');
-            grad.addColorStop(0.7, '#20424d');
-            grad.addColorStop(1, '#152d34');
-        } else {
-            grad.addColorStop(0, '#1c1822');
-            grad.addColorStop(0.35, '#283426');
-            grad.addColorStop(0.7, '#1b231a');
-            grad.addColorStop(1, '#101410');
-        }
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, W, H);
+        // Fons transparent: el reflex se superposa suaument a l'aigua original de la bassa
+        ctx.clearRect(0, 0, W, H);
 
         if (neta) {
             // Cel i núvols reflectits
-            ctx.fillStyle = 'rgba(215, 238, 248, 0.22)';
-            for (let i = 0; i < 4; i++) {
+            ctx.fillStyle = 'rgba(215, 240, 255, 0.20)';
+            for (let i = 0; i < 3; i++) {
                 ctx.beginPath();
-                ctx.ellipse(70 + i * 110, 24 + (i % 2) * 14, 55, 14, 0.04, 0, Math.PI * 2);
+                ctx.ellipse(150 + i * 100, 62 + (i % 2) * 14, 52, 14, 0.04, 0, Math.PI * 2);
                 ctx.fill();
             }
 
             // Reflex invertit dels plàtans de tardor als costats (fullatge daurat/ocre)
-            ctx.fillStyle = 'rgba(215, 175, 75, 0.42)';
-            ctx.beginPath(); ctx.ellipse(85, 52, 45, 28, 0, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = 'rgba(185, 145, 60, 0.38)';
-            ctx.beginPath(); ctx.ellipse(435, 48, 50, 26, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = 'rgba(215, 175, 75, 0.35)';
+            ctx.beginPath(); ctx.ellipse(75, 45, 55, 30, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(120, 35, 40, 22, 0, 0, Math.PI * 2); ctx.fill();
 
-            // Reflex invertit de la Creu de l'Aparició
-            const cx = 295, cy = 35;
-            ctx.fillStyle = 'rgba(38, 30, 24, 0.52)';
-            ctx.fillRect(cx - 6, cy - 20, 12, 75);
-            ctx.fillRect(cx - 24, cy + 6, 48, 10);
-            ctx.fillRect(cx - 14, cy + 50, 28, 14);
-            ctx.fillRect(cx - 22, cy + 64, 44, 12);
+            ctx.fillStyle = 'rgba(185, 145, 60, 0.32)';
+            ctx.beginPath(); ctx.ellipse(425, 42, 50, 28, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(375, 32, 42, 20, 0, 0, Math.PI * 2); ctx.fill();
 
-            // Càustiques de llum i ones daurades
-            ctx.strokeStyle = 'rgba(235, 250, 255, 0.35)';
-            ctx.lineWidth = 1.4;
-            for (let y = 16; y < H - 12; y += 13) {
-                ctx.beginPath();
-                ctx.moveTo(35, y);
-                for (let x = 35; x < W - 35; x += 28) {
-                    ctx.quadraticCurveTo(x + 14, y + ((x % 56) ? 2.5 : -2.5), x + 28, y);
-                }
-                ctx.stroke();
-            }
+            // Reflex invertit de la Creu de l'Aparició (pedestal dalt, creu invertida)
+            ctx.fillStyle = 'rgba(45, 38, 30, 0.45)';
+            ctx.fillRect(236, 0, 28, 10);
+            ctx.fillRect(240, 10, 20, 8);
+            ctx.fillRect(246, 18, 8, 64);
+            ctx.fillRect(232, 38, 36, 7);
+            ctx.fillRect(246, 82, 8, 12);
+            // Glòria daurada subtil al voltant de la creu reflectida
+            ctx.fillStyle = 'rgba(255, 235, 160, 0.16)';
+            ctx.beginPath(); ctx.ellipse(250, 42, 28, 18, 0, 0, Math.PI * 2); ctx.fill();
         } else {
-            // Aigua tèrbola: taques d'oli i corrupció verdoses / violàcies
-            ctx.fillStyle = 'rgba(110, 65, 140, 0.32)';
-            ctx.beginPath(); ctx.ellipse(210, 65, 80, 32, 0.1, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = 'rgba(65, 110, 60, 0.35)';
-            ctx.beginPath(); ctx.ellipse(345, 80, 90, 36, -0.1, 0, Math.PI * 2); ctx.fill();
+            // Aigua tèrbola: taques d'oli i corrupció verdoses / violàcies suaus
+            ctx.fillStyle = 'rgba(125, 65, 155, 0.28)';
+            ctx.beginPath(); ctx.ellipse(190, 65, 85, 30, 0.1, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = 'rgba(65, 115, 55, 0.30)';
+            ctx.beginPath(); ctx.ellipse(320, 75, 95, 34, -0.08, 0, Math.PI * 2); ctx.fill();
 
-            // Línies d'escuma i bombolles fosques
-            ctx.strokeStyle = 'rgba(160, 205, 150, 0.25)';
-            ctx.lineWidth = 1.5;
-            for (let y = 22; y < H - 18; y += 20) {
-                ctx.beginPath();
-                ctx.moveTo(50, y);
-                for (let x = 50; x < W - 50; x += 36) {
-                    ctx.quadraticCurveTo(x + 18, y + ((x % 72) ? 3.5 : -3.5), x + 36, y);
-                }
-                ctx.stroke();
-            }
+            // Reflex desdibuixat i fosc dels arbres
+            ctx.fillStyle = 'rgba(70, 55, 42, 0.30)';
+            ctx.beginPath(); ctx.ellipse(80, 48, 50, 26, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.ellipse(420, 46, 46, 25, 0, 0, Math.PI * 2); ctx.fill();
+
+            // Silueta fosca i trencada de la creu
+            ctx.fillStyle = 'rgba(25, 20, 32, 0.50)';
+            ctx.fillRect(236, 0, 28, 10);
+            ctx.fillRect(240, 10, 20, 8);
+            ctx.fillRect(246, 18, 8, 64);
+            ctx.fillRect(232, 38, 36, 7);
+            ctx.fillRect(246, 82, 8, 12);
         }
 
         this.textures.addCanvas(key, canvas);
@@ -478,38 +460,119 @@ class ZonaCreu extends ZonaBase {
         this.crearTexturaReflex(!neta);
 
         const cx = 700, cy = 395;
-        const W = 520, H = 176;
-        const nFranges = 28;
-        const hFranja = Math.ceil(H / nFranges);
+        this.bassaCx = cx;
+        this.bassaCy = cy;
 
-        this.frangesAigua = [];
-        for (let k = 0; k < nFranges; k++) {
-            const y0 = k * hFranja;
-            const h = Math.min(hFranja, H - y0);
-            const im = this.add.image(0, -H / 2 + y0, key).setOrigin(0.5, 0).setCrop(0, y0, W, h);
-            this.frangesAigua.push(im);
-        }
+        // Reflex unificat de la creu, el cel i els arbres (sense talls ni franges horitzontals)
+        this.reflexAigua = this.add.image(cx, cy, key)
+            .setDepth(301)
+            .setAlpha(neta ? 0.65 : 0.55);
 
-        this.contenidorAigua = this.add.container(cx, cy, this.frangesAigua)
-            .setDepth(301).setAlpha(0.85);
+        // Capa dinàmica de gràfics per a les ones ondulants i càustiques contínues
+        this.graficsAigua = this.add.graphics().setDepth(302);
 
-        // Màscara ovalada ajustada exactament a la vora de pedra de la bassa
+        // Màscara ovalada ajustada exactament a la làmina d'aigua de la bassa
         const mascG = this.make.graphics({ x: 0, y: 0, add: false });
-        mascG.fillStyle(0xffffff, 1).fillEllipse(cx, cy, 488, 164);
-        this.contenidorAigua.setMask(mascG.createGeometryMask());
+        mascG.fillStyle(0xffffff, 1).fillEllipse(cx, cy, 480, 158);
+        const mascara = mascG.createGeometryMask();
+        this.reflexAigua.setMask(mascara);
+        this.graficsAigua.setMask(mascara);
+
+        // Anells d'ones concèntriques que es formen i s'expandeixen
+        this.anellsAigua = [];
+        this.propAnell = 0;
         this.onaMagica = 0;
     }
 
     ondularAigua(ara) {
-        if (!this.frangesAigua) return;
-        const t = ara * 0.0026;
+        if (!this.reflexAigua || !this.graficsAigua) return;
+        const t = ara * 0.0022;
         const neta = Estat.flag('bassadoriaNeta');
-        const baseAmp = neta ? 4.0 : 6.5;
-        const extra = (this.onaMagica || 0) * 14;
-        const amp = baseAmp + extra;
-        this.frangesAigua.forEach((im, k) => {
-            im.x = Math.sin(t + k * 0.36) * amp + Math.cos(t * 1.5 - k * 0.52) * (amp * 0.38);
-        });
+        const extra = (this.onaMagica || 0) * 12;
+        const ampX = (neta ? 3.5 : 5.0) + extra;
+        const ampY = (neta ? 1.8 : 2.5) + extra * 0.5;
+
+        // Moviment harmònic i respiració suau del reflex (sense talls horitzontals)
+        this.reflexAigua.x = this.bassaCx + Math.sin(t * 1.5) * ampX + Math.cos(t * 0.8) * (ampX * 0.4);
+        this.reflexAigua.y = this.bassaCy + Math.cos(t * 1.2) * ampY + Math.sin(t * 0.6) * (ampY * 0.3);
+        this.reflexAigua.scaleX = 1 + Math.sin(t * 1.7) * (0.02 + (this.onaMagica || 0) * 0.05);
+        this.reflexAigua.scaleY = 1 + Math.cos(t * 1.3) * (0.015 + (this.onaMagica || 0) * 0.04);
+        this.reflexAigua.rotation = Math.sin(t * 0.9) * (0.008 + (this.onaMagica || 0) * 0.02);
+
+        // Nou anell concèntric periòdic
+        if (ara > this.propAnell) {
+            this.propAnell = ara + 1400 + Math.random() * 1200;
+            const ang = Math.random() * Math.PI * 2;
+            const dist = Math.random() * 0.7;
+            this.anellsAigua.push({
+                x: this.bassaCx + Math.cos(ang) * (180 * dist),
+                y: this.bassaCy + Math.sin(ang) * (50 * dist),
+                r: 2,
+                maxR: 32 + Math.random() * 26,
+                vel: neta ? 28 : 18,
+                alphaMax: neta ? 0.38 : 0.28
+            });
+        }
+
+        const g = this.graficsAigua;
+        g.clear();
+
+        // Dibuixar les ones contínues d'aigua (càustiques) en temps real
+        const nBandes = 5;
+        for (let b = 0; b < nBandes; b++) {
+            const relY = (b - (nBandes - 1) / 2) / ((nBandes + 1) / 2); // de -0.66 a +0.66
+            const baseY = this.bassaCy + relY * 58;
+            const factorAmple = Math.sqrt(Math.max(0, 1 - (relY * relY * 1.15)));
+            const hw = 220 * factorAmple;
+            if (hw < 15) continue;
+
+            const faseBanda = b * 1.35;
+            const col = neta
+                ? (b % 2 === 0 ? 0xd8f4ff : 0x72d0ea)
+                : (b % 2 === 0 ? 0x9e5eb6 : 0x568644);
+            const alfa = (neta ? 0.28 : 0.22) + (this.onaMagica || 0) * 0.35;
+            const gruix = (neta ? 1.6 : 2.0) + (this.onaMagica || 0) * 1.2;
+
+            g.lineStyle(gruix, col, alfa);
+            g.beginPath();
+
+            const pas = 12;
+            let primer = true;
+            for (let rx = -hw; rx <= hw; rx += pas) {
+                const x = this.bassaCx + rx;
+                // Deformació líquida sinusoïdal de doble freqüència contínua
+                const ond = Math.sin(t * 2.6 + rx * 0.024 + faseBanda) * (3.4 + extra * 0.4)
+                          + Math.cos(t * 1.7 - rx * 0.042 + faseBanda * 0.7) * (2.1 + extra * 0.25);
+                const y = baseY + ond;
+                if (primer) { g.moveTo(x, y); primer = false; }
+                else { g.lineTo(x, y); }
+            }
+            g.strokePath();
+        }
+
+        // Dibuixar els anells concèntrics
+        const colAnell = neta ? 0xe2f7ff : 0x8ab882;
+        for (let i = this.anellsAigua.length - 1; i >= 0; i--) {
+            const an = this.anellsAigua[i];
+            an.r += (an.vel * (16 / 1000));
+            const prog = an.r / an.maxR;
+            if (prog >= 1) {
+                this.anellsAigua.splice(i, 1);
+                continue;
+            }
+            const alfaAn = an.alphaMax * Math.sin((1 - prog) * Math.PI);
+            g.lineStyle(1.4, colAnell, alfaAn);
+            g.strokeEllipse(an.x, an.y, an.r * 2.2, an.r * 0.85);
+        }
+
+        // Si s'està produint el miracle del Cant de l'Aurora: ones daurades i turqueses que escombren la bassa
+        if (this.onaMagica > 0) {
+            const radiAurora = (1 - (this.onaMagicaProg || 0)) * 240 + 20;
+            g.lineStyle(4, 0xffea88, this.onaMagica * 0.75);
+            g.strokeEllipse(this.bassaCx, this.bassaCy, radiAurora * 2.0, radiAurora * 0.75);
+            g.lineStyle(2.5, 0x88ffff, this.onaMagica * 0.85);
+            g.strokeEllipse(this.bassaCx, this.bassaCy, radiAurora * 1.6, radiAurora * 0.6);
+        }
     }
 
     teEfecteMelodia(nom) {
@@ -530,9 +593,14 @@ class ZonaCreu extends ZonaBase {
             yoyo: true,
             duration: 1800,
             ease: 'Sine.easeInOut',
+            onUpdate: (tw) => {
+                this.onaMagicaProg = tw.getValue();
+            },
             onComplete: () => {
-                if (this.frangesAigua) {
-                    this.frangesAigua.forEach(im => im.setTexture('reflex_bassa_neta'));
+                this.onaMagica = 0;
+                if (this.reflexAigua) {
+                    this.reflexAigua.setTexture('reflex_bassa_neta');
+                    this.reflexAigua.setAlpha(0.65);
                 }
             }
         });
