@@ -1121,12 +1121,13 @@ class ZonaDolmen extends ZonaBase {
         if (this.espClavada) { this.espClavada.destroy(); this.espClavada = null; }
         this.tweens.killTweensOf(this.resplendor); this.resplendor.setAlpha(0);
         if (this.aura) { this.aura.forEach(a => { this.tweens.killTweensOf(a); if (a.stop) a.stop(); this.tweens.add({ targets: a, alpha: 0, duration: 600, onComplete: () => a.destroy() }); }); this.aura = null; }
-        const ESC_AIX = (this.textures.get('ineu_aixeca').customData || {}).escala || 0.5;
+        // El gràfic (eines/fer_aixeca_espasa.py) és de 500 px d'ample i es mostra a AMPLE_AIXECA px de món
+        const AMPLE_AIXECA = 130, ESC_AIX = AMPLE_AIXECA / this.textures.get('ineu_aixeca').getSourceImage().width;
         I.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
         this.ineuAlt = this.add.image(I.x, I.y + 2, 'ineu_aixeca').setOrigin(0.5, 1).setScale(ESC_AIX).setDepth(85000);
         cam.flash(700, 255, 255, 255);
         cam.shake(450, 0.008);
-        const punta = { x: I.x + 7, y: I.y - 177 };
+        const punta = { x: I.x + (0.63 - 0.5) * this.ineuAlt.displayWidth, y: I.y + 2 - this.ineuAlt.displayHeight + 4 };          // la punta de la fulla és dalt, a un 63 % de l'ample del gràfic
         // La càmera s'acosta: es veu el dolmen sencer i l'Ineu alçant l'espasa, entre el rètol (a dalt) i la vora de baix
         {
             const D = this.dolmen, H = ALT - ALT_HUD, Tt = ALT * 0.14 + 130, Bb = Math.min(ALT - SAFE_BAIX - 40, ALT * 0.88);
@@ -1146,7 +1147,7 @@ class ZonaDolmen extends ZonaBase {
         let sd = 7; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
         for (let k = 0; k < 28; k++) {
             const a = k / 28 * Math.PI * 2 + r() * 0.1, L = 260 + r() * 520;
-            raigs.lineStyle(1.5 + r() * 3.5, 0xffffff, 0.35 + r() * 0.4).lineBetween(Math.cos(a) * 30, Math.sin(a) * 30, Math.cos(a) * L, Math.sin(a) * L);
+            raigs.lineStyle(1.5 + r() * 3.5, 0xffffff, 0.35 + r() * 0.4).lineBetween(Math.cos(a) * 4, Math.sin(a) * 4, Math.cos(a) * L, Math.sin(a) * L);
         }
         this.tweens.add({ targets: raigs, alpha: 1, duration: 500 });
         this.tweens.add({ targets: raigs, angle: 360, duration: 40000, repeat: -1 });
