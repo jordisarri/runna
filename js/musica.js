@@ -154,7 +154,7 @@ class EscenaMusica extends Phaser.Scene {
             const gemma = add(this.add.circle(x, by, 46, COLOR_NOTA, 1).setStrokeStyle(3, 0x3a2412, 1));
             add(this.add.ellipse(x - 12, by - 20, 24, 12, 0xffffff, 0.4));
             add(this.add.text(x, by + 1, String(n), { fontFamily: FONT_TITOL, fontSize: '39px', fontStyle: 'bold', color: '#3a2412', stroke: '#f5e2ad', strokeThickness: 2, resolution: 2 }).setOrigin(0.5));
-            const tecla = ['', '←  /  1', 'ESPAI  /  2', '3  /  →'][n];
+            const tecla = ['', '1', '2', '3'][n];
             const etiqueta = add(this.add.graphics());
             etiqueta.fillStyle(0xf1dfb1, 0.92).fillRoundedRect(x - 59, by + 67, 118, 27, 8);
             etiqueta.lineStyle(2, 0x79552b, 0.9).strokeRoundedRect(x - 59, by + 67, 118, 27, 8);
@@ -345,7 +345,7 @@ class EscenaMusica extends Phaser.Scene {
         const temps = 60000 / m.bpm;
         this.creaSlots(m.peca.length);
         this.pintaSlots([]);
-        this.estat.setText('♪ ' + m.nom + (fi ? ', sencer' : '') + '   ·   ESC per saltar');
+        this.estat.setText('♪ ' + m.nom + (fi ? ', sencer' : '') + '');
         let t = 250;
         m.peca.forEach(([nota, durada], i) => {
             const f = NOTES_FREQ[nota], boto = BOTO_DE(f);

@@ -318,7 +318,7 @@ class ZonaBase extends Phaser.Scene {
         // L'Ineu és a terra i no passa res fins que el jugador fa clic, toca la pantalla o prem ESPAI/ENTER: llavors apareix el Pare Jordà i comença el diàleg
         let fase = 0;                                   // 0: a terra, esperant · 1: diàleg · 2: acabat
         const llest = this.time.now + 900;              // un instant perquè un toc o una tecla d'abans no es salti l'escena
-        const avis = ui.add.text(AMPLE / 2, ALT - 230, 'Toca la pantalla o prem ESPAI', estilText(24, '#f1e3b6', { stroke: '#1a120b', strokeThickness: 5 })).setOrigin(0.5).setAlpha(0).setDepth(60);
+        const avis = ui.add.text(AMPLE / 2, ALT - 230, 'Toca la pantalla', estilText(24, '#f1e3b6', { stroke: '#1a120b', strokeThickness: 5 })).setOrigin(0.5).setAlpha(0).setDepth(60);
         ui.tweens.add({ targets: avis, alpha: 0.9, duration: 700, delay: 1200, yoyo: true, repeat: -1, hold: 500 });
         const tecles = ['SPACE', 'ENTER', 'E'];
         let alAccio;

@@ -260,7 +260,7 @@ const DIALEGS = {
             ] : [{ qui: "La Pianista", text: "Ho tornem a provar, fill? Escolta bé les tres notes." }];
             return {
                 pagines: [...intro,
-                    { qui: "La Pianista", text: "Però hi ha un cant que encara em surt, perquè la boira no se'l pot empassar: el Cant de l'Aurora. Te l'ensenyaré. Escolta'm i repeteix les notes amb 1, 2 i 3 (o amb ← ESPAI →)." }
+                    { qui: "La Pianista", text: "Però hi ha un cant que encara em surt, perquè la boira no se'l pot empassar: el Cant de l'Aurora. Te l'ensenyaré. Escolta'm i repeteix les notes amb 1, 2 i 3." }
                 ],
                 enAcabar: () => { E.posaFlag("parlatPianista"); iniciarLliço("aurora"); }
             };
@@ -285,7 +285,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "La Pianista", text: "Ai, Ineu, fill, portes Runna! Se't nota a la mirada. Aleshores t'he d'ensenyar l'últim cant, el que l'Ocellaire va robar als ocells: el Cant del Miracle." },
-                    { qui: "La Pianista", text: "Jo me'n recordo perquè el cantava la meva mare. Escolta'm i repeteix les notes amb 1, 2 i 3 (o amb ← ESPAI →). Et farà falta allà baix." }
+                    { qui: "La Pianista", text: "Jo me'n recordo perquè el cantava la meva mare. Escolta'm i repeteix les notes amb 1, 2 i 3. Et farà falta allà baix." }
                 ],
                 enAcabar: () => iniciarLliço("miracle")
             };
@@ -456,7 +456,7 @@ const DIALEGS = {
     // Les úniques explicacions de com es juga: les dóna en Jusef, i curtes
     josepRegles: E => ({
         pagines: [
-            { qui: 'Jusef', text: 'Mira per on ve la pilota: quan el cercle es posi verd, prem el seu carril (← ↓ → o els botons) i la tornaràs.' },
+            { qui: 'Jusef', text: 'Mira per on ve la pilota: quan el cercle es posi verd, prem el seu carril i la tornaràs.' },
             { qui: 'Jusef', text: 'I quan jo faci el servei màgic, mira els tres signes i repeteix-los en el mateix ordre.' }
         ]
     }),
