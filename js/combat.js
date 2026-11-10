@@ -1040,7 +1040,7 @@ Object.assign(ZonaBase.prototype, {
         e.spr.setTintFill(0xffffff);
         this.time.delayedCall(100, () => { if (e.spr.active) e.spr.clearTint(); });
         this.tweens.killTweensOf(e.spr);
-        e.spr.setScale(e.escalaBase);
+        e.spr.setScale(e.escalaPose || e.escalaBase);       // (el Pastor: l'escala de la pose que fa, no la base: si no, en rebre un cop es feia petit)
         const c = this.zonaCop(e);
         this.impacte(c.x, c.y - 10, d, mort ? 2 : dany > 1 ? 1 : 0);
         Sfx.cop(mort || dany > 1);
@@ -1196,7 +1196,7 @@ Object.assign(ZonaBase.prototype, {
                 e.animPastor = nom;
                 sp.anims.stop();
                 sp.setTexture(k);
-                sp.setScale(0.58 * (ESCALA_POSA[k] || 1));
+                e.escalaPose = 0.58 * (ESCALA_POSA[k] || 1); sp.setScale(e.escalaPose);
                 return true;
             }
         }
@@ -1209,7 +1209,7 @@ Object.assign(ZonaBase.prototype, {
             e.animPastor = 'idle';
             sp.anims.stop();
             sp.setTexture('pastor_camina', 40); // Primer fotograma mirant al sud
-            sp.setScale(0.58);
+            e.escalaPose = 0.58; sp.setScale(0.58);
             sp.setFlipX(false);
             return true;
         }
@@ -1235,7 +1235,7 @@ Object.assign(ZonaBase.prototype, {
                 const idAnim = nom + '_' + dir;
                 if (e.animPastor === idAnim && sp.anims.isPlaying) return true;
                 e.animPastor = idAnim;
-                sp.setScale(0.58);
+                e.escalaPose = 0.58; sp.setScale(0.58);
                 sp.setFlipX(false);
                 sp.anims.timeScale = 1.0;
                 sp.play(clau, true);

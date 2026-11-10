@@ -19,6 +19,7 @@ const RADI_GRAN = 110;       // objectes grans (arbres, fonts, dolmen...), amb e
 // Zoom de la càmera de les zones: 1,2 per defecte (al mòbil els personatges es veien massa petits). Es pot canviar amb ?zoom=1.1
 // (de 1 a 1,6) a l'adreça: es recorda fins que se'n posi un altre
 const ZOOM_NPC = 1.12;      // acostament suau de la càmera en parlar amb un personatge (1 = res)
+const ZOOM_COMBAT = 1.12;    // acostament addicional de la càmera mentre hi ha combat (1 = res)
 const ZOOM_CAMERA = (() => {
     let z = parseFloat(new URLSearchParams(location.search).get('zoom'));
     try {
@@ -267,6 +268,7 @@ class ZonaBase extends Phaser.Scene {
         cam.setViewport(0, ALT_HUD, AMPLE, ALT - ALT_HUD);   // la franja de dalt és per al HUD: no s'hi dibuixa escenari
         const zoomZona = this.zoomZona || ZOOM_CAMERA;
         cam.setZoom(zoomZona);
+        this.zoomBase = zoomZona;
         // Si el món és més petit que la pantalla (interiors), es centra en lloc de quedar enganxat a una vora
         const vw = AMPLE / zoomZona, vh = (ALT - ALT_HUD) / zoomZona, alcadaMon = c.alcada + this.extraSud;
         const bx = Math.max(0, (vw - c.amplada) / 2), by = Math.max(0, (vh - alcadaMon) / 2);
@@ -1521,6 +1523,19 @@ class ZonaBase extends Phaser.Scene {
     // ---------------- Bucle ----------------
     update(time, delta) {
         this.cicle(time, delta);
+        this.zoomCombat(delta);
+    }
+
+    // Durant un combat (hi ha un enemic viu a prop, o el boss) la càmera s'acosta una mica (ZOOM_COMBAT) i en acabar torna a lloc, suaument.
+    // No toca la càmera quan hi ha un diàleg o una escena: elles porten el seu propi zoom.
+    zoomCombat(delta) {
+        if (this.camCinema || this.camDialeg || !this.zoomBase) return;
+        const cam = this.cameras.main, I = this.ineu;
+        const lluita = !!(this.enemics && I && this.enemics.some(e => !e.mort && e.spr && e.spr.active && (e.def.barra || Phaser.Math.Distance.Between(e.spr.x, e.spr.y, I.x, I.y) < 650)));
+        const objectiu = this.zoomBase * (lluita ? ZOOM_COMBAT : 1);
+        if (Math.abs(cam.zoom - objectiu) < 0.002) return;
+        cam.setZoom(Phaser.Math.Linear(cam.zoom, objectiu, Math.min(1, delta / 450)));
+        this.ajustarSuperposicions();
     }
 
     // Les siluetes translúcides (la de l'Ineu i les dels enemics darrere les capçades) es col·loquen DESPRÉS que la física hagi mogut els cossos: si es feia dins d'update(),
