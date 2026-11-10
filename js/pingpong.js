@@ -27,6 +27,11 @@ PP.xProp = PP.LANE.map(X => 360 + PP.F * X / (PP.ZF - PP.FA * PP.L));
 class EscenaPingPong extends Phaser.Scene {
     constructor() { super('PingPong'); }
 
+    // Els fulls de l'Ineu d'esquena fent el cop (eines/fer_pingpong_ineu.py): drive (carrils del mig i de la dreta) i revés (carril de l'esquerra); només es carreguen aquí
+    preload() {
+        ['drive', 'reves'].forEach(n => { if (!this.textures.exists('pp_' + n)) this.load.spritesheet('pp_' + n, `assets/ineu/pp_${n}.webp?v=2611110100`, { frameWidth: 256, frameHeight: 256 }); });
+    }
+
     create() {
         this.scene.bringToTop();                // per sobre del HUD
         // La zona i el HUD dormen mentre es juga (no es veuen i no gasten); en acabar es desperten
@@ -93,11 +98,16 @@ class EscenaPingPong extends Phaser.Scene {
             }).setDepth(0.9);
         }
         this.reposJosep();
-        const ineuTex = this.textures.exists('ineu_up') ? 'ineu_up' : 'ineu_avall';
+        this.fullsPP = this.textures.exists('pp_drive') && this.textures.exists('pp_reves');          // l'Ineu amb la pala al dibuix (si falten, es fa servir el d'abans amb la pala dibuixada per codi)
+        const ineuTex = this.fullsPP ? 'pp_drive' : this.textures.exists('ineu_up') ? 'ineu_up' : 'ineu_avall';
         // Gran i només de cintura en amunt: el full és de 256 de costat i el personatge puja fins a ~y16; es retalla per sota de la cintura (~y150)
         this.spIneu = this.add.sprite(360, 0, ineuTex, 0).setOrigin(0.5, 1).setDepth(5);
-        this.escIneu = ((this.textures.get(ineuTex).customData || {}).escala || 0.5) * 3.4;
+        this.escIneu = this.fullsPP ? 1.95 : ((this.textures.get(ineuTex).customData || {}).escala || 0.5) * 3.4;          // (els fulls nous tenen el personatge una mica més petit dins la cel·la)
         this.spIneu.setScale(this.escIneu).setCrop(0, 0, this.spIneu.width, 150);
+        if (this.fullsPP) {
+            // El cop de la pala és al fotograma 4 del drive i al 8 del revés: l'animació comença just abans i el cop cau pels volts dels 35-100 ms
+            [['drive', 3, 30], ['reves', 4, 40]].forEach(([n, ini, fps]) => { if (!this.anims.exists('pp_' + n)) this.anims.create({ key: 'pp_' + n, frames: this.anims.generateFrameNumbers('pp_' + n, { start: ini, end: 15 }), frameRate: fps, repeat: 0 }); });
+        }
         this.spIneu.y = 1215 + (this.spIneu.height - 150) * this.escIneu;           // el tall de la cintura queda just damunt dels botons
         this.ombroIneu = this.spIneu.y - (this.spIneu.height - 85) * this.escIneu;  // alçada de l'espatlla (y85 del full)
         // La pala a la mà de l'Ineu: gira cap al carril on colpeja. El pivot és la mà (el mànec cap avall).
@@ -108,6 +118,7 @@ class EscenaPingPong extends Phaser.Scene {
         gp.fillStyle(0x8a1a1a, 1).fillEllipse(0, -62, 52, 62).lineStyle(3, 0x1a0e06, 1).strokeEllipse(0, -62, 52, 62);
         gp.fillStyle(0xd83a3a, 1).fillEllipse(0, -64, 44, 54).fillStyle(0xffffff, 0.22).fillEllipse(-9, -74, 12, 22);
         this.pala.add(gp);
+        if (this.fullsPP) this.pala.setVisible(false);                // la pala ja és al dibuix de l'Ineu
         this.bracIneu = this.add.graphics().setDepth(4.8);          // la màniga queda per sota del cos de l'Ineu
         this.impacte = this.add.circle(0, 0, 30).setStrokeStyle(5, 0xffffff, 0.9).setDepth(8).setVisible(false);
 
@@ -436,6 +447,13 @@ class EscenaPingPong extends Phaser.Scene {
         const x = PP.xProp[c];
         this.tweens.killTweensOf(this.spIneu); this.tweens.killTweensOf(this.pala);
         this.tweens.add({ targets: this.spIneu, x, duration: 150, ease: 'Sine.easeOut' });
+        if (this.fullsPP) {                       // revés des del carril de l'esquerra; drive des del mig i la dreta (el cop de la pala és cap als fotogrames 4 / 8)
+            const n = c === 0 ? 'reves' : 'drive', sp = this.spIneu;
+            sp.off('animationcomplete'); sp.anims.stop();
+            sp.setTexture('pp_' + n, n === 'reves' ? 4 : 3).setCrop(0, 0, sp.width, 150);
+            sp.play('pp_' + n);
+            sp.once('animationcomplete', () => { sp.setTexture('pp_' + n, 0).setCrop(0, 0, sp.width, 150); });
+        }
         const repos = 20, colp = c === 0 ? -75 : c === 2 ? 75 : -35;
         this.pala.setAngle(repos + (c === 0 ? 40 : c === 2 ? -40 : 0));
         this.tweens.add({ targets: this.pala, x: x + this.palaDx, angle: colp, duration: 130, ease: 'Quad.easeOut',
@@ -473,7 +491,7 @@ class EscenaPingPong extends Phaser.Scene {
         this.auraJosep.setPosition(360 + this.jo.x + fx, this.josepY + this.jo.y + fy - 150).setAlpha(0.1 + 0.07 * Math.sin(time / 600));
         // Braç de l'Ineu: de l'espatlla a la pala (segueix el desplaçament i el gir de la pala)
         const bi = this.bracIneu, sx = this.spIneu.x + 40, sy = this.ombroIneu, hx = this.pala.x, hy = this.pala.y;
-        bi.clear().lineStyle(40, 0x140a04, 1).lineBetween(sx, sy, hx, hy).lineStyle(31, 0x6a4a2e, 1).lineBetween(sx, sy, hx, hy);
+        bi.clear(); if (!this.fullsPP) bi.lineStyle(40, 0x140a04, 1).lineBetween(sx, sy, hx, hy).lineStyle(31, 0x6a4a2e, 1).lineBetween(sx, sy, hx, hy);
         // Pilota que ve: bota a la meitat de l'Ineu i s'enlaira; al punt més alt és el moment del cop
         if (this.estat === 'cop' && !this.respost) {
             const t = time - this.t0, f = t / this.durada;

@@ -17,6 +17,7 @@ from scipy import ndimage
 ARREL = Path(__file__).resolve().parent.parent
 FULLS = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast',          # caminar
          'idle_down', 'idle_up', 'idle_right', 'idle_southeast', 'idle_northeast',                      # aturat
+         'pp_drive', 'pp_reves',                                                                              # ping-pong (d'esquena, des del Celler)
          'atac_down', 'atac_up', 'atac_left', 'atac_right', 'atac_southwest', 'atac_southeast', 'atac_northwest', 'atac_northeast']   # atac
 # Multiplicador del gruix per a imatges que es mostren més reduïdes: aixeca_espasa fa 500 px d'ample i es mostra a 100 (escala 0,2 en lloc de 0,5), així que necessita el doble de píxels per veure's igual de gruixut
 MULT = {'aixeca_espasa': 2}
@@ -70,6 +71,7 @@ def main():
     for f in FULLS + SOLTS:
         dest = ARREL / 'assets' / 'ineu' / (f + '.webp')
         copia = ORIGINALS / (f + '.webp')
+        if not dest.exists() and not copia.exists(): print('Falta', f); continue
         if '--treu' in args:
             if not copia.exists(): print('No hi ha original guardat de', f); continue
             shutil.copyfile(copia, dest); print('Restaurat', dest.relative_to(ARREL)); continue
