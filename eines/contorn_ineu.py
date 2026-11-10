@@ -18,7 +18,7 @@ ARREL = Path(__file__).resolve().parent.parent
 FULLS = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast',          # caminar
          'idle_down', 'idle_up', 'idle_right', 'idle_southeast', 'idle_northeast',                      # aturat
          'atac_down', 'atac_up', 'atac_left', 'atac_right', 'atac_southwest', 'atac_southeast', 'atac_northwest', 'atac_northeast']   # atac
-# Multiplicador del gruix per a imatges que es mostren més reduïdes: aixeca_espasa fa 500 px d'ample i es mostra a 112 (escala 0,22 en lloc de 0,5), així que necessita el doble de píxels per veure's igual de gruixut
+# Multiplicador del gruix per a imatges que es mostren més reduïdes: aixeca_espasa fa 500 px d'ample i es mostra a 100 (escala 0,2 en lloc de 0,5), així que necessita el doble de píxels per veure's igual de gruixut
 MULT = {'aixeca_espasa': 2}
 SOLTS = ['aixeca_espasa', 'aixeca_basto', 'aixeca_buit', 'aixeca_tiler']      # imatges soltes (l'Ineu alçant l'arma): retallades justes, s'hi afegeix un marge del gruix
 CEL = 256

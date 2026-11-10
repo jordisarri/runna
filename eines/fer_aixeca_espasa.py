@@ -5,7 +5,7 @@ El fons blanc es treu emplenant des de les vores, però el reflex clar de la ful
 reflex tocava el fons per un canal fi i es treia també (la fulla quedava transparent). Aquí només es treu el fons de debò: el que queda separat del dibuix
 per una franja més ampla que RADI px (els canals estrets no compten).
 
-    python3 eines/fer_aixeca_espasa.py [amplada_en_pixels]       (per defecte 500: es mostra a l'escena del Dolmen a 112 px d'ample, vegeu AMPLE_AIXECA a js/zones/oest.js)
+    python3 eines/fer_aixeca_espasa.py [amplada_en_pixels]       (per defecte 500: es mostra a l'escena del Dolmen a 100 px d'ample, vegeu AMPLE_AIXECA a js/zones/oest.js)
 
 Escriu la versió SENSE contorn a art/ineu_caminar/sense_contorn/aixeca_espasa.webp; després cal passar eines/contorn_ineu.py (que la torna a escriure a assets/ineu/ amb contorn).
 """
