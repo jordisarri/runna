@@ -3,7 +3,7 @@
 
     python3 eines/contorn_ineu.py            posa el contorn (guarda abans els originals a art/ineu_caminar/sense_contorn/)
     python3 eines/contorn_ineu.py --treu     torna als originals sense contorn
-    python3 eines/contorn_ineu.py --gruix 3  canvia el gruix (en píxels de la cel·la de 256; per defecte 2)
+    python3 eines/contorn_ineu.py --gruix 3  canvia el gruix (en píxels de la cel·la de 256; per defecte 1)
 
 Sempre es parteix de l'original sense contorn, així es pot repetir amb un altre gruix sense que s'acumuli. Cada cel·la és de 256x256 i l'Ineu hi deixa
 com a mínim 5 px de marge, així que fins a ~4 px de contorn cap sense tallar-se. Cal que eines/convertir_webp.js no es torni a executar sobre l'Ineu sense tornar a posar el contorn. Després cal pujar el «?v=» dels fulls a js/assets.js (i index.html si cal).
@@ -54,7 +54,7 @@ def contorn_solt(im, gruix):
 
 def main():
     args = sys.argv[1:]
-    gruix = int(args[args.index('--gruix') + 1]) if '--gruix' in args else 2
+    gruix = int(args[args.index('--gruix') + 1]) if '--gruix' in args else 1
     ORIGINALS.mkdir(parents=True, exist_ok=True)
     for f in FULLS + SOLTS:
         dest = ARREL / 'assets' / 'ineu' / (f + '.webp')

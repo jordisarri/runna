@@ -295,12 +295,12 @@ const Grafics = {
         scene.load.spritesheet('isidre_camina', 'assets/personatges/isidre_camina.webp', { frameWidth: 190, frameHeight: 285 });
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
-            scene.load.spritesheet('ineu_' + dir, `assets/ineu/${dir}.webp?v=2611102140`, mida);
-            scene.load.spritesheet('ineu_atac_' + dir, `assets/ineu/atac_${dir}.webp?v=2611102155`, mida);
+            scene.load.spritesheet('ineu_' + dir, `assets/ineu/${dir}.webp?v=2611102210`, mida);
+            scene.load.spritesheet('ineu_atac_' + dir, `assets/ineu/atac_${dir}.webp?v=2611102210`, mida);
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
-            scene.load.spritesheet('ineu_idle_' + dir, `assets/ineu/idle_${dir}.webp?v=2611102140`, mida);
+            scene.load.spritesheet('ineu_idle_' + dir, `assets/ineu/idle_${dir}.webp?v=2611102210`, mida);
         });
     },
 
