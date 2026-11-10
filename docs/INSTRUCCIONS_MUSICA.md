@@ -25,7 +25,7 @@ Fetes (✔): totes.
 | ✔ `jingle_arma` | Quan l'Ineu alça una arma nova (el bastó, la branca del Til·ler) | peça única | `jingle_objecte` | **Recomanada** |
 | `jingle_objecte` (no es fa servir: els objectes sonen amb `jingle_arma`) | Quan l'Ineu alça el bastó o la branca | peça única | fanfara sintetitzada | Recomanada |
 
-Les Cel·les comparteixen `poble`; la resta de peces que ja hi ha: *The Hero's Ascension* (títol i, fins que hi hagi `poble`, el poble), *Woodland Path* (boscos, la Caseta i els Dipòsits), *Inside All* (interiors i, fins que hi hagi `santuari`, el Santuari), *Deep Dungeon Stillness* (masmorres) i *light book* (pròleg). El Celler (la sala del ping-pong) fa servir `taverna`.
+Les Cel·les comparteixen `poble`; la resta de peces que ja hi ha: `titol` (títol i, fins que hi hagi `poble`, el poble), `bosc` (boscos, la Caseta i els Dipòsits), `interiors` (interiors i, fins que hi hagi `santuari`, el Santuari), `masmorra` (masmorres) i `proleg` (pròleg). El Celler (la sala del ping-pong) fa servir `taverna`.
 
 ## El leitmotiv (la fanfàrria d'`intro_runna`)
 

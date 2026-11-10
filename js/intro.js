@@ -10,7 +10,7 @@ const FONT_TEXT = '"Cormorant Garamond", Georgia, "Times New Roman", serif';   /
 const FONT_LLIBRE = '"IM Fell English", "Cormorant Garamond", Georgia, serif';             // text de llibre antic (pròleg)
 const FONT_PLACA = '"Cinzel", Georgia, serif';                                   // noms i títols a la interfície
 
-// The Hero's Ascension: la fanfarria comença al segon 17 de la cançó. La música arrenca d'aquí, des del primer segon de la intro.
+// titol (abans «The Hero's Ascension»): la fanfarria comença al segon 17 de la cançó. La música arrenca d'aquí, des del primer segon de la intro.
 const MUSICA_FANFARRIA = 17;
 // L'ease «ease-in-out» del CSS: cubic-bezier(.42, 0, .58, 1)
 const EASE_CSS = (() => {

@@ -116,14 +116,14 @@ const Joc = {
     // Fitxers de cada cançó (AAC .m4a, comprimides amb eines/comprimir_media.sh). Només 'musica_intro' es carrega
     // a la pantalla de càrrega; la resta es baixen en segon pla des del títol, o quan una zona les demana.
     FITXERS_MUSICA: {
-        musica_intro: "The Hero's Ascension", musica_casa: 'Inside All',
-        musica_masmorra: 'Deep Dungeon Stillness', musica_bosc: 'Woodland Path'
+        musica_intro: 'titol', musica_casa: 'interiors',
+        musica_masmorra: 'masmorra', musica_bosc: 'bosc'
     },
 
     // Músiques opcionals: es fan servir si el fitxer assets/musica/<fitxer>.m4a existeix; si no, sona la de reserva ('fallback').
     // Així es poden anar afegint cançons una a una sense tocar res més (vegeu docs/INSTRUCCIONS_MUSICA.md).
     MUSICA_OPCIONAL: {
-        musica_proleg:     { fitxer: 'light book', fallback: 'musica_intro' },
+        musica_proleg:     { fitxer: 'proleg', fallback: 'musica_intro' },
         musica_poble:      { fitxer: 'poble',      fallback: 'musica_intro' },      // exteriors del poble (fins ara, la mateixa que el títol)
         musica_santuari:   { fitxer: 'santuari',   fallback: 'musica_casa' },
         musica_taverna:    { fitxer: 'taverna',    fallback: 'musica_casa' },

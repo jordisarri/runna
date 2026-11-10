@@ -505,7 +505,7 @@ const Grafics = {
 
     // Animacions de caminar de l'Ineu (són globals: es creen una sola vegada)
     // Gràfics del Pastor de Boira: nom -> [fotogrames, fotogrames per segon, repeticions (-1 = en bucle)]
-    PASTOR_FULLS: { camina: [8, 10, -1], atac: [1, 0, 0], cau: [1, 0, 0] },        // camina: full de 8 fotogrames; atac (la caiada alçada) i cau (a terra): un sol dibuix
+    PASTOR_FULLS: { camina: [8, 10, -1] },        // camina: full de 8 fotogrames (les poses d'atac, derrota... són imatges soltes del catàleg: pastor_ataca, pastor_derrota...)
 
     animacions(scene) {
         if (scene.textures.exists('pastor_camina') && !scene.anims.exists('pastor_camina')) {
