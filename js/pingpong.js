@@ -102,7 +102,7 @@ class EscenaPingPong extends Phaser.Scene {
         const ineuTex = this.fullsPP ? 'pp_drive' : this.textures.exists('ineu_up') ? 'ineu_up' : 'ineu_avall';
         // Gran i només de cintura en amunt: el full és de 256 de costat i el personatge puja fins a ~y16; es retalla per sota de la cintura (~y150)
         this.spIneu = this.add.sprite(360, 0, ineuTex, 0).setOrigin(0.5, 1).setDepth(5);
-        this.escIneu = this.fullsPP ? 1.95 : ((this.textures.get(ineuTex).customData || {}).escala || 0.5) * 3.4;          // (els fulls nous tenen el personatge una mica més petit dins la cel·la)
+        this.escIneu = this.fullsPP ? 2.4 : ((this.textures.get(ineuTex).customData || {}).escala || 0.5) * 3.4;          // (els fulls nous tenen el personatge una mica més petit dins la cel·la)
         this.spIneu.setScale(this.escIneu).setCrop(0, 0, this.spIneu.width, 150);
         if (this.fullsPP) {
             // El cop de la pala és al fotograma 4 del drive i al 8 del revés: l'animació comença just abans i el cop cau pels volts dels 35-100 ms
