@@ -739,7 +739,7 @@ class ZonaDolmen extends ZonaBase {
         this.placaDolmen = this.posar('placa_dolmen', sx, PY, { escala: 230 / 190, col: { w: 150, h: 16 }, opac: true });
         const PW = this.placaDolmen.displayWidth, PH = this.placaDolmen.displayHeight, PTOP = PY - PH;
         this.placaGeo = { sx, PY, PW, PH, PTOP, cercles: { placaArbre: [sx - PW / 2 + PW * 0.295, PTOP + PH * 0.54], placaSaber: [sx - PW / 2 + PW * 0.515, PTOP + PH * 0.54], placaBenedicio: [sx - PW / 2 + PW * 0.69, PTOP + PH * 0.53] } };
-        this.interactiu(sx, PY + 12, 130, DIALEGS.placaDolmen, { altura: PH + 20, actiu: () => !this.alt && this.davantPlaca() });
+        this.interactiu(sx, PY + 12, 130, DIALEGS.placaDolmen, { altura: PH + 20, actiu: () => !this.alt && this.davantPlaca() && !Estat.flag('placaCompleta') });          // amb els tres medallons ja no diu res: sense «!»
         this.medallonsPlaca = [];
         [['placaArbre', 'emblema_arbre', 0x8fd060], ['placaSaber', 'emblema_saber', 0x7ab8ff], ['placaBenedicio', 'emblema_benedicio', 0xffd860]].forEach(([flag, emb, color]) => { if (Estat.flag(flag)) this.dibuixaMedalloPlaca(flag, emb, color); });
         if (Estat.flag('placaCompleta') && !Estat.te('runna')) this.ferAuraRunna(false);       // Runna ja s'ha il·luminat: l'aura daurada i verda es queda
