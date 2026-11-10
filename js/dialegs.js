@@ -147,7 +147,7 @@ const DIALEGS = {
                 pagines: [
                     { qui: 'Germà Aldreu', text: 'Ineu! Quin drama, oi? Tothom corrent amunt i avall... Segur que els nens s\'han amagat per jugar.' },
                     { qui: 'Germà Aldreu', text: 'Ets del Barça, tu? Tinc uns cromos que els nens es moren per tenir. Ells sí que m\'escolten.' },
-                    { qui: 'Germà Aldreu', text: 'Tinc aquest bastó de pelegrí. Aquests dies és perillós anar sol. Agafa\'l.' },
+                    { qui: 'Germà Aldreu', text: 'Tinc aquest bastó de pelegrí. És perillós anar sol. Agafa\'l.' },
                     { fer: (z, fet) => z.objecteVola('germa_aldreu', () => z.ineuAixeca('ineu_aixeca_basto', fet, 0.58), 'arma_basto') },
                     { avis: 'Has obtingut el BASTÓ DE PELEGRÍ!' },        // quadre de diàleg: l'Ineu hi roman alçant el bastó fins que s'avança
                     { fer: (z, fet) => z.ineuBaixa(fet) }
