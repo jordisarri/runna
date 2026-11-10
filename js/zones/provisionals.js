@@ -95,7 +95,10 @@ class ZonaEsglesia extends ZonaBase {
          ['mandu', 485, R + 350],
          ['frederic', 380, R + 530], ['josep', 450, R + 530], ['germa_francesc', 520, R + 530],
          ['jaumeta', 760, R + 530], ['galf', 830, R + 530], ['isidre', 900, R + 530]
-        ].forEach(([k, x, y]) => { if (this.textures.exists(k) && !(this.npcs && this.npcs[k])) this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 }); });
+        ].forEach(([k, x, y]) => {
+            if (k === 'mandu' && !Estat.flag('manduNinaTrencada')) return;      // la Mandu només hi és si l'Ineu hi va parlar durant el joc (la nina trencada que el Fram cus)
+            if (this.textures.exists(k) && !(this.npcs && this.npcs[k])) this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 });
+        });
         if (this.npcs && this.npcs.mandu && Estat.flag('manduNinaTrencada')) this.npcs.mandu.setTexture('mandu_trencada');            // la nina, encara sense cap
         this.direccio = 'avall';
         if (this.ineu) this.posarDireccio('avall', false);
@@ -162,6 +165,13 @@ class ZonaEsglesia extends ZonaBase {
             { qui: 'Dolora', text: 'I els tornaria a resar tots. Gràcies, Ineu.' },
             { qui: 'Sardi', text: 'Pilària, Pilària! He volat amb ocells de foc!' },
             { qui: 'Pilària', text: "Doncs ara aterraràs a la banyera, que fas olor de gàbia." },
+            // L'Isílder, el pare del Sardi, hi corre i l'abraça
+            ...(hi('isidre') ? [
+                accio(z => [f => z.npcVa('isidre', 735, R + 195, f, 200), f => z.npcMira('isidre', 705, f), f => z.bombolla('isidre', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
+                { qui: 'Isílder', text: "Sardi! Fill meu... Tres nits sense saber de tu." },
+                { qui: 'Sardi', text: "Pare! Has regat la prunera?" },
+                { qui: 'Isílder', text: "Cada dia, fill. Cada dia. Així, quan tornessis, ho trobaves tot com ho havies deixat." }
+            ] : []),
             // L'Iscu, que avui no ha de fregar gots
             ...(hi('ciscu') ? [accio(z => [f => z.npcSalta('ciscu', f, 2)]),
                 { qui: 'Iscu', text: "Avui no frego ni un got! La mare dorm i ningú no m'ho pot manar. Festa grossa!" }] : []),

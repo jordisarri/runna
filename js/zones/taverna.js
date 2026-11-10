@@ -22,7 +22,7 @@ Object.assign(DIALEGS, {
         if (!E.flag('evaParlat')) return {
             pagines: [
                 { qui: 'Eve', text: 'Sóc l\'Eve. Ajudo la Càren... bé, faig la feina de la Càren. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
-                { qui: 'Eve', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola. Entra. Diu que va a buscar vi, però a la Taverna mai no ha faltat cap ampolla. I no en torna amb cap.' },
+                { qui: 'Eve', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola, com si la boira l\'obeís. Entra. Diu que va a buscar vi, però a la Taverna mai no ha faltat cap ampolla. I no en torna amb cap.' },
                 { qui: 'Eve', text: 'A dins, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Ocells, Ineu.' },
                 { qui: 'Eve', text: 'I l\'Iscu, el fill de la Càren, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
                 { qui: 'Eve', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
@@ -48,10 +48,12 @@ Object.assign(DIALEGS, {
     },
 
 
-    // La Porta de les Gírgoles (a l'est del Pati del Celler): la de la galeria, que el Germà Aldreu tanca amb clau cada nit
+    // La Porta de les Gírgoles (a l'est del Pati del Celler): la de la galeria, que s'obria sola per al Germà Aldreu mentre la boira obeïa la veu del Mestre
     portaSoterrani: E => E.flag('clauFerro') ? { pagines: [
+    ] } : E.flag('tombaSegellada') ? { pagines: [
+        { qui: 'Ineu', text: "(Tancada amb clau. A l'Aldreu se li obria sola perquè la boira obeïa la veu del Mestre... però la tomba és segellada i la boira ja no hi és: ara la porta no s'obre per a ningú. Em cal la clau dels monjos.)" }
     ] } : { pagines: [
-        { qui: 'Ineu', text: "Tancada amb clau." }
+        { qui: 'Ineu', text: "(Tancada amb clau. Diuen que a l'Aldreu se li obre sola: la boira l'obeeix. A mi, no.)" }
     ] },
 
     acordio: E => ({ pagines: [] }),

@@ -153,7 +153,8 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: 'Germà Aldreu', text: 'Avui no tinc temps, Ineu. Tinc... coses a fer. Força Barça!' }
+                { qui: 'Germà Aldreu', text: 'Avui no tinc temps, Ineu. Tinc... coses a fer.' },
+                { qui: 'Germà Aldreu', text: "Ei, no sents res? Com una veu molt fluixeta que em crida de sota terra... Deu ser el vent. Força Barça!" }
             ]
         };
     },
@@ -1066,7 +1067,7 @@ const DIALEGS = {
         if (!E.flag('premiPhili')) return {
             pagines: [
                 { qui: 'Pilària', text: 'Per fi! Tres nits que colpejo aquesta porta! Soc la Pilària, i no, no m\'he estat quieta ni un minut.' },
-                { qui: 'Pilària', text: 'T\'ho dic perquè ho vaig veure: el Germà Aldreu, aquell pesat que sempre anava jugant amb els nens, abans que la boira ens tanqués, anava moltes nits a la Porta de les Gírgoles, a l\'est del Celler, i la porta se li obria sola. Mai no li he cregut el somriure.' },
+                { qui: 'Pilària', text: 'T\'ho dic perquè ho vaig veure: el Germà Aldreu, aquell pesat que sempre anava jugant amb els nens, abans que la boira ens tanqués, anava moltes nits a la Porta de les Gírgoles, a l\'est del Celler, i la porta se li obria sola, com si la boira l\'obeís. Mai no li he cregut el somriure.' },
                 { qui: 'Pilària', text: 'Tots aquests nens innocents segrestats per aquesta maleïda boira... Troba\'ls, monjo! Salva\'ls a tots!' },
                 { qui: 'Pilària', text: 'Gràcies pel teu coratge! Que no se t\'acabin les forces!' },
                 ...(ultimaMonja('Phili') ? [avisPremiMonja('Phili')] : [])
@@ -1238,7 +1239,9 @@ const DIALEGS = {
             { qui: "Aldreu, Pastor de Boira", text: "Ineu!" },
             { qui: "Ineu", text: "Germà Aldreu?!" },
             { qui: "Aldreu, Pastor de Boira", text: "L'Aldreu era un monjo que ningú no mirava. Ara sóc el Pastor de Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai." },
-            { qui: "Aldreu, Pastor de Boira", text: "El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» Jo no el trobo a faltar: l'admiro. I ara sóc el seu pastor. El PASTOR!" },
+            { qui: "Aldreu, Pastor de Boira", text: "Des que va pujar la boira, una veu em parla dins el cap, baixeta, només per a mi. Ella em va veure quan ningú més no ho feia. És la veu del Mestre." },
+            { qui: "Ineu", text: "Una veu dins el teu cap... Aldreu, és la de l'Home de la Gàbia. L'Ocellaire parla per la teva boca." },
+            { qui: "Aldreu, Pastor de Boira", text: "L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» Jo no el trobo a faltar: l'admiro. I ara sóc el seu pastor. El PASTOR!" },
             { qui: "Ineu", text: "On són l'Huri, el Fram i el Sardi?" },
             { qui: "Aldreu, Pastor de Boira", text: "Dormen. Els vaig portar jo al Mestre, un per un, de nit. Allà dins ja no tenen por de res." },
             { qui: "Ineu", text: "Aldreu, això que et parla no és bo. Encara pots tornar enrere." },
@@ -1251,7 +1254,7 @@ const DIALEGS = {
         pagines: [
             { fer: (z, fet) => z.aldreuAgenollat(fet) },
             { qui: "Aldreu, Pastor de Boira", text: "Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré." },
-            { qui: "Aldreu, Pastor de Boira", text: "El Mestre és al fons de les Gírgoles, i ja és despert. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells." },
+            { qui: "Aldreu, Pastor de Boira", text: "El Mestre és al fons de les Gírgoles, i ja és despert: la seva veu em crida des d'allà baix i no calla mai. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells." },
             { fer: (z, fet) => z.aldreuAixeca(fet) },
             { qui: "Aldreu, Pastor de Boira", text: "Je, je, je... Ens veurem allà baix, monjo." },
             { fer: (z, fet) => z.aldreuMarxa(fet) },
@@ -1269,7 +1272,9 @@ const DIALEGS = {
     // Juga amb una nina davant la porta de la dreta de Sant Benet. A la primera conversa, la pena i la ràbia li fan arrencar el cap a la nina; no deixa que ningú
     // la toqui: només la pot arreglar el Fram (a l'epíleg).
     mandu: E => {
-        if (E.flag('epilegFet')) return { pagines: [{ qui: 'Mandu', text: "El Fram m'ha cosit el cap de la nina! Diu que ara és una nina valenta. I jo ja no el deixo marxar enlloc." }] };
+        if (E.flag('epilegFet')) return { pagines: [{ qui: 'Mandu', text: E.flag('manduNinaTrencada')
+            ? "Mira la nina! El Fram li ha cosit el cap i diu que ara és una nina valenta. I jo ja no el deixo marxar enlloc!"
+            : "El Fram ha tornat! Ja no he d'esperar sola davant la porta. Avui jugarem tot el dia!" }] };
         if (E.flag('manduNinaTrencada')) return { pagines: [
             { qui: 'Mandu', text: "No la toquis, eh? Li he arrencat el cap perquè estava enfadada, i només el Fram sap cosir-lo." },
             { qui: 'Mandu', text: "La nina espera. Jo també espero." }

@@ -1352,6 +1352,7 @@ class ZonaGabia extends ZonaBase {
                 },
                 f => z.npcMira('germa_aldreu', gx, f)
             ], fet) },
+            { qui: 'Germà Aldreu', text: "La seva veu em parlava dins el cap cada nit. Era l'única que em parlava." },
             { qui: 'Germà Aldreu', text: "El Mestre és aquí dins..." },
             { fer: (z, fet) => z.npcVa('germa_aldreu', gx, base + 10, fet, 120) },
             { qui: 'Germà Aldreu', text: "Jo em quedo amb ell." },

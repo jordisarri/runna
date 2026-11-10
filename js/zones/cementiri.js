@@ -134,7 +134,8 @@ class ZonaCementiri extends ZonaBase {
             });
         });
         this.time.delayedCall(2400, () => this.ui().obrirDialeg({ pagines: [
-            { qui: 'Ineu', text: "(L'esquerda s'ha tancat i ja no en surt boira. Els qui van tancar la porta tornen a descansar.)" }
+            { qui: 'Ineu', text: "(L'esquerda s'ha tancat i ja no en surt boira. Els qui van tancar la porta tornen a descansar.)" },
+            { qui: 'Ineu', text: "(Sense la boira, la veu de l'Home de la Gàbia ja no arriba tan lluny, i les portes que ella obria soles ja no s'obriran.)" }
         ] }, () => Estat.desar()));
         Estat.posaObjectiu(PROGRES.pista(Estat));
         Estat.desar();
