@@ -252,7 +252,7 @@ class ZonaCabanaInt extends ZonaBase {
         });
         this.boira(450, 200, 100, 40, 0.3);
 
-        this.npc('jaumeta', 560, 420, DIALEGS.jaumeta);
+        this.npc('jaumeta', 560, 420, DIALEGS.jaumeta, { zoomConversa: 1.6 });
 
         this.add.rectangle(450, 350, 700, 700, 0xa0e070, 0.05).setDepth(80000);
         this.sortida(410, 680, 80, 14, 'ZonaCabana', 'interior');

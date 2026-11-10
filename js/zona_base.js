@@ -656,6 +656,7 @@ class ZonaBase extends Phaser.Scene {
         // Respiració suau perquè sembli viu
         img.respira = this.tweens.add({ targets: img, scaleY: img.scaleY * 1.02, yoyo: true, repeat: -1, duration: 1100 + Math.random() * 400 });
         img.punt = this.interactiu(x, y - 10, opts.radi || RADI_NPC, dialeg, { altura: img.displayHeight + 6 });
+        if (opts.zoomConversa) img.punt.zoomConversa = opts.zoomConversa;       // més zoom (que ZOOM_NPC) en parlar-hi, perquè s'apreciïn els sprites
         img.punt.npc = img;                                  // en parlar-hi, l'Ineu es fa enrere i no se solapen (vegeu separarDeNpc)
         (this.npcs = this.npcs || {})[key] = img;
         return img;
@@ -1602,7 +1603,7 @@ class ZonaBase extends Phaser.Scene {
             let z2 = Z, wy2 = wv.y, trobat = false, sx2 = cam.scrollX;
             const conversa = !centrar && !!(p && p.npc && p.npc.active && p.npc.visible);
             if (conversa) {
-                const zt = Math.min(1.6, Z * ZOOM_NPC);
+                const zt = Math.min(p.zoomConversa ? 2.2 : 1.6, Z * (p.zoomConversa || ZOOM_NPC));
                 const dalt = Math.min(...mides.map(m => m.dalt)), baix = Math.max(...mides.map(m => m.baix));
                 const wyC = (dalt + baix) / 2 - ((TOP + LIM) / 2 - ALT_HUD) / zt;
                 if (be(zt, wyC)) {
