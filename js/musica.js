@@ -243,14 +243,8 @@ class EscenaMusica extends Phaser.Scene {
         const ctx = this.sound && this.sound.context;
         if (!ctx) return;
         if (ctx.state === 'suspended') ctx.resume();
-        const o = ctx.createOscillator(), g = ctx.createGain(), fi = ctx.currentTime + Math.max(0.55, dur);
-        o.type = 'triangle'; o.frequency.value = freq || FREQ_NOTA[n];
-        g.gain.setValueAtTime(0.0001, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.02);
-        if (dur > 0.8) g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + dur * 0.55);       // les notes llargues es mantenen abans d'apagar-se
-        g.gain.exponentialRampToValueAtTime(0.0001, fi);
-        o.connect(g); g.connect(Sfx.connect(ctx));
-        o.start(); o.stop(fi + 0.05);
+        // El so de la tarota: una ocarina suau (Sfx.ocarina), no una ona electrònica. Les tres notes pròpies de la tarota sonen una octava amunt, on l'ocarina és més dolça.
+        Sfx.ocarina(freq || FREQ_NOTA[n] * 2, Math.max(0.55, dur), 0.26);
     }
 
     // La gemma s'encén i rebota, el forat de la tarota brilla i una ona surt del botó

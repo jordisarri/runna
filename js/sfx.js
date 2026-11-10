@@ -101,6 +101,50 @@ const Sfx = {
         o.start(t); o.stop(t + dur + 0.02);
     },
 
+    // Una nota d'ocarina / flauta dolça (per a la tarota): ona gairebé pura amb un traç d'harmònics, entrada suau amb una mica de buf, un vibrato lleu que arriba
+    // després de l'atac i una caiguda arrodonida. Res d'ones quadrades ni de to «d'ordinador antic».
+    ocarina(freq, dur = 0.55, vol = 0.24, retard = 0) {
+        if (!this.init()) return;
+        const c = this.ctx, t = c.currentTime + retard, fi = t + Math.max(0.5, dur);
+        const mestre = c.createGain();
+        mestre.gain.setValueAtTime(0.0001, t);
+        mestre.gain.linearRampToValueAtTime(vol, t + 0.07);                       // atac suau
+        const sost = dur > 0.8 ? vol * 0.75 : vol;                                // les notes llargues es mantenen una mica més baixes
+        if (dur > 0.8) mestre.gain.linearRampToValueAtTime(sost, t + dur * 0.6);
+        mestre.gain.setValueAtTime(sost, Math.max(t + 0.1, fi - 0.22));
+        mestre.gain.exponentialRampToValueAtTime(0.0001, fi + 0.12);              // caiguda arrodonida
+        const filtre = c.createBiquadFilter();
+        filtre.type = 'lowpass'; filtre.frequency.value = Math.min(5200, freq * 5); filtre.Q.value = 0.5;
+        mestre.connect(filtre); filtre.connect(this.mestre);
+        // El cos: fonamental + un traç del 2n i del 3r harmònic
+        [[1, 1], [2, 0.09], [3, 0.025]].forEach(([m, v]) => {
+            const o = c.createOscillator(), g = c.createGain();
+            o.type = 'sine';
+            o.frequency.setValueAtTime(freq * m * 0.988, t);                       // entra una mica per sota i s'afina
+            o.frequency.exponentialRampToValueAtTime(freq * m, t + 0.07);
+            g.gain.value = v;
+            o.connect(g); g.connect(mestre);
+            // Vibrato (~5 Hz) que arriba després de l'atac
+            const lfo = c.createOscillator(), prof = c.createGain();
+            lfo.frequency.value = 5.1;
+            prof.gain.setValueAtTime(0, t); prof.gain.linearRampToValueAtTime(freq * m * 0.0045, t + 0.35);
+            lfo.connect(prof); prof.connect(o.frequency);
+            o.start(t); lfo.start(t); o.stop(fi + 0.2); lfo.stop(fi + 0.2);
+        });
+        // El buf: soroll filtrat molt baix, només a l'inici
+        if (this.soroll) {
+            const n = c.createBufferSource(), bp = c.createBiquadFilter(), g = c.createGain();
+            n.buffer = this.soroll; n.loop = true;
+            bp.type = 'bandpass'; bp.frequency.value = Math.min(6000, freq * 2.5); bp.Q.value = 0.9;
+            g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(vol * 0.16, t + 0.04);
+            g.gain.exponentialRampToValueAtTime(vol * 0.025, t + 0.25);
+            g.gain.setValueAtTime(vol * 0.025, Math.max(t + 0.26, fi - 0.2));
+            g.gain.exponentialRampToValueAtTime(0.0001, fi + 0.1);
+            n.connect(bp); bp.connect(g); g.connect(mestre);
+            n.start(t); n.stop(fi + 0.2);
+        }
+    },
+
     // ---- El leitmotiv del joc: la fanfàrria d'intro_runna (Do Mi Mi Mi Fa Sol Do · Do Re Mi Fa Fa Mi Re Do Re) ----
     // Notes en MIDI i durades en segons, tretes del MIDI de la cançó (art/musica/motiu/). Els acords són els del baix de l'original.
     FANFARRA: [[60, .53], [64, .95], [64, .22], [64, .47], [65, .41], [67, .31], [60, 1.17],

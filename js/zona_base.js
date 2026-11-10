@@ -1647,6 +1647,12 @@ class ZonaBase extends Phaser.Scene {
             this.congelarEnemics();
             return;
         }
+        // Mentre sona la tarota (és una escena a part), el món s'atura: ni els enemics es mouen ni fan mal, fins que el cant acaba i el lloc hi reacciona
+        if (game.scene.isActive('Musica')) {
+            this.ineu.body.setVelocity(0);
+            this.congelarEnemics();
+            return;
+        }
 
         this.moure(ui, delta);
         this.actualitzarPedres(delta);

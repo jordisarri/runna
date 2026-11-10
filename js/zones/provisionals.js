@@ -181,7 +181,7 @@ class ZonaEsglesia extends ZonaBase {
             accio(z => [
                 f => {
                     z.ineuFlauta(true);
-                    MELODIES.miracle.notes.forEach((n, i) => this.time.delayedCall(i * 420, () => { Sfx.to(FREQ_NOTA[n], FREQ_NOTA[n], 0.38, 'square', 0.05); z.bombolla('ineu', '♪', null, 380); }));
+                    MELODIES.miracle.notes.forEach((n, i) => this.time.delayedCall(i * 420, () => { Sfx.ocarina(FREQ_NOTA[n] * 2, 0.4, 0.14); z.bombolla('ineu', '♪', null, 380); }));
                     this.esperar(MELODIES.miracle.notes.length * 420 + 300, f);
                 },
                 f => {
@@ -396,6 +396,7 @@ class ZonaCreu extends ZonaBase {
         // Els gripaus corromputs s'escapen de la Bassadòria: n'hi ha per tota l'escena i, a mesura que en caiguin,
         // en surten de nous de la bassa. Quan la boira se'n va (aigua neta) ja no en surten més.
         this.propGripau = this.time.now + 2500;
+        this.netejant = false;
         if (!Estat.flag('bassadoriaNeta')) {
             [[560, 600], [1330, 620], [800, 860], [1180, 300]].forEach(([x, y]) => this.enemic('gripau', x, y));
         }
@@ -535,6 +536,7 @@ class ZonaCreu extends ZonaBase {
         if (!prop) return false;
         if (Estat.flag('bassadoriaNeta')) { this.ineuDiu("L'aigua ja és clara."); return true; }
 
+        this.netejant = true;                         // des d'ara i fins que l'aigua és neta, no en surten gripaus nous
         if (this.boiraBass) this.boiraBass.stop();
         this.enemics.filter(e => e.tipus === 'gripau' && !e.mort).forEach(e => {
             e.mort = true; e.spr.body.enable = false;
@@ -550,7 +552,7 @@ class ZonaCreu extends ZonaBase {
     }
 
     actualitzar(ara) {
-        if (Estat.flag('bassadoriaNeta') || ara < this.propGripau) return;
+        if (Estat.flag('bassadoriaNeta') || this.netejant || ara < this.propGripau) return;
         const vius = this.enemics.filter(e => e.tipus === 'gripau' && !e.mort).length;
         if (vius >= 5) return;
         this.propGripau = ara + 3800;
