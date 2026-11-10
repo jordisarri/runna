@@ -108,10 +108,7 @@ class ZonaRuines extends ZonaBase {
         if (!Estat.flag('fragment1')) {
             if (mogutR && Estat.te('llanterna')) {
                 // El Llum d'en Mamet il·lumina el forat i en revela el pergamí
-                this.llumNinxol = this.add.circle(HX, HY - 4, 44, 0xffd270, 0.22).setDepth(-870).setBlendMode('ADD');
-                this.pergamiRunes = this.posar('pergami_partit', HX, HY + 6, { fonsY: HY + 20, escala: 0.72 });
-                this.pergamiBrill = this.add.circle(HX, HY - 12, 36, 0xffe8a0, 0.28).setDepth(HY + 40).setBlendMode('ADD');
-                this.tweens.add({ targets: this.pergamiBrill, alpha: 0.08, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
+                this.mostraPergamiForat();
             }
             this.interactiu(HX + 6, HY + 46, RADI_OBJECTE + 10, DIALEGS.ruines, { altura: 70, actiu: () => !Estat.flag('fragment1') });
         } else if (!Estat.te('fragment1')) Estat.dona('fragment1');          // partides desades d'abans del pergamí físic
@@ -235,13 +232,18 @@ class ZonaRuines extends ZonaBase {
         this.time.delayedCall(900, () => { pols.stop(); this.time.delayedCall(1200, () => pols.destroy()); });
         Estat.desar();
         if (Estat.te('llanterna') && !Estat.flag('fragment1')) {
-            this.llumNinxol = this.add.circle(HX, HY - 4, 44, 0xffd270, 0.22).setDepth(-870).setBlendMode('ADD');
-            this.pergamiRunes = this.posar('pergami_partit', HX, HY + 6, { fonsY: HY + 20, escala: 0.72 });
-            this.pergamiBrill = this.add.circle(HX, HY - 12, 36, 0xffe8a0, 0.28).setDepth(HY + 40).setBlendMode('ADD');
-            this.tweens.add({ targets: this.pergamiBrill, alpha: 0.08, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
+            this.mostraPergamiForat();
         }
-        this.ineu.body.setVelocity(0, 0);
-        this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text: Estat.te('llanterna') ? "(Un forat fosc! Amb el Llum d'en Mamet s'hi veu alguna cosa...)" : "(Hi ha un forat negre, fonda i espessa. Sense llum no s'hi veu res: hauré de tornar amb alguna cosa que il·lumini.)" }] });
+    }
+
+    // Amb el Llum d'en Mamet, al fons del forat s'entreveu el pergamí: petit, apagat, dins la fosca, amb una llum fluixa que bategueja. (Es pot agafar interactuant-hi.)
+    mostraPergamiForat() {
+        const HX = this.HX, HY = this.HY;
+        this.llumNinxol = this.add.circle(HX, HY + 4, 30, 0xffd270, 0.12).setDepth(-870).setBlendMode('ADD');
+        this.pergamiRunes = this.posar('pergami_partit', HX, HY + 5, { fonsY: -869, escala: 0.4 });
+        this.pergamiRunes.setAlpha(0.6).setTint(0xb0a088);
+        this.pergamiBrill = this.add.circle(HX, HY + 2, 18, 0xffe8a0, 0.16).setDepth(-868).setBlendMode('ADD');
+        this.tweens.add({ targets: this.pergamiBrill, alpha: 0.04, scale: 1.25, yoyo: true, repeat: -1, duration: 1100 });
     }
 
     agafarPergamiRunes(fet) {

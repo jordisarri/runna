@@ -393,12 +393,13 @@ const DIALEGS = {
                 { qui: 'Ineu', text: "(Una pedra grossa, enfonsada a terra just al peu del mur. Sota seu hi ha alguna cosa: se n'ha escapat un corrent d'aire fred. Si m'hi recolzo i l'empenyo, potser cedirà.)" },
             ]
         };
-        if (!E.te('llanterna')) return { pagines: [{ qui: 'Ineu', text: "(El forat és tan negre que no s'hi distingeix res. Em cal una llum.)" }] };
+        if (!E.te('llanterna')) return { pagines: [{ qui: 'Ineu', text: "(Hi ha massa fosc: del forat només surt un corrent d'aire fred i no s'hi distingeix res. Em cal una llum.)" }] };
         return {
             pagines: [
-                { qui: 'Ineu', text: "El Llum d'en Mamet forada la tenebra del forat... Al fons hi ha un full amagat!" },
-                { qui: 'Pergamí', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de l'espasa Runna i la va deixar dormint a la pedra. Després va amagar la clau de la porta allà on ningú no la trobés.\nL'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.»" },
+                { qui: 'Ineu', text: "(El Llum d'en Mamet forada una mica la tenebra... Al fons hi ha un full clar, amagat!)" },
                 { fer: (z, fet) => z.agafarPergamiRunes ? z.agafarPergamiRunes(fet) : fet() },
+                { avis: "Has obtingut el PERGAMÍ PARTIT (1/2).", obj: 'fragment1' },
+                { qui: 'Pergamí', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de l'espasa Runna i la va deixar dormint a la pedra. Després va amagar la clau de la porta allà on ningú no la trobés.\nL'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.»" },
                 { qui: 'Ineu', text: "El pergamí s'acaba aquí, però diu que l'altra meitat és sota clau, al sagrari de l'església. I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." },
                 { fer: (z, fet) => z.aparicioOmbra ? z.aparicioOmbra(fet) : fet() },
                 { qui: 'Ineu', text: "Ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts." }
