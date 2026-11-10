@@ -34,6 +34,11 @@ jobs:
           [ -f manifest.json ] && cp manifest.json dist/ || true
           [ -f sw.js ] && cp sw.js dist/ || true
 
+      - name: Mida del que es publica (sense art/)
+        run: |
+          du -sh dist
+          ls dist
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
