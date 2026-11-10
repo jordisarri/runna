@@ -512,8 +512,8 @@ class ZonaCelles extends ZonaBase {
         // Nostra Senyora (oest): la Carry, vídua del campaner, que busca el seu gos Pallofa (el trobaràs a Sant Antoni)
         this.npc('carry', 360, 690, DIALEGS.carry);
 
-        // La Rosansa i el seu carro de verdures: hi és des del principi fins que et dona la llavor i se'n va
-        if (!Estat.flag('llavorSansa')) this.posarSansa();
+        // La Rosansa i el seu carro de verdures: només passen per les cel·les a l'Acte 3 (quan l'Ineu ja té Runna), fins que et dona la llavor i se'n va
+        if (Estat.flag('runna') && !Estat.flag('llavorSansa')) this.posarSansa();
 
         this.cartell(958, 830, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler\n↓ Les Runes\n→ Sant Benet' }] }));       // vora l'encreuament (a la cantonada sud-oest)
 

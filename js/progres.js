@@ -55,8 +55,10 @@ const PROGRES = {
               return f.length ? "Al sopar del Til·ler encara hi falta: " + f.join(', ') + "." : "Ja ho tens tot: el Gran Til·ler espera la taula parada.";
           } },
         // ---- ACTE 2: el Saber i les benediccions ----
+        { id: 'josep', marca: ['josepVencut', 'obj:llanterna'], fet: E => E.flag('josepVencut') || E.flag('fragment1'),
+          pista: E => "A les Runes hi ha un forat fosc al peu del mur, però sense llum no s'hi veu res. Al Celler, en Jusef guarda el Llum d'en Mamet: es guanya a la taula de ping-pong." },
         { id: 'fragment1', marca: ['fragment1'], fet: E => E.flag('fragment1'),
-          pista: E => "A les Runes hi ha una escletxa fonda i fosca entre els carreus del mur." },
+          pista: E => "Amb el Llum d'en Mamet, a les Runes hi ha un forat fosc al peu del mur: al fons hi ha un pergamí." },
         { id: 'clauSagrari', marca: ['missatgeDesxifrat', 'obj:clau_sagrari'], fet: E => E.flag('missatgeDesxifrat') || E.te('clau_sagrari') || E.flag('fragment2'),
           pista: E => {
               const cols = Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).filter(Boolean).length;
@@ -92,8 +94,6 @@ const PROGRES = {
         // ---- ACTE 3 ----
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
           pista: E => "Runna ja és amb tu. Els barrots de la gàbia només escolten un cant que la Pianista encara no t'ha ensenyat." },
-        { id: 'josep', marca: ['josepVencut', 'obj:llanterna'], fet: E => E.flag('josepVencut'),
-          pista: E => "Al Celler, en Jusef guarda el Llum d'en Mamet. Es guanya a la taula de ping-pong." },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
           pista: E => E.flag('florsCreu') ? "El Germà Francí t'espera a Sant Antoni, content."
               : E.te('ram') ? "El ram del Germà Francí és per a algú que ja no el pot rebre: la tomba de l'àngel, al Cementiri."
@@ -131,7 +131,9 @@ const PROGRES = {
           pista: E => !E.flag('llosaOberta')
               ? (E.te('llavorLluna')
                   ? "Ja tens la Llavor de Lluna. Porta-la a l'Isílder, al jardí de l'Hostatgeria, perquè l'ajudi a florir damunt la llosa."
-                  : "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. Si busques com obrir la llosa del jardí, parla amb la venedora de verdures.")
+                  : !E.flag('isidreSansa')
+                      ? "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. A l'Hostatgeria, l'Isílder sap què amaga la llosa del jardí."
+                      : "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. La Rosansa, la venedora de verdures, ha tornat a passar per les cel·les: potser té la llavor d'una flor de lluna.")
               : !E.flag('mongesTrobades')
                   ? "Sota la llosa, les sacerdotesses: desperta la Dolora, empeny l'àngel de pedra que barra la porta de la Pilària i talla els esbarzers de la Carmèlia."
                   : "Les sacerdotesses són lliures: la seva Empara Fraternal t'espera al cofre del vestíbul de l'Hostatgeria." },

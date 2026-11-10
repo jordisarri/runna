@@ -32,7 +32,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Mandu** | Sant Benet | Nena petita, germana del Fram. |
 | **Venerables Sàvies** | Cel·les | Donen la pista del moment. |
 | **Carry** | Nostra Senyora | Vídua del campaner; busca el gos Pallofa. |
-| **Rosansa** | Cel·les (un sol cop) | Dona la Llavor de Lluna. |
+| **Rosansa** | Cel·les (un sol cop, **només a l'Acte 3**) | Dona la Llavor de Lluna. |
 | **Càren, Eve, Iscu** | Taverna / cabana amagada | L'Eve obre la Taverna; l'Iscu té la clau rovellada. |
 | **Julius, Senyor Pomers, Eloi, Jusef** | El Celler | Ping-pong; en Jusef és el repte. |
 | **Isílder** | Hostatgeria (jardí) | Pare del Sardi; cuida les flors. |
@@ -68,13 +68,13 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | Telescopi / Estel de Sant Llorenç | Galf / Dipòsits | Aparta la boira del camí del Dolmen. |
 | **Runna** | El Dolmen | Dany 3; talla els esbarzers negres. |
 | Cant del Miracle | Pianista (després de Runna) | Obre els barrots de la gàbia. |
-| Llanterna | Jusef (en guanyar-lo a ping-pong) | Il·lumina zones fosques. |
+| Llanterna (Llum d'en Mamet) | Jusef (en guanyar-lo a ping-pong, **a l'Acte 2, abans del fragment 1**) | **Imprescindible a les Runes** (sense llum no es veu el pergamí del forat); eixampla la llum als llocs foscos. |
 | Ram / Guants de Poder | Germà Francí | Mouen la roda del Celler, el rastell i l'àngel de pedra. |
 | Maneta | Cofre de joguines de la Caseta (en Georgi) | Fa girar el cap de l'Home del Raïm. |
 | Pergamí del monjo | Cambra secreta (Casa Gran) | Pista del puzle del Raïm. |
 | Clau de ferro | Cripta de la Casa Gran | Obre la porta de ferro exterior (Pati del Celler). |
 | Clau rovellada | L'Iscu (cabana amagada) | Obre la porta de ferro del fons de la galeria. |
-| Llavor de Lluna | Rosansa | L'Isílder la planta: s'obre la llosa de l'Hostatgeria. |
+| Llavor de Lluna | Rosansa (**només a l'Acte 3**) | L'Isílder la planta: s'obre la llosa de l'Hostatgeria. |
 | Empara Fraternal | Cofre del vestíbul de l'Hostatgeria | Dissipa la boira verinosa abans de la Gàbia. |
 | Carta del Cortiner | Pi dels Tres Cants (lateral) | Història dels tres cants. |
 | Cors extra (+1 cada un) | Pastor de Boira vençut, les 3 sacerdotesses, cofre de la Cambra del Santuari / sala del tresor, cofre de la cabana de l'Iscu | Vida màxima (màxim 7). |
@@ -151,6 +151,9 @@ Ritual de tres espelmes (una per cada nen: l'Huri, el Fram i el Sardi): cau la *
 
 ### 2B · El Saber i les benediccions
 
+**Pas 14b · El Celler — partit de ping-pong contra en Jusef: la Llanterna** `josep` `josepRegles` `josepGuanyat` `josepPerdut` `juli` `frederic`
+Cal guanyar en **Jusef** (set punts; Julius i Senyor Pomers donen consells, l'Eloi és arrogant i no cal vèncer-lo). En guanyar, dona el **Llum d'en Mamet** (Llanterna) i revela que la **roda de carruatge** del Celler amaga el túnel dels monjos, però pesa massa per a uns braços sols (això s'aprofitarà a l'Acte 3). Sense la Llanterna, a les Runes l'Ineu diu «Sense llum no s'hi veu res»: la pista de les Venerables envia aquí.
+
 **Pas 15 · Runes — fragment 1 i l'ombra** `ruines`
 L'Ineu llegeix el pergamí entre dues pedres; la llum s'apaga i **apareix l'ombra del monjo** sobre el mur `ombraMonjo`. (A les Runes també hi ha l'esquerda i un cartell `cartellRuinesPingpong`.)
 
@@ -192,8 +195,8 @@ Cal posar a la placa els **tres medallons** (Arbre, Saber, Benedicció) i dir la
 **Pas 26 · Santuari — Cant del Miracle** `pianista`
 Just després de Runna. És el cant que l'Ocellaire va robar als ocells: obre els barrots de la gàbia.
 
-**Pas 27 · El Celler — partit de ping-pong contra en Jusef** `josep` `josepRegles` `josepGuanyat` `josepPerdut` `juli` `frederic`
-Obligatori. En guanyar, en Jusef dona la **Llanterna** i revela que la **roda de carruatge** del Celler amaga el túnel dels monjos; però pesa massa per a uns braços sols. (Julius i Senyor Pomers donen consells; l'Eloi és arrogant, no cal vèncer-lo.)
+**Pas 27 · El Celler — la roda (ja se sap des del pas 14b)** `josep`
+En Jusef ja va revelar al pas 14b que la **roda de carruatge** del Celler amaga el túnel dels monjos, però pesa massa per a uns braços sols: cal arribar-hi amb els Guants de Poder (pas 28).
 
 **Pas 28 · Sant Antoni → Cementiri → Sant Antoni — els Guants de Poder** `germa_francesc` `germaFrancesc`
 El Germà Francí demana que portis el seu **ram** a la tomba de l'àngel del Cementiri `creuCementiri`; en tornar, et dona els **Guants de Poder**. Amb ells la roda cedeix.
@@ -224,7 +227,8 @@ Un **rastell** rovellat només s'aixeca amb els **Guants de Poder**; un mur d'es
 
 **Pas 37 · Hostatgeria — sacerdotesses i Empara Fraternal (lateral obligatòria per passar la boira)** `sansa` `llosaJardi` `monjaPains` `monjaPhili` `monjaCharm` `cofreMonges` `isidreBase`
 Sense l'**Empara Fraternal** la boira verinosa de la galeria final fa tossir l'Ineu i el fa fer enrere. Camí:
-1. **Rosansa** (Cel·les, quan l'Isílder diu que la gent de les Cel·les en sap més) dona la **Llavor de Lluna**; l'Isílder la planta i s'obre la **llosa** del jardí.
+0. **Només a l'Acte 3 (amb Runna):** fins aleshores l'Isílder només parla del jardí i del Sardi, i ningú esmenta la llosa ni la Rosansa. Un cop tens Runna, l'**Isílder** t'explica que el jardí amaga una llosa que només s'obre amb una flor de lluna, i que la **Rosansa** ha tornat a passar per les cel·les; les **Venerables Sàvies** també t'ho recorden.
+1. **Rosansa** (Cel·les, només a partir de l'Acte 3) dona la **Llavor de Lluna**; l'Isílder la planta i s'obre la **llosa** del jardí.
 2. Soterrani de l'Hostatgeria (laberint fosc): vestíbul amb tres portes.
 3. **Dolora** (dormitori, en un capoll de boira): Cant de l'Aurora. **Pilària** (refetor): un àngel de pedra barra la porta; s'empeny amb els Guants. **Carmèlia** (capella): esbarzers negres; Runna.
 4. En lliurar-les totes tres: +1 cor (la tercera), s'obre la porta de l'Hostatgeria per dins i al vestíbul apareix el **cofre amb l'Empara Fraternal**. Carmèlia diu que el Cant del Miracle obre la gàbia; la Pilària va veure el Germà Aldreu anar a la Porta de les Gírgoles moltes nits.
@@ -320,7 +324,7 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 - **La Jauneta**: `jaumeta`
 - **La Pianista**: `pianista`, `ferEpileg`
 - **La placa**: `piPlaca`
-- **Les Venerables Sàvies**: `consellVenerables`, `tillerSoparRitual`
+- **Les Venerables Sàvies**: `avisRosansa`, `consellVenerables`, `tillerSoparRitual`
 - **Llibre**: `masiaLlibre`
 - **Làpida**: `lapida`
 - **Mandu**: `mandu`, `ferEpileg`
@@ -348,6 +352,13 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 ## Diàlegs generals
 
 
+### avisRosansa
+
+
+
+**Les Venerables Sàvies:** I una cosa més: la Rosansa, la venedora de verdures, ha tornat a passar per les cel·les amb el carro. Si algun dia busques una llavor estranya, ja saps a qui preguntar.
+
+
 ### consellVenerables
 
 
@@ -368,7 +379,7 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 
 *Altrament (per defecte):*
 
-**Les Venerables Sàvies:** Ai, fill, torna a seure. A veure...  […]
+**Les Venerables Sàvies:** Ai, fill, torna a seure. A veure... [pista del pas següent de la història: vegeu la Ruta]
 
 
 ### premiMonja
@@ -644,7 +655,7 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 
 *Si: sagrari*
 
-**Pare Daimiel:** I no t'oblidis del rellotge, Ineu.  […]
+**Pare Daimiel:** I no t'oblidis del rellotge, Ineu. [text calculat pel joc: textRellotge]
 
 
 *Si: NO rellotgeReparat ; té clau_campanar o portaCampanarOberta*
@@ -940,11 +951,19 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 **El Gran Til·ler:** La branca és a terra, a prop de les meves arrels. Agafa-la, petit monjo.
 
 
+*Si: soparFet ; pas*
+
+**El Gran Til·ler:** El permís és teu, petit monjo, i les espelmes continuen enceses. Recorda a taula qui hi falta.
+
+
+*Si: soparFet ; NO pas*
+
+**El Gran Til·ler:** El permís és teu, petit monjo, i les espelmes continuen enceses. Recorda a taula qui hi falta. Que Runna et sigui lleu.
+
+
 *Si: soparFet*
 
-**El Gran Til·ler:** El permís és teu, petit monjo, i les espelmes continuen enceses. Recorda a taula qui hi falta. Que Runna et sigui lleu. […]
-
-**El Gran Til·ler:** Ara, per despertar l'espasa:  […]
+**El Gran Til·ler:** Ara, per despertar l'espasa: [text calculat pel joc: pas]
 
 
 *Si: bassadoriaNeta i NO camiCirosaObert*
@@ -983,7 +1002,7 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 
 **Pare Alcoví:** L'arbre sagrat és el Gran Til·ler, el de les cel·les: el seu medalló és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jordà, el prior.
 
-**Pare Alcoví:** I ara, el que et toca:  […]
+**Pare Alcoví:** I ara, el que et toca: [text calculat pel joc: pas]
 
 
 *Si: runna i relTretes i NO tombaSegellada i NO tombaLlegida*
@@ -1328,7 +1347,9 @@ ${mots.join('   ')}
 
 **Isílder:** Bon dia, monjo! Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l'Hostatgeria, aquí al costat, que s'hi aguanta al darrere.
 
-**Isílder:** Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s'obre amb una flor de lluna. La Rosansa, la venedora de verdures, en deu tenir alguna llavor estranya.
+**Isílder:** Portes l'espasa dels monjos, oi? Doncs mira aquesta llosa: aquest jardí en amaga una que ningú no ha aixecat mai. Els vells diuen que només s'obre amb una flor de lluna, i que sota hi ha el camí dels monjos fins al soterrani de la casa.
+
+**Isílder:** De llavors de lluna ja no en queden. Però la Rosansa, la venedora de verdures, ha tornat a passar per les cel·les, i fa anys que porta al carro una llavor estranya que ningú no sap què és. Pregunta-li.
 
 **Isílder:** No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí, el Sardi el cuidava molt. Des que la boira se'l va endur, el cuido jo perquè, quan torni, ho trobi tot tal com ho va deixar.
 
@@ -1412,7 +1433,18 @@ ${mots.join('   ')}
 
 **Dolora:** Si passes pel jardí, saluda l'Isílder, el jardiner d'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.
 
-**Dolora:** La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d'aquests que no els talla ni la falç. Diuen que només cedeixen davant d'una espasa de llum.runna Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho. […]
+
+*Si: NO premiPains ; té runna*
+
+**Dolora:** La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d'aquests que no els talla ni la falç. Diuen que només cedeixen davant d'una espasa de llum. Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho.
+
+
+*Si: NO premiPains ; NO té runna*
+
+**Dolora:** La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d'aquests que no els talla ni la falç. Diuen que només cedeixen davant d'una espasa de llum.
+
+
+*Si: NO premiPains*
 
 **Dolora:** Vés amb compte, fill. Entre les tres germanes guardem l'Empara d'aquesta casa. Quan siguem lliures les tres, serà teva.
 
@@ -1799,12 +1831,17 @@ ${mots.join('   ')}
 
 **Placa:** Només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina.
 
-**Ineu:** (El medalló . ) […]
+**Ineu:** (El medalló [text calculat pel joc: nom]. [text calculat pel joc: text])
 
 
-*Si: NO totsPlacats i portats.length*
+*Si: NO totsPlacats i portats.length ; aviat === 1*
 
-**Ineu:** (Encara em falta un medalló medallons per omplir la placa.) […]
+**Ineu:** (Encara em falta un medalló per omplir la placa.)
+
+
+*Si: NO totsPlacats i portats.length ; NO aviat === 1*
+
+**Ineu:** (Encara em falta [text calculat pel joc: aviat] medallons per omplir la placa.)
 
 
 *Si: té runna o runna*
@@ -1821,7 +1858,7 @@ ${mots.join('   ')}
 
 **Ineu:** (El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alcoví deu saber-ho: ho tindrà escrit a la Crònica.)
 
-**Ineu:** (Tres cercles buits: un per a cada medalló. Em falta: , .) […]
+**Ineu:** (Tres cercles buits: un per a cada medalló. Em falta: ,  […].)
 
 
 ### portaReixa
@@ -1883,7 +1920,7 @@ ${mots.join('   ')}
 
 *Altrament (per defecte):*
 
-**La Jauneta:** Ja tornes, xaval? Els ocells m'ho diuen tot. Escolta:  […]
+**La Jauneta:** Ja tornes, xaval? Els ocells m'ho diuen tot. Escolta: [text calculat pel joc: pista]
 
 **La Jauneta:** Ara fot el camp, que tinc feina amb la sopa. I no li diguis a ningú on visc, o et converteixo en bolet.
 
@@ -2046,7 +2083,7 @@ sols així s'obrirà el camí.
 
 *Si: n > 0*
 
-**Ineu:** ( de les tres branques ja brillen. Falta que cantin les altres.) […]
+**Ineu:** ([text calculat pel joc: n] de les tres branques ja brillen. Falta que cantin les altres.)
 
 
 *Si: NO n > 0*

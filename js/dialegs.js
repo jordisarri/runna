@@ -23,6 +23,10 @@ function pistaActual(E) { return PROGRES.pista(E); }
 // Les partides velles que ja tenen la clau, o que ja han pujat a la torre, no la necessiten.
 function senseClauCampanar(E) { return !E.te('clau_campanar') && !E.flag('portaCampanarOberta') && !E.flag('rellotgeReparat') && !E.flag('visitada_ZonaTorre') && !E.flag('clauCampanar'); }
 
+// A l'Acte 3 (amb Runna) les Venerables recorden que la Rosansa ha tornat a passar per les cel·les (fins que et dona la llavor)
+const avisRosansa = E => (E.flag('runna') && !E.flag('llavorSansa') && !E.flag('llosaOberta'))
+    ? [{ qui: 'Les Venerables Sàvies', text: "I una cosa més: la Rosansa, la venedora de verdures, ha tornat a passar per les cel·les amb el carro. Si algun dia busques una llavor estranya, ja saps a qui preguntar." }] : [];
+
 function consellVenerables(E) {
     if (senseClauCampanar(E)) {
         return {
@@ -30,11 +34,15 @@ function consellVenerables(E) {
                 { qui: 'Les Venerables Sàvies', text: "Ai, fill, has vist que el rellotge del campanar s'ha aturat? La porta del retaule que duu a la torre fa anys que és tancada: des que el campaner se'n va, la clau la guarda la seva vídua, la Carry, aquí a Nostra Senyora." },
                 { qui: 'Les Venerables Sàvies', text: E.flag('carryParlat')
                     ? "Pobreta, no té el cap per res: fa dues nits que busca el seu gos, el Pallofa. Si el trobes i li'l portes, segur que et dona la clau."
-                    : "Parla-hi, però amb paciència: la pobreta no és la mateixa des que va pujar la boira. Potser et pot necessitar." }
+                    : "Parla-hi, però amb paciència: la pobreta no és la mateixa des que va pujar la boira. Potser et pot necessitar." }            ,
+                ...avisRosansa(E)
             ]
         };
     }
-    return { pagines: [{ qui: 'Les Venerables Sàvies', text: "Ai, fill, torna a seure. A veure... " + pistaActual(E) }] };
+    return { pagines: [
+        { qui: 'Les Venerables Sàvies', text: "Ai, fill, torna a seure. A veure... " + pistaActual(E) },
+        ...avisRosansa(E)
+    ] };
 }
 
 // Objectiu viu del sopar del Til·ler: diu què falta
@@ -992,13 +1000,18 @@ const DIALEGS = {
                 ]
             };
         }
+        // Fins que l'Ineu no té Runna (Acte 3) l'Isílder només parla del jardí i del Sardi: la llosa i la Rosansa surten a l'Acte 3
+        const acte3 = E.flag('runna');
         return {
             pagines: [
                 { qui: 'Isílder', text: 'Bon dia, monjo! Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l\'Hostatgeria, aquí al costat, que s\'hi aguanta al darrere.' },
-                { qui: 'Isílder', text: "Aquest jardí amaga una llosa que ningú no ha aixecat mai. Diuen que només s'obre amb una flor de lluna. La Rosansa, la venedora de verdures, en deu tenir alguna llavor estranya." },
+                ...(acte3 ? [
+                    { qui: 'Isílder', text: "Portes l'espasa dels monjos, oi? Doncs mira aquesta llosa: aquest jardí en amaga una que ningú no ha aixecat mai. Els vells diuen que només s'obre amb una flor de lluna, i que sota hi ha el camí dels monjos fins al soterrani de la casa." },
+                    { qui: 'Isílder', text: "De llavors de lluna ja no en queden. Però la Rosansa, la venedora de verdures, ha tornat a passar per les cel·les, i fa anys que porta al carro una llavor estranya que ningú no sap què és. Pregunta-li." }
+                ] : []),
                 { qui: 'Isílder', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí, el Sardi el cuidava molt. Des que la boira se\'l va endur, el cuido jo perquè, quan torni, ho trobi tot tal com ho va deixar.' }
             ],
-            enAcabar: () => { E.posaFlag('isidreSansa'); E.posaObjectiu('Pregunta a la venedora de verdures per la llavor d\'una flor de lluna.'); }
+            enAcabar: () => { if (acte3) { E.posaFlag('isidreSansa'); E.posaObjectiu('Pregunta a la Rosansa, la venedora de verdures, a les cel·les, per la llavor d\'una flor de lluna.'); } }
         };
     },
     // La Rosansa passa per les cel·les un sol cop: et ven la Llavor de Lluna i se'n va

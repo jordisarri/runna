@@ -76,6 +76,25 @@ def variants(e):
         res = [((cond + (' → ' if cond else '')) + c if c else cond, x) for c, x in variants(a)]
         res += [(('NO ' + cond) + (' → ' + c if c else ''), x) for c, x in variants(b)]
         return res
+    # «"text" + (cond ? 'extra' : '')»: es parteix per «+» de nivell 0 i es combinen les variants (sense barrejar-hi el nom de les condicions)
+    parts, prof, q, ini = [], 0, None, 0
+    for k, c in enumerate(e):
+        if q:
+            if c == q and e[k - 1] != chr(92): q = None
+            continue
+        if c in ('"', "'", '`'): q = c
+        elif c in '([{': prof += 1
+        elif c in ')]}': prof -= 1
+        elif c == '+' and prof == 0: parts.append(e[ini:k]); ini = k + 1
+    parts.append(e[ini:])
+    if len(parts) > 1:
+        res = [('', '')]
+        for part in parts:
+            part = part.strip()
+            if part.startswith('(') and part.endswith(')'): part = part[1:-1]
+            vs = variants(part)
+            res = [((c1 + ' ; ' + c2).strip(' ;') if c1 and c2 else (c1 or c2), t1 + t2) for c1, t1 in res for c2, t2 in vs]
+        return res
     trossos = LIT.findall(e)
     if trossos:
         # Si la cadena és només una part (p. ex. text: "abc" + variable), es mostra amb … on hi ha el que es calcula

@@ -32,7 +32,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Mandu** | Sant Benet | Nena petita, germana del Fram. |
 | **Venerables Sàvies** | Cel·les | Donen la pista del moment. |
 | **Carry** | Nostra Senyora | Vídua del campaner; busca el gos Pallofa. |
-| **Rosansa** | Cel·les (un sol cop) | Dona la Llavor de Lluna. |
+| **Rosansa** | Cel·les (un sol cop, **només a l'Acte 3**) | Dona la Llavor de Lluna. |
 | **Càren, Eve, Iscu** | Taverna / cabana amagada | L'Eve obre la Taverna; l'Iscu té la clau rovellada. |
 | **Julius, Senyor Pomers, Eloi, Jusef** | El Celler | Ping-pong; en Jusef és el repte. |
 | **Isílder** | Hostatgeria (jardí) | Pare del Sardi; cuida les flors. |
@@ -68,13 +68,13 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | Telescopi / Estel de Sant Llorenç | Galf / Dipòsits | Aparta la boira del camí del Dolmen. |
 | **Runna** | El Dolmen | Dany 3; talla els esbarzers negres. |
 | Cant del Miracle | Pianista (després de Runna) | Obre els barrots de la gàbia. |
-| Llanterna | Jusef (en guanyar-lo a ping-pong) | Il·lumina zones fosques. |
+| Llanterna (Llum d'en Mamet) | Jusef (en guanyar-lo a ping-pong, **a l'Acte 2, abans del fragment 1**) | **Imprescindible a les Runes** (sense llum no es veu el pergamí del forat); eixampla la llum als llocs foscos. |
 | Ram / Guants de Poder | Germà Francí | Mouen la roda del Celler, el rastell i l'àngel de pedra. |
 | Maneta | Cofre de joguines de la Caseta (en Georgi) | Fa girar el cap de l'Home del Raïm. |
 | Pergamí del monjo | Cambra secreta (Casa Gran) | Pista del puzle del Raïm. |
 | Clau de ferro | Cripta de la Casa Gran | Obre la porta de ferro exterior (Pati del Celler). |
 | Clau rovellada | L'Iscu (cabana amagada) | Obre la porta de ferro del fons de la galeria. |
-| Llavor de Lluna | Rosansa | L'Isílder la planta: s'obre la llosa de l'Hostatgeria. |
+| Llavor de Lluna | Rosansa (**només a l'Acte 3**) | L'Isílder la planta: s'obre la llosa de l'Hostatgeria. |
 | Empara Fraternal | Cofre del vestíbul de l'Hostatgeria | Dissipa la boira verinosa abans de la Gàbia. |
 | Carta del Cortiner | Pi dels Tres Cants (lateral) | Història dels tres cants. |
 | Cors extra (+1 cada un) | Pastor de Boira vençut, les 3 sacerdotesses, cofre de la Cambra del Santuari / sala del tresor, cofre de la cabana de l'Iscu | Vida màxima (màxim 7). |
@@ -151,6 +151,9 @@ Ritual de tres espelmes (una per cada nen: l'Huri, el Fram i el Sardi): cau la *
 
 ### 2B · El Saber i les benediccions
 
+**Pas 14b · El Celler — partit de ping-pong contra en Jusef: la Llanterna** `josep` `josepRegles` `josepGuanyat` `josepPerdut` `juli` `frederic`
+Cal guanyar en **Jusef** (set punts; Julius i Senyor Pomers donen consells, l'Eloi és arrogant i no cal vèncer-lo). En guanyar, dona el **Llum d'en Mamet** (Llanterna) i revela que la **roda de carruatge** del Celler amaga el túnel dels monjos, però pesa massa per a uns braços sols (això s'aprofitarà a l'Acte 3). Sense la Llanterna, a les Runes l'Ineu diu «Sense llum no s'hi veu res»: la pista de les Venerables envia aquí.
+
 **Pas 15 · Runes — fragment 1 i l'ombra** `ruines`
 L'Ineu llegeix el pergamí entre dues pedres; la llum s'apaga i **apareix l'ombra del monjo** sobre el mur `ombraMonjo`. (A les Runes també hi ha l'esquerda i un cartell `cartellRuinesPingpong`.)
 
@@ -192,8 +195,8 @@ Cal posar a la placa els **tres medallons** (Arbre, Saber, Benedicció) i dir la
 **Pas 26 · Santuari — Cant del Miracle** `pianista`
 Just després de Runna. És el cant que l'Ocellaire va robar als ocells: obre els barrots de la gàbia.
 
-**Pas 27 · El Celler — partit de ping-pong contra en Jusef** `josep` `josepRegles` `josepGuanyat` `josepPerdut` `juli` `frederic`
-Obligatori. En guanyar, en Jusef dona la **Llanterna** i revela que la **roda de carruatge** del Celler amaga el túnel dels monjos; però pesa massa per a uns braços sols. (Julius i Senyor Pomers donen consells; l'Eloi és arrogant, no cal vèncer-lo.)
+**Pas 27 · El Celler — la roda (ja se sap des del pas 14b)** `josep`
+En Jusef ja va revelar al pas 14b que la **roda de carruatge** del Celler amaga el túnel dels monjos, però pesa massa per a uns braços sols: cal arribar-hi amb els Guants de Poder (pas 28).
 
 **Pas 28 · Sant Antoni → Cementiri → Sant Antoni — els Guants de Poder** `germa_francesc` `germaFrancesc`
 El Germà Francí demana que portis el seu **ram** a la tomba de l'àngel del Cementiri `creuCementiri`; en tornar, et dona els **Guants de Poder**. Amb ells la roda cedeix.
@@ -224,7 +227,8 @@ Un **rastell** rovellat només s'aixeca amb els **Guants de Poder**; un mur d'es
 
 **Pas 37 · Hostatgeria — sacerdotesses i Empara Fraternal (lateral obligatòria per passar la boira)** `sansa` `llosaJardi` `monjaPains` `monjaPhili` `monjaCharm` `cofreMonges` `isidreBase`
 Sense l'**Empara Fraternal** la boira verinosa de la galeria final fa tossir l'Ineu i el fa fer enrere. Camí:
-1. **Rosansa** (Cel·les, quan l'Isílder diu que la gent de les Cel·les en sap més) dona la **Llavor de Lluna**; l'Isílder la planta i s'obre la **llosa** del jardí.
+0. **Només a l'Acte 3 (amb Runna):** fins aleshores l'Isílder només parla del jardí i del Sardi, i ningú esmenta la llosa ni la Rosansa. Un cop tens Runna, l'**Isílder** t'explica que el jardí amaga una llosa que només s'obre amb una flor de lluna, i que la **Rosansa** ha tornat a passar per les cel·les; les **Venerables Sàvies** també t'ho recorden.
+1. **Rosansa** (Cel·les, només a partir de l'Acte 3) dona la **Llavor de Lluna**; l'Isílder la planta i s'obre la **llosa** del jardí.
 2. Soterrani de l'Hostatgeria (laberint fosc): vestíbul amb tres portes.
 3. **Dolora** (dormitori, en un capoll de boira): Cant de l'Aurora. **Pilària** (refetor): un àngel de pedra barra la porta; s'empeny amb els Guants. **Carmèlia** (capella): esbarzers negres; Runna.
 4. En lliurar-les totes tres: +1 cor (la tercera), s'obre la porta de l'Hostatgeria per dins i al vestíbul apareix el **cofre amb l'Empara Fraternal**. Carmèlia diu que el Cant del Miracle obre la gàbia; la Pilària va veure el Germà Aldreu anar a la Porta de les Gírgoles moltes nits.
