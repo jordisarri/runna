@@ -48,6 +48,8 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 
 ## 0c. Els objectes que s'aconsegueixen (resum)
 
+*Noms dins el joc: la «Llanterna» és el **Llum d'en Mamet**; la «Fulla del Til·ler» és el **Medalló de l'Arbre** (el flag intern es diu `fullaTiler`); la «clau petita» és la **clau del sagrari**.*
+
 | Objecte | On / de qui | Serveix per a |
 |---|---|---|
 | Bastó de pelegrí | Germà Aldreu (Plaça), al començament | Atac bàsic. |
@@ -58,7 +60,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | Branca del Til·ler | Gran Til·ler | Atac millor; enfonsa les arrels que barren la Cirosa. |
 | Esquelles dels pastors | Pastor vell (Cirosa) | Trama del sopar. |
 | Escudella / Flors d'Isílder / Pa dels pastors | Meus / Isílder / pastors | Les tres coses del sopar del Til·ler. |
-| Fulla i medalló del Til·ler | Sopar del Til·ler | Permís per al Dolmen. |
+| Medalló de l'Arbre (la «Fulla del Til·ler» al guió) | Sopar del Til·ler (★ «Has obtingut el MEDALLÓ DE L'ARBRE!») | Permís per al Dolmen. |
 | Clau del sagrari | Ermita de la Desaparició (missatge de les 12 columnes) | Obre el sagrari del Santuari. |
 | Fragments 1 i 2 | Runes / sagrari del Santuari | Pista per a l'Alcoví. |
 | Cant de Vespres | Pianista | Desperta l'ombra, la pedra secreta i el pont de la Gàbia. |
@@ -147,7 +149,7 @@ Amb les esquelles, el Til·ler parla d'un sopar. Calen tres coses:
 1. **L'escudella de la Meus** (Cel·les, Sant Benet) `neus`.
 2. **Les flors d'Isílder** (jardí de l'Hostatgeria) `isidreBase`.
 3. **El pa dels pastors**: els pastors el pasten ells, però necessiten una música antiga vora el foc. La Pianista ensenya el **Cant de Vespres** (veure pas 17) i, tocat vora el foc de la Cirosa, convenç els pastors `pastorsConvencuts`.
-Ritual de tres espelmes (una per cada nen: l'Huri, el Fram i el Sardi): cau la **Fulla del Til·ler** (+1 cor) i el **medalló de l'Arbre**.
+Ritual de tres espelmes (una per cada nen: l'Huri, el Fram i el Sardi): cau la **Fulla del Til·ler**: en objecte, el **Medalló de l'Arbre** i el **medalló de l'Arbre**.
 
 ### 2B · El Saber i les benediccions
 
@@ -202,7 +204,7 @@ En Jusef ja va revelar al pas 14b que la **roda de carruatge** del Celler amaga 
 El Germà Francí demana que portis el seu **ram** a la tomba de l'àngel del Cementiri `creuCementiri`; en tornar, et dona els **Guants de Poder**. Amb ells la roda cedeix.
 
 **Pas 29 · Casa Gran per dins: passadís, cambra, cofre** `cofreCambra` `homeRaimInt` `botaTresor`
-Roda → **Passadís secret** (escolopendres i un mur de cinc esbarzers negres: Runna) → **Cambra secreta** (cofre: +1 cor i el **pergamí del monjo**; la porta del fons és una llosa sense pany: la bóta de la creu rodola, deixa veure una anella, i una cadena fa girar la politja i puja la llosa).
+Roda → **Passadís secret** (escolopendres i un mur de cinc esbarzers negres: Runna) → **Cambra secreta** (cofre: el **pergamí del monjo**; la porta del fons és una llosa sense pany: la bóta de la creu rodola, deixa veure una anella, i una cadena fa girar la politja i puja la llosa).
 
 **Pas 30 · La Caseta — la Maneta** `jordiCaseta` `cofreManeta`
 A l'oest del Gran Til·ler, en Georgi (que crida «MAI! MAI!») guarda la **Maneta** al cofre de les joguines de la caseta aixecada sobre pals; per una cosa seriosa, la hi deixa agafar.
@@ -660,12 +662,12 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 
 *Si: NO rellotgeReparat ; té clau_campanar o portaCampanarOberta*
 
-**Pare Daimiel:** La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s'ho pensarà dues vegades. […]
+**Pare Daimiel:** La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s'ho pensarà dues vegades.
 
 
 *Si: NO rellotgeReparat ; NO té clau_campanar o portaCampanarOberta*
 
-**Pare Daimiel:** ho pensarà dues vegades. […]
+**Pare Daimiel:** La porta de la dreta del retaule és tancada, fill: la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Si algú fa caminar el rellotge, potser la boira s'ho pensarà dues vegades.
 
 
 *Si: NO rellotgeExplicat*
@@ -842,12 +844,12 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 
 *Si: abandonat*
 
-**Jusef:** Ja te'n vas? La taula no fuig. Torna quan vulguis. […]
+**Jusef:** Ja te'n vas? La taula no fuig. Torna quan vulguis.
 
 
 *Si: NO abandonat*
 
-**Jusef:** [text calculat pel joc: el Julius diu que la segona vegada sempre surt millor.']
+**Jusef:** Bona partida, monjo. Però el servei encara és meu. Torna-hi quan vulguis: el Julius diu que la segona vegada sempre surt millor.
 
 
 ### neus
@@ -1217,9 +1219,14 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 ${mots.join('   ')}
 
 
-*Si: totes*
+*Si: totes ; missatgeDesxifrat*
 
-**Ineu:** missatgeDesxifratQuan la boira cobreixi el Miracle, els passos dels absents tornaran amb l'alba.Ja ho tinc sencer. Això són paraules per dir en veu alta... davant l'altar. […]
+**Ineu:** Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l'alba.
+
+
+*Si: totes ; NO missatgeDesxifrat*
+
+**Ineu:** Ja ho tinc sencer. Això són paraules per dir en veu alta... davant l'altar.
 
 
 *Si: altrament*
@@ -1429,7 +1436,7 @@ ${mots.join('   ')}
 
 **Dolora:** Oh, jove monjo! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Dolora.
 
-**Dolora:** La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb hàbit i ocells a l'espatlla que s'enduia els nens del poble, rient baixet.
+**Dolora:** La boira va entrar pel soterrani fa tres nits. Vaig veure un germà amb hàbit que xiulava com els ocells i s'enduia el Sardi dins la boira, rient baixet.
 
 **Dolora:** Si passes pel jardí, saluda l'Isílder, el jardiner d'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.
 
@@ -1915,7 +1922,7 @@ ${mots.join('   ')}
 
 **La Jauneta:** Mira, he barrejat l'aigua que queda amb romaní, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets.
 
-★ Has obtingut el BEURATGE DE LA JACMETA.
+★ Has obtingut el BEURATGE DE LA JAUNETA.
 
 
 *Altrament (per defecte):*
@@ -2294,9 +2301,9 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 
 
-**Ineu:** (L'esquerda s'ha tancat i ja no en surt boira. Els qui van tancar la porta tornen a descansar.)
+**Ineu:** (L'esquerda s'ha tancat i la boira ja no puja a la superfície. Els qui van tancar la porta tornen a descansar.)
 
-**Ineu:** (Sense la boira, la veu de l'Home de la Gàbia ja no arriba tan lluny, i les portes que ella obria soles ja no s'obriran.)
+**Ineu:** (Sense la boira que sortia d'aquí, la veu de l'Home de la Gàbia ja no arriba tan lluny, i les portes que ella obria soles ja no s'obriran. Però la boira que ja s'ha acumulat sota terra, a les Gírgoles, hi continua tancada.)
 
 
 
@@ -2503,17 +2510,9 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 **Germà Francí:** Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.
 
 
-*Si: florsCreu ; 'Les has deixades a l\'àngel*
-
-**Germà Francí:** [text calculat pel joc: Que Déu t\'ho pagui, fill. Els monjos d\'abans ja deuen estar contents]
-
-
-*Si: florsCreu ; NO 'Les has deixades a l\'àngel*
-
-**Germà Francí:** n recorda. […]
-
-
 *Si: florsCreu*
+
+**Germà Francí:** Les has deixades a l'àngel? Que Déu t'ho pagui, fill. Els monjos d'abans ja deuen estar contents: algú encara se'n recorda.
 
 **Germà Francí:** Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.
 
@@ -2670,20 +2669,20 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 **Eve:** L'Iscu? Ja t'ho vaig dir: surt pel camí de la Desaparició, a l'oest de les Runes, i s'amaga per un forat entre els arbres «per on els grans no hi caben». Si el trobes, digues-li que torni a sopar.
 
-
-*Si: 'Aquesta clau... és de ferro vell, com la porta de fora, la de la Porta de les GírgolesNO L\'has trobada a la Casa Gran*
-
-**Eve:** [text calculat pel joc: La porta és a la Sala de les Gírgoles]
+**Eve:** Aquesta clau... és de ferro vell, com la porta de fora, la de la Porta de les Gírgoles! L'has trobada a la Casa Gran? La porta és a la Sala de les Gírgoles: des del Pati del Celler, el camí de l'est, entre els arbres.
 
 
-*Si: NO 'Aquesta clau... és de ferro vell, com la porta de fora, la de la Porta de les GírgolesNO L\'has trobada a la Casa Gran*
+*Si: cantMiracle*
 
-**Eve:** est, entre els arbres. […]
+**Eve:** I la Pianista t'ha ensenyat el cant. Vés amb compte, allà dins.
+
+
+*Si: NO cantMiracle*
+
+**Eve:** Abans d'entrar-hi, passa pel Santuari: la Pianista sempre diu que hi ha un cant per a cada porta.
 
 
 *Altrament (per defecte):*
-
-**Eve:** cantMiracleI la Pianista t'ha ensenyat el cant. Vés amb compte, allà dins.Abans d'entrar-hi, passa pel Santuari: la Pianista sempre diu que hi ha un cant per a cada porta. […]
 
 **Eve:** Aquesta espasa brilla com si estigués contenta. Amb això potser obriríem la porta... però el pany és de clau. Una clau de ferro, grossa.
 
@@ -2698,7 +2697,7 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 
 
-**Ineu:** (Tancada amb clau. A l'Aldreu se li obria sola perquè la boira obeïa la veu del Mestre... però la tomba és segellada i la boira ja no hi és: ara la porta no s'obre per a ningú. Em cal la clau dels monjos.)
+**Ineu:** (Tancada amb clau. A l'Aldreu se li obria sola perquè la boira que sortia de la tomba obeïa la veu del Mestre... però la tomba és segellada i la boira ja no puja: ara la porta no s'obre per a ningú. Em cal la clau dels monjos.)
 
 **Ineu:** (Tancada amb clau. Diuen que a l'Aldreu se li obre sola: la boira l'obeeix. A mi, no.)
 

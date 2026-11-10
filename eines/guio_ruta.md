@@ -48,6 +48,8 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 
 ## 0c. Els objectes que s'aconsegueixen (resum)
 
+*Noms dins el joc: la «Llanterna» és el **Llum d'en Mamet**; la «Fulla del Til·ler» és el **Medalló de l'Arbre** (el flag intern es diu `fullaTiler`); la «clau petita» és la **clau del sagrari**.*
+
 | Objecte | On / de qui | Serveix per a |
 |---|---|---|
 | Bastó de pelegrí | Germà Aldreu (Plaça), al començament | Atac bàsic. |
@@ -58,7 +60,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | Branca del Til·ler | Gran Til·ler | Atac millor; enfonsa les arrels que barren la Cirosa. |
 | Esquelles dels pastors | Pastor vell (Cirosa) | Trama del sopar. |
 | Escudella / Flors d'Isílder / Pa dels pastors | Meus / Isílder / pastors | Les tres coses del sopar del Til·ler. |
-| Fulla i medalló del Til·ler | Sopar del Til·ler | Permís per al Dolmen. |
+| Medalló de l'Arbre (la «Fulla del Til·ler» al guió) | Sopar del Til·ler (★ «Has obtingut el MEDALLÓ DE L'ARBRE!») | Permís per al Dolmen. |
 | Clau del sagrari | Ermita de la Desaparició (missatge de les 12 columnes) | Obre el sagrari del Santuari. |
 | Fragments 1 i 2 | Runes / sagrari del Santuari | Pista per a l'Alcoví. |
 | Cant de Vespres | Pianista | Desperta l'ombra, la pedra secreta i el pont de la Gàbia. |
@@ -147,7 +149,7 @@ Amb les esquelles, el Til·ler parla d'un sopar. Calen tres coses:
 1. **L'escudella de la Meus** (Cel·les, Sant Benet) `neus`.
 2. **Les flors d'Isílder** (jardí de l'Hostatgeria) `isidreBase`.
 3. **El pa dels pastors**: els pastors el pasten ells, però necessiten una música antiga vora el foc. La Pianista ensenya el **Cant de Vespres** (veure pas 17) i, tocat vora el foc de la Cirosa, convenç els pastors `pastorsConvencuts`.
-Ritual de tres espelmes (una per cada nen: l'Huri, el Fram i el Sardi): cau la **Fulla del Til·ler** (+1 cor) i el **medalló de l'Arbre**.
+Ritual de tres espelmes (una per cada nen: l'Huri, el Fram i el Sardi): cau la **Fulla del Til·ler**: en objecte, el **Medalló de l'Arbre** i el **medalló de l'Arbre**.
 
 ### 2B · El Saber i les benediccions
 
@@ -202,7 +204,7 @@ En Jusef ja va revelar al pas 14b que la **roda de carruatge** del Celler amaga 
 El Germà Francí demana que portis el seu **ram** a la tomba de l'àngel del Cementiri `creuCementiri`; en tornar, et dona els **Guants de Poder**. Amb ells la roda cedeix.
 
 **Pas 29 · Casa Gran per dins: passadís, cambra, cofre** `cofreCambra` `homeRaimInt` `botaTresor`
-Roda → **Passadís secret** (escolopendres i un mur de cinc esbarzers negres: Runna) → **Cambra secreta** (cofre: +1 cor i el **pergamí del monjo**; la porta del fons és una llosa sense pany: la bóta de la creu rodola, deixa veure una anella, i una cadena fa girar la politja i puja la llosa).
+Roda → **Passadís secret** (escolopendres i un mur de cinc esbarzers negres: Runna) → **Cambra secreta** (cofre: el **pergamí del monjo**; la porta del fons és una llosa sense pany: la bóta de la creu rodola, deixa veure una anella, i una cadena fa girar la politja i puja la llosa).
 
 **Pas 30 · La Caseta — la Maneta** `jordiCaseta` `cofreManeta`
 A l'oest del Gran Til·ler, en Georgi (que crida «MAI! MAI!») guarda la **Maneta** al cofre de les joguines de la caseta aixecada sobre pals; per una cosa seriosa, la hi deixa agafar.

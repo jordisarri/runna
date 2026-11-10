@@ -1,5 +1,5 @@
 /**
- * LA CABANA DE LA JACMETA: molt lluny, al mig del bosc. Només s'hi arriba pel portal màgic
+ * LA CABANA DE LA JAUNETA: molt lluny, al mig del bosc. Només s'hi arriba pel portal màgic
  * de l'Alzina Buida del Bosc de Sant Joan (cal portar-hi aigua de la font).
  */
 

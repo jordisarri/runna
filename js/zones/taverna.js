@@ -51,7 +51,7 @@ Object.assign(DIALEGS, {
     // La Porta de les Gírgoles (a l'est del Pati del Celler): la de la galeria, que s'obria sola per al Germà Aldreu mentre la boira obeïa la veu del Mestre
     portaSoterrani: E => E.flag('clauFerro') ? { pagines: [
     ] } : E.flag('tombaSegellada') ? { pagines: [
-        { qui: 'Ineu', text: "(Tancada amb clau. A l'Aldreu se li obria sola perquè la boira obeïa la veu del Mestre... però la tomba és segellada i la boira ja no hi és: ara la porta no s'obre per a ningú. Em cal la clau dels monjos.)" }
+        { qui: 'Ineu', text: "(Tancada amb clau. A l'Aldreu se li obria sola perquè la boira que sortia de la tomba obeïa la veu del Mestre... però la tomba és segellada i la boira ja no puja: ara la porta no s'obre per a ningú. Em cal la clau dels monjos.)" }
     ] } : { pagines: [
         { qui: 'Ineu', text: "(Tancada amb clau. Diuen que a l'Aldreu se li obre sola: la boira l'obeeix. A mi, no.)" }
     ] },

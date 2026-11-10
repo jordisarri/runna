@@ -41,10 +41,13 @@ def expressio(t, i):
 
 def talla_ternari(e):
     """(cond, a, b) si l'expressió és «cond ? a : b» a nivell 0; si no, None."""
-    prof, q, pos_q = 0, None, None
+    prof, q, pos_q, salta = 0, None, None, False
     for k, c in enumerate(e):
+        if salta:                      # el caràcter després d'una barra (\') no tanca la cadena
+            salta = False
+            continue
         if q:
-            if c == '\\': continue
+            if c == chr(92): salta = True; continue
             if c == q: q = None
             continue
         if c in '"\'`': q = c

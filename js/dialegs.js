@@ -1065,7 +1065,7 @@ const DIALEGS = {
         if (!E.flag('premiPains')) return {
             pagines: [
                 { qui: 'Dolora', text: 'Oh, jove monjo! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Dolora.' },
-                { qui: 'Dolora', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un home amb hàbit i ocells a l\'espatlla que s\'enduia els nens del poble, rient baixet.' },
+                { qui: 'Dolora', text: 'La boira va entrar pel soterrani fa tres nits. Vaig veure un germà amb hàbit que xiulava com els ocells i s\'enduia el Sardi dins la boira, rient baixet.' },
                 { qui: 'Dolora', text: 'Si passes pel jardí, saluda l\'Isílder, el jardiner d\'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.' },
                 ...(!(E.flag('esb_host_cap1') && E.flag('esb_host_cap2')) ? [{ qui: 'Dolora', text: 'La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d\'aquests que no els talla ni la falç. Diuen que només cedeixen davant d\'una espasa de llum.'
                     + (E.te('runna') ? ' Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho.' : '') }] : []),
@@ -1549,7 +1549,7 @@ const DIALEGS = {
     }),
 
 
-    // ---------------- LA CABANA DE LA JACMETA ----------------
+    // ---------------- LA CABANA DE LA JAUNETA ----------------
     // La Jauneta, bruixa del bosc: una curiositat. Hi vas pel portal de l'Alzina Buida i et diu la pista del moment (és vident)
     jaumeta: E => {
         const pista = pistaActual(E).replace(/^Fill, /, "");
@@ -1563,7 +1563,7 @@ const DIALEGS = {
                     { fer: (z, fet) => z.seq([c => z.npcVa('jaumeta', 500, 360, c, 200), c => z.llum(450, 290, 0x6aff6a, c), c => z.npcVa('jaumeta', 560, 420, c, 200)], fet) },
                     { qui: "La Jauneta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? No és al nord de sempre, com et diuen: és al nord de les Cel·les, i han tapat el camí amb una boira que no marxa amb el vent." },
                     { qui: "La Jauneta", text: "Mira, he barrejat l'aigua que queda amb romaní, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
-                    { avis: "Has obtingut el BEURATGE DE LA JACMETA.", obj: 'beuratge' }
+                    { avis: "Has obtingut el BEURATGE DE LA JAUNETA.", obj: 'beuratge' }
                 ],
                 enAcabar: () => {
                     E.treu("aigua_sj"); E.posaFlag("jaumetaVista"); E.dona("beuratge");
