@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Contorn negre (estil còmic) als fulls de caminar lateral de l'Ineu (assets/ineu/left.webp i right.webp).
+"""Contorn negre (estil còmic) als fulls de caminar i d'aturat (idle) de l'Ineu (assets/ineu/<direccio>.webp i idle_<direccio>.webp).
 
     python3 eines/contorn_ineu.py            posa el contorn (guarda abans els originals a art/ineu_caminar/sense_contorn/)
     python3 eines/contorn_ineu.py --treu     torna als originals sense contorn
-    python3 eines/contorn_ineu.py --gruix 3  canvia el gruix (en píxels de la cel·la de 256; per defecte 4)
+    python3 eines/contorn_ineu.py --gruix 3  canvia el gruix (en píxels de la cel·la de 256; per defecte 2)
 
 Sempre es parteix de l'original sense contorn, així es pot repetir amb un altre gruix sense que s'acumuli. Cada cel·la és de 256x256 i l'Ineu hi deixa
-com a mínim 9 px de marge, així que fins a ~6 px de contorn cap sense tallar-se. Després cal pujar el «?v=» dels fulls a js/assets.js (i index.html si cal).
+com a mínim 5 px de marge, així que fins a ~4 px de contorn cap sense tallar-se. Després cal pujar el «?v=» dels fulls a js/assets.js (i index.html si cal).
 """
 import sys, shutil
 from pathlib import Path
@@ -15,7 +15,8 @@ from PIL import Image
 from scipy import ndimage
 
 ARREL = Path(__file__).resolve().parent.parent
-FULLS = ['left', 'right']
+FULLS = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast',          # caminar
+         'idle_down', 'idle_up', 'idle_right', 'idle_southeast', 'idle_northeast']                      # aturat
 CEL = 256
 ORIGINALS = ARREL / 'art' / 'ineu_caminar' / 'sense_contorn'
 
@@ -41,7 +42,7 @@ def contorn(im, gruix):
 
 def main():
     args = sys.argv[1:]
-    gruix = int(args[args.index('--gruix') + 1]) if '--gruix' in args else 4
+    gruix = int(args[args.index('--gruix') + 1]) if '--gruix' in args else 2
     ORIGINALS.mkdir(parents=True, exist_ok=True)
     for f in FULLS:
         dest = ARREL / 'assets' / 'ineu' / (f + '.webp')
