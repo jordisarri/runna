@@ -1122,7 +1122,7 @@ class ZonaDolmen extends ZonaBase {
         this.tweens.killTweensOf(this.resplendor); this.resplendor.setAlpha(0);
         if (this.aura) { this.aura.forEach(a => { this.tweens.killTweensOf(a); if (a.stop) a.stop(); this.tweens.add({ targets: a, alpha: 0, duration: 600, onComplete: () => a.destroy() }); }); this.aura = null; }
         // El gràfic (eines/fer_aixeca_espasa.py) és de 500 px d'ample i es mostra a AMPLE_AIXECA px de món
-        const AMPLE_AIXECA = 130, ESC_AIX = AMPLE_AIXECA / this.textures.get('ineu_aixeca').getSourceImage().width;
+        const AMPLE_AIXECA = 112, ESC_AIX = AMPLE_AIXECA / this.textures.get('ineu_aixeca').getSourceImage().width;
         I.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
         this.ineuAlt = this.add.image(I.x, I.y + 2, 'ineu_aixeca').setOrigin(0.5, 1).setScale(ESC_AIX).setDepth(85000);
         cam.flash(700, 255, 255, 255);

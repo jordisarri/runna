@@ -1464,7 +1464,7 @@ const DIALEGS = {
         } else if (E.te('runna') || E.flag('runna')) {
             pagines.push({ qui: "Ineu", text: "(Els tres medallons continuen al seu lloc, a la placa. L'espasa ja és meva: Runna.)" });
         } else if (E.flag('placaCompleta')) {
-            pagines.push({ qui: "Ineu", text: "(Els tres medallons són al seu lloc. Només em falta alçar l'espasa.)" });
+            // (cap text: la placa ja és completa)
         } else {
             // Sense cap medalló a les mans: què cal i què falta
             const falta = DIALEGS.faltaRunna(E);
