@@ -1026,7 +1026,11 @@ class ZonaDolmen extends ZonaBase {
         const halo = this.add.circle(x, y, D * 0.8, color, 0.28).setBlendMode(Phaser.BlendModes.ADD).setDepth(g.PY + 3);
         this.tweens.add({ targets: halo, alpha: 0.12, yoyo: true, repeat: -1, duration: 1400, ease: 'Sine.easeInOut' });
         const im = this.textures.exists(emb) ? this.add.image(x, y, emb).setDisplaySize(D, D).setDepth(g.PY + 4) : this.add.circle(x, y, D / 2, color).setDepth(g.PY + 4);
-        this.medallonsPlaca.push({ flag, halo, im, color });
+        // Contorn de color ben visible al voltant del medalló (un anell fix i, a fora, un altre més ample que bategueja)
+        const anell = this.add.circle(x, y, D * 0.56).setStrokeStyle(4, color, 1).setDepth(g.PY + 5);
+        const anellFora = this.add.circle(x, y, D * 0.62).setStrokeStyle(7, color, 0.55).setBlendMode(Phaser.BlendModes.ADD).setDepth(g.PY + 5);
+        this.tweens.add({ targets: anellFora, alpha: 0.2, scale: 1.1, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
+        this.medallonsPlaca.push({ flag, halo, im, color, anell, anellFora });
         return { halo, im, x, y, D };
     }
 
@@ -1084,6 +1088,11 @@ class ZonaDolmen extends ZonaBase {
         const x = this.espX, y = this.espY - 50, { sx, sy } = DOL, ADD = Phaser.BlendModes.ADD;
         const o = this.aura = [];
         const afegeix = (obj, ...t) => { o.push(obj); t.forEach(cfg => this.tweens.add({ targets: obj, ...cfg })); return obj; };
+        // L'espasa clavada es veu amb una llum que la perfila i bategueja
+        if (this.espClavada && this.espClavada.preFX && !this.glowEsp) {
+            this.glowEsp = this.espClavada.preFX.addGlow(0xfff0b8, 3, 0, false, 0.1, 16);
+            this.tweens.add({ targets: this.glowEsp, outerStrength: 7, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
+        }
         this.tweens.killTweensOf(this.resplendor); this.resplendor.setAlpha(0);
         afegeix(this.add.circle(x, y, 135, 0xffd24a, 0.42).setBlendMode(ADD).setDepth(sy + 1), { scale: 1.3, alpha: 0.2, yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
         afegeix(this.add.circle(x, y, 78, 0x9fe85a, 0.5).setBlendMode(ADD).setDepth(sy + 2), { scale: 1.25, alpha: 0.22, yoyo: true, repeat: -1, duration: 950, ease: 'Sine.easeInOut' });
@@ -1108,6 +1117,7 @@ class ZonaDolmen extends ZonaBase {
         const I = this.ineu, cam = this.cameras.main, ui = this.ui(), { sx, sy } = DOL;
         let fanfaraAcabada = false;                                           // fins que no acaba la fanfàrria no es pot passar l'escena
         Joc.jingleRunna(this, () => { fanfaraAcabada = true; });
+        if (this.glowEsp) { this.tweens.killTweensOf(this.glowEsp); this.glowEsp = null; }
         if (this.espClavada) { this.espClavada.destroy(); this.espClavada = null; }
         this.tweens.killTweensOf(this.resplendor); this.resplendor.setAlpha(0);
         if (this.aura) { this.aura.forEach(a => { this.tweens.killTweensOf(a); if (a.stop) a.stop(); this.tweens.add({ targets: a, alpha: 0, duration: 600, onComplete: () => a.destroy() }); }); this.aura = null; }
@@ -1117,10 +1127,20 @@ class ZonaDolmen extends ZonaBase {
         cam.flash(700, 255, 255, 255);
         cam.shake(450, 0.008);
         const punta = { x: I.x + 7, y: I.y - 177 };
-        // La càmera baixa: la punta de l'espasa ha de quedar per sota del rètol (i es continua veient el dolmen i la placa)
-        { const H = ALT - ALT_HUD, T = ALT * 0.3 + 150; this.enquadrar(punta.x, punta.y, cam.zoom, 900, null, H - 2 * T); }
-        const fosc = this.add.rectangle(sx, sy - 400, 4000, 4000, 0x06081a, 1).setDepth(sy + 4).setAlpha(0);
-        this.tweens.add({ targets: fosc, alpha: 0.4, duration: 600 });
+        // La càmera s'acosta: es veu el dolmen sencer i l'Ineu alçant l'espasa, entre el rètol (a dalt) i la vora de baix
+        {
+            const D = this.dolmen, H = ALT - ALT_HUD, Tt = ALT * 0.14 + 130, Bb = Math.min(ALT - SAFE_BAIX - 40, ALT * 0.88);
+            const dalt = punta.y - 40, baix = sy + 30, span = baix - dalt, ampleD = D.displayWidth + 60;
+            const zoom = Math.max(cam.zoom, Math.min((Bb - Tt) / span, AMPLE / ampleD, 2.4));
+            this.enquadrar(D.x, (dalt + baix) / 2, zoom, 1100, null, H - (Tt + Bb));
+        }
+        const fosc = this.add.rectangle(sx, sy - 400, 4000, 4000, 0x06081a, 1).setDepth(sy - 2).setAlpha(0);        // enfosqueix el fons, però no el dolmen ni l'Ineu
+        this.tweens.add({ targets: fosc, alpha: 0.72, duration: 700 });
+        // Tot el que hi ha davant del dolmen (la placa, el camí) s'enfosqueix gairebé del tot: només es veu el dolmen sencer i l'Ineu
+        const davant = this.add.graphics().setDepth(84900).setAlpha(0);
+        davant.fillGradientStyle(0x06081a, 0x06081a, 0x06081a, 0x06081a, 0, 0, 1, 1).fillRect(sx - 2000, sy + 20, 4000, 55);          // (baixa suau, sense vora dura)
+        davant.fillStyle(0x06081a, 1).fillRect(sx - 2000, sy + 75, 4000, 3000);
+        this.tweens.add({ targets: davant, alpha: 0.9, duration: 700 });
         // Línies de llum blanca que surten de la punta de l'espasa i giren a poc a poc
         const raigs = this.add.graphics({ x: punta.x, y: punta.y }).setDepth(84990).setBlendMode('ADD').setAlpha(0);
         let sd = 7; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
@@ -1134,12 +1154,12 @@ class ZonaDolmen extends ZonaBase {
         this.tweens.add({ targets: halo, radius: 62, alpha: 0.25, yoyo: true, repeat: -1, duration: 700, ease: 'Sine.easeInOut' });
         this.llum(punta.x, punta.y, 0xffffff);
         // El rètol, sobreimprès
-        const t1 = ui.add.text(AMPLE / 2, ALT * 0.3, 'RUNNA', { fontFamily: typeof FONT_TITOL !== 'undefined' ? FONT_TITOL : 'Georgia', fontSize: '96px', fontStyle: 'bold', color: '#ffe08a', stroke: '#2a1808', strokeThickness: 10 }).setOrigin(0.5).setDepth(500).setAlpha(0);
-        const t2 = ui.add.text(AMPLE / 2, ALT * 0.3 + 86, "l'espasa del Miracle", estilText(36, '#f2e6c8', { fontStyle: 'italic', stroke: '#2a1808', strokeThickness: 6 })).setOrigin(0.5).setDepth(500).setAlpha(0);
+        const t1 = ui.add.text(AMPLE / 2, ALT * 0.14, 'RUNNA', { fontFamily: typeof FONT_TITOL !== 'undefined' ? FONT_TITOL : 'Georgia', fontSize: '96px', fontStyle: 'bold', color: '#ffe08a', stroke: '#2a1808', strokeThickness: 10 }).setOrigin(0.5).setDepth(500).setAlpha(0);
+        const t2 = ui.add.text(AMPLE / 2, ALT * 0.14 + 86, "l'espasa del Miracle", estilText(36, '#f2e6c8', { fontStyle: 'italic', stroke: '#2a1808', strokeThickness: 6 })).setOrigin(0.5).setDepth(500).setAlpha(0);
         ui.tweens.add({ targets: [t1, t2], alpha: 1, duration: 700 });
         ui.tweens.add({ targets: t1, scale: { from: 0.8, to: 1 }, duration: 900, ease: 'Back.easeOut' });
         const alClic = () => {
-            const coses = [raigs, halo, fosc];
+            const coses = [raigs, halo, fosc, davant];
             this.alliberarCamera(900);
             this.tweens.killTweensOf(halo);
             this.tweens.add({ targets: coses, alpha: 0, duration: 700, onComplete: () => coses.forEach(o => o.destroy()) });
