@@ -95,14 +95,14 @@ class ZonaRuines extends ZonaBase {
         // Una pedra grossa a terra, al peu del mur: tapa un forat. S'empeny de debò (sense guants), des de qualsevol dels quatre costats, caminant-hi
         // contra: la pedra va davant de l'Ineu mentre l'empeny i es queda on la deixa. Quan el forat queda a la vista s'hi veu un pou fosc; el pergamí partit
         // només s'hi veu amb el Llum d'en Mamet.
-        const HX = 1000, HY = 624, mogutR = Estat.flag('pedraRunes');
+        const HX = 1000, HY = 606, mogutR = Estat.flag('pedraRunes');
         this.HX = HX; this.HY = HY;
         this.dibuixarForat(HX, HY);
-        let px = HX, py = HY + 8;
+        let px = HX, py = HY + 24;
         const guardada = String(Estat.dades.flags.pedraRunesPos || '').split(',').map(Number);
         if (guardada.length === 2 && guardada.every(Number.isFinite)) { px = guardada[0]; py = guardada[1]; }
         else if (mogutR) { px = HX + 100; }                                          // partides velles: la pedra era a la dreta
-        this.pedraForat = this.posar('roca', px, py, { escala: 0.95 });
+        this.pedraForat = this.posar('roca', px, py, { escala: 1 });
         this.colPedraForat = this.colisio(px, py - 13, 80, 26);
         this.pedraEmpenta = 0; this.pedraDir = null;
         if (!Estat.flag('fragment1')) {
@@ -146,7 +146,7 @@ class ZonaRuines extends ZonaBase {
     // El forat: una boca fosca a terra, amb vora de terra i pedretes, la paret del fons il·luminada una mica i el fons negre. (Per sobre del terra, per sota de tot.)
     dibuixarForat(HX, HY) {
         const g = this.add.graphics().setDepth(-880);
-        g.fillStyle(0x000000, 0.28).fillEllipse(HX, HY + 6, 96, 44);                         // pessigada d'ombra al voltant
+        g.fillStyle(0x000000, 0.28).fillEllipse(HX, HY + 5, 90, 38);                         // pessigada d'ombra al voltant
         g.fillStyle(0x5a4a38, 1).fillEllipse(HX, HY, 88, 38);                                 // vora de terra trepitjada
         g.fillStyle(0x7a6a52, 1).fillEllipse(HX, HY - 3, 82, 30);                             // cara de dalt de la vora, més clara
         g.fillStyle(0x3a2e22, 1).fillEllipse(HX, HY + 1, 68, 27);                             // paret del pou
@@ -216,8 +216,8 @@ class ZonaRuines extends ZonaBase {
 
     // Tapa la pedra el forat? (el dibuix de la pedra contra la boca del pou)
     foratTapat(x, y) {
-        const HX = this.HX, HY = this.HY;
-        return x + 42 > HX - 28 && x - 42 < HX + 28 && y + 6 > HY - 8 && y - 52 < HY + 8;
+        const HX = this.HX, HY = this.HY;                       // (la pedra fa 90 d'ample i 61 d'alt, amb els peus a y; el pou és l'el·lipse del centre del forat)
+        return x + 45 > HX - 34 && x - 45 < HX + 34 && y > HY - 12 && y - 61 < HY + 14;
     }
 
     // El forat queda a la vista: pols, clic de pedra i, amb el Llum d'en Mamet, es veu el pergamí
