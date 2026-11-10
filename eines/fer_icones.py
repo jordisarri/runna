@@ -15,7 +15,7 @@ LOGO = os.path.join(ARREL, 'art', 'titol', 'logo_runna.png')
 ESPASA = os.path.join(ARREL, 'art', 'armes', 'espasa.jpg')
 SORTIDA = os.path.join(ARREL, 'assets', 'pwa')
 ICONA_ART = os.path.join(ARREL, 'art', 'pwa', 'icona.png')      # si hi és (vegeu docs/PROMPTS_GRAFICS.md), es fa servir aquesta imatge en lloc de la composició
-RETALL = (62, 35, 1002, 975)    # el que es queda de la imatge feta a mà (en píxels d'una de 1024 × 1024): quadrat ajustat al dibuix, amb un petit marge a l'espasa, que és el que més ocupa
+RETALL = (108, 57, 978, 927)    # el que es queda de la imatge feta a mà (en píxels d'una de 1024 × 1024): quadrat ajustat al dibuix, amb un petit marge a l'espasa, que és el que més ocupa
 R_CAIXA = (100, 120, 840, 1070)          # la R (amb els sarments) dins el logo, en píxels de l'original
 # La R toca la U al logo: només es queda el que cau dins d'aquest polígon (la vora dreta passa pel buit que hi ha entre la pota de la R i la U)
 R_POLIGON = [(95, 100), (648, 100), (648, 700), (690, 750), (720, 890), (775, 980), (832, 1012), (845, 1075), (95, 1075)]
