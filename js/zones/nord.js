@@ -242,20 +242,25 @@ class ZonaRuines extends ZonaBase {
         this.pergamiRunes = this.posar('pergami_partit', HX, HY + 5, { fonsY: -869, escala: 0.4 });
         this.pergamiRunes.setAlpha(0).setTint(0xb0a088);
         this.pergamiBrill = this.add.circle(HX, HY + 2, 18, 0xffe8a0, 1).setAlpha(0).setDepth(-868).setBlendMode('ADD');
-        const tons = [0xe6d4ff, 0xd8c0fa, 0xcfb0f4, 0xf0e4ff];
+        const tons = [0xcdb4f0, 0xb99be6, 0xe2d2ff, 0xa88adc];
         this.nuvolsForat = [];
         const prof = Estat.flag('pedraRunes') ? HY + 12 : 600;                              // abans de destapar-lo, la pedra (a davant) tapa la boira: només n'esguita per les vores
-        for (let i = 0; i < 12; i++) {
-            const e = (0.22 + Math.random() * 0.14), x = HX + (Math.random() - 0.5) * 48, y = HY + (Math.random() - 0.5) * 14;
+        for (let i = 0; i < 14; i++) {
+            const e = (0.1 + Math.random() * 0.1), x = HX + (Math.random() - 0.5) * 44, y = HY + 2 + (Math.random() - 0.5) * 10;
             const im = this.add.image(x, y, 'boira_nuvol').setTint(tons[i % 4]).setScale(e * 1.25, e * 0.9).setAngle(Math.random() * 360).setDepth(prof);
-            im.base = 0.8 + Math.random() * 0.18; im.setAlpha(im.base);
-            this.tweens.add({ targets: im, x: x + (Math.random() - 0.5) * 24, y: y - 4 - Math.random() * 8, angle: im.angle + (Math.random() < 0.5 ? 40 : -40), duration: 2600 + Math.random() * 1800, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+            im.base = 0.5 + Math.random() * 0.3; im.setAlpha(im.base);
+            this.tweens.add({ targets: im, x: x + (Math.random() - 0.5) * 36, y: y + (Math.random() - 0.5) * 10, angle: im.angle + (Math.random() < 0.5 ? 70 : -70), duration: 2000 + Math.random() * 1600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
             this.nuvolsForat.push(im);
         }
+        // La boira només és DINS del forat: es retalla amb la boca del pou (la vora, les pedretes i la terra es veuen)
+        const retall = this.make.graphics({ x: 0, y: 0, add: false }); retall.fillStyle(0xffffff, 1).fillEllipse(HX, HY + 2, 64, 24);
+        this.maskForat = retall.createGeometryMask();
+        this.nuvolsForat.forEach(n => n.setMask(this.maskForat));
         this.fumForat = this.add.particles(HX, HY - 4, 'boira_nuvol', {                     // volves lila clar que pugen i s'esfumen
-            tint: [0xe6d4ff, 0xd8c0fa, 0xf0e4ff], x: { min: -24, max: 24 }, y: { min: -5, max: 5 }, speedX: { min: -8, max: 8 }, speedY: { min: -26, max: -8 },
-            scale: { start: 0.09, end: 0.22 }, alpha: { start: 0.5, end: 0 }, lifespan: { min: 2200, max: 3600 }, frequency: 420, rotate: { min: 0, max: 360 }
+            tint: [0xe6d4ff, 0xd8c0fa, 0xf0e4ff], x: { min: -20, max: 20 }, y: { min: -2, max: 6 }, speedX: { min: -4, max: 4 }, speedY: { min: -14, max: -4 },
+            scale: { start: 0.05, end: 0.11 }, alpha: { start: 0.5, end: 0 }, lifespan: { min: 2200, max: 3600 }, frequency: 420, rotate: { min: 0, max: 360 }
         }).setDepth(prof + 2);
+        this.fumForat.setMask(this.maskForat);
     }
 
     // Cada fotograma: la boira del forat s'aparta (només amb la llum i a prop) i deixa veure el pergamí; si no, es tanca
