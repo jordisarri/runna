@@ -388,7 +388,7 @@ const DIALEGS = {
 
     // ---------------- RUÏNES I PING-PONG ----------------
     ruines: E => {
-        if (!E.te('llanterna')) return { pagines: [{ qui: 'Ineu', text: "(Hi ha massa fosc: del forat només surt un corrent d'aire fred i no s'hi distingeix res. Em cal una llum.)" }] };
+        if (!E.te('llanterna')) return { pagines: [{ qui: 'Ineu', text: "(Hi ha massa boira al forat com per veure-hi res... Em cal una llum.)" }] };
         return {
             pagines: [
                 { qui: 'Ineu', text: "(El Llum d'en Mamet forada una mica la tenebra... Al fons hi ha un full clar, amagat!)" },

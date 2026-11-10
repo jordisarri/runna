@@ -256,11 +256,13 @@ class ZonaRuines extends ZonaBase {
         const retall = this.make.graphics({ x: 0, y: 0, add: false }); retall.fillStyle(0xffffff, 1).fillEllipse(HX, HY + 2, 64, 24);
         this.maskForat = retall.createGeometryMask();
         this.nuvolsForat.forEach(n => n.setMask(this.maskForat));
-        this.fumForat = this.add.particles(HX, HY - 4, 'boira_nuvol', {                     // volves lila clar que pugen i s'esfumen
-            tint: [0xe6d4ff, 0xd8c0fa, 0xf0e4ff], x: { min: -20, max: 20 }, y: { min: -2, max: 6 }, speedX: { min: -4, max: 4 }, speedY: { min: -14, max: -4 },
-            scale: { start: 0.05, end: 0.11 }, alpha: { start: 0.5, end: 0 }, lifespan: { min: 2200, max: 3600 }, frequency: 420, rotate: { min: 0, max: 360 }
+        // Fum lila transparent que s'enlaira del forat, ondulant, i s'esvaeix a poca alçada (no es retalla: surt per sobre de la boca)
+        this.fumForat = this.add.particles(HX, HY - 2, 'boira_nuvol', {
+            tint: [0xe2d2ff, 0xcdb4f0, 0xf0e4ff], x: { min: -18, max: 18 }, y: { min: -2, max: 6 }, speedY: { min: -22, max: -10 }, speedX: { min: -3, max: 3 },
+            scale: { start: 0.05, end: 0.14 }, alpha: { start: 0.3, end: 0 }, lifespan: { min: 1500, max: 2300 }, frequency: 180, rotate: { min: 0, max: 360 },
+            emitCallback: q => { q.onda = Math.random() * 6.28; }
         }).setDepth(prof + 2);
-        this.fumForat.setMask(this.maskForat);
+        this.fumOnda = this.time.addEvent({ delay: 60, loop: true, callback: () => { if (this.fumForat) this.fumForat.forEachAlive(q => { q.x += Math.sin(this.time.now / 380 + (q.onda || 0)) * 0.35; }); } });
     }
 
     // Cada fotograma: la boira del forat s'aparta (només amb la llum i a prop) i deixa veure el pergamí; si no, es tanca
@@ -281,6 +283,7 @@ class ZonaRuines extends ZonaBase {
     treuBoiraForat() {
         (this.nuvolsForat || []).forEach(n => { this.tweens.killTweensOf(n); this.tweens.add({ targets: n, alpha: 0, duration: 900, onComplete: () => n.destroy() }); });
         this.nuvolsForat = null;
+        if (this.fumOnda) { this.fumOnda.remove(); this.fumOnda = null; }
         if (this.fumForat) { this.fumForat.stop(); const f = this.fumForat; this.time.delayedCall(4500, () => f.destroy()); this.fumForat = null; }
     }
 
