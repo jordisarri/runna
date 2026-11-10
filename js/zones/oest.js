@@ -95,7 +95,7 @@ class ZonaRovellonera extends ZonaBase {
         bolets.forEach(([x, y]) => this.enemic('bolet', x, y));
         escolo.forEach(([x, y]) => this.enemic('escolopendra', x, y));
 
-        this.boira(800, 550, 700, 300, 1.2);
+        this.boiraAmbient(800, 550, 700, 300, 1.2);
         this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a30, 0.14).setScrollFactor(0).setDepth(90000);
     }
 
@@ -289,7 +289,7 @@ class ZonaCamiRov extends ZonaBase {
         [[2400, 320], [1500, 670], [1000, 660], [450, 1210]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         [[2100, 620], [1200, 460], [700, 1060]].forEach(([x, y]) => this.enemic('bolet', x, y));
 
-        this.boira(900, 900, 400, 160, 1);
+        this.boiraAmbient(900, 900, 400, 160, 1);
         this.sortida(2786, 240, 14, 140, 'ZonaEra', 'rovellonera');
         this.sortida(0, 1160, 14, 140, 'ZonaRovellonera', 'cami');
         this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a30, 0.1).setScrollFactor(0).setDepth(90000);
@@ -805,8 +805,8 @@ class ZonaDolmen extends ZonaBase {
             x: { min: -260, max: 260 }, y: { min: -260, max: 260 }, speedX: { min: -6, max: 6 }, speedY: { min: -10, max: 4 }, lifespan: 4000,
             scale: { start: 0.25, end: 0 }, alpha: { start: 0.8, end: 0 }, tint: [0xfff2b0, 0xffffff], frequency: 160, blendMode: 'ADD'
         }).setDepth(9501);
-        this.boira(cx, 1700, 300, 400, 0.8);
-        this.boira(200, baixY + 60, 300, 120, 0.5);
+        this.boiraAmbient(cx, 1700, 300, 400, 0.8);
+        this.boiraAmbient(200, baixY + 60, 300, 120, 0.5);
 
         // Animalons quiets al voltant del dolmen (s'escapen quan t'hi acostes): dos ocells damunt la llosa
         this.animals = [['conill', -170, 50, 0], ['conill', 160, 80, 0], ['esquirol', -230, 10, 0], ['esquirol', 220, 20, 0], ['ocell', -90, -200, 1], ['ocell', 110, -195, 1]]

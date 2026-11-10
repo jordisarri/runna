@@ -69,7 +69,7 @@ class ZonaPlaca extends ZonaBase {
         // --- Reixes del terra per on surt la boira ---
         [[600, 625], [870, 975]].forEach(([x, y]) => {          // (la de davant del Germà Aldreu s'ha tret)
             this.posar('reixa', x, y, { fonsY: -900 });
-            this.boira(x, y - 14, 40, 10, 0.8);
+            this.boiraAmbient(x, y - 14, 40, 10, 0.8);
         });
 
         // --- Personatges ---

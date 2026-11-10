@@ -89,7 +89,7 @@ class ZonaCamiCirosa extends ZonaBase {
         // Flors de pastura i pedres a la vora del camí
         [[640, 1990], [340, 1650], [940, 1330], [440, 1180], [1000, 650], [560, 620], [430, 250], [640, 150]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
 
-        this.boira(700, 1400, 500, 120, 0.8);
+        this.boiraAmbient(700, 1400, 500, 120, 0.8);
         this.sortida(620, 2186, 160, 14, 'ZonaTiller', 'cirosa');
         this.sortida(500, 0, 160, 14, 'ZonaCirosa', 'cami');
         this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x3a1a55, net ? 0 : 0.09).setScrollFactor(0).setDepth(90000);

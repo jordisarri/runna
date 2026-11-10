@@ -53,6 +53,31 @@ function nivellBoira() {
     return 1 - (1 - BOIRA_MINIM) * fets / BOIRA_PASSOS.length;
 }
 
+// La boira no és igual a tot arreu: neix al Santuari (Plaça i Monestir, la més espessa), és forta als llocs on hi ha un focus (Bassadòria, Cementiri, Cirosa, Dolmen),
+// més fluixa als camins llunyans i gairebé inexistent als llocs protegits (el Gran Til·ler, la cabana de la Jauneta). dens: multiplicador de l'espessor; neta/resta: quan
+// s'ha resolt el seu focus, la boira d'aquella zona baixa a `resta` (fracció del nivell general) sense esperar que marxi la resta. L'Ocellaire vençut ho esborra tot.
+const BOIRA_ZONES = {
+    ZonaPlaca: { dens: 1.8 }, ZonaMonestir: { dens: 1.8 }, ZonaEsglesia: { dens: 1.5 }, ZonaCasaGran: { dens: 1.4 },
+    ZonaRuines: { dens: 1.3 }, ZonaCellerFora: { dens: 1.3 },
+    ZonaCreu: { dens: 1.6, neta: E => E.flag('bassadoriaNeta'), resta: 0.25 },                       // la Bassadòria: neta amb el Cant de l'Aurora
+    ZonaCementiri: { dens: 1.6, neta: E => E.flag('tombaSegellada'), resta: 0.25 },                 // la tomba segellada
+    ZonaCamiCirosa: { dens: 1.3, neta: E => E.flag('pastorVencut'), resta: 0.3 },                   // el Pastor de Boira vençut
+    ZonaCirosa: { dens: 1.3, neta: E => E.flag('pastorVencut'), resta: 0.3 },
+    ZonaDolmen: { dens: 1.5, neta: E => E.flag('boiraDolmenNeta'), resta: 0.3 },                    // l'Estel de Sant Llorenç
+    ZonaBosc: { dens: 1.2, neta: E => E.flag('fontNeta'), resta: 0.3 },                             // la Font del Bisbe neta
+    ZonaBoscPi: { dens: 1.0, neta: E => E.flag('piObert'), resta: 0.3 },                            // el pi desperta
+    ZonaJardi: { dens: 0.8, neta: E => E.flag('mongesTrobades'), resta: 0.35 },                     // l'Hostatgeria, quan les sacerdotesses són lliures
+    ZonaCelles: { dens: 1.0 }, ZonaTaverna: { dens: 1.0 }, ZonaCami: { dens: 1.0 }, ZonaCamiRov: { dens: 0.9 }, ZonaRovellonera: { dens: 0.9 },
+    ZonaErmita: { dens: 0.8 }, ZonaEra: { dens: 0.8 }, ZonaGabriel: { dens: 0.6 }, ZonaDipositos: { dens: 0.6 }, ZonaSantAntoni: { dens: 0.6 }, ZonaJordi: { dens: 0.6 },
+    ZonaTiller: { dens: 0.4 }, ZonaCabana: { dens: 0.4 }                                              // llocs protegits: l'aire gairebé net
+};
+function nivellBoiraZona(clau) {
+    let v = nivellBoira();
+    const z = BOIRA_ZONES[clau];
+    if (v > 0 && z && z.neta && z.neta(Estat)) v *= (z.resta == null ? 0.3 : z.resta);
+    return v;
+}
+
 // Un punt interactiu sense res a dir (diàleg buit i sense efecte) no és interactiu. Només es mira als diàlegs del registre DIALEGS (funcions pures
 // de l'estat): les funcions que fan alguna cosa en cridar-les (girar un engranatge, el volant de l'Home del Raïm...) no s'han d'executar mai per mirar-ho.
 let _dialegsPurs = null;
@@ -1145,7 +1170,7 @@ class ZonaBase extends Phaser.Scene {
     // Si una missió es resol dins de la mateixa zona, es veu com la boira s'aclareix. config.densitatBoira: més espessa a prop d'on neix.
     posarBoiraGeneral() {
         if (this.esInterior() || this.config.senseBoira) return;
-        const dens = this.config.densitatBoira || 1;
+        const dens = (BOIRA_ZONES[this.scene.key] || {}).dens || this.config.densitatBoira || 1;
         const W = AMPLE / ZOOM_CAMERA + 4, H = (ALT - ALT_HUD) / ZOOM_CAMERA + 4, CY = (ALT - ALT_HUD) / 2;      // la càmera mira per una finestra més baixa que el llenç (sota el HUD): el centre és el d'aquesta finestra
         const parts = [];                                               // { o, alfa }: el que val cada peça amb la boira al màxim
         const vel = this.add.rectangle(AMPLE / 2, CY, W, H, 0x3a1a55, 1).setScrollFactor(0).setDepth(90000).setAlpha(0);
@@ -1159,16 +1184,22 @@ class ZonaBase extends Phaser.Scene {
                 this.tweens.add({ targets: b, x: x + (i % 2 ? 60 : -60), duration: 9000 + i * 1300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
             }
         }
-        let nivell = nivellBoira(), objectiu = nivell, tw = null;
+        let nivell = nivellBoiraZona(this.scene.key), objectiu = nivell, tw = null;
         const posa = v => { nivell = v; parts.forEach(p => p.o.setAlpha(p.alfa * v)); };
         posa(nivell);
         this.time.addEvent({ delay: 700, loop: true, callback: () => {
-            const n = nivellBoira();
+            const n = nivellBoiraZona(this.scene.key);
             if (Math.abs(n - objectiu) < 0.001) return;
             objectiu = n;
             if (tw) tw.stop();
             tw = this.tweens.addCounter({ from: nivell, to: n, duration: 4000, onUpdate: c => posa(c.getValue()) });
         } });
+    }
+
+    // Boira ambient d'un exterior: com `boira`, però més o menys espessa segons el nivell de la zona (BOIRA_ZONES) i, si ja n'hi ha molt poca, no se'n posa
+    boiraAmbient(x, y, ample, alt, quantitat = 1, to = null) {
+        const q = quantitat * nivellBoiraZona(this.scene.key) * (((BOIRA_ZONES[this.scene.key] || {}).dens) || 1);
+        return q < 0.08 ? null : this.boira(x, y, ample, alt, q, to);
     }
 
     boira(x, y, ample = 120, alt = 40, quantitat = 1, to = null) {

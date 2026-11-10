@@ -1256,7 +1256,7 @@ class ZonaBosc extends ZonaBase {
             x: { min: -230, max: 230 }, y: { min: -120, max: 60 }, speedX: { min: -8, max: 8 }, speedY: { min: -14, max: -3 }, lifespan: 3200,
             scale: { start: 0.28, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xbaffb0, 0xf2ffc0], frequency: 260, blendMode: 'ADD'
         }).setDepth(AY + 2);
-        this.boira(AX, AY - 20, 300, 60, 0.5);
+        this.boiraAmbient(AX, AY - 20, 300, 60, 0.5);
 
         // Herbes de la Nit de Sant Joan (la tercera ofrena de la font és una pruna de la Prunera): cal trobar-les entre els arbres. Cada una és en una clariana, més gran que abans,
         // amb un halo a terra, espurnes i una columna de llum tènue que es veu per sobre de les copes.

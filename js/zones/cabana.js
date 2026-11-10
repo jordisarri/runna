@@ -92,7 +92,7 @@ class ZonaCabana extends ZonaBase {
         this.portaAnimada({ x: 800, top: cT + cabana.displayHeight * 0.58, bottom: 590 - 11, ample: 76, fons: 570, unic: true, retall: cabana });   // la porta de taulons del gràfic, que s'obre
         this.posar('olla', 1000, 660, { col: { w: 50, h: 20 } });
         this.add.circle(1000, 600, 55, 0x9ae060, 0.12).setDepth(660);
-        this.boira(790, 300, 140, 60, 0.5);
+        this.boiraAmbient(790, 300, 140, 60, 0.5);
         this.add.circle(740, 620, 40, 0xc6f090, 0.1).setDepth(595);          // la llum del farol de la porta
 
         // Llenya, barrils d'aigua de pluja i el tronc de picar, a prop de la façana

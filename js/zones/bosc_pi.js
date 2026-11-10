@@ -108,8 +108,8 @@ class ZonaBoscPi extends ZonaBase {
         // Enemics: només fora de la clariana, a banda i banda del pi
         [[2450, 330], [2150, 640], [700, 620], [350, 580]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
         [[2300, 760], [2450, 520], [550, 760]].forEach(([x, y]) => this.enemic('bolet', x, y));
-        this.boira(2200, 640, 360, 80, 0.8);
-        this.boira(500, 640, 360, 80, 0.8);
+        this.boiraAmbient(2200, 640, 360, 80, 0.8);
+        this.boiraAmbient(500, 640, 360, 80, 0.8);
 
         // La placa de pedra, davant el pi: explica què cal fer. Un cop llegida (i amb la tarota), s'obre la tarota per tocar els cants; la tarota només
         // funciona aquí, a prop de la placa. Des de l'oest de la barrera, només s'hi pot llegir què passa.

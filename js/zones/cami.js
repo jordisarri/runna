@@ -43,8 +43,8 @@ class ZonaCami extends ZonaBase {
         this.copes.filter(img => img.y === 930 && (img.x < 200 || img.x > 2600)).forEach(img => img.destroy());
         this.copes = this.copes.filter(img => img.active);
         [[40, 950], [170, 950], [2630, 950], [2760, 950]].forEach(([x, y]) => this.posar('arbre', x, y, { escala: 0.55, col: { w: 1, h: 1, fix: true } }));
-        this.boira(900, 450, 400, 80, 1);
-        this.boira(1900, 450, 400, 80, 1);
+        this.boiraAmbient(900, 450, 400, 80, 1);
+        this.boiraAmbient(1900, 450, 400, 80, 1);
 
         this.sortida(2786, 380, 14, 140, 'ZonaRuines', 'cami');
         this.sortida(0, 380, 14, 140, 'ZonaErmita', 'cami');
