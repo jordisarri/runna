@@ -92,22 +92,24 @@ class ZonaRuines extends ZonaBase {
         // Pedres caigudes davant i, a ponent, carreus escampats de l'església que mai no es va acabar
         [[570, 650, 0.6], [1190, 655, 0.5], [90, 700, 0.8], [120, 760, 0.55], [60, 1040, 0.7], [260, 640, 0.5], [60, 560, 0.65]]
             .forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 60 * e, h: 22 * e } }));
-        // L'escletxa entre els carreus del mur: fornícula de pedra fosca
-        const esc = this.add.graphics().setDepth(578);
-        esc.fillStyle(0x15110d, 0.95).fillRoundedRect(982, 556, 36, 44, { tl: 18, tr: 18, bl: 4, br: 4 });
-        esc.lineStyle(2, 0x3d352b, 1).strokeRoundedRect(982, 556, 36, 44, { tl: 18, tr: 18, bl: 4, br: 4 });
-        esc.fillStyle(0x0a0705, 0.7).fillRect(985, 558, 30, 20);
-
-        // El pergamí partit dins l'escletxa: només es revela si portes el Llum d'en Mamet
+        // Una pedra grossa a terra, al peu del mur: tapa un forat. Es pot empènyer (sense guants) i, a sota, hi ha un forat fosc; el pergamí partit només s'hi veu amb el Llum d'en Mamet
+        const HX = 1000, HY = 624, mogutR = Estat.flag('pedraRunes');
+        const forat = this.add.graphics().setDepth(-880);
+        forat.fillStyle(0x000000, 0.35).fillEllipse(HX, HY + 4, 82, 34);
+        forat.fillStyle(0x0b0806, 1).fillEllipse(HX, HY, 70, 26);
+        forat.fillStyle(0x000000, 1).fillEllipse(HX, HY + 2, 52, 16);
+        forat.lineStyle(2.5, 0x3a2f24, 1).strokeEllipse(HX, HY, 70, 26);
+        this.pedraForat = this.posar('roca', mogutR ? HX + 100 : HX, HY + 8, { escala: 0.95, col: { w: 80, h: 26 } });
+        this.colPedraForat = this.obstacles.getChildren()[this.obstacles.getChildren().length - 1];
         if (!Estat.flag('fragment1')) {
-            if (Estat.te('llanterna')) {
-                // El Llum d'en Mamet il·lumina la fosca de l'escletxa i en revela el pergamí
-                this.llumNinxol = this.add.circle(1000, 578, 44, 0xffd270, 0.22).setDepth(579).setBlendMode('ADD');
-                this.pergamiRunes = this.posar('pergami_partit', 1000, 584, { fonsY: 605, escala: 0.72 });
-                this.pergamiBrill = this.add.circle(1000, 570, 36, 0xffe8a0, 0.28).setDepth(604).setBlendMode('ADD');
+            if (mogutR && Estat.te('llanterna')) {
+                // El Llum d'en Mamet il·lumina el forat i en revela el pergamí
+                this.llumNinxol = this.add.circle(HX, HY - 4, 44, 0xffd270, 0.22).setDepth(-870).setBlendMode('ADD');
+                this.pergamiRunes = this.posar('pergami_partit', HX, HY + 6, { fonsY: HY + 20, escala: 0.72 });
+                this.pergamiBrill = this.add.circle(HX, HY - 12, 36, 0xffe8a0, 0.28).setDepth(HY + 40).setBlendMode('ADD');
                 this.tweens.add({ targets: this.pergamiBrill, alpha: 0.08, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
             }
-            this.interactiu(1000, 620, RADI_OBJECTE, DIALEGS.ruines, { altura: 60, actiu: () => !Estat.flag('fragment1') });
+            this.interactiu(HX + 6, HY + 46, RADI_OBJECTE + 10, DIALEGS.ruines, { altura: 70, actiu: () => !Estat.flag('fragment1') });
         } else if (!Estat.te('fragment1')) Estat.dona('fragment1');          // partides desades d'abans del pergamí físic
 
         // L'ombra del monjo: projectada al mur a l'esquerra del portal de les runes (dividida en franges horitzontals per a l'efecte d'ondulació espectral)
@@ -143,6 +145,27 @@ class ZonaRuines extends ZonaBase {
     }
 
     // El pergamí vola cap a l'Ineu i passa al sarró
+    // L'Ineu empeny la pedra que tapa el forat: llisca cap a la dreta i deixa el forat a la vista (pols)
+    mouPedraRunes(fet) {
+        const r = this.pedraForat, HX = 1000;
+        Estat.posaFlag('pedraRunes');
+        if (this.colPedraForat) { this.obstacles.remove(this.colPedraForat, true, true); this.colPedraForat = null; }
+        Sfx.pas(true); this.cameras.main.shake(300, 0.002);
+        const pols = this.boira(r.x, r.y - 6, 70, 14, 3, 0xcfc4b0);
+        this.tweens.add({ targets: [r, pols], x: HX + 100, duration: 1200, ease: 'Sine.easeInOut', onComplete: () => {
+            pols.stop(); this.time.delayedCall(1200, () => pols.destroy());
+            this.colisio(HX + 100, r.y - 13, 80, 26);
+            Estat.desar();
+            if (Estat.te('llanterna') && !Estat.flag('fragment1')) {            // amb el Llum d'en Mamet, al forat s'hi veu el pergamí
+                this.llumNinxol = this.add.circle(HX, 620, 44, 0xffd270, 0.22).setDepth(-870).setBlendMode('ADD');
+                this.pergamiRunes = this.posar('pergami_partit', HX, 630, { fonsY: 644, escala: 0.72 });
+                this.pergamiBrill = this.add.circle(HX, 612, 36, 0xffe8a0, 0.28).setDepth(700).setBlendMode('ADD');
+                this.tweens.add({ targets: this.pergamiBrill, alpha: 0.08, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
+            }
+            fet();
+        } });
+    }
+
     agafarPergamiRunes(fet) {
         const s = this.pergamiRunes;
         if (!s) { fet(); return; }

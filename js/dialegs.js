@@ -378,21 +378,27 @@ const DIALEGS = {
     }),
 
     // ---------------- RUÏNES I PING-PONG ----------------
-    ruines: E => E.te('llanterna') ? ({
-        pagines: [
-            { qui: 'Ineu', text: "El Llum d'en Mamet forada la tenebra de l'escletxa... Entre els carreus caiguts hi ha un full amagat!" },
-            { qui: 'Pergamí', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de l'espasa Runna i la va deixar dormint a la pedra. Després va amagar la clau de la porta allà on ningú no la trobés.\nL'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.»" },
-            { fer: (z, fet) => z.agafarPergamiRunes ? z.agafarPergamiRunes(fet) : fet() },
-            { qui: 'Ineu', text: "El pergamí s'acaba aquí, però diu que l'altra meitat és sota clau, al sagrari de l'església. I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." },
-            { fer: (z, fet) => z.aparicioOmbra ? z.aparicioOmbra(fet) : fet() },
-            { qui: 'Ineu', text: "Ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts." }
-        ],
-        enAcabar: () => { E.posaFlag('fragment1'); E.posaObjectiu("Segons el pergamí, l'altra meitat és sota clau al sagrari de l'església, al Santuari. El Pare Daimiel en sabrà alguna cosa."); }
-    }) : ({
-        pagines: [
-            { qui: 'Ineu', text: "Entre els carreus del mur hi ha una escletxa fonda. Hi fa una foscor tan espessa que no s'hi distingeix res." }
-        ]
-    }),
+    ruines: E => {
+        if (!E.flag('pedraRunes')) return {
+            pagines: [
+                { qui: 'Ineu', text: "(Una pedra grossa, enfonsada a terra just al peu del mur. Sota seu hi ha alguna cosa: se n'ha escapat un corrent d'aire fred. Potser la puc empènyer.)" },
+                { fer: (z, fet) => z.mouPedraRunes ? z.mouPedraRunes(fet) : fet() },
+                { qui: 'Ineu', text: E.te('llanterna') ? "(Un forat fosc! Amb el Llum d'en Mamet s'hi veu alguna cosa...)" : "(Hi ha un forat negre, fonda i espessa. Sense llum no s'hi veu res: hauré de tornar amb alguna cosa que il·lumini.)" }
+            ]
+        };
+        if (!E.te('llanterna')) return { pagines: [{ qui: 'Ineu', text: "(El forat és tan negre que no s'hi distingeix res. Em cal una llum.)" }] };
+        return {
+            pagines: [
+                { qui: 'Ineu', text: "El Llum d'en Mamet forada la tenebra del forat... Al fons hi ha un full amagat!" },
+                { qui: 'Pergamí', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de l'espasa Runna i la va deixar dormint a la pedra. Després va amagar la clau de la porta allà on ningú no la trobés.\nL'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.»" },
+                { fer: (z, fet) => z.agafarPergamiRunes ? z.agafarPergamiRunes(fet) : fet() },
+                { qui: 'Ineu', text: "El pergamí s'acaba aquí, però diu que l'altra meitat és sota clau, al sagrari de l'església. I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." },
+                { fer: (z, fet) => z.aparicioOmbra ? z.aparicioOmbra(fet) : fet() },
+                { qui: 'Ineu', text: "Ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts." }
+            ],
+            enAcabar: () => { E.posaFlag('fragment1'); E.posaObjectiu("Segons el pergamí, l'altra meitat és sota clau al sagrari de l'església, al Santuari. El Pare Daimiel en sabrà alguna cosa."); }
+        };
+    },
 
     cartellRuinesPingpong: E => ({ pagines: [{ qui: 'Cartell', text: "← Camí de la Desaparició\n→ Cementiri\n↑ Cel·les\n↓ El Celler i la Plaça" }] }),
     cartellCeller: E => ({ pagines: [{ qui: 'Cartell', text: "← El Celler (ping-pong)\n→ Sala de les Gírgoles\n↑ Les Runes\n↓ Plaça" }] }),
