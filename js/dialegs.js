@@ -388,11 +388,6 @@ const DIALEGS = {
 
     // ---------------- RUÏNES I PING-PONG ----------------
     ruines: E => {
-        if (!E.flag('pedraRunes')) return {
-            pagines: [
-                { qui: 'Ineu', text: "(Una pedra grossa, enfonsada a terra just al peu del mur. Sota seu hi ha alguna cosa: se n'ha escapat un corrent d'aire fred. Si m'hi recolzo i l'empenyo, potser cedirà.)" },
-            ]
-        };
         if (!E.te('llanterna')) return { pagines: [{ qui: 'Ineu', text: "(Hi ha massa fosc: del forat només surt un corrent d'aire fred i no s'hi distingeix res. Em cal una llum.)" }] };
         return {
             pagines: [

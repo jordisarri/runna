@@ -106,11 +106,9 @@ class ZonaRuines extends ZonaBase {
         this.colPedraForat = this.colisio(px, py - 13, 80, 26);
         this.pedraEmpenta = 0; this.pedraDir = null;
         if (!Estat.flag('fragment1')) {
-            if (mogutR && Estat.te('llanterna')) {
-                // El Llum d'en Mamet il·lumina el forat i en revela el pergamí
-                this.mostraPergamiForat();
-            }
-            this.interactiu(HX + 6, HY + 46, RADI_OBJECTE + 10, DIALEGS.ruines, { altura: 70, actiu: () => !Estat.flag('fragment1') });
+            this.crearBoiraForat();
+            // (La pedra no té cap punt d'interacció: només s'empeny. El forat, un cop destapat, en té un.)
+            this.interactiu(HX + 6, HY + 46, RADI_OBJECTE + 10, DIALEGS.ruines, { altura: 70, actiu: () => Estat.flag('pedraRunes') && !Estat.flag('fragment1') });
         } else if (!Estat.te('fragment1')) Estat.dona('fragment1');          // partides desades d'abans del pergamí físic
 
         // L'ombra del monjo: projectada al mur a l'esquerra del portal de les runes (dividida en franges horitzontals per a l'efecte d'ondulació espectral)
@@ -171,8 +169,9 @@ class ZonaRuines extends ZonaBase {
     // va cap a on s'empeny, al ritme de l'Ineu, i no relliscar-hi pels costats. S'atura contra qualsevol obstacle. Quan el forat queda a la vista, el pou es revela.
     actualitzarPedres(delta) {
         super.actualitzarPedres(delta);
+        this.actualitzaBoiraForat(delta);
         const r = this.pedraForat, col = this.colPedraForat;
-        if (!r || !col || !this.ineu) return;
+        if (!r || !col || !this.ineu || Estat.flag('pedraRunes')) return;          // un cop destapat el forat, la pedra ja no es mou més
         const b = this.ineu.body, I = this.intent || { x: 0, y: 0 }, c = col.body, M = 14, MARGE = 0.3, MANTENIR = 0.12;
         const entreY = b.bottom > c.top - 10 && b.top < c.bottom + 10, entreX = b.right > c.left - 14 && b.left < c.right + 14;
         const costats = [
@@ -212,7 +211,6 @@ class ZonaRuines extends ZonaBase {
             const q = o.body;
             if (e < q.right && d > q.left && t < q.bottom && f > q.top) return false;
         }
-        if (Estat.flag('pedraRunes') && this.foratTapat(x, y)) return false;
         return true;
     }
 
@@ -228,22 +226,57 @@ class ZonaRuines extends ZonaBase {
         Estat.posaFlag('pedraRunesPos', Math.round(this.pedraForat.x) + ',' + Math.round(this.pedraForat.y));
         const HX = this.HX, HY = this.HY;
         Sfx.secret();
+        this.pedraDir = null; this.ineu.body.setVelocity(0, 0);
+        (this.nuvolsForat || []).forEach(n => n.setDepth(HY + 12)); if (this.fumForat) this.fumForat.setDepth(HY + 14);      // ara la boira surt per davant
         const pols = this.boira(HX, HY, 60, 12, 3, 0xcfc4b0);
         this.time.delayedCall(900, () => { pols.stop(); this.time.delayedCall(1200, () => pols.destroy()); });
         Estat.desar();
-        if (Estat.te('llanterna') && !Estat.flag('fragment1')) {
-            this.mostraPergamiForat();
-        }
     }
 
-    // Amb el Llum d'en Mamet, al fons del forat s'entreveu el pergamí: petit, apagat, dins la fosca, amb una llum fluixa que bategueja. (Es pot agafar interactuant-hi.)
-    mostraPergamiForat() {
+    // Del forat en surt una boira lila que el tapa del tot: no s'hi veu res. Amb el Llum d'en Mamet, quan l'Ineu s'hi acosta la boira s'aparta i s'entreveu el
+    // pergamí al fons, petit i apagat; si s'allunya, la boira torna a tancar-se. (La boira surt ja de sota la pedra, abans de destapar el forat.)
+    crearBoiraForat() {
         const HX = this.HX, HY = this.HY;
-        this.llumNinxol = this.add.circle(HX, HY + 4, 30, 0xffd270, 0.12).setDepth(-870).setBlendMode('ADD');
+        this.apartForat = 0;
+        this.llumNinxol = this.add.circle(HX, HY + 4, 30, 0xffd270, 1).setAlpha(0).setDepth(-870).setBlendMode('ADD');
         this.pergamiRunes = this.posar('pergami_partit', HX, HY + 5, { fonsY: -869, escala: 0.4 });
-        this.pergamiRunes.setAlpha(0.6).setTint(0xb0a088);
-        this.pergamiBrill = this.add.circle(HX, HY + 2, 18, 0xffe8a0, 0.16).setDepth(-868).setBlendMode('ADD');
-        this.tweens.add({ targets: this.pergamiBrill, alpha: 0.04, scale: 1.25, yoyo: true, repeat: -1, duration: 1100 });
+        this.pergamiRunes.setAlpha(0).setTint(0xb0a088);
+        this.pergamiBrill = this.add.circle(HX, HY + 2, 18, 0xffe8a0, 1).setAlpha(0).setDepth(-868).setBlendMode('ADD');
+        const tons = [0xe6d4ff, 0xd8c0fa, 0xcfb0f4, 0xf0e4ff];
+        this.nuvolsForat = [];
+        const prof = Estat.flag('pedraRunes') ? HY + 12 : 600;                              // abans de destapar-lo, la pedra (a davant) tapa la boira: només n'esguita per les vores
+        for (let i = 0; i < 12; i++) {
+            const e = (0.22 + Math.random() * 0.14), x = HX + (Math.random() - 0.5) * 48, y = HY + (Math.random() - 0.5) * 14;
+            const im = this.add.image(x, y, 'boira_nuvol').setTint(tons[i % 4]).setScale(e * 1.25, e * 0.9).setAngle(Math.random() * 360).setDepth(prof);
+            im.base = 0.8 + Math.random() * 0.18; im.setAlpha(im.base);
+            this.tweens.add({ targets: im, x: x + (Math.random() - 0.5) * 24, y: y - 4 - Math.random() * 8, angle: im.angle + (Math.random() < 0.5 ? 40 : -40), duration: 2600 + Math.random() * 1800, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+            this.nuvolsForat.push(im);
+        }
+        this.fumForat = this.add.particles(HX, HY - 4, 'boira_nuvol', {                     // volves lila clar que pugen i s'esfumen
+            tint: [0xe6d4ff, 0xd8c0fa, 0xf0e4ff], x: { min: -24, max: 24 }, y: { min: -5, max: 5 }, speedX: { min: -8, max: 8 }, speedY: { min: -26, max: -8 },
+            scale: { start: 0.09, end: 0.22 }, alpha: { start: 0.5, end: 0 }, lifespan: { min: 2200, max: 3600 }, frequency: 420, rotate: { min: 0, max: 360 }
+        }).setDepth(prof + 2);
+    }
+
+    // Cada fotograma: la boira del forat s'aparta (només amb la llum i a prop) i deixa veure el pergamí; si no, es tanca
+    actualitzaBoiraForat(delta) {
+        if (!this.nuvolsForat || !this.ineu) return;
+        const HX = this.HX, HY = this.HY, I = this.ineu;
+        const aprop = Estat.flag('pedraRunes') && Estat.te('llanterna') && Phaser.Math.Distance.Between(I.x, I.y, HX, HY) < 150;
+        this.apartForat += ((aprop ? 1 : 0) - this.apartForat) * Math.min(1, delta / 350);
+        const t = this.apartForat;
+        this.nuvolsForat.forEach(n => n.setAlpha(n.base * (1 - 0.88 * t)));
+        if (this.fumForat) this.fumForat.setAlpha(1 - 0.85 * t);
+        if (this.pergamiRunes) this.pergamiRunes.setAlpha(0.6 * t);
+        if (this.llumNinxol) this.llumNinxol.setAlpha(0.12 * t);
+        if (this.pergamiBrill) this.pergamiBrill.setAlpha(t * (0.12 + 0.05 * Math.sin(this.time.now / 300)));
+    }
+
+    // Es treu la boira del forat (el pergamí ja és a l'Ineu)
+    treuBoiraForat() {
+        (this.nuvolsForat || []).forEach(n => { this.tweens.killTweensOf(n); this.tweens.add({ targets: n, alpha: 0, duration: 900, onComplete: () => n.destroy() }); });
+        this.nuvolsForat = null;
+        if (this.fumForat) { this.fumForat.stop(); const f = this.fumForat; this.time.delayedCall(4500, () => f.destroy()); this.fumForat = null; }
     }
 
     agafarPergamiRunes(fet) {
@@ -252,6 +285,7 @@ class ZonaRuines extends ZonaBase {
         Sfx.objecte();
         if (this.pergamiBrill) { this.pergamiBrill.destroy(); this.pergamiBrill = null; }
         if (this.llumNinxol) { this.llumNinxol.destroy(); this.llumNinxol = null; }
+        this.treuBoiraForat();
         this.ajupir('ineu', null, 300);
         this.tweens.add({ targets: s, x: this.ineu.x, y: this.ineu.y - 70, scale: s.scale * 0.5, alpha: 0.2, duration: 650, ease: 'Sine.easeIn', onComplete: () => {
             s.destroy(); this.pergamiRunes = null;
