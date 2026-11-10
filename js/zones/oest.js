@@ -1111,6 +1111,8 @@ class ZonaDolmen extends ZonaBase {
         cam.flash(700, 255, 255, 255);
         cam.shake(450, 0.008);
         const punta = { x: I.x + 7, y: I.y - 177 };
+        // La càmera baixa: la punta de l'espasa ha de quedar per sota del rètol (i es continua veient el dolmen i la placa)
+        { const H = ALT - ALT_HUD, T = ALT * 0.3 + 150; this.enquadrar(punta.x, punta.y, cam.zoom, 900, null, H - 2 * T); }
         const fosc = this.add.rectangle(sx, sy - 400, 4000, 4000, 0x06081a, 1).setDepth(sy + 4).setAlpha(0);
         this.tweens.add({ targets: fosc, alpha: 0.4, duration: 600 });
         // Línies de llum blanca que surten de la punta de l'espasa i giren a poc a poc
@@ -1132,6 +1134,7 @@ class ZonaDolmen extends ZonaBase {
         ui.tweens.add({ targets: t1, scale: { from: 0.8, to: 1 }, duration: 900, ease: 'Back.easeOut' });
         const alClic = () => {
             const coses = [raigs, halo, fosc];
+            this.alliberarCamera(900);
             this.tweens.killTweensOf(halo);
             this.tweens.add({ targets: coses, alpha: 0, duration: 700, onComplete: () => coses.forEach(o => o.destroy()) });
             ui.tweens.add({ targets: [t1, t2], alpha: 0, duration: 700, onComplete: () => { t1.destroy(); t2.destroy(); } });
