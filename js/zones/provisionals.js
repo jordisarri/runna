@@ -205,7 +205,13 @@ class ZonaEsglesia extends ZonaBase {
                 { qui: 'Pare Daimiel', text: "Sents el campanar, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu." },
                 ...(hi('carry') ? [{ qui: 'Carry', text: "El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill." }] : [])
             ] : []),
-            { qui: 'Pare Jordà', text: 'Benvingut a casa, Ineu.' },
+            // L'Ineu explica al Pare Jordà què ha passat amb l'Aldreu, i el prior tanca l'epíleg
+            { qui: 'Ineu', text: "Pare Jordà... el Germà Aldreu no ha tornat. Es va quedar amb el Mestre, sota terra, i la gàbia se'l va tancar a dins." },
+            { qui: 'Pare Jordà', text: "L'Aldreu... dins la gàbia?" },
+            { fer: (z, fet) => z.seq([f => z.bombolla('pare_jordi', '…', f, 1300)], fet) },        // sospira i mira cap al terra
+            { qui: 'Pare Jordà', text: "Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller." },
+            { qui: 'Pare Jordà', text: "Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més." },
+            { qui: 'Pare Jordà', text: "Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill." },
             { fer: (z, fet) => {
                 z.posarDireccio('avall', false);
                 z.seq([

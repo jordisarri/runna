@@ -76,7 +76,7 @@ const ANALISI = (zonaKey) => {
         p.on('pageerror', e => errors.push({ zona: zonaAra, tipus: 'pageerror', msg: e.message.slice(0, 200) }));
         p.on('console', m => { if (m.type() === 'error') errors.push({ zona: zonaAra, tipus: 'console', msg: m.text().slice(0, 200) }); });
         await p.route('**/phaser.min.js*', r => r.fulfill({ path: __dirname + '/../js/lib/phaser.min.js', contentType: 'application/javascript' }));
-        await p.route(/fonts\.(googleapis|gstatic)/, r => r.abort());
+        // (les tipografies són al nostre servidor, assets/fonts: no cal tocar la xarxa)
         await p.goto('http://localhost:8000/?proves&nc=' + Date.now());
         await p.waitForFunction(() => typeof game !== 'undefined' && game.scene.isActive('Titol'), null, { timeout: 120000 });
     };

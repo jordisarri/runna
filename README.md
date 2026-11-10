@@ -26,6 +26,7 @@ Joc web fet amb Phaser 3. Per provar-lo en local: `python serveix.py` i obre `ht
 | `proleg/` | Els cinc vitralls del pròleg. |
 | `musica/` | Cançons: a `art/` els MP3 originals, a `assets/` els M4A. |
 | `video/` | Vídeos de la portada. A `art/video/antics/`, versions descartades. |
+| `fonts/` (només a `assets/`) | Tipografies (Cinzel, Cormorant Garamond, IM Fell English) allotjades al nostre servidor, amb el seu `fonts.css`: el joc no demana res a Google. Es regeneren amb `eines/baixa_tipografies.py`. |
 | `titol/`, `mapa/` | (només a `art/`) logo, portada i esbós del mapa. |
 
 ### L'Ineu

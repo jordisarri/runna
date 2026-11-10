@@ -316,7 +316,7 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 - **Germà Francí**: `germa_francesc`, `germaFrancesc`
 - **Home del Raïm**: `raimDesperta`, `raimDerrotat`
 - **Huri**: `nenGabia`
-- **Ineu**: `bassadoria`, `creu`, `pedraEscolta`, `pedraSecretaOberta`, `faristolOratori`, `pianista`, `pareDaniel`, `sagrari`, `homeRaim`, `ruines`, `pareAlcui`, `ombraMonjo`, `bassadoriaNeta`, `fontSJ`, `alzinaBuida`, `columna`, `taulaPedra`, `altarErmita`, `cofreAltar`, `isidreBase`, `sansa`, `llosaJardi`, `hostatgeria`, `taulaRefetor`, `monjaPains`, `pastorVell`, `aldreuPastor`, `aldreuDerrotat`, `mandu`, `nenaTrenes`, `cofreGabriel`, `telescopiMon`, `estelDiposit`, `boiraDolmen`, `dolmenBaix`, `placaDolmen`, `portaReixa`, `reixaDins`, `cofreCambra`, `botaTresor`, `homeRaimInt`, `jaumeta`, `boiraTiller`, `arrelsTiller`, `cofreManeta`, `tombaMonjos`, `creuCementiri`, `piOest`, `piPlaca`, `piTresCants`, `piHistoria`, `homeRaimInt`, `raimDesperta`, `raimSenseArma`, `jordiCaseta`, `mecanismePorta`, `golfesRellotge`, `golfesNota`, `golfesReparat`, `construir`, `alAtacar`, `masiaTaula`, `masiaEsquelles`, `construir`, `tornRastell`, `pontGabia`, `gabiaGran`, `actualitzar`, `enMelodia`, `iniciarCombatFinal`, `construir`, `construir`, `enEntrar`, `portaTaverna`, `portaSoterrani`, `portaFerro`
+- **Ineu**: `bassadoria`, `creu`, `pedraEscolta`, `pedraSecretaOberta`, `faristolOratori`, `pianista`, `pareDaniel`, `sagrari`, `homeRaim`, `ruines`, `pareAlcui`, `ombraMonjo`, `bassadoriaNeta`, `fontSJ`, `alzinaBuida`, `columna`, `taulaPedra`, `altarErmita`, `cofreAltar`, `isidreBase`, `sansa`, `llosaJardi`, `hostatgeria`, `taulaRefetor`, `monjaPains`, `pastorVell`, `aldreuPastor`, `aldreuDerrotat`, `mandu`, `nenaTrenes`, `cofreGabriel`, `telescopiMon`, `estelDiposit`, `boiraDolmen`, `dolmenBaix`, `placaDolmen`, `portaReixa`, `reixaDins`, `cofreCambra`, `botaTresor`, `homeRaimInt`, `jaumeta`, `boiraTiller`, `arrelsTiller`, `cofreManeta`, `tombaMonjos`, `creuCementiri`, `piOest`, `piPlaca`, `piTresCants`, `piHistoria`, `homeRaimInt`, `raimDesperta`, `raimSenseArma`, `jordiCaseta`, `mecanismePorta`, `golfesRellotge`, `golfesNota`, `golfesReparat`, `construir`, `alAtacar`, `masiaTaula`, `masiaEsquelles`, `construir`, `tornRastell`, `pontGabia`, `gabiaGran`, `actualitzar`, `enMelodia`, `iniciarCombatFinal`, `construir`, `construir`, `ferEpileg`, `enEntrar`, `portaTaverna`, `portaSoterrani`, `portaFerro`
 - **Inscripció**: `taulaPedra`, `creuDesaparicio`, `girgolesInscripcio`, `pontGabia`
 - **Iscu**: `ciscu`, `ferEpileg`
 - **Isílder**: `isidreBase`, `prunera`, `tillerSoparRitual`, `isidre`, `ferEpileg`
@@ -2622,7 +2622,15 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 **Carry:** El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill.
 
-**Pare Jordà:** Benvingut a casa, Ineu.
+**Ineu:** Pare Jordà... el Germà Aldreu no ha tornat. Es va quedar amb el Mestre, sota terra, i la gàbia se'l va tancar a dins.
+
+**Pare Jordà:** L'Aldreu... dins la gàbia?
+
+**Pare Jordà:** Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller.
+
+**Pare Jordà:** Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més.
+
+**Pare Jordà:** Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill.
 
 
 ### enEntrar
