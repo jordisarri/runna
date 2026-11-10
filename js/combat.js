@@ -1170,7 +1170,9 @@ Object.assign(ZonaBase.prototype, {
     },
 
     // El Pastor de Boira té animacions completes de 8 direccions ('pastor_camina') i poses dedicades per a cada acció
+    // Les poses d'atac (apunta, ataca) estan dibuixades més petites que el personatge caminant (uns 155 px d'alt per 235): es compensa amb l'escala
     animaPastor(e, nom, ang) {
+        const ESCALA_POSA = { pastor_apunta: 1.4, pastor_ataca: 1.4 };
         if (!e || !e.spr || !e.spr.active) return false;
         const sp = e.spr;
 
@@ -1194,7 +1196,7 @@ Object.assign(ZonaBase.prototype, {
                 e.animPastor = nom;
                 sp.anims.stop();
                 sp.setTexture(k);
-                sp.setScale(0.58);
+                sp.setScale(0.58 * (ESCALA_POSA[k] || 1));
                 return true;
             }
         }
