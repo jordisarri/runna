@@ -174,12 +174,15 @@ const Joc = {
 
     // La fanfàrria de Runna (jingle_runna) en alçar l'espasa: mentre dura, la música de fons NO se sent (volum 0) i, en acabar, torna. fi() es crida quan la
     // fanfàrria ha acabat (l'escena no es pot passar fins llavors). Si el fitxer no hi és, sona la fanfàrria del joc sintetitzada (el leitmotiv amb orgue).
-    jingleRunna(scene, fi) {
+    // silenci: en acabar la fanfàrria la música de fons NO torna (es queda en silenci fins que qui crida la restableix: Joc.tornaMusica)
+    tornaMusica() { const m = Joc.musica; if (m && m.isPlaying) m.setVolume(0.6); },
+
+    jingleRunna(scene, fi, silenci = false) {
         const m = Joc.musica;
         let acabat = false;
         const acaba = () => {
             if (acabat) return; acabat = true;
-            if (m && Joc.musica === m && m.isPlaying) m.setVolume(0.6);
+            if (!silenci && m && Joc.musica === m && m.isPlaying) m.setVolume(0.6);
             if (fi) fi();
         };
         if (m && m.isPlaying) m.setVolume(0);

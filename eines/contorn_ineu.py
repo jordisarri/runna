@@ -22,6 +22,19 @@ SOLTS = ['aixeca_espasa', 'aixeca_basto', 'aixeca_buit', 'aixeca_tiler']      # 
 CEL = 256
 ORIGINALS = ARREL / 'art' / 'ineu_caminar' / 'sense_contorn'
 
+def alfa_contorn(alfa, gruix):
+    # Silueta = on hi ha dibuix, amb els forats petits tapats (parts translúcides, com la fulla de l'espasa). El negre només va FORA de la silueta i
+    # en la vora de 2 px de dins (perquè els píxels mig transparents del perfil quedin sobre negre); a l'interior no hi va res, així no es veuen línies fosques
+    # sota les zones translúcides.
+    dins = alfa > 24
+    tancat = ndimage.binary_closing(dins, structure=np.ones((3, 3)), iterations=2)
+    tancat = ndimage.binary_fill_holes(tancat | dins)
+    fora = ndimage.distance_transform_edt(~tancat)
+    interior = ndimage.distance_transform_edt(tancat)
+    ring = np.clip(gruix + 0.5 - fora, 0, 1)
+    vora_dins = np.clip(2.5 - interior, 0, 1) * tancat
+    return np.maximum(ring * (~tancat), vora_dins)
+
 def contorn(im, gruix):
     a = np.array(im.convert('RGBA'))
     out = np.zeros_like(a)
@@ -31,11 +44,8 @@ def contorn(im, gruix):
         for c in range(W // CEL):
             ys, xs = slice(r * CEL, (r + 1) * CEL), slice(c * CEL, (c + 1) * CEL)
             cel = a[ys, xs]
-            dins = cel[:, :, 3] > 24
-            dist = ndimage.distance_transform_edt(~dins)                 # distància a la silueta
-            fora = np.clip(gruix + 0.5 - dist, 0, 1)                      # 1 dins el gruix, vora suau d'un píxel
             vora = np.zeros_like(cel)                                     # negre (0,0,0) amb l'alfa del contorn
-            vora[:, :, 3] = (fora * 255).astype(np.uint8)
+            vora[:, :, 3] = (alfa_contorn(cel[:, :, 3], gruix) * 255).astype(np.uint8)
             # el dibuix original per sobre (composició normal alfa)
             base = Image.fromarray(vora, 'RGBA'); top = Image.fromarray(cel, 'RGBA')
             base.alpha_composite(top)
@@ -47,8 +57,7 @@ def contorn_solt(im, gruix):
     a = im.convert('RGBA'); g = gruix + 1
     gran = Image.new('RGBA', (a.width + 2 * g, a.height + 2 * g), (0, 0, 0, 0)); gran.alpha_composite(a, (g, g))
     arr = np.array(gran)
-    dist = ndimage.distance_transform_edt(~(arr[:, :, 3] > 24))
-    vora = np.zeros_like(arr); vora[:, :, 3] = (np.clip(gruix + 0.5 - dist, 0, 1) * 255).astype(np.uint8)
+    vora = np.zeros_like(arr); vora[:, :, 3] = (alfa_contorn(arr[:, :, 3], gruix) * 255).astype(np.uint8)
     base = Image.fromarray(vora, 'RGBA'); base.alpha_composite(gran)
     return base
 

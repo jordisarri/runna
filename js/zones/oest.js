@@ -774,7 +774,7 @@ class ZonaDolmen extends ZonaBase {
             }
         };
         [[140, 1060, 1.2], [260, 1090, 1], [650, 1070, 1.1], [780, 1050, 1.25], [120, 820, 0.9], [790, 840, 1], [330, 960, 0.8], [580, 950, 0.85]].forEach(([x, y, e]) => falguera(x, y, e));
-        [[690, 900, 0.6], [800, 500, 0.55]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 50, h: 18 } }));
+        [[790, 880, 0.6], [800, 500, 0.55]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 50, h: 18 } }));
         for (let n = 0, i = 0; n < 34 && i < 400; i++) {
             const x = 110 + rnd() * 680, y = 520 + rnd() * 520;
             if (Math.abs(x - sx) < 190 && y < sy + 50 && y > sy - 120) continue;            // no damunt del dolmen
@@ -971,7 +971,7 @@ class ZonaDolmen extends ZonaBase {
     posarPujada(lyMon, kD) {
         const { sx, sy } = DOL, vora = lyMon - 44 * kD;
         this.grupLlosa = this.physics.add.staticGroup();
-        const bloc = this.add.zone(sx, (vora - 8 + sy - 40) / 2, 352, sy - 40 - (vora - 8));
+        const bloc = this.add.zone(sx, (vora - 8 + sy - 40) / 2, 336, sy - 40 - (vora - 8));
         this.physics.add.existing(bloc, true); this.grupLlosa.add(bloc);
         // vora: la vora de darrere; dalt..fins: la franja de la cara de dalt on es pot estar (darrere l'espasa); x0..x1: tota l'esquena
         // del bloc (prement cap avall s'hi comença a pujar); esglaons: fins on arriben els esglaons amagats des del mig
@@ -1116,7 +1116,7 @@ class ZonaDolmen extends ZonaBase {
     alcarRunna(fet) {
         const I = this.ineu, cam = this.cameras.main, ui = this.ui(), { sx, sy } = DOL;
         let fanfaraAcabada = false;                                           // fins que no acaba la fanfàrria no es pot passar l'escena
-        Joc.jingleRunna(this, () => { fanfaraAcabada = true; });
+        Joc.jingleRunna(this, () => { fanfaraAcabada = true; }, true);          // en acabar la fanfàrria, silenci fins que es fa clic
         if (this.glowEsp) { this.tweens.killTweensOf(this.glowEsp); this.glowEsp = null; }
         if (this.espClavada) { this.espClavada.destroy(); this.espClavada = null; }
         this.tweens.killTweensOf(this.resplendor); this.resplendor.setAlpha(0);
@@ -1150,18 +1150,15 @@ class ZonaDolmen extends ZonaBase {
         }
         this.tweens.add({ targets: raigs, alpha: 1, duration: 500 });
         this.tweens.add({ targets: raigs, angle: 360, duration: 40000, repeat: -1 });
-        const halo = this.add.circle(punta.x, punta.y, 36, 0xffffff, 0.55).setDepth(84991).setBlendMode('ADD');
-        this.tweens.add({ targets: halo, radius: 62, alpha: 0.25, yoyo: true, repeat: -1, duration: 700, ease: 'Sine.easeInOut' });
-        this.llum(punta.x, punta.y, 0xffffff);
         // El rètol, sobreimprès
         const t1 = ui.add.text(AMPLE / 2, ALT * 0.14, 'RUNNA', { fontFamily: typeof FONT_TITOL !== 'undefined' ? FONT_TITOL : 'Georgia', fontSize: '96px', fontStyle: 'bold', color: '#ffe08a', stroke: '#2a1808', strokeThickness: 10 }).setOrigin(0.5).setDepth(500).setAlpha(0);
         const t2 = ui.add.text(AMPLE / 2, ALT * 0.14 + 86, "l'espasa del Miracle", estilText(36, '#f2e6c8', { fontStyle: 'italic', stroke: '#2a1808', strokeThickness: 6 })).setOrigin(0.5).setDepth(500).setAlpha(0);
         ui.tweens.add({ targets: [t1, t2], alpha: 1, duration: 700 });
         ui.tweens.add({ targets: t1, scale: { from: 0.8, to: 1 }, duration: 900, ease: 'Back.easeOut' });
         const alClic = () => {
-            const coses = [raigs, halo, fosc, davant];
+            const coses = [raigs, fosc, davant];
             this.alliberarCamera(900);
-            this.tweens.killTweensOf(halo);
+            Joc.tornaMusica();                                              // ara sí: torna la música de fons
             this.tweens.add({ targets: coses, alpha: 0, duration: 700, onComplete: () => coses.forEach(o => o.destroy()) });
             ui.tweens.add({ targets: [t1, t2], alpha: 0, duration: 700, onComplete: () => { t1.destroy(); t2.destroy(); } });
             this.time.delayedCall(450, () => {
