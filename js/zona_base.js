@@ -200,7 +200,7 @@ class ZonaBase extends Phaser.Scene {
         this.dadesEntrada = data || {};
         this.canviant = false;
         this.camDialeg = null;
-        this.npcs = {}; this.opacs = []; this.npcDavant = null; this.camCinema = false; this.ineuFlautaImg = null; this.ineuAmagat = false;          // (l'escena es reaprofita: res de la visita anterior)
+        this.npcs = {}; this.opacs = []; this.npcDavant = null; this.camCinema = false; this.camArma = false; this.efectesArma = null; this.ineuFlautaImg = null; this.ineuAmagat = false;          // (l'escena es reaprofita: res de la visita anterior)
         this.boundsCamOrig = null;
         this.twCamDialeg = null;
         this.entradaPropia = false;
@@ -815,7 +815,62 @@ class ZonaBase extends Phaser.Scene {
         }
         this.llum(I.x - 8, I.y - 190, 0xffe8a0);
         Joc.fanfaraArma(this);
+        if (key === 'ineu_aixeca_basto' || key === 'ineu_aixeca_tiler') this.sucArma(key === 'ineu_aixeca_tiler' ? 0xb9e879 : 0xffe8a0);
         if (fet) fet();
+    }
+
+    // El «suc» de rebre una arma nova: la càmera s'acosta a l'Ineu, la pantalla s'enfosqueix una mica, un flaix blanc i uns raigs de llum giren darrere l'arma, ones de llum
+    // s'expandeixen, espurnes pugen i la càmera fa un cop sec. Tot es treu (i la càmera torna a lloc) en baixar el braç (ineuBaixa).
+    sucArma(color) {
+        const I = this.ineu, cam = this.cameras.main, A = this.ineuAlt;
+        if (!A) return;
+        const x = I.x - A.displayWidth * 0.16, y = I.y + 2 - A.displayHeight * 0.97;          // on és l'arma, alçada
+        const efectes = this.efectesArma = this.efectesArma || [];
+        const afegeix = o => { efectes.push(o); return o; };
+        // Zoom: càmera cap a l'Ineu i l'arma (per sobre del quadre de diàleg)
+        this.camArma = true;
+        this.enquadrar(I.x, y + 70, ZOOM_CAMERA * 1.55, 750, null, 420);
+        // Enfosquiment suau de tot el que no és l'Ineu (per sota seu)
+        const vel = afegeix(this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA * 2, (ALT - ALT_HUD) / ZOOM_CAMERA * 2, 0x000000, 0).setScrollFactor(0).setDepth(84900));
+        this.tweens.add({ targets: vel, fillAlpha: 0.5, duration: 500 });
+        // Flaix i cop de càmera
+        cam.flash(260, 255, 255, 255);
+        cam.shake(260, 0.006);
+        // Raigs de llum que giren darrere l'arma
+        const raigs = afegeix(this.add.container(x, y).setDepth(84950).setBlendMode(Phaser.BlendModes.ADD).setScale(0.2).setAlpha(0));
+        const g = this.add.graphics();
+        for (let i = 0; i < 14; i++) {
+            const a = i * Math.PI * 2 / 14, w = 0.09;
+            g.fillStyle(color, 0.27).fillTriangle(0, 0, Math.cos(a - w) * 210, Math.sin(a - w) * 210, Math.cos(a + w) * 210, Math.sin(a + w) * 210);
+        }
+        raigs.add(g);
+        this.tweens.add({ targets: raigs, scale: 1, alpha: 1, duration: 600, ease: 'Back.easeOut' });
+        this.tweens.add({ targets: raigs, angle: 360, duration: 9000, repeat: -1 });
+        // Resplendor que bategueja i ones que s'expandeixen
+        const halo = afegeix(this.add.circle(x, y, 60, color, 0.35).setBlendMode('ADD').setDepth(84960));
+        this.tweens.add({ targets: halo, scale: { from: 0.8, to: 1.35 }, alpha: { from: 0.45, to: 0.2 }, yoyo: true, repeat: -1, duration: 700, ease: 'Sine.easeInOut' });
+        for (let k = 0; k < 3; k++) {
+            const anell = afegeix(this.add.circle(x, y, 16, color, 0).setStrokeStyle(4, color, 0.9).setBlendMode('ADD').setDepth(84961));
+            this.tweens.add({ targets: anell, scale: 9, alpha: 0, duration: 1100, delay: k * 280, ease: 'Cubic.easeOut', onComplete: () => anell.destroy() });
+        }
+        // Espurnes que pugen
+        afegeix(this.add.particles(x, y, 'espurna', {
+            x: { min: -34, max: 34 }, y: { min: -20, max: 20 }, speed: { min: 20, max: 90 }, angle: { min: 230, max: 310 }, lifespan: { min: 900, max: 1600 },
+            scale: { start: 0.4, end: 0 }, alpha: { start: 1, end: 0 }, tint: [color, 0xffffff, 0xffe890], blendMode: 'ADD', frequency: 45
+        }).setDepth(84970));
+    }
+
+    // Treu el «suc» de l'arma (raigs, llums, enfosquiment) i la càmera torna a lloc
+    treuSucArma() {
+        if (this.efectesArma) {
+            this.efectesArma.forEach(o => {
+                if (!o || !o.active) return;
+                this.tweens.killTweensOf(o);
+                this.tweens.add({ targets: o, alpha: 0, duration: 450, onComplete: () => { if (o.active) o.destroy(); } });
+            });
+            this.efectesArma = null;
+        }
+        if (this.camArma) { this.camArma = false; this.alliberarCamera(900); }
     }
     // L'Ineu REP un objecte (el ram, els guants, una clau...): alça el braç amb la mà oberta, l'objecte vola del qui el dona (el punt amb què s'interactua)
     // fins a la seva mà i hi queda, brillant, fins que es crida ineuBaixa() (la UI ho fa en passar la pàgina d'avís { avis, obj: 'id' }). Sona la fanfara.
@@ -874,6 +929,7 @@ class ZonaBase extends Phaser.Scene {
         if (this.ineuAixecaEfecte) { this.ineuAixecaEfecte.destroy(); this.ineuAixecaEfecte = null; }
         if (this.ineuAixecaAura) { this.ineuAixecaAura.destroy(); this.ineuAixecaAura = null; }
         if (this.ineuAlt) { this.ineuAlt.destroy(); this.ineuAlt = null; }
+        this.treuSucArma();
         this.ineu.setVisible(true);
         if (this.fantasma) this.fantasma.setVisible(true);
         if (fet) fet();
