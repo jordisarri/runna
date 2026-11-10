@@ -259,6 +259,10 @@ function fotogramesAtac(vista) {
 function quietIneu() { return SPRITE_INEU.quiet; }
 const OCTANTS_INEU = ['right', 'southeast', 'down', 'southwest', 'left', 'northwest', 'up', 'northeast'];
 
+// Fulls d'idle frontal dels NPC (eines/fer_idle_npc.py): clau → mida de cel·la i nombre de fotogrames. Es carreguen amb la resta i ZonaBase.npc() els fa servir
+// en lloc del dibuix fix; si no hi són, tot es veu com abans.
+const NPC_IDLE = {};
+
 const Grafics = {
     // Avís si el navegador no deixa llegir els píxels (obert amb doble clic, file://)
     pixelsBloquejats: false,
@@ -289,6 +293,7 @@ const Grafics = {
         scene.load.spritesheet('pare_jordi_camina', 'assets/personatges/pare_jordi_camina.webp', { frameWidth: 200, frameHeight: 290 });
         // Fulls d'animació del Pastor de Boira (boss de la Cirosa): quadrícula de fotogrames de 300 x 300; si no hi són, es veu el dibuix fix (vegeu docs/PROMPTS_GRAFICS.md)
         Object.keys(Grafics.PASTOR_FULLS).forEach(n => scene.load.spritesheet('pastor_' + n, `assets/enemics/pastor_${n}.webp`, { frameWidth: 300, frameHeight: 300 }));
+        Object.entries(NPC_IDLE).forEach(([k, d]) => scene.load.spritesheet(k + '_idle', `assets/personatges/${k}_idle.webp?v=2611110300`, { frameWidth: d.w, frameHeight: d.h }));
         scene.load.spritesheet('germa_aldreu_camina', 'assets/personatges/germa_aldreu_camina.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('germa_aldreu_ne', 'assets/personatges/germa_aldreu_ne.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('josep_camina', 'assets/personatges/josep_camina.webp', { frameWidth: 190, frameHeight: 300 });

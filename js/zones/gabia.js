@@ -1084,6 +1084,7 @@ class ZonaGabia extends ZonaBase {
             { fer: (z, fet) => z.seq([
                 f => {
                     const ald = z.npcs.germa_aldreu;
+                    if (ald && ald.anims) { ald.anims.stop(); ald.idleClau = null; }          // deixa l'idle: passa a ser el Guàrdia / el Pastor
                     if (ald && z.textures.exists('aldreu_guardia')) {
                         ald.setTexture('aldreu_guardia');
                         const tex = z.textures.get('aldreu_guardia');

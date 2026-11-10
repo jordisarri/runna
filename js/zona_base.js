@@ -649,19 +649,33 @@ class ZonaBase extends Phaser.Scene {
         }
         const tex = this.textures.get(key);
         const escala = (tex.customData && tex.customData.escala) || 1 / RES;
-        const img = this.add.sprite(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
+        const idle = this.textures.exists(key + '_idle') && NPC_IDLE[key];                  // full d'idle frontal (si n'hi ha): l'NPC respira i es mou una mica
+        const img = this.add.sprite(x, y, idle ? key + '_idle' : key, idle ? 0 : undefined).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
+        if (idle) this.posaIdleNpc(img, key);
         img.setDepth(opts.fonsY !== undefined ? opts.fonsY : y);
         img.col = this.colisio(x, y - 9, opts.colAmple || 40, 18);
         img.ombra = this.add.image(x, y, 'ombra').setScale(0.42).setDepth(-500);
         if (opts.flipX) img.setFlipX(true);
         img.escalaBase = img.scaleY;
-        // Respiració suau perquè sembli viu
-        img.respira = this.tweens.add({ targets: img, scaleY: img.scaleY * 1.02, yoyo: true, repeat: -1, duration: 1100 + Math.random() * 400 });
+        // Respiració suau perquè sembli viu (si ja té animació d'idle, no cal)
+        if (!idle) img.respira = this.tweens.add({ targets: img, scaleY: img.scaleY * 1.02, yoyo: true, repeat: -1, duration: 1100 + Math.random() * 400 });
         img.punt = this.interactiu(x, y - 10, opts.radi || RADI_NPC, dialeg, { altura: img.displayHeight + 6 });
         if (opts.zoomConversa) img.punt.zoomConversa = opts.zoomConversa;       // més zoom (que ZOOM_NPC) en parlar-hi, perquè s'apreciïn els sprites
         img.punt.npc = img;                                  // en parlar-hi, l'Ineu es fa enrere i no se solapen (vegeu separarDeNpc)
         (this.npcs = this.npcs || {})[key] = img;
         return img;
+    }
+
+    // Idle frontal d'un NPC: l'animació 'idle_<clau>' en bucle (a un ritme lent i una mica diferent per a cada un, perquè no vagin tots al compàs)
+    posaIdleNpc(img, key) {
+        if (!this.anims.exists('idle_' + key)) this.anims.create({ key: 'idle_' + key, frames: this.anims.generateFrameNumbers(key + '_idle', { start: 0, end: NPC_IDLE[key].n - 1 }), frameRate: 4, repeat: -1 });
+        img.idleClau = key;
+        img.play({ key: 'idle_' + key, startFrame: Phaser.Math.Between(0, NPC_IDLE[key].n - 1) });
+    }
+    // Torna al dibuix d'idle (després d'una caminada o d'un canvi de dibuix)
+    tornaIdleNpc(img, key) {
+        if (img.idleClau && this.textures.exists(key + '_idle')) { img.setTexture(key + '_idle', 0); img.play('idle_' + key, true); }
+        else img.setTexture(key);
     }
 
     // ---------------- Accions animades (les fan servir les pàgines { fer } dels diàlegs) ----------------
@@ -721,7 +735,7 @@ class ZonaBase extends Phaser.Scene {
         this.tweens.add({ targets: [img, img.ombra].filter(Boolean), x, y, duration: dur, ease: 'Sine.easeInOut', onUpdate: () => img.setDepth(img.y), onComplete: () => {
             if (animClau && img.anims) {
                 img.anims.stop();
-                img.setTexture(key);
+                this.tornaIdleNpc(img, key);
                 if (img.respira) img.respira.resume();
             }
             img.setAngle(0);
