@@ -390,9 +390,7 @@ const DIALEGS = {
     ruines: E => {
         if (!E.flag('pedraRunes')) return {
             pagines: [
-                { qui: 'Ineu', text: "(Una pedra grossa, enfonsada a terra just al peu del mur. Sota seu hi ha alguna cosa: se n'ha escapat un corrent d'aire fred. Potser la puc empènyer.)" },
-                { fer: (z, fet) => z.mouPedraRunes ? z.mouPedraRunes(fet) : fet() },
-                { qui: 'Ineu', text: E.te('llanterna') ? "(Un forat fosc! Amb el Llum d'en Mamet s'hi veu alguna cosa...)" : "(Hi ha un forat negre, fonda i espessa. Sense llum no s'hi veu res: hauré de tornar amb alguna cosa que il·lumini.)" }
+                { qui: 'Ineu', text: "(Una pedra grossa, enfonsada a terra just al peu del mur. Sota seu hi ha alguna cosa: se n'ha escapat un corrent d'aire fred. Si m'hi recolzo i l'empenyo, potser cedirà.)" },
             ]
         };
         if (!E.te('llanterna')) return { pagines: [{ qui: 'Ineu', text: "(El forat és tan negre que no s'hi distingeix res. Em cal una llum.)" }] };

@@ -92,15 +92,19 @@ class ZonaRuines extends ZonaBase {
         // Pedres caigudes davant i, a ponent, carreus escampats de l'església que mai no es va acabar
         [[570, 650, 0.6], [1190, 655, 0.5], [90, 700, 0.8], [120, 760, 0.55], [60, 1040, 0.7], [260, 640, 0.5], [60, 560, 0.65]]
             .forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 60 * e, h: 22 * e } }));
-        // Una pedra grossa a terra, al peu del mur: tapa un forat. Es pot empènyer (sense guants) i, a sota, hi ha un forat fosc; el pergamí partit només s'hi veu amb el Llum d'en Mamet
+        // Una pedra grossa a terra, al peu del mur: tapa un forat. S'empeny de debò (sense guants), des de qualsevol dels quatre costats, caminant-hi
+        // contra: la pedra va davant de l'Ineu mentre l'empeny i es queda on la deixa. Quan el forat queda a la vista s'hi veu un pou fosc; el pergamí partit
+        // només s'hi veu amb el Llum d'en Mamet.
         const HX = 1000, HY = 624, mogutR = Estat.flag('pedraRunes');
-        const forat = this.add.graphics().setDepth(-880);
-        forat.fillStyle(0x000000, 0.35).fillEllipse(HX, HY + 4, 82, 34);
-        forat.fillStyle(0x0b0806, 1).fillEllipse(HX, HY, 70, 26);
-        forat.fillStyle(0x000000, 1).fillEllipse(HX, HY + 2, 52, 16);
-        forat.lineStyle(2.5, 0x3a2f24, 1).strokeEllipse(HX, HY, 70, 26);
-        this.pedraForat = this.posar('roca', mogutR ? HX + 100 : HX, HY + 8, { escala: 0.95, col: { w: 80, h: 26 } });
-        this.colPedraForat = this.obstacles.getChildren()[this.obstacles.getChildren().length - 1];
+        this.HX = HX; this.HY = HY;
+        this.dibuixarForat(HX, HY);
+        let px = HX, py = HY + 8;
+        const guardada = String(Estat.dades.flags.pedraRunesPos || '').split(',').map(Number);
+        if (guardada.length === 2 && guardada.every(Number.isFinite)) { px = guardada[0]; py = guardada[1]; }
+        else if (mogutR) { px = HX + 100; }                                          // partides velles: la pedra era a la dreta
+        this.pedraForat = this.posar('roca', px, py, { escala: 0.95 });
+        this.colPedraForat = this.colisio(px, py - 13, 80, 26);
+        this.pedraEmpenta = 0; this.pedraDir = null;
         if (!Estat.flag('fragment1')) {
             if (mogutR && Estat.te('llanterna')) {
                 // El Llum d'en Mamet il·lumina el forat i en revela el pergamí
@@ -144,26 +148,100 @@ class ZonaRuines extends ZonaBase {
         this.sortida(1286, 645, 14, 130, 'ZonaCementiri', 'runes');
     }
 
-    // El pergamí vola cap a l'Ineu i passa al sarró
-    // L'Ineu empeny la pedra que tapa el forat: llisca cap a la dreta i deixa el forat a la vista (pols)
-    mouPedraRunes(fet) {
-        const r = this.pedraForat, HX = 1000;
+    // El forat: una boca fosca a terra, amb vora de terra i pedretes, la paret del fons il·luminada una mica i el fons negre. (Per sobre del terra, per sota de tot.)
+    dibuixarForat(HX, HY) {
+        const g = this.add.graphics().setDepth(-880);
+        g.fillStyle(0x000000, 0.28).fillEllipse(HX, HY + 6, 96, 44);                         // pessigada d'ombra al voltant
+        g.fillStyle(0x5a4a38, 1).fillEllipse(HX, HY, 88, 38);                                 // vora de terra trepitjada
+        g.fillStyle(0x7a6a52, 1).fillEllipse(HX, HY - 3, 82, 30);                             // cara de dalt de la vora, més clara
+        g.fillStyle(0x3a2e22, 1).fillEllipse(HX, HY + 1, 68, 27);                             // paret del pou
+        g.fillStyle(0x241b13, 1).fillEllipse(HX, HY + 4, 60, 21);
+        g.fillStyle(0x0a0705, 1).fillEllipse(HX, HY + 6, 50, 15);                             // fons
+        g.fillStyle(0x000000, 1).fillEllipse(HX, HY + 7, 38, 9);
+        g.lineStyle(2, 0x2a2016, 1).strokeEllipse(HX, HY, 88, 38);
+        g.lineStyle(1.5, 0x15100b, 0.9).strokeEllipse(HX, HY + 1, 68, 27);
+        // pedretes i terrossos a la vora
+        [[-40, 2, 9, 6, 0x8a8a84], [-30, -12, 8, 5, 0x77776f], [-8, -17, 10, 6, 0x908f88], [18, -15, 9, 6, 0x7d7c75], [38, -3, 9, 6, 0x8a8a84],
+         [35, 12, 8, 5, 0x6d6c66], [-34, 12, 7, 4, 0x6d6c66], [4, 19, 8, 4, 0x77776f]].forEach(([dx, dy, w, h, c]) => {
+            g.fillStyle(0x1c150e, 0.55).fillEllipse(HX + dx + 1, HY + dy + 2, w + 2, h);
+            g.fillStyle(c, 1).fillEllipse(HX + dx, HY + dy, w, h);
+            g.fillStyle(0xffffff, 0.18).fillEllipse(HX + dx - 1, HY + dy - 1, w * 0.5, h * 0.4);
+        });
+        return g;
+    }
+
+    // Cada fotograma: la pedra s'empeny com la resta de pedres del joc (a tocar, des de qualsevol costat, avançant cap a ella), però aquí no té destí fix:
+    // va cap a on s'empeny, al ritme de l'Ineu, i no relliscar-hi pels costats. S'atura contra qualsevol obstacle. Quan el forat queda a la vista, el pou es revela.
+    actualitzarPedres(delta) {
+        super.actualitzarPedres(delta);
+        const r = this.pedraForat, col = this.colPedraForat;
+        if (!r || !col || !this.ineu) return;
+        const b = this.ineu.body, I = this.intent || { x: 0, y: 0 }, c = col.body, M = 14, MARGE = 0.3, MANTENIR = 0.12;
+        const entreY = b.bottom > c.top - 10 && b.top < c.bottom + 10, entreX = b.right > c.left - 14 && b.left < c.right + 14;
+        const costats = [
+            { x: 1, y: 0, toca: entreY && Math.abs(b.right - c.left) < M, comp: I.x, c: 'E' },
+            { x: -1, y: 0, toca: entreY && Math.abs(b.left - c.right) < M, comp: -I.x, c: 'O' },
+            { x: 0, y: 1, toca: entreX && Math.abs(b.bottom - c.top) < M, comp: I.y, c: 'S' },
+            { x: 0, y: -1, toca: entreX && Math.abs(b.top - c.bottom) < M, comp: -I.y, c: 'N' }
+        ];
+        let dir = null;
+        if (this.pedraDir) { const k = costats.find(q => q.c === this.pedraDir.c); if (k && k.toca && k.comp > MANTENIR) dir = this.pedraDir; }
+        else dir = costats.filter(q => q.toca && q.comp > MARGE).sort((p, q) => q.comp - p.comp)[0] || null;
+        this.pedraEmpenta = dir ? this.pedraEmpenta + delta : Math.max(0, this.pedraEmpenta - delta * 3);
+        if (!dir) {
+            if (this.pedraDir) { this.pedraDir = null; Estat.posaFlag('pedraRunesPos', Math.round(r.x) + ',' + Math.round(r.y)); Estat.desar(); }
+            return;
+        }
+        if (dir.x) b.setVelocityY(0); else b.setVelocityX(0);                               // no es llisca pels costats de la pedra
+        if (this.pedraEmpenta < 90) return;                                                  // un instant de recolzar-s'hi
+        this.pedraDir = dir;
+        const VEL = 120, pas = VEL * delta / 1000;
+        const nx = r.x + dir.x * pas, ny = r.y + dir.y * pas;
+        if (!this.pedraLliure(nx, ny)) { b.setVelocity(0, 0); return; }
+        r.x = nx; r.y = ny; r.setDepth(ny);
+        col.setPosition(nx, ny - 13); c.updateFromGameObject();
+        b.setVelocity(dir.x * VEL, dir.y * VEL);                                             // l'Ineu avança amb la pedra: no es queda enrere ni la deixa anar
+        if (this.time.now > (this.pedraSo || 0)) { this.pedraSo = this.time.now + 300; Sfx.pas(true); this.cameras.main.shake(70, 0.0012); }
+        if (!Estat.flag('pedraRunes') && !this.foratTapat(nx, ny)) this.revelaForat();
+    }
+
+    // Cap a on pot anar la pedra: dins la zona, sense xocar amb res més i, un cop descobert, sense tornar a tapar el forat
+    pedraLliure(x, y) {
+        if (x < 130 || x > 1160 || y < 560 || y > 900) return false;
+        const e = x - 40, d = x + 40, t = y - 26, f = y;
+        const col = this.colPedraForat;
+        for (const o of this.obstacles.getChildren()) {
+            if (o === col || !o.body) continue;
+            const q = o.body;
+            if (e < q.right && d > q.left && t < q.bottom && f > q.top) return false;
+        }
+        if (Estat.flag('pedraRunes') && this.foratTapat(x, y)) return false;
+        return true;
+    }
+
+    // Tapa la pedra el forat? (el dibuix de la pedra contra la boca del pou)
+    foratTapat(x, y) {
+        const HX = this.HX, HY = this.HY;
+        return x + 42 > HX - 28 && x - 42 < HX + 28 && y + 6 > HY - 8 && y - 52 < HY + 8;
+    }
+
+    // El forat queda a la vista: pols, clic de pedra i, amb el Llum d'en Mamet, es veu el pergamí
+    revelaForat() {
         Estat.posaFlag('pedraRunes');
-        if (this.colPedraForat) { this.obstacles.remove(this.colPedraForat, true, true); this.colPedraForat = null; }
-        Sfx.pas(true); this.cameras.main.shake(300, 0.002);
-        const pols = this.boira(r.x, r.y - 6, 70, 14, 3, 0xcfc4b0);
-        this.tweens.add({ targets: [r, pols], x: HX + 100, duration: 1200, ease: 'Sine.easeInOut', onComplete: () => {
-            pols.stop(); this.time.delayedCall(1200, () => pols.destroy());
-            this.colisio(HX + 100, r.y - 13, 80, 26);
-            Estat.desar();
-            if (Estat.te('llanterna') && !Estat.flag('fragment1')) {            // amb el Llum d'en Mamet, al forat s'hi veu el pergamí
-                this.llumNinxol = this.add.circle(HX, 620, 44, 0xffd270, 0.22).setDepth(-870).setBlendMode('ADD');
-                this.pergamiRunes = this.posar('pergami_partit', HX, 630, { fonsY: 644, escala: 0.72 });
-                this.pergamiBrill = this.add.circle(HX, 612, 36, 0xffe8a0, 0.28).setDepth(700).setBlendMode('ADD');
-                this.tweens.add({ targets: this.pergamiBrill, alpha: 0.08, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
-            }
-            fet();
-        } });
+        Estat.posaFlag('pedraRunesPos', Math.round(this.pedraForat.x) + ',' + Math.round(this.pedraForat.y));
+        const HX = this.HX, HY = this.HY;
+        Sfx.secret();
+        const pols = this.boira(HX, HY, 60, 12, 3, 0xcfc4b0);
+        this.time.delayedCall(900, () => { pols.stop(); this.time.delayedCall(1200, () => pols.destroy()); });
+        Estat.desar();
+        if (Estat.te('llanterna') && !Estat.flag('fragment1')) {
+            this.llumNinxol = this.add.circle(HX, HY - 4, 44, 0xffd270, 0.22).setDepth(-870).setBlendMode('ADD');
+            this.pergamiRunes = this.posar('pergami_partit', HX, HY + 6, { fonsY: HY + 20, escala: 0.72 });
+            this.pergamiBrill = this.add.circle(HX, HY - 12, 36, 0xffe8a0, 0.28).setDepth(HY + 40).setBlendMode('ADD');
+            this.tweens.add({ targets: this.pergamiBrill, alpha: 0.08, scale: 1.3, yoyo: true, repeat: -1, duration: 900 });
+        }
+        this.ineu.body.setVelocity(0, 0);
+        this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text: Estat.te('llanterna') ? "(Un forat fosc! Amb el Llum d'en Mamet s'hi veu alguna cosa...)" : "(Hi ha un forat negre, fonda i espessa. Sense llum no s'hi veu res: hauré de tornar amb alguna cosa que il·lumini.)" }] });
     }
 
     agafarPergamiRunes(fet) {
