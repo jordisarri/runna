@@ -123,7 +123,7 @@ La porta és tancada («Avui no servim — Càren»). Truca: l'**Eve** obre per 
 ### 2A · El camí del Til·ler
 
 **Pas 7 · Bosc de Sant Joan — Font del Bisbe** `fontSJ` `herba`
-La font és adormida i el bosc és ple de boira lila. Calen **tres ofrenes**: l'**herba de Sant Joan** i el **romaní** (brillen en dues clarianes del bosc) i una **pruna** de la **Prunera Màgica**, al jardí de l'Hostatgeria `prunera`. En tirar-les-hi, la font es desperta (+ **aigua de la Font del Bisbe**).
+La font és adormida i el bosc és ple de boira lila. Calen **tres ofrenes**: l'**herba de Sant Joan** (brilla en una clariana del bosc), la **rialla** (l'«herba del riure», una planta que brilla en una clariana del Bosc del Pi dels Tres Cants, guardada per tres bolets verinosos; no hi és fins que la font la demana) i una **pruna** de la **Prunera Màgica**, al jardí de l'Hostatgeria `prunera`. En tirar-les-hi, la font es desperta (+ **aigua de la Font del Bisbe**).
 
 **Pas 8 · L'Alzina Buida i la Joaneta** `alzinaBuida` `joaneta`
 L'Alzina Buida (el doble de gran que la resta d'arbres) és un portal a la **Cabana de la Joaneta**: la bruixa-vident remena l'olla i dona el **beuratge**. Torna pel portal `portalTornada`.
@@ -1116,9 +1116,11 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 
 *Altrament (per defecte):*
 
-**Ineu:** Les Venerables Sàvies diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, romaní i el fruit de l'arbre d'or.»
+**Ineu:** Les Venerables Sàvies diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, rialla i el fruit de l'arbre d'or.»
 
-**Ineu:** Les herbes de la Nit de Sant Joan fan llum: n'hi ha una al nord (cap al Til·ler) i el romaní al sud-est, sempre en una clariana. I l'arbre d'or... és la Prunera Màgica, al jardí de l'Hostatgeria! Una pruna.
+**Ineu:** Rialla... Això no és cap rialla de riure: és una PLANTA! Les Venerables Sàvies en parlaven: «l'herba del riure», una flor groga, de pètals tot al voltant, amb una boca somrient al mig, com si es rigués. Només creix on la boira no l'ha pogut marcir, i diuen que al Bosc del Pi dels Tres Cants, al sud de Sant Antoni, en una clariana a la vora del camí... però que no la deixen collir fàcilment: la guarden uns bolets verinosos.
+
+**Ineu:** L'herba de Sant Joan fa llum, sempre en una clariana: la trobaré aquí al bosc, al nord (cap al Til·ler). I l'arbre d'or... és la Prunera Màgica, al jardí de l'Hostatgeria! Una pruna.
 
 
 ### alzinaBuida
@@ -1920,7 +1922,7 @@ ${mots.join('   ')}
 
 **La Joaneta:** Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? No és al nord de sempre, com et diuen: és al nord de les Cel·les, i han tapat el camí amb una boira que no marxa amb el vent.
 
-**La Joaneta:** Mira, he barrejat l'aigua que queda amb romaní, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets.
+**La Joaneta:** Mira, he barrejat l'aigua que queda amb rialla, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets.
 
 ★ Has obtingut el BEURATGE DE LA JAUNETA.
 

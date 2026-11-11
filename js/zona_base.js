@@ -20,6 +20,17 @@ const RADI_GRAN = 110;       // objectes grans (arbres, fonts, dolmen...), amb e
 // (de 1 a 1,6) a l'adreça: es recorda fins que se'n posi un altre
 const ZOOM_NPC = 1.12;      // acostament suau de la càmera en parlar amb un personatge (1 = res)
 const ZOOM_COMBAT = 1.12;    // acostament addicional de la càmera mentre hi ha combat (1 = res)
+// Zoom base de cada zona = ZOOM_CAMERA × el factor d'aquí (1 si no hi surt: camins, places i exteriors es queden com abans). Vegeu design/PLA_ZOOM.md.
+// Interiors petits més a prop (acollidors, sense marges buits); interiors mitjans una mica; el tram tens de l'Acte 3 va a més pressió.
+const ZOOM_ZONES = {
+    ZonaCasetaJoc: 1.3, ZonaTresor: 1.3, ZonaCelaStAntoni: 1.3, ZonaCabanaInt: 1.3, ZonaCabanaCami: 1.3, ZonaMasiaCirosa: 1.3, ZonaGolfes: 1.3, ZonaCasaCripta: 1.3, ZonaCasaTresor: 1.3, ZonaCasaGeorgi: 1.3,
+    ZonaTavernaInt: 1.2, ZonaHostatgeriaInt: 1.2, ZonaBiblioteca: 1.2, ZonaMonestirRebedor: 1.2, ZonaCasaGranInt: 1.2, ZonaErmitaInt: 1.2, ZonaGabrielInt: 1.2,
+    ZonaCambraDolora: 1.25, ZonaCambraPilaria: 1.25, ZonaCambraCarmelia: 1.25, ZonaSoterraniHost: 1.2,
+    ZonaSotaTaverna: 1.1, ZonaGirgolesFora: 1.1, ZonaPassadis: 1.15, ZonaGirgoles: 1.15, ZonaTortura: 1.2, ZonaBoira: 1.2
+};
+const ZOOM_MAX_ZONA = 1.85;   // per sobre d'això els gràfics es veuen massa grans
+// Primer cop que s'entra en aquestes zones: pla de situació (la càmera comença una mica més lluny i s'acosta lentament)
+const ZONES_CLAU = ['ZonaPlaca', 'ZonaTiller', 'ZonaDolmen', 'ZonaCirosa', 'ZonaCementiri', 'ZonaRuines', 'ZonaGirgoles', 'ZonaGabia', 'ZonaRovellonera', 'ZonaBosc', 'ZonaCreu', 'ZonaEsglesia'];
 const ZOOM_CAMERA = (() => {
     let z = parseFloat(new URLSearchParams(location.search).get('zoom'));
     try {
@@ -93,7 +104,7 @@ function esDialegBuit(dialeg) {
 }
 
 // Les bestioles que es ressalten als llocs foscos (ZonaBase.ressaltarEnemics)
-const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'ratpenat', 'ferralla'];
+const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'bolet_verinos', 'ratpenat', 'ferralla'];
 
 // VIATGE RÀPID: el carro de vapor (al codi, 'carruatge') del Follet del Carro Verd (el va fer el Galf). A cada parada hi ha el carruatge i l'home;
 // parlant-hi la primera vegada la parada queda desbloquejada (flag parada_<id>) i després s'hi pot viatjar entre les desbloquejades.
@@ -210,6 +221,7 @@ class ZonaBase extends Phaser.Scene {
     create() {
         const c = this.config;
         Estat.dades.zona = this.scene.key;
+        const primeraVisita = !Estat.flag('visitada_' + this.scene.key);       // (per al pla de situació d'entrada)
         Estat.posaFlag('visitada_' + this.scene.key); // el mapa només mostra el que s'ha visitat
         // Si s'hi arriba després d'una derrota (el Pare Jordà et recull), sona la música de l'església durant tota l'escena; en acabar entra la de la zona
         if (Estat.caigut) Joc.iniciarMusica(this, 0, Joc.MUSICA_ZONES.ZonaEsglesia, 1500); else Joc.musicaZona(this);
@@ -266,7 +278,8 @@ class ZonaBase extends Phaser.Scene {
 
         const cam = this.cameras.main;
         cam.setViewport(0, ALT_HUD, AMPLE, ALT - ALT_HUD);   // la franja de dalt és per al HUD: no s'hi dibuixa escenari
-        const zoomZona = this.zoomZona || ZOOM_CAMERA;
+        const zoomZona = this.zoomZona || Math.min(ZOOM_MAX_ZONA, ZOOM_CAMERA * (ZOOM_ZONES[this.scene.key] || 1));
+        this.zoomZona = zoomZona;          // (també el fan servir alliberarCamera i el Dolmen per tornar al zoom de la zona)
         cam.setZoom(zoomZona);
         this.zoomBase = zoomZona;
         // Si el món és més petit que la pantalla (interiors), es centra en lloc de quedar enganxat a una vora
@@ -295,11 +308,43 @@ class ZonaBase extends Phaser.Scene {
 
         if (this.enEntrar) this.enEntrar();
         if (this.dadesEntrada.entrada && !this.dadesEntrada.restaurar && !Estat.caigut && !this.entradaPropia) this.pasEntrada(this.posEntrada);
+        const caigut = Estat.caigut;
         if (Estat.caigut) {
             Estat.caigut = false;
             this.despertarCaigut();
         }
+        this.entradaZoom(primeraVisita, caigut);
         fixarDecorat(this);
+    }
+
+    // Zoom d'entrada (design/PLA_ZOOM.md): als interiors, un acostament des del zoom de fora fins al de la sala; a les zones clau, el primer cop, un pla de situació
+    // (comença una mica més lluny i s'acosta lentament). No es fa si l'escena porta ja la seva càmera (cinema, diàleg, caiguda, entrada pròpia).
+    entradaZoom(primera, caigut) {
+        this.camEntrada = false;
+        const cam = this.cameras.main, base = this.zoomBase;
+        if (this.twEntrada) { this.twEntrada.stop(); this.twEntrada = null; }
+        if (this.camCinema || this.camDialeg || this.entradaPropia || caigut || !base) return;
+        let des = 0, ms = 0;
+        if (this.esInterior() && base > ZOOM_CAMERA * 1.05) { des = ZOOM_CAMERA; ms = 900; }
+        else if (primera && ZONES_CLAU.includes(this.scene.key)) { des = base * 0.94; ms = 1500; }
+        if (!des) return;
+        this.camEntrada = true;
+        cam.setZoom(des);
+        const v = { u: 0 };
+        this.twEntrada = this.tweens.add({
+            targets: v, u: 1, duration: ms, ease: 'Sine.easeInOut',
+            onUpdate: () => { cam.setZoom(Phaser.Math.Linear(des, base, v.u)); this.ajustarSuperposicions(); },
+            onComplete: () => { cam.setZoom(base); this.camEntrada = false; this.twEntrada = null; this.ajustarSuperposicions(); }
+        });
+    }
+
+    // Una càmera pròpia (diàleg o cinema) talla el zoom d'entrada i deixa la zona al seu zoom base
+    tallarEntradaZoom() {
+        if (!this.camEntrada) return;
+        if (this.twEntrada) { this.twEntrada.stop(); this.twEntrada = null; }
+        this.camEntrada = false;
+        this.cameras.main.setZoom(this.zoomBase);
+        this.ajustarSuperposicions();
     }
 
     // Després d'una derrota: l'Ineu a terra, i de cop el Pare Jordà agenollat al seu costat; en tancar el diàleg l'Ineu s'aixeca
@@ -1577,9 +1622,25 @@ class ZonaBase extends Phaser.Scene {
     // Durant un combat (hi ha un enemic viu a prop, o el boss) la càmera s'acosta una mica (ZOOM_COMBAT) i en acabar torna a lloc, suaument.
     // No toca la càmera quan hi ha un diàleg o una escena: elles porten el seu propi zoom.
     zoomCombat(delta) {
-        if (this.camCinema || this.camDialeg || !this.zoomBase) return;
+        if (this.camCinema || this.camDialeg || this.camEntrada || !this.zoomBase) return;
         const cam = this.cameras.main, I = this.ineu;
-        const lluita = !!(this.enemics && I && this.enemics.some(e => !e.mort && e.spr && e.spr.active && (e.def.barra || Phaser.Math.Distance.Between(e.spr.x, e.spr.y, I.x, I.y) < 650)));
+        // Histèresi: s'entra en combat a 650 px, però no se'n surt fins que no hi ha cap enemic a menys de 900 px durant 3 s (sinó, un enemic que passeja
+        // vora el límit, amb l'Ineu quiet, feia que el zoom s'acostés i s'allunyés sense parar).
+        // Només s'acosta amb un mini-boss (barra de vida) o un grup de 3 o més: una bestiola sola no mou la càmera (el zoom canviant a cada bestiola cansava).
+        const dins = r => {
+            if (!this.enemics || !I) return false;
+            let prop = 0;
+            for (const e of this.enemics) {
+                if (e.mort || !e.spr || !e.spr.active) continue;
+                if (e.def.barra) return true;
+                if (Phaser.Math.Distance.Between(e.spr.x, e.spr.y, I.x, I.y) < r) prop++;
+            }
+            return prop >= 3;
+        };
+        const ara = this.time.now;
+        if (dins(this.enLluita ? 900 : 650)) { this.enLluita = true; this.lluitaFins = ara + 3000; }
+        else if (this.enLluita && ara > (this.lluitaFins || 0)) this.enLluita = false;
+        const lluita = !!this.enLluita;
         const objectiu = this.zoomBase * (lluita ? ZOOM_COMBAT : 1);
         if (Math.abs(cam.zoom - objectiu) < 0.002) return;
         cam.setZoom(Phaser.Math.Linear(cam.zoom, objectiu, Math.min(1, delta / 450)));
@@ -1641,6 +1702,7 @@ class ZonaBase extends Phaser.Scene {
     camaraDialeg(obert) {
         const cam = this.cameras.main;
         if (this.camCinema) return;                  // una escena (enquadrar) porta la càmera ella mateixa
+        if (obert) this.tallarEntradaZoom();
         if (obert) {
             if (this.camDialeg) return;
             const p = this.dialegDePunt ? this.puntActiu : null;
@@ -1666,7 +1728,7 @@ class ZonaBase extends Phaser.Scene {
             let z2 = Z, wy2 = wv.y, trobat = false, sx2 = cam.scrollX;
             const conversa = !centrar && !!(p && p.npc && p.npc.active && p.npc.visible);
             if (conversa) {
-                const zt = Math.min(p.zoomConversa ? 2.2 : 1.6, Z * (p.zoomConversa || ZOOM_NPC));
+                const zt = Math.min(p.zoomConversa ? 2.2 : 1.8, Z * (p.zoomConversa || ZOOM_NPC));
                 const dalt = Math.min(...mides.map(m => m.dalt)), baix = Math.max(...mides.map(m => m.baix));
                 const wyC = (dalt + baix) / 2 - ((TOP + LIM) / 2 - ALT_HUD) / zt;
                 if (be(zt, wyC)) {
@@ -1719,6 +1781,7 @@ class ZonaBase extends Phaser.Scene {
     // Pla de cinema: la càmera deixa de seguir l'Ineu i enquadra (x, y) al mig de la part de la pantalla que el quadre de diàleg no tapa
     enquadrar(x, y, zoom, ms = 800, fet, reserva = 470) {
         const cam = this.cameras.main;
+        this.tallarEntradaZoom();
         if (!this.camCinema) {
             this.camCinema = true;
             if (this.twCamDialeg) this.twCamDialeg.stop();

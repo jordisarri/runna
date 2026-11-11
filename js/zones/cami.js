@@ -373,7 +373,7 @@ class ZonaJardi extends ZonaBase {
         COLS.forEach(cx => [YB, YF].forEach(cy => { for (let k = 0; k < 5; k++) { const x = cx + (rnd() - 0.5) * 90, y = cy + 6 + rnd() * 26; if (lliure(x, y)) flor(x, y, 0.45 + rnd() * 0.4); } }));       // mates al peu de les columnes
 
         // L'Isílder, davant l'entrada de la pèrgola (si la llosa ja és oberta, es queda al costat del forat)
-        this.isilder = this.npc('isilder', 664, 915, DIALEGS.isilder);
+        this.isilder = this.npc('isilder', 664, 915, DIALEGS.isilder, { zoomConversa: 1.3 });
         if (Estat.flag('llosaOberta')) {
             this.llosa.setPosition(LX - 92, LY + 4).setRotation(-0.1);
             this.florLluna.setVisible(true);

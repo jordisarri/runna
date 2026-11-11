@@ -8,11 +8,11 @@
 const PARAULES_MISSATGE = ["Quan", "la", "boira", "cobreixi", "el", "Miracle,", "els", "passos", "dels", "absents", "tornaran", "amb l'alba."];
 const SIGNES_MISSATGE = ["☉", "☽", "✦", "♆", "⚶", "☿", "♄", "♃", "⚸", "☋", "☊", "⚷"];
 
-// Ofrenes per a la Font del Bisbe: l'herba de Sant Joan, el romaní i una pruna de la Prunera Màgica
+// Ofrenes per a la Font del Bisbe: l'herba de Sant Joan, la rialla (flag herba2) i una pruna de la Prunera Màgica
 // (a les partides velles, la farigola que s'hi portava abans compta com la pruna)
 function ofrenesFont(E) { return ['herba1', 'herba2'].filter(h => E.flag(h)).length + (E.te('pruna') || E.flag('herba3') ? 1 : 0); }
 function objectiuFont(n) {
-    return n === 3 ? 'Ja ho tens tot: torna a la Font del Bisbe.' : `Porta a la Font del Bisbe l'herba de Sant Joan, el romaní (al bosc) i una pruna de la Prunera de l'Hostatgeria (${n}/3).`;
+    return n === 3 ? 'Ja ho tens tot: torna a la Font del Bisbe.' : `Porta a la Font del Bisbe l'herba de Sant Joan (al bosc), la rialla (una planta: al Bosc del Pi dels Tres Cants, al sud de Sant Antoni, guardada per bolets verinosos) i una pruna de la Prunera de l'Hostatgeria (${n}/3).`;
 }
 
 // Pistes: totes surten de la taula de passos de js/progres.js
@@ -760,7 +760,7 @@ const DIALEGS = {
         if (herbes === 3) {
             return {
                 pagines: [
-                    { fer: (z, fet) => z.seq([c => z.deixar(c, 'herba_sj'), c => z.deixar(c, 'romani'), c => z.deixar(c, null, 0xffd060)], fet) },
+                    { fer: (z, fet) => z.seq([c => z.deixar(c, 'herba_sj'), c => z.deixar(c, 'rialla'), c => z.deixar(c, null, 0xffd060)], fet) },
                     { qui: 'Ineu', text: 'Ha funcionat! L\'aigua de la pica torna a ser clara com el vidre.' },
                     { avis: 'Has obtingut l\'AIGUA DE LA FONT DEL BISBE.', obj: 'aigua_sj' }
                 ],
@@ -772,8 +772,9 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: 'Ineu', text: 'Les Venerables Sàvies diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, romaní i el fruit de l\'arbre d\'or.»' },
-                { qui: 'Ineu', text: 'Les herbes de la Nit de Sant Joan fan llum: n\'hi ha una al nord (cap al Til·ler) i el romaní al sud-est, sempre en una clariana. I l\'arbre d\'or... és la Prunera Màgica, al jardí de l\'Hostatgeria! Una pruna.' },
+                { qui: 'Ineu', text: 'Les Venerables Sàvies diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, rialla i el fruit de l\'arbre d\'or.»' },
+                { qui: 'Ineu', text: 'Rialla... Això no és cap rialla de riure: és una PLANTA! Les Venerables Sàvies en parlaven: «l\'herba del riure», una flor groga, de pètals tot al voltant, amb una boca somrient al mig, com si es rigués. Només creix on la boira no l\'ha pogut marcir, i diuen que al Bosc del Pi dels Tres Cants, al sud de Sant Antoni, en una clariana a la vora del camí... però que no la deixen collir fàcilment: la guarden uns bolets verinosos.' },
+                { qui: 'Ineu', text: 'L\'herba de Sant Joan fa llum, sempre en una clariana: la trobaré aquí al bosc, al nord (cap al Til·ler). I l\'arbre d\'or... és la Prunera Màgica, al jardí de l\'Hostatgeria! Una pruna.' },
                 { avis: `Ofrenes trobades: ${herbes}/3.` }
             ],
             enAcabar: () => { E.posaFlag('fontVista'); E.posaObjectiu(objectiuFont(herbes)); }
@@ -1556,7 +1557,7 @@ const DIALEGS = {
                     { qui: "La Joaneta", text: "Aigua... de la Font del Bisbe?! Dona'm aixòooo! Fa trenta anys que no en tinc ni una gota neta." },
                     { fer: (z, fet) => z.seq([c => z.npcVa('joaneta', 500, 360, c, 200), c => { z.llum(450, 290, 0x6aff6a); z.animaNpc('joaneta', 4200, c, 'bombolles'); }, c => z.npcVa('joaneta', 560, 420, c, 200)], fet) },          // davant l'olla prepara el beuratge (animació pròpia: l'ampolla gran)
                     { qui: "La Joaneta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? Han tapat el camí que hi porta amb una boira que no marxa amb el vent." },
-                    { qui: "La Joaneta", text: "Mira, he barrejat l'aigua que queda amb romaní, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
+                    { qui: "La Joaneta", text: "Mira, he barrejat l'aigua que queda amb rialla, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
                     { avis: "Has obtingut el BEURATGE DE LA JAUNETA.", obj: 'beuratge' }
                 ],
                 enAcabar: () => {

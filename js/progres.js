@@ -26,7 +26,7 @@ const PROGRES = {
               if (!E.flag('fontVista')) return "La Font del Bisbe, que diuen que guaria tothom, s'ha quedat adormida. Val la pena anar-hi a mirar.";
               const n = ['herba1', 'herba2'].filter(h => E.flag(h)).length + (E.te('pruna') || E.flag('herba3') ? 1 : 0);
               return n === 3 ? "Ja tens totes les ofrenes: torna a la Font del Bisbe."
-                  : "A la Font del Bisbe, les ofrenes que falten (" + n + "/3): l'herba de Sant Joan, el romaní i una pruna de la Prunera de l'Hostatgeria.";
+                  : "A la Font del Bisbe, les ofrenes que falten (" + n + "/3): l'herba de Sant Joan (al bosc, al nord), la rialla (una planta: al Bosc del Pi dels Tres Cants, al sud de Sant Antoni, guardada per bolets verinosos) i una pruna de la Prunera de l'Hostatgeria.";
           } },
         { id: 'joaneta', marca: ['joanetaVista', 'obj:beuratge'], fet: E => E.flag('joanetaVista') || E.flag('parlatTiler'),
           pista: E => !E.flag('portalJoaneta')

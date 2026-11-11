@@ -926,6 +926,9 @@ class EscenaUI extends Phaser.Scene {
 
     avancar() {
         if (!this.dialeg) return;
+        // La fanfàrria d'un objecte rebut no es pot interrompre: la pàgina d'avís no passa fins que acaba
+        const pg = this.dialeg.dades.pagines[this.dialeg.pagina];
+        if (this.ineuAlcat && pg && pg.obj && performance.now() < (Joc.fanfaraFins || 0)) return;
         if (this.dialeg.fent) {                                  // una pàgina d'acció que espera un clic (ZonaBase.esperarClic)
             const f = this.dialeg.alClic;
             if (f) { this.dialeg.alClic = null; f(); }

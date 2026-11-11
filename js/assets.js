@@ -151,6 +151,7 @@ const CATALEG = [
     { key: 'pastor_enfadat', file: 'assets/enemics/pastor_enfadat.webp', amplada: 174, cru: true },
     { key: 'aldreu_guardia', file: 'assets/enemics/aldreu_guardia.webp', amplada: 85,  cru: true, provisional: (c, w) => dibuixarPastorBoira(c, w) },
     { key: 'bolet',          file: 'assets/enemics/bolet.webp',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
+    { key: 'bolet_verinos',  file: 'assets/enemics/bolet_verinos.webp',  amplada: 58, provisional: (c, w) => dibuixarBolet(c, w, 'verinos') },       // guardians de la rialla
     { key: 'rovello',        file: 'assets/natura/rovello.webp',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
     { key: 'llac',           file: null,           amplada: 58, provisional: (c, w) => dibuixarLlac(c, w) },
     { key: 'diposit',        file: null,        amplada: 300, provisional: (c, w) => dibuixarDiposit(c, w) },
@@ -172,6 +173,7 @@ const CATALEG = [
     { key: 'herba_sj',     file: null,     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'sj') },
     { key: 'romani',       file: null,       amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'romani') },
     { key: 'farigola',     file: null,     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'farigola') },
+    { key: 'rialla',       file: 'assets/natura/rialla.webp',       amplada: 90, provisional: (c, w) => dibuixarHerba(c, w, 'rialla') },       // l'herba del riure (Bosc del Pi dels Tres Cants)
     { key: 'cercle_bolets',  file: 'assets/natura/cercle_bolets.webp',  amplada: 150, provisional: (c, w) => dibuixarCercleBolets(c, w) },
     { key: 'olla',           file: null,           amplada: 110, provisional: (c, w) => dibuixarOlla(c, w) },
     { key: 'ocell',          file: null,          amplada: 34, provisional: (c, w) => dibuixarOcell(c, w) },

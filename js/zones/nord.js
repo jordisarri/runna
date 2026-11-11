@@ -627,7 +627,7 @@ class ZonaCelles extends ZonaBase {
         else this.jugaMandu();
 
         // Sant Benet (est): la Meus i el seu marit, el senyor Molner, veïns de Sant Benet
-        this.npc('meus', 1250, 680, DIALEGS.meus);
+        this.npc('meus', 1250, 680, DIALEGS.meus, { zoomConversa: 1.3 });
         this.npc('molner', 1320, 700, DIALEGS.molner);
         // Les dues Venerables Sàvies (agafades del braç, un sol gràfic): donen consells
         this.npc('venerables', 815, 700, DIALEGS.venerables, { colAmple: 100 });
@@ -1382,10 +1382,11 @@ class ZonaBosc extends ZonaBase {
         }).setDepth(AY + 2);
         this.boiraAmbient(AX, AY - 20, 300, 60, 0.5);
 
-        // Herbes de la Nit de Sant Joan (la tercera ofrena de la font és una pruna de la Prunera): cal trobar-les entre els arbres. Cada una és en una clariana, més gran que abans,
+        // Herbes de la Nit de Sant Joan (les altres dues ofrenes de la font: el romaní, al Bosc del Pi dels Tres Cants, i una pruna de la Prunera): cal trobar-la entre els arbres. És en una clariana, més gran que abans,
         // amb un halo a terra, espurnes i una columna de llum tènue que es veu per sobre de les copes.
         this.herbes = [];
-        [[1, 'herba de Sant Joan', 'herba_sj', 720, 290], [2, 'romaní', 'romani', 1380, 990]].forEach(([n, nom, key, x, y]) => {
+        // (el romaní, ara, és al Bosc del Pi dels Tres Cants: bosc_pi.js)
+        [[1, 'herba de Sant Joan', 'herba_sj', 720, 290]].forEach(([n, nom, key, x, y]) => {
             const halo = this.add.ellipse(x, y - 10, 96, 44, 0xfff0a0, 0.3).setDepth(y - 1);
             this.tweens.add({ targets: halo, alpha: 0.08, scale: 1.35, yoyo: true, repeat: -1, duration: 1100 });
             const raig = this.add.rectangle(x, y - 110, 30, 220, 0xfff4b0, 0.12).setDepth(9500);
@@ -1405,7 +1406,7 @@ class ZonaBosc extends ZonaBase {
         // Bosc dens: arbres en graella amb petits desplaçaments, deixant lliures el camí i els llocs importants
         // (els arbres es dibuixen davant segons la y: una herba o un cartell queda tapat per les copes dels arbres que té al sud,
         // per això les clarianes són amples i el cartell en té una de més a sota)
-        const lliure = [[200, 180, 170], [900, 650, 250], [AX, AY - 40, 480], [720, 290, 210], [1380, 990, 210], [560, 1020, 210], [1700, 700, 240], [1520, 600, 190], [1520, 830, 210]];
+        const lliure = [[200, 180, 170], [900, 650, 250], [AX, AY - 40, 480], [720, 290, 210], [560, 1020, 210], [1700, 700, 240], [1520, 600, 190], [1520, 830, 210]];
         for (let y = 80; y < 1180; y += 150) {
             for (let x = 70; x < 1760; x += 170) {
                 const px = x + (rnd() - 0.5) * 90, py = y + (rnd() - 0.5) * 70;

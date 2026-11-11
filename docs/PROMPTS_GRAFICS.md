@@ -8,6 +8,8 @@
 
 - [x] `alzina_buida`
 
+- [x] `rialla` (fet: `art/natura/rialla.png`, amb el fons i les ombres netejats; el prompt és sota, a Elements d'escenari)
+
 - [x] `arbre`
 
 - [x] `arma_basto`
@@ -17,6 +19,8 @@
 - [x] `bassadoria`
 
 - [x] `bolet`
+
+- [x] `bolet_verinos` (fet: `art/enemics/bolet_verinos.jpg`; el prompt és sota, a Enemics)
 
 - [x] `branca`
 
@@ -306,6 +310,8 @@ Charming 2D cartoon game scenery asset in the same art style as the attached ref
 ```
 
 
+### `rialla.png` → `assets/natura/rialla.webp` (amplada 90; **fet i connectat**) *(La **rialla**, «l'herba del riure»: una **planta** màgica que és la tercera ofrena de la Font del Bisbe (`js/zones/bosc_pi.js`, Bosc del Pi dels Tres Cants, envoltada de tres bolets verinosos). **UNA SOLA FLOR**, gran, groga, vista de cara, amb **molts pètals tot al voltant** (uns 10, ben definits) i, al centre, una **boca evident i somrient**: oberta, en forma de mitja lluna, de color vermell fosc, amb una mica de llengua rosa. **Sense ulls, sense nas, sense celles, sense galtes ni cap altre tret de cara**: només la boca. Sota la flor, **una sola tija verda i prima** amb **dues fulles ovalades**, i la base de la tija a baix de la imatge. Sense llum, sense espurnes, sense halo ni ombra al terra (el joc hi posa un halo i una columna de llum per codi). Imatge **quasi quadrada, uns 1:1,1**, fons blanc pur (#FFFFFF), mateix estil cel-shading i contorn fosc que la resta de la natura del joc; la flor i la boca s'han de llegir bé a 70 px d'ample. **Prompt:** «A single large bright yellow flower seen from the front, with about ten well-defined petals all around it and, in the centre, one clear smiling mouth: open, half-moon shaped, dark red, with a small pink tongue. No eyes, no nose, no eyebrows, no cheeks, no other facial features, only the mouth. A single thin green stem with two oval leaves, stem base at the bottom of the image. No glow, no sparkles, no halo, no ground shadow. Hand-painted cel-shaded 2D game asset, dark brown outline, pure white background (#FFFFFF), same style as the rest of the game's nature props, readable at 70 px wide.» Mentre no hi sigui, el joc fa servir un dibuix provisional fet amb codi.)*
+
 ### `placa_pi.png` → `assets/natura/placa_pi.webp` (amplada 70) *(La placa del Pi dels Tres Cants: una **fita de pedra petita i baixa** davant el pi, que explica que cal un cant per cada branca. **No ha de semblar una làpida**: sense creu, sense cap arrodonit, sense lletres ni flors. Ha d'estar vista **completament de cara** (alçat frontal, sense cap perspectiva lateral ni cara de dalt visible): una peça plana, com un rectangle de pedra, a la qual es veu només la cara de davant. Mida al joc: uns 70 × 70 (arriba aproximadament a la cintura de l'Ineu). Mentre no hi sigui, el joc fa servir un dibuix provisional fet amb codi.)*
 
 
@@ -446,6 +452,8 @@ Edit the attached reference image of this character. Keep EXACTLY the same chara
 Tots els enemics són bestioles o persones **corrompudes per la boira lila**: han de llegir-se bé a mida petita (uns 60-110 px al joc), amb una silueta clara i ulls que brillen.
 
 
+
+### `bolet_verinos.png` → `assets/enemics/bolet_verinos.webp` (amplada 58; **fet i connectat**) *(El **bolet verinós**, un dels tres guardians de la rialla (`ENEMICS.bolet_verinos`, `js/combat.js`): immòbil, però tira el seu verí. **Puja com a referència `assets/enemics/bolet.webp`** (el bolet brut normal: mateixa mida, mateix enquadrament i mateixa base) però que es distingeixi a primer cop d'ull: **barret verd malaltís** (verd bosc fosc amb una mica de verd àcid a les vores) amb **pigues grogues grosses**, **peu pàl·lid i verdós**, **ulls petits i ferotges**, i **gotes de verí verd brillant que regalimen** de la vora del barret (una o dues, ben visibles). Cal que es llegeixi a uns 58 px d'ample i que no es confongui amb el bolet lila. Imatge **quasi quadrada, uns 1:0,9**, fons blanc pur (#FFFFFF), mateix estil cel-shading que el bolet. Sense verí a terra ni boira. **Prompt:** «Same mushroom creature as the reference image (same size, framing and pose), but a poisonous variant: sickly dark green cap with acid-green edges and large yellow spots, pale greenish stem, small fierce eyes, and one or two bright toxic-green drops dripping from the cap rim. Hand-painted cel-shaded 2D game enemy, chibi proportions, dark outline, pure white background (#FFFFFF), no ground, no mist.» Mentre no hi sigui, el joc fa servir un dibuix provisional fet amb codi.)*
 
 ### Cap girat de l'estàtua: `home_raim_o.png` (amplada 78) *(Opcional: el puzle gira el cap de l'estàtua amb cada volta de la palanca. Les variants nord, nord-est i est ja estan fetes; el sud és `home_raim.png`. Si no hi ha aquesta variant, l'estàtua no canvia de cap i només es mou la fletxa.)*
 

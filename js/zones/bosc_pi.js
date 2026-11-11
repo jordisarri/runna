@@ -7,7 +7,7 @@
  * cada cant fa reviure una de les tres branques (la imatge del pi canvia amb un fade). Només es pot fer des de l'est (Sant Antoni): des del Dolmen, el camí s'acaba contra les branques
  * i l'Ineu entén que cal anar per l'altre costat. El pi no parla: el premi, a banda d'obrir el camí, és la carta que el Cortiner hi va deixar al tronc, amb la història dels tres cants.
  */
-const PI3 = { A: 2800, H: 1000, camiY: 600, camiH: 140, vx: 2490, barX: 1150, piX: 1500, piY: 545, plX: 1500, plY: 598 };
+const PI3 = { rialla: { x: 2060, y: 470, guardians: [[1985, 450], [2135, 450], [2060, 568]] }, A: 2800, H: 1000, camiY: 600, camiH: 140, vx: 2490, barX: 1150, piX: 1500, piY: 545, plX: 1500, plY: 598 };
 // Cada cant que sona davant el pi en fa reviure una branca: la imatge canvia amb un fade, sense llums ni efectes.
 // Estats: 0 pi sec · 1 només la branca esquerra viva · 2 també la dreta · 3 tot l'arbre viu.
 const PI3_ESTATS = ['pi_tres_cants_mort', 'pi_tres_cants_esq', 'pi_tres_cants_dos', 'pi_tres_cants'];
@@ -67,7 +67,7 @@ class ZonaBoscPi extends ZonaBase {
         {
             let ll = 91;
             const r2 = () => { ll = (ll * 16807) % 2147483647; return ll / 2147483647; };
-            const enemics = [[2450, 330], [2150, 640], [700, 620], [350, 580], [2300, 760], [2450, 520], [550, 760]];
+            const enemics = [[2450, 330], [2150, 640], [700, 620], [350, 580], [2300, 760], [2450, 520], [550, 760], [PI3.rialla.x, PI3.rialla.y]];       // (l'últim és la rialla: clariana sense decoració)
             const lliure = (x, y, marge) => !enemics.some(([ex, ey]) => Math.hypot(ex - x, ey - y) < marge) && Math.abs(x - barX) > 330
                 && !(Math.abs(x - piX) < 480) && x > 140 && x < x0c - 130;
             const franges = [[y0 - 60, y0 - 10, 130], [y1 + 20, S - 120, 130]];        // [de y, fins a y, cada quants píxels]
@@ -110,6 +110,8 @@ class ZonaBoscPi extends ZonaBase {
         [[2300, 760], [2450, 520], [550, 760]].forEach(([x, y]) => this.enemic('bolet', x, y));
         this.boiraAmbient(2200, 640, 360, 80, 0.8);
         this.boiraAmbient(500, 640, 360, 80, 0.8);
+
+        this.posarRialla();
 
         // La placa de pedra, davant el pi: explica què cal fer. Un cop llegida (i amb la tarota), s'obre la tarota per tocar els cants; la tarota només
         // funciona aquí, a prop de la placa. Des de l'oest de la barrera, només s'hi pot llegir què passa.
@@ -248,6 +250,49 @@ class ZonaBoscPi extends ZonaBase {
 
     // Els tres cants han sonat: tot l'arbre reviu, les branques s'aixequen, el pi explica d'on vénen els cants i el camí queda lliure
     // Els ocells tornen al pi: volen des de fora de la pantalla fins a les branques i s'hi posen (a partir d'ara hi són sempre). Sense text.
+    // La rialla («l'herba del riure»), una de les tres ofrenes de la Font del Bisbe (Bosc de Sant Joan): aquí, a la vora nord del camí, a l'est del pi, en una clariana
+    // sense arbres, envoltada de tres bolets verinosos (immòbils, però tiren el seu verí) que cal derrotar per arribar-hi. NO EXISTEIX fins que la font la demana (fontVista):
+    // abans no hi són ni l'herba ni els bolets. Un cop lliure (els tres derrotats: flag riallaLliure) els bolets no tornen. (Les capçades del nord queden darrere: no la tapen.)
+    posarRialla() {
+        this.rialla = null; this.guardians = null;
+        if (!Estat.flag('fontVista') || Estat.flag('herba2')) return;
+        const { x, y, guardians } = PI3.rialla;
+        const halo = this.add.ellipse(x, y - 10, 96, 44, 0xfff0a0, 0.3).setDepth(y - 1);
+        this.tweens.add({ targets: halo, alpha: 0.08, scale: 1.35, yoyo: true, repeat: -1, duration: 1100 });
+        const raig = this.add.rectangle(x, y - 110, 30, 220, 0xfff4b0, 0.12).setDepth(9500);
+        this.tweens.add({ targets: raig, alpha: 0.04, yoyo: true, repeat: -1, duration: 1400 });
+        const img = this.posar('rialla', x, y);
+        this.tweens.add({ targets: img, scaleY: img.scaleY * 1.05, yoyo: true, repeat: -1, duration: 900 });
+        const espurnes = this.add.particles(x, y - 14, 'espurna', {
+            x: { min: -30, max: 30 }, y: { min: -10, max: 10 }, speedY: { min: -46, max: -16 }, lifespan: 1600,
+            scale: { start: 0.38, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xfff2a0, 0xffffff], frequency: 260, blendMode: 'ADD'
+        }).setDepth(9501);
+        espurnes.stop();
+        if (!Estat.flag('riallaLliure')) {
+            const g = guardians.map(([gx, gy]) => this.enemic('bolet_verinos', gx, gy)).filter(Boolean);
+            if (g.length) this.guardians = g;                 // (sense combat actiu, enemic() no en crea: llavors l'herba ja és lliure)
+        }
+        this.interactiu(x, y, RADI_OBJECTE, DIALEGS.herba(2, "la rialla, l'herba del riure", 'rialla'), { altura: 70, actiu: () => !Estat.flag('herba2') && this.riallaLliure() });
+        this.rialla = { img, halo, raig, espurnes, encesa: false };
+    }
+
+    // Lliure = els guardians derrotats (o no n'hi ha)
+    riallaLliure() { return !this.guardians || this.guardians.every(e => e.mort); }
+
+    actualitzar() {
+        const r = this.rialla;
+        if (!r) return;
+        if (this.guardians && !Estat.flag('riallaLliure') && this.riallaLliure()) {          // l'últim bolet cau: el cercle s'obre
+            Estat.posaFlag('riallaLliure');
+            this.llum(PI3.rialla.x, PI3.rialla.y - 40, 0xfff0a0);
+            Sfx.objecte();
+        }
+        const visible = !Estat.flag('herba2');
+        r.img.setVisible(visible); r.halo.setVisible(visible); r.raig.setVisible(visible);
+        if (visible && !r.encesa) { r.encesa = true; r.espurnes.start(); }
+        else if (!visible && r.encesa) { r.encesa = false; r.espurnes.stop(); }
+    }
+
     posarOcellsPi(animat, fet) {
         const pi = this.pi, X = pi.x, alt = pi.displayHeight;
         this.ocellsPi = this.ocellsPi || [];
