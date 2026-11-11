@@ -40,7 +40,7 @@ class Arcade extends Phaser.Scene {
         ['drive', 'reves', 'servei'].forEach(n => this.load.spritesheet(n === 'servei' ? 'ineu_servei' : 'pp_' + n, `../../assets/pingpong2/ineu_${n}.webp?v=2`, { frameWidth: 512, frameHeight: 512 }));
         this.load.image('jusef_levita', '../../assets/personatges/jusef_levita.webp');
         this.load.image('cartell_llums', '../../assets/objectes/cartell_llums.webp');
-        this.load.spritesheet('ineu_celebracio', '../../assets/pingpong2/ineu_celebracio.webp?v=1', { frameWidth: 512, frameHeight: 512 });
+        this.load.spritesheet('ineu_celebracio', '../../assets/pingpong2/ineu_celebracio.webp?v=2', { frameWidth: 512, frameHeight: 512 });
         ['jusef_dret', 'jusef_revers', 'jusef_servei'].forEach(n => this.load.spritesheet(n, `../../assets/pingpong2/${n}.webp?v=2`, { frameWidth: 256, frameHeight: 256 }));
     }
 
@@ -89,7 +89,7 @@ class Arcade extends Phaser.Scene {
         this.celebLinies = this.ui(this.add.graphics().setDepth(45.5));
         this.celebActiva = 0;
         if (this.textures.exists('ineu_celebracio')) {
-            this.anims.create({ key: 'celebra', frames: this.anims.generateFrameNumbers('ineu_celebracio', { start: 0, end: 15 }), frameRate: 13 });
+            this.anims.create({ key: 'celebra', frames: this.anims.generateFrameNumbers('ineu_celebracio', { start: 3, end: 15 }), frameRate: 14 });
             this.spCeleb = this.ui(this.add.sprite(AMPLE / 2, ALT + 30, 'ineu_celebracio', 0).setOrigin(0.5, 1).setScale(2.0).setDepth(46).setVisible(false));
         }          // flaix a pantalla (cops perfectes i punts)
         this.input.on('pointerdown', p => this.alPrimer(p));
@@ -584,18 +584,55 @@ class Arcade extends Phaser.Scene {
     celebraVictoria(fet) {
         const sp = this.spCeleb;
         this.celebActiva = this.time.now;
-        this.tweens.add({ targets: this.celebFons, fillAlpha: 0.72, duration: 260 });
+        this.tweens.add({ targets: this.celebFons, fillAlpha: 0.74, duration: 260 });
         this.flaixPantalla(0.9, 380);
         this.cameras.main.shake(400, 0.01);
-        sp.setVisible(true).setScale(2.0).setPosition(AMPLE / 2, ALT + 30).play('celebra');
-        this.so('be'); this.time.delayedCall(260, () => this.so('fort')); this.time.delayedCall(650, () => this.so('be'));
-        // ones d'espurnes (a la interfície, per sobre del tot)
-        [0, 380, 760, 1150].forEach((t, i) => this.time.delayedCall(t, () => this.chispesUI(AMPLE / 2 + (i % 2 ? 90 : -90), 560, 36, [0xffe9a0, 0xffffff, 0x7ad8ff, 0xff9ac8, 0xa0ffb0], 700, 0.8, 1100)));
-        // l'Ineu s'infla en l'impuls del salt
-        this.tweens.add({ targets: sp, scaleX: 2.15, scaleY: 2.15, duration: 520, delay: 380, yoyo: true, ease: 'Back.easeOut' });
-        sp.once('animationcomplete', () => {
-            this.time.delayedCall(1100, () => {
-                this.tweens.add({ targets: [sp], alpha: 0, duration: 260, onComplete: () => { sp.setVisible(false).setAlpha(1); this.celebActiva = 0; this.celebLinies.clear(); this.celebFons.setFillStyle(0x180a26, 0); fet(); } });
+        // 1) «HAS GUANYAT!» en lletres d'onomatopeia d'anime: cada lletra cau gran amb un impacte
+        const lletres = [];
+        const font = 'Impact, "Arial Black", "Helvetica Neue", Georgia, sans-serif';
+        const linia = (text, y, mida, t0) => {
+            const objs = text.split('').map(ch => {
+                const mk = (stroke, sw, color, dx, dy) => this.add.text(0, 0, ch, { fontFamily: font, fontSize: mida + 'px', fontStyle: 'italic bold', color, stroke, strokeThickness: sw }).setOrigin(0.5).setDepth(46).setAngle(0);
+                const grup = [mk('#2a0a3a', 34, '#2a0a3a'), mk('#ffffff', 20, '#ffffff'), mk('#c4161c', 10, '#ffb020'), mk('#c4161c', 0, '#ffe9a0')];     // ombra lila, vora blanca, vora vermella i farciment groc
+                grup[3].setScale(1); grup.forEach(o => { this.cameras.main.ignore(o); o.setVisible(false); });
+                return { ch, grup, w: grup[3].width };
+            });
+            const total = objs.reduce((a, o) => a + o.w + 4, -4); let x = AMPLE / 2 - total / 2;
+            objs.forEach((o, k) => { o.x = x + o.w / 2; x += o.w + 4; o.y = y; o.rot = (t0 ? 3 : -4) + Phaser.Math.FloatBetween(-2.5, 2.5); lletres.push(o); });
+        };
+        linia('HAS', 305, 150, 0);
+        linia('GUANYAT!', 480, 104, 1);
+        // TOT el text apareix de cop, amb una explosió de còmic (estil K.O. de Street Fighter / Dr. Slump): estrella dentada darrere, flaix blanc, tremolor fort
+        const expl = this.add.graphics().setDepth(45.9); this.cameras.main.ignore(expl);
+        const punts = [], N = 26, cx = AMPLE / 2, cy = 400;
+        for (let k = 0; k < N * 2; k++) { const a = (k / (N * 2)) * Math.PI * 2, r = k % 2 ? 250 + Math.random() * 40 : 360 + Math.random() * 110; punts.push({ x: Math.cos(a) * r, y: Math.sin(a) * r * 0.82 }); }
+        expl.setPosition(cx, cy);
+        expl.fillStyle(0xc4161c, 1).fillPoints(punts.map(q => ({ x: q.x * 1.06, y: q.y * 1.06 })), true);
+        expl.fillStyle(0xff9a20, 1).fillPoints(punts.map(q => ({ x: q.x * 0.92, y: q.y * 0.92 })), true);
+        expl.fillStyle(0xffe34a, 1).fillPoints(punts.map(q => ({ x: q.x * 0.74, y: q.y * 0.74 })), true);
+        expl.setScale(0.05).setAngle(-8);
+        this.tweens.add({ targets: expl, scale: 1.12, angle: 2, duration: 240, ease: 'Back.easeOut' });
+        this.tweens.add({ targets: expl, scale: 1.0, duration: 320, delay: 240, ease: 'Sine.easeInOut', yoyo: true, repeat: -1 });
+        lletres.forEach(o => o.grup.forEach(g => { if (o.ch === ' ') return; g.setVisible(true).setPosition(o.x, o.y).setAngle(o.rot).setScale(0.05); this.tweens.add({ targets: g, scale: 1.18, duration: 190, ease: 'Back.easeOut' }); this.tweens.add({ targets: g, scale: 1, duration: 170, delay: 190, ease: 'Sine.easeInOut' }); }));
+        this.flaixPantalla(1, 420); this.cameras.main.shake(600, 0.016);
+        this.so('fort'); this.time.delayedCall(80, () => this.so('magia')); this.time.delayedCall(240, () => this.so('fort'));
+        this.chispesUI(cx, cy, 60, [0xffffff, 0xffe9a0, 0xff9a20, 0xff5a3a], 900, 0.9, 700);
+        // el text vibra suaument mentre dura la celebració
+        const vibra = this.time.addEvent({ delay: 60, loop: true, callback: () => lletres.forEach((o, k) => o.grup.forEach(g => { if (g.visible) g.y = o.y + Math.sin(this.time.now / 90 + k) * 3; })) });
+        // 2) després, per davant del text, l'Ineu salta
+        this.time.delayedCall(1300, () => {
+            sp.setVisible(true).setScale(2.0).setPosition(AMPLE / 2, ALT + 30).play('celebra');
+            this.so('be'); this.time.delayedCall(300, () => this.so('fort'));
+            this.flaixPantalla(0.35, 220);
+            [0, 380, 760, 1150].forEach((t, i) => this.time.delayedCall(t, () => this.chispesUI(AMPLE / 2 + (i % 2 ? 90 : -90), 700, 34, [0xffe9a0, 0xffffff, 0x7ad8ff, 0xff9ac8, 0xa0ffb0], 700, 0.8, 1100)));
+            this.tweens.add({ targets: sp, scaleX: 2.15, scaleY: 2.15, duration: 520, delay: 380, yoyo: true, ease: 'Back.easeOut' });
+            sp.once('animationcomplete', () => {
+                this.time.delayedCall(1000, () => {
+                    this.tweens.add({ targets: [sp, expl, ...lletres.flatMap(o => o.grup)], alpha: 0, duration: 280, onComplete: () => {
+                        vibra.remove(); expl.destroy(); lletres.forEach(o => o.grup.forEach(g => g.destroy()));
+                        sp.setVisible(false).setAlpha(1); this.celebActiva = 0; this.celebLinies.clear(); this.celebFons.setFillStyle(0x180a26, 0); fet();
+                    } });
+                });
             });
         });
     }
