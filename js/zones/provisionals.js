@@ -7,7 +7,7 @@
 // ---------------- ESGLÉSIA (interior) ----------------
 // La nau fa 800 d'ample (x 240-1040). El retaule ocupa tot l'ample i es veu sencer (800 x 990); al seu peu hi ha dues
 // portes: la de la dreta duu a la torre de l'escala (ZonaTorre) i d'allà a les golfes del rellotge.
-const ESG = { alcada: 1640, retY: 1010, retBaix: 24, retTop: 20, sostre: 1000, portaDx: 870, portaEsq: 408 };
+const ESG = { alcada: 1640, retY: 1010, retBaix: 24, retTop: 20, sostre: 1034, sostrePorta: 1000, portaDx: 870, portaEsq: 408 };      // sostre: fins on arriba la base del retaule (els peus no hi pugen); sostrePorta: només davant la porta de la dreta, que s'ha de poder tocar
 
 class ZonaEsglesia extends ZonaBase {
     constructor() {
@@ -32,7 +32,11 @@ class ZonaEsglesia extends ZonaBase {
         murs.fillStyle(0xcdb89a, 1).fillRect(200, 0, 40, A).fillRect(1040, 0, 40, A);
         this.colisio(120, A / 2, 240, A);
         this.colisio(1160, A / 2, 240, A);
-        this.colisio(640, ESG.sostre / 2, 800, ESG.sostre);
+        // El retaule (fins a y = sostre) no es pot trepitjar; només s'obre un pas davant la porta de la dreta (x 828-912), que duu a la torre
+        const P0 = ESG.portaDx - 42, P1 = ESG.portaDx + 42;
+        this.colisio((240 + P0) / 2, ESG.sostre / 2, P0 - 240, ESG.sostre);
+        this.colisio((P1 + 1040) / 2, ESG.sostre / 2, 1040 - P1, ESG.sostre);
+        this.colisio((P0 + P1) / 2, ESG.sostrePorta / 2, P1 - P0, ESG.sostrePorta);
         this.colisio(420, A - 10, 360, 20);
         this.colisio(860, A - 10, 360, 20);
 

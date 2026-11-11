@@ -1430,7 +1430,7 @@ class ZonaBase extends Phaser.Scene {
         } else {
             const quiet = 'aturat_' + vista;
             if (this.anims.exists(quiet)) {
-                this.ineu.setFlipX(DIRS_IDLE_MIRALL.has(vista));
+                this.ineu.setFlipX(false);
                 if (!this.ineu.anims.isPlaying || !this.ineu.anims.currentAnim || this.ineu.anims.currentAnim.key !== quiet) {
                     this.ineu.anims.play(quiet, true);
                 }

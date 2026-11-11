@@ -8,7 +8,7 @@ Origen: art/ineu/v2/zip_walk/<dir>.png i zip_idle/<dir>.png (4x4 fotogrames de 2
   · una translació rígida de tota la direcció (mediana dels peus i del centre), de manera que els peus quedin a y = 238 i el cos centrat a x = 128 i el moviment de
     cada fotograma es conservi,
   · el contorn negre d'1 px (eines/contorn_ineu.py).
-Els fulls vells (assets/ineu/) no es toquen. El joc tria la versió amb el paràmetre ?ineu=v1 / v2 (vegeu INEU_V2 a js/assets.js).
+Els fulls vells (v1) són a art/ineu/arxiu/v1_assets/. Tot el que no s'usa és a art/ineu/arxiu/.
 """
 import sys
 from pathlib import Path

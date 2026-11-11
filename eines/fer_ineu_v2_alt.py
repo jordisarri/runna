@@ -3,9 +3,9 @@
 
     python3 eines/fer_ineu_v2_alt.py [gruix_contorn]
 
-Origen: art/ineu/v2/alt/<nom>.png (4x4 de 256): idle_elev_left/right (idle amb càmera elevada, coroneta visible; el dret és el mirall de l'esquerre), walk_elev_left/right (caminar; l'esquerre és el mirall del dret) i perfil_left/right (caminar de perfil). Els descartats són a alt/descartats/.
+Origen: art/ineu/v2/alt/<nom>.png (4x4 de 256): idle_elev_left/right (idle amb càmera elevada, coroneta visible; el dret és el mirall de l'esquerre), walk_elev_left/right (caminar; l'esquerre és el mirall del dret). 
 Mateixa escala i mateix criteri de peus/centre que eines/fer_ineu_v2.py, i el mateix contorn.
-El joc tria la combinació amb ?lat=elev (idle elevat + caminar pseudo-isomètric, per defecte) o ?lat=perfil (idle de perfil + caminar de perfil).
+Són els fulls definitius d'esquerra i dreta (rutaIneu a js/assets.js). Les proves descartades (caminar de perfil, etc.) són a art/ineu/arxiu/v2_proves/.
 """
 import sys
 from pathlib import Path
