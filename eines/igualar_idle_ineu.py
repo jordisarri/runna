@@ -18,6 +18,8 @@ import fer_ineu_v2 as b
 CEL, PEUS = b.CEL, b.PEUS
 SENSE = b.SENSE
 DIRS = b.DIRS
+# Les vistes cap al nord es veien més petites que les altres (el cap i la massa del cos: 4-6 %), i el canvi des d'un costat era brusc: s'hi aplica un factor (caminar i idle). Màxim ~1,06: més amunt es tallaria el cap a dalt de la cel·la.
+FACTOR_DIR = {'up': 1.05, 'northwest': 1.06, 'northeast': 1.06}
 
 def mesura(im):
     R = []
@@ -42,6 +44,7 @@ def escala(im, k):
 def main():
     gruix = int(sys.argv[1]) if len(sys.argv) > 1 else 1
     parelles = []
+    pw_dest = {d: b.DEST / f'{d}.webp' for d in DIRS}
     for d in DIRS:
         if d in ('left', 'right'):
             continue        # als laterals l'idle és la referència: és el caminar el que s'ajusta (AJUST_CAMINAR a fer_ineu_v2_alt.py)
@@ -51,8 +54,11 @@ def main():
         mw, mi = mesura(w), mesura(i)
         q = (mw[0] / mi[0], (mw[1] / mi[1]) ** .5, (mw[2] / mi[2]) ** .5)
         k = float(np.mean(q))
-        contorn(escala(i, k), gruix).save(dest, 'WEBP', quality=88, alpha_quality=100, method=6)
-        print(d.ljust(10), 'quocients alçada/superfície/cap', [round(x, 3) for x in q], '→ escala', round(k, 3))
+        f = FACTOR_DIR.get(d, 1.0)
+        if f != 1.0:      # el caminar també s'engrandeix (des de la versió sense contorn) i es torna a posar el contorn
+            contorn(escala(w, f), gruix).save(pw_dest[d], 'WEBP', quality=88, alpha_quality=100, method=6)
+        contorn(escala(i, k * f), gruix).save(dest, 'WEBP', quality=88, alpha_quality=100, method=6)
+        print(d.ljust(10), 'quocients alçada/superfície/cap', [round(x, 3) for x in q], '→ escala', round(k, 3), 'factor', f)
 
 if __name__ == '__main__':
     main()

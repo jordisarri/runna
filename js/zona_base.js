@@ -830,7 +830,7 @@ class ZonaBase extends Phaser.Scene {
         const img = de && de.x !== undefined ? de : this.npcs && this.npcs[de];
         const x0 = img ? img.x : this.ineu.x, y0 = img ? img.y - (img.displayHeight || 60) * 0.6 : this.ineu.y - 120;
         const o = key && this.textures.exists(key) ? this.add.image(x0, y0, key) : this.add.circle(x0, y0, 10, 0xffe8a0, 1);
-        if (o.type === 'Image') o.setScale(46 / Math.max(o.height, o.width));
+        if (o.type === 'Image') o.setScale((String(key).startsWith('arma_') ? 150 : 46) / Math.max(o.height, o.width));      // les armes (el bastó, la branca) són llargues i primes: es veuen a 150 px
         o.setDepth(99000);
         this.tweens.add({ targets: o, x: this.ineu.x, y: this.ineu.y - 70, duration: 700, ease: 'Sine.easeInOut', onComplete: () => {
             o.destroy();
@@ -1030,7 +1030,7 @@ class ZonaBase extends Phaser.Scene {
     }
     objecteVolaDe(x0, y0, x1, y1, key, color, fet) {
         const o = key && this.textures.exists(key) ? this.add.image(x0, y0, key) : this.add.circle(x0, y0, 9, color, 1);
-        if (o.type === 'Image') o.setScale(42 / Math.max(o.height, o.width));
+        if (o.type === 'Image') o.setScale((String(key).startsWith('arma_') ? 130 : 42) / Math.max(o.height, o.width));
         o.setDepth(99000);
         this.tweens.add({ targets: o, x: x1, y: y1, duration: 650, ease: 'Sine.easeInOut', onComplete: () => { o.destroy(); if (fet) fet(); } });
     }
