@@ -17,19 +17,22 @@ import fer_ineu_v2 as b
 
 ORIGEN = b.ARREL / 'art' / 'ineu' / 'v2' / 'alt'
 DEST = b.DEST / 'alt'
+AMPLE_LAT = 118.0   # amplada objectiu del cos de perfil (el caminar lateral actual fa ~115)
+MAX_ESTIR = 1.3
 
 def main():
     gruix = int(sys.argv[1]) if len(sys.argv) > 1 else 1
     DEST.mkdir(parents=True, exist_ok=True)
-    alts = [b.bbox(f)[3] - b.bbox(f)[2] + 1 for t in ('walk', 'idle') for d in b.DIRS for f in b.fots(b.ARREL / 'art' / 'ineu' / 'v2' / f'zip_{t}' / f'{d}.png')]
-    f = b.ALT_VELLA / float(np.median(alts))
     for p in sorted(ORIGEN.glob('*.png')):
         fs = b.fots(p); boxes = [b.bbox(x) for x in fs]
+        # Cada full es porta a la mateixa alçada que els altres (224) i, com que de perfil l'Ineu queda més prim del que toca, s'eixampla fins a ~AMPLE_LAT px (com mínim sense encongir, màxim ×MAX_ESTIR).
+        f = b.ALT_VELLA / float(np.median([q[3] - q[2] + 1 for q in boxes]))
+        fx = f * min(MAX_ESTIR, max(1.0, AMPLE_LAT / (float(np.median([q[1] - q[0] + 1 for q in boxes])) * f)))
         cx = float(np.median([(q[0] + q[1]) / 2 for q in boxes])); bot = float(np.median([q[3] for q in boxes]))
-        dx, dy = round(128 - cx * f), round(b.PEUS - bot * f)
+        dx, dy = round(128 - cx * fx), round(b.PEUS - bot * f)
         out = Image.new('RGBA', (4 * b.CEL, 4 * b.CEL), (0, 0, 0, 0))
         for i, im in enumerate(fs):
-            g = im.resize((round(b.CEL * f), round(b.CEL * f)), Image.LANCZOS)
+            g = im.resize((round(b.CEL * fx), round(b.CEL * f)), Image.LANCZOS)
             cel = Image.new('RGBA', (b.CEL, b.CEL), (0, 0, 0, 0)); cel.paste(g, (dx, dy), g)
             out.paste(cel, ((i % 4) * b.CEL, (i // 4) * b.CEL))
         contorn(out, gruix).save(DEST / (p.stem + '.webp'), 'WEBP', quality=88, alpha_quality=100, method=6)
