@@ -33,10 +33,12 @@ def main():
         fix = Image.open(ARREL / 'assets' / 'personatges' / (k + '.webp'))
         s = fix.height / alt_med                                           # mateixa alçada de personatge que el dibuix fix
         fw, fh = round((x1 - x0) * s), round((y1 - y0) * s)
-        out = Image.new('RGBA', (fw * n, fh), (0, 0, 0, 0))
+        cols = n if fw * n <= 2048 else 4                                  # en una sola fila si cap; si no, en quadrícula (les textures grans, com més de 4096 px, no van a tots els mòbils)
+        rows = -(-n // cols)
+        out = Image.new('RGBA', (fw * cols, fh * rows), (0, 0, 0, 0))
         for i, im in enumerate(fots):
             c = im.crop((x0, y0, x1, y1)).resize((fw, fh), Image.LANCZOS)
-            out.paste(c, (i * fw, 0))
+            out.paste(c, ((i % cols) * fw, (i // cols) * fh))
         dest = ARREL / 'assets' / 'personatges' / (k + '_idle.webp')
         out.save(dest, 'WEBP', quality=88, alpha_quality=100, method=6)
         res[k] = {'w': fw, 'h': fh, 'n': n}
