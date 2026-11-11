@@ -467,7 +467,7 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 
 
 
-**Ineu:** L'aigua ja és neta: torna a ser clara i tranquil·la, i la boira violeta s'ha esvaït. Ara sí que se sent com canta.
+**Ineu:** L'aigua ja és neta: torna a ser clara i tranquil·la, i la boira violeta s'ha esvaït.
 
 **Ineu:** L'aigua sempre ha estat clara... Ara és tèrbola i fa olor de soterrani. I en surten aquests gripaus enverinats i una boira violeta, a glopades.
 
@@ -1402,7 +1402,7 @@ ${mots.join('   ')}
 
 
 
-**Isílder:** (des de la pèrgola) No te'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardi en menjava deu cada tarda i no n'hi tenia mai prou...
+**Isílder:** No te'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardi en menjava deu cada tarda i no n'hi tenia mai prou...
 
 ★ Has obtingut una PRUNA DAURADA.
 

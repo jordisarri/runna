@@ -27,6 +27,12 @@ function senseClauCampanar(E) { return !E.te('clau_campanar') && !E.flag('portaC
 const avisRosansa = E => (E.flag('runna') && !E.flag('llavorRosansa') && !E.flag('llosaOberta'))
     ? [{ qui: 'Les Venerables Sàvies', text: "I una cosa més: la Rosansa, la venedora de verdures, ha tornat a passar per les cel·les amb el carro. Si algun dia busques una llavor estranya, ja saps a qui preguntar." }] : [];
 
+// Suport al tema de la llosa del jardí: només quan l'Ineu ja l'ha examinada i n'ha parlat amb l'Isílder (flag llosaMisteri, que posa aquell diàleg)
+const avisLlosa = E => (E.flag('llosaMisteri') && !E.flag('llosaOberta'))
+    ? [{ qui: 'Les Venerables Sàvies', text: E.flag('runna')
+        ? "I la llosa del jardí de l'Hostatgeria? És obra dels monjos antics: la van tancar amb la mateixa llum de Runna que va segellar la porta de ferro. Ara que l'espasa és desperta, la pedra torna a respondre a la seva llum."
+        : "I la llosa del jardí de l'Hostatgeria? És obra dels monjos antics: la van tancar amb la mateixa llum de Runna que va segellar la porta de ferro. Mentre l'espasa dormi, la llosa dormirà amb ella." }] : [];
+
 function consellVenerables(E) {
     if (senseClauCampanar(E)) {
         return {
@@ -35,12 +41,14 @@ function consellVenerables(E) {
                 { qui: 'Les Venerables Sàvies', text: E.flag('carryParlat')
                     ? "Pobreta, no té el cap per res: fa dues nits que busca el seu gos, el Pallofa. Si el trobes i li'l portes, segur que et dona la clau."
                     : "Parla-hi, però amb paciència: la pobreta no és la mateixa des que va pujar la boira. Potser et pot necessitar." }            ,
+                ...avisLlosa(E),
                 ...avisRosansa(E)
             ]
         };
     }
     return { pagines: [
         { qui: 'Les Venerables Sàvies', text: "Ai, fill, torna a seure. A veure... " + pistaActual(E) },
+        ...avisLlosa(E),
         ...avisRosansa(E)
     ] };
 }
@@ -168,7 +176,7 @@ const DIALEGS = {
     },
 
     bassadoria: E => E.flag("bassadoriaNeta") ? ({
-        pagines: [{ qui: "Ineu", text: "L'aigua ja és neta: torna a ser clara i tranquil·la, i la boira violeta s'ha esvaït. Ara sí que se sent com canta." }]
+        pagines: [{ qui: "Ineu", text: "L'aigua ja és neta: torna a ser clara i tranquil·la, i la boira violeta s'ha esvaït." }]
     }) : ({
         pagines: [
             { qui: "Ineu", text: "L'aigua sempre ha estat clara... Ara és tèrbola i fa olor de soterrani. I en surten aquests gripaus enverinats i una boira violeta, a glopades." }
@@ -998,20 +1006,31 @@ const DIALEGS = {
                 ]
             };
         }
-        // Fins que l'Ineu no té Runna (Acte 3) l'Isílder només parla del jardí i del Sardi: la llosa i la Rosansa surten a l'Acte 3
+        // Fins que l'Ineu no té Runna (Acte 3) l'Isílder només parla del jardí i del Sardi (la llosa, quan l'Ineu l'examina: vegeu llosaJardi). Amb Runna, l'escena de la llosa
+        // (isilderRunna) salta sola en entrar al jardí; si no ha saltat (o s'ha tancat), es fa en parlar-hi.
         const acte3 = E.flag('runna');
+        if (acte3 && !E.flag('isilderRosansa') && !E.flag('llavorRosansa')) return DIALEGS.isilderRunna(E);
         return {
             pagines: [
                 { qui: 'Isílder', text: 'Bon dia, monjo! Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l\'Hostatgeria, aquí al costat, que s\'hi aguanta al darrere.' },
-                ...(acte3 ? [
-                    { qui: 'Isílder', text: "Portes l'espasa dels monjos, oi? Doncs mira aquesta llosa: aquest jardí en amaga una que ningú no ha aixecat mai. Els vells diuen que només s'obre amb una flor de lluna, i que sota hi ha el camí dels monjos fins al soterrani de la casa." },
-                    { qui: 'Isílder', text: "De llavors de lluna ja no en queden. Però la Rosansa, la venedora de verdures, ha tornat a passar per les cel·les, i fa anys que porta al carro una llavor estranya que ningú no sap què és. Pregunta-li." }
+                ...(acte3 && !E.flag('llavorRosansa') ? [
+                    { qui: 'Isílder', text: "La llosa encara s'encén amb la llum de la teva espasa. Ja ho saps: la Rosansa, a les cel·les, i aquella llavor estranya que porta al carro." }
                 ] : []),
                 { qui: 'Isílder', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí, el Sardi el cuidava molt. Des que la boira se\'l va endur, el cuido jo perquè, quan torni, ho trobi tot tal com ho va deixar.' }
-            ],
-            enAcabar: () => { if (acte3) { E.posaFlag('isilderRosansa'); E.posaObjectiu('Pregunta a la Rosansa, la venedora de verdures, a les cel·les, per la llavor d\'una flor de lluna.'); } }
+            ]
         };
     },
+    // L'escena de la llosa amb Runna (salta sola en entrar al jardí: ZonaJardi.escenaLlosaRunna). L'Isílder veu la llum de l'espasa i la de la llosa, que s'encén; li fa
+    // pensar en la llum que desprenen les llavors de lluna, i d'aquí, la Rosansa.
+    isilderRunna: E => ({
+        pagines: [
+            { qui: 'Isílder', text: "Monjo, espera! Mira la llosa: s'ha encès. Fa anys que la veig cada dia i no havia fet mai res així." },
+            { qui: 'Ineu', text: "Deu ser per Runna. La llosa brilla al mateix ritme que l'espasa." },
+            { qui: 'Isílder', text: "Aquesta llum pàl·lida i blavosa... Me'n recordo d'una de semblant: la que desprenen les llavors de lluna quan floreixen de nit. Potser una flor de lluna ajudaria la llosa a entendre què li demanes." },
+            { qui: 'Isílder', text: "De llavors de lluna ja no en queden. Però la Rosansa, la venedora de verdures, ha tornat a passar per les cel·les, i fa anys que porta al carro una llavor estranya que ningú no sap què és. Pregunta-li." }
+        ],
+        enAcabar: () => { E.posaFlag('isilderRosansa'); E.posaObjectiu("Pregunta a la Rosansa, la venedora de verdures, a les cel·les, per la llavor d'una flor de lluna."); }
+    }),
     // La Rosansa passa per les cel·les un sol cop: et ven la Llavor de Lluna i se'n va
     rosansa: E => ({
         pagines: [
@@ -1024,16 +1043,21 @@ const DIALEGS = {
         ],
         enAcabar: () => { E.dona('llavorLluna'); E.posaFlag('llavorRosansa'); E.posaObjectiu('Porta la Llavor de Lluna a l' + String.fromCharCode(39) + 'Isílder, a l' + String.fromCharCode(39) + 'Hostatgeria.'); }
     }),
-    llosaJardi: E => ({
-        pagines: [{ qui: 'Ineu', text: E.te('llavorLluna')
-            ? "Una llosa de pedra amb una creu gravada. La Llavor de Lluna voldria terra aquí vora, però cal algú que conegui el jardí: l'Isílder."
-            : E.flag('isilderRosansa')
-                ? "Una llosa de pedra amb una creu gravada, ben encaixada a terra. Cal la llavor d'una flor de lluna: la venedora de verdures en deu tenir."
-                : "Una llosa de pedra amb una creu gravada, ben encaixada a terra. No es mou ni un pam." }]
-    }),
+    // La llosa del jardí. Sense la llavor ni la pista de la Rosansa, l'Isílder (que és a prop) hi diu la seva: depèn d'alguna cosa màgica, però no sap què. Es pot repetir.
+    llosaJardi: E => {
+        if (E.te('llavorLluna')) return { pagines: [{ qui: 'Ineu', text: "Una llosa de pedra amb una creu gravada. La Llavor de Lluna voldria terra aquí vora, però cal algú que conegui el jardí: l'Isílder." }] };
+        if (E.flag('isilderRosansa')) return { pagines: [{ qui: 'Ineu', text: "Una llosa de pedra amb una creu gravada, ben encaixada a terra. Cal la llavor d'una flor de lluna: la venedora de verdures en deu tenir." }] };
+        return {
+            pagines: [
+                { qui: 'Ineu', text: "Una llosa de pedra amb una creu gravada, ben encaixada a terra. No es mou ni un pam." },
+                { qui: 'Isílder', text: "Aquesta llosa... Fa anys i panys que hi és i no s'ha bellugat mai: ho hem provat entre tres homes i una palanca. Els vells deien que no depèn de braços, sinó d'alguna cosa màgica. Què, no ho sé, fill: jo només entenc de flors." }
+            ],
+            enAcabar: () => E.posaFlag('llosaMisteri')
+        };
+    },
     prunera: E => {
         const pagines = [
-            { qui: 'Isílder', text: '(des de la pèrgola) No te\'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardi en menjava deu cada tarda i no n\'hi tenia mai prou...' },
+            { qui: 'Isílder', text: 'No te\'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardi en menjava deu cada tarda i no n\'hi tenia mai prou...' },
             { fer: (z, fet) => z.seq([c => z.agafar(c, null, 0xffd060), c => z.beure(c, 0xffd060)], fet) },
         ];
         const perFont = !E.flag('fontNeta') && !E.te('pruna') && !E.flag('herba3');      // en collir-ne una, se'n guarda una al sarró per a la Font del Bisbe (encara que la font no hagi dit què calen)

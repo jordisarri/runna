@@ -132,7 +132,7 @@ const PROGRES = {
               ? (E.te('llavorLluna')
                   ? "Ja tens la Llavor de Lluna. Porta-la a l'Isílder, al jardí de l'Hostatgeria, perquè l'ajudi a florir damunt la llosa."
                   : !E.flag('isilderRosansa')
-                      ? "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. A l'Hostatgeria, l'Isílder sap què amaga la llosa del jardí."
+                      ? "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. Al jardí de l'Hostatgeria, la llosa dels monjos s'encén amb la llum de Runna: parla-ho amb l'Isílder."
                       : "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. La Rosansa, la venedora de verdures, ha tornat a passar per les cel·les: potser té la llavor d'una flor de lluna.")
               : !E.flag('mongesTrobades')
                   ? "Sota la llosa, les sacerdotesses: desperta la Dolora, empeny l'àngel de pedra que barra la porta de la Pilària i talla els esbarzers de la Carmèlia."

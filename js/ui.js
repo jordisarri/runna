@@ -487,9 +487,11 @@ class EscenaUI extends Phaser.Scene {
         // Cordó: de la creueta al primer gra i, entre gra i gra, una mica penjant
         const c = this.cordo.clear();
         // El cordó es dibuixa dues vegades: la primera, ample i fosc, fa d'ombra; la segona, clara, es llegeix sobre qualsevol fons
+        // El cordó surt de l'anella del cap de la creu (a la creu_rosari de 36x28, l'anella és a (31,4); la imatge és centrada a (42, Y_BOTONS_HUD + 14))
+        const ax = 42 + (31.3 - 18) * ESC_HUD, ay = (Y_BOTONS_HUD + 14) + (3.8 - 14) * ESC_HUD;
         const traç = (dx, dy) => {
-            c.beginPath(); c.moveTo(42 + dx, Y_BOTONS_HUD - 6 + dy);
-            for (let k = 1; k <= 8; k++) { const t = k / 8; c.lineTo(42 + (gx(0) - 42) * t + dx, (Y_BOTONS_HUD - 6) + (gy(0) - (Y_BOTONS_HUD - 6)) * t + Math.sin(Math.PI * t) * 5 + dy); }
+            c.beginPath(); c.moveTo(ax + dx, ay + dy);
+            for (let k = 1; k <= 8; k++) { const t = k / 8; c.lineTo(ax + (gx(0) - ax) * t + dx, ay + (gy(0) - ay) * t + Math.sin(Math.PI * t) * 5 + dy); }
             for (let i = 0; i < d.corsMax - 1; i++) {
                 for (let k = 1; k <= 6; k++) { const t = k / 6; c.lineTo(gx(i) + (gx(i + 1) - gx(i)) * t + dx, gy(i) + (gy(i + 1) - gy(i)) * t + Math.sin(Math.PI * t) * 4 + dy); }
             }
