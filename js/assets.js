@@ -213,6 +213,15 @@ const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'nor
 // Versió dels fulls de caminar i d'idle de l'Ineu: v2 (assets/ineu_v2/, 16 fotogrames a cada direcció, idle propi per a les 8 direccions, generats amb AutoSprite; vegeu
 // eines/fer_ineu_v2.py) o v1 (assets/ineu/, els d'abans). Per tornar enrere sense tocar res: afegir ?ineu=v1 a l'adreça, o posar false aquí.
 const INEU_V2 = new URLSearchParams(location.search).get('ineu') !== 'v1';
+// Combinació lateral (esquerra/dreta) de la v2: ?lat=elev (per defecte: idle amb càmera elevada + caminar pseudo-isomètric) o ?lat=perfil (idle de perfil + caminar de perfil).
+const INEU_LAT = new URLSearchParams(location.search).get('lat') === 'perfil' ? 'perfil' : 'elev';
+const rutaIneuV2 = (dir, idle) => {
+    if (INEU_V2 && (dir === 'left' || dir === 'right')) {
+        if (idle && INEU_LAT === 'elev') return `assets/ineu_v2/alt/idle_elev_${dir}.webp?v=2611111600`;
+        if (!idle && INEU_LAT === 'perfil') return `assets/ineu_v2/alt/perfil_${dir}.webp?v=2611111600`;
+    }
+    return `assets/ineu_v2/${idle ? 'idle_' : ''}${dir}.webp?v=2611111500`;
+};
 const IDLE_INEU = INEU_V2 ? {
     down: 'down', up: 'up', left: 'left', right: 'right',
     southwest: 'southwest', southeast: 'southeast', northwest: 'northwest', northeast: 'northeast'
@@ -306,12 +315,12 @@ const Grafics = {
         scene.load.spritesheet('isilder_camina', 'assets/personatges/isilder_camina.webp', { frameWidth: 190, frameHeight: 285 });
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
-            scene.load.spritesheet('ineu_' + dir, INEU_V2 ? `assets/ineu_v2/${dir}.webp?v=2611111500` : `assets/ineu/${dir}.webp?v=2611110040`, mida);
+            scene.load.spritesheet('ineu_' + dir, INEU_V2 ? rutaIneuV2(dir, false) : `assets/ineu/${dir}.webp?v=2611110040`, mida);
             scene.load.spritesheet('ineu_atac_' + dir, `assets/ineu/atac_${dir}.webp?v=2611110010`, mida);
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
-            scene.load.spritesheet('ineu_idle_' + dir, INEU_V2 ? `assets/ineu_v2/idle_${dir}.webp?v=2611111500` : `assets/ineu/idle_${dir}.webp?v=2611110010`, mida);
+            scene.load.spritesheet('ineu_idle_' + dir, INEU_V2 ? rutaIneuV2(dir, true) : `assets/ineu/idle_${dir}.webp?v=2611110010`, mida);
         });
     },
 
