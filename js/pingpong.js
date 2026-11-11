@@ -703,6 +703,12 @@ class EscenaPingPong extends Phaser.Scene {
 
     // Tanca el minijoc: la zona i el HUD es desperten i s'obre el diàleg d'en Jusef (premi si has guanyat)
     tancar(guanyat, abandonat = false) {
+        // Si has guanyat, en Jusef ha de poder acostar-se a donar-te el premi: l'Ineu es posa al nord de la taula (no a sobre), al costat d'en Jusef
+        if (guanyat && this.zona && this.zona.ineu && this.zona.AX) {
+            const z = this.zona, x = z.AX - 90, y = 480;
+            z.ineu.setPosition(x, y);
+            if (z.ineu.body) z.ineu.body.reset(x, y);
+        }
         if (this.zona) this.scene.wake(this.zona.scene.key);
         this.scene.wake('UI');
         const ui = this.scene.get('UI');
