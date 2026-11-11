@@ -61,7 +61,12 @@ class ZonaEsglesia extends ZonaBase {
         // Orgue (la Pianista seu a l'orgue) i el Pare Daimiel, que dirigeix el cor
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daimiel es posen amb la resta
         if (!epileg) this.orgue = this.posar('orgue', 975, ESG.retY + 250, { col: { w: 110, h: 50 } });
-        if (!epileg) this.npc('pianista', 975, ESG.retY + 320, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
+        if (!epileg) {
+            const pia = this.npc('pianista', 975, ESG.retY + 205, DIALEGS.pianista, { radi: RADI_NPC });         // seu a l'orgue, d'esquena (toca amb animació pròpia: NPC_IDLE.pianista)
+            pia.setDepth(ESG.retY + 251);                                                                         // per davant de l'orgue (que és a retY + 250), tot i seure més amunt
+            if (this.textures.exists('pianista_esquena')) { pia.setTexture('pianista_esquena').setFlipX(false); pia.escalaBase = pia.scaleY = pia.scaleX = this.textures.get('pianista_esquena').customData.escala; }
+            else pia.setFlipX(true);
+        }
         if (!epileg) this.npc('pare_daimiel', 360, ESG.retY + 190, DIALEGS.pareDaimiel, { flipX: false });
 
         // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar (a l'epíleg es retiren perquè tothom tingui lloc sense tapar-se)

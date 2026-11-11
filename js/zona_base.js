@@ -744,7 +744,7 @@ class ZonaBase extends Phaser.Scene {
         } }) : null;
         this.time.delayedCall(ms, () => {
             if (ev) ev.remove();
-            if (img.active) { img.anims.stop(); img.setTexture(key); tween.forEach(t => t.resume()); }
+            if (img.active) { img.anims.stop(); img.setTexture(d.fix || key); tween.forEach(t => t.resume()); }
             if (fet) fet();
         });
     }
@@ -850,6 +850,13 @@ class ZonaBase extends Phaser.Scene {
         const img = this.npcs && this.npcs[key];
         if (!img) { if (fet) fet(); return; }
         if (img.balanceig) img.balanceig.pause();                         // (mentre fa la feina, el balanceig d'idle s'atura)
+        const d = NPC_IDLE[key];
+        if (d && d.alFeina === tipus && d.fix && img.texture.key === d.fix && this.textures.exists(key + '_idle')) {      // té una animació pròpia per a aquesta feina (la Pianista tocant l'orgue d'esquena)
+            this.animaNpc(key, ms, fet);
+            const ev2 = this.time.addEvent({ delay: 220, loop: true, callback: () => this.flotant(img.x + Phaser.Math.Between(-40, 40), img.y - img.displayHeight, Phaser.Utils.Array.GetRandom(['♪', '♫', '♩']), '#d8c8ff') });
+            this.time.delayedCall(ms, () => ev2.remove());
+            return;
+        }
         const t = this.tweens.add({ targets: img, angle: { from: -7, to: 7 }, yoyo: true, repeat: -1, duration: 140 });
         const colors = { guspires: [0xffd060, 0xff8030], notes: [0xd8c8ff, 0xffe8a0], fulles: [0x6ab04a, 0xe86aa0], bombolles: [0x6aff6a, 0xb8ffb0] }[tipus] || [0xffffff];
         const ev = this.time.addEvent({ delay: 160, loop: true, callback: () => {

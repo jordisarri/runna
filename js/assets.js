@@ -71,6 +71,7 @@ const CATALEG = [
 
     // ---- Personatges nous ----
     { key: 'pianista',  file: 'assets/personatges/pianista.webp',  amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
+    { key: 'pianista_esquena',  file: 'assets/personatges/pianista_esquena.webp',  amplada: 133, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
     { key: 'venerables', file: 'assets/personatges/venerables.webp', amplada: 147, cru: true, provisional: (c, w) => dibuixarVenerables(c, w) },   // les dues Venerables Sàvies de les Cel·les, agafades del braç (un sol gràfic)
     { key: 'mare_nena', file: 'assets/personatges/mare_nena.webp', amplada: 77, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#cfd6ee', cabell: '#e8e8f2', dona: true, ample: 1.1, alt: 0.9 }) },   // la mare de la Nena de les Trenes (visió de llum, sense rostre)
     { key: 'meus',      file: 'assets/personatges/meus.webp',      amplada: 55,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
@@ -98,6 +99,7 @@ const CATALEG = [
     { key: 'tiller_arbre', file: 'assets/personatges/tiller_arbre.webp', amplada: 540, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },   // el Til·ler com un arbre qualsevol, sense cara: així el veus abans de parlar-hi (mateix recorte que `tiller`)
     { key: 'tiller',    file: 'assets/personatges/tiller.webp',    amplada: 540, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },
     { key: 'arrels_tiller', file: 'assets/natura/arrels_tiller.webp', amplada: 440 },
+    { key: 'orgue',     file: 'assets/objectes/orgue.webp', amplada: 240, cru: true, provisional: (c, w) => lienc(c, w, Math.round(w * 1.2), (ctx, W, H) => { ctx.fillStyle = '#4a2c16'; ctx.fillRect(0, H * 0.4, W, H * 0.6); ctx.fillStyle = '#c9b48a'; for (let i = 0; i < 9; i++) ctx.fillRect(W * 0.08 + i * W * 0.1, H * 0.05, W * 0.07, H * 0.4); }) },   // l'orgue del Santuari (la Pianista hi toca d'esquena: pianista_orgue)
     { key: 'altar',     file: null,     amplada: 150, provisional: (c, w) => lienc(c, w, Math.round(w * 118 / 150), (ctx, W, H) => { ctx.scale(W / 150, H / 118); pintarAltarPedra(ctx, 150, 118, false); }) },   // l'altar de marbre rosat (Santuari i capella de l'Hostatgeria)
     { key: 'taula_pedra', file: null, amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 0) },
     { key: 'taula_pedra2', file: null, amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
@@ -280,7 +282,8 @@ const OCTANTS_INEU = ['right', 'southeast', 'down', 'southwest', 'left', 'northw
 
 // Fulls d'idle frontal dels NPC (eines/fer_idle_npc.py): clau → mida de cel·la i nombre de fotogrames. Es carreguen amb la resta i ZonaBase.npc() els fa servir
 // en lloc del dibuix fix; si no hi són, tot es veu com abans.
-const NPC_IDLE = { joaneta: { w: 262, h: 304, n: 16, fps: 8 } };          // la Joaneta prepara pocions (idle animat); la resta d'NPC fan l'idle per codi (ZonaBase.idleCodi)
+const NPC_IDLE = { joaneta: { w: 262, h: 304, n: 16, fps: 8 },
+    pianista: { w: 266, h: 240, n: 16, fps: 10, fix: 'pianista_esquena', alFeina: 'notes' } };      // la Pianista toca l'orgue d'esquena (eines/fer_pianista_orgue.py): només s'anima quan toca (fix: dibuix fix d'esquena; alFeina: tipus de npcFeina que l'activa)          // la Joaneta prepara pocions (idle animat); la resta d'NPC fan l'idle per codi (ZonaBase.idleCodi)
 
 const Grafics = {
     // Avís si el navegador no deixa llegir els píxels (obert amb doble clic, file://)
@@ -312,7 +315,7 @@ const Grafics = {
         scene.load.spritesheet('pare_jorda_camina', 'assets/personatges/pare_jorda_camina.webp', { frameWidth: 200, frameHeight: 290 });
         // Fulls d'animació del Pastor de Boira (boss de la Cirosa): quadrícula de fotogrames de 300 x 300; si no hi són, es veu el dibuix fix (vegeu docs/PROMPTS_GRAFICS.md)
         Object.keys(Grafics.PASTOR_FULLS).forEach(n => scene.load.spritesheet('pastor_' + n, `assets/enemics/pastor_${n}.webp`, { frameWidth: 300, frameHeight: 300 }));
-        Object.entries(NPC_IDLE).forEach(([k, d]) => scene.load.spritesheet(k + '_idle', `assets/personatges/${k}_idle.webp?v=2611111200`, { frameWidth: d.w, frameHeight: d.h }));
+        Object.entries(NPC_IDLE).forEach(([k, d]) => scene.load.spritesheet(k + '_idle', `assets/personatges/${k}_idle.webp?v=2611111844`, { frameWidth: d.w, frameHeight: d.h }));
         scene.load.spritesheet('germa_aldreu_camina', 'assets/personatges/germa_aldreu_camina.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('germa_aldreu_ne', 'assets/personatges/germa_aldreu_ne.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('jusef_camina', 'assets/personatges/jusef_camina.webp', { frameWidth: 190, frameHeight: 300 });
@@ -1247,15 +1250,6 @@ const Grafics = {
         crea('icona_consells', 64, 64, pintarIconaConsells);
         // Altar de pedra del presbiteri (desar partida i reposar)
         crea('altar', 150, 118, pintarAltarPedra);
-        crea('orgue', 120, 150, (ctx, w, h) => {
-            ctx.fillStyle = '#4a2c16'; ctx.fillRect(0, 60, w, 90);
-            for (let i = 0; i < 9; i++) {
-                const ph = 50 + Math.abs(4 - i) * -8 + 40;
-                ctx.fillStyle = '#c9b48a'; ctx.fillRect(6 + i * 12, 70 - ph + 40, 9, ph);
-                ctx.fillStyle = '#8e7a52'; ctx.fillRect(6 + i * 12 + 6, 70 - ph + 40, 3, ph);
-            }
-            ctx.fillStyle = '#eee'; ctx.fillRect(10, 112, 100, 10);
-        });
     }
 };
 
