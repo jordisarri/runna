@@ -31,6 +31,7 @@ jobs:
           cp index.html dist/
           cp -r assets dist/
           cp -r js dist/
+          [ -d proves ] && cp -r proves dist/ || true      # prototips fora del joc (p. ex. proves/pingpong/)
           [ -f manifest.json ] && cp manifest.json dist/ || true
           [ -f sw.js ] && cp sw.js dist/ || true
 
