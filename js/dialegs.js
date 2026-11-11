@@ -446,7 +446,7 @@ const DIALEGS = {
         pagines: [
             { qui: 'Jusef', text: 'Benvingut al Celler, viatger. Les pales i la pilota només són l\'escorça: el que jo practico aquí és màgia blanca.' },
             { qui: 'Jusef', text: 'Aquest és el meu servei màgic. La pilota desprèn tres llums que s\'encenen una a una. Fins ara ningú ha aconseguit aturar-lo.' },
-            { qui: 'Jusef', text: 'Vols provar-ho? Una partida, a set punts.' },
+            { qui: 'Jusef', text: 'Vols provar-ho? Una partida, a cinc punts.' },
             { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaPP = i; fet(); }) }
         ],
         enAcabar: () => {
@@ -460,8 +460,8 @@ const DIALEGS = {
     // Les úniques explicacions de com es juga: les dóna en Jusef, i curtes
     jusefRegles: E => ({
         pagines: [
-            { qui: 'Jusef', text: 'Mira per on ve la pilota: quan el cercle es posi verd, prem el seu carril i la tornaràs.' },
-            { qui: 'Jusef', text: 'I quan jo faci el servei màgic, mira els tres signes i repeteix-los en el mateix ordre.' }
+            { qui: 'Jusef', text: 'Mira la pilota: quan l\'anell que té al voltant es posi verd, llisca el dit cap amunt per colpejar-la. Cap a on llisquis, cap allà anirà; com més llarg i ràpid, més lluny i més fort.' },
+            { qui: 'Jusef', text: 'I el meu servei màgic només es trenca amb un cop perfecte: ni abans ni després, just en verd.' }
         ]
     }),
 
