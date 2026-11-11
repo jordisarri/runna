@@ -39,6 +39,7 @@ class Arcade extends Phaser.Scene {
         this.load.spritesheet('pp_drive', '../../assets/ineu/pp_drive.webp', { frameWidth: 256, frameHeight: 256 });
         this.load.spritesheet('pp_reves', '../../assets/ineu/pp_reves.webp', { frameWidth: 256, frameHeight: 256 });
         this.load.image('jusef_levita', '../../assets/personatges/jusef_levita.webp');
+        ['jusef_dret', 'jusef_revers', 'jusef_servei', 'ineu_servei'].forEach(n => this.load.spritesheet(n, `../../assets/pingpong2/${n}.webp?v=1`, { frameWidth: 256, frameHeight: 256 }));
     }
 
     create() {
@@ -47,8 +48,14 @@ class Arcade extends Phaser.Scene {
         this.anims.create({ key: 'drive', frames: this.anims.generateFrameNumbers('pp_drive', { start: 4, end: 15 }), frameRate: 34 });
         this.anims.create({ key: 'reves', frames: this.anims.generateFrameNumbers('pp_reves', { start: 6, end: 15 }), frameRate: 40 });
         this.spIneu = this.add.sprite(0, 0, 'pp_drive', 0).setOrigin(0.5, 0.94);
-        this.spIneu.on('animationcomplete', () => this.spIneu.setFrame(0));
-        this.spJusef = this.add.image(0, 0, 'jusef_levita').setOrigin(0.5, 1);
+        this.spIneu.on('animationcomplete', () => this.spIneu.setTexture('pp_drive', 0));
+        // En Jusef (d'AutoSprite): quiet = el primer fotograma; els gestos de cop de dret, de revers i de servei s'engeguen quan toca
+        this.anims.create({ key: 'jf_dret', frames: this.anims.generateFrameNumbers('jusef_dret', { start: 3, end: 15 }), frameRate: 34 });
+        this.anims.create({ key: 'jf_revers', frames: this.anims.generateFrameNumbers('jusef_revers', { start: 3, end: 15 }), frameRate: 34 });
+        this.anims.create({ key: 'jf_servei', frames: this.anims.generateFrameNumbers('jusef_servei', { start: 1, end: 15 }), frameRate: 22 });
+        this.anims.create({ key: 'ineu_servei', frames: this.anims.generateFrameNumbers('ineu_servei', { start: 3, end: 15 }), frameRate: 26 });
+        this.spJusef = this.add.sprite(0, 0, 'jusef_dret', 0).setOrigin(0.5, 0.94);
+        this.spJusef.on('animationcomplete', () => this.spJusef.setTexture('jusef_dret', 0));
         this.auraJusef = this.add.ellipse(0, 0, 160, 190, 0xb890ff, 0).setDepth(1);
         this.ombra = this.add.ellipse(0, 0, 20, 8, 0x000000, 0.35).setDepth(0.6);
         this.pilota = this.add.circle(0, 0, 14, 0xfff6e0).setStrokeStyle(3, 0x8a7a50);
@@ -141,7 +148,8 @@ class Arcade extends Phaser.Scene {
         if (this.acabat) return;
         this.estat = 'joc';
         const X = Phaser.Math.FloatBetween(-0.55, 0.55);
-        this.serveix('jusef', { X: this.Xj, z: T.L + 0.25, h: 0.3 }, X, Phaser.Math.FloatBetween(0.35, 0.9), suau ? 1.15 : 0.95);
+        this.spJusef.play('jf_servei', true);
+        this.time.delayedCall(420, () => { if (!this.acabat) this.serveix('jusef', { X: this.Xj, z: T.L + 0.25, h: 0.3 }, X, Phaser.Math.FloatBetween(0.35, 0.9), suau ? 1.15 : 0.95); });
     }
 
     // ---- Servei màgic: la pilota encantada fa zigzags; només un cop PERFECTE trenca l'encanteri (i llavors en Jusef no la pot tornar) ----
@@ -155,7 +163,8 @@ class Arcade extends Phaser.Scene {
             if (this.acabat) return;
             this.estat = 'joc';
             const X = Phaser.Math.FloatBetween(-0.5, 0.5) || 0.3;
-            this.serveix('jusef', { X: this.Xj, z: T.L + 0.25, h: 0.3 }, X, Phaser.Math.FloatBetween(0.35, 0.75), 0.85, true);
+            this.spJusef.play('jf_servei', true);
+            this.time.delayedCall(420, () => { if (!this.acabat) this.serveix('jusef', { X: this.Xj, z: T.L + 0.25, h: 0.3 }, X, Phaser.Math.FloatBetween(0.35, 0.75), 0.85, true); });
         });
     }
 
@@ -224,7 +233,7 @@ class Arcade extends Phaser.Scene {
         this.Xj += Phaser.Math.Clamp(objJ - this.Xj, -pasJ, pasJ);
         const pj = this.proj(this.Xj, T.Z_JUSEF);
         const flota = Math.sin(time / 400) * 6;
-        this.spJusef.setPosition(pj.x, pj.y + flota).setScale(0.74 * pj.k / 214).setDepth(10 - T.Z_JUSEF);
+        this.spJusef.setPosition(pj.x, pj.y + flota).setScale(2.5 * pj.k / 400).setDepth(10 - T.Z_JUSEF);
         this.auraJusef.setPosition(pj.x, pj.y - 120 + flota);
         if (this.estat === 'serveiIneu') {            // la pilota a la mà de l'Ineu
             const p = this.proj(this.Xi + 0.18, -0.15, 0.32 + Math.abs(Math.sin(time / 260)) * 0.12);
@@ -334,6 +343,7 @@ class Arcade extends Phaser.Scene {
 
     copJusef() {
         const b = this.b, M = this.M;
+        this.spJusef.play(b.X >= this.Xj ? 'jf_dret' : 'jf_revers', true);
         const dx = Math.abs(b.X - this.Xj);
         let falla = M.fallaJusef + (b.qualitat === 'perfecte' ? 0.3 : b.qualitat === 'be' ? 0.07 : 0) + this.rally * 0.01;
         if (b.tipus === 'fort') falla += 0.12;
@@ -369,9 +379,9 @@ class Arcade extends Phaser.Scene {
         const forca = Phaser.Math.Clamp((vel - 0.35) / 1.5, 0, 1);               // vel en px/ms
         if (this.estat === 'serveiIneu') {
             this.estat = 'joc';
-            this.gest(aim >= this.Xi);
-            this.serveix('ineu', { X: this.Xi + 0.18, z: -0.15, h: 0.3 }, Phaser.Math.Clamp(aim, -0.62, 0.62), T.L * (0.62 + 0.3 * prof), 0.95 - 0.2 * forca);
-            this.b.qualitat = 'be'; this.b.tipus = 'normal';
+            this.spIneu.play('ineu_servei', true);
+            const Xs = Phaser.Math.Clamp(aim, -0.62, 0.62), zs = T.L * (0.62 + 0.3 * prof), ts = 0.95 - 0.2 * forca;
+            this.time.delayedCall(260, () => { if (this.acabat) return; this.serveix('ineu', { X: this.Xi + 0.18, z: -0.15, h: 0.3 }, Xs, zs, ts); this.b.qualitat = 'be'; this.b.tipus = 'normal'; });
             return;
         }
         const b = this.b;
