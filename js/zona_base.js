@@ -657,8 +657,13 @@ class ZonaBase extends Phaser.Scene {
         img.ombra = this.add.image(x, y, 'ombra').setScale(0.42).setDepth(-500);
         if (opts.flipX) img.setFlipX(true);
         img.escalaBase = img.scaleY;
-        // Respiració suau perquè sembli viu (si ja té animació d'idle, no cal)
-        if (!idle) img.respira = this.tweens.add({ targets: img, scaleY: img.scaleY * 1.02, yoyo: true, repeat: -1, duration: 1100 + Math.random() * 400 });
+        // Idle per codi: respira (s'allarga una mica d'alçada i s'estreny d'ample, com un cos que agafa aire) i es balanceja una mica sobre els peus, de manera
+        // diferent per a cada un (durada i fase a l'atzar) perquè no vagin tots al compàs. opts.quiet = sense balanceig.
+        if (!idle) {
+            const d = 1500 + Math.random() * 700, sy = img.scaleY, sx = img.scaleX;
+            img.respira = this.tweens.add({ targets: img, scaleY: sy * 1.028, scaleX: sx * 0.992, yoyo: true, repeat: -1, duration: d, ease: 'Sine.easeInOut', delay: Math.random() * 900 });
+            if (!opts.quiet) img.balanceig = this.tweens.add({ targets: img, angle: { from: -0.8, to: 0.8 }, yoyo: true, repeat: -1, duration: d * 2.1, ease: 'Sine.easeInOut', delay: Math.random() * 1500 });
+        }
         img.punt = this.interactiu(x, y - 10, opts.radi || RADI_NPC, dialeg, { altura: img.displayHeight + 6 });
         if (opts.zoomConversa) img.punt.zoomConversa = opts.zoomConversa;       // més zoom (que ZOOM_NPC) en parlar-hi, perquè s'apreciïn els sprites
         img.punt.npc = img;                                  // en parlar-hi, l'Ineu es fa enrere i no se solapen (vegeu separarDeNpc)
@@ -729,7 +734,8 @@ class ZonaBase extends Phaser.Scene {
         }
         if (animClau && img.anims) {
             if (img.respira) img.respira.pause();
-            img.setScale(img.escalaBase);
+            if (img.balanceig) img.balanceig.pause();
+            img.setScale(img.escalaBase, img.escalaBase);
             img.play(animClau, true);
         }
         this.tweens.add({ targets: [img, img.ombra].filter(Boolean), x, y, duration: dur, ease: 'Sine.easeInOut', onUpdate: () => img.setDepth(img.y), onComplete: () => {
@@ -737,6 +743,7 @@ class ZonaBase extends Phaser.Scene {
                 img.anims.stop();
                 this.tornaIdleNpc(img, key);
                 if (img.respira) img.respira.resume();
+                if (img.balanceig) img.balanceig.resume();
             }
             img.setAngle(0);
             if (img.col) { img.col.setPosition(img.x, img.y - 9); img.col.body.updateFromGameObject(); }
@@ -771,6 +778,7 @@ class ZonaBase extends Phaser.Scene {
     npcFeina(key, ms, tipus, fet) {
         const img = this.npcs && this.npcs[key];
         if (!img) { if (fet) fet(); return; }
+        if (img.balanceig) img.balanceig.pause();                         // (mentre fa la feina, el balanceig d'idle s'atura)
         const t = this.tweens.add({ targets: img, angle: { from: -7, to: 7 }, yoyo: true, repeat: -1, duration: 140 });
         const colors = { guspires: [0xffd060, 0xff8030], notes: [0xd8c8ff, 0xffe8a0], fulles: [0x6ab04a, 0xe86aa0], bombolles: [0x6aff6a, 0xb8ffb0] }[tipus] || [0xffffff];
         const ev = this.time.addEvent({ delay: 160, loop: true, callback: () => {
@@ -779,7 +787,7 @@ class ZonaBase extends Phaser.Scene {
             const p = this.add.circle(img.x + Phaser.Math.Between(-20, 20), img.y - img.displayHeight * 0.5, 4, Phaser.Utils.Array.GetRandom(colors)).setDepth(img.depth + 1);
             this.tweens.add({ targets: p, x: p.x + Phaser.Math.Between(-50, 50), y: p.y - Phaser.Math.Between(20, 60), alpha: 0, duration: 600, onComplete: () => p.destroy() });
         } });
-        this.time.delayedCall(ms, () => { t.stop(); img.setAngle(0); ev.remove(); if (fet) fet(); });
+        this.time.delayedCall(ms, () => { t.stop(); img.setAngle(0); if (img.balanceig) img.balanceig.resume(); ev.remove(); if (fet) fet(); });
     }
     // Bombolla sobre el cap d'algú: '!', '?', '♪', '❤', '…', 'Zzz'
     bombolla(qui, text, fet, ms = 900) {

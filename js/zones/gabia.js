@@ -1136,6 +1136,7 @@ class ZonaGabia extends ZonaBase {
         if (a.col) this.obstacles.remove(a.col, true, true);
         if (a.punt) a.punt.actiu = () => false;
         if (a.respira) a.respira.stop();
+        if (a.balanceig) a.balanceig.stop();
         this.tweens.killTweensOf(a);
         if (a.ombra) a.ombra.destroy();
         a.destroy();

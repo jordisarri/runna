@@ -261,10 +261,7 @@ const OCTANTS_INEU = ['right', 'southeast', 'down', 'southwest', 'left', 'northw
 
 // Fulls d'idle frontal dels NPC (eines/fer_idle_npc.py): clau → mida de cel·la i nombre de fotogrames. Es carreguen amb la resta i ZonaBase.npc() els fa servir
 // en lloc del dibuix fix; si no hi són, tot es veu com abans.
-const NPC_IDLE = {
-    frederic: { w: 192, h: 286, n: 8 }, juli: { w: 165, h: 282, n: 8 }, josep: { w: 170, h: 292, n: 8 },
-    germa_aldreu: { w: 163, h: 257, n: 8 }, pare_jordi: { w: 191, h: 281, n: 8 }, pare_daniel: { w: 193, h: 294, n: 8 }
-};
+const NPC_IDLE = {};          // (buit: de moment els NPC fan un idle per codi; vegeu ZonaBase.npc)
 
 const Grafics = {
     // Avís si el navegador no deixa llegir els píxels (obert amb doble clic, file://)
