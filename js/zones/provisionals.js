@@ -5,96 +5,18 @@
  */
 
 // ---------------- ESGLÉSIA (interior) ----------------
-// La nau central fa 800 d'ample (x 240-1040) i el retaule la hi ocupa sencera. A banda i banda hi ha unes parets altes de pedra de 200 d'ample, vistes de front (com als temples de «A Link to the Past»), amb quatre arcs molt alts
-// i fondos cadascuna (dibuixarParets). La nau s'allarga fins a 1200 per la dreta (1040-1200) perquè hi càpiga l'orgue.
+// La nau fa 800 d'ample (x 240-1040). El retaule ocupa tot l'ample i es veu sencer (800 x 990); al seu peu hi ha dues
 // portes: la de la dreta duu a la torre de l'escala (ZonaTorre) i d'allà a les golfes del rellotge.
-const VORA_CIRI = 0x2a1a10;
-const ESG = { paret: 200, ample: 1400, nauX0: 240, nauX1: 1040, alcada: 1640, retY: 1010, retBaix: 24, retTop: 20, sostre: 1034, sostrePorta: 1000, portaDx: 870, portaEsq: 408 };      // sostre: fins on arriba la base del retaule (els peus no hi pugen); sostrePorta: només davant la porta de la dreta, que s'ha de poder tocar
+const ESG = { alcada: 1640, retY: 1010, retBaix: 24, retTop: 20, sostre: 1034, sostrePorta: 1000, portaDx: 870, portaEsq: 408 };      // sostre: fins on arriba la base del retaule (els peus no hi pugen); sostrePorta: només davant la porta de la dreta, que s'ha de poder tocar
 
 class ZonaEsglesia extends ZonaBase {
-    // Parets laterals altes de pedra, vistes de front (com als temples de «A Link to the Past»), de 200 de gruix. Cada una té DUES CAPELLES ben amples, obertes a la nau i amb
-    // el fons arrodonit (un arc girat 90°: s'obre cap a la nau i es tanca cap a fora), per on es pot passar: dins hi ha terra, catifa, un altar petit, ciris, i una vidriera al fons.
-    // Els trams de paret entre capelles (i tot el que queda per sobre del retaule) són sòlids, amb pilastres i cornises.
-    dibuixarParets() {
-        const A = ESG.alcada, W = ESG.ample, PE = ESG.paret, VORA = 0x2a1a10;
-        const CAPELLES = [{ yc: 1210, vidre: [0x3a78c8, 0xd8c050, 0xc84040] }, { yc: 1510, vidre: [0xc84040, 0x40a860, 0x3a78c8] }];
-        const MIG = 130, DREC = 40, CENTRE = 160;                      // MIG: radi (mitja alçada) de la capella; DREC: tros recte; CENTRE: lx del centre del semicercle (el fons arriba a lx = CENTRE - MIG)
-        [1, -1].forEach(costat => {
-            const bx = costat === 1 ? 0 : W - PE;                       // x de l'esquerra de la franja
-            const X = lx => costat === 1 ? bx + lx : bx + PE - lx;      // x local (0 = costat de fora, PE = costat de la nau) → x del món
-            const rect = (g, lx0, y0, lx1, y1) => { const a = Math.min(X(lx0), X(lx1)), b = Math.max(X(lx0), X(lx1)); g.fillRect(a, y0, b - a, y1 - y0); };
-            if (this.textures.exists('mur_pedra')) this.add.tileSprite(bx, 0, PE, A, 'mur_pedra').setOrigin(0).setTileScale(1.15 / RES).setDepth(-995).setTint(0xcdb48c);
-            else this.add.rectangle(bx, 0, PE, A, 0xb89f78).setOrigin(0).setDepth(-995);
-            const g = this.add.graphics().setDepth(-990);
-            g.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, costat === 1 ? 0.45 : 0, costat === 1 ? 0 : 0.45, costat === 1 ? 0.45 : 0, costat === 1 ? 0 : 0.45).fillRect(bx, 0, PE, A);        // més fosca cap a fora
-            // forma d'una capella (polígon): tros recte des de la nau (lx = PE) i semicercle al fons
-            const contorn = (yc, marge = 0) => { const r = MIG + marge, arr = [{ x: X(PE), y: yc + r }, { x: X(CENTRE), y: yc + r }];
-                for (let i = 1; i < 24; i++) { const a = (i / 24) * Math.PI; arr.push({ x: X(CENTRE - Math.sin(a) * r), y: yc + Math.cos(a) * r }); }
-                arr.push({ x: X(CENTRE), y: yc - r }, { x: X(PE), y: yc - r }); return arr; };
-            CAPELLES.forEach(cap => {
-                const yc = cap.yc;
-                // marc de pedra (una mica més gran que l'obertura) i terra de la capella (les mateixes rajoles que la nau, retallades a la forma)
-                g.fillStyle(0xe2d0a6, 1).fillPoints(contorn(yc, 14), true).lineStyle(3, VORA, 1).strokePoints(contorn(yc, 14), true);
-                const mascara = this.make.graphics({ x: 0, y: 0, add: false }); mascara.fillStyle(0xffffff, 1).fillPoints(contorn(yc), true);
-                const terra = this.add.tileSprite(0, 0, W, A, 'rajola').setOrigin(0).setTileScale(1 / RES).setDepth(-992).setTint(0xc8b8a0);
-                terra.tilePositionX = -PE * RES;
-                terra.setMask(mascara.createGeometryMask());
-                // catifa vermella i ombra de la paret del fons
-                const d = this.add.graphics().setDepth(-991);
-                d.fillStyle(0x7a2428, 0.9); rect(d, 40, yc - 38, PE, yc + 38);
-                d.lineStyle(2, 0xd4af37, 0.9).strokeRect(Math.min(X(40), X(PE)), yc - 38, PE - 40, 76);
-                d.fillStyle(0x000000, 0.32).fillPoints(contorn(yc, 0), true);
-                const llum = this.add.graphics().setDepth(-991).setBlendMode(Phaser.BlendModes.ADD);
-                cap.vidre.forEach((c, i) => llum.fillStyle(c, 0.10).fillCircle(X(CENTRE - MIG + 70), yc + (i - 1) * 60, 74));          // la llum de la vidriera damunt el terra
-                // vidriera al fons de la capella: tres vidres de colors amb emplomat
-                const v = this.add.graphics().setDepth(-989);
-                cap.vidre.forEach((c, i) => { const y0 = yc - 66 + i * 44; v.fillStyle(c, 1); rect(v, CENTRE - MIG + 2, y0 + 3, CENTRE - MIG + 22, y0 + 41); v.lineStyle(2, VORA, 1).strokeRect(Math.min(X(CENTRE - MIG + 2), X(CENTRE - MIG + 22)), y0 + 3, 20, 38); });
-                // vora de la capella (traç fosc) i pilastres als dos costats de l'obertura, amb cimaci i base
-                g.lineStyle(3, VORA, 1).strokePoints(contorn(yc, 0), true);
-                [-1, 1].forEach(sg => { const y = yc + sg * (MIG + 14); g.fillStyle(0xf1e2bf, 1); rect(g, PE - 34, y - (sg > 0 ? 0 : 22), PE, y + (sg > 0 ? 22 : 0)); g.lineStyle(3, VORA, 1).strokeRect(Math.min(X(PE - 34), X(PE)), y - (sg > 0 ? 0 : 22), 34, 22); });
-                // elements de dins: altar petit al fons, dos ciris encesos i bancs
-                this.posar('altar', X(CENTRE - MIG + 62), yc + 18, { escala: 0.5, col: { w: 66, h: 20 } });
-                [-1, 1].forEach(sg => this.ciri(X(CENTRE - 20), yc + sg * 86));
-            });
-            // trams de paret sòlids: cornises i pilastres als espais entre capelles i per sobre del retaule (un panell fosc per donar relleu)
-            const panells = [[60, 330], [370, 700], [740, 1030], [1056, 1090]];
-            panells.forEach(([y0, y1]) => { if (y1 - y0 < 120) return; g.fillStyle(0xcab88f, 1); rect(g, 30, y0, PE - 30, y1); g.lineStyle(3, VORA, 0.9).strokeRect(Math.min(X(30), X(PE - 30)), y0, PE - 60, y1 - y0); g.fillStyle(0x000000, 0.12); rect(g, 40, y0 + 10, PE - 40, y1 - 10); });
-            [340, 710, 1040].forEach(y => { g.fillStyle(0xd6c398, 1); rect(g, 0, y - 15, PE, y + 15); g.lineStyle(3, VORA, 1).strokeRect(bx, y - 15, PE, 30); g.fillStyle(0xffffff, 0.3); rect(g, 0, y - 12, PE, y - 6); g.fillStyle(0x000000, 0.2); rect(g, 0, y + 8, PE, y + 14); });
-            // vora il·luminada del mur (la banda de la nau)
-            const vo = this.add.graphics().setDepth(-988);
-            vo.fillStyle(0x000000, 0.25); rect(vo, PE - 22, 0, PE - 10, A);
-            vo.fillStyle(VORA, 1); rect(vo, PE - 12, 0, PE - 10, A);
-            vo.fillStyle(0xe9d9b4, 1); rect(vo, PE - 10, 0, PE, A);
-            CAPELLES.forEach(cap => { const yc = cap.yc; vo.fillStyle(0x000000, 0); });
-            // col·lisions: només el que és mur sòlid (per sobre de la primera capella, entre capelles i per sota de la darrera) i el fons arrodonit de cada capella
-            const yA = CAPELLES[0].yc - MIG - 14, yB = CAPELLES[0].yc + MIG + 14, yC = CAPELLES[1].yc - MIG - 14, yD = CAPELLES[1].yc + MIG + 14;
-            const sol = (lx0, y0, lx1, y1) => { if (y1 > y0 + 1) this.colisio((X(lx0) + X(lx1)) / 2, (y0 + y1) / 2, Math.abs(X(lx1) - X(lx0)), y1 - y0); };
-            sol(0, 0, PE, yA); sol(0, yB, PE, yC); sol(0, yD, PE, A);
-            CAPELLES.forEach(cap => {                                  // el fons arrodonit: franges horitzontals que segueixen la corba
-                for (let i = 0; i < 8; i++) { const y0 = cap.yc - MIG + i * (2 * MIG) / 8, y1 = y0 + (2 * MIG) / 8, ym = (y0 + y1) / 2, dx = Math.sqrt(Math.max(0, MIG * MIG - (ym - cap.yc) * (ym - cap.yc)));
-                    sol(0, y0, CENTRE - dx, y1); }
-            });
-        });
-    }
-
-    // Un ciri alt d'església (peu de pedra, pal i flama que parpelleja)
-    ciri(x, y) {
-        const g = this.add.graphics().setDepth(y);
-        g.fillStyle(0x3a2a1a, 1).fillEllipse(x, y, 26, 10).fillRect(x - 3, y - 54, 6, 54);
-        g.fillStyle(0xf1e2bf, 1).fillRect(x - 5, y - 74, 10, 22).lineStyle(2, VORA_CIRI, 1).strokeRect(x - 5, y - 74, 10, 22);
-        const fl = this.add.ellipse(x, y - 84, 9, 16, 0xffb040, 0.95).setDepth(y + 1);
-        const halo = this.add.circle(x, y - 80, 36, 0xffc060, 0.16).setDepth(y + 1).setBlendMode(Phaser.BlendModes.ADD);
-        this.tweens.add({ targets: [fl, halo], alpha: { from: 0.65, to: 1 }, scaleY: { from: 0.85, to: 1.15 }, yoyo: true, repeat: -1, duration: 320 + Math.random() * 200, ease: 'Sine.easeInOut' });
-        this.colisio(x, y - 3, 22, 10);
-    }
-
     // La Pianista toca l'orgue d'esquena (animació en bucle) o es gira cap a l'Ineu (dibuix de front, asseguda al banc davant de l'orgue)
     pianistaToca(on, fet) {
         const pia = this.npcs && this.npcs.pianista;
         if (!pia || !pia.active || !this.orgue || !this.textures.exists('pianista_idle')) { if (fet) fet(); return; }
         if (on) {
             if (!this.anims.exists('idle_pianista')) this.anims.create({ key: 'idle_pianista', frames: this.anims.generateFrameNumbers('pianista_idle', { start: 0, end: NPC_IDLE.pianista.n - 1 }), frameRate: NPC_IDLE.pianista.fps, repeat: -1 });
-            pia.setTexture('pianista_idle', 0).setFlipX(false); pia.escalaBase = pia.scaleX = pia.scaleY = this.textures.get('pianista_esquena').customData.escala;
+            pia.setTexture('pianista_idle', 0).setFlipX(false); pia.escalaBase = pia.scaleX = pia.scaleY = this.textures.get('pianista_esquena').customData.escala * 0.85;       // (l'orgue és més petit: ella també)
             pia.setY(this.orgue.y - 45); pia.play('idle_pianista'); if (pia.ombra) pia.ombra.setY(this.orgue.y - 45);
             // mentre toca, tot el cos es balanceja al ritme (rotació des dels peus, sense canviar de mida) perquè es noti que toca
             if (pia.balToca) pia.balToca.remove();
@@ -120,7 +42,7 @@ class ZonaEsglesia extends ZonaBase {
     constructor() {
         super('ZonaEsglesia', {
             nom: 'Santuari del Miracle',
-            amplada: ESG.ample,
+            amplada: 1280,
             alcada: ESG.alcada,
             colorFons: '#140e0a',
             pacifica: true,
@@ -132,19 +54,20 @@ class ZonaEsglesia extends ZonaBase {
         const A = ESG.alcada;
         this.epileg = false; this.epilegEngegat = false;          // (l'escena es reaprofita: l'epíleg d'una altra partida no compta)
         // Terra i murs
-        const W = ESG.ample, PE = ESG.paret;                                           // PE: gruix de les parets laterals
-        this.terra('rajola', PE, 0, W - 2 * PE, A, -1100);
+        this.terra('rajola', 240, 0, 800, A, -1100);
         const murs = this.add.graphics().setDepth(-1000);
-        murs.fillStyle(0x4a1e22, 1).fillRect(PE, 0, W - 2 * PE, ESG.retY);            // paret del fons, darrere el retaule
-        murs.fillStyle(0x2e1216, 1).fillRect(PE, ESG.retY - 8, W - 2 * PE, 8);        // sòcol fosc (si el retaule no el tapa del tot, no es veu cap línia clara)
-        this.dibuixarParets();                                                          // (les parets laterals porten les seves pròpies col·lisions: hi ha capelles obertes)
+        murs.fillStyle(0x4a1e22, 1).fillRect(240, 0, 800, ESG.retY);                 // paret del fons, darrere el retaule
+        murs.fillStyle(0x2e1216, 1).fillRect(240, ESG.retY - 8, 800, 8);            // sòcol fosc (si el retaule no el tapa del tot, no es veu cap línia clara)
+        murs.fillStyle(0xcdb89a, 1).fillRect(200, 0, 40, A).fillRect(1040, 0, 40, A);
+        this.colisio(120, A / 2, 240, A);
+        this.colisio(1160, A / 2, 240, A);
         // El retaule (fins a y = sostre) no es pot trepitjar; només s'obre un pas davant la porta de la dreta (x 828-912), que duu a la torre
         const P0 = ESG.portaDx - 42, P1 = ESG.portaDx + 42;
-        this.colisio((PE + P0) / 2, ESG.sostre / 2, P0 - PE, ESG.sostre);
-        this.colisio((P1 + W - PE) / 2, ESG.sostre / 2, W - PE - P1, ESG.sostre);
+        this.colisio((240 + P0) / 2, ESG.sostre / 2, P0 - 240, ESG.sostre);
+        this.colisio((P1 + 1040) / 2, ESG.sostre / 2, 1040 - P1, ESG.sostre);
         this.colisio((P0 + P1) / 2, ESG.sostrePorta / 2, P1 - P0, ESG.sostrePorta);
-        this.colisio((PE + 600) / 2, A - 10, 600 - PE, 20);
-        this.colisio((680 + W - PE) / 2, A - 10, W - PE - 680, 20);
+        this.colisio(420, A - 10, 360, 20);
+        this.colisio(860, A - 10, 360, 20);
 
         // Retaule Major (tot l'ample de la nau, sencer) i, al davant, l'altar de pedra
         this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
@@ -166,7 +89,7 @@ class ZonaEsglesia extends ZonaBase {
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daimiel, que dirigeix el cor
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daimiel es posen amb la resta
-        if (!epileg) this.orgue = this.posar('orgue', 1085, ESG.retY + 250, { col: { w: 110, h: 50 } });
+        if (!epileg) this.orgue = this.posar('orgue', 960, ESG.retY + 250, { col: { w: 110, h: 50 } });
         if (!epileg) {
             // La Pianista és de cara al banc de l'orgue; només hi toca d'esquena (animada) quan l'Ineu la troba la primera vegada i mentre ensenya un cant (pianistaToca)
             const pia = this.npc('pianista', this.orgue.x, this.orgue.y + 24, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
@@ -174,7 +97,7 @@ class ZonaEsglesia extends ZonaBase {
             [pia.respira, pia.balanceig].forEach(t => t && t.remove()); pia.respira = pia.balanceig = null; pia.setAngle(0);       // fixa: ni respira ni es balanceja (no canvia de mida)
             pia.punt.npc = null;                                                                                  // l'Ineu no es fa enrere en parlar-hi: es posa al costat de l'orgue (pianistaCara)
         }
-        if (!epileg) this.npc('pare_daimiel', 440, ESG.retY + 190, DIALEGS.pareDaimiel, { flipX: false });
+        if (!epileg) this.npc('pare_daimiel', 360, ESG.retY + 190, DIALEGS.pareDaimiel, { flipX: false });
 
         // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar (a l'epíleg es retiren perquè tothom tingui lloc sense tapar-se)
         if (!epileg) {
@@ -186,7 +109,7 @@ class ZonaEsglesia extends ZonaBase {
         }
 
         // Llum de les vidrieres
-        this.add.rectangle(W / 2, A / 2, W - 2 * PE, A, 0xffd38a, 0.05).setDepth(80000);
+        this.add.rectangle(640, A / 2, 800, A, 0xffd38a, 0.05).setDepth(80000);
 
         this.sortida(600, A - 20, 80, 20, 'ZonaPlaca', 'esglesia');
         if (Estat.flag('epilegPendent') && !Estat.flag('epilegFet')) this.prepararEpileg();
