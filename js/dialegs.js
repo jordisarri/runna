@@ -1706,3 +1706,13 @@ const DIALEGS_FINAL = {
     carry: E => E.flag('pallofaTornat') ? ({ pagines: [{ qui: 'Carry', text: "El Pallofa ja no s'escapa: des que no hi ha boira, no té res a perseguir." }] }) : null,
     pastor_vell: E => ({ pagines: [{ qui: 'Pastor vell', text: "Les ovelles tornen a ser blanques. Alguna encara té les orelles una mica liles, però ja li passarà." }] })
 };
+
+// La Pianista seu a l'orgue d'esquena: en parlar-hi, després del primer quadre de diàleg es gira cap a l'Ineu (ZonaEsglesia.pianistaGira) i en acabar torna a l'orgue
+(() => {
+    const original = DIALEGS.pianista;
+    DIALEGS.pianista = E => {
+        const d = original(E);
+        if (d && d.pagines && d.pagines.length > 1) d.pagines.splice(1, 0, { fer: (z, fet) => { if (z.pianistaGira) z.pianistaGira('ineu', fet); else fet(); } });
+        return d;
+    };
+})();
