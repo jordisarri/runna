@@ -90,7 +90,7 @@ class Arcade extends Phaser.Scene {
         this.celebActiva = 0;
         if (this.textures.exists('ineu_celebracio')) {
             this.anims.create({ key: 'celebra', frames: this.anims.generateFrameNumbers('ineu_celebracio', { start: 3, end: 15 }), frameRate: 14 });
-            this.spCeleb = this.ui(this.add.sprite(AMPLE / 2, ALT + 30, 'ineu_celebracio', 0).setOrigin(0.5, 1).setScale(2.0).setDepth(46).setVisible(false));
+            this.spCeleb = this.ui(this.add.sprite(AMPLE / 2, ALT + 30, 'ineu_celebracio', 0).setOrigin(0.5, 1).setScale(2.0).setDepth(46.5).setVisible(false));
         }          // flaix a pantalla (cops perfectes i punts)
         this.input.on('pointerdown', p => this.alPrimer(p));
         this.input.on('pointermove', p => this.alMoure(p));
