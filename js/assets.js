@@ -249,8 +249,18 @@ const ATAC_INEU = {
     perVista: { up: [0, 1, 2, 3, 4, 5, 6, 7] },
     // Fotogrames de transició (es fabriquen en carregar, amb canvas; no hi ha cap fitxer): entre l'últim fotograma de l'atac i l'Ineu quiet, una barreja d'un i altre
     // que va passant del primer al segon, per no fer un salt en acabar el cop. Número de fotogrames per vista; 0 o treure l'entrada = sense transició.
-    transicio: { up: 3 }
+    transicio: {}
 };
+/**
+ * ATACS PER ARMA (definitius): un full per arma i direcció, assets/ineu/atac_<arma>_<direccio>.webp (eines/fer_atac_arma.py), amb l'Ineu ja portant l'arma (bastó,
+ * branca del Til·ler o espasa de Runna) i el contorn d'1 px. Cel·les de ATAC_CEL px, 4 columnes, tants fotogrames com calguin (només el cop, sense preparació). Animació 'atac_<arma>_<vista>'.
+ * (El sistema antic —full sense arma + capa de l'arma que segueix la mà, ATAC_ARMA a js/atac_arma.js— només es fa servir si falta algun full.)
+ */
+const ATAC_ARMES = ['basto', 'tiller', 'espasa'];
+const ATAC_CEL = 240;
+const ATAC_ARMA_FPS = { basto: 18, tiller: 20, espasa: 14 };
+const ATAC_ARMA_N = { basto: 7, tiller: 6, espasa: 4 };           // fotogrames de cada full (la graella pot tenir cel·les buides al final)
+function armaAtacNom(runna, agil) { return runna ? 'espasa' : agil ? 'tiller' : 'basto'; }
 function fpsAtac(vista) {
     return (ATAC_INEU.fpsVista && ATAC_INEU.fpsVista[vista]) || ATAC_INEU.fps;
 }
@@ -308,7 +318,7 @@ const Grafics = {
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, rutaIneu(dir, false), mida);
-            scene.load.spritesheet('ineu_atac_' + dir, `assets/ineu/atac_${dir}.webp?v=2611110010`, mida);
+            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac_${arma}_${dir}.webp?v=2611112400`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
@@ -414,7 +424,8 @@ const Grafics = {
             if (k < items.length) { scene.time.delayedCall(0, tros); return; }
             Grafics.reduirIneu(scene);
             Grafics.fabricarTransicions(scene);
-            Grafics.atacsVista = new Set(DIRS_INEU.filter(d => scene.textures.exists('ineu_atac_' + d) && !Grafics.faltants.includes('ineu_atac_' + d)));
+            Grafics.atacsArma = {};
+            ATAC_ARMES.forEach(arma => { Grafics.atacsArma[arma] = new Set(DIRS_INEU.filter(d => scene.textures.exists(`ineu_atac_${arma}_${d}`) && !Grafics.faltants.includes(`ineu_atac_${arma}_${d}`))); });
             Grafics.animacions(scene);
             if (fet) fet();
         };
@@ -453,7 +464,7 @@ const Grafics = {
     // Redueix les fulles de l'Ineu a SPRITE_INEU.k (vegeu SPRITE_INEU).
     reduirIneu(scene) {
         const tm = scene.textures, k = SPRITE_INEU.k, CEL = SPRITE_INEU.ample, C2 = Math.round(CEL * k);
-        const claus = DIRS_INEU.reduce((llista, dir) => llista.concat(['ineu_' + dir, 'ineu_atac_' + dir]), []);
+        const claus = DIRS_INEU.map(dir => 'ineu_' + dir);
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => claus.push('ineu_idle_' + dir));
         claus.forEach(clau => {
             if (!tm.exists(clau) || Grafics.faltants.includes(clau)) return;
@@ -568,16 +579,16 @@ const Grafics = {
         if (!scene.anims.exists('isilder_camina') && scene.textures.exists('isilder_camina')) {
             scene.anims.create({ key: 'isilder_camina', frames: scene.anims.generateFrameNumbers('isilder_camina', { start: 0, end: 15 }), frameRate: 12, repeat: -1 });
         }
-        (Grafics.atacsVista || []).forEach(dir => {
-            const key = 'atac_' + dir;
+        ATAC_ARMES.forEach(arma => ((Grafics.atacsArma && Grafics.atacsArma[arma]) || []).forEach(dir => {
+            const key = `atac_${arma}_${dir}`, tex = `ineu_atac_${arma}_${dir}`;
             if (scene.anims.exists(key)) scene.anims.remove(key);
             scene.anims.create({
                 key,
-                frames: fotogramesAtac(dir),
-                frameRate: fpsAtac(dir),
+                frames: scene.anims.generateFrameNumbers(tex, { start: 0, end: ATAC_ARMA_N[arma] - 1 }),
+                frameRate: ATAC_ARMA_FPS[arma],
                 repeat: 0
             });
-        });
+        }));
         DIRS_INEU.forEach(dir => {
             const key = 'caminar_' + dir;
             if (scene.anims.exists(key) || !scene.textures.exists('ineu_' + dir)) return;

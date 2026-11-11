@@ -833,21 +833,18 @@ Object.assign(ZonaBase.prototype, {
         if (this.alAtacar) this.alAtacar(jo, d);          // les zones poden reaccionar al cop (les arrels del Til·ler)
     },
 
-    // Animació d'atac de l'Ineu amb la fulla de la direcció (8 vistes). Retorna fals si no n'hi ha.
-    // La fulla mostra l'Ineu sense arma: l'arma (bastó, branca del Til·ler o espasa) és una capa que segueix la mà (ATAC_ARMA).
+    // Animació d'atac de l'Ineu amb la fulla de l'arma i la direcció (8 vistes; l'Ineu ja porta l'arma al dibuix). Retorna fals si no n'hi ha (llavors armaCop).
     animarAtac(d, runna, agil) {
         const vista = OCTANTS_INEU[(Math.round(Math.atan2(d.y, d.x) / (Math.PI / 4)) + 8) % 8];
-        if (!Grafics.atacsVista || !Grafics.atacsVista.has(vista)) return false;
+        const arma = armaAtacNom(runna, agil), clau = `atac_${arma}_${vista}`;       // agil sense Runna = la branca del Til·ler
+        if (!this.anims.exists(clau)) return false;
         this.atacantFins = 0;
         this.vista8Manual = true;
         this.posarDireccio(this.direccio, false, vista);
         this.ineu.setFlipX(false);
-        const fps = typeof fpsAtac === 'function' ? fpsAtac(vista) : ATAC_INEU.fps;
-        this.atacantFins = this.time.now + fotogramesAtac(vista).length / fps * 1000;
-        const net = this.capaArma(vista, runna, agil);
-        this.ineu.anims.play('atac_' + vista, true);
+        this.ineu.anims.play(clau, true);
+        this.atacantFins = this.time.now + this.anims.get(clau).msPerFrame * this.anims.get(clau).frames.length;
         this.ineu.once('animationcomplete', () => {
-            net();
             this.atacantFins = 0;
             if (!this.caient) this.posarDireccio(this.direccio, false);
         });
