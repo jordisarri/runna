@@ -5,32 +5,57 @@
  */
 
 // ---------------- ESGLÉSIA (interior) ----------------
-// La nau central fa 800 d'ample (x 240-1040); a banda i banda hi ha una nau lateral separada per una arcada (piles i arcs en perspectiva): l'esquerra, de 200, i la dreta, més ampla (320), on hi ha l'orgue.
-// (Abans la nau feia 800 d'ample.) El retaule ocupa tot l'ample i es veu sencer (800 x 990); al seu peu hi ha dues
+// La nau central fa 800 d'ample (x 240-1040) i el retaule la hi ocupa sencera. A banda i banda hi ha unes parets altes de pedra de 200 d'ample, vistes de front (com als temples de «A Link to the Past»), amb quatre arcs molt alts
+// i fondos cadascuna (dibuixarParets). La nau s'allarga fins a 1200 per la dreta (1040-1200) perquè hi càpiga l'orgue.
 // portes: la de la dreta duu a la torre de l'escala (ZonaTorre) i d'allà a les golfes del rellotge.
-const ESG = { arcada: { x0: 174.5, baseY: 1590, amplada: 186.5, bases: [[15.5, 612.7], [76.2, 516.7], [124.4, 445.6], [153.6, 401.4], [177.9, 362.9]] }, ample: 1400, nauX0: 240, nauX1: 1040, alcada: 1640, retY: 1010, retBaix: 24, retTop: 20, sostre: 1034, sostrePorta: 1000, portaDx: 870, portaEsq: 408 };      // sostre: fins on arriba la base del retaule (els peus no hi pugen); sostrePorta: només davant la porta de la dreta, que s'ha de poder tocar
+const ESG = { paret: 200, ample: 1400, nauX0: 240, nauX1: 1040, alcada: 1640, retY: 1010, retBaix: 24, retTop: 20, sostre: 1034, sostrePorta: 1000, portaDx: 870, portaEsq: 408 };      // sostre: fins on arriba la base del retaule (els peus no hi pugen); sostrePorta: només davant la porta de la dreta, que s'ha de poder tocar
 
 class ZonaEsglesia extends ZonaBase {
-    // Arcades altes a banda i banda de la nau central, en perspectiva (art/objectes/arcada_santuari.png, eines/fer_arcada_santuari.py): cinc piles i quatre arcs que
-    // s'allunyen cap al retaule (cap amunt), cada cop més petits i més cap al centre. Cada pila és una llesca de la imatge amb la seva profunditat (l'Ineu passa
-    // davant o darrere segons on és) i el seu bloc de col·lisió; entre pila i pila hi ha pas cap a la nau lateral.
-    dibuixarArcades() {
-        const D = ESG.arcada;
-        if (!this.textures.exists('arcada_santuari') || !this.textures.exists('arcada_santuari_d')) return;
-        const mitges = D.bases.slice(0, -1).map((b, i) => (b[0] + D.bases[i + 1][0]) / 2);
+    // Parets laterals altes, vistes de front (com als temples de «A Link to the Past»): una franja de pedra de 200 d'ample a cada costat, amb quatre arcs MOLT alts i fondos,
+    // cornises que els separen i una vora il·luminada a la banda de la nau (el gruix del mur). Dins de cada arc hi ha una fornícula fosca amb la llum càlida del fons.
+    dibuixarParets() {
+        const A = ESG.alcada, W = ESG.ample, PE = ESG.paret, VORA = 0x2a1a10;
+        const BAIES = 4, PAS = 400, Y0 = 60, ALT_ARC = 330, AMPLE_ARC = 150;
         [1, -1].forEach(costat => {
-            // costat 1: esquerra; -1: dreta (la mateixa imatge girada, simètrica respecte a l'eix de la nau, x = 640)
-            const clau = costat === 1 ? 'arcada_santuari' : 'arcada_santuari_d', esc = this.textures.get(clau).customData.escala;
-            const oy = D.baseY - D.bases[0][1], ox = costat === 1 ? D.x0 : ESG.nauX0 + ESG.nauX1 - D.x0 - D.amplada;
-            D.bases.forEach((b, i) => {
-                // llesca de la imatge que conté la pila i (de la meitat cap a la pila anterior a la meitat cap a la següent); a la dreta, les llesques van en ordre invers
-                const x0 = i === 0 ? 0 : mitges[i - 1], x1 = i === D.bases.length - 1 ? D.amplada : mitges[i];
-                const [c0, c1] = costat === 1 ? [x0, x1] : [D.amplada - x1, D.amplada - x0];
-                const img = this.add.image(ox, oy, clau).setOrigin(0, 0).setScale(esc);
-                img.setCrop(c0 / esc, 0, (c1 - c0) / esc, img.height).setTint(0xe6d2a8);        // (pedra una mica més càlida i fosca, perquè no ressalti sobre la sala)
-                img.setDepth(oy + b[1]);
-                this.colisio(costat === 1 ? ox + b[0] : ox + (D.amplada - b[0]), oy + b[1] - 7, 30, 14);
-            });
+            const bx = costat === 1 ? 0 : W - PE;                       // x de l'esquerra de la franja
+            const X = lx => costat === 1 ? bx + lx : bx + PE - lx;      // x local (0 = costat de fora, PE = costat de la nau) → x del món
+            const pts = arr => arr.map(([lx, y]) => ({ x: X(lx), y }));
+            const rect = (g, lx0, y0, lx1, y1) => { const a = Math.min(X(lx0), X(lx1)), b = Math.max(X(lx0), X(lx1)); g.fillRect(a, y0, b - a, y1 - y0); };
+            if (this.textures.exists('mur_pedra')) this.add.tileSprite(bx, 0, PE, A, 'mur_pedra').setOrigin(0).setTileScale(1.15 / RES).setDepth(-995).setTint(0xcdb48c);
+            else this.add.rectangle(bx, 0, PE, A, 0xb89f78).setOrigin(0).setDepth(-995);
+            const g = this.add.graphics().setDepth(-990);
+            g.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, costat === 1 ? 0.45 : 0, costat === 1 ? 0 : 0.45, costat === 1 ? 0.45 : 0, costat === 1 ? 0 : 0.45).fillRect(bx, 0, PE, A);        // més fosca cap a fora
+            for (let k = 0; k < BAIES; k++) {
+                const yt = Y0 + k * PAS, yb = yt + ALT_ARC, R = AMPLE_ARC / 2, cx = PE / 2 - 4, yc = yt + R;          // yt: cim de l'arc; yc: centre de la volta
+                const forma = marge => { const arr = [[cx - R - marge, yb], [cx - R - marge, yc]];
+                    for (let i = 1; i < 20; i++) { const a = Math.PI + (i / 20) * Math.PI; arr.push([cx + Math.cos(a) * (R + marge), yc + Math.sin(a) * (R + marge)]); }
+                    arr.push([cx + R + marge, yc], [cx + R + marge, yb]); return pts(arr); };
+                // marc de pedra i obertura fonda
+                g.fillStyle(0xe2d0a6, 1).fillPoints(forma(16), true).lineStyle(3, VORA, 1).strokePoints(forma(16), true);
+                g.fillStyle(0x1a0c06, 1).fillPoints(forma(0), true);
+                // llum càlida de la fornícula (de baix cap a dalt) i ombra a un costat per donar fondària
+                g.fillGradientStyle(0x2a1608, 0x2a1608, 0xf2b862, 0xf2b862, 0.0, 0.0, 0.6, 0.6).fillRect(Math.min(X(cx - R + 6), X(cx + R - 6)), yc, AMPLE_ARC - 12, yb - yc);
+                g.fillStyle(0xf2b862, 0.12).fillPoints(forma(-10), true);
+                g.fillStyle(0x000000, 0.4); rect(g, cx - R, yc, cx - R + 14, yb);
+                g.lineStyle(3, VORA, 1).strokePoints(forma(0), true);
+                // dovelles del marc i clau de l'arc
+                for (let i = 1; i < 12; i++) { const a = Math.PI + (i / 12) * Math.PI, c = Math.cos(a), sn = Math.sin(a);
+                    g.lineStyle(2, VORA, 0.5).lineBetween(X(cx + c * R), yc + sn * R, X(cx + c * (R + 16)), yc + sn * (R + 16)); }
+                g.fillStyle(0xf1e2bf, 1).fillRect(X(cx) - 11, yt - 34, 22, 28).lineStyle(3, VORA, 1).strokeRect(X(cx) - 11, yt - 34, 22, 28);
+                // llindar de l'obertura
+                g.fillStyle(0xcbb68c, 1); rect(g, cx - R - 16, yb, cx + R + 16, yb + 14); g.lineStyle(3, VORA, 1).strokeRect(Math.min(X(cx - R - 16), X(cx + R + 16)), yb, 2 * R + 32, 14);
+                // cornisa entre arcs (amb relleu)
+                const yk = yt + PAS - 48;
+                if (k < BAIES - 1) {
+                    g.fillStyle(0xd6c398, 1); rect(g, 0, yk, PE, yk + 30); g.lineStyle(3, VORA, 1).strokeRect(bx, yk, PE, 30);
+                    g.fillStyle(0xffffff, 0.3); rect(g, 0, yk + 3, PE, yk + 9);
+                    g.fillStyle(0x000000, 0.2); rect(g, 0, yk + 22, PE, yk + 28);
+                }
+            }
+            // vora il·luminada del mur (la banda de la nau)
+            g.fillStyle(0x000000, 0.25); rect(g, PE - 22, 0, PE - 10, A);
+            g.fillStyle(VORA, 1); rect(g, PE - 12, 0, PE - 10, A);
+            g.fillStyle(0xe9d9b4, 1); rect(g, PE - 10, 0, PE, A);
         });
     }
 
@@ -78,23 +103,21 @@ class ZonaEsglesia extends ZonaBase {
         const A = ESG.alcada;
         this.epileg = false; this.epilegEngegat = false;          // (l'escena es reaprofita: l'epíleg d'una altra partida no compta)
         // Terra i murs
-        const W = ESG.ample, X0 = ESG.nauX0, X1 = ESG.nauX1, EX = 40;                 // EX: gruix de la paret exterior
-        this.terra('rajola', EX, 0, W - 2 * EX, A, -1100);
+        const W = ESG.ample, PE = ESG.paret;                                           // PE: gruix de les parets laterals
+        this.terra('rajola', PE, 0, W - 2 * PE, A, -1100);
         const murs = this.add.graphics().setDepth(-1000);
-        murs.fillStyle(0x4a1e22, 1).fillRect(EX, 0, W - 2 * EX, ESG.retY);                 // paret del fons, darrere el retaule
-        murs.fillStyle(0x2e1216, 1).fillRect(EX, ESG.retY - 8, W - 2 * EX, 8);            // sòcol fosc (si el retaule no el tapa del tot, no es veu cap línia clara)
-        murs.fillStyle(0x6e5a44, 1).fillRect(0, 0, EX, A).fillRect(W - EX, 0, EX, A);                              // parets exteriors de les naus laterals
-        murs.fillStyle(0x000000, 0.28).fillRect(EX, 0, X0 - EX, A).fillRect(X1, 0, W - EX - X1, A);                 // les naus laterals, una mica més fosques que la central
-        this.colisio(EX / 2, A / 2, EX, A);
-        this.colisio(W - EX / 2, A / 2, EX, A);
+        murs.fillStyle(0x4a1e22, 1).fillRect(PE, 0, W - 2 * PE, ESG.retY);            // paret del fons, darrere el retaule
+        murs.fillStyle(0x2e1216, 1).fillRect(PE, ESG.retY - 8, W - 2 * PE, 8);        // sòcol fosc (si el retaule no el tapa del tot, no es veu cap línia clara)
+        this.colisio(PE / 2, A / 2, PE, A);
+        this.colisio(W - PE / 2, A / 2, PE, A);
+        this.dibuixarParets();
         // El retaule (fins a y = sostre) no es pot trepitjar; només s'obre un pas davant la porta de la dreta (x 828-912), que duu a la torre
         const P0 = ESG.portaDx - 42, P1 = ESG.portaDx + 42;
-        this.colisio((EX + P0) / 2, ESG.sostre / 2, P0 - EX, ESG.sostre);
-        this.colisio((P1 + W - EX) / 2, ESG.sostre / 2, W - EX - P1, ESG.sostre);
+        this.colisio((PE + P0) / 2, ESG.sostre / 2, P0 - PE, ESG.sostre);
+        this.colisio((P1 + W - PE) / 2, ESG.sostre / 2, W - PE - P1, ESG.sostre);
         this.colisio((P0 + P1) / 2, ESG.sostrePorta / 2, P1 - P0, ESG.sostrePorta);
-        this.colisio((EX + 600) / 2, A - 10, 600 - EX, 20);
-        this.colisio((680 + W - EX) / 2, A - 10, W - EX - 680, 20);
-        this.dibuixarArcades();
+        this.colisio((PE + 600) / 2, A - 10, 600 - PE, 20);
+        this.colisio((680 + W - PE) / 2, A - 10, W - PE - 680, 20);
 
         // Retaule Major (tot l'ample de la nau, sencer) i, al davant, l'altar de pedra
         this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
@@ -116,7 +139,7 @@ class ZonaEsglesia extends ZonaBase {
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daimiel, que dirigeix el cor
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daimiel es posen amb la resta
-        if (!epileg) this.orgue = this.posar('orgue', 1235, ESG.retY + 250, { col: { w: 110, h: 50 } });
+        if (!epileg) this.orgue = this.posar('orgue', 1110, ESG.retY + 250, { col: { w: 110, h: 50 } });
         if (!epileg) {
             // La Pianista és de cara al banc de l'orgue; només hi toca d'esquena (animada) quan l'Ineu la troba la primera vegada i mentre ensenya un cant (pianistaToca)
             const pia = this.npc('pianista', this.orgue.x, this.orgue.y + 24, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
@@ -136,7 +159,7 @@ class ZonaEsglesia extends ZonaBase {
         }
 
         // Llum de les vidrieres
-        this.add.rectangle(W / 2, A / 2, W - 2 * EX, A, 0xffd38a, 0.05).setDepth(80000);
+        this.add.rectangle(W / 2, A / 2, W - 2 * PE, A, 0xffd38a, 0.05).setDepth(80000);
 
         this.sortida(600, A - 20, 80, 20, 'ZonaPlaca', 'esglesia');
         if (Estat.flag('epilegPendent') && !Estat.flag('epilegFet')) this.prepararEpileg();
