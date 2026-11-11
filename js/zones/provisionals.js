@@ -44,12 +44,9 @@ class ZonaEsglesia extends ZonaBase {
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
 
         // Portes del peu del retaule: totes dues tancades. Quan el Pare Daimiel diu que el rellotge s'ha aturat (rellotgeDit)
-        // s'obre la de la dreta, que duu a la torre i a la Sala del Rellotge. L'esquerra continua tancada.
+        // s'obre la de la dreta, que duu a la torre i a la Sala del Rellotge. L'esquerra és només decorativa: no s'obre mai i no té cap punt d'interacció.
         this.portaRellotge = false;
         this.obrirPortaRellotge(false);
-        this.interactiu(ESG.portaEsq, ESG.retY + 50, RADI_OBJECTE, () => ({
-            pagines: [{ qui: 'Ineu', text: 'Tancada amb clau.' }]
-        }), { altura: 150 });
         this.interactiu(ESG.portaDx, ESG.retY + 50, RADI_OBJECTE, () => Estat.te('clau_campanar') ? ({
             pagines: [{ qui: 'Ineu', text: 'La clau del campanar encaixa al pany. La porta s\'obre.' }],
             enAcabar: () => { Estat.posaFlag('portaCampanarOberta'); Sfx.secret(); this.obrirPortaRellotge(false); }

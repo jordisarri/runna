@@ -4,7 +4,7 @@
     python3 eines/igualar_idle_ineu.py [gruix_contorn]
 
 Executar-lo DESPRÉS de fer_ineu_v2.py i fer_ineu_v2_alt.py (llegeix les versions sense contorn d'art/ineu/v2/sense_contorn/).
-Per cada direcció, es mesura (mediana dels 16 fotogrames) l'alçada, la superfície total i la superfície del cap (el 30 % de dalt) del caminar i de l'idle;
+Per cada direcció (excepte left/right: allà l'idle és la referència), es mesura (mediana dels 16 fotogrames) l'alçada, la superfície total i la superfície del cap (el 30 % de dalt) del caminar i de l'idle;
 l'idle es reescala (peus a y=238, centrat a x=128) pel mig dels tres quocients i es torna a posar el contorn. Els caminars no es toquen.
 """
 import sys
@@ -44,9 +44,8 @@ def main():
     parelles = []
     for d in DIRS:
         if d in ('left', 'right'):
-            parelles.append((d, SENSE / 'alt' / f'walk_elev_{d}.webp', SENSE / 'alt' / f'idle_elev_{d}.webp', b.DEST / 'alt' / f'idle_elev_{d}.webp'))
-        else:
-            parelles.append((d, SENSE / f'{d}.webp', SENSE / f'idle_{d}.webp', b.DEST / f'idle_{d}.webp'))
+            continue        # als laterals l'idle és la referència: és el caminar el que s'ajusta (AJUST_CAMINAR a fer_ineu_v2_alt.py)
+        parelles.append((d, SENSE / f'{d}.webp', SENSE / f'idle_{d}.webp', b.DEST / f'idle_{d}.webp'))
     for d, pw, pi, dest in parelles:
         w, i = Image.open(pw).convert('RGBA'), Image.open(pi).convert('RGBA')
         mw, mi = mesura(w), mesura(i)

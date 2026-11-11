@@ -20,6 +20,7 @@ DEST = b.DEST / 'alt'
 SENSE = b.SENSE / 'alt'
 AMPLE_LAT = 118.0   # amplada objectiu del cos de perfil (el caminar lateral actual fa ~115)
 MAX_ESTIR = 1.3
+AJUST_CAMINAR = (0.95, 0.99)   # (x, y) extra als caminars laterals: es veien més amples que l'idle en passar de l'un a l'altre
 
 def main():
     gruix = int(sys.argv[1]) if len(sys.argv) > 1 else 1
@@ -30,6 +31,7 @@ def main():
         f = b.ALT_VELLA / float(np.median([q[3] - q[2] + 1 for q in boxes]))
         fx = f * min(MAX_ESTIR, max(1.0, AMPLE_LAT / (float(np.median([q[1] - q[0] + 1 for q in boxes])) * f)))
         cx = float(np.median([(q[0] + q[1]) / 2 for q in boxes])); bot = float(np.median([q[3] for q in boxes]))
+        if p.stem.startswith('walk_elev'): fx, f = fx * AJUST_CAMINAR[0], f * AJUST_CAMINAR[1]
         dx, dy = round(128 - cx * fx), round(b.PEUS - bot * f)
         out = Image.new('RGBA', (4 * b.CEL, 4 * b.CEL), (0, 0, 0, 0))
         for i, im in enumerate(fs):
