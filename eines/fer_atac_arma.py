@@ -22,7 +22,6 @@ DIRS = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'n
 FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 5, 5]}       # fotogrames triats (de 0 a 15) per arma
 SRC, CEL = 384, 320         # fotograma d'origen i cel·la de sortida (més gran que abans, perquè l'arma no es talli)
 COS = 170.0                  # alçada que ha de fer el cos de l'Ineu a la cel·la (com als fulls de caminar reduïts)
-K_FIXA = {'espasa': 0.612}   # (basto i tiller: es mesura, vegeu escala())   # escala fixa (el cos de l'espasa fa 277 px a l'origen; amb l'espasa avall, la mesura dels peus no val)
 GRUIX = 1
 
 def fotograma(im, i):
@@ -36,13 +35,21 @@ def peus(im, fots):
         b.append(ys.max())
     return float(np.median(b))
 
+def centre_peus(fot):
+    # Centre horitzontal dels peus (les 24 files de més avall del cos): el cos es mou dins la cel·la durant el cop; es fixa als peus perquè l'Ineu no es desplaci (retrocés)
+    a = np.array(fot.split()[3]) > 24
+    ys, _ = np.where(a)
+    banda = a[max(0, ys.max() - 24):ys.max() + 1]
+    _, xs = np.where(banda)
+    return float(xs.min() + xs.max()) / 2 if len(xs) else SRC / 2
+
 def escala(im, arma):
-    # Alçada del cos = dels peus al cap en els fotogrames finals (l'arma queda a l'alçada de les mans); mediana d'aquests fotogrames
-    if arma in K_FIXA: return K_FIXA[arma]
-    h = []
+    # Alçada del cos = dels peus (mediana de la fila més baixa) al cap (mediana de la fila més alta dels fotogrames finals, on l'arma és a l'alçada de les mans o avall).
+    # Cada generació de AutoSprite fa el personatge d'una mida diferent (l'espasa, ~310 px; el bastó i la branca, 250-270), per això es mesura a cada full.
+    tops = []
     for i in (12, 13, 14, 15):
-        ys, _ = np.where(np.array(fotograma(im, i).split()[3]) > 24); h.append(ys.max() - ys.min() + 1)
-    return COS / float(np.median(h))
+        ys, _ = np.where(np.array(fotograma(im, i).split()[3]) > 24); tops.append(ys.min())
+    return COS / (peus(im, range(16)) - float(np.median(tops)))
 
 def main():
     for arma, fots in FOT.items():
@@ -52,9 +59,10 @@ def main():
             n = len(fots); cols = 4; files = (n + cols - 1) // cols
             out = Image.new('RGBA', (cols * CEL, files * CEL), (0, 0, 0, 0))
             for j, i in enumerate(fots):
-                g = fotograma(im, i).resize((round(SRC * K), round(SRC * K)), Image.LANCZOS)
+                fo = fotograma(im, i)
+                g = fo.resize((round(SRC * K), round(SRC * K)), Image.LANCZOS)
                 cel = Image.new('RGBA', (CEL, CEL), (0, 0, 0, 0))
-                dx, dy = round(CEL / 2 - SRC * K / 2), round(CEL * 0.9375 - pf * K)
+                dx, dy = round(CEL / 2 - centre_peus(fo) * K), round(CEL * 0.9375 - pf * K)
                 cel.paste(g, (dx, dy), g)
                 a = np.array(cel); vora = np.zeros_like(a); vora[:, :, 3] = (alfa_contorn(a[:, :, 3], GRUIX) * 255).astype(np.uint8)
                 base = Image.fromarray(vora, 'RGBA'); base.alpha_composite(cel)
