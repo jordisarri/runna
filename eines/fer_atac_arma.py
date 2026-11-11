@@ -20,9 +20,9 @@ ORIGEN = ARREL / 'art' / 'ineu' / 'atac_arma'
 DEST = ARREL / 'assets' / 'ineu'
 DIRS = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast']
 FOT = {'basto': [1, 2, 3, 4, 5, 6, 7], 'tiller': [2, 3, 4, 5, 6, 6], 'espasa': [2, 3, 4, 5, 5]}       # fotogrames triats (de 0 a 15) per arma
-SRC, CEL = 384, 240
-K = 0.612                    # escala origen → cel·la: el cos de l'Ineu (277 px a l'origen) queda de ~170 px, com als fulls de caminar reduïts
-PEUS_SRC = {'basto': 347, 'tiller': 347, 'espasa': 347}
+SRC, CEL = 384, 320         # fotograma d'origen i cel·la de sortida (més gran que abans, perquè l'arma no es talli)
+COS = 170.0                  # alçada que ha de fer el cos de l'Ineu a la cel·la (com als fulls de caminar reduïts)
+K_FIXA = {'espasa': 0.612, 'basto': 0.612, 'tiller': 0.612}   # provisional per a basto i tiller (primera generació); les noves es mesuren   # escala fixa (el cos de l'espasa fa 277 px a l'origen; amb l'espasa avall, la mesura dels peus no val)
 GRUIX = 1
 
 def fotograma(im, i):
@@ -36,11 +36,19 @@ def peus(im, fots):
         b.append(ys.max())
     return float(np.median(b))
 
+def escala(im, arma):
+    # Alçada del cos = dels peus al cap en els fotogrames finals (l'arma queda a l'alçada de les mans); mediana d'aquests fotogrames
+    if arma in K_FIXA: return K_FIXA[arma]
+    h = []
+    for i in (12, 13, 14, 15):
+        ys, _ = np.where(np.array(fotograma(im, i).split()[3]) > 24); h.append(ys.max() - ys.min() + 1)
+    return COS / float(np.median(h))
+
 def main():
     for arma, fots in FOT.items():
         for d in DIRS:
             im = Image.open(ORIGEN / arma / f'{d}.png').convert('RGBA')
-            pf = peus(im, range(16))
+            pf = peus(im, range(16)); K = escala(im, arma)
             n = len(fots); cols = 4; files = (n + cols - 1) // cols
             out = Image.new('RGBA', (cols * CEL, files * CEL), (0, 0, 0, 0))
             for j, i in enumerate(fots):
@@ -52,7 +60,7 @@ def main():
                 base = Image.fromarray(vora, 'RGBA'); base.alpha_composite(cel)
                 out.paste(base, ((j % cols) * CEL, (j // cols) * CEL))
             out.save(DEST / f'atac_{arma}_{d}.webp', 'WEBP', quality=88, alpha_quality=100, method=6)
-            print(arma, d, n, 'fotogrames, peus origen', round(pf))
+            print(arma, d, n, 'fotogrames, peus origen', round(pf), 'K', round(K, 3))
 
 if __name__ == '__main__':
     main()
