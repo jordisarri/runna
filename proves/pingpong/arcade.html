@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Prototip ping-pong: estil arcade (Threepon)</title>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #0d0b09; overflow: hidden; touch-action: none; }
+  /* Com al joc principal: el contenidor ocupa tota la pantalla i Phaser hi centra el llenç 9:16 */
+  #joc { position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+</style>
+</head>
+<body>
+<div id="joc"></div>
+<!-- Prototip 3 del minijoc de ping-pong (fora del joc principal): un sol gest. -->
+<script src="../../js/lib/phaser.min.js?v=3.80.1"></script>
+<script src="arcade.js?v=1"></script>
+</body>
+</html>
