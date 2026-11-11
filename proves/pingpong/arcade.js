@@ -37,7 +37,7 @@ class Arcade extends Phaser.Scene {
 
     preload() {
         // L'Ineu d'esquena, en alta resolució (512 px per fotograma; eines/fer_pingpong_ineu_hd.py): es mostra molt gran i només de genolls amunt
-        ['drive', 'reves', 'servei'].forEach(n => this.load.spritesheet(n === 'servei' ? 'ineu_servei' : 'pp_' + n, `../../assets/pingpong2/ineu_${n}.webp?v=1`, { frameWidth: 512, frameHeight: 512 }));
+        ['drive', 'reves', 'servei'].forEach(n => this.load.spritesheet(n === 'servei' ? 'ineu_servei' : 'pp_' + n, `../../assets/pingpong2/ineu_${n}.webp?v=2`, { frameWidth: 512, frameHeight: 512 }));
         this.load.image('jusef_levita', '../../assets/personatges/jusef_levita.webp');
         this.load.image('cartell_llums', '../../assets/objectes/cartell_llums.webp');
         ['jusef_dret', 'jusef_revers', 'jusef_servei'].forEach(n => this.load.spritesheet(n, `../../assets/pingpong2/${n}.webp?v=2`, { frameWidth: 256, frameHeight: 256 }));
@@ -79,6 +79,9 @@ class Arcade extends Phaser.Scene {
             .setOrigin(0, 0.5).setDepth(50).setInteractive({ useHandCursor: true }).on('pointerdown', (p, x, y, ev) => { if (ev) ev.stopPropagation(); this.punxo = null; history.length > 1 ? history.back() : (location.href = '../../'); }));
         // Estat
         this.Xi = 0; this.Xj = 0; this.lent = 1; this.zoomExtra = 0; this.punxo = null; this.traç = [];
+        this.pulsIneu = 0; this.pulsJusef = 0; this.paradaFins = 0; this.rastre = [];
+        this.rastreG = this.add.graphics().setDepth(8.8);                      // l'estela de la pilota
+        this.flaix = this.ui(this.add.rectangle(0, 0, AMPLE, ALT, 0xffffff, 0).setOrigin(0).setDepth(45));          // flaix a pantalla (cops perfectes i punts)
         this.input.on('pointerdown', p => this.alPrimer(p));
         this.input.on('pointermove', p => this.alMoure(p));
         this.input.on('pointerup', p => this.alSoltar(p));
@@ -170,7 +173,7 @@ class Arcade extends Phaser.Scene {
     // El cartell del ratolí («No oblideu apagar els llums», art/objectes/cartell_llums), a la paret del fons, darrere d'en Jusef: gris, difuminat i una mica tapat,
     // perquè el seu blanc no distregui del de la pilota
     cartellProhibit() {
-        const img = this.add.image(540, 160, 'cartell_llums').setDepth(-4).setAngle(-3).setAlpha(0.55).setTint(0x8c8a86);
+        const img = this.add.image(540, 160, 'cartell_llums').setDepth(-4).setAngle(-3).setTint(0x8c8a86);
         img.setScale(135 / img.width);
         try { if (img.postFX) img.postFX.addBlur(0, 1.4, 1.4, 1.0); } catch (e) { /* sense WebGL: es veu sense difuminar */ }
     }
@@ -279,10 +282,13 @@ class Arcade extends Phaser.Scene {
         else if (b && !b.morta && b.de === 'jusef') objI = b.marca.X;
         this.Xi += Phaser.Math.Clamp(objI - this.Xi, -7.5 * dt, 7.5 * dt);
         // L'Ineu és a primer pla: molt gran, només de genolls amunt, i el tall de baix és la vora de baix de la pantalla (es mou una mica a banda i banda)
-        const pi = this.proj(this.Xi, T.Z_INEU), tall = this.tallIneu, comp = (this.compIneu[this.spIneu.texture.key] || [])[parseInt(this.spIneu.frame.name, 10)] || 1, ES = this.escIneu * comp;
+        const pi = this.proj(this.Xi, T.Z_INEU), tall = this.tallIneu, comp = (this.compIneu[this.spIneu.texture.key] || [])[parseInt(this.spIneu.frame.name, 10)] || 1, ES = this.escIneu * comp * (1 + 0.05 * this.pulsIneu);
+        this.pulsIneu *= Math.pow(0.0005, dt); this.pulsJusef *= Math.pow(0.0005, dt);
         this.spIneu.setScale(ES).setPosition(360 + Phaser.Math.Clamp((pi.x - 360) * 0.55, -150, 150), ALT + 40 + (512 - tall) * ES).setDepth(12);
         // Simulació de la pilota (el temps del joc va més lent que el real, segons el mode i el cop màgic)
-        if (b && !b.morta) this.simula(dt * this.M.temps * this.lent);
+        const aturada = this.time.now < (this.parada_fins || 0) ? 0.06 : 1;
+        if (b && !b.morta) this.simula(dt * this.M.temps * this.lent * aturada);
+        this.pintaRastre(b);
         // Jusef: va cap a on arribarà la pilota
         let objJ = 0;
         if (this.b && this.b.de === 'ineu' && !this.b.morta) objJ = this.b.marca.X + this.b.vx * 0.35;
@@ -290,11 +296,11 @@ class Arcade extends Phaser.Scene {
         this.Xj += Phaser.Math.Clamp(objJ - this.Xj, -pasJ, pasJ);
         const pj = this.proj(this.Xj, T.Z_JUSEF);
         const flota = Math.sin(time / 400) * 6;
-        this.spJusef.setPosition(pj.x, pj.y + flota).setScale(2.1 * pj.k / 400).setDepth(10 - T.Z_JUSEF);
+        this.spJusef.setPosition(pj.x, pj.y + flota).setScale(2.1 * pj.k / 400 * (1 + 0.07 * this.pulsJusef)).setDepth(10 - T.Z_JUSEF);
         this.auraJusef.setPosition(pj.x, pj.y - 120 + flota);
         if (this.estat === 'serveiIneu') {            // la pilota a la mà de l'Ineu
             const p = this.proj(this.Xi + 0.18, -0.15, 0.32 + Math.abs(Math.sin(time / 260)) * 0.12);
-            this.pilota.setVisible(true).setPosition(p.x, p.y).setRadius(Math.max(9, 0.05 * p.k)).setDepth(21);
+            this.pilota.setVisible(true).setPosition(p.x, p.y).setRadius(Math.max(9, 0.05 * p.k)).setDepth(9);
             this.ombra.setVisible(false);
         }
         this.pintaAnell();
@@ -303,6 +309,17 @@ class Arcade extends Phaser.Scene {
     }
 
     // L'anell que es posa VERD quan toca lliscar: es veu a la pilota que arriba i passa de gris (lluny) a groc (a prop) a verd (ara!)
+    // estela de la pilota: les últimes posicions, cada cop més petites i transparents (es nota quan va ràpid)
+    pintaRastre(b) {
+        const g = this.rastreG; g.clear();
+        if (!b || b.morta) { this.rastre.length = 0; return; }
+        const p = this.proj(this.visX(b), b.z, b.h);
+        this.rastre.push({ x: p.x, y: p.y, r: Math.max(9, 0.05 * p.k) });
+        if (this.rastre.length > 8) this.rastre.shift();
+        const n = this.rastre.length;
+        this.rastre.forEach((q, i) => { const f = i / n; g.fillStyle(b.magica ? 0xe0b8ff : 0xfff6e0, 0.32 * f).fillCircle(q.x, q.y, q.r * (0.35 + 0.6 * f)); });
+    }
+
     pintaAnell() {
         const g = this.anell, b = this.b; g.clear();
         if (!b || b.morta || b.de !== 'jusef' || b.bots !== 1 || this.copFet === b) return;
@@ -360,7 +377,7 @@ class Arcade extends Phaser.Scene {
             if (b.de === 'jusef' && b.bots === 1 && this.copFet !== b && b.vz < 0 && b.z <= Z_COP - 0.5) { this.copFet = b; this.txtCopa('Massa tard!', '#ff9a7a', this.proj(b.X, b.z, b.h)); this.so('mal'); }
             // xarxa
             if ((zAbans - T.L / 2) * (b.z - T.L / 2) <= 0 && b.h < T.NH && Math.abs(b.X) < T.W + 0.1) {
-                b.vz = -b.vz * 0.15; b.vx *= 0.3; this.so('xarxa');
+                b.vz = -b.vz * 0.15; b.vx *= 0.3; this.so('xarxa'); this.cameras.main.shake(100, 0.004); { const q = this.proj(b.X, T.L / 2, T.NH); this.chispes(q.x, q.y, 8, [0xffffff, 0xd8d0c0], 160, 0.3, 380); }
                 this.finalBola(b.de === 'ineu' ? 'jusef' : 'ineu', 'A la xarxa!');
                 return;
             }
@@ -368,7 +385,7 @@ class Arcade extends Phaser.Scene {
             if (b.h <= 0 && b.vh < 0) {
                 if (Math.abs(b.X) <= T.W && b.z >= 0 && b.z <= T.L) {
                     b.h = 0; b.vh = -b.vh * T.REST; b.vx *= 0.97; b.vz *= 0.97;
-                    this.so('bot');
+                    this.so('bot'); { const q = this.proj(b.X, b.z, 0); this.botPilota(q.x, q.y); }
                     const banda = b.z < T.L / 2 ? 'ineu' : 'jusef';
                     if (banda === b.de) {
                         if (b.serveix) { const sv = b.serveix; b.serveix = null; const v = this.vel({ X: b.X, z: b.z, h: 0 }, sv.Xt, sv.zt, sv.t); b.vx = v.vx; b.vz = v.vz; b.vh = v.vh; continue; }     // servei: primer bot al seu camp
@@ -401,6 +418,7 @@ class Arcade extends Phaser.Scene {
     copJusef() {
         const b = this.b, M = this.M;
         this.spJusef.play(b.X >= this.Xj ? 'jf_dret' : 'jf_revers', true);
+        this.juiceCopJusef(this.proj(b.X, b.z, b.h));
         const dx = Math.abs(b.X - this.Xj);
         let falla = M.fallaJusef + (b.qualitat === 'perfecte' ? 0.3 : b.qualitat === 'be' ? 0.07 : 0) + this.rally * 0.01;
         if (b.tipus === 'fort') falla += 0.12;
@@ -413,6 +431,41 @@ class Arcade extends Phaser.Scene {
         const lluny = Math.random() < 0.6 ? -Math.sign(this.Xi || 1) * Phaser.Math.FloatBetween(0.25, 0.62) : Phaser.Math.FloatBetween(-0.6, 0.6);
         const temps = b.qualitat === 'fluix' ? 0.55 : Math.max(0.62, 0.95 - this.rally * 0.03);
         this.llanca('jusef', { X: b.X, z: b.z, h: Math.max(0.15, b.h) }, lluny, Phaser.Math.FloatBetween(0.3, 1.05), temps);
+    }
+
+    // ---------------- «Game juice»: espurnes, anells d'impacte, parada breu, flaix, pols de la pilota i estela ----------------
+    chispes(x, y, n, tints, vel = 320, mida = 0.5, vida = 480) {
+        const em = this.add.particles(x, y, 'espurna', { speed: { min: vel * 0.35, max: vel }, angle: { min: 0, max: 360 }, lifespan: vida, scale: { start: mida, end: 0 }, alpha: { start: 1, end: 0 },
+            tint: tints, gravityY: 380, emitting: false }).setDepth(30);
+        this.camUI.ignore(em); em.explode(n);
+        this.time.delayedCall(vida + 200, () => em.destroy());
+    }
+    anellImpacte(x, y, color, r = 100) {
+        const g = this.add.graphics().setDepth(30), o = { r: 12, a: 1 }; this.camUI.ignore(g);
+        this.tweens.add({ targets: o, r, a: 0, duration: 330, ease: 'Cubic.easeOut', onUpdate: () => { g.clear().lineStyle(8 * o.a + 1, color, o.a).strokeCircle(x, y, o.r); }, onComplete: () => g.destroy() });
+    }
+    parada(ms) { this.parada_fins = this.time.now + ms; }
+    flaixPantalla(a = 0.22, ms = 160) { this.tweens.killTweensOf(this.flaix); this.flaix.setAlpha(a); this.tweens.add({ targets: this.flaix, alpha: 0, duration: ms }); }
+    // la pilota s'aixafa en botar i aixeca una mica de pols
+    botPilota(x, y) {
+        this.tweens.killTweensOf(this.pilota);
+        this.pilota.setScale(1.45, 0.6); this.tweens.add({ targets: this.pilota, scaleX: 1, scaleY: 1, duration: 130, ease: 'Back.easeOut' });
+        this.chispes(x, y, 5, [0xd8d0c0, 0xa89c88], 90, 0.28, 320);
+    }
+    // el cop que fa l'Ineu: espurnes, anell, parada, tremolor, cop de zoom i l'Ineu s'infla un moment
+    juiceCopIneu(bp, fort) {
+        this.chispes(bp.x, bp.y, fort ? 22 : 12, fort ? [0xffffff, 0x7ad8ff, 0xffe9a0] : [0xffe9a0, 0xffffff], fort ? 460 : 300, fort ? 0.6 : 0.45);
+        this.anellImpacte(bp.x, bp.y, fort ? 0x7ad8ff : 0xffe9a0, fort ? 130 : 90);
+        this.parada(fort ? 85 : 45); this.pulsIneu = fort ? 1 : 0.6;
+        this.cameras.main.shake(fort ? 150 : 90, fort ? 0.007 : 0.004); this.zoomExtra = fort ? 0.08 : 0.04;
+        if (fort) this.flaixPantalla(0.2);
+    }
+    // el cop d'en Jusef: espurnes lila i blanques, anell, aura i un petit tremolor
+    juiceCopJusef(bp) {
+        this.chispes(bp.x, bp.y, 14, [0xd8b0ff, 0xffffff, 0xffe9a0], 320, 0.5);
+        this.anellImpacte(bp.x, bp.y, 0xd8b0ff, 100);
+        this.parada(35); this.pulsJusef = 1; this.cameras.main.shake(90, 0.003);
+        this.tweens.add({ targets: this.auraJusef, fillAlpha: 0.55, duration: 90, yoyo: true });
     }
 
     // ---------------- El gest: un lliscament cap amunt ----------------
@@ -472,7 +525,8 @@ class Arcade extends Phaser.Scene {
             else { this.b.qualitat = 'fluix'; this.b.tipus = 'normal'; this.txtCopa('L\'encanteri resisteix...', '#ff9a7a', bp); }
         } else
         this.txtCopa(q === 'perfecte' ? 'PERFECTE ' + noms[this.b.tipus] : noms[this.b.tipus], q === 'perfecte' ? '#7ad8ff' : '#a0ffb0', bp);
-        if (q === 'perfecte' || forca > 0.65) { this.cameras.main.shake(130, 0.005); this.zoomExtra = 0.07; this.so('fort'); }
+        this.juiceCopIneu(bp, q === 'perfecte' || forca > 0.65);
+        if (q === 'perfecte' || forca > 0.65) this.so('fort');
     }
 
     gest(dreta) { this.spIneu.play(dreta ? 'drive' : 'reves', true); }
@@ -498,6 +552,8 @@ class Arcade extends Phaser.Scene {
         this.serveis++;
         this.actualitzaMarcador();
         this.so(guanyador === 'ineu' ? 'be' : 'mal');
+        if (guanyador === 'ineu') { const c = this.proj(0, T.L * 0.78); this.chispes(c.x, c.y, 34, [0xffe9a0, 0xffffff, 0x7ad8ff, 0xff9ac8], 520, 0.7, 900); this.flaixPantalla(0.18, 260); }
+        else { this.cameras.main.shake(220, 0.006); this.pulsJusef = 1; }
         this.avis((guanyador === 'ineu' ? 'Punt teu! ' : 'Punt d\'en Jusef. ') + (text || ''), 1300, guanyador === 'ineu' ? '#a0ffb0' : '#ff9a7a');
         const { ineu, jusef } = this.punts;
         if ((ineu >= T.PUNTS || jusef >= T.PUNTS) && Math.abs(ineu - jusef) >= 2) { this.time.delayedCall(1400, () => this.final(ineu > jusef)); return; }
