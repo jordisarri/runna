@@ -1434,9 +1434,17 @@ class ZonaBosc extends ZonaBase {
         this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x102810, 0.18).setScrollFactor(0).setDepth(90000);
     }
 
+    // L'Ineu acaba de collir l'herba n: el seu dibuix desapareix del terra a l'instant (la icona que s'alça en passa a ser l'única)
+    herbaAgafada(n) {
+        const h = this.herbes.find(q => q.flag === 'herba' + n);
+        if (!h) return;
+        h.agafada = true;
+        h.img.setVisible(false); h.halo.setVisible(false); h.raig.setVisible(false); h.espurnes.stop();
+    }
+
     actualitzar(ara) {
         this.herbes.forEach(h => {
-            const visible = !Estat.flag(h.flag) && Estat.flag('fontVista');
+            const visible = !Estat.flag(h.flag) && Estat.flag('fontVista') && !h.agafada;
             h.img.setVisible(visible); h.halo.setVisible(visible); h.raig.setVisible(visible);
             if (visible && !h.encesa) { h.encesa = true; h.espurnes.start(); }
             if (!visible && h.encesa && !h.apagada) { h.apagada = true; h.espurnes.stop(); }

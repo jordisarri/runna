@@ -1118,9 +1118,9 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 
 **Ineu:** Les Venerables Sàvies diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, rialla i el fruit de l'arbre d'or.»
 
-**Ineu:** Rialla... Això no és cap rialla de riure: és una PLANTA! Les Venerables Sàvies en parlaven: «l'herba del riure», una flor groga, de pètals tot al voltant, amb una boca somrient al mig, com si es rigués. Només creix on la boira no l'ha pogut marcir, i diuen que al Bosc del Pi dels Tres Cants, al sud de Sant Antoni, en una clariana a la vora del camí... però que no la deixen collir fàcilment: la guarden uns bolets verinosos.
+**Ineu:** Rialla... Això no és cap rialla de riure: és una PLANTA! Les Venerables Sàvies parlaven d'una flor que creix envoltada de bolets verinosos, al Bosc del Pi dels Tres Cants.
 
-**Ineu:** L'herba de Sant Joan fa llum, sempre en una clariana: la trobaré aquí al bosc, al nord (cap al Til·ler). I l'arbre d'or... és la Prunera Màgica, al jardí de l'Hostatgeria! Una pruna.
+**Ineu:** L'herba de Sant Joan fa llum, sempre en una clariana: en deu haver-n'hi per aquí, en aquest mateix bosc. I l'arbre d'or... és la Prunera Màgica, al jardí de l'Hostatgeria! Una pruna.
 
 
 ### alzinaBuida

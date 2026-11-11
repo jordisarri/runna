@@ -12,7 +12,7 @@ const SIGNES_MISSATGE = ["☉", "☽", "✦", "♆", "⚶", "☿", "♄", "♃",
 // (a les partides velles, la farigola que s'hi portava abans compta com la pruna)
 function ofrenesFont(E) { return ['herba1', 'herba2'].filter(h => E.flag(h)).length + (E.te('pruna') || E.flag('herba3') ? 1 : 0); }
 function objectiuFont(n) {
-    return n === 3 ? 'Ja ho tens tot: torna a la Font del Bisbe.' : `Porta a la Font del Bisbe l'herba de Sant Joan (al bosc), la rialla (una planta: al Bosc del Pi dels Tres Cants, al sud de Sant Antoni, guardada per bolets verinosos) i una pruna de la Prunera de l'Hostatgeria (${n}/3).`;
+    return n === 3 ? 'Ja ho tens tot: torna a la Font del Bisbe.' : `Porta a la Font del Bisbe l'herba de Sant Joan (al bosc), la rialla (una planta: al Bosc del Pi dels Tres Cants, guardada per bolets verinosos) i una pruna de la Prunera de l'Hostatgeria (${n}/3).`;
 }
 
 // Pistes: totes surten de la taula de passos de js/progres.js
@@ -773,8 +773,8 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: 'Ineu', text: 'Les Venerables Sàvies diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, rialla i el fruit de l\'arbre d\'or.»' },
-                { qui: 'Ineu', text: 'Rialla... Això no és cap rialla de riure: és una PLANTA! Les Venerables Sàvies en parlaven: «l\'herba del riure», una flor groga, de pètals tot al voltant, amb una boca somrient al mig, com si es rigués. Només creix on la boira no l\'ha pogut marcir, i diuen que al Bosc del Pi dels Tres Cants, al sud de Sant Antoni, en una clariana a la vora del camí... però que no la deixen collir fàcilment: la guarden uns bolets verinosos.' },
-                { qui: 'Ineu', text: 'L\'herba de Sant Joan fa llum, sempre en una clariana: la trobaré aquí al bosc, al nord (cap al Til·ler). I l\'arbre d\'or... és la Prunera Màgica, al jardí de l\'Hostatgeria! Una pruna.' },
+                { qui: 'Ineu', text: 'Rialla... Això no és cap rialla de riure: és una PLANTA! Les Venerables Sàvies parlaven d\'una flor que creix envoltada de bolets verinosos, al Bosc del Pi dels Tres Cants.' },
+                { qui: 'Ineu', text: 'L\'herba de Sant Joan fa llum, sempre en una clariana: en deu haver-n\'hi per aquí, en aquest mateix bosc. I l\'arbre d\'or... és la Prunera Màgica, al jardí de l\'Hostatgeria! Una pruna.' },
                 { avis: `Ofrenes trobades: ${herbes}/3.` }
             ],
             enAcabar: () => { E.posaFlag('fontVista'); E.posaObjectiu(objectiuFont(herbes)); }
@@ -782,7 +782,10 @@ const DIALEGS = {
     },
 
     herba: (n, nom, icona) => E => ({
-        pagines: [{ avis: `Has trobat ${nom}!`, obj: icona }],               // l'Ineu alça l'ofrena amb la fanfarra i la imatge de l'objecte
+        pagines: [
+            { fer: (z, fet) => { if (z.herbaAgafada) z.herbaAgafada(n); fet(); } },        // el dibuix de l'herba desapareix del terra: la icona que s'alça en passa a ser l'única
+            { avis: `Has trobat ${nom}!`, obj: icona }
+        ],               // l'Ineu alça l'ofrena amb la fanfarra i la imatge de l'objecte
         enAcabar: () => {
             E.posaFlag('herba' + n);
             if (E.flag('fontVista')) E.posaObjectiu(objectiuFont(ofrenesFont(E)));

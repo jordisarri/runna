@@ -279,6 +279,14 @@ class ZonaBoscPi extends ZonaBase {
     // Lliure = els guardians derrotats (o no n'hi ha)
     riallaLliure() { return !this.guardians || this.guardians.every(e => e.mort); }
 
+    // L'Ineu acaba de collir la rialla: el seu dibuix desapareix del terra a l'instant (la icona que s'alça en passa a ser l'única)
+    herbaAgafada(n) {
+        const r = this.rialla;
+        if (n !== 2 || !r) return;
+        r.agafada = true;
+        r.img.setVisible(false); r.halo.setVisible(false); r.raig.setVisible(false); r.espurnes.stop();
+    }
+
     actualitzar() {
         const r = this.rialla;
         if (!r) return;
@@ -287,7 +295,7 @@ class ZonaBoscPi extends ZonaBase {
             this.llum(PI3.rialla.x, PI3.rialla.y - 40, 0xfff0a0);
             Sfx.objecte();
         }
-        const visible = !Estat.flag('herba2');
+        const visible = !Estat.flag('herba2') && !r.agafada;
         r.img.setVisible(visible); r.halo.setVisible(visible); r.raig.setVisible(visible);
         if (visible && !r.encesa) { r.encesa = true; r.espurnes.start(); }
         else if (!visible && r.encesa) { r.encesa = false; r.espurnes.stop(); }

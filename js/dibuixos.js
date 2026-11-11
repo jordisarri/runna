@@ -551,12 +551,12 @@ function dibuixarHerba(c, w, tipus) {
             ctx.fillStyle = '#6fa84a'; ctx.strokeStyle = '#26361e'; ctx.lineWidth = 1.4;
             [[-1, 0.8], [1, 0.68]].forEach(([sg, yy]) => { ctx.beginPath(); ctx.ellipse(fx + sg * 11, H * yy, 11, 4, sg * -0.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
             // pètals tot al voltant
-            ctx.fillStyle = '#ffd21f'; ctx.strokeStyle = '#8a5a08'; ctx.lineWidth = 1.6;
+            ctx.fillStyle = '#d8307e'; ctx.strokeStyle = '#7a1448'; ctx.lineWidth = 1.6;
             for (let k = 0; k < 10; k++) {
                 const a = k / 10 * Math.PI * 2;
                 ctx.beginPath(); ctx.ellipse(fx + Math.cos(a) * W * 0.25, fy + Math.sin(a) * W * 0.25, W * 0.12, W * 0.065, a, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
             }
-            ctx.fillStyle = '#ffe36a'; ctx.strokeStyle = '#8a5a08'; ctx.lineWidth = 1.8;
+            ctx.fillStyle = '#58b0ec'; ctx.strokeStyle = '#1f4f80'; ctx.lineWidth = 1.8;
             ctx.beginPath(); ctx.arc(fx, fy, W * 0.19, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
             // la boca: mitja lluna oberta i somrient, amb una mica de llengua
             ctx.fillStyle = '#6a1c14'; ctx.strokeStyle = '#3a0e08'; ctx.lineWidth = 1.6;

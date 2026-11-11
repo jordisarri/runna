@@ -236,9 +236,9 @@ const ICONES_OBJECTES = {
         ctx.beginPath(); ctx.moveTo(48, 90); ctx.quadraticCurveTo(50, 70, 48, 56); ctx.stroke();
         ctx.strokeStyle = CONTORN; ctx.fillStyle = '#5aa83a';
         [[36, 76, -0.7], [60, 72, 0.7]].forEach(([x, y, an]) => { ctx.beginPath(); ctx.ellipse(x, y, 10, 4.5, an, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
-        ctx.fillStyle = '#ffd21f'; ctx.lineWidth = 2.5;
+        ctx.fillStyle = '#d8307e'; ctx.lineWidth = 2.5;
         for (let k = 0; k < 10; k++) { const a = k / 10 * Math.PI * 2; ctx.beginPath(); ctx.ellipse(48 + Math.cos(a) * 25, 38 + Math.sin(a) * 25, 12, 7, a, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
-        ctx.fillStyle = '#ffe36a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(48, 38, 19, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#58b0ec'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(48, 38, 19, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         ctx.fillStyle = '#6a1c14'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(35, 36); ctx.quadraticCurveTo(48, 62, 61, 36); ctx.closePath(); ctx.fill(); ctx.stroke();
         ctx.fillStyle = '#e8606a'; ctx.beginPath(); ctx.ellipse(48, 47, 6, 3.4, 0, 0, Math.PI * 2); ctx.fill();
     },
