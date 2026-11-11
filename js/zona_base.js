@@ -649,9 +649,8 @@ class ZonaBase extends Phaser.Scene {
         }
         const tex = this.textures.get(key);
         const escala = (tex.customData && tex.customData.escala) || 1 / RES;
-        const idle = this.textures.exists(key + '_idle') && NPC_IDLE[key];                  // full d'idle frontal (si n'hi ha): l'NPC respira i es mou una mica
-        const img = this.add.sprite(x, y, idle ? key + '_idle' : key, idle ? 0 : undefined).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
-        if (idle) this.posaIdleNpc(img, key);
+        const idle = false;           // (els fulls d'animació de NPC_IDLE no es fan servir d'idle: només en moments concrets, vegeu animaNpc)
+        const img = this.add.sprite(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
         img.setDepth(opts.fonsY !== undefined ? opts.fonsY : y);
         img.col = this.colisio(x, y - 9, opts.colAmple || 40, 18);
         img.ombra = this.add.image(x, y, 'ombra').setScale(0.42).setDepth(-500);
@@ -682,6 +681,27 @@ class ZonaBase extends Phaser.Scene {
         if (!this.anims.exists('idle_' + key)) this.anims.create({ key: 'idle_' + key, frames: this.anims.generateFrameNumbers(key + '_idle', { start: 0, end: NPC_IDLE[key].n - 1 }), frameRate: NPC_IDLE[key].fps || 4, repeat: -1 });
         img.idleClau = key;
         img.play({ key: 'idle_' + key, startFrame: Phaser.Math.Between(0, NPC_IDLE[key].n - 1) });
+    }
+    // Un NPC fa durant 'ms' una animació pròpia (full de NPC_IDLE, p. ex. la Joaneta fent el beuratge) i després torna al seu idle per codi. tipus: espurnes opcionals
+    // ('bombolles', 'guspires'...: els mateixos colors que npcFeina). Si no té full, només espera.
+    animaNpc(key, ms, fet, tipus) {
+        const img = this.npcs && this.npcs[key], d = NPC_IDLE[key];
+        if (!img || !d || !this.textures.exists(key + '_idle')) { this.time.delayedCall(ms, () => { if (fet) fet(); }); return; }
+        const tween = [img.respira, img.balanceig].filter(Boolean);
+        tween.forEach(t => t.pause());
+        img.setAngle(0); img.setScale(img.escalaBase, img.escalaBase);
+        if (!this.anims.exists('idle_' + key)) this.anims.create({ key: 'idle_' + key, frames: this.anims.generateFrameNumbers(key + '_idle', { start: 0, end: d.n - 1 }), frameRate: d.fps || 8, repeat: -1 });
+        img.setTexture(key + '_idle', 0); img.play('idle_' + key);
+        const colors = { guspires: [0xffd060, 0xff8030], fulles: [0x6ab04a, 0xe86aa0], bombolles: [0x6aff6a, 0xb8ffb0] }[tipus];
+        const ev = colors ? this.time.addEvent({ delay: 200, loop: true, callback: () => {
+            const p = this.add.circle(img.x + Phaser.Math.Between(-40, 0), img.y - img.displayHeight * 0.55, 4, Phaser.Utils.Array.GetRandom(colors)).setDepth(img.depth + 1);
+            this.tweens.add({ targets: p, x: p.x + Phaser.Math.Between(-30, 30), y: p.y - Phaser.Math.Between(30, 70), alpha: 0, duration: 700, onComplete: () => p.destroy() });
+        } }) : null;
+        this.time.delayedCall(ms, () => {
+            if (ev) ev.remove();
+            if (img.active) { img.anims.stop(); img.setTexture(key); tween.forEach(t => t.resume()); }
+            if (fet) fet();
+        });
     }
     // Torna al dibuix d'idle (després d'una caminada o d'un canvi de dibuix)
     tornaIdleNpc(img, key) {

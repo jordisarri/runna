@@ -1554,7 +1554,7 @@ const DIALEGS = {
                     { qui: "La Joaneta", text: "Ei! Tu! Qui coi t'ha dit que podies entrar? Els frares no veniu mai per aquí! Fot el camp o et faig créixer bolets a les orelles!" },
                     { qui: "Ineu", text: "Perdoni... He arribat per l'alzina. Duc aigua de la Font del Bisbe." },
                     { qui: "La Joaneta", text: "Aigua... de la Font del Bisbe?! Dona'm aixòooo! Fa trenta anys que no en tinc ni una gota neta." },
-                    { fer: (z, fet) => z.seq([c => z.npcVa('joaneta', 500, 360, c, 200), c => z.llum(450, 290, 0x6aff6a, c), c => z.npcVa('joaneta', 560, 420, c, 200)], fet) },
+                    { fer: (z, fet) => z.seq([c => z.npcVa('joaneta', 500, 360, c, 200), c => { z.llum(450, 290, 0x6aff6a); z.animaNpc('joaneta', 4200, c, 'bombolles'); }, c => z.npcVa('joaneta', 560, 420, c, 200)], fet) },          // davant l'olla prepara el beuratge (animació pròpia: l'ampolla gran)
                     { qui: "La Joaneta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? Han tapat el camí que hi porta amb una boira que no marxa amb el vent." },
                     { qui: "La Joaneta", text: "Mira, he barrejat l'aigua que queda amb romaní, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
                     { avis: "Has obtingut el BEURATGE DE LA JAUNETA.", obj: 'beuratge' }
