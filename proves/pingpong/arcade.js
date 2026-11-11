@@ -36,10 +36,11 @@ class Arcade extends Phaser.Scene {
     constructor() { super('Arcade'); }
 
     preload() {
-        this.load.spritesheet('pp_drive', '../../assets/ineu/pp_drive.webp', { frameWidth: 256, frameHeight: 256 });
-        this.load.spritesheet('pp_reves', '../../assets/ineu/pp_reves.webp', { frameWidth: 256, frameHeight: 256 });
+        // L'Ineu d'esquena, en alta resolució (512 px per fotograma; eines/fer_pingpong_ineu_hd.py): es mostra molt gran i només de genolls amunt
+        ['drive', 'reves', 'servei'].forEach(n => this.load.spritesheet(n === 'servei' ? 'ineu_servei' : 'pp_' + n, `../../assets/pingpong2/ineu_${n}.webp?v=1`, { frameWidth: 512, frameHeight: 512 }));
         this.load.image('jusef_levita', '../../assets/personatges/jusef_levita.webp');
-        ['jusef_dret', 'jusef_revers', 'jusef_servei', 'ineu_servei'].forEach(n => this.load.spritesheet(n, `../../assets/pingpong2/${n}.webp?v=2`, { frameWidth: 256, frameHeight: 256 }));
+        this.load.image('cartell_llums', '../../assets/objectes/cartell_llums.webp');
+        ['jusef_dret', 'jusef_revers', 'jusef_servei'].forEach(n => this.load.spritesheet(n, `../../assets/pingpong2/${n}.webp?v=2`, { frameWidth: 256, frameHeight: 256 }));
     }
 
     create() {
@@ -47,7 +48,8 @@ class Arcade extends Phaser.Scene {
         this.dibuixaEscenari();
         this.anims.create({ key: 'drive', frames: this.anims.generateFrameNumbers('pp_drive', { start: 4, end: 15 }), frameRate: 34 });
         this.anims.create({ key: 'reves', frames: this.anims.generateFrameNumbers('pp_reves', { start: 6, end: 15 }), frameRate: 40 });
-        this.spIneu = this.add.sprite(0, 0, 'pp_drive', 0).setOrigin(0.5, 0.94);
+        this.escIneu = 1.5; this.tallIneu = 370;                          // escala (512 px de fotograma → 768 de pantalla) i alçada que es veu (dalt fins als genolls)
+        this.spIneu = this.add.sprite(0, 0, 'pp_drive', 0).setOrigin(0.5, 1).setCrop(0, 0, 512, this.tallIneu);
         this.spIneu.on('animationcomplete', () => this.spIneu.setTexture('pp_drive', 0));
         // En Jusef (d'AutoSprite): quiet = el primer fotograma; els gestos de cop de dret, de revers i de servei s'engeguen quan toca
         this.anims.create({ key: 'jf_dret', frames: this.anims.generateFrameNumbers('jusef_dret', { start: 2, end: 12 }), frameRate: 30 });
@@ -65,10 +67,10 @@ class Arcade extends Phaser.Scene {
         // Interfície (a una càmera a part, perquè no es mogui amb la càmera del joc)
         const est = (mida, color) => ({ fontFamily: 'Georgia, serif', fontSize: mida + 'px', color, stroke: '#1a0e06', strokeThickness: 6, align: 'center' });
         this.estUI = est;
-        this.txtMarcador = this.ui(this.add.text(AMPLE / 2, ALT - 110, '', est(40, '#f2e6c8')).setOrigin(0.5).setDepth(50));
+        this.txtMarcador = this.ui(this.add.text(20, 44, '', est(34, '#f2e6c8')).setOrigin(0, 0.5).setDepth(50));
         this.txtAvis = this.ui(this.add.text(AMPLE / 2, 520, '', est(44, '#ffd34d')).setOrigin(0.5).setDepth(50));
         this.txtCop = this.ui(this.add.text(0, 0, '', est(40, '#ffffff')).setOrigin(0.5).setDepth(50));
-        this.txtMode = this.ui(this.add.text(AMPLE - 20, ALT - 160, '', est(22, '#c8b890')).setOrigin(1, 0.5).setDepth(50));
+        this.txtMode = this.ui(this.add.text(AMPLE - 20, 44, '', est(22, '#c8b890')).setOrigin(1, 0.5).setDepth(50));
         this.txtAjuda = this.ui(this.add.text(AMPLE / 2, ALT - 40, 'Llisca cap amunt quan l\'anell és verd · direcció = apunta · llargada = fondària · velocitat = força', est(19, '#c8b890')).setOrigin(0.5).setDepth(50));
         this.estelaG = this.ui(this.add.graphics().setDepth(48));
         // Estat
@@ -161,29 +163,12 @@ class Arcade extends Phaser.Scene {
             scale: { start: 0.35, end: 0 }, alpha: { start: 0.8, end: 0 }, tint: [0xd8b0ff, 0xffe08a, 0xffffff], frequency: 140, quantity: 1 }).setDepth(0.9);
     }
 
-    // El cartell es dibuixa en un contenidor i es converteix en una imatge a part, que es difumina (postFX) i es posa grisa
+    // El cartell del ratolí («No oblideu apagar els llums», art/objectes/cartell_llums), a la paret del fons, darrere d'en Jusef: gris, difuminat i una mica tapat,
+    // perquè el seu blanc no distregui del de la pilota
     cartellProhibit() {
-        const W = 230, H = 250, c = this.make.container({ x: 0, y: 0, add: false });
-        const g = this.make.graphics({ add: false });
-        g.fillStyle(0x6a6660, 1).fillRoundedRect(0, 0, W, H, 18).lineStyle(6, 0x8a867e, 1).strokeRoundedRect(3, 3, W - 6, H - 6, 16);
-        g.fillStyle(0x56524c, 1).fillCircle(W / 2, 100, 74);
-        g.fillStyle(0xdad6cc, 1).fillCircle(W / 2, 100, 62);
-        // la pilota
-        g.fillStyle(0x9a958a, 1).fillCircle(W / 2 - 22, 118, 22);
-        // el ratolí (cap, orelles, ull, bigotis)
-        g.fillStyle(0x6e6a62, 1).fillCircle(W / 2 + 10, 78, 14).fillCircle(W / 2 + 36, 78, 14).fillEllipse(W / 2 + 24, 98, 52, 40);
-        g.fillStyle(0xcfc8bc, 1).fillCircle(W / 2 + 10, 78, 8).fillCircle(W / 2 + 36, 78, 8);
-        g.fillStyle(0x3a3732, 1).fillCircle(W / 2 + 18, 94, 3.5).fillCircle(W / 2 + 36, 94, 3.5).fillCircle(W / 2 + 27, 105, 3);
-        g.lineStyle(2, 0x3a3732, 1).lineBetween(W / 2 + 4, 104, W / 2 - 8, 101).lineBetween(W / 2 + 4, 108, W / 2 - 8, 111).lineBetween(W / 2 + 50, 104, W / 2 + 62, 101).lineBetween(W / 2 + 50, 108, W / 2 + 62, 111);
-        // el cercle vermell (desaturat) i la barra de prohibició
-        g.lineStyle(14, 0x8a4a44, 1).strokeCircle(W / 2, 100, 68);
-        g.lineStyle(14, 0x8a4a44, 1).lineBetween(W / 2 - 48, 52, W / 2 + 48, 148);
-        const t1 = this.make.text({ x: W / 2, y: 196, text: 'PROHIBIT JUGAR\nA PILOTA', style: { fontFamily: 'Georgia, serif', fontSize: '24px', color: '#d6d2c8', align: 'center', fontStyle: 'bold' }, add: false }).setOrigin(0.5);
-        c.add([g, t1]);
-        const rt = this.make.renderTexture({ x: 0, y: 0, width: W, height: H, add: false });
-        rt.draw(c); rt.saveTexture('cartellProhibit');
-        const img = this.add.image(520, 178, 'cartellProhibit').setDepth(-4).setAngle(-3).setAlpha(0.72).setScale(0.8).setTint(0xb4b0aa);
-        try { if (img.postFX) img.postFX.addBlur(0, 1.3, 1.3, 1.0); } catch (e) { /* sense WebGL: es veu sense difuminar */ }
+        const img = this.add.image(520, 170, 'cartell_llums').setDepth(-4).setAngle(-3).setAlpha(0.55).setTint(0x8c8a86);
+        img.setScale(210 / img.width);
+        try { if (img.postFX) img.postFX.addBlur(0, 1.4, 1.4, 1.0); } catch (e) { /* sense WebGL: es veu sense difuminar */ }
     }
 
     // ---------------- Partit ----------------
@@ -289,8 +274,9 @@ class Arcade extends Phaser.Scene {
         else if (b && !b.morta && b.de === 'jusef' && b.vz < 0) { const t = Math.max(0, (b.z - Z_COP) / -b.vz); objI = Phaser.Math.Clamp(b.X + b.vx * t, -0.72, 0.72); }
         else if (b && !b.morta && b.de === 'jusef') objI = b.marca.X;
         this.Xi += Phaser.Math.Clamp(objI - this.Xi, -7.5 * dt, 7.5 * dt);
-        const pi = this.proj(this.Xi, T.Z_INEU);
-        this.spIneu.setPosition(pi.x, pi.y).setScale(2.1 * pi.k / 400).setDepth(10 - T.Z_INEU);
+        // L'Ineu és a primer pla: molt gran, només de genolls amunt, i el tall de baix és la vora de baix de la pantalla (es mou una mica a banda i banda)
+        const pi = this.proj(this.Xi, T.Z_INEU), ES = this.escIneu, tall = this.tallIneu;
+        this.spIneu.setScale(ES).setPosition(360 + Phaser.Math.Clamp((pi.x - 360) * 0.55, -150, 150), ALT + 40 + (512 - tall) * ES).setDepth(12);
         // Simulació de la pilota (el temps del joc va més lent que el real, segons el mode i el cop màgic)
         if (b && !b.morta) this.simula(dt * this.M.temps * this.lent);
         // Jusef: va cap a on arribarà la pilota
@@ -402,7 +388,7 @@ class Arcade extends Phaser.Scene {
 
     pintaPilota() {
         const b = this.b, p = this.proj(this.visX(b), b.z, b.h), s = this.proj(b.X, b.z, 0);
-        this.pilota.setPosition(p.x, p.y).setRadius(Math.max(9, 0.05 * p.k)).setDepth(b.z > T.L / 2 ? 10 - b.z + 0.01 : 20);      // a la teva banda, per sobre de l'Ineu (que no la tapi)
+        this.pilota.setPosition(p.x, p.y).setRadius(Math.max(9, 0.05 * p.k)).setDepth(b.z > T.L / 2 ? 10 - b.z + 0.01 : 9);      // a la teva banda, per DARRERE de l'Ineu (que la tapa)
         const r = Math.max(7, 0.05 * s.k * 0.8);
         const sobreTaula = Math.abs(b.X) <= T.W && b.z >= 0 && b.z <= T.L;
         this.ombra.setPosition(s.x, s.y).setSize(r * 2.2, r * 0.9).setAlpha(sobreTaula ? Phaser.Math.Clamp(0.45 - b.h * 0.6, 0.12, 0.45) : 0);
