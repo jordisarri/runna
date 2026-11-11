@@ -1,16 +1,15 @@
 /**
  * PROTOTIP DEL NOU PING-PONG (fora del joc principal: proves/pingpong/index.html)
  *
- * Ping-pong «de veritat», simple:
- *  - La pilota té física (vola, bota a la taula, té ombra). En Jusef te la tira a llocs diferents de la teva meitat.
- *  - L'Ineu segueix el ratolí / el dit (desplaçar-se). Per tornar-la, fes CLIC o TOCA SOBRE LA PILOTA quan ha botat a la teva banda.
- *      · el MOMENT decideix la força: just quan és a l'alçada de la vora de la taula = PERFECTE (ràpida i profunda); una mica abans o després = BÉ;
- *        massa d'hora o massa tard = FLUIXA (alta i curta: en Jusef la mata, o fins i tot va a la xarxa o fora)
- *      · ON la toques decideix la direcció: si la toques pel seu costat dret, se'n va cap a l'esquerra, i al revés (com amb una pala de debò)
- *  - Servei: dos cada un. El teu: toca on vulguis apuntar. El d'en Jusef: a vegades és MÀGIC (ensenya tres llocs; repeteix-los tocant-los en el mateix ordre
- *    per trencar l'encanteri; si t'equivoques, és punt seu).
+ * Ping-pong clàssic, simple (com els d'ordinador dels anys 80):
+ *  - Només mous LA PALA, amb el dit o el ratolí (a la teva meitat de la taula, endavant i endarrere també). L'Ineu és transparent i et segueix: no tapa la pilota.
+ *  - La pilota té física (vola, bota a la taula, té ombra). Quan el cercle de la pala la toca després del bot, la tornes sola: no cal fer cap clic.
+ *  - La FORÇA del cop depèn de com de ràpid mous la pala quan la toca: lenta = pilota alta i curta (en Jusef la mata); mitjana = cop normal; ràpida = cop fort.
+ *  - La DIRECCIÓ depèn d'on toca la pilota a la pala i cap on la mous (moure-la a la dreta, la hi envia).
+ *  - Servei: dos cada un. El teu: toca la pantalla i la pilota surt cap a on mires. El d'en Jusef: un de cada tres és MÀGIC (ensenya tres llocs;
+ *    repeteix-los tocant-los en el mateix ordre per trencar l'encanteri; si t'equivoques, és punt seu).
  *  - Partit a 5 punts (amb 2 de diferència si arriba a 4-4). Després de perdre dues vegades, s'ofereix el mode fàcil.
- * Teclat (per provar): ← → mouen l'Ineu, ESPAI torna la pilota (amb la direcció segons on l'agafa la pala).
+ * Teclat (per provar): ← → ↑ ↓ mouen la pala.
  *
  * Coordenades del món (metres): X de través (centre 0), z al llarg (0 = vora de l'Ineu, L = vora d'en Jusef), h alçada sobre la taula.
  */
@@ -25,9 +24,11 @@ const T = {
 };
 function T_L_PLUS(d) { return 2.74 + d; }
 const MODES = {
-    normal: { temps: 0.92, radiCop: 92, velIneu: 4.2, abastJusef: 0.48, velJusef: 1.9, fallaJusef: 0.05, finestra: [0.17, 0.38] },
-    facil:  { temps: 0.74, radiCop: 128, velIneu: 5.2, abastJusef: 0.40, velJusef: 1.5, fallaJusef: 0.12, finestra: [0.24, 0.50] }
+    // pala: radi del cop (m); v: llindars de velocitat de la pala en px/s (fluix < v[0] ≤ bé < v[1] ≤ fort)
+    normal: { temps: 0.92, pala: 0.24, v: [320, 1050], abastJusef: 0.48, velJusef: 1.9, fallaJusef: 0.05, fluixFalla: 0.2 },
+    facil:  { temps: 0.74, pala: 0.32, v: [220, 800],  abastJusef: 0.40, velJusef: 1.5, fallaJusef: 0.12, fluixFalla: 0.0 }
 };
+const PALA_H = 0.16, PALA_Z0 = -0.62, PALA_Z1 = 0.95, OFFSET_DIT = 70;      // alçada de la pala; fondària mínima i màxima; quant per sobre del dit es dibuixa (perquè el dit no la tapi)
 
 class PingPong extends Phaser.Scene {
     constructor() { super('PingPong'); }
@@ -44,7 +45,7 @@ class PingPong extends Phaser.Scene {
         // L'Ineu (d'esquena amb la pala) i en Jusef
         this.anims.create({ key: 'drive', frames: this.anims.generateFrameNumbers('pp_drive', { start: 4, end: 15 }), frameRate: 34 });
         this.anims.create({ key: 'reves', frames: this.anims.generateFrameNumbers('pp_reves', { start: 6, end: 15 }), frameRate: 40 });
-        this.spIneu = this.add.sprite(0, 0, 'pp_drive', 0).setOrigin(0.5, 0.94);
+        this.spIneu = this.add.sprite(0, 0, 'pp_drive', 0).setOrigin(0.5, 0.94).setAlpha(0.3);       // transparent: no tapa la pilota
         this.spIneu.on('animationcomplete', () => this.spIneu.setFrame(0));
         this.spJusef = this.add.image(0, 0, 'jusef_levita').setOrigin(0.5, 1);
         this.auraJusef = this.add.ellipse(0, 0, 160, 190, 0xb890ff, 0).setDepth(1);
@@ -58,11 +59,14 @@ class PingPong extends Phaser.Scene {
         this.txtAvis = this.add.text(AMPLE / 2, 560, '', est(44, '#ffd34d')).setOrigin(0.5).setDepth(50);
         this.txtCop = this.add.text(0, 0, '', est(34, '#ffffff')).setOrigin(0.5).setDepth(50);
         this.txtMode = this.add.text(AMPLE - 20, ALT - 160, '', est(22, '#c8b890')).setOrigin(1, 0.5).setDepth(50);
-        this.add.text(AMPLE / 2, ALT - 40, 'Mou-te amb el ratolí o el dit · Toca la pilota quan bota a la teva banda', est(20, '#c8b890')).setOrigin(0.5).setDepth(50);
+        this.txtAjuda = this.add.text(AMPLE / 2, ALT - 40, 'Mou la pala amb el dit o el ratolí · Com més ràpid la mous, més fort és el cop', est(20, '#c8b890')).setOrigin(0.5).setDepth(50);
+        // La pala (el que controles): un disc vermell amb mànec, a la fondària Xp/zp de la taula
+        this.palaG = this.add.graphics().setDepth(30);
+        this.palaX = 0; this.palaZ = 0.1; this.palaVx = 0; this.palaVy = 0; this.palaPx = { x: AMPLE / 2, y: 900 };
         // Entrada
-        this.objectiuX = 0; this.Xi = 0; this.Xj = 0;
-        this.input.on('pointermove', p => { this.objectiuX = this.mon(p.x, T.Z_INEU); });
-        this.input.on('pointerdown', p => this.toc(p));
+        this.objectiuX = 0; this.objectiuZ = 0.1; this.Xi = 0; this.Xj = 0;
+        this.input.on('pointermove', p => this.apunta(p));
+        this.input.on('pointerdown', p => { this.apunta(p); this.toc(p); });
         this.tecles = this.input.keyboard.createCursorKeys();
         this.input.keyboard.on('keydown-SPACE', () => this.toc(null));
         this.audio = null;
@@ -72,6 +76,23 @@ class PingPong extends Phaser.Scene {
     // ---------------- Projecció ----------------
     proj(X, z, h = 0) { const Zc = T.ZN + z; return { x: AMPLE / 2 + T.F * X / Zc, y: T.HY + (T.K - T.F * h) / Zc, k: T.F / Zc }; }
     mon(px, z) { return (px - AMPLE / 2) * (T.ZN + z) / T.F; }          // x de pantalla → X del món (a la fondària z)
+
+    // El punter (o el dit) mana la pala: x → X del món i y → fondària (invertint la perspectiva a l'alçada de la pala)
+    apunta(p) {
+        const y = p.y - OFFSET_DIT;
+        const z = (T.K - T.F * PALA_H) / (y - T.HY) - T.ZN;
+        this.objectiuZ = Phaser.Math.Clamp(z, PALA_Z0, PALA_Z1);
+        this.objectiuX = Phaser.Math.Clamp((p.x - AMPLE / 2) * (T.ZN + this.objectiuZ) / T.F, -1.05, 1.05);
+    }
+
+    pintaPala() {
+        const p = this.proj(this.palaX, this.palaZ, PALA_H), r = 0.13 * p.k, g = this.palaG;
+        g.clear();
+        g.fillStyle(0x000000, 0.25).fillEllipse(p.x + 4, this.proj(this.palaX, this.palaZ, 0).y, r * 2, r * 0.7);        // ombra
+        g.fillStyle(0x7a4a22, 1).fillRoundedRect(p.x - r * 0.12, p.y + r * 0.6, r * 0.24, r * 1.1, 4);                    // mànec
+        g.fillStyle(0xd02a22, 1).fillCircle(p.x, p.y, r).lineStyle(Math.max(2, r * 0.1), 0x4a0e0a, 1).strokeCircle(p.x, p.y, r);
+        g.fillStyle(0xff7a6a, 0.35).fillCircle(p.x - r * 0.3, p.y - r * 0.3, r * 0.4);
+    }
 
     dibuixaEscenari() {
         const g = this.add.graphics().setDepth(0);
@@ -116,7 +137,7 @@ class PingPong extends Phaser.Scene {
         this.b = null; this.estat = 'servei'; this.rally = 0;
         this.pilota.setVisible(false); this.ombra.setVisible(false); this.marcaBot.setStrokeStyle(3, 0xffd34d, 0);
         if (this.serveixIneu()) {
-            this.avis('El teu servei: toca on vols apuntar', 1600, '#f2e6c8');
+            this.avis('El teu servei: toca la pantalla', 1600, '#f2e6c8');
             this.estat = 'serveiIneu';
         } else {
             this.serveisJusef++;
@@ -195,12 +216,22 @@ class PingPong extends Phaser.Scene {
     }
 
     update(time, delta) {
-        // Ineu: segueix el punter (o les fletxes)
-        if (this.tecles.left.isDown) this.objectiuX -= 2.2 * delta / 1000;
-        if (this.tecles.right.isDown) this.objectiuX += 2.2 * delta / 1000;
-        this.objectiuX = Phaser.Math.Clamp(this.objectiuX, -1.1, 1.1);
-        const pas = this.M.velIneu * delta / 1000;
-        this.Xi += Phaser.Math.Clamp(this.objectiuX - this.Xi, -pas, pas);
+        // Pala: segueix el punter (o les fletxes) i es mesura la velocitat (px/s a la pantalla), una mica suavitzada
+        const dt = Math.max(1, delta) / 1000;
+        if (this.tecles.left.isDown) this.objectiuX -= 2.4 * dt;
+        if (this.tecles.right.isDown) this.objectiuX += 2.4 * dt;
+        if (this.tecles.up.isDown) this.objectiuZ += 1.6 * dt;
+        if (this.tecles.down.isDown) this.objectiuZ -= 1.6 * dt;
+        this.objectiuX = Phaser.Math.Clamp(this.objectiuX, -1.05, 1.05); this.objectiuZ = Phaser.Math.Clamp(this.objectiuZ, PALA_Z0, PALA_Z1);
+        this.palaX = this.objectiuX; this.palaZ = this.objectiuZ;
+        const pp = this.proj(this.palaX, this.palaZ, PALA_H);
+        const vx = (pp.x - this.palaPx.x) / dt, vy = (pp.y - this.palaPx.y) / dt;
+        this.palaVx = Phaser.Math.Linear(this.palaVx, vx, 0.45); this.palaVy = Phaser.Math.Linear(this.palaVy, vy, 0.45);
+        this.palaPx = { x: pp.x, y: pp.y };
+        this.pintaPala();
+        // L'Ineu (transparent) segueix la pala per darrere
+        const pasI = this.M.velIneu === undefined ? 5 : this.M.velIneu;
+        this.Xi += Phaser.Math.Clamp(this.palaX - this.Xi, -6 * dt, 6 * dt);
         const pi = this.proj(this.Xi, T.Z_INEU);
         this.spIneu.setPosition(pi.x, pi.y).setScale(1.25 * pi.k / 400).setDepth(10 - T.Z_INEU);
 
@@ -215,9 +246,9 @@ class PingPong extends Phaser.Scene {
         const flota = Math.sin(time / 400) * 6;
         this.spJusef.setPosition(pj.x, pj.y + flota).setScale(0.62 * pj.k / 214).setDepth(10 - T.Z_JUSEF);
         this.auraJusef.setPosition(pj.x, pj.y - 120 + flota);
-        // Pilota a la serveixIneu: a la mà de l'Ineu
+        // Pilota al servei: a sobre de la pala
         if (this.estat === 'serveiIneu') {
-            const p = this.proj(this.Xi + 0.18, -0.15, 0.32 + Math.abs(Math.sin(time / 260)) * 0.12);
+            const p = this.proj(this.palaX, this.palaZ, PALA_H + 0.22 + Math.abs(Math.sin(time / 260)) * 0.1);
             this.pilota.setVisible(true).setPosition(p.x, p.y).setRadius(Math.max(9, 0.05 * p.k)).setDepth(10.5);
             this.ombra.setVisible(false);
         }
@@ -229,6 +260,7 @@ class PingPong extends Phaser.Scene {
         for (let i = 0; i < pasos && !b.morta; i++) {
             const d = dt / pasos, zAbans = b.z;
             b.X += b.vx * d; b.z += b.vz * d; b.vh -= T.G * d; b.h += b.vh * d;
+            if (b.de === 'jusef' && b.bots === 1 && this.provaCop()) return;
             // xarxa
             if ((zAbans - T.L / 2) * (b.z - T.L / 2) <= 0 && b.h < T.NH && Math.abs(b.X) < T.W + 0.1) {
                 b.vz = -b.vz * 0.15; b.vx *= 0.3; this.so('xarxa');
@@ -280,42 +312,49 @@ class PingPong extends Phaser.Scene {
         this.llanca('jusef', { X: b.X, z: b.z, h: Math.max(0.15, b.h) }, lluny, Phaser.Math.FloatBetween(0.3, 1.05), temps);
     }
 
-    // ---------------- El toc del jugador ----------------
+    // ---------------- El cop de la pala ----------------
+    // Cada pas de la simulació: la pilota (ja botada a la teva banda, venint cap a tu) toca la pala?
+    provaCop() {
+        const b = this.b;
+        if (this.copFet === b || b.vz >= 0) return false;
+        const R = this.M.pala;
+        if (Math.abs(b.X - this.palaX) > R || Math.abs(b.z - this.palaZ) > R * 0.75 || b.h > PALA_H + 0.3 || b.h < -0.02) return false;
+        this.copFet = b;
+        this.copPala();
+        return true;
+    }
+
+    copPala() {
+        const b = this.b, M = this.M;
+        const v = Math.hypot(this.palaVx, this.palaVy);                       // velocitat de la pala en px/s
+        const q = v >= M.v[1] ? 'perfecte' : v >= M.v[0] ? 'be' : 'fluix';
+        // Direcció: on toca a la pala (la vora dreta l'envia a l'esquerra) i cap on es mou
+        const vora = Phaser.Math.Clamp((b.X - this.palaX) / M.pala, -1, 1);
+        let Xt = Phaser.Math.Clamp(-vora * 0.3 + Phaser.Math.Clamp(this.palaVx / 1800, -1, 1) * 0.5 + b.X * 0.1, -0.68, 0.68);
+        let zt = q === 'perfecte' ? T.L - 0.22 : q === 'be' ? T.L * 0.8 : T.L * 0.62;
+        let temps = q === 'perfecte' ? 0.5 : q === 'be' ? 0.72 : 0.95;
+        if (q === 'fluix' && Math.random() < M.fluixFalla) zt = T.L + 0.45;                 // un cop massa fluix pot anar-se'n fora
+        this.gest(Xt >= this.palaX);
+        this.llanca('ineu', { X: b.X, z: b.z, h: Math.max(0.12, b.h) }, Xt, zt, temps);
+        this.b.qualitat = q;
+        const bp = this.proj(b.X, b.z, b.h);
+        this.txtCopa(q === 'perfecte' ? 'FORT!' : q === 'be' ? 'Bé' : 'Fluix...', q === 'perfecte' ? '#7ad8ff' : q === 'be' ? '#a0ffb0' : '#ffd34d', bp);
+        if (q === 'perfecte') { this.cameras.main.shake(120, 0.004); this.so('fort'); }
+    }
+
+    // ---------------- Tocs: només el servei i el servei màgic ----------------
     toc(p) {
-        if (p) this.objectiuX = this.mon(p.x, T.Z_INEU);
         if (this.acabat) return;
+        if (this.txtAjuda) this.txtAjuda.setAlpha(0.0);
         if (this.estat === 'magiaEntrant') { if (p) this.entradaMagia(p); return; }
         if (this.estat === 'serveiIneu') {
-            const X = p ? Phaser.Math.Clamp(this.mon(p.x, T.L * 0.75), -0.6, 0.6) : Phaser.Math.FloatBetween(-0.5, 0.5);
+            const X = Phaser.Math.Clamp(-this.palaX * 0.6 + Phaser.Math.FloatBetween(-0.3, 0.3), -0.6, 0.6);
             this.estat = 'joc'; this.serveiFet = true;
-            this.gest(X >= this.Xi);
-            this.llanca('ineu', { X: this.Xi + 0.18, z: -0.15, h: 0.3 }, X, T.L * 0.78, 0.8);
+            this.gest(X >= this.palaX);
+            this.llanca('ineu', { X: this.palaX, z: this.palaZ, h: PALA_H + 0.3 }, X, T.L * 0.78, 0.8);
             this.b.qualitat = 'be';
             return;
         }
-        if (this.estat !== 'joc' || !this.b || this.b.morta) return;
-        const b = this.b, bp = this.proj(b.X, b.z, b.h);
-        const tx = p ? p.x : this.proj(this.Xi, b.z, b.h).x;
-        this.gest(tx >= this.proj(this.Xi, T.Z_INEU).x);
-        if (b.de !== 'jusef' || b.bots !== 1 || this.copFet === b) return;              // encara no ha botat (o ja l'has tocada)
-        const prop = p ? Phaser.Math.Distance.Between(p.x, p.y, bp.x, bp.y) < this.M.radiCop : Math.abs(b.X - this.Xi) < 0.45;
-        if (!prop || b.z > 0.75 || b.z < -0.9) { this.txtCopa('Buit!', '#ff9a7a', bp); return; }
-        this.copFet = b;
-        // Moment: com de lluny és del punt ideal
-        const err = Math.abs(b.z - T.Z_IDEAL), [fP, fB] = this.M.finestra;
-        const q = err < fP ? 'perfecte' : err < fB ? 'be' : 'fluix';
-        // Direcció: tocar la pilota pel costat dret l'envia a l'esquerra, i al revés
-        const costat = p ? Phaser.Math.Clamp((p.x - bp.x) / this.M.radiCop, -1, 1) : Phaser.Math.Clamp((this.Xi - b.X) / 0.45, -1, 1);
-        let Xt = Phaser.Math.Clamp(-costat * 0.62 + b.X * 0.2, -0.68, 0.68);
-        let zt = q === 'perfecte' ? T.L - 0.22 : q === 'be' ? T.L * 0.8 : T.L * 0.62;
-        let temps = q === 'perfecte' ? 0.5 : q === 'be' ? 0.72 : 0.95;
-        // Cop fluix: a vegades se'n va a la xarxa o fora
-        if (q === 'fluix' && Math.random() < 0.35) { if (Math.random() < 0.5) zt = T.L + 0.45; else { temps = 0.3; zt = T.L * 0.55; } }
-        this.llanca('ineu', { X: b.X, z: b.z, h: Math.max(0.12, b.h) }, Xt, zt, temps);
-        if (q === 'fluix' && temps === 0.3) this.b.vh = 0.2;          // la pilota surt rasa: a la xarxa
-        this.b.qualitat = q;
-        this.txtCopa(q === 'perfecte' ? 'PERFECTE!' : q === 'be' ? 'Bé' : 'Fluix...', q === 'perfecte' ? '#7ad8ff' : q === 'be' ? '#a0ffb0' : '#ffd34d', bp);
-        if (q === 'perfecte') { this.cameras.main.shake(120, 0.004); this.so('fort'); }
     }
 
     gest(dreta) { this.spIneu.play(dreta ? 'drive' : 'reves', true); }
