@@ -478,11 +478,7 @@ class Arcade extends Phaser.Scene {
     alMoure(p) {
         if (!this.punxo) return;
         this.traç.push({ x: p.x, y: p.y, t: this.time.now });
-        // pista en directe: el tipus de cop que sortiria si deixessis anar ara (curt = TALLAT, ràpid = FORT, la resta = NORMAL)
-        const dx = p.x - this.punxo.x, dy = p.y - this.punxo.y, len = Math.hypot(dx, dy), ms = Math.max(30, this.time.now - this.punxo.t);
-        if (len < 40 || dy > -20) { this.pistaCop.setVisible(false); return; }
-        const forca = Phaser.Math.Clamp((len / ms - 0.35) / 1.5, 0, 1), prof = Phaser.Math.Clamp((len - 70) / 360, 0, 1);
-        this.pistaCop.setText(forca > 0.65 ? 'FORT' : prof < 0.3 ? 'TALLAT' : 'NORMAL').setPosition(p.x, p.y - 40).setVisible(true);
+        // (cap text en els cops: només surt el cop, amb el seu «juice»)
     }
     alSoltar(p) {
         if (!this.punxo || this.acabat) { this.punxo = null; return; }
@@ -514,7 +510,8 @@ class Arcade extends Phaser.Scene {
         this.copFet = b;
         this.copIneu(aim, prof, forca, eta);
     }
-    avisCurt(t) { const bp = this.b && !this.b.morta ? this.proj(this.b.X, this.b.z, this.b.h) : { x: AMPLE / 2, y: 900 }; this.txtCopa(t, '#ffd34d', bp); }
+    avisCurt() { /* sense textos */ }
+    avisCurtVell(t) { const bp = this.b && !this.b.morta ? this.proj(this.b.X, this.b.z, this.b.h) : { x: AMPLE / 2, y: 900 }; this.txtCopa(t, '#ffd34d', bp); }
 
     // El cop de l'Ineu, amb el que ha fet el dit
     copIneu(aim, prof, forca, eta) {
@@ -541,12 +538,7 @@ class Arcade extends Phaser.Scene {
     }
 
     gest(dreta) { this.spIneu.play(dreta ? 'drive' : 'reves', true); }
-    txtCopa(t, color, p) {
-        const q = this.mundAPantalla(p.x, p.y);
-        this.txtCop.setText(t).setColor('#ffe9a0').setPosition(q.x, q.y - 70).setAlpha(1).setScale(0.8);
-        this.tweens.killTweensOf(this.txtCop);
-        this.tweens.add({ targets: this.txtCop, y: q.y - 140, scale: 1.15, alpha: 0, duration: 850, ease: 'Sine.easeOut' });
-    }
+    txtCopa() { /* sense textos en els cops */ }
 
     // ---------------- Punts ----------------
     finalBola(guanyador, text) {
