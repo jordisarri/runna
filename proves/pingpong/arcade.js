@@ -40,6 +40,7 @@ class Arcade extends Phaser.Scene {
         ['drive', 'reves', 'servei'].forEach(n => this.load.spritesheet(n === 'servei' ? 'ineu_servei' : 'pp_' + n, `../../assets/pingpong2/ineu_${n}.webp?v=2`, { frameWidth: 512, frameHeight: 512 }));
         this.load.image('jusef_levita', '../../assets/personatges/jusef_levita.webp');
         this.load.image('cartell_llums', '../../assets/objectes/cartell_llums.webp');
+        this.load.spritesheet('ineu_celebracio', '../../assets/pingpong2/ineu_celebracio.webp?v=1', { frameWidth: 512, frameHeight: 512 });
         ['jusef_dret', 'jusef_revers', 'jusef_servei'].forEach(n => this.load.spritesheet(n, `../../assets/pingpong2/${n}.webp?v=2`, { frameWidth: 256, frameHeight: 256 }));
     }
 
@@ -82,7 +83,15 @@ class Arcade extends Phaser.Scene {
         this.Xi = 0; this.Xj = 0; this.lent = 1; this.zoomExtra = 0; this.punxo = null; this.traç = [];
         this.pulsIneu = 0; this.pulsJusef = 0; this.paradaFins = 0; this.rastre = [];
         this.rastreG = this.add.graphics().setDepth(8.8);                      // l'estela de la pilota
-        this.flaix = this.ui(this.add.rectangle(0, 0, AMPLE, ALT, 0xffffff, 0).setOrigin(0).setDepth(45));          // flaix a pantalla (cops perfectes i punts)
+        this.flaix = this.ui(this.add.rectangle(0, 0, AMPLE, ALT, 0xffffff, 0).setOrigin(0).setDepth(45));
+        // celebració de l'Ineu en guanyar el PARTIT (no cada punt): fons fosc, línies de velocitat d'anime i l'Ineu gran
+        this.celebFons = this.ui(this.add.rectangle(0, 0, AMPLE, ALT, 0x180a26, 0).setOrigin(0).setDepth(44));
+        this.celebLinies = this.ui(this.add.graphics().setDepth(45.5));
+        this.celebActiva = 0;
+        if (this.textures.exists('ineu_celebracio')) {
+            this.anims.create({ key: 'celebra', frames: this.anims.generateFrameNumbers('ineu_celebracio', { start: 0, end: 15 }), frameRate: 13 });
+            this.spCeleb = this.ui(this.add.sprite(AMPLE / 2, ALT + 30, 'ineu_celebracio', 0).setOrigin(0.5, 1).setScale(2.0).setDepth(46).setVisible(false));
+        }          // flaix a pantalla (cops perfectes i punts)
         this.input.on('pointerdown', p => this.alPrimer(p));
         this.input.on('pointermove', p => this.alMoure(p));
         this.input.on('pointerup', p => this.alSoltar(p));
@@ -305,6 +314,7 @@ class Arcade extends Phaser.Scene {
             this.ombra.setVisible(false);
         }
         this.pintaAnell();
+        this.pintaCelebracio(time);
         this.pintaEstela();
         this.movCamera(dt);
     }
@@ -566,6 +576,48 @@ class Arcade extends Phaser.Scene {
     final(guanyat) {
         this.acabat = true; this.estat = 'final'; this.txtAvis.setAlpha(0); this.tweens.killTweensOf(this.txtAvis);
         if (!guanyat) this.derrotes++;
+        if (guanyat && this.spCeleb) { this.celebraVictoria(() => this.panellFinal(guanyat)); return; }
+        this.panellFinal(guanyat);
+    }
+
+    // ---- Celebració de l'Ineu en guanyar el partit (animació d'AutoSprite + efectes d'anime) ----
+    celebraVictoria(fet) {
+        const sp = this.spCeleb;
+        this.celebActiva = this.time.now;
+        this.tweens.add({ targets: this.celebFons, fillAlpha: 0.72, duration: 260 });
+        this.flaixPantalla(0.9, 380);
+        this.cameras.main.shake(400, 0.01);
+        sp.setVisible(true).setScale(2.0).setPosition(AMPLE / 2, ALT + 30).play('celebra');
+        this.so('be'); this.time.delayedCall(260, () => this.so('fort')); this.time.delayedCall(650, () => this.so('be'));
+        // ones d'espurnes (a la interfície, per sobre del tot)
+        [0, 380, 760, 1150].forEach((t, i) => this.time.delayedCall(t, () => this.chispesUI(AMPLE / 2 + (i % 2 ? 90 : -90), 560, 36, [0xffe9a0, 0xffffff, 0x7ad8ff, 0xff9ac8, 0xa0ffb0], 700, 0.8, 1100)));
+        // l'Ineu s'infla en l'impuls del salt
+        this.tweens.add({ targets: sp, scaleX: 2.15, scaleY: 2.15, duration: 520, delay: 380, yoyo: true, ease: 'Back.easeOut' });
+        sp.once('animationcomplete', () => {
+            this.time.delayedCall(1100, () => {
+                this.tweens.add({ targets: [sp], alpha: 0, duration: 260, onComplete: () => { sp.setVisible(false).setAlpha(1); this.celebActiva = 0; this.celebLinies.clear(); this.celebFons.setFillStyle(0x180a26, 0); fet(); } });
+            });
+        });
+    }
+    // línies de velocitat radials, que pampalluguen i giren una mica (estil anime)
+    pintaCelebracio(time) {
+        const g = this.celebLinies; g.clear();
+        if (!this.celebActiva) return;
+        const t = (this.time.now - this.celebActiva) / 1000, cx = AMPLE / 2, cy = ALT * 0.5, n = 46, alfa = Math.min(1, t * 3);
+        for (let i = 0; i < n; i++) {
+            const a = (i / n) * Math.PI * 2 + Math.sin(time / 900) * 0.04, f = Math.sin(time / 70 + i * 3.1) * 0.5 + 0.5;
+            const r0 = 230 + (i % 3) * 40 + f * 40, r1 = 900 + (i % 4) * 120;
+            g.lineStyle(3 + (i % 5) * 2.2, i % 2 ? 0xffe9a0 : 0xffffff, alfa * (0.28 + 0.4 * f)).lineBetween(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0, cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
+        }
+        g.fillStyle(0xffe9a0, 0.1 * alfa).fillCircle(cx, cy + 60, 260 + Math.sin(time / 160) * 14);
+    }
+    chispesUI(x, y, n, tints, vel = 320, mida = 0.5, vida = 480) {
+        const em = this.add.particles(x, y, 'espurna', { speed: { min: vel * 0.35, max: vel }, angle: { min: 0, max: 360 }, lifespan: vida, scale: { start: mida, end: 0 }, alpha: { start: 1, end: 0 }, tint: tints, gravityY: 300, emitting: false }).setDepth(47);
+        this.cameras.main.ignore(em); em.explode(n);
+        this.time.delayedCall(vida + 200, () => em.destroy());
+    }
+
+    panellFinal(guanyat) {
         const c = this.capa = this.add.container(0, 0).setDepth(100); this.cameras.main.ignore(c);
         c.add(this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0.6).setOrigin(0).setInteractive());
         const est = (m, col) => ({ fontFamily: 'Georgia, serif', fontSize: m + 'px', color: col, stroke: '#1a0e06', strokeThickness: 6, align: 'center', wordWrap: { width: 600 } });
