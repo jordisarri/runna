@@ -709,6 +709,7 @@ class ZonaCelles extends ZonaBase {
         this.carroSansa = this.posar('carro_sansa', 1300, 880).setFlipX(true);
         this.colCarro = this.colisio(1240, 855, 160, 50);
         this.sansa = this.posar('sansa', 1550, 892);
+        this.idleCodi(this.sansa);                              // respira i es balanceja una mica mentre espera
         this.colSansa = this.colisio(1550, 883, 40, 18);
         this.ombraSansa = this.add.image(1550, 892, 'ombra').setScale(0.42).setDepth(-500);
         const punt = this.interactiu(1550, 882, RADI_NPC, DIALEGS.sansa, { altura: this.sansa.displayHeight + 6 });
@@ -721,6 +722,7 @@ class ZonaCelles extends ZonaBase {
         this.obstacles.remove(this.colCarro, true, true);
         this.obstacles.remove(this.colSansa, true, true);
         const s = this.sansa, c = this.carroSansa, o = this.ombraSansa, y0 = s.y;
+        this.aturaIdleCodi(s);
         const pas = (dur, n) => this.tweens.add({ targets: s, y: y0 - 4, duration: dur, yoyo: true, repeat: n });
         const seq = [
             f => { pas(180, 5); s.setFlipX(false); this.tweens.add({ targets: [s, o], x: 1468, duration: 1100, ease: 'Sine.easeInOut', onComplete: () => f() }); }, // camina cap a l'oest cap als braços del carro (mirant a l'oest)
@@ -729,7 +731,7 @@ class ZonaCelles extends ZonaBase {
             f => {                                                                                                                                                       // marxen cap a l'est, amb la Rosansa caminant endavant (mirant a l'est)
                 pas(220, 14);
                 this.tweens.add({ targets: [s, o, c], x: '+=520', duration: 3600, ease: 'Sine.easeIn' });
-                this.tweens.add({ targets: [s, o, c], alpha: 0, delay: 2200, duration: 1400, onComplete: () => { s.destroy(); c.destroy(); o.destroy(); f(); } });
+                this.tweens.add({ targets: [s, o, c], alpha: 0, delay: 2200, duration: 1400, onComplete: () => { this.aturaIdleCodi(s); s.destroy(); c.destroy(); o.destroy(); f(); } });
             }
         ];
         this.seq(seq);

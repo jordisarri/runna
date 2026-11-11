@@ -657,19 +657,25 @@ class ZonaBase extends Phaser.Scene {
         img.ombra = this.add.image(x, y, 'ombra').setScale(0.42).setDepth(-500);
         if (opts.flipX) img.setFlipX(true);
         img.escalaBase = img.scaleY;
-        // Idle per codi: respira (s'allarga una mica d'alçada i s'estreny d'ample, com un cos que agafa aire) i es balanceja una mica sobre els peus, de manera
-        // diferent per a cada un (durada i fase a l'atzar) perquè no vagin tots al compàs. opts.quiet = sense balanceig.
-        if (!idle) {
-            const d = 1500 + Math.random() * 700, sy = img.scaleY, sx = img.scaleX;
-            img.respira = this.tweens.add({ targets: img, scaleY: sy * 1.028, scaleX: sx * 0.992, yoyo: true, repeat: -1, duration: d, ease: 'Sine.easeInOut', delay: Math.random() * 900 });
-            if (!opts.quiet) img.balanceig = this.tweens.add({ targets: img, angle: { from: -0.8, to: 0.8 }, yoyo: true, repeat: -1, duration: d * 2.1, ease: 'Sine.easeInOut', delay: Math.random() * 1500 });
-        }
+        if (!idle) this.idleCodi(img, opts.quiet);
         img.punt = this.interactiu(x, y - 10, opts.radi || RADI_NPC, dialeg, { altura: img.displayHeight + 6 });
         if (opts.zoomConversa) img.punt.zoomConversa = opts.zoomConversa;       // més zoom (que ZOOM_NPC) en parlar-hi, perquè s'apreciïn els sprites
         img.punt.npc = img;                                  // en parlar-hi, l'Ineu es fa enrere i no se solapen (vegeu separarDeNpc)
         (this.npcs = this.npcs || {})[key] = img;
         return img;
     }
+
+    // Idle per codi: respira (s'allarga una mica d'alçada i s'estreny d'ample, com un cos que agafa aire) i es balanceja una mica sobre els peus, de manera
+    // diferent per a cada un (durada i fase a l'atzar) perquè no vagin tots al compàs. quiet = sense balanceig. Serveix per a qualsevol sprite amb origen als peus
+    // (els NPC de npc() ja ho tenen; la resta de personatges que es posen amb posar() hi poden cridar).
+    idleCodi(img, quiet = false) {
+        const d = 1500 + Math.random() * 700, sy = img.scaleY, sx = img.scaleX;
+        img.respira = this.tweens.add({ targets: img, scaleY: sy * 1.028, scaleX: sx * 0.992, yoyo: true, repeat: -1, duration: d, ease: 'Sine.easeInOut', delay: Math.random() * 900 });
+        if (!quiet) img.balanceig = this.tweens.add({ targets: img, angle: { from: -0.8, to: 0.8 }, yoyo: true, repeat: -1, duration: d * 2.1, ease: 'Sine.easeInOut', delay: Math.random() * 1500 });
+        return img;
+    }
+    // Atura l'idle per codi (abans de destruir el sprite o de canviar-ne el dibuix)
+    aturaIdleCodi(img) { ['respira', 'balanceig'].forEach(k => { if (img[k]) { img[k].stop(); img[k] = null; } }); img.setAngle(0); }
 
     // Idle frontal d'un NPC: l'animació 'idle_<clau>' en bucle (a un ritme lent i una mica diferent per a cada un, perquè no vagin tots al compàs)
     posaIdleNpc(img, key) {
