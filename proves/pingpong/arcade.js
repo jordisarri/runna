@@ -183,7 +183,7 @@ class Arcade extends Phaser.Scene {
     // El cartell del ratolí («No oblideu apagar els llums», art/objectes/cartell_llums), a la paret del fons, darrere d'en Jusef: gris, difuminat i una mica tapat,
     // perquè el seu blanc no distregui del de la pilota
     cartellProhibit() {
-        const img = this.add.image(88, 222, 'cartell_llums').setDepth(-4).setAngle(2).setTint(0x8c8a86);
+        const img = this.add.image(88, 196, 'cartell_llums').setDepth(-4).setAngle(0).setTint(0x8c8a86);
         img.setScale(112 / img.width);
         try { if (img.postFX) img.postFX.addBlur(0, 0.7, 0.7, 1.0); } catch (e) { /* sense WebGL: es veu sense difuminar */ }
     }
