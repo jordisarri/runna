@@ -5,11 +5,35 @@
  */
 
 // ---------------- ESGLÉSIA (interior) ----------------
-// La nau fa 800 d'ample (x 240-1040). El retaule ocupa tot l'ample i es veu sencer (800 x 990); al seu peu hi ha dues
+// La nau central fa 800 d'ample (x 240-1040); a banda i banda hi ha una nau lateral separada per una arcada (piles i arcs en perspectiva): l'esquerra, de 200, i la dreta, més ampla (320), on hi ha l'orgue.
+// (Abans la nau feia 800 d'ample.) El retaule ocupa tot l'ample i es veu sencer (800 x 990); al seu peu hi ha dues
 // portes: la de la dreta duu a la torre de l'escala (ZonaTorre) i d'allà a les golfes del rellotge.
-const ESG = { alcada: 1640, retY: 1010, retBaix: 24, retTop: 20, sostre: 1034, sostrePorta: 1000, portaDx: 870, portaEsq: 408 };      // sostre: fins on arriba la base del retaule (els peus no hi pugen); sostrePorta: només davant la porta de la dreta, que s'ha de poder tocar
+const ESG = { arcada: { x0: 174.5, baseY: 1590, amplada: 186.5, bases: [[15.5, 612.7], [76.2, 516.7], [124.4, 445.6], [153.6, 401.4], [177.9, 362.9]] }, ample: 1400, nauX0: 240, nauX1: 1040, alcada: 1640, retY: 1010, retBaix: 24, retTop: 20, sostre: 1034, sostrePorta: 1000, portaDx: 870, portaEsq: 408 };      // sostre: fins on arriba la base del retaule (els peus no hi pugen); sostrePorta: només davant la porta de la dreta, que s'ha de poder tocar
 
 class ZonaEsglesia extends ZonaBase {
+    // Arcades altes a banda i banda de la nau central, en perspectiva (art/objectes/arcada_santuari.png, eines/fer_arcada_santuari.py): cinc piles i quatre arcs que
+    // s'allunyen cap al retaule (cap amunt), cada cop més petits i més cap al centre. Cada pila és una llesca de la imatge amb la seva profunditat (l'Ineu passa
+    // davant o darrere segons on és) i el seu bloc de col·lisió; entre pila i pila hi ha pas cap a la nau lateral.
+    dibuixarArcades() {
+        const D = ESG.arcada;
+        if (!this.textures.exists('arcada_santuari') || !this.textures.exists('arcada_santuari_d')) return;
+        const mitges = D.bases.slice(0, -1).map((b, i) => (b[0] + D.bases[i + 1][0]) / 2);
+        [1, -1].forEach(costat => {
+            // costat 1: esquerra; -1: dreta (la mateixa imatge girada, simètrica respecte a l'eix de la nau, x = 640)
+            const clau = costat === 1 ? 'arcada_santuari' : 'arcada_santuari_d', esc = this.textures.get(clau).customData.escala;
+            const oy = D.baseY - D.bases[0][1], ox = costat === 1 ? D.x0 : ESG.nauX0 + ESG.nauX1 - D.x0 - D.amplada;
+            D.bases.forEach((b, i) => {
+                // llesca de la imatge que conté la pila i (de la meitat cap a la pila anterior a la meitat cap a la següent); a la dreta, les llesques van en ordre invers
+                const x0 = i === 0 ? 0 : mitges[i - 1], x1 = i === D.bases.length - 1 ? D.amplada : mitges[i];
+                const [c0, c1] = costat === 1 ? [x0, x1] : [D.amplada - x1, D.amplada - x0];
+                const img = this.add.image(ox, oy, clau).setOrigin(0, 0).setScale(esc);
+                img.setCrop(c0 / esc, 0, (c1 - c0) / esc, img.height).setTint(0xe6d2a8);        // (pedra una mica més càlida i fosca, perquè no ressalti sobre la sala)
+                img.setDepth(oy + b[1]);
+                this.colisio(costat === 1 ? ox + b[0] : ox + (D.amplada - b[0]), oy + b[1] - 7, 30, 14);
+            });
+        });
+    }
+
     // La Pianista toca l'orgue d'esquena (animació en bucle) o es gira cap a l'Ineu (dibuix de front, asseguda al banc davant de l'orgue)
     pianistaToca(on, fet) {
         const pia = this.npcs && this.npcs.pianista;
@@ -42,7 +66,7 @@ class ZonaEsglesia extends ZonaBase {
     constructor() {
         super('ZonaEsglesia', {
             nom: 'Santuari del Miracle',
-            amplada: 1280,
+            amplada: ESG.ample,
             alcada: ESG.alcada,
             colorFons: '#140e0a',
             pacifica: true,
@@ -54,20 +78,23 @@ class ZonaEsglesia extends ZonaBase {
         const A = ESG.alcada;
         this.epileg = false; this.epilegEngegat = false;          // (l'escena es reaprofita: l'epíleg d'una altra partida no compta)
         // Terra i murs
-        this.terra('rajola', 240, 0, 800, A, -1100);
+        const W = ESG.ample, X0 = ESG.nauX0, X1 = ESG.nauX1, EX = 40;                 // EX: gruix de la paret exterior
+        this.terra('rajola', EX, 0, W - 2 * EX, A, -1100);
         const murs = this.add.graphics().setDepth(-1000);
-        murs.fillStyle(0x4a1e22, 1).fillRect(240, 0, 800, ESG.retY);                 // paret del fons, darrere el retaule
-        murs.fillStyle(0x2e1216, 1).fillRect(240, ESG.retY - 8, 800, 8);            // sòcol fosc (si el retaule no el tapa del tot, no es veu cap línia clara)
-        murs.fillStyle(0xcdb89a, 1).fillRect(200, 0, 40, A).fillRect(1040, 0, 40, A);
-        this.colisio(120, A / 2, 240, A);
-        this.colisio(1160, A / 2, 240, A);
+        murs.fillStyle(0x4a1e22, 1).fillRect(EX, 0, W - 2 * EX, ESG.retY);                 // paret del fons, darrere el retaule
+        murs.fillStyle(0x2e1216, 1).fillRect(EX, ESG.retY - 8, W - 2 * EX, 8);            // sòcol fosc (si el retaule no el tapa del tot, no es veu cap línia clara)
+        murs.fillStyle(0x6e5a44, 1).fillRect(0, 0, EX, A).fillRect(W - EX, 0, EX, A);                              // parets exteriors de les naus laterals
+        murs.fillStyle(0x000000, 0.28).fillRect(EX, 0, X0 - EX, A).fillRect(X1, 0, W - EX - X1, A);                 // les naus laterals, una mica més fosques que la central
+        this.colisio(EX / 2, A / 2, EX, A);
+        this.colisio(W - EX / 2, A / 2, EX, A);
         // El retaule (fins a y = sostre) no es pot trepitjar; només s'obre un pas davant la porta de la dreta (x 828-912), que duu a la torre
         const P0 = ESG.portaDx - 42, P1 = ESG.portaDx + 42;
-        this.colisio((240 + P0) / 2, ESG.sostre / 2, P0 - 240, ESG.sostre);
-        this.colisio((P1 + 1040) / 2, ESG.sostre / 2, 1040 - P1, ESG.sostre);
+        this.colisio((EX + P0) / 2, ESG.sostre / 2, P0 - EX, ESG.sostre);
+        this.colisio((P1 + W - EX) / 2, ESG.sostre / 2, W - EX - P1, ESG.sostre);
         this.colisio((P0 + P1) / 2, ESG.sostrePorta / 2, P1 - P0, ESG.sostrePorta);
-        this.colisio(420, A - 10, 360, 20);
-        this.colisio(860, A - 10, 360, 20);
+        this.colisio((EX + 600) / 2, A - 10, 600 - EX, 20);
+        this.colisio((680 + W - EX) / 2, A - 10, W - EX - 680, 20);
+        this.dibuixarArcades();
 
         // Retaule Major (tot l'ample de la nau, sencer) i, al davant, l'altar de pedra
         this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
@@ -89,15 +116,15 @@ class ZonaEsglesia extends ZonaBase {
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daimiel, que dirigeix el cor
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daimiel es posen amb la resta
-        if (!epileg) this.orgue = this.posar('orgue', 975, ESG.retY + 250, { col: { w: 110, h: 50 } });
+        if (!epileg) this.orgue = this.posar('orgue', 1235, ESG.retY + 250, { col: { w: 110, h: 50 } });
         if (!epileg) {
             // La Pianista és de cara al banc de l'orgue; només hi toca d'esquena (animada) quan l'Ineu la troba la primera vegada i mentre ensenya un cant (pianistaToca)
-            const pia = this.npc('pianista', 975, this.orgue.y + 24, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
+            const pia = this.npc('pianista', this.orgue.x, this.orgue.y + 24, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
             pia.setDepth(this.orgue.y + 1);                                                                       // per davant de l'orgue
             [pia.respira, pia.balanceig].forEach(t => t && t.remove()); pia.respira = pia.balanceig = null; pia.setAngle(0);       // fixa: ni respira ni es balanceja (no canvia de mida)
             pia.punt.npc = null;                                                                                  // l'Ineu no es fa enrere en parlar-hi: es posa al costat de l'orgue (pianistaCara)
         }
-        if (!epileg) this.npc('pare_daimiel', 360, ESG.retY + 190, DIALEGS.pareDaimiel, { flipX: false });
+        if (!epileg) this.npc('pare_daimiel', 440, ESG.retY + 190, DIALEGS.pareDaimiel, { flipX: false });
 
         // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar (a l'epíleg es retiren perquè tothom tingui lloc sense tapar-se)
         if (!epileg) {
@@ -109,7 +136,7 @@ class ZonaEsglesia extends ZonaBase {
         }
 
         // Llum de les vidrieres
-        this.add.rectangle(640, A / 2, 800, A, 0xffd38a, 0.05).setDepth(80000);
+        this.add.rectangle(W / 2, A / 2, W - 2 * EX, A, 0xffd38a, 0.05).setDepth(80000);
 
         this.sortida(600, A - 20, 80, 20, 'ZonaPlaca', 'esglesia');
         if (Estat.flag('epilegPendent') && !Estat.flag('epilegFet')) this.prepararEpileg();

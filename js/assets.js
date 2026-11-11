@@ -100,6 +100,8 @@ const CATALEG = [
     { key: 'tiller',    file: 'assets/personatges/tiller.webp',    amplada: 540, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },
     { key: 'arrels_tiller', file: 'assets/natura/arrels_tiller.webp', amplada: 440 },
     { key: 'orgue',     file: 'assets/objectes/orgue.webp', amplada: 240, cru: true, provisional: (c, w) => lienc(c, w, Math.round(w * 1.2), (ctx, W, H) => { ctx.fillStyle = '#4a2c16'; ctx.fillRect(0, H * 0.4, W, H * 0.6); ctx.fillStyle = '#c9b48a'; for (let i = 0; i < 9; i++) ctx.fillRect(W * 0.08 + i * W * 0.1, H * 0.05, W * 0.07, H * 0.4); }) },   // l'orgue del Santuari (la Pianista hi toca d'esquena: pianista_orgue)
+    { key: 'arcada_santuari', file: 'assets/objectes/arcada_santuari.webp', amplada: 186.5, cru: true },
+    { key: 'arcada_santuari_d', file: 'assets/objectes/arcada_santuari_d.webp', amplada: 186.5, cru: true },      // la mateixa, girada (per al costat dret)      // arcada lateral del Santuari, en perspectiva (eines/fer_arcada_santuari.py)
     { key: 'altar',     file: null,     amplada: 150, provisional: (c, w) => lienc(c, w, Math.round(w * 118 / 150), (ctx, W, H) => { ctx.scale(W / 150, H / 118); pintarAltarPedra(ctx, 150, 118, false); }) },   // l'altar de marbre rosat (Santuari i capella de l'Hostatgeria)
     { key: 'taula_pedra', file: null, amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 0) },
     { key: 'taula_pedra2', file: null, amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
