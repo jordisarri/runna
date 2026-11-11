@@ -58,7 +58,7 @@ class ZonaCabana extends ZonaBase {
     constructor() {
         super('ZonaCabana', {
             pins: { pi: 0.3 },
-            nom: 'La cabana de la Jauneta',
+            nom: 'La cabana de la Joaneta',
             amplada: 1400,
             alcada: 1000,
             colorFons: '#14301a',
@@ -138,7 +138,7 @@ class ZonaCabana extends ZonaBase {
             enTancar: () => this.canviarZona('ZonaBosc', 'portal')
         });
 
-        // Ocells als arbres (la Jauneta hi parla)
+        // Ocells als arbres (la Joaneta hi parla)
         [[560, 280], [1180, 360], [380, 430], [1100, 760], [650, 860]].forEach(([x, y], i) => {
             const o = this.posar('ocell', x, y, { fonsY: y });
             this.tweens.add({ targets: o, y: y - 6, yoyo: true, repeat: -1, duration: 600 + i * 90, delay: i * 130 });
@@ -252,7 +252,7 @@ class ZonaCabanaInt extends ZonaBase {
         });
         this.boira(450, 200, 100, 40, 0.3);
 
-        this.npc('jaumeta', 560, 420, DIALEGS.jaumeta, { zoomConversa: 1.6 });
+        this.npc('joaneta', 560, 420, DIALEGS.joaneta, { zoomConversa: 1.6 });
 
         this.add.rectangle(450, 350, 700, 700, 0xa0e070, 0.05).setDepth(80000);
         this.sortida(410, 680, 80, 14, 'ZonaCabana', 'interior');

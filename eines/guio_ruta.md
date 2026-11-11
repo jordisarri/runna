@@ -4,7 +4,7 @@ Document només de text, per llegir la història de principi a fi (com un guió 
 Té dues parts:
 
 1. **La ruta**: la història en ordre, amb on anar, qui parla amb qui, què s'aconsegueix i per a què serveix (sortida de `js/progres.js` i `docs/GUIO.md`).
-2. **L'annex**: TOTS els diàlegs del joc, conversa per conversa, extrets del codi, amb les variants segons el progrés. Cada pas de la ruta cita entre `claudàtors` el nom de la conversa de l'annex (p. ex. `pareJordi`) perquè la trobis ràpid.
+2. **L'annex**: TOTS els diàlegs del joc, conversa per conversa, extrets del codi, amb les variants segons el progrés. Cada pas de la ruta cita entre `claudàtors` el nom de la conversa de l'annex (p. ex. `pareJorda`) perquè la trobis ràpid.
 
 Aquest fitxer es genera amb `python eines/fer_guio_complet.py` (la ruta és a `eines/guio_ruta.md`; l'annex surt del codi).
 
@@ -39,7 +39,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Les sacerdotesses** Dolora, Pilària, Carmèlia | Hostatgeria | Protectores del Sardi; atrapades al soterrani. |
 | **Galf** | L'Era | Inventor del telescopi. |
 | **Georgi** | La Caseta | Nen que guarda la Maneta. |
-| **La Jauneta** | Cabana del bosc | Bruixa-vident; dona el beuratge. |
+| **La Joaneta** | Cabana del bosc | Bruixa-vident; dona el beuratge. |
 | **El Gran Til·ler** | Gran Til·ler | Esperit savi; dona la branca i la Fulla. |
 | **Pastors de la Cirosa** (el pastor vell) | Cirosa | Desterrats; guarden les Esquelles. |
 | **Nena de les Trenes** | Camí de la Rovellonera | Esperit: cal tornar-li dos llaços. |
@@ -55,8 +55,8 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | Bastó de pelegrí | Germà Aldreu (Plaça), al començament | Atac bàsic. |
 | Tarota del Cortiner | La Pianista (Santuari) | Tocar els cants (notes 1-2-3). |
 | Cant de l'Aurora | Pianista | Neteja la Bassadòria; allibera Dolora. |
-| Aigua de la Font del Bisbe | Font del Bisbe (bosc de Sant Joan) | Obre el portal de la Jauneta. |
-| Beuratge | La Jauneta | Esvaeix la boira del camí del Gran Til·ler. |
+| Aigua de la Font del Bisbe | Font del Bisbe (bosc de Sant Joan) | Obre el portal de la Joaneta. |
+| Beuratge | La Joaneta | Esvaeix la boira del camí del Gran Til·ler. |
 | Branca del Til·ler | Gran Til·ler | Atac millor; enfonsa les arrels que barren la Cirosa. |
 | Esquelles dels pastors | Pastor vell (Cirosa) | Trama del sopar. |
 | Escudella / Flors d'Isílder / Pa dels pastors | Meus / Isílder / pastors | Les tres coses del sopar del Til·ler. |
@@ -97,25 +97,25 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 
 ## ACTE 1 — «El misteri»
 
-**Pas 1 · Plaça del Santuari — Pare Jordà** `pareJordi`
+**Pas 1 · Plaça del Santuari — Pare Jordà** `pareJorda`
 L'Ineu parla amb el prior: li explica la desaparició dels nens i li demana que parli amb tothom. *(Posa el flag `clauerNovici`.)*
 
 **Pas 2 · Plaça — Germà Aldreu, vora els xiprers** `germaAldreu`
 Simpàtic i rialler (parla de cromos i del Barça), li dona el **bastó de pelegrí**. *Atenció a la lectura: aquest és el futur Pastor de Boira; a la Plaça sembla inofensiu.*
 
 **Pas 3 · Santuari (interior) — la Pianista** `pianista`
-L'orgue no sona. Ensenya el **Cant de l'Aurora** i dona la **tarota del Cortiner**. Així s'aprèn a tocar els cants (tecles 1-2-3 o ← ESPAI →; al mòbil, tres cercles). També hi és el Pare Daimiel `pareDaniel` (cor i rellotge aturat).
+L'orgue no sona. Ensenya el **Cant de l'Aurora** i dona la **tarota del Cortiner**. Així s'aprèn a tocar els cants (tecles 1-2-3 o ← ESPAI →; al mòbil, tres cercles). També hi és el Pare Daimiel `pareDaimiel` (cor i rellotge aturat).
 
 **Pas 4 · La Bassadòria (sud de la Plaça) — netejar l'aigua** `bassadoria` `bassadoriaNeta`
 Amb la tarota, el Cant de l'Aurora neteja l'aigua tèrbola (en surten gripaus enverinats i boira). La Creu de l'Aparició reacciona `creu`.
 
 **Pas 5 · Cel·les (Sant Benet, Nostra Senyora, Sant Antoni)** *(es pot fer ara o quan toqui)*
-- **Meus i senyor Molner** `neus` `maritNeus`; **Mandu** `mandu` (nena petita, germana del Fram).
+- **Meus i senyor Molner** `meus` `molner`; **Mandu** `mandu` (nena petita, germana del Fram).
 - **Venerables Sàvies** `venerables`: donen la pista del moment si vas perdut.
 - **Carry** `carry`: busca el seu gos (lateral, vegeu més avall).
 - El camí del nord, cap al Gran Til·ler, és tapat per una **boira espessa**.
 
-**Pas 6 · Taverna (lateral des de l'inici)** `eva` `portaTaverna`
+**Pas 6 · Taverna (lateral des de l'inici)** `eve` `portaTaverna`
 La porta és tancada («Avui no servim — Càren»). Truca: l'**Eve** obre per la finestra, explica que el Germà Aldreu va cada nit a la Porta de les Gírgoles i que d'allà se senten ocells, i que el Sardi hi berenava. A la galeria hi ha una **porta de ferro** d'on surt boira (tancada amb clau).
 
 ## ACTE 2 — «La recerca de Runna»
@@ -125,8 +125,8 @@ La porta és tancada («Avui no servim — Càren»). Truca: l'**Eve** obre per 
 **Pas 7 · Bosc de Sant Joan — Font del Bisbe** `fontSJ` `herba`
 La font és adormida i el bosc és ple de boira lila. Calen **tres ofrenes**: l'**herba de Sant Joan** i el **romaní** (brillen en dues clarianes del bosc) i una **pruna** de la **Prunera Màgica**, al jardí de l'Hostatgeria `prunera`. En tirar-les-hi, la font es desperta (+ **aigua de la Font del Bisbe**).
 
-**Pas 8 · L'Alzina Buida i la Jauneta** `alzinaBuida` `jaumeta`
-L'Alzina Buida (el doble de gran que la resta d'arbres) és un portal a la **Cabana de la Jauneta**: la bruixa-vident remena l'olla i dona el **beuratge**. Torna pel portal `portalTornada`.
+**Pas 8 · L'Alzina Buida i la Joaneta** `alzinaBuida` `joaneta`
+L'Alzina Buida (el doble de gran que la resta d'arbres) és un portal a la **Cabana de la Joaneta**: la bruixa-vident remena l'olla i dona el **beuratge**. Torna pel portal `portalTornada`.
 
 **Pas 9 · Cel·les, camí del nord — la boira del Til·ler** `boiraTiller`
 El beuratge esvaeix la boira espessa i s'obre el camí cap al Gran Til·ler.
@@ -146,14 +146,14 @@ Vora el foc, el pastor vell dona les **Esquelles** dels seus avis.
 
 **Pas 14 · Sopar del Til·ler** `tillerSoparIntro` `tillerSoparFalta` `tillerSoparPreparat` `tillerSoparRitual` `espelmesTiller`
 Amb les esquelles, el Til·ler parla d'un sopar. Calen tres coses:
-1. **L'escudella de la Meus** (Cel·les, Sant Benet) `neus`.
-2. **Les flors d'Isílder** (jardí de l'Hostatgeria) `isidreBase`.
+1. **L'escudella de la Meus** (Cel·les, Sant Benet) `meus`.
+2. **Les flors d'Isílder** (jardí de l'Hostatgeria) `isilderBase`.
 3. **El pa dels pastors**: els pastors el pasten ells, però necessiten una música antiga vora el foc. La Pianista ensenya el **Cant de Vespres** (veure pas 17) i, tocat vora el foc de la Cirosa, convenç els pastors `pastorsConvencuts`.
 Ritual de tres espelmes (una per cada nen: l'Huri, el Fram i el Sardi): cau la **Fulla del Til·ler**: en objecte, el **Medalló de l'Arbre** i el **medalló de l'Arbre**.
 
 ### 2B · El Saber i les benediccions
 
-**Pas 14b · El Celler — partit de ping-pong contra en Jusef: la Llanterna** `josep` `josepRegles` `josepGuanyat` `josepPerdut` `juli` `frederic`
+**Pas 14b · El Celler — partit de ping-pong contra en Jusef: la Llanterna** `jusef` `jusefRegles` `jusefGuanyat` `jusefPerdut` `julius` `pomers`
 Cal guanyar en **Jusef** (set punts; Julius i Senyor Pomers donen consells, l'Eloi és arrogant i no cal vèncer-lo). En guanyar, dona el **Llum d'en Mamet** (Llanterna) i revela que la **roda de carruatge** del Celler amaga el túnel dels monjos, però pesa massa per a uns braços sols (això s'aprofitarà a l'Acte 3). Sense la Llanterna, a les Runes l'Ineu diu «Sense llum no s'hi veu res»: la pista de les Venerables envia aquí.
 
 **Pas 15 · Runes — fragment 1 i l'ombra** `ruines`
@@ -162,20 +162,20 @@ L'Ineu llegeix el pergamí entre dues pedres; la llum s'apaga i **apareix l'ombr
 **Pas 16 · Camí de la Desaparició → Ermita de la Desaparició — la clau del sagrari** `taulaPedra` `creuDesaparicio` `altarErmita` `cofreAltar`
 Per tot el camí hi ha **12 columnes** que «parlen»: cada una dona una paraula. La frase completa és: *«Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l'alba.»* A l'ermita, les taules de pedra demanen que algú la digui davant l'altar: premi, la **clau del sagrari**. (Al muret d'arbres del nord del camí hi ha un forat més ample cap a la **cabana amagada** de l'Iscu: vegeu el pas 31.)
 
-**Pas 17 · Santuari — fragment 2 (sagrari) i Cant de Vespres** `sagrari` `pareDaniel` `pianista`
+**Pas 17 · Santuari — fragment 2 (sagrari) i Cant de Vespres** `sagrari` `pareDaimiel` `pianista`
 El Pare Daimiel només parla del sagrari quan l'Ineu ja té el primer pergamí. La clau petita obre el sagrari del retaule: **fragment 2**. La Pianista ensenya el **Cant de Vespres** (3-1-2-1) un cop l'ombra el demana; el mateix cant desperta la **pedra secreta** de la façana del Santuari (sala del tresor: +1 cor, `pedraEscolta` `cofreTresor`).
 
-**Pas 18 · Biblioteca — Pare Alcoví** `pareAlcui`
+**Pas 18 · Biblioteca — Pare Alcoví** `pareAlcovi`
 Llegeix els fragments i els compara amb la Crònica: en un marge hi diu que l'ombra apareix a les Runes. Activa el fragment 3 i demana a l'Ineu que hi parli.
 
 **Pas 19 · Runes — l'ombra i el Cant de Vespres** `ombraMonjo` `benedicioMonjo`
 - Sense els fragments llegits: l'ombra només el mira i li diu quants fragments li falten.
 - Amb els fragments llegits: demana el **Cant de Vespres**. Quan l'Ineu li el toca, l'ombra explica qui era i que el segell es va esquerdar quan van obrir el cementiri, i dona la **Paraula de l'Ombra**: li diu on dorm Runna (sud-est, entre pedres, on el sol s'atura: el Dolmen) i la frase que només l'Alcoví sabrà entendre. Després s'enlaira i es desfà en llum.
 
-**Pas 20 · Biblioteca — el Saber** `pareAlcui`
+**Pas 20 · Biblioteca — el Saber** `pareAlcovi`
 Amb el que l'Ineu li explica, l'Alcoví entén la paraula esborrada de la Crònica: *«La foscor tem la llum, però més encara el riure».* Això és el **Saber** (+ medalló).
 
-**Pas 21 · Plaça — la Benedicció** `pareJordi`
+**Pas 21 · Plaça — la Benedicció** `pareJorda`
 Només amb la Fulla del Til·ler: el Pare Jordà beneeix l'Ineu (animació) i li dona el **medalló de la Benedicció**.
 
 ### 2C · El camí del Dolmen
@@ -197,28 +197,28 @@ Cal posar a la placa els **tres medallons** (Arbre, Saber, Benedicció) i dir la
 **Pas 26 · Santuari — Cant del Miracle** `pianista`
 Just després de Runna. És el cant que l'Ocellaire va robar als ocells: obre els barrots de la gàbia.
 
-**Pas 27 · El Celler — la roda (ja se sap des del pas 14b)** `josep`
+**Pas 27 · El Celler — la roda (ja se sap des del pas 14b)** `jusef`
 En Jusef ja va revelar al pas 14b que la **roda de carruatge** del Celler amaga el túnel dels monjos, però pesa massa per a uns braços sols: cal arribar-hi amb els Guants de Poder (pas 28).
 
-**Pas 28 · Sant Antoni → Cementiri → Sant Antoni — els Guants de Poder** `germa_francesc` `germaFrancesc`
+**Pas 28 · Sant Antoni → Cementiri → Sant Antoni — els Guants de Poder** `germa_franci` `germaFranci`
 El Germà Francí demana que portis el seu **ram** a la tomba de l'àngel del Cementiri `creuCementiri`; en tornar, et dona els **Guants de Poder**. Amb ells la roda cedeix.
 
 **Pas 29 · Casa Gran per dins: passadís, cambra, cofre** `cofreCambra` `homeRaimInt` `botaTresor`
 Roda → **Passadís secret** (escolopendres i un mur de cinc esbarzers negres: Runna) → **Cambra secreta** (cofre: el **pergamí del monjo**; la porta del fons és una llosa sense pany: la bóta de la creu rodola, deixa veure una anella, i una cadena fa girar la politja i puja la llosa).
 
-**Pas 30 · La Caseta — la Maneta** `jordiCaseta` `cofreManeta`
+**Pas 30 · La Caseta — la Maneta** `georgiCaseta` `cofreManeta`
 A l'oest del Gran Til·ler, en Georgi (que crida «MAI! MAI!») guarda la **Maneta** al cofre de les joguines de la caseta aixecada sobre pals; per una cosa seriosa, la hi deixa agafar.
 
 **Pas 31 · Escalinata de la Casa Gran — Home del Raïm i Cripta** `homeRaim` `raimDesperta` `raimDerrotat` `tombaMonjos`
 La Maneta s'encaixa al volant de ferro del pedestal: tres voltes i el cap girat el mira de cara → **boss**. Vençut, la trapa de sota l'escalinata duu a la **Cripta** dels monjos: la **Clau de ferro**.
 
-**Pas 32 · Cementiri — segellar la tomba** `creuCementiri` `tombaMonjos` `pareAlcui`
+**Pas 32 · Cementiri — segellar la tomba** `creuCementiri` `tombaMonjos` `pareAlcovi`
 El Pare Alcoví llegeix a la Crònica que la llum de Runna tanca la tomba. Un cop de **Runna** a la tomba esquerdada la segella i la boira s'esvaeix.
 
 **Pas 33 · Pati del Celler — porta de ferro exterior** `cartellCeller` `cartellGirgoles`
 La Clau de ferro obre la **porta de les Gírgoles**, a l'est del Pati del Celler (la que visitava l'Aldreu): duu a la **Galeria de la Porta de Ferro** i al fons hi ha una segona porta de pany petit.
 
-**Pas 34 · Cabana amagada (camí de la Desaparició) — l'Iscu** `ciscu`
+**Pas 34 · Cabana amagada (camí de la Desaparició) — l'Iscu** `iscu`
 El fill de la Càren s'amaga allà fent solitaris. Ha vist l'Aldreu picar tres cops de nit a la porta de ferro i té la **clau rovellada** (cofre: +1 cor).
 
 **Pas 35 · Sala de les Gírgoles — puzle de les mates** `girgolesInscripcio`
@@ -227,7 +227,7 @@ Cinc mates de gírgoles lluminoses en rotllana: en tocar-ne una, canvien ella i 
 **Pas 36 · Passadís de tortura** 
 Un **rastell** rovellat només s'aixeca amb els **Guants de Poder**; un mur d'esbarzers negres, només amb **Runna**.
 
-**Pas 37 · Hostatgeria — sacerdotesses i Empara Fraternal (lateral obligatòria per passar la boira)** `sansa` `llosaJardi` `monjaPains` `monjaPhili` `monjaCharm` `cofreMonges` `isidreBase`
+**Pas 37 · Hostatgeria — sacerdotesses i Empara Fraternal (lateral obligatòria per passar la boira)** `rosansa` `llosaJardi` `dolora` `pilaria` `carmelia` `cofreMonges` `isilderBase`
 Sense l'**Empara Fraternal** la boira verinosa de la galeria final fa tossir l'Ineu i el fa fer enrere. Camí:
 0. **Només a l'Acte 3 (amb Runna):** fins aleshores l'Isílder només parla del jardí i del Sardi, i ningú esmenta la llosa ni la Rosansa. Un cop tens Runna, l'**Isílder** t'explica que el jardí amaga una llosa que només s'obre amb una flor de lluna, i que la **Rosansa** ha tornat a passar per les cel·les; les **Venerables Sàvies** també t'ho recorden.
 1. **Rosansa** (Cel·les, només a partir de l'Acte 3) dona la **Llavor de Lluna**; l'Isílder la planta i s'obre la **llosa** del jardí.
@@ -256,7 +256,7 @@ Les Venerables Sàvies recorden una lateral quan la història principal és atur
 
 | Lateral | Com començar-la | Què cal fer | Resultat |
 |---|---|---|---|
-| **Taverna i l'Eve** | Des de l'inici: truca a la Taverna | Parla amb l'Eve (`eva`) | Pistes sobre l'Aldreu i les Gírgoles. |
+| **Taverna i l'Eve** | Des de l'inici: truca a la Taverna | Parla amb l'Eve (`eve`) | Pistes sobre l'Aldreu i les Gírgoles. |
 | **Carry i el Pallofa** | Parla amb la Carry (Nostra Senyora) `carry` `pallofa` | Troba el gos **Pallofa** a Sant Antoni i porta-l'hi | **Clau del campanar**. |
 | **Rellotge del campanar** | Amb la clau del campanar; el Pare Daimiel obre la porta de la dreta del retaule | Torre → Sala del Rellotge: tres engranatges (petit, gran, mitjà, segons la nota del campaner) | El rellotge camina; a l'epíleg toca tres campanades. |
 | **Tresor del Santuari** | Després del Cant de Vespres `pedraEscolta` | Tocar el Cant de Vespres davant la pedra de la façana | Sala del tresor: +1 cor. |

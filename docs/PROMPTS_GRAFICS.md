@@ -44,11 +44,11 @@
 
 - [x] `esglesia`
 
-- [x] `eva`
+- [x] `eve`
 
 - [x] `flauta` → `ineu/tarota`
 
-- [x] `frederic`
+- [x] `pomers`
 
 - [x] `arrels_tiller`
 
@@ -56,19 +56,19 @@
 
 - [x] `ocellaire_cansat`
 
-- [x] `neus` (Meus) i `marit_neus` (senyor Molner)
+- [x] `meus` (Meus) i `molner` (senyor Molner)
 
-- [x] `carro_sansa` (Rosansa)
+- [x] `carro_rosansa` (Rosansa)
 
-- [x] `sansa` (Rosansa) i el seu retrat
+- [x] `rosansa` (Rosansa) i el seu retrat
 
 - [x] `galf`
 
 - [x] `germa_aldreu`
 
-- [x] `germa_francesc`
+- [x] `germa_franci`
 
-- [x] `home_carruatge`
+- [x] `follet_carro`
 
 - [x] `home_raim`
 
@@ -84,17 +84,17 @@
 
 - [x] `ineu_inconscient`
 
-- [x] `isidre`
+- [x] `isilder`
 
-- [x] `jaumeta`
+- [x] `joaneta`
 
-- [x] `jordi_caseta`
+- [x] `georgi_caseta`
 
-- [x] `jordi_desperta`
+- [x] `pare_jorda_desperta`
 
-- [x] `josep`
+- [x] `jusef`
 
-- [x] `juli`
+- [x] `julius`
 
 - [x] `mandu`
 
@@ -104,11 +104,11 @@
 
 - [x] `monestir`
 
-- [x] `monja_charm`
+- [x] `carmelia`
 
-- [x] `monja_pains`
+- [x] `dolora`
 
-- [x] `monja_phili`
+- [x] `pilaria`
 
 - [x] `nen_flam`
 
@@ -130,11 +130,11 @@
 
 - [x] `pallofa`
 
-- [x] `pare_alcui`
+- [x] `pare_alcovi`
 
-- [x] `pare_daniel`
+- [x] `pare_daimiel`
 
-- [x] `pare_jordi`
+- [x] `pare_jorda`
 
 - [x] `pastor_a`
 
@@ -230,7 +230,7 @@ indicada. Per això: fons blanc pur i res de blanc a la vora de l'objecte.
 
 **Referències d'estil** (pugeu-les al generador i digueu «same art style as the reference image»):
 
-- **Personatges i enemics:** qualsevol dels chibis fets, p. ex. `art/personatges/isidre.jpg` o `art/personatges/pare_jordi.jpg`.
+- **Personatges i enemics:** qualsevol dels chibis fets, p. ex. `art/personatges/isilder.jpg` o `art/personatges/pare_jorda.jpg`.
 
 - **Edificis, natura i objectes:** un d'ja fet, p. ex. `art/edificis/esglesia.png` (edifici) o `art/natura/roure.png` (arbre).
 

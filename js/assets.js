@@ -14,16 +14,16 @@ const CATALEG = [
     { key: 'taverna',      file: 'assets/edificis/taverna.webp',      amplada: 900, provisional: (c, w) => dibuixarTaverna(c, w) },
     { key: 'casa_gran',    file: 'assets/edificis/casa_gran.webp',    amplada: 1250, provisional: (c, w) => dibuixarCasaGran(c, w) },
     // Personatges
-    { key: 'ineu_inconscient', file: 'assets/personatges/ineu_inconscient.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu a terra després d'una derrota (mateix retall que jordi_desperta)
-    { key: 'jordi_desperta', file: 'assets/personatges/jordi_desperta.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },   // el Pare Jordà agenollat al seu costat, despertant-lo
-    { key: 'pare_jordi',   file: 'assets/personatges/pare_jordi.webp',   amplada: 90, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
+    { key: 'ineu_inconscient', file: 'assets/personatges/ineu_inconscient.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu a terra després d'una derrota (mateix retall que pare_jorda_desperta)
+    { key: 'pare_jorda_desperta', file: 'assets/personatges/pare_jorda_desperta.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },   // el Pare Jordà agenollat al seu costat, despertant-lo
+    { key: 'pare_jorda',   file: 'assets/personatges/pare_jorda.webp',   amplada: 90, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
     { key: 'germa_aldreu', file: 'assets/personatges/germa_aldreu.webp', amplada: 79, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
-    { key: 'pare_daniel',  file: 'assets/personatges/pare_daniel.webp',  amplada: 94, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
-    { key: 'monja_pains',   file: 'assets/personatges/monja_pains.webp', amplada: 94, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },
-    { key: 'monja_charm',   file: 'assets/personatges/monja_charm.webp', amplada: 116, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#6a4a2e', ample: 1.45, alt: 0.92 }) },
-    { key: 'monja_phili',   file: 'assets/personatges/monja_phili.webp', amplada: 111, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#3b2a1e', ulleres: true, ample: 0.8, alt: 1.06 }) },
-    { key: 'germa_francesc', file: 'assets/personatges/germa_francesc.webp', amplada: 92, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
-    { key: 'pare_alcui',   file: 'assets/personatges/pare_alcui.webp',   amplada: 84, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
+    { key: 'pare_daimiel',  file: 'assets/personatges/pare_daimiel.webp',  amplada: 94, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
+    { key: 'dolora',   file: 'assets/personatges/dolora.webp', amplada: 94, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },
+    { key: 'carmelia',   file: 'assets/personatges/carmelia.webp', amplada: 116, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#6a4a2e', ample: 1.45, alt: 0.92 }) },
+    { key: 'pilaria',   file: 'assets/personatges/pilaria.webp', amplada: 111, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#3b2a1e', ulleres: true, ample: 0.8, alt: 1.06 }) },
+    { key: 'germa_franci', file: 'assets/personatges/germa_franci.webp', amplada: 92, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
+    { key: 'pare_alcovi',   file: 'assets/personatges/pare_alcovi.webp',   amplada: 84, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
     // Elements
     { key: 'home_raim',    file: 'assets/personatges/home_raim.webp',    amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua (abans del combat)
     { key: 'home_raim_desperta', file: 'assets/personatges/home_raim_desperta.webp', amplada: 115, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // el guardià despert (boss de l'Escalinata)
@@ -73,22 +73,22 @@ const CATALEG = [
     { key: 'pianista',  file: 'assets/personatges/pianista.webp',  amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
     { key: 'venerables', file: 'assets/personatges/venerables.webp', amplada: 147, cru: true, provisional: (c, w) => dibuixarVenerables(c, w) },   // les dues Venerables Sàvies de les Cel·les, agafades del braç (un sol gràfic)
     { key: 'mare_nena', file: 'assets/personatges/mare_nena.webp', amplada: 77, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#cfd6ee', cabell: '#e8e8f2', dona: true, ample: 1.1, alt: 0.9 }) },   // la mare de la Nena de les Trenes (visió de llum, sense rostre)
-    { key: 'neus',      file: 'assets/personatges/neus.webp',      amplada: 55,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
-    { key: 'marit_neus', file: 'assets/personatges/marit_neus.webp', amplada: 70, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a6a7a', cabell: '#5a4636', alt: 0.98, calb: true }) },
-    { key: 'juli',      file: 'assets/personatges/juli.webp',      amplada: 72, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'juli') },
-    { key: 'frederic',  file: 'assets/personatges/frederic.webp',  amplada: 77, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'frederic') },
+    { key: 'meus',      file: 'assets/personatges/meus.webp',      amplada: 55,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
+    { key: 'molner', file: 'assets/personatges/molner.webp', amplada: 70, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a6a7a', cabell: '#5a4636', alt: 0.98, calb: true }) },
+    { key: 'julius',      file: 'assets/personatges/julius.webp',      amplada: 72, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'julius') },
+    { key: 'pomers',  file: 'assets/personatges/pomers.webp',  amplada: 77, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'pomers') },
     { key: 'eloi',      file: null,      amplada: 104, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'eloi') },
-    { key: 'josep',     file: 'assets/personatges/josep.webp',     amplada: 82, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },
-    { key: 'josep_levita', file: 'assets/personatges/josep_levita.webp', amplada: 134, cru: true, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'josep') },   // en Jusef levitant amb la pala (minijoc de ping-pong)
+    { key: 'jusef',     file: 'assets/personatges/jusef.webp',     amplada: 82, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'jusef') },
+    { key: 'jusef_levita', file: 'assets/personatges/jusef_levita.webp', amplada: 134, cru: true, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'jusef') },   // en Jusef levitant amb la pala (minijoc de ping-pong)
     { key: 'galf',      file: 'assets/personatges/galf.webp',      amplada: 55, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#d9b45a', alt: 0.92, ample: 1.35, cap: 17 }) },
     { key: 'carry',     file: 'assets/personatges/carry.webp',     amplada: 58, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a7a', cabell: '#f0f0f0', pell: '#ece4dc', dona: true, alt: 1.0, ample: 0.7 }) },   // la Carry, anciana molt prima i pàl·lida, de cabells blancs curts i faldilla (busca el Pallofa)
     { key: 'pallofa',   file: 'assets/personatges/pallofa.webp',   amplada: 60, cru: true,  provisional: (c, w) => dibuixarGos(c, w) },   // el Pallofa, gos petit i prim, blanc amb taques marrons, borni i ple de puces
-    { key: 'isidre',    file: 'assets/personatges/isidre.webp',    amplada: 93, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { isidre: true, calb: true, roba: '#f4f1e8', cabell: '#000000', alt: 0.94 }) },
-    { key: 'jordi_caseta', file: 'assets/personatges/jordi_caseta.webp', amplada: 66, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a7a3a', cabell: '#4a3a2a', alt: 0.97, extra: 'gorra' }) },
-    { key: 'sansa',     file: 'assets/personatges/sansa.webp',     amplada: 80,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
-    { key: 'ciscu',     file: 'assets/personatges/ciscu.webp',    amplada: 52, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#c8a040', cabell: '#5a3a1e', alt: 0.74, cap: 17, extra: 'gorra' }) },
-    { key: 'eva',       file: 'assets/personatges/eva.webp',       amplada: 67, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7a5a', cabell: '#e8cc66', dona: true, alt: 0.95 }) },
-    { key: 'home_carruatge', file: 'assets/personatges/home_carruatge.webp', amplada: 68, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2f6b3d', cabell: '#222', alt: 1.04, extra: 'gorra' }) },
+    { key: 'isilder',    file: 'assets/personatges/isilder.webp',    amplada: 93, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { isilder: true, calb: true, roba: '#f4f1e8', cabell: '#000000', alt: 0.94 }) },
+    { key: 'georgi_caseta', file: 'assets/personatges/georgi_caseta.webp', amplada: 66, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a7a3a', cabell: '#4a3a2a', alt: 0.97, extra: 'gorra' }) },
+    { key: 'rosansa',     file: 'assets/personatges/rosansa.webp',     amplada: 80,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8b04a', cabell: '#7a3a1e', dona: true, ample: 1.2, alt: 0.95 }) },
+    { key: 'iscu',     file: 'assets/personatges/iscu.webp',    amplada: 52, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#c8a040', cabell: '#5a3a1e', alt: 0.74, cap: 17, extra: 'gorra' }) },
+    { key: 'eve',       file: 'assets/personatges/eve.webp',       amplada: 67, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7a5a', cabell: '#e8cc66', dona: true, alt: 0.95 }) },
+    { key: 'follet_carro', file: 'assets/personatges/follet_carro.webp', amplada: 68, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#2f6b3d', cabell: '#222', alt: 1.04, extra: 'gorra' }) },
 
     // ---- Escenari nou ----
     { key: 'runes',     file: 'assets/edificis/runes.webp',     amplada: 760, provisional: (c, w) => dibuixarRunes(c, w) },
@@ -103,7 +103,7 @@ const CATALEG = [
     { key: 'taula_pedra2', file: null, amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
     { key: 'font_sj',   file: null,   amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w) },
     { key: 'carruatge', file: 'assets/objectes/carruatge.webp', amplada: 250, provisional: (c, w) => dibuixarCarruatge(c, w) },
-    { key: 'carro_sansa', file: 'assets/objectes/carro_sansa.webp', amplada: 280, provisional: (c, w) => dibuixarCarroSansa(c, w) },
+    { key: 'carro_rosansa', file: 'assets/objectes/carro_rosansa.webp', amplada: 280, provisional: (c, w) => dibuixarCarroRosansa(c, w) },
     { key: 'pergola',   file: null,   amplada: 260, provisional: (c, w) => dibuixarPergola(c, w) },
     { key: 'flors',     file: null,     amplada: 90,  provisional: (c, w) => dibuixarFlors(c, w) },
     { key: 'taula_pp',  file: null,  amplada: 240, provisional: (c, w) => dibuixarTaulaPP(c, w) },
@@ -181,7 +181,7 @@ const CATALEG = [
     { key: 'ocell_verd',     file: null, amplada: 34, provisional: (c, w) => dibuixarOcell(c, w, ['#4aa84a', '#7ad07a', '#388038']) },
     { key: 'ocell_lila',     file: null, amplada: 34, provisional: (c, w) => dibuixarOcell(c, w, ['#9a5ad0', '#b98af0', '#7a3ab0']) },
     { key: 'ocell_taronja',  file: null, amplada: 34, provisional: (c, w) => dibuixarOcell(c, w, ['#e8802a', '#f5a860', '#c06018']) },
-    { key: 'jaumeta',        file: 'assets/personatges/jaumeta.webp',        amplada: 89, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
+    { key: 'joaneta',        file: 'assets/personatges/joaneta.webp',        amplada: 89, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
     { key: 'arma_tiller', file: 'assets/armes/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/armes/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
     { key: 'ineu_aixeca', file: 'assets/ineu/aixeca_espasa.webp', amplada: 100, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant Runna, mirant amunt (ja amb fons transparent)
@@ -200,8 +200,8 @@ const CATALEG = [
 
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
-['ineu', 'pare_jordi', 'germa_aldreu', 'germa_francesc', 'pare_daniel', 'pare_alcui', 'eva', 'josep', 'frederic', 'juli', 'galf', 'isidre', 'pianista', 'jaumeta', 'ciscu',
- 'nena_trenes', 'venerables', 'carry', 'monja_charm', 'monja_phili', 'monja_pains', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'home_carruatge', 'jordi_caseta', 'sansa', 'neus', 'marit_neus', 'ombra_monjo', 'mandu', 'mandu_trencada', 'nen_uri', 'nen_flam', 'nen_sardin']
+['ineu', 'pare_jorda', 'germa_aldreu', 'germa_franci', 'pare_daimiel', 'pare_alcovi', 'eve', 'jusef', 'pomers', 'julius', 'galf', 'isilder', 'pianista', 'joaneta', 'iscu',
+ 'nena_trenes', 'venerables', 'carry', 'carmelia', 'pilaria', 'dolora', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'follet_carro', 'georgi_caseta', 'rosansa', 'meus', 'molner', 'ombra_monjo', 'mandu', 'mandu_trencada', 'nen_uri', 'nen_flam', 'nen_sardin']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
 /**
@@ -290,14 +290,14 @@ const Grafics = {
         if (part === 'inici') return;
         scene.load.spritesheet('visitant_zombi', 'assets/enemics/visitant_zombi.webp', { frameWidth: 127, frameHeight: 209 });      // el visitant (turista zombi) caminant, de cara (4x4 fotogrames): serveix per a totes les direccions
         scene.load.spritesheet('pallofa_cami', 'assets/personatges/pallofa_cami.webp', { frameWidth: 135, frameHeight: 140 });      // el Pallofa caminant cap a la dreta (4x4 fotogrames); es gira per anar cap a l'esquerra
-        scene.load.spritesheet('pare_jordi_camina', 'assets/personatges/pare_jordi_camina.webp', { frameWidth: 200, frameHeight: 290 });
+        scene.load.spritesheet('pare_jorda_camina', 'assets/personatges/pare_jorda_camina.webp', { frameWidth: 200, frameHeight: 290 });
         // Fulls d'animació del Pastor de Boira (boss de la Cirosa): quadrícula de fotogrames de 300 x 300; si no hi són, es veu el dibuix fix (vegeu docs/PROMPTS_GRAFICS.md)
         Object.keys(Grafics.PASTOR_FULLS).forEach(n => scene.load.spritesheet('pastor_' + n, `assets/enemics/pastor_${n}.webp`, { frameWidth: 300, frameHeight: 300 }));
         Object.entries(NPC_IDLE).forEach(([k, d]) => scene.load.spritesheet(k + '_idle', `assets/personatges/${k}_idle.webp?v=2611110300`, { frameWidth: d.w, frameHeight: d.h }));
         scene.load.spritesheet('germa_aldreu_camina', 'assets/personatges/germa_aldreu_camina.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('germa_aldreu_ne', 'assets/personatges/germa_aldreu_ne.webp', { frameWidth: 180, frameHeight: 265 });
-        scene.load.spritesheet('josep_camina', 'assets/personatges/josep_camina.webp', { frameWidth: 190, frameHeight: 300 });
-        scene.load.spritesheet('isidre_camina', 'assets/personatges/isidre_camina.webp', { frameWidth: 190, frameHeight: 285 });
+        scene.load.spritesheet('jusef_camina', 'assets/personatges/jusef_camina.webp', { frameWidth: 190, frameHeight: 300 });
+        scene.load.spritesheet('isilder_camina', 'assets/personatges/isilder_camina.webp', { frameWidth: 190, frameHeight: 285 });
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, `assets/ineu/${dir}.webp?v=2611110040`, mida);
@@ -546,8 +546,8 @@ const Grafics = {
         if (!scene.anims.exists('visitant_camina') && scene.textures.exists('visitant_zombi') && scene.textures.get('visitant_zombi').frameTotal > 2) {
             scene.anims.create({ key: 'visitant_camina', frames: scene.anims.generateFrameNumbers('visitant_zombi', { start: 0, end: 15 }), frameRate: 13, repeat: -1 });
         }
-        if (!scene.anims.exists('pare_jordi_camina') && scene.textures.exists('pare_jordi_camina')) {
-            scene.anims.create({ key: 'pare_jordi_camina', frames: scene.anims.generateFrameNumbers('pare_jordi_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
+        if (!scene.anims.exists('pare_jorda_camina') && scene.textures.exists('pare_jorda_camina')) {
+            scene.anims.create({ key: 'pare_jorda_camina', frames: scene.anims.generateFrameNumbers('pare_jorda_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
         }
         if (!scene.anims.exists('germa_aldreu_camina') && scene.textures.exists('germa_aldreu_camina')) {
             scene.anims.create({ key: 'germa_aldreu_camina', frames: scene.anims.generateFrameNumbers('germa_aldreu_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
@@ -555,11 +555,11 @@ const Grafics = {
         if (!scene.anims.exists('germa_aldreu_ne') && scene.textures.exists('germa_aldreu_ne')) {
             scene.anims.create({ key: 'germa_aldreu_ne', frames: scene.anims.generateFrameNumbers('germa_aldreu_ne', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
         }
-        if (!scene.anims.exists('josep_camina') && scene.textures.exists('josep_camina')) {
-            scene.anims.create({ key: 'josep_camina', frames: scene.anims.generateFrameNumbers('josep_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
+        if (!scene.anims.exists('jusef_camina') && scene.textures.exists('jusef_camina')) {
+            scene.anims.create({ key: 'jusef_camina', frames: scene.anims.generateFrameNumbers('jusef_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
         }
-        if (!scene.anims.exists('isidre_camina') && scene.textures.exists('isidre_camina')) {
-            scene.anims.create({ key: 'isidre_camina', frames: scene.anims.generateFrameNumbers('isidre_camina', { start: 0, end: 15 }), frameRate: 12, repeat: -1 });
+        if (!scene.anims.exists('isilder_camina') && scene.textures.exists('isilder_camina')) {
+            scene.anims.create({ key: 'isilder_camina', frames: scene.anims.generateFrameNumbers('isilder_camina', { start: 0, end: 15 }), frameRate: 12, repeat: -1 });
         }
         (Grafics.atacsVista || []).forEach(dir => {
             const key = 'atac_' + dir;
@@ -1099,7 +1099,7 @@ const Grafics = {
         crea('enclusa_taller', 120, 170, pintarEnclusaTaller);
         crea('trastos_taller', 150, 90, pintarTrastosTaller);
         crea('catifa_taller', 240, 120, pintarCatifaTaller);
-        // Casa d'en Georgi i la caseta de joc (js/dibuixos_jordi.js)
+        // Casa d'en Georgi i la caseta de joc (js/dibuixos_georgi.js)
         crea('paret_masia', 780, 200, pintarParetMasia);
         crea('tauler_eines', 270, 72, pintarTaulerEines);
         crea('penjolls', 96, 120, pintarPenjolls);

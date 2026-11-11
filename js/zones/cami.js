@@ -373,13 +373,13 @@ class ZonaJardi extends ZonaBase {
         COLS.forEach(cx => [YB, YF].forEach(cy => { for (let k = 0; k < 5; k++) { const x = cx + (rnd() - 0.5) * 90, y = cy + 6 + rnd() * 26; if (lliure(x, y)) flor(x, y, 0.45 + rnd() * 0.4); } }));       // mates al peu de les columnes
 
         // L'Isílder, davant l'entrada de la pèrgola (si la llosa ja és oberta, es queda al costat del forat)
-        this.isidre = this.npc('isidre', 664, 915, DIALEGS.isidre);
+        this.isilder = this.npc('isilder', 664, 915, DIALEGS.isilder);
         if (Estat.flag('llosaOberta')) {
             this.llosa.setPosition(LX - 92, LY + 4).setRotation(-0.1);
             this.florLluna.setVisible(true);
             this.posarEntradaForat();
-            this.isidre.setPosition(LX - 74, LY + 62).ombra.setPosition(LX - 74, LY + 62);
-            this.isidre.punt.x = LX - 74; this.isidre.punt.y = LY + 52;
+            this.isilder.setPosition(LX - 74, LY + 62).ombra.setPosition(LX - 74, LY + 62);
+            this.isilder.punt.x = LX - 74; this.isilder.punt.y = LY + 52;
         }
 
         this.cartell(1500, 860, () => ({ pagines: [{ qui: 'Cartell', text: 'L\'Hostatgeria\n→ La Taverna\n← L\'Era' }] }));
@@ -418,7 +418,7 @@ class ZonaJardi extends ZonaBase {
     obrirLlosa(fet) {
         if (this.obrintLlosa || Estat.flag('llosaOberta')) { if (fet) fet(); return; }
         this.obrintLlosa = true;
-        const cam = this.cameras.main, I = this.isidre, { x: LX, y: LY } = this.llosaPos;
+        const cam = this.cameras.main, I = this.isilder, { x: LX, y: LY } = this.llosaPos;
         this.tweens.killTweensOf(I);
         const espera = ms => new Promise(res => this.time.delayedCall(ms, res));
         const mou = (dest, ms) => new Promise(res => {
@@ -574,7 +574,7 @@ class ZonaCabanaCami extends ZonaBase {
     construir() {
         this.terra('taulons', 100, 40, 700, 660, -1100);
 
-        // --- Parets de troncs (les mateixes que fa servir la cabana de la Jauneta) ---
+        // --- Parets de troncs (les mateixes que fa servir la cabana de la Joaneta) ---
         paretsTroncs(this);
         this.colisio(30, 350, 60, 700);
         this.colisio(870, 350, 60, 700);
@@ -635,7 +635,7 @@ class ZonaCabanaCami extends ZonaBase {
         }
         cartes.fillStyle(0x8a2a2a, 1).fillRect(520, 420, 15, 21).lineStyle(1, 0x3a2410, 1).strokeRect(520, 420, 15, 21);
         this.interactiu(450, 440, RADI_OBJECTE, DIALEGS.solitari, { altura: 60 });
-        this.npc('ciscu', 520, 560, DIALEGS.ciscu, { flipX: true });
+        this.npc('iscu', 520, 560, DIALEGS.iscu, { flipX: true });
         this.posar('llenya', 735, 410, { col: { w: 110, h: 26 } });
         this.posar('tronc_tall', 160, 540, { col: { w: 70, h: 24 } });
 

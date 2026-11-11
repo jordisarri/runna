@@ -32,7 +32,7 @@ function dibuixarPersona(canvas, w, o) {
         ctx.fillStyle = o.cabell;
         ctx.beginPath(); ctx.roundRect(meitat - 20, capY - 2, 40, 46, 14); ctx.fill(); ctx.stroke();
     }
-    if (o.isidre) dibuixarCosIsildren(ctx, meitat, capY);
+    if (o.isilder) dibuixarCosIsildren(ctx, meitat, capY);
     else {
     // Cos
     ctx.fillStyle = o.roba;
@@ -567,7 +567,7 @@ function dibuixarCarruatge(c, w) {
     });
 }
 
-function dibuixarCarroSansa(c, w) {
+function dibuixarCarroRosansa(c, w) {
     lienc(c, w, w * 0.6, (ctx, W, H) => {
         ombraTerra(ctx, W / 2, H - 6, W * 0.46, 8);
         ctx.lineWidth = 3.5; ctx.strokeStyle = CONTORN;
@@ -1486,7 +1486,7 @@ function dibuixarCabana(c, w) {
     lienc(c, w, H * RES, ctx => { ctx.scale(RES, RES); pintarCabana(ctx, L, H); });
 }
 
-// Cabana de la Jauneta: parets de troncs amb fang, teulat de palla amb molsa i bolets, xemeneia de pedra, porta amb ferros,
+// Cabana de la Joaneta: parets de troncs amb fang, teulat de palla amb molsa i bolets, xemeneia de pedra, porta amb ferros,
 // finestra amb porticons i llum verdosa, pila de llenya, farol i manats d'herbes penjats
 function pintarCabana(ctx, W, H) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
@@ -2365,7 +2365,7 @@ function dibuixarPiPinyer(c, w) {
 
 // La Caseta: una cabana de fusta aixecada sobre pilars de troncs (com una cabana d'arbre, però sense arbre). Terrassa amb barana i una
 // garlanda de banderetes, teulada de llates amb molsa i un penó, dues finestres (una amb test de flors), un fanalet, un gronxador
-// sota la plataforma i l'escala de fusta al mig. La porta i la plataforma no es mouen: hi ha l'animació de la porta (ZonaJordi).
+// sota la plataforma i l'escala de fusta al mig. La porta i la plataforma no es mouen: hi ha l'animació de la porta (ZonaGeorgi).
 function dibuixarCasetaJoc(c, w) {
     lienc(c, w, w * 1.22, (ctx, W, H) => {
         let llavor = 19;

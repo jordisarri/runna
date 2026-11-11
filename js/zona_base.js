@@ -41,7 +41,7 @@ const MARGE_TEULADA = 62;   // mig cos de l'Ineu: la col·lisió d'un edifici co
 const BOIRA_PASSOS = [
     E => E.flag('bassadoriaNeta'),                                         // Bassadòria: Cant de l'Aurora
     E => E.flag('fontNeta'),                                               // Font del Bisbe: les tres ofrenes
-    E => E.flag('boiraTillerNeta'),                                        // Camí del Gran Til·ler: beuratge de la Jauneta
+    E => E.flag('boiraTillerNeta'),                                        // Camí del Gran Til·ler: beuratge de la Joaneta
     E => E.flag('pastorVencut'),                                           // Cirosa: Pastor de Boira
     E => E.flag('boiraDolmenNeta'),                                        // Camí del Dolmen: Estel de Sant Llorenç
     E => E.flag('tombaSegellada')         // Cementiri: Runna segella la tomba
@@ -55,7 +55,7 @@ function nivellBoira() {
 }
 
 // La boira no és igual a tot arreu: neix al Santuari (Plaça i Monestir, la més espessa), és forta als llocs on hi ha un focus (Bassadòria, Cementiri, Cirosa, Dolmen),
-// més fluixa als camins llunyans i gairebé inexistent als llocs protegits (el Gran Til·ler, la cabana de la Jauneta). dens: multiplicador de l'espessor; neta/resta: quan
+// més fluixa als camins llunyans i gairebé inexistent als llocs protegits (el Gran Til·ler, la cabana de la Joaneta). dens: multiplicador de l'espessor; neta/resta: quan
 // s'ha resolt el seu focus, la boira d'aquella zona baixa a `resta` (fracció del nivell general) sense esperar que marxi la resta. L'Ocellaire vençut ho esborra tot.
 const BOIRA_ZONES = {
     ZonaPlaca: { dens: 1.8 }, ZonaMonestir: { dens: 1.8 }, ZonaEsglesia: { dens: 1.5 }, ZonaCasaGran: { dens: 1.4 },
@@ -69,7 +69,7 @@ const BOIRA_ZONES = {
     ZonaBoscPi: { dens: 1.0, neta: E => E.flag('piObert'), resta: 0.3 },                            // el pi desperta
     ZonaJardi: { dens: 0.8, neta: E => E.flag('mongesTrobades'), resta: 0.35 },                     // l'Hostatgeria, quan les sacerdotesses són lliures
     ZonaCelles: { dens: 1.0 }, ZonaTaverna: { dens: 1.0 }, ZonaCami: { dens: 1.0 }, ZonaCamiRov: { dens: 0.9 }, ZonaRovellonera: { dens: 0.9 },
-    ZonaErmita: { dens: 0.8 }, ZonaEra: { dens: 0.8 }, ZonaGabriel: { dens: 0.6 }, ZonaDipositos: { dens: 0.6 }, ZonaSantAntoni: { dens: 0.6 }, ZonaJordi: { dens: 0.6 },
+    ZonaErmita: { dens: 0.8 }, ZonaEra: { dens: 0.8 }, ZonaGabriel: { dens: 0.6 }, ZonaDipositos: { dens: 0.6 }, ZonaSantAntoni: { dens: 0.6 }, ZonaGeorgi: { dens: 0.6 },
     ZonaTiller: { dens: 0.4 }, ZonaCabana: { dens: 0.4 }                                              // llocs protegits: l'aire gairebé net
 };
 function nivellBoiraZona(clau) {
@@ -186,8 +186,8 @@ const REINICI_ZONES = {
     ZonaBoira: { bombollesV: null, colBoira: null, avisBoira: 0 },
     ZonaGabia: { colPont: null, llumCapolls: null, espurnesCapolls: null },
     ZonaGirgolesFora: { colPorta: null, boiraPorta: null },
-    ZonaCelles: { colBoira: null, fosc: null, colCarro: null, colSansa: null, sansa: null, carroSansa: null },
-    ZonaCambraPains: { pains: null, boiraCapoll: null, capoll: null }
+    ZonaCelles: { colBoira: null, fosc: null, colCarro: null, colRosansa: null, rosansa: null, carroRosansa: null },
+    ZonaCambraDolora: { dolora: null, boiraCapoll: null, capoll: null }
 };
 
 class ZonaBase extends Phaser.Scene {
@@ -306,7 +306,7 @@ class ZonaBase extends Phaser.Scene {
     despertarCaigut() {
         const ui = this.ui(), I = this.ineu;
         const dialeg = { pagines: [{ qui: 'Pare Jordà', text: 'Ineu! Que et trobo a terra! Respira, fill. Has de tenir més cura. Ja estàs bé?' }] };
-        if (!this.textures.exists('ineu_inconscient') || !this.textures.exists('jordi_desperta')) {
+        if (!this.textures.exists('ineu_inconscient') || !this.textures.exists('pare_jorda_desperta')) {
             this.time.delayedCall(600, () => ui.obrirDialeg(dialeg, () => Joc.musicaZona(this, 3000)));
             return;
         }
@@ -336,7 +336,7 @@ class ZonaBase extends Phaser.Scene {
                 if (avis.active) { ui.tweens.killTweensOf(avis); avis.destroy(); }
                 // un instant després, perquè el mateix toc no avanci també la primera pàgina
                 this.time.delayedCall(30, () => {
-                    terra.setTexture('jordi_desperta');
+                    terra.setTexture('pare_jorda_desperta');
                     this.despertarImg = terra;
                     ui.obrirDialeg(dialeg, () => {
                         fase = 2;
@@ -380,7 +380,7 @@ class ZonaBase extends Phaser.Scene {
         const fx = cx + carro.displayWidth * 0.2, fy = cy - carro.displayHeight * 0.86;
         this.add.particles(fx, fy, 'boira', { speedY: { min: -30, max: -14 }, speedX: { min: -14, max: -4 }, lifespan: 1800, scale: { start: 0.25, end: 0.7 },
             alpha: { start: 0.45, end: 0 }, frequency: 650, tint: 0xffffff }).setDepth(cy + 1);
-        this.npc('home_carruatge', hx, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true, colAmple: 48 });     // girat: mira cap a l'escena, no cap al carruatge
+        this.npc('follet_carro', hx, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true, colAmple: 48 });     // girat: mira cap a l'escena, no cap al carruatge
         this.paradaAqui = pd;
         if (Estat.arribadaCarruatge === pd.id) {                       // hi acabem d'arribar: bufada de vapor
             Estat.arribadaCarruatge = null;

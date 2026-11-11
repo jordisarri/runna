@@ -38,12 +38,12 @@ class EscenaPingPong extends Phaser.Scene {
         this.zona = Joc.zonaActiva(this);
         if (this.zona) this.scene.sleep(this.zona.scene.key);
         this.scene.sleep('UI');
-        this.ineu = 0; this.josep = 0;
+        this.ineu = 0; this.jusef = 0;
         this.estat = 'res';
         this.rally = 0;
         this.acabat = false;
         // (l'escena es reaprofita: res d'una partida anterior pot quedar a mig fer)
-        this.fug = null; this.tornant = null; this.fugJosep = null; this.limitServei = null;
+        this.fug = null; this.tornant = null; this.fugJusef = null; this.limitServei = null;
         this.bloqFins = 0; this.carrilSeguent = undefined; this.respost = false; this.entrat = []; this.intents = 0;
 
         // ---- Escenari: la paret de pedra del celler, llum de les espelmes i la taula verda en perspectiva ----
@@ -84,20 +84,20 @@ class EscenaPingPong extends Phaser.Scene {
 
         // ---- Jugadors ----
         // En Jusef levita, cames creuades, darrere la taula; la pala és a la seva mà
-        this.spJosep = this.add.image(360, PP.fonsY - 14, 'josep_levita').setOrigin(0.5, 1).setDepth(1);
-        this.spJosep.setScale(300 / this.spJosep.height);                 // gran: ocupa tot el fons de dalt, el marcador és a un costat
-        this.josepY = this.spJosep.y;
+        this.spJusef = this.add.image(360, PP.fonsY - 14, 'jusef_levita').setOrigin(0.5, 1).setDepth(1);
+        this.spJusef.setScale(300 / this.spJusef.height);                 // gran: ocupa tot el fons de dalt, el marcador és a un costat
+        this.jusefY = this.spJusef.y;
         this.jo = { x: 0, y: 0, angle: 0 };               // el que hi afegeixen els cops (el flotar continu s'hi suma a update)
         // Aura lila darrere seu, ombra a la taula i espurnes que pugen: es veu que no toca res
-        this.auraJosep = this.add.ellipse(360, this.josepY - 150, 300, 330, 0xb890ff, 0.14).setDepth(0.6);
-        this.ombraJosep = this.add.ellipse(360, PP.fonsY + 4, 190, 26, 0x000000, 0.35).setDepth(0.8);
+        this.auraJusef = this.add.ellipse(360, this.jusefY - 150, 300, 330, 0xb890ff, 0.14).setDepth(0.6);
+        this.ombraJusef = this.add.ellipse(360, PP.fonsY + 4, 190, 26, 0x000000, 0.35).setDepth(0.8);
         if (this.textures.exists('espurna')) {
-            this.add.particles(360, this.josepY - 6, 'espurna', {
+            this.add.particles(360, this.jusefY - 6, 'espurna', {
                 x: { min: -80, max: 80 }, speedY: { min: 14, max: 36 }, speedX: { min: -8, max: 8 }, lifespan: 1300,
                 scale: { start: 0.35, end: 0 }, alpha: { start: 0.8, end: 0 }, tint: [0xd8b0ff, 0xffe08a, 0xffffff], frequency: 140, quantity: 1
             }).setDepth(0.9);
         }
-        this.reposJosep();
+        this.reposJusef();
         this.fullsPP = this.textures.exists('pp_drive') && this.textures.exists('pp_reves');          // l'Ineu amb la pala al dibuix (si falten, es fa servir el d'abans amb la pala dibuixada per codi)
         const ineuTex = this.fullsPP ? 'pp_drive' : this.textures.exists('ineu_up') ? 'ineu_up' : 'ineu_avall';
         // Gran i només de cintura en amunt: el full és de 256 de costat i el personatge puja fins a ~y16; es retalla per sota de la cintura (~y150)
@@ -216,27 +216,27 @@ class EscenaPingPong extends Phaser.Scene {
 
     // ---------------- En Jusef: sura amunt i avall; als cops s'inclina cap al carril ----------------
     // On és la pala (al dibuix, a la seva mà dreta): d'allà surten els orbes
-    puntPala() { const sj = this.spJosep; return { x: sj.x + (0.885 - 0.5) * sj.displayWidth, y: sj.y - (1 - 0.575) * sj.displayHeight }; }
-    reposJosep() {
-        const sj = this.spJosep;
+    puntPala() { const sj = this.spJusef; return { x: sj.x + (0.885 - 0.5) * sj.displayWidth, y: sj.y - (1 - 0.575) * sj.displayHeight }; }
+    reposJusef() {
+        const sj = this.spJusef;
         this.tweens.killTweensOf(this.jo);
         this.tweens.add({ targets: this.jo, angle: 0, x: 0, y: 0, duration: 260, ease: 'Sine.easeOut' });
     }
     // Servei màgic: en Jusef s'eleva una mica més, com si llancés l'orbe
-    copJosepMagic(c) {
+    copJusefMagic(c) {
         const sj = this.jo;
         this.tweens.killTweensOf(sj);
         this.tweens.add({ targets: sj, y: -16, angle: (c - 1) * 5, duration: 170, ease: 'Sine.easeOut',
             onComplete: () => this.tweens.add({ targets: sj, y: -2, duration: 160, ease: 'Quad.easeIn',
-                onComplete: () => this.time.delayedCall(200, () => this.reposJosep()) }) });
+                onComplete: () => this.time.delayedCall(200, () => this.reposJusef()) }) });
     }
     // Cop d'en Jusef: s'inclina i es desplaça cap al carril c i torna al repòs (el contacte és als ~220 ms)
-    cop_josep(c) {
+    cop_jusef(c) {
         const sj = this.jo;
         this.tweens.killTweensOf(sj);
         this.tweens.add({ targets: sj, angle: -4, duration: 120, ease: 'Sine.easeOut',
             onComplete: () => this.tweens.add({ targets: sj, angle: (c - 1) * 9, x: (c - 1) * 26, duration: 100, ease: 'Quad.easeIn',
-                onComplete: () => this.time.delayedCall(220, () => this.reposJosep()) }) });
+                onComplete: () => this.time.delayedCall(220, () => this.reposJusef()) }) });
     }
 
     // ---------------- Perspectiva ----------------
@@ -266,9 +266,9 @@ class EscenaPingPong extends Phaser.Scene {
     }
 
     // ---------------- Marcador i servei ----------------
-    serveixIneu() { return Math.floor((this.ineu + this.josep) / 2) % 2 === 0; }
+    serveixIneu() { return Math.floor((this.ineu + this.jusef) / 2) % 2 === 0; }
     actualitzarMarcador() {
-        this.marcador.setText(`Ineu  ${this.ineu}\nJusef  ${this.josep}`);
+        this.marcador.setText(`Ineu  ${this.ineu}\nJusef  ${this.jusef}`);
         this.servei.setText(this.serveixIneu() ? 'Serveixes tu' : 'Serveix en Jusef');
     }
     avis(text, ms = 1100, color = '#ffd34d') {
@@ -306,7 +306,7 @@ class EscenaPingPong extends Phaser.Scene {
         this.estat = 'mirant';
         this.entrat = [];
         this.reiniciaSlots();
-        const n = this.ordre.length, ms = Math.max(700, 940 - (this.ineu + this.josep) * 14);
+        const n = this.ordre.length, ms = Math.max(700, 940 - (this.ineu + this.jusef) * 14);
         const COL = [0x6ac8ff, 0xffd34d, 0xff7ad8], { x: hx, y: hy } = this.puntPala();
         // En Jusef concentra la màgia: aura de fum lila i espurnes al voltant de les mans durant tot el servei
         this.time.delayedCall(Math.max(0, retard - 500), () => {
@@ -319,7 +319,7 @@ class EscenaPingPong extends Phaser.Scene {
         this.ordre.forEach((c, i) => this.time.delayedCall(retard + i * ms, () => {
             if (this.acabat) return;
             // Gest d'en Jusef: s'alça una mica i en surt un orbe màgic que vola fins al carril, deixant una cua de llum
-            this.copJosepMagic(c);
+            this.copJusefMagic(c);
             this.so(3 + c);
             const orbe = this.add.container(hx, hy).setDepth(14);
             orbe.add([this.add.circle(0, 0, 30, COL[c], 0.28).setBlendMode(Phaser.BlendModes.ADD), this.add.circle(0, 0, 15, COL[c], 0.9).setBlendMode(Phaser.BlendModes.ADD), this.add.circle(0, 0, 7, 0xffffff, 1)]);
@@ -352,7 +352,7 @@ class EscenaPingPong extends Phaser.Scene {
             this.reiniciaSlots();
             this.avis('Repeteix-los en ordre!', 1400, '#d8b0ff');
             if (this.limitServei) this.limitServei.remove();
-            this.limitServei = this.time.delayedCall(7000, () => { if (this.estat === 'repetint') this.puntJosep('El servei passa de llarg...'); });
+            this.limitServei = this.time.delayedCall(7000, () => { if (this.estat === 'repetint') this.puntJusef('El servei passa de llarg...'); });
         });
     }
 
@@ -362,7 +362,7 @@ class EscenaPingPong extends Phaser.Scene {
         this.estat = 'cop';
         this.carril = this.carrilSeguent !== undefined ? this.carrilSeguent : Phaser.Math.Between(0, 2);
         this.carrilSeguent = undefined;
-        this.durada = Math.max(1050, 1800 - this.rally * 45 - (this.ineu + this.josep) * 10);       // el cop arriba amb calma i s'accelera molt poc a poc
+        this.durada = Math.max(1050, 1800 - this.rally * 45 - (this.ineu + this.jusef) * 10);       // el cop arriba amb calma i s'accelera molt poc a poc
         this.t0 = this.time.now;
         this.tCop = this.t0 + this.durada;               // el moment del cop = l'alçada màxima de la pilota després del bot
         this.respost = false;
@@ -392,7 +392,7 @@ class EscenaPingPong extends Phaser.Scene {
             if (this.entrat[i] !== this.ordre[i]) {
                 if (this.limitServei) this.limitServei.remove();
                 this.intents--;
-                if (this.intents <= 0) { this.puntJosep('No era aquest ordre!'); return; }
+                if (this.intents <= 0) { this.puntJusef('No era aquest ordre!'); return; }
                 this.estat = 'mirant';
                 this.avis('No era aquest ordre. Mira-ho un cop més!', 1300, '#d8b0ff');
                 this.mostrarOrdre(1400);
@@ -430,14 +430,14 @@ class EscenaPingPong extends Phaser.Scene {
         this.rally++;
         this.tornant = { t0: this.time.now, dur: 900, c };
         this.carrilSeguent = Phaser.Math.Between(0, 2);
-        this.time.delayedCall(690, () => { if (!this.acabat) this.cop_josep(this.carrilSeguent); });     // en Jusef avança el braç perquè el cop coincideixi amb l'arribada de la pilota
+        this.time.delayedCall(690, () => { if (!this.acabat) this.cop_jusef(this.carrilSeguent); });     // en Jusef avança el braç perquè el cop coincideixi amb l'arribada de la pilota
         this.time.delayedCall(940, () => {
             this.tornant = null;
             if (this.acabat) return;
             if (Math.random() < Math.max(0.15, prob)) { this.so(2); this.copEntrant(); }
             else {                                                      // en Jusef no la torna: la pilota se'n va per darrere seu
-                this.fugJosep = { t0: this.time.now, c };
-                this.time.delayedCall(850, () => { this.fugJosep = null; if (!this.acabat) this.puntIneu('En Jusef no hi arriba!'); });
+                this.fugJusef = { t0: this.time.now, c };
+                this.time.delayedCall(850, () => { this.fugJusef = null; if (!this.acabat) this.puntIneu('En Jusef no hi arriba!'); });
             }
         });
     }
@@ -466,7 +466,7 @@ class EscenaPingPong extends Phaser.Scene {
     }
 
     puntIneu(text) { this.ineu++; this.finalPunt(text, '#9fe0a0'); }
-    puntJosep(text) { this.josep++; this.finalPunt(text, '#ff9a8a'); }
+    puntJusef(text) { this.jusef++; this.finalPunt(text, '#ff9a8a'); }
 
     finalPunt(text, color) {
         this.estat = 'res';
@@ -477,18 +477,18 @@ class EscenaPingPong extends Phaser.Scene {
         this.actualitzarMarcador();
         this.avis(text, 900, color);
         const guanya = (a, b) => a >= PP.PUNTS && a - b >= 2;
-        if (guanya(this.ineu, this.josep)) return this.final(true);
-        if (guanya(this.josep, this.ineu)) return this.final(false);
+        if (guanya(this.ineu, this.jusef)) return this.final(true);
+        if (guanya(this.jusef, this.ineu)) return this.final(false);
         this.time.delayedCall(1300, () => this.seguentPunt());
     }
 
     update(time) {
         // En Jusef flota sense parar: balanceig suau de pujar i baixar, una mica de costat i de gir; els cops s'hi sumen
-        const sj = this.spJosep, fy = -(12 + Math.sin(time / 820) * 9 + Math.sin(time / 1310) * 3), fx = Math.sin(time / 1500) * 6, fa = Math.sin(time / 1900) * 1.8;
-        sj.setPosition(360 + this.jo.x + fx, this.josepY + this.jo.y + fy).setAngle(this.jo.angle + fa);
+        const sj = this.spJusef, fy = -(12 + Math.sin(time / 820) * 9 + Math.sin(time / 1310) * 3), fx = Math.sin(time / 1500) * 6, fa = Math.sin(time / 1900) * 1.8;
+        sj.setPosition(360 + this.jo.x + fx, this.jusefY + this.jo.y + fy).setAngle(this.jo.angle + fa);
         const alt = (this.jo.y + fy) / -21;                                  // 0..1: com més amunt, més petita i clara l'ombra
-        this.ombraJosep.setPosition(360 + this.jo.x + fx, PP.fonsY + 4).setScale(1 - 0.25 * alt, 1 - 0.3 * alt).setAlpha(0.42 - 0.2 * alt);
-        this.auraJosep.setPosition(360 + this.jo.x + fx, this.josepY + this.jo.y + fy - 150).setAlpha(0.1 + 0.07 * Math.sin(time / 600));
+        this.ombraJusef.setPosition(360 + this.jo.x + fx, PP.fonsY + 4).setScale(1 - 0.25 * alt, 1 - 0.3 * alt).setAlpha(0.42 - 0.2 * alt);
+        this.auraJusef.setPosition(360 + this.jo.x + fx, this.jusefY + this.jo.y + fy - 150).setAlpha(0.1 + 0.07 * Math.sin(time / 600));
         // Braç de l'Ineu: de l'espatlla a la pala (segueix el desplaçament i el gir de la pala)
         const bi = this.bracIneu, sx = this.spIneu.x + 40, sy = this.ombroIneu, hx = this.pala.x, hy = this.pala.y;
         bi.clear(); if (!this.fullsPP) bi.lineStyle(40, 0x140a04, 1).lineBetween(sx, sy, hx, hy).lineStyle(31, 0x6a4a2e, 1).lineBetween(sx, sy, hx, hy);
@@ -506,7 +506,7 @@ class EscenaPingPong extends Phaser.Scene {
                 this.cercle.setVisible(false);
                 this.fug = { t0: this.t0, c: this.carril, tA: this.durada };
                 this.avis('No hi has arribat!', 800, '#ff9a8a');
-                this.time.delayedCall(1000, () => { this.fug = null; if (!this.acabat) this.puntJosep('No hi has arribat!'); });
+                this.time.delayedCall(1000, () => { this.fug = null; if (!this.acabat) this.puntJusef('No hi has arribat!'); });
             }
         }
         if (this.fug) {                                            // la pilota passa de llarg: segueix la seva paràbola, cau al terra i s'esvaeix
@@ -518,9 +518,9 @@ class EscenaPingPong extends Phaser.Scene {
             const u = Phaser.Math.Clamp((time - this.tornant.t0) / this.tornant.dur, 0, 1), q = this.pilotaTornant(this.tornant.c, u);
             this.posaPilota(q.X, q.f, q.h);
         }
-        if (this.fugJosep) {                                       // en Jusef no hi arriba: la pilota segueix cap al fons, baixa i s'esvaeix
-            const u = Phaser.Math.Clamp((time - this.fugJosep.t0) / 850, 0, 1);
-            const q = this.pilotaTornant(this.fugJosep.c, 1);
+        if (this.fugJusef) {                                       // en Jusef no hi arriba: la pilota segueix cap al fons, baixa i s'esvaeix
+            const u = Phaser.Math.Clamp((time - this.fugJusef.t0) / 850, 0, 1);
+            const q = this.pilotaTornant(this.fugJusef.c, 1);
             this.posaPilota(q.X * (1 + 0.5 * u), q.f - 0.16 * u, q.h * (1 - u) - 0.5 * u * u, 1 - u * 0.9);
         }
     }
@@ -545,7 +545,7 @@ class EscenaPingPong extends Phaser.Scene {
         const ui = this.scene.get('UI');
         if (ui) ui.bloquejatFins = ui.time.now + 300;
         this.scene.stop();
-        if (ui) ui.obrirDialeg(guanyat ? DIALEGS.josepGuanyat(Estat) : DIALEGS.josepPerdut(Estat, abandonat), () => Estat.desar());
+        if (ui) ui.obrirDialeg(guanyat ? DIALEGS.jusefGuanyat(Estat) : DIALEGS.jusefPerdut(Estat, abandonat), () => Estat.desar());
     }
 
     so(n) {

@@ -214,7 +214,7 @@ const ICONES_OBJECTES = {
         ctx.fillStyle = '#e8b060'; ctx.beginPath(); ctx.ellipse(48, 48, 36, 9, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
         ctx.fillStyle = '#f4f0e0'; [[38, 47], [56, 49], [48, 45]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2); ctx.fill(); });
     },
-    flors_isidre: ctx => iconaFlors(ctx, ['#f0f0ff', '#d8e0ff', '#ffffff']),
+    flors_isilder: ctx => iconaFlors(ctx, ['#f0f0ff', '#d8e0ff', '#ffffff']),
     ram: ctx => iconaFlors(ctx, ['#ff90c0', '#ffd0e8', '#f06090']),
     pa_pastor: ctx => {
         ctx.lineWidth = 3; ctx.fillStyle = '#7a4a24';
@@ -514,7 +514,7 @@ const US_OBJECTES = {
     pallofa: () => 'cal',
     clau_sagrari: E => E.flag('fragment2') ? 'record' : 'cal',
     escudella: E => E.flag('soparFet') ? 'record' : 'cal',
-    flors_isidre: E => E.flag('soparFet') ? 'record' : 'cal',
+    flors_isilder: E => E.flag('soparFet') ? 'record' : 'cal',
     esquelles: E => E.flag('soparFet') ? 'record' : 'cal',
     fulla_tiler: E => E.flag('benediccio') ? 'record' : 'cal',
     medallo_arbre: () => 'cal',

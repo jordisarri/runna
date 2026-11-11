@@ -34,7 +34,7 @@ PROGRES.passos.forEach((p, i) => {
     if (!p.fet(E)) errors.push(`Pas ${p.id}: amb els seus flags (${p.marca.join(', ')}) encara no és fet`);
     if (PROGRES.seguent(E) === p) errors.push(`Pas ${p.id}: no s'avança`);
 });
-// Fins a Runna, el Pare Jordi i el Til·ler tenen pista; després, no
+// Fins a Runna, el Pare Jordà i el Til·ler tenen pista; després, no
 const E2 = nouEstat();
 for (const p of PROGRES.passos) {
     if (p.id === 'runna') break;

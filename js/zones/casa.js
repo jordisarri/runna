@@ -62,7 +62,7 @@ Object.assign(DIALEGS, {
     },
 
     // El Georgi de la Caseta (a l'oest del Til·ler): diu on té la maneta, dins la caseta aixecada del jardí
-    jordiCaseta: E => {
+    georgiCaseta: E => {
         if (E.te('maneta') || E.flag('maneta')) {
             return { pagines: [{ qui: 'Georgi', text: "Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes." }] };
         }
@@ -75,7 +75,7 @@ Object.assign(DIALEGS, {
                 ]
             };
         }
-        if (E.flag('jordiManeta')) {
+        if (E.flag('georgiManeta')) {
             return { pagines: [{ qui: 'Georgi', text: "La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!" }] };
         }
         return {
@@ -87,7 +87,7 @@ Object.assign(DIALEGS, {
                 { qui: 'Georgi', text: "Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la." }
             ],
             enAcabar: () => {
-                E.posaFlag('jordiManeta');
+                E.posaFlag('georgiManeta');
                 E.posaObjectiu("La maneta d\'en Georgi és al cofre de les joguines, dalt de la caseta aixecada sobre pals.");
             }
         };

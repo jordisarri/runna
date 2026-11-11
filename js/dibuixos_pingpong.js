@@ -7,7 +7,7 @@
  * Cada funció pinta en un llenç de 100 unitats d'ample (ctx ja escalat); dibuixarNpcPingpong ho prepara per al catàleg d'assets.
  */
 
-const PP_PROPORCIO = { frederic: 1.54, eloi: 1.58, josep: 1.52, juli: 1.44 };
+const PP_PROPORCIO = { pomers: 1.54, eloi: 1.58, jusef: 1.52, julius: 1.44 };
 
 function dibuixarNpcPingpong(c, w, qui, opts) {
     const asp = PP_PROPORCIO[qui];
@@ -59,7 +59,7 @@ function ppCap(ctx, cx, cy, rx, ry, extra = {}) {            // cap de pell amb 
 const PP_FN = {};
 
 // FREDERIC: senyor alt i ben panxut d'uns 50 anys, amb molt de cabell gris, ulleres rectangulars, jersei de ratlles, tirants i pala de pedra
-PP_FN.frederic = (ctx, W, H) => {
+PP_FN.pomers = (ctx, W, H) => {
     ppOmbraTerra(ctx, 50, H - 6, 34);
     // cames llargues de pantaló gris i sabates
     [[37], [63]].forEach(([x]) => { ppRect(ctx, x - 8.5, H - 62, 17, 50, ppGradH(ctx, x - 8.5, x + 8.5, '#5a5a66', '#34343c'), 4); ppEl(ctx, x + (x < 50 ? -1 : 1), H - 9, 12, 6, '#6a4220'); });
@@ -161,7 +161,7 @@ PP_FN.eloi = (ctx, W, H) => {
 };
 
 // JOSEP: gurú tranquil, alt i prim; cabell curt i barba taronges, ulleres rodones, túnica porpra estreta, collaret de boles i una pilota que levita
-PP_FN.josep = (ctx, W, H, opts = {}) => {
+PP_FN.jusef = (ctx, W, H, opts = {}) => {
     const halo = ctx.createRadialGradient(50, 36, 6, 50, 36, 44); halo.addColorStop(0, 'rgba(255,226,150,0.36)'); halo.addColorStop(1, 'rgba(255,226,150,0)');
     ctx.fillStyle = halo; ctx.fillRect(0, 0, W, 90);
     ppOmbraTerra(ctx, 50, H - 6, 28);
@@ -213,7 +213,7 @@ PP_FN.josep = (ctx, W, H, opts = {}) => {
 };
 
 // JULI: cap enorme, ulleres grosses, molt prim; samarreta blava amb un angelet, texans i sabatilles gegants
-PP_FN.juli = (ctx, W, H) => {
+PP_FN.julius = (ctx, W, H) => {
     ppOmbraTerra(ctx, 50, H - 6, 28);
     // cames primes de texans i sabatilles grosses taronja
     [[41], [59]].forEach(([x]) => {

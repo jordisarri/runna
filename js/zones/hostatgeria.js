@@ -225,7 +225,7 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
             this.portaAnimada({ x, top: 22, bottom: 124, ample: 84, arc: true, fons: -987, color: fustes[i][0], panell: fustes[i][1], vora: 0x1a0e06, ferro: true, bloq: blocs[i] });
             this.marcPorta(x);
             this.colisio(x, 50, 90, 100);                                        // dintell sobre cada porta
-            this.sortida(x - 34, 110, 68, 30, ['ZonaCambraPains', 'ZonaCambraPhili', 'ZonaCambraCharm'][i], 'porta');
+            this.sortida(x - 34, 110, 68, 30, ['ZonaCambraDolora', 'ZonaCambraPilaria', 'ZonaCambraCarmelia'][i], 'porta');
         });
         this.decorarVestibul(A, H);
 
@@ -444,13 +444,13 @@ class CambraMonja extends ZonaCasaBase {
 
     construir() {
         const A = 800, H = 620, m = this.monja;
-        this.sala(A, H, 400, m === 'pains' ? 0x7a6a5e : m === 'charm' ? 0x8a7a6e : 0x8a7260);
-        this.sortida(350, H - 22, 100, 14, 'ZonaHostatgeriaInt', { pains: 'cambra1', phili: 'cambra2', charm: 'cambra3' }[m]);
+        this.sala(A, H, 400, m === 'dolora' ? 0x7a6a5e : m === 'carmelia' ? 0x8a7a6e : 0x8a7260);
+        this.sortida(350, H - 22, 100, 14, 'ZonaHostatgeriaInt', { dolora: 'cambra1', pilaria: 'cambra2', carmelia: 'cambra3' }[m]);
         // Paret del fons: arrebossat amb taques de calç, un sòcol de fusta i dos aplics
         const paret = this.add.graphics().setDepth(-995);
         // La paret arriba fins a la cornisa (molt per sobre de la finestra): així la finestra hi és sencera i la paret no queda tallada
         const TOP = -150;
-        paret.fillStyle(m === 'charm' ? 0x5a4a40 : 0x6a5646, 1).fillRect(130, TOP, A - 260, 90 - TOP);
+        paret.fillStyle(m === 'carmelia' ? 0x5a4a40 : 0x6a5646, 1).fillRect(130, TOP, A - 260, 90 - TOP);
         let sd = m.length * 7; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
         for (let k = 0; k < 22; k++) paret.fillStyle(0xffffff, 0.04 + r() * 0.05).fillEllipse(150 + r() * 500, TOP + 20 + r() * (70 - TOP), 30 + r() * 50, 10 + r() * 14);
         paret.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.35, 0.35, 0, 0).fillRect(130, TOP, A - 260, 60);          // la part de dalt, a l'ombra
@@ -463,7 +463,7 @@ class CambraMonja extends ZonaCasaBase {
         this.aplic(240, 50, 0, -990); this.aplic(560, 50, 1, -990);
         // Finestra d'arc amb llum de lluna (a la capella, un rosetó de colors)
         const fin = this.add.graphics().setDepth(-993);
-        if (m === 'charm') {
+        if (m === 'carmelia') {
             fin.fillStyle(0x2a1a0c, 1).fillCircle(400, 30, 26);
             [0xc84a3a, 0x3a6ac8, 0xe8c050, 0x4a9a5a, 0xa04ac0, 0x3a6ac8, 0xe8c050, 0x4a9a5a].forEach((c, i) => {
                 fin.fillStyle(c, 0.9).slice(400, 30, 22, i * Math.PI / 4, (i + 1) * Math.PI / 4).fillPath();
@@ -477,12 +477,12 @@ class CambraMonja extends ZonaCasaBase {
             fin.fillStyle(0x4a2e1a, 1).fillRect(368, 56, 64, 6);
         }
 
-        if (m !== 'charm') {                                           // raig de llum de lluna de la finestra
+        if (m !== 'carmelia') {                                           // raig de llum de lluna de la finestra
             const raig = this.add.graphics().setDepth(-1045).setBlendMode(Phaser.BlendModes.ADD);
             raig.fillStyle(0x9ab8ff, 0.07).fillPoints([{ x: 380, y: 92 }, { x: 420, y: 92 }, { x: 500, y: 330 }, { x: 330, y: 330 }], true);
             raig.fillStyle(0x9ab8ff, 0.05).fillEllipse(415, 340, 190, 40);
         }
-        if (m === 'pains') {                                           // dormitori: tres llits (un per germana) estrets amb capçal, coixí i flassada
+        if (m === 'dolora') {                                           // dormitori: tres llits (un per germana) estrets amb capçal, coixí i flassada
             const llits = this.add.graphics().setDepth(-950);
             const flassades = [0x5a6a8e, 0x6a8a5a, 0xa0784a, 0x9a5a6a];
             const capcal = { tl: 10, tr: 10, bl: 0, br: 0 };
@@ -511,13 +511,13 @@ class CambraMonja extends ZonaCasaBase {
             const cat = this.add.graphics().setDepth(-1050);                                     // estora entre els llits
             cat.fillStyle(0x8a6a3a, 1).fillRoundedRect(430, 410, 180, 120, 10).lineStyle(3, 0x5a3a1a, 1).strokeRoundedRect(438, 418, 164, 104, 8);
             this.colisio(200, 330, 80, 130); this.colisio(420, 330, 80, 130); this.colisio(620, 330, 80, 130);
-            this.pains = this.npc('monja_pains', 520, 470, DIALEGS.monjaPains);
-            this.capoll = this.crearCapoll(this.pains);
-            this.pains.setTint(0xd6c8ff);                                          // atrapada: es veu a través de la seda lila
+            this.dolora = this.npc('dolora', 520, 470, DIALEGS.dolora);
+            this.capoll = this.crearCapoll(this.dolora);
+            this.dolora.setTint(0xd6c8ff);                                          // atrapada: es veu a través de la seda lila
             this.boiraCapoll = this.boira(this.capoll.x, this.capoll.y, this.capoll.rx * 1.4, this.capoll.ry * 1.2, 1.4);
-            this.llocFlauta('pains', 520, 480, 300, false, () => !Estat.flag('lliurePains'));
-            if (Estat.flag('lliurePains')) this.alliberada(true);
-        } else if (m === 'phili') {                                    // refetor: taula llarga, aparador amb plats, faristol i rastells d'alls
+            this.llocFlauta('dolora', 520, 480, 300, false, () => !Estat.flag('lliureDolora'));
+            if (Estat.flag('lliureDolora')) this.alliberada(true);
+        } else if (m === 'pilaria') {                                    // refetor: taula llarga, aparador amb plats, faristol i rastells d'alls
             this.posar('taula_sopar', 400, 330, { col: { w: 360, h: 40 } });
             [[260, 380], [540, 380], [260, 280], [540, 280]].forEach(([x, y]) => this.posar('tamboret', x, y, { col: { w: 28, h: 12 } }));
             this.posar('barril', 130 + 40, 200, { col: { w: 40, h: 18 } });
@@ -545,7 +545,7 @@ class CambraMonja extends ZonaCasaBase {
                 for (let k = 0; k < 6; k++) alls.fillStyle(0xf0e8d8, 1).fillCircle(x + (k % 2 ? 5 : -5), 14 + k * 7, 5).lineStyle(1, 0x8a7a64, 1).strokeCircle(x + (k % 2 ? 5 : -5), 14 + k * 7, 5);
             });
             alls.fillStyle(0xa0503a, 1).fillEllipse(480, 36, 26, 44).lineStyle(2, 0x3a1a0c, 1).strokeEllipse(480, 36, 26, 44).lineBetween(480, 0, 480, 14);
-            this.npc('monja_phili', 400, 272, DIALEGS.monjaPhili, { radi: 190 });          // al seu lloc, darrere la taula del refetor (hi parles per sobre de la taula)
+            this.npc('pilaria', 400, 272, DIALEGS.pilaria, { radi: 190 });          // al seu lloc, darrere la taula del refetor (hi parles per sobre de la taula)
         } else {                                                       // capella: rosetó, altar, catifa fins a l'altar, bancs i dues fornícules
             const cat = this.add.graphics().setDepth(-1050);
             cat.fillStyle(0x6a1f24, 1).fillRect(360, 270, 80, 340);
@@ -561,7 +561,7 @@ class CambraMonja extends ZonaCasaBase {
                 ni.fillStyle(0xf4ecd8, 1).fillCircle(x, 16, 4.5);
                 ni.lineStyle(1.5, 0xe8c050, 0.9).strokeCircle(x, 15, 7.5);
             });
-            this.npc('monja_charm', 400, 340, DIALEGS.monjaCharm);
+            this.npc('carmelia', 400, 340, DIALEGS.carmelia);
         }
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.08).setDepth(80100);
     }
@@ -616,32 +616,32 @@ class CambraMonja extends ZonaCasaBase {
     }
 
     teEfecteMelodia(nom) {
-        return this.monja === 'pains' && nom === 'aurora' && !Estat.flag('lliurePains') && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 520, 460) <= 320;
+        return this.monja === 'dolora' && nom === 'aurora' && !Estat.flag('lliureDolora') && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 520, 460) <= 320;
     }
 
     // Cant de l'Aurora davant el capoll: la boira s'esvaeix i la Dolora es desperta
     enMelodia(nom) {
-        if (this.monja !== 'pains' || nom !== 'aurora') return false;
+        if (this.monja !== 'dolora' || nom !== 'aurora') return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 520, 460) > 320) return false;
-        if (Estat.flag('lliurePains')) { this.ineuDiu('La Dolora ja és desperta.'); return true; }
-        Estat.posaFlag('lliurePains');
+        if (Estat.flag('lliureDolora')) { this.ineuDiu('La Dolora ja és desperta.'); return true; }
+        Estat.posaFlag('lliureDolora');
         this.alliberada(false);
         Sfx.secret();
         this.cameras.main.shake(300, 0.003);
         Estat.desar();
-        this.time.delayedCall(1900, () => { if (!Estat.flag('premiPains')) this.ui().obrirDialeg(DIALEGS.monjaPains(Estat)); });   // la Dolora es desperta i parla
+        this.time.delayedCall(1900, () => { if (!Estat.flag('premiDolora')) this.ui().obrirDialeg(DIALEGS.dolora(Estat)); });   // la Dolora es desperta i parla
         return true;
     }
 
     alliberada(directe) {
         if (this.boiraCapoll) this.boiraCapoll.stop();
-        if (this.pains) this.pains.clearTint();
+        if (this.dolora) this.dolora.clearTint();
         if (directe) { this.tweens.killTweensOf(this.capoll); this.capoll.destroy(); return; }
         this.tweens.killTweensOf(this.capoll);
         this.tweens.add({ targets: this.capoll, alpha: 0, scaleX: 1.5, scaleY: 1.7, duration: 1800, ease: 'Sine.easeOut', onComplete: () => this.capoll.destroy() });
     }
 }
 
-class ZonaCambraPains extends CambraMonja { constructor() { super('ZonaCambraPains', 'Dormitori de les sacerdotesses', 'pains'); } }
-class ZonaCambraPhili extends CambraMonja { constructor() { super('ZonaCambraPhili', 'Refetor de les sacerdotesses', 'phili'); } }
-class ZonaCambraCharm extends CambraMonja { constructor() { super('ZonaCambraCharm', "Capella de l'Hostatgeria", 'charm'); } }
+class ZonaCambraDolora extends CambraMonja { constructor() { super('ZonaCambraDolora', 'Dormitori de les sacerdotesses', 'dolora'); } }
+class ZonaCambraPilaria extends CambraMonja { constructor() { super('ZonaCambraPilaria', 'Refetor de les sacerdotesses', 'pilaria'); } }
+class ZonaCambraCarmelia extends CambraMonja { constructor() { super('ZonaCambraCarmelia', "Capella de l'Hostatgeria", 'carmelia'); } }

@@ -61,7 +61,7 @@ class ZonaEsglesia extends ZonaBase {
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daimiel es posen amb la resta
         if (!epileg) this.orgue = this.posar('orgue', 975, ESG.retY + 250, { col: { w: 110, h: 50 } });
         if (!epileg) this.npc('pianista', 975, ESG.retY + 320, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
-        if (!epileg) this.npc('pare_daniel', 360, ESG.retY + 190, DIALEGS.pareDaniel, { flipX: false });
+        if (!epileg) this.npc('pare_daimiel', 360, ESG.retY + 190, DIALEGS.pareDaimiel, { flipX: false });
 
         // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar (a l'epíleg es retiren perquè tothom tingui lloc sense tapar-se)
         if (!epileg) {
@@ -87,14 +87,14 @@ class ZonaEsglesia extends ZonaBase {
         this.epileg = true;
         const R = ESG.retY;
         [['nen_uri', 575, R + 168], ['nen_flam', 640, R + 180], ['nen_sardin', 705, R + 168],
-         ['pianista', 450, R + 205], ['pare_jordi', 830, R + 205],
-         ['marit_neus', 380, R + 290], ['neus', 450, R + 290], ['ciscu', 520, R + 290],
-         ['pare_daniel', 760, R + 290], ['monja_charm', 830, R + 290], ['monja_phili', 900, R + 290],
-         ['carry', 380, R + 410], ['pare_alcui', 450, R + 410], ['eva', 520, R + 410],
-         ['venerables', 770, R + 410], ['monja_pains', 850, R + 410],
+         ['pianista', 450, R + 205], ['pare_jorda', 830, R + 205],
+         ['molner', 380, R + 290], ['meus', 450, R + 290], ['iscu', 520, R + 290],
+         ['pare_daimiel', 760, R + 290], ['carmelia', 830, R + 290], ['pilaria', 900, R + 290],
+         ['carry', 380, R + 410], ['pare_alcovi', 450, R + 410], ['eve', 520, R + 410],
+         ['venerables', 770, R + 410], ['dolora', 850, R + 410],
          ['mandu', 485, R + 350],
-         ['frederic', 380, R + 530], ['josep', 450, R + 530], ['germa_francesc', 520, R + 530],
-         ['jaumeta', 760, R + 530], ['galf', 830, R + 530], ['isidre', 900, R + 530]
+         ['pomers', 380, R + 530], ['jusef', 450, R + 530], ['germa_franci', 520, R + 530],
+         ['joaneta', 760, R + 530], ['galf', 830, R + 530], ['isilder', 900, R + 530]
         ].forEach(([k, x, y]) => {
             if (k === 'mandu' && !Estat.flag('manduNinaTrencada')) return;      // la Mandu només hi és si l'Ineu hi va parlar durant el joc (la nina trencada que el Fram cus)
             if (this.textures.exists(k) && !(this.npcs && this.npcs[k])) this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 });
@@ -129,7 +129,7 @@ class ZonaEsglesia extends ZonaBase {
 
     ferEpileg() {
         const R = ESG.retY, nens = ['nen_uri', 'nen_flam', 'nen_sardin'];
-        const gent = Object.keys(this.npcs).filter(k => !nens.includes(k) && k !== 'pianista' && k !== 'pare_jordi');
+        const gent = Object.keys(this.npcs).filter(k => !nens.includes(k) && k !== 'pianista' && k !== 'pare_jorda');
         const tots = Object.keys(this.npcs);
         const hi = k => !!this.npcs[k];
         const riure = (llista, f) => { Sfx.riure(); llista.filter(hi).forEach(k => this.npcSalta(k, null, 2)); this.esperar(1500, f); };
@@ -146,7 +146,7 @@ class ZonaEsglesia extends ZonaBase {
                 }
             ]),
             // La Meus corre a buscar l'Huri i el Fram
-            accio(z => [f => z.npcVa('neus', 600, R + 225, f, 190), f => z.npcMira('neus', 575, f), f => z.bombolla('neus', '♥', f, 900),
+            accio(z => [f => z.npcVa('meus', 600, R + 225, f, 190), f => z.npcMira('meus', 575, f), f => z.bombolla('meus', '♥', f, 900),
                         f => { z.npcSalta('nen_uri', null, 2); z.npcSalta('nen_flam', f, 2); }]),
             { qui: 'Meus', text: "Huri! Fram! Bruts com dos esquirols i amb cara de no haver dormit en tres nits... Veniu aquí, que no us deixo anar mai més!" },
             { qui: 'Senyor Molner', text: 'Ja són aquí, Meus. Ja són aquí.' },
@@ -159,21 +159,21 @@ class ZonaEsglesia extends ZonaBase {
                 { qui: 'Mandu', text: "Gràcies, Fram! Ja torna a tenir cap... i tu ja no te n'aniràs mai més, oi?" }
             ] : []),
             // Les sacerdotesses i el seu protegit
-            accio(z => [f => { z.npcVa('monja_phili', 770, R + 232, null, 170); z.npcVa('monja_charm', 735, R + 222, f, 170); },
-                        f => z.npcMira('monja_charm', 705, f), f => z.bombolla('monja_charm', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
+            accio(z => [f => { z.npcVa('pilaria', 770, R + 232, null, 170); z.npcVa('carmelia', 735, R + 222, f, 170); },
+                        f => z.npcMira('carmelia', 705, f), f => z.bombolla('carmelia', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
             { qui: 'Carmèlia', text: 'Sardi! Tres nits sense dormir, les tres. La Dolora ha resat tants rosaris que ja no li queden dits.' },
             { qui: 'Dolora', text: 'I els tornaria a resar tots. Gràcies, Ineu.' },
             { qui: 'Sardi', text: 'Pilària, Pilària! He volat amb ocells de foc!' },
             { qui: 'Pilària', text: "Doncs ara aterraràs a la banyera, que fas olor de gàbia." },
             // L'Isílder, el pare del Sardi, hi corre i l'abraça
-            ...(hi('isidre') ? [
-                accio(z => [f => z.npcVa('isidre', 735, R + 195, f, 200), f => z.npcMira('isidre', 705, f), f => z.bombolla('isidre', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
+            ...(hi('isilder') ? [
+                accio(z => [f => z.npcVa('isilder', 735, R + 195, f, 200), f => z.npcMira('isilder', 705, f), f => z.bombolla('isilder', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
                 { qui: 'Isílder', text: "Sardi! Fill meu... Tres nits sense saber de tu." },
                 { qui: 'Sardi', text: "Pare! Has regat la prunera?" },
                 { qui: 'Isílder', text: "Cada dia, fill. Cada dia. Així, quan tornessis, ho trobaves tot com ho havies deixat." }
             ] : []),
             // L'Iscu, que avui no ha de fregar gots
-            ...(hi('ciscu') ? [accio(z => [f => z.npcSalta('ciscu', f, 2)]),
+            ...(hi('iscu') ? [accio(z => [f => z.npcSalta('iscu', f, 2)]),
                 { qui: 'Iscu', text: "Avui no frego ni un got! La mare dorm i ningú no m'ho pot manar. Festa grossa!" }] : []),
             // La Pianista dona l'entrada: l'Ineu comença el Cant del Miracle amb la tarota i l'orgue el segueix
             accio(z => [f => z.npcVa('pianista', 545, R + 245, f, 140), f => z.npcMira('pianista', 'ineu', f)]),
@@ -196,8 +196,8 @@ class ZonaEsglesia extends ZonaBase {
                     z.posarDireccio('avall', false);
                     riure(tots, f);
                 },
-                f => z.npcVa('pare_jordi', 740, R + 330, f, 120),
-                f => z.npcMira('pare_jordi', 'ineu', f)
+                f => z.npcVa('pare_jorda', 740, R + 330, f, 120),
+                f => z.npcMira('pare_jorda', 'ineu', f)
             ]),
             // Només si l'Ineu va fer caminar el rellotge (missió lateral): el campanar torna a tocar les hores
             ...(Estat.flag('rellotgeReparat') ? [
@@ -208,7 +208,7 @@ class ZonaEsglesia extends ZonaBase {
             // L'Ineu explica al Pare Jordà què ha passat amb l'Aldreu, i el prior tanca l'epíleg
             { qui: 'Ineu', text: "Pare Jordà... el Germà Aldreu no ha tornat. Es va quedar amb el Mestre, sota terra, i la gàbia se'l va tancar a dins." },
             { qui: 'Pare Jordà', text: "L'Aldreu... dins la gàbia?" },
-            { fer: (z, fet) => z.seq([f => z.bombolla('pare_jordi', '…', f, 1300)], fet) },        // sospira i mira cap al terra
+            { fer: (z, fet) => z.seq([f => z.bombolla('pare_jorda', '…', f, 1300)], fet) },        // sospira i mira cap al terra
             { qui: 'Pare Jordà', text: "Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller." },
             { qui: 'Pare Jordà', text: "Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més." },
             { qui: 'Pare Jordà', text: "Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill." },

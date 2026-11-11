@@ -38,7 +38,7 @@ Auditoria de només lectura (cap fitxer del joc modificat). Canon: `docs/GUIO.md
 
 ### 1. El Cant de Vespres al sopar del Til·ler
 - **On**: `dialegs.js:1098`, l'Ineu davant el pastor vell: «Tinc la tarota... El Cant de Vespres, 3-1-2-1: el tocaré vora el foc».
-- **Contradicció**: a `progres.js` el sopar és abans del fragment 1 i de l'ombra. La Pianista només ensenya Vespres si `ombraDemanaCant || alcuiLlegit` (`dialegs.js:242`). Al sopar l'Ineu només sap l'Aurora. L'Ineu anomena un cant que encara no coneix.
+- **Contradicció**: a `progres.js` el sopar és abans del fragment 1 i de l'ombra. La Pianista només ensenya Vespres si `ombraDemanaCant || alcoviLlegit` (`dialegs.js:242`). Al sopar l'Ineu només sap l'Aurora. L'Ineu anomena un cant que encara no coneix.
 - **Proposta mínima**: a `dialegs.js:1098` canviar «El Cant de Vespres, 3-1-2-1» per una referència al cant que sí que sap en aquell moment (Aurora). Cal comprovar què exigeix la foguera a `js/zones/cirosa.js` (no llegit).
 
 ### 2. El Sardi, fill de l'Isílder

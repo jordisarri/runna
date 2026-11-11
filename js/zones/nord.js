@@ -124,7 +124,7 @@ class ZonaRuines extends ZonaBase {
         }
         this.ombraMonjo = this.add.container(825, 550, this.frangesOmbra)
             .setScale((texOmbra.customData && texOmbra.customData.escala) || 0.5).setDepth(596).setAlpha(0);
-        this.puntOmbra = this.interactiu(825, 590, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 140, actiu: () => ['fragment1', 'fragment2', 'alcuiLlegit'].every(f => Estat.flag(f)) && !Estat.flag('benedicioMonjo'), enTancar: () => { if (this.ombraCantOberta()) Estat.posaFlag('flauta_ombra'); } });
+        this.puntOmbra = this.interactiu(825, 590, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 140, actiu: () => ['fragment1', 'fragment2', 'alcoviLlegit'].every(f => Estat.flag(f)) && !Estat.flag('benedicioMonjo'), enTancar: () => { if (this.ombraCantOberta()) Estat.posaFlag('flauta_ombra'); } });
         this.ombraHaCridat = false;
         this.llocFlauta('ombra', 825, 600, 160, true, () => this.ombraCantOberta() && !Estat.flag('benedicioMonjo'));      // la tarota només es pot tocar quan ja s'han llegit els dos pergamins i l'ombra ha demanat el cant
         this.tweens.add({ targets: this.ombraMonjo, y: 553, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
@@ -304,10 +304,10 @@ class ZonaRuines extends ZonaBase {
     }
 
     // Ja es pot tocar davant l'ombra: els dos fragments són al sarró, el Pare Alcoví els ha llegit i l'ombra ha demanat el cant
-    ombraCantOberta() { return ['fragment1', 'fragment2', 'alcuiLlegit', 'ombraDemanaCant'].every(f => Estat.flag(f)); }
+    ombraCantOberta() { return ['fragment1', 'fragment2', 'alcoviLlegit', 'ombraDemanaCant'].every(f => Estat.flag(f)); }
 
     teEfecteMelodia(nom) {
-        return nom === 'pedres' && Estat.flag('fragment1') && !Estat.flag('benedicioMonjo') && ['fragment1', 'fragment2', 'alcuiLlegit'].every(f => Estat.flag(f)) &&
+        return nom === 'pedres' && Estat.flag('fragment1') && !Estat.flag('benedicioMonjo') && ['fragment1', 'fragment2', 'alcoviLlegit'].every(f => Estat.flag(f)) &&
             Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, this.puntOmbra.x, this.puntOmbra.y) <= 300;
     }
 
@@ -316,7 +316,7 @@ class ZonaRuines extends ZonaBase {
         if (nom !== 'pedres' || !Estat.flag('fragment1')) return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, this.puntOmbra.x, this.puntOmbra.y) > 300) return false;
         if (Estat.flag('benedicioMonjo')) return false;                 // ja descansa
-        if (!['fragment1', 'fragment2', 'alcuiLlegit'].every(f => Estat.flag(f))) return false;
+        if (!['fragment1', 'fragment2', 'alcoviLlegit'].every(f => Estat.flag(f))) return false;
         this.ui().obrirDialeg(DIALEGS.benedicioMonjo(Estat), () => Estat.desar());
         return true;
     }
@@ -355,7 +355,7 @@ class ZonaRuines extends ZonaBase {
 
     actualitzar() {
         // Quan el Pare Alcoví ja ha llegit els fragments, l'ombra parla a l'Ineu el primer cop que s'hi acosta (li diu què vol sentir)
-        if (!this.ombraHaCridat && Estat.flag('alcuiLlegit') && Estat.flag('fragment2') && !Estat.flag('ombraDemanaCant')
+        if (!this.ombraHaCridat && Estat.flag('alcoviLlegit') && Estat.flag('fragment2') && !Estat.flag('ombraDemanaCant')
             && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, this.puntOmbra.x, this.puntOmbra.y) < 260 && !this.ui().dialeg) {
             this.ombraHaCridat = true;
             this.ineu.body.setVelocity(0);
@@ -387,7 +387,7 @@ class ZonaRuines extends ZonaBase {
 
 // ---------------- EL CELLER (interior; el ping-pong hi és una prova circumstancial) ----------------
 // Una sala petita, que es veu sencera d'una ullada: l'arcada amb la roda i la porta secreta al fons, una taula de ping-pong al mig
-// amb en Julius i en Frederic, i en Jusef al costat
+// amb en Julius i en Pomers, i en Jusef al costat
 const ALCADA_CELLER = 900, AMPLE_CELLER = 600;
 
 class ZonaPingpong extends ZonaBase {
@@ -509,11 +509,11 @@ class ZonaPingpong extends ZonaBase {
         [[X1 - 40, 470], [X1 - 44, 525], [X0 + 42, A - 70]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
 
         // ---- La taula de ping-pong (verda) al mig, i els jugadors ----
-        // En Jusef queda a la part nord de la taula; Julius i Frederic als costats de la taula
-        this.npc('josep', AX, 540, DIALEGS.josep);
+        // En Jusef queda a la part nord de la taula; Julius i Pomers als costats de la taula
+        this.npc('jusef', AX, 540, DIALEGS.jusef);
         this.posar('taula_pp', AX, 680, { col: { w: 220, h: 40 } });
-        this.npc('juli', AX - 160, 680, DIALEGS.juli);
-        this.npc('frederic', AX + 160, 680, DIALEGS.frederic, { flipX: true });
+        this.npc('julius', AX - 160, 680, DIALEGS.julius);
+        this.npc('pomers', AX + 160, 680, DIALEGS.pomers, { flipX: true });
 
         this.add.rectangle(W / 2, A / 2, AI, A, 0xffe9a8, 0.04).setDepth(80000);
         this.sortida(W / 2 - 40, A - 30, 80, 20, 'ZonaCellerFora', 'pingpong');
@@ -627,15 +627,15 @@ class ZonaCelles extends ZonaBase {
         else this.jugaMandu();
 
         // Sant Benet (est): la Meus i el seu marit, el senyor Molner, veïns de Sant Benet
-        this.npc('neus', 1250, 680, DIALEGS.neus);
-        this.npc('marit_neus', 1320, 700, DIALEGS.maritNeus);
+        this.npc('meus', 1250, 680, DIALEGS.meus);
+        this.npc('molner', 1320, 700, DIALEGS.molner);
         // Les dues Venerables Sàvies (agafades del braç, un sol gràfic): donen consells
         this.npc('venerables', 815, 700, DIALEGS.venerables, { colAmple: 100 });
         // Nostra Senyora (oest): la Carry, vídua del campaner, que busca el seu gos Pallofa (el trobaràs a Sant Antoni)
         this.npc('carry', 360, 690, DIALEGS.carry);
 
         // La Rosansa i el seu carro de verdures: només passen per les cel·les a l'Acte 3 (quan l'Ineu ja té Runna), fins que et dona la llavor i se'n va
-        if (Estat.flag('runna') && !Estat.flag('llavorSansa')) this.posarSansa();
+        if (Estat.flag('runna') && !Estat.flag('llavorRosansa')) this.posarRosansa();
 
         this.cartell(958, 830, () => ({ pagines: [{ qui: 'Cartell', text: '← Bosc de Sant Joan\n← Font del Bisbe\n↑ El Gran Til·ler\n↓ Les Runes\n→ Sant Benet' }] }));       // vora l'encreuament (a la cantonada sud-oest)
 
@@ -645,7 +645,7 @@ class ZonaCelles extends ZonaBase {
 
         this.sortida(1000, 1086, 140, 14, 'ZonaRuines', 'celles');
         this.sortida(0, 640, 14, 130, 'ZonaBosc', 'celles');
-        // El camí del Gran Til·ler, al nord, és tapat per una boira espessa que no marxa amb el vent: la desfà el beuratge de la Jauneta
+        // El camí del Gran Til·ler, al nord, és tapat per una boira espessa que no marxa amb el vent: la desfà el beuratge de la Joaneta
         this.boiraTiller = null;
         if (Estat.flag('boiraTillerNeta') || Estat.flag('parlatTiler')) this.sortida(1000, 0, 140, 14, 'ZonaTiller', 'celles');
         else this.posarBoiraTiller();
@@ -704,24 +704,24 @@ class ZonaCelles extends ZonaBase {
         });
     }
 
-    posarSansa() {
+    posarRosansa() {
         // Els braços del carro miren a l'est. La Rosansa és una mica més a l'est, davant del carro: quan ha parlat s'hi acosta, agafa els braços, es gira cap a l'est i se l'enduu
-        this.carroSansa = this.posar('carro_sansa', 1300, 880).setFlipX(true);
+        this.carroRosansa = this.posar('carro_rosansa', 1300, 880).setFlipX(true);
         this.colCarro = this.colisio(1240, 855, 160, 50);
-        this.sansa = this.posar('sansa', 1550, 892);
-        this.idleCodi(this.sansa);                              // respira i es balanceja una mica mentre espera
-        this.colSansa = this.colisio(1550, 883, 40, 18);
-        this.ombraSansa = this.add.image(1550, 892, 'ombra').setScale(0.42).setDepth(-500);
-        const punt = this.interactiu(1550, 882, RADI_NPC, DIALEGS.sansa, { altura: this.sansa.displayHeight + 6 });
-        punt.enTancar = () => this.marxaSansa(punt);
+        this.rosansa = this.posar('rosansa', 1550, 892);
+        this.idleCodi(this.rosansa);                              // respira i es balanceja una mica mentre espera
+        this.colRosansa = this.colisio(1550, 883, 40, 18);
+        this.ombraRosansa = this.add.image(1550, 892, 'ombra').setScale(0.42).setDepth(-500);
+        const punt = this.interactiu(1550, 882, RADI_NPC, DIALEGS.rosansa, { altura: this.rosansa.displayHeight + 6 });
+        punt.enTancar = () => this.marxaRosansa(punt);
     }
 
     // Se'n va: s'apropa al carro mirant a l'oest, s'ajup a agafar els braços, es gira cap a l'est (la direcció del camí) i tibant se l'enduu
-    marxaSansa(punt) {
+    marxaRosansa(punt) {
         punt.actiu = () => false;
         this.obstacles.remove(this.colCarro, true, true);
-        this.obstacles.remove(this.colSansa, true, true);
-        const s = this.sansa, c = this.carroSansa, o = this.ombraSansa, y0 = s.y;
+        this.obstacles.remove(this.colRosansa, true, true);
+        const s = this.rosansa, c = this.carroRosansa, o = this.ombraRosansa, y0 = s.y;
         this.aturaIdleCodi(s);
         const pas = (dur, n) => this.tweens.add({ targets: s, y: y0 - 4, duration: dur, yoyo: true, repeat: n });
         const seq = [
@@ -747,7 +747,7 @@ Object.assign(DIALEGS, {
     cel_ntrasra: E => ({ pagines: [] }),
     cel_stantoni: E => ({ pagines: [] }),
 
-    germaFrancesc: E => {
+    germaFranci: E => {
         if (E.te('guants')) return { pagines: [
             { qui: 'Germà Francí', text: 'Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.' }
         ] };
@@ -804,7 +804,7 @@ class ZonaSantAntoni extends ZonaBase {
         this.sortida(509, 730, 80, 16, 'ZonaCelaStAntoni', 'porta');
         this.portaAnimada({ x: 549, top: 600, bottom: 755, ample: 92, fons: 761, color: 0x5a3a20, panell: 0x6a4628, vora: 0x2a1608, ferro: true });   // la porta de la cel·la, de fusta amb ferros
 
-        this.npc('germa_francesc', 1010, 870, DIALEGS.germaFrancesc, { flipX: true });
+        this.npc('germa_franci', 1010, 870, DIALEGS.germaFranci, { flipX: true });
         // El Pallofa, el gos de la Carry: només hi passeja un cop has parlat amb ella, fins que l'agafes
         if (Estat.flag('carryParlat') && !Estat.te('pallofa') && !Estat.flag('pallofaTornat')) this.posarPallofa();
         this.cartell(170, 800, () => ({ pagines: [{ qui: 'Cartell', text: '← El Monestir i la Plaça' }] }));
@@ -858,7 +858,7 @@ class ZonaTiller extends ZonaBase {
             entrades: {
                 celles: { x: 700,  y: 940, dir: 'amunt' },
                 cirosa: { x: 1170, y: 140, dir: 'avall' },
-                jordi:  { x: 60,   y: 600, dir: 'dreta' }
+                georgi:  { x: 60,   y: 600, dir: 'dreta' }
             }
         });
     }
@@ -906,7 +906,7 @@ class ZonaTiller extends ZonaBase {
         this.arbres([[120, 870], [1320, 900]]);   // només dos arbres als cantons: el Til·ler es veu sol
 
         this.sortida(620, 986, 160, 14, 'ZonaCelles', 'tiller');
-        this.sortida(0, 540, 14, 130, 'ZonaJordi', 'til');
+        this.sortida(0, 540, 14, 130, 'ZonaGeorgi', 'til');
     }
 
     // La primera vegada que l'examines: la cara es va dibuixant sobre l'escorça (un fos de transparència, lent)
@@ -1048,7 +1048,7 @@ class ZonaTiller extends ZonaBase {
         this.npcs = this.npcs || {};
         const gent = [
             ['pastor_a', 1170, 60, 290, 880], ['pastor_b', 1170, 20, 400, 894], ['pastor_vell', 1170, -20, 510, 880],      // pel camí de la Cirosa
-            ['neus', 700, 1000, 300, 760], ['venerables', 700, 1050, 600, 760], ['isidre', 700, 1100, 450, 764]                   // des de les cel·les (l'Isílder també hi és)
+            ['meus', 700, 1000, 300, 760], ['venerables', 700, 1050, 600, 760], ['isilder', 700, 1100, 450, 764]                   // des de les cel·les (l'Isílder també hi és)
         ];
         const imatges = gent.map(([k, x0, y0, x, y], i) => {
             const img = this.posar(k, x0, y0, { fonsY: y0 });
@@ -1113,9 +1113,9 @@ class ZonaTiller extends ZonaBase {
 // ---------------- LA CASETA (a l'oest del Til·ler): on viu el Georgi de la Caseta ----------------
 // Escenari petit: en Georgi al jardí, la seva casa (es pot entrar: només decorada) i la caseta aixecada sobre pilars
 // de fusta, amb el cofre de les joguines on hi ha la maneta.
-class ZonaJordi extends ZonaBase {
+class ZonaGeorgi extends ZonaBase {
     constructor() {
-        super('ZonaJordi', {
+        super('ZonaGeorgi', {
             pins: { pi: 0.25 },
             nom: 'La Caseta',
             amplada: 1100,
@@ -1129,9 +1129,9 @@ class ZonaJordi extends ZonaBase {
         this.terra('cami', 330, 500, 770, 150);            // del Til·ler (est) a la porta de la casa
 
         // La casa d'en Georgi (520 d'ample): la porta del mig duu a dins
-        const masiaJordi = this.edifici('masia', 380, 480, 500, 76, 'ZonaCasaJordi', 'porta', { alt: 90 });
-        this.portaMasia(masiaJordi, 380, 480);
-        this.npc('jordi_caseta', 560, 590, DIALEGS.jordiCaseta);
+        const masiaGeorgi = this.edifici('masia', 380, 480, 500, 76, 'ZonaCasaGeorgi', 'porta', { alt: 90 });
+        this.portaMasia(masiaGeorgi, 380, 480);
+        this.npc('georgi_caseta', 560, 590, DIALEGS.georgiCaseta);
 
         // La caseta, aixecada sobre pilars de fusta: s'hi puja per l'escala del mig (la maneta és a dins)
         // L'escala es puja caminant (paret a banda i banda i el dintell dalt, a l'altura de la terrassa); l'entrada a l'interior és dalt,
@@ -1149,7 +1149,7 @@ class ZonaJordi extends ZonaBase {
         this.cartell(1000, 720, () => ({ pagines: [{ qui: 'Cartell', text: 'La Caseta\n→ El Gran Til·ler' }] }));
 
         this.arbres([[80, 180], [250, 120], [600, 100], [1040, 160], [90, 680], [250, 760], [850, 760], [1040, 760]]);
-        this.sortida(1086, 510, 14, 130, 'ZonaTiller', 'jordi');
+        this.sortida(1086, 510, 14, 130, 'ZonaTiller', 'georgi');
     }
 
     // A l'escala de la caseta l'Ineu es veu per sobre de la façana (si no, el gràfic el tapa mentre puja)
@@ -1167,14 +1167,14 @@ class ZonaJordi extends ZonaBase {
 // ---------------- CASA D'EN GEORGI (interior) ----------------
 // Una casa de pagès endreçada i plena de vida, però buida: en Georgi és al jardí. Només es mira.
 Object.assign(DIALEGS, {
-    casaJordiEines: E => ({ pagines: [] }),
-    casaJordiTaula: E => ({ pagines: [] }),
-    casaJordiGat: E => ({ pagines: [] })
+    casaGeorgiEines: E => ({ pagines: [] }),
+    casaGeorgiTaula: E => ({ pagines: [] }),
+    casaGeorgiGat: E => ({ pagines: [] })
 });
 
-class ZonaCasaJordi extends ZonaBase {
+class ZonaCasaGeorgi extends ZonaBase {
     constructor() {
-        super('ZonaCasaJordi', {
+        super('ZonaCasaGeorgi', {
             nom: "Masia d'en Georgi",
             amplada: 900,
             alcada: 700,
@@ -1213,7 +1213,7 @@ class ZonaCasaJordi extends ZonaBase {
         this.tweens.add({ targets: llum, alpha: 0.65, yoyo: true, repeat: -1, duration: 3600, ease: 'Sine.easeInOut' });
         this.add.image(480, 16, 'penjolls').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-985);
         this.add.image(662, 40, 'tauler_eines').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-985);
-        this.interactiu(662, 214, RADI_OBJECTE, DIALEGS.casaJordiEines, { altura: 110 });
+        this.interactiu(662, 214, RADI_OBJECTE, DIALEGS.casaGeorgiEines, { altura: 110 });
 
         // Taula de la cuina amb dues cadires, al mig
         this.add.image(450, 412, 'taula_cela').setOrigin(0.5, 1).setScale(1.3 / RES).setDepth(412);
@@ -1222,7 +1222,7 @@ class ZonaCasaJordi extends ZonaBase {
             this.add.image(x, y, 'cadira_cela').setOrigin(0.5, 1).setScale(1.25 / RES).setFlipX(flip).setDepth(y);
             this.colisio(x, y - 8, 42, 16);
         });
-        this.interactiu(450, 430, RADI_GRAN, DIALEGS.casaJordiTaula, { altura: 80 });
+        this.interactiu(450, 430, RADI_GRAN, DIALEGS.casaGeorgiTaula, { altura: 80 });
 
         // El llit, contra la paret de la dreta
         this.add.image(770, 440, 'llit_cela').setOrigin(0.5, 1).setScale(1.15 / RES).setDepth(440);
@@ -1231,7 +1231,7 @@ class ZonaCasaJordi extends ZonaBase {
         // El gat, adormit al cove, i un barril
         this.add.image(170, 590, 'gat_cove').setOrigin(0.5, 1).setScale(1 / RES).setDepth(590);
         this.colisio(170, 575, 96, 26);
-        this.interactiu(170, 620, RADI_OBJECTE, DIALEGS.casaJordiGat, { altura: 70 });
+        this.interactiu(170, 620, RADI_OBJECTE, DIALEGS.casaGeorgiGat, { altura: 70 });
         this.posar('barril', 790, 600, { col: { w: 46, h: 20 } });
 
         // Pols dins la llum de la finestra i un to càlid
@@ -1241,7 +1241,7 @@ class ZonaCasaJordi extends ZonaBase {
             tint: [0xfff0c0], frequency: 320, blendMode: 'ADD'
         }).setDepth(9000);
         this.add.rectangle(A / 2, H / 2, A, H, 0xffd38a, 0.05).setDepth(80000);
-        this.sortida(410, H - 22, 80, 14, 'ZonaJordi', 'casa');
+        this.sortida(410, H - 22, 80, 14, 'ZonaGeorgi', 'casa');
     }
 }
 
@@ -1331,7 +1331,7 @@ class ZonaCasetaJoc extends ZonaBase {
         this.interactiu(510, 225, RADI_OBJECTE, DIALEGS.cofreManeta, { altura: 80, enTancar: () => { if (maneta()) cofreJ.setTexture('cofre_joguines_obert'); } });
 
         this.add.rectangle(320, 260, 640, 520, 0xffd38a, 0.05).setDepth(80000);
-        this.sortida(280, 492, 80, 22, 'ZonaJordi', 'caseta');
+        this.sortida(280, 492, 80, 22, 'ZonaGeorgi', 'caseta');
     }
 }
 
@@ -1359,7 +1359,7 @@ class ZonaBosc extends ZonaBase {
         this.posar('font_sj', 910, 610, { col: { w: 150, h: 50 } });
         this.interactiu(910, 625, RADI_GRAN * 1.5, DIALEGS.fontSJ, { altura: 170 });
 
-        // Alzina Buida: el portal ocult cap a la cabana de la Jauneta. És el doble de gran que els altres arbres, té la seva
+        // Alzina Buida: el portal ocult cap a la cabana de la Joaneta. És el doble de gran que els altres arbres, té la seva
         // pròpia clariana (llum verda a terra, llumenetes i pedres) i el forat del tronc fa claror: no es pot confondre amb la resta.
         const AX = 330, AY = 780;
         this.add.ellipse(AX, AY + 40, 760, 380, 0x8fe08a, 0.13).setDepth(-1090);
@@ -1368,7 +1368,7 @@ class ZonaBosc extends ZonaBase {
         // El punt d'interacció és el forat del tronc (la «!» surt just damunt seu); el radi permet tocar-lo des del peu de l'alzina
         this.interactiu(AX - 18, AY - 128, 235, DIALEGS.alzinaBuida, {
             altura: 56,
-            enTancar: () => { if (Estat.flag('portalJaumeta')) this.canviarZona('ZonaCabana', 'portal'); }
+            enTancar: () => { if (Estat.flag('portalJoaneta')) this.canviarZona('ZonaCabana', 'portal'); }
         });
         [[-250, 75, 0.7], [255, 45, 0.55], [-120, 120, 0.4]].forEach(([dx, dy, e]) => this.posar('roca', AX + dx, AY + dy, { escala: e, col: { w: 34, h: 14 } }));
         this.claror = this.add.ellipse(AX - 18, AY - 128, 78, 104, 0x6aff9a, 0.45).setDepth(AY + 1);

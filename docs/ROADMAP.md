@@ -16,7 +16,7 @@ Estat de partida: la història es pot jugar de principi a fi (`node eines/prova_
 |---|---|---|---|---|
 | **R1** | P1 | La publicació a GitHub Pages es queda penjada a `deploy-pages` (`syncing_files`); la pàgina és despublicada. Les curses de fa dues nits van anar bé. | Tornar a llançar el workflow quan portis ≥1 h; si falla, un workflow que publiqui a la branca `gh-pages` (sense `deploy-pages@v4`). Si també falla, Cloudflare Pages (arrossegar la carpeta). | 30 min |
 | **R2** | P1 | Issue #7: no s'ha provat en un mòbil real des de les últimes revisions (9:16, zones segures d'iOS, controls «Mà»). | Una sessió de 20 min amb un guió curt (inici → plaça → combat → diàleg → tarota → tancar i tornar a obrir) i anotar-ho a `production/qa/`. Jo preparo la llista de proves; tu la passes al telèfon. | 1 h teva |
-| **R3** | P1 | Issues #13 (Cant del Miracle a la Pianista i la Jaumeta de vident) i #14 (canvis del 24/10) pendents de provar a mà. | Provar-los en la mateixa sessió que R2 i tancar els issues. | dins de R2 |
+| **R3** | P1 | Issues #13 (Cant del Miracle a la Pianista i la Joaneta de vident) i #14 (canvis del 24/10) pendents de provar a mà. | Provar-los en la mateixa sessió que R2 i tancar els issues. | dins de R2 |
 | **R4** | P2 | La PWA (`sw.js`) està en versió `runna-4`; cada canvi d'àudio o vídeo demana pujar-la a mà. | Que el `sw.js` agafi la versió del `?v=` d'`index.html` automàticament, perquè no es pugui oblidar. | 30 min |
 
 ## B. Combat

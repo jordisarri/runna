@@ -3,6 +3,65 @@
  * Totes les dades que cal desar viuen a Estat.dades (objecte JSON pla).
  * Es desa al localStorage del navegador i es pot exportar com a "codi de partida" (Base64).
  */
+// Noms antics → actuals (flags, objectes, zones i entrades de les partides desades abans del renom: Jauneta → Joaneta, Isidre → Isílder, Neus → Meus, etc.).
+// Es tradueix en carregar una partida (vegeu migraNoms) perquè ningú no perdi el progrés. (Aquest és l'ÚNIC lloc del projecte on queden noms antics, a propòsit.)
+const RENOMS_ANTICS = {
+    ZonaCambraCharm: 'ZonaCambraCarmelia',
+    ZonaCambraPains: 'ZonaCambraDolora',
+    ZonaCambraPhili: 'ZonaCambraPilaria',
+    ZonaCasaJordi: 'ZonaCasaGeorgi',
+    ZonaJordi: 'ZonaGeorgi',
+    alcuiLlegit: 'alcoviLlegit',
+    alcuiPlacaDita: 'alcoviPlacaDita',
+    carro_sansa: 'carro_rosansa',
+    ciscuTrobat: 'iscuTrobat',
+    clauCiscu: 'clauIscu',
+    evaParlat: 'eveParlat',
+    floresIsidre: 'floresIsilder',
+    flors_isidre: 'flors_isilder',
+    germa_francesc: 'germa_franci',
+    home_carruatge: 'follet_carro',
+    isidreSansa: 'isilderRosansa',
+    isidreSap: 'isilderSap',
+    isidre_camina: 'isilder_camina',
+    jaumeta: 'joaneta',
+    jaumetaVista: 'joanetaVista',
+    jordi: 'georgi',
+    jordiManeta: 'georgiManeta',
+    jordiPalanca: 'georgiPalanca',
+    jordi_caseta: 'georgi_caseta',
+    jordi_desperta: 'pare_jorda_desperta',
+    josepVencut: 'jusefVencut',
+    josep_camina: 'jusef_camina',
+    josep_levita: 'jusef_levita',
+    llavorSansa: 'llavorRosansa',
+    lliurePains: 'lliureDolora',
+    marit_neus: 'molner',
+    monja_charm: 'carmelia',
+    monja_pains: 'dolora',
+    monja_phili: 'pilaria',
+    pare_alcui: 'pare_alcovi',
+    pare_daniel: 'pare_daimiel',
+    pare_jordi: 'pare_jorda',
+    pare_jordi_camina: 'pare_jorda_camina',
+    parlatAlcui: 'parlatAlcovi',
+    parlatDaniel: 'parlatDaimiel',
+    parlatFrederic: 'parlatPomers',
+    parlatJuli: 'parlatJulius',
+    phili: 'pilaria',
+    portalJaumeta: 'portalJoaneta',
+    premiCharm: 'premiCarmelia',
+    premiPains: 'premiDolora',
+    premiPhili: 'premiPilaria',
+    retratimg_home_carruatge: 'retratimg_follet_carro',
+    sansa: 'rosansa',
+    visitada_ZonaCambraCharm: 'visitada_ZonaCambraCarmelia',
+    visitada_ZonaCambraPains: 'visitada_ZonaCambraDolora',
+    visitada_ZonaCambraPhili: 'visitada_ZonaCambraPilaria',
+    visitada_ZonaCasaJordi: 'visitada_ZonaCasaGeorgi',
+    visitada_ZonaJordi: 'visitada_ZonaGeorgi'
+};
+
 const Estat = {
     CLAU: 'runna_partida',
     VERSIO: 1,
@@ -47,6 +106,18 @@ const Estat = {
     // L'objectiu que es mostra (HUD i Diari) és SEMPRE el del primer pas de la història que encara falta, segons PROGRES (progres.js):
     // així no depèn de l'ordre en què el jugador fa les coses ni dels textos escrits a mà als diàlegs (posaObjectiu només és un recanvi).
     objectiu() { return (this.dades && typeof PROGRES !== 'undefined' && PROGRES.pista(this)) || (this.dades && this.dades.objectiu) || ''; },
+
+    // Tradueix els noms antics d'una partida desada (vegeu RENOMS_ANTICS)
+    migraNoms(d) {
+        const nou = k => RENOMS_ANTICS[k] || k.replace(/^(visitada_|esb_|premi)(.+)$/, (_, pre, resta) => pre + (RENOMS_ANTICS[resta] || resta));
+        const flags = {};
+        Object.keys(d.flags || {}).forEach(k => { flags[nou(k)] = d.flags[k]; });
+        d.flags = flags;
+        d.objectes = (d.objectes || []).map(o => RENOMS_ANTICS[o] || o);
+        if (RENOMS_ANTICS[d.zona]) d.zona = RENOMS_ANTICS[d.zona];
+        if (RENOMS_ANTICS[d.entrada]) d.entrada = RENOMS_ANTICS[d.entrada];
+        return d;
+    },
 
     // ---------- localStorage ----------
     desar() {
@@ -153,7 +224,8 @@ const Estat = {
         if (resultat.flags.cantAurora && !resultat.objectes.includes('flauta')) resultat.objectes.push('flauta');
         // La palanca d'en Georgi ara és una maneta (el volant de l'Home del Raïm)
         resultat.objectes = resultat.objectes.map(o => o === 'palanca' ? 'maneta' : o);
-        [['palanca', 'maneta'], ['jordiPalanca', 'jordiManeta'], ['fragment3', 'alcuiLlegit']].forEach(([vell, nou]) => { if (resultat.flags[vell]) { resultat.flags[nou] = resultat.flags[vell]; delete resultat.flags[vell]; } });
+        [['palanca', 'maneta'], ['georgiPalanca', 'georgiManeta'], ['fragment3', 'alcoviLlegit']].forEach(([vell, nou]) => { if (resultat.flags[vell]) { resultat.flags[nou] = resultat.flags[vell]; delete resultat.flags[vell]; } });
+        this.migraNoms(resultat);
         // Migracions futures: if (resultat.versio < 2) { ... }
         resultat.versio = this.VERSIO;
         this.dades = resultat;

@@ -1,6 +1,6 @@
 """
-Passa a WebP transparent la parella ineu_inconscient / jordi_desperta (art/personatges -> assets/personatges).
-Totes dues surten amb el MATEIX retall (el del conjunt amb el Pare Jordi), perquè l'Ineu quedi exactament al mateix lloc
+Passa a WebP transparent la parella ineu_inconscient / pare_jorda_desperta (art/personatges -> assets/personatges).
+Totes dues surten amb el MATEIX retall (el del conjunt amb el Pare Jordà), perquè l'Ineu quedi exactament al mateix lloc
 i el canvi d'una imatge a l'altra no faci cap salt.   python eines/convertir_desperta.py   (cal Pillow)
 """
 from pathlib import Path
@@ -26,7 +26,7 @@ def treure_fons(im):
             if 0 <= nx < w and 0 <= ny < h and not fons[ny*w+nx] and blanc(nx, ny):
                 fons[ny*w+nx] = 1; q.append((nx, ny))
     # Forats blancs tancats (entre un braç i el cos...): el fons no hi arriba des de les vores. Les taques de blanc gairebé pur
-    # prou grans també són fons (l'hàbit del Pare Jordi és crema i no hi entra)
+    # prou grans també són fons (l'hàbit del Pare Jordà és crema i no hi entra)
     vist = bytearray(w * h)
     for y0 in range(h):
         for x0 in range(w):
@@ -46,7 +46,7 @@ def treure_fons(im):
     im.putalpha(mask)
     return im
 
-# L'hàbit del Pare Jordi, aquí més fosc i groguenc que al seu sprite: s'aclareix cap al blanc de l'sprite (de mitjana
+# L'hàbit del Pare Jordà, aquí més fosc i groguenc que al seu sprite: s'aclareix cap al blanc de l'sprite (de mitjana
 # (225,199,176) -> (245,233,219)) mantenint les ombres. Només els colors poc saturats i clars de la zona del seu cos
 # (no la cara ni els cabells, ni l'hàbit marró de l'Ineu)
 GUANY = (0.33, 0.39, 0.46)
@@ -66,12 +66,12 @@ def hàbit_blanc(im):
             px[x, y] = (round(r + (nr - r) * k), round(g + (ng - g) * k), round(b + (nb - b) * k), a)
     return im
 
-jordi = treure_fons(Image.open(ARREL / 'art/personatges/jordi_desperta.jpg'))
-caixa = jordi.getchannel('A').point(lambda a: 255 if a > 24 else 0).getbbox()
-for nom, im in (('jordi_desperta', jordi), ('ineu_inconscient', treure_fons(Image.open(ARREL / 'art/personatges/ineu_inconscient.jpg')))):
+pare_jorda = treure_fons(Image.open(ARREL / 'art/personatges/pare_jorda_desperta.jpg'))
+caixa = pare_jorda.getchannel('A').point(lambda a: 255 if a > 24 else 0).getbbox()
+for nom, im in (('pare_jorda_desperta', pare_jorda), ('ineu_inconscient', treure_fons(Image.open(ARREL / 'art/personatges/ineu_inconscient.jpg')))):
     r = im.crop(caixa)
     r = r.resize((AMPLADA, round(r.height * AMPLADA / r.width)), Image.LANCZOS)
-    if nom == 'jordi_desperta': r = hàbit_blanc(r)
+    if nom == 'pare_jorda_desperta': r = hàbit_blanc(r)
     dest = ARREL / f'assets/personatges/{nom}.webp'
     r.save(dest, 'WEBP', quality=85, method=6)
     print(nom, r.size, dest.stat().st_size, 'caixa', caixa)

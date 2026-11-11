@@ -9,7 +9,7 @@ Confirmat al codi (`js/proves.js`):
 - El panell llista tots els passos de `PROGRES.passos`. Triar un pas deixa fets els flags/objectes de **tots els passos anteriors** (no el triat) i porta a la zona del pas (taula `DIARI_PASSOS`, `js/diari.js`).
 - Tres caselles, marcades per defecte: «missions laterals», «tot el mapa», «totes les melodies apreses». **Cal desmarcar «melodies» per provar amb `cantPedres` inactiu** (marcar-la posa els flags de totes les melodies, incloent `cantPedres`, i la tarota). Cal desmarcar «laterals» per no tenir `carryParlat`, `pallofaTornat`, etc.
 - La llista inferior «O ves a una zona amb l'estat actual» permet canviar de zona sense tocar l'estat.
-- Passos útils (id a `progres.js`; títol a `diari.js` quan n'hi ha): `sopar` («El sopar del Til·ler», ZonaTiller): soparObert fet, pastorsConvencuts no. `ombra` («L'ombra del monjo», ZonaRuines): fragment1, fragment2, alcuiLlegit fets; ombraDemanaCant, cantPedres, benedicioMonjo no. `segell`: runna i relTretes fets, tombaLlegida i tombaSegellada no. `soterrani` (el següent): tombaLlegida i tombaSegellada ja fets.
+- Passos útils (id a `progres.js`; títol a `diari.js` quan n'hi ha): `sopar` («El sopar del Til·ler», ZonaTiller): soparObert fet, pastorsConvencuts no. `ombra` («L'ombra del monjo», ZonaRuines): fragment1, fragment2, alcoviLlegit fets; ombraDemanaCant, cantPedres, benedicioMonjo no. `segell`: runna i relTretes fets, tombaLlegida i tombaSegellada no. `soterrani` (el següent): tombaLlegida i tombaSegellada ja fets.
 - El text exacte de cada botó del panell és «N. títol · zona» (N és la posició; pot variar). Cerca per títol/zona, no pel número.
 - Flags a mà (consola del navegador): **NO CONFIRMAT**. El codi té `Estat.flag/posaFlag/dona/desar`, però no he verificat que `Estat` sigui accessible des de la consola (és una `const` global; hauria de funcionar a Chrome/Edge). Si no funciona, usa només el panell. No hi ha cap altra eina per posar un sol flag; el panell només permet «tot el que és abans del pas X».
 - Per combinar estats que el panell no dona (p. ex. `soparObert` + `cantPedres` sense altres passos): marca «melodies» i tria `sopar`; això dona `cantPedres` amb `soparObert`.
@@ -48,7 +48,7 @@ Convencions: Resultat real i Pass/Fail en blanc. Els noms de zona de la llista d
 
 ### QA-REV251-03 · Pianista ensenya Vespres amb soparObert (canvi 1)
 **Prioritat**: Alta
-**Precondicions**: panell: desmarca «laterals» i «melodies»; tria el pas `sopar`. Estat: soparObert actiu; cantPedres, ombraDemanaCant i alcuiLlegit **inactius**; cantAurora actiu (previ). Si una altra branca anterior de la Pianista (parlatPianista/Aurora, línies ~230-240) es dispara primer, anota-ho.
+**Precondicions**: panell: desmarca «laterals» i «melodies»; tria el pas `sopar`. Estat: soparObert actiu; cantPedres, ombraDemanaCant i alcoviLlegit **inactius**; cantAurora actiu (previ). Si una altra branca anterior de la Pianista (parlatPianista/Aurora, línies ~230-240) es dispara primer, anota-ho.
 **Passos**:
 1. Ves a la zona de la Pianista (Santuari) amb la llista de zones.
 2. Parla amb la Pianista.
@@ -60,7 +60,7 @@ Convencions: Resultat real i Pass/Fail en blanc. Els noms de zona de la llista d
 
 ### QA-REV251-04 · Ombra del monjo amb cantPedres INACTIU: cadena completa (canvi 2, RISC ALT)
 **Prioritat**: Alta
-**Precondicions**: panell: desmarca «laterals» i «melodies»; tria el pas `ombra` (ZonaRuines). Estat: fragment1, fragment2, alcuiLlegit actius; ombraDemanaCant, cantPedres, benedicioMonjo inactius. Tarota (`flauta`) al sarró.
+**Precondicions**: panell: desmarca «laterals» i «melodies»; tria el pas `ombra` (ZonaRuines). Estat: fragment1, fragment2, alcoviLlegit actius; ombraDemanaCant, cantPedres, benedicioMonjo inactius. Tarota (`flauta`) al sarró.
 **Passos**:
 1. A les Runes, acosta't a l'ombra (mur, ~1205,465). Pot parlar sola en acostar-t'hi (< 260 px); si no, interactua-hi.
 2. Llegeix els diàlegs. Comprova l'objectiu del HUD/diari.
@@ -104,7 +104,7 @@ Convencions: Resultat real i Pass/Fail en blanc. Els noms de zona de la llista d
 2. Llegeix tot el diàleg (observa l'ordre dels parlants i el moviment del Pare a 812,372).
 3. Comprova l'objectiu en acabar.
 4. Torna a parlar amb el Pare.
-**Resultat esperat**: ordre: Ineu («Pare Alcoví, he baixat a la cripta...»), Pare Alcoví («Una clau de ferro, i una tomba que no calla...»), moviment, Crònica, Pare Alcoví («La tomba és al Cementiri...»). Objectiu «La tomba esquerdada del Cementiri espera la llum de Runna.»; tombaLlegida actiu. Pas 4: no repeteix la cripta i surt el diàleg de la branca `alcuiLlegit`.
+**Resultat esperat**: ordre: Ineu («Pare Alcoví, he baixat a la cripta...»), Pare Alcoví («Una clau de ferro, i una tomba que no calla...»), moviment, Crònica, Pare Alcoví («La tomba és al Cementiri...»). Objectiu «La tomba esquerdada del Cementiri espera la llum de Runna.»; tombaLlegida actiu. Pas 4: no repeteix la cripta i surt el diàleg de la branca `alcoviLlegit`.
 **Resultat real**:
 **Pass/Fail**:
 
@@ -122,9 +122,9 @@ Convencions: Resultat real i Pass/Fail en blanc. Els noms de zona de la llista d
 **Resultat real**:
 **Pass/Fail**:
 
-### QA-REV251-09 · Pianista: precedència del text (ombraDemanaCant > alcuiLlegit > soparObert)
+### QA-REV251-09 · Pianista: precedència del text (ombraDemanaCant > alcoviLlegit > soparObert)
 **Prioritat**: Mitjana
-**Precondicions**: cantPedres inactiu. Tres estats: (a) pas `ombra` després d'haver parlat amb l'ombra (ombraDemanaCant); (b) pas `ombra` sense parlar-hi (alcuiLlegit, sense soparObert? **NO CONFIRMAT**: al pas `ombra` soparObert també és actiu per passos previs, per tant esperem el text d'alcuiLlegit); (c) pas `sopar` (només soparObert).
+**Precondicions**: cantPedres inactiu. Tres estats: (a) pas `ombra` després d'haver parlat amb l'ombra (ombraDemanaCant); (b) pas `ombra` sense parlar-hi (alcoviLlegit, sense soparObert? **NO CONFIRMAT**: al pas `ombra` soparObert també és actiu per passos previs, per tant esperem el text d'alcoviLlegit); (c) pas `sopar` (només soparObert).
 **Passos**:
 1. Per a cada estat, parla amb la Pianista i anota la primera pàgina.
 **Resultat esperat**: (a) «El monjo de les Runes vol sentir...»; (b) «Vas a veure l'ombra de les Runes? Diuen que només escolta...»; (c) «Els pastors de la Cirosa...». En tots, comença la lliçó «pedres».
@@ -155,13 +155,13 @@ Convencions: Resultat real i Pass/Fail en blanc. Els noms de zona de la llista d
 **Precondicions**: ZonaBiblioteca. Estats: (a) pas `soterrani` (tombaLlegida i tombaSegellada actius); (b) pas `segell` + posar tombaLlegida **sense** tombaSegellada (parla un cop amb el Pare per posar-lo, QA-REV251-07, i torna'l a provar); (c) tombaSegellada actiu però tombaLlegida inactiu (**NO CONFIRMAT** com forçar-ho: el panell sempre posa els dos junts; només possible per consola); (d) pas `raim` o `cripta` (relTretes inactiu, runna actiu).
 **Passos**:
 1. Per a cada estat, parla amb el Pare Alcoví.
-**Resultat esperat**: no sortida del diàleg «he baixat a la cripta de la Casa Gran». (a) i (b) surt la branca `alcuiLlegit` (o la del Saber si benedicioMonjo i !saber); (d) idem. Cap pas queda bloquejat.
+**Resultat esperat**: no sortida del diàleg «he baixat a la cripta de la Casa Gran». (a) i (b) surt la branca `alcoviLlegit` (o la del Saber si benedicioMonjo i !saber); (d) idem. Cap pas queda bloquejat.
 **Resultat real**:
 **Pass/Fail**:
 
 ### QA-REV251-13 · Ombra: tocar Vespres abans que l'ombra demani el cant
 **Prioritat**: Mitjana
-**Precondicions**: panell: marca «melodies», desmarca «laterals»; tria el pas `ombra`. cantPedres actiu, ombraDemanaCant inactiu. **Evita** acostar-te a < 260 px sense control (l'ombra crida sola). Notar que `nord.js` `enMelodia/teEfecteMelodia` no comprova ombraDemanaCant (només fragment1, fragment2, alcuiLlegit), mentre `ombraCantOberta` sí.
+**Precondicions**: panell: marca «melodies», desmarca «laterals»; tria el pas `ombra`. cantPedres actiu, ombraDemanaCant inactiu. **Evita** acostar-te a < 260 px sense control (l'ombra crida sola). Notar que `nord.js` `enMelodia/teEfecteMelodia` no comprova ombraDemanaCant (només fragment1, fragment2, alcoviLlegit), mentre `ombraCantOberta` sí.
 **Passos**:
 1. Acosta't a ≤300 px de l'ombra sense deixar que parli (si parla automàticament, anota-ho: canvi 2 passa per defecte).
 2. Toca Vespres.
@@ -202,12 +202,12 @@ Convencions: Resultat real i Pass/Fail en blanc. Els noms de zona de la llista d
 **Resultat real**:
 **Pass/Fail**:
 
-### QA-REV251-17 · Pistes neutres: font, jaumeta, boiraTiller, benediccio, saber (canvi 9)
+### QA-REV251-17 · Pistes neutres: font, joaneta, boiraTiller, benediccio, saber (canvi 9)
 **Prioritat**: Baixa
-**Precondicions**: per a cada pas, tria'l al panell amb «laterals» desmarcada: `font` (dos estats: sense i amb fontVista), `jaumeta` (sense/amb portalJaumeta), `boiraTiller`, `benediccio`, `saber`. Llegeix la pista amb les Venerables Sàvies.
+**Precondicions**: per a cada pas, tria'l al panell amb «laterals» desmarcada: `font` (dos estats: sense i amb fontVista), `joaneta` (sense/amb portalJoaneta), `boiraTiller`, `benediccio`, `saber`. Llegeix la pista amb les Venerables Sàvies.
 **Passos**:
 1. Per a cada pas, llegeix la pista.
-**Resultat esperat**: font (sense fontVista): «La Font del Bisbe, que diuen que guaria tothom, s'ha quedat adormida. Val la pena anar-hi a mirar.»; font (amb fontVista): ofrenes n/3; jaumeta: «Ja tens l'aigua de la Font del Bisbe. L'Alzina Buida del bosc potser en sabria què fer-ne.»/«A l'altra banda de l'Alzina Buida hi ha un regal per al camí del Til·ler.»; boiraTiller: «Una boira espessa tapa un camí de les Cel·les. Un beuratge la desfaria.»; benediccio: «Ara que el Til·ler t'ha donat permís, a la Plaça et poden posar la mà al cap: la benedicció del prior.»; saber: «Ara que l'ombra t'ha parlat, a la biblioteca del Monestir hi ha paraules per a tu.». Cap pista conté spoilers de passos posteriors (revisió subjectiva: confirma amb qa-lead si se'n dubta).
+**Resultat esperat**: font (sense fontVista): «La Font del Bisbe, que diuen que guaria tothom, s'ha quedat adormida. Val la pena anar-hi a mirar.»; font (amb fontVista): ofrenes n/3; joaneta: «Ja tens l'aigua de la Font del Bisbe. L'Alzina Buida del bosc potser en sabria què fer-ne.»/«A l'altra banda de l'Alzina Buida hi ha un regal per al camí del Til·ler.»; boiraTiller: «Una boira espessa tapa un camí de les Cel·les. Un beuratge la desfaria.»; benediccio: «Ara que el Til·ler t'ha donat permís, a la Plaça et poden posar la mà al cap: la benedicció del prior.»; saber: «Ara que l'ombra t'ha parlat, a la biblioteca del Monestir hi ha paraules per a tu.». Cap pista conté spoilers de passos posteriors (revisió subjectiva: confirma amb qa-lead si se'n dubta).
 **Resultat real**:
 **Pass/Fail**:
 
@@ -245,7 +245,7 @@ Convencions: Resultat real i Pass/Fail en blanc. Els noms de zona de la llista d
 
 ### QA-REV251-21 · Pilària i Dolora (canvis 6 i 10)
 **Prioritat**: Baixa
-**Precondicions**: a l'Hostatgeria, Dolora: lliurePains actiu i premiPains inactiu. Pilària: premiPhili inactiu (alliberada). Com forçar-ho: panell, pas `benediccioFraterna`; **NO CONFIRMAT** que l'estat posi premiPains/premiPhili (el pas els marca tots, així que els textos «primer cop» **ja no es veuran**). Cal jugar el pas a mà (llosa, esbarzers) o cercar un pas anterior (`rastell`/`tortura`) amb lliurePains posat per consola.
+**Precondicions**: a l'Hostatgeria, Dolora: lliureDolora actiu i premiDolora inactiu. Pilària: premiPilaria inactiu (alliberada). Com forçar-ho: panell, pas `benediccioFraterna`; **NO CONFIRMAT** que l'estat posi premiDolora/premiPilaria (el pas els marca tots, així que els textos «primer cop» **ja no es veuran**). Cal jugar el pas a mà (llosa, esbarzers) o cercar un pas anterior (`rastell`/`tortura`) amb lliureDolora posat per consola.
 **Passos**:
 1. Parla amb la Dolora quan ha estat desperta amb música de 3 notes.
 2. Parla amb la Pilària, ja alliberada.
@@ -265,7 +265,7 @@ Convencions: Resultat real i Pass/Fail en blanc. Els noms de zona de la llista d
 
 ### QA-REV251-23 · Jusef: roda de carruatge del Celler (canvi 10)
 **Prioritat**: Baixa
-**Precondicions**: Jusef vençut al ping-pong per primer cop: pas `josep` o l'anterior (`cantMiracle`), «laterals» desmarcada. Anar a ZonaCeller (**NO CONFIRMAT** el nom).
+**Precondicions**: Jusef vençut al ping-pong per primer cop: pas `jusef` o l'anterior (`cantMiracle`), «laterals» desmarcada. Anar a ZonaCeller (**NO CONFIRMAT** el nom).
 **Passos**:
 1. Guanya la partida de ping-pong contra en Jusef.
 2. Llegeix l'última pàgina; després, mira la pista del pas `roda`.

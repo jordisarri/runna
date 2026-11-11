@@ -1,5 +1,5 @@
 /**
- * CASA D'EN JORDI I LA CASETA DE JOC: gràfics de l'interior de la masia (paret emblanquinada amb sòcol de rajola, tauler d'eines,
+ * CASA D'EN GEORGI I LA CASETA DE JOC: gràfics de l'interior de la masia (paret emblanquinada amb sòcol de rajola, tauler d'eines,
  * penjolls d'alls i pebrots, el gat al cove) i el cofre de les joguines de la caseta. Fan servir els ajudants de dibuixos_biblio.js.
  */
 

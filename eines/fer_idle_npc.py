@@ -14,7 +14,7 @@ from PIL import Image
 
 ARREL = Path(__file__).resolve().parent.parent
 ENTRADA = ARREL / 'art' / 'personatges' / 'idle'
-CLAUS = ['frederic', 'juli', 'josep', 'germa_aldreu', 'pare_jordi', 'pare_daniel']
+CLAUS = ['pomers', 'julius', 'jusef', 'germa_aldreu', 'pare_jorda', 'pare_daimiel']
 COLS = 3          # els fulls d'idle d'AutoSprite són de 3 columnes (8 fotogrames en 3x3)
 
 def main():

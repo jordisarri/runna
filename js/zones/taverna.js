@@ -18,8 +18,8 @@ Object.assign(DIALEGS, {
         enAcabar: () => { E.posaFlag('tavernaOberta'); E.desar(); }
     },
 
-    eva: E => {
-        if (!E.flag('evaParlat')) return {
+    eve: E => {
+        if (!E.flag('eveParlat')) return {
             pagines: [
                 { qui: 'Eve', text: 'Sóc l\'Eve. Ajudo la Càren... bé, faig la feina de la Càren. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
                 { qui: 'Eve', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola, com si la boira l\'obeís. Entra. Diu que va a buscar vi, però a la Taverna mai no ha faltat cap ampolla. I no en torna amb cap.' },
@@ -28,9 +28,9 @@ Object.assign(DIALEGS, {
                 { qui: 'Eve', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
                 { qui: 'Eve', text: 'El Sardi hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve.' },
             ],
-            enAcabar: () => { E.posaFlag('evaParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La Porta de les Gírgoles, a l\'est del Pati del Celler, duu a l\'entrada de les Gírgoles: la Clau de ferro l\'obre.' : E.dades.objectiu); }
+            enAcabar: () => { E.posaFlag('eveParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La Porta de les Gírgoles, a l\'est del Pati del Celler, duu a l\'entrada de les Gírgoles: la Clau de ferro l\'obre.' : E.dades.objectiu); }
         };
-        if (E.flag('portaPetitaVista') && !E.flag('ciscuTrobat')) return { pagines: [
+        if (E.flag('portaPetitaVista') && !E.flag('iscuTrobat')) return { pagines: [
             { qui: 'Eve', text: 'L\'Iscu? Ja t\'ho vaig dir: surt pel camí de la Desaparició, a l\'oest de les Runes, i s\'amaga per un forat entre els arbres «per on els grans no hi caben». Si el trobes, digues-li que torni a sopar.' }
         ] };
         if (E.flag('clauFerro')) return { pagines: [
@@ -161,7 +161,7 @@ class ZonaTavernaInt extends ZonaBase {
         this.interactiu(150, 410, RADI_OBJECTE, DIALEGS.acordio, { altura: 60 });
 
         // L\'Eve, al costat de la llar
-        this.npc('eva', 650, 350, DIALEGS.eva, { flipX: true });
+        this.npc('eve', 650, 350, DIALEGS.eve, { flipX: true });
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffc070, 0.07).setDepth(80000);
         this.sortida(460, H - 22, 80, 14, 'ZonaTaverna', 'interior');
