@@ -5,14 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Prototip ping-pong</title>
 <style>
-  html, body { margin: 0; height: 100%; background: #120c08; overflow: hidden; touch-action: none; }
-  #joc { width: 100%; height: 100%; }
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #120c08; overflow: hidden; touch-action: none; overscroll-behavior: none; }
+  #joc { position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; }
+  #joc canvas { display: block; }
 </style>
 </head>
 <body>
 <div id="joc"></div>
 <!-- Prototip del nou minijoc de ping-pong (fora del joc principal). Fa servir el Phaser i els gràfics del joc. -->
 <script src="../../js/lib/phaser.min.js?v=3.80.1"></script>
-<script src="pingpong2.js?v=1"></script>
+<script src="pingpong2.js?v=2"></script>
 </body>
 </html>

@@ -50,7 +50,7 @@ class PingPong extends Phaser.Scene {
         this.auraJusef = this.add.ellipse(0, 0, 160, 190, 0xb890ff, 0).setDepth(1);
         // Pilota i ombra
         this.ombra = this.add.ellipse(0, 0, 20, 8, 0x000000, 0.35).setDepth(0.6);
-        this.pilota = this.add.circle(0, 0, 10, 0xfff6e0).setStrokeStyle(2, 0xd8c8a0);
+        this.pilota = this.add.circle(0, 0, 14, 0xfff6e0).setStrokeStyle(3, 0x8a7a50);
         this.marcaBot = this.add.ellipse(0, 0, 40, 16).setStrokeStyle(3, 0xffd34d, 0.0).setDepth(0.55);
         // Text
         const est = (mida, color) => ({ fontFamily: 'Georgia, serif', fontSize: mida + 'px', color, stroke: '#1a0e06', strokeThickness: 6, align: 'center' });
@@ -218,7 +218,7 @@ class PingPong extends Phaser.Scene {
         // Pilota a la serveixIneu: a la mà de l'Ineu
         if (this.estat === 'serveiIneu') {
             const p = this.proj(this.Xi + 0.18, -0.15, 0.32 + Math.abs(Math.sin(time / 260)) * 0.12);
-            this.pilota.setVisible(true).setPosition(p.x, p.y).setRadius(0.045 * p.k / 2.2 * 2.2).setDepth(10.5);
+            this.pilota.setVisible(true).setPosition(p.x, p.y).setRadius(Math.max(9, 0.05 * p.k)).setDepth(10.5);
             this.ombra.setVisible(false);
         }
     }
@@ -260,8 +260,8 @@ class PingPong extends Phaser.Scene {
 
     pintaPilota() {
         const b = this.b, p = this.proj(b.X, b.z, b.h), s = this.proj(b.X, b.z, 0);
-        this.pilota.setPosition(p.x, p.y).setRadius(Math.max(5, 0.045 * p.k * 0.5)).setDepth(b.z > T.L / 2 ? 10 - b.z + 0.01 : 20);      // a la teva banda, per sobre de l'Ineu (que no la tapi)
-        const r = Math.max(4, 0.045 * s.k * 0.55);
+        this.pilota.setPosition(p.x, p.y).setRadius(Math.max(9, 0.05 * p.k)).setDepth(b.z > T.L / 2 ? 10 - b.z + 0.01 : 20);      // a la teva banda, per sobre de l'Ineu (que no la tapi)
+        const r = Math.max(7, 0.05 * s.k * 0.8);
         const sobreTaula = Math.abs(b.X) <= T.W && b.z >= 0 && b.z <= T.L;
         this.ombra.setPosition(s.x, s.y).setSize(r * 2.2, r * 0.9).setAlpha(sobreTaula ? Phaser.Math.Clamp(0.45 - b.h * 0.6, 0.12, 0.45) : 0);
     }
@@ -399,3 +399,7 @@ window.ppJoc = new Phaser.Game({
     input: { activePointers: 2 },
     scene: [PingPong]
 });
+const reajusta = () => { try { ppJoc.scale.refresh(); } catch (e) { /* res */ } };
+['resize', 'orientationchange'].forEach(ev => window.addEventListener(ev, () => setTimeout(reajusta, 120)));
+if (window.visualViewport) window.visualViewport.addEventListener('resize', () => setTimeout(reajusta, 120));
+setTimeout(reajusta, 300);
