@@ -8,7 +8,9 @@
  *    · el MOMENT en què ho fas: un anell a la pilota es posa VERD quan ja és a la pala. Si lliscs en verd, és PERFECTE (precís i difícil per a en Jusef);
  *      si és una mica abans o després, és BÉ (amb una mica d'error); molt abans: «Massa aviat»; si la pilota ja ha passat: «Massa tard» (punt d'en Jusef).
  *  El lliscament es veu com una estela lluminosa. Sense lliscar, l'Ineu no colpeja (cal estar atent!).
- *  Servei: el teu, llisca cap amunt (apuntes igual). El d'en Jusef: un de cada tres és MÀGIC (toca els tres llocs en ordre).
+ *  Servei (com a la realitat): la pilota bota PRIMER al camp de qui serveix i després passa la xarxa. El teu: llisca cap amunt (apuntes igual).
+ *  El d'en Jusef: un de cada tres és MÀGIC: la pilota encantada fa zigzags i només un cop PERFECTE trenca l'encanteri (llavors en Jusef no la pot tornar);
+ *  si el cop no és perfecte, l'encanteri resisteix i la pilota torna fluixa.
  *  Partit a 5 punts. Després de dues derrotes, s'ofereix el mode fàcil (anell verd més llarg, en Jusef falla més). Càmera mòbil.
  *
  * Coordenades del món (metres): X de través (centre 0), z al llarg (0 = vora de l'Ineu, L = vora d'en Jusef), h alçada sobre la taula.
@@ -25,8 +27,8 @@ const T = {
 function T_L_PLUS(d) { return 2.74 + d; }
 const MODES = {
     // finestra: segons (reals) abans d'arribar la pilota en què lliscar és PERFECTE · bona: fins on és «bé» · abast: fins on arriba l'Ineu (m)
-    normal: { temps: 0.92, finestra: 0.16, bona: 0.42, abast: 0.45, abastJusef: 0.48, velJusef: 1.9, fallaJusef: 0.05 },
-    facil:  { temps: 0.74, finestra: 0.26, bona: 0.6,  abast: 0.65, abastJusef: 0.40, velJusef: 1.5, fallaJusef: 0.12 }
+    normal: { temps: 0.92, finestra: 0.26, bona: 0.75, abast: 0.45, abastJusef: 0.48, velJusef: 1.9, fallaJusef: 0.05 },
+    facil:  { temps: 0.74, finestra: 0.36, bona: 1.0,  abast: 0.65, abastJusef: 0.40, velJusef: 1.5, fallaJusef: 0.12 }
 };
 const Z_COP = 0.05;           // fondària on l'Ineu colpeja la pilota
 
@@ -108,11 +110,6 @@ class Arcade extends Phaser.Scene {
         x.lineStyle(3, 0xf2f2e8, 0.95).lineBetween(n[3].x, n[3].y, n[2].x, n[2].y);
         x.lineStyle(1, 0xf2f2e8, 0.35);
         for (let k = 0; k <= 30; k++) { const X = -T.W - 0.1 + (2 * T.W + 0.2) * k / 30, a = this.proj(X, T.L / 2), b = this.proj(X, T.L / 2, T.NH); x.lineBetween(a.x, a.y, b.x, b.y); }
-        // zones del servei màgic (ocultes)
-        this.zonesMagia = [-0.5, 0, 0.5].map((X, i) => {
-            const p = this.proj(X, 0.6);
-            return this.add.ellipse(p.x, p.y, 190, 74, [0x6ac8ff, 0xffd34d, 0xff7ad8][i], 0).setDepth(0.7);
-        });
     }
 
     // ---------------- Partit ----------------
@@ -144,54 +141,51 @@ class Arcade extends Phaser.Scene {
         if (this.acabat) return;
         this.estat = 'joc';
         const X = Phaser.Math.FloatBetween(-0.55, 0.55);
-        this.llanca('jusef', { X: this.Xj, z: T.L + 0.25, h: 0.3 }, X, Phaser.Math.FloatBetween(0.35, 0.9), suau ? 1.15 : 0.95);
+        this.serveix('jusef', { X: this.Xj, z: T.L + 0.25, h: 0.3 }, X, Phaser.Math.FloatBetween(0.35, 0.9), suau ? 1.15 : 0.95);
     }
 
-    // ---- Servei màgic: tres llocs que cal repetir en el mateix ordre ----
+    // ---- Servei màgic: la pilota encantada fa zigzags; només un cop PERFECTE trenca l'encanteri (i llavors en Jusef no la pot tornar) ----
     serveiMagic() {
         if (this.acabat) return;
-        this.estat = 'magiaMirant';
-        this.ordre = [0, 1, 2].map(() => Phaser.Math.Between(0, 2));
-        this.entrat = [];
-        this.tweens.add({ targets: this.auraJusef, fillAlpha: 0.35, duration: 300 });
-        this.avis('Servei màgic d\'en Jusef: memoritza!', 1300, '#d8b0ff');
+        this.estat = 'res';
+        this.tweens.add({ targets: this.auraJusef, fillAlpha: 0.4, duration: 300, yoyo: true, hold: 900 });
+        this.avis('Servei màgic! Només un cop PERFECTE trenca l\'encanteri', 1700, '#d8b0ff');
         this.so('magia');
-        this.ordre.forEach((z, i) => this.time.delayedCall(1300 + i * 750, () => {
-            const e = this.zonesMagia[z];
-            e.setFillStyle(e.fillColor, 0.75); this.so('nota', z);
-            this.time.delayedCall(480, () => e.setFillStyle(e.fillColor, 0));
-        }));
-        this.time.delayedCall(1300 + 3 * 750 + 100, () => {
-            this.estat = 'magiaEntrant';
-            this.avis('Repeteix-los! Toca els tres llocs', 1400, '#d8b0ff');
-            this.zonesMagia.forEach(e => e.setStrokeStyle(3, 0xd8b0ff, 0.6));
-            this.limitMagia = this.time.delayedCall(5000, () => { if (this.estat === 'magiaEntrant') this.fallaMagia(); });
+        this.time.delayedCall(1500, () => {
+            if (this.acabat) return;
+            this.estat = 'joc';
+            const X = Phaser.Math.FloatBetween(-0.5, 0.5) || 0.3;
+            this.serveix('jusef', { X: this.Xj, z: T.L + 0.25, h: 0.3 }, X, Phaser.Math.FloatBetween(0.35, 0.75), 0.85, true);
         });
-    }
-    entradaMagia(p) {
-        const X = this.mon(p.x, 0.6), z = X < -0.25 ? 0 : X > 0.25 ? 2 : 1;
-        const e = this.zonesMagia[z];
-        e.setFillStyle(e.fillColor, 0.6); this.time.delayedCall(200, () => e.setFillStyle(e.fillColor, 0));
-        this.so('nota', z);
-        this.entrat.push(z);
-        if (z !== this.ordre[this.entrat.length - 1]) { this.fallaMagia(); return; }
-        if (this.entrat.length === 3) {
-            this.estat = 'res'; if (this.limitMagia) this.limitMagia.remove();
-            this.zonesMagia.forEach(e => e.setStrokeStyle(3, 0xd8b0ff, 0));
-            this.tweens.add({ targets: this.auraJusef, fillAlpha: 0, duration: 400 });
-            this.avis('Encanteri trencat!', 900, '#a0ffb0'); this.so('be');
-            this.time.delayedCall(800, () => this.serveiJusef(true));
-        }
-    }
-    fallaMagia() {
-        if (this.limitMagia) this.limitMagia.remove();
-        this.zonesMagia.forEach(e => e.setStrokeStyle(3, 0xd8b0ff, 0));
-        this.tweens.add({ targets: this.auraJusef, fillAlpha: 0, duration: 400 });
-        this.punt('jusef', 'L\'encanteri d\'en Jusef!');
     }
 
     // ---------------- Física de la pilota ----------------
     // Llança la pilota des de 'des' perquè boti a (Xt, zt) al cap de 'temps' segons (s'allarga si no passa la xarxa)
+    // Velocitats per anar des de 'des' fins a botar a (Xt, zt) al cap de 'temps' segons (s'allarga si no passa la xarxa)
+    vel(des, Xt, zt, temps) {
+        let t = temps, vh;
+        const vz = () => (zt - des.z) / t;
+        for (let i = 0; i < 20; i++) {
+            vh = (0 - des.h + 0.5 * T.G * t * t) / t;
+            const tn = (T.L / 2 - des.z) / vz(), hn = des.h + vh * tn - 0.5 * T.G * tn * tn;
+            if (tn < 0 || tn > t || hn > T.NH + 0.06) break;
+            t += 0.06;
+        }
+        return { vx: (Xt - des.X) / t, vz: vz(), vh, t };
+    }
+
+    // SERVEI: la pilota ha de botar PRIMER al camp de qui serveix i després passar la xarxa i botar a l'altre camp
+    serveix(qui, des, Xt, zt, temps, magica = false) {
+        const z1 = qui === 'ineu' ? 0.55 : T.L - 0.55;
+        const v = this.vel(des, des.X + (Xt - des.X) * 0.25, z1, 0.4);
+        this.b = { X: des.X, z: des.z, h: des.h, vx: v.vx, vz: v.vz, vh: v.vh, de: qui, bots: 0, decidit: false, morta: false, marca: { X: Xt, z: zt },
+                   serveix: { Xt, zt, t: temps }, magica, t0: Math.random() * 6.28 };
+        this.pilota.setVisible(true).setFillStyle(magica ? 0xe0b8ff : 0xfff6e0).setStrokeStyle(3, magica ? 0x7a3aa8 : 0x8a7a50); this.ombra.setVisible(true);
+        const pm = this.proj(Xt, zt);
+        this.marcaBot.setPosition(pm.x, pm.y).setSize(46 * pm.k / 300 * 1.4, 18 * pm.k / 300 * 1.4).setStrokeStyle(3, magica ? 0xd8b0ff : 0xffd34d, qui === 'jusef' ? 0.75 : 0);
+        this.so('pala');
+    }
+
     llanca(qui, des, Xt, zt, temps) {
         let t = temps, vh;
         const vz = () => (zt - des.z) / t;
@@ -202,7 +196,7 @@ class Arcade extends Phaser.Scene {
             t += 0.06;
         }
         this.b = { X: des.X, z: des.z, h: des.h, vx: (Xt - des.X) / t, vz: vz(), vh, de: qui, bots: 0, decidit: false, morta: false, marca: { X: Xt, z: zt } };
-        this.pilota.setVisible(true); this.ombra.setVisible(true);
+        this.pilota.setVisible(true).setFillStyle(0xfff6e0).setStrokeStyle(3, 0x8a7a50); this.ombra.setVisible(true);
         // la marca d'on botarà (només quan ve cap a tu)
         const pm = this.proj(Xt, zt);
         this.marcaBot.setPosition(pm.x, pm.y).setSize(46 * pm.k / 300 * 1.4, 18 * pm.k / 300 * 1.4).setStrokeStyle(3, 0xffd34d, qui === 'jusef' ? 0.75 : 0);
@@ -215,11 +209,12 @@ class Arcade extends Phaser.Scene {
         this.lent = Phaser.Math.Linear(this.lent, this.lentObj === undefined ? 1 : this.lentObj, 0.12);
         // L'Ineu ARRIBA SOL a la pilota: va cap a on arribarà (la marca groga); si no hi ha pilota, al mig
         let objI = 0;
-        if (b && !b.morta && b.de === 'jusef' && b.vz < 0) { const t = Math.max(0, (b.z - Z_COP) / -b.vz); objI = Phaser.Math.Clamp(b.X + b.vx * t, -0.85, 0.85); }
+        if (b && !b.morta && b.de === 'jusef' && b.serveix) objI = b.serveix.Xt;
+        else if (b && !b.morta && b.de === 'jusef' && b.vz < 0) { const t = Math.max(0, (b.z - Z_COP) / -b.vz); objI = Phaser.Math.Clamp(b.X + b.vx * t, -0.72, 0.72); }
         else if (b && !b.morta && b.de === 'jusef') objI = b.marca.X;
         this.Xi += Phaser.Math.Clamp(objI - this.Xi, -7.5 * dt, 7.5 * dt);
         const pi = this.proj(this.Xi, T.Z_INEU);
-        this.spIneu.setPosition(pi.x, pi.y).setScale(1.25 * pi.k / 400).setDepth(10 - T.Z_INEU);
+        this.spIneu.setPosition(pi.x, pi.y).setScale(1.5 * pi.k / 400).setDepth(10 - T.Z_INEU);
         // Simulació de la pilota (el temps del joc va més lent que el real, segons el mode i el cop màgic)
         if (b && !b.morta) this.simula(dt * this.M.temps * this.lent);
         // Jusef: va cap a on arribarà la pilota
@@ -229,7 +224,7 @@ class Arcade extends Phaser.Scene {
         this.Xj += Phaser.Math.Clamp(objJ - this.Xj, -pasJ, pasJ);
         const pj = this.proj(this.Xj, T.Z_JUSEF);
         const flota = Math.sin(time / 400) * 6;
-        this.spJusef.setPosition(pj.x, pj.y + flota).setScale(0.62 * pj.k / 214).setDepth(10 - T.Z_JUSEF);
+        this.spJusef.setPosition(pj.x, pj.y + flota).setScale(0.74 * pj.k / 214).setDepth(10 - T.Z_JUSEF);
         this.auraJusef.setPosition(pj.x, pj.y - 120 + flota);
         if (this.estat === 'serveiIneu') {            // la pilota a la mà de l'Ineu
             const p = this.proj(this.Xi + 0.18, -0.15, 0.32 + Math.abs(Math.sin(time / 260)) * 0.12);
@@ -245,12 +240,22 @@ class Arcade extends Phaser.Scene {
     pintaAnell() {
         const g = this.anell, b = this.b; g.clear();
         if (!b || b.morta || b.de !== 'jusef' || b.bots !== 1 || this.copFet === b) return;
-        const eta = this.eta(b), F = this.M.finestra, p = this.proj(b.X, b.z, b.h);
+        const eta = this.eta(b), F = this.M.finestra, B = this.M.bona, p = this.proj(this.visX(b), b.z, b.h);
         const r = Math.max(22, 0.05 * p.k * 2.4);
-        if (eta <= F && eta >= 0) { g.lineStyle(7, 0x58ff8a, 1).strokeCircle(p.x, p.y, r); g.lineStyle(3, 0xffffff, 0.8).strokeCircle(p.x, p.y, r * 0.72); }
-        else if (eta <= F * 2.6) { g.lineStyle(5, 0xffd34d, 0.85).strokeCircle(p.x, p.y, r * (1 + Math.min(1, (eta - F) / (F * 1.6)) * 0.8)); }
+        if (eta <= B) {
+            g.lineStyle(7, 0x58ff8a, 1).strokeCircle(p.x, p.y, r);                                                   // verd: ja pots lliscar
+            if (eta <= F) g.lineStyle(6, 0xffffff, 1).strokeCircle(p.x, p.y, r * 0.66).lineStyle(3, 0x7ad8ff, 0.9).strokeCircle(p.x, p.y, r * 1.18);     // moment perfecte
+        }
+        else if (eta <= B * 2.2) g.lineStyle(5, 0xffd34d, 0.85).strokeCircle(p.x, p.y, r * (1 + Math.min(1, (eta - B) / (B * 1.2)) * 0.8));
         else g.lineStyle(3, 0xffffff, 0.3).strokeCircle(p.x, p.y, r * 1.8);
     }
+    // posició X que es dibuixa (la pilota encantada fa zigzags, però la física i els cops fan servir b.X)
+    visX(b) {
+        if (!b.magica) return b.X;
+        const env = b.bots === 0 ? 1 : Phaser.Math.Clamp((b.z - 0.35) / 1.1, 0, 1);
+        return b.X + Math.sin(b.z * 8.5 + b.t0) * 0.3 * env;
+    }
+
     // segons REALS que falten perquè la pilota arribi a l'Ineu
     eta(b) { return b.vz < 0 ? Math.max(0, (b.z - Z_COP) / -b.vz) / (this.M.temps * this.lent) : 99; }
 
@@ -299,7 +304,10 @@ class Arcade extends Phaser.Scene {
                     b.h = 0; b.vh = -b.vh * T.REST; b.vx *= 0.97; b.vz *= 0.97;
                     this.so('bot');
                     const banda = b.z < T.L / 2 ? 'ineu' : 'jusef';
-                    if (banda === b.de) { this.finalBola(b.de === 'ineu' ? 'jusef' : 'ineu', 'Ha botat al seu camp'); return; }
+                    if (banda === b.de) {
+                        if (b.serveix) { const sv = b.serveix; b.serveix = null; const v = this.vel({ X: b.X, z: b.z, h: 0 }, sv.Xt, sv.zt, sv.t); b.vx = v.vx; b.vz = v.vz; b.vh = v.vh; continue; }     // servei: primer bot al seu camp
+                        this.finalBola(b.de === 'ineu' ? 'jusef' : 'ineu', 'Ha botat al seu camp'); return;
+                    }
                     b.bots++;
                     if (b.bots >= 2) { this.finalBola(b.de, banda === 'ineu' ? 'No hi has arribat' : 'En Jusef no hi arriba!'); return; }
                     if (banda === 'ineu') this.marcaBot.setStrokeStyle(3, 0xffd34d, 0);
@@ -317,7 +325,7 @@ class Arcade extends Phaser.Scene {
     }
 
     pintaPilota() {
-        const b = this.b, p = this.proj(b.X, b.z, b.h), s = this.proj(b.X, b.z, 0);
+        const b = this.b, p = this.proj(this.visX(b), b.z, b.h), s = this.proj(b.X, b.z, 0);
         this.pilota.setPosition(p.x, p.y).setRadius(Math.max(9, 0.05 * p.k)).setDepth(b.z > T.L / 2 ? 10 - b.z + 0.01 : 20);      // a la teva banda, per sobre de l'Ineu (que no la tapi)
         const r = Math.max(7, 0.05 * s.k * 0.8);
         const sobreTaula = Math.abs(b.X) <= T.W && b.z >= 0 && b.z <= T.L;
@@ -343,14 +351,12 @@ class Arcade extends Phaser.Scene {
     // ---------------- El gest: un lliscament cap amunt ----------------
     alPrimer(p) {
         this.punxo = { x: p.x, y: p.y, t: this.time.now }; this.traç = [{ x: p.x, y: p.y, t: this.time.now }];
-        if (this.estat === 'magiaEntrant' && !this.acabat) { this.entradaMagia(p); this.punxo = null; }
     }
     alMoure(p) { if (this.punxo) this.traç.push({ x: p.x, y: p.y, t: this.time.now }); }
     alSoltar(p) {
         if (!this.punxo || this.acabat) { this.punxo = null; return; }
         const ini = this.punxo; this.punxo = null;
         const dx = p.x - ini.x, dy = p.y - ini.y, len = Math.hypot(dx, dy), ms = Math.max(30, this.time.now - ini.t);
-        if (this.estat === 'magiaEntrant') return;
         this.gestura(dx, dy, len, len / ms);
     }
     gestura(dx, dy, len, vel) {
@@ -364,7 +370,7 @@ class Arcade extends Phaser.Scene {
         if (this.estat === 'serveiIneu') {
             this.estat = 'joc';
             this.gest(aim >= this.Xi);
-            this.llanca('ineu', { X: this.Xi + 0.18, z: -0.15, h: 0.3 }, Phaser.Math.Clamp(aim, -0.62, 0.62), T.L * (0.6 + 0.3 * prof), 0.95 - 0.2 * forca);
+            this.serveix('ineu', { X: this.Xi + 0.18, z: -0.15, h: 0.3 }, Phaser.Math.Clamp(aim, -0.62, 0.62), T.L * (0.62 + 0.3 * prof), 0.95 - 0.2 * forca);
             this.b.qualitat = 'be'; this.b.tipus = 'normal';
             return;
         }
@@ -394,6 +400,10 @@ class Arcade extends Phaser.Scene {
         this.b.qualitat = forca > 0.65 ? 'perfecte' : q; this.b.tipus = forca > 0.65 ? 'fort' : prof < 0.3 ? 'tallat' : 'normal';
         const noms = { normal: 'Bé', fort: 'FORT!', tallat: 'Tallat!' };
         const bp = this.proj(b.X, b.z, b.h);
+        if (b.magica) {
+            if (q === 'perfecte') { this.b.tipus = 'magic'; this.b.qualitat = 'perfecte'; this.txtCopa('ENCANTERI TRENCAT!', '#d8b0ff', bp); this.so('magia'); this.zoomExtra = 0.1; }
+            else { this.b.qualitat = 'fluix'; this.b.tipus = 'normal'; this.txtCopa('L\'encanteri resisteix...', '#ff9a7a', bp); }
+        } else
         this.txtCopa(q === 'perfecte' ? 'PERFECTE ' + noms[this.b.tipus] : noms[this.b.tipus], q === 'perfecte' ? '#7ad8ff' : '#a0ffb0', bp);
         if (q === 'perfecte' || forca > 0.65) { this.cameras.main.shake(130, 0.005); this.zoomExtra = 0.07; this.so('fort'); }
     }
