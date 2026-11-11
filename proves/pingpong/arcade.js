@@ -48,6 +48,8 @@ class Arcade extends Phaser.Scene {
         this.dibuixaEscenari();
         this.anims.create({ key: 'drive', frames: this.anims.generateFrameNumbers('pp_drive', { start: 4, end: 15 }), frameRate: 34 });
         this.anims.create({ key: 'reves', frames: this.anims.generateFrameNumbers('pp_reves', { start: 6, end: 15 }), frameRate: 40 });
+        // factor per fotograma de cada full: en girar-se, l'Ineu ocupa menys a la pantalla; s'hi compensa una mica perquè no sembli que s'encongeix
+        this.compIneu = { pp_drive: [1,1,1,1.02,1.08,1.09,1,1.04,1.05,1.05,1.06,1.02,1,1,1,1], pp_reves: [1,1,1.02,1.1,1.05,1.05,1.06,1.08,1.01,1,1.01,1.01,1,1,1,1], ineu_servei: [1,1,1.01,1.02,1.04,1.04,1.05,1.07,1,1,1,1,1,1,1,1] };
         this.escIneu = 1.5; this.tallIneu = 370;                          // escala (512 px de fotograma → 768 de pantalla) i alçada que es veu (dalt fins als genolls)
         this.spIneu = this.add.sprite(0, 0, 'pp_drive', 0).setOrigin(0.5, 1).setCrop(0, 0, 512, this.tallIneu);
         this.spIneu.on('animationcomplete', () => this.spIneu.setTexture('pp_drive', 0));
@@ -68,11 +70,13 @@ class Arcade extends Phaser.Scene {
         const est = (mida, color) => ({ fontFamily: 'Georgia, serif', fontSize: mida + 'px', color, stroke: '#1a0e06', strokeThickness: 6, align: 'center' });
         this.estUI = est;
         this.txtMarcador = this.ui(this.add.text(20, 44, '', est(34, '#f2e6c8')).setOrigin(0, 0.5).setDepth(50));
-        this.txtAvis = this.ui(this.add.text(AMPLE / 2, 520, '', est(44, '#ffd34d')).setOrigin(0.5).setDepth(50));
-        this.txtCop = this.ui(this.add.text(0, 0, '', est(40, '#ffffff')).setOrigin(0.5).setDepth(50));
+        this.txtAvis = this.ui(this.add.text(AMPLE / 2, 416, '', { fontFamily: 'Georgia, serif', fontSize: '40px', color: '#ffe9a0', stroke: '#000000', strokeThickness: 8, align: 'center', wordWrap: { width: 540 } }).setOrigin(0.5).setDepth(50));
+        this.txtCop = this.ui(this.add.text(0, 0, '', { fontFamily: 'Georgia, serif', fontSize: '40px', color: '#ffe9a0', stroke: '#000000', strokeThickness: 8, align: 'center', wordWrap: { width: 460 } }).setOrigin(0.5).setDepth(50));
         this.txtMode = this.ui(this.add.text(AMPLE - 20, 44, '', est(22, '#c8b890')).setOrigin(1, 0.5).setDepth(50));
-        this.txtAjuda = this.ui(this.add.text(AMPLE / 2, ALT - 40, 'Llisca cap amunt quan l\'anell és verd · direcció = apunta · llargada = fondària · velocitat = força', est(19, '#c8b890')).setOrigin(0.5).setDepth(50));
+        this.txtAjuda = null;                                                    // (sense text de tutorial a sota)
         this.estelaG = this.ui(this.add.graphics().setDepth(48));
+        this.ui(this.add.text(20, 94, 'Sortir ✕', { fontFamily: 'Georgia, serif', fontSize: '26px', color: '#f2e6c8', backgroundColor: '#1a120bcc', padding: { x: 12, y: 6 } })
+            .setOrigin(0, 0.5).setDepth(50).setInteractive({ useHandCursor: true }).on('pointerdown', (p, x, y, ev) => { if (ev) ev.stopPropagation(); this.punxo = null; history.length > 1 ? history.back() : (location.href = '../../'); }));
         // Estat
         this.Xi = 0; this.Xj = 0; this.lent = 1; this.zoomExtra = 0; this.punxo = null; this.traç = [];
         this.input.on('pointerdown', p => this.alPrimer(p));
@@ -122,7 +126,7 @@ class Arcade extends Phaser.Scene {
         llum.fillStyle(0xffd38a, 0.06).fillEllipse(AMPLE / 2, 640, 900, 900);
         llum.fillStyle(0xffd38a, 0.05).fillEllipse(AMPLE / 2, 640, 600, 600);
         // espelmes de la paret (parpellegen)
-        [90, 630].forEach((x, i) => {
+        [630].forEach((x, i) => {
             const cd = this.add.graphics().setDepth(-6);
             cd.fillStyle(0x3a2a1a, 1).fillRect(x - 5, 140, 10, 90).fillStyle(0xe8dcc0, 1).fillRect(x - 7, 120, 14, 36);
             const fl = this.add.ellipse(x, 108, 14, 26, 0xffb040, 0.95).setDepth(-5);
@@ -166,8 +170,8 @@ class Arcade extends Phaser.Scene {
     // El cartell del ratolí («No oblideu apagar els llums», art/objectes/cartell_llums), a la paret del fons, darrere d'en Jusef: gris, difuminat i una mica tapat,
     // perquè el seu blanc no distregui del de la pilota
     cartellProhibit() {
-        const img = this.add.image(520, 170, 'cartell_llums').setDepth(-4).setAngle(-3).setAlpha(0.55).setTint(0x8c8a86);
-        img.setScale(210 / img.width);
+        const img = this.add.image(540, 160, 'cartell_llums').setDepth(-4).setAngle(-3).setAlpha(0.55).setTint(0x8c8a86);
+        img.setScale(135 / img.width);
         try { if (img.postFX) img.postFX.addBlur(0, 1.4, 1.4, 1.0); } catch (e) { /* sense WebGL: es veu sense difuminar */ }
     }
 
@@ -187,7 +191,7 @@ class Arcade extends Phaser.Scene {
         this.b = null; this.estat = 'servei'; this.rally = 0;
         this.pilota.setVisible(false); this.ombra.setVisible(false); this.marcaBot.setStrokeStyle(3, 0xffd34d, 0);
         if (this.serveixIneu()) {
-            this.avis('El teu servei: toca la pantalla', 1600, '#f2e6c8');
+            this.avis('El teu servei: llisca cap amunt', 1600, '#f2e6c8');
             this.estat = 'serveiIneu';
         } else {
             this.serveisJusef++;
@@ -275,7 +279,7 @@ class Arcade extends Phaser.Scene {
         else if (b && !b.morta && b.de === 'jusef') objI = b.marca.X;
         this.Xi += Phaser.Math.Clamp(objI - this.Xi, -7.5 * dt, 7.5 * dt);
         // L'Ineu és a primer pla: molt gran, només de genolls amunt, i el tall de baix és la vora de baix de la pantalla (es mou una mica a banda i banda)
-        const pi = this.proj(this.Xi, T.Z_INEU), ES = this.escIneu, tall = this.tallIneu;
+        const pi = this.proj(this.Xi, T.Z_INEU), tall = this.tallIneu, comp = (this.compIneu[this.spIneu.texture.key] || [])[parseInt(this.spIneu.frame.name, 10)] || 1, ES = this.escIneu * comp;
         this.spIneu.setScale(ES).setPosition(360 + Phaser.Math.Clamp((pi.x - 360) * 0.55, -150, 150), ALT + 40 + (512 - tall) * ES).setDepth(12);
         // Simulació de la pilota (el temps del joc va més lent que el real, segons el mode i el cop màgic)
         if (b && !b.morta) this.simula(dt * this.M.temps * this.lent);
@@ -474,7 +478,7 @@ class Arcade extends Phaser.Scene {
     gest(dreta) { this.spIneu.play(dreta ? 'drive' : 'reves', true); }
     txtCopa(t, color, p) {
         const q = this.mundAPantalla(p.x, p.y);
-        this.txtCop.setText(t).setColor(color).setPosition(q.x, q.y - 70).setAlpha(1).setScale(0.8);
+        this.txtCop.setText(t).setColor('#ffe9a0').setPosition(q.x, q.y - 70).setAlpha(1).setScale(0.8);
         this.tweens.killTweensOf(this.txtCop);
         this.tweens.add({ targets: this.txtCop, y: q.y - 140, scale: 1.15, alpha: 0, duration: 850, ease: 'Sine.easeOut' });
     }
@@ -525,7 +529,7 @@ class Arcade extends Phaser.Scene {
     }
 
     avis(text, ms, color) {
-        this.txtAvis.setText(text).setColor(color).setAlpha(1);
+        this.txtAvis.setText(text).setColor('#ffe9a0').setAlpha(1);
         this.tweens.killTweensOf(this.txtAvis);
         this.tweens.add({ targets: this.txtAvis, alpha: 0, delay: ms, duration: 300 });
     }
