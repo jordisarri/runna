@@ -217,11 +217,11 @@ const INEU_V2 = new URLSearchParams(location.search).get('ineu') !== 'v1';
 const INEU_LAT = new URLSearchParams(location.search).get('lat') === 'perfil' ? 'perfil' : 'elev';
 const rutaIneuV2 = (dir, idle) => {
     if (INEU_V2 && (dir === 'left' || dir === 'right')) {
-        if (idle && INEU_LAT === 'elev') return `assets/ineu_v2/alt/idle_elev_${dir}.webp?v=2611112000`;
-        if (!idle && INEU_LAT === 'perfil') return `assets/ineu_v2/alt/perfil_${dir}.webp?v=2611112000`;
-        if (!idle) return `assets/ineu_v2/alt/walk_elev_${dir}.webp?v=2611112000`;
+        if (idle && INEU_LAT === 'elev') return `assets/ineu_v2/alt/idle_elev_${dir}.webp?v=2611112100`;
+        if (!idle && INEU_LAT === 'perfil') return `assets/ineu_v2/alt/perfil_${dir}.webp?v=2611112100`;
+        if (!idle) return `assets/ineu_v2/alt/walk_elev_${dir}.webp?v=2611112100`;
     }
-    return `assets/ineu_v2/${idle ? 'idle_' : ''}${dir}.webp?v=2611111500`;
+    return `assets/ineu_v2/${idle ? 'idle_' : ''}${dir}.webp?v=2611112100`;
 };
 const IDLE_INEU = INEU_V2 ? {
     down: 'down', up: 'up', left: 'left', right: 'right',

@@ -3,7 +3,7 @@
 
     python3 eines/fer_ineu_v2_alt.py [gruix_contorn]
 
-Origen: art/ineu/v2/alt/<nom>.png (4x4 de 256): idle_elev_left/right (idle amb càmera elevada, coroneta visible) i perfil_left/right (caminar de perfil).
+Origen: art/ineu/v2/alt/<nom>.png (4x4 de 256): idle_elev_left/right (idle amb càmera elevada, coroneta visible; el dret és el mirall de l'esquerre), walk_elev_left/right (caminar; l'esquerre és el mirall del dret) i perfil_left/right (caminar de perfil). Els descartats són a alt/descartats/.
 Mateixa escala i mateix criteri de peus/centre que eines/fer_ineu_v2.py, i el mateix contorn.
 El joc tria la combinació amb ?lat=elev (idle elevat + caminar pseudo-isomètric, per defecte) o ?lat=perfil (idle de perfil + caminar de perfil).
 """
@@ -17,12 +17,13 @@ import fer_ineu_v2 as b
 
 ORIGEN = b.ARREL / 'art' / 'ineu' / 'v2' / 'alt'
 DEST = b.DEST / 'alt'
+SENSE = b.SENSE / 'alt'
 AMPLE_LAT = 118.0   # amplada objectiu del cos de perfil (el caminar lateral actual fa ~115)
 MAX_ESTIR = 1.3
 
 def main():
     gruix = int(sys.argv[1]) if len(sys.argv) > 1 else 1
-    DEST.mkdir(parents=True, exist_ok=True)
+    DEST.mkdir(parents=True, exist_ok=True); SENSE.mkdir(parents=True, exist_ok=True)
     for p in sorted(ORIGEN.glob('*.png')):
         fs = b.fots(p); boxes = [b.bbox(x) for x in fs]
         # Cada full es porta a la mateixa alçada que els altres (224) i, com que de perfil l'Ineu queda més prim del que toca, s'eixampla fins a ~AMPLE_LAT px (com mínim sense encongir, màxim ×MAX_ESTIR).
@@ -35,6 +36,7 @@ def main():
             g = im.resize((round(b.CEL * fx), round(b.CEL * f)), Image.LANCZOS)
             cel = Image.new('RGBA', (b.CEL, b.CEL), (0, 0, 0, 0)); cel.paste(g, (dx, dy), g)
             out.paste(cel, ((i % 4) * b.CEL, (i // 4) * b.CEL))
+        out.save(SENSE / (p.stem + '.webp'), 'WEBP', quality=90, alpha_quality=100, method=6)
         contorn(out, gruix).save(DEST / (p.stem + '.webp'), 'WEBP', quality=88, alpha_quality=100, method=6)
         print(p.stem, 'ok')
 
