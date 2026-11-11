@@ -163,14 +163,21 @@ const Joc = {
     VOLUM_MUSICA_ABAIXADA: 0,           // la música de fons es silencia completament (0) mentre sona la fanfàrria d'objecte/arma
 
     // Una peça curta que sona una sola vegada per sobre de tot (no talla la música de fons)
-    jingle(scene, clau) {
+    // bloqueja: és la fanfàrria d'un objecte/arma que s'alça: fins que acabi (Joc.fanfaraFins) la pàgina d'avís no es pot passar (ui.avancar)
+    jingle(scene, clau, bloqueja = false) {
         Joc.detectarMusica().then(() => {
-            if (!Joc.musicaDisponible.has(clau)) return;
-            const play = () => { const s = scene.sound.add(clau, { volume: Joc.VOLUM_JINGLE }); s.once('complete', () => s.destroy()); s.play(); };
+            if (!Joc.musicaDisponible.has(clau)) { if (bloqueja) Joc.fanfaraFins = 0; return; }
+            const play = () => {
+                const s = scene.sound.add(clau, { volume: Joc.VOLUM_JINGLE });
+                s.once('complete', () => { s.destroy(); if (bloqueja) Joc.fanfaraFins = 0; });
+                if (bloqueja) Joc.fanfaraFins = performance.now() + ((s.duration || 6) * 1000) + 300;       // (temps real: l'escena pot canviar de zona)
+                s.play();
+            };
             if (scene.cache.audio.exists(clau)) play();
             else { scene.load.once('filecomplete-audio-' + clau, play); Joc.carregarMusica(scene, clau); scene.load.start(); }
         });
     },
+    fanfaraFins: 0,        // instant (performance.now) fins al qual sona una fanfàrria d'objecte: no es pot interrompre
 
     // La fanfàrria de Runna (jingle_runna) en alçar l'espasa: mentre dura, la música de fons NO se sent (volum 0) i, en acabar, torna. fi() es crida quan la
     // fanfàrria ha acabat (l'escena no es pot passar fins llavors). Si el fitxer no hi és, sona la fanfàrria del joc sintetitzada (el leitmotiv amb orgue).
@@ -209,7 +216,8 @@ const Joc = {
         const m = Joc.musica;
         if (m && m.isPlaying) { m.setVolume(0); setTimeout(() => { if (Joc.musica === m) m.setVolume(0.6); }, 4200); }       // (temps real: el rellotge de l'escena es talla en canviar de zona)
         // De moment, els objectes fan servir la mateixa fanfàrria que les armes (jingle_arma); si no hi és, la sintetitzada
-        Joc.detectarMusica().then(() => { if (Joc.musicaDisponible.has('jingle_arma')) Joc.jingle(scene, 'jingle_arma'); else Sfx.fanfara(); });
+        Joc.fanfaraFins = performance.now() + 8000;                // (provisional, fins saber quant dura; jingle() ho ajusta i ho allibera en acabar)
+        Joc.detectarMusica().then(() => { if (Joc.musicaDisponible.has('jingle_arma')) Joc.jingle(scene, 'jingle_arma', true); else { Sfx.fanfara(); Joc.fanfaraFins = performance.now() + 2300; } });
     },
 
     // L'Ineu alça una arma nova: la seva fanfàrria (jingle_arma); mentre no hi sigui, la d'objecte
@@ -218,7 +226,8 @@ const Joc = {
             if (!Joc.musicaDisponible.has('jingle_arma')) { Joc.fanfaraObjecte(scene); return; }       // (mentrestant, la sintetitzada)
             const m = Joc.musica;
             if (m && m.isPlaying) { m.setVolume(0); setTimeout(() => { if (Joc.musica === m) m.setVolume(0.6); }, 6000); }
-            Joc.jingle(scene, 'jingle_arma');
+            Joc.fanfaraFins = performance.now() + 8000;
+            Joc.jingle(scene, 'jingle_arma', true);
         });
     },
 

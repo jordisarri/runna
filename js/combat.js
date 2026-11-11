@@ -245,6 +245,46 @@ const ENEMICS = {
         }
     },
 
+    // Bolet verinós (els tres guardians de la rialla, al Bosc del Pi): immòbil, però tira el seu verí. Primer MARCA al terra on és l'Ineu (cercle verd que es tanca),
+    // després llança una bola que hi cau en arc i esquitxa: fa mal només a qui hi és a sota en aquell moment (es pot esquivar). Cal derrotar-los de a prop.
+    bolet_verinos: {
+        tex: 'bolet_verinos', vida: 3, vel: 0, mal: 1, radi: 22, cos: [34, 18], ombra: 0.35,
+        perill: () => false,            // el mal el fa el verí, no el contacte
+        ia(z, e, ara) {
+            e.spr.body.setVelocity(0);
+            const c = e.spr.body.center, jo = z.ineu.body.center;
+            if (!e.proxVeri) e.proxVeri = ara + 900 + Math.random() * 1500;
+            if (!e.apuntant) {
+                if (ara < e.proxVeri || Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y) > 480) return;
+                e.apuntant = true; e.fins = ara + 750;
+                e.objX = jo.x; e.objY = jo.y;                                       // on cauria ara: l'Ineu s'ha de moure
+                e.spr.setTint(0xd8ff90);
+                e.cercle = z.add.circle(e.objX, e.objY, 62, 0x9adf50, 0.08).setStrokeStyle(2, 0x9adf50, 0.8).setDepth(e.objY - 1);
+                z.tweens.add({ targets: e.cercle, scale: { from: 1.25, to: 0.85 }, alpha: 0.9, duration: 740 });
+                return;
+            }
+            if (ara < e.fins) return;
+            // Llança la bola: puja en arc fins al punt marcat
+            e.apuntant = false; e.proxVeri = ara + 2400 + Math.random() * 1400;
+            e.spr.clearTint();
+            if (e.cercle) { e.cercle.destroy(); e.cercle = null; }
+            const tx = e.objX, ty = e.objY, x0 = c.x, y0 = c.y - 26;
+            const bola = z.add.circle(x0, y0, 9, 0x9adf50).setStrokeStyle(2, 0x2f5a1c).setDepth(99990);
+            z.tweens.addCounter({
+                from: 0, to: 1, duration: 620, ease: 'Sine.easeInOut',
+                onUpdate: tw => { const k = tw.getValue(); bola.setPosition(x0 + (tx - x0) * k, y0 + (ty - y0) * k - Math.sin(Math.PI * k) * 90).setScale(1 + Math.sin(Math.PI * k) * 0.4); },
+                onComplete: () => {
+                    bola.destroy();
+                    const bassa = z.add.circle(tx, ty, 58, 0x7acb3a, 0.35).setStrokeStyle(2, 0x9adf50, 0.8).setDepth(ty - 1);
+                    z.tweens.add({ targets: bassa, alpha: 0, scale: 1.25, duration: 1300, onComplete: () => bassa.destroy() });
+                    z.boiraPuf(tx, ty);
+                    const j2 = z.ineu.body.center;
+                    if (Phaser.Math.Distance.Between(tx, ty, j2.x, j2.y) < 62) z.ferIneu(1, { x: tx, y: ty });
+                }
+            });
+        }
+    },
+
     // Embesteix en línia recta: apunta (flaix lila), carrega, i queda cansada i vulnerable
     ovella: {
         tex: 'ovella_boira', vida: 3, vel: 290, mal: 1, radi: 24, cos: [46, 24], ombra: 0.4,
@@ -696,7 +736,7 @@ const ENEMICS = {
     },
 
     visitant: {
-        tex: 'visitant_zombi', texAlt: 'visitant', escala: 0.6, vida: 4, vel: 58, mal: 1, radi: 24, cos: [40, 22], ombra: 0.42,
+        tex: 'visitant_zombi', texAlt: 'visitant', escala: 0.85, vida: 4, vel: 58, mal: 1, radi: 28, cos: [52, 28], ombra: 0.55, claredat: 1.35, saturacio: 0.5,
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
@@ -739,6 +779,13 @@ Object.assign(ZonaBase.prototype, {
         spr.body.setSize(def.cos[0] / esc, def.cos[1] / esc);
         spr.body.setOffset((fw - def.cos[0] / esc) / 2, def.centrat ? (fh - def.cos[1] / esc) / 2 : fh - def.cos[1] / esc);
         spr.setCollideWorldBounds(true);
+        if (animada && def.claredat && spr.preFX) {      // enemics apagats: més llum i color (només amb WebGL)
+            try {
+                const cm = spr.preFX.addColorMatrix();
+                cm.brightness(def.claredat, true);
+                if (def.saturacio) cm.saturate(def.saturacio, true);
+            } catch (err) { /* sense efectes: es veu tal qual */ }
+        }
         this.physics.add.collider(spr, this.obstacles);
         const ombra = this.add.image(x, y, 'ombra').setScale(def.ombra || 0.3).setDepth(-500).setVisible(!!def.ombra);
         const e = {
@@ -1284,7 +1331,7 @@ Object.assign(ZonaBase.prototype, {
         const z = this;
         z.ui().obrirDialeg({
             pagines: [
-                { avis: "Has obtingut un GRA DEL ROSARI: " + motiu + " (+1 cor).", obj: 'gra_rosari' }
+                { avis: "Has obtingut un GRA DEL ROSARI: " + motiu + ".", obj: 'gra_rosari' }
             ],
             enAcabar: () => {
                 Estat.afegirGra();

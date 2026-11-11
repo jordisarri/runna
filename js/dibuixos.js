@@ -517,7 +517,7 @@ function dibuixarFontSJ(c, w) {
     });
 }
 
-// Herbes de la Nit de Sant Joan que cal trobar al bosc (herba de Sant Joan, romaní i farigola)
+// Herbes de la Nit de Sant Joan que cal trobar (herba de Sant Joan, rialla, romaní i farigola)
 function dibuixarHerba(c, w, tipus) {
     lienc(c, w, w * 1.1, (ctx, W, H) => {
         ctx.lineJoin = 'round'; ctx.lineCap = 'round';
@@ -544,6 +544,24 @@ function dibuixarHerba(c, w, tipus) {
                 for (let q = 0; q < 16; q++) { const t = 0.15 + q / 16 * 0.85, lx = W * 0.5 + (x1 - W * 0.5) * t + ((q % 2) ? 5 : -5), ly = base + (y1 - base) * t; ctx.strokeStyle = q % 3 ? '#2f5a34' : '#3d7040'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(lx - ((q % 2) ? 3 : -3), ly + 2); ctx.lineTo(lx + ((q % 2) ? 7 : -7), ly - 7); ctx.stroke(); }
                 if (k % 2 === 0) for (let q = 0; q < 3; q++) { ctx.fillStyle = '#9ab8f0'; ctx.strokeStyle = '#3a4a8a'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(x1 + (q - 1) * 5, y1 + 3 + (q % 2) * 7, 3.6, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
             }
+        } else if (tipus === 'rialla') {       // rialla («herba del riure»): UNA sola flor groga, tija i dues fulles; la flor té una boca evident i només això (sense ulls)
+            const fx = W * 0.5, fy = H * 0.34;
+            ctx.strokeStyle = '#2c4a22'; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(fx, base); ctx.quadraticCurveTo(fx + 3, H * 0.7, fx, fy + W * 0.2); ctx.stroke();
+            ctx.strokeStyle = '#7ab84e'; ctx.lineWidth = 2; ctx.stroke();
+            ctx.fillStyle = '#6fa84a'; ctx.strokeStyle = '#26361e'; ctx.lineWidth = 1.4;
+            [[-1, 0.8], [1, 0.68]].forEach(([sg, yy]) => { ctx.beginPath(); ctx.ellipse(fx + sg * 11, H * yy, 11, 4, sg * -0.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+            // pètals tot al voltant
+            ctx.fillStyle = '#d8307e'; ctx.strokeStyle = '#7a1448'; ctx.lineWidth = 1.6;
+            for (let k = 0; k < 10; k++) {
+                const a = k / 10 * Math.PI * 2;
+                ctx.beginPath(); ctx.ellipse(fx + Math.cos(a) * W * 0.25, fy + Math.sin(a) * W * 0.25, W * 0.12, W * 0.065, a, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            }
+            ctx.fillStyle = '#58b0ec'; ctx.strokeStyle = '#1f4f80'; ctx.lineWidth = 1.8;
+            ctx.beginPath(); ctx.arc(fx, fy, W * 0.19, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            // la boca: mitja lluna oberta i somrient, amb una mica de llengua
+            ctx.fillStyle = '#6a1c14'; ctx.strokeStyle = '#3a0e08'; ctx.lineWidth = 1.6;
+            ctx.beginPath(); ctx.moveTo(fx - W * 0.12, fy - W * 0.01); ctx.quadraticCurveTo(fx, fy + W * 0.2, fx + W * 0.12, fy - W * 0.01); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#e8606a'; ctx.beginPath(); ctx.ellipse(fx, fy + W * 0.075, W * 0.05, W * 0.03, 0, 0, Math.PI * 2); ctx.fill();
         } else {                               // farigola: coixinet baix de fulletes grisenques amb flors lila rosades
             ctx.strokeStyle = '#26361e'; ctx.lineWidth = 1.5;
             for (let k = 0; k < 44; k++) { const a = r() * Math.PI, rr = r(); const x = W * 0.5 + Math.cos(a) * W * 0.4 * rr * (r() > 0.5 ? 1 : -1), y = base - Math.sin(a) * H * 0.36 * (0.2 + rr * 0.8) - 6; ctx.fillStyle = ['#6f8a5a', '#7e9a68', '#5f7a4e'][k % 3]; ctx.beginPath(); ctx.arc(x, y, 4.5 + r() * 3, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
@@ -1056,16 +1074,21 @@ function dibuixarTaulaSopar(c, w) {
     });
 }
 
-function dibuixarBolet(c, w) {
+function dibuixarBolet(c, w, variant) {
+    const ver = variant === 'verinos';       // el bolet verinós (guardià de la rialla): barret verd malaltís amb pigues grogues i gotes de verí
     lienc(c, w, w * 0.9, (ctx, W, H) => {
         ombraTerra(ctx, W / 2, H - 6, W * 0.36, 7);
         ctx.lineWidth = 3; ctx.strokeStyle = CONTORN;
         ctx.fillStyle = '#d8c8a0'; ctx.fillRect(W * 0.38, H * 0.5, W * 0.24, H * 0.42); ctx.strokeRect(W * 0.38, H * 0.5, W * 0.24, H * 0.42);
-        ctx.fillStyle = '#7a3a9a';
+        ctx.fillStyle = ver ? '#2f7a4e' : '#7a3a9a';
         ctx.beginPath(); ctx.ellipse(W / 2, H * 0.42, W * 0.46, H * 0.34, 0, Math.PI, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#b8e060';
+        ctx.fillStyle = ver ? '#f2ec5a' : '#b8e060';
         [[0.3, 0.3], [0.5, 0.2], [0.7, 0.3], [0.4, 0.36], [0.62, 0.38]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(W * x, H * y, 4, 0, Math.PI * 2); ctx.fill(); });
         ctx.fillStyle = CONTORN; ctx.fillRect(W * 0.43, H * 0.64, 4, 4); ctx.fillRect(W * 0.55, H * 0.64, 4, 4);
+        if (ver) {       // gotes de verí que regalimen del barret
+            ctx.fillStyle = '#9adf50'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 1.5;
+            [[0.2, 0.46], [0.78, 0.45]].forEach(([x, y]) => { ctx.beginPath(); ctx.ellipse(W * x, H * y + 5, 3.4, 5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+        }
     });
 }
 

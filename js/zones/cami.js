@@ -356,7 +356,10 @@ class ZonaJardi extends ZonaBase {
         this.dibuixaForat(LX, LY);
         this.llosa = this.posar('llosa', LX, LY, { fonsY: -700 }).setOrigin(0.5, 0.5);        // centrada sobre el forat (si no, per sota se'n veurien mig forat i les escales)
         this.florLluna = this.posar('flors', LX - 66, LY + 22, { escala: 0.8 }).setVisible(false);
-        this.interactiu(LX, LY + 5, RADI_OBJECTE, DIALEGS.llosaJardi, { altura: 60, actiu: () => !Estat.flag('llosaOberta') });
+        this.puntLlosa = this.interactiu(LX, LY + 5, RADI_OBJECTE, DIALEGS.llosaJardi, { altura: 60, actiu: () => !Estat.flag('llosaOberta') });
+        // Amb Runna (Acte 3), la llosa dels monjos s'encén: un cercle de runes de llum pàl·lida i blavosa que batega fins que s'obre
+        this.brillLlosa = null;
+        if (Estat.flag('runna') && !Estat.flag('llosaOberta')) this.posarBrillLlosa(LX, LY);
 
         // --- Gespa amb flors: només dins la pèrgola (cap flor fora). Un rectangle clar fa de gespa ben cuidada ---
         this.add.rectangle((COLS[0] + COLS[COLS.length - 1]) / 2, (YB + YF) / 2, COLS[COLS.length - 1] - COLS[0], YF - YB, 0xc4f08c, 0.14).setDepth(-1090);
@@ -372,8 +375,9 @@ class ZonaJardi extends ZonaBase {
         }
         COLS.forEach(cx => [YB, YF].forEach(cy => { for (let k = 0; k < 5; k++) { const x = cx + (rnd() - 0.5) * 90, y = cy + 6 + rnd() * 26; if (lliure(x, y)) flor(x, y, 0.45 + rnd() * 0.4); } }));       // mates al peu de les columnes
 
-        // L'Isílder, davant l'entrada de la pèrgola (si la llosa ja és oberta, es queda al costat del forat)
-        this.isilder = this.npc('isilder', 664, 915, DIALEGS.isilder);
+        // L'Isílder, fora de la pèrgola, davant de la fila de columnes del davant i ben lluny de la Prunera (si la llosa ja és oberta, es queda al costat del forat)
+        this.isilder = this.npc('isilder', 360, 840, DIALEGS.isilder, { zoomConversa: 1.3 });
+        this.puntLlosa.cameraCossos = [this.isilder];                 // en examinar la llosa, el diàleg d'ella (llosaJardi) enquadra l'Isílder també
         if (Estat.flag('llosaOberta')) {
             this.llosa.setPosition(LX - 92, LY + 4).setRotation(-0.1);
             this.florLluna.setVisible(true);
@@ -412,12 +416,65 @@ class ZonaJardi extends ZonaBase {
         this.sortidaEscala(x - 37, y - 37, 74, 74, 'ZonaSoterraniHost', 'entrada', y + 42);   // l'Ineu baixa l'escala abans de canviar de zona
     }
 
+    // El cercle de runes de la llosa quan es desperta amb Runna (el mateix dibuix que s'encén a la seva obertura, obrirLlosa): batega suaument, amb una mica de llum i espurnes
+    posarBrillLlosa(LX, LY) {
+        const g = this.add.graphics().setDepth(-690);
+        g.lineStyle(3, 0xbfe8ff, 1).strokeCircle(LX, LY, 34).strokeCircle(LX, LY, 22);
+        for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; g.lineBetween(LX + Math.cos(a) * 22, LY + Math.sin(a) * 22, LX + Math.cos(a) * 34, LY + Math.sin(a) * 34); }
+        g.fillStyle(0xbfe8ff, 0.18).fillCircle(LX, LY, 34);
+        const llum = this.add.ellipse(LX, LY + 4, 150, 80, 0xbfe8ff, 0.2).setBlendMode(Phaser.BlendModes.ADD).setDepth(-689);
+        const espurnes = this.add.particles(LX, LY, 'espurna', {
+            x: { min: -30, max: 30 }, y: { min: -10, max: 10 }, speedY: { min: -40, max: -12 }, lifespan: 1500,
+            scale: { start: 0.3, end: 0 }, alpha: { start: 0.8, end: 0 }, tint: [0xbfe8ff, 0xffffff], frequency: 380, blendMode: 'ADD'
+        }).setDepth(-688);
+        this.tweens.add({ targets: [g, llum], alpha: { from: 0.35, to: 1 }, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
+        this.brillLlosa = { g, llum, espurnes };
+    }
+
+    // Un cop oberta la llosa, el cercle de runes ja no hi és (l'obertura en dibuixa el seu)
+    treureBrillLlosa() {
+        const b = this.brillLlosa;
+        if (!b) return;
+        [b.g, b.llum].forEach(o => this.tweens.killTweensOf(o));
+        [b.g, b.llum, b.espurnes].forEach(o => o.destroy());
+        this.brillLlosa = null;
+    }
+
+    // Amb Runna, en entrar al jardí, la llosa s'encén i l'Isílder ho veu (escena automàtica, un sol cop: en acabar, el flag isilderRosansa ja hi és)
+    enEntrar() {
+        if (Estat.flag('runna') && !Estat.flag('isilderRosansa') && !Estat.flag('llosaOberta') && !Estat.flag('llavorRosansa') && !Estat.te('llavorLluna') && !Estat.caigut) {
+            this.time.delayedCall(2200, () => this.escenaLlosaRunna());
+        }
+    }
+
+    escenaLlosaRunna(intents = 0) {
+        if (Estat.flag('isilderRosansa') || Estat.flag('llosaOberta') || !this.isilder || !this.isilder.active || !this.sys.isActive()) return;
+        const ui = this.ui();
+        if (ui.dialeg || this.canviant || this.camCinema || this.ineuAlt || this.assegut || this.cinema) {           // hi ha un diàleg o una escena en marxa: espera
+            if (intents < 20) this.time.delayedCall(700, () => this.escenaLlosaRunna(intents + 1));
+            return;
+        }
+        const b = this.brillLlosa;
+        if (b) {                                                              // un cop de llum: la llosa s'encén de debò
+            this.tweens.killTweensOf(b.llum);
+            b.llum.setAlpha(0.2);
+            this.tweens.add({ targets: b.llum, alpha: 1, scale: 1.5, duration: 700, yoyo: true, ease: 'Sine.easeInOut', onComplete: () => this.tweens.add({ targets: [b.g, b.llum], alpha: { from: 0.35, to: 1 }, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' }) });
+            Sfx.to(880, 1320, 0.5, 'sine', 0.1);
+        }
+        this.puntActiu = this.isilder.punt;
+        this.dialegDePunt = true;                                             // la càmera enquadra els dos
+        this.time.delayedCall(800, () => {
+            ui.obrirDialeg(DIALEGS.isilderRunna(Estat), () => { this.dialegDePunt = false; Estat.desar(); });
+        });
+    }
+
     // L'Isílder porta la llavor a la llosa: la deixa caure, hi brota una flor de lluna i una columna de llum lunar baixa fins a ella; sobre la llosa
     // s'encén un cercle de runes, tot tremola i la llosa s'alça i s'aparta, i deixa veure l'escala. Tot es veu (res no s'ajup ni es deforma).
     // fet: quan l'escena ha acabat (es crida des d'una pàgina d'acció del diàleg de l'Isílder).
     obrirLlosa(fet) {
         if (this.obrintLlosa || Estat.flag('llosaOberta')) { if (fet) fet(); return; }
         this.obrintLlosa = true;
+        this.treureBrillLlosa();
         const cam = this.cameras.main, I = this.isilder, { x: LX, y: LY } = this.llosaPos;
         this.tweens.killTweensOf(I);
         const espera = ms => new Promise(res => this.time.delayedCall(ms, res));

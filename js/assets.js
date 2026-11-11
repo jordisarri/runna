@@ -151,6 +151,7 @@ const CATALEG = [
     { key: 'pastor_enfadat', file: 'assets/enemics/pastor_enfadat.webp', amplada: 174, cru: true },
     { key: 'aldreu_guardia', file: 'assets/enemics/aldreu_guardia.webp', amplada: 85,  cru: true, provisional: (c, w) => dibuixarPastorBoira(c, w) },
     { key: 'bolet',          file: 'assets/enemics/bolet.webp',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
+    { key: 'bolet_verinos',  file: 'assets/enemics/bolet_verinos.webp',  amplada: 58, provisional: (c, w) => dibuixarBolet(c, w, 'verinos') },       // guardians de la rialla
     { key: 'rovello',        file: 'assets/natura/rovello.webp',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
     { key: 'llac',           file: null,           amplada: 58, provisional: (c, w) => dibuixarLlac(c, w) },
     { key: 'diposit',        file: null,        amplada: 300, provisional: (c, w) => dibuixarDiposit(c, w) },
@@ -172,6 +173,7 @@ const CATALEG = [
     { key: 'herba_sj',     file: null,     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'sj') },
     { key: 'romani',       file: null,       amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'romani') },
     { key: 'farigola',     file: null,     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'farigola') },
+    { key: 'rialla',       file: 'assets/natura/rialla.webp',       amplada: 44, provisional: (c, w) => dibuixarHerba(c, w, 'rialla') },       // l'herba del riure (Bosc del Pi dels Tres Cants)
     { key: 'cercle_bolets',  file: 'assets/natura/cercle_bolets.webp',  amplada: 150, provisional: (c, w) => dibuixarCercleBolets(c, w) },
     { key: 'olla',           file: null,           amplada: 110, provisional: (c, w) => dibuixarOlla(c, w) },
     { key: 'ocell',          file: null,          amplada: 34, provisional: (c, w) => dibuixarOcell(c, w) },
@@ -318,7 +320,7 @@ const Grafics = {
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, rutaIneu(dir, false), mida);
-            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac_${arma}_${dir}.webp?v=2611113200`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
+            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac_${arma}_${dir}.webp?v=2611113600`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
@@ -881,12 +883,40 @@ const Grafics = {
         crea('gra_mig', 44, 44, (ctx) => gra(ctx, 1));
         crea('gra_buit', 44, 44, (ctx) => gra(ctx, 0));
         // Creueta de llautó que penja al principi del rosari
-        crea('creu_rosari', 28, 40, (ctx) => {
+        crea('creu_rosari', 36, 28, (ctx) => {
+            // Creu de fusta TUMBADA sobre una taula, en perspectiva isomètrica: el pla de la taula es veu en diagonal i la creu hi reposa en horitzontal (el braç llarg
+            // va cap a baix a l'esquerra i el cap de la creu, amb l'anella del cordó, és dalt a la dreta, cap als grans), amb gruix (els costats, més foscos, es veuen per sota) i una ombra suau a la taula. Només polígons, amb la veta de la fusta.
             ctx.lineJoin = 'round';
-            const g = ctx.createLinearGradient(6, 0, 22, 0); g.addColorStop(0, '#8a6a20'); g.addColorStop(0.45, '#f4d77c'); g.addColorStop(1, '#7a5a16');
-            ctx.fillStyle = g; ctx.strokeStyle = '#2a1a06'; ctx.lineWidth = 1.8;
-            ctx.beginPath(); ctx.moveTo(11, 3); ctx.lineTo(17, 3); ctx.lineTo(17, 11); ctx.lineTo(25, 11); ctx.lineTo(25, 17); ctx.lineTo(17, 17); ctx.lineTo(17, 37); ctx.lineTo(11, 37); ctx.lineTo(11, 17); ctx.lineTo(3, 17); ctx.lineTo(3, 11); ctx.lineTo(11, 11); ctx.closePath(); ctx.fill(); ctx.stroke();
-            ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fillRect(12.5, 5, 1.6, 30); ctx.fillRect(5, 12.5, 18, 1.4);
+            const model = [[-15, -3], [-10, -3], [-10, -10], [-4, -10], [-4, -3], [15, -3], [15, 3], [-4, 3], [-4, 10], [-10, 10], [-10, 3], [-15, 3]];     // (llarg, ample) sobre el pla
+            const P = (u, v) => [18 - (u - v) * 0.866, 11.5 + (u + v) * 0.5];                                                                           // projecció isomètrica
+            const dalt = model.map(([u, v]) => P(u, v)), GRUIX = 4;
+            const baix = dalt.map(([x, y]) => [x, y + GRUIX]);
+            const poli = pts => { ctx.beginPath(); pts.forEach(([x, y], k) => k ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); };
+            // Ombra a la taula
+            poli(baix.map(([x, y]) => [x + 2.5, y + 2])); ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.fill();
+            // Costats
+            ctx.strokeStyle = '#2a1608'; ctx.lineWidth = 1.5;
+            for (let k = 0; k < dalt.length; k++) {
+                const n = (k + 1) % dalt.length;
+                poli([dalt[k], dalt[n], baix[n], baix[k]]);
+                ctx.fillStyle = dalt[n][0] - dalt[k][0] < 0 ? '#6e4522' : '#573519'; ctx.fill(); ctx.stroke();
+            }
+            // Cara de dalt: fusta clara amb veta
+            const g = ctx.createLinearGradient(4, 2, 32, 22); g.addColorStop(0, '#d9a066'); g.addColorStop(1, '#a8703a');
+            poli(dalt); ctx.fillStyle = g; ctx.fill(); ctx.stroke();
+            ctx.save(); poli(dalt); ctx.clip();
+            ctx.strokeStyle = 'rgba(80,44,16,0.55)'; ctx.lineWidth = 0.8;
+            const veta = (u1, v1, u2, v2) => { const a = P(u1, v1), b = P(u2, v2); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); };
+            [-1.8, 0, 1.6].forEach(v => veta(-16, v, 16, v));                       // veta del braç llarg
+            [-9, -7, -5.4].forEach(u => { veta(u, -11, u, -3.4); veta(u, 3.4, u, 11); });           // i del travesser
+            ctx.restore();
+            // Brillantor a la vora de dalt del braç llarg
+            ctx.strokeStyle = 'rgba(255,240,200,0.65)'; ctx.lineWidth = 1;
+            const a = P(-15, -3), b = P(15, -3); ctx.beginPath(); ctx.moveTo(a[0] - 0.6, a[1] + 1); ctx.lineTo(b[0] - 0.6, b[1] + 1); ctx.stroke();
+            // L'anella de llautó del cap de la creu, d'on surt el cordó del rosari (cap als grans, a la dreta)
+            const an = P(-15.4, 0);
+            ctx.strokeStyle = '#2a1a06'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.arc(an[0], an[1], 1.8, 0, Math.PI * 2); ctx.stroke();
+            ctx.strokeStyle = '#e8c250'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(an[0], an[1], 1.8, 0, Math.PI * 2); ctx.stroke();
         });
         // Cementiri (dibuixos.js): làpides, tombes amb vorada, la creueta, la tomba de l'àngel (on el Germà Francí porta flors) i els fanalets
         crea('lapida', 56, 80, (ctx, w, h) => pintarLapidaArc(ctx, w, h, 3));

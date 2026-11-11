@@ -123,7 +123,7 @@ La porta és tancada («Avui no servim — Càren»). Truca: l'**Eve** obre per 
 ### 2A · El camí del Til·ler
 
 **Pas 7 · Bosc de Sant Joan — Font del Bisbe** `fontSJ` `herba`
-La font és adormida i el bosc és ple de boira lila. Calen **tres ofrenes**: l'**herba de Sant Joan** i el **romaní** (brillen en dues clarianes del bosc) i una **pruna** de la **Prunera Màgica**, al jardí de l'Hostatgeria `prunera`. En tirar-les-hi, la font es desperta (+ **aigua de la Font del Bisbe**).
+La font és adormida i el bosc és ple de boira lila. Calen **tres ofrenes**: l'**herba de Sant Joan** (brilla en una clariana del bosc), la **rialla** (l'«herba del riure», una planta que brilla en una clariana del Bosc del Pi dels Tres Cants, guardada per tres bolets verinosos; no hi és fins que la font la demana) i una **pruna** de la **Prunera Màgica**, al jardí de l'Hostatgeria `prunera`. En tirar-les-hi, la font es desperta (+ **aigua de la Font del Bisbe**).
 
 **Pas 8 · L'Alzina Buida i la Joaneta** `alzinaBuida` `joaneta`
 L'Alzina Buida (el doble de gran que la resta d'arbres) és un portal a la **Cabana de la Joaneta**: la bruixa-vident remena l'olla i dona el **beuratge**. Torna pel portal `portalTornada`.
@@ -467,7 +467,7 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 
 
 
-**Ineu:** L'aigua ja és neta: torna a ser clara i tranquil·la, i la boira violeta s'ha esvaït. Ara sí que se sent com canta.
+**Ineu:** L'aigua ja és neta: torna a ser clara i tranquil·la, i la boira violeta s'ha esvaït.
 
 **Ineu:** L'aigua sempre ha estat clara... Ara és tèrbola i fa olor de soterrani. I en surten aquests gripaus enverinats i una boira violeta, a glopades.
 
@@ -1116,9 +1116,11 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 
 *Altrament (per defecte):*
 
-**Ineu:** Les Venerables Sàvies diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, romaní i el fruit de l'arbre d'or.»
+**Ineu:** Les Venerables Sàvies diuen que la nit de Sant Joan aquesta aigua guaria. Ara està morta... Hi ha unes lletres gravades a la pica: «Herba de Sant Joan, rialla i el fruit de l'arbre d'or.»
 
-**Ineu:** Les herbes de la Nit de Sant Joan fan llum: n'hi ha una al nord (cap al Til·ler) i el romaní al sud-est, sempre en una clariana. I l'arbre d'or... és la Prunera Màgica, al jardí de l'Hostatgeria! Una pruna.
+**Ineu:** Rialla... Això no és cap rialla de riure: és una PLANTA! Les Venerables Sàvies parlaven d'una flor que creix envoltada de bolets verinosos, al Bosc del Pi dels Tres Cants.
+
+**Ineu:** L'herba de Sant Joan fa llum, sempre en una clariana: en deu haver-n'hi per aquí, en aquest mateix bosc. I l'arbre d'or... és la Prunera Màgica, al jardí de l'Hostatgeria! Una pruna.
 
 
 ### alzinaBuida
@@ -1400,7 +1402,7 @@ ${mots.join('   ')}
 
 
 
-**Isílder:** (des de la pèrgola) No te'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardi en menjava deu cada tarda i no n'hi tenia mai prou...
+**Isílder:** No te'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardi en menjava deu cada tarda i no n'hi tenia mai prou...
 
 ★ Has obtingut una PRUNA DAURADA.
 
@@ -1920,7 +1922,7 @@ ${mots.join('   ')}
 
 **La Joaneta:** Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? No és al nord de sempre, com et diuen: és al nord de les Cel·les, i han tapat el camí amb una boira que no marxa amb el vent.
 
-**La Joaneta:** Mira, he barrejat l'aigua que queda amb romaní, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets.
+**La Joaneta:** Mira, he barrejat l'aigua que queda amb rialla, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets.
 
 ★ Has obtingut el BEURATGE DE LA JAUNETA.
 

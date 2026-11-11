@@ -243,8 +243,8 @@ class EscenaMusica extends Phaser.Scene {
         const ctx = this.sound && this.sound.context;
         if (!ctx) return;
         if (ctx.state === 'suspended') ctx.resume();
-        // El so de la tarota: una ocarina suau (Sfx.ocarina), no una ona electrònica. Les tres notes pròpies de la tarota sonen una octava amunt, on l'ocarina és més dolça.
-        Sfx.ocarina(freq || FREQ_NOTA[n] * 2, Math.max(0.55, dur), 0.26);
+        // El so de la tarota: una ocarina suau (Sfx.ocarina), no una ona electrònica. Totes les notes (les que toca el jugador i les de la peça automàtica) sonen una octava amunt, on l'ocarina és més dolça: així el cant sona igual tocat a mà que seguit sol.
+        Sfx.ocarina((freq || FREQ_NOTA[n]) * 2, Math.max(0.55, dur), 0.26);
     }
 
     // La gemma s'encén i rebota, el forat de la tarota brilla i una ona surt del botó

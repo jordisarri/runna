@@ -371,7 +371,6 @@ class ZonaCreu extends ZonaBase {
     construir() {
         this.terra('herba', 0, 0, 1600, 1000, -1100);
         this.terra('cami', 1100, 0, 160, 720);          // des de la plaça (nord)
-        this.terra('cami', 300, 600, 960, 140);
         this.terra('pedra', 830, 710, 360, 190);        // replà de pedra davant la creu
 
         // Creu de l'Aparició (sense cap tanca ni mur al darrere)

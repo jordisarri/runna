@@ -23,6 +23,18 @@ FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 
 SRC, CEL = 384, 320         # fotograma d'origen i cel·la de sortida (més gran que abans, perquè l'arma no es talli)
 COS = 170.0                  # alçada que ha de fer el cos de l'Ineu a la cel·la (com als fulls de caminar reduïts)
 GRUIX = 1
+AMB_REF = {(arma, d) for arma in ('tiller', 'espasa', 'basto') for d in ('southeast', 'southwest', 'northeast', 'northwest')}
+IDLE = ARREL / 'assets' / 'ineu_v2'
+
+def peus_idle(d):
+    # Centre horitzontal dels peus a l'idle d'aquesta direcció (fotograma de repòs, cel·la de 256): als idles no són al mig de la cel·la (en diagonal, fins a ~28 px),
+    # i si l'atac té els peus al mig, l'Ineu fa un salt en començar-lo. Els peus de l'atac es posen on són els de l'idle.
+    a = np.array(Image.open(IDLE / f'idle_{d}.webp').convert('RGBA'))[:, :, 3] > 24
+    w = a.shape[1] // 4
+    c = a[(2 // 4) * w:(2 // 4 + 1) * w, (2 % 4) * w:(2 % 4 + 1) * w]
+    ys, _ = np.where(c)
+    _, xs = np.where(c[ys.max() - 12:ys.max() + 1])
+    return float(xs.min() + xs.max()) / 2 - w / 2
 
 def fotograma(im, i):
     return im.crop(((i % 4) * SRC, (i // 4) * SRC, (i % 4) * SRC + SRC, (i // 4) * SRC + SRC))
@@ -35,13 +47,23 @@ def peus(im, fots):
         b.append(ys.max())
     return float(np.median(b))
 
-def centre_peus(fot):
+def centre_peus(fot, ref=None, antic=False):
     # Centre horitzontal dels peus (les 24 files de més avall del cos): el cos es mou dins la cel·la durant el cop; es fixa als peus perquè l'Ineu no es desplaci (retrocés)
+    # Si l'arma (la fulla) baixa fins a l'alçada dels peus, la banda en té dos grups separats: es tria el més proper a `ref` (centre dels peus del primer fotograma,
+    # on l'arma és alta) o, sense ref, el de més massa, perquè la fulla no s'emporti el cos (el cos es desplaçava molt en atacar en diagonal avall).
     a = np.array(fot.split()[3]) > 24
     ys, _ = np.where(a)
     banda = a[max(0, ys.max() - 24):ys.max() + 1]
-    _, xs = np.where(banda)
-    return float(xs.min() + xs.max()) / 2 if len(xs) else SRC / 2
+    cols = np.where(banda.any(axis=0))[0]
+    if not len(cols): return SRC / 2
+    grups, ini = [], cols[0]
+    for p, q in zip(cols[:-1], cols[1:]):
+        if q - p > 14: grups.append((ini, p)); ini = q
+    grups.append((ini, cols[-1]))
+    if antic or len(grups) == 1: return float(cols[0] + cols[-1]) / 2 if antic else float(grups[0][0] + grups[0][1]) / 2
+    if ref is not None: g = min(grups, key=lambda g: abs((g[0] + g[1]) / 2 - ref))
+    else: g = max(grups, key=lambda g: banda[:, g[0]:g[1] + 1].sum())
+    return float(g[0] + g[1]) / 2
 
 def escala(im, arma):
     # Alçada del cos = dels peus (mediana de la fila més baixa) al cap (mediana de la fila més alta dels fotogrames finals, on l'arma és a l'alçada de les mans o avall).
@@ -58,11 +80,15 @@ def main():
             pf = peus(im, range(16)); K = escala(im, arma)
             n = len(fots); cols = 4; files = (n + cols - 1) // cols
             out = Image.new('RGBA', (cols * CEL, files * CEL), (0, 0, 0, 0))
+            # només a la branca en diagonal avall: la fulla baixa fins als peus (a les altres, el càlcul antic ja anava bé)
+            ref = centre_peus(fotograma(im, fots[0])) if (arma, d) in AMB_REF else None
+            antic = ref is None
+            desp = peus_idle(d) if not antic else 0.0       # desplaçament dels peus de l'idle respecte al mig de la cel·la
             for j, i in enumerate(fots):
                 fo = fotograma(im, i)
                 g = fo.resize((round(SRC * K), round(SRC * K)), Image.LANCZOS)
                 cel = Image.new('RGBA', (CEL, CEL), (0, 0, 0, 0))
-                dx, dy = round(CEL / 2 - centre_peus(fo) * K), round(CEL * 0.9375 - pf * K)
+                dx, dy = round(CEL / 2 + desp - centre_peus(fo, ref, antic) * K), round(CEL * 0.9375 - pf * K)
                 cel.paste(g, (dx, dy), g)
                 a = np.array(cel); vora = np.zeros_like(a); vora[:, :, 3] = (alfa_contorn(a[:, :, 3], GRUIX) * 255).astype(np.uint8)
                 base = Image.fromarray(vora, 'RGBA'); base.alpha_composite(cel)
