@@ -394,8 +394,8 @@ class PingPong extends Phaser.Scene {
 }
 
 window.ppJoc = new Phaser.Game({
-    type: Phaser.AUTO, parent: 'joc', backgroundColor: '#120c08',
-    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: AMPLE, height: ALT },
+    type: Phaser.AUTO, parent: 'joc', width: AMPLE, height: ALT, backgroundColor: '#0d0b09',      // (igual que el joc principal)
+    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
     input: { activePointers: 2 },
     scene: [PingPong]
 });
@@ -403,3 +403,11 @@ const reajusta = () => { try { ppJoc.scale.refresh(); } catch (e) { /* res */ } 
 ['resize', 'orientationchange'].forEach(ev => window.addEventListener(ev, () => setTimeout(reajusta, 120)));
 if (window.visualViewport) window.visualViewport.addEventListener('resize', () => setTimeout(reajusta, 120));
 setTimeout(reajusta, 300);
+
+// Diagnòstic (afegeix ?debug a l'adreça): mostra a dalt la mida de la pantalla i del llenç
+if (location.search.includes('debug')) {
+    const d = document.createElement('div');
+    d.style.cssText = 'position:fixed;left:0;top:0;z-index:9;background:#000a;color:#8f8;font:12px monospace;padding:4px;pointer-events:none';
+    document.body.appendChild(d);
+    setInterval(() => { const c = document.querySelector('canvas'); const r = c && c.getBoundingClientRect(); d.textContent = `win ${innerWidth}x${innerHeight} dpr ${devicePixelRatio} vv ${window.visualViewport ? Math.round(window.visualViewport.width) + 'x' + Math.round(window.visualViewport.height) + ' s' + window.visualViewport.scale : '-'} canvas ${r ? Math.round(r.x) + ',' + Math.round(r.y) + ' ' + Math.round(r.width) + 'x' + Math.round(r.height) : '-'}`; }, 500);
+}
