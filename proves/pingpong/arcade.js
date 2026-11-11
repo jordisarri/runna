@@ -27,8 +27,8 @@ const T = {
 function T_L_PLUS(d) { return 2.74 + d; }
 const MODES = {
     // finestra: segons (reals) abans d'arribar la pilota en què lliscar és PERFECTE · bona: fins on és «bé» · abast: fins on arriba l'Ineu (m)
-    normal: { temps: 0.92, finestra: 0.26, bona: 0.75, abast: 0.45, abastJusef: 0.48, velJusef: 1.9, fallaJusef: 0.05 },
-    facil:  { temps: 0.74, finestra: 0.36, bona: 1.0,  abast: 0.65, abastJusef: 0.40, velJusef: 1.5, fallaJusef: 0.12 }
+    normal: { temps: 0.8, finestra: 0.45, bona: 1.3, abast: 0.45, abastJusef: 0.48, velJusef: 1.9, fallaJusef: 0.05 },
+    facil:  { temps: 0.65, finestra: 0.7, bona: 1.8,  abast: 0.65, abastJusef: 0.40, velJusef: 1.5, fallaJusef: 0.12 }
 };
 const Z_COP = 0.05;           // fondària on l'Ineu colpeja la pilota
 
@@ -97,26 +97,66 @@ class Arcade extends Phaser.Scene {
     proj(X, z, h = 0) { const Zc = T.ZN + z; return { x: AMPLE / 2 + T.F * X / Zc, y: T.HY + (T.K - T.F * h) / Zc, k: T.F / Zc }; }
     mon(px, z) { return (px - AMPLE / 2) * (T.ZN + z) / T.F; }          // x de pantalla → X del món (a la fondària z)
 
+    // La sala del Celler, com al minijoc de debò: paret de pedra, terra fosc, llum d'espelmes i una taula amb potes, ombra i cantells
     dibuixaEscenari() {
-        const g = this.add.graphics().setDepth(0);
-        g.fillGradientStyle(0x2a1c12, 0x2a1c12, 0x120c08, 0x120c08, 1).fillRect(-400, -400, AMPLE + 800, ALT + 800);
-        // terra
-        g.fillStyle(0x3a2a1c, 1).fillRect(-400, 300, AMPLE + 800, ALT + 400);
-        // taula
-        const c = [this.proj(-T.W, 0), this.proj(T.W, 0), this.proj(T.W, T.L), this.proj(-T.W, T.L)];
-        const gruix = [this.proj(-T.W, 0, -0.05), this.proj(T.W, 0, -0.05)];
-        g.fillStyle(0x0f3a26, 1).fillPoints([c[0], c[1], gruix[1], gruix[0]], true);
-        g.fillStyle(0x1d6b46, 1).fillPoints(c, true);
-        g.lineStyle(4, 0xf2f2e8, 0.9).strokePoints(c, true);
-        const m0 = this.proj(0, 0), m1 = this.proj(0, T.L);
-        g.lineStyle(2, 0xf2f2e8, 0.6).lineBetween(m0.x, m0.y, m1.x, m1.y);
-        // xarxa
-        const n = [this.proj(-T.W - 0.1, T.L / 2), this.proj(T.W + 0.1, T.L / 2), this.proj(T.W + 0.1, T.L / 2, T.NH), this.proj(-T.W - 0.1, T.L / 2, T.NH)];
+        const M = 500;                                                      // el fons passa del llenç perquè la càmera es pot moure
+        this.add.rectangle(-M, -M, AMPLE + 2 * M, ALT + 2 * M, 0x140e0a, 1).setOrigin(0).setDepth(-10);
+        // paret de pedra (maons de colors lleugerament diferents)
+        const mur = this.add.graphics().setDepth(-9);
+        let seed = 7; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+        for (let r = -9, y = -M; y < 300; r++, y += 46) {
+            let x = -M - (r % 2 ? 40 : 0);
+            while (x < AMPLE + M) {
+                const w = 70 + rnd() * 60, t = 0.78 + rnd() * 0.3, c = Phaser.Display.Color.GetColor(Math.round(110 * t), Math.round(96 * t), Math.round(84 * t));
+                mur.fillStyle(c, 1).fillRect(x + 2, y + 2, w - 4, 42);
+                mur.fillStyle(0xffffff, 0.04).fillRect(x + 2, y + 2, w - 4, 6);
+                mur.fillStyle(0x000000, 0.18).fillRect(x + 2, y + 38, w - 4, 6);
+                x += w;
+            }
+        }
+        mur.fillStyle(0x000000, 0.32).fillRect(-M, -M, AMPLE + 2 * M, 300 + M);          // la paret queda en penombra
+        this.add.rectangle(-M, 300, AMPLE + 2 * M, ALT + M - 300, 0x2a221c, 1).setOrigin(0).setDepth(-8);
+        const llum = this.add.graphics().setDepth(-7);
+        llum.fillStyle(0xffd38a, 0.06).fillEllipse(AMPLE / 2, 640, 900, 900);
+        llum.fillStyle(0xffd38a, 0.05).fillEllipse(AMPLE / 2, 640, 600, 600);
+        // espelmes de la paret (parpellegen)
+        [90, 630].forEach((x, i) => {
+            const cd = this.add.graphics().setDepth(-6);
+            cd.fillStyle(0x3a2a1a, 1).fillRect(x - 5, 140, 10, 90).fillStyle(0xe8dcc0, 1).fillRect(x - 7, 120, 14, 36);
+            const fl = this.add.ellipse(x, 108, 14, 26, 0xffb040, 0.95).setDepth(-5);
+            const halo = this.add.circle(x, 112, 70, 0xffc060, 0.14).setDepth(-6).setBlendMode(Phaser.BlendModes.ADD);
+            this.tweens.add({ targets: [fl, halo], alpha: { from: 0.6, to: 1 }, scaleY: { from: 0.85, to: 1.12 }, yoyo: true, repeat: -1, duration: 380 + i * 110, ease: 'Sine.easeInOut' });
+        });
+        // taula, com al minijoc de debò
+        const t = this.add.graphics().setDepth(0.1);
+        const Pt = (X, z, h = 0) => this.proj(X, z, h), W = T.W, ALT_PATA = 0.76;
+        const poli = (pts, c, a) => t.fillStyle(c, a).fillPoints(pts.map(q => ({ x: q.x, y: q.y })), true);
+        poli([Pt(-W, 0, -ALT_PATA), Pt(W, 0, -ALT_PATA), Pt(W, T.L, -ALT_PATA), Pt(-W, T.L, -ALT_PATA)], 0x000000, 0.3);          // ombra al terra
+        const pota = (X, z) => { const a = Pt(X, z, 0), b = Pt(X, z, -ALT_PATA), k = a.k * 0.06; t.fillStyle(0x3a2a1a, 1).fillRect(a.x - k, a.y, 2 * k, b.y - a.y).lineStyle(2, 0x1a0e06, 1).strokeRect(a.x - k, a.y, 2 * k, b.y - a.y); };
+        pota(-W + 0.1, 0.08); pota(W - 0.1, 0.08); pota(-W + 0.1, T.L - 0.08); pota(W - 0.1, T.L - 0.08);
+        const gr = 0.05;
+        poli([Pt(-W, T.L, 0), Pt(W, T.L, 0), Pt(W, T.L, -gr), Pt(-W, T.L, -gr)], 0x134a30, 1);
+        poli([Pt(-W, 0, 0), Pt(-W, T.L, 0), Pt(-W, T.L, -gr), Pt(-W, 0, -gr)], 0x0f3a26, 1);
+        poli([Pt(W, 0, 0), Pt(W, T.L, 0), Pt(W, T.L, -gr), Pt(W, 0, -gr)], 0x0f3a26, 1);
+        poli([Pt(-W, 0, 0), Pt(W, 0, 0), Pt(W, 0, -gr), Pt(-W, 0, -gr)], 0x134a30, 1);
+        const cara = [Pt(-W, 0), Pt(W, 0), Pt(W, T.L), Pt(-W, T.L)];
+        poli(cara, 0x1f6a46, 1);
+        t.fillGradientStyle(0x3a9a6a, 0x3a9a6a, 0x1f6a46, 0x1f6a46, 0.22, 0.22, 0, 0).fillPoints(cara.map(q => ({ x: q.x, y: q.y })), true);
+        t.lineStyle(5, 0xf2f2e8, 1).strokePoints(cara.map(q => ({ x: q.x, y: q.y })), true);
+        t.lineStyle(2, 0xf2f2e8, 0.8).lineBetween(Pt(0, 0).x, Pt(0, 0).y, Pt(0, T.L).x, Pt(0, T.L).y);
+        // xarxa (amb alçada de veritat)
+        const a1 = Pt(-W, T.L / 2, 0), a2 = Pt(W, T.L / 2, 0), b1 = Pt(-W, T.L / 2, T.NH), b2 = Pt(W, T.L / 2, T.NH);
         const x = this.add.graphics().setDepth(10 - T.L / 2);
-        x.fillStyle(0xe8e8e0, 0.25).fillPoints(n, true);
-        x.lineStyle(3, 0xf2f2e8, 0.95).lineBetween(n[3].x, n[3].y, n[2].x, n[2].y);
-        x.lineStyle(1, 0xf2f2e8, 0.35);
-        for (let k = 0; k <= 30; k++) { const X = -T.W - 0.1 + (2 * T.W + 0.2) * k / 30, a = this.proj(X, T.L / 2), b = this.proj(X, T.L / 2, T.NH); x.lineBetween(a.x, a.y, b.x, b.y); }
+        x.fillStyle(0xe8e8e0, 0.22).fillPoints([a1, a2, b2, b1].map(q => ({ x: q.x, y: q.y })), true);
+        x.lineStyle(2, 0xe8e8e0, 0.75); for (let k = 0; k <= 28; k++) { const X = -W + 2 * W * k / 28, u = Pt(X, T.L / 2, 0), v = Pt(X, T.L / 2, T.NH); x.lineBetween(u.x, u.y, v.x, v.y); }
+        for (let k = 1; k < 4; k++) { const u = Pt(-W, T.L / 2, T.NH * k / 4), v = Pt(W, T.L / 2, T.NH * k / 4); x.lineBetween(u.x, u.y, v.x, v.y); }
+        x.lineStyle(5, 0xffffff, 1).lineBetween(b1.x, b1.y, b2.x, b2.y);
+        [[-1, a1, b1], [1, a2, b2]].forEach(([sg, a, b]) => { x.lineStyle(7, 0x2a2a2e, 1).lineBetween(a.x + sg * 8, a.y, b.x + sg * 8, b.y - 8); });
+        // espurnes que pugen al voltant d'en Jusef (es veu que levita)
+        const gt = this.add.graphics(); gt.fillStyle(0xffffff, 1).fillCircle(8, 8, 8); gt.generateTexture('espurna', 16, 16); gt.destroy();
+        const pj = Pt(0, T.Z_JUSEF);
+        this.add.particles(pj.x, pj.y - 20, 'espurna', { x: { min: -100, max: 100 }, speedY: { min: 14, max: 36 }, speedX: { min: -8, max: 8 }, lifespan: 1300,
+            scale: { start: 0.35, end: 0 }, alpha: { start: 0.8, end: 0 }, tint: [0xd8b0ff, 0xffe08a, 0xffffff], frequency: 140, quantity: 1 }).setDepth(0.9);
     }
 
     // ---------------- Partit ----------------
@@ -223,7 +263,7 @@ class Arcade extends Phaser.Scene {
         else if (b && !b.morta && b.de === 'jusef') objI = b.marca.X;
         this.Xi += Phaser.Math.Clamp(objI - this.Xi, -7.5 * dt, 7.5 * dt);
         const pi = this.proj(this.Xi, T.Z_INEU);
-        this.spIneu.setPosition(pi.x, pi.y).setScale(1.5 * pi.k / 400).setDepth(10 - T.Z_INEU);
+        this.spIneu.setPosition(pi.x, pi.y).setScale(2.1 * pi.k / 400).setDepth(10 - T.Z_INEU);
         // Simulació de la pilota (el temps del joc va més lent que el real, segons el mode i el cop màgic)
         if (b && !b.morta) this.simula(dt * this.M.temps * this.lent);
         // Jusef: va cap a on arribarà la pilota
@@ -300,7 +340,7 @@ class Arcade extends Phaser.Scene {
         for (let i = 0; i < pasos && !b.morta; i++) {
             const d = dt / pasos, zAbans = b.z;
             b.X += b.vx * d; b.z += b.vz * d; b.vh -= T.G * d; b.h += b.vh * d;
-            if (b.de === 'jusef' && b.bots === 1 && this.copFet !== b && b.vz < 0 && b.z <= Z_COP - 0.12) { this.copFet = b; this.txtCopa('Massa tard!', '#ff9a7a', this.proj(b.X, b.z, b.h)); this.so('mal'); }
+            if (b.de === 'jusef' && b.bots === 1 && this.copFet !== b && b.vz < 0 && b.z <= Z_COP - 0.5) { this.copFet = b; this.txtCopa('Massa tard!', '#ff9a7a', this.proj(b.X, b.z, b.h)); this.so('mal'); }
             // xarxa
             if ((zAbans - T.L / 2) * (b.z - T.L / 2) <= 0 && b.h < T.NH && Math.abs(b.X) < T.W + 0.1) {
                 b.vz = -b.vz * 0.15; b.vx *= 0.3; this.so('xarxa');
