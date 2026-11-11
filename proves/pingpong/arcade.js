@@ -27,8 +27,8 @@ const T = {
 function T_L_PLUS(d) { return 2.74 + d; }
 const MODES = {
     // finestra: segons (reals) abans d'arribar la pilota en què lliscar és PERFECTE · bona: fins on és «bé» · abast: fins on arriba l'Ineu (m)
-    normal: { temps: 0.8, finestra: 0.45, bona: 1.3, abast: 0.45, abastJusef: 0.48, velJusef: 1.9, fallaJusef: 0.05 },
-    facil:  { temps: 0.65, finestra: 0.7, bona: 1.8,  abast: 0.65, abastJusef: 0.40, velJusef: 1.5, fallaJusef: 0.12 }
+    normal: { temps: 0.8, finestra: 0.45, bona: 1.3, abast: 0.45, abastJusef: 0.3, velJusef: 1.6, fallaJusef: 0 },
+    facil:  { temps: 0.65, finestra: 0.7, bona: 1.8,  abast: 0.65, abastJusef: 0.26, velJusef: 1.3, fallaJusef: 0 }
 };
 const Z_COP = 0.05;           // fondària on l'Ineu colpeja la pilota
 
@@ -75,6 +75,7 @@ class Arcade extends Phaser.Scene {
         this.txtMode = this.ui(this.add.text(AMPLE - 20, 44, '', est(22, '#c8b890')).setOrigin(1, 0.5).setDepth(50));
         this.txtAjuda = null;                                                    // (sense text de tutorial a sota)
         this.estelaG = this.ui(this.add.graphics().setDepth(48));
+        this.pistaCop = this.ui(this.add.text(0, 0, '', { fontFamily: 'Georgia, serif', fontSize: '34px', color: '#ffe9a0', stroke: '#000000', strokeThickness: 7, align: 'center' }).setOrigin(0.5, 1).setDepth(49).setVisible(false));
         this.ui(this.add.text(20, 94, 'Sortir ✕', { fontFamily: 'Georgia, serif', fontSize: '26px', color: '#f2e6c8', backgroundColor: '#1a120bcc', padding: { x: 12, y: 6 } })
             .setOrigin(0, 0.5).setDepth(50).setInteractive({ useHandCursor: true }).on('pointerdown', (p, x, y, ev) => { if (ev) ev.stopPropagation(); this.punxo = null; history.length > 1 ? history.back() : (location.href = '../../'); }));
         // Estat
@@ -392,17 +393,17 @@ class Arcade extends Phaser.Scene {
                         this.finalBola(b.de === 'ineu' ? 'jusef' : 'ineu', 'Ha botat al seu camp'); return;
                     }
                     b.bots++;
-                    if (b.bots >= 2) { this.finalBola(b.de, banda === 'ineu' ? 'No hi has arribat' : 'En Jusef no hi arriba!'); return; }
+                    if (b.bots >= 2) { this.finalBola(b.de, banda === 'ineu' ? 'No hi has arribat' : (b.motiu || 'En Jusef no hi arriba!')); return; }
                     if (banda === 'ineu') this.marcaBot.setStrokeStyle(3, 0xffd34d, 0);
                 } else {
-                    this.finalBola(b.bots >= 1 ? b.de : (b.de === 'ineu' ? 'jusef' : 'ineu'), b.bots >= 1 ? (b.de === 'ineu' ? 'En Jusef no hi arriba!' : 'No hi has arribat') : 'Fora!');
+                    this.finalBola(b.bots >= 1 ? b.de : (b.de === 'ineu' ? 'jusef' : 'ineu'), b.bots >= 1 ? (b.de === 'ineu' ? (b.motiu || 'En Jusef no hi arriba!') : 'No hi has arribat') : 'Fora!');
                     return;
                 }
             }
             // En Jusef torna la pilota (quan ja ha botat al seu camp)
             if (b.de === 'ineu' && b.bots === 1 && !b.decidit && b.z > T.L + 0.05) { b.decidit = true; this.copJusef(); if (b !== this.b) return; }
             // Ha passat de llarg
-            if (b.z < -1.4 || b.z > T.L + 1.5) { this.finalBola(b.bots >= 1 ? b.de : (b.de === 'ineu' ? 'jusef' : 'ineu'), b.bots >= 1 ? (b.de === 'ineu' ? 'En Jusef no hi arriba!' : 'No hi has arribat') : 'Fora!'); return; }
+            if (b.z < -1.4 || b.z > T.L + 1.5) { this.finalBola(b.bots >= 1 ? b.de : (b.de === 'ineu' ? 'jusef' : 'ineu'), b.bots >= 1 ? (b.de === 'ineu' ? (b.motiu || 'En Jusef no hi arriba!') : 'No hi has arribat') : 'Fora!'); return; }
         }
         this.pintaPilota();
     }
@@ -415,18 +416,20 @@ class Arcade extends Phaser.Scene {
         this.ombra.setPosition(s.x, s.y).setSize(r * 2.2, r * 0.9).setAlpha(sobreTaula ? Phaser.Math.Clamp(0.45 - b.h * 0.6, 0.12, 0.45) : 0);
     }
 
+    // En Jusef torna la pilota si hi arriba. NO hi ha cap sorteig: arriba si la pilota cau dins del seu abast des d'on és (es mou cap on cau, a velocitat limitada). Si no hi arriba, es diu per què:
+    //  · cop FORT: no té temps d'arribar-hi ("Massa ràpid"); cop TALLAT: és curt i no s'hi acosta ("Cop tallat"); la resta: cau massa lluny d'on és
+    //  · l'encanteri màgic trencat: no el pot tornar mai. Així, apuntar als racons, i colpejar fort o tallat, és com es guanyen els punts.
     copJusef() {
         const b = this.b, M = this.M;
         this.spJusef.play(b.X >= this.Xj ? 'jf_dret' : 'jf_revers', true);
         this.juiceCopJusef(this.proj(b.X, b.z, b.h));
         const dx = Math.abs(b.X - this.Xj);
-        let falla = M.fallaJusef + (b.qualitat === 'perfecte' ? 0.3 : b.qualitat === 'be' ? 0.07 : 0) + this.rally * 0.01;
-        if (b.tipus === 'fort') falla += 0.12;
-        if (b.tipus === 'tallat') falla += 0.28;                              // el cop tallat és curt: ha de córrer cap a la xarxa
-        if (b.tipus === 'magic') falla = 1;                                    // no es pot tornar
-        if (dx > M.abastJusef) falla = 1;
-        else if (dx > M.abastJusef * 0.65) falla += 0.2;
-        if (Math.random() < falla) return;                                     // no hi arriba: la pilota segueix i és punt de l'Ineu
+        const abast = M.abastJusef * (b.tipus === 'tallat' ? 0.8 : b.tipus === 'fort' ? 0.9 : 1);
+        if (b.tipus === 'magic') { b.motiu = 'L\'encanteri trencat: no hi pot fer res!'; return; }
+        if (dx > abast) {
+            b.motiu = b.tipus === 'fort' ? 'Massa ràpid per a en Jusef!' : b.tipus === 'tallat' ? 'Cop tallat: en Jusef no hi arriba!' : 'Massa lluny per a en Jusef!';
+            return;                                                          // la pilota segueix i és punt de l'Ineu
+        }
         this.rally++;
         const lluny = Math.random() < 0.6 ? -Math.sign(this.Xi || 1) * Phaser.Math.FloatBetween(0.25, 0.62) : Phaser.Math.FloatBetween(-0.6, 0.6);
         const temps = b.qualitat === 'fluix' ? 0.55 : Math.max(0.62, 0.95 - this.rally * 0.03);
@@ -472,10 +475,18 @@ class Arcade extends Phaser.Scene {
     alPrimer(p) {
         this.punxo = { x: p.x, y: p.y, t: this.time.now }; this.traç = [{ x: p.x, y: p.y, t: this.time.now }];
     }
-    alMoure(p) { if (this.punxo) this.traç.push({ x: p.x, y: p.y, t: this.time.now }); }
+    alMoure(p) {
+        if (!this.punxo) return;
+        this.traç.push({ x: p.x, y: p.y, t: this.time.now });
+        // pista en directe: el tipus de cop que sortiria si deixessis anar ara (curt = TALLAT, ràpid = FORT, la resta = NORMAL)
+        const dx = p.x - this.punxo.x, dy = p.y - this.punxo.y, len = Math.hypot(dx, dy), ms = Math.max(30, this.time.now - this.punxo.t);
+        if (len < 40 || dy > -20) { this.pistaCop.setVisible(false); return; }
+        const forca = Phaser.Math.Clamp((len / ms - 0.35) / 1.5, 0, 1), prof = Phaser.Math.Clamp((len - 70) / 360, 0, 1);
+        this.pistaCop.setText(forca > 0.65 ? 'FORT' : prof < 0.3 ? 'TALLAT' : 'NORMAL').setPosition(p.x, p.y - 40).setVisible(true);
+    }
     alSoltar(p) {
         if (!this.punxo || this.acabat) { this.punxo = null; return; }
-        const ini = this.punxo; this.punxo = null;
+        const ini = this.punxo; this.punxo = null; this.pistaCop.setVisible(false);
         const dx = p.x - ini.x, dy = p.y - ini.y, len = Math.hypot(dx, dy), ms = Math.max(30, this.time.now - ini.t);
         this.gestura(dx, dy, len, len / ms);
     }
@@ -554,7 +565,7 @@ class Arcade extends Phaser.Scene {
         this.so(guanyador === 'ineu' ? 'be' : 'mal');
         if (guanyador === 'ineu') { const c = this.proj(0, T.L * 0.78); this.chispes(c.x, c.y, 34, [0xffe9a0, 0xffffff, 0x7ad8ff, 0xff9ac8], 520, 0.7, 900); this.flaixPantalla(0.18, 260); }
         else { this.cameras.main.shake(220, 0.006); this.pulsJusef = 1; }
-        this.avis((guanyador === 'ineu' ? 'Punt teu! ' : 'Punt d\'en Jusef. ') + (text || ''), 1300, guanyador === 'ineu' ? '#a0ffb0' : '#ff9a7a');
+        this.avis((guanyador === 'ineu' ? 'Punt teu!' : 'Punt d\'en Jusef.') + (text ? '\n' + text : ''), 1600, '#ffe9a0');
         const { ineu, jusef } = this.punts;
         if ((ineu >= T.PUNTS || jusef >= T.PUNTS) && Math.abs(ineu - jusef) >= 2) { this.time.delayedCall(1400, () => this.final(ineu > jusef)); return; }
         this.time.delayedCall(1500, () => this.preparaServei());
