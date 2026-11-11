@@ -696,7 +696,7 @@ const ENEMICS = {
     },
 
     visitant: {
-        tex: 'visitant_zombi', texAlt: 'visitant', escala: 0.6, vida: 4, vel: 58, mal: 1, radi: 24, cos: [40, 22], ombra: 0.42,
+        tex: 'visitant_zombi', texAlt: 'visitant', escala: 0.85, vida: 4, vel: 58, mal: 1, radi: 28, cos: [52, 28], ombra: 0.55, claredat: 1.35, saturacio: 0.5,
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
@@ -739,6 +739,13 @@ Object.assign(ZonaBase.prototype, {
         spr.body.setSize(def.cos[0] / esc, def.cos[1] / esc);
         spr.body.setOffset((fw - def.cos[0] / esc) / 2, def.centrat ? (fh - def.cos[1] / esc) / 2 : fh - def.cos[1] / esc);
         spr.setCollideWorldBounds(true);
+        if (animada && def.claredat && spr.preFX) {      // enemics apagats: més llum i color (només amb WebGL)
+            try {
+                const cm = spr.preFX.addColorMatrix();
+                cm.brightness(def.claredat, true);
+                if (def.saturacio) cm.saturate(def.saturacio, true);
+            } catch (err) { /* sense efectes: es veu tal qual */ }
+        }
         this.physics.add.collider(spr, this.obstacles);
         const ombra = this.add.image(x, y, 'ombra').setScale(def.ombra || 0.3).setDepth(-500).setVisible(!!def.ombra);
         const e = {
@@ -1284,7 +1291,7 @@ Object.assign(ZonaBase.prototype, {
         const z = this;
         z.ui().obrirDialeg({
             pagines: [
-                { avis: "Has obtingut un GRA DEL ROSARI: " + motiu + " (+1 cor).", obj: 'gra_rosari' }
+                { avis: "Has obtingut un GRA DEL ROSARI: " + motiu + ".", obj: 'gra_rosari' }
             ],
             enAcabar: () => {
                 Estat.afegirGra();

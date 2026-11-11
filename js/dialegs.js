@@ -68,7 +68,7 @@ function premiMonja(nom, flag) {
         if (ui) {
             ui.obrirDialeg({
                 pagines: [
-                    { avis: "Has obtingut un GRA DEL ROSARI: la llum de les tres germanes (+1 cor).", obj: 'gra_rosari' }
+                    { avis: "Has obtingut un GRA DEL ROSARI: la llum de les tres germanes.", obj: 'gra_rosari' }
                 ],
                 enAcabar: () => {
                     E.afegirGra();
@@ -203,7 +203,7 @@ const DIALEGS = {
             pagines: [
                 { fer: (z, fet) => z.obrirReliquiari ? z.obrirReliquiari(fet) : fet() },
                 { qui: 'Nota', text: '«Per al qui sap escoltar les pedres.»' },
-                { avis: E.dades.corsMax < E.GRANS_MAX ? "Has obtingut un GRA DEL ROSARI (+1 cor)." : "El rosari ja té tots els grans: queda ple.", obj: 'gra_rosari' }
+                { avis: E.dades.corsMax < E.GRANS_MAX ? "Has obtingut un GRA DEL ROSARI." : "El rosari ja té tots els grans: queda ple.", obj: 'gra_rosari' }
             ],
             enAcabar: () => { E.posaFlag('cofreTresor'); E.afegirGra(); }
         };
@@ -242,7 +242,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: 'Nota', text: "«Per a qui es perd pel camí i el troba.»" },
-                { avis: E.dades.corsMax < E.GRANS_MAX ? "Has obtingut un GRA DEL ROSARI (+1 cor)." : "El rosari ja té tots els grans: queda ple.", obj: 'gra_rosari' }
+                { avis: E.dades.corsMax < E.GRANS_MAX ? "Has obtingut un GRA DEL ROSARI." : "El rosari ja té tots els grans: queda ple.", obj: 'gra_rosari' }
             ],
             enAcabar: () => { E.posaFlag('cofreCabanaCami'); E.afegirGra(); }
         };
