@@ -258,8 +258,8 @@ const ATAC_INEU = {
  */
 const ATAC_ARMES = ['basto', 'tiller', 'espasa'];
 const ATAC_CEL = 240;
-const ATAC_ARMA_FPS = { basto: 18, tiller: 20, espasa: 14 };
-const ATAC_ARMA_N = { basto: 7, tiller: 6, espasa: 4 };           // fotogrames de cada full (la graella pot tenir cel·les buides al final)
+const ATAC_ARMA_FPS = { basto: 18, tiller: 20, espasa: 16 };
+const ATAC_ARMA_N = { basto: 7, tiller: 6, espasa: 5 };           // fotogrames de cada full (la graella pot tenir cel·les buides al final)
 function armaAtacNom(runna, agil) { return runna ? 'espasa' : agil ? 'tiller' : 'basto'; }
 function fpsAtac(vista) {
     return (ATAC_INEU.fpsVista && ATAC_INEU.fpsVista[vista]) || ATAC_INEU.fps;
@@ -318,7 +318,7 @@ const Grafics = {
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, rutaIneu(dir, false), mida);
-            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac_${arma}_${dir}.webp?v=2611112400`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
+            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac_${arma}_${dir}.webp?v=2611112700`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
