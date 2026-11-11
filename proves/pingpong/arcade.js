@@ -627,12 +627,16 @@ class Arcade extends Phaser.Scene {
             [0, 380, 760, 1150].forEach((t, i) => this.time.delayedCall(t, () => this.chispesUI(AMPLE / 2 + (i % 2 ? 90 : -90), 700, 34, [0xffe9a0, 0xffffff, 0x7ad8ff, 0xff9ac8, 0xa0ffb0], 700, 0.8, 1100)));
             this.tweens.add({ targets: sp, scaleX: 2.15, scaleY: 2.15, duration: 520, delay: 380, yoyo: true, ease: 'Back.easeOut' });
             sp.once('animationcomplete', () => {
-                this.time.delayedCall(1000, () => {
+                // l'Ineu es queda fix (últim fotograma) amb el text darrere; en tocar la pantalla es passa al panell final
+                const pista = this.add.text(AMPLE / 2, ALT - 40, 'Toca la pantalla per continuar', { fontFamily: 'Georgia, serif', fontSize: '28px', color: '#ffffff', stroke: '#1a0e06', strokeThickness: 6 }).setOrigin(0.5).setDepth(47); this.cameras.main.ignore(pista);
+                const parpelleig = this.tweens.add({ targets: pista, alpha: 0.25, duration: 700, yoyo: true, repeat: -1 });
+                this.time.delayedCall(500, () => this.input.once('pointerdown', () => {
+                    parpelleig.remove(); pista.destroy();
                     this.tweens.add({ targets: [sp, expl, ...lletres.flatMap(o => o.grup)], alpha: 0, duration: 280, onComplete: () => {
                         vibra.remove(); expl.destroy(); lletres.forEach(o => o.grup.forEach(g => g.destroy()));
                         sp.setVisible(false).setAlpha(1); this.celebActiva = 0; this.celebLinies.clear(); this.celebFons.setFillStyle(0x180a26, 0); fet();
                     } });
-                });
+                }));
             });
         });
     }
