@@ -31,6 +31,26 @@ function iconaFlasco(ctx, liquid, brill) {
     ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(32, 50); ctx.quadraticCurveTo(28, 62, 33, 72); ctx.stroke();
 }
 
+// El flascó rodó de coll llarg que prepara la Joaneta: bombolla de vidre gran amb un líquid verd brillant, bombolles i un reflex (el beuratge)
+function iconaFlascoRodo(ctx) {
+    const cx = 48, cy = 60, R = 27;
+    const forma = () => { ctx.beginPath(); ctx.moveTo(42, 12); ctx.lineTo(42, 36); ctx.arc(cx, cy, R, -Math.PI * 0.62, -Math.PI * 0.38, true); ctx.lineTo(54, 12); ctx.closePath(); };
+    ctx.lineWidth = 3;
+    ctx.fillStyle = 'rgba(214,238,238,0.6)'; forma(); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+    ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R - 1, 0, Math.PI * 2); ctx.clip();
+    const g = ctx.createLinearGradient(0, 46, 0, 90); g.addColorStop(0, '#86e83a'); g.addColorStop(1, '#3a9a12');
+    ctx.fillStyle = g; ctx.fillRect(10, 48, 76, 50);
+    ctx.fillStyle = '#c4ff7a'; ctx.beginPath(); ctx.ellipse(cx, 48, 27, 4.5, 0, 0, Math.PI * 2); ctx.fill();            // la superfície del líquid
+    ctx.fillStyle = 'rgba(255,255,255,0.65)';
+    [[38, 66, 2.6], [56, 72, 3.2], [48, 58, 2], [62, 62, 1.8], [40, 77, 1.8]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); });   // bombolles
+    ctx.restore();
+    ctx.strokeStyle = '#1c3c3c'; ctx.beginPath(); ctx.arc(cx, cy, R, -Math.PI * 0.38, -Math.PI * 0.62 + Math.PI * 2); ctx.stroke();           // el contorn de la bombolla (obert pel coll)
+    ctx.beginPath(); ctx.moveTo(42, 36); ctx.lineTo(42, 12); ctx.moveTo(54, 36); ctx.lineTo(54, 12); ctx.stroke();
+    ctx.fillStyle = 'rgba(214,238,238,0.9)'; ctx.beginPath(); ctx.rect(39, 8, 18, 6); ctx.fill(); ctx.stroke();                                   // la vora de la boca
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(cx, cy, R - 6, Math.PI * 0.62, Math.PI * 0.9); ctx.stroke();   // reflex
+}
+
 function iconaFlors(ctx, colors) {
     ctx.lineWidth = 3; ctx.strokeStyle = '#2e5a22';
     [[48, 20], [32, 26], [64, 26], [40, 14], [58, 14]].forEach(([x, y]) => { ctx.beginPath(); ctx.moveTo(48, 84); ctx.quadraticCurveTo(48, 60, x, y + 8); ctx.stroke(); });
@@ -168,7 +188,7 @@ const ICONES_OBJECTES = {
     clau_ferro: ctx => iconaClau(ctx, '#6a6a72', '#3a3a40', true),
     clau_gabriel: ctx => iconaClau(ctx, '#9fb8cc', '#4a6278'),
     aigua_sj: ctx => iconaFlasco(ctx, '#6ab0e8', '#c8e8ff'),
-    beuratge: ctx => iconaFlasco(ctx, '#8a5ac8', '#c8a0ff'),
+    beuratge: ctx => iconaFlascoRodo(ctx),                  // igual que el flascó verd que prepara la Joaneta
     cristall_gel: ctx => {
         ctx.lineWidth = 3; ctx.fillStyle = '#bfe6ff';
         const p = [[48, 8], [70, 34], [62, 84], [34, 84], [26, 34]];

@@ -210,18 +210,24 @@ const CATALEG = [
  * Els originals són a art/ineu_caminar/ i es converteixen amb eines/convertir_webp.js.
  */
 const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast'];
-const IDLE_INEU = {
+// Versió dels fulls de caminar i d'idle de l'Ineu: v2 (assets/ineu_v2/, 16 fotogrames a cada direcció, idle propi per a les 8 direccions, generats amb AutoSprite; vegeu
+// eines/fer_ineu_v2.py) o v1 (assets/ineu/, els d'abans). Per tornar enrere sense tocar res: afegir ?ineu=v1 a l'adreça, o posar false aquí.
+const INEU_V2 = new URLSearchParams(location.search).get('ineu') !== 'v1';
+const IDLE_INEU = INEU_V2 ? {
+    down: 'down', up: 'up', left: 'left', right: 'right',
+    southwest: 'southwest', southeast: 'southeast', northwest: 'northwest', northeast: 'northeast'
+} : {
     down: 'down', up: 'up', left: 'right', right: 'right',
     southwest: 'southeast', southeast: 'southeast', northwest: 'northeast', northeast: 'northeast'
 };
-const DIRS_IDLE_MIRALL = new Set(['left', 'southwest', 'northwest']);
+const DIRS_IDLE_MIRALL = INEU_V2 ? new Set() : new Set(['left', 'southwest', 'northwest']);
 const SPRITE_INEU = {
     ample: 256, alt: 256, peus: 240,
     alcada: 142,          // alçada del fotograma en píxels de joc (el personatge fa uns 125)
     fps: 14,
-    fpsAturat: 3,
+    fpsAturat: INEU_V2 ? 6 : 3,          // (v2: l'idle té 16 fotogrames; v1, 8)
     // Les vistes laterals tenen 16 fotogrames; mantenim una durada de cicle semblant a les altres vistes cardinals.
-    fpsVista: { down: 8, up: 8, left: 16, right: 16 },
+    fpsVista: INEU_V2 ? { down: 16, up: 16, left: 16, right: 16, southwest: 16, southeast: 16, northwest: 16, northeast: 16 } : { down: 8, up: 8, left: 16, right: 16 },
     quiet: 2,             // fotograma de repòs de cada direcció
     // Memòria: les fulles de l'Ineu es redueixen en carregar a cel·les de 192.
     // Totes les mides d'aquí (i les de l'arma, atac_arma.js) continuen en píxels de la cel·la de 256; on cal píxels de la
@@ -300,12 +306,12 @@ const Grafics = {
         scene.load.spritesheet('isilder_camina', 'assets/personatges/isilder_camina.webp', { frameWidth: 190, frameHeight: 285 });
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
-            scene.load.spritesheet('ineu_' + dir, `assets/ineu/${dir}.webp?v=2611110040`, mida);
+            scene.load.spritesheet('ineu_' + dir, INEU_V2 ? `assets/ineu_v2/${dir}.webp?v=2611111500` : `assets/ineu/${dir}.webp?v=2611110040`, mida);
             scene.load.spritesheet('ineu_atac_' + dir, `assets/ineu/atac_${dir}.webp?v=2611110010`, mida);
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
-            scene.load.spritesheet('ineu_idle_' + dir, `assets/ineu/idle_${dir}.webp?v=2611110010`, mida);
+            scene.load.spritesheet('ineu_idle_' + dir, INEU_V2 ? `assets/ineu_v2/idle_${dir}.webp?v=2611111500` : `assets/ineu/idle_${dir}.webp?v=2611110010`, mida);
         });
     },
 
@@ -574,7 +580,7 @@ const Grafics = {
         DIRS_INEU.forEach(dir => {
             const key = 'caminar_' + dir;
             if (scene.anims.exists(key) || !scene.textures.exists('ineu_' + dir)) return;
-            const fotogrames = dir === 'left' || dir === 'right' ? 16 : 8;
+            const fotogrames = INEU_V2 ? scene.textures.get('ineu_' + dir).frameTotal - 1 : (dir === 'left' || dir === 'right' ? 16 : 8);
             scene.anims.create({
                 key,
                 frames: scene.anims.generateFrameNumbers('ineu_' + dir, { start: 0, end: fotogrames - 1 }),
@@ -587,7 +593,7 @@ const Grafics = {
             if (scene.anims.exists(key) || !scene.textures.exists(textura)) return;
             scene.anims.create({
                 key,
-                frames: scene.anims.generateFrameNumbers(textura, { start: 0, end: 7 }),
+                frames: scene.anims.generateFrameNumbers(textura, { start: 0, end: INEU_V2 ? scene.textures.get(textura).frameTotal - 2 : 7 }),
                 frameRate: SPRITE_INEU.fpsAturat,
                 repeat: -1
             });

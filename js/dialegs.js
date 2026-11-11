@@ -1575,7 +1575,7 @@ const DIALEGS = {
     boiraTiller: E => E.te("beuratge") ? {
         pagines: [
             { qui: "Ineu", text: "Provaré amb el beuratge de la Joaneta." },
-            { fer: (z, fet) => z.seq([c => z.deixar(c, iconaObjecte(z, 'beuratge'), 0x9a6aff), c => z.esvairBoira(c)], fet) },
+            { fer: (z, fet) => z.seq([c => z.deixar(c, iconaObjecte(z, 'beuratge'), 0x7aff6a), c => z.esvairBoira(c)], fet) },
             { qui: "Ineu", text: "Ha funcionat! El camí del Gran Til·ler torna a ser net." }
         ]
     } : {

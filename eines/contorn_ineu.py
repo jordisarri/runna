@@ -80,4 +80,5 @@ def main():
         (contorn_solt(im, gruix * MULT.get(f, 1)) if f in SOLTS else contorn(im, gruix)).save(dest, 'WEBP', quality=88, alpha_quality=100, method=6)
         print('Contorn de', gruix, 'px a', dest.relative_to(ARREL))
 
-main()
+if __name__ == '__main__':
+    main()
