@@ -617,7 +617,7 @@ const DIALEGS = {
 
     branca: E => ({
         pagines: [
-            { fer: (z, fet) => { z.ajupir('ineu', null, 300); z.esperar(330, () => { z.brancaAgafada = true; z.llum(z.ineu.x, z.ineu.y - 40, 0xd8f0a0); z.ineuAixeca('ineu_aixeca_tiler', fet); }); } },      // s'agafa de terra i prou (la branca desapareix i l'Ineu l'alça), sense que viatgi cap a ell
+            { fer: (z, fet) => { z.ajupir('ineu', null, 300); z.esperar(330, () => { z.brancaAgafada = true; if (z.branca) z.branca.setVisible(false); if (z.brancaAura) z.brancaAura.setVisible(false); z.llum(z.ineu.x, z.ineu.y - 40, 0xd8f0a0); z.ineuAixeca('ineu_aixeca_tiler', fet); }); } },      // s'agafa de terra i prou (la branca desapareix i l'Ineu l'alça), sense que viatgi cap a ell
             { avis: "Has obtingut la BRANCA DEL TIL·LER!" },
             { fer: (z, fet) => z.ineuBaixa(fet) }
         ],
