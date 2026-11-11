@@ -14,8 +14,8 @@ from PIL import Image
 
 ARREL = Path(__file__).resolve().parent.parent
 ENTRADA = ARREL / 'art' / 'personatges' / 'idle'
-CLAUS = ['pomers', 'julius', 'jusef', 'germa_aldreu', 'pare_jorda', 'pare_daimiel']
-COLS = 3          # els fulls d'idle d'AutoSprite són de 3 columnes (8 fotogrames en 3x3)
+CLAUS = ['pomers', 'julius', 'jusef', 'germa_aldreu', 'pare_jorda', 'pare_daimiel', 'joaneta']
+FOTOGRAMES = {'joaneta': 16}      # per defecte 8 (3 columnes); la Joaneta en té 16 (4 columnes: el full és de 1024)
 
 def main():
     res = {}
@@ -24,7 +24,8 @@ def main():
         if not f.exists(): print('Falta', f.relative_to(ARREL)); continue
         sheet = Image.open(f).convert('RGBA')
         cel = 256
-        n = 8
+        n = FOTOGRAMES.get(k, 8)
+        COLS = sheet.width // cel
         fots = [sheet.crop(((i % COLS) * cel, (i // COLS) * cel, (i % COLS) * cel + cel, (i // COLS) * cel + cel)) for i in range(n)]
         bbs = [im.split()[3].point(lambda v: 255 if v > 24 else 0).getbbox() for im in fots]
         x0 = min(b[0] for b in bbs); y0 = min(b[1] for b in bbs); x1 = max(b[2] for b in bbs); y1 = max(b[3] for b in bbs)

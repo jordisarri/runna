@@ -679,7 +679,7 @@ class ZonaBase extends Phaser.Scene {
 
     // Idle frontal d'un NPC: l'animació 'idle_<clau>' en bucle (a un ritme lent i una mica diferent per a cada un, perquè no vagin tots al compàs)
     posaIdleNpc(img, key) {
-        if (!this.anims.exists('idle_' + key)) this.anims.create({ key: 'idle_' + key, frames: this.anims.generateFrameNumbers(key + '_idle', { start: 0, end: NPC_IDLE[key].n - 1 }), frameRate: 4, repeat: -1 });
+        if (!this.anims.exists('idle_' + key)) this.anims.create({ key: 'idle_' + key, frames: this.anims.generateFrameNumbers(key + '_idle', { start: 0, end: NPC_IDLE[key].n - 1 }), frameRate: NPC_IDLE[key].fps || 4, repeat: -1 });
         img.idleClau = key;
         img.play({ key: 'idle_' + key, startFrame: Phaser.Math.Between(0, NPC_IDLE[key].n - 1) });
     }
