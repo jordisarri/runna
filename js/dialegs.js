@@ -446,7 +446,7 @@ const DIALEGS = {
         pagines: [
             { qui: 'Jusef', text: 'Benvingut al Celler, viatger. Les pales i la pilota només són l\'escorça: el que jo practico aquí és màgia blanca.' },
             { qui: 'Jusef', text: 'Aquest és el meu servei màgic. La pilota desprèn tres llums que s\'encenen una a una. Fins ara ningú ha aconseguit aturar-lo.' },
-            { qui: 'Jusef', text: 'Vols provar-ho? Una partida, a cinc punts.' },
+            { qui: 'Jusef', text: 'Vols provar-ho? Una partida, a onze punts.' },
             { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaPP = i; fet(); }) }
         ],
         enAcabar: () => {

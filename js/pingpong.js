@@ -11,7 +11,7 @@
  *  Servei (com a la realitat): la pilota bota PRIMER al camp de qui serveix i després passa la xarxa. El teu: llisca cap amunt (apuntes igual).
  *  El d'en Jusef: un de cada tres és MÀGIC: la pilota encantada fa zigzags i només un cop PERFECTE trenca l'encanteri (llavors en Jusef no la pot tornar);
  *  si el cop no és perfecte, l'encanteri resisteix i la pilota torna fluixa.
- *  Partit a 5 punts. Després de dues derrotes, s'ofereix el mode fàcil (anell verd més llarg, en Jusef falla més). Càmera mòbil.
+ *  Partit a 5 punts al prototip (11 al joc). Després de dues derrotes, s'ofereix el mode fàcil (anell verd més llarg, en Jusef falla més). Càmera mòbil.
  *
  * Coordenades del món (metres): X de través (centre 0), z al llarg (0 = vora de l'Ineu, L = vora d'en Jusef), h alçada sobre la taula.
  *
@@ -26,7 +26,7 @@ const T = {
     G: 9.81, REST: 0.86,                           // gravetat i rebot a la taula
     Z_INEU: -0.42, Z_JUSEF: T_L_PLUS(0.42),        // on es posen els jugadors
     Z_IDEAL: -0.08,                                // on és la pilota en el moment perfecte del cop (just passada la vora de la taula)
-    PUNTS: 5
+    PUNTS: 11
 };
 function T_L_PLUS(d) { return 2.74 + d; }
 const MODES = {
