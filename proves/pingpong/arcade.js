@@ -127,6 +127,8 @@ class Arcade extends Phaser.Scene {
             const halo = this.add.circle(x, 112, 70, 0xffc060, 0.14).setDepth(-6).setBlendMode(Phaser.BlendModes.ADD);
             this.tweens.add({ targets: [fl, halo], alpha: { from: 0.6, to: 1 }, scaleY: { from: 0.85, to: 1.12 }, yoyo: true, repeat: -1, duration: 380 + i * 110, ease: 'Sine.easeInOut' });
         });
+        // El cartell de «prohibit jugar a pilota» (amb un ratolí), a la paret, darrere d'en Jusef: gris, difuminat i una mica tapat, perquè no faci ombra a la pilota blanca
+        this.cartellProhibit();
         // taula, com al minijoc de debò
         const t = this.add.graphics().setDepth(0.1);
         const Pt = (X, z, h = 0) => this.proj(X, z, h), W = T.W, ALT_PATA = 0.76;
@@ -157,6 +159,31 @@ class Arcade extends Phaser.Scene {
         const pj = Pt(0, T.Z_JUSEF);
         this.add.particles(pj.x, pj.y - 20, 'espurna', { x: { min: -100, max: 100 }, speedY: { min: 14, max: 36 }, speedX: { min: -8, max: 8 }, lifespan: 1300,
             scale: { start: 0.35, end: 0 }, alpha: { start: 0.8, end: 0 }, tint: [0xd8b0ff, 0xffe08a, 0xffffff], frequency: 140, quantity: 1 }).setDepth(0.9);
+    }
+
+    // El cartell es dibuixa en un contenidor i es converteix en una imatge a part, que es difumina (postFX) i es posa grisa
+    cartellProhibit() {
+        const W = 230, H = 250, c = this.make.container({ x: 0, y: 0, add: false });
+        const g = this.make.graphics({ add: false });
+        g.fillStyle(0x6a6660, 1).fillRoundedRect(0, 0, W, H, 18).lineStyle(6, 0x8a867e, 1).strokeRoundedRect(3, 3, W - 6, H - 6, 16);
+        g.fillStyle(0x56524c, 1).fillCircle(W / 2, 100, 74);
+        g.fillStyle(0xdad6cc, 1).fillCircle(W / 2, 100, 62);
+        // la pilota
+        g.fillStyle(0x9a958a, 1).fillCircle(W / 2 - 22, 118, 22);
+        // el ratolí (cap, orelles, ull, bigotis)
+        g.fillStyle(0x6e6a62, 1).fillCircle(W / 2 + 10, 78, 14).fillCircle(W / 2 + 36, 78, 14).fillEllipse(W / 2 + 24, 98, 52, 40);
+        g.fillStyle(0xcfc8bc, 1).fillCircle(W / 2 + 10, 78, 8).fillCircle(W / 2 + 36, 78, 8);
+        g.fillStyle(0x3a3732, 1).fillCircle(W / 2 + 18, 94, 3.5).fillCircle(W / 2 + 36, 94, 3.5).fillCircle(W / 2 + 27, 105, 3);
+        g.lineStyle(2, 0x3a3732, 1).lineBetween(W / 2 + 4, 104, W / 2 - 8, 101).lineBetween(W / 2 + 4, 108, W / 2 - 8, 111).lineBetween(W / 2 + 50, 104, W / 2 + 62, 101).lineBetween(W / 2 + 50, 108, W / 2 + 62, 111);
+        // el cercle vermell (desaturat) i la barra de prohibició
+        g.lineStyle(14, 0x8a4a44, 1).strokeCircle(W / 2, 100, 68);
+        g.lineStyle(14, 0x8a4a44, 1).lineBetween(W / 2 - 48, 52, W / 2 + 48, 148);
+        const t1 = this.make.text({ x: W / 2, y: 196, text: 'PROHIBIT JUGAR\nA PILOTA', style: { fontFamily: 'Georgia, serif', fontSize: '24px', color: '#d6d2c8', align: 'center', fontStyle: 'bold' }, add: false }).setOrigin(0.5);
+        c.add([g, t1]);
+        const rt = this.make.renderTexture({ x: 0, y: 0, width: W, height: H, add: false });
+        rt.draw(c); rt.saveTexture('cartellProhibit');
+        const img = this.add.image(520, 178, 'cartellProhibit').setDepth(-4).setAngle(-3).setAlpha(0.72).setScale(0.8).setTint(0xb4b0aa);
+        try { if (img.postFX) img.postFX.addBlur(0, 1.3, 1.3, 1.0); } catch (e) { /* sense WebGL: es veu sense difuminar */ }
     }
 
     // ---------------- Partit ----------------
