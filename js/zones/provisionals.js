@@ -10,23 +10,29 @@
 const ESG = { alcada: 1640, retY: 1010, retBaix: 24, retTop: 20, sostre: 1034, sostrePorta: 1000, portaDx: 870, portaEsq: 408 };      // sostre: fins on arriba la base del retaule (els peus no hi pugen); sostrePorta: només davant la porta de la dreta, que s'ha de poder tocar
 
 class ZonaEsglesia extends ZonaBase {
-    // La Pianista es gira cap a l'Ineu (dibuix de front, seguda al banc davant de l'orgue) o torna d'esquena a l'orgue
-    pianistaGira(cap, fet) {
+    // La Pianista toca l'orgue d'esquena (animació en bucle) o es gira cap a l'Ineu (dibuix de front, asseguda al banc davant de l'orgue)
+    pianistaToca(on, fet) {
         const pia = this.npcs && this.npcs.pianista;
-        if (!pia || !pia.active || !this.textures.exists('pianista_esquena') || !this.orgue) { if (fet) fet(); return; }
-        const davant = cap === 'ineu';
-        if (davant === (pia.texture.key === 'pianista')) { if (fet) fet(); return; }
-        if (pia.anims && pia.anims.isPlaying) pia.anims.stop();
-        const clau = davant ? 'pianista' : 'pianista_esquena';
-        pia.setTexture(clau).setFlipX(davant);
-        pia.escalaBase = pia.scaleX = pia.scaleY = this.textures.get(clau).customData.escala;
-        pia.setY(this.orgue.y + (davant ? 24 : -45));
-        if (davant && this.ineu) {                       // l'Ineu es posa al costat esquerre de l'orgue perquè no tapi la Pianista (que ara el mira)
-            const I = this.ineu, x = pia.x - 105, y = this.orgue.y + 22;
-            this.tweens.add({ targets: I, x, y, duration: 350, ease: 'Sine.easeInOut', onUpdate: () => { if (I.body) I.body.reset(I.x, I.y); }, onComplete: () => { if (this.cara) this.cara(pia); if (fet) fet(); } });
-            return;
+        if (!pia || !pia.active || !this.orgue || !this.textures.exists('pianista_idle')) { if (fet) fet(); return; }
+        if (on) {
+            if (!this.anims.exists('idle_pianista')) this.anims.create({ key: 'idle_pianista', frames: this.anims.generateFrameNumbers('pianista_idle', { start: 0, end: NPC_IDLE.pianista.n - 1 }), frameRate: NPC_IDLE.pianista.fps, repeat: -1 });
+            pia.setTexture('pianista_idle', 0).setFlipX(false); pia.escalaBase = pia.scaleX = pia.scaleY = this.textures.get('pianista_esquena').customData.escala;
+            pia.setY(this.orgue.y - 45); pia.play('idle_pianista'); if (pia.ombra) pia.ombra.setY(this.orgue.y - 45);
+        } else {
+            if (pia.anims) pia.anims.stop();
+            pia.setTexture('pianista').setFlipX(true); pia.escalaBase = pia.scaleX = pia.scaleY = this.textures.get('pianista').customData.escala;
+            pia.setY(this.orgue.y + 24); if (pia.ombra) pia.ombra.setY(this.orgue.y + 24);
         }
         if (fet) fet();
+    }
+
+    // La Pianista mira l'Ineu: de cara, i l'Ineu es posa al costat esquerre de l'orgue perquè no la tapi
+    pianistaCara(fet) {
+        this.pianistaToca(false);
+        const pia = this.npcs && this.npcs.pianista, I = this.ineu;
+        if (!pia || !I || !this.orgue) { if (fet) fet(); return; }
+        const x = pia.x - 105, y = this.orgue.y + 22;
+        this.tweens.add({ targets: I, x, y, duration: 350, ease: 'Sine.easeInOut', onUpdate: () => { if (I.body) I.body.reset(I.x, I.y); }, onComplete: () => { if (this.cara) this.cara(pia); if (fet) fet(); } });
     }
 
     constructor() {
@@ -81,14 +87,11 @@ class ZonaEsglesia extends ZonaBase {
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daimiel es posen amb la resta
         if (!epileg) this.orgue = this.posar('orgue', 975, ESG.retY + 250, { col: { w: 110, h: 50 } });
         if (!epileg) {
-            const pia = this.npc('pianista', 975, ESG.retY + 205, DIALEGS.pianista, { radi: RADI_NPC });         // seu a l'orgue, d'esquena (toca amb animació pròpia: NPC_IDLE.pianista)
-            pia.setDepth(ESG.retY + 251);                                                                         // per davant de l'orgue (que és a retY + 250), tot i seure més amunt
-            if (this.textures.exists('pianista_esquena')) {
-                pia.setTexture('pianista_esquena').setFlipX(false); pia.escalaBase = pia.scaleY = pia.scaleX = this.textures.get('pianista_esquena').customData.escala;
-                [pia.respira, pia.balanceig].forEach(t => t && t.remove()); pia.respira = pia.balanceig = null; pia.setAngle(0);       // d'esquena a l'orgue està FIXA (sense respirar ni balancejar-se)
-                pia.punt.npc = null; pia.punt.y = ESG.retY + 268; pia.punt.radi = 75;                                    // el punt per parlar-hi és davant de l'orgue (on s'atura l'Ineu), no darrere seu
-                pia.punt.enTancar = () => this.pianistaGira('orgue');                                                       // en acabar de parlar, torna a girar-se cap a l'orgue
-            } else pia.setFlipX(true);
+            // La Pianista és de cara al banc de l'orgue; només hi toca d'esquena (animada) quan l'Ineu la troba la primera vegada i mentre ensenya un cant (pianistaToca)
+            const pia = this.npc('pianista', 975, this.orgue.y + 24, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
+            pia.setDepth(this.orgue.y + 1);                                                                       // per davant de l'orgue
+            [pia.respira, pia.balanceig].forEach(t => t && t.remove()); pia.respira = pia.balanceig = null; pia.setAngle(0);       // fixa: ni respira ni es balanceja (no canvia de mida)
+            pia.punt.npc = null;                                                                                  // l'Ineu no es fa enrere en parlar-hi: es posa al costat de l'orgue (pianistaCara)
         }
         if (!epileg) this.npc('pare_daimiel', 360, ESG.retY + 190, DIALEGS.pareDaimiel, { flipX: false });
 

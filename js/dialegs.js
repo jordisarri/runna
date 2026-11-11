@@ -1707,12 +1707,17 @@ const DIALEGS_FINAL = {
     pastor_vell: E => ({ pagines: [{ qui: 'Pastor vell', text: "Les ovelles tornen a ser blanques. Alguna encara té les orelles una mica liles, però ja li passarà." }] })
 };
 
-// La Pianista seu a l'orgue d'esquena: en parlar-hi, després del primer quadre de diàleg es gira cap a l'Ineu (ZonaEsglesia.pianistaGira) i en acabar torna a l'orgue
+// La Pianista és de cara al banc de l'orgue. La primera vegada que l'Ineu la troba, toca d'esquena i es gira després del primer quadre; la resta de converses, l'Ineu es posa al costat de l'orgue
 (() => {
     const original = DIALEGS.pianista;
     DIALEGS.pianista = E => {
         const d = original(E);
-        if (d && d.pagines && d.pagines.length > 1) d.pagines.splice(1, 0, { fer: (z, fet) => { if (z.pianistaGira) z.pianistaGira('ineu', fet); else fet(); } });
+        if (!d || !d.pagines || !d.pagines.length) return d;
+        const primera = !E.flag('parlatPianista') && !E.flag('cantAurora');
+        if (primera && d.pagines.length > 1) {
+            d.pagines.unshift({ fer: (z, fet) => { if (z.pianistaToca) z.pianistaToca(true, fet); else fet(); } });
+            d.pagines.splice(2, 0, { fer: (z, fet) => { if (z.pianistaCara) z.pianistaCara(fet); else fet(); } });
+        } else d.pagines.unshift({ fer: (z, fet) => { if (z.pianistaCara) z.pianistaCara(fet); else fet(); } });
         return d;
     };
 })();

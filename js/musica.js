@@ -29,8 +29,13 @@ const FREQ_NOTA = [0, 262, 330, 392];
 function iniciarLliço(nom) {
     setTimeout(() => {
         if (game.scene.isActive('Musica')) return;
+        // la Pianista toca l'orgue d'esquena mentre dura la lliçó, i després torna a mirar l'Ineu
+        const ui = game.scene.getScene('UI'), z = ui && Joc.zonaActiva(ui);
+        if (z && z.pianistaToca) z.pianistaToca(true);
         game.scene.start('Musica', { mode: 'llico', melodia: nom });
         game.scene.bringToTop('Musica');
+        const ms = game.scene.getScene('Musica');
+        if (ms && z && z.pianistaToca) ms.events.once('shutdown', () => z.pianistaToca(false));
     }, 150);
 }
 
