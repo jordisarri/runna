@@ -1,0 +1,149 @@
+{
+  "recipe": "rose8-v1",
+  "action": "attack",
+  "width": 1536,
+  "height": 1536,
+  "frame_count": 56,
+  "fps": 24.0,
+  "crops": {
+    "NW": [
+      3,
+      3,
+      504,
+      504
+    ],
+    "N": [
+      515,
+      3,
+      504,
+      504
+    ],
+    "NE": [
+      1028,
+      3,
+      504,
+      504
+    ],
+    "W": [
+      3,
+      515,
+      504,
+      504
+    ],
+    "E": [
+      1028,
+      515,
+      504,
+      504
+    ],
+    "SW": [
+      3,
+      1027,
+      504,
+      504
+    ],
+    "S": [
+      515,
+      1027,
+      504,
+      504
+    ],
+    "SE": [
+      1028,
+      1027,
+      504,
+      504
+    ]
+  },
+  "duration_s": 2.3333333333333335,
+  "frame_indices": [
+    0,
+    4,
+    7,
+    11,
+    15,
+    18,
+    22,
+    26,
+    29,
+    33,
+    37,
+    40,
+    44,
+    48,
+    51,
+    55
+  ],
+  "origin": [
+    0.5,
+    1
+  ],
+  "normalization": "fixed-panel-canvas-v1",
+  "output": {
+    "frame_count": 16,
+    "fps": 6.857142857142857,
+    "frame_size": [
+      384,
+      384
+    ],
+    "columns": 4
+  },
+  "directions": [
+    {
+      "panel": "NW",
+      "direction": "northwest",
+      "generated": true,
+      "sheet": "northwest.png",
+      "atlas": "northwest.json"
+    },
+    {
+      "panel": "N",
+      "direction": "up",
+      "generated": true,
+      "sheet": "up.png",
+      "atlas": "up.json"
+    },
+    {
+      "panel": "NE",
+      "direction": "northeast",
+      "generated": true,
+      "sheet": "northeast.png",
+      "atlas": "northeast.json"
+    },
+    {
+      "panel": "W",
+      "direction": "left",
+      "generated": true,
+      "sheet": "left.png",
+      "atlas": "left.json"
+    },
+    {
+      "panel": "E",
+      "direction": "right",
+      "generated": true,
+      "sheet": "right.png",
+      "atlas": "right.json"
+    },
+    {
+      "panel": "SW",
+      "direction": "southwest",
+      "generated": true,
+      "sheet": "southwest.png",
+      "atlas": "southwest.json"
+    },
+    {
+      "panel": "S",
+      "direction": "down",
+      "generated": true,
+      "sheet": "down.png",
+      "atlas": "down.json"
+    },
+    {
+      "panel": "SE",
+      "direction": "southeast",
+      "generated": true,
+      "sheet": "southeast.png",
+      "atlas": "southeast.json"
+    }
+  ]
+}

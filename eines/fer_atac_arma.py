@@ -3,7 +3,7 @@
 
     python3 eines/fer_atac_arma.py
 
-Origen: art/ineu/atac_arma/<arma>/<direccio>.png (l'espasa és la 2a generació: la 1a repetia el tall quatre vegades i és a espasa_v1/) (paquets isomètrics d'AutoSprite, 4x4 de 384 px, 16 fotogrames; l'arma ja hi surt a la mà).
+Origen: art/ineu/atac_arma/<arma>/<direccio>.png (bastó, branca i espasa són la 2a generació; la 1a és a basto_v1/, tiller_v1/ i espasa_v1/ -l'espasa repetia el tall quatre vegades-; la branca i el bastó es tallaven a la vora: la 1a repetia el tall quatre vegades i és a espasa_v1/) (paquets isomètrics d'AutoSprite, 4x4 de 384 px, 16 fotogrames; l'arma ja hi surt a la mà).
 AutoSprite no fa un cop net: afegeix preparació, repeteix el gest i es queda en pose final. Aquí es tria, per arma, només els fotogrames del cop (FOTOGRAMES), amb
 l'últim repetit perquè es vegi el final del cop. Els fulls surten en cel·les de CEL px a l'escala dels fulls de caminar (reduïts: SPRITE_INEU.k), amb els peus
 a la mateixa fracció de la cel·la (origen 0,5 / 0,9375, com al joc) i el contorn negre d'1 px. El joc els carrega a js/assets.js (ATAC_ARMA_FPS).
@@ -19,10 +19,10 @@ ARREL = Path(__file__).resolve().parent.parent
 ORIGEN = ARREL / 'art' / 'ineu' / 'atac_arma'
 DEST = ARREL / 'assets' / 'ineu'
 DIRS = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast']
-FOT = {'basto': [1, 2, 3, 4, 5, 6, 7], 'tiller': [2, 3, 4, 5, 6, 6], 'espasa': [2, 3, 4, 5, 5]}       # fotogrames triats (de 0 a 15) per arma
+FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 5, 5]}       # fotogrames triats (de 0 a 15) per arma
 SRC, CEL = 384, 320         # fotograma d'origen i cel·la de sortida (més gran que abans, perquè l'arma no es talli)
 COS = 170.0                  # alçada que ha de fer el cos de l'Ineu a la cel·la (com als fulls de caminar reduïts)
-K_FIXA = {'espasa': 0.612, 'basto': 0.612, 'tiller': 0.612}   # provisional per a basto i tiller (primera generació); les noves es mesuren   # escala fixa (el cos de l'espasa fa 277 px a l'origen; amb l'espasa avall, la mesura dels peus no val)
+K_FIXA = {'espasa': 0.612}   # (basto i tiller: es mesura, vegeu escala())   # escala fixa (el cos de l'espasa fa 277 px a l'origen; amb l'espasa avall, la mesura dels peus no val)
 GRUIX = 1
 
 def fotograma(im, i):
