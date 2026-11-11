@@ -261,7 +261,7 @@ const OCTANTS_INEU = ['right', 'southeast', 'down', 'southwest', 'left', 'northw
 
 // Fulls d'idle frontal dels NPC (eines/fer_idle_npc.py): clau → mida de cel·la i nombre de fotogrames. Es carreguen amb la resta i ZonaBase.npc() els fa servir
 // en lloc del dibuix fix; si no hi són, tot es veu com abans.
-const NPC_IDLE = {};          // (buit: de moment els NPC fan un idle per codi; vegeu ZonaBase.npc)
+const NPC_IDLE = { joaneta: { w: 229, h: 285, n: 16, fps: 8 } };          // la Joaneta prepara pocions (idle animat); la resta d'NPC fan l'idle per codi (ZonaBase.idleCodi)
 
 const Grafics = {
     // Avís si el navegador no deixa llegir els píxels (obert amb doble clic, file://)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Converteix els fulls d'idle frontal dels NPC (generats amb AutoSprite, 8 fotogrames) a assets/personatges/<clau>_idle.webp.
 
-    python3 eines/fer_idle_npc.py            (tots els que hi hagi a art/personatges/idle/<clau>_idle_sheet.png)
+    python3 eines/fer_idle_npc.py joaneta     (només aquests; sense arguments, tots els que hi hagi a art/personatges/idle/<clau>_idle_sheet.png)
 
 Per cada NPC: es treu la caixa comuna del personatge a tots els fotogrames, s'escala perquè l'alçada sigui la MATEIXA que la del dibuix fix
 (assets/personatges/<clau>.webp: així l'animació i el dibuix fix es veuen igual de grossos) i es deixen tots els fotogrames en una fila. Mostra
@@ -19,7 +19,7 @@ FOTOGRAMES = {'joaneta': 16}      # per defecte 8 (3 columnes); la Joaneta en t�
 
 def main():
     res = {}
-    for k in CLAUS:
+    for k in (sys.argv[1:] or CLAUS):
         f = ENTRADA / (k + '_idle_sheet.png')
         if not f.exists(): print('Falta', f.relative_to(ARREL)); continue
         sheet = Image.open(f).convert('RGBA')
