@@ -827,25 +827,55 @@ const Grafics = {
             ctx.strokeStyle = '#4f7a35'; ctx.lineWidth = 2;
             [[26, 82, 22, 74], [28, 82, 28, 72], [48, 82, 52, 73], [50, 82, 55, 77]].forEach(([x1, y1, x2, y2]) => { ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); });
         });
-        // Roda de carruatge gegant (la de la Sala del Ping-pong, la que amaga el passadís)
+        // Roda de carruatge gegant (la de la Sala del Ping-pong, la que amaga el passadís): llanta de set trams de fusta amb cèrcol de ferro reblat,
+        // catorze radis aprimats, un cub amb bandes de ferro i cargols, i una mica de fang i molsa; il·luminada des de dalt a l'esquerra
         crea('roda_carruatge', 140, 150, (ctx, w, h) => {
-            const cx = 70, cy = 76, R = 62;
-            ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(cx, 144, 44, 6, 0, 0, Math.PI * 2); ctx.fill();
-            ctx.lineCap = 'round';
-            // Radis
-            ctx.strokeStyle = '#2a1a0c'; ctx.lineWidth = 11;
-            for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * 12, cy + Math.sin(a) * 12); ctx.lineTo(cx + Math.cos(a) * (R - 6), cy + Math.sin(a) * (R - 6)); ctx.stroke(); }
-            ctx.strokeStyle = '#8a5a30'; ctx.lineWidth = 7;
-            for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * 12, cy + Math.sin(a) * 12); ctx.lineTo(cx + Math.cos(a) * (R - 6), cy + Math.sin(a) * (R - 6)); ctx.stroke(); }
-            // Llanta de fusta i cèrcol de ferro
-            ctx.strokeStyle = '#2a1a0c'; ctx.lineWidth = 18; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
-            ctx.strokeStyle = '#7a4e26'; ctx.lineWidth = 13; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
-            ctx.strokeStyle = '#3a3a40'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(cx, cy, R + 7, 0, Math.PI * 2); ctx.stroke();
-            ctx.strokeStyle = 'rgba(255,225,170,0.35)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, R - 3, Math.PI * 1.1, Math.PI * 1.6); ctx.stroke();
-            // Cub
-            ctx.fillStyle = '#4a2c16'; ctx.strokeStyle = '#2a1a0c'; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.arc(cx, cy, 16, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-            ctx.fillStyle = '#8a8a90'; ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI * 2); ctx.fill();
+            const cx = 70, cy = 76, R = 60, O = '#1e120a';
+            ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+            const fusta = (x0, y0, x1, y1, a, b) => { const g = ctx.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, a); g.addColorStop(1, b); return g; };
+            // Radis: aprimats del cub a la llanta, amb vena i llum
+            const NR = 14;
+            for (let i = 0; i < NR; i++) {
+                const a = i * Math.PI * 2 / NR, ca = Math.cos(a), sa = Math.sin(a), px = -sa, py = ca;
+                const r0 = 17, r1 = R - 7, w0 = 5.2, w1 = 3.4;
+                const P = [[cx + ca * r0 + px * w0, cy + sa * r0 + py * w0], [cx + ca * r1 + px * w1, cy + sa * r1 + py * w1], [cx + ca * r1 - px * w1, cy + sa * r1 - py * w1], [cx + ca * r0 - px * w0, cy + sa * r0 - py * w0]];
+                ctx.beginPath(); P.forEach(([x, y], k) => k ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath();
+                ctx.fillStyle = fusta(cx + px * 6, cy + py * 6, cx - px * 6, cy - py * 6, '#a8703a', '#6a4220'); ctx.fill();
+                ctx.strokeStyle = O; ctx.lineWidth = 1.3; ctx.stroke();
+                ctx.strokeStyle = 'rgba(255,225,170,0.4)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(cx + ca * (r0 + 2) + px * 2.4, cy + sa * (r0 + 2) + py * 2.4); ctx.lineTo(cx + ca * (r1 - 2) + px * 1.4, cy + sa * (r1 - 2) + py * 1.4); ctx.stroke();
+            }
+            // Llanta: set trams (cada un amb el seu to i les seves vetes) i les juntes entre ells
+            const NT = 7, tons = ['#7a4c24', '#8a5a2c', '#744622', '#85552a', '#7e5028', '#8c5c30', '#764824'];
+            ctx.strokeStyle = O; ctx.lineWidth = 19; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+            for (let t = 0; t < NT; t++) {
+                const a0 = t * Math.PI * 2 / NT + 0.035, a1 = (t + 1) * Math.PI * 2 / NT - 0.035;
+                ctx.strokeStyle = tons[t]; ctx.lineWidth = 16; ctx.beginPath(); ctx.arc(cx, cy, R, a0, a1); ctx.stroke();
+                ctx.strokeStyle = 'rgba(255,225,170,0.22)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, R - 5, a0 + 0.04, a1 - 0.04); ctx.stroke();
+                ctx.strokeStyle = 'rgba(40,20,8,0.5)'; ctx.lineWidth = 0.9;
+                [-3, 0.5, 3.5].forEach(d => { ctx.beginPath(); ctx.arc(cx, cy, R + d, a0 + 0.12 + 0.05 * d, a1 - 0.18 + 0.04 * d); ctx.stroke(); });
+            }
+            // Cèrcol de ferro reblat per fora, amb la vora de dins més fosca
+            ctx.strokeStyle = O; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(cx, cy, R + 8.5, 0, Math.PI * 2); ctx.stroke();
+            ctx.strokeStyle = '#43434b'; ctx.lineWidth = 5.4; ctx.beginPath(); ctx.arc(cx, cy, R + 8.5, 0, Math.PI * 2); ctx.stroke();
+            ctx.strokeStyle = 'rgba(210,210,225,0.45)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(cx, cy, R + 10.2, Math.PI * 0.95, Math.PI * 1.65); ctx.stroke();
+            ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(cx, cy, R + 6.6, 0, Math.PI * 2); ctx.stroke();
+            for (let k = 0; k < 28; k++) { const a = k * Math.PI * 2 / 28; ctx.fillStyle = '#8a8a96'; ctx.beginPath(); ctx.arc(cx + Math.cos(a) * (R + 8.5), cy + Math.sin(a) * (R + 8.5), 1.5, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.beginPath(); ctx.arc(cx + Math.cos(a) * (R + 8.5) + 0.7, cy + Math.sin(a) * (R + 8.5) + 0.7, 0.8, 0, Math.PI * 2); ctx.fill(); }
+            // Cub: cos de fusta gruixut amb dues bandes de ferro, vuit cargols i la tapa de l'eix
+            ctx.fillStyle = fusta(cx - 16, cy - 16, cx + 16, cy + 16, '#7a4c24', '#3c2210'); ctx.beginPath(); ctx.arc(cx, cy, 18, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = O; ctx.lineWidth = 2.2; ctx.stroke();
+            [[18, 3.2], [11.5, 2.6]].forEach(([r, g]) => { ctx.strokeStyle = O; ctx.lineWidth = g + 1.6; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); ctx.strokeStyle = '#4a4a52'; ctx.lineWidth = g; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke(); });
+            for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4 + 0.2, x = cx + Math.cos(a) * 14.8, y = cy + Math.sin(a) * 14.8; ctx.fillStyle = '#9a9aa6'; ctx.beginPath(); ctx.arc(x, y, 1.9, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = O; ctx.lineWidth = 0.8; ctx.stroke(); }
+            const gc = ctx.createRadialGradient(cx - 2, cy - 2, 0.5, cx, cy, 8); gc.addColorStop(0, '#d8d8e4'); gc.addColorStop(0.5, '#8a8a96'); gc.addColorStop(1, '#4a4a54');
+            ctx.fillStyle = gc; ctx.beginPath(); ctx.arc(cx, cy, 7.5, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = O; ctx.lineWidth = 1.4; ctx.stroke();
+            ctx.fillStyle = '#16100c'; ctx.beginPath(); ctx.arc(cx, cy, 2.2, 0, Math.PI * 2); ctx.fill();
+            // Esquerda a la llanta, fang a la vora de baix i una mica de molsa a dalt
+            ctx.strokeStyle = 'rgba(20,10,4,0.8)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(cx - 46, cy - 38); ctx.lineTo(cx - 43, cy - 33); ctx.lineTo(cx - 47, cy - 29); ctx.stroke();
+            ctx.fillStyle = 'rgba(70,48,26,0.55)'; [[cx + 14, cy + 66, 6, 2.6], [cx - 8, cy + 67, 8, 3], [cx + 32, cy + 60, 5, 2.4], [cx - 30, cy + 62, 5, 2.2]].forEach(([x, y, rx, ry]) => { ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); ctx.fill(); });
+            ctx.fillStyle = 'rgba(86,130,56,0.6)'; [[cx - 24, cy - 62, 5, 2.4], [cx - 14, cy - 66, 4, 2], [cx - 36, cy - 54, 4, 2.2]].forEach(([x, y, rx, ry]) => { ctx.beginPath(); ctx.ellipse(x, y, rx, ry, -0.5, 0, Math.PI * 2); ctx.fill(); });
+            // Llum des de dalt a l'esquerra i ombra a baix a la dreta (només sobre el que ja és dibuixat)
+            ctx.globalCompositeOperation = 'source-atop';
+            const ll = ctx.createLinearGradient(cx - 60, cy - 60, cx + 60, cy + 60); ll.addColorStop(0, 'rgba(255,236,190,0.22)'); ll.addColorStop(0.5, 'rgba(0,0,0,0)'); ll.addColorStop(1, 'rgba(0,0,0,0.38)');
+            ctx.fillStyle = ll; ctx.fillRect(0, 0, w, h);
+            ctx.globalCompositeOperation = 'source-over';
         });
         // Grans de rosari (l'energia de l'Ineu): fusta d'olivera polida i ben encesa (ple), mig apagats (mig) o foscos i esquerdats (buit)
         const gra = (ctx, mode) => {

@@ -426,7 +426,10 @@ class EscenaPingPong extends Phaser.Scene {
                         this.finalBola(b.de === 'ineu' ? 'jusef' : 'ineu', 'Ha botat al seu camp'); return;
                     }
                     b.bots++;
-                    if (b.bots >= 2) { this.finalBola(b.de, banda === 'ineu' ? 'No hi has arribat' : (b.motiu || 'En Jusef no hi arriba!')); return; }
+                    if (b.bots >= 2) {
+                        // un cop fluix o curt bota dos cops al seu camp abans d'arribar al lloc on en Jusef el torna: llavors també l'ha d'intentar tornar (si hi arriba), no donar-lo per perdut
+                        if (banda === 'jusef' && b.de === 'ineu' && !b.decidit) { b.decidit = true; this.copJusef(); if (b !== this.b) return; }
+                        this.finalBola(b.de, banda === 'ineu' ? 'No hi has arribat' : (b.motiu || 'En Jusef no hi arriba!')); return; }
                     if (banda === 'ineu') this.marcaBot.setStrokeStyle(3, 0xffd34d, 0);
                 } else {
                     this.finalBola(b.bots >= 1 ? b.de : (b.de === 'ineu' ? 'jusef' : 'ineu'), b.bots >= 1 ? (b.de === 'ineu' ? (b.motiu || 'En Jusef no hi arriba!') : 'No hi has arribat') : 'Fora!');
@@ -646,6 +649,7 @@ class EscenaPingPong extends Phaser.Scene {
         const vibra = this.time.addEvent({ delay: 60, loop: true, callback: () => lletres.forEach((o, k) => o.grup.forEach(g => { if (g.visible) g.y = o.y + Math.sin(this.time.now / 90 + k) * 3; })) });
         // 2) després, per davant del text, l'Ineu salta
         this.time.delayedCall(1300, () => {
+            this.spIneu.setVisible(false);          // el gràfic de l'Ineu jugador desapareix: només es veu el de la celebració
             sp.setVisible(true).setScale(2.0).setPosition(AMPLE / 2, ALT_PP + 30).play('celebra');
             this.so('be'); this.time.delayedCall(300, () => this.so('fort'));
             this.flaixPantalla(0.35, 220);
@@ -660,7 +664,7 @@ class EscenaPingPong extends Phaser.Scene {
                 this.time.delayedCall(500, () => this.input.once('pointerdown', () => {
                     this.tweens.add({ targets: [sp, expl, ...lletres.flatMap(o => o.grup)], alpha: 0, duration: 280, onComplete: () => {
                         vibra.remove(); expl.destroy(); lletres.forEach(o => o.grup.forEach(g => g.destroy()));
-                        this.tweens.killTweensOf(sp); sp.setVisible(false).setAlpha(1).setAngle(0).setY(yBase); this.celebActiva = 0; this.celebLinies.clear(); this.celebFons.setFillStyle(0x180a26, 0); fet();
+                        this.tweens.killTweensOf(sp); sp.setVisible(false).setAlpha(1).setAngle(0).setY(yBase); this.spIneu.setVisible(true); this.celebActiva = 0; this.celebLinies.clear(); this.celebFons.setFillStyle(0x180a26, 0); fet();
                     } });
                 }));
             });

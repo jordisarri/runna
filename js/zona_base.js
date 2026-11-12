@@ -1948,11 +1948,42 @@ class ZonaBase extends Phaser.Scene {
                 g.lineStyle(1.5, o.vora, 0.8);
                 for (let k = 1; k < 3; k++) g.lineBetween(x + w * k / 3, r * 0.6, x + w * k / 3, H - 2);
             }
+            if (o.vell) {                                                // porta vella: taulons desiguals, vetes, esquerdes, nusos, humitat i el ferro rovellat
+                const rn = n => { const q = Math.sin(n * 91.7 + (esq ? 3.1 : 7.7)) * 43758.5453; return q - Math.floor(q); };
+                const y0 = r * 0.62, NP = 4;
+                for (let k = 0; k < NP; k++) {                           // cada taulò, d'un to una mica diferent
+                    const px0 = x + w * k / NP, tone = [0x5a4630, 0x4c3a26, 0x634d34, 0x503e2a][(k + (esq ? 0 : 2)) % 4];
+                    g.fillStyle(tone, 0.55).fillRect(px0 + 1, y0, w / NP - 2, H - y0 - 2);
+                    g.fillStyle(0xffffff, 0.05).fillRect(px0 + 2, y0, 2, H - y0 - 2);
+                    g.lineStyle(2, 0x0e0804, 0.85).lineBetween(px0, y0, px0, H - 2);
+                }
+                for (let k = 0; k < 16; k++) {                          // vetes de la fusta
+                    const gx = x + 4 + rn(k) * (w - 8), gy = y0 + 6 + rn(k + 40) * (H - y0 - 40), gl = 14 + rn(k + 80) * 30;
+                    g.lineStyle(1, k % 3 ? 0x1c1208 : 0x9a7a52, k % 3 ? 0.45 : 0.22).lineBetween(gx, gy, gx + (rn(k + 7) - 0.5) * 3, gy + gl);
+                }
+                [[0.28, 0.5], [0.74, 0.7]].forEach(([fx, fy]) => { const kx = x + w * fx, ky = y0 + (H - y0) * fy; g.fillStyle(0x1c1208, 0.8).fillEllipse(kx, ky, 7, 11); g.lineStyle(1, 0x0e0804, 0.7).strokeEllipse(kx, ky, 12, 17); });
+                g.lineStyle(1.5, 0x0a0604, 0.9);                         // esquerdes
+                [[0.2, 0.18], [0.62, 0.36]].forEach(([fx, fy]) => { const kx = x + w * fx, ky = y0 + (H - y0) * fy; g.lineBetween(kx, ky, kx + 3, ky + 12).lineBetween(kx + 3, ky + 12, kx - 1, ky + 22).lineBetween(kx - 1, ky + 22, kx + 4, ky + 34); });
+                g.fillStyle(0x1e3a22, 0.32).fillRect(x + 2, H - 16, w - 4, 14);                     // humitat i molsa al peu
+                for (let k = 0; k < 7; k++) g.fillStyle(0x080402, 1).fillTriangle(x + 3 + k * (w - 6) / 7, H - 1, x + 3 + k * (w - 6) / 7 + 4 + rn(k) * 5, H - 1, x + 5 + k * (w - 6) / 7, H - 3 - rn(k + 3) * 5);   // vora de baix rosegada
+            }
             if (o.ferro) [0.22, 0.78].forEach(f => { g.lineStyle(4, 0x2a2018, 1).lineBetween(x + 3, H * f, x + w - 3, H * f); g.fillStyle(0x2a2018, 1).fillCircle(esq ? x + w - 8 : x + 8, H * f, 4); });
+            if (o.vell && o.ferro) {                                     // rovell que regalima de les bandes, reblons i frontisses amb la punta afilada
+                [0.22, 0.78].forEach(f => {
+                    for (let k = 0; k < 5; k++) { const rx = x + 8 + (w - 16) * (k + 0.5) / 5; g.fillStyle(0x7a4a22, 0.55).fillRect(rx, H * f + 3, 2, 6 + (k * 7) % 9); }
+                    for (let rx = x + 8; rx < x + w - 6; rx += 13) { g.fillStyle(0x6a6a72, 1).fillCircle(rx, H * f - 0.5, 1.8); g.fillStyle(0x000000, 0.5).fillCircle(rx + 0.6, H * f + 0.2, 0.9); }
+                    const hx = esq ? x : x + w, sg = esq ? 1 : -1;
+                    g.fillStyle(0x23232a, 1).fillPoints([{ x: hx, y: H * f - 6 }, { x: hx + sg * w * 0.62, y: H * f - 2 }, { x: hx + sg * w * 0.72, y: H * f }, { x: hx + sg * w * 0.62, y: H * f + 2 }, { x: hx, y: H * f + 6 }], true);
+                });
+            }
             if (esq && o.finestra) {                                     // finestreta enreixada
                 g.fillStyle(o.vora, 1).fillRect(x + 10, H - 66, 26, 40);
                 g.lineStyle(1.5, 0x5a7a70, 1); for (let k = 1; k < 4; k++) g.lineBetween(x + 10 + k * 6.5, H - 66, x + 10 + k * 6.5, H - 26);
             }
+            if (o.vell) {                                                // anella de ferro negre penjada d'un clau, en lloc del pom
+                const ax = esq ? x + w - 11 : x + 11, ay = H * 0.55;
+                g.fillStyle(0x15151a, 1).fillCircle(ax, ay - 8, 3.2).lineStyle(3, 0x15151a, 1).strokeCircle(ax, ay + 1, 7).lineStyle(1.2, 0x8a8a96, 0.55).strokeCircle(ax - 0.5, ay + 0.5, 7);
+            } else
             g.fillStyle(0xcfb36a, 1).fillCircle(esq ? x + w - 9 : x + 9, H * 0.55, 2.8);   // pom
             g.setPosition(esq ? DX - DW / 2 : DX + DW / 2, DT);
             return g;
