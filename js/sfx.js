@@ -326,6 +326,12 @@ const Sfx = {
     },
 
     // ---------- Món i interfície ----------
+    escala(amunt) {              // un «tap» sec de sabata sobre un graó de pedra: un cop greu que cau de pressa i un cliqueig; una mica més greu en baixar
+        if (!this.ok('escala', 150)) return;
+        this.xiu(0.05, 0.4, 'bandpass', 1500 + Math.random() * 500, 700, 1.5);                     // cliqueig de la sabata contra la pedra (ben audible per sobre de la música)
+        this.to(amunt ? 210 : 160, amunt ? 90 : 70, 0.11, 'triangle', 0.5);                       // el cop sord del graó
+        this.to(amunt ? 420 : 320, amunt ? 180 : 140, 0.05, 'square', 0.12);                      // una mica de «tac» sec al damunt
+    },
     pas(fort) {
         if (!this.ok('pas', 120)) return;
         this.xiu(0.05, fort ? 0.12 : 0.07, 'lowpass', 700 + Math.random() * 400, 200);

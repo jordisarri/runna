@@ -11,12 +11,13 @@
 const TORRE = {
     graons: 26,            // graons de cargol (més un replà a baix i un de dalt)
     perVolta: 13,          // graons per volta completa
-    alt: 46,               // alçada d'un graó (px)
+    alt: 56,               // alçada d'un graó (px)
     R: 330,                // radi de la paret (px)
-    fons: 74,              // quant surt un graó de la paret cap al centre
+    fons: 90,              // quant surt un graó de la paret cap al centre
     inclinacio: 0.5,
     velocitat: 2.3,        // graons per segon
-    peuY: 800              // y de pantalla (dins la vista) on l'Ineu té els peus
+    peuY: 800,             // y de pantalla (dins la vista) on l'Ineu té els peus
+    escalaIneu: 1.5        // l'Ineu es veu més gran que a les zones (si no, quedava minúscul entre els graons)
 };
 
 class ZonaTorre extends Phaser.Scene {
@@ -50,8 +51,8 @@ class ZonaTorre extends Phaser.Scene {
         this.llum = this.add.graphics().setDepth(6).setBlendMode(Phaser.BlendModes.ADD);
 
         const S = SPRITE_INEU;
-        this.ombra = this.add.image(this.cx, T.peuY, 'ombra').setScale(0.42).setDepth(4);
-        this.ineu = this.add.sprite(this.cx, T.peuY, 'ineu_right', quietIneu()).setOrigin(0.5, S.peus / S.alt).setScale(S.alcada / (S.alt * S.k)).setDepth(5);
+        this.ombra = this.add.image(this.cx, T.peuY, 'ombra').setScale(0.42 * T.escalaIneu).setDepth(4);
+        this.ineu = this.add.sprite(this.cx, T.peuY, 'ineu_right', quietIneu()).setOrigin(0.5, S.peus / S.alt).setScale(S.alcada / (S.alt * S.k) * T.escalaIneu).setDepth(5);
         if (this.anims.exists('aturat_right')) this.ineu.anims.play('aturat_right', true);
         this.dirVista = 1;
 
@@ -90,8 +91,28 @@ class ZonaTorre extends Phaser.Scene {
 
     alturaIneu() {
         const T = TORRE, i = Math.floor(this.p), f = this.p - i;
-        const t = Math.max(0, Math.min(1, (f - 0.7) / 0.3));
+        // Pujada contínua i suau (el graó de davant canvia a f = 0.5; abans el salt era de cop al final i tota l'escena «vibrava» i l'Ineu quedava per sota del graó)
+        const t = Math.max(0, Math.min(1, (f - 0.1) / 0.8));
         return this.cim(i) + (this.cim(i + 1) - this.cim(i)) * (t * t * (3 - 2 * t));
+    }
+
+    // Les finestres i les torxes no poden quedar tapades pels graons: si el seu angle (absolut) coincideix amb el d'un graó i l'alçada també, es desplacen en alçada
+    // fins a un lloc lliure. alt0..alt1: el tros que ocupen respecte a h; tolA: tolerància d'angle; el graó tapa la paret des de 60 px per sota del seu cim fins a 16 per sobre.
+    lliure(aAbs, hIni, alt0, alt1, tolA) {
+        const T = TORRE, dos = Math.PI * 2, dif = (x, y) => { let d = (x - y) % dos; if (d < -Math.PI) d += dos; if (d > Math.PI) d -= dos; return Math.abs(d); };
+        let h = hIni;
+        for (let pas = 0; pas < 3; pas++) {
+            let mogut = false;
+            for (let i = 0; i <= T.graons + 1; i++) {
+                if (dif(aAbs, (i + 0.5) * this.dtheta) > this.dtheta / 2 + tolA) continue;
+                const c = this.cim(i), lo = c - 60, hi = c + 16;
+                if (h + alt1 < lo || h + alt0 > hi) continue;
+                const amunt = hi - (h + alt0), avall = (h + alt1) - lo;
+                h += amunt <= avall ? amunt + 4 : -(avall + 4); mogut = true;
+            }
+            if (!mogut) break;
+        }
+        return h;
     }
 
     pt(alfa, r, h) {
@@ -124,9 +145,10 @@ class ZonaTorre extends Phaser.Scene {
         }
         if (dir) {
             this.ineu.setFlipX(false);
+            const graoAbans = Math.floor(this.p + 0.2);
             this.p += dir * T.velocitat * delta / 1000;
             this.dirVista = dir;
-            if (time > this.proxPas) { this.proxPas = time + 260; this.altrePas = !this.altrePas; Sfx.pas(this.altrePas); }
+            if (Math.floor(this.p + 0.2) !== graoAbans) Sfx.escala(dir > 0);          // un tap a cada graó (quan hi posa el peu, cap al final de la pujada del graó), en pujar i en baixar
             this.ineu.anims.play(dir > 0 ? 'caminar_right' : 'caminar_left', true);
         } else {
             const quiet = 'aturat_' + (this.dirVista > 0 ? 'right' : 'left');
@@ -211,7 +233,28 @@ class ZonaTorre extends Phaser.Scene {
             const aL = a - ample / 2, aR = a + ample / 2, fusta = this.ombrejat(0x5a3a1e, a), pedra = this.ombrejat(0xaaa08c, a);
             const arc = r => { const pts = []; for (let k = 0; k <= 8; k++) { const t = Math.PI - k / 8 * Math.PI, ai = a + Math.cos(t) * (ample / 2) * r; pts.push(this.pt(ai, T.R, h + alt - 30 * r + Math.sin(t) * 34 * r)); } return pts; };
             const marc = [this.pt(aL - 0.05, T.R, h), ...arc(1.35), this.pt(aR + 0.05, T.R, h)];
-            g.fillStyle(pedra, 1).fillPoints(marc, true);
+            // Les portes del retaule: marc daurat amb moldures, columnes salomòniques als costats, capitells i un coronament de raigs amb una creu
+            const or = this.ombrejat(0xd8a830, a, 1.05), orFosc = this.ombrejat(0x8a5e10, a), orClar = this.ombrejat(0xf4d870, a, 1.1), vora = this.ombrejat(0x4a2a08, a);
+            g.fillStyle(or, 1).fillPoints(marc, true);
+            g.lineStyle(2, vora, 1).strokePoints(marc, true);
+            g.lineStyle(2, orClar, 0.9).strokePoints([this.pt(aL - 0.025, T.R, h + 4), ...arc(1.2).slice(0), this.pt(aR + 0.025, T.R, h + 4)], false);          // moldura interior clara
+            [-1, 1].forEach(sd => {                                                                                                                             // columnes salomòniques
+                const c0 = sd < 0 ? aL - 0.135 : aR + 0.065, c1 = c0 + 0.07, hc = h + alt - 44;
+                const col = [this.pt(c0, T.R, h), this.pt(c1, T.R, h), this.pt(c1, T.R, hc), this.pt(c0, T.R, hc)];
+                g.fillStyle(or, 1).fillPoints(col, true); g.lineStyle(1.5, vora, 1).strokePoints(col, true);
+                for (let y = h + 6; y < hc - 4; y += 12) g.lineStyle(2, orFosc, 0.9).lineBetween(this.pt(c0, T.R, y), this.pt(c1, T.R, y + 7));
+                g.fillStyle(orClar, 0.5).fillPoints([this.pt(c0, T.R, h), this.pt(c0 + 0.015, T.R, h), this.pt(c0 + 0.015, T.R, hc), this.pt(c0, T.R, hc)], true);
+                const cap = [this.pt(c0 - 0.012, T.R, hc), this.pt(c1 + 0.012, T.R, hc), this.pt(c1 + 0.008, T.R, hc + 10), this.pt(c0 - 0.008, T.R, hc + 10)];       // capitell
+                g.fillStyle(orClar, 1).fillPoints(cap, true); g.lineStyle(1.5, vora, 1).strokePoints(cap, true);
+                const bas = [this.pt(c0 - 0.012, T.R, h), this.pt(c1 + 0.012, T.R, h), this.pt(c1 + 0.012, T.R, h + 8), this.pt(c0 - 0.012, T.R, h + 8)];            // base
+                g.fillStyle(orClar, 1).fillPoints(bas, true); g.lineStyle(1.5, vora, 1).strokePoints(bas, true);
+            });
+            { const cim = h + alt + 8;                                                                                                                              // coronament: raigs i creu
+                for (let k = -3; k <= 3; k++) g.fillStyle(k % 2 ? orClar : or, 1).fillPoints([this.pt(a, T.R, cim - 6), this.pt(a + k * 0.038 - 0.014, T.R, cim + 26 - Math.abs(k) * 3), this.pt(a + k * 0.038 + 0.014, T.R, cim + 26 - Math.abs(k) * 3)], true);
+                g.lineStyle(1.5, vora, 1).strokePoints([this.pt(a - 0.12, T.R, cim - 6), this.pt(a - 0.1, T.R, cim + 20), this.pt(a, T.R, cim + 30), this.pt(a + 0.1, T.R, cim + 20), this.pt(a + 0.12, T.R, cim - 6)], false);
+                g.fillStyle(orClar, 1).fillPoints([this.pt(a - 0.004, T.R, cim + 28), this.pt(a + 0.004, T.R, cim + 28), this.pt(a + 0.004, T.R, cim + 50), this.pt(a - 0.004, T.R, cim + 50)], true);
+                g.fillStyle(orClar, 1).fillPoints([this.pt(a - 0.02, T.R, cim + 40), this.pt(a + 0.02, T.R, cim + 40), this.pt(a + 0.02, T.R, cim + 44), this.pt(a - 0.02, T.R, cim + 44)], true);
+            }
             const porta = [this.pt(aL, T.R, h), ...arc(1), this.pt(aR, T.R, h)];
             g.fillStyle(0x0c0806, 1).fillPoints(porta, true);
             // porta oberta: el forat fosc amb la claror de l'altra banda, i el batent girat cap endins, arran del brancal esquerre
@@ -219,24 +262,43 @@ class ZonaTorre extends Phaser.Scene {
             const fulla = [this.pt(aL + 0.015, T.R, h), this.pt(aL + 0.015, T.R, h + alt - 26), this.pt(aL + ample * 0.2, T.R - 28, h + alt - 34), this.pt(aL + ample * 0.2, T.R - 28, h + 2)];
             g.fillStyle(fusta, 1).fillPoints(fulla, true);
             g.lineStyle(2, this.ombrejat(0x2a1608, a), 1).strokePoints(fulla, true);
+            g.lineStyle(2, or, 1).strokePoints([this.pt(aL + 0.03, T.R - 3, h + 10), this.pt(aL + 0.03, T.R - 3, h + alt - 34), this.pt(aL + ample * 0.2 - 0.02, T.R - 26, h + alt - 42), this.pt(aL + ample * 0.2 - 0.02, T.R - 26, h + 10)], true);       // bordura daurada
+            { const mc = this.pt(aL + ample * 0.11, T.R - 14, h + alt * 0.5), dm = 11;                                                                                                          // medalló daurat
+                g.fillStyle(or, 1).fillPoints([{ x: mc.x, y: mc.y - dm }, { x: mc.x + dm * 0.6, y: mc.y }, { x: mc.x, y: mc.y + dm }, { x: mc.x - dm * 0.6, y: mc.y }], true);
+                g.lineStyle(1.5, vora, 1).strokePoints([{ x: mc.x, y: mc.y - dm }, { x: mc.x + dm * 0.6, y: mc.y }, { x: mc.x, y: mc.y + dm }, { x: mc.x - dm * 0.6, y: mc.y }], true); g.fillStyle(orClar, 1).fillCircle(mc.x, mc.y, 2.5); }
             if (ambLlum) { const c = this.pt(a, T.R - 24, h + alt * 0.4); this.resplendor(c.x, c.y, 100, 0xffd38a, 0.3); }
         };
-        porta(-0.5 * dth, 0, 0.62, 128, true);
-        porta((T.graons + 1.1) * dth, this.cim(T.graons), 0.62, 128, true);
+        porta(-0.5 * dth, 0, 0.42, 250, true);
+        porta((T.graons + 1.1) * dth, this.cim(T.graons), 0.42, 250, true);
 
         // ---- finestres de sageta i torxes a la paret ----
         for (let k = 0; k < 11; k++) {
-            const a = norm(2.05 * k + 0.35 - rot), hw = 150 + k * 125;
+            const a = norm(2.05 * k + 0.35 - rot), hw = this.lliure(2.05 * k + 0.35, 150 + k * 125, -4, 78, 0.2);
             if (Math.abs(a) < Math.PI / 2 - 0.1 && hw < hTop - 120) {
                 const ap = 0.11;
                 const forma = (e, h0, h1) => { const pts = [this.pt(a - ap * e, T.R, h0), this.pt(a - ap * e, T.R, h1)]; for (let q = 1; q < 6; q++) { const t = Math.PI - q / 6 * Math.PI; pts.push(this.pt(a + Math.cos(t) * ap * e, T.R, h1 + Math.sin(t) * 22 * e)); } pts.push(this.pt(a + ap * e, T.R, h1), this.pt(a + ap * e, T.R, h0)); return pts; };
                 g.fillStyle(this.ombrejat(0xb3a88f, a), 1).fillPoints(forma(1.5, hw - 4, hw + 78), true);
                 g.fillStyle(0xbfd4e4, 1).fillPoints(forma(1, hw, hw + 74), true);
                 g.fillStyle(0xffffff, 0.35).fillPoints(forma(0.45, hw + 4, hw + 70), true);
+                // Marc de fusta amb muntant i dues travesses, finestrons oberts a banda i banda (amb frontisses) i un ampit de pedra
+                const R = T.R, fusta = this.ombrejat(0x5a3a1e, a), clara = this.ombrejat(0x8a5a30, a), fosca = this.ombrejat(0x2a1608, a);
+                g.lineStyle(3.5, fusta, 1).strokePoints(forma(1, hw, hw + 74), true);
+                g.lineStyle(2.5, fusta, 1).lineBetween(this.pt(a, R, hw), this.pt(a, R, hw + 96));
+                [hw + 26, hw + 52].forEach(y => g.lineStyle(2.5, fusta, 1).lineBetween(this.pt(a - ap, R, y), this.pt(a + ap, R, y)));
+                [-1, 1].forEach(sd => {
+                    const a0 = a + sd * ap * 1.15, a1 = a + sd * ap * 2.3, q = [this.pt(a0, R, hw - 2), this.pt(a1, R, hw + 4), this.pt(a1, R, hw + 72), this.pt(a0, R, hw + 78)];
+                    g.fillStyle(this.ombrejat(0x6a4524, a), 1).fillPoints(q, true);
+                    g.lineStyle(1.5, fosca, 0.9).strokePoints(q, true);
+                    for (let m = 1; m < 3; m++) { const am = a0 + (a1 - a0) * m / 3; g.lineStyle(1, fosca, 0.6).lineBetween(this.pt(am, R, hw + 2), this.pt(am, R, hw + 74)); }          // taulons
+                    [hw + 10, hw + 62].forEach(y => g.fillStyle(0x23232a, 1).fillPoints([this.pt(a0, R, y - 3), this.pt(a0 + (a1 - a0) * 0.45, R, y - 2), this.pt(a0 + (a1 - a0) * 0.45, R, y + 2), this.pt(a0, R, y + 3)], true));      // frontisses
+                    g.fillStyle(clara, 0.35).fillPoints([this.pt(a0, R, hw + 70), this.pt(a1, R, hw + 70), this.pt(a1, R, hw + 72), this.pt(a0, R, hw + 76)], true);
+                });
+                g.fillStyle(this.ombrejat(0xcbc1ac, a, 1.1), 1).fillPoints([this.pt(a - ap * 2.0, R, hw - 10), this.pt(a + ap * 2.0, R, hw - 10), this.pt(a + ap * 1.7, R, hw - 3), this.pt(a - ap * 1.7, R, hw - 3)], true);          // ampit de pedra
+                g.lineStyle(1.5, fosca, 0.8).strokePoints([this.pt(a - ap * 2.0, R, hw - 10), this.pt(a + ap * 2.0, R, hw - 10), this.pt(a + ap * 1.7, R, hw - 3), this.pt(a - ap * 1.7, R, hw - 3)], true);
                 const c = this.pt(a, T.R - 40, hw + 40);
                 this.resplendor(c.x, c.y, 130, 0x9cc4e4, 0.2 * Math.cos(a));
             }
-            const b = norm(2.05 * k + 1.3 - rot), ht = 80 + k * 125 + 60;
+            const b = norm(2.05 * k + 1.3 - rot), ht = this.lliure(2.05 * k + 1.3, 80 + k * 125 + 60, -30, 8, 0.1);
             if (Math.abs(b) < Math.PI / 2 - 0.1 && ht < hTop - 60) {
                 const s = this.pt(b, T.R, ht), f = 1 + 0.18 * Math.sin(time / 90 + k * 3) + 0.1 * Math.sin(time / 37 + k);
                 g.fillStyle(0x2a2118, 1).fillRect(s.x - 5, s.y - 6, 10, 22);

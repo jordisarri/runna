@@ -826,13 +826,13 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 
 
 
-**Jusef:** Un altre cop me l'has tornat... El servei és teu, noi. Quan vulguis, tornem-hi.
+**Jusef:** M'has tornat a derrotar, has entès perfectament la màgia del meu servei. Quan vulguis, tornem-hi.
 
-**Jusef:** ...Me l'has tornat. El servei. Algú, per fi, l'ha aturat de debò.
+**Jusef:** M'has... m'has vençut... El meu servei màgic, per primer cop... M'has vençut amb tota justícia.
 
 **Jusef:** Això és per a tu: el Llum d'en Mamet. En Mamet era un vell ermità del Miracle que coneixia tots els passos subterranis i les escletxes dels murs.
 
-**Jusef:** La seva flama s'alimenta d'un oli antic que mai no s'apaga. Als passadissos fondos i a la foscor de les pedres velles, la seva claror et farà visible allò que sembla ocult.
+**Jusef:** La seva flama s'alimenta d'un oli antic que mai no s'apaga. Als passadissos tenebrosos i a la foscor de les pedres velles, la seva claror et farà visible allò que sembla ocult.
 
 ★ Has obtingut el LLUM D'EN MAMET.
 

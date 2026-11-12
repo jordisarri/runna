@@ -7,7 +7,7 @@
 // ---------------- ESGLÉSIA (interior) ----------------
 // La nau fa 800 d'ample (x 240-1040). El retaule ocupa tot l'ample i es veu sencer (800 x 990); al seu peu hi ha dues
 // portes: la de la dreta duu a la torre de l'escala (ZonaTorre) i d'allà a les golfes del rellotge.
-const ESG = { alcada: 1640, retY: 1010, retBaix: 24, retTop: 20, sostre: 1034, sostrePorta: 1000, portaDx: 870, portaEsq: 408 };      // sostre: fins on arriba la base del retaule (els peus no hi pugen); sostrePorta: només davant la porta de la dreta, que s'ha de poder tocar
+const ESG = { alcada: 1840, retY: 1010, retBaix: 24, retTop: 20, sostre: 1034, sostrePorta: 1000, portaDx: 870, portaEsq: 408 };      // sostre: fins on arriba la base del retaule (els peus no hi pugen); sostrePorta: només davant la porta de la dreta, que s'ha de poder tocar
 
 class ZonaEsglesia extends ZonaBase {
     // La Pianista toca l'orgue d'esquena (animació en bucle) o es gira cap a l'Ineu (dibuix de front, asseguda al banc davant de l'orgue)
@@ -39,6 +39,51 @@ class ZonaEsglesia extends ZonaBase {
         this.tweens.add({ targets: I, x, y, duration: 350, ease: 'Sine.easeInOut', onUpdate: () => { if (I.body) I.body.reset(I.x, I.y); }, onComplete: () => { if (this.cara) this.cara(pia); if (fet) fet(); } });
     }
 
+    update(time, delta) { super.update(time, delta); this.vigilaBancs(); }
+
+    // Si l'Ineu camina cap a un banc des del davant (des de l'altar, avall) i hi topa, s'hi asseu sol, de cara a l'altar, sense cap punt d'interacció.
+    // Com a l'Era (ZonaEra.seure): el respatller del banc el tapa de debò; s'aixeca quan el jugador es mou (ZonaBase.moure crida alcar).
+    vigilaBancs() {
+        if (this.assegut || !this.ineu || !this.bancsEsg || this.epileg || this.canviant || this.camCinema || this.ineuAlt || this.cinema || this.caient) return;
+        const ui = this.ui();
+        if ((ui && ui.dialeg) || this.time.now < (this.noSeureFins || 0) || !this.intent || this.intent.y < 0.35) return;
+        const I = this.ineu, b = this.bancsEsg.find(b => Math.abs(I.x - b.x) < b.w / 2 && I.y > b.y - 40 && I.y < b.y - 8);
+        if (b) this.seureBanc(b);
+    }
+
+    // Assegut amb la tecla encara premuda (l'has fet servir per arribar al banc): no s'aixeca fins que se solta, i després es torna a prémer
+    moure(ui, delta) {
+        if (this.assegut && !this.seientLliure) {
+            const c = this.cursors, t = this.tecles;
+            const vol = c.left.isDown || c.right.isDown || c.up.isDown || c.down.isDown || t.A.isDown || t.D.isDown || t.W.isDown || t.S.isDown || Math.hypot(ui.vectorTactil.x, ui.vectorTactil.y) > 0.15;
+            if (vol) { this.intent = { x: 0, y: 0 }; this.ineu.body.setVelocity(0); return; }
+            this.seientLliure = true;
+        }
+        super.moure(ui, delta);
+    }
+
+    seureBanc(b) {
+        this.seientLliure = false;
+        this.assegut = true; this.bancActual = b;
+        const x = this.seientX = Phaser.Math.Clamp(this.ineu.x, b.x - b.w / 2 + 35, b.x + b.w / 2 - 35);
+        this.ineu.body.checkCollision.none = true;
+        this.ineu.body.reset(x, b.y - 4);
+        this.ombraIneu.setPosition(x, b.y - 4);
+        this.ineu.setDepth(b.y - 1);                      // el banc es dibuixa per sobre: el respatller el tapa
+        this.vista8Manual = true;
+        this.posarDireccio('amunt', false, 'up');         // de cara a l'altar
+    }
+
+    // S'aixeca just al costat d'on s'ha assegut (a prop, no al cap del banc): endavant, una mica a un costat, o per darrere del respatller
+    alcar(dir = 'avall') {
+        const b = this.bancActual, x = this.seientX;
+        this.assegut = false; this.noSeureFins = this.time.now + 700;
+        this.ineu.body.checkCollision.none = false;
+        const pos = ({ amunt: [x, b.y - 42], esquerra: [Math.max(x - 45, b.x - b.w / 2 + 12), b.y - 26], dreta: [Math.min(x + 45, b.x + b.w / 2 - 12), b.y - 26] })[dir] || [x, b.y + 38];
+        this.ineu.body.reset(pos[0], pos[1]);
+        this.posarDireccio(dir, false);
+    }
+
     constructor() {
         super('ZonaEsglesia', {
             nom: 'Santuari del Miracle',
@@ -52,6 +97,7 @@ class ZonaEsglesia extends ZonaBase {
 
     construir() {
         const A = ESG.alcada;
+        this.yGraons = undefined;
         this.epileg = false; this.epilegEngegat = false;          // (l'escena es reaprofita: l'epíleg d'una altra partida no compta)
         // Terra i murs
         this.terra('rajola', 240, 0, 800, A, -1100);
@@ -69,12 +115,33 @@ class ZonaEsglesia extends ZonaBase {
         this.colisio(420, A - 10, 360, 20);
         this.colisio(860, A - 10, 360, 20);
 
+        // Presbiteri: terra una mica més clar fins als dos graons (ySt), on hi ha l'altar, l'orgue amb la Pianista i el Pare Daimiel
+        const ySt = ESG.retY + 300, pg = this.add.graphics().setDepth(-1090);
+        pg.fillStyle(0xffe2a0, 0.14).fillRect(240, ESG.retY, 800, ySt - ESG.retY);
+        pg.fillStyle(0xf0e2b8, 1).fillRect(240, ySt, 800, 24).fillStyle(0x6e5a38, 1).fillRect(240, ySt + 24, 800, 16).fillStyle(0x000000, 0.3).fillRect(240, ySt + 40, 800, 3);       // primer graó: replà i contrapetja
+        pg.fillStyle(0xd2bd8a, 1).fillRect(240, ySt + 43, 800, 24).fillStyle(0x5a4828, 1).fillRect(240, ySt + 67, 800, 16);                                                    // segon graó
+        pg.fillStyle(0x000000, 0.3).fillRect(240, ySt + 83, 800, 10);
+        // Catifa vermella central, de la base de l'altar a la porta, amb vora doble, fil d'or i rombes; segueix els dos graons
+        const cg = this.add.graphics().setDepth(-1085), cw = 100, c0 = 640 - cw / 2, c1 = ESG.retY + 128, c2 = A;
+        cg.fillStyle(0x5a1018, 1).fillRect(c0, c1, cw, c2 - c1);
+        cg.fillStyle(0x8c1c26, 1).fillRect(c0 + 5, c1, cw - 10, c2 - c1);
+        cg.fillStyle(0xd8a64a, 1).fillRect(c0 + 9, c1, 3, c2 - c1).fillRect(c0 + cw - 12, c1, 3, c2 - c1);
+        cg.fillStyle(0xa82a34, 1).fillRect(c0 + 13, c1, cw - 26, c2 - c1);
+        // Només 3 rombes, a intervals iguals de 250 (un abans dels graons i dos després): els graons en queden lliures
+        [ESG.retY + 214, ESG.retY + 464, ESG.retY + 714].forEach(y => {
+            cg.fillStyle(0xd8a64a, 1).fillPoints([{ x: 640, y: y - 30 }, { x: 640 + 28, y }, { x: 640, y: y + 30 }, { x: 640 - 28, y }], true);
+            cg.fillStyle(0x8c1c26, 1).fillPoints([{ x: 640, y: y - 19 }, { x: 640 + 17, y }, { x: 640, y: y + 19 }, { x: 640 - 17, y }], true);
+            cg.fillStyle(0xf2d27a, 1).fillCircle(640, y, 5);
+        });
+        cg.fillStyle(0x000000, 0.38).fillRect(c0, ySt + 24, cw, 16).fillRect(c0, ySt + 67, cw, 16);               // contrapetges: la catifa hi baixa i es fa fosca
+        cg.fillStyle(0xf2d27a, 0.35).fillRect(c0, ySt, cw, 2).fillRect(c0, ySt + 43, cw, 2);                       // vora dels replans
+
         // Retaule Major (tot l'ample de la nau, sencer) i, al davant, l'altar de pedra
         this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
         // La porta de la dreta del peu del retaule: la mateixa del gràfic, que s'obre cap endins (amb la clau del campanar) i duu a la torre
         this.portaRetaule = this.portaAnimada({ x: 872, top: 868, bottom: 1021, ample: 83, fons: 900, unic: true, arc: true, retall: this.retaule, bloq: () => !this.portaRellotge });
         this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });     // el sagrari, al mig del retaule (fragment 2)
-        this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
+        this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 }, opac: true });
 
         // Portes del peu del retaule: totes dues tancades. Quan el Pare Daimiel diu que el rellotge s'ha aturat (rellotgeDit)
         // s'obre la de la dreta, que duu a la torre i a la Sala del Rellotge. L'esquerra és només decorativa: no s'obre mai i no té cap punt d'interacció.
@@ -89,7 +156,7 @@ class ZonaEsglesia extends ZonaBase {
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daimiel, que dirigeix el cor
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daimiel es posen amb la resta
-        if (!epileg) this.orgue = this.posar('orgue', 960, ESG.retY + 250, { col: { w: 110, h: 50 } });
+        if (!epileg) this.orgue = this.posar('orgue', 850, ESG.retY + 264, { col: { w: 110, h: 50 }, opac: true });
         if (!epileg) {
             // La Pianista és de cara al banc de l'orgue; només hi toca d'esquena (animada) quan l'Ineu la troba la primera vegada i mentre ensenya un cant (pianistaToca)
             const pia = this.npc('pianista', this.orgue.x, this.orgue.y + 24, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
@@ -97,16 +164,20 @@ class ZonaEsglesia extends ZonaBase {
             [pia.respira, pia.balanceig].forEach(t => t && t.remove()); pia.respira = pia.balanceig = null; pia.setAngle(0);       // fixa: ni respira ni es balanceja (no canvia de mida)
             pia.punt.npc = null;                                                                                  // l'Ineu no es fa enrere en parlar-hi: es posa al costat de l'orgue (pianistaCara)
         }
-        if (!epileg) this.npc('pare_daimiel', 360, ESG.retY + 190, DIALEGS.pareDaimiel, { flipX: false });
+        if (!epileg) this.npc('pare_daimiel', 440, ESG.retY + 215, DIALEGS.pareDaimiel, { flipX: false });
+        if (!epileg) this.posar('atril_barroc', 340, ESG.retY + 262, { col: { w: 34, h: 14 }, opac: true });      // atril barroc daurat, girat d'esquena (no es veu el llibre), a l'esquerra del presbiteri i per davant del Pare Daimiel
 
         // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar (a l'epíleg es retiren perquè tothom tingui lloc sense tapar-se)
         if (!epileg) {
-            const bancs = [ESG.retY + 230, ESG.retY + 380, ESG.retY + 530];
-            bancs.forEach(y => {
-                this.posar('banc_esglesia', 470, y, { col: { w: 140, h: 16 } });
-                this.posar('banc_esglesia', 810, y, { col: { w: 140, h: 16 } });
-            });
+            const bancs = [ESG.retY + 450, ESG.retY + 590, ESG.retY + 730];
+            // Bancs més amplis (hi caben dos o tres personatges): l'Ineu s'hi asseu sol en caminar-hi des del davant (vigilaBancs)
+            this.bancsEsg = [];
+            bancs.forEach(y => [466, 814].forEach(x => {
+                this.posar('banc_esglesia_ample', x, y, { col: { w: 228, h: 16 }, opac: true });
+                this.bancsEsg.push({ x, y, w: 228 });
+            }));
         }
+        this.assegut = false;
 
         // Llum de les vidrieres
         this.add.rectangle(640, A / 2, 800, A, 0xffd38a, 0.05).setDepth(80000);
@@ -157,8 +228,19 @@ class ZonaEsglesia extends ZonaBase {
         if (n.punt) n.punt.altura = h + 6;
     }
 
-    actualitzar() {
+    actualitzar(temps) {
         this.obrirPortaRellotge(true);
+        // Als dos graons del presbiteri l'Ineu els puja i els baixa un a un: a cada contrapetja va una mica més lent i sona un tap; a la resta, gairebé normal.
+        const I = this.ineu, ySt = ESG.retY + 300;
+        const alsGraons = !!(I && I.body && !this.cinema && !this.camCinema && I.x > 240 && I.x < 1040 && I.y > ySt - 6 && I.y < ySt + 100);
+        const BANDES = [[ySt + 58, ySt + 84], [ySt + 20, ySt + 44]];          // les dues contrapetges: la de baix i la de dalt
+        if (alsGraons) {
+            let k = 0.85;
+            BANDES.forEach(([ya, yb]) => { if (I.y > ya && I.y < yb) k = 0.55; });
+            I.body.velocity.scale(k);
+            if (this.yGraons !== undefined) BANDES.forEach(([ya, yb]) => { const amunt = I.y < this.yGraons, vora = amunt ? yb : ya; if ((this.yGraons - vora) * (I.y - vora) < 0) Sfx.escala(amunt); });          // un tap per graó, just quan hi trepitja (la vora per on hi entra)
+            this.yGraons = I.y;
+        } else this.yGraons = undefined;
         if (this.epileg && !this.epilegEngegat) {
             this.epilegEngegat = true;
             // La càmera (que la zona acaba de posar a seguir l'Ineu) passa a un pla general fix de tota la sala

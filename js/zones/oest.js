@@ -834,11 +834,11 @@ class ZonaDolmen extends ZonaBase {
     }
 
     // Mentre l'Ineu puja o baixa els esglaons amagats, el moviment el porta l'animació, no el jugador
-    moure(ui, delta) { if (!this.cinema) super.moure(ui, delta); }
-    sensePunts() { return !!this.cinema; }
+    moure(ui, delta) { if (this.escala) this.moureEscala(ui, delta); else if (!this.cinema) super.moure(ui, delta); }
+    sensePunts() { return !!this.cinema || !!this.escala; }
     sincroFantasma() {
         super.sincroFantasma();
-        if (this.cinema && this.fantasma) this.fantasma.setAlpha(0);       // la llosa el tapa de debò
+        if ((this.cinema || this.escala) && this.fantasma) this.fantasma.setAlpha(0);       // la llosa el tapa de debò
     }
 
     // La llosa és una plataforma: s'hi puja i se'n baixa per darrere (P.vora: la vora de darrere de la cara de dalt). Dalt, l'Ineu
@@ -846,13 +846,13 @@ class ZonaDolmen extends ZonaBase {
     // esglaó a esglaó fins a la vora i hi entra. Baixar: camina amunt fins a la vora, s'hi enfonsa esglaó a esglaó i surt pel nord.
     actualitzarLlosa() {
         const I = this.ineu, P = this.pujada;
-        if (!P || this.cinema) return;
-        const vy = I.body.velocity.y, alPas = I.x >= P.x0 && I.x <= P.x1;
+        if (!P || this.cinema || this.escala) return;
+        const vy = I.body.velocity.y, alPas = Math.abs(I.x - P.cx) <= P.esglaons;          // només es puja o es baixa per dins del cercle de margarides: fora, xoca contra la llosa i no es recol·loca
         if (!this.alt) {
-            if (alPas && vy > 0 && I.y > P.vora - 34 && I.y < P.vora + 4) this.pujar();
+            if (alPas && vy > 0 && I.y > P.vora - 34 && I.y < P.vora + 4) this.iniciEscala(0);
             return;
         }
-        if (alPas && vy < 0 && I.y < P.dalt + 6) { this.baixar(); return; }
+        if (alPas && vy < 0 && I.y < P.dalt + 6) { this.alt = false; this.iniciEscala(1); return; }
         const dins = (x, y) => y >= P.dalt && y <= P.fins && ((x - P.cx) / P.rx) ** 2 + ((y - P.cy) / P.ry) ** 2 <= 1;
         if (!dins(I.x, I.y)) I.body.reset(this.ultimOk.x, this.ultimOk.y);
         else this.ultimOk = { x: I.x, y: I.y };
@@ -885,7 +885,55 @@ class ZonaDolmen extends ZonaBase {
         I.setDepth(this.dolmen.depth - 1);                     // la llosa el tapa: per sota del dolmen
     }
 
-    // Es pot començar a pujar per tota l'esquena del dolmen (no s'hi queda encallat): si és massa al costat, primer es
+    // ---- Els graons amagats, caminant (no guiats): el jugador els puja i els baixa ell mateix, a poc a poc i a batzegades (un graó cada ~380 ms), i hi pot tornar enrere.
+    // 'u' (0-1) és el progrés pels graons: a 0 és a terra, darrere el dolmen; a 1, a la cara de dalt de la llosa. La llosa li tapa els peus i el cos s'hi eleva:
+    // la y que es dibuixa va de la vora cap endins, torna a pujar pels tres graons i entra a la llosa (mateix recorregut que abans feia l'animació).
+    yEscala(u) {
+        const P = this.pujada, v = P.vora, pts = [[0, v - 6], [0.22, v + 76], [0.42, v + 50], [0.58, v + 24], [0.74, v - 2], [1, P.dalt + 8]];          // s'enfonsa darrere la llosa fins a la cintura i puja tres graons de ~26 px (abans només li tapava els peus)
+        for (let k = 1; k < pts.length; k++) if (u <= pts[k][0]) { const [a, ya] = pts[k - 1], [b, yb] = pts[k]; return ya + (yb - ya) * (u - a) / (b - a); }
+        return pts[pts.length - 1][1];
+    }
+
+    iniciEscala(u) {
+        const I = this.ineu, P = this.pujada;
+        this.escala = { u, x: Phaser.Math.Clamp(I.x, P.cx - P.esglaons, P.cx + P.esglaons), pas: 0 };
+        I.body.setVelocity(0); I.body.enable = false;
+        I.setPosition(this.escala.x, this.yEscala(u));
+    }
+
+    moureEscala(ui, delta) {
+        const E = this.escala, I = this.ineu, P = this.pujada, c = this.cursors, t = this.tecles, dt = delta / 1000;
+        let vx = (c.right.isDown || t.D.isDown ? 1 : 0) - (c.left.isDown || t.A.isDown ? 1 : 0), vy = (c.down.isDown || t.S.isDown ? 1 : 0) - (c.up.isDown || t.W.isDown ? 1 : 0);
+        if (!vx && !vy) { vx = ui.vectorTactil.x; vy = ui.vectorTactil.y; }
+        this.intent = { x: 0, y: 0 };
+        const mou = Math.hypot(vx, vy) > 0.15, cad = 0.5 + 0.5 * Math.abs(Math.sin(this.time.now / 380 * Math.PI));          // cadència d'un graó
+        const uAbans = E.u;
+        if (mou) {
+            E.u += (vy > 0.3 ? 1 : vy < -0.3 ? -1 : 0) * 0.6 * cad * dt;
+            E.x = Phaser.Math.Clamp(E.x + vx * 90 * cad * dt, P.cx - P.esglaons, P.cx + P.esglaons);
+            if (vy > 0.3) this.posarDireccio('avall', true, 'down'); else if (vy < -0.3) this.posarDireccio('amunt', true, 'up'); else this.posarDireccio(this.direccio, true);
+            for (const g of (E.u > uAbans ? [0.22, 0.42, 0.58] : [0.74, 0.58, 0.42])) if ((uAbans < g) !== (E.u < g)) Sfx.escala(E.u > uAbans);          // tap, tap, tap: un per cada graó, just quan hi trepitja (al començament de cada pujada o baixada)
+        } else if (this.ineu.anims.isPlaying) this.posarDireccio(this.direccio, false);
+        I.body.setVelocity(0);
+        if (E.u <= 0) {                                                  // enrere: torna a terra, per darrere del dolmen
+            this.escala = null; I.body.enable = true; I.body.reset(E.x, P.vora - 14);
+            I.setDepth(I.y); this.ombraIneu.setVisible(true).setDepth(-500).setPosition(I.x, I.y);
+            this.posarDireccio('amunt', false); return;
+        }
+        if (E.u >= 1) {                                                  // dalt, a la llosa
+            this.escala = null; this.alt = true; this.colLlosa.active = false;
+            I.body.enable = true; I.body.reset(E.x, P.dalt + 8); this.ultimOk = { x: I.x, y: I.y };
+            I.setDepth(DOL.sy + 5); this.ombraIneu.setVisible(true).setDepth(DOL.sy + 4).setPosition(I.x, I.y);
+            this.posarDireccio('avall', false); return;
+        }
+        I.setPosition(E.x, this.yEscala(E.u));
+        const dalt = E.u >= 0.74;                                        // a la part de dalt ja no el tapa la llosa
+        I.setDepth(dalt ? DOL.sy + 5 : this.dolmen.depth - 1);
+        this.ombraIneu.setVisible(dalt).setDepth(DOL.sy + 4).setPosition(I.x, I.y);
+        if (this.colLlosa) this.colLlosa.active = true;
+    }
+
+    // (versió antiga, guiada per animació; ja no es fa servir) Es pot començar a pujar per tota l'esquena del dolmen: si és massa al costat, primer es
     // desplaça fins als esglaons
     pujar() {
         const I = this.ineu, P = this.pujada, x = Phaser.Math.Clamp(I.x, P.cx - P.esglaons, P.cx + P.esglaons);
@@ -1010,7 +1058,7 @@ class ZonaDolmen extends ZonaBase {
         const I = this.ineu, cam = this.cameras.main;
         if (this.camCinema) { this.pesCam = 0; return; }                          // una altra escena porta la càmera: no hi toquem
         const d = Phaser.Math.Distance.Between(I.x, I.y, g.sx, g.PY + 12);
-        const lliure = !this.alt && !this.cinema && !this.canviant && this.davantPlaca();
+        const lliure = !this.alt && !this.cinema && !this.escala && !this.canviant && this.davantPlaca();
         // Pes de l'enquadrament (0 = segueix l'Ineu com sempre, 1 = vista alta): puja i baixa de mica en mica amb la distància, sense interruptors ni salts
         const t = lliure ? 1 - Phaser.Math.Clamp((d - 135) / 190, 0, 1) : 0, ease = t * t * (3 - 2 * t);
         this.pesCam = (this.pesCam || 0) + (ease - (this.pesCam || 0)) * 0.08;

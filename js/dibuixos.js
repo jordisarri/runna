@@ -2935,7 +2935,7 @@ function pintarOlla(ctx, w, h) {
 // ---------------- ALTAR DE PEDRA I PERGAMÍ ----------------
 
 // Altar de pedra amb mantell de lli, dos canelobres de llautó, un calze i un llibre obert. Vista frontal.
-// ornaments = false: l'altar net del Santuari (només una creu daurada a la llosa); true: amb canelobres, calze i llibre
+// ornaments = false: l'altar net del Santuari (només la llosa de marbre, sense creu); true: amb canelobres, calze i llibre
 function pintarAltarPedra(ctx, w, h, ornaments = true) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.translate(0, 18); h -= 18;                  // marge a dalt per a les flames
@@ -2987,12 +2987,7 @@ function pintarAltarPedra(ctx, w, h, ornaments = true) {
     taula(); ctx.fillStyle = vertical(21, 30, '#f0bc88', '#d0975e'); ctx.fill();
     tacar(taula, 26);
     taula(); ctx.strokeStyle = MC; ctx.lineWidth = 1.8; ctx.stroke();
-    if (!ornaments) {
-        ctx.fillStyle = '#d8b248'; ctx.strokeStyle = C; ctx.lineWidth = 1.2;
-        ctx.fillRect(cx - 1.8, my0 - 20, 3.6, 17); ctx.strokeRect(cx - 1.8, my0 - 20, 3.6, 17);
-        ctx.fillRect(cx - 6, my0 - 16, 12, 3.4); ctx.strokeRect(cx - 6, my0 - 16, 12, 3.4);
-        return;
-    }
+    if (!ornaments) return;                  // l'altar net del Santuari: la llosa de marbre, sense cap creu al damunt
     // Canelobres de llautó amb flama
     const canelobre = x => {
         const yb = my0 - 4;

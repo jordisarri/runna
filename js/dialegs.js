@@ -459,14 +459,14 @@ const DIALEGS = {
 
     jusefGuanyat: E => E.flag('jusefVencut') ? ({
         pagines: [
-            { qui: 'Jusef', text: 'Un altre cop me l\'has tornat... El servei és teu, noi. Quan vulguis, tornem-hi.' }
+            { qui: 'Jusef', text: 'M\'has tornat a derrotar, has entès perfectament la màgia del meu servei. Quan vulguis, tornem-hi.' }
         ]
     }) : ({
         pagines: [
-            { qui: 'Jusef', text: '...Me l\'has tornat. El servei. Algú, per fi, l\'ha aturat de debò.' },
+            { qui: 'Jusef', text: 'M\'has... m\'has vençut... El meu servei màgic, per primer cop... M\'has vençut amb tota justícia.' },
             { fer: (z, fet) => z.npcVa('jusef', z.ineu.x + (z.ineu.x < z.config.amplada / 2 ? 60 : -60), z.ineu.y, fet) },
             { qui: 'Jusef', text: 'Això és per a tu: el Llum d\'en Mamet. En Mamet era un vell ermità del Miracle que coneixia tots els passos subterranis i les escletxes dels murs.' },
-            { qui: 'Jusef', text: 'La seva flama s\'alimenta d\'un oli antic que mai no s\'apaga. Als passadissos fondos i a la foscor de les pedres velles, la seva claror et farà visible allò que sembla ocult.' },
+            { qui: 'Jusef', text: 'La seva flama s\'alimenta d\'un oli antic que mai no s\'apaga. Als passadissos tenebrosos i a la foscor de les pedres velles, la seva claror et farà visible allò que sembla ocult.' },
             { fer: (z, fet) => z.objecteVola('jusef', fet) },
             { avis: "Has obtingut el LLUM D'EN MAMET.", obj: 'llanterna' },
             { qui: 'Jusef', text: 'I un secret, per qui sap tornar un servei: aquella roda de carruatge del Celler no és decoració. Darrere hi ha el túnel dels monjos cap a la Casa Gran. Però pesa com un carro ple.' }
