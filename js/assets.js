@@ -23,7 +23,7 @@ const CATALEG = [
     { key: 'dolora',   file: 'assets/personatges/dolora.webp', amplada: 94, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },
     { key: 'carmelia',   file: 'assets/personatges/carmelia.webp', amplada: 116, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#6a4a2e', ample: 1.45, alt: 0.92 }) },
     { key: 'pilaria',   file: 'assets/personatges/pilaria.webp', amplada: 111, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#3b2a1e', ulleres: true, ample: 0.8, alt: 1.06 }) },
-    { key: 'germa_franci', file: 'assets/personatges/germa_franci.webp', amplada: 92, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
+    { key: 'germa_franci', file: 'assets/personatges/germa_franci.webp', amplada: 78, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
     { key: 'pare_alcovi',   file: 'assets/personatges/pare_alcovi.webp',   amplada: 84, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
     // Elements
     { key: 'home_raim',    file: 'assets/personatges/home_raim.webp',    amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua (abans del combat)

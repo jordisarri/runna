@@ -89,8 +89,8 @@ class ZonaBoscPi extends ZonaBase {
 
         // El pas del pi: la franja d'herba s'estreny fins al camí entre dues files de roques baixes (sense capçades que tapin res); allà hi ha la barrera
         const pasDalt = camiY - camiH / 2 - 30, pasBaix = camiY + camiH / 2 + 30;      // 500 i 700
-        this.muralla(barX, N, barX, pasDalt, 70, 'roca', false);                       // de la fila del nord fins a la barrera...
-        this.muralla(barX, pasBaix, barX, S, 70, 'roca', false);                       // ...i de la barrera fins a la fila del sud: tot tancat
+        this.muralla(barX, N, barX, pasDalt, 70, 'roca', false, (x, y) => y > N + 30 && y < pasDalt - 30);      // (sense la roca del mig, que sobra: la col·lisió es manté)                       // de la fila del nord fins a la barrera...
+        this.muralla(barX, pasBaix, barX, S, 70, 'roca', false, (x, y) => y > pasBaix + 30 && y < S - 30);                       // ...i de la barrera fins a la fila del sud: tot tancat
         for (let x = barX - 270; x <= barX + 270; x += 80) { this.posar('roca', x, N + 14); this.posar('roca', x, S - 6); }   // roques on abans hi havia arbres: es veu on s'acaba el camí
 
         this.cameraFollowOffsetY = -150;           // la càmera mira una mica més amunt: així es veu la part de dalt del pi des del camí

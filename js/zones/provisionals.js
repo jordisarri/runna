@@ -454,12 +454,14 @@ class ZonaMonestir extends ZonaBase {
     enEntrar() {
         if (Estat.flag('introVista')) return;
         Estat.posaFlag('introVista');
+        // L'inici del joc: un pla proper de l'Ineu sortint del Monestir mentre es llegeix el primer text; en acabar-lo, la càmera s'obre al zoom normal del joc
+        this.enquadrar(this.ineu.x, this.ineu.y - 50, 2.3, 0);
         this.time.delayedCall(700, () => {
             this.ui().obrirDialeg({
                 pagines: [
                     { qui: 'Ineu', text: 'Una altra nit de boira... i aquest fred que no marxa. El Pare Jordà em deu estar esperant a la Plaça.' }
                 ]
-            }, () => Estat.desar());
+            }, () => { Estat.desar(); this.alliberarCamera(1800); });
         });
     }
 
