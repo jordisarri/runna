@@ -850,12 +850,12 @@ class ZonaCasaTresor extends ZonaCasaBase {
 // ---------------- LA SALA DEL RELLOTGE (el rellotge del campanar, dalt de la torre del Santuari) ----------------
 // El rellotge és aturat a un quart de quatre (l'hora que va arribar la boira). Puzle: posar tres engranatges a la mida correcta
 // perquè torni a caminar. (No dona cap gra al rosari.)
-const GOLFES_SOLUCIO = [0, 2, 1];      // 0 petit, 1 mitjà, 2 gran: «el petit va primer, el gran al mig i el mitjà darrere»
+const GOLFES_SOLUCIO = [0, 1, 2];      // 0 petit, 1 mitjà, 2 gran: «el petit primer, el mitjà al mig i el gran darrere»
 const GOLFES_DENTS = [18, 24, 30];     // radi primitiu = dents * 1.5: totes les rodes tenen el mateix pas de dent i poden engranar
 const GOLFES_NOM = ['petit', 'mitjà', 'gran'];
 // Els engranatges són en un bastidor dret a terra, a l'esquerra (lluny del rellotge, que té el seu punt propi a la paret).
 // Els eixos estan a la distància justa perquè, amb la solució, les dents de cada roda encaixin amb les de la veïna.
-const GOLFES_ENG_X = [222, 222 + 27 + 45, 222 + 27 + 45 + 45 + 36];
+const GOLFES_ENG_X = [222, 222 + 27 + 36, 222 + 27 + 36 + 36 + 45];      // radis 27 (petit), 36 (mitjà) i 45 (gran): la suma de cada parella és la distància entre eixos
 const GOLFES_ENG_Y = 524;
 const GOLFES_BASTIDOR = 604;       // peus del bastidor dels engranatges
 const GOLFES_PARET = 446;          // fins on arriba la paret del fons (a sota, el terra)
@@ -868,7 +868,7 @@ Object.assign(DIALEGS, {
     ] }),
 
     golfesNota: E => ({ pagines: [
-        { qui: 'Ineu', text: "«Nota del campaner. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el gran al mig, i el mitjà darrere.»" }
+        { qui: 'Ineu', text: "«Nota del campaner. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el mitjà al mig, i el gran darrere.»" }
     ] }),
 
     golfesPendol: E => ({ pagines: [] }),
@@ -1148,6 +1148,12 @@ class ZonaGolfes extends ZonaCasaBase {
 
     // Les rodes encaixen, les agulles corren des d'un quart de quatre fins a les cinc, el pèndol arrenca i sonen cinc campanades
     arrencarRellotge(fet) {
+        // La càmera s'allunya (zoom out) per veure el rellotge i el mecanisme sencers mentre arrenca; en acabar, torna a l'Ineu
+        this.enquadrar(500, 340, 0.9, 1300, null, 0);
+        this.esperar(1200, () => this.arrencaAnimacio(fet));
+    }
+
+    arrencaAnimacio(fet) {
         this.encaixaEngranatges();
         this.cameras.main.shake(300, 0.003); Sfx.secret();
         const PI2 = Math.PI * 2;
@@ -1158,7 +1164,7 @@ class ZonaGolfes extends ZonaCasaBase {
             let n = 0;
             this.time.addEvent({ delay: 750, repeat: 4, callback: () => {
                 Sfx.campana(); this.cameras.main.shake(160, 0.0025);
-                if (++n === 5) this.esperar(1200, fet);
+                if (++n === 5) this.esperar(1200, () => this.alliberarCamera(1400, fet));
             } });
         } });
     }
