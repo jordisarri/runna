@@ -1239,7 +1239,17 @@ class ZonaBase extends Phaser.Scene {
 
     cartell(x, y, dialeg) {
         this.posar('cartell', x, y, { col: { w: 20, h: 10 } });
-        return this.interactiu(x, y, RADI_OBJECTE, dialeg, { altura: 70 });
+        const f = typeof dialeg === 'function' ? dialeg : () => dialeg;
+        return this.interactiu(x, y, RADI_OBJECTE, (...a) => this.cartellAmbNom(f(...a)), { altura: 70 });
+    }
+
+    // Tots els cartells diuen primer on som (el nom de la zona) i després cap a on duen els camins; si el text ja comença amb el nom del lloc, es deixa tal qual
+    cartellAmbNom(d) {
+        const nom = this.config && this.config.nom, pag = d && d.pagines && d.pagines[0];
+        if (!nom || !pag || pag.qui !== 'Cartell' || typeof pag.text !== 'string') return d;
+        const norm = t => t.toLowerCase().replace(/[.,«»"]/g, '');
+        if (norm(pag.text).startsWith(norm(nom))) return d;
+        return Object.assign({}, d, { pagines: [Object.assign({}, pag, { text: nom + '\n\n' + pag.text }), ...d.pagines.slice(1)] });
     }
 
     // Les parets d'un interior que barren la porta es parteixen perquè hi quedi un pas lliure (la porta s'ha de poder traspassar)
