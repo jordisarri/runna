@@ -354,13 +354,7 @@ class ZonaRuines extends ZonaBase {
     }
 
     actualitzar() {
-        // Quan el Pare Alcoví ja ha llegit els fragments, l'ombra parla a l'Ineu el primer cop que s'hi acosta (li diu què vol sentir)
-        if (!this.ombraHaCridat && Estat.flag('alcoviLlegit') && Estat.flag('fragment2') && !Estat.flag('ombraDemanaCant')
-            && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, this.puntOmbra.x, this.puntOmbra.y) < 260 && !this.ui().dialeg) {
-            this.ombraHaCridat = true;
-            this.ineu.body.setVelocity(0);
-            this.interactuar(this.puntOmbra);
-        }
+        // (L'ombra ja no parla sola en acostar-s'hi: té el seu punt d'interacció, i en parlar-hi demana el cant)
         this.pintarOmbra();
     }
 

@@ -93,7 +93,7 @@ class ZonaBiblioteca extends ZonaBase {
         this.colisio(842, 318, 70, 20);
 
         // Globus terraqüi a l'esquerra
-        this.add.image(246, 344, 'globus_biblio').setOrigin(0.5, 1).setScale(1 / RES).setDepth(340);
+        (this.opacs = this.opacs || []).push(this.add.image(246, 344, 'globus_biblio').setOrigin(0.5, 1).setScale(1 / RES).setDepth(340));      // opac
         this.colisio(246, 330, 50, 16);
 
         // Llum d'aranya penjada del sostre: dos anells de llautó, cadenes i dotze espelmes amb flama
@@ -110,9 +110,33 @@ class ZonaBiblioteca extends ZonaBase {
         });
 
         // El Pare Alcoví, entre la taula i el faristol
-        this.npc('pare_alcovi', 760, 330, DIALEGS.pareAlcovi, { flipX: true, radi: 110 });
+        const alc = this.npc('pare_alcovi', 760, 330, DIALEGS.pareAlcovi, { flipX: true, radi: 110 });
+        alc.punt.enTancar = () => this.alcoviTorna();          // en acabar de parlar, sempre torna a mirar l'Ineu
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffd38a, 0.06).setDepth(80000);
         this.sortida(510, H - 22, 80, 14, 'ZonaMonestirRebedor', 'biblioteca');
+    }
+    // El Pare Alcoví va al faristol i llegeix la Crònica d'esquena a la càmera (sprite d'esquena); l'Ineu es posa al seu costat, no davant seu
+    alcoviLlegeix(fet) {
+        const a = this.npcs && this.npcs.pare_alcovi, I = this.ineu;
+        if (!a || !this.textures.exists('pare_alcovi_esquena')) { if (fet) fet(); return; }
+        this.alcoviPosa(true);
+        this.seq([
+            f => this.npcVa('pare_alcovi', 842, 372, f, 120),
+            f => this.ineuVa(768, 374, () => { this.posarDireccio('dreta', false); f(); }, 150)
+        ], fet);
+    }
+
+    // Torna a mirar l'Ineu (sprite de front)
+    alcoviTorna(fet) {
+        const a = this.npcs && this.npcs.pare_alcovi;
+        if (a && a.texture.key === 'pare_alcovi_esquena') this.alcoviPosa(false);
+        if (fet) fet();
+    }
+
+    alcoviPosa(esquena) {
+        const a = this.npcs.pare_alcovi, clau = esquena ? 'pare_alcovi_esquena' : 'pare_alcovi';
+        a.setTexture(clau).setFlipX(!esquena);
+        a.escalaBase = a.scaleX = a.scaleY = this.textures.get(clau).customData.escala;
     }
 }

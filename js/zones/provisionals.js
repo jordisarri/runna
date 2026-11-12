@@ -17,7 +17,7 @@ class ZonaEsglesia extends ZonaBase {
         if (on) {
             if (!this.anims.exists('idle_pianista')) this.anims.create({ key: 'idle_pianista', frames: this.anims.generateFrameNumbers('pianista_idle', { start: 0, end: NPC_IDLE.pianista.n - 1 }), frameRate: NPC_IDLE.pianista.fps, repeat: -1 });
             pia.setTexture('pianista_idle', 0).setFlipX(false); pia.escalaBase = pia.scaleX = pia.scaleY = this.textures.get('pianista_esquena').customData.escala * 0.85;       // (l'orgue és més petit: ella també)
-            pia.setY(this.orgue.y - 45); pia.play('idle_pianista'); if (pia.ombra) pia.ombra.setY(this.orgue.y - 45);
+            pia.setY(this.orgue.y - 12); pia.play('idle_pianista'); if (pia.ombra) pia.ombra.setY(this.orgue.y - 12);
             // mentre toca, tot el cos es balanceja al ritme (rotació des dels peus, sense canviar de mida) perquè es noti que toca
             if (pia.balToca) pia.balToca.remove();
             pia.balToca = this.tweens.add({ targets: pia, angle: { from: -3.5, to: 3.5 }, yoyo: true, repeat: -1, duration: 430, ease: 'Sine.easeInOut' });

@@ -59,12 +59,13 @@ class ZonaMonestirRebedor extends ZonaBase {
         // Candelabres amb flama viva a banda i banda de la catifa, i bancs de fusta contra les parets
         [[445, 340], [655, 340], [445, 640], [655, 640]].forEach(([x, y], i) => {
             const c = this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            (this.opacs = this.opacs || []).push(c);                  // opac: la silueta de l'Ineu no es veu a través seu
             this.colisio(x, y - 8, 24, 14);
             const llum = this.add.circle(x, y - 78, 70, 0xffc060, 0.1).setDepth(y + 1);
             this.tweens.add({ targets: llum, alpha: 0.05, scale: 0.92, yoyo: true, repeat: -1, duration: 420 + i * 90 });
         });
         [[190, 430], [190, 660], [910, 430], [910, 660]].forEach(([x, y]) => {
-            this.posar('banc', x, y, { col: { w: 120, h: 20 } });
+            this.posar('banc', x, y, { col: { w: 120, h: 20 }, opac: true });
         });
 
         // Parets i col·lisions (obertura de sortida a baix, al mig)

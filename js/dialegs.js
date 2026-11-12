@@ -636,8 +636,9 @@ const DIALEGS = {
             const pagines = [
                 { qui: "Ineu", text: "Pare Alcoví, a la placa del Dolmen hi diu que només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. Què vol dir?" },
                 { qui: "Pare Alcoví", text: "Això ho tinc a la Crònica, fill. Deixa'm que t'ho llegeixi." },
-                { fer: (z, fet) => z.npcVa('pare_alcovi', 812, 372, fet, 120) },
+                { fer: (z, fet) => z.alcoviLlegeix ? z.alcoviLlegeix(fet) : z.npcVa('pare_alcovi', 812, 372, fet, 120) },
                 { qui: "Crònica", text: "«Per alçar l'espasa calen tres coses: el permís de l'arbre més vell, que seu a taula amb tothom; les paraules que el monjo va deixar, que només entén qui ha parlat amb la seva ombra; i la benedicció del prior, que és la de Déu passada per les mans dels homes.»" },
+                { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
                 { qui: "Pare Alcoví", text: "L'arbre sagrat és el Gran Til·ler, el de les cel·les: el seu medalló és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jordà, el prior." }
             ];
             if (pas) pagines.push({ qui: "Pare Alcoví", text: "I ara, el que et toca: " + pas });
@@ -648,8 +649,9 @@ const DIALEGS = {
                 pagines: [
                     { qui: "Ineu", text: "Pare Alcoví, he baixat a la cripta de la Casa Gran. Hi havia una clau de ferro, i la tomba dels monjos no para de treure boira." },
                     { qui: "Pare Alcoví", text: "Una clau de ferro, i una tomba que no calla... Deixa'm mirar la Crònica." },
-                    { fer: (z, fet) => z.npcVa('pare_alcovi', 812, 372, fet, 120) },
+                    { fer: (z, fet) => z.alcoviLlegeix ? z.alcoviLlegeix(fet) : z.npcVa('pare_alcovi', 812, 372, fet, 120) },
                     { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
+                    { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
                     { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." }
                 ],
                 enAcabar: () => { E.posaFlag("tombaLlegida"); E.posaObjectiu("La tomba esquerdada del Cementiri espera la llum de Runna."); }
@@ -674,8 +676,9 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "Pare Alcoví", text: "Has trobat els dos fragments! Deixa'm llegir-los... Sí. Ho explica la Crònica que guardo a la biblioteca: un monjo va segellar la foscor amb la llum de l'espasa Runna." },
-                    { fer: (z, fet) => z.npcVa('pare_alcovi', 812, 372, fet, 120) },
+                    { fer: (z, fet) => z.alcoviLlegeix ? z.alcoviLlegeix(fet) : z.npcVa('pare_alcovi', 812, 372, fet, 120) },
                     { qui: "Crònica", text: "«Des que la tercera església va quedar inacabada, l'ombra del monjo es veu clarament sobre el mur de les Runes: mig corbat, amb les mans unides, com si pregués. Apareix cada nit.»" },
+                    { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
                     { qui: "Pare Alcoví", text: "L'ombra del monjo... No fa mal a ningú, Ineu. Crec que és el monjo que va segellar la foscor amb la llum de Runna. Ves a les Runes, passat el Pati del Celler: és sobre el mur de l'església inacabada. Parla-hi." }
                 ],
                 enAcabar: () => { E.posaFlag("alcoviLlegit"); E.posaFlag("parlatAlcovi"); E.posaObjectiu("A les Runes, passat el Pati del Celler, l'ombra del monjo és sobre el mur de l'església inacabada. Parla-hi."); }

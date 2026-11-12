@@ -19,13 +19,16 @@ def main():
     sheet = Image.open(ARREL / 'art' / 'personatges' / 'idle' / 'pianista_orgue_sheet.png').convert('RGBA')
     cel, n, cols = 512, 16, 4
     fots = [sheet.crop(((i % cols) * cel, (i // cols) * cel, (i % cols) * cel + cel, (i // cols) * cel + cel)) for i in range(n)]
-    # Es treu el banc del dibuix (la Pianista seu al banc de l'orgue del joc): es talla just per sota de les cames, a la vora de dalt del seient
+    bb = lambda f: f.split()[3].point(lambda v: 255 if v > 24 else 0).getbbox()
+    # L'escala es calcula amb la figura SENSE el banc (tallada a CORT), perquè el cos tingui la mateixa mida de sempre; el dibuix final inclou el banc (la Pianista seu al seu banc)
+    ref = []
     for f in fots:
-        f.paste((0, 0, 0, 0), (0, CORT, cel, cel))
-        f.paste((0, 0, 0, 0), (cel - 12, 0, cel, cel))      # (alguns fotogrames tenen una brutícia a la vora dreta de la cel·la)
-    bbs = [f.split()[3].point(lambda v: 255 if v > 24 else 0).getbbox() for f in fots]
+        g = f.copy(); g.paste((0, 0, 0, 0), (0, CORT, cel, cel)); g.paste((0, 0, 0, 0), (cel - 12, 0, cel, cel)); ref.append(bb(g))
+    ry0 = min(b[1] for b in ref); ry1 = max(b[3] for b in ref)
+    for f in fots: f.paste((0, 0, 0, 0), (cel - 12, 0, cel, cel))      # (alguns fotogrames tenen una brutícia a la vora dreta de la cel·la)
+    bbs = [bb(f) for f in fots]
     x0 = min(b[0] for b in bbs); y0 = min(b[1] for b in bbs); x1 = max(b[2] for b in bbs); y1 = max(b[3] for b in bbs)
-    s = alt_joc * RES / (y1 - y0)
+    s = alt_joc * RES / (ry1 - ry0)
     fw, fh = round((x1 - x0) * s), round((y1 - y0) * s)
     out = Image.new('RGBA', (fw * cols, fh * (n // cols)), (0, 0, 0, 0))
     petits = []

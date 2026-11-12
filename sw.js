@@ -9,7 +9,7 @@
  * No hi ha cap llista de fitxers: es guarda el que el joc va demanant mentre es juga (uns 50 MB com a molt).
  * Per esborrar el que ha guardat: puja el número de VERSIO (es buida la memòria de les versions anteriors).
  */
-const VERSIO = 'runna-63';
+const VERSIO = 'runna-64';
 
 self.addEventListener('install', () => self.skipWaiting());
 

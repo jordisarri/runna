@@ -25,6 +25,7 @@ const CATALEG = [
     { key: 'pilaria',   file: 'assets/personatges/pilaria.webp', amplada: 111, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#3b2a1e', ulleres: true, ample: 0.8, alt: 1.06 }) },
     { key: 'germa_franci', file: 'assets/personatges/germa_franci.webp', amplada: 78, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
     { key: 'pare_alcovi',   file: 'assets/personatges/pare_alcovi.webp',   amplada: 84, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
+    { key: 'pare_alcovi_esquena', file: 'assets/personatges/pare_alcovi_esquena.webp', amplada: 82, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },      // d'esquena, llegint la Crònica al faristol (AutoSprite)
     // Elements
     { key: 'home_raim',    file: 'assets/personatges/home_raim.webp',    amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua (abans del combat)
     { key: 'home_raim_desperta', file: 'assets/personatges/home_raim_desperta.webp', amplada: 115, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // el guardià despert (boss de l'Escalinata)
@@ -72,7 +73,7 @@ const CATALEG = [
 
     // ---- Personatges nous ----
     { key: 'pianista',  file: 'assets/personatges/pianista.webp',  amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
-    { key: 'pianista_esquena',  file: 'assets/personatges/pianista_esquena.webp',  amplada: 142.5, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
+    { key: 'pianista_esquena',  file: 'assets/personatges/pianista_esquena.webp',  amplada: 143, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
     { key: 'venerables', file: 'assets/personatges/venerables.webp', amplada: 147, cru: true, provisional: (c, w) => dibuixarVenerables(c, w) },   // les dues Venerables Sàvies de les Cel·les, agafades del braç (un sol gràfic)
     { key: 'mare_nena', file: 'assets/personatges/mare_nena.webp', amplada: 77, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#cfd6ee', cabell: '#e8e8f2', dona: true, ample: 1.1, alt: 0.9 }) },   // la mare de la Nena de les Trenes (visió de llum, sense rostre)
     { key: 'meus',      file: 'assets/personatges/meus.webp',      amplada: 55,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
@@ -289,7 +290,7 @@ const OCTANTS_INEU = ['right', 'southeast', 'down', 'southwest', 'left', 'northw
 // Fulls d'idle frontal dels NPC (eines/fer_idle_npc.py): clau → mida de cel·la i nombre de fotogrames. Es carreguen amb la resta i ZonaBase.npc() els fa servir
 // en lloc del dibuix fix; si no hi són, tot es veu com abans.
 const NPC_IDLE = { joaneta: { w: 262, h: 304, n: 16, fps: 8 },
-    pianista: { w: 285, h: 240, n: 16, fps: 10, fix: 'pianista_esquena', alFeina: 'notes' } };      // la Pianista toca l'orgue d'esquena (eines/fer_pianista_orgue.py): només s'anima quan toca (fix: dibuix fix d'esquena; alFeina: tipus de npcFeina que l'activa)          // la Joaneta prepara pocions (idle animat); la resta d'NPC fan l'idle per codi (ZonaBase.idleCodi)
+    pianista: { w: 286, h: 330, n: 16, fps: 10, fix: 'pianista_esquena', alFeina: 'notes' } };      // la Pianista toca l'orgue d'esquena (eines/fer_pianista_orgue.py): només s'anima quan toca (fix: dibuix fix d'esquena; alFeina: tipus de npcFeina que l'activa)          // la Joaneta prepara pocions (idle animat); la resta d'NPC fan l'idle per codi (ZonaBase.idleCodi)
 
 const Grafics = {
     // Avís si el navegador no deixa llegir els píxels (obert amb doble clic, file://)
@@ -321,7 +322,7 @@ const Grafics = {
         scene.load.spritesheet('pare_jorda_camina', 'assets/personatges/pare_jorda_camina.webp', { frameWidth: 200, frameHeight: 290 });
         // Fulls d'animació del Pastor de Boira (boss de la Cirosa): quadrícula de fotogrames de 300 x 300; si no hi són, es veu el dibuix fix (vegeu docs/PROMPTS_GRAFICS.md)
         Object.keys(Grafics.PASTOR_FULLS).forEach(n => scene.load.spritesheet('pastor_' + n, `assets/enemics/pastor_${n}.webp`, { frameWidth: 300, frameHeight: 300 }));
-        Object.entries(NPC_IDLE).forEach(([k, d]) => scene.load.spritesheet(k + '_idle', `assets/personatges/${k}_idle.webp?v=2611111952`, { frameWidth: d.w, frameHeight: d.h }));
+        Object.entries(NPC_IDLE).forEach(([k, d]) => scene.load.spritesheet(k + '_idle', `assets/personatges/${k}_idle.webp?v=2611122055`, { frameWidth: d.w, frameHeight: d.h }));
         scene.load.spritesheet('germa_aldreu_camina', 'assets/personatges/germa_aldreu_camina.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('germa_aldreu_ne', 'assets/personatges/germa_aldreu_ne.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('jusef_camina', 'assets/personatges/jusef_camina.webp', { frameWidth: 190, frameHeight: 300 });
