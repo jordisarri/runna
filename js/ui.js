@@ -214,7 +214,7 @@ class EscenaUI extends Phaser.Scene {
         this.crearObjectes();
 
         this.input.keyboard.on('keydown-ESC', () => {
-            if (this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
+            if (this.game.scene.isActive('Estels')) return;
             if (this.game.scene.isActive('Musica') && !this.capaOberta) return;          // amb la tarota oberta, ESC és de la tarota (tret que hi hagi el diari o el menú a sobre)
             if (this.consellsObert) this.tancarConsells();
             else if (this.inventariObert) this.tancarInventari();
@@ -362,13 +362,13 @@ class EscenaUI extends Phaser.Scene {
     refrescaObjectes() {
         if (!this.fonsSarro) return;
         // Als minijocs de pantalla sencera (el telescopi dels Dipòsits, el ping-pong) el HUD de dalt s'amaga: tapava el títol i el seu botó de sortir
-        const minijoc = this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong');
+        const minijoc = this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong') || this.game.scene.isPaused('PingPong');          // (amb el menú de pausa obert, el ping-pong és en pausa però segueix sent un minijoc)
         const vis = !!Estat.dades && !this.menuObert && !this.mapaObert && !minijoc;
         this.fonsSarro.setVisible(vis);
         this.fonsConsells.setVisible(vis && !this.inventariObert);
         if (this.minijocAmagat !== minijoc) {
             this.minijocAmagat = minijoc;
-            [this.fonsHUD, this.cordo, this.creuRosari, this.ombraCreu, this.botoMenu].forEach(o => o && o.setVisible(!minijoc));
+            [this.fonsHUD, this.cordo, this.creuRosari, this.ombraCreu].forEach(o => o && o.setVisible(!minijoc));          // (el botó del menú ☰ es veu també als minijocs: serveix per pausar)
             this.cors.forEach((c, i) => { c.setVisible(!minijoc && i < (Estat.dades ? Estat.dades.corsMax : 0)); });
             this.ombresGrans.forEach((c, i) => { c.setVisible(!minijoc && i < (Estat.dades ? Estat.dades.corsMax : 0)); });
         }
@@ -1093,8 +1093,9 @@ class EscenaUI extends Phaser.Scene {
     }
 
     obrirMenu() {
-        if (this.dialeg || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
+        if (this.dialeg || this.game.scene.isActive('Estels')) return;
         this.menuObert = true;
+        if (this.game.scene.isActive('PingPong')) this.game.scene.pause('PingPong');          // el menú pausa el ping-pong
         this.avisDesar.setVisible(!Estat.emmagatzematgeOk());
         this.seleccio = 0;
         this.premut = false;
@@ -1106,6 +1107,7 @@ class EscenaUI extends Phaser.Scene {
 
     tancarMenu() {
         this.menuObert = false;
+        if (this.game.scene.isPaused('PingPong')) this.game.scene.resume('PingPong');
         this.mapaObert = false;
         if (this.mapa) { this.mapa.destroy(); this.mapa = null; }
         this.menu.setVisible(false);
