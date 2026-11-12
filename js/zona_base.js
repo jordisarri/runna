@@ -24,8 +24,10 @@ const ZOOM_COMBAT = 1.12;    // acostament addicional de la càmera mentre hi ha
 // Interiors petits més a prop (acollidors, sense marges buits); interiors mitjans una mica; el tram tens de l'Acte 3 va a més pressió.
 const ZOOM_ZONES = {
     ZonaCasetaJoc: 1.3, ZonaTresor: 1.3, ZonaCelaStAntoni: 1.3, ZonaCabanaInt: 1.3, ZonaCabanaCami: 1.3, ZonaMasiaCirosa: 1.3, ZonaGolfes: 1.3, ZonaCasaCripta: 1.3, ZonaCasaTresor: 1.3, ZonaCasaGeorgi: 1.3,
-    ZonaTavernaInt: 1.2, ZonaHostatgeriaInt: 1.2, ZonaBiblioteca: 1.2, ZonaMonestirRebedor: 1.2, ZonaCasaGranInt: 1.2, ZonaErmitaInt: 1.2, ZonaGabrielInt: 1.2,
+    ZonaHostatgeriaInt: 1.2, ZonaBiblioteca: 1.2, ZonaMonestirRebedor: 1.2, ZonaErmitaInt: 1.2, ZonaGabrielInt: 1.2,
     ZonaCambraDolora: 1.25, ZonaCambraPilaria: 1.25, ZonaCambraCarmelia: 1.25, ZonaSoterraniHost: 1.2,
+    ZonaPingpong: 1.2, ZonaEsglesia: 1.1, ZonaEsglesiaNova: 1.1, ZonaTavernaInt: 1.25, ZonaCasaGranInt: 1.25,
+    ZonaPlaca: 1.1, ZonaEra: 1.1, ZonaJardi: 1.1, ZonaCementiri: 1.1,       // exteriors amb poc contingut: una mica més a prop
     ZonaSotaTaverna: 1.1, ZonaGirgolesFora: 1.1, ZonaPassadis: 1.15, ZonaGirgoles: 1.15, ZonaTortura: 1.2, ZonaBoira: 1.2
 };
 const ZOOM_MAX_ZONA = 1.85;   // per sobre d'això els gràfics es veuen massa grans
@@ -1780,7 +1782,7 @@ class ZonaBase extends Phaser.Scene {
             let z2 = Z, wy2 = wv.y, trobat = false, sx2 = cam.scrollX;
             const conversa = !centrar && !!(p && p.npc && p.npc.active && p.npc.visible);
             if (conversa) {
-                const zt = Math.min(p.zoomConversa ? 2.2 : 1.8, Z * (p.zoomConversa || ZOOM_NPC));
+                const zt = Math.min(p.zoomConversa ? 2.2 : 1.8, Z * (p.zoomConversa || (this.esInterior() ? 1.3 : ZOOM_NPC)));      // als interiors, més a prop (es veuen els NPC amb detall, com a la biblioteca)
                 const dalt = Math.min(...mides.map(m => m.dalt)), baix = Math.max(...mides.map(m => m.baix));
                 const wyC = (dalt + baix) / 2 - ((TOP + LIM) / 2 - ALT_HUD) / zt;
                 if (be(zt, wyC)) {

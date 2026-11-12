@@ -73,7 +73,7 @@ class ZonaPlaca extends ZonaBase {
         });
 
         // --- Personatges ---
-        this.npc('pare_jorda', 700, 770, DIALEGS.pareJorda, { zoomConversa: 1.25 });
+        this.npc('pare_jorda', 700, 770, DIALEGS.pareJorda, { zoomConversa: 1.5 });
         if (!Estat.flag('camiCirosaObert') && !Estat.flag('pastorVencut')) this.aldreu = this.npc('germa_aldreu', 1020, 585, DIALEGS.germaAldreu, { flipX: true });
 
         // --- Cartells ---
