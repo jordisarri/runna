@@ -381,6 +381,7 @@ class EscenaCarrega extends Phaser.Scene {
             document.fonts.load(`italic 600 28px ${FONT_TEXT}`),
             document.fonts.load(`600 24px ${FONT_PLACA}`),
             document.fonts.load(`700 24px ${FONT_PLACA}`),
+            document.fonts.load('64px Bangers'),
             document.fonts.load(`29px ${FONT_LLIBRE}`)
         ]) : Promise.resolve();
         Promise.race([fonts, new Promise(r => setTimeout(r, 3000))])

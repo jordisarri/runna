@@ -155,7 +155,7 @@ class ZonaEsglesia extends ZonaBase {
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Daimiel, que dirigeix el cor
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, la Pianista i el Pare Daimiel es posen amb la resta
-        if (!epileg) this.orgue = this.posar('orgue', 850, ESG.retY + 264, { col: { w: 110, h: 50 } });
+        if (!epileg) this.orgue = this.posar('orgue', 850, ESG.retY + 264, { col: { w: 110, h: 50 }, opac: true });
         if (!epileg) {
             // La Pianista és de cara al banc de l'orgue; només hi toca d'esquena (animada) quan l'Ineu la troba la primera vegada i mentre ensenya un cant (pianistaToca)
             const pia = this.npc('pianista', this.orgue.x, this.orgue.y + 24, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
@@ -172,7 +172,7 @@ class ZonaEsglesia extends ZonaBase {
             // Bancs més amplis (hi caben dos o tres personatges): l'Ineu s'hi asseu sol en caminar-hi des del davant (vigilaBancs)
             this.bancsEsg = [];
             bancs.forEach(y => [466, 814].forEach(x => {
-                this.posar('banc_esglesia_ample', x, y, { col: { w: 228, h: 16 } });
+                this.posar('banc_esglesia_ample', x, y, { col: { w: 228, h: 16 }, opac: true });
                 this.bancsEsg.push({ x, y, w: 228 });
             }));
         }

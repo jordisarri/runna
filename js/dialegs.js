@@ -459,7 +459,7 @@ const DIALEGS = {
 
     jusefGuanyat: E => E.flag('jusefVencut') ? ({
         pagines: [
-            { qui: 'Jusef', text: 'Un altre cop me l\'has tornat... El servei és teu, noi. Quan vulguis, tornem-hi.' }
+            { qui: 'Jusef', text: 'M\'has tornat a derrotar, has entès perfectament la màgia del meu servei. Quan vulguis, tornem-hi.' }
         ]
     }) : ({
         pagines: [

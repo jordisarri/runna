@@ -26,13 +26,13 @@ const T = {
     G: 9.81, REST: 0.86,                           // gravetat i rebot a la taula
     Z_INEU: -0.42, Z_JUSEF: T_L_PLUS(0.42),        // on es posen els jugadors
     Z_IDEAL: -0.08,                                // on és la pilota en el moment perfecte del cop (just passada la vora de la taula)
-    PUNTS: 11
+    PUNTS: 11, PUNTS_ZERO: 7                       // PUNTS_ZERO: si un arriba a 7 i l'altre en té 0, el partit s'acaba
 };
 function T_L_PLUS(d) { return 2.74 + d; }
 const MODES = {
     // finestra: segons (reals) abans d'arribar la pilota en què lliscar és PERFECTE · bona: fins on és «bé» · abast: fins on arriba l'Ineu (m)
-    normal: { temps: 0.8, finestra: 0.45, bona: 1.3, abast: 0.45, abastJusef: 0.3, velJusef: 1.6, fallaJusef: 0 },
-    facil:  { temps: 0.65, finestra: 0.7, bona: 1.8,  abast: 0.65, abastJusef: 0.26, velJusef: 1.3, fallaJusef: 0 }
+    normal: { temps: 0.8, finestra: 0.45, bona: 1.3, abast: 0.45, abastJusef: 0.3, velJusef: 0.9, fallaJusef: 0 },
+    facil:  { temps: 0.65, finestra: 0.7, bona: 1.8,  abast: 0.65, abastJusef: 0.26, velJusef: 0.72, fallaJusef: 0 }
 };
 const Z_COP = 0.05;           // fondària on l'Ineu colpeja la pilota
 
@@ -74,7 +74,8 @@ class EscenaPingPong extends Phaser.Scene {
         this.spJusef.on('animationcomplete', () => this.spJusef.setTexture('jusef_dret', 0));
         this.auraJusef = this.add.ellipse(0, 0, 160, 190, 0xb890ff, 0).setDepth(1);
         this.ombra = this.add.ellipse(0, 0, 20, 8, 0x000000, 0.35).setDepth(0.6);
-        this.pilota = this.add.circle(0, 0, 14, 0xfff6e0).setStrokeStyle(3, 0x8a7a50);
+        this.pilota = this.add.circle(0, 0, 14, 0xfff6e0).setStrokeStyle(4, 0x3a2a14);
+        this.halo = this.add.circle(0, 0, 24, 0xffffff, 0.3).setVisible(false);         // halo clar darrere la pilota: es veu sobre la roba blanca d'en Jusef i sobre la paret
         this.marcaBot = this.add.ellipse(0, 0, 40, 16).setStrokeStyle(3, 0xffd34d, 0.0).setDepth(0.55);
         this.anell = this.add.graphics().setDepth(21);                         // l'anell que es posa verd quan toca lliscar
         this.estela = this.add.graphics().setDepth(19);                        // estela del cop màgic
@@ -215,10 +216,10 @@ class EscenaPingPong extends Phaser.Scene {
     serveixIneu() { return Math.floor(this.serveis / 2) % 2 === 0; }
 
     preparaServei() {
-        this.b = null; this.estat = 'servei'; this.rally = 0;
+        this.b = null; this.tossJ = null; this.estat = 'servei'; this.rally = 0;
         this.pilota.setVisible(false); this.ombra.setVisible(false); this.marcaBot.setStrokeStyle(3, 0xffd34d, 0);
         if (this.serveixIneu()) {
-            this.avis('El teu servei: llisca cap amunt', 1600, '#f2e6c8');
+            this.avis('Llisca cap amunt', 1600, '#f2e6c8');
             this.estat = 'serveiIneu';
         } else {
             this.serveisJusef++;
@@ -231,7 +232,7 @@ class EscenaPingPong extends Phaser.Scene {
         if (this.acabat) return;
         this.estat = 'joc';
         const X = Phaser.Math.FloatBetween(-0.55, 0.55);
-        this.spJusef.play('jf_servei', true);
+        this.spJusef.play('jf_servei', true); this.tossJ = { t0: this.time.now, dur: 420, magica: false };
         this.time.delayedCall(420, () => { if (!this.acabat) this.serveix('jusef', { X: this.Xj, z: T.L + 0.25, h: 0.3 }, X, Phaser.Math.FloatBetween(0.35, 0.9), suau ? 1.15 : 0.95); });
     }
 
@@ -239,14 +240,14 @@ class EscenaPingPong extends Phaser.Scene {
     serveiMagic() {
         if (this.acabat) return;
         this.estat = 'res';
+        this.avis('Servei màgic!', 1500, '#d8b0ff');
         this.tweens.add({ targets: this.auraJusef, fillAlpha: 0.4, duration: 300, yoyo: true, hold: 900 });
-        this.avis('Servei màgic! Només un cop PERFECTE trenca l\'encanteri', 1700, '#d8b0ff');
         this.so('magia');
         this.time.delayedCall(1500, () => {
             if (this.acabat) return;
             this.estat = 'joc';
             const X = Phaser.Math.FloatBetween(-0.5, 0.5) || 0.3;
-            this.spJusef.play('jf_servei', true);
+            this.spJusef.play('jf_servei', true); this.tossJ = { t0: this.time.now, dur: 420, magica: true };
             this.time.delayedCall(420, () => { if (!this.acabat) this.serveix('jusef', { X: this.Xj, z: T.L + 0.25, h: 0.3 }, X, Phaser.Math.FloatBetween(0.35, 0.75), 0.85, true); });
         });
     }
@@ -268,11 +269,12 @@ class EscenaPingPong extends Phaser.Scene {
 
     // SERVEI: la pilota ha de botar PRIMER al camp de qui serveix i després passar la xarxa i botar a l'altre camp
     serveix(qui, des, Xt, zt, temps, magica = false) {
+        this.tossJ = null;
         const z1 = qui === 'ineu' ? 0.55 : T.L - 0.55;
         const v = this.vel(des, des.X + (Xt - des.X) * 0.25, z1, 0.4);
         this.b = { X: des.X, z: des.z, h: des.h, vx: v.vx, vz: v.vz, vh: v.vh, de: qui, bots: 0, decidit: false, morta: false, marca: { X: Xt, z: zt },
                    serveix: { Xt, zt, t: temps }, magica, t0: Math.random() * 6.28 };
-        this.pilota.setVisible(true).setFillStyle(magica ? 0xe0b8ff : 0xfff6e0).setStrokeStyle(3, magica ? 0x7a3aa8 : 0x8a7a50); this.ombra.setVisible(true);
+        this.pilota.setVisible(true).setFillStyle(magica ? 0xe0b8ff : 0xfff6e0).setStrokeStyle(4, magica ? 0x3a1860 : 0x3a2a14); this.ombra.setVisible(true);
         const pm = this.proj(Xt, zt);
         this.marcaBot.setPosition(pm.x, pm.y).setSize(46 * pm.k / 300 * 1.4, 18 * pm.k / 300 * 1.4).setStrokeStyle(3, magica ? 0xd8b0ff : 0xffd34d, qui === 'jusef' ? 0.75 : 0);
         this.so('pala');
@@ -288,7 +290,7 @@ class EscenaPingPong extends Phaser.Scene {
             t += 0.06;
         }
         this.b = { X: des.X, z: des.z, h: des.h, vx: (Xt - des.X) / t, vz: vz(), vh, de: qui, bots: 0, decidit: false, morta: false, marca: { X: Xt, z: zt } };
-        this.pilota.setVisible(true).setFillStyle(0xfff6e0).setStrokeStyle(3, 0x8a7a50); this.ombra.setVisible(true);
+        this.pilota.setVisible(true).setFillStyle(0xfff6e0).setStrokeStyle(4, 0x3a2a14); this.ombra.setVisible(true);
         // la marca d'on botarà (només quan ve cap a tu)
         const pm = this.proj(Xt, zt);
         this.marcaBot.setPosition(pm.x, pm.y).setSize(46 * pm.k / 300 * 1.4, 18 * pm.k / 300 * 1.4).setStrokeStyle(3, 0xffd34d, qui === 'jusef' ? 0.75 : 0);
@@ -315,7 +317,7 @@ class EscenaPingPong extends Phaser.Scene {
         this.pintaRastre(b);
         // Jusef: va cap a on arribarà la pilota
         let objJ = 0;
-        if (this.b && this.b.de === 'ineu' && !this.b.morta) objJ = this.b.marca.X + this.b.vx * 0.35;
+        if (this.b && this.b.de === 'ineu' && !this.b.morta) objJ = Phaser.Math.Clamp(this.b.marca.X, -0.72, 0.72);          // va just on cau (abans se'n passava quan el cop era fort)
         const pasJ = this.M.velJusef * dt;
         this.Xj += Phaser.Math.Clamp(objJ - this.Xj, -pasJ, pasJ);
         const pj = this.proj(this.Xj, T.Z_JUSEF);
@@ -324,9 +326,16 @@ class EscenaPingPong extends Phaser.Scene {
         this.auraJusef.setPosition(pj.x, pj.y - 120 + flota);
         if (this.estat === 'serveiIneu') {            // la pilota a la mà de l'Ineu
             const p = this.proj(this.Xi + 0.18, -0.15, 0.32 + Math.abs(Math.sin(time / 260)) * 0.12);
-            this.pilota.setVisible(true).setPosition(p.x, p.y).setRadius(Math.max(9, 0.05 * p.k)).setDepth(9);
+            this.pilota.setVisible(true).setPosition(p.x, p.y).setRadius(Math.max(13, 0.062 * p.k)).setDepth(9);
             this.ombra.setVisible(false);
         }
+        // llançament de la pilota d'en Jusef abans del servei: puja de la seva mà i baixa (així es veu des del primer moment)
+        if (this.tossJ) {
+            const f = Math.min(1, (this.time.now - this.tossJ.t0) / this.tossJ.dur), p = this.proj(this.Xj + 0.14, T.L + 0.2, 0.5 + 0.5 * Math.sin(Math.PI * f));
+            this.pilota.setVisible(true).setFillStyle(this.tossJ.magica ? 0xe0b8ff : 0xfff6e0).setPosition(p.x, p.y).setRadius(Math.max(13, 0.062 * p.k)).setDepth(7.6);
+        }
+        if (this.pilota.visible) this.halo.setVisible(true).setPosition(this.pilota.x, this.pilota.y).setRadius(this.pilota.radius * 1.7).setDepth(this.pilota.depth - 0.02);
+        else this.halo.setVisible(false);
         this.pintaAnell();
         this.pintaCelebracio(time);
         this.pintaEstela();
@@ -339,7 +348,7 @@ class EscenaPingPong extends Phaser.Scene {
         const g = this.rastreG; g.clear();
         if (!b || b.morta) { this.rastre.length = 0; return; }
         const p = this.proj(this.visX(b), b.z, b.h);
-        this.rastre.push({ x: p.x, y: p.y, r: Math.max(9, 0.05 * p.k) });
+        this.rastre.push({ x: p.x, y: p.y, r: Math.max(13, 0.062 * p.k) });
         if (this.rastre.length > 8) this.rastre.shift();
         const n = this.rastre.length;
         this.rastre.forEach((q, i) => { const f = i / n; g.fillStyle(b.magica ? 0xe0b8ff : 0xfff6e0, 0.32 * f).fillCircle(q.x, q.y, q.r * (0.35 + 0.6 * f)); });
@@ -434,7 +443,7 @@ class EscenaPingPong extends Phaser.Scene {
 
     pintaPilota() {
         const b = this.b, p = this.proj(this.visX(b), b.z, b.h), s = this.proj(b.X, b.z, 0);
-        this.pilota.setPosition(p.x, p.y).setRadius(Math.max(9, 0.05 * p.k)).setDepth(b.z > T.L / 2 ? 10 - b.z + 0.01 : 9);      // a la teva banda, per DARRERE de l'Ineu (que la tapa)
+        this.pilota.setPosition(p.x, p.y).setRadius(Math.max(13, 0.062 * p.k)).setDepth(b.z > T.L / 2 ? 10 - b.z + 0.01 : 9);      // a la teva banda, per DARRERE de l'Ineu (que la tapa)
         const r = Math.max(7, 0.05 * s.k * 0.8);
         const sobreTaula = Math.abs(b.X) <= T.W && b.z >= 0 && b.z <= T.L;
         this.ombra.setPosition(s.x, s.y).setSize(r * 2.2, r * 0.9).setAlpha(sobreTaula ? Phaser.Math.Clamp(0.45 - b.h * 0.6, 0.12, 0.45) : 0);
@@ -448,10 +457,10 @@ class EscenaPingPong extends Phaser.Scene {
         this.spJusef.play(b.X >= this.Xj ? 'jf_dret' : 'jf_revers', true);
         this.juiceCopJusef(this.proj(b.X, b.z, b.h));
         const dx = Math.abs(b.X - this.Xj);
-        const abast = M.abastJusef * (b.tipus === 'tallat' ? 0.8 : b.tipus === 'fort' ? 0.9 : 1);
+        const abast = M.abastJusef * (b.tipus === 'tallat' ? 0.8 : b.tipus === 'fort' ? 0.95 : 1);
         if (b.tipus === 'magic') { b.motiu = 'L\'encanteri trencat: no hi pot fer res!'; return; }
         if (dx > abast) {
-            b.motiu = b.tipus === 'fort' ? 'Massa ràpid per a en Jusef!' : b.tipus === 'tallat' ? 'Cop tallat: en Jusef no hi arriba!' : 'Massa lluny per a en Jusef!';
+            b.motiu = b.tipus === 'fort' ? 'En Jusef no hi arriba!' : b.tipus === 'tallat' ? 'Cop tallat: en Jusef no hi arriba!' : 'Massa lluny per a en Jusef!';
             return;                                                          // la pilota segueix i és punt de l'Ineu
         }
         this.rally++;
@@ -581,9 +590,10 @@ class EscenaPingPong extends Phaser.Scene {
         this.so(guanyador === 'ineu' ? 'be' : 'mal');
         if (guanyador === 'ineu') { const c = this.proj(0, T.L * 0.78); this.chispes(c.x, c.y, 34, [0xffe9a0, 0xffffff, 0x7ad8ff, 0xff9ac8], 520, 0.7, 900); this.flaixPantalla(0.18, 260); }
         else { this.cameras.main.shake(220, 0.006); this.pulsJusef = 1; }
-        this.avis((guanyador === 'ineu' ? 'Punt teu!' : 'Punt d\'en Jusef.') + (text ? '\n' + text : ''), 1600, '#ffe9a0');
+        this.avis(guanyador === 'ineu' ? 'Punt teu!' : 'Punt d\'en Jusef.', 1600, '#ffe9a0');          // només això: cap explicació de per què
         const { ineu, jusef } = this.punts;
-        if ((ineu >= T.PUNTS || jusef >= T.PUNTS) && Math.abs(ineu - jusef) >= 2) { this.time.delayedCall(1400, () => this.final(ineu > jusef)); return; }
+        const golejada = Math.max(ineu, jusef) >= T.PUNTS_ZERO && Math.min(ineu, jusef) === 0;          // 7-0 (o 0-7): s'acaba igualment, victòria o derrota
+        if (((ineu >= T.PUNTS || jusef >= T.PUNTS) && Math.abs(ineu - jusef) >= 2) || golejada) { this.time.delayedCall(1400, () => this.final(ineu > jusef)); return; }
         this.time.delayedCall(1500, () => this.preparaServei());
     }
 
@@ -604,16 +614,16 @@ class EscenaPingPong extends Phaser.Scene {
         this.cameras.main.shake(400, 0.01);
         // 1) «HAS GUANYAT!» en lletres d'onomatopeia d'anime: cada lletra cau gran amb un impacte
         const lletres = [];
-        const font = 'Impact, "Arial Black", "Helvetica Neue", Georgia, sans-serif';
+        const font = 'Bangers, Impact, sans-serif';          // tipografia de còmic, allotjada al nostre servidor (assets/fonts/)
         const linia = (text, y, mida, t0) => {
             const objs = text.split('').map(ch => {
-                const mk = (stroke, sw, color, dx, dy) => this.add.text(0, 0, ch, { fontFamily: font, fontSize: mida + 'px', fontStyle: 'italic bold', color, stroke, strokeThickness: sw }).setOrigin(0.5).setDepth(46).setAngle(0);
+                const mk = (stroke, sw, color, dx, dy) => this.add.text(0, 0, ch, { fontFamily: font, fontSize: mida + 'px', color, stroke, strokeThickness: sw, padding: { x: 30, y: 30 } }).setOrigin(0.5).setDepth(46).setAngle(0);
                 const grup = [mk('#2a0a3a', 34, '#2a0a3a'), mk('#ffffff', 20, '#ffffff'), mk('#c4161c', 10, '#ffb020'), mk('#c4161c', 0, '#ffe9a0')];     // ombra lila, vora blanca, vora vermella i farciment groc
                 grup[3].setScale(1); grup.forEach(o => { this.cameras.main.ignore(o); o.setVisible(false); });
-                return { ch, grup, w: grup[3].width };
+                return { ch, grup, w: grup[3].width - 60 };          // (el padding de 30 per banda no compta a l'espaiat)
             });
-            const total = objs.reduce((a, o) => a + o.w + 4, -4); let x = AMPLE / 2 - total / 2;
-            objs.forEach((o, k) => { o.x = x + o.w / 2; x += o.w + 4; o.y = y; o.rot = (t0 ? 3 : -4) + Phaser.Math.FloatBetween(-2.5, 2.5); lletres.push(o); });
+            const total = objs.reduce((a, o) => a + o.w + 12, -12); let x = AMPLE / 2 - total / 2;
+            objs.forEach((o, k) => { o.x = x + o.w / 2; x += o.w + 12; o.y = y; o.rot = (t0 ? 3 : -4) + Phaser.Math.FloatBetween(-2.5, 2.5); lletres.push(o); });
         };
         linia('HAS', 305, 150, 0);
         linia('GUANYAT!', 480, 104, 1);
@@ -643,10 +653,14 @@ class EscenaPingPong extends Phaser.Scene {
             this.tweens.add({ targets: sp, scaleX: 2.15, scaleY: 2.15, duration: 520, delay: 380, yoyo: true, ease: 'Back.easeOut' });
             sp.once('animationcomplete', () => {
                 // l'Ineu es queda fix (últim fotograma) amb el text darrere; en tocar la pantalla es passa al panell final
+                // l'últim fotograma no queda aturat: l'Ineu hi flota amunt i avall, amb un lleuger balanceig
+                const yBase = sp.y;
+                this.tweens.add({ targets: sp, y: yBase - 16, duration: 1100, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+                this.tweens.add({ targets: sp, angle: { from: -1.6, to: 1.6 }, duration: 1700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
                 this.time.delayedCall(500, () => this.input.once('pointerdown', () => {
                     this.tweens.add({ targets: [sp, expl, ...lletres.flatMap(o => o.grup)], alpha: 0, duration: 280, onComplete: () => {
                         vibra.remove(); expl.destroy(); lletres.forEach(o => o.grup.forEach(g => g.destroy()));
-                        sp.setVisible(false).setAlpha(1); this.celebActiva = 0; this.celebLinies.clear(); this.celebFons.setFillStyle(0x180a26, 0); fet();
+                        this.tweens.killTweensOf(sp); sp.setVisible(false).setAlpha(1).setAngle(0).setY(yBase); this.celebActiva = 0; this.celebLinies.clear(); this.celebFons.setFillStyle(0x180a26, 0); fet();
                     } });
                 }));
             });

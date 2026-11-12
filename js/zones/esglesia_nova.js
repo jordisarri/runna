@@ -94,7 +94,7 @@ class ZonaEsglesiaNova extends ZonaBase {
         this.posar('altar', xc, yF + 190, { col: { w: 190, h: 34 }, escala: 1.3 });
 
         // ---- Orgue, Pianista i Pare Daimiel ----
-        this.orgue = this.posar('orgue', 1300, yF + 330, { col: { w: 110, h: 50 } });
+        this.orgue = this.posar('orgue', 1300, yF + 330, { col: { w: 110, h: 50 }, opac: true });
         const pia = this.npc('pianista', this.orgue.x, this.orgue.y + 24, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
         pia.setDepth(this.orgue.y + 1);
         [pia.respira, pia.balanceig].forEach(t => t && t.remove()); pia.respira = pia.balanceig = null; pia.setAngle(0);
@@ -145,7 +145,7 @@ class ZonaEsglesiaNova extends ZonaBase {
         // ---- 4 files de bancs, vists per darrere, mirant l'altar ----
         for (let r = 0; r < 4; r++) {
             const y = yB + 240 + r * 220;
-            [560, 790, 1130, 1360].forEach(x => this.posar('banc_esglesia', x, y, { col: { w: 190, h: 18 }, escala: 1.45 }));
+            [560, 790, 1130, 1360].forEach(x => this.posar('banc_esglesia', x, y, { col: { w: 190, h: 18 }, escala: 1.45, opac: true }));
         }
 
         this.add.rectangle(xc, A / 2, xN1 - xN0, A, 0xffd38a, 0.05).setDepth(80000);       // llum de les vidrieres

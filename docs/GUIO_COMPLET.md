@@ -826,7 +826,7 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 
 
 
-**Jusef:** Un altre cop me l'has tornat... El servei és teu, noi. Quan vulguis, tornem-hi.
+**Jusef:** M'has tornat a derrotar, has entès perfectament la màgia del meu servei. Quan vulguis, tornem-hi.
 
 **Jusef:** ...Me l'has tornat. El servei. Algú, per fi, l'ha aturat de debò.
 

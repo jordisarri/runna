@@ -10,7 +10,7 @@ import os, re, urllib.request
 ARREL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 SORTIDA = os.path.join(ARREL, 'assets', 'fonts')
 URL = ('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cinzel+Decorative:wght@700;900'
-       '&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=IM+Fell+English:ital@0;1&display=swap')
+       '&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=IM+Fell+English:ital@0;1&family=Bangers&display=swap')
 UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'   # perquè Google serveixi woff2
 SUBCONJUNTS = ('latin', 'latin-ext')
 

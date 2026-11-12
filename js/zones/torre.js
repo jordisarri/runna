@@ -11,12 +11,13 @@
 const TORRE = {
     graons: 26,            // graons de cargol (més un replà a baix i un de dalt)
     perVolta: 13,          // graons per volta completa
-    alt: 46,               // alçada d'un graó (px)
+    alt: 56,               // alçada d'un graó (px)
     R: 330,                // radi de la paret (px)
-    fons: 74,              // quant surt un graó de la paret cap al centre
+    fons: 90,              // quant surt un graó de la paret cap al centre
     inclinacio: 0.5,
     velocitat: 2.3,        // graons per segon
-    peuY: 800              // y de pantalla (dins la vista) on l'Ineu té els peus
+    peuY: 800,             // y de pantalla (dins la vista) on l'Ineu té els peus
+    escalaIneu: 1.5        // l'Ineu es veu més gran que a les zones (si no, quedava minúscul entre els graons)
 };
 
 class ZonaTorre extends Phaser.Scene {
@@ -50,8 +51,8 @@ class ZonaTorre extends Phaser.Scene {
         this.llum = this.add.graphics().setDepth(6).setBlendMode(Phaser.BlendModes.ADD);
 
         const S = SPRITE_INEU;
-        this.ombra = this.add.image(this.cx, T.peuY, 'ombra').setScale(0.42).setDepth(4);
-        this.ineu = this.add.sprite(this.cx, T.peuY, 'ineu_right', quietIneu()).setOrigin(0.5, S.peus / S.alt).setScale(S.alcada / (S.alt * S.k)).setDepth(5);
+        this.ombra = this.add.image(this.cx, T.peuY, 'ombra').setScale(0.42 * T.escalaIneu).setDepth(4);
+        this.ineu = this.add.sprite(this.cx, T.peuY, 'ineu_right', quietIneu()).setOrigin(0.5, S.peus / S.alt).setScale(S.alcada / (S.alt * S.k) * T.escalaIneu).setDepth(5);
         if (this.anims.exists('aturat_right')) this.ineu.anims.play('aturat_right', true);
         this.dirVista = 1;
 
@@ -90,7 +91,8 @@ class ZonaTorre extends Phaser.Scene {
 
     alturaIneu() {
         const T = TORRE, i = Math.floor(this.p), f = this.p - i;
-        const t = Math.max(0, Math.min(1, (f - 0.7) / 0.3));
+        // Pujada contínua i suau (el graó de davant canvia a f = 0.5; abans el salt era de cop al final i tota l'escena «vibrava» i l'Ineu quedava per sota del graó)
+        const t = Math.max(0, Math.min(1, (f - 0.1) / 0.8));
         return this.cim(i) + (this.cim(i + 1) - this.cim(i)) * (t * t * (3 - 2 * t));
     }
 
@@ -221,8 +223,8 @@ class ZonaTorre extends Phaser.Scene {
             g.lineStyle(2, this.ombrejat(0x2a1608, a), 1).strokePoints(fulla, true);
             if (ambLlum) { const c = this.pt(a, T.R - 24, h + alt * 0.4); this.resplendor(c.x, c.y, 100, 0xffd38a, 0.3); }
         };
-        porta(-0.5 * dth, 0, 0.62, 128, true);
-        porta((T.graons + 1.1) * dth, this.cim(T.graons), 0.62, 128, true);
+        porta(-0.5 * dth, 0, 0.42, 250, true);
+        porta((T.graons + 1.1) * dth, this.cim(T.graons), 0.42, 250, true);
 
         // ---- finestres de sageta i torxes a la paret ----
         for (let k = 0; k < 11; k++) {
