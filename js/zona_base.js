@@ -1961,32 +1961,42 @@ class ZonaBase extends Phaser.Scene {
                 g.lineStyle(1.5, o.vora, 0.8);
                 for (let k = 1; k < 3; k++) g.lineBetween(x + w * k / 3, r * 0.6, x + w * k / 3, H - 2);
             }
-            if (o.vell) {                                                // porta vella: taulons desiguals, vetes, esquerdes, nusos, humitat i el ferro rovellat
+            // Porta vella: el detall cobreix TOT el batent, també la part de l'arc (ha de ser igual de ric a dalt que a baix). El contorn del batent és un quart
+            // de cercle de radi r amb el centre al cantó del mig de la porta (cxx): a cada x, el batent comença a topAt(x).
+            const cxx = esq ? x + w : x;
+            const topAt = px => r ? Math.max(0, r - Math.sqrt(Math.max(0, r * r - (px - cxx) * (px - cxx)))) : 0;
+            const ext = y => r && y < r ? Math.sqrt(Math.max(0, r * r - (r - y) * (r - y))) : w;           // fins on arriba el batent a l'alçada y (des del cantó del mig)
+            const xa = y => esq ? Math.max(x, x + w - ext(y)) : x, xb = y => esq ? x + w : Math.min(x + w, x + ext(y));
+            if (o.vell) {
                 const rn = n => { const q = Math.sin(n * 91.7 + (esq ? 3.1 : 7.7)) * 43758.5453; return q - Math.floor(q); };
-                const y0 = r * 0.62, NP = 4;
-                for (let k = 0; k < NP; k++) {                           // cada taulò, d'un to una mica diferent
-                    const px0 = x + w * k / NP, tone = [0x5a4630, 0x4c3a26, 0x634d34, 0x503e2a][(k + (esq ? 0 : 2)) % 4];
-                    g.fillStyle(tone, 0.55).fillRect(px0 + 1, y0, w / NP - 2, H - y0 - 2);
-                    g.fillStyle(0xffffff, 0.05).fillRect(px0 + 2, y0, 2, H - y0 - 2);
-                    g.lineStyle(2, 0x0e0804, 0.85).lineBetween(px0, y0, px0, H - 2);
+                const NP = 4;
+                for (let k = 0; k < NP; k++) {                           // cada taulò, d'un to una mica diferent, des de la vora de l'arc fins a terra
+                    const p0 = x + w * k / NP, p1 = x + w * (k + 1) / NP, tone = [0x5a4630, 0x4c3a26, 0x634d34, 0x503e2a][(k + (esq ? 0 : 2)) % 4];
+                    g.fillStyle(tone, 0.55).fillPoints([{ x: p0 + 1, y: topAt(p0 + 1) + 1 }, { x: p1 - 1, y: topAt(p1 - 1) + 1 }, { x: p1 - 1, y: H - 2 }, { x: p0 + 1, y: H - 2 }], true);
+                    g.fillStyle(0xffffff, 0.05).fillRect(p0 + 2, topAt(p0 + 2) + 2, 2, H - topAt(p0 + 2) - 4);
+                    if (k > 0) g.lineStyle(2, 0x0e0804, 0.85).lineBetween(p0, topAt(p0) + 1, p0, H - 2);
                 }
-                for (let k = 0; k < 16; k++) {                          // vetes de la fusta
-                    const gx = x + 4 + rn(k) * (w - 8), gy = y0 + 6 + rn(k + 40) * (H - y0 - 40), gl = 14 + rn(k + 80) * 30;
-                    g.lineStyle(1, k % 3 ? 0x1c1208 : 0x9a7a52, k % 3 ? 0.45 : 0.22).lineBetween(gx, gy, gx + (rn(k + 7) - 0.5) * 3, gy + gl);
+                for (let k = 0; k < 26; k++) {                          // vetes de la fusta, repartides per tot el batent
+                    const gx = x + 3 + rn(k) * (w - 6), ty = topAt(gx) + 6, gy = ty + rn(k + 40) * Math.max(4, H - ty - 40), gl = 12 + rn(k + 80) * 28;
+                    g.lineStyle(1, k % 3 ? 0x1c1208 : 0x9a7a52, k % 3 ? 0.45 : 0.22).lineBetween(gx, gy, gx + (rn(k + 7) - 0.5) * 3, Math.min(H - 4, gy + gl));
                 }
-                [[0.28, 0.5], [0.74, 0.7]].forEach(([fx, fy]) => { const kx = x + w * fx, ky = y0 + (H - y0) * fy; g.fillStyle(0x1c1208, 0.8).fillEllipse(kx, ky, 7, 11); g.lineStyle(1, 0x0e0804, 0.7).strokeEllipse(kx, ky, 12, 17); });
-                g.lineStyle(1.5, 0x0a0604, 0.9);                         // esquerdes
-                [[0.2, 0.18], [0.62, 0.36]].forEach(([fx, fy]) => { const kx = x + w * fx, ky = y0 + (H - y0) * fy; g.lineBetween(kx, ky, kx + 3, ky + 12).lineBetween(kx + 3, ky + 12, kx - 1, ky + 22).lineBetween(kx - 1, ky + 22, kx + 4, ky + 34); });
+                [[0.3, 0.2], [0.72, 0.45], [0.45, 0.78]].forEach(([fx, fy]) => { const kx = x + w * fx, ty = topAt(kx), ky = ty + (H - ty) * fy; g.fillStyle(0x1c1208, 0.8).fillEllipse(kx, ky, 7, 11); g.lineStyle(1, 0x0e0804, 0.7).strokeEllipse(kx, ky, 12, 17); });      // nusos
+                g.lineStyle(1.5, 0x0a0604, 0.9);                         // esquerdes (una a la part de l'arc i dues més avall)
+                [[0.34, 0.06], [0.2, 0.34], [0.64, 0.5]].forEach(([fx, fy]) => { const kx = x + w * fx, ty = topAt(kx) + 4, ky = ty + (H - ty) * fy; g.lineBetween(kx, ky, kx + 3, ky + 12).lineBetween(kx + 3, ky + 12, kx - 1, ky + 22).lineBetween(kx - 1, ky + 22, kx + 4, ky + 34); });
                 g.fillStyle(0x1e3a22, 0.32).fillRect(x + 2, H - 16, w - 4, 14);                     // humitat i molsa al peu
                 for (let k = 0; k < 7; k++) g.fillStyle(0x080402, 1).fillTriangle(x + 3 + k * (w - 6) / 7, H - 1, x + 3 + k * (w - 6) / 7 + 4 + rn(k) * 5, H - 1, x + 5 + k * (w - 6) / 7, H - 3 - rn(k + 3) * 5);   // vora de baix rosegada
+                for (let k = 0; k < 9; k++) { const sx = cxx + (esq ? -1 : 1) * (4 + k * 7.5), sy = topAt(sx) + 2; g.fillStyle(0x8a8a96, 0.8).fillCircle(sx, sy + 3.5, 1.4); }          // fila de claus al llarg de la vora de l'arc
             }
-            if (o.ferro) [0.22, 0.78].forEach(f => { g.lineStyle(4, 0x2a2018, 1).lineBetween(x + 3, H * f, x + w - 3, H * f); g.fillStyle(0x2a2018, 1).fillCircle(esq ? x + w - 8 : x + 8, H * f, 4); });
-            if (o.vell && o.ferro) {                                     // rovell que regalima de les bandes, reblons i frontisses amb la punta afilada
-                [0.22, 0.78].forEach(f => {
-                    for (let k = 0; k < 5; k++) { const rx = x + 8 + (w - 16) * (k + 0.5) / 5; g.fillStyle(0x7a4a22, 0.55).fillRect(rx, H * f + 3, 2, 6 + (k * 7) % 9); }
-                    for (let rx = x + 8; rx < x + w - 6; rx += 13) { g.fillStyle(0x6a6a72, 1).fillCircle(rx, H * f - 0.5, 1.8); g.fillStyle(0x000000, 0.5).fillCircle(rx + 0.6, H * f + 0.2, 0.9); }
-                    const hx = esq ? x : x + w, sg = esq ? 1 : -1;
-                    g.fillStyle(0x23232a, 1).fillPoints([{ x: hx, y: H * f - 6 }, { x: hx + sg * w * 0.62, y: H * f - 2 }, { x: hx + sg * w * 0.72, y: H * f }, { x: hx + sg * w * 0.62, y: H * f + 2 }, { x: hx, y: H * f + 6 }], true);
+            if (o.ferro && !o.vell) [0.22, 0.78].forEach(f => { g.lineStyle(4, 0x2a2018, 1).lineBetween(x + 3, H * f, x + w - 3, H * f); g.fillStyle(0x2a2018, 1).fillCircle(esq ? x + w - 8 : x + 8, H * f, 4); });
+            if (o.vell && o.ferro) {                                     // tres bandes de ferro (la de dalt, dins de l'arc), amb rovell, reblons i frontisses afilades
+                [0.17, 0.5, 0.82].forEach(f => {
+                    const yb = H * f, ba = xa(yb) + 2, bb = xb(yb) - 2;
+                    if (bb - ba < 6) return;
+                    g.fillStyle(0x1c1c22, 1).fillRect(ba, yb - 4, bb - ba, 8).lineStyle(1, 0x6a6a74, 0.55).strokeRect(ba, yb - 4, bb - ba, 8);
+                    for (let k = 0; k < 6; k++) { const rx = ba + (bb - ba) * (k + 0.5) / 6; g.fillStyle(0x7a4a22, 0.55).fillRect(rx, yb + 4, 2, 5 + (k * 7) % 9); }       // rovell que regalima
+                    for (let rx = ba + 6; rx < bb - 3; rx += 12) { g.fillStyle(0x7a7a84, 1).fillCircle(rx, yb, 1.8); g.fillStyle(0x000000, 0.5).fillCircle(rx + 0.6, yb + 0.5, 0.9); }
+                    const hx = esq ? ba - 2 : bb + 2, sg = esq ? 1 : -1, hl = w * 0.6;       // frontissa des de la vora de fora
+                    if (f !== 0.5) g.fillStyle(0x23232a, 1).fillPoints([{ x: hx, y: yb - 7 }, { x: hx + sg * hl, y: yb - 2 }, { x: hx + sg * (hl + 8), y: yb }, { x: hx + sg * hl, y: yb + 2 }, { x: hx, y: yb + 7 }], true);
                 });
             }
             if (esq && o.finestra) {                                     // finestreta enreixada
