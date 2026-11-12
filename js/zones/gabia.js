@@ -678,7 +678,7 @@ class ZonaGabia extends ZonaBase {
         this.yPont = y1 + A + 60;
         // Radi ampli i sense haver de mirar-lo: la icona es manté mentre s'és davant del pont (abans només sortia en un punt molt concret i desapareixia en seguir caminant)
         this.interactiu(bx, this.yPont, 340, DIALEGS.pontGabia, { altura: 90, senseMirada: true, actiu: () => !Estat.flag('pontGabia'), enTancar: () => Estat.posaFlag('flauta_pont') });
-        this.llocFlauta('pont', bx, this.yPont, 300, true, () => !Estat.flag('pontGabia'));
+        this.llocFlauta('pont', bx, this.yPont, 300, true, () => !Estat.flag('pontGabia'), false, ['pedres']);
 
         // ---- La gàbia gegant, al fons de la plataforma ----
         const gx = G.x, base = y0 + 260, gw = 300, gh = 420;
@@ -690,7 +690,7 @@ class ZonaGabia extends ZonaBase {
         this.gabiaGfx = [gb, gbPost, this.brillGabia].filter(Boolean);
         if (!oberta) this.colGabia = this.colisio(gx, base - 10, gw + 10, 50);
         this.interactiu(gx, base + 60, 160, DIALEGS.gabiaGran, { altura: 260, actiu: () => !Estat.flag('gabiaOberta'), enTancar: () => Estat.posaFlag('flauta_gabia') });
-        this.llocFlauta('gabia', gx, base + 60, 260, true, () => !Estat.flag('gabiaOberta'));
+        this.llocFlauta('gabia', gx, base + 60, 260, true, () => !Estat.flag('gabiaOberta'), false, ['miracle']);
 
         // Els tres capolls de boira (els nens), dins la gàbia mentre no s'obre
         this.capolls = [];

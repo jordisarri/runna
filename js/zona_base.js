@@ -1638,14 +1638,16 @@ class ZonaBase extends Phaser.Scene {
     // Llocs on una melodia pot fer efecte. Amb la flauta a la mà, l'Ineu hi pot tocar (ESPAI o el medalló de la dreta).
     // pista: cal haver llegit abans la pista del lloc (flag 'flauta_<id>', que posa el diàleg en tancar-se).
     // prioritat: la flauta passa davant de qualsevol persona que hi hagi a prop (p. ex. els pastors al voltant del foc)
-    llocFlauta(id, x, y, radi, pista = false, actiu = null, prioritat = false) {
-        this.llocsFlauta.push({ id, x, y, radi, pista, actiu, prioritat });
+    // cants: els cants (claus de MELODIES) que hi tenen efecte; si l'Ineu no en sap cap, la interfície de tocar la tarota no s'obre (ni sola ni amb ESPAI)
+    llocFlauta(id, x, y, radi, pista = false, actiu = null, prioritat = false, cants = null) {
+        this.llocsFlauta.push({ id, x, y, radi, pista, actiu, prioritat, cants });
     }
 
     // Lloc de flauta on és l'Ineu (o null)
     flautaActiva() {
         if (!Estat.te('flauta') || !this.ineu || this.sensePunts()) return null;
         return this.llocsFlauta.find(l => (!l.pista || Estat.flag('flauta_' + l.id)) && (!l.actiu || l.actiu()) &&
+            (!l.cants || l.cants.some(c => MELODIES[c] && Estat.flag(MELODIES[c].flag))) &&
             Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, l.x, l.y) <= l.radi) || null;
     }
 

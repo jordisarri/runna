@@ -515,7 +515,7 @@ class CambraMonja extends ZonaCasaBase {
             this.capoll = this.crearCapoll(this.dolora);
             this.dolora.setTint(0xd6c8ff);                                          // atrapada: es veu a través de la seda lila
             this.boiraCapoll = this.boira(this.capoll.x, this.capoll.y, this.capoll.rx * 1.4, this.capoll.ry * 1.2, 1.4);
-            this.llocFlauta('dolora', 520, 480, 300, false, () => !Estat.flag('lliureDolora'));
+            this.llocFlauta('dolora', 520, 480, 300, false, () => !Estat.flag('lliureDolora'), false, ['aurora']);
             if (Estat.flag('lliureDolora')) this.alliberada(true);
         } else if (m === 'pilaria') {                                    // refetor: taula llarga, aparador amb plats, faristol i rastells d'alls
             this.posar('taula_sopar', 400, 330, { col: { w: 360, h: 40 } });

@@ -121,6 +121,8 @@ class ZonaBoscPi extends ZonaBase {
             actiu: () => this.ineu.x > barX + 40,
             enTancar: () => {
                 if (Estat.flag('piObert') || !Estat.te('flauta')) return;
+                // només s'obre la tarota si l'Ineu sap algun cant que encara no hagi sonat davant el pi
+                if (!Object.keys(PI3_CANTS).some(n => Estat.flag(MELODIES[n].flag) && !Estat.flag(PI3_CANTS[n].flag))) return;
                 Estat.posaFlag('flauta_pi');
                 this.obrirMusica();                                               // just en acabar el text: l'Ineu no es pot moure entremig
             }

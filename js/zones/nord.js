@@ -126,7 +126,7 @@ class ZonaRuines extends ZonaBase {
             .setScale((texOmbra.customData && texOmbra.customData.escala) || 0.5).setDepth(596).setAlpha(0);
         this.puntOmbra = this.interactiu(825, 590, RADI_OBJECTE, DIALEGS.ombraMonjo, { altura: 140, actiu: () => ['fragment1', 'fragment2', 'alcoviLlegit'].every(f => Estat.flag(f)) && !Estat.flag('benedicioMonjo'), enTancar: () => { if (this.ombraCantOberta()) Estat.posaFlag('flauta_ombra'); } });
         this.ombraHaCridat = false;
-        this.llocFlauta('ombra', 825, 600, 160, true, () => this.ombraCantOberta() && !Estat.flag('benedicioMonjo'));      // la tarota només es pot tocar quan ja s'han llegit els dos pergamins i l'ombra ha demanat el cant
+        this.llocFlauta('ombra', 825, 600, 160, true, () => this.ombraCantOberta() && !Estat.flag('benedicioMonjo'), false, ['pedres']);      // la tarota només es pot tocar quan ja s'han llegit els dos pergamins i l'ombra ha demanat el cant
         this.tweens.add({ targets: this.ombraMonjo, y: 553, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
         this.ombraVista = false; this.ombraMarxa = false;
 
