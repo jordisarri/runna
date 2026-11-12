@@ -23,11 +23,11 @@ FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 
 # Excepcions per (arma, direcció): full d'origen i fotogrames propis. A la vista d'esquena ('up') de la 2a generació l'arma queda amagada darrere el cap o tallada per la vora
 # del fotograma (la branca només es veu en un fotograma, després només una corona de fulles sobre el cap): la branca fa servir la 1a generació (tiller_v1), on la branca balla
 # ben visible i sencera de dreta a esquerra (fotogrames 2: dreta, 8, 4 i 5: a l'esquerra, 3: tot a l'esquerra).
-# L'espasa 'up' (vista d'esquena) de la 2a generació no la mostrava: es va tornar a generar a AutoSprite (pack d'atac amb espasa, art/ineu/atac_arma/espasa_up_v3) i hi surt
-# a tots els fotogrames. Es trien guàrdia alçada (4), espasa enrere a la dreta (11), a dalt a l'esquerra (10), tall en diagonal avall (6) i guàrdia (12).
-ORIGEN_EXC = {('tiller', 'up'): 'tiller_v1', ('espasa', 'up'): 'espasa_up_v3'}
-FOT_EXC = {('tiller', 'up'): [2, 8, 4, 5, 3], ('espasa', 'up'): [4, 11, 10, 6, 12]}
-CENTRAL = {('espasa', 'up')}        # l'espasa sobresurt per sobre del cap: l'escala del cos es mesura només amb les columnes del cap
+# L'espasa 'up' (vista d'esquena): el full de 2a generació l'amagava i el de la 3a (espasa_up_v3) sortia amb l'hàbit massa fosc i l'espasa a l'esquena. Es fa servir un full triat
+# a mà (espasa_up_v4): només els tres primers fotogrames, els únics on surt l'espasa (0: baixa al costat, 1 i 2: alçada), i la tornada per completar els 5 del joc.
+ORIGEN_EXC = {('tiller', 'up'): 'tiller_v1', ('espasa', 'up'): 'espasa_up_v4'}
+FOT_EXC = {('tiller', 'up'): [2, 8, 4, 5, 3], ('espasa', 'up'): [0, 1, 2, 1, 0]}
+CENTRAL = set()        # direccions on l'escala del cos es mesura només amb les columnes del cap (quan l'arma sobresurt per sobre del cap)
 SRC, CEL = 384, 320         # fotograma d'origen i cel·la de sortida (més gran que abans, perquè l'arma no es talli)
 COS = 170.0                  # alçada que ha de fer el cos de l'Ineu a la cel·la (com als fulls de caminar reduïts)
 GRUIX = 1
