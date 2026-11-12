@@ -631,7 +631,7 @@ class ZonaCelles extends ZonaBase {
         this.npc('molner', 1320, 700, DIALEGS.molner);
         // Les dues Venerables Sàvies (agafades del braç, un sol gràfic): donen consells
         this.npc('venerables', 815, 700, DIALEGS.venerables, { colAmple: 100 });
-        // Nostra Senyora (oest): la Carry, vídua del campaner, que busca el seu gos Pallofa (el trobaràs a Sant Antoni)
+        // Nostra Senyora (oest): la Carry, vídua del rellotger, que busca el seu gos Pallofa (el trobaràs a Sant Antoni)
         this.npc('carry', 360, 690, DIALEGS.carry);
 
         // La Rosansa i el seu carro de verdures: només passen per les cel·les a l'Acte 3 (quan l'Ineu ja té Runna), fins que et dona la llavor i se'n va
@@ -682,7 +682,7 @@ class ZonaCelles extends ZonaBase {
     posarBoiraTiller() {
         const X = 1070, Y = 300;
         this.colBoira = this.colisio(X, Y, 360, 90);
-        this.boiraTiller = this.boiraParet(X, Y, 400, 170);
+        this.boiraTiller = this.boiraParet(X, Y, 400, 170, { dep: Y + 220 });      // per damunt de l'Ineu: la boira el cobreix quan s'hi acosta
         // El punt d'interacció és a la boira mateixa: sense el beuratge diu que hi falta alguna cosa; amb ell, l'Ineu l'aboca i la boira s'esvaeix
         this.interactiu(X, Y + 70, RADI_GRAN, DIALEGS.boiraTiller, { altura: 150, actiu: () => !!this.boiraTiller });
     }
@@ -769,7 +769,7 @@ Object.assign(DIALEGS, {
         return {
             pagines: [
                 { qui: 'Germà Francí', text: 'Ineu... Bon dia, fill. Ja et deixen créixer?' },
-                { qui: 'Germà Francí', text: 'Perdona que no camini de pressa: aquests genolls ja tenen més anys que el campanar.' },
+                { qui: 'Germà Francí', text: 'Perdona que no camini de pressa: aquests genolls ja tenen més anys que la torre del rellotge.' },
                 { qui: 'Germà Francí', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L\'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
                 { qui: 'Germà Francí', text: 'Cada setmana porto flors a l\'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
                 { qui: 'Germà Francí', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },

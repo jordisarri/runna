@@ -162,7 +162,7 @@ const CATALEG_OBJECTES = {
     flauta:           ['La tarota del Cortiner', 'Les seves notes desperten allò que dorm sota la boira, les arrels i la pedra.'],
     basto:            ['Bastó de pelegrí', 'Per caminar... i per defensar-se.'],
     basto_tiller:     ['Branca del Til·ler', 'Més lleugera i àgil que el bastó de pelegrí.'],
-    clau_campanar:    ['Clau del campanar', 'Obre la porta de la dreta del retaule, la que duu a la torre del rellotge. Era del campaner, el marit de la Carry.'],
+    clau_campanar:    ['Clau de la torre del rellotge', 'Obre la porta de la dreta del retaule, la que duu a la torre del rellotge. Era del rellotger, el marit de la Carry.'],
     pallofa:          ['El Pallofa', 'El gos de la Carry: petit, prim, borni i ple de puces. Duu-lo a casa seva.'],
     clau_sagrari:     ['Clau del sagrari', 'Petita, gairebé de joguina. Guardada a l\'ermita.'],
     aigua_sj:         ['Aigua de la Font del Bisbe', 'Aigua beneïda, clara com el vidre.'],

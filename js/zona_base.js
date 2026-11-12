@@ -1397,7 +1397,7 @@ class ZonaBase extends Phaser.Scene {
     // o.to (color de la vora), o.fosc (color del nucli), o.dens (1 = normal). Torna { dissipar(fet), objectes } (dissipar: s'esfilagarsa i s'esvaeix).
     boiraParet(x, y, ample, alt, o = {}) {
         const clar = Phaser.Display.Color.IntegerToColor(o.to || 0xc9bde6), fosc = Phaser.Display.Color.IntegerToColor(o.fosc || 0x3a2468);
-        const D = Math.min(ample * 0.5, alt * 1.2), dep = y + 70, objs = [];                       // D: diàmetre d'un núvol
+        const D = Math.min(ample * 0.5, alt * 1.2), dep = o.dep !== undefined ? o.dep : y + 70, objs = [];      // dep: profunditat (per defecte, just per davant del que hi ha al seu nivell)                       // D: diàmetre d'un núvol
         const n = Math.max(6, Math.round(ample * alt / (D * D * 0.55) * (o.dens || 1)));          // núvols per capa
         const ombra = this.add.ellipse(x, y, ample * 1.05, alt * 1.15, o.fosc || 0x3a2468, 0.28).setDepth(dep - 2);          // la foscor que fa la boira a terra
         objs.push(ombra);

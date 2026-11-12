@@ -158,9 +158,9 @@ const PROGRES = {
         { id: 'carry', marca: ['carryParlat', 'pallofaTornat', 'obj:pallofa', 'obj:clau_campanar'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('pallofaTornat'),
           pista: E => !E.flag('carryParlat') ? "La Carry, a Nostra Senyora, té cara de patir per alguna cosa."
               : E.te('pallofa') ? "El Pallofa ja és amb tu, i la Carry el deu trobar a faltar a Nostra Senyora."
-              : "El Pallofa, el gos de la Carry, passeja per Sant Antoni. La Carry, que guarda la clau del campanar, t'ho agrairia." },
+              : "El Pallofa, el gos de la Carry, passeja per Sant Antoni. La Carry, que guarda la clau de la torre del rellotge, t'ho agrairia." },
         { id: 'rellotge', marca: ['rellotgeReparat'], obert: E => E.te('clau_campanar') || E.flag('portaCampanarOberta') || E.flag('clauCampanar'), fet: E => E.flag('rellotgeReparat'),
-          pista: E => "El rellotge del campanar s'ha aturat. La clau de la Carry obre una porta del retaule; dalt la torre, uns engranatges esperen." },
+          pista: E => "El rellotge de la torre s'ha aturat. La clau de la Carry obre una porta del retaule; dalt la torre, uns engranatges esperen." },
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta cants antics." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),

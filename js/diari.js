@@ -36,7 +36,7 @@ const DIARI_PASSOS = {
 };
 const DIARI_LATERALS = {
     taverna: ["L\'Eve de la Taverna", 'ZonaTaverna', null],
-    carry: ['La Carry i el Pallofa', 'ZonaCelles', 'Clau del campanar i el relat de les desaparicions'],
+    carry: ['La Carry i el Pallofa', 'ZonaCelles', 'Clau de la torre del rellotge i el relat de les desaparicions'],
     rellotge: ['El rellotge aturat', 'ZonaGolfes', null],
     tresor: ['La pedra que escolta', 'ZonaPlaca', '+1 cor'],
     nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Llaç de la Nena (absorbeix un cop per zona)'],

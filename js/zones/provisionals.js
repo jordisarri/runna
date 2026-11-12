@@ -138,7 +138,7 @@ class ZonaEsglesia extends ZonaBase {
 
         // Retaule Major (tot l'ample de la nau, sencer) i, al davant, l'altar de pedra
         this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
-        // La porta de la dreta del peu del retaule: la mateixa del gràfic, que s'obre cap endins (amb la clau del campanar) i duu a la torre
+        // La porta de la dreta del peu del retaule: la mateixa del gràfic, que s'obre cap endins (amb la clau de la torre del rellotge) i duu a la torre
         this.portaRetaule = this.portaAnimada({ x: 872, top: 868, bottom: 1021, ample: 83, fons: 900, unic: true, arc: true, retall: this.retaule, bloq: () => !this.portaRellotge });
         this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });     // el sagrari, al mig del retaule (fragment 2)
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 }, opac: true });
@@ -148,7 +148,7 @@ class ZonaEsglesia extends ZonaBase {
         this.portaRellotge = false;
         this.obrirPortaRellotge(false);
         this.interactiu(ESG.portaDx, ESG.retY + 50, RADI_OBJECTE, () => Estat.te('clau_campanar') ? ({
-            pagines: [{ qui: 'Ineu', text: 'La clau del campanar encaixa al pany. La porta s\'obre.' }],
+            pagines: [{ qui: 'Ineu', text: 'La clau de la torre del rellotge encaixa al pany. La porta s\'obre.' }],
             enAcabar: () => { Estat.posaFlag('portaCampanarOberta'); Sfx.secret(); this.obrirPortaRellotge(false); }
         }) : ({
             pagines: [{ qui: 'Ineu', text: 'Tancada amb clau.' }]
@@ -355,11 +355,11 @@ class ZonaEsglesia extends ZonaBase {
                 camina('pare_jorda', [[965, R + 300], [700, R + 395], [705, R + 440]], 130),
                 f => z.npcMira('pare_jorda', 'ineu', f)
             ]),
-            // Només si l'Ineu va fer caminar el rellotge (missió lateral): el campanar torna a tocar les hores
+            // Només si l'Ineu va fer caminar el rellotge (missió lateral): la torre del rellotge torna a tocar les hores
             ...(Estat.flag('rellotgeReparat') ? [
                 { fer: (z, fet) => { [0, 1, 2].forEach(k => z.time.delayedCall(k * 850, () => Sfx.campana())); z.esperar(3000, fet); } },
                 foc(['pare_daimiel'], 1.9),
-                { qui: 'Pare Daimiel', text: "Sents el campanar, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu." },
+                { qui: 'Pare Daimiel', text: "Sents la torre del rellotge, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu." },
                 ...(hi('carry') ? [foc(['carry'], 1.9), { qui: 'Carry', text: "El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill." }] : [])
             ] : []),
             // L'Ineu explica al Pare Jordà què ha passat amb l'Aldreu, i el prior tanca l'epíleg

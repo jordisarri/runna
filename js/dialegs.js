@@ -19,7 +19,7 @@ function objectiuFont(n) {
 function pistaRunna(E) { return PROGRES.pistaRunna(E); }
 function pistaActual(E) { return PROGRES.pista(E); }
 
-// La clau de la porta del retaule que duu a la torre del rellotge és de la Carry (la vídua del campaner); les Venerables només t'hi envien.
+// La clau de la porta del retaule que duu a la torre del rellotge és de la Carry (la vídua del rellotger); les Venerables només t'hi envien.
 // Les partides velles que ja tenen la clau, o que ja han pujat a la torre, no la necessiten.
 function senseClauCampanar(E) { return !E.te('clau_campanar') && !E.flag('portaCampanarOberta') && !E.flag('rellotgeReparat') && !E.flag('visitada_ZonaTorre') && !E.flag('clauCampanar'); }
 
@@ -37,7 +37,7 @@ function consellVenerables(E) {
     if (senseClauCampanar(E)) {
         return {
             pagines: [
-                { qui: 'Les Venerables Sàvies', text: "Ai, fill, has vist que el rellotge del campanar s'ha aturat? La porta del retaule que duu a la torre fa anys que és tancada: des que el campaner se'n va, la clau la guarda la seva vídua, la Carry, aquí a Nostra Senyora." },
+                { qui: 'Les Venerables Sàvies', text: "Ai, fill, has vist que el rellotge de la torre s'ha aturat? La porta del retaule que duu a la torre fa anys que és tancada: des que el rellotger se'n va anar, la clau la guarda la seva vídua, la Carry, aquí a Nostra Senyora." },
                 { qui: 'Les Venerables Sàvies', text: E.flag('carryParlat')
                     ? "Pobreta, no té el cap per res: fa dues nits que busca el seu gos, el Pallofa. Si el trobes i li'l portes, segur que et dona la clau."
                     : "Parla-hi, però amb paciència: la pobreta no és la mateixa des que va pujar la boira. Potser et pot necessitar." }            ,
@@ -327,8 +327,8 @@ const DIALEGS = {
                     { qui: 'Pare Daimiel', text: 'Ineu! Quina alegria de veure\'t! Vine, que necessito veus noves per al cor.' },
                     { qui: 'Pare Daimiel', text: 'La Pianista i jo som amics de tota la vida. Ella toca com ningú, i jo dirigeixo els cants. Però la música es queda sense orgue, ja ho veus.' },
                     { qui: 'Pare Daimiel', text: 'No et preocupis: si la música s\'ha amagat, la cantarem perquè torni! Riure és la primera pregària.' },
-                    { qui: 'Pare Daimiel', text: 'Ah, i una cosa que em preocupa: el rellotge del campanar s\'ha aturat a un quart de quatre, la nit que va arribar la boira.' },
-                    { qui: 'Pare Daimiel', text: 'La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' },
+                    { qui: 'Pare Daimiel', text: 'Ah, i una cosa que em preocupa: el rellotge de la torre s\'ha aturat a un quart de quatre, la nit que va arribar la boira.' },
+                    { qui: 'Pare Daimiel', text: 'La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarda la Carry, la vídua del rellotger, a Nostra Senyora. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' },
                 ],
                 enAcabar: () => { E.posaFlag('parlatDaimiel'); E.posaFlag('rellotgeDit'); }
             };
@@ -336,7 +336,7 @@ const DIALEGS = {
         // El rellotge encara aturat: ho recorda sempre (també quan parla del sagrari)
         const textRellotge = E.te('clau_campanar') || E.flag('portaCampanarOberta')
             ? 'La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s\'ho pensarà dues vegades.'
-            : 'La porta de la dreta del retaule és tancada, fill: la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Si algú fa caminar el rellotge, potser la boira s\'ho pensarà dues vegades.';
+            : 'La porta de la dreta del retaule és tancada, fill: la clau la guarda la Carry, la vídua del rellotger, a Nostra Senyora. Si algú fa caminar el rellotge, potser la boira s\'ho pensarà dues vegades.';
         if (sagrari) return {
             pagines: [...paginesSagrari, ...(E.flag('rellotgeReparat') ? [] : [{ qui: 'Pare Daimiel', text: 'I no t\'oblidis del rellotge, Ineu. ' + textRellotge }])],
             enAcabar: () => E.posaFlag('clauSagrariDita')
@@ -344,7 +344,7 @@ const DIALEGS = {
         if (!E.flag('rellotgeReparat')) {
             return { pagines: [{ qui: 'Pare Daimiel', text: E.te('clau_campanar') || E.flag('portaCampanarOberta')
                 ? 'La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s\'ho pensarà dues vegades.'
-                : 'La porta de la dreta del retaule és tancada, fill: la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Si algú fa caminar el rellotge, potser la boira s\'ho pensarà dues vegades.' }] };
+                : 'La porta de la dreta del retaule és tancada, fill: la clau la guarda la Carry, la vídua del rellotger, a Nostra Senyora. Si algú fa caminar el rellotge, potser la boira s\'ho pensarà dues vegades.' }] };
         }
         // El rellotge camina: ho celebra i, en agraïment, explica la primera missió lateral que encara tens pendent
         const encarrec = DIALEGS.encarrecDaimiel(E);
@@ -519,8 +519,8 @@ const DIALEGS = {
 
     venerables: E => consellVenerables(E),
 
-    // La Carry, anciana molt prima i pàl·lida de Nostra Senyora, vídua del campaner: busca el seu gos, el Pallofa, que passeja per Sant Antoni
-    // un cop has parlat amb ella. En portar-li, et dona la clau del campanar i et conta com van desaparèixer l'Huri i el Fram.
+    // La Carry, anciana molt prima i pàl·lida de Nostra Senyora, vídua del rellotger: busca el seu gos, el Pallofa, que passeja per Sant Antoni
+    // un cop has parlat amb ella. En portar-li, et dona la clau de la torre del rellotge i et conta com van desaparèixer l'Huri i el Fram.
     carry: E => {
         if (E.flag('pallofaTornat')) return { pagines: [
             { qui: 'Carry', text: "El Pallofa no em deixa ni a sol ni a ombra, ara. Gràcies, Ineu. I no t'oblidis del rellotge: sense hora, tot es fa més llarg." }
@@ -534,13 +534,13 @@ const DIALEGS = {
                 { qui: 'Carry', text: "La nit següent va ser el Fram, el de la porta de l'esquerra. El Pallofa va lladrar a la boira, com si veiés algú que jo no veia, i va marxar darrere seu. Per això he tingut tanta por." }
             ];
             if (clau) pagines.push(
-                { qui: 'Carry', text: "El meu home era el campaner. Des que se'n va, la clau de la torre la guardo jo, i fa anys que ningú no hi puja. Pren-la. Aquell rellotge s'ha aturat a un quart de quatre, i ningú no s'ha adonat que el temps ja no passa." },
-                { avis: 'Has obtingut la CLAU DEL CAMPANAR.', obj: 'clau_campanar' });
+                { qui: 'Carry', text: "El meu home era el rellotger, l'encarregat del rellotge. Des que se'n va anar, la clau de la torre la guardo jo, i fa anys que ningú no hi puja. Pren-la. Aquell rellotge s'ha aturat a un quart de quatre, i ningú no s'ha adonat que el temps ja no passa." },
+                { avis: 'Has obtingut la CLAU DE LA TORRE DEL RELLOTGE.', obj: 'clau_campanar' });
             return {
                 pagines,
                 enAcabar: () => {
                     E.treu('pallofa'); E.posaFlag('pallofaTornat');
-                    if (clau) { E.dona('clau_campanar'); E.posaFlag('clauCampanar'); E.posaObjectiu("La clau del campanar obre una porta del retaule del Santuari, i la torre puja cap al rellotge."); }
+                    if (clau) { E.dona('clau_campanar'); E.posaFlag('clauCampanar'); E.posaObjectiu("La clau de la torre del rellotge obre una porta del retaule del Santuari, i la torre puja cap al rellotge."); }
                     E.desar();
                 }
             };

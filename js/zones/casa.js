@@ -847,7 +847,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
     }
 }
 
-// ---------------- LA SALA DEL RELLOTGE (el rellotge del campanar, dalt de la torre del Santuari) ----------------
+// ---------------- LA SALA DEL RELLOTGE (el rellotge de la torre, dalt de la torre del Santuari) ----------------
 // El rellotge és aturat a un quart de quatre (l'hora que va arribar la boira). Puzle: posar tres engranatges a la mida correcta
 // perquè torni a caminar. (No dona cap gra al rosari.)
 const GOLFES_SOLUCIO = [0, 1, 2];      // 0 petit, 1 mitjà, 2 gran: «el petit primer, el mitjà al mig i el gran darrere»
@@ -868,7 +868,7 @@ Object.assign(DIALEGS, {
     ] }),
 
     golfesNota: E => ({ pagines: [
-        { qui: 'Ineu', text: "«Nota del campaner. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el mitjà al mig, i el gran darrere.»" }
+        { qui: 'Ineu', text: "«Nota del rellotger. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el mitjà al mig, i el gran darrere.»" }
     ] }),
 
     golfesPendol: E => ({ pagines: [] }),
@@ -1077,7 +1077,7 @@ class ZonaGolfes extends ZonaCasaBase {
             this.add.text(x, B - 19, ['I', 'II', 'III'][i], estilText(11, '#f2e6c8', { fontStyle: 'bold' })).setOrigin(0.5).setDepth(D + 7);
         });
 
-        // Nota del campaner (la pista del puzle), clavada a la paret de l'esquerra: pergamí desplegat i gastat
+        // Nota del rellotger (la pista del puzle), clavada a la paret de l'esquerra: pergamí desplegat i gastat
         this.posar('pergami_paret', 175, 360, { fonsY: -850, escala: 1.15 });
         this.interactiu(175, GOLFES_PARET + 10, RADI_OBJECTE, DIALEGS.golfesNota, { altura: 90 });
 

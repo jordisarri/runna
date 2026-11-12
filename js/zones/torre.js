@@ -1,5 +1,5 @@
 /**
- * LA TORRE DEL CAMPANAR: sala de transició entre el Santuari i la Sala del Rellotge.
+ * LA TORRE DEL RELLOTGE: sala de transició entre el Santuari i la Sala del Rellotge.
  * Una escala de cargol vista des del centre de la torre, amb un efecte pseudo-3D a l'estil de Nebulus/Castelian:
  * l'Ineu es queda al mig de la pantalla i, a mesura que puja, la paret rodona gira al seu voltant i els graons
  * van passant per sota els seus peus. Tot es dibuixa per codi a cada fotograma (no hi ha cap imatge).
@@ -23,7 +23,7 @@ const TORRE = {
 class ZonaTorre extends Phaser.Scene {
     constructor() {
         super('ZonaTorre');
-        this.config = { nom: 'Torre del campanar', colorFons: '#0a0806', pacifica: true };
+        this.config = { nom: 'Torre del rellotge', colorFons: '#0a0806', pacifica: true };
     }
 
     init(dades) { this.entrada = (dades && dades.entrada) || 'baix'; }
@@ -77,7 +77,7 @@ class ZonaTorre extends Phaser.Scene {
 
         const ui = this.ui();
         ui.actualitzarHUD();
-        ui.mostrarZona('Torre del campanar');
+        ui.mostrarZona('Torre del rellotge');
         Estat.desar();
     }
 
