@@ -328,7 +328,7 @@ const Grafics = {
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, rutaIneu(dir, false), mida);
-            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac_${arma}_${dir}.webp?v=2611121500`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
+            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac_${arma}_${dir}.webp?v=2611121600`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };

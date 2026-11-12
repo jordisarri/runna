@@ -23,9 +23,11 @@ FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 
 # Excepcions per (arma, direcció): full d'origen i fotogrames propis. A la vista d'esquena ('up') de la 2a generació l'arma queda amagada darrere el cap o tallada per la vora
 # del fotograma (la branca només es veu en un fotograma, després només una corona de fulles sobre el cap): la branca fa servir la 1a generació (tiller_v1), on la branca balla
 # ben visible i sencera de dreta a esquerra (fotogrames 2: dreta, 8, 4 i 5: a l'esquerra, 3: tot a l'esquerra).
-# L'espasa 'up' no té cap fotograma bo: eines/fer_espasa_up.py en fabrica un (fulla redibuixada amb l'art real) a espasa_up_fix.
-ORIGEN_EXC = {('tiller', 'up'): 'tiller_v1', ('espasa', 'up'): 'espasa_up_fix'}
-FOT_EXC = {('tiller', 'up'): [2, 8, 4, 5, 3], ('espasa', 'up'): [0, 1, 2, 3, 4]}
+# L'espasa 'up' (vista d'esquena) de la 2a generació no la mostrava: es va tornar a generar a AutoSprite (pack d'atac amb espasa, art/ineu/atac_arma/espasa_up_v3) i hi surt
+# a tots els fotogrames. Es trien guàrdia alçada (4), espasa enrere a la dreta (11), a dalt a l'esquerra (10), tall en diagonal avall (6) i guàrdia (12).
+ORIGEN_EXC = {('tiller', 'up'): 'tiller_v1', ('espasa', 'up'): 'espasa_up_v3'}
+FOT_EXC = {('tiller', 'up'): [2, 8, 4, 5, 3], ('espasa', 'up'): [4, 11, 10, 6, 12]}
+CENTRAL = {('espasa', 'up')}        # l'espasa sobresurt per sobre del cap: l'escala del cos es mesura només amb les columnes del cap
 SRC, CEL = 384, 320         # fotograma d'origen i cel·la de sortida (més gran que abans, perquè l'arma no es talli)
 COS = 170.0                  # alçada que ha de fer el cos de l'Ineu a la cel·la (com als fulls de caminar reduïts)
 GRUIX = 1
@@ -71,12 +73,16 @@ def centre_peus(fot, ref=None, antic=False):
     else: g = max(grups, key=lambda g: banda[:, g[0]:g[1] + 1].sum())
     return float(g[0] + g[1]) / 2
 
-def escala(im, arma):
+def escala(im, arma, central=False):
     # Alçada del cos = dels peus (mediana de la fila més baixa) al cap (mediana de la fila més alta dels fotogrames finals, on l'arma és a l'alçada de les mans o avall).
     # Cada generació de AutoSprite fa el personatge d'una mida diferent (l'espasa, ~310 px; el bastó i la branca, 250-270), per això es mesura a cada full.
     tops = []
     for i in (12, 13, 14, 15):
-        ys, _ = np.where(np.array(fotograma(im, i).split()[3]) > 24); tops.append(ys.min())
+        al = np.array(fotograma(im, i).split()[3]) > 24
+        if central:
+            cx = np.where(al[-60:].any(axis=0))[0]; c = (cx.min() + cx.max()) // 2        # centre dels peus
+            al = al[:, max(0, c - 40):c + 40]
+        ys, _ = np.where(al); tops.append(ys.min())
     return COS / (peus(im, range(16)) - float(np.median(tops)))
 
 def main():
@@ -86,7 +92,7 @@ def main():
             if filtre and f'{arma}:{d}' not in filtre: continue
             fots = FOT_EXC.get((arma, d), fots0)
             im = Image.open(ORIGEN / ORIGEN_EXC.get((arma, d), arma) / f'{d}.png').convert('RGBA')
-            pf = peus(im, range(16)); K = escala(im, arma)
+            pf = peus(im, range(16)); K = escala(im, arma, (arma, d) in CENTRAL)
             n = len(fots); cols = 4; files = (n + cols - 1) // cols
             out = Image.new('RGBA', (cols * CEL, files * CEL), (0, 0, 0, 0))
             # només a la branca en diagonal avall: la fulla baixa fins als peus (a les altres, el càlcul antic ja anava bé)
