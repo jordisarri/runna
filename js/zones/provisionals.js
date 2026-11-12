@@ -97,6 +97,7 @@ class ZonaEsglesia extends ZonaBase {
 
     construir() {
         const A = ESG.alcada;
+        this.yGraons = undefined;
         this.epileg = false; this.epilegEngegat = false;          // (l'escena es reaprofita: l'epíleg d'una altra partida no compta)
         // Terra i murs
         this.terra('rajola', 240, 0, 800, A, -1100);
@@ -216,12 +217,17 @@ class ZonaEsglesia extends ZonaBase {
 
     actualitzar(temps) {
         this.obrirPortaRellotge(true);
-        // Als dos graons del presbiteri l'Ineu va més lent i a batzegades, com quan s'hi puja o se'n baixa (la cadència d'un graó cada ~380 ms): dona sensació d'escala
+        // Als dos graons del presbiteri l'Ineu els puja i els baixa un a un: a cada contrapetja va una mica més lent i sona un tap; a la resta, gairebé normal.
         const I = this.ineu, ySt = ESG.retY + 300;
-        if (I && I.body && !this.cinema && !this.camCinema && I.x > 240 && I.x < 1040 && I.y > ySt - 6 && I.y < ySt + 100) {
-            const k = 0.38 + 0.42 * Math.abs(Math.sin((temps || this.time.now) / 380 * Math.PI / 2 * 2));
+        const alsGraons = !!(I && I.body && !this.cinema && !this.camCinema && I.x > 240 && I.x < 1040 && I.y > ySt - 6 && I.y < ySt + 100);
+        const BANDES = [[ySt + 58, ySt + 84], [ySt + 20, ySt + 44]];          // les dues contrapetges: la de baix i la de dalt
+        if (alsGraons) {
+            let k = 0.85;
+            BANDES.forEach(([ya, yb]) => { if (I.y > ya && I.y < yb) k = 0.55; });
             I.body.velocity.scale(k);
-        }
+            if (this.yGraons !== undefined) BANDES.forEach(([ya, yb]) => { const amunt = I.y < this.yGraons, vora = amunt ? yb : ya; if ((this.yGraons - vora) * (I.y - vora) < 0) Sfx.escala(amunt); });          // un tap per graó, just quan hi trepitja (la vora per on hi entra)
+            this.yGraons = I.y;
+        } else this.yGraons = undefined;
         if (this.epileg && !this.epilegEngegat) {
             this.epilegEngegat = true;
             if (this.ineu) this.posarDireccio('avall', false);
