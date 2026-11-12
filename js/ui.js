@@ -90,6 +90,8 @@ function retratDe(scene, qui) {
     let key = RETRATS[qui];
     if (!key) return null;
     if (key === 'mandu' && Estat.dades && Estat.flag('manduNinaTrencada') && !Estat.flag('epilegFet')) key = 'mandu_trencada';      // enfadada, fins que el Fram li cus el cap a la nina
+    // L'Home de la Gàbia: en caure (ocellaireDerrotat), el retrat derrotat, si hi és (si no, es queda el de sempre)
+    if (key === 'ocellaire' && window.RETRAT_OCELLAIRE_DERROTAT && scene.textures.exists('retratimg_ocellaire_derrotat') && !Grafics.faltants.includes('retratimg_ocellaire_derrotat')) key = 'ocellaire_derrotat';
     const clau = 'retrat_' + key;
     if (scene.textures.exists(clau)) return clau;
     // Retrat dibuixat de tres quarts (assets/retrats/<clau>.webp): es posa sobre el fons de pergamí, amb el tall d'espatlles a baix

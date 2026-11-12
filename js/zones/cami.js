@@ -455,17 +455,27 @@ class ZonaJardi extends ZonaBase {
             if (intents < 20) this.time.delayedCall(700, () => this.escenaLlosaRunna(intents + 1));
             return;
         }
-        const b = this.brillLlosa;
-        if (b) {                                                              // un cop de llum: la llosa s'encén de debò
+        const encenLlosa = () => {
+            const b = this.brillLlosa;
+            if (!b) return;                                                   // un cop de llum: la llosa s'encén de debò
             this.tweens.killTweensOf(b.llum);
             b.llum.setAlpha(0.2);
             this.tweens.add({ targets: b.llum, alpha: 1, scale: 1.5, duration: 700, yoyo: true, ease: 'Sine.easeInOut', onComplete: () => this.tweens.add({ targets: [b.g, b.llum], alpha: { from: 0.35, to: 1 }, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' }) });
             Sfx.to(880, 1320, 0.5, 'sine', 0.1);
-        }
-        this.puntActiu = this.isilder.punt;
-        this.dialegDePunt = true;                                             // la càmera enquadra els dos
-        this.time.delayedCall(800, () => {
-            ui.obrirDialeg(DIALEGS.isilderRunna(Estat), () => { this.dialegDePunt = false; Estat.desar(); });
+        };
+        // L'Ineu pot entrar al jardí molt lluny (per l'Hostatgeria o la Taverna): la càmera de diàleg normal no hi cabria amb l'Isílder, i la llosa no hi és mai. Per això l'escena
+        // enquadra expressament l'Isílder i la llosa (el que s'ha de veure), amb la llosa encesa, i en acabar torna a l'Ineu.
+        const I = this.isilder, { x: LX, y: LY } = this.llosaPos;
+        this.puntActiu = I.punt;
+        this.dialegDePunt = false;
+        this.enquadrar((I.x + LX) / 2, (I.y + LY) / 2 - 20, 0.95, 1000, () => {
+            encenLlosa();
+            this.time.delayedCall(1100, () => {
+                ui.obrirDialeg(DIALEGS.isilderRunna(Estat), () => {
+                    Estat.desar();
+                    this.alliberarCamera(800);
+                });
+            });
         });
     }
 

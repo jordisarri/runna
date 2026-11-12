@@ -96,7 +96,7 @@ class EscenaCredits extends Phaser.Scene {
     }
 
     potSortir() {
-        const t = this.add.text(AMPLE / 2, ALT - 90, 'Toca per continuar', estilText(22, '#9a8ab0', { fontStyle: 'italic' })).setOrigin(0.5);
+        const t = this.add.text(AMPLE / 2, ALT - 90, 'Toca per tornar al principi', estilText(22, '#9a8ab0', { fontStyle: 'italic' })).setOrigin(0.5);
         this.tweens.add({ targets: t, alpha: 0.3, yoyo: true, repeat: -1, duration: 800 });
     }
 
@@ -104,6 +104,14 @@ class EscenaCredits extends Phaser.Scene {
         if (this.sortint) return;
         this.sortint = true;
         this.cameras.main.fadeOut(900, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => Joc.continuar(this));
+        // Final del joc: no es continua a l'església. Es tornen a començar les coses des del principi (portada, intro i pròleg), amb una partida nova i sense res desat.
+        this.cameras.main.once('camerafadeoutcomplete', () => {
+            Estat.esborrar();
+            Estat.nova();
+            Joc.aturarTot(this);
+            const m = this.game.scene;
+            if (m.isActive('UI')) m.stop('UI');
+            m.start('Titol', { mode: 'intro' });
+        });
     }
 }

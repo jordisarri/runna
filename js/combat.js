@@ -20,7 +20,7 @@ const AJUST_OCELLAIRE = {
     tancament: 450,                           // ms que triga a tancar-se la pausa després del tercer cop
     ocellsRetard: 600, ocellsRetardPrimera: 1200,   // els ocells no surten fins que ha passat aquest temps des que cau
     ocellsEspai: { 1: 300, 2: 200, 3: 350 },   // ms entre ocells (a la fase 3, entre parelles)
-    extraCap: 75, extraCapCansat: 110,        // abast extra cap amunt contra el cap (fora de la pausa / durant la pausa)
+    extraCap: 40, extraCapCansat: 25,         // abast extra cap amunt contra el cap (fora de la pausa / durant la pausa): abans 75 i 110, i es picava des de més de 300 px
     focDistMin: 180                           // el foc a terra cau a aquesta distància mínima del cos
 };
 
@@ -442,8 +442,8 @@ const ENEMICS = {
         // (tot a escala K_OCELLAIRE = 1,4: radi 38 -> 53, cos [58,26] -> [81,36], cap.r 48 -> 67, genolls 54 -> 76; el dibuix s'escala amb def.k)
         k: K_OCELLAIRE,
         tex: 'ocellaire', vida: 54, vel: 70, mal: 1, radi: Math.round(38 * K_OCELLAIRE), cos: [Math.round(58 * K_OCELLAIRE), Math.round(26 * K_OCELLAIRE)], ombra: 0.8 * K_OCELLAIRE,
-        cap: { y: 0.19, r: Math.round(48 * K_OCELLAIRE), nomesCansat: true },          // el punt feble: el cap (al 19% del dibuix des de dalt), i només quan està cansat
-        capTex: { ocellaire_genolls: { x: -0.09, y: 0.55, r: Math.round(54 * K_OCELLAIRE), nomesCansat: true } },   // de genolls, el cap és més avall i decantat
+        cap: { y: 0.19, r: Math.round(34 * K_OCELLAIRE), nomesCansat: true },          // el punt feble: el cap (al 19% del dibuix des de dalt), i només quan està cansat
+        capTex: { ocellaire_genolls: { x: -0.09, y: 0.55, r: Math.round(33 * K_OCELLAIRE), nomesCansat: true } },   // de genolls, el cap és més avall i decantat
         copsPausa: 3,                                        // tres cops per pausa; al tercer, la pausa es tanca i s'aixeca d'una revolada i t'empeny
         arma: 'runna',                                       // només Runna li fa mal
         robust: true, barra: true,
@@ -1162,7 +1162,6 @@ Object.assign(ZonaBase.prototype, {
         if (e.estat === 'cansat') {
             const cap = this.puntsCop(e)[0];
             if (e.copsRebuts < e.def.copsPausa) {
-                this.flotant(cap.x, cap.y - cap.r - 40, 'Al cap!', '#ffe9a0', 26);
                 if (e.finestra && e.finestra.fletxa) this.tweens.add({ targets: e.finestra.fletxa, scale: 1.4, yoyo: true, duration: 120 });
             }
             return;
@@ -1172,7 +1171,7 @@ Object.assign(ZonaBase.prototype, {
         const n = this.rebotsFora = (this.rebotsFora || 0) + 1, fets = this.pensamentsFets || 0;
         if (fets < 2 && n >= (fets === 0 ? 1 : 3) && ara - (this.ultimPensament || -1e9) >= 8000) {
             this.pensamentsFets = fets + 1; this.ultimPensament = ara;
-            this.pensamentIneu('(Només el cap, i només quan baixa el bàcul.)');
+            // (sense pensament flotant: era una sobreimpressió més)
         }
     },
     // El pensament de l'Ineu: text cursiu sobre el seu cap, sense quadre ni pausa

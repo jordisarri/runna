@@ -112,6 +112,7 @@ const CATALEG = [
     { key: 'taula_pp',  file: null,  amplada: 240, provisional: (c, w) => dibuixarTaulaPP(c, w) },
     { key: 'alzina_buida', file: 'assets/natura/alzina_buida.webp', amplada: 520, provisional: (c, w) => dibuixarAlzinaBuida(c, w) },
     { key: 'llosa',     file: null,     amplada: 90,  provisional: (c, w) => dibuixarLlosa(c, w) },
+    { key: 'corb_columna', file: 'assets/objectes/corb_columna.webp', amplada: 92, cru: true },      // corb de pedra sobre una columna (Sala de la Gàbia, dalt de les escales); mira cap a l'esquerra: es gira per codi
 
     // ---- Enemics ----
     { key: 'escolopendra', file: null, amplada: 76, fotogrames: 8, provisional: (c, w) => dibuixarEscolopendra(c, w, 8) },   // full de 8 fotogrames (caminar)
@@ -210,7 +211,7 @@ const CATALEG = [
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
 ['ineu', 'pare_jorda', 'germa_aldreu', 'germa_franci', 'pare_daimiel', 'pare_alcovi', 'eve', 'jusef', 'pomers', 'julius', 'galf', 'isilder', 'pianista', 'joaneta', 'iscu',
- 'nena_trenes', 'venerables', 'carry', 'carmelia', 'pilaria', 'dolora', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'follet_carro', 'georgi_caseta', 'rosansa', 'meus', 'molner', 'ombra_monjo', 'mandu', 'mandu_trencada', 'nen_uri', 'nen_flam', 'nen_sardin']
+ 'nena_trenes', 'venerables', 'carry', 'carmelia', 'pilaria', 'dolora', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'follet_carro', 'georgi_caseta', 'rosansa', 'meus', 'molner', 'ombra_monjo', 'mandu', 'mandu_trencada', 'nen_uri', 'nen_flam', 'nen_sardin', 'ocellaire', 'ocellaire_derrotat']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
 /**
@@ -325,6 +326,8 @@ const Grafics = {
         scene.load.spritesheet('germa_aldreu_ne', 'assets/personatges/germa_aldreu_ne.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('jusef_camina', 'assets/personatges/jusef_camina.webp', { frameWidth: 190, frameHeight: 300 });
         scene.load.spritesheet('isilder_camina', 'assets/personatges/isilder_camina.webp', { frameWidth: 190, frameHeight: 285 });
+        scene.load.spritesheet('venerables_camina', 'assets/personatges/venerables_camina.webp', { frameWidth: 266, frameHeight: 267 });       // (fer_camina_npc.py: les dues velletes agafades del braç)
+        scene.load.spritesheet('mandu_camina', 'assets/personatges/mandu_camina.webp', { frameWidth: 134, frameHeight: 236 });
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, rutaIneu(dir, false), mida);
@@ -585,6 +588,12 @@ const Grafics = {
         }
         if (!scene.anims.exists('jusef_camina') && scene.textures.exists('jusef_camina')) {
             scene.anims.create({ key: 'jusef_camina', frames: scene.anims.generateFrameNumbers('jusef_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
+        }
+        if (!scene.anims.exists('venerables_camina') && scene.textures.exists('venerables_camina')) {
+            scene.anims.create({ key: 'venerables_camina', frames: scene.anims.generateFrameNumbers('venerables_camina', { start: 0, end: 7 }), frameRate: 8, repeat: -1 });
+        }
+        if (!scene.anims.exists('mandu_camina') && scene.textures.exists('mandu_camina')) {
+            scene.anims.create({ key: 'mandu_camina', frames: scene.anims.generateFrameNumbers('mandu_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
         }
         if (!scene.anims.exists('isilder_camina') && scene.textures.exists('isilder_camina')) {
             scene.anims.create({ key: 'isilder_camina', frames: scene.anims.generateFrameNumbers('isilder_camina', { start: 0, end: 15 }), frameRate: 12, repeat: -1 });

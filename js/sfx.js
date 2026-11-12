@@ -306,11 +306,59 @@ const Sfx = {
         this.to(fort ? 95 : 80, 38, fort ? 0.45 : 0.32, 'sine', fort ? 0.55 : 0.4);
         this.xiu(0.12, fort ? 0.2 : 0.12, 'lowpass', 600, 120);
     },
-    rugit() {                    // l'Ocellaire crida: veu greu i un xiscle d'ocell a sobre
+    // Veu greu que s'obre i es tanca (sense xiscle agut): dues serres desafinades que baixen, per un passabaixos que s'obre, amb vibrato lent i un soroll de gola
+    veuGreu(f1, f2, dur, vol, retard = 0) {
+        const c = this.ctx, t = c.currentTime + retard;
+        const fil = c.createBiquadFilter(), g = c.createGain(), lfo = c.createOscillator(), lg = c.createGain();
+        fil.type = 'lowpass'; fil.Q.value = 3;
+        fil.frequency.setValueAtTime(260, t); fil.frequency.exponentialRampToValueAtTime(900, t + dur * 0.35); fil.frequency.exponentialRampToValueAtTime(220, t + dur);
+        g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(vol, t + dur * 0.18); g.gain.setValueAtTime(vol, t + dur * 0.55); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        lfo.frequency.value = 5.5; lg.gain.value = f1 * 0.012; lfo.connect(lg);
+        [1, 1.012].forEach(det => {
+            const o = c.createOscillator(); o.type = 'sawtooth';
+            o.frequency.setValueAtTime(f1 * det, t); o.frequency.exponentialRampToValueAtTime(Math.max(20, f2 * det), t + dur);
+            lg.connect(o.frequency); o.connect(fil); o.start(t); o.stop(t + dur + 0.05);
+        });
+        fil.connect(g); g.connect(this.mestre); lfo.start(t); lfo.stop(t + dur + 0.05);
+    },
+    rugit() {                    // l'Ocellaire crida (canvis de fase): veu greu i un buf de gola, sense xiscles aguts
         if (!this.ok('rugit', 600)) return;
-        this.to(140, 60, 1.1, 'sawtooth', 0.22); this.to(146, 55, 1.1, 'square', 0.08);
-        this.xiu(1.0, 0.25, 'bandpass', 900, 200, 1.5);
-        this.to(2200, 3400, 0.5, 'sawtooth', 0.04, 0.2);
+        this.veuGreu(120, 52, 1.5, 0.26);
+        this.to(62, 34, 1.3, 'sine', 0.3);
+        this.xiu(1.1, 0.16, 'lowpass', 500, 90, 1, 0.2);
+    },
+    // Presentació de l'Home de la Gàbia (surt el rètol): cop sec de timbal gran, enfonsament de sub-greus, un acord menor de metalls (Re-La-Re-Fa) que s'obre i s'allarga, una campana
+    // greu de metall (harmònics no enters) i una cua de soroll que s'allunya. Una sola durada de ~4 s, grandiosa i fosca.
+    titolBoss() {
+        if (!this.ok('titolBoss', 2000)) return;
+        const c = this.ctx, t = c.currentTime;
+        // 1. L'impacte: el cop del timbal (sinus que cau) i el soroll del pegat, filtrat
+        this.to(120, 30, 1.6, 'sine', 0.7);
+        this.to(60, 24, 2.4, 'sine', 0.45, 0.02);
+        const imp = c.createBufferSource(); imp.buffer = this.soroll; imp.loop = true;
+        const fi = c.createBiquadFilter(), gi = c.createGain();
+        fi.type = 'lowpass'; fi.frequency.setValueAtTime(1800, t); fi.frequency.exponentialRampToValueAtTime(90, t + 1.2);
+        gi.gain.setValueAtTime(0.0001, t); gi.gain.linearRampToValueAtTime(0.5, t + 0.01); gi.gain.exponentialRampToValueAtTime(0.0001, t + 1.3);
+        imp.connect(fi); fi.connect(gi); gi.connect(this.mestre); imp.start(t); imp.stop(t + 1.4);
+        // 2. L'acord de metalls: serres desafinades per un passabaixos que s'obre (swell) i es tanca
+        const fb = c.createBiquadFilter(), gb = c.createGain();
+        fb.type = 'lowpass'; fb.Q.value = 1.2;
+        fb.frequency.setValueAtTime(180, t + 0.05); fb.frequency.exponentialRampToValueAtTime(1500, t + 1.2); fb.frequency.exponentialRampToValueAtTime(260, t + 3.8);
+        gb.gain.setValueAtTime(0.0001, t + 0.05); gb.gain.linearRampToValueAtTime(0.2, t + 0.9); gb.gain.setValueAtTime(0.2, t + 1.7); gb.gain.exponentialRampToValueAtTime(0.0001, t + 3.9);
+        [73.4, 110, 146.8, 174.6, 220].forEach((f, k) => [0.994, 1.006].forEach(det => {
+            const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f * det;
+            o.connect(fb); o.start(t + 0.05); o.stop(t + 4);
+        }));
+        fb.connect(gb); gb.connect(this.mestre);
+        // 3. La campana: parcials no enters que s'apaguen a poc a poc
+        [1, 2.76, 5.4, 8.93].forEach((m, k) => {
+            const o = c.createOscillator(), g = c.createGain(); o.type = 'sine'; o.frequency.value = 98 * m;
+            g.gain.setValueAtTime(0.0001, t + 0.03); g.gain.linearRampToValueAtTime(0.14 / (1 + k * 0.9), t + 0.06); g.gain.exponentialRampToValueAtTime(0.0001, t + 4.2 - k * 0.5);
+            o.connect(g); g.connect(this.mestre); o.start(t + 0.03); o.stop(t + 4.3);
+        });
+        // 4. Veu greu que respon (el Mestre) i la cua de soroll que s'allunya
+        this.veuGreu(98, 49, 2.2, 0.2, 0.5);
+        this.xiu(2.6, 0.12, 'lowpass', 700, 80, 1, 0.4);
     },
     // Llenguatge sonor de la pausa de l'Ocellaire (design/lluita_final_combat.md § 4-5)
     esgotat() {                  // s'aclofa de genolls: veu greu que cau

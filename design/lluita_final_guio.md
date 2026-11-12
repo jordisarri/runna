@@ -111,7 +111,7 @@ Pàgines marcades amb el pla [Pxx].
 3. `[P03]` Ineu: «Aguanteu. Ja sóc aquí.»
 4. `[P04]` Aldreu: «Silenci! Aquí no s'alça la veu, monjo. El Mestre dorm, i jo vetllo el seu son.»
 5. `[P05]` Ineu: «Germà Aldreu... sóc jo. Baixeu el bastó, que els nens no són seus.»
-6. `[P04]` Aldreu: «Seus, no. Del Mestre. Cada riure que li duc em diu «bon xicot». ¿Saps què vol dir que algú et digui pel nom?»
+6. `[P04]` Aldreu: «Meus, no. Del Mestre. Cada riure que li duc em diu «bon xicot, Aldreu». ¿Saps què vol dir que algú et digui pel nom?»
 7. `[P06 fer: pastor_enfadat]` Aldreu: «Tu no ho saps! Per a tu sempre hi ha hagut algú que et mirés!»
 8. `[P05]` Ineu: «Això no és mirar algú, Germà. És tancar-lo.»
 9. `[P06]` Aldreu: «Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!»

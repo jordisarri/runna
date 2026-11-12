@@ -751,6 +751,7 @@ class ZonaBase extends Phaser.Scene {
     }
     // Torna al dibuix d'idle (després d'una caminada o d'un canvi de dibuix)
     tornaIdleNpc(img, key) {
+        if (img.clauPastor) { img.setTexture(img.clauPastor); return; }          // (l'Aldreu convertit en Pastor de la Boira: no torna mai al dibuix de monjo mentre dura la conversió)
         if (img.idleClau && this.textures.exists(key + '_idle')) { img.setTexture(key + '_idle', 0); img.play('idle_' + key, true); }
         else img.setTexture(key);
     }
@@ -797,7 +798,8 @@ class ZonaBase extends Phaser.Scene {
         const dist = Phaser.Math.Distance.Between(img.x, img.y, x, y), dur = Math.max(150, dist / vel * 1000);
         const dx = x - img.x, dy = y - img.y;
         let animClau = null;
-        if (key === 'germa_aldreu' && dy < -15 && Math.abs(dx) > 10 && this.anims.exists('germa_aldreu_ne')) {
+        if (img.clauPastor) { if (Math.abs(dx) > 4) img.setFlipX(dx < 0); }       // el Pastor de la Boira llisca amb el seu dibuix (l'animació de caminar és la del monjo)
+        else if (key === 'germa_aldreu' && dy < -15 && Math.abs(dx) > 10 && this.anims.exists('germa_aldreu_ne')) {
             animClau = 'germa_aldreu_ne';
             img.setFlipX(dx < 0);
         } else {

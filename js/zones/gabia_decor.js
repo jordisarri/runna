@@ -236,21 +236,17 @@ Object.assign(ZonaGabia.prototype, {
             this.colisio(x, y - 8, 50, 20);
             this.focSala(x, y - 62, 1.25, y);
         });
-        // Dos corbs de pedra dalt de les escales, vigilant el pont
+        // Dos corbs de pedra sobre una columna, dalt de les escales, vigilant el pont: el mateix dibuix (art/objectes/corb_columna.png, que mira cap a l'esquerra), girat al de l'esquerra
+        // perquè tots dos mirin cap al mig
         [[ex0 - 72, -1], [ex1 + 72, 1]].forEach(([x, sd]) => {
-            const y = 1462, c = this.add.graphics().setDepth(y);
-            c.fillStyle(0x000000, 0.3).fillEllipse(x, y + 4, 70, 18);
-            c.fillStyle(0x3a3248, 1).fillRect(x - 28, y - 40, 56, 40).lineStyle(2, 0x14101a, 1).strokeRect(x - 28, y - 40, 56, 40);
-            c.fillStyle(0x4a4258, 1).fillRect(x - 32, y - 46, 64, 8).strokeRect(x - 32, y - 46, 64, 8);
-            const cy = y - 46;
-            c.fillStyle(0x5a5468, 1).fillEllipse(x, cy - 34, 44, 62).fillCircle(x - sd * 14, cy - 70, 15);
-            c.fillStyle(0x4a4458, 1).fillTriangle(x + sd * 4, cy - 10, x + sd * 30, cy, x + sd * 10, cy - 50);
-            c.fillStyle(0x6a6478, 1).fillTriangle(x - sd * 24, cy - 74, x - sd * 46, cy - 66, x - sd * 24, cy - 64);
-            c.lineStyle(2.5, 0x14101a, 1).strokeEllipse(x, cy - 34, 44, 62).strokeCircle(x - sd * 14, cy - 70, 15);
-            c.lineStyle(2, 0x2a2434, 1).lineBetween(x - 6, cy - 46, x + 10, cy - 14).lineBetween(x - 12, cy - 40, x + 4, cy - 10);
-            const u = this.add.circle(x - sd * 18, cy - 73, 3, 0xd8a8ff, 0.9).setBlendMode('ADD').setDepth(90001);
+            const y = 1540;          // la base de la columna més avall (a la vora de baix del replà de les escales)
+            this.add.ellipse(x, y + 2, 100, 22, 0x000000, 0.3).setDepth(y - 1);
+            const c = this.posar('corb_columna', x, y, {});
+            c.setFlipX(sd < 0);
+            // L'ull (a 36,2% de l'ample i 3,9% de l'alçada del dibuix) s'encén amb una llum lila que batega
+            const u = this.add.circle(x - sd * 12.5, y - 282, 4, 0xd8a8ff, 0.9).setBlendMode('ADD').setDepth(90001);
             this.tweens.add({ targets: u, alpha: 0.35, yoyo: true, repeat: -1, duration: 1100 });
-            this.colisio(x, y - 10, 60, 24);
+            this.colisio(x, y - 10, 70, 24);
         });
         // La paret de baix, amb la porta per on s'entra (es dibuixa davant de tot)
         const pb = this.add.graphics().setDepth(H + 40);
