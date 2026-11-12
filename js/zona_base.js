@@ -1961,7 +1961,9 @@ class ZonaBase extends Phaser.Scene {
     //       fletxa), color, panell, vora, finestra, ferro }
     // Amb retall (la imatge de l'edifici ja posada), el batent és el tros del mateix gràfic: la porta oberta és la que es veu dibuixada.
     portaAnimada(o) {
-        const DX = o.x, DT = o.top, DB = o.bottom, DW = o.ample, H = DB - DT, w = o.unic ? DW : DW / 2, r = o.arc ? DW / 2 : 0, Z = o.fons;
+        // Z: profunditat de la porta. Ha de ser PER DAMUNT de qualsevol cosa que hi passi per darrere: l'Ineu és «dins» la porta mentre la seva y és menor que la base (bottom) i
+        // llavors la porta (el batent i l'interior fosc) el tapa, com en travessar un portal. Per això sempre és, com a mínim, just sota la base. (senseAjust: es respecta fons tal qual.)
+        const DX = o.x, DT = o.top, DB = o.bottom, DW = o.ample, H = DB - DT, w = o.unic ? DW : DW / 2, r = o.arc ? DW / 2 : 0, Z = o.senseAjust ? o.fons : Math.max(o.fons, DB + 2);
         const forma = (x0, ample, alt, arc) => {                       // contorn d'un rectangle amb (opcionalment) la part de dalt en arc
             if (!arc) return [{ x: x0, y: alt }, { x: x0, y: 0 }, { x: x0 + ample, y: 0 }, { x: x0 + ample, y: alt }];
             const pts = [{ x: x0, y: alt }], fl = arc === true ? ample / 2 : arc;
@@ -2357,6 +2359,7 @@ class ZonaBase extends Phaser.Scene {
             onUpdate: tw => {
                 const f = tw.getValue();
                 I.setPosition(x0 + v[0] * d * f, y0 + v[1] * d * f);
+                I.setDepth(I.y);                                    // la profunditat segueix la y: en entrar per una porta, la porta (que és més amunt en profunditat) el tapa
                 this.ombraIneu.setPosition(I.x, I.y);
                 if (foscor) { const c = Math.round(255 * (1 - 0.65 * f)); I.setTint(Phaser.Display.Color.GetColor(c, c, c)); }
             },
