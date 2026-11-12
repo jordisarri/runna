@@ -1,29 +1,34 @@
 /**
  * MÚSICA I MELODIES
  * La Pianista ensenya cants a l'Ineu (lliçó tipus "escolta i repeteix"). Un cop après, es poden
- * tocar amb la tarota (el medalló de la dreta o ESPAI als llocs on té efecte): 1, 2 i 3. Si estàs al lloc adequat, la melodia fa efecte
+ * tocar amb la tarota (el medalló de la dreta o ESPAI als llocs on té efecte): 1 a 5 (Do Re Mi Fa Sol). Si estàs al lloc adequat, la melodia fa efecte
  * (la zona implementa enMelodia(nom) i retorna true si l'ha gestionada).
  */
 const MELODIES = {
-    aurora:  { nom: 'Cant de l\'Aurora',  notes: [1, 2, 3],       flag: 'cantAurora', bpm: 108 },
-    pedres:  { nom: 'Cant de Vespres', notes: [3, 1, 2, 1],    flag: 'cantPedres', bpm: 80 },
-    miracle: { nom: 'Cant del Miracle',   notes: [1, 2, 2, 2, 3, 1], flag: 'cantMiracle', bpm: 92 }
+    // La tarota té cinc notes (1 Do, 2 Re, 3 Mi, 4 Fa, 5 Sol). Tres cants, de més fàcil a més difícil:
+    //  · Aurora: Do Re Mi, tres notes en ordre ascendent (el primer que s'ensenya);
+    //  · Vespres: Sol Fa Mi Do, quatre notes que baixen com el sol;
+    //  · Miracle: Do Mi Fa Sol Mi, l'obertura de la fanfàrria del joc (el leitmotiv).
+    aurora:  { nom: 'Cant de l\'Aurora',  notes: [1, 2, 3],          flag: 'cantAurora', bpm: 108 },
+    pedres:  { nom: 'Cant de Vespres',    notes: [5, 4, 3, 1],       flag: 'cantPedres', bpm: 80 },
+    miracle: { nom: 'Cant del Miracle',   notes: [1, 3, 4, 5, 3],    flag: 'cantMiracle', bpm: 96 }
 };
+const NOM_NOTA = ['', 'Do', 'Re', 'Mi', 'Fa', 'Sol'];
 
 // LA PEÇA COMPLETA de cada cant: el jugador toca només la «clau» (les notes de dalt) i la tarota segueix tota sola amb la resta, mentre l'Ineu toca en
 // primer pla; l'efecte del lloc arriba en acabar (només si el cant té efecte allà: zona.teEfecteMelodia). [nota, durada en temps]. Les notes
-// que no són dels tres botons (Re, Fa, La, Si, Do agut, Sol/La greus) només les toca la tarota.
+// que no són dels cinc botons (La, Si, Do agut, Sol/La greus) només les toca la tarota (i il·luminen el botó més proper).
 const NOTES_FREQ = { Sol3: 196, La3: 220, Do: 262, Re: 294, Mi: 330, Fa: 349, Sol: 392, La: 440, Si: 494, Do2: 523 };
-MELODIES.aurora.peca = [['Do', 1], ['Mi', 1], ['Sol', 2], ['Do2', 1], ['Si', 1], ['Sol', 1], ['La', 1], ['Sol', 2], ['Mi', 1], ['Re', 1], ['Do', 4]];
-MELODIES.pedres.peca = [['Sol', 1], ['Do', 1], ['Mi', 1], ['Do', 2], ['Re', 1], ['Mi', 1], ['Re', 1], ['Do', 2], ['La3', 1], ['Do', 1], ['La3', 1], ['Sol3', 4]];
-MELODIES.miracle.peca = [['Do', 1], ['Mi', 0.5], ['Mi', 0.5], ['Mi', 1], ['Sol', 1], ['Do', 2], ['Mi', 1], ['Fa', 1], ['Sol', 1], ['La', 1], ['Sol', 1], ['Do2', 4]];
-// Quin dels tres botons s'il·lumina per a cada altura
-const BOTO_DE = f => f <= 262 ? 1 : f <= 349 ? 2 : 3;
+MELODIES.aurora.peca = [['Do', 1], ['Re', 1], ['Mi', 2], ['Sol', 1], ['Mi', 1], ['Re', 1], ['Do', 4]];
+MELODIES.pedres.peca = [['Sol', 1], ['Fa', 1], ['Mi', 2], ['Do', 1], ['Re', 1], ['Mi', 1], ['Re', 1], ['Do', 4]];
+// el Cant del Miracle és la fanfàrria del joc: Do Mi Fa Sol Mi (la clau) i després la resta del leitmotiv (Do Re Mi Fa Fa Mi Re Do)
+MELODIES.miracle.peca = [['Do', 1], ['Mi', 1], ['Fa', 1], ['Sol', 2], ['Mi', 2], ['Do', 1], ['Re', 1], ['Mi', 1], ['Fa', 1], ['Fa', 1], ['Mi', 1], ['Re', 1], ['Do', 4]];
+// Quin dels cinc botons s'il·lumina per a cada altura (el més proper)
+const BOTO_DE = f => { const fs = [262, 294, 330, 349, 392]; let millor = 0; fs.forEach((x, i) => { if (Math.abs(x - f) < Math.abs(fs[millor] - f)) millor = i; }); return millor + 1; };
 
 const COLOR_NOTA = 0xd7ae58;
-// Les tres notes són Do, Mi i Sol (Do major, com el tema principal): el Cant del Miracle (Do Mi Mi Mi Sol Do) imita l'obertura del leitmotiv
-// (Do Mi Mi Mi Fa Sol Do), amb un Sol on hi hauria el Fa perquè la tarota només té tres notes.
-const FREQ_NOTA = [0, 262, 330, 392];
+// Les cinc notes: Do, Re, Mi, Fa i Sol (Do major, com el tema principal)
+const FREQ_NOTA = [0, 262, 294, 330, 349, 392];
 
 // Posa en marxa una lliçó des d'un diàleg (la Pianista)
 function iniciarLliço(nom) {
@@ -61,10 +66,10 @@ function completarLliço(nom) {
     } else if (nom === 'pedres') {
         pagines = [
             { qui: 'La Pianista', text: E.flag('ombraDemanaCant')
-                ? 'El Cant de Vespres: 3-1-2-1. Si aquest monjo l\'espera, toca\'l davant seu: les pedres antigues sempre l\'han entès.'
+                ? 'El Cant de Vespres: 5-4-3-1. Si aquest monjo l\'espera, toca\'l davant seu: les pedres antigues sempre l\'han entès.'
                 : (E.flag('soparObert') && !E.flag('pastorsConvencuts'))
-                    ? 'El Cant de Vespres: 3-1-2-1. Toca\'l vora el foc dels pastors: un cant tan vell potser els recorda casa.'
-                    : 'El Cant de Vespres: 3-1-2-1. És molt vell: les pedres antigues sempre l\'han entès.' }
+                    ? 'El Cant de Vespres: 5-4-3-1. Toca\'l vora el foc dels pastors: un cant tan vell potser els recorda casa.'
+                    : 'El Cant de Vespres: 5-4-3-1. És molt vell: les pedres antigues sempre l\'han entès.' }
         ];
         E.posaObjectiu(E.flag('ombraDemanaCant') ? "El Cant de Vespres farà parlar l'ombra del monjo, a les Runes." : "Toca el Cant de Vespres vora el foc dels pastors, a la Cirosa.");
     } else {
@@ -146,30 +151,30 @@ class EscenaMusica extends Phaser.Scene {
             fl.lineTo(cx + 242, fy + 48); fl.lineTo(cx + 206, fy + 36); fl.lineTo(cx + 120, fy + 16); fl.lineTo(esquerra + 22, fy + 8);
             fl.closePath(); fl.fillPath();
         }
-        // Posició dels forats 1r, 3r i 5è sobre la imatge de la tarota (o alineats amb els botons si no hi ha imatge)
-        const FORATS_DX = [0, -0.0838, 0.0348, 0.1547], FORATS_DY = [0, -0.0374, -0.0329, -0.0299];
-        this.botons = [null, 1, 2, 3].map(n => {
+        // Posició dels cinc forats sobre la imatge de la tarota (o alineats amb els botons si no hi ha imatge)
+        const FORATS_DX = [0, -0.0838, -0.0245, 0.0348, 0.0955, 0.1547], FORATS_DY = [0, -0.0374, -0.0352, -0.0329, -0.0310, -0.0299];
+        const PAS = 124, RAD = 42;
+        this.botons = [null, 1, 2, 3, 4, 5].map(n => {
             if (!n) return null;
-            const x = cx + (n - 2) * 168, by = T + 287;
+            const x = cx + (n - 3) * PAS, by = T + 287;
             const fx = teImgTarota ? cx + FORATS_DX[n] * tw : x, fyForat = teImgTarota ? fy + FORATS_DY[n] * th : fy;
             const forat = add(this.add.circle(fx, fyForat, 7.5, COLOR_NOTA, 0));
             const halo = add(this.add.circle(fx, fyForat, 20, COLOR_NOTA, 0).setBlendMode(Phaser.BlendModes.ADD));
-            const base = add(this.add.circle(x, by, 56, 0x70451f, 1).setStrokeStyle(4, 0x3a2412, 1).setInteractive({ useHandCursor: true }));
+            const base = add(this.add.circle(x, by, RAD, 0x70451f, 1).setStrokeStyle(4, 0x3a2412, 1).setInteractive({ useHandCursor: true }));
             base.on('pointerdown', () => this.nota(n, true));
-            const gemma = add(this.add.circle(x, by, 46, COLOR_NOTA, 1).setStrokeStyle(3, 0x3a2412, 1));
-            add(this.add.ellipse(x - 12, by - 20, 24, 12, 0xffffff, 0.4));
-            add(this.add.text(x, by + 1, String(n), { fontFamily: FONT_TITOL, fontSize: '39px', fontStyle: 'bold', color: '#3a2412', stroke: '#f5e2ad', strokeThickness: 2, resolution: 2 }).setOrigin(0.5));
-            const tecla = ['', '1', '2', '3'][n];
+            const gemma = add(this.add.circle(x, by, RAD - 8, COLOR_NOTA, 1).setStrokeStyle(3, 0x3a2412, 1));
+            add(this.add.ellipse(x - 9, by - 15, 18, 9, 0xffffff, 0.4));
+            add(this.add.text(x, by + 1, String(n), { fontFamily: FONT_TITOL, fontSize: '33px', fontStyle: 'bold', color: '#3a2412', stroke: '#f5e2ad', strokeThickness: 2, resolution: 2 }).setOrigin(0.5));
             const etiqueta = add(this.add.graphics());
-            etiqueta.fillStyle(0xf1dfb1, 0.92).fillRoundedRect(x - 59, by + 67, 118, 27, 8);
-            etiqueta.lineStyle(2, 0x79552b, 0.9).strokeRoundedRect(x - 59, by + 67, 118, 27, 8);
-            add(this.add.text(x, by + 80, tecla, { ...llibre, fontSize: '17px', fontStyle: 'bold', color: '#3a2412' }).setOrigin(0.5));
-            return { x, by, base, gemma, forat, halo };
+            etiqueta.fillStyle(0xf1dfb1, 0.92).fillRoundedRect(x - 36, by + 50, 72, 27, 8);
+            etiqueta.lineStyle(2, 0x79552b, 0.9).strokeRoundedRect(x - 36, by + 50, 72, 27, 8);
+            add(this.add.text(x, by + 63, NOM_NOTA[n], { ...llibre, fontSize: '17px', fontStyle: 'bold', color: '#3a2412' }).setOrigin(0.5));
+            return { x, by, base, gemma, forat, halo, rad: RAD };
         });
 
-        // Teclat: 1, 2, 3 (o el teclat numèric), o bé ← (nota 1), ESPAI (nota 2) i → (nota 3); també A, W/S i D
+        // Teclat: 1 a 5 (o el teclat numèric), o bé A S D F G
         const k = this.input.keyboard;
-        const TECLES = { 1: ['ONE', 'NUMPAD_ONE', 'LEFT', 'A'], 2: ['TWO', 'NUMPAD_TWO', 'SPACE', 'UP', 'DOWN', 'W', 'S'], 3: ['THREE', 'NUMPAD_THREE', 'RIGHT', 'D'] };
+        const TECLES = { 1: ['ONE', 'NUMPAD_ONE', 'A'], 2: ['TWO', 'NUMPAD_TWO', 'S'], 3: ['THREE', 'NUMPAD_THREE', 'D'], 4: ['FOUR', 'NUMPAD_FOUR', 'F'], 5: ['FIVE', 'NUMPAD_FIVE', 'G'] };
         Object.entries(TECLES).forEach(([n, noms]) => noms.forEach(nom => k.on('keydown-' + nom, () => this.nota(Number(n), true))));
         k.on('keydown-ESC', () => { if (this.capaPerSobre()) return; if (this.llico && this.actuant) this.tancar(true); else this.tancar(false, this.actuant || undefined); });       // durant la peça completa, ESC la salta i l'efecte es dóna igual
 
@@ -236,8 +241,8 @@ class EscenaMusica extends Phaser.Scene {
         const e = this.escPrimerPla;
         this.tweens.add({ targets: img, scale: { from: e * 1.04, to: e }, duration: 260, ease: 'Back.easeOut' });
         this.tweens.add({ targets: this.auraPrimerPla, fillAlpha: { from: 0.34, to: 0.16 }, duration: 420 });
-        const p = this.posBroc, x = p.x + (n - 2) * 18;
-        const t = this.add.text(x, p.y, n === 2 ? '♫' : '♪', { fontFamily: FONT_TITOL, fontSize: '54px', fontStyle: 'bold', color: '#ffe08a', stroke: '#5a3410', strokeThickness: 5, resolution: 2 })
+        const p = this.posBroc, x = p.x + (n - 3) * 18;
+        const t = this.add.text(x, p.y, n % 2 === 0 ? '♫' : '♪', { fontFamily: FONT_TITOL, fontSize: '54px', fontStyle: 'bold', color: '#ffe08a', stroke: '#5a3410', strokeThickness: 5, resolution: 2 })
             .setOrigin(0.5).setDepth(0).setScale(0.4);
         this.tweens.add({ targets: t, y: p.y - 150 - Math.random() * 60, x: x + 25 + Math.random() * 45, scale: 1, angle: (Math.random() - 0.5) * 40, duration: 1300, ease: 'Sine.easeOut' });
         this.tweens.add({ targets: t, alpha: 0, delay: 800, duration: 500, onComplete: () => t.destroy() });
@@ -263,7 +268,7 @@ class EscenaMusica extends Phaser.Scene {
         b.halo.setAlpha(0.85);
         this.tweens.add({ targets: b.halo, alpha: 0, scale: { from: 1, to: 1.8 }, duration: 520 });
         this.time.delayedCall(320, () => { if (b.forat.active) b.forat.setFillStyle(color, 0); });
-        const ona = this.add.circle(b.x, b.by, 56).setStrokeStyle(4, color, 0.9);
+        const ona = this.add.circle(b.x, b.by, b.rad).setStrokeStyle(4, color, 0.9);
         this.panell.add(ona);
         this.tweens.add({ targets: ona, scale: 1.7, alpha: 0, duration: 520, onComplete: () => ona.destroy() });
     }

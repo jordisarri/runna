@@ -268,7 +268,7 @@ const DIALEGS = {
             ] : [{ qui: "La Pianista", text: "Ho tornem a provar, fill? Escolta bé les tres notes." }];
             return {
                 pagines: [...intro,
-                    { qui: "La Pianista", text: "Però hi ha un cant que encara em surt, perquè la boira no se'l pot empassar: el Cant de l'Aurora. Te l'ensenyaré. Escolta'm i repeteix les notes amb 1, 2 i 3." }
+                    { qui: "La Pianista", text: "Però hi ha un cant que encara em surt, perquè la boira no se'l pot empassar: el Cant de l'Aurora. Te l'ensenyaré: tres notes, do, re, mi, en ordre. La tarota en té cinc (do, re, mi, fa i sol). Escolta'm i repeteix-les amb els botons." }
                 ],
                 enAcabar: () => { E.posaFlag("parlatPianista"); iniciarLliço("aurora"); }
             };
@@ -293,7 +293,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "La Pianista", text: "Ai, Ineu, fill, portes Runna! Se't nota a la mirada. Aleshores t'he d'ensenyar l'últim cant, el que l'Ocellaire va robar als ocells: el Cant del Miracle." },
-                    { qui: "La Pianista", text: "Jo me'n recordo perquè el cantava la meva mare. Escolta'm i repeteix les notes amb 1, 2 i 3. Et farà falta allà baix." }
+                    { qui: "La Pianista", text: "Jo me'n recordo perquè el cantava la meva mare. Escolta'm i repeteix les notes amb 1, 2, 3, 4 i 5. Do, mi, fa, sol, mi: és la fanfàrria, i et farà falta allà baix." }
                 ],
                 enAcabar: () => iniciarLliço("miracle")
             };
@@ -717,7 +717,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: "Ineu", text: "Toca el Cant de Vespres amb la tarota: 3-1-2-1." }
+                { qui: "Ineu", text: "Toca el Cant de Vespres amb la tarota: 5-4-3-1." }
             ]
         };
     },
@@ -1187,7 +1187,7 @@ const DIALEGS = {
                 { qui: "Pastor vell", text: "Un sopar, dius? Al Til·ler? Amb els de les cel·les?... No, fill. Nosaltres no som gent per a asseure's amb la gent." },
                 { qui: "Pastor vell", text: "Fa anys que no sentim música vora el foc, ni pastem el pa que fèiem per a les festes. Si algú en toqués... potser ens recordaria que encara som persones." },
                 E.flag("cantPedres")
-                    ? { qui: "Ineu", text: "Tinc la tarota. Les esquelles dels seus avis van afinar els cants antics... El Cant de Vespres, 3-1-2-1: el tocaré vora el foc, i que sigui el que Déu vulgui." }
+                    ? { qui: "Ineu", text: "Tinc la tarota. Les esquelles dels seus avis van afinar els cants antics... El Cant de Vespres, 5-4-3-1: el tocaré vora el foc, i que sigui el que Déu vulgui." }
                     : { qui: "Ineu", text: "Tinc la tarota, però només sé uns pocs cants. Els vells els coneixen tots: potser la Pianista, al Santuari, en sap algun que els faci recordar casa." }
             ], enAcabar: () => E.posaObjectiu("Els pastors de la Cirosa escoltarien una música vora el seu foc.") };
         }

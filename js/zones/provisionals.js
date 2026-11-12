@@ -122,32 +122,47 @@ class ZonaEsglesia extends ZonaBase {
     prepararEpileg() {
         this.epileg = true;
         const R = ESG.retY;
-        [['nen_uri', 575, R + 168], ['nen_flam', 640, R + 180], ['nen_sardin', 705, R + 168],
-         ['pianista', 450, R + 205], ['pare_jorda', 830, R + 205],
-         ['molner', 380, R + 290], ['meus', 450, R + 290], ['iscu', 520, R + 290],
-         ['pare_daimiel', 760, R + 290], ['carmelia', 830, R + 290], ['pilaria', 900, R + 290],
-         ['carry', 380, R + 410], ['pare_alcovi', 450, R + 410], ['eve', 520, R + 410],
-         ['venerables', 770, R + 410], ['dolora', 850, R + 410],
-         ['mandu', 485, R + 350],
-         ['pomers', 380, R + 530], ['jusef', 450, R + 530], ['germa_franci', 520, R + 530],
-         ['joaneta', 760, R + 530], ['galf', 830, R + 530], ['isilder', 900, R + 530]
-        ].forEach(([k, x, y]) => {
+        // [clau, x, y, alçada a la pantalla]: tots els adults fan la mateixa alçada (140), els nens (105) i la Pianista, asseguda al seu banc (120)
+        const AD = 140, NEN = 105;
+        // Dos grups de tres per fila, amb un passadís al mig (x 560-720) per on puja l'Ineu; 85 px entre persones i 130 entre files: ningú es trepitja ni es tapa.
+        // Els nens, al peu de l'altar; la Pianista i el Pare Jordà, a banda i banda dels nens.
+        [['nen_uri', 600, R + 190, NEN], ['nen_flam', 640, R + 190, NEN], ['nen_sardin', 680, R + 190, NEN],
+         ['pianista', 450, R + 200, 120], ['pare_jorda', 830, R + 200, AD],
+         ['molner', 345, R + 300, AD], ['meus', 430, R + 300, AD], ['iscu', 515, R + 300, AD],
+         ['pare_daimiel', 765, R + 300, AD], ['carmelia', 850, R + 300, AD], ['pilaria', 935, R + 300, AD],
+         ['carry', 345, R + 430, AD], ['pare_alcovi', 430, R + 430, AD], ['eve', 515, R + 430, AD],
+         ['venerables', 765, R + 430, AD], ['dolora', 850, R + 430, AD], ['isilder', 935, R + 430, AD],
+         ['pomers', 345, R + 560, AD], ['jusef', 430, R + 560, AD], ['germa_franci', 515, R + 560, AD],
+         ['joaneta', 765, R + 560, AD], ['galf', 850, R + 560, AD], ['mandu', 935, R + 560, NEN]
+        ].forEach(([k, x, y, h]) => {
             if (k === 'mandu' && !Estat.flag('manduNinaTrencada')) return;      // la Mandu només hi és si l'Ineu hi va parlar durant el joc (la nina trencada que el Fram cus)
-            if (this.textures.exists(k) && !(this.npcs && this.npcs[k])) this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 });
+            if (!this.textures.exists(k) || (this.npcs && this.npcs[k])) return;
+            const n = this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 });
+            this.fixaAlcada(n, h);
         });
         if (this.npcs && this.npcs.mandu && Estat.flag('manduNinaTrencada')) this.npcs.mandu.setTexture('mandu_trencada');            // la nina, encara sense cap
         this.direccio = 'avall';
         if (this.ineu) this.posarDireccio('avall', false);
-        // Enquadra tot el Santuari (del retaule i els nens fins a l'últim grup i les parets laterals)
-        // per damunt del quadre de diàleg i el retrat, de manera que tothom es vegi sencer i ningú quedi tallat
-        this.enquadrar(640, R + 340, 0.67, 0);
+        // Enquadra tot el Santuari (del retaule i els nens fins a l'última fila) per damunt del quadre de diàleg i el retrat
         this.cameras.main.fadeIn(1200, 0, 0, 0);
+    }
+
+    // Fa que un personatge tingui una alçada concreta a la pantalla (px de joc), sigui quin sigui el seu dibuix
+    fixaAlcada(n, h) {
+        const e = h / n.frame.height;
+        [n.respira, n.balanceig].forEach(t => t && t.remove());
+        n.setScale(e); n.escalaBase = e;
+        this.idleCodi(n);                         // (la respiració es refà amb la mida nova)
+        if (n.ombra) n.ombra.setScale(0.42 * h / 140);
+        if (n.punt) n.punt.altura = h + 6;
     }
 
     actualitzar() {
         this.obrirPortaRellotge(true);
         if (this.epileg && !this.epilegEngegat) {
             this.epilegEngegat = true;
+            // La càmera (que la zona acaba de posar a seguir l'Ineu) passa a un pla general fix de tota la sala
+            this.camCinema = false; this.cameras.main.stopFollow(); this.enquadrar(640, ESG.retY + 330, 1.0, 0, null, 0);
             if (this.ineu) this.posarDireccio('avall', false);
             this.time.delayedCall(900, () => this.ferEpileg());
         }
@@ -170,57 +185,70 @@ class ZonaEsglesia extends ZonaBase {
         const hi = k => !!this.npcs[k];
         const riure = (llista, f) => { Sfx.riure(); llista.filter(hi).forEach(k => this.npcSalta(k, null, 2)); this.esperar(1500, f); };
         const accio = pas => ({ fer: (z, fet) => z.seq(pas(z), fet) });
+        // La càmera enfoca qui parla (un o dos personatges) i la resta del temps mostra tota la sala; l'Ineu es posa a prop de qui li parla
+        const cos = k => k === 'ineu' ? this.ineu : (this.npcs && this.npcs[k]);
+        const foc = (ks, zoom = 1.5, ms = 800) => ({ fer: (z, fet) => {
+            const os = ks.map(cos).filter(o => o && o.active);
+            if (os.length) z.enquadrar(os.reduce((q, o) => q + o.x, 0) / os.length, os.reduce((q, o) => q + o.y - o.displayHeight * 0.5, 0) / os.length, zoom, ms);
+            fet();
+        } });
+        const ample = { fer: (z, fet) => { z.enquadrar(640, R + 380, 1.0, 1000); fet(); } };
+        const ineuA = (x, y) => accio(z => [f => z.ineuVa(x, y, () => { z.posarDireccio('amunt', false); f(); }, 160)]);
         this.ui().obrirDialeg({ pagines: [
             accio(z => [
-                f => z.ineuVa(640, R + 330, () => {
+                f => z.ineuVa(640, R + 400, () => {
                     z.posarDireccio('avall', false);
                     f();
                 }, 150),
-                f => {
-                    z.posarDireccio('avall', false);
-                    riure(nens, f);
-                }
+                f => { z.enquadrar(640, R + 230, 1.0, 1200); z.posarDireccio('avall', false); riure(nens, f); }
             ]),
             // La Meus corre a buscar l'Huri i el Fram
-            accio(z => [f => z.npcVa('meus', 600, R + 225, f, 190), f => z.npcMira('meus', 575, f), f => z.bombolla('meus', '♥', f, 900),
+            accio(z => [f => { z.enquadrar(575, R + 200, 1.1, 900); f(); }, f => z.npcVa('meus', 552, R + 222, f, 190), f => z.npcMira('meus', 600, f), f => z.bombolla('meus', '♥', f, 900),
                         f => { z.npcSalta('nen_uri', null, 2); z.npcSalta('nen_flam', f, 2); }]),
+            foc(['meus', 'nen_uri'], 1.55),
             { qui: 'Meus', text: "Huri! Fram! Bruts com dos esquirols i amb cara de no haver dormit en tres nits... Veniu aquí, que no us deixo anar mai més!" },
+            foc(['molner'], 1.9),
             { qui: 'Senyor Molner', text: 'Ja són aquí, Meus. Ja són aquí.' },
+            ineuA(600, R + 285), foc(['meus', 'ineu'], 1.6),
             { qui: 'Meus', text: "I tu, Ineu, no et pensis que t'escapes de l'abraçada." },
             // La Mandu corre cap al seu germà amb la nina sense cap: el Fram l'hi cus (només ell la sap arreglar)
             ...(hi('mandu') && Estat.flag('manduNinaTrencada') ? [
-                accio(z => [f => z.npcVa('mandu', 610, R + 232, f, 190), f => z.npcMira('mandu', 640, f)]),
+                accio(z => [f => { z.enquadrar(625, R + 215, 1.2, 900); f(); }, f => z.npcVa('mandu', 612, R + 245, f, 190), f => z.npcMira('mandu', 640, f)]),
+                foc(['nen_flam', 'mandu'], 2.0),
                 { qui: 'Fram', text: "Mandu! Què li ha passat a la nina? Dona-me-la, que només jo sé cosir caps de nina." },
                 { fer: (z, fet) => z.arreglaNina(fet) },
+                foc(['mandu'], 2.1),
                 { qui: 'Mandu', text: "Gràcies, Fram! Ja torna a tenir cap... i tu ja no te n'aniràs mai més, oi?" }
             ] : []),
-            // Les sacerdotesses i el seu protegit
-            accio(z => [f => { z.npcVa('pilaria', 770, R + 232, null, 170); z.npcVa('carmelia', 735, R + 222, f, 170); },
-                        f => z.npcMira('carmelia', 705, f), f => z.bombolla('carmelia', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
-            { qui: 'Carmèlia', text: 'Sardi! Tres nits sense dormir, les tres. La Dolora ha resat tants rosaris que ja no li queden dits.' },
-            { qui: 'Dolora', text: 'I els tornaria a resar tots. Gràcies, Ineu.' },
-            { qui: 'Sardi', text: 'Pilària, Pilària! He volat amb ocells de foc!' },
-            { qui: 'Pilària', text: "Doncs ara aterraràs a la banyera, que fas olor de gàbia." },
+            // Les sacerdotesses s'alegren pel seu protegit, sense dir res: un cor i el Sardi que salta
+            accio(z => [f => { z.enquadrar(760, R + 250, 0.95, 900); f(); }, f => { z.bombolla('carmelia', '♥', null, 1100); z.bombolla('pilaria', '♥', null, 1100); z.bombolla('dolora', '♥', null, 1100); f(); },
+                        f => z.npcSalta('nen_sardin', f, 2)]),
             // L'Isílder, el pare del Sardi, hi corre i l'abraça
             ...(hi('isilder') ? [
-                accio(z => [f => z.npcVa('isilder', 735, R + 195, f, 200), f => z.npcMira('isilder', 705, f), f => z.bombolla('isilder', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
+                accio(z => [f => { z.enquadrar(720, R + 250, 1.0, 900); f(); }, f => z.npcVa('isilder', 722, R + 235, f, 200), f => z.npcMira('isilder', 680, f), f => z.bombolla('isilder', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
+                foc(['isilder', 'nen_sardin'], 1.8),
                 { qui: 'Isílder', text: "Sardi! Fill meu... Tres nits sense saber de tu." },
+                foc(['nen_sardin'], 2.1),
                 { qui: 'Sardi', text: "Pare! Has regat la prunera?" },
+                foc(['isilder'], 1.9),
                 { qui: 'Isílder', text: "Cada dia, fill. Cada dia. Així, quan tornessis, ho trobaves tot com ho havies deixat." }
             ] : []),
             // L'Iscu, que avui no ha de fregar gots
-            ...(hi('iscu') ? [accio(z => [f => z.npcSalta('iscu', f, 2)]),
-                { qui: 'Iscu', text: "Avui no frego ni un got! La mare dorm i ningú no m'ho pot manar. Festa grossa!" }] : []),
+            ...(hi('iscu') ? [foc(['iscu'], 1.9), accio(z => [f => z.npcSalta('iscu', f, 2)]),
+                { qui: 'Iscu', text: "Avui no frego ni un got! Festa grossa: els nens són a casa!" }] : []),
             // La Pianista dona l'entrada: l'Ineu comença el Cant del Miracle amb la tarota i l'orgue el segueix
-            accio(z => [f => z.npcVa('pianista', 545, R + 245, f, 140), f => z.npcMira('pianista', 'ineu', f)]),
+            accio(z => [f => { z.enquadrar(560, R + 300, 0.9, 900); f(); }, f => z.ineuVa(655, R + 395, f, 160), f => z.npcVa('pianista', 585, R + 345, f, 150), f => z.npcMira('pianista', 'ineu', f)]),
+            foc(['pianista', 'ineu'], 1.9),
             { qui: 'La Pianista', text: "Ara sí. Ineu, la tarota: avui el Cant del Miracle el comences tu, i l'orgue et seguirà." },
             accio(z => [
                 f => {
+                    z.enquadrar(655, R + 330, 1.9, 900);
                     z.ineuFlauta(true);
                     MELODIES.miracle.notes.forEach((n, i) => this.time.delayedCall(i * 420, () => { Sfx.ocarina(FREQ_NOTA[n] * 2, 0.4, 0.14); z.bombolla('ineu', '♪', null, 380); }));
                     this.esperar(MELODIES.miracle.notes.length * 420 + 300, f);
                 },
                 f => {
+                    z.enquadrar(640, R + 330, 1.0, 1100, null, 0);
                     // L'orgue torna a sonar: la fanfàrria del joc sencera, amb els acords, i tothom canta
                     const d = Joc.leitmotiv(this, 'orgue') || 4;
                     z.npcFeina('pianista', d * 1000, 'notes');
@@ -232,21 +260,25 @@ class ZonaEsglesia extends ZonaBase {
                     z.posarDireccio('avall', false);
                     riure(tots, f);
                 },
-                f => z.npcVa('pare_jorda', 740, R + 330, f, 120),
+                f => { z.enquadrar(720, R + 330, 1.0, 900); f(); },
+                f => z.npcVa('pare_jorda', 715, R + 395, f, 120),
                 f => z.npcMira('pare_jorda', 'ineu', f)
             ]),
             // Només si l'Ineu va fer caminar el rellotge (missió lateral): el campanar torna a tocar les hores
             ...(Estat.flag('rellotgeReparat') ? [
                 { fer: (z, fet) => { [0, 1, 2].forEach(k => z.time.delayedCall(k * 850, () => Sfx.campana())); z.esperar(3000, fet); } },
+                foc(['pare_daimiel'], 1.9),
                 { qui: 'Pare Daimiel', text: "Sents el campanar, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu." },
-                ...(hi('carry') ? [{ qui: 'Carry', text: "El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill." }] : [])
+                ...(hi('carry') ? [foc(['carry'], 1.9), { qui: 'Carry', text: "El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill." }] : [])
             ] : []),
             // L'Ineu explica al Pare Jordà què ha passat amb l'Aldreu, i el prior tanca l'epíleg
+            foc(['ineu', 'pare_jorda'], 2.2),
             { qui: 'Ineu', text: "Pare Jordà... el Germà Aldreu no ha tornat. Es va quedar amb el Mestre, sota terra, i la gàbia se'l va tancar a dins." },
             { qui: 'Pare Jordà', text: "L'Aldreu... dins la gàbia?" },
             { fer: (z, fet) => z.seq([f => z.bombolla('pare_jorda', '…', f, 1300)], fet) },        // sospira i mira cap al terra
             { qui: 'Pare Jordà', text: "Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller." },
             { qui: 'Pare Jordà', text: "Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més." },
+            ample,
             { qui: 'Pare Jordà', text: "Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill." },
             { fer: (z, fet) => {
                 z.posarDireccio('avall', false);

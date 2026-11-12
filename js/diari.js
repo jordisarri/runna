@@ -266,7 +266,7 @@ const DIARI = {
     cants(ui, c) {
         const E = Estat, AV = this.AV, X = this.MX;
         let y = this.titol(ui, c, X, 170, 'Cants de la tarota');
-        y = this.text(ui, c, X, y + 4, 'Les notes no es veuen a la tarota: cal tocar-les de memòria. 1, 2 i 3 són les tres notes.', 20, TINTA_SUAU, { fontStyle: 'italic' }) + 18;
+        y = this.text(ui, c, X, y + 4, 'Les notes no es veuen a la tarota: cal tocar-les de memòria. 1 Do, 2 Re, 3 Mi, 4 Fa i 5 Sol són les cinc notes.', 20, TINTA_SUAU, { fontStyle: 'italic' }) + 18;
         let n = 0;
         Object.values(MELODIES).forEach(m => {
             const sap = E.flag(m.flag), nn = sap ? m.notes.length : 0;
