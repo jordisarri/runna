@@ -140,7 +140,7 @@ class ZonaEsglesia extends ZonaBase {
         // La porta de la dreta del peu del retaule: la mateixa del gràfic, que s'obre cap endins (amb la clau del campanar) i duu a la torre
         this.portaRetaule = this.portaAnimada({ x: 872, top: 868, bottom: 1021, ample: 83, fons: 900, unic: true, arc: true, retall: this.retaule, bloq: () => !this.portaRellotge });
         this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });     // el sagrari, al mig del retaule (fragment 2)
-        this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 } });
+        this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 }, opac: true });
 
         // Portes del peu del retaule: totes dues tancades. Quan el Pare Daimiel diu que el rellotge s'ha aturat (rellotgeDit)
         // s'obre la de la dreta, que duu a la torre i a la Sala del Rellotge. L'esquerra és només decorativa: no s'obre mai i no té cap punt d'interacció.
@@ -214,8 +214,14 @@ class ZonaEsglesia extends ZonaBase {
         this.cameras.main.fadeIn(1200, 0, 0, 0);
     }
 
-    actualitzar() {
+    actualitzar(temps) {
         this.obrirPortaRellotge(true);
+        // Als dos graons del presbiteri l'Ineu va més lent i a batzegades, com quan s'hi puja o se'n baixa (la cadència d'un graó cada ~380 ms): dona sensació d'escala
+        const I = this.ineu, ySt = ESG.retY + 300;
+        if (I && I.body && !this.cinema && !this.camCinema && I.x > 240 && I.x < 1040 && I.y > ySt - 6 && I.y < ySt + 100) {
+            const k = 0.38 + 0.42 * Math.abs(Math.sin((temps || this.time.now) / 380 * Math.PI / 2 * 2));
+            I.body.velocity.scale(k);
+        }
         if (this.epileg && !this.epilegEngegat) {
             this.epilegEngegat = true;
             if (this.ineu) this.posarDireccio('avall', false);

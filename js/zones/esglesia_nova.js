@@ -91,7 +91,7 @@ class ZonaEsglesiaNova extends ZonaBase {
         // ---- Retaule major (el que ja tenim), sagrari i altar ----
         this.retaule = this.posar('retaule', xc, yF + 24, { fonsY: yF - 110, escala: 1.2 });
         this.interactiu(xc, yF + 42, 140, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });
-        this.posar('altar', xc, yF + 190, { col: { w: 190, h: 34 }, escala: 1.3 });
+        this.posar('altar', xc, yF + 190, { col: { w: 190, h: 34 }, escala: 1.3, opac: true });
 
         // ---- Orgue, Pianista i Pare Daimiel ----
         this.orgue = this.posar('orgue', 1300, yF + 330, { col: { w: 110, h: 50 }, opac: true });
