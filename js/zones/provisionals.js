@@ -537,7 +537,7 @@ class ZonaCreu extends ZonaBase {
         this.terra('pedra', 830, 710, 360, 190);        // replà de pedra davant la creu
 
         // Creu de l'Aparició (sense cap tanca ni mur al darrere)
-        this.posar('creu', 1010, 900, { col: { w: 56, h: 24 } });
+        this.posar('creu', 1010, 900, { col: { w: 56, h: 24 }, opac: true });
         this.interactiu(1010, 905, RADI_OBJECTE, DIALEGS.creu, { altura: 400 });
         [[760, 860], [1260, 860]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xcfe08a));   // plàtans
 
@@ -822,7 +822,7 @@ class ZonaTresor extends ZonaBase {
         });
         // L'arqueta-reliquiari, al mig de la tarima
         const obert = Estat.flag('cofreTresor');
-        this.reliquiari = this.posar(obert ? 'reliquiari_obert' : 'reliquiari', W / 2, YP + 34, { col: { w: 110, h: 24 } });
+        this.reliquiari = this.posar(obert ? 'reliquiari_obert' : 'reliquiari', W / 2, YP + 34, { col: { w: 110, h: 24 }, opac: true });
         this.interactiu(W / 2, YP + 44, RADI_OBJECTE, DIALEGS.cofreTresor, { altura: 120 });
         // El raig de llum de la finestreta de l'absis, fins a l'arqueta, amb pols que sura
         const raig = this.add.graphics().setDepth(79000).setBlendMode('ADD');

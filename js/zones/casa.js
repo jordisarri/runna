@@ -699,6 +699,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
         this.add.image(500, 178, 'graons_ermita').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-990);
         this.registraGraons(310, 690, [[250, 268], [218, 238]]);          // els dos graons del cofre: frenada i un tap a cada un
         this.cofre = this.add.image(500, 218, Estat.flag('cofreCambra') ? 'cofre_tresor_obert' : 'cofre_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(218);
+        (this.opacs = this.opacs || []).push(this.cofre);              // opac: la silueta de l'Ineu no es veu a través seu
         this.colisio(500, 205, 100, 24);
         this.interactiu(500, 262, RADI_OBJECTE, DIALEGS.cofreCambra, { altura: 110, enTancar: () => { if (Estat.flag('cofreCambra')) this.cofre.setTexture('cofre_tresor_obert'); } });
         [[390, 262], [610, 262]].forEach(([x, y], i) => {

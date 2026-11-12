@@ -499,7 +499,7 @@ class ZonaGabrielInt extends ZonaBase {
         // (un cop agafat el cristall, el cofre es queda a lloc, obert i buit)
         if (Estat.flag('garfBancSegut') || Estat.flag('cristallGel')) {
             const cy = grao + 70, buit = () => Estat.flag('cristallGel') || Estat.te('cristall_gel');
-            const cofreG = this.posar(buit() ? 'cofre_obert' : 'cofre', cx, cy, { col: { w: 50, h: 20 } });
+            const cofreG = this.posar(buit() ? 'cofre_obert' : 'cofre', cx, cy, { col: { w: 50, h: 20 }, opac: true });
             if (!buit()) {
                 const gel = this.add.circle(cx, cy - 30, 36, 0xbfe6ff, 0.2).setBlendMode('ADD').setDepth(cy + 2);       // una claror blavosa de gel
                 this.tweens.add({ targets: gel, alpha: 0.06, scale: 1.3, yoyo: true, repeat: -1, duration: 1300 });
