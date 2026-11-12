@@ -243,6 +243,7 @@ class ZonaBase extends Phaser.Scene {
         this.sortides = [];
         this.enemics = []; this.copes = []; this.atacantFins = 0;
         this.esbarzers = [];
+        this.graonsLlista = [];
         this.caient = false;
         this.forcat = null;
         this.cop = null; this.armaNet = null; this.atacFins = 0;
@@ -1564,6 +1565,24 @@ class ZonaBase extends Phaser.Scene {
         });
     }
 
+    // Escales caminables: x0..x1 és l'ample i 'bandes' les contrapetges [[yDalt, yBaix], ...]. L'Ineu hi va una mica més lent, a cada contrapetja encara més, i hi sona
+    // un tap just quan hi trepitja (per la vora per on hi entra, pujant o baixant). (La de l'església, la del Dolmen i la de la torre tenen el seu propi codi.)
+    registraGraons(x0, x1, bandes) { (this.graonsLlista = this.graonsLlista || []).push({ x0, x1, bandes, yAnt: undefined, yMin: Math.min(...bandes.map(b => b[0])) - 10, yMax: Math.max(...bandes.map(b => b[1])) + 10 }); }
+
+    efecteGraons() {
+        const I = this.ineu;
+        if (!I || !I.body || !this.graonsLlista || !this.graonsLlista.length || this.cinema || this.camCinema || this.canviant) return;
+        for (const z of this.graonsLlista) {
+            if (I.x > z.x0 && I.x < z.x1 && I.y > z.yMin && I.y < z.yMax) {
+                let k = 0.85;
+                z.bandes.forEach(([ya, yb]) => { if (I.y > ya && I.y < yb) k = 0.55; });
+                I.body.velocity.scale(k);
+                if (z.yAnt !== undefined) z.bandes.forEach(([ya, yb]) => { const amunt = I.y < z.yAnt, vora = amunt ? yb : ya; if ((z.yAnt - vora) * (I.y - vora) < 0) Sfx.escala(amunt); });
+                z.yAnt = I.y;
+            } else z.yAnt = undefined;
+        }
+    }
+
     // Tots els esbarzers negres punxen: tocar-ne un fa perdre mig gra del rosari i t'empeny enrere (ferIneu dona 1,1 s d'invulnerabilitat).
     // Mai no et deixen sense vida: l'últim mig gra no se'l poden endur (només cal no tocar-los: Runna els talla de lluny, a ~75 px).
     punxenEsbarzers() {
@@ -1905,6 +1924,7 @@ class ZonaBase extends Phaser.Scene {
         this.ressaltarEnemics();
         this.comprovarSortides();
         this.punxenEsbarzers();
+        this.efecteGraons();
         if (this.actualitzar) this.actualitzar(time, delta);
         this.actualitzarPortes(delta);
     }
@@ -2273,10 +2293,12 @@ class ZonaBase extends Phaser.Scene {
         this.ombraIneu.setVisible(false);
         I.setMask(this.make.graphics({ add: false }).fillRect(0, 0, this.config.amplada, s.baixar).createGeometryMask());
         const graons = 6;
+        let graoAnt = -1;
         this.tweens.addCounter({
             from: 0, to: 1, duration: 1500,
             onUpdate: tw => {
                 const f = tw.getValue(), g = f * graons, pas = Math.floor(g) + Phaser.Math.Easing.Sine.InOut(g % 1);   // cada graó: baixada suau i repòs
+                if (Math.floor(g) !== graoAnt) { graoAnt = Math.floor(g); Sfx.escala(false); }          // un tap a cada graó que baixa
                 I.setPosition(Phaser.Math.Linear(I.x, s.xEscala, 0.08), y0 + (y1 - y0) * pas / graons);
                 const c = Math.round(255 * (1 - 0.7 * f));
                 I.setTint(Phaser.Display.Color.GetColor(c, c, c));

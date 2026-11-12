@@ -889,7 +889,7 @@ class ZonaDolmen extends ZonaBase {
     // 'u' (0-1) és el progrés pels graons: a 0 és a terra, darrere el dolmen; a 1, a la cara de dalt de la llosa. La llosa li tapa els peus i el cos s'hi eleva:
     // la y que es dibuixa va de la vora cap endins, torna a pujar pels tres graons i entra a la llosa (mateix recorregut que abans feia l'animació).
     yEscala(u) {
-        const P = this.pujada, v = P.vora, pts = [[0, v - 6], [0.22, v + 26], [0.42, v + 16], [0.58, v + 7], [0.74, v - 2], [1, P.dalt + 8]];
+        const P = this.pujada, v = P.vora, pts = [[0, v - 6], [0.22, v + 76], [0.42, v + 50], [0.58, v + 24], [0.74, v - 2], [1, P.dalt + 8]];          // s'enfonsa darrere la llosa fins a la cintura i puja tres graons de ~26 px (abans només li tapava els peus)
         for (let k = 1; k < pts.length; k++) if (u <= pts[k][0]) { const [a, ya] = pts[k - 1], [b, yb] = pts[k]; return ya + (yb - ya) * (u - a) / (b - a); }
         return pts[pts.length - 1][1];
     }

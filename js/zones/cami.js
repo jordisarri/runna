@@ -126,6 +126,7 @@ class ZonaErmitaInt extends ZonaBase {
 
         // Catifa de la porta a l'altar i graons de l'altar
         this.add.image(500, 262, 'graons_ermita').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-990);
+        this.registraGraons(310, 690, [[334, 352], [302, 322]]);          // els dos graons de l'altar: frenada i un tap a cada un
 
         // Pilastres de pedra adossades als murs laterals
         [[122, 330], [122, 520], [122, 680], [878, 330], [878, 520], [878, 680]].forEach(([x, y]) => {

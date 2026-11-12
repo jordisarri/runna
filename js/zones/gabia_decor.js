@@ -210,6 +210,7 @@ Object.assign(ZonaGabia.prototype, {
             es.lineStyle(2, 0x5e5476, 0.8).lineBetween(ex0, y + 1, ex1, y + 1);
             if (rr() < 0.6) { const cx = ex0 + 20 + rr() * (ex1 - ex0 - 40); es.lineStyle(1.5, 0x1a1424, 0.8).lineBetween(cx, y + 3, cx + 10 + rr() * 16, y + 14 + rr() * 6); }
         }
+        { const bandes = []; for (let y = eY0; y < eY1; y += 30) bandes.push([y + 22, y + 30]); this.registraGraons(ex0, ex1, bandes); }          // l'escalinata: un tap a cada graó
         // Catifa vella, de color de vi, amb vores d'or (gastada al mig)
         es.fillStyle(0x5a1828, 1).fillRect(858, eY0 - 4, 84, eY1 - eY0 + 4);
         es.lineStyle(3, 0xb89a50, 0.85).lineBetween(862, eY0 - 4, 862, eY1).lineBetween(938, eY0 - 4, 938, eY1);
