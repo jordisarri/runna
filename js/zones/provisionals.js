@@ -287,7 +287,7 @@ class ZonaEsglesia extends ZonaBase {
             accio(z => [f => { z.enquadrar(560, R + 215, 1.0, 900); f(); }, f => z.npcVa('venerables', 500, R + 245, f, 170), f => z.npcMira('venerables', 600, f), f => z.bombolla('venerables', '♥', f, 900),
                         f => { z.npcSalta('nen_uri', null, 2); z.npcSalta('nen_flam', f, 2); }]),
             foc(['venerables', 'nen_uri'], 1.5),
-            { qui: 'Les Venerables Sàvies', text: "Ho dèiem, oi, Huri? Que tornaríeu. Les velles sempre ho sabem... i aquest cop ens ha fet molta il·lusió tenir raó." },
+            { qui: 'Les Venerables Sàvies', text: "Huri, no hem dubtat ni per un instant que l'Ineu et salvaria. El seu destí estava escrit a la crònica del Miracle." },
             // La Mandu corre cap al seu germà el Fram (si l'Ineu l'havia vist amb la nina sense cap, el Fram l'hi cus: només ell la sap arreglar)
             ...(hi('mandu') ? [
                 accio(z => [f => { z.enquadrar(625, R + 225, 1.2, 900); f(); }, f => z.npcVa('mandu', 612, R + 245, f, 190), f => z.npcMira('mandu', 640, f)]),
