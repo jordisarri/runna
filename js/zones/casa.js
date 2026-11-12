@@ -672,13 +672,6 @@ class ZonaPassadis extends ZonaCasaBase {
     actualitzar() {
         this.esbarzers.forEach(o => { if (!o.viu && o.halo) { o.halo.destroy(); o.halo = null; } });
         if (this.contrallum && this.esbarzers.every(o => !o.viu)) { this.contrallum.destroy(); this.contrallum = null; }
-        // Els esbarzers negres punxen: tocar-ne un fa perdre mig gra del rosari (i l'empeny enrere). Amb Runna es tallen de lluny, sense tocar-los (el cop arriba a ~75 px)
-        const b = this.ineu && this.ineu.body;
-        if (b) this.esbarzers.forEach(o => {
-            if (!o.viu) return;
-            const c = o.col.body;
-            if (b.right > c.left - 3 && b.left < c.right + 3 && b.bottom > c.top - 3 && b.top < c.bottom + 3) this.ferIneu(1, { x: o.x, y: o.y - 13 });
-        });
         if (Estat.flag('passadisNet')) return;
         if (this.enemics.every(e => e.mort) && this.esbarzers.every(o => !o.viu)) Estat.posaFlag('passadisNet');
     }

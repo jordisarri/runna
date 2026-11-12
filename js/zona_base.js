@@ -1564,6 +1564,18 @@ class ZonaBase extends Phaser.Scene {
         });
     }
 
+    // Tots els esbarzers negres punxen: tocar-ne un fa perdre mig gra del rosari i t'empeny enrere (ferIneu dona 1,1 s d'invulnerabilitat).
+    // Mai no et deixen sense vida: l'últim mig gra no se'l poden endur (només cal no tocar-los: Runna els talla de lluny, a ~75 px).
+    punxenEsbarzers() {
+        const b = this.ineu && this.ineu.body;
+        if (!b || !this.esbarzers.length || Estat.dades.vida <= 1 || this.caient || this.camCinema || this.cinema) return;
+        for (const o of this.esbarzers) {
+            if (!o.viu) continue;
+            const c = o.col.body;
+            if (b.right > c.left - 3 && b.left < c.right + 3 && b.bottom > c.top - 3 && b.top < c.bottom + 3) { this.ferIneu(1, { x: o.x, y: o.y - 13 }); break; }
+        }
+    }
+
     destruirEsbarzer(o) {
         Sfx.talla();
         if (!o.viu) return;
@@ -1890,6 +1902,7 @@ class ZonaBase extends Phaser.Scene {
         this.actualitzarCombat(time);
         this.ressaltarEnemics();
         this.comprovarSortides();
+        this.punxenEsbarzers();
         if (this.actualitzar) this.actualitzar(time, delta);
         this.actualitzarPortes(delta);
     }
