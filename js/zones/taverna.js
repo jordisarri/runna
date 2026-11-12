@@ -79,6 +79,35 @@ Object.assign(DIALEGS, {
 });
 
 // ---------------- LA TAVERNA PER DINS ----------------
+// Escala de pedra que BAIXA cap a la foscor, vista de front des de dalt: el primer graó (el de la porta) és el més ample, clar i baix a la pantalla; cada graó següent
+// és més estret, més fosc i més amunt (és més lluny i més avall), fins a perdre's en la negror. Només es veuen els plans dels graons (les contrahuelles miren cap a dins)
+// amb una vora de llum al davant de cada un i l'ombra del salt, i els murs laterals en fuga cap al fons.
+// cx, yBaix: centre i vora de baix (el llindar); ample: amplada del primer graó; yDalt: on s'acaba la fuga; n: graons.
+function dibuixarEscalaBaixa(g, cx, yBaix, ample, yDalt, n = 8) {
+    const mescla = (a, b, t) => { const ar = a >> 16 & 255, ag = a >> 8 & 255, ab = a & 255, br = b >> 16 & 255, bg = b >> 8 & 255, bb = b & 255;
+        return (Math.round(ar + (br - ar) * t) << 16) | (Math.round(ag + (bg - ag) * t) << 8) | Math.round(ab + (bb - ab) * t); };
+    const alt = yBaix - yDalt, f = 0.9;                           // cada graó és un 90% del de davant (en alçada i en amplada)
+    const suma = (1 - Math.pow(f, n)) / (1 - f), h0 = alt / suma;
+    // Murs laterals: trapezis que es van tancant cap al fons
+    const wFons = ample * Math.pow(f, n);
+    [-1, 1].forEach(sg => {
+        g.fillStyle(0x3a3640, 1).fillPoints([{ x: cx + sg * ample / 2, y: yBaix }, { x: cx + sg * ample / 2 + sg * 14, y: yBaix }, { x: cx + sg * wFons / 2 + sg * 14, y: yDalt }, { x: cx + sg * wFons / 2, y: yDalt }], true);
+        g.fillStyle(0x24202a, 1).fillPoints([{ x: cx + sg * ample / 2, y: yBaix }, { x: cx + sg * ample / 2 + sg * 5, y: yBaix }, { x: cx + sg * wFons / 2 + sg * 5, y: yDalt }, { x: cx + sg * wFons / 2, y: yDalt }], true);
+    });
+    let y = yBaix;
+    for (let i = 0; i < n; i++) {
+        const w = ample * Math.pow(f, i), w2 = ample * Math.pow(f, i + 1), h = h0 * Math.pow(f, i), fosc = Math.min(1, i / (n - 0.5));
+        const tread = mescla(0x8a8478, 0x0c0a10, Math.pow(fosc, 0.8)), edge = mescla(0xc4bcac, 0x14121a, Math.pow(fosc, 0.7)), drop = mescla(0x1a1620, 0x000000, fosc);
+        const yt = y - h;
+        g.fillStyle(drop, 1).fillRect(cx - w2 / 2, yt - h * 0.22, w2, h * 0.22 + 1);                     // el salt cap al graó següent (ombra)
+        g.fillStyle(tread, 1).fillRect(cx - w / 2, yt + h * 0.12, w, h * 0.88);                            // el pla del graó
+        g.fillStyle(edge, 1).fillRect(cx - w / 2, y - h * 0.18, w, Math.max(1.5, h * 0.18));            // la vora de davant, il·luminada
+        g.lineStyle(1, 0x000000, 0.35 + 0.4 * fosc).lineBetween(cx - w / 2, yt + h * 0.12, cx + w / 2, yt + h * 0.12);
+        y = yt;
+    }
+    g.fillStyle(0x000000, 1).fillRect(cx - wFons / 2, yDalt - 4, wFons, 6);
+}
+
 class ZonaTavernaInt extends ZonaBase {
     constructor() {
         super('ZonaTavernaInt', {
@@ -237,7 +266,7 @@ class ZonaSotaTaverna extends ZonaBase {
         if (!ja) { Estat.posaFlag('portaFerroOberta'); Sfx.secret(); this.cameras.main.shake(400, 0.004); Estat.posaObjectiu("La porta de ferro del fons de la galeria dona a la Sala de les Gírgoles."); Estat.desar(); }
         const forat = this.add.graphics().setDepth(-945);
         forat.fillStyle(0x000000, 1).fillRect(312, 20, 176, 140);
-        for (let k = 0; k < 5; k++) forat.fillStyle(0x2a2430 - k * 0x040404, 1).fillRect(330 + k * 6, 40 + k * 22, 140 - k * 12, 18);
+        dibuixarEscalaBaixa(forat, 400, 156, 150, 34, 8);
         forat.fillStyle(0x2a2a30, 1).fillRect(470, 18, 30, 142);
         // La fulla de ferro gira sobre la frontissa de l'esquerra i es queda oberta, de cantó
         const f = this.add.graphics().setDepth(-944).setPosition(310, 18);
@@ -324,7 +353,7 @@ class ZonaGirgolesFora extends ZonaBase {
         g.lineStyle(3, 0x2a241c, 1).strokeRect(x - 100, b - 190, 200, 190);
         g.fillStyle(0x0a0608, 1).fillRect(x - 80, b - 175, 160, 175).fillEllipse(x, b - 175, 160, 70);
         if (oberta) {
-            for (let k = 0; k < 5; k++) g.fillStyle(0x4a4450 - k * 0x080808, 1).fillRect(x - 70 + k * 6, b - 150 + k * 28, 140 - k * 12, 12);
+            dibuixarEscalaBaixa(g, x, b - 4, 150, b - 168, 8);
             g.fillStyle(0x2a2a30, 1).fillRect(x - 80, b - 175, 8, 175).fillRect(x + 72, b - 175, 8, 175);
             return;
         }

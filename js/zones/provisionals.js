@@ -36,7 +36,7 @@ class ZonaEsglesia extends ZonaBase {
         const pia = this.npcs && this.npcs.pianista, I = this.ineu;
         if (!pia || !I || !this.orgue) { if (fet) fet(); return; }
         const x = pia.x - 105, y = this.orgue.y + 22;
-        this.tweens.add({ targets: I, x, y, duration: 350, ease: 'Sine.easeInOut', onUpdate: () => { if (I.body) I.body.reset(I.x, I.y); }, onComplete: () => { if (this.cara) this.cara(pia); if (fet) fet(); } });
+        this.tweens.add({ targets: I, x, y, duration: 350, ease: 'Sine.easeInOut', onUpdate: () => { if (I.body) I.body.reset(I.x, I.y); I.setDepth(I.y); if (this.ombraIneu) this.ombraIneu.setPosition(I.x, I.y); }, onComplete: () => { if (this.cara) this.cara(pia); if (fet) fet(); } });
     }
 
     update(time, delta) { super.update(time, delta); this.vigilaBancs(); }

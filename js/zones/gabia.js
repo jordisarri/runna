@@ -75,11 +75,15 @@ Object.assign(DIALEGS, {
     ] }),
     capoll: nom => E => ({ pagines: [] }),
     aldreuGabia: E => ({ pagines: E.flag('andreuTancat') ? [
-        { qui: 'Germà Aldreu', text: "Ell em va veure, saps? Tothom em passava pel costat. Ell em va veure." },
-        { qui: 'Germà Aldreu', text: "Deixa'm aquí. Si mai torna, que em trobi esperant-lo." }
-    ] : E.flag('ocellaireVencut') ? [
-        { qui: 'Germà Aldreu', text: "Mestre... no em deixeu..." }
-    ] : [
+        { qui: 'Germà Aldreu', text: "Estic bé, Ineu. La boira fa companyia quan ja no demana res." },
+        { qui: 'Germà Aldreu', text: "Torna quan vulguis. Si mai se'm gira el cor, ja trobaré qui em pugui acompanyar..." }
+    ] : E.flag('gabiaOberta') ? [
+        { qui: 'Germà Aldreu', text: "Encara no, noi. Deixa'm sentir com riuen." }
+    ] : E.flag('ocellaireVencut') ? [{ qui: 'Germà Aldreu', text: [
+        "(No et mira.) Ja no em parla. Abans em parlava sempre.",
+        "Fes el que has de fer, noi. Avui no et miraré.",
+        "Quan era a la Plaça, tothom em passava pel costat. Ell em va veure."
+    ][(DIALEGS._rotAldreu = ((DIALEGS._rotAldreu || 0) + 1) % 3)] }] : [
         { qui: 'Aldreu, Pastor de Boira', text: "El Mestre ve, monjo. Ja el sents?" }
     ] }),
     gentEpileg: E => ({ pagines: [{ qui: 'Gent', text: "Avui tothom canta, encara que l'orgue faci una nota de pega." }] }),
@@ -791,7 +795,7 @@ class ZonaGabia extends ZonaBase {
         let g;
         if (this.textures.exists('basto_ocellaire') && !Grafics.faltants.includes('basto_ocellaire')) {
             g = this.add.image(0, 0, 'basto_ocellaire');
-            g.setDisplaySize(184, 184 * g.height / g.width);                    // de punta a punta, ±92 (on surten les flames)
+            g.setDisplaySize(184 * K_OCELLAIRE, 184 * K_OCELLAIRE * g.height / g.width);                    // de punta a punta, ±92 x K (on surten les flames)
         } else {
             g = this.add.graphics();
             g.fillStyle(0x2a1a14, 1).fillRoundedRect(-80, -5, 160, 10, 4);
@@ -801,9 +805,12 @@ class ZonaGabia extends ZonaBase {
             g.lineStyle(6, 0xd8b860, 1); g.beginPath(); g.arc(92, 10, 14, Math.PI + 0.2, Math.PI * 2.6); g.strokePath();
             g.fillStyle(0xff9a40, 0.9).fillCircle(-92, -10, 7).fillCircle(92, 10, 7);
             g.fillStyle(0xffffff, 0.9).fillCircle(-92, -10, 3).fillCircle(92, 10, 3);
+            g.setScale(K_OCELLAIRE);
         }
-        const b = { g, x: e.spr.x, y: e.spr.y - 70, rot: 0, gir: 0.04, volant: false };
+        const b = { g, x: e.spr.x, y: e.spr.y - 70 * K_OCELLAIRE, rot: 0, gir: 0.04, volant: false, lliure: false };
         e.basto = b;
+        // Comptadors per intent (la mateixa escena pot reiniciar el combat)
+        this.rebotsFora = 0; this.pensamentsFets = 0; this.ultimPensament = 0; this.tamborsCallats = false;
         e.flama = this.add.particles(0, 0, 'espurna', {
             speed: { min: 10, max: 60 }, lifespan: 420, scale: { start: 0.35, end: 0 }, alpha: { start: 0.9, end: 0 },
             tint: [0xff9a40, 0xffd060, 0xff5020], blendMode: 'ADD', frequency: 40, emitting: false
@@ -813,12 +820,22 @@ class ZonaGabia extends ZonaBase {
     moureBasto(e) {
         const b = e.basto, c = e.spr.body.center;
         if (!b) return;
-        if (!b.volant) { b.x = c.x + (e.spr.flipX ? -66 : 66); b.y = c.y - 92; }
+        const K = K_OCELLAIRE;
+        if (b.lliure) {          // a la pausa el bàcul és a terra (tween des de genollsOcellaire): ni segueix la mà ni gira
+            b.g.setPosition(b.x, b.y).setRotation(b.rot).setDepth(b.depth || c.y + 30);
+            if (e.flama && e.flama.emitting) e.flama.stop();
+            return;
+        }
+        if (!b.volant) {
+            // Al dibuix d'invocar la mà alçada és a l'altre costat (a l'esquerra del dibuix, i més amunt) que al dibuix base: el bàcul hi segueix
+            if (e.spr.texture.key === 'ocellaire_invoca') { b.x = c.x + (e.spr.flipX ? 101 : -101) * (K / 1.4); b.y = c.y - 178 * (K / 1.4); }
+            else { b.x = c.x + (e.spr.flipX ? -66 : 66) * K; b.y = c.y - 92 * K; }
+        }
         b.rot += b.gir;
         b.g.setPosition(b.x, b.y).setRotation(b.rot).setDepth(c.y + 2);
         // Mentre gira de pressa, les puntes deixen un rastre de foc
         if (e.flama) {
-            if (b.gir > 0.2) { if (!e.flama.emitting) e.flama.start(); e.flama.setPosition(b.x + Math.cos(b.rot) * 92, b.y + Math.sin(b.rot) * 92); }
+            if (b.gir > 0.2) { if (!e.flama.emitting) e.flama.start(); e.flama.setPosition(b.x + Math.cos(b.rot) * 92 * K, b.y + Math.sin(b.rot) * 92 * K); }
             else if (e.flama.emitting) e.flama.stop();
         }
     }
@@ -829,20 +846,22 @@ class ZonaGabia extends ZonaBase {
             g.add(this.add.circle(sd * 15, 0, 14, 0x9a50ff, 0.22).setBlendMode('ADD'));
             g.add(this.add.circle(sd * 15, 0, 7, 0xd8a8ff, 0.45).setBlendMode('ADD'));
         });
+        g.setScale(K_OCELLAIRE);
         this.tweens.add({ targets: g, alpha: 0.65, yoyo: true, repeat: -1, duration: 500 });
         return g;
     }
     posarUlls(u, spr, prof) {
-        u.setPosition(spr.x, spr.y - spr.displayHeight * 0.5 + spr.displayHeight * 0.254).setVisible(spr.alpha > 0.3);       // els ulls són al 25% del dibuix
+        u.setPosition(spr.x, spr.y - spr.displayHeight * 0.5 + spr.displayHeight * 0.254).setVisible(spr.alpha > 0.3 && !spr.senseUlls);       // els ulls són al 25% del dibuix (senseUlls: de genolls s'apaguen)
         if (prof) u.setDepth(prof + 1);
     }
     // Tambors de guerra mentre dura el combat (BUM · BUM BUM ·)
     tambors(ms) {
         if (this.tambor) this.tambor.remove();
         let k = 0;
+        this.tamborsCallats = false;
         this.tambor = this.time.addEvent({ delay: ms, loop: true, callback: () => {
             const t = k++ % 4;
-            if (!this.ui().dialeg && t !== 1) Sfx.tambor(t === 0);
+            if (!this.ui().dialeg && t !== 1 && !this.tamborsCallats) Sfx.tambor(t === 0);       // callen mentre dura la pausa de l'Ocellaire
         } });
     }
     // Segona fase: rugit, ona de xoc que empeny l'Ineu, la cova es torna vermella i els tambors s'acceleren
@@ -851,6 +870,7 @@ class ZonaGabia extends ZonaBase {
         Sfx.rugit();
         cam.shake(fase === 3 ? 1800 : 1300, fase === 3 ? 0.012 : 0.009);
         cam.flash(220, 255, fase === 3 ? 140 : 60, 40);
+        this.punchFase(fase);          // punch-in de càmera + frase de la fase (vegeu punchFase)
         const ona = this.add.circle(c.x, c.y - 30, 30).setStrokeStyle(10, 0xff5030, 0.9).setDepth(99960);
         this.tweens.add({ targets: ona, radius: 520, alpha: 0, duration: 900, ease: 'Cubic.out', onComplete: () => ona.destroy() });
         const jo = this.ineu.body.center, dx = jo.x - c.x, dy = jo.y - c.y, l = Math.hypot(dx, dy) || 1;
@@ -859,7 +879,7 @@ class ZonaGabia extends ZonaBase {
         this.velLila.setFillStyle(fase === 3 ? 0x4a0a04 : 0x3a0610, this.velLila.alpha);
         this.llumLila.setFillStyle(fase === 3 ? 0xff7020 : 0xff3020, fase === 3 ? 0.16 : 0.1);
         this.espurnes.setParticleTint && this.espurnes.setParticleTint(0xff6040);
-        if (e.ulls) this.tweens.add({ targets: e.ulls, scale: 1.6, duration: 400 });
+        if (e.ulls) this.tweens.add({ targets: e.ulls, scale: 1.6 * K_OCELLAIRE, duration: 400 });
         this.tambors(fase === 3 ? 300 : 400);
         if (fase === 3) Joc.iniciarMusica(this, 0, 'musica_boss_final');
     }
@@ -880,14 +900,111 @@ class ZonaGabia extends ZonaBase {
         return g;
     }
     // L'Ocellaire cau de genolls (el bàcul buit): comença la pausa en què se li pot picar el cap
+    // Llenguatge de la pausa: or = ara pots picar. Halo daurat sobre el cap, fletxa, tres llumetes (una per cop), anell d'or a terra,
+    // bàcul a terra i tambors callats; «Ara!» a les dues primeres. Tot per codi i sense bloquejar res (design/lluita_final_combat.md § 4).
     genollsOcellaire(e, ms) {
-        e.estat = 'cansat'; e.fins = this.time.now + ms; e.copsRebuts = 0;
-        if (teGenollsOcellaire(this)) e.spr.setTexture('ocellaire_genolls');          // de cop, sense passar pel sprite dret
+        const ara = this.time.now, K = K_OCELLAIRE, b = e.basto, cam = this.cameras.main;
+        if (e.finestra) this.tancarFinestraOcellaire(e);
+        const n = e.nFinestres = (e.nFinestres || 0) + 1;
+        e.estat = 'cansat'; e.fins = ara + ms; e.copsRebuts = 0;
+        const clau = clauSpriteOcellaire(this, e, ara);
+        if (e.spr.texture.key !== clau) e.spr.setTexture(clau);          // de cop, sense passar pel sprite dret
+        e.spr.senseUlls = true;
+        e.spr.setTintFill(0xffffff);                                        // flaix blanc de 80 ms (després, el tint fred de la ia)
+        this.time.delayedCall(80, () => { if (e.spr.active) e.spr.clearTint(); });
         const c = e.spr.body.center;
-        Sfx.puf();
-        this.cameras.main.shake(120, 0.003, true);
-        const pols = this.ovalTerra(c.x, c.y, 50, 0x9a7acf, 0.35, 4);
+        Sfx.esgotat(); Sfx.puf();
+        this.hitStop(90);
+        cam.shake(180, 0.004, true);
+        const pols = this.ovalTerra(c.x, c.y, 50 * K, 0x9a7acf, 0.35, 4);
         this.tweens.add({ targets: pols, scaleX: 2, scaleY: 2, alpha: 0, duration: 500, ease: 'Cubic.out', onComplete: () => pols.destroy() });
+        this.tamborsCallats = true;                                         // el silenci és la pista: contrasta amb el BUM-BUM
+        // El bàcul cau a terra, apagat
+        if (b) {
+            this.tweens.killTweensOf(b);
+            b.lliure = true; b.volant = false; b.gir = 0; b.rot = Phaser.Math.Angle.Wrap(b.rot); b.depth = c.y + 30;
+            if (b.g.setTint) b.g.setTint(0x8a8a8a);
+            const sg = e.spr.flipX ? -1 : 1;
+            this.tweens.add({ targets: b, x: c.x + sg * 95 * K, y: c.y + 12 * K, rot: 1.35, duration: 260, ease: 'Bounce.easeOut' });
+            this.time.delayedCall(140, () => Sfx.bastoCau());
+        }
+        // Halo, fletxa, llumetes i anell
+        const q0 = this.puntsCop(e)[0], R = q0.r + 12;
+        const f = e.finestra = { off: { v: 0 }, llums: [], apagades: 0, tics: 0, alcat: false, tancada: false };
+        f.halo = this.add.ellipse(q0.x, q0.y, R * 2, R * 2, 0xfff0b0, 0.18).setStrokeStyle(5, 0xffd860, 0.9).setBlendMode('ADD').setDepth(99955);
+        this.tweens.add({ targets: f.halo, alpha: { from: 0.55, to: 1 }, yoyo: true, repeat: -1, duration: 350, ease: 'Sine.inOut' });
+        f.fletxa = this.add.triangle(q0.x, q0.y - R - 40, 0, 0, 24, 0, 12, 20, 0xffd860).setStrokeStyle(3, 0x000000, 1).setDepth(99956);
+        this.tweens.add({ targets: f.off, v: 10, yoyo: true, repeat: -1, duration: 300, ease: 'Sine.inOut' });
+        for (let i = 0; i < e.def.copsPausa; i++) f.llums.push(this.add.circle(q0.x, q0.y, 8, 0xffe08a).setStrokeStyle(2, 0x000000, 0.8).setDepth(99957));
+        f.anell = this.ovalTerra(c.x, c.y, 85 * K, 0xffe9a0, 0.08, 3);
+        this.tweens.add({ targets: f.anell, alpha: { from: 1, to: 0.5 }, yoyo: true, repeat: -1, duration: 500 });
+        f.seguir = () => {       // halo, fletxa i llumetes segueixen el cap cada fotograma
+            if (!e.spr.active || e.mort) return;
+            const q = this.puntsCop(e)[0], r = q.r + 12;
+            if (f.halo) f.halo.setPosition(q.x, q.y);
+            if (f.fletxa) f.fletxa.setPosition(q.x, q.y - r - 40 + f.off.v);
+            f.llums.forEach((l, i) => { const a = Phaser.Math.DegToRad(-150 + i * 60); l.setPosition(q.x + Math.cos(a) * (r + 16), q.y + Math.sin(a) * (r + 16)); });
+        };
+        f.seguir();
+        this.events.on('postupdate', f.seguir);
+        f.net = () => this.events.off('postupdate', f.seguir);
+        this.events.once('shutdown', f.net);
+        if (n <= 2) this.flotant(q0.x, q0.y - R - 82, 'Ara!', '#ffe9a0', 34);
+    }
+    // Cada fotograma de la pausa: avís de tancament (700 ms: parpelleig + tres «tic») i el bàcul que s'alça (250 ms abans)
+    avisFinestraOcellaire(e, ara) {
+        const f = e.finestra;
+        if (!f) return;
+        const rest = e.fins - ara, K = K_OCELLAIRE, b = e.basto, c = e.spr.body.center;
+        if (!f.tancada && rest < AJUST_OCELLAIRE.avis) {
+            if (f.tics === 0) { if (f.halo) this.tweens.killTweensOf(f.halo); }
+            while (f.tics < 3 && rest <= AJUST_OCELLAIRE.avis - f.tics * 250) { Sfx.tic(); f.tics++; }
+            const alfa = Math.floor(ara / 90) % 2 === 0 ? 1 : 0.15;
+            if (f.halo) f.halo.setAlpha(alfa);
+            if (f.fletxa) f.fletxa.setAlpha(alfa);
+            f.llums.forEach((l, i) => { if (i >= f.apagades) l.setAlpha(alfa); });
+        }
+        if (!f.alcat && rest < 250 && b) {
+            f.alcat = true;
+            Sfx.carrega();
+            this.tweens.killTweensOf(b);
+            const sg = e.spr.flipX ? -1 : 1;
+            this.tweens.add({ targets: b, x: c.x + sg * 66 * K, y: c.y - 92 * K, duration: 250, ease: 'Sine.inOut', onComplete: () => { b.lliure = false; b.gir = 0.04; if (b.g.clearTint) b.g.clearTint(); } });
+        }
+    }
+    // Un cop encertat a la pausa: s'apaga una llumeta; al tercer, el halo es trenca en espurnes i la pausa es tanca
+    copFinestraOcellaire(e, tanca) {
+        const f = e.finestra;
+        if (!f) return;
+        const l = f.llums[f.apagades++];
+        if (l) { l.setFillStyle(0x555566).setAlpha(1); this.tweens.add({ targets: l, scale: 1.6, yoyo: true, duration: 60 }); }
+        if (tanca && !f.tancada) {
+            f.tancada = true;
+            const q = this.puntsCop(e)[0];
+            const p = this.add.particles(q.x, q.y, 'espurna', { speed: { min: 120, max: 320 }, lifespan: 450, scale: { start: 0.35, end: 0 }, tint: 0xffffff, quantity: 6, emitting: false }).setDepth(99958);
+            p.explode(6);
+            this.time.delayedCall(600, () => p.destroy());
+            [f.halo, f.fletxa, ...f.llums].forEach(o => { if (o) o.setVisible(false); });
+        }
+    }
+    // Desmunta la pausa (fi de temps, canvi de fase, mort): neteja els marcadors, torna el bàcul a la mà i els tambors
+    tancarFinestraOcellaire(e) {
+        const f = e.finestra;
+        if (!f) return;
+        e.finestra = null;
+        [f.halo, f.fletxa, f.anell, ...f.llums].forEach(o => { if (o) { this.tweens.killTweensOf(o); o.destroy(); } });
+        this.tweens.killTweensOf(f.off);
+        if (f.net) { f.net(); this.events.off('shutdown', f.net); }
+        this.tamborsCallats = false;
+        if (e.spr.active) { e.spr.senseUlls = false; e.spr.clearTint(); }
+        const b = e.basto;
+        if (b && b.lliure && !e.mort) {
+            this.tweens.killTweensOf(b);
+            const c = e.spr.body.center;
+            b.x = c.x + (e.spr.flipX ? -66 : 66) * K_OCELLAIRE; b.y = c.y - 92 * K_OCELLAIRE; b.lliure = false; b.gir = 0.04;
+            if (b.g.clearTint) b.g.clearTint();
+        } else if (b && b.lliure) b.lliure = false;
+        if (!e.mort) Sfx.tambor(true);                                       // tornen els tambors amb un cop fort
     }
     // S'aixeca d'una revolada després de tres cops al cap: una ona curta que empeny l'Ineu (sense fer-li mal)
     aixecaOcellaire(e) {
@@ -918,9 +1035,23 @@ class ZonaGabia extends ZonaBase {
     }
     // Terra en flames (fase 3): quatre zones, una on ets ara, que avisen i després cremen
     focsTerra(e) {
-        const jo = this.ineu.body.center, punts = [{ x: jo.x, y: jo.y }];
+        const jo = this.ineu.body.center, c = e.spr.body.center, MIN = AJUST_OCELLAIRE.focDistMin, punts = [{ x: jo.x, y: jo.y }];
         for (let k = 0; k < 3; k++) { const a = Math.random() * Math.PI * 2, d = 150 + Math.random() * 110; punts.push({ x: jo.x + Math.cos(a) * d, y: jo.y + Math.sin(a) * d * 0.6 }); }
-        punts.forEach(q => { const p = this.puntPlataforma(q.x, q.y); this.focTerra(p.x, p.y, 70, 950, 3000); });
+        punts.forEach(q => {
+            // Cap zona de foc a menys de 180 px del cos de l'Ocellaire (la pausa que ve després no pot obrir-se entre flames):
+            // si hi cau, s'empeny cap enfora i, si la vora de la plataforma ho impedeix, es proven altres direccions
+            let p = this.puntPlataforma(q.x, q.y);
+            if (Phaser.Math.Distance.Between(p.x, p.y, c.x, c.y) < MIN) {
+                const a0 = Math.atan2(q.y - c.y, q.x - c.x) || Math.random() * Math.PI * 2;
+                for (let k = 0; k < 8; k++) {
+                    const a = a0 + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * Math.PI / 4;
+                    const t = this.puntPlataforma(c.x + Math.cos(a) * MIN, c.y + Math.sin(a) * MIN);
+                    p = t;
+                    if (Phaser.Math.Distance.Between(t.x, t.y, c.x, c.y) >= MIN - 1) break;
+                }
+            }
+            this.focTerra(p.x, p.y, 70, 950, 3000);
+        });
     }
     focTerra(x, y, R, avis, dura) {
         const av = this.ovalTerra(x, y, R, 0xff5020, 0.05, 3);
@@ -955,7 +1086,7 @@ class ZonaGabia extends ZonaBase {
     netejarRonda(e) {
         (this.focs || []).forEach(f => this.apagarFoc(f)); this.focs = [];
         (this.anellsAvis || []).forEach(g => { if (g.active) { this.tweens.killTweensOf(g); g.destroy(); } }); this.anellsAvis = [];
-        if (e) e.avisCercle = null;
+        if (e) { e.avisCercle = null; if (e.finestra) this.tancarFinestraOcellaire(e); }
     }
 
     // Rastre de foc d'un ocell
@@ -1035,80 +1166,263 @@ class ZonaGabia extends ZonaBase {
         }
     }
 
+    // ---------- Lluita final: ajudes de muntatge (guió: design/lluita_final_guio.md) ----------
+    // Una textura opcional només compta si s'ha carregat de debò (si falta el fitxer, el catàleg en fa un marcador)
+    teTextura(k) {
+        return this.textures.exists(k) && !(typeof Grafics !== 'undefined' && Grafics.faltants && Grafics.faltants.includes(k));
+    }
+    escalaTextura(a, k) {
+        const t = this.textures.get(k);
+        if (t && t.customData && t.customData.escala) a.setScale(t.customData.escala);
+        a.escalaBase = a.scaleY;
+    }
+    // Bancs de frases de combat (no bloquegen: z.flotant). nou = primera vegada, retry = si ja havia vist l'Ocellaire; ald = l'Aldreu des de fora
+    bancsFrases() {
+        return {
+            fase2: {
+                nou: ["Així que tens ullals, petit. Ara miraré de debò.", "Fa mal, oi? Un riure fa més mal quan és teu que quan és d'un altre."],
+                retry: ["Ja m'has vist això. Et va servir de molt?", "Cada vegada et fas una mica més meu."],
+                ald: ["Així, Mestre! Així!"]
+            },
+            fase3: {
+                nou: ["Prou de música! Que cremi tot!", "He tingut milers de riures. Tu només en tens un... però ja el sento tremolar."],
+                retry: ["Encara hi ets? Que n'ets, de pesat.", "Prou de música! Que cremi tot!"],
+                ald: ["Mestre, no us cansaríeu, oi?"]
+            },
+            cap: { nou: ["Ai!... I això, qui t'ho ha ensenyat?", "Prou. Només el cap, sí? Quin monjo més llest."] },
+            caiguda: {
+                nou: ["Veus? Fins i tot a tu, la gàbia et crida.", "Descansa, petit... al fons hi ha un lloc per a tu."],
+                ald: ["Us ho deia, monjo. Ningú no li guanya."]
+            },
+            espor: { nou: ["Els meus ocells tenen gana.", "Rius poc, monjo. Tens la boca seca.", "Aquest cant... és massa bonic per a tu.", "Un nen que riu sap perdre. Tu no sap perdre?"] }
+        };
+    }
+    triaFrase(clau, llista) {
+        this.ultFrase = this.ultFrase || {};
+        let i = Phaser.Math.Between(0, llista.length - 1);
+        if (llista.length > 1 && i === this.ultFrase[clau]) i = (i + 1) % llista.length;
+        this.ultFrase[clau] = i;
+        return llista[i];
+    }
+    partirFrase(t) {                          // dues línies si és llarga (el text flotant no es parteix sol)
+        if (t.length <= 30) return t;
+        const m = Math.floor(t.length / 2);
+        let i = t.indexOf(' ', m), j = t.lastIndexOf(' ', m);
+        if (i < 0 || (j >= 0 && m - j < i - m)) i = j;
+        return i < 0 ? t : t.slice(0, i) + '\n' + t.slice(i + 1);
+    }
+    // Frase de combat sense bloquejar. clau: 'fase2' | 'fase3' | 'cap' (primer cop al cap) | 'caiguda' (l'Ineu cau) | 'espor'.
+    // punchFase ja la crida per a les fases; 'cap' i 'caiguda' les ha de cridar qui detecta el fet (combat.js).
+    dirFrase(clau) {
+        const b = this.bancsFrases()[clau], e = this.boss;
+        if (!b || !e || !e.spr || !e.spr.active || this.bossCaigut) return;
+        const llista = (this.combatVist && b.retry) ? b.retry : b.nou;
+        this.flotant(e.spr.x, e.spr.y - e.spr.displayHeight - 8, this.partirFrase(this.triaFrase(clau + 'o', llista)), '#d8c8ff');
+        if (b.ald) {
+            const ta = this.triaFrase(clau + 'a', b.ald);
+            this.time.delayedCall(1800, () => { if (this.bossActiu && !this.bossCaigut) this.flotant(this.gx + 330, this.base - 40, this.partirFrase(ta), '#ffffff'); });
+        }
+    }
+    // Una frase esporàdica cada 25-35 s de combat
+    iniciarVeus() {
+        const torn = () => this.time.delayedCall(Phaser.Math.Between(25000, 35000), () => {
+            if (!this.bossActiu || !this.boss || this.bossCaigut) return;
+            this.dirFrase('espor'); torn();
+        });
+        torn();
+    }
+    // PUNCH-IN DE CÀMERA en un canvi de fase (P20/P21). L'ha de cridar qui detecta el rugit: this.punchFase(2) o this.punchFase(3).
+    // Fa també la frase de la fase. El zoom només si l'Ineu és a menys de 520 px de l'Ocellaire; dura <= 1,2 s i torna a seguir l'Ineu.
+    punchFase(f) {
+        const e = this.boss;
+        if (!e || !e.spr || !e.spr.active || !this.bossActiu || this.bossCaigut) return;
+        this.dirFrase(f >= 3 ? 'fase3' : 'fase2');
+        if (this.punchOcupat) return;
+        const I = this.ineu;
+        if (Phaser.Math.Distance.Between(I.x, I.y, e.spr.x, e.spr.y) >= 520) return;
+        const f3 = f >= 3;
+        this.punchOcupat = true;
+        if (!f3) this.hitStop(160);
+        this.enquadrar(e.spr.x, e.spr.y - 0.55 * e.spr.displayHeight, f3 ? 1.8 : 1.55, f3 ? 240 : 300, null, 0);
+        this.time.delayedCall((f3 ? 240 : 300) + (f3 ? 900 : 700), () => {
+            if (!this.bossActiu || this.bossCaigut) { this.punchOcupat = false; return; }
+            this.alliberarCamera(f3 ? 500 : 600, () => { this.punchOcupat = false; });
+        });
+    }
+    // El Pastor (guàrdia) es veu x1.5. clau: nova textura opcional
+    granPastor(a, clau) {
+        if (!a) return;
+        if (a.respira) { a.respira.stop(); a.respira = null; }
+        if (a.balanceig) { a.balanceig.stop(); a.balanceig = null; }
+        if (clau) a.setTexture(clau);
+        const t = this.textures.get(a.texture.key);
+        const e = (t && t.customData && t.customData.escala) || 1 / RES;
+        a.setScale(e * 1.5); a.escalaBase = a.scaleY;
+        if (a.ombra) a.ombra.setScale(0.42 * 1.5);
+        this.idleCodi(a, true);
+    }
+    // ---------- L'Aldreu final: trist (cap cot) -> aixeca el cap -> somriu ----------
+    aldreuTrist(a) {
+        if (!a || !a.active) return;
+        this.aldreuEstat = 'trist';
+        if (a.respira) { a.respira.stop(); a.respira = null; }
+        if (a.balanceig) { a.balanceig.stop(); a.balanceig = null; }
+        if (a.respiraTrist) a.respiraTrist.stop();
+        if (this.teTextura('germa_aldreu_trist')) {
+            a.setTexture('germa_aldreu_trist'); this.escalaTextura(a, 'germa_aldreu_trist');
+            a.clearTint(); a.setAngle(0);
+        } else {
+            a.setTint(0xb8b8d0); a.setAngle(-5); a.setScale(a.scaleX, (a.escalaBase || a.scaleY) * 0.97);
+        }
+        a.setFlipX(true);                                     // de cara als barrots (d'esquena a l'Ineu)
+        const s = a.scaleY;
+        a.respiraTrist = this.tweens.add({ targets: a, scaleY: s * 1.015, yoyo: true, repeat: -1, duration: 2600, ease: 'Sine.easeInOut' });
+    }
+    // Camina fins a (x, y); si encara és trist, recupera la postura en arribar (npcVa la reinicia)
+    aldreuVa(x, y, fet, vel) {
+        this.npcVa('germa_aldreu', x, y, () => { if (this.aldreuEstat === 'trist') this.aldreuTrist(this.npcs.germa_aldreu); if (fet) fet(); }, vel);
+    }
+    aldreuAixeca(a) {
+        if (!a || !a.active || this.aldreuEstat !== 'trist') return;
+        if (a.respiraTrist) { a.respiraTrist.stop(); a.respiraTrist = null; }
+        this.aldreuEstat = 'aixeca';
+        if (this.teTextura('germa_aldreu_aixeca')) { a.setTexture('germa_aldreu_aixeca'); this.escalaTextura(a, 'germa_aldreu_aixeca'); return; }
+        if (this.teTextura('germa_aldreu_trist')) return;          // sense variant: el cap cot es manté fins al somriure
+        this.tweens.add({ targets: a, angle: 0, scaleY: a.escalaBase, duration: 800, ease: 'Sine.easeInOut', onComplete: () => a.clearTint() });
+    }
+    // El somriure de la Plaça: l'sprite normal 'germa_aldreu', que és el que es queda a la gàbia
+    aldreuSomriu(a) {
+        if (!a || !a.active) return;
+        this.aldreuEstat = 'somriu';
+        if (a.respiraTrist) { a.respiraTrist.stop(); a.respiraTrist = null; }
+        this.tweens.killTweensOf(a);
+        a.clearTint(); a.setAngle(0);
+        a.setTexture('germa_aldreu'); this.escalaTextura(a, 'germa_aldreu');
+        this.idleCodi(a, true);
+        this.llum(a.x, a.y - 0.7 * a.displayHeight, 0xffe8a0);
+    }
+
     iniciarCombatFinal() {
         this.combatIniciat = true;
         this.bossActiu = true;
         this.tancarSalaCombat(true);
         const gx = this.gx, base = this.base, vist = Estat.flag('ocellaireVist');
+        this.combatVist = vist;
+        const KO = (typeof K_OCELLAIRE !== 'undefined' ? K_OCELLAIRE : 1.4);
         const ap = this.add.image(gx, base + 90, 'ocellaire').setAlpha(0).setDepth(base + 90);
-        ap.setScale(this.textures.get('ocellaire').customData.escala || 1 / RES);
+        ap.escalaFi = (this.textures.get('ocellaire').customData.escala || 1 / RES) * KO;
+        ap.setScale(ap.escalaFi);
         this.npcs.ocellaire = ap;
-        const cam = this.cameras.main, ui = this.ui(), A = 'Aldreu, Pastor de Boira', O = "L'Home de la Gàbia";
+        const cam = this.cameras.main, ui = this.ui(), I = this.ineu, A = 'Aldreu, Pastor de Boira', O = "L'Home de la Gàbia";
+        // Plans (sense barres negres: només zoom i desplaçament). pla(objectiu, zoom, ms, reserva)
+        const pla = (obj, zoom, ms, reserva) => ({ fer: (z, fet) => { const p = obj(); z.enquadrar(p[0], p[1], zoom, ms, fet, reserva); } });
+        const pIneu = () => [I.x, I.y - 70];
+        const pAld = k => () => { const a = this.npcs.germa_aldreu; return a ? [a.x, a.y - k * a.displayHeight] : pIneu(); };
+        const pMestre = k => () => [ap.x, ap.y - k * ap.displayHeight];
+        const aparicioAldreu = f => {
+            // El Germà Aldreu (Pastor de Boira) apareix de cop entre una bafarada de boira, gran (x1.5)
+            const ald = this.npcs.germa_aldreu;
+            if (ald) {
+                Sfx.puf();
+                this.boiraPuf(ald.x, ald.y - 50);
+                cam.shake(180, 0.004);
+                this.granPastor(ald);
+                ald.setVisible(true).setAlpha(1);
+                if (ald.ombra) ald.ombra.setVisible(true).setAlpha(0.42);
+                if (ald.col) ald.col.body.enable = true;
+            }
+            this.npcMira('germa_aldreu', 'ineu');
+            this.enquadrar(gx + 230, base - 10, 1.55, 350, () => this.esperar(250, f));
+        };
+        const transformacio = (z, fet) => z.seq([
+            f => {
+                const ald = z.npcs.germa_aldreu;
+                if (ald && ald.anims) { ald.anims.stop(); ald.idleClau = null; }          // deixa l'idle: passa a ser el Guàrdia / el Pastor
+                if (ald && z.teTextura('aldreu_pastor_crida')) z.granPastor(ald, 'aldreu_pastor_crida');
+                else if (ald && z.textures.exists('aldreu_guardia')) z.granPastor(ald, 'aldreu_guardia');
+                else if (ald && z.textures.exists('pastor_boira')) { ald.setTexture('pastor_boira'); ald.setScale(0.5 * 1.5); }
+                z.npcSalta('germa_aldreu', f, 2);
+            },
+            f => z.invocarOcellaire(ap, f, vist)
+        ], fet);
+        const rugit = (z, fet) => {
+            // P14: el rugit (dolly-out + shake)
+            z.enquadrar(ap.x, ap.y - 110, 2.2, 1, () => {
+                if (z.textures.exists('ocellaire_rugit')) { ap.setTexture('ocellaire_rugit'); if (ap.ulls) ap.ulls.setVisible(false); }
+                Sfx.rugit(); cam.shake(900, 0.008); cam.flash(180, 255, 255, 255);
+                ui.titolBoss("L'HOME DE LA GÀBIA", "L'Ocellaire");
+                z.enquadrar(ap.x, ap.y - 110, 1.0, 380, null, 0);
+                z.esperar(vist ? 2200 : 3200, () => { ap.setTexture('ocellaire'); if (ap.ulls) ap.ulls.setVisible(true); fet(); });
+            }, 0);
+        };
+        const fuig = (z, fet) => {
+            // P15: l'Aldreu fuig i crida des de lluny; P16: s'obre el joc
+            const ald = z.npcs.germa_aldreu;
+            if (ald) z.enquadrar(ald.x, ald.y - 110, 1.3, 600, null, 0);
+            z.npcVa('germa_aldreu', gx + 330, base + 40, null, 220); z.amagarAldreu();
+            z.flotant(gx + 330, base - 40, vist ? "Mestre, aquesta vegada sí!" : "Sí, Mestre!", '#ffffff');
+            z.esperar(900, () => z.alliberarCamera(900, fet));
+        };
         const pagines = [
-            { fer: (z, fet) => z.seq([
-                f => {
-                    z.ineuVa(this.ineu.x, Math.min(this.ineu.y, base + 340), null, 180);
-                    z.enquadrar(gx + 70, base + 70, 1.08, 900, f);
-                },
-                f => {
-                    // El Germà Aldreu (Pastor de Boira) apareix de cop entre una bafarada de boira
-                    const ald = this.npcs.germa_aldreu;
-                    if (ald) {
-                        Sfx.puf();
-                        this.boiraPuf(ald.x, ald.y - 50);
-                        cam.shake(180, 0.004);
-                        ald.setVisible(true).setAlpha(1);
-                        if (ald.ombra) ald.ombra.setVisible(true).setAlpha(0.42);
-                        if (ald.col) ald.col.body.enable = true;
-                    }
-                    z.npcMira('germa_aldreu', 'ineu');
-                    z.esperar(450, f);
-                }
-            ], fet) },
+            { fer: (z, fet) => {
+                Joc.aturarMusica();
+                z.ineuVa(I.x, Math.min(I.y, base + 340), null, 150);
+                z.posarDireccio('amunt', false);
+                // P01: pla general (tall) i deriva lenta
+                z.enquadrar(gx, base + 80, 0.9, 1, () => {
+                    if (vist) { z.esperar(900, fet); return; }
+                    Sfx.carrega();
+                    z.enquadrar(gx, base + 40, 0.9, 2200, fet, 0);
+                }, 0);
+            } },
             ...(vist ? [
-                { qui: A, text: "Una altra vegada, monjo? El Mestre no es cansa mai." }
+                { fer: (z, fet) => aparicioAldreu(fet) },
+                { qui: A, text: "Una altra vegada, monjo? El Mestre no es cansa mai." },
+                { fer: (z, fet) => transformacio(z, fet) },
+                pla(pMestre(0.55), 1.6, 1),
+                { qui: O, text: "Torna a entrar, petit. Sempre torna, el riure." },
+                { fer: (z, fet) => rugit(z, fet) },
+                { fer: (z, fet) => fuig(z, fet) }
             ] : [
-                { qui: A, text: "Qui t'ha donat permís per trepitjar aquesta sala, monjo?!" },
-                { qui: 'Ineu', text: "Germà Aldreu! Deixeu anar els nens, tot això s'ha d'acabar!" },
+                pla(pIneu, 1.55, 900),
+                { qui: 'Ineu', text: "(Tres capolls de boira, penjats com fruites... L'Huri, el Fram, el Sardi. Dormen.)" },
+                { fer: (z, fet) => z.enquadrar(gx - 160, base - 170, 1.6, 1100, () => { Sfx.riure(); z.enquadrar(gx + 160, base - 170, 1.6, 1100, fet); }) },
+                { qui: 'Ineu', text: "Aguanteu. Ja sóc aquí." },
+                { fer: (z, fet) => aparicioAldreu(fet) },
+                { qui: A, text: "Silenci! Aquí no s'alça la veu, monjo. El Mestre dorm, i jo vetllo el seu son." },
+                pla(pIneu, 1.5, 1),
+                { qui: 'Ineu', text: "Germà Aldreu... sóc jo. Baixeu el bastó, que els nens no són seus." },
+                pla(pAld(0.8), 1.55, 1),
+                { qui: A, text: "Seus, no. Del Mestre. Cada riure que li duc em diu «bon xicot». ¿Saps què vol dir que algú et digui pel nom?" },
                 { fer: (z, fet) => {
                     const ald = z.npcs.germa_aldreu;
-                    if (ald && z.textures.exists('pastor_enfadat')) {
-                        ald.setTexture('pastor_enfadat');
-                        const tex = z.textures.get('pastor_enfadat');
-                        if (tex && tex.customData && tex.customData.escala) ald.setScale(tex.customData.escala);
-                    }
-                    fet();
+                    if (ald && z.textures.exists('pastor_enfadat')) z.granPastor(ald, 'pastor_enfadat');
+                    if (Sfx.xiscle) Sfx.xiscle();
+                    const p = pAld(0.8)(); z.enquadrar(p[0], p[1], 2.0, 500, fet);
                 } },
-                { qui: A, text: "Tard, massa tard! Mestre! Mestre, ja és aquí! El monjo que us vol prendre els nens!" }
-            ]),
-            { fer: (z, fet) => z.seq([
-                f => {
-                    const ald = z.npcs.germa_aldreu;
-                    if (ald && ald.anims) { ald.anims.stop(); ald.idleClau = null; }          // deixa l'idle: passa a ser el Guàrdia / el Pastor
-                    if (ald && z.textures.exists('aldreu_guardia')) {
-                        ald.setTexture('aldreu_guardia');
-                        const tex = z.textures.get('aldreu_guardia');
-                        if (tex && tex.customData && tex.customData.escala) ald.setScale(tex.customData.escala);
-                    } else if (ald && z.textures.exists('pastor_boira')) {
-                        ald.setTexture('pastor_boira');
-                        ald.setScale(0.5);
-                    }
-                    z.npcSalta('germa_aldreu', f, 2);
-                },
-                f => z.invocarOcellaire(ap, f),
-                f => {
-                    if (z.textures.exists('ocellaire_rugit')) { ap.setTexture('ocellaire_rugit'); if (ap.ulls) ap.ulls.setVisible(false); }
-                    Sfx.rugit(); cam.shake(900, 0.008); ui.titolBoss("L'HOME DE LA GÀBIA", "L'Ocellaire");
-                    z.esperar(vist ? 2200 : 3200, () => { ap.setTexture('ocellaire'); if (ap.ulls) ap.ulls.setVisible(true); f(); });
-                }
-            ], fet) },
-            ...(vist ? [] : [
+                { qui: A, text: "Tu no ho saps! Per a tu sempre hi ha hagut algú que et mirés!" },
+                pla(pIneu, 1.5, 1),
+                { qui: 'Ineu', text: "Això no és mirar algú, Germà. És tancar-lo." },
+                pla(pAld(0.8), 2.0, 500),
+                { qui: A, text: "Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!" },
+                { fer: (z, fet) => transformacio(z, fet) },
+                { qui: O, text: "Aldreu... fill meu... no cridis." },
+                { qui: O, text: "Ja l'he sentit entrar. Quin soroll més dolç fan, uns peus de monjo damunt la meva pedra." },
+                pla(pIneu, 1.45, 1),
+                { qui: 'Ineu', text: "Deixeu els nens. Tornaran amb els seus." },
+                pla(pMestre(0.55), 1.6, 700),
                 { qui: O, text: "Un nen que riu... Fa segles que no en sento cap." },
-                { qui: O, text: "La gàbia és plena de riures robats. Encara hi cap el teu." }
-            ]),
-            { fer: (z, fet) => z.seq([
-                f => { z.npcVa('germa_aldreu', gx + 330, base + 40, null, 220); z.amagarAldreu(); z.alliberarCamera(800, f); }
-            ], fet) }
+                { qui: O, text: "La gàbia és plena de riures robats. Encara hi cap el teu." },
+                pla(pIneu, 1.45, 1),
+                { qui: 'Ineu', text: "Runna us coneix. I jo us veig. No sou el que feu veure." },
+                pla(() => [(ap.x + I.x) / 2, (ap.y + I.y) / 2 - 90], 0.95, 1000),
+                { qui: O, text: "Runna... Quina espasa tan petita per a una sala tan gran." },
+                pla(pAld(0.8), 1.3, 500),
+                { qui: A, text: "Deixeu-m'ho a mi, Mestre!" },
+                { qui: O, text: "Aparta, Aldreu. Aquesta nit el Mestre mateix et mostrarà com es fa." },
+                { fer: (z, fet) => rugit(z, fet) },
+                { fer: (z, fet) => fuig(z, fet) }
+            ])
         ];
         this.ui().obrirDialeg({ pagines }, () => this.començarBoss(ap));
     }
@@ -1125,10 +1439,10 @@ class ZonaGabia extends ZonaBase {
         this.tweens.killTweensOf(a);
         a.setVisible(true).setAlpha(1); if (a.ombra) a.ombra.setVisible(true).setAlpha(a.ombra.alpha || 1);
     }
-    // Quan el Mestre cau, la boira deixa l'Aldreu: el Pastor de Boira torna a ser el Germà Aldreu
+    // Quan el Mestre cau, la boira deixa l'Aldreu: el Pastor de Boira torna a ser el Germà Aldreu (a mida normal, trist)
     desferPastor() {
         const a = this.npcs.germa_aldreu;
-        if (!a || (a.texture.key !== 'pastor_boira' && a.texture.key !== 'aldreu_guardia')) return;
+        if (!a) return null;          // (no mira la textura: en caminar, npcVa li torna el dibuix normal, i la boira ha de deixar-lo igualment)
         const x = a.x, y = a.y, flip = a.flipX;
         Sfx.puf();
         this.boiraPuf(x, y - 60);
@@ -1141,26 +1455,52 @@ class ZonaGabia extends ZonaBase {
         if (a.ombra) a.ombra.destroy();
         a.destroy();
         delete this.npcs.pastor_boira; delete this.npcs.germa_aldreu; delete this.npcs.aldreu_guardia;
-        this.npc('germa_aldreu', x, y, DIALEGS.aldreuGabia, { flipX: flip });
+        const n = this.npc('germa_aldreu', x, y, DIALEGS.aldreuGabia, { flipX: flip });
+        this.aldreuEstat = 'trist';
+        if (!this.teTextura('germa_aldreu_trist')) n.setTint(0xb8b8d0);            // (la postura completa s'aplica en arribar: aldreuTrist)
+        return n;
     }
 
-    // La boira baixa de la cúpula, s'arremolina i en surt l'Ocellaire
-    invocarOcellaire(ap, fet) {
-        Sfx.carrega();
-        const p = this.add.particles(this.gx, this.base - this.gh, 'boira', {
-            speedY: { min: 120, max: 260 }, speedX: { min: -40, max: 40 }, lifespan: 1300, scale: { start: 0.5, end: 1.4 },
-            alpha: { start: 0.7, end: 0 }, tint: 0x9a50ff, frequency: 40
-        }).setDepth(99000);
-        this.cameras.main.shake(1200, 0.004);
-        this.time.delayedCall(1100, () => {
-            p.stop(); this.time.delayedCall(1400, () => p.destroy());
-            this.boiraPuf(ap.x, ap.y - 60);
-            this.cameras.main.flash(250, 160, 80, 255);
-            this.tweens.add({ targets: ap, alpha: 1, duration: 500, onComplete: () => {
+    // La boira baixa de la cúpula, s'arremolina i en surt l'Ocellaire gegant que aterra (P07-P11). curta = versió de retry
+    invocarOcellaire(ap, fet, curta) {
+        const gx = this.gx, base = this.base, cam = this.cameras.main;
+        const yTop = base - this.gh - 140, yFi = base + 90, sFi = ap.escalaFi || ap.scaleX, durB = curta ? 1400 : 2400;
+        let p = null;
+        this.seq([
+            f => {                                              // P07: contrapicat, la càmera puja per la gàbia
+                Sfx.carrega();
+                p = this.add.particles(gx, base - this.gh, 'boira', {
+                    speedY: { min: 120, max: 260 }, speedX: { min: -40, max: 40 }, lifespan: 1300, scale: { start: 0.5, end: 1.4 },
+                    alpha: { start: 0.7, end: 0 }, tint: 0x9a50ff, frequency: 40
+                }).setDepth(99000);
+                cam.shake(1200, 0.004);
+                ap.setPosition(gx, yTop).setScale(sFi * 1.36).setAlpha(0);
+                this.enquadrar(gx, base - this.gh - 40, 1.15, curta ? 500 : 1200, f, 0);
+            },
+            f => {                                              // P08: baixada del Mestre (gegantí, ve de dalt)
+                Sfx.carrega();
+                if (this.teTextura('ocellaire_alca')) ap.setTexture('ocellaire_alca');
+                this.tweens.add({ targets: ap, alpha: 1, duration: 500 });
+                this.tweens.add({ targets: ap, y: yFi, scale: sFi, duration: durB, ease: 'Sine.easeIn',
+                    onUpdate: () => { if (p) p.setPosition(gx, ap.y - 60); }, onComplete: f });
+                this.enquadrar(gx, base - 30, 1.3, durB, null, 0);
+            },
+            f => {                                              // P09: aterratge
+                p.stop(); this.time.delayedCall(1400, () => p.destroy());
+                Sfx.puf(); this.boiraPuf(ap.x, ap.y - 60);
+                cam.flash(250, 160, 80, 255); cam.shake(300, 0.010);
+                ap.setTexture(this.teTextura('ocellaire_mira_avall') ? 'ocellaire_mira_avall' : 'ocellaire');
+                if (!curta) this.npcVa('germa_aldreu', gx + 260, base + 60, null, 160);
+                this.enquadrar(ap.x, ap.y - 80, 1.2, 300, f, 0);
+            },
+            f => {                                              // P10: els ulls lila s'encenen (retry: pla mitjà del Mestre)
                 ap.ulls = this.crearUlls(); this.posarUlls(ap.ulls, ap, 0);
-                this.esperar(300, fet);
-            } });
-        });
+                ap.ulls.setAlpha(0);
+                this.tweens.add({ targets: ap.ulls, alpha: 1, duration: 600 });
+                if (curta) this.enquadrar(ap.x, ap.y - 0.55 * ap.displayHeight, 1.6, 600, f);
+                else this.enquadrar(ap.x, ap.y - 0.78 * ap.displayHeight, 2.2, 1100, () => this.esperar(300, f));
+            }
+        ], fet);
     }
 
     començarBoss(ap) {
@@ -1188,18 +1528,20 @@ class ZonaGabia extends ZonaBase {
         this.invulnerableFins = this.time.now + 1500;
         this.tambors(560);
         this.npcs.ocellaire = e.spr;
+        this.iniciarVeus();
     }
 
     ocellaireDerrotat(e) {
         this.bossCaigut = e;
-        const b = e.basto, c = e.spr.body.center, cam = this.cameras.main, ui = this.ui(), O = "L'Home de la Gàbia";
+        const b = e.basto, c = e.spr.body.center, cam = this.cameras.main, ui = this.ui(), O = "L'Home de la Gàbia", gx = this.gx, base = this.base;
         if (this.tambor) { this.tambor.remove(); this.tambor = null; }
         Joc.aturarMusica(); Joc.jingle(this, 'jingle_boss');
         this.netejarRonda(e);
         ui.amagarBarraBoss();
         this.mostrarAldreu();
         if (e.spr.texture.key !== 'ocellaire') e.spr.setTexture('ocellaire');
-        // El cop final: el món gairebé s'atura i un flaix blanc ho esborra tot
+        // P30: el cop final: la càmera s'acosta al cap, el món gairebé s'atura i un flaix blanc ho esborra tot
+        this.enquadrar(e.spr.x, e.spr.y - 0.55 * e.spr.displayHeight, 1.9, 420, null, 0);
         this.hitStop(450);
         cam.flash(700, 255, 255, 255);
         Sfx.rugit();
@@ -1207,27 +1549,32 @@ class ZonaGabia extends ZonaBase {
         // Els ocells de foc s'apaguen tots alhora
         this.enemics.filter(o => o.tipus === 'ocellFoc' && !o.mort).forEach(o => this.apagarOcell(o));
         if (e.flama) { e.flama.destroy(); e.flama = null; }
-        // El bàcul es parteix i cau
+        // El bàcul es parteix i cau (P31: la càmera el segueix)
         this.tweens.killTweensOf(b);
         b.volant = true;
+        this.time.delayedCall(500, () => { if (b.g && b.g.active) this.enquadrar(b.g.x, c.y - 10, 1.6, 500, null, 0); });
         this.tweens.add({ targets: b.g, y: c.y - 10, rotation: b.rot + 4, duration: 700, ease: 'Bounce.easeOut', onComplete: () => {
             Sfx.talla(); this.impacte(b.g.x, b.g.y, { x: 0, y: -1 }, 2);
             this.tweens.add({ targets: b.g, alpha: 0, duration: 900, delay: 500, onComplete: () => b.g.destroy() });
         } });
         this.tweens.add({ targets: e.spr, angle: { from: -6, to: 6 }, yoyo: true, repeat: 6, duration: 90 });
         this.ui().actualitzarHUD();
-        // Pla: l'Ocellaire, la gàbia i l'Aldreu alhora
-        const mx = (e.spr.x + this.gx) / 2, my = Math.min(e.spr.y, this.base + 220) - 80;
-        this.time.delayedCall(900, () => this.ui().obrirDialeg({ pagines: [
-            { fer: (z, fet) => z.enquadrar(mx, my, 1.05, 900, fet) },
+        const mx = (e.spr.x + gx) / 2, my = Math.min(e.spr.y, base + 220) - 80;
+        const lila = '#d8c8ff';
+        this.time.delayedCall(1400, () => this.ui().obrirDialeg({ pagines: [
+            // P32: primer pla del Mestre morint
+            { fer: (z, fet) => z.enquadrar(e.spr.x, e.spr.y - 0.7 * e.spr.displayHeight, 2.0, 900, fet) },
             { qui: O, text: "No... el meu riure... Els meus ocells..." },
+            { fer: (z, fet) => z.enquadrar(e.spr.x, e.spr.y - 0.7 * e.spr.displayHeight, 2.0, 1100, fet) },
+            { qui: O, text: "Tants riures... i cap no era per a mi." },
             { fer: (z, fet) => z.seq([
-                // Es desfà en boira i la gàbia se l'empassa
+                // P33-P34: es desfà en boira i la gàbia se l'empassa
                 f => {
                     Sfx.puf();
                     const p = this.add.particles(e.spr.x, e.spr.y - 60, 'boira', { speed: { min: 30, max: 90 }, lifespan: 1200, scale: { start: 0.5, end: 1.3 }, alpha: { start: 0.7, end: 0 }, tint: 0x9a50ff, frequency: 50 }).setDepth(99000);
                     this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 1400 });
-                    this.tweens.add({ targets: p, x: this.gx, y: this.base - this.gh * 0.5, duration: 1400, ease: 'Sine.easeIn', onComplete: () => {
+                    z.enquadrar(mx, base - this.gh * 0.5, 1.05, 1400, null, 0);
+                    this.tweens.add({ targets: p, x: gx, y: base - this.gh * 0.5, duration: 1400, ease: 'Sine.easeIn', onComplete: () => {
                         p.stop(); this.time.delayedCall(1300, () => p.destroy());
                         this.retirar(e); delete this.npcs.ocellaire;
                         this.cameras.main.flash(300, 160, 80, 255);
@@ -1235,13 +1582,27 @@ class ZonaGabia extends ZonaBase {
                         f();
                     } });
                 },
-                // La boira deixa l'Aldreu
-                f => { z.desferPastor(); z.esperar(1100, f); },
-                f => z.npcVa('germa_aldreu', this.gx + 90, this.base + 60, f, 260)
+                // P35: la boira deixa l'Aldreu (a mida normal, tot petit), que es queda trist; la veu del Mestre, ja sense cos
+                f => {
+                    const n = z.desferPastor() || z.npcs.germa_aldreu;
+                    if (n) z.enquadrar(n.x - 20, n.y - 0.6 * n.displayHeight, 1.2, 700, null);
+                    z.esperar(1100, f);
+                },
+                f => {
+                    this.flotant(gx, base - 200, "Aldreu... fill...\na la gàbia sempre hi haurà lloc per a tu.", lila);
+                    z.esperar(2200, f);
+                },
+                f => {
+                    this.tornarColorCova();
+                    z.aldreuVa(gx + 90, base + 60, null, 120);
+                    z.enquadrar(gx + 60, base - 10, 1.1, 1500, f);
+                }
             ], fet) },
             { qui: 'Germà Aldreu', text: "Mestre! No em deixeu!" },
+            // P36: pla general buit, en silenci
             { fer: (z, fet) => z.seq([
-                f => z.ajupir('germa_aldreu', f, 1200),
+                f => { z.ajupir('germa_aldreu', null, 1200); z.enquadrar(gx + 60, base + 60, 0.95, 1500, f, 0); },
+                f => z.esperar(1000, f),
                 f => z.alliberarCamera(800, f)
             ], fet) }
         ] }, () => {
@@ -1263,20 +1624,33 @@ class ZonaGabia extends ZonaBase {
     // ---------------- L'alliberament ----------------
     // El Cant del Miracle: els barrots s'encenen, la gàbia s'aixeca i els capolls baixen fins a l'Ineu
     obrirGabia() {
-        const gx = this.gx, base = this.base;
+        const gx = this.gx, base = this.base, I = this.ineu;
         Joc.iniciarMusica(this, 0, 'musica_epileg');
-        this.ui().obrirDialeg({ pagines: [{ fer: (z, fet) => z.seq([
+        const pAld = () => { const a = this.npcs.germa_aldreu; return a ? [a.x, a.y - 0.6 * a.displayHeight] : [I.x, I.y - 70]; };
+        this.ui().obrirDialeg({ pagines: [
+            // P40: l'Ineu toca la flauta
+            { fer: (z, fet) => {
+                z.enquadrar(I.x, I.y - 70, 1.5, 700, null);
+                this.time.addEvent({ delay: 200, repeat: 3, callback: () => this.flotant(I.x + Phaser.Math.Between(-30, 30), I.y - 90, Phaser.Utils.Array.GetRandom(['♪', '♫', '♩']), '#ffe08a') });
+                z.esperar(1200, fet);
+            } },
+            // Abans d'obrir: l'Ineu convida l'Aldreu (que encara no, de cap cot i sense mirar)
+            { fer: (z, fet) => { const p = pAld(); z.enquadrar(p[0], p[1], 1.35, 900, fet); } },
+            { qui: 'Ineu', text: "Germà Aldreu, la gàbia s'obrirà. Podeu venir amb nosaltres." },
+            { qui: 'Germà Aldreu', text: "Encara no." },
+            { fer: (z, fet) => z.seq([
             f => {
-                z.enquadrar(gx + 60, base - 40, 1.05, 900, null);
+                z.enquadrar(gx, base - 80, 1.05, 900, null);          // P41
                 this.cameras.main.flash(500, 255, 230, 160);
                 this.tweens.add({ targets: this.brillGabia, alpha: 1, duration: 600 });
                 this.time.addEvent({ delay: 150, repeat: 14, callback: () => this.flotant(gx + Phaser.Math.Between(-150, 150), base - Phaser.Math.Between(60, 380), Phaser.Utils.Array.GetRandom(['♪', '♫', '♩']), '#ffe08a') });
                 this.esperar(1400, f);
             },
-            f => z.npcVa('germa_aldreu', gx + 320, base + 140, f, 300),
+            f => z.aldreuVa(gx + 320, base + 140, f, 150),
             f => {
                 Sfx.secret();
                 this.cameras.main.shake(2200, 0.004);
+                z.enquadrar(gx, base - 380, 1.05, 2400, null, 0);     // tilt-up lent mentre puja la gàbia
                 if (this.colGabia) { this.obstacles.remove(this.colGabia, true, true); this.colGabia = null; }
                 this.tweens.add({ targets: this.gabiaGfx, y: -560, duration: 2400, ease: 'Sine.easeInOut' });
                 this.tweens.add({ targets: this.brillGabia, alpha: 0, duration: 2400 });
@@ -1285,7 +1659,8 @@ class ZonaGabia extends ZonaBase {
                 this.esperar(2500, f);
             },
             f => {
-                // Els capolls queden lliures i baixen davant de l'Ineu
+                // P43: els capolls queden lliures i baixen davant de l'Ineu (tilt-down)
+                z.enquadrar(gx, base + 90, 1.10, 1200, null, 0);
                 this.capolls.forEach((c, i) => {
                     this.tweens.killTweensOf(c);
                     const n = NENS_GABIA[i], x = gx - 200 + i * 200, y = base + 160;
@@ -1304,7 +1679,7 @@ class ZonaGabia extends ZonaBase {
         });
     }
 
-    // Runna trenca un capoll: el nen cau a terra, es desperta i riu
+    // Runna trenca un capoll: el nen cau a terra, es desperta i riu (P50: pla mitjà del nen)
     capollTrencat(e) {
         const n = e.nen, x = e.spr.x, y = e.spr.y + 40;
         Estat.posaFlag(n.flag);
@@ -1315,33 +1690,42 @@ class ZonaGabia extends ZonaBase {
         nen.setAlpha(0);
         this.tweens.add({ targets: [nen, nen.ombra], alpha: 1, duration: 400 });
         Estat.desar();
-        this.time.delayedCall(500, () => {
+        this.enquadrar(x, y - 70, 1.5, 600, null);
+        this.time.delayedCall(700, () => {
             Sfx.riure();
-            this.ui().obrirDialeg(DIALEGS.nenGabia(n.id)(Estat), () => { if (this.totsLliures()) this.time.delayedCall(500, () => this.finalGabia()); });
+            this.ui().obrirDialeg(DIALEGS.nenGabia(n.id)(Estat), () => {
+                if (this.totsLliures()) this.time.delayedCall(500, () => this.finalGabia());
+                else this.alliberarCamera(600);
+            });
         });
     }
 
-    // Els nens riuen, la boira es desfà i l'Aldreu es queda amb el seu Mestre
+    // Els nens riuen, la boira es desfà i l'Aldreu (trist -> somrient) tria quedar-se amb el seu Mestre
     finalGabia() {
         if (this.finalEngegat) return;
         this.finalEngegat = true;
-        const gx = this.gx, base = this.base;
+        const gx = this.gx, base = this.base, I = this.ineu;
         if (!this.npcs.germa_aldreu) this.npc('germa_aldreu', gx + 320, base + 140, DIALEGS.aldreuGabia, { flipX: true });
+        if (!this.aldreuEstat) this.aldreuTrist(this.npcs.germa_aldreu);
         const nens = NENS_GABIA.map(n => n.key);
+        const pAld = () => { const a = this.npcs.germa_aldreu; return a ? [a.x, a.y - 0.8 * a.displayHeight] : [gx, base - 60]; };
+        const pla = (obj, zoom, ms) => ({ fer: (z, fet) => { const p = obj(); z.enquadrar(p[0], p[1], zoom, ms, fet); } });
         this.ui().obrirDialeg({ pagines: [
             { fer: (z, fet) => z.seq([
-                f => {
+                f => {                                                 // P51: pla general dels nens
                     let pend = 2; const llest = () => { if (--pend === 0) f(); };
                     z.ineuVa(gx - 60, base + 330, () => { z.posarDireccio('amunt', false); llest(); }, 210);
-                    z.enquadrar(gx, base + 40, 1.05, 1000, llest);
+                    z.enquadrar(gx, base + 40, 1.0, 1000, llest);
                 },
                 f => {
                     Sfx.riure();
                     nens.forEach(k => z.npcSalta(k, null, 3));
+                    this.time.delayedCall(500, () => z.aldreuAixeca(z.npcs.germa_aldreu));           // F4: per primer cop s'aixeca el cap
                     this.esperar(1300, f);
                 },
                 f => {
-                    // El riure desfà la boira: la cova s'aclareix
+                    // P52: el riure desfà la boira: la cova s'aclareix
+                    z.enquadrar(gx, base - 60, 1.05, 2000, null, 0);
                     this.cameras.main.flash(900, 255, 240, 200);
                     this.boires.forEach(b => b.stop());
                     this.tweens.add({ targets: this.velLila, alpha: 0.05, duration: 2000 });
@@ -1354,25 +1738,47 @@ class ZonaGabia extends ZonaBase {
                 },
                 f => z.npcMira('germa_aldreu', gx, f)
             ], fet) },
+            pla(pAld, 1.9, 900),                                       // P53: l'Aldreu escolta
             { qui: 'Germà Aldreu', text: "La seva veu em parlava dins el cap cada nit. Era l'única que em parlava." },
-            { qui: 'Germà Aldreu', text: "El Mestre és aquí dins..." },
-            { fer: (z, fet) => z.npcVa('germa_aldreu', gx, base + 10, fet, 120) },
+            { qui: 'Germà Aldreu', text: "Escolta'ls. Riuen tan fort... i ningú no els tanca." },
+            pla(() => [I.x, I.y - 70], 1.5, 1),                        // P54
+            { qui: 'Ineu', text: "Veniu amb nosaltres, Germà. A la taula del refectori hi ha lloc per a tothom." },
+            // El somriure (el de la Plaça): suau, humil, una mica trist als ulls
+            { fer: (z, fet) => { const p = pAld(); z.enquadrar(p[0], p[1], 1.9, 600, () => { z.esperar(700, () => { z.aldreuSomriu(z.npcs.germa_aldreu); z.esperar(600, fet); }); }); } },
+            { qui: 'Germà Aldreu', text: "Ja ho sé que n'hi ha. Gràcies, Ineu." },
+            { qui: 'Germà Aldreu', text: "El Mestre és aquí dins... Algú l'ha de vetllar. Algú que sàpiga què és no ser vist." },
+            { fer: (z, fet) => { z.npcVa('germa_aldreu', gx, base + 10, null, 100); const a = z.npcs.germa_aldreu; z.enquadrar(gx, base + 10 - 0.8 * (a ? a.displayHeight : 100), 1.9, 1600, fet); } },
             { qui: 'Germà Aldreu', text: "Jo em quedo amb ell." },
+            pla(() => [I.x, I.y - 70], 1.5, 1),
+            { qui: 'Ineu', text: "Vindré a veure-us." },
+            { qui: 'Germà Aldreu', text: "Ja ho sé." },
             { fer: (z, fet) => z.seq([
                 f => {
-                    // La gàbia baixa i el tanca
-                    this.tweens.add({ targets: this.gabiaGfx, y: 0, duration: 1600, ease: 'Quad.easeIn', onComplete: () => {
-                        Sfx.porta(); this.cameras.main.shake(400, 0.012);
-                        this.boiraPuf(gx, base);
-                        this.esperar(900, f);
-                    } });
+                    // P55: la gàbia baixa, suau (tilt-down amb ella) i el tanca
+                    z.enquadrar(gx, base - 200, 1.0, 900, () => {
+                        z.enquadrar(gx, base - 60, 1.0, 1600, null, 0);
+                        this.tweens.add({ targets: this.gabiaGfx, y: 0, duration: 1600, ease: 'Quad.easeIn', onComplete: () => {
+                            Sfx.porta(); this.cameras.main.shake(400, 0.006);
+                            this.llum(gx, base - 60, 0xffe8a0);
+                            this.esperar(1200, f);
+                        } });
+                    }, 0);
                 },
                 f => {
-                    nens.forEach((k, i) => z.npcVa(k, this.ineu.x - 90 + i * 90, this.ineu.y + 70, null, 200));
-                    this.esperar(1400, f);
+                    // P56: primer pla entre barrots: l'Aldreu somriu, els nens saluden
+                    z.enquadrar(gx, base - 60, 1.95, 900, null);
+                    const a = z.npcs.germa_aldreu;
+                    if (a) z.tweens.add({ targets: a, y: a.y - 3, yoyo: true, duration: 900 });
+                    nens.forEach(k => z.npcSalta(k, null, 1));
+                    this.esperar(1200 + 900, f);
                 },
-                f => { Sfx.riure(); nens.forEach(k => z.npcSalta(k, null, 2)); this.esperar(1200, f); },
-                f => { this.cameras.main.fadeOut(1200, 0, 0, 0); this.esperar(1300, f); }
+                f => {
+                    // P57: reculada lenta, els nens corren cap a l'Ineu; el fosc només al final
+                    z.enquadrar(gx, base - 40, 0.9, 3200, null, 0);
+                    nens.forEach((k, i) => z.npcVa(k, this.ineu.x - 90 + i * 90, this.ineu.y + 70, null, 200));
+                    this.esperar(1400, () => { Sfx.riure(); nens.forEach(k => z.npcSalta(k, null, 2)); });
+                    this.esperar(2600, () => { this.cameras.main.fadeOut(1800, 0, 0, 0); this.esperar(1900, f); });
+                }
             ], fet) }
         ] }, () => {
             Estat.posaFlag('andreuTancat');

@@ -7,6 +7,23 @@
  */
 const DIRS = { avall: { x: 0, y: 1 }, amunt: { x: 0, y: -1 }, esquerra: { x: -1, y: 0 }, dreta: { x: 1, y: 0 } };
 
+// L'Ocellaire (boss final) es veu 1,4 vegades més gran que el seu dibuix base. Global: gabia.js també la fa servir
+// (radi, cos, cap, bàcul, ulls, distàncies de «sura»... tot va multiplicat per aquesta constant).
+const K_OCELLAIRE = 1.4;
+
+// Sintonia de la pausa («genolls») de l'Ocellaire. Vegeu design/lluita_final_combat.md (§ 3-6): els números es toquen aquí, no a la lògica.
+const AJUST_OCELLAIRE = {
+    pausa: { 1: 3200, 2: 2800, 3: 2400 },     // ms de pausa segons la fase (vida 54, 3 de mal -> 18 cops = 6 pauses de 3 cops)
+    pausaPrimera: 4200,                       // la primera pausa de tot el combat és més llarga, per aprendre
+    avis: 700,                                // ms finals de la pausa en què parpelleja i fa «tic»
+    puja: 300,                                // ms entre el final de la pausa i el moment que torna a estar dret
+    tancament: 450,                           // ms que triga a tancar-se la pausa després del tercer cop
+    ocellsRetard: 600, ocellsRetardPrimera: 1200,   // els ocells no surten fins que ha passat aquest temps des que cau
+    ocellsEspai: { 1: 300, 2: 200, 3: 350 },   // ms entre ocells (a la fase 3, entre parelles)
+    extraCap: 75, extraCapCansat: 110,        // abast extra cap amunt contra el cap (fora de la pausa / durant la pausa)
+    focDistMin: 180                           // el foc a terra cau a aquesta distància mínima del cos
+};
+
 // L'ocell de foc de l'Ocellaire: un ocell fet de flames, de perfil, que mou les ales (4 fotogrames: amunt, mig, avall, mig)
 // i deixa una cua de flames. Es dibuixa amb codi (el joc no necessita cap PNG) i s'anima amb 'ocell_foc_vola'.
 function preparaOcellFoc(scene) {
@@ -168,6 +185,31 @@ function armaIneu() { return Estat.te('runna') ? 'runna' : Estat.te('basto_tille
 function teCansatOcellaire(z) { return z.textures.exists('ocellaire_cansat') && !Grafics.faltants.includes('ocellaire_cansat'); }
 // L'Ocellaire de genolls (assets/enemics/ocellaire_genolls.webp): la pausa en què se li pot picar el cap
 function teGenollsOcellaire(z) { return z.textures.exists('ocellaire_genolls') && !Grafics.faltants.includes('ocellaire_genolls'); }
+function teGraficOcellaire(z, clau) { return z.textures.exists(clau) && !Grafics.faltants.includes(clau); }
+
+// TAULA ESTAT -> SPRITE de l'Ocellaire (la primera clau que existeixi; si cap, el sprite base 'ocellaire' + els fallbacks de la ia):
+//   sura     idle: ocellaire / idle2 / ocellaire / idle3 (260 ms cadascun)       fallback: -
+//   rugit    ocellaire_rugit                                                       (canvis de fase)
+//   foc      ocellaire_rugit                                                       (fase 3: crema el terra)
+//   invoca   ocellaire_invoca                                                      fallback: tremolor d'angle (+/-0,8 gr a 25 Hz)
+//   cercle   ocellaire (550 ms) -> ocellaire_cercle (els últims 300 ms, el cop)    fallback: angle -4/+6 gr i tint 0xffd9a0 al cop
+//   llança   ocellaire -> ocellaire_llança (quan el bàcul ja ha sortit)            fallback: tint 0xffb070 en carregar (ja hi era)
+//   esvaeix, apareix   ocellaire (alfa 0 <-> 1)
+//   cansat   ocellaire_genolls -> ocellaire_cansat -> ocellaire                    fallback: tint fred 0xb8b0c8 (sempre)
+//   puja     ocellaire_cansat (300 ms: s'aixeca) -> ocellaire                      fallback: base
+function clauSpriteOcellaire(z, e, ara) {
+    const prefereix = (...claus) => claus.find(k => teGraficOcellaire(z, k)) || 'ocellaire';
+    switch (e.estat) {
+        case 'rugit': case 'foc': return prefereix('ocellaire_rugit');
+        case 'invoca': return prefereix('ocellaire_invoca');
+        case 'cercle': return e.fins - ara < 300 ? prefereix('ocellaire_cercle') : 'ocellaire';
+        case 'llança': return ara > e.fins ? prefereix('ocellaire_llança') : 'ocellaire';
+        case 'cansat': return prefereix('ocellaire_genolls', 'ocellaire_cansat');
+        case 'puja': return prefereix('ocellaire_cansat');
+        case 'sura': { const k = ['ocellaire', 'ocellaire_idle2', 'ocellaire', 'ocellaire_idle3'][Math.floor(ara / 260) % 4]; return teGraficOcellaire(z, k) ? k : 'ocellaire'; }
+        default: return 'ocellaire';
+    }
+}
 
 const ENEMICS = {
     escolopendra: {
@@ -397,26 +439,39 @@ const ENEMICS = {
     // que li volten al voltant i després es llancen contra l'Ineu (Runna els talla). A la segona meitat llança el bàcul
     // com un remolí i desapareix en boira per tornar a sortir en un altre lloc.
     ocellaire: {
-        tex: 'ocellaire', vida: 54, vel: 70, mal: 1, radi: 38, cos: [58, 26], ombra: 0.8,
-        cap: { y: 0.19, r: 40, nomesCansat: true },          // el punt feble: el cap (al 19% del dibuix des de dalt), i només quan està cansat
-        capTex: { ocellaire_genolls: { x: 0.12, y: 0.30, r: 42, nomesCansat: true } },   // de genolls, el cap és més avall i decantat
-        copsPausa: 3,
-        arma: 'runna',                                       // només Runna li fa mal                                        // a la tercera, s'aixeca d'una revolada i t'empeny
+        // (tot a escala K_OCELLAIRE = 1,4: radi 38 -> 53, cos [58,26] -> [81,36], cap.r 48 -> 67, genolls 54 -> 76; el dibuix s'escala amb def.k)
+        k: K_OCELLAIRE,
+        tex: 'ocellaire', vida: 54, vel: 70, mal: 1, radi: Math.round(38 * K_OCELLAIRE), cos: [Math.round(58 * K_OCELLAIRE), Math.round(26 * K_OCELLAIRE)], ombra: 0.8 * K_OCELLAIRE,
+        cap: { y: 0.19, r: Math.round(48 * K_OCELLAIRE), nomesCansat: true },          // el punt feble: el cap (al 19% del dibuix des de dalt), i només quan està cansat
+        capTex: { ocellaire_genolls: { x: -0.09, y: 0.55, r: Math.round(54 * K_OCELLAIRE), nomesCansat: true } },   // de genolls, el cap és més avall i decantat
+        copsPausa: 3,                                        // tres cops per pausa; al tercer, la pausa es tanca i s'aixeca d'una revolada i t'empeny
+        arma: 'runna',                                       // només Runna li fa mal
         robust: true, barra: true,
-        perill: e => !e.amagat && e.estat !== 'apareix',
+        perill: e => !e.amagat && e.estat !== 'apareix' && e.estat !== 'cansat' && e.estat !== 'puja',     // de genolls no fa mal si el toques
         ia(z, e, ara) {
-            const jo = z.ineu.body.center, c = e.spr.body.center;
+            const jo = z.ineu.body.center, c = e.spr.body.center, AJ = AJUST_OCELLAIRE, K = K_OCELLAIRE;
             const fase3 = e.vida <= this.vida / 3, fase2 = e.vida <= this.vida * 2 / 3;      // tres fases d'un terç de vida cadascuna: 54 → 36 → 18 (dues pauses de genolls per fase)
-            const pausa = fase3 ? 1600 : fase2 ? 1900 : 2200;     // quant dura de genolls
+            const faseN = fase3 ? 3 : fase2 ? 2 : 1;
+            const primera = !(e.nFinestres > 0);                  // la primera pausa de tot el combat és més llarga
+            const pausa = primera ? AJ.pausaPrimera : AJ.pausa[faseN];     // quant dura de genolls (sense la «puja»)
             if (!e.proxAtac) { e.proxAtac = ara + 1800; e.estat = 'sura'; e.nAtac = 0; }
-            // Idle: respira (1 → 2 → 1 → 3) mentre sura; pose de rugit als canvis de fase i quan crema el terra; en la resta d'estats, el sprite base
-            const clauIdle = (e.estat === 'rugit' || e.estat === 'foc') ? 'ocellaire_rugit'
-                : e.estat === 'cansat' && teGenollsOcellaire(z) ? 'ocellaire_genolls'
-                : e.estat === 'cansat' && teCansatOcellaire(z) ? 'ocellaire_cansat'
-                : e.estat === 'sura' ? ['ocellaire', 'ocellaire_idle2', 'ocellaire', 'ocellaire_idle3'][Math.floor(ara / 260) % 4] : 'ocellaire';
+            // Sprite segons l'estat (taula a clauSpriteOcellaire)
+            const clauIdle = clauSpriteOcellaire(z, e, ara);
             if (e.spr.texture.key !== clauIdle && z.textures.exists(clauIdle)) e.spr.setTexture(clauIdle);
+            const cansat = e.estat === 'cansat' || e.estat === 'puja';
+            e.spr.senseUlls = cansat;                              // de genolls, els ulls lila s'apaguen
+            e.ombra.setScale((e.estat === 'cansat' ? 0.6 : 0.8) * K);
+            // Fallbacks sense dibuix nou: tint fred a la pausa (no trepitja el flaix blanc d'un cop) i petits girs uniformes
+            if (e.estat === 'cansat' && ara >= e.atorditFins) e.spr.setTint(0xb8b0c8);
+            if (e.estat !== 'rugit') {
+                let ang = 0;
+                if (e.estat === 'invoca' && !teGraficOcellaire(z, 'ocellaire_invoca')) ang = Math.sin(ara * 0.157) * 0.8;       // tremolor del cant (25 Hz)
+                else if (e.estat === 'cercle' && !teGraficOcellaire(z, 'ocellaire_cercle')) ang = (e.fins - ara < 300 ? 6 : -4) * (e.spr.flipX ? -1 : 1);
+                e.spr.angle = ang;
+            }
             // Cada canvi de fase: rugit, ona que l'empeny, els ocells s'apaguen i tot va més de pressa (la 3a crema el terra)
-            if ((fase3 && !e.fase3) || (fase2 && !e.fase2)) {
+            // (mai amb la pausa oberta: primer es tanca la finestra, després la «puja», i llavors el rugit)
+            if (((fase3 && !e.fase3) || (fase2 && !e.fase2)) && !cansat) {
                 const f = fase3 ? 3 : 2;
                 e.fase2 = true; if (fase3) e.fase3 = true;
                 z.enemics.filter(o => o.tipus === 'ocellFoc' && !o.mort).forEach(o => z.apagarOcell(o));
@@ -437,10 +492,10 @@ const ENEMICS = {
                     else { e.estat = 'invoca'; e.fins = ara + 1500; e.nOcells = 0; e.proxOcell = ara + 150; }
                 }
             } else if (e.estat === 'sura') {
-                // Es manté a uns 240 px de l'Ineu, voltant-lo a poc a poc
+                // Es manté a uns 300 px de l'Ineu (240 x 1,25: és més gran), voltant-lo a poc a poc
                 if (!e.puntSura || ara > e.canviFins) {
                     const a = Math.atan2(c.y - jo.y, c.x - jo.x) + (Math.random() < 0.5 ? -0.8 : 0.8);
-                    e.puntSura = z.puntPlataforma(jo.x + Math.cos(a) * 240, jo.y + Math.sin(a) * 200);
+                    e.puntSura = z.puntPlataforma(jo.x + Math.cos(a) * 300, jo.y + Math.sin(a) * 240);
                     e.canviFins = ara + 1400;
                 }
                 const dx = e.puntSura.x - c.x, dy = e.puntSura.y - c.y, l = Math.hypot(dx, dy);
@@ -463,6 +518,7 @@ const ENEMICS = {
                 // Fa girar el bàcul cada cop més de pressa i n'escup ocells de foc, que li volten al voltant
                 e.spr.body.setVelocity(0);
                 b.gir = Math.min(0.55, b.gir + 0.03);
+                if (e.fins - ara < 120) b.gir = 0.1;           // preavís: el bàcul s'esmorteeix just abans de caure (les flames paren soles)
                 Sfx.basto();
                 const max = fase2 ? 6 : 4;
                 if (e.nOcells < max && ara > e.proxOcell) {
@@ -471,10 +527,11 @@ const ENEMICS = {
                     if (o) { o.amo = e; o.angOrb = e.nOcells / max * Math.PI * 2; o.estat = 'orbita'; o.llançar = Infinity; o.rapid = e.nOcells % 3 === 2; z.flamaOcell(o); }
                     e.nOcells++;
                 }
-                if (Phaser.Math.Distance.Between(b.x, b.y, jo.x, jo.y - 40) < 95) z.ferIneu(1, { x: b.x, y: b.y });   // el bàcul que gira fa mal
+                if (e.fins - ara >= 120 && Phaser.Math.Distance.Between(b.x, b.y, jo.x, jo.y - 40) < 95 * K) z.ferIneu(1, { x: b.x, y: b.y });   // el bàcul que gira fa mal
                 if (ara > e.fins) {
-                    // Els ocells es llancen un rere l'altre
-                    z.enemics.filter(o => o.amo === e && o.estat === 'orbita').forEach((o, i) => { o.llançar = fase3 ? ara + 250 + Math.floor(i / 2) * 450 : ara + 250 + i * (fase2 ? 220 : 380); });   // a la fase 3 surten de dos en dos
+                    // Els ocells es llancen un rere l'altre, però no de seguida: l'Ineu té temps d'arribar al cap (el doble a la primera pausa)
+                    const r0 = ara + (primera ? AJ.ocellsRetardPrimera : AJ.ocellsRetard), esp = AJ.ocellsEspai[faseN];
+                    z.enemics.filter(o => o.amo === e && o.estat === 'orbita').forEach((o, i) => { o.llançar = fase3 ? r0 + Math.floor(i / 2) * esp : r0 + i * esp; });   // a la fase 3 surten de dos en dos
                     Sfx.xiscle();
                     z.genollsOcellaire(e, pausa);                 // ha buidat el bàcul: cau de genolls mentre els ocells es llancen
                 }
@@ -482,16 +539,18 @@ const ENEMICS = {
                 // Cop de bàcul en cercle: avisa amb un anell a terra i, en acabar, una ona que fa mal i t'allunya
                 e.spr.body.setVelocity(0);
                 b.gir = Math.min(0.6, b.gir + 0.05);
+                if (e.fins - ara < 300 && !teGraficOcellaire(z, 'ocellaire_cercle')) e.spr.setTint(0xffd9a0);       // fallback: s'encén en el cop
                 if (!e.avisCercle) e.avisCercle = z.avisAnell(c.x, c.y, e.radiCercle, e.fins - ara);
                 if (ara > e.fins) {
                     z.colpAnell(e, e.radiCercle);
+                    e.spr.clearTint();
                     e.avisCercle = null;
                     e.estat = 'sura'; e.proxAtac = ara + (fase3 ? 700 : 1000); e.puntSura = null;      // el cop en cercle no el cansa
                 }
             } else if (e.estat === 'foc') {
                 // Fase 3: alça el bàcul i el terra crema al voltant de l'Ineu (cal moure's de seguida)
                 e.spr.body.setVelocity(0);
-                b.gir = 0.6;
+                b.gir = e.fins - ara < 120 ? 0.1 : 0.6;        // preavís: el bàcul s'esmorteeix just abans de caure
                 if (!e.focFet) { e.focFet = true; z.focsTerra(e); Sfx.carrega(); }
                 if (ara > e.fins) { e.focFet = false; z.genollsOcellaire(e, pausa); }
             } else if (e.estat === 'llança') {
@@ -503,7 +562,7 @@ const ENEMICS = {
                     b.volant = true;
                     const desti = { x: jo.x, y: jo.y - 40 };
                     z.tweens.add({ targets: b, x: desti.x, y: desti.y, duration: 650, ease: 'Sine.easeOut', yoyo: true,
-                        onUpdate: () => { if (Phaser.Math.Distance.Between(b.x, b.y, z.ineu.body.center.x, z.ineu.body.center.y - 30) < 70) z.ferIneu(1, { x: b.x, y: b.y }); },
+                        onUpdate: () => { if (Phaser.Math.Distance.Between(b.x, b.y, z.ineu.body.center.x, z.ineu.body.center.y - 30) < 70 * K) z.ferIneu(1, { x: b.x, y: b.y }); },
                         onComplete: () => { b.volant = false; if (!e.mort && e.estat === 'llança') { e.estat = 'sura'; e.proxAtac = z.time.now + 700; e.puntSura = null; } } });   // recupera el bàcul i torna a surar
                 }
                 if (b.volant) Sfx.basto();
@@ -521,15 +580,25 @@ const ENEMICS = {
             } else if (e.estat === 'apareix') {
                 e.spr.body.setVelocity(0);
                 if (ara > e.fins) { e.amagat = false; e.estat = 'invoca'; e.fins = ara + 1400; e.nOcells = 0; e.proxOcell = ara + 150; }
-            } else {   // cansat: de genolls, el bàcul s'alenteix, abaixa el cap i és el moment de colpejar-lo
+            } else if (e.estat === 'puja') {
+                // Després de la pausa, 300 ms per aixecar-se (sprite dret i esgotat); si l'han picat tres cops, s'aixeca d'una revolada i t'empeny
                 e.spr.body.setVelocity(0);
-                b.gir = Math.max(0.02, b.gir * 0.94);
                 if (ara > e.fins) {
-                    if (e.copsRebuts >= this.copsPausa) z.aixecaOcellaire(e);          // l'han picat prou: s'aixeca d'una revolada i t'empeny
+                    if (e.copsRebuts >= this.copsPausa) z.aixecaOcellaire(e);
                     e.estat = 'sura'; e.proxAtac = ara + (fase3 ? 900 : fase2 ? 1300 : 1800); e.puntSura = null;
+                }
+            } else {   // cansat: de genolls, el bàcul és a terra i és el moment de colpejar-lo al cap (halo, avís i tancament: gabia.js)
+                e.spr.body.setVelocity(0);
+                z.avisFinestraOcellaire(e, ara);
+                if (ara > e.fins) {
+                    z.tancarFinestraOcellaire(e);
+                    e.estat = 'puja'; e.fins = ara + AJ.puja;
                 }
             }
             e.spr.setFlipX(jo.x < c.x);
+            // Els dibuixos nous (invoca, cercle, llança, genolls) tenen un llenç més ample (340) que l'idle (260): la caixa de col·lisió es recentra a la base de cada fotograma
+            // (sense això, Phaser la desplaça en canviar de textura, com passava amb els atacs de l'Ineu)
+            { const f = e.spr.frame, bd = e.spr.body; if (f && bd) bd.setOffset((f.realWidth - bd.sourceWidth) / 2, f.realHeight - bd.sourceHeight); }
             z.moureBasto(e);
         },
         alDerrotar(z, e) { z.ocellaireDerrotat(e); }
@@ -551,7 +620,7 @@ const ENEMICS = {
                 }
                 const t = e.angOrb + ara / 260, ac = amo.spr.body.center;
                 e.spr.body.setVelocity(0);
-                e.spr.body.reset(ac.x + Math.cos(t) * 110, ac.y - 30 + Math.sin(t) * 70);
+                e.spr.body.reset(ac.x + Math.cos(t) * 110 * K_OCELLAIRE, ac.y - 30 * K_OCELLAIRE + Math.sin(t) * 70 * K_OCELLAIRE);
                 e.spr.setFlipX(Math.sin(t) > 0);
             } else if (e.estat === 'vola') {
                 if (ara < e.guiaFins) {     // corregeix una mica el rumb al principi
@@ -772,7 +841,7 @@ Object.assign(ZonaBase.prototype, {
         const animada = !!def.texAlt && this.textures.exists(def.tex) && this.textures.get(def.tex).frameTotal > 2;
         const clauTex = def.texAlt && !animada ? def.texAlt : def.tex;
         const tex = this.textures.get(clauTex);
-        const esc = animada && def.escala ? def.escala : ((tex.customData && tex.customData.escala) || 1 / RES);
+        const esc = (animada && def.escala ? def.escala : ((tex.customData && tex.customData.escala) || 1 / RES)) * (def.k || 1);     // (def.k: factor de mida, p. ex. l'Ocellaire K_OCELLAIRE; cos/radi ja van en píxels de món)
         const spr = this.physics.add.sprite(x, y, clauTex, tex.has(0) ? 0 : undefined).setScale(esc);   // (els fulls d'animació, al fotograma 0)
         spr.setDepth(y + spr.displayHeight / 2);       // ja des del primer moment (mentre hi ha un diàleg no s'actualitza: sense això el decorat el tapava)
         const fw = spr.width, fh = spr.height;
@@ -827,8 +896,8 @@ Object.assign(ZonaBase.prototype, {
     // Missatge que s'ha de poder llegir: al quadre de diàleg de sota
     missatge(text, fet) { this.ui().missatge(text, fet); },
 
-    flotant(x, y, text, color = '#ffffff') {
-        const t = this.add.text(x, y, text, estilText(26, color, { stroke: '#000', strokeThickness: 4, fontStyle: 'bold' }))
+    flotant(x, y, text, color = '#ffffff', mida = 26) {
+        const t = this.add.text(x, y, text, estilText(mida, color, { stroke: '#000', strokeThickness: 4, fontStyle: 'bold' }))
             .setOrigin(0.5, 1).setDepth(99999);
         this.tweens.add({ targets: t, y: y - 46, alpha: 0, duration: 1300, delay: 300, onComplete: () => t.destroy() });
     },
@@ -855,11 +924,14 @@ Object.assign(ZonaBase.prototype, {
         let millor = null, millorDist = Infinity;
         this.enemics.forEach(e => {
             if (e.mort) return;
-            const c = this.puntsCop(e).reduce((m, q) => Phaser.Math.Distance.Between(q.x, q.y, jo.x, jo.y) < Phaser.Math.Distance.Between(m.x, m.y, jo.x, jo.y) ? q : m),
+            // L'Ocellaire a la pausa: l'autoapuntat va SEMPRE al cap (no al punt més proper del cos), amb més marge d'abast i de con
+            const alCap = e.tipus === 'ocellaire' && e.estat === 'cansat';
+            const pts = this.puntsCop(e);
+            const c = alCap ? pts[0] : pts.reduce((m, q) => Phaser.Math.Distance.Between(q.x, q.y, jo.x, jo.y) < Phaser.Math.Distance.Between(m.x, m.y, jo.x, jo.y) ? q : m),
                   dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
-            if (dist > L + c.r + 30 || dist >= millorDist) return;
+            if (dist > L + c.r + (alCap ? AJUST_OCELLAIRE.extraCapCansat : 30) || dist >= millorDist) return;
             const dif = Math.abs(Phaser.Math.Angle.Wrap(Math.atan2(c.y - jo.y, c.x - jo.x) - Math.atan2(d.y, d.x)));
-            if (dif < 1.0) { millor = c; millorDist = dist; }
+            if (dif < (alCap ? 1.6 : 1.0)) { millor = c; millorDist = dist; }
         });
         if (millor) { const a = Math.atan2(millor.y - jo.y, millor.x - jo.x); d = { x: Math.cos(a), y: Math.sin(a) }; }
         if (Math.abs(d.x) > Math.abs(d.y) * 1.1) this.direccio = d.x < 0 ? 'esquerra' : 'dreta';
@@ -960,7 +1032,8 @@ Object.assign(ZonaBase.prototype, {
                 const rx = c.x - jo.x, ry = c.y - jo.y;
                 const t = rx * d.x + ry * d.y;                      // distància al llarg del cop
                 // Contra el cap d'un boss alt, un cop cap amunt (l'arma per sobre del cap) arriba més amunt
-                const extra = c.cap && d.y < -0.4 && !this.capDe(e).senseAbast ? 75 : 0;
+                const esOc = e.tipus === 'ocellaire';
+                const extra = c.cap && d.y < (esOc ? -0.2 : -0.4) && !this.capDe(e).senseAbast ? (esOc && e.estat === 'cansat' ? AJUST_OCELLAIRE.extraCapCansat : AJUST_OCELLAIRE.extraCap) : 0;
                 if (t < -12 || t > k.L + c.r + extra) return false;
                 const lat = Math.abs(rx * d.y - ry * d.x);          // distància lateral
                 return lat < c.r + k.ample;
@@ -971,9 +1044,18 @@ Object.assign(ZonaBase.prototype, {
             // (La història ja ho garanteix, perquè l'Ineu sempre fa servir la millor arma que té; això n'és la xarxa de seguretat.)
             if (e.def.arma && e.def.arma !== armaIneu()) { this.copRebutjat(e, d); return; }
             if (e.def.cap && (!tocats.some(c => c.cap) || (this.capDe(e).nomesCansat && e.estat !== 'cansat'))) { this.copRebutjat(e, d); return; }
+            // Pausa de l'Ocellaire ja esgotada (3 cops fets): els cops que queden rebotaran fins que es tanqui
+            if (e.tipus === 'ocellaire' && e.estat === 'cansat' && e.copsRebuts >= e.def.copsPausa) { this.copRebutjat(e, d); return; }
+            if (e.tipus === 'ocellaire' && !e.primerCap && this.dirFrase) { e.primerCap = true; this.dirFrase('cap'); }       // primera vegada que li piquem el cap
             this.colpejar(e, k.dany, d); encertats++;
             // Bosses amb un màxim de cops per pausa: a l'últim, la pausa s'acaba
-            if (e.def.copsPausa && e.estat === 'cansat' && !e.mort && ++e.copsRebuts >= e.def.copsPausa) e.fins = Math.min(e.fins, this.time.now + 120);
+            if (e.def.copsPausa && e.estat === 'cansat' && !e.mort) {
+                const tanca = ++e.copsRebuts >= e.def.copsPausa;
+                if (e.tipus === 'ocellaire') {
+                    this.copFinestraOcellaire(e, tanca);                      // apaga una llumeta; al tercer, el halo es trenca
+                    if (tanca) e.fins = Math.min(e.fins, this.time.now + AJUST_OCELLAIRE.tancament);
+                } else if (tanca) e.fins = Math.min(e.fins, this.time.now + 120);
+            }
         });
     },
 
@@ -1044,7 +1126,8 @@ Object.assign(ZonaBase.prototype, {
             const oy = -h * s.originY + h * f, ox = fx * s.displayWidth * (s.flipX ? -1 : 1), a = s.rotation || 0;
             return { x: s.x + Math.cos(a) * ox - Math.sin(a) * oy, y: s.y + Math.sin(a) * ox + Math.cos(a) * oy, r, cap };
         };
-        return [punt(cp.y, cp.r, true, cp.x || 0), punt(0.45, 44), punt(0.7, 44), { x: s.x, y: c.y, r: 44 }];
+        const rc = 44 * (e.def.k || 1);
+        return [punt(cp.y, cp.r, true, cp.x || 0), punt(0.45, rc), punt(0.7, rc), { x: s.x, y: c.y, r: rc }];
     },
     // El cap d'un boss segons el dibuix que fa servir ara (de genolls, el cap de l'Ocellaire és més avall)
     capDe(e) {
@@ -1059,9 +1142,44 @@ Object.assign(ZonaBase.prototype, {
     // El cop ha caigut al cos, no al cap: no fa mal
     copRebutjat(e, d) {
         const q = this.puntsCop(e)[2], ara = this.time.now;
+        if (e.tipus === 'ocellaire') { this.copRebutjatOcellaire(e, d, q, ara); return; }
         Sfx.escut();
         this.cameras.main.shake(70, 0.0015, true);
         this.impacte(q.x, q.y, { x: -d.x, y: -d.y }, 0);
+    },
+    // Cop que no compta contra l'Ocellaire: rebot metàl·lic gris, sense sacsejar la pantalla (no es confon amb un cop encertat).
+    // Dins la pausa però al cos: «Al cap!»; fora de la pausa: el pensament de l'Ineu (no bloqueja).
+    copRebutjatOcellaire(e, d, q, ara) {
+        Sfx.rebot();
+        const p = this.add.particles(q.x, q.y, 'espurna', {
+            angle: { min: Phaser.Math.RadToDeg(Math.atan2(-d.y, -d.x)) - 50, max: Phaser.Math.RadToDeg(Math.atan2(-d.y, -d.x)) + 50 },
+            speed: { min: 120, max: 300 }, lifespan: 220, scale: { start: 0.25, end: 0 }, tint: [0xb8b8c8, 0x8a8a9a, 0xffffff], quantity: 6, emitting: false
+        }).setDepth(99991);
+        p.explode(6);
+        this.time.delayedCall(350, () => p.destroy());
+        const g = this.add.circle(q.x, q.y, 18).setStrokeStyle(3, 0x8a8a9a, 0.95).setDepth(99992);
+        this.tweens.add({ targets: g, radius: 40, alpha: 0, duration: 140, onComplete: () => g.destroy() });
+        if (e.estat === 'cansat') {
+            const cap = this.puntsCop(e)[0];
+            if (e.copsRebuts < e.def.copsPausa) {
+                this.flotant(cap.x, cap.y - cap.r - 40, 'Al cap!', '#ffe9a0', 26);
+                if (e.finestra && e.finestra.fletxa) this.tweens.add({ targets: e.finestra.fletxa, scale: 1.4, yoyo: true, duration: 120 });
+            }
+            return;
+        }
+        // Fora de la pausa: 1r rebot de l'intent i després el 3r (màx. 2, separats 8 s, mai un cop vençut)
+        if (e.mort || Estat.flag('ocellaireVencut')) return;
+        const n = this.rebotsFora = (this.rebotsFora || 0) + 1, fets = this.pensamentsFets || 0;
+        if (fets < 2 && n >= (fets === 0 ? 1 : 3) && ara - (this.ultimPensament || -1e9) >= 8000) {
+            this.pensamentsFets = fets + 1; this.ultimPensament = ara;
+            this.pensamentIneu('(Només el cap, i només quan baixa el bàcul.)');
+        }
+    },
+    // El pensament de l'Ineu: text cursiu sobre el seu cap, sense quadre ni pausa
+    pensamentIneu(text) {
+        const t = this.add.text(this.ineu.x, this.ineu.y - 100, text, estilText(22, '#e8e0ff', { stroke: '#000', strokeThickness: 4, fontStyle: 'italic' }))
+            .setOrigin(0.5, 1).setDepth(99999);
+        this.tweens.add({ targets: t, y: t.y - 18, alpha: 0, duration: 700, delay: 1600, onComplete: () => t.destroy() });
     },
 
     colpejar(e, dany, d) {
@@ -1390,6 +1508,7 @@ Object.assign(ZonaBase.prototype, {
 
     // L'Ineu cau: el Pare Jordà el recull a la Plaça amb tota la vida
     caure() {
+        if (this.bossActiu && this.dirFrase) this.dirFrase('caiguda');       // el Mestre s'en riu (frase flotant, no bloqueja)
         this.caient = true; this.canviant = true;
         this.ineu.body.setVelocity(0);
         this.cameras.main.fadeOut(900, 40, 0, 20);

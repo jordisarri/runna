@@ -18,6 +18,7 @@ const CATALEG = [
     { key: 'pare_jorda_desperta', file: 'assets/personatges/pare_jorda_desperta.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },   // el Pare Jordà agenollat al seu costat, despertant-lo
     { key: 'pare_jorda',   file: 'assets/personatges/pare_jorda.webp',   amplada: 90, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
     { key: 'germa_aldreu', file: 'assets/personatges/germa_aldreu.webp', amplada: 79, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
+    { key: 'germa_aldreu_trist', file: 'assets/personatges/germa_aldreu_trist.webp', amplada: 79 },      // Aldreu amb el cap cot (final de la Sala de la Gàbia, abans del somriure); si no hi és, gabia.js usa germa_aldreu amb tint
     { key: 'pare_daimiel',  file: 'assets/personatges/pare_daimiel.webp',  amplada: 94, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
     { key: 'dolora',   file: 'assets/personatges/dolora.webp', amplada: 94, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },
     { key: 'carmelia',   file: 'assets/personatges/carmelia.webp', amplada: 116, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#6a4a2e', ample: 1.45, alt: 0.92 }) },
@@ -137,7 +138,11 @@ const CATALEG = [
     { key: 'ocellaire_idle3', file: 'assets/enemics/ocellaire_idle3.webp', amplada: 130, cru: true },
     { key: 'ocellaire_rugit', file: 'assets/enemics/ocellaire_rugit.webp', amplada: 130, cru: true },      // pose de rugit (canvis de fase), al mateix llenç de 260x329 que l'idle
     { key: 'ocellaire_cansat', file: 'assets/enemics/ocellaire_cansat.webp', amplada: 130, cru: true },
-    { key: 'ocellaire_genolls', file: 'assets/enemics/ocellaire_genolls.webp', amplada: 130, cru: true },   // esgotat, de genolls i el cap avall: l'única pausa en què se li pot picar el cap (mateix llenç 260x329)
+    { key: 'ocellaire_genolls', file: 'assets/enemics/ocellaire_genolls.webp', amplada: 170, cru: true },   // esgotat, de genolls i el cap avall: l'única pausa en què se li pot picar el cap (mateix llenç 260x329)
+    // Poses noves (opcionals: el combat les fa servir només si existeixen; si no, el sprite base amb tint/angle). Vegeu design/lluita_final_combat.md § 8
+    { key: 'ocellaire_invoca', file: 'assets/enemics/ocellaire_invoca.webp', amplada: 170, cru: true },       // canta: mà dreta alçada (sense bàcul dibuixat)
+    { key: 'ocellaire_cercle', file: 'assets/enemics/ocellaire_cercle.webp', amplada: 170, cru: true },       // cop en cercle: ajupit amb els braços avall
+    { key: 'ocellaire_llança', file: 'assets/enemics/ocellaire_llança.webp', amplada: 170, cru: true },       // acaba de llançar el bàcul
     { key: 'ratpenat',       file: null,       amplada: 64, provisional: (c, w) => dibuixarRatpenat(c, w) },
     { key: 'ferralla',       file: null,       amplada: 70, provisional: (c, w) => dibuixarFerralla(c, w) },
     { key: 'capoll',         file: null,         amplada: 70, provisional: (c, w) => dibuixarCapoll(c, w) },
@@ -323,7 +328,7 @@ const Grafics = {
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, rutaIneu(dir, false), mida);
-            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac_${arma}_${dir}.webp?v=2611113600`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
+            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac_${arma}_${dir}.webp?v=2611121500`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };

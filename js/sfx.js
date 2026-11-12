@@ -312,6 +312,26 @@ const Sfx = {
         this.xiu(1.0, 0.25, 'bandpass', 900, 200, 1.5);
         this.to(2200, 3400, 0.5, 'sawtooth', 0.04, 0.2);
     },
+    // Llenguatge sonor de la pausa de l'Ocellaire (design/lluita_final_combat.md § 4-5)
+    esgotat() {                  // s'aclofa de genolls: veu greu que cau
+        if (!this.ok('esgotat', 300)) return;
+        this.to(150, 50, 0.55, 'sine', 0.28);
+        this.xiu(0.3, 0.1, 'lowpass', 900, 150, 0.7);
+    },
+    bastoCau() {                 // el bàcul toca a terra
+        if (!this.ok('bastoCau', 120)) return;
+        this.to(260, 90, 0.18, 'triangle', 0.2);
+        this.to(1500, 900, 0.1, 'square', 0.06, 0.03);
+    },
+    rebot() {                    // el cop rebota (metàl·lic, sense dany)
+        if (!this.ok('rebot', 80)) return;
+        this.to(1500, 600, 0.09, 'square', 0.12);
+        this.xiu(0.05, 0.1, 'bandpass', 3500, 3500, 2);
+    },
+    tic() {                      // avís que la pausa s'acaba
+        if (!this.ok('tic', 40)) return;
+        this.to(1200, 1200, 0.04, 'square', 0.08);
+    },
     riure() {                    // els nens riuen: tres pujades alegres
         if (!this.ok('riure', 500)) return;
         [0, 0.16, 0.32, 0.5].forEach((t, i) => this.to(620 + i * 60, 820 + i * 60, 0.11, 'triangle', 0.12, t));

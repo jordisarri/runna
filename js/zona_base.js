@@ -805,8 +805,9 @@ class ZonaBase extends Phaser.Scene {
             animClau = [key + '_camina', key + '_caminar', key + '_walk'].find(k => this.anims.exists(k));
         }
         if (animClau && img.anims) {
-            if (img.respira) img.respira.pause();
-            if (img.balanceig) img.balanceig.pause();
+            // (el tween de respirar pot haver estat aturat/destruït per una escena: pause()/resume() d'un tween mort peta)
+            if (img.respira && !img.respira.isDestroyed()) img.respira.pause();
+            if (img.balanceig && !img.balanceig.isDestroyed()) img.balanceig.pause();
             img.setScale(img.escalaBase, img.escalaBase);
             img.play(animClau, true);
         }
@@ -814,8 +815,8 @@ class ZonaBase extends Phaser.Scene {
             if (animClau && img.anims) {
                 img.anims.stop();
                 this.tornaIdleNpc(img, key);
-                if (img.respira) img.respira.resume();
-                if (img.balanceig) img.balanceig.resume();
+                if (img.respira && !img.respira.isDestroyed()) img.respira.resume();
+                if (img.balanceig && !img.balanceig.isDestroyed()) img.balanceig.resume();
             }
             img.setAngle(0);
             if (img.col) { img.col.setPosition(img.x, img.y - 9); img.col.body.updateFromGameObject(); }
@@ -1455,6 +1456,15 @@ class ZonaBase extends Phaser.Scene {
         // Caixa de col·lisió petita als peus (en píxels de textura: els de la cel·la de 256 per k)
         this.ineu.body.setSize(72 * S.k, 30 * S.k);
         this.ineu.body.setOffset((S.ample - 72) / 2 * S.k, (S.peus - 30) * S.k);
+        // Els fulls d'atac (320 px) són més grans que els de caminar (192 px) i l'origen del sprite és una fracció del fotograma: sense això, durant el cop
+        // la caixa de col·lisió es desplaçava ~90 px amunt i ~47 a l'esquerra (i podia tocar una sortida i fer canviar de zona). L'offset es recalcula
+        // a cada fotograma perquè la caixa quedi sempre als peus, al mateix lloc que caminant.
+        const preIneu = this.ineu.preUpdate.bind(this.ineu);
+        this.ineu.preUpdate = (t, d) => {
+            preIneu(t, d);
+            const f = this.ineu.frame, b = this.ineu.body;
+            if (f && b) b.setOffset(f.realWidth / 2 - 36 * S.k, S.peus / S.alt * f.realHeight - 30 * S.k);
+        };
         this.ineu.setCollideWorldBounds(true);
         this.physics.add.collider(this.ineu, this.obstacles);
         this.direccio = pos.dir || 'avall';
@@ -2227,7 +2237,8 @@ class ZonaBase extends Phaser.Scene {
         this.cara(n);
         let fet2 = false;
         const acaba = () => { if (fet2) return; fet2 = true; I.body.reset(I.x, I.y); this.canviant = false; this.cara(n); fet(); };
-        this.tweens.add({ targets: I, x: millor.x, y: millor.y, duration: 170, ease: 'Sine.easeOut', onComplete: acaba });
+        this.tweens.add({ targets: I, x: millor.x, y: millor.y, duration: 170, ease: 'Sine.easeOut',
+            onUpdate: () => { I.setDepth(I.y); if (this.ombraIneu) this.ombraIneu.setPosition(I.x, I.y); }, onComplete: () => { if (this.ombraIneu) this.ombraIneu.setPosition(I.x, I.y); acaba(); } });
         this.time.delayedCall(600, acaba);              // si el pas s'interromp (un cop...), no es queda mai encallat
     }
     // L'Ineu es gira cap a algú
@@ -2257,6 +2268,7 @@ class ZonaBase extends Phaser.Scene {
     }
 
     comprovarSortides() {
+        if (this.forcat && this.time.now < this.forcat.fins) return;       // un retrocés mai no fa canviar de zona
         const b = this.ineu.body;
         const peus = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
         for (const s of this.sortides) {

@@ -20,6 +20,12 @@ ORIGEN = ARREL / 'art' / 'ineu' / 'atac_arma'
 DEST = ARREL / 'assets' / 'ineu'
 DIRS = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast']
 FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 5, 5]}       # fotogrames triats (de 0 a 15) per arma
+# Excepcions per (arma, direcció): full d'origen i fotogrames propis. A la vista d'esquena ('up') de la 2a generació l'arma queda amagada darrere el cap o tallada per la vora
+# del fotograma (la branca només es veu en un fotograma, després només una corona de fulles sobre el cap): la branca fa servir la 1a generació (tiller_v1), on la branca balla
+# ben visible i sencera de dreta a esquerra (fotogrames 2: dreta, 8, 4 i 5: a l'esquerra, 3: tot a l'esquerra).
+# L'espasa 'up' no té cap fotograma bo: eines/fer_espasa_up.py en fabrica un (fulla redibuixada amb l'art real) a espasa_up_fix.
+ORIGEN_EXC = {('tiller', 'up'): 'tiller_v1', ('espasa', 'up'): 'espasa_up_fix'}
+FOT_EXC = {('tiller', 'up'): [2, 8, 4, 5, 3], ('espasa', 'up'): [0, 1, 2, 3, 4]}
 SRC, CEL = 384, 320         # fotograma d'origen i cel·la de sortida (més gran que abans, perquè l'arma no es talli)
 COS = 170.0                  # alçada que ha de fer el cos de l'Ineu a la cel·la (com als fulls de caminar reduïts)
 GRUIX = 1
@@ -74,9 +80,12 @@ def escala(im, arma):
     return COS / (peus(im, range(16)) - float(np.median(tops)))
 
 def main():
-    for arma, fots in FOT.items():
+    filtre = sys.argv[1:]            # opcional: 'tiller:up' ... només aquests fulls
+    for arma, fots0 in FOT.items():
         for d in DIRS:
-            im = Image.open(ORIGEN / arma / f'{d}.png').convert('RGBA')
+            if filtre and f'{arma}:{d}' not in filtre: continue
+            fots = FOT_EXC.get((arma, d), fots0)
+            im = Image.open(ORIGEN / ORIGEN_EXC.get((arma, d), arma) / f'{d}.png').convert('RGBA')
             pf = peus(im, range(16)); K = escala(im, arma)
             n = len(fots); cols = 4; files = (n + cols - 1) // cols
             out = Image.new('RGBA', (cols * CEL, files * CEL), (0, 0, 0, 0))
