@@ -7,7 +7,7 @@
  * (la de DIARI_PASSOS, js/diari.js) i desa. També es pot anar a qualsevol zona sense tocar l'estat.
  */
 const Proves = {
-    actiu: new URLSearchParams(location.search).has('proves'),
+    actiu: new URLSearchParams(location.search).has('proves') || new URLSearchParams(location.search).has('esglesia'),
 
     iniciar() {
         if (!this.actiu) return;
@@ -121,3 +121,14 @@ const Proves = {
     }
 };
 Proves.iniciar();
+// ?esglesia: obre directament la nova església jugable (apart de la de la història), amb la partida de proves just abans del Cant de l'Aurora
+if (new URLSearchParams(location.search).has('esglesia')) {
+    const espera = setInterval(() => {
+        try {
+            if (!Joc.recursosLlestos || !game.scene.isActive('Titol')) return;
+            clearInterval(espera);
+            Proves.estatFins(Math.max(0, PROGRES.passos.findIndex(p => p.id === 'cantAurora')), true, true, false);
+            Proves.anar('ZonaEsglesiaNova', 'porta');
+        } catch (e) { /* el joc encara no és a punt */ }
+    }, 300);
+}

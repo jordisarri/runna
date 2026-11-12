@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prototip església</title>
+<style>
+  html, body { margin: 0; background: #0d0b09; color: #e8dcc0; font: 14px/1.4 system-ui, sans-serif; }
+  #pare { display: flex; flex-wrap: wrap; gap: 16px; padding: 16px; align-items: flex-start; }
+  #cv { image-rendering: pixelated; background: #0d0b09; border: 1px solid #3a2f22; }
+  #ctl { min-width: 240px; max-width: 320px; }
+  #ctl h1 { font-size: 16px; margin: 0 0 8px; color: #f0c640; }
+  #ctl label { display: block; margin: 4px 0; }
+  #ctl input[type=range] { width: 160px; vertical-align: middle; }
+  #ctl button, #ctl select { margin: 6px 6px 0 0; }
+  #ctl small { color: #9d8f74; display: block; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div id="pare">
+  <canvas id="cv"></canvas>
+  <div id="ctl">
+    <h1>Església · vista aèria</h1>
+    <label><input type="checkbox" id="o_retaule" checked> Retaule major</label>
+    <label><input type="checkbox" id="o_capelles" checked> Capelles laterals (3 arcades)</label>
+    <label><input type="checkbox" id="o_bancs" checked> Bancs</label>
+    <label><input type="checkbox" id="o_catifa" checked> Catifa central</label>
+    <label><input type="checkbox" id="o_portes" checked> Portes del presbiteri</label>
+    <label><input type="checkbox" id="o_etiq" checked> Etiquetes de les portes</label>
+    <label>Files de bancs <input type="range" id="r_files" min="2" max="9" value="6"> <span id="v_files"></span></label>
+    <label>Alçada cara nord <input type="range" id="r_alt" min="4" max="9" step="0.5" value="6.5"> <span id="v_alt"></span></label>
+    <label>Amplada nau <input type="range" id="r_amp" min="8" max="14" step="2" value="10"> <span id="v_amp"></span></label>
+    <label>Llargada de cada tram <input type="range" id="r_baia" min="5" max="8" value="6"> <span id="v_baia"></span></label>
+    <label>Zoom <select id="s_zoom"><option value="1">1×</option><option value="2" selected>2×</option><option value="3">3×</option></select></label>
+    <button id="b_png">Descarrega PNG</button>
+    <small>Fora del joc: res d'aquí es carrega a <code>index.html</code>. Vista aèria 3/4: altar i retaule al nord, entrada al sud, portes (sacristia i capella petita) al presbiteri i 3 arcades-capella a cada costat des del graó. La part inacabada no s'inclou.</small>
+  </div>
+</div>
+<script src="esglesia.js?v=3"></script>
+</body>
+</html>

@@ -75,7 +75,7 @@ document.addEventListener('visibilitychange', () => {       // amb la pestanya a
 
 const Joc = {
     debug: new URLSearchParams(location.search).has('debug'),
-    ZONES: ['ZonaPlaca', 'ZonaEsglesia', 'ZonaMonestir', 'ZonaCreu', 'ZonaCasaGran', 'ZonaRuines', 'ZonaCellerFora', 'ZonaPingpong',
+    ZONES: ['ZonaPlaca', 'ZonaEsglesia', 'ZonaEsglesiaNova', 'ZonaMonestir', 'ZonaCreu', 'ZonaCasaGran', 'ZonaRuines', 'ZonaCellerFora', 'ZonaPingpong',
             'ZonaCelles', 'ZonaTiller', 'ZonaBosc', 'ZonaCami', 'ZonaErmita', 'ZonaErmitaInt', 'ZonaEra', 'ZonaJardi',
             'ZonaCamiCirosa', 'ZonaCirosa', 'ZonaMasiaCirosa', 'ZonaTavernaInt', 'ZonaSotaTaverna', 'ZonaGirgolesFora', 'ZonaGirgoles', 'ZonaTortura', 'ZonaBoira', 'ZonaGabia', 'ZonaBiblioteca', 'ZonaMonestirRebedor', 'ZonaCelaStAntoni', 'ZonaCementiri', 'ZonaCasaGranInt', 'ZonaCabana', 'ZonaCabanaInt', 'ZonaCamiRov', 'ZonaRovellonera', 'ZonaGabriel', 'ZonaGabrielInt', 'ZonaDipositos', 'ZonaDolmen', 'ZonaBoscPi', 'ZonaTresor', 'ZonaGolfes', 'ZonaPassadis', 'ZonaCasaTresor', 'ZonaCabanaCami', 'ZonaCasaCripta', 'ZonaTorre', 'ZonaSantAntoni', 'ZonaTaverna', 'ZonaGeorgi', 'ZonaCasaGeorgi', 'ZonaCasetaJoc', 'ZonaSoterraniHost', 'ZonaHostatgeriaInt', 'ZonaCambraDolora', 'ZonaCambraPilaria', 'ZonaCambraCarmelia'],
 
@@ -105,7 +105,7 @@ const Joc = {
         ZonaPlaca: 'musica_poble', ZonaMonestir: 'musica_poble', ZonaCreu: 'musica_poble', ZonaCasaGran: 'musica_poble',
         ZonaRuines: 'musica_poble', ZonaCellerFora: 'musica_poble', ZonaGirgolesFora: 'musica_poble', ZonaCelles: 'musica_poble', ZonaSantAntoni: 'musica_poble', ZonaTaverna: 'musica_poble', ZonaGeorgi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaGeorgi: 'musica_casa', ZonaEra: 'musica_poble', ZonaJardi: 'musica_poble', ZonaCementiri: 'musica_poble',
         // Interiors de cases
-        ZonaEsglesia: 'musica_santuari', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
+        ZonaEsglesia: 'musica_santuari', ZonaEsglesiaNova: 'musica_santuari', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
         ZonaCabanaCami: 'musica_casa', ZonaGolfes: 'musica_casa', ZonaTorre: 'musica_casa',
         // Masmorres
         ZonaCasaGranInt: 'musica_masmorra', ZonaPingpong: 'musica_taverna',      // el Celler: gent i ping-pong, no una masmorra
@@ -707,7 +707,7 @@ const game = new Phaser.Game({
     physics: { default: 'arcade', arcade: { debug: Joc.debug } },
     loader: { imageLoadType: 'HTMLImageElement' },
     scene: [EscenaCarrega, EscenaTitol, EscenaProleg,
-            ZonaPlaca, ZonaEsglesia, ZonaMonestir, ZonaCreu, ZonaCasaGran, ZonaRuines, ZonaCellerFora, ZonaPingpong,
+            ZonaPlaca, ZonaEsglesia, ZonaEsglesiaNova, ZonaMonestir, ZonaCreu, ZonaCasaGran, ZonaRuines, ZonaCellerFora, ZonaPingpong,
             ZonaCelles, ZonaTiller, ZonaBosc, ZonaCami, ZonaErmita, ZonaErmitaInt, ZonaEra, ZonaJardi, ZonaCamiCirosa, ZonaCirosa, ZonaMasiaCirosa, ZonaTavernaInt, ZonaSotaTaverna, ZonaGirgolesFora, ZonaGirgoles, ZonaTortura, ZonaBoira, ZonaGabia, ZonaBiblioteca, ZonaMonestirRebedor, ZonaCelaStAntoni,
             ZonaCementiri, ZonaCasaGranInt, ZonaCabana, ZonaCabanaInt, ZonaCamiRov, ZonaRovellonera, ZonaGabriel, ZonaGabrielInt, ZonaDipositos, ZonaDolmen, ZonaBoscPi, ZonaTresor, ZonaGolfes, ZonaPassadis, ZonaCasaTresor, ZonaCabanaCami, ZonaCasaCripta, ZonaTorre, ZonaSantAntoni, ZonaTaverna, ZonaGeorgi, ZonaCasaGeorgi, ZonaCasetaJoc, ZonaSoterraniHost, ZonaHostatgeriaInt, ZonaCambraDolora, ZonaCambraPilaria, ZonaCambraCarmelia,
             EscenaUI, EscenaMusica, EscenaEstels, EscenaPingPong, EscenaCredits]
