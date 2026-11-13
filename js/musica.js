@@ -42,7 +42,7 @@ function iniciarLliço(nom) {
         game.scene.start('Musica', { mode: 'llico', melodia: nom });
         game.scene.bringToTop('Musica');
         const ms = game.scene.getScene('Musica');
-        if (ms && z && z.pianistaToca) ms.events.once('shutdown', () => z.pianistaToca(true));          // continua tocant (només para per parlar)
+        if (ms && z && z.pianistaToca) ms.events.once('shutdown', () => { const u = game.scene.getScene('UI'); if (!(u && u.dialeg)) z.pianistaToca(true); });          // continua tocant (només para per parlar)
     }, 150);
 }
 
@@ -256,7 +256,7 @@ class EscenaMusica extends Phaser.Scene {
         Sfx.ocarina((freq || FREQ_NOTA[n]) * 2, Math.max(0.55, dur), 0.26);
     }
 
-    // Cada nota: el botó s'aixafa i rebota, flaix blanc, ones de color, espurnes i un raig de llum que puja cap a la tarota; el pergamí fa un petit cop
+    // Cada nota: el botó s'aixafa i rebota, flaix blanc, ones de color, espurnes i un raig de llum que puja cap a la tarota (sense sacsejar la pantalla)
     llum(n, freq, dur) {
         const b = this.botons[n], color = b.color, P = this.panell;
         this.so(n, freq, dur);
@@ -284,19 +284,12 @@ class EscenaMusica extends Phaser.Scene {
         const fy = this.fyTarota, h = b.by - fy;
         const raig = this.add.rectangle(b.x, (b.by + fy) / 2, 26, h, color, 0.5).setBlendMode(Phaser.BlendModes.ADD); P.add(raig);
         this.tweens.add({ targets: raig, alpha: 0, scaleX: 0.2, duration: 520, onComplete: () => raig.destroy() });
-        // cop de pergamí i tremolor de pantalla
-        if (this.panell && !this.tremolant) {
-            this.tremolant = true;
-            this.tweens.add({ targets: P, y: P.y - 6, yoyo: true, duration: 70, ease: 'Sine.easeOut', onComplete: () => { this.tremolant = false; } });
-        }
-        this.cameras.main.shake(90, 0.003);
     }
 
     // Error: el pergamí es sacseja a banda i banda
     tremolaPanell() {
         const P = this.panell, x0 = AMPLE / 2 * (1 - this.escPergami);
         this.tweens.add({ targets: P, x: { from: x0 - 14, to: x0 + 14 }, yoyo: true, repeat: 2, duration: 55, onComplete: () => P.setX(x0) });
-        this.cameras.main.shake(180, 0.006);
     }
 
     // Èxit: pluja de confeti de color des del pergamí, la fila de notes brilla
@@ -307,7 +300,6 @@ class EscenaMusica extends Phaser.Scene {
             const dot = this.add.rectangle(x, T + 140, 8 + Math.random() * 6, 5 + Math.random() * 5, c, 1).setAngle(Math.random() * 360); P.add(dot);
             this.tweens.add({ targets: dot, x: x + (Math.random() - 0.5) * 220, y: T - 20 - Math.random() * 160, angle: dot.angle + 360, alpha: 0, duration: 900 + Math.random() * 500, ease: 'Cubic.easeOut', onComplete: () => dot.destroy() });
         }
-        this.cameras.main.shake(220, 0.005);
         if (this.auraPrimerPla && this.auraPrimerPla.active) this.tweens.add({ targets: this.auraPrimerPla, fillAlpha: { from: 0.6, to: 0.16 }, duration: 700 });
     }
 
