@@ -244,11 +244,15 @@ const SPRITE_INEU = {
     fpsAturat: 6,          // l'idle té 16 fotogrames
     // Les vistes laterals tenen 16 fotogrames; mantenim una durada de cicle semblant a les altres vistes cardinals.
     fpsVista: { down: 16, up: 16, left: 16, right: 16, southwest: 16, southeast: 16, northwest: 16, northeast: 16 },
-    // Cicle de caminar escurçat (amunt i avall): el full té 16 fotogrames però el bucle del vídeo no tanca bé (a la costura del 15 al 0 el peu fa un petit retrocés).
+    // Cicle de caminar escurçat (amunt, avall i les quatre diagonals; esquerra i dreta ja eren correctes): el full té 16 fotogrames però el bucle del vídeo no tanca bé (a la costura del 15 al 0 el peu fa un petit retrocés).
     // Es fa servir només un tros de 7 fotogrames (una passa amb cada peu) que tanca net; el ritme de passes és el mateix que abans (~16 fotogrames a 16 fps).
     // Per tornar al cicle sencer: cicleCurt = false (no es toca cap full).
     cicleCurt: true,
-    cicle: { down: { frames: [9, 10, 11, 12, 13, 14, 15], fps: 18.5 }, up: { frames: [9, 10, 11, 12, 13, 14, 15], fps: 18.5 } },
+    cicle: {
+        down: { frames: [9, 10, 11, 12, 13, 14, 15], fps: 18.5 }, up: { frames: [9, 10, 11, 12, 13, 14, 15], fps: 18.5 },
+        southwest: { frames: [9, 10, 11, 12, 13, 14, 15], fps: 18.5 }, southeast: { frames: [8, 9, 10, 11, 12, 13, 14], fps: 18.5 },
+        northwest: { frames: [8, 9, 10, 11, 12, 13, 14], fps: 18.5 }, northeast: { frames: [8, 9, 10, 11, 12, 13, 14], fps: 18.5 }
+    },
     quiet: 2,             // fotograma de repòs de cada direcció
     // Memòria: les fulles de l'Ineu es redueixen en carregar a cel·les de 192.
     // Totes les mides d'aquí (i les de l'arma, atac_arma.js) continuen en píxels de la cel·la de 256; on cal píxels de la
