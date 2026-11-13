@@ -100,7 +100,7 @@ const PROGRES = {
               : "El Germà Francí, a Sant Antoni, té uns guants que mouen el que pesa. Fes-li un favor." },
         { id: 'roda', marca: ['rodaMoguda'], fet: E => E.flag('rodaMoguda'),
           pista: E => "La roda de carruatge de la qual et va parlar en Jusef tapa el túnel dels monjos. Amb els guants, es deixarà empènyer." },
-        { id: 'cambra', marca: ['cofreCambra', 'obj:pergami_monjo'], fet: E => E.flag('cofreCambra'),
+        { id: 'cambra', marca: ['portaTresorOberta'], fet: E => E.flag('portaTresorOberta'),
           pista: E => "Rere la roda, un passadís baixa a una cambra secreta. Els esbarzers negres del camí només cedeixen a Runna." },
         { id: 'maneta', marca: ['georgiManeta', 'maneta', 'obj:maneta'], fet: E => E.flag('maneta') || E.te('maneta'),
           pista: E => E.flag('georgiManeta')

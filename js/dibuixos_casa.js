@@ -333,3 +333,39 @@ function pintarMollaTresor(ctx, w, h) {
     ctx.strokeStyle = '#4a4a50'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.ellipse(cx, yb - gruix, rx - 4, ry - 3, 0, 0, Math.PI * 2); ctx.stroke();     // vora de ferro
     ctx.fillStyle = 'rgba(255,245,220,0.16)'; ctx.beginPath(); ctx.ellipse(cx - 6, yb - gruix - 3, rx * 0.5, ry * 0.4, 0, 0, Math.PI * 2); ctx.fill();
 }
+
+// Taula de fusta amb un llibre gros obert al damunt (Cambra secreta): vista de tres quarts, el llibre amb lletra de monjo i un registre vermell
+function pintarTaulaLlibre(ctx, w, h) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const C = '#2a1608';
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 6, w * 0.46, 7, 0, 0, Math.PI * 2); ctx.fill();
+    // potes
+    [[16, 62, 12, h - 8], [w - 16, 62, w - 12, h - 8], [34, 58, 32, h - 14], [w - 34, 58, w - 32, h - 14]].forEach(([x0, y0, x1, y1]) => {
+        ctx.strokeStyle = C; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+        ctx.strokeStyle = '#6a4220'; ctx.lineWidth = 5.5; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+    });
+    // faldó i tauler (gruix a la vora de davant)
+    ctx.fillStyle = '#5e3a1c'; ctx.beginPath(); ctx.roundRect(8, 56, w - 16, 14, 3); ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 2.4; ctx.stroke();
+    const tg = ctx.createLinearGradient(0, 18, 0, 62); tg.addColorStop(0, '#b27c46'); tg.addColorStop(1, '#8e5c2c');
+    ctx.fillStyle = tg; ctx.beginPath(); ctx.moveTo(26, 18); ctx.lineTo(w - 26, 18); ctx.lineTo(w - 6, 58); ctx.lineTo(6, 58); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(60,30,10,0.35)'; ctx.lineWidth = 1.3;
+    [0.25, 0.5, 0.75].forEach(f => { ctx.beginPath(); ctx.moveTo(26 - 20 * f + 20 * 0, 18 + 40 * f); ctx.lineTo(w - 26 + 20 * f, 18 + 40 * f); ctx.stroke(); });
+    // llibre obert: tapa de cuir, dues pàgines una mica corbes, ombra del llom, línies d'escriptura
+    ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.beginPath(); ctx.ellipse(w / 2, 49, 54, 11, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#5a2418'; ctx.strokeStyle = C; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(w / 2 - 56, 26); ctx.lineTo(w / 2 + 56, 26); ctx.lineTo(w / 2 + 60, 52); ctx.lineTo(w / 2 - 60, 52); ctx.closePath(); ctx.fill(); ctx.stroke();
+    const pag = (sg) => {
+        const x0 = w / 2, x1 = w / 2 + sg * 54;
+        const g = ctx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, '#d8c890'); g.addColorStop(0.15, '#f1e6bc'); g.addColorStop(1, '#e6d6a0');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x0, 25); ctx.quadraticCurveTo((x0 + x1) / 2, 21, x1, 26); ctx.lineTo(x1 + sg * 1, 49); ctx.quadraticCurveTo((x0 + x1) / 2, 53, x0, 49); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = C; ctx.lineWidth = 1.8; ctx.stroke();
+        ctx.strokeStyle = 'rgba(70,40,14,0.7)'; ctx.lineWidth = 1.1;
+        for (let k = 0; k < 6; k++) { const y = 30 + k * 3.4, a = x0 + sg * 6, b = x1 - sg * (5 + (k % 3) * 3); ctx.beginPath(); ctx.moveTo(a, y); ctx.lineTo(b, y + (sg > 0 ? 0.6 : 0)); ctx.stroke(); }
+    };
+    pag(-1); pag(1);
+    // caplletra vermella a la pàgina de la dreta i llom amb ombra
+    ctx.fillStyle = '#a02a1e'; ctx.fillRect(w / 2 + 8, 29, 8, 8); ctx.strokeStyle = '#4a1008'; ctx.lineWidth = 1; ctx.strokeRect(w / 2 + 8, 29, 8, 8);
+    ctx.fillStyle = 'rgba(60,34,10,0.28)'; ctx.fillRect(w / 2 - 2, 25, 4, 25);
+    // punt de llibre vermell que penja
+    ctx.strokeStyle = '#a02a1e'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(w / 2 + 2, 50); ctx.quadraticCurveTo(w / 2 + 6, 58, w / 2 + 2, 62); ctx.stroke();
+}

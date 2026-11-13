@@ -993,11 +993,12 @@ class ZonaCasaTresor extends ZonaCasaBase {
         // Estora, tarima del cofre i el cofre
         this.add.image(500, 690, 'catifa_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(-1050);
         this.add.image(500, 178, 'graons_ermita').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-990);
-        this.registraGraons(310, 690, [[250, 268], [218, 238]]);          // els dos graons del cofre: frenada i un tap a cada un
-        this.cofre = this.add.image(500, 218, Estat.flag('cofreCambra') ? 'cofre_tresor_obert' : 'cofre_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(218);
-        (this.opacs = this.opacs || []).push(this.cofre);              // opac: la silueta de l'Ineu no es veu a través seu
-        this.colisio(500, 205, 100, 24);
-        this.interactiu(500, 262, RADI_OBJECTE, DIALEGS.cofreCambra, { altura: 110, enTancar: () => { if (Estat.flag('cofreCambra')) this.cofre.setTexture('cofre_tresor_obert'); } });
+        this.registraGraons(310, 690, [[250, 268], [218, 238]]);          // els dos graons de la taula del llibre: frenada i un tap a cada un
+        // Una taula amb un llibre gros obert: només es llegeix (no dona cap objecte)
+        this.taulaLlibre = this.add.image(500, 218, 'taula_llibre').setOrigin(0.5, 1).setScale(1 / RES).setDepth(218);
+        (this.opacs = this.opacs || []).push(this.taulaLlibre);        // opac: la silueta de l'Ineu no es veu a través seu
+        this.colisio(500, 205, 120, 24);
+        this.interactiu(500, 262, RADI_OBJECTE, DIALEGS.llibreCambra, { altura: 110 });
         [[390, 262], [610, 262]].forEach(([x, y], i) => {
             this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
             this.colisio(x, y - 8, 24, 14);
@@ -1075,9 +1076,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
         // Inspeccionar la porta tancada
         this.interactiu(PX, PB + 46, RADI_OBJECTE, E => ({ pagines: [{ qui: 'Ineu', text: E.flag('botaAlcada')
             ? "(La llosa no té pany ni maneta. La cadena de la politja hi està lligada: el mecanisme de terra deu fer-la pujar.)"
-            : E.flag('cofreCambra')
-                ? "(Una llosa de pedra sense pany ni maneta. No cedeix gens. «Qui busqui sortida, que trenqui la bóta marcada amb la creu»...)"
-                : "(Una llosa de pedra sense pany ni maneta. No cedeix gens: s'ha d'obrir d'una altra manera.)" }] }),
+            : "(Una llosa de pedra sense pany ni maneta. No cedeix gens: s'ha d'obrir d'una altra manera. Aquella bóta amb la creu vermella sembla fora de lloc...)" }] }),
             { altura: PB - PT + 36, actiu: () => !Estat.flag('portaTresorOberta') });
     }
 

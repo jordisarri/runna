@@ -1362,6 +1362,7 @@ const Grafics = {
         crea('sacs_tresor', 140, 96, pintarSacsTresor);
         crea('molla_tresor', 72, 34, pintarMollaTresor);
         crea('bota_creu', 64, 84, pintarBotaCreu);
+        crea('taula_llibre', 150, 100, pintarTaulaLlibre);
         crea('cofre_tresor', 110, 80, (ctx, w, h) => pintarCofre(ctx, w, h, false));
         crea('cofre_tresor_obert', 110, 80, (ctx, w, h) => pintarCofre(ctx, w, h, true));
         crea('escalinata_fons', 1140, 640, pintarEscalinata);
