@@ -187,7 +187,7 @@ const REINICI_ZONES = {
     ZonaTaverna: { portaTaverna: null, portaOberta: false },
     ZonaSotaTaverna: { portaOberta: false },
     ZonaJardi: { obrintLlosa: false },
-    ZonaCasaGranInt: { reixaBoss: false, colSecreta: null, estatuaFinal: null, reixaEstavaOberta: false, volDespertar: false, raimPas: 0, colReixa: null, barrots: null, barra: null, estatua: null, colEstatua: null, llosaTrapa: null, llumTrapa: null, engranatge: null, manetaVolant: null, volant: null, pedestal: null, boss: null },
+    ZonaCasaGranInt: { colTrapa: null, gemmes: null, runesCercle: null, avisFosc: null, brillVolant: null, reixaBoss: false, colSecreta: null, estatuaFinal: null, reixaEstavaOberta: false, volDespertar: false, raimPas: 0, colReixa: null, barrots: null, barra: null, estatua: null, colEstatua: null, llosaTrapa: null, llumTrapa: null, engranatge: null, manetaVolant: null, volant: null, pedestal: null, boss: null },
     ZonaBosc: { fontBrilla: null, llumLila: null },
     ZonaRuines: { ombraForta: false, pergamiBrill: null },
     ZonaTiller: { avisArrels: false, sopar: null },
@@ -1644,10 +1644,10 @@ class ZonaBase extends Phaser.Scene {
 
     // ---------------- Barrils ----------------
     // Tots els barrils són el mateix gràfic ('barril'), opacs, i es trenquen amb qualsevol arma (vegeu combat.js, atacar)
-    barril(x, y, w, h) {
-        const img = this.posar('barril', x, y, { opac: true });
+    barril(x, y, w, h, clau = 'barril') {
+        const img = this.posar(clau, x, y, { opac: true });
         const col = this.colisio(x, y - h / 2, w, h);
-        const b = { img, col, x, y, viu: true };
+        const b = { img, col, x, y, viu: true, clau };
         this.barrils.push(b);
         return b;
     }
@@ -1657,10 +1657,11 @@ class ZonaBase extends Phaser.Scene {
         if (!b.viu) return;
         b.viu = false;
         Sfx.trenca && Sfx.trenca();
+        if (b.alRomprer) b.alRomprer(b, d);
         this.obstacles.remove(b.col, true, true);
         const idx = this.opacs ? this.opacs.indexOf(b.img) : -1;
         if (idx >= 0) this.opacs.splice(idx, 1);
-        const key = 'barril', fr = this.textures.get(key).get(), W = fr.width, H = fr.height;
+        const key = b.clau || 'barril', fr = this.textures.get(key).get(), W = fr.width, H = fr.height;
         const esc = b.img.scaleX, dw = W * esc, dh = H * esc;
         // Tall irregular en 3 columnes x 3 files
         const tallV = [0, W * Phaser.Math.FloatBetween(0.28, 0.38), W * Phaser.Math.FloatBetween(0.62, 0.74), W];

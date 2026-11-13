@@ -275,13 +275,19 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 Tots els gràfics de dalt són fets i connectats (els seus prompts s'han esborrat d'aquest document).
 
-**Pendents:** cap.
+**Pendents:** `cercle_runes` (el cercle de runes del terra de l'Escalinata; ara es dibuixa amb codi).
 
 ---
 
 ## Pendent
 
-Res: tots els gràfics necessaris són fets.
+### `cercle_runes.png` → `assets/objectes/cercle_runes.webp` (amplada 440) *(El **cercle de runes** gravat a terra al voltant del pedestal de l'Home del Raïm, que s'encén en lila quan el guardià es desperta (`cercleRunes`, `js/zones/casa.js`). Ara el joc el dibuixa amb codi; quan hi hagi el PNG, el substitueix. Imatge **apaïsada, 2,7:1** (el joc la fa servir a uns 440 × 163), fons blanc pur (el trec jo).)*
+
+```
+A magical rune circle engraved into a stone floor, seen from a high three-quarter top-down view as a flat ELLIPSE (about 2.7 times wider than tall), perfectly centred. Two concentric thin ellipses of carved stone grooves with a ring of twelve distinct ancient runes carved between them (simple angular symbols: crosses, triangles, bars, circles), the grooves glowing a soft lilac-violet light as if filled with magic mist, with small wisps of lilac mist rising from some of the runes and a few tiny chips of stone. 2D charming game asset in the same art style as the reference image: bold clean dark outline, rich saturated colours, two-tone cel shading, hand-painted look. Only the circle itself, isolated on a pure white background (#FFFFFF), no floor tiles, no shadow, no text, no frame, no pedestal in the middle (the centre is empty).
+```
+
+(Referència d'estil: `art/enemics/home_raim_apunta.png` per al lila de la boira i `art/objectes/creu.png` per al contorn.)
 
 ---
 

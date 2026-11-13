@@ -1545,18 +1545,18 @@ const DIALEGS = {
             pagines: [
                 { avis: "Has obtingut el PERGAMÍ DEL MONJO.", obj: 'pergami_monjo' },
                 { qui: "Ineu", text: "«La clau de ferro és sota l'escala, murada amb els meus germans. Un guardià de pedra la vigila d'esquena: ningú no hi baixa fins que no et mira a la cara.»" },
-                { qui: "Ineu", text: "I al revers, amb una altra lletra: «Qui busqui sortida, que alci la bóta marcada amb la creu.»" }
+                { qui: "Ineu", text: "I al revers, amb una altra lletra: «Qui busqui sortida, que trenqui la bóta marcada amb la creu.»" }
             ],
             enAcabar: () => {
                 E.dona("pergami_monjo"); E.posaFlag("cofreCambra");
-                E.posaObjectiu("A la cambra, la bóta de la creu vermella sembla fora de lloc: potser amaga una porta.");
+                E.posaObjectiu("A la cambra, la bóta de la creu vermella sembla fora de lloc: trencant-la, potser amaga una porta.");
             }
         };
     },
 
     // La bóta marcada de la cambra secreta: en alçar-la, deixa a la vista l'anella que obre la porta del fons
     botaTresor: E => ({
-        pagines: [{ qui: "Ineu", text: "(Una bóta amb una creu vermella. Pesa molt menys que les altres... La faré rodar.)" }]
+        pagines: [{ qui: "Ineu", text: "(Una bóta amb una creu vermella. Sona buida, i la fusta és fina... Amb un cop d'arma es trencaria.)" }]
     }),
 
 

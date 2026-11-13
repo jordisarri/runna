@@ -327,6 +327,24 @@ const Sfx = {
         });
         fil.connect(g); g.connect(this.mestre); lfo.start(t); lfo.stop(t + dur + 0.05);
     },
+    rugitRaim() {                // el guardià de pedra ruge: grunyit greu i un buf de pedra
+        if (!this.ok('rugitRaim', 400)) return;
+        this.to(95, 55, 0.8, 'sawtooth', 0.3);
+        this.to(48, 38, 0.9, 'sine', 0.4);
+        this.xiu(0.8, 0.24, 'lowpass', 520, 90);
+    },
+    mazaRaim() {                 // la maça cau a terra: cop greu i sec amb tremolor de pedra
+        if (!this.ok('mazaRaim', 150)) return;
+        this.to(115, 32, 0.5, 'sine', 0.75);
+        this.to(70, 28, 0.55, 'triangle', 0.35, 0.02);
+        this.xiu(0.3, 0.5, 'lowpass', 900, 80);
+    },
+    pedra() {                    // crujit de pedra que es trenca o es tomba
+        if (!this.ok('pedra', 120)) return;
+        this.xiu(0.2, 0.4, 'bandpass', 600, 200, 1.5);
+        this.xiu(0.12, 0.28, 'highpass', 1500, 800, 1, 0.08);
+        this.to(140, 70, 0.22, 'square', 0.14);
+    },
     rugit() {                    // l'Ocellaire crida (canvis de fase): veu greu i un buf de gola, sense xiscles aguts
         if (!this.ok('rugit', 600)) return;
         this.veuGreu(120, 52, 1.5, 0.26);

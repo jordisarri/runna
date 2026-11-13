@@ -26,9 +26,9 @@ Object.assign(DIALEGS, {
 
     raimDesperta: {
         pagines: [
-            { qui: 'Home del Raïm', text: "Uf... Quant de temps. M'han tingut mirant la paret com un nen castigat." },
-            { qui: 'Ineu', text: "S'ha mogut! La pedra ha cobrat vida!" },
-            { qui: 'Home del Raïm', text: "Voleu entrar a la cripta? Haureu de passar per sobre meu. Tampoc no tinc res més a fer." }
+            { qui: 'Home del Raïm', text: "La boira... m'ha despertat. Tants anys mirant la paret, i ara em deixen anar. Algú ho pagarà." },
+            { qui: 'Ineu', text: "S'ha mogut! La boira lila li ha donat vida!" },
+            { qui: 'Home del Raïm', text: "Vols la cripta? Ni tu ni cap altre no hi passareu. Us esclafaré com raïms." }
         ]
     },
 
@@ -40,9 +40,10 @@ Object.assign(DIALEGS, {
 
     raimDerrotat: {
         pagines: [
-            { qui: 'Home del Raïm', text: "Està bé, em rendeixo. Fa segles que no em cansava tant." },
-            { qui: 'Home del Raïm', text: "Baixa, si hi tens ganes. Però allà sota hi ha coses que fins la pedra prefereix no mirar." },
-            { qui: 'Home del Raïm', text: "I ara, si no et fa res, torno al meu pedestal. Sembla que és l'únic lloc on tinc feina." },
+            { qui: 'Home del Raïm', text: "La boira se'n va... torno a sentir la pedra. Així acaba: segles guardant el que ells no van tenir ganes de mirar." },
+            { qui: 'Home del Raïm', text: "Ells em van deixar aquí, i el teu Home de la Gàbia m'ha despertat només perquè em matessin." },
+            { qui: 'Home del Raïm', text: "Baixa, si vols. Allà sota ningú no et perdonarà, com ningú no em va perdonar a mi." },
+            { qui: 'Home del Raïm', text: "Torno al pedestal. És l'únic que em van deixar." },
         ]
     },
 
@@ -104,13 +105,13 @@ Object.assign(DIALEGS, {
 });
 
 // On és l'Home del Raïm a l'Escalinata (peu del pedestal) i quant més gran és que el dibuix original del volant
-const RAIM = { x: 700, y: 560, f: 1.35 };
+const RAIM = { x: 700, y: 560, f: 1.485 };
 
 // ---------------- BOSS: L'HOME DEL RAÏM VIU ----------------
-const K_RAIM = 1.3;      // mida del guardià respecte al dibuix original (277 → ~360 px d'alt); cos, radi i cap van ja en píxels de món
+const K_RAIM = 1.1;      // mida del guardià respecte al dibuix original (277 → ~360 px d'alt); cos, radi i cap van ja en píxels de món
 ENEMICS.raim = {
     k: K_RAIM,
-    tex: 'home_raim_desperta', vida: 24, vel: 320, mal: 1, radi: Math.round(38 * K_RAIM), cos: [Math.round(66 * K_RAIM), Math.round(30 * K_RAIM)], ombra: 0.65 * K_RAIM,
+    tex: 'home_raim_desperta', vida: 30, vel: 320, mal: 1, radi: Math.round(38 * K_RAIM), cos: [Math.round(66 * K_RAIM), Math.round(30 * K_RAIM)], ombra: 0.65 * K_RAIM,
     arma: 'runna',                            // només Runna li fa mal
     // El punt feble és el cap (al 27% del dibuix des de dalt), i només quan ha caigut de morros després d'una envestida:
     // llavors el cap queda a terra, a l'abast (sense cap abast extra cap amunt)
@@ -128,10 +129,25 @@ ENEMICS.raim = {
         p.explode(n);
         z.time.delayedCall(800, () => p.destroy());
     },
-    // Una frase curta que surt sobre el cap del guardià i s'esvaeix (només en tres moments: fase 2, a punt de caure i el diàleg de despertar/derrota)
-    diu(z, e, text) {
-        const t = z.add.text(e.spr.x, e.spr.y - e.spr.displayHeight - 14, text, Object.assign(estilText(24, '#f0e6ff', { stroke: '#1a0f2a', strokeThickness: 5, fontStyle: 'italic' }), { wordWrap: { width: 330 }, align: 'center' })).setOrigin(0.5, 1).setDepth(99999);
-        z.tweens.add({ targets: t, y: t.y - 26, alpha: 0, duration: 800, delay: 1900, onComplete: () => t.destroy() });
+    // Una frase del guardià, al quadre de diàleg (el combat s'atura mentre dura): mai text sobreimpresos a la pantalla
+    parla(z, e, text) {
+        z.ui().obrirDialeg({ pagines: [{ qui: 'Home del Raïm', text }] });
+    },
+    // Boira lila al voltant del guardià durant tot el combat: és la que l'ha despertat
+    neboda(z, e) {
+        if (e.nebla) return;
+        e.nebla = z.add.particles(0, 0, 'boira', {
+            x: { min: -80, max: 80 }, y: { min: -190, max: 10 }, lifespan: 1600, speedY: { min: -26, max: -6 }, speedX: { min: -16, max: 16 },
+            scale: { start: 0.8, end: 1.7 }, alpha: { start: 0.34, end: 0 }, tint: [0xb890ff, 0xd8c0ff, 0x9a7acf], frequency: 70
+        }).setDepth(e.spr.depth + 0.5);
+        e.nebla.startFollow(e.spr);
+    },
+    apagaNeboda(e) {
+        const n = e.nebla;
+        if (!n) return;
+        e.nebla = null;
+        n.stop();
+        n.scene.time.delayedCall(1800, () => n.destroy());
     },
     // On queda el cap quan és a terra (el sprite gira pels peus)
     capATerra(z, e) { return z.puntsCop(e)[0]; },
@@ -177,26 +193,31 @@ ENEMICS.raim = {
     // TELEGRAPH DE LA CÀRREGA: una franja vermella a terra, amb la llargada i l'ample reals de l'envestida, que s'omple mentre apunta
     teleCarga(z, e, c, ara, durada, fase2) {
         if (!e.tele) e.tele = z.add.graphics().setDepth(-400);
-        const g = e.tele, L = this.vel * (fase2 ? 0.46 : 0.4) + 36, w = this.radi * 0.9, p = 1 - Phaser.Math.Clamp((e.fins - ara) / durada, 0, 1);
-        const dx = Math.cos(e.ang), dy = Math.sin(e.ang), nx = -dy * w, ny = dx * w;
-        const poli = [{ x: c.x + nx, y: c.y + ny }, { x: c.x + dx * L + nx, y: c.y + dy * L + ny }, { x: c.x + dx * L - nx, y: c.y + dy * L - ny }, { x: c.x - nx, y: c.y - ny }];
+        const g = e.tele, L = this.vel * (fase2 ? 0.46 : 0.4) + 36, w = this.radi * 0.8, p = 1 - Phaser.Math.Clamp((e.fins - ara) / durada, 0, 1);
+        const dx = Math.cos(e.ang), dy = Math.sin(e.ang), nx = -dy, ny = dx;
         g.clear();
-        g.fillStyle(0xff2a2a, 0.16 + 0.26 * p).fillPoints(poli, true);
-        g.lineStyle(3, 0xff6a50, 0.35 + 0.5 * p).strokePoints(poli, true);
-        g.fillStyle(0xff4a38, 0.2 + 0.5 * p).fillCircle(c.x + dx * L, c.y + dy * L, 10 + 12 * p);       // el punt on s'atura
+        // una estela de pols i pedra: franges successives que s'estrenyen i s'esvaeixen cap al final del recorregut (cap contorn dur)
+        const N = 8;
+        for (let i = 0; i < N; i++) {
+            const t0 = i / N, t1 = (i + 1) / N, w0 = w * (1 - 0.55 * t0), w1 = w * (1 - 0.55 * t1);
+            const x0 = c.x + dx * L * t0, y0 = c.y + dy * L * t0, x1 = c.x + dx * L * t1, y1 = c.y + dy * L * t1;
+            g.fillStyle(0x7a4a68, (0.05 + 0.12 * p) * (1 - 0.7 * t0));
+            g.fillPoints([{ x: x0 + nx * w0, y: y0 + ny * w0 }, { x: x1 + nx * w1, y: y1 + ny * w1 }, { x: x1 - nx * w1, y: y1 - ny * w1 }, { x: x0 - nx * w0, y: y0 - ny * w0 }], true);
+        }
+        g.fillStyle(0xc89ab0, 0.06 + 0.22 * p).fillCircle(c.x + dx * L, c.y + dy * L, 6 + 6 * p);        // un petit senyal de pols on s'atura
     },
     netejaTele(e) { if (e.tele) { e.tele.destroy(); e.tele = null; } },
     // COP DE MAÇA (fase 2): la maça cau sobre el punt on era l'Ineu; un cercle vermell s'omple durant l'avís i, en l'impacte, una ona de pedra s'escampa
     teleMaza(z, e, ara) {
         if (!e.teleMa) e.teleMa = z.add.graphics().setDepth(-400);
-        const p = 1 - Phaser.Math.Clamp((e.fins - ara) / 800, 0, 1), R = 120 * K_RAIM / 1.3;
-        e.teleMa.clear().fillStyle(0xff2a2a, 0.12 + 0.34 * p).fillCircle(e.mx, e.my, R).lineStyle(4, 0xff6a50, 0.4 + 0.5 * p).strokeCircle(e.mx, e.my, R);
-        e.teleMa.lineStyle(2, 0xffb090, 0.5).strokeCircle(e.mx, e.my, R * (1 - p));          // l'anell que es tanca marca l'instant del cop
+        const p = 1 - Phaser.Math.Clamp((e.fins - ara) / 800, 0, 1), R = 100;
+        e.teleMa.clear().fillStyle(0x7a4a68, 0.05 + 0.13 * p).fillCircle(e.mx, e.my, R).lineStyle(1.5, 0xc89ab0, 0.2 + 0.3 * p).strokeCircle(e.mx, e.my, R);
+        e.teleMa.lineStyle(1, 0xe0bccc, 0.3 + 0.2 * p).strokeCircle(e.mx, e.my, R * (1 - p));          // un anell fi que es tanca: marca el moment del cop
     },
     netejaMaza(e) { if (e.teleMa) { e.teleMa.destroy(); e.teleMa = null; } },
     impacteMaza(z, e) {
-        const R = 120 * K_RAIM / 1.3;
-        z.cameras.main.shake(380, 0.011); Sfx.cop(true);
+        const R = 100;
+        z.cameras.main.shake(380, 0.011); Sfx.mazaRaim();
         this.trossos(z, e.mx, e.my, 18);
         const ona = z.add.circle(e.mx, e.my, 20, 0xcdb8ff, 0.25).setStrokeStyle(5, 0xe8dcff, 0.9).setDepth(-399);
         z.tweens.add({ targets: ona, radius: R * 1.5, alpha: 0, duration: 520, ease: 'Quad.easeOut', onComplete: () => ona.destroy() });
@@ -234,18 +255,19 @@ ENEMICS.raim = {
     ia(z, e, ara) {
         const jo = z.ineu.body.center, c = e.spr.body.center;
         const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
-        const fase2 = e.vida <= 9;
+        const fase2 = e.vida <= 11;
         const estatAbans = e.estat;
         if (!e.proxCarrega) e.proxCarrega = ara + 2200;
+        if (!e.proxMaza) e.proxMaza = ara + 4500;
         const cap = Math.atan2(jo.y - c.y, jo.x - c.x);
         if (e.estat !== 'apunta') this.netejaTele(e);
         if (e.estat !== 'maza') this.netejaMaza(e);
-        if (e.vida <= 3 && !e.vidaBaixa) { e.vidaBaixa = true; this.diu(z, e, 'Els genolls... ja no són el que eren.'); }
+        if (e.vida <= 4 && !e.vidaBaixa) { e.vidaBaixa = true; this.parla(z, e, 'Em van deixar aquí... i ara tu vens a acabar la feina.'); }
         if (fase2 && !e.fase2vista) {                    // canvi de fase: rugit, flaix lila i una breu pausa abans de tornar a l'atac
             e.fase2vista = true; e.proxMaza = ara + 2600; e.atorditFins = ara + 900;
             e.spr.body.setVelocity(0); e.estat = 'aixeca'; e.fins = ara + 900;
-            z.cameras.main.flash(380, 190, 140, 255); z.cameras.main.shake(500, 0.008); Sfx.carrega();
-            this.diu(z, e, "Ja em feia falta una mica d'exercici!");
+            z.cameras.main.flash(380, 190, 140, 255); z.cameras.main.shake(500, 0.008); Sfx.rugitRaim();
+            this.parla(z, e, "Aquesta boira em crida... vol que us esclafi a tots. Que així sigui.");
             this.trossos(z, c.x, c.y, 16);
             return;
         }
@@ -258,13 +280,13 @@ ENEMICS.raim = {
         } else if (e.estat === 'maza') {
             e.spr.body.setVelocity(0);
             this.teleMaza(z, e, ara);
-            if (ara > e.fins) { this.impacteMaza(z, e); this.netejaMaza(e); e.estat = 'aixeca'; e.fins = ara + 700; e.proxMaza = ara + 5200; e.proxCarrega = Math.max(e.proxCarrega, ara + 1800); }
+            if (ara > e.fins) { this.impacteMaza(z, e); this.netejaMaza(e); e.estat = 'aixeca'; e.fins = ara + 700; e.proxMaza = ara + (fase2 ? 5200 : 7500); e.proxCarrega = Math.max(e.proxCarrega, ara + 1800); }
         } else if (e.estat === 'carrega') {
             const bl = e.spr.body.blocked;
             if (ara > e.fins || bl.left || bl.right || bl.up || bl.down) {
                 e.spr.body.setVelocity(0);
                 // A la fase 2, de vegades encadena una segona envestida abans de caure
-                if (fase2 && !e.segona && Math.random() < 0.6) { e.segona = true; e.estat = 'apunta'; e.duradaApunta = 380; e.fins = ara + 380; e.ang = cap; e.spr.setTint(0xff8080); }
+                if (fase2 && !e.segona && Math.random() < 0.6) { e.segona = true; e.estat = 'apunta'; e.duradaApunta = 380; e.fins = ara + 380; e.ang = cap; e.spr.setTint(0xffc4cc); }
                 else {
                     e.segona = false;
                     e.estat = 'cansat'; e.fins = ara + (fase2 ? 1700 : 2300); e.copsRebuts = 0;
@@ -283,16 +305,17 @@ ENEMICS.raim = {
             const v = dist > 120 * K_RAIM ? (fase2 ? 120 : 90) : 0;
             e.spr.body.setVelocity(Math.cos(cap) * v, Math.sin(cap) * v);
             e.spr.setFlipX(Math.cos(cap) < 0);
-            if (fase2 && ara > (e.proxMaza || 0) && dist < 400 && dist > 90) {
+            if (ara > e.proxMaza && dist < 400 && dist > 90) {
                 e.estat = 'maza'; e.fins = ara + 800;
                 const d = Math.min(dist, 250); e.mx = c.x + Math.cos(cap) * d; e.my = c.y + Math.sin(cap) * d;
                 Sfx.carrega();
             } else if (ara > e.proxCarrega && dist < 520) {
                 e.estat = 'apunta'; e.duradaApunta = fase2 ? 420 : 650; e.fins = ara + e.duradaApunta; e.ang = cap;
-                e.spr.setTint(0xff8080);
+                e.spr.setTint(0xffc4cc);
             }
         }
         if (e.estat === 'cansat') this.seguirFinestra(z, e, ara);
+        this.neboda(z, e); if (e.nebla) e.nebla.setDepth(e.spr.depth + 0.5);
         // Ombra segons l'estat: més petita en tirar-se enrere, ample i plana quan és a terra de morros
         const ob = this.ombra, aterra = e.estat === 'cansat' || e.estat === 'aixeca';
         if (e.ombra) e.ombra.setScale(aterra ? ob * 1.45 : e.estat === 'apunta' ? ob * 0.85 : ob, aterra ? ob * 0.8 : e.estat === 'apunta' ? ob * 0.85 : ob);
@@ -321,13 +344,13 @@ ENEMICS.raim = {
             else if (e.estat === 'cansat') {
                 // Avís: un cercle vermell on caurà el cap (és on fa mal), 420 ms abans del cop; després s'obre la finestra de dany
                 const qp = this.capPrevist(z, e), R = 70 * K_RAIM, yq = qp.y + 30 * K_RAIM;
-                const av = z.add.circle(qp.x, yq, R, 0xff2a2a, 0.12).setStrokeStyle(3, 0xff6a50, 0.8).setDepth(-399);
-                z.tweens.add({ targets: av, fillAlpha: 0.42, duration: 400, ease: 'Quad.easeIn' });
+                const av = z.add.circle(qp.x, yq, R, 0x7a4a68, 0.05).setStrokeStyle(1.5, 0xc89ab0, 0.4).setDepth(-399);
+                z.tweens.add({ targets: av, fillAlpha: 0.18, duration: 400, ease: 'Quad.easeIn' });
                 z.time.delayedCall(430, () => av.destroy());
                 z.time.delayedCall(420, () => {
                     if (e.mort) return;
                     const q = this.capATerra(z, e);
-                    z.cameras.main.shake(260, 0.008); Sfx.cop(true);
+                    z.cameras.main.shake(260, 0.008); Sfx.cop(true); Sfx.pedra();
                     this.trossos(z, q.x, q.y + 30, 14);
                     const jo2 = z.ineu.body.center;
                     if (Phaser.Math.Distance.Between(q.x, yq, jo2.x, jo2.y) < R) z.ferIneu(1, { x: q.x, y: q.y });
@@ -336,7 +359,7 @@ ENEMICS.raim = {
             } else if (e.estat === 'aixeca') this.trossos(z, c.x, c.y, 6);
         }
     },
-    alDerrotar(z, e) { this.netejaTele(e); this.netejaMaza(e); this.netejaFinestra(z, e); z.raimDerrotat(e); }
+    alDerrotar(z, e) { this.apagaNeboda(e); this.netejaTele(e); this.netejaMaza(e); this.netejaFinestra(z, e); z.raimDerrotat(e); }
 };
 
 // ---------------- BASE DE LES SALES ----------------
@@ -476,6 +499,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.colisio(1112, 400, 320, 480);
         this.colisio(450, 400, 24, 430);
         this.colisio(950, 400, 24, 430);
+        this.colisio(700, 245, 500, 170);          // la paret del nord (volta, balcó i sòcol): no es pot caminar per darrere ni per sobre
         // Un raig de claror que cau de la volta sobre l'estàtua
         this.add.graphics().setDepth(-950).fillStyle(0xfff0c0, 0.07).fillPoints([{ x: 620, y: 0 }, { x: 800, y: 0 }, { x: 900, y: 600 }, { x: 540, y: 600 }], true);
 
@@ -495,6 +519,27 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         });
 
         this.puzleRaim();
+        // La càmera acompanya l'Ineu pujant: en entrar, més allunyada i mirant cap amunt perquè es vegi l'estàtua, i s'hi acosta a mesura que ell avança
+        this.zoomBaseSala = null; this.miraAmunt = 0;
+        this.events.on('update', this.camaraSala, this);
+        this.events.once('shutdown', () => this.events.off('update', this.camaraSala, this));
+    }
+
+    camaraSala() {
+        if (!this.zoomBaseSala) this.zoomBaseSala = this.zoomZona;                 // (el zoom de la zona es fixa després de construir)
+        if (!this.ineu || !this.ineu.active || !this.zoomBaseSala) return;
+        if (this.twEntrada) { this.twEntrada.stop(); this.twEntrada = null; this.camEntrada = false; }       // la nostra càmera substitueix l'acostament d'entrada normal
+        if (this.camCinema || this.camDialeg || this.camArma) return;
+        const cam = this.cameras.main, base = this.zoomBaseSala, y = this.ineu.y;
+        let amunt = 0;
+        if (this.guardiaViu()) this.zoomBase = base;                           // en combat, el zoom de sempre
+        else {
+            this.zoomBase = base * Phaser.Math.Linear(1, 0.72, Phaser.Math.Clamp((y - 700) / 180, 0, 1));       // a l'entrada, més lluny; a prop de l'estàtua, a tota mida
+            const vh = (ALT - ALT_HUD) / cam.zoom, centre = Math.max(440, y - vh * 0.42);     // el centre puja cap a l'estàtua sense perdre l'Ineu de vista
+            amunt = Math.max(0, y - centre);
+        }
+        this.miraAmunt = Phaser.Math.Linear(this.miraAmunt, amunt, 0.08);
+        cam.setFollowOffset(0, this.miraAmunt);
     }
 
     // La reixa del porxo vista per dins, a baix de tot: una reixa de ferro entre dos brancals de pedra, amb la claror de la plaça
@@ -587,26 +632,29 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // L'estàtua (o, si ja ha estat vençuda, un munt de pedres)
         this.estatua = null;
         if (derrotat) {
-            this.estatuaFinal = this.posar('home_raim', RX, RY);                  // vençut: l'estàtua, de cara i endreçada, descansa al pedestal per sempre
-            this.colEstatua = this.colisio(RX, RY - 10, 62, 24);
+            this.estatuaFinal = this.posar('home_raim', RX, RY, { opac: true });                  // vençut: l'estàtua, de cara i endreçada, descansa al pedestal per sempre
+            this.colEstatua = this.colisio(RX, RY - 10, 68, 26);
             this.raimPas = 3;
         } else {
-            this.estatua = this.posar(this.texRaim(), RX, RY);
-            this.colEstatua = this.colisio(RX, RY - 10, 62, 24);
+            this.estatua = this.posar(this.texRaim(), RX, RY, { opac: true });
+            this.colEstatua = this.colisio(RX, RY - 10, 68, 26);
         }
         // Mirar l'estàtua només fa falta si encara no tens la maneta: et diu on és
         this.interactiu(RX, RY + 10, 90, DIALEGS.homeRaimInt, { altura: 250, actiu: () => !Estat.flag('raimDesperta') && !Estat.te('maneta') });
 
         // El volant de ferro amb engranatges, encastat a la cara del pedestal: amb la maneta, cada volta gira el cap un quart
         if (!derrotat) this.dibuixarVolant(RX, Math.round(RY - this.estatua.displayHeight * 0.17));
+        if (!derrotat && !desperta) this.lampesRaim();
         this.interactiu(RX, RY + 32, 90, E => {
             this.raimPas = Math.min(3, this.raimPas + 1);
             this.girarVolant();
             this.girarEstatua();
             this.volDespertar = this.raimPas === 3 && this.teArma();
-            return { pagines: [] };
+            if (this.raimPas === 3 && !this.teArma()) return { pagines: [{ qui: 'Ineu', text: "(Ara em mira de cara. No m'agrada gens.)" }, ...DIALEGS.raimSenseArma.pagines] };
+            const frases = ["(El volant grinyola. El cap de pedra s'ha girat una mica.)", "(Una altra volta. Ara el cap ja és de perfil.)", "(Ara em mira de cara. No m'agrada gens.)"];
+            return { pagines: [{ qui: 'Ineu', text: frases[this.raimPas - 1] }] };
         }, { altura: 70, actiu: () => !Estat.flag('raimDesperta') && Estat.te('maneta'),
-             enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.time.delayedCall(500, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => this.despertarRaim())); } } });
+             enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.avisDespertar(); this.time.delayedCall(1000, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => this.despertarRaim())); } } });
 
         // Vençut, l'estàtua del guardià es pot mirar: descansa al pedestal
         this.interactiu(RX, RY + 10, 90, DIALEGS.raimEstatuaFinal, { altura: 250, actiu: () => Estat.flag('raimDerrotat') && !!this.estatuaFinal });
@@ -615,32 +663,98 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.dibuixarTrapa(derrotat);
         this.interactiu(700, 730, RADI_OBJECTE, DIALEGS.trapaCripta, {
             altura: 70, actiu: () => Estat.flag('raimDerrotat'),
-            enTancar: () => this.canviarZona('ZonaCasaCripta', 'porta')
+            enTancar: () => this.baixarTrapa()
         });
 
         // Si el guardià ja estava despert (has sortit i tornat), segueix aquí
         if (desperta && !derrotat) this.despertarRaim(true);
     }
 
+    // L'Ineu baixa pels graons: camina fins a la vora, i a cada graó s'enfonsa (el que queda per sota de la vora s'amaga) amb el seu «tap» de sabata; en acabar, fosa i la Cripta
+    baixarTrapa() {
+        if (this.baixantTrapa) return;
+        this.baixantTrapa = true;
+        const I = this.ineu, lip = 668 + 58;
+        this.ui().bloquejatFins = this.ui().time.now + 4200;
+        if (this.colTrapa) { this.obstacles.remove(this.colTrapa, true, true); this.colTrapa = null; }
+        this.ineuVa(700, lip - 2, () => {
+            const m = this.make.graphics({ add: false });
+            m.fillStyle(0xffffff, 1).fillRect(0, 0, 1400, lip + 2);
+            I.setMask(m.createGeometryMask());
+            if (this.fantasma) this.fantasma.setVisible(false);
+            if (this.ombraIneu) this.ombraIneu.setVisible(false);
+            this.caminantAuto = true; this.vista8Manual = true;
+            this.posarDireccio('amunt', true, 'up');
+            let k = 0;
+            const pas = () => {
+                if (k >= 4) { this.caminantAuto = false; this.canviarZona('ZonaCasaCripta', 'porta'); return; }
+                Sfx.escala(false);
+                this.tweens.add({ targets: I, y: I.y + 27, x: 700, duration: 340, ease: 'Sine.easeInOut', onComplete: () => { k++; this.time.delayedCall(110, pas); } });
+            };
+            pas();
+        }, 150);
+    }
+
     // La boca de la cripta (marc de pedra, foscor i graons) i la llosa que la tapa. oberta: la llosa ja és apartada
     dibuixarTrapa(oberta) {
         const X0 = 640, Y0 = 668, W = 120, H = 58;
+        let sem = 11; const rnd = () => { sem = (sem * 16807) % 2147483647; return sem / 2147483647; };
+        // La boca: marc motllurat de pedra amb dues vores, parets interiors en ombra i graons que s'enfonsen a la foscor
         const boca = this.add.graphics().setDepth(-958);
-        boca.fillStyle(0x8a7a5e, 1).fillRect(X0 - 8, Y0 - 8, W + 16, H + 16).lineStyle(2.5, 0x2a2018, 1).strokeRect(X0 - 8, Y0 - 8, W + 16, H + 16);
+        boca.fillStyle(0x000000, 0.35).fillRect(X0 - 14, Y0 - 6, W + 28, H + 24);
+        boca.fillStyle(0x7a6c54, 1).fillRect(X0 - 12, Y0 - 12, W + 24, H + 24).lineStyle(2.5, 0x241a10, 1).strokeRect(X0 - 12, Y0 - 12, W + 24, H + 24);
+        boca.fillStyle(0xa49477, 1).fillRect(X0 - 12, Y0 - 12, W + 24, 4).fillRect(X0 - 12, Y0 - 12, 4, H + 24);
+        boca.fillStyle(0x5a4e3a, 1).fillRect(X0 - 7, Y0 - 7, W + 14, H + 14).lineStyle(1.5, 0x241a10, 1).strokeRect(X0 - 7, Y0 - 7, W + 14, H + 14);
+        for (let i = 0; i < 14; i++) { boca.fillStyle(rnd() < 0.5 ? 0x3c3224 : 0xb4a688, 0.3).fillRect(X0 - 12 + rnd() * (W + 20), Y0 - 12 + rnd() * (H + 20), 2 + rnd() * 4, 1.5); }     // picats de la pedra del marc
         boca.fillStyle(0x050302, 1).fillRect(X0, Y0, W, H);
-        [[0, 0.62], [14, 0.42], [26, 0.26], [36, 0.14]].forEach(([dy, a], k) => {               // graons que s'enfonsen a la foscor
-            boca.fillStyle(0x9a8a70, a).fillRect(X0 + 6 + k * 6, Y0 + 6 + dy, W - 12 - k * 12, 8);
-        });
+        for (let k = 0; k < 3; k++) {                                                            // tres graons amples: el més proper (a baix) és el més clar; la resta s'enfonsen a la foscor
+            const alfa = [0.82, 0.5, 0.26][k], yy = Y0 + H - 12 - k * 17, ample = W - 10 - k * 9, xx = X0 + 5 + k * 4.5;
+            boca.fillStyle(0xa89a7e, alfa).fillRect(xx, yy, ample, 6);                           // la pisa
+            boca.fillStyle(0x2a2218, alfa).fillRect(xx, yy - 6, ample, 6);                       // la contrapisa (cap a dins)
+            boca.fillStyle(0xe2d6bc, alfa * 0.5).fillRect(xx, yy, ample, 1.5);                   // vora il·luminada
+        }
+        boca.fillStyle(0x000000, 0.55).fillRect(X0, Y0, 8, H).fillRect(X0 + W - 8, Y0, 8, H);   // parets laterals en ombra
         this.llumTrapa = this.add.ellipse(X0 + W / 2, Y0 + H / 2, W, H, 0x9ab8ff, 0).setBlendMode('ADD').setDepth(-957);
-        // La llosa
+
+        // La llosa: bisell de pedra amb panell enfonsat, creu monàstica cisellada, rosetes als cantons, anelles de ferro amb la seva placa, molsa, esquerdes i un cantó trencat
         const ll = this.add.graphics().setDepth(-956);
-        ll.fillStyle(0xb5a58a, 1).fillRect(0, 0, W, H).lineStyle(3, 0x2a2018, 1).strokeRect(0, 0, W, H);
-        ll.fillStyle(0xffffff, 0.18).fillRect(3, 3, W - 6, 5);
-        ll.lineStyle(4, 0x6a5a44, 1).lineBetween(W / 2, 10, W / 2, H - 10).lineBetween(W / 2 - 18, 22, W / 2 + 18, 22);     // creu gravada
-        ll.fillStyle(0x4a4038, 1).fillCircle(10, H / 2, 4).fillCircle(W - 10, H / 2, 4);                                   // anelles
+        ll.fillStyle(0x000000, 0.4).fillRect(-1, 3, W + 4, H + 3);                                   // ombra de contacte
+        ll.fillStyle(0xb2a285, 1).fillRect(0, 0, W, H).lineStyle(3, 0x241a10, 1).strokeRect(0, 0, W, H);
+        ll.fillStyle(0xd9ccb0, 1).fillRect(2, 2, W - 4, 4).fillRect(2, 2, 4, H - 4);               // bisell il·luminat (dalt i esquerra)
+        ll.fillStyle(0x6c5f4b, 1).fillRect(2, H - 6, W - 4, 4).fillRect(W - 6, 2, 4, H - 4);       // bisell en ombra (baix i dreta)
+        ll.fillStyle(0x9d8d70, 1).fillRect(11, 11, W - 22, H - 22).lineStyle(2, 0x4a3e2c, 1).strokeRect(11, 11, W - 22, H - 22);   // panell enfonsat
+        ll.lineStyle(1.5, 0x5a4c38, 0.9).lineBetween(12, 12, W - 12, 12).lineBetween(12, 12, 12, H - 12);                          // vora interior en ombra (dalt i esquerra)
+        ll.lineStyle(1.5, 0xe2d6bc, 0.6).lineBetween(12, H - 12, W - 12, H - 12).lineBetween(W - 12, 12, W - 12, H - 12);          // vora interior il·luminada (baix i dreta)
+        for (let i = 0; i < 70; i++) { ll.fillStyle(rnd() < 0.55 ? 0x4e4332 : 0xe4d8bd, 0.16 + rnd() * 0.14).fillRect(4 + rnd() * (W - 8), 4 + rnd() * (H - 8), 1 + rnd() * 3, 1 + rnd() * 1.6); }   // gra de la pedra
+        ll.lineStyle(1.4, 0x3c3224, 0.85).strokePoints([{ x: W - 30, y: 4 }, { x: W - 36, y: 16 }, { x: W - 31, y: 24 }, { x: W - 40, y: 36 }, { x: W - 38, y: H - 4 }], false);   // esquerdes
+        ll.strokePoints([{ x: 4, y: H - 22 }, { x: 14, y: H - 26 }, { x: 19, y: H - 34 }], false);
+        // creu monàstica (patada) cisellada al centre: solc fosc amb vora de llum
+        const cx = W / 2, cy = H / 2, bra = 22, trav = 28, gr = 6;
+        const creu = (dx, dy, col, a) => {
+            ll.fillStyle(col, a);
+            ll.fillRect(cx - gr / 2 + dx, cy - bra + dy, gr, bra * 2);
+            ll.fillRect(cx - trav + dx, cy - gr / 2 + dy - 4, trav * 2, gr);
+            [[0, -bra], [0, bra]].forEach(([ox, oy]) => ll.fillTriangle(cx + ox + dx - 8, cy + oy + dy + (oy < 0 ? 3 : -3), cx + ox + dx + 8, cy + oy + dy + (oy < 0 ? 3 : -3), cx + ox + dx, cy + oy + dy + (oy < 0 ? -5 : 5)));
+            [[-trav, 1], [trav, -1]].forEach(([ox, sg]) => ll.fillTriangle(cx + ox + dx - sg * 3, cy - 4 + dy - 8, cx + ox + dx - sg * 3, cy - 4 + dy + 8, cx + ox + dx + sg * 5, cy - 4 + dy));
+        };
+        creu(1.5, 1.5, 0xe6dac0, 0.75); creu(0, 0, 0x3a2f20, 1); creu(0.5, 0.5, 0x5a4c38, 0.65);
+        ll.fillStyle(0x3a2f20, 1).fillCircle(cx, cy - 4, 4.5).fillStyle(0xcdbf9f, 1).fillCircle(cx, cy - 4, 2);   // medalló al cor de la creu
+        [[18, 18], [W - 18, 18], [18, H - 18], [W - 18, H - 18]].forEach(([x, y]) => {                // rosetes als cantons
+            ll.lineStyle(1.5, 0x4a3e2c, 1).strokeCircle(x, y, 4.5).fillStyle(0x4a3e2c, 1).fillCircle(x, y, 1.6);
+            ll.lineBetween(x - 4.5, y, x + 4.5, y).lineBetween(x, y - 4.5, x, y + 4.5);
+        });
+        [8, W - 8].forEach(x => {                                                                     // anelles de ferro amb placa i claus
+            ll.fillStyle(0x000000, 0.35).fillEllipse(x + 1, H / 2 + 9, 14, 6);
+            ll.fillStyle(0x2c2824, 1).fillRoundedRect(x - 5, H / 2 - 11, 10, 20, 2).lineStyle(1, 0x0e0c0a, 1).strokeRoundedRect(x - 5, H / 2 - 11, 10, 20, 2);
+            ll.fillStyle(0x9a968e, 1).fillCircle(x, H / 2 - 8, 1.3).fillCircle(x, H / 2 + 6, 1.3);
+            ll.lineStyle(3.2, 0x26221f, 1).strokeCircle(x, H / 2 + 1, 5).lineStyle(1.2, 0x8c8880, 0.9).beginPath().arc(x - 0.5, H / 2 + 0.5, 5, 3.4, 5).strokePath();
+        });
+        for (let i = 0; i < 9; i++) { ll.fillStyle(0x587a3a, 0.28 + rnd() * 0.16).fillEllipse(6 + rnd() * 22, H - 5 - rnd() * 8, 5 + rnd() * 8, 3 + rnd() * 3); }   // molsa al cantó de baix a l'esquerra
+        ll.fillStyle(0x241a10, 1).fillPoints([{ x: W, y: 0 }, { x: W - 11, y: 0 }, { x: W, y: 9 }], true);                             // cantó trencat dalt a la dreta
+        ll.fillStyle(0x7a6c54, 1).fillPoints([{ x: W - 9, y: 1.5 }, { x: W - 1.5, y: 9 }, { x: W - 1.5, y: 1.5 }], true);
         ll.setPosition(X0, Y0);
         this.llosaTrapa = ll;
-        if (oberta) { ll.setPosition(X0 + W + 14, Y0 + 6); this.llumTrapa.setFillStyle(0x9ab8ff, 0.12); }
+        if (oberta) { ll.setPosition(X0 + W + 14, Y0 + 6); this.llumTrapa.setFillStyle(0x9ab8ff, 0.12); this.colTrapa = this.colisio(X0 + W / 2, Y0 + H / 2, W + 4, H + 4); }
     }
     // Vençut el guardià: la càmera mira la llosa, la terra tremola i la llosa llisca a un costat; de sota en surt claror freda i pols
     obrirTrapa(fet) {
@@ -651,6 +765,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             cam.shake(900, 0.005); Sfx.porta();
             this.tweens.add({ targets: this.llosaTrapa, x: X0 + W + 14, y: Y0 + 6, duration: 1300, ease: 'Sine.easeInOut', onComplete: () => {
                 Sfx.secret();
+                if (!this.colTrapa) this.colTrapa = this.colisio(X0 + W / 2, Y0 + 29, W + 4, 62);          // el forat és un obstacle: no s'hi pot caminar al damunt, s'hi baixa interactuant
                 this.tweens.add({ targets: this.llumTrapa, fillAlpha: 0.28, duration: 500, yoyo: true, onComplete: () => this.llumTrapa.setFillStyle(0x9ab8ff, 0.12) });
                 this.boira(700, 690, 100, 30, 0.6);
                 this.time.delayedCall(700, () => { cam.startFollow(this.ineu, true, 0.1, 0.1); if (fet) fet(); });
@@ -689,12 +804,83 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.manetaVolant.setPosition(this.volant.x + Math.cos(a) * 18 * RAIM.f, this.volant.y + Math.sin(a) * 18 * RAIM.f);
     }
 
+    // Tres gemmes sobre el volant: una s'encén a cada volta (1/3, 2/3, 3/3). El volant brilla suaument quan ja hi ha la maneta
+    lampesRaim() {
+        if (!this.volant) return;
+        const gy = this.volant.y - 42, x0 = this.volant.x;
+        this.gemmes = [-22, 0, 22].map(dx => ({ c: this.add.circle(x0 + dx, gy, 5, 0x555566).setStrokeStyle(2, 0x111114).setDepth(RAIM.y + 3), llum: null }));
+        if (Estat.te('maneta')) {
+            this.brillVolant = this.add.circle(this.volant.x, this.volant.y, 32, 0xffe08a, 0.1).setBlendMode(Phaser.BlendModes.ADD).setDepth(RAIM.y + 4);
+            this.tweens.add({ targets: this.brillVolant, alpha: 0.4, yoyo: true, repeat: -1, duration: 1000, ease: 'Sine.easeInOut' });
+        }
+    }
+    encendreGemma(i) {
+        const g = this.gemmes && this.gemmes[i];
+        if (!g || g.llum) return;
+        g.c.setFillStyle(0xffc860);
+        g.llum = this.add.circle(g.c.x, g.c.y, 15, 0xffc060, 0.4).setBlendMode(Phaser.BlendModes.ADD).setDepth(RAIM.y + 3);
+        this.tweens.add({ targets: g.llum, alpha: 0.7, yoyo: true, repeat: -1, duration: 600 });
+        Sfx.tic();
+    }
+    apagaPuzle() {
+        (this.gemmes || []).forEach(g => { g.c.destroy(); if (g.llum) { this.tweens.killTweensOf(g.llum); g.llum.destroy(); } });
+        this.gemmes = null;
+        if (this.brillVolant) { this.tweens.killTweensOf(this.brillVolant); this.brillVolant.destroy(); this.brillVolant = null; }
+    }
+    // La boira lila de l'Home de la Gàbia s'escola cap a l'estàtua des de tots els costats: és ella qui la desperta
+    nebodaDespertar(RX, RY) {
+        for (let i = 0; i < 16; i++) {
+            const a = Math.random() * Math.PI * 2, r = 220 + Math.random() * 160;
+            const p = this.add.image(RX + Math.cos(a) * r, RY - 110 + Math.sin(a) * r * 0.6, 'boira').setTint(i % 2 ? 0xb890ff : 0xd8c0ff).setAlpha(0).setScale(0.9 + Math.random() * 0.6).setDepth(RY + 6);
+            this.tweens.add({ targets: p, x: RX, y: RY - 110, alpha: { from: 0, to: 0.6 }, scale: p.scale * 1.8, duration: 700 + Math.random() * 500, delay: i * 50, ease: 'Sine.easeIn',
+                onComplete: () => this.tweens.add({ targets: p, alpha: 0, duration: 400, onComplete: () => p.destroy() }) });
+        }
+    }
+    // Abans de despertar-se: la sala s'enfosqueix i tremola
+    avisDespertar() {
+        if (this.avisFosc) return;
+        this.avisFosc = this.add.rectangle(0, 0, 1400, 1000, 0x120820, 0).setOrigin(0).setDepth(84900);
+        this.tweens.add({ targets: this.avisFosc, fillAlpha: 0.45, duration: 700 });
+        this.cameras.main.shake(1000, 0.004);
+        Sfx.porta();
+    }
+    treuAvis() {
+        if (!this.avisFosc) return;
+        const a = this.avisFosc; this.avisFosc = null;
+        this.tweens.add({ targets: a, fillAlpha: 0, duration: 900, onComplete: () => a.destroy() });
+    }
+    // CERCLE DE RUNES: un anell gravat a terra al voltant del pedestal, que s'encén en lila quan el guardià es desperta i s'apaga quan descansa
+    cercleRunes() {
+        if (this.runesCercle) return;
+        const cx = RAIM.x, cy = RAIM.y - 8;
+        let g;
+        if (this.textures.exists('cercle_runes') && !Grafics.faltants.includes('cercle_runes')) {
+            const t = this.textures.get('cercle_runes');
+            g = this.add.image(cx, cy, 'cercle_runes').setScale((t.customData && t.customData.escala) || 1 / RES).setDepth(-949).setAlpha(0);
+        } else {                                                              // (sense el gràfic: un anell fet amb codi)
+            const rx = 200, ry = 74, cy2 = RAIM.y + 34;
+            g = this.add.graphics().setDepth(-949).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0);
+            g.lineStyle(3, 0xb890ff, 0.9).strokeEllipse(cx, cy2, rx * 2, ry * 2);
+            g.lineStyle(1.5, 0xd8c0ff, 0.7).strokeEllipse(cx, cy2, (rx - 20) * 2, (ry - 8) * 2);
+        }
+        this.runesCercle = g;
+        this.tweens.add({ targets: g, alpha: 1, duration: 900, onComplete: () => { if (g.active) this.tweens.add({ targets: g, alpha: 0.72, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' }); } });
+    }
+    apagaRunes() {
+        const g = this.runesCercle;
+        if (!g) return;
+        this.runesCercle = null;
+        this.tweens.killTweensOf(g);
+        this.tweens.add({ targets: g, alpha: 0, duration: 800, onComplete: () => g.destroy() });
+    }
+
     // Una volta del volant: gira (i l'engranatge, al revés), grinyola i sacseja
     girarVolant() {
         if (!this.volant) return;
         if (this.manetaVolant) this.manetaVolant.setVisible(true);
         Sfx.porta();
         this.cameras.main.shake(260, 0.003);
+        this.encendreGemma(this.raimPas - 1);
         this.tweens.add({ targets: this.volant, rotation: this.volant.rotation + Math.PI * 2, duration: 900, ease: 'Sine.easeInOut', onUpdate: () => this.posarManeta() });
         this.tweens.add({ targets: this.engranatge, rotation: this.engranatge.rotation - Math.PI * 3.8, duration: 900, ease: 'Sine.easeInOut' });
         if (this.raimPas === 3) this.time.delayedCall(950, () => this.llum(RAIM.x, RAIM.y - 190, 0xffe08a));
@@ -726,16 +912,19 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (!boss) return;
         if (!sense) Estat.posaFlag('raimDesperta');
         this.boss = boss;
+        (this.opacs = this.opacs || []).push(boss.spr);                    // el guardià és opac: la silueta translúcida de l'Ineu s'hi amaga
         // L'origen del sprite passa als peus: així, quan cau de morros, gira pels peus i el cap toca a terra
         const hh = boss.spr.displayHeight / 2;
         boss.spr.setOrigin(0.5, 1); boss.spr.y += hh;
-        this.ui().barraBoss("L'Home del Raïm", [9 / 24]);                       // a 9 de vida, la segona fase
+        this.ui().barraBoss("L'Home del Raïm", [11 / 30]);                      // a 11 de vida, la segona fase
+        this.apagaPuzle();
         const ponPedestal = () => {
             const t = this.textures.get('home_raim_pedestal');
             this.pedestal = this.add.image(RX, RY, 'home_raim_pedestal').setOrigin(0.5, 1).setScale((t.customData && t.customData.escala) || 1 / RES).setDepth(RY);
+            (this.opacs = this.opacs || []).push(this.pedestal);
         };
         if (this.estatua) this.estatua.setVisible(false);
-        if (sense || !this.estatua) { ponPedestal(); this.tancarReixa(); return; }
+        if (sense || !this.estatua) { ponPedestal(); this.tancarReixa(); this.cercleRunes(); this.nebodaDespertar(RX, RY); Joc.iniciarMusica(this, 0, 'musica_boss', 600); return; }
 
         // Mentre dura l'escena el guardià no actua ni fa mal
         const spr = boss.spr, est = this.estatua;
@@ -751,10 +940,12 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.time.delayedCall(550, () => ENEMICS.raim.trossos(this, RX, RY - 70, 8));
         this.time.delayedCall(850, () => {
             est.setVisible(false); ponPedestal();
+            this.treuAvis(); this.cercleRunes();
+            this.nebodaDespertar(RX, RY);
             this.cameras.main.flash(260, 200, 160, 255);
             this.boiraPuf(RX, RY - 90);
             // El guardià és dret a dalt del pedestal (els peus a la cara de dalt, per davant d'ell): ruig i en baixa d'un salt
-            const PT = RY - 118, Y1 = RY + 85 + hh;
+            const PT = RY - 132, Y1 = RY + 85 + hh;
             boss.depthMin = RY + 4;
             spr.setAlpha(1).setScale(boss.escalaBase).setRotation(0);
             spr.body.reset(RX, PT);
@@ -774,9 +965,10 @@ class ZonaCasaGranInt extends ZonaCasaBase {
                         Sfx.cop(true);
                         ENEMICS.raim.trossos(this, RX, RY + 110, 12);
                         this.tancarReixa();
+                        Joc.iniciarMusica(this, 0, 'musica_boss', 600);
                         // Rugit: es tira enrere amb la maça alçada i torna endreçat (sense deformar el sprite)
                         spr.setScale(boss.escalaBase);
-                        this.tweens.add({ targets: spr, rotation: -0.32, duration: 420, ease: 'Sine.easeOut', yoyo: true, hold: 500, onYoyo: () => { Sfx.carrega(); this.esquitxar(RX, RY); } });
+                        this.tweens.add({ targets: spr, rotation: -0.32, duration: 420, ease: 'Sine.easeOut', yoyo: true, hold: 500, onYoyo: () => { Sfx.rugitRaim(); this.esquitxar(RX, RY); } });
                     }
                 });
             });
@@ -787,6 +979,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         const c = e.spr.body.center;
         this.ui().amagarBarraBoss();
         Estat.posaFlag('raimDerrotat');
+        Joc.aturarMusica(); Joc.jingle(this, 'jingle_boss');
         this.reobrirReixa();
         ENEMICS.raim.trossos(this, c.x, c.y, 22);
         this.ui().actualitzarHUD();
@@ -797,13 +990,15 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             // Es dreça, torna d'un salt al seu pedestal i s'hi queda, fet escultura (la imatge de l'estàtua endreçada); llavors s'obre la trapa
             Estat.posaObjectiu("La llosa de sota l'escalinata s'ha obert: baixa a la cripta dels monjos.");
             Estat.desar();
-            this.raimAlPedestal(e, () => this.obrirTrapa());
+            this.raimAlPedestal(e, () => { Joc.musicaZona(this, 1500); this.obrirTrapa(); });
         }));
     }
 
     raimAlPedestal(e, fet) {
-        const { x: RX, y: RY } = RAIM, s = e.spr, PT = RY - 118, x0 = s.x, y0 = s.y;
+        const { x: RX, y: RY } = RAIM, s = e.spr, PT = RY - 132, x0 = s.x, y0 = s.y;
         e.ombra.setAlpha(0);
+        this.apagaRunes();
+        ENEMICS.raim.apagaNeboda(e);
         s.setAlpha(1).setRotation(0).setTexture('home_raim_desperta').setScale(e.escalaBase).setFlipX(RX < x0);
         e.escalaPose = null;
         s.y = y0;
@@ -826,6 +1021,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
                     this.time.delayedCall(700, () => {
                         const t = this.textures.get('home_raim'), esc = (t.customData && t.customData.escala) || 1 / RES;
                         const est = this.estatuaFinal = this.add.image(RX, RY, 'home_raim').setOrigin(0.5, 1).setScale(esc).setDepth(RY).setAlpha(0);
+                        (this.opacs = this.opacs || []).push(est);
                         this.raimPas = 3;
                         Sfx.secret();
                         this.cameras.main.flash(300, 200, 170, 255);
@@ -833,6 +1029,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
                         this.tweens.add({ targets: est, alpha: 1, duration: 1000 });
                         this.tweens.add({ targets: [s, this.pedestal].filter(Boolean), alpha: 0, duration: 1000, onComplete: () => {
                             this.retirar(e);
+                            this.opacs = (this.opacs || []).filter(o => o !== s && o !== this.pedestal);
                             if (this.pedestal) { this.pedestal.destroy(); this.pedestal = null; }
                             this.time.delayedCall(300, () => fet && fet());
                         } });
@@ -970,7 +1167,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
     }
 
     construir() {
-        this.salaPedra(1000, 700, 500, { paret: 'paret_tresor', tint: 0x8a7a68, forats: [[715, 805]] });
+        this.salaPedra(1000, 700, 500, { paret: 'paret_tresor', tint: 0x8a7a68, forats: [[738, 846]] });
         // Estora, tarima del cofre i el cofre
         this.add.image(500, 690, 'catifa_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(-1050);
         this.add.image(500, 178, 'graons_ermita').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-990);
@@ -997,104 +1194,131 @@ class ZonaCasaTresor extends ZonaCasaBase {
     }
 
     // ---- La porta del fons i el seu mecanisme ----
-    // La porta és una llosa de pedra amb ferros, sense pany. A terra, la bóta de la creu tapa una anella de ferro; de l'anella surt
-    // una cadena que corre per una regata del terra, puja per la paret i passa per una politja al costat de la porta. Primer cal
-    // fer rodar la bóta; després, estirant l'anella, la politja gira i la llosa puja dins la llinda.
+    // La porta és una llosa de pedra amb ferros, dins d'un marc de pedra, sense pany. Una bóta marcada amb una creu vermella tapa, a terra, una anella de ferro
+    // clavada en una placa de pedra. Trencada la bóta (amb qualsevol arma), de l'anella surt una cadena que corre per una regata del terra, puja per la paret
+    // fins a una politja i baixa fins al ganxo de la llosa: estirant l'anella, la politja gira i la llosa puja dins la llinda.
     mecanismePorta() {
-        const oberta = Estat.flag('portaTresorOberta'), apartada = oberta || Estat.flag('botaAlcada');
-        const PX = 760, PT = 20, PB = 164, PW = 90, AX = 810, AY = 392, PO = { x: 846, y: 96 };
-        this.PT = { PX, PT, PB, PW, AX, AY, PO };
+        const oberta = Estat.flag('portaTresorOberta'), trencada = oberta || Estat.flag('botaAlcada');
+        const PX = 792, PT = 20, PB = 164, PW = 84, AX = 842, AY = 392, PO = { x: 854, y: 62 };
+        this.PT = { PX, PT, PB, PW, AX, AY, PO, GX: PO.x + 12 };
+        const H = PB - PT;
         // Dins de la porta: foscor, uns graons i la claror de l'escalinata
         const dins = this.add.graphics().setDepth(-989);
-        dins.fillStyle(0x0a0604, 1).fillRect(PX - PW / 2, PT, PW, PB - PT);
-        dins.fillGradientStyle(0x0a0604, 0x0a0604, 0x5a3c1c, 0x5a3c1c, 1, 1, 0.9, 0.9).fillRect(PX - PW / 2, PT + 60, PW, PB - PT - 60);
+        dins.fillStyle(0x0a0604, 1).fillRect(PX - PW / 2, PT, PW, H);
+        dins.fillGradientStyle(0x0a0604, 0x0a0604, 0x5a3c1c, 0x5a3c1c, 1, 1, 0.9, 0.9).fillRect(PX - PW / 2, PT + 60, PW, H - 60);
         dins.fillStyle(0xffd38a, 0.45).fillCircle(PX, PT + 70, 8);
         // La llosa de la porta (amb màscara: quan puja, desapareix dins la llinda)
         const ll = this.add.graphics().setDepth(-988);
-        const H = PB - PT;
         ll.fillStyle(0x6a5a48, 1).fillRect(-PW / 2, 0, PW, H).lineStyle(3, 0x1c140c, 1).strokeRect(-PW / 2, 0, PW, H);
         ll.fillStyle(0x7a6a56, 1).fillRect(-PW / 2 + 6, 6, PW - 12, H - 12);
+        ll.fillStyle(0x9a8a72, 0.5).fillRect(-PW / 2 + 6, 6, PW - 12, 3).fillRect(-PW / 2 + 6, 6, 3, H - 12);
         ll.lineStyle(1.5, 0x3a2e22, 0.7).lineBetween(-PW / 2 + 6, H * 0.5, PW / 2 - 6, H * 0.5).lineBetween(0, 6, 0, H * 0.5).lineBetween(-PW / 4, H * 0.5, -PW / 4, H - 6).lineBetween(PW / 4, H * 0.5, PW / 4, H - 6);
         [0.2, 0.8].forEach(f => { ll.fillStyle(0x2a2420, 1).fillRect(-PW / 2, H * f - 5, PW, 10); for (let x = -PW / 2 + 8; x < PW / 2; x += 16) ll.fillStyle(0x8a8478, 1).fillCircle(x, H * f, 2.4); });
-        ll.fillStyle(0x2a2420, 1).fillRect(PW / 2 - 10, 10, 6, 20);                                      // el ganxo d'on estira la cadena
+        ll.lineStyle(4, 0x1c1814, 1).strokeEllipse(PW / 2 - 8, 16, 11, 14).lineStyle(2, 0x9a948a, 1).strokeEllipse(PW / 2 - 8, 16, 11, 14);       // l'argolla d'on penja la cadena
+        ll.fillStyle(0x2a2420, 1).fillRect(PW / 2 - 12, 22, 8, 7);
         ll.setPosition(PX, PT);
         const mascara = this.make.graphics({ add: false }).fillRect(PX - PW / 2 - 2, PT, PW + 4, H + 4);
         ll.setMask(mascara.createGeometryMask());
         this.llosaPorta = ll;
-        // La politja de la paret, la cadena que hi passa i la regata del terra fins a l'anella
-        this.politja = this.add.graphics({ x: PO.x, y: PO.y }).setDepth(-987);
-        this.politja.lineStyle(6, 0x1c1814, 1).strokeCircle(0, 0, 14).lineStyle(3, 0x6a6a72, 1).strokeCircle(0, 0, 14);
-        for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2; this.politja.lineStyle(3, 0x4a4a52, 1).lineBetween(0, 0, Math.cos(a) * 13, Math.sin(a) * 13); }
-        this.politja.fillStyle(0x8a7a40, 1).fillCircle(0, 0, 4);
+        // El marc de pedra de la porta: dos brancals de carreus, una llinda amb pedra clau i el llindar (només a la porta; no toca les prestatgeries)
+        const mc = this.add.graphics().setDepth(-987);
+        const jx0 = PX - PW / 2 - 12, jx1 = PX + PW / 2;
+        [[jx0, 12], [jx1, 12]].forEach(([x, w]) => {
+            mc.fillStyle(0x8a7a62, 1).fillRect(x, PT - 12, w, H + 22).lineStyle(2.5, 0x1c140c, 1).strokeRect(x, PT - 12, w, H + 22);
+            for (let y = PT - 6; y < PB + 8; y += 24) mc.lineStyle(1.2, 0x3a2e22, 0.8).lineBetween(x, y, x + w, y);
+            mc.fillStyle(0xb8a888, 0.35).fillRect(x + 1.5, PT - 10, 2.5, H + 18);
+        });
+        mc.fillStyle(0x7a6a54, 1).fillRect(jx0 - 4, PT - 22, PW + 32, 14).lineStyle(2.5, 0x1c140c, 1).strokeRect(jx0 - 4, PT - 22, PW + 32, 14);
+        mc.fillStyle(0x9a8a70, 1).fillRect(PX - 11, PT - 28, 22, 12).lineStyle(2, 0x1c140c, 1).strokeRect(PX - 11, PT - 28, 22, 12);
+        mc.lineStyle(1.8, 0x2a2218, 1).strokeEllipse(PX, PT - 22, 11, 5).fillStyle(0x2a2218, 1).fillCircle(PX, PT - 22, 1.8);
+        mc.fillStyle(0x6a5c48, 1).fillRect(jx0 - 4, PB + 8, PW + 32, 8).lineStyle(2, 0x1c140c, 1).strokeRect(jx0 - 4, PB + 8, PW + 32, 8);
+        // La politja de la paret, amb la seva ménsula, i la regata del terra fins a l'anella
         const sup = this.add.graphics().setDepth(-988);
-        sup.fillStyle(0x2a2420, 1).fillRect(PO.x - 3, PO.y - 26, 6, 20).fillRect(PO.x - 10, PO.y - 30, 20, 6);
+        sup.fillStyle(0x000000, 0.3).fillRoundedRect(PO.x - 13, PO.y - 17, 28, 36, 4);
+        sup.fillStyle(0x2c2824, 1).fillRoundedRect(PO.x - 15, PO.y - 19, 28, 36, 4).lineStyle(2, 0x0e0c0a, 1).strokeRoundedRect(PO.x - 15, PO.y - 19, 28, 36, 4);
+        [[-9, -13], [7, -13], [-9, 11], [7, 11]].forEach(([dx, dy]) => sup.fillStyle(0x9a968e, 1).fillCircle(PO.x + dx, PO.y + dy, 1.7));
+        this.politja = this.add.graphics({ x: PO.x, y: PO.y }).setDepth(-987);
+        this.politja.lineStyle(5, 0x1c1814, 1).strokeCircle(0, 0, 11).lineStyle(2.4, 0x7a7a82, 1).strokeCircle(0, 0, 11);
+        for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3; this.politja.lineStyle(2.6, 0x4a4a52, 1).lineBetween(0, 0, Math.cos(a) * 10, Math.sin(a) * 10); }
+        this.politja.fillStyle(0x8a7a40, 1).fillCircle(0, 0, 3.5).lineStyle(1.2, 0x1c1814, 1).strokeCircle(0, 0, 3.5);
         const regata = this.add.graphics().setDepth(-1045);
-        regata.lineStyle(10, 0x1a120c, 0.55).lineBetween(AX, AY, PO.x + 14, 178);
-        this.cadena = this.add.graphics().setDepth(-986);
+        const { GX } = this.PT;
+        regata.lineStyle(14, 0x120c08, 0.7).lineBetween(AX, AY, GX, 178);
+        regata.lineStyle(2, 0xb4a488, 0.55).lineBetween(AX - 8, AY, GX - 8, 178).lineBetween(AX + 8, AY, GX + 8, 178);               // vores de pedra de la regata
+        regata.lineStyle(2, 0x2a2018, 0.8).lineBetween(AX - 10, AY, GX - 10, 178).lineBetween(AX + 10, AY, GX + 10, 178);
+        // Grapes de ferro que guien la cadena per la paret
+        const grapes = this.add.graphics().setDepth(-986);
+        [150, 112, 86].forEach(y => { grapes.fillStyle(0x26221f, 1).fillRect(GX - 7, y - 3, 14, 6).lineStyle(1, 0x0e0c0a, 1).strokeRect(GX - 7, y - 3, 14, 6); grapes.fillStyle(0x9a968e, 1).fillCircle(GX - 5, y, 1.2).fillCircle(GX + 5, y, 1.2); });
+        this.cadena = this.add.graphics().setDepth(-985);
         this.offCadena = 0;
         this.dibuixarCadena(oberta);
-        // L'anella (sota la bóta) i la bóta
-        this.anella = this.add.graphics().setDepth(AY - 1);
-        this.anella.fillStyle(0x7a6a56, 1).fillRect(AX - 30, AY - 16, 60, 30).lineStyle(2.5, 0x2a2018, 1).strokeRect(AX - 30, AY - 16, 60, 30);
-        this.anellaFerro = this.add.graphics({ x: AX, y: AY - 2 }).setDepth(AY);
-        this.anellaFerro.lineStyle(5, 0x1c1814, 1).strokeCircle(0, 0, 10).lineStyle(3, 0x9a948a, 1).strokeCircle(0, 0, 10).fillStyle(0x2a2420, 1).fillRect(-4, 8, 8, 6);
-        this.anella.setVisible(apartada); this.anellaFerro.setVisible(apartada);
-        this.bota = this.posar('bota_creu', apartada ? 880 : AX, AY, { col: { w: 50, h: 22 } });
-        this.colBota = this.obstacles.getChildren()[this.obstacles.getChildren().length - 1];
+        // La placa de pedra amb l'anella de ferro (sota la bóta) i la bóta
+        const pl = this.anella = this.add.graphics().setDepth(AY - 1);
+        pl.fillStyle(0x000000, 0.35).fillRoundedRect(AX - 34, AY - 17, 70, 42, 4);
+        pl.fillStyle(0x8a7a62, 1).fillRoundedRect(AX - 36, AY - 20, 70, 40, 4).lineStyle(2.5, 0x1c140c, 1).strokeRoundedRect(AX - 36, AY - 20, 70, 40, 4);
+        pl.fillStyle(0xb8a888, 0.55).fillRect(AX - 33, AY - 17, 64, 3).fillRect(AX - 33, AY - 17, 3, 34);
+        pl.fillStyle(0x4a3e2c, 0.55).fillRect(AX - 33, AY + 15, 64, 3).fillRect(AX + 29, AY - 17, 3, 34);
+        pl.fillStyle(0x6e604a, 1).fillRect(AX - 26, AY - 12, 52, 24).lineStyle(1.5, 0x2a2018, 1).strokeRect(AX - 26, AY - 12, 52, 24);
+        [[-30, -15], [30, -15], [-30, 15], [30, 15]].forEach(([dx, dy]) => pl.fillStyle(0x2c2824, 1).fillCircle(AX + dx, AY + dy, 2.4).fillStyle(0x9a968e, 1).fillCircle(AX + dx - 0.6, AY + dy - 0.6, 0.9));
+        pl.lineStyle(1.3, 0x2a2018, 0.8).lineBetween(AX - 18, AY + 12, AX - 10, AY + 4).lineBetween(AX + 20, AY - 12, AX + 14, AY - 5);
+        const an = this.anellaFerro = this.add.graphics({ x: AX, y: AY - 2 }).setDepth(AY);
+        an.fillStyle(0x26221f, 1).fillRoundedRect(-9, 4, 18, 8, 2).lineStyle(1, 0x0e0c0a, 1).strokeRoundedRect(-9, 4, 18, 8, 2);          // la grapa clavada a la placa
+        an.fillStyle(0x000000, 0.35).fillEllipse(1, 13, 26, 8);
+        an.lineStyle(6, 0x1c1814, 1).strokeEllipse(0, -2, 20, 24).lineStyle(3.6, 0x6e6a64, 1).strokeEllipse(0, -2, 20, 24);
+        an.lineStyle(1.6, 0xcfcac0, 0.9).beginPath().arc(-1, -3, 10, 3.5, 5.2).strokePath();
+        this.anella.setVisible(trencada); this.anellaFerro.setVisible(trencada);
+        // La bóta de la creu: es trenca amb qualsevol arma i deixa a la vista l'anella
+        if (!trencada) {
+            const b = this.barril(AX, AY, 50, 22, 'bota_creu');
+            b.alRomprer = () => this.botaTrencada();
+            this.botaCreu = b;
+        }
         if (oberta) { this.llosaPorta.y = PT - H; }
         else this.colPorta = this.colisio(PX, PB - 6, PW + 10, 24);     // tancada, no es passa
-        this.colisio(760, 65, 90, 130);                                 // dintell sobre la llosa
-        this.sortida(722, 136, 76, 22, 'ZonaCasaGranInt', 'secreta');
+        this.colisio(PX, 65, PW + 12, 130);                              // dintell sobre la llosa
+        this.sortida(PX - 38, 136, 76, 22, 'ZonaCasaGranInt', 'secreta');
 
         // Inspeccionar la porta tancada
         this.interactiu(PX, PB + 46, RADI_OBJECTE, E => ({ pagines: [{ qui: 'Ineu', text: E.flag('botaAlcada')
             ? "(La llosa no té pany ni maneta. La cadena de la politja hi està lligada: l'anella de terra la deu fer pujar.)"
             : E.flag('cofreCambra')
-                ? "(Una llosa de pedra sense pany ni maneta. No cedeix gens. «Qui busqui sortida, que alci la bóta marcada amb la creu»...)"
+                ? "(Una llosa de pedra sense pany ni maneta. No cedeix gens. «Qui busqui sortida, que trenqui la bóta marcada amb la creu»...)"
                 : "(Una llosa de pedra sense pany ni maneta. No cedeix gens: s'ha d'obrir d'una altra manera.)" }] }),
             { altura: PB - PT + 36, actiu: () => !Estat.flag('portaTresorOberta') });
-        // La bóta: rodola a un costat i deixa veure l'anella
-        this.interactiu(AX, AY + 32, RADI_OBJECTE, DIALEGS.botaTresor, { altura: 90, actiu: () => !Estat.flag('botaAlcada') && !Estat.flag('portaTresorOberta'),
-            enTancar: () => this.rodarBota() });
         // L'anella: en estirar-la s'obre la porta
         this.interactiu(AX, AY + 30, RADI_OBJECTE, () => ({ pagines: [{ fer: (z, fet) => z.estirarAnella(fet) }] }),
             { altura: 50, actiu: () => Estat.flag('botaAlcada') && !Estat.flag('portaTresorOberta') });
     }
 
-    // La cadena: de l'anella puja per la regata i la paret fins a la politja, i baixa fins al ganxo de la llosa. tibant: a tocar
+    // La cadena: de l'anella corre per la regata, puja per la paret fins a la politja, hi passa per sobre i baixa fins al ganxo de la llosa. tibant: a tocar
     dibuixarCadena(tibant) {
-        const { PX, PT, PW, AX, AY, PO } = this.PT, g = this.cadena;
+        const { PX, PT, PW, AX, AY, PO, GX } = this.PT, g = this.cadena;
         g.clear();
-        const tram = (x0, y0, x1, y1) => {
-            const L = Math.hypot(x1 - x0, y1 - y0), n = Math.floor(L / 9), ux = (x1 - x0) / L, uy = (y1 - y0) / L;
-            for (let k = 0; k < n; k++) {
-                const t = ((k * 9 + this.offCadena) % L), x = x0 + ux * t, y = y0 + uy * t;
-                g.lineStyle(2.5, 0x1c1814, 1).strokeEllipse(x, y, k % 2 ? 4 : 8, k % 2 ? 8 : 4).lineStyle(1.2, 0x9a948a, 1).strokeEllipse(x, y, k % 2 ? 4 : 8, k % 2 ? 8 : 4);
-            }
+        const baula = (x, y, plana, ombra) => {
+            const w = plana ? 8 : 4.6, h = plana ? 4.6 : 8;
+            if (ombra) g.lineStyle(2.6, 0x000000, 0.3).strokeEllipse(x + 1.2, y + 2.4, w, h);
+            g.lineStyle(3.2, 0x1c1814, 1).strokeEllipse(x, y, w, h).lineStyle(1.6, plana ? 0x8a867e : 0x6a665e, 1).strokeEllipse(x, y, w, h);
+            g.fillStyle(0xd8d4ca, 0.8).fillCircle(x - w * 0.25, y - h * 0.25, 0.8);
         };
-        tram(AX, AY - 2, PO.x + 14, 178);
-        tram(PO.x + 14, 178, PO.x + 14, PO.y);
-        const ganxo = { x: PX + PW / 2 - 7, y: this.llosaPorta.y + 20 };
-        tram(PO.x - 14, PO.y, ganxo.x, Math.max(ganxo.y, PT + 2));
+        const tram = (x0, y0, x1, y1, ombra) => {
+            const L = Math.hypot(x1 - x0, y1 - y0), n = Math.floor(L / 7), ux = (x1 - x0) / L, uy = (y1 - y0) / L;
+            for (let k = 0; k < n; k++) { const t = ((k * 7 + this.offCadena) % L + L) % L; baula(x0 + ux * t, y0 + uy * t, k % 2 === 0, ombra); }
+        };
+        tram(AX, AY - 2, GX, 178, true);
+        tram(GX, 178, GX, PO.y, false);
+        for (let k = 0; k <= 5; k++) { const a = -Math.PI * k / 5, bx = PO.x + Math.cos(a) * 12, by = PO.y + Math.sin(a) * 12; baula(bx, by, k % 2 === 0, false); }       // la cadena passa per sobre la politja
+        const ganxo = { x: PX + PW / 2 - 8, y: this.llosaPorta.y + 16 };
+        tram(PO.x - 12, PO.y, ganxo.x, Math.max(ganxo.y, PT + 4), false);
     }
 
-    // La bóta rodola a un costat (fa una volta sencera) i deixa veure l'anella de ferro
-    rodarBota() {
+    // La bóta de la creu es trenca d'un cop d'arma: queda a la vista l'anella de ferro, clavada en una placa de pedra
+    botaTrencada() {
         if (Estat.flag('botaAlcada')) return;
         Estat.posaFlag('botaAlcada'); Estat.desar();
-        this.ajupir('ineu', null, 300);
-        this.time.delayedCall(250, () => {
-            Sfx.porta();
-            this.tweens.add({ targets: this.bota, x: 880, angle: 360, duration: 900, ease: 'Sine.easeOut', onComplete: () => {
-                this.bota.angle = 0;
-                this.obstacles.remove(this.colBota, true, true);
-                this.colBota = this.colisio(880, this.PT.AY - 11, 50, 22);
-                this.anella.setVisible(true); this.anellaFerro.setVisible(true).setAlpha(0);
-                this.tweens.add({ targets: this.anellaFerro, alpha: 1, duration: 300 });
-                this.llum(this.PT.AX, this.PT.AY - 10, 0xffe8a0);
-                Estat.posaObjectiu("Sota la bóta hi havia una anella de ferro, amb una cadena que puja fins a la porta.");
-            } });
-        });
+        this.anella.setVisible(true).setAlpha(0); this.anellaFerro.setVisible(true).setAlpha(0);
+        this.tweens.add({ targets: [this.anella, this.anellaFerro], alpha: 1, duration: 450 });
+        this.llum(this.PT.AX, this.PT.AY - 10, 0xffe8a0);
+        Estat.posaObjectiu("Dins la bóta hi havia una anella de ferro, amb una cadena que puja fins a la porta.");
     }
 
     // L'Ineu estira l'anella: la cadena corre, la politja gira i la llosa de la porta puja dins la llinda

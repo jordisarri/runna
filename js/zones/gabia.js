@@ -763,7 +763,7 @@ class ZonaGabia extends ZonaBase {
         this.velLila = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a30, net ? 0.06 : 0.22).setScrollFactor(0).setDepth(90000);
 
         this.decorarSala();                                                           // (js/zones/gabia_decor.js)
-        this.sortida(860, H - 22, 80, 14, 'ZonaBoira', 'gabia');
+        this.sortida(838, H - 28, 124, 22, 'ZonaBoira', 'gabia');
 
         // Capolls que encara no s'han trencat, si la gàbia ja és oberta (s'havia sortit a mig alliberament)
         if (Estat.flag('gabiaOberta')) NENS_GABIA.forEach((n, i) => { if (!Estat.flag(n.flag)) this.crearCapoll(n, gx - 200 + i * 200, base + 160); });

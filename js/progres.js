@@ -107,7 +107,7 @@ const PROGRES = {
               ? "La maneta d\'en Georgi és al cofre de les joguines, dalt de la caseta de pals, a la Caseta."
               : "El volant de ferro de l'Home del Raïm no té maneta. En Georgi de la Caseta en deu saber alguna cosa." },
         { id: 'raim', marca: ['raimDesperta', 'raimDerrotat'], fet: E => E.flag('raimDerrotat'),
-          pista: E => "A l'escalinata de la Casa Gran, l'Home del Raïm té el cap girat. La maneta, al volant de la base, el faria mirar-te." },
+          pista: E => "A l'escalinata de la Casa Gran, l'Home del Raïm té el cap girat d'esquena. Amb la maneta al volant de la base, gira'l tres voltes fins que et miri de cara: es desperta. Només Runna li fa mal, i només al cap, quan ensopega de morros després d'una envestida." },
         { id: 'cripta', marca: ['relTretes', 'clauFerro', 'obj:clau_ferro'], fet: E => E.flag('relTretes'),
           pista: E => "Vençut l'Home del Raïm, la trapa de sota l'escalinata baixa a la Cripta dels monjos. Allà hi ha una clau de ferro." },
         { id: 'segell', marca: ['tombaLlegida', 'tombaSegellada'], fet: E => E.flag('tombaSegellada'),

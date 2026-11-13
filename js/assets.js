@@ -27,18 +27,19 @@ const CATALEG = [
     { key: 'pare_alcovi',   file: 'assets/personatges/pare_alcovi.webp',   amplada: 84, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
     { key: 'pare_alcovi_esquena', file: 'assets/personatges/pare_alcovi_esquena.webp', amplada: 82, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },      // d'esquena, llegint la Crònica al faristol (AutoSprite)
     // Elements
-    { key: 'home_raim',    file: 'assets/personatges/home_raim.webp',    amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua (abans del combat)
+    { key: 'home_raim',    file: 'assets/personatges/home_raim.webp',    amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua (abans del combat)
     { key: 'home_raim_desperta', file: 'assets/personatges/home_raim_desperta.webp', amplada: 115, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // el guardià despert (boss de l'Escalinata)
-    { key: 'home_raim_apunta', file: 'assets/enemics/home_raim_apunta.webp', amplada: 280, cru: true },   // el guardià tirat enrere amb la maça alçada (apuntant i carregant)
-    { key: 'home_raim_caigut', file: 'assets/enemics/home_raim_caigut.webp', amplada: 290, cru: true },   // de morros a terra (cap a l'esquerra; es gira amb flipX): el cap és el punt feble
-    { key: 'home_raim_n',  file: 'assets/personatges/home_raim_n.webp', amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap d'esquena (inici del puzle del volant)
+    { key: 'home_raim_apunta', file: 'assets/enemics/home_raim_apunta.webp', amplada: 250, cru: true },   // el guardià tirat enrere amb la maça alçada (apuntant i carregant)
+    { key: 'home_raim_caigut', file: 'assets/enemics/home_raim_caigut.webp', amplada: 380, cru: true },   // de morros a terra (cap a l'esquerra; es gira amb flipX): el cap és el punt feble
+    { key: 'cercle_runes', file: 'assets/objectes/cercle_runes.webp', amplada: 440, cru: true },   // el cercle de runes al terra de l'Escalinata (s'encén quan es desperta el guardià)
+    { key: 'home_raim_n',  file: 'assets/personatges/home_raim_n.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap d'esquena (inici del puzle del volant)
     { key: 'tomba_angel', file: 'assets/objectes/tomba_angel.webp', amplada: 140, provisional: (c, w) => lienc(c, w, w * 226 / 140, (ctx, W, H) => { ctx.scale(W / 140, H / 226); pintarTombaAngel(ctx, 140, 226, false); }) },   // la tomba de l'àngel, amb el ram marcit
     { key: 'tomba_angel_content', file: 'assets/objectes/tomba_angel_content.webp', amplada: 140, provisional: (c, w) => lienc(c, w, w * 226 / 140, (ctx, W, H) => { ctx.scale(W / 140, H / 226); pintarTombaAngel(ctx, 140, 226, true); }) },   // la mateixa, amb flors fresques i una espelmeta (mateixa amplada: es canvia la textura sense canviar l'escala)
     { key: 'tomba_esquerdada', file: 'assets/objectes/tomba_esquerdada.webp', amplada: 240, provisional: (c, w) => lienc(c, w, w * 0.625, (ctx, W, H) => { ctx.scale(W / 240, H / 150); pintarTombaMonjos(ctx, 240, 150, true); }) },   // la tomba dels monjos, esquerdada i oberta
     { key: 'tomba_tancada', file: 'assets/objectes/tomba_tancada.webp', amplada: 240, provisional: (c, w) => lienc(c, w, w * 0.625, (ctx, W, H) => { ctx.scale(W / 240, H / 150); pintarTombaMonjos(ctx, 240, 150, false); }) },   // la mateixa, segellada (mateixa amplada: es canvia la textura sense canviar l'escala)
-    { key: 'home_raim_pedestal', file: 'assets/personatges/home_raim_pedestal.webp', amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // només el pedestal (queda quan el guardià es desperta i baixa)
-    { key: 'home_raim_e',  file: 'assets/personatges/home_raim_e.webp', amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap de perfil (tercer pas del volant)
-    { key: 'home_raim_ne', file: 'assets/personatges/home_raim_ne.webp', amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap de tres quarts d'esquena (segon pas del volant)
+    { key: 'home_raim_pedestal', file: 'assets/personatges/home_raim_pedestal.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // només el pedestal (queda quan el guardià es desperta i baixa)
+    { key: 'home_raim_e',  file: 'assets/personatges/home_raim_e.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap de perfil (tercer pas del volant)
+    { key: 'home_raim_ne', file: 'assets/personatges/home_raim_ne.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap de tres quarts d'esquena (segon pas del volant)
     { key: 'creu',         file: 'assets/objectes/creu.webp',        amplada: 150,  provisional: (c, w) => dibuixarCreuAparicio(c, w) },
     { key: 'creu_desaparicio', file: 'assets/objectes/creu.webp', amplada: 105, provisional: (c, w) => dibuixarCreuDesaparicio(c, w) },
     // Botons del HUD (rodons, amb el marc inclòs). Mentre no hi hagi el PNG es veu el dibuix provisional (medalló + icona)

@@ -1892,14 +1892,14 @@ ${mots.join('   ')}
 
 **Ineu:** «La clau de ferro és sota l'escala, murada amb els meus germans. Un guardià de pedra la vigila d'esquena: ningú no hi baixa fins que no et mira a la cara.»
 
-**Ineu:** I al revers, amb una altra lletra: «Qui busqui sortida, que alci la bóta marcada amb la creu.»
+**Ineu:** I al revers, amb una altra lletra: «Qui busqui sortida, que trenqui la bóta marcada amb la creu.»
 
 
 ### botaTresor
 
 
 
-**Ineu:** (Una bóta amb una creu vermella. Pesa molt menys que les altres... La faré rodar.)
+**Ineu:** (Una bóta amb una creu vermella. Sona buida, i la fusta és fina... Amb un cop d'arma es trencaria.)
 
 
 ### homeRaimInt
@@ -2174,11 +2174,11 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 
 
-**Home del Raïm:** Uf... Quant de temps. M'han tingut mirant la paret com un nen castigat.
+**Home del Raïm:** La boira... m'ha despertat. Tants anys mirant la paret, i ara em deixen anar. Algú ho pagarà.
 
-**Ineu:** S'ha mogut! La pedra ha cobrat vida!
+**Ineu:** S'ha mogut! La boira lila li ha donat vida!
 
-**Home del Raïm:** Voleu entrar a la cripta? Haureu de passar per sobre meu. Tampoc no tinc res més a fer.
+**Home del Raïm:** Vols la cripta? Ni tu ni cap altre no hi passareu. Us esclafaré com raïms.
 
 
 ### raimSenseArma
@@ -2192,15 +2192,17 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 
 
-**Home del Raïm:** Està bé, em rendeixo. Fa segles que no em cansava tant.
+**Home del Raïm:** La boira se'n va... torno a sentir la pedra. Així acaba: segles guardant el que ells no van tenir ganes de mirar.
 
-**Home del Raïm:** Baixa, si hi tens ganes. Però allà sota hi ha coses que fins la pedra prefereix no mirar.
+**Home del Raïm:** Ells em van deixar aquí, i el teu Home de la Gàbia m'ha despertat només perquè em matessin.
 
-**Home del Raïm:** I ara, si no et fa res, torno al meu pedestal. Sembla que és l'únic lloc on tinc feina.
+**Home del Raïm:** Baixa, si vols. Allà sota ningú no et perdonarà, com ningú no em va perdonar a mi.
 
-*(Fase 2, frase flotant:)* Ja em feia falta una mica d'exercici!
+**Home del Raïm:** Torno al pedestal. És l'únic que em van deixar.
 
-*(Quan és a punt de caure, frase flotant:)* Els genolls... ja no són el que eren.
+*(Fase 2, al quadre de diàleg:)* Aquesta boira em crida... vol que us esclafi a tots. Que així sigui.
+
+*(Quan és a punt de caure, al quadre de diàleg:)* Em van deixar aquí... i ara tu vens a acabar la feina.
 
 
 ### cofreCripta
@@ -2255,7 +2257,7 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 *Si: NO botaAlcada → cofreCambra*
 
-**Ineu:** (Una llosa de pedra sense pany ni maneta. No cedeix gens. «Qui busqui sortida, que alci la bóta marcada amb la creu»...)
+**Ineu:** (Una llosa de pedra sense pany ni maneta. No cedeix gens. «Qui busqui sortida, que trenqui la bóta marcada amb la creu»...)
 
 
 *Si: NO botaAlcada → NO cofreCambra*
