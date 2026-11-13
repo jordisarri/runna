@@ -1368,6 +1368,7 @@ const Grafics = {
         // Ermita de la Desaparició (js/dibuixos_ermita.js)
         crea('paret_ermita', 800, 170, pintarParetErmita);
         crea('mur_ermita', 40, 700, pintarMurErmita);
+        crea('mur_baix_sala', 740, 64, (ctx, w, h) => { carreusErmita(ctx, 0, 0, w, h, 913, [150, 136, 118], 24); ctx.fillStyle = 'rgba(0,0,0,0.22)'; ctx.fillRect(0, 0, w, 6); });
         crea('pilastra_ermita', 54, 170, pintarPilastraErmita);
         crea('catifa_ermita', 120, 440, pintarCatifaErmita);
         crea('graons_ermita', 380, 90, pintarGraonsErmita);

@@ -365,12 +365,22 @@ class ZonaCasaBase extends ZonaBase {
         const vora = this.add.graphics().setDepth(-1040);
         vora.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.45, 0, 0.45, 0).fillRect(130, 170, 110, alt - 170);
         vora.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0, 0.45, 0, 0.45).fillRect(amp - 240, 170, 110, alt - 170);
-        this.colisio(50, alt / 2, 80, alt);
-        this.colisio(amp - 50, alt / 2, 80, alt);
+        this.colisio(65, alt / 2, 130, alt);                    // les parets laterals són sòlides fins on comença el terra (x 130 i x amp-130)
+        this.colisio(amp - 65, alt / 2, 130, alt);
         let x = 130;
         [...(o.forats || []), [amp - 130, amp - 130]].forEach(([a, b]) => { if (a > x) this.colisio((x + a) / 2, 85, a - x, 170); x = Math.max(x, b); });
-        this.colisio((portaX - 60) / 2, alt - 10, portaX - 60, 20);
-        this.colisio((portaX + 60 + amp) / 2, alt - 10, amp - portaX - 60, 20);
+        // Paret de baix amb la porta d'arc per on s'entra i se surt: l'Ineu la traspassa i desapareix a la foscor de fora
+        const YP = alt - 64, OB = 100;
+        this.add.image(130, YP, 'mur_baix_sala').setOrigin(0).setScale(1 / RES).setDepth(-990).setTint(o.tint || 0x8a7a68);
+        const g = this.add.graphics().setDepth(-989);
+        g.fillStyle(0x000000, 0.28).fillRect(130, YP - 6, amp - 260, 8);                               // ombra de la paret sobre el terra
+        g.fillStyle(0x050302, 1).fillRect(portaX - OB / 2, YP + 14, OB, 50).fillEllipse(portaX, YP + 14, OB, 30);   // obertura d'arc
+        const arc = (amp2, col) => { g.lineStyle(amp2, col, 1).beginPath().moveTo(portaX - OB / 2, alt).lineTo(portaX - OB / 2, YP + 14); g.arc(portaX, YP + 14, OB / 2, Math.PI, Math.PI * 2, false); g.lineTo(portaX + OB / 2, alt).strokePath(); };
+        arc(15, 0x1c120a); arc(11, 0x84735e); arc(3, 0xb0a085);
+        g.fillStyle(0x6a5a48, 1).fillRoundedRect(portaX - 8, YP - 4, 16, 16, 3).lineStyle(2, 0x1c120a, 1).strokeRoundedRect(portaX - 8, YP - 4, 16, 16, 3);   // dovella
+        this.add.rectangle(amp / 2, alt + 80, amp + 400, 160, 0x000000, 1).setDepth(99000);               // per sota de la porta tot és fosc
+        this.colisio((portaX - OB / 2) / 2, YP + 32, portaX - OB / 2, 64);
+        this.colisio((portaX + OB / 2 + amp) / 2, YP + 32, amp - portaX - OB / 2, 64);
         this.add.rectangle(amp / 2, alt / 2, amp, alt, 0xffd38a, 0.05).setDepth(80000);
     }
 
@@ -890,7 +900,7 @@ class ZonaCasaCripta extends ZonaCasaBase {
         raig.fillStyle(0xcfd8ff, 0.07).fillPoints([{ x: 450, y: 0 }, { x: 550, y: 0 }, { x: 600, y: 330 }, { x: 400, y: 330 }], true);
         this.add.particles(0, 0, 'espurna', { x: { min: 420, max: 580 }, y: { min: 120, max: 340 }, speedY: { min: -8, max: 2 }, lifespan: 4000, scale: { start: 0.2, end: 0 }, alpha: { start: 0.45, end: 0 }, tint: 0xdfe6ff, frequency: 300, blendMode: 'ADD' }).setDepth(79001);
         this.add.rectangle(500, 350, 1000, 700, 0x100820, 0.18).setDepth(80100);
-        this.sortida(460, 680, 80, 14, 'ZonaCasaGranInt', 'cripta');
+        this.sortida(450, 680, 100, 14, 'ZonaCasaGranInt', 'cripta');
     }
 }
 
@@ -974,12 +984,12 @@ class ZonaCasaTresor extends ZonaCasaBase {
             alcada: 700,
             colorFons: '#0a0806',
             pacifica: true,
-            entrades: { porta: { x: 500, y: 620, dir: 'amunt' }, escala: { x: 760, y: 215, dir: 'avall' } }
+            entrades: { porta: { x: 500, y: 620, dir: 'amunt' }, escala: { x: 780, y: 215, dir: 'avall' } }
         });
     }
 
     construir() {
-        this.salaPedra(1000, 700, 500, { paret: 'paret_tresor', tint: 0x8a7a68, forats: [[715, 805]] });
+        this.salaPedra(1000, 700, 500, { paret: 'paret_tresor', tint: 0x8a7a68, forats: [[725, 835]] });
         // Estora, tarima del cofre i el cofre
         this.add.image(500, 690, 'catifa_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(-1050);
         this.add.image(500, 178, 'graons_ermita').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-990);
@@ -1014,7 +1024,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
     // i la llosa puja dins la llinda.
     mecanismePorta() {
         const oberta = Estat.flag('portaTresorOberta'), trencada = oberta || Estat.flag('botaAlcada');
-        const PX = 760, PT = 20, PB = 164, PW = 90, AX = 810, AY = 392, PO = { x: 846, y: 96 };
+        const PX = 780, PT = 20, PB = 164, PW = 90, AX = 810, AY = 392, PO = { x: 853, y: 96 };
         this.PT = { PX, PT, PB, PW, AX, AY, PO };
         // Dins de la porta: foscor, uns graons i la claror de l'escalinata
         const dins = this.add.graphics().setDepth(-989);
@@ -1053,8 +1063,13 @@ class ZonaCasaTresor extends ZonaCasaBase {
         }
         if (oberta) { this.llosaPorta.y = PT - H; }
         else this.colPorta = this.colisio(PX, PB - 6, PW + 10, 24);     // tancada, no es passa
-        this.colisio(760, 65, 90, 130);                                 // dintell sobre la llosa
-        this.sortida(722, 136, 76, 22, 'ZonaCasaGranInt', 'secreta');
+        this.colisio(PX, 65, 90, 130);                                  // dintell sobre la llosa
+        this.sortida(PX - 38, 136, 76, 22, 'ZonaCasaGranInt', 'secreta');
+        this.sortida(450, 680, 100, 14, 'ZonaPassadis', 'tresor');       // la porta de baix, de tornada al Passadís secret
+        // Marc de pedra de la porta (muntants i llinda): la separa dels prestatges
+        const marc = this.add.graphics().setDepth(-985);
+        marc.fillStyle(0x84735e, 1).fillRect(PX - PW / 2 - 9, PT - 12, 9, PB - PT + 12).fillRect(PX + PW / 2, PT - 12, 9, PB - PT + 12).fillRect(PX - PW / 2 - 9, PT - 14, PW + 18, 12);
+        marc.lineStyle(2, 0x1c120a, 1).strokeRect(PX - PW / 2 - 9, PT - 12, 9, PB - PT + 12).strokeRect(PX + PW / 2, PT - 12, 9, PB - PT + 12).strokeRect(PX - PW / 2 - 9, PT - 14, PW + 18, 12);
 
         // Inspeccionar la porta tancada
         this.interactiu(PX, PB + 46, RADI_OBJECTE, E => ({ pagines: [{ qui: 'Ineu', text: E.flag('botaAlcada')
