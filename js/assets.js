@@ -14,7 +14,7 @@ const CATALEG = [
     { key: 'taverna',      file: 'assets/edificis/taverna.webp',      amplada: 900, provisional: (c, w) => dibuixarTaverna(c, w) },
     { key: 'casa_gran',    file: 'assets/edificis/casa_gran.webp',    amplada: 1250, provisional: (c, w) => dibuixarCasaGran(c, w) },
     // Personatges
-    { key: 'ineu_inconscient', file: 'assets/personatges/ineu_inconscient.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu a terra després d'una derrota (mateix retall que pare_jorda_desperta)
+    { key: 'ineu_inconscient', file: 'assets/ineu/ineu_inconscient.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu a terra després d'una derrota (mateix retall que pare_jorda_desperta)
     { key: 'pare_jorda_desperta', file: 'assets/personatges/pare_jorda_desperta.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },   // el Pare Jordà agenollat al seu costat, despertant-lo
     { key: 'pare_jorda',   file: 'assets/personatges/pare_jorda.webp',   amplada: 90, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
     { key: 'germa_aldreu', file: 'assets/personatges/germa_aldreu.webp', amplada: 79, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
@@ -27,19 +27,19 @@ const CATALEG = [
     { key: 'pare_alcovi',   file: 'assets/personatges/pare_alcovi.webp',   amplada: 84, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
     { key: 'pare_alcovi_esquena', file: 'assets/personatges/pare_alcovi_esquena.webp', amplada: 82, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },      // d'esquena, llegint la Crònica al faristol (AutoSprite)
     // Elements
-    { key: 'home_raim',    file: 'assets/personatges/home_raim.webp',    amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua (abans del combat)
-    { key: 'home_raim_desperta', file: 'assets/personatges/home_raim_desperta.webp', amplada: 115, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // el guardià despert (boss de l'Escalinata)
+    { key: 'home_raim',    file: 'assets/enemics/home_raim.webp',    amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua (abans del combat)
+    { key: 'home_raim_desperta', file: 'assets/enemics/home_raim_desperta.webp', amplada: 115, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // el guardià despert (boss de l'Escalinata)
     { key: 'home_raim_apunta', file: 'assets/enemics/home_raim_apunta.webp', amplada: 250, cru: true },   // el guardià tirat enrere amb la maça alçada (apuntant i carregant)
     { key: 'home_raim_caigut', file: 'assets/enemics/home_raim_caigut.webp', amplada: 380, cru: true },   // de morros a terra (cap a l'esquerra; es gira amb flipX): el cap és el punt feble
     { key: 'cercle_runes', file: 'assets/objectes/cercle_runes.webp', amplada: 440, cru: true },   // el cercle de runes al terra de l'Escalinata (s'encén quan es desperta el guardià)
-    { key: 'home_raim_n',  file: 'assets/personatges/home_raim_n.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap d'esquena (inici del puzle del volant)
+    { key: 'home_raim_n',  file: 'assets/enemics/home_raim_n.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap d'esquena (inici del puzle del volant)
     { key: 'tomba_angel', file: 'assets/objectes/tomba_angel.webp', amplada: 140, provisional: (c, w) => lienc(c, w, w * 226 / 140, (ctx, W, H) => { ctx.scale(W / 140, H / 226); pintarTombaAngel(ctx, 140, 226, false); }) },   // la tomba de l'àngel, amb el ram marcit
     { key: 'tomba_angel_content', file: 'assets/objectes/tomba_angel_content.webp', amplada: 140, provisional: (c, w) => lienc(c, w, w * 226 / 140, (ctx, W, H) => { ctx.scale(W / 140, H / 226); pintarTombaAngel(ctx, 140, 226, true); }) },   // la mateixa, amb flors fresques i una espelmeta (mateixa amplada: es canvia la textura sense canviar l'escala)
     { key: 'tomba_esquerdada', file: 'assets/objectes/tomba_esquerdada.webp', amplada: 240, provisional: (c, w) => lienc(c, w, w * 0.625, (ctx, W, H) => { ctx.scale(W / 240, H / 150); pintarTombaMonjos(ctx, 240, 150, true); }) },   // la tomba dels monjos, esquerdada i oberta
     { key: 'tomba_tancada', file: 'assets/objectes/tomba_tancada.webp', amplada: 240, provisional: (c, w) => lienc(c, w, w * 0.625, (ctx, W, H) => { ctx.scale(W / 240, H / 150); pintarTombaMonjos(ctx, 240, 150, false); }) },   // la mateixa, segellada (mateixa amplada: es canvia la textura sense canviar l'escala)
-    { key: 'home_raim_pedestal', file: 'assets/personatges/home_raim_pedestal.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // només el pedestal (queda quan el guardià es desperta i baixa)
-    { key: 'home_raim_e',  file: 'assets/personatges/home_raim_e.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap de perfil (tercer pas del volant)
-    { key: 'home_raim_ne', file: 'assets/personatges/home_raim_ne.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap de tres quarts d'esquena (segon pas del volant)
+    { key: 'home_raim_pedestal', file: 'assets/enemics/home_raim_pedestal.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // només el pedestal (queda quan el guardià es desperta i baixa)
+    { key: 'home_raim_e',  file: 'assets/enemics/home_raim_e.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap de perfil (tercer pas del volant)
+    { key: 'home_raim_ne', file: 'assets/enemics/home_raim_ne.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap de tres quarts d'esquena (segon pas del volant)
     { key: 'creu',         file: 'assets/objectes/creu.webp',        amplada: 150,  provisional: (c, w) => dibuixarCreuAparicio(c, w) },
     { key: 'creu_desaparicio', file: 'assets/objectes/creu.webp', amplada: 105, provisional: (c, w) => dibuixarCreuDesaparicio(c, w) },
     // Botons del HUD (rodons, amb el marc inclòs). Mentre no hi hagi el PNG es veu el dibuix provisional (medalló + icona)
@@ -127,7 +127,7 @@ const CATALEG = [
     { key: 'pergami',      file: null,      amplada: 70, provisional: (c, w) => dibuixarPergami(c, w) },
     { key: 'pergami_partit', file: null, amplada: 80, provisional: (c, w) => dibuixarPergamiPartit(c, w) },
     { key: 'pergami_paret', file: null, amplada: 62, provisional: (c, w) => dibuixarPergamiParet(c, w) },   // el mateix pergamí, desplegat i clavat a la paret
-    { key: 'ombra_monjo',  file: 'assets/enemics/ombra_monjo.webp', amplada: 140, cru: true },
+    { key: 'ombra_monjo',  file: 'assets/personatges/ombra_monjo.webp', amplada: 140, cru: true },
     { key: 'ovella',         file: null,         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },
     { key: 'ovella_boira',   file: null,   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
     { key: 'roca',           file: 'assets/natura/roca.webp',           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w) },
@@ -162,7 +162,7 @@ const CATALEG = [
     { key: 'pastor_apunta',  file: 'assets/enemics/pastor_apunta.webp',  amplada: 174, cru: true },
     { key: 'pastor_ataca',   file: 'assets/enemics/pastor_ataca.webp',   amplada: 174, cru: true },
     { key: 'pastor_enfadat', file: 'assets/enemics/pastor_enfadat.webp', amplada: 174, cru: true },
-    { key: 'aldreu_guardia', file: 'assets/enemics/aldreu_guardia.webp', amplada: 85,  cru: true, provisional: (c, w) => dibuixarPastorBoira(c, w) },
+    { key: 'aldreu_guardia', file: 'assets/personatges/aldreu_guardia.webp', amplada: 85,  cru: true, provisional: (c, w) => dibuixarPastorBoira(c, w) },
     { key: 'bolet',          file: 'assets/enemics/bolet.webp',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
     { key: 'bolet_verinos',  file: 'assets/enemics/bolet_verinos.webp',  amplada: 58, provisional: (c, w) => dibuixarBolet(c, w, 'verinos') },       // guardians de la rialla
     { key: 'rovello',        file: 'assets/natura/rovello.webp',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
@@ -187,7 +187,6 @@ const CATALEG = [
     { key: 'romani',       file: null,       amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'romani') },
     { key: 'farigola',     file: null,     amplada: 70, provisional: (c, w) => dibuixarHerba(c, w, 'farigola') },
     { key: 'rialla',       file: 'assets/natura/rialla.webp',       amplada: 44, provisional: (c, w) => dibuixarHerba(c, w, 'rialla') },       // l'herba del riure (Bosc del Pi dels Tres Cants)
-    { key: 'cercle_bolets',  file: 'assets/natura/cercle_bolets.webp',  amplada: 150, provisional: (c, w) => dibuixarCercleBolets(c, w) },
     { key: 'olla',           file: null,           amplada: 110, provisional: (c, w) => dibuixarOlla(c, w) },
     { key: 'ocell',          file: null,          amplada: 34, provisional: (c, w) => dibuixarOcell(c, w) },
     // Ocells de colors per al Pi dels Tres Cants (provisionals: els ocells que hi tornen són tots diferents)
@@ -199,16 +198,15 @@ const CATALEG = [
     { key: 'joaneta',        file: 'assets/personatges/joaneta.webp',        amplada: 89, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a6a3a', pell: '#d8a878', cabell: '#4a3a1e', dona: true, alt: 0.86, ample: 1.05, extra: 'rossa' }) },
     { key: 'arma_tiller', file: 'assets/armes/branca_tiler.webp', amplada: 28, provisional: (c, w) => dibuixarBastoProvisional(c, w) },   // la branca del Til·ler, a la mà
     { key: 'arma_basto',  file: 'assets/armes/basto.webp',       amplada: 24, provisional: (c, w) => dibuixarBastoProvisional(c, w) },
-    { key: 'ineu_aixeca', file: 'assets/ineu/aixeca_espasa.webp', amplada: 100, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant Runna, mirant amunt (ja amb fons transparent)
-    { key: 'ineu_aixeca_basto', file: 'assets/ineu/aixeca_basto.webp', amplada: 83, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // el mateix, alçant el bastó de pelegrí que li dona el Germà Aldreu
-    { key: 'ineu_aixeca_buit', file: 'assets/ineu/aixeca_buit.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant el braç amb la mà buida i oberta: l'objecte rebut hi surt damunt per codi (ZonaBase.ineuRep)
-    { key: 'ineu_aixeca_tiler', file: 'assets/ineu/aixeca_tiler.webp', amplada: 96, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // ... i alçant la branca del Gran Til·ler
+    { key: 'ineu_aixeca', file: 'assets/ineu/aixeca/aixeca_espasa.webp', amplada: 100, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant Runna, mirant amunt (ja amb fons transparent)
+    { key: 'ineu_aixeca_basto', file: 'assets/ineu/aixeca/aixeca_basto.webp', amplada: 83, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // el mateix, alçant el bastó de pelegrí que li dona el Germà Aldreu
+    { key: 'ineu_aixeca_buit', file: 'assets/ineu/aixeca/aixeca_buit.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu alçant el braç amb la mà buida i oberta: l'objecte rebut hi surt damunt per codi (ZonaBase.ineuRep)
+    { key: 'ineu_aixeca_tiler', file: 'assets/ineu/aixeca/aixeca_tiler.webp', amplada: 96, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // ... i alçant la branca del Gran Til·ler
     { key: 'ineu_flauta', file: 'assets/ineu/tarota.webp', amplada: 65, cru: true },   // l'Ineu tocant la tarota, de cara a la càmera
     { key: 'ineu_tarota_gran', file: 'assets/ineu/tarota_gran.webp', amplada: 420, cru: true },   // primer pla de l'Ineu tocant la tarota (pantalla de la música)
     { key: 'tarota_ui', file: 'assets/ui/tarota.webp', amplada: 520, cru: true },                 // la tarota del pergamí inferior on es toquen les notes (js/musica.js)
     { key: 'arma_espasa', file: 'assets/armes/espasa.webp',      amplada: 28, provisional: (c, w) => dibuixarEspasaProvisional(c, w) },   // l'espasa de Runna
     { key: 'cartell_llums', file: 'assets/objectes/cartell_llums.webp', amplada: 560, cru: true },            // cartell de paper (es mostra tal com és, amb el fons blanc)
-    { key: 'cartell_llums_borros', file: 'assets/objectes/cartell_llums_borros.webp', amplada: 56, cru: true },   // la mateixa imatge, borrosa i petita, per a la paret
     { key: 'cartell_llums_petit', file: 'assets/objectes/cartell_llums_petit.webp', amplada: 56, cru: true },   // la mateixa imatge, nítida i petita, per a la paret (en examinar-lo es mostra la gran)
     { key: 'espurna',      file: null,      amplada: 32, provisional: (c, w) => dibuixarPuntSegell(c, w) }
 ];
@@ -220,18 +218,18 @@ const CATALEG = [
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
 /**
- * SPRITES DE L'INEU: 8 direccions (assets/ineu_v2/<direccio>.webp, fons transparent).
+ * SPRITES DE L'INEU: 8 direccions (assets/ineu/caminar/<direccio>.webp, fons transparent).
  * Cada fulla és una quadrícula 4x4 de 16 fotogrames de 256x256 (cicle de caminar); l'idle, igual (idle_<direccio>).
  * Els originals de AutoSprite són a art/ineu/v2/ i es converteixen amb eines/fer_ineu_v2.py.
  */
 const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast'];
-// Fulls de caminar i d'idle de l'Ineu (definitius): assets/ineu_v2/<direccio>.webp i idle_<direccio>.webp, 16 fotogrames (4x4) a cada direcció, generats amb AutoSprite
-// (eines/fer_ineu_v2.py). Esquerra i dreta són a assets/ineu_v2/alt/ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
+// Fulls de caminar i d'idle de l'Ineu (definitius): assets/ineu/caminar/<direccio>.webp i assets/ineu/idle/idle_<direccio>.webp, 16 fotogrames (4x4) a cada direcció, generats amb AutoSprite
+// (eines/fer_ineu_v2.py). Esquerra i dreta són walk_elev_/idle_elev_ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
 // Les mides dels idles s'igualen a les dels caminars amb eines/igualar_idle_ineu.py. Els fulls i els prototips anteriors són a art/ineu/arxiu/.
 const rutaIneu = (dir, idle) => {
-    const v = '?v=2611142400';
-    if (dir === 'left' || dir === 'right') return `assets/ineu_v2/alt/${idle ? 'idle_elev_' : 'walk_elev_'}${dir}.webp${v}`;
-    return `assets/ineu_v2/${idle ? 'idle_' : ''}${dir}.webp${v}`;
+    const v = '?v=2611142500';
+    if (dir === 'left' || dir === 'right') return `assets/ineu/${idle ? 'idle/idle_elev_' : 'caminar/walk_elev_'}${dir}.webp${v}`;
+    return `assets/ineu/${idle ? 'idle/idle_' : 'caminar/'}${dir}.webp${v}`;
 };
 const IDLE_INEU = {
     down: 'down', up: 'up', left: 'left', right: 'right',
@@ -251,7 +249,7 @@ const SPRITE_INEU = {
     k: 0.75
 };
 /**
- * ATACS DE L'INEU: una fulla per direcció (assets/ineu/atac_<direccio>.webp, 4x4 fotogrames de 256, fons transparent).
+ * ATACS DE L'INEU: una fulla per direcció (assets/ineu/atac/atac_<direccio>.webp, 4x4 fotogrames de 256, fons transparent).
  * Surten de eines/convertir_atacs.js: ja estan normalitzades (mateixa escala per a totes les direccions, peus a SPRITE_INEU.peus) i
  * l'Ineu hi apareix sense arma. L'arma (bastó, branca del Til·ler o espasa) s'hi afegeix com una capa que segueix la mà
  * fotograma a fotograma (taula ATAC_ARMA a js/atac_arma.js).
@@ -267,7 +265,7 @@ const ATAC_INEU = {
     transicio: {}
 };
 /**
- * ATACS PER ARMA (definitius): un full per arma i direcció, assets/ineu/atac_<arma>_<direccio>.webp (eines/fer_atac_arma.py), amb l'Ineu ja portant l'arma (bastó,
+ * ATACS PER ARMA (definitius): un full per arma i direcció, assets/ineu/atac/atac_<arma>_<direccio>.webp (eines/fer_atac_arma.py), amb l'Ineu ja portant l'arma (bastó,
  * branca del Til·ler o espasa de Runna) i el contorn d'1 px. Cel·les de ATAC_CEL px, 4 columnes, tants fotogrames com calguin (només el cop, sense preparació). Animació 'atac_<arma>_<vista>'.
  * (El sistema antic —full sense arma + capa de l'arma que segueix la mà, ATAC_ARMA a js/atac_arma.js— només es fa servir si falta algun full.)
  */
@@ -337,7 +335,7 @@ const Grafics = {
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, rutaIneu(dir, false), mida);
-            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac_${arma}_${dir}.webp?v=2611121800`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
+            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac/atac_${arma}_${dir}.webp?v=2611121800`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };

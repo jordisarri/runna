@@ -260,3 +260,101 @@ class ZonaCabanaInt extends ZonaBase {
         this.sortida(410, 680, 80, 14, 'ZonaCabana', 'interior');
     }
 }
+
+
+// ---------------- CABANA AMAGADA (camí secret del Camí de la Desaparició) ----------------
+// Una cabana de llenyataire tota de fusta: terra de taulons, parets de troncs, una finestra, un banc, una taula
+// amb tamborets, un barril, una pila de llenya i un tronc de picar amb la destral. El cofre és al fons.
+class ZonaCabanaCami extends ZonaBase {
+    constructor() {
+        super('ZonaCabanaCami', {
+            nom: 'Cabana amagada',
+            amplada: 900,
+            alcada: 700,
+            colorFons: '#140e0a',
+            pacifica: true,
+            entrades: { porta: { x: 450, y: 600, dir: 'amunt' } }
+        });
+    }
+
+    construir() {
+        this.terra('taulons', 100, 40, 700, 660, -1100);
+
+        // --- Parets de troncs (les mateixes que fa servir la cabana de la Joaneta) ---
+        paretsTroncs(this);
+        this.colisio(30, 350, 60, 700);
+        this.colisio(870, 350, 60, 700);
+        this.colisio(450, 60, 800, 120);
+        this.colisio(255, 690, 310, 20);                  // paret de baix, amb un buit al mig: la porta
+        this.colisio(645, 690, 310, 20);
+
+        // Finestra amb marc de fusta i la llum que n'entra
+        const fin = this.add.graphics().setDepth(-980);
+        fin.fillStyle(0x120a04, 1).fillRect(296, 18, 88, 64);
+        fin.fillStyle(0xf0d890, 0.9).fillRect(302, 24, 76, 52);
+        fin.fillStyle(0x8ec8e8, 0.35).fillRect(302, 24, 76, 20);
+        fin.lineStyle(5, 0x5a3a1e, 1).strokeRect(300, 22, 80, 56).lineBetween(340, 22, 340, 78).lineBetween(300, 50, 380, 50);
+        fin.fillStyle(0x7a4e2a, 1).fillRect(290, 78, 100, 8);                                  // ampit
+        const llum = this.add.graphics().setDepth(-900);
+        llum.fillStyle(0xffe8a0, 0.13).fillPoints([{ x: 304, y: 92 }, { x: 376, y: 92 }, { x: 430, y: 330 }, { x: 330, y: 330 }], true);
+        // Prestatge amb gerros, al fons a la dreta
+        const pres = this.add.graphics().setDepth(-980);
+        pres.fillStyle(0x4a2c14, 1).fillRect(520, 56, 130, 8).lineStyle(2, 0x120a04, 1).strokeRect(520, 56, 130, 8);
+        [[540, 0], [578, 1], [616, 2]].forEach(([x, t]) => this.posar('gerro_' + t, x, 56, { fonsY: -970 }));
+
+        // Manats d'herbes i alls penjats de les bigues, una destral clavada a la paret i teranyines a les cantonades
+        [[470, 98], [505, 100], [250, 100]].forEach(([x, y], i) => manatHerbes(this, x, y - 62, 38 + (i % 2) * 8, i === 2 ? [0xe8e0c8, 0xd8d0b0, 0xe8e0c8] : undefined));
+        const destral = this.add.graphics().setDepth(-975);
+        destral.fillStyle(0x6a4020, 1).fillRect(140, 30, 5, 52).lineStyle(1.5, 0x120a04, 1).strokeRect(140, 30, 5, 52);
+        destral.fillStyle(0x8a8a92, 1).fillTriangle(145, 34, 172, 26, 172, 58).fillRect(145, 34, 5, 20);
+        destral.lineStyle(2, 0x120a04, 1).strokeTriangle(145, 34, 172, 26, 172, 58);
+        destral.fillStyle(0xffffff, 0.45).fillRect(165, 32, 2, 18);
+        teranyina(this, 100, 98, 100, 150, 150, 98);
+        teranyina(this, 800, 98, 800, 148, 752, 98);
+        // Un fanal penjat del sostre il·lumina la taula
+        const fanal = this.add.graphics().setDepth(79000);
+        fanal.lineStyle(2, 0x120a04, 1).lineBetween(450, 0, 450, 98);
+        fanal.fillStyle(0x3a3a40, 1).fillRect(440, 98, 20, 4).fillRect(440, 126, 20, 4);
+        fanal.fillStyle(0xffd890, 0.95).fillRect(443, 102, 14, 24).lineStyle(2, 0x120a04, 1).strokeRect(443, 102, 14, 24);
+        const llumFanal = this.add.circle(450, 114, 120, 0xffd38a, 0.1).setDepth(79000);
+        this.tweens.add({ targets: llumFanal, alpha: 0.16, yoyo: true, repeat: -1, duration: 900 });
+
+        // Catifa de teixit sota la taula
+        const catifa = this.add.graphics().setDepth(-950);
+        catifa.fillStyle(0x6a2a2a, 1).fillRoundedRect(310, 360, 280, 180, 8);
+        catifa.lineStyle(3, 0xc8a050, 1).strokeRoundedRect(318, 368, 264, 164, 6);
+        catifa.lineStyle(2, 0x3a1414, 1).strokeRoundedRect(310, 360, 280, 180, 8).strokeRoundedRect(332, 384, 236, 132, 4);
+
+        // Mobles de fusta
+        this.posarBanc(400, 200, 140);
+        this.barril(150, 175, 50, 22);
+        this.barril(205, 160, 50, 22);
+        this.sacs(290, 182, 'tres');
+        this.posar('taula', 450, 470, { col: { w: 160, h: 30 } });
+        this.posar('tamboret', 340, 505, { col: { w: 40, h: 16 } });
+        this.posar('tamboret', 565, 505, { col: { w: 40, h: 16 } });
+        // El solitari de l'Iscu, estirat sobre la taula, i l'Iscu (el fill de la Càren) al costat
+        const cartes = this.add.graphics().setDepth(480);
+        for (let c = 0; c < 7; c++) for (let f = 0; f <= Math.min(c, 3); f++) {
+            const x = 386 + c * 19, y = 418 + f * 7, tapada = f < Math.min(c, 3);
+            cartes.fillStyle(tapada ? 0x8a2a2a : 0xf4ecd8, 1).fillRect(x, y, 15, 21).lineStyle(1, 0x3a2410, 1).strokeRect(x, y, 15, 21);
+            if (!tapada) cartes.fillStyle([0xc8a030, 0x2a5aa0, 0xb83a3a, 0x3a8a3a][c % 4], 1).fillCircle(x + 7.5, y + 10, 3);
+        }
+        cartes.fillStyle(0x8a2a2a, 1).fillRect(520, 420, 15, 21).lineStyle(1, 0x3a2410, 1).strokeRect(520, 420, 15, 21);
+        this.interactiu(450, 440, RADI_OBJECTE, DIALEGS.solitari, { altura: 60 });
+        this.npc('iscu', 520, 560, DIALEGS.iscu, { flipX: true });
+        this.posar('llenya', 735, 410, { col: { w: 110, h: 26 } });
+        this.posar('tronc_tall', 160, 540, { col: { w: 70, h: 24 } });
+
+        // Un cofre petit entre dues espelmes
+        const cofreCab = this.posar(Estat.flag('cofreCabanaCami') ? 'cofre_obert' : 'cofre', 690, 250, { col: { w: 50, h: 20 }, opac: true });
+        this.interactiu(690, 255, RADI_OBJECTE, DIALEGS.cofreCabanaCami, { altura: 80, enTancar: () => { if (Estat.flag('cofreCabanaCami')) cofreCab.setTexture('cofre_obert'); } });
+        [[630, 258], [750, 258]].forEach(([x, y], i) => {
+            const e = this.posar('espelma', x, y, { fonsY: y });
+            this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 350 + i * 90 });
+        });
+
+        this.add.rectangle(450, 350, 700, 700, 0xffd38a, 0.05).setDepth(80000);
+        this.sortida(410, 672, 80, 22, 'ZonaCami', 'secret');
+    }
+}

@@ -47,13 +47,13 @@ class EscenaPingPong extends Phaser.Scene {
 
     preload() {
         // L'Ineu d'esquena, en alta resolució (512 px per fotograma; eines/fer_pingpong_ineu_hd.py): es mostra molt gran i només de genolls amunt
-        ['drive', 'reves', 'servei'].forEach(n => this.load.spritesheet(n === 'servei' ? 'ineu_servei' : 'pp_' + n, `assets/pingpong2/ineu_${n}.webp?v=2`, { frameWidth: 512, frameHeight: 512 }));
+        ['drive', 'reves', 'servei'].forEach(n => this.load.spritesheet(n === 'servei' ? 'ineu_servei' : 'pp_' + n, `assets/ineu/pingpong/ineu_${n}.webp?v=2`, { frameWidth: 512, frameHeight: 512 }));
                 this.load.image('pp_cartell', 'assets/objectes/cartell_llums.webp?v=2611110200');
-        this.load.spritesheet('ineu_derrota', 'assets/pingpong2/ineu_derrota.webp?v=1', { frameWidth: 512, frameHeight: 512 });
-        this.load.spritesheet('ineu_celebracio', 'assets/pingpong2/ineu_celebracio.webp?v=2', { frameWidth: 512, frameHeight: 512 });
-        ['jusef_dret', 'jusef_revers', 'jusef_servei'].forEach(n => this.load.spritesheet(n, `assets/pingpong2/${n}.webp?v=5`, { frameWidth: 256, frameHeight: 256 }));
-        ['jusef_gir_dreta', 'jusef_gir_esquerra'].forEach(n => this.load.spritesheet(n, `assets/pingpong2/${n}.webp?v=5`, { frameWidth: 256, frameHeight: 256 }));       // el gir de cara a perfil, fotograma a fotograma
-        ['jusef_cop_drive_esquerra', 'jusef_revers_3q'].forEach(n => this.load.spritesheet(n, `assets/pingpong2/${n}.webp?v=5`, { frameWidth: 256, frameHeight: 256 }));       // de perfil: gira el cos cap al costat de la pilota
+        this.load.spritesheet('ineu_derrota', 'assets/ineu/pingpong/ineu_derrota.webp?v=1', { frameWidth: 512, frameHeight: 512 });
+        this.load.spritesheet('ineu_celebracio', 'assets/ineu/pingpong/ineu_celebracio.webp?v=2', { frameWidth: 512, frameHeight: 512 });
+        ['jusef_dret', 'jusef_revers', 'jusef_servei'].forEach(n => this.load.spritesheet(n, `assets/pingpong/${n}.webp?v=5`, { frameWidth: 256, frameHeight: 256 }));
+        ['jusef_gir_dreta', 'jusef_gir_esquerra'].forEach(n => this.load.spritesheet(n, `assets/pingpong/${n}.webp?v=5`, { frameWidth: 256, frameHeight: 256 }));       // el gir de cara a perfil, fotograma a fotograma
+        ['jusef_cop_drive_esquerra', 'jusef_revers_3q'].forEach(n => this.load.spritesheet(n, `assets/pingpong/${n}.webp?v=5`, { frameWidth: 256, frameHeight: 256 }));       // de perfil: gira el cos cap al costat de la pilota
     }
 
     create() {

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Full de la celebració de l'Ineu (guanyar el partit de ping-pong) → assets/pingpong2/ineu_celebracio.webp.
+"""Full de la celebració de l'Ineu (guanyar el partit de ping-pong) → assets/ineu/pingpong/ineu_celebracio.webp.
 
     python3 eines/fer_celebracio_ineu.py
 
@@ -18,7 +18,7 @@ def main():
     cel = lambda k: ((k % 4) * CEL, (k // 4) * CEL, (k % 4) * CEL + CEL, (k // 4) * CEL + CEL)
     for dest, font in SUBSTITUCIONS.items():
         im.paste(im.crop(cel(font)), cel(dest)[:2])
-    im.save(ARREL / 'assets' / 'pingpong2' / 'ineu_celebracio.webp', 'WEBP', quality=90, alpha_quality=100, method=6)
+    im.save(ARREL / 'assets' / 'ineu' / 'pingpong' / 'ineu_celebracio.webp', 'WEBP', quality=90, alpha_quality=100, method=6)
     print('ok', SUBSTITUCIONS)
 
 if __name__ == '__main__':

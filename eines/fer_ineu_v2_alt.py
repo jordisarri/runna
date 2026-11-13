@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Variants laterals de l'Ineu v2 (esquerra/dreta) → assets/ineu_v2/alt/<nom>.webp.
+"""Variants laterals de l'Ineu v2 (esquerra/dreta) → assets/ineu/caminar/walk_elev_<costat>.webp i assets/ineu/idle/idle_elev_<costat>.webp.
 
     python3 eines/fer_ineu_v2_alt.py [gruix_contorn]
 
@@ -16,7 +16,7 @@ from contorn_ineu import contorn
 import fer_ineu_v2 as b
 
 ORIGEN = b.ARREL / 'art' / 'ineu' / 'v2' / 'alt'
-DEST = b.DEST / 'alt'
+DEST = b.DEST
 SENSE = b.SENSE / 'alt'
 AMPLE_LAT = 118.0   # amplada objectiu del cos de perfil (el caminar lateral actual fa ~115)
 MAX_ESTIR = 1.3
@@ -24,7 +24,7 @@ AJUST_CAMINAR = (0.95, 0.99)   # (x, y) extra als caminars laterals: es veien m�
 
 def main():
     gruix = int(sys.argv[1]) if len(sys.argv) > 1 else 1
-    DEST.mkdir(parents=True, exist_ok=True); SENSE.mkdir(parents=True, exist_ok=True)
+    (DEST / 'caminar').mkdir(parents=True, exist_ok=True); (DEST / 'idle').mkdir(parents=True, exist_ok=True); SENSE.mkdir(parents=True, exist_ok=True)
     for p in sorted(ORIGEN.glob('*.png')):
         fs = b.fots(p); boxes = [b.bbox(x) for x in fs]
         # Cada full es porta a la mateixa alçada que els altres (224) i, com que de perfil l'Ineu queda més prim del que toca, s'eixampla fins a ~AMPLE_LAT px (com mínim sense encongir, màxim ×MAX_ESTIR).
@@ -39,7 +39,7 @@ def main():
             cel = Image.new('RGBA', (b.CEL, b.CEL), (0, 0, 0, 0)); cel.paste(g, (dx, dy), g)
             out.paste(cel, ((i % 4) * b.CEL, (i // 4) * b.CEL))
         out.save(SENSE / (p.stem + '.webp'), 'WEBP', quality=90, alpha_quality=100, method=6)
-        contorn(out, gruix).save(DEST / (p.stem + '.webp'), 'WEBP', quality=88, alpha_quality=100, method=6)
+        contorn(out, gruix).save(DEST / ('idle' if p.stem.startswith('idle_') else 'caminar') / (p.stem + '.webp'), 'WEBP', quality=88, alpha_quality=100, method=6)
         print(p.stem, 'ok')
 
 if __name__ == '__main__':

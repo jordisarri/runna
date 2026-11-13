@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fulls nous de l'Ineu (caminar i idle en 8 direccions, generats amb AutoSprite) → assets/ineu_v2/<direccio>.webp i idle_<direccio>.webp.
+"""Fulls nous de l'Ineu (caminar i idle en 8 direccions, generats amb AutoSprite) → assets/ineu/caminar/<direccio>.webp i assets/ineu/idle/idle_<direccio>.webp.
 
     python3 eines/fer_ineu_v2.py [gruix_contorn]       (per defecte 1)
 
@@ -22,7 +22,7 @@ DIRS = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'n
 CEL = 256
 PEUS = 238
 ALT_VELLA = 224.0          # alçada mediana de l'Ineu als fulls vells (dins la cel·la de 256)
-DEST = ARREL / 'assets' / 'ineu_v2'
+DEST = ARREL / 'assets' / 'ineu'        # a caminar/ i idle/
 SENSE = ARREL / 'art' / 'ineu' / 'v2' / 'sense_contorn'
 
 def fots(path):
@@ -35,7 +35,7 @@ def bbox(im):
 
 def main():
     gruix = int(sys.argv[1]) if len(sys.argv) > 1 else 1
-    DEST.mkdir(parents=True, exist_ok=True); SENSE.mkdir(parents=True, exist_ok=True)
+    (DEST / 'caminar').mkdir(parents=True, exist_ok=True); (DEST / 'idle').mkdir(parents=True, exist_ok=True); SENSE.mkdir(parents=True, exist_ok=True)
     tots = {(t, d): fots(ARREL / 'art' / 'ineu' / 'v2' / f'zip_{t}' / f'{d}.png') for t in ('walk', 'idle') for d in DIRS}
     alts = [bbox(f)[3] - bbox(f)[2] + 1 for fs in tots.values() for f in fs]
     f = ALT_VELLA / float(np.median(alts))
@@ -51,7 +51,7 @@ def main():
             out.paste(cel, ((i % 4) * CEL, (i // 4) * CEL))
         nom = d if t == 'walk' else 'idle_' + d
         out.save(SENSE / (nom + '.webp'), 'WEBP', quality=90, alpha_quality=100, method=6)
-        contorn(out, gruix).save(DEST / (nom + '.webp'), 'WEBP', quality=88, alpha_quality=100, method=6)
+        contorn(out, gruix).save(DEST / ('idle' if nom.startswith('idle_') else 'caminar') / (nom + '.webp'), 'WEBP', quality=88, alpha_quality=100, method=6)
         print(nom, 'ok')
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Converteix els fulls de l'Ineu del ping-pong (generats amb AutoSprite, d'esquena) a assets/ineu/pp_drive.webp i pp_reves.webp.
+"""Converteix els fulls de l'Ineu del ping-pong (generats amb AutoSprite, d'esquena) a art/ineu/no_usats/pp_drive.webp i pp_reves.webp (sistema antic, ja no es fa servir al joc).
 
     python3 eines/fer_pingpong_ineu.py && python3 eines/contorn_ineu.py
 

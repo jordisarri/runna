@@ -1,11 +1,11 @@
 /**
  * En Jusef és dretà (la raqueta a la mà dreta = a l'esquerra de la pantalla quan mira de cara), però els fulls frontals d'AutoSprite el feien esquerrà.
- * Aquest script emmiralla CADA fotograma (256x256) dels fulls frontals de art/pingpong2/ i els deixa a assets/pingpong2/ (sense tocar els originals):
+ * Aquest script emmiralla CADA fotograma (256x256) dels fulls frontals de art/pingpong2/ i els deixa a assets/pingpong/ (sense tocar els originals):
  *   node eines/emmirallar_jusef.js
  * També deixa a art/pingpong2/tmp/ els dos fotogrames emmirallats que serveixen de pose a AutoSprite per generar els girs.
  */
 const sharp = require('sharp'), fs = require('fs'), path = require('path');
-const A = path.join(__dirname, '..', 'art', 'pingpong2'), S = path.join(__dirname, '..', 'assets', 'pingpong2');
+const A = path.join(__dirname, '..', 'art', 'pingpong2'), S = path.join(__dirname, '..', 'assets', 'pingpong');
 async function emmirallaFull(entrada, sortida, mida = 256) {
   const { data, info } = await sharp(entrada).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
   const n = info.width / mida, comp = [];

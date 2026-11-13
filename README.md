@@ -6,13 +6,13 @@ Joc web fet amb Phaser 3. Per provar-lo en local: `python serveix.py` i obre `ht
 
 | Carpeta | Què hi ha |
 |---|---|
-| `index.html`, `manifest.json`, `sw.js`, `js/` | El joc (i l'aplicació instal·lable: `manifest.json`, el service worker `sw.js` i les icones d'`assets/pwa/`, que fa `eines/fer_icones.py`). `js/zones/` té una escena per cada lloc; `js/assets.js` és el catàleg d'imatges. |
+| `index.html`, `manifest.json`, `sw.js`, `js/` | El joc (i l'aplicació instal·lable: `manifest.json`, el service worker `sw.js` i les icones d'`assets/pwa/`, que fa `eines/fer_icones.py`). `js/zones/` té les escenes de cada lloc, agrupades per fitxer (`esglesia.js`, `monestir.js`, `bassadoria.js`, `casa_gran.js`, `cami.js`, `ermita.js`, `era.js`, `jardi.js`, `taverna.js`, `cabana.js`, `nord.js`, `oest.js`…); `js/assets.js` és el catàleg d'imatges. |
 | `assets/` | El que carrega el joc (WebP, M4A, MP4), ja comprimit. |
 | `art/` | Els originals (JPG/PNG/MP3/MP4) a resolució completa. **No es carrega al joc.** |
 | `docs/` | Guió (`GUIO.md`), prompts dels gràfics i instruccions de la música. |
 | `eines/` | Scripts per passar `art/` a `assets/` (vegeu més avall). |
 
-`art/` fa de mirall d'`assets/`: cada imatge és a la mateixa subcarpeta als dos llocs (`art/natura/arbre.png` → `assets/natura/arbre.webp`).
+`art/` fa de mirall d'`assets/`: cada imatge és a la mateixa subcarpeta als dos llocs (`art/natura/arbre.png` → `assets/natura/arbre.webp`). Els gràfics que el joc ja no fa servir passen a `art/<carpeta>/no_usats/`: a `assets/` només hi ha el que el joc carrega.
 
 | Subcarpeta | Contingut |
 |---|---|
@@ -20,12 +20,12 @@ Joc web fet amb Phaser 3. Per provar-lo en local: `python serveix.py` i obre `ht
 | `edificis/` | Edificis i interiors grans (església, retaule, Monestir…); `antics/` conserva composicions descartades. |
 | `natura/` | Arbres, roques, plantes. |
 | `objectes/` | Cartells, creu, bassadòria, mobles i objectes. |
-| `enemics/` | Enemics i *bosses*; també les referències de l'ombra del monjo. |
+| `enemics/` | Només enemics i *bosses* (inclòs l'Home del Raïm i les seves poses). |
 | `armes/` | Bastó, branca del Til·ler, espasa Runna. |
-| `ineu/` | Tot l'Ineu (vegeu sota). |
+| `ineu/` | Tot l'Ineu: `caminar/`, `idle/`, `atac/`, `aixeca/`, `pingpong/`, tarota i inconscient (vegeu sota). |
 | `proleg/` | Els cinc vitralls del pròleg. |
 | `musica/` | Cançons: a `art/` els MP3 originals, a `assets/` els M4A. |
-| `video/` | Vídeos de la portada. A `art/video/antics/`, versions descartades. |
+| `video/` | Vídeos de la portada. A `art/video/antics/` i `art/video/no_usats/`, versions descartades. |
 | `fonts/` (només a `assets/`) | Tipografies (Cinzel, Cormorant Garamond, IM Fell English) allotjades al nostre servidor, amb el seu `fonts.css`: el joc no demana res a Google. Es regeneren amb `eines/baixa_tipografies.py`. |
 | `titol/`, `mapa/` | (només a `art/`) logo, portada i esbós del mapa. |
 
@@ -35,7 +35,7 @@ Joc web fet amb Phaser 3. Per provar-lo en local: `python serveix.py` i obre `ht
 - `art/ineu/flauta.jpg` és l'original de la postura tocant la flauta; `art/enemics/ombra_monjo_ref.jpg` i `art/edificis/antics/runes_amb_ombra.jpg` són referències visuals, no recursos carregats directament pel joc.
 - `art/ineu_caminar/` conté els spritesheets de caminar (8 fotogrames, graella 4x2) i `costat/` els 16 fotogrames originals de costat; aquests es munten sense reescalar ni moure'ls en fulles 4x4 de 16 fotogrames per a dreta i esquerra (emmirallada). La resta de fulls usa una escala comuna per a totes les direccions i el mateix pivot a tots els fotogrames d'una fulla, sense retallar-los individualment. `art/ineu/caminar/` conserva els originals anteriors i les versions netejades. `art/ineu/atac/` i `aixeca/` són els atacs i les postures d'armes.
 - `art/ineu_idle/` conté els originals de les postures d'aturat (16 fotogrames, graella 4x4); els fulls del joc en conserven un de cada dos (8 fotogrames, graella 4x2) i comparteixen escala per a totes les direccions, sense ajustar fotogrames individualment. Les tres orientacions que falten es reflecteixen en temps d'execució.
-- `assets/ineu_v2/`: caminar (`<direcció>.webp`) i idle (`idle_<direcció>.webp`) definitius, 16 fotogrames 4x4 (generats amb AutoSprite; esquerra i dreta a `alt/`). `assets/ineu/`: `atac_<arma>_<direcció>.webp` (3 armes x 8 direccions, l'Ineu ja porta l'arma; `eines/fer_atac_arma.py` a partir d'`art/ineu/atac_arma/`), `aixeca_<arma>.webp`, ping-pong i tarota. Els fulls antics (caminar/idle v1, proves descartades) són a `art/ineu/arxiu/`.
+- `assets/ineu/`: `caminar/<direcció>.webp` i `idle/idle_<direcció>.webp` definitius, 16 fotogrames 4x4 (generats amb AutoSprite; esquerra i dreta com `walk_elev_`/`idle_elev_`), `atac/atac_<arma>_<direcció>.webp` (3 armes x 8 direccions, l'Ineu ja porta l'arma; `eines/fer_atac_arma.py` a partir d'`art/ineu/atac_arma/`), `aixeca/aixeca_<arma>.webp`, `pingpong/` (cops, derrota i celebració del ping-pong), la tarota i `ineu_inconscient.webp`. Els fulls antics (caminar/idle v1, proves descartades) són a `art/ineu/arxiu/` i els que el joc ja no usa a `art/ineu/no_usats/`. `assets/pingpong/` té el Jusef del ping-pong.
 
 ## Eines (`eines/`)
 

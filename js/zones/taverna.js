@@ -1,4 +1,75 @@
 /**
+ * LA TAVERNA: façana (exterior), interior, i la galeria de la porta de ferro (Gírgoles).
+ */
+
+// ---------------- LA TAVERNA (entre l'Hostatgeria i els arcs de la Casa Gran) ----------------
+// Una sola escena de poble: el camí d'est a oest passa per davant la façana de la Taverna. La porta és tancada
+// (la Càren no obre a ningú aquests dies; el pas del fons, a la banda de sota, encara no existeix).
+class ZonaTaverna extends ZonaBase {
+    constructor() {
+        super('ZonaTaverna', {
+            nom: 'La Taverna',
+            amplada: 1600,
+            alcada: 1100,
+            entrades: { jardi: { x: 60, y: 960, dir: 'dreta' }, casagran: { x: 1540, y: 960, dir: 'esquerra' }, interior: { x: 800, y: 820, dir: 'avall' } }
+        });
+    }
+
+    construir() {
+        this.terra('herba', 0, 0, 1600, 1100, -1100);
+        this.terra('cami', 0, 880, 1600, 130);              // camí de l'Hostatgeria als arcs de la Casa Gran
+        this.terra('llamborda', 0, 740, 1600, 140);          // replà empedrat davant la façana, de vora a vora (d'est a oest)
+
+        // Façana (900 d'ample, tres plantes): la porta és l'arc del mig
+        const t = this.taverna = this.posar('taverna', 800, 750, { fonsY: 640 });
+        this.colisio(603, 705, 355, 90);
+        this.colisio(1040, 705, 340, 90);
+        this.blocDarrere(800, 900, 660, Math.max(0, 750 - t.displayHeight));
+        // La porta (l'arc del mig): tancada fins que s'hi parla (l\'Eve l'obre des de dins)
+        this.colPorta = this.colisio(825, 705, 90, 90);
+        if (Estat.flag('tavernaOberta')) { this.obrirPorta(); this.portaTavernaAnim(); }
+        else this.interactiu(825, 765, RADI_OBJECTE, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() });
+
+        // Barrils de debò (es trenquen) a la dreta de la porta, on els tenia dibuixats la façana (mai apilats: si en trenques un, l'altre es quedaria flotant)
+        this.barril(944, 757, 40, 16); this.barril(992, 762, 40, 16); this.barril(1038, 756, 40, 16);
+        // Barrils a la dreta, taula i banc a l'esquerra, contra la façana
+        this.barril(1150, 800, 40, 16);
+        this.barril(1200, 812, 40, 16);
+        this.posarBanc(520, 790, 130);
+        this.posar('taula', 400, 805, { escala: 0.7, col: { w: 110, h: 22 } });
+        this.enemic('visitant', 1000, 960);        // un visitant trastocat per la boira, que ha vingut a la Taverna
+
+        this.cartell(260, 860, () => ({ pagines: [{ qui: 'Cartell', text: '← L\'Hostatgeria i l\'Era\n→ Els arcs de la Casa Gran' }] }));
+        this.arbres([[130, 250], [200, 560], [1460, 330], [1450, 600], [60, 830], [1180, 1050]]);   // cap arbre davant el cartell
+
+        this.sortida(0, 900, 14, 130, 'ZonaJardi', 'taverna');
+        this.sortida(1586, 900, 14, 130, 'ZonaCasaGran', 'oest');
+    }
+
+    // Se sent el forrellat i la porta del mig s'obre (es veu fosc a dins)
+    obrirPortaAnim(fet) {
+        Sfx.secret && Sfx.secret();
+        const P = this.portaTavernaAnim();
+        P.forcaFins = this.time.now + 1400;          // els batents s'obren sols; després segueixen l'Ineu com la resta de portes
+        this.time.delayedCall(900, fet);
+    }
+
+    // L'arc del mig de la façana: els batents són el tros del mateix gràfic i giren cap endins quan l'Ineu s'hi acosta
+    portaTavernaAnim() {
+        return this.portaTaverna || (this.portaTaverna = this.portaAnimada({ x: 825, top: 590, bottom: 746, ample: 105, fons: 640, unic: true, arc: 46, retall: this.taverna }));
+    }
+
+    obrirPorta() {
+        if (!Estat.flag('tavernaOberta') || this.portaOberta) return;
+        this.portaOberta = true;
+        this.obstacles.remove(this.colPorta, true, true);
+        this.colisio(825, 660, 90, 20);      // dintell
+        this.sortida(793, 680, 64, 40, 'ZonaTavernaInt', 'porta');
+    }
+}
+
+
+/**
  * LA TAVERNA PER DINS i la GALERIA DE LA PORTA DE FERRO (l'entrada de les Gírgoles, a l'est del Celler: res a veure amb la Taverna)
  * La Càren (mandrosa) dorm darrere el taulell; l'Eve (amiga fidel) obre la porta a l'Ineu i li explica què passa de nit.
  * La galeria s'entra per la porta de ferro exterior de la Sala de les Gírgoles, a l'est del Pati del Celler (la que fa servir

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fulls d'atac de l'Ineu amb cada arma (bastó, branca del Til·ler, espasa), 8 direccions → assets/ineu/atac_<arma>_<direccio>.webp.
+"""Fulls d'atac de l'Ineu amb cada arma (bastó, branca del Til·ler, espasa), 8 direccions → assets/ineu/atac/atac_<arma>_<direccio>.webp.
 
     python3 eines/fer_atac_arma.py
 
@@ -17,7 +17,7 @@ from contorn_ineu import alfa_contorn
 
 ARREL = Path(__file__).resolve().parent.parent
 ORIGEN = ARREL / 'art' / 'ineu' / 'atac_arma'
-DEST = ARREL / 'assets' / 'ineu'
+DEST = ARREL / 'assets' / 'ineu' / 'atac'
 DIRS = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast']
 FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 5, 5]}       # fotogrames triats (de 0 a 15) per arma
 # Excepcions per (arma, direcció): full d'origen i fotogrames propis. A la vista d'esquena ('up') de la 2a generació l'arma queda amagada darrere el cap o tallada per la vora
@@ -32,7 +32,7 @@ SRC, CEL = 384, 320         # fotograma d'origen i cel·la de sortida (més gran
 COS = 170.0                  # alçada que ha de fer el cos de l'Ineu a la cel·la (com als fulls de caminar reduïts)
 GRUIX = 1
 AMB_REF = {(arma, d) for arma in ('tiller', 'espasa', 'basto') for d in ('southeast', 'southwest', 'northeast', 'northwest')}
-IDLE = ARREL / 'assets' / 'ineu_v2'
+IDLE = ARREL / 'assets' / 'ineu' / 'idle'
 
 def peus_idle(d):
     # Centre horitzontal dels peus a l'idle d'aquesta direcció (fotograma de repòs, cel·la de 256): als idles no són al mig de la cel·la (en diagonal, fins a ~28 px),

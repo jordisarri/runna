@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fulls de l'Ineu d'esquena del ping-pong NOU en alta resolució (512 px per fotograma, 4x4) → assets/pingpong2/ineu_<cop>.webp, amb contorn negre.
+"""Fulls de l'Ineu d'esquena del ping-pong NOU en alta resolució (512 px per fotograma, 4x4) → assets/ineu/pingpong/ineu_<cop>.webp, amb contorn negre.
 
     python3 eines/fer_pingpong_ineu_hd.py
 
@@ -44,8 +44,8 @@ def main():
                     out[ys, xs] = np.array(base)
                 else:
                     out[ys, xs] = cel
-        (ARREL / 'assets' / 'pingpong2').mkdir(parents=True, exist_ok=True)
-        Image.fromarray(out, 'RGBA').save(ARREL / 'assets' / 'pingpong2' / f'ineu_{nom}.webp', 'WEBP', quality=90, alpha_quality=100, method=6)
+        (ARREL / 'assets' / 'ineu' / 'pingpong').mkdir(parents=True, exist_ok=True)
+        Image.fromarray(out, 'RGBA').save(ARREL / 'assets' / 'ineu' / 'pingpong' / f'ineu_{nom}.webp', 'WEBP', quality=90, alpha_quality=100, method=6)
         print('ok', nom, W, H)
 
 if __name__ == '__main__':

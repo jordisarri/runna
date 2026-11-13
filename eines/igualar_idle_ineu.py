@@ -44,11 +44,11 @@ def escala(im, k):
 def main():
     gruix = int(sys.argv[1]) if len(sys.argv) > 1 else 1
     parelles = []
-    pw_dest = {d: b.DEST / f'{d}.webp' for d in DIRS}
+    pw_dest = {d: b.DEST / 'caminar' / f'{d}.webp' for d in DIRS}
     for d in DIRS:
         if d in ('left', 'right'):
             continue        # als laterals l'idle és la referència: és el caminar el que s'ajusta (AJUST_CAMINAR a fer_ineu_v2_alt.py)
-        parelles.append((d, SENSE / f'{d}.webp', SENSE / f'idle_{d}.webp', b.DEST / f'idle_{d}.webp'))
+        parelles.append((d, SENSE / f'{d}.webp', SENSE / f'idle_{d}.webp', b.DEST / 'idle' / f'idle_{d}.webp'))
     for d, pw, pi, dest in parelles:
         w, i = Image.open(pw).convert('RGBA'), Image.open(pi).convert('RGBA')
         mw, mi = mesura(w), mesura(i)
