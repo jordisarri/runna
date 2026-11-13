@@ -245,6 +245,7 @@ class ZonaBase extends Phaser.Scene {
         this.sortides = [];
         this.enemics = []; this.copes = []; this.atacantFins = 0;
         this.esbarzers = [];
+        this.barrils = [];
         this.graonsLlista = [];
         this.caient = false;
         this.forcat = null;
@@ -1632,6 +1633,82 @@ class ZonaBase extends Phaser.Scene {
         p.explode(14);
         this.time.delayedCall(900, () => p.destroy());
         this.tweens.add({ targets: o.img, alpha: 0, scaleY: o.img.scaleY * 0.6, duration: 600, onComplete: () => o.img.destroy() });
+    }
+
+    // ---------------- Barrils ----------------
+    // Tots els barrils són el mateix gràfic ('barril'), opacs, i es trenquen amb qualsevol arma (vegeu combat.js, atacar)
+    barril(x, y, w, h) {
+        const img = this.posar('barril', x, y, { opac: true });
+        const col = this.colisio(x, y - h / 2, w, h);
+        const b = { img, col, x, y, viu: true };
+        this.barrils.push(b);
+        return b;
+    }
+
+    // El barril es trenca: trossos de fusta (retalls del mateix dibuix) i estelles que salten, reboten i es desfan amb un fade out
+    trencarBarril(b, d) {
+        if (!b.viu) return;
+        b.viu = false;
+        Sfx.trenca && Sfx.trenca();
+        this.obstacles.remove(b.col, true, true);
+        const idx = this.opacs ? this.opacs.indexOf(b.img) : -1;
+        if (idx >= 0) this.opacs.splice(idx, 1);
+        const key = 'barril', fr = this.textures.get(key).get(), W = fr.width, H = fr.height;
+        const esc = b.img.scaleX, dw = W * esc, dh = H * esc;
+        // Tall irregular en 3 columnes x 3 files
+        const tallV = [0, W * Phaser.Math.FloatBetween(0.28, 0.38), W * Phaser.Math.FloatBetween(0.62, 0.74), W];
+        const tallH = [0, H * Phaser.Math.FloatBetween(0.22, 0.34), H * Phaser.Math.FloatBetween(0.6, 0.74), H];
+        const peces = [];
+        const dx = d ? d.x : 0, dy = d ? d.y : 0.5;
+        for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+            const cx0 = tallV[c], cw = tallV[c + 1] - cx0, cy0 = tallH[r], ch = tallH[r + 1] - cy0;
+            const im = this.add.image(0, 0, key).setCrop(cx0, cy0, cw, ch).setScale(esc);
+            im.setOrigin((cx0 + cw / 2) / W, (cy0 + ch / 2) / H);
+            const px = b.x + ((cx0 + cw / 2) / W - 0.5) * dw, py = b.y - dh + ((cy0 + ch / 2) / H) * dh;
+            im.setPosition(px, py);
+            const ang = Math.atan2((py - (b.y - dh * 0.4)) * 0.5, px - b.x) + Phaser.Math.FloatBetween(-0.5, 0.5);
+            const v = Phaser.Math.FloatBetween(70, 190);
+            peces.push({ im, x: px, y: py, vx: Math.cos(ang) * v + dx * 90, vy: -Phaser.Math.FloatBetween(120, 260) + Math.sin(ang) * 40 + dy * 40,
+                         vr: Phaser.Math.FloatBetween(-9, 9), terra: b.y + Phaser.Math.FloatBetween(-8, 14), reb: 0 });
+        }
+        // Estelles fines
+        if (!this.textures.exists('astella')) {
+            const g = this.make.graphics({ x: 0, y: 0, add: false });
+            g.fillStyle(0x8a5a2e, 1).fillRect(0, 0, 14, 3); g.fillStyle(0xc89560, 1).fillRect(0, 0, 14, 1);
+            g.generateTexture('astella', 14, 3); g.destroy();
+        }
+        for (let i = 0; i < 12; i++) {
+            const a = Phaser.Math.FloatBetween(0, Math.PI * 2), v = Phaser.Math.FloatBetween(90, 260);
+            const im = this.add.image(b.x, b.y - dh * Phaser.Math.FloatBetween(0.2, 0.8), 'astella').setScale(Phaser.Math.FloatBetween(0.5, 1.1)).setAngle(Phaser.Math.Between(0, 360));
+            peces.push({ im, x: im.x, y: im.y, vx: Math.cos(a) * v + dx * 70, vy: -Phaser.Math.FloatBetween(100, 280), vr: Phaser.Math.FloatBetween(-14, 14), terra: b.y + Phaser.Math.FloatBetween(-10, 16), reb: 0 });
+        }
+        // Pols de fusta
+        const p = this.add.particles(b.x, b.y - dh * 0.4, 'espurna', {
+            speed: { min: 20, max: 80 }, lifespan: 600, scale: { start: 0.8, end: 0 }, alpha: { start: 0.5, end: 0 },
+            tint: [0xc9a878, 0x9b7a50], quantity: 8, emitting: false
+        }).setDepth(b.y + 5);
+        p.explode(10);
+        this.time.delayedCall(800, () => p.destroy());
+        // El barril sencer desapareix de cop (queda amagat pels trossos)
+        b.img.destroy();
+        const t0 = this.time.now, TEMPS = 1500, FADE = 800;
+        const act = (t, dt) => {
+            const s = Math.min(dt, 50) / 1000, el = this.time.now - t0;
+            peces.forEach(q => {
+                if (!q.im.active) return;
+                q.vy += 900 * s;
+                q.x += q.vx * s; q.y += q.vy * s;
+                if (q.y > q.terra && q.vy > 0) {
+                    q.y = q.terra;
+                    if (q.reb < 2) { q.vy *= -0.35; q.vx *= 0.6; q.vr *= 0.5; q.reb++; } else { q.vy = 0; q.vx = 0; q.vr = 0; }
+                }
+                q.im.setPosition(q.x, q.y).rotation += q.vr * s;
+                q.im.setDepth(Math.max(q.terra, q.y) + 1);
+                if (el > TEMPS) q.im.setAlpha(Math.max(0, 1 - (el - TEMPS) / FADE));
+            });
+            if (el > TEMPS + FADE) { this.events.off('update', act); peces.forEach(q => q.im.destroy()); }
+        };
+        this.events.on('update', act);
     }
 
     // ---------------- Música ----------------

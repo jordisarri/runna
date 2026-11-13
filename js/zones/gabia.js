@@ -221,7 +221,7 @@ class ZonaGirgoles extends ZonaBase {
         [[1050, 1080], [1095, 1100], [1070, 1050], [300, 1100], [340, 1120]].forEach(([x, y]) => sacs.fillStyle(0x7a6a4a, 1).fillEllipse(x, y, 66, 44).lineStyle(2, 0x3a3020, 1).strokeEllipse(x, y, 66, 44).lineStyle(2, 0x3a3020, 1).lineBetween(x - 8, y - 20, x + 8, y - 20));
         this.colisio(1075, 1090, 110, 40); this.colisio(320, 1110, 90, 30);
         this.interactiu(1075, 1140, RADI_OBJECTE, DIALEGS.sacsGirgoles, { altura: 80 });
-        [[1180, 1180], [230, 1190]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 46, h: 20 } }));
+        [[1180, 1180], [230, 1190]].forEach(([x, y]) => this.barril(x, y, 46, 20));
 
         // Gotes que cauen de la volta i fan cercles als bassals
         this.bassals.forEach((b, i) => this.time.addEvent({ delay: 900 + i * 370, loop: true, callback: () => {

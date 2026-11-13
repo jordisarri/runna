@@ -271,6 +271,12 @@ const Sfx = {
         this.xiu(0.14, 0.3, 'highpass', 2500, 1200);
         this.to(500, 180, 0.12, 'sawtooth', 0.12);
     },
+    trenca() {                   // barril que es trenca: cop sord i fusta que s'esquerda
+        if (!this.ok('trenca', 80)) return;
+        this.to(130, 50, 0.2, 'sine', 0.4);
+        this.xiu(0.22, 0.4, 'bandpass', 900, 400, 1.5);
+        [0, 0.05, 0.11, 0.17].forEach(t => this.to(Phaser.Math.Between(300, 700), 120, 0.05, 'square', 0.09, t));
+    },
     basto() {                    // el bàcul de l'Ocellaire que gira: un vuit-vuit d'aire
         if (!this.ok('basto', 140)) return;
         this.xiu(0.13, 0.16, 'bandpass', 380, 900, 3);

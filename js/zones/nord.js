@@ -41,7 +41,7 @@ class ZonaCellerFora extends ZonaBase {
         this.blocDarrere((0 + dreta) / 2, dreta, BASE_Y - 110);   // ni darrere de l'edifici
 
         // Barrils i una bóta vella vora la porta; a l'altra banda del camí, un pati d'herba amb arbres
-        [[560, 930], [612, 948], [190, 940]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
+        [[560, 930], [612, 948], [190, 940]].forEach(([x, y]) => this.barril(x, y, 50, 22));
         this.cartell(960, 640, DIALEGS.cartellCeller);
         this.arbres([[1100, 200], [1350, 120], [1500, 380], [1150, 690], [1450, 700], [1250, 900], [1520, 1020], [1050, 1040]]);
         [[1300, 420], [1180, 820]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: -800, escala: 0.6 }));
@@ -500,7 +500,7 @@ class ZonaPingpong extends ZonaBase {
         if (this.rodaMoguda) this.obrirPassadis();
 
         // ---- Mobiliari del celler ----
-        [[X1 - 40, 470], [X1 - 44, 525], [X0 + 42, A - 70]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
+        [[X1 - 40, 470], [X1 - 44, 525], [X0 + 42, A - 70]].forEach(([x, y]) => this.barril(x, y, 50, 22));
 
         // ---- La taula de ping-pong (verda) al mig, i els jugadors ----
         // En Jusef queda a la part nord de la taula; Julius i Pomers als costats de la taula
@@ -1136,7 +1136,7 @@ class ZonaGeorgi extends ZonaBase {
         this.portaAnimada({ x: 860, top: kT + caseta.displayHeight * 0.27 + 10, bottom: kT + caseta.displayHeight * 0.6 - 5, ample: caseta.displayWidth * 0.18, fons: 480, unic: true, retall: caseta });
 
         // Detalls de jardí
-        this.posar('barril', 1010, 470, { col: { w: 40, h: 16 } });
+        this.barril(1010, 470, 40, 16);
         this.posar('llenya', 690, 470, { escala: 0.7, col: { w: 80, h: 20 } });
         this.posar('banc', 560, 720, { col: { w: 130, h: 22 } });
         [[650, 700], [720, 740], [140, 600]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
@@ -1226,7 +1226,7 @@ class ZonaCasaGeorgi extends ZonaBase {
         this.add.image(170, 590, 'gat_cove').setOrigin(0.5, 1).setScale(1 / RES).setDepth(590);
         this.colisio(170, 575, 96, 26);
         this.interactiu(170, 620, RADI_OBJECTE, DIALEGS.casaGeorgiGat, { altura: 70 });
-        this.posar('barril', 790, 600, { col: { w: 46, h: 20 } });
+        this.barril(790, 600, 46, 20);
 
         // Pols dins la llum de la finestra i un to càlid
         this.add.particles(0, 0, 'espurna', {

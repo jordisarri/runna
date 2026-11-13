@@ -22,7 +22,7 @@ Object.assign(DIALEGS, {
         if (!E.flag('eveParlat')) return {
             pagines: [
                 { qui: 'Eve', text: 'Sóc l\'Eve. Ajudo la Càren... bé, faig la feina de la Càren. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
-                { qui: 'Eve', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola, com si la boira l\'obeís. Entra. Diu que va a buscar vi, però a la Taverna mai no ha faltat cap ampolla. I no en torna amb cap.' },
+                { qui: 'Eve', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola, com si la boira l\'obeís. Entra.' },
                 { qui: 'Eve', text: 'A dins, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Ocells, Ineu.' },
                 { qui: 'Eve', text: 'I l\'Iscu, el fill de la Càren, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
                 { qui: 'Eve', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
@@ -182,7 +182,7 @@ class ZonaTavernaInt extends ZonaBase {
             this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 330 + i * 80 });
         });
         // Barrils de vi, apilats a la dreta, i l'acordió
-        [[860, 470], [900, 500], [880, 440]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 46, h: 20 } }));
+        [[860, 470], [900, 500], [880, 440]].forEach(([x, y]) => this.barril(x, y, 46, 20));
         this.posar('tamboret', 150, 400, { col: { w: 36, h: 14 } });
         const ac = this.add.graphics().setDepth(390);
         ac.fillStyle(0x8a1a1a, 1).fillRoundedRect(130, 360, 40, 30, 4);
@@ -246,7 +246,7 @@ class ZonaSotaTaverna extends ZonaBase {
         if (Estat.flag('portaFerroOberta')) this.obrirPortaFerro(true);
 
         // Sacs i botes de vi, i petjades a la pols
-        [[150, 300], [180, 350], [640, 320]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 46, h: 20 } }));
+        [[150, 300], [180, 350], [640, 320]].forEach(([x, y]) => this.barril(x, y, 46, 20));
         const sacs = this.add.graphics().setDepth(520);
         [[620, 520], [660, 545], [140, 560]].forEach(([x, y]) => sacs.fillStyle(0x8a7a5a, 1).fillEllipse(x, y, 60, 40).lineStyle(2, 0x3a3020, 1).strokeEllipse(x, y, 60, 40));
         const pj = this.add.graphics().setDepth(-1000);

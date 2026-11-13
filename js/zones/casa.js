@@ -713,8 +713,8 @@ class ZonaCasaTresor extends ZonaCasaBase {
             this.add.image(x, y, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
             this.colisio(x, y - h / 2, w, h);
         });
-        [[190, 215], [190, 450], [250, 215]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
-        [[810, 300], [810, 484]].forEach(([x, y]) => this.posar('barril', x, y, { col: { w: 50, h: 22 } }));
+        [[190, 215], [190, 450], [250, 215]].forEach(([x, y]) => this.barril(x, y, 50, 22));
+        [[810, 300], [810, 484]].forEach(([x, y]) => this.barril(x, y, 50, 22));
 
         this.mecanismePorta();
     }

@@ -589,8 +589,8 @@ class ZonaTaverna extends ZonaBase {
         else this.interactiu(825, 765, RADI_OBJECTE, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() });
 
         // Barrils a la dreta, taula i banc a l'esquerra, contra la façana
-        this.posar('barril', 1150, 800, { col: { w: 40, h: 16 } });
-        this.posar('barril', 1200, 812, { col: { w: 40, h: 16 } });
+        this.barril(1150, 800, 40, 16);
+        this.barril(1200, 812, 40, 16);
         this.posar('banc', 520, 790, { col: { w: 130, h: 22 } });
         this.posar('taula', 400, 805, { escala: 0.7, col: { w: 110, h: 22 } });
         this.enemic('visitant', 1000, 960);        // un visitant trastocat per la boira, que ha vingut a la Taverna
@@ -689,8 +689,8 @@ class ZonaCabanaCami extends ZonaBase {
 
         // Mobles de fusta
         this.posar('banc_respatller', 400, 200, { col: { w: 140, h: 16 } });
-        this.posar('barril', 150, 175, { col: { w: 50, h: 22 } });
-        this.posar('barril', 205, 160, { col: { w: 50, h: 22 } });
+        this.barril(150, 175, 50, 22);
+        this.barril(205, 160, 50, 22);
         this.posar('taula', 450, 470, { col: { w: 160, h: 30 } });
         this.posar('tamboret', 340, 505, { col: { w: 40, h: 16 } });
         this.posar('tamboret', 565, 505, { col: { w: 40, h: 16 } });

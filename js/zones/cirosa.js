@@ -124,8 +124,8 @@ class ZonaCirosa extends ZonaBase {
         // La masia (mas vell i descurat) amb la porta que duu a dins
         const masia = this.edifici('masia', 380, 520, 520, 96, 'ZonaMasiaCirosa', 'porta', { alt: 80 }).setTint(0xc8b8a0);
         this.portaMasia(masia, 380, 520);
-        this.posar('barril', 830, 570, { col: { w: 40, h: 16 } });
-        this.posar('barril', 875, 580, { col: { w: 40, h: 16 } });
+        this.barril(830, 570, 40, 16);
+        this.barril(875, 580, 40, 16);
         this.posar('llenya', 110, 580, { col: { w: 90, h: 22 } });
         this.posar('banc', 560, 570, { col: { w: 110, h: 20 } });
         // El pou, a la vora de la masia
@@ -425,8 +425,8 @@ class ZonaMasiaCirosa extends ZonaBase {
             this.colisio(x, y - 2, 176, 62);
         });
         // Barrils i llenya
-        this.posar('barril', 130, 560, { col: { w: 50, h: 22 } });
-        this.posar('barril', 185, 545, { col: { w: 50, h: 22 } });
+        this.barril(130, 560, 50, 22);
+        this.barril(185, 545, 50, 22);
         this.posar('llenya', 740, 600, { col: { w: 100, h: 24 } });
         [[300, 470], [380, 500]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
 

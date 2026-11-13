@@ -520,7 +520,7 @@ class CambraMonja extends ZonaCasaBase {
         } else if (m === 'pilaria') {                                    // refetor: taula llarga, aparador amb plats, faristol i rastells d'alls
             this.posar('taula_sopar', 400, 330, { col: { w: 360, h: 40 } });
             [[260, 380], [540, 380], [260, 280], [540, 280]].forEach(([x, y]) => this.posar('tamboret', x, y, { col: { w: 28, h: 12 } }));
-            this.posar('barril', 130 + 40, 200, { col: { w: 40, h: 18 } });
+            this.barril(130 + 40, 200, 40, 18);
             const ap = this.add.graphics().setDepth(180);                                       // aparador contra la paret del fons, a la dreta
             ap.fillStyle(0x000000, 0.25).fillEllipse(620, 180, 100, 14);
             ap.fillStyle(0x4a2e18, 1).fillRect(578, 40, 84, 140).lineStyle(2, 0x120c08, 1).strokeRect(578, 40, 84, 140);
