@@ -913,7 +913,7 @@ Object.assign(ZonaBase.prototype, {
         const ara = this.time.now;
         const pacifica = this.config.pacifica && !(this.config.provaArma && Estat.te('runna'));          // (el Dolmen és pacífic, però un cop tens Runna hi pots provar l'espasa)
         // A les zones pacífiques només es pot atacar si hi ha un barril a l'abast (per trencar-lo)
-        const jb = this.ineu.body.center, barrilProp = (this.barrils || []).some(o => o.viu && !(o.nomesRunna && !Estat.te('runna')) && Phaser.Math.Distance.Between(o.x, o.y - 22, jb.x, jb.y) < 120);
+        const jb = this.ineu.body.center, barrilProp = (this.barrils || []).some(o => o.viu && !(o.nomesRunna && !Estat.te('runna')) && !(o.bloquejada && o.bloquejada()) && Phaser.Math.Distance.Between(o.x, o.y - 22, jb.x, jb.y) < 120);
         if (!this.teArma() || (pacifica && !barrilProp) || ara < (this.atacFins || 0) || this.caient || this.assegut || this.cinema || this.ineuAlt) return;
         const runna = Estat.te('runna');
         const agil = runna || Estat.te('basto_tiller');          // la branca del Til·ler (i Runna) són més ràpids i amb més abast
@@ -947,7 +947,7 @@ Object.assign(ZonaBase.prototype, {
         this.cop = { fins: ara + 200, d, L, ample: agil ? 34 : 28, dany: runna ? 3 : agil ? 2 : 1, tocats: new Set(), runna };
         this.comprovarCop();
         // Qualsevol arma trenca els barrils
-        { const bx = jo.x + d.x * 50, by = jo.y + d.y * 50; let mb = null, md = 70; this.barrils.forEach(o => { const q = o.viu && !(o.nomesRunna && !runna) ? Phaser.Math.Distance.Between(o.x, o.y - 22, bx, by) : 1e9; if (q < md) { md = q; mb = o; } }); if (mb) this.trencarBarril(mb, d); }
+        { const bx = jo.x + d.x * 50, by = jo.y + d.y * 50; let mb = null, md = 70; this.barrils.forEach(o => { const q = o.viu && !(o.nomesRunna && !runna) && !(o.bloquejada && o.bloquejada()) ? Phaser.Math.Distance.Between(o.x, o.y - 22, bx, by) : 1e9; if (q < md) { md = q; mb = o; } }); if (mb) this.trencarBarril(mb, d); }
         // Runna talla els esbarzers negres
         if (runna) {
             const px = jo.x + d.x * 55, py = jo.y + d.y * 55;
