@@ -1544,7 +1544,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { avis: "Has obtingut el PERGAMÍ DEL MONJO.", obj: 'pergami_monjo' },
-                { qui: "Pergamí", text: "«Qui baixi a la cripta que sàpiga qui hi fa guàrdia. El germà cellerer es bevia el vi de la sagristia, bóta rere bóta, i després jurava que s'havia evaporat.»" },
+                { qui: "Pergamí", text: "«Qui baixi a la cripta que sàpiga qui hi fa guàrdia. El germà bodeguer es bevia el vi de la sagristia, bóta rere bóta, i després jurava que s'havia evaporat.»" },
                 { qui: "Pergamí", text: "«Quan ho vam descobrir, el Prior no el va foragitar: el va fer petrificar i el va posar a vigilar la cripta fins que el vi es torni vinagre. A la cripta mai no es torna vinagre.»" },
                 { qui: "Pergamí", text: "«Per això li diuen l'Home del Raïm. Dorm de cara a la paret, com un nen castigat, i només es desperta si algú el fa girar i el mira a la cara. Sota l'escala hi ha la clau de ferro.»" }
             ],

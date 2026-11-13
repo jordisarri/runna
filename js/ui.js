@@ -188,7 +188,7 @@ const CATALEG_OBJECTES = {
     maneta:           ['Maneta d\'engranatge', 'De ferro: encaixa en volants i rodes vells.'],
     clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Aldreu li va caure; l\'Iscu te l\'ha donada.'],
     fragment1:        ['Pergamí partit (1/2)', 'La meitat d\'un pergamí esquinçat, trobada a les Runes.'],
-    pergami_monjo:    ['Pergamí del monjo', "«El germà cellerer es bevia el vi de la sagristia. El vam petrificar perquè vigili la cripta fins que el vi es torni vinagre (a la cripta mai no es torna). Dorm de cara a la paret i només es desperta si el mires a la cara.»"],
+    pergami_monjo:    ['Pergamí del monjo', "«El germà bodeguer es bevia el vi de la sagristia. El vam petrificar perquè vigili la cripta fins que el vi es torni vinagre (a la cripta mai no es torna). Dorm de cara a la paret i només es desperta si el mires a la cara.»"],
     carta_cortiner:   ['Carta del Cortiner', 'La va deixar al tronc del Pi dels Tres Cants: explica d\'on van sortir els tres cants i què els cal per tornar als ocells.'],
     clau_ferro:       ['Clau de ferro', 'Obre la Porta de les Gírgoles.'],
     clau_gabriel:     ['Clau de Sant Gabriel', "Te l'ha donada el Galf. Obre l'ermita de Sant Gabriel."],
