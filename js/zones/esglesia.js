@@ -15,10 +15,8 @@ class ZonaEsglesia extends ZonaBase {
         if (on) {
             if (!this.anims.exists('idle_pianista')) this.anims.create({ key: 'idle_pianista', frames: this.anims.generateFrameNumbers('pianista_idle', { start: 0, end: NPC_IDLE.pianista.n - 1 }), frameRate: NPC_IDLE.pianista.fps, repeat: -1 });
             pia.setTexture('pianista_idle', 0).setFlipX(false); pia.escalaBase = pia.scaleX = pia.scaleY = this.textures.get('pianista_esquena').customData.escala * 0.85;       // (l'orgue és més petit: ella també)
-            pia.setY(this.orgue.y - 12); pia.play('idle_pianista'); if (pia.ombra) pia.ombra.setY(this.orgue.y - 12);
-            // mentre toca, tot el cos es balanceja al ritme (rotació des dels peus, sense canviar de mida) perquè es noti que toca
-            if (pia.balToca) pia.balToca.remove();
-            pia.balToca = this.tweens.add({ targets: pia, angle: { from: -3.5, to: 3.5 }, yoyo: true, repeat: -1, duration: 430, ease: 'Sine.easeInOut' });
+            if (pia.balToca) { pia.balToca.remove(); pia.balToca = null; }           // (no es balanceja: només les mans i el cos de l'animació)
+            pia.setAngle(0).setY(this.orgue.y + 1); pia.play('idle_pianista'); if (pia.ombra) pia.ombra.setY(this.orgue.y + 1);       // el banc, una mica més avall: queda davant del teclat
         } else {
             if (pia.anims) pia.anims.stop();
             if (pia.balToca) { pia.balToca.remove(); pia.balToca = null; } pia.setAngle(0);
@@ -68,7 +66,7 @@ class ZonaEsglesia extends ZonaBase {
         this.colisio(420, A - 10, 360, 20);
         this.colisio(860, A - 10, 360, 20);
 
-        // Presbiteri: terra una mica més clar fins als dos graons (ySt), on hi ha l'altar, l'orgue amb la Pianista i el Pare Daimiel
+        // Presbiteri: terra una mica més clar fins als dos graons (ySt), on hi ha l'altar, l'orgue amb la Pianista i el Pare Nadiel
         const ySt = ESG.retY + 300, pg = this.add.graphics().setDepth(-1090);
         pg.fillStyle(0xffe2a0, 0.14).fillRect(240, ESG.retY, 800, ySt - ESG.retY);
         pg.fillStyle(0xf0e2b8, 1).fillRect(240, ySt, 800, 24).fillStyle(0x6e5a38, 1).fillRect(240, ySt + 24, 800, 16).fillStyle(0x000000, 0.3).fillRect(240, ySt + 40, 800, 3);       // primer graó: replà i contrapetja
@@ -97,7 +95,7 @@ class ZonaEsglesia extends ZonaBase {
         this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });     // el sagrari, al mig del retaule (fragment 2)
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 }, opac: true });
 
-        // Portes del peu del retaule: totes dues tancades. Quan el Pare Daimiel diu que el rellotge s'ha aturat (rellotgeDit)
+        // Portes del peu del retaule: totes dues tancades. Quan el Pare Nadiel diu que el rellotge s'ha aturat (rellotgeDit)
         // s'obre la de la dreta, que duu a la torre i a la Sala del Rellotge. L'esquerra és només decorativa: no s'obre mai i no té cap punt d'interacció.
         this.portaRellotge = false;
         this.obrirPortaRellotge(false);
@@ -108,8 +106,8 @@ class ZonaEsglesia extends ZonaBase {
             pagines: [{ qui: 'Ineu', text: 'Tancada amb clau.' }]
         }), { altura: 150, actiu: () => !this.portaRellotge });
 
-        // Orgue (la Pianista seu a l'orgue) i el Pare Daimiel, que dirigeix el cor
-        const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, el Pare Daimiel es posa amb la resta; l'orgue, la Pianista (asseguda: no s'aixeca) i els bancs es queden al seu lloc
+        // Orgue (la Pianista seu a l'orgue) i el Pare Nadiel, que dirigeix el cor
+        const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, el Pare Nadiel es posa amb la resta; l'orgue, la Pianista (asseguda: no s'aixeca) i els bancs es queden al seu lloc
         this.orgue = this.posar('orgue', 850, ESG.retY + 264, { col: { w: 110, h: 50 }, opac: true });
         {
             // La Pianista és de cara al banc de l'orgue; només hi toca d'esquena (animada) quan l'Ineu la troba la primera vegada i mentre ensenya un cant (pianistaToca)
@@ -117,9 +115,11 @@ class ZonaEsglesia extends ZonaBase {
             pia.setDepth(this.orgue.y + 1);                                                                       // per davant de l'orgue
             [pia.respira, pia.balanceig].forEach(t => t && t.remove()); pia.respira = pia.balanceig = null; pia.setAngle(0);       // fixa: ni respira ni es balanceja (no canvia de mida)
             pia.punt.npc = null;                                                                                  // l'Ineu no es fa enrere en parlar-hi: es posa al costat de l'orgue (pianistaCara)
+            // Sempre és tocant l'orgue (d'esquena); només para per parlar amb l'Ineu
+            if (!epileg) this.pianistaToca(true);
         }
         if (!epileg) this.npc('pare_daimiel', 440, ESG.retY + 215, DIALEGS.pareDaimiel, { flipX: false });
-        if (!epileg) this.posar('atril_barroc', 340, ESG.retY + 262, { col: { w: 34, h: 14 }, opac: true });      // atril barroc daurat, girat d'esquena (no es veu el llibre), a l'esquerra del presbiteri i per davant del Pare Daimiel
+        if (!epileg) this.posar('atril_barroc', 340, ESG.retY + 262, { col: { w: 34, h: 14 }, opac: true });      // atril barroc daurat, girat d'esquena (no es veu el llibre), a l'esquerra del presbiteri i per davant del Pare Nadiel
 
         // Bancs, vistos per darrere (amb respatller), mirant cap a l'altar (a l'epíleg es retiren: la gent és de peu, en files, i no es tapa)
         if (!epileg) {
@@ -181,7 +181,7 @@ class ZonaEsglesia extends ZonaBase {
         const AD = 140, NEN = 105, FILES = [R + 480, R + 610, R + 740];
         const seient = (fila, costat, n) => [(costat < 0 ? [345, 430, 515] : [765, 850, 935])[n], FILES[fila]];
         [['nen_uri', 480, R + 245, NEN], ['nen_flam', 590, R + 245, NEN], ['nen_sardin', 700, R + 245, NEN],      // els tres nens, separats, al peu de l'altar
-         ['pare_daimiel', 360, R + 215, AD], ['pare_jorda', 965, R + 215, AD],                                      // el presbiteri: el Pare Daimiel a l'esquerra, el Pare Jordà a la dreta, i l'orgue amb la Pianista asseguda
+         ['pare_daimiel', 360, R + 215, AD], ['pare_jorda', 965, R + 215, AD],                                      // el presbiteri: el Pare Nadiel a l'esquerra, el Pare Jordà a la dreta, i l'orgue amb la Pianista asseguda
          ['carry', ...seient(0, -1, 0), AD], ['pare_alcovi', ...seient(0, -1, 1), AD], ['venerables', ...seient(0, -1, 2), AD],
          ['isilder', ...seient(0, 1, 0), AD], ['carmelia', ...seient(0, 1, 1), AD], ['pilaria', ...seient(0, 1, 2), AD],
          ['meus', ...seient(1, -1, 0), AD], ['molner', ...seient(1, -1, 1), AD], ['mandu', ...seient(1, -1, 2), NEN],
@@ -342,7 +342,7 @@ class ZonaEsglesia extends ZonaBase {
             ...(Estat.flag('rellotgeReparat') ? [
                 { fer: (z, fet) => { [0, 1, 2].forEach(k => z.time.delayedCall(k * 850, () => Sfx.campana())); z.esperar(3000, fet); } },
                 foc(['pare_daimiel'], 1.9),
-                { qui: 'Pare Daimiel', text: "Sents la torre del rellotge, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu." },
+                { qui: 'Pare Nadiel', text: "Sents la torre del rellotge, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu." },
                 ...(hi('carry') ? [foc(['carry'], 1.9), { qui: 'Carry', text: "El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill." }] : [])
             ] : []),
             // L'Ineu explica al Pare Jordà què ha passat amb l'Aldreu, i el prior tanca l'epíleg
@@ -405,7 +405,7 @@ class ZonaEsglesia extends ZonaBase {
         });
     }
 
-    // Obre la porta de la dreta del retaule si el Pare Daimiel ja ha parlat del rellotge (també a mitja visita)
+    // Obre la porta de la dreta del retaule si el Pare Nadiel ja ha parlat del rellotge (també a mitja visita)
     obrirPortaRellotge(avis) {
         if (this.portaRellotge || !(Estat.flag('portaCampanarOberta') || Estat.flag('rellotgeReparat') || Estat.flag('visitada_ZonaTorre'))) return;   // (partides velles: ja hi havien pujat)
         this.portaRellotge = true;                // el batent de la porta (portaRetaule) ja no queda bloquejat: s'obre quan l'Ineu s'hi acosta

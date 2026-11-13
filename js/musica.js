@@ -27,6 +27,8 @@ MELODIES.miracle.peca = [['Do', 1], ['Mi', 1], ['Fa', 1], ['Sol', 2], ['Mi', 2],
 const BOTO_DE = f => { const fs = [262, 294, 330, 349, 392]; let millor = 0; fs.forEach((x, i) => { if (Math.abs(x - f) < Math.abs(fs[millor] - f)) millor = i; }); return millor + 1; };
 
 const COLOR_NOTA = 0xd7ae58;
+// Un color per a cada nota (Do vermell, Re taronja, Mi groc, Fa verd, Sol blau): cada botó s'il·lumina del seu color
+const COLORS_NOTA = [0, 0xff7a6a, 0xffb04a, 0xf5e063, 0x86e08e, 0x72b8ff];
 // Les cinc notes: Do, Re, Mi, Fa i Sol (Do major, com el tema principal)
 const FREQ_NOTA = [0, 262, 294, 330, 349, 392];
 
@@ -40,8 +42,8 @@ function iniciarLliço(nom) {
         game.scene.start('Musica', { mode: 'llico', melodia: nom });
         game.scene.bringToTop('Musica');
         const ms = game.scene.getScene('Musica');
-        if (ms && z && z.pianistaToca) ms.events.once('shutdown', () => z.pianistaToca(false));
-    }, 150);
+        if (ms && z && z.pianistaToca) ms.events.once('shutdown', () => { const u = game.scene.getScene('UI'); if (!(u && u.dialeg)) z.pianistaToca(true); });          // continua tocant (només para per parlar)
+    }, 30);            // (sense esperar: del quadre de text s'ha de passar directament a la interfície de la tarota)
 }
 
 // Lliçó acabada amb èxit: el cant queda après
@@ -80,7 +82,9 @@ function completarLliço(nom) {
         E.posaObjectiu(!E.flag('jusefVencut') ? "Al Celler, els secrets es guanyen a la taula."
             : !E.flag('rodaMoguda') ? "La roda de carruatge del Celler amaga el túnel dels monjos." : 'Segueix el túnel dels monjos fins a la Casa Gran.');
     }
-    if (ui) ui.obrirDialeg({ pagines }, () => E.desar());
+    const zP = ui && Joc.zonaActiva(ui);
+    if (zP && zP.pianistaToca) zP.pianistaToca(false);                                  // para per parlar amb l'Ineu
+    if (ui) ui.obrirDialeg({ pagines }, () => { E.desar(); if (zP && zP.pianistaToca) zP.pianistaToca(true); });
 }
 
 // Mides del pergamí de la tarota (a baix de la pantalla; el joc es continua veient a sobre)
@@ -106,6 +110,7 @@ class EscenaMusica extends Phaser.Scene {
             this.events.once('shutdown', () => { if (Joc.musica === mFons && mFons.isPlaying) mFons.setVolume(0.6); });
         }
         const zonaFl = Joc.zonaActiva(this);
+        this.zonaMus = zonaFl;                                              // (mentre dura la tarota la zona és aturada i Joc.zonaActiva no la troba)
         if (zonaFl && zonaFl.ineuFlauta) zonaFl.ineuFlauta(true);          // l'Ineu es veu de cara, tocant la flauta
 
         const cx = AMPLE / 2, T = MUS_T;
@@ -151,25 +156,19 @@ class EscenaMusica extends Phaser.Scene {
             fl.lineTo(cx + 242, fy + 48); fl.lineTo(cx + 206, fy + 36); fl.lineTo(cx + 120, fy + 16); fl.lineTo(esquerra + 22, fy + 8);
             fl.closePath(); fl.fillPath();
         }
-        // Posició dels cinc forats sobre la imatge de la tarota (o alineats amb els botons si no hi ha imatge)
-        const FORATS_DX = [0, -0.0838, -0.0245, 0.0348, 0.0955, 0.1547], FORATS_DY = [0, -0.0374, -0.0352, -0.0329, -0.0310, -0.0299];
+        // Els cinc botons grans (res més: ni forats a la tarota ni noms de notes)
+        this.fyTarota = fy;
         const PAS = 124, RAD = 42;
         this.botons = [null, 1, 2, 3, 4, 5].map(n => {
             if (!n) return null;
-            const x = cx + (n - 3) * PAS, by = T + 287;
-            const fx = teImgTarota ? cx + FORATS_DX[n] * tw : x, fyForat = teImgTarota ? fy + FORATS_DY[n] * th : fy;
-            const forat = add(this.add.circle(fx, fyForat, 7.5, COLOR_NOTA, 0));
-            const halo = add(this.add.circle(fx, fyForat, 20, COLOR_NOTA, 0).setBlendMode(Phaser.BlendModes.ADD));
+            const x = cx + (n - 3) * PAS, by = T + 287, color = COLORS_NOTA[n];
+            const halo = add(this.add.circle(x, by, RAD + 12, color, 0).setBlendMode(Phaser.BlendModes.ADD));
             const base = add(this.add.circle(x, by, RAD, 0x70451f, 1).setStrokeStyle(4, 0x3a2412, 1).setInteractive({ useHandCursor: true }));
             base.on('pointerdown', () => this.nota(n, true));
-            const gemma = add(this.add.circle(x, by, RAD - 8, COLOR_NOTA, 1).setStrokeStyle(3, 0x3a2412, 1));
+            const gemma = add(this.add.circle(x, by, RAD - 8, color, 0.75).setStrokeStyle(3, 0x3a2412, 1));
             add(this.add.ellipse(x - 9, by - 15, 18, 9, 0xffffff, 0.4));
             add(this.add.text(x, by + 1, String(n), { fontFamily: FONT_TITOL, fontSize: '33px', fontStyle: 'bold', color: '#3a2412', stroke: '#f5e2ad', strokeThickness: 2, resolution: 2 }).setOrigin(0.5));
-            const etiqueta = add(this.add.graphics());
-            etiqueta.fillStyle(0xf1dfb1, 0.92).fillRoundedRect(x - 36, by + 50, 72, 27, 8);
-            etiqueta.lineStyle(2, 0x79552b, 0.9).strokeRoundedRect(x - 36, by + 50, 72, 27, 8);
-            add(this.add.text(x, by + 63, NOM_NOTA[n], { ...llibre, fontSize: '17px', fontStyle: 'bold', color: '#3a2412' }).setOrigin(0.5));
-            return { x, by, base, gemma, forat, halo, rad: RAD };
+            return { x, by, base, gemma, halo, rad: RAD, color };
         });
 
         // Teclat: 1 a 5 (o el teclat numèric), o bé A S D F G
@@ -179,19 +178,25 @@ class EscenaMusica extends Phaser.Scene {
         k.on('keydown-ESC', () => { if (this.capaPerSobre()) return; if (this.llico && this.actuant) this.tancar(true); else this.tancar(false, this.actuant || undefined); });       // durant la peça completa, ESC la salta i l'efecte es dóna igual
 
         if (llico) {
-            this.titol.setText('Lliçó: ' + this.melodia.nom);
+            this.titol.setText(this.melodia.nom);
             this.time.delayedCall(700, () => this.reproduir());
         } else {
-            this.titol.setText('La tarota del Cortiner');
-            this.estat.setText('Toca un cant que recordis (les notes són al Diari).');
-            if (!Object.values(MELODIES).some(m => Estat.flag(m.flag))) {
-                this.estat.setText('Encara no coneixes cap cant.');
-            }
+            this.titol.setText('');                      // només el nom del cant, quan se'n toca un
             add(this.add.text(cx + MUS_W / 2 - 34, T + 40, '✕', { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#6a1f12', padding: { x: 8, y: 4 }, resolution: 2 })
                 .setOrigin(0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => { if (!this.capaPerSobre()) this.tancar(false); }));
             this.lastTime = 0;
         }
-        this.tweens.add({ targets: this.panell, alpha: 1, y: ALT * (1 - this.escPergami), duration: 350, ease: 'Sine.easeOut' });
+        this.tweens.add({ targets: this.panell, alpha: 1, y: ALT * (1 - this.escPergami), duration: 250, ease: 'Sine.easeOut' });
+        // El joc s'atura mentre dura la tarota (enemics, físiques i temporitzadors de l'escenari): es reprèn en tancar-la
+        const zp = Joc.zonaActiva(this);
+        if (zp && zp.scene && zp.sys.isActive() && !zp.sys.isPaused()) { this.zonaPausada = zp; zp.sys.pause(); }
+        this.events.once('shutdown', () => this.reprenZona());
+    }
+
+    reprenZona() {
+        const zp = this.zonaPausada;
+        this.zonaPausada = null;
+        if (zp && zp.sys && zp.sys.isPaused()) zp.sys.resume();
     }
 
     // Hi ha el menú, el diari o l'objectiu oberts a sobre (o s'acaben de tancar): la tarota no ha de rebre ni tecles ni clics
@@ -227,12 +232,12 @@ class EscenaMusica extends Phaser.Scene {
         this.imgPrimerPla = img;
         img.setAlpha(0).y += 40;
         this.tweens.add({ targets: img, alpha: 1, y: T + 60, duration: 380, ease: 'Back.easeOut' });
-        this.tweens.add({ targets: this.velPrimerPla, fillAlpha: 0.38, duration: 380 });
+        this.tweens.add({ targets: this.velPrimerPla, fillAlpha: 0.82, duration: 160 });           // el joc queda enfosquit i aturat, com en una pausa
         this.tweens.add({ targets: this.auraPrimerPla, fillAlpha: 0.16, duration: 600 });
         this.tweens.add({ targets: img, angle: { from: -1.5, to: 1.5 }, yoyo: true, repeat: -1, duration: 1600, ease: 'Sine.easeInOut' });   // es gronxa tocant
         this.posBroc = { x: cx + img.displayWidth * 0.38, y: T + 60 - alt * 0.19 };      // per on surten les notes: la campana de la tarota (a baix a la dreta), no els forats que tapen els dits
         const zonaPla = Joc.zonaActiva(this);
-        if (zonaPla && zonaPla.amagarIneuFlauta) zonaPla.amagarIneuFlauta();           // l'Ineu de l'escenari desapareix mentre surt aquest
+        if (zonaPla && zonaPla.amagarIneuFlauta) { zonaPla.amagarIneuFlauta(); const o = zonaPla.ineuFlautaImg || zonaPla.ineu; if (o) o.setAlpha(0); }           // l'Ineu de l'escenari desapareix de seguida (el joc s'atura)
     }
     // Cada nota de l'Ineu: el primer pla fa un petit impuls i en surt una nota musical que puja
     impulsPrimerPla(n) {
@@ -241,11 +246,16 @@ class EscenaMusica extends Phaser.Scene {
         const e = this.escPrimerPla;
         this.tweens.add({ targets: img, scale: { from: e * 1.04, to: e }, duration: 260, ease: 'Back.easeOut' });
         this.tweens.add({ targets: this.auraPrimerPla, fillAlpha: { from: 0.34, to: 0.16 }, duration: 420 });
-        const p = this.posBroc, x = p.x + (n - 3) * 18;
-        const t = this.add.text(x, p.y, n % 2 === 0 ? '♫' : '♪', { fontFamily: FONT_TITOL, fontSize: '54px', fontStyle: 'bold', color: '#ffe08a', stroke: '#5a3410', strokeThickness: 5, resolution: 2 })
-            .setOrigin(0.5).setDepth(0).setScale(0.4);
-        this.tweens.add({ targets: t, y: p.y - 150 - Math.random() * 60, x: x + 25 + Math.random() * 45, scale: 1, angle: (Math.random() - 0.5) * 40, duration: 1300, ease: 'Sine.easeOut' });
-        this.tweens.add({ targets: t, alpha: 0, delay: 800, duration: 500, onComplete: () => t.destroy() });
+        const p = this.posBroc, color = COLORS_NOTA[n] || COLOR_NOTA;
+        if (this.auraPrimerPla && this.auraPrimerPla.active) this.auraPrimerPla.setFillStyle(color, this.auraPrimerPla.fillAlpha);
+        const css = '#' + color.toString(16).padStart(6, '0');
+        for (let k = 0; k < 2; k++) {
+            const x = p.x + (n - 3) * 18 + (k ? 20 : -10);
+            const t = this.add.text(x, p.y, (n + k) % 2 === 0 ? '♫' : '♪', { fontFamily: FONT_TITOL, fontSize: '54px', fontStyle: 'bold', color: css, stroke: '#3a1c08', strokeThickness: 6, resolution: 2 })
+                .setOrigin(0.5).setDepth(0).setScale(0.4);
+            this.tweens.add({ targets: t, y: p.y - 150 - Math.random() * 80, x: x + (k ? 40 : -20) + Math.random() * 40, scale: 1.1, angle: (Math.random() - 0.5) * 50, duration: 1300, ease: 'Sine.easeOut' });
+            this.tweens.add({ targets: t, alpha: 0, delay: 800, duration: 500, onComplete: () => t.destroy() });
+        }
     }
 
     // ---- So i imatge de cada nota ----
@@ -257,20 +267,51 @@ class EscenaMusica extends Phaser.Scene {
         Sfx.ocarina((freq || FREQ_NOTA[n]) * 2, Math.max(0.55, dur), 0.26);
     }
 
-    // La gemma s'encén i rebota, el forat de la tarota brilla i una ona surt del botó
+    // Cada nota: el botó s'aixafa i rebota, flaix blanc, ones de color, espurnes i un raig de llum que puja cap a la tarota (sense sacsejar la pantalla)
     llum(n, freq, dur) {
-        const b = this.botons[n], color = COLOR_NOTA;
+        const b = this.botons[n], color = b.color, P = this.panell;
         this.so(n, freq, dur);
-        b.gemma.setFillStyle(color, 1);
-        this.tweens.add({ targets: [b.base, b.gemma], scale: { from: 1.14, to: 1 }, duration: 260, ease: 'Back.easeOut' });
-        this.time.delayedCall(280, () => { if (b.gemma.active) b.gemma.setFillStyle(color, 0.7); });
-        b.forat.setFillStyle(color, 0.95);
-        b.halo.setAlpha(0.85);
-        this.tweens.add({ targets: b.halo, alpha: 0, scale: { from: 1, to: 1.8 }, duration: 520 });
-        this.time.delayedCall(320, () => { if (b.forat.active) b.forat.setFillStyle(color, 0); });
-        const ona = this.add.circle(b.x, b.by, b.rad).setStrokeStyle(4, color, 0.9);
-        this.panell.add(ona);
-        this.tweens.add({ targets: ona, scale: 1.7, alpha: 0, duration: 520, onComplete: () => ona.destroy() });
+        this.tweens.killTweensOf([b.base, b.gemma]);
+        b.gemma.setFillStyle(color, 1).setAlpha(1);
+        b.base.setScale(1); b.gemma.setScale(1);
+        this.tweens.add({ targets: [b.base, b.gemma], scaleX: { from: 1.28, to: 1 }, scaleY: { from: 0.76, to: 1 }, duration: 340, ease: 'Back.easeOut' });
+        this.time.delayedCall(420, () => { if (b.gemma.active) b.gemma.setFillStyle(color, 0.75); });
+        // halo i flaix
+        b.halo.setAlpha(0.95); this.tweens.add({ targets: b.halo, alpha: 0, scale: { from: 1, to: 2 }, duration: 560 });
+        const fl = this.add.circle(b.x, b.by, b.rad - 6, 0xffffff, 0.9); P.add(fl);
+        this.tweens.add({ targets: fl, alpha: 0, scale: 1.6, duration: 280, onComplete: () => fl.destroy() });
+        // dues ones de color
+        [0, 120].forEach(d => {
+            const ona = this.add.circle(b.x, b.by, b.rad).setStrokeStyle(5, color, 0.95); P.add(ona);
+            this.tweens.add({ targets: ona, scale: 2.3, alpha: 0, duration: 650, delay: d, onComplete: () => ona.destroy() });
+        });
+        // espurnes en totes direccions
+        for (let i = 0; i < 14; i++) {
+            const a = (i / 14) * Math.PI * 2 + Math.random() * 0.4, d = 70 + Math.random() * 70;
+            const dot = this.add.circle(b.x, b.by, 3 + Math.random() * 4, i % 3 ? color : 0xffffff, 1); P.add(dot);
+            this.tweens.add({ targets: dot, x: b.x + Math.cos(a) * d, y: b.by + Math.sin(a) * d - 20, alpha: 0, scale: 0.2, duration: 520 + Math.random() * 260, ease: 'Cubic.easeOut', onComplete: () => dot.destroy() });
+        }
+        // raig de llum cap a la tarota
+        const fy = this.fyTarota, h = b.by - fy;
+        const raig = this.add.rectangle(b.x, (b.by + fy) / 2, 26, h, color, 0.5).setBlendMode(Phaser.BlendModes.ADD); P.add(raig);
+        this.tweens.add({ targets: raig, alpha: 0, scaleX: 0.2, duration: 520, onComplete: () => raig.destroy() });
+    }
+
+    // Error: el pergamí es sacseja a banda i banda
+    tremolaPanell() {
+        const P = this.panell, x0 = AMPLE / 2 * (1 - this.escPergami);
+        this.tweens.add({ targets: P, x: { from: x0 - 14, to: x0 + 14 }, yoyo: true, repeat: 2, duration: 55, onComplete: () => P.setX(x0) });
+    }
+
+    // Èxit: pluja de confeti de color des del pergamí, la fila de notes brilla
+    celebracio() {
+        const cx = AMPLE / 2, T = MUS_T, P = this.panell;
+        for (let i = 0; i < 40; i++) {
+            const c = COLORS_NOTA[1 + (i % 5)], x = cx + (Math.random() - 0.5) * 420;
+            const dot = this.add.rectangle(x, T + 140, 8 + Math.random() * 6, 5 + Math.random() * 5, c, 1).setAngle(Math.random() * 360); P.add(dot);
+            this.tweens.add({ targets: dot, x: x + (Math.random() - 0.5) * 220, y: T - 20 - Math.random() * 160, angle: dot.angle + 360, alpha: 0, duration: 900 + Math.random() * 500, ease: 'Cubic.easeOut', onComplete: () => dot.destroy() });
+        }
+        if (this.auraPrimerPla && this.auraPrimerPla.active) this.tweens.add({ targets: this.auraPrimerPla, fillAlpha: { from: 0.6, to: 0.16 }, duration: 700 });
     }
 
     // Fila de notes: omple cada casella amb el mateix color daurat
@@ -278,13 +319,13 @@ class EscenaMusica extends Phaser.Scene {
         const vistes = notes.slice(-this.slots.length);
         this.slots.forEach((sl, i) => {
             const n = vistes[i];
-            sl.ple.setFillStyle(n ? COLOR_NOTA : 0x000000, n ? 1 : 0.08);
+            sl.ple.setFillStyle(n ? COLORS_NOTA[n] || COLOR_NOTA : 0x000000, n ? 1 : 0.08);
             sl.anell.setStrokeStyle(3, n ? 0x3a2412 : 0x5a3a1a, n ? 1 : 0.8);
-            if (n) this.tweens.add({ targets: [sl.ple, sl.anell], scale: { from: 1.35, to: 1 }, duration: 220, ease: 'Back.easeOut' });
+            if (n && i === vistes.length - 1) this.tweens.add({ targets: [sl.ple, sl.anell], scale: { from: 1.5, to: 1 }, duration: 240, ease: 'Back.easeOut' });          // només la nota nova rebota
         });
     }
     flaixSlots(color) {
-        this.slots.forEach(sl => { sl.ple.setFillStyle(color, 1); this.tweens.add({ targets: [sl.ple, sl.anell], scale: { from: 1.25, to: 1 }, duration: 300, ease: 'Back.easeOut' }); });
+        this.slots.forEach(sl => { if (color !== 0xe8c040) sl.ple.setFillStyle(color, 1); this.tweens.add({ targets: [sl.ple, sl.anell], scale: { from: 1.25, to: 1 }, duration: 300, ease: 'Back.easeOut' }); });
     }
 
     // ---- Lliçó: la Pianista toca i l'Ineu repeteix ----
@@ -292,13 +333,11 @@ class EscenaMusica extends Phaser.Scene {
         this.bloquejat = true;
         this.entrada = [];
         this.pintaSlots([]);
-        this.estat.setText('Escolta la Pianista...');
         this.melodia.notes.forEach((n, i) => this.time.delayedCall(i * 650, () => { this.llum(n); this.pintaSlots(this.melodia.notes.slice(0, i + 1)); }));
         this.time.delayedCall(this.melodia.notes.length * 650 + 300, () => {
             this.bloquejat = false;
             this.entrada = [];
             this.pintaSlots([]);
-            this.estat.setText('Ara tu! Repeteix la seqüència amb els botons o les tecles.');
         });
     }
 
@@ -314,12 +353,12 @@ class EscenaMusica extends Phaser.Scene {
             if (this.melodia.notes[i] !== n) {
                 this.bloquejat = true;
                 this.flaixSlots(0xb03030);
-                this.estat.setText('Això no era... torna a escoltar.');
+                this.tremolaPanell();
                 this.time.delayedCall(1000, () => this.reproduir());
             } else if (this.entrada.length === this.melodia.notes.length) {
                 this.bloquejat = true;
                 this.flaixSlots(0xe8c040);
-                this.estat.setText('Perfecte!');
+                this.celebracio();
                 // Després de la clau, la tarota continua tota sola i sona el cant sencer (com al joc); en acabar (o amb ESC), la lliçó queda apresa
                 if (this.melodia.peca) this.time.delayedCall(900, () => this.actuacio(this.dades.melodia, this.melodia, () => this.tancar(true)));
                 else this.time.delayedCall(900, () => this.tancar(true));
@@ -338,8 +377,9 @@ class EscenaMusica extends Phaser.Scene {
             if (fi.length === l && fi.every((x, i) => x === m.notes[i])) {
                 this.bloquejat = true;
                 this.flaixSlots(0xe8c040);
-                this.estat.setText('♪ ' + m.nom);
-                const zona = Joc.zonaActiva(this);
+                this.titol.setText(m.nom);
+                this.celebracio();
+                const zona = this.zonaMus;
                 if (m.peca && zona && zona.teEfecteMelodia && zona.teEfecteMelodia(clau)) this.time.delayedCall(700, () => this.actuacio(clau, m));
                 else this.time.delayedCall(700, () => this.tancar(false, clau));
                 return;
@@ -355,7 +395,7 @@ class EscenaMusica extends Phaser.Scene {
         const temps = 60000 / m.bpm;
         this.creaSlots(m.peca.length);
         this.pintaSlots([]);
-        this.estat.setText('♪ ' + m.nom + (fi ? ', sencer' : '') + '');
+        this.titol.setText(m.nom);
         let t = 250;
         m.peca.forEach(([nota, durada], i) => {
             const f = NOTES_FREQ[nota], boto = BOTO_DE(f);
@@ -363,7 +403,7 @@ class EscenaMusica extends Phaser.Scene {
                 if (this.tancat) return;
                 this.llum(boto, f, durada * temps / 1000);
                 this.impulsPrimerPla(boto);
-                this.pintaSlots(m.peca.slice(0, i + 1).map(() => 1));
+                this.pintaSlots(m.peca.slice(0, i + 1).map(([nt]) => BOTO_DE(NOTES_FREQ[nt])));       // cada rodona, del color del botó de la seva nota
             });
             t += durada * temps;
         });
@@ -374,15 +414,16 @@ class EscenaMusica extends Phaser.Scene {
         if (this.tancat) return;
         this.tancat = true;
         const nom = this.llico ? this.dades.melodia : null;
-        const zonaFl = Joc.zonaActiva(this);
+        const zonaFl = this.zonaMus;
         const acabar = () => {
+            this.reprenZona();                                                    // el joc torna a avançar abans que l'Ineu i la zona reaccionin
             const ui = this.scene.get('UI');
             if (ui) ui.bloquejatFins = ui.time.now + 300;
             if (zonaFl && zonaFl.ineuFlauta) zonaFl.ineuFlauta(false);          // l'Ineu de l'escenari torna (amb un fade in si s'havia amagat)
             this.scene.stop();
             if (this.llico && exit) completarLliço(nom);
             if (melodiaTocada) {
-                const zona = Joc.zonaActiva(this);
+                const zona = this.zonaMus;
                 if (zona) zona.melodiaTocada(melodiaTocada);
             }
         };

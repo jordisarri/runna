@@ -24,7 +24,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Pare Jordà** | Plaça / Monestir | Prior. Encarrega la missió i dona la Benedicció. |
 | **Pare Alcoví** | Biblioteca (Monestir) | Llegeix els pergamins; dona el Saber. |
 | **La Pianista** | Santuari | Ensenya els tres cants (Aurora, Vespres, Miracle) i dona la tarota. |
-| **Pare Daimiel** | Santuari | Dirigeix el cor. |
+| **Pare Nadiel** | Santuari | Dirigeix el cor. |
 | **Germà Francí** | Monestir / Sant Antoni | Monjo vell; dona els Guants de Poder. |
 | **Germà Aldreu** | Plaça, Cirosa, Gàbia | Antagonista simpàtic: servent de l'Ocellaire (el «Pastor de Boira»). |
 | **L'Ocellaire (L'Home de la Gàbia)** | Sala de la Gàbia | Boss final. |
@@ -104,7 +104,7 @@ L'Ineu parla amb el prior: li explica la desaparició dels nens i li demana que 
 Simpàtic i rialler (parla de cromos i del Barça), li dona el **bastó de pelegrí**. *Atenció a la lectura: aquest és el futur Pastor de Boira; a la Plaça sembla inofensiu.*
 
 **Pas 3 · Santuari (interior) — la Pianista** `pianista`
-L'orgue no sona. Ensenya el **Cant de l'Aurora** i dona la **tarota del Cortiner**. Així s'aprèn a tocar els cants (tecles 1-2-3 o ← ESPAI →; al mòbil, tres cercles). També hi és el Pare Daimiel `pareDaimiel` (cor i rellotge aturat).
+L'orgue no sona. Ensenya el **Cant de l'Aurora** i dona la **tarota del Cortiner**. Així s'aprèn a tocar els cants (tecles 1-2-3 o ← ESPAI →; al mòbil, tres cercles). També hi és el Pare Nadiel `pareDaimiel` (cor i rellotge aturat).
 
 **Pas 4 · La Bassadòria (sud de la Plaça) — netejar l'aigua** `bassadoria` `bassadoriaNeta`
 Amb la tarota, el Cant de l'Aurora neteja l'aigua tèrbola (en surten gripaus enverinats i boira). La Creu de l'Aparició reacciona `creu`.
@@ -163,7 +163,7 @@ L'Ineu llegeix el pergamí entre dues pedres; la llum s'apaga i **apareix l'ombr
 Per tot el camí hi ha **12 columnes** que «parlen»: cada una dona una paraula. La frase completa és: *«Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l'alba.»* A l'ermita, les taules de pedra demanen que algú la digui davant l'altar: premi, la **clau del sagrari**. (Al muret d'arbres del nord del camí hi ha un forat més ample cap a la **cabana amagada** de l'Iscu: vegeu el pas 31.)
 
 **Pas 17 · Santuari — fragment 2 (sagrari) i Cant de Vespres** `sagrari` `pareDaimiel` `pianista`
-El Pare Daimiel només parla del sagrari quan l'Ineu ja té el primer pergamí. La clau petita obre el sagrari del retaule: **fragment 2**. La Pianista ensenya el **Cant de Vespres** (3-1-2-1) un cop l'ombra el demana; el mateix cant desperta la **pedra secreta** de la façana del Santuari (sala del tresor: +1 cor, `pedraEscolta` `cofreTresor`).
+El Pare Nadiel només parla del sagrari quan l'Ineu ja té el primer pergamí. La clau petita obre el sagrari del retaule: **fragment 2**. La Pianista ensenya el **Cant de Vespres** (3-1-2-1) un cop l'ombra el demana; el mateix cant desperta la **pedra secreta** de la façana del Santuari (sala del tresor: +1 cor, `pedraEscolta` `cofreTresor`).
 
 **Pas 18 · Biblioteca — Pare Alcoví** `pareAlcovi`
 Llegeix els fragments i els compara amb la Crònica: en un marge hi diu que l'ombra apareix a les Runes. Activa el fragment 3 i demana a l'Ineu que hi parli.
@@ -258,7 +258,7 @@ Les Venerables Sàvies recorden una lateral quan la història principal és atur
 |---|---|---|---|
 | **Taverna i l'Eve** | Des de l'inici: truca a la Taverna | Parla amb l'Eve (`eve`) | Pistes sobre l'Aldreu i les Gírgoles. |
 | **Carry i el Pallofa** | Parla amb la Carry (Nostra Senyora) `carry` `pallofa` | Troba el gos **Pallofa** a Sant Antoni i porta-l'hi | **Clau del campanar**. |
-| **Rellotge del campanar** | Amb la clau del campanar; el Pare Daimiel obre la porta de la dreta del retaule | Torre → Sala del Rellotge: tres engranatges (petit, gran, mitjà, segons la nota del campaner) | El rellotge camina; a l'epíleg toca tres campanades. |
+| **Rellotge del campanar** | Amb la clau del campanar; el Pare Nadiel obre la porta de la dreta del retaule | Torre → Sala del Rellotge: tres engranatges (petit, gran, mitjà, segons la nota del campaner) | El rellotge camina; a l'epíleg toca tres campanades. |
 | **Tresor del Santuari** | Després del Cant de Vespres `pedraEscolta` | Tocar el Cant de Vespres davant la pedra de la façana | Sala del tresor: +1 cor. |
 | **Nena de les Trenes** | Camí de la Rovellonera `nenaTrenes` | Recupera dos llaços: un pel camí de la Rovellonera i l'altre a la primera clariana | S'allibera l'esperit. |
 | **Pi dels Tres Cants** | Després del Cant del Miracle; al sud de Sant Antoni, entrant per llevant (bosc llarg) | Toca els tres cants davant el pi | Les branques reviscolen; **Carta del Cortiner**. |

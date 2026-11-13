@@ -42,7 +42,7 @@ class ZonaPlaca extends ZonaBase {
         this.colisio(683, 345, 90, 80);                                                                                         // dintell sobre la porta
         this.blocDarrere(1050, 1100, 300);
         this.sortida(644, 420, 78, 16, 'ZonaEsglesia', 'porta');
-        this.portaAnimada({ x: 683, top: 291, bottom: 450, ample: 90, fons: 452, color: 0x2c524a, panell: 0x3a6a5e, vora: 0x0f1e1a, finestra: true });   // la porta verda del Santuari
+        this.portaAnimada({ x: 683, top: 291, bottom: 450, ample: 90, fons: 452, color: 0x2c524a, panell: 0x3a6a5e, vora: 0x0f1e1a, finestra: true, bloq: () => !this.iniciObert() });   // la porta verda del Santuari (tancada fins que s'obre el camí)
         this.posar('xiprer', 1285, 455, { col: { w: 24, h: 12 } });
         this.posar('xiprer', 1305, 490, { col: { w: 24, h: 12 } });
 

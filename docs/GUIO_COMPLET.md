@@ -24,7 +24,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Pare Jordà** | Plaça / Monestir | Prior. Encarrega la missió i dona la Benedicció. |
 | **Pare Alcoví** | Biblioteca (Monestir) | Llegeix els pergamins; dona el Saber. |
 | **La Pianista** | Santuari | Ensenya els tres cants (Aurora, Vespres, Miracle) i dona la tarota. |
-| **Pare Daimiel** | Santuari | Dirigeix el cor. |
+| **Pare Nadiel** | Santuari | Dirigeix el cor. |
 | **Germà Francí** | Monestir / Sant Antoni | Monjo vell; dona els Guants de Poder. |
 | **Germà Aldreu** | Plaça, Cirosa, Gàbia | Antagonista simpàtic: servent de l'Ocellaire (el «Pastor de Boira»). |
 | **L'Ocellaire (L'Home de la Gàbia)** | Sala de la Gàbia | Boss final. |
@@ -104,7 +104,7 @@ L'Ineu parla amb el prior: li explica la desaparició dels nens i li demana que 
 Simpàtic i rialler (parla de cromos i del Barça), li dona el **bastó de pelegrí**. *Atenció a la lectura: aquest és el futur Pastor de Boira; a la Plaça sembla inofensiu.*
 
 **Pas 3 · Santuari (interior) — la Pianista** `pianista`
-L'orgue no sona. Ensenya el **Cant de l'Aurora** i dona la **tarota del Cortiner**. Així s'aprèn a tocar els cants (tecles 1-2-3 o ← ESPAI →; al mòbil, tres cercles). També hi és el Pare Daimiel `pareDaimiel` (cor i rellotge aturat).
+L'orgue no sona. Ensenya el **Cant de l'Aurora** i dona la **tarota del Cortiner**. Així s'aprèn a tocar els cants (tecles 1-2-3 o ← ESPAI →; al mòbil, tres cercles). També hi és el Pare Nadiel `pareDaimiel` (cor i rellotge aturat).
 
 **Pas 4 · La Bassadòria (sud de la Plaça) — netejar l'aigua** `bassadoria` `bassadoriaNeta`
 Amb la tarota, el Cant de l'Aurora neteja l'aigua tèrbola (en surten gripaus enverinats i boira). La Creu de l'Aparició reacciona `creu`.
@@ -163,7 +163,7 @@ L'Ineu llegeix el pergamí entre dues pedres; la llum s'apaga i **apareix l'ombr
 Per tot el camí hi ha **12 columnes** que «parlen»: cada una dona una paraula. La frase completa és: *«Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l'alba.»* A l'ermita, les taules de pedra demanen que algú la digui davant l'altar: premi, la **clau del sagrari**. (Al muret d'arbres del nord del camí hi ha un forat més ample cap a la **cabana amagada** de l'Iscu: vegeu el pas 31.)
 
 **Pas 17 · Santuari — fragment 2 (sagrari) i Cant de Vespres** `sagrari` `pareDaimiel` `pianista`
-El Pare Daimiel només parla del sagrari quan l'Ineu ja té el primer pergamí. La clau petita obre el sagrari del retaule: **fragment 2**. La Pianista ensenya el **Cant de Vespres** (3-1-2-1) un cop l'ombra el demana; el mateix cant desperta la **pedra secreta** de la façana del Santuari (sala del tresor: +1 cor, `pedraEscolta` `cofreTresor`).
+El Pare Nadiel només parla del sagrari quan l'Ineu ja té el primer pergamí. La clau petita obre el sagrari del retaule: **fragment 2**. La Pianista ensenya el **Cant de Vespres** (3-1-2-1) un cop l'ombra el demana; el mateix cant desperta la **pedra secreta** de la façana del Santuari (sala del tresor: +1 cor, `pedraEscolta` `cofreTresor`).
 
 **Pas 18 · Biblioteca — Pare Alcoví** `pareAlcovi`
 Llegeix els fragments i els compara amb la Crònica: en un marge hi diu que l'ombra apareix a les Runes. Activa el fragment 3 i demana a l'Ineu que hi parli.
@@ -258,7 +258,7 @@ Les Venerables Sàvies recorden una lateral quan la història principal és atur
 |---|---|---|---|
 | **Taverna i l'Eve** | Des de l'inici: truca a la Taverna | Parla amb l'Eve (`eve`) | Pistes sobre l'Aldreu i les Gírgoles. |
 | **Carry i el Pallofa** | Parla amb la Carry (Nostra Senyora) `carry` `pallofa` | Troba el gos **Pallofa** a Sant Antoni i porta-l'hi | **Clau del campanar**. |
-| **Rellotge del campanar** | Amb la clau del campanar; el Pare Daimiel obre la porta de la dreta del retaule | Torre → Sala del Rellotge: tres engranatges (petit, gran, mitjà, segons la nota del campaner) | El rellotge camina; a l'epíleg toca tres campanades. |
+| **Rellotge del campanar** | Amb la clau del campanar; el Pare Nadiel obre la porta de la dreta del retaule | Torre → Sala del Rellotge: tres engranatges (petit, gran, mitjà, segons la nota del campaner) | El rellotge camina; a l'epíleg toca tres campanades. |
 | **Tresor del Santuari** | Després del Cant de Vespres `pedraEscolta` | Tocar el Cant de Vespres davant la pedra de la façana | Sala del tresor: +1 cor. |
 | **Nena de les Trenes** | Camí de la Rovellonera `nenaTrenes` | Recupera dos llaços: un pel camí de la Rovellonera i l'altre a la primera clariana | S'allibera l'esperit. |
 | **Pi dels Tres Cants** | Després del Cant del Miracle; al sud de Sant Antoni, entrant per llevant (bosc llarg) | Toca els tres cants davant el pi | Les branques reviscolen; **Carta del Cortiner**. |
@@ -335,7 +335,7 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 - **Nena de les Trenes**: `nenaTrenes`
 - **Nota**: `cofreTresor`, `cofreCabanaCami`, `cofreMonges`, `portaTaverna`
 - **Pare Alcoví**: `pareAlcovi`
-- **Pare Daimiel**: `pareDaimiel`, `ferEpileg`
+- **Pare Nadiel**: `pareDaimiel`, `ferEpileg`
 - **Pare Jordà**: `pareJorda`, `ferEpileg`
 - **Pastor**: `pastorA`
 - **Pastor vell**: `pastorVell`, `pastorsConvencuts`, `tillerSoparRitual`, `pastor_vell`
@@ -635,64 +635,64 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 
 
 
-**Ineu:** Pare Daimiel, el pergamí que he trobat a les Runes diu que l'altra meitat és al sagrari. Sap on és la clau?
+**Ineu:** Pare Nadiel, el pergamí que he trobat a les Runes diu que l'altra meitat és al sagrari. Sap on és la clau?
 
-**Pare Daimiel:** El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se'ls mengi. Si el Pare Alcoví els busca, ja era hora que algú els llegís!
+**Pare Nadiel:** El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se'ls mengi. Si el Pare Alcoví els busca, ja era hora que algú els llegís!
 
-**Pare Daimiel:** Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l'ermita de la Desaparició. Potser és allà.
+**Pare Nadiel:** Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l'ermita de la Desaparició. Potser és allà.
 
 
 *Si: NO parlatDaimiel*
 
-**Pare Daimiel:** Ineu! Quina alegria de veure't! Vine, que necessito veus noves per al cor.
+**Pare Nadiel:** Ineu! Quina alegria de veure't! Vine, que necessito veus noves per al cor.
 
-**Pare Daimiel:** La Pianista i jo som amics de tota la vida. Ella toca com ningú, i jo dirigeixo els cants. Però la música es queda sense orgue, ja ho veus.
+**Pare Nadiel:** La Pianista i jo som amics de tota la vida. Ella toca com ningú, i jo dirigeixo els cants. Però la música es queda sense orgue, ja ho veus.
 
-**Pare Daimiel:** No et preocupis: si la música s'ha amagat, la cantarem perquè torni! Riure és la primera pregària.
+**Pare Nadiel:** No et preocupis: si la música s'ha amagat, la cantarem perquè torni! Riure és la primera pregària.
 
-**Pare Daimiel:** Ah, i una cosa que em preocupa: el rellotge del campanar s'ha aturat a un quart de quatre, la nit que va arribar la boira.
+**Pare Nadiel:** Ah, i una cosa que em preocupa: el rellotge del campanar s'ha aturat a un quart de quatre, la nit que va arribar la boira.
 
-**Pare Daimiel:** La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Jo ja no tinc l'esquena per a tants graons, però tu... mira què hi passa.
+**Pare Nadiel:** La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Jo ja no tinc l'esquena per a tants graons, però tu... mira què hi passa.
 
 
 *Si: sagrari*
 
-**Pare Daimiel:** I no t'oblidis del rellotge, Ineu. [text calculat pel joc: textRellotge]
+**Pare Nadiel:** I no t'oblidis del rellotge, Ineu. [text calculat pel joc: textRellotge]
 
 
 *Si: NO rellotgeReparat ; té clau_campanar o portaCampanarOberta*
 
-**Pare Daimiel:** La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s'ho pensarà dues vegades.
+**Pare Nadiel:** La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s'ho pensarà dues vegades.
 
 
 *Si: NO rellotgeReparat ; NO té clau_campanar o portaCampanarOberta*
 
-**Pare Daimiel:** La porta de la dreta del retaule és tancada, fill: la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Si algú fa caminar el rellotge, potser la boira s'ho pensarà dues vegades.
+**Pare Nadiel:** La porta de la dreta del retaule és tancada, fill: la clau la guarda la Carry, la vídua del campaner, a Nostra Senyora. Si algú fa caminar el rellotge, potser la boira s'ho pensarà dues vegades.
 
 
 *Si: NO rellotgeExplicat*
 
-**Pare Daimiel:** Sents el rellotge, Ineu? Torna a caminar! Fa tres nits que no el sentia. Els nens em diuen que canto massa fort, però avui no cal: ho fa ell per mi!
+**Pare Nadiel:** Sents el rellotge, Ineu? Torna a caminar! Fa tres nits que no el sentia. Els nens em diuen que canto massa fort, però avui no cal: ho fa ell per mi!
 
 
 *Si: NO rellotgeExplicat ; encarrec*
 
-**Pare Daimiel:** I ara que el temps torna a passar, t'explico una cosa que m'ha dit la gent mentre era aturat:
+**Pare Nadiel:** I ara que el temps torna a passar, t'explico una cosa que m'ha dit la gent mentre era aturat:
 
 
 *Si: NO rellotgeExplicat ; NO encarrec*
 
-**Pare Daimiel:** I ara que el temps torna a passar...
+**Pare Nadiel:** I ara que el temps torna a passar...
 
 
 *Si: NO rellotgeExplicat*
 
-**Pare Daimiel:** Doncs res, fill: tu ja ho saps tot. Jo continuaré cantant, que el rellotge ja em porta el compàs. […]
+**Pare Nadiel:** Doncs res, fill: tu ja ho saps tot. Jo continuaré cantant, que el rellotge ja em porta el compàs. […]
 
 
 *Altrament (per defecte):*
 
-**Pare Daimiel:** Doncs res, fill: tu ja ho saps tot. Jo continuaré cantant, que el rellotge ja em porta el compàs. […]
+**Pare Nadiel:** Doncs res, fill: tu ja ho saps tot. Jo continuaré cantant, que el rellotge ja em porta el compàs. […]
 
 
 ### sagrari
@@ -2630,7 +2630,7 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 **La Pianista:** Ara sí. Ineu, la tarota: avui el Cant del Miracle el comences tu, i l'orgue et seguirà.
 
-**Pare Daimiel:** Sents el campanar, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu.
+**Pare Nadiel:** Sents el campanar, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu.
 
 **Carry:** El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill.
 

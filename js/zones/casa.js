@@ -1384,7 +1384,7 @@ Object.assign(DIALEGS, {
         ],
         enAcabar: () => {
             Estat.posaFlag('rellotgeReparat');
-            Estat.posaObjectiu('El rellotge del Santuari torna a caminar. Explica-ho al Pare Daimiel.');
+            Estat.posaObjectiu('El rellotge del Santuari torna a caminar. Explica-ho al Pare Nadiel.');
             Estat.desar();
         }
     }
