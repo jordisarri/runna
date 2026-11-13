@@ -2379,6 +2379,7 @@ class ZonaBase extends Phaser.Scene {
         const b = this.ineu.body;
         const peus = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
         for (const s of this.sortides) {
+            if (s.desarmada) { if (!Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r)) s.desarmada = false; continue; }       // sortida recent: només compta quan l'Ineu en surt i hi torna
             // Per una porta només s'hi entra pel buit: el centre del cos ha d'estar dins l'amplada de la porta (o alçada en sortides laterals)
             const dir = this.dirSortida(s.r);
             const horitz = dir === 'amunt' || dir === 'avall';

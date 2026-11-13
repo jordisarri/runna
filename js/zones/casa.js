@@ -1054,7 +1054,8 @@ class ZonaCasaTresor extends ZonaCasaBase {
         this.offCadena = 0;
         this.dibuixarCadena(oberta);
         // El mecanisme de molla (sota la bóta) i la bóta de la creu, que es trenca amb l'espasa
-        this.molla = this.add.image(AX, AY + 4, 'molla_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(AY - 1).setVisible(trencada);
+        this.molla = this.add.image(AX, AY + 10, 'molla_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(AY - 1).setVisible(trencada);
+        this.registraGraons(AX - 32, AX + 32, [[AY - 8, AY + 12]]);       // s'hi puja com un graó: mateixa frenada i mateix so
         if (!trencada) {
             const img = this.posar('bota_creu', AX, AY, { col: { w: 50, h: 22 }, opac: true });
             const col = this.obstacles.getChildren()[this.obstacles.getChildren().length - 1];
@@ -1086,14 +1087,13 @@ class ZonaCasaTresor extends ZonaCasaBase {
         this.molla.setVisible(true).setAlpha(0);
         this.tweens.add({ targets: this.molla, alpha: 1, duration: 500, delay: 250 });
         this.llum(this.PT.AX, this.PT.AY - 10, 0xffe8a0);
-        Estat.posaObjectiu("Sota la bóta hi havia un mecanisme de molla: trepitja'l o talla'l amb l'espasa.");
+        Estat.posaObjectiu("Sota la bóta hi havia una placa de pressió: puja-hi o talla-la amb l'espasa.");
     }
 
     // Cada fotograma: si l'Ineu trepitja el mecanisme, s'activa
     actualitzar() {
         if (!this.molla || !this.molla.visible || Estat.flag('portaTresorOberta') || this.mollaActiva || this.cinema) return;
-        const jo = this.ineu.body.center;
-        if (Math.hypot(jo.x - this.PT.AX, jo.y - (this.PT.AY - 6)) < 30) this.activarMolla();
+        if (Math.abs(this.ineu.x - this.PT.AX) < 28 && Math.abs(this.ineu.y - (this.PT.AY + 2)) < 10) this.activarMolla();
     }
     // Un cop d'espasa al mecanisme també l'activa
     alAtacar(jo, d) {

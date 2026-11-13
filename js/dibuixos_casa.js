@@ -321,23 +321,15 @@ function pintarEscalinata(ctx, w, h) {
     ctx.globalCompositeOperation = 'source-over';
 }
 
-// Mecanisme de molla de la Cambra secreta (sota la bóta): una placa de pedra amb una molla de ferro i els ressorts, a mig enfonsar
+// Mecanisme de molla de la Cambra secreta (sota la bóta): una placa de pedra baixa, a ras de terra, amb una vora de ferro; s'hi puja com un graó
 function pintarMollaTresor(ctx, w, h) {
-    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 8, w * 0.46, 8, 0, 0, Math.PI * 2); ctx.fill();
-    // forat al terra i brides de ferro
-    ctx.fillStyle = '#1a120c'; ctx.beginPath(); ctx.ellipse(w / 2, h - 18, w * 0.4, 12, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#0c0805'; ctx.lineWidth = 3; ctx.stroke();
-    ctx.strokeStyle = '#7a7468'; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(w / 2, h - 18, w * 0.4, 12, 0, 0, Math.PI * 2); ctx.stroke();
-    // molla: espires de ferro
-    const cx = w / 2;
-    for (let k = 0; k < 6; k++) {
-        const y = h - 20 - k * 5;
-        ctx.strokeStyle = '#1c1814'; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(cx, y, 16, 5, 0, 0, Math.PI * 2); ctx.stroke();
-        ctx.strokeStyle = k % 2 ? '#8a8478' : '#a8a296'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.ellipse(cx, y, 16, 5, 0, Math.PI * 0.05, Math.PI * 0.95); ctx.stroke();
-    }
-    // placa de pedra amb una creu gravada al damunt
-    const py = h - 52;
-    ctx.fillStyle = '#9a8c74'; ctx.beginPath(); ctx.ellipse(cx, py + 5, 27, 11, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#2a2018'; ctx.lineWidth = 2.4; ctx.stroke();
-    ctx.fillStyle = '#b8a98e'; ctx.beginPath(); ctx.ellipse(cx, py, 27, 11, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    ctx.strokeStyle = '#8a1e18'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(cx, py - 6); ctx.lineTo(cx, py + 6); ctx.moveTo(cx - 7, py - 2); ctx.lineTo(cx + 7, py - 2); ctx.stroke();
+    ctx.lineJoin = 'round';
+    const cx = w / 2, rx = w * 0.43, ry = 11, yb = h - 10, gruix = 6;
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(cx, yb + 3, rx + 4, ry + 2, 0, 0, Math.PI * 2); ctx.fill();
+    // costat (gruix) i cara de dalt
+    ctx.fillStyle = '#6e6252'; ctx.beginPath(); ctx.ellipse(cx, yb, rx, ry, 0, 0, Math.PI); ctx.lineTo(cx - rx, yb - gruix); ctx.ellipse(cx, yb - gruix, rx, ry, 0, Math.PI, 0, true); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#2a2018'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = '#a89b82'; ctx.beginPath(); ctx.ellipse(cx, yb - gruix, rx, ry, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = '#4a4a50'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.ellipse(cx, yb - gruix, rx - 4, ry - 3, 0, 0, Math.PI * 2); ctx.stroke();     // vora de ferro
+    ctx.fillStyle = 'rgba(255,245,220,0.16)'; ctx.beginPath(); ctx.ellipse(cx - 6, yb - gruix - 3, rx * 0.5, ry * 0.4, 0, 0, Math.PI * 2); ctx.fill();
 }
