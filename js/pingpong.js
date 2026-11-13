@@ -26,7 +26,7 @@ const T = {
     G: 9.81, REST: 0.86,                           // gravetat i rebot a la taula
     Z_INEU: -0.42, Z_JUSEF: T_L_PLUS(0.42),        // on es posen els jugadors
     Z_IDEAL: -0.08,                                // on és la pilota en el moment perfecte del cop (just passada la vora de la taula)
-    PUNTS: 3, PUNTS_ZERO: 7                       // PUNTS_ZERO: si un arriba a 7 i l'altre en té 0, el partit s'acaba
+    PUNTS: 11, PUNTS_ZERO: 7                       // PUNTS_ZERO: si un arriba a 7 i l'altre en té 0, el partit s'acaba
 };
 function T_L_PLUS(d) { return 2.74 + d; }
 const MODES = {
@@ -69,7 +69,7 @@ class EscenaPingPong extends Phaser.Scene {
         this.anims.create({ key: 'reves', frames: this.anims.generateFrameNumbers('pp_reves', { start: 6, end: 15 }), frameRate: 40 });
         // factor per fotograma de cada full: en girar-se, l'Ineu ocupa menys a la pantalla; s'hi compensa una mica perquè no sembli que s'encongeix
         this.compIneu = { pp_drive: [1,1,1,1.02,1.08,1.09,1,1.04,1.05,1.05,1.06,1.02,1,1,1,1], pp_reves: [1,1,1.02,1.1,1.05,1.05,1.06,1.08,1.01,1,1.01,1.01,1,1,1,1], ineu_servei: [1,1,1.01,1.02,1.04,1.04,1.05,1.07,1,1,1,1,1,1,1,1] };
-        this.escIneu = 1.5; this.tallIneu = 370;                          // escala (512 px de fotograma → 768 de pantalla) i alçada que es veu (dalt fins als genolls)
+        this.escIneu = 1.4; this.tallIneu = 420;                          // escala (512 px de fotograma → 666 de pantalla) i alçada que es veu (dalt fins als peus: els peus acaben al fotograma ~417)
         this.spIneu = this.add.sprite(0, 0, 'pp_drive', 0).setOrigin(0.5, 1).setCrop(0, 0, 512, this.tallIneu);
         this.spIneu.on('animationcomplete', () => this.spIneu.setTexture('pp_drive', 0));
         // En Jusef (d'AutoSprite): quiet = el primer fotograma; els gestos de cop de dret, de revers i de servei s'engeguen quan toca
@@ -130,7 +130,7 @@ class EscenaPingPong extends Phaser.Scene {
         }          // flaix a pantalla (cops perfectes i punts)
         if (this.textures.exists('ineu_derrota')) {
             this.anims.create({ key: 'derrota', frames: this.anims.generateFrameNumbers('ineu_derrota', { start: 3, end: 15 }), frameRate: 9 });
-            this.spDerr = this.ui(this.add.sprite(AMPLE / 2, ALT_PP + 30, 'ineu_derrota', 3).setOrigin(0.5, 1).setScale(2.0).setDepth(46.5).setVisible(false));
+            this.spDerr = this.ui(this.add.sprite(AMPLE / 2, ALT_PP + 30, 'ineu_derrota', 3).setOrigin(0.5, 1).setScale(1.6).setDepth(46.5).setVisible(false));
         }
         this.input.on('pointerdown', p => this.alPrimer(p));
         this.input.on('pointermove', p => this.alMoure(p));
@@ -378,10 +378,10 @@ class EscenaPingPong extends Phaser.Scene {
         else if (b && !b.morta && b.de === 'jusef' && b.vz < 0) { const t = Math.max(0, (b.z - Z_COP) / -b.vz); objI = Phaser.Math.Clamp(b.X + b.vx * t, -0.72, 0.72); }
         else if (b && !b.morta && b.de === 'jusef') objI = b.marca.X;
         this.Xi += Phaser.Math.Clamp(objI - this.Xi, -7.5 * dt, 7.5 * dt);
-        // L'Ineu és a primer pla: molt gran, només de genolls amunt, i el tall de baix és la vora de baix de la pantalla (es mou una mica a banda i banda)
+        // L'Ineu és a primer pla: gran, amb els peus sempre visibles just a la vora de baix de la pantalla (es mou una mica a banda i banda)
         const pi = this.proj(this.Xi, T.Z_INEU), tall = this.tallIneu, comp = (this.compIneu[this.spIneu.texture.key] || [])[parseInt(this.spIneu.frame.name, 10)] || 1, ES = this.escIneu * comp * (1 + 0.05 * this.pulsIneu);
         this.pulsIneu *= Math.pow(0.0005, dt); this.pulsJusef *= Math.pow(0.0005, dt);
-        this.spIneu.setScale(ES).setPosition(360 + Phaser.Math.Clamp((pi.x - 360) * 0.55, -150, 150), ALT_PP + 40 + (512 - tall) * ES).setDepth(12);
+        this.spIneu.setScale(ES).setDepth(12); this.xIneu = 360 + Phaser.Math.Clamp((pi.x - 360) * 0.55, -150, 150); this.esIneu = ES;
         // Simulació de la pilota (el temps del joc va més lent que el real, segons el mode i el cop màgic)
         const aturada = this.time.now < (this.parada_fins || 0) ? 0.06 : 1;
         if (b && !b.morta) this.simula(dt * this.M.temps * this.lent * aturada);
@@ -413,6 +413,9 @@ class EscenaPingPong extends Phaser.Scene {
         this.pintaCelebracio(time);
         this.pintaEstela();
         this.movCamera(dt);
+        // Els peus de l'Ineu sempre a la vora de baix del que veu la càmera (que es mou, s'acosta i s'inclina): així mai queden tallats
+        const cam = this.cameras.main, peus = cam.worldView.bottom - 26 / cam.zoom;
+        this.spIneu.setPosition(this.xIneu, peus + (512 - this.tallIneu) * this.esIneu);
     }
 
     // L'anell que es posa VERD quan toca lliscar: es veu a la pilota que arriba i passa de gris (lluny) a groc (a prop) a verd (ara!)
@@ -786,7 +789,7 @@ class EscenaPingPong extends Phaser.Scene {
         // l'Ineu, per davant: cau de genolls i plora
         this.time.delayedCall(700, () => {
             this.spIneu.setVisible(false);
-            sp.setVisible(true).setScale(2.0).setPosition(cx, ALT_PP + 30).play('derrota');
+            sp.setVisible(true).setScale(1.6).setPosition(cx, ALT_PP + 30).play('derrota');
             [900, 1500].forEach(t => this.time.delayedCall(t, () => this.so('mal')));
             sp.once('animationcomplete', () => {
                 // el plor continua: l'Ineu es balanceja i sacseja una mica

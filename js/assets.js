@@ -29,6 +29,8 @@ const CATALEG = [
     // Elements
     { key: 'home_raim',    file: 'assets/personatges/home_raim.webp',    amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua (abans del combat)
     { key: 'home_raim_desperta', file: 'assets/personatges/home_raim_desperta.webp', amplada: 115, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // el guardià despert (boss de l'Escalinata)
+    { key: 'home_raim_apunta', file: 'assets/enemics/home_raim_apunta.webp', amplada: 280, cru: true },   // el guardià tirat enrere amb la maça alçada (apuntant i carregant)
+    { key: 'home_raim_caigut', file: 'assets/enemics/home_raim_caigut.webp', amplada: 290, cru: true },   // de morros a terra (cap a l'esquerra; es gira amb flipX): el cap és el punt feble
     { key: 'home_raim_n',  file: 'assets/personatges/home_raim_n.webp', amplada: 105, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua amb el cap d'esquena (inici del puzle del volant)
     { key: 'tomba_angel', file: 'assets/objectes/tomba_angel.webp', amplada: 140, provisional: (c, w) => lienc(c, w, w * 226 / 140, (ctx, W, H) => { ctx.scale(W / 140, H / 226); pintarTombaAngel(ctx, 140, 226, false); }) },   // la tomba de l'àngel, amb el ram marcit
     { key: 'tomba_angel_content', file: 'assets/objectes/tomba_angel_content.webp', amplada: 140, provisional: (c, w) => lienc(c, w, w * 226 / 140, (ctx, W, H) => { ctx.scale(W / 140, H / 226); pintarTombaAngel(ctx, 140, 226, true); }) },   // la mateixa, amb flors fresques i una espelmeta (mateixa amplada: es canvia la textura sense canviar l'escala)
@@ -225,7 +227,7 @@ const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'nor
 // (eines/fer_ineu_v2.py). Esquerra i dreta són a assets/ineu_v2/alt/ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
 // Les mides dels idles s'igualen a les dels caminars amb eines/igualar_idle_ineu.py. Els fulls i els prototips anteriors són a art/ineu/arxiu/.
 const rutaIneu = (dir, idle) => {
-    const v = '?v=2611112500';
+    const v = '?v=2611131600';
     if (dir === 'left' || dir === 'right') return `assets/ineu_v2/alt/${idle ? 'idle_elev_' : 'walk_elev_'}${dir}.webp${v}`;
     return `assets/ineu_v2/${idle ? 'idle_' : ''}${dir}.webp${v}`;
 };
@@ -322,6 +324,7 @@ const Grafics = {
         scene.load.spritesheet('pare_jorda_camina', 'assets/personatges/pare_jorda_camina.webp', { frameWidth: 200, frameHeight: 290 });
         // Fulls d'animació del Pastor de Boira (boss de la Cirosa): quadrícula de fotogrames de 300 x 300; si no hi són, es veu el dibuix fix (vegeu docs/PROMPTS_GRAFICS.md)
         Object.keys(Grafics.PASTOR_FULLS).forEach(n => scene.load.spritesheet('pastor_' + n, `assets/enemics/pastor_${n}.webp`, { frameWidth: 300, frameHeight: 300 }));
+        scene.load.spritesheet('home_raim_camina', 'assets/enemics/home_raim_camina.webp?v=2611131800', { frameWidth: 331, frameHeight: 502 });      // el Home del Raïm caminant (4 poses clau, cap a la dreta; es gira amb flipX)
         Object.entries(NPC_IDLE).forEach(([k, d]) => scene.load.spritesheet(k + '_idle', `assets/personatges/${k}_idle.webp?v=2611122055`, { frameWidth: d.w, frameHeight: d.h }));
         scene.load.spritesheet('germa_aldreu_camina', 'assets/personatges/germa_aldreu_camina.webp', { frameWidth: 180, frameHeight: 265 });
         scene.load.spritesheet('germa_aldreu_ne', 'assets/personatges/germa_aldreu_ne.webp', { frameWidth: 180, frameHeight: 265 });

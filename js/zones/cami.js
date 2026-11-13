@@ -26,7 +26,7 @@ class ZonaCami extends ZonaBase {
         // Les 12 columnes de la processó, alternades a banda i banda del camí
         for (let i = 0; i < 12; i++) {
             const x = 2540 - i * 190, y = i % 2 === 0 ? 370 : 575;   // la columna 1 és la més propera a les Runes (est)
-            this.posar('columna_proces_' + i, x, y, { col: { w: 34, h: 14 } });
+            this.posar('columna_proces_' + i, x, y, { col: { w: 34, h: 14 }, opac: true });
             this.interactiu(x, y + 6, RADI_OBJECTE, DIALEGS.columna(i + 1), { altura: 120 });
         }
 
@@ -80,8 +80,8 @@ class ZonaErmita extends ZonaBase {
         this.interactiu(500, 640, RADI_OBJECTE, DIALEGS.ermitaPorta, { altura: 190, actiu: () => false });
 
         // Creu de la Desaparició, davant la finestra de la dreta de l'ermita i a l'altra banda del camí (no té cap paper a la trama: només es pot llegir)
-        this.posar('creu_desaparicio', 660, 840, { escala: 1.9, col: { w: 70, h: 26 }, opac: true });
-        this.interactiu(660, 850, RADI_OBJECTE, DIALEGS.creuDesaparicio, { altura: 300 });
+        this.posar('creu_desaparicio', 660, 895, { escala: 1.5, col: { w: 60, h: 24 }, opac: true });
+        this.interactiu(660, 905, RADI_OBJECTE, DIALEGS.creuDesaparicio, { altura: 300 });
 
         this.cartell(1120, 610, DIALEGS.sortidaErmita);
         this.arbres([[120, 200], [900, 160], [1150, 240], [1300, 160], [150, 520],

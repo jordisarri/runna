@@ -44,6 +44,13 @@ Object.assign(DIALEGS, {
         ]
     },
 
+    // L'estàtua del guardià, vençut, al seu pedestal
+    raimEstatuaFinal: {
+        pagines: [
+            { qui: 'Ineu', text: "L'Home del Raïm descansa per sempre." },
+        ]
+    },
+
     trapaCripta: E => ({
         pagines: []
     }),
@@ -98,12 +105,15 @@ Object.assign(DIALEGS, {
 const RAIM = { x: 700, y: 560, f: 1.35 };
 
 // ---------------- BOSS: L'HOME DEL RAÏM VIU ----------------
+const K_RAIM = 1.3;      // mida del guardià respecte al dibuix original (277 → ~360 px d'alt); cos, radi i cap van ja en píxels de món
 ENEMICS.raim = {
-    tex: 'home_raim_desperta', vida: 24, vel: 320, mal: 1, radi: 38, cos: [66, 30], ombra: 0.65,
+    k: K_RAIM,
+    tex: 'home_raim_desperta', vida: 24, vel: 320, mal: 1, radi: Math.round(38 * K_RAIM), cos: [Math.round(66 * K_RAIM), Math.round(30 * K_RAIM)], ombra: 0.65 * K_RAIM,
     arma: 'runna',                            // només Runna li fa mal
     // El punt feble és el cap (al 27% del dibuix des de dalt), i només quan ha caigut de morros després d'una envestida:
     // llavors el cap queda a terra, a l'abast (sense cap abast extra cap amunt)
-    cap: { y: 0.27, r: 42, nomesCansat: true, senseAbast: true },
+    cap: { y: 0.27, r: Math.round(42 * K_RAIM), nomesCansat: true, senseAbast: true },
+    capTex: { home_raim_caigut: { x: -0.19, y: 0.55, r: Math.round(42 * K_RAIM), nomesCansat: true } },      // tumbat de morros (el dibuix té el cap a l'esquerra: amb flipX passa a la dreta)
     copsPausa: 3,                             // a terra, com a molt tres cops: al tercer s'aixeca
     robust: true, barra: true,
     perill: e => e.estat === 'carrega',
@@ -118,6 +128,102 @@ ENEMICS.raim = {
     },
     // On queda el cap quan és a terra (el sprite gira pels peus)
     capATerra(z, e) { return z.puntsCop(e)[0]; },
+    // On quedarà el cap quan hagi caigut de morros (el dibuix de tumbat, centrat al cos): per avisar abans del cop
+    capPrevist(z, e) {
+        const s = e.spr, key = 'home_raim_caigut';
+        if (!z.textures.exists(key)) return this.capATerra(z, e);
+        const t = z.textures.get(key), esc = ((t.customData && t.customData.escala) || 1 / RES) * K_RAIM, img = t.getSourceImage();
+        const dw = img.width * esc, dh = img.height * esc, c = this.capTex[key];
+        return { x: e.spr.body.center.x + (e.cauDreta ? -1 : 1) * c.x * dw, y: s.y - dh * (1 - c.y) };
+    },
+    // El cicle de caminar: quatre poses clau a poc a poc (pedra pesada); a cada peu que toca terra, una sacsejada i una mica de pols
+    iniciaCamina(z, e) {
+        if (!z.anims.exists('raim_camina')) z.anims.create({ key: 'raim_camina', frames: z.anims.generateFrameNumbers('home_raim_camina', { start: 0, end: 3 }), frameRate: 4, repeat: -1 });
+        e.spr.play('raim_camina');
+        if (!e.passosHook) {
+            e.passosHook = true;
+            e.spr.on('animationupdate', (anim, frame) => {
+                if (e.mort || anim.key !== 'raim_camina' || (frame.index !== 0 && frame.index !== 2)) return;
+                z.cameras.main.shake(90, 0.0022); Sfx.cop(false);
+                this.trossos(z, e.spr.body.center.x, e.spr.body.bottom, 3);
+            });
+        }
+    },
+    // Canvi de dibuix (dempeus, apuntant, tumbat): escala pròpia i el cos de col·lisió sota els peus del dibuix; el cos no es mou del lloc
+    pose(z, e, key, flip, peus = 0.5) {
+        const s = e.spr;
+        if (!z.textures.exists(key) || (typeof Grafics !== 'undefined' && Grafics.faltants.includes(key))) { key = 'home_raim_desperta'; peus = 0.5; }
+        const t = z.textures.get(key), esc = key === 'home_raim_desperta' ? e.escalaBase : key === 'home_raim_camina' ? 300 / t.getSourceImage().height * K_RAIM : ((t.customData && t.customData.escala) || 1 / RES) * K_RAIM;
+        const bx = s.body.center.x, canvi = s.texture.key !== key;
+        s.setFlipX(flip);
+        if (canvi) {
+            if (s.anims && s.anims.isPlaying) s.anims.stop();
+            s.setTexture(key); s.setScale(esc); e.escalaPose = key === 'home_raim_desperta' ? null : esc;
+            if (key === 'home_raim_camina') this.iniciaCamina(z, e);
+        }
+        const fw = s.width, fh = s.height, w = this.cos[0] / esc, h = this.cos[1] / esc, off = fw * (flip ? 1 - peus : peus) - w / 2;
+        s.body.setSize(w, h);
+        s.body.setOffset(off, fh - h);
+        s.x = bx - (-fw * esc / 2 + off * esc + this.cos[0] / 2);          // el cos queda on era
+        return canvi;
+    },
+    // TELEGRAPH DE LA CÀRREGA: una franja vermella a terra, amb la llargada i l'ample reals de l'envestida, que s'omple mentre apunta
+    teleCarga(z, e, c, ara, durada, fase2) {
+        if (!e.tele) e.tele = z.add.graphics().setDepth(-400);
+        const g = e.tele, L = this.vel * (fase2 ? 0.46 : 0.4) + 36, w = this.radi * 0.9, p = 1 - Phaser.Math.Clamp((e.fins - ara) / durada, 0, 1);
+        const dx = Math.cos(e.ang), dy = Math.sin(e.ang), nx = -dy * w, ny = dx * w;
+        const poli = [{ x: c.x + nx, y: c.y + ny }, { x: c.x + dx * L + nx, y: c.y + dy * L + ny }, { x: c.x + dx * L - nx, y: c.y + dy * L - ny }, { x: c.x - nx, y: c.y - ny }];
+        g.clear();
+        g.fillStyle(0xff2a2a, 0.16 + 0.26 * p).fillPoints(poli, true);
+        g.lineStyle(3, 0xff6a50, 0.35 + 0.5 * p).strokePoints(poli, true);
+        g.fillStyle(0xff4a38, 0.2 + 0.5 * p).fillCircle(c.x + dx * L, c.y + dy * L, 10 + 12 * p);       // el punt on s'atura
+    },
+    netejaTele(e) { if (e.tele) { e.tele.destroy(); e.tele = null; } },
+    // COP DE MAÇA (fase 2): la maça cau sobre el punt on era l'Ineu; un cercle vermell s'omple durant l'avís i, en l'impacte, una ona de pedra s'escampa
+    teleMaza(z, e, ara) {
+        if (!e.teleMa) e.teleMa = z.add.graphics().setDepth(-400);
+        const p = 1 - Phaser.Math.Clamp((e.fins - ara) / 800, 0, 1), R = 120 * K_RAIM / 1.3;
+        e.teleMa.clear().fillStyle(0xff2a2a, 0.12 + 0.34 * p).fillCircle(e.mx, e.my, R).lineStyle(4, 0xff6a50, 0.4 + 0.5 * p).strokeCircle(e.mx, e.my, R);
+        e.teleMa.lineStyle(2, 0xffb090, 0.5).strokeCircle(e.mx, e.my, R * (1 - p));          // l'anell que es tanca marca l'instant del cop
+    },
+    netejaMaza(e) { if (e.teleMa) { e.teleMa.destroy(); e.teleMa = null; } },
+    impacteMaza(z, e) {
+        const R = 120 * K_RAIM / 1.3;
+        z.cameras.main.shake(380, 0.011); Sfx.cop(true);
+        this.trossos(z, e.mx, e.my, 18);
+        const ona = z.add.circle(e.mx, e.my, 20, 0xcdb8ff, 0.25).setStrokeStyle(5, 0xe8dcff, 0.9).setDepth(-399);
+        z.tweens.add({ targets: ona, radius: R * 1.5, alpha: 0, duration: 520, ease: 'Quad.easeOut', onComplete: () => ona.destroy() });
+        const jo = z.ineu.body.center;
+        if (Phaser.Math.Distance.Between(e.mx, e.my, jo.x, jo.y) < R) z.ferIneu(1, { x: e.mx, y: e.my });
+    },
+    // FINESTRA DE DANY: un halo pulsant al cap mentre és a terra i tres llumetes al seu voltant (una menys a cada cop encertat); parpelleja abans de tancar-se
+    obreFinestra(z, e) {
+        if (e.finestra) return;
+        const f = e.finestra = { llums: [] }, q = this.capATerra(z, e), R = q.r + 12;
+        f.halo = z.add.ellipse(q.x, q.y, R * 2, R * 2, 0xfff0b0, 0.18).setStrokeStyle(5, 0xffd860, 0.9).setBlendMode('ADD').setDepth(99955);
+        z.tweens.add({ targets: f.halo, alpha: { from: 0.55, to: 1 }, yoyo: true, repeat: -1, duration: 350, ease: 'Sine.inOut' });
+        for (let i = 0; i < this.copsPausa; i++) f.llums.push(z.add.circle(q.x, q.y, 7, 0xffe27a).setStrokeStyle(2, 0x6a5020).setBlendMode('ADD').setDepth(99956));
+        Sfx.tic();
+    },
+    seguirFinestra(z, e, ara) {
+        const f = e.finestra;
+        if (!f) return;
+        const q = this.capATerra(z, e), r = q.r + 12, rest = e.fins - ara, blink = rest < 600 && Math.floor(ara / 90) % 2 === 0;
+        f.halo.setPosition(q.x, q.y);
+        if (rest < 600 && !f.avisat) { f.avisat = true; z.tweens.killTweensOf(f.halo); }
+        if (rest < 600) f.halo.setAlpha(blink ? 0.2 : 1);
+        f.llums.forEach((l, i) => {
+            const a = Phaser.Math.DegToRad(-150 + i * 60), viva = i >= (e.copsRebuts || 0);
+            l.setPosition(q.x + Math.cos(a) * (r + 16), q.y + Math.sin(a) * (r + 16));
+            l.setFillStyle(viva ? 0xffe27a : 0x555566).setAlpha(viva && blink ? 0.2 : 1);
+        });
+    },
+    netejaFinestra(z, e) {
+        const f = e.finestra;
+        if (!f) return;
+        e.finestra = null;
+        [f.halo, ...f.llums].forEach(o => { if (o) { z.tweens.killTweensOf(o); o.destroy(); } });
+    },
     ia(z, e, ara) {
         const jo = z.ineu.body.center, c = e.spr.body.center;
         const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
@@ -125,15 +231,31 @@ ENEMICS.raim = {
         const estatAbans = e.estat;
         if (!e.proxCarrega) e.proxCarrega = ara + 2200;
         const cap = Math.atan2(jo.y - c.y, jo.x - c.x);
+        if (e.estat !== 'apunta') this.netejaTele(e);
+        if (e.estat !== 'maza') this.netejaMaza(e);
+        if (fase2 && !e.fase2vista) {                    // canvi de fase: rugit, flaix lila i una breu pausa abans de tornar a l'atac
+            e.fase2vista = true; e.proxMaza = ara + 2600; e.atorditFins = ara + 900;
+            e.spr.body.setVelocity(0); e.estat = 'aixeca'; e.fins = ara + 900;
+            z.cameras.main.flash(380, 190, 140, 255); z.cameras.main.shake(500, 0.008); Sfx.carrega();
+            this.trossos(z, c.x, c.y, 16);
+            return;
+        }
+        if (e.estat !== 'cansat') this.netejaFinestra(z, e);
         if (e.estat === 'apunta') {
             e.spr.body.setVelocity(0);
-            if (ara > e.fins) { e.estat = 'carrega'; e.fins = ara + (fase2 ? 460 : 400); e.spr.clearTint(); e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel); }
+            if (e.fins - ara > 220) e.ang = cap;                       // segueix l'Ineu i fixa la direcció als últims 220 ms: així es pot esquivar
+            this.teleCarga(z, e, c, ara, e.duradaApunta || 650, fase2);
+            if (ara > e.fins) { e.estat = 'carrega'; this.netejaTele(e); e.fins = ara + (fase2 ? 460 : 400); e.spr.clearTint(); e.spr.body.setVelocity(Math.cos(e.ang) * this.vel, Math.sin(e.ang) * this.vel); }
+        } else if (e.estat === 'maza') {
+            e.spr.body.setVelocity(0);
+            this.teleMaza(z, e, ara);
+            if (ara > e.fins) { this.impacteMaza(z, e); this.netejaMaza(e); e.estat = 'aixeca'; e.fins = ara + 700; e.proxMaza = ara + 5200; e.proxCarrega = Math.max(e.proxCarrega, ara + 1800); }
         } else if (e.estat === 'carrega') {
             const bl = e.spr.body.blocked;
             if (ara > e.fins || bl.left || bl.right || bl.up || bl.down) {
                 e.spr.body.setVelocity(0);
                 // A la fase 2, de vegades encadena una segona envestida abans de caure
-                if (fase2 && !e.segona && Math.random() < 0.6) { e.segona = true; e.estat = 'apunta'; e.fins = ara + 380; e.ang = cap; e.spr.setTint(0xff8080); }
+                if (fase2 && !e.segona && Math.random() < 0.6) { e.segona = true; e.estat = 'apunta'; e.duradaApunta = 380; e.fins = ara + 380; e.ang = cap; e.spr.setTint(0xff8080); }
                 else {
                     e.segona = false;
                     e.estat = 'cansat'; e.fins = ara + (fase2 ? 1700 : 2300); e.copsRebuts = 0;
@@ -149,21 +271,38 @@ ENEMICS.raim = {
             if (ara > e.fins) e.estat = 'camina';
         } else {
             e.estat = 'camina';
-            const v = dist > 120 ? (fase2 ? 80 : 56) : 0;
+            const v = dist > 120 * K_RAIM ? (fase2 ? 120 : 90) : 0;
             e.spr.body.setVelocity(Math.cos(cap) * v, Math.sin(cap) * v);
             e.spr.setFlipX(Math.cos(cap) < 0);
-            if (ara > e.proxCarrega && dist < 480) {
-                e.estat = 'apunta'; e.fins = ara + (fase2 ? 420 : 650); e.ang = cap;
+            if (fase2 && ara > (e.proxMaza || 0) && dist < 400 && dist > 90) {
+                e.estat = 'maza'; e.fins = ara + 800;
+                const d = Math.min(dist, 250); e.mx = c.x + Math.cos(cap) * d; e.my = c.y + Math.sin(cap) * d;
+                Sfx.carrega();
+            } else if (ara > e.proxCarrega && dist < 520) {
+                e.estat = 'apunta'; e.duradaApunta = fase2 ? 420 : 650; e.fins = ara + e.duradaApunta; e.ang = cap;
                 e.spr.setTint(0xff8080);
             }
         }
+        if (e.estat === 'cansat') this.seguirFinestra(z, e, ara);
+        // Ombra segons l'estat: més petita en tirar-se enrere, ample i plana quan és a terra de morros
+        const ob = this.ombra, aterra = e.estat === 'cansat' || e.estat === 'aixeca';
+        if (e.ombra) e.ombra.setScale(aterra ? ob * 1.45 : e.estat === 'apunta' ? ob * 0.85 : ob, aterra ? ob * 0.8 : e.estat === 'apunta' ? ob * 0.85 : ob);
+        // Dibuix segons l'estat: apuntant/carregant (tirat enrere amb la maça), tumbat de morros, o dempeus
+        const vol = e.estat === 'apunta' || e.estat === 'carrega' || e.estat === 'maza';
+        let canviPose = false;
+        if (vol) canviPose = this.pose(z, e, 'home_raim_apunta', Math.cos(e.estat === 'maza' ? Math.atan2(e.my - c.y, e.mx - c.x) : e.ang) < 0, 0.6);
+        else if (e.estat === 'cansat') canviPose = this.pose(z, e, 'home_raim_caigut', !!e.cauDreta, 0.5);
+        else canviPose = this.pose(z, e, e.estat === 'camina' && dist > 120 * K_RAIM ? 'home_raim_camina' : 'home_raim_desperta', Math.cos(cap) < 0, 0.5);
+        const tumbat = e.spr.texture.key === 'home_raim_caigut';
+        if (canviPose && tumbat) e.spr.rotation = (e.cauDreta ? 1 : -1) * 0.9;       // s'hi tomba: la rotació torna a 0 en uns fotogrames
         // Cos de pedra (gira pels peus): camina balancejant-se, es tira enrere en apuntar, s'inclina en carregar,
         // cau de morros quan s'ha cansat i es redreça a poc a poc
         const s = e.estat === 'cansat' || e.estat === 'aixeca' ? (e.cauDreta ? 1 : -1) : Math.cos(e.estat === 'apunta' || e.estat === 'carrega' ? e.ang : cap) < 0 ? -1 : 1;
         let rot, lerp = 0.25;
-        if (e.estat === 'apunta') rot = -s * 0.2 + Math.sin(ara / 28) * 0.025;
-        else if (e.estat === 'carrega') rot = s * 0.22;
-        else if (e.estat === 'cansat') { rot = s * 1.28 + Math.sin(ara / 160) * 0.02; lerp = 0.35; }
+        if (e.estat === 'apunta') rot = e.spr.texture.key === 'home_raim_apunta' ? Math.sin(ara / 28) * 0.02 : -s * 0.2 + Math.sin(ara / 28) * 0.025;
+        else if (e.estat === 'carrega') rot = e.spr.texture.key === 'home_raim_apunta' ? 0 : s * 0.22;
+        else if (e.estat === 'maza') rot = Math.sin(ara / 40) * 0.015;
+        else if (e.estat === 'cansat') { rot = tumbat ? 0 : s * 1.28 + Math.sin(ara / 160) * 0.02; lerp = 0.35; }
         else if (e.estat === 'aixeca') { rot = 0; lerp = 0.12; }
         else rot = Math.sin(ara / (fase2 ? 190 : 260)) * 0.06;
         e.spr.rotation = Phaser.Math.Linear(e.spr.rotation, rot, lerp);
@@ -171,19 +310,24 @@ ENEMICS.raim = {
             if (e.estat === 'apunta') { z.esquitxar(c.x, c.y - 60); Sfx.carrega(); }
             else if (e.estat === 'carrega') this.trossos(z, c.x, c.y, 5);
             else if (e.estat === 'cansat') {
-                // Quan el cap toca a terra: cop sec, pols i, si l'Ineu hi era a sota, li fa mal
-                z.time.delayedCall(220, () => {
+                // Avís: un cercle vermell on caurà el cap (és on fa mal), 420 ms abans del cop; després s'obre la finestra de dany
+                const qp = this.capPrevist(z, e), R = 70 * K_RAIM, yq = qp.y + 30 * K_RAIM;
+                const av = z.add.circle(qp.x, yq, R, 0xff2a2a, 0.12).setStrokeStyle(3, 0xff6a50, 0.8).setDepth(-399);
+                z.tweens.add({ targets: av, fillAlpha: 0.42, duration: 400, ease: 'Quad.easeIn' });
+                z.time.delayedCall(430, () => av.destroy());
+                z.time.delayedCall(420, () => {
                     if (e.mort) return;
                     const q = this.capATerra(z, e);
                     z.cameras.main.shake(260, 0.008); Sfx.cop(true);
                     this.trossos(z, q.x, q.y + 30, 14);
                     const jo2 = z.ineu.body.center;
-                    if (Phaser.Math.Distance.Between(q.x, q.y + 30, jo2.x, jo2.y) < 70) z.ferIneu(1, { x: q.x, y: q.y });
+                    if (Phaser.Math.Distance.Between(q.x, yq, jo2.x, jo2.y) < R) z.ferIneu(1, { x: q.x, y: q.y });
+                    if (e.estat === 'cansat') this.obreFinestra(z, e);
                 });
             } else if (e.estat === 'aixeca') this.trossos(z, c.x, c.y, 6);
         }
     },
-    alDerrotar(z, e) { z.raimDerrotat(e); }
+    alDerrotar(z, e) { this.netejaTele(e); this.netejaMaza(e); this.netejaFinestra(z, e); z.raimDerrotat(e); }
 };
 
 // ---------------- BASE DE LES SALES ----------------
@@ -223,6 +367,48 @@ class ZonaCasaBase extends ZonaBase {
 
     porta(x, y, w, h, color = 0x4a2c16) {
         return this.add.rectangle(x, y, w, h, color).setStrokeStyle(4, 0x2a1a0c).setDepth(y - 60);
+    }
+
+    // Porta camuflada a la paret de l'esquerra: un brancal de carreus amb llinda i una pedra clau gravada, una porta de fusta fosca amb tres platines de ferro,
+    // claus i anella, i una escletxa de llum càlida a sota. (x, y) és el centre de la porta (vista de cantó: estreta i alta).
+    portaSecreta(x, y) {
+        const W = 46, H = 138, x0 = x - W / 2, y0 = y - H / 2, d = y - 60;
+        const g = this.add.graphics().setDepth(d);
+        g.fillStyle(0x000000, 0.35).fillRect(x0 - 4, y0 + 8, W + 10, H + 6);                                   // ombra sobre el terra de la paret
+        // brancal de pedra: carreus alternats amb contorn
+        g.fillStyle(0x7a705e, 1).fillRect(x0 - 6, y0 - 12, W + 12, H + 12).lineStyle(3, 0x1c1610, 1).strokeRect(x0 - 6, y0 - 12, W + 12, H + 12);
+        for (let i = 0; i < 8; i++) {
+            const yy = y0 - 12 + i * ((H + 12) / 8);
+            g.lineStyle(1.5, 0x2a2218, 0.85).lineBetween(x0 - 6, yy, x0 + W + 6, yy);
+            g.lineBetween(x0 - 6 + (i % 2 ? 10 : 22), yy, x0 - 6 + (i % 2 ? 10 : 22), yy + (H + 12) / 8);
+            g.lineBetween(x0 + W + 6 - (i % 2 ? 10 : 22), yy, x0 + W + 6 - (i % 2 ? 10 : 22), yy + (H + 12) / 8);
+        }
+        g.fillStyle(0xcdbf9f, 0.22).fillRect(x0 - 4, y0 - 10, 4, H + 8);                                       // llum a la vora esquerra
+        // llinda i pedra clau amb un ull gravat
+        g.fillStyle(0x8d826c, 1).fillRect(x0 - 10, y0 - 22, W + 20, 14).lineStyle(3, 0x1c1610, 1).strokeRect(x0 - 10, y0 - 22, W + 20, 14);
+        g.fillStyle(0x9b8f77, 1).fillRect(x - 11, y0 - 30, 22, 12).lineStyle(2.5, 0x1c1610, 1).strokeRect(x - 11, y0 - 30, 22, 12);
+        g.lineStyle(2, 0x2a2218, 1).strokeEllipse(x, y0 - 24, 12, 6);
+        g.fillStyle(0x2a2218, 1).fillCircle(x, y0 - 24, 2.2);
+        // l'obertura i la porta de fusta
+        g.fillStyle(0x0c0806, 1).fillRect(x0, y0, W, H);
+        g.fillStyle(0x4a2f1a, 1).fillRect(x0 + 3, y0 + 3, W - 6, H - 8);
+        for (let i = 1; i < 4; i++) g.lineStyle(1.6, 0x24160a, 0.9).lineBetween(x0 + 3 + i * ((W - 6) / 4), y0 + 3, x0 + 3 + i * ((W - 6) / 4), y0 + H - 5);   // taulons
+        g.fillStyle(0x6a4524, 0.55).fillRect(x0 + 5, y0 + 4, 4, H - 10);
+        [0.18, 0.5, 0.82].forEach(f => {                                                                         // platines de ferro amb claus
+            const yy = y0 + H * f;
+            g.fillStyle(0x26221f, 1).fillRect(x0 + 3, yy - 5, W - 6, 10).lineStyle(1.5, 0x0e0c0a, 1).strokeRect(x0 + 3, yy - 5, W - 6, 10);
+            [x0 + 8, x0 + W - 9].forEach(cx => g.fillStyle(0x8d8a84, 1).fillCircle(cx, yy, 1.7));
+        });
+        g.lineStyle(3.5, 0x26221f, 1).strokeCircle(x + 6, y + 6, 6);                                              // anella
+        g.fillStyle(0x26221f, 1).fillCircle(x + 6, y - 1, 2.4);
+        g.fillStyle(0x0c0806, 1).fillRect(x - 8, y + 18, 5, 8);                                                  // pany
+        // escletxa de llum càlida sota la porta: el corredor és il·luminat
+        const llum = this.add.graphics().setDepth(d + 1).setBlendMode(Phaser.BlendModes.ADD);
+        llum.fillStyle(0xffc060, 0.5).fillRect(x0 + 4, y0 + H - 5, W - 8, 3);
+        llum.fillStyle(0xffc060, 0.14).fillEllipse(x + 6, y0 + H + 4, W + 40, 22);
+        this.tweens.add({ targets: llum, alpha: 0.55, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
+        this.aplic(x + 2, y0 - 44, 1, d - 1);                                                                    // un aplic amb espelma al costat, que il·lumina la pedra
+        return g;
     }
 
     // Aplic de ferro clavat a la paret: placa, volutes que aguanten el platet, espelma i flama. (x, y) és el platet.
@@ -285,7 +471,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.add.graphics().setDepth(-950).fillStyle(0xfff0c0, 0.07).fillPoints([{ x: 620, y: 0 }, { x: 800, y: 0 }, { x: 900, y: 600 }, { x: 540, y: 600 }], true);
 
         // Porta camuflada (esquerra): torna a la sala del tresor
-        this.porta(115, 740, 20, 110, 0x6a4a2c);
+        this.portaSecreta(112, 740);
         this.sortida(116, 690, 14, 100, 'ZonaCasaTresor', 'escala');
 
         this.reixaPorxo();
@@ -336,16 +522,49 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.barrots.setAlpha(0.35);
             this.sortida(X0 + 10, Y1 - 14, X1 - X0 - 20, 14, 'ZonaCasaGran', 'porxo');
         };
+        this.reixaEstavaOberta = oberta;
         if (oberta) { obrir(); return; }
         this.colReixa = this.colisio(700, Y0 - 2, X1 - X0 + 44, 52);         // des de la llinda: l'Ineu no es fica dins la reixa
         // El punt és a la mateixa reixa i el «!» hi surt a sobre, als barrots (no damunt de l'Ineu, que s'hi posa al davant)
         this.interactiu(700, Y0 + 30, 96, DIALEGS.reixaDins, {
-            altura: -40, actiu: () => !Estat.flag('reixaObertaDins'),
+            altura: -40, actiu: () => !Estat.flag('reixaObertaDins') && !this.guardiaViu(),
             enTancar: () => {
                 this.obstacles.remove(this.colReixa, true, true);
                 this.tweens.add({ targets: this.barra, y: -18, alpha: 0, duration: 500, ease: 'Sine.easeIn', onComplete: obrir });
             }
         });
+    }
+
+    guardiaViu() { return Estat.flag('raimDesperta') && !Estat.flag('raimDerrotat'); }
+
+    // En despertar-se el guardià la reixa es tanca (i la barra de fusta hi torna): no es pot fugir fins que cau
+    tancarReixa() {
+        if (this.reixaBoss) return;
+        this.reixaBoss = true;
+        if (this.ineu && this.ineu.y > 895) this.ineu.body.reset(700, 870);       // si és a l'entrada de la reixa, se'l treu abans que es tanqui
+        this.tancarPortaSecreta();
+        if (!this.colReixa || !this.colReixa.active) this.colReixa = this.colisio(700, 928, 184, 52);
+        if (this.barrots) { this.tweens.killTweensOf(this.barrots); this.barrots.setAlpha(1); }
+        if (this.barra) { this.tweens.killTweensOf(this.barra); this.barra.setVisible(true).setAlpha(1).setY(0); }
+        Sfx.porta();
+        this.cameras.main.shake(200, 0.004);
+    }
+    // La porta camuflada de l'esquerra també es tanca (una paret de pedra invisible davant la sortida) mentre el guardià és viu
+    tancarPortaSecreta() {
+        if (this.colSecreta && this.colSecreta.active) return;
+        this.colSecreta = this.colisio(121, 740, 24, 120);
+    }
+    // En caure el guardià, la reixa torna a l'estat d'abans (si ja era oberta, queda oberta; si no, es pot alçar la barra com sempre)
+    reobrirReixa() {
+        if (!this.reixaBoss) return;
+        this.reixaBoss = false;
+        if (this.colSecreta && this.colSecreta.active) { this.obstacles.remove(this.colSecreta, true, true); this.colSecreta = null; }
+        if (this.reixaEstavaOberta || Estat.flag('reixaObertaDins') || Estat.flag('ocellaireVencut')) {
+            if (this.colReixa && this.colReixa.active) this.obstacles.remove(this.colReixa, true, true);
+            if (this.barra) this.barra.setVisible(false);
+            if (this.barrots) this.barrots.setAlpha(0.35);
+            Sfx.porta();
+        }
     }
 
     // ---- L'Home del Raïm i el volant de ferro ----
@@ -359,7 +578,9 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // L'estàtua (o, si ja ha estat vençuda, un munt de pedres)
         this.estatua = null;
         if (derrotat) {
-            this.runes();
+            this.estatuaFinal = this.posar('home_raim', RX, RY);                  // vençut: l'estàtua, de cara i endreçada, descansa al pedestal per sempre
+            this.colEstatua = this.colisio(RX, RY - 10, 62, 24);
+            this.raimPas = 3;
         } else {
             this.estatua = this.posar(this.texRaim(), RX, RY);
             this.colEstatua = this.colisio(RX, RY - 10, 62, 24);
@@ -378,6 +599,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         }, { altura: 70, actiu: () => !Estat.flag('raimDesperta') && Estat.te('maneta'),
              enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.time.delayedCall(500, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => this.despertarRaim())); } } });
 
+        // Vençut, l'estàtua del guardià es pot mirar: descansa al pedestal
+        this.interactiu(RX, RY + 10, 90, DIALEGS.raimEstatuaFinal, { altura: 250, actiu: () => Estat.flag('raimDerrotat') && !!this.estatuaFinal });
         // Trapa de la cripta, a sota de l'escalinata: una llosa amb una creu gravada; vençut el guardià, es fa a un costat i
         // deixa veure l'escala que baixa
         this.dibuixarTrapa(derrotat);
@@ -490,9 +713,9 @@ class ZonaCasaGranInt extends ZonaCasaBase {
 
     // L'estàtua cobra vida: s'esquerda i tremola, esclata en llum lila, el guardià salta del pedestal (que es queda) i alça la maça rugint
     despertarRaim(sense = false) {
-        if (!sense) Estat.posaFlag('raimDesperta');
         const { x: RX, y: RY } = RAIM, boss = this.enemic('raim', RX, sense ? RY + 85 : RY - 70);
         if (!boss) return;
+        if (!sense) Estat.posaFlag('raimDesperta');
         this.boss = boss;
         // L'origen del sprite passa als peus: així, quan cau de morros, gira pels peus i el cap toca a terra
         const hh = boss.spr.displayHeight / 2;
@@ -503,11 +726,11 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.pedestal = this.add.image(RX, RY, 'home_raim_pedestal').setOrigin(0.5, 1).setScale((t.customData && t.customData.escala) || 1 / RES).setDepth(RY);
         };
         if (this.estatua) this.estatua.setVisible(false);
-        if (sense || !this.estatua) { ponPedestal(); return; }
+        if (sense || !this.estatua) { ponPedestal(); this.tancarReixa(); return; }
 
         // Mentre dura l'escena el guardià no actua ni fa mal
         const spr = boss.spr, est = this.estatua;
-        boss.atorditFins = this.time.now + 3300;
+        boss.atorditFins = this.time.now + 3900;
         spr.setAlpha(0); boss.ombra.setAlpha(0);
         est.setVisible(true).setTint(0xe0c8ff);
         this.cameras.main.shake(800, 0.004);
@@ -521,22 +744,32 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             est.setVisible(false); ponPedestal();
             this.cameras.main.flash(260, 200, 160, 255);
             this.boiraPuf(RX, RY - 90);
-            spr.setAlpha(1).setScale(boss.escalaBase);
-            boss.ombra.setAlpha(1);
-            // Salta del pedestal i cau al davant
-            this.tweens.addCounter({
-                from: 0, to: 1, duration: 620, ease: 'Bounce.easeOut',
-                onUpdate: tw => { if (spr.active && !boss.mort) spr.body.reset(RX, RY - 70 + hh + 155 * tw.getValue()); },
-                onComplete: () => {
-                    if (!spr.active || boss.mort) return;
-                    spr.body.reset(RX, RY + 85 + hh);
-                    this.cameras.main.shake(320, 0.009);
-                    Sfx.cop(true);
-                    ENEMICS.raim.trossos(this, RX, RY + 110, 12);
-                    // Rugit: es tira enrere amb la maça alçada i torna endreçat (sense deformar el sprite)
-                    spr.setScale(boss.escalaBase);
-                    this.tweens.add({ targets: spr, rotation: -0.32, duration: 420, ease: 'Sine.easeOut', yoyo: true, hold: 500, onYoyo: () => { Sfx.carrega(); this.esquitxar(RX, RY); } });
-                }
+            // El guardià és dret a dalt del pedestal (els peus a la cara de dalt, per davant d'ell): ruig i en baixa d'un salt
+            const PT = RY - 118, Y1 = RY + 85 + hh;
+            boss.depthMin = RY + 4;
+            spr.setAlpha(1).setScale(boss.escalaBase).setRotation(0);
+            spr.body.reset(RX, PT);
+            boss.ombra.setAlpha(0);
+            Sfx.carrega();
+            this.tweens.add({ targets: spr, rotation: -0.14, duration: 380, yoyo: true, hold: 120, ease: 'Sine.easeOut', onYoyo: () => this.esquitxar(RX, RY - 90) });
+            this.time.delayedCall(800, () => {
+                if (!spr.active || boss.mort) return;
+                this.tweens.addCounter({
+                    from: 0, to: 1, duration: 660, ease: 'Sine.easeInOut',
+                    onUpdate: tw => { if (spr.active && !boss.mort) { const t = tw.getValue(); spr.body.reset(RX, PT + (Y1 - PT) * t - Math.sin(Math.PI * t) * 140); } },
+                    onComplete: () => {
+                        if (!spr.active || boss.mort) return;
+                        spr.body.reset(RX, Y1);
+                        boss.depthMin = 0; boss.ombra.setAlpha(1);
+                        this.cameras.main.shake(320, 0.009);
+                        Sfx.cop(true);
+                        ENEMICS.raim.trossos(this, RX, RY + 110, 12);
+                        this.tancarReixa();
+                        // Rugit: es tira enrere amb la maça alçada i torna endreçat (sense deformar el sprite)
+                        spr.setScale(boss.escalaBase);
+                        this.tweens.add({ targets: spr, rotation: -0.32, duration: 420, ease: 'Sine.easeOut', yoyo: true, hold: 500, onYoyo: () => { Sfx.carrega(); this.esquitxar(RX, RY); } });
+                    }
+                });
             });
         });
     }
@@ -545,24 +778,59 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         const c = e.spr.body.center;
         this.ui().amagarBarraBoss();
         Estat.posaFlag('raimDerrotat');
+        this.reobrirReixa();
         ENEMICS.raim.trossos(this, c.x, c.y, 22);
         this.ui().actualitzarHUD();
-        this.tweens.add({ targets: e.spr, angle: 70, duration: 400 });
-        // El volant, l'engranatge i la maneta cauen amb el pedestal
+        // El volant, l'engranatge i la maneta cauen
         [this.volant, this.engranatge, this.manetaVolant].forEach(o => { if (o) this.tweens.add({ targets: o, y: o.y + 40, alpha: 0, duration: 600, ease: 'Quad.easeIn', onComplete: () => o.destroy() }); });
         this.volant = null; this.engranatge = null; this.manetaVolant = null;
-        if (this.pedestal) {                // el pedestal s'esmicola
-            ENEMICS.raim.trossos(this, RAIM.x, RAIM.y, 14);
-            this.tweens.add({ targets: this.pedestal, alpha: 0, duration: 700, onComplete: () => { this.pedestal.destroy(); this.pedestal = null; } });
-            if (this.colEstatua) { this.obstacles.remove(this.colEstatua, true, true); this.colEstatua = null; }
-        }
         this.time.delayedCall(900, () => this.ui().obrirDialeg(DIALEGS.raimDerrotat, () => {
-            this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
-            this.runes();
+            // Es dreça, torna d'un salt al seu pedestal i s'hi queda, fet escultura (la imatge de l'estàtua endreçada); llavors s'obre la trapa
             Estat.posaObjectiu("La llosa de sota l'escalinata s'ha obert: baixa a la cripta dels monjos.");
             Estat.desar();
-            this.obrirTrapa();
+            this.raimAlPedestal(e, () => this.obrirTrapa());
         }));
+    }
+
+    raimAlPedestal(e, fet) {
+        const { x: RX, y: RY } = RAIM, s = e.spr, PT = RY - 118, x0 = s.x, y0 = s.y;
+        e.ombra.setAlpha(0);
+        s.setAlpha(1).setRotation(0).setTexture('home_raim_desperta').setScale(e.escalaBase).setFlipX(RX < x0);
+        e.escalaPose = null;
+        s.y = y0;
+        Sfx.carrega();
+        ENEMICS.raim.trossos(this, x0, y0, 8);
+        this.tweens.add({ targets: s, y: y0 - 36, duration: 180, yoyo: true, ease: 'Sine.easeOut', onComplete: () => {
+            // salta al pedestal: un arc, per davant d'ell
+            this.tweens.addCounter({
+                from: 0, to: 1, duration: 800, ease: 'Sine.easeInOut',
+                onUpdate: tw => {
+                    const t = tw.getValue();
+                    s.setPosition(x0 + (RX - x0) * t, y0 + (PT - y0) * t - Math.sin(Math.PI * t) * 150);
+                    s.setDepth(Math.max(s.y, RY + 4));
+                },
+                onComplete: () => {
+                    s.setPosition(RX, PT).setFlipX(false);
+                    this.cameras.main.shake(260, 0.006); Sfx.cop(true);
+                    ENEMICS.raim.trossos(this, RX, PT, 12);
+                    // s'hi queda quiet un instant i es fa pedra: la imatge de l'estàtua endreçada es fon per sobre
+                    this.time.delayedCall(700, () => {
+                        const t = this.textures.get('home_raim'), esc = (t.customData && t.customData.escala) || 1 / RES;
+                        const est = this.estatuaFinal = this.add.image(RX, RY, 'home_raim').setOrigin(0.5, 1).setScale(esc).setDepth(RY).setAlpha(0);
+                        this.raimPas = 3;
+                        Sfx.secret();
+                        this.cameras.main.flash(300, 200, 170, 255);
+                        this.boiraPuf(RX, RY - 110);
+                        this.tweens.add({ targets: est, alpha: 1, duration: 1000 });
+                        this.tweens.add({ targets: [s, this.pedestal].filter(Boolean), alpha: 0, duration: 1000, onComplete: () => {
+                            this.retirar(e);
+                            if (this.pedestal) { this.pedestal.destroy(); this.pedestal = null; }
+                            this.time.delayedCall(300, () => fet && fet());
+                        } });
+                    });
+                }
+            });
+        } });
     }
 }
 

@@ -616,7 +616,7 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 
 *Si: bassadoriaNeta*
 
-**La Pianista:** Se sent l'aigua cantar des d'aquí, fill. Ho has aconseguit. Torna a veure'm quan tinguis un altre cant per aprendre.
+**La Pianista:** La bassadòria ja és neta, fill. Ho has aconseguit. Torna a veure'm quan tinguis un altre cant per aprendre.
 
 
 *Si: NO bassadoriaNeta*

@@ -927,7 +927,7 @@ Object.assign(ZonaBase.prototype, {
         this.enemics.forEach(e => {
             if (e.mort) return;
             // L'Ocellaire a la pausa: l'autoapuntat va SEMPRE al cap (no al punt més proper del cos), amb més marge d'abast i de con
-            const alCap = e.tipus === 'ocellaire' && e.estat === 'cansat';
+            const alCap = (e.tipus === 'ocellaire' || e.tipus === 'raim') && e.estat === 'cansat';
             const pts = this.puntsCop(e);
             const c = alCap ? pts[0] : pts.reduce((m, q) => Phaser.Math.Distance.Between(q.x, q.y, jo.x, jo.y) < Phaser.Math.Distance.Between(m.x, m.y, jo.x, jo.y) ? q : m),
                   dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
@@ -1049,7 +1049,7 @@ Object.assign(ZonaBase.prototype, {
             if (e.def.arma && e.def.arma !== armaIneu()) { this.copRebutjat(e, d); return; }
             if (e.def.cap && (!tocats.some(c => c.cap) || (this.capDe(e).nomesCansat && e.estat !== 'cansat'))) { this.copRebutjat(e, d); return; }
             // Pausa de l'Ocellaire ja esgotada (3 cops fets): els cops que queden rebotaran fins que es tanqui
-            if (e.tipus === 'ocellaire' && e.estat === 'cansat' && e.copsRebuts >= e.def.copsPausa) { this.copRebutjat(e, d); return; }
+            if ((e.tipus === 'ocellaire' || e.tipus === 'raim') && e.estat === 'cansat' && e.copsRebuts >= e.def.copsPausa) { this.copRebutjat(e, d); return; }
             if (e.tipus === 'ocellaire' && !e.primerCap && this.dirFrase) { e.primerCap = true; this.dirFrase('cap'); }       // primera vegada que li piquem el cap
             this.colpejar(e, k.dany, d); encertats++;
             // Bosses amb un màxim de cops per pausa: a l'últim, la pausa s'acaba
@@ -1146,7 +1146,7 @@ Object.assign(ZonaBase.prototype, {
     // El cop ha caigut al cos, no al cap: no fa mal
     copRebutjat(e, d) {
         const q = this.puntsCop(e)[2], ara = this.time.now;
-        if (e.tipus === 'ocellaire') { this.copRebutjatOcellaire(e, d, q, ara); return; }
+        if (e.tipus === 'ocellaire' || e.tipus === 'raim') { this.copRebutjatOcellaire(e, d, q, ara); return; }       // rebot gris (no es confon amb un cop encertat)
         Sfx.escut();
         this.cameras.main.shake(70, 0.0015, true);
         this.impacte(q.x, q.y, { x: -d.x, y: -d.y }, 0);
@@ -1535,7 +1535,7 @@ Object.assign(ZonaBase.prototype, {
             if (e.mort) continue;
             const b = e.spr.body;
             if (ara >= e.atorditFins) e.def.ia.call(e.def, this, e, ara);
-            e.spr.setDepth(b.bottom);
+            e.spr.setDepth(e.depthMin ? Math.max(b.bottom, e.depthMin) : b.bottom);       // (depthMin: el guardià del Raïm, dret a dalt del pedestal, es veu per davant d'ell)
             e.ombra.setPosition(b.center.x, b.bottom - 4);
             // Contacte amb l'Ineu
             const perillos = e.def.perill ? e.def.perill(e) : true;

@@ -700,7 +700,7 @@ class ZonaCelles extends ZonaBase {
 
     posarRosansa() {
         // Els braços del carro miren a l'est. La Rosansa és una mica més a l'est, davant del carro: quan ha parlat s'hi acosta, agafa els braços, es gira cap a l'est i se l'enduu
-        this.carroRosansa = this.posar('carro_rosansa', 1300, 880).setFlipX(true);
+        this.carroRosansa = this.posar('carro_rosansa', 1300, 880, { opac: true }).setFlipX(true);
         this.colCarro = this.colisio(1240, 855, 160, 50);
         this.rosansa = this.posar('rosansa', 1550, 892);
         this.idleCodi(this.rosansa);                              // respira i es balanceja una mica mentre espera

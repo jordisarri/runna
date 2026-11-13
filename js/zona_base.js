@@ -26,7 +26,7 @@ const ZOOM_ZONES = {
     ZonaCasetaJoc: 1.3, ZonaTresor: 1.3, ZonaCelaStAntoni: 1.3, ZonaCabanaInt: 1.3, ZonaCabanaCami: 1.3, ZonaMasiaCirosa: 1.3, ZonaGolfes: 1.3, ZonaCasaCripta: 1.3, ZonaCasaTresor: 1.3, ZonaCasaGeorgi: 1.3,
     ZonaHostatgeriaInt: 1.2, ZonaBiblioteca: 1.2, ZonaMonestirRebedor: 1.2, ZonaErmitaInt: 1.2, ZonaGabrielInt: 1.2,
     ZonaCambraDolora: 1.25, ZonaCambraPilaria: 1.25, ZonaCambraCarmelia: 1.25, ZonaSoterraniHost: 1.2,
-    ZonaPingpong: 1.2, ZonaEsglesia: 1.1, ZonaEsglesiaNova: 1.1, ZonaTavernaInt: 1.25, ZonaCasaGranInt: 1.25,
+    ZonaPingpong: 1.2, ZonaEsglesia: 1.1, ZonaEsglesiaNova: 1.1, ZonaTavernaInt: 1.25, ZonaCasaGranInt: 1.4,
     ZonaPlaca: 1.1, ZonaEra: 1.1, ZonaJardi: 1.1, ZonaCementiri: 1.1,       // exteriors amb poc contingut: una mica més a prop
     ZonaSotaTaverna: 1.1, ZonaGirgolesFora: 1.1, ZonaPassadis: 1.15, ZonaGirgoles: 1.15, ZonaTortura: 1.2, ZonaBoira: 1.2
 };
@@ -46,6 +46,8 @@ const ZONES_INICI = ['ZonaMonestir', 'ZonaMonestirRebedor', 'ZonaBiblioteca', 'Z
 const BANDA_SUD = 120;   // franja de baix (vora sud, sortides) que es desplaça cap avall en ampliar la zona
 const VELOCITAT_INEU = 230;
 // Caixa de col·lisió del tronc de l'arbre (gràfic 'arbre': les arrels fan ~130 px d'ample i el tronc ~70-100)
+// Part del dibuix (fraccions x0, y0, x1, y1 del gràfic) que és el tronc: és opac (la silueta de l'Ineu s'hi amaga); la copa i les branques, no
+const TRONCS = { arbre: [0.27, 0.52, 0.75, 1], pi: [0.36, 0.55, 0.66, 1], pi_pinyer: [0.30, 0.60, 0.62, 1] };
 const TRONC_ARBRE = esc => ({ w: Math.round(100 * esc), h: Math.round(36 * esc) });
 
 const PROFUNDITAT_PORTA = 36;   // els interiors es surten per sota de la porta: l'Ineu l'ha de traspassar abans de canviar de zona
@@ -185,7 +187,7 @@ const REINICI_ZONES = {
     ZonaTaverna: { portaTaverna: null, portaOberta: false },
     ZonaSotaTaverna: { portaOberta: false },
     ZonaJardi: { obrintLlosa: false },
-    ZonaCasaGranInt: { volDespertar: false, raimPas: 0, colReixa: null, barrots: null, barra: null, estatua: null, colEstatua: null, llosaTrapa: null, llumTrapa: null, engranatge: null, manetaVolant: null, volant: null, pedestal: null, boss: null },
+    ZonaCasaGranInt: { reixaBoss: false, colSecreta: null, estatuaFinal: null, reixaEstavaOberta: false, volDespertar: false, raimPas: 0, colReixa: null, barrots: null, barra: null, estatua: null, colEstatua: null, llosaTrapa: null, llumTrapa: null, engranatge: null, manetaVolant: null, volant: null, pedestal: null, boss: null },
     ZonaBosc: { fontBrilla: null, llumLila: null },
     ZonaRuines: { ombraForta: false, pergamiBrill: null },
     ZonaTiller: { avisArrels: false, sopar: null },
@@ -424,7 +426,7 @@ class ZonaBase extends Phaser.Scene {
     // ---------------- Viatge ràpid ----------------
     parada(pd) {
         const [cx, cy] = pd.c, [hx, hy] = pd.h;
-        const carro = this.posar('carruatge', cx, cy, { col: { w: 190, h: 40 } }).setFlipX(true);     // girat: el davant mira cap a l'escena
+        const carro = this.posar('carruatge', cx, cy, { col: { w: 190, h: 40 }, opac: true }).setFlipX(true);     // girat: el davant mira cap a l'escena
         // una mica de vapor que surt de la xemeneia (a un terç de l'ample, a dalt; el carruatge és girat)
         const fx = cx + carro.displayWidth * 0.2, fy = cy - carro.displayHeight * 0.86;
         this.add.particles(fx, fy, 'boira', { speedY: { min: -30, max: -14 }, speedX: { min: -14, max: -4 }, lifespan: 1800, scale: { start: 0.25, end: 0.7 },
@@ -665,6 +667,11 @@ class ZonaBase extends Phaser.Scene {
         const img = this.add.image(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
         img.setDepth(opts.fonsY !== undefined ? opts.fonsY : y);
         if (/^(arbre|xiprer|pi|pi_pinyer|roure|alzina_buida|pinassa|rovello)$/.test(key)) (this.copes = this.copes || []).push(img);   // copes que es tornen translúcides si amaguen un enemic
+        if (TRONCS[key]) {          // font de la màscara del tronc (no es dibuixa: només amaga la silueta de l'Ineu quan passa darrere el tronc)
+            const f = TRONCS[key], W = img.width, H = img.height;
+            img.tronc = this.make.image({ key, add: false }).setOrigin(0.5, 1).setCrop(f[0] * W, f[1] * H, (f[2] - f[0]) * W, (f[3] - f[1]) * H);
+            img.troncRect = () => { const sx = Math.abs(img.scaleX), sy = Math.abs(img.scaleY); return new Phaser.Geom.Rectangle(img.x - W * sx / 2 + f[0] * W * sx, img.y - H * sy + f[1] * H * sy, (f[2] - f[0]) * W * sx, (f[3] - f[1]) * H * sy); };
+        }
         // Tots els arbres del mateix gràfic tenen el mateix tronc sòlid (arrels incloses), proporcional a l'escala
         if (key === 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: TRONC_ARBRE(opts.escala || 1) });
         if (opts.col) this.colisio(x + (opts.col.dx || 0), y - opts.col.h / 2 + (opts.col.dy || 0), opts.col.w, opts.col.h);
@@ -1239,7 +1246,7 @@ class ZonaBase extends Phaser.Scene {
     }
 
     cartell(x, y, dialeg) {
-        this.posar('cartell', x, y, { col: { w: 20, h: 10 } });
+        this.posar('cartell', x, y, { col: { w: 20, h: 10 }, opac: true });
         const f = typeof dialeg === 'function' ? dialeg : () => dialeg;
         return this.interactiu(x, y, RADI_OBJECTE, (...a) => this.cartellAmbNom(f(...a)), { altura: 70 });
     }
@@ -1829,8 +1836,12 @@ class ZonaBase extends Phaser.Scene {
         const ib = i.getBounds();
         // Un objecte opac (orgue, altar, bancs...) davant l'Ineu amaga del tot la silueta, encara que també hi hagi un personatge davant (només es pot emmascarar amb un objecte)
         if ((this.opacs || []).some(n => n && n.active && n.visible && n.depth > i.depth && Phaser.Geom.Intersects.RectangleToRectangle(n.getBounds(), ib))) f.setAlpha(0);
-        const davant = Object.values(this.npcs || {}).concat(this.opacs || []).find(n => n && n.active && n.visible && n.depth > i.depth
+        let davant = Object.values(this.npcs || {}).concat(this.opacs || []).find(n => n && n.active && n.visible && n.depth > i.depth
             && Phaser.Geom.Intersects.RectangleToRectangle(n.getBounds(), ib));
+        if (!davant) {            // el tronc d'un arbre davant l'Ineu també l'amaga (la copa no: la silueta s'hi veu a través)
+            const arbre = (this.copes || []).find(t => t.tronc && t.active && t.visible && t.depth > i.depth && Phaser.Geom.Intersects.RectangleToRectangle(t.troncRect(), ib));
+            if (arbre) { davant = arbre.tronc; davant.setPosition(arbre.x, arbre.y).setScale(arbre.scaleX, arbre.scaleY).setFlipX(arbre.flipX); }
+        }
         if (davant !== this.npcDavant) {
             this.npcDavant = davant;
             if (davant && !davant.mascaraInv) { davant.mascaraInv = new Phaser.Display.Masks.BitmapMask(this, davant); davant.mascaraInv.invertAlpha = true; }

@@ -308,7 +308,7 @@ const DIALEGS = {
             };
         }
         return { pagines: [{ qui: "La Pianista", text: E.flag("bassadoriaNeta")
-            ? "Se sent l'aigua cantar des d'aquí, fill. Ho has aconseguit. Torna a veure'm quan tinguis un altre cant per aprendre."
+            ? "La bassadòria ja és neta, fill. Ho has aconseguit. Torna a veure'm quan tinguis un altre cant per aprendre."
             : "Si trobes la manera de tornar la música, porta-me-la. Jo no em moc d'aquest banc, ni que s'acabi el món. Toca el cant amb la tarota quan siguis al lloc on cal." }] };
     },
 

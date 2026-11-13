@@ -12,7 +12,8 @@ class MusicaStream {
         const a = this.el = new Audio();
         a.loop = true; a.preload = 'auto';
         a.src = encodeURI(`assets/musica/${fitxer}.m4a`);
-        if (seek) a.addEventListener('loadedmetadata', () => { try { a.currentTime = seek; } catch (e) {} }, { once: true });
+        // seek < 0: punt a l'atzar (entre el 5 % i el 70 % de la cançó), perquè no comenci sempre pel mateix moment
+        if (seek) a.addEventListener('loadedmetadata', () => { try { a.currentTime = seek < 0 ? a.duration * (0.05 + Math.random() * 0.65) : seek; } catch (e) {} }, { once: true });
         const ctx = game.sound && game.sound.context;
         if (ctx) {
             try {
@@ -103,7 +104,7 @@ const Joc = {
         ZonaDolmen: 'musica_bosc', ZonaTiller: 'musica_bosc', ZonaCabana: 'musica_bosc',
         // Exteriors (overworld)
         ZonaPlaca: 'musica_poble', ZonaMonestir: 'musica_poble', ZonaCreu: 'musica_poble', ZonaCasaGran: 'musica_poble',
-        ZonaRuines: 'musica_poble', ZonaCellerFora: 'musica_poble', ZonaGirgolesFora: 'musica_poble', ZonaCelles: 'musica_poble', ZonaSantAntoni: 'musica_poble', ZonaTaverna: 'musica_poble', ZonaGeorgi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaGeorgi: 'musica_casa', ZonaEra: 'musica_poble', ZonaJardi: 'musica_poble', ZonaCementiri: 'musica_poble',
+        ZonaRuines: 'musica_poble', ZonaCellerFora: 'musica_poble', ZonaGirgolesFora: 'musica_poble', ZonaCelles: 'musica_poble', ZonaSantAntoni: 'musica_poble', ZonaTaverna: 'musica_poble', ZonaGeorgi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaGeorgi: 'musica_casa', ZonaEra: 'musica_poble', ZonaJardi: 'musica_poble', ZonaCementiri: 'musica_masmorra',
         // Interiors de cases
         ZonaEsglesia: 'musica_santuari', ZonaEsglesiaNova: 'musica_santuari', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
         ZonaCabanaCami: 'musica_casa', ZonaGolfes: 'musica_casa', ZonaTorre: 'musica_casa',
@@ -288,7 +289,8 @@ const Joc = {
     musicaZona(scene, fade = 0) {
         let clau = Joc.MUSICA_ZONES[scene.scene.key];
         if (scene.scene.key === 'ZonaEsglesia' && Estat.flag('epilegPendent') && !Estat.flag('epilegFet')) clau = 'musica_epileg';   // l'epíleg té el seu tema
-        if (clau) Joc.iniciarMusica(scene, 0, clau, fade);
+        const jaSona = Joc.musica && Joc.musica.isPlaying;
+        if (clau) Joc.iniciarMusica(scene, clau === 'musica_epileg' ? 0 : -1, clau, fade || (jaSona ? 0 : 700));      // la música de zona comença en un punt a l'atzar (si ja sona la mateixa, no es toca)
         else { Joc.musicaPendent = null; Joc.aturarMusica(); }
     },
 

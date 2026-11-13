@@ -30,7 +30,7 @@ class ZonaCementiri extends ZonaBase {
         this.terra('pedra', 1240, 400, 260, 230);        // replà de l'àngel
 
         // La tomba dels monjos primers: un sarcòfag sobre graons. Mentre és oberta, en surt boira lila de l'esquerda
-        this.tomba = this.posar(tancada ? 'tomba_tancada' : 'tomba_esquerdada', 700, 470, { col: { w: 210, h: 60 } });
+        this.tomba = this.posar(tancada ? 'tomba_tancada' : 'tomba_esquerdada', 700, 470, { col: { w: 210, h: 60 }, opac: true });
         // Amb Runna a la mà, ESPAI ja no llegeix la làpida: colpeja (i segella) la tomba
         this.interactiu(700, 480, 130, DIALEGS.tombaMonjos, { altura: 150, actiu: () => !Estat.te('runna') || Estat.flag('tombaSegellada') });
         if (!tancada) {
@@ -40,7 +40,7 @@ class ZonaCementiri extends ZonaBase {
         this.fanalet(585, 500); this.fanalet(818, 500);
 
         // La tomba de l'àngel, on el Germà Francí porta flors: l'àngel que plora al cap i un gerro als peus
-        this.tombaAngel = this.posar(Estat.flag('florsCreu') ? 'tomba_angel_content' : 'tomba_angel', 1370, 600, { col: { w: 124, h: 44 } });
+        this.tombaAngel = this.posar(Estat.flag('florsCreu') ? 'tomba_angel_content' : 'tomba_angel', 1370, 600, { col: { w: 124, h: 122 }, opac: true });      // opac, i el bloc de col·lisió va des de la base de l'àngel fins als peus de la tomba: venint de dalt no es pot passar per sobre
         this.interactiu(1370, 615, RADI_GRAN, DIALEGS.creuCementiri, { altura: 230, enTancar: () => this.posarRam() });
         this.fanalet(1285, 600); this.fanalet(1455, 600);
         this.arbres([[1250, 470], [1495, 470]], 'xiprer');            // dos xiprers emmarquen l'àngel
@@ -63,7 +63,7 @@ class ZonaCementiri extends ZonaBase {
             let x = (x0 + x1) / 2 - (total + pas * (fila.length - 1)) / 2;
             fila.forEach(key => {
                 const w = AMPLADA[key], cx = x + w / 2, tomba = key.startsWith('tomba');
-                this.posar(key, cx, y, { col: tomba ? { w: w - 14, h: 40 } : { w: w - 16, h: 14 } });
+                this.posar(key, cx, y, { col: tomba ? { w: w - 14, h: 40 } : { w: w - 16, h: 14 }, opac: true });
                 if (n % 3 === 1) this.interactiu(cx, y + 6, RADI_OBJECTE, DIALEGS.lapida(n), { altura: tomba ? 100 : 90 });
                 n++;
                 x += w + pas;

@@ -236,11 +236,39 @@ function pintarEscalinata(ctx, w, h) {
     // Mur de carreus de la dreta amb una porta oberta a la claror
     carreusErmita(ctx, 830, 190, 310, 450, 311, [122, 106, 84], 30);
     ctx.fillStyle = gradVBib(ctx, 190, 290, [[0, 'rgba(10,6,3,0.9)'], [1, 'rgba(10,6,3,0)']]); ctx.fillRect(830, 190, 310, 100);
-    const pX = 930, pY = 372, pW = 100, pH = 230;
-    const porta = () => { ctx.beginPath(); ctx.moveTo(pX, pY + pH); ctx.lineTo(pX, pY + pW / 2); ctx.arc(pX + pW / 2, pY + pW / 2, pW / 2, Math.PI, 0); ctx.lineTo(pX + pW, pY + pH); ctx.closePath(); };
-    ctx.strokeStyle = '#cdbf9c'; ctx.lineWidth = 14; porta(); ctx.stroke();
-    ctx.fillStyle = gradVBib(ctx, pY, pY + pH, [[0, '#fff6d8'], [1, '#e2c887']]); porta(); ctx.fill();
-    ctx.strokeStyle = CASA_C; ctx.lineWidth = 2; porta(); ctx.stroke();
+    // Paret de presó: carreus més foscos, rastres d'humitat i molsa, una gran argolla de ferro amb dues cadenes que acaben en grillons i una cadena que penja de la volta
+    const r2 = rndBib(512);
+    ctx.fillStyle = 'rgba(8,5,3,0.34)'; ctx.fillRect(830, 190, 310, 430);
+    for (let i = 0; i < 9; i++) {                                                           // ratlles d'humitat des de dalt
+        const x = 840 + r2() * 290, w = 10 + r2() * 26, l = 90 + r2() * 260, g = ctx.createLinearGradient(0, 190, 0, 190 + l);
+        g.addColorStop(0, 'rgba(18,28,22,0.38)'); g.addColorStop(1, 'rgba(18,28,22,0)'); ctx.fillStyle = g; ctx.fillRect(x, 190, w, l);
+    }
+    for (let i = 0; i < 16; i++) {                                                          // molsa a la vora del terra
+        const x = 835 + r2() * 300, y = 560 + r2() * 58, rr = 8 + r2() * 20;
+        ctx.fillStyle = `rgba(${70 + r2() * 20},${92 + r2() * 20},${50},${0.18 + r2() * 0.14})`; ctx.beginPath(); ctx.ellipse(x, y, rr * 1.4, rr * 0.6, 0, 0, Math.PI * 2); ctx.fill();
+    }
+    const ferro = '#26221f', brillant = '#8d8a84';
+    const cadena = (x0, y0, x1, y1, n, sag) => {
+        for (let i = 0; i <= n; i++) {
+            const t = i / n, x = x0 + (x1 - x0) * t, y = y0 + (y1 - y0) * t + Math.sin(Math.PI * t) * sag, vert = i % 2 === 0;
+            ctx.strokeStyle = ferro; ctx.lineWidth = 4; ctx.beginPath(); ctx.ellipse(x, y, vert ? 4 : 7, vert ? 7 : 4, 0, 0, Math.PI * 2); ctx.stroke();
+            ctx.strokeStyle = brillant; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.ellipse(x - 0.6, y - 0.6, vert ? 3.2 : 6, vert ? 6 : 3.2, 0, 0.3, 2.1); ctx.stroke();
+        }
+    };
+    const grillo = (x, y) => {                                                              // anella de ferro oberta, penjada d'una cadena
+        ctx.strokeStyle = ferro; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(x, y + 14, 15, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = brillant; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.arc(x - 1, y + 13, 15, 3.6, 5.2); ctx.stroke();
+        ctx.fillStyle = ferro; ctx.fillRect(x - 9, y - 4, 18, 10);
+    };
+    ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.beginPath(); ctx.ellipse(988, 338, 40, 14, 0, 0, Math.PI * 2); ctx.fill();         // ombra de l'argolla
+    ctx.fillStyle = '#3a342d'; ctx.fillRect(962, 290, 52, 18); ctx.strokeStyle = CASA_C; ctx.lineWidth = 2; ctx.strokeRect(962, 290, 52, 18);   // placa clavada a la paret
+    ctx.strokeStyle = ferro; ctx.lineWidth = 11; ctx.beginPath(); ctx.arc(988, 328, 30, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = brillant; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(986, 326, 30, 3.5, 5.3); ctx.stroke();
+    cadena(972, 354, 912, 470, 9, 12); grillo(912, 470);
+    cadena(1004, 354, 1066, 470, 9, 12); grillo(1066, 470);
+    cadena(866, 190, 866, 440, 17, 0);                                                      // cadena llarga que penja de la volta
+    ctx.fillStyle = ferro; ctx.beginPath(); ctx.moveTo(858, 440); ctx.quadraticCurveTo(866, 470, 874, 440); ctx.lineTo(872, 434); ctx.quadraticCurveTo(866, 456, 860, 434); ctx.closePath(); ctx.fill();   // garfi
+    ctx.strokeStyle = CASA_C; ctx.lineWidth = 2;
     ctx.fillStyle = '#6a5d48'; ctx.fillRect(830, 620, 310, 20); ctx.strokeRect(830, 620, 310, 20);
     ctx.fillStyle = gradHBib(ctx, 830, 880, [[0, 'rgba(0,0,0,0.5)'], [1, 'rgba(0,0,0,0)']]); ctx.fillRect(830, 190, 50, 450);
 
@@ -260,7 +288,6 @@ function pintarEscalinata(ctx, w, h) {
     ctx.fillStyle = gradVBib(ctx, 344, 430, [[0, 'rgba(10,6,3,0.55)'], [1, 'rgba(10,6,3,0)']]); ctx.fillRect(336, 344, 494, 86);
     ctx.fillStyle = gradHBib(ctx, 336, 400, [[0, 'rgba(10,6,3,0.4)'], [1, 'rgba(10,6,3,0)']]); ctx.fillRect(336, 344, 64, 296);
     ctx.fillStyle = gradHBib(ctx, 780, 830, [[0, 'rgba(10,6,3,0)'], [1, 'rgba(10,6,3,0.4)']]); ctx.fillRect(780, 344, 50, 296);
-    ctx.fillStyle = 'rgba(255,240,190,0.18)'; ctx.beginPath(); ctx.moveTo(830, 560); ctx.lineTo(830, 640); ctx.lineTo(640, 640); ctx.lineTo(720, 560); ctx.closePath(); ctx.fill();   // claror de la porta
     ctx.restore();
     ctx.fillStyle = '#6a5d48'; ctx.fillRect(320, 330, 510, 14); ctx.strokeStyle = CASA_C; ctx.lineWidth = 1.6; ctx.strokeRect(320, 330, 510, 14);
 
