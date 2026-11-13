@@ -975,7 +975,7 @@ class ZonaPassadis extends ZonaCasaBase {
 
 // ---------------- LA CAMBRA SECRETA (sala del tresor) ----------------
 // Una cambra dels monjos: prestatgeries amb mercaderia, sacs, botes i, sobre una tarima, el cofre amb el pergamí. La porta de sortida (al fons, a la dreta)
-// és tancada: s'obre alçant la bóta marcada amb una creu vermella, que el pergamí del monjo assenyala.
+// és tancada: s'obre alçant la bóta marcada amb una creu vermella; no hi ha cap pista: s'ha de descobrir per curiositat.
 class ZonaCasaTresor extends ZonaCasaBase {
     constructor() {
         super('ZonaCasaTresor', {
@@ -1076,7 +1076,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
         // Inspeccionar la porta tancada
         this.interactiu(PX, PB + 46, RADI_OBJECTE, E => ({ pagines: [{ qui: 'Ineu', text: E.flag('botaAlcada')
             ? "(La llosa no té pany ni maneta. La cadena de la politja hi està lligada: el mecanisme de terra deu fer-la pujar.)"
-            : "(Una llosa de pedra sense pany ni maneta. No cedeix gens: s'ha d'obrir d'una altra manera. Aquella bóta amb la creu vermella sembla fora de lloc...)" }] }),
+            : "(Una llosa de pedra sense pany ni maneta. No cedeix gens: s'ha d'obrir d'una altra manera.)" }] }),
             { altura: PB - PT + 36, actiu: () => !Estat.flag('portaTresorOberta') });
     }
 
