@@ -378,11 +378,12 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { fer: (z, fet) => z.agafar(fet, 'pergami', 0xf2e6c8) },
+                { fer: (z, fet) => z.obrirSagrari ? z.obrirSagrari(fet) : z.agafar(fet, 'pergami', 0xf2e6c8) },
+                { avis: "Has obtingut el PERGAMÍ PARTIT (2/2).", obj: 'fragment2' },
                 { qui: "Pergamí", text: "Fragment 2 de 2:\n«El monjo va guardar el segell fins al darrer dia. Des d'aleshores la seva ombra torna cada nit al mur de les Runes a vigilar. La clau de ferro és on ell la va deixar, amb els seus germans, sota la mirada d'un guardià de pedra.»" },
                 { qui: "Pergamí", text: "«Qui busqui la clau, que no oblidi mai on neix el sol.»" }
             ],
-            enAcabar: () => { E.posaFlag("fragment2"); E.posaObjectiu("Ja tens els dos fragments: porta'ls al Pare Alcoví, a la biblioteca del Monestir."); }
+            enAcabar: () => { E.dona('fragment2'); E.posaFlag("fragment2"); E.posaObjectiu("Ja tens els dos fragments: porta'ls al Pare Alcoví, a la biblioteca del Monestir."); }
         };
     },
 
@@ -963,6 +964,12 @@ const DIALEGS = {
     cartellEra: E => ({ pagines: [{ qui: 'Cartell', text: '↑ Ermita de la Desaparició\n→ Hostatgeria\n← Rovellonera' }] }),
 
     // ---------------- JARDÍ ----------------
+    // El senyor Budó, a la taverna: només parla (res de feina ni de missions), assaborint l'anís escarxat que li ha preparat l'Eve
+    senyorBudo: E => ({ pagines: [
+        { qui: 'Senyor Budó', text: "Xxt... baixa la veu, noi, que m'estic fotent un anís escarxat. Me l'ha preparat l'Eve, i això no es beu: s'assaboreix." },
+        { qui: 'Senyor Budó', text: "Una gota de gel, un raig d'aigua, i deixar-lo fer. Les coses bones no tenen pressa. Jo en sé, d'esperar: fa seixanta anys que m'assec en aquesta taula." },
+        { qui: 'Senyor Budó', text: "Si busques conversa, parla amb l'Eve." }
+    ] }),
     isilder: E => DIALEGS.isilderBase(E),
     isilderBase: E => {
         if (E.flag("soparObert") && !E.flag("floresIsilder")) {
@@ -1011,8 +1018,12 @@ const DIALEGS = {
                 ...(acte3 && !E.flag('llavorRosansa') ? [
                     { qui: 'Isílder', text: "La llosa encara s'encén amb la llum de la teva espasa. Ja ho saps: la Rosansa, a les cel·les, i aquella llavor estranya que porta al carro." }
                 ] : []),
-                { qui: 'Isílder', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí, el Sardi el cuidava molt. Des que la boira se\'l va endur, el cuido jo perquè, quan torni, ho trobi tot tal com ho va deixar.' }
-            ]
+                { qui: 'Isílder', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí, el Sardi el cuidava molt. Des que la boira se\'l va endur, el cuido jo perquè, quan torni, ho trobi tot tal com ho va deixar.' },
+                ...(!E.flag('llosaOberta') ? [
+                    { qui: 'Isílder', text: "I la llosa d'aquí al mig, si t'hi has fixat: no s'ha bellugat mai. Entre tres homes i una palanca, res. Pensa que potser la Rosansa, la venedora de verdures, porta al carro una llavor estranya que hi podria fer alguna cosa." }
+                ] : [])
+            ],
+            enAcabar: () => { if (!E.flag('llosaOberta')) E.posaFlag('isilderLlosa'); }
         };
     },
     // L'escena de la llosa amb Runna (salta sola en entrar al jardí: ZonaJardi.escenaLlosaRunna). L'Isílder veu la llum de l'espasa i la de la llosa, que s'encén; li fa
@@ -1041,12 +1052,9 @@ const DIALEGS = {
     // La llosa del jardí. Sense la llavor ni la pista de la Rosansa, l'Isílder (que és a prop) hi diu la seva: depèn d'alguna cosa màgica, però no sap què. Es pot repetir.
     llosaJardi: E => {
         if (E.te('llavorLluna')) return { pagines: [{ qui: 'Ineu', text: "Una llosa de pedra amb una creu gravada. La Llavor de Lluna voldria terra aquí vora, però cal algú que conegui el jardí: l'Isílder." }] };
-        if (E.flag('isilderRosansa')) return { pagines: [{ qui: 'Ineu', text: "Una llosa de pedra amb una creu gravada, ben encaixada a terra. Cal la llavor d'una flor de lluna: la venedora de verdures en deu tenir." }] };
+        if (E.flag('isilderLlosa') || E.flag('isilderRosansa')) return { pagines: [{ qui: 'Ineu', text: "Una llosa de pedra amb una creu gravada, ben encaixada a terra. L'Isílder diu que potser la venedora de verdures té la llavor que cal per obrir-la." }] };
         return {
-            pagines: [
-                { qui: 'Ineu', text: "Una llosa de pedra amb una creu gravada, ben encaixada a terra. No es mou ni un pam." },
-                { qui: 'Isílder', text: "Aquesta llosa... Fa anys i panys que hi és i no s'ha bellugat mai: ho hem provat entre tres homes i una palanca. Els vells deien que no depèn de braços, sinó d'alguna cosa màgica. Què, no ho sé, fill: jo només entenc de flors." }
-            ],
+            pagines: [{ qui: 'Ineu', text: "Una llosa de pedra amb una creu gravada, ben encaixada a terra. No es mou ni un pam, però s'ha de poder obrir d'alguna manera. Potser el senyor de la pèrgola, l'Isílder, ens pot ajudar." }],
             enAcabar: () => E.posaFlag('llosaMisteri')
         };
     },

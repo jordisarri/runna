@@ -1286,16 +1286,14 @@ Object.assign(ZonaBase.prototype, {
         e.spr.body.enable = false;
         const c = e.spr.body.center;
         Estat.dades.flags.derrotats = (Estat.dades.flags.derrotats || 0) + 1;
-        this.boiraPuf(c.x, c.y);
+        if (e.tipus !== 'visitant') this.boiraPuf(c.x, c.y);               // (els visitants cauen adormits, sense esclat)
         Sfx.derrota();
         this.tweens.killTweensOf(e.spr);
-        this.ondaMort(c.x, c.y);
+        if (e.tipus !== 'visitant') this.ondaMort(c.x, c.y);
         if (e.def.alDerrotar) { e.def.alDerrotar(this, e); return; }
 
         if (e.tipus === 'visitant') {
-            if (e.spr.anims) e.spr.anims.stop();
-            this.tweens.add({ targets: e.spr, angle: 90, duration: 300 });
-            this.tweens.add({ targets: [e.spr, e.ombra], alpha: 0, duration: 700, onComplete: () => this.retirar(e) });
+            this.caigudaVisitant(e);
         } else {
             this.tweens.add({ targets: e.spr, alpha: 0, duration: 320, onComplete: () => this.retirar(e) });
             e.ombra.setVisible(false);
@@ -1303,6 +1301,47 @@ Object.assign(ZonaBase.prototype, {
 
         // Sense botí: l'energia només es recupera als llocs de repòs (la Prunera, l'altar...)
         this.ui().actualitzarHUD();
+    },
+
+    // El visitant (turista zombi) vençut: es tambaleja cap enrere, doblega els genolls, cau de costat (gira pels peus), aixeca pols i un petit rebot;
+    // dorm uns instants (tres «z» que pugen) i la boira lila se'n va del cos, que es desfà.
+    caigudaVisitant(e) {
+        const sp = e.spr, I = this.ineu;
+        if (sp.anims) sp.anims.stop();
+        sp.clearTint();
+        const dir = sp.x >= I.x ? 1 : -1, h = sp.displayHeight;
+        sp.setOrigin(0.5, 1); sp.y += h / 2;                          // gira pels peus: el cos cau cap a terra, no pel mig
+        const x0 = sp.x, y0 = sp.y, sx = sp.scaleX, sy = sp.scaleY;
+        e.ombra.setPosition(x0, y0 - 4);
+        // 1) un cop sec: tambaleig cap enrere i els genolls es doblegui
+        this.tweens.add({ targets: sp, x: x0 + dir * 10, angle: -dir * 7, scaleY: sy * 0.93, scaleX: sx * 1.04, duration: 170, ease: 'Sine.easeOut', onComplete: () => {
+            // 2) cau de costat
+            this.tweens.add({ targets: e.ombra, scaleX: e.ombra.scaleX * 1.45, x: x0 + dir * 26, duration: 380 });
+            this.tweens.add({ targets: sp, angle: dir * 88, x: x0 + dir * 36, scaleY: sy, scaleX: sx, duration: 380, ease: 'Cubic.easeIn', onComplete: () => {
+                // 3) impacte: pols i un petit rebot
+                Sfx.puf && Sfx.puf();
+                const pols = this.add.particles(sp.x, y0 - 4, 'espurna', { speed: { min: 20, max: 80 }, angle: { min: 200, max: 340 }, lifespan: 500, scale: { start: 0.45, end: 0 },
+                    alpha: { start: 0.6, end: 0 }, tint: [0xcdb996, 0xa89870], quantity: 8, emitting: false }).setDepth(y0 + 2);
+                pols.explode(8);
+                this.time.delayedCall(700, () => pols.destroy());
+                this.tweens.add({ targets: sp, angle: dir * 80, duration: 90, yoyo: true, ease: 'Sine.easeOut' });
+                // 4) dorm: tres «z» que pugen i s'esvaeixen
+                for (let k = 0; k < 3; k++) this.time.delayedCall(260 + k * 330, () => {
+                    if (!sp.active) return;
+                    const z = this.add.text(sp.x + dir * 26 + k * 6, y0 - 34 - k * 4, 'z', estilText(15 + k * 4, '#e8e0ff', { stroke: '#1a1230', strokeThickness: 3, fontStyle: 'italic' })).setOrigin(0.5).setDepth(y0 + 5);
+                    this.tweens.add({ targets: z, y: z.y - 34, x: z.x + 8, alpha: 0, scale: 1.4, duration: 900, ease: 'Sine.easeOut', onComplete: () => z.destroy() });
+                });
+                // 5) la boira lila se'n va del cos, que es desfà
+                this.time.delayedCall(1250, () => {
+                    if (!sp.active) return;
+                    const bo = this.add.particles(sp.x, y0 - 22, 'boira', { speedY: { min: -42, max: -18 }, speedX: { min: -14, max: 14 }, scale: { start: 0.3, end: 1.25 },
+                        alpha: { start: 0.55, end: 0 }, tint: [0xb890ff, 0xd8c0ff], lifespan: 1500, quantity: 6, emitting: false }).setDepth(y0 + 3);
+                    bo.explode(6);
+                    this.time.delayedCall(1700, () => bo.destroy());
+                    this.tweens.add({ targets: [sp, e.ombra], alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
+                });
+            } });
+        } });
     },
 
     // Anell gran i espurnes d'un enemic que es desfà

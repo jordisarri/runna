@@ -202,6 +202,13 @@ class ZonaRuines extends ZonaBase {
         if (!Estat.flag('pedraRunes') && !this.foratTapat(nx, ny)) this.revelaForat();
     }
 
+    // Cada cop que es desa la partida (també en sortir de la zona o amb la pedra a mig empènyer), la pedra es desa on és ara
+    guardarPosicio() {
+        super.guardarPosicio();
+        const r = this.pedraForat;
+        if (r && r.active) Estat.dades.flags.pedraRunesPos = Math.round(r.x) + ',' + Math.round(r.y);
+    }
+
     // Cap a on pot anar la pedra: dins la zona, sense xocar amb res més i, un cop descobert, sense tornar a tapar el forat
     pedraLliure(x, y) {
         if (x < 130 || x > 1160 || y < 560 || y > 900) return false;
@@ -1139,7 +1146,7 @@ class ZonaGeorgi extends ZonaBase {
         // Detalls de jardí
         this.barril(1010, 470, 40, 16);
         this.posar('llenya', 690, 470, { escala: 0.7, col: { w: 80, h: 20 } });
-        this.posar('banc', 560, 720, { col: { w: 130, h: 22 } });
+        this.posarBanc(560, 720, 130);
         [[650, 700], [720, 740], [140, 600]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
         this.cartell(1000, 720, () => ({ pagines: [{ qui: 'Cartell', text: 'La Caseta\n→ El Gran Til·ler' }] }));
 

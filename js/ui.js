@@ -75,7 +75,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
     'Ineu': 'ineu', 'Pare Jordà': 'pare_jorda', 'Germà Aldreu': 'germa_aldreu', 'Pastor de Boira': 'pastor_boira', 'Aldreu, Pastor de Boira': 'pastor_boira', 'Aldreu, Guàrdia de la Gàbia': 'aldreu_guardia', 'aldreu_guardia': 'aldreu_guardia', 'Germà Francí': 'germa_franci', 'Pare Daimiel': 'pare_daimiel',
-    'Pare Alcoví': 'pare_alcovi', 'Eve': 'eve', 'Jusef': 'jusef', 'Senyor Pomers': 'pomers', 'Julius': 'julius', 'Galf': 'galf', 'Isílder': 'isilder',
+    'Pare Alcoví': 'pare_alcovi', 'Eve': 'eve', 'Senyor Budó': 'senyor_budo', 'Jusef': 'jusef', 'Senyor Pomers': 'pomers', 'Julius': 'julius', 'Galf': 'galf', 'Isílder': 'isilder',
     'La Pianista': 'pianista', 'La Joaneta': 'joaneta', 'Iscu': 'iscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Carmèlia': 'carmelia', 'Pilària': 'pilaria', 'Dolora': 'dolora', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
     'Meus': 'meus', 'Senyor Molner': 'molner', 'Georgi': 'georgi_caseta', 'Rosansa': 'rosansa', 'Monjo': 'ombra_monjo', 'Home del Raïm': 'home_raim',
@@ -188,6 +188,7 @@ const CATALEG_OBJECTES = {
     maneta:           ['Maneta d\'engranatge', 'De ferro: encaixa en volants i rodes vells.'],
     clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Aldreu li va caure; l\'Iscu te l\'ha donada.'],
     fragment1:        ['Pergamí partit (1/2)', 'La meitat d\'un pergamí esquinçat, trobada a les Runes.'],
+    fragment2:        ['Pergamí partit (2/2)', "L'altra meitat de la crònica, trobada al sagrari de l'església."],
     pergami_monjo:    ['Pergamí del monjo', "«El germà bodeguer es bevia el vi de la sagristia. El vam petrificar perquè vigili la cripta fins que el vi es torni vinagre (a la cripta mai no es torna). Dorm de cara a la paret i només es desperta si el mires a la cara.»"],
     carta_cortiner:   ['Carta del Cortiner', 'La va deixar al tronc del Pi dels Tres Cants: explica d\'on van sortir els tres cants i què els cal per tornar als ocells.'],
     clau_ferro:       ['Clau de ferro', 'Obre la Porta de les Gírgoles.'],

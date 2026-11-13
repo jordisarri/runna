@@ -143,9 +143,10 @@ class ZonaEsglesiaNova extends ZonaBase {
         });
 
         // ---- 4 files de bancs, vists per darrere, mirant l'altar ----
+        this.bancsEsg = []; this.assegut = false;          // l'Ineu s'hi asseu caminant-hi des del davant (com a la ZonaEsglesia)
         for (let r = 0; r < 4; r++) {
             const y = yB + 240 + r * 220;
-            [560, 790, 1130, 1360].forEach(x => this.posar('banc_esglesia', x, y, { col: { w: 190, h: 18 }, escala: 1.45, opac: true }));
+            [560, 790, 1130, 1360].forEach(x => { this.posar('banc_esglesia', x, y, { col: { w: 190, h: 18 }, escala: 1.45, opac: true }); this.bancsEsg.push({ x, y, w: 190, cara: 'amunt' }); });
         }
 
         this.add.rectangle(xc, A / 2, xN1 - xN0, A, 0xffd38a, 0.05).setDepth(80000);       // llum de les vidrieres
@@ -155,3 +156,4 @@ class ZonaEsglesiaNova extends ZonaBase {
 // els mateixos moviments de la Pianista que a la ZonaEsglesia de la història
 ZonaEsglesiaNova.prototype.pianistaToca = ZonaEsglesia.prototype.pianistaToca;
 ZonaEsglesiaNova.prototype.pianistaCara = ZonaEsglesia.prototype.pianistaCara;
+

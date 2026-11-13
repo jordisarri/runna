@@ -39,51 +39,6 @@ class ZonaEsglesia extends ZonaBase {
         this.tweens.add({ targets: I, x, y, duration: 350, ease: 'Sine.easeInOut', onUpdate: () => { if (I.body) I.body.reset(I.x, I.y); I.setDepth(I.y); if (this.ombraIneu) this.ombraIneu.setPosition(I.x, I.y); }, onComplete: () => { if (this.cara) this.cara(pia); if (fet) fet(); } });
     }
 
-    update(time, delta) { super.update(time, delta); this.vigilaBancs(); }
-
-    // Si l'Ineu camina cap a un banc des del davant (des de l'altar, avall) i hi topa, s'hi asseu sol, de cara a l'altar, sense cap punt d'interacció.
-    // Com a l'Era (ZonaEra.seure): el respatller del banc el tapa de debò; s'aixeca quan el jugador es mou (ZonaBase.moure crida alcar).
-    vigilaBancs() {
-        if (this.assegut || !this.ineu || !this.bancsEsg || this.epileg || this.canviant || this.camCinema || this.ineuAlt || this.cinema || this.caient) return;
-        const ui = this.ui();
-        if ((ui && ui.dialeg) || this.time.now < (this.noSeureFins || 0) || !this.intent || this.intent.y < 0.35) return;
-        const I = this.ineu, b = this.bancsEsg.find(b => Math.abs(I.x - b.x) < b.w / 2 && I.y > b.y - 40 && I.y < b.y - 8);
-        if (b) this.seureBanc(b);
-    }
-
-    // Assegut amb la tecla encara premuda (l'has fet servir per arribar al banc): no s'aixeca fins que se solta, i després es torna a prémer
-    moure(ui, delta) {
-        if (this.assegut && !this.seientLliure) {
-            const c = this.cursors, t = this.tecles;
-            const vol = c.left.isDown || c.right.isDown || c.up.isDown || c.down.isDown || t.A.isDown || t.D.isDown || t.W.isDown || t.S.isDown || Math.hypot(ui.vectorTactil.x, ui.vectorTactil.y) > 0.15;
-            if (vol) { this.intent = { x: 0, y: 0 }; this.ineu.body.setVelocity(0); return; }
-            this.seientLliure = true;
-        }
-        super.moure(ui, delta);
-    }
-
-    seureBanc(b) {
-        this.seientLliure = false;
-        this.assegut = true; this.bancActual = b;
-        const x = this.seientX = Phaser.Math.Clamp(this.ineu.x, b.x - b.w / 2 + 35, b.x + b.w / 2 - 35);
-        this.ineu.body.checkCollision.none = true;
-        this.ineu.body.reset(x, b.y - 4);
-        this.ombraIneu.setPosition(x, b.y - 4);
-        this.ineu.setDepth(b.y - 1);                      // el banc es dibuixa per sobre: el respatller el tapa
-        this.vista8Manual = true;
-        this.posarDireccio('amunt', false, 'up');         // de cara a l'altar
-    }
-
-    // S'aixeca just al costat d'on s'ha assegut (a prop, no al cap del banc): endavant, una mica a un costat, o per darrere del respatller
-    alcar(dir = 'avall') {
-        const b = this.bancActual, x = this.seientX;
-        this.assegut = false; this.noSeureFins = this.time.now + 700;
-        this.ineu.body.checkCollision.none = false;
-        const pos = ({ amunt: [x, b.y - 42], esquerra: [Math.max(x - 45, b.x - b.w / 2 + 12), b.y - 26], dreta: [Math.min(x + 45, b.x + b.w / 2 - 12), b.y - 26] })[dir] || [x, b.y + 38];
-        this.ineu.body.reset(pos[0], pos[1]);
-        this.posarDireccio(dir, false);
-    }
-
     constructor() {
         super('ZonaEsglesia', {
             nom: 'Santuari del Miracle',
@@ -140,6 +95,7 @@ class ZonaEsglesia extends ZonaBase {
         this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
         // La porta de la dreta del peu del retaule: la mateixa del gràfic, que s'obre cap endins (amb la clau de la torre del rellotge) i duu a la torre
         this.portaRetaule = this.portaAnimada({ x: 872, top: 868, bottom: 1021, ample: 83, fons: 900, senseAjust: true, unic: true, arc: true, retall: this.retaule, bloq: () => !this.portaRellotge });
+        this.dibuixarSagrari();
         this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });     // el sagrari, al mig del retaule (fragment 2)
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 }, opac: true });
 
@@ -174,7 +130,7 @@ class ZonaEsglesia extends ZonaBase {
             this.bancsEsg = [];
             bancs.forEach(y => [466, 814].forEach(x => {
                 this.posar('banc_esglesia_ample', x, y, { col: { w: 228, h: 16 }, opac: true });
-                this.bancsEsg.push({ x, y, w: 228 });
+                this.bancsEsg.push({ x, y, w: 228, cara: 'amunt' });
             }));
         }
         this.assegut = false;
@@ -184,6 +140,35 @@ class ZonaEsglesia extends ZonaBase {
 
         this.sortida(600, A - 20, 80, 20, 'ZonaPlaca', 'esglesia');
         if (Estat.flag('epilegPendent') && !Estat.flag('epilegFet')) this.prepararEpileg();
+    }
+
+    // El sagrari: la porteta del tabernacle, petita, al peu de les escales de l'altar (a (642, 912) del món). Es tanca amb clau; en agafar el pergamí, s'obre i queda oberta.
+    dibuixarSagrari() {
+        const X = 642, Y = 912, W = 19, H = 32, R = { tl: W / 2, tr: W / 2, bl: 1, br: 1 };
+        this.sagrariX = X; this.sagrariY = Y;
+        const fons = this.add.graphics().setDepth(905);                      // l'interior del tabernacle, fosc, amb una claror càlida
+        fons.fillStyle(0x24120a, 1).fillRoundedRect(X - W / 2, Y - H / 2, W, H, R);
+        fons.fillStyle(0xffd070, 0.35).fillRoundedRect(X - W / 2 + 3, Y - H / 2 + 5, W - 6, H - 8, { tl: 6, tr: 6, bl: 1, br: 1 });
+        this.sagrariFons = fons.setAlpha(0);
+        const fulla = this.add.graphics({ x: X - W / 2, y: Y }).setDepth(906);          // la fulla de la porta, amb la frontissa a l'esquerra
+        fulla.fillStyle(0xdcae3e, 1).lineStyle(1.5, 0x6a4810, 1);
+        fulla.fillRoundedRect(0, -H / 2, W, H, R); fulla.strokeRoundedRect(0, -H / 2, W, H, R);
+        fulla.fillStyle(0xf4d27a, 0.7).fillRoundedRect(3, -H / 2 + 5, W - 6, 4, 2);
+        fulla.fillStyle(0x6a4810, 1).fillCircle(W - 4, 2, 1.4);                            // el pany
+        this.sagrariFulla = fulla;
+        if (Estat.flag('fragment2')) { fulla.setScale(0.1, 1); this.sagrariFons.setAlpha(1); }
+    }
+
+    // La porta del sagrari s'obre (amb la clau) i en surt una claror; després va l'animació d'obtenir objecte (amb fanfara), que el pergamí comença des d'aquí
+    obrirSagrari(fet) {
+        if (!this.sagrariFulla) { fet(); return; }
+        this.puntActiu = { x: this.sagrariX, y: this.sagrariY + 30 };                 // (el pergamí surt del sagrari, no del punt d'interacció, que és més avall)
+        if (Sfx.porta) Sfx.porta();
+        const llum = this.add.circle(this.sagrariX, this.sagrariY, 30, 0xffe29a, 0.5).setBlendMode('ADD').setDepth(907).setScale(0.2).setAlpha(0);
+        this.tweens.add({ targets: this.sagrariFons, alpha: 1, duration: 500 });
+        this.tweens.add({ targets: this.sagrariFulla, scaleX: 0.1, duration: 600, ease: 'Sine.easeInOut' });
+        this.tweens.add({ targets: llum, alpha: 0.7, scale: 1.2, duration: 600, yoyo: true, hold: 200, onComplete: () => llum.destroy() });
+        this.esperar(900, fet);
     }
 
     // ---------------- EPÍLEG: «Torna el cant» ----------------
@@ -489,7 +474,7 @@ class ZonaMonestir extends ZonaBase {
             this.colisio(1600 - cx, cy, w, 25);
         }
         this.sortida(764, 416, 72, 14, 'ZonaMonestirRebedor', 'porta');
-        this.portaAnimada({ x: 800, top: 344, bottom: 435, ample: 74, fons: 335, color: 0x6a4328, panell: 0x7a5233, vora: 0x2a1608, ferro: true });   // el portal romànic: els batents de fusta s'obren cap endins
+        this.portaAnimada({ x: 800, top: 325, bottom: 435, ample: 76, fons: 335, color: 0x6a4328, panell: 0x7a5233, vora: 0x2a1608, ferro: true });   // el portal romànic: els batents de fusta s'obren cap endins
         // Xiprers alts a l'esquerra del portal i una conífera a la dreta (al peu de la façana, y=535)
         [[440, 392, 1.7], [492, 398, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y + D, { escala: e, col: { w: 26, h: 12 } }));
         this.posar('xiprer', 1165, 395 + D, { escala: 1.9, col: { w: 30, h: 12 } });
@@ -533,11 +518,12 @@ class ZonaCreu extends ZonaBase {
 
     construir() {
         this.terra('herba', 0, 0, 1600, 1000, -1100);
-        this.terra('cami', 1100, 0, 160, 720);          // des de la plaça (nord)
-        this.terra('pedra', 810, 710, 400, 260);        // replà de pedra davant la creu (arriba prou avall perquè la base de la creu no toqui l'herba)
+        this.terra('cami', 1100, 0, 160, 905);          // des de la plaça (nord): baixa pel costat de la creu i s'acaba a la seva alçada
 
         // Creu de l'Aparició (sense cap tanca ni mur al darrere)
         this.posar('creu', 1010, 900, { col: { w: 56, h: 24 }, opac: true });
+        // La creu, a la gespa, amb flors al seu voltant (menys pel costat del camí)
+        [[895, 885], [918, 940], [985, 955], [1052, 950], [945, 845], [1042, 838], [868, 925], [1080, 905]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
         this.interactiu(1010, 905, RADI_OBJECTE, DIALEGS.creu, { altura: 400 });
         [[760, 860], [1260, 860]].forEach(([x, y]) => this.posar('arbre', x, y, { col: { w: 34, h: 16 } }).setTint(0xcfe08a));   // plàtans
 

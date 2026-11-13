@@ -162,8 +162,6 @@ class ZonaTavernaInt extends ZonaBase {
         t.fillStyle(0xc87a3a, 1).fillEllipse(320, 166, 50, 14);                                   // plat de coca
         this.colisio(310, 215, 410, 70);
         this.interactiu(310, 270, RADI_OBJECTE, DIALEGS.taulellTaverna, { altura: 90 });
-        const zz = this.add.text(330, 70, 'z z Z', estilText(26, '#f2e6c8', { fontStyle: 'italic' })).setDepth(400);
-        this.tweens.add({ targets: zz, y: 50, alpha: 0.2, yoyo: true, repeat: -1, duration: 1400 });
 
         // Llar de foc a la dreta
         const llar = this.add.graphics().setDepth(-960);
@@ -177,20 +175,18 @@ class ZonaTavernaInt extends ZonaBase {
         // Taules amb tamborets i espelmes
         [[260, 470], [520, 430], [700, 560], [330, 620]].forEach(([x, y], i) => {
             this.posar('taula', x, y, { escala: 0.8, col: { w: 130, h: 26 } });
-            [[-70, 20], [70, 20]].forEach(([dx, dy]) => this.posar('tamboret', x + dx, y + dy, { escala: 0.8, col: { w: 30, h: 12 } }));
+            // (a la primera taula, el senyor Budó ocupa el lloc de la dreta, amb el seu propi tamboret dibuixat)
+            [[-70, 20], [70, 20]].forEach(([dx, dy], k) => { if (!(i === 0 && k === 1)) this.posar('tamboret', x + dx, y + dy, { escala: 0.8, col: { w: 30, h: 12 } }); });
             const e = this.posar('espelma', x, y - 50, { fonsY: y + 2 });
             this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 330 + i * 80 });
         });
         // Barrils de vi, apilats a la dreta, i l'acordió
         [[860, 470], [900, 500], [880, 440]].forEach(([x, y]) => this.barril(x, y, 46, 20));
-        this.posar('tamboret', 150, 400, { col: { w: 36, h: 14 } });
-        const ac = this.add.graphics().setDepth(390);
-        ac.fillStyle(0x8a1a1a, 1).fillRoundedRect(130, 360, 40, 30, 4);
-        for (let k = 0; k < 5; k++) ac.fillStyle(k % 2 ? 0xf2ecdc : 0x2a2a2a, 1).fillRect(134 + k * 7, 362, 5, 26);
-        this.interactiu(150, 410, RADI_OBJECTE, DIALEGS.acordio, { altura: 60 });
-
         // L\'Eve, al costat de la llar
         this.npc('eve', 650, 350, DIALEGS.eve, { flipX: true });
+
+        // El senyor Budó, assegut al costat dret de la taula de l'esquerra de tot (sencer, sense que la taula el tapi), assaborint l'anís escarxat que li ha preparat l'Eve
+        this.npc('senyor_budo', 352, 492, DIALEGS.senyorBudo, { colAmple: 50 });
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffc070, 0.07).setDepth(80000);
         this.sortida(460, H - 22, 80, 14, 'ZonaTaverna', 'interior');

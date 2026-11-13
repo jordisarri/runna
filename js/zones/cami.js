@@ -134,7 +134,7 @@ class ZonaErmitaInt extends ZonaBase {
             this.colisio(x, y - 8, 40, 16);
         });
         // Bancs de fusta dels fidels
-        [[260, 450], [260, 590], [740, 450], [740, 590]].forEach(([x, y]) => this.posar('banc', x, y, { col: { w: 120, h: 20 } }));
+        [[260, 450], [260, 590], [740, 450], [740, 590]].forEach(([x, y]) => this.posarBanc(x, y, 120));
 
         // Dues taules de pedra al fons, darrere l'altar
         this.posar('taula_pedra', 340, 190, { col: { w: 100, h: 20 } });
@@ -223,10 +223,10 @@ class ZonaEra extends ZonaBase {
         this.galf = this.npc('galf', ERA_BANC_X, ERA_BANC_N, DIALEGS.galf);
         this.galf.setDepth(ERA_BANC_N + 1);                       // assegut: el banc queda darrere seu
         // L'Ineu s'asseu i s'hi queda fins que es vulgui aixecar (movent-se)
+        // Sense punt d'interacció: l'Ineu s'asseu al banc del sud caminant-hi des del davant (com als de l'església) i llavors el Galf li parla
         this.assegut = false;
-        const puntBanc = this.interactiu(ERA_BANC_X, ERA_BANC_S, RADI_NPC, () => { this.seure(); return DIALEGS.galf(Estat); }, { altura: 150 });
-        puntBanc.npc = this.galf;
-        puntBanc.cameraCossos = [this.bancNord, this.bancSud];
+        this.bancsEsg = [{ x: ERA_BANC_X, y: ERA_BANC_S, w: 140, cara: 'amunt' }];
+        this.puntGalf = { x: ERA_BANC_X, y: ERA_BANC_S, radi: RADI_NPC, altura: 150, npc: this.galf, cameraCossos: [this.bancNord, this.bancSud], dialeg: () => DIALEGS.galf(Estat) };
 
         // El Follet del Carro Verd i el seu carro de vapor, a la vora sud-oest: és la parada de l'Era (PARADES, js/zona_base.js)
 
@@ -239,29 +239,12 @@ class ZonaEra extends ZonaBase {
         this.sortida(0, 500, 14, 130, 'ZonaCamiRov', 'era');
     }
 
-    // L'Ineu s'asseu al banc del sud, de cara al Galf, i hi continua assegut després de parlar: només s'aixeca
-    // quan el jugador es mou (vegeu ZonaBase.moure). El respatller del banc el tapa per darrere.
-    seure() {
-        this.assegut = true;
+    // Quan l'Ineu s'asseu al banc (vigilaBancs / seureBanc, comuns amb l'església), el Galf li parla: ja és assegut, així que passa directe a la conversa
+    enSeureBanc() {
         Estat.posaFlag('garfBancSegut');
-        this.ineu.body.checkCollision.none = true;
-        this.ineu.body.reset(ERA_BANC_X, ERA_BANC_S - 4);
-        this.ombraIneu.setPosition(ERA_BANC_X, ERA_BANC_S - 4);
-        this.ineu.setDepth(ERA_BANC_S - 1);                       // el banc es dibuixa per sobre: el respatller el tapa
-        this.vista8Manual = true;
-        this.posarDireccio('amunt', false, 'up');                 // sempre de cara al Galf, vingui d'on vingui
-    }
-
-    // S'aixeca cap al costat on es mou el jugador: amunt (cap al Galf) per davant del seient, a banda i banda pels costats, i avall per darrere del respatller
-    alcar(dir = 'avall') {
-        this.assegut = false;
-        this.ineu.body.checkCollision.none = false;
-        const pos = { amunt: [ERA_BANC_X, ERA_BANC_S - 60], esquerra: [ERA_BANC_X - 110, ERA_BANC_S - 14], dreta: [ERA_BANC_X + 110, ERA_BANC_S - 14] }[dir] || [ERA_BANC_X, ERA_BANC_S + 48];
-        this.ineu.body.reset(pos[0], pos[1]);
-        this.posarDireccio(dir, false);
+        this.time.delayedCall(350, () => { if (this.assegut && !this.ui().dialeg) this.interactuar(this.puntGalf); });
     }
 }
-
 // ---------------- L'HOSTATGERIA ----------------
 // Un gran edifici de pedra a la dreta i, enganxada al seu lateral esquerre, una pèrgola d'arcades de pedra: és un jardí
 // de gespa amb flors (només allà dins n'hi ha). Les arcades del davant són a la mateixa línia que la façana de la casa i
@@ -441,11 +424,9 @@ class ZonaJardi extends ZonaBase {
         this.brillLlosa = null;
     }
 
-    // Amb Runna, en entrar al jardí, la llosa s'encén i l'Isílder ho veu (escena automàtica, un sol cop: en acabar, el flag isilderRosansa ja hi és)
-    enEntrar() {
-        if (Estat.flag('runna') && !Estat.flag('isilderRosansa') && !Estat.flag('llosaOberta') && !Estat.flag('llavorRosansa') && !Estat.te('llavorLluna') && !Estat.caigut) {
-            this.time.delayedCall(2200, () => this.escenaLlosaRunna());
-        }
+    // Falta que l'Isílder expliqui què fer amb la llosa? (amb Runna, abans de saber res de la Rosansa)
+    llosaCal() {
+        return !!(Estat.flag('runna') && !Estat.flag('isilderRosansa') && !Estat.flag('llosaOberta') && !Estat.flag('llavorRosansa') && !Estat.te('llavorLluna'));
     }
 
     escenaLlosaRunna(intents = 0) {
@@ -576,7 +557,7 @@ class ZonaTaverna extends ZonaBase {
     construir() {
         this.terra('herba', 0, 0, 1600, 1100, -1100);
         this.terra('cami', 0, 880, 1600, 130);              // camí de l'Hostatgeria als arcs de la Casa Gran
-        this.terra('llamborda', 320, 740, 960, 140);        // replà empedrat davant la façana
+        this.terra('llamborda', 0, 740, 1600, 140);          // replà empedrat davant la façana, de vora a vora (d'est a oest)
 
         // Façana (900 d'ample, tres plantes): la porta és l'arc del mig
         const t = this.taverna = this.posar('taverna', 800, 750, { fonsY: 640 });
@@ -588,10 +569,12 @@ class ZonaTaverna extends ZonaBase {
         if (Estat.flag('tavernaOberta')) { this.obrirPorta(); this.portaTavernaAnim(); }
         else this.interactiu(825, 765, RADI_OBJECTE, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() });
 
+        // Barrils de debò (es trenquen) a la dreta de la porta, on els tenia dibuixats la façana (mai apilats: si en trenques un, l'altre es quedaria flotant)
+        this.barril(944, 757, 40, 16); this.barril(992, 762, 40, 16); this.barril(1038, 756, 40, 16);
         // Barrils a la dreta, taula i banc a l'esquerra, contra la façana
         this.barril(1150, 800, 40, 16);
         this.barril(1200, 812, 40, 16);
-        this.posar('banc', 520, 790, { col: { w: 130, h: 22 } });
+        this.posarBanc(520, 790, 130);
         this.posar('taula', 400, 805, { escala: 0.7, col: { w: 110, h: 22 } });
         this.enemic('visitant', 1000, 960);        // un visitant trastocat per la boira, que ha vingut a la Taverna
 
@@ -688,7 +671,7 @@ class ZonaCabanaCami extends ZonaBase {
         catifa.lineStyle(2, 0x3a1414, 1).strokeRoundedRect(310, 360, 280, 180, 8).strokeRoundedRect(332, 384, 236, 132, 4);
 
         // Mobles de fusta
-        this.posar('banc_respatller', 400, 200, { col: { w: 140, h: 16 } });
+        this.posarBanc(400, 200, 140);
         this.barril(150, 175, 50, 22);
         this.barril(205, 160, 50, 22);
         this.sacs(290, 182, 'tres');

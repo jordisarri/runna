@@ -216,7 +216,7 @@ class ZonaBase extends Phaser.Scene {
         this.dadesEntrada = data || {};
         this.canviant = false;
         this.camDialeg = null;
-        this.npcs = {}; this.opacs = []; this.npcDavant = null; this.camCinema = false; this.camArma = false; this.efectesArma = null; this.ineuFlautaImg = null; this.ineuAmagat = false;          // (l'escena es reaprofita: res de la visita anterior)
+        this.bancsEsg = []; this.assegut = false; this.davantBanc = null; this.npcs = {}; this.opacs = []; this.npcDavant = null; this.camCinema = false; this.camArma = false; this.efectesArma = null; this.ineuFlautaImg = null; this.ineuAmagat = false;          // (l'escena es reaprofita: res de la visita anterior)
         this.boundsCamOrig = null;
         this.twCamDialeg = null;
         this.entradaPropia = false;
@@ -429,15 +429,23 @@ class ZonaBase extends Phaser.Scene {
         const carro = this.posar('carruatge', cx, cy, { col: { w: 190, h: 40 }, opac: true }).setFlipX(true);     // girat: el davant mira cap a l'escena
         // el fum blanc de la xemeneia (la xemeneia és a l'esquerra del dibuix, que està girat): animat per codi, sempre blanc
         this.carroParada = carro;
-        const ox = 107 * carro.scaleX, oy = -carro.displayHeight + 6;                 // la xemeneia, respecte al peu del carruatge (si la zona s'amplia cap al sud, el carruatge es mou i el fum el segueix)
+        const ox = 107 * carro.scaleX - 8, oy = -carro.displayHeight + 6;             // la xemeneia, respecte al peu del carruatge (si la zona s'amplia cap al sud, el carruatge es mou i el fum el segueix)
         const fum = this.add.particles(carro.x + ox, carro.y + oy, 'fum', {
-            speedY: { min: -34, max: -20 }, speedX: { min: -4, max: 14 }, accelerationX: 3, lifespan: { min: 2400, max: 3400 },
+            speedY: { min: -34, max: -20 }, speedX: { min: -9, max: 7 }, accelerationX: 1, lifespan: { min: 2400, max: 3400 },
             scale: { start: 0.16, end: 0.95 }, alpha: { start: 0.85, end: 0 }, rotate: { min: -25, max: 25 }, frequency: 260, quantity: 1
         }).setDepth(cy + 1);
-        const segueix = () => { if (carro.active && fum.active) fum.setPosition(carro.x + ox, carro.y + oy); };       // cada fotograma, sobre la xemeneia (la zona pot haver mogut el carruatge en ampliar-se cap al sud)
-        segueix();
-        this.events.on('update', segueix);
-        this.events.once('shutdown', () => this.events.off('update', segueix));
+        // El motor en marxa: el carruatge vibra una mica (uns píxels, ràpid) i el fum surt de la xemeneia quieta, sense vibrar
+        let bx = null, by = null;
+        const motor = (t) => {
+            if (!carro.active || !fum.active) return;
+            if (bx === null) { bx = carro.x; by = carro.y; }                   // (la posició de repòs, un cop la zona ja s'ha ampliat cap al sud)
+            carro.setPosition(bx + Math.sin(t / 31) * 0.45, by + Math.sin(t / 23 + 1) * 0.55 + (Math.random() - 0.5) * 0.35);
+            carro.setRotation(Math.sin(t / 47) * 0.0035);
+            fum.setPosition(bx + ox, by + oy);
+        };
+        fum.setPosition(carro.x + ox, carro.y + oy);
+        this.events.on('update', motor);
+        this.events.once('shutdown', () => this.events.off('update', motor));
         this.npc('follet_carro', hx, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true, colAmple: 48 });     // girat: mira cap a l'escena, no cap al carruatge
         this.paradaAqui = pd;
         if (Estat.arribadaCarruatge === pd.id) {                       // hi acabem d'arribar: bufada de vapor
@@ -588,7 +596,9 @@ class ZonaBase extends Phaser.Scene {
     construirCamins() {
         const rs = this.camins.filter(r => r.alfa > 0);
         if (!rs.length || !this.textures.exists('cami')) return;
-        const W = this.config.amplada, H = this.config.alcada + this.extraSud;
+        // El món real acaba a H0; però la càmera del diàleg pot ensenyar-ne fins a ~450 px més avall (per veure els dos que parlen sobre el quadre de text):
+        // els camins que arriben a la vora sud hi continuen, perquè allà no es vegi herba on hi hauria el camí
+        const W = this.config.amplada, H0 = this.config.alcada + this.extraSud, H = H0 + (this.esInterior() ? 0 : 450);
         const MG = 64, CEL = 4, RAD = 5;
         const gw = Math.ceil((W + 2 * MG) / CEL), gh = Math.ceil((H + 2 * MG) / CEL);
         let a = new Float32Array(gw * gh), b = new Float32Array(gw * gh);
@@ -596,7 +606,7 @@ class ZonaBase extends Phaser.Scene {
         rs.forEach(r => {
             // Un camí que arriba a la vora del món continua més enllà, perquè no es difumini allà
             const x0 = r.x <= 2 ? -MG : r.x, y0 = r.y <= 2 ? -MG : r.y;
-            const x1 = r.x + r.w >= W - 2 ? W + MG : r.x + r.w, y1 = r.y + r.h >= H - 2 ? H + MG : r.y + r.h;
+            const x1 = r.x + r.w >= W - 2 ? W + MG : r.x + r.w, y1 = r.y + r.h >= H0 - 2 ? H + MG : r.y + r.h;
             for (let j = 0; j < gh; j++) {
                 const wy = (j + 0.5) * CEL - MG;
                 if (wy < y0 || wy > y1) continue;
@@ -691,7 +701,10 @@ class ZonaBase extends Phaser.Scene {
         if (key === 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: TRONC_ARBRE(opts.escala || 1) });
         if (opts.col) this.colisio(x + (opts.col.dx || 0), y - opts.col.h / 2 + (opts.col.dy || 0), opts.col.w, opts.col.h);
         // opac: objecte baix (una placa) que no s'ha de veure a través quan l'Ineu hi passa darrere: la silueta translúcida de l'Ineu s'hi amaga com amb els personatges
-        if (opts.opac) (this.opacs = this.opacs || []).push(img);
+        // Tot element de decoració sòlid més baix o més estret que l'Ineu (troncs, bancs, taules, pedres, tamborets...) és opac: no se'n veu la silueta a través.
+        // (Els arbres i els pins ja tenen la seva pròpia màscara del tronc.)
+        const baixOEstret = img.displayHeight <= 120 || img.displayWidth <= 70;
+        if (opts.opac || (opts.opac !== false && opts.col && baixOEstret && !img.tronc && !(this.copes || []).includes(img))) (this.opacs = this.opacs || []).push(img);
         return img;
     }
 
@@ -1669,14 +1682,14 @@ class ZonaBase extends Phaser.Scene {
 
     // Un sac de gra: es trenca amb qualsevol arma, com un barril (vegeu trencarBarril), en trossos de tela i deixant caure els grans a terra
     sac(x, y, key = 'sac') { return this.barril(x, y, 40, 16, key); }
-    // Sacs agrupats de maneres diferents: 'un', 'duo' (un al costat de l'altre), 'tres' (dos a baix i un a sobre), 'fila' (tres seguits), 'mont' (quatre: dos, un i un damunt)
+    // Sacs agrupats de maneres diferents: 'un', 'duo' (un al costat de l'altre), 'tres' (dos i un al davant), 'fila' (tres seguits), 'mont' (quatre, repartits, mai apilats: un sac apilat es quedaria flotant en trencar el de sota)
     sacs(x, y, patro = 'un') {
         const G = {
             un: [[0, 0, 'sac']],
             duo: [[-22, 0, 'sac'], [22, 2, 'sac_b']],
-            tres: [[-22, 0, 'sac_b'], [22, 0, 'sac'], [0, -2, 'sac', 28]],
+            tres: [[-28, 0, 'sac_b'], [28, 2, 'sac'], [0, 18, 'sac']],
             fila: [[-44, 0, 'sac'], [0, 2, 'sac_b'], [44, 0, 'sac']],
-            mont: [[-24, 0, 'sac'], [24, 0, 'sac_b'], [-24, -4, 'sac_b', 28], [26, 8, 'sac']]
+            mont: [[-44, 0, 'sac'], [0, -4, 'sac_b'], [44, 2, 'sac'], [-20, 20, 'sac_b']]
         }[patro] || [[0, 0, 'sac']];
         return G.map(([dx, dy, k, alt]) => {
             const b = this.sac(x + dx, y + dy, alt ? k : k);
@@ -1750,26 +1763,27 @@ class ZonaBase extends Phaser.Scene {
         // El barril sencer desapareix de cop (queda amagat pels trossos)
         b.img.destroy();
         if (b.alTrencar) b.alTrencar();
-        const t0 = this.time.now, TEMPS = 1500, FADE = 800, TEMPS_LLARG = 9000;
+        // Els trossos (de fusta, de tela, els grans) cauen i reboten, però no desapareixen: es queden a terra fins que se surt de l'escenari
+        // (en tornar-hi, els barrils i els sacs són sencers de nou, perquè l'escena es construeix altra vegada).
         const act = (t, dt) => {
-            const s = Math.min(dt, 50) / 1000, el = this.time.now - t0;
+            const s = Math.min(dt, 50) / 1000;
+            let enMoviment = false;
             peces.forEach(q => {
-                if (!q.im.active) return;
-                if (q.fix) { if (el > TEMPS_LLARG) q.im.setAlpha(Math.max(0, 1 - (el - TEMPS_LLARG) / FADE)); return; }
+                if (!q.im.active || q.fix || q.parat) return;
                 q.vy += 900 * s;
                 q.x += q.vx * s; q.y += q.vy * s;
                 if (q.y > q.terra && q.vy > 0) {
                     q.y = q.terra;
-                    if (q.reb < 2) { q.vy *= -0.35; q.vx *= 0.6; q.vr *= 0.5; q.reb++; } else { q.vy = 0; q.vx = 0; q.vr = 0; }
+                    if (q.reb < 2) { q.vy *= -0.35; q.vx *= 0.6; q.vr *= 0.5; q.reb++; } else { q.vy = 0; q.vx = 0; q.vr = 0; q.parat = true; }
                 }
                 q.im.setPosition(q.x, q.y).rotation += q.vr * s;
                 q.im.setDepth(Math.max(q.terra, q.y) + 1);
-                const lim = q.llarg ? TEMPS_LLARG : TEMPS;
-                if (el > lim) q.im.setAlpha(Math.max(0, 1 - (el - lim) / FADE));
+                if (!q.parat) enMoviment = true;
             });
-            if (el > (sac ? TEMPS_LLARG : TEMPS) + FADE) { this.events.off('update', act); peces.forEach(q => q.im.destroy()); }
+            if (!enMoviment) this.events.off('update', act);
         };
         this.events.on('update', act);
+        this.events.once('shutdown', () => this.events.off('update', act));
     }
 
     // ---------------- Música ----------------
@@ -1817,6 +1831,7 @@ class ZonaBase extends Phaser.Scene {
 
     // ---------------- Bucle ----------------
     update(time, delta) {
+        this.vigilaBancs();
         this.cicle(time, delta);
         this.zoomCombat(delta);
     }
@@ -1852,6 +1867,8 @@ class ZonaBase extends Phaser.Scene {
     // Les siluetes translúcides (la de l'Ineu i les dels enemics darrere les capçades) es col·loquen DESPRÉS que la física hagi mogut els cossos: si es feia dins d'update(),
     // copiaven la posició d'abans i anaven sempre un fotograma enrere, i en caminar es veia l'Ineu amb la cara doble, tremolosa i borrosa
     postFisica() {
+        // L'ombra de l'Ineu sempre als seus peus, passi el que passi (diàlegs, objectes alçats, canvis de dibuix...): s'actualitza a cada fotograma, també quan l'escena no processa el moviment
+        if (this.ombraIneu && this.ineu && this.ineu.active && this.ineu.body && !this.ombraIneuFixa) this.ombraIneu.setPosition(this.ineu.x, this.ineu.y);
         this.sincroFantasma();
         this.transparenciaCopes();
     }
@@ -1973,9 +1990,18 @@ class ZonaBase extends Phaser.Scene {
             this.camDialeg = null;
             if (this.twCamDialeg) this.twCamDialeg.stop();
             const v = { u: 0 }, sx0 = cam.scrollX, sy0 = cam.scrollY, z0 = cam.zoom;
+            // On ha de quedar la càmera: no on era abans del diàleg, sinó on la deixaria seguint l'Ineu ARA (si s'ha aixecat i camina, no la fem tornar enrere i saltar després)
+            const destí = () => {
+                const I = this.ineu;
+                if (!o || !I) return { x: d.sx == null ? sx0 : d.sx, y: d.sy };
+                const W = cam.width, H = cam.height, vw = W / d.z, vh = H / d.z;
+                const clamp = (p, ini, llarg, vista) => llarg <= vista ? ini + (llarg - vista) / 2 : Phaser.Math.Clamp(p, ini, ini + llarg - vista);
+                const esq = clamp(I.x - vw / 2, o.x, o.w, vw), dalt = clamp(I.y - (this.cameraFollowOffsetY || 0) - vh / 2, o.y, o.h, vh);
+                return { x: esq - (W - vw) / 2, y: dalt - (H - vh) / 2 };
+            };
             this.twCamDialeg = this.tweens.add({
                 targets: v, u: 1, duration: 800, ease: 'Sine.easeInOut',
-                onUpdate: () => { cam.setZoom(Phaser.Math.Linear(z0, d.z, v.u)); cam.setScroll(Phaser.Math.Linear(sx0, d.sx == null ? sx0 : d.sx, v.u), Phaser.Math.Linear(sy0, d.sy, v.u)); this.ajustarSuperposicions(); },
+                onUpdate: () => { const t = destí(); cam.setZoom(Phaser.Math.Linear(z0, d.z, v.u)); cam.setScroll(Phaser.Math.Linear(sx0, t.x, v.u), Phaser.Math.Linear(sy0, t.y, v.u)); this.ajustarSuperposicions(); },
                 onComplete: () => {
                     cam.setZoom(d.z); this.ajustarSuperposicions();
                     if (o) cam.setBounds(o.x, o.y, o.w, o.h);
@@ -2264,13 +2290,80 @@ class ZonaBase extends Phaser.Scene {
         });
     }
 
+    // ---------------- Seure als bancs ----------------
+    // this.bancsEsg = [{ x, y, w, cara, img }] (vegeu posarBanc). Caminant cap a un banc l'Ineu hi seu, sense punt d'interacció, i s'aixeca quan el jugador es mou.
+    //   cara 'amunt' (banc vist per darrere, com els de l'església): s'hi arriba des de dalt, baixant, i s'hi mira cap amunt; el respatller el tapa.
+    //   cara 'avall' (banc vist de cara, amb respatller darrere): s'hi arriba des de baix, pujant, i s'hi mira cap avall; el davant del seient li tapa les cames.
+    posarBanc(x, y, w = 130, key = 'banc_respatller', cara = 'avall') {
+        const img = this.posar(key, x, y, { col: { w, h: 16 }, opac: true });
+        (this.bancsEsg = this.bancsEsg || []).push({ x, y, w, cara, img });
+        return img;
+    }
+
+    // Assegut, l'Ineu no es belluga: ni l'animació d'idle, un sol fotograma fix
+    ineuQuietSeient() {
+        const I = this.ineu;
+        if (!I || !I.anims) return;
+        I.anims.stop();
+        I.setTexture('ineu_' + (this.vista8 || 'down'), quietIneu());
+    }
+
+    vigilaBancs() {
+        if (this.assegut && this.ineu && this.ineu.anims && this.ineu.anims.isPlaying) this.ineuQuietSeient();
+        if (this.assegut || !this.ineu || !this.bancsEsg || !this.bancsEsg.length || this.epileg || this.canviant || this.camCinema || this.ineuAlt || this.cinema || this.caient || !this.ineu.body) return;
+        const ui = this.ui();
+        if ((ui && ui.dialeg) || this.time.now < (this.noSeureFins || 0) || !this.intent) return;
+        const I = this.ineu;
+        const b = this.bancsEsg.find(b => Math.abs(I.x - b.x) < b.w / 2 && (b.cara === 'avall'
+            ? (this.intent.y < -0.35 && I.y > b.y + 4 && I.y < b.y + 46)
+            : (this.intent.y > 0.35 && I.y > b.y - 40 && I.y < b.y - 8)));
+        if (b) this.seureBanc(b);
+    }
+
+    seureBanc(b) {
+        this.seientLliure = false;
+        this.assegut = true; this.bancActual = b;
+        const I = this.ineu, avall = b.cara === 'avall';
+        const x = this.seientX = Phaser.Math.Clamp(I.x, b.x - b.w / 2 + 35, b.x + b.w / 2 - 35);
+        I.body.checkCollision.none = true;
+        const y = avall ? b.y + 8 : b.y - 4;                // de cara: els malucs queden a l'alçada del seient (els peus, darrere el davant del banc)
+        I.body.reset(x, y);
+        this.ombraIneu.setPosition(x, avall ? b.y - 8 : y);
+        this.vista8Manual = true;
+        if (avall) {
+            I.setDepth(b.y + 1);                                  // davant del banc: les cames li pengen per sobre del cantell del seient, sense fustes pel mig
+            if (this.davantBanc) { this.davantBanc.destroy(); this.davantBanc = null; }
+            this.posarDireccio('avall', false, 'down');
+        } else {
+            I.setDepth(b.y - 1);                                  // el banc es dibuixa per sobre: el respatller el tapa
+            this.posarDireccio('amunt', false, 'up');             // de cara a l'altar / al que hi hagi davant
+        }
+        this.ineuQuietSeient();
+        if (this.enSeureBanc) this.enSeureBanc(b);
+    }
+
+    // S'aixeca just al costat d'on s'ha assegut (a prop, no al cap del banc)
+    alcar(dir = 'avall') {
+        const b = this.bancActual, x = this.seientX;
+        this.assegut = false; this.noSeureFins = this.time.now + 700;
+        this.ineu.body.checkCollision.none = false;
+        if (this.davantBanc) { this.davantBanc.destroy(); this.davantBanc = null; }
+        if (b.cara === 'avall') b.img.setDepth(b.y);
+        let pos;
+        if (b.cara === 'avall') pos = ({ esquerra: [x - 60, b.y + 14], dreta: [x + 60, b.y + 14] })[dir] || [x, b.y + 40];
+        else pos = ({ amunt: [x, b.y - 42], esquerra: [Math.max(x - 45, b.x - b.w / 2 + 12), b.y - 26], dreta: [Math.min(x + 45, b.x + b.w / 2 - 12), b.y - 26] })[dir] || [x, b.y + 38];
+        this.ineu.body.reset(pos[0], pos[1]);
+        this.posarDireccio(dir === 'amunt' && b.cara === 'avall' ? 'avall' : dir, false);
+    }
+
     moure(ui, delta) {
         this.intent = { x: 0, y: 0 };                                                // cap a on vol anar el jugador (el fan servir l'empenta de les pedres)
-        // Assegut en un banc: es queda quiet fins que el jugador es mou (llavors s'aixeca i continua caminant)
+        // Assegut en un banc: es queda quiet fins que el jugador es mou (llavors s'aixeca i continua caminant). Si encara té premuda la tecla amb què hi ha arribat, espera que la solti
         if (this.assegut) {
             const c = this.cursors, t = this.tecles;
             const vol = c.left.isDown || c.right.isDown || c.up.isDown || c.down.isDown ||
                 t.A.isDown || t.D.isDown || t.W.isDown || t.S.isDown || Math.hypot(ui.vectorTactil.x, ui.vectorTactil.y) > 0.15;
+            if (!this.seientLliure) { if (vol) { this.ineu.body.setVelocity(0); return; } this.seientLliure = true; }
             if (!vol) { this.ineu.body.setVelocity(0); return; }
             // Cap a on vol anar el jugador: s'aixeca pel costat on mira, no pel de darrere el banc
             const vx = (c.right.isDown || t.D.isDown ? 1 : 0) - (c.left.isDown || t.A.isDown ? 1 : 0) + ui.vectorTactil.x;

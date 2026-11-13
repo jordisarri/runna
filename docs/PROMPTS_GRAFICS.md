@@ -281,6 +281,16 @@ Tots els gràfics de dalt són fets i connectats (els seus prompts s'han esborra
 
 ## Pendent
 
+### `senyor_budo.png` → `assets/personatges/senyor_budo.webp` (amplada 78) *(El **senyor Budó**, el vell assegut a la taula de l'esquerra de tot de la Taverna (`ZonaTavernaInt`, `js/zones/taverna.js`), assaborint l'anís escarxat que li ha preparat l'Eve. NPC només de conversa (`DIALEGS.senyorBudo`). Ara el joc el dibuixa amb un placeholder. Imatge **de cos sencer, ASSEGUT en un tamboret, de cara a la càmera**, fons blanc pur (el trec jo); la taula del joc li tapa les cames, així que cal que tingui les cames i el tamboret dibuixats igualment.)*
+
+```
+A chubby, jovial, grumpy-looking old man, seen from the front in a high three-quarter view, SITTING on a small round wooden tavern stool, full body visible (stool and legs included), calm and relaxed, savouring a drink. Chibi proportions like the reference image (large head, small body). He has a BIG round bulbous nose (red-ish at the tip), round wire-rimmed spectacles, small squinting happy eyes, white eyebrows, a very sparse amount of white hair (not bald: just a few thin white wisps around the sides and a little on top), rosy cheeks, a soft double chin and a big round belly. He wears a worn brown woollen waistcoat over a cream-coloured shirt with rolled-up sleeves, dark baggy trousers, and old leather shoes. In one hand, held up in front of his chest, he holds a small glass of milky cloudy white-yellow aniseed liqueur (anís escarxat) with a small piece of ice; the other hand rests on his knee. A relaxed contented face, eyes half closed as he savours the drink. 2D charming game character in the same art style as the reference image: bold clean dark outline, rich saturated warm colours, two-tone cel shading, hand-painted look. Isolated on a pure white background (#FFFFFF), no ground, no table, no shadow, no text.
+```
+
+(Referència d'estil: `assets/personatges/galf.webp` o `assets/personatges/pomers.webp`. Si també vols el **retrat** de diàleg: mateix personatge, de cara i de tres quarts, fins a les espatlles, `assets/retrats/senyor_budo.webp`; mentrestant el joc fa servir el cap retallat de l'sprite.)
+
+---
+
 ### `cercle_runes.png` → `assets/objectes/cercle_runes.webp` (amplada 440) *(El **cercle de runes** gravat a terra al voltant del pedestal de l'Home del Raïm, que s'encén en lila quan el guardià es desperta (`cercleRunes`, `js/zones/casa.js`). Ara el joc el dibuixa amb codi; quan hi hagi el PNG, el substitueix. Imatge **apaïsada, 2,7:1** (el joc la fa servir a uns 440 × 163), fons blanc pur (el trec jo).)*
 
 ```

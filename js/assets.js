@@ -86,6 +86,7 @@ const CATALEG = [
     { key: 'eloi',      file: null,      amplada: 104, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'eloi') },
     { key: 'jusef',     file: 'assets/personatges/jusef.webp',     amplada: 82, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'jusef') },
     { key: 'jusef_levita', file: 'assets/personatges/jusef_levita.webp', amplada: 134, cru: true, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'jusef') },   // en Jusef levitant amb la pala (minijoc de ping-pong)
+    { key: 'senyor_budo', file: 'assets/personatges/senyor_budo.webp', amplada: 78, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a4a3a', cabell: '#e8e8e8', alt: 0.9, ample: 1.5, cap: 18 }) },      // el vell de la taverna, assegut
     { key: 'galf',      file: 'assets/personatges/galf.webp',      amplada: 55, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#d9b45a', alt: 0.92, ample: 1.35, cap: 17 }) },
     { key: 'carry',     file: 'assets/personatges/carry.webp',     amplada: 58, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a7a', cabell: '#f0f0f0', pell: '#ece4dc', dona: true, alt: 1.0, ample: 0.7 }) },   // la Carry, anciana molt prima i pàl·lida, de cabells blancs curts i faldilla (busca el Pallofa)
     { key: 'pallofa',   file: 'assets/personatges/pallofa.webp',   amplada: 60, cru: true,  provisional: (c, w) => dibuixarGos(c, w) },   // el Pallofa, gos petit i prim, blanc amb taques marrons, borni i ple de puces
@@ -214,7 +215,7 @@ const CATALEG = [
 
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
-['ineu', 'pare_jorda', 'germa_aldreu', 'germa_franci', 'pare_daimiel', 'pare_alcovi', 'eve', 'jusef', 'pomers', 'julius', 'galf', 'isilder', 'pianista', 'joaneta', 'iscu',
+['ineu', 'pare_jorda', 'germa_aldreu', 'germa_franci', 'pare_daimiel', 'pare_alcovi', 'eve', 'senyor_budo', 'jusef', 'pomers', 'julius', 'galf', 'isilder', 'pianista', 'joaneta', 'iscu',
  'nena_trenes', 'venerables', 'carry', 'carmelia', 'pilaria', 'dolora', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'follet_carro', 'georgi_caseta', 'rosansa', 'meus', 'molner', 'ombra_monjo', 'mandu', 'mandu_trencada', 'nen_uri', 'nen_flam', 'nen_sardin', 'ocellaire', 'ocellaire_derrotat']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
@@ -228,7 +229,7 @@ const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'nor
 // (eines/fer_ineu_v2.py). Esquerra i dreta són a assets/ineu_v2/alt/ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
 // Les mides dels idles s'igualen a les dels caminars amb eines/igualar_idle_ineu.py. Els fulls i els prototips anteriors són a art/ineu/arxiu/.
 const rutaIneu = (dir, idle) => {
-    const v = '?v=2611140300';
+    const v = '?v=2611142400';
     if (dir === 'left' || dir === 'right') return `assets/ineu_v2/alt/${idle ? 'idle_elev_' : 'walk_elev_'}${dir}.webp${v}`;
     return `assets/ineu_v2/${idle ? 'idle_' : ''}${dir}.webp${v}`;
 };
@@ -1188,23 +1189,34 @@ const Grafics = {
             ctx.fillStyle = or(cx - 3, -10, cx + 3, -4); ctx.beginPath(); ctx.arc(cx, -8, 3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
             ctx.fillStyle = 'rgba(255,248,200,0.45)'; ctx.fillRect(cx - 4, 56, 1.6, 22); ctx.fillRect(cx - 7, 86, 1.6, 10);
         });
+        // Banc de jardí vist per darrere (qui hi seu mira cap amunt): els dos muntants pugen pel respatller i baixen com a potes, amb un travesser; el respatller és un
+        // tauler de tres llistons amb el llistó de dalt més ample (se'n veu la cara de dalt), i sota seu es veu la vora del darrere del seient.
         crea('banc_davant', 150, 100, (ctx, w, h) => {
-            const base = h - 8;
+            const base = h - 8, C = '#2a1608';
+            ctx.lineJoin = 'round';
             ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(75, base + 3, 68, 6, 0, 0, Math.PI * 2); ctx.fill();
-            ctx.strokeStyle = '#2a1608'; ctx.lineWidth = 2; ctx.lineJoin = 'round';
-            [[8, 20], [124, 20]].forEach(([x]) => {          // muntants
-                const g = ctx.createLinearGradient(x, 0, x + 18, 0); g.addColorStop(0, '#6a4220'); g.addColorStop(1, '#3e2410');
-                ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(x, 8, 18, base - 8 + 2, 4); ctx.fill(); ctx.stroke();
+            // potes de darrere (sota el seient) i travesser
+            [[10, 0], [124, 1]].forEach(([x]) => { const g = ctx.createLinearGradient(x, 0, x + 16, 0); g.addColorStop(0, '#5a3818'); g.addColorStop(1, '#38200c'); ctx.fillStyle = g; ctx.fillRect(x, 64, 16, base - 62); ctx.strokeStyle = C; ctx.lineWidth = 2; ctx.strokeRect(x, 64, 16, base - 62); });
+            ctx.fillStyle = '#4a2c14'; ctx.fillRect(26, base - 18, 98, 6); ctx.strokeRect(26, base - 18, 98, 6);
+            // vora del darrere del seient (gruixuda, a l'ombra)
+            ctx.fillStyle = '#7a4c22'; ctx.fillRect(4, 56, 142, 13); ctx.strokeRect(4, 56, 142, 13);
+            ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fillRect(5, 63, 140, 5);
+            ctx.fillStyle = 'rgba(255,220,170,0.28)'; ctx.fillRect(6, 58, 138, 2);
+            // muntants del respatller
+            [8, 126].forEach(x => { const g = ctx.createLinearGradient(x, 0, x + 16, 0); g.addColorStop(0, '#6a4220'); g.addColorStop(1, '#3e2410'); ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(x, 6, 16, 62, 4); ctx.fill(); ctx.stroke(); });
+            // tauler: tres llistons amb una escletxa fosca entre cada un (pel buit s'endevina el seient)
+            ctx.fillStyle = '#2e1a0a'; ctx.fillRect(22, 14, 106, 44);
+            [[17, '#b07a42'], [30, '#a06c38'], [43, '#b07a42']].forEach(([y, col]) => {
+                ctx.fillStyle = col; ctx.beginPath(); ctx.roundRect(20, y, 110, 11, 2); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = 'rgba(255,230,180,0.3)'; ctx.fillRect(24, y + 2, 102, 2);
+                ctx.strokeStyle = 'rgba(70,40,14,0.45)'; ctx.lineWidth = 1;
+                for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.moveTo(34 + k * 32, y + 7); ctx.lineTo(58 + k * 32, y + 7); ctx.stroke(); }
+                ctx.strokeStyle = C; ctx.lineWidth = 2;
             });
-            [[22, '#b07a42'], [38, '#a06c38'], [54, '#b07a42'], [70, '#a06c38']].forEach(([y, col]) => {    // taulons del respatller
-                ctx.fillStyle = col; ctx.beginPath(); ctx.roundRect(4, y, 142, 14, 3); ctx.fill(); ctx.stroke();
-                ctx.fillStyle = 'rgba(255,230,180,0.3)'; ctx.fillRect(8, y + 2, 134, 2);
-                ctx.strokeStyle = 'rgba(70,40,14,0.4)'; ctx.lineWidth = 1;
-                for (let k = 0; k < 3; k++) { ctx.beginPath(); ctx.moveTo(24 + k * 40, y + 8); ctx.lineTo(56 + k * 40, y + 8); ctx.stroke(); }
-                ctx.strokeStyle = '#2a1608'; ctx.lineWidth = 2;
-            });
-            ctx.fillStyle = '#c48a4c'; ctx.beginPath(); ctx.roundRect(2, 4, 146, 11, 3); ctx.fill(); ctx.stroke();   // llistó superior
-            ctx.fillStyle = 'rgba(255,230,180,0.35)'; ctx.fillRect(6, 6, 138, 2);
+            // llistó de dalt, més ample, amb la cara superior més clara
+            ctx.fillStyle = '#c48a4c'; ctx.beginPath(); ctx.roundRect(2, 3, 146, 14, 4); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#dca868'; ctx.fillRect(5, 4.5, 140, 4);
+            ctx.fillStyle = 'rgba(70,40,14,0.35)'; ctx.fillRect(5, 12, 140, 3);
         });
         // ---- Mobiliari i terra de fusta (cabanes) ----
         const FUSTA_CONTORN = '#2a1608';

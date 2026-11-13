@@ -208,8 +208,8 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         // Aplics a la paret del fons, entre les portes i les finestres
         [375, 515, 685, 825].forEach((x, i) => this.aplic(x, 66, i, -990));
         // Bancs contra les parets laterals
-        this.posar('banc_respatller', 200, 560, { col: { w: 140, h: 16 } });
-        this.posar('banc_respatller', 1000, 300, { col: { w: 140, h: 16 } });
+        this.posarBanc(200, 560, 140);
+        this.posarBanc(1000, 300, 140);
         this.colisio(50, H / 2, 80, H);
         this.colisio(A - 50, H / 2, 80, H);
         // Paret del fons, amb un forat de 90 a cada porta

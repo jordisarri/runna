@@ -65,7 +65,7 @@ class ZonaMonestirRebedor extends ZonaBase {
             this.tweens.add({ targets: llum, alpha: 0.05, scale: 0.92, yoyo: true, repeat: -1, duration: 420 + i * 90 });
         });
         [[190, 430], [190, 660], [910, 430], [910, 660]].forEach(([x, y]) => {
-            this.posar('banc', x, y, { col: { w: 120, h: 20 }, opac: true });
+            this.posarBanc(x, y, 120);
         });
 
         // Parets i col·lisions (obertura de sortida a baix, al mig)

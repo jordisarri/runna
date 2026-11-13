@@ -448,6 +448,11 @@ const ICONES_OBJECTES = {
         ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 2; [32, 43, 54, 65].forEach(y => { ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(58 - (y % 11), y); ctx.stroke(); });
         ctx.fillStyle = '#9a2a1a'; ctx.fillRect(27, 24, 7, 7);
     },
+    fragment2: ctx => {              // l'altra meitat: la vora esquinçada és a l'esquerra
+        ctx.save(); ctx.translate(100, 0); ctx.scale(-1, 1);
+        ICONES_OBJECTES.fragment1(ctx);
+        ctx.restore();
+    },
     pergami_monjo: ctx => {          // el mateix pergamí esquinçat, amb plecs, taques, escriptura i segell, que es veu clavat a les parets
         ctx.save(); ctx.translate(14, 5); ctx.rotate(-0.04);
         pintarPergamiParet(ctx, 68, 86, { senseClaus: true });
@@ -563,6 +568,7 @@ const US_OBJECTES = {
     guants: E => E.flag('rodaMoguda') && E.flag('refetorObert') && E.flag('rastellObert') ? 'record' : 'cal',
     maneta: E => E.flag('raimDerrotat') ? 'record' : 'cal',
     fragment1: E => E.flag('benedicioMonjo') ? 'record' : 'cal',
+    fragment2: E => E.flag('benedicioMonjo') ? 'record' : 'cal',
     pergami_monjo: E => E.flag('raimDerrotat') ? 'record' : 'cal',
     clau_girgoles: E => E.flag('portaFerroOberta') ? 'record' : 'cal',
     clau_ferro: E => E.flag('portaSoterraniOberta') ? 'record' : 'cal',
