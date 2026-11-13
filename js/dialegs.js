@@ -1559,12 +1559,6 @@ const DIALEGS = {
         pagines: [{ qui: "Ineu", text: "(Una bóta amb una creu vermella. Pesa molt menys que les altres... La faré rodar.)" }]
     }),
 
-    homeRaimInt: E => ({
-        pagines: [
-            { qui: "Ineu", text: "Mira cap amunt i de costat, com si vigilés el balcó de sobre l'escala. Sembla que guardi alguna cosa." },
-        ]
-    }),
-
 
     // ---------------- LA CABANA DE LA JAUNETA ----------------
     // La Joaneta, bruixa del bosc: una curiositat. Hi vas pel portal de l'Alzina Buida i et diu la pista del moment (és vident)

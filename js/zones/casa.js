@@ -26,9 +26,9 @@ Object.assign(DIALEGS, {
 
     raimDesperta: {
         pagines: [
-            { qui: 'Home del Raïm', text: "Cinquanta anys de pedra... Qui gosa despertar el guardià del silenci?" },
+            { qui: 'Home del Raïm', text: "Uf... Quant de temps. M'han tingut mirant la paret com un nen castigat." },
             { qui: 'Ineu', text: "S'ha mogut! La pedra ha cobrat vida!" },
-            { qui: 'Home del Raïm', text: "Mentre jo alci aquesta maça, cap mortal posarà els peus a la cripta!" }
+            { qui: 'Home del Raïm', text: "Voleu entrar a la cripta? Haureu de passar per sobre meu. Tampoc no tinc res més a fer." }
         ]
     },
 
@@ -40,7 +40,9 @@ Object.assign(DIALEGS, {
 
     raimDerrotat: {
         pagines: [
-            { qui: 'Home del Raïm', text: "El pes dels segles... s'esmicola... Baixeu, doncs... i afronteu el que reposa a la foscor." },
+            { qui: 'Home del Raïm', text: "Està bé, em rendeixo. Fa segles que no em cansava tant." },
+            { qui: 'Home del Raïm', text: "Baixa, si hi tens ganes. Però allà sota hi ha coses que fins la pedra prefereix no mirar." },
+            { qui: 'Home del Raïm', text: "I ara, si no et fa res, torno al meu pedestal. Sembla que és l'únic lloc on tinc feina." },
         ]
     },
 
@@ -125,6 +127,11 @@ ENEMICS.raim = {
         }).setDepth(99990);
         p.explode(n);
         z.time.delayedCall(800, () => p.destroy());
+    },
+    // Una frase curta que surt sobre el cap del guardià i s'esvaeix (només en tres moments: fase 2, a punt de caure i el diàleg de despertar/derrota)
+    diu(z, e, text) {
+        const t = z.add.text(e.spr.x, e.spr.y - e.spr.displayHeight - 14, text, Object.assign(estilText(24, '#f0e6ff', { stroke: '#1a0f2a', strokeThickness: 5, fontStyle: 'italic' }), { wordWrap: { width: 330 }, align: 'center' })).setOrigin(0.5, 1).setDepth(99999);
+        z.tweens.add({ targets: t, y: t.y - 26, alpha: 0, duration: 800, delay: 1900, onComplete: () => t.destroy() });
     },
     // On queda el cap quan és a terra (el sprite gira pels peus)
     capATerra(z, e) { return z.puntsCop(e)[0]; },
@@ -233,10 +240,12 @@ ENEMICS.raim = {
         const cap = Math.atan2(jo.y - c.y, jo.x - c.x);
         if (e.estat !== 'apunta') this.netejaTele(e);
         if (e.estat !== 'maza') this.netejaMaza(e);
+        if (e.vida <= 3 && !e.vidaBaixa) { e.vidaBaixa = true; this.diu(z, e, 'Els genolls... ja no són el que eren.'); }
         if (fase2 && !e.fase2vista) {                    // canvi de fase: rugit, flaix lila i una breu pausa abans de tornar a l'atac
             e.fase2vista = true; e.proxMaza = ara + 2600; e.atorditFins = ara + 900;
             e.spr.body.setVelocity(0); e.estat = 'aixeca'; e.fins = ara + 900;
             z.cameras.main.flash(380, 190, 140, 255); z.cameras.main.shake(500, 0.008); Sfx.carrega();
+            this.diu(z, e, "Ja em feia falta una mica d'exercici!");
             this.trossos(z, c.x, c.y, 16);
             return;
         }

@@ -2174,11 +2174,11 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 
 
-**Home del Raïm:** Cinquanta anys de pedra... Qui gosa despertar el guardià del silenci?
+**Home del Raïm:** Uf... Quant de temps. M'han tingut mirant la paret com un nen castigat.
 
 **Ineu:** S'ha mogut! La pedra ha cobrat vida!
 
-**Home del Raïm:** Mentre jo alci aquesta maça, cap mortal posarà els peus a la cripta!
+**Home del Raïm:** Voleu entrar a la cripta? Haureu de passar per sobre meu. Tampoc no tinc res més a fer.
 
 
 ### raimSenseArma
@@ -2192,7 +2192,15 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 
 
-**Home del Raïm:** El pes dels segles... s'esmicola... Baixeu, doncs... i afronteu el que reposa a la foscor.
+**Home del Raïm:** Està bé, em rendeixo. Fa segles que no em cansava tant.
+
+**Home del Raïm:** Baixa, si hi tens ganes. Però allà sota hi ha coses que fins la pedra prefereix no mirar.
+
+**Home del Raïm:** I ara, si no et fa res, torno al meu pedestal. Sembla que és l'únic lloc on tinc feina.
+
+*(Fase 2, frase flotant:)* Ja em feia falta una mica d'exercici!
+
+*(Quan és a punt de caure, frase flotant:)* Els genolls... ja no són el que eren.
 
 
 ### cofreCripta
