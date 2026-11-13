@@ -576,6 +576,15 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         }
     }
 
+    // En examinar l'estàtua, la càmera puja i la mostra sencera (de peus al cap) a la part de la pantalla que el diàleg no tapa
+    enquadrarRaim(dialeg) {
+        const est = this.estatua || this.estatuaFinal, alt = (est ? est.displayHeight : 360) + 30;
+        const lliure = Math.max(240, (ALT - ALT_HUD) - 470);
+        const zoom = Math.min(this.zoomZona || ZOOM_CAMERA, lliure * 0.92 / alt);
+        this.enquadrar(RAIM.x, RAIM.y - alt * 0.48, zoom, 800);
+        return dialeg;
+    }
+
     // ---- L'Home del Raïm i el volant de ferro ----
     // El cap de pedra comença girat del tot (d'esquena). Amb la maneta d'en Georgi, el volant de ferro del pedestal (amb engranatges) li
     // fa girar el cap un pas cada volta: d'esquena, de tres quarts, de perfil i, a la tercera volta, de cara: el guardià es desperta.
@@ -595,7 +604,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.colEstatua = this.colisio(RX, RY - 10, 62, 24);
         }
         // Mirar l'estàtua només fa falta si encara no tens la maneta: et diu on és
-        this.interactiu(RX, RY + 10, 90, DIALEGS.homeRaimInt, { altura: 250, actiu: () => !Estat.flag('raimDesperta') && !Estat.te('maneta') });
+        this.interactiu(RX, RY + 10, 90, E => this.enquadrarRaim(DIALEGS.homeRaimInt(E)), { altura: 250, enTancar: () => this.alliberarCamera(700), actiu: () => !Estat.flag('raimDesperta') && !Estat.te('maneta') });
 
         // El volant de ferro amb engranatges, encastat a la cara del pedestal: amb la maneta, cada volta gira el cap un quart
         if (!derrotat) this.dibuixarVolant(RX, Math.round(RY - this.estatua.displayHeight * 0.17));
@@ -609,7 +618,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
              enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.time.delayedCall(500, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => this.despertarRaim())); } } });
 
         // Vençut, l'estàtua del guardià es pot mirar: descansa al pedestal
-        this.interactiu(RX, RY + 10, 90, DIALEGS.raimEstatuaFinal, { altura: 250, actiu: () => Estat.flag('raimDerrotat') && !!this.estatuaFinal });
+        this.interactiu(RX, RY + 10, 90, E => this.enquadrarRaim(DIALEGS.raimEstatuaFinal), { altura: 250, enTancar: () => this.alliberarCamera(700), actiu: () => Estat.flag('raimDerrotat') && !!this.estatuaFinal });
         // Trapa de la cripta, a sota de l'escalinata: una llosa amb una creu gravada; vençut el guardià, es fa a un costat i
         // deixa veure l'escala que baixa
         this.dibuixarTrapa(derrotat);
