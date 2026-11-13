@@ -1544,8 +1544,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { avis: "Has obtingut el PERGAMÍ DEL MONJO.", obj: 'pergami_monjo' },
-                { qui: "Ineu", text: "«La clau de ferro és sota l'escala, murada amb els meus germans. Un guardià de pedra la vigila d'esquena: ningú no hi baixa fins que no et mira a la cara.»" },
-                { qui: "Ineu", text: "I al revers, amb una altra lletra: «Qui busqui sortida, que trenqui la bóta marcada amb la creu.»" }
+                { qui: "Ineu", text: "«La clau de ferro és sota l'escala, murada amb els meus germans. Un guardià de pedra la vigila d'esquena: ningú no hi baixa fins que no et mira a la cara.»" }
             ],
             enAcabar: () => {
                 E.dona("pergami_monjo"); E.posaFlag("cofreCambra");
