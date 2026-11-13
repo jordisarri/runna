@@ -428,16 +428,21 @@ class ZonaBase extends Phaser.Scene {
         const [cx, cy] = pd.c, [hx, hy] = pd.h;
         const carro = this.posar('carruatge', cx, cy, { col: { w: 190, h: 40 }, opac: true }).setFlipX(true);     // girat: el davant mira cap a l'escena
         // el fum blanc de la xemeneia (la xemeneia és a l'esquerra del dibuix, que està girat): animat per codi, sempre blanc
-        const fx = cx + 107 * carro.scaleX, fy = cy - carro.displayHeight + 6;
-        this.add.particles(fx, fy, 'fum', {
+        this.carroParada = carro;
+        const ox = 107 * carro.scaleX, oy = -carro.displayHeight + 6;                 // la xemeneia, respecte al peu del carruatge (si la zona s'amplia cap al sud, el carruatge es mou i el fum el segueix)
+        const fum = this.add.particles(carro.x + ox, carro.y + oy, 'fum', {
             speedY: { min: -34, max: -20 }, speedX: { min: -4, max: 14 }, accelerationX: 3, lifespan: { min: 2400, max: 3400 },
             scale: { start: 0.16, end: 0.95 }, alpha: { start: 0.85, end: 0 }, rotate: { min: -25, max: 25 }, frequency: 260, quantity: 1
         }).setDepth(cy + 1);
+        const segueix = () => { if (carro.active && fum.active) fum.setPosition(carro.x + ox, carro.y + oy); };       // cada fotograma, sobre la xemeneia (la zona pot haver mogut el carruatge en ampliar-se cap al sud)
+        segueix();
+        this.events.on('update', segueix);
+        this.events.once('shutdown', () => this.events.off('update', segueix));
         this.npc('follet_carro', hx, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true, colAmple: 48 });     // girat: mira cap a l'escena, no cap al carruatge
         this.paradaAqui = pd;
         if (Estat.arribadaCarruatge === pd.id) {                       // hi acabem d'arribar: bufada de vapor
             Estat.arribadaCarruatge = null;
-            this.time.delayedCall(250, () => { this.vaporPuf(fx, fy + 20); this.vaporPuf(pd.a[0], pd.a[1] - 20); });
+            this.time.delayedCall(250, () => { this.vaporPuf(carro.x + ox, carro.y + oy + 20); this.vaporPuf(this.ineu.x, this.ineu.y - 20); });
         }
     }
 
@@ -466,7 +471,7 @@ class ZonaBase extends Phaser.Scene {
         this.canviant = true;
         this.ineu.body.setVelocity(0);
         Sfx.vapor();
-        if (this.paradaAqui) this.vaporPuf(this.paradaAqui.c[0] + 45, this.paradaAqui.c[1] - 160);
+        if (this.carroParada && this.carroParada.active) this.vaporPuf(this.carroParada.x + 107 * this.carroParada.scaleX, this.carroParada.y - this.carroParada.displayHeight + 26);
         Estat.dades.zona = pd.zona; Estat.dades.entrada = null;
         Estat.dades.x = pd.a[0]; Estat.dades.y = pd.a[1];
         Estat.arribadaCarruatge = pd.id;
