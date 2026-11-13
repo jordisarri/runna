@@ -38,7 +38,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Isílder** | Hostatgeria (jardí) | Pare del Sardi; cuida les flors. |
 | **Les sacerdotesses** Dolora, Pilària, Carmèlia | Hostatgeria | Protectores del Sardi; atrapades al soterrani. |
 | **Galf** | L'Era | Inventor del telescopi. |
-| **Georgi** | La Caseta | Nen que guarda la Maneta. |
+| **Jorgi** | La Caseta | Nen que guarda la Maneta. |
 | **La Joaneta** | Cabana del bosc | Bruixa-vident; dona el beuratge. |
 | **El Gran Til·ler** | Gran Til·ler | Esperit savi; dona la branca i la Fulla. |
 | **Pastors de la Cirosa** (el pastor vell) | Cirosa | Desterrats; guarden les Esquelles. |
@@ -72,7 +72,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | Cant del Miracle | Pianista (després de Runna) | Obre els barrots de la gàbia. |
 | Llanterna (Llum d'en Mamet) | Jusef (en guanyar-lo a ping-pong, **a l'Acte 2, abans del fragment 1**) | **Imprescindible a les Runes** (sense llum no es veu el pergamí del forat); eixampla la llum als llocs foscos. |
 | Ram / Guants de Poder | Germà Francí | Mouen la roda del Celler, el rastell i l'àngel de pedra. |
-| Maneta | Cofre de joguines de la Caseta (en Georgi) | Fa girar el cap de l'Home del Raïm. |
+| Maneta | Cofre de joguines de la Caseta (en Jorgi) | Fa girar el cap de l'Home del Raïm. |
 | Pergamí del monjo | Cambra secreta (Casa Gran) | Pista del puzle del Raïm. |
 | Clau de ferro | Cripta de la Casa Gran | Obre la porta de ferro exterior (Pati del Celler). |
 | Clau rovellada | L'Iscu (cabana amagada) | Obre la porta de ferro del fons de la galeria. |
@@ -207,7 +207,7 @@ El Germà Francí demana que portis el seu **ram** a la tomba de l'àngel del Ce
 Roda → **Passadís secret** (escolopendres i un mur de cinc esbarzers negres: Runna) → **Cambra secreta** (cofre: el **pergamí del monjo**; la porta del fons és una llosa sense pany: la bóta de la creu rodola, deixa veure una anella, i una cadena fa girar la politja i puja la llosa).
 
 **Pas 30 · La Caseta — la Maneta** `georgiCaseta` `cofreManeta`
-A l'oest del Gran Til·ler, en Georgi (que crida «MAI! MAI!») guarda la **Maneta** al cofre de les joguines de la caseta aixecada sobre pals; per una cosa seriosa, la hi deixa agafar.
+A l'oest del Gran Til·ler, en Jorgi (que crida «MAI! MAI!») guarda la **Maneta** al cofre de les joguines de la caseta aixecada sobre pals; per una cosa seriosa, la hi deixa agafar.
 
 **Pas 31 · Escalinata de la Casa Gran — Home del Raïm i Cripta** `homeRaim` `raimDesperta` `raimDerrotat` `tombaMonjos`
 La Maneta s'encaixa al volant de ferro del pedestal: tres voltes i el cap girat el mira de cara → **boss**. Vençut, la trapa de sota l'escalinata duu a la **Cripta** dels monjos: la **Clau de ferro**.
@@ -273,7 +273,7 @@ Les Venerables Sàvies recorden una lateral quan la història principal és atur
 - El Germà Aldreu: a la Plaça diu «el Mestre»? Hi ha prou pistes abans del Pastor de Boira?
 - Qui dona el Cant de Vespres i quan? (Pianista, però el demana l'ombra: el sopar del Til·ler també el necessita per al pa dels pastors.)
 - Les pistes de les Venerables Sàvies i el Pare Jordà (surten de `js/progres.js`) han de coincidir amb el que diuen els personatges concrets.
-- Després de l'epíleg: tothom té frase nova? Falta algú (Nena de les Trenes, Galf, Follet, Georgi, Mandu)?
+- Després de l'epíleg: tothom té frase nova? Falta algú (Nena de les Trenes, Galf, Follet, Jorgi, Mandu)?
 - Els diàlegs amb variant «Si: ...» (annex): n'hi ha cap condició que no es pugui complir mai o que repeteixi el mateix text?
 
 ---
@@ -311,7 +311,7 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 - **Fram**: `nenGabia`, `ferEpileg`
 - **Galf**: `galf`
 - **Gent**: `gentEpileg`
-- **Georgi**: `georgiCaseta`
+- **Jorgi**: `georgiCaseta`
 - **Germà Aldreu**: `germaAldreu`, `aldreuGabia`, `ocellaireDerrotat`, `finalGabia`
 - **Germà Francí**: `germa_franci`, `germaFranci`
 - **Home del Raïm**: `raimDesperta`, `raimDerrotat`
@@ -1965,7 +1965,7 @@ ${mots.join('   ')}
 
 *Si: NO georgiManeta*
 
-**Ineu:** No és meva... Millor preguntar a en Georgi abans d'agafar-la.
+**Ineu:** No és meva... Millor preguntar a en Jorgi abans d'agafar-la.
 
 
 *Altrament (per defecte):*
@@ -2217,34 +2217,34 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 *Si: té maneta o maneta*
 
-**Georgi:** Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes.
+**Jorgi:** Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes.
 
 
 *Si: NO raimVolantVist*
 
-**Georgi:** Ei, monjo! Sóc en Georgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.
+**Jorgi:** Ei, monjo! Sóc en Jorgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.
 
 **Ineu:** M'anirà bé saber-ho. De moment només passava a saludar.
 
-**Georgi:** Doncs ja saps on trobar-me si algun dia et cal un cop de mà.
+**Jorgi:** Doncs ja saps on trobar-me si algun dia et cal un cop de mà.
 
 
 *Si: georgiManeta*
 
-**Georgi:** La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!
+**Jorgi:** La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!
 
 
 *Altrament (per defecte):*
 
-**Georgi:** Ei, monjo! Sóc en Georgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.
+**Jorgi:** Ei, monjo! Sóc en Jorgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.
 
-**Ineu:** Georgi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar.
+**Ineu:** Jorgi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar.
 
-**Georgi:** Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda.
+**Jorgi:** Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda.
 
-**Georgi:** Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!
+**Jorgi:** Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!
 
-**Georgi:** Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la.
+**Jorgi:** Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la.
 
 
 ### mecanismePorta

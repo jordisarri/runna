@@ -11,7 +11,7 @@ const CREDITS = [
     ["L'Ineu, novici", 24], ['El Pare Jordà', 24], ['El Germà Aldreu', 24], ["L'Ocellaire, l'Home de la Gàbia", 24],
     ["L'Huri, el Fram i el Sardi", 24], ['La Pianista', 24], ['El Pare Nadiel i el Pare Alcoví', 24], ['El Germà Francí', 24],
     ['Les sacerdotesses Dolora, Pilària i Carmèlia', 24], ['Les Venerables Sàvies', 24], ['El Senyor Pomers, en Julius, en Jusef i el Galf', 24], ['La Meus i el senyor Molner', 24], ['La Carry i el Pallofa', 24], ["L'Isílder, la Joaneta i la Rosansa", 24],
-    ['L\'Iscu', 24], ["L\'Eve i la Càren, de la Taverna", 24], ['En Georgi de la Caseta', 24], ['La Nena de les Trenes', 24], ['Els pastors de la Cirosa', 24], ['El Follet del Carro Verd', 24], ['El Gran Til·ler', 24], ["L'ombra del monjo", 24],
+    ['L\'Iscu', 24], ["L\'Eve i la Càren, de la Taverna", 24], ['En Jorgi de la Caseta', 24], ['La Nena de les Trenes', 24], ['Els pastors de la Cirosa', 24], ['El Follet del Carro Verd', 24], ['El Gran Til·ler', 24], ["L'ombra del monjo", 24],
     ['', 40],
     ['GRÀCIES PER JUGAR', 30, '#ffe08a'],
     ['', 20],

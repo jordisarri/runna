@@ -104,8 +104,8 @@ const PROGRES = {
           pista: E => "Rere la roda, un passadís baixa a una cambra secreta. Els esbarzers negres del camí només cedeixen a Runna." },
         { id: 'maneta', marca: ['georgiManeta', 'maneta', 'obj:maneta'], fet: E => E.flag('maneta') || E.te('maneta'),
           pista: E => E.flag('georgiManeta')
-              ? "La maneta d\'en Georgi és al cofre de les joguines, dalt de la caseta de pals, a la Caseta."
-              : "El volant de ferro de l'Home del Raïm no té maneta. En Georgi de la Caseta en deu saber alguna cosa." },
+              ? "La maneta d\'en Jorgi és al cofre de les joguines, dalt de la caseta de pals, a la Caseta."
+              : "El volant de ferro de l'Home del Raïm no té maneta. En Jorgi de la Caseta en deu saber alguna cosa." },
         { id: 'raim', marca: ['raimDesperta', 'raimDerrotat'], fet: E => E.flag('raimDerrotat'),
           pista: E => "A l'escalinata de la Casa Gran, l'Home del Raïm té el cap girat d'esquena. Amb la maneta al volant de la base, gira'l tres voltes fins que et miri de cara: es desperta. Només Runna li fa mal, i només al cap, quan ensopega de morros després d'una envestida." },
         { id: 'cripta', marca: ['relTretes', 'clauFerro', 'obj:clau_ferro'], fet: E => E.flag('relTretes'),

@@ -3,7 +3,7 @@
  *   Entrada: només la secreta, des d'El Celler (el ping-pong; darrere la roda de carruatge, amb Runna): passadís amb escolopendres
  *            i un esbarzer negre, sala del tresor (la cambra secreta dels monjos) i una porta cap a l'Escalinata. La reixa del porxo
  *            (plaça) és tancada des de fora; només es pot obrir per dins, com a drecera de tornada.
- *   Escalinata: l'Home del Raïm, amb el cap girat. Amb la Maneta d'en Georgi (és a la caseta, a la Caseta) es fa girar el volant de
+ *   Escalinata: l'Home del Raïm, amb el cap girat. Amb la Maneta d'en Jorgi (és a la caseta, a la Caseta) es fa girar el volant de
  *               ferro de la base: tres voltes i el cap et mira de cara; llavors l'estàtua cobra vida (BOSS). Derrotada, s'obre la trapa.
  *   Cripta: la Clau de ferro (i un paper: la llum de Runna segella la tomba esquerdada del Cementiri),
  *           que obre la Porta de les Gírgoles (a sota de la Taverna, no pas des d'aquí).
@@ -71,34 +71,34 @@ Object.assign(DIALEGS, {
         }
     },
 
-    // El Georgi de la Caseta (a l'oest del Til·ler): diu on té la maneta, dins la caseta aixecada del jardí
+    // El Jorgi de la Caseta (a l'oest del Til·ler): diu on té la maneta, dins la caseta aixecada del jardí
     georgiCaseta: E => {
         if (E.te('maneta') || E.flag('maneta')) {
-            return { pagines: [{ qui: 'Georgi', text: "Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes." }] };
+            return { pagines: [{ qui: 'Jorgi', text: "Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes." }] };
         }
         if (!E.flag('raimVolantVist')) {
             return {
                 pagines: [
-                    { qui: 'Georgi', text: "Ei, monjo! Sóc en Georgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
+                    { qui: 'Jorgi', text: "Ei, monjo! Sóc en Jorgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
                     { qui: 'Ineu', text: "M'anirà bé saber-ho. De moment només passava a saludar." },
-                    { qui: 'Georgi', text: "Doncs ja saps on trobar-me si algun dia et cal un cop de mà." }
+                    { qui: 'Jorgi', text: "Doncs ja saps on trobar-me si algun dia et cal un cop de mà." }
                 ]
             };
         }
         if (E.flag('georgiManeta')) {
-            return { pagines: [{ qui: 'Georgi', text: "La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!" }] };
+            return { pagines: [{ qui: 'Jorgi', text: "La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!" }] };
         }
         return {
             pagines: [
-                { qui: 'Georgi', text: "Ei, monjo! Sóc en Georgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
-                { qui: 'Ineu', text: "Georgi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar." },
-                { qui: 'Georgi', text: "Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda." },
-                { qui: 'Georgi', text: "Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!" },
-                { qui: 'Georgi', text: "Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la." }
+                { qui: 'Jorgi', text: "Ei, monjo! Sóc en Jorgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor." },
+                { qui: 'Ineu', text: "Jorgi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar." },
+                { qui: 'Jorgi', text: "Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda." },
+                { qui: 'Jorgi', text: "Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!" },
+                { qui: 'Jorgi', text: "Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la." }
             ],
             enAcabar: () => {
                 E.posaFlag('georgiManeta');
-                E.posaObjectiu("La maneta d\'en Georgi és al cofre de les joguines, dalt de la caseta aixecada sobre pals.");
+                E.posaObjectiu("La maneta d\'en Jorgi és al cofre de les joguines, dalt de la caseta aixecada sobre pals.");
             }
         };
     }
@@ -642,7 +642,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     }
 
     // ---- L'Home del Raïm i el volant de ferro ----
-    // El cap de pedra comença girat del tot (d'esquena). Amb la maneta d'en Georgi, el volant de ferro del pedestal (amb engranatges) li
+    // El cap de pedra comença girat del tot (d'esquena). Amb la maneta d'en Jorgi, el volant de ferro del pedestal (amb engranatges) li
     // fa girar el cap un pas cada volta: d'esquena, de tres quarts, de perfil i, a la tercera volta, de cara: el guardià es desperta.
     puzleRaim() {
         this.raimPas = 0;      // 0 d'esquena, 1 tres quarts, 2 perfil, 3 de cara (CAPS_RAIM)
@@ -813,7 +813,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         for (let k = 0; k < 6; k++) { const a = k * Math.PI / 3; v.lineStyle(4, 0x4a4a54, 1).lineBetween(0, 0, Math.cos(a) * 20, Math.sin(a) * 20); }
         v.fillStyle(0x8a7a40, 1).fillCircle(0, 0, 6).lineStyle(2, 0x111114, 1).strokeCircle(0, 0, 6);
         this.volant = v;
-        // La maneta (d'en Georgi), clavada a la vora del volant
+        // La maneta (d'en Jorgi), clavada a la vora del volant
         this.manetaVolant = this.add.graphics().setScale(RAIM.f).setDepth(RAIM.y + 3);
         this.manetaVolant.lineStyle(5, 0x111114, 1).lineBetween(0, 0, 0, -12).lineStyle(3, 0x8a6a3a, 1).lineBetween(0, 0, 0, -12);
         this.manetaVolant.fillStyle(0x8a6a3a, 1).fillRoundedRect(-3, -20, 6, 10, 2);

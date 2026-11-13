@@ -78,7 +78,7 @@ const RETRATS = {
     'Pare Alcoví': 'pare_alcovi', 'Eve': 'eve', 'Senyor Budó': 'senyor_budo', 'Jusef': 'jusef', 'Senyor Pomers': 'pomers', 'Julius': 'julius', 'Galf': 'galf', 'Isílder': 'isilder',
     'La Pianista': 'pianista', 'La Joaneta': 'joaneta', 'Iscu': 'iscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Carmèlia': 'carmelia', 'Pilària': 'pilaria', 'Dolora': 'dolora', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
-    'Meus': 'meus', 'Senyor Molner': 'molner', 'Georgi': 'georgi_caseta', 'Rosansa': 'rosansa', 'Monjo': 'ombra_monjo', 'Home del Raïm': 'home_raim',
+    'Meus': 'meus', 'Senyor Molner': 'molner', 'Jorgi': 'georgi_caseta', 'Rosansa': 'rosansa', 'Monjo': 'ombra_monjo', 'Home del Raïm': 'home_raim',
     'Carry': 'carry', 'Follet del Carro Verd': 'follet_carro', 'El Gran Til·ler': 'tiller',
     "L'Home de la Gàbia": 'ocellaire', 'Huri': 'nen_uri', 'Fram': 'nen_flam', 'Mandu': 'mandu', 'Flami': 'nen_flam', 'Sardi': 'nen_sardin'
 };

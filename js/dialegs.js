@@ -1623,14 +1623,14 @@ const DIALEGS = {
     },
 
 
-    // El cofre de les joguines de la caseta: la maneta d'en Georgi és a sota
+    // El cofre de les joguines de la caseta: la maneta d'en Jorgi és a sota
     cofreManeta: E => {
         if (E.te("maneta") || E.flag("maneta")) {
             return { pagines: [] };
         }
         if (!E.flag("georgiManeta")) {
             return { pagines: [
-                { qui: "Ineu", text: "No és meva... Millor preguntar a en Georgi abans d'agafar-la." }
+                { qui: "Ineu", text: "No és meva... Millor preguntar a en Jorgi abans d'agafar-la." }
             ] };
         }
         return {

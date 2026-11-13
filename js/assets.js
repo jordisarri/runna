@@ -344,7 +344,7 @@ const Grafics = {
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, rutaIneu(dir, false), mida);
-            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac/atac_${arma}_${dir}.webp?v=2611121800`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
+            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac/atac_${arma}_${dir}.webp?v=2611143100`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
@@ -1340,7 +1340,7 @@ const Grafics = {
         crea('parquet_biblio', 64, 64, pintarParquetBiblio);
         crea('paret_biblio', 984, 214, pintarParetBiblio);
         crea('lloses_rebedor', 128, 128, pintarLosesRebedor);
-        // Mobles de cel·la (js/dibuixos_cela.js), que fa servir la casa d'en Georgi
+        // Mobles de cel·la (js/dibuixos_cela.js), que fa servir la casa d'en Jorgi
         crea('llar_cela', 200, 170, pintarLlarCela);
         crea('llit_cela', 120, 180, pintarLlitCela);
         crea('taula_cela', 120, 90, pintarTaulaCela);
@@ -1358,7 +1358,7 @@ const Grafics = {
         crea('enclusa_taller', 120, 170, pintarEnclusaTaller);
         crea('trastos_taller', 150, 90, pintarTrastosTaller);
         crea('catifa_taller', 240, 120, pintarCatifaTaller);
-        // Casa d'en Georgi i la caseta de joc (js/dibuixos_georgi.js)
+        // Casa d'en Jorgi i la caseta de joc (js/dibuixos_georgi.js)
         crea('paret_masia', 780, 200, pintarParetMasia);
         crea('tauler_eines', 270, 72, pintarTaulerEines);
         crea('penjolls', 96, 120, pintarPenjolls);

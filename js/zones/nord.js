@@ -846,7 +846,7 @@ class ZonaSantAntoni extends ZonaBase {
 }
 
 // ---------------- EL GRAN TIL·LER (escenari petit: només l'arbre amb qui es parla) ----------------
-// Hi arriba el camí del sud (les cel·les). Cap a l'oest, un camí duu a la Caseta (on viu en Georgi); cap al nord-est, a la Cirosa, tancat
+// Hi arriba el camí del sud (les cel·les). Cap a l'oest, un camí duu a la Caseta (on viu en Jorgi); cap al nord-est, a la Cirosa, tancat
 // per les arrels del Til·ler, que només s'enfonsen davant la seva branca.
 const TIL_X = 520, TIL_Y = 510;
 
@@ -1112,8 +1112,8 @@ class ZonaTiller extends ZonaBase {
     }
 }
 
-// ---------------- LA CASETA (a l'oest del Til·ler): on viu el Georgi de la Caseta ----------------
-// Escenari petit: en Georgi al jardí, la seva casa (es pot entrar: només decorada) i la caseta aixecada sobre pilars
+// ---------------- LA CASETA (a l'oest del Til·ler): on viu el Jorgi de la Caseta ----------------
+// Escenari petit: en Jorgi al jardí, la seva casa (es pot entrar: només decorada) i la caseta aixecada sobre pilars
 // de fusta, amb el cofre de les joguines on hi ha la maneta.
 class ZonaGeorgi extends ZonaBase {
     constructor() {
@@ -1130,7 +1130,7 @@ class ZonaGeorgi extends ZonaBase {
         this.terra('herba', 0, 0, 1100, 800, -1100);
         this.terra('cami', 330, 500, 770, 150);            // del Til·ler (est) a la porta de la casa
 
-        // La casa d'en Georgi (520 d'ample): la porta del mig duu a dins
+        // La casa d'en Jorgi (520 d'ample): la porta del mig duu a dins
         const masiaGeorgi = this.edifici('masia', 380, 480, 500, 96, 'ZonaCasaGeorgi', 'porta', { alt: 90 });
         this.portaMasia(masiaGeorgi, 380, 480);
         this.npc('georgi_caseta', 560, 590, DIALEGS.georgiCaseta);
@@ -1154,11 +1154,20 @@ class ZonaGeorgi extends ZonaBase {
         this.sortida(1086, 510, 14, 130, 'ZonaTiller', 'georgi');
     }
 
+    // Mateix efecte també durant el canvi d'escena (quan l'Ineu ja ha tocat la sortida però continua pujant l'escala mentre es fa el fosc): si no, l'actualitzar() no corre,
+    // la seva profunditat torna a ser la y i la façana el tapa abans d'entrar a dins.
+    postFisica() {
+        super.postFisica();
+        const I = this.ineu;
+        this.enEscala = !!I && I.x > 814 && I.x < 906 && I.y < 504 && I.y > 360;
+        if (this.enEscala) { I.setDepth(485); if (this.ombraIneu) this.ombraIneu.setDepth(484.5); }
+    }
+
     // A l'escala de la caseta l'Ineu es veu per sobre de la façana (si no, el gràfic el tapa mentre puja)
     actualitzar() {
         const I = this.ineu;
         this.enEscala = !!I && I.x > 814 && I.x < 906 && I.y < 504 && I.y > 360;
-        if (this.enEscala) { I.setDepth(481); if (this.ombraIneu) this.ombraIneu.setDepth(480.5); }
+        if (this.enEscala) { I.setDepth(485); if (this.ombraIneu) this.ombraIneu.setDepth(484.5); }          // per sobre dels batents oberts de la porta (depth 480-482), que si no el tapen
     }
     sincroFantasma() {
         super.sincroFantasma();
@@ -1167,7 +1176,7 @@ class ZonaGeorgi extends ZonaBase {
 }
 
 // ---------------- CASA D'EN GEORGI (interior) ----------------
-// Una casa de pagès endreçada i plena de vida, però buida: en Georgi és al jardí. Només es mira.
+// Una casa de pagès endreçada i plena de vida, però buida: en Jorgi és al jardí. Només es mira.
 Object.assign(DIALEGS, {
     casaGeorgiEines: E => ({ pagines: [] }),
     casaGeorgiTaula: E => ({ pagines: [] }),
@@ -1177,7 +1186,7 @@ Object.assign(DIALEGS, {
 class ZonaCasaGeorgi extends ZonaBase {
     constructor() {
         super('ZonaCasaGeorgi', {
-            nom: "Masia d'en Georgi",
+            nom: "Masia d'en Jorgi",
             amplada: 900,
             alcada: 700,
             colorFons: '#140e0a',
@@ -1329,7 +1338,7 @@ class ZonaCasetaJoc extends ZonaBase {
         this.posar('tamboret', 240, 360, { escala: 0.7, col: { w: 28, h: 12 } });
         this.posar('tamboret', 400, 360, { escala: 0.7, col: { w: 28, h: 12 } });
 
-        // El cofre dels joguets, amb la maneta d'en Georgi a sota
+        // El cofre dels joguets, amb la maneta d'en Jorgi a sota
         const maneta = () => Estat.te('maneta') || Estat.flag('maneta');
         const cofreJ = this.posar(maneta() ? 'cofre_joguines_obert' : 'cofre_joguines', 510, 222, { col: { w: 56, h: 20 }, opac: true });       // tancat fins que se'n treu la maneta
         this.interactiu(510, 225, RADI_OBJECTE, DIALEGS.cofreManeta, { altura: 80, enTancar: () => { if (maneta()) cofreJ.setTexture('cofre_joguines_obert'); } });

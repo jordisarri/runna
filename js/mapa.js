@@ -16,7 +16,7 @@ const MAPA = {
         { id: 'ZonaCabana',        nom: 'Cabana de la Joaneta',     x: 370,  y: 110 },
         { id: 'ZonaBosc',          nom: 'Bosc de Sant Joan',        x: 520,  y: 200 },
         { id: 'ZonaGeorgi',          nom: 'La Caseta',                x: 630,  y: 130 },
-        { id: 'ZonaCasaGeorgi',     nom: 'Masia d\'en Georgi',       x: 470,  y: 80 },
+        { id: 'ZonaCasaGeorgi',     nom: 'Masia d\'en Jorgi',       x: 470,  y: 80 },
         { id: 'ZonaCasetaJoc',     nom: 'Dins la caseta',           x: 630,  y: 80 },
         { id: 'ZonaTiller',        nom: 'El Gran Til·ler',          x: 800,  y: 130 },
         { id: 'ZonaCelles',        nom: 'Les Cel·les',              x: 800,  y: 210 },
