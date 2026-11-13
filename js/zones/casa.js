@@ -1059,8 +1059,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
         if (!trencada) {
             const img = this.posar('bota_creu', AX, AY, { col: { w: 50, h: 22 }, opac: true });
             const col = this.obstacles.getChildren()[this.obstacles.getChildren().length - 1];
-            this.bota = { img, col, x: AX, y: AY, viu: true, key: 'bota_creu', nomesRunna: true, bloquejada: () => !Estat.flag('cofreCambra'), alTrencar: () => this.botaTrencada() };
-            // Fins que no s'obre el cofre (el pergamí del monjo) la bóta no es trenca (bloquejada): ningú no sap encara què amaga
+            this.bota = { img, col, x: AX, y: AY, viu: true, key: 'bota_creu', nomesRunna: true, alTrencar: () => this.botaTrencada() };
             this.barrils.push(this.bota);
         }
         if (oberta) { this.llosaPorta.y = PT - H; }
