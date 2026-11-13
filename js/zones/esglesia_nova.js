@@ -1,6 +1,6 @@
 /**
  * ESGLÉSIA NOVA (prototip jugable, apart de la ZonaEsglesia de la història).
- * Disseny de proves/esglesia/ passat al joc: vista aèria 3/4, presbiteri elevat amb retaule, altar, orgue (Pianista) i el Pare Daimiel;
+ * Disseny de proves/esglesia/ passat al joc: vista aèria 3/4, presbiteri elevat amb retaule, altar, orgue (Pianista) i el Pare Nadiel;
  * a esquerra la capella petita i a dreta la sacristia (cadascuna ocupa tota la llargada del presbiteri, amb porta a la nau);
  * des del graó, 3 arcades-capella a cada costat; 4 files de bancs i catifa central.
  * Entrada de proves: http://localhost:8000/?esglesia   (o ?proves -> 🧪 -> zona EsglesiaNova)
@@ -93,7 +93,7 @@ class ZonaEsglesiaNova extends ZonaBase {
         this.interactiu(xc, yF + 42, 140, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });
         this.posar('altar', xc, yF + 190, { col: { w: 190, h: 34 }, escala: 1.3, opac: true });
 
-        // ---- Orgue, Pianista i Pare Daimiel ----
+        // ---- Orgue, Pianista i Pare Nadiel ----
         this.orgue = this.posar('orgue', 1300, yF + 330, { col: { w: 110, h: 50 }, opac: true });
         const pia = this.npc('pianista', this.orgue.x, this.orgue.y + 24, DIALEGS.pianista, { flipX: true, radi: RADI_NPC });
         pia.setDepth(this.orgue.y + 1);
@@ -131,7 +131,7 @@ class ZonaEsglesiaNova extends ZonaBase {
         rc(cad, 1810, yF + 300, 56, 50, 0x8a5a30); rc(cad, 1810, yF + 262, 56, 40, 0x6b4020);
         rc(f, 1600, yF + 340, 110, 80, 0x7a1c24, 0.7); rc(f, 1608, yF + 348, 94, 64, 0xa82a34, 0.7);   // estora
         this.interactiu(1665, yF + 70, 100, () => ({ pagines: [{ qui: 'Ineu', text: "L'armari de la sacristia: casulles, albes i estoles planxades. Fa olor de lavanda i de cera." }] }), { altura: 80 });
-        this.interactiu(1735, yF + 255, 100, () => ({ pagines: [{ qui: 'Ineu', text: 'La taula de la sacristia: un calze, uns tovallons i el llibre dels oficis, tot ben posat. El Pare Daimiel és un home ordenat.' }] }), { altura: 80 });
+        this.interactiu(1735, yF + 255, 100, () => ({ pagines: [{ qui: 'Ineu', text: 'La taula de la sacristia: un calze, uns tovallons i el llibre dels oficis, tot ben posat. El Pare Nadiel és un home ordenat.' }] }), { altura: 80 });
 
         // ---- Pilastres de la nau i plantes ----
         const pil = this.add.graphics().setDepth(yB);

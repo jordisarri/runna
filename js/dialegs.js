@@ -324,18 +324,18 @@ const DIALEGS = {
         // A la primera conversa només hi ha el cor i el rellotge aturat.
         const sagrari = !E.te('clau_sagrari') && !E.flag('fragment2') && E.flag('fragment1');
         const paginesSagrari = [
-            { qui: 'Ineu', text: "Pare Daimiel, el pergamí que he trobat a les Runes diu que l'altra meitat és al sagrari. Sap on és la clau?" },
-            { qui: 'Pare Daimiel', text: 'El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se\'ls mengi. Si el Pare Alcoví els busca, ja era hora que algú els llegís!' },
-            { qui: 'Pare Daimiel', text: 'Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l\'ermita de la Desaparició. Potser és allà.' }
+            { qui: 'Ineu', text: "Pare Nadiel, el pergamí que he trobat a les Runes diu que l'altra meitat és al sagrari. Sap on és la clau?" },
+            { qui: 'Pare Nadiel', text: 'El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se\'ls mengi. Si el Pare Alcoví els busca, ja era hora que algú els llegís!' },
+            { qui: 'Pare Nadiel', text: 'Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l\'ermita de la Desaparició. Potser és allà.' }
         ];
         if (!E.flag('parlatDaimiel')) {
             return {
                 pagines: [
-                    { qui: 'Pare Daimiel', text: 'Ineu! Quina alegria de veure\'t! Vine, que necessito veus noves per al cor.' },
-                    { qui: 'Pare Daimiel', text: 'La Pianista i jo som amics de tota la vida. Ella toca com ningú, i jo dirigeixo els cants. Però la música es queda sense orgue, ja ho veus.' },
-                    { qui: 'Pare Daimiel', text: 'No et preocupis: si la música s\'ha amagat, la cantarem perquè torni! Riure és la primera pregària.' },
-                    { qui: 'Pare Daimiel', text: 'Ah, i una cosa que em preocupa: el rellotge de la torre s\'ha aturat a un quart de quatre, la nit que va arribar la boira.' },
-                    { qui: 'Pare Daimiel', text: 'La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarda la Carry, la vídua del rellotger, a Nostra Senyora. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' },
+                    { qui: 'Pare Nadiel', text: 'Ineu! Quina alegria de veure\'t! Vine, que necessito veus noves per al cor.' },
+                    { qui: 'Pare Nadiel', text: 'La Pianista i jo som amics de tota la vida. Ella toca com ningú, i jo dirigeixo els cants. Però la música es queda sense orgue, ja ho veus.' },
+                    { qui: 'Pare Nadiel', text: 'No et preocupis: si la música s\'ha amagat, la cantarem perquè torni! Riure és la primera pregària.' },
+                    { qui: 'Pare Nadiel', text: 'Ah, i una cosa que em preocupa: el rellotge de la torre s\'ha aturat a un quart de quatre, la nit que va arribar la boira.' },
+                    { qui: 'Pare Nadiel', text: 'La porta de la dreta del retaule puja per la torre fins a la Sala del Rellotge, però és tancada amb clau, i la clau la guarda la Carry, la vídua del rellotger, a Nostra Senyora. Jo ja no tinc l\'esquena per a tants graons, però tu... mira què hi passa.' },
                 ],
                 enAcabar: () => { E.posaFlag('parlatDaimiel'); E.posaFlag('rellotgeDit'); }
             };
@@ -345,11 +345,11 @@ const DIALEGS = {
             ? 'La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s\'ho pensarà dues vegades.'
             : 'La porta de la dreta del retaule és tancada, fill: la clau la guarda la Carry, la vídua del rellotger, a Nostra Senyora. Si algú fa caminar el rellotge, potser la boira s\'ho pensarà dues vegades.';
         if (sagrari) return {
-            pagines: [...paginesSagrari, ...(E.flag('rellotgeReparat') ? [] : [{ qui: 'Pare Daimiel', text: 'I no t\'oblidis del rellotge, Ineu. ' + textRellotge }])],
+            pagines: [...paginesSagrari, ...(E.flag('rellotgeReparat') ? [] : [{ qui: 'Pare Nadiel', text: 'I no t\'oblidis del rellotge, Ineu. ' + textRellotge }])],
             enAcabar: () => E.posaFlag('clauSagrariDita')
         };
         if (!E.flag('rellotgeReparat')) {
-            return { pagines: [{ qui: 'Pare Daimiel', text: E.te('clau_campanar') || E.flag('portaCampanarOberta')
+            return { pagines: [{ qui: 'Pare Nadiel', text: E.te('clau_campanar') || E.flag('portaCampanarOberta')
                 ? 'La Sala del Rellotge, fill: la porta de la dreta del retaule, i torre amunt. Si algú el fa caminar de nou, potser la boira s\'ho pensarà dues vegades.'
                 : 'La porta de la dreta del retaule és tancada, fill: la clau la guarda la Carry, la vídua del rellotger, a Nostra Senyora. Si algú fa caminar el rellotge, potser la boira s\'ho pensarà dues vegades.' }] };
         }
@@ -358,16 +358,16 @@ const DIALEGS = {
         if (!E.flag('rellotgeExplicat')) {
             return {
                 pagines: [
-                    { qui: 'Pare Daimiel', text: 'Sents el rellotge, Ineu? Torna a caminar! Fa tres nits que no el sentia. Els nens em diuen que canto massa fort, però avui no cal: ho fa ell per mi!' },
-                    { qui: 'Pare Daimiel', text: encarrec ? 'I ara que el temps torna a passar, t\'explico una cosa que m\'ha dit la gent mentre era aturat:' : 'I ara que el temps torna a passar...' },
-                    { qui: 'Pare Daimiel', text: encarrec || 'Doncs res, fill: tu ja ho saps tot. Jo continuaré cantant, que el rellotge ja em porta el compàs.' }
+                    { qui: 'Pare Nadiel', text: 'Sents el rellotge, Ineu? Torna a caminar! Fa tres nits que no el sentia. Els nens em diuen que canto massa fort, però avui no cal: ho fa ell per mi!' },
+                    { qui: 'Pare Nadiel', text: encarrec ? 'I ara que el temps torna a passar, t\'explico una cosa que m\'ha dit la gent mentre era aturat:' : 'I ara que el temps torna a passar...' },
+                    { qui: 'Pare Nadiel', text: encarrec || 'Doncs res, fill: tu ja ho saps tot. Jo continuaré cantant, que el rellotge ja em porta el compàs.' }
                 ],
                 enAcabar: () => { E.posaFlag('rellotgeExplicat'); E.posaObjectiu(PROGRES.pista(E)); }
             };
         }
-        return { pagines: [{ qui: 'Pare Daimiel', text: encarrec || 'Doncs res, fill: tu ja ho saps tot. Jo continuaré cantant, que el rellotge ja em porta el compàs.' }] };
+        return { pagines: [{ qui: 'Pare Nadiel', text: encarrec || 'Doncs res, fill: tu ja ho saps tot. Jo continuaré cantant, que el rellotge ja em porta el compàs.' }] };
     },
-    // La primera missió lateral pendent, dita pel Pare Daimiel (null si no en queda cap). La de la Carry ja és feta: sense ella no hi ha rellotge
+    // La primera missió lateral pendent, dita pel Pare Nadiel (null si no en queda cap). La de la Carry ja és feta: sense ella no hi ha rellotge
     encarrecDaimiel: E => {
         if (!E.flag('eveParlat')) return "L\'Eve de la Taverna va molt amoïnada: el Sardi berenava cada tarda amb ella. La porta és tancada, però si hi truques, a tu t'obrirà.";
         if (!E.flag('nenaAlliberada')) return "Al camí de la Rovellonera, passat l'Era, hi ha una nena amb trenes que espera algú. Ningú no sap de qui és.";
@@ -415,7 +415,7 @@ const DIALEGS = {
                 { fer: (z, fet) => z.aparicioOmbra ? z.aparicioOmbra(fet) : fet() },
                 { qui: 'Ineu', text: "L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts." }
             ],
-            enAcabar: () => { E.posaFlag('fragment1'); E.posaObjectiu("Segons el pergamí, l'altra meitat és sota clau al sagrari de l'església, al Santuari. El Pare Daimiel en sabrà alguna cosa."); }
+            enAcabar: () => { E.posaFlag('fragment1'); E.posaObjectiu("Segons el pergamí, l'altra meitat és sota clau al sagrari de l'església, al Santuari. El Pare Nadiel en sabrà alguna cosa."); }
         };
     },
 
