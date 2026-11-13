@@ -18,7 +18,7 @@ class ZonaEsglesia extends ZonaBase {
             if (!this.anims.exists('idle_pianista')) this.anims.create({ key: 'idle_pianista', frames: this.anims.generateFrameNumbers('pianista_idle', { start: 0, end: NPC_IDLE.pianista.n - 1 }), frameRate: NPC_IDLE.pianista.fps, repeat: -1 });
             pia.setTexture('pianista_idle', 0).setFlipX(false); pia.escalaBase = pia.scaleX = pia.scaleY = this.textures.get('pianista_esquena').customData.escala * 0.85;       // (l'orgue és més petit: ella també)
             if (pia.balToca) { pia.balToca.remove(); pia.balToca = null; }           // (no es balanceja: només les mans i el cos de l'animació)
-            pia.setAngle(0).setY(this.orgue.y + 6); pia.play('idle_pianista'); if (pia.ombra) pia.ombra.setY(this.orgue.y + 6);       // el banc, una mica més avall: queda davant del teclat
+            pia.setAngle(0).setY(this.orgue.y + 1); pia.play('idle_pianista'); if (pia.ombra) pia.ombra.setY(this.orgue.y + 1);       // el banc, una mica més avall: queda davant del teclat
         } else {
             if (pia.anims) pia.anims.stop();
             if (pia.balToca) { pia.balToca.remove(); pia.balToca = null; } pia.setAngle(0);
@@ -117,8 +117,8 @@ class ZonaEsglesia extends ZonaBase {
             pia.setDepth(this.orgue.y + 1);                                                                       // per davant de l'orgue
             [pia.respira, pia.balanceig].forEach(t => t && t.remove()); pia.respira = pia.balanceig = null; pia.setAngle(0);       // fixa: ni respira ni es balanceja (no canvia de mida)
             pia.punt.npc = null;                                                                                  // l'Ineu no es fa enrere en parlar-hi: es posa al costat de l'orgue (pianistaCara)
-            // Mentre no hi ha parlat, ja és tocant l'orgue quan l'Ineu entra al Santuari
-            if (!epileg && !Estat.flag('parlatPianista') && !Estat.flag('cantAurora')) this.pianistaToca(true);
+            // Sempre és tocant l'orgue (d'esquena); només para per parlar amb l'Ineu
+            if (!epileg) this.pianistaToca(true);
         }
         if (!epileg) this.npc('pare_daimiel', 440, ESG.retY + 215, DIALEGS.pareDaimiel, { flipX: false });
         if (!epileg) this.posar('atril_barroc', 340, ESG.retY + 262, { col: { w: 34, h: 14 }, opac: true });      // atril barroc daurat, girat d'esquena (no es veu el llibre), a l'esquerra del presbiteri i per davant del Pare Daimiel

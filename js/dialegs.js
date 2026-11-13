@@ -260,15 +260,22 @@ const DIALEGS = {
     pianista: E => {
         const primera = !E.flag("parlatPianista");
         if (!E.flag("cantAurora")) {
-            const intro = primera ? [
-                { qui: "La Pianista", text: "Ai, Ineu, fill... Passa, passa. Perdona que no et miri, no puc deixar l'orgue." },
-                { fer: (z, fet) => z.npcFeina('pianista', 1600, 'silenci', fet) },
-                { qui: "La Pianista", text: "Fa quaranta anys que toco cada dia i mai no m'havia faltat el so. Ara els dits es mouen per les tecles, però de l'orgue no en surt ni una nota." },
-                { qui: "La Pianista", text: "Des que va arribar la boira, fa tres nits, el Santuari s'ha quedat mut. Em fa por que s'estigui empassant tota la música." }
-            ] : [{ qui: "La Pianista", text: "Ho tornem a provar, fill? Escolta bé les tres notes." }];
+            if (!primera) return {
+                pagines: [{ qui: "La Pianista", text: "Ho tornem a provar, fill? Escolta bé les notes." }],
+                enAcabar: () => iniciarLliço("aurora")
+            };
             return {
-                pagines: [...intro,
-                    { qui: "La Pianista", text: "Però hi ha un cant que encara em surt, perquè la boira no se'l pot empassar: el Cant de l'Aurora. Te l'ensenyaré: tres notes, do, re, mi, en ordre. La tarota en té cinc (do, re, mi, fa i sol). Escolta'm i repeteix-les amb els botons." }
+                pagines: [
+                    { qui: "La Pianista", text: "Ai, Ineu, fill... Passa, passa. Perdona que no et miri, no puc deixar l'orgue." },
+                    { fer: (z, fet) => z.npcFeina('pianista', 1600, 'silenci', fet) },
+                    { qui: "La Pianista", text: "Fa quaranta anys que toco cada dia i mai no m'havia faltat el so. Ara els dits es mouen per les tecles, però de l'orgue no en surt ni una nota." },
+                    { qui: "La Pianista", text: "Des que va arribar la boira, fa tres nits, el Santuari s'ha quedat mut. Em fa por que s'estigui empassant tota la música." },
+                    { qui: "La Pianista", text: "Però hi ha un cant que la boira no es pot empassar: el Cant de l'Aurora. Només que tu no tens res amb què tocar-lo." },
+                    { qui: "La Pianista", text: "Deixa'm que t'expliqui d'on ve això. Fa molts anys, el Cortiner posava la música a les representacions del Santuari, i tenia una tarota." },
+                    { qui: "La Pianista", text: "Deia que les cortines que de debò importen no són de vellut, sinó la boira, les bardisses i les pedres, i que les notes justes les poden apartar." },
+                    { qui: "La Pianista", text: "Jo mai no he sabut fer-la sonar com ell. Pren-la, fill: potser a tu t'obeeix." },
+                    { fer: (z, fet) => { Estat.dona('flauta'); fet(); } },
+                    { avis: "Has obtingut LA TAROTA DEL CORTINER!", obj: 'flauta' }
                 ],
                 enAcabar: () => { E.posaFlag("parlatPianista"); iniciarLliço("aurora"); }
             };
@@ -1711,6 +1718,14 @@ const DIALEGS_FINAL = {
             d.pagines.unshift({ fer: (z, fet) => { if (z.pianistaToca) z.pianistaToca(true, fet); else fet(); } });
             d.pagines.splice(2, 0, { fer: (z, fet) => { if (z.pianistaCara) z.pianistaCara(fet); else fet(); } });
         } else d.pagines.unshift({ fer: (z, fet) => { if (z.pianistaCara) z.pianistaCara(fet); else fet(); } });
+        // En acabar la conversa torna a tocar l'orgue (només s'atura per parlar)
+        const acabar = d.enAcabar;
+        d.enAcabar = (...a) => {
+            const r = acabar && acabar(...a);
+            const ui = game.scene.getScene('UI'), z = ui && Joc.zonaActiva(ui);
+            if (z && z.pianistaToca) z.pianistaToca(true);
+            return r;
+        };
         return d;
     };
 })();
