@@ -321,11 +321,11 @@ class EscenaMusica extends Phaser.Scene {
             const n = vistes[i];
             sl.ple.setFillStyle(n ? COLORS_NOTA[n] || COLOR_NOTA : 0x000000, n ? 1 : 0.08);
             sl.anell.setStrokeStyle(3, n ? 0x3a2412 : 0x5a3a1a, n ? 1 : 0.8);
-            if (n) this.tweens.add({ targets: [sl.ple, sl.anell], scale: { from: 1.35, to: 1 }, duration: 220, ease: 'Back.easeOut' });
+            if (n && i === vistes.length - 1) this.tweens.add({ targets: [sl.ple, sl.anell], scale: { from: 1.5, to: 1 }, duration: 240, ease: 'Back.easeOut' });          // només la nota nova rebota
         });
     }
     flaixSlots(color) {
-        this.slots.forEach(sl => { sl.ple.setFillStyle(color, 1); this.tweens.add({ targets: [sl.ple, sl.anell], scale: { from: 1.25, to: 1 }, duration: 300, ease: 'Back.easeOut' }); });
+        this.slots.forEach(sl => { if (color !== 0xe8c040) sl.ple.setFillStyle(color, 1); this.tweens.add({ targets: [sl.ple, sl.anell], scale: { from: 1.25, to: 1 }, duration: 300, ease: 'Back.easeOut' }); });
     }
 
     // ---- Lliçó: la Pianista toca i l'Ineu repeteix ----
@@ -403,7 +403,7 @@ class EscenaMusica extends Phaser.Scene {
                 if (this.tancat) return;
                 this.llum(boto, f, durada * temps / 1000);
                 this.impulsPrimerPla(boto);
-                this.pintaSlots(m.peca.slice(0, i + 1).map(() => 1));
+                this.pintaSlots(m.peca.slice(0, i + 1).map(([nt]) => BOTO_DE(NOTES_FREQ[nt])));       // cada rodona, del color del botó de la seva nota
             });
             t += durada * temps;
         });
