@@ -228,7 +228,7 @@ const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'nor
 // (eines/fer_ineu_v2.py). Esquerra i dreta són a assets/ineu_v2/alt/ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
 // Les mides dels idles s'igualen a les dels caminars amb eines/igualar_idle_ineu.py. Els fulls i els prototips anteriors són a art/ineu/arxiu/.
 const rutaIneu = (dir, idle) => {
-    const v = '?v=2611131600';
+    const v = '?v=2611140300';
     if (dir === 'left' || dir === 'right') return `assets/ineu_v2/alt/${idle ? 'idle_elev_' : 'walk_elev_'}${dir}.webp${v}`;
     return `assets/ineu_v2/${idle ? 'idle_' : ''}${dir}.webp${v}`;
 };
@@ -755,6 +755,12 @@ const Grafics = {
             g.addColorStop(0.5, 'rgba(50,25,80,0.45)');
             g.addColorStop(1, 'rgba(30,15,50,0)');
             ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+        });
+        // Una bufada de fum blanc (vapor del carruatge del Follet): un núvol rodó i tou, blanc amb una ombra grisa-blavosa a sota; sempre blanc, no té res a veure amb la boira lila
+        crea('fum', 64, 64, (ctx, w, h) => {
+            const bola = (x, y, r, a, c0, c1) => { const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, `rgba(${c0},${a})`); g.addColorStop(0.65, `rgba(${c1},${a * 0.7})`); g.addColorStop(1, `rgba(${c1},0)`); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); };
+            bola(32, 40, 24, 0.55, '205,212,222', '190,198,210');      // ombra de sota
+            [[32, 32, 22], [20, 36, 16], [44, 36, 16], [26, 24, 15], [40, 25, 14]].forEach(([x, y, r]) => bola(x, y, r, 0.95, '255,255,255', '244,247,250'));
         });
         // Un núvol de boira (blanc, per tintar-lo): moltes taques suaus encavalcades, de vora irregular. Serveix per a les parets de boira (ZonaBase.boiraParet)
         crea('boira_nuvol', 256, 256, (ctx, w, h) => {
@@ -1361,6 +1367,8 @@ const Grafics = {
         crea('llosa_cripta', 200, 120, (ctx, w, h) => pintarLlosaCripta(ctx, w, h, true));
         crea('llosa_cripta_buida', 200, 120, (ctx, w, h) => pintarLlosaCripta(ctx, w, h, false));
         crea('sacs_tresor', 140, 96, pintarSacsTresor);
+        crea('sac', 60, 74, pintarSac);
+        crea('sac_b', 60, 74, pintarSacB);
         crea('molla_tresor', 72, 34, pintarMollaTresor);
         crea('bota_creu', 64, 84, pintarBotaCreu);
         crea('taula_llibre', 150, 100, pintarTaulaLlibre);

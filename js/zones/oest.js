@@ -327,7 +327,7 @@ class ZonaGabriel extends ZonaBase {
 
         // L'ermita, prou gran perquè la porta (d'arc rebaixat) sigui una mica més alta que l'Ineu; la porta s'obre en acostar-s'hi
         // L'ermita és tancada amb clau: la clau la dona el Galf (quan demana el cristall de gel). Sense la porta oberta no hi ha sortida cap a l'interior.
-        const ermita = this.edifici('ermita_gabriel', 400, 640, 520, 88, null, null, { alt: 90 });
+        const ermita = this.edifici('ermita_gabriel', 400, 640, 520, 96, null, null, { alt: 90 });
         this.ermitaOberta = Estat.flag('portaGabrielOberta');
         // Mentre és tancada, la porta és un mur: l'Ineu no pot entrar a l'arc (es treu en obrir-la)
         const murPorta = this.ermitaOberta ? null : this.colisio(400, 598, 92, 62);

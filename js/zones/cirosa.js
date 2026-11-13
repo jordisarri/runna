@@ -126,6 +126,7 @@ class ZonaCirosa extends ZonaBase {
         this.portaMasia(masia, 380, 520);
         this.barril(830, 570, 40, 16);
         this.barril(875, 580, 40, 16);
+        this.sacs(950, 592, 'duo');
         this.posar('llenya', 110, 580, { col: { w: 90, h: 22 } });
         this.posar('banc', 560, 570, { col: { w: 110, h: 20 } });
         // El pou, a la vora de la masia
@@ -427,6 +428,7 @@ class ZonaMasiaCirosa extends ZonaBase {
         // Barrils i llenya
         this.barril(130, 560, 50, 22);
         this.barril(185, 545, 50, 22);
+        this.sacs(262, 568, 'un');
         this.posar('llenya', 740, 600, { col: { w: 100, h: 24 } });
         [[300, 470], [380, 500]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
 

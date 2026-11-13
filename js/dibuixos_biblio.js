@@ -487,6 +487,10 @@ function pintarCandelabreHall(ctx, w, h) {
     [[h - 40, 12], [h - 56, 9], [h - 72, 11]].forEach(([y, ww]) => { ctx.beginPath(); ctx.ellipse(cx, y, ww / 2 + 2, 3.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
     ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(cx - 17, 24); ctx.quadraticCurveTo(cx - 17, 38, cx, 38); ctx.quadraticCurveTo(cx + 17, 38, cx + 17, 24); ctx.stroke();
     ctx.strokeStyle = '#c8a040'; ctx.lineWidth = 2.6; ctx.stroke();
+    // el braç del mig: un coll que uneix el platet central amb el fust (abans l'espelma del mig quedava surant)
+    ctx.fillStyle = '#c8a040'; ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.6;
+    ctx.fillRect(cx - 2.4, 24, 4.8, 14); ctx.strokeRect(cx - 2.4, 24, 4.8, 14);
+    ctx.beginPath(); ctx.ellipse(cx, 36, 4.2, 2.6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
     [-17, 0, 17].forEach((dx, i) => {
         const y = i === 1 ? 20 : 26;
         ctx.fillStyle = '#c8a040'; ctx.fillRect(cx + dx - 5, y + 2, 10, 4); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.4; ctx.strokeRect(cx + dx - 5, y + 2, 10, 4);

@@ -549,6 +549,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             amunt = Math.max(0, y - centre);
         }
         this.miraAmunt = Phaser.Math.Linear(this.miraAmunt, amunt, 0.08);
+        this.cameraFollowOffsetY = this.miraAmunt;                      // (l'alliberament de la càmera dels diàlegs el té en compte: sense salts en tornar)
         cam.setFollowOffset(0, this.miraAmunt);
     }
 
@@ -636,7 +637,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         const est = this.estatua || this.estatuaFinal, alt = (est ? est.displayHeight : 360) + 30;
         const lliure = Math.max(240, (ALT - ALT_HUD) - (senseDialeg ? 40 : 470));
         const zoom = Math.min(this.zoomZona || ZOOM_CAMERA, lliure * 0.92 / alt);
-        this.enquadrar(RAIM.x, RAIM.y - alt * (senseDialeg ? 0.5 : 0.48), zoom, 800, null, senseDialeg ? 0 : 470);
+        this.enquadrar(RAIM.x, RAIM.y - alt * (senseDialeg ? 0.5 : 0.48), zoom, 1600, null, senseDialeg ? 0 : 470);
         return dialeg;
     }
 
@@ -659,7 +660,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.colEstatua = this.colisio(RX, RY - 10, 68, 26);
         }
         // Mirar l'estàtua només fa falta si encara no tens la maneta: et diu on és
-        this.interactiu(RX, RY + 10, 90, E => this.enquadrarRaim(DIALEGS.homeRaimInt(E)), { altura: 250, enTancar: () => this.alliberarCamera(700), actiu: () => !Estat.flag('raimDesperta') && !Estat.te('maneta') });
+        this.interactiu(RX, RY + 10, 90, E => this.enquadrarRaim(DIALEGS.homeRaimInt(E)), { altura: 250, enTancar: () => this.alliberarCamera(1400), actiu: () => !Estat.flag('raimDesperta') && !Estat.te('maneta') });
 
         // El volant de ferro amb engranatges, encastat a la cara del pedestal: amb la maneta, cada volta gira el cap un quart
         if (!derrotat) this.dibuixarVolant(RX, Math.round(RY - this.estatua.displayHeight * 0.17));
@@ -672,13 +673,13 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.volDespertar = this.raimPas === 3 && this.teArma();
             if (this.raimPas === 3 && !this.teArma()) return { pagines: [{ qui: 'Ineu', text: "(Ara em mira de cara. No m'agrada gens.)" }, ...DIALEGS.raimSenseArma.pagines] };
             const frases = ["(El volant grinyola. El cap de pedra s'ha girat una mica.)", "(Una altra volta. Ara el cap ja és de perfil.)", "(Ara em mira de cara. No m'agrada gens.)"];
-            if (!this.volDespertar) this.time.delayedCall(2300, () => this.alliberarCamera(700));
+            if (!this.volDespertar) this.time.delayedCall(2300, () => this.alliberarCamera(1400));
             return { pagines: [{ qui: 'Ineu', text: frases[this.raimPas - 1] }] };
         }, { altura: 70, actiu: () => !Estat.flag('raimDesperta') && Estat.te('maneta'),
-             enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.avisDespertar(); this.time.delayedCall(1000, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => { this.alliberarCamera(600); this.despertarRaim(); })); } } });
+             enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.avisDespertar(); this.time.delayedCall(1000, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => { this.alliberarCamera(1200); this.despertarRaim(); })); } } });
 
         // Vençut, l'estàtua del guardià es pot mirar: descansa al pedestal
-        this.interactiu(RX, RY + 10, 90, E => this.enquadrarRaim(DIALEGS.raimEstatuaFinal), { altura: 250, enTancar: () => this.alliberarCamera(700), actiu: () => Estat.flag('raimDerrotat') && !!this.estatuaFinal });
+        this.interactiu(RX, RY + 10, 90, E => this.enquadrarRaim(DIALEGS.raimEstatuaFinal), { altura: 250, enTancar: () => this.alliberarCamera(1400), actiu: () => Estat.flag('raimDerrotat') && !!this.estatuaFinal });
         // Trapa de la cripta, a sota de l'escalinata: una llosa amb una creu gravada; vençut el guardià, es fa a un costat i
         // deixa veure l'escala que baixa
         this.dibuixarTrapa(derrotat);
@@ -1090,7 +1091,7 @@ class ZonaCasaCripta extends ZonaCasaBase {
         this.colisio(500, 316, 180, 36);
         this.interactiu(500, 372, RADI_OBJECTE, DIALEGS.cofreCripta, { altura: 130, enTancar: () => { if (Estat.flag('relTretes')) this.llosaCripta.setTexture('llosa_cripta_buida'); } });
         [[400, 360], [600, 360]].forEach(([x, y], i) => {
-            this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            (this.opacs = this.opacs || []).push(this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));          // sòlid: opac i amb col·lisió
             this.colisio(x, y - 8, 24, 14);
             const llum = this.add.circle(x, y - 78, 80, 0xffc060, 0.1).setDepth(y + 1);
             this.tweens.add({ targets: llum, alpha: 0.05, scale: 0.92, yoyo: true, repeat: -1, duration: 420 + i * 90 });
@@ -1182,7 +1183,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
             amplada: 1000,
             alcada: 700,
             colorFons: '#0a0806',
-            pacifica: true,
+            pacifica: false,                          // es pot fer servir l'espasa lliurement (sacs i barrils es trenquen)
             entrades: { porta: { x: 500, y: 620, dir: 'amunt' }, escala: { x: 780, y: 215, dir: 'avall' } }
         });
     }
@@ -1194,22 +1195,20 @@ class ZonaCasaTresor extends ZonaCasaBase {
         this.add.image(500, 178, 'graons_ermita').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-990);
         this.registraGraons(310, 690, [[250, 268], [218, 238]]);          // els dos graons de la taula del llibre: frenada i un tap a cada un
         // Una taula amb un llibre gros obert: només es llegeix (no dona cap objecte)
-        this.taulaLlibre = this.add.image(500, 218, 'taula_llibre').setOrigin(0.5, 1).setScale(1 / RES).setDepth(218);
+        this.taulaLlibre = this.add.image(500, 212, 'taula_llibre').setOrigin(0.5, 1).setScale(1 / RES).setDepth(212);          // dins de la tarima (a 10 px del llavi), no al llavi
         (this.opacs = this.opacs || []).push(this.taulaLlibre);        // opac: la silueta de l'Ineu no es veu a través seu
-        this.colisio(500, 205, 120, 24);
+        this.colisio(500, 198, 110, 22);
         this.interactiu(500, 262, RADI_OBJECTE, DIALEGS.llibreCambra, { altura: 110 });
         [[390, 262], [610, 262]].forEach(([x, y], i) => {
-            this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            (this.opacs = this.opacs || []).push(this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));          // sòlid: opac i amb col·lisió
             this.colisio(x, y - 8, 24, 14);
             const llum = this.add.circle(x, y - 78, 70, 0xffc060, 0.1).setDepth(y + 1);
             this.tweens.add({ targets: llum, alpha: 0.05, scale: 0.92, yoyo: true, repeat: -1, duration: 420 + i * 90 });
         });
-        // Sacs de gra (opacs), i un racó més mundà: una tauleta amb un tamboret
-        [[190, 330], [200, 560]].forEach(([x, y]) => {
-            const sacs = this.add.image(x, y, 'sacs_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
-            (this.opacs = this.opacs || []).push(sacs);
-            this.colisio(x, y - 12, 120, 24);
-        });
+        // Sacs de gra agrupats de maneres diferents (es trenquen amb l'espasa), i un racó més mundà: una tauleta amb un tamboret
+        this.sacs(190, 340, 'mont');
+        this.sacs(215, 575, 'tres');
+        this.sacs(330, 600, 'un');
         this.posar('taula', 800, 610, { escala: 0.7, col: { w: 110, h: 22 }, opac: true });
         this.posar('tamboret', 745, 628, { col: { w: 34, h: 14 }, opac: true });
         [[190, 215], [190, 450], [250, 215]].forEach(([x, y]) => this.barril(x, y, 50, 22));

@@ -427,16 +427,26 @@ class ZonaBase extends Phaser.Scene {
     parada(pd) {
         const [cx, cy] = pd.c, [hx, hy] = pd.h;
         const carro = this.posar('carruatge', cx, cy, { col: { w: 190, h: 40 }, opac: true }).setFlipX(true);     // girat: el davant mira cap a l'escena
-        // una mica de vapor que surt de la xemeneia (a un terç de l'ample, a dalt; el carruatge és girat)
-        const fx = cx + carro.displayWidth * 0.2, fy = cy - carro.displayHeight * 0.86;
-        this.add.particles(fx, fy, 'boira', { speedY: { min: -30, max: -14 }, speedX: { min: -14, max: -4 }, lifespan: 1800, scale: { start: 0.25, end: 0.7 },
-            alpha: { start: 0.45, end: 0 }, frequency: 650, tint: 0xffffff }).setDepth(cy + 1);
+        // el fum blanc de la xemeneia (la xemeneia és a l'esquerra del dibuix, que està girat): animat per codi, sempre blanc
+        const fx = cx + 107 * carro.scaleX, fy = cy - carro.displayHeight + 6;
+        this.add.particles(fx, fy, 'fum', {
+            speedY: { min: -34, max: -20 }, speedX: { min: -4, max: 14 }, accelerationX: 3, lifespan: { min: 2400, max: 3400 },
+            scale: { start: 0.16, end: 0.95 }, alpha: { start: 0.85, end: 0 }, rotate: { min: -25, max: 25 }, frequency: 260, quantity: 1
+        }).setDepth(cy + 1);
         this.npc('follet_carro', hx, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true, colAmple: 48 });     // girat: mira cap a l'escena, no cap al carruatge
         this.paradaAqui = pd;
         if (Estat.arribadaCarruatge === pd.id) {                       // hi acabem d'arribar: bufada de vapor
             Estat.arribadaCarruatge = null;
-            this.time.delayedCall(250, () => { this.boiraPuf(fx, fy + 30); this.boiraPuf(pd.a[0], pd.a[1]); });
+            this.time.delayedCall(250, () => { this.vaporPuf(fx, fy + 20); this.vaporPuf(pd.a[0], pd.a[1] - 20); });
         }
+    }
+
+    // Una bufada de vapor blanc (sempre blanc): arribada i sortida del carruatge
+    vaporPuf(x, y) {
+        const p = this.add.particles(x, y, 'fum', { speed: { min: 12, max: 60 }, angle: { min: 200, max: 340 }, scale: { start: 0.35, end: 1.2 }, alpha: { start: 0.75, end: 0 },
+            lifespan: { min: 900, max: 1500 }, rotate: { min: -40, max: 40 }, quantity: 9, emitting: false }).setDepth(99990);
+        p.explode(9);
+        this.time.delayedCall(1700, () => p.destroy());
     }
 
     // Tria el destí entre les parades desbloquejades i hi viatja
@@ -456,7 +466,7 @@ class ZonaBase extends Phaser.Scene {
         this.canviant = true;
         this.ineu.body.setVelocity(0);
         Sfx.vapor();
-        if (this.paradaAqui) this.boiraPuf(this.paradaAqui.c[0] + 45, this.paradaAqui.c[1] - 110);
+        if (this.paradaAqui) this.vaporPuf(this.paradaAqui.c[0] + 45, this.paradaAqui.c[1] - 160);
         Estat.dades.zona = pd.zona; Estat.dades.entrada = null;
         Estat.dades.x = pd.a[0]; Estat.dades.y = pd.a[1];
         Estat.arribadaCarruatge = pd.id;
@@ -1652,11 +1662,30 @@ class ZonaBase extends Phaser.Scene {
         return b;
     }
 
+    // Un sac de gra: es trenca amb qualsevol arma, com un barril (vegeu trencarBarril), en trossos de tela i deixant caure els grans a terra
+    sac(x, y, key = 'sac') { return this.barril(x, y, 40, 16, key); }
+    // Sacs agrupats de maneres diferents: 'un', 'duo' (un al costat de l'altre), 'tres' (dos a baix i un a sobre), 'fila' (tres seguits), 'mont' (quatre: dos, un i un damunt)
+    sacs(x, y, patro = 'un') {
+        const G = {
+            un: [[0, 0, 'sac']],
+            duo: [[-22, 0, 'sac'], [22, 2, 'sac_b']],
+            tres: [[-22, 0, 'sac_b'], [22, 0, 'sac'], [0, -2, 'sac', 28]],
+            fila: [[-44, 0, 'sac'], [0, 2, 'sac_b'], [44, 0, 'sac']],
+            mont: [[-24, 0, 'sac'], [24, 0, 'sac_b'], [-24, -4, 'sac_b', 28], [26, 8, 'sac']]
+        }[patro] || [[0, 0, 'sac']];
+        return G.map(([dx, dy, k, alt]) => {
+            const b = this.sac(x + dx, y + dy, alt ? k : k);
+            if (alt) { b.img.y -= alt; b.img.setDepth(y + dy + 1); }             // el de sobre queda dalt dels de baix (el cop va al de baix, com un barril)
+            return b;
+        });
+    }
+
     // El barril es trenca: trossos de fusta (retalls del mateix dibuix) i estelles que salten, reboten i es desfan amb un fade out
     trencarBarril(b, d) {
         if (!b.viu) return;
         b.viu = false;
-        Sfx.trenca && Sfx.trenca();
+        const sac = String(b.key || '').startsWith('sac');
+        if (sac) { Sfx.puf && Sfx.puf(); Sfx.trenca && Sfx.trenca(); } else Sfx.trenca && Sfx.trenca();
         this.obstacles.remove(b.col, true, true);
         const idx = this.opacs ? this.opacs.indexOf(b.img) : -1;
         if (idx >= 0) this.opacs.splice(idx, 1);
@@ -1684,7 +1713,7 @@ class ZonaBase extends Phaser.Scene {
             g.fillStyle(0x8a5a2e, 1).fillRect(0, 0, 14, 3); g.fillStyle(0xc89560, 1).fillRect(0, 0, 14, 1);
             g.generateTexture('astella', 14, 3); g.destroy();
         }
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < (sac ? 0 : 12); i++) {
             const a = Phaser.Math.FloatBetween(0, Math.PI * 2), v = Phaser.Math.FloatBetween(90, 260);
             const im = this.add.image(b.x, b.y - dh * Phaser.Math.FloatBetween(0.2, 0.8), 'astella').setScale(Phaser.Math.FloatBetween(0.5, 1.1)).setAngle(Phaser.Math.Between(0, 360));
             peces.push({ im, x: im.x, y: im.y, vx: Math.cos(a) * v + dx * 70, vy: -Phaser.Math.FloatBetween(100, 280), vr: Phaser.Math.FloatBetween(-14, 14), terra: b.y + Phaser.Math.FloatBetween(-10, 16), reb: 0 });
@@ -1692,18 +1721,36 @@ class ZonaBase extends Phaser.Scene {
         // Pols de fusta
         const p = this.add.particles(b.x, b.y - dh * 0.4, 'espurna', {
             speed: { min: 20, max: 80 }, lifespan: 600, scale: { start: 0.8, end: 0 }, alpha: { start: 0.5, end: 0 },
-            tint: [0xc9a878, 0x9b7a50], quantity: 8, emitting: false
+            tint: sac ? [0xe8d8a8, 0xcdb27c] : [0xc9a878, 0x9b7a50], quantity: 8, emitting: false
         }).setDepth(b.y + 5);
         p.explode(10);
         this.time.delayedCall(800, () => p.destroy());
+        // Els grans de gra cauen a terra i s'hi queden una estona, amb un petit munt
+        if (sac) {
+            if (!this.textures.exists('gra')) {
+                const g = this.make.graphics({ x: 0, y: 0, add: false });
+                g.fillStyle(0xffffff, 1).fillEllipse(3, 2, 5, 3.2); g.generateTexture('gra', 6, 4); g.destroy();
+            }
+            const ter = b.y + 6;
+            for (let i = 0; i < 46; i++) {
+                const a = Phaser.Math.FloatBetween(0, Math.PI * 2), v = Phaser.Math.FloatBetween(30, 150);
+                const im = this.add.image(b.x + Phaser.Math.FloatBetween(-14, 14), b.y - dh * Phaser.Math.FloatBetween(0.3, 0.8), 'gra').setTint(Phaser.Utils.Array.GetRandom([0xe0b84a, 0xd8a83c, 0xc89a34, 0xe8c860])).setScale(Phaser.Math.FloatBetween(0.8, 1.3));
+                peces.push({ im, x: im.x, y: im.y, vx: Math.cos(a) * v + dx * 40, vy: -Phaser.Math.FloatBetween(40, 180), vr: Phaser.Math.FloatBetween(-8, 8),
+                    terra: ter + Phaser.Math.FloatBetween(-12, 14), reb: 1, llarg: true });
+            }
+            const munt = this.add.ellipse(b.x, ter, 46, 12, 0xd2a840, 0.0).setDepth(b.y - 1);
+            this.tweens.add({ targets: munt, fillAlpha: 0.55, duration: 700, delay: 500 });
+            peces.push({ im: munt, x: b.x, y: ter, vx: 0, vy: 0, vr: 0, terra: 1e9, reb: 9, llarg: true, fix: true });
+        }
         // El barril sencer desapareix de cop (queda amagat pels trossos)
         b.img.destroy();
         if (b.alTrencar) b.alTrencar();
-        const t0 = this.time.now, TEMPS = 1500, FADE = 800;
+        const t0 = this.time.now, TEMPS = 1500, FADE = 800, TEMPS_LLARG = 9000;
         const act = (t, dt) => {
             const s = Math.min(dt, 50) / 1000, el = this.time.now - t0;
             peces.forEach(q => {
                 if (!q.im.active) return;
+                if (q.fix) { if (el > TEMPS_LLARG) q.im.setAlpha(Math.max(0, 1 - (el - TEMPS_LLARG) / FADE)); return; }
                 q.vy += 900 * s;
                 q.x += q.vx * s; q.y += q.vy * s;
                 if (q.y > q.terra && q.vy > 0) {
@@ -1712,9 +1759,10 @@ class ZonaBase extends Phaser.Scene {
                 }
                 q.im.setPosition(q.x, q.y).rotation += q.vr * s;
                 q.im.setDepth(Math.max(q.terra, q.y) + 1);
-                if (el > TEMPS) q.im.setAlpha(Math.max(0, 1 - (el - TEMPS) / FADE));
+                const lim = q.llarg ? TEMPS_LLARG : TEMPS;
+                if (el > lim) q.im.setAlpha(Math.max(0, 1 - (el - lim) / FADE));
             });
-            if (el > TEMPS + FADE) { this.events.off('update', act); peces.forEach(q => q.im.destroy()); }
+            if (el > (sac ? TEMPS_LLARG : TEMPS) + FADE) { this.events.off('update', act); peces.forEach(q => q.im.destroy()); }
         };
         this.events.on('update', act);
     }
@@ -1965,7 +2013,7 @@ class ZonaBase extends Phaser.Scene {
         if (this.twCinema) this.twCinema.stop();
         // On es posaria la càmera en seguir l'Ineu: a Phaser el centre de la vista és scroll + la meitat de la finestra (sigui quin sigui el zoom) i el
         // desplaçament del seguiment es resta. S'hi aplica també el límit del món, perquè en tornar a posar-lo no hi hagi cap salt.
-        const zoom = this.zoomZona || ZOOM_CAMERA, b = this.boundsCinema, dw = AMPLE / zoom, dh = H / zoom;
+        const zoom = this.zoomBase || this.zoomZona || ZOOM_CAMERA, b = this.boundsCinema, dw = AMPLE / zoom, dh = H / zoom;          // (el zoom que té ara la zona, no el de l'entrada: així no hi ha salt)
         let destiX = I.x - AMPLE / 2, destiY = I.y - (this.cameraFollowOffsetY || 0) - H / 2;
         if (b) {
             const bx = b.x + (dw - AMPLE) / 2, by = b.y + (dh - H) / 2;

@@ -42,6 +42,7 @@ class ZonaCellerFora extends ZonaBase {
 
         // Barrils i una bóta vella vora la porta; a l'altra banda del camí, un pati d'herba amb arbres
         [[560, 930], [612, 948], [190, 940]].forEach(([x, y]) => this.barril(x, y, 50, 22));
+        this.sacs(285, 946, 'fila');
         this.cartell(960, 640, DIALEGS.cartellCeller);
         this.arbres([[1100, 200], [1350, 120], [1500, 380], [1150, 690], [1450, 700], [1250, 900], [1520, 1020], [1050, 1040]]);
         [[1300, 420], [1180, 820]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: -800, escala: 0.6 }));
@@ -1123,15 +1124,15 @@ class ZonaGeorgi extends ZonaBase {
         this.terra('cami', 330, 500, 770, 150);            // del Til·ler (est) a la porta de la casa
 
         // La casa d'en Georgi (520 d'ample): la porta del mig duu a dins
-        const masiaGeorgi = this.edifici('masia', 380, 480, 500, 76, 'ZonaCasaGeorgi', 'porta', { alt: 90 });
+        const masiaGeorgi = this.edifici('masia', 380, 480, 500, 96, 'ZonaCasaGeorgi', 'porta', { alt: 90 });
         this.portaMasia(masiaGeorgi, 380, 480);
         this.npc('georgi_caseta', 560, 590, DIALEGS.georgiCaseta);
 
         // La caseta, aixecada sobre pilars de fusta: s'hi puja per l'escala del mig (la maneta és a dins)
         // L'escala es puja caminant (paret a banda i banda i el dintell dalt, a l'altura de la terrassa); l'entrada a l'interior és dalt,
         // davant de la porta, no al peu de l'escala: allà és on hi ha la llum de la sortida
-        const caseta = this.edifici('caseta_joc', 860, 500, 250, 64, null, null, { alt: 140 });
-        this.sortida(860 - 32, 370, 64, 26, 'ZonaCasetaJoc', 'porta');
+        const caseta = this.edifici('caseta_joc', 860, 500, 250, 92, null, null, { alt: 140 });
+        this.sortida(860 - 44, 370, 88, 26, 'ZonaCasetaJoc', 'porta');
         const kT = 500 - caseta.displayHeight;      // la porta és a la terrassa, damunt dels pilars: s'obre quan l'Ineu s'acosta a l'escala
         this.portaAnimada({ x: 860, top: kT + caseta.displayHeight * 0.27 + 10, bottom: kT + caseta.displayHeight * 0.6 - 5, ample: caseta.displayWidth * 0.18, fons: 480, unic: true, retall: caseta });
 
@@ -1149,7 +1150,7 @@ class ZonaGeorgi extends ZonaBase {
     // A l'escala de la caseta l'Ineu es veu per sobre de la façana (si no, el gràfic el tapa mentre puja)
     actualitzar() {
         const I = this.ineu;
-        this.enEscala = !!I && I.x > 826 && I.x < 894 && I.y < 504 && I.y > 360;
+        this.enEscala = !!I && I.x > 814 && I.x < 906 && I.y < 504 && I.y > 360;
         if (this.enEscala) { I.setDepth(481); if (this.ombraIneu) this.ombraIneu.setDepth(480.5); }
     }
     sincroFantasma() {
@@ -1227,6 +1228,8 @@ class ZonaCasaGeorgi extends ZonaBase {
         this.colisio(170, 575, 96, 26);
         this.interactiu(170, 620, RADI_OBJECTE, DIALEGS.casaGeorgiGat, { altura: 70 });
         this.barril(790, 600, 46, 20);
+        this.sacs(700, 622, 'tres');                 // sacs de gra a un racó de la masia
+        this.sacs(300, 652, 'duo');
 
         // Pols dins la llum de la finestra i un to càlid
         this.add.particles(0, 0, 'espurna', {

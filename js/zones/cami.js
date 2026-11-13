@@ -148,7 +148,7 @@ class ZonaErmitaInt extends ZonaBase {
         this.interactiu(500, 335, RADI_OBJECTE, DIALEGS.altarErmita, { altura: 100, actiu: () => totes() && !Estat.flag('cofreAltar') });
         if (Estat.flag('cofreAltar')) this.posarCofreAltar();
         [[392, 352], [608, 352]].forEach(([x, y]) => {          // dos peus de ferro amb l'espelma apagada
-            this.add.image(x, y, 'candelabre_apagat').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            (this.opacs = this.opacs || []).push(this.add.image(x, y, 'candelabre_apagat').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));
             this.colisio(x, y - 8, 20, 14);
         });
 
@@ -691,6 +691,7 @@ class ZonaCabanaCami extends ZonaBase {
         this.posar('banc_respatller', 400, 200, { col: { w: 140, h: 16 } });
         this.barril(150, 175, 50, 22);
         this.barril(205, 160, 50, 22);
+        this.sacs(290, 182, 'tres');
         this.posar('taula', 450, 470, { col: { w: 160, h: 30 } });
         this.posar('tamboret', 340, 505, { col: { w: 40, h: 16 } });
         this.posar('tamboret', 565, 505, { col: { w: 40, h: 16 } });

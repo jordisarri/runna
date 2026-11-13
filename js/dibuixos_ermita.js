@@ -161,13 +161,15 @@ function pintarGraonsErmita(ctx, w, h) {
         for (let bx = x + 30 + r() * 20; bx < x + ww - 10; bx += 46 + r() * 30) { ctx.beginPath(); ctx.moveTo(bx, y); ctx.lineTo(bx, y + hh); ctx.stroke(); }
         ctx.strokeStyle = C; ctx.lineWidth = 1.8; ctx.strokeRect(x, y, ww, hh);
     };
-    cara(36, 0, w - 72, 40, '#aaa294', '#8e8678', 3);                 // cara superior del graó de dalt
-    ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fillRect(38, 2, w - 76, 3);
+    // Perspectiva: la cara de dalt i el davant de cada graó tenen la mateixa amplada (en la vista de dalt, no s'eixamplen)
+    cara(30, 0, w - 60, 40, '#aaa294', '#8e8678', 3);                 // cara superior del graó de dalt (la tarima)
+    ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fillRect(32, 2, w - 64, 3);
     cara(30, 40, w - 60, 20, '#cdc5b3', '#948c7c', 4);                // front
     cara(0, 60, w, 12, '#9a9284', '#86806f', 5);                      // cara superior del graó de baix
     cara(0, 72, w, h - 72, '#c0b8a6', '#847c6e', 6);                  // front
     ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(32, 41, w - 64, 2); ctx.fillRect(2, 73, w - 4, 2);
-    ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.fillRect(2, 60, w - 4, 3);
+    ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.fillRect(32, 57, w - 64, 3); ctx.fillRect(2, 69, w - 4, 3);                       // ombra sota cada llavi
+    ctx.fillStyle = gradHBib(ctx, 30, w - 30, [[0, 'rgba(0,0,0,0.22)'], [0.15, 'rgba(0,0,0,0)'], [0.85, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,0.22)']]); ctx.fillRect(30, 0, w - 60, 40);
 }
 
 // ---------- Ofrenes dels nens: pedretes, plomes, una trompeta de llauna, cera i espelmes curtes ----------

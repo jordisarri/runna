@@ -87,7 +87,7 @@ class ZonaCabana extends ZonaBase {
         this.terra('herba_fosca', 0, 0, 1400, 1000, -1100).setTint(0xb8e0a8);
 
         // La cabana, bruta i deixada
-        const cabana = this.edifici('cabana', 800, 590, 360, 80, 'ZonaCabanaInt', 'porta', { alt: 95 });
+        const cabana = this.edifici('cabana', 800, 590, 360, 92, 'ZonaCabanaInt', 'porta', { alt: 95 });
         const cT = 590 - cabana.displayHeight;
         this.portaAnimada({ x: 800, top: cT + cabana.displayHeight * 0.58, bottom: 590 - 11, ample: 76, fons: 570, unic: true, retall: cabana });   // la porta de taulons del gràfic, que s'obre
         this.posar('olla', 1000, 660, { col: { w: 50, h: 20 } });
@@ -98,6 +98,7 @@ class ZonaCabana extends ZonaBase {
         // Llenya, barrils d'aigua de pluja i el tronc de picar, a prop de la façana
         this.posar('llenya', 925, 600, { col: { w: 110, h: 26 } });
         this.barril(600, 600, 50, 22);
+        this.sacs(682, 604, 'duo');
         this.posar('tronc_tall', 640, 690, { col: { w: 70, h: 24 } });
 
         // Hortet d'herbes tancat amb una tanca de pals
@@ -237,6 +238,7 @@ class ZonaCabanaInt extends ZonaBase {
         this.posar('tamboret', 600, 355, { col: { w: 40, h: 16 } });
         this.barril(130, 560, 50, 22);
         this.barril(185, 545, 50, 22);
+        this.sacs(262, 572, 'un');
         this.posar('llenya', 730, 610, { col: { w: 110, h: 26 } });
         [[300, 520], [350, 580], [250, 470]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
         [[160, 330], [700, 250]].forEach(([x, y]) => this.posar('roca', x, y, { escala: 0.6, col: { w: 40, h: 16 } }));
