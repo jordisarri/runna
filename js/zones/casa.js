@@ -1085,6 +1085,8 @@ class ZonaCasaTresor extends ZonaCasaBase {
     botaTrencada() {
         Estat.posaFlag('botaAlcada'); Estat.desar();
         this.molla.setVisible(true).setAlpha(0);
+        this.mollaLlestaFins = this.time.now + 1400;                 // primer es veu la placa; no s'activa en aquest cop ni mentre apareix
+        this.mollaArmada = false;
         this.tweens.add({ targets: this.molla, alpha: 1, duration: 500, delay: 250 });
         this.llum(this.PT.AX, this.PT.AY - 10, 0xffe8a0);
         Estat.posaObjectiu("Sota la bóta hi havia una placa de pressió: puja-hi o talla-la amb l'espasa.");
@@ -1093,11 +1095,13 @@ class ZonaCasaTresor extends ZonaCasaBase {
     // Cada fotograma: si l'Ineu trepitja el mecanisme, s'activa
     actualitzar() {
         if (!this.molla || !this.molla.visible || Estat.flag('portaTresorOberta') || this.mollaActiva || this.cinema) return;
-        if (Math.abs(this.ineu.x - this.PT.AX) < 28 && Math.abs(this.ineu.y - (this.PT.AY + 2)) < 10) this.activarMolla();
+        const dalt = Math.abs(this.ineu.x - this.PT.AX) < 28 && Math.abs(this.ineu.y - (this.PT.AY + 2)) < 10;
+        if (!dalt) { if (this.time.now > (this.mollaLlestaFins || 0)) this.mollaArmada = true; return; }       // cal pujar-hi de nou: no val si ja hi eres
+        if (this.mollaArmada && this.time.now > (this.mollaLlestaFins || 0)) this.activarMolla();
     }
     // Un cop d'espasa al mecanisme també l'activa
     alAtacar(jo, d) {
-        if (!this.molla || !this.molla.visible || Estat.flag('portaTresorOberta') || this.mollaActiva) return;
+        if (!this.molla || !this.molla.visible || Estat.flag('portaTresorOberta') || this.mollaActiva || this.time.now < (this.mollaLlestaFins || 0)) return;
         const bx = jo.x + d.x * 50, by = jo.y + d.y * 50;
         if (Math.hypot(bx - this.PT.AX, by - (this.PT.AY - 8)) < 60) this.activarMolla();
     }
