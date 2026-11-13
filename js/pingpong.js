@@ -49,6 +49,7 @@ class EscenaPingPong extends Phaser.Scene {
         // L'Ineu d'esquena, en alta resolució (512 px per fotograma; eines/fer_pingpong_ineu_hd.py): es mostra molt gran i només de genolls amunt
         ['drive', 'reves', 'servei'].forEach(n => this.load.spritesheet(n === 'servei' ? 'ineu_servei' : 'pp_' + n, `assets/pingpong2/ineu_${n}.webp?v=2`, { frameWidth: 512, frameHeight: 512 }));
                 this.load.image('pp_cartell', 'assets/objectes/cartell_llums.webp?v=2611110200');
+        this.load.spritesheet('ineu_derrota', 'assets/pingpong2/ineu_derrota.webp?v=1', { frameWidth: 512, frameHeight: 512 });
         this.load.spritesheet('ineu_celebracio', 'assets/pingpong2/ineu_celebracio.webp?v=2', { frameWidth: 512, frameHeight: 512 });
         ['jusef_dret', 'jusef_revers', 'jusef_servei'].forEach(n => this.load.spritesheet(n, `assets/pingpong2/${n}.webp?v=5`, { frameWidth: 256, frameHeight: 256 }));
         ['jusef_gir_dreta', 'jusef_gir_esquerra'].forEach(n => this.load.spritesheet(n, `assets/pingpong2/${n}.webp?v=5`, { frameWidth: 256, frameHeight: 256 }));       // el gir de cara a perfil, fotograma a fotograma
@@ -127,6 +128,10 @@ class EscenaPingPong extends Phaser.Scene {
             this.anims.create({ key: 'celebra', frames: this.anims.generateFrameNumbers('ineu_celebracio', { start: 3, end: 15 }), frameRate: 14 });
             this.spCeleb = this.ui(this.add.sprite(AMPLE / 2, ALT_PP + 30, 'ineu_celebracio', 0).setOrigin(0.5, 1).setScale(2.0).setDepth(46.5).setVisible(false));
         }          // flaix a pantalla (cops perfectes i punts)
+        if (this.textures.exists('ineu_derrota')) {
+            this.anims.create({ key: 'derrota', frames: this.anims.generateFrameNumbers('ineu_derrota', { start: 3, end: 15 }), frameRate: 9 });
+            this.spDerr = this.ui(this.add.sprite(AMPLE / 2, ALT_PP + 30, 'ineu_derrota', 3).setOrigin(0.5, 1).setScale(2.0).setDepth(46.5).setVisible(false));
+        }
         this.input.on('pointerdown', p => this.alPrimer(p));
         this.input.on('pointermove', p => this.alMoure(p));
         this.input.on('pointerup', p => this.alSoltar(p));
@@ -677,6 +682,7 @@ class EscenaPingPong extends Phaser.Scene {
         if (!guanyat) this.derrotes++;
         if (guanyat && this.spCeleb) { this.celebraVictoria(() => this.tancar(true)); return; }
         if (guanyat) { this.tancar(true); return; }
+        if (this.spDerr) { this.celebraDerrota(() => this.panellFinal(false)); return; }
         this.panellFinal(false);
     }
 
@@ -743,6 +749,60 @@ class EscenaPingPong extends Phaser.Scene {
             });
         });
     }
+    // ---- Derrota de l'Ineu: el mateix estil que la celebració, però trist (fons blau fosc, pluja, lletres que s'afonen, l'Ineu s'enfonsa plorant) ----
+    celebraDerrota(fet) {
+        const sp = this.spDerr, cx = AMPLE / 2;
+        if (this.btnSortir) this.btnSortir.setVisible(false).disableInteractive();
+        this.tweens.add({ targets: this.celebFons, fillAlpha: 0.8, duration: 700 });
+        this.celebFons.setFillStyle(0x0c1424, this.celebFons.fillAlpha);
+        this.so('mal');
+        // pluja fina de cortina
+        const pluja = this.add.graphics().setDepth(45.5); this.cameras.main.ignore(pluja);
+        const gotes = Array.from({ length: 70 }, () => ({ x: Math.random() * AMPLE, y: Math.random() * ALT_PP, v: 700 + Math.random() * 500, l: 30 + Math.random() * 40 }));
+        const tPluja = this.time.addEvent({ delay: 33, loop: true, callback: () => {
+            pluja.clear().lineStyle(3, 0x8fb4e8, 0.35);
+            gotes.forEach(g => { g.y += g.v * 0.033; g.x -= 40 * 0.033; if (g.y > ALT_PP) { g.y = -g.l; g.x = Math.random() * AMPLE; } pluja.lineBetween(g.x, g.y, g.x + 5, g.y + g.l); });
+        } });
+        // «HAS PERDUT...» en lletres cap-cot: cauen a poc a poc, es balancegen i s'enfonsen una mica
+        const font = 'Bangers, Impact, sans-serif', lletres = [];
+        const linia = (text, y, mida, t0) => {
+            const objs = text.split('').map(ch => {
+                const mk = (stroke, sw, color) => this.add.text(0, 0, ch, { fontFamily: font, fontSize: mida + 'px', color, stroke, strokeThickness: sw, padding: { x: 30, y: 30 } }).setOrigin(0.5).setDepth(46);
+                const grup = [mk('#050a14', 30, '#050a14'), mk('#bcd0ee', 16, '#bcd0ee'), mk('#2a3f66', 8, '#7f9fd0')];
+                grup.forEach(o => { this.cameras.main.ignore(o); o.setVisible(false); });
+                return { ch, grup, w: grup[2].width - 60 };
+            });
+            const total = objs.reduce((a, o) => a + o.w + 10, -10); let x = cx - total / 2;
+            objs.forEach((o, k) => { o.x = x + o.w / 2; x += o.w + 10; o.y = y; o.rot = (k % 2 ? 1 : -1) * Phaser.Math.FloatBetween(1, 4); o.t0 = t0 + k * 90; lletres.push(o); });
+        };
+        linia('HAS', 270, 120, 400);
+        linia('PERDUT...', 410, 96, 800);
+        lletres.forEach((o, k) => o.grup.forEach(g => {
+            if (o.ch === ' ') return;
+            g.setPosition(o.x, o.y - 140).setAngle(o.rot * 2).setAlpha(0);
+            this.time.delayedCall(o.t0, () => { g.setVisible(true); this.tweens.add({ targets: g, y: o.y + 18 + (k % 3) * 6, alpha: 1, angle: o.rot, duration: 900, ease: 'Sine.easeOut' }); });
+        }));
+        const gronxa = this.time.addEvent({ delay: 60, loop: true, callback: () => lletres.forEach((o, k) => o.grup.forEach(g => { if (g.visible && g.alpha > 0.99) g.y = o.y + 22 + (k % 3) * 6 + Math.sin(this.time.now / 500 + k) * 3; })) });
+        // l'Ineu, per davant: cau de genolls i plora
+        this.time.delayedCall(700, () => {
+            this.spIneu.setVisible(false);
+            sp.setVisible(true).setScale(2.0).setPosition(cx, ALT_PP + 30).play('derrota');
+            [900, 1500].forEach(t => this.time.delayedCall(t, () => this.so('mal')));
+            sp.once('animationcomplete', () => {
+                // el plor continua: l'Ineu es balanceja i sacseja una mica
+                const yBase = sp.y;
+                this.tweens.add({ targets: sp, y: yBase + 8, duration: 420, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+                this.tweens.add({ targets: sp, angle: { from: -1, to: 1 }, duration: 260, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+                this.time.delayedCall(600, () => this.input.once('pointerdown', () => {
+                    this.tweens.add({ targets: [sp, pluja, ...lletres.flatMap(o => o.grup)], alpha: 0, duration: 320, onComplete: () => {
+                        tPluja.remove(); gronxa.remove(); pluja.destroy(); lletres.forEach(o => o.grup.forEach(g => g.destroy()));
+                        this.tweens.killTweensOf(sp); sp.setVisible(false).setAlpha(1).setAngle(0).setY(yBase); this.spIneu.setVisible(true); this.celebFons.setFillStyle(0x180a26, 0); fet();
+                    } });
+                }));
+            });
+        });
+    }
+
     // línies de velocitat radials, que pampalluguen i giren una mica (estil anime)
     pintaCelebracio(time) {
         const g = this.celebLinies; g.clear();
