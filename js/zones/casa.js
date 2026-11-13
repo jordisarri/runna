@@ -587,11 +587,11 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     }
 
     // En examinar l'estàtua, la càmera puja i la mostra sencera (de peus al cap) a la part de la pantalla que el diàleg no tapa
-    enquadrarRaim(dialeg) {
+    enquadrarRaim(dialeg, senseDialeg = false) {
         const est = this.estatua || this.estatuaFinal, alt = (est ? est.displayHeight : 360) + 30;
-        const lliure = Math.max(240, (ALT - ALT_HUD) - 470);
+        const lliure = Math.max(240, (ALT - ALT_HUD) - (senseDialeg ? 40 : 470));
         const zoom = Math.min(this.zoomZona || ZOOM_CAMERA, lliure * 0.92 / alt);
-        this.enquadrar(RAIM.x, RAIM.y - alt * 0.48, zoom, 800);
+        this.enquadrar(RAIM.x, RAIM.y - alt * (senseDialeg ? 0.5 : 0.48), zoom, 800, null, senseDialeg ? 0 : 470);
         return dialeg;
     }
 
@@ -620,12 +620,14 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (!derrotat) this.dibuixarVolant(RX, Math.round(RY - this.estatua.displayHeight * 0.17));
         this.interactiu(RX, RY + 32, 90, E => {
             this.raimPas = Math.min(3, this.raimPas + 1);
+            this.enquadrarRaim(null, true);                         // la càmera puja i es veu l'estàtua sencera mentre gira el cap
             this.girarVolant();
             this.girarEstatua();
             this.volDespertar = this.raimPas === 3 && this.teArma();
+            if (!this.volDespertar) this.time.delayedCall(2300, () => this.alliberarCamera(700));
             return { pagines: [] };
         }, { altura: 70, actiu: () => !Estat.flag('raimDesperta') && Estat.te('maneta'),
-             enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.time.delayedCall(500, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => this.despertarRaim())); } } });
+             enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.time.delayedCall(500, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => { this.alliberarCamera(600); this.despertarRaim(); })); } } });
 
         // Vençut, l'estàtua del guardià es pot mirar: descansa al pedestal
         this.interactiu(RX, RY + 10, 90, E => this.enquadrarRaim(DIALEGS.raimEstatuaFinal), { altura: 250, enTancar: () => this.alliberarCamera(700), actiu: () => Estat.flag('raimDerrotat') && !!this.estatuaFinal });
