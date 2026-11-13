@@ -1660,7 +1660,7 @@ class ZonaBase extends Phaser.Scene {
         this.obstacles.remove(b.col, true, true);
         const idx = this.opacs ? this.opacs.indexOf(b.img) : -1;
         if (idx >= 0) this.opacs.splice(idx, 1);
-        const key = 'barril', fr = this.textures.get(key).get(), W = fr.width, H = fr.height;
+        const key = b.key || 'barril', fr = this.textures.get(key).get(), W = fr.width, H = fr.height;
         const esc = b.img.scaleX, dw = W * esc, dh = H * esc;
         // Tall irregular en 3 columnes x 3 files
         const tallV = [0, W * Phaser.Math.FloatBetween(0.28, 0.38), W * Phaser.Math.FloatBetween(0.62, 0.74), W];
@@ -1698,6 +1698,7 @@ class ZonaBase extends Phaser.Scene {
         this.time.delayedCall(800, () => p.destroy());
         // El barril sencer desapareix de cop (queda amagat pels trossos)
         b.img.destroy();
+        if (b.alTrencar) b.alTrencar();
         const t0 = this.time.now, TEMPS = 1500, FADE = 800;
         const act = (t, dt) => {
             const s = Math.min(dt, 50) / 1000, el = this.time.now - t0;

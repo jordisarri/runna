@@ -994,11 +994,14 @@ class ZonaCasaTresor extends ZonaCasaBase {
             const llum = this.add.circle(x, y - 78, 70, 0xffc060, 0.1).setDepth(y + 1);
             this.tweens.add({ targets: llum, alpha: 0.05, scale: 0.92, yoyo: true, repeat: -1, duration: 420 + i * 90 });
         });
-        // Sacs, or, botes i prestatges
-        [[190, 330, 'sacs_tresor', 130, 24], [200, 560, 'sacs_tresor', 130, 24], [800, 600, 'monedes_tresor', 90, 20]].forEach(([x, y, k, w, h]) => {
-            this.add.image(x, y, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
-            this.colisio(x, y - h / 2, w, h);
+        // Sacs de gra (opacs), i un racó més mundà: una tauleta amb un tamboret
+        [[190, 330], [200, 560]].forEach(([x, y]) => {
+            const sacs = this.add.image(x, y, 'sacs_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            (this.opacs = this.opacs || []).push(sacs);
+            this.colisio(x, y - 12, 120, 24);
         });
+        this.posar('taula', 800, 610, { escala: 0.7, col: { w: 110, h: 22 }, opac: true });
+        this.posar('tamboret', 745, 628, { col: { w: 34, h: 14 }, opac: true });
         [[190, 215], [190, 450], [250, 215]].forEach(([x, y]) => this.barril(x, y, 50, 22));
         [[810, 300], [810, 484]].forEach(([x, y]) => this.barril(x, y, 50, 22));
 
@@ -1006,11 +1009,11 @@ class ZonaCasaTresor extends ZonaCasaBase {
     }
 
     // ---- La porta del fons i el seu mecanisme ----
-    // La porta és una llosa de pedra amb ferros, sense pany. A terra, la bóta de la creu tapa una anella de ferro; de l'anella surt
-    // una cadena que corre per una regata del terra, puja per la paret i passa per una politja al costat de la porta. Primer cal
-    // fer rodar la bóta; després, estirant l'anella, la politja gira i la llosa puja dins la llinda.
+    // La porta és una llosa de pedra amb ferros, sense pany. La bóta de la creu amaga a terra un mecanisme de molla: s'ha de trencar amb
+    // Runna. Sota hi ha una placa amb una molla: en trepitjar-la, o en tallar-la amb l'espasa, la politja del costat de la porta gira
+    // i la llosa puja dins la llinda.
     mecanismePorta() {
-        const oberta = Estat.flag('portaTresorOberta'), apartada = oberta || Estat.flag('botaAlcada');
+        const oberta = Estat.flag('portaTresorOberta'), trencada = oberta || Estat.flag('botaAlcada');
         const PX = 760, PT = 20, PB = 164, PW = 90, AX = 810, AY = 392, PO = { x: 846, y: 96 };
         this.PT = { PX, PT, PB, PW, AX, AY, PO };
         // Dins de la porta: foscor, uns graons i la claror de l'escalinata
@@ -1030,26 +1033,24 @@ class ZonaCasaTresor extends ZonaCasaBase {
         const mascara = this.make.graphics({ add: false }).fillRect(PX - PW / 2 - 2, PT, PW + 4, H + 4);
         ll.setMask(mascara.createGeometryMask());
         this.llosaPorta = ll;
-        // La politja de la paret, la cadena que hi passa i la regata del terra fins a l'anella
+        // La politja de la paret, al costat de la porta, i la cadena curta que en baixa fins al ganxo de la llosa
         this.politja = this.add.graphics({ x: PO.x, y: PO.y }).setDepth(-987);
         this.politja.lineStyle(6, 0x1c1814, 1).strokeCircle(0, 0, 14).lineStyle(3, 0x6a6a72, 1).strokeCircle(0, 0, 14);
         for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2; this.politja.lineStyle(3, 0x4a4a52, 1).lineBetween(0, 0, Math.cos(a) * 13, Math.sin(a) * 13); }
         this.politja.fillStyle(0x8a7a40, 1).fillCircle(0, 0, 4);
         const sup = this.add.graphics().setDepth(-988);
         sup.fillStyle(0x2a2420, 1).fillRect(PO.x - 3, PO.y - 26, 6, 20).fillRect(PO.x - 10, PO.y - 30, 20, 6);
-        const regata = this.add.graphics().setDepth(-1045);
-        regata.lineStyle(10, 0x1a120c, 0.55).lineBetween(AX, AY, PO.x + 14, 178);
         this.cadena = this.add.graphics().setDepth(-986);
         this.offCadena = 0;
         this.dibuixarCadena(oberta);
-        // L'anella (sota la bóta) i la bóta
-        this.anella = this.add.graphics().setDepth(AY - 1);
-        this.anella.fillStyle(0x7a6a56, 1).fillRect(AX - 30, AY - 16, 60, 30).lineStyle(2.5, 0x2a2018, 1).strokeRect(AX - 30, AY - 16, 60, 30);
-        this.anellaFerro = this.add.graphics({ x: AX, y: AY - 2 }).setDepth(AY);
-        this.anellaFerro.lineStyle(5, 0x1c1814, 1).strokeCircle(0, 0, 10).lineStyle(3, 0x9a948a, 1).strokeCircle(0, 0, 10).fillStyle(0x2a2420, 1).fillRect(-4, 8, 8, 6);
-        this.anella.setVisible(apartada); this.anellaFerro.setVisible(apartada);
-        this.bota = this.posar('bota_creu', apartada ? 880 : AX, AY, { col: { w: 50, h: 22 } });
-        this.colBota = this.obstacles.getChildren()[this.obstacles.getChildren().length - 1];
+        // El mecanisme de molla (sota la bóta) i la bóta de la creu, que es trenca amb l'espasa
+        this.molla = this.add.image(AX, AY + 4, 'molla_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(AY - 1).setVisible(trencada);
+        if (!trencada) {
+            const img = this.posar('bota_creu', AX, AY, { col: { w: 50, h: 22 }, opac: true });
+            const col = this.obstacles.getChildren()[this.obstacles.getChildren().length - 1];
+            this.bota = { img, col, x: AX, y: AY, viu: true, key: 'bota_creu', nomesRunna: true, alTrencar: () => this.botaTrencada() };
+            this.barrils.push(this.bota);
+        }
         if (oberta) { this.llosaPorta.y = PT - H; }
         else this.colPorta = this.colisio(PX, PB - 6, PW + 10, 24);     // tancada, no es passa
         this.colisio(760, 65, 90, 130);                                 // dintell sobre la llosa
@@ -1057,17 +1058,39 @@ class ZonaCasaTresor extends ZonaCasaBase {
 
         // Inspeccionar la porta tancada
         this.interactiu(PX, PB + 46, RADI_OBJECTE, E => ({ pagines: [{ qui: 'Ineu', text: E.flag('botaAlcada')
-            ? "(La llosa no té pany ni maneta. La cadena de la politja hi està lligada: l'anella de terra la deu fer pujar.)"
+            ? "(La llosa no té pany ni maneta. La cadena de la politja hi està lligada: el mecanisme de terra deu fer-la pujar.)"
             : E.flag('cofreCambra')
-                ? "(Una llosa de pedra sense pany ni maneta. No cedeix gens. «Qui busqui sortida, que alci la bóta marcada amb la creu»...)"
+                ? "(Una llosa de pedra sense pany ni maneta. No cedeix gens. «Qui busqui sortida, que trenqui la bóta marcada amb la creu»...)"
                 : "(Una llosa de pedra sense pany ni maneta. No cedeix gens: s'ha d'obrir d'una altra manera.)" }] }),
             { altura: PB - PT + 36, actiu: () => !Estat.flag('portaTresorOberta') });
-        // La bóta: rodola a un costat i deixa veure l'anella
-        this.interactiu(AX, AY + 32, RADI_OBJECTE, DIALEGS.botaTresor, { altura: 90, actiu: () => !Estat.flag('botaAlcada') && !Estat.flag('portaTresorOberta'),
-            enTancar: () => this.rodarBota() });
-        // L'anella: en estirar-la s'obre la porta
-        this.interactiu(AX, AY + 30, RADI_OBJECTE, () => ({ pagines: [{ fer: (z, fet) => z.estirarAnella(fet) }] }),
-            { altura: 50, actiu: () => Estat.flag('botaAlcada') && !Estat.flag('portaTresorOberta') });
+    }
+
+    // Es trenca la bóta: a terra apareix el mecanisme de molla, que s'activa en trepitjar-lo o en tallar-lo amb l'espasa
+    botaTrencada() {
+        Estat.posaFlag('botaAlcada'); Estat.desar();
+        this.molla.setVisible(true).setAlpha(0);
+        this.tweens.add({ targets: this.molla, alpha: 1, duration: 500, delay: 250 });
+        this.llum(this.PT.AX, this.PT.AY - 10, 0xffe8a0);
+        Estat.posaObjectiu("Sota la bóta hi havia un mecanisme de molla: trepitja'l o talla'l amb l'espasa.");
+    }
+
+    // Cada fotograma: si l'Ineu trepitja el mecanisme, s'activa
+    actualitzar() {
+        if (!this.molla || !this.molla.visible || Estat.flag('portaTresorOberta') || this.mollaActiva || this.cinema) return;
+        const jo = this.ineu.body.center;
+        if (Math.hypot(jo.x - this.PT.AX, jo.y - (this.PT.AY - 6)) < 30) this.activarMolla();
+    }
+    // Un cop d'espasa al mecanisme també l'activa
+    alAtacar(jo, d) {
+        if (!this.molla || !this.molla.visible || Estat.flag('portaTresorOberta') || this.mollaActiva) return;
+        const bx = jo.x + d.x * 50, by = jo.y + d.y * 50;
+        if (Math.hypot(bx - this.PT.AX, by - (this.PT.AY - 8)) < 60) this.activarMolla();
+    }
+    activarMolla() {
+        this.mollaActiva = true;
+        this.tweens.add({ targets: this.molla, scaleY: this.molla.scaleY * 0.7, duration: 140, yoyo: true, ease: 'Sine.easeOut' });
+        Sfx.porta();
+        this.estirarAnella(() => {});
     }
 
     // La cadena: de l'anella puja per la regata i la paret fins a la politja, i baixa fins al ganxo de la llosa. tibant: a tocar
@@ -1081,37 +1104,15 @@ class ZonaCasaTresor extends ZonaCasaBase {
                 g.lineStyle(2.5, 0x1c1814, 1).strokeEllipse(x, y, k % 2 ? 4 : 8, k % 2 ? 8 : 4).lineStyle(1.2, 0x9a948a, 1).strokeEllipse(x, y, k % 2 ? 4 : 8, k % 2 ? 8 : 4);
             }
         };
-        tram(AX, AY - 2, PO.x + 14, 178);
-        tram(PO.x + 14, 178, PO.x + 14, PO.y);
         const ganxo = { x: PX + PW / 2 - 7, y: this.llosaPorta.y + 20 };
         tram(PO.x - 14, PO.y, ganxo.x, Math.max(ganxo.y, PT + 2));
     }
 
-    // La bóta rodola a un costat (fa una volta sencera) i deixa veure l'anella de ferro
-    rodarBota() {
-        if (Estat.flag('botaAlcada')) return;
-        Estat.posaFlag('botaAlcada'); Estat.desar();
-        this.ajupir('ineu', null, 300);
-        this.time.delayedCall(250, () => {
-            Sfx.porta();
-            this.tweens.add({ targets: this.bota, x: 880, angle: 360, duration: 900, ease: 'Sine.easeOut', onComplete: () => {
-                this.bota.angle = 0;
-                this.obstacles.remove(this.colBota, true, true);
-                this.colBota = this.colisio(880, this.PT.AY - 11, 50, 22);
-                this.anella.setVisible(true); this.anellaFerro.setVisible(true).setAlpha(0);
-                this.tweens.add({ targets: this.anellaFerro, alpha: 1, duration: 300 });
-                this.llum(this.PT.AX, this.PT.AY - 10, 0xffe8a0);
-                Estat.posaObjectiu("Sota la bóta hi havia una anella de ferro, amb una cadena que puja fins a la porta.");
-            } });
-        });
-    }
-
-    // L'Ineu estira l'anella: la cadena corre, la politja gira i la llosa de la porta puja dins la llinda
+    // El mecanisme s'activa: la cadena corre, la politja gira i la llosa de la porta puja dins la llinda
     estirarAnella(fet) {
         if (Estat.flag('portaTresorOberta')) { if (fet) fet(); return; }
         const { PT, PB } = this.PT, H = PB - PT;
         this.ajupir('ineu', null, 1600);
-        this.tweens.add({ targets: this.anellaFerro, y: this.anellaFerro.y - 10, duration: 300, ease: 'Sine.easeOut' });
         this.time.delayedCall(300, () => {
             Sfx.porta(); this.cameras.main.shake(1600, 0.003);
             const cam = this.cameras.main;

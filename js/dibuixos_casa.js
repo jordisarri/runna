@@ -143,23 +143,47 @@ function pintarLlosaCripta(ctx, w, h, plena) {
 
 // ---------- Prestatge de la cambra del tresor ----------
 function pintarSacsTresor(ctx, w, h) {
-    ctx.lineJoin = 'round';
-    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 5, w * 0.48, 6, 0, 0, Math.PI * 2); ctx.fill();
-    [[0.28, 0.62, 30, '#b89a68'], [0.62, 0.66, 32, '#a88a58'], [0.45, 0.4, 28, '#c4a874']].forEach(([fx, fy, r, c]) => {
-        const x = w * fx, y = h * fy;
-        ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(x - r * 0.9, y + r * 0.8); ctx.quadraticCurveTo(x - r * 1.2, y - r * 0.2, x - r * 0.35, y - r * 0.7); ctx.lineTo(x + r * 0.35, y - r * 0.7); ctx.quadraticCurveTo(x + r * 1.2, y - r * 0.2, x + r * 0.9, y + r * 0.8); ctx.closePath(); ctx.fill(); ctx.strokeStyle = CASA_C; ctx.lineWidth = 2; ctx.stroke();
-        ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x - r * 0.35, y - r * 0.6); ctx.lineTo(x + r * 0.35, y - r * 0.6); ctx.stroke();
-        ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.beginPath(); ctx.ellipse(x - r * 0.4, y, r * 0.18, r * 0.4, 0, 0, Math.PI * 2); ctx.fill();
-    });
-}
-function pintarMonedesTresor(ctx, w, h) {
-    ctx.lineJoin = 'round';
-    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 4, w * 0.45, 5, 0, 0, Math.PI * 2); ctx.fill();
-    const r = rndBib(12);
-    for (let i = 0; i < 46; i++) {
-        const x = w / 2 + (r() - 0.5) * w * 0.8 * (1 - i / 80), y = h - 10 - i * 0.6 - r() * 6;
-        ctx.fillStyle = i % 3 ? '#e8c040' : '#c89a28'; ctx.beginPath(); ctx.ellipse(x, y, 7, 3.2, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#6a4a0a'; ctx.lineWidth = 0.9; ctx.stroke();
-    }
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 5, w * 0.48, 7, 0, 0, Math.PI * 2); ctx.fill();
+    const r = rndBib(31);
+    // Un sac de gra, de tela de sac: panxa plena, boca arrugada lligada amb una corda, costura, plecs, taques i fils
+    const sac = (cx, base, amp, alt, col, fosc, clar, inclina) => {
+        ctx.save(); ctx.translate(cx, base); ctx.rotate(inclina);
+        const cos = amp / 2;
+        ctx.beginPath();
+        ctx.moveTo(-cos * 0.55, -alt);                                                               // boca (coll)
+        ctx.bezierCurveTo(-cos * 0.35, -alt * 0.82, -cos * 1.1, -alt * 0.78, -cos * 1.05, -alt * 0.38);   // espatlla i costat esquerre
+        ctx.bezierCurveTo(-cos * 1.15, -alt * 0.05, -cos * 0.7, 0, 0, 0);                            // base
+        ctx.bezierCurveTo(cos * 0.7, 0, cos * 1.15, -alt * 0.05, cos * 1.05, -alt * 0.38);
+        ctx.bezierCurveTo(cos * 1.1, -alt * 0.78, cos * 0.35, -alt * 0.82, cos * 0.55, -alt);
+        ctx.closePath();
+        const g = ctx.createLinearGradient(-cos, 0, cos, 0); g.addColorStop(0, fosc); g.addColorStop(0.35, col); g.addColorStop(0.6, clar); g.addColorStop(1, fosc);
+        ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = '#2a1c10'; ctx.lineWidth = 2.6; ctx.stroke();
+        ctx.save(); ctx.clip();
+        // trama de la tela (línies fines) i plecs
+        ctx.strokeStyle = 'rgba(70,45,20,0.22)'; ctx.lineWidth = 0.8;
+        for (let y = -alt; y < 0; y += 4) { ctx.beginPath(); ctx.moveTo(-cos * 1.3, y); ctx.lineTo(cos * 1.3, y + (r() - 0.5) * 1.2); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(60,38,16,0.4)'; ctx.lineWidth = 1.8;
+        [[-0.55, -0.7, -0.62, -0.25], [0.2, -0.75, 0.32, -0.3], [-0.1, -0.5, -0.05, -0.12]].forEach(([x0, y0, x1, y1]) => { ctx.beginPath(); ctx.moveTo(cos * x0, alt * y0); ctx.quadraticCurveTo(cos * (x0 + x1) / 2 + 3, alt * (y0 + y1) / 2, cos * x1, alt * y1); ctx.stroke(); });
+        // taques i pegats
+        ctx.fillStyle = 'rgba(90,60,30,0.28)'; for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.ellipse((r() - 0.5) * cos * 1.5, -alt * (0.15 + r() * 0.5), 3 + r() * 4, 2 + r() * 3, r(), 0, Math.PI * 2); ctx.fill(); }
+        ctx.fillStyle = clar; ctx.globalAlpha = 0.7; ctx.fillRect(cos * 0.25, -alt * 0.42, 14, 12); ctx.globalAlpha = 1;
+        ctx.strokeStyle = 'rgba(40,25,10,0.7)'; ctx.setLineDash([3, 2]); ctx.lineWidth = 1.2; ctx.strokeRect(cos * 0.25, -alt * 0.42, 14, 12); ctx.setLineDash([]);
+        // llum del costat
+        ctx.fillStyle = 'rgba(255,240,200,0.2)'; ctx.beginPath(); ctx.ellipse(-cos * 0.4, -alt * 0.4, cos * 0.18, alt * 0.3, 0.1, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+        // boca: tela arrugada, amb dues orelletes, lligada amb corda
+        ctx.fillStyle = fosc; ctx.beginPath(); ctx.moveTo(-cos * 0.6, -alt); ctx.lineTo(-cos * 0.75, -alt - 9); ctx.lineTo(-cos * 0.3, -alt - 4); ctx.lineTo(0, -alt - 11); ctx.lineTo(cos * 0.3, -alt - 4); ctx.lineTo(cos * 0.75, -alt - 8); ctx.lineTo(cos * 0.6, -alt); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#2a1c10'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.strokeStyle = '#8a6a3a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(-cos * 0.62, -alt + 1); ctx.quadraticCurveTo(0, -alt + 6, cos * 0.62, -alt + 1); ctx.stroke();
+        ctx.strokeStyle = '#2a1c10'; ctx.lineWidth = 1; ctx.stroke();
+        ctx.strokeStyle = '#8a6a3a'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(cos * 0.1, -alt + 4); ctx.quadraticCurveTo(cos * 0.3, -alt + 16, cos * 0.18, -alt + 20); ctx.moveTo(cos * 0.1, -alt + 4); ctx.quadraticCurveTo(-cos * 0.05, -alt + 14, -cos * 0.18, -alt + 18); ctx.stroke();
+        ctx.restore();
+    };
+    sac(w * 0.27, h - 8, 50, 52, '#c4a672', '#8a6c3c', '#d8be8a', -0.04);
+    sac(w * 0.66, h - 6, 54, 56, '#b89a64', '#7e6234', '#cfb27c', 0.05);
+    sac(w * 0.46, h - 24, 44, 46, '#cdb27c', '#8e7242', '#e0c896', 0.02);
+    // una mica de gra vessat a terra
+    ctx.fillStyle = '#d8b050'; for (let i = 0; i < 16; i++) { ctx.beginPath(); ctx.ellipse(w * 0.2 + r() * w * 0.6, h - 6 + r() * 3, 1.8, 1.1, r() * 3, 0, Math.PI * 2); ctx.fill(); }
 }
 // Bóta de vi amb una creu vermella pintada: la que s'aixeca per obrir la porta
 function pintarBotaCreu(ctx, w, h) {
@@ -295,4 +319,25 @@ function pintarEscalinata(ctx, w, h) {
     ctx.globalCompositeOperation = 'destination-out';
     ctx.fillStyle = gradVBib(ctx, 592, 640, [[0, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,1)']]); ctx.fillRect(336, 592, 494, 48);
     ctx.globalCompositeOperation = 'source-over';
+}
+
+// Mecanisme de molla de la Cambra secreta (sota la bóta): una placa de pedra amb una molla de ferro i els ressorts, a mig enfonsar
+function pintarMollaTresor(ctx, w, h) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 8, w * 0.46, 8, 0, 0, Math.PI * 2); ctx.fill();
+    // forat al terra i brides de ferro
+    ctx.fillStyle = '#1a120c'; ctx.beginPath(); ctx.ellipse(w / 2, h - 18, w * 0.4, 12, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#0c0805'; ctx.lineWidth = 3; ctx.stroke();
+    ctx.strokeStyle = '#7a7468'; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(w / 2, h - 18, w * 0.4, 12, 0, 0, Math.PI * 2); ctx.stroke();
+    // molla: espires de ferro
+    const cx = w / 2;
+    for (let k = 0; k < 6; k++) {
+        const y = h - 20 - k * 5;
+        ctx.strokeStyle = '#1c1814'; ctx.lineWidth = 5; ctx.beginPath(); ctx.ellipse(cx, y, 16, 5, 0, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = k % 2 ? '#8a8478' : '#a8a296'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.ellipse(cx, y, 16, 5, 0, Math.PI * 0.05, Math.PI * 0.95); ctx.stroke();
+    }
+    // placa de pedra amb una creu gravada al damunt
+    const py = h - 52;
+    ctx.fillStyle = '#9a8c74'; ctx.beginPath(); ctx.ellipse(cx, py + 5, 27, 11, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#2a2018'; ctx.lineWidth = 2.4; ctx.stroke();
+    ctx.fillStyle = '#b8a98e'; ctx.beginPath(); ctx.ellipse(cx, py, 27, 11, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = '#8a1e18'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(cx, py - 6); ctx.lineTo(cx, py + 6); ctx.moveTo(cx - 7, py - 2); ctx.lineTo(cx + 7, py - 2); ctx.stroke();
 }

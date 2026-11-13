@@ -1359,8 +1359,8 @@ const Grafics = {
         crea('sarcofag_cripta', 150, 110, pintarSarcofagCripta);
         crea('llosa_cripta', 200, 120, (ctx, w, h) => pintarLlosaCripta(ctx, w, h, true));
         crea('llosa_cripta_buida', 200, 120, (ctx, w, h) => pintarLlosaCripta(ctx, w, h, false));
-        crea('sacs_tresor', 140, 90, pintarSacsTresor);
-        crea('monedes_tresor', 110, 50, pintarMonedesTresor);
+        crea('sacs_tresor', 140, 96, pintarSacsTresor);
+        crea('molla_tresor', 80, 64, pintarMollaTresor);
         crea('bota_creu', 64, 84, pintarBotaCreu);
         crea('cofre_tresor', 110, 80, (ctx, w, h) => pintarCofre(ctx, w, h, false));
         crea('cofre_tresor_obert', 110, 80, (ctx, w, h) => pintarCofre(ctx, w, h, true));

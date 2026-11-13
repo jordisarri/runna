@@ -188,7 +188,7 @@ const CATALEG_OBJECTES = {
     maneta:           ['Maneta d\'engranatge', 'De ferro: encaixa en volants i rodes vells.'],
     clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Aldreu li va caure; l\'Iscu te l\'ha donada.'],
     fragment1:        ['Pergamí partit (1/2)', 'La meitat d\'un pergamí esquinçat, trobada a les Runes.'],
-    pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.» Al revers: «Qui busqui sortida, que alci la bóta marcada amb la creu.»'],
+    pergami_monjo:    ['Pergamí del monjo', '«On neix el sol, el raïm madura.» Al revers: «Qui busqui sortida, que trenqui la bóta marcada amb la creu.»'],
     carta_cortiner:   ['Carta del Cortiner', 'La va deixar al tronc del Pi dels Tres Cants: explica d\'on van sortir els tres cants i què els cal per tornar als ocells.'],
     clau_ferro:       ['Clau de ferro', 'Obre la Porta de les Gírgoles.'],
     clau_gabriel:     ['Clau de Sant Gabriel', "Te l'ha donada el Galf. Obre l'ermita de Sant Gabriel."],
