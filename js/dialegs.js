@@ -1538,27 +1538,15 @@ const DIALEGS = {
         enAcabar: () => E.posaFlag("reixaObertaDins")
     }),
 
-    // Cambra secreta dels monjos (sala del tresor, entre el Celler i la Casa Gran)
-    cofreCambra: E => {
-        if (E.flag("cofreCambra")) return { pagines: [] };
-        return {
-            pagines: [
-                { avis: "Has obtingut el PERGAMÍ DEL MONJO.", obj: 'pergami_monjo' },
-                { qui: "Ineu", text: "«La clau de ferro és sota l'escala, murada amb els meus germans. Un guardià de pedra la vigila d'esquena: ningú no hi baixa fins que no et mira a la cara.»" },
-                { qui: "Ineu", text: "I al revers, amb una altra lletra: «Qui busqui sortida, que trenqui la bóta marcada amb la creu.»" }
-            ],
-            enAcabar: () => {
-                E.dona("pergami_monjo"); E.posaFlag("cofreCambra");
-                E.posaObjectiu("A la cambra, la bóta de la creu vermella sembla fora de lloc: trencant-la, potser amaga una porta.");
-            }
-        };
+    // Cambra secreta dels monjos: un llibre gros obert sobre una taula. Només es llegeix (no dona cap objecte ni marca res)
+    llibreCambra: {
+        pagines: [
+            { qui: "Ineu", text: "Un llibre gros, obert sobre la taula, amb lletra de monjo. Diu a dalt de la pàgina: «Del càstig del germà bodeguer»." },
+            { qui: "Llibre", text: "«El germà bodeguer es bevia el vi de la sagristia, bóta rere bóta, i després jurava que s'havia evaporat.»" },
+            { qui: "Llibre", text: "«Quan ho vam descobrir, el Prior no el va foragitar: el va fer petrificar i el va posar a vigilar la cripta fins que el vi es torni vinagre. A la cripta mai no es torna vinagre.»" },
+            { qui: "Llibre", text: "«Per això li diuen l'Home del Raïm. Dorm de cara a la paret, com un nen castigat, i només es desperta si algú el fa girar i el mira a la cara.»" }
+        ]
     },
-
-    // La bóta marcada de la cambra secreta: en alçar-la, deixa a la vista l'anella que obre la porta del fons
-    botaTresor: E => ({
-        pagines: [{ qui: "Ineu", text: "(Una bóta amb una creu vermella. Sona buida, i la fusta és fina... Amb un cop d'arma es trencaria.)" }]
-    }),
-
 
     // ---------------- LA CABANA DE LA JAUNETA ----------------
     // La Joaneta, bruixa del bosc: una curiositat. Hi vas pel portal de l'Alzina Buida i et diu la pista del moment (és vident)
@@ -1637,7 +1625,7 @@ const DIALEGS = {
             ],
             enAcabar: () => {
                 E.dona("maneta"); E.posaFlag("maneta");
-                if (E.flag("cofreCambra")) E.posaObjectiu("La maneta encaixaria al volant de ferro de l'Home del Raïm, a l'escalinata de la Casa Gran.");
+                if (E.flag("portaTresorOberta")) E.posaObjectiu("La maneta encaixaria al volant de ferro de l'Home del Raïm, a l'escalinata de la Casa Gran.");
             }
         };
     },

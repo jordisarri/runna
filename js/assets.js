@@ -1360,15 +1360,17 @@ const Grafics = {
         crea('sarcofag_cripta', 150, 110, pintarSarcofagCripta);
         crea('llosa_cripta', 200, 120, (ctx, w, h) => pintarLlosaCripta(ctx, w, h, true));
         crea('llosa_cripta_buida', 200, 120, (ctx, w, h) => pintarLlosaCripta(ctx, w, h, false));
-        crea('sacs_tresor', 140, 90, pintarSacsTresor);
-        crea('monedes_tresor', 110, 50, pintarMonedesTresor);
+        crea('sacs_tresor', 140, 96, pintarSacsTresor);
+        crea('molla_tresor', 72, 34, pintarMollaTresor);
         crea('bota_creu', 64, 84, pintarBotaCreu);
+        crea('taula_llibre', 150, 100, pintarTaulaLlibre);
         crea('cofre_tresor', 110, 80, (ctx, w, h) => pintarCofre(ctx, w, h, false));
         crea('cofre_tresor_obert', 110, 80, (ctx, w, h) => pintarCofre(ctx, w, h, true));
         crea('escalinata_fons', 1140, 640, pintarEscalinata);
         // Ermita de la Desaparició (js/dibuixos_ermita.js)
         crea('paret_ermita', 800, 170, pintarParetErmita);
         crea('mur_ermita', 40, 700, pintarMurErmita);
+        crea('mur_baix_sala', 740, 64, (ctx, w, h) => { carreusErmita(ctx, 0, 0, w, h, 913, [150, 136, 118], 24); ctx.fillStyle = 'rgba(0,0,0,0.22)'; ctx.fillRect(0, 0, w, 6); });
         crea('pilastra_ermita', 54, 170, pintarPilastraErmita);
         crea('catifa_ermita', 120, 440, pintarCatifaErmita);
         crea('graons_ermita', 380, 90, pintarGraonsErmita);

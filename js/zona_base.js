@@ -1644,10 +1644,10 @@ class ZonaBase extends Phaser.Scene {
 
     // ---------------- Barrils ----------------
     // Tots els barrils són el mateix gràfic ('barril'), opacs, i es trenquen amb qualsevol arma (vegeu combat.js, atacar)
-    barril(x, y, w, h, clau = 'barril') {
-        const img = this.posar(clau, x, y, { opac: true });
+    barril(x, y, w, h, key = 'barril') {
+        const img = this.posar(key, x, y, { opac: true });
         const col = this.colisio(x, y - h / 2, w, h);
-        const b = { img, col, x, y, viu: true, clau };
+        const b = { img, col, x, y, viu: true, key };
         this.barrils.push(b);
         return b;
     }
@@ -1657,11 +1657,10 @@ class ZonaBase extends Phaser.Scene {
         if (!b.viu) return;
         b.viu = false;
         Sfx.trenca && Sfx.trenca();
-        if (b.alRomprer) b.alRomprer(b, d);
         this.obstacles.remove(b.col, true, true);
         const idx = this.opacs ? this.opacs.indexOf(b.img) : -1;
         if (idx >= 0) this.opacs.splice(idx, 1);
-        const key = b.clau || 'barril', fr = this.textures.get(key).get(), W = fr.width, H = fr.height;
+        const key = b.key || 'barril', fr = this.textures.get(key).get(), W = fr.width, H = fr.height;
         const esc = b.img.scaleX, dw = W * esc, dh = H * esc;
         // Tall irregular en 3 columnes x 3 files
         const tallV = [0, W * Phaser.Math.FloatBetween(0.28, 0.38), W * Phaser.Math.FloatBetween(0.62, 0.74), W];
@@ -1699,6 +1698,7 @@ class ZonaBase extends Phaser.Scene {
         this.time.delayedCall(800, () => p.destroy());
         // El barril sencer desapareix de cop (queda amagat pels trossos)
         b.img.destroy();
+        if (b.alTrencar) b.alTrencar();
         const t0 = this.time.now, TEMPS = 1500, FADE = 800;
         const act = (t, dt) => {
             const s = Math.min(dt, 50) / 1000, el = this.time.now - t0;
@@ -2379,6 +2379,7 @@ class ZonaBase extends Phaser.Scene {
         const b = this.ineu.body;
         const peus = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
         for (const s of this.sortides) {
+            if (s.desarmada) { if (!Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r)) s.desarmada = false; continue; }       // sortida recent: només compta quan l'Ineu en surt i hi torna
             // Per una porta només s'hi entra pel buit: el centre del cos ha d'estar dins l'amplada de la porta (o alçada en sortides laterals)
             const dir = this.dirSortida(s.r);
             const horitz = dir === 'amunt' || dir === 'avall';

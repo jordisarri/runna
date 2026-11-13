@@ -563,7 +563,7 @@ class ZonaPingpong extends ZonaBase {
     // L'obertura de la paret descoberta: porta al passadís (sortida sense llum ni fletxa, perquè és una troballa)
     obrirPassadis() {
 
-        this.sortides.push({ r: new Phaser.Geom.Rectangle(this.AX - 50, this.YP + 18, 100, 32), desti: 'ZonaPassadis', entrada: 'porta' });
+        this.sortides.push({ r: new Phaser.Geom.Rectangle(this.AX - 50, this.YP + 18, 100, 32), desti: 'ZonaPassadis', entrada: 'porta', desarmada: true });
         this.tweens.add({ targets: this.add.circle(this.AX, this.YP - 40, 70, 0xa070ff, 0.12).setDepth(-970), alpha: 0.03, yoyo: true, repeat: -1, duration: 900 });
     }
 }

@@ -143,23 +143,47 @@ function pintarLlosaCripta(ctx, w, h, plena) {
 
 // ---------- Prestatge de la cambra del tresor ----------
 function pintarSacsTresor(ctx, w, h) {
-    ctx.lineJoin = 'round';
-    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 5, w * 0.48, 6, 0, 0, Math.PI * 2); ctx.fill();
-    [[0.28, 0.62, 30, '#b89a68'], [0.62, 0.66, 32, '#a88a58'], [0.45, 0.4, 28, '#c4a874']].forEach(([fx, fy, r, c]) => {
-        const x = w * fx, y = h * fy;
-        ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(x - r * 0.9, y + r * 0.8); ctx.quadraticCurveTo(x - r * 1.2, y - r * 0.2, x - r * 0.35, y - r * 0.7); ctx.lineTo(x + r * 0.35, y - r * 0.7); ctx.quadraticCurveTo(x + r * 1.2, y - r * 0.2, x + r * 0.9, y + r * 0.8); ctx.closePath(); ctx.fill(); ctx.strokeStyle = CASA_C; ctx.lineWidth = 2; ctx.stroke();
-        ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x - r * 0.35, y - r * 0.6); ctx.lineTo(x + r * 0.35, y - r * 0.6); ctx.stroke();
-        ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.beginPath(); ctx.ellipse(x - r * 0.4, y, r * 0.18, r * 0.4, 0, 0, Math.PI * 2); ctx.fill();
-    });
-}
-function pintarMonedesTresor(ctx, w, h) {
-    ctx.lineJoin = 'round';
-    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 4, w * 0.45, 5, 0, 0, Math.PI * 2); ctx.fill();
-    const r = rndBib(12);
-    for (let i = 0; i < 46; i++) {
-        const x = w / 2 + (r() - 0.5) * w * 0.8 * (1 - i / 80), y = h - 10 - i * 0.6 - r() * 6;
-        ctx.fillStyle = i % 3 ? '#e8c040' : '#c89a28'; ctx.beginPath(); ctx.ellipse(x, y, 7, 3.2, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#6a4a0a'; ctx.lineWidth = 0.9; ctx.stroke();
-    }
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 5, w * 0.48, 7, 0, 0, Math.PI * 2); ctx.fill();
+    const r = rndBib(31);
+    // Un sac de gra, de tela de sac: panxa plena, boca arrugada lligada amb una corda, costura, plecs, taques i fils
+    const sac = (cx, base, amp, alt, col, fosc, clar, inclina) => {
+        ctx.save(); ctx.translate(cx, base); ctx.rotate(inclina);
+        const cos = amp / 2;
+        ctx.beginPath();
+        ctx.moveTo(-cos * 0.55, -alt);                                                               // boca (coll)
+        ctx.bezierCurveTo(-cos * 0.35, -alt * 0.82, -cos * 1.1, -alt * 0.78, -cos * 1.05, -alt * 0.38);   // espatlla i costat esquerre
+        ctx.bezierCurveTo(-cos * 1.15, -alt * 0.05, -cos * 0.7, 0, 0, 0);                            // base
+        ctx.bezierCurveTo(cos * 0.7, 0, cos * 1.15, -alt * 0.05, cos * 1.05, -alt * 0.38);
+        ctx.bezierCurveTo(cos * 1.1, -alt * 0.78, cos * 0.35, -alt * 0.82, cos * 0.55, -alt);
+        ctx.closePath();
+        const g = ctx.createLinearGradient(-cos, 0, cos, 0); g.addColorStop(0, fosc); g.addColorStop(0.35, col); g.addColorStop(0.6, clar); g.addColorStop(1, fosc);
+        ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = '#2a1c10'; ctx.lineWidth = 2.6; ctx.stroke();
+        ctx.save(); ctx.clip();
+        // trama de la tela (línies fines) i plecs
+        ctx.strokeStyle = 'rgba(70,45,20,0.22)'; ctx.lineWidth = 0.8;
+        for (let y = -alt; y < 0; y += 4) { ctx.beginPath(); ctx.moveTo(-cos * 1.3, y); ctx.lineTo(cos * 1.3, y + (r() - 0.5) * 1.2); ctx.stroke(); }
+        ctx.strokeStyle = 'rgba(60,38,16,0.4)'; ctx.lineWidth = 1.8;
+        [[-0.55, -0.7, -0.62, -0.25], [0.2, -0.75, 0.32, -0.3], [-0.1, -0.5, -0.05, -0.12]].forEach(([x0, y0, x1, y1]) => { ctx.beginPath(); ctx.moveTo(cos * x0, alt * y0); ctx.quadraticCurveTo(cos * (x0 + x1) / 2 + 3, alt * (y0 + y1) / 2, cos * x1, alt * y1); ctx.stroke(); });
+        // taques i pegats
+        ctx.fillStyle = 'rgba(90,60,30,0.28)'; for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.ellipse((r() - 0.5) * cos * 1.5, -alt * (0.15 + r() * 0.5), 3 + r() * 4, 2 + r() * 3, r(), 0, Math.PI * 2); ctx.fill(); }
+        ctx.fillStyle = clar; ctx.globalAlpha = 0.7; ctx.fillRect(cos * 0.25, -alt * 0.42, 14, 12); ctx.globalAlpha = 1;
+        ctx.strokeStyle = 'rgba(40,25,10,0.7)'; ctx.setLineDash([3, 2]); ctx.lineWidth = 1.2; ctx.strokeRect(cos * 0.25, -alt * 0.42, 14, 12); ctx.setLineDash([]);
+        // llum del costat
+        ctx.fillStyle = 'rgba(255,240,200,0.2)'; ctx.beginPath(); ctx.ellipse(-cos * 0.4, -alt * 0.4, cos * 0.18, alt * 0.3, 0.1, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+        // boca: tela arrugada, amb dues orelletes, lligada amb corda
+        ctx.fillStyle = fosc; ctx.beginPath(); ctx.moveTo(-cos * 0.6, -alt); ctx.lineTo(-cos * 0.75, -alt - 9); ctx.lineTo(-cos * 0.3, -alt - 4); ctx.lineTo(0, -alt - 11); ctx.lineTo(cos * 0.3, -alt - 4); ctx.lineTo(cos * 0.75, -alt - 8); ctx.lineTo(cos * 0.6, -alt); ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#2a1c10'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.strokeStyle = '#8a6a3a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(-cos * 0.62, -alt + 1); ctx.quadraticCurveTo(0, -alt + 6, cos * 0.62, -alt + 1); ctx.stroke();
+        ctx.strokeStyle = '#2a1c10'; ctx.lineWidth = 1; ctx.stroke();
+        ctx.strokeStyle = '#8a6a3a'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(cos * 0.1, -alt + 4); ctx.quadraticCurveTo(cos * 0.3, -alt + 16, cos * 0.18, -alt + 20); ctx.moveTo(cos * 0.1, -alt + 4); ctx.quadraticCurveTo(-cos * 0.05, -alt + 14, -cos * 0.18, -alt + 18); ctx.stroke();
+        ctx.restore();
+    };
+    sac(w * 0.27, h - 8, 50, 52, '#c4a672', '#8a6c3c', '#d8be8a', -0.04);
+    sac(w * 0.66, h - 6, 54, 56, '#b89a64', '#7e6234', '#cfb27c', 0.05);
+    sac(w * 0.46, h - 24, 44, 46, '#cdb27c', '#8e7242', '#e0c896', 0.02);
+    // una mica de gra vessat a terra
+    ctx.fillStyle = '#d8b050'; for (let i = 0; i < 16; i++) { ctx.beginPath(); ctx.ellipse(w * 0.2 + r() * w * 0.6, h - 6 + r() * 3, 1.8, 1.1, r() * 3, 0, Math.PI * 2); ctx.fill(); }
 }
 // Bóta de vi amb una creu vermella pintada: la que s'aixeca per obrir la porta
 function pintarBotaCreu(ctx, w, h) {
@@ -295,4 +319,53 @@ function pintarEscalinata(ctx, w, h) {
     ctx.globalCompositeOperation = 'destination-out';
     ctx.fillStyle = gradVBib(ctx, 592, 640, [[0, 'rgba(0,0,0,0)'], [1, 'rgba(0,0,0,1)']]); ctx.fillRect(336, 592, 494, 48);
     ctx.globalCompositeOperation = 'source-over';
+}
+
+// Mecanisme de molla de la Cambra secreta (sota la bóta): una placa de pedra baixa, a ras de terra, amb una vora de ferro; s'hi puja com un graó
+function pintarMollaTresor(ctx, w, h) {
+    ctx.lineJoin = 'round';
+    const cx = w / 2, rx = w * 0.43, ry = 11, yb = h - 10, gruix = 6;
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(cx, yb + 3, rx + 4, ry + 2, 0, 0, Math.PI * 2); ctx.fill();
+    // costat (gruix) i cara de dalt
+    ctx.fillStyle = '#6e6252'; ctx.beginPath(); ctx.ellipse(cx, yb, rx, ry, 0, 0, Math.PI); ctx.lineTo(cx - rx, yb - gruix); ctx.ellipse(cx, yb - gruix, rx, ry, 0, Math.PI, 0, true); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#2a2018'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = '#a89b82'; ctx.beginPath(); ctx.ellipse(cx, yb - gruix, rx, ry, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = '#4a4a50'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.ellipse(cx, yb - gruix, rx - 4, ry - 3, 0, 0, Math.PI * 2); ctx.stroke();     // vora de ferro
+    ctx.fillStyle = 'rgba(255,245,220,0.16)'; ctx.beginPath(); ctx.ellipse(cx - 6, yb - gruix - 3, rx * 0.5, ry * 0.4, 0, 0, Math.PI * 2); ctx.fill();
+}
+
+// Taula de fusta amb un llibre gros obert al damunt (Cambra secreta): vista de tres quarts, el llibre amb lletra de monjo i un registre vermell
+function pintarTaulaLlibre(ctx, w, h) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const C = '#2a1608';
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 6, w * 0.46, 7, 0, 0, Math.PI * 2); ctx.fill();
+    // potes
+    [[16, 62, 12, h - 8], [w - 16, 62, w - 12, h - 8], [34, 58, 32, h - 14], [w - 34, 58, w - 32, h - 14]].forEach(([x0, y0, x1, y1]) => {
+        ctx.strokeStyle = C; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+        ctx.strokeStyle = '#6a4220'; ctx.lineWidth = 5.5; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+    });
+    // faldó i tauler (gruix a la vora de davant)
+    ctx.fillStyle = '#5e3a1c'; ctx.beginPath(); ctx.roundRect(8, 56, w - 16, 14, 3); ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 2.4; ctx.stroke();
+    const tg = ctx.createLinearGradient(0, 18, 0, 62); tg.addColorStop(0, '#b27c46'); tg.addColorStop(1, '#8e5c2c');
+    ctx.fillStyle = tg; ctx.beginPath(); ctx.moveTo(26, 18); ctx.lineTo(w - 26, 18); ctx.lineTo(w - 6, 58); ctx.lineTo(6, 58); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(60,30,10,0.35)'; ctx.lineWidth = 1.3;
+    [0.25, 0.5, 0.75].forEach(f => { ctx.beginPath(); ctx.moveTo(26 - 20 * f + 20 * 0, 18 + 40 * f); ctx.lineTo(w - 26 + 20 * f, 18 + 40 * f); ctx.stroke(); });
+    // llibre obert: tapa de cuir, dues pàgines una mica corbes, ombra del llom, línies d'escriptura
+    ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.beginPath(); ctx.ellipse(w / 2, 49, 54, 11, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#5a2418'; ctx.strokeStyle = C; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(w / 2 - 56, 26); ctx.lineTo(w / 2 + 56, 26); ctx.lineTo(w / 2 + 60, 52); ctx.lineTo(w / 2 - 60, 52); ctx.closePath(); ctx.fill(); ctx.stroke();
+    const pag = (sg) => {
+        const x0 = w / 2, x1 = w / 2 + sg * 54;
+        const g = ctx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, '#d8c890'); g.addColorStop(0.15, '#f1e6bc'); g.addColorStop(1, '#e6d6a0');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x0, 25); ctx.quadraticCurveTo((x0 + x1) / 2, 21, x1, 26); ctx.lineTo(x1 + sg * 1, 49); ctx.quadraticCurveTo((x0 + x1) / 2, 53, x0, 49); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = C; ctx.lineWidth = 1.8; ctx.stroke();
+        ctx.strokeStyle = 'rgba(70,40,14,0.7)'; ctx.lineWidth = 1.1;
+        for (let k = 0; k < 6; k++) { const y = 30 + k * 3.4, a = x0 + sg * 6, b = x1 - sg * (5 + (k % 3) * 3); ctx.beginPath(); ctx.moveTo(a, y); ctx.lineTo(b, y + (sg > 0 ? 0.6 : 0)); ctx.stroke(); }
+    };
+    pag(-1); pag(1);
+    // caplletra vermella a la pàgina de la dreta i llom amb ombra
+    ctx.fillStyle = '#a02a1e'; ctx.fillRect(w / 2 + 8, 29, 8, 8); ctx.strokeStyle = '#4a1008'; ctx.lineWidth = 1; ctx.strokeRect(w / 2 + 8, 29, 8, 8);
+    ctx.fillStyle = 'rgba(60,34,10,0.28)'; ctx.fillRect(w / 2 - 2, 25, 4, 25);
+    // punt de llibre vermell que penja
+    ctx.strokeStyle = '#a02a1e'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(w / 2 + 2, 50); ctx.quadraticCurveTo(w / 2 + 6, 58, w / 2 + 2, 62); ctx.stroke();
 }

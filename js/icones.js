@@ -448,12 +448,10 @@ const ICONES_OBJECTES = {
         ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 2; [32, 43, 54, 65].forEach(y => { ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(58 - (y % 11), y); ctx.stroke(); });
         ctx.fillStyle = '#9a2a1a'; ctx.fillRect(27, 24, 7, 7);
     },
-    pergami_monjo: ctx => {
-        ctx.lineWidth = 3; ctx.fillStyle = '#e8d8a8';
-        ctx.beginPath(); ctx.rect(22, 18, 52, 60); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#c8b480'; [18, 78].forEach(y => { ctx.beginPath(); ctx.ellipse(48, y, 30, 7, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
-        ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 2; [32, 42, 52, 62].forEach(y => { ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(66 - (y % 20), y); ctx.stroke(); });
-        ctx.fillStyle = '#9a2a1a'; ctx.beginPath(); ctx.arc(62, 66, 6, 0, Math.PI * 2); ctx.fill();
+    pergami_monjo: ctx => {          // el mateix pergamí esquinçat, amb plecs, taques, escriptura i segell, que es veu clavat a les parets
+        ctx.save(); ctx.translate(14, 5); ctx.rotate(-0.04);
+        pintarPergamiParet(ctx, 68, 86, { senseClaus: true });
+        ctx.restore();
     },
     carta_cortiner: ctx => {                      // un pergamí enrotllat, lligat amb una cinta blava
         ctx.save(); ctx.translate(48, 48); ctx.rotate(-0.35); ctx.translate(-48, -48);
