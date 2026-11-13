@@ -43,7 +43,7 @@ function iniciarLliço(nom) {
         game.scene.bringToTop('Musica');
         const ms = game.scene.getScene('Musica');
         if (ms && z && z.pianistaToca) ms.events.once('shutdown', () => { const u = game.scene.getScene('UI'); if (!(u && u.dialeg)) z.pianistaToca(true); });          // continua tocant (només para per parlar)
-    }, 150);
+    }, 30);            // (sense esperar: del quadre de text s'ha de passar directament a la interfície de la tarota)
 }
 
 // Lliçó acabada amb èxit: el cant queda après
@@ -110,6 +110,7 @@ class EscenaMusica extends Phaser.Scene {
             this.events.once('shutdown', () => { if (Joc.musica === mFons && mFons.isPlaying) mFons.setVolume(0.6); });
         }
         const zonaFl = Joc.zonaActiva(this);
+        this.zonaMus = zonaFl;                                              // (mentre dura la tarota la zona és aturada i Joc.zonaActiva no la troba)
         if (zonaFl && zonaFl.ineuFlauta) zonaFl.ineuFlauta(true);          // l'Ineu es veu de cara, tocant la flauta
 
         const cx = AMPLE / 2, T = MUS_T;
@@ -185,7 +186,17 @@ class EscenaMusica extends Phaser.Scene {
                 .setOrigin(0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => { if (!this.capaPerSobre()) this.tancar(false); }));
             this.lastTime = 0;
         }
-        this.tweens.add({ targets: this.panell, alpha: 1, y: ALT * (1 - this.escPergami), duration: 350, ease: 'Sine.easeOut' });
+        this.tweens.add({ targets: this.panell, alpha: 1, y: ALT * (1 - this.escPergami), duration: 250, ease: 'Sine.easeOut' });
+        // El joc s'atura mentre dura la tarota (enemics, físiques i temporitzadors de l'escenari): es reprèn en tancar-la
+        const zp = Joc.zonaActiva(this);
+        if (zp && zp.scene && zp.sys.isActive() && !zp.sys.isPaused()) { this.zonaPausada = zp; zp.sys.pause(); }
+        this.events.once('shutdown', () => this.reprenZona());
+    }
+
+    reprenZona() {
+        const zp = this.zonaPausada;
+        this.zonaPausada = null;
+        if (zp && zp.sys && zp.sys.isPaused()) zp.sys.resume();
     }
 
     // Hi ha el menú, el diari o l'objectiu oberts a sobre (o s'acaben de tancar): la tarota no ha de rebre ni tecles ni clics
@@ -221,12 +232,12 @@ class EscenaMusica extends Phaser.Scene {
         this.imgPrimerPla = img;
         img.setAlpha(0).y += 40;
         this.tweens.add({ targets: img, alpha: 1, y: T + 60, duration: 380, ease: 'Back.easeOut' });
-        this.tweens.add({ targets: this.velPrimerPla, fillAlpha: 0.38, duration: 380 });
+        this.tweens.add({ targets: this.velPrimerPla, fillAlpha: 0.82, duration: 160 });           // el joc queda enfosquit i aturat, com en una pausa
         this.tweens.add({ targets: this.auraPrimerPla, fillAlpha: 0.16, duration: 600 });
         this.tweens.add({ targets: img, angle: { from: -1.5, to: 1.5 }, yoyo: true, repeat: -1, duration: 1600, ease: 'Sine.easeInOut' });   // es gronxa tocant
         this.posBroc = { x: cx + img.displayWidth * 0.38, y: T + 60 - alt * 0.19 };      // per on surten les notes: la campana de la tarota (a baix a la dreta), no els forats que tapen els dits
         const zonaPla = Joc.zonaActiva(this);
-        if (zonaPla && zonaPla.amagarIneuFlauta) zonaPla.amagarIneuFlauta();           // l'Ineu de l'escenari desapareix mentre surt aquest
+        if (zonaPla && zonaPla.amagarIneuFlauta) { zonaPla.amagarIneuFlauta(); const o = zonaPla.ineuFlautaImg || zonaPla.ineu; if (o) o.setAlpha(0); }           // l'Ineu de l'escenari desapareix de seguida (el joc s'atura)
     }
     // Cada nota de l'Ineu: el primer pla fa un petit impuls i en surt una nota musical que puja
     impulsPrimerPla(n) {
@@ -368,7 +379,7 @@ class EscenaMusica extends Phaser.Scene {
                 this.flaixSlots(0xe8c040);
                 this.titol.setText(m.nom);
                 this.celebracio();
-                const zona = Joc.zonaActiva(this);
+                const zona = this.zonaMus;
                 if (m.peca && zona && zona.teEfecteMelodia && zona.teEfecteMelodia(clau)) this.time.delayedCall(700, () => this.actuacio(clau, m));
                 else this.time.delayedCall(700, () => this.tancar(false, clau));
                 return;
@@ -403,15 +414,16 @@ class EscenaMusica extends Phaser.Scene {
         if (this.tancat) return;
         this.tancat = true;
         const nom = this.llico ? this.dades.melodia : null;
-        const zonaFl = Joc.zonaActiva(this);
+        const zonaFl = this.zonaMus;
         const acabar = () => {
+            this.reprenZona();                                                    // el joc torna a avançar abans que l'Ineu i la zona reaccionin
             const ui = this.scene.get('UI');
             if (ui) ui.bloquejatFins = ui.time.now + 300;
             if (zonaFl && zonaFl.ineuFlauta) zonaFl.ineuFlauta(false);          // l'Ineu de l'escenari torna (amb un fade in si s'havia amagat)
             this.scene.stop();
             if (this.llico && exit) completarLliço(nom);
             if (melodiaTocada) {
-                const zona = Joc.zonaActiva(this);
+                const zona = this.zonaMus;
                 if (zona) zona.melodiaTocada(melodiaTocada);
             }
         };
