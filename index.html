@@ -32,7 +32,7 @@
     <!-- Tipografies al nostre servidor (eines/baixa_tipografies.py): el joc no demana res a Google -->
     <link rel="stylesheet" href="assets/fonts/fonts.css">
     <!-- Phaser va amb el joc (així no depèn de cap servidor extern); si el fitxer local fallés, es prova el CDN -->
-    <script src="js/lib/phaser.min.js?v=2611144400.80.1"></script>
+    <script src="js/lib/phaser.min.js?v=2611144500.80.1"></script>
     <script>if (typeof Phaser === 'undefined') document.write('<script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"><\/script>');</script>
 </head>
 <body>
@@ -121,7 +121,23 @@
         // Service worker: només amb http(s) (no obrint el fitxer directament) i sense fer fallar el joc si no pot ser
         window.addEventListener('load', () => { try { if (typeof game !== 'undefined') sessionStorage.removeItem('runna_reintent'); } catch (e) { } });
         if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-            window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => { /* sense service worker: el joc va igual */ }); });
+            window.addEventListener('load', () => {
+                const teControlador = !!navigator.serviceWorker.controller;
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    // Busca versions noves en obrir i cada cop que es torna al joc
+                    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => {}); });
+                    reg.update().catch(() => {});
+                }).catch(() => { /* sense service worker: el joc va igual */ });
+                // Quan una versió nova passa a controlar la pàgina, es recarrega sola: de seguida si som a la portada, o en sortir de la pestanya (així no es talla una partida)
+                if (teControlador) {
+                    let fet = false;
+                    const recarrega = () => { if (!fet) { fet = true; location.reload(); } };
+                    navigator.serviceWorker.addEventListener('controllerchange', () => {
+                        try { if (typeof game !== 'undefined' && game.scene.isActive('Titol')) { recarrega(); return; } } catch (e) { /* res */ }
+                        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') recarrega(); });
+                    });
+                }
+            });
         }
     </script>
 </body>
