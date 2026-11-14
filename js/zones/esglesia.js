@@ -116,6 +116,7 @@ class ZonaEsglesia extends ZonaBase {
             const pia = this.npc('pianista', this.orgue.x, this.orgue.y + 24, DIALEGS.pianista, { flipX: true, radi: RADI_NPC, zoomConversa: 1.5 });
             pia.setDepth(this.orgue.y + 1);                                                                       // per davant de l'orgue
             [pia.respira, pia.balanceig].forEach(t => t && t.remove()); pia.respira = pia.balanceig = null; pia.setAngle(0);       // fixa: ni respira ni es balanceja (no canvia de mida)
+            pia.punt.radi = 170; pia.punt.senseMirada = true;                                                     // s'hi pot parlar també des del darrere de l'orgue, sense haver d'enganxar-s'hi (abast ~136 px, sense mirar-la)
             pia.punt.npc = null;                                                                                  // l'Ineu no es fa enrere en parlar-hi: es posa al costat de l'orgue (pianistaCara)
             // Sempre és tocant l'orgue (d'esquena); només para per parlar amb l'Ineu
             if (!epileg) this.pianistaToca(true);

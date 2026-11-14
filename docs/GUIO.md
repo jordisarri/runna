@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 526: Es pot parlar amb la Pianista des del darrere de l'orgue (abast d'uns 136 px, sense haver de mirar-la), sense haver d'enganxar-s'hi.*
+
 *Revisió 525: El brillo de la portella de la Bassadòria es recol·loca a la reixa (estava massa baix) i la seva zona d'activació es redueix (uns 140 px d'ample, davant la reixa). Repàs de tots els brillos amb un rectangle de comprovació: el del forat de l'Alzina Buida (bosc i cabana) també baixa al forat, i la seva claror i halo s'hi alineen; la resta ja quadrava.*
 
 *Revisió 524: Abast mínim d'interacció dels objectes a 80 px.*
