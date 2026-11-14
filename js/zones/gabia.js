@@ -421,7 +421,7 @@ class ZonaTortura extends ZonaBase {
         else {
             this.colRastell = this.colisio(450, YR - 10, 420, 30);
             const puntR = this.interactiu(650, YR + 92, RADI_OBJECTE, DIALEGS.tornRastell, { altura: 110, actiu: () => !Estat.flag('rastellObert'), enTancar: () => { if (Estat.te('guants')) this.alcarRastell(); } });
-            this.brillo(450, YR - 70, 428, 176, { punt: puntR, actiu: () => !Estat.flag('rastellObert'), dep: YR + 1 });
+            this.brillo(672, YR + 28, 100, 70, { punt: puntR, actiu: () => !Estat.flag('rastellObert'), dep: YR + 61 });
         }
 
         // Roda i eines (tram 2)
