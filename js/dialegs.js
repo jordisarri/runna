@@ -1426,7 +1426,7 @@ const DIALEGS = {
         if (E.flag("estelsFets")) {
             return { pagines: [{ qui: "Ineu", text: "L'últim estel s'ha apagat damunt del dipòsit de llevant. Hi ha una llum a l'aigua: he d'anar-hi." }] };
         }
-        if (E.flag("telescopiMuntat") || E.flag("estelsPart1")) {
+        if (E.flag("telescopiMuntat")) {
             // El telescopi ja és al trípode: només es mira pel telescopi (sense tornar a deixar-lo ni repetir res)
             return { pagines: [], enAcabar: () => game.scene.start("Estels") };
         }
@@ -1574,7 +1574,8 @@ const DIALEGS = {
             { qui: "Llibre", text: "«El germà bodeguer es bevia el vi de la sagristia, bóta rere bóta, i després jurava que s'havia evaporat.»" },
             { qui: "Llibre", text: "«Quan ho vam descobrir, el Prior no el va foragitar: el va fer petrificar i el va posar a vigilar la cripta fins que el vi es torni vinagre. A la cripta mai no es torna vinagre.»" },
             { qui: "Llibre", text: "«Per això li diuen l'Home del Raïm. Dorm de cara a la paret, com un nen castigat, i només es desperta si algú el fa girar i el mira a la cara.»" }
-        ]
+        ],
+        enAcabar: () => Estat.posaFlag('llibreCambraLlegit')
     },
 
     // ---------------- LA CABANA DE LA JAUNETA ----------------

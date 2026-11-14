@@ -1198,7 +1198,8 @@ class ZonaCasaTresor extends ZonaCasaBase {
         this.taulaLlibre = this.add.image(500, 212, 'taula_llibre').setOrigin(0.5, 1).setScale(1 / RES).setDepth(212);          // dins de la tarima (a 10 px del llavi), no al llavi
         (this.opacs = this.opacs || []).push(this.taulaLlibre);        // opac: la silueta de l'Ineu no es veu a través seu
         this.colisio(500, 198, 110, 22);
-        this.interactiu(500, 262, RADI_OBJECTE, DIALEGS.llibreCambra, { altura: 110 });
+        const puntLlibre = this.interactiu(500, 262, RADI_OBJECTE, DIALEGS.llibreCambra, { altura: 110 });
+        this.brilloImatge(this.taulaLlibre, { punt: puntLlibre, actiu: () => !Estat.flag('llibreCambraLlegit') });          // el llibre brilla fins que se'l llegeix un cop
         [[390, 262], [610, 262]].forEach(([x, y], i) => {
             (this.opacs = this.opacs || []).push(this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));          // sòlid: opac i amb col·lisió
             this.colisio(x, y - 8, 24, 14);

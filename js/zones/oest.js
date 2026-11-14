@@ -628,7 +628,7 @@ class ZonaDipositos extends ZonaBase {
         for (let k = 0; k <= 20; k++) { const a = Math.PI * (1.02 + k / 20 * 0.96); ampit.push({ x: MX + Math.cos(a) * 114, y: MY - 4 + Math.sin(a) * 44 }); }
         mir.lineStyle(14, 0x4a463e, 1).strokePoints(ampit.map(p => ({ x: p.x, y: p.y - 6 })));
         mir.lineStyle(10, 0x8e887a, 1).strokePoints(ampit.map(p => ({ x: p.x, y: p.y - 8 })));
-        const muntat = Estat.flag('telescopiMuntat') || Estat.flag('estelsPart1') || Estat.flag('estelLlorenc');
+        const muntat = Estat.flag('telescopiMuntat') || Estat.flag('estelLlorenc');
         this.tripode = this.posar(muntat ? 'telescopi_mon' : 'tripode', MX, MY + 10, { col: { w: 36, h: 16 } });
         const puntTel = this.interactiu(MX, MY + 15, RADI_OBJECTE, DIALEGS.telescopiMon, { altura: 120 });
         this.brilloImatge(this.tripode, { punt: puntTel, actiu: () => !Estat.flag('estelsFets') });          // el telescopi (o el trípode) brilla fins que es fa el joc dels estels
@@ -660,7 +660,7 @@ class ZonaDipositos extends ZonaBase {
         const E = Estat;
         if (!this.llumEstel && !this.estelCaient && E.flag('estelsFets') && !E.te('estel_llorenc')) this.posarLlumEstel();
         if (this.llumEstel && E.te('estel_llorenc')) { this.llumEstel.forEach(o => o.destroy()); this.llumEstel = null; }
-        if (!this.tripodeMuntat && (E.flag('telescopiMuntat') || E.flag('estelsPart1'))) { this.tripodeMuntat = true; this.tripode.setTexture('telescopi_mon'); }
+        if (!this.tripodeMuntat && (E.flag('telescopiMuntat'))) { this.tripodeMuntat = true; this.tripode.setTexture('telescopi_mon'); }
     }
 
     // En sortir del telescopi amb la constel·lació feta: la càmera mira el dipòsit de llevant, l'últim estel hi cau del cel i
