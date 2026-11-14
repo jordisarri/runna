@@ -1031,6 +1031,7 @@ class ZonaBase extends Phaser.Scene {
         const mx = I.x - OX * dw + 0.11 * dw, my = I.y + 2 - dh + 0.065 * dh - 24;          // sobre la palma de la mà alçada
         const color = 0xffe8a0, icona = iconaObjecte(this, id);
         const p = (this.puntActiu && Phaser.Math.Distance.Between(this.puntActiu.x, this.puntActiu.y, I.x, I.y) < 250) ? this.puntActiu : { x: mx, y: my + 80 };
+        if (this.puntActiu && p === this.puntActiu) this.amagarObjecteDeTerra(id, p);          // l'objecte de terra s'esvaeix quan comença a volar cap a la mà
         const obj = icona ? this.add.image(p.x, p.y - 30, icona).setScale(0.22) : this.add.circle(p.x, p.y - 30, 9, color, 1);
         const halo = this.add.circle(p.x, p.y - 30, 34, color, 0.45).setBlendMode('ADD').setScale(0.4);
         obj.setDepth(85002); halo.setDepth(85001);
@@ -1043,6 +1044,22 @@ class ZonaBase extends Phaser.Scene {
         this.esGraRosari = (id === 'gra_rosari');
         return true;
     }
+    // L'objecte que es recull ja no es veu a terra mentre vola cap a la mà de l'Ineu (si no, se'n veurien dos): l'imatge propera al punt d'interacció
+    // que té el mateix nom que l'objecte (llac -> llac_nena, flors -> flors_isilder...) s'esvaeix (alfa 0: hi ha zones que ajusten la visibilitat a cada fotograma)
+    amagarObjecteDeTerra(id, p) {
+        const arrel = String(id).split('_')[0];
+        let millor = null, md = 75;
+        this.children.list.forEach(o => {
+            if (!o || o.type !== 'Image' || !o.visible || o.alpha === 0 || !o.texture) return;
+            const k = o.texture.key;
+            if (!(k === id || id.startsWith(k + '_') || k.startsWith(id + '_') || k.split('_')[0] === arrel)) return;
+            if (/^(icona_|ineu)/.test(k)) return;
+            const d = Phaser.Math.Distance.Between(o.x, o.y, p.x, p.y);
+            if (d < md) { md = d; millor = o; }
+        });
+        if (millor) this.tweens.add({ targets: millor, alpha: 0, duration: 160 });
+    }
+
     ineuBaixa(fet) {
         if (this.ineuAltObjecte) {
             const objs = this.ineuAltObjecte;
@@ -1635,6 +1652,7 @@ class ZonaBase extends Phaser.Scene {
         if (!ui || ui.dialeg || ui.bloquejat) return;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, img.x, img.y) > 46) return;
         this.llacAgafat = true;
+        this.puntActiu = { x: img.x, y: img.y };
         ui.obrirDialeg(DIALEGS.llac(k)(Estat));
     }
 
