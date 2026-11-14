@@ -13,7 +13,7 @@
 // Tres mides, perquè tot s'activi més o menys a la mateixa distància (uns 72-88 px dels peus de l'Ineu al punt):
 const RADI_NPC = 100;        // personatges: 80 px, la mateixa distància a la qual es queda l'Ineu en parlar-hi (separarDeNpc)
 const RADI_OBJECTE = 90;     // cartells, cofres, portes, pedres, taules...: 72 px
-const ALCANS_OBJECTE = 105;  // abast mínim (px) de tots els objectes no personatges: es pot interactuar sense tocar-los, igual arreu
+const ALCANS_OBJECTE = 80;  // abast mínim (px) de tots els objectes no personatges: es pot interactuar sense tocar-los, igual arreu
 const RADI_GRAN = 110;       // objectes grans (arbres, fonts, dolmen...), amb el punt al centre: 88 px
 // Els objectes enormes (el pantà, les bardisses, la gàbia gran...) fan servir el seu propi radi, més gran.
 

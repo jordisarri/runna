@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 524: Abast mínim d'interacció dels objectes a 80 px.*
+
 *Revisió 523: Abast mínim d'interacció dels objectes reduït de 130 a 105 px.*
 
 *Revisió 522: Es recupera un fitxer buit js/zones/esglesia_nova.js només perquè les versions antigues del joc que encara són a la memòria cau dels mòbils no donin error en actualitzar-se.*
