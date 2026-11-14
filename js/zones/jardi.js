@@ -98,6 +98,7 @@ class ZonaJardi extends ZonaBase {
         this.llosa = this.posar('llosa', LX, LY, { fonsY: -700 }).setOrigin(0.5, 0.5);        // centrada sobre el forat (si no, per sota se'n veurien mig forat i les escales)
         this.florLluna = this.posar('flors', LX - 66, LY + 22, { escala: 0.8 }).setVisible(false);
         this.puntLlosa = this.interactiu(LX, LY + 5, RADI_OBJECTE, DIALEGS.llosaJardi, { altura: 60, actiu: () => !Estat.flag('llosaOberta') });
+        this.brilloImatge(this.llosa, { punt: this.puntLlosa, actiu: () => !Estat.flag('llosaOberta') });          // la llosa brilla fins que s'obre
         // Amb Runna (Acte 3), la llosa dels monjos s'encén: un cercle de runes de llum pàl·lida i blavosa que batega fins que s'obre
         this.brillLlosa = null;
         if (Estat.flag('runna') && !Estat.flag('llosaOberta')) this.posarBrillLlosa(LX, LY);

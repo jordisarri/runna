@@ -113,8 +113,9 @@ class ZonaTresor extends ZonaBase {
             this.tweens.add({ targets: llum, alpha: 0.2, scale: 1.08, yoyo: true, repeat: -1, duration: 320 + i * 90, ease: 'Sine.easeInOut' });
         });
         // Faristol amb el llibre obert, a la dreta
-        this.posar('faristol', W - 120, 470, { col: { w: 50, h: 16 } });
-        this.interactiu(W - 120, 480, RADI_OBJECTE, DIALEGS.faristolOratori, { altura: 120 });
+        const faristol = this.posar('faristol', W - 120, 470, { col: { w: 50, h: 16 } });
+        const puntFaristol = this.interactiu(W - 120, 480, RADI_OBJECTE, DIALEGS.faristolOratori, { altura: 120 });
+        this.brilloImatge(faristol, { punt: puntFaristol, actiu: () => !Estat.flag('faristolLlegit') });          // el faristol brilla fins que se'n llegeix el llibre
         // Un banc de pedra a l'esquerra i unes pedres caigudes al racó
         const banc = this.add.graphics().setDepth(560);
         banc.fillStyle(0x000000, 0.3).fillEllipse(110, 562, 120, 14);

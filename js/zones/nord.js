@@ -1369,8 +1369,9 @@ class ZonaBosc extends ZonaBase {
         this.terra('pedra', 780, 520, 260, 230);         // clariana de pedra de la font
 
         // Font del Bisbe (missió de la font)
-        this.posar('font_sj', 910, 610, { col: { w: 150, h: 50 } });
-        this.interactiu(910, 625, RADI_GRAN * 1.5, DIALEGS.fontSJ, { altura: 170 });
+        const fontSJ = this.posar('font_sj', 910, 610, { col: { w: 150, h: 50 } });
+        const puntFont = this.interactiu(910, 625, RADI_GRAN * 1.5, DIALEGS.fontSJ, { altura: 170 });
+        this.brilloImatge(fontSJ, { punt: puntFont, actiu: () => !Estat.flag('fontNeta') });          // la font brilla fins que l'aigua torna a ser clara
 
         // Alzina Buida: el portal ocult cap a la cabana de la Joaneta. És el doble de gran que els altres arbres, té la seva
         // pròpia clariana (llum verda a terra, llumenetes i pedres) i el forat del tronc fa claror: no es pot confondre amb la resta.

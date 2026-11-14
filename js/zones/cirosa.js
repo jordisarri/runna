@@ -17,7 +17,7 @@ Object.assign(DIALEGS, {
         { qui: 'Llibre', text: "«L'Ocellaire baixava cada primavera amb els seus ocells engabiats. Els nens reien amb ells; després ja no reien amb res. Hi va haver anys de plors a les cases.»" },
         { qui: 'Llibre', text: "«Els pastors i els monjos el vam tancar dins la seva gàbia, sota terra, i un monjo va segellar la porta amb la llum de l'espasa. El poble va estar content tres dies. Després va voler algú a qui culpar, i ens va culpar a nosaltres.»" },
         { qui: 'Llibre', text: "«Que qui trobi això no ens oblidi: vam obrir els ulls abans que ningú. Només vam fer el que calia.»" }
-    ] }),
+    ], enAcabar: () => E.posaFlag('masiaLlibreLlegit') }),
 
     masiaEsquelles: E => ({ pagines: E.te('esquelles') ? [
     ] : E.flag('pastorVencut') ? [
@@ -408,7 +408,8 @@ class ZonaMasiaCirosa extends ZonaBase {
         const pres = this.add.graphics().setDepth(-940);
         pres.fillStyle(0x4a2c14, 1).fillRect(110, 56, 150, 8).lineStyle(2, 0x120a04, 1).strokeRect(110, 56, 150, 8);
         pres.fillStyle(0x7a2a1a, 1).fillRect(132, 34, 38, 22).fillStyle(0x3a4a6a, 1).fillRect(176, 28, 22, 28).fillStyle(0x5a3a1e, 1).fillRect(204, 38, 44, 18);
-        this.interactiu(180, 100, RADI_OBJECTE, DIALEGS.masiaLlibre, { altura: 60 });
+        const puntLlibre = this.interactiu(180, 100, RADI_OBJECTE, DIALEGS.masiaLlibre, { altura: 60 });
+        this.brillo(185, 42, 150, 30, { dep: -939, punt: puntLlibre, actiu: () => !Estat.flag('masiaLlibreLlegit') });          // els llibres del prestatge brillen fins que se'n llegeix un
 
         // Taula llarga i tamborets
         this.posar('taula', 330, 330, { col: { w: 170, h: 30 } });

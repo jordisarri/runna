@@ -204,7 +204,7 @@ const DIALEGS = {
     ] },
     faristolOratori: E => ({ pagines: [
         { qui: 'Ineu', text: "«Les pedres guarden el que se'ls diu. Qui calla prou estona, les sent respondre.»" }
-    ] }),
+    ], enAcabar: () => E.posaFlag('faristolLlegit') }),
     cofreTresor: E => {
         if (E.flag('cofreTresor')) return { pagines: [] };
         return {
