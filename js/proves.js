@@ -62,7 +62,11 @@ const Proves = {
         Estat.posaFlag('introVista');
         PROGRES.passos.slice(0, fins).forEach(p => marca(p.marca));
         if (laterals) PROGRES.laterals.forEach(l => marca(l.marca));
-        if (melodies) { Object.values(MELODIES).forEach(m => Estat.posaFlag(m.flag)); Estat.dona('flauta'); }              // totes les melodies apreses (i la tarota)
+        if (melodies) {              // les melodies apreses (i la tarota), menys les que ensenya el pas des d'on es comença o un de posterior (si no, aquest ja seria fet)
+            const encara = new Set(PROGRES.passos.slice(fins).flatMap(p => p.marca));
+            Object.values(MELODIES).forEach(m => { if (!encara.has(m.flag)) Estat.posaFlag(m.flag); });
+            if (!encara.has('obj:flauta')) Estat.dona('flauta');
+        }
         if (mapa) Joc.ZONES.forEach(z => Estat.posaFlag('visitada_' + z));                        // tot el mapa desbloquejat: totes les escenes visitades
         if (Estat.flag('placaCompleta')) ['medallo_arbre', 'medallo_saber', 'medallo_benedicio'].forEach(o => Estat.treu(o));        // els medallons ja són a la placa
         if (Estat.flag('bastoObtingut')) { Estat.posaFlag('tutorialCombat'); Estat.posaFlag('combatActiu'); }
@@ -88,6 +92,7 @@ const Proves = {
     saltar(i, laterals, mapa, melodies) {
         const p = PROGRES.passos[i];
         this.estatFins(i, laterals, mapa, melodies);
+        if (p.id === 'final') Estat.posaFlag('epilegPendent');                      // l'epíleg es fa en entrar al Santuari només si està pendent
         this.anar((DIARI_PASSOS[p.id] && DIARI_PASSOS[p.id][1]) || 'ZonaPlaca');
     },
 
@@ -225,7 +230,7 @@ const Proves = {
             l.innerHTML = '<input type="checkbox" id="' + id + '"' + (marcat ? ' checked' : '') + '> ' + text;
             return l;
         };
-        cos.append(check('provesLaterals', 'amb totes les missions laterals fetes', true), check('provesMapa', 'amb tot el mapa desbloquejat', true), check('provesMelodies', 'amb totes les melodies apreses', true),
+        cos.append(check('provesLaterals', 'amb totes les missions laterals fetes', true), check('provesMapa', 'amb tot el mapa desbloquejat', true), check('provesMelodies', 'amb les melodies que ja tocaria (fins aquí)', true),
                    this.etiqueta('Comença just abans de… (tot l\'anterior ja és fet)'));
         // Les etapes del Pi dels Tres Cants (Bosc del Pi, al sud de Sant Antoni) van just després del Cant del Miracle: ja es tenen els tres cants
         // i es pot donar la volta per Sant Antoni. La resta de la història queda feta només fins aquí.
@@ -239,15 +244,20 @@ const Proves = {
                 ["Pi despert: les branques s'han alçat i el camí és lliure", ['piAurora', 'piPedres', 'piMiracle', 'piObert', 'piVist', 'flauta_pi']]
             ].forEach(([text, flags]) => entrades.push({ text, flags }));
         });
+        const nomZona = z => { const sc = game.scene.getScene(z); return (sc && sc.config && sc.config.nom) || z.replace(/^Zona/, ''); };
         const opcions = () => ['#provesLaterals', '#provesMapa', '#provesMelodies'].map(s => cos.querySelector(s).checked);
+        entrades.push({ acabada: true });
         entrades.forEach((e, n) => {
             let text, f;
             if (e.passa !== undefined) {
                 const p = PROGRES.passos[e.passa], info = DIARI_PASSOS[p.id];
-                text = (n + 1) + '. ' + (info ? info[0] : p.id) + (info ? '  ·  ' + info[1].replace(/^Zona/, '') : '');
+                text = (n + 1) + '. ' + (info ? info[0] : p.id) + (info ? '  ·  ' + nomZona(info[1]) : '');
                 f = () => { const [l, m, me] = opcions(); this.panell(); this.saltar(e.passa, l, m, me); };
+            } else if (e.acabada) {
+                text = 'Història acabada (epíleg fet): només queden les missions laterals  ·  ' + nomZona('ZonaPlaca');
+                f = () => { const [l, m, me] = opcions(); this.panell(); this.estatFins(PROGRES.passos.length, l, m, me); this.anar('ZonaPlaca'); };
             } else {
-                text = (n + 1) + '. ' + e.text + '  ·  BoscPi';
+                text = (n + 1) + '. ' + e.text + '  ·  ' + nomZona('ZonaBoscPi');
                 f = () => {
                     const [l, m] = opcions(); this.panell();
                     this.estatFins(iMiracle + 1, l, m, true);                       // fins al Cant del Miracle inclòs, amb les tres melodies apreses
