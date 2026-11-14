@@ -1426,6 +1426,10 @@ const DIALEGS = {
         if (E.flag("estelsFets")) {
             return { pagines: [{ qui: "Ineu", text: "L'últim estel s'ha apagat damunt del dipòsit de llevant. Hi ha una llum a l'aigua: he d'anar-hi." }] };
         }
+        if (E.flag("telescopiMuntat") || E.flag("estelsPart1")) {
+            // El telescopi ja és al trípode: només es mira pel telescopi (sense tornar a deixar-lo ni repetir res)
+            return { pagines: [], enAcabar: () => game.scene.start("Estels") };
+        }
         if (!E.te("telescopi")) {
             // El peu del mirador: es veu que hi va alguna cosa. Si el Galf ja li ha parlat del telescopi, l'Ineu hi cau; si no, pensa que potser el Galf n'entén
             return { pagines: [
