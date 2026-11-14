@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 542: Home del Raïm, càmera i guies. (1) Entre girs del volant la càmera es queda al pla proper del cap (ja no fa pla general i primer pla a cada gir); només s'allibera, suaument, quan l'Ineu s'allunya. (2) En ser vençut, la càmera enquadra el guardià sencer per damunt del quadre de text (abans el text el tapava); després fa un pla general del salt al pedestal perquè es vegi com hi torna, i en acabar s'allibera abans d'obrir la trapa. (3) La guia de l'envestida torna, discreta: una estela lila molt tènue, uns xevrons que avancen cap a on anirà i un anell suau a la fi (res de làsers), i el cercle de la maça igual de suau.*
+
 *Revisió 541: Home del Raïm: la música del combat comença quan, al final del gir del cap, l'estàtua ja ens mira enfadada (abans, en despertar-se). I es redueix la dificultat (33 de vida, fase 2 a 14, envestida de 1 de mal, avís una mica més llarg, menys envestides i maçades seguides i més descans a terra): a mig camí entre la primera versió i l'anterior.*
 
 *Revisió 540: El brillo del volant de l'Home del Raïm segueix la forma del gràfic: un cercle sobre la roda i un altre sobre l'engranatge petit (abans era un rectangle que no hi encaixava). `brillo()` accepta ara `cercle: true`.*

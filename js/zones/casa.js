@@ -191,29 +191,39 @@ ENEMICS.raim = {
         s.x = bx - (-fw * esc / 2 + off * esc + this.cos[0] / 2);          // el cos queda on era
         return canvi;
     },
-    // TELEGRAPH DE LA CÀRREGA: una franja vermella a terra, amb la llargada i l'ample reals de l'envestida, que s'omple mentre apunta
+    // TELEGRAPH DE LA CÀRREGA: una guia fina i discreta cap a on envestirà (llarga com l'envestida real): una estela lila molt tènue que s'estreny i uns
+    // petits xevrons que avancen en la direcció del cop, cada cop més clars mentre apunta, i un anell suau on arribarà. Mai línies dures ni làsers.
     teleCarga(z, e, c, ara, durada, fase2) {
-        if (!e.tele) e.tele = z.add.graphics().setDepth(-400);
+        if (!e.tele) e.tele = z.add.graphics().setDepth(-300).setBlendMode(Phaser.BlendModes.ADD);
         const g = e.tele, L = this.vel * (fase2 ? 0.46 : 0.4) + 36, w = this.radi * 0.8, p = 1 - Phaser.Math.Clamp((e.fins - ara) / durada, 0, 1);
         const dx = Math.cos(e.ang), dy = Math.sin(e.ang), nx = -dy, ny = dx;
         g.clear();
-        // una estela de pols i pedra: franges successives que s'estrenyen i s'esvaeixen cap al final del recorregut (cap contorn dur)
-        const N = 8;
+        // estela: franges que s'estrenyen i s'esvaeixen cap al final
+        const N = 10;
         for (let i = 0; i < N; i++) {
-            const t0 = i / N, t1 = (i + 1) / N, w0 = w * (1 - 0.55 * t0), w1 = w * (1 - 0.55 * t1);
+            const t0 = i / N, t1 = (i + 1) / N, w0 = w * (1 - 0.5 * t0), w1 = w * (1 - 0.5 * t1);
             const x0 = c.x + dx * L * t0, y0 = c.y + dy * L * t0, x1 = c.x + dx * L * t1, y1 = c.y + dy * L * t1;
-            g.fillStyle(0x7a4a68, (0.05 + 0.12 * p) * (1 - 0.7 * t0));
+            g.fillStyle(0xcbb0ff, (0.025 + 0.07 * p) * (1 - 0.75 * t0));
             g.fillPoints([{ x: x0 + nx * w0, y: y0 + ny * w0 }, { x: x1 + nx * w1, y: y1 + ny * w1 }, { x: x1 - nx * w1, y: y1 - ny * w1 }, { x: x0 - nx * w0, y: y0 - ny * w0 }], true);
         }
-        g.fillStyle(0xc89ab0, 0.06 + 0.22 * p).fillCircle(c.x + dx * L, c.y + dy * L, 6 + 6 * p);        // un petit senyal de pols on s'atura
+        // xevrons que avancen cap a l'objectiu (la seva claror puja i baixa en onada)
+        const K = 5, flux = (ara / 520) % 1;
+        for (let k = 0; k < K; k++) {
+            const t = (k + flux) / K, d = 30 + (L - 30) * t, mida = 9 * (1 - 0.35 * t);
+            const cx = c.x + dx * d, cy = c.y + dy * d, alfa = (0.1 + 0.4 * p) * Math.sin(Math.PI * Math.min(1, t * 1.05));
+            g.lineStyle(2.2, 0xe4d4ff, alfa);
+            g.beginPath(); g.moveTo(cx - dx * mida + nx * mida, cy - dy * mida + ny * mida); g.lineTo(cx, cy); g.lineTo(cx - dx * mida - nx * mida, cy - dy * mida - ny * mida); g.strokePath();
+        }
+        // anell suau on s'atura
+        g.lineStyle(1.6, 0xe4d4ff, 0.08 + 0.3 * p).strokeCircle(c.x + dx * L, c.y + dy * L, 10 + 8 * p);
     },
     netejaTele(e) { if (e.tele) { e.tele.destroy(); e.tele = null; } },
     // COP DE MAÇA (fase 2): la maça cau sobre el punt on era l'Ineu; un cercle vermell s'omple durant l'avís i, en l'impacte, una ona de pedra s'escampa
     teleMaza(z, e, ara) {
-        if (!e.teleMa) e.teleMa = z.add.graphics().setDepth(-400);
+        if (!e.teleMa) e.teleMa = z.add.graphics().setDepth(-300).setBlendMode(Phaser.BlendModes.ADD);
         const p = 1 - Phaser.Math.Clamp((e.fins - ara) / 800, 0, 1), R = 100;
-        e.teleMa.clear().fillStyle(0x7a4a68, 0.05 + 0.13 * p).fillCircle(e.mx, e.my, R).lineStyle(1.5, 0xc89ab0, 0.2 + 0.3 * p).strokeCircle(e.mx, e.my, R);
-        e.teleMa.lineStyle(1, 0xe0bccc, 0.3 + 0.2 * p).strokeCircle(e.mx, e.my, R * (1 - p));          // un anell fi que es tanca: marca el moment del cop
+        e.teleMa.clear().fillStyle(0xcbb0ff, 0.03 + 0.08 * p).fillCircle(e.mx, e.my, R).lineStyle(1.5, 0xe4d4ff, 0.12 + 0.3 * p).strokeCircle(e.mx, e.my, R);
+        e.teleMa.lineStyle(1, 0xf0e6ff, 0.2 + 0.25 * p).strokeCircle(e.mx, e.my, R * (1 - p));          // un anell fi que es tanca: marca el moment del cop
     },
     netejaMaza(e) { if (e.teleMa) { e.teleMa.destroy(); e.teleMa = null; } },
     impacteMaza(z, e) {
@@ -540,6 +550,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (!this.zoomBaseSala) this.zoomBaseSala = this.zoomZona;                 // (el zoom de la zona es fixa després de construir)
         if (!this.ineu || !this.ineu.active || !this.zoomBaseSala) return;
         if (this.twEntrada) { this.twEntrada.stop(); this.twEntrada = null; this.camEntrada = false; }       // la nostra càmera substitueix l'acostament d'entrada normal
+        // Entre girs del volant, la càmera es queda al pla proper del cap (no va i ve entre el general i el primer pla); només s'allibera, suaument, quan l'Ineu s'allunya del volant
+        if (this.camVolant && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, RAIM.x, RAIM.y + 32) > 170) { this.camVolant = false; this.alliberarCamera(1700); }
         if (this.camCinema || this.camDialeg || this.camArma) return;
         const cam = this.cameras.main, base = this.zoomBaseSala, y = this.ineu.y;
         let amunt = 0;
@@ -642,6 +654,13 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         return dialeg;
     }
 
+    // Enquadra una franja vertical del guardià (de yDalt a yBaix) perquè quedi sencera a la part de dalt de la pantalla, per damunt del quadre de text (reserva px de baix)
+    enquadrarGuardia(x, yDalt, yBaix, reserva = 470, ms = 1100, fet) {
+        const alt = yBaix - yDalt + 50, lliure = Math.max(240, (ALT - ALT_HUD) - reserva);
+        const zoom = Math.min(this.zoomZona || ZOOM_CAMERA, lliure * 0.92 / alt);
+        this.enquadrar(x, (yDalt + yBaix) / 2, zoom, ms, fet, reserva);
+    }
+
     // ---- L'Home del Raïm i el volant de ferro ----
     // El cap de pedra comença girat del tot (d'esquena). Amb la maneta d'en Jorgi, el volant de ferro del pedestal (amb engranatges) li
     // fa girar el cap un pas cada volta: d'esquena, de tres quarts, de perfil i, a la tercera volta, de cara: el guardià es desperta.
@@ -685,7 +704,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             const frases = ["(El volant grinyola. El cap de pedra s'ha girat una mica.)", "(Una altra volta. Ara el cap ja és de perfil.)", "(Ara em mira de cara. No m'agrada gens.)"];
             return { pagines: [espera, { qui: 'Ineu', text: frases[this.raimPas - 1] }] };
         }, { altura: 70, actiu: () => !Estat.flag('raimDesperta') && Estat.te('maneta'),
-             enTancar: () => { if (!this.volDespertar) this.alliberarCamera(1400); if (this.volDespertar) { this.volDespertar = false; this.avisDespertar(); this.time.delayedCall(1000, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => { this.alliberarCamera(1200); this.despertarRaim(); })); } } });
+             enTancar: () => { if (!this.volDespertar) this.camVolant = true; if (this.volDespertar) { this.camVolant = false; this.volDespertar = false; this.avisDespertar(); this.time.delayedCall(1000, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => { this.alliberarCamera(1200); this.despertarRaim(); })); } } });
 
         // Vençut, l'estàtua del guardià es pot mirar: descansa al pedestal
         this.interactiu(RX, RY + 10, 90, E => this.enquadrarRaim(DIALEGS.raimEstatuaFinal), { altura: 250, enTancar: () => this.alliberarCamera(1400), actiu: () => Estat.flag('raimDerrotat') && !!this.estatuaFinal });
@@ -1012,11 +1031,16 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // El volant, l'engranatge i la maneta cauen
         [this.volant, this.engranatge, this.manetaVolant].forEach(o => { if (o) this.tweens.add({ targets: o, y: o.y + 40, alpha: 0, duration: 600, ease: 'Quad.easeIn', onComplete: () => o.destroy() }); });
         this.volant = null; this.engranatge = null; this.manetaVolant = null;
-        this.time.delayedCall(900, () => this.ui().obrirDialeg(DIALEGS.raimDerrotat, () => {
+        // La càmera es queda amb el guardià caigut, sencer per damunt del quadre de text (abans el text el tapava)
+        this.enquadrarGuardia(e.spr.x, e.spr.y - 300 * K_RAIM, e.spr.y + 20, 470, 1200);
+        this.time.delayedCall(1100, () => this.ui().obrirDialeg(DIALEGS.raimDerrotat, () => {
             // Es dreça, torna d'un salt al seu pedestal i s'hi queda, fet escultura (la imatge de l'estàtua endreçada); llavors s'obre la trapa
             Estat.posaObjectiu("La llosa de sota l'escalinata s'ha obert: baixa a la cripta dels monjos.");
             Estat.desar();
-            this.raimAlPedestal(e, () => { Joc.musicaZona(this, 1500); this.obrirTrapa(); });
+            // Pla general del salt al pedestal: es veu des d'on es dreça fins que s'hi queda (sense text al davant)
+            const { x: RX, y: RY } = RAIM;
+            this.enquadrarGuardia(RX, Math.min(e.spr.y - 300 * K_RAIM, RY - 340), Math.max(e.spr.y + 20, RY + 10), 0, 1000);
+            this.time.delayedCall(900, () => this.raimAlPedestal(e, () => { Joc.musicaZona(this, 1500); this.alliberarCamera(700, () => this.obrirTrapa()); }));
         }));
     }
 
