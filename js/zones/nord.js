@@ -1381,12 +1381,12 @@ class ZonaBosc extends ZonaBase {
             altura: 56,
             enTancar: () => { if (Estat.flag('portalJoaneta')) this.canviarZona('ZonaCabana', 'portal'); }
         });
-        this.brillo(AX - 18, AY - 128, 62, 100, { arc: true });          // el forat del tronc brilla sempre (només la part lògica de l'alzina, no tot l'arbre)
+        this.brillo(AX - 18, AY - 89, 60, 88, { arc: true });          // el forat del tronc brilla sempre (només la part lògica de l'alzina, no tot l'arbre)
         [[-250, 75, 0.7], [255, 45, 0.55], [-120, 120, 0.4]].forEach(([dx, dy, e]) => this.posar('roca', AX + dx, AY + dy, { escala: e, col: { w: 34, h: 14 } }));
-        this.claror = this.add.ellipse(AX - 18, AY - 128, 78, 104, 0x6aff9a, 0.45).setDepth(AY + 1);
+        this.claror = this.add.ellipse(AX - 18, AY - 89, 78, 104, 0x6aff9a, 0.45).setDepth(AY + 1);
         this.tweens.add({ targets: this.claror, alpha: 0.18, scaleX: 1.2, scaleY: 1.12, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
         // Halo que batega al voltant del forat: crida l'atenció sense tapar el dibuix
-        const halo = this.add.circle(AX - 18, AY - 128, 70, 0xb8ffc0, 0).setStrokeStyle(4, 0xd8ffd0, 0.8).setBlendMode(Phaser.BlendModes.ADD).setDepth(AY + 2);
+        const halo = this.add.circle(AX - 18, AY - 89, 70, 0xb8ffc0, 0).setStrokeStyle(4, 0xd8ffd0, 0.8).setBlendMode(Phaser.BlendModes.ADD).setDepth(AY + 2);
         this.tweens.add({ targets: halo, scale: { from: 0.55, to: 1.5 }, alpha: { from: 0.9, to: 0 }, repeat: -1, duration: 1900, ease: 'Sine.easeOut' });
         this.add.particles(AX, AY - 90, 'espurna', {
             x: { min: -230, max: 230 }, y: { min: -120, max: 60 }, speedX: { min: -8, max: 8 }, speedY: { min: -14, max: -3 }, lifespan: 3200,

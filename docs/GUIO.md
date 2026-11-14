@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 525: El brillo de la portella de la Bassadòria es recol·loca a la reixa (estava massa baix) i la seva zona d'activació es redueix (uns 140 px d'ample, davant la reixa). Repàs de tots els brillos amb un rectangle de comprovació: el del forat de l'Alzina Buida (bosc i cabana) també baixa al forat, i la seva claror i halo s'hi alineen; la resta ja quadrava.*
+
 *Revisió 524: Abast mínim d'interacció dels objectes a 80 px.*
 
 *Revisió 523: Abast mínim d'interacció dels objectes reduït de 130 a 105 px.*

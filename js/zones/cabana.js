@@ -124,10 +124,10 @@ class ZonaCabana extends ZonaBase {
         this.add.ellipse(AX, AY + 40, 760, 300, 0x8fe08a, 0.13).setDepth(-1090);
         this.add.ellipse(AX, AY + 40, 480, 180, 0xb8f0a0, 0.13).setDepth(-1089);
         this.alzina = this.posar('alzina_buida', AX, AY, { col: { w: 150, h: 46 } });
-        this.claror = this.add.ellipse(AX - 18, AY - 128, 78, 104, 0x6aff9a, 0.45).setDepth(AY + 1);
+        this.claror = this.add.ellipse(AX - 18, AY - 89, 78, 104, 0x6aff9a, 0.45).setDepth(AY + 1);
         this.tweens.add({ targets: this.claror, alpha: 0.18, scaleX: 1.2, scaleY: 1.12, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
         // Halo que batega al voltant del forat: crida l'atenció sense tapar el dibuix
-        const halo = this.add.circle(AX - 18, AY - 128, 70, 0xb8ffc0, 0).setStrokeStyle(4, 0xd8ffd0, 0.8).setBlendMode(Phaser.BlendModes.ADD).setDepth(AY + 2);
+        const halo = this.add.circle(AX - 18, AY - 89, 70, 0xb8ffc0, 0).setStrokeStyle(4, 0xd8ffd0, 0.8).setBlendMode(Phaser.BlendModes.ADD).setDepth(AY + 2);
         this.tweens.add({ targets: halo, scale: { from: 0.55, to: 1.5 }, alpha: { from: 0.9, to: 0 }, repeat: -1, duration: 1900, ease: 'Sine.easeOut' });
         this.add.particles(AX, AY - 90, 'espurna', {
             x: { min: -230, max: 230 }, y: { min: -120, max: 60 }, speedX: { min: -8, max: 8 }, speedY: { min: -14, max: -3 }, lifespan: 3200,
@@ -139,7 +139,7 @@ class ZonaCabana extends ZonaBase {
             enTancar: () => this.canviarZona('ZonaBosc', 'portal')
         });
 
-        this.brillo(AX - 18, AY - 128, 62, 100, { arc: true });          // el forat del tronc brilla sempre
+        this.brillo(AX - 18, AY - 89, 60, 88, { arc: true });          // el forat del tronc brilla sempre
 
         // Ocells als arbres (la Joaneta hi parla)
         [[560, 280], [1180, 360], [380, 430], [1100, 760], [650, 860]].forEach(([x, y], i) => {

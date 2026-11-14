@@ -1491,6 +1491,7 @@ class ZonaBase extends Phaser.Scene {
     brillo(x, y, w, h, o = {}) {
         const radi = o.radi || Infinity, per = o.per || 2400, dur = 800, ang = o.ang !== undefined ? o.ang : 0.5;
         const b = { per, desfase: o.desfase !== undefined ? o.desfase : Math.random() * per };
+        b.rect = { x, y, w, h, arc: !!o.arc };      // (per a les proves: on cau el brillo)
         (this.brillos = this.brillos || []).push(b);
         const g = this.add.graphics().setDepth(o.dep || 910).setBlendMode('ADD');
         const m = this.make.graphics({ add: false }); m.fillStyle(0xffffff, 1);
