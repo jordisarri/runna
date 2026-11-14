@@ -25,8 +25,12 @@ FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 
 # ben visible i sencera de dreta a esquerra (fotogrames 2: dreta, 8, 4 i 5: a l'esquerra, 3: tot a l'esquerra).
 # L'espasa 'up' (vista d'esquena): el full de 2a generació l'amagava i el de la 3a (espasa_up_v3) sortia amb l'hàbit massa fosc i l'espasa a l'esquena. Es fa servir un full triat
 # a mà (espasa_up_v4): només els tres primers fotogrames, els únics on surt l'espasa (0: baixa al costat, 1 i 2: alçada), i la tornada per completar els 5 del joc.
-ORIGEN_EXC = {('tiller', 'up'): 'tiller_v1', ('espasa', 'up'): 'espasa_up_v4'}
-FOT_EXC = {('tiller', 'up'): [2, 8, 4, 5, 3], ('espasa', 'up'): [0, 1, 2, 1, 0]}
+# El bastó 'up' també fa servir la 1a generació (basto_v1): a la 2a el bastó només surt als dos primers fotogrames i a la resta s'amaga darrere el cap. A basto_v1 surt a tots els 16.
+# Els fotogrames 3, 2, 4, 5 donen un gir continu de la punta del bastó, de dreta a esquerra (angle de la vara: ~-10°, 15°, 37°, 67°), amb el bastó visible a tots; l'últim es repeteix (el 0 té la punta tallada per la vora de l'original).
+ORIGEN_EXC = {('tiller', 'up'): 'tiller_v1', ('espasa', 'up'): 'espasa_up_v4', ('basto', 'up'): 'basto_v1'}
+FOT_EXC = {('tiller', 'up'): [2, 8, 4, 5, 3], ('espasa', 'up'): [0, 1, 2, 1, 0], ('basto', 'up'): [3, 2, 4, 5, 5]}
+# Fotogrames amb què es mesura l'alçada del cos (per defecte 12-15, on l'arma és a les mans). A basto_v1 'up' la gafa del bastó sobresurt per sobre del cap en aquests: es mesura amb el 3 i el 4.
+ESCALA_FOTS = {('basto', 'up'): (3, 4)}
 CENTRAL = set()        # direccions on l'escala del cos es mesura només amb les columnes del cap (quan l'arma sobresurt per sobre del cap)
 SRC, CEL = 384, 320         # fotograma d'origen i cel·la de sortida (més gran que abans, perquè l'arma no es talli)
 COS = 170.0                  # alçada que ha de fer el cos de l'Ineu a la cel·la (com als fulls de caminar reduïts)
@@ -73,11 +77,11 @@ def centre_peus(fot, ref=None, antic=False):
     else: g = max(grups, key=lambda g: banda[:, g[0]:g[1] + 1].sum())
     return float(g[0] + g[1]) / 2
 
-def escala(im, arma, central=False):
+def escala(im, arma, central=False, fots=(12, 13, 14, 15)):
     # Alçada del cos = dels peus (mediana de la fila més baixa) al cap (mediana de la fila més alta dels fotogrames finals, on l'arma és a l'alçada de les mans o avall).
     # Cada generació de AutoSprite fa el personatge d'una mida diferent (l'espasa, ~310 px; el bastó i la branca, 250-270), per això es mesura a cada full.
     tops = []
-    for i in (12, 13, 14, 15):
+    for i in fots:
         al = np.array(fotograma(im, i).split()[3]) > 24
         if central:
             cx = np.where(al[-60:].any(axis=0))[0]; c = (cx.min() + cx.max()) // 2        # centre dels peus
@@ -92,7 +96,7 @@ def main():
             if filtre and f'{arma}:{d}' not in filtre: continue
             fots = FOT_EXC.get((arma, d), fots0)
             im = Image.open(ORIGEN / ORIGEN_EXC.get((arma, d), arma) / f'{d}.png').convert('RGBA')
-            pf = peus(im, range(16)); K = escala(im, arma, (arma, d) in CENTRAL)
+            pf = peus(im, range(16)); K = escala(im, arma, (arma, d) in CENTRAL, ESCALA_FOTS.get((arma, d), (12, 13, 14, 15)))
             n = len(fots); cols = 4; files = (n + cols - 1) // cols
             out = Image.new('RGBA', (cols * CEL, files * CEL), (0, 0, 0, 0))
             # només a la branca en diagonal avall: la fulla baixa fins als peus (a les altres, el càlcul antic ja anava bé)
