@@ -2048,6 +2048,19 @@ class ZonaBase extends Phaser.Scene {
         }
     }
 
+    // Pla de càmera dins un diàleg (escenes emotives): porta (x, y) del món al mig de l'espai que deixen el HUD i el quadre de text, amb aquest zoom i una transició suau.
+    // Només funciona mentre la càmera del diàleg és activa (ja desenganxada de l'Ineu); es combina amb reenquadrarDialeg() per tornar a l'enquadrament de la conversa.
+    camaraPla(x, y, zoom, ms = 1200, ease = 'Sine.easeInOut', fet) {
+        const cam = this.cameras.main;
+        if (!this.camDialeg) { if (fet) fet(); return; }
+        this.reenquadrar = false;
+        const H = ALT - ALT_HUD, yPantalla = ((TOP_HUD + 8) + (ALT - SAFE_BAIX - (this.ui().alcadaCaixaDialeg || 360) - 60)) / 2;
+        const sx = x - AMPLE / 2, sy = y - H / 2 - (yPantalla - H / 2) / zoom;
+        if (this.twCamDialeg) this.twCamDialeg.stop();
+        this.twCamDialeg = this.tweens.add({ targets: cam, scrollX: sx, scrollY: sy, zoom, duration: ms, ease,
+            onUpdate: () => this.ajustarSuperposicions(), onComplete: () => { this.ajustarSuperposicions(); if (fet) fet(); } });
+    }
+
     // Dins d'un diàleg, quan els qui hi surten canvien de lloc (algú s'acosta, apareix algú): la càmera es torna a posar, suau, de manera que tots quedin grans i centrats
     reenquadrarDialeg() { if (this.camDialeg) this.reenquadrar = true; }
 

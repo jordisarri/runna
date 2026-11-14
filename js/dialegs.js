@@ -1348,7 +1348,7 @@ const DIALEGS = {
     nenaTrenes: E => {
         const n = ["llac1", "llac2"].filter(f => E.flag(f)).length;
         if (E.flag("nenaAlliberada")) {
-            return { pagines: [] };
+            return { pagines: [{ qui: "Nena de les Trenes", text: "La mare m'ha lligat les trenes. Ja no tinc por, monjo. Vés amb compte pel bosc." }] };
         }
         if (!E.flag("nenaVista")) {
             return {
@@ -1376,12 +1376,15 @@ const DIALEGS = {
                 { qui: "Nena de les Trenes", text: "Els tens... els dos? Oh, monjo..." },
                 // L'Ineu s'acosta a la dreta de la nena i, vingui d'on vingui, hi arriba mirant-la (no en la direcció en què ha caminat)
                 { fer: (z, fet) => z.seq([c => z.ineuVa(z.nena.x + 70, z.nena.y + 10, () => { z.cara(z.nena); z.reenquadrarDialeg(); c(); }), c => { z.ajupir('ineu'); z.llum(z.nena.x, z.nena.y - 60, 0xffc8e0, c); }], fet) },
-                { qui: "Nena de les Trenes", text: "Els sento... són les mans de la mare lligant-me'ls. Mare...? Mare, ets tu? M'has trobat?" },
-                { fer: (z, fet) => z.mareNena(fet) },
-                { qui: "Nena de les Trenes", text: "Ja no tinc por. Gràcies, monjo. Et deixo un dels llaços: guarda'l, que protegeix els qui es perden." },
+                { qui: "Nena de les Trenes", text: "Els sento... són les mans de la mare lligant-me'ls. Mare...?" },
+                { fer: (z, fet) => z.mareApareix(fet) },
+                { qui: "La mare", text: "Ja t'he trobat, filla. Perdona que hagi trigat tant." },
+                { fer: (z, fet) => z.mareMarxa(fet) },
+                { qui: "Nena de les Trenes", text: "Ja no tinc por. M'ha lligat les trenes, com abans. Gràcies, monjo." },
+                { qui: "Nena de les Trenes", text: "L'altre llaç és per a tu. Guarda'l: protegeix els qui es perden." },
                 { avis: "Has obtingut el LLAÇ DE LA NENA.", obj: 'cinta_nena' },
-                { qui: "Nena de les Trenes", text: "La mare me'l va lligar perquè res de dolent no em fes mal. Ara et servirà a tu: cada vegada que entris a un lloc nou, el llaç aguantarà el primer cop que rebis, i no et farà mal." },
-                { qui: "Nena de les Trenes", text: "Només aguanta un cop per lloc. Quan surtis i tornis a entrar en un altre, el llaç es renova." }
+                { qui: "Nena de les Trenes", text: "Aguantarà el primer cop que rebis a cada lloc nou. Ara ja no et quedaràs sol." },
+                { qui: "Ineu", text: "Ni tu." }
             ],
             enAcabar: () => {
                 E.posaFlag("nenaAlliberada"); E.posaFlag("trenesNena"); E.dona("cinta_nena"); E.treu("llac_nena");
