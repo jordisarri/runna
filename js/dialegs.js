@@ -1390,7 +1390,7 @@ const DIALEGS = {
         };
     },
 
-    llac: k => E => ({
+    llac: k => E => !E.flag("nenaVista") ? { pagines: [] } : ({          // (els llaços no es poden agafar fins que la Nena ha explicat que els ha perdut)
         pagines: [{ avis: "Has trobat un llaç de la nena (" + (["llac1", "llac2"].filter(f => E.flag(f) || f === "llac" + k).length) + "/2).", obj: 'llac_nena' }],      // (amb obj, l'Ineu alça el llaç)
         enAcabar: () => {
             E.posaFlag("llac" + k); E.dona("llac_nena");

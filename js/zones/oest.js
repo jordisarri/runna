@@ -82,7 +82,7 @@ class ZonaRovellonera extends ZonaBase {
 
         // Segon llaç de la Nena de les Trenes (el primer és pel camí): a la primera clariana, també sota una pedra
         if (pas === 0) {
-            this.llac = this.posar('llac', 1100, 300, { fonsY: 300 });
+            this.llac = this.posar('llac', 1100, 300, { fonsY: 300 }).setVisible(false);
             this.tweens.add({ targets: this.llac, y: 294, yoyo: true, repeat: -1, duration: 700 });
             this.interactiu(1100, 300, RADI_OBJECTE, DIALEGS.llac(2), { altura: 50, actiu: () => this.llac2Lliure() });
             this.roca2 = this.pedraMobil(1100, 310, 'llac2', 110, 0,
@@ -279,7 +279,7 @@ class ZonaCamiRov extends ZonaBase {
             this.interactiu(880, 880, RADI_NPC, DIALEGS.nenaTrenes, { altura: 145 });
         }
         // Primer llaç: amagat sota una roca que cal empènyer
-        this.llac = this.posar('llac', 1300, 830, { fonsY: 830 });
+        this.llac = this.posar('llac', 1300, 830, { fonsY: 830 }).setVisible(false);
         this.tweens.add({ targets: this.llac, y: 824, yoyo: true, repeat: -1, duration: 700 });
         this.interactiu(1300, 830, RADI_OBJECTE, DIALEGS.llac(1), { altura: 50, actiu: () => this.llacLliure() });
         this.roca1 = this.pedraMobil(1300, 840, 'llac1', 110, 0,
