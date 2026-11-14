@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 516: Brillo permanent a les portes tancades: la porta de la Taverna, la reixa de la Casa Gran, la porta de ferro vermella de les Gàrgoles (fora) i la porta de ferro de sota la Taverna; s'apaga quan s'obren.*
+
 *Revisió 515: Arreu, el «!» només el mostren els personatges (NPC); els objectes ja no el porten i només es noten pel brillo (que ja no s'amaga en acostar-s'hi). L'Alzina Buida (bosc i cabana de la Joaneta) té un brillo permanent al forat del tronc, no a tot l'arbre.*
 
 *Revisió 514: Bassadòria: la portella ja no mostra el «!»; només el brillo, i el text s'activa davant seu.*
