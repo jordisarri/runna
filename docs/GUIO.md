@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 520: Repàs de cofres i cartells: cap porta indicador. S'ha tret la claror blavosa pulsant del cofre del cristall de gel (Ermita de Sant Gabriel); la resta de cofres i tots els cartells ja no en tenien.*
+
 *Revisió 519: La branca del Til·ler perd l'aura groga, la pulsació i el to daurat: només queda el brillo.*
 
 *Revisió 518: Brillo a la branca i a les arrels del Til·ler (el cor de la mata, no tot el dibuix). L'herba de Sant Joan de la Font perd el halo, el raig de llum i les espurnes: només queda el brillo discret.*

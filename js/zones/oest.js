@@ -566,13 +566,8 @@ class ZonaGabrielInt extends ZonaBase {
         if (Estat.flag('garfBancSegut') || Estat.flag('cristallGel')) {
             const cy = grao + 70, buit = () => Estat.flag('cristallGel') || Estat.te('cristall_gel');
             const cofreG = this.posar(buit() ? 'cofre_obert' : 'cofre', cx, cy, { col: { w: 50, h: 20 }, opac: true });
-            if (!buit()) {
-                const gel = this.add.circle(cx, cy - 30, 36, 0xbfe6ff, 0.2).setBlendMode('ADD').setDepth(cy + 2);       // una claror blavosa de gel
-                this.tweens.add({ targets: gel, alpha: 0.06, scale: 1.3, yoyo: true, repeat: -1, duration: 1300 });
-                this.cofreGel = gel;
-            }
             this.interactiu(cx, cy + 6, RADI_OBJECTE, DIALEGS.cofreGabriel, { altura: 80, actiu: () => !buit(),
-                enTancar: () => { if (buit()) { cofreG.setTexture('cofre_obert'); if (this.cofreGel) { this.tweens.killTweensOf(this.cofreGel); this.cofreGel.destroy(); this.cofreGel = null; } } } });
+                enTancar: () => { if (buit()) cofreG.setTexture('cofre_obert'); } });
         }
 
         // Parets i porta
