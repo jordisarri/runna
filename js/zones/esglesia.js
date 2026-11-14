@@ -194,6 +194,13 @@ class ZonaEsglesia extends ZonaBase {
             this.fixaAlcada(n, h);
         });
         if (this.npcs && this.npcs.mandu && Estat.flag('manduNinaTrencada')) this.npcs.mandu.setTexture('mandu_trencada');            // la nina, encara sense cap
+        // La Nena de les Trenes i la seva mare (si l'Ineu les va retrobar): dos esperits translúcids, de la mà al forat lliure del fons de la nau, que han sentit el cant des de lluny
+        if (Estat.flag('nenaAlliberada') && this.textures.exists('mare_nena') && this.textures.exists('nena_trenes') && !(this.npcs && this.npcs.nena_trenes)) {
+            const mare = this.npc('mare_nena', 935, R + 740, () => ({ pagines: [] }), { flipX: true });
+            this.fixaAlcada(mare, AD); mare.setTint(0xe8eeff).setAlpha(0.8);
+            const nena = this.npc('nena_trenes', 1004, R + 740, DIALEGS.nenaEpileg, { flipX: true });
+            this.fixaAlcada(nena, 100); nena.setAlpha(0.9);
+        }
         this.direccio = 'avall';
         if (this.ineu) this.posarDireccio('avall', false);
         this.cameras.main.fadeIn(1200, 0, 0, 0);
@@ -338,6 +345,19 @@ class ZonaEsglesia extends ZonaBase {
                 camina('pare_jorda', [[965, R + 300], [700, R + 395], [705, R + 440]], 130),
                 f => z.npcMira('pare_jorda', 'ineu', f)
             ]),
+            // La Nena de les Trenes i la seva mare, al fons de la nau (només si l'Ineu les va retrobar): l'agraeixen de nou i, en acabar, s'esvaeixen en llum, en pau
+            ...(hi('nena_trenes') ? [
+                accio(z => [pla(970, R + 700, 1.0, 1000), f => z.bombolla('mare_nena', '♥', f, 900)]),
+                foc(['nena_trenes', 'mare_nena'], 2.0, 1000),
+                { qui: 'Nena de les Trenes', text: "La mare i jo ho hem sentit des de lluny. Cantes molt bé, monjo." },
+                { qui: 'Nena de les Trenes', text: "Gràcies per portar-me a casa." },
+                { fer: (z, fet) => {
+                    const a = [z.npcs.nena_trenes, z.npcs.mare_nena].filter(o => o && o.active);
+                    z.llum(970, R + 650, 0xfff4e0);
+                    z.tweens.add({ targets: a, alpha: 0, y: '-=14', duration: 2600, ease: 'Sine.easeIn', onComplete: () => { a.forEach(o => { if (o.punt) o.punt.actiu = () => false; if (o.col) o.col.destroy(); o.setVisible(false); }); } });
+                    z.esperar(3000, fet);
+                } }
+            ] : []),
             // Només si l'Ineu va fer caminar el rellotge (missió lateral): la torre del rellotge torna a tocar les hores
             ...(Estat.flag('rellotgeReparat') ? [
                 { fer: (z, fet) => { [0, 1, 2].forEach(k => z.time.delayedCall(k * 850, () => Sfx.campana())); z.esperar(3000, fet); } },

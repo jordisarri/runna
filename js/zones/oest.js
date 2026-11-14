@@ -233,6 +233,7 @@ class ZonaCamiRov extends ZonaBase {
         const mx = n.x - 170, my = n.y + 10, pit = n.y - 70;
         const mare = this.mare = this.add.image(mx, my, 'mare_nena').setOrigin(0.5, 1).setTint(0xe8eeff).setAlpha(0).setDepth(80000);       // per sobre dels arbres: que cap copa no la tapi
         mare.setScale((this.textures.get('mare_nena').customData || {}).escala || 0.5);
+        this.cossosExtra = [mare];                                                                       // la càmera de la conversa la té en compte (nena, mare i Ineu, junts)
         const halo = this.haloMare = this.add.circle(mx, my - 70, 90, 0xfff4e0, 0).setBlendMode('ADD').setDepth(79999);
         const par = this.espurnesMare = this.add.particles(mx, my - 20, 'espurna', { x: { min: -45, max: 45 }, speed: { min: 8, max: 25 }, angle: { min: 260, max: 280 }, lifespan: 2600,
             scale: { start: 0.3, end: 0 }, tint: [0xffd98a, 0xffffff, 0xffc8e0], blendMode: 'ADD', frequency: 140, quantity: 1, emitting: false }).setDepth(80001);
@@ -270,23 +271,31 @@ class ZonaCamiRov extends ZonaBase {
         });
     }
 
-    mareMarxa(fet) {
-        const n = this.nena, mare = this.mare;
-        const fi = () => {
-            if (mare) mare.destroy();
-            [this.haloMare, this.espurnesMare].forEach(o => o && o.destroy());
-            this.mare = this.haloMare = this.espurnesMare = null; this.cossosExtra = null;
-            this.musicaEscena(0.6, 2500);
-            this.reenquadrarDialeg();                                                                   // torna, suau, a l'enquadrament de la conversa (nena i Ineu)
-            this.time.delayedCall(900, fet);
-        };
-        if (!mare) { fi(); return; }
+    // Després de la frase de la mare: s'acaben les espurnes, la mare es queda al costat de la nena (callada, tranquil·la) i la càmera s'obre per tornar a abastar els tres
+    mareSeQueda(fet) {
         if (this.espurnesMare) this.espurnesMare.stop();
-        this.llum(mare.x, mare.y - 80, 0xfff4e0);
-        this.tweens.add({ targets: this.haloMare, alpha: 0, duration: 1800 });
-        this.tweens.add({ targets: mare, alpha: 0, y: mare.y - 14, duration: 2000, ease: 'Sine.easeIn', onComplete: () => {
-            if (n) this.time.delayedCall(250, () => this.llum(n.x, n.y - 78, 0xffc8e0));                // un espurneig rosa a les trenes de la nena: la mare l'hi ha lligat
-            this.time.delayedCall(700, fi);
+        if (this.haloMare) { this.tweens.killTweensOf(this.haloMare); this.tweens.add({ targets: this.haloMare, alpha: 0.12, scale: 1, duration: 1200 }); }
+        this.reenquadrarDialeg();
+        this.time.delayedCall(1100, fet);
+    }
+
+    // El comiat: la nena i la mare se'n van juntes, en llum (descansen en pau). L'Ineu es queda mirant on eren; la música torna.
+    nenaMarxa(fet) {
+        const n = this.nena, mare = this.mare;
+        this.cara(mare || n);
+        const mx = (n.x + (mare ? mare.x : n.x)) / 2;
+        this.llum(mx, n.y - 90, 0xfff4e0);
+        if (this.espurnesMare) { this.espurnesMare.start(); }
+        this.musicaEscena(0.6, 3500);
+        const objectius = [n, this.resplendorNena, mare, this.haloMare].filter(Boolean);
+        this.tweens.add({ targets: [n, mare].filter(Boolean), y: '-=16', duration: 2600, ease: 'Sine.easeIn' });
+        this.tweens.add({ targets: objectius, alpha: 0, duration: 2600, ease: 'Sine.easeIn', onComplete: () => {
+            this.time.delayedCall(250, () => this.llum(mx, n.y - 90, 0xffc8e0));
+            [mare, this.haloMare, this.espurnesMare].forEach(o => o && o.destroy());
+            this.mare = this.haloMare = this.espurnesMare = null; this.cossosExtra = null;
+            n.setVisible(false);
+            if (n.col) n.col.destroy();
+            this.time.delayedCall(1400, fet);                                                          // un moment de silenci mirant el camí buit
         } });
     }
 
@@ -329,13 +338,10 @@ class ZonaCamiRov extends ZonaBase {
         this.cartell(2640, 420, () => ({ pagines: [{ qui: 'Cartell', text: '← Rovellonera\n«On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.»' }] }));
 
         // La primera corba del camí, des de l'Era, on espera la Nena de les Trenes
-        {   // (la nena es queda al camí també després d'alliberar-la: ja no flota ni té halo, i sembla en pau)
-            const lliure = Estat.flag('nenaAlliberada');
+        if (!Estat.flag('nenaAlliberada')) {          // (en acabar la seva escena la nena marxa de la mà de la mare i ja no hi és: només torna, com a esperit, a l'epíleg)
             this.nena = this.posar('nena_trenes', 1560, 670, { fonsY: 670 });          // sempre al 100% d'opacitat: ben visible
-            if (!lliure) {
-                this.resplendorNena = this.add.circle(1560, 605, 52, 0xcfd8ff, 0.07).setDepth(669);      // un halo molt discret
-                this.tweens.add({ targets: [this.nena, this.resplendorNena], y: '-=10', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
-            } else this.idleCodi(this.nena);
+            this.resplendorNena = this.add.circle(1560, 605, 52, 0xcfd8ff, 0.07).setDepth(669);      // un halo molt discret
+            this.tweens.add({ targets: [this.nena, this.resplendorNena], y: '-=10', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
             const puntNena = this.interactiu(1560, 670, RADI_NPC, DIALEGS.nenaTrenes, { altura: 110 });
             puntNena.npc = this.nena; puntNena.zoomConversa = 1.6;                  // és un personatge com els altres: l'Ineu es posa a la distància de parlar i la càmera els enquadra, grans, entre el HUD i el quadre
         }

@@ -1348,7 +1348,7 @@ const DIALEGS = {
     nenaTrenes: E => {
         const n = ["llac1", "llac2"].filter(f => E.flag(f)).length;
         if (E.flag("nenaAlliberada")) {
-            return { pagines: [{ qui: "Nena de les Trenes", text: "La mare m'ha lligat les trenes. Ja no tinc por, monjo. Vés amb compte pel bosc." }] };
+            return { pagines: [] };          // (marxa de la mà de la mare en acabar la seva escena; només torna a l'epíleg)
         }
         if (!E.flag("nenaVista")) {
             return {
@@ -1379,12 +1379,16 @@ const DIALEGS = {
                 { qui: "Nena de les Trenes", text: "Els sento... són les mans de la mare lligant-me'ls. Mare...?" },
                 { fer: (z, fet) => z.mareApareix(fet) },
                 { qui: "La mare", text: "Ja t'he trobat, filla. Perdona que hagi trigat tant." },
-                { fer: (z, fet) => z.mareMarxa(fet) },
+                { fer: (z, fet) => z.mareSeQueda(fet) },
                 { qui: "Nena de les Trenes", text: "Ja no tinc por. M'ha lligat les trenes, com abans. Gràcies, monjo." },
                 { qui: "Nena de les Trenes", text: "L'altre llaç és per a tu. Guarda'l: protegeix els qui es perden." },
                 { avis: "Has obtingut el LLAÇ DE LA NENA.", obj: 'cinta_nena' },
                 { qui: "Nena de les Trenes", text: "Aguantarà el primer cop que rebis a cada lloc nou. Ara ja no et quedaràs sol." },
-                { qui: "Ineu", text: "Ni tu." }
+                { qui: "Ineu", text: "Ni tu. Ja no estaràs mai més perduda." },
+                { qui: "Nena de les Trenes", text: "Mare, anem a casa?" },
+                { qui: "La mare", text: "Anem, filla." },
+                { qui: "Nena de les Trenes", text: "Adéu, monjo. Canta fort." },
+                { fer: (z, fet) => z.nenaMarxa(fet) }
             ],
             enAcabar: () => {
                 E.posaFlag("nenaAlliberada"); E.posaFlag("trenesNena"); E.dona("cinta_nena"); E.treu("llac_nena");
@@ -1392,6 +1396,9 @@ const DIALEGS = {
             }
         };
     },
+
+    // A l'epíleg: la Nena de les Trenes, amb la seva mare, al fons de la nau
+    nenaEpileg: E => ({ pagines: [{ qui: "Nena de les Trenes", text: "Gràcies per portar-me a casa, monjo." }] }),
 
     llac: k => E => !E.flag("nenaVista") ? { pagines: [] } : ({          // (els llaços no es poden agafar fins que la Nena ha explicat que els ha perdut)
         pagines: [{ avis: "Has trobat un llaç de la nena (" + (["llac1", "llac2"].filter(f => E.flag(f) || f === "llac" + k).length) + "/2).", obj: 'llac_nena' }],      // (amb obj, l'Ineu alça el llaç)
