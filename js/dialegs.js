@@ -1452,17 +1452,17 @@ const DIALEGS = {
     estelDiposit: E => ({
         pagines: [
             { fer: (z, fet) => z.agafar(fet, null, 0x8fc8ff) },
-            { avis: "Has obtingut l'ESTEL DE SANT LLORENÇ.", obj: 'estel_llorenc' },
+            { avis: "Has obtingut la LLÀGRIMA DE SANT LLORENÇ.", obj: 'estel_llorenc' },
             { qui: "Ineu", text: "Fa la mateixa claror que els set estels... Diuen que la boira no gosa tocar la llum de Sant Llorenç. El camí del Dolmen, a llevant, n'és ple." }
         ],
         enAcabar: () => {
             E.posaFlag("estelLlorenc"); E.dona("estel_llorenc");
-            E.posaObjectiu("La boira que tapa el camí del Dolmen s'apartaria davant l'Estel de Sant Llorenç.");
+            E.posaObjectiu("La boira que tapa el camí del Dolmen s'apartaria davant la Llàgrima de Sant Llorenç.");
             E.desar();
         }
     }),
 
-    // La boira que tapa el camí del Dolmen: només l'aparta la llum de l'Estel de Sant Llorenç
+    // La boira que tapa el camí del Dolmen: només l'aparta la llum de la Llàgrima de Sant Llorenç
     boiraDolmen: E => E.te("estel_llorenc")
         ? { pagines: [
         ] }

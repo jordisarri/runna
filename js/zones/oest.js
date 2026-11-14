@@ -588,7 +588,7 @@ class ZonaGabrielInt extends ZonaBase {
 
 // ---------------- ELS DIPÒSITS ----------------
 // Dos dipòsits d'aigua de la serra en un pla d'herba, de nit, i el mirador amb el trípode del telescopi. Mirant el cel
-// (EscenaEstels) s'encén una llum a l'aigua del dipòsit de llevant: és l'Estel de Sant Llorenç. La seva llum aparta la
+// (EscenaEstels) s'encén una llum a l'aigua del dipòsit de llevant: és la Llàgrima de Sant Llorenç. La seva llum aparta la
 // boira que tapa el camí del Dolmen (a llevant).
 const DIP = { estelX: 1180, estelY: 175, boiraX: 1500 };
 
@@ -702,11 +702,11 @@ class ZonaDipositos extends ZonaBase {
         const halo = this.add.ellipse(x, y, 140, 40, 0xd8e8ff, 0.6).setDepth(D).setBlendMode('ADD');
         const punt = this.add.circle(x, y, 9, 0xffffff, 1).setDepth(D + 1);
         const estel = this.add.graphics({ x, y: y - 90 }).setDepth(D + 1).setBlendMode('ADD');
-        estel.fillStyle(0xffffff, 0.95).fillPoints([{ x: 0, y: -26 }, { x: 5, y: -5 }, { x: 26, y: 0 }, { x: 5, y: 5 }, { x: 0, y: 26 }, { x: -5, y: 5 }, { x: -26, y: 0 }, { x: -5, y: -5 }], true);
+        estel.fillStyle(0xffffff, 0.95).fillPoints([{ x: 0, y: -30 }, { x: 6, y: -14 }, { x: 14, y: -2 }, { x: 17, y: 8 }, { x: 12, y: 18 }, { x: 0, y: 23 }, { x: -12, y: 18 }, { x: -17, y: 8 }, { x: -14, y: -2 }, { x: -6, y: -14 }], true);          // una gota (la Llàgrima de Sant Llorenç)
         estel.fillStyle(0xd8e8ff, 0.5).fillCircle(0, 0, 10);
         this.tweens.add({ targets: [raig, nucli, halo], alpha: '*=0.5', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
         this.tweens.add({ targets: punt, scale: 1.5, yoyo: true, repeat: -1, duration: 700 });
-        this.tweens.add({ targets: estel, scale: { from: 0.7, to: 1.15 }, angle: 45, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
+        this.tweens.add({ targets: estel, scale: { from: 0.85, to: 1.2 }, y: estel.y - 8, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
         const esp = this.add.particles(x, y, 'espurna', {
             x: { min: -50, max: 50 }, y: { min: -8, max: 8 }, speedY: { min: -40, max: -10 }, lifespan: 1400,
             scale: { start: 0.35, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xd8e8ff, 0xffffff], frequency: 120, blendMode: 'ADD'
@@ -724,7 +724,7 @@ class ZonaDipositos extends ZonaBase {
         });
     }
 
-    // L'Estel de Sant Llorenç s'encén a la mà de l'Ineu i la boira s'esfilagarsa
+    // La Llàgrima de Sant Llorenç s'encén a la mà de l'Ineu i la boira s'esfilagarsa
     esvairBoiraDolmen() {
         if (!this.boiraDolmen) return;
         Estat.posaFlag('boiraDolmenNeta');

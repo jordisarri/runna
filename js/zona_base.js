@@ -58,7 +58,7 @@ const BOIRA_PASSOS = [
     E => E.flag('fontNeta'),                                               // Font del Bisbe: les tres ofrenes
     E => E.flag('boiraTillerNeta'),                                        // Camí del Gran Til·ler: beuratge de la Joaneta
     E => E.flag('pastorVencut'),                                           // Cirosa: Pastor de Boira
-    E => E.flag('boiraDolmenNeta'),                                        // Camí del Dolmen: Estel de Sant Llorenç
+    E => E.flag('boiraDolmenNeta'),                                        // Camí del Dolmen: Llàgrima de Sant Llorenç
     E => E.flag('tombaSegellada')         // Cementiri: Runna segella la tomba
 ];
 const BOIRA_MINIM = 0.2;                                                  // el que en queda quan s'han fet totes, fins al combat final
@@ -79,7 +79,7 @@ const BOIRA_ZONES = {
     ZonaCementiri: { dens: 1.6, neta: E => E.flag('tombaSegellada'), resta: 0.25 },                 // la tomba segellada
     ZonaCamiCirosa: { dens: 1.3, neta: E => E.flag('pastorVencut'), resta: 0.3 },                   // el Pastor de Boira vençut
     ZonaCirosa: { dens: 1.3, neta: E => E.flag('pastorVencut'), resta: 0.3 },
-    ZonaDolmen: { dens: 1.5, neta: E => E.flag('boiraDolmenNeta'), resta: 0.3 },                    // l'Estel de Sant Llorenç
+    ZonaDolmen: { dens: 1.5, neta: E => E.flag('boiraDolmenNeta'), resta: 0.3 },                    // la Llàgrima de Sant Llorenç
     ZonaBosc: { dens: 1.2, neta: E => E.flag('fontNeta'), resta: 0.3 },                             // la Font del Bisbe neta
     ZonaBoscPi: { dens: 1.0, neta: E => E.flag('piObert'), resta: 0.3 },                            // el pi desperta
     ZonaJardi: { dens: 0.8, neta: E => E.flag('mongesTrobades'), resta: 0.35 },                     // l'Hostatgeria, quan les sacerdotesses són lliures

@@ -67,7 +67,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | Medalló del Saber | Pare Alcoví | Placa del Dolmen. |
 | Medalló de la Benedicció | Pare Jordà | Placa del Dolmen. |
 | Clau de Sant Gabriel / Cristall de Gel | Galf / cofre de l'ermita de Sant Gabriel | Telescopi. |
-| Telescopi / Estel de Sant Llorenç | Galf / Dipòsits | Aparta la boira del camí del Dolmen. |
+| Telescopi / Llàgrima de Sant Llorenç | Galf / Dipòsits | Aparta la boira del camí del Dolmen. |
 | **Runna** | El Dolmen | Dany 3; talla els esbarzers negres. |
 | Cant del Miracle | Pianista (després de Runna) | Obre els barrots de la gàbia. |
 | Llanterna (Llum d'en Mamet) | Jusef (en guanyar-lo a ping-pong, **a l'Acte 2, abans del fragment 1**) | **Imprescindible a les Runes** (sense llum no es veu el pergamí del forat); eixampla la llum als llocs foscos. |
@@ -184,10 +184,10 @@ Només amb la Fulla del Til·ler: el Pare Jordà beneeix l'Ineu (animació) i li
 Seu al banc del Galf. Demana un **cristall de gel** i et dona la **clau de Sant Gabriel**. A l'**ermita de Sant Gabriel** (camí de la Rovellonera) hi ha el cofre amb el **Cristall de Gel** (només hi és un cop el Galf n'ha parlat). Torna al Galf: construeix el **telescopi** (`telescopiMon`).
 
 **Pas 23 · Dipòsits — estels** `estelDiposit` `telescopiMon`
-Al mirador dels Dipòsits, el telescopi mostra estels; l'últim, l'**Estel de Sant Llorenç**, cau a l'aigua del dipòsit: cal pujar-hi a collir-ne la llum.
+Al mirador dels Dipòsits, el telescopi mostra estels; l'últim, la **Llàgrima de Sant Llorenç**, cau a l'aigua del dipòsit: cal pujar-hi a collir-ne la llum.
 
 **Pas 24 · Camí del Dolmen — la boira** `boiraDolmen`
-L'Estel de Sant Llorenç aparta la boira que tapa el camí.
+La Llàgrima de Sant Llorenç aparta la boira que tapa el camí.
 
 **Pas 25 · Dolmen — Runna** `dolmen` `dolmenBaix` `placaDolmen` `faltaRunna` `objectiuRunna`
 Cal posar a la placa els **tres medallons** (Arbre, Saber, Benedicció) i dir la frase del monjo. La pedra s'obre i **Runna** baixa a la mà de l'Ineu (l'espasa no parla). *Dany 3; talla esbarzers negres.*

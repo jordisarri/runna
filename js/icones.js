@@ -404,14 +404,15 @@ const ICONES_OBJECTES = {
         ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.fillRect(-6, -9, 30, 4);
         ctx.restore();
     },
-    estel_llorenc: ctx => {
-        const g = ctx.createRadialGradient(48, 48, 2, 48, 48, 46); g.addColorStop(0, 'rgba(230,240,255,0.9)'); g.addColorStop(1, 'rgba(180,200,255,0)');
+    estel_llorenc: ctx => {         // la Llàgrima de Sant Llorenç: una gota de llum blavosa, amb un reflex
+        const g = ctx.createRadialGradient(48, 52, 2, 48, 52, 46); g.addColorStop(0, 'rgba(200,225,255,0.75)'); g.addColorStop(1, 'rgba(160,190,255,0)');
         ctx.fillStyle = g; ctx.fillRect(0, 0, 96, 96);
-        ctx.lineWidth = 3; ctx.fillStyle = '#f4f8ff';
-        ctx.beginPath();
-        for (let k = 0; k < 10; k++) { const a = -Math.PI / 2 + k * Math.PI / 5, r = k % 2 ? 13 : 34; ctx.lineTo(48 + Math.cos(a) * r, 50 + Math.sin(a) * r); }
-        ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#c8d8ff'; ctx.beginPath(); ctx.arc(48, 50, 7, 0, Math.PI * 2); ctx.fill();
+        ctx.lineJoin = 'round'; ctx.lineWidth = 3;
+        const gota = () => { ctx.beginPath(); ctx.moveTo(48, 10); ctx.bezierCurveTo(52, 28, 76, 44, 76, 62); ctx.bezierCurveTo(76, 78, 63, 88, 48, 88); ctx.bezierCurveTo(33, 88, 20, 78, 20, 62); ctx.bezierCurveTo(20, 44, 44, 28, 48, 10); ctx.closePath(); };
+        const d = ctx.createLinearGradient(30, 20, 70, 88); d.addColorStop(0, '#f2f8ff'); d.addColorStop(0.55, '#a8d0ff'); d.addColorStop(1, '#5a90e0');
+        gota(); ctx.fillStyle = d; ctx.fill(); ctx.strokeStyle = '#243a78'; ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.beginPath(); ctx.ellipse(37, 62, 6, 13, 0.25, 0, Math.PI * 2); ctx.fill();         // reflex
+        ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.beginPath(); ctx.arc(60, 74, 3, 0, Math.PI * 2); ctx.fill();
     },
     runna: ctx => {
         const g = ctx.createRadialGradient(48, 48, 4, 48, 48, 46); g.addColorStop(0, 'rgba(216,232,255,0.7)'); g.addColorStop(1, 'rgba(216,232,255,0)');

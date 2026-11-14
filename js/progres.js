@@ -90,7 +90,7 @@ const PROGRES = {
         { id: 'runna', marca: ['runna', 'obj:runna', 'placaArbre', 'placaSaber', 'placaBenedicio', 'placaCompleta'], fet: E => E.flag('runna'),
           pista: E => E.flag('placaCompleta')
               ? "Els tres medallons són a la placa: l'espasa del Dolmen espera, dalt de la llosa."
-              : "L'estel aparta la boira. Al final, la placa del Dolmen espera els medallons de l'Arbre, del Saber i de la Benedicció." },
+              : "La llàgrima aparta la boira. Al final, la placa del Dolmen espera els medallons de l'Arbre, del Saber i de la Benedicció." },
         // ---- ACTE 3 ----
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
           pista: E => "Runna ja és amb tu. Els barrots de la gàbia només escolten un cant que la Pianista encara no t'ha ensenyat." },

@@ -181,7 +181,7 @@ const CATALEG_OBJECTES = {
     llac_nena:        ['Llaç de cinta', 'Rosa i descolorit. És de la Nena de les Trenes.'],
     llanterna:        ["Llum d'en Mamet", "Un antic llum d'oli d'un vell ermità del Miracle. La seva flama clara revela secrets amagats a la foscor i a les escletxes de la pedra."],
     telescopi:        ['Telescopi del Galf', 'Per mirar els estels als Dipòsits.'],
-    estel_llorenc:    ['Estel de Sant Llorenç', 'Un bocí de llum caigut del cel.'],
+    estel_llorenc:    ['Llàgrima de Sant Llorenç', 'Una gota de llum caiguda del cel, de la nit en què el cel plora.'],
     runna:            ['Runna', 'L\'espasa de llum del monjo.'],
     ram:              ['Ram de flors', 'Del Germà Francí, per a la tomba de l\'àngel.'],
     guants:           ['Guants de Poder', 'Per moure el que pesa massa.'],

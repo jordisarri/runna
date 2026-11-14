@@ -21,7 +21,7 @@ const DIARI_PASSOS = {
     alcoviLlegit: ['Els fragments del Pare Alcoví', 'ZonaBiblioteca'], ombra: ["L'ombra del monjo", 'ZonaRuines'],
     saber: ['Les Paraules del Saber', 'ZonaBiblioteca'], benediccio: ['La benedicció', 'ZonaPlaca'],
     telescopi: ['El telescopi del Galf', 'ZonaEra'], estels: ['Els estels', 'ZonaDipositos'],
-    estelLlorenc: ['L\'Estel de Sant Llorenç', 'ZonaDipositos'], runna: ['Runna', 'ZonaDolmen'],
+    estelLlorenc: ['La Llàgrima de Sant Llorenç', 'ZonaDipositos'], runna: ['Runna', 'ZonaDolmen'],
     jusef: ['El partit contra en Jusef', 'ZonaPingpong'],
     guants: ['Els Guants de Poder', 'ZonaSantAntoni'], roda: ['La roda del Celler', 'ZonaPingpong'],
     cambra: ['La cambra secreta', 'ZonaPassadis'], maneta: ["La maneta d\'en Jorgi", 'ZonaGeorgi'],

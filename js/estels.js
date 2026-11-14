@@ -14,7 +14,7 @@ const ESTELS_GABIA = { a: [90, 1000], b: [270, 1000], c: [90, 820], d: [270, 820
 const ESTELS_GABIA_LINIES = [['a', 'b'], ['a', 'c'], ['c', 'e'], ['e', 'd'], ['d', 'f'], ['b', 'g']];
 
 // Final de la constel·lació: l'últim estel s'apaga damunt del dipòsit de llevant i hi deixa una llum a l'aigua
-// (la zona dels Dipòsits la mostra; recollir-la dona l'Estel de Sant Llorenç)
+// (la zona dels Dipòsits la mostra; recollir-la dona la Llàgrima de Sant Llorenç)
 function completarEstels() {
     const E = Estat;
     E.posaFlag("estelsFets");
