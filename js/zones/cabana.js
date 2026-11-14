@@ -348,7 +348,7 @@ class ZonaCabanaCami extends ZonaBase {
 
         // Un cofre petit entre dues espelmes
         const cofreCab = this.posar(Estat.flag('cofreCabanaCami') ? 'cofre_obert' : 'cofre', 690, 250, { col: { w: 50, h: 20 }, opac: true });
-        this.interactiu(690, 255, RADI_OBJECTE, DIALEGS.cofreCabanaCami, { altura: 80, enTancar: () => { if (Estat.flag('cofreCabanaCami')) cofreCab.setTexture('cofre_obert'); } });
+        this.interactiu(690, 255, RADI_OBJECTE, DIALEGS.cofreCabanaCami, { altura: 80, actiu: () => !Estat.flag('cofreCabanaCami'), enTancar: () => { if (Estat.flag('cofreCabanaCami')) cofreCab.setTexture('cofre_obert'); } });
         [[630, 258], [750, 258]].forEach(([x, y], i) => {
             const e = this.posar('espelma', x, y, { fonsY: y });
             this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 350 + i * 90 });

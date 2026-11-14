@@ -1089,7 +1089,7 @@ class ZonaCasaCripta extends ZonaCasaBase {
         // Llosa amb la clau de ferro sota un raig de llum tènue, i dos candelabres
         this.llosaCripta = this.add.image(500, 340, Estat.flag('relTretes') ? 'llosa_cripta_buida' : 'llosa_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(340);
         this.colisio(500, 316, 180, 36);
-        this.interactiu(500, 372, RADI_OBJECTE, DIALEGS.cofreCripta, { altura: 130, enTancar: () => { if (Estat.flag('relTretes')) this.llosaCripta.setTexture('llosa_cripta_buida'); } });
+        this.interactiu(500, 372, RADI_OBJECTE, DIALEGS.cofreCripta, { altura: 130, actiu: () => !Estat.flag('relTretes'), enTancar: () => { if (Estat.flag('relTretes')) this.llosaCripta.setTexture('llosa_cripta_buida'); } });
         [[400, 360], [600, 360]].forEach(([x, y], i) => {
             (this.opacs = this.opacs || []).push(this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));          // sòlid: opac i amb col·lisió
             this.colisio(x, y - 8, 24, 14);

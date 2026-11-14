@@ -269,7 +269,7 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         this.posar('taula', 1040, 560, { escala: 0.9, col: { w: 100, h: 24 } });
         if (Estat.flag('mongesTrobades')) {
             const cofreM = this.posar(Estat.flag('cofreMonges') ? 'cofre_obert' : 'cofre', 600, 520, { col: { w: 50, h: 20 }, opac: true });
-            this.interactiu(600, 525, RADI_OBJECTE, DIALEGS.cofreMonges, { altura: 70, enTancar: () => { if (Estat.flag('cofreMonges')) cofreM.setTexture('cofre_obert'); } });
+            this.interactiu(600, 525, RADI_OBJECTE, DIALEGS.cofreMonges, { altura: 70, actiu: () => !Estat.flag('cofreMonges'), enTancar: () => { if (Estat.flag('cofreMonges')) cofreM.setTexture('cofre_obert'); } });
         }
         this.boira(600, 450, 900, 260, 1.2);
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.1).setDepth(80000);

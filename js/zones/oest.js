@@ -571,7 +571,7 @@ class ZonaGabrielInt extends ZonaBase {
                 this.tweens.add({ targets: gel, alpha: 0.06, scale: 1.3, yoyo: true, repeat: -1, duration: 1300 });
                 this.cofreGel = gel;
             }
-            this.interactiu(cx, cy + 6, RADI_OBJECTE, DIALEGS.cofreGabriel, { altura: 80,
+            this.interactiu(cx, cy + 6, RADI_OBJECTE, DIALEGS.cofreGabriel, { altura: 80, actiu: () => !buit(),
                 enTancar: () => { if (buit()) { cofreG.setTexture('cofre_obert'); if (this.cofreGel) { this.tweens.killTweensOf(this.cofreGel); this.cofreGel.destroy(); this.cofreGel = null; } } } });
         }
 
