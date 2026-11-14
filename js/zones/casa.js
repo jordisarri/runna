@@ -883,11 +883,11 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     // CERCLE DE RUNES: un anell gravat a terra al voltant del pedestal, que s'encén en lila quan el guardià es desperta i s'apaga quan descansa
     cercleRunes() {
         if (this.runesCercle) return;
-        const cx = RAIM.x, cy = RAIM.y - 8;
+        const cx = RAIM.x, cy = RAIM.y - 30;             // centrat a la base del pedestal (no a la cripta, que queda fora del cercle)
         let g;
         if (this.textures.exists('cercle_runes') && !Grafics.faltants.includes('cercle_runes')) {
             const t = this.textures.get('cercle_runes');
-            g = this.add.image(cx, cy, 'cercle_runes').setScale((t.customData && t.customData.escala) || 1 / RES).setDepth(-949).setAlpha(0);
+            g = this.add.image(cx, cy, 'cercle_runes').setScale(((t.customData && t.customData.escala) || 1 / RES) * 0.68).setDepth(-949).setAlpha(0);       // més petit (300 d'ample en lloc de 440)
         } else {                                                              // (sense el gràfic: un anell fet amb codi)
             const rx = 200, ry = 74, cy2 = RAIM.y + 34;
             g = this.add.graphics().setDepth(-949).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0);
@@ -895,7 +895,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             g.lineStyle(1.5, 0xd8c0ff, 0.7).strokeEllipse(cx, cy2, (rx - 20) * 2, (ry - 8) * 2);
         }
         this.runesCercle = g;
-        this.tweens.add({ targets: g, alpha: 1, duration: 900, onComplete: () => { if (g.active) this.tweens.add({ targets: g, alpha: 0.72, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' }); } });
+        this.tweens.add({ targets: g, alpha: 0.55, duration: 900, onComplete: () => { if (g.active) this.tweens.add({ targets: g, alpha: 0.32, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' }); } });       // més transparent
     }
     apagaRunes() {
         const g = this.runesCercle;
