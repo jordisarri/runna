@@ -34,7 +34,7 @@ class ZonaCreu extends ZonaBase {
         this.colisio(700, 400, 600, 170);             // l'anella de pedra (una el·lipse feta de tres franges)
         this.colisio(700, 290, 430, 60);
         this.colisio(705, 515, 390, 80);              // portella, jardinera i abeurador
-        const puntPortella = this.interactiu(703, 600, 170, DIALEGS.bassadoria, { altura: 130, enTancar: () => Estat.posaFlag('flauta_bassadoria') });    // la tarota s'obre sola en acabar el text (zona_base: tarotaDespresDeText)
+        const puntPortella = this.interactiu(703, 600, 170, DIALEGS.bassadoria, { altura: 130, enTancar: () => Estat.posaFlag('flauta_bassadoria'), toc: { x0: 603, x1: 803, y0: 0, y1: 690 } });      // sense «!»: només el brillo; s'activa davant la portella    // la tarota s'obre sola en acabar el text (zona_base: tarotaDespresDeText)
         this.brillo(703, 526, 76, 86, { punt: puntPortella });       // la portella de la bassa brilla sempre (el text es pot tornar a llegir)
         this.llocFlauta('bassadoria', 700, 470, 340, true, () => !Estat.flag('bassadoriaNeta'), false, ['aurora']);
         if (!Estat.flag('bassadoriaNeta')) this.boiraBass = this.boira(700, 360, 480, 120, 3.5);

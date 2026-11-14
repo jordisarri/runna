@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 514: Bassadòria: la portella ja no mostra el «!»; només el brillo, i el text s'activa davant seu.*
+
 *Revisió 513: Bassadòria: la portella de la bassa brilla sempre (el text es pot tornar a llegir, així que no s'apaga) i el punt d'interacció, amb la icona, passa a ser a la portella i s'activa des d'una distància curta.*
 
 *Revisió 512: El joc busca versions noves en obrir-lo i en tornar-hi, i es recarrega sol quan en troba una (de seguida a la portada; si no, en sortir de la pestanya, perquè no es talli la partida).*
