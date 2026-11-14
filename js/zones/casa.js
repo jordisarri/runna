@@ -106,6 +106,7 @@ Object.assign(DIALEGS, {
 
 // On és l'Home del Raïm a l'Escalinata (peu del pedestal) i quant més gran és que el dibuix original del volant
 const RAIM = { x: 700, y: 560, f: 1.485 };
+const GIR_RAIM_MS = 3000;      // el cap de l'Home del Raïm gira a tres batzegades (cada volta del volant), amb pauses: perquè es vegi i se senti
 
 // ---------------- BOSS: L'HOME DEL RAÏM VIU ----------------
 const K_RAIM = 0.88;     // mida del guardià respecte al dibuix original (277 → ~290 px d'alt): perquè es vegi sencer durant el combat; cos, radi i cap van ja en píxels de món
@@ -675,12 +676,12 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.girarVolant();
             this.girarEstatua();
             this.volDespertar = this.raimPas === 3 && this.teArma();
-            if (this.raimPas === 3 && !this.teArma()) return { pagines: [{ qui: 'Ineu', text: "(Ara em mira de cara. No m'agrada gens.)" }, ...DIALEGS.raimSenseArma.pagines] };
+            const espera = { fer: (z, fet) => z.esperar(GIR_RAIM_MS + 400, fet) };       // primer es veu (i se sent) com gira el cap; després surt el text
+            if (this.raimPas === 3 && !this.teArma()) return { pagines: [espera, { qui: 'Ineu', text: "(Ara em mira de cara. No m'agrada gens.)" }, ...DIALEGS.raimSenseArma.pagines] };
             const frases = ["(El volant grinyola. El cap de pedra s'ha girat una mica.)", "(Una altra volta. Ara el cap ja és de perfil.)", "(Ara em mira de cara. No m'agrada gens.)"];
-            if (!this.volDespertar) this.time.delayedCall(2300, () => this.alliberarCamera(1400));
-            return { pagines: [{ qui: 'Ineu', text: frases[this.raimPas - 1] }] };
+            return { pagines: [espera, { qui: 'Ineu', text: frases[this.raimPas - 1] }] };
         }, { altura: 70, actiu: () => !Estat.flag('raimDesperta') && Estat.te('maneta'),
-             enTancar: () => { if (this.volDespertar) { this.volDespertar = false; this.avisDespertar(); this.time.delayedCall(1000, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => { this.alliberarCamera(1200); this.despertarRaim(); })); } } });
+             enTancar: () => { if (!this.volDespertar) this.alliberarCamera(1400); if (this.volDespertar) { this.volDespertar = false; this.avisDespertar(); this.time.delayedCall(1000, () => this.ui().obrirDialeg(DIALEGS.raimDesperta, () => { this.alliberarCamera(1200); this.despertarRaim(); })); } } });
 
         // Vençut, l'estàtua del guardià es pot mirar: descansa al pedestal
         this.interactiu(RX, RY + 10, 90, E => this.enquadrarRaim(DIALEGS.raimEstatuaFinal), { altura: 250, enTancar: () => this.alliberarCamera(1400), actiu: () => Estat.flag('raimDerrotat') && !!this.estatuaFinal });
@@ -885,12 +886,16 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     girarVolant() {
         if (!this.volant) return;
         if (this.manetaVolant) this.manetaVolant.setVisible(true);
-        Sfx.porta();
-        this.cameras.main.shake(260, 0.003);
+        // El volant fa una volta en tres batzegades (amb pauses) mentre el cap de pedra gira, rascant, a poc a poc
+        for (let k = 0; k < 3; k++) {
+            this.time.delayedCall(k * 1000, () => {
+                if (!this.volant || !this.engranatge) return;
+                this.tweens.add({ targets: this.volant, rotation: this.volant.rotation + Math.PI * 2 / 3, duration: 700, ease: 'Sine.easeInOut', onUpdate: () => this.posarManeta() });
+                this.tweens.add({ targets: this.engranatge, rotation: this.engranatge.rotation - Math.PI * 3.8 / 3, duration: 700, ease: 'Sine.easeInOut' });
+            });
+        }
         this.encendreGemma(this.raimPas - 1);
-        this.tweens.add({ targets: this.volant, rotation: this.volant.rotation + Math.PI * 2, duration: 900, ease: 'Sine.easeInOut', onUpdate: () => this.posarManeta() });
-        this.tweens.add({ targets: this.engranatge, rotation: this.engranatge.rotation - Math.PI * 3.8, duration: 900, ease: 'Sine.easeInOut' });
-        if (this.raimPas === 3) this.time.delayedCall(950, () => this.llum(RAIM.x, RAIM.y - 190, 0xffe08a));
+        if (this.raimPas === 3) this.time.delayedCall(GIR_RAIM_MS - 50, () => this.llum(RAIM.x, RAIM.y - 190, 0xffe08a));
     }
 
     runes() {
@@ -904,13 +909,23 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         return this.textures.exists(k) && !Grafics.faltants.includes(k) ? k : 'home_raim';
     }
 
-    // El cap de l'estàtua gira: la nova imatge es fon per sobre de l'anterior
+    // El cap de l'estàtua gira a poc a poc i a batzegades: tres tirades de pedra que rasca (so, sacsejada i pols), amb pauses, a cadascuna la nova imatge
+    // es fon una mica més per sobre de l'anterior; en acabar, la nova passa a ser la de l'estàtua
     girarEstatua() {
         const e = this.estatua, k = this.texRaim();
         if (!e || !e.active || e.texture.key === k) return;
         const esc = (this.textures.get(k).customData && this.textures.get(k).customData.escala) || 1 / RES;
         const nova = this.add.image(e.x, e.y, k).setOrigin(e.originX, e.originY).setScale(esc).setDepth(e.depth + 1).setAlpha(0);
-        this.tweens.add({ targets: nova, alpha: 1, duration: 380, delay: 300, ease: 'Sine.easeInOut', onComplete: () => { e.setTexture(k).setScale(esc); nova.destroy(); } });
+        for (let n = 0; n < 3; n++) {
+            this.time.delayedCall(n * 1000, () => {
+                if (!e.active) return;
+                Sfx.pedraRascant(0.7);
+                this.cameras.main.shake(650, 0.0028);
+                ENEMICS.raim.trossos(this, RAIM.x, RAIM.y - 175, 5);
+                this.tweens.add({ targets: e, x: e.x + 2, duration: 45, yoyo: true, repeat: 6 });
+                this.tweens.add({ targets: nova, alpha: (n + 1) / 3, duration: 700, ease: 'Sine.easeInOut', onComplete: () => { if (n === 2) { e.setTexture(k).setScale(esc); nova.destroy(); } } });
+            });
+        }
     }
 
     // L'estàtua cobra vida: s'esquerda i tremola, esclata en llum lila, el guardià salta del pedestal (que es queda) i alça la maça rugint

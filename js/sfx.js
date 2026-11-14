@@ -345,6 +345,13 @@ const Sfx = {
         this.xiu(0.12, 0.28, 'highpass', 1500, 800, 1, 0.08);
         this.to(140, 70, 0.22, 'square', 0.14);
     },
+    pedraRascant(dur = 0.65) {   // pedra que rasca contra pedra (el cap de l'Home del Raïm en girar): rascades greus a batzegades, un rumor de fons i un xiscle fi de gra
+        if (!this.ok('pedraRascant', 250)) return;
+        const n = Math.max(3, Math.round(dur / 0.11));
+        for (let k = 0; k < n; k++) this.xiu(0.2, 0.18 + Math.random() * 0.12, 'bandpass', 320 + Math.random() * 260, 150, 3.5, k * dur / n);
+        this.xiu(dur, 0.12, 'lowpass', 220, 90, 1, 0);
+        this.xiu(dur * 0.8, 0.05, 'highpass', 2400, 1500, 2, 0.05);
+    },
     rugit() {                    // l'Ocellaire crida (canvis de fase): veu greu i un buf de gola, sense xiscles aguts
         if (!this.ok('rugit', 600)) return;
         this.veuGreu(120, 52, 1.5, 0.26);
