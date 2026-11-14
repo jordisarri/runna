@@ -309,7 +309,11 @@ const Proves = {
         const zones = Joc.ZONES;
         const sz = document.createElement('select'), se = document.createElement('select');
         [sz, se].forEach(s => { s.style.cssText = 'font:inherit;padding:7px;max-width:100%;margin:2px 6px 2px 0'; });
-        zones.forEach(z => sz.add(new Option(z.replace(/^Zona/, ''), z)));
+        // Nom de cada zona tal com es mostra al joc (config.nom), en ordre alfabètic; si dues porten el mateix nom, s'hi afegeix la clau
+        const nomZona = z => { const sc = game.scene.getScene(z); return (sc && sc.config && sc.config.nom) || z.replace(/^Zona/, ''); };
+        const noms = zones.map(z => [nomZona(z), z]);
+        noms.sort((x, y) => x[0].localeCompare(y[0], 'ca', { sensitivity: 'base' }));
+        noms.forEach(([n, z]) => sz.add(new Option(noms.filter(q => q[0] === n).length > 1 ? n + ' (' + z.replace(/^Zona/, '') + ')' : n, z)));
         const act = this.zonaActiva();
         if (act) sz.value = act.scene.key;
         const omple = () => {
