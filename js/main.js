@@ -390,10 +390,25 @@ class EscenaCarrega extends Phaser.Scene {
             .catch(() => {})
             .then(() => {
                 // L'escena de càrrega es queda viva (sense res a la pantalla) i carrega tota la resta mentre es veuen la portada i el pròleg
-                this.children.removeAll(true);
-                this.scene.launch('Titol', { mode: 'intro' });
-                this.carregarResta();
+                // Abans de començar, es comprova que la foto i el logo de la portada s'han carregat de debò (si la xarxa en talla una petició, es torna a provar)
+                this.asseguraCritics(() => {
+                    this.children.removeAll(true);
+                    this.scene.launch('Titol', { mode: 'intro' });
+                    this.carregarResta();
+                });
             });
+    }
+
+    // La foto de la portada i el logo no poden faltar: si el carregador no els ha pogut baixar (una petició tallada), es tornen a demanar fins a 4 vegades
+    // (amb una adreça diferent perquè ni el navegador ni el service worker tornin a donar la resposta fallida) abans de seguir; així la portada mai surt buida.
+    asseguraCritics(fet, intent = 0) {
+        const CRITICS = { portada_intro: 'assets/video/intro.webp', logo_runna: 'assets/video/logo_runna.webp' };
+        const falten = Object.keys(CRITICS).filter(k => !this.textures.exists(k));
+        if (!falten.length || intent >= 4) { fet(); return; }
+        const detall = this.add.text(AMPLE / 2, ALT / 2 + 80, 'Tornant a provar...', estilText(22, '#8a8070')).setOrigin(0.5);
+        falten.forEach(k => this.load.image(k, CRITICS[k] + '?r=' + Date.now() + '_' + intent));
+        this.load.once('complete', () => { detall.destroy(); this.time.delayedCall(400 * (intent + 1), () => this.asseguraCritics(fet, intent + 1)); });
+        this.load.start();
     }
 
     carregarResta() {

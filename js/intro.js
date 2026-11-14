@@ -58,7 +58,7 @@ class EscenaTitol extends Phaser.Scene {
 
     // El món de la portada: la foto fixa dins d'un contenidor, que és el que fa el zoom.
     construirMon() {
-        const foto = this.add.image(0, 0, 'portada_intro');
+        const foto = this.textures.exists('portada_intro') ? this.add.image(0, 0, 'portada_intro') : this.add.rectangle(0, 0, 1024, 1024, 0x0a0814);          // (si la foto no s'ha pogut baixar, un fons fosc: la portada no peta)
         const W = this.fw = foto.width, H = this.fh = foto.height;
         this.mon = this.add.container(AMPLE / 2, ALT / 2, [foto]).setDepth(1).setVisible(false);
 
