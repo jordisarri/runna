@@ -720,7 +720,7 @@ class ZonaBase extends Phaser.Scene {
 
     // Punt on es pot prémer ESPAI. dialeg = funció de DIALEGS o funció pròpia que retorna un diàleg.
     interactiu(x, y, radi, dialeg, opts = {}) {
-        const punt = { x, y, radi, dialeg, altura: opts.altura || 60, enTancar: opts.enTancar, actiu: opts.actiu, senseMirada: opts.senseMirada, toc: opts.toc };       // toc {x0,x1,y0,y1}: només s'activa quan l'Ineu hi és dins (tocant el dibuix) i no mostra el «!»
+        const punt = { x, y, radi, dialeg, altura: opts.altura || 60, enTancar: opts.enTancar, actiu: opts.actiu, senseMirada: opts.senseMirada, toc: opts.toc, marca: opts.marca };       // marca: només els personatges (npc) mostren el «!»; els objectes només es nota que són interactius pel brillo       // toc {x0,x1,y0,y1}: només s'activa quan l'Ineu hi és dins (tocant el dibuix) i no mostra el «!»
         this.interactius.push(punt);
         return punt;
     }
@@ -742,7 +742,7 @@ class ZonaBase extends Phaser.Scene {
         if (opts.flipX) img.setFlipX(true);
         img.escalaBase = img.scaleY;
         if (!idle) this.idleCodi(img, opts.quiet);
-        img.punt = this.interactiu(x, y - 10, opts.radi || RADI_NPC, dialeg, { altura: img.displayHeight + 6 });
+        img.punt = this.interactiu(x, y - 10, opts.radi || RADI_NPC, dialeg, { altura: img.displayHeight + 6, marca: true });
         if (opts.zoomConversa) img.punt.zoomConversa = opts.zoomConversa;       // més zoom (que ZOOM_NPC) en parlar-hi, perquè s'apreciïn els sprites
         img.punt.npc = img;                                  // en parlar-hi, l'Ineu es fa enrere i no se solapen (vegeu separarDeNpc)
         (this.npcs = this.npcs || {})[key] = img;
@@ -1501,7 +1501,7 @@ class ZonaBase extends Phaser.Scene {
             if (ph > dur || !this.ineu) return;
             if (o.actiu && !o.actiu()) return;
             if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, x, y) > radi) return;
-            if (o.punt && !o.punt.toc && this.puntProper && this.puntProper() === o.punt) return;
+            if (o.punt && o.punt.marca && this.puntProper && this.puntProper() === o.punt) return;
             const p = ph / dur, e = p * p * (3 - 2 * p), sk = h * ang, cx = x - w / 2 - w * 0.4 + e * w * 1.8, bw = Math.max(7, w * 0.2), alfa = 0.8 * Math.sin(Math.PI * p);
             [[1, 0.3], [0.62, 0.55], [0.28, 1]].forEach(([k, a]) => {
                 const mig = bw * k;
@@ -1522,7 +1522,7 @@ class ZonaBase extends Phaser.Scene {
         for (let i = 0; i < N; i++) copies.push(this.add.image(0, 0, img.texture.key, img.frame.name).setTintFill(0xffffff).setBlendMode('ADD').setVisible(false));
         const f = () => {
             const ph = (this.time.now + b.desfase) % per;
-            const ok = img.active && img.visible && img.alpha > 0.5 && ph <= dur && (!o.actiu || o.actiu()) && !(o.punt && !o.punt.toc && this.puntProper && this.puntProper() === o.punt);
+            const ok = img.active && img.visible && img.alpha > 0.5 && ph <= dur && (!o.actiu || o.actiu()) && !(o.punt && o.punt.marca && this.puntProper && this.puntProper() === o.punt);
             if (!ok) { copies.forEach(c => c.visible && c.setVisible(false)); return; }
             const fw = img.frame.width, fh = img.frame.height, p = ph / dur, e = p * p * (3 - 2 * p), skew = fh * ang, bw = Math.max(8, fw * 0.2);
             const cx = -bw * 1.5 + e * (fw + bw * 3), alfa = 0.75 * Math.sin(Math.PI * p);
@@ -2236,7 +2236,7 @@ class ZonaBase extends Phaser.Scene {
         const proper = this.puntProper();
         // La tarota NO s'obre mai directament amb ESPAI: cada lloc de tarota té un punt d'interacció (el «!») amb el seu text, i la tarota s'obre
         // en acabar-lo (vegeu tarotaDespresDeText). Així els enemics de prop no hi interfereixen.
-        const mostra = proper && !proper.toc ? proper : null;
+        const mostra = proper && proper.marca ? proper : null;
         this.indicador.setVisible(!!mostra);
         if (mostra) this.indicador.setPosition(mostra.x, mostra.y - mostra.altura);
         const T = Phaser.Input.Keyboard.JustDown;

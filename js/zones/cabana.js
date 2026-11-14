@@ -139,6 +139,8 @@ class ZonaCabana extends ZonaBase {
             enTancar: () => this.canviarZona('ZonaBosc', 'portal')
         });
 
+        this.brillo(AX - 18, AY - 128, 62, 100, { arc: true });          // el forat del tronc brilla sempre
+
         // Ocells als arbres (la Joaneta hi parla)
         [[560, 280], [1180, 360], [380, 430], [1100, 760], [650, 860]].forEach(([x, y], i) => {
             const o = this.posar('ocell', x, y, { fonsY: y });
