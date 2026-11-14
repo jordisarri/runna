@@ -668,7 +668,9 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (!derrotat && !desperta) this.lampesRaim();
         if (!derrotat && !desperta) {      // el volant i l'engranatge brillen sempre (sense la maneta donen text; amb ella, giren)
             const vy = Math.round(RY - this.estatua.displayHeight * 0.17), f = RAIM.f;
-            this.brillo(RX + 7 * f, vy - 3 * f, 64 * f, 56 * f, { actiu: () => !Estat.flag('raimDesperta') && !!this.volant, dep: RAIM.y + 5 });
+            const actiu = () => !Estat.flag('raimDesperta') && !!this.volant;
+            const bv = this.brillo(RX, vy, 50 * f, 50 * f, { cercle: true, actiu, dep: RAIM.y + 5 });                                    // el volant (rodó)
+            this.brillo(RX + 24 * f, vy - 16 * f, 31 * f, 31 * f, { cercle: true, actiu, dep: RAIM.y + 5, desfase: bv.desfase + 120 });     // i l'engranatge petit, just després
         }
         this.interactiu(RX, RY + 32, 90, E => {
             this.raimPas = Math.min(3, this.raimPas + 1);

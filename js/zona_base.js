@@ -1491,11 +1491,12 @@ class ZonaBase extends Phaser.Scene {
     brillo(x, y, w, h, o = {}) {
         const radi = o.radi || Infinity, per = o.per || 2400, dur = 800, ang = o.ang !== undefined ? o.ang : 0.5;
         const b = { per, desfase: o.desfase !== undefined ? o.desfase : Math.random() * per };
-        b.rect = { x, y, w, h, arc: !!o.arc };      // (per a les proves: on cau el brillo)
+        b.rect = { x, y, w, h, arc: !!o.arc, cercle: !!o.cercle };      // (per a les proves: on cau el brillo)
         (this.brillos = this.brillos || []).push(b);
         const g = this.add.graphics().setDepth(o.dep || 910).setBlendMode('ADD');
         const m = this.make.graphics({ add: false }); m.fillStyle(0xffffff, 1);
-        if (o.arc) m.fillRoundedRect(x - w / 2, y - h / 2, w, h, { tl: w / 2, tr: w / 2, bl: 0, br: 0 }); else m.fillRect(x - w / 2, y - h / 2, w, h);
+        if (o.cercle) m.fillCircle(x, y, w / 2);                  // (cercle: roda o engranatge; w = diàmetre)
+        else if (o.arc) m.fillRoundedRect(x - w / 2, y - h / 2, w, h, { tl: w / 2, tr: w / 2, bl: 0, br: 0 }); else m.fillRect(x - w / 2, y - h / 2, w, h);
         g.setMask(m.createGeometryMask());
         const f = () => {
             g.clear();
