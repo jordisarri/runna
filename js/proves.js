@@ -358,7 +358,7 @@ const Proves = {
         const sec = (t, ...bs) => { cos.appendChild(this.etiqueta(t)); bs.forEach(b => { botons.push(b); cos.appendChild(b); }); };
         const teR = () => Estat.te('runna'), teB = () => Estat.te('basto_tiller'), teBa = () => Estat.te('basto');
         sec('Arma', arma('Cap', [], false, () => !teR() && !teB() && !teBa()), arma('Bastó', ['basto'], false, () => !teR() && !teB() && teBa()),
-            arma('Branca del Til·ler', ['basto_tiller'], false, () => !teR() && teB()), arma('Runna', ['runna'], true, teR));
+            arma('Branca del Til·ler', ['basto', 'basto_tiller'], false, () => !teR() && teB()), arma('Runna', ['basto', 'basto_tiller', 'runna'], true, teR));        // (com a la partida: les millores s'afegeixen i el bastó es conserva; el joc només té arma si hi ha bastó o Runna)
         const obj = (nom, o) => interruptor(nom, () => Estat.te(o), () => this.donaObj(o), () => this.treuObj(o));
         const fl = (nom, f) => interruptor(nom, () => Estat.flag(f), () => Estat.posaFlag(f), () => this.treuFlag(f));
         sec('Flauta i cants', obj('Flauta (tarota)', 'flauta'), fl('Cant de l\'Aurora', 'cantAurora'), fl('Cant de Vespres (Pedres)', 'cantPedres'), fl('Cant del Miracle', 'cantMiracle'));
