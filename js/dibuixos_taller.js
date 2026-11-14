@@ -210,13 +210,30 @@ function pintarLabTaller(ctx, w, h) {
     ctx.fillStyle = '#4a2e18'; [[14, top + 16], [w - 26, top + 16]].forEach(([x, y]) => { ctx.fillRect(x, y, 12, h - y - 6); ctx.strokeRect(x, y, 12, h - y - 6); });
     ctx.fillStyle = gradVBib(ctx, top, top + 18, [[0, '#8a6038'], [1, '#5a381c']]); ctx.fillRect(4, top, w - 8, 18); ctx.strokeRect(4, top, w - 8, 18);
     const vidre = (fn, liquid) => { ctx.save(); fn(); ctx.clip(); ctx.fillStyle = liquid[0]; ctx.fillRect(0, liquid[1], w, h); ctx.restore(); fn(); ctx.fillStyle = 'rgba(220,240,255,0.18)'; ctx.fill(); ctx.strokeStyle = 'rgba(30,40,50,0.9)'; ctx.lineWidth = 2; ctx.stroke(); };
-    // Matràs rodó verd sobre un cremador
-    const mx = 46, my = top - 30;
-    ctx.fillStyle = '#2a2a30'; ctx.fillRect(mx - 14, top - 10, 28, 10); ctx.strokeRect(mx - 14, top - 10, 28, 10);
-    ctx.fillStyle = '#4a8aff'; ctx.beginPath(); ctx.moveTo(mx - 5, top - 10); ctx.quadraticCurveTo(mx, top - 22, mx + 5, top - 10); ctx.fill();
-    vidre(() => { ctx.beginPath(); ctx.arc(mx, my, 20, Math.PI * 0.62, Math.PI * 2.38); ctx.lineTo(mx + 6, my - 40); ctx.lineTo(mx - 6, my - 40); ctx.closePath(); }, ['#6ad050', my - 4]);
-    // Tub que va a l'alambí
-    ctx.strokeStyle = 'rgba(200,230,255,0.8)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(mx, my - 40); ctx.quadraticCurveTo(mx + 30, my - 66, 96, my - 52); ctx.stroke();
+    // Matràs rodó verd sobre una làmpada d'alcohol: esfera de vidre amb coll estret i tap de suro, líquid verd amb menisc, llums i bombolles
+    const mx = 46, my = top - 28, R = 17, cb = 4.5;
+    ctx.lineWidth = 2.5; ctx.strokeStyle = TALLER_CONTORN;
+    ctx.fillStyle = coureTaller(ctx, mx - 13, 0, mx + 13, 0); ctx.beginPath(); ctx.roundRect(mx - 13, top - 8, 26, 8, 2); ctx.fill(); ctx.stroke();            // la làmpada: cos de coure
+    ctx.fillStyle = '#2a2a30'; ctx.fillRect(mx - 2, top - 11, 4, 4); ctx.strokeRect(mx - 2, top - 11, 4, 4);                                                    // el ble
+    const iy = my - Math.sqrt(R * R - cb * cb), aL = Math.atan2(iy - my, -cb), aR = Math.atan2(iy - my, cb);
+    const forma = () => { ctx.beginPath(); ctx.moveTo(mx - cb, my - 36); ctx.lineTo(mx - cb, iy); ctx.arc(mx, my, R, aL, aR, true); ctx.lineTo(mx + cb, my - 36); ctx.closePath(); };
+    vidre(forma, ['#5fc84a', my - 2]);
+    ctx.save(); forma(); ctx.clip();                                                                                                                              // dins del vidre: ombra a la dreta, menisc i llum
+    ctx.fillStyle = 'rgba(20,70,20,0.28)'; ctx.beginPath(); ctx.ellipse(mx + 9, my + 5, 8, 13, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#b4f090'; ctx.beginPath(); ctx.ellipse(mx, my - 2, R, 3, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 2.4; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.arc(mx, my, R - 4, Math.PI * 0.72, Math.PI * 1.05); ctx.stroke();                                                                       // el reflex de la finestra
+    ctx.beginPath(); ctx.moveTo(mx - cb + 2, my - 32); ctx.lineTo(mx - cb + 2, my - 22); ctx.stroke();                                                           // llum al coll
+    ctx.fillStyle = 'rgba(255,255,255,0.8)'; [[-4, 6, 1.6], [3, 9, 1.2], [-1, 1, 1.1]].forEach(([dx, dy, r]) => { ctx.beginPath(); ctx.arc(mx + dx, my + dy, r, 0, Math.PI * 2); ctx.fill(); });   // bombolles
+    ctx.lineCap = 'butt'; ctx.lineWidth = 2.5; ctx.strokeStyle = TALLER_CONTORN;
+    ctx.fillStyle = '#b07a42'; ctx.beginPath(); ctx.roundRect(mx - 6.5, my - 43, 13, 8, 1.5); ctx.fill(); ctx.stroke();                                         // el tap de suro
+    ctx.fillStyle = 'rgba(255,230,180,0.35)'; ctx.fillRect(mx - 5, my - 42, 10, 2);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = '#ff9a3a';                                                                              // la flama, que llepa el fons del matràs
+    ctx.beginPath(); ctx.moveTo(mx - 4, top - 11); ctx.quadraticCurveTo(mx, top - 24, mx + 4, top - 11); ctx.fill();
+    ctx.fillStyle = '#6ab4ff'; ctx.beginPath(); ctx.moveTo(mx - 2, top - 11); ctx.quadraticCurveTo(mx, top - 18, mx + 2, top - 11); ctx.fill(); ctx.restore();
+    // Tub que va a l'alambí (surt del tap)
+    ctx.strokeStyle = 'rgba(200,230,255,0.8)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(mx, my - 43); ctx.quadraticCurveTo(mx + 30, my - 62, 96, my - 52); ctx.stroke();
     // Alambí de coure
     const ax = 106, ay = top - 30;
     ctx.fillStyle = coureTaller(ctx, ax - 22, 0, ax + 22, 0); ctx.strokeStyle = TALLER_CONTORN; ctx.lineWidth = 2;
