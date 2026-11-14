@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 537: En girar el volant, la càmera s'acosta al cap de l'Home del Raïm (pla més proper, centrat al cap) mentre gira; en tancar el text, es torna a allunyar.*
+
 *Revisió 536: El cap de l'Home del Raïm gira més visible i a poc a poc: a cada volta del volant fa tres batzegades de pedra (uns 3 s en total, amb pauses), cada una amb so de pedra que rasca, sacsejada i pols; el text surt quan el gir ha acabat i la càmera s'allibera en tancar-lo. El volant també gira a batzegades.*
 
 *Revisió 535: Cel·la de Sant Antoni: es redibuixa el primer matràs de la taula dreta (esfera de vidre amb coll estret i tap de suro, líquid verd amb menisc, reflexos i bombolles, sobre una làmpada d'alcohol de coure amb la flama que llepa el fons; el tub cap a l'alambí surt del tap).*

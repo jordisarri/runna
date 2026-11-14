@@ -672,7 +672,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         }
         this.interactiu(RX, RY + 32, 90, E => {
             this.raimPas = Math.min(3, this.raimPas + 1);
-            this.enquadrarRaim(null, true);                         // la càmera puja i es veu l'estàtua sencera mentre gira el cap
+            const est = this.estatua, zc = Math.min(2.6, (this.zoomZona || ZOOM_CAMERA) * 1.9);
+            this.enquadrar(RAIM.x, RAIM.y - (est ? est.displayHeight : 360) * 0.9, zc, 1100, null, 0);          // la càmera s'acosta al cap (pla proper) mentre gira
             this.girarVolant();
             this.girarEstatua();
             this.volDespertar = this.raimPas === 3 && this.teArma();
