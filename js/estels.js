@@ -247,8 +247,8 @@ class EscenaEstels extends Phaser.Scene {
         }
         this.fletxa.setAlpha(0.35);                                             // les línies d'unir els punts queden de fons
         this.tweens.add({ targets: [g, o], alpha: 1, duration: 1400 });
-        this.info.setText("Un ocell que s'escapa d'una gàbia oberta...\ncom l'Ocellaire, si la boira guanya.");
-        this.info.setFontSize(28).setWordWrapWidth(500).setY(190);          // (text llarg: més petit i amb marge als costats del quadre)
+        this.info.setText("Un ocell que s'escapa d'una gàbia oberta...");
+        this.info.setFontSize(30).setWordWrapWidth(520).setY(215);          // (text llarg: més petit i amb marge als costats del quadre)
         [1, 3, 2].forEach((n, i) => this.time.delayedCall(i * 350, () => this.so(n + 1)));
         this.time.delayedCall(6500, () => this.tancar(true));          // (més estona per poder llegir el missatge)
     }
