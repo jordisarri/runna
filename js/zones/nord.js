@@ -893,6 +893,7 @@ class ZonaTiller extends ZonaBase {
             .setAngle(this.branca.angle).setDepth(TIL_Y - 1);
         this.tweens.add({ targets: this.brancaAura, alpha: { from: 0.15, to: 0.38 }, scaleX: { from: 0.85, to: 1.15 }, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
         this.tweens.add({ targets: this.branca, alpha: { from: 0.65, to: 1 }, yoyo: true, repeat: -1, duration: 800, ease: 'Sine.easeInOut' });
+        this.brilloImatge(this.branca, { actiu: () => Estat.flag('tillerBranca') && !Estat.te('basto_tiller') });          // la branca brilla mentre és a terra
         this.interactiu(TIL_X + 100, TIL_Y + 115, RADI_OBJECTE, DIALEGS.branca, { altura: 60, actiu: () => Estat.flag('tillerBranca') && !Estat.te('basto_tiller') });
         // (només es veu un cop ha caigut: si no, en entrar es veuria un instant abans que el primer fotograma l'amagués)
         const brancaVisible = Estat.flag('tillerBranca') && !Estat.te('basto_tiller');
@@ -963,6 +964,7 @@ class ZonaTiller extends ZonaBase {
         let sd = 11; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
         // Tota la mata d'arrels és sòlida (i arriba fins a la paret d'arbres de l'oest): no es pot passar per darrere
         this.colArrels = this.colisio(1140, Y - 67, 520, 144);
+        this.brillo(1175, 140, 200, 130, { actiu: () => !Estat.flag('camiCirosaObert') });          // el cor de la mata d'arrels brilla (no tot el dibuix, que és enorme)
         this.muralla(0, 150, 960, 150, 110, 'arbre', true, x => x > 230);   // fins aquí, una paret invisible tanca el pas per l'oest (arbres només al canton, perquè el Til·ler quedi sol)
         if (this.textures.exists('arrels_tiller') && !Grafics.faltants.includes('arrels_tiller')) {
             const imatge = this.posar('arrels_tiller', 1180, Y);            // (de 960 a 1400: sencera dins l'escena i tapant tot el camí)
@@ -1402,20 +1404,11 @@ class ZonaBosc extends ZonaBase {
         this.herbes = [];
         // (el romaní, ara, és al Bosc del Pi dels Tres Cants: bosc_pi.js)
         [[1, 'herba de Sant Joan', 'herba_sj', 720, 290]].forEach(([n, nom, key, x, y]) => {
-            const halo = this.add.ellipse(x, y - 10, 96, 44, 0xfff0a0, 0.3).setDepth(y - 1);
-            this.tweens.add({ targets: halo, alpha: 0.08, scale: 1.35, yoyo: true, repeat: -1, duration: 1100 });
-            const raig = this.add.rectangle(x, y - 110, 30, 220, 0xfff4b0, 0.12).setDepth(9500);
-            this.tweens.add({ targets: raig, alpha: 0.04, yoyo: true, repeat: -1, duration: 1400 });
             const img = this.posar(key, x, y);
-            this.tweens.add({ targets: img, scaleY: img.scaleY * 1.05, yoyo: true, repeat: -1, duration: 900 });
-            const espurnes = this.add.particles(x, y - 14, 'espurna', {
-                x: { min: -30, max: 30 }, y: { min: -10, max: 10 }, speedY: { min: -46, max: -16 }, lifespan: 1600,
-                scale: { start: 0.38, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xfff2a0, 0xffffff], frequency: 260, blendMode: 'ADD'
-            }).setDepth(9501);
-            // Fins que no es llegeix la font (fontVista) no se sap què cal portar-hi: ni es veuen les herbes ni s'hi pot interactuar
-            espurnes.stop();
+            // Fins que no es llegeix la font (fontVista) no se sap què cal portar-hi: ni es veuen les herbes ni s'hi pot interactuar. Només un brillo discret (sense halo, raig ni espurnes)
             this.interactiu(x, y, RADI_OBJECTE, DIALEGS.herba(n, nom, key), { altura: 70, actiu: () => !Estat.flag('herba' + n) && Estat.flag('fontVista') });
-            this.herbes.push({ img, halo, raig, espurnes, flag: 'herba' + n });
+            this.brilloImatge(img, { actiu: () => !Estat.flag('herba' + n) && Estat.flag('fontVista') });
+            this.herbes.push({ img, flag: 'herba' + n });
         });
 
         // Bosc dens: arbres en graella amb petits desplaçaments, deixant lliures el camí i els llocs importants
@@ -1454,15 +1447,13 @@ class ZonaBosc extends ZonaBase {
         const h = this.herbes.find(q => q.flag === 'herba' + n);
         if (!h) return;
         h.agafada = true;
-        h.img.setVisible(false); h.halo.setVisible(false); h.raig.setVisible(false); h.espurnes.stop();
+        h.img.setVisible(false);
     }
 
     actualitzar(ara) {
         this.herbes.forEach(h => {
             const visible = !Estat.flag(h.flag) && Estat.flag('fontVista') && !h.agafada;
-            h.img.setVisible(visible); h.halo.setVisible(visible); h.raig.setVisible(visible);
-            if (visible && !h.encesa) { h.encesa = true; h.espurnes.start(); }
-            if (!visible && h.encesa && !h.apagada) { h.apagada = true; h.espurnes.stop(); }
+            h.img.setVisible(visible);
         });
         // La font s'ha netejat: la boira lila se'n va (deixa de néixer i el to lila s'esvaeix)
         if (Estat.flag('fontNeta') && this.boires.length) {

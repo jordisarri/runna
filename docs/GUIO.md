@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 518: Brillo a la branca i a les arrels del Til·ler (el cor de la mata, no tot el dibuix). L'herba de Sant Joan de la Font perd el halo, el raig de llum i les espurnes: només queda el brillo discret.*
+
 *Revisió 517: Fora el brillo de les portes evidents (Taverna, reixa de la Casa Gran, Gàrgoles, porta de ferro de sota la Taverna) i dels llibres de la Masia; a la Sala del Rellotge només brilla el pergamí. La Nova Església (zona de proves, fora de la història) s'arxiva a art/arxiu/ i surt del joc.*
 
 *Revisió 516: Brillo permanent a les portes tancades: la porta de la Taverna, la reixa de la Casa Gran, la porta de ferro vermella de les Gàrgoles (fora) i la porta de ferro de sota la Taverna; s'apaga quan s'obren.*
