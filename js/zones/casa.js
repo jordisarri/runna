@@ -220,10 +220,20 @@ ENEMICS.raim = {
     netejaTele(e) { if (e.tele) { e.tele.destroy(); e.tele = null; } },
     // COP DE MAÇA (fase 2): la maça cau sobre el punt on era l'Ineu; un cercle vermell s'omple durant l'avís i, en l'impacte, una ona de pedra s'escampa
     teleMaza(z, e, ara) {
-        if (!e.teleMa) e.teleMa = z.add.graphics().setDepth(-300).setBlendMode(Phaser.BlendModes.ADD);
-        const p = 1 - Phaser.Math.Clamp((e.fins - ara) / 800, 0, 1), R = 100;
-        e.teleMa.clear().fillStyle(0xcbb0ff, 0.03 + 0.08 * p).fillCircle(e.mx, e.my, R).lineStyle(1.5, 0xe4d4ff, 0.12 + 0.3 * p).strokeCircle(e.mx, e.my, R);
-        e.teleMa.lineStyle(1, 0xf0e6ff, 0.2 + 0.25 * p).strokeCircle(e.mx, e.my, R * (1 - p));          // un anell fi que es tanca: marca el moment del cop
+        // Zona de perill ben clara: un disc vermell que s'omple, un anell gruixut, esquerdes que s'obren des del centre (l'ona de xoc que vindrà) i l'ombra de la
+        // maça que baixa (un cercle fosc que s'encongeix); a l'últim moment un anell blanc es tanca: aquell és l'instant del cop.
+        if (!e.teleMa) e.teleMa = z.add.graphics().setDepth(-290);
+        const p = 1 - Phaser.Math.Clamp((e.fins - ara) / 800, 0, 1), R = 100, g = e.teleMa, parpelleig = 0.75 + 0.25 * Math.sin(ara / 70);
+        g.clear();
+        g.fillStyle(0xd0382e, (0.1 + 0.26 * p) * parpelleig).fillCircle(e.mx, e.my, R);
+        g.lineStyle(3.5, 0xff6a4a, (0.5 + 0.45 * p) * parpelleig).strokeCircle(e.mx, e.my, R);
+        g.lineStyle(1.5, 0xff9a7a, 0.3 + 0.3 * p);
+        for (let k = 0; k < 8; k++) {                                                   // esquerdes que creixen cap a fora
+            const a = k * Math.PI / 4 + 0.2, l1 = R * 0.18, l2 = R * (0.3 + 0.55 * p);
+            g.lineBetween(e.mx + Math.cos(a) * l1, e.my + Math.sin(a) * l1, e.mx + Math.cos(a) * l2, e.my + Math.sin(a) * l2);
+        }
+        g.fillStyle(0x000000, 0.12 + 0.3 * p).fillCircle(e.mx, e.my, 44 * (1.7 - 0.7 * p));          // l'ombra de la maça que cau
+        g.lineStyle(2.2, 0xffffff, 0.35 + 0.5 * p).strokeCircle(e.mx, e.my, R * (1 - p) + 6);           // l'anell que es tanca
     },
     netejaMaza(e) { if (e.teleMa) { e.teleMa.destroy(); e.teleMa = null; } },
     impacteMaza(z, e) {

@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 547: Home del Raïm: el cop de maça avisa clarament: disc vermell de perill que s'omple i parpelleja, anell gruixut, esquerdes que s'obren des del centre (l'ona de xoc), l'ombra de la maça que cau i un anell blanc que es tanca just abans de l'impacte. Sprites del guardià: es treuen els forats blancs entre braç i mànec (camina) i les taques blanques opaques del fum (camina i apunta), que ara són translúcides i lila.*
+
 *Revisió 546: Derrota de l'Home del Raïm més espectacular (uns 3,5 s abans que parli): cop de gràcia a càmera lenta amb la càmera acostant-se al guardià, flaix blanc i sacsejada, el cos que s'encén blanc i parpelleja lila, pluja de trossos de marbre, ones de xoc lila, un pilar de llum que s'esvaeix, boira que puja, el cercle de runes que s'encén i es trenca, i un so nou (cop sord, retrunyir de pedra, marbre que cau i un acord que s'esvaeix); després l'enquadrament de sempre amb el text i el salt al pedestal.*
 
 *Revisió 545: Gir del volant: l'enquadrament és més ajustat (zoom fins a 2,8): des d'una mica més amunt del cap del guardià fins a mig Ineu, just per damunt del quadre de text, sense mostrar tota la sala.*
