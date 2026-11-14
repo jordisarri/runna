@@ -630,7 +630,8 @@ class ZonaDipositos extends ZonaBase {
         mir.lineStyle(10, 0x8e887a, 1).strokePoints(ampit.map(p => ({ x: p.x, y: p.y - 8 })));
         const muntat = Estat.flag('telescopiMuntat') || Estat.flag('estelsPart1') || Estat.flag('estelLlorenc');
         this.tripode = this.posar(muntat ? 'telescopi_mon' : 'tripode', MX, MY + 10, { col: { w: 36, h: 16 } });
-        this.interactiu(MX, MY + 15, RADI_OBJECTE, DIALEGS.telescopiMon, { altura: 120 });
+        const puntTel = this.interactiu(MX, MY + 15, RADI_OBJECTE, DIALEGS.telescopiMon, { altura: 120 });
+        this.brilloImatge(this.tripode, { punt: puntTel, actiu: () => !Estat.flag('estelsFets') });          // el telescopi (o el trípode) brilla fins que es fa el joc dels estels
         // Cartell a la vora del camí, sense cap arbre al davant
         this.cartell(230, 500, () => ({ pagines: [{ qui: 'Cartell', text: '→ Dolmen\n← Ermita de Sant Gabriel' }] }));
 

@@ -129,6 +129,7 @@ class ZonaBoscPi extends ZonaBase {
         });
         Object.defineProperty(puntPlaca, 'cameraCossos', { get: () => [this.pi] });         // en llegir la placa, el pi es veu sencer (la càmera s'allunya si cal)
         puntPlaca.centrarCamera = true;                                                     // i la càmera panegi suau fins que el pi (i l'Ineu) queden centrats entre el HUD i el quadre de text
+        this.brilloImatge(this.placa, { punt: puntPlaca, actiu: () => this.ineu.x > barX + 40 && !Estat.flag('piObert') });          // la placa de pedra brilla fins que s'obre el pi
         this.interactiu(barX, camiY, 190, () => DIALEGS.piOest(Estat), { altura: 150, actiu: () => !Estat.flag('piObert') && this.ineu.x < barX + 40 });
         // (la tarota no es pot tocar lliurement a prop del pi: només s'obre en llegir la placa, quan se'n tanca el diàleg)
 

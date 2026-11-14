@@ -1513,6 +1513,32 @@ class ZonaBase extends Phaser.Scene {
         return b;
     }
 
+    // El mateix brillo, per a un objecte que és una imatge: la ratlla en diagonal només s'il·lumina on l'imatge és opaca (segueix la seva silueta). Es fa amb
+    // còpies de la mateixa imatge, en blanc i additives, retallades en franges horitzontals desplaçades (així la franja queda en diagonal).
+    brilloImatge(img, o = {}) {
+        const per = o.per || 2400, dur = 800, ang = 0.5, N = 7, b = { per, desfase: o.desfase !== undefined ? o.desfase : Math.random() * per };
+        (this.brillos = this.brillos || []).push(b);
+        const copies = [];
+        for (let i = 0; i < N; i++) copies.push(this.add.image(0, 0, img.texture.key, img.frame.name).setTintFill(0xffffff).setBlendMode('ADD').setVisible(false));
+        const f = () => {
+            const ph = (this.time.now + b.desfase) % per;
+            const ok = img.active && img.visible && img.alpha > 0.5 && ph <= dur && (!o.actiu || o.actiu()) && !(o.punt && this.puntProper && this.puntProper() === o.punt);
+            if (!ok) { copies.forEach(c => c.visible && c.setVisible(false)); return; }
+            const fw = img.frame.width, fh = img.frame.height, p = ph / dur, e = p * p * (3 - 2 * p), skew = fh * ang, bw = Math.max(8, fw * 0.2);
+            const cx = -bw * 1.5 + e * (fw + bw * 3), alfa = 0.75 * Math.sin(Math.PI * p);
+            copies.forEach((c, i) => {
+                const off = (0.5 - (i + 0.5) / N) * skew, x0 = Math.max(0, cx + off - bw / 2), x1 = Math.min(fw, cx + off + bw / 2);
+                if (x1 - x0 < 1) { c.setVisible(false); return; }
+                if (c.texture.key !== img.texture.key || c.frame.name !== img.frame.name) c.setTexture(img.texture.key, img.frame.name);
+                c.setCrop(x0, Math.floor(i * fh / N), x1 - x0, Math.ceil(fh / N) + 1).setOrigin(img.originX, img.originY).setScale(img.scaleX, img.scaleY).setFlip(img.flipX, img.flipY)
+                    .setAngle(img.angle).setPosition(img.x, img.y).setDepth(img.depth + 0.5).setAlpha(alfa).setVisible(true);
+            });
+        };
+        this.events.on('update', f);
+        this.events.once('shutdown', () => this.events.off('update', f));
+        return b;
+    }
+
     // Aigua tranquil·la: damunt d'una taca d'aigua el·líptica (cx, cy, rx, ry) hi llisquen reflexos suaus i hi corren ones concèntriques molt lentes, tot retallat a l'el·lipse.
     // dep: profunditat; o.color: color dels reflexos; o.intensitat: força (1 per defecte)
     aiguaTranquila(cx, cy, rx, ry, dep, o = {}) {
@@ -1648,8 +1674,9 @@ class ZonaBase extends Phaser.Scene {
         if (!mogut) {
             // Punt d'interacció com els de parlar (la marca només surt quan ets molt a prop), però sense text: la roca es mou en tocar-la (si hi ha textPista, el diu)
             // (enTancar buit: el motor ignora els punts sense diàleg ni acció; amb ell, la marca surt i ESPAI no fa res)
-            this.interactiu(x, y - 10, 85, textPista ? { pagines: [{ qui: 'Ineu', text: textPista }] } : { pagines: [] },
+            const punt = this.interactiu(x, y - 10, 85, textPista ? { pagines: [{ qui: 'Ineu', text: textPista }] } : { pagines: [] },
                 { altura: 70, actiu: () => !o.mogut && o.permet(), senseMirada: true, enTancar: () => {} });
+            this.brilloImatge(o.img, { punt, actiu: () => !o.mogut && o.permet() });          // la roca brilla mentre es pot empènyer
             (this.pedresMobils = this.pedresMobils || []).push(o);
         }
         return o;

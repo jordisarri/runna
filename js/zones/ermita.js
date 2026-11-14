@@ -88,10 +88,11 @@ class ZonaErmitaInt extends ZonaBase {
         [[260, 450], [260, 590], [740, 450], [740, 590]].forEach(([x, y]) => this.posarBanc(x, y, 120));
 
         // Dues taules de pedra al fons, darrere l'altar
-        this.posar('taula_pedra', 340, 190, { col: { w: 100, h: 20 } });
-        this.interactiu(340, 210, RADI_OBJECTE, DIALEGS.taulaPedra(1), { altura: 170 });
-        this.posar('taula_pedra2', 660, 190, { col: { w: 100, h: 20 } });
-        this.interactiu(660, 210, RADI_OBJECTE, DIALEGS.taulaPedra(2), { altura: 170 });
+        const taula1 = this.posar('taula_pedra', 340, 190, { col: { w: 100, h: 20 } });
+        const punt1 = this.interactiu(340, 210, RADI_OBJECTE, DIALEGS.taulaPedra(1), { altura: 170 });
+        const taula2 = this.posar('taula_pedra2', 660, 190, { col: { w: 100, h: 20 } });
+        const punt2 = this.interactiu(660, 210, RADI_OBJECTE, DIALEGS.taulaPedra(2), { altura: 170 });
+        [[taula1, punt1], [taula2, punt2]].forEach(([img, punt]) => this.brilloImatge(img, { punt, actiu: () => !Estat.flag('missatgeDesxifrat') }));          // les taules brillen fins que es desxifra el missatge
 
         // Altar de pedra nua, amb dos peus de ferro amb les espelmes apagades. Amb les dotze paraules, l'Ineu hi diu la frase i apareix un cofre
         this.posar('altar_ermita', 500, 300, { col: { w: 140, h: 36 }, opac: true });

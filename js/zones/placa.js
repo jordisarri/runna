@@ -60,10 +60,11 @@ class ZonaPlaca extends ZonaBase {
             enTancar: () => this.canviarZona('ZonaTresor', 'porta')
         });
         // Abans d'obrir-la, la pedra es pot mirar (té el seu «!»); després de mirar-la, ESPAI hi toca la flauta
-        this.interactiu(PX, 480, RADI_OBJECTE, DIALEGS.pedraEscolta, {
+        const puntPedra = this.interactiu(PX, 480, RADI_OBJECTE, DIALEGS.pedraEscolta, {
             altura: 90, actiu: () => !Estat.flag('tresorObert'),
             enTancar: () => Estat.posaFlag('flauta_pedra')
         });
+        this.brillo(PX, 405, 44, 34, { dep: 461, punt: puntPedra, actiu: () => !Estat.flag('tresorObert') });          // la pedra que no encaixa brilla fins que s'obre
         this.llocFlauta('pedra', PX, 480, 150, true, () => !Estat.flag('tresorObert'), false, ['pedres']);    // un cop oberta, ESPAI hi entra
 
         // --- Reixes del terra per on surt la boira ---
