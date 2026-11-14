@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 527: La Pianista deixa d'anomenar «fanfàrria» el Cant del Miracle. Pi dels Tres Cants: la barrera d'arrels neix d'una pedra a la base (ja no a dalt) i tota la vertical del pas, llevat del camí que alliberen les arrels, és una paret de roques sense buits. La carta del Cortiner té una icona nova: el pergamí plegat de les parets, lligat amb una cinta blava i un segell de cera amb una nota. Al Celler, en apartar la roda, la porta secreta s'obre i el passadís es pot travessar de seguida (abans calia esperar que la roda acabés de rodar). Cambra secreta: el llibre es llegeix des de qualsevol punt a prop de la taula. El volant i l'engranatge de l'Home del Raïm brillen quan es poden girar. A proves, nova entrada «Home del Raïm» amb estats amb i sense la maneta.*
+
 *Revisió 526: Es pot parlar amb la Pianista des del darrere de l'orgue (abast d'uns 136 px, sense haver de mirar-la), sense haver d'enganxar-s'hi.*
 
 *Revisió 525: El brillo de la portella de la Bassadòria es recol·loca a la reixa (estava massa baix) i la seva zona d'activació es redueix (uns 140 px d'ample, davant la reixa). Repàs de tots els brillos amb un rectangle de comprovació: el del forat de l'Alzina Buida (bosc i cabana) també baixa al forat, i la seva claror i halo s'hi alineen; la resta ja quadrava.*

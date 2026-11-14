@@ -300,7 +300,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: "La Pianista", text: "Ai, Ineu, fill, portes Runna! Se't nota a la mirada. Aleshores t'he d'ensenyar l'últim cant, el que l'Ocellaire va robar als ocells: el Cant del Miracle." },
-                    { qui: "La Pianista", text: "Jo me'n recordo perquè el cantava la meva mare. Escolta'm i repeteix les notes amb 1, 2, 3, 4 i 5. Do, mi, fa, sol, mi: és la fanfàrria, i et farà falta allà baix." }
+                    { qui: "La Pianista", text: "Jo me'n recordo perquè el cantava la meva mare. Escolta'm i repeteix les notes amb 1, 2, 3, 4 i 5. Do, mi, fa, sol, mi. Aprèn-lo bé: et farà falta allà baix." }
                 ],
                 enAcabar: () => iniciarLliço("miracle")
             };

@@ -75,4 +75,13 @@ const ESCENARIS = [
             { nom: 'Runna ja alçada', posa: ['fullaTiler', 'saber', 'benediccio', 'runna', 'placaCompleta'], obj: ['runna'], zona: 'ZonaDolmen', entrada: 'bosc' }
         ]
     }
+    ,{
+        id: 'raim', nom: 'Home del Raïm (Casa Gran, escalinata)', lateral: null,
+        estats: [
+            { nom: 'Sense la maneta (el volant no gira)', posa: ['cantMiracle'], treu: ['georgiManeta', 'maneta', 'raimDesperta', 'raimDerrotat'], treuObj: ['maneta'], zona: 'ZonaCasaGranInt', entrada: 'porxo' },
+            { nom: 'Amb la maneta (cal girar el volant)', posa: ['cantMiracle', 'georgiManeta', 'maneta'], treu: ['raimDesperta', 'raimDerrotat'], obj: ['maneta'], zona: 'ZonaCasaGranInt', entrada: 'porxo' },
+            { nom: 'Amb la maneta i Runna (a punt per lluitar-hi)', posa: ['cantMiracle', 'georgiManeta', 'maneta', 'runna'], treu: ['raimDesperta', 'raimDerrotat'], obj: ['maneta', 'runna'], zona: 'ZonaCasaGranInt', entrada: 'porxo' },
+            { nom: 'Vençut (la trapa de la cripta oberta)', posa: ['cantMiracle', 'georgiManeta', 'maneta', 'runna', 'raimDesperta', 'raimDerrotat'], obj: ['runna'], treuObj: ['maneta'], zona: 'ZonaCasaGranInt', entrada: 'cripta' }
+        ]
+    }
 ];

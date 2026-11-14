@@ -665,6 +665,10 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // El volant de ferro amb engranatges, encastat a la cara del pedestal: amb la maneta, cada volta gira el cap un quart
         if (!derrotat) this.dibuixarVolant(RX, Math.round(RY - this.estatua.displayHeight * 0.17));
         if (!derrotat && !desperta) this.lampesRaim();
+        if (!derrotat && !desperta) {      // el volant i l'engranatge brillen mentre es poden girar (amb la maneta)
+            const vy = Math.round(RY - this.estatua.displayHeight * 0.17), f = RAIM.f;
+            this.brillo(RX + 7 * f, vy - 3 * f, 64 * f, 56 * f, { actiu: () => !Estat.flag('raimDesperta') && Estat.te('maneta') && !!this.volant, dep: RAIM.y + 5 });
+        }
         this.interactiu(RX, RY + 32, 90, E => {
             this.raimPas = Math.min(3, this.raimPas + 1);
             this.enquadrarRaim(null, true);                         // la càmera puja i es veu l'estàtua sencera mentre gira el cap
@@ -1198,7 +1202,7 @@ class ZonaCasaTresor extends ZonaCasaBase {
         this.taulaLlibre = this.add.image(500, 212, 'taula_llibre').setOrigin(0.5, 1).setScale(1 / RES).setDepth(212);          // dins de la tarima (a 10 px del llavi), no al llavi
         (this.opacs = this.opacs || []).push(this.taulaLlibre);        // opac: la silueta de l'Ineu no es veu a través seu
         this.colisio(500, 198, 110, 22);
-        const puntLlibre = this.interactiu(500, 262, RADI_OBJECTE, DIALEGS.llibreCambra, { altura: 110 });
+        const puntLlibre = this.interactiu(500, 255, 170, DIALEGS.llibreCambra, { altura: 110, senseMirada: true });          // es llegeix des de qualsevol punt a prop de la taula, sense posar-se en una posició exacta
         this.brilloImatge(this.taulaLlibre, { punt: puntLlibre, actiu: () => !Estat.flag('llibreCambraLlegit') });          // el llibre brilla fins que se'l llegeix un cop
         [[390, 262], [610, 262]].forEach(([x, y], i) => {
             (this.opacs = this.opacs || []).push(this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));          // sòlid: opac i amb col·lisió

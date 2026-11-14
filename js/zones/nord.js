@@ -556,14 +556,16 @@ class ZonaPingpong extends ZonaBase {
         Estat.dades.flags.rodaX = x;
         this.cameras.main.shake(350, 0.003);
         Sfx.porta();
+        // La porta secreta es descobreix just en apartar la roda (no cal esperar que acabi de rodar): el passadís ja és una sortida, les juntes
+        // s'il·luminen i la porta s'obre un moment per ensenyar-lo (després s'obre en acostar-s'hi)
+        this.obrirPassadis();
+        this.tweens.add({ targets: this.juntesPorta, alpha: 0.4, yoyo: true, repeat: 2, duration: 220 });
+        this.portaSecreta.forcaFins = this.time.now + 3200;
         this.tweens.add({
             targets: this.roda, x, angle: dir * 180, duration: 900, ease: 'Sine.easeInOut',
             onUpdate: () => { this.colRoda.x = this.roda.x; this.colRoda.body.updateFromGameObject(); },
             onComplete: () => {
-                Sfx.secret(); this.obrirPassadis(); Estat.desar();
-                // La porta secreta es descobreix: les juntes s'il·luminen i s'obre un moment per ensenyar el passadís (després s'obre en acostar-s'hi)
-                this.tweens.add({ targets: this.juntesPorta, alpha: 0.4, yoyo: true, repeat: 2, duration: 220 });
-                this.portaSecreta.forcaFins = this.time.now + 2200;
+                Sfx.secret(); Estat.desar();
             }
         });
     }

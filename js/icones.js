@@ -459,17 +459,26 @@ const ICONES_OBJECTES = {
         pintarPergamiParet(ctx, 68, 86, { senseClaus: true });
         ctx.restore();
     },
-    carta_cortiner: ctx => {                      // un pergamí enrotllat, lligat amb una cinta blava
-        ctx.save(); ctx.translate(48, 48); ctx.rotate(-0.35); ctx.translate(-48, -48);
-        ctx.lineWidth = 3; ctx.lineJoin = 'round'; ctx.fillStyle = '#efe0b4';
-        ctx.beginPath(); ctx.rect(18, 34, 60, 30); ctx.fill(); ctx.stroke();                                              // el cos del rotlle
-        ctx.fillStyle = '#d9c48a'; ctx.beginPath(); ctx.rect(18, 55, 60, 9); ctx.fill();                                // ombra de baix
-        ctx.beginPath(); ctx.moveTo(18, 64); ctx.lineTo(78, 64); ctx.stroke();
-        ctx.fillStyle = '#c8b070'; [18, 78].forEach(x => { ctx.beginPath(); ctx.ellipse(x, 49, 7, 15, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });   // les dues puntes enrotllades
-        ctx.lineWidth = 2; ctx.strokeStyle = '#6a4a2a'; [18, 78].forEach(x => { ctx.beginPath(); ctx.ellipse(x, 49, 3.5, 8, 0, 0, Math.PI * 2); ctx.stroke(); });
-        ctx.fillStyle = '#2a5a8a'; ctx.strokeStyle = '#1c3c5c'; ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.rect(42, 32, 11, 34); ctx.fill(); ctx.stroke();                                              // la cinta
-        ctx.beginPath(); ctx.moveTo(47, 66); ctx.lineTo(41, 78); ctx.lineTo(47, 74); ctx.lineTo(53, 78); ctx.closePath(); ctx.fill(); ctx.stroke();   // els caps penjant
+    carta_cortiner: ctx => {                      // una carta: el mateix pergamí plegat de les parets, lligat amb una cinta blava i un segell de cera
+        ctx.save(); ctx.translate(14, 5); ctx.rotate(0.05);
+        pintarPergamiParet(ctx, 68, 86, { senseClaus: true });
+        ctx.restore();
+        ctx.save(); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        const cinta = (x0, w) => {                                                                                         // la cinta, de dalt a baix, amb una llum
+            ctx.fillStyle = '#2f6fb0'; ctx.strokeStyle = '#17385a'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.rect(x0, 8, w, 76); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = 'rgba(190,225,255,0.45)'; ctx.fillRect(x0 + 1.5, 10, 2, 72);
+        };
+        cinta(43, 9);
+        ctx.fillStyle = '#2f6fb0'; ctx.strokeStyle = '#17385a'; ctx.lineWidth = 2;                                         // dos caps penjant, en V
+        ctx.beginPath(); ctx.moveTo(44, 83); ctx.lineTo(39, 93); ctx.lineTo(45, 91); ctx.lineTo(47, 85); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(51, 83); ctx.lineTo(56, 93); ctx.lineTo(50, 91); ctx.lineTo(48, 85); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.arc(48.5, 53, 8.5, 0, Math.PI * 2); ctx.fill();               // el segell de cera, amb ombra
+        const g = ctx.createRadialGradient(44, 46, 1, 47, 50, 11); g.addColorStop(0, '#6aa6e6'); g.addColorStop(1, '#1f4f86');
+        ctx.fillStyle = g; ctx.strokeStyle = '#102c4a'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(47.5, 50, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(220,240,255,0.7)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(47.5, 50, 5, 0.4, Math.PI * 1.1); ctx.stroke();      // reflex
+        ctx.fillStyle = '#d8ecff'; ctx.font = 'bold 9px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('♪', 47.5, 51);   // una nota: el Cortiner era músic
         ctx.restore();
     },
     llavorLluna: ctx => {
