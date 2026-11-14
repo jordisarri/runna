@@ -1485,10 +1485,10 @@ class ZonaBase extends Phaser.Scene {
     }
 
     // Brillantor discreta d'un objecte interactuable de l'escenari: una ratlla blanca que el recorre en diagonal cada pocs segons, retallada a la seva forma
-    // (x, y: centre; w, h: mida; o.arc: part de dalt rodona, com una porta d'arc). Només es veu quan l'Ineu és a prop (o.radi), si l'objecte encara és
+    // (x, y: centre; w, h: mida; o.arc: part de dalt rodona, com una porta d'arc). Es veu tota l'estona que l'Ineu és a l'escenari (o.radi: només a prop), si l'objecte encara és
     // interactuable (o.actiu) i mentre el punt d'interacció (o.punt) NO mostra la seva marca «!».
     brillo(x, y, w, h, o = {}) {
-        const radi = o.radi || 340, per = o.per || 4800, dur = 800, ang = o.ang !== undefined ? o.ang : 0.5;
+        const radi = o.radi || Infinity, per = o.per || 2400, dur = 800, ang = o.ang !== undefined ? o.ang : 0.5;
         const b = { per, desfase: o.desfase !== undefined ? o.desfase : Math.random() * per };
         (this.brillos = this.brillos || []).push(b);
         const g = this.add.graphics().setDepth(o.dep || 910).setBlendMode('ADD');
