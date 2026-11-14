@@ -83,43 +83,19 @@ class EscenaEstels extends Phaser.Scene {
         this.tweens.add({ targets: [this.missatge, this.fonsMissatge], alpha: 0, delay: ms, duration: 600 });
     }
 
-    // Pantalla d'instruccions amb exemples dibuixats; s'obre en començar cada part i es tanca amb «Comença» (clic, ESPAI o ENTER)
+    // Sense pantalla d'instruccions: un sol missatge curt i gran en començar (el joc ja arrenca) i la franja de dalt ho recorda tota l'estona
     instruccions(fet) {
-        this.instrOberta = true; this.instrFet = fet;
-        const c = this.add.container(0, 0).setDepth(40); this.instr = c;
-        c.add(this.add.rectangle(AMPLE / 2, ALT / 2, AMPLE, ALT, 0x03061a, 0.93));
-        const T = (y, txt, mida, col, extra = {}) => { const t = this.add.text(AMPLE / 2, y, txt, estilText(mida, col, Object.assign({ align: "center", wordWrap: { width: 620 } }, extra))).setOrigin(0.5); c.add(t); return t; };
-        T(120, "Com es juga", 46, "#ffd34d", { fontStyle: "bold" });
-        const estel = (x, y, color, etq, bona) => {
-            c.add(this.add.line(0, 0, x - 60, y - 40, x, y, color, 0.45).setOrigin(0, 0).setLineWidth(5));
-            c.add(this.add.circle(x, y, 13, color, 1));
-            const t = this.add.text(x, y + 56, etq, estilText(30, bona ? "#9affb0" : "#ff9a9a", { fontStyle: "bold", align: "center" })).setOrigin(0.5); c.add(t);
-        };
-        if (this.part === 1) {
-            T(250, "Cauen estels fugaços pel cel.\nToca'ls amb el cercle groc.", 34, "#eef2ff");
-            T(380, "Només valen els BLANCS: són les llàgrimes de Sant Llorenç. Cal tocar-ne 7.", 34, "#ffffff");
-            estel(150, 540, 0xffffff, "Llàgrima\nSÍ", true); estel(360, 540, 0x7fb0ff, "Blau\nNO", false); estel(570, 540, 0xffc840, "Daurat\nNO", false);
-            T(700, "Si toques un estel blau o daurat, perds una llàgrima del compte.", 32, "#ffd0d0");
-            T(830, "Ratolí o dit: toca l'estel.\nTeclat: fletxes (o WASD) per moure el cercle i ESPAI per tocar.", 30, "#c8d2ff");
-        } else {
-            T(260, "Els set estels dibuixen una figura amagada.", 36, "#eef2ff");
-            T(400, "Hi ha set punts numerats. Toca'ls en ordre, de l'1 al 7, i la figura es dibuixarà.", 34, "#ffffff");
-            [[160, 560], [360, 520], [560, 580]].forEach(([x, y], i) => { c.add(this.add.circle(x, y, 17, 0xaac8ff, 0.9)); c.add(this.add.text(x + 24, y - 44, String(i + 1), estilText(38, "#aac8ff", { fontStyle: "bold" }))); });
-            c.add(this.add.line(0, 0, 160, 560, 360, 520, 0xffe08a, 0.9).setOrigin(0, 0).setLineWidth(4)); c.add(this.add.line(0, 0, 360, 520, 560, 580, 0xffe08a, 0.9).setOrigin(0, 0).setLineWidth(4));
-            T(740, "Si et confons de punt, el joc t'ho diu i pots continuar.", 32, "#ffd0d0");
-        }
-        const boto = this.add.rectangle(AMPLE / 2, ALT - 230, 360, 100, 0xd4af37, 1).setStrokeStyle(4, 0xfff0b0, 1).setInteractive({ useHandCursor: true });
-        const txt = this.add.text(AMPLE / 2, ALT - 230, "Comença", estilText(42, "#2a1608", { fontStyle: "bold" })).setOrigin(0.5);
-        c.add([boto, txt]);
-        this.tweens.add({ targets: [boto, txt], scale: { from: 1, to: 1.06 }, yoyo: true, repeat: -1, duration: 700 });
-        boto.on("pointerdown", (p, x, y, ev) => { if (ev) ev.stopPropagation(); this.tancarInstr(); });
+        this.dir(this.part === 1 ? "Toca els estels BLANCS: són les llàgrimes" : "Uneix els punts en ordre: 1, 2, 3...", "#eef2ff", 4500);
+        fet();
     }
-    tancarInstr() {
-        if (!this.instrOberta) return;
-        this.instrOberta = false;
-        const c = this.instr, fet = this.instrFet;
-        this.tweens.add({ targets: c, alpha: 0, duration: 250, onComplete: () => c.destroy() });
-        if (fet) fet();
+
+    // Part 2: un anell que pulsa marca sempre el següent punt (així no cal explicar res)
+    posaGuia() {
+        if (this.guia) { this.tweens.killTweensOf(this.guia); this.guia.destroy(); this.guia = null; }
+        const q = this.punts[this.seguent - 1];
+        if (!q) return;
+        this.guia = this.add.circle(q.x, q.y, 26).setStrokeStyle(4, 0xffe08a, 1).setDepth(8);
+        this.tweens.add({ targets: this.guia, scale: { from: 0.8, to: 1.5 }, alpha: { from: 1, to: 0.15 }, repeat: -1, duration: 900 });
     }
 
     // ---------- Part 1: estels fugaços ----------
@@ -156,10 +132,10 @@ class EscenaEstels extends Phaser.Scene {
             const n = this.add.text(x + 20, y - 36, String(i + 1), estilText(34, "#cfe0ff", { fontStyle: "bold" }));
             this.punts.push({ x, y, c, n });
         });
+        this.posaGuia();
     }
 
     triar() {
-        if (this.instrOberta) { this.tancarInstr(); return; }
         if (this.tancat) return;
         if (this.part === 1) {
             const d = s => Phaser.Math.Distance.Between(s.x, s.y, this.rx, this.ry);
@@ -211,7 +187,7 @@ class EscenaEstels extends Phaser.Scene {
             this.fletxa.lineStyle(3, 0xffe08a, 0.9).lineBetween(ESTELS_PUNTS[a - 1][0], ESTELS_PUNTS[a - 1][1], ESTELS_PUNTS[b - 1][0], ESTELS_PUNTS[b - 1][1]);
         });
         this.seguent++;
-        if (this.seguent > 7) this.completar();
+        if (this.seguent > 7) { if (this.guia) this.guia.destroy(); this.completar(); } else this.posaGuia();
     }
 
     completar() {
@@ -290,7 +266,7 @@ class EscenaEstels extends Phaser.Scene {
         this.rx = Phaser.Math.Clamp(this.rx, 0, AMPLE); this.ry = Phaser.Math.Clamp(this.ry, 0, ALT);
         this.cursor.setPosition(this.rx, this.ry);
 
-        if (this.part === 1 && !this.instrOberta) {
+        if (this.part === 1) {
             if (this.time.now > this.propEstrella) {
                 this.nouEstel();
                 this.propEstrella = this.time.now + 1300 + Math.random() * 900;
