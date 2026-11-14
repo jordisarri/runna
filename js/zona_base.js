@@ -1960,19 +1960,22 @@ class ZonaBase extends Phaser.Scene {
         if (this.camCinema) return;                  // una escena (enquadrar) porta la càmera ella mateixa
         if (obert) this.tallarEntradaZoom();
         if (obert) {
-            if (this.camDialeg) return;
+            if (this.camDialeg && !this.reenquadrar) return;
+            const original = this.camDialeg;               // (en re-enquadrar, el punt de partida per tornar-hi és el del principi del diàleg)
+            this.reenquadrar = false;
             const p = this.dialegDePunt ? this.puntActiu : null;
             const cossos = [this.ineu];
             if (this.despertarImg && this.despertarImg.active) cossos.push(this.despertarImg);       // el dibuix gran del despertar, que no es pot tapar
             if (p && p.npc && p.npc.active && p.npc.visible) cossos.push(p.npc);
             if (p && p.cameraCossos) cossos.push(...p.cameraCossos.filter(o => o && o.active && o.visible));
+            if (this.cossosExtra) cossos.push(...this.cossosExtra.filter(o => o && o.active && o.visible));       // qui s'afegeix a l'escena a mitja diàleg (la mare de la Nena)
             const TOP = TOP_HUD + 8;                                    // sota el HUD flotant
             const alcadaCaixa = this.ui().alcadaCaixaDialeg || 360;
             const LIM = ALT - SAFE_BAIX - alcadaCaixa - 60;                         // 50 px sobre la vora superior del quadre
             const LIM_RETRAT = ALT - SAFE_BAIX - alcadaCaixa - 160;                 // sobre el retrat, que sobresurt per damunt del quadre
-            const Z = cam.zoom, wv = cam.worldView, H = ALT - ALT_HUD;
+            const Z = original ? original.z : cam.zoom, wv = cam.worldView, H = ALT - ALT_HUD;          // (Z: el zoom de la zona, no el que ja té la càmera per la conversa)
             const mides = cossos.map(o => {
-                const b = o.getBounds(), esq = (b.x - wv.x) * Z, dre = (b.right - wv.x) * Z;
+                const b = o.getBounds(), esq = (b.x - wv.x) * cam.zoom, dre = (b.right - wv.x) * cam.zoom;
                 return { dalt: b.y, baix: b.bottom, lim: esq < 200 && dre > 10 ? LIM_RETRAT : LIM };
             });
             // On queden ara (y de pantalla del cap i dels peus)
@@ -1984,8 +1987,10 @@ class ZonaBase extends Phaser.Scene {
             let z2 = Z, wy2 = wv.y, trobat = false, sx2 = cam.scrollX;
             const conversa = !centrar && !!(p && p.npc && p.npc.active && p.npc.visible);
             if (conversa) {
-                const zt = Math.min(p.zoomConversa ? 2.2 : 1.8, Z * (p.zoomConversa || (this.esInterior() ? 1.3 : ZOOM_NPC)));      // als interiors, més a prop (es veuen els NPC amb detall, com a la biblioteca)
+                let zt = Math.min(p.zoomConversa ? 2.2 : 1.8, Z * (p.zoomConversa || (this.esInterior() ? 1.3 : ZOOM_NPC)));      // als interiors, més a prop (es veuen els NPC amb detall, com a la biblioteca)
                 const dalt = Math.min(...mides.map(m => m.dalt)), baix = Math.max(...mides.map(m => m.baix));
+                const ampleGrup = Math.max(...cossos.map(o => o.getBounds().right)) - Math.min(...cossos.map(o => o.getBounds().x));
+                zt = Math.max(0.6, Math.min(zt, 0.9 * AMPLE / Math.max(1, ampleGrup)));                // si el grup és ample (tres personatges), tots hi caben de costat a costat
                 const wyC = (dalt + baix) / 2 - ((TOP + LIM) / 2 - ALT_HUD) / zt;
                 if (be(zt, wyC)) {
                     z2 = zt; wy2 = wyC; trobat = true;
@@ -2009,16 +2014,16 @@ class ZonaBase extends Phaser.Scene {
                 if (be(z, wy)) { z2 = z; wy2 = wy; trobat = true; }
             }
             if (!trobat) { z2 = 0.6; wy2 = Math.max(...mides.map(m => m.baix - (m.lim - ALT_HUD) / z2)); }      // no hi cap enlloc: es prioritza que no els tapi la caixa
-            this.camDialeg = { sx: cam.scrollX, sy: cam.scrollY, z: cam.zoom };
+            this.camDialeg = original || { sx: cam.scrollX, sy: cam.scrollY, z: cam.zoom };
             if (!this.boundsCamOrig) { const b = cam.getBounds(); this.boundsCamOrig = { x: b.x, y: b.y, w: b.width, h: b.height }; }
             cam.removeBounds(); cam.stopFollow();
             if (this.twCamDialeg) this.twCamDialeg.stop();
             const sy2 = wy2 - (H - H / z2) / 2;                         // scrollY que dona aquesta y de la vista amb aquest zoom
             const v = { u: 0 }, sx0 = cam.scrollX, sy0 = cam.scrollY, z0 = cam.zoom;
-            this.twCamDialeg = this.tweens.add({ targets: v, u: 1, duration: 1000, ease: 'Sine.easeInOut', onUpdate: () => { cam.setZoom(Phaser.Math.Linear(z0, z2, v.u)); cam.setScroll(Phaser.Math.Linear(sx0, sx2, v.u), Phaser.Math.Linear(sy0, sy2, v.u)); this.ajustarSuperposicions(); } });
+            this.twCamDialeg = this.tweens.add({ targets: v, u: 1, duration: original ? 1400 : 1000, ease: 'Sine.easeInOut', onUpdate: () => { cam.setZoom(Phaser.Math.Linear(z0, z2, v.u)); cam.setScroll(Phaser.Math.Linear(sx0, sx2, v.u), Phaser.Math.Linear(sy0, sy2, v.u)); this.ajustarSuperposicions(); } });
         } else if (this.camDialeg) {
             const d = this.camDialeg, o = this.boundsCamOrig;
-            this.camDialeg = null;
+            this.camDialeg = null; this.cossosExtra = null; this.reenquadrar = false;
             if (this.twCamDialeg) this.twCamDialeg.stop();
             const v = { u: 0 }, sx0 = cam.scrollX, sy0 = cam.scrollY, z0 = cam.zoom;
             // On ha de quedar la càmera: no on era abans del diàleg, sinó on la deixaria seguint l'Ineu ARA (si s'ha aixecat i camina, no la fem tornar enrere i saltar després)
@@ -2042,6 +2047,9 @@ class ZonaBase extends Phaser.Scene {
             });
         }
     }
+
+    // Dins d'un diàleg, quan els qui hi surten canvien de lloc (algú s'acosta, apareix algú): la càmera es torna a posar, suau, de manera que tots quedin grans i centrats
+    reenquadrarDialeg() { if (this.camDialeg) this.reenquadrar = true; }
 
     // Pla de cinema: la càmera deixa de seguir l'Ineu i enquadra (x, y) al mig de la part de la pantalla que el quadre de diàleg no tapa
     enquadrar(x, y, zoom, ms = 800, fet, reserva = 470) {

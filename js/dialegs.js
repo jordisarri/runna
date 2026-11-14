@@ -1375,7 +1375,7 @@ const DIALEGS = {
             pagines: [
                 { qui: "Nena de les Trenes", text: "Els tens... els dos? Oh, monjo..." },
                 // L'Ineu s'acosta a la dreta de la nena i, vingui d'on vingui, hi arriba mirant-la (no en la direcció en què ha caminat)
-                { fer: (z, fet) => z.seq([c => z.ineuVa(z.nena.x + 70, z.nena.y + 10, () => { z.cara(z.nena); c(); }), c => { z.ajupir('ineu'); z.llum(z.nena.x, z.nena.y - 60, 0xffc8e0, c); }], fet) },
+                { fer: (z, fet) => z.seq([c => z.ineuVa(z.nena.x + 70, z.nena.y + 10, () => { z.cara(z.nena); z.reenquadrarDialeg(); c(); }), c => { z.ajupir('ineu'); z.llum(z.nena.x, z.nena.y - 60, 0xffc8e0, c); }], fet) },
                 { qui: "Nena de les Trenes", text: "Els sento... són les mans de la mare lligant-me'ls. Mare...? Mare, ets tu? M'has trobat?" },
                 { fer: (z, fet) => z.mareNena(fet) },
                 { qui: "Nena de les Trenes", text: "Ja no tinc por. Gràcies, monjo. Et deixo un dels llaços: guarda'l, que protegeix els qui es perden." },

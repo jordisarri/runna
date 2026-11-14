@@ -223,17 +223,18 @@ class ZonaCamiRov extends ZonaBase {
     mareNena(fet) {
         const n = this.nena;
         if (!n) { fet(); return; }
-        const mare = this.add.image(n.x - 160, n.y + 10, 'mare_nena').setOrigin(0.5, 1).setTint(0xe8eeff).setAlpha(0).setDepth(80000);       // per sobre dels arbres: que cap copa no la tapi
+        const mare = this.add.image(n.x - 170, n.y + 10, 'mare_nena').setOrigin(0.5, 1).setTint(0xe8eeff).setAlpha(0).setDepth(80000);       // per sobre dels arbres: que cap copa no la tapi
         mare.setScale((this.textures.get('mare_nena').customData || {}).escala || 0.5);
         this.tweens.killTweensOf([n, this.resplendorNena]);
         this.cara(n);                                                                   // l'Ineu mira la nena des que apareix la mare
+        this.cossosExtra = [mare]; this.reenquadrarDialeg();                            // la càmera hi abasta els tres (la mare, la nena i l'Ineu), grans i centrats
         this.tweens.add({ targets: mare, alpha: 0.85, duration: 1500, onComplete: () => {
             this.time.delayedCall(1800, () => {                                        // un moment mirant-se, abans que la nena hi vagi
-                this.tweens.add({ targets: [n, this.resplendorNena], x: n.x - 100, duration: 1400, ease: 'Sine.easeInOut', onUpdate: () => this.cara(n), onComplete: () => {      // l'Ineu la va seguint amb la mirada
+                this.tweens.add({ targets: [n, this.resplendorNena], x: mare.x + 78, duration: 1400, ease: 'Sine.easeInOut', onUpdate: () => this.cara(n), onComplete: () => {      // l'Ineu la va seguint amb la mirada
                     this.llum(mare.x + 20, mare.y - 80, 0xfff4e0);
                     this.cara(n);
                     this.time.delayedCall(2600, () => {                                // s'abracen: es queden ben visibles
-                        this.tweens.add({ targets: [mare, n, this.resplendorNena], alpha: 0, duration: 2000, onComplete: () => { mare.destroy(); fet(); } });
+                        this.tweens.add({ targets: [mare, n, this.resplendorNena], alpha: 0, duration: 2000, onComplete: () => { mare.destroy(); this.cossosExtra = null; this.reenquadrarDialeg(); fet(); } });
                     });
                 } });
             });
@@ -275,7 +276,8 @@ class ZonaCamiRov extends ZonaBase {
             this.nena = this.posar('nena_trenes', 1560, 670, { fonsY: 670 });          // sempre al 100% d'opacitat: ben visible
             this.resplendorNena = this.add.circle(1560, 605, 52, 0xcfd8ff, 0.07).setDepth(669);      // un halo molt discret
             this.tweens.add({ targets: [this.nena, this.resplendorNena], y: '-=10', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
-            this.interactiu(1560, 670, RADI_NPC, DIALEGS.nenaTrenes, { altura: 145 });
+            const puntNena = this.interactiu(1560, 670, RADI_NPC, DIALEGS.nenaTrenes, { altura: 110 });
+            puntNena.npc = this.nena; puntNena.zoomConversa = 1.6;                  // és un personatge com els altres: l'Ineu es posa a la distància de parlar i la càmera els enquadra, grans, entre el HUD i el quadre
         }
         // Primer llaç: amagat sota una roca que cal empènyer, al tram final del camí (només es pot empènyer després de parlar amb la Nena)
         this.llacAgafat = false;
