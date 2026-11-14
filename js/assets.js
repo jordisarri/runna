@@ -28,6 +28,7 @@ const CATALEG = [
     { key: 'pare_alcovi_esquena', file: 'assets/personatges/pare_alcovi_esquena.webp', amplada: 82, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },      // d'esquena, llegint la Crònica al faristol (AutoSprite)
     // Elements
     { key: 'home_raim',    file: 'assets/enemics/home_raim.webp',    amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua (abans del combat)
+    { key: 'home_raim_mira', file: 'assets/enemics/home_raim_mira.webp', amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua al pedestal amb el cap girat cap avall, enfadat, mirant l'Ineu (últim pas del volant, abans del combat); 'home_raim' és la de cara mirant a l'horitzó (en descansar vençut)
     { key: 'home_raim_desperta', file: 'assets/enemics/home_raim_desperta.webp', amplada: 115, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // el guardià despert (boss de l'Escalinata)
     { key: 'home_raim_apunta', file: 'assets/enemics/home_raim_apunta.webp', amplada: 250, cru: true },   // el guardià tirat enrere amb la maça alçada (apuntant i carregant)
     { key: 'home_raim_caigut', file: 'assets/enemics/home_raim_caigut.webp', amplada: 380, cru: true },   // de morros a terra (cap a l'esquerra; es gira amb flipX): el cap és el punt feble
@@ -214,7 +215,7 @@ const CATALEG = [
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
 ['ineu', 'pare_jorda', 'germa_aldreu', 'germa_franci', 'pare_daimiel', 'pare_alcovi', 'eve', 'senyor_budo', 'jusef', 'pomers', 'julius', 'galf', 'isilder', 'pianista', 'joaneta', 'iscu',
- 'nena_trenes', 'venerables', 'carry', 'carmelia', 'pilaria', 'dolora', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'follet_carro', 'georgi_caseta', 'rosansa', 'meus', 'molner', 'ombra_monjo', 'mandu', 'mandu_trencada', 'nen_uri', 'nen_flam', 'nen_sardin', 'ocellaire', 'ocellaire_derrotat']
+ 'nena_trenes', 'venerables', 'carry', 'carmelia', 'pilaria', 'dolora', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'follet_carro', 'georgi_caseta', 'rosansa', 'meus', 'molner', 'ombra_monjo', 'mandu', 'mandu_trencada', 'nen_uri', 'nen_flam', 'nen_sardin', 'ocellaire', 'ocellaire_derrotat', 'home_raim', 'home_raim_horitzo']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
 /**

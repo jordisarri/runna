@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 538: Home del Raïm: cap diàleg durant el combat (el guardià ja no parla en canviar de fase ni amb poca vida). Al darrer pas del volant, l'estàtua acaba amb el cap girat cap avall, enfadada, mirant l'Ineu (nou dibuix `home_raim_mira`, fet amb AutoSprite a partir de l'estàtua); la mirada a l'horitzó queda per quan, vençut, torna al pedestal. Retrats nous: enfadat, de cara (ulls vermells, esquerdes lila), fins que és vençut, i després el rostre de pedra tranquil (`home_raim_horitzo`). Neteja de la vora blanca semitransparent dels sprites del guardià.*
+
 *Revisió 537: En girar el volant, la càmera s'acosta al cap de l'Home del Raïm (pla més proper, centrat al cap) mentre gira; en tancar el text, es torna a allunyar.*
 
 *Revisió 536: El cap de l'Home del Raïm gira més visible i a poc a poc: a cada volta del volant fa tres batzegades de pedra (uns 3 s en total, amb pauses), cada una amb so de pedra que rasca, sacsejada i pols; el text surt quan el gir ha acabat i la càmera s'allibera en tancar-lo. El volant també gira a batzegades.*

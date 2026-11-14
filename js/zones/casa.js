@@ -132,7 +132,7 @@ ENEMICS.raim = {
     },
     // Una frase del guardià, al quadre de diàleg (el combat s'atura mentre dura): mai text sobreimpresos a la pantalla
     parla(z, e, text) {
-        z.ui().obrirDialeg({ pagines: [{ qui: 'Home del Raïm', text }] });
+        // (Durant el combat no hi ha cap diàleg: el guardià ja no parla; el combat no s'atura.)
     },
     // Boira lila al voltant del guardià durant tot el combat: és la que l'ha despertat
     neboda(z, e) {
@@ -906,7 +906,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
 
     // Imatge de l'estàtua segons com té girat el cap (de cara és la imatge base)
     texRaim() {
-        const k = ['home_raim_n', 'home_raim_ne', 'home_raim_e', 'home_raim'][this.raimPas];
+        const k = ['home_raim_n', 'home_raim_ne', 'home_raim_e', 'home_raim_mira'][this.raimPas];       // l'últim pas: mira l'Ineu, enfadat (el 'home_raim' mira a l'horitzó: només en descansar vençut)
         return this.textures.exists(k) && !Grafics.faltants.includes(k) ? k : 'home_raim';
     }
 
