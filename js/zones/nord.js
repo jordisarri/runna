@@ -888,16 +888,12 @@ class ZonaTiller extends ZonaBase {
 
         // La branca del Til·ler: el bastó
         this.branca = this.posar('arma_tiller', TIL_X + 100, TIL_Y + 110, { fonsY: TIL_Y });
-        this.branca.setOrigin(0.5, 0.5).setAngle(68).setTint(0xffe8b0).setScale(this.branca.scaleX * 1.18);
-        this.brancaAura = this.add.ellipse(this.branca.x, this.branca.y, 100, 24, 0xffd060, 0.25)
-            .setAngle(this.branca.angle).setDepth(TIL_Y - 1);
-        this.tweens.add({ targets: this.brancaAura, alpha: { from: 0.15, to: 0.38 }, scaleX: { from: 0.85, to: 1.15 }, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
-        this.tweens.add({ targets: this.branca, alpha: { from: 0.65, to: 1 }, yoyo: true, repeat: -1, duration: 800, ease: 'Sine.easeInOut' });
+        this.branca.setOrigin(0.5, 0.5).setAngle(68).setScale(this.branca.scaleX * 1.18);
         this.brilloImatge(this.branca, { actiu: () => Estat.flag('tillerBranca') && !Estat.te('basto_tiller') });          // la branca brilla mentre és a terra
         this.interactiu(TIL_X + 100, TIL_Y + 115, RADI_OBJECTE, DIALEGS.branca, { altura: 60, actiu: () => Estat.flag('tillerBranca') && !Estat.te('basto_tiller') });
         // (només es veu un cop ha caigut: si no, en entrar es veuria un instant abans que el primer fotograma l'amagués)
         const brancaVisible = Estat.flag('tillerBranca') && !Estat.te('basto_tiller');
-        this.branca.setVisible(brancaVisible); this.brancaAura.setVisible(brancaVisible);
+        this.branca.setVisible(brancaVisible);
 
         this.cartell(980, 470, DIALEGS.cartellCirosa);
 
@@ -1110,7 +1106,6 @@ class ZonaTiller extends ZonaBase {
         // La branca només es veu mentre encara no l'has agafada (i després que el Til·ler te l'hagi indicat)
         const visible = Estat.flag('tillerBranca') && !Estat.te('basto_tiller') && !this.brancaAgafada && !this.brancaCaient;
         this.branca.setVisible(visible);
-        this.brancaAura.setVisible(visible);
     }
 }
 
