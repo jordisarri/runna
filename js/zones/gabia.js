@@ -393,11 +393,17 @@ class ZonaTortura extends ZonaBase {
         // ---- Rastell rovellat amb el torn (Guants de Poder) ----
         const YR = 1180;
         this.rastell = this.add.graphics().setDepth(YR);
-        this.rastell.fillStyle(0x2a2420, 1).fillRect(240, YR - 150, 420, 14);
-        this.rastell.lineStyle(7, 0x5a4a40, 1);
-        for (let x = 254; x <= 646; x += 28) { this.rastell.lineBetween(x, YR - 140, x, YR); this.rastell.fillStyle(0x5a4a40, 1).fillTriangle(x - 5, YR, x + 5, YR, x, YR + 14); }
-        this.rastell.lineStyle(5, 0x4a3e36, 1).lineBetween(240, YR - 90, 660, YR - 90).lineBetween(240, YR - 40, 660, YR - 40);
-        // El torn: un bastidor de fusta amb un tambor on s'enrotlla la corda del rastell i una maneta de ferro
+        const R = this.rastell;
+        R.fillStyle(0x000000, 0.4).fillRect(236, YR - 130, 428, 150);                                                   // ombra de fons: el rastell es llegeix sobre la pedra
+        R.fillStyle(0x5a3a22, 1).fillRect(236, YR - 156, 428, 20).lineStyle(2, 0x120a05, 1).strokeRect(236, YR - 156, 428, 20);   // biga de dalt
+        R.fillStyle(0x9a6a3a, 1).fillRect(238, YR - 154, 424, 5);
+        for (let x = 254; x <= 646; x += 28) {                                                                          // barrots de ferro rovellat, amb vora fosca i llum
+            R.fillStyle(0x120a05, 1).fillRect(x - 6, YR - 138, 12, 138).fillTriangle(x - 6, YR, x + 6, YR, x, YR + 18);
+            R.fillStyle(0x8a5a38, 1).fillRect(x - 4, YR - 138, 8, 138).fillTriangle(x - 4, YR, x + 4, YR, x, YR + 14);
+            R.fillStyle(0xc98a50, 1).fillRect(x - 3, YR - 138, 2, 138);
+        }
+        [YR - 100, YR - 48].forEach(y => { R.fillStyle(0x120a05, 1).fillRect(236, y - 6, 428, 12); R.fillStyle(0x7a4e2e, 1).fillRect(236, y - 4, 428, 8); R.fillStyle(0xc98a50, 1).fillRect(236, y - 4, 428, 2); });
+        R.fillStyle(0x9a3a10, 0.55); [[262, YR - 110], [340, YR - 70], [454, YR - 126], [538, YR - 30], [620, YR - 90]].forEach(([x, y]) => R.fillCircle(x, y, 5));   // taques de rovell
         const torn = this.add.graphics().setDepth(YR + 60);
         torn.lineStyle(3, 0xc8b890, 1).lineBetween(662, YR + 14, 662, YR - 150);                                        // la corda, fins al rastell
         torn.fillStyle(0x000000, 0.35).fillEllipse(662, YR + 62, 76, 16);
@@ -414,7 +420,8 @@ class ZonaTortura extends ZonaBase {
         if (Estat.flag('rastellObert')) this.rastell.y = -150;
         else {
             this.colRastell = this.colisio(450, YR - 10, 420, 30);
-            this.interactiu(650, YR + 92, RADI_OBJECTE, DIALEGS.tornRastell, { altura: 110, actiu: () => !Estat.flag('rastellObert'), enTancar: () => { if (Estat.te('guants')) this.alcarRastell(); } });
+            const puntR = this.interactiu(650, YR + 92, RADI_OBJECTE, DIALEGS.tornRastell, { altura: 110, actiu: () => !Estat.flag('rastellObert'), enTancar: () => { if (Estat.te('guants')) this.alcarRastell(); } });
+            this.brillo(450, YR - 70, 428, 176, { punt: puntR, actiu: () => !Estat.flag('rastellObert'), dep: YR + 1 });
         }
 
         // Roda i eines (tram 2)
