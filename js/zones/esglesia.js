@@ -92,7 +92,7 @@ class ZonaEsglesia extends ZonaBase {
         // La porta de la dreta del peu del retaule: la mateixa del gràfic, que s'obre cap endins (amb la clau de la torre del rellotge) i duu a la torre
         this.portaRetaule = this.portaAnimada({ x: 872, top: 868, bottom: 1021, ample: 83, fons: 900, senseAjust: true, unic: true, arc: true, retall: this.retaule, bloq: () => !this.portaRellotge });
         this.dibuixarSagrari();
-        const puntSagrari = this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });     // el sagrari, al mig del retaule (fragment 2)
+        const puntSagrari = this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2'), toc: { x0: this.sagrariX - 40, x1: this.sagrariX + 40, y0: 0, y1: ESG.sostre + 30 } });     // el sagrari, al mig del retaule (fragment 2)
         this.brillo(this.sagrariX, this.sagrariY, 19, 32, { arc: true, punt: puntSagrari, actiu: () => !Estat.flag('fragment2') });          // el sagrari brilla fins que se n'agafa el pergamí
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 }, opac: true });
 
@@ -105,7 +105,7 @@ class ZonaEsglesia extends ZonaBase {
             enAcabar: () => { Estat.posaFlag('portaCampanarOberta'); Sfx.secret(); this.obrirPortaRellotge(false); }
         }) : ({
             pagines: [{ qui: 'Ineu', text: 'Tancada amb clau.' }]
-        }), { altura: 150, actiu: () => !this.portaRellotge });
+        }), { altura: 150, actiu: () => !this.portaRellotge, toc: { x0: ESG.portaDx - 42, x1: ESG.portaDx + 42, y0: 0, y1: ESG.retY + 40 } });
         this.brillo(ESG.portaDx + 2, 944, 83, 153, { arc: true, punt: puntPorta, actiu: () => !this.portaRellotge });         // la porta de la dreta del retaule brilla mentre és tancada
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Nadiel, que dirigeix el cor

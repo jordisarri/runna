@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 509: La porta de la dreta del retaule i el sagrari ja no mostren el «!»: el text només s'activa quan l'Ineu toca el seu dibuix (nova opció `toc` dels punts d'interacció). Es manté la brillantor.*
+
 *Revisió 508: La brillantor del rastell passa al torn (la manivela de la base), no als barrots; s'atura quan s'alça el rastell.*
 
 *Revisió 507: El rastell de la Sala de la Gàbia es redibuixa més clar (barrots de ferro rovellat amb vora fosca i llum, travessers, biga de dalt, taques de rovell i ombra de fons) i brilla discretament fins que s'alça.*

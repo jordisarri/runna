@@ -720,7 +720,7 @@ class ZonaBase extends Phaser.Scene {
 
     // Punt on es pot prémer ESPAI. dialeg = funció de DIALEGS o funció pròpia que retorna un diàleg.
     interactiu(x, y, radi, dialeg, opts = {}) {
-        const punt = { x, y, radi, dialeg, altura: opts.altura || 60, enTancar: opts.enTancar, actiu: opts.actiu, senseMirada: opts.senseMirada };
+        const punt = { x, y, radi, dialeg, altura: opts.altura || 60, enTancar: opts.enTancar, actiu: opts.actiu, senseMirada: opts.senseMirada, toc: opts.toc };       // toc {x0,x1,y0,y1}: només s'activa quan l'Ineu hi és dins (tocant el dibuix) i no mostra el «!»
         this.interactius.push(punt);
         return punt;
     }
@@ -1501,7 +1501,7 @@ class ZonaBase extends Phaser.Scene {
             if (ph > dur || !this.ineu) return;
             if (o.actiu && !o.actiu()) return;
             if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, x, y) > radi) return;
-            if (o.punt && this.puntProper && this.puntProper() === o.punt) return;
+            if (o.punt && !o.punt.toc && this.puntProper && this.puntProper() === o.punt) return;
             const p = ph / dur, e = p * p * (3 - 2 * p), sk = h * ang, cx = x - w / 2 - w * 0.4 + e * w * 1.8, bw = Math.max(7, w * 0.2), alfa = 0.8 * Math.sin(Math.PI * p);
             [[1, 0.3], [0.62, 0.55], [0.28, 1]].forEach(([k, a]) => {
                 const mig = bw * k;
@@ -1522,7 +1522,7 @@ class ZonaBase extends Phaser.Scene {
         for (let i = 0; i < N; i++) copies.push(this.add.image(0, 0, img.texture.key, img.frame.name).setTintFill(0xffffff).setBlendMode('ADD').setVisible(false));
         const f = () => {
             const ph = (this.time.now + b.desfase) % per;
-            const ok = img.active && img.visible && img.alpha > 0.5 && ph <= dur && (!o.actiu || o.actiu()) && !(o.punt && this.puntProper && this.puntProper() === o.punt);
+            const ok = img.active && img.visible && img.alpha > 0.5 && ph <= dur && (!o.actiu || o.actiu()) && !(o.punt && !o.punt.toc && this.puntProper && this.puntProper() === o.punt);
             if (!ok) { copies.forEach(c => c.visible && c.setVisible(false)); return; }
             const fw = img.frame.width, fh = img.frame.height, p = ph / dur, e = p * p * (3 - 2 * p), skew = fh * ang, bw = Math.max(8, fw * 0.2);
             const cx = -bw * 1.5 + e * (fw + bw * 3), alfa = 0.75 * Math.sin(Math.PI * p);
@@ -2236,7 +2236,7 @@ class ZonaBase extends Phaser.Scene {
         const proper = this.puntProper();
         // La tarota NO s'obre mai directament amb ESPAI: cada lloc de tarota té un punt d'interacció (el «!») amb el seu text, i la tarota s'obre
         // en acabar-lo (vegeu tarotaDespresDeText). Així els enemics de prop no hi interfereixen.
-        const mostra = proper;
+        const mostra = proper && !proper.toc ? proper : null;
         this.indicador.setVisible(!!mostra);
         if (mostra) this.indicador.setPosition(mostra.x, mostra.y - mostra.altura);
         const T = Phaser.Input.Keyboard.JustDown;
@@ -2557,6 +2557,7 @@ class ZonaBase extends Phaser.Scene {
         for (const p of this.interactius) {
             if (p.actiu && !p.actiu()) continue;
             if (!p.enTancar && esDialegBuit(p.dialeg)) continue;                                        // sense res a dir: no és interactiu
+            if (p.toc) { const t = p.toc; if (this.ineu.x >= t.x0 && this.ineu.x <= t.x1 && this.ineu.y >= t.y0 && this.ineu.y <= t.y1) { millor = p; millorDist = 0; } continue; }
             const dx = p.x - this.ineu.x, dy = p.y - this.ineu.y, d = Math.hypot(dx, dy);
             if (d > p.radi * 0.8 || d >= millorDist) continue;
             if (!p.senseMirada && d > 36 && (dx * dv.x + dy * dv.y) / d < 0.34) continue; // no el mira
