@@ -1580,8 +1580,9 @@ class ZonaBase extends Phaser.Scene {
         o.col = this.colisio(o.x, o.y - 13, 70, 26);
         if (!mogut) {
             // Punt d'interacció com els de parlar (la marca només surt quan ets molt a prop), però sense text: la roca es mou en tocar-la (si hi ha textPista, el diu)
-            this.interactiu(x, y + 24, 60, textPista ? { pagines: [{ qui: 'Ineu', text: textPista }] } : { pagines: [] },
-                { altura: 70, actiu: () => !o.mogut && o.permet() });
+            // (enTancar buit: el motor ignora els punts sense diàleg ni acció; amb ell, la marca surt i ESPAI no fa res)
+            this.interactiu(x, y - 10, 85, textPista ? { pagines: [{ qui: 'Ineu', text: textPista }] } : { pagines: [] },
+                { altura: 70, actiu: () => !o.mogut && o.permet(), senseMirada: true, enTancar: () => {} });
             (this.pedresMobils = this.pedresMobils || []).push(o);
         }
         return o;
