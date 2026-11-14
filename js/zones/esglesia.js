@@ -323,8 +323,9 @@ class ZonaEsglesia extends ZonaBase {
                 f => {
                     z.enquadrar(640, R + 400, 1.9, 900, null, 0);
                     z.ineuFlauta(true);
-                    MELODIES.miracle.notes.forEach((n, i) => this.time.delayedCall(i * 420, () => { Sfx.ocarina(FREQ_NOTA[n] * 2, 0.4, 0.14); z.bombolla('ineu', '♪', null, 380); }));
-                    this.esperar(MELODIES.miracle.notes.length * 420 + 300, f);
+                    let ta = 0;                         // les notes del Cant del Miracle, amb el ritme de la fanfàrria
+                    MELODIES.miracle.notes.forEach((n, i) => { const t = ta; ta += MELODIES.miracle.ritme[i] * 1000; this.time.delayedCall(t, () => { Sfx.ocarina(FREQ_NOTA[n] * 2, 0.4, 0.14); z.bombolla('ineu', '♪', null, 380); }); });
+                    this.esperar(ta + 300, f);
                 },
                 f => {
                     z.enquadrar(640, R + 320, 0.9, 1100, null, 0);
