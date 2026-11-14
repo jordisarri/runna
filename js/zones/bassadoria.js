@@ -45,7 +45,7 @@ class ZonaCreu extends ZonaBase {
         // Els gripaus corromputs s'escapen de la Bassadòria: n'hi ha per tota l'escena i, a mesura que en caiguin,
         // en surten de nous de la bassa. Quan la boira se'n va (aigua neta) ja no en surten més.
         this.propGripau = this.time.now + 2500;
-        this.netejant = false;
+        this.netejant = false; this.aiguaViva = false;
         if (!Estat.flag('bassadoriaNeta')) {
             [[560, 600], [1330, 620], [800, 860], [1180, 300]].forEach(([x, y]) => this.enemic('gripau', x, y));
         }
@@ -195,12 +195,14 @@ class ZonaCreu extends ZonaBase {
 
         // Efecte de transició amb deformació d'ones estil SNES JRPG
         this.transicioBassadoriaSNES(() => {
+            this.netejant = false;          // (ja és neta: ara es pot posar l'efecte d'aigua tranquil·la)
             this.ui().obrirDialeg(DIALEGS.bassadoriaNeta(Estat), () => Estat.desar());
         });
         return true;
     }
 
     actualitzar(ara) {
+        if (Estat.flag('bassadoriaNeta') && !this.netejant && !this.aiguaViva) { this.aiguaViva = true; this.aiguaTranquila(728, 363, 235, 52, 302, { color: 0xffffff, intensitat: 2.4 }); }          // aigua neta: reflexos i ones tranquils
         if (Estat.flag('bassadoriaNeta') || this.netejant || ara < this.propGripau) return;
         const vius = this.enemics.filter(e => e.tipus === 'gripau' && !e.mort).length;
         if (vius >= 5) return;

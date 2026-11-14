@@ -1484,6 +1484,35 @@ class ZonaBase extends Phaser.Scene {
         };
     }
 
+    // Aigua tranquil·la: damunt d'una taca d'aigua el·líptica (cx, cy, rx, ry) hi llisquen reflexos suaus i hi corren ones concèntriques molt lentes, tot retallat a l'el·lipse.
+    // dep: profunditat; o.color: color dels reflexos; o.intensitat: força (1 per defecte)
+    aiguaTranquila(cx, cy, rx, ry, dep, o = {}) {
+        const g = this.add.graphics().setDepth(dep), color = o.color || 0xffffff, k = o.intensitat || 1;
+        const m = this.make.graphics({ add: false }); m.fillStyle(0xffffff, 1).fillEllipse(cx, cy, rx * 2, ry * 2);
+        g.setMask(m.createGeometryMask());
+        const t0 = this.time.now, orig = [[-0.35, 0.1], [0.4, -0.15], [0.05, 0.3]];
+        const refresca = () => {
+            const t = (this.time.now - t0) / 1000;
+            g.clear();
+            // reflexos: franges horitzontals suaus que s'allarguen, es desplacen i es difuminen
+            for (let i = 0; i < 8; i++) {
+                const f = (i + 0.5) / 8, y = cy - ry + f * 2 * ry + Math.sin(t * 0.45 + i * 1.7) * ry * 0.06;
+                const ample = rx * Math.sqrt(Math.max(0.05, 1 - Math.pow((y - cy) / ry, 2)));
+                const l = ample * (0.45 + 0.2 * Math.sin(t * 0.3 + i)), x0 = cx + Math.sin(t * 0.28 + i * 2.1) * ample * 0.45 - l / 2;
+                g.lineStyle(2, color, (0.1 + 0.07 * Math.sin(t * 0.8 + i * 1.3)) * k).lineBetween(x0, y, x0 + l, y);
+                g.lineStyle(1.2, color, (0.07 + 0.05 * Math.sin(t * 0.6 + i)) * k).lineBetween(x0 + l * 0.2, y + 3, x0 + l * 0.8, y + 3);
+            }
+            // ones concèntriques, lentíssimes, que neixen en tres punts i s'esvaeixen
+            orig.forEach(([ox, oy], j) => {
+                const ph = ((t / 7) + j / 3) % 1;
+                g.lineStyle(2, color, 0.22 * (1 - ph) * k).strokeEllipse(cx + ox * rx, cy + oy * ry, rx * (0.08 + ph * 0.5), ry * (0.08 + ph * 0.5));
+            });
+        };
+        this.events.on('update', refresca);
+        this.events.once('shutdown', () => this.events.off('update', refresca));
+        return g;
+    }
+
     // ---------------- Ineu ----------------
     // Una posició desada és bona si és dins la zona i els peus no queden dins d'un obstacle (si l'escena ha canviat
     // des que es va desar, la posició pot haver quedat dins d'una paret: llavors l'Ineu surt per l'entrada)

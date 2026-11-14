@@ -613,7 +613,10 @@ class ZonaDipositos extends ZonaBase {
         this.terra('cami', 0, 520, 1600, 130).setTint(0xb8b8c8);
 
         // Dos dipòsits d'aigua, de pedra
-        [[420, 330], [DIP.estelX, 330]].forEach(([x, y]) => this.posar('diposit', x, y, { col: { w: 270, h: 50 } }));
+        [[420, 330], [DIP.estelX, 330]].forEach(([x, y]) => {
+            this.posar('diposit', x, y, { col: { w: 270, h: 50 } });
+            this.aiguaTranquila(x - 2, y - 163, 114, 25, y + 1, { color: 0xcfe6ff, intensitat: 2.2 });          // l'aigua del dipòsit es belluga plàcidament
+        });
         // El mirador, entre els dos dipòsits (des del telescopi es veu caure l'estel a l'aigua): una plataforma rodona de pedra
         // amb un ampit baix, i el trípode del telescopi
         const MX = 800, MY = 440, mir = this.add.graphics().setDepth(-1000);
@@ -717,9 +720,9 @@ class ZonaDipositos extends ZonaBase {
     posarBoiraDolmen() {
         const X = DIP.boiraX, Y = 585;
         this.colBoira = this.colisio(X + 30, Y, 140, 240);
-        this.boiraDolmen = this.boiraParet(X + 40, Y, 220, 330, { to: 0xd2dcff, fosc: 0x2c3460 });
-        this.interactiu(X - 50, Y, RADI_GRAN, DIALEGS.boiraDolmen, {
-            altura: 150, actiu: () => !!this.boiraDolmen,
+        this.boiraDolmen = this.boiraParet(X + 40, Y, 220, 330, { to: 0xd2dcff, fosc: 0x2c3460, dep: 20000 });          // per damunt de l'Ineu: el cobreix, translúcida, vingui d'on vingui
+        this.interactiu(X - 30, Y, 300, DIALEGS.boiraDolmen, {          // punt accessible des de lluny
+            altura: 150, senseMirada: true, actiu: () => !!this.boiraDolmen,
             enTancar: () => { if (Estat.te('estel_llorenc')) this.esvairBoiraDolmen(); }
         });
     }
