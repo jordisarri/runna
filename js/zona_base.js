@@ -1484,6 +1484,35 @@ class ZonaBase extends Phaser.Scene {
         };
     }
 
+    // Brillantor discreta d'un objecte interactuable de l'escenari: una ratlla blanca que el recorre en diagonal cada pocs segons, retallada a la seva forma
+    // (x, y: centre; w, h: mida; o.arc: part de dalt rodona, com una porta d'arc). Només es veu quan l'Ineu és a prop (o.radi), si l'objecte encara és
+    // interactuable (o.actiu) i mentre el punt d'interacció (o.punt) NO mostra la seva marca «!».
+    brillo(x, y, w, h, o = {}) {
+        const radi = o.radi || 340, per = o.per || 4800, dur = 800, ang = o.ang !== undefined ? o.ang : 0.5;
+        const b = { per, desfase: o.desfase !== undefined ? o.desfase : Math.random() * per };
+        (this.brillos = this.brillos || []).push(b);
+        const g = this.add.graphics().setDepth(o.dep || 910).setBlendMode('ADD');
+        const m = this.make.graphics({ add: false }); m.fillStyle(0xffffff, 1);
+        if (o.arc) m.fillRoundedRect(x - w / 2, y - h / 2, w, h, { tl: w / 2, tr: w / 2, bl: 0, br: 0 }); else m.fillRect(x - w / 2, y - h / 2, w, h);
+        g.setMask(m.createGeometryMask());
+        const f = () => {
+            g.clear();
+            const ph = (this.time.now + b.desfase) % b.per;
+            if (ph > dur || !this.ineu) return;
+            if (o.actiu && !o.actiu()) return;
+            if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, x, y) > radi) return;
+            if (o.punt && this.puntProper && this.puntProper() === o.punt) return;
+            const p = ph / dur, e = p * p * (3 - 2 * p), sk = h * ang, cx = x - w / 2 - w * 0.4 + e * w * 1.8, bw = Math.max(7, w * 0.2), alfa = 0.8 * Math.sin(Math.PI * p);
+            [[1, 0.3], [0.62, 0.55], [0.28, 1]].forEach(([k, a]) => {
+                const mig = bw * k;
+                g.fillStyle(0xffffff, alfa * a * 0.55).fillPoints([{ x: cx - mig + sk / 2, y: y - h / 2 }, { x: cx + mig + sk / 2, y: y - h / 2 }, { x: cx + mig - sk / 2, y: y + h / 2 }, { x: cx - mig - sk / 2, y: y + h / 2 }], true);
+            });
+        };
+        this.events.on('update', f);
+        this.events.once('shutdown', () => this.events.off('update', f));
+        return b;
+    }
+
     // Aigua tranquil·la: damunt d'una taca d'aigua el·líptica (cx, cy, rx, ry) hi llisquen reflexos suaus i hi corren ones concèntriques molt lentes, tot retallat a l'el·lipse.
     // dep: profunditat; o.color: color dels reflexos; o.intensitat: força (1 per defecte)
     aiguaTranquila(cx, cy, rx, ry, dep, o = {}) {

@@ -92,19 +92,21 @@ class ZonaEsglesia extends ZonaBase {
         // La porta de la dreta del peu del retaule: la mateixa del gràfic, que s'obre cap endins (amb la clau de la torre del rellotge) i duu a la torre
         this.portaRetaule = this.portaAnimada({ x: 872, top: 868, bottom: 1021, ample: 83, fons: 900, senseAjust: true, unic: true, arc: true, retall: this.retaule, bloq: () => !this.portaRellotge });
         this.dibuixarSagrari();
-        this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });     // el sagrari, al mig del retaule (fragment 2)
+        const puntSagrari = this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2') });     // el sagrari, al mig del retaule (fragment 2)
+        this.brillo(this.sagrariX, this.sagrariY, 19, 32, { arc: true, radi: 300, punt: puntSagrari, actiu: () => !Estat.flag('fragment2') });          // el sagrari brilla fins que se n'agafa el pergamí
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 }, opac: true });
 
         // Portes del peu del retaule: totes dues tancades. Quan el Pare Nadiel diu que el rellotge s'ha aturat (rellotgeDit)
         // s'obre la de la dreta, que duu a la torre i a la Sala del Rellotge. L'esquerra és només decorativa: no s'obre mai i no té cap punt d'interacció.
         this.portaRellotge = false;
         this.obrirPortaRellotge(false);
-        this.interactiu(ESG.portaDx, ESG.retY + 50, RADI_OBJECTE, () => Estat.te('clau_campanar') ? ({
+        const puntPorta = this.interactiu(ESG.portaDx, ESG.retY + 50, RADI_OBJECTE, () => Estat.te('clau_campanar') ? ({
             pagines: [{ qui: 'Ineu', text: 'La clau de la torre del rellotge encaixa al pany. La porta s\'obre.' }],
             enAcabar: () => { Estat.posaFlag('portaCampanarOberta'); Sfx.secret(); this.obrirPortaRellotge(false); }
         }) : ({
             pagines: [{ qui: 'Ineu', text: 'Tancada amb clau.' }]
         }), { altura: 150, actiu: () => !this.portaRellotge });
+        this.brillo(ESG.portaDx + 2, 944, 83, 153, { arc: true, punt: puntPorta, actiu: () => !this.portaRellotge });         // la porta de la dreta del retaule brilla mentre és tancada
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Nadiel, que dirigeix el cor
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, el Pare Nadiel es posa amb la resta; l'orgue, la Pianista (asseguda: no s'aixeca) i els bancs es queden al seu lloc
