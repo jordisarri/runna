@@ -345,6 +345,16 @@ const Sfx = {
         this.xiu(0.12, 0.28, 'highpass', 1500, 800, 1, 0.08);
         this.to(140, 70, 0.22, 'square', 0.14);
     },
+    raimEsclat() {               // el guardià vençut esclata: cop sord, retrunyir de pedra, una pluja de trossos de marbre i un acord que s'esvaeix
+        if (!this.ok('raimEsclat', 800)) return;
+        this.to(95, 30, 1.7, 'sine', 0.5);
+        this.to(190, 55, 0.9, 'square', 0.12);
+        this.xiu(1.3, 0.5, 'lowpass', 1000, 70, 1);
+        for (let k = 0; k < 9; k++) this.xiu(0.16, 0.14 + Math.random() * 0.14, 'bandpass', 1500 + Math.random() * 1800, 350, 2.2, 0.06 + k * 0.13 + Math.random() * 0.05);
+        const t0 = this.ctx.currentTime + 0.45;
+        [523, 392, 330, 262].forEach((f, i) => this.notaLlarga(f, t0 + i * 0.2, 1.5, 'triangle', 0.055, 0.5));
+        this.xiu(1.8, 0.07, 'highpass', 3000, 1200, 1, 0.3);
+    },
     pedraRascant(dur = 0.65) {   // pedra que rasca contra pedra (el cap de l'Home del Raïm en girar): rascades greus a batzegades, un rumor de fons i un xiscle fi de gra
         if (!this.ok('pedraRascant', 250)) return;
         const n = Math.max(3, Math.round(dur / 0.11));

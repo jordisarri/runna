@@ -1024,16 +1024,16 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         const c = e.spr.body.center;
         this.ui().amagarBarraBoss();
         Estat.posaFlag('raimDerrotat');
-        Joc.aturarMusica(); Joc.jingle(this, 'jingle_boss');
+        Joc.aturarMusica();
         this.reobrirReixa();
-        ENEMICS.raim.trossos(this, c.x, c.y, 22);
         this.ui().actualitzarHUD();
+        this.esclatDerrota(e, c);
         // El volant, l'engranatge i la maneta cauen
         [this.volant, this.engranatge, this.manetaVolant].forEach(o => { if (o) this.tweens.add({ targets: o, y: o.y + 40, alpha: 0, duration: 600, ease: 'Quad.easeIn', onComplete: () => o.destroy() }); });
         this.volant = null; this.engranatge = null; this.manetaVolant = null;
-        // La càmera es queda amb el guardià caigut, sencer per damunt del quadre de text (abans el text el tapava)
-        this.enquadrarGuardia(e.spr.x, e.spr.y - 300 * K_RAIM, e.spr.y + 20, 470, 1200);
-        this.time.delayedCall(1100, () => this.ui().obrirDialeg(DIALEGS.raimDerrotat, () => {
+        // (primer passa tot l'esclat de la derrota; la càmera acaba amb el guardià sencer per damunt del quadre de text, que abans el tapava)
+        this.time.delayedCall(2700, () => this.enquadrarGuardia(e.spr.x, e.spr.y - 300 * K_RAIM, e.spr.y + 20, 470, 1100));
+        this.time.delayedCall(3900, () => this.ui().obrirDialeg(DIALEGS.raimDerrotat, () => {
             // Es dreça, torna d'un salt al seu pedestal i s'hi queda, fet escultura (la imatge de l'estàtua endreçada); llavors s'obre la trapa
             Estat.posaObjectiu("La llosa de sota l'escalinata s'ha obert: baixa a la cripta dels monjos.");
             Estat.desar();
@@ -1042,6 +1042,58 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.enquadrarGuardia(RX, Math.min(e.spr.y - 300 * K_RAIM, RY - 340), Math.max(e.spr.y + 20, RY + 10), 0, 1000);
             this.time.delayedCall(900, () => this.raimAlPedestal(e, () => { Joc.musicaZona(this, 1500); this.alliberarCamera(700, () => this.obrirTrapa()); }));
         }));
+    }
+
+    // L'esclat de la derrota: cop de gràcia a càmera lenta, flaix blanc, cop i trossos de marbre, ones lila, un pilar de llum, el cercle de runes que es trenca,
+    // la boira lila que se'n va i la música que s'apaga; tot abans que el guardià parli. Dura uns 3,5 s.
+    esclatDerrota(e, c) {
+        const s = e.spr, cam = this.cameras.main, ADD = Phaser.BlendModes.ADD;
+        // 1) cop de gràcia: tot va a càmera lenta un instant, la càmera s'acosta i un flaix blanc
+        const lent = (f, ms) => {
+            this.time.timeScale = f; this.tweens.timeScale = f; this.physics.world.timeScale = 1 / f;
+            setTimeout(() => { if (this.sys && this.sys.isActive()) { this.time.timeScale = 1; this.tweens.timeScale = 1; this.physics.world.timeScale = 1; } }, ms);
+        };
+        lent(0.25, 650);
+        this.enquadrarGuardia(c.x, c.y - 260 * K_RAIM, c.y + 40, 0, 550, null, 30, 2.3);
+        cam.flash(320, 255, 255, 255); cam.shake(900, 0.014);
+        Sfx.derrota(); Sfx.raimEsclat();
+        this.time.delayedCall(250, () => Joc.jingle(this, 'jingle_boss'));
+        // el cos, blanc d'un cop i després amb parpelleigs lila mentre es trenca
+        s.setTintFill(0xffffff);
+        this.time.delayedCall(140, () => { if (s.active) s.clearTint(); });
+        for (let k = 0; k < 5; k++) this.time.delayedCall(450 + k * 230, () => { if (s.active) { s.setTint(k % 2 ? 0xffffff : 0xcbb0ff); this.time.delayedCall(90, () => s.active && s.clearTint()); } });
+        // 2) trossos de marbre, pols i boira
+        ENEMICS.raim.trossos(this, c.x, c.y, 34);
+        const metralla = this.add.particles(c.x, c.y - 40, 'espurna', {
+            speed: { min: 140, max: 380 }, angle: { min: 195, max: 345 }, gravityY: 520, lifespan: 1500, scale: { start: 0.8, end: 0.1 }, alpha: { start: 1, end: 0 },
+            tint: [0xe8e2d2, 0xb9b3a2, 0xcbb0ff, 0xffffff], quantity: 46, emitting: false
+        }).setDepth(99990);
+        metralla.explode(46);
+        this.time.delayedCall(1700, () => metralla.destroy());
+        [0, 350, 700].forEach(d => this.time.delayedCall(d, () => this.boiraPuf(c.x + Phaser.Math.Between(-40, 40), c.y - Phaser.Math.Between(20, 90))));
+        // 3) ones de xoc lila i un pilar de llum que s'esvaeix
+        [[0, 300], [220, 380]].forEach(([d, R]) => this.time.delayedCall(d, () => {
+            const ona = this.add.circle(c.x, c.y + 6, 20, 0xcbb0ff, 0.18).setStrokeStyle(4, 0xf0e6ff, 0.9).setBlendMode(ADD).setDepth(-290);
+            this.tweens.add({ targets: ona, radius: R, alpha: 0, duration: 1100, ease: 'Quad.easeOut', onComplete: () => ona.destroy() });
+        }));
+        const pilar = this.add.rectangle(c.x, c.y - 330, 90, 700, 0xe8dcff, 0.55).setBlendMode(ADD).setDepth(99950);
+        this.tweens.add({ targets: pilar, alpha: 0, scaleX: 0.15, duration: 1500, ease: 'Cubic.easeOut', onComplete: () => pilar.destroy() });
+        // 4) el cercle de runes s'encén de cop i es trenca; la boira lila del guardià se'n va
+        if (this.runesCercle) {
+            const rc = this.runesCercle;
+            this.tweens.killTweensOf(rc);
+            this.tweens.add({ targets: rc, alpha: 1, duration: 180, yoyo: true, repeat: 2, onComplete: () => this.apagaRunes() });
+        }
+        ENEMICS.raim.apagaNeboda(e);
+        // 5) els esquitxos de llum pugen a poc a poc (la boira que se'n va)
+        this.time.delayedCall(1100, () => {
+            const fum = this.add.particles(c.x, c.y - 20, 'espurna', {
+                x: { min: -50, max: 50 }, speedY: { min: -90, max: -30 }, lifespan: 1800, scale: { start: 0.45, end: 0 }, alpha: { start: 0.8, end: 0 },
+                tint: [0xcbb0ff, 0xe8dcff], frequency: 60, blendMode: 'ADD'
+            }).setDepth(99989);
+            this.time.delayedCall(1500, () => fum.stop());
+            this.time.delayedCall(3400, () => fum.destroy());
+        });
     }
 
     raimAlPedestal(e, fet) {
