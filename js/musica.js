@@ -8,10 +8,10 @@ const MELODIES = {
     // La tarota té cinc notes (1 Do, 2 Re, 3 Mi, 4 Fa, 5 Sol). Tres cants, de més fàcil a més difícil:
     //  · Aurora: Do Re Mi, tres notes en ordre ascendent (el primer que s'ensenya);
     //  · Vespres: Sol Fa Mi Do, quatre notes que baixen com el sol;
-    //  · Miracle: Mi Mi Fa Sol Mi, al ritme de la fanfàrria del joc (el leitmotiv), que la tarota continua tota sola.
+    //  · Miracle: Mi Mi Mi Fa Sol, al ritme de la fanfàrria del joc (el leitmotiv), que la tarota continua tota sola.
     aurora:  { nom: 'Cant de l\'Aurora',  notes: [1, 2, 3],          flag: 'cantAurora', bpm: 108 },
     pedres:  { nom: 'Cant de Vespres',    notes: [5, 4, 3, 1],       flag: 'cantPedres', bpm: 80 },
-    miracle: { nom: 'Cant del Miracle',   notes: [3, 3, 4, 5, 3],     flag: 'cantMiracle', bpm: 60, ritme: [0.95, 0.47, 0.41, 0.31, 1.17] }      // ritme: durades (s) de la fanfàrria (Sfx.FANFARRA); bpm 60: la durada de la peça és en segons
+    miracle: { nom: 'Cant del Miracle',   notes: [3, 3, 3, 4, 5],     flag: 'cantMiracle', bpm: 60, ritme: [0.95, 0.22, 0.47, 0.41, 0.31] }      // ritme: durades (s) de la fanfàrria (Sfx.FANFARRA); bpm 60: la durada de la peça és en segons
 };
 const NOM_NOTA = ['', 'Do', 'Re', 'Mi', 'Fa', 'Sol'];
 
@@ -21,8 +21,8 @@ const NOM_NOTA = ['', 'Do', 'Re', 'Mi', 'Fa', 'Sol'];
 const NOTES_FREQ = { Sol3: 196, La3: 220, Do: 262, Re: 294, Mi: 330, Fa: 349, Sol: 392, La: 440, Si: 494, Do2: 523 };
 MELODIES.aurora.peca = [['Do', 1], ['Re', 1], ['Mi', 2], ['Sol', 1], ['Mi', 1], ['Re', 1], ['Do', 4]];
 MELODIES.pedres.peca = [['Sol', 1], ['Fa', 1], ['Mi', 2], ['Do', 1], ['Re', 1], ['Mi', 1], ['Re', 1], ['Do', 4]];
-// el Cant del Miracle és la fanfàrria del joc: Mi Mi Fa Sol Mi (la clau, amb el ritme de la fanfàrria) i després la resta del leitmotiv, tal com sona a Sfx.FANFARRA (durades en segons: bpm 60)
-MELODIES.miracle.peca = [['Mi', 0.95], ['Mi', 0.47], ['Fa', 0.41], ['Sol', 0.31], ['Mi', 1.17], ['Do', 0.79], ['Re', 0.13], ['Mi', 0.18], ['Fa', 0.88], ['Fa', 0.28], ['Mi', 0.43], ['Re', 0.44], ['Do', 0.31], ['Re', 1.6]];
+// el Cant del Miracle és la fanfàrria del joc: Mi Mi Mi Fa Sol (la clau: la pujada de la fanfàrria, amb el seu ritme; la tarota hi respon amb el Do) i després la resta del leitmotiv, tal com sona a Sfx.FANFARRA (durades en segons: bpm 60)
+MELODIES.miracle.peca = [['Mi', 0.95], ['Mi', 0.22], ['Mi', 0.47], ['Fa', 0.41], ['Sol', 0.31], ['Do', 1.17], ['Do', 0.79], ['Re', 0.13], ['Mi', 0.18], ['Fa', 0.88], ['Fa', 0.28], ['Mi', 0.43], ['Re', 0.44], ['Do', 0.31], ['Re', 1.6]];
 // Quin dels cinc botons s'il·lumina per a cada altura (el més proper)
 const BOTO_DE = f => { const fs = [262, 294, 330, 349, 392]; let millor = 0; fs.forEach((x, i) => { if (Math.abs(x - f) < Math.abs(fs[millor] - f)) millor = i; }); return millor + 1; };
 

@@ -43,7 +43,7 @@ class ZonaCelaStAntoni extends ZonaBase {
         });
 
         // La caldera, amb el forn encès: resplendor que batega, flama i espurnes
-        this.add.image(400, 252, 'caldera_taller').setOrigin(0.5, 1).setScale(E).setDepth(252);
+        (this.opacs = this.opacs || []).push(this.add.image(400, 252, 'caldera_taller').setOrigin(0.5, 1).setScale(E).setDepth(252));
         this.colisio(400, 236, 150, 34);
         const forn = this.add.circle(400, 200, 130, 0xff8a30, 0.14).setBlendMode('ADD').setDepth(253);
         this.tweens.add({ targets: forn, alpha: 0.26, scale: 1.08, yoyo: true, repeat: -1, duration: 380 });
@@ -67,23 +67,23 @@ class ZonaCelaStAntoni extends ZonaBase {
         });
 
         // El banc de treball, amb l'ull de l'ocell mecànic que brilla
-        this.add.image(188, 362, 'banc_taller').setOrigin(0.5, 1).setScale(E).setDepth(362);
+        (this.opacs = this.opacs || []).push(this.add.image(188, 362, 'banc_taller').setOrigin(0.5, 1).setScale(E).setDepth(362));
         this.colisio(188, 344, 232, 36);
         const ull = this.add.circle(199, 231, 5, 0x60f0ff, 0.9).setBlendMode('ADD').setDepth(363);
         this.tweens.add({ targets: ull, alpha: 0.25, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
 
         // El laboratori: bombolles al matràs verd i al gerro lila
-        this.add.image(612, 362, 'lab_taller').setOrigin(0.5, 1).setScale(E).setDepth(362);
+        (this.opacs = this.opacs || []).push(this.add.image(612, 362, 'lab_taller').setOrigin(0.5, 1).setScale(E).setDepth(362));
         this.colisio(612, 344, 212, 36);
         [[543, 216, 0xa0ff80], [662, 236, 0xe0b0ff]].forEach(([x, y, c]) => this.add.particles(x, y, 'espurna', { x: { min: -6, max: 6 },
             speedY: { min: -26, max: -10 }, lifespan: 900, scale: { start: 0.1, end: 0.02 }, alpha: { start: 0.9, end: 0 }, tint: c, frequency: 220 }).setDepth(363));
 
         // El llit del Galf, el telescopi i els trastos
-        this.add.image(140, 582, 'llit_galf').setOrigin(0.5, 1).setScale(E).setDepth(582);
+        (this.opacs = this.opacs || []).push(this.add.image(140, 582, 'llit_galf').setOrigin(0.5, 1).setScale(E).setDepth(582));
         this.colisio(140, 545, 150, 70);
-        this.add.image(662, 590, 'enclusa_taller').setOrigin(0.5, 1).setScale(E).setDepth(590);
+        (this.opacs = this.opacs || []).push(this.add.image(662, 590, 'enclusa_taller').setOrigin(0.5, 1).setScale(E).setDepth(590));
         this.colisio(662, 578, 70, 18);
-        this.add.image(540, 602, 'trastos_taller').setOrigin(0.5, 1).setScale(E).setDepth(602);
+        (this.opacs = this.opacs || []).push(this.add.image(540, 602, 'trastos_taller').setOrigin(0.5, 1).setScale(E).setDepth(602));
         this.colisio(540, 588, 140, 26);
 
         // Els plànols de la paret: l'única cosa que l'Ineu es mira
@@ -92,6 +92,7 @@ class ZonaCelaStAntoni extends ZonaBase {
         const planols = () => ({ pagines: [{ qui: 'Ineu', text: "(Semblen els plànols d'una mena d'artefacte per mirar les estrelles.)" }] });
         this.interactiu(582, 380, RADI_OBJECTE, planols, { altura: 300 });
         this.interactiu(582, 236, RADI_OBJECTE, planols, { altura: 156 });
+        this.brillo(588, 74, 122, 90, { dep: -970 });          // el plànol del telescopi, a la paret, brilla (no s'apaga: el text es pot tornar a llegir)
 
         // Parets i col·lisions (obertura de sortida a baix, al mig)
         this.colisio(20, H / 2, 40, H);

@@ -1515,25 +1515,29 @@ class ZonaBase extends Phaser.Scene {
         return b;
     }
 
-    // El mateix brillo, per a un objecte que és una imatge: la ratlla en diagonal només s'il·lumina on l'imatge és opaca (segueix la seva silueta). Es fa amb
-    // còpies de la mateixa imatge, en blanc i additives, retallades en franges horitzontals desplaçades (així la franja queda en diagonal).
+    // El mateix brillo, per a un objecte que és una imatge: la ratlla en diagonal (recta, sense escalons, també als sprites grans) només s'il·lumina on l'imatge és opaca
+    // (segueix la seva silueta). Es fa amb còpies de la mateixa imatge, en blanc i additives, retallades per una màscara geomètrica en forma de paral·lelogram.
     brilloImatge(img, o = {}) {
-        const per = o.per || 2400, dur = 800, ang = 0.5, N = 7, b = { per, desfase: o.desfase !== undefined ? o.desfase : Math.random() * per };
+        const per = o.per || 2400, dur = 800, ang = 0.5, b = { per, desfase: o.desfase !== undefined ? o.desfase : Math.random() * per };
         (this.brillos = this.brillos || []).push(b);
-        const copies = [];
-        for (let i = 0; i < N; i++) copies.push(this.add.image(0, 0, img.texture.key, img.frame.name).setTintFill(0xffffff).setBlendMode('ADD').setVisible(false));
+        const capes = [[1, 0.3], [0.62, 0.55], [0.28, 1]].map(([k, a]) => {          // tres franges, de la més ampla i suau a la més estreta i clara
+            const c = this.add.image(0, 0, img.texture.key, img.frame.name).setTintFill(0xffffff).setBlendMode('ADD').setVisible(false);
+            const g = this.make.graphics({ add: false });
+            c.setMask(g.createGeometryMask());
+            return { c, g, k, a };
+        });
         const f = () => {
             const ph = (this.time.now + b.desfase) % per;
             const ok = img.active && img.visible && img.alpha > 0.5 && ph <= dur && (!o.actiu || o.actiu()) && !(o.punt && o.punt.marca && this.puntProper && this.puntProper() === o.punt);
-            if (!ok) { copies.forEach(c => c.visible && c.setVisible(false)); return; }
-            const fw = img.frame.width, fh = img.frame.height, p = ph / dur, e = p * p * (3 - 2 * p), skew = fh * ang, bw = Math.max(8, fw * 0.2);
-            const cx = -bw * 1.5 + e * (fw + bw * 3), alfa = 0.75 * Math.sin(Math.PI * p);
-            copies.forEach((c, i) => {
-                const off = (0.5 - (i + 0.5) / N) * skew, x0 = Math.max(0, cx + off - bw / 2), x1 = Math.min(fw, cx + off + bw / 2);
-                if (x1 - x0 < 1) { c.setVisible(false); return; }
+            if (!ok) { capes.forEach(({ c }) => c.visible && c.setVisible(false)); return; }
+            const B = img.getBounds(), p = ph / dur, e = p * p * (3 - 2 * p), sk = B.height * ang, bw = Math.max(8, B.width * 0.2);
+            const cx = B.x - bw * 1.5 + e * (B.width + bw * 3), alfa = 0.75 * Math.sin(Math.PI * p);
+            capes.forEach(({ c, g, k, a }) => {
+                const mig = bw * k;
+                g.clear().fillStyle(0xffffff, 1).fillPoints([{ x: cx - mig + sk / 2, y: B.y }, { x: cx + mig + sk / 2, y: B.y }, { x: cx + mig - sk / 2, y: B.y + B.height }, { x: cx - mig - sk / 2, y: B.y + B.height }], true);
                 if (c.texture.key !== img.texture.key || c.frame.name !== img.frame.name) c.setTexture(img.texture.key, img.frame.name);
-                c.setCrop(x0, Math.floor(i * fh / N), x1 - x0, Math.ceil(fh / N) + 1).setOrigin(img.originX, img.originY).setScale(img.scaleX, img.scaleY).setFlip(img.flipX, img.flipY)
-                    .setAngle(img.angle).setPosition(img.x, img.y).setDepth(img.depth + 0.5).setAlpha(alfa).setVisible(true);
+                c.setOrigin(img.originX, img.originY).setScale(img.scaleX, img.scaleY).setFlip(img.flipX, img.flipY)
+                    .setAngle(img.angle).setPosition(img.x, img.y).setDepth(img.depth + 0.5).setAlpha(alfa * a * 0.55).setVisible(true);
             });
         };
         this.events.on('update', f);
