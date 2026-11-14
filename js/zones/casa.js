@@ -687,38 +687,19 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // Trapa de la cripta, a sota de l'escalinata: una llosa amb una creu gravada; vençut el guardià, es fa a un costat i
         // deixa veure l'escala que baixa
         this.dibuixarTrapa(derrotat);
-        this.interactiu(700, 697, 150, DIALEGS.trapaCripta, {          // al mig del forat: s'hi baixa des de qualsevol costat (nord, sud o laterals)
-            altura: 70, senseMirada: true, actiu: () => Estat.flag('raimDerrotat'),
-            enTancar: () => this.baixarTrapa()
-        });
+        // La cripta s'hi baixa com a totes les escales: en entrar al forat (la llosa ja apartada), l'Ineu s'enfonsa graó a graó (sortidaEscala); no cal interactuar
+        if (derrotat) this.posarSortidaTrapa();
 
         // Si el guardià ja estava despert (has sortit i tornat), segueix aquí
         if (desperta && !derrotat) this.despertarRaim(true);
     }
 
-    // L'Ineu baixa pels graons: camina fins a la vora, i a cada graó s'enfonsa (el que queda per sota de la vora s'amaga) amb el seu «tap» de sabata; en acabar, fosa i la Cripta
-    baixarTrapa() {
-        if (this.baixantTrapa) return;
-        this.baixantTrapa = true;
-        const I = this.ineu, lip = 668 + 58;
-        this.ui().bloquejatFins = this.ui().time.now + 4200;
-        if (this.colTrapa) { this.obstacles.remove(this.colTrapa, true, true); this.colTrapa = null; }
-        this.ineuVa(700, lip - 2, () => {
-            const m = this.make.graphics({ add: false });
-            m.fillStyle(0xffffff, 1).fillRect(0, 0, 1400, lip + 2);
-            I.setMask(m.createGeometryMask());
-            if (this.fantasma) this.fantasma.setVisible(false);
-            if (this.ombraIneu) this.ombraIneu.setVisible(false);
-            this.caminantAuto = true; this.vista8Manual = true;
-            this.posarDireccio('amunt', true, 'up');
-            let k = 0;
-            const pas = () => {
-                if (k >= 4) { this.caminantAuto = false; this.canviarZona('ZonaCasaCripta', 'porta'); return; }
-                Sfx.escala(false);
-                this.tweens.add({ targets: I, y: I.y + 27, x: 700, duration: 340, ease: 'Sine.easeInOut', onComplete: () => { k++; this.time.delayedCall(110, pas); } });
-            };
-            pas();
-        }, 150);
+    // L'escala de la cripta: el forat (640-760 × 668-726) és una sortida amb baixada graó a graó, com la dels altres llocs (zona_base: baixarEscala)
+    posarSortidaTrapa() {
+        if (this.sortidaTrapa) return;
+        this.sortidaTrapa = true;
+        this.sortidaEscala(640, 668, 120, 58, 'ZonaCasaCripta', 'porta', 728);
+        this.sortides[this.sortides.length - 1].desarmada = true;          // en pujar de la cripta, l'Ineu surt just a dins del forat: no ha de tornar a baixar fins que en surti
     }
 
     // La boca de la cripta (marc de pedra, foscor i graons) i la llosa que la tapa. oberta: la llosa ja és apartada
@@ -780,7 +761,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         ll.fillStyle(0x7a6c54, 1).fillPoints([{ x: W - 9, y: 1.5 }, { x: W - 1.5, y: 9 }, { x: W - 1.5, y: 1.5 }], true);
         ll.setPosition(X0, Y0);
         this.llosaTrapa = ll;
-        if (oberta) { ll.setPosition(X0 + W + 14, Y0 + 6); this.llumTrapa.setFillStyle(0x9ab8ff, 0.12); this.colTrapa = this.colisio(X0 + W / 2, Y0 + H / 2, W + 4, H + 4); }
+        if (oberta) { ll.setPosition(X0 + W + 14, Y0 + 6); this.llumTrapa.setFillStyle(0x9ab8ff, 0.12); }
     }
     // Vençut el guardià: la càmera mira la llosa, la terra tremola i la llosa llisca a un costat; de sota en surt claror freda i pols
     obrirTrapa(fet) {
@@ -791,7 +772,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             cam.shake(900, 0.005); Sfx.porta();
             this.tweens.add({ targets: this.llosaTrapa, x: X0 + W + 14, y: Y0 + 6, duration: 1300, ease: 'Sine.easeInOut', onComplete: () => {
                 Sfx.secret();
-                if (!this.colTrapa) this.colTrapa = this.colisio(X0 + W / 2, Y0 + 29, W + 4, 62);          // el forat és un obstacle: no s'hi pot caminar al damunt, s'hi baixa interactuant
+                this.posarSortidaTrapa();          // el forat és una escala: s'hi baixa caminant-hi
                 this.tweens.add({ targets: this.llumTrapa, fillAlpha: 0.28, duration: 500, yoyo: true, onComplete: () => this.llumTrapa.setFillStyle(0x9ab8ff, 0.12) });
                 this.boira(700, 690, 100, 30, 0.6);
                 this.time.delayedCall(700, () => { cam.startFollow(this.ineu, true, 0.1, 0.1); if (fet) fet(); });

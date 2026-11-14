@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 534: La trapa de la cripta (Casa Gran) es baixa com la resta d'escales: en caminar cap al forat obert l'Ineu s'enfonsa graó a graó i passa a la Cripta; ja no cal interactuar-hi. En pujar de la cripta no torna a baixar de seguida.*
+
 *Revisió 533: Home del Raïm: més difícil (36 de vida, fase 2 abans, envestides més ràpides i més seguides amb un avís més curt, la maça més sovint, menys temps de descans a terra, i l'envestida fa més mal) i una mica més petit (80%), amb la càmera de la sala més allunyada perquè es vegi sencer. La trapa de la cripta, un cop vençut, es pot fer servir des de qualsevol costat del forat (punt al mig, sense haver de mirar-lo).*
 
 *Revisió 532: El Cant del Miracle passa a Mi Mi Mi Fa Sol (la pujada de la fanfàrria, amb el seu ritme); la tarota hi respon amb el Do llarg i la resta. Cel·la de Sant Antoni: els elements del laboratori (caldera, bancs, llit, enclusa, trastos) són opacs, i el plànol del telescopi de la paret brilla. El brillo dels sprites grans ja no fa escales: és una ratlla diagonal recta, retallada a la silueta de l'objecte.*
