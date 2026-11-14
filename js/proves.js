@@ -145,6 +145,11 @@ const Proves = {
         Object.entries(e.valors || {}).forEach(([k, v]) => Estat.posaFlag(k, v));
         (e.treuObj || []).forEach(o => this.treuObj(o));
         (e.obj || []).forEach(o => this.donaObj(o));
+        if (e.maneta === 'tria') {                       // la casella «portem la maneta» (Home del Raïm): amb ella, l'Ineu la porta; sense, no la té (ni se n'ha parlat amb en Jorgi)
+            let amb = true; try { amb = localStorage.getItem('provesManeta') !== '0'; } catch (err) { /* res */ }
+            if (amb) { ['georgiManeta', 'maneta'].forEach(f => Estat.posaFlag(f)); this.donaObj('maneta'); }
+            else { ['georgiManeta', 'maneta'].forEach(f => this.treuFlag(f)); this.treuObj('maneta'); }
+        }
         Estat.posaObjectiu(PROGRES.pista(Estat));
         this.anar(e.zona, e.entrada);
     },
@@ -218,6 +223,13 @@ const Proves = {
             const t = this.etiqueta(m.nom + marca, 'font-weight:bold;opacity:1;margin-top:10px');
             const fila = document.createElement('div');
             m.estats.forEach(e => fila.appendChild(this.boto(e.nom, () => { this.aplicaEscenari(e, sel.value); this.panell(); })));
+            if (m.casellaManeta) {
+                const l = document.createElement('label'); l.style.cssText = 'display:inline-block;margin:4px 12px 4px 0';
+                let amb = true; try { amb = localStorage.getItem('provesManeta') !== '0'; } catch (err) { /* res */ }
+                l.innerHTML = '<input type="checkbox"' + (amb ? ' checked' : '') + '> Portem la maneta d\'en Jorgi';
+                l.firstChild.onchange = ev => { try { localStorage.setItem('provesManeta', ev.target.checked ? '1' : '0'); } catch (err) { /* res */ } };
+                fila.prepend(l);
+            }
             cos.append(t, fila);
         });
     },

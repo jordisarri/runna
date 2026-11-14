@@ -90,9 +90,9 @@ class ZonaBoscPi extends ZonaBase {
         // El pas del pi: la franja d'herba s'estreny fins al camí entre dues files de roques baixes (sense capçades que tapin res); allà hi ha la barrera
         const pasDalt = camiY - camiH / 2 - 30, pasBaix = camiY + camiH / 2 + 30;      // 500 i 700
         this.muralla(barX, N, barX, pasDalt, 70, 'roca', false, (x, y) => y > N + 30);      // (sense la roca del mig, que sobra: la col·lisió es manté)                       // de la fila del nord fins a la barrera...
-        this.muralla(barX, pasBaix, barX, S, 70, 'roca', false, (x, y) => y < pasBaix + 130);                       // ...i de la barrera fins a la fila del sud: tot tancat
+        this.muralla(barX, pasBaix, barX, S, 70, 'roca', false, (x, y) => y < S - 30);                       // ...i de la barrera fins a la fila del sud: tot tancat
         // La paret de pedres de la vertical: el camí és només el que alliberen les arrels; tota la resta (fins a les files del nord i del sud) són roques, sense cap buit
-        [440, 478, 812, 905].forEach(y => this.posar('roca', barX, y));
+        [445, 490, 765, 810, 855, 900].forEach(y => this.posar('roca', barX, y));      // totes de la mateixa mida, a intervals iguals
         for (let x = barX - 270; x <= barX + 270; x += 80) { this.posar('roca', x, N + 14); this.posar('roca', x, S - 6); }   // roques on abans hi havia arbres: es veu on s'acaba el camí
 
         this.cameraFollowOffsetY = -150;           // la càmera mira una mica més amunt: així es veu la part de dalt del pi des del camí
@@ -145,7 +145,6 @@ class ZonaBoscPi extends ZonaBase {
         const { barX, camiY } = PI3;
         this.barrera = this.posar('pi_arrels_mortes', barX, camiY + 150, { fonsY: camiY + 200 });      // seca, com el pi adormit
         this.colBarrera = this.colisio(barX, camiY, 110, 220);
-        this.posar('roca', barX, camiY + 154, { escala: 1.5 }).setDepth(camiY + 201);      // les arrels neixen d'una pedra, a la base (i hi queda quan s'enfonsen)
     }
 
     // Les arrels reviscolen (s'afegeix la imatge viva per sobre, que apareix poc a poc) i, tot seguit, s'enfonsen a terra per la part de baix: el que

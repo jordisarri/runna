@@ -665,9 +665,9 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // El volant de ferro amb engranatges, encastat a la cara del pedestal: amb la maneta, cada volta gira el cap un quart
         if (!derrotat) this.dibuixarVolant(RX, Math.round(RY - this.estatua.displayHeight * 0.17));
         if (!derrotat && !desperta) this.lampesRaim();
-        if (!derrotat && !desperta) {      // el volant i l'engranatge brillen mentre es poden girar (amb la maneta)
+        if (!derrotat && !desperta) {      // el volant i l'engranatge brillen sempre (sense la maneta donen text; amb ella, giren)
             const vy = Math.round(RY - this.estatua.displayHeight * 0.17), f = RAIM.f;
-            this.brillo(RX + 7 * f, vy - 3 * f, 64 * f, 56 * f, { actiu: () => !Estat.flag('raimDesperta') && Estat.te('maneta') && !!this.volant, dep: RAIM.y + 5 });
+            this.brillo(RX + 7 * f, vy - 3 * f, 64 * f, 56 * f, { actiu: () => !Estat.flag('raimDesperta') && !!this.volant, dep: RAIM.y + 5 });
         }
         this.interactiu(RX, RY + 32, 90, E => {
             this.raimPas = Math.min(3, this.raimPas + 1);
