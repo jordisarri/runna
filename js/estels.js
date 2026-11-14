@@ -4,7 +4,7 @@
  * en cauen també de blaus i daurats, que no ho són: tocar-ne un en resta un del compte.
  * Part 2: uneix els 7 punts en ordre i apareix la constel·lació amagada: un ocell que s'escapa d'una gàbia oberta
  * (la gàbia són uns altres estels, més febles, que ja hi són; en acabar s'uneixen sols).
- * Controls: ratolí o fletxes/WASD per moure el cercle; ESPAI/ENTER/clic per triar; ESC per sortir (es desa el progrés).
+ * Controls: ratolí o fletxes/WASD per moure el cercle; ESPAI/ENTER/clic per triar; ESC per sortir (no es desa cap progrés: o es fa sencer o no es fa).
  */
 // L'ocell (els 7 punts que s'uneixen): cua, cos, ala esquerra, coll, ala dreta, cap i bec. Vola amunt i a la dreta.
 const ESTELS_PUNTS = [[360, 760], [440, 680], [370, 500], [560, 610], [530, 420], [615, 572], [672, 556]];
@@ -30,9 +30,10 @@ class EscenaEstels extends Phaser.Scene {
     constructor() { super("Estels"); }
 
     create() {
-        const F = Estat.dades.flags;
-        this.part = F.estelsPart1 ? 2 : 1;
-        this.compte = F.estelsCompt || 0;
+        // El minijoc és complet o no és: no es desa cap progrés a mig fer (si surts, tornes a començar des de la primera part)
+        delete Estat.dades.flags.estelsCompt;
+        this.part = 1;
+        this.compte = 0;
         this.seguent = 1;
         this.estrelles = [];
         this.tancat = false;
@@ -154,7 +155,6 @@ class EscenaEstels extends Phaser.Scene {
             if (e && e.color !== 0xffffff) {                     // no és una llàgrima: en resta una
                 e.vida = 0;
                 this.compte = Math.max(0, this.compte - 1);
-                Estat.dades.flags.estelsCompt = this.compte;
                 const flaix = this.add.circle(e.x, e.y, 10, e.color, 0.9);
                 this.tweens.add({ targets: flaix, radius: 50, alpha: 0, duration: 350, onComplete: () => flaix.destroy() });
                 this.cameras.main.shake(120, 0.004);
@@ -165,14 +165,12 @@ class EscenaEstels extends Phaser.Scene {
             if (e) {
                 e.vida = 0;
                 this.compte++;
-                Estat.dades.flags.estelsCompt = this.compte;
                 const flaix = this.add.circle(e.x, e.y, 10, 0xffffff, 0.9);
                 this.tweens.add({ targets: flaix, radius: 70, alpha: 0, duration: 450, onComplete: () => flaix.destroy() });
                 this.so(this.compte);
                 this.dir(this.compte >= 7 ? "Set llàgrimes!" : `Una llàgrima! Te'n ${7 - this.compte === 1 ? "falta 1" : "falten " + (7 - this.compte)}.`, "#d0ffd8", 1800);
                 this.textCompte();
                 if (this.compte >= 7) {
-                    Estat.posaFlag("estelsPart1");
                     this.estrelles = [];
                     this.info.setText("Set llàgrimes! Ara, mira bé el cel...");
                     this.info.setY(215);
@@ -250,7 +248,7 @@ class EscenaEstels extends Phaser.Scene {
         this.fletxa.setAlpha(0.35);                                             // les línies d'unir els punts queden de fons
         this.tweens.add({ targets: [g, o], alpha: 1, duration: 1400 });
         this.info.setText("Un ocell que s'escapa d'una gàbia oberta...\ncom l'Ocellaire, si la boira guanya.");
-        this.info.setY(190);
+        this.info.setFontSize(28).setWordWrapWidth(500).setY(190);          // (text llarg: més petit i amb marge als costats del quadre)
         [1, 3, 2].forEach((n, i) => this.time.delayedCall(i * 350, () => this.so(n + 1)));
         this.time.delayedCall(6500, () => this.tancar(true));          // (més estona per poder llegir el missatge)
     }
