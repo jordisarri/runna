@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 511: Més marge per interactuar amb la porta de la dreta del retaule i amb el sagrari: no cal estar enganxat al dibuix.*
+
 *Revisió 510: Càrrega inicial més ràpida: la partida només espera la música de la portada i del poble; la resta de cançons es baixen en segon pla un cop llestes les imatges (amb 10 Mbps: de 33 s i 37 MB a 25 s i 24 MB abans de poder començar).*
 
 *Revisió 509: La porta de la dreta del retaule i el sagrari ja no mostren el «!»: el text només s'activa quan l'Ineu toca el seu dibuix (nova opció `toc` dels punts d'interacció). Es manté la brillantor.*
