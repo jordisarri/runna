@@ -704,7 +704,8 @@ class ZonaBase extends Phaser.Scene {
         // Tot element de decoració sòlid més baix o més estret que l'Ineu (troncs, bancs, taules, pedres, tamborets...) és opac: no se'n veu la silueta a través.
         // (Els arbres i els pins ja tenen la seva pròpia màscara del tronc.)
         const baixOEstret = img.displayHeight <= 120 || img.displayWidth <= 70;
-        if (opts.opac || (opts.opac !== false && opts.col && baixOEstret && !img.tronc && !(this.copes || []).includes(img))) (this.opacs = this.opacs || []).push(img);
+        // (Totes les roques són opaques, també les mòbils dels llaços, que no porten caixa de col·lisió pròpia a posar.)
+        if (opts.opac || (opts.opac !== false && (/^roca/.test(key) || (opts.col && baixOEstret && !img.tronc && !(this.copes || []).includes(img))))) (this.opacs = this.opacs || []).push(img);
         return img;
     }
 
