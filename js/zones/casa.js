@@ -108,10 +108,10 @@ Object.assign(DIALEGS, {
 const RAIM = { x: 700, y: 560, f: 1.485 };
 
 // ---------------- BOSS: L'HOME DEL RAÏM VIU ----------------
-const K_RAIM = 1.1;      // mida del guardià respecte al dibuix original (277 → ~360 px d'alt); cos, radi i cap van ja en píxels de món
+const K_RAIM = 0.88;     // mida del guardià respecte al dibuix original (277 → ~290 px d'alt): perquè es vegi sencer durant el combat; cos, radi i cap van ja en píxels de món
 ENEMICS.raim = {
     k: K_RAIM,
-    tex: 'home_raim_desperta', vida: 30, vel: 320, mal: 1, radi: Math.round(38 * K_RAIM), cos: [Math.round(66 * K_RAIM), Math.round(30 * K_RAIM)], ombra: 0.65 * K_RAIM,
+    tex: 'home_raim_desperta', vida: 36, vel: 360, mal: 2, radi: Math.round(38 * K_RAIM), cos: [Math.round(66 * K_RAIM), Math.round(30 * K_RAIM)], ombra: 0.65 * K_RAIM,
     arma: 'runna',                            // només Runna li fa mal
     // El punt feble és el cap (al 27% del dibuix des de dalt), i només quan ha caigut de morros després d'una envestida:
     // llavors el cap queda a terra, a l'abast (sense cap abast extra cap amunt)
@@ -255,10 +255,10 @@ ENEMICS.raim = {
     ia(z, e, ara) {
         const jo = z.ineu.body.center, c = e.spr.body.center;
         const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
-        const fase2 = e.vida <= 11;
+        const fase2 = e.vida <= 16;
         const estatAbans = e.estat;
-        if (!e.proxCarrega) e.proxCarrega = ara + 2200;
-        if (!e.proxMaza) e.proxMaza = ara + 4500;
+        if (!e.proxCarrega) e.proxCarrega = ara + 1500;
+        if (!e.proxMaza) e.proxMaza = ara + 3200;
         const cap = Math.atan2(jo.y - c.y, jo.x - c.x);
         if (e.estat !== 'apunta') this.netejaTele(e);
         if (e.estat !== 'maza') this.netejaMaza(e);
@@ -280,18 +280,18 @@ ENEMICS.raim = {
         } else if (e.estat === 'maza') {
             e.spr.body.setVelocity(0);
             this.teleMaza(z, e, ara);
-            if (ara > e.fins) { this.impacteMaza(z, e); this.netejaMaza(e); e.estat = 'aixeca'; e.fins = ara + 700; e.proxMaza = ara + (fase2 ? 5200 : 7500); e.proxCarrega = Math.max(e.proxCarrega, ara + 1800); }
+            if (ara > e.fins) { this.impacteMaza(z, e); this.netejaMaza(e); e.estat = 'aixeca'; e.fins = ara + 700; e.proxMaza = ara + (fase2 ? 3600 : 5200); e.proxCarrega = Math.max(e.proxCarrega, ara + 1300); }
         } else if (e.estat === 'carrega') {
             const bl = e.spr.body.blocked;
             if (ara > e.fins || bl.left || bl.right || bl.up || bl.down) {
                 e.spr.body.setVelocity(0);
                 // A la fase 2, de vegades encadena una segona envestida abans de caure
-                if (fase2 && !e.segona && Math.random() < 0.6) { e.segona = true; e.estat = 'apunta'; e.duradaApunta = 380; e.fins = ara + 380; e.ang = cap; e.spr.setTint(0xffc4cc); }
+                if (fase2 && !e.segona && Math.random() < 0.8) { e.segona = true; e.estat = 'apunta'; e.duradaApunta = 380; e.fins = ara + 380; e.ang = cap; e.spr.setTint(0xffc4cc); }
                 else {
                     e.segona = false;
-                    e.estat = 'cansat'; e.fins = ara + (fase2 ? 1700 : 2300); e.copsRebuts = 0;
+                    e.estat = 'cansat'; e.fins = ara + (fase2 ? 1450 : 1900); e.copsRebuts = 0;
                     e.cauDreta = Math.cos(e.ang) >= 0;
-                    e.proxCarrega = ara + (fase2 ? 1500 : 2600);
+                    e.proxCarrega = ara + (fase2 ? 1000 : 1700);
                 }
             }
         } else if (e.estat === 'cansat') {                 // de morros a terra
@@ -302,7 +302,7 @@ ENEMICS.raim = {
             if (ara > e.fins) e.estat = 'camina';
         } else {
             e.estat = 'camina';
-            const v = dist > 120 * K_RAIM ? (fase2 ? 120 : 90) : 0;
+            const v = dist > 120 * K_RAIM ? (fase2 ? 150 : 115) : 0;
             e.spr.body.setVelocity(Math.cos(cap) * v, Math.sin(cap) * v);
             e.spr.setFlipX(Math.cos(cap) < 0);
             if (ara > e.proxMaza && dist < 400 && dist > 90) {
@@ -310,7 +310,7 @@ ENEMICS.raim = {
                 const d = Math.min(dist, 250); e.mx = c.x + Math.cos(cap) * d; e.my = c.y + Math.sin(cap) * d;
                 Sfx.carrega();
             } else if (ara > e.proxCarrega && dist < 520) {
-                e.estat = 'apunta'; e.duradaApunta = fase2 ? 420 : 650; e.fins = ara + e.duradaApunta; e.ang = cap;
+                e.estat = 'apunta'; e.duradaApunta = fase2 ? 360 : 540; e.fins = ara + e.duradaApunta; e.ang = cap;
                 e.spr.setTint(0xffc4cc);
             }
         }
@@ -687,8 +687,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // Trapa de la cripta, a sota de l'escalinata: una llosa amb una creu gravada; vençut el guardià, es fa a un costat i
         // deixa veure l'escala que baixa
         this.dibuixarTrapa(derrotat);
-        this.interactiu(700, 730, RADI_OBJECTE, DIALEGS.trapaCripta, {
-            altura: 70, actiu: () => Estat.flag('raimDerrotat'),
+        this.interactiu(700, 697, 150, DIALEGS.trapaCripta, {          // al mig del forat: s'hi baixa des de qualsevol costat (nord, sud o laterals)
+            altura: 70, senseMirada: true, actiu: () => Estat.flag('raimDerrotat'),
             enTancar: () => this.baixarTrapa()
         });
 
