@@ -250,10 +250,9 @@ const Joc = {
     // Les cançons de fons van en streaming (MusicaStream); només les peces curtes (jingles) passen per Phaser
     precarregarMusiques() {},
 
-    // Baixa les cançons perquè quedin a la memòria cau del navegador i sonin de seguida en entrar a una zona. Les de l'inici (portada, poble,
-    // monestir, església, biblioteca, casa) van primer i es baixen a la vegada que la resta del joc; la partida no comença fins que hi són.
+    // Baixa les cançons perquè quedin a la memòria cau del navegador i sonin de seguida en entrar a una zona. Les de l'inici (portada i poble) van primer i es baixen a la vegada que la resta del joc; la partida no comença fins que hi són.
     // La resta es baixen en segon pla, una darrere l'altra.
-    PRIORITAT_MUSICA: ['musica_intro', 'musica_poble', 'musica_santuari', 'musica_biblioteca', 'musica_casa', 'musica_bosc'],
+    PRIORITAT_MUSICA: ['musica_intro', 'musica_poble'],      // només la portada i el poble (on comença la partida): la resta es baixa en segon pla, perquè no frenin l'inici
     escalfarMusiques(fet) {
         const fitxerDe = k => Joc.FITXERS_MUSICA[k] || (Joc.MUSICA_OPCIONAL[k] && Joc.MUSICA_OPCIONAL[k].fitxer);
         const baixa = f => fetch(encodeURI(`assets/musica/${f}.m4a`)).then(r => r.arrayBuffer()).catch(() => {});
@@ -264,7 +263,7 @@ const Joc = {
         Promise.all(prior.map(baixa)).then(() => {
             if (fet) fet();
             const cua = [...resta];
-            const seguent = () => { const f = cua.shift(); if (f) baixa(f).then(() => setTimeout(seguent, 200)); };
+            const seguent = () => { if (!Joc.recursosLlestos) { setTimeout(seguent, 500); return; } const f = cua.shift(); if (f) baixa(f).then(() => setTimeout(seguent, 200)); };      // la resta, un cop llestes les imatges: no competeixen amb l'inici
             seguent();
         });
     },
