@@ -28,7 +28,7 @@ class ZonaTaverna extends ZonaBase {
         // La porta (l'arc del mig): tancada fins que s'hi parla (l\'Eve l'obre des de dins)
         this.colPorta = this.colisio(825, 705, 90, 90);
         if (Estat.flag('tavernaOberta')) { this.obrirPorta(); this.portaTavernaAnim(); }
-        else { this.interactiu(825, 765, RADI_OBJECTE, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() }); this.brillo(831, 790, 104, 160, { arc: true, actiu: () => !Estat.flag('tavernaOberta') }); }
+        else { this.interactiu(825, 765, RADI_OBJECTE, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() }); }
 
         // Barrils de debò (es trenquen) a la dreta de la porta, on els tenia dibuixats la façana (mai apilats: si en trenques un, l'altre es quedaria flotant)
         this.barril(944, 757, 40, 16); this.barril(992, 762, 40, 16); this.barril(1038, 756, 40, 16);
@@ -309,7 +309,6 @@ class ZonaSotaTaverna extends ZonaBase {
         this.boira(300, 420, 160, 40, 0.5);
         this.boira(520, 600, 160, 40, 0.5);
         this.fullaPorta = pf;
-        this.brillo(400, 89, 180, 142, { actiu: () => !Estat.flag('portaFerroOberta') });          // la porta de ferro brilla mentre és tancada
         this.interactiu(400, 220, RADI_GRAN, DIALEGS.portaFerro, { altura: 170, actiu: () => !Estat.flag('portaFerroOberta'), enTancar: () => { if (Estat.te('clau_girgoles') && Estat.flag('cantMiracle')) this.obrirPortaFerro(); } });
         if (Estat.flag('portaFerroOberta')) this.obrirPortaFerro(true);
 
@@ -403,7 +402,6 @@ class ZonaGirgolesFora extends ZonaBase {
         else {
             this.colPorta = this.colisio(PX, 200, 160, 200);
             this.boiraPorta = this.boira(PX, BASE - 8, 140, 14, 0.6);
-            this.brillo(PX, 212, 160, 175, { actiu: () => !Estat.flag('portaSoterraniOberta') });          // les fulles vermelles brillen mentre són tancades
             this.interactiu(PX, 340, RADI_OBJECTE, DIALEGS.portaSoterrani, { altura: 120, actiu: () => !Estat.flag('portaSoterraniOberta'), enTancar: () => this.obrirPorta() });
         }
 

@@ -409,7 +409,6 @@ class ZonaMasiaCirosa extends ZonaBase {
         pres.fillStyle(0x4a2c14, 1).fillRect(110, 56, 150, 8).lineStyle(2, 0x120a04, 1).strokeRect(110, 56, 150, 8);
         pres.fillStyle(0x7a2a1a, 1).fillRect(132, 34, 38, 22).fillStyle(0x3a4a6a, 1).fillRect(176, 28, 22, 28).fillStyle(0x5a3a1e, 1).fillRect(204, 38, 44, 18);
         const puntLlibre = this.interactiu(180, 100, RADI_OBJECTE, DIALEGS.masiaLlibre, { altura: 60 });
-        this.brillo(185, 42, 150, 30, { dep: -939, punt: puntLlibre, actiu: () => !Estat.flag('masiaLlibreLlegit') });          // els llibres del prestatge brillen fins que se'n llegeix un
 
         // Taula llarga i tamborets
         this.posar('taula', 330, 330, { col: { w: 170, h: 30 } });

@@ -26,7 +26,7 @@ const ZOOM_ZONES = {
     ZonaCasetaJoc: 1.3, ZonaTresor: 1.3, ZonaCelaStAntoni: 1.3, ZonaCabanaInt: 1.3, ZonaCabanaCami: 1.3, ZonaMasiaCirosa: 1.3, ZonaGolfes: 1.3, ZonaCasaCripta: 1.3, ZonaCasaTresor: 1.3, ZonaCasaGeorgi: 1.3,
     ZonaHostatgeriaInt: 1.2, ZonaBiblioteca: 1.2, ZonaMonestirRebedor: 1.2, ZonaErmitaInt: 1.2, ZonaGabrielInt: 1.2,
     ZonaCambraDolora: 1.25, ZonaCambraPilaria: 1.25, ZonaCambraCarmelia: 1.25, ZonaSoterraniHost: 1.2,
-    ZonaPingpong: 1.2, ZonaEsglesia: 1.1, ZonaEsglesiaNova: 1.1, ZonaTavernaInt: 1.25, ZonaCasaGranInt: 1.4,
+    ZonaPingpong: 1.2, ZonaEsglesia: 1.1, ZonaTavernaInt: 1.25, ZonaCasaGranInt: 1.4,
     ZonaPlaca: 1.1, ZonaEra: 1.1, ZonaJardi: 1.1, ZonaCementiri: 1.1,       // exteriors amb poc contingut: una mica més a prop
     ZonaSotaTaverna: 1.1, ZonaGirgolesFora: 1.1, ZonaPassadis: 1.15, ZonaGirgoles: 1.15, ZonaTortura: 1.2, ZonaBoira: 1.2
 };

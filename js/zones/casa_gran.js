@@ -37,7 +37,7 @@ class ZonaCasaGran extends ZonaBase {
             // Un cop s'ha aixecat la barra per dins, la reixa queda oberta (els batents giren en acostar-s'hi) i es pot entrar a la Casa Gran
             this.portaReixaFora = this.portaAnimada({ x: 700, top: 400 + D, bottom: 573 + D, ample: 107, fons: 560 + D, arc: true, retall: facana });
             this.sortida(658, 548 + D, 84, 16, 'ZonaCasaGranInt', 'porxo');
-        } else { this.interactiu(700, 585 + D, RADI_OBJECTE, DIALEGS.portaReixa, { altura: 190 }); this.brillo(700, 486 + D, 107, 173, { arc: true }); }
+        } else { this.interactiu(700, 585 + D, RADI_OBJECTE, DIALEGS.portaReixa, { altura: 190 }); }
 
         // Cartell que indica la Taverna, a la vora de la sortida de l'esquerra
         this.cartell(170, 880, () => ({ pagines: [{ qui: 'Cartell', text: '← La Taverna i l\'Hostatgeria\n→ La Plaça del Santuari' }] }));

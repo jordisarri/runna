@@ -1582,8 +1582,9 @@ class ZonaGolfes extends ZonaCasaBase {
         });
 
         // Nota del rellotger (la pista del puzle), clavada a la paret de l'esquerra: pergamí desplegat i gastat
-        this.posar('pergami_paret', 175, 360, { fonsY: -850, escala: 1.15 });
+        const pergamiParet = this.posar('pergami_paret', 175, 360, { fonsY: -850, escala: 1.15 });
         this.interactiu(175, GOLFES_PARET + 10, RADI_OBJECTE, DIALEGS.golfesNota, { altura: 90 });
+        this.brilloImatge(pergamiParet);          // l'únic objecte de la Sala del Rellotge que brilla: el pergamí (es pot rellegir, no s'apaga)
 
         // Caixa del pèndol, al costat dret: el pèndol batega quan el rellotge camina
         const caixa = this.add.graphics().setDepth(522);

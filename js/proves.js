@@ -12,7 +12,7 @@
  *   - els canvis d'estat es veuen en reiniciar la zona (les escenes llegeixen l'estat en construir-se): per defecte es reinicia sola.
  */
 const Proves = {
-    actiu: new URLSearchParams(location.search).has('proves') || new URLSearchParams(location.search).has('esglesia'),
+    actiu: new URLSearchParams(location.search).has('proves'),
     invuln: false,
     autoReinicia: true,
     pestanya: 'missions',
@@ -378,14 +378,3 @@ const Proves = {
     }
 };
 Proves.iniciar();
-// ?esglesia: obre directament la nova església jugable (apart de la de la història), amb la partida de proves just abans del Cant de l'Aurora
-if (new URLSearchParams(location.search).has('esglesia')) {
-    const espera = setInterval(() => {
-        try {
-            if (!Joc.recursosLlestos || !game.scene.isActive('Titol')) return;
-            clearInterval(espera);
-            Proves.estatFins(Math.max(0, PROGRES.passos.findIndex(p => p.id === 'cantAurora')), true, true, false);
-            Proves.anar('ZonaEsglesiaNova', 'porta');
-        } catch (e) { /* el joc encara no és a punt */ }
-    }, 300);
-}
