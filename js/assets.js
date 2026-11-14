@@ -341,6 +341,7 @@ const Grafics = {
         scene.load.spritesheet('isilder_camina', 'assets/personatges/isilder_camina.webp', { frameWidth: 190, frameHeight: 285 });
         scene.load.spritesheet('venerables_camina', 'assets/personatges/venerables_camina.webp', { frameWidth: 266, frameHeight: 267 });       // (fer_camina_npc.py: les dues velletes agafades del braç)
         scene.load.spritesheet('mandu_camina', 'assets/personatges/mandu_camina.webp', { frameWidth: 134, frameHeight: 236 });
+        scene.load.spritesheet('nena_trenes_camina', 'assets/personatges/nena_trenes_camina.webp', { frameWidth: 225, frameHeight: 282 });       // la Nena de les Trenes corrent cap a la mare (AutoSprite iso_run_right; eines/fer_camina_npc.py)
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, rutaIneu(dir, false), mida);
@@ -607,6 +608,9 @@ const Grafics = {
         }
         if (!scene.anims.exists('mandu_camina') && scene.textures.exists('mandu_camina')) {
             scene.anims.create({ key: 'mandu_camina', frames: scene.anims.generateFrameNumbers('mandu_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
+        }
+        if (!scene.anims.exists('nena_trenes_camina') && scene.textures.exists('nena_trenes_camina')) {
+            scene.anims.create({ key: 'nena_trenes_camina', frames: scene.anims.generateFrameNumbers('nena_trenes_camina', { start: 0, end: 7 }), frameRate: 14, repeat: -1 });
         }
         if (!scene.anims.exists('isilder_camina') && scene.textures.exists('isilder_camina')) {
             scene.anims.create({ key: 'isilder_camina', frames: scene.anims.generateFrameNumbers('isilder_camina', { start: 0, end: 15 }), frameRate: 12, repeat: -1 });

@@ -249,9 +249,17 @@ class ZonaCamiRov extends ZonaBase {
         });
         this.time.delayedCall(3700, () => {                                                              // la mare s'abaixa una mica; la nena corre cap a ella
             this.tweens.add({ targets: mare, scaleY: mare.scaleY * 0.95, yoyo: true, duration: 600, ease: 'Sine.easeInOut' });
-            const y0 = n.y;
-            this.tweens.add({ targets: n, y: y0 - 6, yoyo: true, repeat: 4, duration: 110, ease: 'Sine.easeOut', onComplete: () => { n.y = y0; } });
-            this.tweens.add({ targets: [n, this.resplendorNena], x: mx + 78, duration: 1100, ease: 'Quad.easeIn', onUpdate: () => this.cara(n), onComplete: () => {
+            let corre = null;                                                                           // el full de córrer (si hi és): substitueix el dibuix fix mentre dura la cursa
+            if (this.textures.exists('nena_trenes_camina') && this.anims.exists('nena_trenes_camina')) {
+                corre = this.add.sprite(n.x, n.y, 'nena_trenes_camina').setOrigin(0.5, 1).setScale(n.scaleX, n.scaleY).setFlipX(true).setDepth(n.depth);       // (el full va cap a la dreta; ella va cap a l'esquerra)
+                corre.play('nena_trenes_camina');
+                n.setVisible(false);
+            } else {
+                const y0 = n.y;
+                this.tweens.add({ targets: n, y: y0 - 6, yoyo: true, repeat: 4, duration: 110, ease: 'Sine.easeOut', onComplete: () => { n.y = y0; } });
+            }
+            this.tweens.add({ targets: [n, this.resplendorNena], x: mx + 62, duration: 1300, ease: 'Sine.easeIn', onUpdate: () => { this.cara(n); if (corre) corre.x = n.x; }, onComplete: () => {
+                if (corre) { corre.destroy(); n.setVisible(true); }
                 this.llum(mx + 40, n.y - 90, 0xfff4e0);                                                    // s'abracen
                 this.time.delayedCall(600, () => this.llum(mx + 40, n.y - 90, 0xffc8e0));
                 par.explode(14);
