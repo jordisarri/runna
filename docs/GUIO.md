@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 545: Gir del volant: l'enquadrament és més ajustat (zoom fins a 2,8): des d'una mica més amunt del cap del guardià fins a mig Ineu, just per damunt del quadre de text, sense mostrar tota la sala.*
+
 *Revisió 544: En girar el volant, la càmera enquadra alhora la cara del guardià i l'Ineu al volant (per damunt del quadre de text), i es manté igual entre girs.*
 
 *Revisió 543: El cercle de runes de l'Escalinata és més petit (300 d'ample, abans 440) i més transparent, ja no tapa la trapa de la cripta, i queda centrat a la base del pedestal.*

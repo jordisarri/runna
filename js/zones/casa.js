@@ -655,9 +655,9 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     }
 
     // Enquadra una franja vertical del guardià (de yDalt a yBaix) perquè quedi sencera a la part de dalt de la pantalla, per damunt del quadre de text (reserva px de baix)
-    enquadrarGuardia(x, yDalt, yBaix, reserva = 470, ms = 1100, fet) {
-        const alt = yBaix - yDalt + 50, lliure = Math.max(240, (ALT - ALT_HUD) - reserva);
-        const zoom = Math.min(this.zoomZona || ZOOM_CAMERA, lliure * 0.92 / alt);
+    enquadrarGuardia(x, yDalt, yBaix, reserva = 470, ms = 1100, fet, marge = 50, zoomMax = 0) {
+        const alt = yBaix - yDalt + marge, lliure = Math.max(240, (ALT - ALT_HUD) - reserva);
+        const zoom = Math.min(zoomMax || this.zoomZona || ZOOM_CAMERA, lliure * 0.96 / alt);
         this.enquadrar(x, (yDalt + yBaix) / 2, zoom, ms, fet, reserva);
     }
 
@@ -694,7 +694,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.interactiu(RX, RY + 32, 90, E => {
             this.raimPas = Math.min(3, this.raimPas + 1);
             const est = this.estatua, capDalt = RAIM.y - (est ? est.displayHeight : 360);
-            this.enquadrarGuardia(RAIM.x, capDalt - 10, this.ineu.y + 25, 470, 1100);          // la càmera s'acosta: es veu la cara del guardià girant i l'Ineu al volant, per damunt del quadre de text
+            this.enquadrarGuardia(RAIM.x, capDalt - 35, this.ineu.y - 38, 470, 1100, null, 8, 2.8);          // pla ajustat: des d'una mica més amunt del cap del guardià fins a mig Ineu (la part de dalt), just per damunt del quadre de text
             this.girarVolant();
             this.girarEstatua();
             this.volDespertar = this.raimPas === 3 && this.teArma();
