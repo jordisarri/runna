@@ -13,6 +13,7 @@
 // Tres mides, perquè tot s'activi més o menys a la mateixa distància (uns 72-88 px dels peus de l'Ineu al punt):
 const RADI_NPC = 100;        // personatges: 80 px, la mateixa distància a la qual es queda l'Ineu en parlar-hi (separarDeNpc)
 const RADI_OBJECTE = 90;     // cartells, cofres, portes, pedres, taules...: 72 px
+const ALCANS_OBJECTE = 130;  // abast mínim (px) de tots els objectes no personatges: es pot interactuar sense tocar-los, igual arreu
 const RADI_GRAN = 110;       // objectes grans (arbres, fonts, dolmen...), amb el punt al centre: 88 px
 // Els objectes enormes (el pantà, les bardisses, la gàbia gran...) fan servir el seu propi radi, més gran.
 
@@ -2236,7 +2237,7 @@ class ZonaBase extends Phaser.Scene {
         const proper = this.puntProper();
         // La tarota NO s'obre mai directament amb ESPAI: cada lloc de tarota té un punt d'interacció (el «!») amb el seu text, i la tarota s'obre
         // en acabar-lo (vegeu tarotaDespresDeText). Així els enemics de prop no hi interfereixen.
-        const mostra = proper && proper.marca ? proper : null;
+        const mostra = proper && (proper.marca || proper.npc) ? proper : null;
         this.indicador.setVisible(!!mostra);
         if (mostra) this.indicador.setPosition(mostra.x, mostra.y - mostra.altura);
         const T = Phaser.Input.Keyboard.JustDown;
@@ -2559,7 +2560,8 @@ class ZonaBase extends Phaser.Scene {
             if (!p.enTancar && esDialegBuit(p.dialeg)) continue;                                        // sense res a dir: no és interactiu
             if (p.toc) { const t = p.toc; if (this.ineu.x >= t.x0 && this.ineu.x <= t.x1 && this.ineu.y >= t.y0 && this.ineu.y <= t.y1) { millor = p; millorDist = 0; } continue; }
             const dx = p.x - this.ineu.x, dy = p.y - this.ineu.y, d = Math.hypot(dx, dy);
-            if (d > p.radi * 0.8 || d >= millorDist) continue;
+            const abast = (p.marca || p.npc) ? p.radi * 0.8 : Math.max(p.radi * 0.8, ALCANS_OBJECTE);          // objectes: el mateix marge mínim arreu
+            if (d > abast || d >= millorDist) continue;
             if (!p.senseMirada && d > 36 && (dx * dv.x + dy * dv.y) / d < 0.34) continue; // no el mira
             millor = p; millorDist = d;
         }

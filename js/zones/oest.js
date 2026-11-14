@@ -342,7 +342,7 @@ class ZonaCamiRov extends ZonaBase {
             this.nena = this.posar('nena_trenes', 1560, 670, { fonsY: 670 });          // sempre al 100% d'opacitat: ben visible
             this.resplendorNena = this.add.circle(1560, 605, 52, 0xcfd8ff, 0.07).setDepth(669);      // un halo molt discret
             this.tweens.add({ targets: [this.nena, this.resplendorNena], y: '-=10', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
-            const puntNena = this.interactiu(1560, 670, RADI_NPC, DIALEGS.nenaTrenes, { altura: 110 });
+            const puntNena = this.interactiu(1560, 670, RADI_NPC, DIALEGS.nenaTrenes, { altura: 110, marca: true });
             puntNena.npc = this.nena; puntNena.zoomConversa = 1.6;                  // és un personatge com els altres: l'Ineu es posa a la distància de parlar i la càmera els enquadra, grans, entre el HUD i el quadre
         }
         // Primer llaç: amagat sota una roca que cal empènyer, al tram final del camí (només es pot empènyer després de parlar amb la Nena)
@@ -566,8 +566,13 @@ class ZonaGabrielInt extends ZonaBase {
         if (Estat.flag('garfBancSegut') || Estat.flag('cristallGel')) {
             const cy = grao + 70, buit = () => Estat.flag('cristallGel') || Estat.te('cristall_gel');
             const cofreG = this.posar(buit() ? 'cofre_obert' : 'cofre', cx, cy, { col: { w: 50, h: 20 }, opac: true });
+            if (!buit()) {
+                const gel = this.add.circle(cx, cy - 30, 36, 0xbfe6ff, 0.2).setBlendMode('ADD').setDepth(cy + 2);       // una claror blavosa de gel
+                this.tweens.add({ targets: gel, alpha: 0.06, scale: 1.3, yoyo: true, repeat: -1, duration: 1300 });
+                this.cofreGel = gel;
+            }
             this.interactiu(cx, cy + 6, RADI_OBJECTE, DIALEGS.cofreGabriel, { altura: 80, actiu: () => !buit(),
-                enTancar: () => { if (buit()) cofreG.setTexture('cofre_obert'); } });
+                enTancar: () => { if (buit()) { cofreG.setTexture('cofre_obert'); if (this.cofreGel) { this.tweens.killTweensOf(this.cofreGel); this.cofreGel.destroy(); this.cofreGel = null; } } } });
         }
 
         // Parets i porta

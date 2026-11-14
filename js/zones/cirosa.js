@@ -177,7 +177,7 @@ class ZonaCirosa extends ZonaBase {
             this.aldreuOmbra = this.add.image(1400, 640, 'ombra').setScale(0.5).setDepth(-500);
             this.aldreuNpc.ombra = this.aldreuOmbra;
             (this.npcs = this.npcs || {}).aldreu = this.aldreuNpc;
-            this.aldreuPunt = this.interactiu(1400, 630, RADI_NPC, DIALEGS.aldreuPastor, { altura: this.aldreuNpc.displayHeight + 6, actiu: () => !this.bossIniciat });
+            this.aldreuPunt = this.interactiu(1400, 630, RADI_NPC, DIALEGS.aldreuPastor, { altura: this.aldreuNpc.displayHeight + 6, marca: true, actiu: () => !this.bossIniciat });
             this.aldreuPunt.npc = this.aldreuNpc;
             // Sura sobre la boira, i l'ombra s'encongeix quan puja
             this.aldreuFlota = this.tweens.add({ targets: this.aldreuNpc, y: 626, yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut',

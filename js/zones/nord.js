@@ -714,7 +714,7 @@ class ZonaCelles extends ZonaBase {
         this.idleCodi(this.rosansa);                              // respira i es balanceja una mica mentre espera
         this.colRosansa = this.colisio(1550, 883, 40, 18);
         this.ombraRosansa = this.add.image(1550, 892, 'ombra').setScale(0.42).setDepth(-500);
-        const punt = this.interactiu(1550, 882, RADI_NPC, DIALEGS.rosansa, { altura: this.rosansa.displayHeight + 6 });
+        const punt = this.interactiu(1550, 882, RADI_NPC, DIALEGS.rosansa, { altura: this.rosansa.displayHeight + 6, marca: true });
         punt.enTancar = () => this.marxaRosansa(punt);
     }
 
@@ -832,7 +832,7 @@ class ZonaSantAntoni extends ZonaBase {
             if (g.anims) { g.anims.stop(); if (g.setFrame) g.setFrame(0); }
             if (this.ineu) g.setFlipX(this.ineu.x < g.x);
             return DIALEGS.pallofa(Estat);
-        }, { altura: g.displayHeight + 6 });
+        }, { altura: g.displayHeight + 6, marca: true });
         tw = this.tweens.add({ targets: g, x: 900, duration: 6500, yoyo: true, repeat: -1, ease: 'Linear',
             onYoyo: () => g.setFlipX(true), onRepeat: () => g.setFlipX(false),
             onUpdate: () => { ombra.x = g.x; punt.x = g.x; } });
@@ -880,7 +880,7 @@ class ZonaTiller extends ZonaBase {
             const d = DIALEGS.tiller(E);
             if (this.tillerCara || !d.pagines || !d.pagines.length) return d;
             return Object.assign({}, d, { pagines: [{ fer: (z, fet) => z.despertarTiller(fet) }, ...d.pagines] });
-        }, { altura: 230 });            // el «!» a l'alçada de la cara (més amunt quedava fora de la pantalla)
+        }, { altura: 230, marca: true });            // el «!» a l'alçada de la cara (més amunt quedava fora de la pantalla)
         puntTiller.cameraCossos = [this.tillerAmbCara];
 
         // Després del sopar queden tres espelmes vora les arrels del Til·ler
