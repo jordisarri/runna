@@ -896,29 +896,21 @@ class ZonaBase extends Phaser.Scene {
         const d = NPC_IDLE[key];
         if (d && d.alFeina === tipus && d.fix && img.texture.key === d.fix && this.textures.exists(key + '_idle')) {      // té una animació pròpia per a aquesta feina (la Pianista tocant l'orgue d'esquena)
             this.animaNpc(key, ms, fet);
-            const ev2 = this.time.addEvent({ delay: 220, loop: true, callback: () => this.flotant(img.x + Phaser.Math.Between(-40, 40), img.y - img.displayHeight, Phaser.Utils.Array.GetRandom(['♪', '♫', '♩']), '#d8c8ff') });
-            this.time.delayedCall(ms, () => ev2.remove());
             return;
         }
         const t = this.tweens.add({ targets: img, angle: { from: -7, to: 7 }, yoyo: true, repeat: -1, duration: 140 });
         const colors = { guspires: [0xffd060, 0xff8030], notes: [0xd8c8ff, 0xffe8a0], fulles: [0x6ab04a, 0xe86aa0], bombolles: [0x6aff6a, 0xb8ffb0] }[tipus] || [0xffffff];
         const ev = this.time.addEvent({ delay: tipus === 'notes' ? 380 : 160, loop: true, callback: () => {
             if (tipus === 'silenci') return;
-            if (tipus === 'notes') { this.flotant(img.x + Phaser.Math.Between(-30, 30), img.y - img.displayHeight, Phaser.Utils.Array.GetRandom(['♪', '♫', '♩']), '#d8c8ff'); return; }
             const p = this.add.circle(img.x + Phaser.Math.Between(-20, 20), img.y - img.displayHeight * 0.5, 4, Phaser.Utils.Array.GetRandom(colors)).setDepth(img.depth + 1);
             this.tweens.add({ targets: p, x: p.x + Phaser.Math.Between(-50, 50), y: p.y - Phaser.Math.Between(20, 60), alpha: 0, duration: 600, onComplete: () => p.destroy() });
         } });
         this.time.delayedCall(ms, () => { t.stop(); img.setAngle(0); if (img.balanceig) img.balanceig.resume(); ev.remove(); if (fet) fet(); });
     }
-    // Bombolla sobre el cap d'algú: '!', '?', '♪', '❤', '…', 'Zzz'
+    // Abans dibuixava bombolles d'expressió sobre el cap d'algú ('!', '♥', '♪', '…'). L'autor no en vol cap sobreimpressió d'aquest tipus: ara no es veu res,
+    // però es conserva la pausa (ms) perquè l'escena mantingui el ritme. (Les crides ja no cal afegir-les.)
     bombolla(qui, text, fet, ms = 900) {
-        const img = qui === 'ineu' ? this.ineu : this.npcs && this.npcs[qui];
-        if (!img) { if (fet) fet(); return; }
-        const t = this.add.text(img.x, img.y - img.displayHeight - 16, text, estilText(34, '#2a170b', { backgroundColor: '#f2e6c8', padding: { x: 10, y: 4 } })).setOrigin(0.5, 1).setDepth(99000);
-        const v = this.cameras.main.worldView, mw = t.displayWidth / 2 + 8;          // que no surti per la vora de la pantalla
-        if (v.width > 2 * mw) t.x = Phaser.Math.Clamp(t.x, v.x + mw, v.right - mw);
-        this.tweens.add({ targets: t, y: t.y - 10, duration: 250, ease: 'Back.easeOut' });
-        this.time.delayedCall(ms, () => { t.destroy(); if (fet) fet(); });
+        if (fet) this.time.delayedCall(ms, fet);
     }
     // Un objecte (o una espurna) vola d'algú cap a l'Ineu
     objecteVola(de, fet, key) {

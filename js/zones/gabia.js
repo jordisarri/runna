@@ -1641,7 +1641,6 @@ class ZonaGabia extends ZonaBase {
             // P40: l'Ineu toca la flauta
             { fer: (z, fet) => {
                 z.enquadrar(I.x, I.y - 70, 1.5, 700, null);
-                this.time.addEvent({ delay: 200, repeat: 3, callback: () => this.flotant(I.x + Phaser.Math.Between(-30, 30), I.y - 90, Phaser.Utils.Array.GetRandom(['♪', '♫', '♩']), '#ffe08a') });
                 z.esperar(1200, fet);
             } },
             // Abans d'obrir: l'Ineu convida l'Aldreu (que encara no, de cap cot i sense mirar)
@@ -1653,7 +1652,6 @@ class ZonaGabia extends ZonaBase {
                 z.enquadrar(gx, base - 80, 1.05, 900, null);          // P41
                 this.cameras.main.flash(500, 255, 230, 160);
                 this.tweens.add({ targets: this.brillGabia, alpha: 1, duration: 600 });
-                this.time.addEvent({ delay: 150, repeat: 14, callback: () => this.flotant(gx + Phaser.Math.Between(-150, 150), base - Phaser.Math.Between(60, 380), Phaser.Utils.Array.GetRandom(['♪', '♫', '♩']), '#ffe08a') });
                 this.esperar(1400, f);
             },
             f => z.aldreuVa(gx + 320, base + 140, f, 150),

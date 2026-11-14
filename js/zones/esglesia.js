@@ -347,7 +347,7 @@ class ZonaEsglesia extends ZonaBase {
             ]),
             // La Nena de les Trenes i la seva mare, al fons de la nau (només si l'Ineu les va retrobar): l'agraeixen de nou i, en acabar, s'esvaeixen en llum, en pau
             ...(hi('nena_trenes') ? [
-                accio(z => [pla(970, R + 700, 1.0, 1000), f => z.bombolla('mare_nena', '♥', f, 900)]),
+                accio(z => [pla(970, R + 700, 1.0, 1000), f => z.esperar(900, f)]),
                 foc(['nena_trenes', 'mare_nena'], 2.0, 1000),
                 { qui: 'Nena de les Trenes', text: "La mare i jo ho hem sentit des de lluny. Cantes molt bé, monjo." },
                 { qui: 'Nena de les Trenes', text: "Gràcies per portar-me a casa." },

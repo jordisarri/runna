@@ -1384,7 +1384,7 @@ const DIALEGS = {
                 { qui: "Nena de les Trenes", text: "L'altre llaç és per a tu. Guarda'l: protegeix els qui es perden." },
                 { avis: "Has obtingut el LLAÇ DE LA NENA.", obj: 'cinta_nena' },
                 { qui: "Nena de les Trenes", text: "Aguantarà el primer cop que rebis a cada lloc nou. Ara ja no et quedaràs sol." },
-                { qui: "Ineu", text: "Ni tu. Ja no estaràs mai més perduda." },
+                { qui: "Ineu", text: "Ni tu. Ja no estaràs mai més sola." },
                 { qui: "Nena de les Trenes", text: "Mare, anem a casa?" },
                 { qui: "La mare", text: "Anem, filla." },
                 { qui: "Nena de les Trenes", text: "Adéu, monjo. Canta fort." },
