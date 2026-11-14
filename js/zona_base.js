@@ -1569,17 +1569,18 @@ class ZonaBase extends Phaser.Scene {
     // Roca que l'Ineu empeny de debò, des de qualsevol costat (dalt, baix, esquerra o dreta), per descobrir el que hi ha a sota:
     // s'hi ha de posar a un costat i caminar contra ella; ella s'aparta 'dist' píxels cap a l'altra banda. ESPAI només l'examina.
     // El costat per on s'ha empès es desa al flag ('E', 'O', 'S' o 'N') perquè en tornar-hi la roca sigui on l'has deixada.
-    pedraMobil(x, y, id, dist, extra, textPista) {
+    pedraMobil(x, y, id, dist, extra, textPista, condicio) {
         const flag = Estat.dades.flags['pedra_' + id];
         const DIR = { E: [1, 0], O: [-1, 0], S: [0, 1], N: [0, -1] };
         const d0 = DIR[flag] || [1, 0];                                   // les partides velles només guardaven «true»: la roca era a la dreta
         const mogut = !!flag;
-        const o = { id, mogut, x: x + (mogut ? d0[0] * dist : 0), y: y + (mogut ? d0[1] * dist : 0), dist, fet: 0, empenta: 0, dir: null };
+        const o = { id, mogut, x: x + (mogut ? d0[0] * dist : 0), y: y + (mogut ? d0[1] * dist : 0), dist, fet: 0, empenta: 0, dir: null, permet: condicio || (() => true) };       // permet: fins que no es compleix, la roca és un obstacle més (no s'empeny ni mostra cap marca)
         o.img = this.posar('roca', o.x, o.y);
         o.col = this.colisio(o.x, o.y - 13, 70, 26);
         if (!mogut) {
-            this.interactiu(x, y + 24, RADI_OBJECTE, { pagines: [{ qui: 'Ineu', text: "(Si m'hi recolzo i l'empenyo, potser cedirà.)" }] },
-                { altura: 70, actiu: () => !o.mogut });
+            // Punt d'interacció com els de parlar (la marca només surt quan ets molt a prop), però sense text: la roca es mou en tocar-la (si hi ha textPista, el diu)
+            this.interactiu(x, y + 24, 60, textPista ? { pagines: [{ qui: 'Ineu', text: textPista }] } : { pagines: [] },
+                { altura: 70, actiu: () => !o.mogut && o.permet() });
             (this.pedresMobils = this.pedresMobils || []).push(o);
         }
         return o;
@@ -1593,7 +1594,7 @@ class ZonaBase extends Phaser.Scene {
         if (!this.pedresMobils) return;
         const b = this.ineu.body, I = this.intent || { x: 0, y: 0 }, M = 14, MARGE = 0.3, MANTENIR = 0.12;
         this.pedresMobils.forEach(o => {
-            if (o.mogut) return;
+            if (o.mogut || !o.permet()) { o.empenta = 0; return; }
             const c = o.col.body;
             const entreY = b.bottom > c.top - 10 && b.top < c.bottom + 10, entreX = b.right > c.left - 14 && b.left < c.right + 14;
             const costats = [
@@ -1623,6 +1624,16 @@ class ZonaBase extends Phaser.Scene {
                 Estat.desar();
             }
         });
+    }
+
+    // Un llaç de la Nena a terra: es recull només amb tocar-lo (img = el llaç; k = 1 o 2)
+    recullLlac(k, img) {
+        if (this.llacAgafat || this.cinema || this.camCinema || !img || !img.visible) return;
+        const ui = this.ui();
+        if (!ui || ui.dialeg || ui.bloquejat) return;
+        if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, img.x, img.y) > 46) return;
+        this.llacAgafat = true;
+        ui.obrirDialeg(DIALEGS.llac(k)(Estat));
     }
 
     // Escales caminables: x0..x1 és l'ample i 'bandes' les contrapetges [[yDalt, yBaix], ...]. L'Ineu hi va una mica més lent, a cada contrapetja encara més, i hi sona

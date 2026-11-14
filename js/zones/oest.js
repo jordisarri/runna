@@ -37,6 +37,7 @@ class ZonaRovellonera extends ZonaBase {
         this.pas = Math.min(Estat.dades.rovPas || 0, 2);
         const pas = this.pas;
         this.llac = this.roca2 = null;     // (l'escena es reutilitza: que no quedin els de la clariana anterior)
+        this.llacAgafat = false;
 
         this.terra('herba_fosca', 0, 0, 1600, 1100, -1100);
         this.terra('cami', 700, 0, 200, 1100).setAlpha(0.0);       // (reservat)
@@ -59,7 +60,7 @@ class ZonaRovellonera extends ZonaBase {
             const x = 160 + rnd() * 1280, y = 160 + rnd() * 780;
             if (Phaser.Math.Distance.Between(x, y, 800, 550) < 230) continue;
             if (Math.abs(x - 800) < 140 || Math.abs(y - 550) < 140) continue;
-            if (pas === 0 && Phaser.Math.Distance.Between(x, y, 1150, 300) < 230) continue;   // lloc per empènyer la roca del llaç
+            if (pas === 1 && Phaser.Math.Distance.Between(x, y, 1150, 300) < 230) continue;   // lloc per empènyer la roca del llaç
             this.posar(i % 3 ? 'pi' : 'arbre', x, y, { col: { w: 28, h: 14 } });
         }
 
@@ -80,13 +81,11 @@ class ZonaRovellonera extends ZonaBase {
         const mapaSortides = { N: [700, 0, 200, 14], S: [700, 1086, 200, 14], W: [0, 440, 14, 220], E: [1586, 440, 14, 220] };
         Object.entries(mapaSortides).forEach(([d, r]) => this.sortida(r[0], r[1], r[2], r[3], 'ZonaRovellonera', 'x_' + d));
 
-        // Segon llaç de la Nena de les Trenes (el primer és pel camí): a la primera clariana, també sota una pedra
-        if (pas === 0) {
+        // Segon llaç de la Nena de les Trenes (el primer és pel camí): a la clariana del mig del laberint, també sota una pedra
+        if (pas === 1) {
             this.llac = this.posar('llac', 1100, 300, { fonsY: 300 }).setVisible(false);
             this.tweens.add({ targets: this.llac, y: 294, yoyo: true, repeat: -1, duration: 700 });
-            this.interactiu(1100, 300, RADI_OBJECTE, DIALEGS.llac(2), { altura: 50, actiu: () => this.llac2Lliure() });
-            this.roca2 = this.pedraMobil(1100, 310, 'llac2', 110, 0,
-                'Una roca grossa entre els pins, coberta de molsa. Per sota en surt un tros de cinta rosa.');
+            this.roca2 = this.pedraMobil(1100, 310, 'llac2', 110, 0, null, () => Estat.flag('nenaVista'));
         }
 
         // Enemics: bolets bruts i escolopendres
@@ -195,7 +194,7 @@ class ZonaRovellonera extends ZonaBase {
     }
 
     actualitzar() {
-        if (this.llac) this.llac.setVisible(this.llac2Lliure());
+        if (this.llac) { const lliure = this.llac2Lliure(); this.llac.setVisible(lliure); if (lliure) this.recullLlac(2, this.llac); }
     }
 
     llac2Lliure() { return Estat.flag('nenaVista') && !Estat.flag('llac2') && !!this.roca2 && this.roca2.mogut; }
@@ -261,29 +260,28 @@ class ZonaCamiRov extends ZonaBase {
                 const px = x + (rnd() - 0.5) * 80, py = y + (rnd() - 0.5) * 70;
                 if (tram.some(([tx, ty, tw, th]) => px > tx - 90 && px < tx + tw + 90 && py > ty - 70 && py < ty + th + 90)) continue;
                 if (Math.abs(px - 2640) < 240 && py > 330 && py < 880) continue;   // que cap arbre tapi el cartell
-                if (Phaser.Math.Distance.Between(px, py, 880, 880) < 170 || Phaser.Math.Distance.Between(px, py, 1300, 830) < 120) continue;
+                if ((Math.abs(px - 1560) < 280 && py > 700 && py < 1080) || Phaser.Math.Distance.Between(px, py, 480, 1215) < 150) continue;       // que cap arbre tapi la Nena (primer revolt) ni la roca del llaç
                 const tipus = rnd() < 0.6 ? 'pi' : 'arbre';                       // (es tria abans de descartar: així la resta del bosc queda igual)
                 // La roca del primer llaç: cap arbre al voltant ni al davant (les copes pugen i la tapen), ni a la banda on s'empeny
-                if (Math.abs(px - 1300) < 240 && py > 760 && py < 1140) continue;
+                if (Math.abs(px - 480) < 240 && py > 1100) continue;
                 this.posar(tipus, px, py, { col: { w: 30, h: 14 } });
             }
         }
         [[2300, 460], [1500, 770], [1100, 560], [620, 1100], [500, 1330], [900, 1000]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 70, h: 26 } }));
         this.cartell(2640, 420, () => ({ pagines: [{ qui: 'Cartell', text: '← Rovellonera\n«On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.»' }] }));
 
-        // La segona corba, ben endins del camí, on espera la Nena de les Trenes
+        // La primera corba del camí, des de l'Era, on espera la Nena de les Trenes
         if (!Estat.flag('nenaAlliberada')) {
-            this.nena = this.posar('nena_trenes', 880, 880, { fonsY: 880 });          // sempre al 100% d'opacitat: ben visible
-            this.resplendorNena = this.add.circle(880, 815, 52, 0xcfd8ff, 0.07).setDepth(879);      // un halo molt discret
+            this.nena = this.posar('nena_trenes', 1560, 670, { fonsY: 670 });          // sempre al 100% d'opacitat: ben visible
+            this.resplendorNena = this.add.circle(1560, 605, 52, 0xcfd8ff, 0.07).setDepth(669);      // un halo molt discret
             this.tweens.add({ targets: [this.nena, this.resplendorNena], y: '-=10', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
-            this.interactiu(880, 880, RADI_NPC, DIALEGS.nenaTrenes, { altura: 145 });
+            this.interactiu(1560, 670, RADI_NPC, DIALEGS.nenaTrenes, { altura: 145 });
         }
-        // Primer llaç: amagat sota una roca que cal empènyer
-        this.llac = this.posar('llac', 1300, 830, { fonsY: 830 }).setVisible(false);
-        this.tweens.add({ targets: this.llac, y: 824, yoyo: true, repeat: -1, duration: 700 });
-        this.interactiu(1300, 830, RADI_OBJECTE, DIALEGS.llac(1), { altura: 50, actiu: () => this.llacLliure() });
-        this.roca1 = this.pedraMobil(1300, 840, 'llac1', 110, 0,
-            'Una roca grossa a la vora del camí, amb l\'herba aixafada al voltant. Sota seu hi brilla una cosa rosada.');
+        // Primer llaç: amagat sota una roca que cal empènyer, al tram final del camí (només es pot empènyer després de parlar amb la Nena)
+        this.llacAgafat = false;
+        this.llac = this.posar('llac', 480, 1205, { fonsY: 1205 }).setVisible(false);
+        this.tweens.add({ targets: this.llac, y: 1199, yoyo: true, repeat: -1, duration: 700 });
+        this.roca1 = this.pedraMobil(480, 1215, 'llac1', 110, 0, null, () => Estat.flag('nenaVista'));
 
         // Animalets i bolets
         [[2400, 320], [1500, 670], [1000, 660], [450, 1210]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
@@ -296,7 +294,7 @@ class ZonaCamiRov extends ZonaBase {
     }
 
     actualitzar() {
-        if (this.llac) this.llac.setVisible(this.llacLliure());
+        if (this.llac) { const lliure = this.llacLliure(); this.llac.setVisible(lliure); if (lliure) this.recullLlac(1, this.llac); }
     }
 
     llacLliure() { return Estat.flag('nenaVista') && !Estat.flag('llac1') && !!this.roca1 && this.roca1.mogut; }

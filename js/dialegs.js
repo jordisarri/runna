@@ -1356,18 +1356,18 @@ const DIALEGS = {
                     { qui: "Nena de les Trenes", text: "No fugis, si us plau. Tothom que em veu surt corrent. Només voldria parlar amb algú." },
                     { qui: "Nena de les Trenes", text: "Vaig venir a collir rovellons amb la mare. Ella sempre deia: «On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.» Però jo només mirava els rovellons, i em vaig oblidar del camí." },
                     { qui: "Nena de les Trenes", text: "La mare m'havia lligat les trenes amb dos llaços rosa. Quan em vaig adonar que m'havia perdut, vaig córrer, i els llaços van caure pel bosc. Fa molts, molts anys d'això." },
-                    { qui: "Nena de les Trenes", text: "Un el vaig perdre pel camí de la Rovellonera, i l'altre a la primera clariana. Sense ells no puc sentir les mans de la mare. Si me'ls portessis..." },
+                    { qui: "Nena de les Trenes", text: "Un el vaig perdre pel camí de la Rovellonera, i l'altre en una clariana del mig del bosc de la Rovellonera. Sense ells no puc sentir les mans de la mare. Si me'ls portessis..." },
                     { qui: "Ineu", text: "Els trobaré. No et quedaràs sola, t'ho prometo." }
                 ],
                 enAcabar: () => {
                     E.posaFlag("nenaVista");
-                    E.posaObjectiu("La Nena de les Trenes va perdre dos llaços: un pel camí de la Rovellonera i l'altre a la primera clariana.");
+                    E.posaObjectiu("La Nena de les Trenes va perdre dos llaços: un pel camí de la Rovellonera i l'altre en una clariana del mig del bosc de la Rovellonera.");
                 }
             };
         }
         if (n < 2) {
-            const text = n === 0 ? "Encara no en tens cap. Un el vaig perdre pel camí de la Rovellonera, i l'altre a la primera clariana. Jo m'espero aquí."
-                : E.flag("llac1") ? "Ja en tens un! L'altre el vaig perdre a la primera clariana."
+            const text = n === 0 ? "Encara no en tens cap. Un el vaig perdre pel camí de la Rovellonera, i l'altre en una clariana del mig del bosc de la Rovellonera. Jo m'espero aquí."
+                : E.flag("llac1") ? "Ja en tens un! L'altre el vaig perdre en una clariana del mig del bosc de la Rovellonera."
                 : "Ja en tens un! L'altre el vaig perdre pel camí de la Rovellonera.";
             return { pagines: [{ qui: "Nena de les Trenes", text }] };
         }
@@ -1395,7 +1395,7 @@ const DIALEGS = {
         enAcabar: () => {
             E.posaFlag("llac" + k); E.dona("llac_nena");
             const n = ["llac1", "llac2"].filter(f => E.flag(f)).length;
-            E.posaObjectiu(n < 2 ? (k === 1 ? "Troba el segon llaç de la Nena de les Trenes (1/2): és a la primera clariana." : "Troba el segon llaç de la Nena de les Trenes (1/2): és pel camí de la Rovellonera.") : "Ja tens els dos llaços: porta'ls a la Nena de les Trenes.");
+            E.posaObjectiu(n < 2 ? (k === 1 ? "Troba el segon llaç de la Nena de les Trenes (1/2): és en una clariana del mig del bosc de la Rovellonera." : "Troba el segon llaç de la Nena de les Trenes (1/2): és pel camí de la Rovellonera.") : "Ja tens els dos llaços: porta'ls a la Nena de les Trenes.");
         }
     }),
 

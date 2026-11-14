@@ -164,7 +164,7 @@ const PROGRES = {
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta cants antics." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
-          pista: E => "La Nena de les Trenes va perdre dos llaços: un pel camí de la Rovellonera i l'altre a la primera clariana." },
+          pista: E => "La Nena de les Trenes va perdre dos llaços: un pel camí de la Rovellonera i l'altre en una clariana del mig del bosc de la Rovellonera." },
         { id: 'pi', marca: ['piObert', 'piAurora', 'piPedres', 'piMiracle', 'piVist'], obert: E => E.flag('cantMiracle'), fet: E => E.flag('piObert'),
           pista: E => "Al sud de Sant Antoni, un bosc molt llarg amaga un pi vell que sembla escoltar els tres cants. Només s'hi pot arribar des de llevant." },
         { id: 'carruatge', marca: ['carruatgeObert'], obert: E => E.flag('epilegFet'), fet: E => E.flag('carruatgeObert'),
