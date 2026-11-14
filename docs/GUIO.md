@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 541: Home del Raïm: la música del combat comença quan, al final del gir del cap, l'estàtua ja ens mira enfadada (abans, en despertar-se). I es redueix la dificultat (33 de vida, fase 2 a 14, envestida de 1 de mal, avís una mica més llarg, menys envestides i maçades seguides i més descans a terra): a mig camí entre la primera versió i l'anterior.*
+
 *Revisió 540: El brillo del volant de l'Home del Raïm segueix la forma del gràfic: un cercle sobre la roda i un altre sobre l'engranatge petit (abans era un rectangle que no hi encaixava). `brillo()` accepta ara `cercle: true`.*
 
 *Revisió 539: Els retrats de l'Home del Raïm passen a tres quarts, com els dels altres personatges: enfadat (ulls vermells i esquerdes lila, mirant l'Ineu) i, un cop vençut, tranquil mirant lluny.*

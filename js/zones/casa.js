@@ -112,7 +112,7 @@ const GIR_RAIM_MS = 3000;      // el cap de l'Home del Raïm gira a tres batzega
 const K_RAIM = 0.88;     // mida del guardià respecte al dibuix original (277 → ~290 px d'alt): perquè es vegi sencer durant el combat; cos, radi i cap van ja en píxels de món
 ENEMICS.raim = {
     k: K_RAIM,
-    tex: 'home_raim_desperta', vida: 36, vel: 360, mal: 2, radi: Math.round(38 * K_RAIM), cos: [Math.round(66 * K_RAIM), Math.round(30 * K_RAIM)], ombra: 0.65 * K_RAIM,
+    tex: 'home_raim_desperta', vida: 33, vel: 340, mal: 1, radi: Math.round(38 * K_RAIM), cos: [Math.round(66 * K_RAIM), Math.round(30 * K_RAIM)], ombra: 0.65 * K_RAIM,
     arma: 'runna',                            // només Runna li fa mal
     // El punt feble és el cap (al 27% del dibuix des de dalt), i només quan ha caigut de morros després d'una envestida:
     // llavors el cap queda a terra, a l'abast (sense cap abast extra cap amunt)
@@ -256,10 +256,10 @@ ENEMICS.raim = {
     ia(z, e, ara) {
         const jo = z.ineu.body.center, c = e.spr.body.center;
         const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
-        const fase2 = e.vida <= 16;
+        const fase2 = e.vida <= 14;
         const estatAbans = e.estat;
-        if (!e.proxCarrega) e.proxCarrega = ara + 1500;
-        if (!e.proxMaza) e.proxMaza = ara + 3200;
+        if (!e.proxCarrega) e.proxCarrega = ara + 1900;
+        if (!e.proxMaza) e.proxMaza = ara + 3800;
         const cap = Math.atan2(jo.y - c.y, jo.x - c.x);
         if (e.estat !== 'apunta') this.netejaTele(e);
         if (e.estat !== 'maza') this.netejaMaza(e);
@@ -281,18 +281,18 @@ ENEMICS.raim = {
         } else if (e.estat === 'maza') {
             e.spr.body.setVelocity(0);
             this.teleMaza(z, e, ara);
-            if (ara > e.fins) { this.impacteMaza(z, e); this.netejaMaza(e); e.estat = 'aixeca'; e.fins = ara + 700; e.proxMaza = ara + (fase2 ? 3600 : 5200); e.proxCarrega = Math.max(e.proxCarrega, ara + 1300); }
+            if (ara > e.fins) { this.impacteMaza(z, e); this.netejaMaza(e); e.estat = 'aixeca'; e.fins = ara + 700; e.proxMaza = ara + (fase2 ? 4400 : 6200); e.proxCarrega = Math.max(e.proxCarrega, ara + 1500); }
         } else if (e.estat === 'carrega') {
             const bl = e.spr.body.blocked;
             if (ara > e.fins || bl.left || bl.right || bl.up || bl.down) {
                 e.spr.body.setVelocity(0);
                 // A la fase 2, de vegades encadena una segona envestida abans de caure
-                if (fase2 && !e.segona && Math.random() < 0.8) { e.segona = true; e.estat = 'apunta'; e.duradaApunta = 380; e.fins = ara + 380; e.ang = cap; e.spr.setTint(0xffc4cc); }
+                if (fase2 && !e.segona && Math.random() < 0.7) { e.segona = true; e.estat = 'apunta'; e.duradaApunta = 380; e.fins = ara + 380; e.ang = cap; e.spr.setTint(0xffc4cc); }
                 else {
                     e.segona = false;
-                    e.estat = 'cansat'; e.fins = ara + (fase2 ? 1450 : 1900); e.copsRebuts = 0;
+                    e.estat = 'cansat'; e.fins = ara + (fase2 ? 1550 : 2100); e.copsRebuts = 0;
                     e.cauDreta = Math.cos(e.ang) >= 0;
-                    e.proxCarrega = ara + (fase2 ? 1000 : 1700);
+                    e.proxCarrega = ara + (fase2 ? 1250 : 2100);
                 }
             }
         } else if (e.estat === 'cansat') {                 // de morros a terra
@@ -303,7 +303,7 @@ ENEMICS.raim = {
             if (ara > e.fins) e.estat = 'camina';
         } else {
             e.estat = 'camina';
-            const v = dist > 120 * K_RAIM ? (fase2 ? 150 : 115) : 0;
+            const v = dist > 120 * K_RAIM ? (fase2 ? 135 : 100) : 0;
             e.spr.body.setVelocity(Math.cos(cap) * v, Math.sin(cap) * v);
             e.spr.setFlipX(Math.cos(cap) < 0);
             if (ara > e.proxMaza && dist < 400 && dist > 90) {
@@ -311,7 +311,7 @@ ENEMICS.raim = {
                 const d = Math.min(dist, 250); e.mx = c.x + Math.cos(cap) * d; e.my = c.y + Math.sin(cap) * d;
                 Sfx.carrega();
             } else if (ara > e.proxCarrega && dist < 520) {
-                e.estat = 'apunta'; e.duradaApunta = fase2 ? 360 : 540; e.fins = ara + e.duradaApunta; e.ang = cap;
+                e.estat = 'apunta'; e.duradaApunta = fase2 ? 390 : 600; e.fins = ara + e.duradaApunta; e.ang = cap;
                 e.spr.setTint(0xffc4cc);
             }
         }
@@ -679,6 +679,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             this.girarVolant();
             this.girarEstatua();
             this.volDespertar = this.raimPas === 3 && this.teArma();
+            if (this.volDespertar) this.time.delayedCall(GIR_RAIM_MS - 300, () => Joc.iniciarMusica(this, 0, 'musica_boss', 900));          // la música del guardià comença quan ja ens mira, enfadat (no més tard, en despertar-se)
             const espera = { fer: (z, fet) => z.esperar(GIR_RAIM_MS + 400, fet) };       // primer es veu (i se sent) com gira el cap; després surt el text
             if (this.raimPas === 3 && !this.teArma()) return { pagines: [espera, { qui: 'Ineu', text: "(Ara em mira de cara. No m'agrada gens.)" }, ...DIALEGS.raimSenseArma.pagines] };
             const frases = ["(El volant grinyola. El cap de pedra s'ha girat una mica.)", "(Una altra volta. Ara el cap ja és de perfil.)", "(Ara em mira de cara. No m'agrada gens.)"];
@@ -941,7 +942,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // L'origen del sprite passa als peus: així, quan cau de morros, gira pels peus i el cap toca a terra
         const hh = boss.spr.displayHeight / 2;
         boss.spr.setOrigin(0.5, 1); boss.spr.y += hh;
-        this.ui().barraBoss("L'Home del Raïm", [11 / 30]);                      // a 11 de vida, la segona fase
+        this.ui().barraBoss("L'Home del Raïm", [14 / 33]);                      // a 14 de vida, la segona fase
         this.apagaPuzle();
         const ponPedestal = () => {
             const t = this.textures.get('home_raim_pedestal');
