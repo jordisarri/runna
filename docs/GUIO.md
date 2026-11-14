@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 522: Es recupera un fitxer buit js/zones/esglesia_nova.js només perquè les versions antigues del joc que encara són a la memòria cau dels mòbils no donin error en actualitzar-se.*
+
 *Revisió 521: Torna la claror blavosa pulsant al cofre del cristall de gel. Marge d'interacció igual arreu: tots els objectes (no personatges) s'activen des d'un mínim de 130 px, sense haver de tocar-los (abans, 72-88 px); els personatges conserven el seu radi i el «!».*
 
 *Revisió 520: Repàs de cofres i cartells: cap porta indicador. S'ha tret la claror blavosa pulsant del cofre del cristall de gel (Ermita de Sant Gabriel); la resta de cofres i tots els cartells ja no en tenien.*
