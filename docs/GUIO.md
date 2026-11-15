@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 570: Portes d'abaix de tots els interiors amb sortida a la vora sud (21 sales): una paret de davant (de fusta a les cases, de pedra a les sales de pedra i subterranis) amb el forat de la porta enmarcat; la llinda de fusta o l'arc de pedra queda per damunt de l'Ineu, opac, i dos batents de fusta s'obren en acostar-s'hi i es tanquen en allunyar-se. La paret és sòlida: només es surt pel forat (comprovat sala per sala). Les sales amb porta pròpia (Cripta, Cambra secreta, reixa de l'Escalinata) no s'han tocat.*
+
 *Revisió 569: Portes d'abaix dels interiors (1/n): les sales de pedra amb porta d'arc (Cripta i Cambra secreta) tenen ara dos batents de fusta opacs, amb frontisses als brancals, que s'obren quan l'Ineu s'hi acosta i es tanquen en allunyar-se; l'arc ja era per damunt de l'Ineu, opac, i sense el quadradet.*
 
 *Revisió 568: Escala de la cripta: en baixar, l'Ineu s'allunya (es fa un 22% més petit) i va més a poc a poc dins del forat, perquè no sembli que caigui. Arc de la porta de les sales de pedra: fora el quadradet (dovella) del mig, que tapava l'Ineu en entrar.*

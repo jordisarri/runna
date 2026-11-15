@@ -402,6 +402,7 @@ class ZonaCasaBase extends ZonaBase {
     // Sala de pedra amb els gràfics de dibuixos_casa.js: paret del fons (textura), murs laterals, vora fosca al terra i parets de col·lisió.
     // forats: [[x0, x1], ...] trams de la paret del fons que queden oberts (per a una porta).
     salaPedra(amp, alt, portaX, o = {}) {
+        this.portaPropia = true;                      // aquesta sala ja dibuixa la seva porta d'arc
         this.terra('rajola', 130, 80, amp - 260, alt - 80, -1100).setTint(o.tint || 0x8a7a68);
         this.add.image(130, 0, o.paret).setOrigin(0).setScale(1 / RES).setDepth(-995);
         this.add.image(90, 0, 'mur_ermita').setOrigin(0).setScale(1 / RES).setDepth(-995);
@@ -594,6 +595,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     // vores, la claror de la plaça a fora, dos batents de reixa amb barrots que segueixen la volta i una barra de fusta travessada. Aixecant la barra s'obre: els batents
     // giren sols en acostar-s'hi (i es tanquen en allunyar-se), i des de llavors s'hi entra i se surt. L'Ineu pot arribar fins a la barra.
     reixaPorxo() {
+        this.portaPropia = true;
         const oberta = Estat.flag('reixaObertaDins') || Estat.flag('ocellaireVencut');
         const CX = 700, OB = 140, R = OB / 2, X0 = CX - R, X1 = CX + R, Y1 = 1000, YC = 962, YT = YC - R, YBARRA = 956;      // YC: on comença la volta; YT: dalt de l'arc; YBARRA: dalt de la barra
         // La silueta de l'obertura (brancal esquerre, volta, brancal dret) com a polígon: a partir de dues x globals (xa, xb) només es dibuixa aquella part

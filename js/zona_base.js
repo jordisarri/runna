@@ -51,6 +51,7 @@ const VELOCITAT_INEU = 230;
 const TRONCS = { arbre: [0.27, 0.52, 0.75, 1], pi: [0.36, 0.55, 0.66, 1], pi_pinyer: [0.30, 0.60, 0.62, 1] };
 const TRONC_ARBRE = esc => ({ w: Math.round(100 * esc), h: Math.round(36 * esc) });
 
+const ESTIL_PORTA_PEDRA = ['ZonaErmitaInt', 'ZonaGabrielInt', 'ZonaPassadis', 'ZonaSotaTaverna', 'ZonaGirgoles', 'ZonaTortura', 'ZonaBoira', 'ZonaGabia', 'ZonaSoterraniHost', 'ZonaEsglesia', 'ZonaMonestirRebedor', 'ZonaPingpong', 'ZonaTresor', 'ZonaGolfes'];
 const PROFUNDITAT_PORTA = 36;   // els interiors es surten per sota de la porta: l'Ineu l'ha de traspassar abans de canviar de zona
 const MARGE_TEULADA = 62;   // mig cos de l'Ineu: la col·lisió d'un edifici comença així de baix de la seva teulada, i per dalt es pot passar-hi darrere
 // Missions que fan marxar la boira del Miracle (cadascuna n'esvaeix una part); la boira no desapareix del tot fins que cau l'Ocellaire
@@ -1299,8 +1300,67 @@ class ZonaBase extends Phaser.Scene {
         return Object.assign({}, d, { pagines: [Object.assign({}, pag, { text: nom + '\n\n' + pag.text }), ...d.pagines.slice(1)] });
     }
 
+    // La porta de baix d'un interior (vista de dalt): una paret de davant a la vora sud del terra, amb el forat de la porta enmarcat; el marc (llinda o arc) queda
+    // per DAMUNT de l'Ineu, opac, i dos batents de fusta s'obren quan l'Ineu s'hi acosta i es tanquen en allunyar-se. Cada sala té el seu estil (fusta o pedra).
+    dibuixarPortaBaix(llista) {
+        if (this.portaPropia || !llista || !llista.length) return;
+        const pedra = ESTIL_PORTA_PEDRA.includes(this.scene.key), W = this.config.amplada, Y = this.config.alcada - 4, H = 56, C = 0x140a04;
+        const portes = llista.map(pr => { const dw = Math.max(pr.w, 84), cx = pr.x + pr.w / 2; return { dw, cx, X0: cx - dw / 2, X1: cx + dw / 2 }; }).sort((a, b) => a.cx - b.cx);
+        const cara = pedra ? 0x6a5c46 : 0x4a3220, tapa = pedra ? 0xb8a888 : 0x8a6a44, junta = pedra ? 0x2a2018 : 0x24160a;
+        const g = this.add.graphics().setDepth(98300), ga = this.add.graphics().setDepth(98500);
+        const tros = (xa, xb) => {
+            if (xb <= xa) return;
+            g.fillStyle(cara, 1).fillRect(xa, Y + 8, xb - xa, H - 8);
+            g.fillStyle(tapa, 1).fillRect(xa, Y, xb - xa, 10);
+            g.fillStyle(0xffffff, 0.16).fillRect(xa, Y + 1, xb - xa, 2);
+            g.lineStyle(1.4, junta, 0.8);
+            if (pedra) { for (let yy = Y + 22; yy < Y + H; yy += 17) { g.lineBetween(xa, yy, xb, yy); for (let xx = xa + (((yy / 17) | 0) % 2 ? 22 : 44); xx < xb; xx += 58) g.lineBetween(xx, yy - 17, xx, yy); } }
+            else { for (let xx = xa + 22; xx < xb; xx += 22) g.lineBetween(xx, Y + 10, xx, Y + H); g.lineBetween(xa, Y + 30, xb, Y + 30); }
+            g.lineStyle(2.2, C, 1).strokeRect(xa, Y, xb - xa, H);
+            this.colisio((xa + xb) / 2, Y + 28, xb - xa, H);             // l'Ineu només pot sortir pels forats
+        };
+        let x = -60; portes.forEach(d => { tros(x, d.X0 - 10); x = d.X1 + 10; }); tros(x, W + 60);
+        const batents = [];
+        portes.forEach(d => {
+            const { dw, cx, X0, X1 } = d;
+            [[X0 - 10, X0], [X1, X1 + 10]].forEach(([xa, xb]) => { g.fillStyle(pedra ? 0x9a8e76 : 0x6a4a2c, 1).fillRect(xa, Y - 4, xb - xa, H + 4).lineStyle(2.2, C, 1).strokeRect(xa, Y - 4, xb - xa, H + 4); });
+            if (pedra) {                                                     // arc de pedra per damunt de l'Ineu
+                const r = dw / 2, yb = Y + 6;
+                const arc = (gr, col) => { ga.lineStyle(gr, col, 1).beginPath().moveTo(X0, Y + H).lineTo(X0, yb); ga.arc(cx, yb, r, Math.PI, Math.PI * 2, false); ga.lineTo(X1, Y + H).strokePath(); };
+                arc(13, 0x140a04); arc(9, 0x9a8e76); arc(2.5, 0xd2c7a8);
+            } else {                                                         // llinda de fusta per damunt de l'Ineu
+                ga.fillStyle(0x6a4a2c, 1).fillRect(X0 - 12, Y - 10, dw + 24, 16).lineStyle(2.2, C, 1).strokeRect(X0 - 12, Y - 10, dw + 24, 16);
+                ga.fillStyle(0xa87c4c, 0.7).fillRect(X0 - 10, Y - 8, dw + 20, 3);
+            }
+            const half = dw / 2 - 1, y0b = Y + 6, hb = H - 6;
+            const bat = esq => {
+                const gb = this.add.graphics().setDepth(98400);
+                gb.setPosition(esq ? X0 + 1 : X1 - 1, 0);
+                const x0 = esq ? 0 : -half;
+                gb.fillStyle(0x4a2f1a, 1).fillRect(x0, y0b, half, hb);
+                gb.lineStyle(1.5, 0x24160a, 0.9); for (let k = 1; k < 3; k++) gb.lineBetween(x0 + k * half / 3, y0b, x0 + k * half / 3, y0b + hb);
+                gb.fillStyle(0x6a4524, 0.55).fillRect(x0 + (esq ? 2 : half - 6), y0b + 2, 4, hb - 4);
+                [0.3, 0.72].forEach(f => { gb.fillStyle(0x26221f, 1).fillRect(x0, y0b + hb * f - 3, half, 6); gb.fillStyle(0x8d8a84, 1).fillCircle(x0 + 5, y0b + hb * f, 1.4).fillCircle(x0 + half - 5, y0b + hb * f, 1.4); });
+                gb.fillStyle(0x26221f, 1).fillCircle(x0 + (esq ? half - 6 : 6), y0b + hb * 0.5, 2.2);
+                gb.lineStyle(2.2, 0x1c120a, 1).strokeRect(x0, y0b, half, hb);
+                return gb;
+            };
+            batents.push({ cx, bats: [bat(true), bat(false)], a: 0 });
+        });
+        const act = () => {
+            if (!this.ineu || !batents[0].bats[0].active) return;
+            batents.forEach(b => {
+                const d = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, b.cx, Y);
+                b.a = Phaser.Math.Linear(b.a, Phaser.Math.Clamp((200 - d) / 120, 0, 1), 0.14);
+                b.bats.forEach(g2 => g2.setScale(Math.max(0.1, 1 - b.a * 0.9), 1));
+            });
+        };
+        this.events.on('update', act); this.events.once('shutdown', () => this.events.off('update', act));
+    }
+
     // Les parets d'un interior que barren la porta es parteixen perquè hi quedi un pas lliure (la porta s'ha de poder traspassar)
     obrirPortes() {
+        this.dibuixarPortaBaix(this.portesInt);
         (this.portesInt || []).forEach(p => {
             const x0 = p.x - 4, x1 = p.x + p.w + 4;
             this.obstacles.getChildren().slice().forEach(o => {
