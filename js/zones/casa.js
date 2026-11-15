@@ -427,7 +427,6 @@ class ZonaCasaBase extends ZonaBase {
             const g = ga;
             const arc2 = (amp2, col) => { g.lineStyle(amp2, col, 1).beginPath().moveTo(portaX - OB / 2, alt).lineTo(portaX - OB / 2, YP + 14); g.arc(portaX, YP + 14, OB / 2, Math.PI, Math.PI * 2, false); g.lineTo(portaX + OB / 2, alt).strokePath(); };
             arc2(15, 0x1c120a); arc2(11, 0x84735e); arc2(3, 0xb0a085);
-            g.fillStyle(0x6a5a48, 1).fillRoundedRect(portaX - 8, YP - 4, 16, 16, 3).lineStyle(2, 0x1c120a, 1).strokeRoundedRect(portaX - 8, YP - 4, 16, 16, 3);   // dovella
         }
         this.add.rectangle(amp / 2, alt + 80, amp + 400, 160, 0x000000, 1).setDepth(99000);               // per sota de la porta tot és fosc
         this.colisio((portaX - OB / 2) / 2, YP + 32, portaX - OB / 2, 64);
@@ -756,7 +755,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             if (pr > 0.02) {
                 // un clon de l'Ineu s'enfonsa (es dibuixa cada cop més avall, darrere la vora de davant que el va tapant de baix cap a dalt); el de veritat s'amaga
                 if (!clon) { clon = this.add.sprite(I.x, I.y, I.texture.key, I.frame.name).setOrigin(I.originX, I.originY).setScale(I.scaleX, I.scaleY).setDepth(I.depth); clon.setMask(m.createGeometryMask()); I.setAlpha(0); }
-                clon.setTexture(I.texture.key, I.frame.name).setFlipX(I.flipX).setPosition(I.x, I.y + (I.displayHeight + (YB - YF)) * pr);
+                clon.setTexture(I.texture.key, I.frame.name).setFlipX(I.flipX).setScale(I.scaleX * (1 - 0.22 * pr), I.scaleY * (1 - 0.22 * pr)).setPosition(I.x, I.y + (I.displayHeight + (YB - YF)) * pr);
+                I.body.setVelocityY(Math.max(I.body.velocity.y, -62));          // dins de l'escala va més a poc a poc
                 const c = Math.round(255 * (1 - 0.65 * pr)); clon.setTint(Phaser.Display.Color.GetColor(c, c, c));
                 this.ombraIneu.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
                 if (pr >= 0.98) { baixant = true; I.body.setVelocity(0); Sfx.porta(); this.canviarZona('ZonaCasaCripta', 'porta'); }
