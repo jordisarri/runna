@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 561: Sala de l'Escalinata: es redueixen les textures de pedra a dues famílies (carreu rugós i marbre llis). La paret del fons és la textura mestra; els murs laterals, la paret de baix i l'esllavissada passen a la mateixa paleta (#d2c7a8, #b8a888, #9e8a6c, #6a5c46) amb morter i contorn únic #140a04, filades de 29-35 px i menys variació d'alçada; el terra es fosqueix (0x8f8068) perquè es llegeixi la figura contra la paret.*
+
 *Revisió 560: En entrar a l'obertura de la paret esquerra de l'Escalinata, l'Ineu camina cap a l'esquerra (abans pujava); les sortides poden dir explícitament la seva direcció (`s.dir`).*
 
 *Revisió 559: Sala de l'Escalinata: els murs laterals ja no s'allarguen per sota del límit del terra i la paret de baix (a banda i banda de la reixa) és de pedra, amb el mateix mur. L'escala de la cripta només s'agafa per davant: els costats i la part de dalt són sòlids. A les sales de pedra (cripta, ermita), l'arc de la porta de sortida queda per sobre de l'Ineu, opac.*

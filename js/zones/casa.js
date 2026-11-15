@@ -501,7 +501,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
 
     construir() {
         this.sortidaTrapa = false;          // (l'escena es reutilitza en cada visita: sense això, en tornar de la cripta l'escala ja no es tornava a posar)
-        this.sala(1400, 1000, 700, 0xb5a58a);
+        this.sala(1400, 1000, 700, 0x8f8068);
         // els murs laterals (x 90-130 i 1270-1310) són sòlids, llevat de l'obertura de l'esquerra (y 655-825)
         this.colisio(110, 327, 40, 655); this.colisio(110, 912, 40, 176); this.colisio(1290, 500, 40, 1000);
         // les parets laterals són de pedra (com a la resta de sales de pedra)
@@ -578,7 +578,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         g.fillStyle(0xf4e2b0, 1).fillRect(X0, Y0, X1 - X0, Y1 - Y0);                                     // la plaça, a fora, de dia
         g.fillStyle(0xd8c090, 1).fillRect(X0, Y1 - 22, X1 - X0, 22);
         [[X0 - 22, 22], [X1, 22]].forEach(([x, w]) => {                                               // brancals de pedra
-            g.fillStyle(0xb5a58a, 1).fillRect(x, Y0 - 16, w, Y1 - Y0 + 16).lineStyle(2.5, 0x1c1610, 1).strokeRect(x, Y0 - 16, w, Y1 - Y0 + 16);
+            g.fillStyle(0x8f8068, 1).fillRect(x, Y0 - 16, w, Y1 - Y0 + 16).lineStyle(2, 0x140a04, 1).strokeRect(x, Y0 - 16, w, Y1 - Y0 + 16);
             g.fillStyle(0xffffff, 0.2).fillRect(x + 3, Y0 - 14, 4, Y1 - Y0 + 12);
         });
         g.fillStyle(0xcdbd9e, 1).fillRect(X0 - 26, Y0 - 24, X1 - X0 + 52, 12).lineStyle(2.5, 0x1c1610, 1).strokeRect(X0 - 26, Y0 - 24, X1 - X0 + 52, 12);   // llinda

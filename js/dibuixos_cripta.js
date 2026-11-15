@@ -100,7 +100,7 @@ function pintarTeranyinaCripta(ctx, w, h) {
 function pintarEsllavissadaEscalinata(ctx, w, h) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     let llavor = 29; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
-    const C = '#1c1410';
+    const C = '#140a04';
     ctx.save(); ctx.beginPath(); ctx.rect(0, 0, w, h); ctx.clip();         // res no surt de l'amplada de l'escala (la barana queda lliure)
     const bloc = (cx, cy, r, tons) => {
         const n = 7, pts = [];
@@ -108,11 +108,11 @@ function pintarEsllavissadaEscalinata(ctx, w, h) {
         ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(cx + r * 0.1, cy + r * 0.7, r * 0.95, r * 0.28, 0, 0, Math.PI * 2); ctx.fill();
         ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath();
         const g = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r); g.addColorStop(0, tons[0]); g.addColorStop(0.55, tons[1]); g.addColorStop(1, tons[2]);
-        ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 2.2; ctx.stroke();
+        ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = r < 14 ? 0.8 : 1.8; ctx.stroke();
         ctx.strokeStyle = 'rgba(255,240,210,0.35)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(pts[5][0], pts[5][1]); ctx.lineTo(pts[6][0], pts[6][1]); ctx.lineTo(pts[0][0], pts[0][1]); ctx.stroke();
         ctx.strokeStyle = 'rgba(30,20,10,0.5)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx - r * 0.2, cy - r * 0.1); ctx.lineTo(cx + r * 0.1, cy + r * 0.25); ctx.stroke();
     };
-    const TONS = [['#b8a888', '#8a7a64', '#4e4234'], ['#a89878', '#7a6a56', '#463a2e'], ['#c4b494', '#968468', '#52463a']];
+    const TONS = [['#b8a888', '#9e8a6c', '#6a5c46'], ['#a8987c', '#8e7c60', '#605340'], ['#d2c7a8', '#a8987c', '#6a5c46']];
     // files de blocs de dalt (fons) a baix (davant): omplen tota l'alçada, sense cap llençol de fons
     // disposició caòtica: pedres de mides molt diferents escampades a l'atzar (més denses al mig i a dalt), ordenades de dalt a baix perquè s'encavalquin
     const llista = [];
@@ -125,7 +125,7 @@ function pintarEsllavissadaEscalinata(ctx, w, h) {
         ctx.save(); ctx.translate(x, y); ctx.rotate((rnd() - 0.5) * 1.6); ctx.scale(0.8 + rnd() * 0.7, 0.75 + rnd() * 0.4); bloc(0, 0, r, TONS[n % 3]); ctx.restore();
     });
     // llosa trencada i biga de fusta
-    ctx.save(); ctx.translate(w * 0.38, h * 0.58); ctx.rotate(-0.7); ctx.fillStyle = '#c0b090'; ctx.strokeStyle = C; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.roundRect(-46, -9, 92, 18, 3); ctx.fill(); ctx.stroke(); ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fillRect(-44, -7, 88, 3); ctx.restore();
+    ctx.save(); ctx.translate(w * 0.38, h * 0.58); ctx.rotate(-0.7); ctx.fillStyle = '#b8a888'; ctx.strokeStyle = C; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.roundRect(-46, -9, 92, 18, 3); ctx.fill(); ctx.stroke(); ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fillRect(-44, -7, 88, 3); ctx.restore();
     ctx.save(); ctx.translate(w * 0.7, h * 0.3); ctx.rotate(1.1); ctx.fillStyle = '#6a4424'; ctx.strokeStyle = C; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(-52, -7, 104, 14, 2); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#9a6a3a'; ctx.fillRect(-50, -5, 100, 3); ctx.restore();
     // cua de pedres petites i graves a baix
     for (let j = 0; j < 60; j++) bloc(8 + rnd() * (w - 16), h - 40 + rnd() * 34, 5 + rnd() * 11, TONS[j % 3]);
@@ -136,18 +136,18 @@ function pintarEsllavissadaEscalinata(ctx, w, h) {
 // vores arrodonides, llum a dalt-esquerra i ombra a baix-dreta; el desplaçament de les juntes canvia a cada filada. Retallat net als costats.
 function pintarMurPedraIrregular(ctx, w, h) {
     let llavor = 91; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
-    ctx.fillStyle = '#2a2018'; ctx.fillRect(0, 0, w, h);                                             // morter
+    ctx.fillStyle = '#140a04'; ctx.fillRect(0, 0, w, h);                                             // morter
     ctx.save(); ctx.beginPath(); ctx.rect(0, 0, w, h); ctx.clip();
-    const TONS = [['#bca886', '#968060', '#6a563e'], ['#a8946f', '#82704f', '#584834'], ['#b49e7a', '#8e7a58', '#605038'], ['#9a8866', '#76664a', '#4e4030']];
+    const TONS = [['#b8a888', '#9e8a6c', '#6a5c46'], ['#a8987c', '#8e7c60', '#605340'], ['#b8a888', '#988468', '#6a5c46'], ['#d2c7a8', '#a8987c', '#6a5c46']];       // paleta única de pedra de la sala
     const pedra = (x0, y0, x1, y1, t) => {
-        const m = 1.6, a = x0 + m, b = y0 + m, c = x1 - m, d = y1 - m, r = Math.min(5, (c - a) * 0.3, (d - b) * 0.3);
+        const m = 1.4, a = x0 + m, b = y0 + m, c = x1 - m, d = y1 - m, r = Math.min(3, (c - a) * 0.3, (d - b) * 0.3);
         const j = () => (rnd() - 0.5) * 2;
         ctx.beginPath();
         ctx.moveTo(a + r + j(), b + j() * 0.6); ctx.lineTo(c - r + j(), b + j() * 0.6); ctx.quadraticCurveTo(c + j(), b, c + j() * 0.6, b + r);
         ctx.lineTo(c + j() * 0.6, d - r); ctx.quadraticCurveTo(c, d + j(), c - r, d + j() * 0.6); ctx.lineTo(a + r, d + j() * 0.6); ctx.quadraticCurveTo(a + j(), d, a, d - r);
         ctx.lineTo(a + j() * 0.6, b + r); ctx.quadraticCurveTo(a, b, a + r, b); ctx.closePath();
         const g = ctx.createLinearGradient(a, b, c, d); g.addColorStop(0, t[0]); g.addColorStop(0.55, t[1]); g.addColorStop(1, t[2]);
-        ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = '#1a120c'; ctx.lineWidth = 1.8; ctx.lineJoin = 'round'; ctx.stroke();
+        ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = '#140a04'; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.stroke();
         ctx.strokeStyle = 'rgba(255,238,205,0.34)'; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(a + 2, d - 4); ctx.lineTo(a + 2, b + 3); ctx.lineTo(c - 4, b + 3); ctx.stroke();
         ctx.strokeStyle = 'rgba(20,12,6,0.32)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(c - 2, b + 4); ctx.lineTo(c - 2, d - 2); ctx.lineTo(a + 4, d - 2); ctx.stroke();
         for (let k = 0; k < 5; k++) { ctx.fillStyle = 'rgba(25,15,8,0.28)'; ctx.fillRect(a + 3 + rnd() * (c - a - 6), b + 3 + rnd() * (d - b - 6), 1 + rnd() * 2, 1 + rnd() * 1.5); }
@@ -155,7 +155,7 @@ function pintarMurPedraIrregular(ctx, w, h) {
     };
     let y = 0, f = 0;
     while (y < h) {
-        const alt = 20 + ((rnd() * 22) | 0);
+        const alt = 29 + ((rnd() * 7) | 0);
         const talls = rnd() < 0.55 ? [-4 + rnd() * 4, 14 + rnd() * 14, w + 4] : [-4, w + 4];          // una o dues pedres per filada
         if (talls.length === 3 && talls[1] < 12) talls[1] = 14;
         for (let k = 0; k < talls.length - 1; k++) pedra(talls[k], y, talls[k + 1], y + alt, TONS[(rnd() * TONS.length) | 0]);
