@@ -741,24 +741,26 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (this.sortidaTrapa) return;
         this.sortidaTrapa = true;
         // Els costats i la part de dalt del forat són sòlids: només s'hi entra per davant (per baix)
-        [[620, 697, 28, 78], [780, 697, 28, 78], [700, 652, 150, 14]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));
+        [[620, 697, 28, 78], [780, 697, 28, 78], [700, 641, 150, 14]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));
+        this.registraGraons(640, 760, [[716, 724], [704, 712], [692, 700], [680, 688]]);          // quatre graons: frenada i un tap a cada un
         // L'escala es baixa com les altres: caminant cap amunt per dins del forat. Com més endins (cap al nord), més s'enfonsa l'Ineu: el graó de davant (opac) el va tapant
         // de baix cap a dalt; en estar-hi del tot ficat, passa a la cripta. Si torna enrere, torna a sortir.
-        const YB = 726, YF = 702, X0 = 640, X1 = 760, m = this.make.graphics({ add: false });
-        let enmasc = false, baixant = false;
+        const YB = 726, YF = 676, X0 = 640, X1 = 760, m = this.make.graphics({ add: false });
+        m.fillStyle(0xffffff, 1).fillRect(0, 0, this.config.amplada, YB);                    // només es veu el que és per damunt de la vora de davant del forat (opaca)
+        let clon = null, baixant = false;
         const f = () => {
             const I = this.ineu;
             if (!I || !I.active || this.canviant || baixant) return;
             const dins = I.x > X0 - 4 && I.x < X1 + 4 && I.y < YB + 4;
             const pr = dins ? Phaser.Math.Clamp((YB - I.y) / (YB - YF), 0, 1) : 0;
             if (pr > 0.02) {
-                if (!enmasc) { enmasc = true; I.setMask(m.createGeometryMask()); }
-                const alt = I.displayHeight;
-                m.clear().fillStyle(0xffffff, 1).fillRect(0, 0, this.config.amplada, I.y - alt * 0.98 * pr);
-                const c = Math.round(255 * (1 - 0.7 * pr)); I.setTint(Phaser.Display.Color.GetColor(c, c, c));
+                // un clon de l'Ineu s'enfonsa (es dibuixa cada cop més avall, darrere la vora de davant que el va tapant de baix cap a dalt); el de veritat s'amaga
+                if (!clon) { clon = this.add.sprite(I.x, I.y, I.texture.key, I.frame.name).setOrigin(I.originX, I.originY).setScale(I.scaleX, I.scaleY).setDepth(I.depth); clon.setMask(m.createGeometryMask()); I.setAlpha(0); }
+                clon.setTexture(I.texture.key, I.frame.name).setFlipX(I.flipX).setPosition(I.x, I.y + (I.displayHeight + (YB - YF)) * pr);
+                const c = Math.round(255 * (1 - 0.65 * pr)); clon.setTint(Phaser.Display.Color.GetColor(c, c, c));
                 this.ombraIneu.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
                 if (pr >= 0.98) { baixant = true; I.body.setVelocity(0); Sfx.porta(); this.canviarZona('ZonaCasaCripta', 'porta'); }
-            } else if (enmasc) { enmasc = false; I.clearMask(); I.clearTint(); this.ombraIneu.setVisible(true); }
+            } else if (clon) { clon.destroy(); clon = null; I.setAlpha(1); this.ombraIneu.setVisible(true); }
         };
         this.events.on('update', f);
         this.events.once('shutdown', () => this.events.off('update', f));

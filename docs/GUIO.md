@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 567: Escala de la cripta (Home del Raïm), animació corregida després de veure una gravació: ara el forat té 52 px de fondària amb quatre graons (frenada i tap a cada un) i l'Ineu s'hi enfonsa de debò: un clon es dibuixa cada cop més avall darrere la vora de davant (opaca), que el tapa de baix cap a dalt, mentre camina cap amunt; passa a la cripta quan ja no es veu. Si tornes enrere, torna a sortir.*
+
 *Revisió 566: Escala de la cripta: l'Ineu passa a la cripta abans (a 24 px de fondària dins del forat, no 46) perquè sempre s'hi arribi, també amb el joystick a poca velocitat.*
 
 *Revisió 565: L'escala de la cripta (Home del Raïm) deixa de ser automàtica: es baixa com les altres escales, caminant cap amunt dins del forat; com més endins, més s'enfonsa l'Ineu (el graó de davant el tapa de baix cap a dalt i s'enfosqueix) i en estar-hi del tot passa a la cripta; si torna enrere, torna a sortir. En tornar de la cripta, apareix just davant del forat.*
