@@ -763,7 +763,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             clon.setMask(m.createGeometryMask()); I.setAlpha(0);
             let graoAnt = -1;
             this.tweens.addCounter({
-                from: 0, to: 1, duration: 800,
+                from: 0, to: 1, duration: 1900,
                 onUpdate: tw => {
                     const fr = tw.getValue(), g = fr * GRAONS, pas = Math.floor(g) + Phaser.Math.Easing.Sine.InOut(g % 1), pr = pas / GRAONS;       // cada graó: baixada suau i repòs
                     if (Math.floor(g) !== graoAnt) { graoAnt = Math.floor(g); Sfx.escala(false); }                                                     // un tap a cada graó que baixa
@@ -773,7 +773,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
                 }
             });
             // només baixa un parell de graons: mentre baixa el segon ja es fa el fade a negre cap a la cripta (canviarZona)
-            this.time.delayedCall(500, () => { this.canviant = false; this.canviarZona('ZonaCasaCripta', 'porta'); });
+            this.time.delayedCall(1350, () => { this.canviant = false; this.canviarZona('ZonaCasaCripta', 'porta'); });
         };
         this.events.on('update', f);
         this.events.once('shutdown', () => this.events.off('update', f));
