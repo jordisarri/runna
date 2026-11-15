@@ -735,32 +735,42 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (desperta && !derrotat) this.despertarRaim(true);
     }
 
-    // L'escala de la cripta: el forat (640-760 × 668-726) és una sortida amb baixada graó a graó, com la dels altres llocs (zona_base: baixarEscala)
+    // L'escala de la cripta: el forat (640-760 × 668-726) es baixa com les escales dels altres llocs (zona_base: baixarEscala / baixarEscalaNord): en entrar-hi pel davant, l'Ineu
+    // fa un descens guiat de 1,7 s en 5 graons, amb un tap a cada graó, i s'enfonsa darrere la vora de davant (opaca), cada cop més fosc; després passa a la cripta.
     posarSortidaTrapa() {
         if (this.sortidaTrapa) return;
         this.sortidaTrapa = true;
-        // Els costats i la part de dalt del forat són sòlids: només s'hi entra per davant (per baix)
-        [[620, 697, 28, 78], [780, 697, 28, 78], [700, 641, 150, 14]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));
-        this.registraGraons(640, 760, [[716, 724], [704, 712], [692, 700], [680, 688]]);          // quatre graons: frenada i un tap a cada un
-        // L'escala es baixa com les altres: caminant cap amunt per dins del forat. Com més endins (cap al nord), més s'enfonsa l'Ineu: el graó de davant (opac) el va tapant
-        // de baix cap a dalt; en estar-hi del tot ficat, passa a la cripta. Si torna enrere, torna a sortir.
-        const YB = 726, YF = 676, X0 = 640, X1 = 760, m = this.make.graphics({ add: false });
+        // Els costats i tota la part de dalt del forat (fins a la vora de la boca) són sòlids: només s'hi entra per davant (per baix); a l'espai entre el forat i el pedestal no s'hi pot arribar
+        [[620, 697, 28, 78], [780, 697, 28, 78], [700, 651, 150, 36]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));
+        const YB = 726, X0 = 640, X1 = 760, GRAONS = 5, m = this.make.graphics({ add: false });
         m.fillStyle(0xffffff, 1).fillRect(0, 0, this.config.amplada, YB);                    // només es veu el que és per damunt de la vora de davant del forat (opaca)
-        let clon = null, baixant = false;
+        let baixant = false;
         const f = () => {
             const I = this.ineu;
             if (!I || !I.active || this.canviant || baixant) return;
-            const dins = I.x > X0 - 4 && I.x < X1 + 4 && I.y < YB + 4;
-            const pr = dins ? Phaser.Math.Clamp((YB - I.y) / (YB - YF), 0, 1) : 0;
-            if (pr > 0.02) {
-                // un clon de l'Ineu s'enfonsa (es dibuixa cada cop més avall, darrere la vora de davant que el va tapant de baix cap a dalt); el de veritat s'amaga
-                if (!clon) { clon = this.add.sprite(I.x, I.y, I.texture.key, I.frame.name).setOrigin(I.originX, I.originY).setScale(I.scaleX, I.scaleY).setDepth(I.depth); clon.setMask(m.createGeometryMask()); I.setAlpha(0); }
-                clon.setTexture(I.texture.key, I.frame.name).setFlipX(I.flipX).setScale(I.scaleX * (1 - 0.22 * pr), I.scaleY * (1 - 0.22 * pr)).setPosition(I.x, I.y + (I.displayHeight + (YB - YF)) * pr);
-                I.body.setVelocityY(Math.max(I.body.velocity.y, -62));          // dins de l'escala va més a poc a poc
-                const c = Math.round(255 * (1 - 0.65 * pr)); clon.setTint(Phaser.Display.Color.GetColor(c, c, c));
-                this.ombraIneu.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
-                if (pr >= 0.98) { baixant = true; I.body.setVelocity(0); Sfx.porta(); this.canviarZona('ZonaCasaCripta', 'porta'); }
-            } else if (clon) { clon.destroy(); clon = null; I.setAlpha(1); this.ombraIneu.setVisible(true); }
+            // Només es comença a baixar en entrar per la boca (davant del forat, a la franja dels primers graons): no n'hi ha prou d'estar «per sobre» del forat
+            if (!(I.x > X0 + 4 && I.x < X1 - 4 && I.y > 690 && I.y < YB - 1)) return;
+            baixant = true; this.canviant = true;
+            I.body.setVelocity(0); I.body.enable = false;
+            this.posarDireccio('amunt', true);
+            this.ombraIneu.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
+            // Un clon de l'Ineu s'enfonsa (darrere la vora de davant, que el va tapant de baix cap a dalt); el de veritat s'amaga
+            const x0 = I.x, y0 = I.y, alt = I.displayHeight;
+            const clon = this.add.sprite(x0, y0, I.texture.key, I.frame.name).setOrigin(I.originX, I.originY).setScale(I.scaleX, I.scaleY).setDepth(I.depth).setFlipX(I.flipX);
+            clon.setMask(m.createGeometryMask()); I.setAlpha(0);
+            let graoAnt = -1;
+            this.tweens.addCounter({
+                from: 0, to: 1, duration: 1700,
+                onUpdate: tw => {
+                    const fr = tw.getValue(), g = fr * GRAONS, pas = Math.floor(g) + Phaser.Math.Easing.Sine.InOut(g % 1), pr = pas / GRAONS;       // cada graó: baixada suau i repòs
+                    if (Math.floor(g) !== graoAnt) { graoAnt = Math.floor(g); Sfx.escala(false); }                                                     // un tap a cada graó que baixa
+                    clon.setTexture(I.texture.key, I.frame.name).setScale(I.scaleX * (1 - 0.22 * pr), I.scaleY * (1 - 0.22 * pr))
+                        .setPosition(Phaser.Math.Linear(x0, (X0 + X1) / 2, pr), y0 + (alt + 6) * pr);
+                    const c = Math.round(255 * (1 - 0.65 * fr)); clon.setTint(Phaser.Display.Color.GetColor(c, c, c));
+                }
+            });
+            Sfx.porta();
+            this.time.delayedCall(1500, () => { this.canviant = false; this.canviarZona('ZonaCasaCripta', 'porta'); });
         };
         this.events.on('update', f);
         this.events.once('shutdown', () => this.events.off('update', f));
@@ -1232,7 +1242,8 @@ class ZonaCasaCripta extends ZonaCasaBase {
         // Llosa amb la clau de ferro sota un raig de llum tènue, i dos candelabres
         this.llosaCripta = opac(this.add.image(500, 340, Estat.flag('relTretes') ? 'llosa_cripta_buida' : 'llosa_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(340));
         this.colisio(500, 316, 180, 36);
-        this.interactiu(500, 372, RADI_OBJECTE, DIALEGS.cofreCripta, { altura: 130, actiu: () => !Estat.flag('relTretes'), enTancar: () => { if (Estat.flag('relTretes')) this.llosaCripta.setTexture('llosa_cripta_buida'); } });
+        const puntLlosa = this.interactiu(500, 372, RADI_OBJECTE, DIALEGS.cofreCripta, { altura: 130, actiu: () => !Estat.flag('relTretes'), enTancar: () => { if (Estat.flag('relTretes')) this.llosaCripta.setTexture('llosa_cripta_buida'); } });
+        if (!Estat.flag('relTretes')) this.brillo(484, 252, 84, 24, { dep: 342, per: 2000, actiu: () => !Estat.flag('relTretes'), punt: puntLlosa });          // la clau de ferro brilla fins que s'agafa
         [[400, 360], [600, 360]].forEach(([x, y], i) => {
             opac(this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));          // sòlid: opac i amb col·lisió
             this.colisio(x, y - 8, 24, 14);
