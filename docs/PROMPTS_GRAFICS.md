@@ -275,7 +275,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 Tots els gràfics de dalt són fets i connectats (els seus prompts s'han esborrat d'aquest document).
 
-**Pendents:** `cercle_runes` (el cercle de runes del terra de l'Escalinata; ara es dibuixa amb codi) i `gra_rosari_*` (els grans de fusta del rosari de vida; ara es dibuixen amb codi).
+**Pendents:** `cercle_runes` (el cercle de runes del terra de l'Escalinata; ara es dibuixa amb codi).
 
 ---
 
@@ -298,16 +298,6 @@ A magical rune circle engraved into a stone floor, seen from a high three-quarte
 ```
 
 (Referència d'estil: `art/enemics/home_raim_apunta.png` per al lila de la boira i `art/objectes/creu.png` per al contorn.)
-
----
-
-### `gra_rosari_a.png`, `gra_rosari_b.png`, `gra_rosari_c.png`… → `assets/ui/gra_rosari_*.webp` (amplada ~44) *(Un **gra del rosari** d'energia: cada gra és un punt de vida al HUD de dalt a l'esquerra (`js/ui.js`, `actualitzarHUD`). Ara es dibuixa amb codi i queda poc rodó; quan hi hagi les imatges, el joc en fa servir **una per gra** (diferents entre elles, girades de manera diferent) i els estats «mig» i «buit» es fan a partir d'aquesta mateixa imatge (la meitat apagada i l'esquerdada, per codi). Imatge **quadrada 1:1**, un sol gra, fons blanc pur (el trec jo). Es veu a uns 40 px: ha de ser **gros, senzill i clarament rodó**.)*
-
-```
-A single handmade wooden rosary bead for a charming 2D cartoon game, seen from the front, clearly round, matte (no shine, no glow), with a little wood grain, clean dark brown outline and simple cel shading. Isolated on a pure white background, no shadow, square 1:1.
-```
-
-**Curt a propòsit:** el prompt és breu perquè cada versió surti diferent (forma, color de la fusta, veta). Si surt brillant: «completely matte like dry wood». Si no és prou rodona: «a perfect round circle outline». Es veurà a uns 40 px: com més senzilla, millor. No cal pujar cap imatge de referència.
 
 ---
 
