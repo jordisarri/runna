@@ -522,6 +522,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     }
 
     construir() {
+        this.sortidaTrapa = false;          // (l'escena es reutilitza en cada visita: sense això, en tornar de la cripta l'escala ja no es tornava a posar)
         this.sala(1400, 1000, 700, 0xb5a58a);
 
         // Escala de pedra a l'esquerra, volta i balcó al fons, mur amb porta a la dreta, lloses al mig (a partir de les fotos de l'Home del Raïm real)
@@ -613,6 +614,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.reixaEstavaOberta = oberta;
         if (oberta) { obrir(); return; }
         this.colReixa = this.colisio(700, Y0 - 2, X1 - X0 + 44, 52);         // des de la llinda: l'Ineu no es fica dins la reixa
+        this.brillo(700, Y0 + 33, X1 - X0 + 60, 18, { dep: Y1 + 3, actiu: () => !Estat.flag('reixaObertaDins') && !Estat.flag('ocellaireVencut') && !this.guardiaViu() && this.barra.visible });          // la barra de fusta brilla mentre no s'ha aixecat (i no es lluita)
         // El punt és a la mateixa reixa i el «!» hi surt a sobre, als barrots (no damunt de l'Ineu, que s'hi posa al davant)
         this.interactiu(700, Y0 + 30, 96, DIALEGS.reixaDins, {
             altura: -40, actiu: () => !Estat.flag('reixaObertaDins') && !this.guardiaViu(),
