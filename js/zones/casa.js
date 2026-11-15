@@ -525,7 +525,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
 
         // Porta camuflada (esquerra): torna a la sala del tresor
         this.portaSecreta(112, 740);
-        this.sortida(116, 656, 14, 168, 'ZonaCasaTresor', 'escala');
+        this.sortida(116, 656, 14, 168, 'ZonaCasaTresor', 'escala').dir = 'esquerra';
 
         this.reixaPorxo();
         // Paret de baix, a banda i banda de la reixa: un sòcol de pedra fosca que tanca la sala (abans s'hi podia ficar l'Ineu)
