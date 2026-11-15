@@ -554,7 +554,10 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         let amunt = 0;
         if (this.guardiaViu()) this.zoomBase = base;                           // en combat, el zoom de sempre
         else {
-            this.zoomBase = base * Phaser.Math.Linear(1, 0.72, Phaser.Math.Clamp((y - 700) / 180, 0, 1));       // a l'entrada, més lluny; a prop de l'estàtua, a tota mida
+            // a l'entrada, una mica més lluny (no gaire: tot es veia molt petit); a prop de l'estàtua, a tota mida. Mai tant que la vista sigui més alta que la sala
+            // (la càmera no hi cabria i quedaria una franja negra a baix): el zoom mínim és el que fa que l'alçada de la vista sigui la de la sala
+            const zoomMin = (ALT - ALT_HUD) / (this.config.alcada + this.extraSud);
+            this.zoomBase = Math.min(base, Math.max(zoomMin, base * Phaser.Math.Linear(1, 0.88, Phaser.Math.Clamp((y - 700) / 180, 0, 1))));
             const vh = (ALT - ALT_HUD) / cam.zoom, centre = Math.max(440, y - vh * 0.42);     // el centre puja cap a l'estàtua sense perdre l'Ineu de vista
             amunt = Math.max(0, y - centre);
         }
@@ -1213,23 +1216,17 @@ class ZonaCasaCripta extends ZonaCasaBase {
         // Teranyines als cantons del fons
         this.add.image(131, 172, 'teranyina_cripta').setOrigin(0).setScale(1 / RES * 0.9).setDepth(-993);
         this.add.image(869, 172, 'teranyina_cripta').setOrigin(0).setScale(1 / RES * 0.9).setDepth(-993).setFlipX(true);
-        // Sarcòfags dels monjos, tres a cada banda, amb les piles que aguanten les voltes entre ells; a cada tapa, una espelma (amb la seva llum) o una calavera
-        [[230, 330], [230, 470], [230, 610], [770, 330], [770, 470], [770, 610]].forEach(([x, y], i) => {
+        // Sarcòfags dels monjos, tres a cada banda, amb les piles que aguanten les voltes entre ells; la tapa només porta una creu estirada (sense espelmes ni calaveres)
+        [[230, 330], [230, 470], [230, 610], [770, 330], [770, 470], [770, 610]].forEach(([x, y]) => {
             opac(this.add.image(x, y, 'sarcofag_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));
             this.colisio(x, y - 22, 140, 36);
-            if (i % 3 !== 1) {
-                const ex = x + (x < 500 ? 34 : -34);
-                opac(this.add.image(ex, y - 36, 'espelma_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y + 1));
-                const ll = this.add.circle(ex, y - 62, 38, 0xffb050, 0.11).setBlendMode(Phaser.BlendModes.ADD).setDepth(y + 2);
-                this.tweens.add({ targets: ll, alpha: 0.05, scale: 0.9, yoyo: true, repeat: -1, duration: 380 + i * 70 });
-            } else opac(this.add.image(x + (x < 500 ? 36 : -36), y - 30, 'calaveres_cripta').setOrigin(0.5, 1).setScale(1 / RES * 0.45).setDepth(y + 1));
         });
         [[345, 300], [655, 300], [345, 560], [655, 560]].forEach(([x, y]) => {
             opac(this.add.image(x, y, 'pilastra_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));
             this.colisio(x, y - 8, 40, 16);
         });
-        // Àmfores a banda i banda del passadís central, i munts de calaveres amb ossos
-        [[322, 452], [678, 452]].forEach(([x, y]) => { opac(this.add.image(x, y, 'amfora_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y)); this.colisio(x, y - 8, 28, 14); });
+        // Àmfores a banda i banda del passadís central (entre les dues files de pilastres: cap columna no les tapa), i munts de calaveres amb ossos
+        [[330, 382], [670, 382]].forEach(([x, y]) => { opac(this.add.image(x, y, 'amfora_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y)); this.colisio(x, y - 8, 28, 14); });
         [[406, 500], [594, 500]].forEach(([x, y], i) => { opac(this.add.image(x, y, 'calaveres_cripta').setOrigin(0.5, 1).setScale(1 / RES).setFlipX(i === 1).setDepth(y)); this.colisio(x, y - 10, 66, 18); });
         // Brasers de ferro: dos a l'entrada i dos al fons, amb la seva claror i espurnes de brasa
         [[418, 610], [582, 610], [160, 250], [840, 250]].forEach(([x, y], i) => {

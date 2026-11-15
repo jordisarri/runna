@@ -111,12 +111,19 @@ function pintarSarcofagCripta(ctx, w, h) {
     for (let x = 22; x < w - 14; x += 34) { ctx.strokeStyle = 'rgba(30,24,16,0.55)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x, h * 0.46); ctx.lineTo(x, h * 0.9); ctx.stroke(); }
     pesa(2, h * 0.22, w - 4, h * 0.22, '#c4bcaa', '#8a8374');                      // tapa
     ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(4, h * 0.23, w - 8, 2);
-    // Efígie: cap amb caputxa i mans creuades sobre el pit, i una creu
-    ctx.fillStyle = '#b4ac9a'; ctx.beginPath(); ctx.ellipse(w * 0.2, h * 0.33, 9, 7, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = CASA_C; ctx.lineWidth = 1.4; ctx.stroke();
-    ctx.beginPath(); ctx.ellipse(w * 0.55, h * 0.33, w * 0.26, 6, 0, 0, Math.PI * 2); ctx.fillStyle = '#a89f8d'; ctx.fill(); ctx.stroke();
-    ctx.strokeStyle = 'rgba(40,32,22,0.8)'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(w * 0.5, h * 0.27); ctx.lineTo(w * 0.7, h * 0.39); ctx.moveTo(w * 0.5, h * 0.39); ctx.lineTo(w * 0.7, h * 0.27); ctx.stroke();
+    // Una creu gravada estirada sobre la tapa, en perspectiva (la tapa es veu des de dalt i de cara: el peu de la creu, cap al davant, queda més ample i més curt;
+    // el cap, cap al fons, més estret): braç llarg que s'allunya i travesser que el creua, de pedra més fosca, amb la vora de dalt il·luminada
+    {
+        const cx = w / 2, yT = h * 0.235, yB = h * 0.425, tw0 = 3.2, tw1 = 6;             // fons (estret) i davant (ample) del braç llarg
+        const yc = yT + (yB - yT) * 0.34, hw = 23, ht = 3.6;                                  // el travesser, a un terç de dalt: mig ample i mig gruix
+        const pol = pts => { ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); };
+        ctx.fillStyle = '#7e776a'; ctx.strokeStyle = 'rgba(40,32,22,0.85)'; ctx.lineWidth = 1.2;
+        pol([[cx - tw0, yT], [cx + tw0, yT], [cx + tw1, yB], [cx - tw1, yB]]); ctx.fill(); ctx.stroke();                              // braç llarg
+        pol([[cx - hw, yc - ht * 0.8], [cx + hw, yc - ht * 0.8], [cx + hw + 1, yc + ht], [cx - hw - 1, yc + ht]]); ctx.fill(); ctx.stroke();      // travesser
+        ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 0.9;
+        ctx.beginPath(); ctx.moveTo(cx - hw + 1, yc - ht * 0.8 + 0.8); ctx.lineTo(cx + hw - 1, yc - ht * 0.8 + 0.8); ctx.moveTo(cx - tw0 + 0.8, yT + 0.6); ctx.lineTo(cx - tw1 + 0.8, yB - 0.6); ctx.stroke();
+    }
     const r = rndBib(w); ctx.fillStyle = 'rgba(70,100,50,0.4)'; for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.ellipse(10 + r() * (w - 20), h * 0.9, 4 + r() * 5, 2 + r() * 2, 0, 0, Math.PI * 2); ctx.fill(); }
-    teranyinaCasa(ctx, 4, h * 0.2, 1, 22);
 }
 
 // ---------- Llosa de la cripta amb la clau de ferro i el paper dels monjos, o buida ----------
