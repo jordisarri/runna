@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 563: Baixada a la cripta: l'Ineu hi camina de cara a amunt, graó a graó (cinc), i s'enfonsa: el que queda per sota de la vora del graó de davant (opac) s'amaga, de baix cap a dalt, cada cop més fosc, fins que desapareix; sense la silueta translúcida (`baixarEscalaNord` a zona_base.js).*
+
 *Revisió 562: La reixa de sortida de la sala de l'Escalinata (per dins) té dos batents opacs de barrots amb frontisses als brancals: un cop aixecada la barra (o vençut el guardià), giren i s'obren en acostar-s'hi i es tanquen en allunyar-se, com la reixa de fora; ja no són translúcids.*
 
 *Revisió 561: Sala de l'Escalinata: es redueixen les textures de pedra a dues famílies (carreu rugós i marbre llis). La paret del fons és la textura mestra; els murs laterals, la paret de baix i l'esllavissada passen a la mateixa paleta (#d2c7a8, #b8a888, #9e8a6c, #6a5c46) amb morter i contorn únic #140a04, filades de 29-35 px i menys variació d'alçada; el terra es fosqueix (0x8f8068) perquè es llegeixi la figura contra la paret.*

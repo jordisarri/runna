@@ -740,7 +740,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     posarSortidaTrapa() {
         if (this.sortidaTrapa) return;
         this.sortidaTrapa = true;
-        this.sortidaEscala(640, 668, 120, 58, 'ZonaCasaCripta', 'porta', 728);
+        Object.assign(this.sortidaEscala(640, 668, 120, 58, 'ZonaCasaCripta', 'porta', 728), { nord: true, yFons: 676 });          // baixa cap al nord, s'hi enfonsa de baix cap a dalt
         [[620, 697, 28, 78], [780, 697, 28, 78], [700, 652, 150, 14]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));          // l'escala només s'agafa per davant (per baix): els costats i la part de dalt són sòlids
         this.sortides[this.sortides.length - 1].desarmada = true;          // en pujar de la cripta, l'Ineu surt just a dins del forat: no ha de tornar a baixar fins que en surti
     }

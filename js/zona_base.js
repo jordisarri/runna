@@ -2683,7 +2683,7 @@ class ZonaBase extends Phaser.Scene {
 
     // Escala que baixa sota terra cap al nord (un forat, una trapa): ycut és la vora de davant del forat
     sortidaEscala(x, y, w, h, desti, entrada, ycut) {
-        Object.assign(this.sortida(x, y, w, h, desti, entrada), { baixar: ycut, xEscala: x + w / 2 });
+        return Object.assign(this.sortida(x, y, w, h, desti, entrada), { baixar: ycut, xEscala: x + w / 2 });
     }
 
     // L'Ineu baixa l'escala: camina d'esquena cap al mig de l'escala i s'enfonsa darrere la vora de davant del forat,
@@ -2691,6 +2691,7 @@ class ZonaBase extends Phaser.Scene {
     baixarEscala(s) {
         if (this.canviant) return;
         this.canviant = true;
+        if (s.nord) { this.baixarEscalaNord(s); return; }
         const I = this.ineu, alt = I.displayHeight, y0 = I.y, y1 = s.baixar + alt * 0.95;
         I.body.setVelocity(0); I.body.enable = false;
         this.posarDireccio('amunt', true);
@@ -2710,6 +2711,33 @@ class ZonaBase extends Phaser.Scene {
         });
         Sfx.porta();
         this.time.delayedCall(1250, () => { this.canviant = false; this.canviarZona(s.desti, s.entrada); });
+    }
+
+    // Escala que baixa cap al nord (s'allunya de la càmera): l'Ineu hi camina de cara a amunt, graó a graó, i s'enfonsa: el que queda per sota de la línia de la vora
+    // del graó de davant (que és opac i el tapa) s'amaga, cada cop més amunt; així se'l veu desaparèixer de baix cap a dalt, cada cop més fosc
+    baixarEscalaNord(s) {
+        const I = this.ineu, alt = I.displayHeight, yIni = I.y, yFi = s.yFons, graons = 5;
+        I.body.setVelocity(0); I.body.enable = false;
+        this.posarDireccio('amunt', true);
+        this.ombraIneu.setVisible(false);
+        if (this.fantasma) this.fantasma.setVisible(false);
+        const m = this.make.graphics({ add: false });
+        I.setMask(m.createGeometryMask());
+        let graoAnt = -1;
+        this.tweens.addCounter({
+            from: 0, to: 1, duration: 1700,
+            onUpdate: tw => {
+                const f = tw.getValue(), g = f * graons, pas = Math.floor(g) + Phaser.Math.Easing.Sine.InOut(g % 1), t = pas / graons;
+                if (Math.floor(g) !== graoAnt) { graoAnt = Math.floor(g); Sfx.escala(false); }
+                const y = Phaser.Math.Linear(yIni, yFi, t), enfonsat = alt * 0.98 * t;
+                I.setPosition(Phaser.Math.Linear(I.x, s.xEscala, 0.1), y);
+                m.clear().fillStyle(0xffffff, 1).fillRect(0, 0, this.config.amplada, y - enfonsat);          // només es veu el que és per damunt de la línia que va pujant
+                const c = Math.round(255 * (1 - 0.7 * f));
+                I.setTint(Phaser.Display.Color.GetColor(c, c, c));
+            }
+        });
+        Sfx.porta();
+        this.time.delayedCall(1500, () => { this.canviarZona(s.desti, s.entrada); });
     }
 
     // Per on surt una sortida: segons la vora de la zona on és el rectangle (igual que marcarSortida)
