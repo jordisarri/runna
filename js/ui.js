@@ -476,16 +476,16 @@ class EscenaUI extends Phaser.Scene {
             this.ombresGrans.push(this.add.image(0, 0, 'gra_ple').setScale(1.1 * ESC_GRA).setTintFill(0x000000).setAlpha(0.5));
             this.cors.push(this.add.image(0, 0, 'gra_ple').setScale(ESC_GRA));
         }
-        // Rosari irregular, com un de veritat (de fusta, fet a mà): els grans pengen a alçades i separacions una mica diferents i cadascun va girat de manera diferent
+        // Rosari irregular, com un de veritat (de fusta, fet a mà): els grans pengen a alçades i separacions una mica diferents, cadascun d'una variant del dibuix i girat de manera diferent
         // (sempre igual, perquè no es moguin)
         const DX = [0, 2, -2, 1, -1, 2, -2], DY = [0, 5, -3, 6, -2, 4, -5];
-        const GIRS = [-17, 26, -6, 33, -28, 11, -38];          // (totes les boles són la mateixa imatge; cada una, girada diferent)
+        const GIRS = [-17, 26, -6, 33, -28, 11, -38], VARIANTS = ['', '_b', '_c', '_b', '', '_c', '_b'];
         const gx = i => GRA_X0 + i * GRA_PAS + (DX[i] || 0) * ESC_HUD, gy = i => Y_BOTONS_HUD + (DY[i] || 0) * ESC_HUD;
         const pops = [];
         this.cors.forEach((img, i) => {
             const v = d.vida - i * 2;
             const niv = v >= 2 ? 2 : v === 1 ? 1 : 0;
-            const tex = niv === 2 ? 'gra_ple' : niv === 1 ? 'gra_mig' : 'gra_buit';
+            const tex = (niv === 2 ? 'gra_ple' : niv === 1 ? 'gra_mig' : 'gra_buit') + (VARIANTS[i % 7] || '');
             if (img.nivAnt !== undefined && niv > img.nivAnt && i < d.corsMax) pops.push(i);       // guanya vida (no és la primera vegada; perdre'n ho anima animarPerdua)
             img.nivAnt = niv;
             const gir = GIRS[i % 7] || 0; img.anglePropi = gir;

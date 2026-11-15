@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 575: Es recupera el rosari de la vida dibuixat per codi (grans de fusta mat); la versió amb imatges de gra (art/ui/gra_rosari.png i els tres estats gra_ple/mig/buit.webp, i eines/fer_grans_rosari.py) queda guardada a art/ui/ i fora del joc.*
+
 *Revisió 574: Interiors amb porta a baix: la càmera ara deixa 64 px de marge al sud, així la paret de la porta (amb el seu marc i els batents) es veu sencera i l'Ineu queda ben visible a prop de la porta, sense canviar el zoom de cap sala (comprovat a les 20).*
 
 *Revisió 573: Portes d'abaix d'arc: les fulles de fusta ara omplen tot l'arc (la vora de dalt segueix la volta, amb taulons i ferros repartits per tota l'alçada); abans eren rectangulars i quedaven curtes.*
