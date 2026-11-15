@@ -1411,6 +1411,13 @@ const Grafics = {
         crea('candelabre_apagat', 36, 112, pintarCandelabreApagat);
         crea('ofrenes_ermita', 130, 44, pintarOfrenesErmita);
         crea('candelabre_hall', 44, 112, pintarCandelabreHall);
+        // La cripta de la Casa Gran (js/dibuixos_cripta.js)
+        crea('braser_cripta', 60, 112, pintarBraserCripta);
+        crea('calaveres_cripta', 90, 70, pintarCalaveresCripta);
+        crea('amfora_cripta', 50, 84, pintarAmforaCripta);
+        crea('espelma_cripta', 20, 38, pintarEspelmaCripta);
+        crea('estora_cripta', 96, 300, pintarEstoraCripta);
+        crea('teranyina_cripta', 100, 100, pintarTeranyinaCripta);
         crea('banner_hall', 60, 150, pintarBannerHall);
         // Barril de fusta amb cèrcols de ferro, dogues i tapa
         crea('barril', 64, 84, pintarBarril);

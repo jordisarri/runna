@@ -1167,21 +1167,44 @@ class ZonaCasaCripta extends ZonaCasaBase {
 
     construir() {
         this.salaPedra(1000, 700, 500, { paret: 'paret_cripta', tint: 0x6a6a72 });
-        // Sarcòfags dels monjos, tres a cada banda, amb les piles que aguanten les voltes entre ells
+        const opac = img => { (this.opacs = this.opacs || []).push(img); return img; };          // tot el que hi ha a la cripta és sòlid: opac (la silueta de l'Ineu no es veu a través)
+        // L'estora vermella, des de la porta fins a la llosa (a terra: no és cap objecte)
+        this.add.image(500, 340, 'estora_cripta').setOrigin(0.5, 0).setScale(1 / RES).setDepth(-1030).setAlpha(0.95);
+        // Teranyines als cantons del fons
+        this.add.image(131, 172, 'teranyina_cripta').setOrigin(0).setScale(1 / RES * 0.9).setDepth(-993);
+        this.add.image(869, 172, 'teranyina_cripta').setOrigin(0).setScale(1 / RES * 0.9).setDepth(-993).setFlipX(true);
+        // Sarcòfags dels monjos, tres a cada banda, amb les piles que aguanten les voltes entre ells; a cada tapa, una espelma (amb la seva llum) o una calavera
         [[230, 330], [230, 470], [230, 610], [770, 330], [770, 470], [770, 610]].forEach(([x, y], i) => {
-            this.add.image(x, y, 'sarcofag_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            opac(this.add.image(x, y, 'sarcofag_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));
             this.colisio(x, y - 22, 140, 36);
+            if (i % 3 !== 1) {
+                const ex = x + (x < 500 ? 34 : -34);
+                opac(this.add.image(ex, y - 36, 'espelma_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y + 1));
+                const ll = this.add.circle(ex, y - 62, 38, 0xffb050, 0.11).setBlendMode(Phaser.BlendModes.ADD).setDepth(y + 2);
+                this.tweens.add({ targets: ll, alpha: 0.05, scale: 0.9, yoyo: true, repeat: -1, duration: 380 + i * 70 });
+            } else opac(this.add.image(x + (x < 500 ? 36 : -36), y - 30, 'calaveres_cripta').setOrigin(0.5, 1).setScale(1 / RES * 0.45).setDepth(y + 1));
         });
         [[345, 300], [655, 300], [345, 560], [655, 560]].forEach(([x, y]) => {
-            this.add.image(x, y, 'pilastra_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            opac(this.add.image(x, y, 'pilastra_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));
             this.colisio(x, y - 8, 40, 16);
         });
+        // Àmfores a banda i banda del passadís central, i munts de calaveres amb ossos
+        [[322, 452], [678, 452]].forEach(([x, y]) => { opac(this.add.image(x, y, 'amfora_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y)); this.colisio(x, y - 8, 28, 14); });
+        [[406, 500], [594, 500]].forEach(([x, y], i) => { opac(this.add.image(x, y, 'calaveres_cripta').setOrigin(0.5, 1).setScale(1 / RES).setFlipX(i === 1).setDepth(y)); this.colisio(x, y - 10, 66, 18); });
+        // Brasers de ferro: dos a l'entrada i dos al fons, amb la seva claror i espurnes de brasa
+        [[418, 610], [582, 610], [160, 250], [840, 250]].forEach(([x, y], i) => {
+            opac(this.add.image(x, y, 'braser_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));
+            this.colisio(x, y - 10, 40, 16);
+            const ll = this.add.circle(x, y - 70, 95, 0xff8a30, 0.13).setBlendMode(Phaser.BlendModes.ADD).setDepth(y + 2);
+            this.tweens.add({ targets: ll, alpha: 0.06, scale: 0.9, yoyo: true, repeat: -1, duration: 330 + i * 80, ease: 'Sine.easeInOut' });
+            this.add.particles(x, y - 70, 'espurna', { x: { min: -10, max: 10 }, speedY: { min: -46, max: -18 }, speedX: { min: -10, max: 10 }, lifespan: 1100, scale: { start: 0.22, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xffb040, 0xff6a20], frequency: 150, blendMode: 'ADD' }).setDepth(y + 3);
+        });
         // Llosa amb la clau de ferro sota un raig de llum tènue, i dos candelabres
-        this.llosaCripta = this.add.image(500, 340, Estat.flag('relTretes') ? 'llosa_cripta_buida' : 'llosa_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(340);
+        this.llosaCripta = opac(this.add.image(500, 340, Estat.flag('relTretes') ? 'llosa_cripta_buida' : 'llosa_cripta').setOrigin(0.5, 1).setScale(1 / RES).setDepth(340));
         this.colisio(500, 316, 180, 36);
         this.interactiu(500, 372, RADI_OBJECTE, DIALEGS.cofreCripta, { altura: 130, actiu: () => !Estat.flag('relTretes'), enTancar: () => { if (Estat.flag('relTretes')) this.llosaCripta.setTexture('llosa_cripta_buida'); } });
         [[400, 360], [600, 360]].forEach(([x, y], i) => {
-            (this.opacs = this.opacs || []).push(this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));          // sòlid: opac i amb col·lisió
+            opac(this.add.image(x, y, 'candelabre_hall').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));          // sòlid: opac i amb col·lisió
             this.colisio(x, y - 8, 24, 14);
             const llum = this.add.circle(x, y - 78, 80, 0xffc060, 0.1).setDepth(y + 1);
             this.tweens.add({ targets: llum, alpha: 0.05, scale: 0.92, yoyo: true, repeat: -1, duration: 420 + i * 90 });

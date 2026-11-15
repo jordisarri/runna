@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 548: Cripta de la Casa Gran: decoració nova (js/dibuixos_cripta.js): estora vermella amb rombes daurats des de la porta fins a la llosa, quatre brasers de ferro amb flama, claror i espurnes, àmfores, dos munts de calaveres amb ossos, espelmes i calaveres sobre els sarcòfags i teranyines als cantons del fons. Tot el que hi ha (sarcòfags, pilastres, llosa, candelabres, brasers, àmfores, calaveres, espelmes) és opac.*
+
 *Revisió 547: Home del Raïm: el cop de maça avisa clarament: disc vermell de perill que s'omple i parpelleja, anell gruixut, esquerdes que s'obren des del centre (l'ona de xoc), l'ombra de la maça que cau i un anell blanc que es tanca just abans de l'impacte. Sprites del guardià: es treuen els forats blancs entre braç i mànec (camina) i les taques blanques opaques del fum (camina i apunta), que ara són translúcides i lila.*
 
 *Revisió 546: Derrota de l'Home del Raïm més espectacular (uns 3,5 s abans que parli): cop de gràcia a càmera lenta amb la càmera acostant-se al guardià, flaix blanc i sacsejada, el cos que s'encén blanc i parpelleja lila, pluja de trossos de marbre, ones de xoc lila, un pilar de llum que s'esvaeix, boira que puja, el cercle de runes que s'encén i es trenca, i un so nou (cop sord, retrunyir de pedra, marbre que cau i un acord que s'esvaeix); després l'enquadrament de sempre amb el text i el salt al pedestal.*
