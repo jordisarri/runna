@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 574: Interiors amb porta a baix: la càmera ara deixa 64 px de marge al sud, així la paret de la porta (amb el seu marc i els batents) es veu sencera i l'Ineu queda ben visible a prop de la porta, sense canviar el zoom de cap sala (comprovat a les 20).*
+
 *Revisió 573: Portes d'abaix d'arc: les fulles de fusta ara omplen tot l'arc (la vora de dalt segueix la volta, amb taulons i ferros repartits per tota l'alçada); abans eren rectangulars i quedaven curtes.*
 
 *Revisió 572: Les portes d'abaix en angle recte es fan més altes (consell de l'agent d'art): alçada total màx(ample/2 + 56, ample × 1,25), uns 98 px a les de 84 d'ample, més altes que amples, com a les d'arc; muntants, llinda i batents hi arriben.*

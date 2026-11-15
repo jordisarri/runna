@@ -293,7 +293,7 @@ class ZonaBase extends Phaser.Scene {
         cam.setZoom(zoomZona);
         this.zoomBase = zoomZona;
         // Si el món és més petit que la pantalla (interiors), es centra en lloc de quedar enganxat a una vora
-        const vw = AMPLE / zoomZona, vh = (ALT - ALT_HUD) / zoomZona, alcadaMon = c.alcada + this.extraSud;
+        const vw = AMPLE / zoomZona, vh = (ALT - ALT_HUD) / zoomZona, alcadaMon = c.alcada + this.extraSud + (this.esInterior() ? 64 : 0);          // (als interiors, un marge al sud: es veu la paret de la porta sencera)
         const bx = Math.max(0, (vw - c.amplada) / 2), by = Math.max(0, (vh - alcadaMon) / 2);
         cam.setBounds(-bx, -by, c.amplada + 2 * bx, alcadaMon + 2 * by);
         cam.startFollow(this.ineu, false, 0.12, 0.12, 0, this.cameraFollowOffsetY || 0);
