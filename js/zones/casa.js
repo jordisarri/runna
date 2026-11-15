@@ -744,7 +744,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         [[620, 697, 28, 78], [780, 697, 28, 78], [700, 652, 150, 14]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));
         // L'escala es baixa com les altres: caminant cap amunt per dins del forat. Com més endins (cap al nord), més s'enfonsa l'Ineu: el graó de davant (opac) el va tapant
         // de baix cap a dalt; en estar-hi del tot ficat, passa a la cripta. Si torna enrere, torna a sortir.
-        const YB = 726, YF = 680, X0 = 640, X1 = 760, m = this.make.graphics({ add: false });
+        const YB = 726, YF = 702, X0 = 640, X1 = 760, m = this.make.graphics({ add: false });
         let enmasc = false, baixant = false;
         const f = () => {
             const I = this.ineu;
