@@ -566,44 +566,61 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         cam.setFollowOffset(0, this.miraAmunt);
     }
 
-    // La reixa del porxo vista per dins, a baix de tot: una reixa de ferro entre dos brancals de pedra, amb la claror de la plaça
-    // que entra entre els barrots i una barra de fusta travessada. Aixecant la barra s'obre, i des de llavors s'hi entra i se surt
+    // La porta del porxo vista per dins, a baix de tot: una porta d'arc com la de la cripta (salaPedra), però una mica més ampla (140 px en lloc de 100): arc de pedra amb tres
+    // vores, la claror de la plaça a fora, dos batents de reixa amb barrots que segueixen la volta i una barra de fusta travessada. Aixecant la barra s'obre: els batents
+    // giren sols en acostar-s'hi (i es tanquen en allunyar-se), i des de llavors s'hi entra i se surt. L'Ineu pot arribar fins a la barra.
     reixaPorxo() {
         const oberta = Estat.flag('reixaObertaDins') || Estat.flag('ocellaireVencut');
-        const X0 = 630, X1 = 770, Y0 = 930, Y1 = 1000;
+        const CX = 700, OB = 140, R = OB / 2, X0 = CX - R, X1 = CX + R, Y1 = 1000, YC = 962, YT = YC - R, YBARRA = 956;      // YC: on comença la volta; YT: dalt de l'arc; YBARRA: dalt de la barra
+        // La silueta de l'obertura (brancal esquerre, volta, brancal dret) com a polígon: a partir de dues x globals (xa, xb) només es dibuixa aquella part
+        const forma = (xa, xb) => {
+            const pts = [{ x: xa, y: Y1 }];
+            for (let k = 0; k <= 24; k++) {
+                const x = X0 + (X1 - X0) * k / 24;
+                if (x < xa - 0.01 || x > xb + 0.01) continue;
+                pts.push({ x, y: YC - Math.sqrt(Math.max(0, R * R - (x - CX) * (x - CX))) });
+            }
+            pts.push({ x: xb, y: Y1 });
+            return pts;
+        };
+        const perfil = x => YC - Math.sqrt(Math.max(0, R * R - (x - CX) * (x - CX)));      // y de la volta a la x global
         // la claror de fora: darrere dels barrots i escampada pel terra cap amunt
         const llum = this.add.graphics().setDepth(-940).setBlendMode('ADD');
-        llum.fillStyle(0xfff0c0, 0.06).fillPoints([{ x: X0 + 10, y: Y1 }, { x: X1 - 10, y: Y1 }, { x: X1 + 90, y: Y0 - 230 }, { x: X0 - 90, y: Y0 - 230 }], true);
-        llum.fillStyle(0xfff0c0, 0.06).fillPoints([{ x: X0 + 30, y: Y1 }, { x: X1 - 30, y: Y1 }, { x: X1 + 30, y: Y0 - 150 }, { x: X0 - 30, y: Y0 - 150 }], true);
+        llum.fillStyle(0xfff0c0, 0.06).fillPoints([{ x: X0 + 10, y: Y1 }, { x: X1 - 10, y: Y1 }, { x: X1 + 90, y: YT - 200 }, { x: X0 - 90, y: YT - 200 }], true);
+        llum.fillStyle(0xfff0c0, 0.06).fillPoints([{ x: X0 + 30, y: Y1 }, { x: X1 - 30, y: Y1 }, { x: X1 + 30, y: YT - 120 }, { x: X0 - 30, y: YT - 120 }], true);
         this.tweens.add({ targets: llum, alpha: 0.6, yoyo: true, repeat: -1, duration: 1800, ease: 'Sine.easeInOut' });
         const g = this.add.graphics().setDepth(Y1);
-        g.fillStyle(0xf4e2b0, 1).fillRect(X0, Y0, X1 - X0, Y1 - Y0);                                     // la plaça, a fora, de dia
-        g.fillStyle(0xd8c090, 1).fillRect(X0, Y1 - 22, X1 - X0, 22);
-        [[X0 - 22, 22], [X1, 22]].forEach(([x, w]) => {                                               // brancals de pedra
-            g.fillStyle(0x8f8068, 1).fillRect(x, Y0 - 16, w, Y1 - Y0 + 16).lineStyle(2, 0x140a04, 1).strokeRect(x, Y0 - 16, w, Y1 - Y0 + 16);
-            g.fillStyle(0xffffff, 0.2).fillRect(x + 3, Y0 - 14, 4, Y1 - Y0 + 12);
-        });
-        g.fillStyle(0xcdbd9e, 1).fillRect(X0 - 26, Y0 - 24, X1 - X0 + 52, 12).lineStyle(2.5, 0x1c1610, 1).strokeRect(X0 - 26, Y0 - 24, X1 - X0 + 52, 12);   // llinda
+        g.fillStyle(0xf4e2b0, 1).fillPoints(forma(X0, X1), true);                                       // la plaça, a fora, de dia (dins l'obertura d'arc)
+        g.fillStyle(0xd8c090, 1).fillRect(X0, Y1 - 22, OB, 22);
         // Dos batents de reixa (opacs), amb frontisses als brancals: en acostar-s'hi (un cop aixecada la barra) giren i s'obren, i es tanquen en allunyar-se (com la reixa de fora)
         const batent = esq => {
-            const gb = this.add.graphics().setDepth(Y1 + 1), mig = (X1 - X0) / 2, x0 = esq ? 0 : -mig;
-            gb.setPosition(esq ? X0 : X1, 0);
-            gb.fillStyle(0x1e1b18, 1).fillRect(x0, Y0, mig, Y1 - Y0);                                        // fons opac (no es veu a través)
+            const gb = this.add.graphics().setDepth(Y1 + 1), xa = esq ? X0 : CX, xb = esq ? CX : X1, h = esq ? X0 : X1;          // h: la frontissa (el brancal)
+            gb.setPosition(h, 0);
+            const loc = pts => pts.map(p => ({ x: p.x - h, y: p.y }));
+            const cos = forma(xa, xb);
+            gb.fillStyle(0x1e1b18, 1).fillPoints(loc(cos), true);                                         // fons opac (no es veu a través)
+            const barrots = [];
+            for (let x = esq ? X0 + 8 : X1 - 8; esq ? x <= CX - 4 : x >= CX + 4; x += esq ? 15 : -15) barrots.push(x);
             gb.lineStyle(5, 0x2a2622, 1);
-            for (let x = x0 + 8; x <= x0 + mig - 4; x += 15) gb.lineBetween(x, Y0, x, Y1);
-            gb.lineStyle(4, 0x2a2622, 1).lineBetween(x0, Y0 + 8, x0 + mig, Y0 + 8).lineBetween(x0, Y1 - 10, x0 + mig, Y1 - 10);
+            barrots.forEach(x => gb.lineBetween(x - h, perfil(x) + 3, x - h, Y1));
+            // travessers: un a l'alçada de l'arrencada de la volta i un a baix
+            gb.lineStyle(4, 0x2a2622, 1).lineBetween(xa - h, YC - 22, xb - h, YC - 22).lineBetween(xa - h, Y1 - 10, xb - h, Y1 - 10);
             gb.lineStyle(1.5, 0x8a8278, 0.8);
-            for (let x = x0 + 7; x <= x0 + mig - 5; x += 15) gb.lineBetween(x, Y0 + 2, x, Y1 - 2);
-            gb.lineStyle(2.5, 0x111114, 1).strokeRect(x0, Y0, mig, Y1 - Y0);
+            barrots.forEach(x => gb.lineBetween(x - h - 1, perfil(x) + 5, x - h - 1, Y1 - 2));
+            gb.lineStyle(2.5, 0x111114, 1).strokePoints(loc(cos), false);
             return gb;
         };
         this.batentsReixa = [batent(true), batent(false)];
+        // L'arc de pedra, igual que el de la cripta (tres vores: fosca, pedra i llum), per sobre de l'Ineu (que hi entra per sota), opac
+        const ga = this.add.graphics().setDepth(98500);
+        const arc = (gruix, color) => { ga.lineStyle(gruix, color, 1).beginPath().moveTo(X0, Y1).lineTo(X0, YC); ga.arc(CX, YC, R, Math.PI, Math.PI * 2, false); ga.lineTo(X1, Y1).strokePath(); };
+        arc(15, 0x1c120a); arc(11, 0x84735e); arc(3, 0xb0a085);
         this.barrots = { setAlpha: () => {} };
         this.aReixa = 0;
         this.reixaObrintse = () => !!this.reixaEstavaOberta || Estat.flag('reixaObertaDins') || Estat.flag('ocellaireVencut');
         const actuReixa = () => {
             if (!this.ineu || !this.batentsReixa[0].active) return;
-            const d = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 700, Y1);
+            const d = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, CX, Y1);
             const obj = this.reixaObrintse() && !this.guardiaViu() ? Phaser.Math.Clamp((230 - d) / 150, 0, 1) : 0;
             this.aReixa = Phaser.Math.Linear(this.aReixa, obj, 0.12);
             this.batentsReixa.forEach(gb => gb.setScale(Math.max(0.1, 1 - this.aReixa * 0.9), 1));
@@ -612,19 +629,19 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.events.once('shutdown', () => this.events.off('update', actuReixa));
         // la barra de fusta amb abraçadores de ferro, travessada als brancals
         this.barra = this.add.graphics().setDepth(Y1 + 2);
-        this.barra.fillStyle(0x6a4424, 1).fillRect(X0 - 30, Y0 + 26, X1 - X0 + 60, 14).lineStyle(2.5, 0x1c1006, 1).strokeRect(X0 - 30, Y0 + 26, X1 - X0 + 60, 14);
-        this.barra.fillStyle(0x9a6a3a, 1).fillRect(X0 - 28, Y0 + 28, X1 - X0 + 56, 3);
-        [X0 - 12, X1 + 4].forEach(x => this.barra.fillStyle(0x3a3a40, 1).fillRect(x, Y0 + 22, 8, 22).lineStyle(1.5, 0x111114, 1).strokeRect(x, Y0 + 22, 8, 22));
+        this.barra.fillStyle(0x6a4424, 1).fillRect(X0 - 30, YBARRA, X1 - X0 + 60, 14).lineStyle(2.5, 0x1c1006, 1).strokeRect(X0 - 30, YBARRA, X1 - X0 + 60, 14);
+        this.barra.fillStyle(0x9a6a3a, 1).fillRect(X0 - 28, YBARRA + 2, X1 - X0 + 56, 3);
+        [X0 - 12, X1 + 4].forEach(x => this.barra.fillStyle(0x3a3a40, 1).fillRect(x, YBARRA - 4, 8, 22).lineStyle(1.5, 0x111114, 1).strokeRect(x, YBARRA - 4, 8, 22));
         const obrir = () => {
             this.barra.setVisible(false);
             this.sortida(X0 + 10, Y1 - 14, X1 - X0 - 20, 14, 'ZonaCasaGran', 'porxo');
         };
         this.reixaEstavaOberta = oberta;
         if (oberta) { obrir(); return; }
-        this.colReixa = this.colisio(700, Y0 - 2, X1 - X0 + 44, 52);         // des de la llinda: l'Ineu no es fica dins la reixa
-        this.brillo(700, Y0 + 33, X1 - X0 + 60, 18, { dep: Y1 + 3, actiu: () => !Estat.flag('reixaObertaDins') && !Estat.flag('ocellaireVencut') && !this.guardiaViu() && this.barra.visible });          // la barra de fusta brilla mentre no s'ha aixecat (i no es lluita)
+        this.colReixa = this.colisio(CX, YBARRA + 24, X1 - X0 + 44, 44);         // just darrere la barra (y 958-1002): l'Ineu hi arriba, però no la travessa
+        this.brillo(CX, YBARRA + 7, X1 - X0 + 60, 18, { dep: Y1 + 3, actiu: () => !Estat.flag('reixaObertaDins') && !Estat.flag('ocellaireVencut') && !this.guardiaViu() && this.barra.visible });          // la barra de fusta brilla mentre no s'ha aixecat (i no es lluita)
         // El punt és a la mateixa reixa i el «!» hi surt a sobre, als barrots (no damunt de l'Ineu, que s'hi posa al davant)
-        this.interactiu(700, Y0 + 30, 96, DIALEGS.reixaDins, {
+        this.interactiu(CX, YBARRA + 4, 96, DIALEGS.reixaDins, {
             altura: -40, actiu: () => !Estat.flag('reixaObertaDins') && !this.guardiaViu(),
             enTancar: () => {
                 this.obstacles.remove(this.colReixa, true, true);
@@ -639,9 +656,9 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     tancarReixa() {
         if (this.reixaBoss) return;
         this.reixaBoss = true;
-        if (this.ineu && this.ineu.y > 895) this.ineu.body.reset(700, 870);       // si és a l'entrada de la reixa, se'l treu abans que es tanqui
+        if (this.ineu && this.ineu.y > 935) this.ineu.body.reset(700, 900);       // si és a l'entrada de la reixa, se'l treu abans que es tanqui
         this.tancarPortaSecreta();
-        if (!this.colReixa || !this.colReixa.active) this.colReixa = this.colisio(700, 928, 184, 52);
+        if (!this.colReixa || !this.colReixa.active) this.colReixa = this.colisio(700, 980, 184, 44);
         if (this.barrots) { this.tweens.killTweensOf(this.barrots); this.barrots.setAlpha(1); }
         if (this.barra) { this.tweens.killTweensOf(this.barra); this.barra.setVisible(true).setAlpha(1).setY(0); }
         Sfx.porta();
@@ -738,45 +755,40 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (desperta && !derrotat) this.despertarRaim(true);
     }
 
-    // L'escala de la cripta: el forat (640-760 × 668-726) es baixa com les escales dels altres llocs (zona_base: baixarEscala / baixarEscalaNord): en entrar-hi pel davant, l'Ineu
-    // baixa un parell de graons (2, amb un tap a cada un), s'enfonsa una mica darrere la vora de davant (opaca), cada cop més fosc, i ja es fa el fade a negre cap a la cripta.
+    // L'escala de la cripta: el forat (640-760 × 668-726) es baixa com les altres escales: la baixa el jugador caminant-hi cap amunt (frenada i un tap a cada graó, com a tot arreu),
+    // i l'Ineu s'hi enfonsa a poc a poc darrere la vora de davant (opaca), cada cop més fosc. Només cal baixar un parell de graons: aleshores es fa el fade a negre cap a la cripta.
+    // Si es torna enrere, torna a sortir.
     posarSortidaTrapa() {
         if (this.sortidaTrapa) return;
         this.sortidaTrapa = true;
         // Els costats i tota la part de dalt del forat (fins a la vora de la boca) són sòlids: només s'hi entra per davant (per baix); a l'espai entre el forat i el pedestal no s'hi pot arribar
         [[620, 697, 28, 78], [780, 697, 28, 78], [700, 651, 150, 36]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));
-        const YB = 726, X0 = 640, X1 = 760, GRAONS = 2, m = this.make.graphics({ add: false });
+        this.registraGraons(640, 760, [[714, 722], [698, 706]]);          // dos graons: frenada i un tap a cada un
+        const YB = 726, YF = 686, X0 = 640, X1 = 760, m = this.make.graphics({ add: false });
         m.fillStyle(0xffffff, 1).fillRect(0, 0, this.config.amplada, YB);                    // només es veu el que és per damunt de la vora de davant del forat (opaca)
-        let baixant = false;
+        let clon = null, baixant = false, lent = false;
         const f = () => {
             const I = this.ineu;
+            lent = false;
             if (!I || !I.active || this.canviant || baixant) return;
-            // Només es comença a baixar en entrar per la boca (davant del forat, a la franja dels primers graons): no n'hi ha prou d'estar «per sobre» del forat
-            if (!(I.x > X0 + 4 && I.x < X1 - 4 && I.y > 690 && I.y < YB - 1)) return;
-            baixant = true; this.canviant = true;
-            I.body.setVelocity(0); I.body.enable = false;
-            this.posarDireccio('amunt', true);
-            this.ombraIneu.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
-            // Un clon de l'Ineu s'enfonsa (darrere la vora de davant, que el va tapant de baix cap a dalt); el de veritat s'amaga
-            const x0 = I.x, y0 = I.y, alt = I.displayHeight;
-            const clon = this.add.sprite(x0, y0, I.texture.key, I.frame.name).setOrigin(I.originX, I.originY).setScale(I.scaleX, I.scaleY).setDepth(I.depth).setFlipX(I.flipX);
-            clon.setMask(m.createGeometryMask()); I.setAlpha(0);
-            let graoAnt = -1;
-            this.tweens.addCounter({
-                from: 0, to: 1, duration: 1900,
-                onUpdate: tw => {
-                    const fr = tw.getValue(), g = fr * GRAONS, pas = Math.floor(g) + Phaser.Math.Easing.Sine.InOut(g % 1), pr = pas / GRAONS;       // cada graó: baixada suau i repòs
-                    if (Math.floor(g) !== graoAnt) { graoAnt = Math.floor(g); Sfx.escala(false); }                                                     // un tap a cada graó que baixa
-                    clon.setTexture(I.texture.key, I.frame.name).setScale(I.scaleX * (1 - 0.22 * pr), I.scaleY * (1 - 0.22 * pr))
-                        .setPosition(Phaser.Math.Linear(x0, (X0 + X1) / 2, pr), y0 + (alt + 6) * pr);
-                    const c = Math.round(255 * (1 - 0.65 * fr)); clon.setTint(Phaser.Display.Color.GetColor(c, c, c));
-                }
-            });
-            // només baixa un parell de graons: mentre baixa el segon ja es fa el fade a negre cap a la cripta (canviarZona)
-            this.time.delayedCall(1350, () => { this.canviant = false; this.canviarZona('ZonaCasaCripta', 'porta'); });
+            // Només compta dins del forat i entrant-hi pel davant (el de dalt del forat és sòlid): pr = 0 a la boca, 1 en haver baixat els dos graons
+            const dins = I.x > X0 - 4 && I.x < X1 + 4 && I.y < YB + 4 && I.y > YF - 8;
+            const pr = dins ? Phaser.Math.Clamp((YB - I.y) / (YB - YF), 0, 1) : 0;
+            if (pr > 0.02) {
+                // un clon de l'Ineu s'enfonsa (la meitat del cos, com a màxim, darrere la vora de davant); el de veritat s'amaga
+                const alt = I.displayHeight;
+                if (!clon) { clon = this.add.sprite(I.x, I.y, I.texture.key, I.frame.name).setOrigin(I.originX, I.originY).setScale(I.scaleX, I.scaleY).setDepth(I.depth); clon.setMask(m.createGeometryMask()); I.setAlpha(0); }
+                clon.setTexture(I.texture.key, I.frame.name).setFlipX(I.flipX).setScale(I.scaleX * (1 - 0.1 * pr), I.scaleY * (1 - 0.1 * pr)).setPosition(I.x, I.y + ((YB - YF) + alt * 0.55) * pr);
+                lent = true;          // dins de l'escala va a poc a poc (el límit s'aplica a postupdate: el moviment del joc posa la velocitat a update)
+                const c = Math.round(255 * (1 - 0.55 * pr)); clon.setTint(Phaser.Display.Color.GetColor(c, c, c));
+                this.ombraIneu.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
+                if (pr >= 0.98) { baixant = true; I.body.setVelocity(0); this.canviarZona('ZonaCasaCripta', 'porta'); }          // (canviarZona ja fa el fade a negre i el so de la porta)
+            } else if (clon) { clon.destroy(); clon = null; I.setAlpha(1); this.ombraIneu.setVisible(true); }
         };
+        const frena = () => { const I = this.ineu; if (lent && I && I.body && I.body.velocity.y < -46) I.body.setVelocityY(-46); };
         this.events.on('update', f);
-        this.events.once('shutdown', () => this.events.off('update', f));
+        this.events.on('postupdate', frena);
+        this.events.once('shutdown', () => { this.events.off('update', f); this.events.off('postupdate', frena); });
     }
 
     // La boca de la cripta (marc de pedra, foscor i graons) i la llosa que la tapa. oberta: la llosa ja és apartada
