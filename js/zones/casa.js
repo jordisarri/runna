@@ -739,13 +739,13 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     }
 
     // L'escala de la cripta: el forat (640-760 × 668-726) es baixa com les escales dels altres llocs (zona_base: baixarEscala / baixarEscalaNord): en entrar-hi pel davant, l'Ineu
-    // fa un descens guiat de 1,7 s en 5 graons, amb un tap a cada graó, i s'enfonsa darrere la vora de davant (opaca), cada cop més fosc; després passa a la cripta.
+    // baixa un parell de graons (2, amb un tap a cada un), s'enfonsa una mica darrere la vora de davant (opaca), cada cop més fosc, i ja es fa el fade a negre cap a la cripta.
     posarSortidaTrapa() {
         if (this.sortidaTrapa) return;
         this.sortidaTrapa = true;
         // Els costats i tota la part de dalt del forat (fins a la vora de la boca) són sòlids: només s'hi entra per davant (per baix); a l'espai entre el forat i el pedestal no s'hi pot arribar
         [[620, 697, 28, 78], [780, 697, 28, 78], [700, 651, 150, 36]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));
-        const YB = 726, X0 = 640, X1 = 760, GRAONS = 5, m = this.make.graphics({ add: false });
+        const YB = 726, X0 = 640, X1 = 760, GRAONS = 2, m = this.make.graphics({ add: false });
         m.fillStyle(0xffffff, 1).fillRect(0, 0, this.config.amplada, YB);                    // només es veu el que és per damunt de la vora de davant del forat (opaca)
         let baixant = false;
         const f = () => {
@@ -763,7 +763,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             clon.setMask(m.createGeometryMask()); I.setAlpha(0);
             let graoAnt = -1;
             this.tweens.addCounter({
-                from: 0, to: 1, duration: 1700,
+                from: 0, to: 1, duration: 800,
                 onUpdate: tw => {
                     const fr = tw.getValue(), g = fr * GRAONS, pas = Math.floor(g) + Phaser.Math.Easing.Sine.InOut(g % 1), pr = pas / GRAONS;       // cada graó: baixada suau i repòs
                     if (Math.floor(g) !== graoAnt) { graoAnt = Math.floor(g); Sfx.escala(false); }                                                     // un tap a cada graó que baixa
@@ -772,8 +772,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
                     const c = Math.round(255 * (1 - 0.65 * fr)); clon.setTint(Phaser.Display.Color.GetColor(c, c, c));
                 }
             });
-            Sfx.porta();
-            this.time.delayedCall(1500, () => { this.canviant = false; this.canviarZona('ZonaCasaCripta', 'porta'); });
+            // només baixa un parell de graons: mentre baixa el segon ja es fa el fade a negre cap a la cripta (canviarZona)
+            this.time.delayedCall(500, () => { this.canviant = false; this.canviarZona('ZonaCasaCripta', 'porta'); });
         };
         this.events.on('update', f);
         this.events.once('shutdown', () => this.events.off('update', f));
