@@ -434,43 +434,45 @@ class ZonaCasaBase extends ZonaBase {
 
     // Porta camuflada a la paret de l'esquerra: un brancal de carreus amb llinda i una pedra clau gravada, una porta de fusta fosca amb tres platines de ferro,
     // claus i anella, i una escletxa de llum càlida a sota. (x, y) és el centre de la porta (vista de cantó: estreta i alta).
+    // Porta de la paret de l'esquerra, vista des de dalt (com tot el joc): el que es veu és el gruix de la paret de pedra amb un forat al mig, el passadís fosc
+    // que s'hi endinsa, el llindar de pedra al terra i la fulla de fusta, mig oberta cap a dins de la sala, vista de dalt (planxes i bandes de ferro)
     portaSecreta(x, y) {
-        const W = 46, H = 138, x0 = x - W / 2, y0 = y - H / 2, d = y - 60;
+        const H = 138, y0 = y - H / 2, y1 = y + H / 2, xp = x - 38, xt = x + 8, d = y - 60;     // xp: cara de fora de la paret; xt: cara de la sala
         const g = this.add.graphics().setDepth(d);
-        g.fillStyle(0x000000, 0.35).fillRect(x0 - 4, y0 + 8, W + 10, H + 6);                                   // ombra sobre el terra de la paret
-        // brancal de pedra: carreus alternats amb contorn
-        g.fillStyle(0x7a705e, 1).fillRect(x0 - 6, y0 - 12, W + 12, H + 12).lineStyle(3, 0x1c1610, 1).strokeRect(x0 - 6, y0 - 12, W + 12, H + 12);
-        for (let i = 0; i < 8; i++) {
-            const yy = y0 - 12 + i * ((H + 12) / 8);
-            g.lineStyle(1.5, 0x2a2218, 0.85).lineBetween(x0 - 6, yy, x0 + W + 6, yy);
-            g.lineBetween(x0 - 6 + (i % 2 ? 10 : 22), yy, x0 - 6 + (i % 2 ? 10 : 22), yy + (H + 12) / 8);
-            g.lineBetween(x0 + W + 6 - (i % 2 ? 10 : 22), yy, x0 + W + 6 - (i % 2 ? 10 : 22), yy + (H + 12) / 8);
-        }
-        g.fillStyle(0xcdbf9f, 0.22).fillRect(x0 - 4, y0 - 10, 4, H + 8);                                       // llum a la vora esquerra
-        // llinda i pedra clau amb un ull gravat
-        g.fillStyle(0x8d826c, 1).fillRect(x0 - 10, y0 - 22, W + 20, 14).lineStyle(3, 0x1c1610, 1).strokeRect(x0 - 10, y0 - 22, W + 20, 14);
-        g.fillStyle(0x9b8f77, 1).fillRect(x - 11, y0 - 30, 22, 12).lineStyle(2.5, 0x1c1610, 1).strokeRect(x - 11, y0 - 30, 22, 12);
-        g.lineStyle(2, 0x2a2218, 1).strokeEllipse(x, y0 - 24, 12, 6);
-        g.fillStyle(0x2a2218, 1).fillCircle(x, y0 - 24, 2.2);
-        // l'obertura i la porta de fusta
-        g.fillStyle(0x0c0806, 1).fillRect(x0, y0, W, H);
-        g.fillStyle(0x4a2f1a, 1).fillRect(x0 + 3, y0 + 3, W - 6, H - 8);
-        for (let i = 1; i < 4; i++) g.lineStyle(1.6, 0x24160a, 0.9).lineBetween(x0 + 3 + i * ((W - 6) / 4), y0 + 3, x0 + 3 + i * ((W - 6) / 4), y0 + H - 5);   // taulons
-        g.fillStyle(0x6a4524, 0.55).fillRect(x0 + 5, y0 + 4, 4, H - 10);
-        [0.18, 0.5, 0.82].forEach(f => {                                                                         // platines de ferro amb claus
-            const yy = y0 + H * f;
-            g.fillStyle(0x26221f, 1).fillRect(x0 + 3, yy - 5, W - 6, 10).lineStyle(1.5, 0x0e0c0a, 1).strokeRect(x0 + 3, yy - 5, W - 6, 10);
-            [x0 + 8, x0 + W - 9].forEach(cx => g.fillStyle(0x8d8a84, 1).fillCircle(cx, yy, 1.7));
-        });
-        g.lineStyle(3.5, 0x26221f, 1).strokeCircle(x + 6, y + 6, 6);                                              // anella
-        g.fillStyle(0x26221f, 1).fillCircle(x + 6, y - 1, 2.4);
-        g.fillStyle(0x0c0806, 1).fillRect(x - 8, y + 18, 5, 8);                                                  // pany
-        // escletxa de llum càlida sota la porta: el corredor és il·luminat
-        const llum = this.add.graphics().setDepth(d + 1).setBlendMode(Phaser.BlendModes.ADD);
-        llum.fillStyle(0xffc060, 0.5).fillRect(x0 + 4, y0 + H - 5, W - 8, 3);
-        llum.fillStyle(0xffc060, 0.14).fillEllipse(x + 6, y0 + H + 4, W + 40, 22);
+        const C = 0x1c1610;
+        // el gruix de la paret, a dalt i a baix del forat: carreus vists de dalt
+        const bloc = (ya, yb) => {
+            g.fillStyle(0x8d826c, 1).fillRect(xp, ya, xt - xp, yb - ya).lineStyle(3, C, 1).strokeRect(xp, ya, xt - xp, yb - ya);
+            g.fillStyle(0xb2a688, 0.55).fillRect(xp + 2, ya + 2, xt - xp - 4, 4);
+            g.lineStyle(1.5, 0x2a2218, 0.8);
+            for (let yy = ya + 18; yy < yb - 6; yy += 18) { g.lineBetween(xp, yy, xt, yy); g.lineBetween(xp + (((yy / 18) | 0) % 2 ? 14 : 30), yy - 18, xp + (((yy / 18) | 0) % 2 ? 14 : 30), yy); }
+        };
+        bloc(y0 - 56, y0); bloc(y1, y1 + 56);
+        g.fillStyle(0x000000, 0.3).fillRect(xt, y0 - 56, 8, H + 112);                                           // ombra de la paret sobre el terra
+        // el forat: passadís fosc que s'il·lumina cap a la sala
+        const gr = this.add.graphics().setDepth(d);
+        gr.fillGradientStyle(0x050302, 0x4a3018, 0x050302, 0x4a3018, 1, 1, 1, 1).fillRect(xp, y0, xt - xp, H);
+        gr.lineStyle(3, C, 1).strokeRect(xp, y0, xt - xp, H);
+        // llindar de pedra al terra, a la vora de la sala
+        g.fillStyle(0xb2a688, 1).fillRect(xt - 4, y0 + 2, 12, H - 4).lineStyle(2.5, C, 1).strokeRect(xt - 4, y0 + 2, 12, H - 4);
+        g.fillStyle(0xe0d4b4, 0.5).fillRect(xt - 2, y0 + 4, 3, H - 8);
+        // la fulla de la porta, mig oberta cap a dins de la sala: pivota a la frontissa (dalt), es veu de dalt com una planxa llarga
+        const f = this.add.graphics().setDepth(d + 1);
+        f.setPosition(xt + 2, y0 + 6); f.setRotation(0.0);
+        const L = 92, A = 14;
+        f.fillStyle(0x000000, 0.35).fillRect(3, 4, A, L);
+        f.fillStyle(0x5a3a1e, 1).fillRect(0, 0, A, L).lineStyle(2.5, 0x1c0e06, 1).strokeRect(0, 0, A, L);
+        for (let k = 1; k < 4; k++) f.lineStyle(1.3, 0x24160a, 0.9).lineBetween(2, k * L / 4, A - 2, k * L / 4);        // juntes dels taulons
+        f.fillStyle(0x8a5e30, 0.7).fillRect(1.5, 1.5, 3, L - 3);
+        [8, L - 14].forEach(yy => { f.fillStyle(0x26221f, 1).fillRect(-1, yy, A + 2, 6).lineStyle(1.2, 0x0e0c0a, 1).strokeRect(-1, yy, A + 2, 6); f.fillStyle(0x8d8a84, 1).fillCircle(3, yy + 3, 1.2).fillCircle(A - 3, yy + 3, 1.2); });   // bandes de ferro
+        f.fillStyle(0x26221f, 1).fillCircle(A - 3, L * 0.55, 2.2);                                                   // anella
+        this.tweens.add({ targets: f, rotation: 0.0, duration: 1, });
+        // claror càlida que surt del passadís
+        const llum = this.add.graphics().setDepth(d + 2).setBlendMode(Phaser.BlendModes.ADD);
+        llum.fillStyle(0xffc060, 0.16).fillEllipse(xt + 22, y, 50, H + 26);
+        llum.fillStyle(0xffc060, 0.35).fillRect(xt - 2, y0 + 4, 3, H - 8);
         this.tweens.add({ targets: llum, alpha: 0.55, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
-        this.aplic(x + 2, y0 - 44, 1, d - 1);                                                                    // un aplic amb espelma al costat, que il·lumina la pedra
+        this.aplic(x + 2, y0 - 70, 1, d - 1);                                                                      // un aplic amb espelma al costat, que il·lumina la pedra
         return g;
     }
 
