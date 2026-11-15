@@ -494,7 +494,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             entrades: {
                 porxo:   { x: 700,  y: 930, dir: 'amunt' },
                 secreta: { x: 170,  y: 740, dir: 'dreta' },
-                cripta:  { x: 700,  y: 700, dir: 'avall' }
+                cripta:  { x: 700,  y: 752, dir: 'avall' }
             }
         });
     }
@@ -740,9 +740,28 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     posarSortidaTrapa() {
         if (this.sortidaTrapa) return;
         this.sortidaTrapa = true;
-        Object.assign(this.sortidaEscala(640, 668, 120, 58, 'ZonaCasaCripta', 'porta', 728), { nord: true, yFons: 676 });          // baixa cap al nord, s'hi enfonsa de baix cap a dalt
-        [[620, 697, 28, 78], [780, 697, 28, 78], [700, 652, 150, 14]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));          // l'escala només s'agafa per davant (per baix): els costats i la part de dalt són sòlids
-        this.sortides[this.sortides.length - 1].desarmada = true;          // en pujar de la cripta, l'Ineu surt just a dins del forat: no ha de tornar a baixar fins que en surti
+        // Els costats i la part de dalt del forat són sòlids: només s'hi entra per davant (per baix)
+        [[620, 697, 28, 78], [780, 697, 28, 78], [700, 652, 150, 14]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));
+        // L'escala es baixa com les altres: caminant cap amunt per dins del forat. Com més endins (cap al nord), més s'enfonsa l'Ineu: el graó de davant (opac) el va tapant
+        // de baix cap a dalt; en estar-hi del tot ficat, passa a la cripta. Si torna enrere, torna a sortir.
+        const YB = 726, YF = 680, X0 = 640, X1 = 760, m = this.make.graphics({ add: false });
+        let enmasc = false, baixant = false;
+        const f = () => {
+            const I = this.ineu;
+            if (!I || !I.active || this.canviant || baixant) return;
+            const dins = I.x > X0 - 4 && I.x < X1 + 4 && I.y < YB + 4;
+            const pr = dins ? Phaser.Math.Clamp((YB - I.y) / (YB - YF), 0, 1) : 0;
+            if (pr > 0.02) {
+                if (!enmasc) { enmasc = true; I.setMask(m.createGeometryMask()); }
+                const alt = I.displayHeight;
+                m.clear().fillStyle(0xffffff, 1).fillRect(0, 0, this.config.amplada, I.y - alt * 0.98 * pr);
+                const c = Math.round(255 * (1 - 0.7 * pr)); I.setTint(Phaser.Display.Color.GetColor(c, c, c));
+                this.ombraIneu.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
+                if (pr >= 0.98) { baixant = true; I.body.setVelocity(0); Sfx.porta(); this.canviarZona('ZonaCasaCripta', 'porta'); }
+            } else if (enmasc) { enmasc = false; I.clearMask(); I.clearTint(); this.ombraIneu.setVisible(true); }
+        };
+        this.events.on('update', f);
+        this.events.once('shutdown', () => this.events.off('update', f));
     }
 
     // La boca de la cripta (marc de pedra, foscor i graons) i la llosa que la tapa. oberta: la llosa ja és apartada

@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 565: L'escala de la cripta (Home del Raïm) deixa de ser automàtica: es baixa com les altres escales, caminant cap amunt dins del forat; com més endins, més s'enfonsa l'Ineu (el graó de davant el tapa de baix cap a dalt i s'enfosqueix) i en estar-hi del tot passa a la cripta; si torna enrere, torna a sortir. En tornar de la cripta, apareix just davant del forat.*
+
 *Revisió 564: La mateixa baixada (l'Ineu s'enfonsa de baix cap a dalt tapat pels graons opacs) s'aplica també a l'escala de la llosa de la pèrgola (Jardí); es corregeix que, després de l'animació, no es canviés de zona.*
 
 *Revisió 563: Baixada a la cripta: l'Ineu hi camina de cara a amunt, graó a graó (cinc), i s'enfonsa: el que queda per sota de la vora del graó de davant (opac) s'amaga, de baix cap a dalt, cada cop més fosc, fins que desapareix; sense la silueta translúcida (`baixarEscalaNord` a zona_base.js).*
