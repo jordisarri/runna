@@ -791,14 +791,15 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         boca.fillStyle(0x5a4e3a, 1).fillRect(X0 - 7, Y0 - 7, W + 14, H + 14).lineStyle(1.5, 0x241a10, 1).strokeRect(X0 - 7, Y0 - 7, W + 14, H + 14);
         for (let i = 0; i < 14; i++) { boca.fillStyle(rnd() < 0.5 ? 0x3c3224 : 0xb4a688, 0.3).fillRect(X0 - 12 + rnd() * (W + 20), Y0 - 12 + rnd() * (H + 20), 2 + rnd() * 4, 1.5); }     // picats de la pedra del marc
         boca.fillStyle(0x050302, 1).fillRect(X0, Y0, W, H);
-        for (let k = 0; k < 3; k++) {                                                            // tres graons amples: el més proper (a baix) és el més clar; la resta s'enfonsen a la foscor
-            const alfa = [0.82, 0.5, 0.26][k], yy = Y0 + H - 12 - k * 17, ample = W - 10 - k * 9, xx = X0 + 5 + k * 4.5;
+        for (let k = 0; k < 2; k++) {                                                            // només dos graons, a la meitat de baix: el més proper (a baix) és el més clar; l'altre ja s'enfosqueix
+            const alfa = [0.82, 0.45][k], yy = Y0 + H - 12 - k * 11, ample = W - 10 - k * 9, xx = X0 + 5 + k * 4.5;
             boca.fillStyle(0xa89a7e, alfa).fillRect(xx, yy, ample, 6);                           // la pisa
             boca.fillStyle(0x2a2218, alfa).fillRect(xx, yy - 6, ample, 6);                       // la contrapisa (cap a dins)
             boca.fillStyle(0xe2d6bc, alfa * 0.5).fillRect(xx, yy, ample, 1.5);                   // vora il·luminada
         }
+        boca.fillGradientStyle(0x050302, 0x050302, 0x050302, 0x050302, 1, 1, 0, 0).fillRect(X0, Y0 + H * 0.3, W, H * 0.3);      // de la meitat cap amunt, tot és foscor (degradat suau cap als graons)
         boca.fillStyle(0x000000, 0.55).fillRect(X0, Y0, 8, H).fillRect(X0 + W - 8, Y0, 8, H);   // parets laterals en ombra
-        this.llumTrapa = this.add.ellipse(X0 + W / 2, Y0 + H / 2, W, H, 0x9ab8ff, 0).setBlendMode('ADD').setDepth(-957);
+        this.llumTrapa = this.add.ellipse(X0 + W / 2, Y0 + H * 0.8, W * 0.85, H * 0.34, 0x9ab8ff, 0).setBlendMode('ADD').setDepth(-957);          // la claror freda només a la part de baix (sobre els graons); a dalt, foscor
 
         // La llosa: bisell de pedra amb panell enfonsat, creu monàstica cisellada, rosetes als cantons, anelles de ferro amb la seva placa, molsa, esquerdes i un cantó trencat
         const ll = this.add.graphics().setDepth(-956);
