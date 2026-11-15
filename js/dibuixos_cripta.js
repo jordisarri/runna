@@ -101,33 +101,26 @@ function pintarEsllavissadaEscalinata(ctx, w, h) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     let llavor = 29; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
     const C = '#1c1410';
-    ctx.fillStyle = 'rgba(0,0,0,0.30)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 10, w / 2 - 8, 16, 0, 0, Math.PI * 2); ctx.fill();
-    // el talús: el munt de runa en forma de falda que obre els graons de sota
-    const talus = []; for (let k = 0; k <= 14; k++) { const t = k / 14, x = 6 + t * (w - 12); talus.push([x, h - 14 - Math.abs(Math.sin(t * 5.1 + 0.6)) * 22 - (1 - Math.abs(t - 0.5) * 2) * 14]); }
-    ctx.fillStyle = '#6a5a46'; ctx.beginPath(); ctx.moveTo(4, h - 8); talus.forEach(([x, y]) => ctx.lineTo(x, y)); ctx.lineTo(w - 4, h - 8); ctx.lineTo(w - 30, 70); ctx.lineTo(30, 70); ctx.closePath(); ctx.fill();
-    ctx.strokeStyle = C; ctx.lineWidth = 2.4; ctx.stroke();
-    const grad = ctx.createLinearGradient(0, 40, 0, h); grad.addColorStop(0, 'rgba(0,0,0,0.5)'); grad.addColorStop(0.5, 'rgba(0,0,0,0)'); grad.addColorStop(1, 'rgba(0,0,0,0.15)');
-    ctx.fillStyle = grad; ctx.fillRect(0, 40, w, h - 40);
-    // blocs: poligons irregulars amb tres cares (llum a dalt-esquerra, ombra a baix-dreta)
     const bloc = (cx, cy, r, tons) => {
         const n = 7, pts = [];
         for (let k = 0; k < n; k++) { const a = k / n * Math.PI * 2 + rnd() * 0.3, rr = r * (0.72 + rnd() * 0.3); pts.push([cx + Math.cos(a) * rr, cy + Math.sin(a) * rr * 0.82]); }
+        ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(cx + r * 0.1, cy + r * 0.7, r * 0.95, r * 0.28, 0, 0, Math.PI * 2); ctx.fill();
         ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath();
         const g = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r); g.addColorStop(0, tons[0]); g.addColorStop(0.55, tons[1]); g.addColorStop(1, tons[2]);
         ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = C; ctx.lineWidth = 2.2; ctx.stroke();
-        ctx.strokeStyle = 'rgba(255,240,210,0.35)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(pts[5][0], pts[5][1]); ctx.lineTo(pts[6][0], pts[6][1]); ctx.lineTo(pts[0][0], pts[0][1]); ctx.stroke();       // aresta il·luminada
-        ctx.strokeStyle = 'rgba(30,20,10,0.5)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx - r * 0.2, cy - r * 0.1); ctx.lineTo(cx + r * 0.1, cy + r * 0.25); ctx.stroke();                                // una esquerda
+        ctx.strokeStyle = 'rgba(255,240,210,0.35)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(pts[5][0], pts[5][1]); ctx.lineTo(pts[6][0], pts[6][1]); ctx.lineTo(pts[0][0], pts[0][1]); ctx.stroke();
+        ctx.strokeStyle = 'rgba(30,20,10,0.5)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx - r * 0.2, cy - r * 0.1); ctx.lineTo(cx + r * 0.1, cy + r * 0.25); ctx.stroke();
     };
     const TONS = [['#b8a888', '#8a7a64', '#4e4234'], ['#a89878', '#7a6a56', '#463a2e'], ['#c4b494', '#968468', '#52463a']];
-    // fila del darrere (grans), després els del mig i els petits del davant
-    [[70, 96, 44], [150, 84, 50], [236, 98, 46], [296, 108, 34], [34, 112, 30]].forEach(([x, y, r], i) => bloc(x, y, r, TONS[i % 3]));
-    [[104, 132, 38], [190, 134, 42], [262, 140, 36], [52, 150, 28], [316, 150, 26]].forEach(([x, y, r], i) => bloc(x, y, r, TONS[(i + 1) % 3]));
-    // llosa trencada de l'escala i biga de fusta clavada entre els blocs
-    ctx.save(); ctx.translate(w * 0.46, 124); ctx.rotate(-0.35); ctx.fillStyle = '#c0b090'; ctx.strokeStyle = C; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.roundRect(-46, -9, 92, 18, 3); ctx.fill(); ctx.stroke(); ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fillRect(-44, -7, 88, 3); ctx.restore();
-    ctx.save(); ctx.translate(w * 0.74, 90); ctx.rotate(0.5); ctx.fillStyle = '#6a4424'; ctx.strokeStyle = C; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(-52, -7, 104, 14, 2); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#9a6a3a'; ctx.fillRect(-50, -5, 100, 3); ctx.restore();
-    // pedres mitjanes i petites escampades, i pols clara
-    for (let k = 0; k < 26; k++) { const x = 14 + rnd() * (w - 28), y = 150 + rnd() * (h - 168), r = 4 + rnd() * 9; bloc(x, y, r, TONS[k % 3]); }
-    for (let k = 0; k < 90; k++) { const x = 6 + rnd() * (w - 12), y = 140 + rnd() * (h - 150); ctx.fillStyle = rnd() < 0.5 ? 'rgba(40,30,20,0.55)' : 'rgba(210,196,166,0.6)'; ctx.fillRect(x, y, 1 + rnd() * 2.4, 1 + rnd() * 1.8); }
-    const pols = ctx.createRadialGradient(w / 2, 100, 10, w / 2, 100, w * 0.62); pols.addColorStop(0, 'rgba(220,208,180,0.28)'); pols.addColorStop(1, 'rgba(220,208,180,0)');
-    ctx.fillStyle = pols; ctx.fillRect(0, 0, w, h);
+    // files de blocs de dalt (fons) a baix (davant): omplen tota l'alçada, sense cap llençol de fons
+    let k = 0;
+    for (let y = 50; y <= h - 40; y += 46) {
+        const gran = y < h * 0.55 ? 1 : 0.8, off = ((y / 46) | 0) % 2 ? 28 : 0;
+        for (let x = 20 + off; x <= w - 10; x += 62) bloc(x + (rnd() - 0.5) * 16, y + (rnd() - 0.5) * 12, (30 + rnd() * 14) * gran, TONS[k++ % 3]);
+    }
+    // llosa trencada i biga de fusta
+    ctx.save(); ctx.translate(w * 0.42, h * 0.5); ctx.rotate(-0.35); ctx.fillStyle = '#c0b090'; ctx.strokeStyle = C; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.roundRect(-46, -9, 92, 18, 3); ctx.fill(); ctx.stroke(); ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fillRect(-44, -7, 88, 3); ctx.restore();
+    ctx.save(); ctx.translate(w * 0.72, h * 0.34); ctx.rotate(0.5); ctx.fillStyle = '#6a4424'; ctx.strokeStyle = C; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(-52, -7, 104, 14, 2); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#9a6a3a'; ctx.fillRect(-50, -5, 100, 3); ctx.restore();
+    // cua de pedres petites i graves a baix
+    for (let j = 0; j < 30; j++) bloc(10 + rnd() * (w - 20), h - 30 + rnd() * 24, 4 + rnd() * 8, TONS[j % 3]);
 }
