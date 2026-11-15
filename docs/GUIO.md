@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 553: La porta lateral de l'Escalinata segueix la perspectiva d'A Link to the Past: franja de paret de pedra amb un forat fosc que s'aclareix cap a la sala, dues columnes rodones flanquejant-lo i un graó de pedra clar. L'esllavissada és caòtica: pedres de mides molt diferents, girades i escampades a l'atzar, que s'encavalquen.*
+
 *Revisió 552: La porta lateral de la sala de l'Escalinata es redibuixa vista de dalt (gruix de paret de pedra amb forat, passadís fosc, llindar al terra i fulla de fusta vista de dalt); l'esllavissada és molt més densa: blocs grossos amuntegats i superposats, sense forats per esquivar.*
 
 *Revisió 551: L'esllavissada de l'escalinata arriba fins dalt de l'escala (més blocs, en files) i perd el fons fosc que semblava un llençol.*

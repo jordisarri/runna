@@ -434,45 +434,37 @@ class ZonaCasaBase extends ZonaBase {
 
     // Porta camuflada a la paret de l'esquerra: un brancal de carreus amb llinda i una pedra clau gravada, una porta de fusta fosca amb tres platines de ferro,
     // claus i anella, i una escletxa de llum càlida a sota. (x, y) és el centre de la porta (vista de cantó: estreta i alta).
-    // Porta de la paret de l'esquerra, vista des de dalt (com tot el joc): el que es veu és el gruix de la paret de pedra amb un forat al mig, el passadís fosc
-    // que s'hi endinsa, el llindar de pedra al terra i la fulla de fusta, mig oberta cap a dins de la sala, vista de dalt (planxes i bandes de ferro)
+    // Porta de la paret de l'esquerra, vista des de dalt (com els jocs de dalt: A Link to the Past): la paret és una franja vertical de pedra; el forat és un
+    // rectangle fosc que travessa el gruix de la paret, flanquejat per dues columnes rodones i amb un graó de pedra clar a la vora de la sala
     portaSecreta(x, y) {
-        const H = 138, y0 = y - H / 2, y1 = y + H / 2, xp = x - 38, xt = x + 8, d = y - 60;     // xp: cara de fora de la paret; xt: cara de la sala
+        const H = 118, y0 = y - H / 2, y1 = y + H / 2, xp = x - 38, xt = x + 8, d = y - 60, C = 0x1c1610;
         const g = this.add.graphics().setDepth(d);
-        const C = 0x1c1610;
-        // el gruix de la paret, a dalt i a baix del forat: carreus vists de dalt
-        const bloc = (ya, yb) => {
+        g.fillStyle(0x000000, 0.28).fillRect(xt, y0 - 30, 9, H + 60);                                           // ombra sobre el terra
+        // la franja de paret, a dalt i a baix del forat: carreus vists de dalt
+        [[y0 - 62, y0 - 14], [y1 + 14, y1 + 62]].forEach(([ya, yb]) => {
             g.fillStyle(0x8d826c, 1).fillRect(xp, ya, xt - xp, yb - ya).lineStyle(3, C, 1).strokeRect(xp, ya, xt - xp, yb - ya);
-            g.fillStyle(0xb2a688, 0.55).fillRect(xp + 2, ya + 2, xt - xp - 4, 4);
+            g.fillStyle(0xb2a688, 0.55).fillRect(xp + 2, ya + 2, xt - xp - 4, 3);
             g.lineStyle(1.5, 0x2a2218, 0.8);
-            for (let yy = ya + 18; yy < yb - 6; yy += 18) { g.lineBetween(xp, yy, xt, yy); g.lineBetween(xp + (((yy / 18) | 0) % 2 ? 14 : 30), yy - 18, xp + (((yy / 18) | 0) % 2 ? 14 : 30), yy); }
-        };
-        bloc(y0 - 56, y0); bloc(y1, y1 + 56);
-        g.fillStyle(0x000000, 0.3).fillRect(xt, y0 - 56, 8, H + 112);                                           // ombra de la paret sobre el terra
-        // el forat: passadís fosc que s'il·lumina cap a la sala
-        const gr = this.add.graphics().setDepth(d);
-        gr.fillGradientStyle(0x050302, 0x4a3018, 0x050302, 0x4a3018, 1, 1, 1, 1).fillRect(xp, y0, xt - xp, H);
-        gr.lineStyle(3, C, 1).strokeRect(xp, y0, xt - xp, H);
-        // llindar de pedra al terra, a la vora de la sala
-        g.fillStyle(0xb2a688, 1).fillRect(xt - 4, y0 + 2, 12, H - 4).lineStyle(2.5, C, 1).strokeRect(xt - 4, y0 + 2, 12, H - 4);
-        g.fillStyle(0xe0d4b4, 0.5).fillRect(xt - 2, y0 + 4, 3, H - 8);
-        // la fulla de la porta, mig oberta cap a dins de la sala: pivota a la frontissa (dalt), es veu de dalt com una planxa llarga
-        const f = this.add.graphics().setDepth(d + 1);
-        f.setPosition(xt + 2, y0 + 6); f.setRotation(0.0);
-        const L = 92, A = 14;
-        f.fillStyle(0x000000, 0.35).fillRect(3, 4, A, L);
-        f.fillStyle(0x5a3a1e, 1).fillRect(0, 0, A, L).lineStyle(2.5, 0x1c0e06, 1).strokeRect(0, 0, A, L);
-        for (let k = 1; k < 4; k++) f.lineStyle(1.3, 0x24160a, 0.9).lineBetween(2, k * L / 4, A - 2, k * L / 4);        // juntes dels taulons
-        f.fillStyle(0x8a5e30, 0.7).fillRect(1.5, 1.5, 3, L - 3);
-        [8, L - 14].forEach(yy => { f.fillStyle(0x26221f, 1).fillRect(-1, yy, A + 2, 6).lineStyle(1.2, 0x0e0c0a, 1).strokeRect(-1, yy, A + 2, 6); f.fillStyle(0x8d8a84, 1).fillCircle(3, yy + 3, 1.2).fillCircle(A - 3, yy + 3, 1.2); });   // bandes de ferro
-        f.fillStyle(0x26221f, 1).fillCircle(A - 3, L * 0.55, 2.2);                                                   // anella
-        this.tweens.add({ targets: f, rotation: 0.0, duration: 1, });
+            for (let yy = ya + 16; yy < yb - 4; yy += 16) { g.lineBetween(xp, yy, xt, yy); g.lineBetween(xp + (((yy / 16) | 0) % 2 ? 12 : 26), yy - 16, xp + (((yy / 16) | 0) % 2 ? 12 : 26), yy); }
+        });
+        // el forat: fosc, que s'aclareix cap a la sala (el passadís il·luminat)
+        g.fillGradientStyle(0x060403, 0x3a2a1a, 0x060403, 0x3a2a1a, 1, 1, 1, 1).fillRect(xp, y0 - 14, xt - xp, H + 28);
+        g.lineStyle(3, C, 1).strokeRect(xp, y0 - 14, xt - xp, H + 28);
+        g.fillStyle(0xb8a98a, 1).fillRect(xt - 9, y0 - 8, 9, H + 16).lineStyle(2.2, C, 1).strokeRect(xt - 9, y0 - 8, 9, H + 16);          // graó de pedra
+        g.fillStyle(0xe4d8b8, 0.6).fillRect(xt - 8, y0 - 6, 2.5, H + 12);
+        // les dues columnes rodones que flanquegen la porta (a dalt i a baix del forat), vistes de dalt
+        [y0 - 14, y1 + 14].forEach(cy => {
+            g.fillStyle(0x000000, 0.3).fillCircle(x - 14, cy + 3, 15);
+            g.fillStyle(0x6a6050, 1).fillCircle(x - 15, cy, 14).lineStyle(3, C, 1).strokeCircle(x - 15, cy, 14);
+            g.fillStyle(0x9a8e76, 1).fillCircle(x - 16, cy - 1, 8.5).lineStyle(2, C, 1).strokeCircle(x - 16, cy - 1, 8.5);
+            g.fillStyle(0xd8ccb0, 0.7).fillCircle(x - 19, cy - 4, 3);
+        });
         // claror càlida que surt del passadís
         const llum = this.add.graphics().setDepth(d + 2).setBlendMode(Phaser.BlendModes.ADD);
         llum.fillStyle(0xffc060, 0.16).fillEllipse(xt + 22, y, 50, H + 26);
-        llum.fillStyle(0xffc060, 0.35).fillRect(xt - 2, y0 + 4, 3, H - 8);
+        llum.fillStyle(0xffc060, 0.3).fillRect(xt - 9, y0 - 6, 9, H + 12);
         this.tweens.add({ targets: llum, alpha: 0.55, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
-        this.aplic(x + 2, y0 - 70, 1, d - 1);                                                                      // un aplic amb espelma al costat, que il·lumina la pedra
+        this.aplic(x + 2, y0 - 76, 1, d - 1);
         return g;
     }
 

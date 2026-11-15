@@ -113,16 +113,19 @@ function pintarEsllavissadaEscalinata(ctx, w, h) {
     };
     const TONS = [['#b8a888', '#8a7a64', '#4e4234'], ['#a89878', '#7a6a56', '#463a2e'], ['#c4b494', '#968468', '#52463a']];
     // files de blocs de dalt (fons) a baix (davant): omplen tota l'alçada, sense cap llençol de fons
-    let k = 0;
-    for (let y = 36; y <= h - 30; y += 30) {
-        const gran = y < h * 0.5 ? 1.15 : 0.95, off = ((y / 30) | 0) % 2 ? 22 : 0;
-        for (let x = 8 + off; x <= w + 10; x += 46) bloc(x + (rnd() - 0.5) * 14, y + (rnd() - 0.5) * 10, (30 + rnd() * 16) * gran, TONS[k++ % 3]);
+    // disposició caòtica: pedres de mides molt diferents escampades a l'atzar (més denses al mig i a dalt), ordenades de dalt a baix perquè s'encavalquin
+    const llista = [];
+    for (let n = 0; n < 190; n++) {
+        const x = rnd() * (w + 20) - 10, y = 30 + Math.pow(rnd(), 0.8) * (h - 50);
+        const gran = rnd() < 0.18 ? 1 : 0;
+        llista.push([x, y, gran ? 40 + rnd() * 26 : 9 + rnd() * 30, n]);
     }
-    // blocs enormes a sobre, que s'amunteguen contra la paret
-    [[60, 70, 58], [170, 54, 64], [270, 78, 60], [120, 150, 54], [236, 164, 56]].forEach(([x, y, r]) => bloc(x, y, r, TONS[k++ % 3]));
+    llista.sort((p, q) => p[1] - q[1]).forEach(([x, y, r, n]) => {
+        ctx.save(); ctx.translate(x, y); ctx.rotate((rnd() - 0.5) * 1.6); ctx.scale(0.8 + rnd() * 0.7, 0.75 + rnd() * 0.4); bloc(0, 0, r, TONS[n % 3]); ctx.restore();
+    });
     // llosa trencada i biga de fusta
-    ctx.save(); ctx.translate(w * 0.42, h * 0.5); ctx.rotate(-0.35); ctx.fillStyle = '#c0b090'; ctx.strokeStyle = C; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.roundRect(-46, -9, 92, 18, 3); ctx.fill(); ctx.stroke(); ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fillRect(-44, -7, 88, 3); ctx.restore();
-    ctx.save(); ctx.translate(w * 0.72, h * 0.34); ctx.rotate(0.5); ctx.fillStyle = '#6a4424'; ctx.strokeStyle = C; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(-52, -7, 104, 14, 2); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#9a6a3a'; ctx.fillRect(-50, -5, 100, 3); ctx.restore();
+    ctx.save(); ctx.translate(w * 0.38, h * 0.58); ctx.rotate(-0.7); ctx.fillStyle = '#c0b090'; ctx.strokeStyle = C; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.roundRect(-46, -9, 92, 18, 3); ctx.fill(); ctx.stroke(); ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fillRect(-44, -7, 88, 3); ctx.restore();
+    ctx.save(); ctx.translate(w * 0.7, h * 0.3); ctx.rotate(1.1); ctx.fillStyle = '#6a4424'; ctx.strokeStyle = C; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(-52, -7, 104, 14, 2); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#9a6a3a'; ctx.fillRect(-50, -5, 100, 3); ctx.restore();
     // cua de pedres petites i graves a baix
     for (let j = 0; j < 60; j++) bloc(8 + rnd() * (w - 16), h - 40 + rnd() * 34, 5 + rnd() * 11, TONS[j % 3]);
 }
