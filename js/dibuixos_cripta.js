@@ -163,3 +163,10 @@ function pintarMurPedraIrregular(ctx, w, h) {
     }
     ctx.restore();
 }
+
+// El mateix mur de pedra, en horitzontal (per a la paret de baix de la sala de l'Escalinata): w llarg x h gruix
+function pintarMurPedraHoritzontal(ctx, w, h) {
+    ctx.save(); ctx.translate(0, h); ctx.rotate(-Math.PI / 2);
+    pintarMurPedraIrregular(ctx, h, w);
+    ctx.restore();
+}

@@ -420,8 +420,15 @@ class ZonaCasaBase extends ZonaBase {
         g.fillStyle(0x000000, 0.28).fillRect(130, YP - 6, amp - 260, 8);                               // ombra de la paret sobre el terra
         g.fillStyle(0x050302, 1).fillRect(portaX - OB / 2, YP + 14, OB, 50).fillEllipse(portaX, YP + 14, OB, 30);   // obertura d'arc
         const arc = (amp2, col) => { g.lineStyle(amp2, col, 1).beginPath().moveTo(portaX - OB / 2, alt).lineTo(portaX - OB / 2, YP + 14); g.arc(portaX, YP + 14, OB / 2, Math.PI, Math.PI * 2, false); g.lineTo(portaX + OB / 2, alt).strokePath(); };
-        arc(15, 0x1c120a); arc(11, 0x84735e); arc(3, 0xb0a085);
-        g.fillStyle(0x6a5a48, 1).fillRoundedRect(portaX - 8, YP - 4, 16, 16, 3).lineStyle(2, 0x1c120a, 1).strokeRoundedRect(portaX - 8, YP - 4, 16, 16, 3);   // dovella
+        const g0 = g;
+        const ga = this.add.graphics().setDepth(98500);                                              // l'arc queda per sobre de l'Ineu (que hi passa per sota), opac
+        const gp = g; g.fillStyle(0x1c120a, 0);
+        {
+            const g = ga;
+            const arc2 = (amp2, col) => { g.lineStyle(amp2, col, 1).beginPath().moveTo(portaX - OB / 2, alt).lineTo(portaX - OB / 2, YP + 14); g.arc(portaX, YP + 14, OB / 2, Math.PI, Math.PI * 2, false); g.lineTo(portaX + OB / 2, alt).strokePath(); };
+            arc2(15, 0x1c120a); arc2(11, 0x84735e); arc2(3, 0xb0a085);
+            g.fillStyle(0x6a5a48, 1).fillRoundedRect(portaX - 8, YP - 4, 16, 16, 3).lineStyle(2, 0x1c120a, 1).strokeRoundedRect(portaX - 8, YP - 4, 16, 16, 3);   // dovella
+        }
         this.add.rectangle(amp / 2, alt + 80, amp + 400, 160, 0x000000, 1).setDepth(99000);               // per sota de la porta tot és fosc
         this.colisio((portaX - OB / 2) / 2, YP + 32, portaX - OB / 2, 64);
         this.colisio((portaX + OB / 2 + amp) / 2, YP + 32, amp - portaX - OB / 2, 64);
@@ -498,8 +505,9 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // els murs laterals (x 90-130 i 1270-1310) són sòlids, llevat de l'obertura de l'esquerra (y 655-825)
         this.colisio(110, 327, 40, 655); this.colisio(110, 912, 40, 176); this.colisio(1290, 500, 40, 1000);
         // les parets laterals són de pedra (com a la resta de sales de pedra)
-        this.add.image(90, 0, 'mur_pedra_irregular').setOrigin(0).setScale(1 / RES).setDepth(-994);
-        this.add.image(1400 - 130, 0, 'mur_pedra_irregular').setOrigin(0).setScale(1 / RES).setDepth(-994).setFlipX(true);
+        // (retallats al límit del terra, y 950: no s'allarguen per sota del sòcol)
+        const mur = (x, flip) => { const im = this.add.image(x, 0, 'mur_pedra_irregular').setOrigin(0).setScale(1 / RES).setDepth(-994).setFlipX(flip); im.setCrop(0, 0, im.width, 950 * RES); };
+        mur(90, false); mur(1400 - 130, true);
 
         // Escala de pedra a l'esquerra, volta i balcó al fons, mur amb porta a la dreta, lloses al mig (a partir de les fotos de l'Home del Raïm real)
         this.add.image(130, 0, 'escalinata_fons').setOrigin(0).setScale(1 / RES).setDepth(-990);
@@ -523,10 +531,9 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // Paret de baix, a banda i banda de la reixa: un sòcol de pedra fosca que tanca la sala (abans s'hi podia ficar l'Ineu)
         const sc = this.add.graphics().setDepth(1003);
         [[130, 478], [792, 478]].forEach(([x, w]) => {
-            sc.fillStyle(0x2a1f18, 1).fillRect(x, 950, w, 50);
-            sc.fillStyle(0x6a5a48, 1).fillRect(x, 946, w, 8).lineStyle(2, 0x1c1610, 1).strokeRect(x, 946, w, 8);
-            sc.lineStyle(1.5, 0x1c1610, 0.8);
-            for (let k = x + 60; k < x + w; k += 60) sc.lineBetween(k, 954, k, 1000);
+            const im = this.add.image(x, 948, 'mur_baix_pedra').setOrigin(0).setScale(1 / RES).setDepth(1003);          // la paret de baix, de pedra (retallada a la seva part)
+            im.setCrop(0, 0, Math.min(im.width, w * RES), im.height);
+            if (w > 1000) { const im2 = this.add.image(x + 1000, 948, 'mur_baix_pedra').setOrigin(0).setScale(1 / RES).setDepth(1003); im2.setCrop(0, 0, (w - 1000) * RES, im2.height); }
             this.colisio(x + w / 2, 973, w, 54);
         });
 
@@ -715,6 +722,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (this.sortidaTrapa) return;
         this.sortidaTrapa = true;
         this.sortidaEscala(640, 668, 120, 58, 'ZonaCasaCripta', 'porta', 728);
+        [[620, 697, 28, 78], [780, 697, 28, 78], [700, 652, 150, 14]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));          // l'escala només s'agafa per davant (per baix): els costats i la part de dalt són sòlids
         this.sortides[this.sortides.length - 1].desarmada = true;          // en pujar de la cripta, l'Ineu surt just a dins del forat: no ha de tornar a baixar fins que en surti
     }
 
