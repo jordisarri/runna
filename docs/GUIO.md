@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 569: Portes d'abaix dels interiors (1/n): les sales de pedra amb porta d'arc (Cripta i Cambra secreta) tenen ara dos batents de fusta opacs, amb frontisses als brancals, que s'obren quan l'Ineu s'hi acosta i es tanquen en allunyar-se; l'arc ja era per damunt de l'Ineu, opac, i sense el quadradet.*
+
 *Revisió 568: Escala de la cripta: en baixar, l'Ineu s'allunya (es fa un 22% més petit) i va més a poc a poc dins del forat, perquè no sembli que caigui. Arc de la porta de les sales de pedra: fora el quadradet (dovella) del mig, que tapava l'Ineu en entrar.*
 
 *Revisió 567: Escala de la cripta (Home del Raïm), animació corregida després de veure una gravació: ara el forat té 52 px de fondària amb quatre graons (frenada i tap a cada un) i l'Ineu s'hi enfonsa de debò: un clon es dibuixa cada cop més avall darrere la vora de davant (opaca), que el tapa de baix cap a dalt, mentre camina cap amunt; passa a la cripta quan ja no es veu. Si tornes enrere, torna a sortir.*

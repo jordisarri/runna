@@ -428,6 +428,30 @@ class ZonaCasaBase extends ZonaBase {
             const arc2 = (amp2, col) => { g.lineStyle(amp2, col, 1).beginPath().moveTo(portaX - OB / 2, alt).lineTo(portaX - OB / 2, YP + 14); g.arc(portaX, YP + 14, OB / 2, Math.PI, Math.PI * 2, false); g.lineTo(portaX + OB / 2, alt).strokePath(); };
             arc2(15, 0x1c120a); arc2(11, 0x84735e); arc2(3, 0xb0a085);
         }
+        // Els dos batents de fusta de la porta d'arc (opacs, amb frontisses als brancals): s'obren en acostar-s'hi l'Ineu i es tanquen en allunyar-se
+        {
+            const half = OB / 2 - 2, y0b = YP + 12, hb = alt - y0b + 4;
+            const bat = esq => {
+                const gb = this.add.graphics().setDepth(98400);
+                gb.setPosition(portaX + (esq ? -OB / 2 + 2 : OB / 2 - 2), 0);
+                const x0 = esq ? 0 : -half;
+                gb.fillStyle(0x4a2f1a, 1).fillRect(x0, y0b, half, hb);
+                gb.lineStyle(1.5, 0x24160a, 0.9); for (let k = 1; k < 3; k++) gb.lineBetween(x0 + k * half / 3, y0b, x0 + k * half / 3, y0b + hb);
+                gb.fillStyle(0x6a4524, 0.55).fillRect(x0 + (esq ? 2 : half - 6), y0b + 2, 4, hb - 4);
+                [0.3, 0.7].forEach(f => { gb.fillStyle(0x26221f, 1).fillRect(x0, y0b + hb * f - 3, half, 6); gb.fillStyle(0x8d8a84, 1).fillCircle(x0 + 5, y0b + hb * f, 1.4).fillCircle(x0 + half - 5, y0b + hb * f, 1.4); });
+                gb.fillStyle(0x26221f, 1).fillCircle(x0 + (esq ? half - 6 : 6), y0b + hb * 0.55, 2.2);          // anella
+                gb.lineStyle(2.2, 0x1c120a, 1).strokeRect(x0, y0b, half, hb);
+                return gb;
+            };
+            const bats = [bat(true), bat(false)]; let aP = 0;
+            const actuP = () => {
+                if (!this.ineu || !bats[0].active) return;
+                const d = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, portaX, alt - 10);
+                aP = Phaser.Math.Linear(aP, Phaser.Math.Clamp((200 - d) / 120, 0, 1), 0.14);
+                bats.forEach(g2 => g2.setScale(Math.max(0.1, 1 - aP * 0.9), 1));
+            };
+            this.events.on('update', actuP); this.events.once('shutdown', () => this.events.off('update', actuP));
+        }
         this.add.rectangle(amp / 2, alt + 80, amp + 400, 160, 0x000000, 1).setDepth(99000);               // per sota de la porta tot és fosc
         this.colisio((portaX - OB / 2) / 2, YP + 32, portaX - OB / 2, 64);
         this.colisio((portaX + OB / 2 + amp) / 2, YP + 32, amp - portaX - OB / 2, 64);
