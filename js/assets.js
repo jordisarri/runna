@@ -916,38 +916,21 @@ const Grafics = {
             ctx.fillStyle = ll; ctx.fillRect(0, 0, w, h);
             ctx.globalCompositeOperation = 'source-over';
         });
-        // Grans de rosari (l'energia de l'Ineu): boles de fusta MAT i artesanals, de la mateixa fusta que la creu (sense brillantor ni halo). Cada gra és una mica diferent: contorn
-        // ovalat i ondulat, veta i porus propis (3 variants: a, b, c) i, al HUD, un gir propi. Ple = fusta encesa, mig = només la meitat, buit = fusta apagada i esquerdada
-        const gra = (ctx, mode, variant) => {
+        // Grans de rosari (l'energia de l'Ineu): fusta d'olivera polida i ben encesa (ple), mig apagats (mig) o foscos i esquerdats (buit)
+        const gra = (ctx, mode) => {
             const cx = 22, cy = 22, r = 15;
-            let sem = 17 + variant * 53; const rnd = () => { sem = (sem * 16807) % 2147483647; return sem / 2147483647; };
-            const rx = r * (0.985 + 0.03 * rnd()), ry = r * (0.985 + 0.03 * rnd()), gir = (rnd() - 0.5) * 0.6, N = 36;
-            const ond = Array.from({ length: N }, () => 1 + (rnd() - 0.5) * 0.025);         // ondulació mínima: rodona, amb la veta i la inclinació fent la diferència
-            const contorn = () => {
-                ctx.beginPath();
-                for (let k = 0; k <= N; k++) {
-                    const a = k / N * Math.PI * 2, o = ond[k % N], x = Math.cos(a) * rx * o, y = Math.sin(a) * ry * o;
-                    const X = cx + x * Math.cos(gir) - y * Math.sin(gir), Y = cy + x * Math.sin(gir) + y * Math.cos(gir);
-                    k ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y);
-                }
-                ctx.closePath();
+            const esfera = (clar, mig, fosc) => {
+                const g = ctx.createRadialGradient(cx - 5, cy - 6, 1.5, cx, cy, r + 1);
+                g.addColorStop(0, clar); g.addColorStop(0.45, mig); g.addColorStop(1, fosc);
+                ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
             };
-            const omple = (c1, c2) => { const g = ctx.createLinearGradient(cx - 8, cy - 9, cx + 9, cy + 10); g.addColorStop(0, c1); g.addColorStop(1, c2); ctx.fillStyle = g; contorn(); ctx.fill(); };
-            const veta = alfa => {          // fibres de la fusta (arcs desiguals) i uns quants porus
-                ctx.save(); contorn(); ctx.clip();
-                ctx.strokeStyle = `rgba(70,38,14,${alfa})`; ctx.lineWidth = 0.9;
-                const n = 4 + Math.floor(rnd() * 2);
-                for (let k = 0; k < n; k++) {
-                    const y = cy - 11 + k * (22 / n) + (rnd() - 0.5) * 3;
-                    ctx.beginPath(); ctx.moveTo(cx - 17, y + (rnd() - 0.5) * 4); ctx.quadraticCurveTo(cx + (rnd() - 0.5) * 8, y + (rnd() - 0.5) * 7, cx + 17, y + (rnd() - 0.5) * 4); ctx.stroke();
-                }
-                ctx.fillStyle = `rgba(60,30,10,${alfa * 0.8})`;
-                for (let k = 0; k < 6; k++) ctx.fillRect(cx - 10 + rnd() * 20, cy - 10 + rnd() * 20, 1.1, 1.1);
-                ctx.restore();
+            const veta = alfa => {          // anells de la fusta i el canal per on passa el cordó
+                ctx.strokeStyle = `rgba(60,28,8,${alfa})`; ctx.lineWidth = 1;
+                [6, 10.5].forEach(ry => { ctx.beginPath(); ctx.ellipse(cx, cy, r - 1, ry, 0, 0, Math.PI * 2); ctx.stroke(); });
             };
-            // apagat (base de tots tres): fusta fosca i seca
-            omple('#6a5848', '#3e3126');
-            veta(0.3);
+            // apagat (base de tots tres)
+            esfera('#7a6a5c', '#4a3c30', '#211810');
+            veta(0.35);
             if (mode === 0) {               // esquerda
                 ctx.strokeStyle = 'rgba(10,6,2,0.8)'; ctx.lineWidth = 1.4;
                 ctx.beginPath(); ctx.moveTo(cx + 3, cy - 13); ctx.lineTo(cx, cy - 6); ctx.lineTo(cx + 4, cy - 1); ctx.lineTo(cx + 1, cy + 5); ctx.stroke();
@@ -955,20 +938,22 @@ const Grafics = {
             if (mode > 0) {
                 ctx.save();
                 if (mode === 1) { ctx.beginPath(); ctx.rect(0, 0, cx, 44); ctx.clip(); }
-                omple('#c98f55', '#9c6636');                                   // la mateixa fusta de la creu, mat: només una mica més clara a dalt a l'esquerra
-                veta(0.45);
-                ctx.save(); contorn(); ctx.clip(); ctx.strokeStyle = 'rgba(70,38,14,0.3)'; ctx.lineWidth = 3; contorn(); ctx.stroke(); ctx.restore();       // vora una mica més fosca (volum sense llum)
+                // halo càlid
+                const h = ctx.createRadialGradient(cx, cy, r - 2, cx, cy, r + 6); h.addColorStop(0, 'rgba(255,190,90,0.55)'); h.addColorStop(1, 'rgba(255,190,90,0)');
+                ctx.fillStyle = h; ctx.beginPath(); ctx.arc(cx, cy, r + 6, 0, Math.PI * 2); ctx.fill();
+                esfera('#ffd894', '#c27a34', '#5a2a0e');
+                veta(0.5);
+                ctx.fillStyle = 'rgba(255,255,255,0.75)'; ctx.beginPath(); ctx.ellipse(cx - 6, cy - 7, 4.6, 2.8, -0.6, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.arc(cx + 6, cy + 7, 1.6, 0, Math.PI * 2); ctx.fill();
                 ctx.restore();
                 if (mode === 1) { ctx.strokeStyle = 'rgba(30,14,4,0.7)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx, cy - r + 1); ctx.lineTo(cx, cy + r - 1); ctx.stroke(); }
             }
-            ctx.lineWidth = 2.2; ctx.strokeStyle = '#2a1608'; contorn(); ctx.stroke();
-            ctx.fillStyle = '#2a1608'; [-1, 1].forEach(sg => { const x = cx + sg * (rx - 1.2) * Math.cos(gir), y = cy + sg * (rx - 1.2) * Math.sin(gir); ctx.beginPath(); ctx.ellipse(x, y, 1.6, 2.6, gir, 0, Math.PI * 2); ctx.fill(); });   // forats del cordó
+            ctx.lineWidth = 2.4; ctx.strokeStyle = '#1e0e04'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+            ctx.fillStyle = '#1e0e04'; [cx - r + 1.2, cx + r - 1.2].forEach(x => { ctx.beginPath(); ctx.ellipse(x, cy, 1.6, 2.6, 0, 0, Math.PI * 2); ctx.fill(); });   // forats del cordó
         };
-        [['', 0], ['_b', 1], ['_c', 2]].forEach(([suf, v]) => {
-            crea('gra_ple' + suf, 44, 44, (ctx) => gra(ctx, 2, v));
-            crea('gra_mig' + suf, 44, 44, (ctx) => gra(ctx, 1, v));
-            crea('gra_buit' + suf, 44, 44, (ctx) => gra(ctx, 0, v));
-        });
+        crea('gra_ple', 44, 44, (ctx) => gra(ctx, 2));
+        crea('gra_mig', 44, 44, (ctx) => gra(ctx, 1));
+        crea('gra_buit', 44, 44, (ctx) => gra(ctx, 0));
         // Creueta de llautó que penja al principi del rosari
         crea('creu_rosari', 36, 28, (ctx) => {
             // Creu de fusta TUMBADA sobre una taula, en perspectiva isomètrica: el pla de la taula es veu en diagonal i la creu hi reposa en horitzontal (el braç llarg
