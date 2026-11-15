@@ -101,6 +101,7 @@ function pintarEsllavissadaEscalinata(ctx, w, h) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     let llavor = 29; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
     const C = '#1c1410';
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, w, h); ctx.clip();         // res no surt de l'amplada de l'escala (la barana queda lliure)
     const bloc = (cx, cy, r, tons) => {
         const n = 7, pts = [];
         for (let k = 0; k < n; k++) { const a = k / n * Math.PI * 2 + rnd() * 0.3, rr = r * (0.72 + rnd() * 0.3); pts.push([cx + Math.cos(a) * rr, cy + Math.sin(a) * rr * 0.82]); }
@@ -116,7 +117,7 @@ function pintarEsllavissadaEscalinata(ctx, w, h) {
     // disposició caòtica: pedres de mides molt diferents escampades a l'atzar (més denses al mig i a dalt), ordenades de dalt a baix perquè s'encavalquin
     const llista = [];
     for (let n = 0; n < 190; n++) {
-        const x = rnd() * (w + 20) - 10, y = 30 + Math.pow(rnd(), 0.8) * (h - 50);
+        const x = 4 + rnd() * (w - 8), y = 30 + Math.pow(rnd(), 0.8) * (h - 50);
         const gran = rnd() < 0.18 ? 1 : 0;
         llista.push([x, y, gran ? 40 + rnd() * 26 : 9 + rnd() * 30, n]);
     }
@@ -128,4 +129,5 @@ function pintarEsllavissadaEscalinata(ctx, w, h) {
     ctx.save(); ctx.translate(w * 0.7, h * 0.3); ctx.rotate(1.1); ctx.fillStyle = '#6a4424'; ctx.strokeStyle = C; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(-52, -7, 104, 14, 2); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#9a6a3a'; ctx.fillRect(-50, -5, 100, 3); ctx.restore();
     // cua de pedres petites i graves a baix
     for (let j = 0; j < 60; j++) bloc(8 + rnd() * (w - 16), h - 40 + rnd() * 34, 5 + rnd() * 11, TONS[j % 3]);
+    ctx.restore();
 }

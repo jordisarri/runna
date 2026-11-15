@@ -437,34 +437,32 @@ class ZonaCasaBase extends ZonaBase {
     // Porta de la paret de l'esquerra, vista des de dalt (com els jocs de dalt: A Link to the Past): la paret és una franja vertical de pedra; el forat és un
     // rectangle fosc que travessa el gruix de la paret, flanquejat per dues columnes rodones i amb un graó de pedra clar a la vora de la sala
     portaSecreta(x, y) {
-        const H = 118, y0 = y - H / 2, y1 = y + H / 2, xp = x - 38, xt = x + 8, d = y - 60, C = 0x1c1610;
+        const H = 104, y0 = y - H / 2, y1 = y + H / 2, xp = 90, xt = 130, d = y - 60, C = 0x1c1610;      // la paret de l'esquerra ocupa x 90-130
         const g = this.add.graphics().setDepth(d);
-        g.fillStyle(0x000000, 0.28).fillRect(xt, y0 - 30, 9, H + 60);                                           // ombra sobre el terra
-        // la franja de paret, a dalt i a baix del forat: carreus vists de dalt
-        [[y0 - 62, y0 - 14], [y1 + 14, y1 + 62]].forEach(([ya, yb]) => {
-            g.fillStyle(0x8d826c, 1).fillRect(xp, ya, xt - xp, yb - ya).lineStyle(3, C, 1).strokeRect(xp, ya, xt - xp, yb - ya);
-            g.fillStyle(0xb2a688, 0.55).fillRect(xp + 2, ya + 2, xt - xp - 4, 3);
-            g.lineStyle(1.5, 0x2a2218, 0.8);
-            for (let yy = ya + 16; yy < yb - 4; yy += 16) { g.lineBetween(xp, yy, xt, yy); g.lineBetween(xp + (((yy / 16) | 0) % 2 ? 12 : 26), yy - 16, xp + (((yy / 16) | 0) % 2 ? 12 : 26), yy); }
+        // el forat travessa la paret de banda a banda: interior fosc, amb el terra del passadís que es veu cap a la sala
+        g.fillStyle(0x070504, 1).fillRect(xp, y0, xt - xp, H);
+        g.fillGradientStyle(0x1a1410, 0x8a7a54, 0x1a1410, 0x8a7a54, 1, 1, 1, 1).fillRect(xp + 2, y0, xt - xp - 12, H);
+        for (let k = 0; k < 4; k++) { g.fillStyle(0x2a2016, 0.7).fillRect(xp + 6 + k * 7, y0, 2, H); }          // juntes de les lloses del terra del passadís
+        g.fillStyle(0xb8a98a, 1).fillRect(xt - 10, y0, 10, H).lineStyle(2.2, C, 1).strokeRect(xt - 10, y0, 10, H);       // graó de pedra a la vora de la sala
+        g.fillStyle(0xe4d8b8, 0.6).fillRect(xt - 9, y0 + 2, 2.5, H - 4);
+        // brancals: dos blocs de pedra a cada extrem del forat, i una columna rodona a sobre de cadascun
+        [[y0 - 16, y0], [y1, y1 + 16]].forEach(([ya, yb]) => {
+            g.fillStyle(0x9a8e76, 1).fillRect(xp, ya, xt - xp, yb - ya).lineStyle(2.5, C, 1).strokeRect(xp, ya, xt - xp, yb - ya);
+            g.fillStyle(0xcdbf9f, 0.55).fillRect(xp + 2, ya + 2, xt - xp - 4, 3);
+            g.lineStyle(1.4, 0x2a2218, 0.8).lineBetween(xp + 20, ya, xp + 20, yb);
         });
-        // el forat: fosc, que s'aclareix cap a la sala (el passadís il·luminat)
-        g.fillGradientStyle(0x060403, 0x3a2a1a, 0x060403, 0x3a2a1a, 1, 1, 1, 1).fillRect(xp, y0 - 14, xt - xp, H + 28);
-        g.lineStyle(3, C, 1).strokeRect(xp, y0 - 14, xt - xp, H + 28);
-        g.fillStyle(0xb8a98a, 1).fillRect(xt - 9, y0 - 8, 9, H + 16).lineStyle(2.2, C, 1).strokeRect(xt - 9, y0 - 8, 9, H + 16);          // graó de pedra
-        g.fillStyle(0xe4d8b8, 0.6).fillRect(xt - 8, y0 - 6, 2.5, H + 12);
-        // les dues columnes rodones que flanquegen la porta (a dalt i a baix del forat), vistes de dalt
-        [y0 - 14, y1 + 14].forEach(cy => {
-            g.fillStyle(0x000000, 0.3).fillCircle(x - 14, cy + 3, 15);
-            g.fillStyle(0x6a6050, 1).fillCircle(x - 15, cy, 14).lineStyle(3, C, 1).strokeCircle(x - 15, cy, 14);
-            g.fillStyle(0x9a8e76, 1).fillCircle(x - 16, cy - 1, 8.5).lineStyle(2, C, 1).strokeCircle(x - 16, cy - 1, 8.5);
-            g.fillStyle(0xd8ccb0, 0.7).fillCircle(x - 19, cy - 4, 3);
+        [y0 - 8, y1 + 8].forEach(cy => {
+            g.fillStyle(0x000000, 0.35).fillCircle(x + 2, cy + 3, 15);
+            g.fillStyle(0x6a6050, 1).fillCircle(x, cy, 14).lineStyle(3, C, 1).strokeCircle(x, cy, 14);
+            g.fillStyle(0x9a8e76, 1).fillCircle(x - 1, cy - 1, 8.5).lineStyle(2, C, 1).strokeCircle(x - 1, cy - 1, 8.5);
+            g.fillStyle(0xd8ccb0, 0.7).fillCircle(x - 4, cy - 4, 3);
         });
         // claror càlida que surt del passadís
         const llum = this.add.graphics().setDepth(d + 2).setBlendMode(Phaser.BlendModes.ADD);
-        llum.fillStyle(0xffc060, 0.16).fillEllipse(xt + 22, y, 50, H + 26);
-        llum.fillStyle(0xffc060, 0.3).fillRect(xt - 9, y0 - 6, 9, H + 12);
+        llum.fillStyle(0xffc060, 0.14).fillEllipse(xt + 24, y, 56, H + 20);
+        llum.fillStyle(0xffc060, 0.3).fillRect(xt - 10, y0 + 2, 10, H - 4);
         this.tweens.add({ targets: llum, alpha: 0.55, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
-        this.aplic(x + 2, y0 - 76, 1, d - 1);
+        this.aplic(x + 2, y0 - 70, 1, d - 1);
         return g;
     }
 
@@ -524,7 +522,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // L'escalinata de l'esquerra es pot pujar fins a mig camí; més amunt hi ha una esllavissada de blocs grossos que ho barra del tot
         this.registraGraons(130, 450, [236, 284, 334, 392, 444, 497, 549, 597].map(y => [y - 6, y + 6]));
         (this.opacs = this.opacs || []).push(this.add.image(290, 440, 'esllavissada_escalinata').setOrigin(0.5, 1).setScale(1 / RES).setDepth(428));
-        this.colisio(290, 300, 320, 280);
+        this.colisio(290, 300, 300, 280);
         this.add.particles(290, 250, 'espurna', { x: { min: -140, max: 140 }, speedY: { min: 6, max: 18 }, speedX: { min: -4, max: 4 }, lifespan: 2600, scale: { start: 0.14, end: 0 }, alpha: { start: 0.35, end: 0 }, tint: [0xd8caa8, 0xb8a888], frequency: 380 }).setDepth(429);          // pols fina que encara cau
         this.colisio(1112, 400, 320, 480);
         this.colisio(450, 400, 24, 430);
