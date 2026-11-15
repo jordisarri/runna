@@ -437,32 +437,11 @@ class ZonaCasaBase extends ZonaBase {
     // Porta de la paret de l'esquerra, vista des de dalt (com els jocs de dalt: A Link to the Past): la paret és una franja vertical de pedra; el forat és un
     // rectangle fosc que travessa el gruix de la paret, flanquejat per dues columnes rodones i amb un graó de pedra clar a la vora de la sala
     portaSecreta(x, y) {
-        const H = 104, y0 = y - H / 2, y1 = y + H / 2, xp = 90, xt = 130, d = y - 60, C = 0x1c1610;      // la paret de l'esquerra ocupa x 90-130
+        const H = 104, y0 = y - H / 2, xp = 90, xt = 130, d = y - 60;      // la paret de l'esquerra ocupa x 90-130: aquí només s'hi obre un forat
         const g = this.add.graphics().setDepth(d);
-        // el forat travessa la paret de banda a banda: interior fosc, amb el terra del passadís que es veu cap a la sala
-        g.fillStyle(0x070504, 1).fillRect(xp, y0, xt - xp, H);
-        g.fillGradientStyle(0x1a1410, 0x8a7a54, 0x1a1410, 0x8a7a54, 1, 1, 1, 1).fillRect(xp + 2, y0, xt - xp - 12, H);
-        for (let k = 0; k < 4; k++) { g.fillStyle(0x2a2016, 0.7).fillRect(xp + 6 + k * 7, y0, 2, H); }          // juntes de les lloses del terra del passadís
-        g.fillStyle(0xb8a98a, 1).fillRect(xt - 10, y0, 10, H).lineStyle(2.2, C, 1).strokeRect(xt - 10, y0, 10, H);       // graó de pedra a la vora de la sala
-        g.fillStyle(0xe4d8b8, 0.6).fillRect(xt - 9, y0 + 2, 2.5, H - 4);
-        // brancals: dos blocs de pedra a cada extrem del forat, i una columna rodona a sobre de cadascun
-        [[y0 - 16, y0], [y1, y1 + 16]].forEach(([ya, yb]) => {
-            g.fillStyle(0x9a8e76, 1).fillRect(xp, ya, xt - xp, yb - ya).lineStyle(2.5, C, 1).strokeRect(xp, ya, xt - xp, yb - ya);
-            g.fillStyle(0xcdbf9f, 0.55).fillRect(xp + 2, ya + 2, xt - xp - 4, 3);
-            g.lineStyle(1.4, 0x2a2218, 0.8).lineBetween(xp + 20, ya, xp + 20, yb);
-        });
-        [y0 - 8, y1 + 8].forEach(cy => {
-            g.fillStyle(0x000000, 0.35).fillCircle(x + 2, cy + 3, 15);
-            g.fillStyle(0x6a6050, 1).fillCircle(x, cy, 14).lineStyle(3, C, 1).strokeCircle(x, cy, 14);
-            g.fillStyle(0x9a8e76, 1).fillCircle(x - 1, cy - 1, 8.5).lineStyle(2, C, 1).strokeCircle(x - 1, cy - 1, 8.5);
-            g.fillStyle(0xd8ccb0, 0.7).fillCircle(x - 4, cy - 4, 3);
-        });
-        // claror càlida que surt del passadís
-        const llum = this.add.graphics().setDepth(d + 2).setBlendMode(Phaser.BlendModes.ADD);
-        llum.fillStyle(0xffc060, 0.14).fillEllipse(xt + 24, y, 56, H + 20);
-        llum.fillStyle(0xffc060, 0.3).fillRect(xt - 10, y0 + 2, 10, H - 4);
-        this.tweens.add({ targets: llum, alpha: 0.55, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.easeInOut' });
-        this.aplic(x + 2, y0 - 70, 1, d - 1);
+        g.fillStyle(0x0a0705, 1).fillRect(xp, y0, xt - xp, H);
+        g.fillGradientStyle(0x0a0705, 0x4a3c28, 0x0a0705, 0x4a3c28, 1, 1, 1, 1).fillRect(xp, y0, xt - xp, H);
+        g.lineStyle(3, 0x1c1610, 1).lineBetween(xp, y0, xt, y0).lineBetween(xp, y0 + H, xt, y0 + H);
         return g;
     }
 
@@ -516,6 +495,11 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     construir() {
         this.sortidaTrapa = false;          // (l'escena es reutilitza en cada visita: sense això, en tornar de la cripta l'escala ja no es tornava a posar)
         this.sala(1400, 1000, 700, 0xb5a58a);
+        // les parets laterals són de pedra (com a la resta de sales de pedra)
+        [0, 700].forEach(yy => {
+            this.add.image(90, yy, 'mur_ermita').setOrigin(0).setScale(1 / RES).setDepth(-994);
+            this.add.image(1400 - 130, yy, 'mur_ermita').setOrigin(0).setScale(1 / RES).setDepth(-994).setFlipX(true);
+        });
 
         // Escala de pedra a l'esquerra, volta i balcó al fons, mur amb porta a la dreta, lloses al mig (a partir de les fotos de l'Home del Raïm real)
         this.add.image(130, 0, 'escalinata_fons').setOrigin(0).setScale(1 / RES).setDepth(-990);
