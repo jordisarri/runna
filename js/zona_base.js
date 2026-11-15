@@ -1325,7 +1325,8 @@ class ZonaBase extends Phaser.Scene {
         const batents = [];
         portes.forEach(d => {
             const { dw, cx, X0, X1 } = d;
-            [[X0 - 10, X0], [X1, X1 + 10]].forEach(([xa, xb]) => { g.fillStyle(pedra ? 0x9a8e76 : 0x9a7040, 1).fillRect(xa, Y - 4, xb - xa, H + 4).lineStyle(2.2, C, 1).strokeRect(xa, Y - 4, xb - xa, H + 4); });
+            const arc0 = ARC_PORTA.includes(this.scene.key), total = arc0 ? H : Math.round(Math.max(dw / 2 + 56, dw * 1.25)), top = Y + H - total;          // porta recta: tan alta com la d'arc i més alta que ampla (perspectiva 3/4)
+            [[X0 - 10, X0], [X1, X1 + 10]].forEach(([xa, xb]) => { g.fillStyle(pedra ? 0x9a8e76 : 0x9a7040, 1).fillRect(xa, arc0 ? Y - 4 : top, xb - xa, arc0 ? H + 4 : total).lineStyle(2.2, C, 1).strokeRect(xa, arc0 ? Y - 4 : top, xb - xa, arc0 ? H + 4 : total); });
             const arc = ARC_PORTA.includes(this.scene.key);
             const c1 = pedra ? 0x9a8e76 : 0x9a7040, c2 = pedra ? 0xd2c7a8 : 0xd8a868;
             if (arc) {                                                       // marc d'arc (arrodonit) per damunt de l'Ineu, opac: com la porta de fora
@@ -1333,11 +1334,11 @@ class ZonaBase extends Phaser.Scene {
                 const arcX = (gr, col) => { ga.lineStyle(gr, col, 1).beginPath().moveTo(X0, Y + H).lineTo(X0, yb); ga.arc(cx, yb, r, Math.PI, Math.PI * 2, false); ga.lineTo(X1, Y + H).strokePath(); };
                 arcX(13, 0x140a04); arcX(9, c1); arcX(2.5, c2);
             } else {                                                         // llinda en angle recte per damunt de l'Ineu, opaca
-                ga.fillStyle(c1, 1).fillRect(X0 - 12, Y - 12, dw + 24, 18).lineStyle(2.2, C, 1).strokeRect(X0 - 12, Y - 12, dw + 24, 18);
-                ga.fillStyle(c2, 0.7).fillRect(X0 - 10, Y - 10, dw + 20, 3);
-                if (pedra) { ga.lineStyle(1.3, 0x2a2018, 0.8); for (let xx = X0 + 20; xx < X1; xx += 34) ga.lineBetween(xx, Y - 12, xx, Y + 6); }
+                ga.fillStyle(c1, 1).fillRect(X0 - 12, top, dw + 24, 18).lineStyle(2.2, C, 1).strokeRect(X0 - 12, top, dw + 24, 18);
+                ga.fillStyle(c2, 0.7).fillRect(X0 - 10, top + 2, dw + 20, 3);
+                if (pedra) { ga.lineStyle(1.3, 0x2a2018, 0.8); for (let xx = X0 + 20; xx < X1; xx += 34) ga.lineBetween(xx, top, xx, top + 18); }
             }
-            const half = dw / 2 - 1, y0b = Y + 6, hb = H - 6;
+            const half = dw / 2 - 1, y0b = arc0 ? Y + 6 : top + 18, hb = Y + H - y0b;
             const bat = esq => {
                 const gb = this.add.graphics().setDepth(98400);
                 gb.setPosition(esq ? X0 + 1 : X1 - 1, 0);
