@@ -921,8 +921,8 @@ const Grafics = {
         const gra = (ctx, mode, variant) => {
             const cx = 22, cy = 22, r = 15;
             let sem = 17 + variant * 53; const rnd = () => { sem = (sem * 16807) % 2147483647; return sem / 2147483647; };
-            const rx = r * (0.93 + 0.09 * rnd()), ry = r * (0.93 + 0.09 * rnd()), gir = (rnd() - 0.5) * 0.9, N = 22;
-            const ond = Array.from({ length: N }, () => 1 + (rnd() - 0.5) * 0.1);          // petites ondulacions: no és mai un cercle perfecte
+            const rx = r * (0.985 + 0.03 * rnd()), ry = r * (0.985 + 0.03 * rnd()), gir = (rnd() - 0.5) * 0.6, N = 36;
+            const ond = Array.from({ length: N }, () => 1 + (rnd() - 0.5) * 0.025);         // ondulació mínima: rodona, amb la veta i la inclinació fent la diferència
             const contorn = () => {
                 ctx.beginPath();
                 for (let k = 0; k <= N; k++) {

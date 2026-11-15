@@ -275,7 +275,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 Tots els gràfics de dalt són fets i connectats (els seus prompts s'han esborrat d'aquest document).
 
-**Pendents:** `cercle_runes` (el cercle de runes del terra de l'Escalinata; ara es dibuixa amb codi).
+**Pendents:** `cercle_runes` (el cercle de runes del terra de l'Escalinata; ara es dibuixa amb codi) i `gra_rosari_*` (els grans de fusta del rosari de vida; ara es dibuixen amb codi).
 
 ---
 
@@ -298,6 +298,16 @@ A magical rune circle engraved into a stone floor, seen from a high three-quarte
 ```
 
 (Referència d'estil: `art/enemics/home_raim_apunta.png` per al lila de la boira i `art/objectes/creu.png` per al contorn.)
+
+---
+
+### `gra_rosari_a.png`, `gra_rosari_b.png`, `gra_rosari_c.png`… → `assets/ui/gra_rosari_*.webp` (amplada ~44) *(Un **gra del rosari** d'energia: cada gra és un punt de vida al HUD de dalt a l'esquerra (`js/ui.js`, `actualitzarHUD`). Ara es dibuixa amb codi i queda poc rodó; quan hi hagi les imatges, el joc en fa servir **una per gra** (diferents entre elles, girades de manera diferent) i els estats «mig» i «buit» es fan a partir d'aquesta mateixa imatge (la meitat apagada i l'esquerdada, per codi). Imatge **quadrada 1:1**, un sol gra, fons blanc pur (el trec jo). Es veu a uns 40 px: ha de ser **gros, senzill i clarament rodó**.)*
+
+```
+A single wooden rosary prayer bead, seen strictly from the front as a clean, clearly ROUND ball (a perfect circle silhouette that fills about 90% of the square image, centred), perfectly flat like a 2D front drawing with no perspective. Hand-carved, slightly rustic olive-wood / walnut bead in a warm medium brown (#b9824a with a soft darker brown shading plane on the lower right), with a MATTE surface: absolutely no gloss, no shine, no white specular highlight, no glow, no halo. The craftsmanship shows only in the wood itself: four or five thin dark brown grain lines that wander in slightly different curves, two or three tiny pores or little nicks, and a very subtle uneven tone, but the outline stays round. A small dark oval hole on the left edge and another on the right edge where the cord passes through. 2D charming cartoon game asset in the same art style as the attached reference image (the little wooden cross of the rosary): bold clean dark brown outline (#2a1608) around the whole bead, two-tone cel shading (base wood tone plus one soft flat shadow plane), clean light from the top-left. Isolated on a pure white background (#FFFFFF), no cast shadow, no ground shadow, no text, square image with a 1:1 aspect ratio.
+```
+
+**Ajust:** si surt massa brillant: afegeix «completely matte like dry wood, remove all highlights». Si no és prou rodona: «a perfect round circle outline, like a billiard ball seen from the front». Si la veta és massa recarregada: «only three simple grain lines». Genera'n unes quantes i **canvia una mica el prompt a cada versió** (més clara, més fosca, la veta en un altre sentit, un petit nus a un costat) perquè no siguin iguals. Referència d'estil: una captura del HUD amb la creueta de fusta del rosari (i, si vols, una de les boles actuals perquè vegi el color).
 
 ---
 
