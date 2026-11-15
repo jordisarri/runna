@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 571: Les portes d'abaix dels interiors tenen la mateixa forma que la porta de fora que hi duu: d'arc (arrodonida) a Rebedor, Biblioteca, Masia, Hostatgeria, Gabriel, Casa d'en Jorgi, Taverna, Ping-pong, Passadís i Sota la Taverna; en angle recte a la resta. El marc (arc o llinda), de fusta o de pedra segons la sala, és opac i va per damunt de l'Ineu; els marcs de fusta s'aclareixen perquè es vegin sobre la paret.*
+
 *Revisió 570: Portes d'abaix de tots els interiors amb sortida a la vora sud (21 sales): una paret de davant (de fusta a les cases, de pedra a les sales de pedra i subterranis) amb el forat de la porta enmarcat; la llinda de fusta o l'arc de pedra queda per damunt de l'Ineu, opac, i dos batents de fusta s'obren en acostar-s'hi i es tanquen en allunyar-se. La paret és sòlida: només es surt pel forat (comprovat sala per sala). Les sales amb porta pròpia (Cripta, Cambra secreta, reixa de l'Escalinata) no s'han tocat.*
 
 *Revisió 569: Portes d'abaix dels interiors (1/n): les sales de pedra amb porta d'arc (Cripta i Cambra secreta) tenen ara dos batents de fusta opacs, amb frontisses als brancals, que s'obren quan l'Ineu s'hi acosta i es tanquen en allunyar-se; l'arc ja era per damunt de l'Ineu, opac, i sense el quadradet.*

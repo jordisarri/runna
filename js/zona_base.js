@@ -52,6 +52,8 @@ const TRONCS = { arbre: [0.27, 0.52, 0.75, 1], pi: [0.36, 0.55, 0.66, 1], pi_pin
 const TRONC_ARBRE = esc => ({ w: Math.round(100 * esc), h: Math.round(36 * esc) });
 
 const ESTIL_PORTA_PEDRA = ['ZonaErmitaInt', 'ZonaGabrielInt', 'ZonaPassadis', 'ZonaSotaTaverna', 'ZonaGirgoles', 'ZonaTortura', 'ZonaBoira', 'ZonaGabia', 'ZonaSoterraniHost', 'ZonaEsglesia', 'ZonaMonestirRebedor', 'ZonaPingpong', 'ZonaTresor', 'ZonaGolfes'];
+// Forma de la porta d'abaix, igual que la de fora (la que dona a aquesta sala): d'arc (arrodonida) o en angle recte
+const ARC_PORTA = ['ZonaMonestirRebedor', 'ZonaBiblioteca', 'ZonaMasiaCirosa', 'ZonaHostatgeriaInt', 'ZonaGabrielInt', 'ZonaCasaGeorgi', 'ZonaTavernaInt', 'ZonaPingpong', 'ZonaPassadis', 'ZonaSotaTaverna'];
 const PROFUNDITAT_PORTA = 36;   // els interiors es surten per sota de la porta: l'Ineu l'ha de traspassar abans de canviar de zona
 const MARGE_TEULADA = 62;   // mig cos de l'Ineu: la col·lisió d'un edifici comença així de baix de la seva teulada, i per dalt es pot passar-hi darrere
 // Missions que fan marxar la boira del Miracle (cadascuna n'esvaeix una part); la boira no desapareix del tot fins que cau l'Ocellaire
@@ -1323,14 +1325,17 @@ class ZonaBase extends Phaser.Scene {
         const batents = [];
         portes.forEach(d => {
             const { dw, cx, X0, X1 } = d;
-            [[X0 - 10, X0], [X1, X1 + 10]].forEach(([xa, xb]) => { g.fillStyle(pedra ? 0x9a8e76 : 0x6a4a2c, 1).fillRect(xa, Y - 4, xb - xa, H + 4).lineStyle(2.2, C, 1).strokeRect(xa, Y - 4, xb - xa, H + 4); });
-            if (pedra) {                                                     // arc de pedra per damunt de l'Ineu
+            [[X0 - 10, X0], [X1, X1 + 10]].forEach(([xa, xb]) => { g.fillStyle(pedra ? 0x9a8e76 : 0x9a7040, 1).fillRect(xa, Y - 4, xb - xa, H + 4).lineStyle(2.2, C, 1).strokeRect(xa, Y - 4, xb - xa, H + 4); });
+            const arc = ARC_PORTA.includes(this.scene.key);
+            const c1 = pedra ? 0x9a8e76 : 0x9a7040, c2 = pedra ? 0xd2c7a8 : 0xd8a868;
+            if (arc) {                                                       // marc d'arc (arrodonit) per damunt de l'Ineu, opac: com la porta de fora
                 const r = dw / 2, yb = Y + 6;
-                const arc = (gr, col) => { ga.lineStyle(gr, col, 1).beginPath().moveTo(X0, Y + H).lineTo(X0, yb); ga.arc(cx, yb, r, Math.PI, Math.PI * 2, false); ga.lineTo(X1, Y + H).strokePath(); };
-                arc(13, 0x140a04); arc(9, 0x9a8e76); arc(2.5, 0xd2c7a8);
-            } else {                                                         // llinda de fusta per damunt de l'Ineu
-                ga.fillStyle(0x6a4a2c, 1).fillRect(X0 - 12, Y - 10, dw + 24, 16).lineStyle(2.2, C, 1).strokeRect(X0 - 12, Y - 10, dw + 24, 16);
-                ga.fillStyle(0xa87c4c, 0.7).fillRect(X0 - 10, Y - 8, dw + 20, 3);
+                const arcX = (gr, col) => { ga.lineStyle(gr, col, 1).beginPath().moveTo(X0, Y + H).lineTo(X0, yb); ga.arc(cx, yb, r, Math.PI, Math.PI * 2, false); ga.lineTo(X1, Y + H).strokePath(); };
+                arcX(13, 0x140a04); arcX(9, c1); arcX(2.5, c2);
+            } else {                                                         // llinda en angle recte per damunt de l'Ineu, opaca
+                ga.fillStyle(c1, 1).fillRect(X0 - 12, Y - 12, dw + 24, 18).lineStyle(2.2, C, 1).strokeRect(X0 - 12, Y - 12, dw + 24, 18);
+                ga.fillStyle(c2, 0.7).fillRect(X0 - 10, Y - 10, dw + 20, 3);
+                if (pedra) { ga.lineStyle(1.3, 0x2a2018, 0.8); for (let xx = X0 + 20; xx < X1; xx += 34) ga.lineBetween(xx, Y - 12, xx, Y + 6); }
             }
             const half = dw / 2 - 1, y0b = Y + 6, hb = H - 6;
             const bat = esq => {
