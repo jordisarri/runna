@@ -582,12 +582,32 @@ class ZonaCasaGranInt extends ZonaCasaBase {
             g.fillStyle(0xffffff, 0.2).fillRect(x + 3, Y0 - 14, 4, Y1 - Y0 + 12);
         });
         g.fillStyle(0xcdbd9e, 1).fillRect(X0 - 26, Y0 - 24, X1 - X0 + 52, 12).lineStyle(2.5, 0x1c1610, 1).strokeRect(X0 - 26, Y0 - 24, X1 - X0 + 52, 12);   // llinda
-        this.barrots = this.add.graphics().setDepth(Y1 + 1);
-        this.barrots.lineStyle(5, 0x2a2622, 1);
-        for (let x = X0 + 10; x <= X1 - 10; x += 15) this.barrots.lineBetween(x, Y0, x, Y1);
-        this.barrots.lineStyle(4, 0x2a2622, 1).lineBetween(X0, Y0 + 8, X1, Y0 + 8).lineBetween(X0, Y1 - 10, X1, Y1 - 10);
-        this.barrots.lineStyle(1.5, 0x8a8278, 0.8);
-        for (let x = X0 + 9; x <= X1 - 10; x += 15) this.barrots.lineBetween(x, Y0 + 2, x, Y1 - 2);
+        // Dos batents de reixa (opacs), amb frontisses als brancals: en acostar-s'hi (un cop aixecada la barra) giren i s'obren, i es tanquen en allunyar-se (com la reixa de fora)
+        const batent = esq => {
+            const gb = this.add.graphics().setDepth(Y1 + 1), mig = (X1 - X0) / 2, x0 = esq ? 0 : -mig;
+            gb.setPosition(esq ? X0 : X1, 0);
+            gb.fillStyle(0x1e1b18, 1).fillRect(x0, Y0, mig, Y1 - Y0);                                        // fons opac (no es veu a través)
+            gb.lineStyle(5, 0x2a2622, 1);
+            for (let x = x0 + 8; x <= x0 + mig - 4; x += 15) gb.lineBetween(x, Y0, x, Y1);
+            gb.lineStyle(4, 0x2a2622, 1).lineBetween(x0, Y0 + 8, x0 + mig, Y0 + 8).lineBetween(x0, Y1 - 10, x0 + mig, Y1 - 10);
+            gb.lineStyle(1.5, 0x8a8278, 0.8);
+            for (let x = x0 + 7; x <= x0 + mig - 5; x += 15) gb.lineBetween(x, Y0 + 2, x, Y1 - 2);
+            gb.lineStyle(2.5, 0x111114, 1).strokeRect(x0, Y0, mig, Y1 - Y0);
+            return gb;
+        };
+        this.batentsReixa = [batent(true), batent(false)];
+        this.barrots = { setAlpha: () => {} };
+        this.aReixa = 0;
+        this.reixaObrintse = () => !!this.reixaEstavaOberta || Estat.flag('reixaObertaDins') || Estat.flag('ocellaireVencut');
+        const actuReixa = () => {
+            if (!this.ineu || !this.batentsReixa[0].active) return;
+            const d = Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 700, Y1);
+            const obj = this.reixaObrintse() && !this.guardiaViu() ? Phaser.Math.Clamp((230 - d) / 150, 0, 1) : 0;
+            this.aReixa = Phaser.Math.Linear(this.aReixa, obj, 0.12);
+            this.batentsReixa.forEach(gb => gb.setScale(Math.max(0.1, 1 - this.aReixa * 0.9), 1));
+        };
+        this.events.on('update', actuReixa);
+        this.events.once('shutdown', () => this.events.off('update', actuReixa));
         // la barra de fusta amb abraçadores de ferro, travessada als brancals
         this.barra = this.add.graphics().setDepth(Y1 + 2);
         this.barra.fillStyle(0x6a4424, 1).fillRect(X0 - 30, Y0 + 26, X1 - X0 + 60, 14).lineStyle(2.5, 0x1c1006, 1).strokeRect(X0 - 30, Y0 + 26, X1 - X0 + 60, 14);
@@ -595,7 +615,6 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         [X0 - 12, X1 + 4].forEach(x => this.barra.fillStyle(0x3a3a40, 1).fillRect(x, Y0 + 22, 8, 22).lineStyle(1.5, 0x111114, 1).strokeRect(x, Y0 + 22, 8, 22));
         const obrir = () => {
             this.barra.setVisible(false);
-            this.barrots.setAlpha(0.35);
             this.sortida(X0 + 10, Y1 - 14, X1 - X0 - 20, 14, 'ZonaCasaGran', 'porxo');
         };
         this.reixaEstavaOberta = oberta;
