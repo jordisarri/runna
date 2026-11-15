@@ -476,18 +476,21 @@ class EscenaUI extends Phaser.Scene {
             this.ombresGrans.push(this.add.image(0, 0, 'gra_ple').setScale(1.1 * ESC_GRA).setTintFill(0x000000).setAlpha(0.5));
             this.cors.push(this.add.image(0, 0, 'gra_ple').setScale(ESC_GRA));
         }
-        // Rosari irregular, com un de veritat: els grans pengen a alçades i separacions una mica diferents (sempre les mateixes, perquè no es moguin)
+        // Rosari irregular, com un de veritat (de fusta, fet a mà): els grans pengen a alçades i separacions una mica diferents, cadascun d'una variant del dibuix i girat de manera diferent
+        // (sempre igual, perquè no es moguin)
         const DX = [0, 2, -2, 1, -1, 2, -2], DY = [0, 5, -3, 6, -2, 4, -5];
+        const GIRS = [-17, 26, -6, 33, -28, 11, -38], VARIANTS = ['', '_b', '_c', '_b', '', '_c', '_b'];
         const gx = i => GRA_X0 + i * GRA_PAS + (DX[i] || 0) * ESC_HUD, gy = i => Y_BOTONS_HUD + (DY[i] || 0) * ESC_HUD;
         const pops = [];
         this.cors.forEach((img, i) => {
             const v = d.vida - i * 2;
-            const tex = v >= 2 ? 'gra_ple' : v === 1 ? 'gra_mig' : 'gra_buit';
-            const nivell = t => t === 'gra_ple' ? 2 : t === 'gra_mig' ? 1 : 0;
-            if (img.texAnt && nivell(tex) > nivell(img.texAnt) && i < d.corsMax) pops.push(i);       // guanya vida (no és la primera vegada; perdre'n ho anima animarPerdua)
-            img.texAnt = tex;
-            img.setVisible(i < d.corsMax).setPosition(gx(i), gy(i)).setTexture(tex);
-            this.ombresGrans[i].setVisible(i < d.corsMax).setPosition(gx(i) + 2.5, gy(i) + 3.5).setTexture(tex);
+            const niv = v >= 2 ? 2 : v === 1 ? 1 : 0;
+            const tex = (niv === 2 ? 'gra_ple' : niv === 1 ? 'gra_mig' : 'gra_buit') + (VARIANTS[i % 7] || '');
+            if (img.nivAnt !== undefined && niv > img.nivAnt && i < d.corsMax) pops.push(i);       // guanya vida (no és la primera vegada; perdre'n ho anima animarPerdua)
+            img.nivAnt = niv;
+            const gir = GIRS[i % 7] || 0; img.anglePropi = gir;
+            img.setVisible(i < d.corsMax).setPosition(gx(i), gy(i)).setTexture(tex).setAngle(gir);
+            this.ombresGrans[i].setVisible(i < d.corsMax).setPosition(gx(i) + 2.5, gy(i) + 3.5).setTexture(tex).setAngle(gir);
         });
         // Cordó: de la creueta al primer gra i, entre gra i gra, una mica penjant
         const c = this.cordo.clear();
@@ -547,7 +550,7 @@ class EscenaUI extends Phaser.Scene {
         this.animantCor = true;
         if (this.latidorTween) { this.latidorTween.stop(); this.latidorTween = null; }
         this.latidorIdx = -1;
-        this.cors.forEach(c => { this.tweens.killTweensOf(c); c.setScale(base).setAngle(0).clearTint(); });
+        this.cors.forEach(c => { this.tweens.killTweensOf(c); c.setScale(base).setAngle(c.anglePropi || 0).clearTint(); });
         this.cameras.main.shake(240, 0.006, true);
         this.cors.forEach((img, i) => {
             if (!img.visible) return;
@@ -562,7 +565,7 @@ class EscenaUI extends Phaser.Scene {
             this.time.delayedCall(90, () => img.clearTint());
             img.setScale(base * 2.1);
             this.tweens.add({ targets: img, scale: base, duration: 380, ease: 'Back.out' });
-            this.tweens.add({ targets: img, angle: { from: -22, to: 0 }, duration: 480, ease: 'Elastic.out' });
+            this.tweens.add({ targets: img, angle: { from: (img.anglePropi || 0) - 22, to: img.anglePropi || 0 }, duration: 480, ease: 'Elastic.out' });
             // Anell de llum que s'apaga
             const anell = this.add.graphics().setPosition(img.x, img.y).setDepth(img.depth + 1);
             anell.lineStyle(4, 0xffb060, 0.95).strokeCircle(0, 0, 18);
