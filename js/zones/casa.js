@@ -495,6 +495,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     construir() {
         this.sortidaTrapa = false;          // (l'escena es reutilitza en cada visita: sense això, en tornar de la cripta l'escala ja no es tornava a posar)
         this.sala(1400, 1000, 700, 0xb5a58a);
+        // els murs laterals (x 90-130 i 1270-1310) són sòlids, llevat de l'obertura de l'esquerra (y 655-825)
+        this.colisio(110, 327, 40, 655); this.colisio(110, 912, 40, 176); this.colisio(1290, 500, 40, 1000);
         // les parets laterals són de pedra (com a la resta de sales de pedra)
         [0, 700].forEach(yy => {
             this.add.image(90, yy, 'mur_pedra_irregular').setOrigin(0).setScale(1 / RES).setDepth(-994);
@@ -505,8 +507,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.add.image(130, 0, 'escalinata_fons').setOrigin(0).setScale(1 / RES).setDepth(-990);
         // L'escalinata de l'esquerra es pot pujar fins a mig camí; més amunt hi ha una esllavissada de blocs grossos que ho barra del tot
         this.registraGraons(130, 450, [236, 284, 334, 392, 444, 497, 549, 597].map(y => [y - 6, y + 6]));
-        (this.opacs = this.opacs || []).push(this.add.image(290, 440, 'esllavissada_escalinata').setOrigin(0.5, 1).setScale(1 / RES).setDepth(428));
-        this.colisio(290, 300, 300, 280);
+        (this.opacs = this.opacs || []).push(this.add.image(285, 440, 'esllavissada_escalinata').setOrigin(0.5, 1).setScale(1 / RES).setDepth(428));
+        this.colisio(285, 300, 306, 280);
         this.add.particles(290, 250, 'espurna', { x: { min: -140, max: 140 }, speedY: { min: 6, max: 18 }, speedX: { min: -4, max: 4 }, lifespan: 2600, scale: { start: 0.14, end: 0 }, alpha: { start: 0.35, end: 0 }, tint: [0xd8caa8, 0xb8a888], frequency: 380 }).setDepth(429);          // pols fina que encara cau
         this.colisio(1112, 400, 320, 480);
         this.colisio(450, 400, 24, 430);

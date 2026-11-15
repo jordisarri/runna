@@ -1419,7 +1419,7 @@ const Grafics = {
         crea('estora_cripta', 96, 300, pintarEstoraCripta);
         crea('teranyina_cripta', 100, 100, pintarTeranyinaCripta);
         crea('mur_pedra_irregular', 40, 700, pintarMurPedraIrregular);
-        crea('esllavissada_escalinata', 290, 300, pintarEsllavissadaEscalinata);
+        crea('esllavissada_escalinata', 306, 300, pintarEsllavissadaEscalinata);
         crea('banner_hall', 60, 150, pintarBannerHall);
         // Barril de fusta amb cèrcols de ferro, dogues i tapa
         crea('barril', 64, 84, pintarBarril);
