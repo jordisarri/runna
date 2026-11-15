@@ -1341,14 +1341,19 @@ class ZonaBase extends Phaser.Scene {
             const half = dw / 2 - 1, y0b = arc0 ? Y + 6 : top + 18, hb = Y + H - y0b;
             const bat = esq => {
                 const gb = this.add.graphics().setDepth(98400);
-                gb.setPosition(esq ? X0 + 1 : X1 - 1, 0);
-                const x0 = esq ? 0 : -half;
-                gb.fillStyle(0x4a2f1a, 1).fillRect(x0, y0b, half, hb);
-                gb.lineStyle(1.5, 0x24160a, 0.9); for (let k = 1; k < 3; k++) gb.lineBetween(x0 + k * half / 3, y0b, x0 + k * half / 3, y0b + hb);
-                gb.fillStyle(0x6a4524, 0.55).fillRect(x0 + (esq ? 2 : half - 6), y0b + 2, 4, hb - 4);
-                [0.3, 0.72].forEach(f => { gb.fillStyle(0x26221f, 1).fillRect(x0, y0b + hb * f - 3, half, 6); gb.fillStyle(0x8d8a84, 1).fillCircle(x0 + 5, y0b + hb * f, 1.4).fillCircle(x0 + half - 5, y0b + hb * f, 1.4); });
-                gb.fillStyle(0x26221f, 1).fillCircle(x0 + (esq ? half - 6 : 6), y0b + hb * 0.5, 2.2);
-                gb.lineStyle(2.2, 0x1c120a, 1).strokeRect(x0, y0b, half, hb);
+                const ox = esq ? X0 + 1 : X1 - 1;
+                gb.setPosition(ox, 0);
+                const x0 = esq ? 0 : -half, rr = dw / 2 - 6, yb = Y + 6;
+                const sup = xa => arc0 ? yb - Math.sqrt(Math.max(0, rr * rr - (xa - cx) * (xa - cx))) : y0b;          // vora de dalt de la fulla: segueix la volta de l'arc
+                const cont = [{ x: x0, y: Y + H }];
+                for (let k = 0; k <= 10; k++) { const xa = esq ? X0 + 1 + (cx - X0 - 1) * k / 10 : cx + (X1 - 1 - cx) * k / 10; cont.push({ x: xa - ox, y: sup(xa) }); }
+                cont.push({ x: x0 + half, y: Y + H });
+                gb.fillStyle(0x4a2f1a, 1).fillPoints(cont, true);
+                gb.lineStyle(1.5, 0x24160a, 0.9); for (let k = 1; k < 3; k++) { const xa = x0 + k * half / 3; gb.lineBetween(xa, sup(xa + ox) + 2, xa, Y + H); }
+                const alt = Y + H - y0b;
+                [0.45, 0.78].forEach(f => { const yy = y0b + alt * f; gb.fillStyle(0x26221f, 1).fillRect(x0, yy - 3, half, 6); gb.fillStyle(0x8d8a84, 1).fillCircle(x0 + 5, yy, 1.4).fillCircle(x0 + half - 5, yy, 1.4); });
+                gb.fillStyle(0x26221f, 1).fillCircle(x0 + (esq ? half - 6 : 6), y0b + alt * 0.62, 2.2);
+                gb.lineStyle(2.2, 0x1c120a, 1).strokePoints(cont, true);
                 return gb;
             };
             batents.push({ cx, bats: [bat(true), bat(false)], a: 0 });

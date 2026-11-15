@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 573: Portes d'abaix d'arc: les fulles de fusta ara omplen tot l'arc (la vora de dalt segueix la volta, amb taulons i ferros repartits per tota l'alçada); abans eren rectangulars i quedaven curtes.*
+
 *Revisió 572: Les portes d'abaix en angle recte es fan més altes (consell de l'agent d'art): alçada total màx(ample/2 + 56, ample × 1,25), uns 98 px a les de 84 d'ample, més altes que amples, com a les d'arc; muntants, llinda i batents hi arriben.*
 
 *Revisió 571: Les portes d'abaix dels interiors tenen la mateixa forma que la porta de fora que hi duu: d'arc (arrodonida) a Rebedor, Biblioteca, Masia, Hostatgeria, Gabriel, Casa d'en Jorgi, Taverna, Ping-pong, Passadís i Sota la Taverna; en angle recte a la resta. El marc (arc o llinda), de fusta o de pedra segons la sala, és opac i va per damunt de l'Ineu; els marcs de fusta s'aclareixen perquè es vegin sobre la paret.*
