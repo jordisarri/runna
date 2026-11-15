@@ -155,7 +155,7 @@ class ZonaJardi extends ZonaBase {
 
     posarEntradaForat() {
         const { x, y } = this.llosaPos;
-        this.sortidaEscala(x - 37, y - 37, 74, 74, 'ZonaSoterraniHost', 'entrada', y + 42);   // l'Ineu baixa l'escala abans de canviar de zona
+        Object.assign(this.sortidaEscala(x - 37, y - 37, 74, 74, 'ZonaSoterraniHost', 'entrada', y + 42), { nord: true, yFons: y - 26 });   // l'Ineu baixa l'escala abans de canviar de zona
     }
 
     // El cercle de runes de la llosa quan es desperta amb Runna (el mateix dibuix que s'encén a la seva obertura, obrirLlosa): batega suaument, amb una mica de llum i espurnes

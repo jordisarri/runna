@@ -2737,7 +2737,7 @@ class ZonaBase extends Phaser.Scene {
             }
         });
         Sfx.porta();
-        this.time.delayedCall(1500, () => { this.canviarZona(s.desti, s.entrada); });
+        this.time.delayedCall(1500, () => { this.canviant = false; this.canviarZona(s.desti, s.entrada); });
     }
 
     // Per on surt una sortida: segons la vora de la zona on és el rectangle (igual que marcarSortida)
