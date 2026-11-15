@@ -437,7 +437,7 @@ class ZonaCasaBase extends ZonaBase {
     // Porta de la paret de l'esquerra, vista des de dalt (com els jocs de dalt: A Link to the Past): la paret és una franja vertical de pedra; el forat és un
     // rectangle fosc que travessa el gruix de la paret, flanquejat per dues columnes rodones i amb un graó de pedra clar a la vora de la sala
     portaSecreta(x, y) {
-        const H = 104, y0 = y - H / 2, xp = 90, xt = 130, d = y - 60;      // la paret de l'esquerra ocupa x 90-130: aquí només s'hi obre un forat
+        const H = 170, y0 = y - H / 2, xp = 90, xt = 130, d = y - 60;      // la paret de l'esquerra ocupa x 90-130: aquí només s'hi obre un forat
         const g = this.add.graphics().setDepth(d);
         g.fillStyle(0x0a0705, 1).fillRect(xp, y0, xt - xp, H);
         g.fillGradientStyle(0x0a0705, 0x4a3c28, 0x0a0705, 0x4a3c28, 1, 1, 1, 1).fillRect(xp, y0, xt - xp, H);
@@ -497,8 +497,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         this.sala(1400, 1000, 700, 0xb5a58a);
         // les parets laterals són de pedra (com a la resta de sales de pedra)
         [0, 700].forEach(yy => {
-            this.add.image(90, yy, 'mur_ermita').setOrigin(0).setScale(1 / RES).setDepth(-994);
-            this.add.image(1400 - 130, yy, 'mur_ermita').setOrigin(0).setScale(1 / RES).setDepth(-994).setFlipX(true);
+            this.add.image(90, yy, 'mur_pedra_irregular').setOrigin(0).setScale(1 / RES).setDepth(-994);
+            this.add.image(1400 - 130, yy, 'mur_pedra_irregular').setOrigin(0).setScale(1 / RES).setDepth(-994).setFlipX(true);
         });
 
         // Escala de pedra a l'esquerra, volta i balcó al fons, mur amb porta a la dreta, lloses al mig (a partir de les fotos de l'Home del Raïm real)
@@ -517,7 +517,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
 
         // Porta camuflada (esquerra): torna a la sala del tresor
         this.portaSecreta(112, 740);
-        this.sortida(116, 690, 14, 100, 'ZonaCasaTresor', 'escala');
+        this.sortida(116, 656, 14, 168, 'ZonaCasaTresor', 'escala');
 
         this.reixaPorxo();
         // Paret de baix, a banda i banda de la reixa: un sòcol de pedra fosca que tanca la sala (abans s'hi podia ficar l'Ineu)

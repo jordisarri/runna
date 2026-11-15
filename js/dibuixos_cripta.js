@@ -131,3 +131,24 @@ function pintarEsllavissadaEscalinata(ctx, w, h) {
     for (let j = 0; j < 60; j++) bloc(8 + rnd() * (w - 16), h - 40 + rnd() * 34, 5 + rnd() * 11, TONS[j % 3]);
     ctx.restore();
 }
+
+// Mur de pedra irregular (40 x 700): pedres de mides i formes molt diferents, d'un to càlid de roca natural, amb juntes fondes i irregulars (no un totxo gris regular).
+function pintarMurPedraIrregular(ctx, w, h) {
+    let llavor = 77; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+    ctx.fillStyle = '#2a2018'; ctx.fillRect(0, 0, w, h);
+    const TONS = [['#b09c7a', '#8a7658', '#5a4a36'], ['#9c8868', '#786448', '#4a3c2a'], ['#bca886', '#947e5c', '#62503a'], ['#8a7a60', '#6a5a42', '#3e3224']];
+    for (let y = -10; y < h + 10;) {
+        const alt = 18 + rnd() * 34; let x = -8 + rnd() * 6;
+        while (x < w) {
+            const ample = 14 + rnd() * 30, t = TONS[(rnd() * TONS.length) | 0];
+            const pts = [[x, y], [x + ample * (0.3 + rnd() * 0.4), y - rnd() * 3], [x + ample, y + rnd() * 3], [x + ample + rnd() * 3, y + alt * 0.5], [x + ample - rnd() * 3, y + alt], [x + ample * 0.4, y + alt + rnd() * 3], [x - rnd() * 3, y + alt * 0.6]];
+            ctx.beginPath(); pts.forEach(([px, py], i) => i ? ctx.lineTo(px, py) : ctx.moveTo(px, py)); ctx.closePath();
+            const g = ctx.createLinearGradient(x, y, x + ample, y + alt); g.addColorStop(0, t[0]); g.addColorStop(0.55, t[1]); g.addColorStop(1, t[2]);
+            ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = '#1a120c'; ctx.lineWidth = 2.2; ctx.lineJoin = 'round'; ctx.stroke();
+            ctx.strokeStyle = 'rgba(255,236,200,0.28)'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(pts[0][0] + 2, pts[0][1] + 2); ctx.lineTo(pts[1][0], pts[1][1] + 2); ctx.lineTo(pts[2][0] - 2, pts[2][1] + 2); ctx.stroke();
+            for (let k = 0; k < 4; k++) { ctx.fillStyle = 'rgba(20,12,6,0.25)'; ctx.fillRect(x + rnd() * ample, y + rnd() * alt, 1 + rnd() * 3, 1 + rnd() * 2); }
+            x += ample + rnd() * 3;
+        }
+        y += alt + rnd() * 2;
+    }
+}
