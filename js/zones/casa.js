@@ -527,7 +527,11 @@ class ZonaCasaGranInt extends ZonaCasaBase {
 
         // Escala de pedra a l'esquerra, volta i balcó al fons, mur amb porta a la dreta, lloses al mig (a partir de les fotos de l'Home del Raïm real)
         this.add.image(130, 0, 'escalinata_fons').setOrigin(0).setScale(1 / RES).setDepth(-990);
-        this.colisio(290, 400, 320, 480);
+        // L'escalinata de l'esquerra es pot pujar fins a mig camí; més amunt hi ha una esllavissada de blocs grossos que ho barra del tot
+        this.registraGraons(130, 450, [236, 284, 334, 392, 444, 497, 549, 597].map(y => [y - 6, y + 6]));
+        (this.opacs = this.opacs || []).push(this.add.image(290, 428, 'esllavissada_escalinata').setOrigin(0.5, 1).setScale(1 / RES).setDepth(428));
+        this.colisio(290, 290, 320, 250);
+        this.add.particles(290, 250, 'espurna', { x: { min: -140, max: 140 }, speedY: { min: 6, max: 18 }, speedX: { min: -4, max: 4 }, lifespan: 2600, scale: { start: 0.14, end: 0 }, alpha: { start: 0.35, end: 0 }, tint: [0xd8caa8, 0xb8a888], frequency: 380 }).setDepth(429);          // pols fina que encara cau
         this.colisio(1112, 400, 320, 480);
         this.colisio(450, 400, 24, 430);
         this.colisio(950, 400, 24, 430);

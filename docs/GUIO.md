@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 550: Escalinata de la Casa Gran: es pot pujar fins a mig camí (amb els tocs de cada graó) i més amunt hi ha una esllavissada de blocs grossos de pedra càlida, una llosa trencada i una biga de fusta (dibuix nou, diferent de les roques dels camins), amb pols fina que encara cau; barra el pas del tot.*
+
 *Revisió 549: (1) La barra de fusta de la reixa de sortida de la sala de l'Home del Raïm brilla mentre no s'ha aixecat i no hi ha combat. (2) Arreglat: en sortir de la cripta, l'escala de la trapa ja no es tornava a posar i no es podia tornar a baixar; ara es pot entrar i sortir tantes vegades com es vulgui.*
 
 *Revisió 548: Cripta de la Casa Gran: decoració nova (js/dibuixos_cripta.js): estora vermella amb rombes daurats des de la porta fins a la llosa, quatre brasers de ferro amb flama, claror i espurnes, àmfores, dos munts de calaveres amb ossos, espelmes i calaveres sobre els sarcòfags i teranyines als cantons del fons. Tot el que hi ha (sarcòfags, pilastres, llosa, candelabres, brasers, àmfores, calaveres, espelmes) és opac.*
