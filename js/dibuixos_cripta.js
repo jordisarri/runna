@@ -132,23 +132,34 @@ function pintarEsllavissadaEscalinata(ctx, w, h) {
     ctx.restore();
 }
 
-// Mur de pedra irregular (40 x 700): pedres de mides i formes molt diferents, d'un to càlid de roca natural, amb juntes fondes i irregulars (no un totxo gris regular).
+// Mur de pedra irregular (40 x 1000): filades de pedres tallades i ben encaixades de mides diferents (una o dues per filada, mai talls a mitges), amb morter fosc a les juntes,
+// vores arrodonides, llum a dalt-esquerra i ombra a baix-dreta; el desplaçament de les juntes canvia a cada filada. Retallat net als costats.
 function pintarMurPedraIrregular(ctx, w, h) {
-    let llavor = 77; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
-    ctx.fillStyle = '#2a2018'; ctx.fillRect(0, 0, w, h);
-    const TONS = [['#b09c7a', '#8a7658', '#5a4a36'], ['#9c8868', '#786448', '#4a3c2a'], ['#bca886', '#947e5c', '#62503a'], ['#8a7a60', '#6a5a42', '#3e3224']];
-    for (let y = -10; y < h + 10;) {
-        const alt = 18 + rnd() * 34; let x = -8 + rnd() * 6;
-        while (x < w) {
-            const ample = 14 + rnd() * 30, t = TONS[(rnd() * TONS.length) | 0];
-            const pts = [[x, y], [x + ample * (0.3 + rnd() * 0.4), y - rnd() * 3], [x + ample, y + rnd() * 3], [x + ample + rnd() * 3, y + alt * 0.5], [x + ample - rnd() * 3, y + alt], [x + ample * 0.4, y + alt + rnd() * 3], [x - rnd() * 3, y + alt * 0.6]];
-            ctx.beginPath(); pts.forEach(([px, py], i) => i ? ctx.lineTo(px, py) : ctx.moveTo(px, py)); ctx.closePath();
-            const g = ctx.createLinearGradient(x, y, x + ample, y + alt); g.addColorStop(0, t[0]); g.addColorStop(0.55, t[1]); g.addColorStop(1, t[2]);
-            ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = '#1a120c'; ctx.lineWidth = 2.2; ctx.lineJoin = 'round'; ctx.stroke();
-            ctx.strokeStyle = 'rgba(255,236,200,0.28)'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(pts[0][0] + 2, pts[0][1] + 2); ctx.lineTo(pts[1][0], pts[1][1] + 2); ctx.lineTo(pts[2][0] - 2, pts[2][1] + 2); ctx.stroke();
-            for (let k = 0; k < 4; k++) { ctx.fillStyle = 'rgba(20,12,6,0.25)'; ctx.fillRect(x + rnd() * ample, y + rnd() * alt, 1 + rnd() * 3, 1 + rnd() * 2); }
-            x += ample + rnd() * 3;
-        }
-        y += alt + rnd() * 2;
+    let llavor = 91; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+    ctx.fillStyle = '#2a2018'; ctx.fillRect(0, 0, w, h);                                             // morter
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, w, h); ctx.clip();
+    const TONS = [['#bca886', '#968060', '#6a563e'], ['#a8946f', '#82704f', '#584834'], ['#b49e7a', '#8e7a58', '#605038'], ['#9a8866', '#76664a', '#4e4030']];
+    const pedra = (x0, y0, x1, y1, t) => {
+        const m = 1.6, a = x0 + m, b = y0 + m, c = x1 - m, d = y1 - m, r = Math.min(5, (c - a) * 0.3, (d - b) * 0.3);
+        const j = () => (rnd() - 0.5) * 2;
+        ctx.beginPath();
+        ctx.moveTo(a + r + j(), b + j() * 0.6); ctx.lineTo(c - r + j(), b + j() * 0.6); ctx.quadraticCurveTo(c + j(), b, c + j() * 0.6, b + r);
+        ctx.lineTo(c + j() * 0.6, d - r); ctx.quadraticCurveTo(c, d + j(), c - r, d + j() * 0.6); ctx.lineTo(a + r, d + j() * 0.6); ctx.quadraticCurveTo(a + j(), d, a, d - r);
+        ctx.lineTo(a + j() * 0.6, b + r); ctx.quadraticCurveTo(a, b, a + r, b); ctx.closePath();
+        const g = ctx.createLinearGradient(a, b, c, d); g.addColorStop(0, t[0]); g.addColorStop(0.55, t[1]); g.addColorStop(1, t[2]);
+        ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = '#1a120c'; ctx.lineWidth = 1.8; ctx.lineJoin = 'round'; ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,238,205,0.34)'; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(a + 2, d - 4); ctx.lineTo(a + 2, b + 3); ctx.lineTo(c - 4, b + 3); ctx.stroke();
+        ctx.strokeStyle = 'rgba(20,12,6,0.32)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(c - 2, b + 4); ctx.lineTo(c - 2, d - 2); ctx.lineTo(a + 4, d - 2); ctx.stroke();
+        for (let k = 0; k < 5; k++) { ctx.fillStyle = 'rgba(25,15,8,0.28)'; ctx.fillRect(a + 3 + rnd() * (c - a - 6), b + 3 + rnd() * (d - b - 6), 1 + rnd() * 2, 1 + rnd() * 1.5); }
+        if (rnd() < 0.3) { ctx.strokeStyle = 'rgba(25,15,8,0.45)'; ctx.lineWidth = 1; ctx.beginPath(); const sx = a + (c - a) * (0.3 + rnd() * 0.4); ctx.moveTo(sx, b + 2); ctx.lineTo(sx + (rnd() - 0.5) * 8, b + (d - b) * 0.55); ctx.stroke(); }          // esquerda
+    };
+    let y = 0, f = 0;
+    while (y < h) {
+        const alt = 20 + ((rnd() * 22) | 0);
+        const talls = rnd() < 0.55 ? [-4 + rnd() * 4, 14 + rnd() * 14, w + 4] : [-4, w + 4];          // una o dues pedres per filada
+        if (talls.length === 3 && talls[1] < 12) talls[1] = 14;
+        for (let k = 0; k < talls.length - 1; k++) pedra(talls[k], y, talls[k + 1], y + alt, TONS[(rnd() * TONS.length) | 0]);
+        y += alt; f++;
     }
+    ctx.restore();
 }

@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 558: Mur de pedra de la sala de l'Escalinata redibuixat: filades de pedres ben tallades i encaixades (una o dues per filada, de mides diferents), amb morter fosc, vores arrodonides, llum i ombra, alguna esquerda, i retallat net als costats; una sola imatge de tota l'alçada (sense la junta que hi havia a mig mur).*
+
 *Revisió 557: Sala de l'Escalinata: els murs laterals eren travessables (només hi havia col·lisió fins a x 90); ara són sòlids, llevat de l'obertura de l'esquerra, que continua duent a la cambra secreta. L'esllavissada cobreix tota l'amplada de l'escala, de paret a barana.*
 
 *Revisió 556: Sala de l'Escalinata: l'obertura de la paret és més gran (170 d'alt, amb la sortida ajustada) i les parets laterals tenen un mur nou de pedra irregular i càlida (pedres de mides i formes molt diferents amb juntes fondes), en lloc del totxo gris regular.*

@@ -498,10 +498,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         // els murs laterals (x 90-130 i 1270-1310) són sòlids, llevat de l'obertura de l'esquerra (y 655-825)
         this.colisio(110, 327, 40, 655); this.colisio(110, 912, 40, 176); this.colisio(1290, 500, 40, 1000);
         // les parets laterals són de pedra (com a la resta de sales de pedra)
-        [0, 700].forEach(yy => {
-            this.add.image(90, yy, 'mur_pedra_irregular').setOrigin(0).setScale(1 / RES).setDepth(-994);
-            this.add.image(1400 - 130, yy, 'mur_pedra_irregular').setOrigin(0).setScale(1 / RES).setDepth(-994).setFlipX(true);
-        });
+        this.add.image(90, 0, 'mur_pedra_irregular').setOrigin(0).setScale(1 / RES).setDepth(-994);
+        this.add.image(1400 - 130, 0, 'mur_pedra_irregular').setOrigin(0).setScale(1 / RES).setDepth(-994).setFlipX(true);
 
         // Escala de pedra a l'esquerra, volta i balcó al fons, mur amb porta a la dreta, lloses al mig (a partir de les fotos de l'Home del Raïm real)
         this.add.image(130, 0, 'escalinata_fons').setOrigin(0).setScale(1 / RES).setDepth(-990);
