@@ -938,13 +938,10 @@ const Grafics = {
             if (mode > 0) {
                 ctx.save();
                 if (mode === 1) { ctx.beginPath(); ctx.rect(0, 0, cx, 44); ctx.clip(); }
-                // halo càlid
-                const h = ctx.createRadialGradient(cx, cy, r - 2, cx, cy, r + 6); h.addColorStop(0, 'rgba(255,190,90,0.55)'); h.addColorStop(1, 'rgba(255,190,90,0)');
-                ctx.fillStyle = h; ctx.beginPath(); ctx.arc(cx, cy, r + 6, 0, Math.PI * 2); ctx.fill();
-                esfera('#ffd894', '#c27a34', '#5a2a0e');
+                // (mat: sense halo; degradat suau, de fusta encerada i no polida)
+                esfera('#dfa862', '#c08040', '#7a4018');
                 veta(0.5);
-                ctx.fillStyle = 'rgba(255,255,255,0.75)'; ctx.beginPath(); ctx.ellipse(cx - 6, cy - 7, 4.6, 2.8, -0.6, 0, Math.PI * 2); ctx.fill();
-                ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.arc(cx + 6, cy + 7, 1.6, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = 'rgba(255,236,200,0.2)'; ctx.beginPath(); ctx.ellipse(cx - 6, cy - 7, 4.6, 2.8, -0.6, 0, Math.PI * 2); ctx.fill();
                 ctx.restore();
                 if (mode === 1) { ctx.strokeStyle = 'rgba(30,14,4,0.7)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx, cy - r + 1); ctx.lineTo(cx, cy + r - 1); ctx.stroke(); }
             }
