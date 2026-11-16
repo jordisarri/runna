@@ -265,6 +265,13 @@ const Joc = {
         fetch(encodeURI(`assets/musica/${f}.m4a`)).then(r => r.ok ? r.arrayBuffer() : null).then(ok => { if (ok) Joc.musicaBaixada.add(f); }).catch(() => {})
             .then(() => { Joc.baixantMusica.delete(f); espera.forEach(g => g()); });
     },
+    musicaProleg() { const k = Joc.resoldreMusica('musica_proleg'); Joc.baixarMusica(Joc.FITXERS_MUSICA[k] || (Joc.MUSICA_OPCIONAL[k] && Joc.MUSICA_OPCIONAL[k].fitxer)); },
+    // Les cançons de les zones veïnes (les de les sortides, interiors o escenaris del costat) es posen a baixar en entrar a una zona, abans de la resta de la cua
+    musicaVeines(z) {
+        const claus = new Set((z.sortides || []).map(s => Joc.MUSICA_ZONES[s.desti]).filter(Boolean));
+        claus.add(Joc.MUSICA_ZONES[z.scene.key]);
+        claus.forEach(k => { if (!k) return; const r = Joc.resoldreMusica(k); Joc.baixarMusica(Joc.FITXERS_MUSICA[r] || (Joc.MUSICA_OPCIONAL[r] && Joc.MUSICA_OPCIONAL[r].fitxer)); });
+    },
     // La cançó de la zona on comença la partida: la de la partida desada, o la del poble (la plaça) si és nova
     musicaIniciPartida() {
         try {
@@ -277,6 +284,7 @@ const Joc = {
         const fitxerDe = k => Joc.FITXERS_MUSICA[k] || (Joc.MUSICA_OPCIONAL[k] && Joc.MUSICA_OPCIONAL[k].fitxer);
         const f0 = fitxerDe(Joc.resoldreMusica(Joc.musicaIniciPartida()));
         Joc.baixarMusica(f0);
+        if (!Estat.hiHaPartida()) Joc.musicaProleg();          // partida nova: el pròleg també (si n'hi ha una de desada, només si es tria «Nova partida»)
         const resta = new Set(Object.values(Joc.FITXERS_MUSICA));
         Object.entries(Joc.MUSICA_OPCIONAL).forEach(([k, o]) => { if (!o.jingle && Joc.musicaDisponible.has(k)) resta.add(o.fitxer); });
         resta.delete(f0);

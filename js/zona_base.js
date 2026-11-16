@@ -234,6 +234,7 @@ class ZonaBase extends Phaser.Scene {
         Estat.posaFlag('visitada_' + this.scene.key); // el mapa només mostra el que s'ha visitat
         // Si s'hi arriba després d'una derrota (el Pare Jordà et recull), sona la música de l'església durant tota l'escena; en acabar entra la de la zona
         if (Estat.caigut) Joc.iniciarMusica(this, 0, Joc.MUSICA_ZONES.ZonaEsglesia, 1500); else Joc.musicaZona(this);
+        this.time.delayedCall(400, () => { if (this.sys.isActive()) Joc.musicaVeines(this); });          // (les sortides ja són posades) baixa la música de les zones veïnes
         // Red de seguretat: si passat un moment una zona amb música no en té cap (o la que sona no és la seva), s'hi posa la de la zona
         this.time.delayedCall(1500, () => {
             const clau = Joc.MUSICA_ZONES[this.scene.key];

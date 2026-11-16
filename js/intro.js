@@ -232,6 +232,7 @@ class EscenaTitol extends Phaser.Scene {
         if (hiHa && !window.confirm('Començar una partida nova? Es perdrà la partida desada.')) return;
         Estat.nova();
         Estat.desar();
+        Joc.musicaProleg();          // el pròleg (si no s'havia baixat encara, perquè hi havia una partida desada)
         this.scene.start('Proleg');
     }
 }
