@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 579: rosari de la vida: les betes de la fusta ara són irregulars (ondulades, de gruix i longitud variables) en comptes de línies rectes.*
+
 *Revisió 578: rosari de la vida: tornen els grans brillants, però cada gra té la veta de la fusta inclinada diferent (set de 7 textures); el reflex i la llum són iguals a tots.*
 
 *Revisió 577: Els grans del rosari de la vida són més mats: sense halo, degradat més suau i amb un reflex molt tènue.*

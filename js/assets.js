@@ -924,9 +924,25 @@ const Grafics = {
                 g.addColorStop(0, clar); g.addColorStop(0.45, mig); g.addColorStop(1, fosc);
                 ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
             };
-            const veta = alfa => {          // anells de la fusta i el canal per on passa el cordó
-                ctx.strokeStyle = `rgba(60,28,8,${alfa})`; ctx.lineWidth = 1;
-                [6, 10.5].forEach(ry => { ctx.beginPath(); ctx.ellipse(cx, cy, r - 1, ry, ang, 0, Math.PI * 2); ctx.stroke(); });
+            const veta = alfa => {          // betes irregulars de la fusta (ondulades, de gruix i longitud variables), girades segons `ang`
+                ctx.save();
+                ctx.beginPath(); ctx.arc(cx, cy, r - 1, 0, Math.PI * 2); ctx.clip();
+                ctx.translate(cx, cy); ctx.rotate(ang);
+                let sem = Math.floor(Math.abs(ang) * 1000) + 7;          // aleatori determinista: la mateixa veta a cada textura
+                const rnd = () => (sem = (sem * 16807) % 2147483647) / 2147483647;
+                ctx.lineCap = 'round';
+                for (let y = -r + 1.5; y < r; y += 2.2 + rnd() * 2.2) {
+                    const f1 = 0.18 + rnd() * 0.22, f2 = 0.5 + rnd() * 0.6, a1 = 0.8 + rnd() * 1.8, a2 = 0.3 + rnd() * 0.6, ph = rnd() * 6.28;
+                    const x0 = -r + rnd() * 6, x1 = r - rnd() * 6;
+                    ctx.strokeStyle = `rgba(60,28,8,${alfa * (0.45 + rnd() * 0.7)})`; ctx.lineWidth = 0.6 + rnd() * 0.9;
+                    ctx.beginPath();
+                    for (let x = x0; x <= x1; x += 1.5) {
+                        const yy = y + Math.sin(x * f1 + ph) * a1 + Math.sin(x * f2 + ph * 2) * a2;
+                        x === x0 ? ctx.moveTo(x, yy) : ctx.lineTo(x, yy);
+                    }
+                    ctx.stroke();
+                }
+                ctx.restore();
             };
             // apagat (base de tots tres)
             esfera('#7a6a5c', '#4a3c30', '#211810');
