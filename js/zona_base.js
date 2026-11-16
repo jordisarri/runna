@@ -220,7 +220,7 @@ class ZonaBase extends Phaser.Scene {
         this.dadesEntrada = data || {};
         this.canviant = false;
         this.camDialeg = null;
-        this.bancsEsg = []; this.assegut = false; this.davantBanc = null; this.npcs = {}; this.opacs = []; this.npcDavant = null; this.camCinema = false; this.camArma = false; this.efectesArma = null; this.ineuFlautaImg = null; this.ineuAmagat = false;          // (l'escena es reaprofita: res de la visita anterior)
+        this.bancsEsg = []; this.assegut = false; this.davantBanc = null; this.npcs = {}; this.opacs = []; this.forcsPorta = []; this.npcDavant = null; this.camCinema = false; this.camArma = false; this.efectesArma = null; this.ineuFlautaImg = null; this.ineuAmagat = false;          // (l'escena es reaprofita: res de la visita anterior)
         this.boundsCamOrig = null;
         this.twCamDialeg = null;
         this.entradaPropia = false;
@@ -2089,6 +2089,7 @@ class ZonaBase extends Phaser.Scene {
         if (!f || !i || !f.active || !i.active) return;             // (en tancar l'escena ja no hi són)
         if (f.texture.key !== i.texture.key || f.frame.name !== i.frame.name) f.setTexture(i.texture.key, i.frame.name);
         f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(this.assegut ? 0 : i.alpha * 0.38);   // assegut: el banc el tapa de debò
+        if ((this.forcsPorta || []).some(q => i.x > q.x0 && i.x < q.x1 && i.y > q.t && i.y < q.b)) f.setAlpha(0);          // dins d'una porta: el marc el tapa de debò
         // Els personatges no es transparenten com els arbres: si un que és davant de l'Ineu el tapa, la silueta s'amaga on hi ha el personatge
         const ib = i.getBounds();
         // Un objecte opac (orgue, altar, bancs...) davant l'Ineu amaga del tot la silueta, encara que també hi hagi un personatge davant (només es pot emmascarar amb un objecte)
@@ -2346,6 +2347,7 @@ class ZonaBase extends Phaser.Scene {
             pts.push({ x: x0 + ample, y: alt });
             return pts;
         };
+        (this.forcsPorta = this.forcsPorta || []).push({ x0: DX - DW / 2 - 4, x1: DX + DW / 2 + 4, t: DT, b: DB + 2 });          // el marc i l'interior tapen l'Ineu: la silueta translúcida s'hi amaga
         const dins = this.add.graphics().setDepth(Z + 1).setPosition(0, DT);
         dins.fillStyle(0x0e0806, 1).fillPoints(forma(DX - DW / 2, DW, H, o.arc), true);
         dins.fillGradientStyle(0x0e0806, 0x0e0806, 0x6a4420, 0x6a4420, 1, 1, 0.9, 0.9).fillRect(DX - DW / 2, H * 0.45, DW, H * 0.55);
