@@ -53,6 +53,88 @@ SECCIONS = [
                                 'zones/gabia:iniciarCombatFinal', 'zones/gabia:ocellaireDerrotat', 'zones/gabia:obrirGabia', 'zones/gabia:finalGabia']),
     ('Epíleg: després del final', ['zones/esglesia:ferEpileg', 'zones/gabia:gentEpileg']),
 ]
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+# NOMS DE FLAGS I OBJECTES -> català entenedor (per a les línies «Si: ...»). La frase afirmativa comença per un verb («ha ...», «és ...», «sap ...», «porta ...»):
+# la negativa s'obté posant-hi «encara no» davant. Si surt un nom que no és aquí, es mostra tal qual i el programa t'ho avisa.
+# ---------------------------------------------------------------------------------------------------------------------------------------------------------
+FLAGS = {
+    'clauerNovici': "ha parlat per primer cop amb el Pare Jordà (l'encàrrec inicial)",
+    'cantAurora': "sap el Cant de l'Aurora", 'cantPedres': "sap el Cant de Vespres (el de les pedres)", 'cantMiracle': "sap el Cant del Miracle",
+    'aurora': "toca el Cant de l'Aurora", 'pedres': "toca el Cant de Vespres", 'miracle': "toca el Cant del Miracle",
+    'bassadoriaNeta': "ha netejat la Bassadòria", 'camiCirosaObert': "ha obert el camí de la Cirosa",
+    'soparObert': "ha sentit parlar del sopar del Til·ler", 'soparFet': "ha fet el sopar del Til·ler", 'pastorsConvencuts': "ha convençut els pastors de la Cirosa",
+    'pastorVencut': "ha vençut el Pastor de Boira", 'parlatTiler': "ha parlat amb el Gran Til·ler", 'escudella': "té l'escudella de la Meus", 'floresIsilder': "té les flors de l'Isílder",
+    'fullaTiler': "té la fulla del Til·ler", 'benediccio': "ha rebut la benedicció del prior", 'benedicioMonjo': "ha rebut la benedicció de l'ombra del monjo",
+    'saber': "ha rebut el Saber (les paraules del monjo)", 'alcoviLlegit': "ha fet llegir els pergamins al Pare Alcoví", 'alcoviPlacaDita': "ha sentit del Pare Alcoví què diu la placa del Dolmen",
+    'ombraDemanaCant': "ha sentit que l'ombra del monjo demana un cant", 'perOmbra': "parla amb l'ombra del monjo",
+    'runna': "ha aconseguit Runna", 'cantAurora ': "", 'relTretes': "ha tret les relíquies de la Casa Gran", 'tombaSegellada': "ha trobat segellada la tomba de l'Ocellaire", 'tombaLlegida': "ha llegit la tomba dels monjos",
+    'garfBancSegut': "s'ha assegut al banc del Galf", 'telescopi': "té el telescopi", 'cristallGel': "ha trobat el cristall de gel", 'estelsFets': "ha vist tots els estels", 'estelLlorenc': "ha recollit l'estel d'en Llorenç",
+    'rellotgeExplicat': "ha sentit l'explicació del rellotge del Santuari", 'rellotgeReparat': "ha reparat el rellotge de la torre", 'portaCampanarOberta': "ha obert la porta del campanar",
+    'clau_campanar': "porta la clau del campanar", 'senseClauCampanar(E': "encara no té la clau del campanar", 'carryParlat': "ha parlat amb la Carry",
+    'premiDolora': "ha rebut el premi de la Dolora", 'premiPilaria': "ha rebut el premi de la Pilària", 'premiCarmelia': "ha rebut el premi de la Carmèlia",
+    'missatgeDesxifrat': "ha desxifrat el missatge de les dotze columnes", 'totes': "ha llegit totes les columnes", 'clau_sagrari': "porta la clau del sagrari", 'sagrari': "ha obert el sagrari",
+    'guants': "porta els Guants de Poder", 'maneta': "porta la maneta", 'georgiManeta': "ha parlat amb en Jorgi de la maneta", 'esquelles': "porta les esquelles", 'esquellesVistes': "ha vist les esquelles",
+    'basto_tiller': "porta el bastó del Til·ler", 'carta_cortiner': "porta la carta del Cortiner", 'piObert': "ha obert el pi dels tres cants", 'placaDolmen': "ha llegit la placa del Dolmen",
+    'llosaOberta': "ha obert la llosa del jardí", 'llavorLluna': "porta la llavor de lluna", 'isilderSap': "ha avisat l'Isílder", 'mongesTrobades': "ha trobat les sacerdotesses",
+    'manduNinaTrencada': "s'ha trencat la nina de la Mandu", 'nenaVista': "ha vist la Nena de les Trenes", 'joanetaVista': "ha vist la Joaneta", 'iscuTrobat': "ha trobat l'Iscu", 'eveParlat': "ha parlat amb l'Eve",
+    'epilegFet': "ha vist l'epíleg", 'carruatgeObert': "ha obert el carruatge del Follet", 'ocellaireVencut': "ha vençut l'Ocellaire", 'pontGabia': "ha creuat el pont de la Gàbia",
+    'bastoObtingut': "porta el bastó", 'florsCreu': "ha deixat flors a la creu", 'raimVolantVist': "ha vist el volant del Raïm", 'botaAlcada': "ha fet servir la bota d'alçada", 'pallofa': "porta l'encàrrec del Pallofa",
+    'ram': "porta el ram", 'aigua_sj': "porta l'aigua de Sant Joan", 'abandonat': "ha abandonat la partida de ping-pong", 'encarrec': "té un encàrrec del Pare Nadiel", 'parlatDaimiel': "ha parlat amb el Pare Nadiel",
+    'herbes': "té les herbes de Sant Joan",
+}
+OBJECTES = {'runna': "porta l'espasa Runna", 'maneta': 'porta la maneta', 'guants': 'porta els Guants de Poder', 'ram': 'porta el ram', 'aigua_sj': "porta l'aigua de Sant Joan", 'llavorLluna': 'porta la llavor de lluna',
+            'basto_tiller': 'porta el bastó del Til·ler', 'carta_cortiner': 'porta la carta del Cortiner', 'clau_sagrari': 'porta la clau del sagrari', 'clau_campanar': 'porta la clau del campanar',
+            'esquelles': 'porta les esquelles', 'telescopi': 'porta el telescopi', 'pallofa': "porta l'encàrrec del Pallofa", 'cristall_gel': 'porta el cristall de gel', 'llanterna': "porta el Llum d'en Mamet"}
+CONNECTORS = {'i': 'i', 'o': 'o'}
+STOP = ('combatActiu', 'combatIniciat', 'avisBoira', 'faltaRunna', 'pas', 'ui', 'now', 'conegudes', 'f1', 'f2', 'gestionada', 'mogut', 'primera', 'avis', 'n', 'nom', 'id', 'aviat', 'portats', 'totsPlacats', 'encarrec', 'abandonat', 'ineu', 'hi', 'si', 'que')           # variables internes del programa: la condició es resumeix com a «calculada»
+NOS_CONEGUTS = set()
+
+
+def humanitza(marca):
+    """Converteix la condició «NO x i té y» en català entenedor."""
+    if not marca or marca.startswith('altrament'):
+        return marca
+    parts = []
+    for tros in marca.split(' ; '):
+        tros = tros.strip()
+        tros = re.sub(r'//.*$', '', tros).strip()
+        sub = []
+        # la fletxa → separa condicions encadenades
+        for peça in re.split(r'\s*→\s*', tros):
+            peça = peça.strip(' ){')
+            # qualsevol cosa que no sigui «NO / té / noms / i / o» és codi del programa
+            if re.search(r"[=<>.\[\]'+*/%]|\bthis\b|\bnow\b|\blength\b", peça):
+                sub.append('(depèn d\'un càlcul del joc)')
+                continue
+            if any(re.search(r'\b' + re.escape(z) + r'\b', peça) for z in STOP):          # variables internes del programa
+                sub.append("(depèn d'un càlcul del joc)")
+                continue
+            toks = re.findall(r"NO |té |[A-Za-z_][A-Za-z_0-9]*\(?E?|\)|\(", peça)
+            sortida = []
+            neg = False; te = False
+            for t in toks:
+                if t == 'NO ': neg = True; continue
+                if t == 'té ': te = True; continue
+                if t in ('(', ')'): continue
+                if t in CONNECTORS and not neg and not te:
+                    sortida.append(CONNECTORS[t]); continue
+                nom = t.strip()
+                if te and nom in OBJECTES and nom not in FLAGS:
+                    sortida.append(('encara no ' + OBJECTES[nom]) if neg else OBJECTES[nom]); neg = False; te = False; continue
+                if nom in FLAGS and FLAGS[nom]:
+                    f = FLAGS[nom]
+                    if te:                                   # «té X» (objecte)
+                        f = OBJECTES.get(nom, 'porta ' + nom)
+                    sortida.append(('encara no ' + f) if neg else f)
+                else:
+                    NOS_CONEGUTS.add(nom)
+                    sortida.append(('NO ' if neg else '') + ('té ' if te else '') + nom)
+                neg = False; te = False
+            sub.append(' '.join(sortida).replace(' i ', ' i ').strip())
+        parts.append(' → '.join(x for x in sub if x))
+    return ' ; '.join(x for x in parts if x)
+
+
 SECCIO_ALTRES = 'Altres (encara sense classificar)'
 SECCIO_PENSAMENTS = 'Pensaments i avisos curts de l\'Ineu (ineuDiu)'
 SECCIO_PROLEG = SECCIONS[0][0]
@@ -227,7 +309,7 @@ def main():
     out.append('# Textos del joc (numerats)\n')
     out.append('Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **número** de cada frase entre claudàtors: per corregir, digues «al text 45 canvia ...».\n')
     out.append('- Els números són **estables**: una frase conserva el seu número encara que se\'n corregeixi el text; les noves reben el número següent; les esborrades desapareixen d\'aquí (queden al registre `docs/textos_ids.json`).')
-    out.append('- *Si: ...* indica en quin moment de la partida es diu una variant (noms dels flags i objectes del joc; «té X» = l\'Ineu porta l\'objecte X). Els `[…]` són parts que el joc calcula.')
+    out.append('- *Si: ...* indica en quin moment de la partida es diu una variant (en català; «(depèn d\'un càlcul del joc)» vol dir que la condició la decideix el programa i no es pot resumir). Els `[…]` són parts del text que el joc calcula.')
     out.append('- Les línies amb ★ són els avisos d\'objectes que s\'obtenen. Aquest document es genera amb `python3 eines/fer_textos.py` (vegeu `CLAUDE.md`).\n')
     total = 0
     for titol, llista in seccions.items():
@@ -243,7 +325,7 @@ def main():
             for p, e in zip(ps, entrades):
                 cond = list(p['cond'])
                 if p['varcond']: cond.append(p['varcond'])
-                marca = ' ; '.join(cond)
+                marca = humanitza(' ; '.join(cond))
                 if marca != antic:
                     out.append(f'\n*Si: {marca}*\n' if marca else ('\n*Altrament (per defecte):*\n' if antic else '\n'))
                     antic = marca
@@ -259,6 +341,8 @@ def main():
     json.dump(reg, open(REGISTRE, 'w', encoding='utf8'), ensure_ascii=False, indent=1)
     sense = [g for g in grups if seccio_de(g, any(p.get('pensament') for p in grups[g])) == SECCIO_ALTRES]
     print('fet', SORTIDA, total, 'textos,', len(grups), 'converses; següent número:', reg['seguent'])
+    if NOS_CONEGUTS:
+        print('Noms de flags sense traducció (afegeix-los a FLAGS):', ', '.join(sorted(NOS_CONEGUTS)))
     if sense:
         print('Converses sense classificar (afegeix-les a SECCIONS):', ', '.join(f'{a}:{c}' for a, c in sense))
 
