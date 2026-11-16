@@ -2360,6 +2360,22 @@ class ZonaBase extends Phaser.Scene {
                 if (imF.isTinted) im.setTint(imF.tintTopLeft);
             });
         }
+        if (imF) {          // i el tros de façana de damunt de l'obertura (i, en arc, els cantons de l'arc): el cap de l'Ineu també queda tapat mentre és dins la porta
+            const src = imF.texture.getSourceImage(), ALT_I = 130, fl = o.arc ? (o.arc === true ? DW / 2 : o.arc) : 0, hh = ALT_I + fl, ys = DT - ALT_I;
+            const nom = 'dintell_' + imF.texture.key + '_' + DX + '_' + DT, kx = 1 / imF.scaleX, ky = 1 / imF.scaleY;
+            if (!this.textures.exists(nom)) {
+                const sw = Math.ceil(DW * kx), sh = Math.ceil(hh * ky), ct = this.textures.createCanvas(nom, sw, sh), cx = ct.getContext();
+                cx.drawImage(src, (DX - DW / 2 - imF.x + imF.displayWidth * imF.originX) * kx, (ys - imF.y + imF.displayHeight * imF.originY) * ky, sw, sh, 0, 0, sw, sh);
+                if (o.arc) {
+                    cx.globalCompositeOperation = 'destination-out'; cx.beginPath();
+                    forma(0, DW, hh, o.arc).forEach((q, k) => k ? cx.lineTo(q.x * kx, (q.y + ALT_I) * ky) : cx.moveTo(q.x * kx, (q.y + ALT_I) * ky));
+                    cx.closePath(); cx.fill();
+                }
+                ct.refresh();
+            }
+            const im = this.add.image(DX - DW / 2, ys, nom).setOrigin(0).setScale(imF.scaleX, imF.scaleY).setDepth(Z + 3);
+            if (imF.isTinted) im.setTint(imF.tintTopLeft);
+        }
         const dins = this.add.graphics().setDepth(Z + 1).setPosition(0, DT);
         dins.fillStyle(0x0e0806, 1).fillPoints(forma(DX - DW / 2, DW, H, o.arc), true);
         dins.fillGradientStyle(0x0e0806, 0x0e0806, 0x6a4420, 0x6a4420, 1, 1, 0.9, 0.9).fillRect(DX - DW / 2, H * 0.45, DW, H * 0.55);
