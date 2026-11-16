@@ -766,7 +766,7 @@ class ZonaBase extends Phaser.Scene {
 
     // Punt on es pot prémer ESPAI. dialeg = funció de DIALEGS o funció pròpia que retorna un diàleg.
     interactiu(x, y, radi, dialeg, opts = {}) {
-        const punt = { x, y, radi, dialeg, altura: opts.altura || 60, enTancar: opts.enTancar, actiu: opts.actiu, senseMirada: opts.senseMirada, toc: opts.toc, marca: opts.marca };       // marca: només els personatges (npc) mostren el «!»; els objectes només es nota que són interactius pel brillo       // toc {x0,x1,y0,y1}: només s'activa quan l'Ineu hi és dins (tocant el dibuix) i no mostra el «!»
+        const punt = { x, y, radi, dialeg, altura: opts.altura || 60, enTancar: opts.enTancar, actiu: opts.actiu, senseMirada: opts.senseMirada, toc: opts.toc, marca: opts.marca, tarota: opts.tarota };       // marca: només els personatges (npc) mostren el «!»; els objectes només es nota que són interactius pel brillo       // toc {x0,x1,y0,y1}: només s'activa quan l'Ineu hi és dins (tocant el dibuix) i no mostra el «!»
         this.interactius.push(punt);
         return punt;
     }
@@ -2762,7 +2762,7 @@ class ZonaBase extends Phaser.Scene {
         this.time.delayedCall(400, () => {
             if (this.canviant || this.ui().dialeg || this.ui().bloquejat) return;
             const lloc = this.flautaActiva();
-            if (lloc && Phaser.Math.Distance.Between(punt.x, punt.y, lloc.x, lloc.y) < 80) this.obrirMusica();
+            if (lloc && (punt.tarota || Phaser.Math.Distance.Between(punt.x, punt.y, lloc.x, lloc.y) < 80)) this.obrirMusica();          // (tarota: el punt és al lloc de la tarota encara que no hi coincideixi, com la portella de la bassa)
         });
     }
 

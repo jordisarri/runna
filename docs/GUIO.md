@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 587: Bassadòria: en acabar de llegir el text de la portella (l'aigua tèrbola), s'obre la interfície de la tarota si es sap el Cant de l'Aurora (abans no s'obria perquè el punt de lectura és massa lluny del centre del lloc de la tarota).*
+
 *Revisió 586: nou mode lent per provar connexions dolentes (`?lent` o `?lent=KB/s` a l'adreça): el service worker frena tot el que es baixa i ignora la còpia guardada.*
 
 *Revisió 585: música sota demanda, afinada: en una partida nova també es baixa la música del pròleg (en continuar-ne una, no; sí si es tria «Nova partida»); en entrar a cada zona es posen a baixar les cançons de les zones veïnes (interiors i escenaris dels costats, segons les sortides); la resta, a poc a poc mentre es juga.*
