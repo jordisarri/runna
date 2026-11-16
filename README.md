@@ -2,6 +2,8 @@
 
 Joc web fet amb Phaser 3. Per provar-lo en local: `python serveix.py` i obre `http://localhost:8000/`.
 
+**Mode lent** (per provar una connexió de dades dolenta, p. ex. a l'iPhone): obre el joc amb `?lent` (60 KB/s) o `?lent=30` (KB/s). Cal recarregar la pàgina una vegada perquè el service worker ja la controli; mentre és actiu, tot el que es baixa va per la xarxa (sense la còpia guardada) amb 300 ms de latència. Per tornar a la velocitat normal, obre el joc sense `?lent`.
+
 ## Estructura
 
 | Carpeta | Què hi ha |

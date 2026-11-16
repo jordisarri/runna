@@ -9,7 +9,7 @@
  * No hi ha cap llista de fitxers: es guarda el que el joc va demanant mentre es juga (uns 50 MB com a molt).
  * Per esborrar el que ha guardat: puja el número de VERSIO (es buida la memòria de les versions anteriors).
  */
-const VERSIO = 'runna-230';
+const VERSIO = 'runna-231';
 
 self.addEventListener('install', () => self.skipWaiting());
 
@@ -41,8 +41,35 @@ const guarda = (cache, req, resposta) => {
     return resposta;
 };
 
+// MODE LENT (per provar una connexió de dades dolenta): obre el joc amb ?lent (60 KB/s) o ?lent=30 (KB/s). Mentre és actiu, tot el que demana el joc (també l'àudio)
+// va per la xarxa, sense la còpia guardada, amb 300 ms de latència i la velocitat repartida entre totes les peticions. La primera vegada cal recarregar la pàgina
+// perquè el service worker ja la controli.
+let lent = 0, lliureFins = 0;
+self.addEventListener('message', ev => { if (ev.data && typeof ev.data.lent === 'number') lent = ev.data.lent; });
+const lenta = async req => {
+    const vel = lent * 1000;          // bytes per segon
+    await new Promise(res => setTimeout(res, 300));
+    const r = await fetch(req, { cache: 'no-store' });
+    if (!r.body) return r;
+    const lector = r.body.getReader();
+    const flux = new ReadableStream({
+        async pull(ctrl) {
+            const { done, value } = await lector.read();
+            if (done) { ctrl.close(); return; }
+            const ara = Date.now(), fins = Math.max(ara, lliureFins) + value.length / vel * 1000;
+            lliureFins = fins;
+            await new Promise(res => setTimeout(res, fins - ara));
+            ctrl.enqueue(value);
+        },
+        cancel() { return lector.cancel(); }
+    });
+    return new Response(flux, { status: r.status, statusText: r.statusText, headers: r.headers });
+};
+
 self.addEventListener('fetch', ev => {
     const req = ev.request, url = new URL(req.url);
+    if (req.mode === 'navigate' && url.origin === self.location.origin) { const q = url.searchParams.get('lent'); lent = q === null ? 0 : (parseFloat(q) || 60); }
+    if (lent && req.method === 'GET' && url.origin === self.location.origin) { ev.respondWith(lenta(req)); return; }
     // Només lectures del mateix lloc, i sense peticions parcials (àudio/vídeo amb Range: la memòria cau no les guarda bé)
     if (req.method !== 'GET' || url.origin !== self.location.origin || req.headers.has('range')) return;
     const mateixa = url.pathname.endsWith('/') || /\/(index\.html|sw\.js|manifest\.json)$/.test(url.pathname) || req.mode === 'navigate';

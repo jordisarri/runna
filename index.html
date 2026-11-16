@@ -32,7 +32,7 @@
     <!-- Tipografies al nostre servidor (eines/baixa_tipografies.py): el joc no demana res a Google -->
     <link rel="stylesheet" href="assets/fonts/fonts.css">
     <!-- Phaser va amb el joc (així no depèn de cap servidor extern); si el fitxer local fallés, es prova el CDN -->
-    <script src="js/lib/phaser.min.js?v=2611160500.80.1"></script>
+    <script src="js/lib/phaser.min.js?v=2611160600.80.1"></script>
     <script>if (typeof Phaser === 'undefined') document.write('<script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"><\/script>');</script>
 </head>
 <body>
@@ -69,7 +69,7 @@
     <script src="js/dibuixos_biblio.js?v=2611143920"></script>
     <script src="js/dibuixos_cela.js?v=2611143920"></script>
     <script src="js/dibuixos_taller.js?v=2611143920"></script>
-    <script src="js/dibuixos_cripta.js?v=2611160500"></script>
+    <script src="js/dibuixos_cripta.js?v=2611160600"></script>
     <script src="js/dibuixos_georgi.js?v=2611143920"></script>
     <script src="js/dibuixos_oratori.js?v=2611143920"></script>
     <script src="js/dibuixos_ermita.js?v=2611143920"></script>
@@ -123,6 +123,8 @@
         if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
             window.addEventListener('load', () => {
                 const teControlador = !!navigator.serviceWorker.controller;
+                const lent = new URLSearchParams(location.search).get('lent');          // mode lent (vegeu sw.js): es torna a avisar el service worker, per si s'havia aturat
+                if (lent !== null) { const avisa = () => { const c = navigator.serviceWorker.controller; if (c) c.postMessage({ lent: parseFloat(lent) || 60 }); }; avisa(); setInterval(avisa, 20000); }
                 navigator.serviceWorker.register('sw.js').then(reg => {
                     // Busca versions noves en obrir i cada cop que es torna al joc
                     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => {}); });

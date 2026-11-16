@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 586: nou mode lent per provar connexions dolentes (`?lent` o `?lent=KB/s` a l'adreça): el service worker frena tot el que es baixa i ignora la còpia guardada.*
+
 *Revisió 585: música sota demanda, afinada: en una partida nova també es baixa la música del pròleg (en continuar-ne una, no; sí si es tria «Nova partida»); en entrar a cada zona es posen a baixar les cançons de les zones veïnes (interiors i escenaris dels costats, segons les sortides); la resta, a poc a poc mentre es juga.*
 
 *Revisió 584: càrrega més lleugera: l'inici només baixa la cançó de la zona on comença l'Ineu (la de la partida desada, o la del poble) i ja no espera cap música; la resta es baixa en segon pla mentre es juga, una darrere l'altra. Si entra a una zona la música de la qual encara no és baixada, la que sona no s'atura: es baixa i, quan és llesta, s'hi canvia suaument.*
