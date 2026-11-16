@@ -230,7 +230,7 @@ const DIALEGS = {
         if (!E.flag('iscuTrobat')) return {
             pagines: [
                 { fer: (z, fet) => z.seq([c => z.bombolla('iscu', '!', c, 600), c => z.npcSalta('iscu', c, 1)], fet) },
-                { qui: 'Iscu', text: 'Xxt! Baixa la veu! Si la mare em troba, em fa fregar gots fins a Nadal.' },
+                { qui: 'Iscu', text: 'Xxt! Baixa la veu! Si l\'Eve em troba, em fa fregar gots fins a Nadal.' },
                 { qui: 'Iscu', text: 'Em dic Iscu. Vaig trobar el forat entre els arbres «per on els grans no hi caben» i aquesta cabana. Ningú més no la coneix: aquí ningú em mana res!' },
                 { qui: 'Iscu', text: 'Hi havia una baralla vella damunt la taula, i m\'encanta fer solitaris amb les cartes. Més val això que fregar gots!' },
                 ...clau
@@ -987,8 +987,6 @@ const DIALEGS = {
         { qui: 'Senyor Buidor', text: "Xxt... baixa la veu, noi, que m'estic fotent un anís escarxat. Me l'ha preparat l'Eve, i això no es beu: s'assaboreix." },
         { qui: 'Senyor Buidor', text: "Una gota de gel, un raig d'aigua, i deixar-lo fer. Les coses bones no tenen pressa. Jo en sé, d'esperar: fa seixanta anys que m'assec en aquesta taula." },
         { qui: 'Senyor Buidor', text: "Des que la Càren dorm, l'Eve porta la taverna sola i no es queixa mai. Això és de gent de molt bona fusta." },
-        { qui: 'Senyor Buidor', text: "El Sardi s'asseia aquí al costat cada tarda a berenar pa amb xocolata. Fa una nit que no el veig, i aquest noi no falla mai." },
-        { qui: 'Senyor Buidor', text: "I de nit, quan tot és tancat, es senten ocells. Ocells que no canten com ocells. A mi no m'agrada, i mira que no m'amoïna res." },
         { qui: 'Senyor Buidor', text: "Ara calla, noi, que se m'acaba l'anís." }
     ] }),
     isilder: E => DIALEGS.isilderBase(E),

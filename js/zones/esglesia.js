@@ -314,7 +314,7 @@ class ZonaEsglesia extends ZonaBase {
             ] : []),
             // L'Iscu, que avui no ha de fregar gots
             ...(hi('iscu') ? [foc(['iscu'], 1.9), accio(z => [f => z.npcSalta('iscu', f, 2)]),
-                { qui: 'Iscu', text: "Avui no frego ni un got! Festa grossa: els nens són a casa!" }] : []),
+                { qui: 'Iscu', text: "Avui no frego ni un got! Festa grossa: els nens són a casa!" }, ...(hi('eve') ? [foc(['eve'], 1.9), { qui: 'Eve', text: "Avui, sí. Demà et guardo la pila sencera, que les cartes no renten els gots." }] : [])] : []),
             // La Pianista dona l'entrada des del seu lloc (asseguda a l'orgue: no s'aixeca): l'Ineu es queda al passadís, es gira cap a l'orgue i comença el Cant del Miracle amb la tarota; l'orgue el segueix
             accio(z => [pla(745, R + 360, 0.95, 900), f => { z.posarDireccio('dreta', false); z.npcMira('pianista', 'ineu', f); }]),
             foc(['pianista', 'ineu'], 1.25),
