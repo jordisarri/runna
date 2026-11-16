@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 606: l'Eve diu que el Sardi ve cada tarda a berenar però ahir no va venir; a l'epíleg, la seva resposta a l'Iscu queda en «Avui, sí. Demà et guardo la pila sencera.»*
+
 *Revisió 605: Taverna: el senyor Buidor perd el Sardi i els ocells (només anís i la Càren que dorm); el Sardi torna a l'Eve, que ara lliga amb l'Iscu: des que la Càren dorm, els gots els frego jo i l'Iscu s'esfuma (l'Iscu ara té por de l'Eve, no de la mare, perquè «et fa fregar gots fins a Nadal»); a l'epíleg, davant l'Iscu («Avui no frego ni un got!») l'Eve li respon que demà li guarda la pila sencera.*
 
 *Revisió 604: Taverna: la primera conversa de l'Eve passa de sis pàgines a dues (només el que importa: la Porta de les Gírgoles i l'Aldreu, i l'Iscu al camí de la Desaparició); el color (la Càren que dorm, el Sardi que venia a berenar, els ocells de nit) passa al senyor Buidor, que ara té quatre pàgines més. (Pendent de decidir: donar més pes a l'Eve amb pistes vives o un got de llet que recupera cors.)*
