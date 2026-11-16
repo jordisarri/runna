@@ -1328,10 +1328,10 @@ Object.assign(ZonaBase.prototype, {
                 pols.explode(8);
                 this.time.delayedCall(700, () => pols.destroy());
                 this.tweens.add({ targets: sp, angle: dir * 80, duration: 90, yoyo: true, ease: 'Sine.easeOut' });
-                // 4) dorm: tres «z» que pugen i s'esvaeixen
+                // 4) dorm: tres «z» que surten del cap (a l'extrem del cos estirat) i s'esvaeixen
                 for (let k = 0; k < 3; k++) this.time.delayedCall(260 + k * 330, () => {
                     if (!sp.active) return;
-                    const z = this.add.text(sp.x + dir * 26 + k * 6, y0 - 34 - k * 4, 'z', estilText(15 + k * 4, '#e8e0ff', { stroke: '#1a1230', strokeThickness: 3, fontStyle: 'italic' })).setOrigin(0.5).setDepth(y0 + 5);
+                    const z = this.add.text(sp.x + dir * (h * 0.72 + k * 6), y0 - sp.displayWidth * 0.5 - 16 - k * 4, 'z', estilText(15 + k * 4, '#e8e0ff', { stroke: '#1a1230', strokeThickness: 3, fontStyle: 'italic' })).setOrigin(0.5).setDepth(y0 + 5);
                     this.tweens.add({ targets: z, y: z.y - 34, x: z.x + 8, alpha: 0, scale: 1.4, duration: 900, ease: 'Sine.easeOut', onComplete: () => z.destroy() });
                 });
                 // 5) la boira lila se'n va del cos, que es desfà
