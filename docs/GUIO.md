@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 600: Prunera Màgica: en collir una pruna, la fruita surt de la capçada (la més propera a l'Ineu): espurnes a la branca, cau una mica i vola en arc fins a les seves mans; al cap d'una estona torna a créixer. Abans sortia del peu de l'arbre.*
+
 *Revisió 599: porta tancada de l'Hostatgeria (Jardí): el punt d'interacció era 60 px darrere d'on l'Ineu s'atura i, mirant cap amunt, no el «veia»; ara és a la porta mateixa.*
 
 *Revisió 598: els turistes zombi, en caure, treuen les «z» pel cap (a l'extrem del cos estirat) i no pels peus.*

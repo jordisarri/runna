@@ -87,7 +87,7 @@ class ZonaJardi extends ZonaBase {
             x: { min: -150, max: 150 }, y: { min: -110, max: 90 }, speed: { min: 4, max: 14 }, lifespan: 1800,
             scale: { start: 0.55, end: 0 }, tint: [0xffd060, 0xfff0b0], frequency: 220, alpha: { start: 0.9, end: 0 }
         }).setDepth(8001);
-        [[-110, -190], [-60, -250], [0, -300], [70, -260], [120, -200], [-140, -140], [40, -170], [-20, -210], [100, -130], [-90, -100]].forEach(([dx, dy]) => this.add.circle(PX + dx, PY + dy, 10, 0xf0b830).setStrokeStyle(2, 0x7a5010).setDepth(PY + 1));
+        [[-110, -190], [-60, -250], [0, -300], [70, -260], [120, -200], [-140, -140], [40, -170], [-20, -210], [100, -130], [-90, -100]].forEach(([dx, dy]) => (this.fruitsPrunera = this.fruitsPrunera || []).push(this.add.circle(PX + dx, PY + dy, 10, 0xf0b830).setStrokeStyle(2, 0x7a5010).setDepth(PY + 1)));
         this.interactiu(PX, PY + 40, RADI_GRAN * 1.5, DIALEGS.prunera, { altura: 150, senseMirada: true }); // es pot collir la pruna des de qualsevol costat de l'arbre
 
         // La llosa del passadís cap al soterrani de l'Hostatgeria, entre les columnes i ben amunt perquè les columnes del sud no la tapin gens
@@ -134,6 +134,30 @@ class ZonaJardi extends ZonaBase {
     }
 
     // Forat quadrat emmarcat amb carreus de pedra i una escala que baixa cap al nord (els graons del fons són més foscos)
+    // Collir una pruna: una de les prunes daurades de la capçada (la més propera a l'Ineu) es deixa anar de la branca, cau en arc cap a les seves mans i l'arbre s'estremeix un moment;
+    // al cap d'una estona en torna a créixer una altra al mateix lloc.
+    collirPruna(fet) {
+        const I = this.ineu, fruits = (this.fruitsPrunera || []).filter(f => f.alpha > 0.5);
+        if (!fruits.length) { this.agafar(fet, null, 0xffd060); return; }
+        const f = fruits.sort((a, b) => Phaser.Math.Distance.Between(a.x, a.y, I.x, I.y) - Phaser.Math.Distance.Between(b.x, b.y, I.x, I.y))[0];
+        const x0 = f.x, y0 = f.y, x1 = I.x, y1 = I.y - 70;
+        const o = this.add.circle(x0, y0, 10, 0xf0b830).setStrokeStyle(2, 0x7a5010).setDepth(99000);
+        f.setAlpha(0);
+        this.llum(x0, y0, 0xffd060);
+        const rama = this.add.particles(x0, y0, 'espurna', { speed: { min: 20, max: 70 }, scale: { start: 0.3, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xffd060, 0xfff0b0], lifespan: 500, quantity: 6, emitting: false }).setDepth(99001);
+        rama.explode(6); this.time.delayedCall(700, () => rama.destroy());
+        this.ajupir && this.time.delayedCall(450, () => this.ajupir('ineu', null, 300));
+        const T = { t: 0 };
+        // 1) la pruna es deixa anar i cau una mica; 2) vola en arc fins a les mans de l'Ineu
+        this.tweens.add({ targets: o, y: y0 + 24, scale: 1.4, duration: 260, ease: 'Quad.easeIn', onComplete: () => {
+            const xa = o.x, ya = o.y;
+            this.tweens.add({ targets: T, t: 1, duration: 760, ease: 'Sine.easeIn',
+                onUpdate: () => { o.x = xa + (x1 - xa) * T.t; o.y = ya + (y1 - ya) * T.t - Math.sin(T.t * Math.PI) * 38; o.setScale(1.4 - 0.4 * T.t); },
+                onComplete: () => { o.destroy(); this.llum(x1, y1, 0xffd060); this.esperar(300, fet); } });
+        } });
+        this.time.delayedCall(9000, () => { if (f.active) this.tweens.add({ targets: f, alpha: 1, duration: 900 }); });          // en torna a créixer una
+    }
+
     dibuixaForat(x, y) {
         const g = this.foratLlosa;
         g.clear();
