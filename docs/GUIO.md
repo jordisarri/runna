@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 595: nova versió a l'adreça de tots els scripts (?v=) perquè cap navegador no serveixi còpies velles del joc (després del canvi de nom a senyor Llaminer, algú encara veia «Molner»).*
+
 *Revisió 594: el senyor Molner passa a dir-se **senyor Llaminer** (diàlegs, retrats, crèdits i documents; l'identificador intern `molner` no canvia).*
 
 *Revisió 593: Runes: un cop mogut la pedra, el forat amb boira té el brillo de sempre (fins que se'n recull el pergamí), perquè l'Ineu hi vagi a examinar.*
