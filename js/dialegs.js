@@ -477,13 +477,16 @@ const DIALEGS = {
             { qui: 'Jusef', text: 'La seva flama s\'alimenta d\'un oli antic que mai no s\'apaga. Als passadissos tenebrosos i a la foscor de les pedres velles, la seva claror et farà visible allò que sembla ocult.' },
             { fer: (z, fet) => z.objecteVola('jusef', fet) },
             { avis: "Has obtingut el LLUM D'EN MAMET.", obj: 'llanterna' },
-            { qui: 'Jusef', text: 'I un secret, per qui sap tornar un servei: aquella roda de carruatge del Celler no és decoració. Darrere hi ha el túnel dels monjos cap a la Casa Gran. Però pesa com un carro ple.' }
+            ...(E.flag('rodaMoguda') ? [] : [         // (si ja s'ha empès la roda, no se'n parla)
+                { qui: 'Jusef', text: 'I un secret, per qui sap tornar un servei: aquella roda de carruatge del Celler no és decoració. Darrere hi ha el túnel dels monjos cap a la Casa Gran. Però pesa com un carro ple.' }
+            ])
         ],
         enAcabar: () => {
             E.posaFlag('jusefVencut');
             if (!E.te('llanterna')) { E.dona('llanterna'); E.posaFlag('llanterna'); }
             const ui = game.scene.getScene('UI'); if (ui) ui.actualitzarHUD();
             E.posaObjectiu(!E.flag('runna') ? 'Has guanyat en Jusef. Segueix buscant Runna.'
+                : E.flag('rodaMoguda') ? 'Has guanyat en Jusef. El túnel dels monjos ja és obert: baixa fins a la Casa Gran.'
                 : E.te('guants') ? 'Empeny amb els Guants la roda de carruatge: amaga el túnel dels monjos (Runna en talla els esbarzers).'
                 : 'La roda de carruatge pesa massa: el Germà Francí, a Sant Antoni, té uns guants que mouen el que pesa.');
         }
