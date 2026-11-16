@@ -917,7 +917,7 @@ const Grafics = {
             ctx.globalCompositeOperation = 'source-over';
         });
         // Grans de rosari (l'energia de l'Ineu): fusta d'olivera polida i ben encesa (ple), mig apagats (mig) o foscos i esquerdats (buit)
-        const gra = (ctx, mode) => {
+        const gra = (ctx, mode, ang = 0) => {          // ang: inclinació de les betes de la fusta (només gira la veta; la llum i el reflex són sempre al mateix lloc)
             const cx = 22, cy = 22, r = 15;
             const esfera = (clar, mig, fosc) => {
                 const g = ctx.createRadialGradient(cx - 5, cy - 6, 1.5, cx, cy, r + 1);
@@ -926,7 +926,7 @@ const Grafics = {
             };
             const veta = alfa => {          // anells de la fusta i el canal per on passa el cordó
                 ctx.strokeStyle = `rgba(60,28,8,${alfa})`; ctx.lineWidth = 1;
-                [6, 10.5].forEach(ry => { ctx.beginPath(); ctx.ellipse(cx, cy, r - 1, ry, 0, 0, Math.PI * 2); ctx.stroke(); });
+                [6, 10.5].forEach(ry => { ctx.beginPath(); ctx.ellipse(cx, cy, r - 1, ry, ang, 0, Math.PI * 2); ctx.stroke(); });
             };
             // apagat (base de tots tres)
             esfera('#7a6a5c', '#4a3c30', '#211810');
@@ -938,19 +938,25 @@ const Grafics = {
             if (mode > 0) {
                 ctx.save();
                 if (mode === 1) { ctx.beginPath(); ctx.rect(0, 0, cx, 44); ctx.clip(); }
-                // (mat: sense halo; degradat suau, de fusta encerada i no polida)
-                esfera('#dfa862', '#c08040', '#7a4018');
+                // halo càlid
+                const h = ctx.createRadialGradient(cx, cy, r - 2, cx, cy, r + 6); h.addColorStop(0, 'rgba(255,190,90,0.55)'); h.addColorStop(1, 'rgba(255,190,90,0)');
+                ctx.fillStyle = h; ctx.beginPath(); ctx.arc(cx, cy, r + 6, 0, Math.PI * 2); ctx.fill();
+                esfera('#ffd894', '#c27a34', '#5a2a0e');
                 veta(0.5);
-                ctx.fillStyle = 'rgba(255,236,200,0.2)'; ctx.beginPath(); ctx.ellipse(cx - 6, cy - 7, 4.6, 2.8, -0.6, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = 'rgba(255,255,255,0.75)'; ctx.beginPath(); ctx.ellipse(cx - 6, cy - 7, 4.6, 2.8, -0.6, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.beginPath(); ctx.arc(cx + 6, cy + 7, 1.6, 0, Math.PI * 2); ctx.fill();
                 ctx.restore();
                 if (mode === 1) { ctx.strokeStyle = 'rgba(30,14,4,0.7)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx, cy - r + 1); ctx.lineTo(cx, cy + r - 1); ctx.stroke(); }
             }
             ctx.lineWidth = 2.4; ctx.strokeStyle = '#1e0e04'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
             ctx.fillStyle = '#1e0e04'; [cx - r + 1.2, cx + r - 1.2].forEach(x => { ctx.beginPath(); ctx.ellipse(x, cy, 1.6, 2.6, 0, 0, Math.PI * 2); ctx.fill(); });   // forats del cordó
         };
-        crea('gra_ple', 44, 44, (ctx) => gra(ctx, 2));
-        crea('gra_mig', 44, 44, (ctx) => gra(ctx, 1));
-        crea('gra_buit', 44, 44, (ctx) => gra(ctx, 0));
+        [0, 0.5, 1.05, 1.6, 2.15, 2.65, -0.45].forEach((ang, k) => {           // set variants (un per gra del rosari), amb la veta inclinada diferent
+            const suf = k ? '_' + k : '';
+            crea('gra_ple' + suf, 44, 44, (ctx) => gra(ctx, 2, ang));
+            crea('gra_mig' + suf, 44, 44, (ctx) => gra(ctx, 1, ang));
+            crea('gra_buit' + suf, 44, 44, (ctx) => gra(ctx, 0, ang));
+        });
         // Creueta de llautó que penja al principi del rosari
         crea('creu_rosari', 36, 28, (ctx) => {
             // Creu de fusta TUMBADA sobre una taula, en perspectiva isomètrica: el pla de la taula es veu en diagonal i la creu hi reposa en horitzontal (el braç llarg

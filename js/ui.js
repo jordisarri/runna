@@ -482,10 +482,10 @@ class EscenaUI extends Phaser.Scene {
         const pops = [];
         this.cors.forEach((img, i) => {
             const v = d.vida - i * 2;
-            const tex = v >= 2 ? 'gra_ple' : v === 1 ? 'gra_mig' : 'gra_buit';
-            const nivell = t => t === 'gra_ple' ? 2 : t === 'gra_mig' ? 1 : 0;
-            if (img.texAnt && nivell(tex) > nivell(img.texAnt) && i < d.corsMax) pops.push(i);       // guanya vida (no és la primera vegada; perdre'n ho anima animarPerdua)
-            img.texAnt = tex;
+            const niv = v >= 2 ? 2 : v === 1 ? 1 : 0, suf = i % 7 ? '_' + (i % 7) : '';         // cada gra té la veta de la fusta inclinada diferent (set de textures _1.._6)
+            const tex = (niv === 2 ? 'gra_ple' : niv === 1 ? 'gra_mig' : 'gra_buit') + suf;
+            if (img.nivAnt !== undefined && niv > img.nivAnt && i < d.corsMax) pops.push(i);       // guanya vida (no és la primera vegada; perdre'n ho anima animarPerdua)
+            img.nivAnt = niv;
             img.setVisible(i < d.corsMax).setPosition(gx(i), gy(i)).setTexture(tex);
             this.ombresGrans[i].setVisible(i < d.corsMax).setPosition(gx(i) + 2.5, gy(i) + 3.5).setTexture(tex);
         });
