@@ -11,6 +11,7 @@ class MusicaStream {
         this.volum = fade ? 0 : volum; this.destruida = false; this.gest = null;
         const a = this.el = new Audio();
         a.loop = true; a.preload = 'auto';
+        a.addEventListener('canplaythrough', () => Joc.musicaBaixada.add(fitxer), { once: true });          // ja sona: es pot tornar a posar sense esperar
         a.src = encodeURI(`assets/musica/${fitxer}.m4a`);
         // seek < 0: punt a l'atzar (entre el 5 % i el 70 % de la cançó), perquè no comenci sempre pel mateix moment
         if (seek) a.addEventListener('loadedmetadata', () => { try { a.currentTime = seek < 0 ? a.duration * (0.05 + Math.random() * 0.65) : seek; } catch (e) {} }, { once: true });
@@ -250,22 +251,43 @@ const Joc = {
     // Les cançons de fons van en streaming (MusicaStream); només les peces curtes (jingles) passen per Phaser
     precarregarMusiques() {},
 
-    // Baixa les cançons perquè quedin a la memòria cau del navegador i sonin de seguida en entrar a una zona. Les de l'inici (portada i poble) van primer i es baixen a la vegada que la resta del joc; la partida no comença fins que hi són.
-    // La resta es baixen en segon pla, una darrere l'altra.
-    PRIORITAT_MUSICA: ['musica_intro', 'musica_poble'],      // només la portada i el poble (on comença la partida): la resta es baixa en segon pla, perquè no frenin l'inici
+    // Música sota demanda: només es baixa la de la zona on comença la partida; la resta, en segon pla mentre es juga (una darrere l'altra, sense frenar la càrrega),
+    // i la d'una zona nova que encara no hi és es baixa tot just es demana (iniciarMusica). Mentre no és llesta, la que sona NO s'atura.
+    musicaBaixada: new Set(),            // fitxers que ja són a la memòria cau del navegador
+    baixantMusica: new Map(),            // fitxer -> llista de funcions a cridar quan acabi
+    cuaMusica: [],
+    baixarMusica(f, fet) {
+        if (!f) { if (fet) fet(); return; }
+        if (Joc.musicaBaixada.has(f)) { if (fet) fet(); return; }
+        if (Joc.baixantMusica.has(f)) { if (fet) Joc.baixantMusica.get(f).push(fet); return; }
+        const espera = fet ? [fet] : [];
+        Joc.baixantMusica.set(f, espera);
+        fetch(encodeURI(`assets/musica/${f}.m4a`)).then(r => r.ok ? r.arrayBuffer() : null).then(ok => { if (ok) Joc.musicaBaixada.add(f); }).catch(() => {})
+            .then(() => { Joc.baixantMusica.delete(f); espera.forEach(g => g()); });
+    },
+    // La cançó de la zona on comença la partida: la de la partida desada, o la del poble (la plaça) si és nova
+    musicaIniciPartida() {
+        try {
+            const t = localStorage.getItem(Estat.CLAU), z = t && JSON.parse(t).zona;
+            if (z && Joc.MUSICA_ZONES[z]) return Joc.MUSICA_ZONES[z];
+        } catch (e) {}
+        return 'musica_poble';
+    },
     escalfarMusiques(fet) {
         const fitxerDe = k => Joc.FITXERS_MUSICA[k] || (Joc.MUSICA_OPCIONAL[k] && Joc.MUSICA_OPCIONAL[k].fitxer);
-        const baixa = f => fetch(encodeURI(`assets/musica/${f}.m4a`)).then(r => r.arrayBuffer()).catch(() => {});
-        const prior = [...new Set(Joc.PRIORITAT_MUSICA.map(k => Joc.resoldreMusica(k)).map(fitxerDe).filter(Boolean))];
+        const f0 = fitxerDe(Joc.resoldreMusica(Joc.musicaIniciPartida()));
+        Joc.baixarMusica(f0);
         const resta = new Set(Object.values(Joc.FITXERS_MUSICA));
         Object.entries(Joc.MUSICA_OPCIONAL).forEach(([k, o]) => { if (!o.jingle && Joc.musicaDisponible.has(k)) resta.add(o.fitxer); });
-        prior.forEach(f => resta.delete(f));
-        Promise.all(prior.map(baixa)).then(() => {
-            if (fet) fet();
-            const cua = [...resta];
-            const seguent = () => { if (!Joc.recursosLlestos) { setTimeout(seguent, 500); return; } const f = cua.shift(); if (f) baixa(f).then(() => setTimeout(seguent, 200)); };      // la resta, un cop llestes les imatges: no competeixen amb l'inici
-            seguent();
-        });
+        resta.delete(f0);
+        Joc.cuaMusica = [...resta];
+        const seguent = () => {
+            if (!Joc.recursosLlestos) { setTimeout(seguent, 500); return; }          // fins que no són llestes les imatges, res més no competeix amb l'inici
+            const f = Joc.cuaMusica.shift();
+            if (f) Joc.baixarMusica(f, () => setTimeout(seguent, 300));
+        };
+        seguent();
+        if (fet) fet();               // l'inici no espera cap cançó: la partida no queda frenada per la música
     },
 
     iniciarMusica(scene, seek = 0, clau = 'musica_intro', fade = 0) {
@@ -275,9 +297,15 @@ const Joc = {
             return;
         }
         clau = Joc.resoldreMusica(clau);
-        Joc.musicaPendent = null;
+        Joc.musicaPendent = null; Joc.musicaDesitjada = null;
         if (Joc.musica && Joc.musicaClau === clau && Joc.musica.isPlaying) { Joc.musica.setVolume(0.6); return; }
         const fitxer = Joc.FITXERS_MUSICA[clau] || (Joc.MUSICA_OPCIONAL[clau] && Joc.MUSICA_OPCIONAL[clau].fitxer);
+        // Si la cançó nova encara no és baixada i n'hi ha una de sonant, aquesta NO s'atura: es baixa i, quan és llesta (si encara es vol), s'hi canvia suaument
+        if (fitxer && !Joc.musicaBaixada.has(fitxer) && Joc.musica && Joc.musica.isPlaying) {
+            const desig = Joc.musicaDesitjada = { clau };
+            Joc.baixarMusica(fitxer, () => { if (Joc.musicaDesitjada !== desig) return; Joc.musicaBaixada.add(fitxer); Joc.iniciarMusica(scene, seek, clau, fade || 1500); });          // (si la baixada falla, es fa en streaming igualment)
+            return;
+        }
         Joc.aturarMusica();
         if (!fitxer) return;
         Joc.musicaClau = clau;
@@ -295,6 +323,7 @@ const Joc = {
 
     // Esvaeix la cançó que sona (cada cançó té el seu propi fade)
     aturarMusica() {
+        Joc.musicaDesitjada = null;
         const mus = Joc.musica;
         Joc.musica = null;
         Joc.musicaClau = null;
@@ -424,7 +453,7 @@ class EscenaCarrega extends Phaser.Scene {
                 (Joc.esperantRecursos || []).splice(0).forEach(f => f());
                 this.scene.stop();
             };
-            Joc.escalfarMusiques(() => { musiques = true; acabat(); });
+            Joc.escalfarMusiques(() => { musiques = true; acabat(); });          // (ja no espera cap cançó)
             this.load.once('complete', () => Grafics.preparar(this, 'resta', () => { imatges = true; acabat(); }));
             this.load.start();
         });

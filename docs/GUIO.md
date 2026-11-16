@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 584: càrrega més lleugera: l'inici només baixa la cançó de la zona on comença l'Ineu (la de la partida desada, o la del poble) i ja no espera cap música; la resta es baixa en segon pla mentre es juga, una darrere l'altra. Si entra a una zona la música de la qual encara no és baixada, la que sona no s'atura: es baixa i, quan és llesta, s'hi canvia suaument.*
+
 *Revisió 583: l'animació del cop rebut de l'Ineu ja té la mateixa mida que la resta d'sprites (se'n redueixen els fulls com els de caminar i idle); un enemic davant l'Ineu el tapa de debò (sense silueta translúcida); els enemics sòlids (turistes, ovelles, gripaus…) tenen un cos el·líptic que l'Ineu no pot travessar, tampoc des de dalt.*
 
 *Revisió 582: portes de façana: el tros de façana de damunt de l'obertura també tapa l'Ineu, de manera que sencer (cap inclòs) desapareix mentre és dins la porta.*
