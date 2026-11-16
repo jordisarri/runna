@@ -1374,10 +1374,9 @@ class ZonaBosc extends ZonaBase {
         this.brilloImatge(fontSJ, { punt: puntFont, actiu: () => !Estat.flag('fontNeta') });          // la font brilla fins que l'aigua torna a ser clara
 
         // Alzina Buida: el portal ocult cap a la cabana de la Joaneta. És el doble de gran que els altres arbres, té la seva
-        // pròpia clariana (llum verda a terra, llumenetes i pedres) i el forat del tronc fa claror: no es pot confondre amb la resta.
+        // pròpia clariana de pedres i el brillo al forat del tronc: no es pot confondre amb la resta.
         const AX = 330, AY = 780;
-        this.add.ellipse(AX, AY + 40, 760, 380, 0x8fe08a, 0.13).setDepth(-1090);
-        this.add.ellipse(AX, AY + 40, 480, 220, 0xb8f0a0, 0.13).setDepth(-1089);
+        // (sense clariana verda: l'alzina només té el brillo al forat)
         this.alzina = this.posar('alzina_buida', AX, AY, { col: { w: 150, h: 46 } });
         // El punt d'interacció és el forat del tronc (la «!» surt just damunt seu); el radi permet tocar-lo des del peu de l'alzina
         this.interactiu(AX - 18, AY - 128, 235, DIALEGS.alzinaBuida, {
@@ -1386,15 +1385,6 @@ class ZonaBosc extends ZonaBase {
         });
         this.brillo(AX - 18, AY - 89, 60, 88, { arc: true });          // el forat del tronc brilla sempre (només la part lògica de l'alzina, no tot l'arbre)
         [[-250, 75, 0.7], [255, 45, 0.55], [-120, 120, 0.4]].forEach(([dx, dy, e]) => this.posar('roca', AX + dx, AY + dy, { escala: e, col: { w: 34, h: 14 } }));
-        this.claror = this.add.ellipse(AX - 18, AY - 89, 78, 104, 0x6aff9a, 0.45).setDepth(AY + 1);
-        this.tweens.add({ targets: this.claror, alpha: 0.18, scaleX: 1.2, scaleY: 1.12, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' });
-        // Halo que batega al voltant del forat: crida l'atenció sense tapar el dibuix
-        const halo = this.add.circle(AX - 18, AY - 89, 70, 0xb8ffc0, 0).setStrokeStyle(4, 0xd8ffd0, 0.8).setBlendMode(Phaser.BlendModes.ADD).setDepth(AY + 2);
-        this.tweens.add({ targets: halo, scale: { from: 0.55, to: 1.5 }, alpha: { from: 0.9, to: 0 }, repeat: -1, duration: 1900, ease: 'Sine.easeOut' });
-        this.add.particles(AX, AY - 90, 'espurna', {
-            x: { min: -230, max: 230 }, y: { min: -120, max: 60 }, speedX: { min: -8, max: 8 }, speedY: { min: -14, max: -3 }, lifespan: 3200,
-            scale: { start: 0.28, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xbaffb0, 0xf2ffc0], frequency: 260, blendMode: 'ADD'
-        }).setDepth(AY + 2);
         this.boiraAmbient(AX, AY - 20, 300, 60, 0.5);
 
         // Herbes de la Nit de Sant Joan (les altres dues ofrenes de la font: el romaní, al Bosc del Pi dels Tres Cants, i una pruna de la Prunera): cal trobar-la entre els arbres. És en una clariana, més gran que abans,

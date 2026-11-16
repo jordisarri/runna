@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 597: Alzina Buida (al Bosc i a la cabana de la Joaneta): fora la clariana verda, la claror, el halo i les espurnes verdes; només el brillo al forat del tronc.*
+
 *Revisió 596: el carruatge de vapor del Follet del Carro Verd és un 25 % més gran (amb la col·lisió, el follet i el fum recol·locats) i el fum de la xemeneia és gris-negre.*
 
 *Revisió 595: nova versió a l'adreça de tots els scripts (?v=) perquè cap navegador no serveixi còpies velles del joc (després del canvi de nom a senyor Llaminer, algú encara veia «Molner»).*
