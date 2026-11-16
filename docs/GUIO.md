@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 583: l'animació del cop rebut de l'Ineu ja té la mateixa mida que la resta d'sprites (se'n redueixen els fulls com els de caminar i idle); un enemic davant l'Ineu el tapa de debò (sense silueta translúcida); els enemics sòlids (turistes, ovelles, gripaus…) tenen un cos el·líptic que l'Ineu no pot travessar, tampoc des de dalt.*
+
 *Revisió 582: portes de façana: el tros de façana de damunt de l'obertura també tapa l'Ineu, de manera que sencer (cap inclòs) desapareix mentre és dins la porta.*
 
 *Revisió 581: portes de façana (Monestir): els brancals del marc es tornen a dibuixar per sobre de l'Ineu, de manera que dins del portal el marc el tapa de debò.*

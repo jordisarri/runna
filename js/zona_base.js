@@ -2155,7 +2155,8 @@ class ZonaBase extends Phaser.Scene {
         const ib = i.getBounds();
         // Un objecte opac (orgue, altar, bancs...) davant l'Ineu amaga del tot la silueta, encara que també hi hagi un personatge davant (només es pot emmascarar amb un objecte)
         if ((this.opacs || []).some(n => n && n.active && n.visible && n.depth > i.depth && Phaser.Geom.Intersects.RectangleToRectangle(n.getBounds(), ib))) f.setAlpha(0);
-        let davant = Object.values(this.npcs || {}).concat(this.opacs || []).find(n => n && n.active && n.visible && n.depth > i.depth
+        const enem = (this.enemics || []).filter(e => !e.mort && e.spr).map(e => e.spr);          // un enemic davant l'Ineu el tapa de debò: la silueta no es veu a través seu
+        let davant = Object.values(this.npcs || {}).concat(this.opacs || [], enem).find(n => n && n.active && n.visible && n.depth > i.depth
             && Phaser.Geom.Intersects.RectangleToRectangle(n.getBounds(), ib));
         if (!davant) {            // el tronc d'un arbre davant l'Ineu també l'amaga (la copa no: la silueta s'hi veu a través)
             const arbre = (this.copes || []).find(t => t.tronc && t.active && t.visible && t.depth > i.depth && Phaser.Geom.Intersects.RectangleToRectangle(t.troncRect(), ib));

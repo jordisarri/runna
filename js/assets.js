@@ -494,7 +494,7 @@ const Grafics = {
     // Redueix les fulles de l'Ineu a SPRITE_INEU.k (vegeu SPRITE_INEU).
     reduirIneu(scene) {
         const tm = scene.textures, k = SPRITE_INEU.k, CEL = SPRITE_INEU.ample, C2 = Math.round(CEL * k);
-        const claus = DIRS_INEU.map(dir => 'ineu_' + dir);
+        const claus = DIRS_INEU.map(dir => 'ineu_' + dir).concat(DIRS_INEU.map(dir => 'ineu_cop_' + dir));          // (el cop rebut també: si no, es veuria un 33 % més gran que la resta)
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => claus.push('ineu_idle_' + dir));
         claus.forEach(clau => {
             if (!tm.exists(clau) || Grafics.faltants.includes(clau)) return;

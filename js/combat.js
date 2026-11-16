@@ -1601,10 +1601,12 @@ Object.assign(ZonaBase.prototype, {
             }
             // Els enemics sòlids no es poden travessar: si l'Ineu és massa a prop, se l'empeny suaument cap a fora (poc per fotograma; per sota de radi+20, perquè el contacte continuï fent mal)
             if (e.def.solid && !this.canviant && !this.caient && !this.cinema && !(this.forcat && ara < this.forcat.fins) && ara >= e.atorditFins && !e.amagat) {
-                const dxs = jo.x - b.center.x, dys = jo.y - b.center.y, min = e.def.radi * 0.6 + 14, d2 = dxs * dxs + dys * dys;
-                if (d2 < min * min) {
-                    const d = Math.sqrt(d2) || 0.01, pas = Math.min(min - d, 5), nx = d > 0.02 ? dxs / d : 1, ny = d > 0.02 ? dys / d : 0;
-                    this.ineu.body.x += nx * pas; this.ineu.body.y += ny * pas;
+                // Cos el·líptic (la caixa de peus de l'enemic + la de l'Ineu), correcció sencera cada fotograma: ni de dalt ni de cap costat no es pot travessar
+                const dxs = jo.x - b.center.x, dys = jo.y - b.center.y, rx = e.def.cos[0] / 2 + 24, ry = e.def.cos[1] / 2 + 15;
+                const q = Math.hypot(dxs / rx, dys / ry);
+                if (q < 1) {
+                    const nx = q > 0.001 ? dxs / q : 0, ny = q > 0.001 ? dys / q : ry;          // (just a sobre: surt cap amunt, el costat d'on sol venir)
+                    this.ineu.body.x += Phaser.Math.Clamp(nx - dxs, -24, 24); this.ineu.body.y += Phaser.Math.Clamp(ny - dys, -24, 24);
                 }
             }
         }
