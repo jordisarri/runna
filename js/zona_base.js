@@ -126,6 +126,7 @@ const PARADES = [
     { id: 'diposits',  zona: 'ZonaGabriel',    nom: 'Sant Gabriel',       c: [1150, 990], h: [1300, 1005], a: [1210, 1050] }
 ];
 
+const CARRUATGE_K = 1.25;       // factor de mida del carruatge de vapor del Follet
 const PAS_PORTA = 44;       // en passar una porta (o qualsevol sortida), l'Ineu camina aquests píxels més cap a la foscor abans de canviar d'escena, i en arribar en camina altres tants cap endins
 const MS_PAS_PORTA = 450;
 const MS_PORTA_EDIFICI = 1100;      // sortir o entrar per la porta d'un edifici (l'Ineu s'hi veu endinsar-se o sortir-ne)
@@ -472,13 +473,15 @@ class ZonaBase extends Phaser.Scene {
     // ---------------- Viatge ràpid ----------------
     parada(pd) {
         const [cx, cy] = pd.c, [hx, hy] = pd.h;
-        const carro = this.posar('carruatge', cx, cy, { col: { w: 190, h: 40 }, opac: true }).setFlipX(true);     // girat: el davant mira cap a l'escena
+        const KC = CARRUATGE_K;          // el carruatge, una mica més gran (el fum i el follet es recoloquen amb ell)
+        const carro = this.posar('carruatge', cx, cy, { col: { w: 190 * KC, h: 40 * KC }, opac: true, escala: KC }).setFlipX(true);     // girat: el davant mira cap a l'escena
         // el fum blanc de la xemeneia (la xemeneia és a l'esquerra del dibuix, que està girat): animat per codi, sempre blanc
         this.carroParada = carro;
-        const ox = 107 * carro.scaleX - 8, oy = -carro.displayHeight + 6;             // la xemeneia, respecte al peu del carruatge (si la zona s'amplia cap al sud, el carruatge es mou i el fum el segueix)
+        const ox = 107 * carro.scaleX - 8 * KC, oy = -carro.displayHeight + 6 * KC;             // la xemeneia, respecte al peu del carruatge (si la zona s'amplia cap al sud, el carruatge es mou i el fum el segueix)
         const fum = this.add.particles(carro.x + ox, carro.y + oy, 'fum', {
             speedY: { min: -34, max: -20 }, speedX: { min: -9, max: 7 }, accelerationX: 1, lifespan: { min: 2400, max: 3400 },
-            scale: { start: 0.16, end: 0.95 }, alpha: { start: 0.85, end: 0 }, rotate: { min: -25, max: 25 }, frequency: 260, quantity: 1
+            scale: { start: 0.16 * KC, end: 0.95 * KC }, alpha: { start: 0.8, end: 0 }, rotate: { min: -25, max: 25 }, frequency: 260, quantity: 1,
+            tint: [0x2c2c30, 0x3a3a3e, 0x4a4a4e]          // fum gris-negre (el vapor de l'arribada continua blanc)
         }).setDepth(cy + 1);
         // El motor en marxa: el carruatge vibra una mica (uns píxels, ràpid) i el fum surt de la xemeneia quieta, sense vibrar
         let bx = null, by = null;
@@ -492,18 +495,18 @@ class ZonaBase extends Phaser.Scene {
         fum.setPosition(carro.x + ox, carro.y + oy);
         this.events.on('update', motor);
         this.events.once('shutdown', () => this.events.off('update', motor));
-        this.npc('follet_carro', hx, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true, colAmple: 48 });     // girat: mira cap a l'escena, no cap al carruatge
+        this.npc('follet_carro', hx + 30 * (KC - 1) / 0.25, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true, colAmple: 48 });     // girat: mira cap a l'escena, no cap al carruatge
         this.paradaAqui = pd;
         if (Estat.arribadaCarruatge === pd.id) {                       // hi acabem d'arribar: bufada de vapor
             Estat.arribadaCarruatge = null;
-            this.time.delayedCall(250, () => { this.vaporPuf(carro.x + ox, carro.y + oy + 20); this.vaporPuf(this.ineu.x, this.ineu.y - 20); });
+            this.time.delayedCall(250, () => { this.vaporPuf(carro.x + ox, carro.y + oy + 20 * KC, 0x4a4a4e); this.vaporPuf(this.ineu.x, this.ineu.y - 20); });
         }
     }
 
     // Una bufada de vapor blanc (sempre blanc): arribada i sortida del carruatge
-    vaporPuf(x, y) {
-        const p = this.add.particles(x, y, 'fum', { speed: { min: 12, max: 60 }, angle: { min: 200, max: 340 }, scale: { start: 0.35, end: 1.2 }, alpha: { start: 0.75, end: 0 },
-            lifespan: { min: 900, max: 1500 }, rotate: { min: -40, max: 40 }, quantity: 9, emitting: false }).setDepth(99990);
+    vaporPuf(x, y, tint) {
+        const p = this.add.particles(x, y, 'fum', Object.assign(tint !== undefined ? { tint } : {}, { speed: { min: 12, max: 60 }, angle: { min: 200, max: 340 }, scale: { start: 0.35, end: 1.2 }, alpha: { start: 0.75, end: 0 },
+            lifespan: { min: 900, max: 1500 }, rotate: { min: -40, max: 40 }, quantity: 9, emitting: false })).setDepth(99990);
         p.explode(9);
         this.time.delayedCall(1700, () => p.destroy());
     }
@@ -525,7 +528,7 @@ class ZonaBase extends Phaser.Scene {
         this.canviant = true;
         this.ineu.body.setVelocity(0);
         Sfx.vapor();
-        if (this.carroParada && this.carroParada.active) this.vaporPuf(this.carroParada.x + 107 * this.carroParada.scaleX, this.carroParada.y - this.carroParada.displayHeight + 26);
+        if (this.carroParada && this.carroParada.active) this.vaporPuf(this.carroParada.x + 107 * this.carroParada.scaleX, this.carroParada.y - this.carroParada.displayHeight + 26 * CARRUATGE_K, 0x4a4a4e);
         Estat.dades.zona = pd.zona; Estat.dades.entrada = null;
         Estat.dades.x = pd.a[0]; Estat.dades.y = pd.a[1];
         Estat.arribadaCarruatge = pd.id;
