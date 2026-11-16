@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 592: la llum d'en Mamet ja té pes: sense ella, al Soterrani de l'Hostatgeria i a les Gírgoles el cercle de llum de l'Ineu és de 130 px (abans 330-340) i amb ella de 450; la primera vegada, l'Ineu ho comenta (flag avisFoscor). Només a llocs posteriors a Jusef; la resta de zones «fosques» (Cementiri, boscos, Passadís secret, Tortura, Boira) no canvien.*
+
 *Revisió 591: Jusef, en ser vençut, només parla de la roda de carruatge si encara no s'ha empès; si ja s'ha mogut, no en diu res i l'objectiu ho reflecteix.*
 
 *Revisió 590: Celler: en sortir del Passadís secret per la roda, l'Ineu apareix davant la paret (no dins la porta, encastat a la paret) i la porta secreta no el fa tornar enrere: la sortida al Passadís només s'arma quan és a sota.*
@@ -235,7 +237,7 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat q
 | Cristall de Gel | Cofre de l'ermita de Sant Gabriel (només hi és un cop el Galf n'ha parlat) | El Galf en fa el telescopi. |
 | Telescopi, Llàgrima de Sant Llorenç | Galf (amb el Cristall de Gel), mirador dels Dipòsits | **Obligatoris**: la boira del camí del Dolmen només s'aparta amb l'Estel. |
 | Llavor de Lluna | Rosansa | L'Isílder la planta: obre la llosa de l'Hostatgeria. |
-| Llanterna (Llum d'en Mamet) | Jusef, en guanyar el partit (Celler). **S'aconsegueix a l'Acte 2, abans del fragment 1** | **Obligatòria a les Runes** (sense llum no es veu el pergamí del forat); als llocs foscos (Hostatgeria, Gírgoles) eixampla el cercle de llum. |
+| Llanterna (Llum d'en Mamet) | Jusef, en guanyar el partit (Celler). **S'aconsegueix a l'Acte 2, abans del fragment 1** | **Obligatòria a les Runes** (sense llum no es veu el pergamí del forat); als llocs foscos de debò (Soterrani de l'Hostatgeria, Gírgoles) fa el cercle de llum gran (450 px); sense ella és petit (130 px): s'hi avança, a poc a poc, i la primera vegada l'Ineu comenta que està massa fosc i que Jusef guardava una llum. Són llocs on només s'arriba després de Jusef, així que no hi ha soft-lock. |
 | Clau del sagrari | Ermita de la Desaparició (taules de pedra, un cop llegides les dotze columnes) | Obre el sagrari del retaule (fragment 2). |
 | Escudella de la Meus, Flors d'Isílder, Pa dels pastors | Meus (cel·les), Isílder (jardí), pastors de la Cirosa (el pasten ells quan una música vora el foc els convenç d'anar al sopar) | Les tres coses que es posen a taula al sopar del Til·ler; es consumeixen al ritual. |
 | Cors extra | Pastor de Boira vençut, les tres sacerdotesses, el cofre de la Cambra del Santuari i el cofre de la cabana de l'Iscu | +1 cor màxim cadascun (màxim del joc: 7). |

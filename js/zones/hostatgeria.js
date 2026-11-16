@@ -144,6 +144,7 @@ class ZonaSoterraniHost extends ZonaBase {
             bc.fillStyle = gr; bc.fillRect(0, 0, 512, 512); brush.refresh();
         }
         this.foscor = this.add.renderTexture(0, 0, W, H).setOrigin(0).setDepth(85000);
+        avisFoscor(this);
         this.pinzell = this.make.image({ key: 'llum_brush', add: false }).setOrigin(0.5);
         this.cartaLaberint = g;
     }
@@ -152,7 +153,7 @@ class ZonaSoterraniHost extends ZonaBase {
         const f = this.foscor, p = this.pinzell, t = this.time.now;
         f.clear(); f.fill(0x000000, 0.82);
         const llum = (x, y, rad) => { p.setScale(rad / 256); f.erase(p, x, y); };
-        llum(this.ineu.x, this.ineu.y - 40, Estat.te('llanterna') ? 450 : 340);
+        llum(this.ineu.x, this.ineu.y - 40, Estat.te('llanterna') ? 450 : 130);          // sense el Llum d'en Mamet, un cercle petit: s'avança, però a poc a poc
         this.llums.forEach(l => llum(l.x, l.y, l.r * (1 + 0.05 * Math.sin(t / 170 + l.f))));
     }
 }

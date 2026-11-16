@@ -11,6 +11,16 @@
  */
 
 // Foscor amb forats de llum (la mateixa tècnica que el soterrani de l'Hostatgeria)
+// Sense el Llum d'en Mamet, la primera vegada que s'entra en un lloc de foscor de debò, l'Ineu ho comenta (una pista, no un bloqueig)
+function avisFoscor(escena) {
+    if (Estat.te('llanterna') || Estat.flag('avisFoscor')) return;
+    escena.time.delayedCall(900, () => {
+        if (!escena.sys.isActive() || Estat.te('llanterna') || Estat.flag('avisFoscor')) return;
+        Estat.posaFlag('avisFoscor');
+        escena.ineuDiu("Està massa fosc... Només hi veig a un pas. Jusef, al Celler, guardava una llum.");
+    });
+}
+
 function crearFoscor(escena, W, H) {
     if (!escena.textures.exists('llum_brush')) {
         const brush = escena.textures.createCanvas('llum_brush', 512, 512);
@@ -288,6 +298,7 @@ class ZonaGirgoles extends ZonaBase {
         [[420, 520], [980, 560], [360, 900], [1020, 980]].forEach(([x, y]) => { const e = this.enemic('ratpenat', x, y); if (e) e.estat = 'penja'; });
 
         this.foscor = crearFoscor(this, W, H);
+        avisFoscor(this);
         // La sortida del nord (i les seves llumetes) només s'activa quan el puzle de les gírgoles ja és resolt
         if (resolt) this.sortida(656, 130, 88, 24, 'ZonaTortura', 'girgoles');
         this.sortida(660, H - 22, 80, 14, 'ZonaSotaTaverna', 'girgoles');
@@ -334,7 +345,7 @@ class ZonaGirgoles extends ZonaBase {
     actualitzar() {
         const t = this.time.now, resolt = Estat.flag('girgolesEnceses');
         const llums = [
-            [this.ineu.x, this.ineu.y - 40, Estat.te('llanterna') ? 450 : 330],
+            [this.ineu.x, this.ineu.y - 40, Estat.te('llanterna') ? 450 : 130],          // sense el Llum d'en Mamet, un cercle petit: s'avança, però a poc a poc
             [470, 190, 210]
         ];
         this.mates.forEach(m => { if (m.on) llums.push([m.x, m.y - 20, 200 * (1 + 0.05 * Math.sin(t / 300 + m.i))]); });
