@@ -2224,6 +2224,15 @@ class ZonaBase extends Phaser.Scene {
                     sx2 = cx - AMPLE / 2;
                 }
             }
+            if (p && p.senseZoom) {                                     // (la llosa del jardí...) sense canviar el zoom: només es centra, a poc a poc, entre l'Ineu i l'objecte, dins l'espai lliure entre el HUD i el quadre
+                const dalt = Math.min(...mides.map(m => m.dalt)), baix = Math.max(...mides.map(m => m.baix));
+                z2 = Z; wy2 = (dalt + baix) / 2 - ((TOP + LIM) / 2 - ALT_HUD) / z2;
+                const esq = Math.min(...cossos.map(o => o.getBounds().x)), dre = Math.max(...cossos.map(o => o.getBounds().right));
+                const ob = this.boundsCamOrig || (() => { const bb = cam.getBounds(); return { x: bb.x, w: bb.width }; })();
+                let cx = (esq + dre) / 2;
+                if (ob.w) cx = Phaser.Math.Clamp(cx, ob.x + AMPLE / (2 * z2), Math.max(ob.x + AMPLE / (2 * z2), ob.x + ob.w - AMPLE / (2 * z2)));
+                sx2 = cx - AMPLE / 2; trobat = true;
+            }
             if (!trobat && !centrar && be(Z, wv.y)) return;             // ja es veuen bé: la càmera no es mou
             // Es busca el zoom més gran (fins a 0,6) en què hi caben; la y de la vista s'escull perquè els peus més baixos quedin just al seu límit
             if (centrar) {

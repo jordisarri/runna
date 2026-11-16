@@ -119,7 +119,7 @@ class ZonaJardi extends ZonaBase {
 
         // L'Isílder, fora de la pèrgola, davant de la fila de columnes del davant i ben lluny de la Prunera (si la llosa ja és oberta, es queda al costat del forat)
         this.isilder = this.npc('isilder', 360, 840, DIALEGS.isilder, { zoomConversa: 1.5 });
-        this.puntLlosa.cameraCossos = [this.isilder];                 // en examinar la llosa, el diàleg d'ella (llosaJardi) enquadra l'Isílder també
+        this.puntLlosa.cameraCossos = [this.llosa]; this.puntLlosa.senseZoom = true;          // en examinar la llosa, la càmera només es centra (sense zoom) entre l'Ineu i la llosa
         if (Estat.flag('llosaOberta')) {
             this.llosa.setPosition(LX - 92, LY + 4).setRotation(-0.1);
             this.florLluna.setVisible(true);
