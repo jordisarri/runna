@@ -1710,7 +1710,7 @@ class ZonaBase extends Phaser.Scene {
         // Es surt d'una porta: a fora, l'Ineu apareix dins la porta (a la base, tapat pel marc) i en surt caminant; a dins, apareix a la porta de baix de la sala i hi entra
         this.entradaPorta = false;
         if (!this.dadesEntrada.restaurar) {
-            const pa = pos.dir === 'avall' && (this.portesAnim || []).find(P => !(P.bloq && P.bloq()) && Math.abs(P.DX - pos.x) < P.DW / 2 + 70 && pos.y > P.DB - 10 && pos.y - P.DB < 200);
+            const pa = pos.dir === 'avall' && (this.portesAnim || []).find(P => !P.senseSortida && !(P.bloq && P.bloq()) && Math.abs(P.DX - pos.x) < P.DW / 2 + 70 && pos.y > P.DB - 10 && pos.y - P.DB < 200);
             const pi = pos.dir === 'amunt' && this.esInterior() && (this.portesInt || []).find(q => Math.abs(q.x + q.w / 2 - pos.x) < q.w / 2 + 70);
             if (pa) {          // surt de la porta: ja és oberta (no la traspassa tancada) i es manté oberta mentre l'Ineu en surt
                 pos = Object.assign({}, pos, { x: pa.DX, y: pa.DB - 12 }); this.entradaPorta = true;
@@ -2533,7 +2533,7 @@ class ZonaBase extends Phaser.Scene {
         // La sortida d'aquesta porta (si n'hi ha) no ha de saltar abans que l'Ineu arribi a la base de la porta: es retalla per baix
         const sp = this.sortides.find(t => t.r.width <= 140 && Math.abs(t.r.centerX - DX) < DW && t.r.y < DB - 14 && t.r.bottom > DT - 40 && t.r.bottom > DB - 4 && !t.baixar);
         if (sp) sp.r.height = DB - 4 - sp.r.y;
-        const P = { DX, DB, DW, a: 0, estat: 'tancada', esq, dre, bloq: o.bloq };
+        const P = { DX, DB, DW, a: 0, estat: 'tancada', esq, dre, bloq: o.bloq, senseSortida: o.senseSortida };
         this.portesAnim.push(P);
         return P;
     }
@@ -2828,7 +2828,7 @@ class ZonaBase extends Phaser.Scene {
         const b = this.ineu.body;
         const peus = new Phaser.Geom.Rectangle(b.x, b.y, b.width, b.height);
         for (const s of this.sortides) {
-            if (s.desarmada) { if (!Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r)) s.desarmada = false; continue; }       // sortida recent: només compta quan l'Ineu en surt i hi torna
+            if (s.desarmada) { if (!Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r) && (!s.desarmaSota || peus.y >= s.r.bottom)) s.desarmada = false; continue; }       // sortida recent: només compta quan l'Ineu en surt i hi torna
             // Per una porta només s'hi entra pel buit: el centre del cos ha d'estar dins l'amplada de la porta (o alçada en sortides laterals)
             const dir = s.dir || this.dirSortida(s.r);          // (s.dir: sortida lateral oberta a un mur de l'interior, on la vora de la zona no diu per on se surt)
             const horitz = dir === 'amunt' || dir === 'avall';

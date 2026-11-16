@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 590: Celler: en sortir del Passadís secret per la roda, l'Ineu apareix davant la paret (no dins la porta, encastat a la paret) i la porta secreta no el fa tornar enrere: la sortida al Passadís només s'arma quan és a sota.*
+
 *Revisió 589: Bassadòria: durant la transició a l'aigua neta, el dibuix sencer (reixa metàl·lica, pedra, vores) es manté visible i el dibuix net hi apareix amb un fade; l'ona només és l'efecte dins l'oval. Ja no desapareix la reixa ni apareix de cop al final.*
 
 *Revisió 588: la tarota s'obre al moment de tancar el text d'un lloc de tarota, com una pàgina més del quadre (abans hi havia una espera de 0,4 s).*

@@ -463,7 +463,7 @@ class ZonaPingpong extends ZonaBase {
         juntes.lineStyle(2, 0x0a0806, 0.5).strokePoints(forma, false).lineBetween(AX, PY - 44, AX, YP);
         juntes.lineStyle(1.5, 0x8a8070, 0.18).strokePoints(forma.map(p => ({ x: p.x + 2, y: p.y + 1 })), false);
         this.juntesPorta = juntes;
-        this.portaSecreta = this.portaAnimada({ x: AX, top: PY - 44, bottom: YP, ample: PR * 2, arc: 44, fons: -979, color: 0x4a3a28, vora: 0x1a1612, panell: 0x3a2c1c, ferro: true, vell: true, bloq: () => !this.rodaMoguda });
+        this.portaSecreta = this.portaAnimada({ x: AX, top: PY - 44, bottom: YP, ample: PR * 2, arc: 44, fons: -979, color: 0x4a3a28, vora: 0x1a1612, panell: 0x3a2c1c, ferro: true, vell: true, bloq: () => !this.rodaMoguda, senseSortida: true });
         // un fanal a l'esquerra de l'arcada (flama que tremola)
         [X0 + 92].forEach((x, k) => {
             const y = 130, f = this.add.graphics().setDepth(-975);
@@ -573,7 +573,7 @@ class ZonaPingpong extends ZonaBase {
     // L'obertura de la paret descoberta: porta al passadís (sortida sense llum ni fletxa, perquè és una troballa)
     obrirPassadis() {
 
-        this.sortides.push({ r: new Phaser.Geom.Rectangle(this.AX - 50, this.YP + 18, 100, 32), desti: 'ZonaPassadis', entrada: 'porta', desarmada: true });
+        this.sortides.push({ r: new Phaser.Geom.Rectangle(this.AX - 50, this.YP + 18, 100, 32), desti: 'ZonaPassadis', entrada: 'porta', desarmada: true, desarmaSota: true });          // (en sortir del Passadís, l'Ineu surt caminant per aquesta porta: no s'arma fins que és a sota)
         this.tweens.add({ targets: this.add.circle(this.AX, this.YP - 40, 70, 0xa070ff, 0.12).setDepth(-970), alpha: 0.03, yoyo: true, repeat: -1, duration: 900 });
     }
 }
