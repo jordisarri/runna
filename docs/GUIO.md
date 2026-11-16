@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 589: Bassadòria: durant la transició a l'aigua neta, el dibuix sencer (reixa metàl·lica, pedra, vores) es manté visible i el dibuix net hi apareix amb un fade; l'ona només és l'efecte dins l'oval. Ja no desapareix la reixa ni apareix de cop al final.*
+
 *Revisió 588: la tarota s'obre al moment de tancar el text d'un lloc de tarota, com una pàgina més del quadre (abans hi havia una espera de 0,4 s).*
 
 *Revisió 587: Bassadòria: en acabar de llegir el text de la portella (l'aigua tèrbola), s'obre la interfície de la tarota si es sap el Cant de l'Aurora (abans no s'obria perquè el punt de lectura és massa lluny del centre del lloc de la tarota).*

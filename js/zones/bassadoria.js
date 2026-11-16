@@ -92,7 +92,10 @@ class ZonaCreu extends ZonaBase {
         const sprTrans = this.add.image(700, 560, texKey)
             .setOrigin(0.5, 1)
             .setDepth(this.bassa.depth + 0.1);
-        this.bassa.setVisible(false);
+        // La bassa vella es veu tota l'estona (reixa metàl·lica i vores inclosos) i la neta hi va apareixent a sobre, de mica en mica, per tot el dibuix: l'ona només n'és l'efecte per dins l'oval,
+        // així la resta del dibuix (la reixa de dalt, la pedra...) canvia amb un fade i no de cop.
+        const profBassa = this.bassa.depth;
+        const netaFull = this.posar('bassadoria', 700, 560, { fonsY: 300 }).setDepth(profBassa + 0.05).setAlpha(0);
 
         // Màscara ovalada que s'ajusta exactament a la silueta de la Bassadòria:
         // impedeix que cap píxel ni vora quadrada pugui sortir fora de l'oval
@@ -137,6 +140,7 @@ class ZonaCreu extends ZonaBase {
                 ctx.clip();
 
                 const k = anim.prog;
+                netaFull.setAlpha(Phaser.Math.Clamp((k - 0.15) / 0.8, 0, 1));          // el fade de tot el dibuix (arriba a 1 una mica abans del final)
                 // Amplitud d'ona sinusoïdal: arrenca a 0, arriba a ~26px al punt central i decau a 0
                 const amp = Math.sin(k * Math.PI) * 26;
                 const freq = 0.052;
@@ -170,10 +174,11 @@ class ZonaCreu extends ZonaBase {
                 this.textures.get(texKey).refresh();
             },
             onComplete: () => {
+                netaFull.setAlpha(1).setDepth(profBassa);
                 sprTrans.destroy();
                 this.textures.remove(texKey);
                 this.bassa.destroy();
-                this.bassa = this.posar('bassadoria', 700, 560, { fonsY: 300 });
+                this.bassa = netaFull;
                 if (enAcabar) enAcabar();
             }
         });
