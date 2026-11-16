@@ -2759,11 +2759,9 @@ class ZonaBase extends Phaser.Scene {
     // Sempre primer el text i després la tarota: si el punt llegit és al lloc d'una tarota activa (la bassa, la pedra...), en acabar el diàleg
     // s'obre la interfície de tocar. Així no depèn dels enemics de prop (amb ells, ESPAI ataca).
     tarotaDespresDeText(punt) {
-        this.time.delayedCall(400, () => {
-            if (this.canviant || this.ui().dialeg || this.ui().bloquejat) return;
-            const lloc = this.flautaActiva();
-            if (lloc && (punt.tarota || Phaser.Math.Distance.Between(punt.x, punt.y, lloc.x, lloc.y) < 80)) this.obrirMusica();          // (tarota: el punt és al lloc de la tarota encara que no hi coincideixi, com la portella de la bassa)
-        });
+        if (this.canviant || this.ui().dialeg) return;
+        const lloc = this.flautaActiva();          // (sense espera: just en tancar el text, com una pàgina més del quadre; l'Ineu no es pot moure entremig)
+        if (lloc && (punt.tarota || Phaser.Math.Distance.Between(punt.x, punt.y, lloc.x, lloc.y) < 80)) this.obrirMusica();          // (tarota: el punt és al lloc de la tarota encara que no hi coincideixi, com la portella de la bassa)
     }
 
     // Parlar amb algú: l'Ineu fa un pas enrere perquè els dos dibuixos no se solapin («parlen a una petita distància, sense tocar-se»).
