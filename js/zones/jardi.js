@@ -38,7 +38,7 @@ class ZonaJardi extends ZonaBase {
             this.portaAnimada({ x: 1338, top: 582, bottom: 719, ample: 90, fons: 640, unic: true, retall: casa });   // la mateixa porta del gràfic, que s'obre
         } else {
             this.colisio(1338, 700, 90, 40);
-            this.interactiu(1339, 775, RADI_OBJECTE, DIALEGS.hostatgeria, { altura: 180 });
+            this.interactiu(1339, 712, RADI_OBJECTE, DIALEGS.hostatgeria, { altura: 180 });          // (a la porta mateixa: l'Ineu s'hi para just davant, mirant cap amunt, i el punt ha de quedar davant seu)
         }
 
         // --- Pèrgola de pedra enganxada al lateral esquerre: dues files de columnes unides per bigues d'heura ---

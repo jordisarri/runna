@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 599: porta tancada de l'Hostatgeria (Jardí): el punt d'interacció era 60 px darrere d'on l'Ineu s'atura i, mirant cap amunt, no el «veia»; ara és a la porta mateixa.*
+
 *Revisió 598: els turistes zombi, en caure, treuen les «z» pel cap (a l'extrem del cos estirat) i no pels peus.*
 
 *Revisió 597: Alzina Buida (al Bosc i a la cabana de la Joaneta): fora la clariana verda, la claror, el halo i les espurnes verdes; només el brillo al forat del tronc.*
