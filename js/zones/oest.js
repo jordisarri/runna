@@ -405,7 +405,7 @@ class ZonaGabriel extends ZonaBase {
         if (this.ermitaOberta) obreErmita();
         this.portaAnimada({ x: 400, top: 493, bottom: 625, ample: 88, fons: 620, unic: true, arc: 26, retall: ermita, bloq: () => !this.ermitaOberta });
         this.interactiu(400, 655, RADI_OBJECTE, () => Estat.te('clau_gabriel') ? ({
-            pagines: [{ qui: 'Ineu', text: "La clau del Galf encaixa al pany. La porta de l'ermita s'obre." }],
+            pagines: [{ qui: 'Ineu', text: "La clau del senyor Buidor encaixa al pany. La porta de l'ermita s'obre." }],
             enAcabar: () => { Estat.posaFlag('portaGabrielOberta'); Sfx.secret(); obreErmita(); }
         }) : ({
             pagines: [{ qui: 'Ineu', text: "L'ermita de Sant Gabriel és tancada amb clau." }]

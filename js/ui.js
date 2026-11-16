@@ -194,7 +194,7 @@ const CATALEG_OBJECTES = {
     pergami_monjo:    ['Pergamí del monjo', "«El germà bodeguer es bevia el vi de la sagristia. El vam petrificar perquè vigili la cripta fins que el vi es torni vinagre (a la cripta mai no es torna). Dorm de cara a la paret i només es desperta si el mires a la cara.»"],
     carta_cortiner:   ['Carta del Cortiner', 'La va deixar al tronc del Pi dels Tres Cants: explica d\'on van sortir els tres cants i què els cal per tornar als ocells.'],
     clau_ferro:       ['Clau de ferro', 'Obre la Porta de les Gírgoles.'],
-    clau_gabriel:     ['Clau de Sant Gabriel', "Te l'ha donada el Galf. Obre l'ermita de Sant Gabriel."],
+    clau_gabriel:     ['Clau de Sant Gabriel', "Te l'ha donada el senyor Buidor, que va ser sagristà. Obre l'ermita de Sant Gabriel."],
     llavorLluna:      ['Llavor de Lluna', 'De la Rosansa. L\'Isílder sap on plantar-la.'],
 };
 

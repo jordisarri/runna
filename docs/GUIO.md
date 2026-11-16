@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 603: la clau de l'ermita de Sant Gabriel ja no la dona el Galf: el Galf, en parlar del cristall de gel, envia l'Ineu al senyor Buidor, que va ser el sagristà i la té a la butxaca; el Buidor només la dona després de parlar amb el Galf (flag galfCristallDit). Pistes i descripció de l'objecte actualitzades.*
+
 *Revisió 602: el senyor Budó passa a dir-se **senyor Buidor** (diàlegs, retrats i documents; l'identificador intern `senyor_budo` no canvia).*
 
 *Revisió 601: en examinar la llosa de la pèrgola, la càmera ja no s'allunya ni fa zoom: només es centra a poc a poc entre l'Ineu i la llosa (opció senseZoom dels punts interactius).*
@@ -253,7 +255,7 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat q
 | **Clau de ferro** | Cripta de la Casa Gran | Obre la **porta de ferro exterior** (a l'est del Pati del Celler), que dona a la galeria de les Gírgoles. |
 | **Clau rovellada** | L'Iscu, a la cabana amagada | Obre la **porta de ferro del fons** de la galeria, que porta a la Sala de les Gírgoles. |
 | Aigua de la Font del Bisbe | Font del Bisbe | Obre el portal de la Joaneta. |
-| **Clau de Sant Gabriel** | El Galf, a l'Era, quan demana el cristall (un cop assegut al banc) | Obre la porta de l'ermita de Sant Gabriel, que és tancada amb clau. |
+| **Clau de Sant Gabriel** | El **senyor Buidor**, a la Taverna (va ser el sagristà de l'ermita), un cop el Galf, a l'Era, ha parlat del cristall de gel i l'ha enviat a demanar-la-hi | Obre la porta de l'ermita de Sant Gabriel, que és tancada amb clau. |
 | Cristall de Gel | Cofre de l'ermita de Sant Gabriel (només hi és un cop el Galf n'ha parlat) | El Galf en fa el telescopi. |
 | Telescopi, Llàgrima de Sant Llorenç | Galf (amb el Cristall de Gel), mirador dels Dipòsits | **Obligatoris**: la boira del camí del Dolmen només s'aparta amb l'Estel. |
 | Llavor de Lluna | Rosansa | L'Isílder la planta: obre la llosa de l'Hostatgeria. |

@@ -963,19 +963,27 @@ const DIALEGS = {
             return { pagines: [{ qui: 'Galf', text: "Mmm? Ah, un monjo! Seu, seu al banc de davant, que per xerrar s'hi està millor." }] };
         }
         const clauDonada = E.flag('clauGabrielDonada') || E.te('clau_gabriel') || E.flag('portaGabrielOberta');
-        if (clauDonada) return { pagines: [{ qui: 'Galf', text: "Torna quan tinguis el cristall de gel, noi. L'ermita de Sant Gabriel s'obre amb la clau que t'he donat." }] };
+        if (clauDonada) return { pagines: [{ qui: 'Galf', text: "Torna quan tinguis el cristall de gel, noi. L'ermita de Sant Gabriel s'obre amb la clau del senyor Buidor." }] };
+        if (E.flag('galfCristallDit')) return { pagines: [{ qui: 'Galf', text: "Ja t'ho he dit, noi: la clau de l'ermita la té el senyor Buidor, a la Taverna. Va ser el sagristà. Demana-la-hi." }] };
         return { pagines: [
             { qui: 'Galf', text: "Així sí. Soc el Galf, inventor. Visc a la cel·la de Sant Antoni, però vinc aquí cada dia: és l'únic racó on cap teulada no em tapa el cel. Tinc idees que ni jo entenc." },
             { qui: 'Galf', text: "Si em portes un cristall de gel, et construiré un telescopi per mirar el cel. N'hi ha un a l'ermita de Sant Gabriel." },
-            { qui: 'Galf', text: "Però l'ermita és tancada, i la clau la guardo jo des que el sagristà va marxar. Té: no te la deixis perdre." },
-            { avis: "Has obtingut la CLAU DE SANT GABRIEL.", obj: 'clau_gabriel' }
-        ], enAcabar: () => { E.dona('clau_gabriel'); E.posaFlag('clauGabrielDonada'); } };
+            { qui: 'Galf', text: "Però l'ermita és tancada. La clau la tenia el sagristà, el senyor Buidor, que va plegar fa anys i ara es passa els dies a la Taverna. Demana-la-hi de part meva." }
+        ], enAcabar: () => { E.posaFlag('galfCristallDit'); E.posaObjectiu("Demana la clau de l'ermita de Sant Gabriel al senyor Buidor, a la Taverna."); } };
     },
     cartellEra: E => ({ pagines: [{ qui: 'Cartell', text: '↑ Ermita de la Desaparició\n→ Hostatgeria\n← Rovellonera' }] }),
 
     // ---------------- JARDÍ ----------------
     // El senyor Buidor, a la taverna: només parla (res de feina ni de missions), assaborint l'anís escarxat que li ha preparat l'Eve
-    senyorBudo: E => ({ pagines: [
+    senyorBudo: E => (E.flag('galfCristallDit') && !(E.flag('clauGabrielDonada') || E.te('clau_gabriel') || E.flag('portaGabrielOberta'))) ? ({
+        pagines: [
+            { qui: 'Senyor Buidor', text: "Xxt... ¿El Galf? Ah, sí. Vol el cristall de gel de l'ermita de Sant Gabriel, oi? Sempre ha tingut ganes de mirar el cel." },
+            { qui: 'Senyor Buidor', text: "Jo hi vaig ser sagristà molts anys, fins que ja no vaig poder amb els graons. Tinc la clau a la butxaca des d'aleshores: ningú no me l'ha demanada mai." },
+            { qui: 'Senyor Buidor', text: "Té. Però tanca bé, que el pany és vell. I no t'enduguis res més que el cristall." },
+            { avis: "Has obtingut la CLAU DE SANT GABRIEL.", obj: 'clau_gabriel' }
+        ],
+        enAcabar: () => { E.dona('clau_gabriel'); E.posaFlag('clauGabrielDonada'); E.posaObjectiu("L'ermita de Sant Gabriel és oberta amb la clau del senyor Buidor: hi ha el cristall de gel."); }
+    }) : ({ pagines: [
         { qui: 'Senyor Buidor', text: "Xxt... baixa la veu, noi, que m'estic fotent un anís escarxat. Me l'ha preparat l'Eve, i això no es beu: s'assaboreix." },
         { qui: 'Senyor Buidor', text: "Una gota de gel, un raig d'aigua, i deixar-lo fer. Les coses bones no tenen pressa. Jo en sé, d'esperar: fa seixanta anys que m'assec en aquesta taula." },
         { qui: 'Senyor Buidor', text: "Si busques conversa, parla amb l'Eve." }

@@ -82,7 +82,9 @@ const PROGRES = {
           pista: E => !E.flag('garfBancSegut')
               ? "A l'Era, un inventor anomenat Galf mira el cel. Potser et deixa seure al seu banc."
               : E.te('cristall_gel') ? "Ja tens el cristall de gel: el Galf, a l'Era, en farà un tub per mirar els estels."
-              : "El Galf, a l'Era, farà un tub per mirar els estels si li portes un cristall de gel. L'ermita de Sant Gabriel s'obre amb la clau que ell t'ha donat." },
+              : !E.flag('galfCristallDit') && !E.te('clau_gabriel') && !E.flag('portaGabrielOberta') ? "El Galf, a l'Era, farà un tub per mirar els estels si li portes un cristall de gel. Parla-hi, assegut al seu banc: et dirà com entrar a l'ermita de Sant Gabriel."
+              : !E.te('clau_gabriel') && !E.flag('portaGabrielOberta') ? "La clau de l'ermita de Sant Gabriel la té el senyor Buidor, a la Taverna: el Galf t'hi envia."
+              : "El Galf, a l'Era, farà un tub per mirar els estels si li portes un cristall de gel. L'ermita de Sant Gabriel s'obre amb la clau del senyor Buidor." },
         { id: 'estels', marca: ['telescopiMuntat', 'estelsFets'], fet: E => E.flag('estelsFets') || E.flag('estelLlorenc'),
           pista: E => "El telescopi vol un lloc alt i fosc: els Dipòsits." },
         { id: 'estelLlorenc', marca: ['estelLlorenc', 'obj:estel_llorenc'], fet: E => E.flag('estelLlorenc'),
