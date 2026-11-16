@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 581: portes de façana (Monestir): els brancals del marc es tornen a dibuixar per sobre de l'Ineu, de manera que dins del portal el marc el tapa de debò.*
+
 *Revisió 580: quan l'Ineu travessa una porta de façana, el marc i l'interior el tapen de debò: la silueta translúcida ja no es veu a través.*
 
 *Revisió 579: rosari de la vida: les betes de la fusta ara són irregulars (ondulades, de gruix i longitud variables) en comptes de línies rectes.*

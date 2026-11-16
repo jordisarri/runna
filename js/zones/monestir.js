@@ -42,7 +42,7 @@ class ZonaMonestir extends ZonaBase {
         // 800 d'ample: la façana surt per dalt de la pantalla i només es veu a partir de les últimes fileres de teula
         // La façana: el portal del mig duu a la biblioteca (on treballa el Pare Alcoví)
         // La imatge va al fons (fonsY): l'Ineu puja l'escalinata per davant i arriba a la porta, que es veu obrir-se i el duu al Rebedor
-        this.posar('monestir', 800, 440 + D, { fonsY: 330 });
+        const facanaMon = this.posar('monestir', 800, 440 + D, { fonsY: 330 });
         // Murs de la façana: als costats de l'escalinata la paret arriba fins a y=535; dalt de l'escalinata el mur i la porta són a y=438
         this.colisio(531, 267.5, 238, 535);
         this.colisio(1069, 267.5, 238, 535);
@@ -57,7 +57,7 @@ class ZonaMonestir extends ZonaBase {
             this.colisio(1600 - cx, cy, w, 25);
         }
         this.sortida(764, 416, 72, 14, 'ZonaMonestirRebedor', 'porta');
-        this.portaAnimada({ x: 800, top: 325, bottom: 435, ample: 76, fons: 335, color: 0x6a4328, panell: 0x7a5233, vora: 0x2a1608, ferro: true });   // el portal romànic: els batents de fusta s'obren cap endins
+        this.portaAnimada({ x: 800, top: 325, bottom: 435, ample: 76, fons: 335, marc: facanaMon, color: 0x6a4328, panell: 0x7a5233, vora: 0x2a1608, ferro: true });   // el portal romànic: els batents de fusta s'obren cap endins
         // Xiprers alts a l'esquerra del portal i una conífera a la dreta (al peu de la façana, y=535)
         [[440, 392, 1.7], [492, 398, 1.5]].forEach(([x, y, e]) => this.posar('xiprer', x, y + D, { escala: e, col: { w: 26, h: 12 } }));
         this.posar('xiprer', 1165, 395 + D, { escala: 1.9, col: { w: 30, h: 12 } });

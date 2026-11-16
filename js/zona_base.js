@@ -2348,6 +2348,18 @@ class ZonaBase extends Phaser.Scene {
             return pts;
         };
         (this.forcsPorta = this.forcsPorta || []).push({ x0: DX - DW / 2 - 4, x1: DX + DW / 2 + 4, t: DT, b: DB + 2 });          // el marc i l'interior tapen l'Ineu: la silueta translúcida s'hi amaga
+        // Els brancals (els costats del marc) són del gràfic de la façana, que és al fons: es tornen a dibuixar per sobre de l'Ineu perquè, dins la porta, el marc el tapi de debò
+        const imF = o.marc || o.retall;
+        if (imF) {
+            const src = imF.texture.getSourceImage(), SW = 26;
+            [[DX - DW / 2 - SW, DX - DW / 2], [DX + DW / 2, DX + DW / 2 + SW]].forEach(([xa, xb]) => {
+                const nom = 'brancal_' + imF.texture.key + '_' + xa + '_' + DT, sx = (xa - imF.x + imF.displayWidth * imF.originX) / imF.scaleX, sy = (DT - imF.y + imF.displayHeight * imF.originY) / imF.scaleY;
+                const sw = Math.ceil((xb - xa) / imF.scaleX), sh = Math.ceil((DB - DT) / imF.scaleY);
+                if (!this.textures.exists(nom)) { const ct = this.textures.createCanvas(nom, sw, sh); ct.getContext().drawImage(src, sx, sy, sw, sh, 0, 0, sw, sh); ct.refresh(); }
+                const im = this.add.image(xa, DT, nom).setOrigin(0).setScale(imF.scaleX, imF.scaleY).setDepth(Z + 3);
+                if (imF.isTinted) im.setTint(imF.tintTopLeft);
+            });
+        }
         const dins = this.add.graphics().setDepth(Z + 1).setPosition(0, DT);
         dins.fillStyle(0x0e0806, 1).fillPoints(forma(DX - DW / 2, DW, H, o.arc), true);
         dins.fillGradientStyle(0x0e0806, 0x0e0806, 0x6a4420, 0x6a4420, 1, 1, 0.9, 0.9).fillRect(DX - DW / 2, H * 0.45, DW, H * 0.55);
