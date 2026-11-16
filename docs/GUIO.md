@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 593: Runes: un cop mogut la pedra, el forat amb boira té el brillo de sempre (fins que se'n recull el pergamí), perquè l'Ineu hi vagi a examinar.*
+
 *Revisió 592: la llum d'en Mamet ja té pes: sense ella, al Soterrani de l'Hostatgeria i a les Gírgoles el cercle de llum de l'Ineu és de 130 px (abans 330-340) i amb ella de 450; la primera vegada, l'Ineu ho comenta (flag avisFoscor). Només a llocs posteriors a Jusef; la resta de zones «fosques» (Cementiri, boscos, Passadís secret, Tortura, Boira) no canvien.*
 
 *Revisió 591: Jusef, en ser vençut, només parla de la roda de carruatge si encara no s'ha empès; si ja s'ha mogut, no en diu res i l'objectiu ho reflecteix.*

@@ -1604,11 +1604,12 @@ class ZonaBase extends Phaser.Scene {
     brillo(x, y, w, h, o = {}) {
         const radi = o.radi || Infinity, per = o.per || 2400, dur = 800, ang = o.ang !== undefined ? o.ang : 0.5;
         const b = { per, desfase: o.desfase !== undefined ? o.desfase : Math.random() * per };
-        b.rect = { x, y, w, h, arc: !!o.arc, cercle: !!o.cercle };      // (per a les proves: on cau el brillo)
+        b.rect = { x, y, w, h, arc: !!o.arc, cercle: !!o.cercle, el: !!o.el };      // (per a les proves: on cau el brillo)
         (this.brillos = this.brillos || []).push(b);
         const g = this.add.graphics().setDepth(o.dep || 910).setBlendMode('ADD');
         const m = this.make.graphics({ add: false }); m.fillStyle(0xffffff, 1);
         if (o.cercle) m.fillCircle(x, y, w / 2);                  // (cercle: roda o engranatge; w = diàmetre)
+        else if (o.el) m.fillEllipse(x, y, w, h);                  // (el: el·lipse, com la boca d'un forat a terra)
         else if (o.arc) m.fillRoundedRect(x - w / 2, y - h / 2, w, h, { tl: w / 2, tr: w / 2, bl: 0, br: 0 }); else m.fillRect(x - w / 2, y - h / 2, w, h);
         g.setMask(m.createGeometryMask());
         const f = () => {
@@ -1618,7 +1619,7 @@ class ZonaBase extends Phaser.Scene {
             if (o.actiu && !o.actiu()) return;
             if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, x, y) > radi) return;
             if (o.punt && o.punt.marca && this.puntProper && this.puntProper() === o.punt) return;
-            const p = ph / dur, e = p * p * (3 - 2 * p), sk = h * ang, cx = x - w / 2 - w * 0.4 + e * w * 1.8, bw = Math.max(7, w * 0.2), alfa = 0.8 * Math.sin(Math.PI * p);
+            const p = ph / dur, e = p * p * (3 - 2 * p), sk = h * ang, cx = x - w / 2 - w * 0.4 + e * w * 1.8, bw = Math.max(7, w * 0.2), alfa = Math.min(1, 0.8 * (o.forca || 1)) * Math.sin(Math.PI * p);
             [[1, 0.3], [0.62, 0.55], [0.28, 1]].forEach(([k, a]) => {
                 const mig = bw * k;
                 g.fillStyle(0xffffff, alfa * a * 0.55).fillPoints([{ x: cx - mig + sk / 2, y: y - h / 2 }, { x: cx + mig + sk / 2, y: y - h / 2 }, { x: cx + mig - sk / 2, y: y + h / 2 }, { x: cx - mig - sk / 2, y: y + h / 2 }], true);

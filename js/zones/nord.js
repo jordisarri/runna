@@ -109,7 +109,8 @@ class ZonaRuines extends ZonaBase {
         if (!Estat.flag('fragment1')) {
             this.crearBoiraForat();
             // (La pedra no té cap punt d'interacció: només s'empeny. El forat, un cop destapat, en té un.)
-            this.interactiu(HX + 6, HY + 46, RADI_OBJECTE + 10, DIALEGS.ruines, { altura: 70, actiu: () => Estat.flag('pedraRunes') && !Estat.flag('fragment1') });
+            const puntForat = this.interactiu(HX + 6, HY + 46, RADI_OBJECTE + 10, DIALEGS.ruines, { altura: 70, actiu: () => Estat.flag('pedraRunes') && !Estat.flag('fragment1') });
+            this.brillo(HX, HY + 2, 84, 34, { el: true, forca: 1.4, dep: HY + 30, punt: puntForat, actiu: () => Estat.flag('pedraRunes') && !Estat.flag('fragment1') });          // un cop mogut la pedra, el forat brilla: invita a anar-hi a mirar
         } else if (!Estat.te('fragment1')) Estat.dona('fragment1');          // partides desades d'abans del pergamí físic
 
         // L'ombra del monjo: projectada al mur a l'esquerra del portal de les runes (dividida en franges horitzontals per a l'efecte d'ondulació espectral)
