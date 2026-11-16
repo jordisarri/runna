@@ -1,5 +1,5 @@
 /**
- * EL CELLER: el partit de ping-pong contra en Jusef, estil arcade «Threepon» (el prototip és a proves/pingpong/arcade.html; el minijoc antic, de tres carrils, a proves/pingpong/antic/)
+ * EL CELLER: el partit de ping-pong contra en Jusef, estil arcade «Threepon» (el prototip és a art/proves/pingpong/arcade.html; el minijoc antic, de tres carrils, a art/proves/pingpong/antic/)
  *
  * Un sol gest, sense botons ni joystick. L'Ineu CORRE SOL cap a la pilota (una marca groga t'ensenya on botarà); tu només LLISCES el dit cap amunt per colpejar:
  *    · la DIRECCIÓ del lliscament apunta (cap a l'esquerra o la dreta)

@@ -11,7 +11,7 @@ class ZonaTaverna extends ZonaBase {
             nom: 'La Taverna',
             amplada: 1600,
             alcada: 1100,
-            entrades: { jardi: { x: 60, y: 960, dir: 'dreta' }, casagran: { x: 1540, y: 960, dir: 'esquerra' }, interior: { x: 800, y: 820, dir: 'avall' } }
+            entrades: { jardi: { x: 60, y: 960, dir: 'dreta' }, casagran: { x: 1540, y: 960, dir: 'esquerra' }, interior: { x: 831, y: 775, dir: 'avall' } }
         });
     }
 
@@ -26,9 +26,9 @@ class ZonaTaverna extends ZonaBase {
         this.colisio(1040, 705, 340, 90);
         this.blocDarrere(800, 900, 660, Math.max(0, 750 - t.displayHeight));
         // La porta (l'arc del mig): tancada fins que s'hi parla (l\'Eve l'obre des de dins)
-        this.colPorta = this.colisio(825, 705, 90, 90);
+        this.colPorta = this.colisio(831, 705, 90, 90);
         if (Estat.flag('tavernaOberta')) { this.obrirPorta(); this.portaTavernaAnim(); }
-        else { this.interactiu(825, 765, RADI_OBJECTE, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() }); }
+        else { this.interactiu(831, 765, RADI_OBJECTE, DIALEGS.portaTaverna, { altura: 170, actiu: () => !Estat.flag('tavernaOberta'), enTancar: () => this.obrirPorta() }); }
 
         // Barrils de debò (es trenquen) a la dreta de la porta, on els tenia dibuixats la façana (mai apilats: si en trenques un, l'altre es quedaria flotant)
         this.barril(944, 757, 40, 16); this.barril(992, 762, 40, 16); this.barril(1038, 756, 40, 16);
@@ -36,7 +36,7 @@ class ZonaTaverna extends ZonaBase {
         this.barril(1150, 800, 40, 16);
         this.barril(1200, 812, 40, 16);
         this.posarBanc(520, 790, 130);
-        this.posar('taula', 400, 805, { escala: 0.7, col: { w: 110, h: 22 } });
+        this.posar('taula_buida', 400, 805, { escala: 0.7, col: { w: 110, h: 22 } });
         this.enemic('visitant', 1000, 960);        // un visitant trastocat per la boira, que ha vingut a la Taverna
 
         this.cartell(260, 860, () => ({ pagines: [{ qui: 'Cartell', text: '← L\'Hostatgeria i l\'Era\n→ Els arcs de la Casa Gran' }] }));
@@ -56,15 +56,15 @@ class ZonaTaverna extends ZonaBase {
 
     // L'arc del mig de la façana: els batents són el tros del mateix gràfic i giren cap endins quan l'Ineu s'hi acosta
     portaTavernaAnim() {
-        return this.portaTaverna || (this.portaTaverna = this.portaAnimada({ x: 825, top: 590, bottom: 746, ample: 105, fons: 640, unic: true, arc: 46, retall: this.taverna }));
+        return this.portaTaverna || (this.portaTaverna = this.portaAnimada({ x: 831, top: 590, bottom: 746, ample: 107, fons: 640, unic: true, arc: 46, retall: this.taverna }));
     }
 
     obrirPorta() {
         if (!Estat.flag('tavernaOberta') || this.portaOberta) return;
         this.portaOberta = true;
         this.obstacles.remove(this.colPorta, true, true);
-        this.colisio(825, 660, 90, 20);      // dintell
-        this.sortida(793, 680, 64, 40, 'ZonaTavernaInt', 'porta');
+        this.colisio(831, 660, 90, 20);      // dintell
+        this.sortida(799, 676, 64, 14, 'ZonaTavernaInt', 'porta');
     }
 }
 
@@ -187,13 +187,13 @@ class ZonaTavernaInt extends ZonaBase {
             alcada: 800,
             colorFons: '#140e0a',
             pacifica: true,
-            entrades: { porta: { x: 500, y: 700, dir: 'amunt' } }
+            entrades: { porta: { x: 500, y: 752, dir: 'amunt' } }
         });
     }
 
     construir() {
         const A = 1000, H = 800;
-        this.terra('taulons', 100, 40, 800, 760, -1100).setTint(0xb08a5a);
+        this.terra('taulons', 60, 40, 880, 760, -1100).setTint(0xb08a5a);
         // Paret del fons: arrebossat càlid, sòcol de rajola i bigues
         const p = this.add.graphics().setDepth(-990);
         p.fillStyle(0x120a04, 1).fillRect(58, 0, 884, 130);
@@ -207,9 +207,9 @@ class ZonaTavernaInt extends ZonaBase {
         p.fillStyle(0x4a3018, 1).fillRect(30, 0, 30, H).fillRect(940, 0, 30, H);
         this.colisio(30, H / 2, 60, H);
         this.colisio(A - 30, H / 2, 60, H);
-        this.colisio(A / 2, 70, A - 120, 140);
-        this.colisio(265, H - 10, 330, 20);
-        this.colisio(735, H - 10, 330, 20);
+        this.colisio(A / 2, 65, A - 120, 130);
+        this.colisio(245, H - 10, 370, 20);
+        this.colisio(755, H - 10, 370, 20);
 
         // Prestatgeria d'ampolles darrere el taulell i un rellotge de paret
         const pr = this.add.graphics().setDepth(-980);
@@ -223,14 +223,53 @@ class ZonaTavernaInt extends ZonaBase {
         pr.fillStyle(0x5a3a1e, 1).fillCircle(560, 50, 26).fillStyle(0xf2ecdc, 1).fillCircle(560, 50, 20);
         pr.lineStyle(2, 0x1a1008, 1).lineBetween(560, 50, 560, 36).lineBetween(560, 50, 570, 54);
 
-        // El taulell (llarg, de fusta amb sobre de marbre) i la Càren dormint al darrere
+        // El taulell (llarg, de fusta amb sobre de marbre) i la Càren dormint al darrere: frontal de plafons amb motllures, reposapeus de llautó, i a sobre tot el que hi ha en una taverna
         const t = this.add.graphics().setDepth(250);
-        t.fillStyle(0x000000, 0.25).fillRect(110, 248, 400, 14);
-        t.fillStyle(0x6a4224, 1).fillRect(110, 180, 400, 70);
-        for (let x = 130; x < 500; x += 46) t.fillStyle(0x5a361c, 1).fillRect(x, 192, 30, 48);
-        t.fillStyle(0xe0d8c8, 1).fillRect(104, 168, 412, 16).lineStyle(2, 0x1a1008, 1).strokeRect(104, 168, 412, 16).strokeRect(110, 184, 400, 66);
-        [[170, 160], [230, 158], [400, 160]].forEach(([x, y]) => t.fillStyle(0xd8e8f0, 0.8).fillRect(x, y, 14, 18).lineStyle(1, 0x5a6a7a, 1).strokeRect(x, y, 14, 18));
-        t.fillStyle(0xc87a3a, 1).fillEllipse(320, 166, 50, 14);                                   // plat de coca
+        t.fillStyle(0x000000, 0.28).fillEllipse(310, 256, 430, 20);
+        t.fillStyle(0x4a2c14, 1).fillRect(106, 184, 408, 68);
+        t.fillStyle(0x6a4224, 1).fillRect(110, 188, 400, 60);
+        for (let x = 118; x < 500; x += 48) {
+            t.fillStyle(0x4e2e16, 1).fillRect(x, 194, 38, 44);
+            t.lineStyle(1.5, 0x2a160a, 1).strokeRect(x, 194, 38, 44);
+            t.lineStyle(1, 0x9a6a3c, 0.6).lineBetween(x + 2, 196, x + 36, 196).lineBetween(x + 2, 196, x + 2, 236);
+            t.fillStyle(0x3a200e, 0.5).fillRect(x + 5, 202, 28, 28);
+            t.lineStyle(1, 0x2a160a, 0.7).strokeRect(x + 5, 202, 28, 28);
+        }
+        for (let k = 0; k < 30; k++) { const gx = 114 + (k * 37) % 392; t.lineStyle(1, 0x2a160a, 0.22).lineBetween(gx, 190 + (k * 13) % 30, gx + 1, 200 + (k * 13) % 40); }
+        t.fillStyle(0x3a200e, 1).fillRect(106, 240, 408, 10);
+        t.fillStyle(0xb8903a, 1).fillRect(108, 244, 404, 4).fillStyle(0xf0d070, 0.8).fillRect(108, 244, 404, 1.5);          // reposapeus de llautó
+        [140, 310, 480].forEach(x => t.fillStyle(0xb8903a, 1).fillRect(x - 2, 240, 4, 12).fillStyle(0xf0d070, 0.7).fillRect(x - 2, 240, 1.5, 12));
+        t.fillStyle(0xe0d8c8, 1).fillRect(102, 166, 416, 20);                                                                // sobre de marbre
+        t.fillStyle(0xf4eee0, 1).fillRect(102, 166, 416, 5);
+        t.fillStyle(0xb8b0a0, 1).fillRect(102, 182, 416, 4);
+        for (let k = 0; k < 9; k++) t.lineStyle(1, 0x8a8478, 0.35).lineBetween(116 + k * 46, 172, 124 + k * 46, 180);
+        t.lineStyle(2, 0x1a1008, 1).strokeRect(102, 166, 416, 20).strokeRect(106, 184, 408, 68);
+        // Damunt del taulell, només: una ampolla, una tassa de fang i dos gots
+        const g = this.add.graphics().setDepth(251);
+        const got = (x, y, buit) => {                                                                   // got de vidre gruixut, de pafegir vi: base gruixuda i parets que s'obren
+            g.fillStyle(0x000000, 0.25).fillEllipse(x + 1, y + 1, 16, 5);
+            g.fillStyle(0xcfe4ee, 0.55).fillPoints([{ x: x - 7, y: y - 17 }, { x: x + 7, y: y - 17 }, { x: x + 5, y: y - 2 }, { x: x - 5, y: y - 2 }], true);
+            if (!buit) g.fillStyle(0x8a1e2a, 0.85).fillPoints([{ x: x - 6, y: y - 10 }, { x: x + 6, y: y - 10 }, { x: x + 5, y: y - 2 }, { x: x - 5, y: y - 2 }], true);
+            g.fillStyle(0xe8f4fa, 0.9).fillRect(x - 5, y - 3, 10, 2.5);
+            g.lineStyle(1.2, 0x6a7e8a, 0.95).strokePoints([{ x: x - 7, y: y - 17 }, { x: x - 5, y: y - 2 }, { x: x + 5, y: y - 2 }, { x: x + 7, y: y - 17 }], false);
+            g.fillStyle(0xffffff, 0.7).fillRect(x - 5, y - 15, 1.5, 9);
+        };
+        const tassa = (x, y) => {                                                                       // tassa de fang vidriat amb nansa i escuma
+            g.fillStyle(0x000000, 0.25).fillEllipse(x + 1, y + 1, 22, 6);
+            g.lineStyle(3.5, 0x7a4a2a, 1).strokeCircle(x + 10, y - 9, 5);
+            g.fillStyle(0x9a6038, 1).fillRoundedRect(x - 9, y - 18, 18, 18, 3).fillStyle(0xc88a58, 0.55).fillRect(x - 6, y - 16, 3, 13).fillStyle(0x6a3e22, 1).fillRect(x - 9, y - 6, 18, 2);
+            g.fillStyle(0xf4ecd0, 1).fillEllipse(x, y - 18, 18, 6).fillStyle(0xffffff, 0.6).fillCircle(x - 3, y - 19, 2);
+            g.lineStyle(1.2, 0x3a200e, 1).strokeRoundedRect(x - 9, y - 18, 18, 18, 3);
+        };
+        const ampolla = (x, y) => {                                                                     // ampolla verda de coll llarg, amb etiqueta i tap de suro
+            g.fillStyle(0x000000, 0.25).fillEllipse(x + 1, y + 1, 18, 5);
+            g.fillStyle(0x2c6a3a, 1).fillRoundedRect(x - 7, y - 24, 14, 24, 3).fillRect(x - 3, y - 38, 6, 16);
+            g.fillStyle(0x9a6a3a, 1).fillRect(x - 3, y - 41, 6, 4);
+            g.fillStyle(0xeadcb4, 1).fillRect(x - 6, y - 17, 12, 9).lineStyle(1, 0x5a4a30, 0.8).strokeRect(x - 6, y - 17, 12, 9);
+            g.fillStyle(0xffffff, 0.35).fillRect(x - 5, y - 24, 2, 16);
+            g.lineStyle(1.2, 0x143a1e, 1).strokeRoundedRect(x - 7, y - 24, 14, 24, 3);
+        };
+        ampolla(190, 171); tassa(300, 170); got(380, 171, false); got(406, 170, true);
         this.colisio(310, 215, 410, 70);
         this.interactiu(310, 270, RADI_OBJECTE, DIALEGS.taulellTaverna, { altura: 90 });
 
@@ -245,9 +284,18 @@ class ZonaTavernaInt extends ZonaBase {
 
         // Taules amb tamborets i espelmes
         [[260, 470], [520, 430], [700, 560], [330, 620]].forEach(([x, y], i) => {
-            this.posar('taula', x, y, { escala: 0.8, col: { w: 130, h: 26 } });
+            this.posar('taula_buida', x, y, { escala: 0.8, col: { w: 130, h: 26 } });
             // (a la primera taula, el senyor Budó ocupa el lloc de la dreta, amb el seu propi tamboret dibuixat)
             [[-70, 20], [70, 20]].forEach(([dx, dy], k) => { if (!(i === 0 && k === 1)) this.posar('tamboret', x + dx, y + dy, { escala: 0.8, col: { w: 30, h: 12 } }); });
+            if (i !== 0) return;                                          // (només la taula del senyor Budó té res a sobre)
+            // el senyor Budó hi té el seu anís en un got de peu, un platet amb unes olives i l'espelma
+            const m = this.add.graphics().setDepth(y + 1);
+            m.fillStyle(0x000000, 0.22).fillEllipse(x + 30, y - 58, 16, 5);
+            m.fillStyle(0xd8ecf4, 0.6).fillPoints([{ x: x + 24, y: y - 74 }, { x: x + 36, y: y - 74 }, { x: x + 33, y: y - 64 }, { x: x + 27, y: y - 64 }], true).fillRect(x + 29, y - 64, 2, 6).fillRect(x + 25, y - 58, 10, 2);
+            m.fillStyle(0xe8e4c8, 0.85).fillPoints([{ x: x + 25, y: y - 69 }, { x: x + 35, y: y - 69 }, { x: x + 33, y: y - 64 }, { x: x + 27, y: y - 64 }], true);
+            m.lineStyle(1, 0x5a6e7a, 0.9).strokePoints([{ x: x + 24, y: y - 74 }, { x: x + 27, y: y - 64 }, { x: x + 33, y: y - 64 }, { x: x + 36, y: y - 74 }], false);
+            m.fillStyle(0xeee4cc, 1).fillEllipse(x - 28, y - 62, 24, 8).lineStyle(1, 0x8a7a5a, 1).strokeEllipse(x - 28, y - 62, 24, 8);
+            [[-33, -62], [-28, -64], [-23, -61]].forEach(([dx, dy]) => m.fillStyle(0x4a5a2a, 1).fillEllipse(x + dx, y + dy, 5, 3.5));
             const e = this.posar('espelma', x, y - 50, { fonsY: y + 2 });
             this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 330 + i * 80 });
         });

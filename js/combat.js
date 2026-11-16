@@ -211,6 +211,8 @@ function clauSpriteOcellaire(z, e, ara) {
     }
 }
 
+// Enemics sòlids: l'Ineu no els pot travessar (separació suau a actualitzarCombat). Els voladors, els estàtics i el boss no.
+const ENEMICS_SOLIDS = ['escolopendra', 'gripau', 'ovella', 'pastor', 'ferralla', 'visitant'];
 const ENEMICS = {
     escolopendra: {
         tex: 'escolopendra', vida: 2, vel: 95, mal: 1, radi: 20, cos: [40, 16], ombra: 0, centrat: true,   // l'ombra ja és al dibuix; vista de dalt, el cos és al mig
@@ -829,6 +831,7 @@ const ENEMICS = {
         }
     }
 };
+ENEMICS_SOLIDS.forEach(k => { if (ENEMICS[k]) ENEMICS[k].solid = true; });
 
 Object.assign(ZonaBase.prototype, {
     // ---------------- Crear enemics ----------------
@@ -1524,12 +1527,22 @@ Object.assign(ZonaBase.prototype, {
         const c = this.ineu.body.center;
         let dx = c.x - des.x, dy = c.y - des.y;
         const l = Math.hypot(dx, dy) || 1;
-        this.forcat = { vx: dx / l * 420, vy: dy / l * 420, fins: ara + 210 };      // retrocés
+        this.forcat = { vx: dx / l * 340, vy: dy / l * 340, ini: ara, fins: ara + 420 };      // retrocés: s'alenteix a mesura que passa (zona_base, update); dura el que l'estremiment
+        // L'Ineu s'estremeix (animació del cop, a la direcció on mirava); si estava atacant, el cop s'interromp
+        this.atacantFins = 0;
+        const vistaCop = this.vista8 || ({ amunt: 'up', avall: 'down', esquerra: 'left', dreta: 'right' }[this.direccio]) || 'down';
+        if (this.anims.exists('cop_' + vistaCop)) {
+            this.vista8Manual = true;
+            this.posarDireccio(this.direccio, false, vistaCop);
+            this.ineu.setFlipX(false);
+            this.ineu.anims.play('cop_' + vistaCop, true);
+            this.ineu.once('animationcomplete', () => { if (!this.caient && this.ineu.active) this.posarDireccio(this.direccio, false); });
+        }
         // Cop rebut: so, congelació, sacsejada, vinyeta, espurnes i flaix blanc
         Sfx.ferit();
         Sfx.corPerdut();
-        this.hitStop(130);
-        this.cameras.main.shake(260, 0.013, true);
+        this.hitStop(90);
+        this.cameras.main.shake(180, 0.009, true);
         this.vinyeta();
         this.ineu.setTintFill(0xffffff);
         this.time.delayedCall(110, () => { if (this.ineu.active) this.ineu.setTint(0xff6060); });
@@ -1541,7 +1554,11 @@ Object.assign(ZonaBase.prototype, {
         }).setDepth(99991);
         sang.explode(10);
         this.time.delayedCall(600, () => sang.destroy());
-        this.tweens.add({ targets: this.ineu, alpha: 0.3, yoyo: true, repeat: 4, duration: 90, onComplete: () => { if (!this.caient) this.ineu.setAlpha(1); } });
+        // Invulnerable (1100 ms): l'Ineu es veu sencer, sense transparència; només uns polsos suaus de to rosat (3 cops, de 320 a 1100 ms)
+        [0, 1, 2].forEach(k => {
+            this.time.delayedCall(330 + k * 260, () => { if (this.ineu.active && !this.caient) this.ineu.setTint(0xffb8b8); });
+            this.time.delayedCall(330 + k * 260 + 130, () => { if (this.ineu.active) this.ineu.clearTint(); });
+        });
         const ui = this.ui();
         ui.actualitzarHUD();
         if (ui.animarPerdua) ui.animarPerdua(abans, d.vida);
@@ -1581,6 +1598,14 @@ Object.assign(ZonaBase.prototype, {
             if (perillos && ara >= e.atorditFins &&
                 Phaser.Math.Distance.Between(b.center.x, b.center.y, jo.x, jo.y) < e.def.radi + 20) {
                 this.ferIneu(e.def.mal, b.center);
+            }
+            // Els enemics sòlids no es poden travessar: si l'Ineu és massa a prop, se l'empeny suaument cap a fora (poc per fotograma; per sota de radi+20, perquè el contacte continuï fent mal)
+            if (e.def.solid && !this.canviant && !this.caient && !this.cinema && !(this.forcat && ara < this.forcat.fins) && ara >= e.atorditFins && !e.amagat) {
+                const dxs = jo.x - b.center.x, dys = jo.y - b.center.y, min = e.def.radi * 0.6 + 14, d2 = dxs * dxs + dys * dys;
+                if (d2 < min * min) {
+                    const d = Math.sqrt(d2) || 0.01, pas = Math.min(min - d, 5), nx = d > 0.02 ? dxs / d : 1, ny = d > 0.02 ? dys / d : 0;
+                    this.ineu.body.x += nx * pas; this.ineu.body.y += ny * pas;
+                }
             }
         }
     }

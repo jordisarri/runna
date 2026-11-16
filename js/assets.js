@@ -14,8 +14,7 @@ const CATALEG = [
     { key: 'taverna',      file: 'assets/edificis/taverna.webp',      amplada: 900, provisional: (c, w) => dibuixarTaverna(c, w) },
     { key: 'casa_gran',    file: 'assets/edificis/casa_gran.webp',    amplada: 1250, provisional: (c, w) => dibuixarCasaGran(c, w) },
     // Personatges
-    { key: 'ineu_inconscient', file: 'assets/ineu/ineu_inconscient.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu a terra després d'una derrota (mateix retall que pare_jorda_desperta)
-    { key: 'pare_jorda_desperta', file: 'assets/personatges/pare_jorda_desperta.webp', amplada: 170, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },   // el Pare Jordà agenollat al seu costat, despertant-lo
+    { key: 'ineu_inconscient', file: 'assets/ineu/ineu_inconscient.webp', amplada: 295, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu a terra amb els ulls tancats, de 420 x 342 (eines/fer_desperta_v5.py), abans de l'animació de despertar (ineu_desperta, spritesheet)
     { key: 'pare_jorda',   file: 'assets/personatges/pare_jorda.webp',   amplada: 90, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
     { key: 'germa_aldreu', file: 'assets/personatges/germa_aldreu.webp', amplada: 79, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
     { key: 'germa_aldreu_trist', file: 'assets/personatges/germa_aldreu_trist.webp', amplada: 79 },      // Aldreu amb el cap cot (final de la Sala de la Gàbia, abans del somriure); si no hi és, gabia.js usa germa_aldreu amb tint
@@ -281,6 +280,7 @@ const ATAC_INEU = {
  */
 const ATAC_ARMES = ['basto', 'tiller', 'espasa'];
 const ATAC_CEL = 320;
+const ATAC_CEL_EXC = { basto_up: 480 };          // fulls amb cel·la més gran (l'Ineu centrat i molt d'espai al voltant; vegeu eines/fer_atac_arma.py, CEL_EXC)
 const ATAC_ARMA_FPS = { basto: 15, tiller: 16, espasa: 16 };
 const ATAC_ARMA_N = { basto: 5, tiller: 5, espasa: 5 };           // fotogrames de cada full (la graella pot tenir cel·les buides al final)
 function armaAtacNom(runna, agil) { return runna ? 'espasa' : agil ? 'tiller' : 'basto'; }
@@ -342,11 +342,13 @@ const Grafics = {
         scene.load.spritesheet('isilder_camina', 'assets/personatges/isilder_camina.webp', { frameWidth: 190, frameHeight: 285 });
         scene.load.spritesheet('venerables_camina', 'assets/personatges/venerables_camina.webp', { frameWidth: 266, frameHeight: 267 });       // (fer_camina_npc.py: les dues velletes agafades del braç)
         scene.load.spritesheet('mandu_camina', 'assets/personatges/mandu_camina.webp', { frameWidth: 134, frameHeight: 236 });
+        scene.load.spritesheet('ineu_desperta', 'assets/personatges/ineu_desperta.webp', { frameWidth: 342, frameHeight: 342 });          // l'Ineu a terra i el Pare Jordà que l'acaricia: 4 x 2 fotogrames fets a mà (vegeu despertarCaigut)
         scene.load.spritesheet('nena_trenes_camina', 'assets/personatges/nena_trenes_camina.webp', { frameWidth: 225, frameHeight: 282 });       // la Nena de les Trenes corrent cap a la mare (AutoSprite iso_run_right; eines/fer_camina_npc.py)
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, rutaIneu(dir, false), mida);
-            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac/atac_${arma}_${dir}.webp?v=2611143900`, { frameWidth: ATAC_CEL, frameHeight: ATAC_CEL }));
+            scene.load.spritesheet('ineu_cop_' + dir, `assets/ineu/cop/cop_${dir}.webp?v=1`, mida);          // l'Ineu rebent un cop (AutoSprite «Hit React», eines/fer_cop_ineu.py)
+            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac/atac_${arma}_${dir}.webp?v=2611160100`, { frameWidth: ATAC_CEL_EXC[`${arma}_${dir}`] || ATAC_CEL, frameHeight: ATAC_CEL_EXC[`${arma}_${dir}`] || ATAC_CEL }));
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
@@ -637,6 +639,11 @@ const Grafics = {
                 frameRate: curt ? curt.fps : (SPRITE_INEU.fpsVista[dir] || SPRITE_INEU.fps),
                 repeat: -1
             });
+        });
+        DIRS_INEU.forEach(dir => {          // el cop rebut: es veu l'estremiment (fotogrames 1 a 11 de 16, 0,42 s, el que dura el retrocés) i torna a quiet
+            const key = 'cop_' + dir, tex = 'ineu_cop_' + dir;
+            if (scene.anims.exists(key) || !scene.textures.exists(tex) || scene.textures.get(tex).frameTotal < 13) return;
+            scene.anims.create({ key, frames: scene.anims.generateFrameNumbers(tex, { start: 1, end: 11 }), frameRate: 26, repeat: 0 });
         });
         DIRS_INEU.forEach(dir => {
             const key = 'aturat_' + dir, textura = 'ineu_idle_' + IDLE_INEU[dir];
@@ -1306,7 +1313,7 @@ const Grafics = {
             }
         });
         // Taula de fusta, vista de tres quarts, amb un bol i una tassa
-        crea('taula', 170, 110, (ctx, w, h) => {
+        [['taula', true], ['taula_buida', false]].forEach(([nomTaula, ambObjectes]) => crea(nomTaula, 170, 110, (ctx, w, h) => {
             ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(85, h - 8, 74, 8, 0, 0, Math.PI * 2); ctx.fill();
             ctx.strokeStyle = FUSTA_CONTORN; ctx.lineWidth = 2; ctx.lineJoin = 'round';
             const pota = (x, y0, y1, ample) => {
@@ -1327,12 +1334,13 @@ const Grafics = {
             });
             ctx.fillStyle = '#8e5a2a'; ctx.fillRect(4, 54, 162, 12); ctx.strokeRect(4, 54, 162, 12);
             ctx.fillStyle = 'rgba(255,230,180,0.3)'; ctx.fillRect(8, 12, 154, 2);
+            if (!ambObjectes) return;
             // Bol de fusta i tassa d'estany
             ctx.fillStyle = '#6a4220'; ctx.beginPath(); ctx.ellipse(52, 30, 15, 7, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
             ctx.fillStyle = '#e8d8a0'; ctx.beginPath(); ctx.ellipse(52, 29, 11, 4.5, 0, 0, Math.PI * 2); ctx.fill();
             ctx.fillStyle = '#9a9a96'; ctx.fillRect(112, 18, 12, 14); ctx.strokeRect(112, 18, 12, 14);
             ctx.fillStyle = '#6a3a1a'; ctx.beginPath(); ctx.ellipse(118, 18, 6, 2.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        });
+        }));
         // Tamboret rodó de tres potes
         crea('tamboret', 58, 62, (ctx, w, h) => {
             ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(29, h - 6, 24, 5, 0, 0, Math.PI * 2); ctx.fill();

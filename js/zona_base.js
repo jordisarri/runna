@@ -128,6 +128,7 @@ const PARADES = [
 
 const PAS_PORTA = 44;       // en passar una porta (o qualsevol sortida), l'Ineu camina aquests píxels més cap a la foscor abans de canviar d'escena, i en arribar en camina altres tants cap endins
 const MS_PAS_PORTA = 450;
+const MS_PORTA_EDIFICI = 1100;      // sortir o entrar per la porta d'un edifici (l'Ineu s'hi veu endinsar-se o sortir-ne)
 const TOPE_Y = 100;   // els peus de l'Ineu no passen d'aquí amunt: sempre se li veu el cos (la càmera s'atura a y=0)
 
 // ---------- Rendiment: el decorat dibuixat amb codi, a una imatge ----------
@@ -360,18 +361,48 @@ class ZonaBase extends Phaser.Scene {
     // Després d'una derrota: l'Ineu a terra, i de cop el Pare Jordà agenollat al seu costat; en tancar el diàleg l'Ineu s'aixeca
     despertarCaigut() {
         const ui = this.ui(), I = this.ineu;
-        const dialeg = { pagines: [{ qui: 'Pare Jordà', text: 'Ineu! Que et trobo a terra! Respira, fill. Has de tenir més cura. Ja estàs bé?' }] };
-        if (!this.textures.exists('ineu_inconscient') || !this.textures.exists('pare_jorda_desperta')) {
+        const dialeg = { pagines: [{ qui: 'Pare Jordà', text: 'Ineu! Què fas a terra? Respira, fill! Encara prendràs mal. Ja estàs bé?' }] };
+        if (!this.textures.exists('ineu_inconscient') || !this.textures.exists('ineu_desperta')) {
             this.time.delayedCall(600, () => ui.obrirDialeg(dialeg, () => Joc.musicaZona(this, 3000)));
             return;
         }
+        // L'Ineu a terra amb els ulls tancats (ineu_inconscient, 420 x 342, alineat per l'esquerra amb l'spritesheet) i, en tocar, l'animació feta a mà (ineu_desperta, 3 x 3 cel·les de 342):
+        // el Pare Jordà acaricia el front de l'Ineu, que té els ulls oberts (eines/fer_desperta_v5.py). Les dues imatges comparteixen origen: el centre de la cel·la (x = 171) i els peus (85 % d'alçada).
         const esc = this.textures.get('ineu_inconscient').customData.escala || 1 / RES;
-        const terra = this.add.image(I.x, I.y, 'ineu_inconscient').setOrigin(0.5, 0.85).setScale(esc).setDepth(I.y + 1);
+        const mon = (px, py) => ({ x: I.x + (px - 171) * esc, y: I.y + (py - 0.85 * 342) * esc });          // (px, py) de la cel·la de 342 -> món
+        const ineuT = this.add.image(I.x, I.y, 'ineu_inconscient').setOrigin(171 / this.textures.get('ineu_inconscient').getSourceImage().width, 0.85).setScale(esc).setDepth(I.y + 1).setAlpha(0);
+        const anim = this.add.sprite(I.x, I.y, 'ineu_desperta', 0).setOrigin(0.5, 0.85).setScale(esc).setDepth(I.y + 1.1).setAlpha(0);
+        if (!this.anims.exists('ineu_desperta_gest')) this.anims.create({ key: 'ineu_desperta_gest', frames: this.anims.generateFrameNumbers('ineu_desperta', { start: 0, end: 7 }), frameRate: 6, repeat: -1 });
+        const tot = [ineuT, anim];
+        this.despertarImg = ineuT;                                           // (la càmera del diàleg no ha de tapar l'Ineu)
         const veu = [I, this.fantasma, this.ombraIneu].filter(Boolean);
         veu.forEach(o => o.setVisible(false));
         this.canviant = true;
+        // Mentre és a terra, el rosari de vida és buit (l'Ineu acaba de caure); en acabar el diàleg, els grans es tornen a omplir (animació de guanyar vida)
+        const vidaPlena = Estat.dades.vida;
+        Estat.dades.vida = 0; ui.actualitzarHUD();
+        const tws = [], extres = [];                                        // tweens i objectes que s'han de netejar si l'escena s'acaba
+        const tw = c => { const t = this.tweens.add(c); tws.push(t); return t; };
+        const zoomBase = this.zoomBase || this.cameras.main.zoom;
+        // Fase 0, a terra: un pla una mica més proper; l'Ineu només respira. Les estrelletes del mareig giren sobre el cap i una mica de pols s'aixeca i s'esvaeix (fet amb codi)
+        const c0 = mon(200, 240);
+        this.enquadrar(c0.x, c0.y, Math.min(2.2, zoomBase * 1.25), 900, null);
+        tw({ targets: ineuT, alpha: 1, duration: 450, ease: 'Sine.easeOut' });
+        const respira = tw({ targets: ineuT, scaleY: esc * 1.008, duration: 1500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+        const cap = mon(74, 156), pols = mon(22, 241);
+        const estrelles = [0, 1, 2].map(() => { const t = this.add.text(0, 0, '✦', estilText(20, '#fff3b0', { stroke: '#6a4a10', strokeThickness: 3 })).setOrigin(0.5).setDepth(I.y + 5); extres.push(t); return t; });
+        const orbita = { a: 0 };
+        tw({ targets: orbita, a: Math.PI * 2, duration: 2600, repeat: -1, onUpdate: () => estrelles.forEach((t, k) => {
+            const a = orbita.a + k * Math.PI * 2 / 3;
+            t.setPosition(cap.x + Math.cos(a) * 44, cap.y + Math.sin(a) * 10).setScale(0.8 + 0.3 * Math.sin(a)).setAlpha(0.55 + 0.45 * (Math.sin(a) + 1) / 2).setAngle(a * 40);
+        }) });
+        [0, 1, 2].forEach(k => {
+            const p = this.add.circle(pols.x, pols.y, 6 + k * 2, 0xe8dcc4, 0).setDepth(I.y + 4); extres.push(p);
+            tw({ targets: p, x: pols.x - 20 - k * 6, y: pols.y - 18 - k * 5, scale: 2.3, alpha: { from: 0.5, to: 0 }, duration: 2400, delay: k * 800, repeat: -1, ease: 'Sine.easeOut',
+                onRepeat: () => p.setPosition(pols.x, pols.y).setScale(1) });
+        });
         // L'Ineu és a terra i no passa res fins que el jugador fa clic, toca la pantalla o prem ESPAI/ENTER: llavors apareix el Pare Jordà i comença el diàleg
-        let fase = 0;                                   // 0: a terra, esperant · 1: diàleg · 2: acabat
+        let fase = 0;                                   // 0: a terra, esperant · 1: el Pare Jordà (gest i diàleg) · 2: acabat
         const llest = this.time.now + 900;              // un instant perquè un toc o una tecla d'abans no es salti l'escena
         const avis = ui.add.text(AMPLE / 2, ALT - 230, 'Toca la pantalla', estilText(24, '#f1e3b6', { stroke: '#1a120b', strokeThickness: 5 })).setOrigin(0.5).setAlpha(0).setDepth(60);
         ui.tweens.add({ targets: avis, alpha: 0.9, duration: 700, delay: 1200, yoyo: true, repeat: -1, hold: 500 });
@@ -381,6 +412,8 @@ class ZonaBase extends Phaser.Scene {
             tecles.forEach(k => this.input.keyboard.off('keydown-' + k, alAccio));
             ui.input.off('pointerdown', alAccio);
             if (avis.active) { ui.tweens.killTweensOf(avis); avis.destroy(); }
+            tws.forEach(t => t.stop()); extres.forEach(o => o && o.active && o.destroy());
+            if (Estat.dades.vida === 0 && vidaPlena > 0) { Estat.dades.vida = vidaPlena; ui.actualitzarHUD(); }          // (si l'escena s'acaba abans d'hora, la vida no es perd)
         };
         alAccio = ev => {
             const esTecla = !!(ev && ev.key !== undefined);
@@ -389,21 +422,29 @@ class ZonaBase extends Phaser.Scene {
                 if (this.time.now < llest) return;
                 fase = 1;
                 if (avis.active) { ui.tweens.killTweensOf(avis); avis.destroy(); }
-                // un instant després, perquè el mateix toc no avanci també la primera pàgina
-                this.time.delayedCall(30, () => {
-                    terra.setTexture('pare_jorda_desperta');
-                    this.despertarImg = terra;
+                // Les estrelletes i la pols s'esvaeixen; el Pare Jordà s'acosta des de la dreta (el cos i la mà del pit, amb l'espatlla) i la càmera es posa entre els dos caps
+                tws.forEach(t => { if (t !== respira) t.stop(); }); tws.length = 0; tws.push(respira);          // (només segueix la respiració)
+                tw({ targets: extres, alpha: 0, duration: 400, onComplete: () => { extres.forEach(o => o.active && o.destroy()); extres.length = 0; } });
+                Sfx.secret && Sfx.secret();
+                // El Pare Jordà arriba: l'animació apareix amb una fosa, al mateix lloc, mentre l'Ineu de ulls tancats s'esvaeix
+                anim.setAlpha(0); anim.play('ineu_desperta_gest');
+                tw({ targets: anim, alpha: 1, duration: 800, ease: 'Sine.easeInOut' });
+                tw({ targets: ineuT, alpha: 0, duration: 800, delay: 150, ease: 'Sine.easeInOut' });
+                const c1 = mon(150, 170);
+                this.enquadrar(c1.x, c1.y, Math.min(2.6, zoomBase * 1.55), 1400, null);
+                // el diàleg s'obre quan el gest ja ha començat
+                this.time.delayedCall(1100, () => {
                     ui.obrirDialeg(dialeg, () => {
                         fase = 2;
                         neteja();
                         this.despertarImg = null;
-                        terra.destroy();
+                        tot.forEach(o => o.destroy());
                         veu.forEach(o => o.setVisible(true));
-                        this.canviant = false;           // (el cicle torna a córrer i la càmera del diàleg es restableix sola)
+                        this.canviant = false;           // (el cicle torna a córrer)
+                        this.alliberarCamera(900);       // la càmera torna sola a seguir l'Ineu
                         ui.accioTactil = false;          // un toc que hagi quedat pendent no ha de fer cap acció en tornar el control
                         Joc.musicaZona(this, 3000);      // ara la música de la zona, que entra poc a poc
                     });
-                    this.camaraDialeg(true);             // el cicle no corre mentre dura aquesta escena: cal buscar-hi la càmera aquí, perquè el diàleg no tapi el Pare Jordà
                 });
             } else if (fase === 1 && esTecla && ui.dialeg && !ui.menuObert) ui.avancar();      // el cicle de la zona no corre mentre dura l'escena: el teclat s'ha de llegir aquí (el toc ja el llegeix la UI)
         };
@@ -1665,6 +1706,18 @@ class ZonaBase extends Phaser.Scene {
             pos = Object.assign({}, pos, { y: this.mapY(pos.y) });
         }
 
+        // Es surt d'una porta: a fora, l'Ineu apareix dins la porta (a la base, tapat pel marc) i en surt caminant; a dins, apareix a la porta de baix de la sala i hi entra
+        this.entradaPorta = false;
+        if (!this.dadesEntrada.restaurar) {
+            const pa = pos.dir === 'avall' && (this.portesAnim || []).find(P => !(P.bloq && P.bloq()) && Math.abs(P.DX - pos.x) < P.DW / 2 + 70 && pos.y > P.DB - 10 && pos.y - P.DB < 200);
+            const pi = pos.dir === 'amunt' && this.esInterior() && (this.portesInt || []).find(q => Math.abs(q.x + q.w / 2 - pos.x) < q.w / 2 + 70);
+            if (pa) {          // surt de la porta: ja és oberta (no la traspassa tancada) i es manté oberta mentre l'Ineu en surt
+                pos = Object.assign({}, pos, { x: pa.DX, y: pa.DB - 12 }); this.entradaPorta = true;
+                pa.a = 1; pa.estat = 'oberta'; pa.forcaFins = this.time.now + 1500;
+                [pa.esq, pa.dre].forEach(b => { if (b) { b.scaleX = 0.12; b.setAlpha(0.75); } });
+            }
+            else if (pi) { pos = Object.assign({}, pos, { x: Phaser.Math.Clamp(pos.x, pi.x + 20, pi.x + pi.w - 20), y: Math.min(this.mapY(this.config.alcada) - 4, this.mapY(pi.y) + 22) }); this.entradaPorta = true; }
+        }
         if (pos.y < TOPE_Y + 40) pos = Object.assign({}, pos, { y: TOPE_Y + 40 });
         this.posEntrada = pos;
         this.ombraIneu = this.add.image(pos.x, pos.y, 'ombra').setScale(0.4).setDepth(-500);
@@ -2057,6 +2110,14 @@ class ZonaBase extends Phaser.Scene {
         if (this.ombraIneu && this.ineu && this.ineu.active && this.ineu.body && !this.ombraIneuFixa) this.ombraIneu.setPosition(this.ineu.x, this.ineu.y);
         this.sincroFantasma();
         this.transparenciaCopes();
+        // Dins d'una porta de façana (entre el llindar i el fons) l'Ineu va a mig pas: entrar-hi es veu i no s'esvaeix d'un salt
+        const I = this.ineu, qp = I && I.active && I.body ? (this.forcsPorta || []).find(q => I.x > q.x0 && I.x < q.x1 && I.y > q.t && I.y < q.b) : null;
+        if (qp) {
+            // S'hi veu entrar: es dibuixa per sobre de la fosca de l'interior (però sota el marc) i es va enfosquint a mesura que s'endinsa, en lloc de desaparèixer de cop
+            if (!this.canviant) I.body.velocity.scale(0.5);
+            const pr = Phaser.Math.Clamp((qp.b - I.y) / 56, 0, 1), c = Math.round(255 * (1 - 0.7 * pr));
+            I.setDepth(qp.z + 1.5).setTint(Phaser.Display.Color.GetColor(c, c, c)); this.tintPorta = true;
+        } else if (this.tintPorta && I && I.active) { I.clearTint(); this.tintPorta = false; }
     }
 
     // Un enemic darrere la capçada d'un arbre no es perd: se'n veu una silueta translúcida per sobre
@@ -2347,7 +2408,7 @@ class ZonaBase extends Phaser.Scene {
             pts.push({ x: x0 + ample, y: alt });
             return pts;
         };
-        (this.forcsPorta = this.forcsPorta || []).push({ x0: DX - DW / 2 - 4, x1: DX + DW / 2 + 4, t: DT, b: DB + 2 });          // el marc i l'interior tapen l'Ineu: la silueta translúcida s'hi amaga
+        (this.forcsPorta = this.forcsPorta || []).push({ x0: DX - DW / 2 - 4, x1: DX + DW / 2 + 4, t: DT, b: DB + 2, z: Z });          // el marc i l'interior tapen l'Ineu: la silueta translúcida s'hi amaga
         // Els brancals (els costats del marc) són del gràfic de la façana, que és al fons: es tornen a dibuixar per sobre de l'Ineu perquè, dins la porta, el marc el tapi de debò
         const imF = o.marc || o.retall;
         if (imF) {
@@ -2467,7 +2528,10 @@ class ZonaBase extends Phaser.Scene {
             return g;
         };
         const esq = batent(true), dre = o.unic ? null : batent(false);
-        const P = { DX, DB, a: 0, estat: 'tancada', esq, dre, bloq: o.bloq };
+        // La sortida d'aquesta porta (si n'hi ha) no ha de saltar abans que l'Ineu arribi a la base de la porta: es retalla per baix
+        const sp = this.sortides.find(t => t.r.width <= 140 && Math.abs(t.r.centerX - DX) < DW && t.r.y < DB - 14 && t.r.bottom > DT - 40 && t.r.bottom > DB - 4 && !t.baixar);
+        if (sp) sp.r.height = DB - 4 - sp.r.y;
+        const P = { DX, DB, DW, a: 0, estat: 'tancada', esq, dre, bloq: o.bloq };
         this.portesAnim.push(P);
         return P;
     }
@@ -2609,7 +2673,7 @@ class ZonaBase extends Phaser.Scene {
         }
         // Empenta forçada (retrocés quan et fan mal): el jugador no la controla
         if (this.forcat && this.time.now < this.forcat.fins) {
-            this.ineu.body.setVelocity(this.forcat.vx, this.forcat.vy);
+            { const q = this.forcat, r = q.ini ? Phaser.Math.Clamp((q.fins - this.time.now) / (q.fins - q.ini), 0, 1) : 1, k = 0.12 + 0.88 * r * r; this.ineu.body.setVelocity(q.vx * k, q.vy * k); }          // (el retrocés s'alenteix)
             this.ineu.setDepth(this.ineu.y);
             this.ombraIneu.setPosition(this.ineu.x, this.ineu.y);
             return;
@@ -2851,14 +2915,14 @@ class ZonaBase extends Phaser.Scene {
     }
 
     // L'Ineu camina PAS_PORTA píxels en la direcció dir, sense col·lisions (travessa la porta, la llum, la paret...). amb foscor: s'enfosqueix mentre avança.
-    pasPorta(dir, fet, foscor = false, d = PAS_PORTA) {
+    pasPorta(dir, fet, foscor = false, d = PAS_PORTA, ms = MS_PAS_PORTA) {
         const I = this.ineu, v = { esquerra: [-1, 0], dreta: [1, 0], amunt: [0, -1], avall: [0, 1] }[dir] || [0, 0];
         I.body.setVelocity(0);
         I.body.checkCollision.none = true;
         this.posarDireccio(dir, true);
         const x0 = I.x, y0 = I.y;
         this.tweens.addCounter({
-            from: 0, to: 1, duration: MS_PAS_PORTA,
+            from: 0, to: 1, duration: ms,
             onUpdate: tw => {
                 const f = tw.getValue();
                 I.setPosition(x0 + v[0] * d * f, y0 + v[1] * d * f);
@@ -2882,7 +2946,7 @@ class ZonaBase extends Phaser.Scene {
         this.pasPorta(pos.dir || 'avall', () => {
             this.ineu.body.checkCollision.none = false;
             this.canviant = false;
-        }, false, d);
+        }, false, d, MS_PAS_PORTA);
     }
 
     // dir: per on s'ha sortit (si es coneix): l'Ineu avança un pas més cap a la foscor mentre la pantalla s'enfosqueix
@@ -2894,7 +2958,11 @@ class ZonaBase extends Phaser.Scene {
         Estat.dades.entrada = entrada;
         Estat.dades.x = null;
         Estat.dades.y = null;
-        if (dir) {
+        const I = this.ineu, enPorta = !!(dir && (this.forcsPorta || []).some(q => I.x > q.x0 && I.x < q.x1 && I.y > q.t && I.y < q.b + 26));          // (la sortida salta quan el cos toca el rectangle: els peus són uns píxels més avall)
+        if (enPorta) {                 // porta d'un edifici: es veu com s'endinsa a poc a poc a la foscor, i la pantalla s'enfosqueix després
+            this.pasPorta(dir, null, true, PAS_PORTA, MS_PORTA_EDIFICI);
+            this.time.delayedCall(MS_PORTA_EDIFICI * 0.3, () => this.cameras.main.fadeOut(MS_PORTA_EDIFICI * 0.7, 0, 0, 0));
+        } else if (dir) {
             this.pasPorta(dir, null, true);
             this.cameras.main.fadeOut(MS_PAS_PORTA, 0, 0, 0);
         } else {

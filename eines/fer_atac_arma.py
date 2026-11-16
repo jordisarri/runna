@@ -28,10 +28,12 @@ FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 
 # El bastó 'up' també fa servir la 1a generació (basto_v1): a la 2a el bastó només surt als dos primers fotogrames i a la resta s'amaga darrere el cap. A basto_v1 surt a tots els 16.
 # Els fotogrames 3, 2, 4, 5 donen un gir continu de la punta del bastó, de dreta a esquerra (angle de la vara: ~-10°, 15°, 37°, 67°), amb el bastó visible a tots; l'últim es repeteix (el 0 té la punta tallada per la vora de l'original).
 ORIGEN_EXC = {('tiller', 'up'): 'tiller_v1', ('espasa', 'up'): 'espasa_up_v4', ('basto', 'up'): 'basto_v1'}
-FOT_EXC = {('tiller', 'up'): [2, 8, 4, 5, 3], ('espasa', 'up'): [0, 1, 2, 1, 0], ('basto', 'up'): [3, 2, 4, 5, 5]}
+FOT_EXC = {('tiller', 'up'): [2, 8, 4, 5, 3], ('espasa', 'up'): [0, 1, 2, 1, 0], ('basto', 'up'): [4, 3, 2, 1, 0]}
 # Fotogrames amb què es mesura l'alçada del cos (per defecte 12-15, on l'arma és a les mans). A basto_v1 'up' la gafa del bastó sobresurt per sobre del cap en aquests: es mesura amb el 3 i el 4.
 ESCALA_FOTS = {('basto', 'up'): (3, 4)}
 CENTRAL = set()        # direccions on l'escala del cos es mesura només amb les columnes del cap (quan l'arma sobresurt per sobre del cap)
+# Cel·la més gran per a fulls concrets (js/assets.js, ATAC_CEL_EXC, ha de dir el mateix): el bastó 'up' es tallava a la vora i s'ha de poder retocar a mà (l'Ineu va al mig, amb molt d'espai)
+CEL_EXC = {('basto', 'up'): 480}
 SRC, CEL = 384, 320         # fotograma d'origen i cel·la de sortida (més gran que abans, perquè l'arma no es talli)
 COS = 170.0                  # alçada que ha de fer el cos de l'Ineu a la cel·la (com als fulls de caminar reduïts)
 GRUIX = 1
@@ -90,6 +92,8 @@ def escala(im, arma, central=False, fots=(12, 13, 14, 15)):
     return COS / (peus(im, range(16)) - float(np.median(tops)))
 
 def main():
+    global CEL
+    CEL0 = CEL
     filtre = sys.argv[1:]            # opcional: 'tiller:up' ... només aquests fulls
     for arma, fots0 in FOT.items():
         for d in DIRS:
@@ -98,6 +102,7 @@ def main():
             im = Image.open(ORIGEN / ORIGEN_EXC.get((arma, d), arma) / f'{d}.png').convert('RGBA')
             pf = peus(im, range(16)); K = escala(im, arma, (arma, d) in CENTRAL, ESCALA_FOTS.get((arma, d), (12, 13, 14, 15)))
             n = len(fots); cols = 4; files = (n + cols - 1) // cols
+            CEL = CEL_EXC.get((arma, d), CEL0)
             out = Image.new('RGBA', (cols * CEL, files * CEL), (0, 0, 0, 0))
             # només a la branca en diagonal avall: la fulla baixa fins als peus (a les altres, el càlcul antic ja anava bé)
             ref = centre_peus(fotograma(im, fots[0])) if (arma, d) in AMB_REF else None
