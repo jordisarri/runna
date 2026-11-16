@@ -92,12 +92,8 @@ Object.assign(DIALEGS, {
     eve: E => {
         if (!E.flag('eveParlat')) return {
             pagines: [
-                { qui: 'Eve', text: 'Sóc l\'Eve. Ajudo la Càren... bé, faig la feina de la Càren. Ella dorm des que va arribar la boira. Diu que és cansament. Jo crec que és la boira.' },
-                { qui: 'Eve', text: 'T\'he fet entrar per una cosa. Cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola, com si la boira l\'obeís. Entra.' },
-                { qui: 'Eve', text: 'A dins, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai. D\'allà surt la boira. I de nit... se senten ocells. Ocells, Ineu.' },
-                { qui: 'Eve', text: 'I l\'Iscu, el fill de la Càren, fa dos dies que s\'escapa: diu que va a jugar a cartes on ningú no el molesta. Aquest no l\'ha pres la boira: l\'ha pres la mandra de fregar gots.' },
-                { qui: 'Eve', text: 'Sempre surt pel camí de la Desaparició. Una vegada em va dir, rient, que hi ha un forat entre els arbres «per on els grans no hi caben».' },
-                { qui: 'Eve', text: 'El Sardi hi venia cada tarda a berenar pa amb xocolata. Fa una nit que no ve.' },
+                { qui: 'Eve', text: 'Sóc l\'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T\'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola. A dins, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.' },
+                { qui: 'Eve', text: 'I l\'Iscu, el fill de la Càren, fa dos dies que s\'escapa pel camí de la Desaparició: diu que hi ha un forat entre els arbres «per on els grans no hi caben». Aquest no l\'ha pres la boira, sinó la mandra de fregar gots. Si el trobes, digues-li que torni a sopar.' },
             ],
             enAcabar: () => { E.posaFlag('eveParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La Porta de les Gírgoles, a l\'est del Pati del Celler, duu a l\'entrada de les Gírgoles: la Clau de ferro l\'obre.' : E.dades.objectiu); }
         };

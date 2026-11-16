@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 604: Taverna: la primera conversa de l'Eve passa de sis pàgines a dues (només el que importa: la Porta de les Gírgoles i l'Aldreu, i l'Iscu al camí de la Desaparició); el color (la Càren que dorm, el Sardi que venia a berenar, els ocells de nit) passa al senyor Buidor, que ara té quatre pàgines més. (Pendent de decidir: donar més pes a l'Eve amb pistes vives o un got de llet que recupera cors.)*
+
 *Revisió 603: la clau de l'ermita de Sant Gabriel ja no la dona el Galf: el Galf, en parlar del cristall de gel, envia l'Ineu al senyor Buidor, que va ser el sagristà i la té a la butxaca; el Buidor només la dona després de parlar amb el Galf (flag galfCristallDit). Pistes i descripció de l'objecte actualitzades.*
 
 *Revisió 602: el senyor Budó passa a dir-se **senyor Buidor** (diàlegs, retrats i documents; l'identificador intern `senyor_budo` no canvia).*
