@@ -631,7 +631,7 @@ class ZonaCelles extends ZonaBase {
         if (Estat.flag('manduNinaTrencada') && !Estat.flag('epilegFet')) this.mandu.setTexture('mandu_trencada');
         else this.jugaMandu();
 
-        // Sant Benet (est): la Meus i el seu marit, el senyor Molner, veïns de Sant Benet
+        // Sant Benet (est): la Meus i el seu marit, el senyor Llaminer, veïns de Sant Benet
         this.npc('meus', 1250, 680, DIALEGS.meus, { zoomConversa: 1.3 });
         this.npc('molner', 1320, 700, DIALEGS.molner);
         // Les dues Venerables Sàvies (agafades del braç, un sol gràfic): donen consells

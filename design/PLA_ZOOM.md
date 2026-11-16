@@ -61,7 +61,7 @@ Ara l'Ineu es mou en una habitació petita amb marges foscos. Amb el factor de l
 |---|---|---|---|
 | **Primera entrada a una zona nova** | Plano de situació: comença a base×0,9 i s'acosta fins a base en ~1,2 s | Només la 1a visita (flag per zona) | Dóna "bon dia" al lloc sense repetir-se |
 | **Conversa casual** | ×1,08–1,12 (com ara) | Parlar amb NPC de passada | Mantenir |
-| **Conversa important/íntima** | ×1,3–1,6 | Joaneta (ja), Isílder, Sacerdotesses, Nena de les Trenes, Meus/Molner a l'epíleg, Pare Jordà el primer cop | `zoomConversa` per NPC; cal comprovar que els dos caben |
+| **Conversa important/íntima** | ×1,3–1,6 | Joaneta (ja), Isílder, Sacerdotesses, Nena de les Trenes, Meus/Llaminer a l'epíleg, Pare Jordà el primer cop | `zoomConversa` per NPC; cal comprovar que els dos caben |
 | **Diàleg llarg** | Push-in lent addicional (+4 % al llarg del diàleg) | >6 pàgines | Evita "foto fixa"; opcional |
 | **Examinar objecte** (cartell, placa, pergamí) | Acostament a l'objecte | Ja a `nord.js`; estendre als pergamins de Runes/Santuari | |
 | **Obtenir objecte clau / gra de rosari** | Micro push-in (×1,06, 500 ms) + sostenir mentre surt l'avís | Gra, Runna, Llanterna, Medalló | Reforça el premi sense text; no s'ha de repetir en cofres menors |

@@ -514,7 +514,7 @@ const DIALEGS = {
         return {
             pagines: [
                 { qui: "Meus", text: "Ineu, fill, no t'hi quedis plantat! L'Huri i el Fram dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!" },
-                { qui: "Senyor Molner", text: "Meus, deixa'l respirar..." },
+                { qui: "Senyor Llaminer", text: "Meus, deixa'l respirar..." },
                 { qui: "Meus", text: "Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls." }
             ],
             enAcabar: () => E.posaFlag("parlatSantBenet")
@@ -523,8 +523,8 @@ const DIALEGS = {
 
     molner: E => ({
         pagines: [
-            { qui: 'Senyor Molner', text: 'Sí, Meus. No, Meus. Ara vinc, Meus.' },
-            { qui: 'Senyor Molner', text: '...Ah, Ineu. Ets tu. Fes cas del que digui ella. Sempre té raó. Sempre.' }
+            { qui: 'Senyor Llaminer', text: 'Sí, Meus. No, Meus. Ara vinc, Meus.' },
+            { qui: 'Senyor Llaminer', text: '...Ah, Ineu. Ets tu. Fes cas del que digui ella. Sempre té raó. Sempre.' }
         ]
     }),
 
@@ -1710,8 +1710,8 @@ const DIALEGS_FINAL = {
         { qui: 'Meus', text: "Ja els tinc a casa, i ja els he renyat tres vegades. Dues més i potser els deixo sortir a jugar." },
         { qui: 'Meus', text: "Gràcies, Ineu. No ho diré gaires cops, així que escolta'm bé: gràcies." }] }),
     molner: E => ({ pagines: [
-        { qui: 'Senyor Molner', text: "Des que han tornat els nens, la Meus canta mentre renta. Desafina, però canta." },
-        { qui: 'Senyor Molner', text: "No li diguis que t'ho he dit." }] }),
+        { qui: 'Senyor Llaminer', text: "Des que han tornat els nens, la Meus canta mentre renta. Desafina, però canta." },
+        { qui: 'Senyor Llaminer', text: "No li diguis que t'ho he dit." }] }),
     dolora: E => ({ pagines: [{ qui: 'Dolora', text: "El Sardi ja torna a robar galetes del rebost. Senyal que està bé del tot." }] }),
     pilaria: E => ({ pagines: [{ qui: 'Pilària', text: "Hem posat una espelma per tu a cada cambra, Ineu. I una altra per si de cas." }] }),
     carmelia: E => ({ pagines: [{ qui: 'Carmèlia', text: "Les tres te'n devem una. I nosaltres sempre paguem els deutes... amb pastissos." }] }),

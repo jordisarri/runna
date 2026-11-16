@@ -28,7 +28,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Germà Francí** | Monestir / Sant Antoni | Monjo vell; dona els Guants de Poder. |
 | **Germà Aldreu** | Plaça, Cirosa, Gàbia | Antagonista simpàtic: servent de l'Ocellaire (el «Pastor de Boira»). |
 | **L'Ocellaire (L'Home de la Gàbia)** | Sala de la Gàbia | Boss final. |
-| **Meus i senyor Molner** | Sant Benet | Matrimoni veí dels nens; la Meus fa l'escudella del sopar. |
+| **Meus i senyor Llaminer** | Sant Benet | Matrimoni veí dels nens; la Meus fa l'escudella del sopar. |
 | **Mandu** | Sant Benet | Nena petita, germana del Fram. |
 | **Venerables Sàvies** | Cel·les | Donen la pista del moment. |
 | **Carry** | Nostra Senyora | Vídua del campaner; busca el gos Pallofa. |
@@ -110,7 +110,7 @@ L'orgue no sona. Ensenya el **Cant de l'Aurora** i dona la **tarota del Cortiner
 Amb la tarota, el Cant de l'Aurora neteja l'aigua tèrbola (en surten gripaus enverinats i boira). La Creu de l'Aparició reacciona `creu`.
 
 **Pas 5 · Cel·les (Sant Benet, Nostra Senyora, Sant Antoni)** *(es pot fer ara o quan toqui)*
-- **Meus i senyor Molner** `meus` `molner`; **Mandu** `mandu` (nena petita, germana del Fram).
+- **Meus i senyor Llaminer** `meus` `molner`; **Mandu** `mandu` (nena petita, germana del Fram).
 - **Venerables Sàvies** `venerables`: donen la pista del moment si vas perdut.
 - **Carry** `carry`: busca el seu gos (lateral, vegeu més avall).
 - El camí del nord, cap al Gran Til·ler, és tapat per una **boira espessa**.
@@ -345,7 +345,7 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 - **Placa**: `placaDolmen`
 - **Rosansa**: `rosansa`
 - **Sardi**: `nenGabia`, `ferEpileg`
-- **Senyor Molner**: `meus`, `molner`, `molner`, `ferEpileg`
+- **Senyor Llaminer**: `meus`, `molner`, `molner`, `ferEpileg`
 - **Senyor Pomers**: `pomers`
 - **Veu del bosc**: `alzinaBuida`
 
@@ -870,7 +870,7 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 
 **Meus:** Ineu, fill, no t'hi quedis plantat! L'Huri i el Fram dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!
 
-**Senyor Molner:** Meus, deixa'l respirar...
+**Senyor Llaminer:** Meus, deixa'l respirar...
 
 **Meus:** Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls.
 
@@ -883,9 +883,9 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 
 
 
-**Senyor Molner:** Sí, Meus. No, Meus. Ara vinc, Meus.
+**Senyor Llaminer:** Sí, Meus. No, Meus. Ara vinc, Meus.
 
-**Senyor Molner:** ...Ah, Ineu. Ets tu. Fes cas del que digui ella. Sempre té raó. Sempre.
+**Senyor Llaminer:** ...Ah, Ineu. Ets tu. Fes cas del que digui ella. Sempre té raó. Sempre.
 
 
 ### carry
@@ -2009,9 +2009,9 @@ ${mots.join('   ')}
 
 
 
-**Senyor Molner:** Des que han tornat els nens, la Meus canta mentre renta. Desafina, però canta.
+**Senyor Llaminer:** Des que han tornat els nens, la Meus canta mentre renta. Desafina, però canta.
 
-**Senyor Molner:** No li diguis que t'ho he dit.
+**Senyor Llaminer:** No li diguis que t'ho he dit.
 
 
 ### dolora
@@ -2604,7 +2604,7 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 **Meus:** Huri! Fram! Bruts com dos esquirols i amb cara de no haver dormit en tres nits... Veniu aquí, que no us deixo anar mai més!
 
-**Senyor Molner:** Ja són aquí, Meus. Ja són aquí.
+**Senyor Llaminer:** Ja són aquí, Meus. Ja són aquí.
 
 **Meus:** I tu, Ineu, no et pensis que t'escapes de l'abraçada.
 

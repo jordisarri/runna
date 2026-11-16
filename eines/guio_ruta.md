@@ -28,7 +28,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Germà Francí** | Monestir / Sant Antoni | Monjo vell; dona els Guants de Poder. |
 | **Germà Aldreu** | Plaça, Cirosa, Gàbia | Antagonista simpàtic: servent de l'Ocellaire (el «Pastor de Boira»). |
 | **L'Ocellaire (L'Home de la Gàbia)** | Sala de la Gàbia | Boss final. |
-| **Meus i senyor Molner** | Sant Benet | Matrimoni veí dels nens; la Meus fa l'escudella del sopar. |
+| **Meus i senyor Llaminer** | Sant Benet | Matrimoni veí dels nens; la Meus fa l'escudella del sopar. |
 | **Mandu** | Sant Benet | Nena petita, germana del Fram. |
 | **Venerables Sàvies** | Cel·les | Donen la pista del moment. |
 | **Carry** | Nostra Senyora | Vídua del campaner; busca el gos Pallofa. |
@@ -110,7 +110,7 @@ L'orgue no sona. Ensenya el **Cant de l'Aurora** i dona la **tarota del Cortiner
 Amb la tarota, el Cant de l'Aurora neteja l'aigua tèrbola (en surten gripaus enverinats i boira). La Creu de l'Aparició reacciona `creu`.
 
 **Pas 5 · Cel·les (Sant Benet, Nostra Senyora, Sant Antoni)** *(es pot fer ara o quan toqui)*
-- **Meus i senyor Molner** `meus` `molner`; **Mandu** `mandu` (nena petita, germana del Fram).
+- **Meus i senyor Llaminer** `meus` `molner`; **Mandu** `mandu` (nena petita, germana del Fram).
 - **Venerables Sàvies** `venerables`: donen la pista del moment si vas perdut.
 - **Carry** `carry`: busca el seu gos (lateral, vegeu més avall).
 - El camí del nord, cap al Gran Til·ler, és tapat per una **boira espessa**.

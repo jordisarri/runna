@@ -277,7 +277,7 @@ class ZonaEsglesia extends ZonaBase {
                 pla(640, R + 330, 1.0, 1200),
                 f => riure(nens, f)
             ]),
-            // Els adults importants per als nens: les Venerables Sàvies, la Mandu (la germana del Fram) i l'Isílder (el pare del Sardi). La Meus i el senyor Molner, a la multitud, sense protagonisme.
+            // Els adults importants per als nens: les Venerables Sàvies, la Mandu (la germana del Fram) i l'Isílder (el pare del Sardi). La Meus i el senyor Llaminer, a la multitud, sense protagonisme.
             // Cada un surt del seu banc pel passadís i puja fins al nen (caminant).
             accio(z => [pla(560, R + 380, 0.95, 900), camina('venerables', [[640, R + 480], [640, R + 330], AL_NEN.nen_uri]), f => z.npcMira('venerables', 'nen_uri', f), f => z.bombolla('venerables', '♥', f, 900),
                         f => { z.npcSalta('nen_uri', null, 2); z.npcSalta('nen_flam', f, 2); }]),

@@ -60,7 +60,7 @@
 
 - [x] `ocellaire_cansat`
 
-- [x] `meus` (Meus) i `molner` (senyor Molner)
+- [x] `meus` (Meus) i `molner` (senyor Llaminer)
 
 - [x] `carro_rosansa` (Rosansa)
 
