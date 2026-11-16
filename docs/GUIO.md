@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 602: el senyor Budó passa a dir-se **senyor Buidor** (diàlegs, retrats i documents; l'identificador intern `senyor_budo` no canvia).*
+
 *Revisió 601: en examinar la llosa de la pèrgola, la càmera ja no s'allunya ni fa zoom: només es centra a poc a poc entre l'Ineu i la llosa (opció senseZoom dels punts interactius).*
 
 *Revisió 600: Prunera Màgica: en collir una pruna, la fruita surt de la capçada (la més propera a l'Ineu): espurnes a la branca, cau una mica i vola en arc fins a les seves mans; al cap d'una estona torna a créixer. Abans sortia del peu de l'arbre.*

@@ -974,11 +974,11 @@ const DIALEGS = {
     cartellEra: E => ({ pagines: [{ qui: 'Cartell', text: '↑ Ermita de la Desaparició\n→ Hostatgeria\n← Rovellonera' }] }),
 
     // ---------------- JARDÍ ----------------
-    // El senyor Budó, a la taverna: només parla (res de feina ni de missions), assaborint l'anís escarxat que li ha preparat l'Eve
+    // El senyor Buidor, a la taverna: només parla (res de feina ni de missions), assaborint l'anís escarxat que li ha preparat l'Eve
     senyorBudo: E => ({ pagines: [
-        { qui: 'Senyor Budó', text: "Xxt... baixa la veu, noi, que m'estic fotent un anís escarxat. Me l'ha preparat l'Eve, i això no es beu: s'assaboreix." },
-        { qui: 'Senyor Budó', text: "Una gota de gel, un raig d'aigua, i deixar-lo fer. Les coses bones no tenen pressa. Jo en sé, d'esperar: fa seixanta anys que m'assec en aquesta taula." },
-        { qui: 'Senyor Budó', text: "Si busques conversa, parla amb l'Eve." }
+        { qui: 'Senyor Buidor', text: "Xxt... baixa la veu, noi, que m'estic fotent un anís escarxat. Me l'ha preparat l'Eve, i això no es beu: s'assaboreix." },
+        { qui: 'Senyor Buidor', text: "Una gota de gel, un raig d'aigua, i deixar-lo fer. Les coses bones no tenen pressa. Jo en sé, d'esperar: fa seixanta anys que m'assec en aquesta taula." },
+        { qui: 'Senyor Buidor', text: "Si busques conversa, parla amb l'Eve." }
     ] }),
     isilder: E => DIALEGS.isilderBase(E),
     isilderBase: E => {

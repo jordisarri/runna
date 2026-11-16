@@ -285,10 +285,10 @@ class ZonaTavernaInt extends ZonaBase {
         // Taules amb tamborets i espelmes
         [[260, 470], [520, 430], [700, 560], [330, 620]].forEach(([x, y], i) => {
             this.posar('taula_buida', x, y, { escala: 0.8, col: { w: 130, h: 26 } });
-            // (a la primera taula, el senyor Budó ocupa el lloc de la dreta, amb el seu propi tamboret dibuixat)
+            // (a la primera taula, el senyor Buidor ocupa el lloc de la dreta, amb el seu propi tamboret dibuixat)
             [[-70, 20], [70, 20]].forEach(([dx, dy], k) => { if (!(i === 0 && k === 1)) this.posar('tamboret', x + dx, y + dy, { escala: 0.8, col: { w: 30, h: 12 } }); });
-            if (i !== 0) return;                                          // (només la taula del senyor Budó té res a sobre)
-            // el senyor Budó hi té el seu anís en un got de peu, un platet amb unes olives i l'espelma
+            if (i !== 0) return;                                          // (només la taula del senyor Buidor té res a sobre)
+            // el senyor Buidor hi té el seu anís en un got de peu, un platet amb unes olives i l'espelma
             const m = this.add.graphics().setDepth(y + 1);
             m.fillStyle(0x000000, 0.22).fillEllipse(x + 30, y - 58, 16, 5);
             m.fillStyle(0xd8ecf4, 0.6).fillPoints([{ x: x + 24, y: y - 74 }, { x: x + 36, y: y - 74 }, { x: x + 33, y: y - 64 }, { x: x + 27, y: y - 64 }], true).fillRect(x + 29, y - 64, 2, 6).fillRect(x + 25, y - 58, 10, 2);
@@ -304,7 +304,7 @@ class ZonaTavernaInt extends ZonaBase {
         // L\'Eve, al costat de la llar
         this.npc('eve', 650, 350, DIALEGS.eve, { flipX: true });
 
-        // El senyor Budó, assegut al costat dret de la taula de l'esquerra de tot (sencer, sense que la taula el tapi), assaborint l'anís escarxat que li ha preparat l'Eve
+        // El senyor Buidor, assegut al costat dret de la taula de l'esquerra de tot (sencer, sense que la taula el tapi), assaborint l'anís escarxat que li ha preparat l'Eve
         this.npc('senyor_budo', 352, 492, DIALEGS.senyorBudo, { colAmple: 50 });
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffc070, 0.07).setDepth(80000);
