@@ -243,11 +243,14 @@ class EscenaUI extends Phaser.Scene {
         let pIniciDialeg = null, d0PinchDialeg = 0, scrollIniciDialeg = 0, haMogutDialeg = false;
         let tempsUltimPinch = 0;
 
+        // Un punter compta com a «dit a la pantalla» només si és premut i fa poc que s'ha posat: al mòbil, de vegades un toc es perd (cop de dit, canvi d'app) i Phaser el deixa «premut»
+        // per sempre; llavors tots els clics semblaven un pinch i el diàleg no avançava mai.
+        const punterViu = q => !!q && q.isDown && (performance.now() - (q.downTime || 0)) < 4000;
         this.input.on('pointerdown', (p, objectes) => {
             if (objectes.length) return;
             if (this.dialeg && !this.menuObert) {
                 const p1 = this.input.pointer1, p2 = this.input.pointer2;
-                const esMultitouch = (p1 && p1.isDown && p !== p1) || (p2 && p2.isDown && p !== p2) || (this.input.totalActivePointers > 1);
+                const esMultitouch = (p1 && p !== p1 && punterViu(p1)) || (p2 && p !== p2 && punterViu(p2));          // (punterViu: un dit encallat d'un toc perdut no compta)
                 if (esMultitouch || (Date.now() - tempsUltimPinch < 600)) {
                     haMogutDialeg = true;
                     tempsUltimPinch = Date.now();
@@ -265,7 +268,7 @@ class EscenaUI extends Phaser.Scene {
         this.input.on('pointermove', p => {
             if (!this.dialeg || this.menuObert) return;
             const p1 = this.input.pointer1, p2 = this.input.pointer2;
-            if (p1 && p2 && p1.isDown && p2.isDown) {
+            if (p1 && p2 && punterViu(p1) && punterViu(p2)) {
                 haMogutDialeg = true;
                 tempsUltimPinch = Date.now();
                 pIniciDialeg = null;
@@ -299,7 +302,7 @@ class EscenaUI extends Phaser.Scene {
         this.input.on('pointerup', p => {
             if (!this.dialeg || this.menuObert) { pIniciDialeg = null; return; }
             const p1 = this.input.pointer1, p2 = this.input.pointer2;
-            const quedaAlcunPunter = (p1 && p1.isDown && p1 !== p) || (p2 && p2.isDown && p2 !== p) || (this.input.totalActivePointers > 1);
+            const quedaAlcunPunter = (p1 && p1 !== p && punterViu(p1)) || (p2 && p2 !== p && punterViu(p2));
             const eraPinchRecent = (Date.now() - tempsUltimPinch < 600);
 
             if (quedaAlcunPunter || eraPinchRecent) {
