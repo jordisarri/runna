@@ -53,7 +53,7 @@ const TRONC_ARBRE = esc => ({ w: Math.round(100 * esc), h: Math.round(36 * esc) 
 
 const ESTIL_PORTA_PEDRA = ['ZonaErmitaInt', 'ZonaGabrielInt', 'ZonaPassadis', 'ZonaSotaTaverna', 'ZonaGirgoles', 'ZonaTortura', 'ZonaBoira', 'ZonaGabia', 'ZonaSoterraniHost', 'ZonaEsglesia', 'ZonaMonestirRebedor', 'ZonaPingpong', 'ZonaTresor', 'ZonaGolfes'];
 // Forma de la porta d'abaix, igual que la de fora (la que dona a aquesta sala): d'arc (arrodonida) o en angle recte
-const ARC_PORTA = ['ZonaMonestirRebedor', 'ZonaBiblioteca', 'ZonaMasiaCirosa', 'ZonaHostatgeriaInt', 'ZonaGabrielInt', 'ZonaCasaGeorgi', 'ZonaTavernaInt', 'ZonaPingpong', 'ZonaPassadis', 'ZonaSotaTaverna'];
+const ARC_PORTA = ['ZonaMonestirRebedor', 'ZonaBiblioteca', 'ZonaMasiaCirosa', 'ZonaHostatgeriaInt', 'ZonaGabrielInt', 'ZonaTavernaInt', 'ZonaPingpong', 'ZonaPassadis', 'ZonaSotaTaverna'];
 const PROFUNDITAT_PORTA = 36;   // els interiors es surten per sota de la porta: l'Ineu l'ha de traspassar abans de canviar de zona
 const MARGE_TEULADA = 62;   // mig cos de l'Ineu: la col·lisió d'un edifici comença així de baix de la seva teulada, i per dalt es pot passar-hi darrere
 // Missions que fan marxar la boira del Miracle (cadascuna n'esvaeix una part); la boira no desapareix del tot fins que cau l'Ocellaire
