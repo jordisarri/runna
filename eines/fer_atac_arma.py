@@ -28,8 +28,8 @@ FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 
 # El bastó 'up' també fa servir la 1a generació (basto_v1): a la 2a el bastó només surt als dos primers fotogrames i a la resta s'amaga darrere el cap. A basto_v1 surt a tots els 16.
 # Els fotogrames 3, 2, 4, 5 donen un gir continu de la punta del bastó, de dreta a esquerra (angle de la vara: ~-10°, 15°, 37°, 67°), amb el bastó visible a tots; l'últim es repeteix (el 0 té la punta tallada per la vora de l'original).
 ORIGEN_EXC = {('tiller', 'up'): 'tiller_v1', ('espasa', 'up'): 'espasa_up_v4', ('basto', 'up'): 'basto_v1'}
-FOT_EXC = {('tiller', 'up'): [0, 1, 9, 10, 11], ('espasa', 'up'): [0, 1, 2, 1, 0], ('basto', 'up'): [4, 3, 2, 1, 0]}
-# La branca 'up' torna a la 1a generació (tiller_v1) amb els fotogrames 1, 2, 10, 11 i 12 (comptats des d'1), triats a mà amb proves/atac_up/ (queda el full de proves v5 a tiller_up_v5, amb REDUCCIO si es torna a fer servir).
+FOT_EXC = {('tiller', 'up'): [7, 0, 9, 10, 11], ('espasa', 'up'): [0, 1, 2, 1, 0], ('basto', 'up'): [4, 3, 2, 1, 0]}
+# La branca 'up' torna a la 1a generació (tiller_v1) amb els fotogrames 8, 1, 10, 11 i 12 (comptats des d'1), triats a mà amb proves/atac_up/ (queda el full de proves v5 a tiller_up_v5, amb REDUCCIO si es torna a fer servir).
 # Fotogrames amb què es mesura l'alçada del cos (per defecte 12-15, on l'arma és a les mans). A basto_v1 'up' la gafa del bastó sobresurt per sobre del cap en aquests: es mesura amb el 3 i el 4.
 ESCALA_FOTS = {('basto', 'up'): (3, 4)}
 # Reducció extra de la mida (per a fulls on el personatge surt dibuixat més ample que als altres; tiller_up_v5, a 0,85, igualava l'amplada del cos amb la dels altres atacs)
