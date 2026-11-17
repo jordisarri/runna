@@ -884,7 +884,9 @@ class ZonaTiller extends ZonaBase {
             if (this.tillerCara || !d.pagines || !d.pagines.length) return d;
             return Object.assign({}, d, { pagines: [{ fer: (z, fet) => z.despertarTiller(fet) }, ...d.pagines] });
         }, { altura: 230, marca: true });            // el «!» a l'alçada de la cara (més amunt quedava fora de la pantalla)
-        puntTiller.cameraCossos = [this.tillerAmbCara];
+        // La càmera de la conversa enquadra l'Ineu i la CARA del Til·ler (una caixa invisible des de la cara fins a les arrels), no tot l'arbre amb la copa: així s'hi acosta molt més
+        this.capTiller = this.add.rectangle(TIL_X, TIL_Y - 120, 160, 190, 0x000000, 0).setDepth(-2000);
+        puntTiller.cameraCossos = [this.capTiller];
 
         // Després del sopar queden tres espelmes vora les arrels del Til·ler
         if (Estat.flag('soparFet')) this.posarEspelmes();
