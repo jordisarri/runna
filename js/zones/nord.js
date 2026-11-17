@@ -1369,7 +1369,7 @@ class ZonaBosc extends ZonaBase {
         this.terra('pedra', 780, 520, 260, 230);         // clariana de pedra de la font
 
         // Font del Bisbe (missió de la font)
-        const fontSJ = this.posar('font_sj', 910, 610, { col: { w: 150, h: 50 } });
+        const fontSJ = this.fontImg = this.posar(Estat.flag('fontNeta') ? 'font_sj_neta' : 'font_sj', 910, 610, { col: { w: 150, h: 50 } });
         const puntFont = this.interactiu(910, 625, RADI_GRAN * 1.5, DIALEGS.fontSJ, { altura: 170 });
         this.brilloImatge(fontSJ, { punt: puntFont, actiu: () => !Estat.flag('fontNeta') });          // la font brilla fins que l'aigua torna a ser clara
 
@@ -1450,6 +1450,7 @@ class ZonaBosc extends ZonaBase {
             if (this.llumLila) this.tweens.add({ targets: this.llumLila, alpha: 0, duration: 3500 });
         }
         // I l'aigua de la font brilla
+        if (Estat.flag('fontNeta') && this.fontImg && this.fontImg.texture.key !== 'font_sj_neta') this.fontImg.setTexture('font_sj_neta');       // aigua clara: canvia el dibuix de la font
         if (Estat.flag('fontNeta') && !this.fontBrilla) {
             this.fontBrilla = this.add.particles(910, 575, 'espurna', {
                 x: { min: -45, max: 45 }, y: { min: -10, max: 10 }, speedY: { min: -22, max: -6 }, lifespan: 1500,

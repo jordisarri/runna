@@ -275,11 +275,29 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 Tots els gràfics de dalt són fets i connectats (els seus prompts s'han esborrat d'aquest document).
 
-**Pendents:** `cercle_runes` (el cercle de runes del terra de l'Escalinata; ara es dibuixa amb codi).
+**Pendents:** `font_sj` i `font_sj_neta` (la Font del Bisbe, adormida i neta; ara es dibuixa amb codi), `cercle_runes` (el cercle de runes del terra de l'Escalinata; ara es dibuixa amb codi).
 
 ---
 
 ## Pendent
+
+### `font_sj.png` i `font_sj_neta.png` → `assets/objectes/font_sj.webp` i `assets/objectes/font_sj_neta.webp` (amplada 190 cadascun) *(La **Font del Bisbe** del Bosc de Sant Joan (`ZonaBosc`, `js/zones/nord.js`). Dos estats de la MATEIXA font: **adormida** (`font_sj`: aigua bruta i tèrbola, la canella no raja) i **neta** (`font_sj_neta`: aigua clara que raja; el joc hi canvia quan es fan les tres ofrenes, `fontNeta`). Ara el joc els dibuixa amb codi (`dibuixarFontSJ` a `js/dibuixos.js`). Fons blanc pur (el trec jo). Genereu primer la bruta i després la neta **a partir de la bruta** (edició d'imatge / image-to-image), perquè tinguin exactament el mateix encuadrament, mida i pedres i el canvi al joc no «salti».)*
+
+**1. `font_sj.png` (adormida, aigua bruta):**
+
+```
+A very austere, natural old stone fountain seen from a high three-quarter view: a large, rough, weathered grey boulder / rock outcrop standing like a short natural wall, with a SIMPLE SHORT STONE SPOUT (a small plain carved stone pipe, no statue, no ornaments, no pedestal, no tiers) coming out of the rock face at about mid height, like a tap pouring out of the wall. Directly below it, in front of the rock, a low, rough, round-ish stone trough (a simple shallow stone basin, rustic, chipped, slightly irregular). Above the spout, only a tiny, very discreet bishop's mitre lightly carved in the rock, barely visible. The fountain is ASLEEP and DEAD: the spout is dry, with only one dark dirty drip hanging from it and a long dark greenish stain running down the rock under it; the water in the basin is DIRTY and MURKY: opaque, dark olive-brown with a faint sickly lilac-purple tint, with a film of scum, green slime patches, a few rotting brown leaves and a couple of dead bubbles floating on it, no reflections, no transparency (you cannot see the bottom). Thick dark moss and some ivy on the rock and on the rim of the basin, a few loose stones at the foot, faint wisps of lilac mist near the base. Chibi 2D charming game asset in the same art style as the reference image: bold clean dark outline, rich colours, two-tone cel shading, hand-painted look. The whole fountain is wider than tall (about 1.2:1), centred, with the base at the bottom of the image. Isolated on a pure white background (#FFFFFF), no ground, no cast shadow, no text.
+```
+
+**2. `font_sj_neta.png` (neta, aigua clara)** *(feu-la amb la imatge anterior com a base i aquest text d'edició):*
+
+```
+The exact same fountain, same composition, same framing, same rock, same stone trough and same loose stones, pixel-aligned, but now CLEAN and ALIVE: the spout pours a thin steady stream of crystal-clear water down into the basin, with white ripple rings spreading where it lands; the water in the basin is CLEAR and TRANSPARENT, bright light-blue with a lighter centre, glints and highlights, small pebbles visible on the bottom; the dirty stain and slime under the spout are gone, just a little dark dampness on the rock; much less moss, fresher and brighter green; no scum, no rotting leaves, no lilac mist. Same art style, outline and cel shading as the dirty version. Isolated on a pure white background (#FFFFFF), no ground, no cast shadow, no text.
+```
+
+(Referència d'estil: `art/objectes/creu.png` per al contorn i la pedra. Quan hi hagi els PNG, digueu-m'ho: els converteixo a `assets/objectes/` i poso `file:` a `font_sj` i `font_sj_neta` de `js/assets.js`; també comprovo que la pica no tapi el pas i ajusto la caixa de col·lisió i la posició de les espurnes de l'aigua neta.)
+
+---
 
 ### `senyor_budo.png` → `assets/personatges/senyor_budo.webp` (amplada 78) *(El **senyor Buidor**, el vell assegut a la taula de l'esquerra de tot de la Taverna (`ZonaTavernaInt`, `js/zones/taverna.js`), assaborint l'anís escarxat que li ha preparat l'Eve. NPC només de conversa (`DIALEGS.senyorBudo`). Ara el joc el dibuixa amb un placeholder. Imatge **de cos sencer, ASSEGUT en un tamboret, de cara a la càmera**, fons blanc pur (el trec jo); la taula del joc li tapa les cames, així que cal que tingui les cames i el tamboret dibuixats igualment.)*
 
