@@ -94,7 +94,7 @@ const Joc = {
         });
     },
 
-    // Música: 'musica_intro' (títol i, mentre no hi hagi 'poble', exteriors) i 'musica_bosc' (parts de bosc)
+    // Música: 'musica_intro' (títol i, mentre no hi hagi 'poble', exteriors); els boscos fan servir 'musica_poble'
     musica: null,
     musicaClau: null,
     // Cançó de cada zona (les que no hi són, queden en silenci)
@@ -119,7 +119,7 @@ const Joc = {
     // a la pantalla de càrrega; la resta es baixen en segon pla des del títol, o quan una zona les demana.
     FITXERS_MUSICA: {
         musica_intro: 'titol', musica_casa: 'interiors',
-        musica_masmorra: 'masmorra', musica_bosc: 'bosc'
+        musica_masmorra: 'masmorra'
     },
 
     // Músiques opcionals: es fan servir si el fitxer assets/musica/<fitxer>.m4a existeix; si no, sona la de reserva ('fallback').
