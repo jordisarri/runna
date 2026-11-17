@@ -169,12 +169,7 @@ class ZonaCabana extends ZonaBase {
         // L'Alzina Buida, la mateixa del bosc: el portal de tornada (amb la seva clariana verda, claror al forat i llumenetes)
         const AX = 330, AY = 905;
         // (sense clariana verda: l'alzina només té el brillo al forat)
-        this.alzina = this.posar('alzina_buida', AX, AY, { col: { w: 150, h: 46 } });
-        // El punt d'interacció és el forat del tronc (la «!» surt just damunt seu); el radi permet tocar-lo des del peu de l'alzina
-        this.interactiu(AX - 18, AY - 128, 235, DIALEGS.portalTornada, {
-            altura: 56,
-            enTancar: () => this.canviarZona('ZonaBosc', 'portal')
-        });
+        this.alzina = this.posarAlzinaPortal(AX, AY, 'ZonaBosc', 'portal', true);          // el portal de tornada: s'hi entra caminant pel forat del tronc
 
         this.brillo(AX - 15, AY - 126, 54, 86, { arc: true });          // el forat del tronc brilla sempre
 

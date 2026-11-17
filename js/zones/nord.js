@@ -1377,11 +1377,12 @@ class ZonaBosc extends ZonaBase {
         // pròpia clariana de pedres i el brillo al forat del tronc: no es pot confondre amb la resta.
         const AX = 330, AY = 780;
         // (sense clariana verda: l'alzina només té el brillo al forat)
-        this.alzina = this.posar('alzina_buida', AX, AY, { col: { w: 150, h: 46 } });
-        // El punt d'interacció és el forat del tronc (la «!» surt just damunt seu); el radi permet tocar-lo des del peu de l'alzina
+        this.alzina = this.posarAlzinaPortal(AX, AY, 'ZonaCabana', 'portal', Estat.flag('portalJoaneta'));
+        // El punt d'interacció és el forat del tronc (la «!» surt just damunt seu); només cal per obrir-lo amb l'aigua: un cop obert, s'hi entra caminant
         this.interactiu(AX - 18, AY - 128, 235, DIALEGS.alzinaBuida, {
             altura: 56,
-            enTancar: () => { if (Estat.flag('portalJoaneta')) this.canviarZona('ZonaCabana', 'portal'); }
+            actiu: () => !Estat.flag('portalJoaneta'),
+            enTancar: () => { if (Estat.flag('portalJoaneta')) this.obrirAlzina(); }
         });
         this.brillo(AX - 15, AY - 126, 54, 86, { arc: true });          // el forat del tronc brilla sempre (només la part lògica de l'alzina, no tot l'arbre)
         [[-250, 75, 0.7], [255, 45, 0.55], [-120, 120, 0.4]].forEach(([dx, dy, e]) => this.posar('roca', AX + dx, AY + dy, { escala: e, col: { w: 34, h: 14 } }));

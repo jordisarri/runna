@@ -48,7 +48,7 @@ const BANDA_SUD = 120;   // franja de baix (vora sud, sortides) que es desplaça
 const VELOCITAT_INEU = 230;
 // Caixa de col·lisió del tronc de l'arbre (gràfic 'arbre': les arrels fan ~130 px d'ample i el tronc ~70-100)
 // Part del dibuix (fraccions x0, y0, x1, y1 del gràfic) que és el tronc: és opac (la silueta de l'Ineu s'hi amaga); la copa i les branques, no
-const TRONCS = { arbre: [0.27, 0.52, 0.75, 1], pi: [0.36, 0.55, 0.66, 1], pi_pinyer: [0.30, 0.60, 0.62, 1] };
+const TRONCS = { arbre: [0.27, 0.52, 0.75, 1], alzina_buida: [0.32, 0.55, 0.70, 0.96], pi: [0.36, 0.55, 0.66, 1], pi_pinyer: [0.30, 0.60, 0.62, 1] };
 const TRONC_ARBRE = esc => ({ w: Math.round(100 * esc), h: Math.round(36 * esc) });
 
 const ESTIL_PORTA_PEDRA = ['ZonaErmitaInt', 'ZonaGabrielInt', 'ZonaPassadis', 'ZonaSotaTaverna', 'ZonaGirgoles', 'ZonaTortura', 'ZonaBoira', 'ZonaGabia', 'ZonaSoterraniHost', 'ZonaEsglesia', 'ZonaMonestirRebedor', 'ZonaPingpong', 'ZonaTresor', 'ZonaGolfes'];
@@ -2865,6 +2865,25 @@ class ZonaBase extends Phaser.Scene {
     // Escala que baixa sota terra cap al nord (un forat, una trapa): ycut és la vora de davant del forat
     sortidaEscala(x, y, w, h, desti, entrada, ycut) {
         return Object.assign(this.sortida(x, y, w, h, desti, entrada), { baixar: ycut, xEscala: x + w / 2 });
+    }
+
+    // L'Alzina Buida (bosc i cabana de la Joaneta): el tronc és opac (la silueta de l'Ineu no s'hi veu a través), la col·lisió és alta (no es pot anar
+    // massa per darrere) i el forat del tronc és una trapa: s'hi entra caminant-hi des del sud (per un passadís entre les arrels), i l'Ineu s'hi enfonsa
+    // com a les escales. obert=false: el passadís és tancat fins a obrirAlzina() (el bosc l'obre amb l'aigua de la font).
+    posarAlzinaPortal(AX, AY, desti, entrada, obert) {
+        const alz = this.posar('alzina_buida', AX, AY);
+        [[AX - 59, AY - 45, 42, 90], [AX + 41, AY - 45, 67, 90], [AX + 1, AY - 140, 138, 100]].forEach(([x, y, w, h]) => this.colisio(x, y, w, h));
+        this.alzinaPorta = { AX, AY, desti, entrada, bloc: this.colisio(AX - 15, AY - 45, 46, 90), obert: false };
+        if (obert) this.obrirAlzina();
+        return alz;
+    }
+    obrirAlzina() {
+        const P = this.alzinaPorta;
+        if (!P || P.obert) return;
+        P.obert = true;
+        this.obstacles.remove(P.bloc, true, true);
+        this.forcsPorta.push({ x0: P.AX - 23, x1: P.AX + 23, t: P.AY - 95, b: P.AY + 22, z: P.AY + 1 });          // dins el passadís l'Ineu es dibuixa davant del tronc, i s'enfosqueix
+        Object.assign(this.sortidaEscala(P.AX - 19, P.AY - 95, 38, 50, P.desti, P.entrada, 0), { nord: true, yFons: P.AY - 84 });
     }
 
     // L'Ineu baixa l'escala: camina d'esquena cap al mig de l'escala i s'enfonsa darrere la vora de davant del forat,
