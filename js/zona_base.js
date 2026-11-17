@@ -2034,7 +2034,11 @@ class ZonaBase extends Phaser.Scene {
                 q.im.setDepth(Math.max(q.terra, q.y) + 1);
                 if (!q.parat) enMoviment = true;
             });
-            if (!enMoviment) this.events.off('update', act);
+            if (!enMoviment) {
+                this.events.off('update', act);
+                // Els trossos d'un objecte que amaga alguna cosa a sota (b.desapareixen: la bóta sobre la placa de pressió) s'esvaeixen un cop a terra, perquè no la tapin
+                if (b.desapareixen) this.time.delayedCall(900, () => peces.forEach(q => { if (q.im.active) this.tweens.add({ targets: q.im, alpha: 0, duration: 600, onComplete: () => q.im.destroy() }); }));
+            }
         };
         this.events.on('update', act);
         this.events.once('shutdown', () => this.events.off('update', act));

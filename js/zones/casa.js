@@ -1444,12 +1444,12 @@ class ZonaCasaTresor extends ZonaCasaBase {
         this.offCadena = 0;
         this.dibuixarCadena(oberta);
         // El mecanisme de molla (sota la bóta) i la bóta de la creu, que es trenca amb l'espasa
-        this.molla = this.add.image(AX, AY + 10, 'molla_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(AY - 1).setVisible(trencada);
+        this.molla = this.add.image(AX, AY + 10, 'molla_tresor').setOrigin(0.5, 1).setScale(1 / RES).setDepth(AY + 40).setVisible(trencada);          // (per damunt dels trossos de la bóta: no la tapen)
         this.registraGraons(AX - 32, AX + 32, [[AY - 8, AY + 12]]);       // s'hi puja com un graó: mateixa frenada i mateix so
         if (!trencada) {
             const img = this.posar('bota_creu', AX, AY, { col: { w: 50, h: 22 }, opac: true });
             const col = this.obstacles.getChildren()[this.obstacles.getChildren().length - 1];
-            this.bota = { img, col, x: AX, y: AY, viu: true, key: 'bota_creu', nomesRunna: true, alTrencar: () => this.botaTrencada() };
+            this.bota = { img, col, x: AX, y: AY, viu: true, key: 'bota_creu', nomesRunna: true, desapareixen: true, alTrencar: () => this.botaTrencada() };
             this.barrils.push(this.bota);
         }
         if (oberta) { this.llosaPorta.y = PT - H; }
