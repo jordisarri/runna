@@ -250,7 +250,7 @@ const ENEMICS = {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
             if (e.estat === 'salt') {
-                if (ara > e.fins) { e.estat = 'repos'; e.fins = ara + 1150; e.spr.body.setVelocity(0); e.spr.setScale(e.escalaBase); }
+                if (ara > e.fins) { e.estat = 'repos'; e.fins = ara + 1150; e.spr.body.setVelocity(0); e.spr.setScale((e.escalaPose || e.escalaBase)); }
                 return;
             }
             e.spr.body.setVelocity(0);
@@ -260,7 +260,7 @@ const ENEMICS = {
                 e.estat = 'salt'; e.fins = ara + (dist < 340 ? 430 : 300);
                 e.spr.body.setVelocity(Math.cos(cap) * vel, Math.sin(cap) * vel);
                 e.spr.setFlipX(Math.cos(cap) < 0);
-                e.spr.setScale(e.escalaBase);
+                e.spr.setScale((e.escalaPose || e.escalaBase));
                 Sfx.salt();
             }
         }
@@ -653,7 +653,7 @@ const ENEMICS = {
             if (e.ocell && e.ocell.mort) { e.ocell = null; e.proxObre = ara + 2200; e.spr.setTexture('gabia_viva'); }
             if (!e.ocell && ara > e.proxObre && d < 340) {
                 e.spr.setTexture('gabia_viva_oberta');
-                z.tweens.add({ targets: e.spr, scaleX: e.escalaBase * 1.08, yoyo: true, duration: 120 });
+                z.tweens.add({ targets: e.spr, scaleX: (e.escalaPose || e.escalaBase) * 1.08, yoyo: true, duration: 120 });
                 Sfx.xiscle();
                 const o = z.enemic('ocellGabia', e.spr.x, e.spr.y - 120);
                 if (o) { o.amo = e; o.estat = 'surt'; o.fins = ara + 650; o.ang0 = Math.random() * Math.PI * 2; e.ocell = o; }
@@ -696,7 +696,7 @@ const ENEMICS = {
                 const dx = casa.x - c.x, dy = casa.y - c.y, l = Math.hypot(dx, dy) || 1;
                 e.spr.body.setVelocity(dx / l * 200, dy / l * 200);
                 e.spr.setFlipX(dx < 0);
-                if (l < 22) { e.mort = true; e.spr.body.enable = false; z.tweens.add({ targets: e.spr, alpha: 0, scale: e.escalaBase * 0.4, duration: 220, onComplete: () => z.retirar(e) }); }
+                if (l < 22) { e.mort = true; e.spr.body.enable = false; z.tweens.add({ targets: e.spr, alpha: 0, scale: (e.escalaPose || e.escalaBase) * 0.4, duration: 220, onComplete: () => z.retirar(e) }); }
             }
         }
     },
@@ -720,7 +720,7 @@ const ENEMICS = {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
             if (!e.casa) e.casa = { x: c.x, y: c.y };
-            e.spr.setScale(e.escalaBase);
+            e.spr.setScale((e.escalaPose || e.escalaBase));
             if (e.estat === 'desperta') {
                 e.spr.body.setVelocity(0, -25);
                 if (z.textures.exists('ratpenat_amunt')) e.spr.setTexture('ratpenat_amunt');
@@ -1377,9 +1377,24 @@ Object.assign(ZonaBase.prototype, {
     },
 
     // El Pastor de Boira té animacions completes de 8 direccions ('pastor_camina') i poses dedicades per a cada acció
-    // Les poses d'atac (apunta, ataca) estan dibuixades més petites que el personatge caminant (uns 155 px d'alt per 235): es compensa amb l'escala
+    // Cada pose està dibuixada a una mida diferent: es compensa amb un factor (posaPastor) perquè el cap sempre tingui la mateixa mida
+    // Canvia la imatge del Pastor mantenint la mida del seu CAP (que és el que es nota) i els peus al mateix lloc. factor: la mida del cap de cada dibuix respecte del del
+    // personatge caminant (mesurat: apunta 0,89, ataca 1,08, enfadat 1,25, derrota 0,82). Els fulls de caminar són de 300 x 300 per fotograma i les poses de 600 x 600
+    // (eines/poses_pastor.py, el doble de nítides): l'escala es compensa amb l'amplada de la imatge.
+    posaPastor(e, clau, fotograma, factor = 1) {
+        const sp = e.spr, ant = e.peusDesp !== undefined ? e.peusDesp : 72.5, peus = sp.y + ant;
+        sp.anims.stop();
+        if (fotograma !== undefined) sp.setTexture(clau, fotograma); else sp.setTexture(clau);
+        const esc = 0.58 * factor * (300 / sp.width), desp = (275 / 300 - 0.5) * sp.height * esc;
+        sp.setScale(esc); e.escalaPose = esc;
+        sp.y = peus - desp; e.peusDesp = desp;                                   // els peus no es mouen quan canvia el dibuix
+        const bd = sp.body, c = e.def && e.def.cos;
+        if (bd && c) { bd.setSize(c[0] / esc, c[1] / esc); bd.setOffset((sp.width - c[0] / esc) / 2, sp.height - c[1] / esc); }
+    },
+    peusPastor(e) { return e.spr.y + (e.peusDesp !== undefined ? e.peusDesp : 72.5); },
+
     animaPastor(e, nom, ang) {
-        const ESCALA_POSA = { pastor_apunta: 1.4, pastor_ataca: 1.4 };
+        const FACTOR_POSA = { pastor_apunta: 0.89, pastor_ataca: 1.08, pastor_enfadat: 1.25, pastor_derrota: 0.82 };
         if (!e || !e.spr || !e.spr.active) return false;
         const sp = e.spr;
 
@@ -1401,9 +1416,7 @@ Object.assign(ZonaBase.prototype, {
             if (this.textures.exists(k)) {
                 if (e.animPastor === nom) return true;
                 e.animPastor = nom;
-                sp.anims.stop();
-                sp.setTexture(k);
-                e.escalaPose = 0.58 * (ESCALA_POSA[k] || 1); sp.setScale(e.escalaPose);
+                this.posaPastor(e, k, undefined, FACTOR_POSA[k] || 1);
                 return true;
             }
         }
@@ -1414,9 +1427,7 @@ Object.assign(ZonaBase.prototype, {
         if (nom === 'idle') {
             if (e.animPastor === 'idle') return true;
             e.animPastor = 'idle';
-            sp.anims.stop();
-            sp.setTexture('pastor_camina', 40); // Primer fotograma mirant al sud
-            e.escalaPose = 0.58; sp.setScale(0.58);
+            this.posaPastor(e, 'pastor_camina', 40, 1); // Primer fotograma mirant al sud
             sp.setFlipX(false);
             return true;
         }
@@ -1442,7 +1453,7 @@ Object.assign(ZonaBase.prototype, {
                 const idAnim = nom + '_' + dir;
                 if (e.animPastor === idAnim && sp.anims.isPlaying) return true;
                 e.animPastor = idAnim;
-                e.escalaPose = 0.58; sp.setScale(0.58);
+                this.posaPastor(e, 'pastor_camina', 0, 1);
                 sp.setFlipX(false);
                 sp.anims.timeScale = 1.0;
                 sp.play(clau, true);
@@ -1471,7 +1482,7 @@ Object.assign(ZonaBase.prototype, {
         this.animaPastor(e, 'derrota');
         e.spr.setFlipX(e.spr.x > this.ineu.x);
         if (e.ombra) {
-            e.ombra.setPosition(e.spr.x, e.spr.y + (276 - 150) * 0.58 - 2);
+            e.ombra.setPosition(e.spr.x, this.peusPastor(e) - 2);
             e.ombra.setScale(0.72, 0.38);
             e.ombra.setVisible(true);
         }

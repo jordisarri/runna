@@ -102,7 +102,7 @@ const Joc = {
         // Bosc i camins
         ZonaCami: 'musica_bosc', ZonaCamiRov: 'musica_bosc', ZonaRovellonera: 'musica_bosc', ZonaErmita: 'musica_bosc',
         ZonaGabriel: 'musica_bosc', ZonaBoscPi: 'musica_bosc', ZonaBosc: 'musica_bosc', ZonaCamiCirosa: 'musica_bosc', ZonaCirosa: 'musica_cirosa', ZonaMasiaCirosa: 'musica_cirosa', ZonaTavernaInt: 'musica_taverna', ZonaSotaTaverna: 'musica_masmorra', ZonaGirgoles: 'musica_girgoles', ZonaTortura: 'musica_masmorra', ZonaBoira: 'musica_masmorra', ZonaGabia: 'musica_gabia', ZonaBiblioteca: 'musica_biblioteca', ZonaMonestirRebedor: 'musica_biblioteca', ZonaCelaStAntoni: 'musica_casa',
-        ZonaDolmen: 'musica_bosc', ZonaTiller: 'musica_bosc', ZonaCabana: 'musica_bosc',
+        ZonaDolmen: 'musica_bosc', ZonaTiller: 'musica_poble', ZonaCabana: 'musica_bosc',          // (el Til·ler comparteix la música del poble i de les Cel·les: la de bosc s'hi assemblava massa)
         // Exteriors (overworld)
         ZonaPlaca: 'musica_poble', ZonaMonestir: 'musica_poble', ZonaCreu: 'musica_poble', ZonaCasaGran: 'musica_poble',
         ZonaRuines: 'musica_poble', ZonaCellerFora: 'musica_poble', ZonaGirgolesFora: 'musica_poble', ZonaCelles: 'musica_poble', ZonaSantAntoni: 'musica_poble', ZonaTaverna: 'musica_poble', ZonaGeorgi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaGeorgi: 'musica_casa', ZonaEra: 'musica_poble', ZonaJardi: 'musica_poble', ZonaCementiri: 'musica_masmorra',

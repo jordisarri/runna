@@ -243,14 +243,15 @@ class ZonaCirosa extends ZonaBase {
         e.spr.setFlipX(e.spr.x > this.ineu.x);
         this.animaPastor(e, 'derrota');
         if (e.ombra) {
-            e.ombra.setPosition(e.spr.x, e.spr.y + (276 - 150) * 0.58 - 2);
+            e.ombra.setPosition(e.spr.x, this.peusPastor(e) - 2);
             e.ombra.setScale(0.72, 0.38);
             e.ombra.setVisible(true);
         }
         // Zoom cinematogràfic per veure amb detall l'Ineu i el Pastor derrotat
-        const migX = (this.ineu.x + e.spr.x) / 2;
-        const migY = (this.ineu.y + e.spr.y) / 2;
-        this.enquadrar(migX, migY, 1.45, 900);
+        // (més a prop que abans: l'Ineu i el Pastor vençut es veuen grans durant tota la conversa; el zoom baixa només si estan molt separats)
+        const migX = (this.ineu.x * 0.45 + e.spr.x * 0.55), migY = (this.ineu.y * 0.45 + e.spr.y * 0.55) - 10;
+        const zoom = Phaser.Math.Clamp(AMPLE * 0.78 / (Math.abs(this.ineu.x - e.spr.x) + 230), 1.5, 2.2);
+        this.enquadrar(migX, migY, zoom, 900);
 
         this.tweens.add({ targets: e.spr, y: e.spr.y + 6, duration: 120, yoyo: true });
         this.cameras.main.shake(160, 0.004);
@@ -267,7 +268,7 @@ class ZonaCirosa extends ZonaBase {
                 this.animaPastor(e, 'idle');
                 e.spr.setFlipX(e.spr.x > this.ineu.x);
                 if (e.ombra) {
-                    e.ombra.setPosition(e.spr.x, e.spr.y + (276 - 150) * 0.58 - 2);
+                    e.ombra.setPosition(e.spr.x, this.peusPastor(e) - 2);
                     e.ombra.setScale(0.5, 0.35);
                 }
             }
