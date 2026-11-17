@@ -1453,7 +1453,7 @@ class ZonaBosc extends ZonaBase {
         // I l'aigua de la font brilla
         if (Estat.flag('fontNeta') && this.fontImg && this.fontImg.texture.key !== 'font_sj_neta') this.fontImg.setTexture('font_sj_neta');       // aigua clara: canvia el dibuix de la font
         if (Estat.flag('fontNeta') && !this.fontBrilla) {
-            this.fontBrilla = this.add.particles(910, 575, 'espurna', {
+            this.fontBrilla = this.add.particles(910, 565, 'espurna', {
                 x: { min: -45, max: 45 }, y: { min: -10, max: 10 }, speedY: { min: -22, max: -6 }, lifespan: 1500,
                 scale: { start: 0.3, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xbfe8ff, 0xffffff], frequency: 280, blendMode: 'ADD'
             }).setDepth(700);

@@ -109,9 +109,9 @@ const CATALEG = [
     { key: 'altar',     file: null,     amplada: 150, provisional: (c, w) => lienc(c, w, Math.round(w * 118 / 150), (ctx, W, H) => { ctx.scale(W / 150, H / 118); pintarAltarPedra(ctx, 150, 118, false); }) },   // l'altar de marbre rosat (Santuari i capella de l'Hostatgeria)
     { key: 'taula_pedra', file: null, amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 0) },
     { key: 'taula_pedra2', file: null, amplada: 130, provisional: (c, w) => dibuixarTaulaPedra(c, w, 6) },
-    // La Font del Bisbe: dos estats (adormida: aigua bruta i tèrbola; neta: aigua clara). Quan hi hagi els PNG (docs/PROMPTS_GRAFICS.md), posa'n el file.
-    { key: 'font_sj',   file: null,   amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w, false) },
-    { key: 'font_sj_neta', file: null, amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w, true) },
+    // La Font del Bisbe: dos estats (adormida: aigua bruta i tèrbola; neta: aigua clara)
+    { key: 'font_sj',   file: 'assets/objectes/font_sj.webp',   amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w, false) },
+    { key: 'font_sj_neta', file: 'assets/objectes/font_sj_neta.webp', amplada: 190, provisional: (c, w) => dibuixarFontSJ(c, w, true) },
     { key: 'carruatge', file: 'assets/objectes/carruatge.webp', amplada: 250, provisional: (c, w) => dibuixarCarruatge(c, w) },
     { key: 'carro_rosansa', file: 'assets/objectes/carro_rosansa.webp', amplada: 280, provisional: (c, w) => dibuixarCarroRosansa(c, w) },
     { key: 'pergola',   file: null,   amplada: 260, provisional: (c, w) => dibuixarPergola(c, w) },
