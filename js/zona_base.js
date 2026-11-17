@@ -1728,6 +1728,11 @@ class ZonaBase extends Phaser.Scene {
         }
         if (pos.y < TOPE_Y + 40) pos = Object.assign({}, pos, { y: TOPE_Y + 40 });
         this.posEntrada = pos;
+        // Sortint d'una porta d'un edifici (cap avall), l'Ineu camina PAS_PORTA píxels: si en aquest tros hi ha una altra sortida (l'escala de la caseta de joc, que
+        // surt a dalt de tot), no s'ha d'armar fins que l'Ineu hi hagi passat per sota; si no, tornava a entrar tot sol
+        if (this.entradaPorta && pos.dir === 'avall') this.sortides.forEach(q => {
+            if (q.r && q.r.right > pos.x - 20 && q.r.x < pos.x + 20 && q.r.bottom > pos.y - 10 && q.r.y < pos.y + PAS_PORTA + 30) { q.desarmada = true; q.desarmaSota = true; }
+        });
         this.ombraIneu = this.add.image(pos.x, pos.y, 'ombra').setScale(0.4).setDepth(-500);
         const S = SPRITE_INEU;
         this.ineu = this.physics.add.sprite(pos.x, pos.y, 'ineu_down', S.quiet).setOrigin(0.5, S.peus / S.alt);
