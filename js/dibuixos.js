@@ -1010,7 +1010,7 @@ function dibuixarRoca(c, w, variant = 0) {
         ctx.lineJoin = 'round'; ctx.lineCap = 'round';
         const u = W / 100;
         let sd = 23 + variant * 41; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
-        const LLUM = '#e3c98f', MIG = '#c9a468', OMB = '#9a7648', PROF = '#6e5233', CONT = '#3b2412', MOLSA = '#7f9a2c', MOLSA_L = '#a6b83a';
+        const LLUM = '#d2d0ca', MIG = '#aeaca5', OMB = '#85837e', PROF = '#5e5c58', CONT = '#2e2a28', MOLSA = '#7f9a2c', MOLSA_L = '#a6b83a';          // gris de pedra (sense molsa)
         // Una sola ombra de contacte, suau, una mica a la dreta
         ctx.fillStyle = 'rgba(30,40,10,0.28)'; ctx.beginPath(); ctx.ellipse(W * 0.52, H - 0.06 * W, W * 0.5, W * 0.07, 0, 0, Math.PI * 2); ctx.fill();
         // Quatre pinzellades d'herba fina, DARRERE de la pedra (només en sobresurt la punta, a banda i banda del peu)
@@ -1066,14 +1066,14 @@ function dibuixarRoca(c, w, variant = 0) {
         };
         if (variant === 0) {
             pedra([[0.03, 0.92], [0.01, 0.66], [0.10, 0.38], [0.30, 0.16], [0.55, 0.10], [0.78, 0.20], [0.94, 0.44], [0.99, 0.72], [0.95, 0.93]], 0, 0, W, H - 3 * u,
-                { ombra: 0.64, esquerdes: 2, molsa: [[0.28, 0.08, 0.38, 0.17], [0.8, 0.26, 0.15, 0.08]] });
+                { ombra: 0.64, esquerdes: 2, molsa: [] });
         } else if (variant === 1) {
             pedra([[0.12, 0.95], [0.05, 0.62], [0.12, 0.30], [0.30, 0.08], [0.55, 0.03], [0.78, 0.14], [0.92, 0.40], [0.95, 0.70], [0.88, 0.95]], 0, 0, W, H - 3 * u,
-                { ombra: 0.65, esquerdes: 3, molsa: [[0.22, 0.04, 0.5, 0.14], [0.08, 0.14, 0.1, 0.22]] });
+                { ombra: 0.65, esquerdes: 3, molsa: [] });
         } else {
             pedra([[0.0, 0.95], [0.08, 0.5], [0.3, 0.2], [0.62, 0.2], [0.94, 0.5], [1.0, 0.95]], W * 0.58, H * 0.4, W * 0.4, H * 0.55 - 3 * u, { ombra: 0.55, esquerdes: 1 });          // la mitjana, darrere
             pedra([[0.03, 0.92], [0.01, 0.66], [0.10, 0.38], [0.30, 0.14], [0.55, 0.09], [0.78, 0.2], [0.94, 0.46], [0.99, 0.74], [0.95, 0.94]], 0, 0, W * 0.68, H - 3 * u,
-                { ombra: 0.64, esquerdes: 2, molsa: [[0.3, 0.08, 0.4, 0.16]] });                                                                                                                                       // la gran, davant
+                { ombra: 0.64, esquerdes: 2, molsa: [] });                                                                                                                                       // la gran, davant
             pedra([[0.0, 0.9], [0.1, 0.4], [0.5, 0.08], [0.92, 0.35], [1.0, 0.9]], W * 0.02, H * 0.83, W * 0.12, H * 0.12, { ombra: 0.55, esquerdes: 0 });                                                                // la pedreta
         }
     });

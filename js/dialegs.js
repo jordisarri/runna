@@ -1464,7 +1464,7 @@ const DIALEGS = {
     // La llum que ha deixat l'últim estel a l'aigua del dipòsit de llevant
     estelDiposit: E => ({
         pagines: [
-            { fer: (z, fet) => z.agafar(fet, null, 0x8fc8ff) },
+            { fer: (z, fet) => { if (z.apagaLlumEstel) z.apagaLlumEstel(); z.agafar(fet, null, 0x8fc8ff); } },
             { avis: "Has obtingut la LLÀGRIMA DE SANT LLORENÇ.", obj: 'estel_llorenc' },
             { qui: "Ineu", text: "Fa la mateixa claror que els set estels... Diuen que la boira no gosa tocar la llum de Sant Llorenç. El camí del Dolmen, a llevant, n'és ple." }
         ],

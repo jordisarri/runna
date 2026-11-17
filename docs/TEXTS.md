@@ -2042,7 +2042,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[652] Ineu:** Pesa massa... calen unes mans més fortes.
 
-### pensament a esvairBoiraDolmen  <sub>(js/zones/oest.js:742)</sub>
+### pensament a esvairBoiraDolmen  <sub>(js/zones/oest.js:752)</sub>
 
 **[653] Ineu:** El camí del Dolmen és lliure.
 

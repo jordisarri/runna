@@ -878,7 +878,7 @@
     "qui": "Cartell",
     "text": "La Caseta\n→ El Gran Til·ler",
     "fitxer": "js/zones/nord.js",
-    "linia": 1163
+    "linia": 1166
    }
   ],
   "dialegs::prunera": [
@@ -4902,7 +4902,7 @@
     "qui": "Ineu",
     "text": "El camí del Dolmen és lliure.",
     "fitxer": "js/zones/oest.js",
-    "linia": 742
+    "linia": 752
    }
   ],
   "zones/placa::ineuDiu·enMelodia": [

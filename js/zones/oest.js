@@ -609,6 +609,7 @@ class ZonaDipositos extends ZonaBase {
     }
 
     construir() {
+        this.llumEstel = null; this.llumRecollida = false; this.estelCaient = false;          // (l'escena es reaprofita: res de la visita anterior)
         this.terra('herba_fosca', 0, 0, 1600, 1000, -1100).setTint(0x9aa8c8);
         this.terra('cami', 0, 520, 1600, 130).setTint(0xb8b8c8);
 
@@ -647,7 +648,9 @@ class ZonaDipositos extends ZonaBase {
         }
 
         // La llum de l'estel al dipòsit de llevant (quan s'han comptat els estels i encara no s'ha recollit)
-        this.interactiu(DIP.estelX, 350, RADI_GRAN, DIALEGS.estelDiposit, { altura: 200, actiu: () => !!this.llumEstel });
+        const puntEstel = this.interactiu(DIP.estelX, 350, RADI_GRAN, DIALEGS.estelDiposit, { altura: 200, actiu: () => !!this.llumEstel });
+        // La llàgrima de l'aigua del dipòsit brilla (per sobre del vel de nit) mentre es pot recollir, perquè es vegi que s'hi pot interactuar
+        this.brillo(DIP.estelX, DIP.estelY, 150, 48, { el: true, dep: 90010, punt: puntEstel, actiu: () => !!this.llumEstel, per: 1800, forca: 1.3 });
         // La boira que tapa el camí del Dolmen
         if (this.boiraTapa()) this.posarBoiraDolmen();
         else this.sortida(1586, 520, 14, 130, 'ZonaDolmen', 'diposits');
@@ -658,7 +661,7 @@ class ZonaDipositos extends ZonaBase {
 
     actualitzar() {
         const E = Estat;
-        if (!this.llumEstel && !this.estelCaient && E.flag('estelsFets') && !E.te('estel_llorenc')) this.posarLlumEstel();
+        if (!this.llumEstel && !this.llumRecollida && !this.estelCaient && E.flag('estelsFets') && !E.te('estel_llorenc')) this.posarLlumEstel();
         if (this.llumEstel && E.te('estel_llorenc')) { this.llumEstel.forEach(o => o.destroy()); this.llumEstel = null; }
         if (!this.tripodeMuntat && (E.flag('telescopiMuntat'))) { this.tripodeMuntat = true; this.tripode.setTexture('telescopi_mon'); }
     }
@@ -695,6 +698,14 @@ class ZonaDipositos extends ZonaBase {
                     });
                 } });
         });
+    }
+
+    // En recollir la llàgrima, la llum del dipòsit s'esvaeix (i ja no hi queda res per recollir)
+    apagaLlumEstel() {
+        const l = this.llumEstel;
+        if (!l) return;
+        this.llumEstel = null; this.llumRecollida = true;          // (no tornar-la a posar mentre l'objecte s'acaba de donar)
+        l.forEach(o => { if (o.stop && !o.setAlpha) { o.stop(); this.time.delayedCall(1500, () => o.destroy()); } else { this.tweens.killTweensOf(o); this.tweens.add({ targets: o, alpha: 0, duration: 900, onComplete: () => o.destroy() }); } });
     }
 
     // Una columna de llum freda baixa del cel fins a l'aigua del dipòsit, i hi queda un punt brillant amb espurnes. Va per sobre
