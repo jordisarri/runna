@@ -966,6 +966,7 @@ const DIALEGS = {
         if (clauDonada) return { pagines: [{ qui: 'Galf', text: "Torna quan tinguis el cristall de gel, noi. L'ermita de Sant Gabriel s'obre amb la clau del senyor Buidor." }] };
         if (E.flag('galfCristallDit')) return { pagines: [{ qui: 'Galf', text: "Ja t'ho he dit, noi: la clau de l'ermita la té el senyor Buidor, a la Taverna. Va ser el sagristà. Demana-la-hi." }] };
         return { pagines: [
+            { fer: (z, fet) => { E.posaFlag('galfCristallDit'); fet(); } },          // (ja des del principi de la conversa: si es talla, el senyor Buidor ja sap de què va)
             { qui: 'Galf', text: "Així sí. Soc el Galf, inventor. Visc a la cel·la de Sant Antoni, però vinc aquí cada dia: és l'únic racó on cap teulada no em tapa el cel. Tinc idees que ni jo entenc." },
             { qui: 'Galf', text: "Si em portes un cristall de gel, et construiré un telescopi per mirar el cel. N'hi ha un a l'ermita de Sant Gabriel." },
             { qui: 'Galf', text: "Però l'ermita és tancada. La clau la tenia el sagristà, el senyor Buidor, que va plegar fa anys i ara es passa els dies a la Taverna. Demana-la-hi de part meva." }
@@ -975,7 +976,7 @@ const DIALEGS = {
 
     // ---------------- JARDÍ ----------------
     // El senyor Buidor, a la taverna: només parla (res de feina ni de missions), assaborint l'anís escarxat que li ha preparat l'Eve
-    senyorBudo: E => (E.flag('galfCristallDit') && !(E.flag('clauGabrielDonada') || E.te('clau_gabriel') || E.flag('portaGabrielOberta'))) ? ({
+    senyorBudo: E => ((E.flag('galfCristallDit') || E.flag('garfBancSegut')) && !(E.flag('clauGabrielDonada') || E.te('clau_gabriel') || E.flag('portaGabrielOberta'))) ? ({
         pagines: [
             { qui: 'Senyor Buidor', text: "Xxt... ¿El Galf? Ah, sí. Vol el cristall de gel de l'ermita de Sant Gabriel, oi? Sempre ha tingut ganes de mirar el cel." },
             { qui: 'Senyor Buidor', text: "Jo hi vaig ser sagristà molts anys, fins que ja no vaig poder amb els graons. Tinc la clau a la butxaca des d'aleshores: ningú no me l'ha demanada mai." },
