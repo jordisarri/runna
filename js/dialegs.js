@@ -1478,6 +1478,9 @@ const DIALEGS = {
     // La boira que tapa el camí del Dolmen: només l'aparta la llum de la Llàgrima de Sant Llorenç
     boiraDolmen: E => E.te("estel_llorenc")
         ? { pagines: [
+            { qui: "Ineu", text: "La Llàgrima de Sant Llorenç fa la claror dels estels. Diuen que la boira no gosa tocar-la... Provem-ho." },
+            { fer: (z, fet) => z.seq([c => z.deixar(c, iconaObjecte(z, 'estel_llorenc'), 0x8fc8ff), c => { z.esvairBoiraDolmen(); z.esperar(1500, c); }], fet) },          // la llàgrima s'alça i brilla, i la boira s'esfilagarsa amb la seva llum
+            { qui: "Ineu", text: "Ha funcionat! La llum de la Llàgrima ha desfet la boira: el camí del Dolmen és lliure." }
         ] }
         : { pagines: [
             { qui: "Ineu", text: "Aquí no s'hi veu res. Em caldria una llum que la boira no pogués apagar..." }

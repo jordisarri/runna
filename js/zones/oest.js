@@ -734,8 +734,7 @@ class ZonaDipositos extends ZonaBase {
         this.colBoira = this.colisio(X + 30, Y, 140, 240);
         this.boiraDolmen = this.boiraParet(X + 40, Y, 220, 330, { to: 0xd2dcff, fosc: 0x2c3460, dep: 20000 });          // per damunt de l'Ineu: el cobreix, translúcida, vingui d'on vingui
         this.interactiu(X - 30, Y, 300, DIALEGS.boiraDolmen, {          // punt accessible des de lluny
-            altura: 150, senseMirada: true, actiu: () => !!this.boiraDolmen,
-            enTancar: () => { if (Estat.te('estel_llorenc')) this.esvairBoiraDolmen(); }
+            altura: 150, senseMirada: true, actiu: () => !!this.boiraDolmen
         });
     }
 
@@ -750,7 +749,6 @@ class ZonaDipositos extends ZonaBase {
         this.obstacles.remove(this.colBoira, true, true);
         Sfx.secret();
         this.sortida(1586, 520, 14, 130, 'ZonaDolmen', 'diposits');
-        this.ineuDiu('El camí del Dolmen és lliure.');
         Estat.posaObjectiu(DIALEGS.objectiuRunna(Estat));
         Estat.desar();
     }

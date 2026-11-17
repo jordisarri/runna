@@ -1,5 +1,5 @@
 {
- "seguent": 660,
+ "seguent": 662,
  "converses": {
   "main::proleg": [
    {
@@ -396,14 +396,14 @@
     "qui": "La Pianista",
     "text": "Has sentit l'orgue? Encara li falla el re, però canta. Escolta.",
     "fitxer": "js/dialegs.js",
-    "linia": 1722
+    "linia": 1725
    },
    {
     "id": 55,
     "qui": "La Pianista",
     "text": "I tu, fill, no deixis mai la tarota al calaix.",
     "fitxer": "js/dialegs.js",
-    "linia": 1724
+    "linia": 1727
    }
   ],
   "musica::completarLliço": [
@@ -758,63 +758,63 @@
     "qui": "La Joaneta",
     "text": "Ei! Tu! Qui coi t'ha dit que podies entrar? Els frares no veniu mai per aquí! Fot el camp o et faig créixer bolets a les orelles!",
     "fitxer": "js/dialegs.js",
-    "linia": 1602
+    "linia": 1605
    },
    {
     "id": 103,
     "qui": "Ineu",
     "text": "Perdoni... He arribat per l'alzina. Duc aigua de la Font del Bisbe.",
     "fitxer": "js/dialegs.js",
-    "linia": 1603
+    "linia": 1606
    },
    {
     "id": 104,
     "qui": "La Joaneta",
     "text": "Aigua... de la Font del Bisbe?! Dona'm aixòooo! Fa trenta anys que no en tinc ni una gota neta.",
     "fitxer": "js/dialegs.js",
-    "linia": 1604
+    "linia": 1607
    },
    {
     "id": 105,
     "qui": "La Joaneta",
     "text": "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? Han tapat el camí que hi porta amb una boira que no marxa amb el vent.",
     "fitxer": "js/dialegs.js",
-    "linia": 1606
+    "linia": 1609
    },
    {
     "id": 106,
     "qui": "La Joaneta",
     "text": "Mira, he barrejat l'aigua que queda amb rialla, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets.",
     "fitxer": "js/dialegs.js",
-    "linia": 1607
+    "linia": 1610
    },
    {
     "id": 107,
     "qui": "",
     "text": "★ Has obtingut el BEURATGE DE LA JOANETA.",
     "fitxer": "js/dialegs.js",
-    "linia": 1608
+    "linia": 1611
    },
    {
     "id": 108,
     "qui": "La Joaneta",
     "text": "Ja tornes, xaval? Els ocells m'ho diuen tot. Escolta: [text calculat pel joc: pista]",
     "fitxer": "js/dialegs.js",
-    "linia": 1617
+    "linia": 1620
    },
    {
     "id": 109,
     "qui": "La Joaneta",
     "text": "Ara fot el camp, que tinc feina amb la sopa. I no li diguis a ningú on visc, o et converteixo en bolet.",
     "fitxer": "js/dialegs.js",
-    "linia": 1618
+    "linia": 1621
    },
    {
     "id": 110,
     "qui": "La Joaneta",
     "text": "L'olla ja no fa bombolles liles. Ara fa olor de farigola, com ha de ser.",
     "fitxer": "js/dialegs.js",
-    "linia": 1735
+    "linia": 1738
    }
   ],
   "dialegs::alzinaBuida": [
@@ -903,21 +903,21 @@
     "qui": "Ineu",
     "text": "Provaré amb el beuratge de la Joaneta.",
     "fitxer": "js/dialegs.js",
-    "linia": 1625
+    "linia": 1628
    },
    {
     "id": 122,
     "qui": "Ineu",
     "text": "Ha funcionat! El camí del Gran Til·ler torna a ser net.",
     "fitxer": "js/dialegs.js",
-    "linia": 1627
+    "linia": 1630
    },
    {
     "id": 123,
     "qui": "Ineu",
     "text": "No hi puc passar. Aquesta boira no és de les que marxen amb el vent: per desfer-la em caldria algun líquid, una poció... alguna cosa que no tinc.",
     "fitxer": "js/dialegs.js",
-    "linia": 1631
+    "linia": 1634
    }
   ],
   "dialegs::tiller": [
@@ -1035,14 +1035,14 @@
     "qui": "Ineu",
     "text": "Són les arrels del Gran Til·ler. El bastó de pelegrí no les mourà... però potser reconeixerien una branca del mateix arbre.",
     "fitxer": "js/dialegs.js",
-    "linia": 1639
+    "linia": 1642
    },
    {
     "id": 140,
     "qui": "Ineu",
     "text": "Les arrels s'han estremit en reconèixer la branca, però no s'enfonsen. Sembla que esperen alguna cosa: potser que l'aigua clara de la Bassadòria torni a respirar.",
     "fitxer": "js/dialegs.js",
-    "linia": 1645
+    "linia": 1648
    }
   ],
   "dialegs::cartellCirosa": [
@@ -1206,7 +1206,7 @@
     "qui": "Pastor vell",
     "text": "Les ovelles tornen a ser blanques. Alguna encara té les orelles una mica liles, però ja li passarà.",
     "fitxer": "js/dialegs.js",
-    "linia": 1741
+    "linia": 1744
    }
   ],
   "dialegs::pastorsConvencuts": [
@@ -1596,14 +1596,14 @@
     "qui": "Meus",
     "text": "Ja els tinc a casa, i ja els he renyat tres vegades. Dues més i potser els deixo sortir a jugar.",
     "fitxer": "js/dialegs.js",
-    "linia": 1726
+    "linia": 1729
    },
    {
     "id": 215,
     "qui": "Meus",
     "text": "Gràcies, Ineu. No ho diré gaires cops, així que escolta'm bé: gràcies.",
     "fitxer": "js/dialegs.js",
-    "linia": 1727
+    "linia": 1730
    }
   ],
   "dialegs::molner": [
@@ -1626,14 +1626,14 @@
     "qui": "Senyor Llaminer",
     "text": "Des que han tornat els nens, la Meus canta mentre renta. Desafina, però canta.",
     "fitxer": "js/dialegs.js",
-    "linia": 1729
+    "linia": 1732
    },
    {
     "id": 219,
     "qui": "Senyor Llaminer",
     "text": "No li diguis que t'ho he dit.",
     "fitxer": "js/dialegs.js",
-    "linia": 1730
+    "linia": 1733
    }
   ],
   "dialegs::consellVenerables": [
@@ -1758,7 +1758,7 @@
     "qui": "Carry",
     "text": "El Pallofa ja no s'escapa: des que no hi ha boira, no té res a perseguir.",
     "fitxer": "js/dialegs.js",
-    "linia": 1740
+    "linia": 1743
    }
   ],
   "dialegs::pallofa": [
@@ -1903,7 +1903,7 @@
     "qui": "Eve",
     "text": "El Sardi ja torna a berenar aquí cada tarda. La Càren encara dorm, però ronca més contenta.",
     "fitxer": "js/dialegs.js",
-    "linia": 1739
+    "linia": 1742
    }
   ],
   "dialegs::senyorBudo": [
@@ -2026,7 +2026,7 @@
     "qui": "Iscu",
     "text": "M'ha sortit el solitari! M'encanta això de les cartes. Ara ja no cal que m'amagui tant...",
     "fitxer": "js/dialegs.js",
-    "linia": 1738
+    "linia": 1741
    }
   ],
   "dialegs::cartellRuinesPingpong": [
@@ -2490,35 +2490,35 @@
     "qui": "Ineu",
     "text": "«Els monjos del Miracle, d'ara i d'abans.»",
     "fitxer": "js/dialegs.js",
-    "linia": 1689
+    "linia": 1692
    },
    {
     "id": 335,
     "qui": "Ineu",
     "text": "Aquest ram és del Germà Francí, per als monjos que dormen aquí. El deixo als peus de l'àngel.",
     "fitxer": "js/dialegs.js",
-    "linia": 1692
+    "linia": 1695
    },
    {
     "id": 336,
     "qui": "Ineu",
     "text": "(Els pètals tremolen, com si algú respirés a prop. L'àngel, que mirava a terra, alça la cara al cel i somriu: ja no plora sol.)",
     "fitxer": "js/dialegs.js",
-    "linia": 1694
+    "linia": 1697
    },
    {
     "id": 337,
     "qui": "Ineu",
     "text": "El Germà Francí es posarà content. Va dir que, en tornar, tindria alguna cosa per a mi a Sant Antoni.",
     "fitxer": "js/dialegs.js",
-    "linia": 1695
+    "linia": 1698
    },
    {
     "id": 338,
     "qui": "",
     "text": "★ Has deixat el RAM DE FLORS als peus de l'àngel.",
     "fitxer": "js/dialegs.js",
-    "linia": 1696
+    "linia": 1699
    }
   ],
   "dialegs::lapida": [
@@ -2527,7 +2527,7 @@
     "qui": "Làpida",
     "text": "[text calculat pel joc: mots[n % mots.length]]",
     "fitxer": "js/dialegs.js",
-    "linia": 1713
+    "linia": 1716
    }
   ],
   "dialegs::tombaMonjos": [
@@ -2536,7 +2536,7 @@
     "qui": "Ineu",
     "text": "«Aquí reposen els qui van tancar la porta.»",
     "fitxer": "js/dialegs.js",
-    "linia": 1684
+    "linia": 1687
    }
   ],
   "dialegs::cartellCami": [
@@ -2678,7 +2678,7 @@
     "qui": "Cartell",
     "text": "→ Dolmen\n← Ermita de Sant Gabriel",
     "fitxer": "js/zones/oest.js",
-    "linia": 636
+    "linia": 637
    }
   ],
   "dialegs::cartellEra": [
@@ -2766,7 +2766,7 @@
     "qui": "Galf",
     "text": "Des del telescopi es veu tot el poble, i aquesta nit no hi ha ni un fil de boira.",
     "fitxer": "js/dialegs.js",
-    "linia": 1736
+    "linia": 1739
    }
   ],
   "dialegs::cofreGabriel": [
@@ -2900,11 +2900,25 @@
   ],
   "dialegs::boiraDolmen": [
    {
+    "id": 660,
+    "qui": "Ineu",
+    "text": "La Llàgrima de Sant Llorenç fa la claror dels estels. Diuen que la boira no gosa tocar-la... Provem-ho.",
+    "fitxer": "js/dialegs.js",
+    "linia": 1481
+   },
+   {
+    "id": 661,
+    "qui": "Ineu",
+    "text": "Ha funcionat! La llum de la Llàgrima ha desfet la boira: el camí del Dolmen és lliure.",
+    "fitxer": "js/dialegs.js",
+    "linia": 1483
+   },
+   {
     "id": 388,
     "qui": "Ineu",
     "text": "Aquí no s'hi veu res. Em caldria una llum que la boira no pogués apagar...",
     "fitxer": "js/dialegs.js",
-    "linia": 1483
+    "linia": 1486
    }
   ],
   "dialegs::dolmenBaix": [
@@ -2913,7 +2927,7 @@
     "qui": "Ineu",
     "text": "(Runna és dalt de la llosa. Potser s'hi pot pujar per darrere.)",
     "fitxer": "js/dialegs.js",
-    "linia": 1507
+    "linia": 1510
    }
   ],
   "dialegs::placaDolmen": [
@@ -2922,49 +2936,49 @@
     "qui": "Placa",
     "text": "Només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina.",
     "fitxer": "js/dialegs.js",
-    "linia": 1518
+    "linia": 1521
    },
    {
     "id": 391,
     "qui": "Ineu",
     "text": "(El medalló [text calculat pel joc: nom]. [text calculat pel joc: text])",
     "fitxer": "js/dialegs.js",
-    "linia": 1521
+    "linia": 1524
    },
    {
     "id": 392,
     "qui": "Ineu",
     "text": "(Encara em falta un medalló per omplir la placa.)",
     "fitxer": "js/dialegs.js",
-    "linia": 1528
+    "linia": 1531
    },
    {
     "id": 393,
     "qui": "Ineu",
     "text": "(Encara em falta [text calculat pel joc: aviat] medallons per omplir la placa.)",
     "fitxer": "js/dialegs.js",
-    "linia": 1528
+    "linia": 1531
    },
    {
     "id": 394,
     "qui": "Ineu",
     "text": "(Els tres medallons continuen al seu lloc, a la placa. L'espasa ja és meva: Runna.)",
     "fitxer": "js/dialegs.js",
-    "linia": 1530
+    "linia": 1533
    },
    {
     "id": 395,
     "qui": "Ineu",
     "text": "(El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alcoví deu saber-ho: ho tindrà escrit a la Crònica.)",
     "fitxer": "js/dialegs.js",
-    "linia": 1536
+    "linia": 1539
    },
    {
     "id": 396,
     "qui": "Ineu",
     "text": "(Tres cercles buits: un per a cada medalló. Em falta: ,  […].)",
     "fitxer": "js/dialegs.js",
-    "linia": 1537
+    "linia": 1540
    }
   ],
   "zones/bosc_pi::piOest": [
@@ -3344,7 +3358,7 @@
     "qui": "Germà Francí",
     "text": "La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui.",
     "fitxer": "js/dialegs.js",
-    "linia": 1737
+    "linia": 1740
    }
   ],
   "zones/nord::germaFranci": [
@@ -3511,28 +3525,28 @@
     "qui": "Ineu",
     "text": "Un llibre gros, obert sobre la taula, amb lletra de monjo. Diu a dalt de la pàgina: «Del càstig del germà bodeguer».",
     "fitxer": "js/dialegs.js",
-    "linia": 1586
+    "linia": 1589
    },
    {
     "id": 472,
     "qui": "Llibre",
     "text": "«El germà bodeguer es bevia el vi de la sagristia, bóta rere bóta, i després jurava que s'havia evaporat.»",
     "fitxer": "js/dialegs.js",
-    "linia": 1587
+    "linia": 1590
    },
    {
     "id": 473,
     "qui": "Llibre",
     "text": "«Quan ho vam descobrir, el Prior no el va foragitar: el va fer petrificar i el va posar a vigilar la cripta fins que el vi es torni vinagre. A la cripta mai no es torna vinagre.»",
     "fitxer": "js/dialegs.js",
-    "linia": 1588
+    "linia": 1591
    },
    {
     "id": 474,
     "qui": "Llibre",
     "text": "«Per això li diuen l'Home del Raïm. Dorm de cara a la paret, com un nen castigat, i només es desperta si algú el fa girar i el mira a la cara.»",
     "fitxer": "js/dialegs.js",
-    "linia": 1589
+    "linia": 1592
    }
   ],
   "dialegs::cofreManeta": [
@@ -3541,21 +3555,21 @@
     "qui": "Ineu",
     "text": "Un cofre de joguines d'infant. No és meu: millor no remenar-lo.",
     "fitxer": "js/dialegs.js",
-    "linia": 1663
+    "linia": 1666
    },
    {
     "id": 475,
     "qui": "Ineu",
     "text": "No és meva... Millor preguntar a en Jorgi abans d'agafar-la.",
     "fitxer": "js/dialegs.js",
-    "linia": 1667
+    "linia": 1670
    },
    {
     "id": 476,
     "qui": "",
     "text": "★ Has obtingut la MANETA D'ENGRANATGE.",
     "fitxer": "js/dialegs.js",
-    "linia": 1673
+    "linia": 1676
    }
   ],
   "zones/casa::golfesRellotge": [
@@ -3591,7 +3605,7 @@
     "qui": "Ineu",
     "text": "Fa generacions que ningú no obre això. Haurà d'haver-hi una altra manera d'entrar-hi.",
     "fitxer": "js/dialegs.js",
-    "linia": 1570
+    "linia": 1573
    }
   ],
   "dialegs::reixaDins": [
@@ -3600,7 +3614,7 @@
     "qui": "Ineu",
     "text": "(La barra fora: ara puc entrar i sortir per la plaça.)",
     "fitxer": "js/dialegs.js",
-    "linia": 1578
+    "linia": 1581
    }
   ],
   "dialegs::homeRaim": [
@@ -3892,7 +3906,7 @@
     "qui": "Isílder",
     "text": "Les flors de lluna ja s'obren de dia. Diria que és el riure dels nens, que les enganya.",
     "fitxer": "js/dialegs.js",
-    "linia": 1734
+    "linia": 1737
    }
   ],
   "dialegs::llosaJardi": [
@@ -4088,7 +4102,7 @@
     "qui": "Dolora",
     "text": "El Sardi ja torna a robar galetes del rebost. Senyal que està bé del tot.",
     "fitxer": "js/dialegs.js",
-    "linia": 1731
+    "linia": 1734
    }
   ],
   "dialegs::pilaria": [
@@ -4132,7 +4146,7 @@
     "qui": "Pilària",
     "text": "Hem posat una espelma per tu a cada cambra, Ineu. I una altra per si de cas.",
     "fitxer": "js/dialegs.js",
-    "linia": 1732
+    "linia": 1735
    }
   ],
   "dialegs::carmelia": [
@@ -4183,7 +4197,7 @@
     "qui": "Carmèlia",
     "text": "Les tres te'n devem una. I nosaltres sempre paguem els deutes... amb pastissos.",
     "fitxer": "js/dialegs.js",
-    "linia": 1733
+    "linia": 1736
    }
   ],
   "dialegs::cofreMonges": [
@@ -4896,15 +4910,6 @@
     "linia": 547
    }
   ],
-  "zones/oest::ineuDiu·esvairBoiraDolmen": [
-   {
-    "id": 653,
-    "qui": "Ineu",
-    "text": "El camí del Dolmen és lliure.",
-    "fitxer": "js/zones/oest.js",
-    "linia": 752
-   }
-  ],
   "zones/placa::ineuDiu·enMelodia": [
    {
     "id": 654,
@@ -4949,5 +4954,11 @@
    }
   ]
  },
- "retirats": {}
+ "retirats": {
+  "653": {
+   "conversa": "zones/oest::ineuDiu·esvairBoiraDolmen",
+   "qui": "Ineu",
+   "text": "El camí del Dolmen és lliure."
+  }
+ }
 }
