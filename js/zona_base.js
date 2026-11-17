@@ -2126,7 +2126,7 @@ class ZonaBase extends Phaser.Scene {
         this.sincroFantasma();
         this.transparenciaCopes();
         // Dins d'una porta de façana (entre el llindar i el fons) l'Ineu va a mig pas: entrar-hi es veu i no s'esvaeix d'un salt
-        const I = this.ineu, qp = I && I.active && I.body ? (this.forcsPorta || []).find(q => I.x > q.x0 && I.x < q.x1 && I.y > q.t && I.y < q.b) : null;
+        const I = this.ineu, qp = I && I.active && I.body ? (this.forcsPorta || []).find(q => I.x > q.x0 && I.x < q.x1 && I.y > q.t && I.y < q.b && !(q.bloq && q.bloq())) : null;
         if (qp) {
             // S'hi veu entrar: es dibuixa per sobre de la fosca de l'interior (però sota el marc) i es va enfosquint a mesura que s'endinsa, en lloc de desaparèixer de cop
             if (!this.canviant) I.body.velocity.scale(0.5);
@@ -2165,7 +2165,7 @@ class ZonaBase extends Phaser.Scene {
         if (!f || !i || !f.active || !i.active) return;             // (en tancar l'escena ja no hi són)
         if (f.texture.key !== i.texture.key || f.frame.name !== i.frame.name) f.setTexture(i.texture.key, i.frame.name);
         f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(this.assegut ? 0 : i.alpha * 0.38);   // assegut: el banc el tapa de debò
-        if ((this.forcsPorta || []).some(q => i.x > q.x0 && i.x < q.x1 && i.y > q.t && i.y < q.b)) f.setAlpha(0);          // dins d'una porta: el marc el tapa de debò
+        if ((this.forcsPorta || []).some(q => i.x > q.x0 && i.x < q.x1 && i.y > q.t && i.y < q.b && !(q.bloq && q.bloq()))) f.setAlpha(0);          // dins d'una porta: el marc el tapa de debò
         // Els personatges no es transparenten com els arbres: si un que és davant de l'Ineu el tapa, la silueta s'amaga on hi ha el personatge
         const ib = i.getBounds();
         // Un objecte opac (orgue, altar, bancs...) davant l'Ineu amaga del tot la silueta, encara que també hi hagi un personatge davant (només es pot emmascarar amb un objecte)
@@ -2433,7 +2433,7 @@ class ZonaBase extends Phaser.Scene {
             pts.push({ x: x0 + ample, y: alt });
             return pts;
         };
-        (this.forcsPorta = this.forcsPorta || []).push({ x0: DX - DW / 2 - 4, x1: DX + DW / 2 + 4, t: DT, b: Math.min(Math.max(DB + 2, Z), DB + 12), z: Z });          // el marc i l'interior tapen l'Ineu: la silueta translúcida s'hi amaga
+        (this.forcsPorta = this.forcsPorta || []).push({ x0: DX - DW / 2 - 4, x1: DX + DW / 2 + 4, t: DT, b: Math.min(Math.max(DB + 2, Z), DB + 12), z: Z, bloq: o.bloq });          // el marc i l'interior tapen l'Ineu: la silueta translúcida s'hi amaga
         // Els brancals (els costats del marc) són del gràfic de la façana, que és al fons: es tornen a dibuixar per sobre de l'Ineu perquè, dins la porta, el marc el tapi de debò
         const imF = o.marc || o.retall;
         if (imF && !o.senseMarc) {          // (senseMarc: porta més estreta que l'Ineu, com la de la caseta: els brancals i el dintell tornats a dibuixar el tallarien en trossos)
