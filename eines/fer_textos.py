@@ -8,7 +8,7 @@ Els números són ESTABLES: es guarden a docs/textos_ids.json (número -> fitxer
 número encara que se'n corregeixi el text o se'n moguin d'altres; les frases noves reben el número següent i les esborrades queden retirades al registre.
 Cal tornar-lo a executar (i desar docs/TEXTS.md i docs/textos_ids.json) cada cop que canvia qualsevol text del joc.
 
-Extreu del codi amb el mateix extractor que docs/GUIO_COMPLET.md (eines/fer_guio_complet.py): js/dialegs.js, js/zones/*.js, js/musica.js, js/zona_base.js, js/estels.js, js/ui.js,
+Extreu del codi amb el mateix extractor que art/arxiu/docs/GUIO_COMPLET.md (eines/fer_guio_complet.py): js/dialegs.js, js/zones/*.js, js/musica.js, js/zona_base.js, js/estels.js, js/ui.js,
 més els pensaments curts de l'Ineu (ineuDiu), el pròleg (js/main.js) i els crèdits no (només text de joc).
 """
 import os, re, sys, glob, json, collections, difflib

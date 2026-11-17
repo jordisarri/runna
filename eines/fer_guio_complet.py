@@ -1,5 +1,5 @@
 """
-Genera docs/GUIO_COMPLET.md: la ruta pas a pas (escrita a mà a eines/guio_ruta.md) + un annex amb TOTS els diàlegs del joc,
+Genera art/arxiu/docs/GUIO_COMPLET.md (arxivat; el document que es manté és docs/TEXTS.md): la ruta pas a pas (escrita a mà a eines/guio_ruta.md) + un annex amb TOTS els diàlegs del joc,
 extrets del codi (js/dialegs.js i les escenes de js/zones/), amb les condicions de cada variant:
     python eines/fer_guio_complet.py
 Només text (cap imatge). Si canvia un diàleg al codi, torna a executar-lo.
@@ -8,7 +8,7 @@ import os, re, glob, collections
 
 ARREL = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 RUTA = os.path.join(ARREL, 'eines', 'guio_ruta.md')
-SORTIDA = os.path.join(ARREL, 'docs', 'GUIO_COMPLET.md')
+SORTIDA = os.path.join(ARREL, 'art', 'arxiu', 'docs', 'GUIO_COMPLET.md')          # (arxivat: el document que es manté és docs/TEXTS.md)
 
 LIT = re.compile(r'"((?:[^"\\]|\\.)*)"|\'((?:[^\'\\]|\\.)*)\'|`((?:[^`\\]|\\.)*)`', re.S)
 

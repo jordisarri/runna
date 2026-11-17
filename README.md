@@ -11,7 +11,7 @@ Joc web fet amb Phaser 3. Per provar-lo en local: `python serveix.py` i obre `ht
 | `index.html`, `manifest.json`, `sw.js`, `js/` | El joc (i l'aplicació instal·lable: `manifest.json`, el service worker `sw.js` i les icones d'`assets/pwa/`, que fa `eines/fer_icones.py`). `js/zones/` té les escenes de cada lloc, agrupades per fitxer (`esglesia.js`, `monestir.js`, `bassadoria.js`, `casa_gran.js`, `cami.js`, `ermita.js`, `era.js`, `jardi.js`, `taverna.js`, `cabana.js`, `nord.js`, `oest.js`…); `js/assets.js` és el catàleg d'imatges. |
 | `assets/` | El que carrega el joc (WebP, M4A, MP4), ja comprimit. |
 | `art/` | Els originals (JPG/PNG/MP3/MP4) a resolució completa. **No es carrega al joc.** |
-| `docs/` | Guió (`GUIO.md`), prompts dels gràfics i instruccions de la música. |
+| `docs/` | Guió (`GUIO.md`), tots els textos numerats (`TEXTS.md`), prompts dels gràfics i instruccions de la música. Els documents antics són a `art/arxiu/docs/`. |
 | `eines/` | Scripts per passar `art/` a `assets/` (vegeu més avall). |
 
 `art/` fa de mirall d'`assets/`: cada imatge és a la mateixa subcarpeta als dos llocs (`art/natura/arbre.png` → `assets/natura/arbre.webp`). Els gràfics que el joc ja no fa servir passen a `art/<carpeta>/no_usats/`: a `assets/` només hi ha el que el joc carrega.

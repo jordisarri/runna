@@ -24,7 +24,7 @@ per desvetllar l'espasa Runna i tancar la boira que roba el riure dels nens.
 - Combat: bastó, branca del Til·ler i Runna; 8 enemics i 3 bosses amb la seva arma.
 - Ping-pong contra en Jusef (un sol partit obligatori).
 - Cants/tarota (Cant del Miracle) i música per zones.
-- Art definitiu i música de les zones principals (el que encara falta: vegeu `docs/PLA_FINAL.md`).
+- Art definitiu i música de les zones principals (el que encara falta: vegeu `art/arxiu/docs/PLA_FINAL.md`, antic).
 
 ## Out of scope — not building this
 - Monedes, botiga, compra o venda.
