@@ -27,10 +27,11 @@ FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 
 # a mà (espasa_up_v4): només els tres primers fotogrames, els únics on surt l'espasa (0: baixa al costat, 1 i 2: alçada), i la tornada per completar els 5 del joc.
 # El bastó 'up' també fa servir la 1a generació (basto_v1): a la 2a el bastó només surt als dos primers fotogrames i a la resta s'amaga darrere el cap. A basto_v1 surt a tots els 16.
 # Els fotogrames 3, 2, 4, 5 donen un gir continu de la punta del bastó, de dreta a esquerra (angle de la vara: ~-10°, 15°, 37°, 67°), amb el bastó visible a tots; l'últim es repeteix (el 0 té la punta tallada per la vora de l'original).
-ORIGEN_EXC = {('tiller', 'up'): 'tiller_v1', ('espasa', 'up'): 'espasa_up_v4', ('basto', 'up'): 'basto_v1'}
-FOT_EXC = {('tiller', 'up'): [2, 8, 4, 5, 3], ('espasa', 'up'): [0, 1, 2, 1, 0], ('basto', 'up'): [4, 3, 2, 1, 0]}
+ORIGEN_EXC = {('tiller', 'up'): 'tiller_up_v5', ('espasa', 'up'): 'espasa_up_v4', ('basto', 'up'): 'basto_v1'}
+FOT_EXC = {('tiller', 'up'): [0, 1, 2, 3, 4], ('espasa', 'up'): [0, 1, 2, 1, 0], ('basto', 'up'): [4, 3, 2, 1, 0]}
+# La branca 'up' fa servir ara el full de proves v5 (tiller_up_v5, 5 fotogrames dibuixats, tots triats a mà amb proves/atac_up/; l'alçada del cos es mesura amb el 5).
 # Fotogrames amb què es mesura l'alçada del cos (per defecte 12-15, on l'arma és a les mans). A basto_v1 'up' la gafa del bastó sobresurt per sobre del cap en aquests: es mesura amb el 3 i el 4.
-ESCALA_FOTS = {('basto', 'up'): (3, 4)}
+ESCALA_FOTS = {('basto', 'up'): (3, 4), ('tiller', 'up'): (4,)}
 CENTRAL = set()        # direccions on l'escala del cos es mesura només amb les columnes del cap (quan l'arma sobresurt per sobre del cap)
 # Cel·la més gran per a fulls concrets (js/assets.js, ATAC_CEL_EXC, ha de dir el mateix): el bastó 'up' es tallava a la vora i s'ha de poder retocar a mà (l'Ineu va al mig, amb molt d'espai)
 CEL_EXC = {('basto', 'up'): 480}
@@ -58,7 +59,7 @@ def peus(im, fots):
     b = []
     for i in fots:
         ys, _ = np.where(np.array(fotograma(im, i).split()[3]) > 24)
-        b.append(ys.max())
+        if len(ys): b.append(ys.max())             # (els fotogrames buits dels fulls curts, com tiller_up_v5, no compten)
     return float(np.median(b))
 
 def centre_peus(fot, ref=None, antic=False):
@@ -88,7 +89,8 @@ def escala(im, arma, central=False, fots=(12, 13, 14, 15)):
         if central:
             cx = np.where(al[-60:].any(axis=0))[0]; c = (cx.min() + cx.max()) // 2        # centre dels peus
             al = al[:, max(0, c - 40):c + 40]
-        ys, _ = np.where(al); tops.append(ys.min())
+        ys, _ = np.where(al)
+        if len(ys): tops.append(ys.min())
     return COS / (peus(im, range(16)) - float(np.median(tops)))
 
 def main():
