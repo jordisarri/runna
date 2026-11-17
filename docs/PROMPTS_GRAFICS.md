@@ -22,6 +22,8 @@
 
 - [x] `masia_cirosa` i `masia_georgi` (les dues masies: `art/edificis/masia_cirosa.png` i `masia_georgi.png`; la porta és a `portaMasia`, amb les fraccions de cada una)
 
+- [x] `caseta_joc` (la caseta de joc del jardí d'en Jorgi: `art/edificis/caseta_joc.png`; convertida amb `python eines/treure_fons.py art/edificis/caseta_joc.png assets/edificis/caseta_joc.webp 260 --forats 300`, que també buida els forats blancs entre pilars i graons)
+
 - [x] `cabana` (la cabana de la Joaneta: `art/edificis/cabana.png`)
 
 - [x] `font_sj` i `font_sj_neta` (la Font del Bisbe, adormida i neta: `art/objectes/font_sj.png` i `font_sj_neta.png`)
@@ -286,16 +288,6 @@ Tots els gràfics de dalt són fets i connectats (els seus prompts s'han esborra
 ---
 
 ## Pendent
-
-### `caseta_joc.png` → `assets/edificis/caseta_joc.webp` (amplada 270) *(La **caseta de joc** del jardí d'en Jorgi (`ZonaGeorgi`, `js/zones/nord.js`; gràfic `caseta_joc`): una caseta de fusta elevada sobre pilars, amb una escala al mig que puja fins a una terrassa i la porta a dalt. Ara el joc la dibuixa amb codi (`dibuixarCasetaJoc`). **Alçat frontal pla, SENSE PERSPECTIVA** (la primera versió generada tenia l'escala vista en perspectiva, més estreta a baix, i no serveix: el joc és d'alçat frontal, com els edificis). Fons blanc pur (el trec jo), sense persones, plantes ni barrils. **Composició fixa:** la porta al MIG, amb la part de dalt a ~0,30 de l'alçada de la imatge, el sòl de la terrassa a ~0,60 i uns 0,18 de l'amplada d'ample; l'**escala centrada**, de la mateixa amplada de dalt a baix (uns 0,28 de l'amplada), baixa des de la terrassa fins a la base de la imatge; sota la terrassa, només pilars i creuetes. Proporció: unes 1 : 1,3.)*
-
-```
-A cute wooden playhouse for children on stilts, drawn as a FLAT ORTHOGRAPHIC FRONT ELEVATION like a 2D sticker: absolutely no perspective, no foreshortening, no vanishing point, no three-quarter view, everything drawn on a single flat vertical plane facing the viewer. Chunky hand-painted 2D game style with thick bevelled planks and logs, bold clean dark-brown outline (#3b2412), warm saturated colours, two-tone cel shading with soft highlights on the upper-left edges, like a charming chibi fantasy adventure game. A small log cabin with horizontal round logs and pale plank corners sits on a wooden platform (the terrace), which is drawn only as a thin horizontal wooden slab seen edge-on from the front (we do not see its top surface). The slab rests on four sturdy vertical wooden stilts with simple diagonal cross-bracing, so the space under the terrace is empty and you can see through it. In the exact centre, a straight wooden staircase seen purely from the front: it is a perfectly vertical rectangle of constant width from top to bottom (about 28% of the image width), made of evenly spaced flat horizontal wooden steps stacked one above the other, all of the same width, with two perfectly straight vertical side rails (stringers) at its edges; it reaches from the terrace slab down to the bottom edge of the image. The terrace has a straight horizontal wooden railing in front, decorated with a string of small colourful flags and ribbons (red, blue, yellow, green), with a gap in the railing where the staircase arrives. In the exact centre of the cabin, directly above the top of the staircase, a small plank door with a little heart carved on it and a round brass knob; to its left a small square window with a blue-and-white curtain, to its right a round porthole window with a cross frame. A steep pyramidal roof of brown wooden shingles seen from the front as a simple triangle with a small red pennant flag on top, and a tiny blue bucket hanging on a rope at one side. The door is centred, about 18% of the image width, with its top at about 30% of the image height and its bottom (the terrace floor) at about 60% of the image height. No plants, no barrels, no people, no text, no watermark, no ground, no shadow. Isolated on a pure white background (#FFFFFF). Image proportions about 1:1.3 (taller than wide).
-```
-
-(Si el generador insisteix en la perspectiva de l'escala, es pot fer la caseta amb un **replà i una escala de mà recta** (una escala de fusta vertical amb travessers) en lloc d'escala de graons; digueu-m'ho. Quan tingueu la imatge, passeu-me-la: la connecto, ajusto la porta de la terrassa i la sortida de dalt de l'escala.)
-
----
 
 ### `senyor_budo.png` → `assets/personatges/senyor_budo.webp` (amplada 78) *(El **senyor Buidor**, el vell assegut a la taula de l'esquerra de tot de la Taverna (`ZonaTavernaInt`, `js/zones/taverna.js`), assaborint l'anís escarxat que li ha preparat l'Eve. NPC només de conversa (`DIALEGS.senyorBudo`). Ara el joc el dibuixa amb un placeholder. Imatge **de cos sencer, ASSEGUT en un tamboret, de cara a la càmera**, fons blanc pur (el trec jo); la taula del joc li tapa les cames, així que cal que tingui les cames i el tamboret dibuixats igualment.)*
 

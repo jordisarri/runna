@@ -63,7 +63,7 @@ const CATALEG = [
     { key: 'pi_tres_cants', file: 'assets/natura/pi_tres_cants.webp', amplada: 340, provisional: (c, w) => lienc(c, w, Math.round(w * 1.53), (ctx, W, H) => pintarPiTresCants(ctx, W, H)) },   // el Pi dels Tres Cants (js/zones/bosc_pi.js); prompt a docs/PROMPTS_GRAFICS.md
     { key: 'pi',           file: 'assets/natura/pi.webp',           amplada: 230, provisional: (c, w) => dibuixarPi(c, w) },
     { key: 'pi_pinyer',    file: 'assets/natura/pi_pinyer.webp',    amplada: 470, provisional: (c, w) => dibuixarPiPinyer(c, w) },
-    { key: 'caseta_joc',   file: null,   amplada: 270, provisional: (c, w) => dibuixarCasetaJoc(c, w) },
+    { key: 'caseta_joc',   file: 'assets/edificis/caseta_joc.webp',   amplada: 260, provisional: (c, w) => dibuixarCasetaJoc(c, w) },          // la caseta de joc del jardí d'en Jorgi (art/edificis/caseta_joc.png)
     { key: 'xiprer',       file: 'assets/natura/xiprer.webp',       amplada: 80,  provisional: (c, w) => dibuixarXiprer(c, w) },
     { key: 'retaule',      file: 'assets/edificis/retaule_tancat.webp', amplada: 800, provisional: (c, w) => dibuixarRetauleBarroc(c, w) },
 

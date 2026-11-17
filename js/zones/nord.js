@@ -1138,10 +1138,10 @@ class ZonaGeorgi extends ZonaBase {
         // La caseta, aixecada sobre pilars de fusta: s'hi puja per l'escala del mig (la maneta és a dins)
         // L'escala es puja caminant (paret a banda i banda i el dintell dalt, a l'altura de la terrassa); l'entrada a l'interior és dalt,
         // davant de la porta, no al peu de l'escala: allà és on hi ha la llum de la sortida
-        const caseta = this.edifici('caseta_joc', 860, 500, 250, 92, null, null, { alt: 140 });
-        this.sortida(860 - 44, 370, 88, 26, 'ZonaCasetaJoc', 'porta');
-        const kT = 500 - caseta.displayHeight;      // la porta és a la terrassa, damunt dels pilars: s'obre quan l'Ineu s'acosta a l'escala
-        this.portaAnimada({ x: 860, top: kT + caseta.displayHeight * 0.27 + 10, bottom: kT + caseta.displayHeight * 0.6 - 5, ample: caseta.displayWidth * 0.18, fons: 480, unic: true, retall: caseta });
+        // (el gràfic generat: l'escala fa 67 px d'ample i la llosa de la terrassa és a 0,615 de l'alçada; la porta, a 0,376-0,580)
+        const caseta = this.edifici('caseta_joc', 860, 500, 260, 67, null, null, { alt: 137 });
+        this.sortida(860 - 33, 500 - 137 + 6, 66, 26, 'ZonaCasetaJoc', 'porta');
+        this.portaMasia(caseta, 860, 500, false, { cx: 0.5016, w: 0.147, top: 0.376, bottom: 0.580 });          // la porta és a la terrassa, damunt dels pilars: s'obre quan l'Ineu s'acosta a l'escala
 
         // Detalls de jardí
         this.barril(1010, 470, 40, 16);
@@ -1159,14 +1159,14 @@ class ZonaGeorgi extends ZonaBase {
     postFisica() {
         super.postFisica();
         const I = this.ineu;
-        this.enEscala = !!I && I.x > 814 && I.x < 906 && I.y < 504 && I.y > 360;
+        this.enEscala = !!I && I.x > 824 && I.x < 896 && I.y < 504 && I.y > 353;
         if (this.enEscala) { I.setDepth(485); if (this.ombraIneu) this.ombraIneu.setDepth(484.5); }
     }
 
     // A l'escala de la caseta l'Ineu es veu per sobre de la façana (si no, el gràfic el tapa mentre puja)
     actualitzar() {
         const I = this.ineu;
-        this.enEscala = !!I && I.x > 814 && I.x < 906 && I.y < 504 && I.y > 360;
+        this.enEscala = !!I && I.x > 824 && I.x < 896 && I.y < 504 && I.y > 353;
         if (this.enEscala) { I.setDepth(485); if (this.ombraIneu) this.ombraIneu.setDepth(484.5); }          // per sobre dels batents oberts de la porta (depth 480-482), que si no el tapen
     }
     sincroFantasma() {
