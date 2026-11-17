@@ -1532,7 +1532,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[483] Ineu:** L'estàtua té el cap completament girat d'esquena, mirant la paret. A la base del pedestal hi ha un volant de ferro amb engranatges, però li falta la maneta per poder-lo fer girar.
 
-**[662] Ineu:** Una maneta així és una peça d'eina... En Jorgi de la Caseta, al camí de l'oest del Gran Til·ler, en deu saber alguna cosa: ell sempre està entre eines.
+**[662] Ineu:** En Jorgi de la Caseta segur que me'n pot deixar una, és un expert en tot tipus d'eines.
 
 ### raimDesperta  <sub>(js/zones/casa.js:30)</sub>
 
