@@ -2426,7 +2426,7 @@ class ZonaBase extends Phaser.Scene {
             pts.push({ x: x0 + ample, y: alt });
             return pts;
         };
-        (this.forcsPorta = this.forcsPorta || []).push({ x0: DX - DW / 2 - 4, x1: DX + DW / 2 + 4, t: DT, b: DB + 2, z: Z });          // el marc i l'interior tapen l'Ineu: la silueta translúcida s'hi amaga
+        (this.forcsPorta = this.forcsPorta || []).push({ x0: DX - DW / 2 - 4, x1: DX + DW / 2 + 4, t: DT, b: Math.max(DB + 2, Z), z: Z });          // el marc i l'interior tapen l'Ineu: la silueta translúcida s'hi amaga
         // Els brancals (els costats del marc) són del gràfic de la façana, que és al fons: es tornen a dibuixar per sobre de l'Ineu perquè, dins la porta, el marc el tapi de debò
         const imF = o.marc || o.retall;
         if (imF) {
