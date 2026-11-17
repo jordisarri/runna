@@ -275,7 +275,7 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 Tots els gràfics de dalt són fets i connectats (els seus prompts s'han esborrat d'aquest document).
 
-**Pendents:** `font_sj` i `font_sj_neta` (la Font del Bisbe, adormida i neta; ara es dibuixa amb codi), `cercle_runes` (el cercle de runes del terra de l'Escalinata; ara es dibuixa amb codi).
+**Pendents:** `roca` (refer-la en estil més dibuixat), `font_sj` i `font_sj_neta` (la Font del Bisbe, adormida i neta; ara es dibuixa amb codi), `cercle_runes` (el cercle de runes del terra de l'Escalinata; ara es dibuixa amb codi).
 
 ---
 
@@ -296,6 +296,16 @@ The exact same fountain, same composition, same framing, same rock, same stone t
 ```
 
 (Referència d'estil: `art/objectes/creu.png` per al contorn i la pedra. Quan hi hagi els PNG, digueu-m'ho: els converteixo a `assets/objectes/` i poso `file:` a `font_sj` i `font_sj_neta` de `js/assets.js`; també comprovo que la pica no tapi el pas i ajusto la caixa de col·lisió i la posició de les espurnes de l'aigua neta.)
+
+---
+
+### `roca.png` → `assets/natura/roca.webp` (amplada 90; **substitueix** l'actual, que és massa realista) *(La **roca** que el joc posa per tot arreu (bosc, cabana de la Joaneta, camins...): una pedra grossa i baixa per decorar i fer de límit. L'actual (`art/natura/roca.png`) és pintura realista amb textura molt fina i no encaixa amb la resta de gràfics, que són d'estil dibuixat/chibi amb contorn gruixut. Cal que sigui **simple, rodona i «amable»**. Genereu-ne 3 variants (mateix prompt, canviant la forma) i us dic quina fa de `roca` i quines passen a `roca2`/`roca3` perquè no es repeteixin.)*
+
+```
+A single large rounded boulder for a charming 2D game, seen from a high three-quarter view, in a STYLISED hand-drawn cartoon / chibi style: chunky simple shapes, only 3 big flat planes of colour (a light top, a mid-grey side, a darker shadow side), simple two-tone cel shading, NO realistic texture, NO photographic detail, NO noise or grain. A bold clean dark-brown outline of even thickness all around. A few short simple crack lines and one or two clean stylised tufts of green moss on the top, plus maybe one tiny pebble next to it. Soft warm grey-blue stone colours with a slightly warm highlight on the upper left, rich saturated colours, friendly and readable even when very small. Slightly flattened, wider than tall (about 1.3:1), base flat at the bottom of the image. Isolated on a pure white background (#FFFFFF), no ground, no cast shadow, no text.
+```
+
+(Variants: «a taller, more angular boulder with a flat top», «two boulders of different size leaning together», «a small flat stone with a few pebbles around it». Referència d'estil: `art/objectes/creu.png` i `art/natura/arbre.png` per al contorn i la simplicitat. Si també voleu les **pedres petites** (les que surten a clarianes i camins) o la «pedra» de terra, digueu-ho i en fem el prompt.)
 
 ---
 

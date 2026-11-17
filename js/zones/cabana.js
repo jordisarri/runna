@@ -54,6 +54,53 @@ function teranyina(escena, x, y, sx, sy, sx2, sy2) {
     return g;
 }
 
+// Ocells decoratius que no es deixen atrapar: quan l'Ineu s'hi acosta, fugen donant saltets (i es tornen a posar una mica més enllà) o volant
+// (s'esvaeixen cap amunt i tornen al seu lloc quan l'Ineu ja és lluny). punts: [[x, y], ...]; lim: {x0, x1, y0, y1} on poden saltar.
+function ocellsFugitius(escena, punts, escala, lim) {
+    const radi = 150;
+    const ocells = punts.map(([x, y], i) => {
+        const img = escena.posar('ocell', x, y, { fonsY: y, escala });
+        return { img, hx: x, hy: y, bx: x, by: y, estat: 'quiet', i, fins: 0, base: img.depth };
+    });
+    const f = () => {
+        const I = escena.ineu, ara = escena.time.now;
+        if (!I) return;
+        ocells.forEach(o => {
+            const im = o.img, d = Phaser.Math.Distance.Between(I.x, I.y, im.x, im.y);
+            if (o.estat === 'quiet') {
+                im.y = o.by - 2.5 * (1 + Math.sin(ara / (260 + o.i * 40) + o.i));                         // piula quiet: un balanceig petit
+                if (d < radi && ara > o.fins) {
+                    let ax = im.x - I.x, ay = im.y - I.y; const l = Math.hypot(ax, ay) || 1; ax /= l; ay /= l;
+                    const tx = Phaser.Math.Clamp(im.x + ax * 130, lim.x0, lim.x1), ty = Phaser.Math.Clamp(im.y + ay * 70, lim.y0, lim.y1);
+                    const dirX = Math.sign(tx - im.x) || (ax >= 0 ? 1 : -1);
+                    const arraconat = Math.hypot(tx - im.x, ty - im.y) < 50;                                 // no té lloc per saltar: vola
+                    im.setFlipX(dirX < 0);
+                    if (!arraconat && Math.random() < 0.65) {                                                 // saltets
+                        o.estat = 'salta'; const N = 5, dur = 120;
+                        escena.tweens.add({ targets: im, x: tx, duration: N * dur * 2, ease: 'Linear' });
+                        escena.tweens.add({ targets: im, y: { from: im.y, to: ty }, duration: N * dur * 2, ease: 'Linear' });
+                        escena.tweens.add({ targets: im, scaleY: im.scaleY * 1.18, yoyo: true, repeat: N - 1, duration: dur, ease: 'Quad.easeOut' });
+                        escena.time.delayedCall(N * dur * 2 + 20, () => { o.bx = im.x; o.by = im.y; o.estat = 'quiet'; o.fins = escena.time.now + 700; im.setDepth(im.y); });
+                        const h = { v: 0 };
+                        escena.tweens.add({ targets: h, v: 1, duration: N * dur * 2, onUpdate: () => im.setDepth(im.y) });
+                    } else {                                                                                  // vola
+                        o.estat = 'vola'; im.setDepth(9400);
+                        escena.tweens.add({ targets: im, x: im.x + dirX * 380, y: im.y - 240, alpha: 0, duration: 1100, ease: 'Quad.easeIn', onComplete: () => { im.setVisible(false); o.estat = 'fora'; o.fins = escena.time.now + 6000; } });
+                        escena.tweens.add({ targets: im, scaleY: im.scaleY * 0.5, yoyo: true, repeat: 5, duration: 90 });
+                    }
+                }
+            } else if (o.estat === 'fora' && ara > o.fins && Phaser.Math.Distance.Between(I.x, I.y, o.hx, o.hy) > 330) {
+                o.estat = 'quiet'; o.bx = o.hx; o.by = o.hy; o.fins = ara + 400;
+                im.setPosition(o.hx, o.hy).setDepth(o.base).setVisible(true).setAlpha(0).setFlipX(false);
+                escena.tweens.add({ targets: im, alpha: 1, duration: 800 });
+            }
+        });
+    };
+    escena.events.on('update', f);
+    escena.events.once('shutdown', () => escena.events.off('update', f));
+    return ocells;
+}
+
 class ZonaCabana extends ZonaBase {
     constructor() {
         super('ZonaCabana', {
@@ -131,14 +178,11 @@ class ZonaCabana extends ZonaBase {
 
         this.brillo(AX - 15, AY - 126, 54, 86, { arc: true });          // el forat del tronc brilla sempre
 
-        // Ocells als arbres (la Joaneta hi parla)
-        [[560, 280], [1180, 360], [380, 430], [1100, 760], [650, 860]].forEach(([x, y], i) => {
-            const o = this.posar('ocell', x, y, { fonsY: y });
-            this.tweens.add({ targets: o, y: y - 6, yoyo: true, repeat: -1, duration: 600 + i * 90, delay: i * 130 });
-        });
+        // Ocells: no es deixen atrapar, fugen saltant o volant quan l'Ineu s'hi acosta
+        ocellsFugitius(this, [[560, 280], [1180, 360], [380, 430], [1100, 760], [650, 860]], 1, { x0: 60, x1: 1340, y0: 60, y1: 950 });
 
         // Roba estesa, sacs, calaixos... tot abandonat
-        [[1120, 520], [480, 560], [700, 780]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 20 }));
+        [[1120, 520], [480, 560], [700, 780]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 20, col: { w: 40, h: 14 } }));
         [[1100, 880], [400, 780]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 60, h: 24 } }));
 
         this.arbres([[120, 150], [300, 90], [520, 130], [820, 90], [1050, 130], [1280, 160], [90, 520],
@@ -199,7 +243,6 @@ class ZonaCabanaInt extends ZonaBase {
         pres.fillStyle(0x3a220e, 1).fillRect(558, 182, 6, 12).fillRect(758, 182, 6, 12);
         [[570, 2], [606, 1], [642, 0], [678, 2], [714, 1], [750, 0]].forEach(([x, t], i) => this.posar('gerro_' + t, x, 174, { fonsY: -960, escala: 0.82 + (i % 2) * 0.08 }));
         [[320, 38], [370, 46], [420, 36], [470, 44]].forEach(([x, y], i) => manatHerbes(this, x, y, 34 + (i % 2) * 8, [[0x5f9a3a, 0x7a5ab0, 0x4c8430], [0xc86a3a, 0x8a9a3a, 0xd8b84a]][i % 2]));
-        this.posar('pergami_paret', 770, 118, { fonsY: -900, escala: 0.62 });                   // una nota clavada a la paret
         teranyina(this, 100, 92, 100, 140, 150, 92);
         teranyina(this, 800, 92, 800, 138, 752, 92);
 
@@ -225,19 +268,16 @@ class ZonaCabanaInt extends ZonaBase {
         [[0, 0, 0x8a3a3a], [1, 1, 0xc8a050], [2, 0, 0x4a6aa0], [0, 1, 0xc8a050], [1, 0, 0x8a3a3a], [2, 1, 0x6a8a4a]].forEach(([c, f, col]) => llit.fillStyle(col, 0.9).fillRect(178 + c * 36, 130 + f * 36, 34, 34));
         llit.fillStyle(0xf2ecdc, 1).fillRoundedRect(144, 128, 32, 70, 8).lineStyle(2, 0x6a5a3a, 1).strokeRoundedRect(144, 128, 32, 70, 8);       // coixí
         this.colisio(215, 165, 170, 90);
-        [[620, 160], [700, 150]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y }));
+        [[620, 160], [700, 150]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y, col: { w: 40, h: 14 } }));
         this.posar('taula', 680, 330, { col: { w: 160, h: 30 } });
         this.posar('tamboret', 600, 355, { col: { w: 40, h: 16 } });
         this.barril(130, 560, 50, 22);
         this.barril(185, 545, 50, 22);
         this.sacs(262, 572, 'un');
         this.posar('llenya', 730, 610, { col: { w: 110, h: 26 } });
-        [[300, 520], [350, 580], [250, 470]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
-        [[160, 330], [700, 250]].forEach(([x, y]) => this.posar('roca', x, y, { escala: 0.6, col: { w: 40, h: 16 } }));
-        [[250, 170], [430, 145], [565, 155], [660, 185], [710, 245]].forEach(([x, y], i) => {
-            const o = this.posar('ocell', x, y, { fonsY: y, escala: 1.5 });
-            this.tweens.add({ targets: o, y: y - 5, yoyo: true, repeat: -1, duration: 700 + i * 150 });
-        });
+        [[300, 520], [350, 580], [250, 470]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10, col: { w: 40, h: 14 } }));
+        this.posar('roca', 160, 330, { escala: 0.6, col: { w: 40, h: 16 } });          // (la pedra de darrere la taula, a 700, 250, s'ha tret: quedava tapada a mitges)
+        ocellsFugitius(this, [[250, 170], [430, 145], [565, 155], [660, 185], [710, 245]], 1.5, { x0: 120, x1: 780, y0: 130, y1: 650 });
         const gat = this.add.image(660, 560, 'gat_cove').setOrigin(0.5, 1).setScale(0.65 / RES).setDepth(560);
         this.colisio(gat.x, gat.y - 10, 48, 16);
         [[650, 300], [715, 305]].forEach(([x, y], i) => {
