@@ -1316,20 +1316,53 @@ function dibuixarEspelma(c, w) {
     });
 }
 
-// Taula llarga del sopar: tovallola, plats, pa, vi i flors
+// Taula llarga del sopar: tauler de fusta amb tovallola de lli brodada que penja pel davant (vora d'ondes i cenefa), cavallets a sota, sis llocs amb plat i cullera (l'escudella
+// fumeja), pa, gerres, copes, tres llocs buits al davant (per a les espelmes) i flors de lluna en un vas al mig.
 function dibuixarTaulaSopar(c, w) {
-    lienc(c, w, w * 0.32, (ctx, W, H) => {
-        ombraTerra(ctx, W / 2, H - 4, W * 0.48, 8);
-        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN;
-        ctx.fillStyle = '#5b3a20'; ctx.fillRect(10, H * 0.55, 10, H * 0.4); ctx.fillRect(W - 20, H * 0.55, 10, H * 0.4);
-        ctx.fillStyle = '#f4eadb'; ctx.fillRect(0, H * 0.2, W, H * 0.45); ctx.strokeRect(0, H * 0.2, W, H * 0.45);
-        // plats, pa i copes
-        for (let x = 30; x < W - 20; x += 46) {
-            ctx.fillStyle = '#d8d0c0'; ctx.beginPath(); ctx.ellipse(x, H * 0.42, 14, 7, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-            ctx.fillStyle = ['#c07a30', '#8a2a2a', '#4f9a44'][(x / 46 | 0) % 3];
-            ctx.beginPath(); ctx.arc(x, H * 0.38, 4, 0, Math.PI * 2); ctx.fill();
-        }
-        ctx.fillStyle = '#e06a8a'; for (let x = 70; x < W - 40; x += 120) { ctx.beginPath(); ctx.arc(x, H * 0.28, 5, 0, Math.PI * 2); ctx.fill(); }
+    lienc(c, w, w * 0.42, (ctx, W, H) => {
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        ombraTerra(ctx, W / 2, H - 5, W * 0.5, 9);
+        const L = 3, fus = '#6a4426', fusC = '#8a5e36', fusF = '#4a2c16';
+        // cavallets de fusta (dues potes en X a cada banda) sota la tovallola
+        [W * 0.09, W * 0.91].forEach(x => {
+            ctx.strokeStyle = CONTORN; ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(x - 14, H * 0.64); ctx.lineTo(x + 14, H - 8); ctx.moveTo(x + 14, H * 0.64); ctx.lineTo(x - 14, H - 8); ctx.stroke();
+            ctx.strokeStyle = fus; ctx.lineWidth = 7; ctx.stroke();
+            ctx.strokeStyle = fusC; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 12, H * 0.66); ctx.lineTo(x + 12, H - 12); ctx.stroke();
+        });
+        // tauler de dalt (en perspectiva suau): cara de dalt i cantell de davant
+        const yT = H * 0.14, yB = H * 0.44;
+        ctx.fillStyle = fusC; ctx.strokeStyle = CONTORN; ctx.lineWidth = L;
+        ctx.beginPath(); ctx.moveTo(W * 0.02, yB); ctx.lineTo(W * 0.06, yT); ctx.lineTo(W * 0.94, yT); ctx.lineTo(W * 0.98, yB); ctx.closePath(); ctx.fill(); ctx.stroke();
+        // tovallola: cobreix el tauler i penja pel davant fins a H*0.7, amb vora d'ondes
+        const tov = ctx.createLinearGradient(0, yT, 0, H * 0.72); tov.addColorStop(0, '#fbf3df'); tov.addColorStop(0.55, '#f2e8cf'); tov.addColorStop(1, '#ddd0ae');
+        ctx.fillStyle = tov; ctx.beginPath(); ctx.moveTo(W * 0.04, yB - 2); ctx.lineTo(W * 0.07, yT + 3); ctx.lineTo(W * 0.93, yT + 3); ctx.lineTo(W * 0.96, yB - 2);
+        ctx.lineTo(W * 0.97, H * 0.62);
+        const n = 16; for (let k = n; k >= 0; k--) { const x = W * (0.03 + 0.94 * k / n); ctx.quadraticCurveTo(x + W * 0.94 / n / 2, H * 0.74 + (k % 2 ? 4 : -2), x, H * 0.64 + (k % 2 ? 6 : 0)); }
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.save(); ctx.clip();
+        ctx.strokeStyle = 'rgba(120,90,50,0.22)'; ctx.lineWidth = 1.2; for (let k = 1; k < 14; k++) { const x = W * k / 14; ctx.beginPath(); ctx.moveTo(x, yB); ctx.quadraticCurveTo(x + 4, H * 0.55, x - 2, H * 0.72); ctx.stroke(); }      // plecs del lli
+        ctx.fillStyle = '#b8402e'; ctx.fillRect(0, H * 0.5, W, 5); ctx.fillStyle = '#2f5fa8'; ctx.fillRect(0, H * 0.5 + 9, W, 3);                                                                                // cenefa vermella i blava
+        ctx.fillStyle = '#b8402e'; for (let x = 10; x < W; x += 22) { ctx.beginPath(); ctx.moveTo(x, H * 0.57); ctx.lineTo(x + 6, H * 0.62); ctx.lineTo(x - 6, H * 0.62); ctx.closePath(); ctx.fill(); }
+        ctx.restore();
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(W * 0.04, yB - 2); ctx.lineTo(W * 0.96, yB - 2); ctx.stroke();
+        // sis llocs al darrere (plat, escudella amb fum, cullera i copa) i tres de buits al davant (només plat i copa)
+        const plat = (x, y, ple) => {
+            ctx.fillStyle = 'rgba(80,60,30,0.18)'; ctx.beginPath(); ctx.ellipse(x + 2, y + 3, 17, 6, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#e8dcc0'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(x, y, 17, 6.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#cdbf9c'; ctx.beginPath(); ctx.ellipse(x, y, 11, 3.8, 0, 0, Math.PI * 2); ctx.fill();
+            if (ple) { ctx.fillStyle = '#c9772e'; ctx.beginPath(); ctx.ellipse(x, y - 0.5, 10, 3.2, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#8fb04a'; ctx.beginPath(); ctx.arc(x - 3, y - 1, 1.6, 0, 7); ctx.arc(x + 3, y, 1.4, 0, 7); ctx.fill(); ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x - 4, y - 5); ctx.quadraticCurveTo(x - 9, y - 12, x - 3, y - 17); ctx.moveTo(x + 4, y - 5); ctx.quadraticCurveTo(x + 9, y - 12, x + 3, y - 17); ctx.stroke(); }
+        };
+        const copa = (x, y) => { ctx.fillStyle = '#c8a050'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(x - 4, y - 9); ctx.lineTo(x + 4, y - 9); ctx.lineTo(x + 3, y); ctx.lineTo(x - 3, y); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#8a2a3a'; ctx.fillRect(x - 3, y - 8, 6, 3); };
+        [0.16, 0.30, 0.44, 0.58, 0.72, 0.86].forEach((f, i) => { const x = W * f, y = H * 0.25; plat(x, y, true); copa(x + 22, y - 1); ctx.strokeStyle = '#8a8a90'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 24, y + 1); ctx.lineTo(x - 19, y - 4); ctx.stroke(); });
+        // pa, gerres i el vas de flors de lluna al mig
+        [[0.23, 0.28], [0.66, 0.28], [0.50, 0.31]].forEach(([f, g], i) => { const x = W * f, y = H * g; ctx.fillStyle = '#c98a3e'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(x, y, 13, 7, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.strokeStyle = 'rgba(80,40,10,0.5)'; ctx.lineWidth = 1.3; for (let k = -1; k <= 1; k++) { ctx.beginPath(); ctx.moveTo(x + k * 6 - 2, y - 4); ctx.lineTo(x + k * 6 + 2, y + 3); ctx.stroke(); } });
+        [0.38, 0.62].forEach(f => { const x = W * f, y = H * 0.29; ctx.fillStyle = '#7a5a3a'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 6, y - 14); ctx.quadraticCurveTo(x - 10, y - 3, x - 5, y + 2); ctx.lineTo(x + 5, y + 2); ctx.quadraticCurveTo(x + 10, y - 3, x + 6, y - 14); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#9a7a52'; ctx.fillRect(x - 5, y - 16, 10, 3); });
+        const vx = W * 0.5, vy = H * 0.215;
+        ctx.fillStyle = '#4f8c3a'; ctx.strokeStyle = '#1e3a14'; ctx.lineWidth = 1.4; for (let k = -3; k <= 3; k++) { ctx.beginPath(); ctx.moveTo(vx, vy - 4); ctx.quadraticCurveTo(vx + k * 5, vy - 16, vx + k * 7, vy - 24 - Math.abs(k)); ctx.stroke(); }
+        [[-14, -26], [-6, -32], [3, -30], [12, -25], [-2, -22]].forEach(([dx, dy], i) => { ctx.fillStyle = i % 2 ? '#e8f0ff' : '#cfe0ff'; ctx.strokeStyle = '#4a5a8a'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(vx + dx, vy + dy, 5.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#f4d860'; ctx.beginPath(); ctx.arc(vx + dx, vy + dy, 1.7, 0, Math.PI * 2); ctx.fill(); });
+        ctx.fillStyle = '#7ab0c8'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(vx - 6, vy - 6); ctx.lineTo(vx - 4, vy + 6); ctx.lineTo(vx + 4, vy + 6); ctx.lineTo(vx + 6, vy - 6); ctx.closePath(); ctx.fill(); ctx.stroke();      // el vas
+        // tres llocs buits al davant, per a les espelmes (x del joc: 0,30 / 0,50 / 0,70 de l'amplada)
+        [0.30, 0.50, 0.70].forEach(f => { plat(W * f, H * 0.37, false); copa(W * f + 22, H * 0.36); });
     });
 }
 
