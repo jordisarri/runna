@@ -554,7 +554,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[166]** ★ Has obtingut el PA DELS PASTORS.
 
-### construir  <sub>(js/zones/cirosa.js:135)</sub>
+### construir  <sub>(js/zones/cirosa.js:132)</sub>
 
 *Si: sap el Cant de Vespres (el de les pedres)*
 
@@ -1990,7 +1990,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[642] Ineu:** L'aigua ja és clara.
 
-### pensament a enMelodia  <sub>(js/zones/cirosa.js:232)</sub>
+### pensament a enMelodia  <sub>(js/zones/cirosa.js:229)</sub>
 
 *Si: sap el Cant de Vespres (el de les pedres)*
 

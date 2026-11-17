@@ -1001,71 +1001,81 @@ function dibuixarOvella(c, w, boira) {
     });
 }
 
-// Roques de dibuix simple i «amable» (estil del joc: formes grosses, tres plans de color, contorn gruixut), sense textura realista. variant 0: pedra rodona i baixa;
-// 1: pedra alta i arrodonida, una mica inclinada; 2: dues pedres recolzades l'una a l'altra amb una pedreta. Una mica de molsa a dalt i quatre esquerdes.
+// Roques (direcció d'art): sorra/ocre càlids com la roca de la Font del Bisbe, tres plans de color amb vores internes ondulades, llum des de dalt a l'esquerra,
+// contorn marró fosc (més gruixut a la base), molsa verd groc SENSE contorn, dues o tres esquerdes, una sola ombra suau i quatre pinzellades d'herba fina darrere del peu.
+// variant 0: rodona i baixa; 1: alta i arrodonida; 2: una de gran, una de mitjana i una pedreta.
 function dibuixarRoca(c, w, variant = 0) {
-    const RATIO = [0.72, 0.86, 0.74][variant] || 0.72;
+    const RATIO = [0.66, 0.92, 0.70][variant] || 0.66;
     lienc(c, w, w * RATIO, (ctx, W, H) => {
         ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-        let sd = 17 + variant * 31; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
-        ombraTerra(ctx, W / 2, H - 6, W * 0.5, 10); ombraTerra(ctx, W / 2, H - 7, W * 0.4, 6);          // ombra de contacte doble: la pedra «pesa» sobre el terra
-        // Silueta suavitzada (o amb cantons) a partir de punts en fraccions de la caixa de la pedra
-        const traca = (pts, x0, y0, ww, hh, suau) => {
-            const P = pts.map(([x, y]) => [x0 + x * ww, y0 + y * hh]);
-            ctx.beginPath();
-            if (suau) {
-                const m = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], n = P.length, i0 = m(P[n - 1], P[0]);
-                ctx.moveTo(i0[0], i0[1]);
-                for (let i = 0; i < n; i++) { const q = m(P[i], P[(i + 1) % n]); ctx.quadraticCurveTo(P[i][0], P[i][1], q[0], q[1]); }
-            } else { P.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); }
+        const u = W / 100;
+        let sd = 23 + variant * 41; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        const LLUM = '#e3c98f', MIG = '#c9a468', OMB = '#9a7648', PROF = '#6e5233', CONT = '#3b2412', MOLSA = '#7f9a2c', MOLSA_L = '#a6b83a';
+        // Una sola ombra de contacte, suau, una mica a la dreta
+        ctx.fillStyle = 'rgba(30,40,10,0.28)'; ctx.beginPath(); ctx.ellipse(W * 0.52, H - 0.06 * W, W * 0.5, W * 0.07, 0, 0, Math.PI * 2); ctx.fill();
+        // Quatre pinzellades d'herba fina, DARRERE de la pedra (només en sobresurt la punta, a banda i banda del peu)
+        [[0.06, 0.8], [0.2, 0.55], [0.8, 0.6], [0.94, 0.85]].forEach(([fx, e], k) => {
+            for (let j = 0; j < 3; j++) {
+                const bx = W * fx + (j - 1) * 3.2 * u, top = H * (0.1 + 0.07 * (3 - j) * e) , dx = (j - 1) * 3.4 * u;
+                ctx.strokeStyle = ['#3f7a32', '#4f8c3a'][(k + j) % 2]; ctx.lineWidth = 1.5 * u;
+                ctx.beginPath(); ctx.moveTo(bx, H - 3 * u); ctx.quadraticCurveTo(bx + dx * 0.4, H - top * 0.6 - 3 * u, bx + dx, H - top - 3 * u); ctx.stroke();
+            }
+        });
+        // Silueta suavitzada (cantons arrodonits) a partir de punts en fraccions de la caixa
+        const irreg = new Map();          // la silueta s'irregularitza (lòbuls i trencs, com la roca de la font) una sola vegada per pedra, amb punts intermedis desplaçats
+        const traca = (pts0, x0, y0, ww, hh) => {
+            let pts = irreg.get(pts0);
+            if (!pts) {
+                pts = [];
+                pts0.forEach((p0, i) => { const q = pts0[(i + 1) % pts0.length]; pts.push(p0); if (i < pts0.length - 1 || true) { const mx = (p0[0] + q[0]) / 2, my = (p0[1] + q[1]) / 2, cx = pts0.reduce((a, b) => a + b[0], 0) / pts0.length, cy = pts0.reduce((a, b) => a + b[1], 0) / pts0.length, vx = mx - cx, vy = my - cy, l = Math.hypot(vx, vy) || 1, k = (r() - 0.35) * 0.075; if (my < 0.9) pts.push([mx + vx / l * k, my + vy / l * k]); else pts.push([mx, my]); } });
+                irreg.set(pts0, pts);
+            }
+            const P = pts.map(([x, y]) => [x0 + x * ww, y0 + y * hh]), n = P.length, m = (a, b2) => [(a[0] + b2[0]) / 2, (a[1] + b2[1]) / 2];
+            const i0 = m(P[n - 1], P[0]);
+            ctx.beginPath(); ctx.moveTo(i0[0], i0[1]);
+            for (let i = 0; i < n; i++) { const q = m(P[i], P[(i + 1) % n]); ctx.quadraticCurveTo(P[i][0], P[i][1], q[0], q[1]); }
             ctx.closePath();
         };
-        const pedra = (pts, x0, y0, ww, hh, suau, tons) => {
-            const [clar, mig, fosc] = tons;
-            traca(pts, x0, y0, ww, hh, suau); ctx.fillStyle = mig; ctx.fill();
-            ctx.save(); traca(pts, x0, y0, ww, hh, suau); ctx.clip();
-            ctx.fillStyle = clar; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + ww, y0); ctx.lineTo(x0 + ww, y0 + hh * 0.34); ctx.lineTo(x0 + ww * 0.45, y0 + hh * 0.5); ctx.lineTo(x0, y0 + hh * 0.42); ctx.closePath(); ctx.fill();            // el pla de dalt, il·luminat
-            ctx.fillStyle = fosc; ctx.beginPath(); ctx.moveTo(x0 + ww * 0.66, y0 + hh * 0.42); ctx.lineTo(x0 + ww, y0 + hh * 0.3); ctx.lineTo(x0 + ww, y0 + hh); ctx.lineTo(x0 + ww * 0.78, y0 + hh); ctx.closePath(); ctx.fill();        // el pla de la dreta, a l'ombra
-            ctx.fillStyle = 'rgba(255,248,225,0.42)'; ctx.beginPath(); ctx.ellipse(x0 + ww * 0.34, y0 + hh * 0.22, ww * 0.16, hh * 0.07, -0.4, 0, Math.PI * 2); ctx.fill();                                                             // llum a dalt a l'esquerra
-            ctx.strokeStyle = 'rgba(48,40,30,0.55)'; ctx.lineWidth = 2;                                                                                                                                                      // esquerdes curtes
-            for (let k = 0; k < 3; k++) { const cx = x0 + ww * (0.2 + r() * 0.55), cy = y0 + hh * (0.45 + r() * 0.3); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + ww * 0.05, cy + hh * 0.07); ctx.lineTo(cx - ww * 0.01, cy + hh * 0.15); ctx.stroke(); }
-            for (let k = 0; k < 26; k++) { ctx.fillStyle = r() < 0.5 ? 'rgba(40,32,22,0.16)' : 'rgba(255,245,220,0.14)'; ctx.beginPath(); ctx.ellipse(x0 + ww * r(), y0 + hh * (0.15 + r() * 0.8), 1.5 + r() * 3, 1 + r() * 2, r() * 3, 0, Math.PI * 2); ctx.fill(); }          // gra de la pedra
-            const volum = ctx.createRadialGradient(x0 + ww * 0.36, y0 + hh * 0.25, ww * 0.05, x0 + ww * 0.5, y0 + hh * 0.55, ww * 0.75);          // volum: arrodoneix la pedra (clara a dalt a l'esquerra, fosca al peu de la dreta)
-            volum.addColorStop(0, 'rgba(255,248,225,0.16)'); volum.addColorStop(0.6, 'rgba(0,0,0,0)'); volum.addColorStop(1, 'rgba(25,20,12,0.30)');
-            ctx.fillStyle = volum; ctx.fillRect(x0, y0, ww, hh);
-            const peu = ctx.createLinearGradient(0, y0 + hh * 0.72, 0, y0 + hh); peu.addColorStop(0, 'rgba(30,40,18,0)'); peu.addColorStop(1, 'rgba(30,40,18,0.42)');          // el peu, ombrejat i amb un to verd (rebot de l'herba)
-            ctx.fillStyle = peu; ctx.fillRect(x0, y0 + hh * 0.72, ww, hh * 0.28);
+        // Una pedra: silueta + plans amb vores internes ondulades + esquerdes + molsa, i el contorn al final
+        const pedra = (pts, x0, y0, ww, hh, o = {}) => {
+            const X = f => x0 + f * ww, Y = f => y0 + f * hh;
+            traca(pts, x0, y0, ww, hh); ctx.fillStyle = MIG; ctx.fill();
+            ctx.save(); traca(pts, x0, y0, ww, hh); ctx.clip();
+            // pla d'ombra: la banda de la dreta, amb la vora ondulada
+            const fe = o.ombra || 0.62;
+            ctx.fillStyle = OMB; ctx.beginPath(); ctx.moveTo(X(fe + 0.1), Y(0)); ctx.bezierCurveTo(X(fe - 0.06), Y(0.3), X(fe + 0.1), Y(0.6), X(fe - 0.04), Y(1.02)); ctx.lineTo(X(1.05), Y(1.02)); ctx.lineTo(X(1.05), Y(0)); ctx.closePath(); ctx.fill();
+            // pla de llum: dalt i a l'esquerra, fins a ~0,45 d'alçada
+            ctx.fillStyle = LLUM; ctx.beginPath(); ctx.moveTo(X(-0.05), Y(-0.05)); ctx.lineTo(X(fe + 0.12), Y(-0.05)); ctx.bezierCurveTo(X(fe), Y(0.16), X(fe - 0.2), Y(0.3), X(fe - 0.34), Y(0.42));
+            ctx.bezierCurveTo(X(0.2), Y(0.5), X(0.1), Y(0.46), X(-0.05), Y(0.52)); ctx.closePath(); ctx.fill();
+            // banda profunda sota la vora de baix
+            ctx.fillStyle = PROF; ctx.beginPath(); ctx.moveTo(X(-0.05), Y(0.94)); ctx.bezierCurveTo(X(0.3), Y(0.9), X(0.6), Y(0.97), X(1.05), Y(0.92)); ctx.lineTo(X(1.05), Y(1.05)); ctx.lineTo(X(-0.05), Y(1.05)); ctx.closePath(); ctx.fill();
+            // esquerdes (traç de tres segments)
+            ctx.strokeStyle = PROF; ctx.lineWidth = 1.2 * u;
+            for (let k = 0; k < (o.esquerdes || 2); k++) { const cx = X(0.25 + r() * 0.45), cy = Y(0.5 + r() * 0.2); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + ww * 0.04, cy + hh * 0.08); ctx.lineTo(cx - ww * 0.015, cy + hh * 0.15); ctx.lineTo(cx + ww * 0.025, cy + hh * 0.22); ctx.stroke(); }
+            // molsa: taques irregulars sense contorn (base i una llum)
+            (o.molsa || []).forEach(([mx, my, mw, mh]) => {
+                ctx.fillStyle = MOLSA; ctx.beginPath(); ctx.moveTo(X(mx), Y(my + mh * 0.5));
+                for (let k = 0; k <= 6; k++) { const t = k / 6; ctx.quadraticCurveTo(X(mx + mw * (t - 0.08)), Y(my + (k % 2 ? -0.1 * hh / hh : 0.22) * mh), X(mx + mw * t), Y(my + mh * (0.3 + 0.35 * Math.sin(t * 5 + mx * 9)))); }
+                ctx.lineTo(X(mx + mw), Y(my + mh * 0.6)); ctx.quadraticCurveTo(X(mx + mw * 0.5), Y(my + mh * 1.1), X(mx), Y(my + mh * 0.5)); ctx.closePath(); ctx.fill();
+                ctx.fillStyle = MOLSA_L; ctx.beginPath(); ctx.ellipse(X(mx + mw * 0.4), Y(my + mh * 0.3), ww * mw * 0.22, hh * mh * 0.2, -0.2, 0, Math.PI * 2); ctx.fill();
+            });
             ctx.restore();
-            traca(pts, x0, y0, ww, hh, suau); ctx.lineWidth = 3.5; ctx.strokeStyle = CONTORN; ctx.stroke();
+            // contorn exterior: 2,2u i, a la base, 3,2u
+            traca(pts, x0, y0, ww, hh); ctx.strokeStyle = CONT; ctx.lineWidth = 2.2 * u; ctx.stroke();
+            ctx.save(); ctx.beginPath(); ctx.rect(x0 - 10, y0 + hh * 0.8, ww + 20, hh * 0.3); ctx.clip(); traca(pts, x0, y0, ww, hh); ctx.lineWidth = 3.2 * u; ctx.stroke(); ctx.restore();
         };
-        const molsa = (cx, cy, rx) => {
-            ctx.fillStyle = '#6fa646'; ctx.strokeStyle = '#26361e'; ctx.lineWidth = 2;
-            [[-0.5, 0.15, 0.55], [0, -0.1, 0.7], [0.5, 0.12, 0.5]].forEach(([dx, dy, e]) => { ctx.beginPath(); ctx.ellipse(cx + dx * rx, cy + dy * rx * 0.5, rx * 0.45 * e + 2, rx * 0.26 * e + 2, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
-            ctx.fillStyle = '#93c860'; ctx.beginPath(); ctx.ellipse(cx - rx * 0.05, cy - rx * 0.12, rx * 0.2, rx * 0.09, 0, 0, Math.PI * 2); ctx.fill();
-        };
-        const TONS = ['#c4bda6', '#9a9480', '#6f6a58'];
         if (variant === 0) {
-            pedra([[0.04, 0.96], [0.02, 0.68], [0.13, 0.36], [0.36, 0.12], [0.63, 0.08], [0.86, 0.26], [0.98, 0.62], [0.97, 0.96]], 0, 0, W, H - 4, true, TONS);
-            molsa(W * 0.42, H * 0.18, W * 0.17); molsa(W * 0.8, H * 0.32, W * 0.09);
+            pedra([[0.03, 0.92], [0.01, 0.66], [0.10, 0.38], [0.30, 0.16], [0.55, 0.10], [0.78, 0.20], [0.94, 0.44], [0.99, 0.72], [0.95, 0.93]], 0, 0, W, H - 3 * u,
+                { ombra: 0.64, esquerdes: 2, molsa: [[0.28, 0.08, 0.38, 0.17], [0.8, 0.26, 0.15, 0.08]] });
         } else if (variant === 1) {
-            pedra([[0.1, 0.97], [0.04, 0.66], [0.1, 0.34], [0.28, 0.1], [0.56, 0.04], [0.8, 0.14], [0.94, 0.42], [0.95, 0.74], [0.9, 0.97]], 0, 0, W, H - 4, true, ['#c8c1aa', '#9f9985', '#726d5b']);
-            molsa(W * 0.5, H * 0.1, W * 0.2);
+            pedra([[0.12, 0.95], [0.05, 0.62], [0.12, 0.30], [0.30, 0.08], [0.55, 0.03], [0.78, 0.14], [0.92, 0.40], [0.95, 0.70], [0.88, 0.95]], 0, 0, W, H - 3 * u,
+                { ombra: 0.65, esquerdes: 3, molsa: [[0.22, 0.04, 0.5, 0.14], [0.08, 0.14, 0.1, 0.22]] });
         } else {
-            pedra([[0.02, 0.97], [0.0, 0.62], [0.1, 0.3], [0.3, 0.1], [0.55, 0.1], [0.72, 0.4], [0.74, 0.97]], 0, 0, W * 0.75, H - 4, true, TONS);
-            pedra([[0.0, 0.97], [0.05, 0.4], [0.35, 0.08], [0.75, 0.2], [1, 0.97]], W * 0.62, H * 0.46, W * 0.36, H * 0.5, true, ['#d6d1c0', '#b3ae9d', '#837f6f']);
-            molsa(W * 0.34, H * 0.16, W * 0.15);
-            ctx.fillStyle = '#9a9480'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(W * 0.1, H - 10, W * 0.07, H * 0.045, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();      // una pedreta
+            pedra([[0.0, 0.95], [0.08, 0.5], [0.3, 0.2], [0.62, 0.2], [0.94, 0.5], [1.0, 0.95]], W * 0.58, H * 0.4, W * 0.4, H * 0.55 - 3 * u, { ombra: 0.55, esquerdes: 1 });          // la mitjana, darrere
+            pedra([[0.03, 0.92], [0.01, 0.66], [0.10, 0.38], [0.30, 0.14], [0.55, 0.09], [0.78, 0.2], [0.94, 0.46], [0.99, 0.74], [0.95, 0.94]], 0, 0, W * 0.68, H - 3 * u,
+                { ombra: 0.64, esquerdes: 2, molsa: [[0.3, 0.08, 0.4, 0.16]] });                                                                                                                                       // la gran, davant
+            pedra([[0.0, 0.9], [0.1, 0.4], [0.5, 0.08], [0.92, 0.35], [1.0, 0.9]], W * 0.02, H * 0.83, W * 0.12, H * 0.12, { ombra: 0.55, esquerdes: 0 });                                                                // la pedreta
         }
-        // Mates d'herba al peu, per davant de la vora de baix: la pedra queda assentada a l'escenari i no sembla enganxada
-        const mata = (cx, by, alt) => {
-            for (let k = -2; k <= 2; k++) {
-                const ax = cx + k * 4, hh = alt * (0.7 + r() * 0.5) * (1 - Math.abs(k) * 0.12), dx = k * 5 + (r() - 0.5) * 5;
-                ctx.beginPath(); ctx.moveTo(ax - 2, by); ctx.quadraticCurveTo(ax + dx * 0.4, by - hh * 0.6, ax + dx, by - hh); ctx.quadraticCurveTo(ax + dx * 0.4 + 2, by - hh * 0.5, ax + 2, by); ctx.closePath();
-                ctx.fillStyle = ['#4f8c3a', '#5f9a44', '#3f7a32'][(k + 2) % 3]; ctx.fill(); ctx.lineWidth = 1.2; ctx.strokeStyle = '#1e3a14'; ctx.stroke();
-            }
-        };
-        const nm = Math.max(5, Math.round(W / 24));
-        for (let k = 0; k < nm; k++) mata(W * (0.04 + 0.92 * (k + r() * 0.6) / nm), H - 5 - r() * 3, H * (0.08 + r() * 0.06));
     });
 }
 

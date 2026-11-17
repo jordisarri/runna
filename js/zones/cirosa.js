@@ -23,9 +23,6 @@ Object.assign(DIALEGS, {
         { qui: 'Ineu', text: "(Qui sap on són ara. Potser els pastors les guarden.)" }
     ] }),
 
-    masiaLlar: E => ({ pagines: [
-        { fer: (z, fet) => { z.ajupir('ineu', null, 900); z.llum(z.ineu.x, z.ineu.y - 60, 0xffb060, fet); } },
-    ], enAcabar: () => game.scene.getScene('ZonaMasiaCirosa').descansar() })
 });
 
 // ---------------- CAMÍ DE LA CIROSA ----------------
@@ -340,7 +337,7 @@ class ZonaCirosa extends ZonaBase {
 }
 
 // ---------------- EL MAS DE LA CIROSA (interior) ----------------
-// La casa dels pastors desterrats: pobra però neta. Hi ha la llar (hi reposes), un llibre de comptes amb la història de la gàbia i la biga buida de les esquelles.
+// La casa dels pastors desterrats: pobra però neta. Hi ha la llar, un llibre de comptes amb la història de la gàbia i la biga buida de les esquelles.
 class ZonaMasiaCirosa extends ZonaBase {
     constructor() {
         super('ZonaMasiaCirosa', {
@@ -385,7 +382,6 @@ class ZonaMasiaCirosa extends ZonaBase {
         this.foc = this.posar('foc', 450, 126, { fonsY: 126, col: { w: 60, h: 16 } });
         this.tweens.add({ targets: this.foc, scaleY: this.foc.scaleY * 1.08, yoyo: true, repeat: -1, duration: 260 });
         this.add.circle(450, 150, 140, 0xff9a30, 0.12).setDepth(300);
-        this.interactiu(450, 170, RADI_OBJECTE, DIALEGS.masiaLlar, { altura: 100 });
         this.posar('olla', 560, 170, { col: { w: 56, h: 22 } });
 
         // Biga amb ganxos buits (per les esquelles) a la paret de la dreta
@@ -424,11 +420,5 @@ class ZonaMasiaCirosa extends ZonaBase {
 
         this.add.rectangle(450, 350, 700, 700, 0xffd38a, 0.06).setDepth(80000);
         this.sortida(410, 672, 80, 22, 'ZonaCirosa', 'masia');
-    }
-
-    // Repòs vora la llar: es cura i es desa la partida
-    descansar() {
-        Estat.dades.vida = Estat.dades.corsMax * 2;
-        this.ui().actualitzarHUD(); this.guardarPosicio(); Estat.desar();
     }
 }

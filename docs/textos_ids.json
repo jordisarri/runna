@@ -1245,14 +1245,14 @@
     "qui": "Ineu",
     "text": "(El foc crepita i els pastors callen. Un cant antic vora les brases, el de Vespres, els podria obrir el cor...)",
     "fitxer": "js/zones/cirosa.js",
-    "linia": 135
+    "linia": 132
    },
    {
     "id": 168,
     "qui": "Ineu",
     "text": "(El foc crepita i els pastors callen. Una música antiga vora les brases els podria obrir el cor... Potser la Pianista, al Santuari, en coneix alguna.)",
     "fitxer": "js/zones/cirosa.js",
-    "linia": 135
+    "linia": 132
    }
   ],
   "zones/cirosa::masiaTaula": [
@@ -4811,28 +4811,28 @@
     "qui": "Ineu",
     "text": "Els pastors m'escolten, però això no els recorda casa. Un cant antic, de les esquelles: el de Vespres.",
     "fitxer": "js/zones/cirosa.js",
-    "linia": 232
+    "linia": 229
    },
    {
     "id": 644,
     "qui": "Ineu",
     "text": "Els pastors m'escolten, però això no els recorda casa. Hauria de ser un cant més antic: potser la Pianista en coneix algun.",
     "fitxer": "js/zones/cirosa.js",
-    "linia": 232
+    "linia": 229
    },
    {
     "id": 645,
     "qui": "Ineu",
     "text": "Els pastors m'escolten en silenci... Encara no és el moment: primer cal parlar amb el Til·ler.",
     "fitxer": "js/zones/cirosa.js",
-    "linia": 234
+    "linia": 231
    },
    {
     "id": 646,
     "qui": "Ineu",
     "text": "Els pastors somriuen: aquí ja ha tornat la música.",
     "fitxer": "js/zones/cirosa.js",
-    "linia": 237
+    "linia": 234
    }
   ],
   "zones/esglesia::ineuDiu·obrirPortaRellotge": [
