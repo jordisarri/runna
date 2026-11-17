@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 607: l'Empara Fraternal passa a l'ordre de la història just després dels Guants (abans de la roda, la maneta i les Gírgoles); la Porta de Ferro no s'obre sense ella; el Germà Francí i l'Iscu n'avisen. El Pi dels Tres Cants segueix opcional (pendent de decidir quin paper obligatori té).*
+
 *Revisió 606: l'Eve diu que el Sardi ve cada tarda a berenar però ahir no va venir; a l'epíleg, la seva resposta a l'Iscu queda en «Avui, sí. Demà et guardo la pila sencera.»*
 
 *Revisió 605: Taverna: el senyor Buidor perd el Sardi i els ocells (només anís i la Càren que dorm); el Sardi torna a l'Eve, que ara lliga amb l'Iscu: des que la Càren dorm, els gots els frego jo i l'Iscu s'esfuma (l'Iscu ara té por de l'Eve, no de la mare, perquè «et fa fregar gots fins a Nadal»); a l'epíleg, davant l'Iscu («Avui no frego ni un got!») l'Eve li respon que demà li guarda la pila sencera.*
@@ -269,7 +271,7 @@ Amb els segles, la **tomba dels monjos primers**, al Cementiri, s'ha esquerdat q
 | Clau del sagrari | Ermita de la Desaparició (taules de pedra, un cop llegides les dotze columnes) | Obre el sagrari del retaule (fragment 2). |
 | Escudella de la Meus, Flors d'Isílder, Pa dels pastors | Meus (cel·les), Isílder (jardí), pastors de la Cirosa (el pasten ells quan una música vora el foc els convenç d'anar al sopar) | Les tres coses que es posen a taula al sopar del Til·ler; es consumeixen al ritual. |
 | Cors extra | Pastor de Boira vençut, les tres sacerdotesses, el cofre de la Cambra del Santuari i el cofre de la cabana de l'Iscu | +1 cor màxim cadascun (màxim del joc: 7). |
-| **Empara fraternal** | Cofre del vestíbul de l'Hostatgeria, un cop alliberades les tres sacerdotesses | **Obligatòria**: dissipa la boira verinosa de la galeria entre el passadís de tortura i la Sala de la Gàbia. Sense ella, l'Ineu tus i es fa enrere. |
+| **Empara fraternal** | Cofre del vestíbul de l'Hostatgeria, un cop alliberades les tres sacerdotesses | **Obligatòria**: dissipa la boira verinosa de la galeria entre el passadís de tortura i la Sala de la Gàbia. **Es guanya abans de baixar a les Gírgoles**: just després dels Guants (l'àngel de la Pilària els demana; el Germà Francí en parla en donar-los i l'Iscu en donar la clau), i la Porta de Ferro de sota la Taverna no s'obre sense ella (l'Ineu diu que li surt una olor de boira que crema). Així no cal tornar enrere en el tram final. |
 
 ## A5. Mapa i pantalles
 Vertical: 720 d'ample fix i alçada que s'adapta a la proporció de la pantalla (de 900 a 1600; 1280 = 9:16); a dalt, flotant sobre l'escenari (sense franja), el rosari amb una ombra suau i tres botons: consells (tecla O, mostra l'objectiu actual), sarró/Diari (tecla I) i menú. L'objectiu ja no és sempre visible: es consulta amb el botó de consells. Camins de terra i plaça empedrada; sense carreteres. Nord a dalt.

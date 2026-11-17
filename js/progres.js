@@ -100,6 +100,17 @@ const PROGRES = {
           pista: E => E.flag('florsCreu') ? "El Germà Francí t'espera a Sant Antoni, content."
               : E.te('ram') ? "El ram del Germà Francí és per a algú que ja no el pot rebre: la tomba de l'àngel, al Cementiri."
               : "El Germà Francí, a Sant Antoni, té uns guants que mouen el que pesa. Fes-li un favor." },
+        // L'Empara Fraternal es guanya just després dels Guants (l'àngel de la Pilària els demana) i ABANS de baixar a les Gírgoles: la Porta de Ferro no s'obre sense ella (boira verinosa del fons)
+        { id: 'benediccioFraterna', marca: ['isilderRosansa', 'llavorRosansa', 'llosaOberta', 'lliureDolora', 'refetorObert', 'esb_host_cap1', 'esb_host_cap2', 'mongesTrobades', 'premiDolora', 'premiPilaria', 'premiCarmelia', 'cofreMonges', 'obj:benedicio_fraterna'], fet: E => E.te('benedicio_fraterna'),
+          pista: E => !E.flag('llosaOberta')
+              ? (E.te('llavorLluna')
+                  ? "Ja tens la Llavor de Lluna. Porta-la a l'Isílder, al jardí de l'Hostatgeria, perquè l'ajudi a florir damunt la llosa."
+                  : !E.flag('isilderRosansa')
+                      ? "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. Al jardí de l'Hostatgeria, la llosa dels monjos s'encén amb la llum de Runna: parla-ho amb l'Isílder."
+                      : "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. La Rosansa, la venedora de verdures, ha tornat a passar per les cel·les: potser té la llavor d'una flor de lluna.")
+              : !E.flag('mongesTrobades')
+                  ? "Sota la llosa, les sacerdotesses: desperta la Dolora, empeny l'àngel de pedra que barra la porta de la Pilària i talla els esbarzers de la Carmèlia."
+                  : "Les sacerdotesses són lliures: la seva Empara Fraternal t'espera al cofre del vestíbul de l'Hostatgeria." },
         { id: 'roda', marca: ['rodaMoguda'], fet: E => E.flag('rodaMoguda'),
           pista: E => "La roda de carruatge de la qual et va parlar en Jusef tapa el túnel dels monjos. Amb els guants, es deixarà empènyer." },
         { id: 'cambra', marca: ['portaTresorOberta'], fet: E => E.flag('portaTresorOberta'),
@@ -129,16 +140,6 @@ const PROGRES = {
           pista: E => "Al passadís de tortura, un rastell rovellat barra el pas. Els Guants de Poder saben de torns." },
         { id: 'tortura', marca: ['torturaNet'], fet: E => E.flag('torturaNet'),
           pista: E => "Al final del passadís de tortura, un mur d'esbarzers negres es deixa tallar per Runna." },
-        { id: 'benediccioFraterna', marca: ['isilderRosansa', 'llavorRosansa', 'llosaOberta', 'lliureDolora', 'refetorObert', 'esb_host_cap1', 'esb_host_cap2', 'mongesTrobades', 'premiDolora', 'premiPilaria', 'premiCarmelia', 'cofreMonges', 'obj:benedicio_fraterna'], fet: E => E.te('benedicio_fraterna'),
-          pista: E => !E.flag('llosaOberta')
-              ? (E.te('llavorLluna')
-                  ? "Ja tens la Llavor de Lluna. Porta-la a l'Isílder, al jardí de l'Hostatgeria, perquè l'ajudi a florir damunt la llosa."
-                  : !E.flag('isilderRosansa')
-                      ? "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. Al jardí de l'Hostatgeria, la llosa dels monjos s'encén amb la llum de Runna: parla-ho amb l'Isílder."
-                      : "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. La Rosansa, la venedora de verdures, ha tornat a passar per les cel·les: potser té la llavor d'una flor de lluna.")
-              : !E.flag('mongesTrobades')
-                  ? "Sota la llosa, les sacerdotesses: desperta la Dolora, empeny l'àngel de pedra que barra la porta de la Pilària i talla els esbarzers de la Carmèlia."
-                  : "Les sacerdotesses són lliures: la seva Empara Fraternal t'espera al cofre del vestíbul de l'Hostatgeria." },
         { id: 'pont', marca: ['pontGabia'], fet: E => E.flag('pontGabia'),
           pista: E => "Davant l'avenc de la Sala de la Gàbia, els blocs del fons dormen. Un cant de pedres els faria aixecar." },
         { id: 'ocellaire', marca: ['ocellaireVencut'], fet: E => E.flag('ocellaireVencut'),

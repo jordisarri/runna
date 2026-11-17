@@ -842,7 +842,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[266]** ★ Has obtingut la CLAU ROVELLADA
 
-**[267] Iscu:** Crec que és per a la porta petita del fons, la del pany petit. I tu no m'has vist, eh?
+**[267] Iscu:** Crec que és per a la porta petita del fons, la del pany petit. Allà baix, diuen, hi ha una boira que cou: les sacerdotesses de l'Hostatgeria en saben. I tu no m'has vist, eh?
 
 *Si: encara no ha trobat l'Iscu*
 
@@ -1426,6 +1426,8 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[453] Germà Francí:** Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.
 
+**[663] Germà Francí:** I una altra cosa, fill: a l'Hostatgeria hi ha un àngel de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella.
+
 *Altrament (per defecte):*
 
 **[454] Germà Francí:** El ram, a la tomba de l'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.
@@ -1790,7 +1792,9 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[563] Ineu:** (Tinc la clau, però allà baix només un cant em serveix: els barrots de la gàbia només escolten el Cant del Miracle. Primer l'he d'aprendre: la Pianista, al Santuari, me l'ensenyarà.)
 
-**[564] Ineu:** (Tinc Runna i el Cant del Miracle. Endavant.)
+**[664] Ineu:** (Pel pany surt una olor de boira que crema la gola. Abans de baixar-hi he de passar per l'Hostatgeria: les sacerdotesses guarden una Empara contra aquestes boires.)
+
+**[564] Ineu:** (Tinc Runna, el Cant del Miracle i l'Empara. Endavant.)
 
 **[565] Ineu:** (Aquí és d'on surt tot. Em falta l'espasa que la va segellar... i una clau.)
 
@@ -1856,7 +1860,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: (depèn d'un càlcul del joc)*
 
-**[584] Ineu:** (Aquesta boira crema la gola... No la puc travessar sense alguna protecció. Les sacerdotesses de l'Hostatgeria, que guarden la pau d'aquesta terra, potser me'n podrien donar una.)
+**[584] Ineu:** (Aquesta boira crema la gola... Sense l'Empara de les sacerdotesses de l'Hostatgeria no la podré travessar.)
 
 **[585] Ineu:** (Una força invisible no em deixa passar. Sense el Cant del Miracle, els barrots no m'escoltaran. La Pianista, al Santuari, me l'ha d'ensenyar.)
 

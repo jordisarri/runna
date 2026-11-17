@@ -1,5 +1,5 @@
 {
- "seguent": 663,
+ "seguent": 665,
  "converses": {
   "main::proleg": [
    {
@@ -871,14 +871,14 @@
     "qui": "Cartell",
     "text": "← El Monestir i la Plaça",
     "fitxer": "js/zones/nord.js",
-    "linia": 815
+    "linia": 816
    },
    {
     "id": 118,
     "qui": "Cartell",
     "text": "La Caseta\n→ El Gran Til·ler",
     "fitxer": "js/zones/nord.js",
-    "linia": 1166
+    "linia": 1167
    }
   ],
   "dialegs::prunera": [
@@ -1989,7 +1989,7 @@
    {
     "id": 267,
     "qui": "Iscu",
-    "text": "Crec que és per a la porta petita del fons, la del pany petit. I tu no m'has vist, eh?",
+    "text": "Crec que és per a la porta petita del fons, la del pany petit. Allà baix, diuen, hi ha una boira que cou: les sacerdotesses de l'Hostatgeria en saben. I tu no m'has vist, eh?",
     "fitxer": "js/dialegs.js",
     "linia": 227
    },
@@ -3398,53 +3398,60 @@
     "linia": 764
    },
    {
+    "id": 663,
+    "qui": "Germà Francí",
+    "text": "I una altra cosa, fill: a l'Hostatgeria hi ha un àngel de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella.",
+    "fitxer": "js/zones/nord.js",
+    "linia": 765
+   },
+   {
     "id": 454,
     "qui": "Germà Francí",
     "text": "El ram, a la tomba de l'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.",
     "fitxer": "js/zones/nord.js",
-    "linia": 772
+    "linia": 773
    },
    {
     "id": 455,
     "qui": "Germà Francí",
     "text": "Ineu... Bon dia, fill. Ja et deixen créixer?",
     "fitxer": "js/zones/nord.js",
-    "linia": 776
+    "linia": 777
    },
    {
     "id": 456,
     "qui": "Germà Francí",
     "text": "Perdona que no camini de pressa: aquests genolls ja tenen més anys que la torre del rellotge.",
     "fitxer": "js/zones/nord.js",
-    "linia": 777
+    "linia": 778
    },
    {
     "id": 457,
     "qui": "Germà Francí",
     "text": "Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.",
     "fitxer": "js/zones/nord.js",
-    "linia": 778
+    "linia": 779
    },
    {
     "id": 458,
     "qui": "Germà Francí",
     "text": "Cada setmana porto flors a l'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.",
     "fitxer": "js/zones/nord.js",
-    "linia": 779
+    "linia": 780
    },
    {
     "id": 459,
     "qui": "Germà Francí",
     "text": "Me'n faries el favor? Deixa aquest ram als peus de l'àngel. I torna, que tinc una cosa per a tu.",
     "fitxer": "js/zones/nord.js",
-    "linia": 780
+    "linia": 781
    },
    {
     "id": 460,
     "qui": "",
     "text": "★ Has obtingut un RAM DE FLORS.",
     "fitxer": "js/zones/nord.js",
-    "linia": 781
+    "linia": 782
    }
   ],
   "zones/casa::georgiCaseta": [
@@ -4248,32 +4255,39 @@
     "linia": 133
    },
    {
-    "id": 564,
+    "id": 664,
     "qui": "Ineu",
-    "text": "(Tinc Runna i el Cant del Miracle. Endavant.)",
+    "text": "(Pel pany surt una olor de boira que crema la gola. Abans de baixar-hi he de passar per l'Hostatgeria: les sacerdotesses guarden una Empara contra aquestes boires.)",
     "fitxer": "js/zones/taverna.js",
     "linia": 136
+   },
+   {
+    "id": 564,
+    "qui": "Ineu",
+    "text": "(Tinc Runna, el Cant del Miracle i l'Empara. Endavant.)",
+    "fitxer": "js/zones/taverna.js",
+    "linia": 139
    },
    {
     "id": 565,
     "qui": "Ineu",
     "text": "(Aquí és d'on surt tot. Em falta l'espasa que la va segellar... i una clau.)",
     "fitxer": "js/zones/taverna.js",
-    "linia": 139
+    "linia": 142
    },
    {
     "id": 566,
     "qui": "Ineu",
     "text": "(La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Aldreu en deu tenir una altra.)",
     "fitxer": "js/zones/taverna.js",
-    "linia": 143
+    "linia": 146
    },
    {
     "id": 567,
     "qui": "Ineu",
     "text": "(Algú l'hauria d'haver vist anar-hi de nit... L'Iscu, el fill de la Càren! L'Eve va dir que s'escapa pel camí de la Desaparició, per un forat entre els arbres.)",
     "fitxer": "js/zones/taverna.js",
-    "linia": 144
+    "linia": 147
    }
   ],
   "dialegs::cartellGirgoles": [
@@ -4406,7 +4420,7 @@
    {
     "id": 584,
     "qui": "Ineu",
-    "text": "(Aquesta boira crema la gola... No la puc travessar sense alguna protecció. Les sacerdotesses de l'Hostatgeria, que guarden la pau d'aquesta terra, potser me'n podrien donar una.)",
+    "text": "(Aquesta boira crema la gola... Sense l'Empara de les sacerdotesses de l'Hostatgeria no la podré travessar.)",
     "fitxer": "js/zones/gabia.js",
     "linia": 600
    },

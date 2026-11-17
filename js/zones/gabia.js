@@ -597,7 +597,7 @@ class ZonaBoira extends ZonaBase {
         if (this.time.now > (this.avisBoira || 0)) {
             this.avisBoira = this.time.now + 5000;
             Sfx.puf();
-            this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text: "(Aquesta boira crema la gola... No la puc travessar sense alguna protecció. Les sacerdotesses de l'Hostatgeria, que guarden la pau d'aquesta terra, potser me'n podrien donar una.)" }] });
+            this.ui().obrirDialeg({ pagines: [{ qui: 'Ineu', text: "(Aquesta boira crema la gola... Sense l'Empara de les sacerdotesses de l'Hostatgeria no la podré travessar.)" }] });
         }
     }
 

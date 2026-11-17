@@ -224,7 +224,7 @@ const DIALEGS = {
             { qui: 'Iscu', text: 'Ei, espera. Tinc una cosa que potser et va bé. Una nit, passant per davant la porta de ferro de les Gírgoles, vaig veure una clau a terra: li havia caigut al Germà Aldreu i ni se\'n va adonar.' },
             { qui: 'Iscu', text: 'És rovellada, però encara gira. Te la dono: jo no tinc res a obrir.' },
             { avis: 'Has obtingut la CLAU ROVELLADA', obj: 'clau_girgoles' },
-            { qui: 'Iscu', text: 'Crec que és per a la porta petita del fons, la del pany petit. I tu no m\'has vist, eh?' }
+            { qui: 'Iscu', text: 'Crec que és per a la porta petita del fons, la del pany petit. Allà baix, diuen, hi ha una boira que cou: les sacerdotesses de l\'Hostatgeria en saben. I tu no m\'has vist, eh?' }
         ];
         const donar = () => { E.posaFlag('iscuTrobat'); E.posaFlag('clauGirgoles'); E.dona('clau_girgoles'); E.posaObjectiu(PROGRES.pista(E)); };
         if (!E.flag('iscuTrobat')) return {

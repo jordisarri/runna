@@ -132,8 +132,11 @@ Object.assign(DIALEGS, {
         if (E.te('clau_girgoles') && !E.flag('cantMiracle')) return { pagines: [
             { qui: 'Ineu', text: '(Tinc la clau, però allà baix només un cant em serveix: els barrots de la gàbia només escolten el Cant del Miracle. Primer l\'he d\'aprendre: la Pianista, al Santuari, me l\'ensenyarà.)' }
         ] };
+        if (E.te('clau_girgoles') && !E.te('benedicio_fraterna')) return { pagines: [
+            { qui: 'Ineu', text: "(Pel pany surt una olor de boira que crema la gola. Abans de baixar-hi he de passar per l'Hostatgeria: les sacerdotesses guarden una Empara contra aquestes boires.)" }
+        ] };
         if (E.te('clau_girgoles')) return { pagines: [
-            { qui: 'Ineu', text: '(Tinc Runna i el Cant del Miracle. Endavant.)' }
+            { qui: 'Ineu', text: "(Tinc Runna, el Cant del Miracle i l'Empara. Endavant.)" }
         ] };
         if (!E.flag('clauFerro')) return { pagines: [
             { qui: 'Ineu', text: '(Aquí és d\'on surt tot. Em falta l\'espasa que la va segellar... i una clau.)' }
@@ -354,7 +357,7 @@ class ZonaSotaTaverna extends ZonaBase {
         this.boira(300, 420, 160, 40, 0.5);
         this.boira(520, 600, 160, 40, 0.5);
         this.fullaPorta = pf;
-        this.interactiu(400, 220, RADI_GRAN, DIALEGS.portaFerro, { altura: 170, actiu: () => !Estat.flag('portaFerroOberta'), enTancar: () => { if (Estat.te('clau_girgoles') && Estat.flag('cantMiracle')) this.obrirPortaFerro(); } });
+        this.interactiu(400, 220, RADI_GRAN, DIALEGS.portaFerro, { altura: 170, actiu: () => !Estat.flag('portaFerroOberta'), enTancar: () => { if (Estat.te('clau_girgoles') && Estat.flag('cantMiracle') && Estat.te('benedicio_fraterna')) this.obrirPortaFerro(); } });
         if (Estat.flag('portaFerroOberta')) this.obrirPortaFerro(true);
 
         // Sacs i botes de vi, i petjades a la pols
