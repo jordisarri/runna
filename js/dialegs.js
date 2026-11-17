@@ -1590,7 +1590,7 @@ const DIALEGS = {
         enAcabar: () => Estat.posaFlag('llibreCambraLlegit')
     },
 
-    // ---------------- LA CABANA DE LA JAUNETA ----------------
+    // ---------------- LA CABANA DE LA JOANETA ----------------
     // La Joaneta, bruixa del bosc: una curiositat. Hi vas pel portal de l'Alzina Buida i et diu la pista del moment (és vident)
     joaneta: E => {
         const pista = pistaActual(E).replace(/^Fill, /, "");
@@ -1604,7 +1604,7 @@ const DIALEGS = {
                     { fer: (z, fet) => z.seq([c => z.npcVa('joaneta', 500, 360, c, 200), c => z.camaraPla(500, 290, 1.3, 700, 'Sine.easeInOut', c), c => { z.llum(450, 290, 0x6aff6a); z.animaNpc('joaneta', 4200, c, 'bombolles'); }, c => z.npcVa('joaneta', 560, 420, c, 200)], () => { z.reenquadrarDialeg(); fet(); }) },          // davant l'olla prepara el beuratge (animació pròpia: l'ampolla gran)
                     { qui: "La Joaneta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? Han tapat el camí que hi porta amb una boira que no marxa amb el vent." },
                     { qui: "La Joaneta", text: "Mira, he barrejat l'aigua que queda amb rialla, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
-                    { avis: "Has obtingut el BEURATGE DE LA JAUNETA.", obj: 'beuratge' }
+                    { avis: "Has obtingut el BEURATGE DE LA JOANETA.", obj: 'beuratge' }
                 ],
                 enAcabar: () => {
                     E.treu("aigua_sj"); E.posaFlag("joanetaVista"); E.dona("beuratge");

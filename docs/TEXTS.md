@@ -364,7 +364,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[106] La Joaneta:** Mira, he barrejat l'aigua que queda amb rialla, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets.
 
-**[107]** ★ Has obtingut el BEURATGE DE LA JAUNETA.
+**[107]** ★ Has obtingut el BEURATGE DE LA JOANETA.
 
 *Altrament (per defecte):*
 
@@ -936,7 +936,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1813)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1816)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -2058,7 +2058,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2065)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2068)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
