@@ -211,6 +211,28 @@ class ZonaJardi extends ZonaBase {
         return !!(Estat.flag('runna') && !Estat.flag('isilderRosansa') && !Estat.flag('llosaOberta') && !Estat.flag('llavorRosansa') && !Estat.te('llavorLluna'));
     }
 
+    encenLlosa() {
+        const b = this.brillLlosa;
+        if (!b) return;                                                   // un cop de llum: la llosa s'encén de debò
+        this.tweens.killTweensOf(b.llum);
+        b.llum.setAlpha(0.2);
+        this.tweens.add({ targets: b.llum, alpha: 1, scale: 1.5, duration: 700, yoyo: true, ease: 'Sine.easeInOut', onComplete: () => this.tweens.add({ targets: [b.g, b.llum], alpha: { from: 0.35, to: 1 }, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' }) });
+        Sfx.to(880, 1320, 0.5, 'sine', 0.1);
+    }
+
+    // Enquadra expressament l'Isílder i la llosa (per si l'Ineu hi parla des de lluny o de molt a prop: amb el zoom de conversa normal la llosa no es veuria i no se sabria de què parla),
+    // amb la llosa encesa. Si l'escena ja porta la càmera (l'escena automàtica d'entrada), no fa res. fet() quan la càmera ja hi és.
+    enquadrarLlosa(fet) {
+        if (this.camCinema || !this.isilder || !this.isilder.active) { fet(); return; }
+        const I = this.isilder, { x: LX, y: LY } = this.llosaPos;
+        this.camCinemaPropia = true;
+        this.enquadrar((I.x + LX) / 2, (I.y + LY) / 2 - 20, 0.95, 1000, () => { this.encenLlosa(); this.time.delayedCall(700, fet); }, 440);
+    }
+    deixaCamaraLlosa(fet) {
+        if (this.camCinemaPropia) { this.camCinemaPropia = false; this.alliberarCamera(800); }
+        fet();
+    }
+
     escenaLlosaRunna(intents = 0) {
         if (Estat.flag('isilderRosansa') || Estat.flag('llosaOberta') || !this.isilder || !this.isilder.active || !this.sys.isActive()) return;
         const ui = this.ui();
@@ -218,14 +240,7 @@ class ZonaJardi extends ZonaBase {
             if (intents < 20) this.time.delayedCall(700, () => this.escenaLlosaRunna(intents + 1));
             return;
         }
-        const encenLlosa = () => {
-            const b = this.brillLlosa;
-            if (!b) return;                                                   // un cop de llum: la llosa s'encén de debò
-            this.tweens.killTweensOf(b.llum);
-            b.llum.setAlpha(0.2);
-            this.tweens.add({ targets: b.llum, alpha: 1, scale: 1.5, duration: 700, yoyo: true, ease: 'Sine.easeInOut', onComplete: () => this.tweens.add({ targets: [b.g, b.llum], alpha: { from: 0.35, to: 1 }, yoyo: true, repeat: -1, duration: 1500, ease: 'Sine.easeInOut' }) });
-            Sfx.to(880, 1320, 0.5, 'sine', 0.1);
-        };
+        const encenLlosa = () => this.encenLlosa();
         // L'Ineu pot entrar al jardí molt lluny (per l'Hostatgeria o la Taverna): la càmera de diàleg normal no hi cabria amb l'Isílder, i la llosa no hi és mai. Per això l'escena
         // enquadra expressament l'Isílder i la llosa (el que s'ha de veure), amb la llosa encesa, i en acabar torna a l'Ineu.
         const I = this.isilder, { x: LX, y: LY } = this.llosaPos;

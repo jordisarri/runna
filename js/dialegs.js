@@ -1050,10 +1050,12 @@ const DIALEGS = {
     // pensar en la llum que desprenen les llavors de lluna, i d'aquí, la Rosansa.
     isilderRunna: E => ({
         pagines: [
+            { fer: (z, fet) => z.enquadrarLlosa ? z.enquadrarLlosa(fet) : fet() },          // (si parles amb ella des de lluny, la càmera enquadra ella i la llosa encesa: així es veu de què parla)
             { qui: 'Isílder', text: "Monjo, espera! Mira la llosa: s'ha encès. Fa anys que la veig cada dia i no havia fet mai res així." },
             { qui: 'Ineu', text: "Deu ser per Runna. La llosa brilla al mateix ritme que l'espasa." },
             { qui: 'Isílder', text: "Aquesta llum pàl·lida i blavosa... Me'n recordo d'una de semblant: la que desprenen les llavors de lluna quan floreixen de nit. Potser una flor de lluna ajudaria la llosa a entendre què li demanes." },
             { qui: 'Isílder', text: "De llavors de lluna ja no en queden. Però la Rosansa, la venedora de verdures, ha tornat a passar per les cel·les, i fa anys que porta al carro una llavor estranya que ningú no sap què és. Pregunta-li." }
+            ,{ fer: (z, fet) => z.deixaCamaraLlosa ? z.deixaCamaraLlosa(fet) : fet() }
         ],
         enAcabar: () => { E.posaFlag('isilderRosansa'); E.posaObjectiu("Pregunta a la Rosansa, la venedora de verdures, a les cel·les, per la llavor d'una flor de lluna."); }
     }),
