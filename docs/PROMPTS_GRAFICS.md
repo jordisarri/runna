@@ -20,6 +20,8 @@
 
 - [x] `bolet`
 
+- [x] `masia_cirosa` i `masia_georgi` (les dues masies: `art/edificis/masia_cirosa.png` i `masia_georgi.png`; la porta és a `portaMasia`, amb les fraccions de cada una)
+
 - [x] `font_sj` i `font_sj_neta` (la Font del Bisbe, adormida i neta: `art/objectes/font_sj.png` i `font_sj_neta.png`)
 
 - [x] `bolet_verinos` (fet: `art/enemics/bolet_verinos.jpg`; el prompt és sota, a Enemics)
@@ -282,26 +284,6 @@ Tots els gràfics de dalt són fets i connectats (els seus prompts s'han esborra
 ---
 
 ## Pendent
-
-### `masia_cirosa.png` i `masia_georgi.png` → `assets/edificis/masia_cirosa.webp` i `masia_georgi.webp` (amplada 520 cadascun) *(Les dues masies de l'exterior: la **masia dels pastors de la Cirosa** (`ZonaCirosa`, `js/zones/cirosa.js`; gràfic `masia`) i la **masia d'en Jorgi** (`ZonaGeorgi`, `js/zones/nord.js`; gràfic `masia_georgi`). Ara el joc les dibuixa amb codi (`dibuixarMasia` i `dibuixarMasiaGeorgi`, a `js/dibuixos.js`) i no agraden: es volen generar. Han de ser **diferents** entre elles. Les dues, **vistes de front**, amb l'edifici ocupant TOTA l'amplada de la imatge de punta a punta (sense sòl ni lloses més amples que la façana, sense parets laterals), la base de la façana tocant la vora de baix, **fons blanc pur (#FFFFFF)** (el trec jo), **sense persones, plantes, barrils ni text**. **Porta al MIG de l'amplada, amb la part de dalt a 0,56 de l'alçada de la imatge i uns 0,15 de l'amplada de la imatge d'ample** (el joc hi posa la porta animada i la sortida): és l'única restricció de composició. Proporció: Cirosa 1,6:1 (més ampla que alta), Jorgi 1,28:1.)*
-
-**Estil comú (afegiu-ho davant de cada prompt, o doneu com a referència la roca de `art/objectes/font_sj.png` i `art/natura/arbre.png`):** *chunky hand-painted 2D game asset, thick bevelled stones and planks like a stylised cartoon-3D look, bold clean dark-brown outline (#3b2412), warm saturated colours, two-tone cel shading with soft highlights on the top-left edges, matching the style of a charming chibi fantasy adventure game.*
-
-**1. `masia_cirosa.png` (la casa pobra però neta dels pastors desterrats):**
-
-```
-A single rustic shepherds' stone farmhouse seen straight on from the front, one storey plus a steep roof, in a chunky hand-painted 2D game style with thick bevelled stones and planks, bold dark-brown outline, warm saturated colours, two-tone cel shading with soft highlights on the upper-left edges. The walls are made of chunky rounded grey fieldstone blocks of different sizes with dark mortar lines, bevelled with light tops and darker bottoms. A cobbled stone plinth runs along the base. The roof is covered with big terracotta-orange rounded tiles in offset rows, with a thick wooden ridge beam on top held by three grey stone clamps, a small pointed wooden dormer window with a stone cap on the left, and a chunky grey stone chimney with a flat stone slab on the right. In the exact centre, a tall round-arched doorway: a thick arch of large bevelled grey voussoir stones with a bigger keystone carved with a small cross, and a heavy dark-wood plank door with three iron straps and studs and an iron ring handle, two stone steps in front. Four small windows with grey stone frames and stone lintels, dark glass, and old brown wooden shutters opened flat against the wall, two on each side of the door. The building fills the whole width of the image from edge to edge (no ground slab wider than the facade, no side walls). No plants, no barrels, no people, no text, no watermark. Isolated on a pure white background (#FFFFFF). The door is centred, about 15% of the image width, with its top at about 56% of the image height. Image proportions about 1.6:1 (wider than tall).
-```
-
-**2. `masia_georgi.png` (la casa de pagès càlida d'en Jorgi, de pedra ocre i fusta clara, per fer-la ben diferent de la de la Cirosa):**
-
-```
-A single warm Catalan stone farmhouse (masia) seen straight on from the front, two storeys, in a chunky hand-painted 2D game style with thick bevelled stones and planks, bold dark-brown outline, warm saturated colours, two-tone cel shading with soft highlights on the upper-left edges. The walls are rough exposed ashlar made of chunky rounded sandstone blocks in warm ochre, sand, honey and slightly reddish tones, with pale mortar lines and a few small patches of lime plaster between the stones. A low terracotta tile roof with a thick wooden eaves beam and a small stone chimney at the right end. On the upper floor, two windows with light orange pine-wood frames and dark blue-green glass reflecting tree tops: the left one bigger, the right one smaller and a little lower, each with a stone sill. In the exact centre of the ground floor, a rectangular doorway of light yellow-orange pine wood with a tall narrow glass panel, under a pale grey stone lintel with a small old iron lantern above it, and two large old dark-brown wooden shutters with vertical planks, crossbars and black iron hinges folded open flat against the wall on both sides of the door, one flat stone step in front. The building fills the whole width of the image from edge to edge (no ground slab wider than the facade, no side walls). No plants, no barrels, no people, no text, no watermark. Isolated on a pure white background (#FFFFFF). The door is centred, about 15% of the image width, with its top at about 56% of the image height. Image proportions about 1.28:1 (wider than tall).
-```
-
-(Referència d'estil: la teva imatge de la casa de pedra gris, per al to de les pedres i la teulada, **només com a inspiració**: no la feu servir com a font ni com a imatge de base, perquè porta marca d'aigua. Quan tingueu les imatges, passeu-me-les: les converteixo a `assets/edificis/`, poso `file:` a `masia` i `masia_georgi` de `js/assets.js` i comprovo la porta animada, la sortida i les col·lisions.)
-
----
 
 ### `senyor_budo.png` → `assets/personatges/senyor_budo.webp` (amplada 78) *(El **senyor Buidor**, el vell assegut a la taula de l'esquerra de tot de la Taverna (`ZonaTavernaInt`, `js/zones/taverna.js`), assaborint l'anís escarxat que li ha preparat l'Eve. NPC només de conversa (`DIALEGS.senyorBudo`). Ara el joc el dibuixa amb un placeholder. Imatge **de cos sencer, ASSEGUT en un tamboret, de cara a la càmera**, fons blanc pur (el trec jo); la taula del joc li tapa les cames, així que cal que tingui les cames i el tamboret dibuixats igualment.)*
 

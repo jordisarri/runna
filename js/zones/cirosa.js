@@ -110,7 +110,7 @@ class ZonaCirosa extends ZonaBase {
 
         // La masia (mas vell i descurat) amb la porta que duu a dins
         const masia = this.edifici('masia', 380, 520, 520, 96, 'ZonaMasiaCirosa', 'porta', { alt: 80 }).setTint(0xc8b8a0);
-        this.portaMasia(masia, 380, 520);
+        this.portaMasia(masia, 380, 520, true, { cx: 0.507, w: 0.138, top: 0.56, bottom: 0.909 });          // (la porta del gràfic generat)
         this.barril(830, 570, 40, 16);
         this.barril(875, 580, 40, 16);
         this.sacs(950, 592, 'duo');

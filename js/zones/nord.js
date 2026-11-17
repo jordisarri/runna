@@ -1132,7 +1132,7 @@ class ZonaGeorgi extends ZonaBase {
 
         // La casa d'en Jorgi (520 d'ample): la porta del mig duu a dins
         const masiaGeorgi = this.edifici('masia_georgi', 380, 480, 500, 96, 'ZonaCasaGeorgi', 'porta', { alt: 90 });
-        this.portaMasia(masiaGeorgi, 380, 480, false);
+        this.portaMasia(masiaGeorgi, 380, 480, false, { cx: 0.504, w: 0.111, top: 0.567, bottom: 0.931 });          // (la porta del gràfic generat)
         this.npc('georgi_caseta', 560, 590, DIALEGS.georgiCaseta);
 
         // La caseta, aixecada sobre pilars de fusta: s'hi puja per l'escala del mig (la maneta és a dins)

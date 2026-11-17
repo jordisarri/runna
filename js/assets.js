@@ -137,8 +137,8 @@ const CATALEG = [
     { key: 'roca2',          file: null,           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w, 1) },
     { key: 'roca3',          file: null,           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w, 2) },
     { key: 'basto_ocellaire', file: 'assets/armes/basto_ocellaire.webp', amplada: 184, cru: true },      // (art/armes/basto_ocellaire.png, sense flames: les posa el joc quan gira de pressa; la versió amb flames és basto_ocellaire_flames.png)
-    { key: 'masia',          file: null,          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },
-    { key: 'masia_georgi',   file: null,          amplada: 520, provisional: (c, w) => dibuixarMasiaGeorgi(c, w) },          // la masia d'en Jorgi (la de la Cirosa és 'masia')
+    { key: 'masia',          file: 'assets/edificis/masia_cirosa.webp',          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },          // la masia dels pastors de la Cirosa (art/edificis/masia_cirosa.png)
+    { key: 'masia_georgi',   file: 'assets/edificis/masia_georgi.webp',          amplada: 520, provisional: (c, w) => dibuixarMasiaGeorgi(c, w) },          // la masia d'en Jorgi (la de la Cirosa és 'masia')
     { key: 'pastor_a',       file: 'assets/personatges/pastor_a.webp',       amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a48', cabell: '#8a7a60', alt: 0.9, ample: 0.95, calb: true }) },
     { key: 'pastor_b',       file: 'assets/personatges/pastor_b.webp',       amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a4a58', cabell: '#7a7a7a', dona: true, alt: 0.88, ample: 0.95 }) },
     { key: 'pastor_vell',    file: 'assets/personatges/pastor_vell.webp',    amplada: 96, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a5040', cabell: '#d0d0d0', barba: '#d0d0d0', alt: 0.86, bastoCoix: true }) },
