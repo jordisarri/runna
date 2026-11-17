@@ -31,8 +31,8 @@ class ZonaErmita extends ZonaBase {
         this.interactiu(500, 640, RADI_OBJECTE, DIALEGS.ermitaPorta, { altura: 190, actiu: () => false });
 
         // Creu de la Desaparició, davant la finestra de la dreta de l'ermita i a l'altra banda del camí (no té cap paper a la trama: només es pot llegir)
-        this.posar('creu_desaparicio', 660, 895, { escala: 1.5, col: { w: 60, h: 24 }, opac: true });
-        this.interactiu(660, 905, RADI_OBJECTE, DIALEGS.creuDesaparicio, { altura: 300 });
+        this.posar('creu_desaparicio', 740, 895, { escala: 1.5, col: { w: 60, h: 24 }, opac: true });
+        this.interactiu(740, 905, RADI_OBJECTE, DIALEGS.creuDesaparicio, { altura: 300 });
 
         this.cartell(1120, 610, DIALEGS.sortidaErmita);
         this.arbres([[120, 200], [900, 160], [1150, 240], [1300, 160], [150, 520],
