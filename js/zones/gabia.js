@@ -275,7 +275,7 @@ class ZonaGirgoles extends ZonaBase {
             girgoles(g, x - 26, y - 6, 4, 0xd8fff0, 0x4a9a7a); girgoles(g, x + 2, y - 10, 5, 0xe8fff8, 0x4a9a7a); girgoles(g, x + 28, y - 4, 3, 0xd8fff0, 0x4a9a7a);
             const m = { i, x, y, halo, g, on: !!inici[i] };
             this.colisio(x, y - 2, 80, 22);
-            this.interactiu(x, y + 30, RADI_OBJECTE, () => null, { altura: 80, actiu: () => !Estat.flag('girgolesEnceses'), enTancar: () => this.tocarMata(i) });
+            this.interactiu(x, y + 30, RADI_GRAN, () => null, { altura: 80, senseMirada: true, actiu: () => !Estat.flag('girgolesEnceses'), enTancar: () => this.tocarMata(i) });
             this.mates.push(m);
         }
         this.pintarMates();
@@ -291,7 +291,7 @@ class ZonaGirgoles extends ZonaBase {
         if (resolt) this.cortina.setVisible(false);
         else {
             this.colCortina = this.colisio(700, 170, 120, 40);
-            this.interactiu(700, 230, RADI_OBJECTE, DIALEGS.cortinaMicel, { altura: 90, actiu: () => !Estat.flag('girgolesEnceses') });
+            this.interactiu(700, 200, RADI_GRAN, DIALEGS.cortinaMicel, { altura: 90, senseMirada: true, actiu: () => !Estat.flag('girgolesEnceses') });          // (el punt era al sud de la paret de la cortina: l'Ineu, mirant al nord, el tenia a l'esquena i no el «mirava»)
         }
 
         // Ratpenats de boira que pengen de la volta
