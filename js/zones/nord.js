@@ -1139,8 +1139,9 @@ class ZonaGeorgi extends ZonaBase {
         // L'escala es puja caminant (paret a banda i banda i el dintell dalt, a l'altura de la terrassa); l'entrada a l'interior és dalt,
         // davant de la porta, no al peu de l'escala: allà és on hi ha la llum de la sortida
         // (el gràfic generat: l'escala fa 67 px d'ample i la llosa de la terrassa és a 0,615 de l'alçada; la porta, a 0,376-0,580)
-        const caseta = this.edifici('caseta_joc', 860, 500, 260, 67, null, null, { alt: 137 });
-        this.sortida(860 - 33, 500 - 137 + 6, 66, 26, 'ZonaCasetaJoc', 'porta');
+        // L'Ineu puja per l'escala fins a la llosa de la terrassa i s'hi planta davant de la porta (el bloc de dalt és just per sobre del terra de la terrassa, a y 345): allà salta la sortida
+        const caseta = this.edifici('caseta_joc', 860, 500, 260, 67, null, null, { alt: 160 });
+        this.sortida(860 - 33, 500 - 160 + 6, 66, 26, 'ZonaCasetaJoc', 'porta');
         this.portaMasia(caseta, 860, 500, false, { cx: 0.5016, w: 0.147, top: 0.376, bottom: 0.580 });          // la porta és a la terrassa, damunt dels pilars: s'obre quan l'Ineu s'acosta a l'escala
         // La llosa de la terrassa (la vora de davant, a 0,585-0,615 de l'alçada) es torna a dibuixar per sobre de l'Ineu, només al tros de la porta: quan és a la terrassa li tapa els peus
         this.yLlosa = caseta.y - caseta.displayHeight * (1 - 0.615);
