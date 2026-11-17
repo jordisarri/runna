@@ -123,6 +123,7 @@ class ZonaTresor extends ZonaBase {
         banc.fillStyle(0x7a6c58, 1).fillRect(62, 542, 14, 18).fillRect(146, 542, 14, 18).strokeRect(62, 542, 14, 18).strokeRect(146, 542, 14, 18);
         banc.fillStyle(0xfff0d8, 0.3).fillRect(58, 522, 106, 3);
         this.colisio(111, 548, 116, 26);
+        (this.bancsEsg = this.bancsEsg || []).push({ x: 111, y: 560, w: 110, cara: 'avall', img: banc });          // el banc de pedra: s'hi pot seure
         [[560, 660, 0.45], [584, 676, 0.35], [80, 690, 0.4]].forEach(([x, y, e]) => this.posar('roca', x, y, { escala: e, col: { w: 40 * e * 2, h: 14 } }));
 
         // L'escala d'entrada, amb la claror de la plaça que baixa

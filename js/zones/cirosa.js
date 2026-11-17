@@ -75,7 +75,7 @@ class ZonaCamiCirosa extends ZonaBase {
         [[560, 1980], [880, 2050], [270, 1600], [480, 1330], [930, 1100], [1060, 800], [440, 760], [700, 300]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 70, h: 26 } }));
 
         // Cartells a cada tram del camí i un banc de pedra a mig pujar (hi reposes i es desa la partida)
-        this.posar('banc_respatller', 560, 1228, { col: { w: 130, h: 22 } });      // (aquest té punt d'interacció: hi reposes i es desa la partida)
+        this.posarBanc(560, 1228, 130);      // (hi pots seure caminant-hi des de baix; a més té punt d'interacció: hi reposes i es desa la partida)
         this.interactiu(560, 1238, RADI_OBJECTE, DIALEGS.bancCami, { altura: 70 });
 
         // Ramat: de boira i hostil fins que el Pastor cau; després, ovelles blanques que pasturen tranquil·les

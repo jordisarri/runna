@@ -552,8 +552,8 @@ class CambraMonja extends ZonaCasaBase {
             cat.fillStyle(0x6a1f24, 1).fillRect(360, 270, 80, 340);
             cat.lineStyle(3, 0xc8a050, 1).strokeRect(366, 276, 68, 334);
             this.posar('altar', 400, 240, { col: { w: 140, h: 36 } });
-            this.posar('banc_esglesia', 270, 400, { escala: 0.8, col: { w: 110, h: 16 } });
-            this.posar('banc_esglesia', 530, 400, { escala: 0.8, col: { w: 110, h: 16 } });
+            this.posarBanc(270, 400, 110, 'banc_esglesia', 'amunt', 0.8);          // bancs de capella: s'hi seu des de dalt, de cara a l'altar
+            this.posarBanc(530, 400, 110, 'banc_esglesia', 'amunt', 0.8);
             const ni = this.add.graphics().setDepth(-990);                                       // fornícules amb la Mare de Déu i un sant
             [[170, 0x3a5a9a], [630, 0x8a3a3a]].forEach(([x, mant]) => {
                 ni.fillStyle(0x2a1a0c, 1).fillRect(x - 18, 4, 36, 56).fillCircle(x, 6, 18);

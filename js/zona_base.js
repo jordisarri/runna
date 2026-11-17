@@ -2619,8 +2619,8 @@ class ZonaBase extends Phaser.Scene {
     // this.bancsEsg = [{ x, y, w, cara, img }] (vegeu posarBanc). Caminant cap a un banc l'Ineu hi seu, sense punt d'interacció, i s'aixeca quan el jugador es mou.
     //   cara 'amunt' (banc vist per darrere, com els de l'església): s'hi arriba des de dalt, baixant, i s'hi mira cap amunt; el respatller el tapa.
     //   cara 'avall' (banc vist de cara, amb respatller darrere): s'hi arriba des de baix, pujant, i s'hi mira cap avall; el davant del seient li tapa les cames.
-    posarBanc(x, y, w = 130, key = 'banc_respatller', cara = 'avall') {
-        const img = this.posar(key, x, y, { col: { w, h: 16 }, opac: true });
+    posarBanc(x, y, w = 130, key = 'banc_respatller', cara = 'avall', escala = 1) {
+        const img = this.posar(key, x, y, { col: { w, h: 16 }, opac: true, escala });
         (this.bancsEsg = this.bancsEsg || []).push({ x, y, w, cara, img });
         return img;
     }
