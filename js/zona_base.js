@@ -737,6 +737,7 @@ class ZonaBase extends Phaser.Scene {
             // El tronc dels pins no és al mig del dibuix (el pi, uns 8 px a l'esquerra; el pinyer, uns 34): la caixa de col·lisió s'hi ajusta, i és prou ampla per cobrir les arrels
             if (key !== 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: key === 'pi' ? { w: 62, h: 18, dx: -8 } : { w: 84, h: 18, dx: -34 } });
         }
+        if (key === 'roca') { const h = Math.abs(Math.sin(x * 7.3 + y * 31.7) * 43758.5453) % 1; key = h < 0.45 ? 'roca' : h < 0.75 ? 'roca2' : 'roca3'; }          // tres variants de roca, triades per posició
         const tex = this.textures.get(key);
         const escala = (tex.customData && tex.customData.escala) || 1 / RES;
         const img = this.add.image(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));

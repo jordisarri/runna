@@ -132,7 +132,10 @@ const CATALEG = [
     { key: 'ombra_monjo',  file: 'assets/personatges/ombra_monjo.webp', amplada: 140, cru: true },
     { key: 'ovella',         file: null,         amplada: 70, provisional: (c, w) => dibuixarOvella(c, w, false) },
     { key: 'ovella_boira',   file: null,   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
-    { key: 'roca',           file: 'assets/natura/roca.webp',           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w) },
+    // Les roques es dibuixen per codi (dibuixarRoca): tres variants; ZonaBase.posar en tria una per posició (l'antic PNG realista, assets/natura/roca.webp, ja no es fa servir)
+    { key: 'roca',           file: null,           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w, 0) },
+    { key: 'roca2',          file: null,           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w, 1) },
+    { key: 'roca3',          file: null,           amplada: 90, provisional: (c, w) => dibuixarRoca(c, w, 2) },
     { key: 'basto_ocellaire', file: 'assets/armes/basto_ocellaire.webp', amplada: 184, cru: true },      // (art/armes/basto_ocellaire.png, sense flames: les posa el joc quan gira de pressa; la versió amb flames és basto_ocellaire_flames.png)
     { key: 'masia',          file: null,          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },
     { key: 'masia_georgi',   file: null,          amplada: 520, provisional: (c, w) => dibuixarMasiaGeorgi(c, w) },          // la masia d'en Jorgi (la de la Cirosa és 'masia')

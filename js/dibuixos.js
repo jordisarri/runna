@@ -1001,13 +1001,55 @@ function dibuixarOvella(c, w, boira) {
     });
 }
 
-function dibuixarRoca(c, w) {
-    lienc(c, w, w * 0.7, (ctx, W, H) => {
-        ombraTerra(ctx, W / 2, H - 6, W * 0.46, 8);
-        ctx.lineWidth = 3.5; ctx.strokeStyle = CONTORN;
-        ctx.fillStyle = '#8a867c';
-        ctx.beginPath(); ctx.moveTo(6, H - 6); ctx.lineTo(W * 0.12, H * 0.4); ctx.lineTo(W * 0.4, H * 0.1); ctx.lineTo(W * 0.78, H * 0.2); ctx.lineTo(W - 6, H - 6); ctx.closePath(); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#a09c90'; ctx.beginPath(); ctx.moveTo(W * 0.3, H * 0.4); ctx.lineTo(W * 0.42, H * 0.18); ctx.lineTo(W * 0.62, H * 0.28); ctx.lineTo(W * 0.5, H * 0.5); ctx.closePath(); ctx.fill();
+// Roques de dibuix simple i «amable» (estil del joc: formes grosses, tres plans de color, contorn gruixut), sense textura realista. variant 0: pedra rodona i baixa;
+// 1: pedra alta i angulosa de dalt pla; 2: dues pedres recolzades l'una a l'altra amb una pedreta. Una mica de molsa a dalt i quatre esquerdes.
+function dibuixarRoca(c, w, variant = 0) {
+    const RATIO = [0.72, 0.9, 0.74][variant] || 0.72;
+    lienc(c, w, w * RATIO, (ctx, W, H) => {
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        let sd = 17 + variant * 31; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        ombraTerra(ctx, W / 2, H - 6, W * 0.47, 8);
+        // Silueta suavitzada (o amb cantons) a partir de punts en fraccions de la caixa de la pedra
+        const traca = (pts, x0, y0, ww, hh, suau) => {
+            const P = pts.map(([x, y]) => [x0 + x * ww, y0 + y * hh]);
+            ctx.beginPath();
+            if (suau) {
+                const m = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], n = P.length, i0 = m(P[n - 1], P[0]);
+                ctx.moveTo(i0[0], i0[1]);
+                for (let i = 0; i < n; i++) { const q = m(P[i], P[(i + 1) % n]); ctx.quadraticCurveTo(P[i][0], P[i][1], q[0], q[1]); }
+            } else { P.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); }
+            ctx.closePath();
+        };
+        const pedra = (pts, x0, y0, ww, hh, suau, tons) => {
+            const [clar, mig, fosc] = tons;
+            traca(pts, x0, y0, ww, hh, suau); ctx.fillStyle = mig; ctx.fill();
+            ctx.save(); traca(pts, x0, y0, ww, hh, suau); ctx.clip();
+            ctx.fillStyle = clar; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + ww, y0); ctx.lineTo(x0 + ww, y0 + hh * 0.34); ctx.lineTo(x0 + ww * 0.45, y0 + hh * 0.5); ctx.lineTo(x0, y0 + hh * 0.42); ctx.closePath(); ctx.fill();            // el pla de dalt, il·luminat
+            ctx.fillStyle = fosc; ctx.beginPath(); ctx.moveTo(x0 + ww * 0.66, y0 + hh * 0.42); ctx.lineTo(x0 + ww, y0 + hh * 0.3); ctx.lineTo(x0 + ww, y0 + hh); ctx.lineTo(x0 + ww * 0.78, y0 + hh); ctx.closePath(); ctx.fill();        // el pla de la dreta, a l'ombra
+            ctx.fillStyle = 'rgba(255,248,225,0.42)'; ctx.beginPath(); ctx.ellipse(x0 + ww * 0.34, y0 + hh * 0.22, ww * 0.16, hh * 0.07, -0.4, 0, Math.PI * 2); ctx.fill();                                                             // llum a dalt a l'esquerra
+            ctx.strokeStyle = 'rgba(48,40,30,0.55)'; ctx.lineWidth = 2;                                                                                                                                                      // esquerdes curtes
+            for (let k = 0; k < 3; k++) { const cx = x0 + ww * (0.2 + r() * 0.55), cy = y0 + hh * (0.45 + r() * 0.3); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + ww * 0.05, cy + hh * 0.07); ctx.lineTo(cx - ww * 0.01, cy + hh * 0.15); ctx.stroke(); }
+            ctx.restore();
+            traca(pts, x0, y0, ww, hh, suau); ctx.lineWidth = 3.5; ctx.strokeStyle = CONTORN; ctx.stroke();
+        };
+        const molsa = (cx, cy, rx) => {
+            ctx.fillStyle = '#6fa646'; ctx.strokeStyle = '#26361e'; ctx.lineWidth = 2;
+            [[-0.5, 0.15, 0.55], [0, -0.1, 0.7], [0.5, 0.12, 0.5]].forEach(([dx, dy, e]) => { ctx.beginPath(); ctx.ellipse(cx + dx * rx, cy + dy * rx * 0.5, rx * 0.45 * e + 2, rx * 0.26 * e + 2, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+            ctx.fillStyle = '#93c860'; ctx.beginPath(); ctx.ellipse(cx - rx * 0.05, cy - rx * 0.12, rx * 0.2, rx * 0.09, 0, 0, Math.PI * 2); ctx.fill();
+        };
+        const TONS = ['#d2cdbc', '#aaa595', '#7e7a6a'];
+        if (variant === 0) {
+            pedra([[0.04, 0.96], [0.02, 0.68], [0.13, 0.36], [0.36, 0.12], [0.63, 0.08], [0.86, 0.26], [0.98, 0.62], [0.97, 0.96]], 0, 0, W, H - 4, true, TONS);
+            molsa(W * 0.42, H * 0.18, W * 0.17); molsa(W * 0.8, H * 0.32, W * 0.09);
+        } else if (variant === 1) {
+            pedra([[0.1, 0.97], [0.05, 0.55], [0.17, 0.2], [0.42, 0.07], [0.78, 0.1], [0.95, 0.45], [0.93, 0.97]], 0, 0, W, H - 4, false, ['#d6d1c0', '#b0ab9a', '#827e6e']);
+            molsa(W * 0.5, H * 0.1, W * 0.2);
+        } else {
+            pedra([[0.02, 0.97], [0.0, 0.62], [0.1, 0.3], [0.3, 0.1], [0.55, 0.1], [0.72, 0.4], [0.74, 0.97]], 0, 0, W * 0.75, H - 4, true, TONS);
+            pedra([[0.0, 0.97], [0.05, 0.4], [0.35, 0.08], [0.75, 0.2], [1, 0.97]], W * 0.62, H * 0.46, W * 0.36, H * 0.5, true, ['#d6d1c0', '#b3ae9d', '#837f6f']);
+            molsa(W * 0.34, H * 0.16, W * 0.15);
+            ctx.fillStyle = '#aaa595'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(W * 0.1, H - 10, W * 0.07, H * 0.045, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();      // una pedreta
+        }
     });
 }
 
