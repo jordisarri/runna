@@ -1147,11 +1147,11 @@ class ZonaGeorgi extends ZonaBase {
         this.yLlosa = caseta.y - caseta.displayHeight * (1 - 0.615);
         this.forcaPortaCaseta = this.forcsPorta[this.forcsPorta.length - 1]; this.forcaPortaCaseta.b = this.yLlosa + 18;          // el «portal» comença a dalt de l'escala (no només a la porta): l'Ineu s'enfosqueix i el marc el tapa mentre acaba de pujar
         const tx = this.textures.get('caseta_joc').getSourceImage();
+        // La part de dalt de la caseta (de la teulada al llindar de la porta) es torna a dibuixar per sobre de l'Ineu: quan el cap passa de l'alçada de la porta, la cabana el tapa
         const dwc = caseta.displayWidth, dcx = caseta.x - dwc / 2 + 0.5016 * dwc, dhw = 0.147 * dwc / 2, sill = caseta.y - caseta.displayHeight * (1 - 0.580);
-        const llindar = caseta.y - caseta.displayHeight * (1 - 0.376);          // la part de dalt de la porta: el que puja per sobre d'aquesta alçada ja no es veu (és dins la caseta)
-        const mg = this.make.graphics({ add: false });
-        mg.fillStyle(0xffffff, 1).fillRect(0, llindar, this.config.amplada, this.config.alcada);          // la porta (només la part de dalt: el cap) i tot el que hi ha per sota (el cos)
-        this.mascaraPorta = { g: mg, mask: mg.createGeometryMask(), x0: dcx - dhw, x1: dcx + dhw, sill };
+        this.sobreCaseta = this.add.image(caseta.x, caseta.y, 'caseta_joc').setOrigin(0.5, 1).setScale(caseta.scaleX, caseta.scaleY).setDepth(490)
+            .setCrop(0, 0, tx.width, tx.height * 0.372);
+        this.mascaraPorta = { x0: dcx - dhw, x1: dcx + dhw, sill };
 
         // Detalls de jardí
         this.barril(1010, 470, 40, 16);
@@ -1172,22 +1172,17 @@ class ZonaGeorgi extends ZonaBase {
         this.posaEscala();
     }
     posaEscala() {
-        const I = this.ineu, q = this.forcaPortaCaseta, m = this.mascaraPorta;
+        const I = this.ineu, m = this.mascaraPorta;
         if (!I || !m) return;
         const prop = I.x > m.x0 - 40 && I.x < m.x1 + 40 && I.y > m.sill - 200 && I.y < m.sill + 70;          // a prop de la porta de dalt
+        this.enPropPorta = prop;
         this.enEscala = I.x > 824 && I.x < 896 && I.y < 504 && I.y > 353;
-        if (this.enEscala) { I.setDepth(485); if (this.ombraIneu) this.ombraIneu.setDepth(484.5); }          // per sobre dels batents oberts de la porta, que si no el tapen
-        // A prop de la porta, l'Ineu només es veu dins del dibuix de la porta (per sobre del llindar: l'ample de la porta) i lliure per sota: sembla que el cap és dins i el cos fora
-        if (prop) { I.setDepth(485); if (this.ombraIneu) this.ombraIneu.setDepth(484.5); }          // (també mentre camina cap a dins en canviar de zona: pasPorta li posa la profunditat de la y i la foscor de la porta el tapava del tot)
-        if (prop && !I.mask) I.setMask(m.mask);
-        if (this.fantasma) { if (prop && !this.fantasma.mask) this.fantasma.setMask(m.mask); else if (!prop && this.fantasma.mask) this.fantasma.clearMask(); }          // la silueta translúcida també
-        else if (!prop && I.mask) I.clearMask();
-        if (this.llosaDavant) this.llosaDavant.setVisible(false);
+        if (this.enEscala || prop) { I.setDepth(485); if (this.ombraIneu) this.ombraIneu.setDepth(484.5); }          // per sobre dels batents oberts de la porta (la part de dalt de la caseta, a 490, el tapa)
     }
     actualitzar() { this.posaEscala(); }
     sincroFantasma() {
         super.sincroFantasma();
-        if (this.enEscala && this.fantasma) this.fantasma.setAlpha(0);        // a l'escala es veu de debò, no per transparència
+        if ((this.enEscala || this.enPropPorta) && this.fantasma) this.fantasma.setAlpha(0);        // a l'escala es veu de debò, no per transparència
     }
 }
 
