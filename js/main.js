@@ -129,7 +129,7 @@ const Joc = {
         musica_poble:      { fitxer: 'poble',      fallback: 'musica_intro' },      // exteriors del poble (fins ara, la mateixa que el títol)
         musica_santuari:   { fitxer: 'santuari',   fallback: 'musica_casa' },
         musica_taverna:    { fitxer: 'taverna',    fallback: 'musica_casa' },
-        musica_cirosa:     { fitxer: 'cirosa',     fallback: 'musica_bosc' },
+        musica_cirosa:     { fitxer: 'cirosa',     fallback: 'musica_poble' },
         musica_biblioteca: { fitxer: 'biblioteca', fallback: 'musica_casa' },
         musica_hostatgeria: { fitxer: 'hostatgeria', fallback: 'musica_casa' },
         musica_girgoles:   { fitxer: 'girgoles',   fallback: 'musica_masmorra' },
