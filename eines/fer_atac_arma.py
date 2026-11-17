@@ -32,6 +32,8 @@ FOT_EXC = {('tiller', 'up'): [0, 1, 2, 3, 4], ('espasa', 'up'): [0, 1, 2, 1, 0],
 # La branca 'up' fa servir ara el full de proves v5 (tiller_up_v5, 5 fotogrames dibuixats, tots triats a mà amb proves/atac_up/; l'alçada del cos es mesura amb el 5).
 # Fotogrames amb què es mesura l'alçada del cos (per defecte 12-15, on l'arma és a les mans). A basto_v1 'up' la gafa del bastó sobresurt per sobre del cap en aquests: es mesura amb el 3 i el 4.
 ESCALA_FOTS = {('basto', 'up'): (3, 4), ('tiller', 'up'): (4,)}
+# Reducció extra de la mida (per a fulls on el personatge surt dibuixat més ample que als altres; tiller_up_v5, a 0,85, igualava l'amplada del cos amb la dels altres atacs)
+REDUCCIO = {('tiller', 'up'): 0.85}
 CENTRAL = set()        # direccions on l'escala del cos es mesura només amb les columnes del cap (quan l'arma sobresurt per sobre del cap)
 # Cel·la més gran per a fulls concrets (js/assets.js, ATAC_CEL_EXC, ha de dir el mateix): el bastó 'up' es tallava a la vora i s'ha de poder retocar a mà (l'Ineu va al mig, amb molt d'espai)
 CEL_EXC = {('basto', 'up'): 480}
@@ -102,7 +104,7 @@ def main():
             if filtre and f'{arma}:{d}' not in filtre: continue
             fots = FOT_EXC.get((arma, d), fots0)
             im = Image.open(ORIGEN / ORIGEN_EXC.get((arma, d), arma) / f'{d}.png').convert('RGBA')
-            pf = peus(im, range(16)); K = escala(im, arma, (arma, d) in CENTRAL, ESCALA_FOTS.get((arma, d), (12, 13, 14, 15)))
+            pf = peus(im, range(16)); K = escala(im, arma, (arma, d) in CENTRAL, ESCALA_FOTS.get((arma, d), (12, 13, 14, 15))) * REDUCCIO.get((arma, d), 1.0)
             n = len(fots); cols = 4; files = (n + cols - 1) // cols
             CEL = CEL_EXC.get((arma, d), CEL0)
             out = Image.new('RGBA', (cols * CEL, files * CEL), (0, 0, 0, 0))
