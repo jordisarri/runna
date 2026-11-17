@@ -12,13 +12,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### proleg  <sub>(js/main.js)</sub>
 
-**[1] (narrador):** Fa tres segles, quan el món encara tremolava de pregàries, un firaire de capa negra pujava cada primavera al Miracle amb gàbies d'ocells que cantaven amb veu de persona: l'Ocellaire. I els nens que l'escoltaven perdien el riure per sempre.
+**[1] (narrador):** Fa tres segles, quan el món encara tremolava de pregàries, un firaire de capa negra pujava cada primavera al Miracle amb gàbies d'ocells que cantaven amb veu de persona: l'Ocellaire. Els nens que l'escoltaven perdien el riure per sempre.
 
-**[2] (narrador):** Pastors i monjos s'alçaren contra ell i el van tancar dins la seva pròpia gàbia, al més profund de la terra. Els monjos van segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la van fer dormir entre pedres, a l'espera del dia en què la foscor tornés.
+**[2] (narrador):** Pastors i monjos s'alçaren contra ell i el tancaren dins la seva pròpia gàbia, al més profund de la terra. Els monjos van segellar la porta de ferro amb la llum de l'espasa del Miracle, Runna. La van fer dormir entre pedres, a l'espera del dia en què la foscor tornés.
 
 **[3] (narrador):** Però la foscor no oblida. Fa tres nits, una boira violeta i glaçada s'ha alçat de sota terra: marceix els horts, enterboleix les aigües i ha fet emmudir l'orgue sagrat del Santuari.
 
-**[4] (narrador):** I cada nit, la boira reclama un nen. / Primer l'Huri i el Fram, a Sant Benet. / I ara, en aquesta nit maleïda... el Sardi.
+**[4] (narrador):** I cada nit, la boira reclama un nen. / Un llit buit a Sant Benet, i després un altre. / I aquesta nit maleïda... un tercer bressol s'ha quedat fred.
 
 **[5] (narrador):** Quan l'alba torna a incendiar el cel del Miracle, un jove monjo desperta al Monestir: l'Ineu. / El destí l'ha triat, encara que ell no ho sàpiga. El Pare Jordà l'espera a la Plaça.
 
@@ -46,19 +46,19 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[10] Pare Jordà:** No et vull espantar. Fa tres nits que una boira violeta surt de sota terra, i cada nit falta un nen: l'Huri i el Fram, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el protegit de les sacerdotesses de l'Hostatgeria.
 
-**[11] Pare Jordà:** Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada.
+**[11] Pare Jordà:** Ningú no els ha vist marxar. Els llits són desfets, i les finestres tancades per dins. Només queda una olor de terra mullada.
 
 **[12] Pare Jordà:** Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot. Ves amb compte pels camins, Ineu.
 
 *Si: té la fulla del Til·ler i encara no ha rebut la benedicció del prior*
 
-**[13] Pare Jordà:** Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna ni a mi.
+**[13] Pare Jordà:** Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna a qualsevol.
 
-**[14] Pare Jordà:** Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és voler bé de debò. Ajup el cap.
+**[14] Pare Jordà:** Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és l'autèntica bona voluntat. Ajup el cap.
 
-**[15] Pare Jordà:** No vas sol, Ineu. Vas amb tot el Miracle darrere teu.
+**[15] Pare Jordà:** No vas sol, Ineu. T'acompanya tot el Miracle.
 
-**[16] Pare Jordà:** I pren això. És un medalló de pedra, amb una mà oberta tallada, que ha passat de mà en mà per les generacions de priors del Miracle. Ara ha de ser teu: duu-lo a la placa del Dolmen.
+**[16] Pare Jordà:** I pren això. És un medalló de pedra, amb una mà oberta tallada, que han guardat totes les generacions de priors del Miracle. Ara ha de ser teu: porta'l al Dolmen.
 
 **[17]** ★ Has obtingut el MEDALLÓ DE LA BENEDICCIÓ!
 

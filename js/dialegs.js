@@ -106,7 +106,7 @@ const DIALEGS = {
                 pagines: [
                     { qui: "Pare Jordà", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
                     { qui: "Pare Jordà", text: "No et vull espantar. Fa tres nits que una boira violeta surt de sota terra, i cada nit falta un nen: l'Huri i el Fram, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el protegit de les sacerdotesses de l'Hostatgeria." },
-                    { qui: "Pare Jordà", text: "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada." },
+                    { qui: "Pare Jordà", text: "Ningú no els ha vist marxar. Els llits són desfets, i les finestres tancades per dins. Només queda una olor de terra mullada." },
                     { qui: "Pare Jordà", text: "Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot. Ves amb compte pels camins, Ineu." }
                 ],
                 enAcabar: () => {
@@ -118,11 +118,11 @@ const DIALEGS = {
         if (E.flag("fullaTiler") && !E.flag("benediccio")) {
             return {
                 pagines: [
-                    { qui: "Pare Jordà", text: "Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna ni a mi." },
-                    { qui: "Pare Jordà", text: "Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és voler bé de debò. Ajup el cap." },
+                    { qui: "Pare Jordà", text: "Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna a qualsevol." },
+                    { qui: "Pare Jordà", text: "Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és l'autèntica bona voluntat. Ajup el cap." },
                     { fer: (z, fet) => z.seq([c => z.npcVa('pare_jorda', z.ineu.x + 60, z.ineu.y + 4, c), c => z.npcMira('pare_jorda', 'ineu', c), c => { z.ajupir('ineu'); z.llum(z.ineu.x, z.ineu.y - 90, 0xffe8a0, c); }], fet) },
-                    { qui: "Pare Jordà", text: "No vas sol, Ineu. Vas amb tot el Miracle darrere teu." },
-                    { qui: "Pare Jordà", text: "I pren això. És un medalló de pedra, amb una mà oberta tallada, que ha passat de mà en mà per les generacions de priors del Miracle. Ara ha de ser teu: duu-lo a la placa del Dolmen." },
+                    { qui: "Pare Jordà", text: "No vas sol, Ineu. T'acompanya tot el Miracle." },
+                    { qui: "Pare Jordà", text: "I pren això. És un medalló de pedra, amb una mà oberta tallada, que han guardat totes les generacions de priors del Miracle. Ara ha de ser teu: porta'l al Dolmen." },
                     { avis: "Has obtingut el MEDALLÓ DE LA BENEDICCIÓ!", obj: 'medallo_benedicio' }
                 ],
                 enAcabar: () => { E.dona("medallo_benedicio"); E.posaFlag("benediccio"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }

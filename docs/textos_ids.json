@@ -5,14 +5,14 @@
    {
     "id": 1,
     "qui": "(narrador)",
-    "text": "Fa tres segles, quan el món encara tremolava de pregàries, un firaire de capa negra pujava cada primavera al Miracle amb gàbies d'ocells que cantaven amb veu de persona: l'Ocellaire. I els nens que l'escoltaven perdien el riure per sempre.",
+    "text": "Fa tres segles, quan el món encara tremolava de pregàries, un firaire de capa negra pujava cada primavera al Miracle amb gàbies d'ocells que cantaven amb veu de persona: l'Ocellaire. Els nens que l'escoltaven perdien el riure per sempre.",
     "fitxer": "js/main.js",
     "linia": 0
    },
    {
     "id": 2,
     "qui": "(narrador)",
-    "text": "Pastors i monjos s'alçaren contra ell i el van tancar dins la seva pròpia gàbia, al més profund de la terra. Els monjos van segellar la porta de ferro amb la llum de Runna, l'espasa del Miracle, i la van fer dormir entre pedres, a l'espera del dia en què la foscor tornés.",
+    "text": "Pastors i monjos s'alçaren contra ell i el tancaren dins la seva pròpia gàbia, al més profund de la terra. Els monjos van segellar la porta de ferro amb la llum de l'espasa del Miracle, Runna. La van fer dormir entre pedres, a l'espera del dia en què la foscor tornés.",
     "fitxer": "js/main.js",
     "linia": 0
    },
@@ -26,7 +26,7 @@
    {
     "id": 4,
     "qui": "(narrador)",
-    "text": "I cada nit, la boira reclama un nen. / Primer l'Huri i el Fram, a Sant Benet. / I ara, en aquesta nit maleïda... el Sardi.",
+    "text": "I cada nit, la boira reclama un nen. / Un llit buit a Sant Benet, i després un altre. / I aquesta nit maleïda... un tercer bressol s'ha quedat fred.",
     "fitxer": "js/main.js",
     "linia": 0
    },
@@ -83,7 +83,7 @@
    {
     "id": 11,
     "qui": "Pare Jordà",
-    "text": "Ningú no els ha vist marxar. Els llits són desfets i les finestres, tancades per dins. Només queda una olor de terra mullada.",
+    "text": "Ningú no els ha vist marxar. Els llits són desfets, i les finestres tancades per dins. Només queda una olor de terra mullada.",
     "fitxer": "js/dialegs.js",
     "linia": 109
    },
@@ -97,28 +97,28 @@
    {
     "id": 13,
     "qui": "Pare Jordà",
-    "text": "Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna ni a mi.",
+    "text": "Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna a qualsevol.",
     "fitxer": "js/dialegs.js",
     "linia": 121
    },
    {
     "id": 14,
     "qui": "Pare Jordà",
-    "text": "Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és voler bé de debò. Ajup el cap.",
+    "text": "Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és l'autèntica bona voluntat. Ajup el cap.",
     "fitxer": "js/dialegs.js",
     "linia": 122
    },
    {
     "id": 15,
     "qui": "Pare Jordà",
-    "text": "No vas sol, Ineu. Vas amb tot el Miracle darrere teu.",
+    "text": "No vas sol, Ineu. T'acompanya tot el Miracle.",
     "fitxer": "js/dialegs.js",
     "linia": 124
    },
    {
     "id": 16,
     "qui": "Pare Jordà",
-    "text": "I pren això. És un medalló de pedra, amb una mà oberta tallada, que ha passat de mà en mà per les generacions de priors del Miracle. Ara ha de ser teu: duu-lo a la placa del Dolmen.",
+    "text": "I pren això. És un medalló de pedra, amb una mà oberta tallada, que han guardat totes les generacions de priors del Miracle. Ara ha de ser teu: porta'l al Dolmen.",
     "fitxer": "js/dialegs.js",
     "linia": 125
    },
