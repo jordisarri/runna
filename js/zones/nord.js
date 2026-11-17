@@ -1142,6 +1142,12 @@ class ZonaGeorgi extends ZonaBase {
         const caseta = this.edifici('caseta_joc', 860, 500, 260, 67, null, null, { alt: 137 });
         this.sortida(860 - 33, 500 - 137 + 6, 66, 26, 'ZonaCasetaJoc', 'porta');
         this.portaMasia(caseta, 860, 500, false, { cx: 0.5016, w: 0.147, top: 0.376, bottom: 0.580 });          // la porta és a la terrassa, damunt dels pilars: s'obre quan l'Ineu s'acosta a l'escala
+        // La llosa de la terrassa (la vora de davant, a 0,585-0,615 de l'alçada) es torna a dibuixar per sobre de l'Ineu, només al tros de la porta: quan és a la terrassa li tapa els peus
+        this.yLlosa = caseta.y - caseta.displayHeight * (1 - 0.615);
+        this.forcaPortaCaseta = this.forcsPorta[this.forcsPorta.length - 1]; this.forcaPortaCaseta.b = this.yLlosa + 18;          // el «portal» comença a dalt de l'escala (no només a la porta): l'Ineu s'enfosqueix i el marc el tapa mentre acaba de pujar
+        const tx = this.textures.get('caseta_joc').getSourceImage();
+        this.llosaDavant = this.add.image(caseta.x, caseta.y, 'caseta_joc').setOrigin(0.5, 1).setScale(caseta.scaleX, caseta.scaleY).setDepth(486).setVisible(false)
+            .setCrop(tx.width * 0.4, tx.height * 0.583, tx.width * 0.2, tx.height * 0.034);
 
         // Detalls de jardí
         this.barril(1010, 470, 40, 16);
@@ -1154,21 +1160,22 @@ class ZonaGeorgi extends ZonaBase {
         this.sortida(1086, 510, 14, 130, 'ZonaTiller', 'georgi');
     }
 
-    // Mateix efecte també durant el canvi d'escena (quan l'Ineu ja ha tocat la sortida però continua pujant l'escala mentre es fa el fosc): si no, l'actualitzar() no corre,
-    // la seva profunditat torna a ser la y i la façana el tapa abans d'entrar a dins.
+    // Pujant per l'escala (fins a la llosa de la terrassa) l'Ineu es veu per sobre de la façana (si no, el gràfic el tapa mentre puja). Un cop a la llosa o més amunt entra pel
+    // portal com a qualsevol porta: es dibuixa darrere el marc i el llindar (però per damunt de la foscor de dins), i la llosa de la terrassa li tapa els peus. Es fa a
+    // postFisica() perquè també compti durant el canvi d'escena (quan l'Ineu ja ha tocat la sortida però continua pujant mentre es fa el fosc).
     postFisica() {
         super.postFisica();
-        const I = this.ineu;
-        this.enEscala = !!I && I.x > 824 && I.x < 896 && I.y < 504 && I.y > 353;
-        if (this.enEscala) { I.setDepth(485); if (this.ombraIneu) this.ombraIneu.setDepth(484.5); }
+        this.posaEscala();
     }
-
-    // A l'escala de la caseta l'Ineu es veu per sobre de la façana (si no, el gràfic el tapa mentre puja)
-    actualitzar() {
-        const I = this.ineu;
-        this.enEscala = !!I && I.x > 824 && I.x < 896 && I.y < 504 && I.y > 353;
+    posaEscala() {
+        const I = this.ineu, q = this.forcaPortaCaseta;
+        const enPorta = !!I && !!q && I.x > q.x0 && I.x < q.x1 && I.y > q.t && I.y < q.b;          // dins la «porta» (des de dalt de l'escala): el marc i el llindar el tapen, com a tota porta
+        this.enEscala = !!I && I.x > 824 && I.x < 896 && I.y < 504 && I.y > 353 && !enPorta;
         if (this.enEscala) { I.setDepth(485); if (this.ombraIneu) this.ombraIneu.setDepth(484.5); }          // per sobre dels batents oberts de la porta (depth 480-482), que si no el tapen
+        // La llosa de la terrassa (la vora de davant, a sobre de l'Ineu) només el tapa quan ja hi és a dalt, no mentre puja per l'escala
+        if (this.llosaDavant) this.llosaDavant.setVisible(enPorta && I.y <= this.yLlosa + 12);
     }
+    actualitzar() { this.posaEscala(); }
     sincroFantasma() {
         super.sincroFantasma();
         if (this.enEscala && this.fantasma) this.fantasma.setAlpha(0);        // a l'escala es veu de debò, no per transparència
