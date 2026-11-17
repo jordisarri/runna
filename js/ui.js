@@ -303,7 +303,7 @@ class EscenaUI extends Phaser.Scene {
             if (!this.dialeg || this.menuObert) { pIniciDialeg = null; return; }
             const p1 = this.input.pointer1, p2 = this.input.pointer2;
             const quedaAlcunPunter = (p1 && p1 !== p && punterViu(p1)) || (p2 && p2 !== p && punterViu(p2));
-            const eraPinchRecent = (Date.now() - tempsUltimPinch < 600);
+            const eraPinchRecent = (Date.now() - tempsUltimPinch < 600) && quedaAlcunPunter;          // (un «pinch recent» sense cap altre dit viu no és un pinch)
 
             if (quedaAlcunPunter || eraPinchRecent) {
                 haMogutDialeg = true;
@@ -313,7 +313,9 @@ class EscenaUI extends Phaser.Scene {
                 return;
             }
 
-            const vaMoure = haMogutDialeg;
+            // És un toc si el dit s'ha mogut poc entre que s'ha posat i s'aixeca (es mira el mateix punter, no l'estat acumulat: si un toc anterior s'ha perdut, aquest ja no queda marcat com a arrossegament)
+            const toc = Math.hypot(p.x - p.downX, p.y - p.downY) < 14;
+            const vaMoure = haMogutDialeg && !toc;
             pIniciDialeg = null;
             haMogutDialeg = false;
             d0PinchDialeg = 0;
@@ -321,6 +323,10 @@ class EscenaUI extends Phaser.Scene {
                 this.avancar();
             }
         });
+        // En perdre o tornar a guanyar el focus (canvi d'aplicació), es neteja tot l'estat dels gestos del diàleg
+        const netejaGestos = () => { pIniciDialeg = null; haMogutDialeg = false; d0PinchDialeg = 0; tempsUltimPinch = 0; };
+        document.addEventListener('visibilitychange', netejaGestos);
+        window.addEventListener('blur', netejaGestos);
 
         this.input.on('pointerupoutside', () => {
             pIniciDialeg = null;
