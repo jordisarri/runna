@@ -2436,7 +2436,7 @@ class ZonaBase extends Phaser.Scene {
         (this.forcsPorta = this.forcsPorta || []).push({ x0: DX - DW / 2 - 4, x1: DX + DW / 2 + 4, t: DT, b: Math.min(Math.max(DB + 2, Z), DB + 12), z: Z });          // el marc i l'interior tapen l'Ineu: la silueta translúcida s'hi amaga
         // Els brancals (els costats del marc) són del gràfic de la façana, que és al fons: es tornen a dibuixar per sobre de l'Ineu perquè, dins la porta, el marc el tapi de debò
         const imF = o.marc || o.retall;
-        if (imF) {
+        if (imF && !o.senseMarc) {          // (senseMarc: porta més estreta que l'Ineu, com la de la caseta: els brancals i el dintell tornats a dibuixar el tallarien en trossos)
             const src = imF.texture.getSourceImage(), SW = 26;
             [[DX - DW / 2 - SW, DX - DW / 2], [DX + DW / 2, DX + DW / 2 + SW]].forEach(([xa, xb]) => {
                 const nom = 'brancal_' + imF.texture.key + '_' + xa + '_' + DT, sx = (xa - imF.x + imF.displayWidth * imF.originX) / imF.scaleX, sy = (DT - imF.y + imF.displayHeight * imF.originY) / imF.scaleY;
@@ -2446,7 +2446,7 @@ class ZonaBase extends Phaser.Scene {
                 if (imF.isTinted) im.setTint(imF.tintTopLeft);
             });
         }
-        if (imF) {          // i el tros de façana de damunt de l'obertura (i, en arc, els cantons de l'arc): el cap de l'Ineu també queda tapat mentre és dins la porta
+        if (imF && !o.senseMarc) {          // (senseMarc: porta més estreta que l'Ineu, com la de la caseta: els brancals i el dintell tornats a dibuixar el tallarien en trossos)          // i el tros de façana de damunt de l'obertura (i, en arc, els cantons de l'arc): el cap de l'Ineu també queda tapat mentre és dins la porta
             const src = imF.texture.getSourceImage(), ALT_I = 130, fl = o.arc ? (o.arc === true ? DW / 2 : o.arc) : 0, hh = ALT_I + fl, ys = DT - ALT_I;
             const nom = 'dintell_' + imF.texture.key + '_' + DX + '_' + DT, kx = 1 / imF.scaleX, ky = 1 / imF.scaleY;
             if (!this.textures.exists(nom)) {
@@ -2602,7 +2602,7 @@ class ZonaBase extends Phaser.Scene {
     portaMasia(img, x, y, arc = true, d = null) {
         const dw = img.displayWidth, dh = img.displayHeight, t = y - dh;
         const cx = d ? img.x - dw / 2 + d.cx * dw : x, top = t + dh * (d ? d.top : 0.56), bottom = d ? t + dh * d.bottom : y - 4, ample = dw * (d ? d.w : 0.15);
-        this.portaAnimada({ x: cx, top, bottom, ample, fons: y - 20, unic: true, arc, retall: img, tint: img.isTinted ? img.tintTopLeft : 0 });
+        this.portaAnimada({ x: cx, top, bottom, ample, fons: y - 20, unic: true, arc, retall: img, senseMarc: !!(d && d.senseMarc), tint: img.isTinted ? img.tintTopLeft : 0 });
     }
 
     actualitzarPortes(delta) {
