@@ -21,7 +21,7 @@ Object.assign(DIALEGS, {
                 { qui: 'Ineu', text: "L'estàtua té el cap completament girat d'esquena, mirant la paret. A la base del pedestal hi ha un volant de ferro amb engranatges, però li falta la maneta per poder-lo fer girar." },
                 { qui: 'Ineu', text: "En Jorgi de la Caseta segur que me'n pot deixar una, és un expert en tot tipus d'eines." }
             ],
-            enAcabar: () => { E.posaFlag('raimVolantVist'); if (!E.flag('maneta') && !E.te('maneta')) E.posaObjectiu("El volant de ferro de l'Home del Raïm no té maneta. En Jorgi de la Caseta, a l'oest del Gran Til·ler, en deu saber alguna cosa."); }
+            enAcabar: () => { E.posaFlag('raimVolantVist'); if (!E.flag('maneta') && !E.te('maneta')) E.posaObjectiu("El volant de ferro de l'Home del Raïm no té maneta. En Jorgi de la Caseta segur que me'n pot deixar una."); }
         };
     },
 
