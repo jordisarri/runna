@@ -2342,17 +2342,28 @@ class ZonaBase extends Phaser.Scene {
         if (this.twCinema) this.twCinema.stop();
         // On es posaria la càmera en seguir l'Ineu: a Phaser el centre de la vista és scroll + la meitat de la finestra (sigui quin sigui el zoom) i el
         // desplaçament del seguiment es resta. S'hi aplica també el límit del món, perquè en tornar a posar-lo no hi hagi cap salt.
-        const zoom = this.zoomBase || this.zoomZona || ZOOM_CAMERA, b = this.boundsCinema, dw = AMPLE / zoom, dh = H / zoom;          // (el zoom que té ara la zona, no el de l'entrada: així no hi ha salt)
-        let destiX = I.x - AMPLE / 2, destiY = I.y - (this.cameraFollowOffsetY || 0) - H / 2;
-        if (b) {
-            const bx = b.x + (dw - AMPLE) / 2, by = b.y + (dh - H) / 2;
-            destiX = Phaser.Math.Clamp(destiX, bx, Math.max(bx, bx + b.w - dw));
-            destiY = Phaser.Math.Clamp(destiY, by, Math.max(by, by + b.h - dh));
-        }
-        this.twCinema = this.tweens.add({ targets: cam, scrollX: destiX, scrollY: destiY, zoom, duration: ms, ease: 'Sine.easeInOut',
-            onUpdate: () => this.ajustarSuperposicions(), onComplete: () => {
-                const b = this.boundsCinema;
+        // El destí es recalcula a cada fotograma (l'Ineu pot caminar mentre la càmera torna: amb un destí fix, en acabar la càmera li saltava a sobre d'un cop)
+        const b = this.boundsCinema, s0 = { x: cam.scrollX, y: cam.scrollY, z: cam.zoom };
+        const desti = () => {
+            const zoom = this.zoomBase || this.zoomZona || ZOOM_CAMERA, dw = AMPLE / zoom, dh = H / zoom;          // (el zoom que té ara la zona, no el de l'entrada: així no hi ha salt)
+            let x = I.x - AMPLE / 2, y = I.y - (this.cameraFollowOffsetY || 0) - H / 2;
+            if (b) {
+                const bx = b.x + (dw - AMPLE) / 2, by = b.y + (dh - H) / 2;
+                x = Phaser.Math.Clamp(x, bx, Math.max(bx, bx + b.w - dw));
+                y = Phaser.Math.Clamp(y, by, Math.max(by, by + b.h - dh));
+            }
+            return { x, y, z: zoom };
+        };
+        const v = { t: 0 };
+        this.twCinema = this.tweens.add({ targets: v, t: 1, duration: ms, ease: 'Sine.easeInOut',
+            onUpdate: () => {
+                const d = desti(), k = v.t;
+                cam.setZoom(Phaser.Math.Linear(s0.z, d.z, k)); cam.setScroll(Phaser.Math.Linear(s0.x, d.x, k), Phaser.Math.Linear(s0.y, d.y, k));
+                this.ajustarSuperposicions();
+            },
+            onComplete: () => {
                 if (b) cam.setBounds(b.x, b.y, b.w, b.h);
+                const d = desti(); cam.setZoom(d.z); cam.setScroll(d.x, d.y);
                 cam.startFollow(I, false, 0.12, 0.12, 0, this.cameraFollowOffsetY || 0);
                 this.camCinema = false; this.ajustarSuperposicions();
                 if (fet) fet();
