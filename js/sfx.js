@@ -401,7 +401,7 @@ const Sfx = {
         this.veuGreu(98, 49, 2.2, 0.2, 0.5);
         this.xiu(2.6, 0.12, 'lowpass', 700, 80, 1, 0.4);
     },
-    // Llenguatge sonor de la pausa de l'Ocellaire (design/lluita_final_combat.md § 4-5)
+    // Llenguatge sonor de la pausa de l'Ocellaire (art/arxiu/design/lluita_final_combat.md § 4-5)
     esgotat() {                  // s'aclofa de genolls: veu greu que cau
         if (!this.ok('esgotat', 300)) return;
         this.to(150, 50, 0.55, 'sine', 0.28);

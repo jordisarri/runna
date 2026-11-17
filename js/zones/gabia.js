@@ -922,7 +922,7 @@ class ZonaGabia extends ZonaBase {
     }
     // L'Ocellaire cau de genolls (el bàcul buit): comença la pausa en què se li pot picar el cap
     // Llenguatge de la pausa: or = ara pots picar. Halo daurat sobre el cap, fletxa, tres llumetes (una per cop), anell d'or a terra,
-    // bàcul a terra i tambors callats; «Ara!» a les dues primeres. Tot per codi i sense bloquejar res (design/lluita_final_combat.md § 4).
+    // bàcul a terra i tambors callats; «Ara!» a les dues primeres. Tot per codi i sense bloquejar res (art/arxiu/design/lluita_final_combat.md § 4).
     genollsOcellaire(e, ms) {
         const ara = this.time.now, K = K_OCELLAIRE, b = e.basto, cam = this.cameras.main;
         if (e.finestra) this.tancarFinestraOcellaire(e);
@@ -1182,7 +1182,7 @@ class ZonaGabia extends ZonaBase {
         }
     }
 
-    // ---------- Lluita final: ajudes de muntatge (guió: design/lluita_final_guio.md) ----------
+    // ---------- Lluita final: ajudes de muntatge (guió: art/arxiu/design/lluita_final_guio.md) ----------
     // Una textura opcional només compta si s'ha carregat de debò (si falta el fitxer, el catàleg en fa un marcador)
     teTextura(k) {
         return this.textures.exists(k) && !(typeof Grafics !== 'undefined' && Grafics.faltants && Grafics.faltants.includes(k));

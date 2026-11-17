@@ -4,7 +4,7 @@ Joc web en català fet amb **Phaser 3** (HTML + JS, sense motor ni bundler). Per
 
 ## Fonts de veritat
 - Guió i història: `docs/GUIO.md` (qualsevol canvi d'història es fa primer allà).
-- Prompts dels gràfics: `docs/PROMPTS_GRAFICS.md`. Textos numerats del joc: `docs/TEXTS.md`. Documents antics (roadmap, pla final, guió complet): `art/arxiu/docs/` (només consulta; ja no s'actualitzen).
+- Prompts dels gràfics: `docs/PROMPTS_GRAFICS.md`. Textos numerats del joc: `docs/TEXTS.md`. Documents antics (roadmap, pla final, guió complet; pla de zoom i guió/combat de la lluita final, ja implementats): `art/arxiu/docs/` i `art/arxiu/design/` (només consulta; ja no s'actualitzen). `design/game-brief.md` és el resum del joc que llegeixen les skills.
 - Estructura de carpetes: `README.md`.
 - Codi: `js/` (una escena per lloc a `js/zones/`, catàleg d'imatges a `js/assets.js`, diàlegs a `js/dialegs.js`).
 - `art/` són els originals; `assets/` el que carrega el joc. No editar `assets/` a mà (vegeu `eines/`).

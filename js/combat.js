@@ -11,7 +11,7 @@ const DIRS = { avall: { x: 0, y: 1 }, amunt: { x: 0, y: -1 }, esquerra: { x: -1,
 // (radi, cos, cap, bàcul, ulls, distàncies de «sura»... tot va multiplicat per aquesta constant).
 const K_OCELLAIRE = 1.4;
 
-// Sintonia de la pausa («genolls») de l'Ocellaire. Vegeu design/lluita_final_combat.md (§ 3-6): els números es toquen aquí, no a la lògica.
+// Sintonia de la pausa («genolls») de l'Ocellaire. Vegeu art/arxiu/design/lluita_final_combat.md (§ 3-6): els números es toquen aquí, no a la lògica.
 const AJUST_OCELLAIRE = {
     pausa: { 1: 3200, 2: 2800, 3: 2400 },     // ms de pausa segons la fase (vida 54, 3 de mal -> 18 cops = 6 pauses de 3 cops)
     pausaPrimera: 4200,                       // la primera pausa de tot el combat és més llarga, per aprendre

@@ -21,7 +21,7 @@ const RADI_GRAN = 110;       // objectes grans (arbres, fonts, dolmen...), amb e
 // (de 1 a 1,6) a l'adreça: es recorda fins que se'n posi un altre
 const ZOOM_NPC = 1.12;      // acostament suau de la càmera en parlar amb un personatge (1 = res)
 const ZOOM_COMBAT = 1.12;    // acostament addicional de la càmera mentre hi ha combat (1 = res)
-// Zoom base de cada zona = ZOOM_CAMERA × el factor d'aquí (1 si no hi surt: camins, places i exteriors es queden com abans). Vegeu design/PLA_ZOOM.md.
+// Zoom base de cada zona = ZOOM_CAMERA × el factor d'aquí (1 si no hi surt: camins, places i exteriors es queden com abans). Vegeu art/arxiu/design/PLA_ZOOM.md.
 // Interiors petits més a prop (acollidors, sense marges buits); interiors mitjans una mica; el tram tens de l'Acte 3 va a més pressió.
 const ZOOM_ZONES = {
     ZonaCasetaJoc: 1.3, ZonaTresor: 1.3, ZonaCelaStAntoni: 1.3, ZonaCabanaInt: 1.3, ZonaCabanaCami: 1.3, ZonaMasiaCirosa: 1.3, ZonaGolfes: 1.3, ZonaCasaCripta: 1.3, ZonaCasaTresor: 1.3, ZonaCasaGeorgi: 1.3,
@@ -330,7 +330,7 @@ class ZonaBase extends Phaser.Scene {
         fixarDecorat(this);
     }
 
-    // Zoom d'entrada (design/PLA_ZOOM.md): als interiors, un acostament des del zoom de fora fins al de la sala; a les zones clau, el primer cop, un pla de situació
+    // Zoom d'entrada (art/arxiu/design/PLA_ZOOM.md): als interiors, un acostament des del zoom de fora fins al de la sala; a les zones clau, el primer cop, un pla de situació
     // (comença una mica més lluny i s'acosta lentament). No es fa si l'escena porta ja la seva càmera (cinema, diàleg, caiguda, entrada pròpia).
     entradaZoom(primera, caigut) {
         this.camEntrada = false;

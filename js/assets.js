@@ -145,7 +145,7 @@ const CATALEG = [
     { key: 'ocellaire_rugit', file: 'assets/enemics/ocellaire_rugit.webp', amplada: 130, cru: true },      // pose de rugit (canvis de fase), al mateix llenç de 260x329 que l'idle
     { key: 'ocellaire_cansat', file: 'assets/enemics/ocellaire_cansat.webp', amplada: 130, cru: true },
     { key: 'ocellaire_genolls', file: 'assets/enemics/ocellaire_genolls.webp', amplada: 170, cru: true },   // esgotat, de genolls i el cap avall: l'única pausa en què se li pot picar el cap (mateix llenç 260x329)
-    // Poses noves (opcionals: el combat les fa servir només si existeixen; si no, el sprite base amb tint/angle). Vegeu design/lluita_final_combat.md § 8
+    // Poses noves (opcionals: el combat les fa servir només si existeixen; si no, el sprite base amb tint/angle). Vegeu art/arxiu/design/lluita_final_combat.md § 8
     { key: 'ocellaire_invoca', file: 'assets/enemics/ocellaire_invoca.webp', amplada: 170, cru: true },       // canta: mà dreta alçada (sense bàcul dibuixat)
     { key: 'ocellaire_cercle', file: 'assets/enemics/ocellaire_cercle.webp', amplada: 170, cru: true },       // cop en cercle: ajupit amb els braços avall
     { key: 'ocellaire_llança', file: 'assets/enemics/ocellaire_llança.webp', amplada: 170, cru: true },       // acaba de llançar el bàcul
