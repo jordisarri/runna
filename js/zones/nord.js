@@ -1383,7 +1383,7 @@ class ZonaBosc extends ZonaBase {
             altura: 56,
             enTancar: () => { if (Estat.flag('portalJoaneta')) this.canviarZona('ZonaCabana', 'portal'); }
         });
-        this.brillo(AX - 18, AY - 89, 60, 88, { arc: true });          // el forat del tronc brilla sempre (només la part lògica de l'alzina, no tot l'arbre)
+        this.brillo(AX - 15, AY - 126, 54, 86, { arc: true });          // el forat del tronc brilla sempre (només la part lògica de l'alzina, no tot l'arbre)
         [[-250, 75, 0.7], [255, 45, 0.55], [-120, 120, 0.4]].forEach(([dx, dy, e]) => this.posar('roca', AX + dx, AY + dy, { escala: e, col: { w: 34, h: 14 } }));
         this.boiraAmbient(AX, AY - 20, 300, 60, 0.5);
 
