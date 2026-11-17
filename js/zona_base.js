@@ -2597,9 +2597,9 @@ class ZonaBase extends Phaser.Scene {
     }
 
     // El portal d'arc de la masia (gràfic provisional 'masia'): x, y = peus del centre de la façana
-    portaMasia(img, x, y) {
+    portaMasia(img, x, y, arc = true) {          // arc=false: porta rectangular (la masia d'en Jorgi)
         const t = y - img.displayHeight;
-        this.portaAnimada({ x, top: t + img.displayHeight * 0.56, bottom: y - 4, ample: img.displayWidth * 0.15, fons: y - 20, unic: true, arc: true, retall: img, tint: img.isTinted ? img.tintTopLeft : 0 });
+        this.portaAnimada({ x, top: t + img.displayHeight * 0.56, bottom: y - 4, ample: img.displayWidth * 0.15, fons: y - 20, unic: true, arc, retall: img, tint: img.isTinted ? img.tintTopLeft : 0 });
     }
 
     actualitzarPortes(delta) {

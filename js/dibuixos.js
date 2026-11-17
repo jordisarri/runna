@@ -1059,6 +1059,93 @@ function dibuixarMasia(c, w) {
     });
 }
 
+// Masia d'en Jorgi: casa de pagès de dues plantes, de pedra vista irregular (carreus de to i mida diferents amb morter clar i alguna taca de calç), amb dues finestres
+// de fusta clara a dalt (la de l'esquerra més gran), la porta de pi clar amb vidre al mig, sota un llindar de pedra amb un fanal, i dues contraportes velles de fusta
+// fosca obertes a banda i banda, amb creus. Teulada de teules i un parell de mates florides al peu. La porta és al mig (a 0,56 de l'alçada, com a portaMasia).
+function dibuixarMasiaGeorgi(c, w) {
+    lienc(c, w, w * 0.78, (ctx, W, H) => {
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        let sd = 29; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+        ombraTerra(ctx, W / 2, H - 6, W * 0.52, 9);
+        const base = H - 8, sostre = H * 0.15;
+        // --- Paret de pedra vista: files de carreus d'alçada i amplada irregulars, de tons càlids diferents
+        ctx.fillStyle = '#b8966a'; ctx.fillRect(0, sostre, W, base - sostre);
+        const TONS = ['#c7a477', '#b8946a', '#d3b68b', '#a98960', '#c0a07a', '#b98f6c', '#d8bf94', '#a58a66', '#c6a27e'];
+        ctx.save(); ctx.beginPath(); ctx.rect(0, sostre, W, base - sostre); ctx.clip();
+        for (let y = sostre; y < base; ) {
+            const ah = H * (0.045 + r() * 0.035);
+            for (let x = -r() * 30; x < W; ) {
+                const aw = W * (0.05 + r() * 0.07);
+                ctx.fillStyle = TONS[(r() * TONS.length) | 0];
+                ctx.beginPath(); ctx.roundRect(x + 1, y + 1, aw - 2, ah - 2, 3); ctx.fill();
+                ctx.fillStyle = 'rgba(255,240,210,0.18)'; ctx.fillRect(x + 3, y + 2, aw * 0.6, 2);                  // llum a la vora de dalt de cada pedra
+                ctx.fillStyle = 'rgba(70,46,24,0.22)'; ctx.fillRect(x + 3, y + ah - 4, aw - 6, 2);                  // ombra a baix
+                if (r() < 0.12) { ctx.fillStyle = 'rgba(150,70,44,0.35)'; ctx.beginPath(); ctx.roundRect(x + 2, y + 2, aw - 4, ah - 4, 3); ctx.fill(); }     // alguna pedra rogenca
+                x += aw;
+            }
+            y += ah;
+        }
+        for (let k = 0; k < 7; k++) {                                                                             // taques de calç clara entre les pedres
+            ctx.fillStyle = 'rgba(232,218,190,0.16)'; ctx.beginPath(); ctx.ellipse(W * r(), sostre + (base - sostre) * r(), W * (0.02 + r() * 0.03), H * (0.01 + r() * 0.02), r() * 2, 0, Math.PI * 2); ctx.fill();
+        }
+        const ombra = ctx.createLinearGradient(0, base - H * 0.16, 0, base); ombra.addColorStop(0, 'rgba(40,28,14,0)'); ombra.addColorStop(1, 'rgba(40,28,14,0.38)');
+        ctx.fillStyle = ombra; ctx.fillRect(0, base - H * 0.16, W, H * 0.16);                                      // la pedra del peu, més fosca i humida
+        ctx.fillStyle = 'rgba(255,230,190,0.10)'; ctx.fillRect(0, sostre, W * 0.03, base - sostre);                // vora il·luminada a l'esquerra
+        ctx.restore();
+        ctx.strokeStyle = CONTORN; ctx.lineWidth = 4; ctx.strokeRect(0, sostre, W, base - sostre);
+        // --- Finestres de fusta clara a la planta de dalt (la de l'esquerra, més gran; la de la dreta, més petita i més avall)
+        const finestraFusta = (x, y, fw, fh) => {
+            ctx.fillStyle = '#d8c6a2'; ctx.fillRect(x - 6, y + fh, fw + 12, 8); ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.5; ctx.strokeRect(x - 6, y + fh, fw + 12, 8);       // ampit de pedra
+            ctx.fillStyle = 'rgba(30,20,10,0.45)'; ctx.fillRect(x - 5, y - 5, fw + 10, fh + 10);                                                                                  // doble fons (la paret és gruixuda)
+            ctx.fillStyle = '#c9802f'; ctx.fillRect(x, y, fw, fh); ctx.lineWidth = 3; ctx.strokeRect(x, y, fw, fh);
+            const m = Math.max(4, fw * 0.07), mig = x + fw / 2;
+            [[x + m, mig - m / 2], [mig + m / 2, x + fw - m]].forEach(([a, b]) => {
+                const g = ctx.createLinearGradient(a, y, b, y + fh); g.addColorStop(0, '#46586a'); g.addColorStop(0.55, '#2a3744'); g.addColorStop(1, '#1e2833');
+                ctx.fillStyle = g; ctx.fillRect(a, y + m, b - a, fh - 2 * m); ctx.lineWidth = 1.8; ctx.strokeRect(a, y + m, b - a, fh - 2 * m);
+                ctx.fillStyle = '#2d5a3a'; ctx.beginPath(); ctx.moveTo((a + b) / 2, y + fh * 0.3); ctx.lineTo(b - 3, y + fh * 0.62); ctx.lineTo(a + 3, y + fh * 0.62); ctx.closePath(); ctx.fill();      // el reflex d'un avet
+                ctx.fillStyle = 'rgba(255,255,255,0.14)'; ctx.beginPath(); ctx.moveTo(a, y + m); ctx.lineTo(a + (b - a) * 0.5, y + m); ctx.lineTo(a, y + fh * 0.55); ctx.closePath(); ctx.fill();      // lluïssor
+            });
+            ctx.fillStyle = 'rgba(255,215,150,0.35)'; ctx.fillRect(x + 1.5, y + 1.5, fw - 3, 2);
+        };
+        finestraFusta(W * 0.13, H * 0.235, W * 0.17, H * 0.19);
+        finestraFusta(W * 0.74, H * 0.29, W * 0.105, H * 0.15);
+        // --- Porta: llindar de pedra, fanal, contraportes velles i la porta de pi clar amb vidre
+        const pw = W * 0.15, px = W / 2 - pw / 2, py = H * 0.56;
+        const contraporta = (x0, esq) => {
+            const cw = pw * 0.62, yy = py - H * 0.015, hh = base - yy - 3;
+            ctx.fillStyle = '#6a4a2e'; ctx.fillRect(x0, yy, cw, hh); ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.strokeRect(x0, yy, cw, hh);
+            ctx.strokeStyle = 'rgba(30,18,8,0.7)'; ctx.lineWidth = 1.6;
+            for (let k = 1; k < 4; k++) { const xx = x0 + cw * k / 4; ctx.beginPath(); ctx.moveTo(xx, yy + 2); ctx.lineTo(xx, yy + hh - 2); ctx.stroke(); }                       // llistons verticals
+            ctx.fillStyle = '#4e3520'; [0.08, 0.5, 0.88].forEach(f => ctx.fillRect(x0 + 2, yy + hh * f, cw - 4, H * 0.022));                                                       // travessers
+            ctx.fillStyle = 'rgba(255,225,170,0.18)'; ctx.fillRect(x0 + 3, yy + 3, 3, hh - 6);
+            ctx.fillStyle = '#2a2a2e'; [0.1, 0.52, 0.9].forEach(f => ctx.fillRect(esq ? x0 : x0 + cw - 10, yy + hh * f, 10, 4));                                                     // frontisses
+            ctx.fillStyle = '#d06a3a'; ctx.fillRect(x0 + cw * 0.5 - 2, yy + hh * 0.3, 4, 8);                                                                                       // una marca vermella, com la del fuster
+        };
+        contraporta(px - pw * 0.62 - W * 0.012, true);
+        contraporta(px + pw + W * 0.012, false);
+        ctx.fillStyle = '#cfc4ad'; ctx.beginPath(); ctx.rect(px - W * 0.035, py - H * 0.055, pw + W * 0.07, H * 0.055); ctx.fill(); ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.stroke();       // llindar
+        ctx.fillStyle = 'rgba(255,255,255,0.22)'; ctx.fillRect(px - W * 0.03, py - H * 0.05, pw + W * 0.06, 3);
+        ctx.fillStyle = '#7a8088'; ctx.fillRect(W / 2 - 2, py - H * 0.115, 4, H * 0.06); ctx.fillStyle = '#e8e4d0'; ctx.beginPath(); ctx.ellipse(W / 2, py - H * 0.118, 8, 7, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.stroke();   // fanal
+        ctx.fillStyle = 'rgba(255,235,160,0.55)'; ctx.beginPath(); ctx.arc(W / 2, py - H * 0.118, 14, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#8a5a2a'; ctx.fillRect(px - 5, py, pw + 10, base - py); ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.strokeRect(px - 5, py, pw + 10, base - py);                          // marc
+        ctx.fillStyle = '#d9a24e'; ctx.fillRect(px, py + 3, pw, base - py - 3);                                                                                                               // porta de pi clar
+        ctx.fillStyle = '#e8b862'; ctx.fillRect(px + 3, py + 6, pw * 0.2, base - py - 9);
+        const vg = ctx.createLinearGradient(px, py, px + pw, py + (base - py) * 0.6); vg.addColorStop(0, '#5a7060'); vg.addColorStop(1, '#2a3a3a');
+        ctx.fillStyle = vg; ctx.fillRect(px + pw * 0.28, py + (base - py) * 0.1, pw * 0.52, (base - py) * 0.5); ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.5; ctx.strokeRect(px + pw * 0.28, py + (base - py) * 0.1, pw * 0.52, (base - py) * 0.5);   // vidre
+        ctx.fillStyle = '#c0c4c8'; ctx.fillRect(px + pw * 0.18, py + (base - py) * 0.58, 3, 12);                                                                                              // tirador
+        // --- Teulada de teules i una canal de fusta
+        teuladaTeules(ctx, W, H * 0.02, sostre + 4, '#b5613c');
+        ctx.fillStyle = '#5a3a20'; ctx.fillRect(0, sostre + 3, W, 6); ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.strokeRect(0, sostre + 3, W, 6);
+        // --- Mates al peu: una de flor blanca a l'esquerra i una de caléndules taronja a la dreta
+        const mata = (cx, cy, rx, ry, flors) => {
+            for (let k = 0; k < 9; k++) { ctx.fillStyle = ['#3f7a32', '#4f8c3a', '#34682a'][k % 3]; ctx.beginPath(); ctx.ellipse(cx + (r() - 0.5) * rx * 1.6, cy + (r() - 0.5) * ry, rx * 0.4, ry * 0.5, r() * 3, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = '#1e3a14'; ctx.lineWidth = 1.2; ctx.stroke(); }
+            flors.forEach(col => { for (let k = 0; k < 7; k++) { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(cx + (r() - 0.5) * rx * 1.7, cy + (r() - 0.6) * ry, 3.4, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = 'rgba(40,30,10,0.6)'; ctx.lineWidth = 1; ctx.stroke(); } });
+        };
+        mata(W * 0.07, base - 4, W * 0.07, H * 0.1, ['#f4f4ea']);
+        mata(W * 0.93, base - 4, W * 0.06, H * 0.09, ['#f08a2a', '#f4a840']);
+    });
+}
+
 function dibuixarFoc(c, w) {
     lienc(c, w, w * 0.8, (ctx, W, H) => {
         ombraTerra(ctx, W / 2, H - 8, W * 0.4, 8);

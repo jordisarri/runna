@@ -283,6 +283,14 @@ Tots els gràfics de dalt són fets i connectats (els seus prompts s'han esborra
 
 ## Pendent
 
+### `masia_georgi.png` → `assets/edificis/masia_georgi.webp` (amplada 520) *(La **masia d'en Jorgi** (`ZonaGeorgi`, `js/zones/nord.js`): façana de pedra d'una casa de pagès de dues plantes. Ara el joc la dibuixa amb codi (`dibuixarMasiaGeorgi`, a partir d'una foto de la façana real); si la genereu, **la porta ha de quedar al MIG, de la meitat d'alçada cap avall (a 0,56 de l'alçada de la imatge), d'uns 0,15 de l'amplada**, perquè el joc hi posa la porta animada. Edifici amb la base al fons de la imatge, fons blanc pur (el trec jo).)*
+
+```
+A rustic two-storey Catalan farmhouse (masia) facade seen straight on from the front, in a charming 2D game style: bold clean dark outline, rich warm colours, two-tone cel shading, hand-painted look. The wall is rough exposed stone: irregular ashlar blocks of different sizes and warm ochre, sand, brownish and slightly reddish tones, with light mortar lines and a few patches of pale lime plaster. Terracotta tile roof along the top. On the upper floor, two light-wood-framed windows with dark blue-green glass reflecting tree tops: the left one larger, the right one smaller and a bit lower. In the exact centre of the ground floor, a rectangular doorway made of light yellow-orange pine wood with a tall narrow glass panel, set under a pale stone lintel with a small old lantern above it, and with two large old dark-brown wooden shutters (vertical planks, crossbars, black iron hinges) folded open flat against the wall on both sides of the door. At the foot of the wall, a small bush with white flowers on the left and a few orange marigolds on the right. The door is about 0.15 of the facade width and its top is at about 0.56 of the image height. Isolated on a pure white background (#FFFFFF), no ground, no cast shadow, no people, no text.
+```
+
+---
+
 ### `roca.png` → `assets/natura/roca.webp` (amplada 90; **substitueix** l'actual, que és massa realista) *(La **roca** que el joc posa per tot arreu (bosc, cabana de la Joaneta, camins...): una pedra grossa i baixa per decorar i fer de límit. L'actual (`art/natura/roca.png`) és pintura realista amb textura molt fina i no encaixa amb la resta de gràfics, que són d'estil dibuixat/chibi amb contorn gruixut. Cal que sigui **simple, rodona i «amable»**. Genereu-ne 3 variants (mateix prompt, canviant la forma) i us dic quina fa de `roca` i quines passen a `roca2`/`roca3` perquè no es repeteixin.)*
 
 ```

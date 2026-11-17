@@ -1131,8 +1131,8 @@ class ZonaGeorgi extends ZonaBase {
         this.terra('cami', 330, 500, 770, 150);            // del Til·ler (est) a la porta de la casa
 
         // La casa d'en Jorgi (520 d'ample): la porta del mig duu a dins
-        const masiaGeorgi = this.edifici('masia', 380, 480, 500, 96, 'ZonaCasaGeorgi', 'porta', { alt: 90 });
-        this.portaMasia(masiaGeorgi, 380, 480);
+        const masiaGeorgi = this.edifici('masia_georgi', 380, 480, 500, 96, 'ZonaCasaGeorgi', 'porta', { alt: 90 });
+        this.portaMasia(masiaGeorgi, 380, 480, false);
         this.npc('georgi_caseta', 560, 590, DIALEGS.georgiCaseta);
 
         // La caseta, aixecada sobre pilars de fusta: s'hi puja per l'escala del mig (la maneta és a dins)
