@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prova: atac amunt de l'Ineu amb la branca del Til·ler</title>
+<style>
+ body{font-family:system-ui,sans-serif;background:#2b2a22;color:#f2ead3;margin:0;padding:12px}
+ h1{font-size:18px;margin:0 0 8px} select,input,button{font-size:16px;padding:6px;margin:3px 0}
+ #pantalla{background:#46683f;border:2px solid #120c08;display:block;margin:8px 0;image-rendering:auto;max-width:100%}
+ #tira{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0} #tira canvas{background:#46683f;border:2px solid #120c08;cursor:pointer}
+ #tira canvas.sel{border-color:#ffd34d} small{color:#bfb59a;display:block;margin:2px 0}
+ label{display:inline-block;margin-right:10px}
+</style></head><body>
+<h1>Atac amunt de l'Ineu amb la branca del Til·ler — proves una a una</h1>
+<label>Full: <select id="full"></select></label>
+<small id="nota"></small>
+<div>
+ <label>Fotogrames (comptats des de 1, separats per espais; buit = tots): <input id="fots" size="22"></label>
+ <label>fps: <input id="fps" type="number" value="16" style="width:60px"></label>
+ <label>Zoom: <input id="zoom" type="number" step="0.25" value="1" style="width:60px"></label>
+ <label><input id="bucle" type="checkbox" checked> bucle</label>
+ <button id="play">▶ / ⏸</button>
+</div>
+<canvas id="pantalla" width="480" height="480"></canvas>
+<small>Els fotogrames del full (toca'n un per veure'l fix; el número és el que has d'escriure a dalt):</small>
+<div id="tira"></div>
+<script>
+// Fulls d'atac amunt amb la branca. cel: mida d'un fotogrames; cols: columnes; n: fotogrames; joc: els que fa servir el joc (comptats des de 1)
+const B = '../art/ineu/';
+const FULLS = [
+  { nom: 'EN JOC ARA — assets/ineu/atac/atac_tiller_up.webp (1a generació, 5 fotogrames amb contorn)', src: '../assets/ineu/atac/atac_tiller_up.webp', cel: 320, cols: 4, n: 5 },
+  { nom: '1a generació — atac_arma/tiller_v1/up.png (16 fotogrames; el joc en fa servir 3, 9, 5, 6, 4)', src: B + 'atac_arma/tiller_v1/up.png', cel: 384, cols: 4, n: 16, joc: [3, 9, 5, 6, 4] },
+  { nom: '2a generació — atac_arma/tiller/up.png (la branca s\'amaga darrere el cap: descartada)', src: B + 'atac_arma/tiller/up.png', cel: 384, cols: 4, n: 16 },
+  { nom: 'Base per retocar — atac_arma/tiller_up_per_editar.png (5 fotogrames sense contorn)', src: B + 'atac_arma/tiller_up_per_editar.png', cel: 320, cols: 4, n: 5 },
+  { nom: 'Retocada a mà — no_usats/tiller_up_5_2_1_7_10_retocada_a_ma.png', src: B + 'no_usats/tiller_up_5_2_1_7_10_retocada_a_ma.png', cel: 320, cols: 4, n: 5 },
+  { nom: 'Prova v5 — no_usats/tiller_up_v5_proves/up.png (8 fotogrames)', src: B + 'no_usats/tiller_up_v5_proves/up.png', cel: 384, cols: 4, n: 8 },
+  { nom: 'Prova v5 (primera) — no_usats/tiller_up_v5_proves/up_primera.png (8 fotogrames)', src: B + 'no_usats/tiller_up_v5_proves/up_primera.png', cel: 384, cols: 4, n: 8 },
+  { nom: 'Prova v6 — no_usats/tiller_up_v6_proves/up.png (16)', src: B + 'no_usats/tiller_up_v6_proves/up.png', cel: 384, cols: 4, n: 16 },
+  { nom: 'Prova v7 — no_usats/tiller_up_v7_proves/up.png (16)', src: B + 'no_usats/tiller_up_v7_proves/up.png', cel: 384, cols: 4, n: 16 },
+  { nom: 'Prova v8 — no_usats/tiller_up_v8_proves/up.png (16)', src: B + 'no_usats/tiller_up_v8_proves/up.png', cel: 384, cols: 4, n: 16 }
+];
+const $ = id => document.getElementById(id), cv = $('pantalla'), cx = cv.getContext('2d');
+let img = null, F = null, ordre = [], k = 0, ple = true, t0 = 0, fixe = -1;
+FULLS.forEach((f, i) => { const o = document.createElement('option'); o.value = i; o.textContent = f.nom; $('full').appendChild(o); });
+function dibuixa(i, c, esc) {
+  const x = (i % F.cols) * F.cel, y = Math.floor(i / F.cols) * F.cel;
+  c.clearRect(0, 0, c.canvas.width, c.canvas.height); c.imageSmoothingQuality = 'high';
+  c.drawImage(img, x, y, F.cel, F.cel, 0, 0, c.canvas.width, c.canvas.height);
+}
+function carrega() {
+  F = FULLS[$('full').value]; fixe = -1; k = 0;
+  $('nota').textContent = F.src;
+  $('fots').value = F.joc ? F.joc.join(' ') : '';
+  img = new Image(); img.onload = () => { cv.width = cv.height = Math.round(480 * (+$('zoom').value || 1)); tira(); actualitza(); }; img.src = F.src + '?' + Date.now();
+}
+function tira() {
+  $('tira').innerHTML = '';
+  for (let i = 0; i < F.n; i++) {
+    const c = document.createElement('canvas'); c.width = c.height = 96; c.title = 'fotograma ' + (i + 1);
+    dibuixa(i, c.getContext('2d')); c.onclick = () => { fixe = i; ple = false; k = 0; pinta(); };
+    const w = document.createElement('div'); w.style.textAlign = 'center'; w.appendChild(c); w.appendChild(Object.assign(document.createElement('small'), { textContent: i + 1 })); $('tira').appendChild(w);
+  }
+}
+function actualitza() {
+  const v = $('fots').value.trim(); ordre = v ? v.split(/\s+/).map(n => (+n) - 1).filter(n => n >= 0 && n < F.n) : [...Array(F.n).keys()];
+  if (!ordre.length) ordre = [0]; fixe = -1; k = 0; ple = true; cv.width = cv.height = Math.round(480 * (+$('zoom').value || 1)); pinta();
+}
+function pinta() { const i = fixe >= 0 ? fixe : ordre[k % ordre.length]; dibuixa(i, cx); [...$('tira').children].forEach((w, j) => w.firstChild.className = j === i ? 'sel' : ''); }
+function bucle(t) {
+  const dt = 1000 / (+$('fps').value || 16);
+  if (ple && fixe < 0 && t - t0 > dt) { t0 = t; if (k + 1 >= ordre.length && !$('bucle').checked) ple = false; else k++; pinta(); }
+  requestAnimationFrame(bucle);
+}
+$('full').onchange = carrega; $('fots').onchange = actualitza; $('zoom').onchange = actualitza; $('fps').onchange = () => {};
+$('play').onclick = () => { if (fixe >= 0) { fixe = -1; k = 0; } ple = !ple; };
+carrega(); requestAnimationFrame(bucle);
+</script></body></html>
