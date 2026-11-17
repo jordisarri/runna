@@ -622,6 +622,7 @@ class ZonaBase extends Phaser.Scene {
             if (go.body && go.body.updateFromGameObject && go.body.physicsType === Phaser.Physics.Arcade.STATIC_BODY) go.body.updateFromGameObject();
         });
         this.interactius.concat(this.esbarzers).forEach(o => { if (o.y >= tall) o.y += extra; });
+        (this.bancsEsg || []).forEach(b => { if (b.y >= tall) b.y += extra; });          // els bancs de la franja del sud baixen amb tot el que hi ha (si no, no s'hi podia seure: la zona de seure quedava al lloc vell)
         this.sortides.forEach(s => {
             if (s.r.y >= tall) s.r.y += extra;
             else if (s.r.bottom >= c.alcada - 20) s.r.height += extra;

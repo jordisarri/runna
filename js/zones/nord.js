@@ -1148,7 +1148,7 @@ class ZonaGeorgi extends ZonaBase {
         this.posar('llenya', 690, 470, { escala: 0.7, col: { w: 80, h: 20 } });
         this.posarBanc(560, 720, 130);
         [[650, 700], [720, 740], [140, 600]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
-        this.cartell(1000, 720, () => ({ pagines: [{ qui: 'Cartell', text: 'La Caseta\n→ El Gran Til·ler' }] }));
+        this.cartell(480, 545, () => ({ pagines: [{ qui: 'Cartell', text: 'La Caseta\n→ El Gran Til·ler' }] }));          // davant de la masia, vora el camí (abans era al sud, entre arbres)
 
         this.arbres([[80, 180], [250, 120], [600, 100], [1040, 160], [90, 680], [250, 760], [850, 760], [1040, 760]]);
         this.sortida(1086, 510, 14, 130, 'ZonaTiller', 'georgi');
