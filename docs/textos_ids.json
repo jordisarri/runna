@@ -1,5 +1,5 @@
 {
- "seguent": 659,
+ "seguent": 660,
  "converses": {
   "main::proleg": [
    {
@@ -396,14 +396,14 @@
     "qui": "La Pianista",
     "text": "Has sentit l'orgue? Encara li falla el re, però canta. Escolta.",
     "fitxer": "js/dialegs.js",
-    "linia": 1715
+    "linia": 1721
    },
    {
     "id": 55,
     "qui": "La Pianista",
     "text": "I tu, fill, no deixis mai la tarota al calaix.",
     "fitxer": "js/dialegs.js",
-    "linia": 1717
+    "linia": 1723
    }
   ],
   "musica::completarLliço": [
@@ -814,7 +814,7 @@
     "qui": "La Joaneta",
     "text": "L'olla ja no fa bombolles liles. Ara fa olor de farigola, com ha de ser.",
     "fitxer": "js/dialegs.js",
-    "linia": 1728
+    "linia": 1734
    }
   ],
   "dialegs::alzinaBuida": [
@@ -1206,7 +1206,7 @@
     "qui": "Pastor vell",
     "text": "Les ovelles tornen a ser blanques. Alguna encara té les orelles una mica liles, però ja li passarà.",
     "fitxer": "js/dialegs.js",
-    "linia": 1734
+    "linia": 1740
    }
   ],
   "dialegs::pastorsConvencuts": [
@@ -1596,14 +1596,14 @@
     "qui": "Meus",
     "text": "Ja els tinc a casa, i ja els he renyat tres vegades. Dues més i potser els deixo sortir a jugar.",
     "fitxer": "js/dialegs.js",
-    "linia": 1719
+    "linia": 1725
    },
    {
     "id": 215,
     "qui": "Meus",
     "text": "Gràcies, Ineu. No ho diré gaires cops, així que escolta'm bé: gràcies.",
     "fitxer": "js/dialegs.js",
-    "linia": 1720
+    "linia": 1726
    }
   ],
   "dialegs::molner": [
@@ -1626,14 +1626,14 @@
     "qui": "Senyor Llaminer",
     "text": "Des que han tornat els nens, la Meus canta mentre renta. Desafina, però canta.",
     "fitxer": "js/dialegs.js",
-    "linia": 1722
+    "linia": 1728
    },
    {
     "id": 219,
     "qui": "Senyor Llaminer",
     "text": "No li diguis que t'ho he dit.",
     "fitxer": "js/dialegs.js",
-    "linia": 1723
+    "linia": 1729
    }
   ],
   "dialegs::consellVenerables": [
@@ -1758,7 +1758,7 @@
     "qui": "Carry",
     "text": "El Pallofa ja no s'escapa: des que no hi ha boira, no té res a perseguir.",
     "fitxer": "js/dialegs.js",
-    "linia": 1733
+    "linia": 1739
    }
   ],
   "dialegs::pallofa": [
@@ -1903,7 +1903,7 @@
     "qui": "Eve",
     "text": "El Sardi ja torna a berenar aquí cada tarda. La Càren encara dorm, però ronca més contenta.",
     "fitxer": "js/dialegs.js",
-    "linia": 1732
+    "linia": 1738
    }
   ],
   "dialegs::senyorBudo": [
@@ -2026,7 +2026,7 @@
     "qui": "Iscu",
     "text": "M'ha sortit el solitari! M'encanta això de les cartes. Ara ja no cal que m'amagui tant...",
     "fitxer": "js/dialegs.js",
-    "linia": 1731
+    "linia": 1737
    }
   ],
   "dialegs::cartellRuinesPingpong": [
@@ -2490,35 +2490,35 @@
     "qui": "Ineu",
     "text": "«Els monjos del Miracle, d'ara i d'abans.»",
     "fitxer": "js/dialegs.js",
-    "linia": 1682
+    "linia": 1688
    },
    {
     "id": 335,
     "qui": "Ineu",
     "text": "Aquest ram és del Germà Francí, per als monjos que dormen aquí. El deixo als peus de l'àngel.",
     "fitxer": "js/dialegs.js",
-    "linia": 1685
+    "linia": 1691
    },
    {
     "id": 336,
     "qui": "Ineu",
     "text": "(Els pètals tremolen, com si algú respirés a prop. L'àngel, que mirava a terra, alça la cara al cel i somriu: ja no plora sol.)",
     "fitxer": "js/dialegs.js",
-    "linia": 1687
+    "linia": 1693
    },
    {
     "id": 337,
     "qui": "Ineu",
     "text": "El Germà Francí es posarà content. Va dir que, en tornar, tindria alguna cosa per a mi a Sant Antoni.",
     "fitxer": "js/dialegs.js",
-    "linia": 1688
+    "linia": 1694
    },
    {
     "id": 338,
     "qui": "",
     "text": "★ Has deixat el RAM DE FLORS als peus de l'àngel.",
     "fitxer": "js/dialegs.js",
-    "linia": 1689
+    "linia": 1695
    }
   ],
   "dialegs::lapida": [
@@ -2527,7 +2527,7 @@
     "qui": "Làpida",
     "text": "[text calculat pel joc: mots[n % mots.length]]",
     "fitxer": "js/dialegs.js",
-    "linia": 1706
+    "linia": 1712
    }
   ],
   "dialegs::tombaMonjos": [
@@ -2536,7 +2536,7 @@
     "qui": "Ineu",
     "text": "«Aquí reposen els qui van tancar la porta.»",
     "fitxer": "js/dialegs.js",
-    "linia": 1677
+    "linia": 1683
    }
   ],
   "dialegs::cartellCami": [
@@ -2766,7 +2766,7 @@
     "qui": "Galf",
     "text": "Des del telescopi es veu tot el poble, i aquesta nit no hi ha ni un fil de boira.",
     "fitxer": "js/dialegs.js",
-    "linia": 1729
+    "linia": 1735
    }
   ],
   "dialegs::cofreGabriel": [
@@ -3344,7 +3344,7 @@
     "qui": "Germà Francí",
     "text": "La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui.",
     "fitxer": "js/dialegs.js",
-    "linia": 1730
+    "linia": 1736
    }
   ],
   "zones/nord::germaFranci": [
@@ -3537,18 +3537,25 @@
   ],
   "dialegs::cofreManeta": [
    {
+    "id": 659,
+    "qui": "Ineu",
+    "text": "Un cofre de joguines d'infant. No és meu: millor no remenar-lo.",
+    "fitxer": "js/dialegs.js",
+    "linia": 1662
+   },
+   {
     "id": 475,
     "qui": "Ineu",
     "text": "No és meva... Millor preguntar a en Jorgi abans d'agafar-la.",
     "fitxer": "js/dialegs.js",
-    "linia": 1660
+    "linia": 1666
    },
    {
     "id": 476,
     "qui": "",
     "text": "★ Has obtingut la MANETA D'ENGRANATGE.",
     "fitxer": "js/dialegs.js",
-    "linia": 1666
+    "linia": 1672
    }
   ],
   "zones/casa::golfesRellotge": [
@@ -3885,7 +3892,7 @@
     "qui": "Isílder",
     "text": "Les flors de lluna ja s'obren de dia. Diria que és el riure dels nens, que les enganya.",
     "fitxer": "js/dialegs.js",
-    "linia": 1727
+    "linia": 1733
    }
   ],
   "dialegs::llosaJardi": [
@@ -4081,7 +4088,7 @@
     "qui": "Dolora",
     "text": "El Sardi ja torna a robar galetes del rebost. Senyal que està bé del tot.",
     "fitxer": "js/dialegs.js",
-    "linia": 1724
+    "linia": 1730
    }
   ],
   "dialegs::pilaria": [
@@ -4125,7 +4132,7 @@
     "qui": "Pilària",
     "text": "Hem posat una espelma per tu a cada cambra, Ineu. I una altra per si de cas.",
     "fitxer": "js/dialegs.js",
-    "linia": 1725
+    "linia": 1731
    }
   ],
   "dialegs::carmelia": [
@@ -4176,7 +4183,7 @@
     "qui": "Carmèlia",
     "text": "Les tres te'n devem una. I nosaltres sempre paguem els deutes... amb pastissos.",
     "fitxer": "js/dialegs.js",
-    "linia": 1726
+    "linia": 1732
    }
   ],
   "dialegs::cofreMonges": [

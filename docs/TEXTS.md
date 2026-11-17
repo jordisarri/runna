@@ -540,7 +540,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[161] Pastor vell:** Aquesta pastura torna a ser un lloc tranquil. Gràcies per això.
 
-### pastor_vell  <sub>(js/dialegs.js:1734)</sub>
+### pastor_vell  <sub>(js/dialegs.js:1740)</sub>
 
 **[162] Pastor vell:** Les ovelles tornen a ser blanques. Alguna encara té les orelles una mica liles, però ja li passarà.
 
@@ -812,7 +812,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[254] Eve:** Busca aquesta espasa, Ineu. Jo em quedo aquí, fent veure que treballo.
 
-### eve  <sub>(js/dialegs.js:1732)</sub>
+### eve  <sub>(js/dialegs.js:1738)</sub>
 
 **[255] Eve:** El Sardi ja torna a berenar aquí cada tarda. La Càren encara dorm, però ronca més contenta.
 
@@ -1042,7 +1042,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[333] Ineu:** (Sense la boira que sortia d'aquí, la veu de l'Home de la Gàbia ja no arriba tan lluny, i les portes que ella obria soles ja no s'obriran. Però la boira que ja s'ha acumulat sota terra, a les Gírgoles, hi continua tancada.)
 
-### creuCementiri  <sub>(js/dialegs.js:1682)</sub>
+### creuCementiri  <sub>(js/dialegs.js:1688)</sub>
 
 **[334] Ineu:** «Els monjos del Miracle, d'ara i d'abans.»
 
@@ -1056,11 +1056,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[338]** ★ Has deixat el RAM DE FLORS als peus de l'àngel.
 
-### lapida  <sub>(js/dialegs.js:1706)</sub>
+### lapida  <sub>(js/dialegs.js:1712)</sub>
 
 **[339] Làpida:** [text calculat pel joc: mots[n % mots.length]]
 
-### tombaMonjos  <sub>(js/dialegs.js:1677)</sub>
+### tombaMonjos  <sub>(js/dialegs.js:1683)</sub>
 
 **[340] Ineu:** «Aquí reposen els qui van tancar la porta.»
 
@@ -1404,7 +1404,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Acte 3: els Guants de Poder i la roda de carruatge
 
-### germa_franci  <sub>(js/dialegs.js:1730)</sub>
+### germa_franci  <sub>(js/dialegs.js:1736)</sub>
 
 **[448] Germà Francí:** La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui.
 
@@ -1482,7 +1482,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[474] Llibre:** «Per això li diuen l'Home del Raïm. Dorm de cara a la paret, com un nen castigat, i només es desperta si algú el fa girar i el mira a la cara.»
 
-### cofreManeta  <sub>(js/dialegs.js:1660)</sub>
+### cofreManeta  <sub>(js/dialegs.js:1662)</sub>
+
+*Si: encara no ha parlat amb en Jorgi de la maneta ; encara no ha vist el volant del Raïm*
+
+**[659] Ineu:** Un cofre de joguines d'infant. No és meu: millor no remenar-lo.
 
 *Si: encara no ha parlat amb en Jorgi de la maneta*
 
@@ -1632,7 +1636,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[518] Isílder:** De llavors de lluna ja no en queden. Però la Rosansa, la venedora de verdures, ha tornat a passar per les cel·les, i fa anys que porta al carro una llavor estranya que ningú no sap què és. Pregunta-li.
 
-### isilder  <sub>(js/dialegs.js:1727)</sub>
+### isilder  <sub>(js/dialegs.js:1733)</sub>
 
 **[519] Isílder:** Les flors de lluna ja s'obren de dia. Diria que és el riure dels nens, que les enganya.
 

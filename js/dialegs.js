@@ -1656,6 +1656,12 @@ const DIALEGS = {
             return { pagines: [] };
         }
         if (!E.flag("georgiManeta")) {
+            // Fins que no s'ha vist el volant de l'Home del Raïm (raimVolantVist), en Jorgi no sap res de la maneta: el cofre no ha de portar el jugador a parlar-hi
+            if (!E.flag("raimVolantVist")) {
+                return { pagines: [
+                    { qui: "Ineu", text: "Un cofre de joguines d'infant. No és meu: millor no remenar-lo." }
+                ] };
+            }
             return { pagines: [
                 { qui: "Ineu", text: "No és meva... Millor preguntar a en Jorgi abans d'agafar-la." }
             ] };
