@@ -5,9 +5,6 @@
 
 // Diàlegs propis de la Cirosa
 Object.assign(DIALEGS, {
-    bancCami: E => ({ pagines: [],
-        enAcabar: () => game.scene.getScene('ZonaCamiCirosa').descansar() }),
-
     masiaTaula: E => ({ pagines: E.flag('soparFet') ? [
         { qui: 'Ineu', text: "(Per als que no tenen nom. Algú se n'ha recordat.)" }
     ] : [
@@ -74,9 +71,8 @@ class ZonaCamiCirosa extends ZonaBase {
         // Roques al marge del camí (de moment només decoració)
         [[560, 1980], [880, 2050], [270, 1600], [480, 1330], [930, 1100], [1060, 800], [440, 760], [700, 300]].forEach(([x, y]) => this.posar('roca', x, y, { col: { w: 70, h: 26 } }));
 
-        // Cartells a cada tram del camí i un banc de pedra a mig pujar (hi reposes i es desa la partida)
-        this.posarBanc(560, 1228, 130);      // (hi pots seure caminant-hi des de baix; a més té punt d'interacció: hi reposes i es desa la partida)
-        this.interactiu(560, 1238, RADI_OBJECTE, DIALEGS.bancCami, { altura: 70 });
+        // Cartells a cada tram del camí i un banc de pedra a mig pujar (hi pots seure caminant-hi des de baix; no desa la partida)
+        this.posarBanc(560, 1228, 130);
 
         // Ramat: de boira i hostil fins que el Pastor cau; després, ovelles blanques que pasturen tranquil·les
         const net = Estat.flag('pastorVencut');
@@ -93,12 +89,6 @@ class ZonaCamiCirosa extends ZonaBase {
         this.sortida(620, 2186, 160, 14, 'ZonaTiller', 'cirosa');
         this.sortida(500, 0, 160, 14, 'ZonaCirosa', 'cami');
         this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x3a1a55, net ? 0 : 0.09).setScrollFactor(0).setDepth(90000);
-    }
-
-    // Repòs al banc: es cura i es desa la partida
-    descansar() {
-        Estat.dades.vida = Estat.dades.corsMax * 2;
-        this.ui().actualitzarHUD(); this.guardarPosicio(); Estat.desar();
     }
 }
 

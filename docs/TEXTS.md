@@ -554,7 +554,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[166]** ★ Has obtingut el PA DELS PASTORS.
 
-### construir  <sub>(js/zones/cirosa.js:145)</sub>
+### construir  <sub>(js/zones/cirosa.js:135)</sub>
 
 *Si: sap el Cant de Vespres (el de les pedres)*
 
@@ -564,11 +564,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[168] Ineu:** (El foc crepita i els pastors callen. Una música antiga vora les brases els podria obrir el cor... Potser la Pianista, al Santuari, en coneix alguna.)
 
-### masiaTaula  <sub>(js/zones/cirosa.js:12)</sub>
+### masiaTaula  <sub>(js/zones/cirosa.js:9)</sub>
 
 **[169] Ineu:** (Per als que no tenen nom. Algú se n'ha recordat.)
 
-### masiaLlibre  <sub>(js/zones/cirosa.js:17)</sub>
+### masiaLlibre  <sub>(js/zones/cirosa.js:14)</sub>
 
 **[170] Llibre:** «L'Ocellaire baixava cada primavera amb els seus ocells engabiats. Els nens reien amb ells; després ja no reien amb res. Hi va haver anys de plors a les cases.»
 
@@ -576,7 +576,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[172] Llibre:** «Que qui trobi això no ens oblidi: vam obrir els ulls abans que ningú. Només vam fer el que calia.»
 
-### masiaEsquelles  <sub>(js/zones/cirosa.js:24)</sub>
+### masiaEsquelles  <sub>(js/zones/cirosa.js:21)</sub>
 
 **[173] Ineu:** (El pastor vell les té. Li he de parlar vora el foc.)
 
@@ -936,7 +936,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1816)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1823)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1990,7 +1990,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[642] Ineu:** L'aigua ja és clara.
 
-### pensament a enMelodia  <sub>(js/zones/cirosa.js:242)</sub>
+### pensament a enMelodia  <sub>(js/zones/cirosa.js:232)</sub>
 
 *Si: sap el Cant de Vespres (el de les pedres)*
 
@@ -2058,7 +2058,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2068)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2075)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
