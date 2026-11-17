@@ -354,7 +354,7 @@ const Grafics = {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_' + dir, rutaIneu(dir, false), mida);
             scene.load.spritesheet('ineu_cop_' + dir, `assets/ineu/cop/cop_${dir}.webp?v=1`, mida);          // l'Ineu rebent un cop (AutoSprite «Hit React», eines/fer_cop_ineu.py)
-            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac/atac_${arma}_${dir}.webp?v=2611174500`, { frameWidth: ATAC_CEL_EXC[`${arma}_${dir}`] || ATAC_CEL, frameHeight: ATAC_CEL_EXC[`${arma}_${dir}`] || ATAC_CEL }));
+            ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac/atac_${arma}_${dir}.webp?v=2611174600`, { frameWidth: ATAC_CEL_EXC[`${arma}_${dir}`] || ATAC_CEL, frameHeight: ATAC_CEL_EXC[`${arma}_${dir}`] || ATAC_CEL }));
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };

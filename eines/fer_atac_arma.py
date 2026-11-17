@@ -27,13 +27,13 @@ FOT = {'basto': [2, 3, 4, 5, 5], 'tiller': [2, 3, 4, 5, 5], 'espasa': [2, 3, 4, 
 # a mà (espasa_up_v4): només els tres primers fotogrames, els únics on surt l'espasa (0: baixa al costat, 1 i 2: alçada), i la tornada per completar els 5 del joc.
 # El bastó 'up' també fa servir la 1a generació (basto_v1): a la 2a el bastó només surt als dos primers fotogrames i a la resta s'amaga darrere el cap. A basto_v1 surt a tots els 16.
 # Els fotogrames 3, 2, 4, 5 donen un gir continu de la punta del bastó, de dreta a esquerra (angle de la vara: ~-10°, 15°, 37°, 67°), amb el bastó visible a tots; l'últim es repeteix (el 0 té la punta tallada per la vora de l'original).
-ORIGEN_EXC = {('tiller', 'up'): 'tiller_up_v5', ('espasa', 'up'): 'espasa_up_v4', ('basto', 'up'): 'basto_v1'}
-FOT_EXC = {('tiller', 'up'): [0, 1, 2, 3, 4], ('espasa', 'up'): [0, 1, 2, 1, 0], ('basto', 'up'): [4, 3, 2, 1, 0]}
-# La branca 'up' fa servir ara el full de proves v5 (tiller_up_v5, 5 fotogrames dibuixats, tots triats a mà amb proves/atac_up/; l'alçada del cos es mesura amb el 5).
+ORIGEN_EXC = {('tiller', 'up'): 'tiller_v1', ('espasa', 'up'): 'espasa_up_v4', ('basto', 'up'): 'basto_v1'}
+FOT_EXC = {('tiller', 'up'): [0, 1, 9, 10, 11], ('espasa', 'up'): [0, 1, 2, 1, 0], ('basto', 'up'): [4, 3, 2, 1, 0]}
+# La branca 'up' torna a la 1a generació (tiller_v1) amb els fotogrames 1, 2, 10, 11 i 12 (comptats des d'1), triats a mà amb proves/atac_up/ (queda el full de proves v5 a tiller_up_v5, amb REDUCCIO si es torna a fer servir).
 # Fotogrames amb què es mesura l'alçada del cos (per defecte 12-15, on l'arma és a les mans). A basto_v1 'up' la gafa del bastó sobresurt per sobre del cap en aquests: es mesura amb el 3 i el 4.
-ESCALA_FOTS = {('basto', 'up'): (3, 4), ('tiller', 'up'): (4,)}
+ESCALA_FOTS = {('basto', 'up'): (3, 4)}
 # Reducció extra de la mida (per a fulls on el personatge surt dibuixat més ample que als altres; tiller_up_v5, a 0,85, igualava l'amplada del cos amb la dels altres atacs)
-REDUCCIO = {('tiller', 'up'): 0.85}
+REDUCCIO = {}
 CENTRAL = set()        # direccions on l'escala del cos es mesura només amb les columnes del cap (quan l'arma sobresurt per sobre del cap)
 # Cel·la més gran per a fulls concrets (js/assets.js, ATAC_CEL_EXC, ha de dir el mateix): el bastó 'up' es tallava a la vora i s'ha de poder retocar a mà (l'Ineu va al mig, amb molt d'espai)
 CEL_EXC = {('basto', 'up'): 480}
