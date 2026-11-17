@@ -1612,7 +1612,17 @@ function dibuixarDolmen(c, w, mode = 'tot') {
             ctx.fillStyle = '#6e685c'; ctx.beginPath(); ctx.moveTo(x + amp, y0); ctx.lineTo(x + amp + prof, y0 - prof * 0.5); ctx.lineTo(x + amp + prof, y0 + alt - prof * 0.5); ctx.lineTo(x + amp, y0 + alt); ctx.closePath(); ctx.fill(); ctx.stroke();
             ctx.strokeStyle = 'rgba(40,32,24,0.45)'; ctx.lineWidth = 1.5 * u;
             ctx.beginPath(); ctx.moveTo(x + amp * 0.3, y0 + 8 * u); ctx.lineTo(x + amp * 0.42, y0 + alt * 0.5); ctx.moveTo(x + 6 * u, y0 + alt * 0.62); ctx.lineTo(x + amp - 8 * u, y0 + alt * 0.66); ctx.stroke();
-            ctx.fillStyle = 'rgba(96,140,64,0.75)'; ctx.beginPath(); ctx.ellipse(x + amp * 0.5, y0 + alt - 4 * u, amp * 0.55, 6 * u, 0, 0, Math.PI * 2); ctx.fill();
+            // Herba al peu del pilar: tofes de fulles fines (llargues i corbades, de tons verds, amb contorn fosc), no una taca
+            { const by = y0 + alt - 1 * u, nt = Math.max(3, Math.round(amp / (18 * u)));
+              for (let t = 0; t < nt; t++) {
+                const tx = x - 4 * u + (amp + 8 * u) * (t + 0.5) / nt, nb = 6;
+                for (let b = 0; b < nb; b++) {
+                    const k = (b - (nb - 1) / 2) / ((nb - 1) / 2), alt2 = (26 + r() * 18) * u * (1 - Math.abs(k) * 0.3), dx = k * (14 + r() * 8) * u + (r() - 0.5) * 4 * u;
+                    const bx = tx + k * 5 * u;
+                    ctx.beginPath(); ctx.moveTo(bx - 3 * u, by); ctx.quadraticCurveTo(bx + dx * 0.25, by - alt2 * 0.65, bx + dx, by - alt2); ctx.quadraticCurveTo(bx + dx * 0.25 + 3 * u, by - alt2 * 0.5, bx + 3 * u, by); ctx.closePath();
+                    ctx.fillStyle = ['#5a9a3c', '#72b048', '#4a8a30', '#8cc458'][(t + b) % 4]; ctx.fill(); ctx.strokeStyle = '#24421a'; ctx.lineWidth = 1.1 * u; ctx.stroke();
+                }
+              } }
             ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.5 * u;
         };
         pilar(236 * u, 220 * u, 58 * u, peu - 220 * u - 6 * u, 16 * u);           // el del fons, a la dreta
