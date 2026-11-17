@@ -774,7 +774,7 @@ const DIALEGS = {
         if (herbes === 3) {
             return {
                 pagines: [
-                    { fer: (z, fet) => z.seq([c => z.deixar(c, 'herba_sj'), c => z.deixar(c, 'rialla'), c => z.deixar(c, null, 0xffd060)], fet) },
+                    { fer: (z, fet) => z.seq([c => z.deixar(c, 'herba_sj'), c => z.deixar(c, 'rialla'), c => z.deixar(c, null, 0xffd060), c => z.transicioFont ? z.transicioFont(c) : c()], fet) },
                     { qui: 'Ineu', text: 'Ha funcionat! L\'aigua de la pica torna a ser clara com el vidre.' },
                     { avis: 'Has obtingut l\'AIGUA DE LA FONT DEL BISBE.', obj: 'aigua_sj' }
                 ],

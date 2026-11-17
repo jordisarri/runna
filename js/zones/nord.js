@@ -1369,6 +1369,7 @@ class ZonaBosc extends ZonaBase {
         this.terra('pedra', 780, 520, 260, 230);         // clariana de pedra de la font
 
         // Font del Bisbe (missió de la font)
+        this.aiguaFont = null; this.transFont = false;          // (l'escena es reaprofita: res de la visita anterior)
         const fontSJ = this.fontImg = this.posar(Estat.flag('fontNeta') ? 'font_sj_neta' : 'font_sj', 910, 610, { col: { w: 150, h: 50 } });
         const puntFont = this.interactiu(910, 625, RADI_GRAN * 1.5, DIALEGS.fontSJ, { altura: 170 });
         this.brilloImatge(fontSJ, { punt: puntFont, actiu: () => !Estat.flag('fontNeta') });          // la font brilla fins que l'aigua torna a ser clara
@@ -1450,13 +1451,80 @@ class ZonaBosc extends ZonaBase {
             this.boires = [];
             if (this.llumLila) this.tweens.add({ targets: this.llumLila, alpha: 0, duration: 3500 });
         }
-        // I l'aigua de la font brilla
-        if (Estat.flag('fontNeta') && this.fontImg && this.fontImg.texture.key !== 'font_sj_neta') this.fontImg.setTexture('font_sj_neta');       // aigua clara: canvia el dibuix de la font
-        if (Estat.flag('fontNeta') && !this.fontBrilla) {
-            this.fontBrilla = this.add.particles(910, 565, 'espurna', {
-                x: { min: -45, max: 45 }, y: { min: -10, max: 10 }, speedY: { min: -22, max: -6 }, lifespan: 1500,
-                scale: { start: 0.3, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xbfe8ff, 0xffffff], frequency: 280, blendMode: 'ADD'
-            }).setDepth(700);
+        // La font neta: el dibuix canvia (per si el flag ja hi era) i l'aigua raja i s'esquitxa
+        if (Estat.flag('fontNeta') && !this.transFont) {
+            if (this.fontImg && this.fontImg.texture.key !== 'font_sj_neta') this.fontImg.setTexture('font_sj_neta');
+            this.animarAiguaFont();
         }
+    }
+
+    // L'aigua neta de la font, viva: gotes que baixen pel fil de la canella, anells que s'obren on cau, esquitxos i petits reflexos sobre l'aigua de la pica.
+    // (Les coordenades són les del dibuix font_sj_neta: la boca de la canella i el punt on cau el fil.)
+    animarAiguaFont() {
+        if (this.aiguaFont || !this.fontImg) return;
+        const XB = 918, YB = 531, XA = 920, YA = 569, dep = this.fontImg.depth + 1;
+        const objs = this.aiguaFont = [];
+        for (let k = 0; k < 4; k++) {                          // gotes: franges clares que corren pel fil d'aigua
+            const g = this.add.rectangle(XB, YB, 2.6, 8, 0xeaffff, 0.85).setDepth(dep).setBlendMode('ADD');
+            this.tweens.add({ targets: g, x: { from: XB, to: XA }, y: { from: YB + 2, to: YA - 3 }, alpha: { from: 0.9, to: 0.25 }, scaleY: { from: 0.8, to: 1.7 }, duration: 520, repeat: -1, delay: k * 130, ease: 'Quad.easeIn' });
+            objs.push(g);
+        }
+        for (let k = 0; k < 3; k++) {                          // anells a l'aigua, un rere l'altre
+            const r = this.add.ellipse(XA, YA + 1, 8, 3).setStrokeStyle(1.2, 0xffffff, 0.85).setDepth(dep).setBlendMode('ADD');
+            this.tweens.add({ targets: r, scale: { from: 0.6, to: 6 }, alpha: { from: 0.85, to: 0 }, duration: 1500, repeat: -1, delay: k * 500, ease: 'Sine.easeOut' });
+            objs.push(r);
+        }
+        objs.push(this.add.particles(XA, YA, 'espurna', {      // esquitxos que salten on cau el fil
+            x: { min: -3, max: 3 }, speedX: { min: -28, max: 28 }, speedY: { min: -62, max: -26 }, gravityY: 190, lifespan: 520,
+            scale: { start: 0.2, end: 0 }, alpha: { start: 0.95, end: 0 }, tint: [0xbfe8ff, 0xffffff], frequency: 110, blendMode: 'ADD'
+        }).setDepth(dep));
+        objs.push(this.add.particles(XA, YA + 3, 'espurna', {  // reflexos de llum que brillen a la superfície
+            emitZone: { type: 'random', source: new Phaser.Geom.Ellipse(0, 0, 76, 16) },
+            speed: 0, lifespan: 900, scale: { start: 0.14, end: 0 }, alpha: { start: 0.85, end: 0 }, tint: [0xffffff, 0xcdf3ff], frequency: 420, blendMode: 'ADD'
+        }).setDepth(dep));
+    }
+
+    // La font es neteja amb el mateix efecte que la Bassadòria: l'ona d'escaneig (deformació sinusoïdal per línies) mentre el dibuix de l'aigua bruta es dissol en el de l'aigua neta,
+    // amb espurnes místiques sobre la pica. En acabar, la font ja és la neta (i comença a rajar). fet() quan s'acaba.
+    transicioFont(fet) {
+        const img = this.fontImg, tB = this.textures.get('font_sj'), tN = this.textures.get('font_sj_neta');
+        if (!img || !tB || !tN || this.transFont) { if (img && tN) img.setTexture('font_sj_neta'); if (fet) fet(); return; }
+        this.transFont = true;
+        const sB = tB.getSourceImage(), sN = tN.getSourceImage(), esc = img.scaleX;
+        const MARGE = 24, CW = sN.width + MARGE * 2, CH = sN.height;
+        const canvas = document.createElement('canvas'); canvas.width = CW; canvas.height = CH;
+        const cx = canvas.getContext('2d'), clau = 'transicio_font_' + Date.now();
+        this.textures.addCanvas(clau, canvas);
+        const spr = this.add.image(img.x, img.y, clau).setOrigin(0.5, 1).setScale(esc).setDepth(img.depth + 0.1);
+        img.setVisible(false);
+        const espurnes = this.add.particles(img.x + 2, 568, 'espurna', {
+            emitZone: { type: 'random', source: new Phaser.Geom.Ellipse(0, 0, 80, 18) },
+            speed: { min: 12, max: 50 }, scale: { start: 0.26, end: 0.04 }, alpha: { start: 0.9, end: 0 }, tint: [0xffea88, 0x7ae8ff, 0xffffff], lifespan: 1000, frequency: 45, blendMode: 'ADD'
+        }).setDepth(img.depth + 0.5);
+        this.time.delayedCall(2300, () => { espurnes.stop(); this.time.delayedCall(1200, () => espurnes.destroy()); });
+        const anim = { prog: 0, fase: 0 }, pas = 2;
+        this.tweens.add({
+            targets: anim, prog: 1, fase: Math.PI * 7, duration: 2600, ease: 'Linear',
+            onUpdate: () => {
+                cx.clearRect(0, 0, CW, CH);
+                const k = anim.prog, amp = Math.sin(k * Math.PI) * 11, freq = 0.052;
+                const aB = Math.max(0, Math.min(1, (0.6 - k) / 0.35)), aN = Math.max(0, Math.min(1, (k - 0.35) / 0.35));
+                for (let y = 0; y < CH; y += pas) {
+                    const fix = Math.min(1, Math.max(0, (CH - 6 - y) / 40));          // la base toca a terra i queda fixa
+                    const dx = MARGE + (Math.sin(y * freq + anim.fase) * amp + Math.cos(y * freq * 0.45 - anim.fase * 0.8) * amp * 0.35) * fix;
+                    if (aB > 0) { cx.globalAlpha = aB; cx.drawImage(sB, 0, y, sB.width, pas, dx, y, sB.width, pas); }
+                    if (aN > 0) { cx.globalAlpha = aN; cx.drawImage(sN, 0, y, sN.width, pas, dx, y, sN.width, pas); }
+                }
+                cx.globalAlpha = 1;
+                this.textures.get(clau).refresh();
+            },
+            onComplete: () => {
+                img.setTexture('font_sj_neta').setVisible(true);
+                spr.destroy(); this.textures.remove(clau);
+                this.transFont = false;
+                this.animarAiguaFont();
+                if (fet) fet();
+            }
+        });
     }
 }
