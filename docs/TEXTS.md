@@ -1856,7 +1856,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: (depèn d'un càlcul del joc)*
 
-**[584] Ineu:** (Aquesta boira crema la gola... Sense l'Empara Fraternal de les sacerdotesses de l'Hostatgeria no la podré travessar.)
+**[584] Ineu:** (Aquesta boira crema la gola... No la puc travessar sense alguna protecció. Les sacerdotesses de l'Hostatgeria, que guarden la pau d'aquesta terra, potser me'n podrien donar una.)
 
 **[585] Ineu:** (Una força invisible no em deixa passar. Sense el Cant del Miracle, els barrots no m'escoltaran. La Pianista, al Santuari, me l'ha d'ensenyar.)
 
