@@ -100,19 +100,19 @@ const Joc = {
     // Cançó de cada zona (les que no hi són, queden en silenci)
     MUSICA_ZONES: {
         // Bosc i camins
-        ZonaCami: 'musica_bosc', ZonaCamiRov: 'musica_bosc', ZonaRovellonera: 'musica_bosc', ZonaErmita: 'musica_bosc',
-        ZonaGabriel: 'musica_bosc', ZonaBoscPi: 'musica_bosc', ZonaBosc: 'musica_bosc', ZonaCamiCirosa: 'musica_bosc', ZonaCirosa: 'musica_cirosa', ZonaMasiaCirosa: 'musica_cirosa', ZonaTavernaInt: 'musica_taverna', ZonaSotaTaverna: 'musica_masmorra', ZonaGirgoles: 'musica_girgoles', ZonaTortura: 'musica_masmorra', ZonaBoira: 'musica_masmorra', ZonaGabia: 'musica_gabia', ZonaBiblioteca: 'musica_biblioteca', ZonaMonestirRebedor: 'musica_biblioteca', ZonaCelaStAntoni: 'musica_casa',
-        ZonaDolmen: 'musica_bosc', ZonaTiller: 'musica_poble', ZonaCabana: 'musica_bosc',          // (el Til·ler comparteix la música del poble i de les Cel·les: la de bosc s'hi assemblava massa)
+        ZonaCami: 'musica_poble', ZonaCamiRov: 'musica_poble', ZonaRovellonera: 'musica_poble', ZonaErmita: 'musica_poble',
+        ZonaGabriel: 'musica_poble', ZonaBoscPi: 'musica_poble', ZonaBosc: 'musica_poble', ZonaCamiCirosa: 'musica_poble', ZonaCirosa: 'musica_cirosa', ZonaMasiaCirosa: 'musica_cirosa', ZonaTavernaInt: 'musica_taverna', ZonaSotaTaverna: 'musica_masmorra', ZonaGirgoles: 'musica_girgoles', ZonaTortura: 'musica_masmorra', ZonaBoira: 'musica_masmorra', ZonaGabia: 'musica_gabia', ZonaBiblioteca: 'musica_biblioteca', ZonaMonestirRebedor: 'musica_biblioteca', ZonaCelaStAntoni: 'musica_casa',
+        ZonaDolmen: 'musica_poble', ZonaTiller: 'musica_poble', ZonaCabana: 'musica_poble',          // (tot el que era bosc fa servir la música del poble: la de bosc s'hi assemblava massa)
         // Exteriors (overworld)
         ZonaPlaca: 'musica_poble', ZonaMonestir: 'musica_poble', ZonaCreu: 'musica_poble', ZonaCasaGran: 'musica_poble',
-        ZonaRuines: 'musica_poble', ZonaCellerFora: 'musica_poble', ZonaGirgolesFora: 'musica_poble', ZonaCelles: 'musica_poble', ZonaSantAntoni: 'musica_poble', ZonaTaverna: 'musica_poble', ZonaGeorgi: 'musica_bosc', ZonaCasetaJoc: 'musica_casa', ZonaCasaGeorgi: 'musica_casa', ZonaEra: 'musica_poble', ZonaJardi: 'musica_poble', ZonaCementiri: 'musica_masmorra',
+        ZonaRuines: 'musica_poble', ZonaCellerFora: 'musica_poble', ZonaGirgolesFora: 'musica_poble', ZonaCelles: 'musica_poble', ZonaSantAntoni: 'musica_poble', ZonaTaverna: 'musica_poble', ZonaGeorgi: 'musica_poble', ZonaCasetaJoc: 'musica_casa', ZonaCasaGeorgi: 'musica_casa', ZonaEra: 'musica_poble', ZonaJardi: 'musica_poble', ZonaCementiri: 'musica_masmorra',
         // Interiors de cases
         ZonaEsglesia: 'musica_santuari', ZonaErmitaInt: 'musica_casa', ZonaGabrielInt: 'musica_casa', ZonaCabanaInt: 'musica_casa',
         ZonaCabanaCami: 'musica_casa', ZonaGolfes: 'musica_casa', ZonaTorre: 'musica_casa',
         // Masmorres
         ZonaCasaGranInt: 'musica_masmorra', ZonaPingpong: 'musica_taverna',      // el Celler: gent i ping-pong, no una masmorra
         ZonaCasaCripta: 'musica_masmorra', ZonaPassadis: 'musica_masmorra',
-        ZonaCasaTresor: 'musica_masmorra', ZonaSoterraniHost: 'musica_masmorra', ZonaHostatgeriaInt: 'musica_hostatgeria', ZonaCambraDolora: 'musica_hostatgeria', ZonaCambraPilaria: 'musica_hostatgeria', ZonaCambraCarmelia: 'musica_hostatgeria', ZonaTresor: 'musica_masmorra', ZonaDipositos: 'musica_bosc'      // els Dipòsits: un prat de nit, a l'aire lliure
+        ZonaCasaTresor: 'musica_masmorra', ZonaSoterraniHost: 'musica_masmorra', ZonaHostatgeriaInt: 'musica_hostatgeria', ZonaCambraDolora: 'musica_hostatgeria', ZonaCambraPilaria: 'musica_hostatgeria', ZonaCambraCarmelia: 'musica_hostatgeria', ZonaTresor: 'musica_masmorra', ZonaDipositos: 'musica_poble'      // els Dipòsits: un prat de nit, a l'aire lliure
     },
 
     // Fitxers de cada cançó (AAC .m4a, comprimides amb eines/comprimir_media.sh). Només 'musica_intro' es carrega
