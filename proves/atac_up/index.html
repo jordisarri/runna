@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- Pàgina de proves (GitHub Pages només publica index.html, assets, js i proves/: per això les imatges d'art/ hi són copiades a imatges/). -->
 <html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Prova: atac amunt de l'Ineu amb la branca del Til·ler</title>
 <style>
@@ -24,18 +25,17 @@
 <div id="tira"></div>
 <script>
 // Fulls d'atac amunt amb la branca. cel: mida d'un fotogrames; cols: columnes; n: fotogrames; joc: els que fa servir el joc (comptats des de 1)
-const B = '../art/ineu/';
 const FULLS = [
-  { nom: 'EN JOC ARA — assets/ineu/atac/atac_tiller_up.webp (1a generació, 5 fotogrames amb contorn)', src: '../assets/ineu/atac/atac_tiller_up.webp', cel: 320, cols: 4, n: 5 },
-  { nom: '1a generació — atac_arma/tiller_v1/up.png (16 fotogrames; el joc en fa servir 3, 9, 5, 6, 4)', src: B + 'atac_arma/tiller_v1/up.png', cel: 384, cols: 4, n: 16, joc: [3, 9, 5, 6, 4] },
-  { nom: '2a generació — atac_arma/tiller/up.png (la branca s\'amaga darrere el cap: descartada)', src: B + 'atac_arma/tiller/up.png', cel: 384, cols: 4, n: 16 },
-  { nom: 'Base per retocar — atac_arma/tiller_up_per_editar.png (5 fotogrames sense contorn)', src: B + 'atac_arma/tiller_up_per_editar.png', cel: 320, cols: 4, n: 5 },
-  { nom: 'Retocada a mà — no_usats/tiller_up_5_2_1_7_10_retocada_a_ma.png', src: B + 'no_usats/tiller_up_5_2_1_7_10_retocada_a_ma.png', cel: 320, cols: 4, n: 5 },
-  { nom: 'Prova v5 — no_usats/tiller_up_v5_proves/up.png (8 fotogrames)', src: B + 'no_usats/tiller_up_v5_proves/up.png', cel: 384, cols: 4, n: 8 },
-  { nom: 'Prova v5 (primera) — no_usats/tiller_up_v5_proves/up_primera.png (8 fotogrames)', src: B + 'no_usats/tiller_up_v5_proves/up_primera.png', cel: 384, cols: 4, n: 8 },
-  { nom: 'Prova v6 — no_usats/tiller_up_v6_proves/up.png (16)', src: B + 'no_usats/tiller_up_v6_proves/up.png', cel: 384, cols: 4, n: 16 },
-  { nom: 'Prova v7 — no_usats/tiller_up_v7_proves/up.png (16)', src: B + 'no_usats/tiller_up_v7_proves/up.png', cel: 384, cols: 4, n: 16 },
-  { nom: 'Prova v8 — no_usats/tiller_up_v8_proves/up.png (16)', src: B + 'no_usats/tiller_up_v8_proves/up.png', cel: 384, cols: 4, n: 16 }
+  { nom: 'EN JOC ARA — assets/ineu/atac/atac_tiller_up.webp (1a generació, 5 fotogrames amb contorn)', src: 'imatges/en_joc.webp', cel: 320, cols: 4, n: 5 },
+  { nom: '1a generació — atac_arma/tiller_v1/up.png (16 fotogrames; el joc en fa servir 3, 9, 5, 6, 4)', src: 'imatges/v1gen.png', cel: 384, cols: 4, n: 16, joc: [3, 9, 5, 6, 4] },
+  { nom: '2a generació — atac_arma/tiller/up.png (la branca s\'amaga darrere el cap: descartada)', src: 'imatges/v2gen.png', cel: 384, cols: 4, n: 16 },
+  { nom: 'Base per retocar — atac_arma/tiller_up_per_editar.png (5 fotogrames sense contorn)', src: 'imatges/per_editar.png', cel: 320, cols: 4, n: 5 },
+  { nom: 'Retocada a mà — no_usats/tiller_up_5_2_1_7_10_retocada_a_ma.png', src: 'imatges/retocada.png', cel: 320, cols: 4, n: 5 },
+  { nom: 'Prova v5 — no_usats/tiller_up_v5_proves/up.png (8 fotogrames)', src: 'imatges/v5.png', cel: 384, cols: 4, n: 8 },
+  { nom: 'Prova v5 (primera) — no_usats/tiller_up_v5_proves/up_primera.png (8 fotogrames)', src: 'imatges/v5_primera.png', cel: 384, cols: 4, n: 8 },
+  { nom: 'Prova v6 — no_usats/tiller_up_v6_proves/up.png (16)', src: 'imatges/v6.png', cel: 384, cols: 4, n: 16 },
+  { nom: 'Prova v7 — no_usats/tiller_up_v7_proves/up.png (16)', src: 'imatges/v7.png', cel: 384, cols: 4, n: 16 },
+  { nom: 'Prova v8 — no_usats/tiller_up_v8_proves/up.png (16)', src: 'imatges/v8.png', cel: 384, cols: 4, n: 16 }
 ];
 const $ = id => document.getElementById(id), cv = $('pantalla'), cx = cv.getContext('2d');
 let img = null, F = null, ordre = [], k = 0, ple = true, t0 = 0, fixe = -1;
