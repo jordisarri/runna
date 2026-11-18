@@ -1,7 +1,7 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
-*Revisió 609: nou personatge, el **Pare Xèvius** (Vigilant de la Porta): barra el camí de la Porta de les Gírgoles amb una tanca fins que l'Ineu li demostra bona voluntat ensenyant-li la **Carta del Cortiner**, que només s'obté despertant el **Pi dels Tres Cants** (ara pas obligatori de la història, abans de la Porta de les Gírgoles, i no una missió lateral). El Pare Alcoví, que n'és amic de fa quaranta anys, n'avisa i el justifica en parlar de la tomba. L'Empara Fraternal i el Cant del Miracle són les dues proves de dins.*
+*Revisió 609: nou personatge, el **Pare Xèvius** (Vigilant de la Porta): barra el camí de la Porta de les Gírgoles amb una tanca fins que l'Ineu li demostra bona voluntat ensenyant-li la **Carta del Cortiner**, que només s'obté despertant el **Pi dels Tres Cants** (ara pas obligatori de la història, abans de la Porta de les Gírgoles, i no una missió lateral). El Pare Alcoví, que n'és amic de fa quaranta anys, n'avisa i el justifica en parlar de la tomba. L'Empara Fraternal i el Cant del Miracle són les dues proves de dins. L'avís d'Alcoví surt tant si l'Ineu ja ha segellat la tomba com si no.*
 
 *Revisió 608: fora l'Eloi (el personatge del Celler que ja no hi era): dibuix i catàleg treballats fora.*
 

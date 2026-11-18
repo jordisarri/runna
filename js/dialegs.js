@@ -673,20 +673,28 @@ const DIALEGS = {
             if (pas) pagines.push({ qui: "Pare Alcoví", text: "I ara, el que et toca: " + pas });
             return { pagines, enAcabar: () => { E.posaFlag("alcoviPlacaDita"); E.desar(); } };
         }
-        if (E.flag("runna") && E.flag("relTretes") && !E.flag("tombaSegellada") && !E.flag("tombaLlegida")) {
+        if (E.flag("runna") && E.flag("relTretes") && !E.flag("tombaLlegida")) {
+            // L'avís sobre el Pare Xèvius s'ha de sentir sigui quin sigui l'ordre: potser l'Ineu ja ha segellat la tomba abans de venir
+            const segellada = E.flag("tombaSegellada");
+            const pagTomba = segellada ? [
+                { qui: "Ineu", text: "Pare Alcoví, he baixat a la cripta de la Casa Gran i he trobat una clau de ferro. I amb Runna he segellat la tomba esquerdada del Cementiri: la boira ja no puja." },
+                { qui: "Pare Alcoví", text: "Ho has fet bé, fill. Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba." }
+            ] : [
+                { qui: "Ineu", text: "Pare Alcoví, he baixat a la cripta de la Casa Gran. Hi havia una clau de ferro, i la tomba dels monjos no para de treure boira." },
+                { qui: "Pare Alcoví", text: "Una clau de ferro, i una tomba que no calla... Deixa'm mirar la Crònica." },
+                { fer: (z, fet) => z.alcoviLlegeix ? z.alcoviLlegeix(fet) : z.npcVa('pare_alcovi', 812, 372, fet, 120) },
+                { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
+                { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
+                { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." }
+            ];
             return {
                 pagines: [
-                    { qui: "Ineu", text: "Pare Alcoví, he baixat a la cripta de la Casa Gran. Hi havia una clau de ferro, i la tomba dels monjos no para de treure boira." },
-                    { qui: "Pare Alcoví", text: "Una clau de ferro, i una tomba que no calla... Deixa'm mirar la Crònica." },
-                    { fer: (z, fet) => z.alcoviLlegeix ? z.alcoviLlegeix(fet) : z.npcVa('pare_alcovi', 812, 372, fet, 120) },
-                    { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
-                    { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
-                    { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." },
+                    ...pagTomba,
                     { qui: "Pare Alcoví", text: "I una cosa més, fill, que no és de la Crònica sinó d'un amic. Al Pare Xèvius, el vigilant de la porta de les Gírgoles, el conec de fa quaranta anys: no és dolent, sinó escarmentat. Fa trenta anys l'Aldreu el va enganyar amb bones paraules, i des d'aleshores no es fia de ningú. Entén-lo, i no t'ho prenguis a mal." },
                     { qui: "Pare Alcoví", text: "No et deixarà passar sense una prova de bona voluntat, i res no el convenç com la Carta del Cortiner, que reposa al tronc del Pi dels Tres Cants. Hauràs de despertar el pi amb els tres cants: Aurora, Vespres i Miracle. Fes-ho abans d'anar a la porta, que després no hi ha manera de tornar enrere." },
                     { qui: "Pare Alcoví", text: "Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Francí t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat." }
                 ],
-                enAcabar: () => { E.posaFlag("tombaLlegida"); E.posaObjectiu("La tomba esquerdada del Cementiri espera la llum de Runna."); }
+                enAcabar: () => { E.posaFlag("tombaLlegida"); E.posaObjectiu(segellada ? PROGRES.pista(E) : "La tomba esquerdada del Cementiri espera la llum de Runna."); }
             };
         }
         if (E.flag("alcoviLlegit") && E.flag("benedicioMonjo") && !E.flag("saber")) {
