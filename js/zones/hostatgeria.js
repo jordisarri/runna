@@ -331,16 +331,22 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
     }
 
     canelobre(x, y, i) {
+        // Bronze clar amb contorn fosc (abans, ferro fosc: gairebé no es veia sobre el terra), una taca de llum al terra i un halo més fort
         this.colisio(x, y + 8, 22, 12);
+        const BRONZE = 0xd2a84c, CONT = 0x3a2810, CLAR = 0xf0d27a;
+        this.add.ellipse(x, y + 14, 120, 40, 0xffc060, 0.16).setDepth(-1040).setBlendMode(Phaser.BlendModes.ADD);          // la llum cau al terra
         const g = this.add.graphics().setDepth(y + 12);
-        g.fillStyle(0x000000, 0.28).fillEllipse(x, y + 16, 34, 10);
-        g.fillStyle(0x2a2420, 1).fillEllipse(x, y + 12, 26, 8).fillRect(x - 3, y - 36, 6, 48).fillEllipse(x, y - 36, 22, 6);
-        g.lineStyle(2.5, 0x2a2420, 1).beginPath().arc(x - 9, y - 36, 9, Math.PI * 0.5, Math.PI, false).strokePath().beginPath().arc(x + 9, y - 36, 9, 0, Math.PI * 0.5, false).strokePath();
-        [-9, 0, 9].forEach(dx => g.fillStyle(0xeee2c4, 1).fillRect(x + dx - 2, y - 52 - (dx === 0 ? 8 : 0), 4, 16 + (dx === 0 ? 8 : 0)));
-        const llum = this.add.circle(x, y - 54, 52, 0xffc060, 0.1).setDepth(y + 13).setBlendMode(Phaser.BlendModes.ADD);
-        this.tweens.add({ targets: llum, alpha: 0.18, scale: 1.1, yoyo: true, repeat: -1, duration: 600 + i * 130 });
+        g.fillStyle(0x000000, 0.35).fillEllipse(x, y + 17, 36, 10);
+        g.fillStyle(CONT, 1).fillEllipse(x, y + 12, 30, 11).fillRect(x - 5, y - 38, 10, 52).fillEllipse(x, y - 36, 26, 9);
+        g.fillStyle(BRONZE, 1).fillEllipse(x, y + 11, 26, 8).fillRect(x - 3, y - 36, 6, 48).fillEllipse(x, y - 36, 22, 6);
+        g.fillStyle(CLAR, 1).fillRect(x - 3, y - 36, 2, 48).fillEllipse(x - 4, y + 10, 8, 3);                                // un filet de llum a la tija i a la base
+        g.lineStyle(4.5, CONT, 1).beginPath().arc(x - 9, y - 36, 9, Math.PI * 0.5, Math.PI, false).strokePath().beginPath().arc(x + 9, y - 36, 9, 0, Math.PI * 0.5, false).strokePath();
+        g.lineStyle(2.5, BRONZE, 1).beginPath().arc(x - 9, y - 36, 9, Math.PI * 0.5, Math.PI, false).strokePath().beginPath().arc(x + 9, y - 36, 9, 0, Math.PI * 0.5, false).strokePath();
+        [-9, 0, 9].forEach(dx => g.fillStyle(CONT, 1).fillRect(x + dx - 3, y - 53 - (dx === 0 ? 8 : 0), 6, 18 + (dx === 0 ? 8 : 0)).fillStyle(0xfff4d8, 1).fillRect(x + dx - 2, y - 52 - (dx === 0 ? 8 : 0), 4, 16 + (dx === 0 ? 8 : 0)));
+        const llum = this.add.circle(x, y - 54, 60, 0xffc060, 0.16).setDepth(y + 13).setBlendMode(Phaser.BlendModes.ADD);
+        this.tweens.add({ targets: llum, alpha: 0.26, scale: 1.1, yoyo: true, repeat: -1, duration: 600 + i * 130 });
         [-9, 0, 9].forEach((dx, k) => {
-            const f = this.add.ellipse(x + dx, y - 58 - (dx === 0 ? 8 : 0), 5, 10, 0xffc860, 1).setDepth(y + 14);
+            const f = this.add.ellipse(x + dx, y - 58 - (dx === 0 ? 8 : 0), 5, 10, 0xffd878, 1).setDepth(y + 14);
             this.tweens.add({ targets: f, scaleY: 0.78, alpha: 0.8, yoyo: true, repeat: -1, duration: 260 + k * 70 + i * 40 });
         });
     }
