@@ -953,7 +953,9 @@ class ZonaBase extends Phaser.Scene {
     }
     npcMira(key, cap, fet) {                 // cap: 'ineu' o una x
         const img = this.npcs && this.npcs[key];
-        if (img) img.setFlipX((cap === 'ineu' ? this.ineu.x : cap) < img.x);
+        // cap: 'ineu', la clau d'un altre personatge de l'escena (npcs) o una x
+        const x = cap === 'ineu' ? this.ineu.x : (typeof cap === 'string' && this.npcs && this.npcs[cap]) ? this.npcs[cap].x : cap;
+        if (img && typeof x === 'number') img.setFlipX(x < img.x);
         if (fet) fet();
     }
     // Feina amb les mans: es mou endavant i enrere, amb guspires, notes o en silenci
@@ -966,7 +968,9 @@ class ZonaBase extends Phaser.Scene {
             this.animaNpc(key, ms, fet);
             return;
         }
-        const t = this.tweens.add({ targets: img, angle: { from: -7, to: 7 }, yoyo: true, repeat: -1, duration: 140 });
+        // (cantant o gronxant-se en silenci, com a l'epíleg: més suau i lent; la resta de feines, a pressa)
+        const suau = tipus === 'notes' || tipus === 'silenci';
+        const t = this.tweens.add({ targets: img, angle: suau ? { from: -2.5, to: 2.5 } : { from: -7, to: 7 }, yoyo: true, repeat: -1, duration: suau ? 520 : 140, ease: suau ? 'Sine.easeInOut' : 'Linear' });
         const colors = { guspires: [0xffd060, 0xff8030], notes: [0xd8c8ff, 0xffe8a0], fulles: [0x6ab04a, 0xe86aa0], bombolles: [0x6aff6a, 0xb8ffb0] }[tipus] || [0xffffff];
         const ev = this.time.addEvent({ delay: tipus === 'notes' ? 380 : 160, loop: true, callback: () => {
             if (tipus === 'silenci') return;

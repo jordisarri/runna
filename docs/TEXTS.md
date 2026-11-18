@@ -936,7 +936,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1885)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1889)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1992,7 +1992,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[634] Pare Nadiel:** Sents la torre del rellotge, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu.
 
-**[635] Carry:** El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill.
+**[635] Carry:** El meu home estaria orgullós que el caminar del seu rellotge ens uneixi a tots. Gràcies, fill.
 
 **[636] Ineu:** Pare Jordà... el Germà Aldreu no ha tornat. Es va quedar amb el Mestre, sota terra, i la gàbia se'l va tancar a dins.
 
@@ -2084,7 +2084,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2141)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2145)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 

@@ -111,7 +111,7 @@ class ZonaEsglesia extends ZonaBase {
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Nadiel, que dirigeix el cor
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, el Pare Nadiel es posa amb la resta; l'orgue, la Pianista (asseguda: no s'aixeca) i els bancs es queden al seu lloc
-        this.orgue = this.posar('orgue', 850, ESG.retY + 264, { col: { w: 110, h: 50 }, opac: true });
+        this.orgue = this.posar('orgue', epileg ? 925 : 850, ESG.retY + 264, { col: { w: 110, h: 50 }, opac: true });
         {
             // La Pianista és de cara al banc de l'orgue; només hi toca d'esquena (animada) quan l'Ineu la troba la primera vegada i mentre ensenya un cant (pianistaToca)
             const pia = this.npc('pianista', this.orgue.x, this.orgue.y + 24, DIALEGS.pianista, { flipX: true, radi: RADI_NPC, zoomConversa: 1.5 });
@@ -186,7 +186,7 @@ class ZonaEsglesia extends ZonaBase {
         const HOMES_EPILEG = ['pare_daimiel', 'pare_jorda', 'pare_alcovi', 'isilder', 'molner', 'pomers', 'jusef', 'germa_franci', 'galf'];
         const seient = (fila, costat, n) => [(costat < 0 ? [345, 430, 515] : [765, 850, 935])[n], FILES[fila]];
         [['nen_uri', 480, R + 245, NEN - 8], ['nen_flam', 590, R + 245, NEN + 9], ['nen_sardin', 700, R + 245, NEN + 9],      // els tres nens, separats, al peu de l'altar
-         ['pare_daimiel', 360, R + 215, AD], ['pare_jorda', 965, R + 215, AD],                                      // el presbiteri: el Pare Nadiel a l'esquerra, el Pare Jordà a la dreta, i l'orgue amb la Pianista asseguda
+         ['pare_daimiel', 360, R + 215, AD], ['pare_jorda', 1030, R + 215, AD],                                      // el presbiteri: el Pare Nadiel a l'esquerra, el Pare Jordà a la dreta, i l'orgue amb la Pianista asseguda
          ['carry', ...seient(0, -1, 0), AD], ['pare_alcovi', ...seient(0, -1, 1), AD], ['venerables', ...seient(0, -1, 2), AD],
          ['isilder', ...seient(0, 1, 0), AD], ['carmelia', ...seient(0, 1, 1), AD], ['pilaria', ...seient(0, 1, 2), AD],
          ['meus', ...seient(1, -1, 0), AD], ['molner', ...seient(1, -1, 1), AD], ['mandu', ...seient(1, -1, 2), NEN],
@@ -272,7 +272,7 @@ class ZonaEsglesia extends ZonaBase {
         // Camina per etapes (de la banqueta al passadís, i del passadís als nens): cada punt és [x, y]
         const camina = (k, punts, vel = 170) => f => this.seq(punts.map(([x, y]) => g => this.npcVa(k, x, y, g, vel)), f);
         // On s'aturen al costat de cada nen (els nens són a x 480, 590 i 700, y R+245)
-        const AL_NEN = { nen_uri: [425, R + 262], nen_flam: [548, R + 262], nen_sardin: [748, R + 262] };
+        const AL_NEN = { nen_uri: [425, R + 262], nen_flam: [548, R + 262], nen_sardin: [795, R + 262] };
         this.ui().obrirDialeg({ pagines: [
             accio(z => [
                 f => z.ineuVa(640, R + 440, () => { z.posarDireccio('amunt', false); f(); }, 150),
@@ -348,7 +348,7 @@ class ZonaEsglesia extends ZonaBase {
                 },
                 // El Pare Jordà (de la dreta del presbiteri) baixa a trobar l'Ineu
                 pla(800, R + 330, 0.95, 900),
-                camina('pare_jorda', [[965, R + 300], [700, R + 395], [705, R + 440]], 130),
+                camina('pare_jorda', [[1030, R + 300], [700, R + 395], [705, R + 440]], 130),
                 f => z.npcMira('pare_jorda', 'ineu', f)
             ]),
             // La Nena de les Trenes i la seva mare, al fons de la nau (només si l'Ineu les va retrobar): l'agraeixen de nou i, en acabar, s'esvaeixen en llum, en pau
@@ -369,7 +369,7 @@ class ZonaEsglesia extends ZonaBase {
                 { fer: (z, fet) => { [0, 1, 2].forEach(k => z.time.delayedCall(k * 850, () => Sfx.campana())); z.esperar(3000, fet); } },
                 foc(['pare_daimiel'], 1.9),
                 { qui: 'Pare Nadiel', text: "Sents la torre del rellotge, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu." },
-                ...(hi('carry') ? [foc(['carry'], 1.9), { qui: 'Carry', text: "El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill." }] : [])
+                ...(hi('carry') ? [foc(['carry'], 1.9), { qui: 'Carry', text: "El meu home estaria orgullós que el caminar del seu rellotge ens uneixi a tots. Gràcies, fill." }] : [])
             ] : []),
             // L'Ineu explica al Pare Jordà què ha passat amb l'Aldreu, i el prior tanca l'epíleg
             foc(['ineu', 'pare_jorda'], 2.2),

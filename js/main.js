@@ -499,12 +499,12 @@ class EscenaProleg extends Phaser.Scene {
         this.punts = this.add.text(AMPLE / 2, ALT - 58, '', estilText(26, '#d4af37')).setOrigin(0.5).setDepth(51);
         // Icona discreta de saltar (fast-forward >>), sense text ni requadre i en un to apagat perquè no destaqui
         const bw = 56, bh = 48, cx = AMPLE - 38, cy = 38 + SAFE_TOP;
-        const fletxes = this.add.graphics().setDepth(60).setAlpha(0.5);
-        fletxes.fillStyle(0x9a8c74, 1);
+        const fletxes = this.add.graphics().setDepth(60).setAlpha(0.9);          // (més visible: abans 0,5 i gairebé no es veia)
+        fletxes.fillStyle(0xe8d8b0, 1);
         [-14, 1].forEach(dx => fletxes.fillTriangle(cx + dx, cy - 11, cx + dx, cy + 11, cx + dx + 16, cy));
         this.add.rectangle(cx + 2, cy, bw, bh, 0xffffff, 0.001).setDepth(60).setInteractive({ useHandCursor: true })
-            .on('pointerover', () => fletxes.setAlpha(0.85))
-            .on('pointerout', () => fletxes.setAlpha(0.5))
+            .on('pointerover', () => fletxes.setAlpha(1))
+            .on('pointerout', () => fletxes.setAlpha(0.9))
             .on('pointerdown', (p, x, y, ev) => { if (ev) ev.stopPropagation(); this.acabar(); });
 
         this.input.keyboard.on('keydown-SPACE', () => this.seguent());
