@@ -44,7 +44,7 @@
     "qui": "Pare Jordà",
     "text": "Ineu! Què fas a terra? Respira, fill! Encara prendràs mal. Ja estàs bé?",
     "fitxer": "js/zona_base.js",
-    "linia": 366
+    "linia": 375
    }
   ],
   "zones/monestir::enEntrar": [
@@ -2233,7 +2233,7 @@
     "qui": "Ineu",
     "text": "[text calculat pel joc: textPista]",
     "fitxer": "js/zona_base.js",
-    "linia": 1862
+    "linia": 1885
    }
   ],
   "dialegs::ombraMonjo": [
@@ -4770,140 +4770,140 @@
     "qui": "Les Venerables Sàvies",
     "text": "Huri, no hem dubtat ni per un instant que l'Ineu et salvaria. El seu destí estava escrit a la crònica del Miracle.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 286
+    "linia": 287
    },
    {
     "id": 622,
     "qui": "Fram",
     "text": "Mandu! Què li ha passat a la nina? Dona-me-la, que només jo sé cosir caps de nina.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 293
+    "linia": 294
    },
    {
     "id": 623,
     "qui": "Mandu",
     "text": "Gràcies, Fram! Ja torna a tenir cap... i tu ja no te n'aniràs mai més, oi?",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 296
+    "linia": 297
    },
    {
     "id": 624,
     "qui": "Mandu",
     "text": "Fram! Ja has tornat! I tu ja no te n'aniràs mai més, oi?",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 298
+    "linia": 299
    },
    {
     "id": 625,
     "qui": "Fram",
     "text": "Mai més, Mandu. T'ho prometo.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 300
+    "linia": 301
    },
    {
     "id": 626,
     "qui": "Isílder",
     "text": "Sardi! Fill meu... Tres nits sense saber de tu.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 310
+    "linia": 311
    },
    {
     "id": 627,
     "qui": "Sardi",
     "text": "Pare! Has regat la prunera?",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 312
+    "linia": 313
    },
    {
     "id": 628,
     "qui": "Isílder",
     "text": "Cada dia, fill. Cada dia. Així, quan tornessis, ho trobaves tot com ho havies deixat.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 314
+    "linia": 315
    },
    {
     "id": 629,
     "qui": "Iscu",
     "text": "Avui no frego ni un got! Festa grossa: els nens són a casa!",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 318
+    "linia": 319
    },
    {
     "id": 630,
     "qui": "Eve",
     "text": "Avui, sí. Demà et guardo la pila sencera.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 318
+    "linia": 319
    },
    {
     "id": 631,
     "qui": "La Pianista",
     "text": "Ara sí. Ineu, la tarota: avui el Cant del Miracle el comences tu, i l'orgue et seguirà.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 322
+    "linia": 323
    },
    {
     "id": 632,
     "qui": "Nena de les Trenes",
     "text": "La mare i jo ho hem sentit des de lluny. Cantes molt bé, monjo.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 357
+    "linia": 358
    },
    {
     "id": 633,
     "qui": "Nena de les Trenes",
     "text": "Gràcies per portar-me a casa.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 358
+    "linia": 359
    },
    {
     "id": 634,
     "qui": "Pare Nadiel",
     "text": "Sents la torre del rellotge, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 370
+    "linia": 371
    },
    {
     "id": 635,
     "qui": "Carry",
     "text": "El meu home ho hauria sentit des de lluny, aquest so. Gràcies, fill.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 371
+    "linia": 372
    },
    {
     "id": 636,
     "qui": "Ineu",
     "text": "Pare Jordà... el Germà Aldreu no ha tornat. Es va quedar amb el Mestre, sota terra, i la gàbia se'l va tancar a dins.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 375
+    "linia": 376
    },
    {
     "id": 637,
     "qui": "Pare Jordà",
     "text": "L'Aldreu... dins la gàbia?",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 376
+    "linia": 377
    },
    {
     "id": 638,
     "qui": "Pare Jordà",
     "text": "Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 378
+    "linia": 379
    },
    {
     "id": 639,
     "qui": "Pare Jordà",
     "text": "Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 379
+    "linia": 380
    },
    {
     "id": 640,
     "qui": "Pare Jordà",
     "text": "Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 381
+    "linia": 382
    }
   ],
   "zones/gabia::gentEpileg": [
@@ -4960,7 +4960,7 @@
     "qui": "Ineu",
     "text": "La porta de la dreta del retaule ja és oberta.",
     "fitxer": "js/zones/esglesia.js",
-    "linia": 440
+    "linia": 441
    }
   ],
   "zones/gabia::ineuDiu·avisFoscor": [
@@ -4987,7 +4987,7 @@
     "qui": "Ineu",
     "text": "El mussol de pedra no es belluga ni un pèl. Necessito ser molt més fort per moure'l.",
     "fitxer": "js/zones/hostatgeria.js",
-    "linia": 378
+    "linia": 393
    }
   ],
   "zones/hostatgeria::ineuDiu·enMelodia": [
@@ -4996,7 +4996,7 @@
     "qui": "Ineu",
     "text": "La Dolora ja és desperta.",
     "fitxer": "js/zones/hostatgeria.js",
-    "linia": 596
+    "linia": 615
    }
   ],
   "zones/nord::ineuDiu·actualitzar": [
@@ -5023,14 +5023,14 @@
     "qui": "Ineu",
     "text": "[text calculat pel joc: text]",
     "fitxer": "js/zona_base.js",
-    "linia": 462
+    "linia": 471
    },
    {
     "id": 656,
     "qui": "Ineu",
     "text": "[text calculat pel joc: text]",
     "fitxer": "js/zona_base.js",
-    "linia": 466
+    "linia": 475
    }
   ],
   "zona_base::ineuDiu·triarViatge": [
@@ -5039,7 +5039,7 @@
     "qui": "Ineu",
     "text": "Ara no: hi ha bèsties a prop.",
     "fitxer": "js/zona_base.js",
-    "linia": 520
+    "linia": 529
    }
   ],
   "zona_base::ineuDiu·melodiaTocada": [
@@ -5048,7 +5048,7 @@
     "qui": "Ineu",
     "text": "He tocat el [text calculat pel joc: MELODIES[nom].nom], però aquí no passa res...",
     "fitxer": "js/zona_base.js",
-    "linia": 2118
+    "linia": 2141
    }
   ]
  },

@@ -26,7 +26,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Inici: el Monestir i la Plaça
 
-### despertarCaigut  <sub>(js/zona_base.js:366)</sub>
+### despertarCaigut  <sub>(js/zona_base.js:375)</sub>
 
 **[6] Pare Jordà:** Ineu! Què fas a terra? Respira, fill! Encara prendràs mal. Ja estàs bé?
 
@@ -936,7 +936,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1862)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1885)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1974,7 +1974,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Epíleg: després del final
 
-### ferEpileg  <sub>(js/zones/esglesia.js:286)</sub>
+### ferEpileg  <sub>(js/zones/esglesia.js:287)</sub>
 
 **[621] Les Venerables Sàvies:** Huri, no hem dubtat ni per un instant que l'Ineu et salvaria. El seu destí estava escrit a la crònica del Miracle.
 
@@ -2046,7 +2046,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[646] Ineu:** Els pastors somriuen: aquí ja ha tornat la música.
 
-### pensament a obrirPortaRellotge  <sub>(js/zones/esglesia.js:440)</sub>
+### pensament a obrirPortaRellotge  <sub>(js/zones/esglesia.js:441)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -2060,13 +2060,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[649] Ineu:** Les gírgoles canten: el micel·li es desfà!
 
-### pensament a actualitzar  <sub>(js/zones/hostatgeria.js:378)</sub>
+### pensament a actualitzar  <sub>(js/zones/hostatgeria.js:393)</sub>
 
 *Si: encara no porta els Guants de Poder*
 
 **[650] Ineu:** El mussol de pedra no es belluga ni un pèl. Necessito ser molt més fort per moure'l.
 
-### pensament a enMelodia  <sub>(js/zones/hostatgeria.js:596)</sub>
+### pensament a enMelodia  <sub>(js/zones/hostatgeria.js:615)</sub>
 
 **[651] Ineu:** La Dolora ja és desperta.
 
@@ -2080,7 +2080,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[654] Ineu:** El passatge ja és obert.
 
-### pensament a ineuDiu  <sub>(js/zona_base.js:462)</sub>
+### pensament a ineuDiu  <sub>(js/zona_base.js:471)</sub>
 
 **[655] Ineu:** [text calculat pel joc: text]
 
@@ -2088,11 +2088,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[656] Ineu:** [text calculat pel joc: text]
 
-### pensament a triarViatge  <sub>(js/zona_base.js:520)</sub>
+### pensament a triarViatge  <sub>(js/zona_base.js:529)</sub>
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2118)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2141)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
