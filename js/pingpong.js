@@ -9,6 +9,7 @@
  *      si és una mica abans o després, és BÉ (amb una mica d'error); molt abans: «Massa aviat»; si la pilota ja ha passat: «Massa tard» (punt d'en Jusef).
  *  El lliscament es veu com una estela lluminosa. Sense lliscar, l'Ineu no colpeja (cal estar atent!).
  *  Servei (com a la realitat): la pilota bota PRIMER al camp de qui serveix i després passa la xarxa. El teu: llisca cap amunt (apuntes igual).
+ *  Quan l'intercanvi passa dels tres cops, en Jusef es cansa i va cada cop més lent (fins al 45%).
  *  El d'en Jusef: un de cada tres és MÀGIC: la pilota encantada fa zigzags i només un cop PERFECTE trenca l'encanteri (llavors en Jusef no la pot tornar);
  *  si el cop no és perfecte, l'encanteri resisteix i la pilota torna fluixa.
  *  Partit a 5 punts al prototip (11 al joc). Després de dues derrotes, s'ofereix el mode fàcil (anell verd més llarg, en Jusef falla més). Càmera mòbil.
@@ -389,7 +390,9 @@ class EscenaPingPong extends Phaser.Scene {
         // Jusef: va cap a on arribarà la pilota
         let objJ = 0;
         if (this.b && this.b.de === 'ineu' && !this.b.morta) objJ = Phaser.Math.Clamp(this.b.xInt !== undefined ? this.b.xInt : this.b.marca.X, -0.85, 0.85);          // va just on cau (abans se'n passava quan el cop era fort)
-        const pasJ = this.M.velJusef * dt;
+        // Després d'uns quants intercanvis, en Jusef es cansa: es desplaça cada cop més lent d'un costat a l'altre de la taula (fins a un 45%), i així el partit no és una paret
+        const cansament = this.rally >= 3 ? Math.max(0.45, 1 - 0.14 * (this.rally - 2)) : 1;
+        const pasJ = this.M.velJusef * cansament * dt;
         this.Xj += Phaser.Math.Clamp(objJ - this.Xj, -pasJ, pasJ);
         const pj = this.proj(this.Xj, T.Z_JUSEF);
         const flota = Math.sin(time / 400) * 6;
