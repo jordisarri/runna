@@ -112,7 +112,7 @@ function esDialegBuit(dialeg) {
 }
 
 // Les bestioles que es ressalten als llocs foscos (ZonaBase.ressaltarEnemics)
-const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'bolet_verinos', 'ratpenat', 'ferralla'];
+const BESTIOLES_FOSQUES = ['escolopendra', 'gripau', 'bolet', 'bolet_verinos', 'ratpenat'];
 
 // VIATGE RÀPID: el carro de vapor (al codi, 'carruatge') del Follet del Carro Verd (el va fer el Galf). A cada parada hi ha el carruatge i l'home;
 // parlant-hi la primera vegada la parada queda desbloquejada (flag parada_<id>) i després s'hi pot viatjar entre les desbloquejades.

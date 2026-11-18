@@ -4284,35 +4284,6 @@ function dibuixarRatpenat(c, w) {
     lienc(c, w, w * 0.65, (ctx, W, H) => pintarRatpenatFotograma(ctx, W, H, 'mig'));
 }
 
-// Ferralla viva: un garbuix d'eines rovellades (estenalles, un ganxo, una clau de gàbia i cadena) amb un ull lila
-function dibuixarFerralla(c, w) {
-    lienc(c, w, w * 0.9, (ctx, W, H) => {
-        ombraTerra(ctx, W / 2, H * 0.92, W * 0.36, H * 0.05);
-        ctx.lineCap = 'round'; ctx.strokeStyle = CONTORN;
-        const eina = (x0, y0, x1, y1, color, gruix) => { ctx.lineWidth = gruix + 4; ctx.strokeStyle = CONTORN; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke(); ctx.lineWidth = gruix; ctx.strokeStyle = color; ctx.stroke(); };
-        // Potes: dues eines que fan de cames
-        eina(W * 0.35, H * 0.55, W * 0.22, H * 0.9, '#7a5030', 6);
-        eina(W * 0.65, H * 0.55, W * 0.8, H * 0.9, '#6a4a2a', 6);
-        // Estenalles obertes (la boca)
-        eina(W * 0.3, H * 0.5, W * 0.12, H * 0.2, '#8a5a3a', 7);
-        eina(W * 0.3, H * 0.5, W * 0.05, H * 0.42, '#9a6a40', 7);
-        // Ganxo
-        eina(W * 0.7, H * 0.55, W * 0.78, H * 0.15, '#7a6a5a', 6);
-        ctx.lineWidth = 6; ctx.strokeStyle = '#7a6a5a'; ctx.beginPath(); ctx.arc(W * 0.86, H * 0.17, W * 0.08, Math.PI, Math.PI * 0.2, true); ctx.stroke();
-        // Cos: un pany vell
-        ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.fillStyle = '#6a4a30';
-        ctx.beginPath(); ctx.roundRect(W * 0.3, H * 0.36, W * 0.4, H * 0.28, 8); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = 'rgba(170,90,40,0.6)'; ctx.fillRect(W * 0.34, H * 0.52, W * 0.12, H * 0.07); ctx.fillRect(W * 0.55, H * 0.4, W * 0.1, H * 0.05);
-        // L'ull de boira
-        const g = ctx.createRadialGradient(W / 2, H * 0.47, 0, W / 2, H * 0.47, W * 0.09);
-        g.addColorStop(0, '#ffffff'); g.addColorStop(0.35, '#c080ff'); g.addColorStop(1, 'rgba(154,80,255,0)');
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(W / 2, H * 0.47, W * 0.09, 0, Math.PI * 2); ctx.fill();
-        // Cadena que penja
-        ctx.lineWidth = 2; ctx.strokeStyle = '#5a5a60';
-        for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.ellipse(W * 0.5 + k * 4, H * 0.66 + k * 7, 4, 3, k % 2 ? 1.2 : 0, 0, Math.PI * 2); ctx.stroke(); }
-    });
-}
-
 // Capoll de boira on dorm un nen (es trenca amb Runna)
 function dibuixarCapoll(c, w) {
     // Un capoll de boira lila, teixit de fils de seda que l'embolcallen, amb un nen adormit i arraulit a dins que fa llum

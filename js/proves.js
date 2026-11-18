@@ -73,6 +73,9 @@ const Proves = {
         if (Estat.flag('placaCompleta')) ['medallo_arbre', 'medallo_saber', 'medallo_benedicio'].forEach(o => Estat.treu(o));        // els medallons ja són a la placa
         if (Estat.flag('bastoObtingut')) { Estat.posaFlag('tutorialCombat'); Estat.posaFlag('combatActiu'); }
         PARADES.forEach(pd => Estat.posaFlag('parada_' + pd.id));                                 // a proves, totes les parades del carruatge ja conegudes
+        // Els dos cofres que donen un gra són voluntaris i cap pas no en posa el flag: a proves es donen per oberts si el seu pas ja és fet (el de la cabana de l'Iscu amb el pas de la clau de l'Iscu; el de la sala del tresor del Santuari si s'ha obert la pedra que escolta)
+        if (PROGRES.passos.findIndex(p => p.id === 'clauIscu') < fins) Estat.posaFlag('cofreCabanaCami');
+        if (Estat.flag('tresorObert')) Estat.posaFlag('cofreTresor');
         // Els grans del rosari que ja s'haurien guanyat (3 + Pastor de Boira, sacerdotesses, cofre de l'oratori i cofre de la cabana): mai més de 7
         if (Estat.flag('pastorVencut')) Estat.posaFlag('pastorGra');
         Estat.dades.corsMax = Math.min(Estat.GRANS_MAX, 3 + ['pastorVencut', 'mongesTrobades', 'cofreTresor', 'cofreCabanaCami'].filter(f => Estat.flag(f)).length);

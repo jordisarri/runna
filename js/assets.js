@@ -156,7 +156,6 @@ const CATALEG = [
     { key: 'ocellaire_cercle', file: 'assets/enemics/ocellaire_cercle.webp', amplada: 170, cru: true },       // cop en cercle: ajupit amb els braços avall
     { key: 'ocellaire_llança', file: 'assets/enemics/ocellaire_llança.webp', amplada: 170, cru: true },       // acaba de llançar el bàcul
     { key: 'ratpenat',       file: null,       amplada: 64, provisional: (c, w) => dibuixarRatpenat(c, w) },
-    { key: 'ferralla',       file: null,       amplada: 70, provisional: (c, w) => dibuixarFerralla(c, w) },
     { key: 'capoll',         file: null,         amplada: 70, provisional: (c, w) => dibuixarCapoll(c, w) },
     { key: 'nen_uri',        file: 'assets/personatges/nen_uri.webp',    amplada: 50, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7ad0', cabell: '#e8c870', alt: 0.56, cap: 17 }) },
     { key: 'nen_flam',       file: 'assets/personatges/nen_flam.webp',   amplada: 54, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d04a3a', cabell: '#14100c', alt: 0.64, cap: 17 }) },
@@ -235,7 +234,7 @@ const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'nor
 // (eines/fer_ineu_v2.py). Esquerra i dreta són walk_elev_/idle_elev_ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
 // Les mides dels idles s'igualen a les dels caminars amb eines/igualar_idle_ineu.py. Els fulls i els prototips anteriors són a art/ineu/arxiu/.
 const rutaIneu = (dir, idle) => {
-    const v = '?v=2611188700';
+    const v = '?v=2611190300';
     if (dir === 'left' || dir === 'right') return `assets/ineu/${idle ? 'idle/idle_elev_' : 'caminar/walk_elev_'}${dir}.webp${v}`;
     return `assets/ineu/${idle ? 'idle/idle_' : 'caminar/'}${dir}.webp${v}`;
 };

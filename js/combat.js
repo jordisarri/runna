@@ -212,7 +212,7 @@ function clauSpriteOcellaire(z, e, ara) {
 }
 
 // Enemics sòlids: l'Ineu no els pot travessar (separació suau a actualitzarCombat). Els voladors, els estàtics i el boss no.
-const ENEMICS_SOLIDS = ['escolopendra', 'gripau', 'ovella', 'pastor', 'ferralla', 'visitant'];
+const ENEMICS_SOLIDS = ['escolopendra', 'gripau', 'ovella', 'pastor', 'visitant'];
 const ENEMICS = {
     escolopendra: {
         tex: 'escolopendra', vida: 2, vel: 95, mal: 1, radi: 20, cos: [40, 16], ombra: 0, centrat: true,   // l'ombra ja és al dibuix; vista de dalt, el cos és al mig
@@ -363,7 +363,7 @@ const ENEMICS = {
     // BOSS: el Germà Aldreu convertit en Pastor de Boira. Crida ovelles, carrega amb la caiada i la clava a terra en arc.
     // Fulls d'animació (assets/enemics/pastor_*.webp, vegeu docs/PROMPTS_GRAFICS.md): si no hi són, es veu el dibuix fix de sempre.
     pastor: {
-        tex: 'pastor_camina', texAlt: 'pastor_boira', escala: 0.58, vida: 28, vel: 430, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 440,
+        tex: 'pastor_camina', texAlt: 'pastor_boira', escala: 0.58, vida: 28, vel: 430, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 270,
         robust: true, barra: true, arma: 'tiller',          // només cedeix a la branca del Til·ler
         perill: e => e.estat === 'carrega',
         ia(z, e, ara) {
@@ -765,36 +765,6 @@ const ENEMICS = {
         }
     },
 
-    // Ferralla viva (passadís de tortura): eines rovellades que s'ajunten i avancen a salts, fent soroll de ferro
-    ferralla: {
-        tex: 'ferralla', vida: 4, vel: 230, mal: 1, radi: 26, cos: [44, 22], ombra: 0.4,
-        perill: e => e.estat === 'salta',
-        ia(z, e, ara) {
-            const jo = z.ineu.body.center, c = e.spr.body.center;
-            const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
-            if (e.estat === 'salta') {
-                if (ara > e.fins) {
-                    e.estat = 'repos'; e.fins = ara + 650 + Math.random() * 400; e.spr.body.setVelocity(0);
-                    Sfx.ferralla();
-                }
-            } else if (e.estat === 'apunta') {
-                e.spr.body.setVelocity(0);
-                e.spr.angle = Math.sin(ara / 30) * 6;      // tremola abans de saltar
-                if (ara > e.fins) {
-                    e.spr.angle = 0;
-                    e.estat = 'salta'; e.fins = ara + 330;
-                    const a = Math.atan2(jo.y - c.y, jo.x - c.x);
-                    e.spr.body.setVelocity(Math.cos(a) * this.vel, Math.sin(a) * this.vel);
-                    z.tweens.add({ targets: e.spr, y: e.spr.y - 12, yoyo: true, duration: 160 });
-                }
-            } else {
-                e.spr.body.setVelocity(0);
-                if (ara > e.fins && dist < 420) { e.estat = 'apunta'; e.fins = ara + 380; }
-            }
-            if (Math.abs(jo.x - c.x) > 5) e.spr.setFlipX(jo.x < c.x);
-        }
-    },
-
     // Capoll de boira on dorm un nen: Runna el trenca
     capoll: {
         tex: 'capoll', vida: 1, vel: 0, mal: 0, radi: 30, cos: [50, 40], ombra: 0.35,
@@ -926,17 +896,19 @@ Object.assign(ZonaBase.prototype, {
         // Direcció: la de la vista de 8 direccions; si hi ha un enemic a prop dins del con, s'hi apunta
         const v8 = { right: [1, 0], southeast: [1, 1], down: [0, 1], southwest: [-1, 1], left: [-1, 0], northwest: [-1, -1], up: [0, -1], northeast: [1, -1] }[this.vista8];
         let d = v8 ? { x: v8[0] / Math.hypot(...v8), y: v8[1] / Math.hypot(...v8) } : (DIRS[this.direccio] || DIRS.avall);
-        let millor = null, millorDist = Infinity;
-        this.enemics.forEach(e => {
+        let millor = null, millorDist = Infinity, capTriat = false;
+        const esCap = e => (e.tipus === 'ocellaire' || e.tipus === 'raim') && e.estat === 'cansat';
+        [...this.enemics].sort((a, b) => esCap(b) - esCap(a)).forEach(e => {          // el cap (a la pausa) es mira primer
             if (e.mort) return;
-            // L'Ocellaire a la pausa: l'autoapuntat va SEMPRE al cap (no al punt més proper del cos), amb més marge d'abast i de con
-            const alCap = (e.tipus === 'ocellaire' || e.tipus === 'raim') && e.estat === 'cansat';
+            // L'Ocellaire a la pausa: l'autoapuntat va SEMPRE al cap (no al punt més proper del cos), amb més marge d'abast i de con; si és a l'abast, cap ocell proper no li pren el cop
+            const alCap = esCap(e);
+            if (capTriat && !alCap) return;
             const pts = this.puntsCop(e);
             const c = alCap ? pts[0] : pts.reduce((m, q) => Phaser.Math.Distance.Between(q.x, q.y, jo.x, jo.y) < Phaser.Math.Distance.Between(m.x, m.y, jo.x, jo.y) ? q : m),
                   dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
             if (dist > L + c.r + (alCap ? AJUST_OCELLAIRE.extraCapCansat : 30) || dist >= millorDist) return;
             const dif = Math.abs(Phaser.Math.Angle.Wrap(Math.atan2(c.y - jo.y, c.x - jo.x) - Math.atan2(d.y, d.x)));
-            if (dif < (alCap ? 1.6 : 1.0)) { millor = c; millorDist = dist; }
+            if (dif < (alCap ? 1.6 : 1.0)) { millor = c; millorDist = dist; if (alCap) capTriat = true; }
         });
         if (millor) { const a = Math.atan2(millor.y - jo.y, millor.x - jo.x); d = { x: Math.cos(a), y: Math.sin(a) }; }
         if (Math.abs(d.x) > Math.abs(d.y) * 1.1) this.direccio = d.x < 0 ? 'esquerra' : 'dreta';

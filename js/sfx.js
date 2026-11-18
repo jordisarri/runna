@@ -302,11 +302,6 @@ const Sfx = {
         if (!this.ok('ratpenat', 250)) return;
         this.to(3200, 4200, 0.07, 'square', 0.03); this.to(3600, 4600, 0.06, 'square', 0.025, 0.09);
     },
-    ferralla() {                 // ferros que piquen a terra
-        if (!this.ok('ferralla', 120)) return;
-        this.to(1800, 1500, 0.12, 'square', 0.05); this.to(2600, 2300, 0.09, 'triangle', 0.06, 0.03);
-        this.xiu(0.1, 0.18, 'highpass', 4000, 2500);
-    },
     tambor(fort) {               // tambor de guerra del combat final
         if (!this.ok('tambor', 90)) return;
         this.to(fort ? 95 : 80, 38, fort ? 0.45 : 0.32, 'sine', fort ? 0.55 : 0.4);
