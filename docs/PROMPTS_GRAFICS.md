@@ -328,3 +328,8 @@ A magical rune circle engraved into a stone floor, seen from a high three-quarte
 ---
 
 
+
+
+## Escultura de l'Hostatgeria: el rossinyol de pedra (substitueix l'àngel del vestíbul; `assets/objectes/estatua_ocell.webp`)
+
+*Prompt (anglès):* Game object sprite, front view, transparent or plain white background. A large weathered stone statue of a nightingale, sitting upright on a two-step square stone pedestal. The bird has its wings folded tight against its body and its beak firmly closed, its head slightly bowed, as if it had forgotten how to sing; carved feathers, a few cracks and patches of green moss on the pedestal and on one wing. The pedestal is wide and heavy-looking. Warm grey sandstone, soft cartoon outlines, flat soft colors with simple shading, chibi cute proportions with a big rounded body, cheerful fairy-tale game art. Symmetrical, centered, no shadow on the ground, no text.
