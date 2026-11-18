@@ -7,7 +7,7 @@ Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
 
 *Revisió 614: s'aclareix a la trama de l'ombra quin és l'ordre habitual del Cant de Vespres (al sopar, abans de l'ombra) i que l'altre és una variant. Només documentació.*
 
-*Revisió 614: mides dels personatges a tot el joc: l'Ineu i les dones fan uns 133 px de cos visible, els homes una mica més (142), els nens uns 100 (l'Uri 94, el Julius 112, l'Iscu 106, la Nena 98), la Dolora (a la cadira) 125 i el Pare Xèvius, alt i prim, 155. El Follet del Carro Verd, el Pallofa, el Til·ler i els enemics no s'han tocat. A l'epíleg, les alçades són les mateixes (`fixaAlcada`).*
+*Revisió 614: mides dels personatges a tot el joc: l'Ineu i les dones fan uns 133 px de cos visible, els homes una mica més (142), els nens uns 100 (els tres de dibuix assegut —Senyor Buidor, Galf i Pianista— no s'han tocat) (l'Uri 94, el Julius 112, l'Iscu 106, la Nena 98), la Dolora (a la cadira) 125 i el Pare Xèvius, alt i prim, 155. El Follet del Carro Verd, el Pallofa, el Til·ler i els enemics no s'han tocat. A l'epíleg, les alçades són les mateixes (`fixaAlcada`).*
 
 *Revisió 613: un cop resolt el laberint de la Rovellonera (arribar a Sant Gabriel) i agafat el llaç de la clariana de la Nena de les Trenes, la Rovellonera es redueix a una sola clariana: s'hi entra per la dreta (el camí) i se'n surt per baix (Sant Gabriel), sense altres sortides i amb rovellons a totes dues. El cartell fa dir a l'Ineu que el camí ara és més senzill i que ja no cal recordar les pistes.*
 

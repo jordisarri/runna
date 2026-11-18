@@ -76,8 +76,8 @@ const CATALEG = [
     { key: 'hostatgeria',    file: 'assets/edificis/hostatgeria.webp',    amplada: 1100, provisional: (c, w) => dibuixarHostatgeria(c, w) },
 
     // ---- Personatges nous ----
-    { key: 'pianista',  file: 'assets/personatges/pianista.webp',  amplada: 89.2, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
-    { key: 'pianista_esquena',  file: 'assets/personatges/pianista_esquena.webp',  amplada: 138.6, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
+    { key: 'pianista',  file: 'assets/personatges/pianista.webp',  amplada: 92, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
+    { key: 'pianista_esquena',  file: 'assets/personatges/pianista_esquena.webp',  amplada: 143, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a3a6a', cabell: '#c8c8c8', dona: true, ample: 1.45, alt: 0.9, ulleres: true }) },
     { key: 'venerables', file: 'assets/personatges/venerables.webp', amplada: 147, cru: true, provisional: (c, w) => dibuixarVenerables(c, w) },   // les dues Venerables Sàvies de les Cel·les, agafades del braç (un sol gràfic)
     { key: 'mare_nena', file: 'assets/personatges/mare_nena.webp', amplada: 85, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#cfd6ee', cabell: '#e8e8f2', dona: true, ample: 1.1, alt: 0.9 }) },   // la mare de la Nena de les Trenes (visió de llum, sense rostre)
     { key: 'meus',      file: 'assets/personatges/meus.webp',      amplada: 56.6,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#b03a4a', cabell: '#3b2a1e', dona: true, ample: 1.1, alt: 1.0 }) },
@@ -86,8 +86,8 @@ const CATALEG = [
     { key: 'pomers',  file: 'assets/personatges/pomers.webp',  amplada: 77.5, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'pomers') },
     { key: 'jusef',     file: 'assets/personatges/jusef.webp',     amplada: 80.5, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'jusef') },
     { key: 'jusef_levita', file: 'assets/personatges/jusef_levita.webp', amplada: 131.6, cru: true, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'jusef') },   // en Jusef levitant amb la pala (minijoc de ping-pong)
-    { key: 'senyor_budo', file: 'assets/personatges/senyor_budo.webp', amplada: 87.9, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a4a3a', cabell: '#e8e8e8', alt: 0.9, ample: 1.5, cap: 18 }) },      // el vell de la taverna, assegut
-    { key: 'galf',      file: 'assets/personatges/galf.webp',      amplada: 60.3, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#d9b45a', alt: 0.92, ample: 1.35, cap: 17 }) },
+    { key: 'senyor_budo', file: 'assets/personatges/senyor_budo.webp', amplada: 78, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a4a3a', cabell: '#e8e8e8', alt: 0.9, ample: 1.5, cap: 18 }) },      // el vell de la taverna, assegut
+    { key: 'galf',      file: 'assets/personatges/galf.webp',      amplada: 55, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#8a6a3a', cabell: '#d9b45a', alt: 0.92, ample: 1.35, cap: 17 }) },
     { key: 'carry',     file: 'assets/personatges/carry.webp',     amplada: 54.7, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a7a', cabell: '#f0f0f0', pell: '#ece4dc', dona: true, alt: 1.0, ample: 0.7 }) },   // la Carry, anciana molt prima i pàl·lida, de cabells blancs curts i faldilla (busca el Pallofa)
     { key: 'pallofa',   file: 'assets/personatges/pallofa.webp',   amplada: 60, cru: true,  provisional: (c, w) => dibuixarGos(c, w) },   // el Pallofa, gos petit i prim, blanc amb taques marrons, borni i ple de puces
     { key: 'isilder',    file: 'assets/personatges/isilder.webp',    amplada: 95.7, cru: true,  provisional: (c, w) => dibuixarPersona(c, w, { isilder: true, calb: true, roba: '#f4f1e8', cabell: '#000000', alt: 0.94 }) },

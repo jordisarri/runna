@@ -196,7 +196,7 @@ class ZonaEsglesia extends ZonaBase {
         ].forEach(([k, x, y, h]) => {
             if (!this.textures.exists(k) || (this.npcs && this.npcs[k])) return;
             const n = this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 });
-            this.fixaAlcada(n, HOMES_EPILEG.includes(k) ? HOME : h);          // els homes, una mica més alts
+            this.fixaAlcada(n, k === 'galf' ? 112 : HOMES_EPILEG.includes(k) ? HOME : h);          // (el Galf té el dibuix assegut: més baix)          // els homes, una mica més alts
         });
         if (this.npcs && this.npcs.mandu && Estat.flag('manduNinaTrencada')) this.npcs.mandu.setTexture('mandu_trencada');            // la nina, encara sense cap
         // La Nena de les Trenes i la seva mare (si l'Ineu les va retrobar): dos esperits translúcids, de la mà al forat lliure del fons de la nau, que han sentit el cant des de lluny
