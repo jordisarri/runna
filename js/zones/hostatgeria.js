@@ -169,6 +169,7 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
     constructor() {
         super('ZonaHostatgeriaInt', {
             nom: "L'Hostatgeria",
+            margeDalt: 90,          // la càmera hi pot pujar un tros per damunt de la paret: l'escultura de la porta del mig no queda sota el HUD
             amplada: 1200,
             alcada: 900,
             colorFons: '#0a0806',
