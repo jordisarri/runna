@@ -483,35 +483,116 @@ class ZonaTortura extends ZonaBase {
 // ---------------- LA GALERIA DE LA BOIRA VERINOSA ----------------
 // Entre el passadís de tortura i la Sala de la Gàbia: una galeria llarga, mig enfonsada, plena d'una boira verda i lila que crema.
 // Només l'Empara Fraternal de les tres sacerdotesses la dissipa; sense, l'Ineu no hi pot entrar.
-const BOIRA_V = { y0: 360, y1: 940 };
+const BOIRA_V = { y0: 250, y1: 600 };
 class ZonaBoira extends ZonaBase {
     constructor() {
         super('ZonaBoira', {
             fosca: true,
             nom: 'Galeria de la boira',
             amplada: 900,
-            alcada: 1400,
-            colorFons: '#070608',
-            entrades: { tortura: { x: 450, y: 1300, dir: 'amunt' }, gabia: { x: 450, y: 220, dir: 'avall' } }
+            alcada: 880,
+            colorFons: '#05060a',
+            entrades: { tortura: { x: 450, y: 780, dir: 'amunt' }, gabia: { x: 450, y: 200, dir: 'avall' } }
         });
     }
 
+    // Un gran saló de pedra, d'aire nan (a l'estil de les mines de Moria): fileres de pilars gruixuts amb bandes de runes, murs amb relleus d'ocells, braserers, un gran arc
+    // d'or i runes cap a la Sala de la Gàbia, un medalló d'estrella gravat al terra i raigs de llum freda que cauen d'alt entre la boira.
     construir() {
-        const W = 900, H = 1400, B = BOIRA_V;
-        this.terra('pedra', 200, 0, 500, H, -1100).setTint(0x7a8478);
+        const W = 900, H = 880, B = BOIRA_V;
+        this.terra('pedra', 200, 0, 500, H, -1100).setTint(0x5d6676);
         const m = this.add.graphics().setDepth(-990);
-        m.fillStyle(0x141816, 1).fillRect(0, 0, 200, H).fillRect(700, 0, 200, H);
-        m.fillStyle(0x2c3430, 1).fillRect(170, 0, 30, H).fillRect(700, 0, 30, H);
-        m.lineStyle(1.5, 0x0c100e, 0.8);
-        for (let y = 0; y < H; y += 30) { m.lineBetween(170, y, 200, y); m.lineBetween(700, y, 730, y); }
-        m.fillStyle(0x070608, 1).fillRect(200, 0, 500, 120);
+        // Murs laterals: carreus grans, un sòcol i una vora amb gravats
+        m.fillStyle(0x12161c, 1).fillRect(0, 0, 200, H).fillRect(700, 0, 200, H);
+        for (let y = 0, f = 0; y < H; y += 46, f++) for (let x = (f % 2) * 30; x < 200; x += 60) {
+            const t = 0.8 + ((x * 7 + y * 13) % 5) * 0.07;
+            m.fillStyle(Phaser.Display.Color.GetColor(Math.round(30 * t), Math.round(36 * t), Math.round(46 * t)), 1).fillRect(x + 1, y + 1, 58, 44).fillRect(700 + x + 1, y + 1, 58, 44);
+        }
+        m.fillStyle(0x2b3340, 1).fillRect(166, 0, 34, H).fillRect(700, 0, 34, H);
+        m.lineStyle(1.5, 0x0a0d12, 0.9);
+        for (let y = 0; y < H; y += 30) { m.lineBetween(166, y, 200, y); m.lineBetween(700, y, 734, y); }
+        m.fillStyle(0xd8b050, 0.8).fillRect(198, 0, 2, H).fillRect(700, 0, 2, H);                        // fil d'or a la vora de la sala
+        // Relleus d'ocells als murs (un plafó per tram: marc daurat i un ocell de pedra amb les ales obertes)
+        const ocell = (cx, cy, esp) => {
+            m.lineStyle(2, 0xc8a84a, 0.85).strokeRect(cx - 38, cy - 44, 76, 88);
+            m.fillStyle(0x1b2129, 1).fillRect(cx - 36, cy - 42, 72, 84);
+            m.lineStyle(2.5, 0x7d8a9c, 0.9);
+            [-1, 1].forEach(sg => { m.beginPath().moveTo(cx, cy - 6).lineTo(cx + sg * 30, cy - 26).lineTo(cx + sg * 22, cy - 4).lineTo(cx + sg * 30, cy + 8).lineTo(cx + sg * 14, cy + 6).lineTo(cx + sg * 8, cy + 16).strokePath(); });
+            m.fillStyle(0x7d8a9c, 1).fillEllipse(cx, cy - 2, 12, 22).fillCircle(cx, cy - 16, 6).fillTriangle(cx - 2, cy - 17, cx + 2, cy - 17, cx, cy - 11);
+            m.lineStyle(1.5, 0x7d8a9c, 0.8).lineBetween(cx, cy + 8, cx - 5, cy + 30).lineBetween(cx, cy + 8, cx + 5, cy + 30);
+        };
+        [190, 350, 510, 670].forEach(y => { ocell(86, y, 0); ocell(814, y, 1); });
+        // La zona de dalt, fosca, on s'obre l'arc cap a la Sala de la Gàbia
+        m.fillStyle(0x05060a, 1).fillRect(200, 0, 500, 110);
+        // Camí d'honor al mig: una franja de pedra clara amb un fil d'or i un patró de rombes
+        const cam = this.add.graphics().setDepth(-1050);
+        cam.fillStyle(0x7a8494, 0.55).fillRect(385, 0, 130, H);
+        cam.lineStyle(3, 0xd8b050, 0.8).lineBetween(385, 0, 385, H).lineBetween(515, 0, 515, H);
+        cam.lineStyle(1.5, 0xd8b050, 0.55).lineBetween(393, 0, 393, H).lineBetween(507, 0, 507, H);
+        for (let y = 120; y < H; y += 54) cam.fillStyle(0xd8b050, 0.5).fillTriangle(450, y, 436, y + 27, 464, y + 27).fillTriangle(450, y + 54, 436, y + 27, 464, y + 27);
+        // Medalló d'estrella gravat al terra (sota la boira): tres anells, estrella de vuit puntes i un cercle central
+        const med = this.add.graphics().setDepth(-1045);
+        const MX = 450, MY = (B.y0 + B.y1) / 2 + 20;
+        [150, 128, 70].forEach((r, i) => med.lineStyle(i === 0 ? 4 : 2, 0xd8b050, i === 0 ? 0.8 : 0.55).strokeCircle(MX, MY, r));
+        for (let k = 0; k < 8; k++) { const a1 = k * Math.PI / 4, a2 = a1 + Math.PI / 8; med.lineStyle(2, 0xd8b050, 0.6).lineBetween(MX + Math.cos(a1) * 128, MY + Math.sin(a1) * 128, MX + Math.cos(a2) * 62, MY + Math.sin(a2) * 62).lineBetween(MX + Math.cos(a2) * 62, MY + Math.sin(a2) * 62, MX + Math.cos(a1 + Math.PI / 4) * 128, MY + Math.sin(a1 + Math.PI / 4) * 128); }
+        for (let k = 0; k < 24; k++) { const a = k / 24 * Math.PI * 2; med.fillStyle(0x9ad8ff, 0.5).fillRect(MX + Math.cos(a) * 139 - 1.5, MY + Math.sin(a) * 139 - 3, 3, 6); }      // petits gravats lluminosos (runes)
         // Esquerdes del terra per on puja la boira, i ossos d'ocell escampats
         m.lineStyle(3, 0x2a3a28, 0.9);
-        [[300, 520, 380, 600], [520, 700, 600, 640], [380, 820, 440, 900], [560, 450, 500, 520]].forEach(([a, b, c, d]) => m.lineBetween(a, b, c, d));
+        [[300, 330, 380, 410], [520, 450, 600, 400], [380, 520, 440, 590], [560, 290, 500, 350]].forEach(([a, b, c, d]) => m.lineBetween(a, b, c, d));
         m.fillStyle(0xd8d0c0, 0.5);
-        [[260, 1100], [620, 1180], [330, 300], [600, 260]].forEach(([x, y]) => m.fillEllipse(x, y, 14, 4).fillEllipse(x + 8, y + 4, 10, 3));
-        [[700, 760], [200, 760]].forEach(([x, y]) => { m.fillStyle(0x2c3430, 1).fillRect(x - (x > 400 ? 0 : 40), y - 30, 40, 40); });
-        m.lineStyle(14, 0x2c3430, 1).beginPath(); m.arc(450, 1100 + 140, 250, Math.PI * 1.18, Math.PI * 1.82); m.strokePath();
+        [[270, 740], [620, 790], [330, 200], [600, 170], [300, 640]].forEach(([x, y]) => m.fillEllipse(x, y, 14, 4).fillEllipse(x + 8, y + 4, 10, 3));
+        // Pilars gruixuts, en dues fileres: fust amb llum a l'esquerra, bandes gravades amb runes, capitell i base, i una orba de llum freda
+        const pilar = (x, y, i) => {
+            const g = this.add.graphics().setDepth(y);
+            const ALT = 124, WP = 46;
+            g.fillStyle(0x000000, 0.35).fillEllipse(x, y + 4, 74, 16);
+            g.fillStyle(0x39424e, 1).fillRect(x - 32, y - 14, 64, 14).lineStyle(2, 0x0c0f14, 1).strokeRect(x - 32, y - 14, 64, 14);                        // base
+            g.fillStyle(0x4a5666, 1).fillRect(x - WP / 2, y - ALT, WP, ALT - 12).lineStyle(2, 0x0c0f14, 1).strokeRect(x - WP / 2, y - ALT, WP, ALT - 12);  // fust
+            g.fillStyle(0x7f8da0, 1).fillRect(x - WP / 2 + 2, y - ALT + 2, 11, ALT - 16);                                                              // llum a l'esquerra
+            g.fillStyle(0x2a323d, 1).fillRect(x + WP / 2 - 12, y - ALT + 2, 10, ALT - 16);                                                             // ombra a la dreta
+            [0.2, 0.5, 0.78].forEach(f => { const yy = y - ALT * f; g.fillStyle(0x2a323d, 1).fillRect(x - WP / 2, yy - 5, WP, 10).lineStyle(1.5, 0xd8b050, 0.8).strokeRect(x - WP / 2, yy - 5, WP, 10);
+                for (let k = 0; k < 5; k++) g.lineStyle(1.5, 0x9ad8ff, 0.8).lineBetween(x - 16 + k * 8, yy - 3, x - 16 + k * 8 + (k % 2 ? 3 : -3), yy + 3); });                    // runes
+            g.fillStyle(0x39424e, 1).fillRect(x - 36, y - ALT - 10, 72, 18).lineStyle(2, 0x0c0f14, 1).strokeRect(x - 36, y - ALT - 10, 72, 18);          // capitell
+            g.fillStyle(0xd8b050, 0.9).fillRect(x - 34, y - ALT - 2, 68, 3);
+            const orba = this.add.circle(x, y - ALT * 0.5, 46, 0x7ac8ff, 0.1).setBlendMode(Phaser.BlendModes.ADD).setDepth(y + 1);
+            this.tweens.add({ targets: orba, alpha: 0.2, scale: 1.12, yoyo: true, repeat: -1, duration: 1800 + i * 210, ease: 'Sine.easeInOut' });
+            this.colisio(x, y - 7, 46, 14);
+        };
+        [[232, 250], [232, 410], [232, 570], [232, 730], [668, 250], [668, 410], [668, 570], [668, 730]].forEach(([x, y], i) => pilar(x, y, i));
+        // Braserers de bronze entre els pilars, amb una flama gran
+        [[318, 330], [318, 490], [318, 650], [582, 330], [582, 490], [582, 650]].forEach(([x, y], i) => {
+            const g = this.add.graphics().setDepth(y);
+            g.fillStyle(0x000000, 0.3).fillEllipse(x, y + 4, 40, 10);
+            g.fillStyle(0x3a2a1a, 1).fillRect(x - 3, y - 30, 6, 32).fillRect(x - 10, y - 2, 20, 4);
+            g.fillStyle(0x4a3a22, 1).fillEllipse(x, y - 32, 36, 14).fillStyle(0x1a120a, 1).fillEllipse(x, y - 34, 28, 8).lineStyle(2, 0xd8b050, 0.9).strokeEllipse(x, y - 32, 36, 14);
+            const fl = this.add.ellipse(x, y - 46, 18, 32, 0xffa84a, 1).setDepth(y + 1), fl2 = this.add.ellipse(x, y - 44, 9, 18, 0xfff0a0, 1).setDepth(y + 2);
+            const ll = this.add.container(x, y - 44).setDepth(y + 3);
+            [[120, 0.05], [78, 0.07], [40, 0.1]].forEach(([rr, a]) => ll.add(this.add.circle(0, 0, rr, 0xff9a40, a).setBlendMode(Phaser.BlendModes.ADD)));
+            this.tweens.add({ targets: [fl, fl2, ll], scaleY: 1.18, alpha: 0.78, yoyo: true, repeat: -1, duration: 190 + i * 31 });
+            this.colisio(x, y - 4, 22, 10);
+        });
+        // L'arc d'entrada a la Sala de la Gàbia: marc de pedra amb dovelles, filet d'or, una clau amb un ocell i runes que brillen
+        const arc = this.add.graphics().setDepth(160);
+        arc.lineStyle(26, 0x2e3744, 1).beginPath().arc(450, 140, 96, Math.PI, 0, false).strokePath();
+        arc.lineStyle(4, 0xd8b050, 0.95).beginPath().arc(450, 140, 110, Math.PI, 0, false).strokePath().beginPath().arc(450, 140, 82, Math.PI, 0, false).strokePath();
+        for (let k = 1; k < 9; k++) { const a = Math.PI + k * Math.PI / 9; arc.lineStyle(2, 0x0c0f14, 0.9).lineBetween(450 + Math.cos(a) * 84, 140 + Math.sin(a) * 84, 450 + Math.cos(a) * 108, 140 + Math.sin(a) * 108); }
+        arc.fillStyle(0xd8b050, 1).fillTriangle(436, 40, 464, 40, 450, 62).lineStyle(2, 0x0c0f14, 1).strokeTriangle(436, 40, 464, 40, 450, 62);        // clau de l'arc
+        arc.fillStyle(0x2e3744, 1).fillRect(344, 130, 22, 70).fillRect(534, 130, 22, 70).lineStyle(2, 0xd8b050, 0.8).strokeRect(344, 130, 22, 70).strokeRect(534, 130, 22, 70);
+        const runesArc = this.add.graphics().setDepth(161).setBlendMode(Phaser.BlendModes.ADD);
+        for (let k = 0; k < 13; k++) { const a = Math.PI + (k + 0.5) * Math.PI / 13.4, r = 96; runesArc.lineStyle(2, 0x9ad8ff, 0.9).lineBetween(450 + Math.cos(a) * (r - 6), 140 + Math.sin(a) * (r - 6), 450 + Math.cos(a) * (r + 6) + (k % 2 ? 2 : -2), 140 + Math.sin(a) * (r + 6)); }
+        this.tweens.add({ targets: runesArc, alpha: 0.35, yoyo: true, repeat: -1, duration: 2200, ease: 'Sine.easeInOut' });
+        // Raigs de llum freda que cauen d'alt i es perden a la boira, amb pols en suspensió
+        [[330, 70], [570, 60], [450, 90]].forEach(([x, w], i) => {
+            const raig = this.add.graphics().setDepth(90005).setBlendMode(Phaser.BlendModes.ADD);
+            raig.fillStyle(0x9ac8ff, 0.07).fillPoints([{ x: x - w / 2, y: 0 }, { x: x + w / 2, y: 0 }, { x: x + w / 2 + 70, y: H }, { x: x - w / 2 + 70, y: H }], true);
+            raig.fillStyle(0xc8e0ff, 0.05).fillPoints([{ x: x - w / 5, y: 0 }, { x: x + w / 5, y: 0 }, { x: x + w / 5 + 70, y: H }, { x: x - w / 5 + 70, y: H }], true);
+            this.tweens.add({ targets: raig, alpha: 0.55, yoyo: true, repeat: -1, duration: 3200 + i * 700, ease: 'Sine.easeInOut' });
+        });
+        this.add.particles(450, 0, 'espurna', { x: { min: -170, max: 170 }, y: { min: 0, max: 60 }, speedY: { min: 14, max: 30 }, speedX: { min: -6, max: 6 }, lifespan: 9000, scale: { start: 0.18, end: 0.05 }, alpha: { start: 0.5, end: 0 }, tint: [0xbfe0ff, 0xffffff], frequency: 260 }).setDepth(90006);
+        // Foscor suau a dalt i a baix (la sala sembla més fonda)
+        const vinyeta = this.add.graphics().setDepth(90007);
+        vinyeta.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.7, 0.7, 0, 0).fillRect(0, 0, W, 150);
+        vinyeta.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0, 0, 0.6, 0.6).fillRect(0, H - 140, W, 140);
         this.colisio(100, H / 2, 200, H);
         this.colisio(800, H / 2, 200, H);
         this.colisio(295, 60, 190, 120);                                              // paret nord esquerra
@@ -519,15 +600,6 @@ class ZonaBoira extends ZonaBase {
         this.colisio(450, 45, 120, 90);                                               // dintell sobre l'obertura del nord
         this.colisio(270, H - 10, 140, 20);
         this.colisio(630, H - 10, 140, 20);
-        // Torxes a l'entrada, que la boira apaga més amunt
-        [[215, 1180], [685, 1180], [215, 240], [685, 240]].forEach(([x, y], i) => {
-            const t = this.add.graphics().setDepth(y);
-            t.fillStyle(0x3a2a1a, 1).fillRect(x - 4, y - 10, 8, 30).fillStyle(0x2a2a2e, 1).fillRect(x - 8, y - 14, 16, 6);
-            const fl = this.add.ellipse(x, y - 24, 14, 24, 0xffa040, 1).setDepth(y + 1);
-            const ll = this.add.container(x, y - 20).setDepth(y + 2);
-            [[90, 0.05], [55, 0.07], [28, 0.1]].forEach(([rr, a]) => ll.add(this.add.circle(0, 0, rr, 0xff9040, a).setBlendMode('ADD')));
-            this.tweens.add({ targets: [fl, ll], scaleY: 1.15, alpha: 0.75, yoyo: true, repeat: -1, duration: 170 + i * 29 });
-        });
 
         // La boira verinosa: capes de boira verda i lila que es mouen i fumegen per les esquerdes
         this.boiraV = [];
@@ -547,7 +619,7 @@ class ZonaBoira extends ZonaBase {
                 this.boiraV.push(e);
             }
             // Fumeroles que pugen de les esquerdes del terra, verdes i liles
-            [[340, 560], [560, 670], [410, 860], [530, 480], [300, 760], [600, 860]].forEach(([x, y], i) => {
+            [[340, 330], [560, 410], [410, 520], [530, 290], [300, 450], [600, 520]].forEach(([x, y], i) => {
                 const pr = this.add.particles(x, y, 'boira_suau', {
                     x: { min: -40, max: 40 }, speedY: { min: -38, max: -14 }, speedX: { min: -10, max: 10 },
                     scale: { start: 0.25, end: 1.1 }, alpha: { start: 0.45, end: 0 }, lifespan: { min: 2600, max: 4200 },
@@ -570,7 +642,7 @@ class ZonaBoira extends ZonaBase {
             this.boiraV.push(vel);
             this.colBoira = this.colisio(450, B.y1 + 40, 500, 20);
         }
-        this.boira(450, 180, 260, 60, 0.8);                    // la boira lila de la Sala de la Gàbia, que baixa per dalt
+        this.boira(450, 150, 260, 60, 0.8);                    // la boira lila de la Sala de la Gàbia, que baixa per dalt
 
         this.sortida(398, 94, 104, 16, 'ZonaGabia', 'tortura');
         this.sortida(410, H - 22, 80, 14, 'ZonaTortura', 'gabia');
