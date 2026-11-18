@@ -7,6 +7,8 @@ Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
 
 *Revisió 614: s'aclareix a la trama de l'ombra quin és l'ordre habitual del Cant de Vespres (al sopar, abans de l'ombra) i que l'altre és una variant. Només documentació.*
 
+*Revisió 614: mides dels personatges a tot el joc: l'Ineu i les dones fan uns 133 px de cos visible, els homes una mica més (142), els nens uns 100 (l'Uri 94, el Julius 112, l'Iscu 106, la Nena 98), la Dolora (a la cadira) 125 i el Pare Xèvius, alt i prim, 155. El Follet del Carro Verd, el Pallofa, el Til·ler i els enemics no s'han tocat. A l'epíleg, les alçades són les mateixes (`fixaAlcada`).*
+
 *Revisió 613: un cop resolt el laberint de la Rovellonera (arribar a Sant Gabriel) i agafat el llaç de la clariana de la Nena de les Trenes, la Rovellonera es redueix a una sola clariana: s'hi entra per la dreta (el camí) i se'n surt per baix (Sant Gabriel), sense altres sortides i amb rovellons a totes dues. El cartell fa dir a l'Ineu que el camí ara és més senzill i que ja no cal recordar les pistes.*
 
 *Revisió 613: a l'Hostatgeria, l'escultura que barra la porta del refetor passa de ser un àngel a ser un **mussol de pedra** sobre una peanya, i s'empeny a poc a poc (només cap a l'esquerra o la dreta, sense punt interactiu) com les pedres de Sant Joan: amb els Guants de Poder; sense, l'Ineu diu que li cal ser més fort. Un cop al seu lloc, ja no es mou.*
