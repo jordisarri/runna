@@ -563,7 +563,7 @@ class CambraMonja extends ZonaCasaBase {
                 ni.fillStyle(0xf4ecd8, 1).fillCircle(x, 16, 4.5);
                 ni.lineStyle(1.5, 0xe8c050, 0.9).strokeCircle(x, 15, 7.5);
             });
-            this.npc('carmelia', 400, 340, DIALEGS.carmelia, { zoomConversa: 1.2 });
+            this.npc('carmelia', 400, 440, DIALEGS.carmelia, { zoomConversa: 1.2 });
         }
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.08).setDepth(80100);
     }
