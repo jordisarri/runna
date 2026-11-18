@@ -526,10 +526,11 @@ class EscenaUI extends Phaser.Scene {
     ordreMusica() {
         const m = this.game.scene;
         if (!m.isActive('Musica')) { this.musicaDavant = null; return; }
-        const damunt = this.capaOberta;
+        // El HUD (rosari, botons del pergamí i del sarró) es veu sempre per damunt de la tarota, amb la llum de sempre (sense l'enfosquiment del joc): serveix per consultar els cants
+        const damunt = true;
         if (this.musicaDavant === damunt) return;
         this.musicaDavant = damunt;
-        m.bringToTop(damunt ? 'UI' : 'Musica');
+        m.bringToTop('UI');
     }
 
     update() { this.refrescaObjectes(); this.ordreMusica(); }

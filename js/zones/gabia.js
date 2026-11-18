@@ -65,10 +65,7 @@ Object.assign(DIALEGS, {
     tornRastell: E => ({ pagines: [] }),          // (sense text: el torn es mou en tocar-lo; ja no cal cap objecte)
     pontGabia: E => E.flag('pontGabia') ? { pagines: [] } : {
         pagines: [
-            { qui: 'Inscripció', text: "Gravada a la pedra, una paraula antiga: PEDRES." },
-            { qui: 'Ineu', text: E.flag('cantPedres')
-                    ? "(Les pedres... L'ombra del monjo es va despertar amb el Cant de Vespres. Potser aquestes també: 5-4-3-1.)"
-                    : "(Pedres que dormen. Hi deu haver un cant per despertar-les.)" }
+            { qui: 'Ineu', text: "(Els blocs de pedra dormen. Potser la tarota els pot despertar.)" }
         ]
     },
     gabiaGran: E => ({ pagines: E.flag('andreuTancat') ? [

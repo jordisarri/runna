@@ -149,7 +149,7 @@ const PROGRES = {
         { id: 'tortura', marca: ['torturaNet'], fet: E => E.flag('torturaNet'),
           pista: E => "Segueix el camí de les Gírgoles fins al final: un mur d'esbarzers negres barra el pas, i Runna els sap tallar." },
         { id: 'pont', marca: ['pontGabia'], fet: E => E.flag('pontGabia'),
-          pista: E => "Al fons de les Gírgoles, davant d'un abisme, uns blocs de pedra dormen. Un cant de pedres els faria aixecar." },
+          pista: E => "Al fons de les Gírgoles, davant d'un abisme, uns blocs de pedra dormen. Potser la tarota sap com despertar-los." },
         { id: 'ocellaire', marca: ['ocellaireVencut'], fet: E => E.flag('ocellaireVencut'),
           pista: E => E.flag('ocellaireVist') ? "Talla els ocells de foc i aparta't del bàcul. Quan l'Ocellaire cau de genolls, colpeja-li el cap."
               : "Més enllà del pont, el Germà Aldreu fa guàrdia... i no hi és sol." },
