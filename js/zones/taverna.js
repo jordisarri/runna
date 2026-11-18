@@ -341,16 +341,18 @@ class ZonaSotaTaverna extends ZonaBase {
         this.colisio(220, H - 10, 280, 20);
         this.colisio(580, H - 10, 280, 20);
 
-        // La porta de ferro, al mig de la paret del fons, amb boira lila que en surt
+        // La porta de ferro, al mig de la paret del fons: marc de pedra amb dovelles, fulla de ferro amb tres bandes reblades, un pany petit (el de la clau rovellada) i una anella,
+        // amb l'espasa i la gàbia gravades al marc (el segell dels monjos) i, per sota, la boira lila que s'escola per la ranura
         const pf = this.add.graphics().setDepth(-950);
-        pf.fillStyle(0x0a0808, 1).fillRect(300, 10, 200, 150);
-        pf.fillStyle(0x2a2a30, 1).fillRect(310, 18, 180, 142);
-        for (let y = 30; y < 160; y += 26) for (let x = 322; x < 490; x += 28) pf.fillStyle(0x4a4a52, 1).fillCircle(x, y, 4);
-        pf.fillStyle(0x1a1a1e, 1).fillRect(310, 82, 180, 10).fillRect(310, 128, 180, 10);
-        pf.fillStyle(0x8a7a40, 1).fillRect(460, 88, 18, 26).fillStyle(0x0a0808, 1).fillRect(466, 96, 6, 12);
-        // Espasa i gàbia gravades al marc
-        pf.lineStyle(3, 0x7a6a8a, 0.8).lineBetween(282, 30, 282, 120).lineBetween(272, 50, 292, 50);
-        pf.strokeRect(508, 60, 24, 34).lineBetween(514, 60, 514, 94).lineBetween(520, 60, 520, 94).lineBetween(526, 60, 526, 94);
+        pf.fillStyle(0x0a0808, 1).fillRect(286, 4, 228, 160);                                                     // el buit del marc
+        for (let y = 4, f = 0; y < 164; y += 20, f++) {                                                           // brancals de pedra (carreus)
+            [[286, 22], [492, 22]].forEach(([x, w], j) => { pf.fillStyle([0x4a4452, 0x3e3846, 0x544e5c][(f + j) % 3], 1).fillRect(x, y, w, 19).lineStyle(1.5, 0x120e16, 1).strokeRect(x, y, w, 19); });
+        }
+        for (let x = 286, k = 0; x < 514; x += 38, k++) pf.fillStyle([0x544e5c, 0x4a4452, 0x5e5866][k % 3], 1).fillRect(x, 0, 38, 20).lineStyle(1.5, 0x120e16, 1).strokeRect(x, 0, 38, 20);   // llinda
+        this.fulla(pf, 310, 20, 180, 142);
+        // Espasa i gàbia gravades als brancals
+        pf.lineStyle(3, 0x8a7aa0, 0.85).lineBetween(297, 40, 297, 110).lineBetween(289, 56, 305, 56).lineBetween(297, 110, 297, 118);
+        pf.strokeRect(500, 62, 10, 34).lineBetween(503, 62, 503, 96).lineBetween(507, 62, 507, 96);
         const resplendor = this.add.ellipse(400, 170, 320, 70, 0x9a50ff, 0.25).setDepth(-940);
         this.tweens.add({ targets: resplendor, alpha: 0.08, scaleX: 1.15, yoyo: true, repeat: -1, duration: 1600 });
         this.boira(400, 170, 220, 40, 1.2);
@@ -360,18 +362,51 @@ class ZonaSotaTaverna extends ZonaBase {
         this.interactiu(400, 220, RADI_GRAN, DIALEGS.portaFerro, { altura: 170, actiu: () => !Estat.flag('portaFerroOberta'), enTancar: () => { if (Estat.te('clau_girgoles') && Estat.flag('cantMiracle') && Estat.te('benedicio_fraterna')) this.obrirPortaFerro(); } });
         if (Estat.flag('portaFerroOberta')) this.obrirPortaFerro(true);
 
-        // Sacs i botes de vi, i petjades a la pols
+        // Botes i sacs de gra de les provisions dels monjos (es poden trencar)
         [[150, 300], [180, 350], [640, 320]].forEach(([x, y]) => this.barril(x, y, 46, 20));
-        const sacs = this.add.graphics().setDepth(520);
-        [[620, 520], [660, 545], [140, 560]].forEach(([x, y]) => sacs.fillStyle(0x8a7a5a, 1).fillEllipse(x, y, 60, 40).lineStyle(2, 0x3a3020, 1).strokeEllipse(x, y, 60, 40));
+        this.sacs(640, 540, 'duo'); this.sacs(150, 580, 'un');
+        // Les petjades a la pols: un rastre de botes que puja de l'escala fins a la porta de ferro i s'hi atura (són les del Germà Aldreu, que hi pica cada nit); les més properes a la porta, més fosques i amb boira
         const pj = this.add.graphics().setDepth(-1000);
-        for (let k = 0; k < 9; k++) pj.fillStyle(0x2a2430, 0.6).fillEllipse(380 + (k % 2) * 30, 740 - k * 60, 14, 22);
-
-        // Escala que puja (sortida), a baix
-        const esc = this.add.graphics().setDepth(-1000);
-        for (let k = 0; k < 5; k++) esc.fillStyle(0x4a4450 + k * 0x050505, 1).fillRect(340, H - 100 + k * 20, 120, 20);
+        for (let k = 0; k < 13; k++) {
+            const y = 760 - k * 42, x = 400 + (k % 2 ? 16 : -16) + Math.sin(k * 0.9) * 6, f = 1 - k / 18;
+            pj.fillStyle(0x15111a, 0.45 * f + 0.15).fillEllipse(x, y, 15, 23).fillEllipse(x + (k % 2 ? 1 : -1), y + 15, 11, 9);
+            pj.fillStyle(0x6a6070, 0.2).fillEllipse(x - 2, y - 3, 5, 9);
+        }
+        // La claror de l'escala (el Celler de dalt) cau en un con suau sobre el terra, davant l'arc de sortida
+        const con = this.add.graphics().setDepth(-995).setBlendMode('ADD');
+        con.fillStyle(0xffe8c0, 0.05).fillPoints([{ x: 360, y: H - 12 }, { x: 440, y: H - 12 }, { x: 520, y: H - 330 }, { x: 280, y: H - 330 }], true);
+        con.fillStyle(0xffe8c0, 0.06).fillPoints([{ x: 372, y: H - 12 }, { x: 428, y: H - 12 }, { x: 468, y: H - 200 }, { x: 332, y: H - 200 }], true);
+        // Dues torxes de paret, a banda i banda de la porta, amb la seva claror càlida
+        [236, 564].forEach((x, i) => {
+            const t = this.add.graphics().setDepth(-940);
+            t.fillStyle(0x3a2a1a, 1).fillRect(x - 3, 96, 6, 34).lineStyle(2, 0x120c06, 1).strokeRect(x - 3, 96, 6, 34);
+            t.fillStyle(0x24242a, 1).fillRect(x - 8, 92, 16, 6).fillRect(x - 5, 130, 10, 5);
+            const flama = this.add.ellipse(x, 84, 12, 20, 0xffa030, 0.95).setDepth(-939);
+            const nucli = this.add.ellipse(x, 87, 6, 11, 0xfff0b0, 1).setDepth(-938);
+            this.tweens.add({ targets: [flama, nucli], scaleY: { from: 0.85, to: 1.2 }, scaleX: { from: 1.05, to: 0.85 }, yoyo: true, repeat: -1, duration: 260 + i * 70, ease: 'Sine.easeInOut' });
+            const halo = this.add.circle(x, 90, 90, 0xff9a40, 0.12).setDepth(-960).setBlendMode('ADD');
+            this.tweens.add({ targets: halo, alpha: 0.2, scale: 1.08, yoyo: true, repeat: -1, duration: 380 + i * 90 });
+        });
         this.add.rectangle(A / 2, H / 2, A, H, 0x1a0a30, 0.25).setDepth(80000);
         this.sortida(360, H - 22, 80, 14, 'ZonaGirgolesFora', 'porta');                 // l'escala puja a la porta de ferro de fora
+    }
+
+    // La fulla de la porta de ferro (g, a (x, y), de w x h): dues meitats de planxa amb tres bandes de ferro, reblons només a les bandes, anella i un pany petit
+    fulla(g, x, y, w, h) {
+        g.fillStyle(0x2c2c33, 1).fillRect(x, y, w, h);
+        g.fillStyle(0x38383f, 1).fillRect(x + 3, y + 3, w / 2 - 5, h - 6).fillRect(x + w / 2 + 2, y + 3, w / 2 - 5, h - 6);        // les dues meitats de la planxa
+        g.fillStyle(0x4a4a52, 0.35).fillRect(x + 6, y + 5, 3, h - 10).fillRect(x + w / 2 + 5, y + 5, 3, h - 10);                    // llum a l'esquerra de cada meitat
+        g.fillStyle(0x15151a, 1).fillRect(x + w / 2 - 1, y, 2, h);                                                                 // la juntura del mig
+        [0.16, 0.5, 0.84].forEach(f => {                                                                                            // bandes de ferro
+            const yy = y + h * f - 6;
+            g.fillStyle(0x1c1c22, 1).fillRect(x, yy, w, 12).lineStyle(1.5, 0x0c0c10, 1).strokeRect(x, yy, w, 12);
+            g.fillStyle(0x6a6a74, 0.5).fillRect(x + 1, yy + 1, w - 2, 2);
+            for (let xx = x + 10; xx < x + w - 6; xx += 22) g.fillStyle(0x8a8a94, 1).fillCircle(xx, yy + 6, 2.2).fillStyle(0x0c0c10, 0.6).fillCircle(xx + 0.7, yy + 6.7, 1);     // reblons
+        });
+        g.lineStyle(1, 0x7a3a10, 0.5); [[0.3, 0.2], [0.7, 0.7], [0.45, 0.35]].forEach(([fx, fy]) => g.lineBetween(x + w * fx, y + h * fy, x + w * fx + 2, y + h * fy + 14));          // regalims de rovell
+        g.lineStyle(3, 0x14141a, 1).strokeCircle(x + w - 28, y + h * 0.5 + 24, 7);                                                   // anella
+        g.fillStyle(0x8a7a40, 1).fillRect(x + w - 24, y + h * 0.5 - 30, 14, 20).fillStyle(0x0a0808, 1).fillRect(x + w - 19, y + h * 0.5 - 24, 4, 9);      // el pany petit (el de la clau rovellada)
+        g.fillStyle(0x7a5a2a, 1).fillRect(x + w - 24, y + h * 0.5 - 30, 14, 3);
     }
 
     // La Clau de ferro obre la porta: s'hi veu l'escala que baixa a la Sala de les Gírgoles
@@ -385,10 +420,7 @@ class ZonaSotaTaverna extends ZonaBase {
         forat.fillStyle(0x2a2a30, 1).fillRect(470, 18, 30, 142);
         // La fulla de ferro gira sobre la frontissa de l'esquerra i es queda oberta, de cantó
         const f = this.add.graphics().setDepth(-944).setPosition(310, 18);
-        f.fillStyle(0x2a2a30, 1).fillRect(0, 0, 180, 142).lineStyle(2, 0x111114, 1).strokeRect(0, 0, 180, 142);
-        for (let y = 12; y < 142; y += 26) for (let x = 12; x < 180; x += 28) f.fillStyle(0x4a4a52, 1).fillCircle(x, y, 4);
-        f.fillStyle(0x1a1a1e, 1).fillRect(0, 64, 180, 10).fillRect(0, 110, 180, 10);
-        f.fillStyle(0x8a7a40, 1).fillRect(150, 70, 18, 26).fillStyle(0x0a0808, 1).fillRect(156, 78, 6, 12);
+        this.fulla(f, 0, 0, 180, 142);
         if (ja) f.scaleX = 0.1;
         else this.tweens.add({ targets: f, scaleX: 0.1, duration: 1100, ease: 'Sine.easeInOut' });
         this.sortida(346, 146, 108, 20, 'ZonaGirgoles', 'porta');
