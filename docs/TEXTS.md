@@ -1884,13 +1884,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[585] Ineu:** (Una força invisible no em deixa passar. Sense el Cant del Miracle, els barrots no m'escoltaran. La Pianista, al Santuari, me l'ha d'ensenyar.)
 
-### enMelodia  <sub>(js/zones/gabia.js:1135)</sub>
+### enMelodia  <sub>(js/zones/gabia.js:1138)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
 **[586] Ineu:** (L'Home de la Gàbia xiula més fort que el cant.)
 
-### iniciarCombatFinal  <sub>(js/zones/gabia.js:1397)</sub>
+### iniciarCombatFinal  <sub>(js/zones/gabia.js:1400)</sub>
 
 **[587] Aldreu, Pastor de Boira:** Una altra vegada, monjo? El Mestre no es cansa mai.
 
@@ -1934,7 +1934,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[607] Aldreu, Pastor de Boira:** Sí, Mestre...
 
-### ocellaireDerrotat  <sub>(js/zones/gabia.js:1590)</sub>
+### ocellaireDerrotat  <sub>(js/zones/gabia.js:1593)</sub>
 
 **[608] L'Home de la Gàbia:** No... el meu riure... Els meus ocells...
 
@@ -1942,13 +1942,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[610] Germà Aldreu:** Mestre! No em deixeu!
 
-### obrirGabia  <sub>(js/zones/gabia.js:1661)</sub>
+### obrirGabia  <sub>(js/zones/gabia.js:1664)</sub>
 
 **[611] Ineu:** Germà Aldreu, la gàbia s'obrirà. Podeu venir amb nosaltres.
 
 **[612] Germà Aldreu:** Encara no.
 
-### finalGabia  <sub>(js/zones/gabia.js:1763)</sub>
+### finalGabia  <sub>(js/zones/gabia.js:1766)</sub>
 
 **[613] Germà Aldreu:** La seva veu em parlava dins el cap cada nit. Era l'única que em parlava.
 
@@ -2056,6 +2056,10 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[649] Ineu:** Les gírgoles canten: el micel·li es desfà!
 
+### pensament a obrirBoira  <sub>(js/zones/gabia.js:619)</sub>
+
+**[694] Ineu:** L'Empara de les sacerdotesses m'embolcalla d'una llum càlida, i la boira que cremava s'aparta davant seu. Puc passar.
+
 ### pensament a actualitzar  <sub>(js/zones/hostatgeria.js:393)</sub>
 
 *Si: encara no porta els Guants de Poder*
@@ -2072,7 +2076,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[652] Ineu:** Pesa massa... calen unes mans més fortes.
 
-### pensament a enMelodia  <sub>(js/zones/placa.js:108)</sub>
+### pensament a enMelodia  <sub>(js/zones/placa.js:125)</sub>
 
 **[654] Ineu:** El passatge ja és obert.
 

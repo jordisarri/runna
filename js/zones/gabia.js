@@ -601,7 +601,8 @@ class ZonaBoira extends ZonaBase {
         Estat.posaFlag('boiraVerinosaOberta');
         const I = this.ineu;
         I.body.setVelocity(0);
-        Sfx.secret();
+        // Un sorollet suau de purificació (un buf i dues notes que pugen), en lloc del soroll de mecanisme secret
+        Sfx.xiu(1.5, 0.09, 'bandpass', 700, 2600, 3); Sfx.to(660, 990, 0.5, 'sine', 0.13); Sfx.to(990, 1320, 0.7, 'sine', 0.11, 0.28);
         this.cameras.main.flash(500, 255, 240, 200);
         const aura = this.add.circle(I.x, I.y - 50, 40, 0xffe8a0, 0.5).setBlendMode('ADD').setDepth(99000);
         this.tweens.add({ targets: aura, radius: 420, alpha: 0, duration: 1800, ease: 'Cubic.out', onComplete: () => aura.destroy() });
@@ -614,6 +615,8 @@ class ZonaBoira extends ZonaBase {
         if (this.colBoira) { this.obstacles.remove(this.colBoira, true, true); this.colBoira = null; }
         Estat.posaObjectiu("La boira s'ha esvaït. Més amunt, la Sala de la Gàbia.");
         Estat.desar();
+        // Es diu per què ha marxat (la boira crema qui no porta l'Empara: davant seu, s'aparta)
+        this.time.delayedCall(900, () => this.ineuDiu("L'Empara de les sacerdotesses m'embolcalla d'una llum càlida, i la boira que cremava s'aparta davant seu. Puc passar."));
     }
 }
 
