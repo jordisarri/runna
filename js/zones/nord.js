@@ -514,7 +514,7 @@ class ZonaPingpong extends ZonaBase {
         // ---- La taula de ping-pong (verda) al mig, i els jugadors ----
         // En Jusef queda a la part nord de la taula; Julius i Pomers als costats de la taula
         this.npc('jusef', AX, 540, DIALEGS.jusef);
-        this.posar('taula_pp', AX, 680, { col: { w: 220, h: 40 } });
+        this.posar('taula_pp', AX, 680, { col: { w: 220, h: 40 }, opac: true });
         this.npc('julius', AX - 160, 680, DIALEGS.julius);
         this.npc('pomers', AX + 160, 680, DIALEGS.pomers, { flipX: true });
 
