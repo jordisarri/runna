@@ -2983,6 +2983,7 @@ class ZonaBase extends Phaser.Scene {
     // Escala que baixa cap al nord (s'allunya de la càmera): l'Ineu hi camina de cara a amunt, graó a graó, i s'enfonsa: el que queda per sota de la línia de la vora
     // del graó de davant (que és opac i el tapa) s'amaga, cada cop més amunt; així se'l veu desaparèixer de baix cap a dalt, cada cop més fosc
     baixarEscalaNord(s) {
+        if (s.baixar > 0) { this.baixarEscalaVora(s); return; }
         const I = this.ineu, alt = I.displayHeight, yIni = I.y, yFi = s.yFons, graons = 5;
         I.body.setVelocity(0); I.body.enable = false;
         this.posarDireccio('amunt', true);
@@ -3005,6 +3006,40 @@ class ZonaBase extends Phaser.Scene {
         });
         Sfx.porta();
         this.time.delayedCall(1500, () => { this.canviant = false; this.canviarZona(s.desti, s.entrada); });
+    }
+
+    // Escala cap al nord d'un forat petit (el jardí): l'Ineu camina fins a la vora de davant del forat (s.baixar) i s'hi enfonsa: el que queda per sota d'aquesta línia
+    // FIXA (la vora de pedra, que és davant seu) s'amaga, així se'l veu baixar els graons de cap a peus i no travessa el forat ni se li talla el cos enmig de l'aire
+    baixarEscalaVora(s) {
+        const I = this.ineu, alt = I.displayHeight, yR = s.baixar, yIni = I.y, yAlt = yR - 4, yFi = yR + alt * 1.02, graons = 5;
+        I.body.setVelocity(0); I.body.enable = false;
+        this.posarDireccio('amunt', true);
+        this.ombraIneu.setVisible(false);
+        if (this.fantasma) this.fantasma.setVisible(false);
+        const m = this.make.graphics({ add: false }), x0 = I.x, W = this.config.amplada, H = this.config.alcada;
+        I.setMask(m.createGeometryMask());
+        const clip = (y, enfonsant) => { m.clear().fillStyle(0xffffff, 1).fillRect(0, 0, W, !enfonsant && y > yR + 1 ? H + 400 : yR); };          // fora del forat (al sud de la vora) no es talla res
+        clip(yIni);
+        let graoAnt = -1;
+        const arribada = yIni > yAlt ? 0.22 : 0;                       // primer s'acosta a la vora (caminant cap amunt), després s'enfonsa
+        this.tweens.addCounter({
+            from: 0, to: 1, duration: 1900,
+            onUpdate: tw => {
+                const f = tw.getValue();
+                let y, c, enfonsant = f >= arribada;
+                if (f < arribada) { const k = f / arribada; y = Phaser.Math.Linear(yIni, yAlt, k); c = 255; }
+                else {
+                    const g = (f - arribada) / (1 - arribada) * graons, pas = Math.min(graons, Math.floor(g) + Phaser.Math.Easing.Sine.InOut(g % 1)), t = pas / graons;
+                    if (Math.floor(g) !== graoAnt) { graoAnt = Math.floor(g); Sfx.escala(false); }
+                    y = Phaser.Math.Linear(yAlt, yFi, t); c = Math.round(255 * (1 - 0.7 * t));
+                }
+                I.setPosition(Phaser.Math.Linear(x0, s.xEscala, Math.min(1, f / 0.3)), y);
+                clip(y, enfonsant);
+                I.setTint(Phaser.Display.Color.GetColor(c, c, c));
+            }
+        });
+        Sfx.porta();
+        this.time.delayedCall(1750, () => { this.canviant = false; this.canviarZona(s.desti, s.entrada); });
     }
 
     // Per on surt una sortida: segons la vora de la zona on és el rectangle (igual que marcarSortida)
