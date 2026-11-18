@@ -139,8 +139,8 @@ const PROGRES = {
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
           pista: E => "Al Pati del Celler hi ha una porta de ferro. La clau de ferro n'és amiga." },
         { id: 'clauIscu', marca: ['iscuTrobat', 'clauGirgoles', 'obj:clau_girgoles'], fet: E => E.te('clau_girgoles') || E.flag('portaFerroOberta'),
-          pista: E => E.flag('iscuTrobat') ? "L\'Iscu t'espera a la cabana amagada: té una clau rovellada per a tu."
-              : "La porta del fons té un pany petit. L\'Iscu, el noi de la Taverna, ho ha vist tot: s'amaga pel camí de la Desaparició." },
+          pista: E => E.flag('iscuTrobat') ? "L\'Iscu t'espera a la cabana amagada, en un buit entre els arbres al nord del camí de la Desaparició: té una clau rovellada per a tu."
+              : "La porta del fons té un pany petit. L\'Iscu, el noi de la Taverna, ho ha vist tot: s'amaga pel camí de la Desaparició: busca un buit entre els arbres, al nord del camí." },
         { id: 'portaFerro', marca: ['portaFerroOberta'], fet: E => E.flag('portaFerroOberta'),
           pista: E => !E.flag('cantMiracle') || !E.te('benedicio_fraterna') ? "La porta de ferro del fons de la galeria de sota la Taverna només s\'obre amb la clau rovellada, el Cant del Miracle i l\'Empara de les sacerdotesses." : "Al fons de la galeria de la Porta de Ferro, la clau rovellada de l\'Iscu té una porta de ferro que treu boira." },
         { id: 'girgoles', marca: ['girgolesEnceses'], fet: E => E.flag('girgolesEnceses'),

@@ -235,7 +235,7 @@ const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'nor
 // (eines/fer_ineu_v2.py). Esquerra i dreta són walk_elev_/idle_elev_ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
 // Les mides dels idles s'igualen a les dels caminars amb eines/igualar_idle_ineu.py. Els fulls i els prototips anteriors són a art/ineu/arxiu/.
 const rutaIneu = (dir, idle) => {
-    const v = '?v=2611185600';
+    const v = '?v=2611187000';
     if (dir === 'left' || dir === 'right') return `assets/ineu/${idle ? 'idle/idle_elev_' : 'caminar/walk_elev_'}${dir}.webp${v}`;
     return `assets/ineu/${idle ? 'idle/idle_' : 'caminar/'}${dir}.webp${v}`;
 };
@@ -259,10 +259,10 @@ const SPRITE_INEU = {
         southwest: { frames: [9, 10, 11, 12, 13, 14, 15], fps: 18.5 }, southeast: { frames: [8, 9, 10, 11, 12, 13, 14], fps: 18.5 },
         northwest: { frames: [8, 9, 10, 11, 12, 13, 14], fps: 18.5 }, northeast: { frames: [8, 9, 10, 11, 12, 13, 14], fps: 18.5 }
     },
-    // Idle en alta resolució (assets/ineu/idle/idle_<direcció>.webp, eines/fer_idle_ineu_hd.py): cel·les de 288 px que NO es redueixen (els altres fulls es redueixen a k = 0,75 → 192 px).
+    // Idle en alta resolució (assets/ineu/idle/idle_<direcció>.webp, eines/fer_idle_ineu_hd.py i fer_idle_ineu_hd_lat.py): cel·les de 288 px que NO es redueixen (els altres fulls es redueixen a k = 0,75 → 192 px).
     // L'Ineu aturat es veu igual de gran, amb 1,5 vegades més detall: com que la cel·la és més gran, el sprite s'escala per escalaIdleHD mentre dura aquest full (vegeu crearIneu).
-    // Les vistes esquerra i dreta (idle_elev_*) continuen sent de 256 reduïts.
-    idleHD: { dirs: ['down', 'up', 'southwest', 'southeast', 'northwest', 'northeast'], cel: 288 },
+    // Esquerra i dreta (idle_elev_*) també, fets amb eines/fer_idle_ineu_hd_lat.py.
+    idleHD: { dirs: ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'northwest', 'northeast'], cel: 288 },
     quiet: 2,             // fotograma de repòs de cada direcció
     // Memòria: les fulles de l'Ineu es redueixen en carregar a cel·les de 192.
     // Totes les mides d'aquí (i les de l'arma, atac_arma.js) continuen en píxels de la cel·la de 256; on cal píxels de la

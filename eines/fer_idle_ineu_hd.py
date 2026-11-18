@@ -7,7 +7,7 @@ Origen: art/ineu/v2/zip_idle_hd/<dir>.png (AutoSprite, 4x4 fotogrames de 512, re
 Es fa EXACTAMENT la mateixa transformació que a eines/fer_ineu_v2.py + eines/igualar_idle_ineu.py (mateixa escala, mateixos peus i centre, mateixa igualació amb el caminar), però sobre els píxels
 de 512 i en una cel·la de 288 (= 256 · 1,125): així l'Ineu aturat fa la mateixa alçada a la pantalla que sempre, però amb 1,5 vegades més detall que a l'antic (192 px per cel·la, vegeu
 SPRITE_INEU.k a js/assets.js). El contorn es fa a doble mida (576) amb gruix 3 i es baixa a 288 (≈ 1,5 px).
-Les vistes esquerra i dreta (idle_elev_*) no es toquen: venen d'un altre vídeo (càmera elevada).
+Les vistes esquerra i dreta (idle_elev_*) venen d'un altre vídeo (càmera elevada): les fa eines/fer_idle_ineu_hd_lat.py.
 """
 import sys
 from pathlib import Path
