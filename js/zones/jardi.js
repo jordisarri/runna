@@ -70,7 +70,7 @@ class ZonaJardi extends ZonaBase {
         };
         // Les columnes: el mateix sprite (pedres irregulars amb heura), girat amb el mirall alternant de columna en columna i de fila en fila perquè no siguin totes iguals
         COLS.forEach((x, i) => [YB, YF].forEach((y, j) => {
-            const c = this.posar('columna_heura', x, y, { col: { w: 52, h: 14 } });
+            const c = this.posar('columna_heura', x, y, { col: { w: 52, h: 14 }, opac: true });
             c.setFlipX((i + j) % 2 === 1);
         }));
         this.pergola = { x0: COLS[0], x1: COLS[COLS.length - 1], yb: YB, yf: YF, planta: PLANTA };
