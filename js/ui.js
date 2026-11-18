@@ -397,13 +397,19 @@ class EscenaUI extends Phaser.Scene {
         const titol = this.add.text(AMPLE / 2, 0, 'Objectiu', estilText(32, '#3a2412', { fontStyle: 'bold' })).setOrigin(0.5, 0);
         const cos = this.add.text(AMPLE / 2, 0, text, estilText(28, '#3a2412', { fontStyle: 'italic', wordWrap: { width: w - 90 }, align: 'center', lineSpacing: 2 })).setOrigin(0.5, 0);
         const peu = this.add.text(AMPLE / 2, 0, 'Toca per tancar', estilText(22, '#7a5a38')).setOrigin(0.5, 0);
-        const h = Math.max(220, 40 + titol.height + 14 + cos.height + 18 + peu.height + 38), y0 = TOP_HUD + 24;
+        // Si hi ha altres passos de la història a mig fer, també hi surten (cada un amb la seva pista), perquè el jugador no es perdi
+        const mitges = typeof PROGRES !== 'undefined' ? PROGRES.aMitges(Estat).slice(0, 4) : [];
+        const mes = mitges.length ? this.add.text((AMPLE - w) / 2 + 45, 0, 'Ja has començat:\n' + mitges.map(p => '◆ ' + (typeof DIARI_PASSOS !== 'undefined' && DIARI_PASSOS[p.id] ? DIARI_PASSOS[p.id][0] + ': ' : '') + p.pista(Estat)).join('\n'),
+            estilText(22, '#5a3a1c', { wordWrap: { width: w - 90 }, lineSpacing: 4 })).setOrigin(0, 0) : null;
+        const h = Math.max(220, 40 + titol.height + 14 + cos.height + (mes ? 26 + mes.height : 0) + 18 + peu.height + 38), y0 = TOP_HUD + 24;
         const tapa = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0).setOrigin(0).setInteractive().setDepth(79).on('pointerdown', () => this.tancarConsells());
         this.tapaConsells = tapa;
         this.tweens.add({ targets: tapa, fillAlpha: 0.35, duration: 220 });
         const fons = marcPergami(this, (AMPLE - w) / 2, y0, w, h).setOrigin(0);
         titol.setY(y0 + 38); cos.setY(titol.y + titol.height + 14); peu.setY(y0 + h - 22 - peu.height);
+        if (mes) mes.setY(cos.y + cos.height + 26);
         cont.add([fons, titol, cos, peu]);
+        if (mes) cont.add(mes);
         this.contConsells = cont;
         // El panell creix des del seu centre amb un petit rebot (Back.easeOut) i un fade in; la mida es fa servir com a pivot de l'escala
         const cx = AMPLE / 2, cy = y0 + h / 2, pop = { v: 0.82 };

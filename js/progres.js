@@ -105,6 +105,11 @@ const PROGRES = {
           pista: E => E.flag('florsCreu') ? "El Germà Francí t'espera a Sant Antoni, content."
               : E.te('ram') ? "El ram del Germà Francí és per a algú que ja no el pot rebre: la tomba de l'àngel, al Cementiri."
               : "El Germà Francí, a Sant Antoni, té uns guants que mouen el que pesa. Fes-li un favor." },
+        // El Pi dels Tres Cants és obligatori: el Pare Xèvius, vigilant de la Porta de les Gírgoles, només deixa passar qui li ensenya la Carta del Cortiner.
+        { id: 'pi', marca: ['piObert', 'piAurora', 'piPedres', 'piMiracle', 'piVist', 'obj:carta_cortiner'], fet: E => E.flag('piObert') || E.flag('portaSoterraniOberta'),
+          pista: E => E.flag('cantMiracle')
+              ? "El Pare Xèvius, a l'entrada de les Gírgoles, no deixa passar sense una prova de bona voluntat. Al sud de Sant Antoni, un bosc molt llarg amaga un pi vell que sembla escoltar els tres cants. Només s'hi pot arribar des de llevant."
+              : "Un pi vell, al sud de Sant Antoni, escolta els tres cants. Caldrà saber-los tots tres." },
         // L'Empara Fraternal es guanya just després dels Guants (l'àngel de la Pilària els demana) i ABANS de baixar a les Gírgoles: la Porta de Ferro no s'obre sense ella (boira verinosa del fons)
         { id: 'benediccioFraterna', marca: ['isilderRosansa', 'llavorRosansa', 'llosaOberta', 'lliureDolora', 'refetorObert', 'esb_host_cap1', 'esb_host_cap2', 'mongesTrobades', 'premiDolora', 'premiPilaria', 'premiCarmelia', 'cofreMonges', 'obj:benedicio_fraterna'], fet: E => E.te('benedicio_fraterna'),
           pista: E => !E.flag('llosaOberta')
@@ -129,11 +134,6 @@ const PROGRES = {
         { id: 'cripta', marca: ['relTretes', 'clauFerro', 'obj:clau_ferro'], fet: E => E.flag('relTretes'),
           pista: E => "Vençut l'Home del Raïm, la trapa de sota l'escalinata baixa a la Cripta dels monjos. Allà hi ha una clau de ferro." },
         // ---- Les Gírgoles ----
-        // El Pi dels Tres Cants és obligatori: el Pare Xèvius, vigilant de la Porta de les Gírgoles, només deixa passar qui li ensenya la Carta del Cortiner.
-        { id: 'pi', marca: ['piObert', 'piAurora', 'piPedres', 'piMiracle', 'piVist', 'obj:carta_cortiner'], fet: E => E.flag('piObert') || E.flag('portaSoterraniOberta'),
-          pista: E => E.flag('cantMiracle')
-              ? "El Pare Xèvius, a l'entrada de les Gírgoles, no deixa passar sense una prova de bona voluntat. Al sud de Sant Antoni, un bosc molt llarg amaga un pi vell que sembla escoltar els tres cants. Només s'hi pot arribar des de llevant."
-              : "Un pi vell, al sud de Sant Antoni, escolta els tres cants. Caldrà saber-los tots tres." },
         { id: 'vigilant', marca: ['vigilantObert'], fet: E => E.flag('vigilantObert') || E.flag('portaSoterraniOberta'),
           pista: E => "El Pare Xèvius barra el camí de la porta de les Gírgoles. Vol una prova de bona voluntat: la Carta del Cortiner, que reposa al Pi dels Tres Cants." },
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
@@ -183,6 +183,13 @@ const PROGRES = {
 
     // El primer pas de la història que encara no és fet
     seguent(E) { return this.passos.find(p => !p.fet(E)) || null; },
+
+    // Els passos que l'Ineu ja ha començat però no ha acabat (hi ha alguna de les seves marques i encara no són fets), sense el primer pendent (que ja és «el fil del camí»):
+    // el Diari els mostra tots, perquè el jugador no es perdi quan té diverses coses a mig fer
+    aMitges(E) {
+        const seg = this.seguent(E);
+        return this.passos.filter(p => p !== seg && !p.fet(E) && p.marca && p.marca.some(m => m.startsWith('obj:') ? E.te(m.slice(4)) : E.flag(m)));
+    },
 
     // Recompte de joc completat (menú de pausa i crèdits): la història principal val un 70% i les missions laterals un 30%.
     // El 100% només hi és quan tot és fet (no s'arrodoneix cap amunt).

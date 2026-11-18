@@ -299,6 +299,19 @@ const DIARI = {
             y = this.text(ui, c, X + 26, y + 8, seg.pista(E), 22, TINTA) + 26;
         } else y = this.text(ui, c, X, y, 'Ja ho has fet tot. Els nens tornen a riure.', 24, TINTA, { fontStyle: 'italic' }) + 26;
 
+        // Altres passos de la història ja començats i a mig fer (cada un amb la seva pista)
+        const mitges = PROGRES.aMitges(E);
+        if (mitges.length) {
+            y = this.titol(ui, c, X, y, 'Ja has començat...');
+            mitges.forEach(p => {
+                const [nom, zona] = DIARI_PASSOS[p.id] || [p.id, null];
+                y = this.text(ui, c, X, y, '◆ ' + nom, 25, '#7a4a1a', { fontStyle: 'bold' });
+                if (zona) y = this.text(ui, c, X + 26, y + 2, this.nomZona(zona), 19, TINTA_SUAU, { fontStyle: 'italic' });
+                y = this.text(ui, c, X + 26, y + 6, p.pista(E), 21, TINTA) + 22;
+            });
+            y += 4;
+        }
+
         y = this.titol(ui, c, X, y, 'Et van demanar...');
         const oberts = PROGRES.laterals.filter(l => l.obert(E) && !l.fet(E));
         const fets = PROGRES.laterals.filter(l => l.fet(E));
