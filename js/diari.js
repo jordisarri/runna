@@ -290,44 +290,19 @@ const DIARI = {
     encarrecs(ui, c) {
         const E = Estat, X = this.MX;
         let y = 170;
-        const seg = PROGRES.seguent(E);
-        y = this.titol(ui, c, X, y, 'El fil del camí');
-        if (seg) {
-            const [nom, zona] = DIARI_PASSOS[seg.id] || [seg.id, null];
-            y = this.text(ui, c, X, y, '★ ' + nom, 27, VERMELL, { fontStyle: 'bold' });
-            if (zona) y = this.text(ui, c, X + 26, y + 2, this.nomZona(zona), 20, TINTA_SUAU, { fontStyle: 'italic' });
-            y = this.text(ui, c, X + 26, y + 8, seg.pista(E), 22, TINTA) + 26;
-        } else y = this.text(ui, c, X, y, 'Ja ho has fet tot. Els nens tornen a riure.', 24, TINTA, { fontStyle: 'italic' }) + 26;
-
-        // Altres passos de la història ja començats i a mig fer (cada un amb la seva pista)
-        const mitges = PROGRES.aMitges(E);
-        if (mitges.length) {
-            y = this.titol(ui, c, X, y, 'Ja has començat...');
-            mitges.forEach(p => {
-                const [nom, zona] = DIARI_PASSOS[p.id] || [p.id, null];
-                y = this.text(ui, c, X, y, '◆ ' + nom, 25, '#7a4a1a', { fontStyle: 'bold' });
-                if (zona) y = this.text(ui, c, X + 26, y + 2, this.nomZona(zona), 19, TINTA_SUAU, { fontStyle: 'italic' });
-                y = this.text(ui, c, X + 26, y + 6, p.pista(E), 21, TINTA) + 22;
-            });
-            y += 4;
-        }
-
-        y = this.titol(ui, c, X, y, 'Et van demanar...');
-        const oberts = PROGRES.laterals.filter(l => l.obert(E) && !l.fet(E));
-        const fets = PROGRES.laterals.filter(l => l.fet(E));
-        if (!oberts.length) y = this.text(ui, c, X, y, fets.length ? 'No tens cap encàrrec pendent.' : 'Encara ningú no t\'ha demanat res. Parla amb la gent!', 22, TINTA_SUAU, { fontStyle: 'italic' }) + 20;
-        oberts.forEach(l => {
-            const [nom, zona] = DIARI_LATERALS[l.id] || [l.id, null];
-            y = this.text(ui, c, X, y, '! ' + nom, 25, '#2a4a7a', { fontStyle: 'bold' });
+        // Una sola llista: el següent pas de cada missió (el fil principal, els altres passos de la història ja començats i les missions laterals obertes)
+        y = this.titol(ui, c, X, y, 'Què tens pendent');
+        const entrada = (marca, color, nom, zona, pista) => {
+            y = this.text(ui, c, X, y, marca + ' ' + nom, 25, color, { fontStyle: 'bold' });
             if (zona) y = this.text(ui, c, X + 26, y + 2, this.nomZona(zona), 19, TINTA_SUAU, { fontStyle: 'italic' });
-            y = this.text(ui, c, X + 26, y + 6, l.pista(E), 21, TINTA);
-            y += 22;
-        });
-        if (fets.length) {
-            y += 6;
-            y = this.titol(ui, c, X, y, 'Fets');
-            fets.forEach(l => { y = this.text(ui, c, X, y, '✓ ' + (DIARI_LATERALS[l.id] || [l.id])[0], 22, '#3a7a3a') + 8; });
-        }
+            y = this.text(ui, c, X + 26, y + 6, pista, 21, TINTA) + 22;
+        };
+        const seg = PROGRES.seguent(E);
+        if (seg) { const [nom, zona] = DIARI_PASSOS[seg.id] || [seg.id, null]; entrada('★', VERMELL, nom, zona, seg.pista(E)); }
+        PROGRES.aMitges(E).forEach(p => { const [nom, zona] = DIARI_PASSOS[p.id] || [p.id, null]; entrada('◆', '#7a4a1a', nom, zona, p.pista(E)); });
+        const oberts = PROGRES.laterals.filter(l => l.obert(E) && !l.fet(E));
+        oberts.forEach(l => { const [nom, zona] = DIARI_LATERALS[l.id] || [l.id, null]; entrada('!', '#2a4a7a', nom, zona, l.pista(E)); });
+        if (!seg && !oberts.length) this.text(ui, c, X, y, 'Ja ho has fet tot. Els nens tornen a riure.', 24, TINTA, { fontStyle: 'italic' });
     },
 
     // ---------------- Sarró ----------------

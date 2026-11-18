@@ -442,7 +442,7 @@ Cellerer i Cellerer de Boira, vinyaters, obrers del segle XVII, contraban, Diari
 ## A11b. Diari de l'Ineu (`js/diari.js`)
 S'obre amb el medalló del sarró (o **I**; **M** obre el mapa; **◀ ▶** canvien de pestanya). Tot surt de `js/progres.js`, així que no cal mantenir-lo a part:
 - **Missió:** l'objectiu actual, l'acte, el progrés de cada acte (passos fets / total), els tres nens (rescatats o no), els cants apresos amb les notes de colors, i grans del rosari, bestioles calmades i llocs trobats.
-- **Encàrrecs:** «El fil del camí» (el pas següent amb una pista velada i el lloc), «Ja has començat...» (els altres passos de la història ja començats i a mig fer, cada un amb la seva pista i el lloc; el medalló del pergamí del HUD també els llista) i «Et van demanar...» (missions laterals obertes, amb la seva pista i el lloc), i les ja fetes.
+- **Encàrrecs:** una sola llista, «Què tens pendent», amb el pas següent de cada missió: ★ el fil principal, ◆ els altres passos de la història ja començats i ! les missions laterals obertes; cada una amb el seu nom, el lloc i una pista (el pergamí del HUD els resumeix també).
 - **Sarró:** els objectes en fitxes, amb la descripció.
 - **Mapa:** tauler fosc amb fitxes enganxades en una graella (cada regió té el seu color) i camins curts entre veïnes, «Ets aquí» que batega, ★ al lloc de l'objectiu, ! on hi ha encàrrecs i ? als llocs veïns encara per explorar (amb el camí puntejat). Tocant un lloc es veu què hi ha. El títol i la zona de cada pas són a `DIARI_PASSOS` i `DIARI_LATERALS`: si s'afegeix un pas a `progres.js`, cal afegir-l'hi.
 
