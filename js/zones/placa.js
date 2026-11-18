@@ -29,9 +29,26 @@ class ZonaPlaca extends ZonaBase {
         this.terra('cami', 0, 470, 380, 190);            // cap a la Casa Gran (oest)
         this.terra('cami', 760, 1000, 160, 200);         // cap a la Creu i la Bassadòria (sud)
         this.terra('cami', 330, 0, 130, 440);            // cap a les Runes (nord, a l'esquerra del Santuari)
-        this.terra('llamborda', 360, 420, 1240, 590);    // la plaça: arriba fins a la vora est, davant del Monestir
+        // La plaça: arriba fins a la vora est, davant del Monestir. Perquè no sigui un rectangle dur clavat a l'herba i als camins: una orla de terra (de vora suau, com els camins) li fa de
+        // transició, i el tros empedrat té les cantonades de l'oest arrodonides (amb una vora fina i fosca), de manera que els camins del nord i de l'oest hi entren de manera natural.
+        this.terra('cami', 336, 396, 1280, 638);
+        const llam = this.terra('llamborda', 360, 420, 1240, 590);
+        const forma = { tl: 80, bl: 80, tr: 0, br: 0 };
+        llam.setMask(this.make.graphics({ add: false }).fillStyle(0xffffff, 1).fillRoundedRect(360, 420, 1240, 590, forma).createGeometryMask());
         const vora = this.add.graphics().setDepth(-990);
-        vora.lineStyle(4, 0x8a7658, 1).strokeRect(360, 420, 1240, 590);
+        vora.lineStyle(3, 0x7a6648, 0.55).strokeRoundedRect(360, 420, 1240, 590, forma);
+        // Llambordes soltes a l'orla de terra, escampades de manera irregular: desfan la línia recta entre l'empedrat i la terra
+        let llavor = 91; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+        for (let k = 0; k < 70; k++) {
+            const costat = rnd(), t = rnd();
+            let x, y;
+            if (costat < 0.62) { x = 372 - rnd() * 34; y = 500 + t * 500; }                 // vora de l'oest
+            else if (costat < 0.82) { x = 440 + t * 1100; y = 1004 + rnd() * 24; }          // vora del sud
+            else { x = 372 - rnd() * 40 + t * 70; y = 424 - rnd() * 22; }                  // vora del nord, tocant el camí
+            const g = rnd() < 0.5 ? 0x8f8a7e : 0x7a756a;
+            vora.fillStyle(0x000000, 0.18).fillEllipse(x + 1, y + 3, 11 + rnd() * 9, 5 + rnd() * 3);
+            vora.fillStyle(g, 1).fillEllipse(x, y, 10 + rnd() * 9, 6 + rnd() * 3).lineStyle(1.3, 0x3a3228, 0.7).strokeEllipse(x, y, 10 + rnd() * 9, 6 + rnd() * 3);
+        }
 
         // --- Santuari i Runes (nord) ---
         // Façana gran (1100 d'ample) que acaba a la vora est del món: la porta, a x=683, fa ~165 d'alt (l'Ineu ~125)
