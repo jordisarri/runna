@@ -1800,9 +1800,9 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[567] Ineu:** (Algú l'hauria d'haver vist anar-hi de nit... L'Iscu, el fill de la Càren! L'Eve va dir que s'escapa pel camí de la Desaparició, per un forat entre els arbres.)
 
-**[667] Ineu:** (Tinc la clau, el Cant del Miracle i l'Empara. Endavant.)
+**[667] Ineu:** (Tinc la clau, el Cant del Miracle i l'Empara: les dues proves de què parlava la Crònica del Pare Alcoví. Endavant.)
 
-**[668] Ineu:** (Tinc la clau petita, però per baixar encara em falta  i  […].)
+**[668] Ineu:** (Tinc la clau petita, però la Crònica del Pare Alcoví deia que, per baixar, em cal passar dues proves. Encara em falta  i  […].)
 
 ### cartellGirgoles  <sub>(js/dialegs.js:424)</sub>
 

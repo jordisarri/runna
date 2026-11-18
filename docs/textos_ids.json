@@ -4285,14 +4285,14 @@
    {
     "id": 667,
     "qui": "Ineu",
-    "text": "(Tinc la clau, el Cant del Miracle i l'Empara. Endavant.)",
+    "text": "(Tinc la clau, el Cant del Miracle i l'Empara: les dues proves de què parlava la Crònica del Pare Alcoví. Endavant.)",
     "fitxer": "js/zones/taverna.js",
     "linia": 142
    },
    {
     "id": 668,
     "qui": "Ineu",
-    "text": "(Tinc la clau petita, però per baixar encara em falta  i  […].)",
+    "text": "(Tinc la clau petita, però la Crònica del Pare Alcoví deia que, per baixar, em cal passar dues proves. Encara em falta  i  […].)",
     "fitxer": "js/zones/taverna.js",
     "linia": 149
    }
