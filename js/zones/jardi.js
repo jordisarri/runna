@@ -68,11 +68,11 @@ class ZonaJardi extends ZonaBase {
                 });
             }
         };
-        COLS.forEach(x => {
-            this.posar('columna', x, YB, { escala: ESC, col: { w: 34, h: 14 } });
-            this.posar('columna', x, YF, { escala: ESC, col: { w: 34, h: 14 } });
-            [YB, YF].forEach(y => { for (let k = 0; k < 14; k++) heura(x + (rnd() - 0.5) * (k % 3 ? 30 : 38), y - 10 - k * (ALT_COL * 0.93 / 14) - rnd() * 10, 0.16 + rnd() * 0.09, 0.45 + rnd() * 0.15, y + 2, (rnd() - 0.5) * 120); });   // l'heura puja per les columnes: no gaire, i translúcida (es veuen les pedres)
-        });
+        // Les columnes: el mateix sprite (pedres irregulars amb heura), girat amb el mirall alternant de columna en columna i de fila en fila perquè no siguin totes iguals
+        COLS.forEach((x, i) => [YB, YF].forEach((y, j) => {
+            const c = this.posar('columna_heura', x, y, { col: { w: 52, h: 14 } });
+            c.setFlipX((i + j) % 2 === 1);
+        }));
         this.pergola = { x0: COLS[0], x1: COLS[COLS.length - 1], yb: YB, yf: YF, planta: PLANTA };
 
         // La Prunera Màgica, l'únic arbre: dins el jardí de la pèrgola

@@ -100,6 +100,7 @@ const CATALEG = [
     // ---- Escenari nou ----
     { key: 'runes',     file: 'assets/edificis/runes.webp',     amplada: 760, provisional: (c, w) => dibuixarRunes(c, w) },
     ...Array.from({ length: 12 }, (_, k) => ({ key: 'columna_proces_' + k, file: null, amplada: 64, provisional: (c, w) => dibuixarColumnaProcessio(c, w, k) })),
+    { key: 'columna_heura', file: 'assets/objectes/columna_heura.webp', amplada: 88, cru: true },          // columna de pedres irregulars amb heura (pèrgola del jardí de l'Hostatgeria); es posa girada (mirall) alternant
     { key: 'columna',   file: null,   amplada: 58,  provisional: (c, w) => dibuixarColumna(c, w) },
     { key: 'roure',     file: 'assets/natura/roure.webp',     amplada: 420, provisional: (c, w) => dibuixarRoure(c, w) },
     { key: 'tiller_arbre', file: 'assets/personatges/tiller_arbre.webp', amplada: 540, cru: true, provisional: (c, w) => dibuixarTiller(c, w) },   // el Til·ler com un arbre qualsevol, sense cara: així el veus abans de parlar-hi (mateix recorte que `tiller`)
