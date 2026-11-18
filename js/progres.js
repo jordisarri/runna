@@ -94,6 +94,11 @@ const PROGRES = {
               ? "Els tres medallons són a la placa: l'espasa del Dolmen espera, dalt de la llosa."
               : "La llàgrima aparta la boira. Al final, la placa del Dolmen espera els medallons de l'Arbre, del Saber i de la Benedicció." },
         // ---- ACTE 3 ----
+        // Amb Runna, el Pare Alcoví demana segellar la tomba del Cementiri per poder llegir-li la resta de la Crònica (el Pare Xèvius, el Pi, les proves de dins): és obligatori
+        { id: 'segell', marca: ['tombaDemanada', 'tombaSegellada', 'tombaLlegida'], fet: E => E.flag('tombaLlegida') || E.flag('portaSoterraniOberta'),
+          pista: E => !E.flag('tombaDemanada') ? "Ja tens Runna: el Pare Alcoví, a la Biblioteca, té més a dir-te de la Crònica."
+              : !E.flag('tombaSegellada') ? "La tomba esquerdada del Cementiri treu boira: la llum de Runna la tancaria. El Pare Alcoví no et llegirà la resta de la Crònica fins que no ho facis."
+              : "Has segellat la tomba. Torna al Pare Alcoví: et vol llegir la resta de la Crònica." },
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
           pista: E => "Runna ja és amb tu. Els barrots de la gàbia només escolten un cant que la Pianista encara no t'ha ensenyat." },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
@@ -123,10 +128,6 @@ const PROGRES = {
           pista: E => "A l'escalinata de la Casa Gran, l'Home del Raïm té el cap girat d'esquena. Amb la maneta al volant de la base, gira'l tres voltes fins que et miri de cara: es desperta. Només Runna li fa mal, i només al cap, quan ensopega de morros després d'una envestida." },
         { id: 'cripta', marca: ['relTretes', 'clauFerro', 'obj:clau_ferro'], fet: E => E.flag('relTretes'),
           pista: E => "Vençut l'Home del Raïm, la trapa de sota l'escalinata baixa a la Cripta dels monjos. Allà hi ha una clau de ferro." },
-        { id: 'segell', marca: ['tombaLlegida', 'tombaSegellada'], fet: E => E.flag('tombaSegellada'),
-          pista: E => E.flag('tombaLlegida') || !E.flag('relTretes')
-              ? "La tomba esquerdada del Cementiri treu boira: la llum de Runna la tancaria. La clau de ferro obre la porta del Pati del Celler."
-              : "La tomba del Cementiri treu boira: el Pare Alcoví, a la Biblioteca, sabrà què fer-hi. La clau de ferro obre la porta del Pati del Celler." },
         // ---- Les Gírgoles ----
         // El Pi dels Tres Cants és obligatori: el Pare Xèvius, vigilant de la Porta de les Gírgoles, només deixa passar qui li ensenya la Carta del Cortiner.
         { id: 'pi', marca: ['piObert', 'piAurora', 'piPedres', 'piMiracle', 'piVist', 'obj:carta_cortiner'], fet: E => E.flag('piObert') || E.flag('portaSoterraniOberta'),

@@ -47,7 +47,7 @@ const DIARI_LATERALS = {
 const DIARI_ACTES = [
     { nom: 'Acte 1 · La boira', des: 'clauer' },
     { nom: 'Acte 2 · El Til·ler i el Saber', des: 'font' },
-    { nom: 'Acte 3 · La Sala de la Gàbia', des: 'cantMiracle' }
+    { nom: 'Acte 3 · La Sala de la Gàbia', des: 'segell' }
 ];
 const DIARI_PESTANYES = [['missio', 'Missió'], ['encarrecs', 'Encàrrecs'], ['sarro', 'Sarró'], ['cants', 'Cants'], ['mapa', 'Mapa']];
 
