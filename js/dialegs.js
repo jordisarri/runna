@@ -1135,11 +1135,6 @@ const DIALEGS = {
         ? { pagines: [{ qui: 'Carmèlia', text: 'Entra, fill: aquesta casa torna a ser teva.' }] }
         : { pagines: [{ qui: 'Ineu', text: 'La porta està tancada per dins.' }] },
     sortidaMonges: E => ({ pagines: [] }),
-    taulaRefetor: E => E.te('guants')
-        ? { pagines: [{ qui: 'Ineu', text: "Un àngel de pedra massís barra la porta del mig. Amb els Guants de Poder el podré empènyer: només cal posar-me a un costat i fer força contra ell." }] }
-        : { pagines: [
-            { qui: 'Ineu', text: "Un àngel de pedra massís barra la porta del mig. Des de l'altra banda, una veu fina i enrabiada colpeja la fusta." },
-            { qui: 'Ineu', text: "No el puc moure amb les mans soles. Ni dues persones... Necessito molta més força." }] },
     // El mur d'esbarzers del passadís secret (Celler → Cambra secreta)
     // ---------------- LES SACERDOTESSES DE L'HOSTATGERIA ----------------
     dolora: E => {

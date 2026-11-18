@@ -46,7 +46,7 @@ SECCIONS = [
     ('Acte 3: el passadís secret, la cambra i la maneta (en Jorgi)', ['zones/casa:georgiCaseta', 'llibreCambra', 'cofreManeta', 'zones/casa:golfesRellotge', 'zones/casa:golfesNota', 'zones/casa:golfesReparat']),
     ('Acte 3: la Casa Gran, la cripta i l\'Home del Raïm', ['portaReixa', 'reixaDins', 'homeRaim', 'zones/casa:homeRaimInt', 'zones/casa:raimDesperta', 'zones/casa:raimSenseArma', 'zones/casa:raimDerrotat',
                                                             'zones/casa:raimEstatuaFinal', 'zones/casa:cofreCripta', 'zones/casa:puzleRaim', 'zones/casa:mecanismePorta', 'zones/casa_gran:construir']),
-    ('Acte 3: l\'Hostatgeria, les sacerdotesses i la llosa del jardí', ['isilderBase', 'isilderRunna', 'isilder', 'llosaJardi', 'zones/jardi:construir', 'rosansa', 'avisLlosa', 'hostatgeria', 'taulaRefetor',
+    ('Acte 3: l\'Hostatgeria, les sacerdotesses i la llosa del jardí', ['isilderBase', 'isilderRunna', 'isilder', 'llosaJardi', 'zones/jardi:construir', 'rosansa', 'avisLlosa', 'hostatgeria',
                                                                          'dolora', 'pilaria', 'carmelia', 'cofreMonges']),
     ('La porta de ferro i les Gírgoles', ['zones/taverna:portaSoterrani', 'xevius', 'zones/taverna:portaFerro', 'cartellGirgoles', 'zones/gabia:girgolesInscripcio', 'zones/gabia:tornRastell']),
     ('La Gàbia i l\'Ocellaire', ['zones/gabia:pontGabia', 'zones/gabia:gabiaGran', 'zones/gabia:aldreuGabia', 'zones/gabia:nenGabia', 'zones/gabia:actualitzar', 'zones/gabia:enMelodia',

@@ -232,12 +232,11 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
 
         // Bloqueig del refetor (porta del mig): un àngel de pedra massís. Amb els Guants de Poder s'empeny des de qualsevol dels dos costats i es desplaça
         // just el necessari per deixar la porta lliure (sense arribar a les altres dues). Un cop empès, es queda al costat on l'han deixat.
-        this.estatua = null; this.colEstatua = []; this.empentaMs = 0; this.pistaEstatua = 0;
+        this.estatua = null; this.colEstatua = []; this.empentaMs = 0; this.pistaEstatua = 0; this.dirEstatua = 0; this.fetEstatua = 0;
         if (!Estat.flag('refetorObert')) {
             this.estatua = this.crearEstatua(600, 250);
             // Un cos sota els peus i un tros de paret al darrere: ni es pot vorejar per darrere ni passar entre l'àngel i la porta
             this.colEstatua = [this.colisio(600, 236, 100, 40), this.colisio(600, 192, 150, 36)];
-            this.interactiu(600, 262, 130, DIALEGS.taulaRefetor, { altura: 200, senseMirada: true, actiu: () => !Estat.flag('refetorObert') });
         } else {
             const e = this.crearEstatua(Estat.flag('estatuaEsquerra') ? ESTATUA_X_ESQ : ESTATUA_X_DRE, 250);       // ja empès: es queda al costat
             this.colisio(e.x, 236, 100, 40);
@@ -399,40 +398,44 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         if (!E || Estat.flag('refetorObert')) return;
         const ui = this.ui(), c = this.cursors, t = this.tecles, I = this.ineu;
         const dx = I.x - E.x, vora = Math.abs(dx) > 40 && Math.abs(dx) < 100 && Math.abs(I.y - 236) < 56;       // al costat (a l'alçada de la peanya)
-        // Generós amb la direcció (com a les pedres mòbils): compta cap a on VOL anar el jugador, n'hi ha prou amb ~30% cap a l'àngel (també en diagonal i amb el
-        // joystick) i mentre s'empeny no es llisca pels costats; si el dit tremola un instant, no es perd tot el que s'havia recolzat
+        // Com les pedres mòbils de Sant Joan: només s'empeny caminant-hi contra des d'un costat (esquerra o dreta), sense cap punt interactiu ni acció automàtica; l'àngel
+        // es desplaça a poc a poc mentre l'Ineu fa força i s'atura si deixa de fer-ne. Sense els Guants de Poder no es belluga (l'Ineu diu que li cal ser més fort).
+        // Generós amb la direcció: compta cap a on VOL anar el jugador, n'hi ha prou amb ~30% cap a l'àngel (també en diagonal i amb el joystick) i mentre
+        // s'empeny no es llisca pels costats. Un cop arribat al seu lloc, queda alliberat el pas i ja no es pot tornar a moure.
         const I2 = this.intent || { x: 0, y: 0 };
-        const empeny = vora && I2.x * (dx < 0 ? 1 : -1) > 0.3;                                                // vol anar cap a l'àngel
+        const cap = dx < 0 ? 1 : -1;                                                                           // cap a on l'empeny l'Ineu
+        const empeny = vora && I2.x * cap > 0.3 && (!this.dirEstatua || this.dirEstatua === cap);             // un cop començat, només cap a la mateixa banda
         if (empeny) I.body.setVelocityY(0);
         this.empentaMs = empeny ? this.empentaMs + delta : Math.max(0, this.empentaMs - delta * 2);
-        E.x = 600 + (empeny && Estat.te('guants') ? Math.sin(ara / 45) * 1.6 : 0);                              // tremola quan s'hi fa força
-        if (this.empentaMs < 450) return;
-        this.empentaMs = 0;
+        if (!empeny || this.empentaMs < 300) return;                                                           // primer s'hi recolza una mica
         if (!Estat.te('guants')) {
-            if (ara > this.pistaEstatua) { this.pistaEstatua = ara + 7000; this.ineuDiu("L'àngel de pedra no es belluga ni un pèl. Pesa massa: calen unes mans més fortes."); }
+            this.empentaMs = 0;
+            if (ara > this.pistaEstatua) { this.pistaEstatua = ara + 7000; this.ineuDiu("L'àngel de pedra no es belluga ni un pèl. Necessito ser molt més fort per moure'l."); }
             return;
         }
-        this.empenyEstatua(dx < 0 ? 1 : -1);
+        this.empenyEstatua(cap, delta);
     }
 
-    empenyEstatua(dir = 1) {
+    // Avança l'àngel una mica (mentre l'Ineu fa força); en arribar al lloc, es queda lliure el pas i ja no es mou més
+    empenyEstatua(dir, delta) {
         const E = this.estatua;
         if (Estat.flag('refetorObert') || !E) return;
+        this.dirEstatua = dir;
+        const dist = ESTATUA_X_DRE - 600, pas = Math.min(dist - (this.fetEstatua || 0), 75 * delta / 1000);
+        this.fetEstatua = (this.fetEstatua || 0) + pas;
+        E.x += dir * pas;
+        this.colEstatua[0].setPosition(E.x, 236); this.colEstatua[0].body.updateFromGameObject();
+        if (this.time.now > (this.proxSoEstatua || 0)) { this.proxSoEstatua = this.time.now + 260; Sfx.pas(true); this.cameras.main.shake(80, 0.0015); }
+        if (this.fetEstatua < dist - 0.5) return;
+        // Al seu lloc: el pas queda lliure (es treu el tros de paret del darrere) i l'àngel es queda aquí per sempre
         Estat.posaFlag('refetorObert');
         if (dir < 0) Estat.posaFlag('estatuaEsquerra');
-        this.colEstatua.forEach(z => this.obstacles.remove(z, true, true));
+        this.obstacles.remove(this.colEstatua[1], true, true);
         this.colEstatua = [];
+        this.estatua = null;
         Sfx.secret();
         this.cameras.main.shake(400, 0.003);
-        const fi = dir < 0 ? ESTATUA_X_ESQ : ESTATUA_X_DRE;
-        const pols = this.boira(E.x, 240, 110, 20, 3, 0xcfc4b0);
-        this.tweens.add({ targets: E, x: fi, duration: 1700, ease: 'Sine.easeInOut', onComplete: () => {
-            this.colisio(fi, 236, 100, 40);                                  // un cop al seu lloc, torna a fer de mur
-            pols.stop(); this.time.delayedCall(1200, () => pols.destroy());
-            this.estatua = null;
-            Estat.desar();
-        } });
-        this.tweens.add({ targets: pols, x: fi, duration: 1700, ease: 'Sine.easeInOut' });
+        Estat.desar();          // (el cos de sota, el que ha anat movent, es queda com a mur al seu lloc)
     }
 }
 
