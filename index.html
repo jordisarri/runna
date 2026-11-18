@@ -120,6 +120,33 @@
     <script>
         // Service worker: només amb http(s) (no obrint el fitxer directament) i sense fer fallar el joc si no pot ser
         window.addEventListener('load', () => { try { if (typeof game !== 'undefined') sessionStorage.removeItem('runna_reintent'); } catch (e) { } });
+        // Versió nova: una app instal·lada al mòbil (accés directe) no torna a carregar la pàgina en tornar-hi (queda suspesa), i el service worker no canvia si només canvien els
+        // fitxers del joc. Per això, en obrir-lo i cada cop que es torna al joc, es mira si index.html té un altre número de versió (?v=) que el de la pàgina oberta: si és així,
+        // es recarrega de seguida a la portada, o en sortir del joc (així no es talla una partida).
+        if (/^https?:$/.test(location.protocol)) {
+            const mi = document.querySelector('script[src*="js/main.js"]'), versioMeva = mi && (mi.src.match(/[?&]v=(\d+)/) || [])[1];
+            let pendent = false, mirant = false;
+            const recarregaNova = () => { try { location.reload(); } catch (e) { /* res */ } };
+            const miraNova = async () => {
+                if (!versioMeva || mirant) return;
+                mirant = true;
+                try {
+                    const r = await fetch('index.html', { cache: 'no-store' });
+                    const m = (await r.text()).match(/js\/main\.js\?v=(\d+)/);
+                    if (m && m[1] !== versioMeva) {
+                        pendent = true;
+                        let alTitol = false;
+                        try { alTitol = typeof game !== 'undefined' && game.scene.isActive('Titol'); } catch (e) { /* res */ }
+                        if (alTitol || document.visibilityState === 'hidden') recarregaNova();
+                    }
+                } catch (e) { /* sense connexió: ens quedem amb el que hi ha */ }
+                mirant = false;
+            };
+            document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') miraNova(); else if (pendent) recarregaNova(); });
+            window.addEventListener('load', () => setTimeout(miraNova, 4000));
+            setInterval(() => { if (document.visibilityState === 'visible') miraNova(); }, 300000);
+            setInterval(() => { try { if (pendent && typeof game !== 'undefined' && game.scene.isActive('Titol')) recarregaNova(); } catch (e) { /* res */ } }, 1500);          // (hi ha versió nova i s'arriba a la portada)
+        }
         if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
             window.addEventListener('load', () => {
                 const teControlador = !!navigator.serviceWorker.controller;

@@ -1,7 +1,7 @@
 /**
  * SERVICE WORKER (perquè el joc es pugui instal·lar com a aplicació i, un cop jugat, tornar-hi sense connexió i gastant molt poca xarxa)
  * Estratègies:
- *  - la pàgina, aquest fitxer i el manifest: la xarxa primer (així sempre es veu l'última versió; sense connexió, la còpia guardada);
+ *  - la pàgina, aquest fitxer i el manifest: la xarxa primer, comprovant sempre amb el servidor (així sempre es veu l'última versió; sense connexió, la còpia guardada);
  *  - els fitxers amb versió a l'adreça (?v=...: el codi del joc) i l'àudio/vídeo (que pesen molt i no canvien): primer la còpia guardada, sense tornar-los a baixar
  *    (el codi canvia d'adreça quan canvia; si canvia un àudio o un vídeo, puja VERSIO);
  *  - tota la resta (imatges, àudio, vídeo...): primer la còpia guardada i, en segon pla, es comprova si ha canviat (una petició molt petita, sense tornar a baixar res si no ha canviat);
@@ -78,7 +78,7 @@ self.addEventListener('fetch', ev => {
     ev.respondWith((async () => {
         const cache = await caches.open(VERSIO);
         if (mateixa) {                                                          // xarxa primer
-            try { return guarda(cache, req, await baixa(req, 2)); }
+            try { return guarda(cache, req, await baixa(new Request(req, { cache: 'no-cache' }), 2)); }          // (no-cache: sempre es comprova amb el servidor; sense això, la memòria del navegador podia servir una pàgina de fins a 10 minuts)
             catch (e) {
                 const guardada = await cache.match(req) || await cache.match(req, { ignoreSearch: true });
                 if (guardada) return guardada;
