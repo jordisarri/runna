@@ -495,8 +495,13 @@ class CambraMonja extends ZonaCasaBase {
             this.llocFlauta('dolora', 520, 480, 300, false, () => !Estat.flag('lliureDolora'), false, ['aurora']);
             if (Estat.flag('lliureDolora')) this.alliberada(true);
         } else if (m === 'pilaria') {                                    // refetor: taula llarga, aparador amb plats, faristol i rastells d'alls
-            this.posar('taula_sopar', 400, 330, { col: { w: 360, h: 40 } });
-            [[260, 380], [540, 380], [260, 280], [540, 280]].forEach(([x, y]) => this.posar('tamboret', x, y, { col: { w: 28, h: 12 } }));
+            // La taula, més avall: la Pilària (darrere) es veu sencera, amb els peus a la vora del fons de la taula. Opaca. Tres cadires (no tamborets).
+            this.posar('taula_sopar', 400, 400, { col: { w: 360, h: 40 }, opac: true });
+            [[250, 232, false], [300, 470, true], [510, 470, false]].forEach(([x, y, flip]) => {
+                const cad = this.add.image(x, y, 'cadira_cela').setOrigin(0.5, 1).setScale(1.25 / RES).setFlipX(flip).setDepth(y);
+                this.colisio(x, y - 6, 30, 12);
+                (this.opacs = this.opacs || []).push(cad);
+            });
             this.barril(130 + 40, 200, 40, 18);
             const ap = this.add.graphics().setDepth(100).setPosition(0, -80);          // aparador contra la paret del fons, a la dreta: la base (y=100) toca la base de la paret (y≈90)
             ap.fillStyle(0x000000, 0.25).fillEllipse(620, 180, 100, 14);
@@ -524,7 +529,7 @@ class CambraMonja extends ZonaCasaBase {
                 for (let k = 0; k < 6; k++) alls.fillStyle(0xf0e8d8, 1).fillCircle(x + (k % 2 ? 5 : -5), 14 + k * 7, 5).lineStyle(1, 0x8a7a64, 1).strokeCircle(x + (k % 2 ? 5 : -5), 14 + k * 7, 5);
             });
             alls.fillStyle(0xa0503a, 1).fillEllipse(480, 36, 26, 44).lineStyle(2, 0x3a1a0c, 1).strokeEllipse(480, 36, 26, 44).lineBetween(480, 0, 480, 14);
-            this.npc('pilaria', 400, 272, DIALEGS.pilaria, { radi: 190, zoomConversa: 1.2 });          // al seu lloc, darrere la taula del refetor (hi parles per sobre de la taula)
+            this.npc('pilaria', 400, 240, DIALEGS.pilaria, { radi: 250, zoomConversa: 1.2 });          // al seu lloc, darrere la taula del refetor (hi parles per sobre de la taula)
         } else {                                                       // capella: rosetó, altar, catifa fins a l'altar, bancs i dues fornícules
             const cat = this.add.graphics().setDepth(-1050);
             cat.fillStyle(0x6a1f24, 1).fillRect(360, 270, 80, 340);
