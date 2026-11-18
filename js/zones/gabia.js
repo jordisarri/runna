@@ -1348,6 +1348,8 @@ class ZonaGabia extends ZonaBase {
         a.setScale(e * 1.5); a.escalaBase = a.scaleY;
         if (a.ombra) a.ombra.setScale(0.42 * 1.5);
         this.idleCodi(a, true);
+        // Una respiració molt més suau (0,8%) en lloc del 2,8% de la resta de personatges: a mida gran, el Pastor es veia «inflar-se i desinflar-se»
+        if (a.respira) { a.respira.stop(); a.respira = this.tweens.add({ targets: a, scaleY: a.escalaBase * 1.008, scaleX: a.scaleX * 0.998, yoyo: true, repeat: -1, duration: 1900, ease: 'Sine.easeInOut' }); }
     }
     // ---------- L'Aldreu final: trist (cap cot) -> aixeca el cap -> somriu ----------
     aldreuTrist(a) {
@@ -1570,14 +1572,14 @@ class ZonaGabia extends ZonaBase {
                     alpha: { start: 0.5, end: 0 }, tint: 0x9a50ff, frequency: 40
                 }).setDepth(ap.depth - 0.5);                       // darrere el Mestre: la boira l'envolta però no li tapa la cara
                 cam.shake(1200, 0.004);
-                ap.setPosition(gx, yTop).setScale(sFi * 1.36).setAlpha(0);
+                ap.setPosition(gx, yTop).setScale(sFi).setAlpha(0);          // (la mateixa mida que al combat: abans començava un 36% més gran i s'encongia en baixar)
                 this.enquadrar(gx, base - this.gh - 40, 1.15, curta ? 500 : 1200, f, 0);
             },
             f => {                                              // P08: baixada del Mestre (gegantí, ve de dalt)
                 Sfx.carrega();
                 if (this.teTextura('ocellaire_alca')) ap.setTexture('ocellaire_alca');
                 this.tweens.add({ targets: ap, alpha: 1, duration: 500 });
-                this.tweens.add({ targets: ap, y: yFi, scale: sFi, duration: durB, ease: 'Sine.easeIn',
+                this.tweens.add({ targets: ap, y: yFi, duration: durB, ease: 'Sine.easeIn',
                     onUpdate: () => { if (p) p.setPosition(gx, ap.y - 60); }, onComplete: f });
                 this.enquadrar(gx, base - 30, 1.3, durB, null, 0);
             },
