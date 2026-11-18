@@ -148,7 +148,7 @@
 
 - [ ] `pare_xevius` (sprite `assets/personatges/pare_xevius.webp` i retrat `assets/retrats/pare_xevius.webp`; ara hi ha un dibuix provisional per codi)
 
-  *Prompt:* Monjo molt vell, Vigilant de la Porta de les Gírgoles. Home alt, molt molt prim i una mica encorbat, d'uns vuitanta anys, cara llarga i angulosa de pòmuls marcats, nas gros i prominent, celles blanques, ulleres petites de muntura fina, mirada serena però escarmentada, cabells blancs, fins i despentinats. Porta una túnica blanca de monjo amb escapulari i, a sobre, una casulla clara d'estil litúrgic de brocat daurat amb una franja vertical brodada vermella i daurada al mig, coll i caputxa blancs; a les mans, un full de paper doblegat com si l'estigués llegint. Cos sencer, vista frontal, fons transparent, estil il·lustració de conte fosc, com la resta de monjos del joc (Pare Alcoví, Germà Francí).
+  *Prompt (anglès):* Full-body character sprite, front view, standing, transparent background. An extremely tall and very, very thin elderly monk, about eighty years old, slightly stooped. Long narrow face with prominent cheekbones, big prominent nose, thick white eyebrows, small thin-framed round glasses, calm but wary, once-bitten expression. Thin, fine, messy white hair. He wears a white monk's habit with a scapular and, over it, a pale cream liturgical chasuble of gold brocade with a vertical embroidered red-and-gold stripe down the middle, and a white collar and hood. He holds a folded sheet of paper in his hands, as if reading it. Dark fairy-tale storybook illustration style, painterly, soft outlines, warm muted colors.
 
 - [x] `pare_jorda`
 
