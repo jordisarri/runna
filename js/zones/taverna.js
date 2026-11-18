@@ -64,7 +64,7 @@ class ZonaTaverna extends ZonaBase {
         this.portaOberta = true;
         this.obstacles.remove(this.colPorta, true, true);
         this.colisio(831, 660, 90, 20);      // dintell
-        this.sortida(799, 676, 64, 14, 'ZonaTavernaInt', 'porta');
+        this.sortida(799, 700, 64, 42, 'ZonaTavernaInt', 'porta');          // la sortida arriba fins a la base de la porta (746-4): abans era 60 px més amunt i l'Ineu caminava massa dins de la porta abans d'entrar
     }
 }
 
