@@ -2233,7 +2233,7 @@
     "qui": "Ineu",
     "text": "[text calculat pel joc: textPista]",
     "fitxer": "js/zona_base.js",
-    "linia": 1823
+    "linia": 1851
    }
   ],
   "dialegs::ombraMonjo": [
@@ -5055,7 +5055,7 @@
     "qui": "Ineu",
     "text": "Ara no: hi ha bèsties a prop.",
     "fitxer": "js/zona_base.js",
-    "linia": 519
+    "linia": 520
    }
   ],
   "zona_base::ineuDiu·melodiaTocada": [
@@ -5064,7 +5064,7 @@
     "qui": "Ineu",
     "text": "He tocat el [text calculat pel joc: MELODIES[nom].nom], però aquí no passa res...",
     "fitxer": "js/zona_base.js",
-    "linia": 2079
+    "linia": 2107
    }
   ]
  },

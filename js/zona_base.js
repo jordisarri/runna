@@ -222,7 +222,7 @@ class ZonaBase extends Phaser.Scene {
         this.dadesEntrada = data || {};
         this.canviant = false;
         this.camDialeg = null;
-        this.bancsEsg = []; this.assegut = false; this.davantBanc = null; this.npcs = {}; this.opacs = []; this.forcsPorta = []; this.npcDavant = null; this.camCinema = false; this.camArma = false; this.efectesArma = null; this.ineuFlautaImg = null; this.ineuAmagat = false;          // (l'escena es reaprofita: res de la visita anterior)
+        this.arribadaEnCarro = null; this.carroParada = null; this.bancsEsg = []; this.assegut = false; this.davantBanc = null; this.npcs = {}; this.opacs = []; this.forcsPorta = []; this.npcDavant = null; this.camCinema = false; this.camArma = false; this.efectesArma = null; this.ineuFlautaImg = null; this.ineuAmagat = false;          // (l'escena es reaprofita: res de la visita anterior)
         this.boundsCamOrig = null;
         this.twCamDialeg = null;
         this.entradaPropia = false;
@@ -499,6 +499,7 @@ class ZonaBase extends Phaser.Scene {
         this.paradaAqui = pd;
         if (Estat.arribadaCarruatge === pd.id) {                       // hi acabem d'arribar: bufada de vapor
             Estat.arribadaCarruatge = null;
+            this.arribadaEnCarro = pd;                                 // (crearIneu hi col·loca l'Ineu separat del carruatge i del Follet)
             this.time.delayedCall(250, () => { this.vaporPuf(carro.x + ox, carro.y + oy + 20 * KC, 0x4a4a4e); this.vaporPuf(this.ineu.x, this.ineu.y - 20); });
         }
     }
@@ -1706,10 +1707,37 @@ class ZonaBase extends Phaser.Scene {
         return !this.obstacles.getChildren().some(o => o.body && Phaser.Geom.Intersects.RectangleToRectangle(peus, new Phaser.Geom.Rectangle(o.body.x, o.body.y, o.body.width, o.body.height)));
     }
 
+    // El lloc lliure més proper a (x, y) que no toqui el carruatge ni el Follet (a menys de 90 px del Follet o de 60 px de la caixa del carruatge: l'Ineu no hi pot quedar encaixat)
+    llocSeparatDelCarro(x, y) {
+        const car = this.carroParada, fol = Object.values(this.npcs || {}).find(n => n.texture && n.texture.key === 'follet_carro');
+        const b = this.physics.world.bounds;
+        const be = (cx, cy) => {
+            if (cx < b.x + 40 || cx > b.right - 40 || cy < b.y + 40 || cy > b.bottom - 20) return false;
+            if (!this.llocLliure(cx, cy)) return false;
+            if (fol && Phaser.Math.Distance.Between(cx, cy, fol.x, fol.y) < 90) return false;
+            if (car) { const r = car.getBounds(); if (cx > r.x - 60 && cx < r.right + 60 && cy > r.y + r.height * 0.45 - 60 && cy < r.bottom + 60) return false; }
+            return true;
+        };
+        if (be(x, y)) return { x, y };
+        for (let r = 24; r <= 480; r += 24) {
+            const n = Math.max(8, Math.round(r / 12)), cand = [];
+            for (let k = 0; k < n; k++) { const a = k / n * Math.PI * 2; cand.push([Math.round(x + Math.cos(a) * r), Math.round(y + Math.sin(a) * r)]); }
+            cand.sort((p, q) => q[1] - p[1]);                                   // a igualtat de distància, més avall (cap a la càmera) que a darrere el carruatge
+            const t = cand.find(c => be(c[0], c[1]));
+            if (t) return { x: t[0], y: t[1] };
+        }
+        return { x, y };
+    }
+
     crearIneu() {
         const e = this.config.entrades;
         let pos;
-        if (this.dadesEntrada.restaurar && Estat.dades.x !== null && this.llocLliure(Estat.dades.x, Estat.dades.y)) {
+        if (this.dadesEntrada.restaurar && this.arribadaEnCarro && Estat.dades.x !== null) {
+            // Arribada amb el carruatge: la posició de la parada (pd.a) és dissenyada abans d'ampliar la zona cap al sud, com el carruatge i el Follet (que ja s'han mogut): es mapeja igual
+            // i, si queda massa a prop del carruatge o del Follet (o fora de lloc), es busca el lloc lliure més proper, separat d'ells.
+            const l = this.llocSeparatDelCarro(Estat.dades.x, this.mapY(Estat.dades.y));
+            pos = { x: l.x, y: l.y, dir: 'avall' };
+        } else if (this.dadesEntrada.restaurar && Estat.dades.x !== null && this.llocLliure(Estat.dades.x, Estat.dades.y)) {
             pos = { x: Estat.dades.x, y: Estat.dades.y, dir: 'avall' };
         } else {
             pos = e[this.dadesEntrada.entrada] || e[Object.keys(e)[0]];

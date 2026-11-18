@@ -26,7 +26,7 @@ const PROGRES = {
               if (!E.flag('fontVista')) return "La Font del Bisbe, que diuen que guaria tothom, s'ha quedat adormida. Val la pena anar-hi a mirar.";
               const n = ['herba1', 'herba2'].filter(h => E.flag(h)).length + (E.te('pruna') || E.flag('herba3') ? 1 : 0);
               return n === 3 ? "Ja tens totes les ofrenes: torna a la Font del Bisbe."
-                  : "A la Font del Bisbe, les ofrenes que falten (" + n + "/3): l'herba de Sant Joan (en aquest mateix bosc), la rialla (una planta: al Bosc del Pi dels Tres Cants, al sud de Sant Antoni, guardada per bolets verinosos) i una pruna de la Prunera de l'Hostatgeria. Recorda que el Follet del Carro Verd et pot portar de pressa d'una parada a l'altra.";
+                  : "A la Font del Bisbe, les ofrenes que falten (" + n + "/3): l'herba de Sant Joan (en aquest mateix bosc), la rialla (una planta: al Bosc del Pi dels Tres Cants, al sud de Sant Antoni, guardada per bolets verinosos) i una pruna de la Prunera de l'Hostatgeria.";
           } },
         { id: 'joaneta', marca: ['joanetaVista', 'obj:beuratge'], fet: E => E.flag('joanetaVista') || E.flag('parlatTiler'),
           pista: E => !E.flag('portalJoaneta')
@@ -200,8 +200,37 @@ const PROGRES = {
         return { percent: tot ? 100 : Math.min(99, Math.floor(70 * fets / tp + 30 * lat / tl)), historia: [fets, tp], laterals: [lat, tl] };
     },
 
-    // Pista del pas següent; si la història principal està aturada en una part encara per fer, recorda una lateral
+    // Nombre de zones a creuar entre dues zones (pel graf de MAPA.enllacos); null si no es pot calcular (p. ex. a les proves de node)
+    distanciaZones(a, b) {
+        if (typeof MAPA === 'undefined' || !a || !b) return null;
+        if (a === b) return 0;
+        const veins = {};
+        MAPA.enllacos.forEach(([x, y]) => { (veins[x] = veins[x] || []).push(y); (veins[y] = veins[y] || []).push(x); });
+        const dist = { [a]: 0 }, cua = [a];
+        while (cua.length) {
+            const z = cua.shift();
+            for (const v of veins[z] || []) if (dist[v] === undefined) { dist[v] = dist[z] + 1; if (v === b) return dist[v]; cua.push(v); }
+        }
+        return null;
+    },
+
+    // El pas següent és lluny (4 zones o més des d'on ets) i ja es pot viatjar amb el Follet del Carro Verd (n'has trobat alguna parada): se't recorda
+    recordaFollet(E, p) {
+        if (typeof game === 'undefined' || typeof PARADES === 'undefined' || typeof DIARI_PASSOS === 'undefined' || !p || !DIARI_PASSOS[p.id]) return false;
+        if (!PARADES.some(pd => E.flag('parada_' + pd.id))) return false;
+        const act = game.scene.getScenes(true).find(sc => /^Zona/.test(sc.scene.key));
+        const d = act ? this.distanciaZones(act.scene.key, DIARI_PASSOS[p.id][1]) : null;
+        return d !== null && d >= 4;
+    },
+
+    // Pista del pas següent (amb el recordatori del Follet quan toca)
     pista(E) {
+        const t = this.pistaBase(E), p = this.seguent(E);
+        return p && this.recordaFollet(E, p) ? t + " Recorda que el Follet del Carro Verd et pot portar de pressa d'una parada a l'altra." : t;
+    },
+
+    // Pista del pas següent; si la història principal està aturada en una part encara per fer, recorda una lateral
+    pistaBase(E) {
         const p = this.seguent(E);
         if (p && !p.pendent) return p.pista(E);
         const l = this.laterals.find(m => m.obert(E) && !m.fet(E));

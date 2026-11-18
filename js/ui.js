@@ -389,41 +389,119 @@ class EscenaUI extends Phaser.Scene {
     }
 
     // ---------------- CONSELLS (l'objectiu, només quan es vol consultar) ----------------
+    // El pergamí de l'objectiu: el text es pot desplaçar (arrossegar, rodeta) i ampliar (botons A−/A+, pessigar o Ctrl + rodeta), com al Diari. Un toc sense arrossegar tanca el pergamí.
     obrirConsells() {
         if (this.consellsObert || this.dialeg || this.menuObert || this.inventariObert || this.mapaObert || !Estat.dades || this.game.scene.isActive('Estels') || this.game.scene.isActive('PingPong')) return;
         this.consellsObert = true;
-        const w = 640, text = Estat.objectiu() || 'De moment no tens cap encàrrec. Passeja i parla amb la gent.';
-        const cont = this.add.container(0, 0).setDepth(80);
-        const titol = this.add.text(AMPLE / 2, 0, 'Objectiu', estilText(32, '#3a2412', { fontStyle: 'bold' })).setOrigin(0.5, 0);
-        const cos = this.add.text(AMPLE / 2, 0, text, estilText(28, '#3a2412', { fontStyle: 'italic', wordWrap: { width: w - 90 }, align: 'center', lineSpacing: 2 })).setOrigin(0.5, 0);
-        const peu = this.add.text(AMPLE / 2, 0, 'Toca per tancar', estilText(22, '#7a5a38')).setOrigin(0.5, 0);
-        // Si hi ha altres passos de la història a mig fer, també hi surten (cada un amb la seva pista), perquè el jugador no es perdi
-        const mitges = typeof PROGRES !== 'undefined' ? PROGRES.aMitges(Estat).slice(0, 4) : [];
-        const mes = mitges.length ? this.add.text((AMPLE - w) / 2 + 45, 0, 'Ja has començat:\n' + mitges.map(p => '◆ ' + (typeof DIARI_PASSOS !== 'undefined' && DIARI_PASSOS[p.id] ? DIARI_PASSOS[p.id][0] + ': ' : '') + p.pista(Estat)).join('\n'),
-            estilText(22, '#5a3a1c', { wordWrap: { width: w - 90 }, lineSpacing: 4 })).setOrigin(0, 0) : null;
-        const h = Math.max(220, 40 + titol.height + 14 + cos.height + (mes ? 26 + mes.height : 0) + 18 + peu.height + 38), y0 = TOP_HUD + 24;
         const tapa = this.add.rectangle(0, 0, AMPLE, ALT, 0x000000, 0).setOrigin(0).setInteractive().setDepth(79).on('pointerdown', () => this.tancarConsells());
         this.tapaConsells = tapa;
         this.tweens.add({ targets: tapa, fillAlpha: 0.35, duration: 220 });
-        const fons = marcPergami(this, (AMPLE - w) / 2, y0, w, h).setOrigin(0);
-        titol.setY(y0 + 38); cos.setY(titol.y + titol.height + 14); peu.setY(y0 + h - 22 - peu.height);
-        if (mes) mes.setY(cos.y + cos.height + 26);
-        cont.add([fons, titol, cos, peu]);
-        if (mes) cont.add(mes);
-        this.contConsells = cont;
-        // El panell creix des del seu centre amb un petit rebot (Back.easeOut) i un fade in; la mida es fa servir com a pivot de l'escala
-        const cx = AMPLE / 2, cy = y0 + h / 2, pop = { v: 0.82 };
-        const posa = () => cont.setScale(pop.v).setPosition(cx * (1 - pop.v), cy * (1 - pop.v));
-        posa(); cont.setAlpha(0);
-        this.tweens.add({ targets: pop, v: 1, duration: 340, ease: 'Back.easeOut', onUpdate: posa });
-        this.tweens.add({ targets: cont, alpha: 1, duration: 180 });
+        this.fraccioConsells = 0;
+        this.dibuixaConsells(true);
         if (Sfx.objecte) Sfx.objecte();
+    }
+
+    get escalaConsells() {
+        if (this._escalaConsells === undefined) {
+            this._escalaConsells = 1;
+            try { const v = parseFloat(localStorage.getItem('runna_consells_escala')); if (v >= 0.9 && v <= 2.2) this._escalaConsells = v; } catch (e) { /* sense emmagatzematge */ }
+        }
+        return this._escalaConsells;
+    }
+
+    canviarEscalaConsells(nova) {
+        nova = Math.min(2.2, Math.max(0.9, nova));
+        if (!this.consellsObert || Math.abs(nova - this.escalaConsells) < 0.01) return;
+        this.fraccioConsells = this.maxScrollConsells > 0 ? this.scrollConsells / this.maxScrollConsells : 0;
+        this._escalaConsells = nova;
+        try { localStorage.setItem('runna_consells_escala', String(nova)); } catch (e) { /* res */ }
+        this.dibuixaConsells(false);
+    }
+
+    netejaConsells() {
+        if (this.entradaConsells) { const e = this.entradaConsells; this.input.off('pointermove', e.mou); this.input.off('pointerup', e.solta); this.input.off('wheel', e.roda); this.entradaConsells = null; }
+        if (this.maskConsells) { this.maskConsells.destroy(); this.maskConsells = null; }
+        if (this.contConsells) { this.tweens.killTweensOf(this.contConsells); this.contConsells.destroy(); this.contConsells = null; }
+    }
+
+    dibuixaConsells(anima) {
+        this.netejaConsells();
+        const sc = this.escalaConsells, w = 640, x0 = (AMPLE - w) / 2, y0 = TOP_HUD + 24, Wv = (w - 90) / sc;      // Wv: amplada «virtual» del text (es mostra ampliat per sc)
+        const text = Estat.objectiu() || 'De moment no tens cap encàrrec. Passeja i parla amb la gent.';
+        const cont = this.add.container(0, 0).setDepth(80);
+        const titol = this.add.text(AMPLE / 2, 0, 'Objectiu', estilText(32, '#3a2412', { fontStyle: 'bold' })).setOrigin(0.5, 0);
+        const cos = this.add.text(0, 0, text, estilText(28, '#3a2412', { fontStyle: 'italic', wordWrap: { width: Wv }, align: 'left', lineSpacing: 2 })).setOrigin(0, 0);
+        // Si hi ha altres passos de la història a mig fer, també hi surten (cada un amb la seva pista), perquè el jugador no es perdi
+        const mitges = typeof PROGRES !== 'undefined' ? PROGRES.aMitges(Estat).slice(0, 4) : [];
+        const mes = mitges.length ? this.add.text(0, 0, 'Ja has començat:\n' + mitges.map(p => '◆ ' + (typeof DIARI_PASSOS !== 'undefined' && DIARI_PASSOS[p.id] ? DIARI_PASSOS[p.id][0] + ': ' : '') + p.pista(Estat)).join('\n'),
+            estilText(22, '#5a3a1c', { wordWrap: { width: Wv }, lineSpacing: 4 })).setOrigin(0, 0) : null;
+        [cos, mes].forEach(o => { if (o && o.setResolution) o.setResolution(Math.min(4, Math.ceil(2 * sc))); });
+        if (mes) mes.setY(cos.height + 26);
+        const hCont = (mes ? mes.y + mes.height : cos.height) * sc;                       // alçada del text ja ampliat
+        const yS0 = y0 + 38 + titol.height + 14, baix = 74;                               // l'àrea de text comença sota el títol; a baix, la fila de botons
+        const hMax = ALT - y0 - 30, H = Math.min(hMax, Math.max(220, (yS0 - y0) + hCont + 18 + baix));
+        const vp = H - (yS0 - y0) - 18 - baix;                                            // alçada visible del text
+        this.maxScrollConsells = Math.max(0, hCont - vp);
+        this.scrollConsells = Math.min(this.maxScrollConsells, Math.max(0, (this.fraccioConsells || 0) * this.maxScrollConsells)); this.fraccioConsells = 0;
+        const fons = marcPergami(this, x0, y0, w, H).setOrigin(0);
+        titol.setY(y0 + 38);
+        const zona = this.add.zone(x0, y0, w, H).setOrigin(0).setInteractive();
+        const area = this.add.container(x0 + 45, yS0).setScale(sc);                       // el text (escalat), dins d'una màscara
+        area.add([cos]); if (mes) area.add(mes);
+        const g = this.make.graphics({ add: false }); g.fillStyle(0xffffff).fillRect(x0 + 30, yS0, w - 60, vp);
+        this.maskConsells = g; area.setMask(g.createGeometryMask());
+        const ind = this.add.rectangle(x0 + w - 30, yS0, 6, 40, 0x6a1f12, 0.55).setOrigin(0.5, 0).setVisible(this.maxScrollConsells > 0);
+        const aplica = () => {
+            this.scrollConsells = Math.min(this.maxScrollConsells, Math.max(0, this.scrollConsells));
+            area.setY(yS0 - this.scrollConsells);
+            if (this.maxScrollConsells > 0) { const alt = Math.max(40, vp * vp / (vp + this.maxScrollConsells)); ind.setSize(6, alt).setY(yS0 + (this.scrollConsells / this.maxScrollConsells) * (vp - alt)); }
+        };
+        aplica();
+        const yB = y0 + H - 38;
+        const botons = [['A−', x0 + 64, 1 / 1.15], ['A+', x0 + 120, 1.15]].map(([t, x, f]) => {
+            const b = this.add.circle(x, yB, 22, 0x8a5a2a, 0.25).setStrokeStyle(2, 0x6a1f12, 0.8).setInteractive({ useHandCursor: true }).on('pointerdown', () => { if (Sfx.pagina) Sfx.pagina(); this.canviarEscalaConsells(this.escalaConsells * f); });
+            const l = this.add.text(x, yB - 1, t, estilText(22, '#6a1f12', { fontStyle: 'bold' })).setOrigin(0.5);
+            return [b, l];
+        }).flat();
+        const peu = this.add.text(AMPLE / 2 + 40, yB, this.maxScrollConsells > 0 ? 'Arrossega per llegir · toca per tancar' : 'Toca per tancar', estilText(20, '#7a5a38')).setOrigin(0.5);
+        cont.add([fons, zona, titol, area, ind, ...botons, peu]);
+        this.contConsells = cont;
+        // Entrada: arrossegar, rodeta, pessigar (mida de la lletra). Un toc sense arrossegar tanca.
+        let arr = null, d0 = 0;
+        zona.on('pointerdown', p => { arr = { y: p.y, sc: this.scrollConsells, mogut: false }; d0 = 0; });
+        const mou = p => {
+            const p1 = this.input.pointer1, p2 = this.input.pointer2;
+            if (p1 && p2 && p1.isDown && p2.isDown) {
+                const d = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+                if (!d0) d0 = d;
+                else if (Math.abs(d / d0 - 1) > 0.08) { const r = d / d0; d0 = d; arr = null; this.canviarEscalaConsells(this.escalaConsells * r); }
+                return;
+            }
+            d0 = 0;
+            if (arr && p.isDown) { if (Math.abs(p.y - arr.y) > 12) arr.mogut = true; this.scrollConsells = arr.sc - (p.y - arr.y); aplica(); }
+        };
+        const solta = () => { if (arr && !arr.mogut) { arr = null; this.tancarConsells(); return; } arr = null; d0 = 0; };
+        const roda = (p, o, dx, dy, dz, ev) => {
+            if ((ev && ev.ctrlKey) || (p.event && p.event.ctrlKey)) this.canviarEscalaConsells(this.escalaConsells * (dy > 0 ? 0.92 : 1.09));
+            else { this.scrollConsells += dy; aplica(); }
+        };
+        if (!this.input.pointer2) this.input.addPointer(1);
+        this.input.on('pointermove', mou); this.input.on('pointerup', solta); this.input.on('wheel', roda);
+        this.entradaConsells = { mou, solta, roda };
+        // El panell creix des del seu centre amb un petit rebot (Back.easeOut) i un fade in; la mida es fa servir com a pivot de l'escala
+        if (anima) {
+            const cx = AMPLE / 2, cy = y0 + H / 2, pop = { v: 0.82 };
+            const posa = () => cont.setScale(pop.v).setPosition(cx * (1 - pop.v), cy * (1 - pop.v));
+            posa(); cont.setAlpha(0);
+            this.tweens.add({ targets: pop, v: 1, duration: 340, ease: 'Back.easeOut', onUpdate: posa });
+            this.tweens.add({ targets: cont, alpha: 1, duration: 180 });
+        }
     }
 
     tancarConsells() {
         if (!this.consellsObert) return;
         this.consellsObert = false;
-        if (this.contConsells) { this.tweens.killTweensOf(this.contConsells); this.contConsells.destroy(); this.contConsells = null; }
+        this.netejaConsells();
         if (this.tapaConsells) { this.tweens.killTweensOf(this.tapaConsells); this.tapaConsells.destroy(); this.tapaConsells = null; }
         this.bloquejatFins = this.time.now + 200;
     }
@@ -921,9 +999,14 @@ class EscenaUI extends Phaser.Scene {
         this.textDialeg.setText('');
         // La veu del narrador, en cursiva i en un to vermellós; els personatges, en tinta fosca
         this.textDialeg.setColor(p.qui || p.avis ? '#2a170b' : '#5a2410').setFontStyle(p.qui || p.avis ? 'normal' : 'italic');
-        // Pàgina de versos (p.vers): lletra més gran, en negreta i centrada (per a les paraules solemnes, com les del Saber davant l'espasa)
-        if (p.vers) this.textDialeg.setFontSize(Math.round(34 * this.escalaDialeg)).setFontStyle('bold').setColor('#5a1a10').setAlign('center').setX(-316).setLineSpacing(Math.round(10 * this.escalaDialeg));
+        // Pàgina de versos (p.vers): lletra més gran, en negreta i alineada a l'esquerra (per a les paraules solemnes, com les del Saber davant l'espasa)
+        if (p.vers) this.textDialeg.setFontSize(Math.round(34 * this.escalaDialeg)).setFontStyle('bold').setColor('#5a1a10').setAlign('left').setX(-316).setLineSpacing(Math.round(10 * this.escalaDialeg));
         else this.textDialeg.setFontSize(Math.round(28 * this.escalaDialeg)).setAlign('left').setLineSpacing(Math.round(5 * this.escalaDialeg));
+        // Les línies es calculen ABANS d'escriure (amb el text sencer ja a la mida i l'estil d'aquesta pàgina) i s'hi posen salts de línia explícits: així cada paraula
+        // s'escriu ja a la seva línia i no «salta» a la de sota quan ja és mig escrita.
+        this.textDialeg.setText(this.textComplet);
+        this.textEscrit = this.textDialeg.getWrappedText().join('\n');
+        this.textDialeg.setText('');
         this.scrollDialeg = 0;
         this.actualitzarScrollDialeg();
         this.indicador.setVisible(false);
@@ -931,17 +1014,17 @@ class EscenaUI extends Phaser.Scene {
         this.timerText = this.time.addEvent({
             delay: 22, loop: true, callback: () => {
                 this.lletres++;
-                if (this.lletres % 2 === 0 && /\S/.test(this.textComplet[this.lletres - 1] || '')) Sfx.lletra();
-                this.textDialeg.setText(this.textComplet.slice(0, this.lletres));
+                if (this.lletres % 2 === 0 && /\S/.test(this.textEscrit[this.lletres - 1] || '')) Sfx.lletra();
+                this.textDialeg.setText(this.textEscrit.slice(0, this.lletres));
                 this.actualitzarScrollDialeg();
-                if (this.lletres >= this.textComplet.length) this.acabarEscriptura();
+                if (this.lletres >= this.textEscrit.length) this.acabarEscriptura();
             }
         });
     }
 
     acabarEscriptura() {
         if (this.timerText) { this.timerText.remove(); this.timerText = null; }
-        this.textDialeg.setText(this.textComplet);
+        this.textDialeg.setText(this.textEscrit || this.textComplet);
         this.indicador.setVisible(true);
         this.actualitzarScrollDialeg();
     }

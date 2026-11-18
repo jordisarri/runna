@@ -936,7 +936,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1823)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1851)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -2094,11 +2094,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[656] Ineu:** [text calculat pel joc: text]
 
-### pensament a triarViatge  <sub>(js/zona_base.js:519)</sub>
+### pensament a triarViatge  <sub>(js/zona_base.js:520)</sub>
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2079)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2107)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
