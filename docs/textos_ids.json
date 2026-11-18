@@ -4701,7 +4701,7 @@
    {
     "id": 615,
     "qui": "Ineu",
-    "text": "Veniu amb nosaltres, Germà. A la taula del refectori hi ha lloc per a tothom.",
+    "text": "Veniu amb nosaltres, Aldreu. A la taula del refectori hi ha lloc per a tothom.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1923
    },
@@ -4731,14 +4731,14 @@
     "qui": "Ineu",
     "text": "Vindré a veure-us.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1931
+    "linia": 1932
    },
    {
     "id": 620,
     "qui": "Germà Aldreu",
     "text": "Ja ho sé.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1932
+    "linia": 1933
    }
   ],
   "zones/esglesia::ferEpileg": [

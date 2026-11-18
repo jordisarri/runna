@@ -16,8 +16,8 @@ const CATALEG = [
     // Personatges
     { key: 'ineu_inconscient', file: 'assets/ineu/ineu_inconscient.webp', amplada: 295, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu a terra amb els ulls tancats, de 420 x 342 (eines/fer_desperta_v5.py), abans de l'animació de despertar (ineu_desperta, spritesheet)
     { key: 'pare_jorda',   file: 'assets/personatges/pare_jorda.webp',   amplada: 91.6, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
-    { key: 'germa_aldreu', file: 'assets/personatges/germa_aldreu.webp', amplada: 88, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
-    { key: 'germa_aldreu_trist', file: 'assets/personatges/germa_aldreu_trist.webp', amplada: 88 },      // Aldreu amb el cap cot (final de la Sala de la Gàbia, abans del somriure); si no hi és, gabia.js usa germa_aldreu amb tint
+    { key: 'germa_aldreu', file: 'assets/personatges/germa_aldreu.webp', amplada: 82.6, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
+    { key: 'germa_aldreu_trist', file: 'assets/personatges/germa_aldreu_trist.webp', amplada: 75.2 },      // Aldreu amb el cap cot (final de la Sala de la Gàbia, abans del somriure); si no hi és, gabia.js usa germa_aldreu amb tint
     { key: 'pare_daimiel',  file: 'assets/personatges/pare_daimiel.webp',  amplada: 91.4, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
     { key: 'dolora',   file: 'assets/personatges/dolora.webp', amplada: 73.4, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },
     { key: 'carmelia',   file: 'assets/personatges/carmelia.webp', amplada: 96.4, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#6a4a2e', ample: 1.45, alt: 0.92 }) },

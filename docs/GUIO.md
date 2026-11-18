@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 623: Sala de la Gàbia: «Veniu amb nosaltres, Aldreu.»; el brillo de la porta de la gàbia és centrat a la porta; el Germà Aldreu (normal i trist) té la mida de l'Ineu (abans era un 20% més alt); l'Ineu també mira l'Aldreu a «Vindré a veure-us.»; els tres nens cauen del capoll més junts (105 px) i en caure la gàbia es veuen tots tres amb l'Aldreu. Epíleg: les Venerables s'aturen al costat de l'Huri, no al damunt.*
+
 *Revisió 622: Sala de la Gàbia: la porta de la gàbia brilla (és interactiva) un cop vençut l'Ocellaire; quan l'Ineu convida el Germà Aldreu (abans d'obrir la gàbia i a la taula del refectori) l'Ineu i l'Aldreu es giren i es miren; el diàleg següent s'apropa l'Ineu a l'Aldreu i se'ls veu junts, de cara; l'Aldreu diu «Escolta'ls, riuen tan fort que no es poden engabiar.»; el Fram i el Sardi són més alts que l'Huri (a la Gàbia i a l'epíleg).*
 
 *Revisió 621: es tornen els capolls al dibuix anterior i la frase «penjats com llonganisses»; la mort de l'Home de la Gàbia diu «No... els meus riures... els meus ocells...» i «Tantes rialles, i cap no era per a mi.»; fora la frase lila sobreimpresa que no es podia llegir; la gàbia ja no diu les notes del Cant del Miracle; i la peça del Cant del Miracle fa un sol Do llarg en lloc de dos Do seguits.*

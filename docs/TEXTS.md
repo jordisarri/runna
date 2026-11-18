@@ -1946,7 +1946,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[614] Germà Aldreu:** Escolta'ls, riuen tan fort que no es poden engabiar.
 
-**[615] Ineu:** Veniu amb nosaltres, Germà. A la taula del refectori hi ha lloc per a tothom.
+**[615] Ineu:** Veniu amb nosaltres, Aldreu. A la taula del refectori hi ha lloc per a tothom.
 
 **[616] Germà Aldreu:** Ja ho sé que n'hi ha. Gràcies, Ineu.
 

@@ -778,7 +778,7 @@ class ZonaGabia extends ZonaBase {
         if (!oberta) this.colGabia = this.colisio(gx, base - 10, gw + 10, 50);
         const puntGabia = this.interactiu(gx, base + 60, 160, DIALEGS.gabiaGran, { altura: 260, actiu: () => !Estat.flag('gabiaOberta'), enTancar: () => Estat.posaFlag('flauta_gabia') });
         // La porta de la gàbia brilla (com tot el que és interactiu) un cop vençut l'Ocellaire: és on s'ha de tocar el Cant del Miracle
-        this.brillo(gx, base - 118, 86, 150, { punt: puntGabia, actiu: () => Estat.flag('ocellaireVencut') && !Estat.flag('gabiaOberta'), dep: base + 27 });
+        this.brillo(gx, base - 116, 100, 188, { punt: puntGabia, actiu: () => Estat.flag('ocellaireVencut') && !Estat.flag('gabiaOberta'), dep: base + 27 });
         this.llocFlauta('gabia', gx, base + 60, 260, true, () => !Estat.flag('gabiaOberta'), false, ['miracle']);
 
         // Els tres capolls de boira (els nens), dins la gàbia mentre no s'obre
@@ -801,7 +801,7 @@ class ZonaGabia extends ZonaBase {
             }).setDepth(base - 19);
         }
         // Els nens ja alliberats, al davant de la gàbia
-        NENS_GABIA.forEach((n, i) => { if (Estat.flag(n.flag)) this.posarNen(n, gx - 200 + i * 200, base + 220); });
+        NENS_GABIA.forEach((n, i) => { if (Estat.flag(n.flag)) this.posarNen(n, gx - 105 + i * 105, base + 220); });
 
         // Ocells de boira que volen en cercles al voltant de la cúpula (fins que l'Ocellaire cau)
         this.ocellsBoira = [];
@@ -855,7 +855,7 @@ class ZonaGabia extends ZonaBase {
         this.sortida(838, H - 28, 124, 22, 'ZonaBoira', 'gabia');
 
         // Capolls que encara no s'han trencat, si la gàbia ja és oberta (s'havia sortit a mig alliberament)
-        if (Estat.flag('gabiaOberta')) NENS_GABIA.forEach((n, i) => { if (!Estat.flag(n.flag)) this.crearCapoll(n, gx - 200 + i * 200, base + 160); });
+        if (Estat.flag('gabiaOberta')) NENS_GABIA.forEach((n, i) => { if (!Estat.flag(n.flag)) this.crearCapoll(n, gx - 105 + i * 105, base + 160); });
         // Tots alliberats però l'Aldreu encara no s'ha tancat: es reprèn el final
         if (this.totsLliures() && !Estat.flag('andreuTancat')) this.time.delayedCall(600, () => this.finalGabia());
     }
@@ -1841,7 +1841,7 @@ class ZonaGabia extends ZonaBase {
                 z.enquadrar(gx, base + 90, 1.10, 1200, null, 0);
                 this.capolls.forEach((c, i) => {
                     this.tweens.killTweensOf(c);
-                    const n = NENS_GABIA[i], x = gx - 200 + i * 200, y = base + 160;
+                    const n = NENS_GABIA[i], x = gx - 105 + i * 105, y = base + 160;          // (més junts: separats 105 px)
                     this.tweens.add({ targets: c, x, y: y - 40, duration: 1200, delay: i * 200, ease: 'Sine.easeInOut', onComplete: () => {
                         c.destroy();
                         this.crearCapoll(n, x, y);
@@ -1920,7 +1920,7 @@ class ZonaGabia extends ZonaBase {
             { qui: 'Germà Aldreu', text: "La seva veu em parlava dins el cap cada nit. Era l'única que em parlava." },
             { qui: 'Germà Aldreu', text: "Escolta'ls, riuen tan fort que no es poden engabiar." },
             { fer: (z, fet) => { z.mirarseIneuAldreu(); const a = z.npcs.germa_aldreu; z.enquadrar(a ? (I.x + a.x) / 2 : I.x, a ? (I.y + a.y) / 2 - 70 : I.y - 70, a ? 1.1 : 1.5, 700, fet); } },          // P54: l'Ineu es gira cap a l'Aldreu (i l'Aldreu cap a ell), i se'ls veu tots dos
-            { qui: 'Ineu', text: "Veniu amb nosaltres, Germà. A la taula del refectori hi ha lloc per a tothom." },
+            { qui: 'Ineu', text: "Veniu amb nosaltres, Aldreu. A la taula del refectori hi ha lloc per a tothom." },
             // L'Ineu s'apropa a l'Aldreu i se'ls veu junts, de cara: el somriure (el de la Plaça), suau, humil, una mica trist als ulls
             { fer: (z, fet) => { z.ineuAproparAldreu(() => { const a = z.npcs.germa_aldreu; z.enquadrar((I.x + a.x) / 2, a.y - 0.68 * a.displayHeight, 2.1, 800, () => { z.esperar(500, () => { z.aldreuSomriu(a); z.esperar(600, fet); }); }); }); } },
             { qui: 'Germà Aldreu', text: "Ja ho sé que n'hi ha. Gràcies, Ineu." },
@@ -1928,6 +1928,7 @@ class ZonaGabia extends ZonaBase {
             { fer: (z, fet) => { z.npcVa('germa_aldreu', gx, base + 10, null, 100); const a = z.npcs.germa_aldreu; z.enquadrar(gx, base + 10 - 0.8 * (a ? a.displayHeight : 100), 1.9, 1600, fet); } },
             { qui: 'Germà Aldreu', text: "Jo em quedo amb ell." },
             pla(() => [I.x, I.y - 70], 1.5, 1),
+            { fer: (z, fet) => { z.mirarseIneuAldreu(); const a = z.npcs.germa_aldreu; z.enquadrar(a ? (I.x + a.x) / 2 : I.x, a ? (I.y + a.y) / 2 - 70 : I.y - 70, 1.5, 600, fet); } },          // l'Ineu mira l'Aldreu
             { qui: 'Ineu', text: "Vindré a veure-us." },
             { qui: 'Germà Aldreu', text: "Ja ho sé." },
             { fer: (z, fet) => z.seq([
@@ -1944,7 +1945,7 @@ class ZonaGabia extends ZonaBase {
                 },
                 f => {
                     // P56: primer pla entre barrots: l'Aldreu somriu, els nens saluden
-                    z.enquadrar(gx, base - 60, 1.95, 900, null);
+                    z.enquadrar(gx, base + 40, 1.4, 900, null);          // (menys zoom i més avall: es veuen l'Aldreu a la gàbia i els tres nens, junts)
                     const a = z.npcs.germa_aldreu;
                     if (a) z.tweens.add({ targets: a, y: a.y - 3, yoyo: true, duration: 900 });
                     nens.forEach(k => z.npcSalta(k, null, 1));
