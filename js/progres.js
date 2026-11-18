@@ -146,12 +146,10 @@ const PROGRES = {
           pista: E => !E.flag('cantMiracle') || !E.te('benedicio_fraterna') ? "La porta de ferro del fons de la galeria de sota la Taverna només s\'obre amb la clau rovellada, el Cant del Miracle i l\'Empara de les sacerdotesses." : "Al fons de la galeria de la Porta de Ferro, la clau rovellada de l\'Iscu té una porta de ferro que treu boira." },
         { id: 'girgoles', marca: ['girgolesEnceses'], fet: E => E.flag('girgolesEnceses'),
           pista: E => "Darrere la porta de ferro, cinc mates de gírgoles lluminoses voldrien brillar alhora, però cada una desperta les veïnes." },
-        { id: 'rastell', marca: ['rastellObert'], fet: E => E.flag('rastellObert'),
-          pista: E => "El camí cap al fons de les Gírgoles és barrat: mira bé si hi ha algun mecanisme per obrir-lo." },
         { id: 'tortura', marca: ['torturaNet'], fet: E => E.flag('torturaNet'),
           pista: E => "Segueix el camí de les Gírgoles fins al final: un mur d'esbarzers negres barra el pas, i Runna els sap tallar." },
         { id: 'pont', marca: ['pontGabia'], fet: E => E.flag('pontGabia'),
-          pista: E => "Al fons de les Gírgoles, davant d'un pou sense fons, uns blocs de pedra dormen. Un cant de pedres els faria aixecar." },
+          pista: E => "Al fons de les Gírgoles, davant d'un abisme, uns blocs de pedra dormen. Un cant de pedres els faria aixecar." },
         { id: 'ocellaire', marca: ['ocellaireVencut'], fet: E => E.flag('ocellaireVencut'),
           pista: E => E.flag('ocellaireVist') ? "Talla els ocells de foc i aparta't del bàcul. Quan l'Ocellaire cau de genolls, colpeja-li el cap."
               : "Més enllà del pont, el Germà Aldreu fa guàrdia... i no hi és sol." },

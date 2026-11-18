@@ -30,7 +30,7 @@ const DIARI_PASSOS = {
     pi: ['El Pi dels Tres Cants', 'ZonaBoscPi'], vigilant: ['El Pare Xèvius', 'ZonaGirgolesFora'],
     soterrani: ['La porta de les Gírgoles', 'ZonaGirgolesFora'], clauIscu: ['La clau de l\'Iscu', 'ZonaCabanaCami'],
     portaFerro: ['La porta de ferro', 'ZonaSotaTaverna'], girgoles: ['Les gírgoles', 'ZonaGirgoles'],
-    rastell: ['El rastell', 'ZonaTortura'], tortura: ['El mur d\'esbarzers', 'ZonaTortura'],
+    tortura: ['El mur d\'esbarzers', 'ZonaTortura'],
     benediccioFraterna: ["L'Empara Fraternal", 'ZonaJardi'],
     pont: ['El pont de pedra', 'ZonaGabia'], ocellaire: ["L'Ocellaire", 'ZonaGabia'],
     gabia: ['La gàbia', 'ZonaGabia'], nens: ['Els tres capolls', 'ZonaGabia'], final: ['Torna el cant', 'ZonaEsglesia']

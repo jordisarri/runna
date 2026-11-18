@@ -62,12 +62,7 @@ Object.assign(DIALEGS, {
     cortinaMicel: E => ({ pagines: [
     ] }),
     sacsGirgoles: E => ({ pagines: [] }),
-    tornRastell: E => E.flag('rastellObert') ? { pagines: [] } : E.te('guants') ? {
-        pagines: [
-        ]
-    } : { pagines: [
-        { qui: 'Ineu', text: "(Em caldrien unes mans molt més fortes: els guants dels picapedrers del Germà Francí.)" }
-    ] },
+    tornRastell: E => ({ pagines: [] }),          // (sense text: el torn es mou en tocar-lo; ja no cal cap objecte)
     pontGabia: E => E.flag('pontGabia') ? { pagines: [] } : {
         pagines: [
             { qui: 'Inscripció', text: "Gravada a la pedra, una paraula antiga: PEDRES." },
@@ -431,7 +426,7 @@ class ZonaTortura extends ZonaBase {
         if (Estat.flag('rastellObert')) this.rastell.y = -150;
         else {
             this.colRastell = this.colisio(450, YR - 10, 420, 30);
-            const puntR = this.interactiu(650, YR + 92, RADI_OBJECTE, DIALEGS.tornRastell, { altura: 110, actiu: () => !Estat.flag('rastellObert'), enTancar: () => { if (Estat.te('guants')) this.alcarRastell(); } });
+            const puntR = this.interactiu(650, YR + 92, RADI_OBJECTE, DIALEGS.tornRastell, { altura: 110, actiu: () => !Estat.flag('rastellObert'), enTancar: () => this.alcarRastell() });
             this.brillo(672, YR + 28, 100, 70, { punt: puntR, actiu: () => !Estat.flag('rastellObert'), dep: YR + 61 });
         }
 

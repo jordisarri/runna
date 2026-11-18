@@ -1762,7 +1762,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[552] Carmèlia:** Benvingut, fill de Déu. Sóc la Carmèlia, la gran sacerdotessa d'aquesta casa. Havíem perdut l'esperança, però no la pregària.
 
-**[553] Carmèlia:** Els infants d'aquesta terra han estat arrossegats a la foscor d'un pou sense fons. La nit que la boira ens va tancar a les cambres, els seus llits van quedar buits. Salva'ls, fill: porta a casa tots els nens segrestats.
+**[553] Carmèlia:** Els infants d'aquesta terra han estat arrossegats a la foscor d'un abisme profund. La nit que la boira ens va tancar a les cambres, els seus llits van quedar buits. Salva'ls, fill: porta a casa tots els nens segrestats.
 
 *Si: encara no ha rebut el premi de la Carmèlia ; sap el Cant del Miracle*
 
@@ -1834,15 +1834,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[569] Inscripció:** «Les gírgoles de la cova canten juntes o callen juntes. Toca'n una i despertaràs també les dues que té al costat. Quan cantin totes, el pas s'obre.»
 
-### tornRastell  <sub>(js/zones/gabia.js:69)</sub>
-
-**[570] Ineu:** (Em caldrien unes mans molt més fortes: els guants dels picapedrers del Germà Francí.)
-
 ---
 
 ## La Gàbia i l'Ocellaire
 
-### pontGabia  <sub>(js/zones/gabia.js:73)</sub>
+### pontGabia  <sub>(js/zones/gabia.js:68)</sub>
 
 **[571] Inscripció:** Gravada a la pedra, una paraula antiga: PEDRES.
 
@@ -1854,13 +1850,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[573] Ineu:** (Pedres que dormen. Hi deu haver un cant per despertar-les.)
 
-### gabiaGran  <sub>(js/zones/gabia.js:82)</sub>
+### gabiaGran  <sub>(js/zones/gabia.js:77)</sub>
 
 **[574] Ineu:** (Ara. El Cant del Miracle: 1-2-2-2-3-1.)
 
 **[575] Ineu:** (Els barrots no tenen pany. Només un cant els pot obrir: el Cant del Miracle.)
 
-### aldreuGabia  <sub>(js/zones/gabia.js:88)</sub>
+### aldreuGabia  <sub>(js/zones/gabia.js:83)</sub>
 
 **[576] Germà Aldreu:** Estic bé, Ineu. La boira fa companyia quan ja no demana res.
 
@@ -1872,7 +1868,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[580] Aldreu, Pastor de Boira:** El Mestre ve, monjo. Ja el sents?
 
-### nenGabia  <sub>(js/zones/gabia.js:100)</sub>
+### nenGabia  <sub>(js/zones/gabia.js:95)</sub>
 
 **[581] Huri:** Ineu! Somiava que era un ocell dins d'una gàbia... i ara tinc unes ganes de riure!
 
@@ -1880,7 +1876,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[583] Sardi:** El pare deu estar amoïnat regant la prunera... Anem a casa, Ineu?
 
-### actualitzar  <sub>(js/zones/gabia.js:600)</sub>
+### actualitzar  <sub>(js/zones/gabia.js:595)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1888,13 +1884,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[585] Ineu:** (Una força invisible no em deixa passar. Sense el Cant del Miracle, els barrots no m'escoltaran. La Pianista, al Santuari, me l'ha d'ensenyar.)
 
-### enMelodia  <sub>(js/zones/gabia.js:1140)</sub>
+### enMelodia  <sub>(js/zones/gabia.js:1135)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
 **[586] Ineu:** (L'Home de la Gàbia xiula més fort que el cant.)
 
-### iniciarCombatFinal  <sub>(js/zones/gabia.js:1402)</sub>
+### iniciarCombatFinal  <sub>(js/zones/gabia.js:1397)</sub>
 
 **[587] Aldreu, Pastor de Boira:** Una altra vegada, monjo? El Mestre no es cansa mai.
 
@@ -1938,7 +1934,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[607] Aldreu, Pastor de Boira:** Sí, Mestre...
 
-### ocellaireDerrotat  <sub>(js/zones/gabia.js:1595)</sub>
+### ocellaireDerrotat  <sub>(js/zones/gabia.js:1590)</sub>
 
 **[608] L'Home de la Gàbia:** No... el meu riure... Els meus ocells...
 
@@ -1946,13 +1942,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[610] Germà Aldreu:** Mestre! No em deixeu!
 
-### obrirGabia  <sub>(js/zones/gabia.js:1666)</sub>
+### obrirGabia  <sub>(js/zones/gabia.js:1661)</sub>
 
 **[611] Ineu:** Germà Aldreu, la gàbia s'obrirà. Podeu venir amb nosaltres.
 
 **[612] Germà Aldreu:** Encara no.
 
-### finalGabia  <sub>(js/zones/gabia.js:1768)</sub>
+### finalGabia  <sub>(js/zones/gabia.js:1763)</sub>
 
 **[613] Germà Aldreu:** La seva veu em parlava dins el cap cada nit. Era l'única que em parlava.
 
@@ -2016,7 +2012,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[640] Pare Jordà:** Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill.
 
-### gentEpileg  <sub>(js/zones/gabia.js:99)</sub>
+### gentEpileg  <sub>(js/zones/gabia.js:94)</sub>
 
 **[641] Gent:** Avui tothom canta, encara que l'orgue faci una nota de pega.
 
@@ -2056,7 +2052,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[648] Ineu:** Està massa fosc... Només hi veig a un pas. Jusef, al Celler, guardava una llum.
 
-### pensament a obrirCortina  <sub>(js/zones/gabia.js:331)</sub>
+### pensament a obrirCortina  <sub>(js/zones/gabia.js:326)</sub>
 
 **[649] Ineu:** Les gírgoles canten: el micel·li es desfà!
 

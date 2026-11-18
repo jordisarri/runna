@@ -66,7 +66,7 @@ function objectiuSopar(E) {
 // la mateixa sacerdotessa avisa que al vestíbul hi ha aparegut el premi (un cofre amb l'Empara Fraternal)
 const ultimaMonja = nom => ['Dolora', 'Pilaria', 'Carmelia'].filter(n => n !== nom).every(n => Estat.flag('premi' + n));
 const NOMS_MONJA = { Dolora: 'Dolora', Pilaria: 'Pilària', Carmelia: 'Carmèlia' };      // els identificadors (premiDolora...) es queden; aquests són els noms que es veuen
-const avisPremiMonja = nom => ({ qui: NOMS_MONJA[nom], text: "Al vestíbul t'hem deixat la nostra Empara, fill. T'ajudarà a protegir-te de la boira del pou i salvar els nens segrestats." });
+const avisPremiMonja = nom => ({ qui: NOMS_MONJA[nom], text: "Al vestíbul t'hem deixat la nostra Empara, fill. T'ajudarà a protegir-te de la boira de l'abisme i salvar els nens segrestats." });
 function premiMonja(nom, flag) {
     const E = Estat;
     E.posaFlag(flag);
@@ -1171,7 +1171,7 @@ const DIALEGS = {
         if (!E.flag('premiCarmelia')) return {
             pagines: [
                 { qui: 'Carmèlia', text: 'Benvingut, fill de Déu. Sóc la Carmèlia, la gran sacerdotessa d\'aquesta casa. Havíem perdut l\'esperança, però no la pregària.' },
-                { qui: 'Carmèlia', text: 'Els infants d\'aquesta terra han estat arrossegats a la foscor d\'un pou sense fons. La nit que la boira ens va tancar a les cambres, els seus llits van quedar buits. Salva\'ls, fill: porta a casa tots els nens segrestats.' },
+                { qui: 'Carmèlia', text: 'Els infants d\'aquesta terra han estat arrossegats a la foscor d\'un abisme profund. La nit que la boira ens va tancar a les cambres, els seus llits van quedar buits. Salva\'ls, fill: porta a casa tots els nens segrestats.' },
                 { qui: 'Carmèlia', text: E.flag('cantMiracle')
                     ? "Als llibres d'aquesta casa he llegit que l'Ocellaire va robar el cant dels ocells, i que només aquest mateix cant obre la seva gàbia. El que has après amb la Pianista, fill, és el que ell va robar. No el deixis anar."
                     : "Als llibres d'aquesta casa he llegit que l'Ocellaire va robar el cant dels ocells, i que només aquest mateix cant obre la seva gàbia. Tu l'aprendràs: la Pianista el recorda." },
