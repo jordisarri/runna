@@ -53,7 +53,7 @@ class ZonaPlaca extends ZonaBase {
         this.forat.fillStyle(0x07040c, 1).fillRoundedRect(PX - 24, 384, 48, 42, 4).lineStyle(3, 0x2a1c10, 1).strokeRoundedRect(PX - 24, 384, 48, 42, 4);
         [0, 1, 2].forEach(k => this.forat.fillStyle(0x3a2c4a, 1 - k * 0.25).fillRect(PX - 20 + k * 3, 410 + k * 5 - 8, 40 - k * 6, 4));
         this.forat.fillStyle(0xa070ff, 0.18).fillEllipse(PX, 405, 60, 52);
-        this.pedraSecreta = this.add.rectangle(PX, 405, 44, 34, 0x9a7a54).setStrokeStyle(3, 0x4a3420).setDepth(460);
+        this.pedraSecreta = this.add.image(PX, 405, 'pedra_escolta').setScale(this.textures.get('pedra_escolta').customData && this.textures.get('pedra_escolta').customData.escala || 1 / RES).setDepth(460);
         this.interactiu(PX, 480, RADI_OBJECTE, DIALEGS.pedraSecreta, {
             altura: 90,
             actiu: () => Estat.flag('tresorObert'),
@@ -64,7 +64,7 @@ class ZonaPlaca extends ZonaBase {
             altura: 90, actiu: () => !Estat.flag('tresorObert'),
             enTancar: () => Estat.posaFlag('flauta_pedra')
         });
-        this.brillo(PX, 405, 44, 34, { dep: 461, punt: puntPedra, actiu: () => !Estat.flag('tresorObert') });          // la pedra que no encaixa brilla fins que s'obre
+        this.brilloImatge(this.pedraSecreta, { punt: puntPedra, actiu: () => !Estat.flag('tresorObert') });          // la pedra que no encaixa brilla fins que s'obre
         this.llocFlauta('pedra', PX, 480, 150, true, () => !Estat.flag('tresorObert'), false, ['pedres']);    // un cop oberta, ESPAI hi entra
 
         // --- Reixes del terra per on surt la boira ---

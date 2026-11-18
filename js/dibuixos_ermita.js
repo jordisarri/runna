@@ -261,3 +261,27 @@ function pintarCandelabreApagat(ctx, w, h) {
     ctx.fillStyle = '#c8bfa6'; ctx.fillRect(cx - 3.5, 14, 7, 22); ctx.strokeRect(cx - 3.5, 14, 7, 22);
     ctx.strokeStyle = '#1a1612'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(cx, 14); ctx.lineTo(cx + 1, 9); ctx.stroke();
 }
+
+// ---------- La pedra que escolta (façana del Santuari): una pedra tallada, grisosa i freda, diferent del morter ocre de la paret --------
+function pintarPedraEscolta(ctx, w, h) {
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    let sd = 7; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
+    const cos = [[4, 8], [13, 3.5], [w - 15, 3], [w - 4, 9], [w - 3.5, h - 13], [w - 10, h - 4], [14, h - 3], [3.5, h - 11]];
+    const traç = (pts, dx = 0, dy = 0) => { ctx.beginPath(); pts.forEach(([x, y], i) => (i ? ctx.lineTo(x + dx, y + dy) : ctx.moveTo(x + dx, y + dy))); ctx.closePath(); };
+    // la junta: una ombra marró a l'entorn, que la separa del morter
+    ctx.fillStyle = 'rgba(40,24,12,0.55)'; traç(cos, 1.6, 2.2); ctx.fill();
+    // el cos de la pedra (degradat fred) i la vora
+    const g = ctx.createLinearGradient(0, 3, w * 0.4, h); g.addColorStop(0, '#b9bec4'); g.addColorStop(0.5, '#8d949c'); g.addColorStop(1, '#6a7078');
+    ctx.fillStyle = g; traç(cos); ctx.fill();
+    ctx.strokeStyle = '#2e2a30'; ctx.lineWidth = 2.2; ctx.stroke();
+    // llum a dalt i a l'esquerra, ombra a baix i a la dreta (relleu)
+    ctx.strokeStyle = 'rgba(255,255,255,0.45)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(7, 9); ctx.lineTo(14, 5.5); ctx.lineTo(w - 15, 5); ctx.stroke();
+    ctx.strokeStyle = 'rgba(20,20,30,0.45)'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(w - 6, h - 13); ctx.lineTo(w - 11, h - 6.5); ctx.lineTo(15, h - 5.5); ctx.stroke();
+    // gra de la pedra
+    for (let i = 0; i < 46; i++) { const x = 6 + r() * (w - 12), y = 6 + r() * (h - 12); ctx.fillStyle = r() < 0.5 ? 'rgba(255,255,255,0.22)' : 'rgba(30,30,40,0.22)'; ctx.fillRect(x, y, 1.4, 1.4); }
+    // escletxa a la part de dalt a la dreta
+    ctx.strokeStyle = '#2a2a30'; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.moveTo(w - 13, 5); ctx.lineTo(w - 17, 12); ctx.lineTo(w - 14.5, 17); ctx.lineTo(w - 19, 23); ctx.stroke();
+    // una cantonada trencada (a baix a l'esquerra) i la molsa que hi creix
+    ctx.fillStyle = 'rgba(40,40,48,0.5)'; ctx.beginPath(); ctx.moveTo(4, h - 13); ctx.lineTo(10, h - 9); ctx.lineTo(5.5, h - 5); ctx.closePath(); ctx.fill();
+    [[8, h - 7, 6.5, 3.4], [15, h - 5.5, 5, 2.6], [5.5, h - 14, 3.4, 2.6]].forEach(([x, y, a, b]) => { ctx.fillStyle = '#4e7236'; ctx.beginPath(); ctx.ellipse(x, y, a, b, 0, 0, Math.PI * 2); ctx.fill(); });
+}

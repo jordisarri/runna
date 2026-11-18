@@ -1778,11 +1778,22 @@ class ZonaBase extends Phaser.Scene {
         // la caixa de col·lisió es desplaçava ~90 px amunt i ~47 a l'esquerra (i podia tocar una sortida i fer canviar de zona). L'offset es recalcula
         // a cada fotograma perquè la caixa quedi sempre als peus, al mateix lloc que caminant.
         const preIneu = this.ineu.preUpdate.bind(this.ineu);
-        this.ineu.preUpdate = (t, d) => {
-            preIneu(t, d);
-            const f = this.ineu.frame, b = this.ineu.body;
-            if (f && b) b.setOffset(f.realWidth / 2 - 36 * S.k, S.peus / S.alt * f.realHeight - 30 * S.k);
+        const escBase = S.alcada / (S.alt * S.k);
+        // (es fa a preUpdate i també després de l'update de l'escena: si el codi de moure l'Ineu canvia de full just en aturar-se, el fotograma nou no es dibuixa mai amb l'escala del full anterior)
+        const ajustaIneu = () => {
+            const I = this.ineu, f = I && I.frame, b = I && I.body;
+            if (!I || !I.active || !f || !b) return;
+            // Idle en alta resolució (cel·les de 288 en lloc de 192): el sprite s'encongeix per escalaIdleHD perquè faci la mateixa alçada, i la caixa de col·lisió (en píxels de textura)
+            // es fa més gran en la mateixa proporció perquè en unitats de joc sigui la mateixa que caminant.
+            const hd = /^ineu_idle_/.test(I.texture.key) && S.idleHD.dirs.includes(I.texture.key.slice(10)) ? S.escalaIdleHD : 1;
+            if (Math.abs(I.scaleX - escBase * hd) > 1e-5) I.setScale(escBase * hd);
+            if (this.fantasma && this.fantasma.active && Math.abs(this.fantasma.scaleX - I.scaleX) > 1e-5) this.fantasma.setScale(I.scaleX);
+            if (hd !== (I.hdAnt || 1)) { b.setSize(72 * S.k / hd, 30 * S.k / hd, false); I.hdAnt = hd; }
+            b.setOffset(f.realWidth / 2 - 36 * S.k / hd, S.peus / S.alt * f.realHeight - 30 * S.k / hd);
         };
+        this.ineu.preUpdate = (t, d) => { preIneu(t, d); ajustaIneu(); };
+        this.events.on('postupdate', ajustaIneu);
+        this.events.once('shutdown', () => this.events.off('postupdate', ajustaIneu));
         this.ineu.setCollideWorldBounds(true);
         this.physics.add.collider(this.ineu, this.obstacles);
         this.direccio = pos.dir || 'avall';
@@ -2196,6 +2207,7 @@ class ZonaBase extends Phaser.Scene {
         const f = this.fantasma, i = this.ineu;
         if (!f || !i || !f.active || !i.active) return;             // (en tancar l'escena ja no hi són)
         if (f.texture.key !== i.texture.key || f.frame.name !== i.frame.name) f.setTexture(i.texture.key, i.frame.name);
+        if (Math.abs(f.scaleX - i.scaleX) > 1e-5) f.setScale(i.scaleX);          // (l'idle d'alta resolució té un altre full i una altra escala)
         f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(this.assegut ? 0 : i.alpha * 0.38);   // assegut: el banc el tapa de debò
         if ((this.forcsPorta || []).some(q => i.x > q.x0 && i.x < q.x1 && i.y > q.t && i.y < q.b && !(q.bloq && q.bloq()))) f.setAlpha(0);          // dins d'una porta: el marc el tapa de debò
         // Els personatges no es transparenten com els arbres: si un que és davant de l'Ineu el tapa, la silueta s'amaga on hi ha el personatge

@@ -31,11 +31,15 @@ class ZonaRovellonera extends ZonaBase {
 
     construir() {
         const ent = this.dadesEntrada.entrada;
+        // Un cop resolt el laberint (i agafat el llaç de la Nena), la Rovellonera és una sola clariana: s'hi entra per la dreta (el camí) i se'n surt per baix (Sant Gabriel), i totes dues sortides tenen rovellons
+        this.simple = !!Estat.flag('rovResolt') && !!Estat.flag('llac2');          // (només si ja té el llaç de la clariana: si no, el laberint continua sencer)
+        if (this.simple) Estat.dades.rovPas = 0;
         if (ent === 'cami') Estat.dades.rovPas = 0;
         if (ent === 'gabriel') Estat.dades.rovPas = 2;
         if (ent === 'portal') Estat.dades.rovPas = 1;
         this.pas = Math.min(Estat.dades.rovPas || 0, 2);
-        const pas = this.pas;
+        const pas = this.simple ? 0 : this.pas;
+        const ambLlac = pas === 1;
         this.llac = this.roca2 = null;     // (l'escena es reutilitza: que no quedin els de la clariana anterior)
         this.llacAgafat = false;
 
@@ -55,21 +59,28 @@ class ZonaRovellonera extends ZonaBase {
             this.posar(rnd() < 0.55 ? 'pi' : 'xiprer', 40 + rnd() * 30, y + rnd() * 30, { col: { w: 28, h: 14 } });
             this.posar(rnd() < 0.55 ? 'pi' : 'xiprer', 1540 + rnd() * 30, y + rnd() * 30, { col: { w: 28, h: 14 } });
         }
+        // Clariana única: només queden obertes la dreta i baix; a dalt i a l'esquerra els pins tanquen el buit
+        if (this.simple) {
+            [-105, 0, 105].forEach(dx => this.posar(rnd() < 0.55 ? 'pi' : 'xiprer', 800 + dx, 44 + rnd() * 20, { col: { w: 28, h: 14 } }));
+            [-105, 0, 105].forEach(dy => this.posar(rnd() < 0.55 ? 'pi' : 'xiprer', 44 + rnd() * 20, 550 + dy, { col: { w: 28, h: 14 } }));
+        }
         // Pins soltes a l'interior, lluny del centre i dels passos
         for (let i = 0; i < 18; i++) {
             const x = 160 + rnd() * 1280, y = 160 + rnd() * 780;
             if (Phaser.Math.Distance.Between(x, y, 800, 550) < 230) continue;
             if (Math.abs(x - 800) < 140 || Math.abs(y - 550) < 140) continue;
-            if (pas === 1 && Phaser.Math.Distance.Between(x, y, 1150, 300) < 230) continue;   // lloc per empènyer la roca del llaç
+            if (ambLlac && Phaser.Math.Distance.Between(x, y, 1150, 300) < 230) continue;   // lloc per empènyer la roca del llaç
             this.posar(i % 3 ? 'pi' : 'arbre', x, y, { col: { w: 28, h: 14 } });
         }
 
         // Rovellons sota els pins, al costat de la sortida correcta
-        const D = ROV_SEQ[pas];
-        if (D) this.rovellons(D);
+        const D = this.simple ? null : ROV_SEQ[pas];
+        if (this.simple) { this.rovellons('E'); this.rovellons('S'); }
+        else if (D) this.rovellons(D);
         // Cartell d'entrada (només a la primera clariana): la regla del bosc
         if (pas === 0) this.cartell(1330, 650, () => ({ pagines: [
-            { qui: 'Cartell', text: "Bosc de les Rovelloneres.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»" }
+            { qui: 'Cartell', text: "Bosc de les Rovelloneres.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»" },
+            ...(this.simple ? [{ qui: 'Ineu', text: '(El camí ara és més senzill: només he de seguir els rovellons. Ja no cal que recordi les pistes.)' }] : [])
         ] }));
         // Si l'Ineu s'ha perdut dues vegades o més, unes llumetes assenyalen la sortida bona (el bosc s'apiada)
         if (D && (Estat.dades.rovPerdut || 0) >= 2) {
@@ -79,10 +90,10 @@ class ZonaRovellonera extends ZonaBase {
         }
         // Sortides
         const mapaSortides = { N: [700, 0, 200, 14], S: [700, 1086, 200, 14], W: [0, 440, 14, 220], E: [1586, 440, 14, 220] };
-        Object.entries(mapaSortides).forEach(([d, r]) => this.sortida(r[0], r[1], r[2], r[3], 'ZonaRovellonera', 'x_' + d));
+        Object.entries(mapaSortides).filter(([d]) => !this.simple || d === 'E' || d === 'S').forEach(([d, r]) => this.sortida(r[0], r[1], r[2], r[3], 'ZonaRovellonera', 'x_' + d));
 
         // Segon llaç de la Nena de les Trenes (el primer és pel camí): a la clariana del mig del laberint, també sota una pedra
-        if (pas === 1) {
+        if (ambLlac) {
             this.llac = this.posar('llac', 1100, 300, { fonsY: 300 }).setVisible(false);
             this.tweens.add({ targets: this.llac, y: 294, yoyo: true, repeat: -1, duration: 700 });
             this.roca2 = this.pedraMobil(1100, 310, 'llac2', 110, 0, null, () => Estat.flag('nenaVista'));
@@ -114,6 +125,7 @@ class ZonaRovellonera extends ZonaBase {
         if (desti === 'ZonaRovellonera' && entrada && entrada.startsWith('x_')) {
             const d = entrada[2];
             let pas = this.pas, dest = 'ZonaRovellonera', ent, perdut = false;
+            if (this.simple) { if (d === 'E') return super.canviarZona('ZonaCamiRov', 'rovellonera', dir); if (d === 'S') return super.canviarZona('ZonaGabriel', 'rovellonera', dir); return; }
             if (pas === 0 && d === 'E') { dest = 'ZonaCamiRov'; ent = 'rovellonera'; }
             else if (d === ROV_SEQ[pas]) {
                 pas++;
@@ -121,6 +133,7 @@ class ZonaRovellonera extends ZonaBase {
             } else if (pas > 0 && d === ROV_OPOSAT[ROV_SEQ[pas - 1]]) { pas--; ent = 'ent_' + ROV_OPOSAT[d]; }
             else { pas = 0; ent = 'ent_' + ROV_OPOSAT[d]; perdut = true; }
             Estat.dades.rovPas = pas;
+            if (pas >= 3) Estat.posaFlag('rovResolt');
             if (perdut) Estat.dades.rovPerdut = (Estat.dades.rovPerdut || 0) + 1;
             if (pas >= 3) Estat.dades.rovPerdut = 0;
             if (perdut) {

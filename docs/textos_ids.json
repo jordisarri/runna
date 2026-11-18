@@ -1,5 +1,5 @@
 {
- "seguent": 691,
+ "seguent": 692,
  "converses": {
   "main::proleg": [
    {
@@ -2233,7 +2233,7 @@
     "qui": "Ineu",
     "text": "[text calculat pel joc: textPista]",
     "fitxer": "js/zona_base.js",
-    "linia": 1851
+    "linia": 1862
    }
   ],
   "dialegs::ombraMonjo": [
@@ -2692,42 +2692,49 @@
     "qui": "Cartell",
     "text": "Bosc de les Rovelloneres.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»",
     "fitxer": "js/zones/oest.js",
-    "linia": 72
+    "linia": 82
+   },
+   {
+    "id": 691,
+    "qui": "Ineu",
+    "text": "(El camí ara és més senzill: només he de seguir els rovellons. Ja no cal que recordi les pistes.)",
+    "fitxer": "js/zones/oest.js",
+    "linia": 83
    },
    {
     "id": 354,
     "qui": "Cartell",
     "text": "← Rovellonera\n«On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.»",
     "fitxer": "js/zones/oest.js",
-    "linia": 338
+    "linia": 351
    },
    {
     "id": 355,
     "qui": "Ineu",
     "text": "La clau del senyor Buidor encaixa al pany. La porta de l'ermita s'obre.",
     "fitxer": "js/zones/oest.js",
-    "linia": 408
+    "linia": 421
    },
    {
     "id": 356,
     "qui": "Ineu",
     "text": "L'ermita de Sant Gabriel és tancada amb clau.",
     "fitxer": "js/zones/oest.js",
-    "linia": 411
+    "linia": 424
    },
    {
     "id": 357,
     "qui": "Cartell",
     "text": "→ Dipòsits\n↑ La Rovellonera",
     "fitxer": "js/zones/oest.js",
-    "linia": 413
+    "linia": 426
    },
    {
     "id": 358,
     "qui": "Cartell",
     "text": "→ Dolmen\n← Ermita de Sant Gabriel",
     "fitxer": "js/zones/oest.js",
-    "linia": 638
+    "linia": 651
    }
   ],
   "dialegs::cartellEra": [
@@ -5064,7 +5071,7 @@
     "qui": "Ineu",
     "text": "He tocat el [text calculat pel joc: MELODIES[nom].nom], però aquí no passa res...",
     "fitxer": "js/zona_base.js",
-    "linia": 2107
+    "linia": 2118
    }
   ]
  },

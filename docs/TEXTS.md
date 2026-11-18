@@ -936,7 +936,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1851)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1862)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1130,9 +1130,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[352] Ineu:** La clau del sagrari del Santuari! Els monjos la van deixar aquí. Amb això obriré el sagrari del retaule.
 
-### construir  <sub>(js/zones/oest.js:72)</sub>
+### construir  <sub>(js/zones/oest.js:82)</sub>
 
 **[353] Cartell:** Bosc de les Rovelloneres. / «Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»
+
+**[691] Ineu:** (El camí ara és més senzill: només he de seguir els rovellons. Ja no cal que recordi les pistes.)
 
 **[354] Cartell:** ← Rovellonera / «On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.»
 
@@ -2098,7 +2100,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2107)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2118)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 

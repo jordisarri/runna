@@ -235,7 +235,7 @@ const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'nor
 // (eines/fer_ineu_v2.py). Esquerra i dreta són walk_elev_/idle_elev_ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
 // Les mides dels idles s'igualen a les dels caminars amb eines/igualar_idle_ineu.py. Els fulls i els prototips anteriors són a art/ineu/arxiu/.
 const rutaIneu = (dir, idle) => {
-    const v = '?v=2611183700';
+    const v = '?v=2611185600';
     if (dir === 'left' || dir === 'right') return `assets/ineu/${idle ? 'idle/idle_elev_' : 'caminar/walk_elev_'}${dir}.webp${v}`;
     return `assets/ineu/${idle ? 'idle/idle_' : 'caminar/'}${dir}.webp${v}`;
 };
@@ -259,12 +259,17 @@ const SPRITE_INEU = {
         southwest: { frames: [9, 10, 11, 12, 13, 14, 15], fps: 18.5 }, southeast: { frames: [8, 9, 10, 11, 12, 13, 14], fps: 18.5 },
         northwest: { frames: [8, 9, 10, 11, 12, 13, 14], fps: 18.5 }, northeast: { frames: [8, 9, 10, 11, 12, 13, 14], fps: 18.5 }
     },
+    // Idle en alta resolució (assets/ineu/idle/idle_<direcció>.webp, eines/fer_idle_ineu_hd.py): cel·les de 288 px que NO es redueixen (els altres fulls es redueixen a k = 0,75 → 192 px).
+    // L'Ineu aturat es veu igual de gran, amb 1,5 vegades més detall: com que la cel·la és més gran, el sprite s'escala per escalaIdleHD mentre dura aquest full (vegeu crearIneu).
+    // Les vistes esquerra i dreta (idle_elev_*) continuen sent de 256 reduïts.
+    idleHD: { dirs: ['down', 'up', 'southwest', 'southeast', 'northwest', 'northeast'], cel: 288 },
     quiet: 2,             // fotograma de repòs de cada direcció
     // Memòria: les fulles de l'Ineu es redueixen en carregar a cel·les de 192.
     // Totes les mides d'aquí (i les de l'arma, atac_arma.js) continuen en píxels de la cel·la de 256; on cal píxels de la
     // textura de veritat, es multiplica per k
     k: 0.75
 };
+SPRITE_INEU.escalaIdleHD = SPRITE_INEU.ample * SPRITE_INEU.k / SPRITE_INEU.idleHD.cel;      // 192 / 288: el sprite s'encongeix a aquesta fracció quan mostra un idle d'alta resolució
 /**
  * ATACS DE L'INEU: una fulla per direcció (assets/ineu/atac/atac_<direccio>.webp, 4x4 fotogrames de 256, fons transparent).
  * Surten de eines/convertir_atacs.js: ja estan normalitzades (mateixa escala per a totes les direccions, peus a SPRITE_INEU.peus) i
@@ -359,7 +364,8 @@ const Grafics = {
             ATAC_ARMES.forEach(arma => scene.load.spritesheet(`ineu_atac_${arma}_${dir}`, `assets/ineu/atac/atac_${arma}_${dir}.webp?v=2611174800`, { frameWidth: ATAC_CEL_EXC[`${arma}_${dir}`] || ATAC_CEL, frameHeight: ATAC_CEL_EXC[`${arma}_${dir}`] || ATAC_CEL }));
         });
         [...new Set(Object.values(IDLE_INEU))].forEach(dir => {
-            const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
+            const hd = SPRITE_INEU.idleHD.dirs.includes(dir), c = SPRITE_INEU.idleHD.cel;
+            const mida = hd ? { frameWidth: c, frameHeight: c } : { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
             scene.load.spritesheet('ineu_idle_' + dir, rutaIneu(dir, true), mida);
         });
     },
@@ -503,7 +509,7 @@ const Grafics = {
     reduirIneu(scene) {
         const tm = scene.textures, k = SPRITE_INEU.k, CEL = SPRITE_INEU.ample, C2 = Math.round(CEL * k);
         const claus = DIRS_INEU.map(dir => 'ineu_' + dir).concat(DIRS_INEU.map(dir => 'ineu_cop_' + dir));          // (el cop rebut també: si no, es veuria un 33 % més gran que la resta)
-        [...new Set(Object.values(IDLE_INEU))].forEach(dir => claus.push('ineu_idle_' + dir));
+        [...new Set(Object.values(IDLE_INEU))].forEach(dir => { if (!SPRITE_INEU.idleHD.dirs.includes(dir)) claus.push('ineu_idle_' + dir); });          // (els idles d'alta resolució no es redueixen)
         claus.forEach(clau => {
             if (!tm.exists(clau) || Grafics.faltants.includes(clau)) return;
             const font = tm.get(clau).getSourceImage(), cols = Math.round(font.width / CEL), files = Math.round(font.height / CEL);
@@ -1443,6 +1449,7 @@ const Grafics = {
         crea('catifa_ermita', 120, 440, pintarCatifaErmita);
         crea('graons_ermita', 380, 90, pintarGraonsErmita);
         crea('altar_ermita', 150, 118, pintarAltarAustera);
+        crea('pedra_escolta', 56, 46, pintarPedraEscolta);          // la pedra de la façana del Santuari que escolta (ZonaPlaca)
         crea('candelabre_apagat', 36, 112, pintarCandelabreApagat);
         crea('ofrenes_ermita', 130, 44, pintarOfrenesErmita);
         crea('candelabre_hall', 44, 112, pintarCandelabreHall);

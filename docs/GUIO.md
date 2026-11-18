@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 613: un cop resolt el laberint de la Rovellonera (arribar a Sant Gabriel) i agafat el llaç de la clariana de la Nena de les Trenes, la Rovellonera es redueix a una sola clariana: s'hi entra per la dreta (el camí) i se'n surt per baix (Sant Gabriel), sense altres sortides i amb rovellons a totes dues. El cartell fa dir a l'Ineu que el camí ara és més senzill i que ja no cal recordar les pistes.*
+
 *Revisió 612: Als altres de l'Ermita de la Desaparició, de Sant Gabriel, de la capella de la Carmèlia i del Santuari, l'Ineu s'hi agenolla (d'esquena si hi arriba per davant, de cara si hi arriba per darrere) i recupera tota l'energia: els grans del rosari s'omplen un a un, cadascun amb el seu so, i es desa la partida. S'esborra del tot el fitxer buit js/zones/esglesia_nova.js (l'original queda a art/arxiu/).*
 
 *Revisió 611: l'ordre de les pistes de l'Acte 3 va per zones (Santuari i Monestir; Sant Antoni: Guants, Pi i Empara; Casa Gran; Gírgoles). El Diari (Encàrrecs) i el pergamí del HUD mostren, a més del pas següent, tots els passos ja començats i a mig fer, amb la seva pista, perquè el jugador no es perdi.*
