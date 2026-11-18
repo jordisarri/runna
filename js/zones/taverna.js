@@ -487,11 +487,58 @@ class ZonaGirgolesFora extends ZonaBase {
             this.interactiu(PX, 340, RADI_OBJECTE, DIALEGS.portaSoterrani, { altura: 120, actiu: () => !Estat.flag('portaSoterraniOberta'), enTancar: () => this.obrirPorta() });
         }
 
+        this.posarVigilant(PX);
+
         // Pocs arbres i escampats amb naturalitat: cap no arriba a tocar l'edifici (les capçades fan uns 280 d'alt: els de dalt, més petits)
         [[62, 520, 0.7], [735, 545, 0.75], [70, 880], [150, 1060, 0.9], [340, 1085], [600, 1070, 0.85], [740, 950]]
             .forEach(([x, y, esc]) => this.posar('arbre', x, y, esc ? { escala: esc } : {}));
 
         this.sortida(0, 560, 14, 120, 'ZonaCellerFora', 'girgoles');
+    }
+
+    // El Pare Xèvius barra el camí de la porta amb una tanca de fusta, de vora a vora, i una barrera al mig: no deixa passar fins que veu la Carta del Cortiner
+    posarVigilant(PX) {
+        const YT = 385, A = 800, GAP = 70;
+        if (Estat.flag('portaSoterraniOberta')) Estat.posaFlag('vigilantObert');             // partides velles: la porta ja és oberta
+        const obert = Estat.flag('vigilantObert');
+        if (!obert) {
+            this.tanca = this.add.graphics().setDepth(YT);
+            const t = this.tanca, fusta = 0x6b4a2c, ombra = 0x3a2616;
+            [[0, PX - GAP], [PX + GAP, A]].forEach(([x0, x1]) => {
+                t.fillStyle(ombra, 1).fillRect(x0, YT - 38, x1 - x0, 5).fillRect(x0, YT - 20, x1 - x0, 5);
+                t.fillStyle(fusta, 1).fillRect(x0, YT - 40, x1 - x0, 5).fillRect(x0, YT - 22, x1 - x0, 5);
+                for (let x = x0 + 8; x < x1; x += 46) t.fillStyle(fusta, 1).fillRect(x - 5, YT - 56, 10, 62).fillStyle(ombra, 1).fillRect(x + 2, YT - 56, 3, 62);
+            });
+            this.colTancaE = this.colisio((PX - GAP) / 2, YT, PX - GAP, 14);
+            this.colTancaD = this.colisio((PX + GAP + A) / 2, YT, A - PX - GAP, 14);
+            this.colBarrera = this.colisio(PX, YT, GAP * 2, 14);
+            // La barrera del mig: dues fulles que s'obren
+            this.barrera = this.add.graphics().setDepth(YT);
+            const b = this.barrera;
+            b.fillStyle(0x7a5632, 1).fillRect(PX - GAP, YT - 44, GAP * 2, 6).fillRect(PX - GAP, YT - 26, GAP * 2, 6).fillRect(PX - GAP, YT - 6, GAP * 2, 6);
+            b.fillStyle(0x5a3a1e, 1).fillRect(PX - 3, YT - 48, 6, 52);
+            b.fillStyle(0x3a2616, 1).fillRect(PX - GAP - 5, YT - 58, 10, 66).fillRect(PX + GAP - 5, YT - 58, 10, 66);
+        }
+        const x = obert ? PX + 150 : PX, y = obert ? 372 : 430;
+        this.vigilant = this.npc('pare_xevius', x, y, DIALEGS.xevius, { quiet: false });
+        if (!obert) this.vigilant.punt.enTancar = () => {};                  // (la porta s'obre al diàleg, vegeu obrirVigilant)
+        this.vigilant.punt.altura = this.vigilant.displayHeight + 6;
+        // Mentre no s'ha obert el camí, la porta no es pot fer servir (hi ha la tanca pel mig)
+    }
+
+    // Quan el Pare Xèvius veu la carta: s'aparta i s'obre la barrera
+    obrirVigilant(fet) {
+        const PX = this.PX, v = this.vigilant;
+        Sfx.secret();
+        this.tweens.add({ targets: this.barrera, alpha: 0, duration: 900, onComplete: () => { this.barrera.destroy(); this.barrera = null; } });
+        if (this.colBarrera) { this.obstacles.remove(this.colBarrera, true, true); this.colBarrera = null; }
+        if (v.col) { this.obstacles.remove(v.col, true, true); v.col = null; }
+        const nx = PX + 150;
+        this.tweens.add({ targets: [v, v.ombra], x: nx, duration: 1400, ease: 'Sine.easeInOut', onComplete: () => {
+            v.col = this.colisio(nx, v.y - 9, 40, 18);
+            if (v.punt) v.punt.x = nx;
+            fet();
+        } });
     }
 
     // Porta de ferro en un marc de pedra amb arc: dues fulles amb reblons; oberta, es veu l'escala que baixa

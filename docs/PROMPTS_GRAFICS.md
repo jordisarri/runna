@@ -146,6 +146,10 @@
 
 - [x] `pare_daimiel`
 
+- [ ] `pare_xevius` (sprite `assets/personatges/pare_xevius.webp` i retrat `assets/retrats/pare_xevius.webp`; ara hi ha un dibuix provisional per codi)
+
+  *Prompt:* Vigilant de la Porta de les Gírgoles, monjo molt vell i prim, d'uns setanta anys, d'aspecte sever però bondadós. Hàbit marró fosc de llana, cordó a la cintura, caputxa abaixada, tonsura i cabells blancs curts, barba blanca llarga i ben cuidada, celles espesses i mirada desconfiada; braços creuats a les mànigues. Vista frontal, cos sencer, fons transparent, estil il·lustració de conte fosc, com la resta de monjos del joc (Pare Alcoví, Germà Francí).
+
 - [x] `pare_jorda`
 
 - [x] `pastor_a`

@@ -48,7 +48,7 @@ SECCIONS = [
                                                             'zones/casa:raimEstatuaFinal', 'zones/casa:cofreCripta', 'zones/casa:puzleRaim', 'zones/casa:mecanismePorta', 'zones/casa_gran:construir']),
     ('Acte 3: l\'Hostatgeria, les sacerdotesses i la llosa del jardí', ['isilderBase', 'isilderRunna', 'isilder', 'llosaJardi', 'zones/jardi:construir', 'rosansa', 'avisLlosa', 'hostatgeria', 'taulaRefetor',
                                                                          'dolora', 'pilaria', 'carmelia', 'cofreMonges']),
-    ('La porta de ferro i les Gírgoles', ['zones/taverna:portaSoterrani', 'zones/taverna:portaFerro', 'cartellGirgoles', 'zones/gabia:girgolesInscripcio', 'zones/gabia:tornRastell']),
+    ('La porta de ferro i les Gírgoles', ['zones/taverna:portaSoterrani', 'xevius', 'zones/taverna:portaFerro', 'cartellGirgoles', 'zones/gabia:girgolesInscripcio', 'zones/gabia:tornRastell']),
     ('La Gàbia i l\'Ocellaire', ['zones/gabia:pontGabia', 'zones/gabia:gabiaGran', 'zones/gabia:aldreuGabia', 'zones/gabia:nenGabia', 'zones/gabia:actualitzar', 'zones/gabia:enMelodia',
                                 'zones/gabia:iniciarCombatFinal', 'zones/gabia:ocellaireDerrotat', 'zones/gabia:obrirGabia', 'zones/gabia:finalGabia']),
     ('Epíleg: després del final', ['zones/esglesia:ferEpileg', 'zones/gabia:gentEpileg']),

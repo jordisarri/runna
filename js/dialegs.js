@@ -639,6 +639,24 @@ const DIALEGS = {
     }),
 
 
+    // El Pare Xèvius, vigilant de la Porta de les Gírgoles: no deixa passar sense una prova de bona voluntat (la Carta del Cortiner)
+    xevius: E => {
+        if (E.flag("vigilantObert")) return { pagines: [
+            { qui: "Pare Xèvius", text: "Passa, fill, passa. Que la llum de Runna t'acompanyi: allà baix en tindràs ben bé necessitat." }
+        ] };
+        if (!E.te("carta_cortiner")) return { pagines: [
+            { qui: "Pare Xèvius", text: "Alto, noi. No passes. Fa trenta anys un monjo de bona cara va picar a aquesta porta, va dir tres paraules dolces... i el meu predecessor li va obrir." },
+            { qui: "Pare Xèvius", text: "Des d'aleshores, qui vol passar m'ha de demostrar la bona voluntat. No amb paraules, fill: amb fets." },
+            { qui: "Ineu", text: "(Quina prova se li pot demostrar? Potser el Pare Alcoví, a la Biblioteca, ho sap: ho deu tenir a la Crònica.)" }
+        ] };
+        return { pagines: [
+            { qui: "Ineu", text: "Pare Xèvius, porto això: la Carta del Cortiner. Era al tronc del Pi dels Tres Cants. Els ocells hi han tornat." },
+            { qui: "Pare Xèvius", text: "La lletra del Cortiner... i el sagell blau, intacte. Només qui fa tornar els ocells al pi té un cor així." },
+            { qui: "Pare Xèvius", text: "Perdona'm, fill. Les males experiències deixen ferides. Obre bé els ulls allà baix: l'Aldreu no és el que era." },
+            { fer: (z, fet) => z.obrirVigilant ? z.obrirVigilant(fet) : fet() }
+        ], enAcabar: () => { E.posaFlag("vigilantObert"); E.posaObjectiu("Pel camí de la porta de les Gírgoles ja pots passar: el Pare Xèvius t'ha deixat via lliure."); E.desar(); } };
+    },
+
     pareAlcovi: E => {
         const f1 = E.flag("fragment1"), f2 = E.flag("fragment2");
         // Ha llegit la placa del Dolmen i li ho pregunta: la Crònica diu què calen per alçar Runna i qui ho dona
@@ -664,8 +682,9 @@ const DIALEGS = {
                     { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
                     { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
                     { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." },
-                    { qui: "Pare Alcoví", text: "I una cosa més que diu el marge de la Crònica, per quan baixis a la porta de ferro de la Taverna. El pany és petit, i el vigilant en devia deixar la clau a algú que s'escapa de nit. Però un cop oberta, dins hi ha dues proves, fill." },
-                    { qui: "Pare Alcoví", text: "La primera és la boira que crema: només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria, i els guants del Germà Francí t'ajudaran a guanyar-te-la. La segona és la gàbia: els seus barrots només escolten el Cant del Miracle, el que els ocells van perdre. No baixis sense les dues." }
+                    { qui: "Pare Alcoví", text: "I una cosa més que diu el marge de la Crònica, per quan baixis a la porta de les Gírgoles. Allà hi ha el Pare Xèvius, el vigilant. Fa trenta anys l'Aldreu el va enganyar amb bones paraules i, d'ençà d'aleshores, no es fia de ningú. No et deixarà passar sense una prova de bona voluntat, fill." },
+                    { qui: "Pare Alcoví", text: "Només s'ablana amb la Carta del Cortiner, que reposa al tronc del Pi dels Tres Cants. Hauràs de despertar el pi amb els tres cants: Aurora, Vespres i Miracle. Fes-ho abans d'anar a la porta, que després no hi ha manera de tornar enrere." },
+                    { qui: "Pare Alcoví", text: "Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Francí t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat." }
                 ],
                 enAcabar: () => { E.posaFlag("tombaLlegida"); E.posaObjectiu("La tomba esquerdada del Cementiri espera la llum de Runna."); }
             };

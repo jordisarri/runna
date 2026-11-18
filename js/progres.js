@@ -126,7 +126,15 @@ const PROGRES = {
         { id: 'segell', marca: ['tombaLlegida', 'tombaSegellada'], fet: E => E.flag('tombaSegellada'),
           pista: E => E.flag('tombaLlegida') || !E.flag('relTretes')
               ? "La tomba esquerdada del Cementiri treu boira: la llum de Runna la tancaria. La clau de ferro obre la porta del Pati del Celler."
-              : "La tomba del Cementiri treu boira: el Pare Alcoví, a la Biblioteca, sabrà què fer-hi. La clau de ferro obre la porta del Pati del Celler." },        // ---- Les Gírgoles ----
+              : "La tomba del Cementiri treu boira: el Pare Alcoví, a la Biblioteca, sabrà què fer-hi. La clau de ferro obre la porta del Pati del Celler." },
+        // ---- Les Gírgoles ----
+        // El Pi dels Tres Cants és obligatori: el Pare Xèvius, vigilant de la Porta de les Gírgoles, només deixa passar qui li ensenya la Carta del Cortiner.
+        { id: 'pi', marca: ['piObert', 'piAurora', 'piPedres', 'piMiracle', 'piVist', 'obj:carta_cortiner'], fet: E => E.flag('piObert') || E.flag('portaSoterraniOberta'),
+          pista: E => E.flag('cantMiracle')
+              ? "El Pare Xèvius, a l'entrada de les Gírgoles, no deixa passar sense una prova de bona voluntat. Al sud de Sant Antoni, un bosc molt llarg amaga un pi vell que sembla escoltar els tres cants. Només s'hi pot arribar des de llevant."
+              : "Un pi vell, al sud de Sant Antoni, escolta els tres cants. Caldrà saber-los tots tres." },
+        { id: 'vigilant', marca: ['vigilantObert'], fet: E => E.flag('vigilantObert') || E.flag('portaSoterraniOberta'),
+          pista: E => "El Pare Xèvius barra el camí de la porta de les Gírgoles. Vol una prova de bona voluntat: la Carta del Cortiner, que reposa al Pi dels Tres Cants." },
         { id: 'soterrani', marca: ['portaSoterraniOberta'], fet: E => E.flag('portaSoterraniOberta'),
           pista: E => "Al Pati del Celler hi ha una porta de ferro. La clau de ferro n'és amiga." },
         { id: 'clauIscu', marca: ['iscuTrobat', 'clauGirgoles', 'obj:clau_girgoles'], fet: E => E.te('clau_girgoles') || E.flag('portaFerroOberta'),
@@ -168,8 +176,6 @@ const PROGRES = {
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta cants antics." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
           pista: E => "La Nena de les Trenes va perdre dos llaços: un pel camí de la Rovellonera i l'altre en una clariana del mig del bosc de la Rovellonera." },
-        { id: 'pi', marca: ['piObert', 'piAurora', 'piPedres', 'piMiracle', 'piVist'], obert: E => E.flag('cantMiracle'), fet: E => E.flag('piObert'),
-          pista: E => "Al sud de Sant Antoni, un bosc molt llarg amaga un pi vell que sembla escoltar els tres cants. Només s'hi pot arribar des de llevant." },
         { id: 'carruatge', marca: ['carruatgeObert'], obert: E => E.flag('epilegFet'), fet: E => E.flag('carruatgeObert'),
           pista: E => "El Follet del Carro Verd, a l'Era, deia que obriria el carro quan la boira marxés del tot." }
     ],
