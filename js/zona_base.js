@@ -2633,6 +2633,49 @@ class ZonaBase extends Phaser.Scene {
         });
     }
 
+    // ---------------- Altars: agenollar-se i recuperar l'energia ----------------
+    // Punt d'interacció d'un altar: l'Ineu s'hi agenolla (d'esquena si hi arriba per davant, de cara si hi arriba per darrere, des de dalt), i els grans del rosari
+    // s'omplen un a un, cadascun amb el seu so. Sense cap altra animació ni llum. En acabar es desa la partida. S'hi pot tornar tantes vegades com es vulgui.
+    // opts: { radi, altura, actiu, dalt }  (dalt: distància cap amunt, des de y, d'un segon punt darrere l'altar; només es posa si hi ha lloc per posar-s'hi)
+    altarRepos(x, y, opts = {}) {
+        const radi = opts.radi || RADI_OBJECTE + 14, actiu = opts.actiu;
+        const punt = (px, py, davant) => this.interactiu(px, py, radi, () => ({ pagines: [{ fer: (z, fet) => z.agenolla(fet, davant) }] }), { altura: opts.altura || 110, actiu, senseMirada: true });
+        punt(x, y, false);
+        const yD = y - (opts.dalt || 0);
+        if (opts.dalt) this.time.delayedCall(0, () => { if (this.scene.isActive() && this.llocLliure(x, yD)) punt(x, yD, true); });
+        return null;
+    }
+
+    agenolla(fet, davant = false) {
+        const I = this.ineu, key = davant ? 'ineu_agenollat_front' : 'ineu_agenollat_esquena';
+        this.posarDireccio(davant ? 'avall' : 'amunt', false, davant ? 'down' : 'up');
+        I.body.setVelocity(0);
+        const esc = (this.textures.get(key).customData || {}).escala || 0.4;
+        I.setVisible(false);
+        if (this.fantasma) this.fantasma.setVisible(false);
+        const img = this.add.image(I.x, I.y + 2, key).setOrigin(0.5, 1).setScale(esc).setDepth(I.y + 1);
+        const d = Estat.dades, ui = this.ui(), total = d.corsMax * 2;
+        // Els grans es van omplint d'un en un (cada pas completa un gra: de buit a mig o de mig a ple, i el següent), amb un so més agut a cada gra
+        const NOTES = [523, 587, 659, 698, 784, 880, 988];
+        const passos = [];
+        for (let v = d.vida; v < total; v += (v % 2 ? 1 : 2)) passos.push(Math.min(total, v + (v % 2 ? 1 : 2)));
+        passos.forEach((v, k) => this.time.delayedCall(600 + k * 420, () => {
+            d.vida = v;
+            if (ui && ui.actualitzarHUD) ui.actualitzarHUD();
+            const gra = Math.min(NOTES.length - 1, Math.ceil(v / 2) - 1);
+            if (Sfx.to) Sfx.to(NOTES[gra], NOTES[gra] * 1.5, 0.28, 'sine', 0.09);
+        }));
+        const fins = 600 + passos.length * 420 + 700;
+        this.time.delayedCall(fins, () => {
+            Estat.desar();
+            img.destroy();
+            I.setVisible(true);
+            if (this.fantasma) this.fantasma.setVisible(true);
+            this.posarDireccio(davant ? 'avall' : 'amunt', false);
+            if (fet) fet();
+        });
+    }
+
     // ---------------- Seure als bancs ----------------
     // this.bancsEsg = [{ x, y, w, cara, img }] (vegeu posarBanc). Caminant cap a un banc l'Ineu hi seu, sense punt d'interacció, i s'aixeca quan el jugador es mou.
     //   cara 'amunt' (banc vist per darrere, com els de l'església): s'hi arriba des de dalt, baixant, i s'hi mira cap amunt; el respatller el tapa.

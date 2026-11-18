@@ -98,6 +98,7 @@ class ZonaErmitaInt extends ZonaBase {
         this.posar('altar_ermita', 500, 300, { col: { w: 140, h: 36 }, opac: true });
         const totes = () => Array.from({ length: 12 }, (_, i) => Estat.flag('col' + (i + 1))).every(Boolean);
         this.interactiu(500, 335, RADI_OBJECTE, DIALEGS.altarErmita, { altura: 100, actiu: () => totes() && !Estat.flag('cofreAltar') });
+        this.altarRepos(500, 340, { dalt: 80, actiu: () => !(totes() && !Estat.flag('cofreAltar')) });          // s'hi agenolla i recupera l'energia (quan no toca dir-hi la frase)
         if (Estat.flag('cofreAltar')) this.posarCofreAltar();
         [[392, 352], [608, 352]].forEach(([x, y]) => {          // dos peus de ferro amb l'espelma apagada
             (this.opacs = this.opacs || []).push(this.add.image(x, y, 'candelabre_apagat').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));

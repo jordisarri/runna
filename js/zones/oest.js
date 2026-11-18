@@ -554,6 +554,7 @@ class ZonaGabrielInt extends ZonaBase {
             this.add.circle(cx + dx, ay - 118, 22, 0xffc860, 0.12).setDepth(396).setBlendMode('ADD');
         });
         this.colisio(cx, ay - 20, 150, 40);
+        this.altarRepos(cx - 76, ay + 28, { dalt: 90 });                       // l'altar: l'Ineu s'hi agenolla (a un costat del cofre del cristall) i recupera l'energia
         // Dos testos de flors seques al peu del graó
         [-40, 40].forEach(dx => {
             const t = this.add.graphics().setDepth(grao + 30);

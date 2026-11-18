@@ -552,6 +552,7 @@ class CambraMonja extends ZonaCasaBase {
             cat.fillStyle(0x6a1f24, 1).fillRect(360, 270, 80, 340);
             cat.lineStyle(3, 0xc8a050, 1).strokeRect(366, 276, 68, 334);
             this.posar('altar', 400, 240, { col: { w: 140, h: 36 } });
+            this.altarRepos(400, 292, { dalt: 90 });                                    // l'altar de la capella: s'hi agenolla i recupera l'energia
             this.posarBanc(270, 400, 110, 'banc_esglesia', 'amunt', 0.8);          // bancs de capella: s'hi seu des de dalt, de cara a l'altar
             this.posarBanc(530, 400, 110, 'banc_esglesia', 'amunt', 0.8);
             const ni = this.add.graphics().setDepth(-990);                                       // fornícules amb la Mare de Déu i un sant
