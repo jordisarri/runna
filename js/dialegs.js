@@ -1022,7 +1022,7 @@ const DIALEGS = {
         enAcabar: () => { E.dona('clau_gabriel'); E.posaFlag('clauGabrielDonada'); E.posaObjectiu("L'ermita de Sant Gabriel és oberta amb la clau del senyor Buidor: hi ha el cristall de gel."); }
     }) : ({ pagines: [
         { qui: 'Senyor Buidor', text: "Xxt... baixa la veu, noi, que m'estic fotent un anís escarxat. Me l'ha preparat l'Eve, i això no es beu: s'assaboreix." },
-        { qui: 'Senyor Buidor', text: "Una gota de gel, un raig d'aigua, i deixar-lo fer. Les coses bones no tenen pressa. Jo en sé, d'esperar: fa seixanta anys que m'assec en aquesta taula." },
+        { qui: 'Senyor Buidor', text: "Una mica de gel, un raig d'aigua, i deixar-lo fer. Les coses bones no tenen pressa. Jo en sé, d'esperar: fa seixanta anys que m'assec en aquesta taula." },
         { qui: 'Senyor Buidor', text: "Des que la Càren dorm, l'Eve porta la taverna sola i no es queixa mai. Això és de gent de molt bona fusta." },
         { qui: 'Senyor Buidor', text: "Ara calla, noi, que se m'acaba l'anís." }
     ] }),

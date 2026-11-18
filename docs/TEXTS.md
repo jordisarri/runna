@@ -828,7 +828,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[260] Senyor Buidor:** Xxt... baixa la veu, noi, que m'estic fotent un anís escarxat. Me l'ha preparat l'Eve, i això no es beu: s'assaboreix.
 
-**[261] Senyor Buidor:** Una gota de gel, un raig d'aigua, i deixar-lo fer. Les coses bones no tenen pressa. Jo en sé, d'esperar: fa seixanta anys que m'assec en aquesta taula.
+**[261] Senyor Buidor:** Una mica de gel, un raig d'aigua, i deixar-lo fer. Les coses bones no tenen pressa. Jo en sé, d'esperar: fa seixanta anys que m'assec en aquesta taula.
 
 **[262] Senyor Buidor:** Des que la Càren dorm, l'Eve porta la taverna sola i no es queixa mai. Això és de gent de molt bona fusta.
 
