@@ -319,6 +319,14 @@ class ZonaBase extends Phaser.Scene {
         // Autodesat en entrar a una zona
         this.guardarPosicio();
         Estat.desar();
+        // I cada pocs segons mentre l'Ineu camina lliure (fora de cinemàtiques, canvis de zona, escales, bancs i diàlegs, i lluny de les sortides): així, en continuar, es torna on era
+        // i no a la porta per on s'havia entrat a la zona
+        this.time.addEvent({ delay: 4000, loop: true, callback: () => {
+            const I = this.ineu, ui = this.ui();
+            if (!I || !I.active || !I.body || this.canviant || this.cinema || this.camCinema || this.ineuAlt || this.assegut || this.caminantAuto || this.caient || this.epileg || (ui && (ui.dialeg || ui.menuObert))) return;
+            if ((this.sortides || []).some(q => q.r && Phaser.Geom.Rectangle.Contains(Phaser.Geom.Rectangle.Inflate(Phaser.Geom.Rectangle.Clone(q.r), 50, 50), I.x, I.y))) return;
+            this.guardarPosicio(); Estat.desar();
+        } });
 
         if (this.enEntrar) this.enEntrar();
         if (this.dadesEntrada.entrada && !this.dadesEntrada.restaurar && !Estat.caigut && !this.entradaPropia) this.pasEntrada(this.posEntrada);
@@ -1733,6 +1741,13 @@ class ZonaBase extends Phaser.Scene {
     crearIneu() {
         const e = this.config.entrades;
         let pos;
+        // Si la posició desada cau damunt (o gairebé) d'una sortida, és que es va desar just en entrar a la zona (a la porta) i no s'ha tornat a desar: en continuar, l'Ineu hi
+        // apareixia i tornava a entrar tot sol. Llavors es tracta com una entrada normal (surt de la porta caminant, amb la porta oberta).
+        if (this.dadesEntrada.restaurar && Estat.dades.x !== null && !this.arribadaEnCarro &&
+            (this.sortides || []).some(q => q.r && Phaser.Geom.Rectangle.Contains(Phaser.Geom.Rectangle.Inflate(Phaser.Geom.Rectangle.Clone(q.r), 40, 40), Estat.dades.x, Estat.dades.y))) {
+            this.dadesEntrada = Object.assign({}, this.dadesEntrada, { restaurar: false });
+            Estat.dades.x = null; Estat.dades.y = null;
+        }
         if (this.dadesEntrada.restaurar && this.arribadaEnCarro && Estat.dades.x !== null) {
             // Arribada amb el carruatge: la posició de la parada (pd.a) és dissenyada abans d'ampliar la zona cap al sud, com el carruatge i el Follet (que ja s'han mogut): es mapeja igual
             // i, si queda massa a prop del carruatge o del Follet (o fora de lloc), es busca el lloc lliure més proper, separat d'ells.
