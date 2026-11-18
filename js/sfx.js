@@ -392,9 +392,39 @@ const Sfx = {
             g.gain.setValueAtTime(0.0001, t + 0.03); g.gain.linearRampToValueAtTime(0.14 / (1 + k * 0.9), t + 0.06); g.gain.exponentialRampToValueAtTime(0.0001, t + 4.2 - k * 0.5);
             o.connect(g); g.connect(this.mestre); o.start(t + 0.03); o.stop(t + 4.3);
         });
-        // 4. Veu greu que respon (el Mestre) i la cua de soroll que s'allunya
-        this.veuGreu(98, 49, 2.2, 0.2, 0.5);
-        this.xiu(2.6, 0.12, 'lowpass', 700, 80, 1, 0.4);
+        // 4. Un crit espectral intens (abans, una veu greu que semblava un mugit) i la cua de soroll que s'allunya
+        this.cridEspectral(0.15);
+        this.xiu(2.6, 0.1, 'lowpass', 700, 80, 1, 0.4);
+    },
+    // Crit espectral, fort i punyent: dues veus agudes i desafinades (un trítò) que pugen de to amb vibrato ràpid i es trenquen, passades per filtres de vocal oberta («aaah»),
+    // sobre un xiscle de soroll que obre; i un ressò llarg que el fa semblar un esperit. Dura uns 2,4 s.
+    cridEspectral(retard = 0) {
+        const c = this.ctx, t = c.currentTime + retard, dur = 2.4;
+        const sortida = c.createGain(); sortida.gain.value = 1;
+        // ressò (delay amb realimentació) perquè sembli que ve de molt lluny i s'allarga
+        const eco = c.createDelay(1); eco.delayTime.value = 0.23; const fb = c.createGain(); fb.gain.value = 0.42; const ge = c.createGain(); ge.gain.value = 0.5;
+        sortida.connect(eco); eco.connect(fb); fb.connect(eco); eco.connect(ge); ge.connect(this.mestre); sortida.connect(this.mestre);
+        [[1, 0], [1.414, 0.07]].forEach(([det, ret]) => {
+            const tt = t + ret;
+            const lfo = c.createOscillator(), lg = c.createGain(); lfo.frequency.setValueAtTime(5, tt); lfo.frequency.linearRampToValueAtTime(11, tt + dur); lg.gain.value = 22 * det; lfo.connect(lg);
+            const g = c.createGain();
+            g.gain.setValueAtTime(0.0001, tt); g.gain.linearRampToValueAtTime(0.2, tt + 0.12); g.gain.setValueAtTime(0.2, tt + dur * 0.55); g.gain.exponentialRampToValueAtTime(0.0001, tt + dur);
+            const f1 = c.createBiquadFilter(), f2 = c.createBiquadFilter();
+            f1.type = 'bandpass'; f1.Q.value = 6; f1.frequency.setValueAtTime(800, tt); f1.frequency.exponentialRampToValueAtTime(1400, tt + dur);
+            f2.type = 'bandpass'; f2.Q.value = 8; f2.frequency.setValueAtTime(1300, tt); f2.frequency.exponentialRampToValueAtTime(2600, tt + dur);
+            [1, 1.007].forEach(d2 => {
+                const o = c.createOscillator(); o.type = 'sawtooth';
+                o.frequency.setValueAtTime(380 * det * d2, tt); o.frequency.exponentialRampToValueAtTime(1050 * det * d2, tt + dur * 0.5); o.frequency.exponentialRampToValueAtTime(760 * det * d2, tt + dur);
+                lg.connect(o.frequency); o.connect(f1); o.connect(f2); o.start(tt); o.stop(tt + dur + 0.05);
+            });
+            f1.connect(g); f2.connect(g); g.connect(sortida); lfo.start(tt); lfo.stop(tt + dur + 0.05);
+        });
+        // xiscle de soroll agut que s'obre
+        const n = c.createBufferSource(); n.buffer = this.soroll; n.loop = true;
+        const fn = c.createBiquadFilter(), gn = c.createGain();
+        fn.type = 'bandpass'; fn.Q.value = 2.5; fn.frequency.setValueAtTime(1800, t); fn.frequency.exponentialRampToValueAtTime(5200, t + dur * 0.6);
+        gn.gain.setValueAtTime(0.0001, t); gn.gain.linearRampToValueAtTime(0.16, t + 0.2); gn.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        n.connect(fn); fn.connect(gn); gn.connect(sortida); n.start(t); n.stop(t + dur + 0.1);
     },
     // Llenguatge sonor de la pausa de l'Ocellaire (art/arxiu/design/lluita_final_combat.md § 4-5)
     esgotat() {                  // s'aclofa de genolls: veu greu que cau

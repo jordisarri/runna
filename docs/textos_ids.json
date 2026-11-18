@@ -4590,14 +4590,14 @@
    {
     "id": 600,
     "qui": "Ineu",
-    "text": "Deixeu els nens. Tornaran amb els seus.",
+    "text": "Deixeu que els nens tornin amb els seus!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1507
    },
    {
     "id": 601,
     "qui": "L'Home de la Gàbia",
-    "text": "Un nen que riu... Fa segles que no en sento cap.",
+    "text": "Un nen que riu... feia segles que no en sentia cap.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1509
    },
@@ -4611,7 +4611,7 @@
    {
     "id": 603,
     "qui": "Ineu",
-    "text": "Runna us coneix. I jo us veig. No sou el que feu veure.",
+    "text": "Ja coneixeu Runna. I ara em coneixereu a mi!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1512
    },
@@ -4625,7 +4625,7 @@
    {
     "id": 605,
     "qui": "Aldreu, Pastor de Boira",
-    "text": "Deixeu-m'ho a mi, Mestre!",
+    "text": "Deixeu-me'l a mi, Mestre, aquest cop l'esclafaré!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1516
    },

@@ -1910,17 +1910,17 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[599] L'Home de la Gàbia:** Uns peus de monjo jove damunt la meva pedra.
 
-**[600] Ineu:** Deixeu els nens. Tornaran amb els seus.
+**[600] Ineu:** Deixeu que els nens tornin amb els seus!
 
-**[601] L'Home de la Gàbia:** Un nen que riu... Fa segles que no en sento cap.
+**[601] L'Home de la Gàbia:** Un nen que riu... feia segles que no en sentia cap.
 
 **[602] L'Home de la Gàbia:** La gàbia és plena de riures robats. Encara hi cap el teu.
 
-**[603] Ineu:** Runna us coneix. I jo us veig. No sou el que feu veure.
+**[603] Ineu:** Ja coneixeu Runna. I ara em coneixereu a mi!
 
 **[604] L'Home de la Gàbia:** Runna... Quina espasa tan petita per a una sala tan gran.
 
-**[605] Aldreu, Pastor de Boira:** Deixeu-m'ho a mi, Mestre!
+**[605] Aldreu, Pastor de Boira:** Deixeu-me'l a mi, Mestre, aquest cop l'esclafaré!
 
 **[606] L'Home de la Gàbia:** Aparta, Aldreu. Aquesta nit el Mestre mateix et mostrarà com es fa.
 
