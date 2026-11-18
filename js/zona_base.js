@@ -747,11 +747,13 @@ class ZonaBase extends Phaser.Scene {
             // El tronc dels pins no és al mig del dibuix (el pi, uns 8 px a l'esquerra; el pinyer, uns 34): la caixa de col·lisió s'hi ajusta, i és prou ampla per cobrir les arrels
             if (key !== 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: key === 'pi' ? { w: 62, h: 18, dx: -8 } : { w: 84, h: 18, dx: -34 } });
         }
-        if (key === 'roca') { const h = Math.abs(Math.sin(x * 7.3 + y * 31.7) * 43758.5453) % 1; key = h < 0.45 ? 'roca' : h < 0.75 ? 'roca2' : 'roca3'; }          // tres variants de roca, triades per posició
+        let giraRoca = false;
+        if (key === 'roca' || key === 'roca_mobil') giraRoca = (Math.abs(Math.sin(x * 7.3 + y * 31.7) * 43758.5453) % 1) < 0.5;          // un sol dibuix de roca: la meitat, girades (mirall), triades per posició
         const tex = this.textures.get(key);
         const escala = (tex.customData && tex.customData.escala) || 1 / RES;
         const img = this.add.image(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
         img.setDepth(opts.fonsY !== undefined ? opts.fonsY : y);
+        if (giraRoca) img.setFlipX(true);
         if (/^(arbre|xiprer|pi|pi_pinyer|roure|alzina_buida|pinassa|rovello)$/.test(key)) (this.copes = this.copes || []).push(img);   // copes que es tornen translúcides si amaguen un enemic
         if (TRONCS[key]) {          // font de la màscara del tronc (no es dibuixa: només amaga la silueta de l'Ineu quan passa darrere el tronc)
             const f = TRONCS[key], W = img.width, H = img.height;
@@ -1870,7 +1872,7 @@ class ZonaBase extends Phaser.Scene {
         const d0 = DIR[flag] || [1, 0];                                   // les partides velles només guardaven «true»: la roca era a la dreta
         const mogut = !!flag;
         const o = { id, mogut, x: x + (mogut ? d0[0] * dist : 0), y: y + (mogut ? d0[1] * dist : 0), dist, fet: 0, empenta: 0, dir: null, permet: condicio || (() => true) };       // permet: fins que no es compleix, la roca és un obstacle més (no s'empeny ni mostra cap marca)
-        o.img = this.posar('roca', o.x, o.y);
+        o.img = this.posar('roca_mobil', o.x, o.y);
         o.col = this.colisio(o.x, o.y - 13, 70, 26);
         if (!mogut) {
             // Punt d'interacció com els de parlar (la marca només surt quan ets molt a prop), però sense text: la roca es mou en tocar-la (si hi ha textPista, el diu)

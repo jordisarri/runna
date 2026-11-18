@@ -103,7 +103,7 @@ class ZonaRuines extends ZonaBase {
         const guardada = String(Estat.dades.flags.pedraRunesPos || '').split(',').map(Number);
         if (guardada.length === 2 && guardada.every(Number.isFinite)) { px = guardada[0]; py = guardada[1]; }
         else if (mogutR) { px = HX + 100; }                                          // partides velles: la pedra era a la dreta
-        this.pedraForat = this.posar('roca', px, py, { escala: 1 });
+        this.pedraForat = this.posar('roca_mobil', px, py, { escala: 1 });
         this.colPedraForat = this.colisio(px, py - 13, 80, 26);
         this.pedraEmpenta = 0; this.pedraDir = null;
         if (!Estat.flag('fragment1')) {
