@@ -663,7 +663,9 @@ const DIALEGS = {
                     { fer: (z, fet) => z.alcoviLlegeix ? z.alcoviLlegeix(fet) : z.npcVa('pare_alcovi', 812, 372, fet, 120) },
                     { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
                     { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
-                    { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." }
+                    { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." },
+                    { qui: "Pare Alcoví", text: "I una cosa més que diu el marge de la Crònica, per quan baixis a la porta de ferro de la Taverna. Qui la vulgui obrir i anar al fons ha de dur tres coses: la clau petita del vigilant, el Cant del Miracle que els ocells van perdre, i l'Empara de les sacerdotesses de l'Hostatgeria, que protegeix de l'alè de la boira." },
+                    { qui: "Pare Alcoví", text: "Les sacerdotesses són a l'Hostatgeria, i els guants del Germà Francí t'hi ajudaran. No baixis sense les tres: l'avenc no perdona." }
                 ],
                 enAcabar: () => { E.posaFlag("tombaLlegida"); E.posaObjectiu("La tomba esquerdada del Cementiri espera la llum de Runna."); }
             };

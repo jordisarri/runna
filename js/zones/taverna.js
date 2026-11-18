@@ -129,23 +129,25 @@ Object.assign(DIALEGS, {
 
     portaFerro: E => {
         if (E.flag('portaFerroOberta')) return { pagines: [] };
-        if (E.te('clau_girgoles') && !E.flag('cantMiracle')) return { pagines: [
-            { qui: 'Ineu', text: '(Tinc la clau, però allà baix només un cant em serveix: els barrots de la gàbia només escolten el Cant del Miracle. Primer l\'he d\'aprendre: la Pianista, al Santuari, me l\'ensenyarà.)' }
-        ] };
-        if (E.te('clau_girgoles') && !E.te('benedicio_fraterna')) return { pagines: [
-            { qui: 'Ineu', text: "(Pel pany surt una olor de boira que crema la gola. Abans de baixar-hi he de passar per l'Hostatgeria: les sacerdotesses guarden una Empara contra aquestes boires.)" }
-        ] };
-        if (E.te('clau_girgoles')) return { pagines: [
-            { qui: 'Ineu', text: "(Tinc Runna, el Cant del Miracle i l'Empara. Endavant.)" }
-        ] };
         if (!E.flag('clauFerro')) return { pagines: [
             { qui: 'Ineu', text: '(Aquí és d\'on surt tot. Em falta l\'espasa que la va segellar... i una clau.)' }
         ] };
-        // Sense la clau petita: l'Ineu recorda qui s'escapa de nit (l\'Iscu) i l'objectiu l'hi porta
-        return { pagines: [
+        const clau = E.te('clau_girgoles'), cant = E.flag('cantMiracle'), empara = E.te('benedicio_fraterna');
+        // Sense la clau petita: l'Ineu recorda qui s'escapa de nit (l'Iscu) i l'objectiu l'hi porta
+        if (!clau) return { pagines: [
             { qui: 'Ineu', text: '(La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Aldreu en deu tenir una altra.)' },
             { qui: 'Ineu', text: '(Algú l\'hauria d\'haver vist anar-hi de nit... L\'Iscu, el fill de la Càren! L\'Eve va dir que s\'escapa pel camí de la Desaparició, per un forat entre els arbres.)' }
         ], enAcabar: () => { E.posaFlag('portaPetitaVista'); E.posaObjectiu(PROGRES.pista(E)); } };
+        if (cant && empara) return { pagines: [
+            { qui: 'Ineu', text: "(Tinc la clau, el Cant del Miracle i l'Empara. Endavant.)" }
+        ] };
+        // Tot el que falta, d'una vegada (la clau ja la té)
+        const falta = [];
+        if (!cant) falta.push("el Cant del Miracle (la Pianista, al Santuari, me l'ensenyarà un cop tingui Runna)");
+        if (!empara) falta.push("l'Empara de les sacerdotesses de l'Hostatgeria (contra la boira que crema)");
+        return { pagines: [
+            { qui: 'Ineu', text: '(Tinc la clau petita, però per baixar encara em falta ' + falta.join(' i ') + '.)' }
+        ] };
     }
 });
 
