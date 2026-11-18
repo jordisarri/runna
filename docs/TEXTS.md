@@ -306,7 +306,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[90] Pergamí:** «Qui busqui la clau, que no oblidi mai on neix el sol.»
 
-### construir  <sub>(js/zones/esglesia.js:104)</sub>
+### construir  <sub>(js/zones/esglesia.js:105)</sub>
 
 **[91] Ineu:** La clau de la torre del rellotge encaixa al pany. La porta s'obre.
 
@@ -782,7 +782,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: encara no ha parlat amb l'Eve*
 
-**[244] Eve:** Sóc l'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, al camí de l'est del Pati del Celler, i la porta s'obre sola. A dins, diuen, n'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.
+**[244] Eve:** Sóc l'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, i la porta s'obre sola. A dins, diuen, n'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.
 
 **[245] Eve:** I l'Iscu, el fill de la Càren, fa dos dies que s'escapa pel camí de la Desaparició: diu que hi ha un forat entre els arbres «per on els grans no hi caben». Aquest no l'ha pres la boira, sinó la mandra: des que la seva mare dorm, els gots els frego jo, i ell s'esfuma. Si el trobes, digues-li que torni a sopar... i a fregar.
 
@@ -1750,7 +1750,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[546] Pilària:** Per fi! Tres nits que colpejo aquesta porta! Soc la Pilària, i no, no m'he estat quieta ni un minut.
 
-**[547] Pilària:** T'ho dic perquè ho vaig veure: el Germà Aldreu, aquell pesat que sempre anava jugant amb els nens, abans que la boira ens tanqués, anava moltes nits a la Porta de les Gírgoles, a l'est del Celler, i la porta se li obria sola, com si la boira l'obeís. Mai no li he cregut el somriure.
+**[547] Pilària:** T'ho dic perquè ho vaig veure: el Germà Aldreu, aquell pesat que sempre anava jugant amb els nens, anava moltes nits a la Porta de les Gírgoles, i la porta se li obria sola, com si la boira l'obeís. Mai no li he cregut el somriure.
 
 **[548] Pilària:** Tots aquests nens innocents segrestats per aquesta maleïda boira... Troba'ls, monjo! Salva'ls a tots!
 
@@ -1980,7 +1980,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Epíleg: després del final
 
-### ferEpileg  <sub>(js/zones/esglesia.js:285)</sub>
+### ferEpileg  <sub>(js/zones/esglesia.js:286)</sub>
 
 **[621] Les Venerables Sàvies:** Huri, no hem dubtat ni per un instant que l'Ineu et salvaria. El seu destí estava escrit a la crònica del Miracle.
 
@@ -2052,7 +2052,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[646] Ineu:** Els pastors somriuen: aquí ja ha tornat la música.
 
-### pensament a obrirPortaRellotge  <sub>(js/zones/esglesia.js:439)</sub>
+### pensament a obrirPortaRellotge  <sub>(js/zones/esglesia.js:440)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -2072,7 +2072,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[650] Ineu:** L'àngel de pedra no es belluga ni un pèl. Pesa massa: calen unes mans més fortes.
 
-### pensament a enMelodia  <sub>(js/zones/hostatgeria.js:627)</sub>
+### pensament a enMelodia  <sub>(js/zones/hostatgeria.js:628)</sub>
 
 **[651] Ineu:** La Dolora ja és desperta.
 

@@ -92,11 +92,11 @@ Object.assign(DIALEGS, {
     eve: E => {
         if (!E.flag('eveParlat')) return {
             pagines: [
-                { qui: 'Eve', text: 'Sóc l\'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T\'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, al camí de l\'est del Pati del Celler, i la porta s\'obre sola. A dins, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.' },
+                { qui: 'Eve', text: 'Sóc l\'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T\'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, i la porta s\'obre sola. A dins, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.' },
                 { qui: 'Eve', text: 'I l\'Iscu, el fill de la Càren, fa dos dies que s\'escapa pel camí de la Desaparició: diu que hi ha un forat entre els arbres «per on els grans no hi caben». Aquest no l\'ha pres la boira, sinó la mandra: des que la seva mare dorm, els gots els frego jo, i ell s\'esfuma. Si el trobes, digues-li que torni a sopar... i a fregar.' },
                 { qui: 'Eve', text: 'El Sardi, en canvi, ve cada tarda a berenar pa amb xocolata. Ahir no va venir.' },
             ],
-            enAcabar: () => { E.posaFlag('eveParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La Porta de les Gírgoles, a l\'est del Pati del Celler, duu a l\'entrada de les Gírgoles: la Clau de ferro l\'obre.' : E.dades.objectiu); }
+            enAcabar: () => { E.posaFlag('eveParlat'); E.posaObjectiu(E.flag('clauFerro') ? 'La Porta de les Gírgoles duu a l\'entrada de les Gírgoles: la Clau de ferro l\'obre.' : E.dades.objectiu); }
         };
         if (E.flag('portaPetitaVista') && !E.flag('iscuTrobat')) return { pagines: [
             { qui: 'Eve', text: 'L\'Iscu? Ja t\'ho vaig dir: surt pel camí de la Desaparició, a l\'oest de les Runes, i s\'amaga per un forat entre els arbres «per on els grans no hi caben». Si el trobes, digues-li que torni a sopar.' }

@@ -1162,7 +1162,7 @@ const DIALEGS = {
         if (!E.flag('premiPilaria')) return {
             pagines: [
                 { qui: 'Pilària', text: 'Per fi! Tres nits que colpejo aquesta porta! Soc la Pilària, i no, no m\'he estat quieta ni un minut.' },
-                { qui: 'Pilària', text: 'T\'ho dic perquè ho vaig veure: el Germà Aldreu, aquell pesat que sempre anava jugant amb els nens, abans que la boira ens tanqués, anava moltes nits a la Porta de les Gírgoles, a l\'est del Celler, i la porta se li obria sola, com si la boira l\'obeís. Mai no li he cregut el somriure.' },
+                { qui: 'Pilària', text: 'T\'ho dic perquè ho vaig veure: el Germà Aldreu, aquell pesat que sempre anava jugant amb els nens, anava moltes nits a la Porta de les Gírgoles, i la porta se li obria sola, com si la boira l\'obeís. Mai no li he cregut el somriure.' },
                 { qui: 'Pilària', text: 'Tots aquests nens innocents segrestats per aquesta maleïda boira... Troba\'ls, monjo! Salva\'ls a tots!' },
                 { qui: 'Pilària', text: 'Gràcies pel teu coratge! Que no se t\'acabin les forces!' },
                 ...(ultimaMonja('Pilaria') ? [avisPremiMonja('Pilaria')] : [])
