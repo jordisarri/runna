@@ -673,8 +673,7 @@ class ZonaBoira extends ZonaBase {
         Estat.posaFlag('boiraVerinosaOberta');
         const I = this.ineu;
         I.body.setVelocity(0);
-        // Un sorollet suau de purificació (un buf i dues notes que pugen), en lloc del soroll de mecanisme secret
-        Sfx.xiu(1.5, 0.09, 'bandpass', 700, 2600, 3); Sfx.to(660, 990, 0.5, 'sine', 0.13); Sfx.to(990, 1320, 0.7, 'sine', 0.11, 0.28);
+        Sfx.secret();
         this.cameras.main.flash(500, 255, 240, 200);
         const aura = this.add.circle(I.x, I.y - 50, 40, 0xffe8a0, 0.5).setBlendMode('ADD').setDepth(99000);
         this.tweens.add({ targets: aura, radius: 420, alpha: 0, duration: 1800, ease: 'Cubic.out', onComplete: () => aura.destroy() });
