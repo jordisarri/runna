@@ -494,7 +494,7 @@ class CambraMonja extends ZonaCasaBase {
             const cat = this.add.graphics().setDepth(-1050);                                     // estora entre els llits
             cat.fillStyle(0x8a6a3a, 1).fillRoundedRect(430, 410, 180, 120, 10).lineStyle(3, 0x5a3a1a, 1).strokeRoundedRect(438, 418, 164, 104, 8);
             this.colisio(200, 330, 80, 130); this.colisio(420, 330, 80, 130); this.colisio(620, 330, 80, 130);
-            this.dolora = this.npc('dolora', 520, 470, DIALEGS.dolora, { zoomConversa: 1.2 });
+            this.dolora = this.npc('dolora', 520, 470, DIALEGS.dolora, { escala: 0.82, zoomConversa: 1.2 });
             this.capoll = this.crearCapoll(this.dolora);
             this.dolora.setTint(0xd6c8ff);                                          // atrapada: es veu a través de la seda lila
             this.boiraCapoll = this.boira(this.capoll.x, this.capoll.y, this.capoll.rx * 1.4, this.capoll.ry * 1.2, 1.4);
@@ -550,7 +550,7 @@ class CambraMonja extends ZonaCasaBase {
                 ni.fillStyle(0xf4ecd8, 1).fillCircle(x, 16, 4.5);
                 ni.lineStyle(1.5, 0xe8c050, 0.9).strokeCircle(x, 15, 7.5);
             });
-            this.npc('carmelia', 400, 440, DIALEGS.carmelia, { zoomConversa: 1.2 });
+            this.npc('carmelia', 400, 440, DIALEGS.carmelia, { escala: 0.72, zoomConversa: 1.2 });
         }
         this.add.rectangle(A / 2, H / 2, A, H, 0x2a1a45, 0.08).setDepth(80100);
     }
