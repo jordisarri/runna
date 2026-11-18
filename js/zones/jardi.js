@@ -71,7 +71,7 @@ class ZonaJardi extends ZonaBase {
         COLS.forEach(x => {
             this.posar('columna', x, YB, { escala: ESC, col: { w: 34, h: 14 } });
             this.posar('columna', x, YF, { escala: ESC, col: { w: 34, h: 14 } });
-            [YB, YF].forEach(y => { for (let k = 0; k < 34; k++) heura(x + (rnd() - 0.5) * (k % 3 ? 30 : 38), y - 10 - k * (ALT_COL * 0.93 / 34) - rnd() * 8, 0.16 + rnd() * 0.09, 0.9 + rnd() * 0.1, y + 2, (rnd() - 0.5) * 120); });   // l'heura puja per les columnes: molta, tapant gairebé tot el fust
+            [YB, YF].forEach(y => { for (let k = 0; k < 14; k++) heura(x + (rnd() - 0.5) * (k % 3 ? 30 : 38), y - 10 - k * (ALT_COL * 0.93 / 14) - rnd() * 10, 0.16 + rnd() * 0.09, 0.45 + rnd() * 0.15, y + 2, (rnd() - 0.5) * 120); });   // l'heura puja per les columnes: no gaire, i translúcida (es veuen les pedres)
         });
         this.pergola = { x0: COLS[0], x1: COLS[COLS.length - 1], yb: YB, yf: YF, planta: PLANTA };
 
@@ -121,8 +121,11 @@ class ZonaJardi extends ZonaBase {
             this.llosa.setPosition(LX - 92, LY + 4).setRotation(-0.1);
             this.florLluna.setVisible(true);
             this.posarEntradaForat();
-            this.isilder.setPosition(LX - 74, LY + 62).ombra.setPosition(LX - 74, LY + 62);
-            this.isilder.punt.x = LX - 74; this.isilder.punt.y = LY + 52;
+            const I = this.isilder, ix = LX - 74, iy = LY + 62;
+            I.setPosition(ix, iy).setDepth(iy); I.ombra.setPosition(ix, iy);
+            if (I.col) { I.col.setPosition(ix, iy - 9); I.col.body.updateFromGameObject(); }          // el cos de col·lisió també (abans es quedava on era abans de la llosa: es podia travessar)
+            I.punt.x = ix; I.punt.y = iy - 10;
+            this.florLluna.setPosition(LX - 30, LY + 54).setScale(1.15);
         }
 
         this.cartell(1500, 860, () => ({ pagines: [{ qui: 'Cartell', text: 'L\'Hostatgeria\n→ La Taverna\n← L\'Era' }] }));
