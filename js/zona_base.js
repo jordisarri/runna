@@ -748,7 +748,12 @@ class ZonaBase extends Phaser.Scene {
             if (key !== 'arbre' && !(opts.col && opts.col.fix)) opts = Object.assign({}, opts, { col: key === 'pi' ? { w: 62, h: 18, dx: -8 } : { w: 84, h: 18, dx: -34 } });
         }
         let giraRoca = false;
-        if (key === 'roca' || key === 'roca_mobil') giraRoca = (Math.abs(Math.sin(x * 7.3 + y * 31.7) * 43758.5453) % 1) < 0.5;          // un sol dibuix de roca: la meitat, girades (mirall), triades per posició
+        if (key === 'roca' || key === 'roca_mobil') {
+            // Roques de decoració: tres dibuixos (la rodona, la de fileres i la de fileres amb molsa), triats per posició, i la meitat girats (mirall). Les mòbils no varien de dibuix.
+            const h = Math.abs(Math.sin(x * 7.3 + y * 31.7) * 43758.5453) % 1, h2 = Math.abs(Math.sin(x * 3.1 + y * 17.9) * 43758.5453) % 1;
+            if (key === 'roca') key = h < 0.4 ? 'roca' : h < 0.7 ? 'roca_mobil' : 'roca_molsa';
+            giraRoca = h2 < 0.5;
+        }
         const tex = this.textures.get(key);
         const escala = (tex.customData && tex.customData.escala) || 1 / RES;
         const img = this.add.image(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));

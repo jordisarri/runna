@@ -135,6 +135,7 @@ const CATALEG = [
     { key: 'ovella_boira',   file: null,   amplada: 76, provisional: (c, w) => dibuixarOvella(c, w, true) },
     // Les roques es dibuixen per codi (dibuixarRoca): tres variants; ZonaBase.posar en tria una per posició (l'antic PNG realista, assets/natura/roca.webp, ja no es fa servir)
     { key: 'roca',           file: 'assets/natura/roca_petita.webp', amplada: 90, cru: true },          // roca petita (decoració): un sol dibuix, girat (mirall) segons la posició perquè no siguin totes iguals
+    { key: 'roca_molsa',     file: 'assets/natura/roca_molsa.webp',  amplada: 100, cru: true },         // roca grossa amb molsa: una variant més de decoració
     { key: 'roca_mobil',     file: 'assets/natura/roca_mobil.webp',  amplada: 100, cru: true },         // roca grossa de fileres de pedra: les que s'empenyen (pedraMobil i la pedra del forat de les Runes)
     { key: 'basto_ocellaire', file: 'assets/armes/basto_ocellaire.webp', amplada: 184, cru: true },      // (art/armes/basto_ocellaire.png, sense flames: les posa el joc quan gira de pressa; la versió amb flames és basto_ocellaire_flames.png)
     { key: 'masia',          file: 'assets/edificis/masia_cirosa.webp',          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },          // la masia dels pastors de la Cirosa (art/edificis/masia_cirosa.png)
