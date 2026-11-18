@@ -387,14 +387,14 @@ ENEMICS.raim = {
 // ---------------- BASE DE LES SALES ----------------
 class ZonaCasaBase extends ZonaBase {
     // Sala amb terra de marbre, murs i una obertura de 120 al mig de la paret de sota
-    sala(amp, alt, portaX, tint = 0xcfc2b0, altParet = 160) {          // altParet: fins on arriba el mur de col·lisió de la paret del fons (per defecte 160; les cambres de l'Hostatgeria el volen més baix, perquè l'Ineu hi pugui tocar la paret)
-        this.terra('rajola', 130, 80, amp - 260, alt - 80, -1100).setTint(tint);
+    sala(amp, alt, portaX, tint = 0xcfc2b0, altParet = 160, marge = 130) {          // altParet: fins on arriba el mur de col·lisió de la paret del fons (per defecte 160; les cambres de l'Hostatgeria el volen més baix, perquè l'Ineu hi pugui tocar la paret). marge: on comencen el terra i la paret del fons (130; les cambres de l'Hostatgeria, 90: fins a on arriba l'Ineu)
+        this.terra('rajola', marge, 80, amp - 2 * marge, alt - 80, -1100).setTint(tint);
         const murs = this.add.graphics().setDepth(-1000);
-        murs.fillStyle(0x2a1f18, 1).fillRect(90, 0, 40, alt).fillRect(amp - 130, 0, 40, alt);
-        murs.fillStyle(0x3a2c22, 1).fillRect(130, 0, amp - 260, 90);
+        murs.fillStyle(0x2a1f18, 1).fillRect(marge - 40, 0, 40, alt).fillRect(amp - marge, 0, 40, alt);
+        murs.fillStyle(0x3a2c22, 1).fillRect(marge, 0, amp - 2 * marge, 90);
         this.colisio(50, alt / 2, 80, alt);
         this.colisio(amp - 50, alt / 2, 80, alt);
-        this.colisio(amp / 2, altParet / 2, amp - 260, altParet);
+        this.colisio(amp / 2, altParet / 2, amp - 2 * marge, altParet);
         this.colisio((portaX - 60) / 2, alt - 10, portaX - 60, 20);
         this.colisio((portaX + 60 + amp) / 2, alt - 10, amp - portaX - 60, 20);
         this.add.rectangle(amp / 2, alt / 2, amp, alt, 0xffd38a, 0.05).setDepth(80000);

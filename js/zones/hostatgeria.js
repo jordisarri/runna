@@ -421,22 +421,22 @@ class CambraMonja extends ZonaCasaBase {
 
     construir() {
         const A = 800, H = 620, m = this.monja;
-        this.sala(A, H, 400, m === 'dolora' ? 0x7a6a5e : m === 'carmelia' ? 0x8a7a6e : 0x8a7260, 104);          // (el mur de col·lisió de la paret del fons arriba fins a la vora visible de la paret: l'Ineu la pot tocar)
+        this.sala(A, H, 400, m === 'dolora' ? 0x7a6a5e : m === 'carmelia' ? 0x8a7a6e : 0x8a7260, 104, 90);          // (el mur de col·lisió de la paret del fons arriba fins a la vora visible de la paret: l'Ineu la pot tocar)
         this.sortida(350, H - 22, 100, 14, 'ZonaHostatgeriaInt', { dolora: 'cambra1', pilaria: 'cambra2', carmelia: 'cambra3' }[m]);
         // Paret del fons: arrebossat amb taques de calç, un sòcol de fusta i dos aplics
         const paret = this.add.graphics().setDepth(-995);
         // La paret arriba fins a la cornisa (molt per sobre de la finestra): així la finestra hi és sencera i la paret no queda tallada
         const TOP = -150;
-        paret.fillStyle(m === 'carmelia' ? 0x5a4a40 : 0x6a5646, 1).fillRect(130, TOP, A - 260, 90 - TOP);
+        paret.fillStyle(m === 'carmelia' ? 0x5a4a40 : 0x6a5646, 1).fillRect(90, TOP, A - 180, 90 - TOP);
         let sd = m.length * 7; const r = () => (sd = sd * 16807 % 2147483647) / 2147483647;
-        for (let k = 0; k < 22; k++) paret.fillStyle(0xffffff, 0.04 + r() * 0.05).fillEllipse(150 + r() * 500, TOP + 20 + r() * (70 - TOP), 30 + r() * 50, 10 + r() * 14);
-        paret.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.35, 0.35, 0, 0).fillRect(130, TOP, A - 260, 60);          // la part de dalt, a l'ombra
-        paret.fillStyle(0x3a2412, 1).fillRect(122, TOP - 6, A - 244, 22).fillStyle(0x5a3a1e, 1).fillRect(122, TOP + 12, A - 244, 5);      // cornisa de fusta
-        paret.fillStyle(0xffd9a0, 0.14).fillRect(122, TOP - 6, A - 244, 3);
-        paret.fillStyle(0x2a1f18, 1).fillRect(90, TOP - 6, 40, -TOP + 6).fillRect(A - 130, TOP - 6, 40, -TOP + 6);        // els murs laterals pugen amb la paret
-        paret.fillStyle(0x4a2e1a, 1).fillRect(130, 64, A - 260, 26);
-        paret.fillStyle(0xffd9a0, 0.18).fillRect(130, 64, A - 260, 3);
-        for (let x = 150; x < A - 130; x += 36) paret.lineStyle(1, 0x2a1a0c, 0.7).lineBetween(x, 68, x, 88);
+        for (let k = 0; k < 22; k++) paret.fillStyle(0xffffff, 0.04 + r() * 0.05).fillEllipse(110 + r() * 580, TOP + 20 + r() * (70 - TOP), 30 + r() * 50, 10 + r() * 14);
+        paret.fillGradientStyle(0x000000, 0x000000, 0x000000, 0x000000, 0.35, 0.35, 0, 0).fillRect(90, TOP, A - 180, 60);          // la part de dalt, a l'ombra
+        paret.fillStyle(0x3a2412, 1).fillRect(82, TOP - 6, A - 164, 22).fillStyle(0x5a3a1e, 1).fillRect(82, TOP + 12, A - 164, 5);      // cornisa de fusta
+        paret.fillStyle(0xffd9a0, 0.14).fillRect(82, TOP - 6, A - 164, 3);
+        paret.fillStyle(0x2a1f18, 1).fillRect(50, TOP - 6, 40, -TOP + 6).fillRect(A - 90, TOP - 6, 40, -TOP + 6);        // els murs laterals pugen amb la paret
+        paret.fillStyle(0x4a2e1a, 1).fillRect(90, 64, A - 180, 26);
+        paret.fillStyle(0xffd9a0, 0.18).fillRect(90, 64, A - 180, 3);
+        for (let x = 110; x < A - 90; x += 36) paret.lineStyle(1, 0x2a1a0c, 0.7).lineBetween(x, 68, x, 88);
         this.aplic(240, 50, 0, -990); this.aplic(560, 50, 1, -990);
         // Finestra d'arc amb llum de lluna (a la capella, un rosetó de colors)
         const fin = this.add.graphics().setDepth(-993);
@@ -498,7 +498,7 @@ class CambraMonja extends ZonaCasaBase {
             this.posar('taula_sopar', 400, 330, { col: { w: 360, h: 40 } });
             [[260, 380], [540, 380], [260, 280], [540, 280]].forEach(([x, y]) => this.posar('tamboret', x, y, { col: { w: 28, h: 12 } }));
             this.barril(130 + 40, 200, 40, 18);
-            const ap = this.add.graphics().setDepth(180);                                       // aparador contra la paret del fons, a la dreta
+            const ap = this.add.graphics().setDepth(100).setPosition(0, -80);          // aparador contra la paret del fons, a la dreta: la base (y=100) toca la base de la paret (y≈90)
             ap.fillStyle(0x000000, 0.25).fillEllipse(620, 180, 100, 14);
             ap.fillStyle(0x4a2e18, 1).fillRect(578, 40, 84, 140).lineStyle(2, 0x120c08, 1).strokeRect(578, 40, 84, 140);
             ap.fillStyle(0x2a1a0c, 1).fillRect(584, 46, 72, 70);
@@ -508,7 +508,9 @@ class CambraMonja extends ZonaCasaBase {
             });
             ap.fillStyle(0x5a3a22, 1).fillRect(584, 124, 34, 50).fillRect(622, 124, 34, 50).lineStyle(1.5, 0x120c08, 1).strokeRect(584, 124, 34, 50).strokeRect(622, 124, 34, 50);
             ap.fillStyle(0xcfb36a, 1).fillCircle(612, 150, 2.5).fillCircle(628, 150, 2.5);
-            this.colisio(620, 168, 90, 24);
+            this.colisio(620, 90, 90, 24);
+            const apOpac = this.add.rectangle(620, 100, 84, 140, 0x000000, 0).setOrigin(0.5, 1).setDepth(100);          // opac: la silueta de l'Ineu no es veu a través
+            (this.opacs = this.opacs || []).push(apOpac);
             const fa = this.add.graphics().setDepth(470);                                       // faristol amb el llibre de les lectures
             fa.fillStyle(0x000000, 0.25).fillEllipse(200, 470, 50, 10);
             fa.fillStyle(0x4a2e18, 1).fillRect(196, 410, 8, 60).fillRect(184, 466, 32, 6);
