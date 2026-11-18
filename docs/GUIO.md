@@ -5,6 +5,8 @@ Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
 
 *Revisió 615: El Cant del Miracle passa a Mi Mi Fa Sol Do (abans Mi Mi Mi Fa Sol), amb el mateix ritme; els altres cants no canvien. La fila de caselles de notes ja no surt del marc del pergamí: s'adapta a la mida de la peça.*
 
+*Revisió 615: el que el jugador veu com a «avenc» es diu ara **el pou** (sense fons) a tots els textos del joc. Les pistes de les Gírgoles ja no parlen del rastell ni dels Guants, i diuen on són els esbarzers (al final del camí de les Gírgoles).*
+
 *Revisió 614: s'aclareix a la trama de l'ombra quin és l'ordre habitual del Cant de Vespres (al sopar, abans de l'ombra) i que l'altre és una variant. Només documentació.*
 
 *Revisió 614: mides dels personatges a tot el joc: l'Ineu i les dones fan uns 133 px de cos visible, els homes una mica més (142), els nens uns 100 (els tres de dibuix assegut —Senyor Buidor, Galf i Pianista— no s'han tocat) (l'Uri 94, el Julius 112, l'Iscu 106, la Nena 98), la Dolora (a la cadira) 125 i el Pare Xèvius, alt i prim, 155. El Follet del Carro Verd, el Pallofa, el Til·ler i els enemics no s'han tocat. A l'epíleg, les alçades són les mateixes (`fixaAlcada`).*
@@ -332,7 +334,7 @@ Vertical: 720 d'ample fix i alçada que s'adapta a la proporció de la pantalla 
   - **Sala de les Gírgoles:** cova fosca i humida (cal la llum de l'Ineu; la Llanterna l'eixampla), amb bassals on cauen gotes, prestatges de troncs plens de gírgoles, sacs i espores que suren. **Puzle:** cinc mates de gírgoles lluminoses en rotllana; en tocar-ne una, canvien ella i les dues veïnes. Quan brillen totes cinc, la cortina de micel·li del túnel del nord es desfà i la cova s'il·lumina. Una inscripció dels monjos ho explica.
   - **Passadís de tortura:** corredor llarg amb torxes, arcs, una roda, eines i **gàbies vives** que pengen del sostre. **Puzles:** un **rastell** rovellat que només s'aixeca girant el torn amb els **Guants de Poder**, i un mur d'**esbarzers negres** que només talla **Runna**.
   - **Galeria de la boira:** entre el passadís de tortura i la Sala de la Gàbia; una boira verda i lila que crema barra el camí. Sense l'**Empara Fraternal** l'Ineu tus i es fa enrere; amb ella, la benedicció s'encén al seu voltant i la boira s'esvaeix per sempre.
-  - **Sala de la Gàbia:** una cova alta amb columnes; al mig, una plataforma sobre un **avenc** sense fons amb la **gàbia gegant**, tres capolls de boira amb l'Huri, el Fram i el Sardi, i ocells de boira volant. **Puzles:** al marge de l'avenc, el **Cant de Vespres** aixeca els blocs del fons i fa un **pont**; davant dels barrots, el **Cant del Miracle** (un cop vençut l'Ocellaire) aixeca la gàbia.
+  - **Sala de la Gàbia:** una cova alta amb columnes; al mig, una plataforma sobre un **pou** sense fons amb la **gàbia gegant**, tres capolls de boira amb l'Huri, el Fram i el Sardi, i ocells de boira volant. **Puzles:** al marge de l'pou, el **Cant de Vespres** aixeca els blocs del fons i fa un **pont**; davant dels barrots, el **Cant del Miracle** (un cop vençut l'Ocellaire) aixeca la gàbia.
 
 **Mapa del joc (Diari de l'Ineu):** només els escenaris exteriors (cada lloc interior compta com l'exterior on s'entra: Rebedor i Biblioteca = Monestir). Es dibuixen les visitades (flag `visitada_<zona>`) i, amb un ?, les veïnes encara per explorar.
 

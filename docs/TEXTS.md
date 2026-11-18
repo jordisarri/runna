@@ -1762,7 +1762,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[552] Carmèlia:** Benvingut, fill de Déu. Sóc la Carmèlia, la gran sacerdotessa d'aquesta casa. Havíem perdut l'esperança, però no la pregària.
 
-**[553] Carmèlia:** Els infants d'aquesta terra han estat arrossegats a la foscor d'un avenc profund. La nit que la boira ens va tancar a les cambres, els seus llits van quedar buits. Salva'ls, fill: porta a casa tots els nens segrestats.
+**[553] Carmèlia:** Els infants d'aquesta terra han estat arrossegats a la foscor d'un pou sense fons. La nit que la boira ens va tancar a les cambres, els seus llits van quedar buits. Salva'ls, fill: porta a casa tots els nens segrestats.
 
 *Si: encara no ha rebut el premi de la Carmèlia ; sap el Cant del Miracle*
 
