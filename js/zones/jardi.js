@@ -267,21 +267,20 @@ class ZonaJardi extends ZonaBase {
         const cam = this.cameras.main, I = this.isilder, { x: LX, y: LY } = this.llosaPos;
         this.tweens.killTweensOf(I);
         const espera = ms => new Promise(res => this.time.delayedCall(ms, res));
-        const mou = (dest, ms) => new Promise(res => {
-            const balanceig = this.tweens.add({ targets: I, angle: { from: -4, to: 4 }, yoyo: true, repeat: -1, duration: 260 });
-            this.tweens.add({
-                targets: [I, I.ombra], ...dest, duration: ms, ease: 'Sine.easeInOut',
-                onUpdate: () => { I.setDepth(I.y); I.punt.x = I.x; I.punt.y = I.y - 10; },
-                onComplete: () => { balanceig.stop(); I.setAngle(0); res(); }
-            });
-        });
+        // L'Isílder camina de debò (amb la seva animació de caminar i girant-se cap on va), a una velocitat que li fa tardar ms
+        const mou = (dest, ms) => new Promise(res => this.npcVa('isilder', dest.x, dest.y, res, Phaser.Math.Distance.Between(I.x, I.y, dest.x, dest.y) / ms * 1000));
         const pols = (x, y, tints, n = 8) => { const p = this.add.particles(x, y, 'espurna', { speed: { min: 20, max: 70 }, angle: { min: 200, max: 340 }, lifespan: 600, scale: { start: 0.35, end: 0 }, tint: tints, quantity: n, emitting: false }).setDepth(99000); p.explode(n); this.time.delayedCall(800, () => p.destroy()); };
-        const FX = LX - 66, FY = LY + 22;                                  // on creix la flor
+        let halo = null;
+        const FX = LX - 30, FY = LY + 50;                                  // on creix la flor
         (async () => {
-            cam.stopFollow(); cam.pan(LX - 30, LY + 110, 700, 'Sine.easeInOut');
-            await espera(750);
+            // Càmera ampla i fixa, que ho deixa tot a la vista (la flor, la llosa i el camí de l'Isílder), sense el zoom de conversa que ho feia molt gran i ho tapava
+            this.enquadrar(560, 610, 1.1, 900, null, 0);
+            await espera(950);
+            // L'Ineu se separa de la flor i de la llosa (si no, es posa al davant de l'Isílder i de la flor) i mira l'escena
+            await new Promise(res => this.ineuVa(LX - 140, 880, res, 200));
+            this.posarDireccio('amunt', false);
             await mou({ x: LX, y: 780 }, 1300);                            // surt per l'obertura de la pèrgola
-            await mou({ x: FX + 46, y: FY + 40 }, 1100);                   // fins al lloc de la flor
+            await mou({ x: FX + 48, y: FY + 80 }, 1100);                   // fins al lloc de la flor (a la dreta i una mica avall, perquè no tapi ni la flor ni la llosa; a l'esquerra la flor quedaria darrere l'heura)
             // 1. La llavor surt de la mà de l'Isílder i cau a terra
             const icona = iconaObjecte(this, 'llavorLluna');
             const llavor = icona ? this.add.image(I.x - 12, I.y - 70, icona).setScale(0.28).setDepth(99000) : this.add.circle(I.x - 12, I.y - 70, 6, 0xe8e4f8, 1).setDepth(99000);
@@ -297,11 +296,13 @@ class ZonaJardi extends ZonaBase {
             } });
             await espera(1000);
             this.florLluna.setVisible(true).setScale(0.04).setPosition(FX, FY + 4).setAlpha(1);          // la flor s'obre
-            this.tweens.add({ targets: this.florLluna, scale: 0.8, duration: 1300, ease: 'Back.easeOut' });
+            this.tweens.add({ targets: this.florLluna, scale: 1.15, duration: 1300, ease: 'Back.easeOut' });
+            halo = this.add.circle(FX, FY - 8, 46, 0xcfe4ff, 0.3).setBlendMode(Phaser.BlendModes.ADD).setDepth(FY + 3);          // un halo pàl·lid: la flor es veu bé
+            this.tweens.add({ targets: halo, scale: 1.25, alpha: 0.15, yoyo: true, repeat: -1, duration: 700, ease: 'Sine.easeInOut' });
             Sfx.xiu(1.2, 0.1, 'bandpass', 900, 2200, 3); Sfx.to(880, 1320, 0.5, 'sine', 0.12);
             // 3. La llum de la lluna baixa del cel fins a la flor (una columna pàl·lida, amb borrissol de llum)
-            const raig = this.add.rectangle(FX, FY - 150, 90, 340, 0xcfe4ff, 0).setBlendMode(Phaser.BlendModes.ADD).setDepth(FY + 30);
-            this.tweens.add({ targets: raig, fillAlpha: 0.2, duration: 900, yoyo: false });
+            const raig = this.add.rectangle(FX, FY - 150, 64, 340, 0xcfe4ff, 0).setBlendMode(Phaser.BlendModes.ADD).setDepth(FY + 30);
+            this.tweens.add({ targets: raig, fillAlpha: 0.13, duration: 900, yoyo: false });
             const llum = this.add.particles(FX, FY - 10, 'espurna', { x: { min: -34, max: 34 }, speedY: { min: -70, max: -20 }, lifespan: 1700, scale: { start: 0.45, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xbfe8ff, 0xffffff, 0xe0d0ff], frequency: 60, blendMode: 'ADD' }).setDepth(FY + 31);
             await espera(1800);
             // 4. Sobre la llosa s'encén un cercle de runes; tot tremola
@@ -316,12 +317,12 @@ class ZonaJardi extends ZonaBase {
             // 5. La llosa s'alça una mica i llisca cap a l'esquerra, i deixa veure l'escala
             this.tweens.add({ targets: this.llosa, scale: this.llosa.scale * 1.05, duration: 350, yoyo: true });
             await espera(380);
-            await mou({ x: FX + 40, y: FY + 70 }, 500);
+            await mou({ x: FX + 48, y: FY + 84 }, 500);
             this.tweens.add({ targets: this.llosa, x: LX - 92, y: LY + 4, rotation: -0.1, duration: 1500, ease: 'Cubic.easeInOut' });
             cam.shake(500, 0.004); pols(LX - 20, LY, [0xa89878, 0x8a8478], 10);
             this.tweens.add({ targets: cercle, alpha: 0, duration: 1200 });
             await espera(1800);
-            raig.destroy(); llum.stop(); this.time.delayedCall(1700, () => llum.destroy());
+            raig.destroy(); if (halo) halo.destroy(); llum.stop(); this.time.delayedCall(1700, () => llum.destroy());
             await mou({ x: LX - 74, y: LY + 62 }, 700);                     // s'aparta cap a l'esquerra (a la dreta hi ha la paret de la casa)
             Estat.posaFlag('llosaOberta');
             this.posarEntradaForat();
@@ -329,9 +330,7 @@ class ZonaJardi extends ZonaBase {
             tija.destroy();
             Estat.posaObjectiu("La llosa del jardí s'ha obert i deixa veure una escala cap al soterrani de l'Hostatgeria.");
             Estat.desar();
-            cam.pan(this.ineu.x, this.ineu.y, 700, 'Sine.easeInOut');
-            await espera(750);
-            cam.startFollow(this.ineu, false, 0.12, 0.12);
+            await new Promise(res => this.alliberarCamera(800, res));
             this.obrintLlosa = false;
             if (fet) fet();
         })();
