@@ -148,7 +148,7 @@
 
 - [ ] `pare_xevius` (sprite `assets/personatges/pare_xevius.webp` i retrat `assets/retrats/pare_xevius.webp`; ara hi ha un dibuix provisional per codi)
 
-  *Prompt (anglès):* Full-body character sprite, front view, standing, transparent background. An extremely tall and very, very thin elderly monk, about eighty years old, slightly stooped. Long narrow face with prominent cheekbones, big prominent nose, thick white eyebrows, small thin-framed round glasses, calm but wary, once-bitten expression. Thin, fine, messy white hair. He wears a white monk's habit with a scapular and, over it, a pale cream liturgical chasuble of gold brocade with a vertical embroidered red-and-gold stripe down the middle, and a white collar and hood. He holds a folded sheet of paper in his hands, as if reading it. Dark fairy-tale storybook illustration style, painterly, soft outlines, warm muted colors.
+  *Prompt (anglès):* Full-body chibi character sprite, front view, standing, transparent background. An elderly monk drawn as a cute chibi: big head and small body, but still clearly the tallest and thinnest of all, with a long narrow face, high cheekbones, a big prominent nose, thick white eyebrows, small thin-framed round glasses, thin messy white hair, a calm but wary, once-bitten expression. He wears a white monk's habit with a white hood and collar and, over it, a pale cream liturgical chasuble with a vertical red-and-gold stripe down the middle, and brown sandals. He holds a small old brass oil lantern with a warm glowing flame in one hand, the other hand resting on his chest. Clean cartoon outlines, flat soft colors, cheerful fairy-tale game art.
 
 - [x] `pare_jorda`
 
