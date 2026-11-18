@@ -2,7 +2,7 @@
  * DIARI DE L'INEU: s'obre amb el medalló del sarró (o I; M obre directament el mapa).
  * Quatre pestanyes:
  *   Missió     l'objectiu, el progrés de cada acte, els nens rescatats i els cants apresos (amb les notes)
- *   Encàrrecs  què toca ara (pas principal de js/progres.js) i què t'han demanat (missions laterals obertes)
+ *   Precs      què toca ara (pas principal de js/progres.js) i què t'han demanat (missions laterals obertes)
  *   Sarró      els objectes que portes
  *   Mapa       mapa del Santuari: on ets, on és l'objectiu, encàrrecs i camins per explorar
  * Les dades surten de PROGRES (progres.js), MAPA (mapa.js), MELODIES (musica.js) i CATALEG_OBJECTES (ui.js).
@@ -49,7 +49,7 @@ const DIARI_ACTES = [
     { nom: 'Acte 2 · El Til·ler i el Saber', des: 'font' },
     { nom: 'Acte 3 · La Sala de la Gàbia', des: 'segell' }
 ];
-const DIARI_PESTANYES = [['missio', 'Missió'], ['encarrecs', 'Encàrrecs'], ['sarro', 'Sarró'], ['cants', 'Cants'], ['mapa', 'Mapa']];
+const DIARI_PESTANYES = [['missio', 'Missió'], ['encarrecs', 'Precs'], ['sarro', 'Sarró'], ['cants', 'Cants'], ['mapa', 'Mapa']];
 
 const TINTA = '#3a2412', TINTA_SUAU = '#6a4a2a', VERMELL = '#8a2a14';
 
