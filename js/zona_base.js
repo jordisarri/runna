@@ -2188,7 +2188,12 @@ class ZonaBase extends Phaser.Scene {
     // copiaven la posició d'abans i anaven sempre un fotograma enrere, i en caminar es veia l'Ineu amb la cara doble, tremolosa i borrosa
     postFisica() {
         // L'ombra de l'Ineu sempre als seus peus, passi el que passi (diàlegs, objectes alçats, canvis de dibuix...): s'actualitza a cada fotograma, també quan l'escena no processa el moviment
-        if (this.ombraIneu && this.ineu && this.ineu.active && this.ineu.body && !this.ombraIneuFixa) this.ombraIneu.setPosition(this.ineu.x, this.ineu.y);
+        if (this.ombraIneu && this.ineu && this.ineu.active && this.ineu.body && !this.ombraIneuFixa) {
+            // L'ombra va sota els peus de veritat (a l'idle i als atacs els peus no són sempre al punt d'ancoratge del sprite: vegeu eines/fer_sombra_ineu.py)
+            const I = this.ineu, t = typeof SOMBRA_INEU !== 'undefined' && SOMBRA_INEU[I.texture.key], f = t && t[parseInt(I.frame.name, 10)];
+            if (f) { const k = I.scaleX; this.ombraIneu.setPosition(I.x + f[0] * k, I.y + Math.max(-6, Math.min(30, f[1] * k))); }
+            else this.ombraIneu.setPosition(I.x, I.y);
+        }
         this.sincroFantasma();
         this.transparenciaCopes();
         // Dins d'una porta de façana (entre el llindar i el fons) l'Ineu va a mig pas: entrar-hi es veu i no s'esvaeix d'un salt
