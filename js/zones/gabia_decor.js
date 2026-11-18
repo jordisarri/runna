@@ -244,7 +244,9 @@ Object.assign(ZonaGabia.prototype, {
             const c = this.posar('corb_columna', x, y, {});
             c.setFlipX(sd < 0);
             // L'ull (a 36,2% de l'ample i 3,9% de l'alçada del dibuix) s'encén amb una llum lila que batega
-            const u = this.add.circle(x - sd * 12.5, y - 282, 4, 0xd8a8ff, 0.9).setBlendMode('ADD').setDepth(90001);
+            // (la posició surt del píxel de l'ull al dibuix, 65,24 de 184x602, i de la mida real del sprite; girat, l'ull és a l'altra banda)
+            const fx = sd < 0 ? 1 - 65 / 184 : 65 / 184, ux = c.x - c.displayWidth / 2 + c.displayWidth * fx, uy = c.y - c.displayHeight + c.displayHeight * (24 / 602);
+            const u = this.add.circle(ux, uy, 3.2, 0xd8a8ff, 0.95).setBlendMode('ADD').setDepth(90001);
             this.tweens.add({ targets: u, alpha: 0.35, yoyo: true, repeat: -1, duration: 1100 });
             this.colisio(x, y - 10, 70, 24);
         });
