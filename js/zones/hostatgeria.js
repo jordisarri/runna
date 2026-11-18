@@ -220,7 +220,7 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         this.colisio(50, H / 2, 80, H);
         this.colisio(A - 50, H / 2, 80, H);
         // Paret del fons, amb un forat de 90 a cada porta
-        [[130, 255], [345, 555], [645, 855], [945, 1070]].forEach(([a, b]) => this.colisio((a + b) / 2, 85, b - a, 170));
+        [[130, 255], [345, 555], [645, 855], [945, 1070]].forEach(([a, b]) => this.colisio((a + b) / 2, 62, b - a, 124));          // (fins a la vora de baix visible de la paret: l'Ineu la pot tocar)
         // Paret de baix: forat de l'escala del soterrani (140-260, al racó) i de la porta de l'Hostatgeria (540-660)
         [[0, 140], [260, 540], [660, A]].forEach(([a, b]) => this.colisio((a + b) / 2, H - 10, b - a, 20));
 
@@ -232,7 +232,8 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
             this.portaAnimada({ x, top: 22, bottom: 124, ample: 84, arc: true, fons: -987, color: fustes[i][0], panell: fustes[i][1], vora: 0x1a0e06, ferro: true, bloq: blocs[i] });
             this.marcPorta(x);
             this.colisio(x, 50, 90, 100);                                        // dintell sobre cada porta
-            this.sortida(x - 34, 110, 68, 30, ['ZonaCambraDolora', 'ZonaCambraPilaria', 'ZonaCambraCarmelia'][i], 'porta');
+            const sd = this.sortida(x - 34, 110, 68, 30, ['ZonaCambraDolora', 'ZonaCambraPilaria', 'ZonaCambraCarmelia'][i], 'porta');
+            if (i === 1) sd.bloqueada = () => !Estat.flag('refetorObert');          // la del mig no serveix fins que l'escultura és al seu lloc (la porta tampoc no s'obre)
         });
         this.decorarVestibul(A, H);
 
@@ -240,12 +241,12 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         // just el necessari per deixar la porta lliure (sense arribar a les altres dues). Un cop empès, es queda al costat on l'han deixat.
         this.estatua = null; this.colEstatua = []; this.empentaMs = 0; this.pistaEstatua = 0; this.dirEstatua = 0; this.fetEstatua = 0;
         if (!Estat.flag('refetorObert')) {
-            this.estatua = this.crearEstatua(600, 160);          // quasi tocant la porta (a y=110-140)
+            this.estatua = this.crearEstatua(600, 150);          // quasi tocant la porta (a y=110-140)
             // Un cos sota els peus i un tros de paret al darrere: ni es pot vorejar per darrere ni passar entre l'àngel i la porta
-            this.colEstatua = [this.colisio(600, 146, 58, 40), this.colisio(600, 130, 250, 60)];          // el segon, un mur ample entre l'àngel i la porta: no es pot vorejar per darrere ni entrar a la porta de costat
+            this.colEstatua = [this.colisio(600, 136, 60, 40)];          // el cos de l'escultura, que ocupa el buit de la porta (de la paret a la paret, tret de cada costat només hi passa aire)
         } else {
-            const e = this.crearEstatua(Estat.flag('estatuaEsquerra') ? ESTATUA_X_ESQ : ESTATUA_X_DRE, 160);       // ja empès: es queda al costat
-            this.colisio(e.x, 146, 58, 40);
+            const e = this.crearEstatua(Estat.flag('estatuaEsquerra') ? ESTATUA_X_ESQ : ESTATUA_X_DRE, 150);       // ja empès: es queda al costat
+            this.colisio(e.x, 136, 60, 40);
         }
         // Bloqueig de la capella (porta de la dreta): dues mates d'esbarzers negres, i un mur invisible al darrere perquè no es pugui vorejar
         this.esbarzer(880, 215, 'host_cap1'); this.esbarzer(924, 215, 'host_cap2');
@@ -370,7 +371,7 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         const E = this.estatua;
         if (!E || Estat.flag('refetorObert')) return;
         const ui = this.ui(), c = this.cursors, t = this.tecles, I = this.ineu;
-        const dx = I.x - E.x, vora = Math.abs(dx) > 40 && Math.abs(dx) < 100 && Math.abs(I.y - 146) < 56;       // al costat (a l'alçada de la peanya)
+        const dx = I.x - E.x, vora = Math.abs(dx) > 40 && Math.abs(dx) < 100 && Math.abs(I.y - 136) < 56;       // al costat (a l'alçada de la peanya)
         // Com les pedres mòbils de Sant Joan: només s'empeny caminant-hi contra des d'un costat (esquerra o dreta), sense cap punt interactiu ni acció automàtica; l'àngel
         // es desplaça a poc a poc mentre l'Ineu fa força i s'atura si deixa de fer-ne. Sense els Guants de Poder no es belluga (l'Ineu diu que li cal ser més fort).
         // Generós amb la direcció: compta cap a on VOL anar el jugador, n'hi ha prou amb ~30% cap a l'àngel (també en diagonal i amb el joystick) i mentre
@@ -397,13 +398,12 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         const dist = ESTATUA_X_DRE - 600, pas = Math.min(dist - (this.fetEstatua || 0), 75 * delta / 1000);
         this.fetEstatua = (this.fetEstatua || 0) + pas;
         E.x += dir * pas;
-        this.colEstatua[0].setPosition(E.x, 146); this.colEstatua[0].body.updateFromGameObject();
+        this.colEstatua[0].setPosition(E.x, 136); this.colEstatua[0].body.updateFromGameObject();
         if (this.time.now > (this.proxSoEstatua || 0)) { this.proxSoEstatua = this.time.now + 260; Sfx.pas(true); this.cameras.main.shake(80, 0.0015); }
         if (this.fetEstatua < dist - 0.5) return;
         // Al seu lloc: el pas queda lliure (es treu el tros de paret del darrere) i l'àngel es queda aquí per sempre
         Estat.posaFlag('refetorObert');
         if (dir < 0) Estat.posaFlag('estatuaEsquerra');
-        this.obstacles.remove(this.colEstatua[1], true, true);
         this.colEstatua = [];
         this.estatua = null;
         Sfx.secret();

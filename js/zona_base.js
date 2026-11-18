@@ -2963,6 +2963,7 @@ class ZonaBase extends Phaser.Scene {
                                    : (c.y >= s.r.y + my && c.y <= s.r.bottom - my);
             if (s.peu ? s.r.contains(b.center.x, b.bottom) : (centrat && Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r))) {
                 if (s.pendentLlum) continue;                             // encara tancada: no és una sortida (sense llum; es camina contra el marge)
+                if (s.bloqueada && s.bloqueada()) continue;              // (una sortida amb una condició: p. ex. la porta del refetor, tapada per l'escultura fins que s'ha acabat d'empènyer)
                 if (s.baixar !== undefined) this.baixarEscala(s);
                 else this.canviarZona(s.desti, s.entrada, dir);
                 return;
