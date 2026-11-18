@@ -664,8 +664,10 @@ const DIALEGS = {
                     { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
                     { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
                     { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill." },
-                    { qui: "Pare Alcoví", text: "I una cosa més que diu el marge de la Crònica, per quan baixis a la porta de ferro de la Taverna. Qui la vulgui obrir i anar al fons ha de dur tres coses: la clau petita del vigilant, el Cant del Miracle que els ocells van perdre, i l'Empara de les sacerdotesses de l'Hostatgeria, que protegeix de l'alè de la boira." },
-                    { qui: "Pare Alcoví", text: "Les sacerdotesses són a l'Hostatgeria, i els guants del Germà Francí t'hi ajudaran. No baixis sense les tres: l'avenc no perdona." }
+                    { qui: "Pare Alcoví", text: "I una cosa més que diu el marge de la Crònica, per quan baixis a la porta de ferro de la Taverna. Per obrir-la calen tres coses: la clau petita del vigilant, el Cant del Miracle que els ocells van perdre, i l'Empara de les sacerdotesses de l'Hostatgeria, que protegeix de l'alè de la boira. Les sacerdotesses són a l'Hostatgeria; els guants del Germà Francí t'hi ajudaran." },
+                    { qui: "Pare Alcoví", text: "I a dins, abans de la gàbia, hi ha dues proves. La primera és la Sala de les Gírgoles: cinc mates lluminoses que només s'encenen totes alhora si trobes l'ordre just, perquè cada una desperta les veïnes. No hi cal res més que el seny." },
+                    { qui: "Pare Alcoví", text: "La segona és el passadís de tortura: un rastell rovellat que només els Guants de Poder fan pujar, i al fons un mur d'esbarzers negres que només Runna talla. Després hi ha la boira verinosa, que només l'Empara travessa, i un avenc amb un pont de blocs que dormen: els desperta el cant que les pedres entenen, el de Vespres." },
+                    { qui: "Pare Alcoví", text: "Al capdavall hi ha la gàbia, i els seus barrots només escolten el Cant del Miracle. Vés-hi ben preparat, fill: dins no hi ha camí de tornada fàcil." }
                 ],
                 enAcabar: () => { E.posaFlag("tombaLlegida"); E.posaObjectiu("La tomba esquerdada del Cementiri espera la llum de Runna."); }
             };
