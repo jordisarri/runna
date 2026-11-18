@@ -190,7 +190,7 @@ class ZonaEsglesia extends ZonaBase {
          ['carry', ...seient(0, -1, 0), AD], ['pare_alcovi', ...seient(0, -1, 1), AD], ['venerables', ...seient(0, -1, 2), AD],
          ['isilder', ...seient(0, 1, 0), AD], ['carmelia', ...seient(0, 1, 1), AD], ['pilaria', ...seient(0, 1, 2), AD],
          ['meus', ...seient(1, -1, 0), AD], ['molner', ...seient(1, -1, 1), AD], ['mandu', ...seient(1, -1, 2), NEN],
-         ['dolora', ...seient(1, 1, 0), AD], ['eve', ...seient(1, 1, 1), AD], ['iscu', ...seient(1, 1, 2), AD],
+         ['dolora', ...seient(1, 1, 0), AD], ['eve', ...seient(1, 1, 1), AD], ['iscu', ...seient(1, 1, 2), NEN],
          ['pomers', ...seient(2, -1, 0), AD], ['jusef', ...seient(2, -1, 1), AD], ['germa_franci', ...seient(2, -1, 2), AD],
          ['joaneta', ...seient(2, 1, 0), AD], ['galf', ...seient(2, 1, 1), AD]
         ].forEach(([k, x, y, h]) => {
