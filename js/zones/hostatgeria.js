@@ -164,7 +164,7 @@ class ZonaSoterraniHost extends ZonaBase {
 //   dreta (capella, la Carmèlia): esbarzers negres → Runna
 // En alliberar les tres, obren la porta de l'Hostatgeria per dins (al vestíbul apareix un cofre amb l'Empara Fraternal).
 // On queda l'àngel de pedra un cop empès: justament fora de la porta del mig (que s'obre a 560-640) i lluny de les altres dues (a 300 i 900)
-const ESTATUA_X_ESQ = 500, ESTATUA_X_DRE = 700;
+const ESTATUA_X_ESQ = 520, ESTATUA_X_DRE = 680;
 class ZonaHostatgeriaInt extends ZonaCasaBase {
     constructor() {
         super('ZonaHostatgeriaInt', {
@@ -236,10 +236,10 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         if (!Estat.flag('refetorObert')) {
             this.estatua = this.crearEstatua(600, 200);          // quasi tocant la porta (a y=110-140)
             // Un cos sota els peus i un tros de paret al darrere: ni es pot vorejar per darrere ni passar entre l'àngel i la porta
-            this.colEstatua = [this.colisio(600, 186, 76, 40), this.colisio(600, 142, 250, 70)];          // el segon, un mur ample entre l'àngel i la porta: no es pot vorejar per darrere ni entrar a la porta de costat
+            this.colEstatua = [this.colisio(600, 186, 58, 40), this.colisio(600, 142, 250, 70)];          // el segon, un mur ample entre l'àngel i la porta: no es pot vorejar per darrere ni entrar a la porta de costat
         } else {
             const e = this.crearEstatua(Estat.flag('estatuaEsquerra') ? ESTATUA_X_ESQ : ESTATUA_X_DRE, 200);       // ja empès: es queda al costat
-            this.colisio(e.x, 186, 76, 40);
+            this.colisio(e.x, 186, 58, 40);
         }
         // Bloqueig de la capella (porta de la dreta): dues mates d'esbarzers negres, i un mur invisible al darrere perquè no es pugui vorejar
         this.esbarzer(880, 215, 'host_cap1'); this.esbarzer(924, 215, 'host_cap2');
@@ -353,7 +353,9 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
 
     // L'escultura de pedra (un mussol sobre una peanya de dos graons, amb molsa i esquerdes): (x, y) són els peus. El dibuix antic de l'àngel ja no es fa servir.
     crearEstatua(x, y) {
-        return this.add.image(x, y + 6, 'estatua_mussol').setOrigin(0.5, 1).setDepth(y);
+        const img = this.add.image(x, y + 6, 'estatua_mussol').setOrigin(0.5, 1).setDepth(y);
+        (this.opacs = this.opacs || []).push(img);          // opac: la silueta de l'Ineu no es veu a través quan passa darrere
+        return img;
     }
 
     // L'Ineu empeny l'àngel si és a un costat, a prop, i avança contra ell (no cal cap punt exacte: qualsevol lloc del seu lateral serveix)
