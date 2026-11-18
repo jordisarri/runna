@@ -191,6 +191,11 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         // Paret del fons: pedra a dalt, sòcol de fusta a baix, finestres d'arc amb llum de lluna entre les portes i tapissos
         murs.fillStyle(0x5a4a3a, 1).fillRect(130, 0, A - 260, 120);
         for (let f = 0; f < 3; f++) for (let x = 130 + (f % 2) * 30; x < A - 130; x += 60) murs.fillStyle([0x655342, 0x5e4c3c, 0x6a5846][(x / 60 + f) % 3 | 0], 1).fillRect(x + 1, f * 26 + 1, 58, 24);
+        // La paret es fa més alta per dalt (fins a y=-90, on arriba la càmera: margeDalt): així les finestres no sobresurten per la vora de la paret
+        murs.fillStyle(0x2a1f18, 1).fillRect(90, -90, 40, 90).fillRect(A - 130, -90, 40, 90);
+        murs.fillStyle(0x5a4a3a, 1).fillRect(130, -90, A - 260, 90);
+        for (let f = -4; f < 0; f++) for (let x = 130 + ((f + 4) % 2) * 30; x < A - 130; x += 60) murs.fillStyle([0x655342, 0x5e4c3c, 0x6a5846][(x / 60 + f + 4) % 3 | 0], 1).fillRect(x + 1, f * 26 + 14, 58, 24);
+        murs.fillStyle(0x3a2412, 1).fillRect(130, -90, A - 260, 10).fillStyle(0x000000, 0.28).fillRect(130, -80, A - 260, 6);          // biga de fusta al capdamunt, amb ombra
         murs.fillStyle(0x4a2e1a, 1).fillRect(130, 78, A - 260, 42);
         murs.lineStyle(2, 0x2a1a0c, 1).lineBetween(130, 78, A - 130, 78);
         for (let x = 150; x < A - 130; x += 40) murs.lineStyle(1, 0x2a1a0c, 0.8).lineBetween(x, 84, x, 116);
