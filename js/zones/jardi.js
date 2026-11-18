@@ -48,8 +48,8 @@ class ZonaJardi extends ZonaBase {
         const tex = this.textures.get('columna'), escalaBase = (tex.customData && tex.customData.escala) || 1 / RES;
         const colH = tex.getSourceImage().height * escalaBase;            // alçada d'una columna sense escalar
         const ESC = 1.4, ALT_COL = Math.round(colH * ESC), COL_W = Math.round(tex.getSourceImage().width * escalaBase * ESC);
-        // Bigues de dues files de fulles d'heura (fixes, sense moviment) que uneixen les columnes pel capdamunt fins a tocar les del sud:
-        // una biga al llarg de cada fila de columnes i una de travessera a cada columna, entre la fila del darrere i la del davant
+        // L'heura només baixa per les columnes (ja no hi ha bigues d'heura pel capdamunt: tapaven l'Isílder i l'Ineu quan hi passaven per sota).
+        // (La funció biga() es deixa per si cal tornar-hi.)
         const heura = (x, y, esc, alfa, prof, ang) => {
             if (Math.hypot(x - 290, (y - 430) * 1.25) < 195 && y < 545) prof = 638;   // sota la capçada de la Prunera però per damunt de les columnes del nord
             const l = this.add.image(x, y, 'fulla_heura').setScale(esc).setAlpha(alfa).setDepth(prof).setAngle(ang);
@@ -68,9 +68,6 @@ class ZonaJardi extends ZonaBase {
                 });
             }
         };
-        biga(COLS[0], yTopB, COLS[COLS.length - 1], yTopB);                         // la biga de la fila del darrere
-        biga(COLS[0], yTopF, COLS[COLS.length - 1], yTopF);                         // la biga de la fila del davant (sobre els capitells del sud)
-        COLS.forEach(x => biga(x, yTopB, x, yTopF));                                // una de travessera a cada columna, de nord a sud
         COLS.forEach(x => {
             this.posar('columna', x, YB, { escala: ESC, col: { w: 34, h: 14 } });
             this.posar('columna', x, YF, { escala: ESC, col: { w: 34, h: 14 } });
