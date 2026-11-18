@@ -869,7 +869,7 @@
    {
     "id": 117,
     "qui": "Cartell",
-    "text": "← El Monestir i la Plaça",
+    "text": "← El Monestir i la Plaça\n↓ El Bosc del Pi dels Tres Cants",
     "fitxer": "js/zones/nord.js",
     "linia": 816
    },
@@ -3634,7 +3634,7 @@
     "qui": "Ineu",
     "text": "El mecanisme és al bastidor de fusta de l'esquerra: tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran.",
     "fitxer": "js/zones/casa.js",
-    "linia": 1562
+    "linia": 1563
    }
   ],
   "zones/casa::golfesNota": [
@@ -3643,7 +3643,7 @@
     "qui": "Ineu",
     "text": "«Nota del rellotger. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el mitjà al mig, i el gran darrere.»",
     "fitxer": "js/zones/casa.js",
-    "linia": 1566
+    "linia": 1567
    }
   ],
   "zones/casa::golfesReparat": [
@@ -3652,7 +3652,7 @@
     "qui": "Ineu",
     "text": "(Torna a caminar! Ara se sentirà per tot el poble.)",
     "fitxer": "js/zones/casa.js",
-    "linia": 1575
+    "linia": 1576
    }
   ],
   "dialegs::portaReixa": [
@@ -3784,14 +3784,14 @@
     "qui": "Ineu",
     "text": "(Ara em mira de cara. No m'agrada gens.)",
     "fitxer": "js/zones/casa.js",
-    "linia": 767
+    "linia": 768
    },
    {
     "id": 495,
     "qui": "Ineu",
     "text": "[text calculat pel joc: frases[this.raimPas - 1]]",
     "fitxer": "js/zones/casa.js",
-    "linia": 769
+    "linia": 770
    }
   ],
   "zones/casa::mecanismePorta": [
@@ -3800,14 +3800,14 @@
     "qui": "Ineu",
     "text": "(La llosa no té pany ni maneta. La cadena de la politja hi està lligada: el mecanisme de terra deu fer-la pujar.)",
     "fitxer": "js/zones/casa.js",
-    "linia": 1467
+    "linia": 1468
    },
    {
     "id": 497,
     "qui": "Ineu",
     "text": "(Una llosa de pedra sense pany ni maneta. No cedeix gens: s'ha d'obrir d'una altra manera.)",
     "fitxer": "js/zones/casa.js",
-    "linia": 1467
+    "linia": 1468
    }
   ],
   "zones/casa_gran::construir": [

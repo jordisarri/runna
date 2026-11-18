@@ -813,7 +813,7 @@ class ZonaSantAntoni extends ZonaBase {
         this.npc('germa_franci', 1010, 870, DIALEGS.germaFranci, { flipX: true });
         // El Pallofa, el gos de la Carry: només hi passeja un cop has parlat amb ella, fins que l'agafes
         if (Estat.flag('carryParlat') && !Estat.te('pallofa') && !Estat.flag('pallofaTornat')) this.posarPallofa();
-        this.cartell(170, 800, () => ({ pagines: [{ qui: 'Cartell', text: '← El Monestir i la Plaça' }] }));
+        this.cartell(170, 800, () => ({ pagines: [{ qui: 'Cartell', text: '← El Monestir i la Plaça\n↓ El Bosc del Pi dels Tres Cants' }] }));
         this.arbres([[1250, 300], [1320, 560], [1340, 1060], [160, 300], [360, 220]]);   // cap arbre davant el cartell ni el Germà Francí
 
         this.sortida(0, 820, 14, 140, 'ZonaMonestir', 'santantoni');   // surts per l'est del Monestir

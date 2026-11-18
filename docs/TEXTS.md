@@ -398,7 +398,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[116] Cartell:** ← Bosc de Sant Joan / ← Font del Bisbe / ↑ El Gran Til·ler / ↓ Les Runes / → Sant Benet
 
-**[117] Cartell:** ← El Monestir i la Plaça
+**[117] Cartell:** ← El Monestir i la Plaça / ↓ El Bosc del Pi dels Tres Cants
 
 **[118] Cartell:** La Caseta / → El Gran Til·ler
 
@@ -1518,15 +1518,15 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[476]** ★ Has obtingut la MANETA D'ENGRANATGE.
 
-### golfesRellotge  <sub>(js/zones/casa.js:1562)</sub>
+### golfesRellotge  <sub>(js/zones/casa.js:1563)</sub>
 
 **[477] Ineu:** El mecanisme és al bastidor de fusta de l'esquerra: tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran.
 
-### golfesNota  <sub>(js/zones/casa.js:1566)</sub>
+### golfesNota  <sub>(js/zones/casa.js:1567)</sub>
 
 **[478] Ineu:** «Nota del rellotger. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el mitjà al mig, i el gran darrere.»
 
-### golfesReparat  <sub>(js/zones/casa.js:1575)</sub>
+### golfesReparat  <sub>(js/zones/casa.js:1576)</sub>
 
 **[479] Ineu:** (Torna a caminar! Ara se sentirà per tot el poble.)
 
@@ -1582,13 +1582,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[493]** ★ Has obtingut la CLAU DE FERRO.
 
-### puzleRaim  <sub>(js/zones/casa.js:767)</sub>
+### puzleRaim  <sub>(js/zones/casa.js:768)</sub>
 
 **[494] Ineu:** (Ara em mira de cara. No m'agrada gens.)
 
 **[495] Ineu:** [text calculat pel joc: frases[this.raimPas - 1]]
 
-### mecanismePorta  <sub>(js/zones/casa.js:1467)</sub>
+### mecanismePorta  <sub>(js/zones/casa.js:1468)</sub>
 
 *Si: ha fet servir la bota d'alçada*
 
