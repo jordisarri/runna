@@ -22,7 +22,7 @@ const NOTES_FREQ = { Sol3: 196, La3: 220, Do: 262, Re: 294, Mi: 330, Fa: 349, So
 MELODIES.aurora.peca = [['Do', 1], ['Re', 1], ['Mi', 2], ['Sol', 1], ['Mi', 1], ['Re', 1], ['Do', 4]];
 MELODIES.pedres.peca = [['Sol', 1], ['Fa', 1], ['Mi', 2], ['Do', 1], ['Re', 1], ['Mi', 1], ['Re', 1], ['Do', 4]];
 // el Cant del Miracle: Mi Mi Fa Sol Do (la clau, la que toca el jugador, amb el ritme de la fanfàrria del joc) i després la resta del leitmotiv, tal com sona a Sfx.FANFARRA (durades en segons: bpm 60).
-MELODIES.miracle.peca = [['Mi', 0.95], ['Mi', 0.22], ['Fa', 0.47], ['Sol', 0.41], ['Do', 1.48], ['Do', 0.79], ['Re', 0.13], ['Mi', 0.18], ['Fa', 0.88], ['Fa', 0.28], ['Mi', 0.43], ['Re', 0.44], ['Do', 0.31], ['Re', 1.6]];
+MELODIES.miracle.peca = [['Mi', 0.95], ['Mi', 0.22], ['Fa', 0.47], ['Sol', 0.41], ['Do', 2.27], ['Re', 0.13], ['Mi', 0.18], ['Fa', 0.88], ['Fa', 0.28], ['Mi', 0.43], ['Re', 0.44], ['Do', 0.31], ['Re', 1.6]];
 // Quin dels cinc botons s'il·lumina per a cada altura (el més proper)
 const BOTO_DE = f => { const fs = [262, 294, 330, 349, 392]; let millor = 0; fs.forEach((x, i) => { if (Math.abs(x - f) < Math.abs(fs[millor] - f)) millor = i; }); return millor + 1; };
 

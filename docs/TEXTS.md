@@ -1844,7 +1844,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### gabiaGran  <sub>(js/zones/gabia.js:74)</sub>
 
-**[574] Ineu:** (Ara. El Cant del Miracle: 1-2-2-2-3-1.)
+**[574] Ineu:** (Ara. El Cant del Miracle.)
 
 **[575] Ineu:** (Els barrots no tenen pany. Només un cant els pot obrir: el Cant del Miracle.)
 
@@ -1876,13 +1876,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[585] Ineu:** (Una força invisible no em deixa passar. Sense el Cant del Miracle, els barrots no m'escoltaran. La Pianista, al Santuari, me l'ha d'ensenyar.)
 
-### enMelodia  <sub>(js/zones/gabia.js:1209)</sub>
+### enMelodia  <sub>(js/zones/gabia.js:1271)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
 **[586] Ineu:** (L'Home de la Gàbia xiula més fort que el cant.)
 
-### iniciarCombatFinal  <sub>(js/zones/gabia.js:1472)</sub>
+### iniciarCombatFinal  <sub>(js/zones/gabia.js:1536)</sub>
 
 **[587] Aldreu, Pastor de Boira:** Una altra vegada, monjo? El Mestre no es cansa mai.
 
@@ -1890,7 +1890,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[589] Aldreu, Pastor de Boira:** Mestre, aquesta vegada sí!
 
-**[590] Ineu:** (Tres capolls de boira, surant dins la gàbia... L'Huri, el Fram, el Sardi. Dormen.)
+**[590] Ineu:** (Tres capolls de boira, penjats com llonganisses... L'Huri, el Fram, el Sardi. Dormen.)
 
 **[591] Ineu:** Aguanteu. Ja sóc aquí.
 
@@ -1926,21 +1926,21 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[607] Aldreu, Pastor de Boira:** Sí, Mestre...
 
-### ocellaireDerrotat  <sub>(js/zones/gabia.js:1667)</sub>
+### ocellaireDerrotat  <sub>(js/zones/gabia.js:1731)</sub>
 
-**[608] L'Home de la Gàbia:** No... el meu riure... Els meus ocells...
+**[608] L'Home de la Gàbia:** No... els meus riures... els meus ocells...
 
-**[609] L'Home de la Gàbia:** Tants riures... i cap no era per a mi.
+**[609] L'Home de la Gàbia:** Tantes rialles, i cap no era per a mi.
 
 **[610] Germà Aldreu:** Mestre! No em deixeu!
 
-### obrirGabia  <sub>(js/zones/gabia.js:1738)</sub>
+### obrirGabia  <sub>(js/zones/gabia.js:1799)</sub>
 
 **[611] Ineu:** Germà Aldreu, la gàbia s'obrirà. Podeu venir amb nosaltres.
 
 **[612] Germà Aldreu:** Encara no.
 
-### finalGabia  <sub>(js/zones/gabia.js:1840)</sub>
+### finalGabia  <sub>(js/zones/gabia.js:1901)</sub>
 
 **[613] Germà Aldreu:** La seva veu em parlava dins el cap cada nit. Era l'única que em parlava.
 

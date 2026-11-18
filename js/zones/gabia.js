@@ -71,7 +71,7 @@ Object.assign(DIALEGS, {
     gabiaGran: E => ({ pagines: E.flag('andreuTancat') ? [
     ] : E.flag('gabiaOberta') ? [
     ] : E.flag('ocellaireVencut') ? [
-        { qui: 'Ineu', text: "(Ara. El Cant del Miracle: 1-2-2-2-3-1.)" }
+        { qui: 'Ineu', text: "(Ara. El Cant del Miracle.)" }
     ] : [
         { qui: 'Ineu', text: "(Els barrots no tenen pany. Només un cant els pot obrir: el Cant del Miracle.)" }
     ] }),
@@ -783,7 +783,7 @@ class ZonaGabia extends ZonaBase {
         this.capolls = [];
         if (!Estat.flag('gabiaOberta')) NENS_GABIA.forEach((n, i) => {
             const y = base - 150 - (i % 2) * 30;
-            const c = this.add.image(gx + (i - 1) * 104, y, 'capoll').setDepth(base - 20);          // (més grans: separats 104 px dins la gàbia)
+            const c = this.add.image(gx + n.dx, y, 'capoll').setDepth(base - 20);
             c.setScale(this.textures.get('capoll').customData.escala || 1 / RES);
             this.tweens.add({ targets: c, y: y - 10, yoyo: true, repeat: -1, duration: 1500 + i * 300, ease: 'Sine.easeInOut' });
             this.capolls.push(c);
@@ -1542,7 +1542,7 @@ class ZonaGabia extends ZonaBase {
                 { fer: (z, fet) => fuig(z, fet) }
             ] : [
                 { fer: (z, fet) => z.enquadrar(gx, base - 215, 0.82, 900, fet) },          // la gàbia sencera, amb els capolls a dins, mentre l'Ineu els descriu
-                { qui: 'Ineu', text: "(Tres capolls de boira, surant dins la gàbia... L'Huri, el Fram, el Sardi. Dormen.)" },
+                { qui: 'Ineu', text: "(Tres capolls de boira, penjats com llonganisses... L'Huri, el Fram, el Sardi. Dormen.)" },
                 { fer: (z, fet) => z.enquadrar(gx - 170, base - 190, 1.5, 1000, () => { Sfx.riure(); z.enquadrar(gx + 170, base - 190, 1.5, 1000, fet); }) },
                 // La gàbia SENCERA (amb els tres capolls a dins, ben visibles) mentre l'Ineu els parla
                 { fer: (z, fet) => z.enquadrar(gx, base - 215, 0.82, 1100, fet) },
@@ -1728,9 +1728,9 @@ class ZonaGabia extends ZonaBase {
         this.time.delayedCall(1400, () => this.ui().obrirDialeg({ pagines: [
             // P32: primer pla del Mestre morint
             { fer: (z, fet) => z.enquadrar(e.spr.x, e.spr.y - 0.45 * e.spr.displayHeight, 2.0, 900, fet) },
-            { qui: O, text: "No... el meu riure... Els meus ocells..." },
+            { qui: O, text: "No... els meus riures... els meus ocells..." },
             { fer: (z, fet) => z.enquadrar(e.spr.x, e.spr.y - 0.45 * e.spr.displayHeight, 2.0, 1100, fet) },
-            { qui: O, text: "Tants riures... i cap no era per a mi." },
+            { qui: O, text: "Tantes rialles, i cap no era per a mi." },
             { fer: (z, fet) => z.seq([
                 // P33-P34: es desfà en boira i la gàbia se l'empassa
                 f => {
@@ -1752,10 +1752,7 @@ class ZonaGabia extends ZonaBase {
                     if (n) z.enquadrar(n.x - 20, n.y - 0.6 * n.displayHeight, 1.2, 700, null);
                     z.esperar(1100, f);
                 },
-                f => {
-                    this.flotant(gx, base - 200, "Aldreu... fill...\na la gàbia sempre hi haurà lloc per a tu.", lila);
-                    z.esperar(2200, f);
-                },
+                f => z.esperar(1000, f),          // (abans hi havia una frase lila sobreimpresa que no donava temps de llegir: fora)
                 f => {
                     this.tornarColorCova();
                     z.aldreuVa(gx + 90, base + 60, null, 120);
