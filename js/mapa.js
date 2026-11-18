@@ -192,7 +192,15 @@ const MAPA = {
         PROGRES.laterals.filter(l => l.obert(E) && !l.fet(E)).forEach(l => { const d = DIARI_LATERALS[l.id]; if (d) (encarrecs[amunt(d[1])] = encarrecs[amunt(d[1])] || []).push(d[0]); });
         const vis = id => MAPA.visitada(id) || Object.keys(MAPA.PARE).some(k => MAPA.PARE[k] === id && MAPA.visitada(k));
         // Llocs per explorar: no visitats però al costat d'un de visitat (o on és l'objectiu)
-        const conegut = id => vis(id) || id === zObj || MAPA.enllacos.some(([a, b]) => (a === id && vis(b)) || (b === id && vis(a)));
+        // El camí fins a l'objectiu (el més curt des d'on s'és) també es mostra, encara que no s'hi hagi estat: així el jugador veu per on ha d'anar quan l'objectiu és lluny
+        const camiObj = new Set();
+        if (zObj && actual) {
+            const veins = {}; MAPA.enllacos.forEach(([a, b]) => { const A = amunt(a), B = amunt(b); if (A !== B) { (veins[A] = veins[A] || []).push(B); (veins[B] = veins[B] || []).push(A); } });
+            const ant = { [actual]: null }, cua = [actual];
+            while (cua.length && !(zObj in ant)) { const u = cua.shift(); (veins[u] || []).forEach(v => { if (!(v in ant)) { ant[v] = u; cua.push(v); } }); }
+            if (zObj in ant) for (let u = zObj; u; u = ant[u]) camiObj.add(u);
+        }
+        const conegut = id => vis(id) || id === zObj || camiObj.has(id) || MAPA.enllacos.some(([a, b]) => (a === id && vis(b)) || (b === id && vis(a)));
         const disp = MAPA.disposicio();
         const nodes = MAPA.zones.filter(z => disp[z.id] && conegut(z.id)).map(z => {
             const d = disp[z.id], t = MAPA.tipus(z.id), v = vis(z.id);

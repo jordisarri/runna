@@ -23,7 +23,8 @@ const PROGRES = {
         { id: 'font', marca: ['fontNeta', 'obj:aigua_sj', 'obj:pruna'], fet: E => E.flag('fontNeta'),
           pista: E => {
               // Fins que no s'ha anat a la font (fontVista) no se sap què cal portar-hi: la pista només dona el lloc
-              if (!E.flag('fontVista')) return "La Font del Bisbe, que diuen que guaria tothom, s'ha quedat adormida. Val la pena anar-hi a mirar.";
+              // (encara no s'hi ha estat: el lloc, perquè és lluny, i el camí des de la Plaça; el mapa del Diari també el mostra)
+              if (!E.flag('fontVista')) return "La Font del Bisbe, que diuen que guaria tothom, s'ha quedat adormida. És al Bosc de Sant Joan" + (E.flag('visitada_ZonaBosc') ? "." : ", al nord-oest del mapa: des de la Plaça, puja pel Pati del Celler, les Runes i les Cel·les.") + " Val la pena anar-hi a mirar.";
               const n = ['herba1', 'herba2'].filter(h => E.flag(h)).length + (E.te('pruna') || E.flag('herba3') ? 1 : 0);
               return n === 3 ? "Ja tens totes les ofrenes: torna a la Font del Bisbe."
                   : "A la Font del Bisbe, les ofrenes que falten (" + n + "/3): l'herba de Sant Joan (en aquest mateix bosc), la rialla (una planta: al Bosc del Pi dels Tres Cants, al sud de Sant Antoni, guardada per bolets verinosos) i una pruna de la Prunera de l'Hostatgeria.";
