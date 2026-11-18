@@ -2912,7 +2912,7 @@ function dibuixarColumnaProcessio(c, w, k = 0) {
     });
 }
 
-// Bastó vertical (cap a dalt) per si falta assets/armes/basto.png
+// Bastó vertical (cap a dalt) per si falta assets/armes/basto.webp
 function dibuixarBastoProvisional(c, w) {
     c.width = w; c.height = Math.round(w * 4.25);
     const x = c.getContext('2d');

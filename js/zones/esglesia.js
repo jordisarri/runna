@@ -95,6 +95,7 @@ class ZonaEsglesia extends ZonaBase {
         const puntSagrari = this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2'), toc: { x0: this.sagrariX - 100, x1: this.sagrariX + 100, y0: 0, y1: ESG.sostre + 120 } });     // el sagrari, al mig del retaule (fragment 2)
         this.brillo(this.sagrariX, this.sagrariY, 19, 32, { arc: true, punt: puntSagrari, actiu: () => !Estat.flag('fragment2') });          // el sagrari brilla fins que se n'agafa el pergamí
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 }, opac: true });
+        this.altarRepos(640, ESG.retY + 176, { dalt: 100 });                     // l'Ineu s'hi agenolla i recupera l'energia
 
         // Portes del peu del retaule: totes dues tancades. Quan el Pare Nadiel diu que el rellotge s'ha aturat (rellotgeDit)
         // s'obre la de la dreta, que duu a la torre i a la Sala del Rellotge. L'esquerra és només decorativa: no s'obre mai i no té cap punt d'interacció.
