@@ -2732,7 +2732,10 @@ class ZonaBase extends Phaser.Scene {
         const I = this.ineu;
         if (!I || !I.anims) return;
         I.anims.stop();
-        I.setTexture('ineu_' + (this.vista8 || 'down'), quietIneu());
+        // Un fotograma de l'idle NOU (alta resolució, 'ineu_idle_<vista>'), no del full de caminar: el de caminar és de l'idle anterior (ajustaIneu ja n'ajusta l'escala i la caixa)
+        const vista = this.vista8 || 'down', idle = 'ineu_idle_' + (typeof IDLE_INEU !== 'undefined' && IDLE_INEU[vista] || vista);
+        if (this.textures.exists(idle) && !(typeof Grafics !== 'undefined' && Grafics.faltants && Grafics.faltants.includes(idle))) I.setTexture(idle, 0);
+        else I.setTexture('ineu_' + vista, quietIneu());
     }
 
     vigilaBancs() {
