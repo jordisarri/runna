@@ -364,25 +364,31 @@ function dibuixarColumna(c, w) {
         ombraTerra(ctx, W / 2, H - 6, W * 0.5, 7);
         ctx.lineWidth = 3; ctx.strokeStyle = CONTORN; ctx.lineJoin = 'round';
         ctx.fillStyle = '#9a9488'; ctx.fillRect(4, H - 24, W - 8, 18); ctx.strokeRect(4, H - 24, W - 8, 18);
-        // El fust, fet de carreus de pedra ben visibles: fileres de blocs desiguals, cada un amb el seu to, la seva vora i una mica de llum a dalt
+        // El fust, fet de pedres irregulars (no de totxos): mides i formes diferents, voreres tortes, entre una argamassa fosca; cada pedra amb el seu to, llum a dalt i una mica d'ombra
         const x0 = 12, y0 = 18, ww = W - 24, hh = H - 44;
-        let llavor = 11; const r = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+        let llavor = 23; const r = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
         ctx.save(); ctx.beginPath(); ctx.rect(x0, y0, ww, hh); ctx.clip();
-        ctx.fillStyle = '#7a7466'; ctx.fillRect(x0, y0, ww, hh);
-        const alt = Math.max(14, hh / 9);
-        for (let y = y0 + hh, fila = 0; y > y0 - 1; fila++) {
-            const a = Math.min(alt * (0.9 + r() * 0.3), y - y0 + 2), yy = y - a;
-            const tall = ww * (0.35 + r() * 0.3) + (fila % 2 ? 0 : ww * 0.1);           // un sol tall per filera, desplaçat cada fila (aparell a trencajunt)
-            const blocs = [[x0, tall], [x0 + tall, ww - tall]];
-            blocs.forEach(([bx, bw], i) => {
-                const t = 0.82 + r() * 0.3, v = Math.round(168 * t), g = Math.round(162 * t), bl = Math.round(148 * t);
-                ctx.fillStyle = `rgb(${v},${g},${bl})`; ctx.beginPath(); ctx.roundRect(bx + 1.5, yy + 1.5, bw - 3, a - 3, 3); ctx.fill();
-                ctx.fillStyle = 'rgba(255,248,226,0.22)'; ctx.fillRect(bx + 4, yy + 3, bw - 8, 2.6);              // llum a la vora de dalt
-                ctx.fillStyle = 'rgba(30,22,12,0.22)'; ctx.fillRect(bx + 4, yy + a - 6, bw - 8, 3);               // ombra a la de baix
-                if (r() < 0.25) { ctx.strokeStyle = 'rgba(40,30,16,0.5)'; ctx.lineWidth = 1.2; ctx.beginPath(); const cx = bx + 6 + r() * (bw - 12); ctx.moveTo(cx, yy + 4); ctx.lineTo(cx + 4, yy + a * 0.5); ctx.lineTo(cx - 2, yy + a - 4); ctx.stroke(); }
-                ctx.strokeStyle = 'rgba(34,26,14,0.85)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(bx + 1.5, yy + 1.5, bw - 3, a - 3, 3); ctx.stroke();
-            });
-            y = yy;
+        ctx.fillStyle = '#4a4336'; ctx.fillRect(x0, y0, ww, hh);                                  // argamassa
+        const pedra = (px, py, pw, ph) => {
+            const j = () => (r() - 0.5) * Math.min(pw, ph) * 0.32;                               // cada vèrtex es desplaça una mica: forma irregular
+            const pts = [[px + 2 + j(), py + 2 + j()], [px + pw * 0.5 + j(), py + 1 + j() * 0.6], [px + pw - 2 + j(), py + 2 + j()], [px + pw - 1 + j() * 0.6, py + ph * 0.55 + j()],
+                [px + pw - 2 + j(), py + ph - 2 + j()], [px + pw * 0.45 + j(), py + ph - 1 + j() * 0.6], [px + 2 + j(), py + ph - 2 + j()], [px + 1 + j() * 0.6, py + ph * 0.45 + j()]];
+            const t = 0.7 + r() * 0.5, tint = r() < 0.25 ? [1.04, 0.96, 0.84] : r() < 0.4 ? [0.92, 0.98, 1.02] : [1, 1, 0.95];
+            const col = `rgb(${Math.min(255, Math.round(170 * t * tint[0]))},${Math.min(255, Math.round(162 * t * tint[1]))},${Math.min(255, Math.round(148 * t * tint[2]))})`;
+            const traç = () => { ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); };
+            traç(); ctx.fillStyle = col; ctx.fill();
+            ctx.save(); traç(); ctx.clip();
+            ctx.fillStyle = 'rgba(255,248,226,0.22)'; ctx.fillRect(px, py, pw, ph * 0.28);                 // llum a dalt
+            ctx.fillStyle = 'rgba(30,22,12,0.22)'; ctx.fillRect(px, py + ph * 0.72, pw, ph * 0.3);          // ombra a baix
+            if (r() < 0.3) { ctx.strokeStyle = 'rgba(40,30,16,0.5)'; ctx.lineWidth = 1.2; ctx.beginPath(); const cx = px + pw * (0.25 + r() * 0.5); ctx.moveTo(cx, py + 2); ctx.lineTo(cx + 4, py + ph * 0.5); ctx.lineTo(cx - 3, py + ph - 2); ctx.stroke(); }
+            ctx.restore();
+            traç(); ctx.strokeStyle = 'rgba(30,22,12,0.9)'; ctx.lineWidth = 1.8; ctx.stroke();
+        };
+        for (let y = y0; y < y0 + hh;) {
+            const ph = 15 + r() * 24;                                                            // alçada de la filera, diferent cada cop
+            let x = x0 - r() * 14;
+            while (x < x0 + ww) { const pw = 20 + r() * 40, a = ph * (0.85 + r() * 0.3); pedra(x, y + (ph - a) * r(), pw, a); x += pw; }
+            y += ph * 0.95;
         }
         ctx.restore();
         ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.strokeRect(x0, y0, ww, hh);
