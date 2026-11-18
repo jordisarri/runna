@@ -280,6 +280,16 @@ const DIALEGS = {
                 enAcabar: () => { E.posaFlag("parlatPianista"); iniciarLliço("aurora"); }
             };
         }
+        // Les esquelles dels pastors, si l'Ineu ja les porta, són el primer que la Pianista nota (abans de qualsevol cant): així no hi reacciona tard, com si fos la primera vegada
+        if (E.flag("esquelles") && !E.flag("esquellesVistes")) {
+            return {
+                pagines: [
+                    { qui: "La Pianista", text: "Ai, mare de Déu, les esquelles dels pastors! Fa vint anys que no en sentia el so. Deixa-me-les tocar un instant..." },
+                    { qui: "La Pianista", text: "Duen una música antiga. Amb la tarota, els cants antics encara desperten allò que dorm sota la boira. Vés amb compte, que amb aquesta força la boira no et perdonarà." }
+                ],
+                enAcabar: () => E.posaFlag("esquellesVistes")
+            };
+        }
         // El Cant de Vespres: l'Ineu el demana a la Pianista, o perquè l'ombra del monjo ha dit que qui toca l'orgue el coneix, o perquè el Til·ler l'hi
         // ha remès pels pastors de la Cirosa. Ella no sap res de l'ombra ni dels pastors: ho sap pel que l'Ineu li explica.
         if ((E.flag("ombraDemanaCant") || E.flag("soparObert")) && !E.flag("cantPedres")) {
@@ -303,15 +313,6 @@ const DIALEGS = {
                     { qui: "La Pianista", text: "Jo me'n recordo perquè el cantava la meva mare. Escolta'm i repeteix el que et toqui. Aprèn-lo bé: et farà falta allà baix." }
                 ],
                 enAcabar: () => iniciarLliço("miracle")
-            };
-        }
-        if (E.flag("esquelles") && !E.flag("esquellesVistes")) {
-            return {
-                pagines: [
-                    { qui: "La Pianista", text: "Ai, mare de Déu, les esquelles dels pastors! Fa vint anys que no en sentia el so. Deixa-me-les tocar un instant..." },
-                    { qui: "La Pianista", text: "Duen una música antiga. Amb la tarota, els cants antics encara desperten allò que dorm sota la boira. Vés amb compte, que amb aquesta força la boira no et perdonarà." }
-                ],
-                enAcabar: () => E.posaFlag("esquellesVistes")
             };
         }
         return { pagines: [{ qui: "La Pianista", text: E.flag("bassadoriaNeta")

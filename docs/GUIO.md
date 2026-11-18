@@ -1,6 +1,10 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 615: El Cant del Miracle passa a Mi Mi Fa Sol Do (abans Mi Mi Mi Fa Sol), amb el mateix ritme; els altres cants no canvien. La fila de caselles de notes ja no surt del marc del pergamí: s'adapta a la mida de la peça.*
+
+*Revisió 614: s'aclareix a la trama de l'ombra quin és l'ordre habitual del Cant de Vespres (al sopar, abans de l'ombra) i que l'altre és una variant. Només documentació.*
+
 *Revisió 613: un cop resolt el laberint de la Rovellonera (arribar a Sant Gabriel) i agafat el llaç de la clariana de la Nena de les Trenes, la Rovellonera es redueix a una sola clariana: s'hi entra per la dreta (el camí) i se'n surt per baix (Sant Gabriel), sense altres sortides i amb rovellons a totes dues. El cartell fa dir a l'Ineu que el camí ara és més senzill i que ja no cal recordar les pistes.*
 
 *Revisió 612: Als altres de l'Ermita de la Desaparició, de Sant Gabriel, de la capella de la Carmèlia i del Santuari, l'Ineu s'hi agenolla (d'esquena si hi arriba per davant, de cara si hi arriba per darrere) i recupera tota l'energia: els grans del rosari s'omplen un a un, cadascun amb el seu so, i es desa la partida. S'esborra del tot el fitxer buit js/zones/esglesia_nova.js (l'original queda a art/arxiu/).*
@@ -345,7 +349,7 @@ Cinc quadres il·lustrats amb text (tocar passa al següent; «Saltar» ho salta
 3. **Biblioteca, Pare Alcoví.** Llegeix els dos fragments i els compara amb la Crònica: en un marge hi ha escrit que l'ombra apareix a les Runes. Això activa el **fragment 3** i li diu a l'Ineu que hi parli.
 4. **L'ombra, abans de tenir-ho tot.** Si l'Ineu hi parla sense els fragments, només la veu mirar-lo: li diu quants fragments li falten i que els ha de portar a l'Alcoví.
 5. **L'ombra, amb els fragments llegits.** Desperta una mica i demana el **Cant de Vespres**: «aprèn-lo i torna a cantar-me'l aquí».
-6. **Santuari, la Pianista.** Ensenya el Cant de Vespres (5-4-3-1 amb la tarota). El mateix cant desperta la pedra secreta de la façana del Santuari (la sala del tresor).
+6. **Santuari, la Pianista.** Ensenya el Cant de Vespres (5-4-3-1 amb la tarota). **Ordre habitual:** la Pianista l'ensenya abans, al sopar, quan el Gran Til·ler hi envia l'Ineu pels pastors de la Cirosa; llavors, quan l'ombra el demana, l'Ineu ja el sap i només cal tornar a les Runes. Si l'Ineu fa les Runes abans del sopar (el Celler és obert des del principi), és l'ombra qui l'hi envia i la Pianista li'l dona per aquest motiu (variant, ja prevista al codi). El mateix cant desperta la pedra secreta de la façana del Santuari (la sala del tresor).
 7. **Cant davant l'ombra.** L'ombra explica qui era, que el segell es va esquerdar quan van obrir el cementiri, i dona la **Paraula de l'Ombra**. A més **diu on dorm Runna** (sud-est, entre pedres, on el sol s'atura: el Dolmen) i li dona la frase, dient que només l'Alcoví la sabrà entendre.
 8. **Alcoví, el Saber.** Amb el que l'Ineu li explica de l'ombra, l'Alcoví entén la paraula esborrada de la Crònica: «La foscor tem la llum, però més encara el riure». Això és el **Saber**.
 

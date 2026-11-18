@@ -41,7 +41,6 @@ const DIARI_LATERALS = {
     rellotge: ['El rellotge aturat', 'ZonaGolfes', null],
     tresor: ['La pedra que escolta', 'ZonaPlaca', '+1 cor'],
     nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Llaç de la Nena (absorbeix un cop per zona)'],
-    pi: ['El Pi dels Tres Cants', 'ZonaBoscPi', 'La història dels tres cants'],
     carruatge: ['Els ocells del carro verd', 'ZonaEra', null]
 };
 const DIARI_ACTES = [

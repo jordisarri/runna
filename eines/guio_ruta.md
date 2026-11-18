@@ -66,7 +66,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | Cant de Vespres | Pianista | Desperta l'ombra, la pedra secreta i el pont de la Gàbia. |
 | Medalló del Saber | Pare Alcoví | Placa del Dolmen. |
 | Medalló de la Benedicció | Pare Jordà | Placa del Dolmen. |
-| Clau de Sant Gabriel / Cristall de Gel | Galf / cofre de l'ermita de Sant Gabriel | Telescopi. |
+| Clau de Sant Gabriel / Cristall de Gel | Senyor Buidor (després del Galf) / cofre de l'ermita de Sant Gabriel | Telescopi. |
 | Telescopi / Llàgrima de Sant Llorenç | Galf / Dipòsits | Aparta la boira del camí del Dolmen. |
 | **Runna** | El Dolmen | Dany 3; talla els esbarzers negres. |
 | Cant del Miracle | Pianista (després de Runna) | Obre els barrots de la gàbia. |
@@ -78,7 +78,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | Clau rovellada | L'Iscu (cabana amagada) | Obre la porta de ferro del fons de la galeria. |
 | Llavor de Lluna | Rosansa (**només a l'Acte 3**) | L'Isílder la planta: s'obre la llosa de l'Hostatgeria. |
 | Empara Fraternal | Cofre del vestíbul de l'Hostatgeria | Dissipa la boira verinosa abans de la Gàbia. |
-| Carta del Cortiner | Pi dels Tres Cants (lateral) | Història dels tres cants. |
+| Carta del Cortiner | Pi dels Tres Cants (pas obligatori) | Història dels tres cants. |
 | Cors extra (+1 cada un) | Pastor de Boira vençut, les 3 sacerdotesses, cofre de la Cambra del Santuari / sala del tresor, cofre de la cabana de l'Iscu | Vida màxima (màxim 7). |
 
 ---
@@ -123,7 +123,7 @@ La porta és tancada («Avui no servim — Càren»). Truca: l'**Eve** obre per 
 ### 2A · El camí del Til·ler
 
 **Pas 7 · Bosc de Sant Joan — Font del Bisbe** `fontSJ` `herba`
-La font és adormida i el bosc és ple de boira lila. Calen **tres ofrenes**: l'**herba de Sant Joan** i el **romaní** (brillen en dues clarianes del bosc) i una **pruna** de la **Prunera Màgica**, al jardí de l'Hostatgeria `prunera`. En tirar-les-hi, la font es desperta (+ **aigua de la Font del Bisbe**).
+La font és adormida i el bosc és ple de boira lila. Calen **tres ofrenes**: l'**herba de Sant Joan** (brilla en una clariana del bosc) i la **rialla** (al Bosc del Pi) i una **pruna** de la **Prunera Màgica**, al jardí de l'Hostatgeria `prunera`. En tirar-les-hi, la font es desperta (+ **aigua de la Font del Bisbe**).
 
 **Pas 8 · L'Alzina Buida i la Joaneta** `alzinaBuida` `joaneta`
 L'Alzina Buida (el doble de gran que la resta d'arbres) és un portal a la **Cabana de la Joaneta**: la bruixa-vident remena l'olla i dona el **beuratge**. Torna pel portal `portalTornada`.
@@ -163,7 +163,7 @@ L'Ineu llegeix el pergamí entre dues pedres; la llum s'apaga i **apareix l'ombr
 Per tot el camí hi ha **12 columnes** que «parlen»: cada una dona una paraula. La frase completa és: *«Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l'alba.»* A l'ermita, les taules de pedra demanen que algú la digui davant l'altar: premi, la **clau del sagrari**. (Al muret d'arbres del nord del camí hi ha un forat més ample cap a la **cabana amagada** de l'Iscu: vegeu el pas 31.)
 
 **Pas 17 · Santuari — fragment 2 (sagrari) i Cant de Vespres** `sagrari` `pareDaimiel` `pianista`
-El Pare Nadiel només parla del sagrari quan l'Ineu ja té el primer pergamí. La clau petita obre el sagrari del retaule: **fragment 2**. La Pianista ensenya el **Cant de Vespres** (3-1-2-1) un cop l'ombra el demana; el mateix cant desperta la **pedra secreta** de la façana del Santuari (sala del tresor: +1 cor, `pedraEscolta` `cofreTresor`).
+El Pare Nadiel només parla del sagrari quan l'Ineu ja té el primer pergamí. La clau petita obre el sagrari del retaule: **fragment 2**. La Pianista ensenya el **Cant de Vespres** (5-4-3-1; normalment al sopar, quan el Til·ler hi envia l'Ineu; si l'Ineu fa abans les Runes, l'hi envia l'ombra); el mateix cant desperta la **pedra secreta** de la façana del Santuari (sala del tresor: +1 cor, `pedraEscolta` `cofreTresor`).
 
 **Pas 18 · Biblioteca — Pare Alcoví** `pareAlcovi`
 Llegeix els fragments i els compara amb la Crònica: en un marge hi diu que l'ombra apareix a les Runes. Activa el fragment 3 i demana a l'Ineu que hi parli.
@@ -181,7 +181,7 @@ Només amb la Fulla del Til·ler: el Pare Jordà beneeix l'Ineu (animació) i li
 ### 2C · El camí del Dolmen
 
 **Pas 22 · L'Era — Galf** `galf` `cofreGabriel`
-Seu al banc del Galf. Demana un **cristall de gel** i et dona la **clau de Sant Gabriel**. A l'**ermita de Sant Gabriel** (camí de la Rovellonera) hi ha el cofre amb el **Cristall de Gel** (només hi és un cop el Galf n'ha parlat). Torna al Galf: construeix el **telescopi** (`telescopiMon`).
+Seu al banc del Galf. Demana un **cristall de gel** i envia l'Ineu al **senyor Buidor** (Taverna), l'antic sagristà, que li dona la **clau de Sant Gabriel** un cop ha parlat amb el Galf. A l'**ermita de Sant Gabriel** (camí de la Rovellonera) hi ha el cofre amb el **Cristall de Gel** (només hi és un cop el Galf n'ha parlat). Torna al Galf: construeix el **telescopi** (`telescopiMon`).
 
 **Pas 23 · Dipòsits — estels** `estelDiposit` `telescopiMon`
 Al mirador dels Dipòsits, el telescopi mostra estels; l'últim, la **Llàgrima de Sant Llorenç**, cau a l'aigua del dipòsit: cal pujar-hi a collir-ne la llum.
@@ -261,7 +261,6 @@ Les Venerables Sàvies recorden una lateral quan la història principal és atur
 | **Rellotge del campanar** | Amb la clau del campanar; el Pare Nadiel obre la porta de la dreta del retaule | Torre → Sala del Rellotge: tres engranatges (petit, gran, mitjà, segons la nota del campaner) | El rellotge camina; a l'epíleg toca tres campanades. |
 | **Tresor del Santuari** | Després del Cant de Vespres `pedraEscolta` | Tocar el Cant de Vespres davant la pedra de la façana | Sala del tresor: +1 cor. |
 | **Nena de les Trenes** | Camí de la Rovellonera `nenaTrenes` | Recupera dos llaços: un pel camí de la Rovellonera i l'altre a la primera clariana | S'allibera l'esperit. |
-| **Pi dels Tres Cants** | Després del Cant del Miracle; al sud de Sant Antoni, entrant per llevant (bosc llarg) | Toca els tres cants davant el pi | Les branques reviscolen; **Carta del Cortiner**. |
 | **Llosa i sacerdotesses** | Vegeu pas 37 | Llavor de Lluna, Guants, Runna | Empara Fraternal (necessària). |
 | **Follet del Carro Verd** | Parla-hi a cada parada (Era, Bassadòria, Cel·les, Cirosa, Sant Antoni, Dipòsits) | Després de l'epíleg, a l'Era `carruatge` | Obre el carro i deixa anar els ocells; només el final. |
 
