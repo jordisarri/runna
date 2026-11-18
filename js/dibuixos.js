@@ -4310,49 +4310,43 @@ function dibuixarRatpenat(c, w) {
 
 // Capoll de boira on dorm un nen (es trenca amb Runna)
 function dibuixarCapoll(c, w) {
-    // Un capoll de boira lila, teixit de fils de seda que l'embolcallen, amb un nen adormit i arraulit a dins que fa llum
-    lienc(c, w, w * 1.6, (ctx, W, H) => {
-        const cx = W / 2, cy = H * 0.55, rx = W * 0.42, ry = H * 0.4;
-        const halo = ctx.createRadialGradient(cx, cy, rx * 0.3, cx, cy, W * 0.5);
-        halo.addColorStop(0, 'rgba(200,160,255,0.35)'); halo.addColorStop(1, 'rgba(200,160,255,0)');
+    // Un capoll de boira: una bombolla rodona de boira lila i seda, lluminosa, amb un nen adormit i arraulit a dins (cap, ulls tancats, cos i cames recollides). Sense cap fil que
+    // el pengi (abans semblava una llonganissa): es veu surar. Contorn gruixut i fosc, com la resta del joc.
+    lienc(c, w, w * 1.18, (ctx, W, H) => {
+        const cx = W / 2, cy = H * 0.52, R = W * 0.43;
+        // halo exterior
+        const halo = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, W * 0.62);
+        halo.addColorStop(0, 'rgba(210,170,255,0.55)'); halo.addColorStop(1, 'rgba(210,170,255,0)');
         ctx.fillStyle = halo; ctx.fillRect(0, 0, W, H);
-        // el fil d'on penja
-        ctx.strokeStyle = 'rgba(230,215,255,0.8)'; ctx.lineWidth = W * 0.02;
-        ctx.beginPath(); ctx.moveTo(cx, 0); ctx.quadraticCurveTo(cx + W * 0.04, cy - ry * 1.3, cx, cy - ry * 0.95); ctx.stroke();
-        // el cos
-        const g = ctx.createRadialGradient(cx - rx * 0.15, cy - ry * 0.25, 2, cx, cy, rx * 1.15);
-        g.addColorStop(0, 'rgba(255,245,255,0.95)'); g.addColorStop(0.3, 'rgba(210,170,255,0.9)');
-        g.addColorStop(0.75, 'rgba(120,70,190,0.9)'); g.addColorStop(1, 'rgba(60,30,100,0.95)');
-        ctx.fillStyle = g;
-        ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); ctx.fill();
-        // el nen arraulit, fosc dins la llum
-        ctx.fillStyle = 'rgba(70,35,115,0.5)';
-        ctx.beginPath(); ctx.arc(cx - rx * 0.18, cy - ry * 0.38, rx * 0.3, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.ellipse(cx + rx * 0.05, cy + ry * 0.12, rx * 0.42, ry * 0.42, -0.4, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.ellipse(cx + rx * 0.22, cy + ry * 0.48, rx * 0.32, ry * 0.16, 0.3, 0, Math.PI * 2); ctx.fill();
-        // fils de seda que l'embolcallen
+        // bombolla: lila clara al centre i més fosca cap a la vora
+        const g = ctx.createRadialGradient(cx - R * 0.25, cy - R * 0.3, R * 0.1, cx, cy, R);
+        g.addColorStop(0, 'rgba(255,248,255,0.98)'); g.addColorStop(0.45, 'rgba(226,196,255,0.95)'); g.addColorStop(1, 'rgba(150,100,225,0.97)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+        // el nen arraulit (silueta càlida dins la llum): cap, ulls tancats, cos i cames recollides
+        ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R - 2, 0, Math.PI * 2); ctx.clip();
+        ctx.fillStyle = '#c98a6a'; ctx.strokeStyle = 'rgba(70,35,90,0.85)'; ctx.lineWidth = W * 0.016;
+        ctx.beginPath(); ctx.ellipse(cx + R * 0.05, cy + R * 0.22, R * 0.46, R * 0.34, -0.35, 0, Math.PI * 2); ctx.fill(); ctx.stroke();            // cos i cames recollides
+        ctx.fillStyle = '#e8b896';
+        ctx.beginPath(); ctx.arc(cx - R * 0.25, cy - R * 0.16, R * 0.3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();                                        // cap
+        ctx.fillStyle = '#5a3a2a'; ctx.beginPath(); ctx.arc(cx - R * 0.27, cy - R * 0.26, R * 0.3, Math.PI * 1.02, Math.PI * 2.05); ctx.fill();          // cabells
+        ctx.strokeStyle = 'rgba(70,35,60,0.9)'; ctx.lineWidth = W * 0.014;
+        ctx.beginPath(); ctx.arc(cx - R * 0.34, cy - R * 0.14, R * 0.05, 0.1, Math.PI - 0.1); ctx.stroke(); ctx.beginPath(); ctx.arc(cx - R * 0.17, cy - R * 0.14, R * 0.05, 0.1, Math.PI - 0.1); ctx.stroke();   // ulls tancats
+        ctx.fillStyle = 'rgba(240,130,130,0.5)'; ctx.beginPath(); ctx.arc(cx - R * 0.37, cy - R * 0.06, R * 0.06, 0, Math.PI * 2); ctx.arc(cx - R * 0.13, cy - R * 0.06, R * 0.06, 0, Math.PI * 2); ctx.fill();      // galtes
+        // fils de seda que embolcallen la bombolla (arcs de llum que la volten)
         let s = 7; const rr = () => (s = s * 16807 % 2147483647) / 2147483647;
-        ctx.save(); ctx.beginPath(); ctx.ellipse(cx, cy, rx * 1.02, ry * 1.02, 0, 0, Math.PI * 2); ctx.clip();
-        for (let k = 0; k < 16; k++) {
-            const y0 = cy - ry + rr() * ry * 2, y1 = y0 + (rr() - 0.5) * ry * 0.9;
-            ctx.strokeStyle = `rgba(240,228,255,${0.35 + rr() * 0.35})`; ctx.lineWidth = W * (0.012 + rr() * 0.016);
-            ctx.beginPath(); ctx.moveTo(cx - rx * 1.1, y0); ctx.bezierCurveTo(cx - rx * 0.3, y0 - ry * 0.25, cx + rx * 0.3, y1 + ry * 0.25, cx + rx * 1.1, y1); ctx.stroke();
+        for (let k = 0; k < 9; k++) {
+            const a0 = rr() * Math.PI * 2, rad = R * (0.55 + rr() * 0.45);
+            ctx.strokeStyle = `rgba(250,240,255,${0.35 + rr() * 0.35})`; ctx.lineWidth = W * (0.012 + rr() * 0.012);
+            ctx.beginPath(); ctx.arc(cx, cy, rad, a0, a0 + 0.9 + rr() * 1.2); ctx.stroke();
         }
         ctx.restore();
-        // vora i fils solts
-        ctx.strokeStyle = '#e8d8ff'; ctx.lineWidth = W * 0.03;
-        ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); ctx.stroke();
-        ctx.strokeStyle = 'rgba(40,20,70,0.8)'; ctx.lineWidth = W * 0.012;
-        ctx.beginPath(); ctx.ellipse(cx, cy, rx + W * 0.018, ry + W * 0.018, 0, 0, Math.PI * 2); ctx.stroke();
-        ctx.strokeStyle = 'rgba(230,215,255,0.6)'; ctx.lineWidth = W * 0.012;
-        [[-0.9, 0.5], [0.95, -0.2], [0.6, 0.85], [-0.5, -0.8]].forEach(([fx, fy]) => {
-            const x = cx + rx * fx, y = cy + ry * fy;
-            ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + fx * W * 0.08, y + W * 0.06, x + fx * W * 0.12, y + W * 0.14); ctx.stroke();
-        });
+        // contorn gruixut i un brillant a dalt a l'esquerra
+        ctx.strokeStyle = 'rgba(45,20,75,0.95)'; ctx.lineWidth = W * 0.035; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineWidth = W * 0.03; ctx.beginPath(); ctx.arc(cx, cy, R * 0.84, Math.PI * 1.12, Math.PI * 1.45); ctx.stroke();
         // espurnes
-        ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        [[-0.4, -0.6], [0.5, -0.1], [0.1, 0.6], [-0.6, 0.2]].forEach(([fx, fy]) => {
-            const x = cx + rx * fx, y = cy + ry * fy, r = W * 0.03;
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        [[0.72, -0.62], [-0.8, 0.4], [0.62, 0.7]].forEach(([fx, fy]) => {
+            const x = cx + R * fx, y = cy + R * fy, r = W * 0.04;
             ctx.beginPath(); ctx.moveTo(x, y - r); ctx.lineTo(x + r * 0.3, y - r * 0.3); ctx.lineTo(x + r, y); ctx.lineTo(x + r * 0.3, y + r * 0.3);
             ctx.lineTo(x, y + r); ctx.lineTo(x - r * 0.3, y + r * 0.3); ctx.lineTo(x - r, y); ctx.lineTo(x - r * 0.3, y - r * 0.3); ctx.fill();
         });

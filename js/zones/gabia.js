@@ -783,7 +783,7 @@ class ZonaGabia extends ZonaBase {
         this.capolls = [];
         if (!Estat.flag('gabiaOberta')) NENS_GABIA.forEach((n, i) => {
             const y = base - 150 - (i % 2) * 30;
-            const c = this.add.image(gx + n.dx, y, 'capoll').setDepth(base - 20);
+            const c = this.add.image(gx + (i - 1) * 104, y, 'capoll').setDepth(base - 20);          // (més grans: separats 104 px dins la gàbia)
             c.setScale(this.textures.get('capoll').customData.escala || 1 / RES);
             this.tweens.add({ targets: c, y: y - 10, yoyo: true, repeat: -1, duration: 1500 + i * 300, ease: 'Sine.easeInOut' });
             this.capolls.push(c);
@@ -1477,30 +1477,32 @@ class ZonaGabia extends ZonaBase {
                 { fer: (z, fet) => rugit(z, fet) },
                 { fer: (z, fet) => fuig(z, fet) }
             ] : [
-                pla(pIneu, 1.55, 900),
-                { qui: 'Ineu', text: "(Tres capolls de boira, penjats com fruites... L'Huri, el Fram, el Sardi. Dormen.)" },
-                { fer: (z, fet) => z.enquadrar(gx - 160, base - 170, 1.6, 1100, () => { Sfx.riure(); z.enquadrar(gx + 160, base - 170, 1.6, 1100, fet); }) },
+                { fer: (z, fet) => z.enquadrar(gx, base - 215, 0.82, 900, fet) },          // la gàbia sencera, amb els capolls a dins, mentre l'Ineu els descriu
+                { qui: 'Ineu', text: "(Tres capolls de boira, surant dins la gàbia... L'Huri, el Fram, el Sardi. Dormen.)" },
+                { fer: (z, fet) => z.enquadrar(gx - 170, base - 190, 1.5, 1000, () => { Sfx.riure(); z.enquadrar(gx + 170, base - 190, 1.5, 1000, fet); }) },
+                // La gàbia SENCERA (amb els tres capolls a dins, ben visibles) mentre l'Ineu els parla
+                { fer: (z, fet) => z.enquadrar(gx, base - 215, 0.82, 1100, fet) },
                 { qui: 'Ineu', text: "Aguanteu. Ja sóc aquí." },
                 { fer: (z, fet) => aparicioAldreu(fet) },
                 { qui: A, text: "Silenci! Aquí no s'alça la veu, monjo. El Mestre dorm, i jo vetllo el seu son." },
-                pla(pIneu, 1.5, 1),
-                { qui: 'Ineu', text: "Germà Aldreu... sóc jo. Baixeu el bastó, que els nens no són seus." },
+                pla(pIneu, 2.2, 700),          // pla molt més gran de l'Ineu
+                { qui: 'Ineu', text: "Germà Aldreu, sóc jo. Baixeu la veu." },
                 pla(pAld(0.8), 1.55, 1),
-                { qui: A, text: "Meus, no. Del Mestre. Cada riure que li duc em diu «bon xicot, Aldreu». ¿Saps què vol dir que algú et digui pel nom?" },
+                { qui: A, text: "Per cada riure que li duc, em gratifica amb un «bon minyó, Aldreu». No pots entendre què vol dir per a mi que algú tan poderós conegui el meu nom." },
                 { fer: (z, fet) => {
                     const ald = z.npcs.germa_aldreu;
                     if (ald && z.textures.exists('pastor_enfadat')) z.granPastor(ald, 'pastor_enfadat');
                     if (Sfx.xiscle) Sfx.xiscle();
                     const p = pAld(0.8)(); z.enquadrar(p[0], p[1], 2.0, 500, fet);
                 } },
-                { qui: A, text: "Tu no ho saps! Per a tu sempre hi ha hagut algú que et mirés!" },
+                { qui: A, text: "Tu sempre has tingut el favor de tothom, nen mimat!" },
                 pla(pIneu, 1.5, 1),
-                { qui: 'Ineu', text: "Això no és mirar algú, Germà. És tancar-lo." },
+                { qui: 'Ineu', text: "Això no és admirar algú, Aldreu, és engabiar-se." },
                 pla(pAld(0.8), 2.0, 500),
                 { qui: A, text: "Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!" },
                 { fer: (z, fet) => transformacio(z, fet) },
-                { qui: O, text: "Aldreu... fill meu... no cridis." },
-                { qui: O, text: "Ja l'he sentit entrar. Quin soroll més dolç fan, uns peus de monjo damunt la meva pedra." },
+                { qui: O, text: "Aldreu, fill meu, no cal que cridis." },
+                { qui: O, text: "Uns peus de monjo jove damunt la meva pedra." },
                 pla(pDos, 0.82, 700),
                 { qui: 'Ineu', text: "Deixeu els nens. Tornaran amb els seus." },
                 pla(pMestre(0.55), 1.6, 700),
