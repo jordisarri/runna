@@ -490,7 +490,7 @@ const ENEMICS = {
                 e.spr.angle = Math.sin(ara / 35) * 1.8;
                 if (ara > e.fins) {
                     e.spr.angle = 0;
-                    if (fase3) { e.estat = 'foc'; e.fins = ara + 1350; e.focFet = false; }          // la fase 3 s'obre cremant el terra
+                    if (!fase3) { e.estat = 'foc'; e.fins = ara + 1350; e.focFet = false; }          // la fase 2 s'obre cremant el terra (els cercles de foc són més fàcils que el bàcul amb els ocells: aquest és ara la fase 3)
                     else { e.estat = 'invoca'; e.fins = ara + 1500; e.nOcells = 0; e.proxOcell = ara + 150; }
                 }
             } else if (e.estat === 'sura') {
@@ -506,15 +506,15 @@ const ENEMICS = {
                 b.gir = 0.04;
                 if (ara > e.proxAtac) {
                     e.spr.body.setVelocity(0);
-                    // Repertori de cada fase: la 1a alterna ocells i un cop de bàcul en cercle; la 2a hi afegeix el bàcul llançat i
-                    // l'esvaïment; la 3a, a més, crema el terra
+                    // Repertori de cada fase: la 1a alterna ocells i un cop de bàcul en cercle; la 2a crema el terra (i hi afegeix el bàcul llançat);
+                    // la 3a, la més difícil, és el bàcul amb sis ocells girant de pressa, llançat, el cercle i l'esvaïment
                     const n = e.nAtac++;
-                    const tria = (fase3 ? ['foc', 'invoca', 'llança', 'cercle'] : fase2 ? ['invoca', 'llança', 'cercle', 'esvaeix'] : ['invoca', 'cercle', 'invoca'])[n % (fase3 || fase2 ? 4 : 3)];
+                    const tria = (fase3 ? ['invoca', 'llança', 'cercle', 'esvaeix'] : fase2 ? ['foc', 'invoca', 'llança', 'cercle'] : ['invoca', 'cercle', 'invoca'])[n % (fase3 || fase2 ? 4 : 3)];          // (fase 2 = terra en flames; fase 3 = el bàcul amb els ocells girant de pressa)
                     if (tria === 'llança') { e.estat = 'llança'; e.fins = ara + 400; e.spr.setTint(0xffb070); Sfx.carrega(); }
                     else if (tria === 'esvaeix') { e.estat = 'esvaeix'; e.fins = ara + 500; Sfx.puf(); z.boiraPuf(c.x, c.y - 40); z.tweens.add({ targets: [e.spr, b.g], alpha: 0, duration: 400 }); }
                     else if (tria === 'cercle') { e.estat = 'cercle'; e.fins = ara + 850; e.radiCercle = fase3 ? 230 : 190; e.avisCercle = null; Sfx.carrega(); }
                     else if (tria === 'foc') { e.estat = 'foc'; e.fins = ara + 950; e.focFet = false; }
-                    else { e.estat = 'invoca'; e.fins = ara + (fase3 ? 1300 : fase2 ? 1500 : 1900); e.nOcells = 0; e.proxOcell = ara + 200; }
+                    else { e.estat = 'invoca'; e.fins = ara + (fase3 ? 1300 : fase2 ? 1700 : 1900); e.nOcells = 0; e.proxOcell = ara + 200; }
                 }
             } else if (e.estat === 'invoca') {
                 // Fa girar el bàcul cada cop més de pressa i n'escup ocells de foc, que li volten al voltant
@@ -522,11 +522,11 @@ const ENEMICS = {
                 b.gir = Math.min(0.55, b.gir + 0.03);
                 if (e.fins - ara < 120) b.gir = 0.1;           // preavís: el bàcul s'esmorteeix just abans de caure (les flames paren soles)
                 Sfx.basto();
-                const max = fase2 ? 6 : 4;
+                const max = fase3 ? 6 : 4;          // (6 ocells només a la fase 3)
                 if (e.nOcells < max && ara > e.proxOcell) {
                     e.proxOcell = ara + 260;
                     const o = z.enemic('ocellFoc', b.x, b.y);
-                    if (o) { o.amo = e; o.angOrb = e.nOcells / max * Math.PI * 2; o.estat = 'orbita'; o.llançar = Infinity; o.rapid = e.nOcells % 3 === 2; z.flamaOcell(o); }
+                    if (o) { o.amo = e; o.angOrb = e.nOcells / max * Math.PI * 2; o.estat = 'orbita'; o.llançar = Infinity; o.rapid = fase3 && e.nOcells % 3 === 2; z.flamaOcell(o); }
                     e.nOcells++;
                 }
                 if (e.fins - ara >= 120 && Phaser.Math.Distance.Between(b.x, b.y, jo.x, jo.y - 40) < 95 * K) z.ferIneu(1, { x: b.x, y: b.y });   // el bàcul que gira fa mal

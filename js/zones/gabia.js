@@ -1121,8 +1121,8 @@ class ZonaGabia extends ZonaBase {
     // Terra en flames (fase 3): quatre zones, una on ets ara, que avisen i després cremen
     focsTerra(e) {
         const jo = this.ineu.body.center, c = e.spr.body.center, MIN = AJUST_OCELLAIRE.focDistMin, punts = [{ x: jo.x, y: jo.y }];
-        for (let k = 0; k < 3; k++) { const a = Math.random() * Math.PI * 2, d = 150 + Math.random() * 110; punts.push({ x: jo.x + Math.cos(a) * d, y: jo.y + Math.sin(a) * d * 0.6 }); }
-        punts.forEach(q => {
+        for (let k = 0; k < 4; k++) { const a = Math.random() * Math.PI * 2, d = 150 + Math.random() * 130; punts.push({ x: jo.x + Math.cos(a) * d, y: jo.y + Math.sin(a) * d * 0.6 }); }
+        punts.forEach((q, ordre) => {
             // Cap zona de foc a menys de 180 px del cos de l'Ocellaire (la pausa que ve després no pot obrir-se entre flames):
             // si hi cau, s'empeny cap enfora i, si la vora de la plataforma ho impedeix, es proven altres direccions
             let p = this.puntPlataforma(q.x, q.y);
@@ -1135,24 +1135,81 @@ class ZonaGabia extends ZonaBase {
                     if (Phaser.Math.Distance.Between(t.x, t.y, c.x, c.y) >= MIN - 1) break;
                 }
             }
-            this.focTerra(p.x, p.y, 70, 950, 3000);
+            this.time.delayedCall(ordre * 170, () => this.focTerra(p.x, p.y, 74, 950, 3200));          // s'encenen en onada, una rere l'altra
         });
     }
+    // Un cercle de foc ESPECTACULAR: l'avís és un segell rúnic que gira i es va omplint de brasa des del centre, amb espurnes que hi convergeixen; en encendre's esclata una ona de xoc,
+    // un flaix, una columna de flames altes amb brases que salten i fum, esquerdes de llum incandescent a terra i una llum viva que batega, i en apagar-se s'esvaeix en cendra.
     focTerra(x, y, R, avis, dura) {
         const av = this.ovalTerra(x, y, R, 0xff5020, 0.05, 3);
         this.tweens.add({ targets: av, fillAlpha: 0.32, alpha: { from: 1, to: 0.6 }, duration: avis });
-        const f = { x, y, R, av, mort: false };
+        const f = { x, y, R, av, mort: false, extres: [] };
         (this.focs = this.focs || []).push(f);
+        // --- Avís: el segell rúnic (anell doble amb glifs que giren), els radis i la brasa que creix des del centre ---
+        const seg = this.add.graphics().setDepth(y - 399);
+        f.extres.push(seg);
+        const t0 = this.time.now, RY = 0.55;
+        const dibuixa = () => {
+            if (f.mort || !seg.active) return;
+            const p = Math.min(1, (this.time.now - t0) / avis), gir = p * 5.5;
+            seg.clear();
+            seg.fillStyle(0xff4a10, 0.1 + 0.25 * p).fillEllipse(x, y, R * 2 * p, R * 2 * RY * p);                                              // la brasa que creix
+            seg.lineStyle(2, 0xffb060, 0.9).strokeEllipse(x, y, R * 2.16, R * 2.16 * RY).strokeEllipse(x, y, R * 1.7, R * 1.7 * RY);           // dos anells
+            for (let k = 0; k < 8; k++) {                                                                                                        // glifs que giren al voltant
+                const a = gir + k * Math.PI / 4, gx = x + Math.cos(a) * R * 1.93, gy = y + Math.sin(a) * R * 1.93 * RY;
+                seg.fillStyle(0xffd070, 0.9).fillCircle(gx, gy, 3.2).lineStyle(1.8, 0xff8a30, 0.9).lineBetween(gx - 5, gy, gx + 5, gy).lineBetween(gx, gy - 4, gx, gy + 4);
+            }
+            for (let k = 0; k < 6; k++) { const a = -gir * 0.6 + k * Math.PI / 3; seg.lineStyle(1.6, 0xff7a30, 0.5 + 0.4 * p).lineBetween(x + Math.cos(a) * R * 0.25, y + Math.sin(a) * R * 0.25 * RY, x + Math.cos(a) * R * 1.65, y + Math.sin(a) * R * 1.65 * RY); }
+        };
+        const rellotge = this.time.addEvent({ delay: 33, loop: true, callback: dibuixa });
+        f.extres.push({ destroy: () => rellotge.remove() });
+        // espurnes que convergeixen al centre durant l'avís
+        const conv = this.add.particles(x, y, 'espurna', { emitZone: { type: 'edge', source: new Phaser.Geom.Ellipse(0, 0, R * 2.2, R * 2.2 * RY), quantity: 1 }, speed: 0, lifespan: avis * 0.8,
+            scale: { start: 0.4, end: 0 }, alpha: { start: 0.9, end: 0.2 }, tint: [0xffb040, 0xff7a20], blendMode: 'ADD', frequency: 40,
+            moveToX: 0, moveToY: 0 }).setDepth(y - 398);
+        f.extres.push(conv);
+        Sfx.carrega && Sfx.carrega();
         this.time.delayedCall(avis, () => {
             if (f.mort) return;
             Sfx.flama();
+            conv.stop();
+            seg.clear();
             av.setFillStyle(0xff7a20, 0.42).setStrokeStyle(4, 0xffd060, 0.95).setAlpha(1);
             this.tweens.add({ targets: av, alpha: 0.7, yoyo: true, repeat: -1, duration: 160 });
+            // ona de xoc (dos anells que s'obren) i flaix
+            [0, 90].forEach(d => {
+                const ona = this.add.ellipse(x, y, R * 1.2, R * 1.2 * RY).setStrokeStyle(6, 0xfff0b0, 0.95).setDepth(y + 290).setScale(0.4);
+                this.tweens.add({ targets: ona, scale: 2.3, alpha: 0, delay: d, duration: 520, ease: 'Cubic.out', onComplete: () => ona.destroy() });
+            });
+            const flaix = this.add.circle(x, y - 24, R * 1.5, 0xffc070, 0.4).setBlendMode('ADD').setDepth(y + 310);
+            this.tweens.add({ targets: flaix, alpha: 0, scale: 1.7, duration: 360, onComplete: () => flaix.destroy() });
+            this.cameras.main.shake(180, 0.0035);
+            // llum viva que batega i esquerdes incandescents a terra
+            const llum = this.add.ellipse(x, y - 10, R * 4.2, R * 2.8, 0xff7a20, 0.18).setBlendMode('ADD').setDepth(y - 1);
+            this.tweens.add({ targets: llum, alpha: 0.32, scaleX: 1.12, scaleY: 1.12, yoyo: true, repeat: -1, duration: 220 });
+            const es = this.add.graphics().setDepth(y - 2).setBlendMode('ADD');
+            for (let k = 0; k < 9; k++) {
+                const a = k * Math.PI * 2 / 9 + Math.random() * 0.3; let px = x, py = y; es.lineStyle(3, 0xffa040, 0.85).beginPath().moveTo(px, py);
+                for (let j = 1; j <= 3; j++) { px += Math.cos(a + (Math.random() - 0.5) * 0.7) * R * 0.3; py += Math.sin(a + (Math.random() - 0.5) * 0.7) * R * 0.3 * RY; es.lineTo(px, py); }
+                es.strokePath();
+            }
+            f.extres.push(llum, es);
+            // la columna de flames: llengües grosses i altes, brases que salten amb gravetat i un fum fosc que puja
             f.flames = this.add.particles(x, y, 'espurna', {
                 emitZone: { type: 'random', source: new Phaser.Geom.Ellipse(0, 0, R * 1.7, R * 0.9) },
-                speedY: { min: -90, max: -30 }, lifespan: 700, scale: { start: 0.5, end: 0 }, alpha: { start: 0.95, end: 0 },
-                tint: [0xff5020, 0xff9a30, 0xffe060], blendMode: 'ADD', frequency: 28
+                speedY: { min: -210, max: -80 }, speedX: { min: -24, max: 24 }, lifespan: { min: 600, max: 1000 }, scale: { start: 0.7, end: 0 }, alpha: { start: 0.8, end: 0 },
+                tint: [0xff3a08, 0xff6a18, 0xff9a30, 0xffc050], blendMode: 'ADD', frequency: 22
             }).setDepth(y + 300);
+            const brases = this.add.particles(x, y, 'espurna', {
+                emitZone: { type: 'random', source: new Phaser.Geom.Ellipse(0, 0, R * 1.5, R * 0.7) },
+                speed: { min: 60, max: 190 }, angle: { min: 235, max: 305 }, gravityY: 240, lifespan: { min: 900, max: 1500 }, scale: { start: 0.2, end: 0 }, alpha: { start: 1, end: 0 },
+                tint: [0xffb040, 0xff7020], blendMode: 'ADD', frequency: 55
+            }).setDepth(y + 301);
+            const fum = this.add.particles(x, y - 20, 'espurna', {
+                emitZone: { type: 'random', source: new Phaser.Geom.Ellipse(0, 0, R * 1.2, R * 0.6) },
+                speedY: { min: -70, max: -30 }, lifespan: 1600, scale: { start: 0.5, end: 1.4 }, alpha: { start: 0.35, end: 0 }, tint: [0x2a1a14, 0x3a2a24], frequency: 90
+            }).setDepth(y + 299);
+            f.extres.push(brases, fum);
             const ticks = this.time.addEvent({ delay: 300, loop: true, callback: () => {
                 if (f.mort) return;
                 if (this.dinsOval(x, y, R, this.ineu.body.center)) this.ferIneu(1, { x, y });
@@ -1165,7 +1222,12 @@ class ZonaGabia extends ZonaBase {
         f.mort = true;
         this.tweens.killTweensOf(f.av);
         this.tweens.add({ targets: f.av, alpha: 0, duration: 300, onComplete: () => f.av.destroy() });
-        if (f.flames) { f.flames.stop(); this.time.delayedCall(800, () => f.flames.destroy()); }
+        if (f.flames) { f.flames.stop(); this.time.delayedCall(900, () => f.flames.destroy()); }
+        (f.extres || []).forEach(o => {
+            if (o.stop) { o.stop(); this.time.delayedCall(1700, () => o.destroy()); }
+            else if (o.setAlpha) { this.tweens.killTweensOf(o); this.tweens.add({ targets: o, alpha: 0, duration: 500, onComplete: () => o.destroy() }); }
+            else if (o.destroy) o.destroy();
+        });
     }
     // Neteja d'avisos i flames (canvi de fase o final del combat)
     netejarRonda(e) {
