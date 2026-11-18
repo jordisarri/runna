@@ -146,7 +146,7 @@
 
 - [x] `pare_daimiel`
 
-- [x] `pare_xevius` (sprite fet, amb el fanalet; el retrat és el cap retallat del sprite)
+- [x] `pare_xevius` (sprite fet, amb el fanalet; retrat fet: `assets/retrats/pare_xevius.webp`)
 
   *Prompt (anglès):* Full-body chibi character sprite, front view, standing, transparent background. An elderly monk drawn as a cute chibi: big head and small body, but still clearly the tallest and thinnest of all, with a long narrow face, high cheekbones, a big prominent nose, thick white eyebrows, small thin-framed round glasses, thin messy white hair, a calm but wary, once-bitten expression. He wears a white monk's habit with a white hood and collar and, over it, a pale cream liturgical chasuble with a vertical red-and-gold stripe down the middle, and brown sandals. He holds a small old brass oil lantern with a warm glowing flame in one hand, the other hand resting on his chest. Clean cartoon outlines, flat soft colors, cheerful fairy-tale game art.
 

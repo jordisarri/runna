@@ -219,7 +219,7 @@ const CATALEG = [
 
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
-['ineu', 'pare_jorda', 'germa_aldreu', 'germa_franci', 'pare_daimiel', 'pare_alcovi', 'eve', 'senyor_budo', 'jusef', 'pomers', 'julius', 'galf', 'isilder', 'pianista', 'joaneta', 'iscu',
+['ineu', 'pare_jorda', 'germa_aldreu', 'germa_franci', 'pare_daimiel', 'pare_alcovi', 'pare_xevius', 'eve', 'senyor_budo', 'jusef', 'pomers', 'julius', 'galf', 'isilder', 'pianista', 'joaneta', 'iscu',
  'nena_trenes', 'venerables', 'carry', 'carmelia', 'pilaria', 'dolora', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'follet_carro', 'georgi_caseta', 'rosansa', 'meus', 'molner', 'ombra_monjo', 'mandu', 'mandu_trencada', 'nen_uri', 'nen_flam', 'nen_sardin', 'ocellaire', 'ocellaire_derrotat', 'home_raim', 'home_raim_horitzo']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
