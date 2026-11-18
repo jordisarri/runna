@@ -24,7 +24,7 @@ const CATALEG = [
     { key: 'pilaria',   file: 'assets/personatges/pilaria.webp', amplada: 111, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#3b2a1e', ulleres: true, ample: 0.8, alt: 1.06 }) },
     { key: 'germa_franci', file: 'assets/personatges/germa_franci.webp', amplada: 78, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
     { key: 'pare_alcovi',   file: 'assets/personatges/pare_alcovi.webp',   amplada: 84, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
-    { key: 'pare_xevius',   file: 'assets/personatges/pare_xevius.webp',   amplada: 80, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#4a3a2c', cabell: '#cfcfcf', alt: 1.1, prim: true, barba: '#dcdcdc' }) },      // el Vigilant de la Porta de les Gírgoles (provisional fins que hi hagi l'art: vegeu docs/PROMPTS_GRAFICS.md)
+    { key: 'pare_xevius',   file: 'assets/personatges/pare_xevius.webp',   amplada: 80, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#4a3a2c', cabell: '#cfcfcf', alt: 1.1, prim: true, barba: '#dcdcdc' }) },      // el Vigilant de la Porta de les Gírgoles (provisional fins que hi hagi l'art: vegeu docs/PROMPTS_GRAFICS.md)
     { key: 'pare_alcovi_esquena', file: 'assets/personatges/pare_alcovi_esquena.webp', amplada: 82, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },      // d'esquena, llegint la Crònica al faristol (AutoSprite)
     // Elements
     { key: 'home_raim',    file: 'assets/enemics/home_raim.webp',    amplada: 115.5, provisional: (c, w) => dibuixarHomeRaimMarbre(c, w) },   // l'estàtua (abans del combat)
