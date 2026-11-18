@@ -998,9 +998,9 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[318] Pare Alcoví:** La tomba és al Cementiri, darrere del Santuari i el Monestir. Colpeja l'esquerda amb Runna, fill.
 
-**[674] Pare Alcoví:** I una cosa més que diu el marge de la Crònica, per quan baixis a la porta de les Gírgoles. Allà hi ha el Pare Xèvius, el vigilant. Fa trenta anys l'Aldreu el va enganyar amb bones paraules i, d'ençà d'aleshores, no es fia de ningú. No et deixarà passar sense una prova de bona voluntat, fill.
+**[674] Pare Alcoví:** I una cosa més, fill, que no és de la Crònica sinó d'un amic. Al Pare Xèvius, el vigilant de la porta de les Gírgoles, el conec de fa quaranta anys: no és dolent, sinó escaldat. Fa trenta anys l'Aldreu el va enganyar amb bones paraules, i des d'aleshores no es fia de ningú. Entén-lo, i no t'ho prenguis a mal.
 
-**[675] Pare Alcoví:** Només s'ablana amb la Carta del Cortiner, que reposa al tronc del Pi dels Tres Cants. Hauràs de despertar el pi amb els tres cants: Aurora, Vespres i Miracle. Fes-ho abans d'anar a la porta, que després no hi ha manera de tornar enrere.
+**[675] Pare Alcoví:** No et deixarà passar sense una prova de bona voluntat, i res no el convenç com la Carta del Cortiner, que reposa al tronc del Pi dels Tres Cants. Hauràs de despertar el pi amb els tres cants: Aurora, Vespres i Miracle. Fes-ho abans d'anar a la porta, que després no hi ha manera de tornar enrere.
 
 **[673] Pare Alcoví:** Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Francí t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat.
 
