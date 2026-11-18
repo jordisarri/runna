@@ -3456,7 +3456,7 @@
    {
     "id": 663,
     "qui": "Germà Francí",
-    "text": "I una altra cosa, fill: a l'Hostatgeria hi ha un àngel de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella.",
+    "text": "I una altra cosa, fill: a l'Hostatgeria hi ha un mussol de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella.",
     "fitxer": "js/zones/nord.js",
     "linia": 765
    },
@@ -4985,9 +4985,9 @@
    {
     "id": 650,
     "qui": "Ineu",
-    "text": "L'àngel de pedra no es belluga ni un pèl. Necessito ser molt més fort per moure'l.",
+    "text": "El mussol de pedra no es belluga ni un pèl. Necessito ser molt més fort per moure'l.",
     "fitxer": "js/zones/hostatgeria.js",
-    "linia": 413
+    "linia": 378
    }
   ],
   "zones/hostatgeria::ineuDiu·enMelodia": [
@@ -4996,7 +4996,7 @@
     "qui": "Ineu",
     "text": "La Dolora ja és desperta.",
     "fitxer": "js/zones/hostatgeria.js",
-    "linia": 631
+    "linia": 596
    }
   ],
   "zones/nord::ineuDiu·actualitzar": [

@@ -351,44 +351,9 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         }
     }
 
-    // L'àngel de pedra: una escultura de 100 px d'ample amb peanya, ales plegades, caputxa i mans juntes. (x, y) són els peus.
+    // L'escultura de pedra (un mussol sobre una peanya de dos graons, amb molsa i esquerdes): (x, y) són els peus. El dibuix antic de l'àngel ja no es fa servir.
     crearEstatua(x, y) {
-        const c = this.add.container(x, y).setDepth(y);
-        const g = this.add.graphics();
-        const PEDRA = 0x9a9484, MITJA = 0x7c7668, FOSCA = 0x5a5448, VORA = 0x24201a;
-        g.fillStyle(0x000000, 0.3).fillEllipse(0, 6, 128, 20);
-        // ales plegades al darrere
-        [-1, 1].forEach(sg => {
-            const ala = [{ x: sg * 12, y: -124 }, { x: sg * 54, y: -170 }, { x: sg * 66, y: -122 }, { x: sg * 52, y: -82 }, { x: sg * 28, y: -50 }];
-            g.fillStyle(MITJA, 1).fillPoints(ala, true).lineStyle(2, VORA, 1).strokePoints(ala, true);
-            g.lineStyle(1.5, FOSCA, 0.9);
-            for (let k = 1; k <= 4; k++) g.lineBetween(sg * 14, -122 + k * 12, sg * (50 + k * 4), -150 + k * 16);
-        });
-        // túnica: plecs i cara d'ombra a la dreta
-        const roba = [{ x: -30, y: -44 }, { x: -21, y: -122 }, { x: 21, y: -122 }, { x: 30, y: -44 }];
-        g.fillStyle(PEDRA, 1).fillPoints(roba, true);
-        g.fillStyle(MITJA, 1).fillPoints([{ x: 4, y: -122 }, { x: 21, y: -122 }, { x: 30, y: -44 }, { x: 10, y: -44 }], true);
-        g.lineStyle(2, VORA, 1).strokePoints(roba, true);
-        g.lineStyle(1.5, FOSCA, 0.85);
-        [-14, -4, 8, 18].forEach(fx => g.lineBetween(fx * 0.7, -112, fx * 1.35, -46));
-        g.fillStyle(FOSCA, 1).fillRect(-30, -62, 60, 4).fillRect(-4, -62, 8, 22);                    // cinta i cordó
-        // mans joves en pregària
-        g.fillStyle(PEDRA, 1).fillPoints([{ x: -9, y: -98 }, { x: 0, y: -116 }, { x: 9, y: -98 }, { x: 5, y: -86 }, { x: -5, y: -86 }], true).lineStyle(1.5, VORA, 1).strokePoints([{ x: -9, y: -98 }, { x: 0, y: -116 }, { x: 9, y: -98 }, { x: 5, y: -86 }, { x: -5, y: -86 }], true);
-        // cap amb caputxa i aurèola de pedra
-        g.fillStyle(PEDRA, 1).fillCircle(0, -136, 17).lineStyle(2, VORA, 1).strokeCircle(0, -136, 17);
-        g.fillStyle(MITJA, 1).fillPoints([{ x: -19, y: -126 }, { x: -17, y: -148 }, { x: 0, y: -158 }, { x: 17, y: -148 }, { x: 19, y: -126 }, { x: 10, y: -134 }, { x: -10, y: -134 }], true);
-        g.lineStyle(2, VORA, 1).strokePoints([{ x: -19, y: -126 }, { x: -17, y: -148 }, { x: 0, y: -158 }, { x: 17, y: -148 }, { x: 19, y: -126 }], false);
-        g.fillStyle(FOSCA, 0.7).fillEllipse(-5, -132, 4, 3).fillEllipse(5, -132, 4, 3).fillRect(-2, -128, 4, 5);                    // ulls i nas gairebé esborrats
-        g.lineStyle(3, 0xb8b09c, 0.8).strokeEllipse(0, -164, 42, 12);
-        // peanya de dos graons
-        g.fillStyle(MITJA, 1).fillRect(-54, -18, 108, 20).lineStyle(2, VORA, 1).strokeRect(-54, -18, 108, 20);
-        g.fillStyle(PEDRA, 1).fillRect(-46, -42, 92, 26).lineStyle(2, VORA, 1).strokeRect(-46, -42, 92, 26);
-        g.fillStyle(0xb4ac98, 1).fillRect(-50, -48, 100, 8).lineStyle(2, VORA, 1).strokeRect(-50, -48, 100, 8);
-        g.lineStyle(1.5, FOSCA, 0.9).lineBetween(-20, -40, -14, -28).lineBetween(-14, -28, -22, -18).lineBetween(24, -16, 30, -4);       // esquerdes
-        // molsa
-        g.fillStyle(0x5a7a4a, 0.7).fillEllipse(-36, -6, 22, 8).fillEllipse(30, -30, 14, 6).fillEllipse(-8, -118, 10, 5);
-        c.add(g);
-        return c;
+        return this.add.image(x, y + 6, 'estatua_mussol').setOrigin(0.5, 1).setDepth(y);
     }
 
     // L'Ineu empeny l'àngel si és a un costat, a prop, i avança contra ell (no cal cap punt exacte: qualsevol lloc del seu lateral serveix)
@@ -410,7 +375,7 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         if (!empeny || this.empentaMs < 300) return;                                                           // primer s'hi recolza una mica
         if (!Estat.te('guants')) {
             this.empentaMs = 0;
-            if (ara > this.pistaEstatua) { this.pistaEstatua = ara + 7000; this.ineuDiu("L'àngel de pedra no es belluga ni un pèl. Necessito ser molt més fort per moure'l."); }
+            if (ara > this.pistaEstatua) { this.pistaEstatua = ara + 7000; this.ineuDiu("El mussol de pedra no es belluga ni un pèl. Necessito ser molt més fort per moure'l."); }
             return;
         }
         this.empenyEstatua(cap, delta);

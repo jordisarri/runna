@@ -1444,7 +1444,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[453] Germà Francí:** Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.
 
-**[663] Germà Francí:** I una altra cosa, fill: a l'Hostatgeria hi ha un àngel de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella.
+**[663] Germà Francí:** I una altra cosa, fill: a l'Hostatgeria hi ha un mussol de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella.
 
 *Altrament (per defecte):*
 
@@ -2060,13 +2060,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[649] Ineu:** Les gírgoles canten: el micel·li es desfà!
 
-### pensament a actualitzar  <sub>(js/zones/hostatgeria.js:413)</sub>
+### pensament a actualitzar  <sub>(js/zones/hostatgeria.js:378)</sub>
 
 *Si: encara no porta els Guants de Poder*
 
-**[650] Ineu:** L'àngel de pedra no es belluga ni un pèl. Necessito ser molt més fort per moure'l.
+**[650] Ineu:** El mussol de pedra no es belluga ni un pèl. Necessito ser molt més fort per moure'l.
 
-### pensament a enMelodia  <sub>(js/zones/hostatgeria.js:631)</sub>
+### pensament a enMelodia  <sub>(js/zones/hostatgeria.js:596)</sub>
 
 **[651] Ineu:** La Dolora ja és desperta.
 

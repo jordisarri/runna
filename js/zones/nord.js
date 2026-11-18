@@ -762,7 +762,7 @@ Object.assign(DIALEGS, {
                 { qui: 'Germà Francí', text: 'Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.' },
                 { avis: 'Has obtingut els GUANTS DE PODER!', obj: 'guants' },
                 { qui: 'Germà Francí', text: 'Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.' },
-                { qui: 'Germà Francí', text: "I una altra cosa, fill: a l'Hostatgeria hi ha un àngel de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella." }
+                { qui: 'Germà Francí', text: "I una altra cosa, fill: a l'Hostatgeria hi ha un mussol de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella." }
             ],
             enAcabar: () => {
                 E.dona('guants');

@@ -120,7 +120,7 @@ const PROGRES = {
                       ? "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. Al jardí de l'Hostatgeria, la llosa dels monjos s'encén amb la llum de Runna: parla-ho amb l'Isílder."
                       : "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. La Rosansa, la venedora de verdures, ha tornat a passar per les cel·les: potser té la llavor d'una flor de lluna.")
               : !E.flag('mongesTrobades')
-                  ? "Sota la llosa, les sacerdotesses: desperta la Dolora, empeny l'àngel de pedra que barra la porta de la Pilària i talla els esbarzers de la Carmèlia."
+                  ? "Sota la llosa, les sacerdotesses: desperta la Dolora, empeny el mussol de pedra que barra la porta de la Pilària i talla els esbarzers de la Carmèlia."
                   : "Les sacerdotesses són lliures: la seva Empara Fraternal t'espera al cofre del vestíbul de l'Hostatgeria." },
         { id: 'roda', marca: ['rodaMoguda'], fet: E => E.flag('rodaMoguda'),
           pista: E => "La roda de carruatge de la qual et va parlar en Jusef tapa el túnel dels monjos. Amb els guants, es deixarà empènyer." },

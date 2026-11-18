@@ -214,6 +214,7 @@ const CATALEG = [
     { key: 'tarota_ui', file: 'assets/ui/tarota.webp', amplada: 520, cru: true },                 // la tarota del pergamí inferior on es toquen les notes (js/musica.js)
     { key: 'arma_espasa', file: 'assets/armes/espasa.webp',      amplada: 28, provisional: (c, w) => dibuixarEspasaProvisional(c, w) },   // l'espasa de Runna
     { key: 'cartell_llums', file: 'assets/objectes/cartell_llums.webp', amplada: 560, cru: true },            // cartell de paper (es mostra tal com és, amb el fons blanc)
+    { key: 'estatua_mussol', file: 'assets/objectes/estatua_mussol.webp', amplada: 96, cru: true },          // l'escultura de l'Hostatgeria (un mussol de pedra, a la peanya) que barra la porta del refetor
     { key: 'cartell_llums_petit', file: 'assets/objectes/cartell_llums_petit.webp', amplada: 56, cru: true },   // la mateixa imatge, nítida i petita, per a la paret (en examinar-lo es mostra la gran)
     { key: 'espurna',      file: null,      amplada: 32, provisional: (c, w) => dibuixarPuntSegell(c, w) }
 ];
