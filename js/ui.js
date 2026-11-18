@@ -1156,8 +1156,6 @@ class EscenaUI extends Phaser.Scene {
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
             { text: 'Àudio', audio: true, fn: () => { Sfx.commutarSilenci(); this.pintarSeleccio(); Sfx.tria(); } },
-            // Controls tàctils (només en pantalles tàctils): dretà (joystick a l'esquerra, acció a la dreta), esquerrà (al revés) o automàtic (tota la pantalla: un toc = acció, arrossegar = joystick)
-            ...(this.sys.game.device.input.touch ? [{ text: 'Mà', commuta: true, etiqueta: () => 'Mà: ' + ({ dreta: 'dretana', esquerra: 'esquerrana', auto: 'automàtic' })[this.mans], fn: () => { this.canviarMans(); this.pintarSeleccio(); Sfx.tria(); } }] : []),
             { text: 'Desa a un fitxer', fn: () => { Estat.exportar(); this.missatge('Partida baixada: guarda el fitxer. La podràs carregar des del títol.'); } },
             { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];
@@ -1282,18 +1280,9 @@ class EscenaUI extends Phaser.Scene {
     }
 
     // ---------------- CONTROLS TÀCTILS ----------------
-    // Quina mà domina als controls tàctils: 'dreta' (joystick a la meitat esquerra, acció a la dreta), 'esquerra' (al revés) o 'auto' (tota la pantalla: un toc = acció,
-    // tocar i arrossegar = joystick, i un segon dit mentre es mou = acció). Es recorda al navegador; per defecte, automàtic.
-    get mans() {
-        if (!this._mans) { try { this._mans = localStorage.getItem('runna_mans'); } catch (e) { /* res */ } if (!['dreta', 'esquerra', 'auto'].includes(this._mans)) this._mans = 'auto'; }
-        return this._mans;
-    }
-    canviarMans() {
-        const ordre = ['dreta', 'esquerra', 'auto'];
-        this._mans = ordre[(ordre.indexOf(this.mans) + 1) % ordre.length];
-        try { localStorage.setItem('runna_mans', this._mans); } catch (e) { /* res */ }
-        this.amagarJoystick();
-    }
+    // Controls tàctils: sempre en mode automàtic (tota la pantalla: un toc = acció, tocar i arrossegar = joystick, i un segon dit mentre es mou = acció).
+    // Ja no es pot triar la mà al menú: l'automàtic funciona bé per a tothom.
+    get mans() { return 'auto'; }
     amagarJoystick() {
         this.joyPunter = null; this.candidat = null;
         this.vectorTactil = { x: 0, y: 0 };
