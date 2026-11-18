@@ -1,13 +1,12 @@
 /**
- * ELS PERSONATGES DEL CELLER (ping-pong): Senyor Pomers, Eloi, Jusef i Julius, tots en estil xibi (cap gran, cos petit) i amb molt de detall.
+ * ELS PERSONATGES DEL CELLER (ping-pong): Senyor Pomers, Jusef i Julius, tots en estil xibi (cap gran, cos petit) i amb molt de detall.
  *  - Senyor Pomers: senyor alt i panxut d'uns 50 anys, amb molt de cabell, ulleres i la pala de pedra.
- *  - Eloi: atleta alt i musculós.
  *  - Jusef: una mena de gurú alt i prim, amb ulleres, cabell curt i barba taronges.
  *  - Julius: cap enorme, ulleres i molt prim; porta la samarreta dels angelets.
  * Cada funció pinta en un llenç de 100 unitats d'ample (ctx ja escalat); dibuixarNpcPingpong ho prepara per al catàleg d'assets.
  */
 
-const PP_PROPORCIO = { pomers: 1.54, eloi: 1.58, jusef: 1.52, julius: 1.44 };
+const PP_PROPORCIO = { pomers: 1.54, jusef: 1.52, julius: 1.44 };
 
 function dibuixarNpcPingpong(c, w, qui, opts) {
     const asp = PP_PROPORCIO[qui];
@@ -103,61 +102,6 @@ PP_FN.pomers = (ctx, W, H) => {
     [[30, 36], [52, 36]].forEach(([x, y]) => { ctx.beginPath(); ctx.roundRect(x, y, 19, 14, 3); ctx.fill(); ctx.stroke(); });
     ctx.beginPath(); ctx.moveTo(49, 42); ctx.lineTo(52, 42); ctx.stroke(); ctx.beginPath(); ctx.moveTo(30, 41); ctx.lineTo(23, 39); ctx.moveTo(71, 41); ctx.lineTo(77, 39); ctx.stroke();
     ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.fillRect(33, 38, 4, 2); ctx.fillRect(55, 38, 4, 2);
-};
-
-// ELOI: atleta alt i musculós; esquena ampla, bíceps grossos, samarreta de tirants vermella, diadema i vambraces
-PP_FN.eloi = (ctx, W, H) => {
-    ppOmbraTerra(ctx, 50, H - 6, 36);
-    // cames musculoses (pantorrilles) i sabatilles
-    [[36], [64]].forEach(([x]) => {
-        ppRect(ctx, x - 8, H - 50, 16, 40, ppGradH(ctx, x - 8, x + 8, '#f0bf92', '#c88a5e', '#f8cfa4'), 6);
-        ppEl(ctx, x + (x < 50 ? -3 : 3), H - 32, 7.4, 8, 'rgba(180,100,60,0.3)', false);
-        ppRect(ctx, x - 8, H - 24, 16, 8, '#f2f2f2', 3);
-        ppRect(ctx, x - 12, H - 14, 24, 11, ppGradV(ctx, H - 14, H - 3, '#ffffff', '#c8c8d0'), 5);
-        ctx.fillStyle = '#c02828'; ctx.fillRect(x - 10, H - 9, 20, 3);
-    });
-    // pantaló curt negre amb franges
-    ctx.fillStyle = ppGradV(ctx, 96, H - 52, '#2a2a34', '#14141a'); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4;
-    ctx.beginPath(); ctx.moveTo(30, 98); ctx.lineTo(70, 98); ctx.lineTo(76, H - 50); ctx.lineTo(54, H - 50); ctx.lineTo(50, 112); ctx.lineTo(46, H - 50); ctx.lineTo(24, H - 50); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.strokeStyle = '#c02828'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(27, 102); ctx.lineTo(25, H - 52); ctx.moveTo(73, 102); ctx.lineTo(75, H - 52); ctx.stroke();
-    // tors en V: espatlles amples i cintura estreta
-    const tors = new Path2D(); tors.moveTo(14, 58); tors.quadraticCurveTo(50, 50, 86, 58); tors.lineTo(70, 102); tors.lineTo(30, 102); tors.closePath();
-    ctx.fillStyle = ppGradH(ctx, 14, 86, '#d82e2e', '#9a1a1a', '#ee4040'); ctx.fill(tors); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.4; ctx.stroke(tors);
-    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.beginPath(); ctx.moveTo(40, 80); ctx.quadraticCurveTo(50, 90, 60, 80); ctx.lineTo(58, 102); ctx.lineTo(42, 102); ctx.closePath(); ctx.fill();   // volum d'abdominals
-    ctx.fillStyle = '#f2f2f2'; ctx.beginPath(); ctx.moveTo(34, 56); ctx.quadraticCurveTo(50, 70, 66, 56); ctx.lineTo(62, 54); ctx.quadraticCurveTo(50, 62, 38, 54); ctx.closePath(); ctx.fill(); ctx.strokeStyle = PP_C; ctx.lineWidth = 1.6; ctx.stroke();
-    ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 3; ctx.font = 'bold 14px sans-serif'; ctx.fillStyle = '#f8f8f8'; ctx.textAlign = 'center'; ctx.fillText('7', 50, 86); ctx.textAlign = 'start';
-    // colls de pectorals i espatlles (pell)
-    ppEl(ctx, 50, 52, 9, 7, PP_PELL, false);
-    // braços: bíceps enormes i avantbraços amb vambraces
-    [[-1], [1]].forEach(([s]) => {
-        const x = 50 + s * 36;
-        ppEl(ctx, x, 70, 10, 18, ppGradH(ctx, x - 11, x + 11, '#f6c89c', '#c88a5e', '#fbd6ae'));
-        ppEl(ctx, x - s * 2, 66, 6.5, 8, 'rgba(255,255,255,0.22)', false);           // llum al bíceps
-        ctx.strokeStyle = 'rgba(160,90,60,0.6)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(x - 5, 76); ctx.quadraticCurveTo(x, 80, x + 5, 76); ctx.stroke();
-        ppRect(ctx, x - 7, 82, 14, 18, ppGradH(ctx, x - 7, x + 7, '#f0bf92', '#c88a5e'), 6);
-        ppRect(ctx, x - 8, 94, 16, 7, '#f2f2f2', 3);                                    // vambrace
-        ppMans(ctx, x, 106, 6);
-    });
-    // pala de ping-pong a la mà dreta
-    ctx.save(); ctx.translate(88, 106); ctx.rotate(0.12);
-    ppRect(ctx, -2.4, -2, 5, 16, '#a67442', 2);
-    ctx.fillStyle = ppGradV(ctx, -32, -2, '#d83a3a', '#8a1a1a'); ctx.beginPath(); ctx.ellipse(0, -16, 9, 12, 0, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = PP_C; ctx.lineWidth = 2.2; ctx.stroke();
-    ctx.restore();
-    // coll gruixut i cap més petit (és alt), mandíbula quadrada
-    ppRect(ctx, 41, 46, 18, 12, PP_PELL_OMBRA, 4);
-    ppCap(ctx, 50, 30, 21, 20);
-    ctx.fillStyle = 'rgba(214,150,110,0.45)'; ctx.beginPath(); ctx.moveTo(32, 38); ctx.quadraticCurveTo(50, 56, 68, 38); ctx.quadraticCurveTo(50, 44, 32, 38); ctx.fill();   // mandíbula
-    // cabell negre curt i punxós + diadema blanca i vermella
-    ctx.fillStyle = '#1e1a1e'; ctx.strokeStyle = PP_C; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(29, 28); ctx.lineTo(30, 14); ctx.lineTo(35, 17); ctx.lineTo(38, 8); ctx.lineTo(44, 14); ctx.lineTo(50, 6); ctx.lineTo(56, 14); ctx.lineTo(62, 8); ctx.lineTo(65, 17); ctx.lineTo(70, 14); ctx.lineTo(71, 28); ctx.quadraticCurveTo(50, 18, 29, 28); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#f2f2f2'; ctx.beginPath(); ctx.moveTo(29, 27); ctx.quadraticCurveTo(50, 17, 71, 27); ctx.lineTo(71, 32); ctx.quadraticCurveTo(50, 22, 29, 32); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#c02828'; ctx.beginPath(); ctx.moveTo(29, 29); ctx.quadraticCurveTo(50, 19, 71, 29); ctx.lineTo(71, 30.5); ctx.quadraticCurveTo(50, 20.5, 29, 30.5); ctx.closePath(); ctx.fill();
-    // cara decidida: celles gruixudes, ulls petits, somriure ample amb dents
-    ppUll(ctx, 42, 34, 3.4, 3.8, '#2a2a3a', 0.3); ppUll(ctx, 58, 34, 3.4, 3.8, '#2a2a3a', -0.3);
-    ctx.strokeStyle = '#1e1a1e'; ctx.lineWidth = 3.2; ctx.beginPath(); ctx.moveTo(36, 30); ctx.lineTo(46, 31); ctx.moveTo(54, 31); ctx.lineTo(64, 30); ctx.stroke();
-    ppEl(ctx, 50, 40, 3, 2.4, '#e6a47e');
-    ctx.fillStyle = '#ffffff'; ctx.strokeStyle = PP_C; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(40, 44); ctx.quadraticCurveTo(50, 53, 60, 44); ctx.quadraticCurveTo(50, 46, 40, 44); ctx.fill(); ctx.stroke();
-    ppRubor(ctx, 34, 40, 4.4, 2.8); ppRubor(ctx, 66, 40, 4.4, 2.8);
 };
 
 // JOSEP: gurú tranquil, alt i prim; cabell curt i barba taronges, ulleres rodones, túnica porpra estreta, collaret de boles i una pilota que levita

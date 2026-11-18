@@ -83,7 +83,6 @@ const CATALEG = [
     { key: 'molner', file: 'assets/personatges/molner.webp', amplada: 70, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a6a7a', cabell: '#5a4636', alt: 0.98, calb: true }) },
     { key: 'julius',      file: 'assets/personatges/julius.webp',      amplada: 72, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'julius') },
     { key: 'pomers',  file: 'assets/personatges/pomers.webp',  amplada: 77, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'pomers') },
-    { key: 'eloi',      file: null,      amplada: 104, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'eloi') },
     { key: 'jusef',     file: 'assets/personatges/jusef.webp',     amplada: 82, cru: true,  provisional: (c, w) => dibuixarNpcPingpong(c, w, 'jusef') },
     { key: 'jusef_levita', file: 'assets/personatges/jusef_levita.webp', amplada: 134, cru: true, provisional: (c, w) => dibuixarNpcPingpong(c, w, 'jusef') },   // en Jusef levitant amb la pala (minijoc de ping-pong)
     { key: 'senyor_budo', file: 'assets/personatges/senyor_budo.webp', amplada: 78, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a4a3a', cabell: '#e8e8e8', alt: 0.9, ample: 1.5, cap: 18 }) },      // el vell de la taverna, assegut
