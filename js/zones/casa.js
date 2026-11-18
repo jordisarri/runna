@@ -683,7 +683,8 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     tancarReixa() {
         if (this.reixaBoss) return;
         this.reixaBoss = true;
-        if (this.ineu && this.ineu.y > 935) this.ineu.body.reset(700, 900);       // si és a l'entrada de la reixa, se'l treu abans que es tanqui
+        // (en entrar a l'escena amb el guardià ja despert, aquesta crida és durant construir(): this.ineu és encara el de la visita anterior, destruït i sense cos)
+        if (this.ineu && this.ineu.active && this.ineu.body && this.ineu.y > 935) this.ineu.body.reset(700, 900);       // si és a l'entrada de la reixa, se'l treu abans que es tanqui
         this.tancarPortaSecreta();
         if (!this.colReixa || !this.colReixa.active) this.colReixa = this.colisio(700, 980, 184, 44);
         if (this.barrots) { this.tweens.killTweensOf(this.barrots); this.barrots.setAlpha(1); }
@@ -694,7 +695,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
     // La porta camuflada de l'esquerra també es tanca (una paret de pedra invisible davant la sortida) mentre el guardià és viu
     tancarPortaSecreta() {
         if (this.colSecreta && this.colSecreta.active) return;
-        this.colSecreta = this.colisio(121, 740, 24, 120);
+        this.colSecreta = this.colisio(121, 752, 24, 150);          // cobreix y 677-827: abans (120 d'alt) quedava un forat entre y 800 i 824, per sota de la paret, per on es podia fugir
     }
     // En caure el guardià, la reixa torna a l'estat d'abans (si ja era oberta, queda oberta; si no, es pot alçar la barra com sempre)
     reobrirReixa() {
