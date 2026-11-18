@@ -421,7 +421,7 @@ class CambraMonja extends ZonaCasaBase {
 
     construir() {
         const A = 800, H = 620, m = this.monja;
-        this.sala(A, H, 400, m === 'dolora' ? 0x7a6a5e : m === 'carmelia' ? 0x8a7a6e : 0x8a7260);
+        this.sala(A, H, 400, m === 'dolora' ? 0x7a6a5e : m === 'carmelia' ? 0x8a7a6e : 0x8a7260, 104);          // (el mur de col·lisió de la paret del fons arriba fins a la vora visible de la paret: l'Ineu la pot tocar)
         this.sortida(350, H - 22, 100, 14, 'ZonaHostatgeriaInt', { dolora: 'cambra1', pilaria: 'cambra2', carmelia: 'cambra3' }[m]);
         // Paret del fons: arrebossat amb taques de calç, un sòcol de fusta i dos aplics
         const paret = this.add.graphics().setDepth(-995);

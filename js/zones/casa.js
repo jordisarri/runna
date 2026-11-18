@@ -387,14 +387,14 @@ ENEMICS.raim = {
 // ---------------- BASE DE LES SALES ----------------
 class ZonaCasaBase extends ZonaBase {
     // Sala amb terra de marbre, murs i una obertura de 120 al mig de la paret de sota
-    sala(amp, alt, portaX, tint = 0xcfc2b0) {
+    sala(amp, alt, portaX, tint = 0xcfc2b0, altParet = 160) {          // altParet: fins on arriba el mur de col·lisió de la paret del fons (per defecte 160; les cambres de l'Hostatgeria el volen més baix, perquè l'Ineu hi pugui tocar la paret)
         this.terra('rajola', 130, 80, amp - 260, alt - 80, -1100).setTint(tint);
         const murs = this.add.graphics().setDepth(-1000);
         murs.fillStyle(0x2a1f18, 1).fillRect(90, 0, 40, alt).fillRect(amp - 130, 0, 40, alt);
         murs.fillStyle(0x3a2c22, 1).fillRect(130, 0, amp - 260, 90);
         this.colisio(50, alt / 2, 80, alt);
         this.colisio(amp - 50, alt / 2, 80, alt);
-        this.colisio(amp / 2, 80, amp - 260, 160);
+        this.colisio(amp / 2, altParet / 2, amp - 260, altParet);
         this.colisio((portaX - 60) / 2, alt - 10, portaX - 60, 20);
         this.colisio((portaX + 60 + amp) / 2, alt - 10, amp - portaX - 60, 20);
         this.add.rectangle(amp / 2, alt / 2, amp, alt, 0xffd38a, 0.05).setDepth(80000);
