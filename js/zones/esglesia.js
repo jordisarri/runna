@@ -180,9 +180,10 @@ class ZonaEsglesia extends ZonaBase {
     prepararEpileg() {
         this.epileg = true;
         const R = ESG.retY;
-        // Tots els adults fan la mateixa alçada (126: com l'Ineu, que fa uns 125) i els nens (96). Sense bancs: el poble és DE PEU, en tres files de tres a cada costat del passadís central (x 590-690),
+        // Les dones i l'Ineu fan la mateixa alçada (130, que a l'Ineu li dona uns 133 de cos visible), els homes una mica més (139) i els nens 96. Sense bancs: el poble és DE PEU, en tres files de tres a cada costat del passadís central (x 590-690),
         // a 85 px entre persones i 130 entre files per sota dels graons del presbiteri; els qui toquen el passadís (x 515 i 765) són els qui en surten per anar cap als nens.
-        const AD = 126, NEN = 96, FILES = [R + 480, R + 610, R + 740];
+        const AD = 130, HOME = 139, NEN = 96, FILES = [R + 480, R + 610, R + 740];
+        const HOMES_EPILEG = ['pare_daimiel', 'pare_jorda', 'pare_alcovi', 'isilder', 'molner', 'pomers', 'jusef', 'germa_franci', 'galf'];
         const seient = (fila, costat, n) => [(costat < 0 ? [345, 430, 515] : [765, 850, 935])[n], FILES[fila]];
         [['nen_uri', 480, R + 245, NEN], ['nen_flam', 590, R + 245, NEN], ['nen_sardin', 700, R + 245, NEN],      // els tres nens, separats, al peu de l'altar
          ['pare_daimiel', 360, R + 215, AD], ['pare_jorda', 965, R + 215, AD],                                      // el presbiteri: el Pare Nadiel a l'esquerra, el Pare Jordà a la dreta, i l'orgue amb la Pianista asseguda
@@ -195,7 +196,7 @@ class ZonaEsglesia extends ZonaBase {
         ].forEach(([k, x, y, h]) => {
             if (!this.textures.exists(k) || (this.npcs && this.npcs[k])) return;
             const n = this.npc(k, x, y, DIALEGS.gentEpileg, { flipX: x > 640 });
-            this.fixaAlcada(n, h);
+            this.fixaAlcada(n, HOMES_EPILEG.includes(k) ? HOME : h);          // els homes, una mica més alts
         });
         if (this.npcs && this.npcs.mandu && Estat.flag('manduNinaTrencada')) this.npcs.mandu.setTexture('mandu_trencada');            // la nina, encara sense cap
         // La Nena de les Trenes i la seva mare (si l'Ineu les va retrobar): dos esperits translúcids, de la mà al forat lliure del fons de la nau, que han sentit el cant des de lluny
