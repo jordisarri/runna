@@ -164,7 +164,7 @@ class ZonaSoterraniHost extends ZonaBase {
 //   dreta (capella, la Carmèlia): esbarzers negres → Runna
 // En alliberar les tres, obren la porta de l'Hostatgeria per dins (al vestíbul apareix un cofre amb l'Empara Fraternal).
 // On queda l'àngel de pedra un cop empès: justament fora de la porta del mig (que s'obre a 560-640) i lluny de les altres dues (a 300 i 900)
-const ESTATUA_X_ESQ = 470, ESTATUA_X_DRE = 730;
+const ESTATUA_X_ESQ = 500, ESTATUA_X_DRE = 700;
 class ZonaHostatgeriaInt extends ZonaCasaBase {
     constructor() {
         super('ZonaHostatgeriaInt', {
@@ -236,10 +236,10 @@ class ZonaHostatgeriaInt extends ZonaCasaBase {
         if (!Estat.flag('refetorObert')) {
             this.estatua = this.crearEstatua(600, 250);
             // Un cos sota els peus i un tros de paret al darrere: ni es pot vorejar per darrere ni passar entre l'àngel i la porta
-            this.colEstatua = [this.colisio(600, 236, 100, 40), this.colisio(600, 192, 150, 36)];
+            this.colEstatua = [this.colisio(600, 236, 76, 40), this.colisio(600, 192, 120, 36)];
         } else {
             const e = this.crearEstatua(Estat.flag('estatuaEsquerra') ? ESTATUA_X_ESQ : ESTATUA_X_DRE, 250);       // ja empès: es queda al costat
-            this.colisio(e.x, 236, 100, 40);
+            this.colisio(e.x, 236, 76, 40);
         }
         // Bloqueig de la capella (porta de la dreta): dues mates d'esbarzers negres, i un mur invisible al darrere perquè no es pugui vorejar
         this.esbarzer(880, 215, 'host_cap1'); this.esbarzer(924, 215, 'host_cap2');
