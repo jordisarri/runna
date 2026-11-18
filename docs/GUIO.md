@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 622: Sala de la Gàbia: la porta de la gàbia brilla (és interactiva) un cop vençut l'Ocellaire; quan l'Ineu convida el Germà Aldreu (abans d'obrir la gàbia i a la taula del refectori) l'Ineu i l'Aldreu es giren i es miren; el diàleg següent s'apropa l'Ineu a l'Aldreu i se'ls veu junts, de cara; l'Aldreu diu «Escolta'ls, riuen tan fort que no es poden engabiar.»; el Fram i el Sardi són més alts que l'Huri (a la Gàbia i a l'epíleg).*
+
 *Revisió 621: es tornen els capolls al dibuix anterior i la frase «penjats com llonganisses»; la mort de l'Home de la Gàbia diu «No... els meus riures... els meus ocells...» i «Tantes rialles, i cap no era per a mi.»; fora la frase lila sobreimpresa que no es podia llegir; la gàbia ja no diu les notes del Cant del Miracle; i la peça del Cant del Miracle fa un sol Do llarg en lloc de dos Do seguits.*
 
 *Revisió 620: combat de l'Ocellaire: es canvien les fases 2 i 3 dels atacs. La **fase 2** és la del terra en flames (foc, ocells, bàcul llançat i cercle; quatre ocells); la **fase 3**, la més difícil, és el bàcul amb sis ocells girant de pressa (alguns ràpids), el bàcul llançat, el cercle i l'esvaïment. Els cercles de foc es refan més espectaculars: un segell rúnic que gira i es va omplint de brasa amb espurnes que hi convergeixen, ona de xoc, flaix, esquerdes incandescents, columna de flames amb brases i fum, llum que batega, ignició en onada de cinc zones i cendra en apagar-se.*

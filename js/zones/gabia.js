@@ -776,7 +776,9 @@ class ZonaGabia extends ZonaBase {
         this.brillGabia = brill;
         this.gabiaGfx = [gb, gbPost, this.brillGabia].filter(Boolean);
         if (!oberta) this.colGabia = this.colisio(gx, base - 10, gw + 10, 50);
-        this.interactiu(gx, base + 60, 160, DIALEGS.gabiaGran, { altura: 260, actiu: () => !Estat.flag('gabiaOberta'), enTancar: () => Estat.posaFlag('flauta_gabia') });
+        const puntGabia = this.interactiu(gx, base + 60, 160, DIALEGS.gabiaGran, { altura: 260, actiu: () => !Estat.flag('gabiaOberta'), enTancar: () => Estat.posaFlag('flauta_gabia') });
+        // La porta de la gàbia brilla (com tot el que és interactiu) un cop vençut l'Ocellaire: és on s'ha de tocar el Cant del Miracle
+        this.brillo(gx, base - 118, 86, 150, { punt: puntGabia, actiu: () => Estat.flag('ocellaireVencut') && !Estat.flag('gabiaOberta'), dep: base + 27 });
         this.llocFlauta('gabia', gx, base + 60, 260, true, () => !Estat.flag('gabiaOberta'), false, ['miracle']);
 
         // Els tres capolls de boira (els nens), dins la gàbia mentre no s'obre
@@ -1431,6 +1433,23 @@ class ZonaGabia extends ZonaBase {
         a.respiraTrist = this.tweens.add({ targets: a, scaleY: s * 1.015, yoyo: true, repeat: -1, duration: 2600, ease: 'Sine.easeInOut' });
     }
     // Camina fins a (x, y); si encara és trist, recupera la postura en arribar (npcVa la reinicia)
+    // L'Ineu i l'Aldreu es miren: cadascun gira l'sprite cap a l'altre (l'Ineu a la vista de 8 direccions més propera; l'Aldreu amb el mirall)
+    mirarseIneuAldreu() {
+        const a = this.npcs.germa_aldreu, I = this.ineu;
+        if (!a) return;
+        const dx = a.x - I.x, dy = a.y - I.y;
+        const oct = OCTANTS_INEU[(Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) + 8) % 8];
+        const dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'esquerra' : 'dreta') : (dy < 0 ? 'amunt' : 'avall');
+        this.vista8Manual = true; this.posarDireccio(dir, false, oct);
+        a.setFlipX(I.x < a.x);
+    }
+    // L'Ineu camina fins al costat de l'Aldreu (al lloc d'on ve: a l'esquerra seu) i es giren l'un cap a l'altre; fet() quan hi és
+    ineuAproparAldreu(fet) {
+        const a = this.npcs.germa_aldreu, I = this.ineu;
+        if (!a) { fet(); return; }
+        const x = a.x - 82, y = a.y + 6;
+        this.ineuVa(x, y, () => { this.mirarseIneuAldreu(); fet(); }, 170);
+    }
     aldreuVa(x, y, fet, vel) {
         this.npcVa('germa_aldreu', x, y, () => { if (this.aldreuEstat === 'trist') this.aldreuTrist(this.npcs.germa_aldreu); if (fet) fet(); }, vel);
     }
@@ -1795,7 +1814,7 @@ class ZonaGabia extends ZonaBase {
                 z.esperar(1200, fet);
             } },
             // Abans d'obrir: l'Ineu convida l'Aldreu (que encara no, de cap cot i sense mirar)
-            { fer: (z, fet) => { const p = pAld(); z.enquadrar(p[0], p[1], 1.35, 900, fet); } },
+            { fer: (z, fet) => { const p = pAld(); z.enquadrar(p[0], p[1], 1.35, 900, fet); z.mirarseIneuAldreu(); } },          // es miren: l'Ineu gira cap a l'Aldreu i l'Aldreu cap a l'Ineu
             { qui: 'Ineu', text: "Germà Aldreu, la gàbia s'obrirà. Podeu venir amb nosaltres." },
             { qui: 'Germà Aldreu', text: "Encara no." },
             { fer: (z, fet) => z.seq([
@@ -1899,11 +1918,11 @@ class ZonaGabia extends ZonaBase {
             ], fet) },
             pla(pAld, 1.9, 900),                                       // P53: l'Aldreu escolta
             { qui: 'Germà Aldreu', text: "La seva veu em parlava dins el cap cada nit. Era l'única que em parlava." },
-            { qui: 'Germà Aldreu', text: "Escolta'ls. Riuen tan fort... i ningú no els tanca." },
-            pla(() => [I.x, I.y - 70], 1.5, 1),                        // P54
+            { qui: 'Germà Aldreu', text: "Escolta'ls, riuen tan fort que no es poden engabiar." },
+            { fer: (z, fet) => { z.mirarseIneuAldreu(); const a = z.npcs.germa_aldreu; z.enquadrar(a ? (I.x + a.x) / 2 : I.x, a ? (I.y + a.y) / 2 - 70 : I.y - 70, a ? 1.1 : 1.5, 700, fet); } },          // P54: l'Ineu es gira cap a l'Aldreu (i l'Aldreu cap a ell), i se'ls veu tots dos
             { qui: 'Ineu', text: "Veniu amb nosaltres, Germà. A la taula del refectori hi ha lloc per a tothom." },
-            // El somriure (el de la Plaça): suau, humil, una mica trist als ulls
-            { fer: (z, fet) => { const p = pAld(); z.enquadrar(p[0], p[1], 1.9, 600, () => { z.esperar(700, () => { z.aldreuSomriu(z.npcs.germa_aldreu); z.esperar(600, fet); }); }); } },
+            // L'Ineu s'apropa a l'Aldreu i se'ls veu junts, de cara: el somriure (el de la Plaça), suau, humil, una mica trist als ulls
+            { fer: (z, fet) => { z.ineuAproparAldreu(() => { const a = z.npcs.germa_aldreu; z.enquadrar((I.x + a.x) / 2, a.y - 0.68 * a.displayHeight, 2.1, 800, () => { z.esperar(500, () => { z.aldreuSomriu(a); z.esperar(600, fet); }); }); }); } },
             { qui: 'Germà Aldreu', text: "Ja ho sé que n'hi ha. Gràcies, Ineu." },
             { qui: 'Germà Aldreu', text: "El Mestre és aquí dins... Algú l'ha de vetllar. Algú que sàpiga què és no ser vist." },
             { fer: (z, fet) => { z.npcVa('germa_aldreu', gx, base + 10, null, 100); const a = z.npcs.germa_aldreu; z.enquadrar(gx, base + 10 - 0.8 * (a ? a.displayHeight : 100), 1.9, 1600, fet); } },

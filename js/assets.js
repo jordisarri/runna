@@ -158,11 +158,11 @@ const CATALEG = [
     { key: 'ocellaire_llança', file: 'assets/enemics/ocellaire_llança.webp', amplada: 170, cru: true },       // acaba de llançar el bàcul
     { key: 'ratpenat',       file: null,       amplada: 64, provisional: (c, w) => dibuixarRatpenat(c, w) },
     { key: 'capoll',         file: null,         amplada: 70, provisional: (c, w) => dibuixarCapoll(c, w) },
-    { key: 'nen_uri',        file: 'assets/personatges/nen_uri.webp',    amplada: 52.6, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7ad0', cabell: '#e8c870', alt: 0.56, cap: 17 }) },
-    { key: 'nen_flam',       file: 'assets/personatges/nen_flam.webp',   amplada: 54.8, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d04a3a', cabell: '#14100c', alt: 0.64, cap: 17 }) },
+    { key: 'nen_uri',        file: 'assets/personatges/nen_uri.webp',    amplada: 49.2, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#3a7ad0', cabell: '#e8c870', alt: 0.56, cap: 17 }) },
+    { key: 'nen_flam',       file: 'assets/personatges/nen_flam.webp',   amplada: 58.2, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d04a3a', cabell: '#14100c', alt: 0.64, cap: 17 }) },
     { key: 'mandu',          file: 'assets/personatges/mandu.webp',          amplada: 54.9, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8a0c0', cabell: '#8a5a2a', dona: true, alt: 0.62, cap: 17 }) },       // la Mandu, la germana del Fram, amb la nina sencera
     { key: 'mandu_trencada', file: 'assets/personatges/mandu_trencada.webp', amplada: 54.9, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#d8a0c0', cabell: '#8a5a2a', dona: true, alt: 0.62, cap: 17 }) },       // la mateixa, amb la nina sense cap (fins que el Fram torni)
-    { key: 'nen_sardin',     file: 'assets/personatges/nen_sardin.webp', amplada: 55.9, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a9a5a', cabell: '#1e1a16', alt: 0.74, cap: 17, ulleres: true }) },
+    { key: 'nen_sardin',     file: 'assets/personatges/nen_sardin.webp', amplada: 59.4, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#4a9a5a', cabell: '#1e1a16', alt: 0.74, cap: 17, ulleres: true }) },
     { key: 'pastor_boira',   file: 'assets/enemics/pastor_boira.webp',   amplada: 88, cru: true, provisional: (c, w) => dibuixarPastorBoira(c, w) },
     { key: 'pastor_derrota', file: 'assets/enemics/pastor_derrota.webp', amplada: 174, cru: true, provisional: (c, w) => dibuixarPastorDerrota(c, w) },
     { key: 'pastor_apunta',  file: 'assets/enemics/pastor_apunta.webp',  amplada: 174, cru: true },

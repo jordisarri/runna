@@ -185,7 +185,7 @@ class ZonaEsglesia extends ZonaBase {
         const AD = 130, HOME = 139, NEN = 96, FILES = [R + 480, R + 610, R + 740];
         const HOMES_EPILEG = ['pare_daimiel', 'pare_jorda', 'pare_alcovi', 'isilder', 'molner', 'pomers', 'jusef', 'germa_franci', 'galf'];
         const seient = (fila, costat, n) => [(costat < 0 ? [345, 430, 515] : [765, 850, 935])[n], FILES[fila]];
-        [['nen_uri', 480, R + 245, NEN], ['nen_flam', 590, R + 245, NEN], ['nen_sardin', 700, R + 245, NEN],      // els tres nens, separats, al peu de l'altar
+        [['nen_uri', 480, R + 245, NEN - 8], ['nen_flam', 590, R + 245, NEN + 9], ['nen_sardin', 700, R + 245, NEN + 9],      // els tres nens, separats, al peu de l'altar
          ['pare_daimiel', 360, R + 215, AD], ['pare_jorda', 965, R + 215, AD],                                      // el presbiteri: el Pare Nadiel a l'esquerra, el Pare Jordà a la dreta, i l'orgue amb la Pianista asseguda
          ['carry', ...seient(0, -1, 0), AD], ['pare_alcovi', ...seient(0, -1, 1), AD], ['venerables', ...seient(0, -1, 2), AD],
          ['isilder', ...seient(0, 1, 0), AD], ['carmelia', ...seient(0, 1, 1), AD], ['pilaria', ...seient(0, 1, 2), AD],

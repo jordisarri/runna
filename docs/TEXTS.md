@@ -1876,13 +1876,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[585] Ineu:** (Una força invisible no em deixa passar. Sense el Cant del Miracle, els barrots no m'escoltaran. La Pianista, al Santuari, me l'ha d'ensenyar.)
 
-### enMelodia  <sub>(js/zones/gabia.js:1271)</sub>
+### enMelodia  <sub>(js/zones/gabia.js:1273)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
 **[586] Ineu:** (L'Home de la Gàbia xiula més fort que el cant.)
 
-### iniciarCombatFinal  <sub>(js/zones/gabia.js:1536)</sub>
+### iniciarCombatFinal  <sub>(js/zones/gabia.js:1555)</sub>
 
 **[587] Aldreu, Pastor de Boira:** Una altra vegada, monjo? El Mestre no es cansa mai.
 
@@ -1926,7 +1926,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[607] Aldreu, Pastor de Boira:** Sí, Mestre...
 
-### ocellaireDerrotat  <sub>(js/zones/gabia.js:1731)</sub>
+### ocellaireDerrotat  <sub>(js/zones/gabia.js:1750)</sub>
 
 **[608] L'Home de la Gàbia:** No... els meus riures... els meus ocells...
 
@@ -1934,17 +1934,17 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[610] Germà Aldreu:** Mestre! No em deixeu!
 
-### obrirGabia  <sub>(js/zones/gabia.js:1799)</sub>
+### obrirGabia  <sub>(js/zones/gabia.js:1818)</sub>
 
 **[611] Ineu:** Germà Aldreu, la gàbia s'obrirà. Podeu venir amb nosaltres.
 
 **[612] Germà Aldreu:** Encara no.
 
-### finalGabia  <sub>(js/zones/gabia.js:1901)</sub>
+### finalGabia  <sub>(js/zones/gabia.js:1920)</sub>
 
 **[613] Germà Aldreu:** La seva veu em parlava dins el cap cada nit. Era l'única que em parlava.
 
-**[614] Germà Aldreu:** Escolta'ls. Riuen tan fort... i ningú no els tanca.
+**[614] Germà Aldreu:** Escolta'ls, riuen tan fort que no es poden engabiar.
 
 **[615] Ineu:** Veniu amb nosaltres, Germà. A la taula del refectori hi ha lloc per a tothom.
 

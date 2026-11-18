@@ -4483,7 +4483,7 @@
     "qui": "Ineu",
     "text": "(Una força invisible no em deixa passar. Sense el Cant del Miracle, els barrots no m'escoltaran. La Pianista, al Santuari, me l'ha d'ensenyar.)",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1294
+    "linia": 1296
    }
   ],
   "zones/gabia::enMelodia": [
@@ -4492,7 +4492,7 @@
     "qui": "Ineu",
     "text": "(L'Home de la Gàbia xiula més fort que el cant.)",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1271
+    "linia": 1273
    }
   ],
   "zones/gabia::iniciarCombatFinal": [
@@ -4501,147 +4501,147 @@
     "qui": "Aldreu, Pastor de Boira",
     "text": "Una altra vegada, monjo? El Mestre no es cansa mai.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1536
+    "linia": 1555
    },
    {
     "id": 588,
     "qui": "L'Home de la Gàbia",
     "text": "Torna a entrar, petit. Sempre torna, el riure.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1539
+    "linia": 1558
    },
    {
     "id": 589,
     "qui": "Aldreu, Pastor de Boira",
     "text": "Mestre, aquesta vegada sí!",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1540
+    "linia": 1559
    },
    {
     "id": 590,
     "qui": "Ineu",
     "text": "(Tres capolls de boira, penjats com llonganisses... L'Huri, el Fram, el Sardi. Dormen.)",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1545
+    "linia": 1564
    },
    {
     "id": 591,
     "qui": "Ineu",
     "text": "Aguanteu. Ja sóc aquí.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1549
+    "linia": 1568
    },
    {
     "id": 592,
     "qui": "Aldreu, Pastor de Boira",
     "text": "Silenci! Aquí no s'alça la veu, monjo. El Mestre dorm, i jo vetllo el seu son.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1551
+    "linia": 1570
    },
    {
     "id": 593,
     "qui": "Ineu",
     "text": "Germà Aldreu, sóc jo. Baixeu la veu.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1553
+    "linia": 1572
    },
    {
     "id": 594,
     "qui": "Aldreu, Pastor de Boira",
     "text": "Per cada riure que li duc, em gratifica amb un «bon minyó, Aldreu». No pots entendre què vol dir per a mi que algú tan poderós conegui el meu nom.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1555
+    "linia": 1574
    },
    {
     "id": 595,
     "qui": "Aldreu, Pastor de Boira",
     "text": "Tu sempre has tingut el favor de tothom, nen mimat!",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1562
+    "linia": 1581
    },
    {
     "id": 596,
     "qui": "Ineu",
     "text": "Això no és admirar algú, Aldreu, és engabiar-se.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1564
+    "linia": 1583
    },
    {
     "id": 597,
     "qui": "Aldreu, Pastor de Boira",
     "text": "Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1566
+    "linia": 1585
    },
    {
     "id": 598,
     "qui": "L'Home de la Gàbia",
     "text": "Aldreu, fill meu, no cal que cridis.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1568
+    "linia": 1587
    },
    {
     "id": 599,
     "qui": "L'Home de la Gàbia",
     "text": "Uns peus de monjo jove damunt la meva pedra.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1569
+    "linia": 1588
    },
    {
     "id": 600,
     "qui": "Ineu",
     "text": "Deixeu que els nens tornin amb els seus!",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1571
+    "linia": 1590
    },
    {
     "id": 601,
     "qui": "L'Home de la Gàbia",
     "text": "Un nen que riu... feia segles que no en sentia cap.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1573
+    "linia": 1592
    },
    {
     "id": 602,
     "qui": "L'Home de la Gàbia",
     "text": "La gàbia és plena de riures robats. Encara hi cap el teu.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1574
+    "linia": 1593
    },
    {
     "id": 603,
     "qui": "Ineu",
     "text": "Ja coneixeu Runna. I ara em coneixereu a mi!",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1576
+    "linia": 1595
    },
    {
     "id": 604,
     "qui": "L'Home de la Gàbia",
     "text": "Runna... Quina espasa tan petita per a una sala tan gran.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1578
+    "linia": 1597
    },
    {
     "id": 605,
     "qui": "Aldreu, Pastor de Boira",
     "text": "Deixeu-me'l a mi, Mestre, aquest cop l'esclafaré!",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1580
+    "linia": 1599
    },
    {
     "id": 606,
     "qui": "L'Home de la Gàbia",
     "text": "Aparta, Aldreu. Aquesta nit el Mestre mateix et mostrarà com es fa.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1581
+    "linia": 1600
    },
    {
     "id": 607,
     "qui": "Aldreu, Pastor de Boira",
     "text": "Sí, Mestre...",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1582
+    "linia": 1601
    }
   ],
   "zones/gabia::ocellaireDerrotat": [
@@ -4650,21 +4650,21 @@
     "qui": "L'Home de la Gàbia",
     "text": "No... els meus riures... els meus ocells...",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1731
+    "linia": 1750
    },
    {
     "id": 609,
     "qui": "L'Home de la Gàbia",
     "text": "Tantes rialles, i cap no era per a mi.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1733
+    "linia": 1752
    },
    {
     "id": 610,
     "qui": "Germà Aldreu",
     "text": "Mestre! No em deixeu!",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1762
+    "linia": 1781
    }
   ],
   "zones/gabia::obrirGabia": [
@@ -4673,14 +4673,14 @@
     "qui": "Ineu",
     "text": "Germà Aldreu, la gàbia s'obrirà. Podeu venir amb nosaltres.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1799
+    "linia": 1818
    },
    {
     "id": 612,
     "qui": "Germà Aldreu",
     "text": "Encara no.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1800
+    "linia": 1819
    }
   ],
   "zones/gabia::finalGabia": [
@@ -4689,56 +4689,56 @@
     "qui": "Germà Aldreu",
     "text": "La seva veu em parlava dins el cap cada nit. Era l'única que em parlava.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1901
+    "linia": 1920
    },
    {
     "id": 614,
     "qui": "Germà Aldreu",
-    "text": "Escolta'ls. Riuen tan fort... i ningú no els tanca.",
+    "text": "Escolta'ls, riuen tan fort que no es poden engabiar.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1902
+    "linia": 1921
    },
    {
     "id": 615,
     "qui": "Ineu",
     "text": "Veniu amb nosaltres, Germà. A la taula del refectori hi ha lloc per a tothom.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1904
+    "linia": 1923
    },
    {
     "id": 616,
     "qui": "Germà Aldreu",
     "text": "Ja ho sé que n'hi ha. Gràcies, Ineu.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1907
+    "linia": 1926
    },
    {
     "id": 617,
     "qui": "Germà Aldreu",
     "text": "El Mestre és aquí dins... Algú l'ha de vetllar. Algú que sàpiga què és no ser vist.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1908
+    "linia": 1927
    },
    {
     "id": 618,
     "qui": "Germà Aldreu",
     "text": "Jo em quedo amb ell.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1910
+    "linia": 1929
    },
    {
     "id": 619,
     "qui": "Ineu",
     "text": "Vindré a veure-us.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1912
+    "linia": 1931
    },
    {
     "id": 620,
     "qui": "Germà Aldreu",
     "text": "Ja ho sé.",
     "fitxer": "js/zones/gabia.js",
-    "linia": 1913
+    "linia": 1932
    }
   ],
   "zones/esglesia::ferEpileg": [
