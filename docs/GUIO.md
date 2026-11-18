@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 618: l'abisme i el pont de la Sala de la Gàbia es llegeixen molt més clar: una fossa fonda amb la paret de pedra de la plataforma, resplendor i boira lila que puja del fons, un caire a la vora de l'escala amb quatre pedres rúniques que marquen el pas, el traçat lluminós del pont amb fletxes cap a la plataforma i els tres blocs que dormen al fons, ben visibles. En aixecar-se el pont, el traçat s'esvaeix i els blocs es fan sòlids.*
+
 *Revisió 617: la Galeria de la boira es fa més curta (880 px en lloc de 1400) i es redissenya com un saló de pedra d'aire nan (estil mines de Moria): dues fileres de pilars amb bandes de runes, murs amb relleus d'ocells i filet d'or, camí d'honor amb rombes, medalló d'estrella gravat al terra sota la boira, braserers, un gran arc d'or i runes cap a la Sala de la Gàbia i raigs de llum freda. En esvair-se la boira hi ha un sorollet suau i l'Ineu explica per què (l'Empara).*
 
 *Revisió 616: es treu del joc la ferralla (enemic que no s'usava a cap zona: codi, dibuix i so) i es posen al dia les xifres del guió: Home del Raïm 33 de vida i fase 2 a les 14; l'Empara Fraternal no cura (només és obligatòria per obrir la Porta de Ferro); les sacerdotesses són obligatòries. La immunitat del Pastor de Boira baixa de 440 a 270 ms (cada cop compta) i, a la pausa de l'Ocellaire i del Raïm, l'autoapuntat va sempre al cap.*

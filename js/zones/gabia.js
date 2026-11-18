@@ -748,6 +748,9 @@ class ZonaGabia extends ZonaBase {
         this.colisio((bx + bw / 2 + x1 + A) / 2, y1 + A / 2, x1 + A - (bx + bw / 2), A);
         this.limits = { x0: x0 + 70, x1: x1 - 70, y0: y0 + 90, y1: y1 - 45 };
 
+        // L'abisme que separa l'escala de la plataforma, ben llegible (js/zones/gabia_decor.js): una fossa fonda amb la paret de pedra de la plataforma, boira lila que puja del fons, la vora
+        // de l'escala amb un caire i, al mig, el traçat lluminós del pont que falta, amb els blocs de pedra que dormen al fons
+        this.dibuixarAbisme(x0 - A, x1 + A, y1, A, bx, bw);
         // El pont: blocs de pedra que dormen al fons i el Cant de Vespres aixeca
         this.blocs = [];
         for (let k = 0; k < 3; k++) {
@@ -756,7 +759,7 @@ class ZonaGabia extends ZonaBase {
         }
         if (Estat.flag('pontGabia')) this.blocs.forEach(b => b.setAlpha(1).setScale(1));
         else {
-            this.blocs.forEach(b => b.setAlpha(0.25).setScale(0.6));
+            this.blocs.forEach((b, i) => { b.setAlpha(0.8).setScale(0.82 - i * 0.03); });          // dormen al fons: ben visibles però apagats i més petits (com més avall, més lluny)
             this.colPont = this.colisio(bx, y1 + A / 2, bw, A);
         }
         this.yPont = y1 + A + 60;
@@ -1213,7 +1216,8 @@ class ZonaGabia extends ZonaBase {
         Estat.posaFlag('pontGabia');
         Sfx.secret();
         this.cameras.main.shake(600, 0.004);
-        this.blocs.forEach((b, i) => this.tweens.add({ targets: b, alpha: 1, scale: 1, delay: i * 400, duration: 700, ease: 'Back.easeOut' }));
+        this.blocs.forEach((b, i) => { this.tweens.add({ targets: b, alpha: 1, scale: 1, delay: i * 400, duration: 700, ease: 'Back.easeOut' }); });
+        (this.fantasmaPont || []).forEach(o => this.tweens.add({ targets: o, alpha: 0, duration: 900, onComplete: () => o.destroy() }));          // el traçat lluminós ja no cal: el pont és de debò
         this.time.delayedCall(1300, () => { if (this.colPont) this.obstacles.remove(this.colPont, true, true); });
         Estat.posaObjectiu("El pont de pedra porta fins a la gàbia.");
         Estat.desar();

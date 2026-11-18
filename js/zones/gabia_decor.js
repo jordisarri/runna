@@ -263,6 +263,58 @@ Object.assign(ZonaGabia.prototype, {
     },
 
     // Un bloc de pedra del pont, amb una runa que brilla quan el Cant de Vespres el desperta
+    // L'abisme del sud de la plataforma (entre l'escala i la plataforma): xmin..xmax i de ypl (vora sud de la plataforma) a ypl + prof. bx, bw: el pas del pont
+    dibuixarAbisme(xmin, xmax, ypl, prof, bx, bw) {
+        const W = xmax - xmin;
+        if (!this.textures.exists('boira_suau')) {                 // una taca rodona i difuminada (la mateixa de la galeria de la boira)
+            const c = this.textures.createCanvas('boira_suau', 256, 256), ctx = c.getContext();
+            const gr = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+            gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.5, 'rgba(255,255,255,0.55)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = gr; ctx.fillRect(0, 0, 256, 256); c.refresh();
+        }
+        const g = this.add.graphics().setDepth(-1055);
+        // Fons de la fossa: negre a dalt (sota la plataforma) i cada cop més lila i lluminós cap al fons
+        g.fillGradientStyle(0x050208, 0x050208, 0x2a0f4c, 0x2a0f4c, 1, 1, 1, 1).fillRect(xmin, ypl, W, prof);
+        // La paret de pedra de la plataforma, que baixa dins la fossa: filades de carreus que s'enfosqueixen
+        for (let f = 0, y = ypl; y < ypl + 44; f++, y += 14) {
+            for (let x = xmin + (f % 2) * 22; x < xmax; x += 44) {
+                const t = Math.max(0.15, 1 - f * 0.26);
+                g.fillStyle(Phaser.Display.Color.GetColor(Math.round(74 * t), Math.round(62 * t), Math.round(96 * t)), 1).fillRect(x + 1, y + 1, 42, 12);
+            }
+        }
+        g.fillStyle(0x000000, 0.35).fillRect(xmin, ypl + 30, W, 16);
+        // Resplendor lila del fons i una franja de llum al caire de baix
+        const llum = this.add.graphics().setDepth(-1054).setBlendMode(Phaser.BlendModes.ADD);
+        [[0.9, 0.05], [0.6, 0.06], [0.35, 0.08]].forEach(([f, a]) => llum.fillStyle(0x9a50ff, a).fillEllipse(xmin + W / 2, ypl + prof - 6, W * f, prof * 0.9));
+        this.tweens.add({ targets: llum, alpha: 0.55, yoyo: true, repeat: -1, duration: 2400, ease: 'Sine.easeInOut' });
+        // El caire de baix (vora de l'escala): una llosa llarga amb llum a la vora i petites roques
+        const caire = this.add.graphics().setDepth(-1040);
+        caire.fillStyle(0x1a1424, 1).fillRect(xmin, ypl + prof - 4, W, 10);
+        caire.fillStyle(0x6a5a80, 1).fillRect(xmin, ypl + prof - 8, W, 6);
+        caire.fillStyle(0xb8a0d8, 0.7).fillRect(xmin, ypl + prof - 8, W, 2);
+        caire.lineStyle(2, 0x120c18, 1).lineBetween(xmin, ypl + prof - 2, xmax, ypl + prof - 2);
+        // Dues pedres rúniques a cada banda del pas, que marquen on ha d'anar el pont (les seves bases)
+        [-1, 1].forEach(sd => { [ypl + 2, ypl + prof - 14].forEach(y => {
+            caire.fillStyle(0x4a3e60, 1).fillRect(bx + sd * (bw / 2 + 12) - 12, y - 4, 24, 16).lineStyle(2, 0x120c18, 1).strokeRect(bx + sd * (bw / 2 + 12) - 12, y - 4, 24, 16);
+            caire.lineStyle(2, 0xb88aff, 0.9).strokeCircle(bx + sd * (bw / 2 + 12), y + 4, 4);
+        }); });
+        // El traçat lluminós del pont que falta: dues llindes de llum a banda i banda del pas, amb fletxes que apunten cap a la plataforma i petits pous de llum
+        const fant = this.add.graphics().setDepth(-1042).setBlendMode(Phaser.BlendModes.ADD);
+        fant.lineStyle(3, 0xc89aff, 0.85);
+        for (let y = ypl + 6; y < ypl + prof - 12; y += 16) { fant.lineBetween(bx - bw / 2, y, bx - bw / 2, y + 8); fant.lineBetween(bx + bw / 2, y, bx + bw / 2, y + 8); }
+        for (let k = 0; k < 3; k++) { const y = ypl + 26 + k * 38; fant.lineStyle(2.5, 0xe6d0ff, 0.9).lineBetween(bx - 14, y + 8, bx, y - 6).lineBetween(bx + 14, y + 8, bx, y - 6); }
+        this.tweens.add({ targets: fant, alpha: 0.25, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
+        // Boira lila que puja del fons de l'abisme (només al llarg de la fossa) i petites espurnes
+        const boira = this.add.particles(xmin + W / 2, ypl + prof - 10, 'boira_suau', {
+            x: { min: -W / 2 + 40, max: W / 2 - 40 }, speedY: { min: -26, max: -8 }, speedX: { min: -8, max: 8 }, lifespan: { min: 2200, max: 3600 },
+            scale: { start: 0.35, end: 0.9 }, alpha: { start: 0.42, end: 0 }, tint: [0xa070ff, 0x7a40d8], frequency: 120
+        }).setDepth(-1053);
+        this.add.particles(xmin + W / 2, ypl + prof - 10, 'espurna', { x: { min: -W / 2 + 40, max: W / 2 - 40 }, speedY: { min: -36, max: -14 }, lifespan: 2200, scale: { start: 0.22, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xe0c8ff, 0xb88aff], frequency: 200 }).setDepth(-1052);
+        this.fantasmaPont = Estat.flag('pontGabia') ? [] : [fant];
+        if (Estat.flag('pontGabia')) fant.destroy();
+        return g;
+    },
+
     blocPont(x, y, w, h) {
         const g = this.add.graphics().setPosition(x, y).setDepth(-1045);
         g.fillStyle(0x1a1424, 1).fillRect(-w / 2, -h / 2 + 4, w, h);
