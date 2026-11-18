@@ -180,9 +180,9 @@ class ZonaEsglesia extends ZonaBase {
     prepararEpileg() {
         this.epileg = true;
         const R = ESG.retY;
-        // Tots els adults fan la mateixa alçada (140) i els nens (105). Sense bancs: el poble és DE PEU, en tres files de tres a cada costat del passadís central (x 590-690),
+        // Tots els adults fan la mateixa alçada (126: com l'Ineu, que fa uns 125) i els nens (96). Sense bancs: el poble és DE PEU, en tres files de tres a cada costat del passadís central (x 590-690),
         // a 85 px entre persones i 130 entre files per sota dels graons del presbiteri; els qui toquen el passadís (x 515 i 765) són els qui en surten per anar cap als nens.
-        const AD = 140, NEN = 105, FILES = [R + 480, R + 610, R + 740];
+        const AD = 126, NEN = 96, FILES = [R + 480, R + 610, R + 740];
         const seient = (fila, costat, n) => [(costat < 0 ? [345, 430, 515] : [765, 850, 935])[n], FILES[fila]];
         [['nen_uri', 480, R + 245, NEN], ['nen_flam', 590, R + 245, NEN], ['nen_sardin', 700, R + 245, NEN],      // els tres nens, separats, al peu de l'altar
          ['pare_daimiel', 360, R + 215, AD], ['pare_jorda', 965, R + 215, AD],                                      // el presbiteri: el Pare Nadiel a l'esquerra, el Pare Jordà a la dreta, i l'orgue amb la Pianista asseguda
@@ -203,7 +203,7 @@ class ZonaEsglesia extends ZonaBase {
             const mare = this.npc('mare_nena', 935, R + 740, () => ({ pagines: [] }), { flipX: true });
             this.fixaAlcada(mare, AD); mare.setTint(0xe8eeff).setAlpha(0.8);
             const nena = this.npc('nena_trenes', 1004, R + 740, DIALEGS.nenaEpileg, { flipX: true });
-            this.fixaAlcada(nena, 100); nena.setAlpha(0.9);
+            this.fixaAlcada(nena, 92); nena.setAlpha(0.9);
         }
         this.direccio = 'avall';
         if (this.ineu) this.posarDireccio('avall', false);
