@@ -831,7 +831,8 @@ class ZonaDolmen extends ZonaBase {
         const PY = sy + 145;
         this.placaDolmen = this.posar('placa_dolmen', sx, PY, { escala: 230 / 190, col: { w: 150, h: 16 }, opac: true });
         const PW = this.placaDolmen.displayWidth, PH = this.placaDolmen.displayHeight, PTOP = PY - PH;
-        this.placaGeo = { sx, PY, PW, PH, PTOP, cercles: { placaArbre: [sx - PW / 2 + PW * 0.295, PTOP + PH * 0.54], placaSaber: [sx - PW / 2 + PW * 0.515, PTOP + PH * 0.54], placaBenedicio: [sx - PW / 2 + PW * 0.69, PTOP + PH * 0.53] } };
+        // (els centres dels tres cercles de la placa, mesurats sobre el gràfic: diàmetre 0,185 de l'ample)
+        this.placaGeo = { sx, PY, PW, PH, PTOP, cercles: { placaArbre: [sx - PW / 2 + PW * 0.298, PTOP + PH * 0.549], placaSaber: [sx - PW / 2 + PW * 0.502, PTOP + PH * 0.549], placaBenedicio: [sx - PW / 2 + PW * 0.708, PTOP + PH * 0.549] } };
         const puntPlacaD = this.interactiu(sx, PY + 12, 130, DIALEGS.placaDolmen, { altura: PH + 20, actiu: () => !this.alt && this.davantPlaca() && !Estat.flag('placaCompleta') });
         this.brilloImatge(this.placaDolmen, { punt: puntPlacaD, actiu: () => !this.alt && !Estat.flag('placaCompleta') });          // la placa brilla fins que hi són els tres medallons          // amb els tres medallons ja no diu res: sense «!»
         this.medallonsPlaca = [];
@@ -1165,14 +1166,11 @@ class ZonaDolmen extends ZonaBase {
     // Dibuixa (fix) un medalló de pedra a la placa, al seu cercle, amb una llum suau del seu color
     dibuixaMedalloPlaca(flag, emb, color) {
         const g = this.placaGeo, [x, y] = g.cercles[flag], D = g.PW * 0.185;
-        const halo = this.add.circle(x, y, D * 0.8, color, 0.28).setBlendMode(Phaser.BlendModes.ADD).setDepth(g.PY + 3);
+        const halo = this.add.circle(x, y, D * 0.62, color, 0.22).setBlendMode(Phaser.BlendModes.ADD).setDepth(g.PY + 3);
         this.tweens.add({ targets: halo, alpha: 0.12, yoyo: true, repeat: -1, duration: 1400, ease: 'Sine.easeInOut' });
         const im = this.textures.exists(emb) ? this.add.image(x, y, emb).setDisplaySize(D, D).setDepth(g.PY + 4) : this.add.circle(x, y, D / 2, color).setDepth(g.PY + 4);
-        // Contorn de color ben visible al voltant del medalló (un anell fix i, a fora, un altre més ample que bategueja)
-        const anell = this.add.circle(x, y, D * 0.56).setStrokeStyle(4, color, 1).setDepth(g.PY + 5);
-        const anellFora = this.add.circle(x, y, D * 0.62).setStrokeStyle(7, color, 0.55).setBlendMode(Phaser.BlendModes.ADD).setDepth(g.PY + 5);
-        this.tweens.add({ targets: anellFora, alpha: 0.2, scale: 1.1, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
-        this.medallonsPlaca.push({ flag, halo, im, color, anell, anellFora });
+        // (el contorn de color és ja a la vora del medalló mateix: art/ui/emblema_*.png; aquí només una llum suau, més petita perquè els tres cercles són a prop i no es barregin)
+        this.medallonsPlaca.push({ flag, halo, im, color });
         return { halo, im, x, y, D };
     }
 
@@ -1200,6 +1198,12 @@ class ZonaDolmen extends ZonaBase {
 
     // Els tres medallons són a la placa: els tres cercles s'encenen, una llum puja de la placa cap a l'espasa i Runna s'il·lumina (apareix el punt d'interacció a l'espasa)
     placaCompleta(fet) {
+        // Abans del festival de llums, l'Ineu s'allunya de la placa caminant cap avall (només el necessari per no tapar-ne els medallons) i es gira cap a ella: així es veu bé tota l'escena (la placa, la llum que puja i l'espasa)
+        const I = this.ineu, yFi = Math.min(Math.max(I.y, this.placaGeo.PY + 100), this.config.alcada - 140);          // només el necessari: que el cap quedi per sota dels medallons
+        this.ineuVa(I.x, yFi, () => { this.posarDireccio('amunt', false); this.time.delayedCall(350, () => this.placaCompletaLlums(fet)); }, 105);
+    }
+
+    placaCompletaLlums(fet) {
         const g = this.placaGeo, ms = this.medallonsPlaca;
         Sfx.secret();
         ms.forEach(m => { this.tweens.killTweensOf(m.halo); this.tweens.add({ targets: m.halo, alpha: 0.9, scale: 1.8, duration: 700, yoyo: true, ease: 'Sine.easeInOut' }); });
