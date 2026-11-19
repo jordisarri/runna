@@ -102,3 +102,13 @@ La font de cada `.webp` s'ha determinat comparant-ne la imatge amb cada candidat
 6. Baixar un 10 % la saturació de `pi*` i `rialla`; halos radials del color de l'objecte.
 
 **Límits d'aquesta revisió.** He vist el render de 17 gràfics d'`assets/` (fulla de dalt) i la taula de duplicats és exhaustiva per nom, però la de «quin és l'origen» és aproximada (comparació en 48 px). No he vist els personatges NPC ni els retrats al detall.
+
+## 5. Rectificació i què s'ha executat (2026-11-19)
+- **Rectificació:** `art/` fa de mirall d'`assets/` per carpeta (README). Per això `art/ui/tarota.png` ↔ `art/ineu/tarota.png` i `art/proleg/ocellaire.jpg` ↔ `art/enemics/ocellaire.jpg` **no són conflictes** (cada un és l'origen d'un webp d'una carpeta diferent). Tampoc s'han mogut les carpetes `_v1`, `espasa_up_v4`, `tiller_up_v5`: les usen `fer_atac_arma.py` i `fer_atac_tiller_up_editable.py`. `columna_heura` només existeix com a `.webp` d'origen; no es pot recuperar el PNG.
+- **Neteja:** `logo_runna.jpg` → `art/titol/antics/`; `bolet_verinos.jpg` → `art/enemics/antics/`; `roca.png` → `art/natura/no_usats/` i `assets/natura/roca.webp` eliminat (ja no es feia servir: la clau `roca` és `roca_petita.webp`; el pas 4 ja era fet).
+- **`eines/auditar_art.py`:** webp sense original, formats duplicats a la mateixa carpeta, referències de `js/` a fitxers inexistents i relació d'aspecte. Ara surt net (només avisos d'aspecte, que són retalls normals).
+- **`GRUIX_CONTORN`** (3) a `js/dibuixos.js`, usat als traços de contorn de `dibuixos*.js`.
+- **`iconaVolum`** (`js/icones.js`): ombra suau a baix i llum a dalt-esquerra sobre 17 icones planes. Les 5 claus tenen cap diferent (anell, rombe, trèvol, quadrat, creu) i llum a la tija.
+- **Halos:** `llavorLluna` (lila radial) i `benedicio_fraterna` (daurat radial) ja no són un cercle pla; `estel_llorenc`, `runna` i `gra_rosari` ja eren radials.
+- **`eines/contorn_natura.py`:** contorn `#120c08` (4 px de webp, 3 als pins sense fulles) i –12 % de saturació a `arbre` i `pi*`; `rialla`, –10 % al fúcsia i una mica més càlid. La font sense contorn és a `art/natura/sense_contorn/`. **L'església no en porta.**
+- **Decisions d'estil registrades:** ombra de terra només a peces d'escenari; `cartell_llums` queda com a excepció B/N.

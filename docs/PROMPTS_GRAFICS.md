@@ -28,7 +28,7 @@
 
 - [x] `font_sj` i `font_sj_neta` (la Font del Bisbe, adormida i neta: `art/objectes/font_sj.png` i `font_sj_neta.png`)
 
-- [x] `bolet_verinos` (fet: `art/enemics/bolet_verinos.jpg`; el prompt és sota, a Enemics)
+- [x] `bolet_verinos` (fet: `art/enemics/bolet_verinos.png`; el prompt és sota, a Enemics)
 
 - [x] `branca`
 

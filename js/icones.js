@@ -6,15 +6,29 @@
 const ICONA_MIDA = 96;
 
 // Ajudes de dibuix
-function iconaClau(ctx, cos, ombra, gran) {
+function iconaClau(ctx, cos, ombra, gran, cap) {
     const s = gran ? 1.15 : 1;
     ctx.save(); ctx.translate(48, 48); ctx.rotate(-Math.PI / 4); ctx.scale(s, s);
-    ctx.fillStyle = cos; ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.arc(-22, 0, 13, 0, Math.PI * 2); ctx.arc(-22, 0, 6, 0, Math.PI * 2, true); ctx.fill('evenodd'); ctx.stroke();
-    ctx.beginPath(); ctx.arc(-22, 0, 6, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = cos; ctx.lineWidth = GRUIX_CONTORN;
+    // el cap és diferent a cada clau (es distingeixen per la forma, no només pel color)
+    if (cap === 'trevol') {
+        [[-22, -9], [-22, 9], [-33, 0]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+        ctx.beginPath(); ctx.arc(-22, 0, 10, 0, Math.PI * 2); ctx.fill();
+    } else if (cap === 'quadrat') {
+        ctx.beginPath(); ctx.roundRect(-36, -13, 26, 26, 4); ctx.fill(); ctx.stroke();
+    } else if (cap === 'rombe') {
+        ctx.beginPath(); ctx.moveTo(-38, 0); ctx.lineTo(-24, -15); ctx.lineTo(-10, 0); ctx.lineTo(-24, 15); ctx.closePath(); ctx.fill(); ctx.stroke();
+    } else if (cap === 'creu') {
+        ctx.beginPath(); ctx.roundRect(-38, -5, 28, 10, 3); ctx.roundRect(-30, -15, 10, 30, 3); ctx.fill(); ctx.stroke();
+    } else {
+        ctx.beginPath(); ctx.arc(-22, 0, 13, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    }
+    if (cap !== 'creu') { ctx.fillStyle = 'rgba(18,12,8,0.85)'; ctx.beginPath(); ctx.arc(-22, 0, 4.5, 0, Math.PI * 2); ctx.fill(); }   // forat/gemma
+    ctx.fillStyle = cos;
     ctx.beginPath(); ctx.rect(-10, -4, 40, 8); ctx.fill(); ctx.stroke();
     ctx.beginPath(); ctx.rect(18, 4, 6, 10); ctx.rect(26, 4, 4, 7); ctx.fill(); ctx.stroke();
     ctx.fillStyle = ombra; ctx.fillRect(-9, 1, 38, 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.fillRect(-9, -3, 38, 1.5);                                      // llum a la tija
     ctx.restore();
 }
 
@@ -63,6 +77,19 @@ function iconaFlors(ctx, colors) {
     ctx.fillStyle = '#d8c8a0'; ctx.lineWidth = 3;
     ctx.beginPath(); ctx.moveTo(36, 56); ctx.lineTo(60, 56); ctx.lineTo(54, 86); ctx.lineTo(42, 86); ctx.closePath(); ctx.fill(); ctx.stroke();
 }
+
+// Dóna volum a una icona ja dibuixada (només sobre els píxels pintats): ombra suau a la meitat inferior i una llum a dalt-esquerra.
+// Es passa a les icones que eren planes perquè quedin al nivell de les refetes (pallofa, pa_pastor, basto_tiller).
+function iconaVolum(ctx, fort) {
+    const f = fort || 1;
+    ctx.save(); ctx.globalCompositeOperation = 'source-atop';
+    const g = ctx.createLinearGradient(0, 30, 0, 92); g.addColorStop(0, 'rgba(60,30,10,0)'); g.addColorStop(1, 'rgba(60,30,10,' + (0.3 * f) + ')');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, 96, 96);
+    const l = ctx.createRadialGradient(34, 28, 2, 34, 28, 46); l.addColorStop(0, 'rgba(255,248,220,' + (0.32 * f) + ')'); l.addColorStop(1, 'rgba(255,248,220,0)');
+    ctx.fillStyle = l; ctx.fillRect(0, 0, 96, 96);
+    ctx.restore();
+}
+const ICONES_AMB_VOLUM = ['clau_campanar', 'clau_sagrari', 'clau_girgoles', 'clau_ferro', 'clau_gabriel', 'fragment1', 'fragment2', 'maneta', 'ram', 'flors_isilder', 'herba_sj', 'romani', 'fulla_tiler', 'telescopi', 'cinta_nena', 'llac_nena', 'guants'];
 
 const ICONES_OBJECTES = {
     // La tarota (instrument de canya doble catalana): cos cònic de fusta fosca amb el pavelló obert, forats i anelles de llautó, bocal i canya
@@ -158,11 +185,11 @@ const ICONES_OBJECTES = {
         ctx.fillStyle = 'rgba(40,40,48,0.55)'; [[2, 3.5, 1.1], [-1, 6, 0.8], [4.6, 5.8, 0.7]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); });
         ctx.restore();
     },
-    clau_campanar: ctx => iconaClau(ctx, '#c8a858', '#7a5a22'),
-    clau_sagrari: ctx => iconaClau(ctx, '#e8c050', '#a07a20'),
-    clau_girgoles: ctx => iconaClau(ctx, '#a8603a', '#6a3418'),
-    clau_ferro: ctx => iconaClau(ctx, '#6a6a72', '#3a3a40', true),
-    clau_gabriel: ctx => iconaClau(ctx, '#9fb8cc', '#4a6278'),
+    clau_campanar: ctx => iconaClau(ctx, '#c8a858', '#7a5a22', false, 'anell'),
+    clau_sagrari: ctx => iconaClau(ctx, '#e8c050', '#a07a20', false, 'rombe'),
+    clau_girgoles: ctx => iconaClau(ctx, '#a8603a', '#6a3418', false, 'trevol'),
+    clau_ferro: ctx => iconaClau(ctx, '#6a6a72', '#3a3a40', true, 'quadrat'),
+    clau_gabriel: ctx => iconaClau(ctx, '#9fb8cc', '#4a6278', false, 'creu'),
     aigua_sj: ctx => iconaFlasco(ctx, '#6ab0e8', '#c8e8ff'),
     beuratge: ctx => iconaFlascoRodo(ctx),                  // igual que el flascó verd que prepara la Joaneta
     cristall_gel: ctx => {
@@ -295,7 +322,7 @@ const ICONES_OBJECTES = {
     cinta_nena: (ctx, cv) => { const t = document.createElement('canvas'); dibuixarLlac(t, 80); ctx.drawImage(t, 8, (96 - t.height) / 2); },      // el mateix llaç que es troba sota les pedres
     benedicio_fraterna: ctx => {                                // una creu al mig d'una aurèola daurada, amb raigs de claror i dos cors petits als costats
         ctx.lineWidth = 3;
-        ctx.fillStyle = 'rgba(255,220,120,0.35)'; ctx.beginPath(); ctx.arc(48, 48, 40, 0, Math.PI * 2); ctx.fill();
+        const hl = ctx.createRadialGradient(48, 48, 12, 48, 48, 42); hl.addColorStop(0, 'rgba(255,224,120,0.6)'); hl.addColorStop(1, 'rgba(255,190,60,0)'); ctx.fillStyle = hl; ctx.beginPath(); ctx.arc(48, 48, 42, 0, Math.PI * 2); ctx.fill();
         ctx.strokeStyle = '#e8b830'; ctx.lineWidth = 3;
         for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6; ctx.beginPath(); ctx.moveTo(48 + Math.cos(a) * 30, 48 + Math.sin(a) * 30); ctx.lineTo(48 + Math.cos(a) * 42, 48 + Math.sin(a) * 42); ctx.stroke(); }
         ctx.strokeStyle = CONTORN; ctx.lineWidth = 3; ctx.fillStyle = '#f6e6a8';
@@ -445,7 +472,7 @@ const ICONES_OBJECTES = {
         ctx.restore();
     },
     llavorLluna: ctx => {
-        const g = ctx.createRadialGradient(48, 52, 2, 48, 52, 42); g.addColorStop(0, 'rgba(230,230,255,0.8)'); g.addColorStop(1, 'rgba(200,200,255,0)');
+        const g = ctx.createRadialGradient(48, 52, 2, 48, 52, 42); g.addColorStop(0, 'rgba(196,176,255,0.75)'); g.addColorStop(0.55, 'rgba(160,140,236,0.3)'); g.addColorStop(1, 'rgba(140,120,230,0)');
         ctx.fillStyle = g; ctx.fillRect(0, 0, 96, 96);
         ctx.lineWidth = 3; ctx.fillStyle = '#e8e4f8';
         ctx.beginPath(); ctx.ellipse(48, 54, 18, 26, 0.3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
@@ -647,6 +674,7 @@ function iconaObjecte(scene, id) {
         const ctx = cv.getContext('2d');
         ctx.lineJoin = 'round'; ctx.strokeStyle = CONTORN;
         dib(ctx, cv, scene);
+        if (ICONES_AMB_VOLUM.includes(id)) iconaVolum(ctx);
         scene.textures.addCanvas(clau, cv);
     }
     return clau;
