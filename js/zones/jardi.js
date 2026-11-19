@@ -14,7 +14,7 @@ class ZonaJardi extends ZonaBase {
             nom: "L'Hostatgeria",
             amplada: 1800,
             alcada: 1100,
-            entrades: { era: { x: 60, y: 960, dir: 'dreta' }, taverna: { x: 1740, y: 960, dir: 'esquerra' }, llosa: { x: 664, y: 588, dir: 'avall' }, hostatgeria: { x: 1339, y: 800, dir: 'avall' } }
+            entrades: { era: { x: 60, y: 960, dir: 'dreta' }, taverna: { x: 1740, y: 960, dir: 'esquerra' }, llosa: { x: 624, y: 568, dir: 'avall' }, hostatgeria: { x: 1339, y: 800, dir: 'avall' } }
         });
     }
 
@@ -26,24 +26,25 @@ class ZonaJardi extends ZonaBase {
 
         // --- L'Hostatgeria: edifici gran a la dreta (1100 d'ample; la paret de l'esquerra és a x≈752) ---
         // La porta (~110x150) queda a x≈1339.
-        const casa = this.posar('hostatgeria', 1250, 760, { fonsY: 640 });
+        const BASE = 734;                                  // on comença l'edifici (la base de la façana): el gràfic ja no té vorera; el mur de la pèrgola acaba al mateix nivell
+        const casa = this.posar('hostatgeria', 1250, BASE, { fonsY: 640 });
         // La façana, amb un forat a la porta (x 1293-1383). Un cop s'ha sortit per dins (o les sacerdotesses l'han oberta), s'hi pot entrar
         if (this.dadesEntrada.entrada === 'hostatgeria') Estat.posaFlag('portaHostOberta');
         const oberta = Estat.flag('portaHostOberta') || Estat.flag('mongesTrobades');
-        this.colisio((700 + 1293) / 2, 715, 1293 - 700, 90);
-        this.colisio((1383 + 1800) / 2, 715, 1800 - 1383, 90);
-        this.blocDarrere(1250, 1100, 670);
+        this.colisio((754 + 1293) / 2, (670 + BASE - 17) / 2, 1293 - 754, BASE - 17 - 670);          // (la paret de l'esquerra de la casa és a x≈754: l'Ineu s'hi pot arrambar des del jardí)
+        this.colisio((1383 + 1800) / 2, (670 + BASE - 17) / 2, 1800 - 1383, BASE - 17 - 670);
+        this.blocDarrere(1277, 1046, 670);
         if (oberta) {
             this.sortida(1295, 686, 86, 30, 'ZonaHostatgeriaInt', 'porta');
             this.portaAnimada({ x: 1338, top: 582, bottom: 719, ample: 90, fons: 640, unic: true, retall: casa });   // la mateixa porta del gràfic, que s'obre
         } else {
-            this.colisio(1338, 700, 90, 40);
+            this.colisio(1338, 698, 90, 36);
             this.interactiu(1339, 712, RADI_OBJECTE, DIALEGS.hostatgeria, { altura: 180 });          // (a la porta mateixa: l'Ineu s'hi para just davant, mirant cap amunt, i el punt ha de quedar davant seu)
         }
 
         // --- Pèrgola de pedra enganxada al lateral esquerre: dues files de columnes unides per bigues d'heura ---
-        // Fila del davant a y=760 (la base de la façana); fila del darrere a y=410 perquè el jardí i la llosa quedin ben deslliurats.
-        const COLS = [132, 284, 436, 588, 740], YB = 410, YF = 760;
+        // Fila del davant a y=BASE-48 (el mur de sota acaba a la base de la façana); fila del darrere a y=410 perquè el jardí i la llosa quedin ben deslliurats.
+        const COLS = [44, 276, 508, 740], YB = 410, YF = BASE - 48;          // quatre columnes per fila: la primera toca la vora de l'escenari (88 d'ample) i la de la dreta és enganxada a la paret de la casa
         const PLANTA = Math.round(casa.displayHeight * 0.339);            // alçada de la planta baixa de la façana
         const tex = this.textures.get('columna'), escalaBase = (tex.customData && tex.customData.escala) || 1 / RES;
         const colH = tex.getSourceImage().height * escalaBase;            // alçada d'una columna sense escalar
@@ -51,7 +52,7 @@ class ZonaJardi extends ZonaBase {
         // L'heura només baixa per les columnes (ja no hi ha bigues d'heura pel capdamunt: tapaven l'Isílder i l'Ineu quan hi passaven per sota).
         // (La funció biga() es deixa per si cal tornar-hi.)
         const heura = (x, y, esc, alfa, prof, ang) => {
-            if (Math.hypot(x - 290, (y - 430) * 1.25) < 195 && y < 545) prof = 638;   // sota la capçada de la Prunera però per damunt de les columnes del nord
+            if (Math.hypot(x - 160, (y - 430) * 1.25) < 195 && y < 545) prof = 638;   // sota la capçada de la Prunera però per damunt de les columnes del nord
             const l = this.add.image(x, y, 'fulla_heura').setScale(esc).setAlpha(alfa).setDepth(prof).setAngle(ang);
             l.setTint([0x4f8f35, 0x6aac3e, 0x7cbc4a, 0x3f7a30, 0x92cc58][Math.floor(rnd() * 5)]);
             return l;
@@ -70,13 +71,89 @@ class ZonaJardi extends ZonaBase {
         };
         // Les columnes: el mateix sprite (pedres irregulars amb heura), girat amb el mirall alternant de columna en columna i de fila en fila perquè no siguin totes iguals
         COLS.forEach((x, i) => [YB, YF].forEach((y, j) => {
-            const c = this.posar('columna_heura', x, y, { col: { w: 52, h: 14 }, opac: true });
-            c.setFlipX((i + j) % 2 === 1);
+            // Sense col·lisió pròpia (la fa només el mur, d'una sola línia) i per sobre del mur (hi són a sobre); les de la dreta les tapa l'edifici (es retallen a la seva paret, x = 754)
+            const c = this.posar('columna_heura', x, y, { opac: true });
+            c.setFlipX((i + j) % 2 === 1).setDepth(y + 41);
+            if (i === COLS.length - 1) { const fw = c.frame.width, ample = c.displayWidth; c.setCrop(0, 0, Math.max(1, Math.min(fw, (754 - (x - ample / 2)) / ample * fw)), c.frame.height); }
         }));
         this.pergola = { x0: COLS[0], x1: COLS[COLS.length - 1], yb: YB, yf: YF, planta: PLANTA };
 
+        // --- Murets sota les columnes (davant i darrere): les aguanten totes i van de la vora de l'escenari (x = 0) fins a la paret de la casa. Es construeixen repetint la textura
+        // muret_textura (en trossos d'ample fix), tot seguit des de la vora de l'esquerra. El mur del davant no es talla: davant, entre la 3a i la 4a columna, hi ha un graó
+        // que és l'entrada al jardí de la pèrgola (allà el mur no bloqueja el pas, i el tros de mur que hi ha es dibuixa per sota de l'Ineu perquè hi pugi). ---
+        const MX1 = 754, TW = 182;                                                   // MX1: paret de l'esquerra de la casa; TW: ample d'un tros de la textura al joc
+        const GX0 = (COLS[2] + COLS[3]) / 2 - 47, GX1 = GX0 + 94;                    // el graó: 94 d'ample, al mig entre la columna 3 i la 4
+        {
+            const tx = this.textures.get('muret_textura').getSourceImage();
+            const sg = TW / tx.width, DH = tx.height * sg;                           // escala de la textura (1024 x 340: el cos del mur ocupa de la fila 9 a la 325)
+            const PATX = 0;                                                            // la textura comença a la vora de l'escenari (la primera columna hi és just al damunt)
+            const YTOP = -8 - 9 * sg;                                                  // la part de dalt del dibuix, respecte a la fila de columnes (els peus de les columnes són a +8 de la vora de dalt del mur)
+            const WB = YF + 48;                                                        // la vora de baix del mur (al mateix nivell que la base de la casa)
+            const opacs = (this.opacs = this.opacs || []);
+            // Un tros de la textura de x = a fins a x = b, repetida. Per defecte, tota l'alçada; amb f = { r0, r1, top, h }: només les files r0..r1 de la textura, estirades a h píxels i amb la vora de dalt a y = top
+            const tros = (y, a, b, prof, f, opac = true) => {
+                const r0 = f ? f.r0 : 0, r1 = f ? f.r1 : tx.height, sy = f ? f.h / (r1 - r0) : sg;
+                const yi = f ? f.top - r0 * sy : y + YTOP;
+                const imgs = [];
+                for (let k = Math.floor((a - PATX) / TW); PATX + k * TW < b; k++) {
+                    const px = PATX + k * TW, x1 = Math.max(px, a), x2 = Math.min(px + TW, b);
+                    if (x2 <= x1) continue;
+                    const im = this.add.image(px, yi, 'muret_textura').setOrigin(0, 0).setScale(TW / tx.width, sy).setDepth(prof);
+                    const c0 = (x1 - px) / TW * tx.width, cw = (x2 - x1) / TW * tx.width;
+                    im.setCrop(c0, r0, cw, r1 - r0);
+                    if (opac) opacs.push(im);
+                    imgs.push(im);
+                }
+                return imgs;
+            };
+            this.gapMur = [];
+            // Una sola línia de col·lisió, fina, a la base del darrere del mur (y + 31): per davant l'Ineu hi arriba amb els peus a la vora de baix del mur (y + 48, el nivell de la casa) i per darrere
+            // hi arriba amb els peus a aquesta línia, de manera que el mur li tapa fins als genolls (el mur comença 39 px més amunt). El mur es dibuixa per darrere de l'Ineu quan és al davant
+            // (y + 48 o més) i per davant quan és al darrere.
+            const mur = (y, forat) => {
+                const prof = y + 40;
+                if (forat) { tros(y, PATX, GX0, prof); this.gapMur = tros(y, GX0, GX1, -750, null, false); tros(y, GX1, MX1, prof); }       // (el tros dels graons es dibuixa per sota de l'Ineu quan hi puja)
+                else tros(y, PATX, MX1, prof);
+                const col = (xa, xb) => this.colisio((xa + xb) / 2, y + 31.5, xb - xa, 2);
+                if (forat) { col(0, GX0); col(GX1, MX1); } else col(0, MX1);
+            };
+            mur(YB, false);                                                            // darrere
+            mur(YF, true);                                                             // davant
+            // Les escaletes (dibuixades amb codi, de color de pedra): dos graons, un enganxat al mur (el de dalt) i un al davant (el de baix), de 12 d'alt i 12 de fons cada un
+            const gr = this.add.graphics().setDepth(-745), TOP_C = 0xe8caa0, FRONT_C = 0xd2b283, LL = 0x2a2018, W_G = GX1 - GX0;
+            const graoDib = (yFront, h, d) => {                                            // yFront: vora de baix de la cara del davant del graó
+                gr.fillStyle(0x000000, 0.2).fillRect(GX0 - 1, yFront - 1, W_G + 2, 4);
+                gr.fillStyle(FRONT_C, 1).fillRect(GX0, yFront - h, W_G, h);
+                gr.fillStyle(TOP_C, 1).fillRect(GX0, yFront - h - d, W_G, d);
+                gr.fillStyle(0xfbe8c4, 0.6).fillRect(GX0, yFront - h - d, W_G, 1.5);
+                gr.lineStyle(1.3, LL, 1).strokeRect(GX0, yFront - h - d, W_G, h + d).lineBetween(GX0, yFront - h, GX1, yFront - h);
+                gr.lineStyle(1, 0x8a6f48, 0.7).lineBetween(GX0 + 2, yFront - h + 5, GX1 - 2, yFront - h + 5);
+            };
+            graoDib(WB + 12, 12, 12);                                                  // el de dalt, enganxat al mur
+            graoDib(WB + 24, 12, 12);                                                  // el del davant
+            // Pujar-los com a totes les escales del joc: més lent i un tap a cada graó. Mentre puja (graons i mur) l'Ineu es dibuixa més amunt (elevacioIneu, a zona_base) i, en passar
+            // el mur, torna a baixar: quan és a dins queda just darrere del mur, que li tapa fins als genolls.
+            this.registraGraons(GX0, GX1, [[WB + 22, WB + 30], [WB + 2, WB + 8], [YF + 30, YF + 38], [YF + 24, YF + 32]]);
+            const PUNTS = [[WB + 30, 0], [WB + 22, 12], [WB + 6, 12], [WB - 2, 24], [WB - 12, 24], [YF + 32, 40], [YF + 24, 0]];          // [peus y, elevació]
+            const alcada = y => {
+                if (y >= PUNTS[0][0]) return 0;
+                for (let k = 1; k < PUNTS.length; k++) if (y >= PUNTS[k][0]) return PUNTS[k][1] + (PUNTS[k - 1][1] - PUNTS[k][1]) * (y - PUNTS[k][0]) / (PUNTS[k - 1][0] - PUNTS[k][0]);
+                return 0;
+            };
+            const elev = () => {
+                const I = this.ineu;
+                if (!I || !I.active) return;
+                const dins = I.x > GX0 - 2 && I.x < GX1 + 2;
+                this.elevacioIneu = dins ? alcada(I.y) : 0;
+                const baix = dins && I.y > YF + 26;                                        // pujant (o davant): el tros de mur és per sota; ja a dins, passa a tapar-lo fins als genolls
+                this.gapMur.forEach(im => im.setDepth(baix ? -750 : YF + 40));
+            };
+            this.events.on('update', elev);
+            this.events.once('shutdown', () => { this.events.off('update', elev); this.elevacioIneu = 0; });
+        }
+
         // La Prunera Màgica, l'únic arbre: dins el jardí de la pèrgola
-        const PX = 290, PY = 640;
+        const PX = 160, PY = 640;
         this.posar('arbre', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } }).setTint(0xffd878);   // gran i alta: destaca sobre la pèrgola
         this.add.ellipse(PX, PY - 50, 380, 90, 0xffc850, 0.16).setDepth(-1080);
         this.add.ellipse(PX, PY - 220, 330, 240, 0xffc850, 0.18).setDepth(8000);
@@ -88,11 +165,12 @@ class ZonaJardi extends ZonaBase {
         this.interactiu(PX, PY + 40, RADI_GRAN * 1.5, DIALEGS.prunera, { altura: 150, senseMirada: true }); // es pot collir la pruna des de qualsevol costat de l'arbre
 
         // La llosa del passadís cap al soterrani de l'Hostatgeria, entre les columnes i ben amunt perquè les columnes del sud no la tapin gens
-        const LX = 664, LY = 490;
+        // La trapa funciona com la de la cripta de l'Escalinata del Raïm (90 x 46, en perspectiva, boca de pedra i llosa amb una creu): a prop del mur de darrere
+        const TWD = 90, THD = 46, TX0 = Math.round((COLS[2] + COLS[3]) / 2) - TWD / 2, TY0 = YB + 66;
+        const LX = TX0 + TWD / 2, LY = TY0 + THD / 2;
         this.llosaPos = { x: LX, y: LY };
-        this.foratLlosa = this.add.graphics().setDepth(-705);                // el forat amb l'escala, tapat per la llosa fins que s'obre
-        this.dibuixaForat(LX, LY);
-        this.llosa = this.posar('llosa', LX, LY, { fonsY: -700 }).setOrigin(0.5, 0.5);        // centrada sobre el forat (si no, per sota se'n veurien mig forat i les escales)
+        this.trapa = { x0: TX0, y0: TY0, w: TWD, h: THD, desplac: TWD + 10 };
+        this.dibuixaTrapa();
         this.florLluna = this.posar('flors', LX - 66, LY + 22, { escala: 0.8 }).setVisible(false);
         this.puntLlosa = this.interactiu(LX, LY + 5, RADI_OBJECTE, DIALEGS.llosaJardi, { altura: 60, actiu: () => !Estat.flag('llosaOberta') });
         this.brilloImatge(this.llosa, { punt: this.puntLlosa, actiu: () => !Estat.flag('llosaOberta') });          // la llosa brilla fins que s'obre
@@ -102,7 +180,7 @@ class ZonaJardi extends ZonaBase {
 
         // --- Gespa amb flors: només dins la pèrgola (cap flor fora). Un rectangle clar fa de gespa ben cuidada ---
         this.add.rectangle((COLS[0] + COLS[COLS.length - 1]) / 2, (YB + YF) / 2, COLS[COLS.length - 1] - COLS[0], YF - YB, 0xc4f08c, 0.14).setDepth(-1090);
-        const lliure = (x, y) => Math.hypot(x - PX, (y - PY) * 1.6) > 70 && Math.hypot(x - LX, (y - LY) * 1.6) > 130 && Math.hypot(x - (LX - 92), (y - LY) * 1.6) > 70;
+        const lliure = (x, y) => Math.hypot(x - PX, (y - PY) * 1.6) > 70 && Math.hypot(x - LX, (y - LY) * 1.6) > 130 && Math.hypot(x - (LX - 134), (y - LY) * 1.6) > 90;
         // Un jardí de debò: moltes flors, de colors diferents, escampades per tota la gespa i en mates més denses a les voreres i al peu de les columnes
         const COLORS_FLORS = [0xffffff, 0xffd6e6, 0xfff2b0, 0xd6e8ff, 0xffb0c8, 0xffcf80, 0xd0b0ff, 0xff9a9a, 0xb0f0d0];
         const flor = (x, y, esc) => { const f = this.posar('flors', x, y, { fonsY: -800, escala: esc }); f.setTint(COLORS_FLORS[Math.floor(rnd() * COLORS_FLORS.length)]); };
@@ -118,10 +196,9 @@ class ZonaJardi extends ZonaBase {
         this.isilder = this.npc('isilder', 360, 840, DIALEGS.isilder, { zoomConversa: 1.5 });
         this.puntLlosa.cameraCossos = [this.llosa]; this.puntLlosa.senseZoom = true;          // en examinar la llosa, la càmera només es centra (sense zoom) entre l'Ineu i la llosa
         if (Estat.flag('llosaOberta')) {
-            this.llosa.setPosition(LX - 92, LY + 4).setRotation(-0.1);
             this.florLluna.setVisible(true);
             this.posarEntradaForat();
-            const I = this.isilder, ix = LX - 74, iy = LY + 62;
+            const I = this.isilder, ix = LX - 32, iy = LY + 153;
             I.setPosition(ix, iy).setDepth(iy); I.ombra.setPosition(ix, iy);
             if (I.col) { I.col.setPosition(ix, iy - 9); I.col.body.updateFromGameObject(); }          // el cos de col·lisió també (abans es quedava on era abans de la llosa: es podia travessar)
             I.punt.x = ix; I.punt.y = iy - 10;
@@ -158,37 +235,65 @@ class ZonaJardi extends ZonaBase {
         this.time.delayedCall(9000, () => { if (f.active) this.tweens.add({ targets: f, alpha: 1, duration: 900 }); });          // en torna a créixer una
     }
 
-    dibuixaForat(x, y) {
-        const g = this.foratLlosa;
-        g.clear();
-        g.fillStyle(0x000000, 0.28).fillRoundedRect(x - 46, y - 43, 92, 92, 7);
-        g.fillStyle(0x6e6658, 1).fillRoundedRect(x - 44, y - 44, 88, 88, 5).lineStyle(3, 0x18120c, 1).strokeRoundedRect(x - 44, y - 44, 88, 88, 5);
-        g.lineStyle(1.4, 0x3a3228, 0.85);
-        [-22, 0, 22].forEach(d => {
-            g.lineBetween(x + d, y - 44, x + d, y - 36).lineBetween(x + d, y + 36, x + d, y + 44);
-            g.lineBetween(x - 44, y + d, x - 36, y + d).lineBetween(x + 36, y + d, x + 44, y + d);
-        });
-        g.fillStyle(0x0a0604, 1).fillRect(x - 36, y - 36, 72, 72);
-        [0x14100c, 0x241c14, 0x3a2e22, 0x5a4a36, 0x7a6648, 0x9a8460].forEach((c, i) => {
-            const sy = y - 36 + i * 12;
-            g.fillStyle(c, 1).fillRect(x - 36, sy, 72, 12).lineStyle(1.4, 0x0a0604, 0.9).lineBetween(x - 36, sy + 12, x + 36, sy + 12);
-            g.fillStyle(0xffffff, 0.08).fillRect(x - 35, sy + 1, 70, 2);
-        });
-        g.lineStyle(2, 0x120c08, 1).strokeRect(x - 36, y - 36, 72, 72);
+    // La trapa en perspectiva: la boca (marc de pedra, foscor i graons) i la llosa que la tapa, dibuixades com a trapezis (més estretes al fons que al davant) i amb el gruix de la llosa a la
+    // vora de davant. Mateixa idea i mateixa mecànica que la cripta de l'Escalinata del Raïm (casa.js), però més petita i amb poc marc, perquè no toqui les columnes.
+    dibuixaTrapa() {
+        const { x0: X0, y0: Y0, w: W, h: H } = this.trapa, RET = 8;                              // RET: quant més estreta és la vora del fons, a cada costat
+        let sem = 17; const rnd = () => { sem = (sem * 16807) % 2147483647; return sem / 2147483647; };
+        const trap = (g, x0, y0, w, h, ret, ym = 0) => g.fillPoints([{ x: x0 + ret, y: y0 }, { x: x0 + w - ret, y: y0 }, { x: x0 + w, y: y0 + h }, { x: x0, y: y0 + h }], true);
+        const bor = (g, x0, y0, w, h, ret) => g.strokePoints([{ x: x0 + ret, y: y0 }, { x: x0 + w - ret, y: y0 }, { x: x0 + w, y: y0 + h }, { x: x0, y: y0 + h }], true);
+        const boca = this.add.graphics().setDepth(-705);
+        const M = 5;                                                                              // el marc, fi
+        boca.fillStyle(0x000000, 0.3); trap(boca, X0 - M - 3, Y0 - M, W + 2 * M + 6, H + 2 * M + 6, RET);
+        boca.fillStyle(0x7a6c54, 1); trap(boca, X0 - M, Y0 - M, W + 2 * M, H + 2 * M, RET); boca.lineStyle(1, 0x241a10, 1); bor(boca, X0 - M, Y0 - M, W + 2 * M, H + 2 * M, RET);
+        boca.fillStyle(0xa49477, 1).fillRect(X0 - M + RET, Y0 - M, W + 2 * M - 2 * RET, 2);
+        boca.fillStyle(0x050302, 1); trap(boca, X0, Y0, W, H, RET);
+        for (let k = 0; k < 2; k++) {                                                            // dos graons a la meitat de baix: el més proper és el més clar
+            const alfa = [0.82, 0.45][k], yy = Y0 + H - 9 - k * 9, ample = W - 8 - k * 8, xx = X0 + 4 + k * 4;
+            boca.fillStyle(0xa89a7e, alfa).fillRect(xx, yy, ample, 5);
+            boca.fillStyle(0x2a2218, alfa).fillRect(xx, yy - 5, ample, 5);
+            boca.fillStyle(0xe2d6bc, alfa * 0.5).fillRect(xx, yy, ample, 1);
+        }
+        boca.fillGradientStyle(0x050302, 0x050302, 0x050302, 0x050302, 1, 1, 0, 0).fillRect(X0 + RET, Y0 + H * 0.3, W - 2 * RET, H * 0.3);
+        this.llumTrapa = this.add.ellipse(X0 + W / 2, Y0 + H * 0.8, W * 0.8, H * 0.34, 0x9ab8ff, 0).setBlendMode('ADD').setDepth(-704);
+        // La llosa (la textura es fa una sola vegada): cara de dalt en perspectiva (trapezi), gruix a la vora de davant, bisell, panell enfonsat, una creu monàstica aplanada, anelles
+        // de ferro, molsa i esquerdes. Contorns fins.
+        if (!this.textures.exists('llosa_jardi')) {
+            const T = 5, ll = this.make.graphics({ add: false });                                 // T: gruix de la llosa
+            ll.translateCanvas(2, 2);
+            ll.fillStyle(0x000000, 0.35); trap(ll, -1, 2, W + 2, H + T, RET);                      // ombra de contacte
+            ll.fillStyle(0x6c5f4b, 1).fillRect(0, H, W, T);                                         // el gruix (vora de davant)
+            ll.lineStyle(1, 0x241a10, 1).strokeRect(0, H, W, T);
+            ll.fillStyle(0xb2a285, 1); trap(ll, 0, 0, W, H, RET); ll.lineStyle(1, 0x241a10, 1); bor(ll, 0, 0, W, H, RET);
+            ll.fillStyle(0xd9ccb0, 1).fillRect(RET + 1, 1, W - 2 * RET - 2, 3);                    // bisell il·luminat (el fons)
+            ll.fillStyle(0x9d8d70, 1); trap(ll, 8, 7, W - 16, H - 14, RET - 1); ll.lineStyle(0.8, 0x4a3e2c, 1); bor(ll, 8, 7, W - 16, H - 14, RET - 1);   // panell enfonsat
+            for (let i = 0; i < 40; i++) ll.fillStyle(rnd() < 0.55 ? 0x4e4332 : 0xe4d8bd, 0.16 + rnd() * 0.14).fillRect(6 + rnd() * (W - 12), 4 + rnd() * (H - 8), 1 + rnd() * 3, 1 + rnd() * 1.2);
+            ll.lineStyle(0.8, 0x3c3224, 0.85).strokePoints([{ x: W - 24, y: 2 }, { x: W - 28, y: 10 }, { x: W - 24, y: 16 }, { x: W - 31, y: 24 }, { x: W - 29, y: H - 2 }], false);
+            const cx = W / 2, cy = H / 2 - 1;                                                       // la creu, aplanada (perspectiva)
+            const creu = (dx, dy, col, a) => { ll.fillStyle(col, a); ll.fillRect(cx - 1.8 + dx, cy - 13 + dy, 3.6, 26); ll.fillRect(cx - 19 + dx, cy - 3 + dy, 38, 3.6); ll.fillTriangle(cx - 5 + dx, cy - 13 + dy, cx + 5 + dx, cy - 13 + dy, cx + dx, cy - 18 + dy); ll.fillTriangle(cx - 5 + dx, cy + 13 + dy, cx + 5 + dx, cy + 13 + dy, cx + dx, cy + 18 + dy); };
+            creu(1, 1, 0xe6dac0, 0.7); creu(0, 0, 0x3a2f20, 1);
+            ll.fillStyle(0x3a2f20, 1).fillEllipse(cx, cy - 1.5, 6, 4).fillStyle(0xcdbf9f, 1).fillEllipse(cx, cy - 1.5, 3, 2);
+            [14, W - 14].forEach(x => { ll.fillStyle(0x2c2824, 1).fillEllipse(x, H / 2 + 5, 6, 8); ll.lineStyle(1.8, 0x26221f, 1).strokeEllipse(x, H / 2 + 5, 6, 8); });          // anelles de ferro
+            for (let i = 0; i < 6; i++) ll.fillStyle(0x587a3a, 0.28 + rnd() * 0.16).fillEllipse(8 + rnd() * 18, H - 4 - rnd() * 6, 4 + rnd() * 6, 2 + rnd() * 2);                  // molsa
+            ll.generateTexture('llosa_jardi', W + 4, H + T + 4);
+            ll.destroy();
+        }
+        this.llosa = this.add.image(X0 + W / 2, Y0 + H / 2 + 2.5, 'llosa_jardi').setDepth(-700);
+        if (Estat.flag('llosaOberta')) { this.llosa.setPosition(X0 + W / 2 - this.trapa.desplac, Y0 + H / 2 + 8); this.llumTrapa.setFillStyle(0x9ab8ff, 0.12); }
     }
 
     posarEntradaForat() {
-        const { x, y } = this.llosaPos;
-        Object.assign(this.sortidaEscala(x - 37, y - 37, 74, 74, 'ZonaSoterraniHost', 'entrada', y + 44), { nord: true, yFons: y - 26 });   // l'Ineu baixa l'escala abans de canviar de zona
+        const { x0, y0, w, h } = this.trapa;
+        this.posarTrapaEscala({ x0, x1: x0 + w, y0, yb: y0 + h, desti: 'ZonaSoterraniHost', entrada: 'entrada' });          // com a la cripta del Raïm
     }
 
     // El cercle de runes de la llosa quan es desperta amb Runna (el mateix dibuix que s'encén a la seva obertura, obrirLlosa): batega suaument, amb una mica de llum i espurnes
     posarBrillLlosa(LX, LY) {
-        const g = this.add.graphics().setDepth(-690);
-        g.lineStyle(3, 0xbfe8ff, 1).strokeCircle(LX, LY, 34).strokeCircle(LX, LY, 22);
-        for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; g.lineBetween(LX + Math.cos(a) * 22, LY + Math.sin(a) * 22, LX + Math.cos(a) * 34, LY + Math.sin(a) * 34); }
-        g.fillStyle(0xbfe8ff, 0.18).fillCircle(LX, LY, 34);
-        const llum = this.add.ellipse(LX, LY + 4, 150, 80, 0xbfe8ff, 0.2).setBlendMode(Phaser.BlendModes.ADD).setDepth(-689);
+        const g = this.add.graphics({ x: LX, y: LY }).setDepth(-690).setScale(1, 0.5);          // (en perspectiva: el cercle, aplanat com la llosa)
+        g.lineStyle(2.5, 0xbfe8ff, 1).strokeCircle(0, 0, 44).strokeCircle(0, 0, 28);
+        for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; g.lineBetween(Math.cos(a) * 28, Math.sin(a) * 28, Math.cos(a) * 44, Math.sin(a) * 44); }
+        g.fillStyle(0xbfe8ff, 0.18).fillCircle(0, 0, 44);
+        const llum = this.add.ellipse(LX, LY + 2, 160, 70, 0xbfe8ff, 0.2).setBlendMode(Phaser.BlendModes.ADD).setDepth(-689);
         const espurnes = this.add.particles(LX, LY, 'espurna', {
             x: { min: -30, max: 30 }, y: { min: -10, max: 10 }, speedY: { min: -40, max: -12 }, lifespan: 1500,
             scale: { start: 0.3, end: 0 }, alpha: { start: 0.8, end: 0 }, tint: [0xbfe8ff, 0xffffff], frequency: 380, blendMode: 'ADD'
@@ -274,13 +379,13 @@ class ZonaJardi extends ZonaBase {
         const FX = LX - 30, FY = LY + 50;                                  // on creix la flor
         (async () => {
             // Càmera ampla i fixa, que ho deixa tot a la vista (la flor, la llosa i el camí de l'Isílder), sense el zoom de conversa que ho feia molt gran i ho tapava
-            this.enquadrar(560, 610, 1.1, 900, null, 0);
+            this.enquadrar(LX - 60, LY, 1.1, 900, null, 0);
             await espera(950);
             // L'Ineu se separa de la flor i de la llosa (si no, es posa al davant de l'Isílder i de la flor) i mira l'escena
             await new Promise(res => this.ineuVa(LX - 140, 880, res, 200));
             this.posarDireccio('amunt', false);
             await mou({ x: LX, y: 780 }, 1300);                            // surt per l'obertura de la pèrgola
-            await mou({ x: FX + 48, y: FY + 80 }, 1100);                   // fins al lloc de la flor (a la dreta i una mica avall, perquè no tapi ni la flor ni la llosa; a l'esquerra la flor quedaria darrere l'heura)
+            await mou({ x: FX + 48, y: Math.min(FY + 80, this.pergola.yf - 30) }, 1100);                   // fins al lloc de la flor (a la dreta i una mica avall, perquè no tapi ni la flor ni la llosa; a l'esquerra la flor quedaria darrere l'heura)
             // 1. La llavor surt de la mà de l'Isílder i cau a terra
             const icona = iconaObjecte(this, 'llavorLluna');
             const llavor = icona ? this.add.image(I.x - 12, I.y - 70, icona).setScale(0.28).setDepth(99000) : this.add.circle(I.x - 12, I.y - 70, 6, 0xe8e4f8, 1).setDepth(99000);
@@ -306,10 +411,10 @@ class ZonaJardi extends ZonaBase {
             const llum = this.add.particles(FX, FY - 10, 'espurna', { x: { min: -34, max: 34 }, speedY: { min: -70, max: -20 }, lifespan: 1700, scale: { start: 0.45, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xbfe8ff, 0xffffff, 0xe0d0ff], frequency: 60, blendMode: 'ADD' }).setDepth(FY + 31);
             await espera(1800);
             // 4. Sobre la llosa s'encén un cercle de runes; tot tremola
-            const cercle = this.add.graphics().setDepth(LY + 6).setAlpha(0);
-            cercle.lineStyle(3, 0xbfe8ff, 1).strokeCircle(LX, LY, 34).strokeCircle(LX, LY, 22);
-            for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; cercle.lineBetween(LX + Math.cos(a) * 22, LY + Math.sin(a) * 22, LX + Math.cos(a) * 34, LY + Math.sin(a) * 34); }
-            cercle.fillStyle(0xbfe8ff, 0.18).fillCircle(LX, LY, 34);
+            const cercle = this.add.graphics({ x: LX, y: LY }).setDepth(-699).setScale(1, 0.5).setAlpha(0);
+            cercle.lineStyle(2.5, 0xbfe8ff, 1).strokeCircle(0, 0, 44).strokeCircle(0, 0, 28);
+            for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; cercle.lineBetween(Math.cos(a) * 28, Math.sin(a) * 28, Math.cos(a) * 44, Math.sin(a) * 44); }
+            cercle.fillStyle(0xbfe8ff, 0.18).fillCircle(0, 0, 44);
             this.tweens.add({ targets: cercle, alpha: 1, duration: 900 });
             this.tweens.add({ targets: this.llosa, x: { from: LX - 1.5, to: LX + 1.5 }, yoyo: true, repeat: 10, duration: 60 });
             cam.shake(1100, 0.0025); Sfx.secret();
@@ -318,12 +423,13 @@ class ZonaJardi extends ZonaBase {
             this.tweens.add({ targets: this.llosa, scale: this.llosa.scale * 1.05, duration: 350, yoyo: true });
             await espera(380);
             await mou({ x: FX + 48, y: FY + 84 }, 500);
-            this.tweens.add({ targets: this.llosa, x: LX - 92, y: LY + 4, rotation: -0.1, duration: 1500, ease: 'Cubic.easeInOut' });
-            cam.shake(500, 0.004); pols(LX - 20, LY, [0xa89878, 0x8a8478], 10);
+            this.tweens.add({ targets: this.llosa, x: LX - this.trapa.desplac, y: LY + 6, duration: 1300, ease: 'Sine.easeInOut' });
+            cam.shake(900, 0.005); pols(LX - 20, LY, [0xa89878, 0x8a8478], 10);
+            this.time.delayedCall(1300, () => { Sfx.secret(); this.tweens.add({ targets: this.llumTrapa, fillAlpha: 0.28, duration: 500, yoyo: true, onComplete: () => this.llumTrapa.setFillStyle(0x9ab8ff, 0.12) }); });
             this.tweens.add({ targets: cercle, alpha: 0, duration: 1200 });
             await espera(1800);
             raig.destroy(); if (halo) halo.destroy(); llum.stop(); this.time.delayedCall(1700, () => llum.destroy());
-            await mou({ x: LX - 74, y: LY + 62 }, 700);                     // s'aparta cap a l'esquerra (a la dreta hi ha la paret de la casa)
+            await mou({ x: LX - 32, y: LY + 153 }, 700);                     // s'aparta cap a l'esquerra (a la dreta hi ha la paret de la casa)
             Estat.posaFlag('llosaOberta');
             this.posarEntradaForat();
             I.punt.x = I.x; I.punt.y = I.y - 10;

@@ -1826,7 +1826,12 @@ class ZonaBase extends Phaser.Scene {
             if (Math.abs(I.scaleX - escBase * hd) > 1e-5) I.setScale(escBase * hd);
             if (this.fantasma && this.fantasma.active && Math.abs(this.fantasma.scaleX - I.scaleX) > 1e-5) this.fantasma.setScale(I.scaleX);
             if (hd !== (I.hdAnt || 1)) { b.setSize(72 * S.k / hd, 30 * S.k / hd, false); I.hdAnt = hd; }
-            b.setOffset(f.realWidth / 2 - 36 * S.k / hd, S.peus / S.alt * f.realHeight - 30 * S.k / hd);
+            // Elevació (this.elevacioIneu, en píxels del joc): l'Ineu es dibuixa més amunt (puja a un mur, a un graó...) sense moure el cos de col·lisió: l'origen del sprite puja i el
+            // desplaçament del cos baixa el mateix (en píxels de textura). Sense elevació, tot queda com sempre.
+            const el = this.elevacioIneu || 0;
+            const oy = S.peus / S.alt + (el ? el / I.displayHeight : 0);
+            if (Math.abs(I.originY - oy) > 1e-6) { I.setOrigin(0.5, oy); b.setSize(72 * S.k / hd, 30 * S.k / hd, false); }          // (només si canvia: no tocar-lo cada fotograma; setOrigin torna a calcular la mida del cos, que es refà)
+            b.setOffset(f.realWidth / 2 - 36 * S.k / hd, S.peus / S.alt * f.realHeight - 30 * S.k / hd + el / I.scaleY);
         };
         this.ineu.preUpdate = (t, d) => { preIneu(t, d); ajustaIneu(); };
         this.events.on('postupdate', ajustaIneu);
@@ -2205,8 +2210,8 @@ class ZonaBase extends Phaser.Scene {
         if (this.ombraIneu && this.ineu && this.ineu.active && this.ineu.body && !this.ombraIneuFixa) {
             // L'ombra va sota els peus de veritat (a l'idle i als atacs els peus no són sempre al punt d'ancoratge del sprite: vegeu eines/fer_sombra_ineu.py)
             const I = this.ineu, t = typeof SOMBRA_INEU !== 'undefined' && SOMBRA_INEU[I.texture.key], f = t && t[parseInt(I.frame.name, 10)];
-            if (f) { const k = I.scaleX; this.ombraIneu.setPosition(I.x + f[0] * k, I.y + Math.max(-6, Math.min(30, f[1] * k))); }
-            else this.ombraIneu.setPosition(I.x, I.y);
+            if (f) { const k = I.scaleX; this.ombraIneu.setPosition(I.x + f[0] * k, I.y + Math.max(-6, Math.min(30, f[1] * k)) - (this.elevacioIneu || 0)); }
+            else this.ombraIneu.setPosition(I.x, I.y - (this.elevacioIneu || 0));
         }
         this.sincroFantasma();
         this.transparenciaCopes();
@@ -2249,7 +2254,8 @@ class ZonaBase extends Phaser.Scene {
         const f = this.fantasma, i = this.ineu;
         if (!f || !i || !f.active || !i.active) return;             // (en tancar l'escena ja no hi són)
         if (f.texture.key !== i.texture.key || f.frame.name !== i.frame.name) f.setTexture(i.texture.key, i.frame.name);
-        if (Math.abs(f.scaleX - i.scaleX) > 1e-5) f.setScale(i.scaleX);          // (l'idle d'alta resolució té un altre full i una altra escala)
+        if (Math.abs(f.scaleX - i.scaleX) > 1e-5) f.setScale(i.scaleX);
+        if (f.originY !== i.originY) f.setOrigin(i.originX, i.originY);          // (elevació: la silueta fantasma puja amb l'Ineu)          // (l'idle d'alta resolució té un altre full i una altra escala)
         f.setPosition(i.x, i.y).setFlipX(i.flipX).setAlpha(this.assegut ? 0 : i.alpha * 0.38);   // assegut: el banc el tapa de debò
         if ((this.forcsPorta || []).some(q => i.x > q.x0 && i.x < q.x1 && i.y > q.t && i.y < q.b && !(q.bloq && q.bloq()))) f.setAlpha(0);          // dins d'una porta: el marc el tapa de debò
         // Els personatges no es transparenten com els arbres: si un que és davant de l'Ineu el tapa, la silueta s'amaga on hi ha el personatge
@@ -3021,6 +3027,40 @@ class ZonaBase extends Phaser.Scene {
     // Escala que baixa sota terra cap al nord (un forat, una trapa): ycut és la vora de davant del forat
     sortidaEscala(x, y, w, h, desti, entrada, ycut) {
         return Object.assign(this.sortida(x, y, w, h, desti, entrada), { baixar: ycut, xEscala: x + w / 2 });
+    }
+
+    // Trapa amb escala (com la de la cripta de l'Escalinata del Raïm, mateixa mecànica): el forat (x0..x1 de ample, de y0 a yb) té els costats i tota la part de dalt sòlids, només s'hi entra
+    // pel davant (pel sud); frenada i un tap a cada graó (registraGraons) i l'Ineu s'hi enfonsa a poc a poc darrere la vora de davant (opaca), cada cop més fosc; en haver baixat els
+    // graons fa el fade a negre cap a (desti, entrada). o: { x0, x1, y0, yb, desti, entrada }. Es crida quan la llosa ja és apartada.
+    posarTrapaEscala(o) {
+        if (this.trapaEscalaFeta) return;
+        this.trapaEscalaFeta = true;
+        const { x0: X0, x1: X1, yb: YB, y0: Y0 } = o, H = YB - Y0, YF = YB - Math.round(H * 0.69), W = X1 - X0;          // (a la cripta del Raïm: H = 58, YF = Y0 + 18)
+        [[X0 - 20, Y0 + H / 2, 28, H + 20], [X1 + 20, Y0 + H / 2, 28, H + 20], [X0 + W / 2, Y0 - 17, W + 30, 36]].forEach(([cx, cy, w, h]) => this.colisio(cx, cy, w, h));
+        this.registraGraons(X0, X1, [[YB - 12, YB - 4], [YB - 28, YB - 20]]);
+        const m = this.make.graphics({ add: false });
+        m.fillStyle(0xffffff, 1).fillRect(0, 0, this.config.amplada, YB);                    // només es veu el que és per damunt de la vora de davant del forat (opaca)
+        let clon = null, baixant = false, lent = false;
+        const f = () => {
+            const I = this.ineu;
+            lent = false;
+            if (!I || !I.active || this.canviant || baixant) return;
+            const dins = I.x > X0 - 4 && I.x < X1 + 4 && I.y < YB + 4 && I.y > YF - 8;
+            const pr = dins ? Phaser.Math.Clamp((YB - I.y) / (YB - YF), 0, 1) : 0;
+            if (pr > 0.02) {
+                const alt = I.displayHeight;
+                if (!clon) { clon = this.add.sprite(I.x, I.y, I.texture.key, I.frame.name).setOrigin(I.originX, I.originY).setScale(I.scaleX, I.scaleY).setDepth(I.depth); clon.setMask(m.createGeometryMask()); I.setAlpha(0); }
+                clon.setTexture(I.texture.key, I.frame.name).setFlipX(I.flipX).setScale(I.scaleX * (1 - 0.1 * pr), I.scaleY * (1 - 0.1 * pr)).setPosition(I.x, I.y + ((YB - YF) + alt * 0.55) * pr);
+                lent = true;
+                const c = Math.round(255 * (1 - 0.55 * pr)); clon.setTint(Phaser.Display.Color.GetColor(c, c, c));
+                this.ombraIneu.setVisible(false); if (this.fantasma) this.fantasma.setVisible(false);
+                if (pr >= 0.98) { baixant = true; I.body.setVelocity(0); this.canviarZona(o.desti, o.entrada); }
+            } else if (clon) { clon.destroy(); clon = null; I.setAlpha(1); this.ombraIneu.setVisible(true); }
+        };
+        const frena = () => { const I = this.ineu; if (lent && I && I.body && I.body.velocity.y < -46) I.body.setVelocityY(-46); };
+        this.events.on('update', f);
+        this.events.on('postupdate', frena);
+        this.events.once('shutdown', () => { this.events.off('update', f); this.events.off('postupdate', frena); this.trapaEscalaFeta = false; });
     }
 
     // L'Alzina Buida (bosc i cabana de la Joaneta): el tronc és opac (la silueta de l'Ineu no s'hi veu a través), la col·lisió és alta (no es pot anar
