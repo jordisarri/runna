@@ -56,3 +56,49 @@
 3. Regenerar `roca` i els `pi*` amb `tomba_angel.jpg` com a referència (o aplicar un contorn de 3 px per post-procés).
 4. Retocar els halos blancs de les icones i baixar la saturació de `rialla` i `pi`.
 5. Decidir l'ombra de terra (sí/no) i l'excepció de `cartell_llums`, i escriure-ho a `docs/PROMPTS_GRAFICS.md`.
+
+---
+
+# Addenda: verificació amb els `.webp` reals i coherència de `art/` (2026-11-19)
+
+**Mètode.** Converteixo els `.webp` d'`assets/` a una fulla de contactes i els miro (l'agent no podia). Després creuo `art/` amb `assets/` per nom de fitxer. Els scripts i resultats són reproduïbles (mateix nom = mateixa peça).
+
+## 1. El que l'informe deia i ara està confirmat (o matisat) amb el render real
+- **Confirmat:** `arbre`, `pi`, `pi_arrels`, `pi_tres_cants_mort`, `roca` i `esglesia` són **pictòrics**: contorn fi o inexistent i textura. En canvi `roca_mobil`, `roca_petita`, `roca_molsa`, `placa_pi`, `placa_dolmen`, `columna_heura`, `rialla` i `carry` tenen contorn negre gruixut i cel-shading net. Dos mons a la mateixa pantalla.
+- **Matís important:** `roca.webp` (la fosca i realista) és ara la **peça més dissonant**, però les roques ja tenen una família coherent (`roca_mobil`/`roca_petita`/`roca_molsa`). El pas més barat és **substituir `roca` per `roca_molsa`/`roca_mobil` als llocs on només és decoració** (o regenerar-la amb el prompt de `roca_molsa`), no tocar l'estil de res més.
+- **Matís:** `hostatgeria.webp` és molt més a prop del xibi que `esglesia.webp` (volums plans, finestres amb persianes, contorn fosc fi). La inconsistència d'edificis es concentra a `esglesia`.
+- **Matís:** `cartell_llums` és B/N amb text, però ja es llegeix com a peça diegètica. Es pot deixar com a excepció (decisió registrada).
+- **Matís:** el color de `pi` (tronc taronja) és coherent amb una llum de capvespre, però és el més saturat de la fulla; amb un –10 % de saturació queda al nivell d'`arbre`.
+
+## 2. Incoherències a `art/` (mateix nom, fitxers diferents) — ordenades per risc
+La font de cada `.webp` s'ha determinat comparant-ne la imatge amb cada candidata (mitjana de diferència en 48×48 px: <3 = és aquesta).
+
+| Peça | Fitxers | Quin és l'origen del webp | Risc |
+|---|---|---|---|
+| `tarota` | `art/ui/tarota.png` (1024×571) i `art/ineu/tarota.png` (687×1024) | **Són dues imatges diferents amb el mateix nom.** `assets/ui/tarota.webp` ve d'`ui/`; `assets/ineu/tarota.webp` (clau `ineu_flauta`) ve d'`ineu/`. | **Alt**: qui en retoqui «la tarota» pot canviar la que no és. Cal reanomenar `art/ineu/tarota.png` → `ineu_tarota.png`. |
+| `ocellaire` | `art/proleg/ocellaire.jpg` (1536×2752) i `art/enemics/ocellaire.jpg` (1536×2722) | `assets/enemics/ocellaire.webp` ve d'`enemics/`. El de `proleg/` és el **retrat** (`assets/retrats/ocellaire.webp`), no coincideix. | **Alt**: nom idèntic, ús diferent. Reanomenar el de `proleg/` → `ocellaire_proleg.jpg`. |
+| `logo_runna` | `.jpg` (771 KB) i `.png` (3,6 MB), 2752×1536 | El `.png` (diferència 0,6) | Mitjà: el `.jpg` és un residu; el compressor ja treballa des del `.png`. |
+| `bolet_verinos` | `.jpg` (1984×2144) i `.png` (1206×1305) | El `.png` (1,9) | Mitjà: el `.jpg` no coincideix amb el joc; si algú regenera des d'ell canvia la peça. |
+| `joaneta` | `personatges/joaneta.png` i `personatges/antics/joaneta.jpg` | El `.png` (0,3) | Baix: l'antic ja és a `antics/`. |
+| `pi_tres_cants_mort` | `natura/…png` i `natura/antics/…jpg` | El `.png` (0,1) | Baix: idem. |
+| `aixeca_tiler` | `ineu/aixeca_tiler.png` (192×422) i `ineu/aixeca/aixeca_tiler.jpg` (926×2000) | Cal comprovar-ho a mà (el `.png` és ja la versió petita) | Mitjà: dos formats, mides ×5 diferents. |
+| `icona_runna` | `pwa/` i `pwa/antics/` | – | Baix: l'antic ja és a `antics/`. |
+| `espasa`, `branca_tiler` | `armes/*.jpg|png` i `armes/sense_contorn/*.webp` | **El webp d'`assets/armes/` no coincideix amb cap dels dos** (diferència ≈20): hi ha un tercer pas (`eines/contorn_armes.py` posa contorn). | Baix, però convé que `LLEGEIX.md` ho digui: l'original sense contorn és `sense_contorn/`, i el joc usa la versió amb contorn generada. |
+| frames d'Ineu (`down.png`, `up.png`, `left.png`…) | Fins a **19 fitxers amb el mateix nom** a `ineu/atac_arma/*`, `ineu/cop/`, `ineu/v2/zip_*`, `ineu/caminar/transparents`, `ineu/no_usats/tiller_up_v5…v8_proves` | Cada carpeta és un conjunt diferent | **Alt per a les eines i els humans**: cap nom permet saber el conjunt sense la ruta. Les carpetes `_v1`, `_v4`, `_v5` i `no_usats/*_proves` haurien de moure's a `art/arxiu/`. |
+| `Ineu-iso_attack_*-v3` | `ineu/atac/` (png) i `ineu/antics/` (png, webp i jpg) | – | Baix: còpia del mateix conjunt en 3 formats. |
+| `columna_heura.webp` | A `art/objectes/` hi ha un **`.webp` com a original**, no un `png|jpg` | – | Mitjà: l'original perd qualitat (és ja un webp 1024×1536); convindria guardar-hi el PNG/JPG d'origen. |
+
+## 3. Altres incoherències entre `art/` i `assets/` (sense `.webp` equivalent, o al revés)
+- **Webp sense original a `art/`** (no es poden regenerar): `assets/objectes/cartell_llums_petit`, `orgue_petit`, `pergola_grao`, `tarota_gran`, `ocellaire_llança`, `visitant_zombi`, `home_raim_camina|mira|horitzo`, `ombra_monjo` (**duplicat** a `personatges/` i `retrats/`) i tots els frames d'Ineu d'`atac/`, `cop/`, `pingpong/`. Els derivats de fulles d'`eines/fer_*.py` són coherents; els dits «sense original» són els que cal rastrejar (cap script els genera).
+- **Relació d'aspecte** original ↔ webp: la majoria de personatges (carry, dolora, eve…) passen d'~0,75 a ~0,4 perquè s'ha retallat el marge (normal). Surten **sospitosos** només: `home_raim.jpg` (1312×3200) → `retrats/home_raim.webp` (340×340, és un retrat retallat: acceptable), `pastor_camina` (630×1024 → 2400×2400 és una **fulla de frames**) i `intro.png` 1920×1080 → `intro.webp` 2048×2048 (fulla de vídeo).
+- Cap referència a `js/` apunta a un fitxer inexistent, i només tres `.webp` d'`assets/` no surten citats a `js/` (`joaneta_idle`, `ineu_reves`, `ineu_drive`; es carreguen per nom construït, no són orfes).
+
+## 4. Pla millorat (ordre proposat, de menys a més decisió estètica)
+1. **Neteja de noms a `art/` (sense risc, no toca el joc):** reanomenar `ineu/tarota.png` i `proleg/ocellaire.jpg`; moure els `.jpg` residuals (`logo_runna.jpg`, `bolet_verinos.jpg`) i les carpetes de proves d'Ineu a `art/arxiu/`; guardar l'original PNG de `columna_heura`. Afegir a `art/LLEGEIX.md` la taula de «peça → webp d'`assets/`» (la pot generar un script).
+2. **Eina de comprovació** (`eines/auditar_art.py`): el que he fet avui, executable: webp sense original, noms duplicats a `art/`, relació d'aspecte i referències de `js/` a fitxers inexistents. Es pot passar abans de cada publicació.
+3. **Unificar la mida del contorn al codi:** una sola constant `CONTORN`/`GRUIX_CONTORN` a `js/dibuixos.js` (com diu l'informe) i la funció `iconaVolum` per a les 14 icones planes.
+4. **Roques:** usar la família `roca_molsa`/`roca_mobil` en comptes de `roca.webp` (o regenerar-la). És el canvi amb més efecte visual per menys feina.
+5. **Contorn gruixut als gràfics pictòrics** (`arbre`, `pi*`, `esglesia`): és decisió **teva**. Opcions: (a) regenerar amb referència `tomba_angel`/`roca_mobil`; (b) post-procés `eines/contorn_*.py` (traç de 3 px `#120c08`); (c) deixar-los pictòrics com a «fons» i acceptar que els objectes interactius són més gràfics (un contrast que pot ajudar al jugador a distingir què és interactiu).
+6. Baixar un 10 % la saturació de `pi*` i `rialla`; halos radials del color de l'objecte.
+
+**Límits d'aquesta revisió.** He vist el render de 17 gràfics d'`assets/` (fulla de dalt) i la taula de duplicats és exhaustiva per nom, però la de «quin és l'origen» és aproximada (comparació en 48 px). No he vist els personatges NPC ni els retrats al detall.
