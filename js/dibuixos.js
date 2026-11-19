@@ -1633,21 +1633,13 @@ function dibuixarDolmen(c, w, mode = 'tot') {
         // Els dos pilars quadrats de sempre, amb la cara del davant i la del costat (no han canviat)
         ctx.lineWidth = 3.5 * u; ctx.strokeStyle = CONTORN;
         const pilar = (x, y0, amp, alt, prof) => {
-            ctx.fillStyle = '#9a9282'; ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x + amp, y0); ctx.lineTo(x + amp, y0 + alt); ctx.lineTo(x, y0 + alt); ctx.closePath(); ctx.fill(); ctx.stroke();
-            ctx.fillStyle = '#6e685c'; ctx.beginPath(); ctx.moveTo(x + amp, y0); ctx.lineTo(x + amp + prof, y0 - prof * 0.5); ctx.lineTo(x + amp + prof, y0 + alt - prof * 0.5); ctx.lineTo(x + amp, y0 + alt); ctx.closePath(); ctx.fill(); ctx.stroke();
+            // (el contorn negre només és a dalt i als costats: la vora de baix de les potes no en porta, perquè es fongui amb el terra)
+            ctx.fillStyle = '#9a9282'; ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x + amp, y0); ctx.lineTo(x + amp, y0 + alt); ctx.lineTo(x, y0 + alt); ctx.closePath(); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(x, y0 + alt); ctx.lineTo(x, y0); ctx.lineTo(x + amp, y0); ctx.lineTo(x + amp, y0 + alt); ctx.stroke();
+            ctx.fillStyle = '#6e685c'; ctx.beginPath(); ctx.moveTo(x + amp, y0); ctx.lineTo(x + amp + prof, y0 - prof * 0.5); ctx.lineTo(x + amp + prof, y0 + alt - prof * 0.5); ctx.lineTo(x + amp, y0 + alt); ctx.closePath(); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(x + amp, y0 + alt); ctx.lineTo(x + amp, y0); ctx.lineTo(x + amp + prof, y0 - prof * 0.5); ctx.lineTo(x + amp + prof, y0 + alt - prof * 0.5); ctx.stroke();          // (sense la vora de baix)
             ctx.strokeStyle = 'rgba(40,32,24,0.45)'; ctx.lineWidth = 1.5 * u;
             ctx.beginPath(); ctx.moveTo(x + amp * 0.3, y0 + 8 * u); ctx.lineTo(x + amp * 0.42, y0 + alt * 0.5); ctx.moveTo(x + 6 * u, y0 + alt * 0.62); ctx.lineTo(x + amp - 8 * u, y0 + alt * 0.66); ctx.stroke();
-            // Herba al peu del pilar: tofes de fulles fines (llargues i corbades, de tons verds, amb contorn fosc), no una taca
-            { const by = y0 + alt - 1 * u, nt = Math.max(3, Math.round(amp / (18 * u)));
-              for (let t = 0; t < nt; t++) {
-                const tx = x - 4 * u + (amp + 8 * u) * (t + 0.5) / nt, nb = 6;
-                for (let b = 0; b < nb; b++) {
-                    const k = (b - (nb - 1) / 2) / ((nb - 1) / 2), alt2 = (26 + r() * 18) * u * (1 - Math.abs(k) * 0.3), dx = k * (14 + r() * 8) * u + (r() - 0.5) * 4 * u;
-                    const bx = tx + k * 5 * u;
-                    ctx.beginPath(); ctx.moveTo(bx - 3 * u, by); ctx.quadraticCurveTo(bx + dx * 0.25, by - alt2 * 0.65, bx + dx, by - alt2); ctx.quadraticCurveTo(bx + dx * 0.25 + 3 * u, by - alt2 * 0.5, bx + 3 * u, by); ctx.closePath();
-                    ctx.fillStyle = ['#5a9a3c', '#72b048', '#4a8a30', '#8cc458'][(t + b) % 4]; ctx.fill(); ctx.strokeStyle = '#24421a'; ctx.lineWidth = 1.1 * u; ctx.stroke();
-                }
-              } }
             ctx.strokeStyle = CONTORN; ctx.lineWidth = 3.5 * u;
         };
         pilar(236 * u, 220 * u, 58 * u, peu - 220 * u - 6 * u, 16 * u);           // el del fons, a la dreta

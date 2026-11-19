@@ -89,11 +89,16 @@ class ZonaBoscPi extends ZonaBase {
 
         // El pas del pi: la franja d'herba s'estreny fins al camí entre dues files de roques baixes (sense capçades que tapin res); allà hi ha la barrera
         const pasDalt = camiY - camiH / 2 - 30, pasBaix = camiY + camiH / 2 + 30;      // 500 i 700
-        this.muralla(barX, N, barX, pasDalt, 70, 'roca', false, (x, y) => y > N + 30);      // (sense la roca del mig, que sobra: la col·lisió es manté)                       // de la fila del nord fins a la barrera...
-        this.muralla(barX, pasBaix, barX, S, 70, 'roca', false, (x, y) => y < S - 30);                       // ...i de la barrera fins a la fila del sud: tot tancat
-        // La paret de pedres de la vertical: el camí és només el que alliberen les arrels; tota la resta (fins a les files del nord i del sud) són roques, sense cap buit
-        [445, 490, 765, 810, 855, 900].forEach(y => this.posar('roca', barX, y));      // totes de la mateixa mida, a intervals iguals
-        for (let x = barX - 270; x <= barX + 270; x += 80) { this.posar('roca', x, N + 14); this.posar('roca', x, S - 6); }   // roques on abans hi havia arbres: es veu on s'acaba el camí
+        // La paret de roques que tanca el pas, ben ordenada: totes de la mateixa mida (escala 0,85: 76 x 57), a intervals iguals i sense solapar-se entre elles ni amb la barrera d'arrels
+        // (que ocupa de y 496 a 750 al camí); totes opaques. Dues files horitzontals (nord i sud) i, a la vertical de la barrera, una columna a cada banda de les arrels.
+        const ESC_R = 0.85, RW = 76, RH = 57, PAS_X = 80, PAS_Y = 62;
+        const roca = (x, y) => { const r = this.posar('roca', x, y, { escala: ESC_R, opac: true, col: { w: 70, h: 24 } }); r.setFlipX(Math.round((x + y) / 20) % 2 === 1); };
+        const yN = N + 16, yS = S - 6;                                                              // els peus de les dues files
+        for (let x = barX - 280; x <= barX + 280; x += PAS_X) { roca(x, yN); roca(x, yS); }
+        for (let y = yN + PAS_Y; y <= 496 - 2; y += PAS_Y) roca(barX, y);                     // de la fila del nord fins a les arrels (a dalt de y 496)
+        for (let y = yS - PAS_Y; y - RH >= 750 - 2; y -= PAS_Y) roca(barX, y);                     // i de les arrels (a baix de y 750) fins a la fila del sud
+        this.colisio(barX, (yN + 496) / 2 - 14, 76, 496 - yN + 20);                                // col·lisió contínua de la paret (a dalt i a baix de la barrera)
+        this.colisio(barX, (750 + yS) / 2 - 14, 76, yS - 750 + 20);
 
         this.cameraFollowOffsetY = -150;           // la càmera mira una mica més amunt: així es veu la part de dalt del pi des del camí
 

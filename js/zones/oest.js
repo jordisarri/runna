@@ -822,6 +822,28 @@ class ZonaDolmen extends ZonaBase {
         this.espX = wx(DOLMEN_DIB.ex); this.espY = wy(DOLMEN_DIB.ey);          // on s'enfonsa la punta de la fulla
         this.resplendor = this.add.circle(this.espX, this.espY - 55, 90, 0xd8e8ff, Estat.te('runna') ? 0 : 0.12).setDepth(sy + 1).setBlendMode('ADD');
         if (!Estat.te('runna')) this.tweens.add({ targets: this.resplendor, alpha: 0.28, yoyo: true, repeat: -1, duration: 1200 });
+        // Als peus de les dues potes (fora del sprite del dolmen): una vora de terra tova, pedretes soltes i unes flors silvestres, perquè les potes s'assentin al terra sense l'herba dibuixada
+        {
+            const peuY = sy, pous = [wx(92 + 37), wx(236 + 29)];                   // els centres dels dos pilars, a la base
+            const base = this.add.graphics().setDepth(peuY - 3);
+            pous.forEach((px, k) => {
+                const ww = (k ? 58 : 74) * kD;
+                base.fillStyle(0x4a3a24, 0.42).fillEllipse(px + 6, peuY + 2, ww * 1.5, 16);          // terra pisada, tova
+                base.fillStyle(0x6a5334, 0.35).fillEllipse(px + 4, peuY + 1, ww * 1.1, 10);
+            });
+            const peds = this.add.graphics().setDepth(peuY + 4);
+            for (let i = 0; i < 16; i++) {                                                          // pedretes soltes, de dos tons, amb una mica de llum
+                const px = pous[i % 2] + (rnd() - 0.5) * 110, py = peuY + 2 + rnd() * 16, rr = 2.4 + rnd() * 3.6;
+                peds.fillStyle(0x000000, 0.22).fillEllipse(px + 1, py + 2, rr * 2.2, rr * 0.9);
+                peds.fillStyle(rnd() < 0.5 ? 0x9a9282 : 0x80786a, 1).fillEllipse(px, py, rr * 2, rr * 1.3);
+                peds.fillStyle(0xffffff, 0.25).fillEllipse(px - rr * 0.3, py - rr * 0.3, rr * 0.8, rr * 0.4);
+            }
+            for (let i = 0; i < 9; i++) {                                                           // flors petites, blanques i grogues, amb un tija curta
+                const px = pous[i % 2] + (rnd() - 0.5) * 150, py = peuY + 6 + rnd() * 18, c = [0xfff3c0, 0xffffff, 0xf6d860][i % 3];
+                peds.lineStyle(1.4, 0x4a7a30, 1).lineBetween(px, py, px + (rnd() - 0.5) * 3, py - 7 - rnd() * 4);
+                peds.fillStyle(c, 1).fillCircle(px, py - 9, 2.2); peds.fillStyle(0xe8a030, 1).fillCircle(px, py - 9, 0.9);
+            }
+        }
         this.posarPujada(wy(DOLMEN_DIB.ly), kD);
         // El dolmen i l'espasa no responen fins que l'Ineu té les tres coses (el permís del Til·ler, les paraules del Saber i la benedicció): abans, cap punt d'interacció
         const teLesTres = () => Estat.flag('placaCompleta');                  // l'espasa respon quan els tres medallons són a la placa
