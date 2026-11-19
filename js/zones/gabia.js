@@ -1521,12 +1521,13 @@ class ZonaGabia extends ZonaBase {
             f => { z.vista8Manual = true; z.posarDireccio('dreta', false, 'northeast'); z.invocarOcellaire(ap, f, vist); }        // amb el Mestre al davant, de tres quarts
         ], fet);
         const rugit = (z, fet) => {
-            // P14: el rugit (dolly-out + shake)
-            z.enquadrar(ap.x, ap.y - 110, 2.2, 1, () => {
+            // P14: el rugit (primer pla de l'Ocellaire enrabiat: es veu bé el sprite; dolly-out suau + shake)
+            const cy = () => ap.y - 0.6 * ap.displayHeight;
+            z.enquadrar(ap.x, cy(), 2.8, 1, () => {
                 if (z.textures.exists('ocellaire_rugit')) { ap.setTexture('ocellaire_rugit'); if (ap.ulls) ap.ulls.setVisible(false); }
                 Sfx.titolBoss(); cam.shake(900, 0.008); cam.flash(180, 255, 255, 255);
                 ui.titolBoss("L'HOME DE LA GÀBIA", "L'Ocellaire");
-                z.enquadrar(ap.x, ap.y - 110, 1.0, 380, null, 0);
+                z.enquadrar(ap.x, cy(), 2.2, 700, null, 0);
                 z.esperar(vist ? 2200 : 3200, () => { ap.setTexture('ocellaire'); if (ap.ulls) ap.ulls.setVisible(true); fet(); });
             }, 0);
         };
