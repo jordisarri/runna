@@ -298,9 +298,6 @@ const ATAC_ARMES = ['basto', 'tiller', 'espasa'];
 const ATAC_CEL = 320;
 const ATAC_CEL_EXC = { basto_up: 480 };          // fulls amb cel·la més gran (l'Ineu centrat i molt d'espai al voltant; vegeu eines/fer_atac_arma.py, CEL_EXC)
 const ATAC_ARMA_FPS = { basto: 15, tiller: 16, espasa: 16 };
-// Atacs que es fan amb els fotogrames en ordre INVERS (el cop va cap a l'altre costat): clau 'arma_vista' → true. Prova: l'espasa cap amunt. Per tornar a l'ordre de sempre, treure l'entrada
-// o posar-la a false (no es toca el full, només l'ordre de reproducció).
-const ATAC_INVERTIT = { espasa_up: true };
 const ATAC_ARMA_N = { basto: 5, tiller: 5, espasa: 5 };           // fotogrames de cada full (la graella pot tenir cel·les buides al final)
 function armaAtacNom(runna, agil) { return runna ? 'espasa' : agil ? 'tiller' : 'basto'; }
 function fpsAtac(vista) {
@@ -643,7 +640,7 @@ const Grafics = {
             if (scene.anims.exists(key)) scene.anims.remove(key);
             scene.anims.create({
                 key,
-                frames: (() => { const f = scene.anims.generateFrameNumbers(tex, { start: 0, end: ATAC_ARMA_N[arma] - 1 }); return ATAC_INVERTIT[arma + '_' + dir] ? f.reverse() : f; })(),
+                frames: scene.anims.generateFrameNumbers(tex, { start: 0, end: ATAC_ARMA_N[arma] - 1 }),
                 frameRate: ATAC_ARMA_FPS[arma],
                 repeat: 0
             });
