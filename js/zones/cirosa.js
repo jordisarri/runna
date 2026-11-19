@@ -3,6 +3,15 @@
  * Camí llarg que puja des de les cel·les + la masia amb la pastura on espera el Pastor de Boira + l'interior del mas.
  */
 
+// Qualsevol dels tres pastors (el vell, el pastor i la pastora) dona el pas següent de la història: les esquelles (un cop vençut el Pastor de Boira) i, durant el sopar del Til·ler,
+// l'escena de la música vora el foc. Són els textos del pastor vell (DIALEGS.pastorVell), amb el nom de qui parla canviat; si no hi ha cap pas a donar, cada un diu el seu de sempre.
+function pasDelsPastors(E, qui, propi) {
+    const pas = (E.flag('pastorVencut') && !E.te('esquelles')) || (E.te('esquelles') && E.flag('soparObert') && !E.flag('pastorsConvencuts'));
+    if (!pas) return propi(E);
+    const d = DIALEGS.pastorVell(E);
+    return Object.assign({}, d, { pagines: d.pagines.map(p => p.qui === 'Pastor vell' ? Object.assign({}, p, { qui }) : p) });
+}
+
 // Diàlegs propis de la Cirosa
 Object.assign(DIALEGS, {
     masiaTaula: E => ({ pagines: E.flag('soparFet') ? [
@@ -116,8 +125,6 @@ class ZonaCirosa extends ZonaBase {
         this.sacs(950, 592, 'duo');
         this.posar('llenya', 110, 580, { col: { w: 90, h: 22 } });
         this.posarBanc(560, 570, 110);
-        // El pou, a la vora de la masia
-        this.pou(790, 440);
         // Bales de palla a la vora de la tanca, dins la pastura
         [[1080, 240], [1120, 250], [1100, 215], [1110, 960], [1150, 980]].forEach(([x, y]) => this.bala(x, y));
 
@@ -133,8 +140,8 @@ class ZonaCirosa extends ZonaBase {
             ? "(El foc crepita i els pastors callen. Un cant antic vora les brases, el de Vespres, els podria obrir el cor...)"
             : "(El foc crepita i els pastors callen. Una música antiga vora les brases els podria obrir el cor... Potser la Pianista, al Santuari, en coneix alguna.)" }] }),
             { altura: 90, actiu: vorFoc, senseMirada: true });                                    // el text previ a tocar la tarota
-        this.npc('pastor_a', 200, 740, DIALEGS.pastorA, { flipX: false });
-        this.npc('pastor_b', 370, 755, DIALEGS.pastorB, { flipX: true });
+        this.npc('pastor_a', 200, 740, E => pasDelsPastors(E, 'Pastor', DIALEGS.pastorA), { flipX: false });          // (qualsevol dels tres pastors dona el pas següent, no només el vell)
+        this.npc('pastor_b', 370, 755, E => pasDelsPastors(E, 'Pastora', DIALEGS.pastorB), { flipX: true });
         this.npc('pastor_vell', 285, 650, DIALEGS.pastorVell);
 
         // La pastura de la dreta: oberta del tot. Només es tanca amb unes tanques de fusta quan comença el combat contra el Pastor
@@ -196,18 +203,6 @@ class ZonaCirosa extends ZonaBase {
             const ui = this.ui();
             if (!this.bossIniciat && !ui.dialeg && !ui.bloquejat && !this.canviant) this.interactuar(this.aldreuPunt);
         });
-    }
-
-    // Pou de pedra baix, amb corriola de fusta
-    pou(x, y) {
-        const g = this.add.graphics().setDepth(y);
-        g.fillStyle(0x000000, 0.25).fillEllipse(x, y + 4, 90, 24);
-        g.fillStyle(0x6a6458, 1).fillRect(x - 36, y - 38, 72, 40).fillStyle(0x8a8478, 1).fillEllipse(x, y - 38, 72, 24);
-        g.fillStyle(0x151a22, 1).fillEllipse(x, y - 38, 52, 14);
-        g.lineStyle(2, 0x2a2620, 0.6); for (let r = 0; r < 3; r++) g.lineBetween(x - 36, y - 26 + r * 12, x + 36, y - 26 + r * 12);
-        g.fillStyle(0x5a3a1e, 1).fillRect(x - 36, y - 98, 6, 62).fillRect(x + 30, y - 98, 6, 62).fillRect(x - 38, y - 100, 76, 6);
-        g.fillStyle(0x4a2c14, 1).fillRect(x - 3, y - 94, 6, 26).fillRect(x - 6, y - 70, 12, 10);
-        this.colisio(x, y - 10, 80, 26);
     }
 
     // Bala de palla rodona
@@ -402,13 +397,13 @@ class ZonaMasiaCirosa extends ZonaBase {
         [[270, 370], [330, 372], [390, 370]].forEach(([x, y]) => this.posar('tamboret', x, y, { col: { w: 36, h: 14 } }));
         this.interactiu(330, 345, RADI_GRAN, DIALEGS.masiaTaula, { altura: 60 });
 
-        // Jaços de palla amb manta, a la dreta
-        [[690, 300], [690, 440]].forEach(([x, y], i) => {
+        // Jaços de palla amb manta, a la dreta: un per a cada pastor (en són tres)
+        [[690, 300], [690, 440], [690, 580]].forEach(([x, y], i) => {
             const j = this.add.graphics().setDepth(y);
             j.fillStyle(0x2a1608, 1).fillRoundedRect(x - 90, y - 40, 180, 76, 10);
             j.fillStyle(0xc8b060, 1).fillRoundedRect(x - 84, y - 34, 168, 64, 8);
             for (let k = 0; k < 18; k++) j.lineStyle(2, 0x8a7430, 1).lineBetween(x - 78 + k * 9, y - 28, x - 72 + k * 9, y + 24);
-            j.fillStyle(i ? 0x6a8a4a : 0x8a3a3a, 1).fillRoundedRect(x - 40, y - 30, 116, 56, 6).lineStyle(2, 0x1a1008, 1).strokeRoundedRect(x - 40, y - 30, 116, 56, 6);
+            j.fillStyle([0x8a3a3a, 0x6a8a4a, 0x4a6a8a][i], 1).fillRoundedRect(x - 40, y - 30, 116, 56, 6).lineStyle(2, 0x1a1008, 1).strokeRoundedRect(x - 40, y - 30, 116, 56, 6);
             j.fillStyle(0xf2ecdc, 1).fillRoundedRect(x - 76, y - 28, 30, 48, 8);
             this.colisio(x, y - 2, 176, 62);
         });
@@ -416,7 +411,7 @@ class ZonaMasiaCirosa extends ZonaBase {
         this.barril(130, 560, 50, 22);
         this.barril(185, 545, 50, 22);
         this.sacs(262, 568, 'un');
-        this.posar('llenya', 740, 600, { col: { w: 100, h: 24 } });
+        this.posar('llenya', 150, 420, { col: { w: 100, h: 24 } });          // (la llenya canvia de lloc: el tercer jaç ocupa el racó de la dreta)
         [[300, 470], [380, 500]].forEach(([x, y]) => this.posar('flors', x, y, { fonsY: y - 10 }));
 
         this.add.rectangle(450, 350, 700, 700, 0xffd38a, 0.06).setDepth(80000);

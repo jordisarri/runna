@@ -1051,23 +1051,25 @@ class ZonaTiller extends ZonaBase {
         const vel = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x2a1000, 1).setScrollFactor(0).setDepth(89500).setAlpha(0);
         this.tweens.add({ targets: vel, alpha: 0.38, duration: 1600 });
         // La taula, al camí just davant del Til·ler (el camí va de y 520 a 670: la taula arriba fins al 730, i els comensals seuen darrere seu, amb la taula tapant-los les cames)
-        const taula = this.posar('taula_sopar', TAULA_SOPAR.x, TAULA_SOPAR.y, { fonsY: TAULA_SOPAR.y, escala: 1.2 }).setAlpha(0);
+        // La taula, més llarga (perquè hi càpiguen tots sense solapar-se) i a l'alçada d'una taula de menjar normal (el dibuix és més alt: s'aplana, com a la taula del refetor de la Pilària), opaca
+        const taula = this.posar('taula_sopar', TAULA_SOPAR.x, TAULA_SOPAR.y, { fonsY: TAULA_SOPAR.y, escala: 1.2, opac: true }).setAlpha(0);
+        taula.setScale(taula.scaleX * 1.5, taula.scaleY * 0.68);
         this.tweens.add({ targets: taula, alpha: 1, duration: 1200 });
         this.npcs = this.npcs || {};
         // Els personatges no tenen full de caminar: apareixen amb un fade in al seu lloc de la taula, un rere l'altre
-        const gent = [['meus', 350], ['isilder', 425], ['pastor_a', 500], ['pastor_b', 575], ['pastor_vell', 650], ['venerables', 725]];
+        const gent = [['meus', 235], ['isilder', 350], ['pastor_a', 465], ['pastor_b', 580], ['pastor_vell', 695], ['venerables', 810]];          // (116 px entre un i l'altre: abans se solapaven)
         const imatges = gent.map(([k, x], i) => {
-            const img = this.posar(k, x, TAULA_SOPAR.y - 138, { fonsY: TAULA_SOPAR.y - 138 }).setAlpha(0);
+            const img = this.posar(k, x, TAULA_SOPAR.y - 115, { fonsY: TAULA_SOPAR.y - 115 }).setAlpha(0);          // darrere la taula, que els tapa les cames
             img.ombra = null;
             this.npcs['sopar_' + k] = img;
             this.tweens.add({ targets: img, alpha: 1, duration: 900, delay: 700 + i * 450, ease: 'Sine.easeInOut' });
             return img;
         });
         // L'Ineu (que sí que camina) va a l'extrem de la taula
-        this.time.delayedCall(300, () => this.ineuVa(TAULA_SOPAR.x + 280, TAULA_SOPAR.y - 30, () => this.posarDireccio('esquerra', false), 150));
+        this.time.delayedCall(300, () => this.ineuVa(TAULA_SOPAR.x + 390, TAULA_SOPAR.y - 25, () => this.posarDireccio('esquerra', false), 150));
         this.time.delayedCall(4800, () => {
             // Pla de càmera: el Til·ler (la cara), la taula, els comensals i l'Ineu, centrats a l'espai que deixa el quadre de text (el zoom més gran en què hi caben)
-            this.enquadrar(550, 515, 1.15, 1200, () => this.ui().obrirDialeg(DIALEGS.tillerSoparRitual(Estat), () => { this.alliberarCamera(1200); Estat.desar(); }), 440);
+            this.enquadrar(560, 545, 0.85, 1200, () => this.ui().obrirDialeg(DIALEGS.tillerSoparRitual(Estat), () => { this.alliberarCamera(1200); Estat.desar(); }), 440);
         });
         this.sopar = { vel, taula, pastors: imatges, espelmes: [] };
     }
@@ -1076,7 +1078,7 @@ class ZonaTiller extends ZonaBase {
     encendreEspelmes(llista, fet) {
         if (!this.sopar) { fet(); return; }
         this.seq(llista.map(i => c => {
-            const x = TAULA_SOPAR.x + (i - 1) * 91, y = TAULA_SOPAR.y - 128;          // els tres llocs buits del davant de la taula
+            const x = TAULA_SOPAR.x + (i - 1) * 120, y = TAULA_SOPAR.y - 92;          // els tres llocs buits, a davant de la taula (sobre el tauler)
             const e = this.posar('espelma', x, y, { fonsY: TAULA_SOPAR.y + 5 }).setAlpha(0);
             this.sopar.espelmes.push(e);
             this.tweens.add({ targets: e, alpha: 1, duration: 300 });

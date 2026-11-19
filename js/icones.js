@@ -158,31 +158,7 @@ const ICONES_OBJECTES = {
         ctx.fillStyle = 'rgba(40,40,48,0.55)'; [[2, 3.5, 1.1], [-1, 6, 0.8], [4.6, 5.8, 0.7]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); });
         ctx.restore();
     },
-    basto_tiller: ctx => {
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = CONTORN; ctx.lineWidth = 11; ctx.beginPath(); ctx.moveTo(18, 86); ctx.quadraticCurveTo(44, 54, 76, 14); ctx.stroke();
-        ctx.strokeStyle = '#a07a48'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(18, 86); ctx.quadraticCurveTo(44, 54, 76, 14); ctx.stroke();
-        ctx.lineWidth = 2.5; ctx.strokeStyle = CONTORN;
-        [[60, 26, 0x6a9a3a], [70, 40, 0x5a8a32], [46, 40, 0x7aaa44]].forEach(([x, y, c]) => {
-            ctx.fillStyle = '#' + c.toString(16);
-            ctx.beginPath(); ctx.moveTo(x, y + 12); ctx.bezierCurveTo(x - 14, y + 2, x - 8, y - 12, x, y - 4); ctx.bezierCurveTo(x + 8, y - 12, x + 14, y + 2, x, y + 12); ctx.fill(); ctx.stroke();
-        });
-    },
     clau_campanar: ctx => iconaClau(ctx, '#c8a858', '#7a5a22'),
-    pallofa: ctx => {
-        ctx.lineWidth = 3; ctx.lineJoin = 'round';
-        ctx.fillStyle = '#f4f0e8';
-        ctx.beginPath(); ctx.ellipse(44, 58, 28, 13, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(18, 54); ctx.quadraticCurveTo(8, 38, 14, 28); ctx.stroke();
-        ctx.beginPath(); ctx.ellipse(66, 38, 14, 12, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.ellipse(77, 44, 8, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#7a4a2a';
-        ctx.beginPath(); ctx.ellipse(56, 30, 6, 11, -0.3, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.ellipse(34, 54, 9, 5, 0, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#2a1608'; ctx.beginPath(); ctx.arc(70, 36, 2.6, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(82, 42, 2.6, 0, Math.PI * 2); ctx.fill();
-        [[28, 46], [48, 48], [58, 62], [40, 63]].forEach(([x, y]) => ctx.fillRect(x, y, 2.4, 2.4));
-        ctx.fillStyle = '#f4f0e8'; [[28, 66], [38, 68], [56, 68], [64, 66]].forEach(([x, y]) => { ctx.fillRect(x - 3, y - 6, 6, 18); ctx.strokeRect(x - 3, y - 6, 6, 18); });
-    },
     clau_sagrari: ctx => iconaClau(ctx, '#e8c050', '#a07a20'),
     clau_girgoles: ctx => iconaClau(ctx, '#a8603a', '#6a3418'),
     clau_ferro: ctx => iconaClau(ctx, '#6a6a72', '#3a3a40', true),
@@ -252,13 +228,6 @@ const ICONES_OBJECTES = {
     },
     flors_isilder: ctx => iconaFlors(ctx, ['#f0f0ff', '#d8e0ff', '#ffffff']),
     ram: ctx => iconaFlors(ctx, ['#ff90c0', '#ffd0e8', '#f06090']),
-    pa_pastor: ctx => {
-        ctx.lineWidth = 3; ctx.fillStyle = '#7a4a24';
-        ctx.beginPath(); ctx.ellipse(48, 56, 38, 22, -0.15, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle = '#a06a38'; ctx.beginPath(); ctx.ellipse(46, 50, 30, 13, -0.15, 0, Math.PI * 2); ctx.fill();
-        ctx.lineWidth = 2.5; [28, 44, 60].forEach(x => { ctx.beginPath(); ctx.moveTo(x, 42 + (x - 48) * 0.15); ctx.lineTo(x + 8, 60 + (x - 48) * 0.15); ctx.stroke(); });
-        ctx.fillStyle = 'rgba(80,70,60,0.6)'; [[24, 66], [70, 50], [52, 70]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill(); });
-    },
     esquelles: ctx => {
         ctx.lineWidth = 3;
         [[34, 40, 1], [62, 52, 0.85]].forEach(([x, y, s]) => {
@@ -531,6 +500,141 @@ function dibuixaEmblemaIcona(ctx, scene, clau) {
     const im = scene.textures.get(clau).getSourceImage(), m = 4;
     ctx.drawImage(im, m, m, ICONA_MIDA - 2 * m, ICONA_MIDA - 2 * m);
 }
+
+// ---- Icones refetes (pa dels pastors, Pallofa, branca del Til·ler): dibuix més treballat, amb degradats, llum i el contorn fosc de la resta ----
+const FOSC_ICONA = '#2a1608';
+function fulla96(ctx, x, y, ang, llarg, ample, c1, c2) {                  // una fulla (ametlla) amb nervi central, des de (x, y) cap a l'angle ang
+    ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
+    const g = ctx.createLinearGradient(0, -ample, 0, ample); g.addColorStop(0, c1); g.addColorStop(1, c2);
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(llarg * 0.25, -ample, llarg * 0.75, -ample * 0.9, llarg, 0); ctx.bezierCurveTo(llarg * 0.75, ample * 0.9, llarg * 0.25, ample, 0, 0); ctx.closePath();
+    ctx.fillStyle = g; ctx.fill(); ctx.lineWidth = 1.8; ctx.strokeStyle = '#1c2a0e'; ctx.stroke();
+    ctx.strokeStyle = 'rgba(220,245,160,0.7)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(llarg * 0.08, 0); ctx.lineTo(llarg * 0.85, 0); ctx.stroke();
+    ctx.restore();
+}
+
+const ICONES_REFETES = {
+    // Un pa rodó de pastor: crosta daurada amb degradat, quatre talls clars, farina per sobre i dues espigues de blat al darrere
+    pa_pastor: ctx => {
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        // espigues de blat, darrere el pa
+        [[-0.55, 70, 38], [-0.2, 76, 28]].forEach(([a, x, y]) => {
+            ctx.save(); ctx.translate(x, y); ctx.rotate(a);
+            ctx.strokeStyle = FOSC_ICONA; ctx.lineWidth = 4.6; ctx.beginPath(); ctx.moveTo(0, 40); ctx.lineTo(0, -14); ctx.stroke();
+            ctx.strokeStyle = '#c8a850'; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(0, 40); ctx.lineTo(0, -14); ctx.stroke();
+            for (let k = 0; k < 5; k++) [-1, 1].forEach(s => {
+                ctx.save(); ctx.translate(0, -12 + k * -0 - k * 6 + 6); ctx.rotate(s * 0.55);
+                ctx.fillStyle = k % 2 ? '#e6c25a' : '#d4a93e'; ctx.strokeStyle = FOSC_ICONA; ctx.lineWidth = 1.4;
+                ctx.beginPath(); ctx.ellipse(0, -5, 2.8, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.restore();
+            });
+            ctx.restore();
+        });
+        // ombra a terra
+        ctx.fillStyle = 'rgba(0,0,0,0.28)'; ctx.beginPath(); ctx.ellipse(48, 82, 36, 7, 0, 0, Math.PI * 2); ctx.fill();
+        // el pa
+        const cos = () => { ctx.beginPath(); ctx.moveTo(10, 62); ctx.bezierCurveTo(6, 36, 28, 22, 48, 22); ctx.bezierCurveTo(70, 22, 90, 36, 86, 62); ctx.bezierCurveTo(84, 76, 66, 82, 48, 82); ctx.bezierCurveTo(30, 82, 12, 76, 10, 62); ctx.closePath(); };
+        const g = ctx.createRadialGradient(38, 38, 4, 48, 56, 46); g.addColorStop(0, '#f0c070'); g.addColorStop(0.45, '#d89844'); g.addColorStop(1, '#8e4c1c');
+        cos(); ctx.fillStyle = g; ctx.fill();
+        ctx.save(); cos(); ctx.clip();
+        // crosta més fosca a baix i a la dreta
+        const f = ctx.createLinearGradient(20, 40, 80, 84); f.addColorStop(0.5, 'rgba(70,30,6,0)'); f.addColorStop(1, 'rgba(70,30,6,0.5)'); ctx.fillStyle = f; ctx.fillRect(0, 0, 96, 96);
+        // els talls (clars, amb una vora fosca per sota)
+        [[24, 42, 18, 6], [40, 34, 24, 8], [58, 34, 24, 8], [72, 44, 18, 6]].forEach(([x, y, l, w], i) => {
+            ctx.save(); ctx.translate(x, y); ctx.rotate(-0.55 + i * 0.28);
+            ctx.fillStyle = 'rgba(80,36,8,0.55)'; ctx.beginPath(); ctx.ellipse(0, 2.2, l, w * 0.5, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#f6dca0'; ctx.beginPath(); ctx.ellipse(0, 0, l, w * 0.42, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.beginPath(); ctx.ellipse(-l * 0.2, -1, l * 0.55, w * 0.14, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+        });
+        // llum a dalt a l'esquerra i farina
+        ctx.fillStyle = 'rgba(255,244,210,0.32)'; ctx.beginPath(); ctx.ellipse(34, 36, 20, 9, -0.5, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,0.5)'; [[26, 46, 1.6], [34, 28, 1.4], [52, 27, 1.5], [60, 50, 1.2], [44, 62, 1.3], [70, 40, 1.4], [20, 58, 1.2]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); });
+        ctx.restore();
+        cos(); ctx.lineWidth = 3; ctx.strokeStyle = FOSC_ICONA; ctx.stroke();
+    },
+
+    // El Pallofa: un gos petit, prim i borni, blanc amb taques marrons, amb una orella caiguda, un pegat amb una creu a l'ull, el collar i la cua aixecada (com al seu dibuix)
+    pallofa: ctx => {
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        const FOSC = '#2a1608', BLANC = '#f7f2e8', BLANC2 = '#dcd2c0', MARRO = '#8a5530';
+        ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.beginPath(); ctx.ellipse(46, 88, 32, 5, 0, 0, Math.PI * 2); ctx.fill();
+        // cua (aixecada, una mica rebregada)
+        ctx.strokeStyle = FOSC; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(18, 58); ctx.quadraticCurveTo(7, 52, 8, 38); ctx.stroke();
+        ctx.strokeStyle = BLANC; ctx.lineWidth = 4.6; ctx.beginPath(); ctx.moveTo(18, 58); ctx.quadraticCurveTo(7, 52, 8, 38); ctx.stroke();
+        // potes del darrere i del davant (primes)
+        const pota = (x, y, h) => { ctx.fillStyle = BLANC; ctx.strokeStyle = FOSC; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.roundRect(x - 4, y, 8, h, 3); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.ellipse(x + 0.5, y + h, 6, 3.4, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); };
+        pota(26, 66, 18); pota(36, 68, 17); pota(56, 68, 17); pota(66, 66, 18);
+        // cos
+        const gc = ctx.createLinearGradient(0, 44, 0, 74); gc.addColorStop(0, BLANC); gc.addColorStop(1, BLANC2);
+        ctx.fillStyle = gc; ctx.strokeStyle = FOSC; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(44, 58, 28, 15, -0.05, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        // taques del pelatge
+        ctx.save(); ctx.beginPath(); ctx.ellipse(44, 58, 27, 14, -0.05, 0, Math.PI * 2); ctx.clip();
+        ctx.fillStyle = MARRO; [[34, 52, 9, 5, 0.2], [56, 60, 6, 4, -0.3], [24, 62, 4, 3, 0]].forEach(([x, y, a, b, r]) => { ctx.beginPath(); ctx.ellipse(x, y, a, b, r, 0, Math.PI * 2); ctx.fill(); });
+        ctx.fillStyle = 'rgba(120,90,60,0.5)'; [[44, 48], [50, 52], [30, 66], [60, 54]].forEach(([x, y]) => ctx.fillRect(x, y, 2.4, 2.4));          // (puces)
+        ctx.restore();
+        // cap: part de darrere de l'orella, cap blanc, morro
+        ctx.fillStyle = BLANC; ctx.strokeStyle = FOSC; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(64, 36, 17, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.ellipse(77, 43, 10, 7.5, 0.15, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        // orella dreta (blanca, dreta) i orella esquerra (marró, caiguda)
+        ctx.beginPath(); ctx.moveTo(70, 22); ctx.quadraticCurveTo(80, 8, 84, 16); ctx.quadraticCurveTo(84, 26, 76, 30); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = MARRO; ctx.beginPath(); ctx.moveTo(52, 24); ctx.quadraticCurveTo(44, 26, 46, 44); ctx.quadraticCurveTo(54, 48, 58, 38); ctx.quadraticCurveTo(62, 28, 52, 24); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,220,170,0.25)'; ctx.beginPath(); ctx.ellipse(50, 32, 2.5, 7, 0.1, 0, Math.PI * 2); ctx.fill();
+        // pegat a l'ull esquerre, amb una creu cosida
+        ctx.fillStyle = MARRO; ctx.beginPath(); ctx.arc(59, 33, 8, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = '#f2dcc0'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(55.5, 29.5); ctx.lineTo(62.5, 36.5); ctx.moveTo(62.5, 29.5); ctx.lineTo(55.5, 36.5); ctx.stroke();
+        // l'ull bo, el nas i la boca
+        ctx.fillStyle = '#2a1608'; ctx.beginPath(); ctx.ellipse(71, 32, 3.4, 4, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(72, 30.6, 1.2, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#1a0e08'; ctx.beginPath(); ctx.ellipse(85, 41, 3.6, 2.8, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = FOSC; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(83, 46); ctx.quadraticCurveTo(76, 50, 70, 46); ctx.stroke();
+        // collar fosc amb una xapa
+        ctx.strokeStyle = FOSC; ctx.lineWidth = 7.5; ctx.beginPath(); ctx.moveTo(50, 48); ctx.quadraticCurveTo(56, 55, 66, 50); ctx.stroke();
+        ctx.strokeStyle = '#4a4a54'; ctx.lineWidth = 4.2; ctx.beginPath(); ctx.moveTo(50, 48); ctx.quadraticCurveTo(56, 55, 66, 50); ctx.stroke();
+        ctx.fillStyle = '#c8ccd4'; ctx.strokeStyle = FOSC; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(58, 58, 3.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    },
+
+    // La branca del Til·ler: una branca llarga i verda, viva, amb la capçada de fulles al capdamunt, dos brots als costats i el casquet de metall a la punta (com l'arma del joc)
+    basto_tiller: ctx => {
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        // línia central (de baix-esquerra a dalt-dreta, una mica corba)
+        const P = (t) => { const x = 22 + 40 * t + Math.sin(t * 3.1) * 2.5, y = 86 - 62 * t; return [x, y]; };
+        const N = 24, M = []; for (let i = 0; i <= N; i++) M.push(P(i / N));
+        const ample = i => 8.4 - 3.4 * (i / N) + Math.sin(i * 1.7) * 0.5;
+        const nor = i => { const a = M[Math.max(0, i - 1)], b = M[Math.min(N, i + 1)], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; };
+        const E = [], D = [];
+        M.forEach((m, i) => { const n = nor(i), w = ample(i) / 2; E.push([m[0] + n[0] * w, m[1] + n[1] * w]); D.push([m[0] - n[0] * w, m[1] - n[1] * w]); });
+        const forma = () => { ctx.beginPath(); E.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); for (let i = N; i >= 0; i--) ctx.lineTo(D[i][0], D[i][1]); ctx.closePath(); };
+        // brots laterals (dues branquetes amb una fulla cada una), darrere la branca
+        [[0.38, 1, 0.9], [0.62, -1, 0.7]].forEach(([t, s, esc]) => {
+            const [x, y] = P(t); const a = -Math.PI / 2 + s * 0.95;
+            ctx.strokeStyle = FOSC_ICONA; ctx.lineWidth = 4.6; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a) * 11 * esc, y + Math.sin(a) * 11 * esc); ctx.stroke();
+            ctx.strokeStyle = '#6a8a3a'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a) * 11 * esc, y + Math.sin(a) * 11 * esc); ctx.stroke();
+            fulla96(ctx, x + Math.cos(a) * 10 * esc, y + Math.sin(a) * 10 * esc, a - 0.2 * s, 13 * esc, 5.2 * esc, '#8ac04a', '#4a8a2a');
+            fulla96(ctx, x + Math.cos(a) * 7 * esc, y + Math.sin(a) * 7 * esc, a + 0.9 * s, 9 * esc, 3.8 * esc, '#7ab43e', '#3e7a24');
+        });
+        // la branca (verda, amb vetes i llum)
+        const g = ctx.createLinearGradient(14, 90, 66, 18); g.addColorStop(0, '#4e6a2c'); g.addColorStop(0.5, '#6f9440'); g.addColorStop(1, '#58792f');
+        forma(); ctx.fillStyle = g; ctx.fill();
+        ctx.save(); forma(); ctx.clip();
+        ctx.strokeStyle = 'rgba(30,50,14,0.45)'; ctx.lineWidth = 1; [-0.2, 0.15].forEach((d, k) => { ctx.beginPath(); M.forEach((m, i) => { if (i < 2) return; const n = nor(i), w = ample(i) * d; const x = m[0] + n[0] * w, y = m[1] + n[1] * w; (i === 2) ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }); ctx.stroke(); });
+        ctx.strokeStyle = 'rgba(220,245,170,0.5)'; ctx.lineWidth = 1.6; ctx.beginPath(); E.forEach((p, i) => { if (i < 1 || i > N - 4) return; const n = nor(i); const x = p[0] - n[0] * 1.8, y = p[1] - n[1] * 1.8; i === 1 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); }); ctx.stroke();
+        ctx.restore();
+        forma(); ctx.strokeStyle = '#1c2a0e'; ctx.lineWidth = 2.4; ctx.stroke();
+        // nusos amb un brotet
+        [[0.2, 1], [0.5, -1], [0.78, 1]].forEach(([t, s]) => { const i = Math.round(t * N), m = M[i], n = nor(i), w = ample(i) / 2, x = m[0] + n[0] * s * (w - 0.4), y = m[1] + n[1] * s * (w - 0.4); ctx.fillStyle = '#9ac05a'; ctx.strokeStyle = '#1c2a0e'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.ellipse(x, y, 2.6, 2, 0.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+        // casquet de metall a la punta de baix
+        const b0 = M[0], tb = [M[2][0] - b0[0], M[2][1] - b0[1]], ab = Math.atan2(tb[1], tb[0]);
+        ctx.save(); ctx.translate(b0[0], b0[1]); ctx.rotate(ab - Math.PI / 2);
+        ctx.fillStyle = '#9aa2ac'; ctx.strokeStyle = FOSC_ICONA; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(-6, -1, 12, 8, 3); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.fillRect(-4.4, 0.4, 2.6, 5);
+        ctx.restore();
+        // la capçada de fulles (de més fosca a més clara)
+        const [tx, ty] = P(1);
+        [[-2.55, 17, '#4c8a2a', '#2e6a1c'], [-0.4, 17, '#4c8a2a', '#2e6a1c'], [-1.9, 21, '#6aa83a', '#3a7a22'], [-1.1, 21, '#6aa83a', '#3a7a22'], [-3.0, 14, '#7ab83e', '#3e8a24'], [0.1, 14, '#7ab83e', '#3e8a24'], [-1.5, 24, '#9ad048', '#4e9a2c']].forEach(([a, l, c1, c2]) => fulla96(ctx, tx, ty + 1, a, l, 7.6, c1, c2));
+    },
+};
+Object.assign(ICONES_OBJECTES, ICONES_REFETES);
+
 
 // Clau de la textura de la icona (es crea el primer cop que cal); null si l'objecte no en té
 function iconaObjecte(scene, id) {

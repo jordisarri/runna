@@ -1236,11 +1236,20 @@ class ZonaDolmen extends ZonaBase {
             this.tweens.add({ targets: this.glowEsp, outerStrength: 7, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });
         }
         this.tweens.killTweensOf(this.resplendor); this.resplendor.setAlpha(0);
-        afegeix(this.add.circle(x, y, 135, 0xffd24a, 0.42).setBlendMode(ADD).setDepth(sy + 1), { scale: 1.3, alpha: 0.2, yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
-        afegeix(this.add.circle(x, y, 78, 0x9fe85a, 0.5).setBlendMode(ADD).setDepth(sy + 2), { scale: 1.25, alpha: 0.22, yoyo: true, repeat: -1, duration: 950, ease: 'Sine.easeInOut' });
-        afegeix(this.add.circle(x, y, 30, 0xfff3c0, 0.3).setBlendMode(ADD).setDepth(sy + 3), { scale: 1.4, yoyo: true, repeat: -1, duration: 700, ease: 'Sine.easeInOut' });
-        afegeix(this.add.rectangle(x, y - 380, 120, 800, 0xffe08a, 0.1).setBlendMode(ADD).setDepth(9400), { fillAlpha: 0.2, yoyo: true, repeat: -1, duration: 1700, ease: 'Sine.easeInOut' });       // pilar daurat
-        afegeix(this.add.rectangle(x, y - 380, 44, 800, 0xcfff90, 0.16).setBlendMode(ADD).setDepth(9401), { fillAlpha: 0.32, yoyo: true, repeat: -1, duration: 1100, ease: 'Sine.easeInOut' });        // nucli verd
+        // Els halos són de vora suau (un degradat radial) i els pilars s'esvaeixen a baix: abans eren cercles i rectangles de vora dura, i on la vora travessava la fulla de l'espasa
+        // se'n veia la meitat d'un blau i l'altra meitat d'un altre (dos colors)
+        if (!this.textures.exists('llum_suau')) {
+            const cv = this.textures.createCanvas('llum_suau', 128, 128), c = cv.getContext(), gr = c.createRadialGradient(64, 64, 0, 64, 64, 64);
+            gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.35, 'rgba(255,255,255,0.6)'); gr.addColorStop(0.7, 'rgba(255,255,255,0.18)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+            c.fillStyle = gr; c.fillRect(0, 0, 128, 128); cv.refresh();
+        }
+        const suau = (d, color, alfa, dep) => { const im = this.add.image(x, y, 'llum_suau').setTint(color).setAlpha(alfa).setBlendMode(ADD).setDepth(dep); im.setScale(d / 128); return im; };
+        { const h = suau(300, 0xffd24a, 0.55, sy + 1); afegeix(h, { scale: h.scale * 1.3, alpha: 0.25, yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' }); }
+        { const h = suau(180, 0x9fe85a, 0.6, sy + 2); afegeix(h, { scale: h.scale * 1.25, alpha: 0.28, yoyo: true, repeat: -1, duration: 950, ease: 'Sine.easeInOut' }); }
+        { const h = suau(90, 0xfff3c0, 0.4, sy + 3); afegeix(h, { scale: h.scale * 1.4, yoyo: true, repeat: -1, duration: 700, ease: 'Sine.easeInOut' }); }
+        const pilar = (ample, color, alfa, dep, dur, a0, a1) => { const g = this.add.graphics().setBlendMode(ADD).setDepth(dep); g.fillGradientStyle(color, color, color, color, alfa, alfa, 0, 0).fillRect(x - ample / 2, y - 780, ample, 800); g.setAlpha(a0); afegeix(g, { alpha: a1, yoyo: true, repeat: -1, duration: dur, ease: 'Sine.easeInOut' }); };
+        pilar(120, 0xffe08a, 0.22, 9400, 1700, 0.55, 1);                                // pilar daurat
+        pilar(44, 0xcfff90, 0.32, 9401, 1100, 0.5, 1);                                  // nucli verd
         const raigs = this.add.graphics({ x, y }).setBlendMode(ADD).setDepth(sy + 1).setAlpha(0.5);
         for (let k = 0; k < 20; k++) { const a = k / 20 * Math.PI * 2, L = 150 + (k % 3) * 70; raigs.lineStyle(2 + (k % 2) * 2, k % 2 ? 0xb8f070 : 0xffe08a, 0.45).lineBetween(Math.cos(a) * 26, Math.sin(a) * 26, Math.cos(a) * L, Math.sin(a) * L); }
         afegeix(raigs, { angle: 360, duration: 50000, repeat: -1 });

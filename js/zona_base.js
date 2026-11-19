@@ -2834,7 +2834,9 @@ class ZonaBase extends Phaser.Scene {
     }
 
     moure(ui, delta) {
-        this.intent = { x: 0, y: 0 };                                                // cap a on vol anar el jugador (el fan servir l'empenta de les pedres)
+        this.intent = { x: 0, y: 0 };
+        // Mentre l'Ineu camina sol (ineuVa: una escena, el sopar del Til·ler...) el moviment és el del tween: no s'ha de tornar a posar la velocitat a 0 ni l'animació d'aturat a cada fotograma (si no, llisca sense caminar)
+        if (this.caminantAuto && this.ineu && this.tweens.isTweening(this.ineu)) return;                                                // cap a on vol anar el jugador (el fan servir l'empenta de les pedres)
         // Assegut en un banc: es queda quiet fins que el jugador es mou (llavors s'aixeca i continua caminant). Si encara té premuda la tecla amb què hi ha arribat, espera que la solti
         if (this.assegut) {
             const c = this.cursors, t = this.tecles;

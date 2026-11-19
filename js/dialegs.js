@@ -280,19 +280,10 @@ const DIALEGS = {
                 enAcabar: () => { E.posaFlag("parlatPianista"); iniciarLliço("aurora"); }
             };
         }
-        // Les esquelles dels pastors, si l'Ineu ja les porta, són el primer que la Pianista nota (abans de qualsevol cant): així no hi reacciona tard, com si fos la primera vegada
-        if (E.flag("esquelles") && !E.flag("esquellesVistes")) {
-            return {
-                pagines: [
-                    { qui: "La Pianista", text: "Ai, mare de Déu, les esquelles dels pastors! Fa vint anys que no en sentia el so. Deixa-me-les tocar un instant..." },
-                    { qui: "La Pianista", text: "Duen una música antiga. Amb la tarota, els cants antics encara desperten allò que dorm sota la boira. Vés amb compte, que amb aquesta força la boira no et perdonarà." }
-                ],
-                enAcabar: () => E.posaFlag("esquellesVistes")
-            };
-        }
         // El Cant de Vespres: l'Ineu el demana a la Pianista, o perquè l'ombra del monjo ha dit que qui toca l'orgue el coneix, o perquè el Til·ler l'hi
         // ha remès pels pastors de la Cirosa. Ella no sap res de l'ombra ni dels pastors: ho sap pel que l'Ineu li explica.
-        if ((E.flag("ombraDemanaCant") || E.flag("soparObert")) && !E.flag("cantPedres")) {
+        const vespres = () => {
+            if (!((E.flag("ombraDemanaCant") || E.flag("soparObert")) && !E.flag("cantPedres"))) return null;
             const perOmbra = E.flag("ombraDemanaCant");
             return {
                 pagines: [
@@ -305,7 +296,21 @@ const DIALEGS = {
                 ],
                 enAcabar: () => iniciarLliço("pedres")
             };
+        };
+        // Les esquelles dels pastors, si l'Ineu ja les porta, són el primer que la Pianista nota (abans de qualsevol cant): així no hi reacciona tard, com si fos la primera vegada.
+        // I si l'Ineu venia pel Cant de Vespres (els pastors del sopar), a continuació l'hi ensenya, sense haver de tornar a parlar-hi.
+        if (E.flag("esquelles") && !E.flag("esquellesVistes")) {
+            const seg = vespres();
+            return {
+                pagines: [
+                    { qui: "La Pianista", text: "Ai, mare de Déu, les esquelles dels pastors! Fa vint anys que no en sentia el so. Deixa-me-les tocar un instant..." },
+                    { qui: "La Pianista", text: "Duen una música antiga. Amb la tarota, els cants antics encara desperten allò que dorm sota la boira. Vés amb compte, que amb aquesta força la boira no et perdonarà." },
+                    ...(seg ? seg.pagines : [])
+                ],
+                enAcabar: () => { E.posaFlag("esquellesVistes"); if (seg) seg.enAcabar(); }
+            };
         }
+        { const v = vespres(); if (v) return v; }
         if (E.flag("runna") && !E.flag("cantMiracle")) {
             return {
                 pagines: [
@@ -767,7 +772,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: "Ineu", text: "Toca el Cant de Vespres amb la tarota: 5-4-3-1." }
+                { qui: "Ineu", text: "Toca el Cant de Vespres amb la tarota." }
             ]
         };
     },
@@ -1251,7 +1256,7 @@ const DIALEGS = {
                 { qui: "Pastor vell", text: "Un sopar, dius? Al Til·ler? Amb els de les cel·les?... No, fill. Nosaltres no som gent per a asseure's amb la gent." },
                 { qui: "Pastor vell", text: "Fa anys que no sentim música vora el foc, ni pastem el pa que fèiem per a les festes. Si algú en toqués... potser ens recordaria que encara som persones." },
                 E.flag("cantPedres")
-                    ? { qui: "Ineu", text: "Tinc la tarota. Les esquelles dels seus avis van afinar els cants antics... El Cant de Vespres, 5-4-3-1: el tocaré vora el foc, i que sigui el que Déu vulgui." }
+                    ? { qui: "Ineu", text: "Tinc la tarota. Les esquelles dels seus avis van afinar els cants antics... El Cant de Vespres: el tocaré vora el foc, i que sigui el que Déu vulgui." }
                     : { qui: "Ineu", text: "Tinc la tarota, però només sé uns pocs cants. Els vells els coneixen tots: potser la Pianista, al Santuari, en sap algun que els faci recordar casa." }
             ], enAcabar: () => E.posaObjectiu("Els pastors de la Cirosa escoltarien una música vora el seu foc.") };
         }
@@ -1264,7 +1269,7 @@ const DIALEGS = {
             { fer: (z, fet) => { ['pastor_a', 'pastor_vell', 'pastor_b'].forEach((k, i) => z.time.delayedCall(i * 300, () => { z.npcSalta(k, null, 1); z.bombolla(k, '♪', null, 1100); })); if (z.foc) z.tweens.add({ targets: z.foc, scale: z.foc.scale * 1.5, yoyo: true, duration: 600 }); z.esperar(1600, fet); } },
             { qui: "Pastora", text: "Havia oblidat que existia això..." },
             { qui: "Pastor vell", text: "Fa cinquanta anys que ningú no ens convidava enlloc, monjo. Ni a una missa, ni a una taula. I tu ens parles amb música." },
-            { qui: "Pastor vell", text: "Mira: el forn encara és calent. Aquest pa el pastem nosaltres, amb aquestes mans, com abans. Porta'l al teu arbre. I vindrem: no direm gaire cosa, perquè no sabem com es fa, però el pa és el que sabem fer." },
+            { qui: "Pastor vell", text: "Mira: el forn encara és calent. Aquest pa el pastem nosaltres, amb aquestes mans, com abans. Porta'l al teu arbre. I vindrem, no direm gaire cosa, però el pa parlarà per nosaltres." },
             { avis: "Has obtingut el PA DELS PASTORS.", obj: 'pa_pastor' }
         ],
         enAcabar: () => { E.posaFlag("pastorsConvencuts"); E.dona("pa_pastor"); objectiuSopar(E); }
@@ -1302,7 +1307,7 @@ const DIALEGS = {
             { qui: "Isílder", text: "He posat les flors de lluna al mig, com cada any. Aquest cop són per l'Huri, pel Fram... i pel meu Sardi." },
             { qui: "Les Venerables Sàvies", text: "Sempre fem el mateix, fill: una espelma per cada cadira buida a la taula. Enguany en són tres: l'Huri, el Fram i el Sardi. Encén-les tu: ets tu en qui tenim les nostres esperances posades." },
             { fer: (z, fet) => z.encendreEspelmes([0, 1, 2], fet) },
-            { qui: "Pastor vell", text: "Fa molts anys que a nosaltres ningú no ens guardava cap cadira a cap taula. Gràcies per asseure'ns, fill." },
+            { qui: "Pastor vell", text: "Fa molts anys que a nosaltres ningú no ens guardava cap cadira a cap taula. Gràcies per convidar-nos, fill." },
             { qui: "El Gran Til·ler", text: "Aquesta és la saviesa que et volia donar, petit monjo: ningú no es perd del tot mentre algú el recorda a taula. La gàbia de l'Ocellaire només s'omple de qui s'ha quedat sol." },
             { qui: "El Gran Til·ler", text: "Rep el meu permís. Que et sigui lleu, i que no et faci oblidar mai que vas menjar amb tots." },
             { qui: "El Gran Til·ler", text: "Entre les meves branques hi custodio, des de temps immemorials, un medalló de pedra amb una fulla tallada: el permís de l'arbre. Fa segles que espera algú que s'assegui a taula amb tothom. Agafa'l." },
