@@ -110,5 +110,5 @@ La font de cada `.webp` s'ha determinat comparant-ne la imatge amb cada candidat
 - **`GRUIX_CONTORN`** (3) a `js/dibuixos.js`, usat als traços de contorn de `dibuixos*.js`.
 - **`iconaVolum`** (`js/icones.js`): ombra suau a baix i llum a dalt-esquerra sobre 17 icones planes. Les 5 claus tenen cap diferent (anell, rombe, trèvol, quadrat, creu) i llum a la tija.
 - **Halos:** `llavorLluna` (lila radial) i `benedicio_fraterna` (daurat radial) ja no són un cercle pla; `estel_llorenc`, `runna` i `gra_rosari` ja eren radials.
-- **`eines/contorn_natura.py`:** contorn `#120c08` (4 px de webp, 3 als pins sense fulles) i –12 % de saturació a `arbre` i `pi*`; `rialla`, –10 % al fúcsia i una mica més càlid. La font sense contorn és a `art/natura/sense_contorn/`. **L'església no en porta.**
+- **`eines/contorn_natura.py`:** es va provar un contorn fosc a `arbre` i `pi*` i **es va descartar** (queda malament). Només queda la baixada de saturació (–12 %; `rialla` –10 % al fúcsia). La font és a `art/natura/sense_contorn/`.
 - **Decisions d'estil registrades:** ombra de terra només a peces d'escenari; `cartell_llums` queda com a excepció B/N.

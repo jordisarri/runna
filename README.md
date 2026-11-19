@@ -42,7 +42,7 @@ Joc web fet amb Phaser 3. Per provar-lo en local: `python serveix.py` i obre `ht
 
 ## Eines (`eines/`)
 
-- `auditar_art.py`: comprova la coherència entre `art/` i `assets/` (webp sense original, formats duplicats, referències inexistents). `contorn_natura.py`: contorn fosc i menys saturació a `arbre` i `pi*` (font a `art/natura/sense_contorn/`; torna'l a passar després de reconvertir-los).
+- `auditar_art.py`: comprova la coherència entre `art/` i `assets/` (webp sense original, formats duplicats, referències inexistents). `contorn_natura.py`: menys saturació a `arbre` i `pi*` (el contorn es va descartar) (font a `art/natura/sense_contorn/`; torna'l a passar després de reconvertir-los).
 - `convertir_webp.js`: passa a WebP les imatges del catàleg (`art/<carpeta>/<nom>` → `assets/<carpeta>/<nom>.webp`) i els sprites de caminar d'`art/ineu_caminar/`, inclosos els fotogrames originals de `costat/`. Cal `sharp`.
 - `convertir_atacs.js`: fulles d'atac de l'Ineu i espasa. Rebaixa una mica la saturació dels marrons de l'hàbit perquè coincideixin amb caminar/idle; les fulles d'abans de l'ajust es conserven a `art/ineu/atac/atac_<direcció>-abans-colors.webp`, inclosa la fulla d'atac amunt retocada a mà. Cal servir el joc i tenir Chrome.
 - `comprimir_media.sh`: vídeos i música (cal `ffmpeg`).

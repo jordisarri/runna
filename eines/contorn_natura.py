@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Contorn fosc (#120c08) i saturació més baixa per als gràfics pictòrics de natura (arbre, pi*) i rialla.
+"""(El contorn es va descartar: només queda la baixada de saturació.) Contorn fosc (#120c08) i saturació més baixa per als gràfics pictòrics de natura (arbre, pi*) i rialla.
    python3 eines/contorn_natura.py
 Igual que eines/contorn_armes.py: la 1a vegada copia l'actual assets/natura/<nom>.webp a art/natura/sense_contorn/<nom>.webp
 (la versió «sense contorn», que és la font) i escriu el resultat a assets/natura/<nom>.webp. Es pot repetir sense acumular.
@@ -56,5 +56,5 @@ def procesa(nom, nomes_magenta=False, amb_contorn=True):
     print(nom, Image.open(font).size, '->', im.size, os.path.getsize(dest) // 1024, 'KB')
 
 if __name__ == '__main__':
-    for n in NOMS: procesa(n)
+    for n in NOMS: procesa(n, amb_contorn=False)   # el contorn es va provar i es va descartar (queda malament als arbres); només es baixa la saturació
     procesa('rialla', nomes_magenta=True, amb_contorn=False)
