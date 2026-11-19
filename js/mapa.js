@@ -111,7 +111,7 @@ const MAPA = {
         ['ZonaPlaca', 'E', 'ZonaMonestir', 530, 600],
         ['ZonaMonestir', 'E', 'ZonaSantAntoni', 640, 820],
         ['ZonaPlaca', 'S', 'ZonaCreu', 760, 1100],
-        ['ZonaPlaca', 'W', 'ZonaCasaGran', 470, 880],
+        ['ZonaPlaca', 'W', 'ZonaCasaGran', 420, 880],
         ['ZonaCasaGran', 'W', 'ZonaTaverna', 880, 900],
         ['ZonaTaverna', 'W', 'ZonaJardi', 900, 900],
         ['ZonaJardi', 'W', 'ZonaEra', 900, 500],

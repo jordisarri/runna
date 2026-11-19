@@ -13,7 +13,7 @@ class ZonaPlaca extends ZonaBase {
             alcada: 1200,
             entrades: {
                 inici:    { x: 1240, y: 820, dir: 'esquerra' },
-                casaGran: { x: 50,   y: 565, dir: 'dreta' },
+                casaGran: { x: 50,   y: 515, dir: 'dreta' },
                 creu:     { x: 840,  y: 1120, dir: 'amunt' },
                 ruines:   { x: 390,  y: 150, dir: 'avall' },
                 tresor:   { x: 1535, y: 490, dir: 'avall' },
@@ -26,14 +26,14 @@ class ZonaPlaca extends ZonaBase {
     construir() {
         // --- Terra ---
         this.terra('herba', 0, 0, 1600, 1200, -1100);
-        this.terra('llamborda', 0, 470, 380, 190);       // cap a la Casa Gran (oest): empedrat, com la resta de la plaça
+        this.terra('llamborda', 0, 420, 380, 190);       // cap a la Casa Gran (oest): empedrat, com la resta de la plaça; la vora de dalt, a la mateixa línia (y = 420) que la de la plaça, de l'església a la vora de l'escenari
         this.terra('cami', 760, 1000, 160, 200);         // cap a la Creu i la Bassadòria (sud)
         this.terra('cami', 330, 0, 130, 440);            // cap a les Runes (nord, a l'esquerra del Santuari): de terra
         this.terra('llamborda', 360, 420, 1240, 590);    // la plaça: arriba fins a la vora est, davant del Monestir
         const vora = this.add.graphics().setDepth(-990);
         // la vora de la plaça (sense el tros de l'oest que s'obre al camí empedrat)
         vora.lineStyle(4, 0x8a7658, 1).lineBetween(360, 420, 1600, 420).lineBetween(1600, 420, 1600, 1010).lineBetween(1600, 1010, 360, 1010)
-            .lineBetween(360, 1010, 360, 660).lineBetween(360, 470, 360, 420);
+            .lineBetween(360, 1010, 360, 610);
 
         // --- Santuari i Runes (nord) ---
         // Façana gran (1100 d'ample) que acaba a la vora est del món: la porta, a x=683, fa ~165 d'alt (l'Ineu ~125)
@@ -80,7 +80,7 @@ class ZonaPlaca extends ZonaBase {
         if (!Estat.flag('camiCirosaObert') && !Estat.flag('pastorVencut')) this.aldreu = this.npc('germa_aldreu', 1020, 585, DIALEGS.germaAldreu, { flipX: true });
 
         // --- Cartells ---
-        this.cartell(300, 465, DIALEGS.cartellPlaca);
+        this.cartell(235, 400, DIALEGS.cartellPlaca);
 
         // --- Arbres ---
         [[110, 250], [140, 980], [300, 1110], [640, 1130], [1040, 1110],
@@ -89,7 +89,7 @@ class ZonaPlaca extends ZonaBase {
         });
 
         // --- Sortides ---
-        this.sortida(0, 470, 14, 190, 'ZonaCasaGran', 'placa');
+        this.sortida(0, 420, 14, 190, 'ZonaCasaGran', 'placa');
         this.sortida(760, 1186, 160, 14, 'ZonaCreu', 'placa');
         this.sortida(330, 0, 130, 14, 'ZonaCellerFora', 'placa');
         this.sortida(1586, 530, 14, 150, 'ZonaMonestir', 'placa');

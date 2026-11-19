@@ -82,7 +82,7 @@ class ZonaJardi extends ZonaBase {
         // muret_textura (en trossos d'ample fix), tot seguit des de la vora de l'esquerra. El mur del davant no es talla: davant, entre la 3a i la 4a columna, hi ha un graó
         // que és l'entrada al jardí de la pèrgola (allà el mur no bloqueja el pas, i el tros de mur que hi ha es dibuixa per sota de l'Ineu perquè hi pugi). ---
         const MX1 = 754, TW = 182;                                                   // MX1: paret de l'esquerra de la casa; TW: ample d'un tros de la textura al joc
-        const GX0 = (COLS[2] + COLS[3]) / 2 - 47, GX1 = GX0 + 94;                    // el graó: 94 d'ample, al mig entre la columna 3 i la 4
+        const GX0 = (COLS[2] + COLS[3]) / 2 - 72, GX1 = GX0 + 144;                  // els graons: tot l'espai entre la columna 3 i la 4 (144 d'ample)
         {
             const tx = this.textures.get('muret_textura').getSourceImage();
             const sg = TW / tx.width, DH = tx.height * sg;                           // escala de la textura (1024 x 340: el cos del mur ocupa de la fila 9 a la 325)
@@ -119,22 +119,13 @@ class ZonaJardi extends ZonaBase {
             };
             mur(YB, false);                                                            // darrere
             mur(YF, true);                                                             // davant
-            // Les escaletes (dibuixades amb codi, de color de pedra): dos graons, un enganxat al mur (el de dalt) i un al davant (el de baix), de 12 d'alt i 12 de fons cada un
-            const gr = this.add.graphics().setDepth(-745), TOP_C = 0xe8caa0, FRONT_C = 0xd2b283, LL = 0x2a2018, W_G = GX1 - GX0;
-            const graoDib = (yFront, h, d) => {                                            // yFront: vora de baix de la cara del davant del graó
-                gr.fillStyle(0x000000, 0.2).fillRect(GX0 - 1, yFront - 1, W_G + 2, 4);
-                gr.fillStyle(FRONT_C, 1).fillRect(GX0, yFront - h, W_G, h);
-                gr.fillStyle(TOP_C, 1).fillRect(GX0, yFront - h - d, W_G, d);
-                gr.fillStyle(0xfbe8c4, 0.6).fillRect(GX0, yFront - h - d, W_G, 1.5);
-                gr.lineStyle(1.3, LL, 1).strokeRect(GX0, yFront - h - d, W_G, h + d).lineBetween(GX0, yFront - h, GX1, yFront - h);
-                gr.lineStyle(1, 0x8a6f48, 0.7).lineBetween(GX0 + 2, yFront - h + 5, GX1 - 2, yFront - h + 5);
-            };
-            graoDib(WB + 12, 12, 12);                                                  // el de dalt, enganxat al mur
-            graoDib(WB + 24, 12, 12);                                                  // el del davant
-            // Pujar-los com a totes les escales del joc: més lent i un tap a cada graó. Mentre puja (graons i mur) l'Ineu es dibuixa més amunt (elevacioIneu, a zona_base) i, en passar
+            // El graó: una llosa de pedra (pergola_grao) davant del mur, de tot l'espai entre les dues columnes. Es dibuixa per sobre del mur (que la taparia) i per sota de l'Ineu quan hi puja.
+            const gI = this.add.image((GX0 + GX1) / 2, WB + 20, 'pergola_grao').setOrigin(0.5, 1).setDepth(YF + 41);
+            gI.setScale((GX1 - GX0) / gI.frame.width);
+            // Pujar-lo com a totes les escales del joc: més lent i un tap en pujar-hi i en passar al mur. Mentre puja (graó i mur) l'Ineu es dibuixa més amunt (elevacioIneu, a zona_base) i, en passar
             // el mur, torna a baixar: quan és a dins queda just darrere del mur, que li tapa fins als genolls.
-            this.registraGraons(GX0, GX1, [[WB + 22, WB + 30], [WB + 2, WB + 8], [YF + 30, YF + 38], [YF + 24, YF + 32]]);
-            const PUNTS = [[WB + 30, 0], [WB + 22, 12], [WB + 6, 12], [WB - 2, 24], [WB - 12, 24], [YF + 32, 40], [YF + 24, 0]];          // [peus y, elevació]
+            this.registraGraons(GX0, GX1, [[WB + 14, WB + 26], [YF + 30, YF + 38], [YF + 24, YF + 32]]);
+            const PUNTS = [[WB + 26, 0], [WB + 14, 28], [WB - 4, 28], [YF + 32, 40], [YF + 24, 0]];          // [peus y, elevació]
             const alcada = y => {
                 if (y >= PUNTS[0][0]) return 0;
                 for (let k = 1; k < PUNTS.length; k++) if (y >= PUNTS[k][0]) return PUNTS[k][1] + (PUNTS[k - 1][1] - PUNTS[k][1]) * (y - PUNTS[k][0]) / (PUNTS[k - 1][0] - PUNTS[k][0]);

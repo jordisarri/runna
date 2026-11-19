@@ -100,6 +100,7 @@ const CATALEG = [
     // ---- Escenari nou ----
     { key: 'runes',     file: 'assets/edificis/runes.webp',     amplada: 760, provisional: (c, w) => dibuixarRunes(c, w) },
     ...Array.from({ length: 12 }, (_, k) => ({ key: 'columna_proces_' + k, file: null, amplada: 64, provisional: (c, w) => dibuixarColumnaProcessio(c, w, k) })),
+    { key: 'pergola_grao', file: 'assets/objectes/pergola_grao.webp', amplada: 144, cru: true },          // llosa de pedra que fa de graó davant del mur de la pèrgola del jardí de l'Hostatgeria
     { key: 'muret_textura', file: 'assets/objectes/muret_textura.webp', amplada: 183, cru: true },          // textura del mur baix de pedra amb heura (es repeteix; pèrgola del jardí de l'Hostatgeria)
     { key: 'columna_heura', file: 'assets/objectes/columna_heura.webp', amplada: 88, cru: true },          // columna de pedres irregulars amb heura (pèrgola del jardí de l'Hostatgeria); es posa girada (mirall) alternant
     { key: 'columna',   file: null,   amplada: 58,  provisional: (c, w) => dibuixarColumna(c, w) },
