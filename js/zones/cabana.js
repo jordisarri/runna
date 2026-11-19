@@ -357,17 +357,17 @@ class ZonaCabanaCami extends ZonaBase {
         this.barril(150, 175, 50, 22);
         this.barril(205, 160, 50, 22);
         this.sacs(290, 182, 'tres');
-        this.posar('taula', 450, 470, { col: { w: 160, h: 30 } });
+        this.posar('taula_buida', 450, 470, { col: { w: 160, h: 30 } });      // (sense bol ni tassa: el tauler és ple de cartes)
         this.posar('tamboret', 340, 505, { col: { w: 40, h: 16 } });
         this.posar('tamboret', 565, 505, { col: { w: 40, h: 16 } });
         // El solitari de l'Iscu, estirat sobre la taula, i l'Iscu (el fill de la Càren) al costat
         const cartes = this.add.graphics().setDepth(480);
         for (let c = 0; c < 7; c++) for (let f = 0; f <= Math.min(c, 3); f++) {
-            const x = 386 + c * 19, y = 418 + f * 7, tapada = f < Math.min(c, 3);
+            const x = 378 + c * 18, y = 375 + f * 5, tapada = f < Math.min(c, 3);
             cartes.fillStyle(tapada ? 0x8a2a2a : 0xf4ecd8, 1).fillRect(x, y, 15, 21).lineStyle(1, 0x3a2410, 1).strokeRect(x, y, 15, 21);
             if (!tapada) cartes.fillStyle([0xc8a030, 0x2a5aa0, 0xb83a3a, 0x3a8a3a][c % 4], 1).fillCircle(x + 7.5, y + 10, 3);
         }
-        cartes.fillStyle(0x8a2a2a, 1).fillRect(520, 420, 15, 21).lineStyle(1, 0x3a2410, 1).strokeRect(520, 420, 15, 21);
+        cartes.fillStyle(0x8a2a2a, 1).fillRect(508, 378, 15, 21).lineStyle(1, 0x3a2410, 1).strokeRect(508, 378, 15, 21);
         this.interactiu(450, 440, RADI_OBJECTE, DIALEGS.solitari, { altura: 60 });
         this.npc('iscu', 520, 560, DIALEGS.iscu, { flipX: true });
         this.posar('llenya', 735, 410, { col: { w: 110, h: 26 } });
