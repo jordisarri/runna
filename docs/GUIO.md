@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 629: Epíleg: l'Ineu diu del Germà Aldreu «Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar»; quan parla la Carry, la càmera s'hi acosta més (zoom 2,6).*
+
 *Revisió 628: Epíleg: la Nena de les Trenes diu «Toques molt bé, monjo» (l'Ineu toca la tarota, no canta); quan ella i la mare desapareixen, també se'n va l'ombra del terra.*
 
 *Revisió 627: Cirosa: qualsevol dels tres pastors (el vell, el pastor i la pastora) dona el pas següent de la història (les esquelles, un cop vençut el Pastor de Boira, i la conversa del sopar abans de tocar vora el foc), no només el vell; tocar la tarota vora el foc ja servia des de qualsevol dels tres. El pou de la Cirosa (decoració) es treu. Santuari: si l'Ineu porta les esquelles i ve pel Cant de Vespres, la Pianista reacciona a les esquelles i a continuació ja li ensenya el cant (abans calia tornar-hi a parlar). Als diàlegs de l'Ineu, el Cant de Vespres ja no es diu amb números (les notes són als cants del sarró); la frase del pastor és «i vindrem, no direm gaire cosa, però el pa parlarà per nosaltres».*

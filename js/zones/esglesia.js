@@ -370,11 +370,11 @@ class ZonaEsglesia extends ZonaBase {
                 { fer: (z, fet) => { [0, 1, 2].forEach(k => z.time.delayedCall(k * 850, () => Sfx.campana())); z.esperar(3000, fet); } },
                 foc(['pare_daimiel'], 1.9),
                 { qui: 'Pare Nadiel', text: "Sents la torre del rellotge, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu." },
-                ...(hi('carry') ? [foc(['carry'], 1.9), { qui: 'Carry', text: "El meu home estaria orgullós que el caminar del seu rellotge ens uneixi a tots. Gràcies, fill." }] : [])
+                ...(hi('carry') ? [foc(['carry'], 2.6), { qui: 'Carry', text: "El meu home estaria orgullós que el caminar del seu rellotge ens uneixi a tots. Gràcies, fill." }] : [])
             ] : []),
             // L'Ineu explica al Pare Jordà què ha passat amb l'Aldreu, i el prior tanca l'epíleg
             foc(['ineu', 'pare_jorda'], 2.2),
-            { qui: 'Ineu', text: "Pare Jordà... el Germà Aldreu no ha tornat. Es va quedar amb el Mestre, sota terra, i la gàbia se'l va tancar a dins." },
+            { qui: 'Ineu', text: "Pare Jordà... el Germà Aldreu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar." },
             { qui: 'Pare Jordà', text: "L'Aldreu... dins la gàbia?" },
             { fer: (z, fet) => z.seq([f => z.bombolla('pare_jorda', '…', f, 1300)], fet) },        // sospira i mira cap al terra
             { qui: 'Pare Jordà', text: "Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller." },

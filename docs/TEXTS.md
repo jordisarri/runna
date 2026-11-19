@@ -1994,7 +1994,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[635] Carry:** El meu home estaria orgullós que el caminar del seu rellotge ens uneixi a tots. Gràcies, fill.
 
-**[636] Ineu:** Pare Jordà... el Germà Aldreu no ha tornat. Es va quedar amb el Mestre, sota terra, i la gàbia se'l va tancar a dins.
+**[636] Ineu:** Pare Jordà... el Germà Aldreu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar.
 
 **[637] Pare Jordà:** L'Aldreu... dins la gàbia?
 
