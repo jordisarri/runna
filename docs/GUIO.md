@@ -1,6 +1,10 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 626: Home del Raïm: mentre el guardià és viu, la porta camuflada de l'oest ja no té llum ni llumetes de sortida (no sembla una sortida; ja estava tancada amb una paret invisible) i en caure torna la llum; el cop de maça (el cercle vermell) és ara un sigil de foc molt més espectacular (disc de brases que s'omple, anells de runes que giren, esquerdes de llum, ones de calor, flaix a l'últim moment) i l'impacte té flaix, ona de foc, esquerdes lluminoses a terra, pols i brases. Cripta: en agafar la Clau de ferro vola cap a l'Ineu i desapareix de la llosa a l'instant (abans en quedava una de dibuixada mentre durava el diàleg), i el dibuix de la llosa ja no té el paper plegat (la història no canvia: el paper segueix existint al joc).*
+
+*Revisió 625: el Pastor de Boira passa de 28 a 40 de vida: amb la immunitat de 270 ms (cada cop compta) morí en uns 5 s sense arribar a atacar.*
+
 *Revisió 624: epíleg: l'Isílder mira el Sardi quan li parla i s'atura al seu costat (l'orgue, la Pianista i el Pare Jordà es desplacen cap a la dreta); en tocar el Cant del Miracle la gent es gronxa més lentament i suau; la Carry diu «El meu home estaria orgullós que el caminar del seu rellotge ens uneixi a tots. Gràcies, fill.» Pròleg: la icona de saltar es veu molt més (opacitat 0,9 i color clar).*
 
 *Revisió 623: Sala de la Gàbia: «Veniu amb nosaltres, Aldreu.»; el brillo de la porta de la gàbia és centrat a la porta; el Germà Aldreu (normal i trist) té la mida de l'Ineu (abans era un 20% més alt); l'Ineu també mira l'Aldreu a «Vindré a veure-us.»; els tres nens cauen del capoll més junts (105 px) i en caure la gàbia es veuen tots tres amb l'Aldreu. Epíleg: les Venerables s'aturen al costat de l'Huri, no al damunt.*

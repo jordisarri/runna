@@ -1514,7 +1514,7 @@ class ZonaBase extends Phaser.Scene {
         // Llumetes: neixen dins de la pantalla i s'allunyen lentament cap a la sortida, tremolant una mica
         const ample = Math.abs(v[0]) ? fons : span * 0.9, alt = Math.abs(v[0]) ? span * 0.9 : fons;
         const zona = new Phaser.Geom.Rectangle(ex - v[0] * fons * 0.55 - ample / 2, ey - v[1] * fons * 0.55 - alt / 2, ample, alt);
-        this.add.particles(0, 0, 'espurna', {
+        const emissor = this.add.particles(0, 0, 'espurna', {
             emitZone: { type: 'random', source: zona },
             speedX: { min: v[0] * 14 - 6, max: v[0] * 30 + 6 },
             speedY: { min: v[1] * 14 - 6, max: v[1] * 30 + 6 },
@@ -1525,6 +1525,16 @@ class ZonaBase extends Phaser.Scene {
             blendMode: 'ADD',
             frequency: Math.max(45, 220 - span * 0.6)
         }).setDepth(86000);
+        (this.objsSortida = this.objsSortida || new Map()).set(r, [llum, emissor]);
+    }
+
+    // Treu la llum i les llumetes d'una sortida (p. ex. la que no s'ha de poder fer servir durant un combat de boss); es tornen a fer amb marcarSortida(r)
+    treureLlumSortida(r) {
+        const o = this.objsSortida && this.objsSortida.get(r);
+        if (!o) return;
+        this.objsSortida.delete(r);
+        o.forEach(x => { if (x && x.scene) { this.tweens.killTweensOf(x); x.destroy(); } });
+        this.llumsSortida = (this.llumsSortida || []).filter(l => l.r !== r);
     }
 
     // Emissor de boira fosca

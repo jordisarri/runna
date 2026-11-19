@@ -2233,7 +2233,7 @@
     "qui": "Ineu",
     "text": "[text calculat pel joc: textPista]",
     "fitxer": "js/zona_base.js",
-    "linia": 1889
+    "linia": 1899
    }
   ],
   "dialegs::ombraMonjo": [
@@ -3516,70 +3516,70 @@
     "qui": "Jorgi",
     "text": "Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes.",
     "fitxer": "js/zones/casa.js",
-    "linia": 78
+    "linia": 80
    },
    {
     "id": 462,
     "qui": "Jorgi",
     "text": "Ei, monjo! Sóc en Jorgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.",
     "fitxer": "js/zones/casa.js",
-    "linia": 83
+    "linia": 85
    },
    {
     "id": 463,
     "qui": "Ineu",
     "text": "M'anirà bé saber-ho. De moment només passava a saludar.",
     "fitxer": "js/zones/casa.js",
-    "linia": 84
+    "linia": 86
    },
    {
     "id": 464,
     "qui": "Jorgi",
     "text": "Doncs ja saps on trobar-me si algun dia et cal un cop de mà.",
     "fitxer": "js/zones/casa.js",
-    "linia": 85
+    "linia": 87
    },
    {
     "id": 465,
     "qui": "Jorgi",
     "text": "La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!",
     "fitxer": "js/zones/casa.js",
-    "linia": 90
+    "linia": 92
    },
    {
     "id": 466,
     "qui": "Jorgi",
     "text": "Ei, monjo! Sóc en Jorgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.",
     "fitxer": "js/zones/casa.js",
-    "linia": 94
+    "linia": 96
    },
    {
     "id": 467,
     "qui": "Ineu",
     "text": "Jorgi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar.",
     "fitxer": "js/zones/casa.js",
-    "linia": 95
+    "linia": 97
    },
    {
     "id": 468,
     "qui": "Jorgi",
     "text": "Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda.",
     "fitxer": "js/zones/casa.js",
-    "linia": 96
+    "linia": 98
    },
    {
     "id": 469,
     "qui": "Jorgi",
     "text": "Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!",
     "fitxer": "js/zones/casa.js",
-    "linia": 97
+    "linia": 99
    },
    {
     "id": 470,
     "qui": "Jorgi",
     "text": "Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la.",
     "fitxer": "js/zones/casa.js",
-    "linia": 98
+    "linia": 100
    }
   ],
   "dialegs::llibreCambra": [
@@ -3641,7 +3641,7 @@
     "qui": "Ineu",
     "text": "El mecanisme és al bastidor de fusta de l'esquerra: tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran.",
     "fitxer": "js/zones/casa.js",
-    "linia": 1563
+    "linia": 1631
    }
   ],
   "zones/casa::golfesNota": [
@@ -3650,7 +3650,7 @@
     "qui": "Ineu",
     "text": "«Nota del rellotger. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el mitjà al mig, i el gran darrere.»",
     "fitxer": "js/zones/casa.js",
-    "linia": 1567
+    "linia": 1635
    }
   ],
   "zones/casa::golfesReparat": [
@@ -3659,7 +3659,7 @@
     "qui": "Ineu",
     "text": "(Torna a caminar! Ara se sentirà per tot el poble.)",
     "fitxer": "js/zones/casa.js",
-    "linia": 1576
+    "linia": 1644
    }
   ],
   "dialegs::portaReixa": [
@@ -3782,7 +3782,7 @@
     "qui": "",
     "text": "★ Has obtingut la CLAU DE FERRO.",
     "fitxer": "js/zones/casa.js",
-    "linia": 66
+    "linia": 68
    }
   ],
   "zones/casa::puzleRaim": [
@@ -3791,14 +3791,14 @@
     "qui": "Ineu",
     "text": "(Ara em mira de cara. No m'agrada gens.)",
     "fitxer": "js/zones/casa.js",
-    "linia": 768
+    "linia": 836
    },
    {
     "id": 495,
     "qui": "Ineu",
     "text": "[text calculat pel joc: frases[this.raimPas - 1]]",
     "fitxer": "js/zones/casa.js",
-    "linia": 770
+    "linia": 838
    }
   ],
   "zones/casa::mecanismePorta": [
@@ -3807,14 +3807,14 @@
     "qui": "Ineu",
     "text": "(La llosa no té pany ni maneta. La cadena de la politja hi està lligada: el mecanisme de terra deu fer-la pujar.)",
     "fitxer": "js/zones/casa.js",
-    "linia": 1468
+    "linia": 1536
    },
    {
     "id": 497,
     "qui": "Ineu",
     "text": "(Una llosa de pedra sense pany ni maneta. No cedeix gens: s'ha d'obrir d'una altra manera.)",
     "fitxer": "js/zones/casa.js",
-    "linia": 1468
+    "linia": 1536
    }
   ],
   "zones/casa_gran::construir": [
@@ -5034,7 +5034,7 @@
     "qui": "Ineu",
     "text": "He tocat el [text calculat pel joc: MELODIES[nom].nom], però aquí no passa res...",
     "fitxer": "js/zona_base.js",
-    "linia": 2145
+    "linia": 2155
    }
   ]
  },

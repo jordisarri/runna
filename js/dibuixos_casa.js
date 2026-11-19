@@ -137,15 +137,13 @@ function pintarLlosaCripta(ctx, w, h, plena) {
     ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fillRect(2, h * 0.355, w - 4, 2);
     ctx.strokeStyle = 'rgba(40,32,22,0.7)'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(w / 2, h * 0.58); ctx.lineTo(w / 2, h * 0.8); ctx.moveTo(w / 2 - 10, h * 0.66); ctx.lineTo(w / 2 + 10, h * 0.66); ctx.stroke();
     if (!plena) return;
-    // Drap de lli, la clau de ferro negre i el paper plegat
+    // Drap de lli i la clau de ferro negre
     ctx.fillStyle = '#f0e8d4'; ctx.beginPath(); ctx.moveTo(14, h * 0.36); ctx.lineTo(w - 14, h * 0.36); ctx.lineTo(w - 8, h * 0.5); ctx.lineTo(8, h * 0.5); ctx.closePath(); ctx.fill(); ctx.strokeStyle = CASA_C; ctx.lineWidth = 1.4; ctx.stroke();
     ctx.save(); ctx.translate(w * 0.42, h * 0.27); ctx.rotate(-0.12);
     ctx.strokeStyle = CASA_C; ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(-28, 0, 11, 0, Math.PI * 2); ctx.moveTo(-17, 0); ctx.lineTo(36, 0); ctx.moveTo(26, 0); ctx.lineTo(26, 12); ctx.moveTo(34, 0); ctx.lineTo(34, 9); ctx.stroke();
     ctx.strokeStyle = '#3a3a40'; ctx.lineWidth = 4; ctx.stroke();
     ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-14, -1.5); ctx.lineTo(34, -1.5); ctx.stroke();
     ctx.restore();
-    ctx.fillStyle = '#e8dcb4'; ctx.save(); ctx.translate(w * 0.8, h * 0.28); ctx.rotate(0.2); ctx.fillRect(-12, -9, 24, 18); ctx.strokeStyle = CASA_C; ctx.lineWidth = 1.2; ctx.strokeRect(-12, -9, 24, 18);
-    ctx.strokeStyle = '#6a4a2a'; ctx.lineWidth = 1; [-3, 2].forEach(y => { ctx.beginPath(); ctx.moveTo(-8, y); ctx.lineTo(8, y); ctx.stroke(); }); ctx.restore();
 }
 
 // ---------- Prestatge de la cambra del tresor ----------

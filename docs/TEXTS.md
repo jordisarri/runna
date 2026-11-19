@@ -936,7 +936,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1889)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1899)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1466,7 +1466,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Acte 3: el passadís secret, la cambra i la maneta (en Jorgi)
 
-### georgiCaseta  <sub>(js/zones/casa.js:78)</sub>
+### georgiCaseta  <sub>(js/zones/casa.js:80)</sub>
 
 *Si: porta la maneta o porta la maneta*
 
@@ -1520,15 +1520,15 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[476]** ★ Has obtingut la MANETA D'ENGRANATGE.
 
-### golfesRellotge  <sub>(js/zones/casa.js:1563)</sub>
+### golfesRellotge  <sub>(js/zones/casa.js:1631)</sub>
 
 **[477] Ineu:** El mecanisme és al bastidor de fusta de l'esquerra: tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran.
 
-### golfesNota  <sub>(js/zones/casa.js:1567)</sub>
+### golfesNota  <sub>(js/zones/casa.js:1635)</sub>
 
 **[478] Ineu:** «Nota del rellotger. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el mitjà al mig, i el gran darrere.»
 
-### golfesReparat  <sub>(js/zones/casa.js:1576)</sub>
+### golfesReparat  <sub>(js/zones/casa.js:1644)</sub>
 
 **[479] Ineu:** (Torna a caminar! Ara se sentirà per tot el poble.)
 
@@ -1580,17 +1580,17 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[492] Ineu:** L'Home del Raïm descansa per sempre.
 
-### cofreCripta  <sub>(js/zones/casa.js:66)</sub>
+### cofreCripta  <sub>(js/zones/casa.js:68)</sub>
 
 **[493]** ★ Has obtingut la CLAU DE FERRO.
 
-### puzleRaim  <sub>(js/zones/casa.js:768)</sub>
+### puzleRaim  <sub>(js/zones/casa.js:836)</sub>
 
 **[494] Ineu:** (Ara em mira de cara. No m'agrada gens.)
 
 **[495] Ineu:** [text calculat pel joc: frases[this.raimPas - 1]]
 
-### mecanismePorta  <sub>(js/zones/casa.js:1468)</sub>
+### mecanismePorta  <sub>(js/zones/casa.js:1536)</sub>
 
 *Si: ha fet servir la bota d'alçada*
 
@@ -2084,7 +2084,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2145)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2155)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 

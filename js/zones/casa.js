@@ -5,7 +5,7 @@
  *            (plaça) és tancada des de fora; només es pot obrir per dins, com a drecera de tornada.
  *   Escalinata: l'Home del Raïm, amb el cap girat. Amb la Maneta d'en Jorgi (és a la caseta, a la Caseta) es fa girar el volant de
  *               ferro de la base: tres voltes i el cap et mira de cara; llavors l'estàtua cobra vida (BOSS). Derrotada, s'obre la trapa.
- *   Cripta: la Clau de ferro (i un paper: la llum de Runna segella la tomba esquerdada del Cementiri),
+ *   Cripta: la Clau de ferro (la llum de Runna segella la tomba esquerdada del Cementiri),
  *           que obre la Porta de les Gírgoles (a sota de la Taverna, no pas des d'aquí).
  */
 
@@ -63,6 +63,8 @@ Object.assign(DIALEGS, {
         pagines: []
     } : {
         pagines: [
+            // La clau vola de la llosa a l'Ineu i, des d'aquest moment, a la llosa ja no hi és (abans es quedava dibuixada fins que es tancava el diàleg: se'n veien dues)
+            { fer: (z, fet) => { if (z.llosaCripta) z.llosaCripta.setTexture('llosa_cripta_buida'); z.agafar(fet, 'clau_ferro', 0xc8c8d8); } },
             { avis: "Has obtingut la CLAU DE FERRO.", obj: 'clau_ferro' }
         ],
         enAcabar: () => {
@@ -219,32 +221,89 @@ ENEMICS.raim = {
         g.lineStyle(1.6, 0xe4d4ff, 0.08 + 0.3 * p).strokeCircle(c.x + dx * L, c.y + dy * L, 10 + 8 * p);
     },
     netejaTele(e) { if (e.tele) { e.tele.destroy(); e.tele = null; } },
-    // COP DE MAÇA (fase 2): la maça cau sobre el punt on era l'Ineu; un cercle vermell s'omple durant l'avís i, en l'impacte, una ona de pedra s'escampa
+    // COP DE MAÇA (fase 2): la maça cau sobre el punt on era l'Ineu. L'avís és un sigil de foc a terra: un disc que s'omple de brases des del centre, dos anells de runes
+    // que giren en sentits contraris, esquerdes de llum que s'obren cap a fora, ones de calor que surten del centre, l'ombra de la maça que baixa i, a l'últim moment, un anell
+    // blanc que es tanca i un flaix. La zona de perill és sempre el cercle de radi R = 100 (el mateix que l'impacte).
     teleMaza(z, e, ara) {
-        // Zona de perill ben clara: un disc vermell que s'omple, un anell gruixut, esquerdes que s'obren des del centre (l'ona de xoc que vindrà) i l'ombra de la
-        // maça que baixa (un cercle fosc que s'encongeix); a l'últim moment un anell blanc es tanca: aquell és l'instant del cop.
-        if (!e.teleMa) e.teleMa = z.add.graphics().setDepth(-290);
-        const p = 1 - Phaser.Math.Clamp((e.fins - ara) / 800, 0, 1), R = 100, g = e.teleMa, parpelleig = 0.75 + 0.25 * Math.sin(ara / 70);
-        g.clear();
-        g.fillStyle(0xd0382e, (0.1 + 0.26 * p) * parpelleig).fillCircle(e.mx, e.my, R);
-        g.lineStyle(3.5, 0xff6a4a, (0.5 + 0.45 * p) * parpelleig).strokeCircle(e.mx, e.my, R);
-        g.lineStyle(1.5, 0xff9a7a, 0.3 + 0.3 * p);
-        for (let k = 0; k < 8; k++) {                                                   // esquerdes que creixen cap a fora
-            const a = k * Math.PI / 4 + 0.2, l1 = R * 0.18, l2 = R * (0.3 + 0.55 * p);
-            g.lineBetween(e.mx + Math.cos(a) * l1, e.my + Math.sin(a) * l1, e.mx + Math.cos(a) * l2, e.my + Math.sin(a) * l2);
+        if (!e.teleMa) { e.teleMa = z.add.graphics().setDepth(-290); e.teleMaB = z.add.graphics().setDepth(-289).setBlendMode(Phaser.BlendModes.ADD); }
+        const R = 100, g = e.teleMa, h = e.teleMaB, mx = e.mx, my = e.my, t = ara / 1000;
+        const p = 1 - Phaser.Math.Clamp((e.fins - ara) / 800, 0, 1), pulsa = 0.8 + 0.2 * Math.sin(ara / 55), flaix = Phaser.Math.Clamp((p - 0.88) / 0.12, 0, 1);
+        g.clear(); h.clear();
+        // Base: terra socarrimat fosc i vermell a tot el cercle
+        g.fillStyle(0x2a0604, 0.22 + 0.2 * p).fillCircle(mx, my, R * 1.04);
+        g.fillStyle(0xa81e16, (0.12 + 0.2 * p) * pulsa).fillCircle(mx, my, R);
+        // Brases: el disc brillant creix des del centre fins a la vora (omplir-se = temps que queda), en capes de més fosc a més clar
+        [[1, 0xff3a1c, 0.16], [0.7, 0xff6a2a, 0.2], [0.4, 0xffb04a, 0.24]].forEach(([k, c, a]) => h.fillStyle(c, a * (0.5 + 0.5 * p) * pulsa).fillCircle(mx, my, R * Math.max(0.05, p) * k));
+        // Anell principal (la vora de la zona de perill), amb una segona vora lluminosa
+        g.lineStyle(5, 0x5a0a06, 0.9).strokeCircle(mx, my, R + 1);
+        h.lineStyle(3.5, 0xff5a3a, (0.55 + 0.4 * p) * pulsa).strokeCircle(mx, my, R);
+        h.lineStyle(1.5, 0xffd0a0, 0.25 + 0.35 * p).strokeCircle(mx, my, R - 7);
+        // Anell exterior de runes que gira (vint-i-quatre traços) i anell interior de triangles que gira al revés
+        for (let k = 0; k < 24; k++) {
+            const a = k * Math.PI / 12 + t * 0.9, c = Math.cos(a), sn = Math.sin(a), r0 = R * 1.1, r1 = R * (k % 2 ? 1.2 : 1.27);
+            h.lineStyle(k % 2 ? 2 : 3, k % 3 ? 0xff7a4a : 0xffc080, (0.25 + 0.5 * p) * pulsa).lineBetween(mx + c * r0, my + sn * r0, mx + c * r1, my + sn * r1);
         }
-        g.fillStyle(0x000000, 0.12 + 0.3 * p).fillCircle(e.mx, e.my, 44 * (1.7 - 0.7 * p));          // l'ombra de la maça que cau
-        g.lineStyle(2.2, 0xffffff, 0.35 + 0.5 * p).strokeCircle(e.mx, e.my, R * (1 - p) + 6);           // l'anell que es tanca
+        for (let k = 0; k < 8; k++) {
+            const a = -k * Math.PI / 4 - t * 1.4, r = R * 0.72, c = Math.cos(a), sn = Math.sin(a), px = -sn, py = c;
+            h.fillStyle(0xffa060, (0.18 + 0.42 * p) * pulsa).fillTriangle(mx + c * (r + 10), my + sn * (r + 10), mx + c * (r - 9) + px * 8, my + sn * (r - 9) + py * 8, mx + c * (r - 9) - px * 8, my + sn * (r - 9) - py * 8);
+        }
+        // Esquerdes de llum que s'obren des del centre (en ziga-zaga) i creixen amb l'avís
+        for (let k = 0; k < 9; k++) {
+            const a0 = k * Math.PI * 2 / 9 + 0.35, L = R * (0.25 + 0.8 * p), n = 5;
+            let x = mx + Math.cos(a0) * R * 0.1, y = my + Math.sin(a0) * R * 0.1;
+            for (let q = 1; q <= n; q++) {
+                const a = a0 + Math.sin(k * 7.1 + q * 2.3) * 0.35, x2 = mx + Math.cos(a) * (R * 0.1 + L * q / n), y2 = my + Math.sin(a) * (R * 0.1 + L * q / n);
+                g.lineStyle(4, 0x3a0805, 0.5).lineBetween(x, y, x2, y2);
+                h.lineStyle(2, 0xffc890, (0.3 + 0.5 * p) * pulsa).lineBetween(x, y, x2, y2);
+                x = x2; y = y2;
+            }
+        }
+        // Ones de calor: anells que surten del centre cap a la vora i s'esvaeixen
+        for (let k = 0; k < 2; k++) { const f = ((t * 1.6 + k * 0.5) % 1); h.lineStyle(2, 0xffa070, 0.4 * (1 - f)).strokeCircle(mx, my, R * (0.15 + 0.85 * f)); }
+        // L'ombra de la maça que cau (cada cop més gran i fosca) i, a l'últim moment, un anell blanc que es tanca i un flaix
+        g.fillStyle(0x000000, 0.12 + 0.32 * p).fillCircle(mx, my, 44 * (1.7 - 0.7 * p));
+        h.lineStyle(2.6, 0xffffff, 0.35 + 0.55 * p).strokeCircle(mx, my, R * (1 - p) + 6);
+        if (flaix > 0) h.fillStyle(0xfff0e0, 0.4 * flaix).fillCircle(mx, my, R);
     },
-    netejaMaza(e) { if (e.teleMa) { e.teleMa.destroy(); e.teleMa = null; } },
+    netejaMaza(e) { ['teleMa', 'teleMaB'].forEach(k => { if (e[k]) { e[k].destroy(); e[k] = null; } }); },
+    // L'impacte: flaix vermell, trossos de marbre, ona de xoc lila i una segona ona de foc, esquerdes lluminoses que queden un moment al terra, núvol de pols,
+    // brases que salten i una taca socarrada que s'esvaeix. El mal és el de sempre (radi 100).
     impacteMaza(z, e) {
-        const R = 100;
-        z.cameras.main.shake(380, 0.011); Sfx.mazaRaim();
-        this.trossos(z, e.mx, e.my, 18);
-        const ona = z.add.circle(e.mx, e.my, 20, 0xcdb8ff, 0.25).setStrokeStyle(5, 0xe8dcff, 0.9).setDepth(-399);
+        const R = 100, mx = e.mx, my = e.my;
+        z.cameras.main.shake(440, 0.013); z.cameras.main.flash(140, 255, 140, 100); Sfx.mazaRaim();
+        this.trossos(z, mx, my, 22);
+        const ona = z.add.circle(mx, my, 20, 0xcdb8ff, 0.25).setStrokeStyle(5, 0xe8dcff, 0.9).setDepth(-399);
         z.tweens.add({ targets: ona, radius: R * 1.5, alpha: 0, duration: 520, ease: 'Quad.easeOut', onComplete: () => ona.destroy() });
+        const foc = z.add.circle(mx, my, 10, 0xff5a2a, 0.35).setStrokeStyle(7, 0xffa060, 0.95).setDepth(-398).setBlendMode(Phaser.BlendModes.ADD);
+        z.time.delayedCall(70, () => z.tweens.add({ targets: foc, radius: R * 1.95, alpha: 0, duration: 640, ease: 'Cubic.easeOut', onComplete: () => foc.destroy() }));
+        // taca socarrada + esquerdes de llum que s'esvaeixen
+        const taca = z.add.graphics().setDepth(-401), llum = z.add.graphics().setDepth(-400).setBlendMode(Phaser.BlendModes.ADD);
+        taca.fillStyle(0x140402, 0.5).fillCircle(mx, my, R * 0.95); taca.lineStyle(4, 0x3a0805, 0.7).strokeCircle(mx, my, R);
+        for (let k = 0; k < 11; k++) {
+            const a0 = k * Math.PI * 2 / 11 + Math.sin(k * 3.7) * 0.2, L = R * (1.05 + 0.25 * Math.sin(k * 5.3));
+            let x = mx, y = my;
+            for (let q = 1; q <= 5; q++) {
+                const a = a0 + Math.sin(k * 7.1 + q * 2.3) * 0.3, x2 = mx + Math.cos(a) * L * q / 5, y2 = my + Math.sin(a) * L * q / 5;
+                taca.lineStyle(5, 0x1a0503, 0.65).lineBetween(x, y, x2, y2);
+                llum.lineStyle(2.5, 0xffb070, 0.95).lineBetween(x, y, x2, y2);
+                x = x2; y = y2;
+            }
+        }
+        z.tweens.add({ targets: llum, alpha: 0, duration: 1100, ease: 'Quad.easeIn', onComplete: () => llum.destroy() });
+        z.tweens.add({ targets: taca, alpha: 0, delay: 500, duration: 1400, onComplete: () => taca.destroy() });
+        // núvol de pols que s'escampa
+        for (let k = 0; k < 12; k++) {
+            const a = k * Math.PI / 6 + Math.random() * 0.4, r0 = R * 0.5, pol = z.add.circle(mx + Math.cos(a) * r0, my + Math.sin(a) * r0 * 0.8, 14 + Math.random() * 10, 0xb8a890, 0.45).setDepth(my + 40);
+            z.tweens.add({ targets: pol, x: mx + Math.cos(a) * R * 1.5, y: my + Math.sin(a) * R * 1.2 - 14, scale: 2.1, alpha: 0, duration: 650 + Math.random() * 350, ease: 'Cubic.easeOut', onComplete: () => pol.destroy() });
+        }
+        // brases que salten
+        if (z.textures.exists('espurna')) {
+            const br = z.add.particles(mx, my, 'espurna', { speed: { min: 140, max: 330 }, angle: { min: 0, max: 360 }, lifespan: { min: 500, max: 1000 }, gravityY: 260, scale: { start: 0.3, end: 0 }, alpha: { start: 1, end: 0 }, tint: [0xffe08a, 0xff8a3a, 0xff4a2a], blendMode: 'ADD', emitting: false }).setDepth(my + 60);
+            br.explode(26);
+            z.time.delayedCall(1200, () => br.destroy());
+        }
         const jo = z.ineu.body.center;
-        if (Phaser.Math.Distance.Between(e.mx, e.my, jo.x, jo.y) < R) z.ferIneu(1, { x: e.mx, y: e.my });
+        if (Phaser.Math.Distance.Between(mx, my, jo.x, jo.y) < R) z.ferIneu(1, { x: mx, y: my });
     },
     // FINESTRA DE DANY: un halo pulsant al cap mentre és a terra i tres llumetes al seu voltant (una menys a cada cop encertat); parpelleja abans de tancar-se
     obreFinestra(z, e) {
@@ -692,8 +751,16 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         Sfx.porta();
         this.cameras.main.shake(200, 0.004);
     }
+    // La llum de la porta de l'oest no es fa si el guardià ja és despert en entrar a la sala
+    marcarSortida(r) {
+        if (r.x === 116 && r.y === 656 && this.guardiaViu()) { this.llumOestPendent = r; return; }
+        return super.marcarSortida(r);
+    }
+
     // La porta camuflada de l'esquerra també es tanca (una paret de pedra invisible davant la sortida) mentre el guardià és viu
     tancarPortaSecreta() {
+        const so = (this.sortides || []).find(q => q.desti === 'ZonaCasaTresor' && q.entrada === 'escala');
+        if (so) { this.treureLlumSortida(so.r); this.llumOestPendent = so.r; }          // mentre el guardià és viu, la porta de l'oest no té llum (no sembla una sortida) ni s'hi pot anar
         if (this.colSecreta && this.colSecreta.active) return;
         this.colSecreta = this.colisio(121, 752, 24, 150);          // cobreix y 677-827: abans (120 d'alt) quedava un forat entre y 800 i 824, per sota de la paret, per on es podia fugir
     }
@@ -702,6 +769,7 @@ class ZonaCasaGranInt extends ZonaCasaBase {
         if (!this.reixaBoss) return;
         this.reixaBoss = false;
         if (this.colSecreta && this.colSecreta.active) { this.obstacles.remove(this.colSecreta, true, true); this.colSecreta = null; }
+        if (this.llumOestPendent) { const r = this.llumOestPendent; this.llumOestPendent = null; ZonaBase.prototype.marcarSortida.call(this, r); }          // caigut el guardià, la llum de la porta torna
         if (this.reixaEstavaOberta || Estat.flag('reixaObertaDins') || Estat.flag('ocellaireVencut')) {
             if (this.colReixa && this.colReixa.active) this.obstacles.remove(this.colReixa, true, true);
             if (this.barra) this.barra.setVisible(false);
