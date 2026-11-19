@@ -124,7 +124,6 @@ class ZonaJardi extends ZonaBase {
             gI.setScale((GX1 - GX0) / gI.frame.width);
             // Pujar-lo com a totes les escales del joc: més lent i un tap en pujar-hi i en passar al mur. Mentre puja (graó i mur) l'Ineu es dibuixa més amunt (elevacioIneu, a zona_base) i, en passar
             // el mur, torna a baixar: quan és a dins queda just darrere del mur, que li tapa fins als genolls.
-            this.registraGraons(GX0, GX1, [[WB + 14, WB + 26], [YF + 30, YF + 38], [YF + 24, YF + 32]]);
             const PUNTS = [[WB + 26, 0], [WB + 14, 28], [WB - 4, 28], [YF + 32, 40], [YF + 24, 0]];          // [peus y, elevació]
             const alcada = y => {
                 if (y >= PUNTS[0][0]) return 0;
@@ -139,8 +138,27 @@ class ZonaJardi extends ZonaBase {
                 const baix = dins && I.y > YF + 26;                                        // pujant (o davant): el tros de mur és per sota; ja a dins, passa a tapar-lo fins als genolls
                 this.gapMur.forEach(im => im.setDepth(baix ? -750 : YF + 40));
             };
+            // Com a les escales de l'església: mentre puja (o baixa) el graó i el mur va a poc a poc (velocitat limitada) i fa un tap cada pocs píxels, un per cada «graó» (el graó, el mur...)
+            const Y_A = YF + 20, Y_B = WB + 30, PAS = 12;
+            let lent = false, yAnt = null;
+            const frenada = () => {
+                const I = this.ineu;
+                lent = false;
+                if (!I || !I.active || !I.body || this.canviant || this.cinema || this.camCinema || !(I.x > GX0 - 2 && I.x < GX1 + 2) || I.y < Y_A || I.y > Y_B) { yAnt = null; return; }
+                lent = true;
+                if (yAnt !== null && Math.floor((I.y - Y_A) / PAS) !== Math.floor((yAnt - Y_A) / PAS)) Sfx.escala(I.y < yAnt);          // un tap a cada graó que es passa
+                yAnt = I.y;
+            };
+            const limita = () => {
+                const I = this.ineu;
+                if (!lent || !I || !I.body) return;
+                const v = I.body.velocity, m = Math.hypot(v.x, v.y);
+                if (m > 110) v.scale(110 / m);                                              // (el límit s'aplica a postupdate: el moviment del joc posa la velocitat a update)
+            };
             this.events.on('update', elev);
-            this.events.once('shutdown', () => { this.events.off('update', elev); this.elevacioIneu = 0; });
+            this.events.on('update', frenada);
+            this.events.on('postupdate', limita);
+            this.events.once('shutdown', () => { this.events.off('update', elev); this.events.off('update', frenada); this.events.off('postupdate', limita); this.elevacioIneu = 0; });
         }
 
         // La Prunera Màgica, l'únic arbre: dins el jardí de la pèrgola

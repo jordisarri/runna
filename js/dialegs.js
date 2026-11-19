@@ -1076,7 +1076,7 @@ const DIALEGS = {
                 ] : []),
                 { qui: 'Isílder', text: 'No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí, el Sardi el cuidava molt. Des que la boira se\'l va endur, el cuido jo perquè, quan torni, ho trobi tot tal com ho va deixar.' },
                 ...(!E.flag('llosaOberta') ? [
-                    { qui: 'Isílder', text: "I la llosa d'aquí al mig, si t'hi has fixat: no s'ha bellugat mai. Entre tres homes i una palanca, res. Pensa que potser la Rosansa, la venedora de verdures, porta al carro una llavor estranya que hi podria fer alguna cosa." }
+                    { qui: 'Isílder', text: "T'has fixat en la llosa? Cap home l'ha pogut moure mai. Expliquen que només reacciona a la llum d'una llavor de lluna. Només se m'acut que en podria haver vist una la venedora de verdura que de tant en tant volta per les cel·les. Pots provar." }
                 ] : [])
             ],
             enAcabar: () => { if (!E.flag('llosaOberta')) E.posaFlag('isilderLlosa'); }

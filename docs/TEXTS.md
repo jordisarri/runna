@@ -936,7 +936,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1899)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1904)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1650,7 +1650,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[513] Isílder:** No et sorprenguis si em veus aquí cada dia, ni amb pluja. Aquest jardí, el Sardi el cuidava molt. Des que la boira se'l va endur, el cuido jo perquè, quan torni, ho trobi tot tal com ho va deixar.
 
-**[514] Isílder:** I la llosa d'aquí al mig, si t'hi has fixat: no s'ha bellugat mai. Entre tres homes i una palanca, res. Pensa que potser la Rosansa, la venedora de verdures, porta al carro una llavor estranya que hi podria fer alguna cosa.
+**[514] Isílder:** T'has fixat en la llosa? Cap home l'ha pogut moure mai. Expliquen que només reacciona a la llum d'una llavor de lluna. Només se m'acut que en podria haver vist una la venedora de verdura que de tant en tant volta per les cel·les. Pots provar.
 
 ### isilderRunna  <sub>(js/dialegs.js:1090)</sub>
 
@@ -1674,7 +1674,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[522] Ineu:** Una llosa de pedra amb una creu gravada, ben encaixada a terra. No es mou ni un pam, però s'ha de poder obrir d'alguna manera. Potser el senyor de la pèrgola, l'Isílder, ens pot ajudar.
 
-### construir  <sub>(js/zones/jardi.js:131)</sub>
+### construir  <sub>(js/zones/jardi.js:217)</sub>
 
 **[523] Cartell:** L'Hostatgeria / → La Taverna / ← L'Era
 
@@ -2068,7 +2068,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[652] Ineu:** Pesa massa... calen unes mans més fortes.
 
-### pensament a enMelodia  <sub>(js/zones/placa.js:125)</sub>
+### pensament a enMelodia  <sub>(js/zones/placa.js:110)</sub>
 
 **[654] Ineu:** El passatge ja és obert.
 
@@ -2084,7 +2084,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2155)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2160)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
