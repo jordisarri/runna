@@ -936,7 +936,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1904)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1918)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1288,13 +1288,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## El pi dels tres cants i la Nena de les Trenes
 
-### piOest  <sub>(js/zones/bosc_pi.js:372)</sub>
+### piOest  <sub>(js/zones/bosc_pi.js:377)</sub>
 
 **[397] Ineu:** (Unes branques molt baixes, i gruixudes com troncs, baixen fins a terra i barren el camí. Per aquí no hi ha manera de passar.)
 
 **[398] Ineu:** (Totes miren cap a llevant, cap on neix l'alba, i al fons es veu una clariana amb un pi enorme. Si el pi escolta algú, ha de ser pel cantó d'allà. Hauré d'arribar-hi per l'altre costat: per Sant Antoni, potser.)
 
-### piPlaca  <sub>(js/zones/bosc_pi.js:383)</sub>
+### piPlaca  <sub>(js/zones/bosc_pi.js:388)</sub>
 
 **[399] Ineu:** (Davant el pi, una pedra de fita baixa, gastada i coberta de molsa. Hi ha gravat un pi de tres soques i, a sota, tres notes.)
 
@@ -1312,7 +1312,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[404] Ineu:** (Necessitaré la tarota per respondre-li.)
 
-### piTresCants  <sub>(js/zones/bosc_pi.js:398)</sub>
+### piTresCants  <sub>(js/zones/bosc_pi.js:403)</sub>
 
 *Si: ha obert el pi dels tres cants i encara no porta la carta del Cortiner*
 
@@ -1324,7 +1324,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[407] Ineu:** (Un pi vell, amb tres soques que s'obren com tres braços. Sembla que escolta.)
 
-### piHistoria  <sub>(js/zones/bosc_pi.js:407)</sub>
+### piHistoria  <sub>(js/zones/bosc_pi.js:412)</sub>
 
 **[408]** ★ Has trobat la CARTA DEL CORTINER.
 
@@ -1882,7 +1882,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[586] Ineu:** (L'Home de la Gàbia xiula més fort que el cant.)
 
-### iniciarCombatFinal  <sub>(js/zones/gabia.js:1555)</sub>
+### iniciarCombatFinal  <sub>(js/zones/gabia.js:1556)</sub>
 
 **[587] Aldreu, Pastor de Boira:** Una altra vegada, monjo? El Mestre no es cansa mai.
 
@@ -1926,7 +1926,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[607] Aldreu, Pastor de Boira:** Sí, Mestre...
 
-### ocellaireDerrotat  <sub>(js/zones/gabia.js:1750)</sub>
+### ocellaireDerrotat  <sub>(js/zones/gabia.js:1751)</sub>
 
 **[608] L'Home de la Gàbia:** No... els meus riures... els meus ocells...
 
@@ -1934,13 +1934,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[610] Germà Aldreu:** Mestre! No em deixeu!
 
-### obrirGabia  <sub>(js/zones/gabia.js:1818)</sub>
+### obrirGabia  <sub>(js/zones/gabia.js:1819)</sub>
 
 **[611] Ineu:** Germà Aldreu, la gàbia s'obrirà. Podeu venir amb nosaltres.
 
 **[612] Germà Aldreu:** Encara no.
 
-### finalGabia  <sub>(js/zones/gabia.js:1920)</sub>
+### finalGabia  <sub>(js/zones/gabia.js:1921)</sub>
 
 **[613] Germà Aldreu:** La seva veu em parlava dins el cap cada nit. Era l'única que em parlava.
 
@@ -1986,7 +1986,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[631] La Pianista:** Ara sí. Ineu, la tarota: avui el Cant del Miracle el comences tu, i l'orgue et seguirà.
 
-**[632] Nena de les Trenes:** La mare i jo ho hem sentit des de lluny. Cantes molt bé, monjo.
+**[632] Nena de les Trenes:** La mare i jo ho hem sentit des de lluny. Toques molt bé, monjo.
 
 **[633] Nena de les Trenes:** Gràcies per portar-me a casa.
 
@@ -2034,7 +2034,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[646] Ineu:** Els pastors somriuen: aquí ja ha tornat la música.
 
-### pensament a obrirPortaRellotge  <sub>(js/zones/esglesia.js:441)</sub>
+### pensament a obrirPortaRellotge  <sub>(js/zones/esglesia.js:442)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -2084,7 +2084,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2160)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2174)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
