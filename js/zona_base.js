@@ -958,6 +958,20 @@ class ZonaBase extends Phaser.Scene {
         if (img && typeof x === 'number') img.setFlipX(x < img.x);
         if (fet) fet();
     }
+    // Un personatge mira de PERFIL cap a un altre (o una x): si té el full de caminar (de costat), s'hi posa al primer fotograma, parat; si no, com npcMira
+    npcPerfil(key, cap, fet) {
+        const img = this.npcs && this.npcs[key];
+        const x = cap === 'ineu' ? this.ineu.x : (typeof cap === 'string' && this.npcs && this.npcs[cap]) ? this.npcs[cap].x : cap;
+        if (img && typeof x === 'number') {
+            if (this.textures.exists(key + '_camina')) {
+                if (img.anims) img.anims.stop();
+                if (img.balanceig && !img.balanceig.isDestroyed()) img.balanceig.pause();
+                img.setTexture(key + '_camina', 0).setScale(img.escalaBase, img.escalaBase);
+            }
+            img.setFlipX(x < img.x);
+        }
+        if (fet) fet();
+    }
     // Feina amb les mans: es mou endavant i enrere, amb guspires, notes o en silenci
     npcFeina(key, ms, tipus, fet) {
         const img = this.npcs && this.npcs[key];

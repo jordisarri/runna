@@ -306,7 +306,7 @@ class ZonaEsglesia extends ZonaBase {
                         f => z.npcSalta('nen_sardin', f, 2)]),
             // L'Isílder, el pare del Sardi, hi puja pel passadís i l'abraça
             ...(hi('isilder') ? [
-                accio(z => [pla(720, R + 400, 0.95, 900), camina('isilder', [[690, R + 480], [690, R + 330], AL_NEN.nen_sardin], 200), f => z.npcMira('isilder', 'nen_sardin', f), f => z.bombolla('isilder', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
+                accio(z => [pla(720, R + 400, 0.95, 900), camina('isilder', [[690, R + 480], [690, R + 330], AL_NEN.nen_sardin], 200), f => z.npcPerfil('isilder', 'nen_sardin', f), f => z.bombolla('isilder', '♥', f, 900), f => z.npcSalta('nen_sardin', f, 2)]),
                 foc(['isilder', 'nen_sardin'], 1.8),
                 { qui: 'Isílder', text: "Sardi! Fill meu... Tres nits sense saber de tu." },
                 foc(['nen_sardin'], 2.1),
