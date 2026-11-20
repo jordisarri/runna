@@ -109,6 +109,15 @@ class ZonaCementiri extends ZonaBase {
         if (!Estat.te('runna') || Estat.flag('tombaSegellada')) return;
         const px = jo.x + d.x * 60, py = jo.y + d.y * 60;
         if (Math.abs(px - 700) > 140 || Math.abs(py - 440) > 110) return;
+        if (!Estat.flag('rellotgeReparat')) {          // el segell no aguanta si el temps no el sosté: cal que el rellotge de la torre camini
+            const ui = this.ui();
+            if (ui && this.time.now - (this.avisTomba || -9999) > 6000) {
+                this.avisTomba = this.time.now;
+                this.llum(700, 410, 0xd8e8ff);
+                ui.obrirDialeg({ pagines: [{ qui: 'Ineu', text: "(La llum no cedeix. Falta alguna cosa... potser encara no és... l'hora.)" }] });
+            }
+            return;
+        }
         Estat.posaFlag('tombaSegellada');
         Sfx.secret();
         this.cameras.main.shake(600, 0.004);

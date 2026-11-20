@@ -26,7 +26,7 @@ const DIARI_PASSOS = {
     guants: ['Els Guants de Poder', 'ZonaSantAntoni'], roda: ['La roda del Celler', 'ZonaPingpong'],
     cambra: ['La cambra secreta', 'ZonaPassadis'], maneta: ["La maneta d\'en Jorgi", 'ZonaGeorgi'],
     raim: ['L\'Home del Raïm', 'ZonaCasaGranInt'], cripta: ['La Cripta', 'ZonaCasaCripta'],
-    segell: ['La tomba dels monjos', 'ZonaCementiri'], cantMiracle: ['El Cant del Miracle', 'ZonaEsglesia'],
+    segellDemana: ['El Pare Alcoví i la Crònica', 'ZonaBiblioteca'], rellotge: ['El rellotge de la torre', 'ZonaEsglesia'], segell: ['La tomba dels monjos', 'ZonaCementiri'], cantMiracle: ['El Cant del Miracle', 'ZonaEsglesia'],
     pi: ['El Pi dels Tres Cants', 'ZonaBoscPi'], vigilant: ['El Pare Xèvius', 'ZonaGirgolesFora'],
     soterrani: ['La porta de les Gírgoles', 'ZonaGirgolesFora'], clauIscu: ['La clau de l\'Iscu', 'ZonaCabanaCami'],
     portaFerro: ['La porta de ferro', 'ZonaSotaTaverna'], girgoles: ['Les gírgoles', 'ZonaGirgoles'],
@@ -37,16 +37,13 @@ const DIARI_PASSOS = {
 };
 const DIARI_LATERALS = {
     taverna: ["L\'Eve de la Taverna", 'ZonaTaverna', null],
-    carry: ['La Carry i el Pallofa', 'ZonaCelles', 'Clau de la torre del rellotge i el relat de les desaparicions'],
-    rellotge: ['El rellotge aturat', 'ZonaGolfes', null],
     tresor: ['La pedra que escolta', 'ZonaPlaca', '+1 cor'],
-    nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Llaç de la Nena (absorbeix un cop per zona)'],
-    carruatge: ['Els ocells del carro verd', 'ZonaEra', null]
+    nena: ['Els llaços de la Nena', 'ZonaCamiRov', 'Llaç de la Nena (absorbeix un cop per zona)']
 };
 const DIARI_ACTES = [
     { nom: 'Acte 1 · La boira', des: 'clauer' },
     { nom: 'Acte 2 · El Til·ler i el Saber', des: 'font' },
-    { nom: 'Acte 3 · La Sala de la Gàbia', des: 'segell' }
+    { nom: 'Acte 3 · La Sala de la Gàbia', des: 'segellDemana' }
 ];
 const DIARI_PESTANYES = [['missio', 'Missió'], ['encarrecs', 'Precs'], ['sarro', 'Sarró'], ['cants', 'Cants'], ['mapa', 'Mapa']];
 

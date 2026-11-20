@@ -69,6 +69,7 @@ const Estat = {
     dades: null,
 
     nova() {
+        this.acabada = false;
         this.dades = {
             versio: this.VERSIO,
             zona: 'ZonaMonestir',
@@ -120,7 +121,10 @@ const Estat = {
     },
 
     // ---------- localStorage ----------
+    // Un cop s'ha vist l'epíleg (Estat.acabada), el joc s'acaba: la partida s'ha esborrat i no es torna a desar res (ni l'autodesat de l'última escena, abans dels crèdits)
+    acabada: false,
     desar() {
+        if (this.acabada) return false;
         try {
             localStorage.setItem(this.CLAU, JSON.stringify(this.dades));
             return true;
@@ -196,6 +200,7 @@ const Estat = {
             const d = this.validar(JSON.parse(text));
             if (!d) return false;
             this.dades = d;
+            this.acabada = false;
             this.migrar();
             return true;
         } catch (e) {

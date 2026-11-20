@@ -393,13 +393,13 @@ class ZonaEsglesia extends ZonaBase {
             Estat.posaFlag('epilegFet');
             Estat.posaFlag('epilegPendent', false);
             Estat.posaObjectiu("El Santuari torna a cantar.");
-            // El joc s'acaba aquí: no es pot tornar a jugar des del Santuari. La partida desada s'esborra ara mateix (si es tanca el navegador durant els crèdits, no queda
-            // res per continuar); les dades es mantenen en memòria només perquè els crèdits en mostrin el percentatge.
+            // El joc s'acaba aquí: no es pot tornar a jugar des del Santuari. La partida desada s'esborra ara mateix i el desat queda desactivat (Estat.acabada: si es tanca el navegador
+            // durant els crèdits, no queda res per continuar); les dades es mantenen en memòria només perquè els crèdits en mostrin el percentatge.
+            // Abans dels crèdits, una última escena a l'Era: el Follet del Carro Verd obre la gàbia dels ocells (ZonaEra.enEntrar), i és ella qui duu als crèdits.
+            Estat.acabada = true;
             Estat.esborrar();
             this.canviant = true;
-            Joc.aturarTot(this);
-            this.scene.stop('UI');
-            this.scene.start('Credits');
+            this.scene.start('ZonaEra', { entrada: 'final' });
         });
     }
 

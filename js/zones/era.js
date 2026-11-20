@@ -17,14 +17,15 @@ class ZonaEra extends ZonaBase {
             entrades: {
                 ermita: { x: 320,  y: 70,  dir: 'avall' },
                 jardi:  { x: 1740, y: 565, dir: 'esquerra' },
-                rovellonera: { x: 60, y: 565, dir: 'dreta' }
+                rovellonera: { x: 60, y: 565, dir: 'dreta' },
+                final: { x: 600, y: 1290, dir: 'esquerra' }          // la cinemàtica final (només després de l'epíleg): l'Ineu arriba al carro del Follet
             }
         });
     }
 
     construir() {
         this.terra('herba', 0, 0, 1800, 1300, -1100);
-        this.add.image(ERA_BANC_X, 800, 'clariana').setDisplaySize(1500, 900).setDepth(-1050);   // gespa tallada de l'era
+        this.add.image(ERA_BANC_X, 900, 'clariana').setDisplaySize(1500, 1100).setDepth(-1050);   // gespa tallada de l'era (arriba fins a la vora de baix del mapa: perquè no es vegi la franja d'herba més clara a sota)
         this.terra('cami', 240, 0, 160, 630);             // cap a l'Ermita (nord)
         this.terra('cami', 0, 500, 1800, 130);            // de la Rovellonera (oest) al Jardí (est)
 
@@ -53,6 +54,26 @@ class ZonaEra extends ZonaBase {
         this.sortida(240, 0, 160, 14, 'ZonaErmita', 'era');
         this.sortida(1786, 500, 14, 130, 'ZonaJardi', 'era');
         this.sortida(0, 500, 14, 130, 'ZonaCamiRov', 'era');
+    }
+
+    // CINEMÀTICA FINAL, just abans dels crèdits (venim de l'epíleg del Santuari): l'alba a l'Era, el Follet del Carro Verd obre la gàbia del darrere i en surten els ocells que els seus avis
+    // van guardar quan van tancar l'Ocellaire; tot s'enfosqueix i comencen els crèdits. (Mai no es desa res: Estat.acabada.)
+    enEntrar() {
+        if (this.dadesEntrada.entrada !== 'final') return;
+        Estat.acabada = true;
+        this.cinema = true; this.canviant = true;
+        const cam = this.cameras.main;
+        cam.fadeIn(2200, 0, 0, 0);
+        this.enquadrar(440, 1170, 0.95, 1, null, 300);                                                          // el carro, el Follet i l'Ineu, i el cel on pujaran els ocells
+        this.add.rectangle(900, 650, 1800, 1300, 0xffc47a, 0.14).setBlendMode('ADD').setDepth(99950);          // la llum rosada de l'alba
+        this.time.delayedCall(2600, () => {
+            const ui = this.ui();
+            if (!ui) return;
+            ui.obrirDialeg(DIALEGS.follet_final(Estat), () => {
+                cam.fadeOut(2400, 0, 0, 0);
+                cam.once('camerafadeoutcomplete', () => { Joc.aturarTot(this); this.scene.stop('UI'); this.scene.start('Credits'); });
+            });
+        });
     }
 
     // Quan l'Ineu s'asseu al banc (vigilaBancs / seureBanc, comuns amb l'església), el Galf li parla: ja és assegut, així que passa directe a la conversa

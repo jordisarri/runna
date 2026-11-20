@@ -27,7 +27,7 @@ const ESCENARIS = [
         ]
     },
     {
-        id: 'carry', nom: 'La Carry i el Pallofa', lateral: 'carry',
+        id: 'carry', nom: 'La Carry i el Pallofa (pas de la història: rellotge)', lateral: null,
         estats: [
             { nom: 'No començada', posa: ['clauerNovici'], treu: ['carryParlat', 'pallofaTornat', 'clauCampanar'], treuObj: ['pallofa', 'clau_campanar'], zona: 'ZonaCelles', entrada: 'ruines' },
             { nom: 'Ha parlat (cal trobar el gos a Sant Antoni)', posa: ['clauerNovici', 'carryParlat'], treu: ['pallofaTornat', 'clauCampanar'], treuObj: ['pallofa', 'clau_campanar'], zona: 'ZonaSantAntoni', entrada: 'monestir' },
@@ -36,7 +36,7 @@ const ESCENARIS = [
         ]
     },
     {
-        id: 'rellotge', nom: 'El rellotge de la torre', lateral: 'rellotge',
+        id: 'rellotge', nom: 'El rellotge de la torre (pas de la història)', lateral: null,
         estats: [
             { nom: 'Té la clau (falta obrir la porta del retaule)', posa: ['rellotgeDit', 'rellotgeExplicat'], treu: ['portaCampanarOberta', 'rellotgeReparat'], obj: ['clau_campanar'], zona: 'ZonaEsglesia', entrada: 'porta' },
             { nom: 'Porta oberta: puzle dels engranatges per fer', posa: ['rellotgeDit', 'rellotgeExplicat', 'portaCampanarOberta'], treu: ['rellotgeReparat'], obj: ['clau_campanar'], zona: 'ZonaGolfes', entrada: 'porta' },
@@ -60,10 +60,16 @@ const ESCENARIS = [
         ]
     },
     {
-        id: 'carruatge', nom: 'El Carro Verd del Follet', lateral: 'carruatge',
+        id: 'tomba', nom: 'La tomba del Cementiri (cal el rellotge en marxa)', lateral: null,
         estats: [
-            { nom: 'Epíleg fet, carro tancat', posa: ['epilegFet', 'parada_era'], treu: ['carruatgeObert'], zona: 'ZonaEra', entrada: 'jardi' },
-            { nom: 'Feta (carro obert)', posa: ['epilegFet', 'parada_era', 'carruatgeObert'], zona: 'ZonaEra', entrada: 'jardi' }
+            { nom: 'Amb Runna, rellotge aturat (el cop no cedeix)', posa: ['cantMiracle', 'runna', 'tombaDemanada'], treu: ['rellotgeReparat', 'tombaSegellada', 'tombaLlegida'], obj: ['runna'], zona: 'ZonaCementiri', entrada: 'monestir' },
+            { nom: 'Amb Runna, rellotge en marxa (el cop segella la tomba)', posa: ['cantMiracle', 'runna', 'tombaDemanada', 'rellotgeReparat', 'portaCampanarOberta', 'carryParlat', 'pallofaTornat'], treu: ['tombaSegellada', 'tombaLlegida'], obj: ['runna', 'clau_campanar'], zona: 'ZonaCementiri', entrada: 'monestir' }
+        ]
+    },
+    {
+        id: 'follet', nom: 'Cinemàtica final del Follet (abans dels crèdits)', lateral: null,
+        estats: [
+            { nom: "L'Era a l'alba: el Follet obre la gàbia (acaba als crèdits)", posa: ['epilegFet', 'parada_era'], zona: 'ZonaEra', entrada: 'final' }
         ]
     },
     {

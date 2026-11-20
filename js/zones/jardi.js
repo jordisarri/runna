@@ -187,9 +187,10 @@ class ZonaJardi extends ZonaBase {
 
         // La Prunera Màgica, l'únic arbre: dins el jardí de la pèrgola
         const PX = 160, PY = 640, PRUNA_MIDA = 46;                 // PRUNA_MIDA: costat (px) de la icona de la pruna a les branques
-        this.posar('arbre', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } }).setTint(0xffd878);   // gran i alta: destaca sobre la pèrgola
+        this.copaPrunera = this.posar('arbre', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } }).setTint(0xffd878);   // gran i alta: destaca sobre la pèrgola
         this.add.ellipse(PX, PY - 50, 380, 90, 0xffc850, 0.16).setDepth(-1080);
-        this.add.ellipse(PX, PY - 220, 330, 240, 0xffc850, 0.18).setDepth(8000);
+        this.llumCopaPrunera = this.add.ellipse(PX, PY - 220, 330, 240, 0xffc850, 0.18).setDepth(8000);
+        this.copaA = 1;                                                // opacitat de la capçada (baixa quan l'Ineu és darrere l'arbre; vegeu postFisica)
         this.add.particles(PX, PY - 220, 'espurna', {
             x: { min: -150, max: 150 }, y: { min: -110, max: 90 }, speed: { min: 4, max: 14 }, lifespan: 1800,
             scale: { start: 0.55, end: 0 }, tint: [0xffd060, 0xfff0b0], frequency: 220, alpha: { start: 0.9, end: 0 }
@@ -246,15 +247,28 @@ class ZonaJardi extends ZonaBase {
     }
 
     // Forat quadrat emmarcat amb carreus de pedra i una escala que baixa cap al nord (els graons del fons són més foscos)
+    // La capçada de la Prunera (fulles, prunes i llum) es fa transparent quan l'Ineu hi passa darrere, perquè es vegi
+    postFisica() {
+        super.postFisica();
+        const I = this.ineu, t = this.copaPrunera;
+        if (!t || !t.active || !I || !I.active) return;
+        const b = t.getBounds(), darrere = I.y < t.y - 20 && I.x > b.x && I.x < b.right && I.y > b.y - 40;
+        const dest = darrere ? 0.3 : 1;
+        this.copaA += (dest - this.copaA) * 0.15;
+        t.setAlpha(this.copaA);
+        if (this.llumCopaPrunera) this.llumCopaPrunera.setAlpha(0.18 * this.copaA);
+        (this.fruitsPrunera || []).forEach(f => { if (!f.colli) f.setAlpha(this.copaA); });
+    }
+
     // Collir una pruna: una de les prunes daurades de la capçada (la més propera a l'Ineu) es deixa anar de la branca, cau en arc cap a les seves mans i l'arbre s'estremeix un moment;
     // al cap d'una estona en torna a créixer una altra al mateix lloc.
     collirPruna(fet) {
-        const I = this.ineu, fruits = (this.fruitsPrunera || []).filter(f => f.alpha > 0.5);
+        const I = this.ineu, fruits = (this.fruitsPrunera || []).filter(f => !f.colli);
         if (!fruits.length) { this.agafar(fet, null, 0xffd060); return; }
         const f = fruits.sort((a, b) => Phaser.Math.Distance.Between(a.x, a.y, I.x, I.y) - Phaser.Math.Distance.Between(b.x, b.y, I.x, I.y))[0];
         const x0 = f.x, y0 = f.y, x1 = I.x, y1 = I.y - 70;
         const S0 = f.scaleX, o = this.add.image(x0, y0, f.texture.key).setScale(S0).setAngle(f.angle).setDepth(99000);
-        f.setAlpha(0);
+        f.colli = true; f.setAlpha(0);
         this.llum(x0, y0, 0xffd060);
         const rama = this.add.particles(x0, y0, 'espurna', { speed: { min: 20, max: 70 }, scale: { start: 0.3, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xffd060, 0xfff0b0], lifespan: 500, quantity: 6, emitting: false }).setDepth(99001);
         rama.explode(6); this.time.delayedCall(700, () => rama.destroy());
@@ -267,7 +281,7 @@ class ZonaJardi extends ZonaBase {
                 onUpdate: () => { o.x = xa + (x1 - xa) * T.t; o.y = ya + (y1 - ya) * T.t - Math.sin(T.t * Math.PI) * 38; o.setScale(S0 * (1.4 - 0.4 * T.t)); },
                 onComplete: () => { o.destroy(); this.llum(x1, y1, 0xffd060); this.esperar(300, fet); } });
         } });
-        this.time.delayedCall(9000, () => { if (f.active) this.tweens.add({ targets: f, alpha: 1, duration: 900 }); });          // en torna a créixer una
+        this.time.delayedCall(9000, () => { if (f.active) this.tweens.add({ targets: f, alpha: this.copaA, duration: 900, onComplete: () => { f.colli = false; } }); });          // en torna a créixer una
     }
 
     // La trapa en perspectiva: la boca (marc de pedra, foscor i graons) i la llosa que la tapa, dibuixades com a trapezis (més estretes al fons que al davant) i amb el gruix de la llosa a la

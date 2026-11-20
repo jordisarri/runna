@@ -96,9 +96,18 @@ const PROGRES = {
               : "La llàgrima aparta la boira. Al final, la placa del Dolmen espera els medallons de l'Arbre, del Saber i de la Benedicció." },
         // ---- ACTE 3 ----
         // Amb Runna, el Pare Alcoví demana segellar la tomba del Cementiri per poder llegir-li la resta de la Crònica (el Pare Xèvius, el Pi, les proves de dins): és obligatori
-        { id: 'segell', marca: ['tombaDemanada', 'tombaSegellada', 'tombaLlegida'], fet: E => E.flag('tombaLlegida') || E.flag('portaSoterraniOberta'),
-          pista: E => !E.flag('tombaDemanada') ? "Ja tens Runna: el Pare Alcoví, a la Biblioteca, té més a dir-te de la Crònica."
-              : !E.flag('tombaSegellada') ? "La tomba esquerdada del Cementiri treu boira: la llum de Runna la tancaria. El Pare Alcoví no et llegirà la resta de la Crònica fins que no ho facis."
+        { id: 'segellDemana', marca: ['tombaDemanada'], fet: E => E.flag('tombaDemanada') || E.flag('tombaSegellada') || E.flag('tombaLlegida') || E.flag('portaSoterraniOberta'),
+          pista: E => "Ja tens Runna: el Pare Alcoví, a la Biblioteca, té més a dir-te de la Crònica." },
+        // El rellotge de la torre (la Carry, el Pallofa i la clau) és obligatori: la tomba es va esquerdar a la mateixa hora a què es va aturar el rellotge, i el segell no aguanta si el temps no el sosté
+        { id: 'rellotge', marca: ['carryParlat', 'pallofaTornat', 'obj:pallofa', 'obj:clau_campanar', 'portaCampanarOberta', 'rellotgeReparat'],
+          fet: E => E.flag('rellotgeReparat') || E.flag('tombaSegellada') || E.flag('tombaLlegida') || E.flag('portaSoterraniOberta'),
+          pista: E => (E.te('clau_campanar') || E.flag('portaCampanarOberta') || E.flag('clauCampanar') || E.flag('pallofaTornat'))
+              ? "El rellotge de la torre s'ha aturat. La clau de la Carry obre una porta del retaule; dalt la torre, uns engranatges esperen."
+              : !E.flag('carryParlat') ? "El Pare Alcoví vol que el rellotge de la torre torni a caminar. La clau de la porta del retaule la té la Carry, a Nostra Senyora."
+              : E.te('pallofa') ? "El Pallofa ja és amb tu: porta'l a la Carry, a Nostra Senyora, i et donarà la clau de la torre."
+              : "El Pallofa, el gos de la Carry, passeja per Sant Antoni. La Carry, que guarda la clau de la torre del rellotge, t'ho agrairia." },
+        { id: 'segell', marca: ['tombaSegellada', 'tombaLlegida'], fet: E => E.flag('tombaLlegida') || E.flag('portaSoterraniOberta'),
+          pista: E => !E.flag('tombaSegellada') ? "El rellotge ja camina: la llum de Runna pot tancar l'esquerda de la tomba del Cementiri. El Pare Alcoví no et llegirà la resta de la Crònica fins que no ho facis."
               : "Has segellat la tomba. Torna al Pare Alcoví: et vol llegir la resta de la Crònica." },
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
           pista: E => "Runna ja és amb tu. Els barrots de la gàbia només escolten un cant que la Pianista encara no t'ha ensenyat." },
@@ -166,18 +175,10 @@ const PROGRES = {
     laterals: [
         { id: 'taverna', marca: ['tavernaOberta', 'eveParlat'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('eveParlat'),
           pista: E => "El Sardi berenava cada tarda a la Taverna amb l\'Eve. La porta és tancada, però una trucada potser l'obriria." },
-        { id: 'carry', marca: ['carryParlat', 'pallofaTornat', 'obj:pallofa', 'obj:clau_campanar'], obert: E => E.flag('clauerNovici'), fet: E => E.flag('pallofaTornat'),
-          pista: E => !E.flag('carryParlat') ? "La Carry, a Nostra Senyora, té cara de patir per alguna cosa."
-              : E.te('pallofa') ? "El Pallofa ja és amb tu, i la Carry el deu trobar a faltar a Nostra Senyora."
-              : "El Pallofa, el gos de la Carry, passeja per Sant Antoni. La Carry, que guarda la clau de la torre del rellotge, t'ho agrairia." },
-        { id: 'rellotge', marca: ['rellotgeReparat'], obert: E => E.te('clau_campanar') || E.flag('portaCampanarOberta') || E.flag('clauCampanar'), fet: E => E.flag('rellotgeReparat'),
-          pista: E => "El rellotge de la torre s'ha aturat. La clau de la Carry obre una porta del retaule; dalt la torre, uns engranatges esperen." },
         { id: 'tresor', marca: ['tresorObert'], obert: E => E.flag('cantPedres'), fet: E => E.flag('tresorObert'),
           pista: E => "Diuen que a la façana del Santuari hi ha una pedra que escolta cants antics." },
         { id: 'nena', marca: ['nenaVista', 'llac1', 'llac2', 'nenaAlliberada'], obert: E => E.flag('nenaVista'), fet: E => E.flag('nenaAlliberada'),
-          pista: E => "La Nena de les Trenes va perdre dos llaços: un pel camí de la Rovellonera i l'altre en una clariana del mig del bosc de la Rovellonera." },
-        { id: 'carruatge', marca: ['carruatgeObert'], obert: E => E.flag('epilegFet'), fet: E => E.flag('carruatgeObert'),
-          pista: E => "El Follet del Carro Verd, a l'Era, deia que obriria el carro quan la boira marxés del tot." }
+          pista: E => "La Nena de les Trenes va perdre dos llaços: un pel camí de la Rovellonera i l'altre en una clariana del mig del bosc de la Rovellonera." }
     ],
 
     // El primer pas de la història que encara no és fet

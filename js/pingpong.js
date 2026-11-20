@@ -12,12 +12,12 @@
  *  Quan l'intercanvi passa dels tres cops, en Jusef es cansa i va cada cop més lent (fins al 45%).
  *  El d'en Jusef: un de cada tres és MÀGIC: la pilota encantada fa zigzags i només un cop PERFECTE trenca l'encanteri (llavors en Jusef no la pot tornar);
  *  si el cop no és perfecte, l'encanteri resisteix i la pilota torna fluixa.
- *  Partit a 5 punts al prototip (11 al joc). Després de dues derrotes, s'ofereix el mode fàcil (anell verd més llarg, en Jusef falla més). Càmera mòbil.
+ *  Partit a 7 punts, qui hi arriba primer. Després de dues derrotes, en Jusef ofereix el mode fàcil (anell verd més llarg, en Jusef falla més). Càmera mòbil.
  *
  * Coordenades del món (metres): X de través (centre 0), z al llarg (0 = vora de l'Ineu, L = vora d'en Jusef), h alçada sobre la taula.
  *
  * Al joc: un sol partit contra en Jusef, obligatori (el Senyor Pomers no parla de la roda fins que el guanyes). En guanyar-lo, celebració de l'Ineu i, en tocar la pantalla, es tanca
- * i s'obre el diàleg del premi (DIALEGS.jusefGuanyat). Si perds, panell amb «Tornar a jugar» (i el mode fàcil després de dues derrotes) o «Marxar» (DIALEGS.jusefPerdut).
+ * i s'obre el diàleg del premi (DIALEGS.jusefGuanyat). Si perds, en Jusef pregunta (Sí / No, com a tot el joc: ui.triar) si ho vols repetir (i, després de dues derrotes, si vols el mode fàcil): DIALEGS.jusefPerdut.
  */
 const EscenaPingPong = (() => {
 const ALT_PP = 1280;                // alçada per a la qual està dissenyada l'escena (AMPLE i ALT_PP venen del joc: la pantalla real pot ser més baixa)
@@ -27,7 +27,7 @@ const T = {
     G: 9.81, REST: 0.86,                           // gravetat i rebot a la taula
     Z_INEU: -0.42, Z_JUSEF: T_L_PLUS(0.42),        // on es posen els jugadors
     Z_IDEAL: -0.08,                                // on és la pilota en el moment perfecte del cop (just passada la vora de la taula)
-    PUNTS: 11, PUNTS_ZERO: 7                       // PUNTS_ZERO: si un arriba a 7 i l'altre en té 0, el partit s'acaba
+    PUNTS: 7                                       // el partit és a 7 punts: qui hi arriba primer guanya (sense diferència mínima ni golejada)
 };
 function T_L_PLUS(d) { return 2.74 + d; }
 const MODES = {
@@ -678,18 +678,18 @@ class EscenaPingPong extends Phaser.Scene {
         else { this.cameras.main.shake(220, 0.006); this.pulsJusef = 1; }
         this.avis(guanyador === 'ineu' ? 'Punt teu!' : 'Punt d\'en Jusef.', 1600, '#ffe9a0');          // només això: cap explicació de per què
         const { ineu, jusef } = this.punts;
-        const golejada = Math.max(ineu, jusef) >= T.PUNTS_ZERO && Math.min(ineu, jusef) === 0;          // 7-0 (o 0-7): s'acaba igualment, victòria o derrota
-        if (((ineu >= T.PUNTS || jusef >= T.PUNTS) && Math.abs(ineu - jusef) >= 2) || golejada) { this.time.delayedCall(1400, () => this.final(ineu > jusef)); return; }
+        if (ineu >= T.PUNTS || jusef >= T.PUNTS) { this.time.delayedCall(1400, () => this.final(ineu > jusef)); return; }          // el primer a 7
         this.time.delayedCall(1500, () => this.preparaServei());
     }
 
     final(guanyat) {
         this.acabat = true; this.guanyat = guanyat; this.estat = 'final'; this.txtAvis.setAlpha(0); this.tweens.killTweensOf(this.txtAvis);
-        if (!guanyat) this.derrotes++;
+        if (!guanyat) { this.derrotes++; ESTAT_PP.derrotes = this.derrotes; }          // (ja, perquè el diàleg d'en Jusef ho llegeix just en tancar)
         if (guanyat && this.spCeleb) { this.celebraVictoria(() => this.tancar(true)); return; }
         if (guanyat) { this.tancar(true); return; }
-        if (this.spDerr) { this.celebraDerrota(() => this.panellFinal(false)); return; }
-        this.panellFinal(false);
+        this.sortint = true;                                                                                // (no es pot sortir dues vegades)
+        if (this.spDerr) { this.celebraDerrota(() => this.tancar(false)); return; }
+        this.tancar(false);                                                                                // en Jusef pregunta si es vol repetir (DIALEGS.jusefPerdut)
     }
 
     // ---- Celebració de l'Ineu en guanyar el partit (animació d'AutoSprite + efectes d'anime) ----
@@ -827,30 +827,6 @@ class EscenaPingPong extends Phaser.Scene {
         this.time.delayedCall(vida + 200, () => em.destroy());
     }
 
-    panellFinal(guanyat) {
-        const c = this.capa = this.add.container(0, 0).setDepth(100); this.cameras.main.ignore(c);
-        c.add(this.add.rectangle(0, 0, AMPLE, ALT_PP, 0x000000, 0.6).setOrigin(0).setInteractive());
-        const est = (m, col) => ({ fontFamily: 'Georgia, serif', fontSize: m + 'px', color: col, stroke: '#1a0e06', strokeThickness: 6, align: 'center', wordWrap: { width: 600 } });
-        c.add(this.add.text(AMPLE / 2, 460, 'En Jusef guanya el partit', est(48, '#ff9a7a')).setOrigin(0.5));
-        c.add(this.add.text(AMPLE / 2, 540, `${this.punts.ineu} - ${this.punts.jusef}`, est(40, '#f2e6c8')).setOrigin(0.5));
-        const boto = (y, text, fn) => {
-            const r = this.add.rectangle(AMPLE / 2, y, 440, 90, 0x6a4426, 1).setStrokeStyle(4, 0xd4af37).setInteractive({ useHandCursor: true });
-            const t = this.add.text(AMPLE / 2, y, text, est(32, '#f2e6c8')).setOrigin(0.5);
-            r.on('pointerdown', (p, x, y, ev) => { ev.stopPropagation(); fn(); });
-            c.add([r, t]);
-        };
-        if (!guanyat && this.derrotes >= 2 && this.mode !== 'facil') {
-            c.add(this.add.text(AMPLE / 2, 650, 'Vols tornar-ho a provar en mode fàcil?\n(pilota més lenta, més marge)', est(28, '#f2e6c8')).setOrigin(0.5));
-            boto(780, 'Sí, més fàcil', () => { this.mode = 'facil'; this.nouPartit(); });
-            boto(900, 'No, igual', () => this.nouPartit());
-            boto(1020, 'Marxar', () => this.sortir());
-        } else {
-            boto(720, 'Tornar a jugar', () => this.nouPartit());
-            boto(840, 'Marxar', () => this.sortir());
-            if (this.mode === 'facil') boto(960, 'Tornar al mode normal', () => { this.mode = 'normal'; this.nouPartit(); });
-        }
-    }
-
     // Sortir (botó, ESC o «Marxar»): es considera partit abandonat. Un cop guanyat, només es surt en tocar la pantalla de la celebració
     sortir() {
         if (this.sortint || this.guanyat) return;
@@ -895,5 +871,6 @@ class EscenaPingPong extends Phaser.Scene {
         } catch (e) { /* sense àudio */ }
     }
 }
+EscenaPingPong.ESTAT = ESTAT_PP;          // (el diàleg d'en Jusef hi canvia el mode fàcil)
 return EscenaPingPong;
 })();

@@ -63,7 +63,7 @@ const Proves = {
         PROGRES.passos.slice(0, fins).forEach(p => marca(p.marca));
         if (laterals) PROGRES.laterals.forEach(l => marca(l.marca));
         // Els objectes que la partida real gasta quan es fa el pas següent (el marcatge els dona tots, sense gastar-los): l'aigua de la font passa a ser el beuratge de la Joaneta, que s'aboca a la boira del Til·ler, i el ram es deixa a la tomba de l'àngel
-        [['joanetaVista', 'aigua_sj'], ['boiraTillerNeta', 'beuratge'], ['florsCreu', 'ram']].forEach(([f, o]) => { if (Estat.flag(f)) Estat.treu(o); });
+        [['joanetaVista', 'aigua_sj'], ['boiraTillerNeta', 'beuratge'], ['florsCreu', 'ram'], ['pallofaTornat', 'pallofa']].forEach(([f, o]) => { if (Estat.flag(f)) Estat.treu(o); });
         if (melodies) {              // les melodies apreses (i la tarota), menys les que ensenya el pas des d'on es comença o un de posterior (si no, aquest ja seria fet)
             const encara = new Set(PROGRES.passos.slice(fins).flatMap(p => p.marca));
             Object.values(MELODIES).forEach(m => { if (!encara.has(m.flag)) Estat.posaFlag(m.flag); });

@@ -460,7 +460,7 @@ const DIALEGS = {
         pagines: [
             { qui: 'Jusef', text: 'Benvingut al Celler, viatger. Les pales i la pilota només són l\'escorça: el que jo practico aquí és màgia blanca.' },
             { qui: 'Jusef', text: 'Aquest és el meu servei màgic. Fins ara ningú ha aconseguit aturar-lo.' },
-            { qui: 'Jusef', text: 'Vols provar-ho? Una partida, a onze punts.' },
+            { qui: 'Jusef', text: 'Vols provar-ho? Una partida, a set punts.' },
             { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaPP = i; fet(); }) }
         ],
         enAcabar: () => {
@@ -498,10 +498,28 @@ const DIALEGS = {
         }
     }),
 
-    jusefPerdut: (E, abandonat) => ({
-        pagines: [{ qui: 'Jusef', text: abandonat ? 'Ja te\'n vas? La taula no fuig. Torna quan vulguis.' : 'Bona partida, monjo. Però el servei encara és meu. Torna-hi quan vulguis: el Julius diu que la segona vegada sempre surt millor.' }],
-        enAcabar: () => { if (!E.flag('jusefVencut')) E.posaObjectiu("En Jusef, al Celler, sempre té ganes d'una partida."); }
-    }),
+    // En perdre (o en marxar a mig partit). Si s'ha perdut, en Jusef pregunta amb el Sí / No de sempre (ui.triar) si es vol repetir; després de dues derrotes, abans, ofereix el mode fàcil
+    jusefPerdut: (E, abandonat) => {
+        const pp = typeof EscenaPingPong !== 'undefined' ? EscenaPingPong.ESTAT : null, ofereixFacil = !abandonat && pp && pp.derrotes >= 2 && pp.mode !== 'facil';
+        const pagines = [{ qui: 'Jusef', text: abandonat ? 'Ja te\'n vas? La taula no fuig. Torna quan vulguis.' : 'Bona partida, monjo. Però el servei encara és meu.' }];
+        if (ofereixFacil) pagines.push(
+            { qui: 'Jusef', text: 'Si vols, t\'afluixo una mica el servei: la pilota anirà més lenta i tindràs més marge. Què et sembla?' },
+            { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { if (i === 0 && pp) pp.mode = 'facil'; fet(); }) });
+        if (!abandonat) pagines.push(
+            { qui: 'Jusef', text: 'Vols repetir la partida?' },
+            { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaPP = i; fet(); }) });
+        return {
+            pagines,
+            enAcabar: () => {
+                if (!E.flag('jusefVencut')) E.posaObjectiu("En Jusef, al Celler, sempre té ganes d'una partida.");
+                if (abandonat) return;
+                const triat = DIALEGS._triaPP; DIALEGS._triaPP = null;
+                const ui = game.scene.getScene('UI');
+                if (triat === 0) game.scene.start('PingPong');
+                else if (ui) ui.obrirDialeg({ pagines: [{ qui: 'Jusef', text: 'Com vulguis. Torna-hi quan vulguis: el Julius diu que la segona vegada sempre surt millor.' }] });
+            }
+        };
+    },
 
 
     // ---------------- CEL·LES I TIL·LER ----------------
@@ -677,12 +695,15 @@ const DIALEGS = {
                 { qui: "Pare Alcoví", text: "L'arbre sagrat és el Gran Til·ler, el de les cel·les: el seu medalló és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jordà, el prior." }
             ];
             if (pas) pagines.push({ qui: "Pare Alcoví", text: "I ara, el que et toca: " + pas });
+            pagines.push({ qui: "Pare Alcoví", text: "I quan tinguis Runna, torna a veure'm: hi ha pàgines de la Crònica que encara no et puc llegir." });
             return { pagines, enAcabar: () => { E.posaFlag("alcoviPlacaDita"); E.desar(); } };
         }
         // Amb Runna, el Pare Alcoví no pot continuar llegint la Crònica mentre la tomba esquerdada del Cementiri treu boira: demana que la segelli (obligatori) i, quan torna, li dona la resta
         if (E.flag("runna") && !E.flag("tombaSegellada")) {
             if (E.flag("tombaDemanada")) return { pagines: [
-                { qui: "Pare Alcoví", text: "La tomba, fill. Mentre l'esquerda del Cementiri treu boira no et puc llegir la resta de la Crònica. Colpeja-la amb Runna i torna." }
+                { qui: "Pare Alcoví", text: E.flag("rellotgeReparat")
+                    ? "La tomba, fill. Mentre l'esquerda del Cementiri treu boira no et puc llegir la resta de la Crònica. Colpeja-la amb Runna i torna."
+                    : "La tomba, fill. Un segell no aguanta si el temps no el sosté: fes que el rellotge de la torre torni a caminar i colpeja l'esquerda del Cementiri amb Runna. Mentre treu boira no et puc llegir la resta de la Crònica." }
             ] };
             return {
                 pagines: [
@@ -691,10 +712,14 @@ const DIALEGS = {
                     { fer: (z, fet) => z.alcoviLlegeix ? z.alcoviLlegeix(fet) : z.npcVa('pare_alcovi', 812, 372, fet, 120) },
                     { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
                     { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
+                    { qui: "Pare Alcoví", text: "Un moment, fill. Fixa't en una cosa: la tomba es va esquerdar a un quart de quatre. És l'hora exacta a què es va aturar el rellotge de la torre." },
+                    { qui: "Pare Alcoví", text: E.flag("rellotgeReparat")
+                        ? "I ja l'has fet caminar: bon senyal. Un segell només aguanta si el temps el sosté."
+                        : "Un segell no aguanta si el temps no el sosté. Primer cal que el rellotge torni a caminar: la clau de la porta del retaule la guarda la Carry, a Nostra Senyora." },
                     { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir, i treu boira per l'esquerda. Fins que no sigui tancada no et puc llegir la resta: la boira esborra les paraules que et caldran." },
-                    { qui: "Pare Alcoví", text: "Colpeja l'esquerda amb Runna, fill, i torna a veure'm." }
+                    { qui: "Pare Alcoví", text: E.flag("rellotgeReparat") ? "Colpeja l'esquerda amb Runna, fill, i torna a veure'm." : "Quan el rellotge camini, colpeja l'esquerda amb Runna, fill, i torna a veure'm." }
                 ],
-                enAcabar: () => { E.posaFlag("tombaDemanada"); E.posaObjectiu("El Pare Alcoví et demana que segelli amb Runna la tomba esquerdada del Cementiri, darrere el Santuari i el Monestir."); }
+                enAcabar: () => { E.posaFlag("tombaDemanada"); E.posaObjectiu(PROGRES.pista(E)); }
             };
         }
         if (E.flag("runna") && E.flag("tombaSegellada") && !E.flag("tombaLlegida")) {
@@ -871,32 +896,38 @@ const DIALEGS = {
     cartellCirosa: E => ({ pagines: [{ qui: "Cartell", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí amunt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\n← La Caseta" }] }),
 
     // ---------------- EL FOLLET DEL CARRO VERD: VIATGE RÀPID ----------------
+    // CINEMÀTICA FINAL (ZonaEra.enEntrar, després de l'epíleg i abans dels crèdits): el Follet obre la gàbia del darrere i en surten els ocells que l'Ocellaire havia tancat fa segles
+    follet_final: E => {
+        const nom = 'Follet del Carro Verd';
+        return {
+            pagines: [
+                { qui: nom, text: "La boira se n'ha anat del tot, monjo. Abans de tornar a la carretera, deixa'm obrir la gàbia del darrere." },
+                { qui: nom, text: "Hi porto els ocells que l'Ocellaire va tancar fa segles. Els meus avis els van recollir i els hem guardat de pare a fill, perquè amb la boira no volien cantar." },
+                { fer: (z, fet) => {
+                    const [cx, cy] = z.paradaAqui ? z.paradaAqui.c : [260, 1230];
+                    for (let i = 0; i < 16; i++) z.time.delayedCall(i * 190, () => {
+                        const g = z.add.graphics().setDepth(90000);
+                        g.lineStyle(9, 0x2a1a10, 1).beginPath().moveTo(-24, 4).lineTo(0, -12).lineTo(24, 4).strokePath();          // un ocell de lluny: una «v» clara amb contorn fosc (es veu sobre l'arbre i sobre l'herba)
+                        g.lineStyle(4, 0xfff1c9, 1).beginPath().moveTo(-24, 4).lineTo(0, -12).lineTo(24, 4).strokePath();
+                        g.setPosition(cx - 40 - Math.random() * 50, cy - 80);      // la gàbia és al darrere (el carruatge és girat)
+                        z.tweens.add({ targets: g, scaleY: { from: 1, to: -0.6 }, yoyo: true, repeat: -1, duration: 170 + Math.random() * 60 });
+                        // pugen cap al cel, cap a la dreta (l'Ineu i l'arbre), dins del que veu la càmera, i només s'esvaeixen al final
+                        z.tweens.add({ targets: g, x: cx + 120 + Math.random() * 520, y: cy - 300 - Math.random() * 230, duration: 3400 + Math.random() * 800, ease: 'Sine.easeOut',
+                            alpha: { value: 0, duration: 1100, delay: 2600 }, onComplete: () => g.destroy() });
+                    });
+                    z.esperar(3600, fet);
+                } },
+                { qui: nom, text: "Ja poden cantar. Gràcies per tornar-los el cant." },
+                { qui: nom, text: "Au, ves-te'n a casa, Ineu: el Miracle sempre et tindrà carretera." }
+            ]
+        };
+    },
+
     // Condueix el carro de vapor que li va fer el Galf (al codi, 'carruatge'). A cada parada (PARADES, js/zona_base.js) la primera conversa la
     // desbloqueja; després pregunta on anem. La seva història (els ocells que porta tapats al darrere, que els seus avis van
     // recollir quan van tancar l'Ocellaire) queda per a l'epíleg: a l'Era, quan la boira ha marxat, obre la gàbia.
     cotxer: (E, id) => {
         const nom = 'Follet del Carro Verd';
-        if (id === 'era' && E.flag('epilegFet') && !E.flag('carruatgeObert')) {
-            return {
-                pagines: [
-                    { qui: nom, text: "La boira se n'ha anat del tot, monjo. Abans de tornar a la carretera, deixa'm obrir la gàbia del darrere." },
-                    { qui: nom, text: "Hi porto els ocells que l'Ocellaire va tancar fa segles. Els meus avis els van recollir i els hem guardat de pare a fill, perquè amb la boira no volien cantar." },
-                    { fer: (z, fet) => {
-                        const [cx, cy] = z.paradaAqui ? z.paradaAqui.c : [260, 1230];
-                        for (let i = 0; i < 10; i++) z.time.delayedCall(i * 170, () => {
-                            const g = z.add.graphics().setDepth(90000);
-                            g.lineStyle(3, 0x2a1a10, 1).beginPath().moveTo(-9, 2).lineTo(0, -5).lineTo(9, 2).strokePath();
-                            g.setPosition(cx - 60 - Math.random() * 45, cy - 75);      // la gàbia és al darrere (el carruatge és girat)
-                            z.tweens.add({ targets: g, scaleY: { from: 1, to: -0.6 }, yoyo: true, repeat: -1, duration: 160 + Math.random() * 60 });
-                            z.tweens.add({ targets: g, x: cx + (Math.random() - 0.5) * 700, y: cy - 700 - Math.random() * 250, alpha: 0, duration: 2400 + Math.random() * 600, ease: 'Sine.easeOut', onComplete: () => g.destroy() });
-                        });
-                        z.esperar(2400, fet);
-                    } },
-                    { qui: nom, text: "Ja poden cantar. Gràcies per tornar-los el cant." }
-                ],
-                enAcabar: () => { E.posaFlag('carruatgeObert'); E.posaFlag('parada_era'); }
-            };
-        }
         const conegudes = PARADES.filter(pd => E.flag('parada_' + pd.id)).length;
         if (!E.flag('parada_' + id)) {
             return {

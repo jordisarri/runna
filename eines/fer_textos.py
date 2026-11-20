@@ -35,7 +35,7 @@ SECCIONS = [
                                                   'zones/cirosa:construir', 'zones/cirosa:masiaTaula', 'zones/cirosa:masiaLlibre', 'zones/cirosa:masiaEsquelles', 'aldreuPastor', 'aldreuDerrotat',
                                                   'tillerSoparIntro', 'tillerSoparFalta', 'tillerSoparPreparat', 'tillerSoparRitual']),
     ('Les Cel·les: la Meus, el senyor Llaminer, les Venerables i la Carry', ['zones/cela:construir', 'meus', 'molner', 'consellVenerables', 'premiMonja', 'carry', 'pallofa', 'llac']),
-    ('La Taverna: l\'Eve, el senyor Buidor i l\'Iscu', ['zones/taverna:construir', 'zones/taverna:portaTaverna', 'zones/taverna:eve', 'eve', 'senyorBudo', 'iscu']),
+    ('La Taverna: l\'Eve, el senyor Buidor i l\'Iscu', ['zones/taverna:construir', 'zones/taverna:portaTaverna', 'zones/taverna:eve', 'zones/taverna:eveBase', 'eve', 'senyorBudo', 'iscu']),
     ('Acte 2: el Celler i en Jusef', ['cartellRuinesPingpong', 'cartellCeller', 'julius', 'pomers', 'jusef', 'jusefGuanyat', 'jusefPerdut']),
     ('Acte 2: les Runes, l\'ombra del monjo i el Saber', ['ruines', 'zona_base:pedraMobil', 'ombraMonjo', 'benedicioMonjo', 'pareAlcovi', 'zones/cementiri:construir', 'zones/cementiri:alAtacar', 'creuCementiri', 'lapida', 'tombaMonjos']),
     ('Acte 2: l\'ermita de la Desaparició i la clau del sagrari', ['cartellCami', 'sortidaErmita', 'columna', 'creuDesaparicio', 'taulaPedra', 'altarErmita', 'cofreAltar', 'zones/oest:construir']),
@@ -51,7 +51,7 @@ SECCIONS = [
     ('La porta de ferro i les Gírgoles', ['zones/taverna:portaSoterrani', 'xevius', 'zones/taverna:portaFerro', 'cartellGirgoles', 'zones/gabia:girgolesInscripcio', 'zones/gabia:tornRastell']),
     ('La Gàbia i l\'Ocellaire', ['zones/gabia:pontGabia', 'zones/gabia:gabiaGran', 'zones/gabia:aldreuGabia', 'zones/gabia:nenGabia', 'zones/gabia:actualitzar', 'zones/gabia:enMelodia',
                                 'zones/gabia:iniciarCombatFinal', 'zones/gabia:ocellaireDerrotat', 'zones/gabia:obrirGabia', 'zones/gabia:finalGabia']),
-    ('Epíleg: després del final', ['zones/esglesia:ferEpileg', 'zones/gabia:gentEpileg']),
+    ('Epíleg: després del final', ['zones/esglesia:ferEpileg', 'zones/gabia:gentEpileg', 'follet_final']),
 ]
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------
 # NOMS DE FLAGS I OBJECTES -> català entenedor (per a les línies «Si: ...»). La frase afirmativa comença per un verb («ha ...», «és ...», «sap ...», «porta ...»):
@@ -77,7 +77,7 @@ FLAGS = {
     'basto_tiller': "porta el bastó del Til·ler", 'carta_cortiner': "porta la carta del Cortiner", 'piObert': "ha obert el pi dels tres cants", 'placaDolmen': "ha llegit la placa del Dolmen",
     'llosaOberta': "ha obert la llosa del jardí", 'llavorLluna': "porta la llavor de lluna", 'isilderSap': "ha avisat l'Isílder", 'mongesTrobades': "ha trobat les sacerdotesses",
     'manduNinaTrencada': "s'ha trencat la nina de la Mandu", 'nenaVista': "ha vist la Nena de les Trenes", 'joanetaVista': "ha vist la Joaneta", 'iscuTrobat': "ha trobat l'Iscu", 'eveParlat': "ha parlat amb l'Eve",
-    'epilegFet': "ha vist l'epíleg", 'carruatgeObert': "ha obert el carruatge del Follet", 'ocellaireVencut': "ha vençut l'Ocellaire", 'pontGabia': "ha creuat el pont de la Gàbia",
+    'ferit': "té els grans del rosari buits (no té la vida plena)", 'epilegFet': "ha vist l'epíleg", 'ocellaireVencut': "ha vençut l'Ocellaire", 'pontGabia': "ha creuat el pont de la Gàbia",
     'bastoObtingut': "porta el bastó", 'florsCreu': "ha deixat flors a la creu", 'raimVolantVist': "ha vist el volant del Raïm", 'botaAlcada': "ha fet servir la bota d'alçada", 'pallofa': "porta l'encàrrec del Pallofa",
     'ram': "porta el ram", 'aigua_sj': "porta l'aigua de Sant Joan", 'abandonat': "ha abandonat la partida de ping-pong", 'encarrec': "té un encàrrec del Pare Nadiel", 'parlatDaimiel': "ha parlat amb el Pare Nadiel",
     'herbes': "té les herbes de Sant Joan",

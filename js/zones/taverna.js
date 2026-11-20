@@ -89,7 +89,7 @@ Object.assign(DIALEGS, {
         enAcabar: () => { E.posaFlag('tavernaOberta'); E.desar(); }
     },
 
-    eve: E => {
+    eveBase: E => {
         if (!E.flag('eveParlat')) return {
             pagines: [
                 { qui: 'Eve', text: 'Sóc l\'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T\'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, i la porta s\'obre sola. A dins, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.' },
@@ -150,6 +150,32 @@ Object.assign(DIALEGS, {
         ] };
     }
 });
+
+// L'Eve acaba cada conversa oferint un got de llet calenta (Sí / No amb el mateix ui.triar que en Jusef): si es diu que sí, l'Ineu se'l beu i recupera tots els grans del rosari.
+// Com que la Taverna no té cap altre premi, també fa de lloc de repòs.
+DIALEGS.eve = E => {
+    const d = DIALEGS.eveBase(E), ferit = E.dades.vida < E.dades.corsMax * 2;
+    const enAcabarBase = d.enAcabar;
+    return {
+        pagines: [
+            ...d.pagines,
+            { qui: 'Eve', text: ferit ? 'Per cert, tens mala cara. Vols un got de llet calenta? Encara en queda, de la vaca de la Càren.' : 'Per cert, vols un got de llet calenta? Encara en queda, de la vaca de la Càren.' },
+            { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaLlet = i; fet(); }) },
+            { fer: (z, fet) => DIALEGS._triaLlet === 0 ? z.beure(fet, 0xfff4dc) : fet() }
+        ],
+        enAcabar: () => {
+            if (enAcabarBase) enAcabarBase();
+            const triat = DIALEGS._triaLlet; DIALEGS._triaLlet = null;
+            const ui = game.scene.getScene('UI');
+            if (triat === 0) {
+                E.dades.vida = E.dades.corsMax * 2;
+                if (ui) { ui.actualitzarHUD(); ui.obrirDialeg({ pagines: [{ qui: 'Eve', text: ferit ? 'Té. Ara tens més color. Que et faci bon profit, monjo.' : 'Que et faci bon profit, monjo, encara que ja vagis ben sa.' }] }); }
+                E.desar();
+            } else if (ui) ui.obrirDialeg({ pagines: [{ qui: 'Eve', text: 'Com vulguis. Aquí en tens quan en vulguis.' }] });
+        }
+    };
+};
+
 
 // ---------------- LA TAVERNA PER DINS ----------------
 // Escala de pedra que BAIXA cap a la foscor, vista de front des de dalt: el primer graó (el de la porta) és el més ample, clar i baix a la pantalla; cada graó següent
