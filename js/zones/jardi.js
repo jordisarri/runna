@@ -248,8 +248,8 @@ class ZonaJardi extends ZonaBase {
             f.setTint(COLORS_FLORS[Math.floor(rnd() * COLORS_FLORS.length)]);
             llistaFlors.push(f);
         };
-        // Poques flors, només a tres llocs: al voltant de la Prunera, a l'entrada (els graons) i a la llosa. Al mig del jardí, cap. Cada zona és una el·lipse [x, y, radi x, radi y, quantes].
-        [[PX, PY + 10, 140, 60, 16], [(COLS[2] + COLS[3]) / 2, YF + 6, 100, 34, 9], [LX, LY + 6, 110, 52, 28]].forEach(([zx, zy, rx, ry, n]) => {
+        // Poques flors, només a tres llocs: al voltant de la Prunera, a l'entrada (els graons), a la llosa i a tota la banda dreta de la pèrgola. Al mig del jardí, cap. Cada zona és una el·lipse [x, y, radi x, radi y, quantes].
+        [[PX, PY + 10, 140, 60, 16], [(COLS[2] + COLS[3]) / 2, YF + 6, 100, 34, 9], [LX, LY + 6, 110, 52, 28], [660, 585, 88, 92, 26]].forEach(([zx, zy, rx, ry, n]) => {
             for (let k = 0; k < n; k++) {
                 const a = rnd() * Math.PI * 2, r = Math.sqrt(rnd());
                 const x = zx + Math.cos(a) * rx * r, y = zy + Math.sin(a) * ry * r;
