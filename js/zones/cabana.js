@@ -110,7 +110,7 @@ class ZonaCabana extends ZonaBase {
             alcada: 1000,
             colorFons: '#14301a',
             entrades: {
-                portal:   { x: 330, y: 975, dir: 'avall' },
+                portal:   { x: 315, y: 975, dir: 'avall' },
                 interior: { x: 800, y: 640, dir: 'avall' }
             }
         });

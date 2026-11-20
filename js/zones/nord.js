@@ -1376,7 +1376,7 @@ class ZonaBosc extends ZonaBase {
             amplada: 1800,
             alcada: 1200,
             colorFons: '#1f3a1a',
-            entrades: { celles: { x: 1740, y: 705, dir: 'esquerra' }, portal: { x: 330, y: 870, dir: 'avall' } }
+            entrades: { celles: { x: 1740, y: 705, dir: 'esquerra' }, portal: { x: 315, y: 870, dir: 'avall' } }
         });
     }
 
