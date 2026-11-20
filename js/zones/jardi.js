@@ -88,7 +88,7 @@ class ZonaJardi extends ZonaBase {
             [[YB, yTopB, false], [YF, yTopF, true]].forEach(([y, yTop, davant]) => {
                 for (let i = 0; i < COLS.length - 1; i++) {
                     const xa = COLS[i] + MARGE, xb = COLS[i + 1] - MARGE;
-                    if (davant && i === 2) continue;                                                        // davant, entre la 3a i la 4a columna (per on s'entra, amb els graons): res d'heura
+                    if (davant && (i === 0 || i === 2)) continue;                                                        // davant, entre la 3a i la 4a columna (per on s'entra, amb els graons): res d'heura; tampoc entre la 1a i la 2a (aquí tampoc hi ha paret d'heura)
                     panells.push([xa, xb, y, yTop]);
                 }
             });
