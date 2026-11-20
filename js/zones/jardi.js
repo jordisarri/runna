@@ -84,14 +84,17 @@ class ZonaJardi extends ZonaBase {
             const HORITZO = YB - 70;
             const cel = this.add.graphics().setDepth(-1050);
             cel.fillGradientStyle(0x62a8e0, 0x62a8e0, 0xb4daf2, 0xb4daf2, 1).fillRect(0, 0, 1800, HORITZO + 34);
-            // Núvols en cargol a l'estil de Monkey Island 3: el dibuix assets/natura/nuvol.webp (pocs, a mides diferents i alguns girats), que es mouen molt a poc a poc
-            const nuvol = (x, y, ample, girat, alfa) => {
-                const g = this.add.image(x, y, 'nuvol').setOrigin(0.5, 0.5).setDepth(-1045).setAlpha(alfa).setFlipX(girat);
+            // Núvols en cargol a l'estil de Monkey Island 3: el dibuix assets/natura/nuvol.webp, girat (el cargol va al davant i la cua darrere) i passant lentament d'esquerra a dreta de tot el cel;
+            // en sortir per la dreta tornen a entrar per l'esquerra. Pocs, de mides diferents i de velocitats lleugerament diferents (px/s).
+            const nuvol = (x0, y, ample, vel, alfa) => {
+                const g = this.add.image(x0, y, 'nuvol').setOrigin(0.5, 0.5).setDepth(-1045).setAlpha(alfa).setFlipX(true);
                 g.setScale(ample / g.width);
-                this.tweens.add({ targets: g, x: x + 24 + rnd() * 24, duration: 18000 + rnd() * 9000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+                const FI = 1800 + ample, INICI = -ample;
+                const volta = () => { g.x = INICI; this.tweens.add({ targets: g, x: FI, duration: (FI - INICI) / vel * 1000, ease: 'Linear', repeat: -1 }); };
+                this.tweens.add({ targets: g, x: FI, duration: (FI - x0) / vel * 1000, ease: 'Linear', onComplete: volta });
                 return g;
             };
-            [[190, 190, 300, false, 0.95], [520, 245, 210, true, 0.9], [900, 170, 340, false, 0.95], [1300, 235, 230, true, 0.9], [1640, 180, 290, false, 0.95]].forEach(([x, y, w, gi, a]) => nuvol(x, y, w, gi, a));
+            [[250, 190, 300, 11, 0.95], [650, 245, 210, 16, 0.9], [1050, 170, 340, 9, 0.95], [1400, 235, 230, 14, 0.9], [1700, 180, 290, 12, 0.95]].forEach(([x, y, w, v, a]) => nuvol(x, y, w, v, a));
             this.colisio(900, HORITZO + 2, 1800, 4);                                          // (línia de col·lisió: no es pot pujar al fons)
         }
 
