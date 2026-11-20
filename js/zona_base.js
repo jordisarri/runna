@@ -1027,7 +1027,7 @@ class ZonaBase extends Phaser.Scene {
         this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(85000);       // per sobre de tothom (també del Germà Aldreu), però SOTA la boira (89990+): si no, quedava il·luminat
         // Excepció: si l'Ineu és darrere d'un objecte opac (un cofre agafat pel nord...), es queda darrere seu i no el travessa
         const davant = (this.opacs || []).find(o => o.active && o.visible && o.depth > I.y && o.y - o.displayHeight < I.y && Math.abs(o.x - I.x) < o.displayWidth / 2);
-        if (davant) this.ineuAlt.setDepth(I.y);
+        if (davant && !this.assegut) this.ineuAlt.setDepth(I.y);          // (assegut en un banc: el dibuix d'alçar l'objecte passa per SOBRE del banc, i en acabar l'Ineu torna a quedar assegut darrere seu)
         if (key === 'ineu_aixeca_tiler') {
             const x = I.x - this.ineuAlt.displayWidth * 0.16;
             const y = I.y + 2 - this.ineuAlt.displayHeight * 0.97;
