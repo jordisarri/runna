@@ -182,10 +182,11 @@ class EscenaMusica extends Phaser.Scene {
             this.time.delayedCall(700, () => this.reproduir());
         } else {
             this.titol.setText('');                      // només el nom del cant, quan se'n toca un
-            add(this.add.text(cx + MUS_W / 2 - 34, T + 40, '✕', { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#6a1f12', padding: { x: 8, y: 4 }, resolution: 2 })
-                .setOrigin(0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => { if (!this.capaPerSobre()) this.tancar(false); }));
             this.lastTime = 0;
         }
+        // La ✕ per tancar sense tocar la cançó: també quan s'està aprenent un cant (la lliçó). No compta com a tocada: ni completa la lliçó ni dóna l'efecte del cant.
+        add(this.add.text(cx + MUS_W / 2 - 34, T + 40, '✕', { fontFamily: FONT_PLACA, fontSize: '30px', fontStyle: 'bold', color: '#6a1f12', padding: { x: 8, y: 4 }, resolution: 2 })
+            .setOrigin(0.5).setInteractive({ useHandCursor: true }).on('pointerdown', () => { if (!this.capaPerSobre()) this.tancar(false); }));
         this.tweens.add({ targets: this.panell, alpha: 1, y: ALT * (1 - this.escPergami), duration: 250, ease: 'Sine.easeOut' });
         // El joc s'atura mentre dura la tarota (enemics, físiques i temporitzadors de l'escenari): es reprèn en tancar-la
         const zp = Joc.zonaActiva(this);
