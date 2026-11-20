@@ -273,9 +273,12 @@ const DIALEGS = {
                     { qui: "La Pianista", text: "Però hi ha un cant que la boira no es pot empassar: el Cant de l'Aurora. Només que tu no tens res amb què tocar-lo." },
                     { qui: "La Pianista", text: "Deixa'm que t'expliqui d'on ve això. Fa molts anys, el Cortiner posava la música a les representacions del Santuari, i tenia una tarota." },
                     { qui: "La Pianista", text: "Deia que les cortines que de debò importen no són de vellut, sinó la boira, les bardisses i les pedres, i que les notes justes les poden apartar." },
+                    // Moment de la tarota: zoom molt més proper a la Pianista i l'Ineu
+                    { fer: (z, fet) => { const p = z.npcs && z.npcs.pianista, I = z.ineu; if (p && I) z.enquadrar((p.x + I.x) / 2, (p.y + I.y) / 2 - 0.45 * p.displayHeight, 2.4, 900, fet); else fet(); } },
                     { qui: "La Pianista", text: "Jo mai no he sabut fer-la sonar com ell. Pren-la, fill: potser a tu t'obeeix." },
                     { fer: (z, fet) => { Estat.dona('flauta'); fet(); } },
-                    { avis: "Has obtingut LA TAROTA DEL CORTINER!", obj: 'flauta' }
+                    { avis: "Has obtingut LA TAROTA DEL CORTINER!", obj: 'flauta' },
+                    { fer: (z, fet) => z.alliberarCamera(700, fet) }
                 ],
                 enAcabar: () => { E.posaFlag("parlatPianista"); iniciarLliço("aurora"); }
             };
