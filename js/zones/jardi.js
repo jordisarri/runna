@@ -91,7 +91,7 @@ class ZonaJardi extends ZonaBase {
                 const E0 = ample / g.width;
                 g.setScale(E0);
                 // Mentre vola «respira»: s'aplana una mica (més comprimit per dalt i per baix) i torna al seu estat, molt lent i suau; el gruix i l'ample es compensen una mica perquè no sigui un simple encongiment
-                this.tweens.add({ targets: g, scaleY: E0 * 0.84, scaleX: E0 * 1.03, duration: 5200, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+                this.tweens.add({ targets: g, scaleY: E0 * 0.84, scaleX: E0 * 1.03, duration: 3400, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
                 const FI = 1800 + ample, INICI = -ample;
                 // Passa d'esquerra a dreta; quan l'edifici de l'Hostatgeria l'amaga del tot, torna a entrar de seguida per l'esquerra (sense esperar a sortir per l'extrem)
                 const anar = x => { g.x = x; const tw = this.tweens.add({ targets: g, x: FI, duration: (FI - x) / vel * 1000, ease: 'Linear',
