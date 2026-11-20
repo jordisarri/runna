@@ -78,6 +78,30 @@ class ZonaJardi extends ZonaBase {
         }));
         this.pergola = { x0: COLS[0], x1: COLS[COLS.length - 1], yb: YB, yf: YF, planta: PLANTA };
 
+        // --- Cortines d'heura entre les columnes (la fila del davant i la del darrere): el dibuix cortina_heura (art/objectes), estàtic i una mica transparent, des del capitell fins al muret.
+        // No toquen el tros de l'est (entre la 4a columna i la paret de la casa) i, davant, deixen lliure l'entrada (entre la 3a i la 4a columna, amb els graons, no hi ha res). Cada panell
+        // mostra un tros diferent del dibuix (i alguns, girats) perquè no es repeteixin. Es pot ajustar: ALFA_CORT (opacitat; 1 = opac).
+        {
+            const ALFA_CORT = 0.75;
+            const MARGE = 0;                                                               // la cortina arriba fins al centre de cada columna (que la tapa per davant): així la toca sempre
+            const panells = [];
+            [[YB, yTopB, false], [YF, yTopF, true]].forEach(([y, yTop, davant]) => {
+                for (let i = 0; i < COLS.length - 1; i++) {
+                    const xa = COLS[i] + MARGE, xb = COLS[i + 1] - MARGE;
+                    if (davant && i === 2) continue;                                                        // davant, entre la 3a i la 4a columna (per on s'entra, amb els graons): res d'heura
+                    panells.push([xa, xb, y, yTop]);
+                }
+            });
+            const fw = this.textures.get('cortina_heura').getSourceImage().width, fh = this.textures.get('cortina_heura').getSourceImage().height;
+            panells.forEach(([xa, xb, y, yTop], n) => {
+                const w = xb - xa, top = yTop + 12, h = y - 6 - top;
+                if (w < 4 || h < 20) return;
+                const sx = 250 / fw, sy = h / fh, cw = Math.min(fw, w / sx);                // escala (ample 250 px al joc, alçada ajustada) i ample del tros que es mostra
+                const f0 = Math.max(0, (fw - cw) * [0.5, 0.15, 0.7, 0.3, 0.85][n % 5]);          // d'on comença el tros dins el dibuix
+                this.add.image(xa - f0 * sx, top, 'cortina_heura').setOrigin(0, 0).setScale(sx, sy).setCrop(f0, 0, cw, fh).setAlpha(ALFA_CORT).setDepth(y + 40);
+            });
+        }
+
         // --- Murets sota les columnes (davant i darrere): les aguanten totes i van de la vora de l'escenari (x = 0) fins a la paret de la casa. Es construeixen repetint la textura
         // muret_textura (en trossos d'ample fix), tot seguit des de la vora de l'esquerra. El mur del davant no es talla: davant, entre la 3a i la 4a columna, hi ha un graó
         // que és l'entrada al jardí de la pèrgola (allà el mur no bloqueja el pas, i el tros de mur que hi ha es dibuixa per sota de l'Ineu perquè hi pugi). ---
@@ -162,7 +186,7 @@ class ZonaJardi extends ZonaBase {
         }
 
         // La Prunera Màgica, l'únic arbre: dins el jardí de la pèrgola
-        const PX = 160, PY = 640;
+        const PX = 160, PY = 640, PRUNA_MIDA = 46;                 // PRUNA_MIDA: costat (px) de la icona de la pruna a les branques
         this.posar('arbre', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } }).setTint(0xffd878);   // gran i alta: destaca sobre la pèrgola
         this.add.ellipse(PX, PY - 50, 380, 90, 0xffc850, 0.16).setDepth(-1080);
         this.add.ellipse(PX, PY - 220, 330, 240, 0xffc850, 0.18).setDepth(8000);
@@ -170,7 +194,7 @@ class ZonaJardi extends ZonaBase {
             x: { min: -150, max: 150 }, y: { min: -110, max: 90 }, speed: { min: 4, max: 14 }, lifespan: 1800,
             scale: { start: 0.55, end: 0 }, tint: [0xffd060, 0xfff0b0], frequency: 220, alpha: { start: 0.9, end: 0 }
         }).setDepth(8001);
-        [[-110, -190], [-60, -250], [0, -300], [70, -260], [120, -200], [-140, -140], [40, -170], [-20, -210], [100, -130], [-90, -100]].forEach(([dx, dy]) => (this.fruitsPrunera = this.fruitsPrunera || []).push(this.add.circle(PX + dx, PY + dy, 10, 0xf0b830).setStrokeStyle(2, 0x7a5010).setDepth(PY + 1)));
+        [[-110, -190], [-60, -250], [0, -300], [70, -260], [120, -200], [-140, -140], [40, -170], [-20, -210], [100, -130], [-90, -100]].forEach(([dx, dy], i) => (this.fruitsPrunera = i ? this.fruitsPrunera : []).push(this.add.image(PX + dx, PY + dy, iconaObjecte(this, 'pruna_arbre')).setDisplaySize(PRUNA_MIDA, PRUNA_MIDA).setAngle(((i * 37) % 30) - 15).setDepth(PY + 1)));
         this.interactiu(PX, PY + 40, RADI_GRAN * 1.5, DIALEGS.prunera, { altura: 150, senseMirada: true }); // es pot collir la pruna des de qualsevol costat de l'arbre
 
         // La llosa del passadís cap al soterrani de l'Hostatgeria, entre les columnes i ben amunt perquè les columnes del sud no la tapin gens
@@ -189,15 +213,17 @@ class ZonaJardi extends ZonaBase {
 
         // --- Gespa amb flors: només dins la pèrgola (cap flor fora). Un rectangle clar fa de gespa ben cuidada ---
         this.add.rectangle((COLS[0] + COLS[COLS.length - 1]) / 2, (YB + YF) / 2, COLS[COLS.length - 1] - COLS[0], YF - YB, 0xc4f08c, 0.14).setDepth(-1090);
-        const lliure = (x, y) => Math.hypot(x - PX, (y - PY) * 1.6) > 70 && Math.hypot(x - LX, (y - LY) * 1.6) > 130 && Math.hypot(x - (LX - 134), (y - LY) * 1.6) > 90;
+        const lliure = (x, y) => Math.hypot(x - PX, (y - PY) * 1.6) > 45 && !(Math.abs(x - LX) < TWD / 2 + 14 && Math.abs(y - LY) < THD / 2 + 14);          // només queden sense flors el tronc de la Prunera i la boca de la trapa (abans, tot un cercle gran al voltant de la llosa)
         // Un jardí de debò: moltes flors, de colors diferents, escampades per tota la gespa i en mates més denses a les voreres i al peu de les columnes
         const COLORS_FLORS = [0xffffff, 0xffd6e6, 0xfff2b0, 0xd6e8ff, 0xffb0c8, 0xffcf80, 0xd0b0ff, 0xff9a9a, 0xb0f0d0];
         const flor = (x, y, esc) => { const f = this.posar('flors', x, y, { fonsY: -800, escala: esc }); f.setTint(COLORS_FLORS[Math.floor(rnd() * COLORS_FLORS.length)]); };
-        for (let n = 0, intents = 0; n < 130 && intents < 1500; intents++) {
-            const x = COLS[0] + 20 + rnd() * (COLS[COLS.length - 1] - COLS[0] - 40), y = YB + 20 + rnd() * (YF - YB - 30);
-            if (!lliure(x, y)) continue;
-            flor(x, y, 0.5 + rnd() * 0.5);
-            n++;
+        // Flors per tota la gespa, amb la densitat de sempre: una graella de cel·les de 40 x 34 px amb una flor (de vegades dues) a cada una, a l'atzar dins la cel·la
+        for (let gx = COLS[0] + 14; gx < COLS[COLS.length - 1] - 8; gx += 40) {
+            for (let gy = YB + 30; gy < YF - 4; gy += 34) {
+                const x = gx + rnd() * 40, y = gy + rnd() * 34;
+                if (lliure(x, y)) flor(x, y, 0.5 + rnd() * 0.5);
+                if (rnd() < 0.3) { const x2 = gx + rnd() * 40, y2 = gy + rnd() * 34; if (lliure(x2, y2)) flor(x2, y2, 0.4 + rnd() * 0.4); }
+            }
         }
         COLS.forEach(cx => [YB, YF].forEach(cy => { for (let k = 0; k < 5; k++) { const x = cx + (rnd() - 0.5) * 90, y = cy + 6 + rnd() * 26; if (lliure(x, y)) flor(x, y, 0.45 + rnd() * 0.4); } }));       // mates al peu de les columnes
 
@@ -227,7 +253,7 @@ class ZonaJardi extends ZonaBase {
         if (!fruits.length) { this.agafar(fet, null, 0xffd060); return; }
         const f = fruits.sort((a, b) => Phaser.Math.Distance.Between(a.x, a.y, I.x, I.y) - Phaser.Math.Distance.Between(b.x, b.y, I.x, I.y))[0];
         const x0 = f.x, y0 = f.y, x1 = I.x, y1 = I.y - 70;
-        const o = this.add.circle(x0, y0, 10, 0xf0b830).setStrokeStyle(2, 0x7a5010).setDepth(99000);
+        const S0 = f.scaleX, o = this.add.image(x0, y0, f.texture.key).setScale(S0).setAngle(f.angle).setDepth(99000);
         f.setAlpha(0);
         this.llum(x0, y0, 0xffd060);
         const rama = this.add.particles(x0, y0, 'espurna', { speed: { min: 20, max: 70 }, scale: { start: 0.3, end: 0 }, alpha: { start: 0.9, end: 0 }, tint: [0xffd060, 0xfff0b0], lifespan: 500, quantity: 6, emitting: false }).setDepth(99001);
@@ -235,10 +261,10 @@ class ZonaJardi extends ZonaBase {
         this.ajupir && this.time.delayedCall(450, () => this.ajupir('ineu', null, 300));
         const T = { t: 0 };
         // 1) la pruna es deixa anar i cau una mica; 2) vola en arc fins a les mans de l'Ineu
-        this.tweens.add({ targets: o, y: y0 + 24, scale: 1.4, duration: 260, ease: 'Quad.easeIn', onComplete: () => {
+        this.tweens.add({ targets: o, y: y0 + 24, scale: S0 * 1.4, duration: 260, ease: 'Quad.easeIn', onComplete: () => {
             const xa = o.x, ya = o.y;
             this.tweens.add({ targets: T, t: 1, duration: 760, ease: 'Sine.easeIn',
-                onUpdate: () => { o.x = xa + (x1 - xa) * T.t; o.y = ya + (y1 - ya) * T.t - Math.sin(T.t * Math.PI) * 38; o.setScale(1.4 - 0.4 * T.t); },
+                onUpdate: () => { o.x = xa + (x1 - xa) * T.t; o.y = ya + (y1 - ya) * T.t - Math.sin(T.t * Math.PI) * 38; o.setScale(S0 * (1.4 - 0.4 * T.t)); },
                 onComplete: () => { o.destroy(); this.llum(x1, y1, 0xffd060); this.esperar(300, fet); } });
         } });
         this.time.delayedCall(9000, () => { if (f.active) this.tweens.add({ targets: f, alpha: 1, duration: 900 }); });          // en torna a créixer una

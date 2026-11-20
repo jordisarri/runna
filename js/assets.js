@@ -102,6 +102,7 @@ const CATALEG = [
     ...Array.from({ length: 12 }, (_, k) => ({ key: 'columna_proces_' + k, file: null, amplada: 64, provisional: (c, w) => dibuixarColumnaProcessio(c, w, k) })),
     { key: 'pergola_grao', file: 'assets/objectes/pergola_grao.webp', amplada: 144, cru: true },          // llosa de pedra que fa de graó davant del mur de la pèrgola del jardí de l'Hostatgeria
     { key: 'muret_textura', file: 'assets/objectes/muret_textura.webp', amplada: 183, cru: true },          // textura del mur baix de pedra amb heura (es repeteix; pèrgola del jardí de l'Hostatgeria)
+    { key: 'cortina_heura', file: 'assets/objectes/cortina_heura.webp', amplada: 250, cru: true },          // cortina d'heura que penja entre les columnes de la pèrgola del jardí (art/objectes/cortina_heura.png; eines/treure_fons.py)
     { key: 'columna_heura', file: 'assets/objectes/columna_heura.webp', amplada: 88, cru: true },          // columna de pedres irregulars amb heura (pèrgola del jardí de l'Hostatgeria); es posa girada (mirall) alternant
     { key: 'columna',   file: null,   amplada: 58,  provisional: (c, w) => dibuixarColumna(c, w) },
     { key: 'roure',     file: 'assets/natura/roure.webp',     amplada: 420, provisional: (c, w) => dibuixarRoure(c, w) },
@@ -238,7 +239,7 @@ const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'nor
 // (eines/fer_ineu_v2.py). Esquerra i dreta són walk_elev_/idle_elev_ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
 // Les mides dels idles s'igualen a les dels caminars amb eines/igualar_idle_ineu.py. Els fulls i els prototips anteriors són a art/ineu/arxiu/.
 const rutaIneu = (dir, idle) => {
-    const v = '?v=2611200940';
+    const v = '?v=2611201345';
     if (dir === 'left' || dir === 'right') return `assets/ineu/${idle ? 'idle/idle_elev_' : 'caminar/walk_elev_'}${dir}.webp${v}`;
     return `assets/ineu/${idle ? 'idle/idle_' : 'caminar/'}${dir}.webp${v}`;
 };

@@ -348,3 +348,10 @@ A magical rune circle engraved into a stone floor, seen from a high three-quarte
 
 *Notes:* els dos graons han de ser baixos (cada un ~12 px d'alt al joc) i la part de dalt del de darrere ha de quedar a la mateixa alçada visual que la pedra de baix del muret perquè s'hi enganxi; si surt un graó més alt que l'altre, millor el de darrere.
 
+## Cortina d'heura entre les columnes de la pèrgola (jardí de l'Hostatgeria; `art/objectes/cortina_heura.png` → `assets/objectes/cortina_heura.webp` amb `eines/treure_fons.py`; es col·loca a `js/zones/jardi.js`)
+
+*Entrada:* adjunta `art/objectes/columna_heura.webp` i `art/objectes/muret_textura.webp` com a imatges de referència (mateixos verds, mateix contorn). *Mida de sortida:* aprox. 1:1,05 d'ample per alt (p. ex. 1000 × 1050); al joc fa ~180 × 167 px. Calen 2 o 3 variants perquè no es repeteixi.
+
+*Prompt (anglès):* Using the attached images as the exact style reference (same ivy leaves, same fresh greens, same thick dark outline, same flat cartoon shading), draw a hanging curtain of dense ivy, front view, to hang between two stone pillars of a garden pergola. A thick wall of overlapping ivy leaves on many vertical vines hanging straight down from the top edge, in several layers: dark green leaves at the back, mid greens, and a few light yellow-green leaves on top; every leaf with a bold dark outline and a light vein. Almost no gaps in the middle, but the top edge, the two side edges and the bottom edge are ragged, with single vines and loose leaves hanging at different lengths so that the shape looks natural and can sit in front of a stone wall. No pillars, no stone, no wall, no ground, no shadow, no text. Perfectly plain white background (or transparent), nothing else in the image.
+
+*Notes:* al joc es posa a mig camí entre dues columnes, des del capitell fins al muret, amb una opacitat del 60-80 % perquè es vegi l'Ineu a través; per això les vores laterals han de ser irregulars (les columnes les tapen una mica) i no hi ha d'haver fons.

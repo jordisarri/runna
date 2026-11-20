@@ -200,14 +200,6 @@ const ICONES_OBJECTES = {
         ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(26, 34); ctx.lineTo(48, 40); ctx.lineTo(70, 34); ctx.moveTo(48, 40); ctx.lineTo(48, 84); ctx.stroke();
         ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(38, 30, 4, 0, Math.PI * 2); ctx.fill();
     },
-    pruna: ctx => {
-        ctx.lineWidth = 3;
-        const g = ctx.createRadialGradient(40, 44, 4, 48, 54, 34); g.addColorStop(0, '#fff2a0'); g.addColorStop(0.5, '#f0c040'); g.addColorStop(1, '#b8801a');
-        ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(48, 56, 28, 30, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(48, 28); ctx.quadraticCurveTo(46, 50, 50, 84); ctx.stroke();
-        ctx.lineWidth = 3; ctx.strokeStyle = '#5a3a1a'; ctx.beginPath(); ctx.moveTo(48, 28); ctx.lineTo(52, 12); ctx.stroke();
-        ctx.strokeStyle = CONTORN; ctx.fillStyle = '#5a9a32'; ctx.beginPath(); ctx.ellipse(64, 18, 13, 6, -0.4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    },
     herba_sj: ctx => {                                          // herba de Sant Joan: tiges verdes amb flors petites i grogues
         ctx.lineWidth = 3; ctx.strokeStyle = '#2f6a22';
         [[48, 84, 48, 30], [48, 84, 30, 36], [48, 84, 66, 38]].forEach(([x0, y0, x1, y1]) => { ctx.beginPath(); ctx.moveTo(x0, y0); ctx.quadraticCurveTo((x0 + x1) / 2 + (x1 - x0) * 0.2, (y0 + y1) / 2, x1, y1); ctx.stroke(); });
@@ -539,7 +531,49 @@ function fulla96(ctx, x, y, ang, llarg, ample, c1, c2) {                  // una
     ctx.restore();
 }
 
+// La pruna daurada: fruit d'or amb el solc al mig, rosada taronja a baix, pruïna clara a dalt a l'esquerra, rebot de llum i una espurna màgica.
+// `sola`: només el fruit, sense fulla, ombra ni espurna (per a les branques de l'arbre, on es veu petita).
+function dibuixarPruna(ctx, sola) {
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    const cos = () => {                                                  // un ou ample, amb la petita escotadura del solc a dalt (on surt el pecíol)
+        ctx.beginPath(); ctx.moveTo(48, 30);
+        ctx.bezierCurveTo(40, 25, 22, 30, 20, 52); ctx.bezierCurveTo(18, 74, 34, 86, 48, 86);
+        ctx.bezierCurveTo(62, 86, 78, 74, 76, 52); ctx.bezierCurveTo(74, 30, 56, 25, 48, 30); ctx.closePath();
+    };
+    if (!sola) { ctx.fillStyle = 'rgba(0,0,0,0.26)'; ctx.beginPath(); ctx.ellipse(48, 87, 27, 5, 0, 0, Math.PI * 2); ctx.fill(); }
+    // el pecíol i la fulla (darrere el fruit)
+    if (!sola) {
+        ctx.strokeStyle = FOSC_ICONA; ctx.lineWidth = 5.4; ctx.beginPath(); ctx.moveTo(48, 32); ctx.quadraticCurveTo(48, 20, 55, 11); ctx.stroke();
+        ctx.strokeStyle = '#7a5226'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(48, 32); ctx.quadraticCurveTo(48, 20, 55, 11); ctx.stroke();
+        ctx.fillStyle = '#5aa83a'; ctx.strokeStyle = FOSC_ICONA; ctx.lineWidth = 2.6;
+        ctx.beginPath(); ctx.moveTo(53, 15); ctx.bezierCurveTo(60, 4, 78, 6, 84, 14); ctx.bezierCurveTo(76, 24, 60, 24, 53, 15); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = '#2e6a1c'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(55, 15); ctx.quadraticCurveTo(68, 13, 81, 14); ctx.stroke();
+        ctx.fillStyle = 'rgba(190,235,120,0.55)'; ctx.beginPath(); ctx.ellipse(66, 12, 7, 2.2, 0.1, 0, Math.PI * 2); ctx.fill();
+    }
+    // el fruit: degradat d'or, de clar a dalt-esquerra a fosc a baix-dreta
+    const g = ctx.createRadialGradient(36, 44, 3, 50, 58, 42); g.addColorStop(0, '#fff3a6'); g.addColorStop(0.35, '#f7cf4c'); g.addColorStop(0.75, '#dc9a2a'); g.addColorStop(1, '#a8601a');
+    cos(); ctx.fillStyle = g; ctx.fill();
+    ctx.save(); cos(); ctx.clip();
+    const rosa = ctx.createRadialGradient(68, 72, 2, 66, 70, 30); rosa.addColorStop(0, 'rgba(232,110,30,0.55)'); rosa.addColorStop(1, 'rgba(232,110,30,0)'); ctx.fillStyle = rosa; ctx.fillRect(0, 0, 96, 96);
+    ctx.strokeStyle = 'rgba(120,62,10,0.6)'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(48, 30); ctx.bezierCurveTo(44, 46, 45, 66, 49, 86); ctx.stroke();       // el solc
+    ctx.strokeStyle = 'rgba(255,246,190,0.55)'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(51, 32); ctx.bezierCurveTo(47, 48, 48, 66, 52, 84); ctx.stroke();
+    const pruina = ctx.createRadialGradient(34, 42, 1, 34, 44, 20); pruina.addColorStop(0, 'rgba(255,255,236,0.55)'); pruina.addColorStop(1, 'rgba(255,255,236,0)'); ctx.fillStyle = pruina; ctx.fillRect(0, 0, 96, 96);
+    ctx.fillStyle = 'rgba(70,30,4,0.22)'; ctx.beginPath(); ctx.ellipse(60, 84, 24, 6, -0.3, 0, Math.PI * 2); ctx.fill();         // ombra de baix
+    ctx.restore();
+    cos(); ctx.lineWidth = 3; ctx.strokeStyle = FOSC_ICONA; ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.beginPath(); ctx.ellipse(34, 45, 5.5, 3.2, -0.7, 0, Math.PI * 2); ctx.fill();    // el rebot de llum
+    ctx.beginPath(); ctx.arc(42, 38, 1.6, 0, Math.PI * 2); ctx.fill();
+    if (!sola) {                                                          // una espurna màgica de quatre puntes
+        ctx.fillStyle = '#fffbe0'; ctx.strokeStyle = '#e8b830'; ctx.lineWidth = 1.2; ctx.beginPath();
+        [[82, 38], [85, 45], [92, 48], [85, 51], [82, 58], [79, 51], [72, 48], [79, 45]].forEach(([x, y], i) => i ? ctx.lineTo(x - 0, y - 12 + 12) : ctx.moveTo(x, y)); ctx.closePath(); ctx.fill(); ctx.stroke();
+    }
+}
+
 const ICONES_REFETES = {
+    // La pruna daurada de la Prunera Màgica: fruit rodó amb el solc al mig, pell d'or amb una rosada taronja a baix, la pruïna (la pols blanquinosa de la pell) i un llumeneta d'esplendor.
+    pruna: ctx => dibuixarPruna(ctx, false),
+    pruna_arbre: ctx => dibuixarPruna(ctx, true),
+
     // Un pa rodó de pastor: crosta daurada amb degradat, quatre talls clars, farina per sobre i dues espigues de blat al darrere
     pa_pastor: ctx => {
         ctx.lineCap = 'round'; ctx.lineJoin = 'round';
