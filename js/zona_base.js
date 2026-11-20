@@ -2786,7 +2786,8 @@ class ZonaBase extends Phaser.Scene {
         const esc = (this.textures.get(key).customData || {}).escala || 0.4;
         I.setVisible(false);
         if (this.fantasma) this.fantasma.setVisible(false);
-        const img = this.add.image(I.x, I.y + 2, key).setOrigin(0.5, 1).setScale(esc).setDepth(I.y + 1);
+        // Més ample (no més alt): l'amplada s'amplia perquè el cap iguali el de l'Ineu dret (de cara x1,06, d'esquena x1,12); l'alçada és la de sempre
+        const img = this.add.image(I.x, I.y + 2, key).setOrigin(0.5, 1).setScale(esc * (davant ? 1.06 : 1.12), esc).setDepth(I.y + 1);
         const d = Estat.dades, ui = this.ui(), total = d.corsMax * 2;
         // Els grans es van omplint d'un en un (cada pas completa un gra: de buit a mig o de mig a ple, i el següent), amb un so més agut a cada gra
         const NOTES = [523, 587, 659, 698, 784, 880, 988];
