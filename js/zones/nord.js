@@ -1389,7 +1389,7 @@ class ZonaBosc extends ZonaBase {
 
         // Font del Bisbe (missió de la font)
         this.aiguaFont = null; this.transFont = false;          // (l'escena es reaprofita: res de la visita anterior)
-        const fontSJ = this.fontImg = this.posar(Estat.flag('fontNeta') ? 'font_sj_neta' : 'font_sj', 910, 610, { col: { w: 150, h: 50 } });
+        const fontSJ = this.fontImg = this.posar(Estat.flag('fontNeta') ? 'font_sj_neta' : 'font_sj', 910, 610, { col: { w: 150, h: 50 }, opac: true });          // opaca: la silueta de l'Ineu no es veu a través quan hi passa darrere
         const puntFont = this.interactiu(910, 625, RADI_GRAN * 1.5, DIALEGS.fontSJ, { altura: 170 });
         this.brilloImatge(fontSJ, { punt: puntFont, actiu: () => !Estat.flag('fontNeta') });          // la font brilla fins que l'aigua torna a ser clara
 

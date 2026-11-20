@@ -329,7 +329,8 @@ class ZonaBase extends Phaser.Scene {
         } });
 
         if (this.enEntrar) this.enEntrar();
-        if (this.dadesEntrada.entrada && !this.dadesEntrada.restaurar && !Estat.caigut && !this.entradaPropia) this.pasEntrada(this.posEntrada);
+        if (this.dadesEntrada.entrada === 'portal' && this.alzinaPorta && !this.dadesEntrada.restaurar && !Estat.caigut) this.alzinaSurt();          // (arriba pel portal de l'Alzina Buida: en surt caminant del forat del tronc)
+        else if (this.dadesEntrada.entrada && !this.dadesEntrada.restaurar && !Estat.caigut && !this.entradaPropia) this.pasEntrada(this.posEntrada);
         const caigut = Estat.caigut;
         if (Estat.caigut) {
             Estat.caigut = false;
@@ -1867,7 +1868,8 @@ class ZonaBase extends Phaser.Scene {
             // Idle en alta resolució (cel·les de 288 en lloc de 192): el sprite s'encongeix per escalaIdleHD perquè faci la mateixa alçada, i la caixa de col·lisió (en píxels de textura)
             // es fa més gran en la mateixa proporció perquè en unitats de joc sigui la mateixa que caminant.
             const hd = /^ineu_idle_/.test(I.texture.key) && S.idleHD.dirs.includes(I.texture.key.slice(10)) ? S.escalaIdleHD : 1;
-            if (Math.abs(I.scaleX - escBase * hd) > 1e-5) I.setScale(escBase * hd);
+            const kf = this.escalaIneuK || 1;          // (escala forçada: l'Ineu que entra/surt de l'Alzina Buida es fa petit a mesura que s'endinsa)
+            if (Math.abs(I.scaleX - escBase * hd * kf) > 1e-5) I.setScale(escBase * hd * kf);
             if (this.fantasma && this.fantasma.active && Math.abs(this.fantasma.scaleX - I.scaleX) > 1e-5) this.fantasma.setScale(I.scaleX);
             if (hd !== (I.hdAnt || 1)) { b.setSize(72 * S.k / hd, 30 * S.k / hd, false); I.hdAnt = hd; }
             // Elevació (this.elevacioIneu, en píxels del joc): l'Ineu es dibuixa més amunt (puja a un mur, a un graó...) sense moure el cos de col·lisió: l'origen del sprite puja i el
@@ -3128,8 +3130,66 @@ class ZonaBase extends Phaser.Scene {
         if (!P || P.obert) return;
         P.obert = true;
         this.obstacles.remove(P.bloc, true, true);
-        this.forcsPorta.push({ x0: P.AX - 23, x1: P.AX + 23, t: P.AY - 95, b: P.AY + 22, z: P.AY + 1 });          // dins el passadís l'Ineu es dibuixa davant del tronc, i s'enfosqueix
-        Object.assign(this.sortidaEscala(P.AX - 19, P.AY - 95, 38, 50, P.desti, P.entrada, 0), { nord: true, yFons: P.AY - 84 });
+        // L'entrada és el peu del passadís entre les arrels (la boca): només tocar-la, l'Ineu entra tot sol (alzinaEntra). Abans calia pujar pel tronc fins al forat.
+        const cx = P.AX - 15;
+        Object.assign(this.sortidaEscala(cx - 20, P.AY - 10, 40, 24, P.desti, P.entrada, 0), { nord: true, alzina: true, yFons: P.AY - 100 });
+    }
+
+    // L'Ineu entra a l'Alzina Buida caminant tot sol: puja pel passadís entre les arrels cap al forat del tronc, es fa més petit i més fosc a mesura que s'hi endinsa (com si
+    // s'allunyés de la càmera, cap a dins del tronc) i s'esvaeix just al fons del forat; llavors canvia de zona. A l'altra banda en surt caminant (alzinaSurt).
+    alzinaEntra(s) {
+        const P = this.alzinaPorta, I = this.ineu, cx = P.AX - 15, yFi = P.AY - 100;
+        this.canviant = true;
+        I.body.setVelocity(0); I.body.enable = false;
+        this.escalaIneuK = 1;
+        this.posarDireccio('amunt', true);
+        this.ombraIneu.setVisible(false);
+        if (this.fantasma) this.fantasma.setVisible(false);
+        I.setDepth(P.AY + 3);
+        const x0 = I.x, y0 = I.y;
+        let passAnt = -1;
+        this.tweens.addCounter({ from: 0, to: 1, duration: 2000, onUpdate: tw => {
+            const t = tw.getValue(), e = Phaser.Math.Easing.Sine.InOut(t);
+            I.setPosition(Phaser.Math.Linear(x0, cx, Math.min(1, t * 3)), Phaser.Math.Linear(y0, yFi, e));
+            const f = Math.max(0, (I.y - yFi) / Math.max(1, y0 - yFi));                 // 1 a l'entrada del passadís, 0 al fons del forat
+            this.escalaIneuK = 0.5 + 0.5 * f;
+            const c = Math.round(255 * (0.18 + 0.82 * f)); I.setTint(Phaser.Display.Color.GetColor(c, c, c));
+            I.setAlpha(Math.min(1, f * 4 + 0.2));
+            const pas = Math.floor(t * 8); if (pas !== passAnt) { passAnt = pas; if (Sfx.pas) Sfx.pas(); }
+        } });
+        this.time.delayedCall(2100, () => { this.canviant = false; this.escalaIneuK = 1; this.canviarZona(s.desti, s.entrada); });
+    }
+
+    // Surt de l'Alzina Buida (a l'altra banda del portal): apareix, petit i fosc, al fons del forat del tronc i en surt caminant tot sol cap a la càmera, creixent i il·luminant-se,
+    // fins al peu del passadís; llavors el jugador en recupera el control.
+    alzinaSurt(fet) {
+        const P = this.alzinaPorta, I = this.ineu, cx = P.AX - 15, yIni = P.AY - 100, yFi = P.AY + 46;
+        this.canviant = true;
+        I.body.enable = false; I.body.setVelocity(0);
+        this.escalaIneuK = 0.5;
+        this.posarDireccio('avall', true);
+        this.ombraIneu.setVisible(false);
+        if (this.fantasma) this.fantasma.setVisible(false);
+        I.setPosition(cx, yIni).setDepth(P.AY + 3).setAlpha(0);
+        I.setTint(Phaser.Display.Color.GetColor(46, 46, 46));
+        this.sortides.forEach(q => { if (q.alzina) q.desarmada = true; });
+        let passAnt = -1;
+        this.time.delayedCall(350, () => this.tweens.addCounter({ from: 0, to: 1, duration: 2000, onUpdate: tw => {
+            const t = tw.getValue(), e = Phaser.Math.Easing.Sine.InOut(t);
+            I.setPosition(cx, Phaser.Math.Linear(yIni, yFi, e));
+            const f = Math.min(1, (I.y - yIni) / (P.AY - yIni));                        // 0 al forat, 1 al peu del passadís
+            this.escalaIneuK = 0.5 + 0.5 * f;
+            const c = Math.round(255 * (0.18 + 0.82 * f)); I.setTint(Phaser.Display.Color.GetColor(c, c, c));
+            I.setAlpha(Math.min(1, t * 4));
+            const pas = Math.floor(t * 8); if (pas !== passAnt) { passAnt = pas; if (Sfx.pas) Sfx.pas(); }
+        }, onComplete: () => {
+            this.escalaIneuK = 1; I.clearTint(); I.setAlpha(1);
+            I.body.enable = true; I.body.reset(cx, yFi);
+            this.ombraIneu.setVisible(true); if (this.fantasma) this.fantasma.setVisible(true);
+            this.posarDireccio('avall', false);
+            this.canviant = false;
+            if (fet) fet();
+        } }));
     }
 
     // L'Ineu baixa l'escala: camina d'esquena cap al mig de l'escala i s'enfonsa darrere la vora de davant del forat,
@@ -3137,6 +3197,7 @@ class ZonaBase extends Phaser.Scene {
     baixarEscala(s) {
         if (this.canviant) return;
         this.canviant = true;
+        if (s.alzina) { this.canviant = false; this.alzinaEntra(s); return; }
         if (s.nord) { this.baixarEscalaNord(s); return; }
         const I = this.ineu, alt = I.displayHeight, y0 = I.y, y1 = s.baixar + alt * 0.95;
         I.body.setVelocity(0); I.body.enable = false;
