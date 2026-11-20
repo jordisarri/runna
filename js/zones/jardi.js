@@ -226,11 +226,12 @@ class ZonaJardi extends ZonaBase {
         for (let gx = COLS[0] + 14; gx < COLS[COLS.length - 1] - 8; gx += 40) {
             for (let gy = YB + 30; gy < YF - 4; gy += 34) {
                 const x = gx + rnd() * 40, y = gy + rnd() * 34;
-                if (lliure(x, y)) flor(x, y, 0.5 + rnd() * 0.5);
-                if (rnd() < 0.3) { const x2 = gx + rnd() * 40, y2 = gy + rnd() * 34; if (lliure(x2, y2)) flor(x2, y2, 0.4 + rnd() * 0.4); }
+                const clar = x > COLS[1] - 24 && x < COLS[2] + 24;                // entre la 2a i la 3a columna (la que té el davant sense heura): menys flors, que no quedi atapeït
+                if (lliure(x, y) && (!clar || rnd() < 0.3)) flor(x, y, 0.5 + rnd() * 0.5);
+                if (!clar && rnd() < 0.3) { const x2 = gx + rnd() * 40, y2 = gy + rnd() * 34; if (lliure(x2, y2)) flor(x2, y2, 0.4 + rnd() * 0.4); }
             }
         }
-        COLS.forEach(cx => [YB, YF].forEach(cy => { for (let k = 0; k < 5; k++) { const x = cx + (rnd() - 0.5) * 90, y = cy + 6 + rnd() * 26; if (lliure(x, y)) flor(x, y, 0.45 + rnd() * 0.4); } }));       // mates al peu de les columnes
+        COLS.forEach(cx => [YB, YF].forEach(cy => { for (let k = 0; k < (cx === COLS[1] || cx === COLS[2] ? 2 : 5); k++) { const x = cx + (rnd() - 0.5) * 90, y = cy + 6 + rnd() * 26; if (lliure(x, y)) flor(x, y, 0.45 + rnd() * 0.4); } }));       // mates al peu de les columnes
         if (llistaFlors.length) {
             const K = 2;                                                           // resolució de la textura (el doble de la del món, perquè no es vegi borrosa en apropar la càmera)
             let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
