@@ -90,8 +90,11 @@ class ZonaJardi extends ZonaBase {
                 const g = this.add.image(x0, y, 'nuvol').setOrigin(0.5, 0.5).setDepth(-1045).setAlpha(alfa).setFlipX(true);
                 g.setScale(ample / g.width);
                 const FI = 1800 + ample, INICI = -ample;
-                const volta = () => { g.x = INICI; this.tweens.add({ targets: g, x: FI, duration: (FI - INICI) / vel * 1000, ease: 'Linear', repeat: -1 }); };
-                this.tweens.add({ targets: g, x: FI, duration: (FI - x0) / vel * 1000, ease: 'Linear', onComplete: volta });
+                // Passa d'esquerra a dreta; quan l'edifici de l'Hostatgeria l'amaga del tot, torna a entrar de seguida per l'esquerra (sense esperar a sortir per l'extrem)
+                const anar = x => { g.x = x; const tw = this.tweens.add({ targets: g, x: FI, duration: (FI - x) / vel * 1000, ease: 'Linear',
+                    onUpdate: () => { if (casa.getBounds().contains(g.getBounds().left, g.getBounds().top) && casa.getBounds().contains(g.getBounds().right, g.getBounds().bottom)) { tw.stop(); anar(INICI); } },
+                    onComplete: () => anar(INICI) }); };
+                anar(x0);
                 return g;
             };
             [[250, 150, 320, 12, 0.95]].forEach(([x, y, w, v, a]) => nuvol(x, y, w, v, a));
@@ -242,16 +245,14 @@ class ZonaJardi extends ZonaBase {
             f.setTint(COLORS_FLORS[Math.floor(rnd() * COLORS_FLORS.length)]);
             llistaFlors.push(f);
         };
-        // Flors per tota la gespa, amb la densitat de sempre: una graella de cel·les de 40 x 34 px amb una flor (de vegades dues) a cada una, a l'atzar dins la cel·la
-        for (let gx = COLS[0] + 14; gx < COLS[COLS.length - 1] - 8; gx += 40) {
-            for (let gy = YB + 30; gy < YF - 4; gy += 34) {
-                const x = gx + rnd() * 40, y = gy + rnd() * 34;
-                const clar = x > COLS[1] - 24 && x < COLS[2] + 24;                // entre la 2a i la 3a columna (la que té el davant sense heura): menys flors, que no quedi atapeït
-                if (lliure(x, y) && (!clar || rnd() < 0.3)) flor(x, y, 0.5 + rnd() * 0.5);
-                if (!clar && rnd() < 0.3) { const x2 = gx + rnd() * 40, y2 = gy + rnd() * 34; if (lliure(x2, y2)) flor(x2, y2, 0.4 + rnd() * 0.4); }
+        // Poques flors, només a tres llocs: al voltant de la Prunera, a l'entrada (els graons) i a la llosa. Al mig del jardí, cap. Cada zona és una el·lipse [x, y, radi x, radi y, quantes].
+        [[PX, PY + 10, 140, 60, 16], [(COLS[2] + COLS[3]) / 2, YF + 6, 100, 34, 9], [LX, LY + 6, 90, 44, 9]].forEach(([zx, zy, rx, ry, n]) => {
+            for (let k = 0; k < n; k++) {
+                const a = rnd() * Math.PI * 2, r = Math.sqrt(rnd());
+                const x = zx + Math.cos(a) * rx * r, y = zy + Math.sin(a) * ry * r;
+                if (lliure(x, y)) flor(x, y, 0.5 + rnd() * 0.5);
             }
-        }
-        COLS.forEach(cx => [YB, YF].forEach(cy => { for (let k = 0; k < (cx === COLS[1] || cx === COLS[2] ? 2 : 5); k++) { const x = cx + (rnd() - 0.5) * 90, y = cy + 6 + rnd() * 26; if (lliure(x, y)) flor(x, y, 0.45 + rnd() * 0.4); } }));       // mates al peu de les columnes
+        });
         if (llistaFlors.length) {
             const K = 2;                                                           // resolució de la textura (el doble de la del món, perquè no es vegi borrosa en apropar la càmera)
             let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
