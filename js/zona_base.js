@@ -2304,8 +2304,9 @@ class ZonaBase extends Phaser.Scene {
         if ((this.forcsPorta || []).some(q => i.x > q.x0 && i.x < q.x1 && i.y > q.t && i.y < q.b && !(q.bloq && q.bloq()))) f.setAlpha(0);          // dins d'una porta: el marc el tapa de debò
         // Els personatges no es transparenten com els arbres: si un que és davant de l'Ineu el tapa, la silueta s'amaga on hi ha el personatge
         const ib = i.getBounds();
+        const ibc = new Phaser.Geom.Rectangle(ib.centerX - ib.width * 0.2, ib.y, ib.width * 0.4, ib.height);          // només el cos (el sprite té marge als costats: un objecte davant que només en toca el marge no l'ha de tapar)
         // Un objecte opac (orgue, altar, bancs...) davant l'Ineu amaga del tot la silueta, encara que també hi hagi un personatge davant (només es pot emmascarar amb un objecte)
-        if ((this.opacs || []).some(n => n && n.active && n.visible && n.depth > i.depth && Phaser.Geom.Intersects.RectangleToRectangle(n.getBounds(), ib))) f.setAlpha(0);
+        if ((this.opacs || []).some(n => n && n.active && n.visible && n.depth > i.depth && Phaser.Geom.Intersects.RectangleToRectangle(n.getBounds(), ibc))) f.setAlpha(0);
         const enem = (this.enemics || []).filter(e => !e.mort && e.spr).map(e => e.spr);          // un enemic davant l'Ineu el tapa de debò: la silueta no es veu a través seu
         let davant = Object.values(this.npcs || {}).concat(this.opacs || [], enem).find(n => n && n.active && n.visible && n.depth > i.depth
             && Phaser.Geom.Intersects.RectangleToRectangle(n.getBounds(), ib));

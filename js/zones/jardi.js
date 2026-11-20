@@ -188,8 +188,6 @@ class ZonaJardi extends ZonaBase {
         // La Prunera Màgica, l'únic arbre: dins el jardí de la pèrgola
         const PX = 160, PY = 640, PRUNA_MIDA = 46;                 // PRUNA_MIDA: costat (px) de la icona de la pruna a les branques
         this.posar('arbre', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } }).setTint(0xffd878);   // gran i alta: destaca sobre la pèrgola
-        this.add.ellipse(PX, PY - 50, 380, 90, 0xffc850, 0.16).setDepth(-1080);
-        this.add.ellipse(PX, PY - 220, 330, 240, 0xffc850, 0.18).setDepth(8000);
         this.add.particles(PX, PY - 220, 'espurna', {
             x: { min: -150, max: 150 }, y: { min: -110, max: 90 }, speed: { min: 4, max: 14 }, lifespan: 1800,
             scale: { start: 0.55, end: 0 }, tint: [0xffd060, 0xfff0b0], frequency: 220, alpha: { start: 0.9, end: 0 }
@@ -339,12 +337,17 @@ class ZonaJardi extends ZonaBase {
         this.posarTrapaEscala({ x0, x1: x0 + w, y0, yb: y0 + h, desti: 'ZonaSoterraniHost', entrada: 'entrada' });          // com a la cripta del Raïm
     }
 
-    // El cercle de runes de la llosa quan es desperta amb Runna (el mateix dibuix que s'encén a la seva obertura, obrirLlosa): batega suaument, amb una mica de llum i espurnes
+    // El cercle de runes de la llosa quan es desperta amb Runna (el mateix dibuix que s'encén a la seva obertura, obrirLlosa): batega suaument, amb una mica de llum i espurnes.
+    // Per no pesar: el cercle es dibuixa UNA sola vegada en una textura (abans, un Graphics que es retraçava a cada fotograma mentre batega)
     posarBrillLlosa(LX, LY) {
-        const g = this.add.graphics({ x: LX, y: LY }).setDepth(-690).setScale(1, 0.5);          // (en perspectiva: el cercle, aplanat com la llosa)
-        g.lineStyle(2.5, 0xbfe8ff, 1).strokeCircle(0, 0, 44).strokeCircle(0, 0, 28);
-        for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; g.lineBetween(Math.cos(a) * 28, Math.sin(a) * 28, Math.cos(a) * 44, Math.sin(a) * 44); }
-        g.fillStyle(0xbfe8ff, 0.18).fillCircle(0, 0, 44);
+        if (!this.textures.exists('runes_llosa')) {
+            const g0 = this.make.graphics({ add: false }), C = 48;
+            g0.lineStyle(2.5, 0xbfe8ff, 1).strokeCircle(C, C, 44).strokeCircle(C, C, 28);
+            for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; g0.lineBetween(C + Math.cos(a) * 28, C + Math.sin(a) * 28, C + Math.cos(a) * 44, C + Math.sin(a) * 44); }
+            g0.fillStyle(0xbfe8ff, 0.18).fillCircle(C, C, 44);
+            g0.generateTexture('runes_llosa', 96, 96); g0.destroy();
+        }
+        const g = this.add.image(LX, LY, 'runes_llosa').setDepth(-690).setScale(1, 0.5);          // (en perspectiva: el cercle, aplanat com la llosa)
         const llum = this.add.ellipse(LX, LY + 2, 160, 70, 0xbfe8ff, 0.2).setBlendMode(Phaser.BlendModes.ADD).setDepth(-689);
         const espurnes = this.add.particles(LX, LY, 'espurna', {
             x: { min: -30, max: 30 }, y: { min: -10, max: 10 }, speedY: { min: -40, max: -12 }, lifespan: 1500,
