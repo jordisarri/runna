@@ -54,6 +54,20 @@ class ZonaTorre extends Phaser.Scene {
         this.ombra = this.add.image(this.cx, T.peuY, 'ombra').setScale(0.42 * T.escalaIneu).setDepth(4);
         this.ineu = this.add.sprite(this.cx, T.peuY, 'ineu_right', quietIneu()).setOrigin(0.5, S.peus / S.alt).setScale(S.alcada / (S.alt * S.k) * T.escalaIneu).setDepth(5);
         if (this.anims.exists('aturat_right')) this.ineu.anims.play('aturat_right', true);
+        // L'idle és d'alta resolució (cel·les de 288 en lloc de 192): amb la mateixa escala que caminant l'Ineu quedava 1,5 vegades més gran. Com a ZonaBase, el sprite s'encongeix
+        // per escalaIdleHD mentre mostra un full d'idle (a cada fotograma, també just després de canviar de full).
+        const escTorre = S.alcada / (S.alt * S.k) * T.escalaIneu;
+        const ajustaIneu = () => {
+            const I = this.ineu;
+            if (!I || !I.active) return;
+            const hd = /^ineu_idle_/.test(I.texture.key) && S.idleHD.dirs.includes(I.texture.key.slice(10)) ? S.escalaIdleHD : 1;
+            if (Math.abs(I.scaleX - escTorre * hd) > 1e-5) I.setScale(escTorre * hd);
+        };
+        const preIneuTorre = this.ineu.preUpdate.bind(this.ineu);
+        this.ineu.preUpdate = (t, d) => { preIneuTorre(t, d); ajustaIneu(); };
+        this.events.on('postupdate', ajustaIneu);
+        this.events.once('shutdown', () => this.events.off('postupdate', ajustaIneu));
+        ajustaIneu();
         this.dirVista = 1;
 
         // Pols en suspensió, a la llum de les finestres
