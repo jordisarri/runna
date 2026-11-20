@@ -944,7 +944,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1918)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1925)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1706,7 +1706,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[522] Ineu:** Una llosa de pedra amb una creu gravada, ben encaixada a terra. No es mou ni un pam, però s'ha de poder obrir d'alguna manera. Potser el senyor de la pèrgola, l'Isílder, ens pot ajudar.
 
-### construir  <sub>(js/zones/jardi.js:244)</sub>
+### construir  <sub>(js/zones/jardi.js:260)</sub>
 
 **[523] Cartell:** L'Hostatgeria / → La Taverna / ← L'Era
 
@@ -1860,11 +1860,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: té els grans del rosari buits (no té la vida plena)*
 
-**[700] Eve:** Per cert, tens mala cara. Vols un got de llet calenta? Encara en queda, de la vaca de la Càren.
+**[700] Eve:** Per cert, tens mala cara. Vols un got de llet calenta?
 
 *Si: encara no té els grans del rosari buits (no té la vida plena)*
 
-**[701] Eve:** Per cert, vols un got de llet calenta? Encara en queda, de la vaca de la Càren.
+**[701] Eve:** Per cert, vols un got de llet calenta?
 
 *Si: (depèn d'un càlcul del joc) ; té els grans del rosari buits (no té la vida plena)*
 
@@ -1876,7 +1876,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Altrament (per defecte):*
 
-**[704] Eve:** Com vulguis. Aquí en tens quan en vulguis.
+**[704] Eve:** Com vulguis.
 
 ### cartellGirgoles  <sub>(js/dialegs.js:430)</sub>
 
@@ -2146,7 +2146,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2174)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2181)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 

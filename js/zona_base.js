@@ -1221,6 +1221,29 @@ class ZonaBase extends Phaser.Scene {
         this.tweens.add({ targets: this.ineu, y: this.ineu.y - 10, yoyo: true, duration: 200 });
         this.llum(this.ineu.x, this.ineu.y - 60, color, () => this.esperar(200, fet));
     }
+    // Beure un got de llet: l'Ineu es fa de perfil i beu (full AutoSprite de perfil mirant a la dreta); si `cap` (qui li ha donat el got) és a l'esquerra, el full es gira com un mirall
+    // perquè l'Ineu li doni sempre la cara. Sense el full, es fa la llum de sempre.
+    beureLlet(fet, cap) {
+        const I = this.ineu;
+        if (!this.textures.exists('ineu_beu_llet') || !I || !I.active) { this.beure(fet, 0xfff4dc); return; }
+        if (!this.anims.exists('beu_llet')) this.anims.create({ key: 'beu_llet', frames: this.anims.generateFrameNumbers('ineu_beu_llet', { start: 0, end: 15 }), frameRate: 9 });
+        const ESCALA = 0.40, ESCALA_X = 0.46, PEUS = 413 / 512, CENTRE = 0.499;          // alçada igual que l'idle de l'Ineu (cel·la de 512); ample allargat un 14 % perquè sigui tan grassonet com l'idle; la línia dels peus és dins del fotograma; CENTRE fa que els peus caiguin al mateix lloc que els de l'idle (els de l'idle són un 5 % a la dreta del centre del fotograma)
+        const esquerra = !!cap && cap.x < I.x - 6;          // el full mira a la dreta: es gira si qui li ha donat el got és a l'esquerra
+        const s = this.add.sprite(I.x, I.y, 'ineu_beu_llet', 0).setOrigin(CENTRE, PEUS).setScale(ESCALA_X, ESCALA).setFlipX(esquerra).setDepth(I.depth + 0.5).setAlpha(0);
+        // fosa creuada: l'Ineu de debò s'esvaeix mentre el full apareix (i al revés al final), perquè no es noti que el dibuix del full no és idèntic
+        const fosa = (a, b, ms, cb) => this.tweens.add({ targets: s, alpha: b, duration: ms, onComplete: cb });
+        const alfaIneu = (v) => { I.setAlpha(v); if (this.fantasma) this.fantasma.setAlpha(v); };
+        const ini = I.alpha;
+        this.tweens.addCounter({ from: 1, to: 0, duration: 100, onUpdate: t => alfaIneu(t.getValue() * ini) });
+        fosa(0, 1, 100);
+        const acaba = () => {
+            if (!s.active) return;
+            this.tweens.addCounter({ from: 0, to: 1, duration: 100, onUpdate: t => alfaIneu(t.getValue() * ini), onComplete: () => { alfaIneu(ini); s.destroy(); this.esperar(150, fet); } });
+            fosa(1, 0, 100);
+        };
+        s.once('animationcomplete', acaba);
+        s.play('beu_llet');
+    }
     objecteVolaDe(x0, y0, x1, y1, key, color, fet) {
         const o = key && this.textures.exists(key) ? this.add.image(x0, y0, key) : this.add.circle(x0, y0, 9, color, 1);
         if (o.type === 'Image') o.setScale((String(key).startsWith('arma_') ? 130 : 42) / Math.max(o.height, o.width));
@@ -1561,18 +1584,25 @@ class ZonaBase extends Phaser.Scene {
         const dens = (BOIRA_ZONES[this.scene.key] || {}).dens || this.config.densitatBoira || 1;
         const W = AMPLE / ZOOM_CAMERA + 4, H = (ALT - ALT_HUD) / ZOOM_CAMERA + 4, CY = (ALT - ALT_HUD) / 2;      // la càmera mira per una finestra més baixa que el llenç (sota el HUD): el centre és el d'aquesta finestra
         const parts = [];                                               // { o, alfa }: el que val cada peça amb la boira al màxim
-        const vel = this.add.rectangle(AMPLE / 2, CY, W, H, 0x3a1a55, 1).setScrollFactor(0).setDepth(90000).setAlpha(0);
-        parts.push({ o: vel, alfa: Math.min(0.34, 0.14 * dens) });
-        if (this.textures.exists('boira')) {
+        // La boira només baixa (cada pas de la història la fa marxar i mai no torna): si en aquesta zona ja és tan fluixa que no es veuria, no es crea res
+        // (el vel i els bancs de boira són objectes a pantalla completa amb transparència: pesen molt al mòbil)
+        const nivell0 = nivellBoiraZona(this.scene.key);
+        const alfaVel = Math.min(0.34, 0.14 * dens), alfaBanc = 0.3 * Math.min(dens, 1.6);
+        if (alfaVel * nivell0 >= 0.08) {
+            const vel = this.add.rectangle(AMPLE / 2, CY, W, H, 0x3a1a55, 1).setScrollFactor(0).setDepth(90000).setAlpha(0);
+            parts.push({ o: vel, alfa: alfaVel });
+        }
+        if (this.textures.exists('boira') && alfaBanc * nivell0 >= 0.15) {
             const n = Math.round(4 + 2 * dens);
             for (let i = 0; i < n; i++) {
                 const x = AMPLE / 2 + (i / (n - 1) - 0.5) * W * 0.9, y = CY + (((i * 37) % 7) / 7 - 0.5) * H * 0.9;
                 const b = this.add.image(x, y, 'boira').setTint(0xa878ec).setScrollFactor(0).setDepth(89990 + i * 0.01).setAlpha(0).setDisplaySize(W * 0.7, H * 0.28);
-                parts.push({ o: b, alfa: 0.3 * Math.min(dens, 1.6) });
+                parts.push({ o: b, alfa: alfaBanc });
                 this.tweens.add({ targets: b, x: x + (i % 2 ? 60 : -60), duration: 9000 + i * 1300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
             }
         }
-        let nivell = nivellBoiraZona(this.scene.key), objectiu = nivell, tw = null;
+        if (!parts.length) return;
+        let nivell = nivell0, objectiu = nivell, tw = null;
         const posa = v => { nivell = v; parts.forEach(p => p.o.setAlpha(p.alfa * v)); };
         posa(nivell);
         this.time.addEvent({ delay: 700, loop: true, callback: () => {

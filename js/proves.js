@@ -28,7 +28,8 @@ const Proves = {
          ['↻', 'Reinicia la zona (mateix lloc, amb l\'estat actual)', () => this.reinicia()],
          ['🛡', 'Invulnerable (no et fan mal)', b => { this.invuln = !this.invuln; this.avis('Invulnerable: ' + (this.invuln ? 'sí' : 'no')); b.style.background = this.invuln ? '#2f6b2f' : '#1a120bcc'; }],
          ['✚', 'Cura del tot', () => { Estat.dades.vida = Estat.dades.corsMax * 2; this.ui() && this.ui().actualitzarHUD && this.ui().actualitzarHUD(); this.avis('Vida plena'); }],
-         ['⏭', 'Salta el diàleg obert', () => this.saltaDialeg()]
+         ['⏭', 'Salta el diàleg obert', () => this.saltaDialeg()],
+         ['📈', 'Mostra / amaga els fotogrames per segon i els objectes de la zona', b => { this.fpsOn = !this.fpsOn; b.style.background = this.fpsOn ? '#2f6b2f' : '#1a120bcc'; this.mostraFps(); }]
         ].forEach(([t, titol, f]) => {
             const b = document.createElement('button');
             b.textContent = t; b.title = titol;
@@ -82,6 +83,25 @@ const Proves = {
         Estat.dades.vida = Estat.dades.corsMax * 2;
         const p = PROGRES.passos[fins];
         Estat.posaObjectiu(p ? p.pista(Estat) : 'Proves: final de la història.');
+    },
+
+    // Mesura del rendiment: fotogrames per segon (mitjana i el pitjor del darrer segon) i objectes de l'escena activa; es veu amb el botó 📈 de la barra
+    mostraFps() {
+        let e = document.getElementById('fpsProves');
+        if (!this.fpsOn) { if (e) e.remove(); clearInterval(this.fpsTimer); this.fpsTimer = null; return; }
+        if (!e) {
+            e = document.createElement('div'); e.id = 'fpsProves';
+            e.style.cssText = 'position:fixed;left:4px;top:calc(34% + 255px);z-index:22;background:#1a120bdd;color:#f2e6c8;border:2px solid #d4af37;border-radius:6px;padding:2px 6px;font:12px monospace;pointer-events:none;white-space:pre';
+            document.body.appendChild(e);
+        }
+        let t0 = performance.now(), n = 0, pitjor = 0, ultim = t0;
+        const compta = ts => { if (!this.fpsOn) return; n++; pitjor = Math.max(pitjor, ts - ultim); ultim = ts; requestAnimationFrame(compta); };
+        requestAnimationFrame(compta);
+        this.fpsTimer = setInterval(() => {
+            const ara = performance.now(), z = this.zonaActiva(), fps = n * 1000 / (ara - t0);
+            e.textContent = fps.toFixed(0) + ' fps (pitjor ' + (pitjor ? (1000 / pitjor).toFixed(0) : '-') + ')\n' + (z ? z.scene.key.replace('Zona', '') + ': ' + z.children.length + ' objectes' : '');
+            t0 = ara; n = 0; pitjor = 0;
+        }, 1000);
     },
 
     // Comença a la zona triada amb l'estat que hi ha a Estat.dades

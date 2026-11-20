@@ -187,10 +187,9 @@ class ZonaJardi extends ZonaBase {
 
         // La Prunera Màgica, l'únic arbre: dins el jardí de la pèrgola
         const PX = 160, PY = 640, PRUNA_MIDA = 46;                 // PRUNA_MIDA: costat (px) de la icona de la pruna a les branques
-        this.copaPrunera = this.posar('arbre', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } }).setTint(0xffd878);   // gran i alta: destaca sobre la pèrgola
+        this.posar('arbre', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } }).setTint(0xffd878);   // gran i alta: destaca sobre la pèrgola
         this.add.ellipse(PX, PY - 50, 380, 90, 0xffc850, 0.16).setDepth(-1080);
-        this.llumCopaPrunera = this.add.ellipse(PX, PY - 220, 330, 240, 0xffc850, 0.18).setDepth(8000);
-        this.copaA = 1;                                                // opacitat de la capçada (baixa quan l'Ineu és darrere l'arbre; vegeu postFisica)
+        this.add.ellipse(PX, PY - 220, 330, 240, 0xffc850, 0.18).setDepth(8000);
         this.add.particles(PX, PY - 220, 'espurna', {
             x: { min: -150, max: 150 }, y: { min: -110, max: 90 }, speed: { min: 4, max: 14 }, lifespan: 1800,
             scale: { start: 0.55, end: 0 }, tint: [0xffd060, 0xfff0b0], frequency: 220, alpha: { start: 0.9, end: 0 }
@@ -217,7 +216,14 @@ class ZonaJardi extends ZonaBase {
         const lliure = (x, y) => Math.hypot(x - PX, (y - PY) * 1.6) > 45 && !(Math.abs(x - LX) < TWD / 2 + 14 && Math.abs(y - LY) < THD / 2 + 14);          // només queden sense flors el tronc de la Prunera i la boca de la trapa (abans, tot un cercle gran al voltant de la llosa)
         // Un jardí de debò: moltes flors, de colors diferents, escampades per tota la gespa i en mates més denses a les voreres i al peu de les columnes
         const COLORS_FLORS = [0xffffff, 0xffd6e6, 0xfff2b0, 0xd6e8ff, 0xffb0c8, 0xffcf80, 0xd0b0ff, 0xff9a9a, 0xb0f0d0];
-        const flor = (x, y, esc) => { const f = this.posar('flors', x, y, { fonsY: -800, escala: esc }); f.setTint(COLORS_FLORS[Math.floor(rnd() * COLORS_FLORS.length)]); };
+        // Les flors no són objectes solts (en eren unes 200, amb molt de solapament: el que més pesava al mòbil): es dibuixen totes una sola vegada en una textura i el jardí en veu només una imatge
+        const ESC_FLOR = (this.textures.get('flors').customData && this.textures.get('flors').customData.escala) || 1 / RES;
+        const llistaFlors = [];
+        const flor = (x, y, esc) => {
+            const f = this.make.image({ key: 'flors', add: false }).setOrigin(0.5, 1).setScale(ESC_FLOR * esc).setPosition(x, y);
+            f.setTint(COLORS_FLORS[Math.floor(rnd() * COLORS_FLORS.length)]);
+            llistaFlors.push(f);
+        };
         // Flors per tota la gespa, amb la densitat de sempre: una graella de cel·les de 40 x 34 px amb una flor (de vegades dues) a cada una, a l'atzar dins la cel·la
         for (let gx = COLS[0] + 14; gx < COLS[COLS.length - 1] - 8; gx += 40) {
             for (let gy = YB + 30; gy < YF - 4; gy += 34) {
@@ -227,6 +233,16 @@ class ZonaJardi extends ZonaBase {
             }
         }
         COLS.forEach(cx => [YB, YF].forEach(cy => { for (let k = 0; k < 5; k++) { const x = cx + (rnd() - 0.5) * 90, y = cy + 6 + rnd() * 26; if (lliure(x, y)) flor(x, y, 0.45 + rnd() * 0.4); } }));       // mates al peu de les columnes
+        if (llistaFlors.length) {
+            const K = 2;                                                           // resolució de la textura (el doble de la del món, perquè no es vegi borrosa en apropar la càmera)
+            let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+            llistaFlors.forEach(f => { const w = f.width * f.scaleX, h = f.height * f.scaleY; x0 = Math.min(x0, f.x - w / 2); x1 = Math.max(x1, f.x + w / 2); y0 = Math.min(y0, f.y - h); y1 = Math.max(y1, f.y); });
+            x0 = Math.floor(x0); y0 = Math.floor(y0);
+            const rt = this.add.renderTexture(x0, y0, Math.ceil((x1 - x0) * K), Math.ceil((y1 - y0) * K)).setOrigin(0).setScale(1 / K).setDepth(-800);
+            llistaFlors.forEach(f => f.setPosition((f.x - x0) * K, (f.y - y0) * K).setScale(f.scaleX * K));
+            rt.draw(llistaFlors);
+            llistaFlors.forEach(f => f.destroy());
+        }
 
         // L'Isílder, fora de la pèrgola, davant de la fila de columnes del davant i ben lluny de la Prunera (si la llosa ja és oberta, es queda al costat del forat)
         this.isilder = this.npc('isilder', 360, 840, DIALEGS.isilder, { zoomConversa: 1.5 });
@@ -247,19 +263,6 @@ class ZonaJardi extends ZonaBase {
     }
 
     // Forat quadrat emmarcat amb carreus de pedra i una escala que baixa cap al nord (els graons del fons són més foscos)
-    // La capçada de la Prunera (fulles, prunes i llum) es fa transparent quan l'Ineu hi passa darrere, perquè es vegi
-    postFisica() {
-        super.postFisica();
-        const I = this.ineu, t = this.copaPrunera;
-        if (!t || !t.active || !I || !I.active) return;
-        const b = t.getBounds(), darrere = I.y < t.y - 20 && I.x > b.x && I.x < b.right && I.y > b.y - 40;
-        const dest = darrere ? 0.3 : 1;
-        this.copaA += (dest - this.copaA) * 0.15;
-        t.setAlpha(this.copaA);
-        if (this.llumCopaPrunera) this.llumCopaPrunera.setAlpha(0.18 * this.copaA);
-        (this.fruitsPrunera || []).forEach(f => { if (!f.colli) f.setAlpha(this.copaA); });
-    }
-
     // Collir una pruna: una de les prunes daurades de la capçada (la més propera a l'Ineu) es deixa anar de la branca, cau en arc cap a les seves mans i l'arbre s'estremeix un moment;
     // al cap d'una estona en torna a créixer una altra al mateix lloc.
     collirPruna(fet) {
@@ -281,7 +284,7 @@ class ZonaJardi extends ZonaBase {
                 onUpdate: () => { o.x = xa + (x1 - xa) * T.t; o.y = ya + (y1 - ya) * T.t - Math.sin(T.t * Math.PI) * 38; o.setScale(S0 * (1.4 - 0.4 * T.t)); },
                 onComplete: () => { o.destroy(); this.llum(x1, y1, 0xffd060); this.esperar(300, fet); } });
         } });
-        this.time.delayedCall(9000, () => { if (f.active) this.tweens.add({ targets: f, alpha: this.copaA, duration: 900, onComplete: () => { f.colli = false; } }); });          // en torna a créixer una
+        this.time.delayedCall(9000, () => { if (f.active) this.tweens.add({ targets: f, alpha: 1, duration: 900, onComplete: () => { f.colli = false; } }); });          // en torna a créixer una
     }
 
     // La trapa en perspectiva: la boca (marc de pedra, foscor i graons) i la llosa que la tapa, dibuixades com a trapezis (més estretes al fons que al davant) i amb el gruix de la llosa a la

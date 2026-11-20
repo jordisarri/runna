@@ -239,7 +239,7 @@ const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'nor
 // (eines/fer_ineu_v2.py). Esquerra i dreta són walk_elev_/idle_elev_ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
 // Les mides dels idles s'igualen a les dels caminars amb eines/igualar_idle_ineu.py. Els fulls i els prototips anteriors són a art/ineu/arxiu/.
 const rutaIneu = (dir, idle) => {
-    const v = '?v=2611201655';
+    const v = '?v=2611202310';
     if (dir === 'left' || dir === 'right') return `assets/ineu/${idle ? 'idle/idle_elev_' : 'caminar/walk_elev_'}${dir}.webp${v}`;
     return `assets/ineu/${idle ? 'idle/idle_' : 'caminar/'}${dir}.webp${v}`;
 };
@@ -359,6 +359,7 @@ const Grafics = {
         scene.load.spritesheet('isilder_camina', 'assets/personatges/isilder_camina.webp', { frameWidth: 190, frameHeight: 285 });
         scene.load.spritesheet('venerables_camina', 'assets/personatges/venerables_camina.webp', { frameWidth: 266, frameHeight: 267 });       // (fer_camina_npc.py: les dues velletes agafades del braç)
         scene.load.spritesheet('mandu_camina', 'assets/personatges/mandu_camina.webp', { frameWidth: 134, frameHeight: 236 });
+        scene.load.spritesheet('ineu_beu_llet', 'assets/ineu/llet/beu_llet.webp?v=6', { frameWidth: 512, frameHeight: 512 });          // l'Ineu de perfil (mirant a la dreta) bevent un got de llet: 4 x 4 fotogrames d'AutoSprite (eines/fer_beu_llet_ineu.py); es gira com un mirall segons on sigui l'Eve (ZonaBase.beureLlet)
         scene.load.spritesheet('ineu_desperta', 'assets/personatges/ineu_desperta.webp', { frameWidth: 342, frameHeight: 342 });          // l'Ineu a terra i el Pare Jordà que l'acaricia: 4 x 2 fotogrames fets a mà (vegeu despertarCaigut)
         scene.load.spritesheet('nena_trenes_camina', 'assets/personatges/nena_trenes_camina.webp', { frameWidth: 225, frameHeight: 282 });       // la Nena de les Trenes corrent cap a la mare (AutoSprite iso_run_right; eines/fer_camina_npc.py)
         DIRS_INEU.forEach(dir => {

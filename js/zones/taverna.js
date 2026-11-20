@@ -159,9 +159,9 @@ DIALEGS.eve = E => {
     return {
         pagines: [
             ...d.pagines,
-            { qui: 'Eve', text: ferit ? 'Per cert, tens mala cara. Vols un got de llet calenta? Encara en queda, de la vaca de la Càren.' : 'Per cert, vols un got de llet calenta? Encara en queda, de la vaca de la Càren.' },
+            { qui: 'Eve', text: ferit ? 'Per cert, tens mala cara. Vols un got de llet calenta?' : 'Per cert, vols un got de llet calenta?' },
             { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaLlet = i; fet(); }) },
-            { fer: (z, fet) => DIALEGS._triaLlet === 0 ? z.beure(fet, 0xfff4dc) : fet() }
+            { fer: (z, fet) => DIALEGS._triaLlet === 0 ? z.beureLlet(fet, z.eve) : fet() }
         ],
         enAcabar: () => {
             if (enAcabarBase) enAcabarBase();
@@ -171,7 +171,7 @@ DIALEGS.eve = E => {
                 E.dades.vida = E.dades.corsMax * 2;
                 if (ui) { ui.actualitzarHUD(); ui.obrirDialeg({ pagines: [{ qui: 'Eve', text: ferit ? 'Té. Ara tens més color. Que et faci bon profit, monjo.' : 'Que et faci bon profit, monjo, encara que ja vagis ben sa.' }] }); }
                 E.desar();
-            } else if (ui) ui.obrirDialeg({ pagines: [{ qui: 'Eve', text: 'Com vulguis. Aquí en tens quan en vulguis.' }] });
+            } else if (ui) ui.obrirDialeg({ pagines: [{ qui: 'Eve', text: 'Com vulguis.' }] });
         }
     };
 };
@@ -330,7 +330,7 @@ class ZonaTavernaInt extends ZonaBase {
         // Barrils de vi, apilats a la dreta, i l'acordió
         [[860, 470], [900, 500], [880, 440]].forEach(([x, y]) => this.barril(x, y, 46, 20));
         // L\'Eve, al costat de la llar
-        this.npc('eve', 650, 350, DIALEGS.eve, { flipX: true });
+        this.eve = this.npc('eve', 650, 350, DIALEGS.eve, { flipX: true });
 
         // El senyor Buidor, assegut al costat dret de la taula de l'esquerra de tot (sencer, sense que la taula el tapi), assaborint l'anís escarxat que li ha preparat l'Eve
         this.npc('senyor_budo', 352, 492, DIALEGS.senyorBudo, { colAmple: 50 });
