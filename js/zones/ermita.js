@@ -84,8 +84,8 @@ class ZonaErmitaInt extends ZonaBase {
             this.add.image(x, y, 'pilastra_ermita').setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
             this.colisio(x, y - 8, 40, 16);
         });
-        // Bancs de fusta dels fidels
-        [[260, 450], [260, 590], [740, 450], [740, 590]].forEach(([x, y]) => this.posarBanc(x, y, 120));
+        // Bancs dels fidels: com els de l'església (vistos per darrere, mirant cap a l'altar, amb el respatller a dalt), no bancs de carrer; s'hi seu des de dalt, baixant
+        [[260, 450], [260, 590], [740, 450], [740, 590]].forEach(([x, y]) => this.posarBanc(x, y, 190, 'banc_esglesia_ample', 'amunt', 0.85));
 
         // Dues taules de pedra al fons, darrere l'altar
         const taula1 = this.posar('taula_pedra', 340, 190, { col: { w: 100, h: 20 } });
