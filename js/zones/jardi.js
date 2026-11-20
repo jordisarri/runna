@@ -209,13 +209,13 @@ class ZonaJardi extends ZonaBase {
         }
 
         // La Prunera Màgica, l'únic arbre: dins el jardí de la pèrgola
-        const PX = 160, PY = 640, PRUNA_MIDA = 46;                 // PRUNA_MIDA: costat (px) de la icona de la pruna a les branques
+        const PX = 160, PY = 640, PRUNA_MIDA = 46;      // (les prunes, dins la capçada però entre les columnes: x 100-225 i 330-385; abans n'hi havia que sortien pel darrere de la columna)                 // PRUNA_MIDA: costat (px) de la icona de la pruna a les branques
         this.posar('prunera', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } });   // gran i alta: destaca sobre la pèrgola
         this.add.particles(PX, PY - 220, 'espurna', {
             x: { min: -150, max: 150 }, y: { min: -110, max: 90 }, speed: { min: 4, max: 14 }, lifespan: 1800,
             scale: { start: 0.55, end: 0 }, tint: [0xffd060, 0xfff0b0], frequency: 220, alpha: { start: 0.9, end: 0 }
         }).setDepth(8001);
-        [[-110, -190], [-60, -250], [0, -300], [70, -260], [120, -200], [-140, -140], [40, -170], [-20, -210], [100, -130], [-90, -100]].forEach(([dx, dy], i) => (this.fruitsPrunera = i ? this.fruitsPrunera : []).push(this.add.image(PX + dx, PY + dy, iconaObjecte(this, 'pruna_arbre')).setDisplaySize(PRUNA_MIDA, PRUNA_MIDA).setAngle(((i * 37) % 30) - 15).setDepth(PY + 1)));
+        [[-40, -370], [15, -385], [55, -345], [-20, -315], [32, -300], [-48, -268], [5, -248], [54, -260], [170, -250], [172, -200]].forEach(([dx, dy], i) => (this.fruitsPrunera = i ? this.fruitsPrunera : []).push(this.add.image(PX + dx, PY + dy, iconaObjecte(this, 'pruna_arbre')).setDisplaySize(PRUNA_MIDA, PRUNA_MIDA).setAngle(((i * 37) % 30) - 15).setDepth(PY + 1)));
         this.interactiu(PX, PY + 40, RADI_GRAN * 1.5, DIALEGS.prunera, { altura: 150, senseMirada: true }); // es pot collir la pruna des de qualsevol costat de l'arbre
 
         // La llosa del passadís cap al soterrani de l'Hostatgeria, entre les columnes i ben amunt perquè les columnes del sud no la tapin gens
