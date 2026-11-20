@@ -352,7 +352,7 @@ class ZonaCamiRov extends ZonaBase {
 
         // La primera corba del camí, des de l'Era, on espera la Nena de les Trenes
         if (!Estat.flag('nenaAlliberada')) {          // (en acabar la seva escena la nena marxa de la mà de la mare i ja no hi és: només torna, com a esperit, a l'epíleg)
-            this.nena = this.posar('nena_trenes', 1560, 670, { fonsY: 670 });          // sempre al 100% d'opacitat: ben visible
+            this.nena = this.posar('nena_trenes', 1560, 670, { fonsY: 670 }).setFlipX(true);          // sempre al 100% d'opacitat: ben visible; girada (mirall) perquè l'Ineu, que hi arriba des de l'Era (a l'est, per la dreta), se la trobi de cara
             this.resplendorNena = this.add.circle(1560, 605, 52, 0xcfd8ff, 0.07).setDepth(669);      // un halo molt discret
             this.tweens.add({ targets: [this.nena, this.resplendorNena], y: '-=10', yoyo: true, repeat: -1, duration: 1300, ease: 'Sine.easeInOut' });
             const puntNena = this.interactiu(1560, 670, RADI_NPC, DIALEGS.nenaTrenes, { altura: 110, marca: true });
