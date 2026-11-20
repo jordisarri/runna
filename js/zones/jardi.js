@@ -84,29 +84,14 @@ class ZonaJardi extends ZonaBase {
             const HORITZO = YB - 70;
             const cel = this.add.graphics().setDepth(-1050);
             cel.fillGradientStyle(0x62a8e0, 0x62a8e0, 0xb4daf2, 0xb4daf2, 1).fillRect(0, 0, 1800, HORITZO + 34);
-            // Núvols a l'estil de Monkey Island 3, simplificats: una cua que s'aprima i acaba en un cargol (espiral), blancs amb la part de sota blavosa i una vora fina blava
-            const nuvol = (x, y, esc, girat) => {
-                const g = this.add.graphics().setDepth(-1045);
-                const L = 150, R = 36, W = 44, cl = [];
-                for (let k = 0; k <= 14; k++) { const t = k / 14; cl.push([-L + t * L, Math.sin(t * 3.1) * 5 * (1 - t), W * Math.min(1, t / 0.45) * 0.9]); }          // la cua, de punta a punta
-                const NS = 30;
-                for (let k = 1; k <= NS; k++) {                                                                                          // el cargol: gira 1,5 voltes cap a dins
-                    const t = k / NS, th = Math.PI / 2 - t * Math.PI * 3.0, r = R * (1 - 0.72 * t);
-                    cl.push([r * Math.cos(th), -R + r * Math.sin(th), W * (0.9 - 0.62 * t)]);
-                }
-                const vora = d => { const a = [], b = [];
-                    cl.forEach(([cx, cy, w], n) => { const q = cl[Math.min(cl.length - 1, n + 1)], pq = cl[Math.max(0, n - 1)];
-                        let tx = q[0] - pq[0], ty = q[1] - pq[1]; const m = Math.hypot(tx, ty) || 1; tx /= m; ty /= m;
-                        a.push({ x: cx - ty * w / 2 + d[0], y: cy + tx * w / 2 + d[1] }); b.push({ x: cx + ty * w / 2 + d[0], y: cy - tx * w / 2 + d[1] }); });
-                    return a.concat(b.reverse()); };
-                g.fillStyle(0xbcd8f0, 1).fillPoints(vora([0, 4]), true);                                    // la part de sota (ombra blavosa)
-                g.fillStyle(0xffffff, 1).fillPoints(vora([0, 0]), true);
-                g.lineStyle(2, 0x86aed6, 0.9).strokePoints(vora([0, 0]), true);
-                g.setPosition(x, y).setScale(girat ? -esc : esc, esc);
+            // Núvols en cargol a l'estil de Monkey Island 3: el dibuix assets/natura/nuvol.webp (pocs, a mides diferents i alguns girats), que es mouen molt a poc a poc
+            const nuvol = (x, y, ample, girat, alfa) => {
+                const g = this.add.image(x, y, 'nuvol').setOrigin(0.5, 0.5).setDepth(-1045).setAlpha(alfa).setFlipX(girat);
+                g.setScale(ample / g.width);
                 this.tweens.add({ targets: g, x: x + 24 + rnd() * 24, duration: 18000 + rnd() * 9000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
                 return g;
             };
-            [[190, 180, 1.25, false], [500, 235, 0.85, true], [900, 160, 1.4, false], [1300, 225, 0.95, true], [1640, 170, 1.2, false]].forEach(([x, y, e, gi]) => nuvol(x, y, e, gi));
+            [[190, 190, 300, false, 0.95], [520, 245, 210, true, 0.9], [900, 170, 340, false, 0.95], [1300, 235, 230, true, 0.9], [1640, 180, 290, false, 0.95]].forEach(([x, y, w, gi, a]) => nuvol(x, y, w, gi, a));
             this.colisio(900, HORITZO + 2, 1800, 4);                                          // (línia de col·lisió: no es pot pujar al fons)
         }
 
