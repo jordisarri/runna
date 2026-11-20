@@ -48,6 +48,7 @@ const CATALEG = [
     { key: 'boto_consells', file: 'assets/ui/boto_consells.webp', amplada: 72, cru: true, provisional: (c, w) => lienc(c, w, w, (ctx, W) => pintarBoto(ctx, W, pintarIconaConsells)) },
     { key: 'bassadoria',   file: 'assets/objectes/bassadoria.webp',   amplada: 620, cru: true, provisional: (c, w) => dibuixarBassadoriaReixa(c, w) },   // aigua neta
     { key: 'bassadoria_boira', file: 'assets/objectes/bassadoria_boira.webp', amplada: 620, cru: true, provisional: (c, w) => dibuixarBassadoriaReixa(c, w) },   // aigua tèrbola amb boira (abans del Cant de l'Aurora)
+    { key: 'prunera',      file: 'assets/natura/prunera.webp',      amplada: 300, provisional: (c, w) => dibuixarArbre(c, w) },   // la Prunera Màgica (copes daurades, sense fruits: les prunes les penja jardi.js)
     { key: 'arbre',        file: 'assets/natura/arbre.webp',        amplada: 300, provisional: (c, w) => dibuixarArbre(c, w) },
     { key: 'pi_arrels_mortes', file: 'assets/natura/pi_arrels_mortes.webp', amplada: 149 },   // les arrels seques, mentre el pi dorm
     { key: 'placa_pi',     file: 'assets/natura/placa_pi.webp',     amplada: 100, provisional: (c, w) => lienc(c, w, Math.round(w * 0.95), (ctx, W, H) => pintarPlacaPi(ctx, W, H)) },   // la fita del Pi dels Tres Cants (docs/PROMPTS_GRAFICS.md)

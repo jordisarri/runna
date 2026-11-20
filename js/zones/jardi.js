@@ -187,7 +187,7 @@ class ZonaJardi extends ZonaBase {
 
         // La Prunera Màgica, l'únic arbre: dins el jardí de la pèrgola
         const PX = 160, PY = 640, PRUNA_MIDA = 46;                 // PRUNA_MIDA: costat (px) de la icona de la pruna a les branques
-        this.posar('arbre', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } }).setTint(0xffd878);   // gran i alta: destaca sobre la pèrgola
+        this.posar('prunera', PX, PY, { escala: 1.55, col: { w: 60, h: 26 } });   // gran i alta: destaca sobre la pèrgola
         this.add.particles(PX, PY - 220, 'espurna', {
             x: { min: -150, max: 150 }, y: { min: -110, max: 90 }, speed: { min: 4, max: 14 }, lifespan: 1800,
             scale: { start: 0.55, end: 0 }, tint: [0xffd060, 0xfff0b0], frequency: 220, alpha: { start: 0.9, end: 0 }

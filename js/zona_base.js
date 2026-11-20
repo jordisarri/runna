@@ -48,7 +48,7 @@ const BANDA_SUD = 120;   // franja de baix (vora sud, sortides) que es desplaça
 const VELOCITAT_INEU = 230;
 // Caixa de col·lisió del tronc de l'arbre (gràfic 'arbre': les arrels fan ~130 px d'ample i el tronc ~70-100)
 // Part del dibuix (fraccions x0, y0, x1, y1 del gràfic) que és el tronc: és opac (la silueta de l'Ineu s'hi amaga); la copa i les branques, no
-const TRONCS = { arbre: [0.27, 0.52, 0.75, 1], alzina_buida: [0.32, 0.55, 0.70, 0.96], pi: [0.36, 0.55, 0.66, 1], pi_pinyer: [0.30, 0.60, 0.62, 1] };
+const TRONCS = { arbre: [0.27, 0.52, 0.75, 1], prunera: [0.36, 0.55, 0.66, 1], alzina_buida: [0.32, 0.55, 0.70, 0.96], pi: [0.36, 0.55, 0.66, 1], pi_pinyer: [0.30, 0.60, 0.62, 1] };
 const TRONC_ARBRE = esc => ({ w: Math.round(100 * esc), h: Math.round(36 * esc) });
 
 const ESTIL_PORTA_PEDRA = ['ZonaErmitaInt', 'ZonaGabrielInt', 'ZonaPassadis', 'ZonaSotaTaverna', 'ZonaGirgoles', 'ZonaTortura', 'ZonaBoira', 'ZonaGabia', 'ZonaSoterraniHost', 'ZonaEsglesia', 'ZonaMonestirRebedor', 'ZonaPingpong', 'ZonaTresor', 'ZonaGolfes'];
