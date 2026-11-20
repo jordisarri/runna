@@ -356,7 +356,7 @@ A magical rune circle engraved into a stone floor, seen from a high three-quarte
 
 *Notes:* al joc es posa a mig camí entre dues columnes, des del capitell fins al muret, amb una opacitat del 60-80 % perquè es vegi l'Ineu a través; per això les vores laterals han de ser irregulars (les columnes les tapen una mica) i no hi ha d'haver fons.
 
-## [FET] La Prunera Màgica (jardí de l'Hostatgeria; `art/natura/prunera.jpg` → `assets/natura/prunera.webp` amb `eines/treure_fons.py ... 300 --forats 8`; ara el joc fa servir `arbre` tintat d'or, a `js/zones/jardi.js`)
+## [FET] La Prunera Màgica (jardí de l'Hostatgeria; `art/natura/prunera.jpg` → `assets/natura/prunera.webp` amb `eines/treure_fons.py ... 300 --forats 8`, i després `eines/netejar_vora.py assets/natura/prunera.webp` (treu la vora blanca); ara el joc fa servir `arbre` tintat d'or, a `js/zones/jardi.js`)
 
 *Entrada:* adjunta `art/natura/arbre.png` com a imatge de referència d'estil (mateix pinzell suau, mateixes ombres, **sense contorn negre gruixut**: els arbres van pictòrics, vegeu la revisió d'art). *Mida de sortida:* aprox. 1:1,1 (p. ex. 1200 × 1320); al joc faria uns 460 px d'ample (ara és l'`arbre` a escala 1,55). Només un arbre, fons blanc pur (el trec jo).
 
