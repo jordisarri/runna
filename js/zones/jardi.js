@@ -78,26 +78,19 @@ class ZonaJardi extends ZonaBase {
         }));
         this.pergola = { x0: COLS[0], x1: COLS[COLS.length - 1], yb: YB, yf: YF, planta: PLANTA };
 
-        // --- El fons de la pèrgola (darrere la fila de columnes del darrere): una tanca de jardí de pedra (la mateixa textura que els murets, en dues filades), amb una fila de xiprers al darrere i
-        // un fons de bosc fosc per dalt. Abans hi havia només gespa i les columnes semblaven plantades al no-res. Es pot ajustar: MUR_BASE (on és el peu de la tanca), FILADES, TANCA_ALPHA.
+        // --- El fons de la pèrgola (darrere la fila de columnes del darrere): un fons de bosc fosc amb una fila de xiprers (el mur de pedra que s'hi va provar, darrere l'heura, quedava malament). Abans hi havia només gespa i les columnes semblaven plantades al no-res. Es pot ajustar: MUR_BASE (on és el peu de la tanca), FILADES, TANCA_ALPHA.
         {
             const MUR_BASE = YB - 70, FILADES = 2, tx2 = this.textures.get('muret_textura').getSourceImage(), sg2 = 182 / tx2.width, HF = (325 - 9) * sg2;
-            const topMur = MUR_BASE - FILADES * HF + 6;
+            const topMur = MUR_BASE - 34;                                                       // (sense mur de pedra: el fons de bosc arriba fins al peu de les cortines)
             const fonsBosc = this.add.graphics().setDepth(-1050);
-            fonsBosc.fillGradientStyle(0x1b3a22, 0x1b3a22, 0x3a6a3a, 0x3a6a3a, 1).fillRect(0, 0, 1800, topMur + 30);
+            fonsBosc.fillGradientStyle(0x1b3a22, 0x1b3a22, 0x3a6a3a, 0x3a6a3a, 1).fillRect(0, 0, 1800, topMur + 34);
             let xp = 18;                                                                     // xiprers: alts, estrets, de mides una mica diferents, tots darrere la tanca
             while (xp < 1800) {
                 const ample = 62 + rnd() * 18, alt = ample * 527 / 160;
                 this.add.image(xp, topMur + 34, 'xiprer').setOrigin(0.5, 1).setDisplaySize(ample, alt).setDepth(-1040).setFlipX(rnd() < 0.5).setTint(0x9fb8a0);
                 xp += 78 + rnd() * 34;
             }
-            for (let j = 0; j < FILADES; j++) {
-                for (let px = 0; px < 1800; px += 182) {
-                    const im = this.add.image(px, MUR_BASE - (j + 1) * HF + 6, 'muret_textura').setOrigin(0, 0).setScale(182 / tx2.width, HF / (325 - 9)).setDepth(-790).setTint(0xcfd2c8);
-                    im.setCrop(0, 9, Math.min(tx2.width, (1800 - px) / (182 / tx2.width)), 325 - 9);
-                }
-            }
-            this.colisio(900, MUR_BASE + 2, 1800, 4);                                         // la tanca no es pot traspassar (per sobre no hi ha res a veure)
+            this.colisio(900, MUR_BASE + 2, 1800, 4);                                         // (línia de col·lisió: no es pot pujar al fons)
         }
 
         // --- Cortines d'heura entre les columnes (la fila del davant i la del darrere): el dibuix cortina_heura (art/objectes), estàtic i una mica transparent, des del capitell fins al muret.
