@@ -1674,7 +1674,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Altrament (per defecte):*
 
-**[511] Isílder:** Bon dia, monjo! Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l'Hostatgeria, aquí al costat, que s'hi aguanta al darrere.
+**[511] Isílder:** Bon dia, monjo!
 
 **[512] Isílder:** La llosa encara s'encén amb la llum de la teva espasa. Ja ho saps: la Rosansa, a les cel·les, i aquella llavor estranya que porta al carro.
 
@@ -1870,7 +1870,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: (depèn d'un càlcul del joc) ; encara no té els grans del rosari buits (no té la vida plena)*
 
-**[703] Eve:** Que et faci bon profit, monjo, encara que ja vagis ben sa.
+**[703] Eve:** Que et faci bon profit, monjo.
 
 *Altrament (per defecte):*
 

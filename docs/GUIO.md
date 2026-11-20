@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 636: Isílder: només diu «Bon dia, monjo!» (ja no explica que la pèrgola és més vella que el monestir ni de l'Hostatgeria); Eve: en donar el got de llet a l'Ineu sa, només diu «Que et faci bon profit, monjo.» (sense «encara que ja vagis ben sa»).*
+
 *Revisió 635: Iscu: en donar la clau rovellada només diu que li va caure al Germà Aldreu (ja no diu on, ni que és «per a la porta petita del fons», ni res de les sacerdotesses de l'Hostatgeria: no en sap res); s'ha tret l'última pàgina de pista. Es queda el «I tu no m'has vist, eh?».*
 
 *Revisió 634: **el rellotge de la torre és obligatori** (i, amb ell, la Carry i el Pallofa, que en tenen la clau): ja no són laterals. Al final de la conversa de la placa del Dolmen, el Pare Alcoví demana que torni quan tingui Runna. Amb Runna, l'Alcoví llegeix a la Crònica que la tomba es va esquerdar **a un quart de quatre**, l'hora a què es va aturar el rellotge: «un segell no aguanta si el temps no el sosté». Cal fer caminar el rellotge (clau de la Carry, que cal guanyar portant-li el Pallofa; engranatges a la Sala del Rellotge) i **només llavors** el cop de Runna segella la tomba; abans, l'Ineu pensa «La llum no cedeix. Falta alguna cosa... potser encara no és... l'hora.». A `PROGRES.passos` el pas «segell» es parteix en tres: l'Alcoví demana, el rellotge, la tomba. Les laterals queden tres: la Taverna, la pedra que escolta i la Nena. També, a la Prunera Màgica, la copa (fulles, prunes i llum) es fa transparent quan l'Ineu hi passa darrere.*

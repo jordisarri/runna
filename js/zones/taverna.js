@@ -169,7 +169,7 @@ DIALEGS.eve = E => {
             const ui = game.scene.getScene('UI');
             if (triat === 0) {
                 E.dades.vida = E.dades.corsMax * 2;
-                if (ui) { ui.actualitzarHUD(); ui.obrirDialeg({ pagines: [{ qui: 'Eve', text: ferit ? 'Té. Ara tens més color. Que et faci bon profit, monjo.' : 'Que et faci bon profit, monjo, encara que ja vagis ben sa.' }] }); }
+                if (ui) { ui.actualitzarHUD(); ui.obrirDialeg({ pagines: [{ qui: 'Eve', text: ferit ? 'Té. Ara tens més color. Que et faci bon profit, monjo.' : 'Que et faci bon profit, monjo.' }] }); }
                 E.desar();
             } else if (ui) ui.obrirDialeg({ pagines: [{ qui: 'Eve', text: 'Com vulguis.' }] });
         }

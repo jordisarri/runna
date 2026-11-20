@@ -3956,7 +3956,7 @@
    {
     "id": 511,
     "qui": "Isílder",
-    "text": "Bon dia, monjo! Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l'Hostatgeria, aquí al costat, que s'hi aguanta al darrere.",
+    "text": "Bon dia, monjo!",
     "fitxer": "js/dialegs.js",
     "linia": 1114
    },
@@ -4432,7 +4432,7 @@
    {
     "id": 703,
     "qui": "Eve",
-    "text": "Que et faci bon profit, monjo, encara que ja vagis ben sa.",
+    "text": "Que et faci bon profit, monjo.",
     "fitxer": "js/zones/taverna.js",
     "linia": 172
    },

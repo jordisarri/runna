@@ -1111,7 +1111,7 @@ const DIALEGS = {
         if (acte3 && !E.flag('isilderRosansa') && !E.flag('llavorRosansa')) return DIALEGS.isilderRunna(E);
         return {
             pagines: [
-                { qui: 'Isílder', text: 'Bon dia, monjo! Aquesta pèrgola de pedra és més vella que el monestir: les columnes, els arcs... i l\'Hostatgeria, aquí al costat, que s\'hi aguanta al darrere.' },
+                { qui: 'Isílder', text: 'Bon dia, monjo!' },
                 ...(acte3 && !E.flag('llavorRosansa') ? [
                     { qui: 'Isílder', text: "La llosa encara s'encén amb la llum de la teva espasa. Ja ho saps: la Rosansa, a les cel·les, i aquella llavor estranya que porta al carro." }
                 ] : []),
