@@ -92,7 +92,7 @@ class ZonaEsglesia extends ZonaBase {
         // La porta de la dreta del peu del retaule: la mateixa del gràfic, que s'obre cap endins (amb la clau de la torre del rellotge) i duu a la torre
         this.portaRetaule = this.portaAnimada({ x: 872, top: 868, bottom: 1021, ample: 83, fons: 900, senseAjust: true, unic: true, arc: true, retall: this.retaule, bloq: () => !this.portaRellotge });
         this.dibuixarSagrari();
-        const puntSagrari = this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2'), toc: { x0: this.sagrariX - 100, x1: this.sagrariX + 100, y0: 0, y1: ESG.sostre + 120 } });     // el sagrari, al mig del retaule (fragment 2)
+        const puntSagrari = this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2'), toc: { x0: this.sagrariX - 100, x1: this.sagrariX + 100, y0: 0, y1: ESG.sostre + 26 } });     // el sagrari, al mig del retaule (fragment 2); només es toca des de la franja de dalt de tot (fins a sostre + 26): més avall, per la part de dalt de l'altar, mana el punt de l'altar (agenollar-se)
         this.brillo(this.sagrariX, this.sagrariY, 19, 32, { arc: true, punt: puntSagrari, actiu: () => !Estat.flag('fragment2') });          // el sagrari brilla fins que se n'agafa el pergamí
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 }, opac: true });
         this.altarRepos(640, ESG.retY + 176, { dalt: 100 });                     // l'Ineu s'hi agenolla i recupera l'energia
