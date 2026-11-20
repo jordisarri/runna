@@ -2786,9 +2786,9 @@ class ZonaBase extends Phaser.Scene {
         const esc = (this.textures.get(key).customData || {}).escala || 0.4;
         I.setVisible(false);
         if (this.fantasma) this.fantasma.setVisible(false);
-        // Mida de l'Ineu agenollat respecte de l'idle (a mida de joc, l'idle fa 79 d'ample x 121 d'alt de cara i 82 x 128 d'esquena): IGUAL d'ample i una mica més baix (~90%).
-        // De cara: ample 79 (131 px del dibuix) i alt = el de sempre (109); d'esquena: ample 82 (151 px) i alt 115 (262 px).
-        const [sx, sy] = davant ? [79.4 / 131, esc] : [82.3 / 151, 115 / 262];
+        // Mida de l'Ineu agenollat respecte de l'idle (a mida de joc, l'idle fa 79 d'ample x 121 d'alt de cara i 82 x 128 d'esquena): una mica més petit que l'idle (~90% d'ample i ~85% d'alçada), perquè no es veiés gran.
+        // De cara: 71 d'ample (131 px del dibuix) x 103 d'alt (218 px); d'esquena: 74 d'ample (151 px) x 105 d'alt (262 px).
+        const [sx, sy] = davant ? [71 / 131, 103 / 218] : [74 / 151, 105 / 262];
         const img = this.add.image(I.x, I.y + 2, key).setOrigin(0.5, 1).setScale(sx, sy).setDepth(I.y + 1);
         const d = Estat.dades, ui = this.ui(), total = d.corsMax * 2;
         // Els grans es van omplint d'un en un (cada pas completa un gra: de buit a mig o de mig a ple, i el següent), amb un so més agut a cada gra
