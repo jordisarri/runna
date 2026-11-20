@@ -94,7 +94,7 @@ class ZonaJardi extends ZonaBase {
                 this.tweens.add({ targets: g, x: FI, duration: (FI - x0) / vel * 1000, ease: 'Linear', onComplete: volta });
                 return g;
             };
-            [[250, 200, 320, 12, 0.95]].forEach(([x, y, w, v, a]) => nuvol(x, y, w, v, a));
+            [[250, 150, 320, 12, 0.95]].forEach(([x, y, w, v, a]) => nuvol(x, y, w, v, a));
             this.colisio(900, HORITZO + 2, 1800, 4);                                          // (línia de col·lisió: no es pot pujar al fons)
         }
 
