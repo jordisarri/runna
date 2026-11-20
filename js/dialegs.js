@@ -866,8 +866,11 @@ const DIALEGS = {
 
     herba: (n, nom, icona) => E => ({
         pagines: [
+            // Zoom més proper a l'Ineu i l'herba que acaba de trobar
+            { fer: (z, fet) => { const p = z.puntActiu, I = z.ineu; if (p && I) z.enquadrar((p.x + I.x) / 2, (p.y + I.y) / 2 - 30, 2.5, 700, fet); else fet(); } },
             { fer: (z, fet) => { if (z.herbaAgafada) z.herbaAgafada(n); fet(); } },        // el dibuix de l'herba desapareix del terra: la icona que s'alça en passa a ser l'única
-            { avis: `Has trobat ${nom}!`, obj: icona }
+            { avis: `Has trobat ${nom}!`, obj: icona },
+            { fer: (z, fet) => z.alliberarCamera(600, fet) }
         ],               // l'Ineu alça l'ofrena amb la fanfarra i la imatge de l'objecte
         enAcabar: () => {
             E.posaFlag('herba' + n);
