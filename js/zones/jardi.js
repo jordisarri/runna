@@ -78,19 +78,25 @@ class ZonaJardi extends ZonaBase {
         }));
         this.pergola = { x0: COLS[0], x1: COLS[COLS.length - 1], yb: YB, yf: YF, planta: PLANTA };
 
-        // --- El fons de la pèrgola (darrere la fila de columnes del darrere): un fons de bosc fosc amb una fila de xiprers (el mur de pedra que s'hi va provar, darrere l'heura, quedava malament). Abans hi havia només gespa i les columnes semblaven plantades al no-res. Es pot ajustar: MUR_BASE (on és el peu de la tanca), FILADES, TANCA_ALPHA.
+        // --- El fons de la pèrgola (darrere la fila de columnes del darrere): el CEL, amb núvols de dibuix animat (prova; abans s'hi havia provat un mur de pedra i un bosc amb xiprers, i quedaven malament).
+        // Degradat de blau a dalt a un blau-crema pàl·lid a l'horitzó (a l'altura del peu de les cortines), i uns quants núvols blancs que es mouen molt a poc a poc.
         {
-            const MUR_BASE = YB - 70, FILADES = 2, tx2 = this.textures.get('muret_textura').getSourceImage(), sg2 = 182 / tx2.width, HF = (325 - 9) * sg2;
-            const topMur = MUR_BASE - 34;                                                       // (sense mur de pedra: el fons de bosc arriba fins al peu de les cortines)
-            const fonsBosc = this.add.graphics().setDepth(-1050);
-            fonsBosc.fillGradientStyle(0x1b3a22, 0x1b3a22, 0x3a6a3a, 0x3a6a3a, 1).fillRect(0, 0, 1800, topMur + 34);
-            let xp = 18;                                                                     // xiprers: alts, estrets, de mides una mica diferents, tots darrere la tanca
-            while (xp < 1800) {
-                const ample = 62 + rnd() * 18, alt = ample * 527 / 160;
-                this.add.image(xp, topMur + 34, 'xiprer').setOrigin(0.5, 1).setDisplaySize(ample, alt).setDepth(-1040).setFlipX(rnd() < 0.5).setTint(0x9fb8a0);
-                xp += 78 + rnd() * 34;
-            }
-            this.colisio(900, MUR_BASE + 2, 1800, 4);                                         // (línia de col·lisió: no es pot pujar al fons)
+            const HORITZO = YB - 70;
+            const cel = this.add.graphics().setDepth(-1050);
+            cel.fillGradientStyle(0x6fb6ea, 0x6fb6ea, 0xeaf6f2, 0xeaf6f2, 1).fillRect(0, 0, 1800, HORITZO + 34);
+            const nuvol = (x, y, esc, alfa) => {
+                const g = this.add.graphics().setDepth(-1045).setAlpha(alfa);
+                const bolles = [[-46, 6, 26], [-22, -8, 32], [8, -14, 36], [36, -4, 30], [56, 8, 22], [0, 10, 30]];
+                g.fillStyle(0xb9d6ec, 1); bolles.forEach(([dx, dy, r]) => g.fillCircle(dx, dy + 7, r));                       // ombra blavosa de sota
+                g.fillStyle(0xffffff, 1); bolles.forEach(([dx, dy, r]) => g.fillCircle(dx, dy, r));
+                g.fillStyle(0xffffff, 1).fillEllipse(5, 22, 130, 22);                                                          // base plana
+                g.setPosition(x, y).setScale(esc);
+                this.tweens.add({ targets: g, x: x + 30 + rnd() * 30, duration: 16000 + rnd() * 9000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+                return g;
+            };
+            [[110, 70, 1.1, 0.95], [330, 150, 0.8, 0.85], [560, 60, 1.3, 0.95], [760, 140, 0.9, 0.85], [980, 80, 1.15, 0.95], [1200, 160, 0.8, 0.85], [1430, 70, 1.2, 0.95], [1650, 140, 0.9, 0.85], [240, 230, 0.6, 0.8], [880, 240, 0.65, 0.8]]
+                .forEach(([x, y, e, a]) => nuvol(x, y, e, a));
+            this.colisio(900, HORITZO + 2, 1800, 4);                                          // (línia de col·lisió: no es pot pujar al fons)
         }
 
         // --- Cortines d'heura entre les columnes (la fila del davant i la del darrere): el dibuix cortina_heura (art/objectes), estàtic i una mica transparent, des del capitell fins al muret.
