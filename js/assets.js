@@ -238,7 +238,7 @@ const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'nor
 // (eines/fer_ineu_v2.py). Esquerra i dreta són walk_elev_/idle_elev_ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
 // Les mides dels idles s'igualen a les dels caminars amb eines/igualar_idle_ineu.py. Els fulls i els prototips anteriors són a art/ineu/arxiu/.
 const rutaIneu = (dir, idle) => {
-    const v = '?v=2611190300';
+    const v = '?v=2611200940';
     if (dir === 'left' || dir === 'right') return `assets/ineu/${idle ? 'idle/idle_elev_' : 'caminar/walk_elev_'}${dir}.webp${v}`;
     return `assets/ineu/${idle ? 'idle/idle_' : 'caminar/'}${dir}.webp${v}`;
 };

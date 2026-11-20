@@ -403,8 +403,7 @@ class EscenaUI extends Phaser.Scene {
 
     get escalaConsells() {
         if (this._escalaConsells === undefined) {
-            this._escalaConsells = 1;
-            try { const v = parseFloat(localStorage.getItem('runna_consells_escala')); if (v >= 0.9 && v <= 2.2) this._escalaConsells = v; } catch (e) { /* sense emmagatzematge */ }
+            this._escalaConsells = 1.25;                       // mida per defecte (sense botons A−/A+; només es pot canviar pessigant o amb Ctrl + rodeta, i no es desa)
         }
         return this._escalaConsells;
     }
@@ -414,7 +413,6 @@ class EscenaUI extends Phaser.Scene {
         if (!this.consellsObert || Math.abs(nova - this.escalaConsells) < 0.01) return;
         this.fraccioConsells = this.maxScrollConsells > 0 ? this.scrollConsells / this.maxScrollConsells : 0;
         this._escalaConsells = nova;
-        try { localStorage.setItem('runna_consells_escala', String(nova)); } catch (e) { /* res */ }
         this.dibuixaConsells(false);
     }
 
@@ -438,7 +436,7 @@ class EscenaUI extends Phaser.Scene {
         [cos, mes].forEach(o => { if (o && o.setResolution) o.setResolution(Math.min(4, Math.ceil(2 * sc))); });
         if (mes) mes.setY(cos.height + 26);
         const hCont = (mes ? mes.y + mes.height : cos.height) * sc;                       // alçada del text ja ampliat
-        const yS0 = y0 + 38 + titol.height + 14, baix = 74;                               // l'àrea de text comença sota el títol; a baix, la fila de botons
+        const yS0 = y0 + 38 + titol.height + 14, baix = 24;                               // l'àrea de text comença sota el títol; a baix, la fila de botons
         const hMax = ALT - y0 - 30, H = Math.min(hMax, Math.max(220, (yS0 - y0) + hCont + 18 + baix));
         const vp = H - (yS0 - y0) - 18 - baix;                                            // alçada visible del text
         this.maxScrollConsells = Math.max(0, hCont - vp);
@@ -457,14 +455,7 @@ class EscenaUI extends Phaser.Scene {
             if (this.maxScrollConsells > 0) { const alt = Math.max(40, vp * vp / (vp + this.maxScrollConsells)); ind.setSize(6, alt).setY(yS0 + (this.scrollConsells / this.maxScrollConsells) * (vp - alt)); }
         };
         aplica();
-        const yB = y0 + H - 38;
-        const botons = [['A−', x0 + 64, 1 / 1.15], ['A+', x0 + 120, 1.15]].map(([t, x, f]) => {
-            const b = this.add.circle(x, yB, 22, 0x8a5a2a, 0.25).setStrokeStyle(2, 0x6a1f12, 0.8).setInteractive({ useHandCursor: true }).on('pointerdown', () => { if (Sfx.pagina) Sfx.pagina(); this.canviarEscalaConsells(this.escalaConsells * f); });
-            const l = this.add.text(x, yB - 1, t, estilText(22, '#6a1f12', { fontStyle: 'bold' })).setOrigin(0.5);
-            return [b, l];
-        }).flat();
-        const peu = this.add.text(AMPLE / 2 + 40, yB, this.maxScrollConsells > 0 ? 'Arrossega per llegir · toca per tancar' : 'Toca per tancar', estilText(20, '#7a5a38')).setOrigin(0.5);
-        cont.add([fons, zona, titol, area, ind, ...botons, peu]);
+        cont.add([fons, zona, titol, area, ind]);
         this.contConsells = cont;
         // Entrada: arrossegar, rodeta, pessigar (mida de la lletra). Un toc sense arrossegar tanca.
         let arr = null, d0 = 0;
