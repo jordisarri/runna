@@ -759,7 +759,7 @@ class ZonaBase extends Phaser.Scene {
         const img = this.add.image(x, y, key).setOrigin(0.5, 1).setScale(escala * (opts.escala || 1));
         img.setDepth(opts.fonsY !== undefined ? opts.fonsY : y);
         if (giraRoca) img.setFlipX(true);
-        if (/^(arbre|xiprer|pi|pi_pinyer|roure|alzina_buida|pinassa|rovello)$/.test(key)) (this.copes = this.copes || []).push(img);   // copes que es tornen translúcides si amaguen un enemic
+        if (/^(arbre|prunera|xiprer|pi|pi_pinyer|roure|alzina_buida|pinassa|rovello)$/.test(key)) (this.copes = this.copes || []).push(img);   // copes que es tornen translúcides si amaguen un enemic
         if (TRONCS[key]) {          // font de la màscara del tronc (no es dibuixa: només amaga la silueta de l'Ineu quan passa darrere el tronc)
             const f = TRONCS[key], W = img.width, H = img.height;
             img.tronc = this.make.image({ key, add: false }).setOrigin(0.5, 1).setCrop(f[0] * W, f[1] * H, (f[2] - f[0]) * W, (f[3] - f[1]) * H);
