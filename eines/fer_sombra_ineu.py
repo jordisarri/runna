@@ -13,8 +13,17 @@ def mesura(fr, cel):
     ys, xs = np.where(fr)
     if len(ys) < 200: return None
     h = ys.max() - ys.min()
-    pe = ys > ys.max() - max(6, 0.12 * h)               # el tros de baix de tot: els peus
-    return round(float(xs[pe].mean() - cel / 2), 1), round(float(ys.max() - cel * PEUS), 1)
+    # x: el centre de la massa del cos baix (túnica i peus, el 35% de baix), no només dels peus: a les diagonals i de perfil els peus queden a un costat del cos
+    # (un peu endavant) i l'ombra semblava descentrada. y: la fila dels peus (el punt més baix).
+    baix = ys > ys.max() - 0.35 * h
+    # x de l'arma/mans no compta: es tallen les columnes amb poca massa (menys del 25% del màxim de la fila) perquè una espasa o un bastó no desplacin l'ombra
+    col = np.bincount(xs[baix], minlength=cel).astype(float)
+    ok = col >= 0.25 * col.max()
+    xc = float((np.arange(cel)[ok] * col[ok]).sum() / col[ok].sum())
+    fons = [ys[xs == x].max() for x in np.where(ok)[0] if (xs == x).any()]
+    yb = float(np.percentile(fons, 75))      # peus: el 75% de les columnes més baixes (una espasa vertical és poques columnes)
+    _ = None                       # (i la fila dels peus, només a les columnes del cos: la punta d'una espasa cap avall no abaixa l'ombra)
+    return round(xc - cel / 2, 1), round(float(yb - cel * PEUS), 1)
 
 def fulla(path, cel):
     im = np.array(Image.open(os.path.join(ARREL, path)).convert('RGBA'))
