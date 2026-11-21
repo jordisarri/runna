@@ -173,7 +173,6 @@ const CATALEG = [
     { key: 'pastor_apunta',  file: 'assets/enemics/pastor_apunta.webp',  amplada: 174, cru: true },
     { key: 'pastor_ataca',   file: 'assets/enemics/pastor_ataca.webp',   amplada: 174, cru: true },
     { key: 'pastor_enfadat', file: 'assets/enemics/pastor_enfadat.webp', amplada: 174, cru: true },
-    { key: 'aldreu_guardia', file: 'assets/personatges/aldreu_guardia.webp', amplada: 82.6 * MA('aldreu_guardia'),  cru: true, provisional: (c, w) => dibuixarPastorBoira(c, w) },
     { key: 'bolet',          file: 'assets/enemics/bolet.webp',          amplada: 58, provisional: (c, w) => dibuixarBolet(c, w) },
     { key: 'bolet_verinos',  file: 'assets/enemics/bolet_verinos.webp',  amplada: 58, provisional: (c, w) => dibuixarBolet(c, w, 'verinos') },       // guardians de la rialla
     { key: 'rovello',        file: 'assets/natura/rovello.webp',        amplada: 80, provisional: (c, w) => dibuixarRovello(c, w) },
@@ -352,11 +351,11 @@ const Grafics = {
         scene.load.spritesheet('pallofa_cami', 'assets/personatges/pallofa_cami.webp', { frameWidth: 135, frameHeight: 140 });      // el Pallofa caminant cap a la dreta (4x4 fotogrames); es gira per anar cap a l'esquerra
         scene.load.spritesheet('pare_jorda_camina', 'assets/personatges/pare_jorda_camina.webp', { frameWidth: 200, frameHeight: 290 });
         // Fulls d'animació del Pastor de la Boira (boss de la Cirosa): quadrícula de fotogrames: 384 x 384 el full de caminar (alta resolució, vegeu eines/fer_pastor_camina_hd.py); si no hi són, es veu el dibuix fix (vegeu docs/PROMPTS_GRAFICS.md)
-        Object.keys(Grafics.PASTOR_FULLS).forEach(n => scene.load.spritesheet('pastor_' + n, `assets/enemics/pastor_${n}.webp?v=2611211123`, { frameWidth: 384, frameHeight: 384 }));
+        Object.keys(Grafics.PASTOR_FULLS).forEach(n => scene.load.spritesheet('pastor_' + n, `assets/enemics/pastor_${n}.webp?v=2611211131`, { frameWidth: 384, frameHeight: 384 }));
         scene.load.spritesheet('home_raim_camina', 'assets/enemics/home_raim_camina.webp?v=2611131800', { frameWidth: 331, frameHeight: 502 });      // el Home del Raïm caminant (4 poses clau, cap a la dreta; es gira amb flipX)
         Object.entries(NPC_IDLE).forEach(([k, d]) => scene.load.spritesheet(k + '_idle', `assets/personatges/${k}_idle.webp?v=2611122055`, { frameWidth: d.w, frameHeight: d.h }));
-        scene.load.spritesheet('germa_aldreu_camina', 'assets/personatges/germa_aldreu_camina.webp?v=2611211123', { frameWidth: 195, frameHeight: 281 });
-        scene.load.spritesheet('germa_aldreu_ne', 'assets/personatges/germa_aldreu_ne.webp?v=2611211123', { frameWidth: 195, frameHeight: 281 });
+        scene.load.spritesheet('germa_aldreu_camina', 'assets/personatges/germa_aldreu_camina.webp?v=2611211131', { frameWidth: 195, frameHeight: 281 });
+        scene.load.spritesheet('germa_aldreu_ne', 'assets/personatges/germa_aldreu_ne.webp?v=2611211131', { frameWidth: 195, frameHeight: 281 });
         scene.load.spritesheet('jusef_camina', 'assets/personatges/jusef_camina.webp', { frameWidth: 190, frameHeight: 300 });
         scene.load.spritesheet('isilder_camina', 'assets/personatges/isilder_camina.webp', { frameWidth: 190, frameHeight: 285 });
         scene.load.spritesheet('venerables_camina', 'assets/personatges/venerables_camina.webp', { frameWidth: 266, frameHeight: 267 });       // (fer_camina_npc.py: les dues velletes agafades del braç)

@@ -822,7 +822,7 @@ class ZonaGabia extends ZonaBase {
         else if (!Estat.flag('gabiaOberta')) {
             if (Estat.flag('ocellaireVencut')) this.npc('germa_aldreu', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
             else {
-                const a = this.npcs.germa_aldreu = this.npc('aldreu_guardia', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
+                const a = this.npcs.germa_aldreu = this.npc('pastor_boira', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
                 a.setVisible(false).setAlpha(0);
                 if (a.ombra) a.ombra.setVisible(false).setAlpha(0);
                 if (a.col) a.col.body.enable = false;
@@ -1513,9 +1513,9 @@ class ZonaGabia extends ZonaBase {
             f => {
                 const ald = z.npcs.germa_aldreu;
                 if (ald && ald.anims) { ald.anims.stop(); ald.idleClau = null; }          // deixa l'idle: passa a ser el Guàrdia / el Pastor
+                // (el Guàrdia de la Gàbia i el Pastor de la Boira són el MATEIX personatge: un sol dibuix, pastor_boira)
                 if (ald && z.teTextura('aldreu_pastor_crida')) z.granPastor(ald, 'aldreu_pastor_crida');
-                else if (ald && z.textures.exists('aldreu_guardia')) z.granPastor(ald, 'aldreu_guardia');
-                else if (ald && z.textures.exists('pastor_boira')) { ald.setTexture('pastor_boira'); ald.setScale(0.5 * 1.5); }
+                else if (ald && z.textures.exists('pastor_boira')) z.granPastor(ald, 'pastor_boira');
                 z.npcSalta('germa_aldreu', f, 2);
             },
             f => { z.vista8Manual = true; z.posarDireccio('dreta', false, 'northeast'); z.invocarOcellaire(ap, f, vist); }        // amb el Mestre al davant, de tres quarts
@@ -1634,7 +1634,7 @@ class ZonaGabia extends ZonaBase {
         this.tweens.killTweensOf(a);
         if (a.ombra) a.ombra.destroy();
         a.destroy();
-        delete this.npcs.pastor_boira; delete this.npcs.germa_aldreu; delete this.npcs.aldreu_guardia;
+        delete this.npcs.pastor_boira; delete this.npcs.germa_aldreu;
         const n = this.npc('germa_aldreu', x, y, DIALEGS.aldreuGabia, { flipX: flip });
         this.aldreuEstat = 'trist';
         if (!this.teTextura('germa_aldreu_trist')) n.setTint(0xb8b8d0);            // (la postura completa s'aplica en arribar: aldreuTrist)
