@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 642: Pastor de la Boira: el full de caminar passa a alta resolució (cel·les de 384 px, regenerat gratis a AutoSprite a 512 px per fotograma; abans, de 300 px ampliats d'uns de 256: es veia borrós) i el combat deixa de veure's pixelat. Les poses (apuntar, batre, enfadat, derrotat) ja eren de 600 px; en aixecar-se vençut es veu el dibuix nítid de la conversa.*
+
 *Revisió 641: Nom: el Germà Aldreu convertit és «el Pastor de la Boira» (no «Pastor de Boira») a tot el joc (títol de la barra del boss, converses, Diari, objectius, grans del rosari) i a la documentació.*
 
 *Revisió 640: La Cirosa: la pastura del combat amb el Pastor de la Boira té la mateixa gespa que la resta de la zona (abans hi havia un tros tenyit d'un altre color). Aldreu ja no diu «Jo no el trobo a faltar: l'admiro» i acaba «I ara sóc el seu pastor. El PASTOR DE LA BOIRA!».*

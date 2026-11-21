@@ -215,6 +215,8 @@ function clauSpriteOcellaire(z, e, ara) {
 // Mida del Pastor de la Boira durant el combat (escala del full de caminar, 300 px per fotograma; totes les poses en depenen). Abans era 0,58 i, en començar el combat, es veia més petit
 // que el dibuix de la conversa (el cap, uns 56 px contra 69): amb 0,68 el cap fa uns 66 px.
 const ESC_PASTOR = 0.68;
+// Escala del full de caminar (cel·les de 384 px, personatge de ~342 px d'alçada dins la cel·la; abans cel·les de 300 amb ~227 px d'alçada): el personatge es veu igual de gran que amb ESC_PASTOR
+const ESC_CAMINA = ESC_PASTOR * 227 / 342;
 // On són els peus del Pastor dins de cada dibuix, respecte del centre horitzontal (px del dibuix): l'ombra va allà, no al centre del dibuix
 const PEUS_X_PASTOR = { pastor_apunta: -19, pastor_ataca: -68, pastor_enfadat: -4, pastor_derrota: 13, pastor_boira: -4 };
 const ENEMICS_SOLIDS = ['escolopendra', 'gripau', 'ovella', 'pastor', 'visitant'];
@@ -368,7 +370,7 @@ const ENEMICS = {
     // BOSS: el Germà Aldreu convertit en Pastor de la Boira. Crida ovelles, carrega amb la caiada i la clava a terra en arc.
     // Fulls d'animació (assets/enemics/pastor_*.webp, vegeu docs/PROMPTS_GRAFICS.md): si no hi són, es veu el dibuix fix de sempre.
     pastor: {
-        tex: 'pastor_camina', texAlt: 'pastor_boira', escala: ESC_PASTOR, vida: 40, vel: 430, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 270,
+        tex: 'pastor_camina', texAlt: 'pastor_boira', escala: ESC_CAMINA, vida: 40, vel: 430, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 270,
         robust: true, barra: true, arma: 'tiller',          // només cedeix a la branca del Til·ler
         perill: e => e.estat === 'carrega',
         ia(z, e, ara) {
@@ -1359,16 +1361,16 @@ Object.assign(ZonaBase.prototype, {
     // personatge caminant (mesurat: apunta 0,89, ataca 1,08, enfadat 1,25, derrota 0,82). Els fulls de caminar són de 300 x 300 per fotograma i les poses de 600 x 600
     // (eines/poses_pastor.py, el doble de nítides): l'escala es compensa amb l'amplada de la imatge.
     posaPastor(e, clau, fotograma, factor = 1, peuFrac = 275 / 300) {
-        const sp = e.spr, ant = e.peusDesp !== undefined ? e.peusDesp : 125 * ESC_PASTOR, peus = sp.y + ant;
+        const sp = e.spr, ant = e.peusDesp !== undefined ? e.peusDesp : 160 * ESC_CAMINA, peus = sp.y + ant;
         sp.anims.stop();
         if (fotograma !== undefined) sp.setTexture(clau, fotograma); else sp.setTexture(clau);
-        const esc = ESC_PASTOR * factor * (300 / sp.width), desp = (peuFrac - 0.5) * sp.height * esc;
+        const esc = (clau === 'pastor_camina' ? ESC_CAMINA : ESC_PASTOR * 300 / sp.width) * factor, desp = (peuFrac - 0.5) * sp.height * esc;
         sp.setScale(esc); e.escalaPose = esc;
         sp.y = peus - desp; e.peusDesp = desp;                                   // els peus no es mouen quan canvia el dibuix
         const bd = sp.body, c = e.def && e.def.cos;
         if (bd && c) { bd.setSize(c[0] / esc, c[1] / esc); bd.setOffset((sp.width - c[0] / esc) / 2, sp.height - c[1] / esc); }
     },
-    peusPastor(e) { return e.spr.y + (e.peusDesp !== undefined ? e.peusDesp : 125 * ESC_PASTOR); },
+    peusPastor(e) { return e.spr.y + (e.peusDesp !== undefined ? e.peusDesp : 160 * ESC_CAMINA); },
 
     animaPastor(e, nom, ang) {
         // (pastor_boira: el dibuix de la conversa, de 176 px d'ample i molt més nítid que un fotograma de caminar de 300 px; es mostra a escala 0,5, la mateixa que abans del combat: x(0,5 / escala base))
