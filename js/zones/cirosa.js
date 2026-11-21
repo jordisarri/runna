@@ -170,6 +170,7 @@ class ZonaCirosa extends ZonaBase {
             this.aldreuNpc = this.posar('pastor_boira', 1400, 640);
             this.aldreuOmbra = this.add.image(1400, 640, 'ombra').setScale(0.5).setDepth(-500);
             this.aldreuNpc.ombra = this.aldreuOmbra;
+            this.aldreuNpc.perfilConversa = 'esquerra';          // abans del combat, l'Ineu li parla de perfil (a la seva esquerra, mirant-lo)
             (this.npcs = this.npcs || {}).aldreu = this.aldreuNpc;
             this.aldreuPunt = this.interactiu(1400, 630, RADI_NPC, DIALEGS.aldreuPastor, { altura: this.aldreuNpc.displayHeight + 6, marca: true, actiu: () => !this.bossIniciat });
             this.aldreuPunt.npc = this.aldreuNpc;

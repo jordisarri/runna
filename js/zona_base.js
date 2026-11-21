@@ -2997,6 +2997,23 @@ class ZonaBase extends Phaser.Scene {
         const I = this.ineu;
         if (this.assegut || !n || !n.active || !I.visible) { fet(); return; }
         const ax = 31 + n.displayWidth * 0.5 + 14, ay = 80;                                   // mig cos de l'Ineu + mig cos de l'altre + un buit de 14
+        // Conversa de perfil (n.perfilConversa = 'esquerra' | 'dreta'): l'Ineu es posa al costat indicat de l'altre, al seu mateix nivell, i el mira de perfil (en lloc de davant o darrere)
+        if (n.perfilConversa) {
+            const sg = n.perfilConversa === 'dreta' ? 1 : -1, tx = n.x + sg * (ax + 8), ty = n.y + 4;
+            const lliureP = (x, y) => this.llocLliure(x, y) && x > 24 && x < this.config.amplada - 24;
+            if (lliureP(tx, ty)) {
+                this.canviant = true; I.body.setVelocity(0);
+                this.vista8Manual = false; this.vista8 = null;
+                if (Math.abs(tx - I.x) + Math.abs(ty - I.y) > 12) this.posarDireccio(Math.abs(tx - I.x) >= Math.abs(ty - I.y) ? (tx > I.x ? 'dreta' : 'esquerra') : (ty > I.y ? 'avall' : 'amunt'), true);          // (camina fins al seu lloc)
+                let fetP = false;
+                const acabaP = () => { if (fetP) return; fetP = true; I.body.reset(tx, ty); this.canviant = false; this.vista8Manual = false; this.vista8 = null; this.posarDireccio(sg < 0 ? 'dreta' : 'esquerra', false); fet(); };
+                const dist = Phaser.Math.Distance.Between(I.x, I.y, tx, ty);
+                this.tweens.add({ targets: I, x: tx, y: ty, duration: Math.min(900, 150 + dist * 3.2), ease: 'Sine.easeInOut',
+                    onUpdate: () => { I.setDepth(I.y); if (this.ombraIneu) this.ombraIneu.setPosition(I.x, I.y); }, onComplete: acabaP });
+                this.time.delayedCall(1200, acabaP);
+                return;
+            }
+        }
         const dx0 = I.x - n.x, dy0 = I.y - n.y, d0 = Math.hypot(dx0, dy0) || 1, ang0 = Math.atan2(dy0 || 1, dx0);
         const radi = a => 1 / Math.hypot(Math.cos(a) / ax, Math.sin(a) / ay);              // distància necessària en aquella direcció
         const lliure = (x, y) => this.llocLliure(x, y) && y > TOPE_Y + 8 && x > 24 && x < this.config.amplada - 24 &&
