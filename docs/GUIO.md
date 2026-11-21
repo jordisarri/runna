@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 639: Gran Til·ler: la cara apareix amb l'efecte de transformació de la Font del Bisbe i la Bassadòria (ona d'escaneig, l'arbre sense cara es dissol en el de la cara, espurnes i un halo suau al voltant de la cara; ~3 s) en comptes d'un simple fos.*
+
 *Revisió 638: Venerables Sàvies: en comptes de «Ai, fill, torna a seure» (l'Ineu mai no s'asseu) diuen «Ai, fill, escolta bé el que et diran les profecies. A veure...» abans de la pista.*
 
 *Revisió 637: Alzina Buida (bosc i cabana): en tocar el peu del passadís entre les arrels, l'Ineu entra tot sol al forat del tronc (camina cap a dins, es fa petit i fosc fins que s'esvaeix) i a l'altra banda en surt caminant tot sol del forat; ja no cal pujar pel tronc ni es talla el sprite. Font del Bisbe: opaca (no es veu la silueta de l'Ineu a través).*

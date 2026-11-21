@@ -879,7 +879,7 @@ class ZonaTiller extends ZonaBase {
         // El Gran Til·ler
         // Fins que l'Ineu hi parla per primer cop és un arbre qualsevol, sense cara; la cara (el mateix dibuix, amb el mateix recorte) apareix a poc a poc
         this.tillerCara = Estat.flag('tillerCara') || Estat.flag('parlatTiler');          // les partides velles ja el coneixen
-        this.posar('tiller_arbre', TIL_X, TIL_Y, { col: { w: 230, h: 44 } });
+        this.tillerBase = this.posar('tiller_arbre', TIL_X, TIL_Y, { col: { w: 230, h: 44 } });
         this.tillerAmbCara = this.posar('tiller', TIL_X, TIL_Y).setDepth(TIL_Y + 0.1).setAlpha(this.tillerCara ? 1 : 0);
         const puntTiller = this.interactiu(TIL_X, TIL_Y + 25, 120, E => {
             const d = DIALEGS.tiller(E);
@@ -953,10 +953,54 @@ class ZonaTiller extends ZonaBase {
         });
     }
 
+    // La cara del Til·ler es forma amb l'efecte de transformació de la Font del Bisbe i de la Bassadòria: l'ona d'escaneig (deformació sinusoïdal per línies, amb la base fixa a terra)
+    // mentre el dibuix de l'arbre sense cara es dissol en el de l'arbre amb cara, amb espurnes místiques al voltant de la cara i un llampec suau. S'ha fet a mitja resolució (540)
+    // perquè no pesi al mòbil: el sprite es mostra a doble escala.
     despertarTiller(fet) {
+        const tB = this.textures.get('tiller_arbre'), tC = this.textures.get('tiller'), base = this.tillerBase, cara = this.tillerAmbCara;
+        if (!tB || !tC || !base || !cara || this.transTiller) { if (cara) cara.setAlpha(1); this.tillerCara = true; Estat.posaFlag('tillerCara'); this.esperar(500, fet); return; }
+        this.transTiller = true;
         Sfx.secret();
-        this.tweens.add({ targets: this.tillerAmbCara, alpha: 1, duration: 3200, ease: 'Sine.easeInOut',
-            onComplete: () => { this.tillerCara = true; Estat.posaFlag('tillerCara'); this.esperar(500, fet); } });
+        const sB = tB.getSourceImage(), sC = tC.getSourceImage(), esc = cara.scaleX;
+        const R = 0.5, CW = Math.round(sC.width * R), CH = Math.round(sC.height * R);
+        const canvas = document.createElement('canvas'); canvas.width = CW; canvas.height = CH;
+        const cx = canvas.getContext('2d'), clau = 'transicio_tiller_' + Date.now();
+        this.textures.addCanvas(clau, canvas);
+        const spr = this.add.image(cara.x, cara.y, clau).setOrigin(0.5, 1).setScale(esc / R).setDepth(cara.depth + 0.1);
+        base.setVisible(false); cara.setAlpha(0);
+        const fy = TIL_Y - 205;                                                                    // el centre de la cara
+        const espurnes = this.add.particles(TIL_X, fy, 'espurna', {
+            emitZone: { type: 'random', source: new Phaser.Geom.Ellipse(0, 0, 150, 120) },
+            speed: { min: 14, max: 60 }, scale: { start: 0.3, end: 0.04 }, alpha: { start: 0.9, end: 0 }, tint: [0xffea88, 0x9aff9a, 0xffffff], lifespan: 1100, frequency: 40, blendMode: 'ADD'
+        }).setDepth(cara.depth + 0.5);
+        const halo = this.add.circle(TIL_X, fy, 120, 0xdfffc0, 0).setBlendMode(Phaser.BlendModes.ADD).setDepth(cara.depth + 0.4);
+        this.tweens.add({ targets: halo, alpha: { from: 0, to: 0.28 }, scale: { from: 0.6, to: 1.3 }, duration: 1700, yoyo: true, ease: 'Sine.easeInOut' });
+        this.time.delayedCall(3000, () => { espurnes.stop(); this.time.delayedCall(1300, () => { espurnes.destroy(); halo.destroy(); }); });
+        const anim = { prog: 0, fase: 0 }, pas = 2;
+        this.tweens.add({
+            targets: anim, prog: 1, fase: Math.PI * 8, duration: 3200, ease: 'Linear',
+            onUpdate: () => {
+                cx.clearRect(0, 0, CW, CH);
+                const k = anim.prog, amp = Math.sin(k * Math.PI) * 13, freq = 0.034;                // (px del canvas, que és a mitja resolució)
+                const aB = Math.max(0, Math.min(1, (0.62 - k) / 0.36)), aN = Math.max(0, Math.min(1, (k - 0.34) / 0.36));
+                for (let y = 0; y < CH; y += pas) {
+                    const fix = Math.min(1, Math.max(0, (CH - 6 - y) / 70));                        // les arrels toquen a terra i queden fixes
+                    const dx = (Math.sin(y * freq + anim.fase) * amp + Math.cos(y * freq * 0.45 - anim.fase * 0.8) * amp * 0.35) * fix;
+                    const sy = y / R;
+                    if (aB > 0) { cx.globalAlpha = aB; cx.drawImage(sB, 0, sy, sB.width, pas / R, dx, y, CW, pas); }
+                    if (aN > 0) { cx.globalAlpha = aN; cx.drawImage(sC, 0, sy, sC.width, pas / R, dx, y, CW, pas); }
+                }
+                cx.globalAlpha = 1;
+                this.textures.get(clau).refresh();
+            },
+            onComplete: () => {
+                cara.setAlpha(1); base.setVisible(true);
+                spr.destroy(); this.textures.remove(clau);
+                this.transTiller = false;
+                this.tillerCara = true; Estat.posaFlag('tillerCara');
+                this.esperar(500, fet);
+            }
+        });
     }
 
     // Arrels del Til·ler: grans arcs nuosos que surten de terra i tanquen el camí, amb fulles de til·ler a dalt.
