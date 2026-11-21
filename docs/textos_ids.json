@@ -44,7 +44,7 @@
     "qui": "Pare Jordà",
     "text": "Ineu! Què fas a terra? Respira, fill! Encara prendràs mal. Ja estàs bé?",
     "fitxer": "js/zona_base.js",
-    "linia": 375
+    "linia": 376
    }
   ],
   "zones/monestir::enEntrar": [
@@ -1661,7 +1661,7 @@
    {
     "id": 223,
     "qui": "Les Venerables Sàvies",
-    "text": "Ai, fill, torna a seure. A veure... [pista del pas següent de la història: vegeu la Ruta]",
+    "text": "Ai, fill, escolta bé el que et diran les profecies. A veure... [pista del pas següent de la història: vegeu la Ruta]",
     "fitxer": "js/dialegs.js",
     "linia": 50
    }
@@ -2247,7 +2247,7 @@
     "qui": "Ineu",
     "text": "[text calculat pel joc: textPista]",
     "fitxer": "js/zona_base.js",
-    "linia": 1948
+    "linia": 1950
    }
   ],
   "dialegs::ombraMonjo": [
@@ -5116,14 +5116,14 @@
     "qui": "Ineu",
     "text": "[text calculat pel joc: text]",
     "fitxer": "js/zona_base.js",
-    "linia": 471
+    "linia": 472
    },
    {
     "id": 656,
     "qui": "Ineu",
     "text": "[text calculat pel joc: text]",
     "fitxer": "js/zona_base.js",
-    "linia": 475
+    "linia": 476
    }
   ],
   "zona_base::ineuDiu·triarViatge": [
@@ -5132,7 +5132,7 @@
     "qui": "Ineu",
     "text": "Ara no: hi ha bèsties a prop.",
     "fitxer": "js/zona_base.js",
-    "linia": 529
+    "linia": 530
    }
   ],
   "zona_base::ineuDiu·melodiaTocada": [
@@ -5141,7 +5141,7 @@
     "qui": "Ineu",
     "text": "He tocat el [text calculat pel joc: MELODIES[nom].nom], però aquí no passa res...",
     "fitxer": "js/zona_base.js",
-    "linia": 2204
+    "linia": 2206
    }
   ]
  },

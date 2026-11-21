@@ -47,7 +47,7 @@ function consellVenerables(E) {
         };
     }
     return { pagines: [
-        { qui: 'Les Venerables Sàvies', text: "Ai, fill, torna a seure. A veure... " + pistaActual(E) },
+        { qui: 'Les Venerables Sàvies', text: "Ai, fill, escolta bé el que et diran les profecies. A veure... " + pistaActual(E) },
         ...avisLlosa(E),
         ...avisRosansa(E)
     ] };

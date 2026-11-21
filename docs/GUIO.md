@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 638: Venerables Sàvies: en comptes de «Ai, fill, torna a seure» (l'Ineu mai no s'asseu) diuen «Ai, fill, escolta bé el que et diran les profecies. A veure...» abans de la pista.*
+
 *Revisió 637: Alzina Buida (bosc i cabana): en tocar el peu del passadís entre les arrels, l'Ineu entra tot sol al forat del tronc (camina cap a dins, es fa petit i fosc fins que s'esvaeix) i a l'altra banda en surt caminant tot sol del forat; ja no cal pujar pel tronc ni es talla el sprite. Font del Bisbe: opaca (no es veu la silueta de l'Ineu a través).*
 
 *Revisió 636: Isílder: només diu «Bon dia, monjo!» (ja no explica que la pèrgola és més vella que el monestir ni de l'Hostatgeria); Eve: en donar el got de llet a l'Ineu sa, només diu «Que et faci bon profit, monjo.» (sense «encara que ja vagis ben sa»).*

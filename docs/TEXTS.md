@@ -26,7 +26,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Inici: el Monestir i la Plaça
 
-### despertarCaigut  <sub>(js/zona_base.js:375)</sub>
+### despertarCaigut  <sub>(js/zona_base.js:376)</sub>
 
 **[6] Pare Jordà:** Ineu! Què fas a terra? Respira, fill! Encara prendràs mal. Ja estàs bé?
 
@@ -714,7 +714,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Altrament (per defecte):*
 
-**[223] Les Venerables Sàvies:** Ai, fill, torna a seure. A veure... [pista del pas següent de la història: vegeu la Ruta]
+**[223] Les Venerables Sàvies:** Ai, fill, escolta bé el que et diran les profecies. A veure... [pista del pas següent de la història: vegeu la Ruta]
 
 ### premiMonja  <sub>(js/dialegs.js:79)</sub>
 
@@ -942,7 +942,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1948)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1950)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -2132,7 +2132,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[654] Ineu:** El passatge ja és obert.
 
-### pensament a ineuDiu  <sub>(js/zona_base.js:471)</sub>
+### pensament a ineuDiu  <sub>(js/zona_base.js:472)</sub>
 
 **[655] Ineu:** [text calculat pel joc: text]
 
@@ -2140,11 +2140,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[656] Ineu:** [text calculat pel joc: text]
 
-### pensament a triarViatge  <sub>(js/zona_base.js:529)</sub>
+### pensament a triarViatge  <sub>(js/zona_base.js:530)</sub>
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2204)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2206)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
