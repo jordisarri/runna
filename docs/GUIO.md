@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 640: La Cirosa: la pastura del combat amb el Pastor de Boira té la mateixa gespa que la resta de la zona (abans hi havia un tros tenyit d'un altre color). Aldreu ja no diu «Jo no el trobo a faltar: l'admiro» i acaba «I ara sóc el seu pastor. El PASTOR DE LA BOIRA!».*
+
 *Revisió 639: Gran Til·ler: la cara apareix amb l'efecte de transformació de la Font del Bisbe i la Bassadòria (ona d'escaneig, l'arbre sense cara es dissol en el de la cara, espurnes i un halo suau al voltant de la cara; ~3 s) en comptes d'un simple fos.*
 
 *Revisió 638: Venerables Sàvies: en comptes de «Ai, fill, torna a seure» (l'Ineu mai no s'asseu) diuen «Ai, fill, escolta bé el que et diran les profecies. A veure...» abans de la pista.*

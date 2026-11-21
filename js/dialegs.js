@@ -1373,7 +1373,7 @@ const DIALEGS = {
             { qui: "Aldreu, Pastor de Boira", text: "L'Aldreu era un monjo que ningú no mirava. Ara sóc el Pastor de Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai." },
             { qui: "Aldreu, Pastor de Boira", text: "Des que va pujar la boira, una veu em parla dins el cap, baixeta, només per a mi. Ella em va veure quan ningú més no ho feia. És la veu del Mestre." },
             { qui: "Ineu", text: "Una veu dins el teu cap... Aldreu, és la de l'Home de la Gàbia. L'Ocellaire parla per la teva boca." },
-            { qui: "Aldreu, Pastor de Boira", text: "L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» Jo no el trobo a faltar: l'admiro. I ara sóc el seu pastor. El PASTOR!" },
+            { qui: "Aldreu, Pastor de Boira", text: "L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» I ara sóc el seu pastor. El PASTOR DE LA BOIRA!" },
             { qui: "Ineu", text: "On són l'Huri, el Fram i el Sardi?" },
             { qui: "Aldreu, Pastor de Boira", text: "Dormen. Els vaig portar jo al Mestre, un per un, de nit. Allà dins ja no tenen por de res." },
             { qui: "Ineu", text: "Aldreu, això que et parla no és bo. Encara pots tornar enrere." },

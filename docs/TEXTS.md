@@ -594,7 +594,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[179] Ineu:** Una veu dins el teu cap... Aldreu, és la de l'Home de la Gàbia. L'Ocellaire parla per la teva boca.
 
-**[180] Aldreu, Pastor de Boira:** L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» Jo no el trobo a faltar: l'admiro. I ara sóc el seu pastor. El PASTOR!
+**[180] Aldreu, Pastor de Boira:** L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» I ara sóc el seu pastor. El PASTOR DE LA BOIRA!
 
 **[181] Ineu:** On són l'Huri, el Fram i el Sardi?
 

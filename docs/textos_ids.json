@@ -878,7 +878,7 @@
     "qui": "Cartell",
     "text": "La Caseta\n→ El Gran Til·ler",
     "fitxer": "js/zones/nord.js",
-    "linia": 1169
+    "linia": 1213
    }
   ],
   "dialegs::prunera": [
@@ -1342,7 +1342,7 @@
    {
     "id": 180,
     "qui": "Aldreu, Pastor de Boira",
-    "text": "L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» Jo no el trobo a faltar: l'admiro. I ara sóc el seu pastor. El PASTOR!",
+    "text": "L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» I ara sóc el seu pastor. El PASTOR DE LA BOIRA!",
     "fitxer": "js/dialegs.js",
     "linia": 1376
    },

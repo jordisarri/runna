@@ -145,7 +145,7 @@ class ZonaCirosa extends ZonaBase {
         this.npc('pastor_vell', 285, 650, DIALEGS.pastorVell);
 
         // La pastura de la dreta: oberta del tot. Només es tanca amb unes tanques de fusta quan comença el combat contra el Pastor
-        this.terra('herba', 1032, 160, 740, 860, -1050).setTint(0xcdeaa0);
+        // (la pastura té la mateixa gespa que la resta de la zona: abans hi havia un tros d'herba tenyit, d'un altre color)
 
         // El ramat. Mentre el Pastor hi és, totes les ovelles són de boira (enemigues): dues d'adormides a la pastura, que es
         // desperten quan comença el combat (i el Pastor en crida més, fins a dues alhora). Vençut, ovelles blanques que pasturen.
