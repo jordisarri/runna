@@ -213,8 +213,8 @@ function clauSpriteOcellaire(z, e, ara) {
 
 // Enemics sòlids: l'Ineu no els pot travessar (separació suau a actualitzarCombat). Els voladors, els estàtics i el boss no.
 // Mida del Pastor de la Boira durant el combat (escala del full de caminar, 300 px per fotograma; totes les poses en depenen). Abans era 0,58 i, en començar el combat, es veia més petit
-// que el dibuix de la conversa (el cap, uns 56 px contra 69): amb 0,68 el cap fa uns 66 px.
-const ESC_PASTOR = 0.68;
+// que el dibuix de la conversa; amb 0,80 el cap del Pastor és tan gran com el de l'Ineu o una mica més (era massa petit al costat de l'Ineu). Els factors de cada pose (FACTOR_POSA) igualen el cap de totes.
+const ESC_PASTOR = 0.80;
 // Escala del full de caminar (cel·les de 384 px, personatge de ~342 px d'alçada dins la cel·la; abans cel·les de 300 amb ~227 px d'alçada): el personatge es veu igual de gran que amb ESC_PASTOR
 const ESC_CAMINA = ESC_PASTOR * 227 / 342;
 // On són els peus del Pastor dins de cada dibuix, respecte del centre horitzontal (px del dibuix): l'ombra va allà, no al centre del dibuix
@@ -1374,7 +1374,7 @@ Object.assign(ZonaBase.prototype, {
 
     animaPastor(e, nom, ang) {
         // (pastor_boira: el dibuix de la conversa, de 176 px d'ample i molt més nítid que un fotograma de caminar de 300 px; es mostra a escala 0,5, la mateixa que abans del combat: x(0,5 / escala base))
-        const FACTOR_POSA = { pastor_apunta: 0.89, pastor_ataca: 1.08, pastor_enfadat: 1.25, pastor_derrota: 0.82, pastor_boira: 0.5 / (ESC_PASTOR * 300 / 176) };
+        const FACTOR_POSA = { pastor_apunta: 0.98, pastor_ataca: 1.32, pastor_enfadat: 1.28, pastor_derrota: 0.95, pastor_boira: 0.5 / (ESC_PASTOR * 300 / 176) };
         if (!e || !e.spr || !e.spr.active) return false;
         const sp = e.spr;
 
