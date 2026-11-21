@@ -261,7 +261,7 @@ class ZonaCirosa extends ZonaBase {
         this.tweens.add({ targets: e.spr, y: e.spr.y - 14, duration: 220, yoyo: true, delay: 250 });
         this.time.delayedCall(450, () => {
             if (e.spr.active) {
-                this.animaPastor(e, 'normal');          // dret amb el dibuix nítid de la conversa (el fotograma de caminar, de 300 px, es veia molt borrós ampliat)
+                this.animaPastor(e, 'idle');          // dret amb el fotograma de caminar (ara de 384 px, nítid) a la mateixa mida que quan se'n va caminant: abans, amb el dibuix de la conversa, era molt més petit i en començar a caminar es feia gran de cop
                 e.spr.setFlipX(e.spr.x > this.ineu.x);
                 if (e.ombra) {
                     e.ombra.setPosition(e.spr.x, this.peusPastor(e) - 2);
