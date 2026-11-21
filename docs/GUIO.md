@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 645: Pastor de la Boira: mides triades per l'autor sobre la imatge de comparació: caminant i quiet de cara a l'alçada del Germà Aldreu (≈133 px; 80 %), batent amb el cap a l'alçada de l'Ineu (121 px; 75 %), enfadat/crida amb el cap a l'alçada del Germà Aldreu (64 %); apuntar 76 %, de genolls 78 %.*
+
 *Revisió 644: Pastor de la Boira: mides unificades amb el criteri de l'agent d'art perquè sempre es vegi igual de gran: el cap fa uns 45-48 px a totes les poses (caminant 75 %, apuntar 76 %, batre 84 %, enfadat 80 %, de genolls 78 %) i el caminant de cara fa ≈ 1,12 vegades l'alçada de l'Ineu (un pèl més gran, no desproporcionat).*
 
 *Revisió 643: Pastor de la Boira: mides de les poses del combat triades per l'autor amb l'eina (apuntar 86 %, batre 78 %, enfadat 76 %, de genolls 86 %; caminant i dret, 74 % (igual d'alt que el dibuix de la conversa); mida general, 100 %). Aldreu fora del combat, sense canvis.*

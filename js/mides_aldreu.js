@@ -11,7 +11,7 @@ const MIDES_ALDREU = {
         poses: { apunta: 0.98, ataca: 1.32, enfadat: 1.28, derrota: 0.95 },     // factor de cada pose, perquè el cap tingui la mateixa mida a totes
         aldreu: { germa_aldreu: 82.6, germa_aldreu_trist: 75.2, pastor_boira: 88, aldreu_guardia: 89.4 }       // amplada de joc (px) de cada dibuix de l'Aldreu fora del combat (js/assets.js)
     },
-    mult: { pastor: 1, camina: 0.75, apunta: 0.76, ataca: 0.84, enfadat: 0.80, derrota: 0.78, germa_aldreu: 1, germa_aldreu_trist: 1, pastor_boira: 1, aldreu_guardia: 1 }          // (mides unificades: el cap del Pastor fa 45-48 px a totes les poses i el caminant, 1,12 x l'alçada de l'Ineu; es poden ajustar amb l'eina)
+    mult: { pastor: 1, camina: 0.80, apunta: 0.76, ataca: 0.75, enfadat: 0.64, derrota: 0.78, germa_aldreu: 1, germa_aldreu_trist: 1, pastor_boira: 1, aldreu_guardia: 1 }          // (triats segons l'autor: caminant i quiet de cara = alçada del Germà Aldreu (133 px, línia blanca); batent: el cap a l'alçada de l'Ineu (121 px); enfadat: el cap a la línia blanca)
 };
 try {
     const desat = JSON.parse(localStorage.getItem('runna_mides_aldreu') || 'null');
