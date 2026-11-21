@@ -1358,11 +1358,11 @@ Object.assign(ZonaBase.prototype, {
     // Canvia la imatge del Pastor mantenint la mida del seu CAP (que és el que es nota) i els peus al mateix lloc. factor: la mida del cap de cada dibuix respecte del del
     // personatge caminant (mesurat: apunta 0,89, ataca 1,08, enfadat 1,25, derrota 0,82). Els fulls de caminar són de 300 x 300 per fotograma i les poses de 600 x 600
     // (eines/poses_pastor.py, el doble de nítides): l'escala es compensa amb l'amplada de la imatge.
-    posaPastor(e, clau, fotograma, factor = 1) {
+    posaPastor(e, clau, fotograma, factor = 1, peuFrac = 275 / 300) {
         const sp = e.spr, ant = e.peusDesp !== undefined ? e.peusDesp : 125 * ESC_PASTOR, peus = sp.y + ant;
         sp.anims.stop();
         if (fotograma !== undefined) sp.setTexture(clau, fotograma); else sp.setTexture(clau);
-        const esc = ESC_PASTOR * factor * (300 / sp.width), desp = (275 / 300 - 0.5) * sp.height * esc;
+        const esc = ESC_PASTOR * factor * (300 / sp.width), desp = (peuFrac - 0.5) * sp.height * esc;
         sp.setScale(esc); e.escalaPose = esc;
         sp.y = peus - desp; e.peusDesp = desp;                                   // els peus no es mouen quan canvia el dibuix
         const bd = sp.body, c = e.def && e.def.cos;
@@ -1371,7 +1371,8 @@ Object.assign(ZonaBase.prototype, {
     peusPastor(e) { return e.spr.y + (e.peusDesp !== undefined ? e.peusDesp : 125 * ESC_PASTOR); },
 
     animaPastor(e, nom, ang) {
-        const FACTOR_POSA = { pastor_apunta: 0.89, pastor_ataca: 1.08, pastor_enfadat: 1.25, pastor_derrota: 0.82 };
+        // (pastor_boira: el dibuix de la conversa, de 176 px d'ample i molt més nítid que un fotograma de caminar de 300 px; es mostra a escala 0,5, la mateixa que abans del combat: x(0,5 / escala base))
+        const FACTOR_POSA = { pastor_apunta: 0.89, pastor_ataca: 1.08, pastor_enfadat: 1.25, pastor_derrota: 0.82, pastor_boira: 0.5 / (ESC_PASTOR * 300 / 176) };
         if (!e || !e.spr || !e.spr.active) return false;
         const sp = e.spr;
 
@@ -1393,7 +1394,7 @@ Object.assign(ZonaBase.prototype, {
             if (this.textures.exists(k)) {
                 if (e.animPastor === nom) return true;
                 e.animPastor = nom;
-                this.posaPastor(e, k, undefined, FACTOR_POSA[k] || 1);
+                this.posaPastor(e, k, undefined, FACTOR_POSA[k] || 1, k === 'pastor_boira' ? 267 / 268 : undefined);
                 return true;
             }
         }
