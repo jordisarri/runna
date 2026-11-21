@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 647: Germà Aldreu monjo: l'animació de caminar (cap a la dreta i cap al nord-est) també és la del personatge nou (la mateixa cara que el Pastor de la Boira), generada a AutoSprite a 512 px; abans caminava amb el dibuix vell.*
+
 *Revisió 646: Germà Aldreu (monjo, abans de la boira): dibuixos nous (quiet i trist) amb la mateixa cara que el Pastor de la Boira (la mateixa persona: cabell blanc, ulleres rodones, orelles grans), sense cap efecte màgic. Generats a AutoSprite a partir del personatge «Pastor de la boira». Pendents: el full de caminar, el retrat i el guàrdia.*
 
 *Revisió 645: Pastor de la Boira: mides triades per l'autor sobre la imatge de comparació: caminant i quiet de cara a l'alçada del Germà Aldreu (≈133 px; 80 %), batent amb el cap a l'alçada de l'Ineu (121 px; 75 %), enfadat/crida amb el cap a l'alçada del Germà Aldreu (64 %); apuntar 76 %, de genolls 78 %.*
