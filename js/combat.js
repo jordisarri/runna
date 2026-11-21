@@ -214,9 +214,9 @@ function clauSpriteOcellaire(z, e, ara) {
 // Enemics sòlids: l'Ineu no els pot travessar (separació suau a actualitzarCombat). Els voladors, els estàtics i el boss no.
 // Mida del Pastor de la Boira durant el combat (escala del full de caminar, 300 px per fotograma; totes les poses en depenen). Abans era 0,58 i, en començar el combat, es veia més petit
 // que el dibuix de la conversa; amb 0,80 el cap del Pastor és tan gran com el de l'Ineu o una mica més (era massa petit al costat de l'Ineu). Els factors de cada pose (FACTOR_POSA) igualen el cap de totes.
-const ESC_PASTOR = 0.80;
+const ESC_PASTOR = MIDES_ALDREU.base.pastor * MA('pastor');          // (js/mides_aldreu.js, eina proves/ajust_aldreu.html)
 // Escala del full de caminar (cel·les de 384 px, personatge de ~342 px d'alçada dins la cel·la; abans cel·les de 300 amb ~227 px d'alçada): el personatge es veu igual de gran que amb ESC_PASTOR
-const ESC_CAMINA = ESC_PASTOR * 227 / 342;
+const ESC_CAMINA = ESC_PASTOR * 227 / 342 * MA('camina');
 // On són els peus del Pastor dins de cada dibuix, respecte del centre horitzontal (px del dibuix): l'ombra va allà, no al centre del dibuix
 const PEUS_X_PASTOR = { pastor_apunta: -19, pastor_ataca: -68, pastor_enfadat: -4, pastor_derrota: 13, pastor_boira: -4 };
 const ENEMICS_SOLIDS = ['escolopendra', 'gripau', 'ovella', 'pastor', 'visitant'];
@@ -1374,7 +1374,7 @@ Object.assign(ZonaBase.prototype, {
 
     animaPastor(e, nom, ang) {
         // (pastor_boira: el dibuix de la conversa, de 176 px d'ample i molt més nítid que un fotograma de caminar de 300 px; es mostra a escala 0,5, la mateixa que abans del combat: x(0,5 / escala base))
-        const FACTOR_POSA = { pastor_apunta: 0.98, pastor_ataca: 1.32, pastor_enfadat: 1.28, pastor_derrota: 0.95, pastor_boira: 0.5 / (ESC_PASTOR * 300 / 176) };
+        const P_ = MIDES_ALDREU.base.poses, FACTOR_POSA = { pastor_apunta: P_.apunta * MA('apunta'), pastor_ataca: P_.ataca * MA('ataca'), pastor_enfadat: P_.enfadat * MA('enfadat'), pastor_derrota: P_.derrota * MA('derrota'), pastor_boira: 0.5 / (ESC_PASTOR * 300 / 176) };
         if (!e || !e.spr || !e.spr.active) return false;
         const sp = e.spr;
 

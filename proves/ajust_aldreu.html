@@ -1,0 +1,123 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mides de l'Aldreu i del Pastor</title>
+<style>
+    body { background: #2a3a22; color: #f2e6c8; font: 15px Georgia, serif; margin: 10px; }
+    h1 { font-size: 18px; margin: 4px 0 8px; }
+    h2 { font-size: 15px; margin: 12px 0 4px; border-bottom: 1px solid #5a7a4a; }
+    canvas { background: #46603a; display: block; width: 100%; height: auto; border-radius: 6px; touch-action: pan-y; }
+    .fila { display: grid; grid-template-columns: 9.5em 1fr 4.6em; gap: 6px; align-items: center; margin: 3px 0; }
+    .fila input[type=range] { width: 100%; }
+    .fila output { text-align: right; font-variant-numeric: tabular-nums; }
+    button { font: inherit; padding: 6px 10px; margin: 4px 6px 4px 0; border-radius: 6px; border: 1px solid #c8a850; background: #5a4020; color: #f2e6c8; cursor: pointer; }
+    small { opacity: .8; }
+    #resum { background: #1c2a16; padding: 6px 8px; border-radius: 6px; font: 12px monospace; word-break: break-all; margin-top: 6px; }
+    .avis { color: #ffe08a; }
+</style>
+<h1>Mides de l'Aldreu i del Pastor de la Boira</h1>
+<small>A l'<b>esquerra de cada fila</b> hi ha l'Ineu aturat (la referència: no es canvia). Sota cada figura hi ha la seva mida real (alt × ample visibles, en px de joc). Cada figura es dibuixa a la mida real del joc (px de món); el zoom només ho amplia per veure-ho. Les línies marquen l'alçada de l'Ineu i la del seu cap. Els canvis es desen sols en aquest navegador i el joc els fa servir de seguida (obre'l a continuació). Per fer-los definitius, copia el text i passa'l.</small>
+
+<h2>Comparació</h2>
+<label>Zoom <input id="zoom" type="range" min="1" max="4" step="0.1" value="2"> <output id="zoomV">2×</output></label>
+<canvas id="c" width="1100" height="700"></canvas>
+
+<h2>Pastor de la Boira (combat)</h2>
+<div id="sPastor"></div>
+<h2>Aldreu (fora del combat)</h2>
+<div id="sAldreu"></div>
+
+<p>
+    <button id="desa">Desa i aplica al joc</button>
+    <button id="copia">Copia els valors</button>
+    <button id="reset">Torna a 100 %</button>
+    <button id="esborra">Esborra el que hi ha desat</button>
+</p>
+<div id="resum"></div>
+<p class="avis" id="msg"></p>
+<script src="../js/mides_aldreu.js"></script>
+<script>
+const B = MIDES_ALDREU.base, M = Object.assign({}, MIDES_ALDREU.mult);       // M: els multiplicadors (de codi + el que hi hagi desat)
+const NOMS = { pastor: 'Mida general del Pastor', camina: 'Pastor caminant / dret', apunta: 'Pastor: apuntar', ataca: 'Pastor: batre', enfadat: 'Pastor: enfadat', derrota: 'Pastor: de genolls',
+               germa_aldreu: 'Aldreu (monjo)', germa_aldreu_trist: 'Aldreu trist', aldreu_guardia: 'Aldreu guàrdia', pastor_boira: 'Aldreu (conversa)' };
+const imatges = {};
+const carrega = (k, src) => new Promise(r => { const i = new Image(); i.onload = () => { imatges[k] = i; r(); }; i.onerror = () => r(); i.src = src; });
+const FITXERS = { ineu: '../assets/ineu/idle/idle_down.webp', camina: '../assets/enemics/pastor_camina.webp', apunta: '../assets/enemics/pastor_apunta.webp', ataca: '../assets/enemics/pastor_ataca.webp',
+    enfadat: '../assets/enemics/pastor_enfadat.webp', derrota: '../assets/enemics/pastor_derrota.webp', germa_aldreu: '../assets/personatges/germa_aldreu.webp',
+    germa_aldreu_trist: '../assets/personatges/germa_aldreu_trist.webp', aldreu_guardia: '../assets/personatges/aldreu_guardia.webp', pastor_boira: '../assets/enemics/pastor_boira.webp' };
+
+// Cada figura: { clau, rotul, w, h (px de món), peusFrac (on són els peus dins la imatge, 0-1), dibuixa(ctx, x, yPeus, k) }
+function figures() {
+    const E = B.pastor * M.pastor, f = [];
+    // L'Ineu aturat: cel·la de 288 mostrada a 142 px (SPRITE_INEU.alcada), peus a 240/256
+    f.push({ clau: 'ineu', rotul: 'Ineu aturat (referència)', mida: 142, peus: 240 / 256, src: [0, 0, 288, 288] });
+    f.push({ clau: 'camina', rotul: 'Pastor caminant', mida: 384 * E * 227 / 342 * M.camina, peus: 275 / 300, src: [0, 5 * 384, 384, 384] });
+    ['apunta', 'ataca', 'enfadat', 'derrota'].forEach(k => f.push({ clau: k, rotul: 'Pastor: ' + NOMS[k].split(': ')[1], mida: 600 * E * B.poses[k] * M[k] * 300 / 600, peus: 275 / 300, src: [0, 0, 600, 600] }));
+    ['germa_aldreu', 'germa_aldreu_trist', 'aldreu_guardia', 'pastor_boira'].forEach(k => {
+        const i = imatges[k], w = B.aldreu[k] * M[k];
+        f.push({ clau: k, rotul: NOMS[k], mida: w, ample: true, peus: 0.995, src: i ? [0, 0, i.width, i.height] : [0, 0, 1, 1] });
+    });
+    return f;
+}
+const cv = document.getElementById('c'), cx = cv.getContext('2d');
+const caixes = {};
+function caixa(f) {                                   // la part visible (píxels no transparents) de la imatge, en px d'origen: [x0, y0, x1, y1]
+    const k = f.clau + f.src.join(',');
+    if (caixes[k]) return caixes[k];
+    const t = document.createElement('canvas'); t.width = f.src[2]; t.height = f.src[3];
+    const c = t.getContext('2d'); c.drawImage(imatges[f.clau], f.src[0], f.src[1], f.src[2], f.src[3], 0, 0, f.src[2], f.src[3]);
+    const d = c.getImageData(0, 0, t.width, t.height).data; let x0 = t.width, y0 = t.height, x1 = 0, y1 = 0;
+    for (let y = 0; y < t.height; y++) for (let x = 0; x < t.width; x++) if (d[(y * t.width + x) * 4 + 3] > 40) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    return caixes[k] = [x0, y0, x1, y1];
+}
+function fila(fs, y0, alt, Z, escComu) {                       // una fila: l'Ineu aturat a l'esquerra i les figures al costat, totes a la seva mida real (x zoom); si no hi caben, es redueix la vista
+    const ample = cv.width - 16;
+    const mides = fs.map(f => f.mida * Z + 12), total = mides.reduce((a, b) => a + b, 0), esc = escComu, base = y0 + alt;
+    const ineu = fs[0], cIn = caixa(ineu), hIneu = (cIn[3] - cIn[1]) / ineu.src[3] * ineu.mida * Z * esc;        // alçada visible de l'Ineu en pantalla
+    cx.strokeStyle = 'rgba(255,255,255,.5)'; cx.setLineDash([6, 5]); cx.lineWidth = 1; cx.font = '12px sans-serif'; cx.fillStyle = 'rgba(255,255,255,.75)';
+    [[0, 'terra'], [hIneu, 'alçada de l\'Ineu'], [hIneu * 0.78, 'cap de l\'Ineu']].forEach(([h, t]) => { cx.beginPath(); cx.moveTo(0, base - h); cx.lineTo(cv.width, base - h); cx.stroke(); cx.fillText(t, cv.width - 110, base - h - 3); });
+    cx.setLineDash([]);
+    let x = 8;
+    fs.forEach(f => {
+        const i = imatges[f.clau]; if (!i) return;
+        const w = f.mida * Z * esc, h = w * f.src[3] / f.src[2], yTop = base - h * f.peus;
+        cx.drawImage(i, f.src[0], f.src[1], f.src[2], f.src[3], x, yTop, w, h);
+        const c = caixa(f), vis = (c[3] - c[1]) / f.src[3] * f.mida, visW = (c[2] - c[0]) / f.src[2] * f.mida;
+        cx.fillStyle = f === ineu ? '#ffe08a' : '#f2e6c8'; cx.font = '11px sans-serif';
+        cx.fillText(f.rotul, x, base + 14); cx.fillText(Math.round(vis) + ' alt × ' + Math.round(visW) + ' ample', x, base + 27);
+        x += w + 12 * esc;
+    });
+}
+function pinta() {
+    const Z = +document.getElementById('zoom').value, fs = figures(), ineu = fs[0];
+    cx.clearRect(0, 0, cv.width, cv.height); cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = 'high';
+    const alt = Math.round(150 * Z) + 10;
+    cv.height = 2 * (alt + 52); cx.imageSmoothingEnabled = true;
+    const amp = cv.width - 16, tot = lf => lf.reduce((a, f) => a + f.mida * Z + 12, 0), r1 = [ineu, ...fs.slice(1, 6)], r2 = [ineu, ...fs.slice(6)];
+    const esc = Math.min(1, amp / tot(r1), amp / tot(r2));          // la mateixa escala a les dues files: l'Ineu es veu igual de gran
+    fila(r1, 6, alt, Z, esc);
+    fila(r2, alt + 52 + 6, alt, Z, esc);
+    document.getElementById('zoomV').textContent = Z.toFixed(1) + '×';
+    const linia = 'mult: { ' + Object.keys(MIDES_ALDREU.mult).map(k => k + ': ' + (+M[k].toFixed(3))).join(', ') + ' }';
+    document.getElementById('resum').textContent = linia;
+}
+function sliders(div, claus) {
+    claus.forEach(k => {
+        const d = document.createElement('div'); d.className = 'fila';
+        d.innerHTML = '<span>' + NOMS[k] + '</span><input type="range" min="40" max="250" step="1" value="' + Math.round(M[k] * 100) + '"><output></output>';
+        const r = d.querySelector('input'), o = d.querySelector('output');
+        const act = () => { M[k] = r.value / 100; o.textContent = r.value + ' %'; pinta(); localStorage.setItem('runna_mides_aldreu', JSON.stringify(M)); document.getElementById('msg').textContent = 'Desat en aquest navegador: ja es veu al joc.'; };
+        r.addEventListener('input', act); o.textContent = r.value + ' %'; d.act = act; div.appendChild(d);
+        d.refresca = () => { r.value = Math.round(M[k] * 100); o.textContent = r.value + ' %'; };
+    });
+}
+sliders(document.getElementById('sPastor'), ['pastor', 'camina', 'apunta', 'ataca', 'enfadat', 'derrota']);
+sliders(document.getElementById('sAldreu'), ['germa_aldreu', 'germa_aldreu_trist', 'aldreu_guardia', 'pastor_boira']);
+document.getElementById('zoom').addEventListener('input', pinta);
+document.getElementById('desa').onclick = () => { localStorage.setItem('runna_mides_aldreu', JSON.stringify(M)); document.getElementById('msg').textContent = 'Desat: recarrega el joc.'; };
+document.getElementById('copia').onclick = async () => { const t = document.getElementById('resum').textContent; try { await navigator.clipboard.writeText(t); document.getElementById('msg').textContent = 'Copiat. Passa\'m aquesta línia perquè la deixi definitiva.'; } catch (e) { document.getElementById('msg').textContent = 'No he pogut copiar: selecciona el text de sota i copia\'l a mà.'; } };
+const refresca = () => document.querySelectorAll('.fila').forEach(d => d.refresca && d.refresca());
+document.getElementById('reset').onclick = () => { Object.keys(M).forEach(k => M[k] = 1); refresca(); pinta(); localStorage.setItem('runna_mides_aldreu', JSON.stringify(M)); document.getElementById('msg').textContent = 'Tot a 100 % (desat).'; };
+document.getElementById('esborra').onclick = () => { localStorage.removeItem('runna_mides_aldreu'); Object.keys(M).forEach(k => M[k] = 1); refresca(); pinta(); document.getElementById('msg').textContent = 'Esborrat: el joc torna als valors de codi (js/mides_aldreu.js).'; };
+Promise.all(Object.entries(FITXERS).map(([k, s]) => carrega(k, s))).then(pinta);
+</script>
