@@ -492,7 +492,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[144] Pastor:** El ramat és de nou al corral. No sé com agrair-t'ho, monjo. Nosaltres només volem una mica de pau, i un racó on no ens miri ningú malament.
 
-**[145] Pastor:** No s'acosti gaire, pare, que la gent diu que portem mala sort. Només tenim el ramat... i el Germà Aldreu, aquell monjo pesat que sempre jugava amb els nens, ens l'ha pres. Ara es fa dir el Pastor de Boira.
+**[145] Pastor:** No s'acosti gaire, pare, que la gent diu que portem mala sort. Només tenim el ramat... i el Germà Aldreu, aquell monjo pesat que sempre jugava amb els nens, ens l'ha pres. Ara es fa dir el Pastor de la Boira.
 
 ### pastorB  <sub>(js/dialegs.js:1255)</sub>
 
@@ -584,33 +584,33 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### aldreuPastor  <sub>(js/dialegs.js:1371)</sub>
 
-**[175] Aldreu, Pastor de Boira:** Ineu!
+**[175] Aldreu, Pastor de la Boira:** Ineu!
 
 **[176] Ineu:** Germà Aldreu?!
 
-**[177] Aldreu, Pastor de Boira:** L'Aldreu era un monjo que ningú no mirava. Ara sóc el Pastor de Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai.
+**[177] Aldreu, Pastor de la Boira:** L'Aldreu era un monjo que ningú no mirava. Ara sóc el Pastor de la Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai.
 
-**[178] Aldreu, Pastor de Boira:** Des que va pujar la boira, una veu em parla dins el cap, baixeta, només per a mi. Ella em va veure quan ningú més no ho feia. És la veu del Mestre.
+**[178] Aldreu, Pastor de la Boira:** Des que va pujar la boira, una veu em parla dins el cap, baixeta, només per a mi. Ella em va veure quan ningú més no ho feia. És la veu del Mestre.
 
 **[179] Ineu:** Una veu dins el teu cap... Aldreu, és la de l'Home de la Gàbia. L'Ocellaire parla per la teva boca.
 
-**[180] Aldreu, Pastor de Boira:** L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» I ara sóc el seu pastor. El PASTOR DE LA BOIRA!
+**[180] Aldreu, Pastor de la Boira:** L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» I ara sóc el seu pastor. El PASTOR DE LA BOIRA!
 
 **[181] Ineu:** On són l'Huri, el Fram i el Sardi?
 
-**[182] Aldreu, Pastor de Boira:** Dormen. Els vaig portar jo al Mestre, un per un, de nit. Allà dins ja no tenen por de res.
+**[182] Aldreu, Pastor de la Boira:** Dormen. Els vaig portar jo al Mestre, un per un, de nit. Allà dins ja no tenen por de res.
 
 **[183] Ineu:** Aldreu, això que et parla no és bo. Encara pots tornar enrere.
 
-**[184] Aldreu, Pastor de Boira:** Tornar enrere? Mai! El Mestre em va veure, quan ningú més no ho feia. Calla! Be-e-e!
+**[184] Aldreu, Pastor de la Boira:** Tornar enrere? Mai! El Mestre em va veure, quan ningú més no ho feia. Calla! Be-e-e!
 
 ### aldreuDerrotat  <sub>(js/dialegs.js:1388)</sub>
 
-**[185] Aldreu, Pastor de Boira:** Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré.
+**[185] Aldreu, Pastor de la Boira:** Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré.
 
-**[186] Aldreu, Pastor de Boira:** El Mestre és al fons de les Gírgoles, i ja és despert: la seva veu em crida des d'allà baix i no calla mai. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells.
+**[186] Aldreu, Pastor de la Boira:** El Mestre és al fons de les Gírgoles, i ja és despert: la seva veu em crida des d'allà baix i no calla mai. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells.
 
-**[187] Aldreu, Pastor de Boira:** Je, je, je... Ens veurem allà baix, monjo.
+**[187] Aldreu, Pastor de la Boira:** Je, je, je... Ens veurem allà baix, monjo.
 
 **[188] Ineu:** («Al fons de les Gírgoles»... Ara ja sé on mirar.)
 
@@ -1908,7 +1908,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[579] Germà Aldreu:** (No et mira.) Ja no em parla. Abans em parlava sempre.Fes el que has de fer, noi. Avui no et miraré.Quan era a la Plaça, tothom em passava pel costat. Ell em va veure. […]
 
-**[580] Aldreu, Pastor de Boira:** El Mestre ve, monjo. Ja el sents?
+**[580] Aldreu, Pastor de la Boira:** El Mestre ve, monjo. Ja el sents?
 
 ### nenGabia  <sub>(js/zones/gabia.js:92)</sub>
 
@@ -1934,27 +1934,27 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### iniciarCombatFinal  <sub>(js/zones/gabia.js:1556)</sub>
 
-**[587] Aldreu, Pastor de Boira:** Una altra vegada, monjo? El Mestre no es cansa mai.
+**[587] Aldreu, Pastor de la Boira:** Una altra vegada, monjo? El Mestre no es cansa mai.
 
 **[588] L'Home de la Gàbia:** Torna a entrar, petit. Sempre torna, el riure.
 
-**[589] Aldreu, Pastor de Boira:** Mestre, aquesta vegada sí!
+**[589] Aldreu, Pastor de la Boira:** Mestre, aquesta vegada sí!
 
 **[590] Ineu:** (Tres capolls de boira, penjats com llonganisses... L'Huri, el Fram, el Sardi. Dormen.)
 
 **[591] Ineu:** Aguanteu. Ja sóc aquí.
 
-**[592] Aldreu, Pastor de Boira:** Silenci! Aquí no s'alça la veu, monjo. El Mestre dorm, i jo vetllo el seu son.
+**[592] Aldreu, Pastor de la Boira:** Silenci! Aquí no s'alça la veu, monjo. El Mestre dorm, i jo vetllo el seu son.
 
 **[593] Ineu:** Germà Aldreu, sóc jo. Baixeu la veu.
 
-**[594] Aldreu, Pastor de Boira:** Per cada riure que li duc, em gratifica amb un «bon minyó, Aldreu». No pots entendre què vol dir per a mi que algú tan poderós conegui el meu nom.
+**[594] Aldreu, Pastor de la Boira:** Per cada riure que li duc, em gratifica amb un «bon minyó, Aldreu». No pots entendre què vol dir per a mi que algú tan poderós conegui el meu nom.
 
-**[595] Aldreu, Pastor de Boira:** Tu sempre has tingut el favor de tothom, nen mimat!
+**[595] Aldreu, Pastor de la Boira:** Tu sempre has tingut el favor de tothom, nen mimat!
 
 **[596] Ineu:** Això no és admirar algú, Aldreu, és engabiar-se.
 
-**[597] Aldreu, Pastor de Boira:** Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!
+**[597] Aldreu, Pastor de la Boira:** Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!
 
 **[598] L'Home de la Gàbia:** Aldreu, fill meu, no cal que cridis.
 
@@ -1970,11 +1970,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[604] L'Home de la Gàbia:** Runna... Quina espasa tan petita per a una sala tan gran.
 
-**[605] Aldreu, Pastor de Boira:** Deixeu-me'l a mi, Mestre, aquest cop l'esclafaré!
+**[605] Aldreu, Pastor de la Boira:** Deixeu-me'l a mi, Mestre, aquest cop l'esclafaré!
 
 **[606] L'Home de la Gàbia:** Aparta, Aldreu. Aquesta nit el Mestre mateix et mostrarà com es fa.
 
-**[607] Aldreu, Pastor de Boira:** Sí, Mestre...
+**[607] Aldreu, Pastor de la Boira:** Sí, Mestre...
 
 ### ocellaireDerrotat  <sub>(js/zones/gabia.js:1751)</sub>
 
@@ -2076,7 +2076,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[642] Ineu:** L'aigua ja és clara.
 
-### pensament a enMelodia  <sub>(js/zones/cirosa.js:224)</sub>
+### pensament a enMelodia  <sub>(js/zones/cirosa.js:225)</sub>
 
 *Si: sap el Cant de Vespres (el de les pedres)*
 

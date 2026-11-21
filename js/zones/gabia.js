@@ -86,7 +86,7 @@ Object.assign(DIALEGS, {
         "Fes el que has de fer, noi. Avui no et miraré.",
         "Quan era a la Plaça, tothom em passava pel costat. Ell em va veure."
     ][(DIALEGS._rotAldreu = ((DIALEGS._rotAldreu || 0) + 1) % 3)] }] : [
-        { qui: 'Aldreu, Pastor de Boira', text: "El Mestre ve, monjo. Ja el sents?" }
+        { qui: 'Aldreu, Pastor de la Boira', text: "El Mestre ve, monjo. Ja el sents?" }
     ] }),
     gentEpileg: E => ({ pagines: [{ qui: 'Gent', text: "Avui tothom canta, encara que l'orgue faci una nota de pega." }] }),
     nenGabia: nom => E => ({ pagines: [{ qui: nom, text: {
@@ -1485,7 +1485,7 @@ class ZonaGabia extends ZonaBase {
         ap.escalaFi = (this.textures.get('ocellaire').customData.escala || 1 / RES) * KO;
         ap.setScale(ap.escalaFi);
         this.npcs.ocellaire = ap;
-        const cam = this.cameras.main, ui = this.ui(), I = this.ineu, A = 'Aldreu, Pastor de Boira', O = "L'Home de la Gàbia";
+        const cam = this.cameras.main, ui = this.ui(), I = this.ineu, A = 'Aldreu, Pastor de la Boira', O = "L'Home de la Gàbia";
         // Plans (sense barres negres: només zoom i desplaçament). pla(objectiu, zoom, ms, reserva)
         const pla = (obj, zoom, ms, reserva) => ({ fer: (z, fet) => { const p = obj(); z.enquadrar(p[0], p[1], zoom, ms, fet, reserva); } });
         const pIneu = () => [I.x, I.y - 70];
@@ -1493,7 +1493,7 @@ class ZonaGabia extends ZonaBase {
         const pMestre = k => () => [ap.x, ap.y - k * ap.displayHeight];
         const pDos = () => [(ap.x + I.x) / 2, ((ap.y - ap.displayHeight) + I.y) / 2];       // els dos alhora: l'Ocellaire (gegant) sencer i l'Ineu
         const aparicioAldreu = f => {
-            // El Germà Aldreu (Pastor de Boira) apareix de cop entre una bafarada de boira, gran (x1.5)
+            // El Germà Aldreu (Pastor de la Boira) apareix de cop entre una bafarada de boira, gran (x1.5)
             const ald = this.npcs.germa_aldreu;
             if (ald) {
                 Sfx.puf();
@@ -1619,7 +1619,7 @@ class ZonaGabia extends ZonaBase {
         this.tweens.killTweensOf(a);
         a.setVisible(true).setAlpha(1); if (a.ombra) a.ombra.setVisible(true).setAlpha(a.ombra.alpha || 1);
     }
-    // Quan el Mestre cau, la boira deixa l'Aldreu: el Pastor de Boira torna a ser el Germà Aldreu (a mida normal, trist)
+    // Quan el Mestre cau, la boira deixa l'Aldreu: el Pastor de la Boira torna a ser el Germà Aldreu (a mida normal, trist)
     desferPastor() {
         const a = this.npcs.germa_aldreu;
         if (!a) return null;          // (no mira la textura: en caminar, npcVa li torna el dibuix normal, i la boira ha de deixar-lo igualment)

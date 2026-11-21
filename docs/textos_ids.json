@@ -1079,7 +1079,7 @@
    {
     "id": 145,
     "qui": "Pastor",
-    "text": "No s'acosti gaire, pare, que la gent diu que portem mala sort. Només tenim el ramat... i el Germà Aldreu, aquell monjo pesat que sempre jugava amb els nens, ens l'ha pres. Ara es fa dir el Pastor de Boira.",
+    "text": "No s'acosti gaire, pare, que la gent diu que portem mala sort. Només tenim el ramat... i el Germà Aldreu, aquell monjo pesat que sempre jugava amb els nens, ens l'ha pres. Ara es fa dir el Pastor de la Boira.",
     "fitxer": "js/dialegs.js",
     "linia": 1249
    }
@@ -1306,7 +1306,7 @@
   "dialegs::aldreuPastor": [
    {
     "id": 175,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Ineu!",
     "fitxer": "js/dialegs.js",
     "linia": 1371
@@ -1320,14 +1320,14 @@
    },
    {
     "id": 177,
-    "qui": "Aldreu, Pastor de Boira",
-    "text": "L'Aldreu era un monjo que ningú no mirava. Ara sóc el Pastor de Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai.",
+    "qui": "Aldreu, Pastor de la Boira",
+    "text": "L'Aldreu era un monjo que ningú no mirava. Ara sóc el Pastor de la Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai.",
     "fitxer": "js/dialegs.js",
     "linia": 1373
    },
    {
     "id": 178,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Des que va pujar la boira, una veu em parla dins el cap, baixeta, només per a mi. Ella em va veure quan ningú més no ho feia. És la veu del Mestre.",
     "fitxer": "js/dialegs.js",
     "linia": 1374
@@ -1341,7 +1341,7 @@
    },
    {
     "id": 180,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» I ara sóc el seu pastor. El PASTOR DE LA BOIRA!",
     "fitxer": "js/dialegs.js",
     "linia": 1376
@@ -1355,7 +1355,7 @@
    },
    {
     "id": 182,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Dormen. Els vaig portar jo al Mestre, un per un, de nit. Allà dins ja no tenen por de res.",
     "fitxer": "js/dialegs.js",
     "linia": 1378
@@ -1369,7 +1369,7 @@
    },
    {
     "id": 184,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Tornar enrere? Mai! El Mestre em va veure, quan ningú més no ho feia. Calla! Be-e-e!",
     "fitxer": "js/dialegs.js",
     "linia": 1380
@@ -1378,21 +1378,21 @@
   "dialegs::aldreuDerrotat": [
    {
     "id": 185,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré.",
     "fitxer": "js/dialegs.js",
     "linia": 1388
    },
    {
     "id": 186,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "El Mestre és al fons de les Gírgoles, i ja és despert: la seva veu em crida des d'allà baix i no calla mai. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells.",
     "fitxer": "js/dialegs.js",
     "linia": 1389
    },
    {
     "id": 187,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Je, je, je... Ens veurem allà baix, monjo.",
     "fitxer": "js/dialegs.js",
     "linia": 1391
@@ -4518,7 +4518,7 @@
    },
    {
     "id": 580,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "El Mestre ve, monjo. Ja el sents?",
     "fitxer": "js/zones/gabia.js",
     "linia": 89
@@ -4575,7 +4575,7 @@
   "zones/gabia::iniciarCombatFinal": [
    {
     "id": 587,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Una altra vegada, monjo? El Mestre no es cansa mai.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1556
@@ -4589,7 +4589,7 @@
    },
    {
     "id": 589,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Mestre, aquesta vegada sí!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1560
@@ -4610,7 +4610,7 @@
    },
    {
     "id": 592,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Silenci! Aquí no s'alça la veu, monjo. El Mestre dorm, i jo vetllo el seu son.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1571
@@ -4624,14 +4624,14 @@
    },
    {
     "id": 594,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Per cada riure que li duc, em gratifica amb un «bon minyó, Aldreu». No pots entendre què vol dir per a mi que algú tan poderós conegui el meu nom.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1575
    },
    {
     "id": 595,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Tu sempre has tingut el favor de tothom, nen mimat!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1582
@@ -4645,7 +4645,7 @@
    },
    {
     "id": 597,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1586
@@ -4701,7 +4701,7 @@
    },
    {
     "id": 605,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Deixeu-me'l a mi, Mestre, aquest cop l'esclafaré!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1600
@@ -4715,7 +4715,7 @@
    },
    {
     "id": 607,
-    "qui": "Aldreu, Pastor de Boira",
+    "qui": "Aldreu, Pastor de la Boira",
     "text": "Sí, Mestre...",
     "fitxer": "js/zones/gabia.js",
     "linia": 1602
@@ -5014,28 +5014,28 @@
     "qui": "Ineu",
     "text": "Els pastors m'escolten, però això no els recorda casa. Un cant antic, de les esquelles: el de Vespres.",
     "fitxer": "js/zones/cirosa.js",
-    "linia": 224
+    "linia": 225
    },
    {
     "id": 644,
     "qui": "Ineu",
     "text": "Els pastors m'escolten, però això no els recorda casa. Hauria de ser un cant més antic: potser la Pianista en coneix algun.",
     "fitxer": "js/zones/cirosa.js",
-    "linia": 224
+    "linia": 225
    },
    {
     "id": 645,
     "qui": "Ineu",
     "text": "Els pastors m'escolten en silenci... Encara no és el moment: primer cal parlar amb el Til·ler.",
     "fitxer": "js/zones/cirosa.js",
-    "linia": 226
+    "linia": 227
    },
    {
     "id": 646,
     "qui": "Ineu",
     "text": "Els pastors somriuen: aquí ja ha tornat la música.",
     "fitxer": "js/zones/cirosa.js",
-    "linia": 229
+    "linia": 230
    }
   ],
   "zones/esglesia::ineuDiu·obrirPortaRellotge": [

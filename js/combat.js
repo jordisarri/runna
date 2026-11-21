@@ -360,7 +360,7 @@ const ENEMICS = {
         }
     },
 
-    // BOSS: el Germà Aldreu convertit en Pastor de Boira. Crida ovelles, carrega amb la caiada i la clava a terra en arc.
+    // BOSS: el Germà Aldreu convertit en Pastor de la Boira. Crida ovelles, carrega amb la caiada i la clava a terra en arc.
     // Fulls d'animació (assets/enemics/pastor_*.webp, vegeu docs/PROMPTS_GRAFICS.md): si no hi són, es veu el dibuix fix de sempre.
     pastor: {
         tex: 'pastor_camina', texAlt: 'pastor_boira', escala: 0.58, vida: 40, vel: 430, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 270,
@@ -1348,7 +1348,7 @@ Object.assign(ZonaBase.prototype, {
         this.enemics = this.enemics.filter(x => x !== e);
     },
 
-    // El Pastor de Boira té animacions completes de 8 direccions ('pastor_camina') i poses dedicades per a cada acció
+    // El Pastor de la Boira té animacions completes de 8 direccions ('pastor_camina') i poses dedicades per a cada acció
     // Cada pose està dibuixada a una mida diferent: es compensa amb un factor (posaPastor) perquè el cap sempre tingui la mateixa mida
     // Canvia la imatge del Pastor mantenint la mida del seu CAP (que és el que es nota) i els peus al mateix lloc. factor: la mida del cap de cada dibuix respecte del del
     // personatge caminant (mesurat: apunta 0,89, ataca 1,08, enfadat 1,25, derrota 0,82). Els fulls de caminar són de 300 x 300 per fotograma i les poses de 600 x 600
@@ -1435,7 +1435,7 @@ Object.assign(ZonaBase.prototype, {
         return false;
     },
 
-    // Final del combat contra el Pastor de Boira
+    // Final del combat contra el Pastor de la Boira
     pastorDerrotat(e) {
         e.mort = true;
         if (e.spr.body) {
@@ -1462,7 +1462,7 @@ Object.assign(ZonaBase.prototype, {
         // (la música de boss continua durant la conversa, fins que el Pastor se'n va)
         this.time.delayedCall(700, () => this.ui().obrirDialeg(DIALEGS.aldreuDerrotat(Estat), () => {
             this.tweens.add({ targets: [e.spr, e.ombra].filter(Boolean), alpha: 0, duration: 800, onComplete: () => this.retirar(e) });
-            this.granRosari('pastorGra', 'Pastor de Boira vençut', () => {
+            this.granRosari('pastorGra', 'Pastor de la Boira vençut', () => {
                 if (this.camCinema) this.alliberarCamera(800);
                 Joc.musicaZona(this, 1500);
                 Estat.desar();

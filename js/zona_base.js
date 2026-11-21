@@ -61,7 +61,7 @@ const BOIRA_PASSOS = [
     E => E.flag('bassadoriaNeta'),                                         // Bassadòria: Cant de l'Aurora
     E => E.flag('fontNeta'),                                               // Font del Bisbe: les tres ofrenes
     E => E.flag('boiraTillerNeta'),                                        // Camí del Gran Til·ler: beuratge de la Joaneta
-    E => E.flag('pastorVencut'),                                           // Cirosa: Pastor de Boira
+    E => E.flag('pastorVencut'),                                           // Cirosa: Pastor de la Boira
     E => E.flag('boiraDolmenNeta'),                                        // Camí del Dolmen: Llàgrima de Sant Llorenç
     E => E.flag('tombaSegellada')         // Cementiri: Runna segella la tomba
 ];
@@ -81,7 +81,7 @@ const BOIRA_ZONES = {
     ZonaRuines: { dens: 1.3 }, ZonaCellerFora: { dens: 1.3 },
     ZonaCreu: { dens: 1.6, neta: E => E.flag('bassadoriaNeta'), resta: 0.25 },                       // la Bassadòria: neta amb el Cant de l'Aurora
     ZonaCementiri: { dens: 1.6, neta: E => E.flag('tombaSegellada'), resta: 0.25 },                 // la tomba segellada
-    ZonaCamiCirosa: { dens: 1.3, neta: E => E.flag('pastorVencut'), resta: 0.3 },                   // el Pastor de Boira vençut
+    ZonaCamiCirosa: { dens: 1.3, neta: E => E.flag('pastorVencut'), resta: 0.3 },                   // el Pastor de la Boira vençut
     ZonaCirosa: { dens: 1.3, neta: E => E.flag('pastorVencut'), resta: 0.3 },
     ZonaDolmen: { dens: 1.5, neta: E => E.flag('boiraDolmenNeta'), resta: 0.3 },                    // la Llàgrima de Sant Llorenç
     ZonaBosc: { dens: 1.2, neta: E => E.flag('fontNeta'), resta: 0.3 },                             // la Font del Bisbe neta

@@ -87,7 +87,7 @@ const Estat = {
     },
 
     // ---------- Rosari ----------
-    // Els grans del rosari (els cors) són 3 al principi i mai poden passar de GRANS_MAX: 3 + el Pastor de Boira, les tres sacerdotesses, el cofre de l'oratori i el de la cabana
+    // Els grans del rosari (els cors) són 3 al principi i mai poden passar de GRANS_MAX: 3 + el Pastor de la Boira, les tres sacerdotesses, el cofre de l'oratori i el de la cabana
     GRANS_MAX: 7,
     // Un gran més (cura del tot). Retorna fals si ja n'hi ha el màxim (només es cura).
     afegirGra() {

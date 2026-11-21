@@ -1246,7 +1246,7 @@ const DIALEGS = {
         ] : E.flag("pastorVencut") ? [
             { qui: "Pastor", text: "El ramat és de nou al corral. No sé com agrair-t'ho, monjo. Nosaltres només volem una mica de pau, i un racó on no ens miri ningú malament." }
         ] : [
-            { qui: "Pastor", text: "No s'acosti gaire, pare, que la gent diu que portem mala sort. Només tenim el ramat... i el Germà Aldreu, aquell monjo pesat que sempre jugava amb els nens, ens l'ha pres. Ara es fa dir el Pastor de Boira." }
+            { qui: "Pastor", text: "No s'acosti gaire, pare, que la gent diu que portem mala sort. Només tenim el ramat... i el Germà Aldreu, aquell monjo pesat que sempre jugava amb els nens, ens l'ha pres. Ara es fa dir el Pastor de la Boira." }
         ]
     }),
 
@@ -1268,7 +1268,7 @@ const DIALEGS = {
                     { qui: "Pastor vell", text: "Els nostres avis van tancar aquella gàbia sota terra fa segles, i el poble ens va pagar amb oblit." },
                     { qui: "Pastor vell", text: "Si trobes la manera de treure-li aquesta cosa, ho agrairem. Hi ha unes esquelles que van ser dels nostres avis: te les donarem, però el ramat és a la pastura, i ell hi és." }
                 ],
-                enAcabar: () => E.posaObjectiu("El Germà Aldreu, fet Pastor de Boira, té la pastura de la Cirosa, a la dreta de la masia.")
+                enAcabar: () => E.posaObjectiu("El Germà Aldreu, fet Pastor de la Boira, té la pastura de la Cirosa, a la dreta de la masia.")
             };
         }
         if (!E.te("esquelles")) {                    // (també si el senyal hi és però l'objecte no: es tornen a donar)
@@ -1368,16 +1368,16 @@ const DIALEGS = {
     aldreuPastor: E => ({
         pagines: [
             { fer: (z, fet) => z.seq([c => { z.aldreuFlota.pause(); z.npcs.aldreu.y = 640; z.aldreuOmbra.setScale(0.5); c(); }, c => z.npcSalta('aldreu', c, 1), c => z.llum(z.npcs.aldreu.x, z.npcs.aldreu.y - 90, 0xb88aff, c)], fet) },
-            { qui: "Aldreu, Pastor de Boira", text: "Ineu!" },
+            { qui: "Aldreu, Pastor de la Boira", text: "Ineu!" },
             { qui: "Ineu", text: "Germà Aldreu?!" },
-            { qui: "Aldreu, Pastor de Boira", text: "L'Aldreu era un monjo que ningú no mirava. Ara sóc el Pastor de Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai." },
-            { qui: "Aldreu, Pastor de Boira", text: "Des que va pujar la boira, una veu em parla dins el cap, baixeta, només per a mi. Ella em va veure quan ningú més no ho feia. És la veu del Mestre." },
+            { qui: "Aldreu, Pastor de la Boira", text: "L'Aldreu era un monjo que ningú no mirava. Ara sóc el Pastor de la Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai." },
+            { qui: "Aldreu, Pastor de la Boira", text: "Des que va pujar la boira, una veu em parla dins el cap, baixeta, només per a mi. Ella em va veure quan ningú més no ho feia. És la veu del Mestre." },
             { qui: "Ineu", text: "Una veu dins el teu cap... Aldreu, és la de l'Home de la Gàbia. L'Ocellaire parla per la teva boca." },
-            { qui: "Aldreu, Pastor de Boira", text: "L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» I ara sóc el seu pastor. El PASTOR DE LA BOIRA!" },
+            { qui: "Aldreu, Pastor de la Boira", text: "L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» I ara sóc el seu pastor. El PASTOR DE LA BOIRA!" },
             { qui: "Ineu", text: "On són l'Huri, el Fram i el Sardi?" },
-            { qui: "Aldreu, Pastor de Boira", text: "Dormen. Els vaig portar jo al Mestre, un per un, de nit. Allà dins ja no tenen por de res." },
+            { qui: "Aldreu, Pastor de la Boira", text: "Dormen. Els vaig portar jo al Mestre, un per un, de nit. Allà dins ja no tenen por de res." },
             { qui: "Ineu", text: "Aldreu, això que et parla no és bo. Encara pots tornar enrere." },
-            { qui: "Aldreu, Pastor de Boira", text: "Tornar enrere? Mai! El Mestre em va veure, quan ningú més no ho feia. Calla! Be-e-e!" }
+            { qui: "Aldreu, Pastor de la Boira", text: "Tornar enrere? Mai! El Mestre em va veure, quan ningú més no ho feia. Calla! Be-e-e!" }
         ],
         enAcabar: () => game.scene.getScene("ZonaCirosa").iniciarBoss()
     }),
@@ -1385,10 +1385,10 @@ const DIALEGS = {
     aldreuDerrotat: E => ({
         pagines: [
             { fer: (z, fet) => z.aldreuAgenollat(fet) },
-            { qui: "Aldreu, Pastor de Boira", text: "Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré." },
-            { qui: "Aldreu, Pastor de Boira", text: "El Mestre és al fons de les Gírgoles, i ja és despert: la seva veu em crida des d'allà baix i no calla mai. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells." },
+            { qui: "Aldreu, Pastor de la Boira", text: "Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré." },
+            { qui: "Aldreu, Pastor de la Boira", text: "El Mestre és al fons de les Gírgoles, i ja és despert: la seva veu em crida des d'allà baix i no calla mai. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells." },
             { fer: (z, fet) => z.aldreuAixeca(fet) },
-            { qui: "Aldreu, Pastor de Boira", text: "Je, je, je... Ens veurem allà baix, monjo." },
+            { qui: "Aldreu, Pastor de la Boira", text: "Je, je, je... Ens veurem allà baix, monjo." },
             { fer: (z, fet) => z.aldreuMarxa(fet) },
             { qui: "Ineu", text: "(«Al fons de les Gírgoles»... Ara ja sé on mirar.)" },
             { qui: "Ineu", text: "(I el pastor vell em va prometre les esquelles dels seus avis. Aniré a veure'l vora el foc.)" }

@@ -1,9 +1,9 @@
 /**
  * LA CIROSA (extrem nord-est)
- * Camí llarg que puja des de les cel·les + la masia amb la pastura on espera el Pastor de Boira + l'interior del mas.
+ * Camí llarg que puja des de les cel·les + la masia amb la pastura on espera el Pastor de la Boira + l'interior del mas.
  */
 
-// Qualsevol dels tres pastors (el vell, el pastor i la pastora) dona el pas següent de la història: les esquelles (un cop vençut el Pastor de Boira) i, durant el sopar del Til·ler,
+// Qualsevol dels tres pastors (el vell, el pastor i la pastora) dona el pas següent de la història: les esquelles (un cop vençut el Pastor de la Boira) i, durant el sopar del Til·ler,
 // l'escena de la música vora el foc. Són els textos del pastor vell (DIALEGS.pastorVell), amb el nom de qui parla canviat; si no hi ha cap pas a donar, cada un diu el seu de sempre.
 function pasDelsPastors(E, qui, propi) {
     const pas = (E.flag('pastorVencut') && !E.te('esquelles')) || (E.te('esquelles') && E.flag('soparObert') && !E.flag('pastorsConvencuts'));
@@ -164,7 +164,7 @@ class ZonaCirosa extends ZonaBase {
             });
         }
 
-        // El Germà Aldreu, de Pastor de Boira, al mig de la pastura
+        // El Germà Aldreu, de Pastor de la Boira, al mig de la pastura
         if (lila) {
             // (sense col·lisió: el boss hi apareixerà al mateix lloc)
             this.aldreuNpc = this.posar('pastor_boira', 1400, 640);
@@ -317,14 +317,14 @@ class ZonaCirosa extends ZonaBase {
         this.tweens.add({ targets: T.peces, alpha: 0, duration: 600, onComplete: () => T.peces.forEach(g => g.destroy()) });
     }
 
-    // El Pastor de Boira es posa en marxa després del diàleg
+    // El Pastor de la Boira es posa en marxa després del diàleg
     iniciarBoss() {
         if (this.bossIniciat) return;
         this.bossIniciat = true;
         this.aldreuFlota.pause();
         this.aldreuNpc.setVisible(false); this.aldreuOmbra.setVisible(false);
         const e = this.enemic('pastor', 1400, 570);
-        if (e) this.ui().barraBoss('Aldreu, Pastor de Boira', [0.5]);              // a la meitat, la segona fase
+        if (e) this.ui().barraBoss('Aldreu, Pastor de la Boira', [0.5]);              // a la meitat, la segona fase
         if (!e) { this.bossIniciat = false; this.aldreuNpc.setVisible(true); this.aldreuOmbra.setVisible(true); this.aldreuFlota.resume(); return; }
         this.cameras.main.shake(300, 0.005);
         this.tancarArena();

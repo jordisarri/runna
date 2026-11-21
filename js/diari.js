@@ -15,7 +15,7 @@ const DIARI_PASSOS = {
     font: ['La Font del Bisbe', 'ZonaBosc'], joaneta: ["L'Alzina Buida", 'ZonaBosc'],
     boiraTiller: ['La boira del Til·ler', 'ZonaCelles'], tiller: ['El Gran Til·ler', 'ZonaTiller'],
     branca: ['La branca del Til·ler', 'ZonaTiller'], bardissa: ['Les arrels del Til·ler', 'ZonaTiller'],
-    pastor: ['El Pastor de Boira', 'ZonaCirosa'], esquelles: ['Les esquelles', 'ZonaCirosa'],
+    pastor: ['El Pastor de la Boira', 'ZonaCirosa'], esquelles: ['Les esquelles', 'ZonaCirosa'],
     soparObert: ['Tornar al Til·ler', 'ZonaTiller'], sopar: ['El sopar del Til·ler', 'ZonaTiller'],
     fragment1: ['El primer fragment', 'ZonaRuines'], clauSagrari: ['La clau del sagrari', 'ZonaCami'], fragment2: ['El sagrari', 'ZonaEsglesia'],
     alcoviLlegit: ['Els fragments del Pare Alcoví', 'ZonaBiblioteca'], ombra: ["L'ombra del monjo", 'ZonaRuines'],

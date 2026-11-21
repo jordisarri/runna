@@ -1104,7 +1104,7 @@ function dibuixarRoca(c, w, variant = 0) {
     });
 }
 
-// El Germà Aldreu convertit en Pastor de Boira: hàbit fosc, caiada i ulls lila
+// El Germà Aldreu convertit en Pastor de la Boira: hàbit fosc, caiada i ulls lila
 function afegirCaiada(c, w) {
     const ctx = c.getContext('2d');
     ctx.save();
@@ -4420,7 +4420,7 @@ function dibuixarTurista(canvas, w) {
     [[30, 14, -8], [66, 12, 10]].forEach(([x, y, d]) => { ctx.beginPath(); ctx.moveTo(x, y); ctx.bezierCurveTo(x + d, y - 8, x - d, y - 14, x + d * 0.4, y - 22); ctx.stroke(); });
 }
 
-// El Germà Aldreu convertit en Pastor de Boira: hàbit violeta fosc, caiada de fusta amb una esquella i un fanal de boira, i els ulls lila lluminosos.
+// El Germà Aldreu convertit en Pastor de la Boira: hàbit violeta fosc, caiada de fusta amb una esquella i un fanal de boira, i els ulls lila lluminosos.
 function dibuixarPastorBoira(canvas, w) {
     const h = Math.round(w * 4 / 3);
     canvas.width = w; canvas.height = h;
@@ -4474,7 +4474,7 @@ function dibuixarPastorBoira(canvas, w) {
     [[20, 122, 14], [44, 126, 18], [68, 122, 13]].forEach(([x, y, r]) => { ctx.beginPath(); ctx.ellipse(x, y, r, 4, 0, 0, Math.PI * 2); ctx.fill(); });
 }
 
-// Pastor de Boira derrotat: de quatre potes a terra, panteixant i profundament emprenyat
+// Pastor de la Boira derrotat: de quatre potes a terra, panteixant i profundament emprenyat
 function dibuixarPastorDerrota(canvas, w) {
     const h = Math.round(w * 80 / 104);
     canvas.width = w; canvas.height = h;

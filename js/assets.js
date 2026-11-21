@@ -351,7 +351,7 @@ const Grafics = {
         scene.load.spritesheet('visitant_zombi', 'assets/enemics/visitant_zombi.webp', { frameWidth: 127, frameHeight: 209 });      // el visitant (turista zombi) caminant, de cara (4x4 fotogrames): serveix per a totes les direccions
         scene.load.spritesheet('pallofa_cami', 'assets/personatges/pallofa_cami.webp', { frameWidth: 135, frameHeight: 140 });      // el Pallofa caminant cap a la dreta (4x4 fotogrames); es gira per anar cap a l'esquerra
         scene.load.spritesheet('pare_jorda_camina', 'assets/personatges/pare_jorda_camina.webp', { frameWidth: 200, frameHeight: 290 });
-        // Fulls d'animació del Pastor de Boira (boss de la Cirosa): quadrícula de fotogrames de 300 x 300; si no hi són, es veu el dibuix fix (vegeu docs/PROMPTS_GRAFICS.md)
+        // Fulls d'animació del Pastor de la Boira (boss de la Cirosa): quadrícula de fotogrames de 300 x 300; si no hi són, es veu el dibuix fix (vegeu docs/PROMPTS_GRAFICS.md)
         Object.keys(Grafics.PASTOR_FULLS).forEach(n => scene.load.spritesheet('pastor_' + n, `assets/enemics/pastor_${n}.webp`, { frameWidth: 300, frameHeight: 300 }));
         scene.load.spritesheet('home_raim_camina', 'assets/enemics/home_raim_camina.webp?v=2611131800', { frameWidth: 331, frameHeight: 502 });      // el Home del Raïm caminant (4 poses clau, cap a la dreta; es gira amb flipX)
         Object.entries(NPC_IDLE).forEach(([k, d]) => scene.load.spritesheet(k + '_idle', `assets/personatges/${k}_idle.webp?v=2611122055`, { frameWidth: d.w, frameHeight: d.h }));
@@ -578,7 +578,7 @@ const Grafics = {
     },
 
     // Animacions de caminar de l'Ineu (són globals: es creen una sola vegada)
-    // Gràfics del Pastor de Boira: nom -> [fotogrames, fotogrames per segon, repeticions (-1 = en bucle)]
+    // Gràfics del Pastor de la Boira: nom -> [fotogrames, fotogrames per segon, repeticions (-1 = en bucle)]
     PASTOR_FULLS: { camina: [8, 10, -1] },        // camina: full de 8 fotogrames (les poses d'atac, derrota... són imatges soltes del catàleg: pastor_ataca, pastor_derrota...)
 
     animacions(scene) {
