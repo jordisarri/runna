@@ -11,7 +11,7 @@ const MIDES_ALDREU = {
         poses: { apunta: 0.98, ataca: 1.32, enfadat: 1.28, derrota: 0.95 },     // factor de cada pose, perquè el cap tingui la mateixa mida a totes
         aldreu: { germa_aldreu: 82.6, germa_aldreu_trist: 75.2, pastor_boira: 88, aldreu_guardia: 89.4 }       // amplada de joc (px) de cada dibuix de l'Aldreu fora del combat (js/assets.js)
     },
-    mult: { pastor: 1, camina: 0.8, apunta: 0.86, ataca: 0.78, enfadat: 0.76, derrota: 0.86, germa_aldreu: 1, germa_aldreu_trist: 1, pastor_boira: 1, aldreu_guardia: 1 }          // (valors triats a l'eina; caminant/dret a 0,8 perquè el cap quedi igual que a les poses ja reduïdes)
+    mult: { pastor: 1, camina: 0.74, apunta: 0.86, ataca: 0.78, enfadat: 0.76, derrota: 0.86, germa_aldreu: 1, germa_aldreu_trist: 1, pastor_boira: 1, aldreu_guardia: 1 }          // (valors triats a l'eina; caminant/dret a 0,74: fa la mateixa alçada visible (uns 134 px) que el dibuix de la conversa del principi)
 };
 try {
     const desat = JSON.parse(localStorage.getItem('runna_mides_aldreu') || 'null');
