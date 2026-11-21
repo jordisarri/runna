@@ -982,7 +982,7 @@ class ZonaTiller extends ZonaBase {
             onUpdate: () => {
                 cx.clearRect(0, 0, CW, CH);
                 const k = anim.prog, amp = Math.sin(k * Math.PI) * 13, freq = 0.034;                // (px del canvas, que és a mitja resolució)
-                const aB = Math.max(0, Math.min(1, (0.62 - k) / 0.36)), aN = Math.max(0, Math.min(1, (k - 0.34) / 0.36));
+                const aB = 1, aN = Math.max(0, Math.min(1, (k - 0.15) / 0.6));          // l'arbre sense cara no s'esvaeix mai (sempre opac): el de la cara es va dibuixant a sobre, de manera que mai es veu l'herba a través
                 for (let y = 0; y < CH; y += pas) {
                     const fix = Math.min(1, Math.max(0, (CH - 6 - y) / 70));                        // les arrels toquen a terra i queden fixes
                     const dx = (Math.sin(y * freq + anim.fase) * amp + Math.cos(y * freq * 0.45 - anim.fase * 0.8) * amp * 0.35) * fix;
