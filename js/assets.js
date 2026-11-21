@@ -16,8 +16,8 @@ const CATALEG = [
     // Personatges
     { key: 'ineu_inconscient', file: 'assets/ineu/ineu_inconscient.webp', amplada: 295, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#6a4426', cabell: '#5a4636' }) },   // l'Ineu a terra amb els ulls tancats, de 420 x 342 (eines/fer_desperta_v5.py), abans de l'animació de despertar (ineu_desperta, spritesheet)
     { key: 'pare_jorda',   file: 'assets/personatges/pare_jorda.webp',   amplada: 91.6, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', alt: 1.08, ulleres: true, cabell: '#9c9c9c' }) },
-    { key: 'germa_aldreu', file: 'assets/personatges/germa_aldreu.webp', amplada: 82.6 * MA('germa_aldreu'), provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
-    { key: 'germa_aldreu_trist', file: 'assets/personatges/germa_aldreu_trist.webp', amplada: 75.2 * MA('germa_aldreu_trist') },      // Aldreu amb el cap cot (final de la Sala de la Gàbia, abans del somriure); si no hi és, gabia.js usa germa_aldreu amb tint
+    { key: 'germa_aldreu', file: 'assets/personatges/germa_aldreu.webp', amplada: 71.5 * MA('germa_aldreu'), provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#2a2230', cabell: '#d8d8dc', ulleres: true, pilota: true }) },
+    { key: 'germa_aldreu_trist', file: 'assets/personatges/germa_aldreu_trist.webp', amplada: 68.2 * MA('germa_aldreu_trist') },      // Aldreu amb el cap cot (final de la Sala de la Gàbia, abans del somriure); si no hi és, gabia.js usa germa_aldreu amb tint
     { key: 'pare_daimiel',  file: 'assets/personatges/pare_daimiel.webp',  amplada: 91.4, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#5a4636' }) },
     { key: 'dolora',   file: 'assets/personatges/dolora.webp', amplada: 73.4, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },
     { key: 'carmelia',   file: 'assets/personatges/carmelia.webp', amplada: 96.4, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#6a4a2e', ample: 1.45, alt: 0.92 }) },
@@ -352,7 +352,7 @@ const Grafics = {
         scene.load.spritesheet('pallofa_cami', 'assets/personatges/pallofa_cami.webp', { frameWidth: 135, frameHeight: 140 });      // el Pallofa caminant cap a la dreta (4x4 fotogrames); es gira per anar cap a l'esquerra
         scene.load.spritesheet('pare_jorda_camina', 'assets/personatges/pare_jorda_camina.webp', { frameWidth: 200, frameHeight: 290 });
         // Fulls d'animació del Pastor de la Boira (boss de la Cirosa): quadrícula de fotogrames: 384 x 384 el full de caminar (alta resolució, vegeu eines/fer_pastor_camina_hd.py); si no hi són, es veu el dibuix fix (vegeu docs/PROMPTS_GRAFICS.md)
-        Object.keys(Grafics.PASTOR_FULLS).forEach(n => scene.load.spritesheet('pastor_' + n, `assets/enemics/pastor_${n}.webp?v=2611211054`, { frameWidth: 384, frameHeight: 384 }));
+        Object.keys(Grafics.PASTOR_FULLS).forEach(n => scene.load.spritesheet('pastor_' + n, `assets/enemics/pastor_${n}.webp?v=2611211102`, { frameWidth: 384, frameHeight: 384 }));
         scene.load.spritesheet('home_raim_camina', 'assets/enemics/home_raim_camina.webp?v=2611131800', { frameWidth: 331, frameHeight: 502 });      // el Home del Raïm caminant (4 poses clau, cap a la dreta; es gira amb flipX)
         Object.entries(NPC_IDLE).forEach(([k, d]) => scene.load.spritesheet(k + '_idle', `assets/personatges/${k}_idle.webp?v=2611122055`, { frameWidth: d.w, frameHeight: d.h }));
         scene.load.spritesheet('germa_aldreu_camina', 'assets/personatges/germa_aldreu_camina.webp', { frameWidth: 180, frameHeight: 265 });
