@@ -3860,7 +3860,7 @@ function pintarTombaCreu(ctx, W, H) {
     });
 }
 
-// La tomba de l'àngel on el Germà Francí porta flors (140 x 226): l'àngel que plora al cap de la tomba i, als peus,
+// La tomba de l'àngel on el Germà Floresc porta flors (140 x 226): l'àngel que plora al cap de la tomba i, als peus,
 // un gerro amb el ram (marcit o fresc, amb una espelmeta encesa)
 function pintarTombaAngel(ctx, W, H, fresc) {
     pintarTombaRam(ctx, W, H, fresc, (rnd, cx, sb) => {

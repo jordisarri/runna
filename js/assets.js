@@ -1036,7 +1036,7 @@ const Grafics = {
             ctx.strokeStyle = '#2a1a06'; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.arc(an[0], an[1], 1.8, 0, Math.PI * 2); ctx.stroke();
             ctx.strokeStyle = '#e8c250'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(an[0], an[1], 1.8, 0, Math.PI * 2); ctx.stroke();
         });
-        // Cementiri (dibuixos.js): làpides, tombes amb vorada, la creueta, la tomba de l'àngel (on el Germà Francí porta flors) i els fanalets
+        // Cementiri (dibuixos.js): làpides, tombes amb vorada, la creueta, la tomba de l'àngel (on el Germà Floresc porta flors) i els fanalets
         crea('lapida', 56, 80, (ctx, w, h) => pintarLapidaArc(ctx, w, h, 3));
         crea('lapida_b', 56, 80, (ctx, w, h) => pintarLapidaArc(ctx, w, h, 17));
         crea('lapida_creu', 54, 90, (ctx, w, h) => pintarLapidaCreu(ctx, w, h));

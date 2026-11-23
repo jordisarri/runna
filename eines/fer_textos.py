@@ -71,7 +71,7 @@ FLAGS = {
     'garfBancSegut': "s'ha assegut al banc del Galf", 'telescopi': "té el telescopi", 'cristallGel': "ha trobat el cristall de gel", 'estelsFets': "ha vist tots els estels", 'estelLlorenc': "ha recollit l'estel d'en Llorenç",
     'rellotgeExplicat': "ha sentit l'explicació del rellotge del Santuari", 'rellotgeReparat': "ha reparat el rellotge de la torre", 'portaCampanarOberta': "ha obert la porta del campanar",
     'clau_campanar': "porta la clau del campanar", 'senseClauCampanar(E': "encara no té la clau del campanar", 'carryParlat': "ha parlat amb la Carry",
-    'premiDolora': "ha rebut el premi de la Dolora", 'premiPilaria': "ha rebut el premi de la Pilària", 'premiCarmelia': "ha rebut el premi de la Carmèlia",
+    'premiDolòria': "ha rebut el premi de la Dolòria", 'premiPilaria': "ha rebut el premi de la Pilària", 'premiCarmelia': "ha rebut el premi de la Carmèlia",
     'missatgeDesxifrat': "ha desxifrat el missatge de les dotze columnes", 'totes': "ha llegit totes les columnes", 'clau_sagrari': "porta la clau del sagrari", 'sagrari': "ha obert el sagrari",
     'guants': "porta els Guants de Poder", 'maneta': "porta la maneta", 'georgiManeta': "ha parlat amb en Gori de la maneta", 'esquelles': "porta les esquelles", 'esquellesVistes': "ha vist les esquelles",
     'basto_tiller': "porta el bastó del Til·ler", 'carta_cortiner': "porta la carta del Cortiner", 'piObert': "ha obert el pi dels tres cants", 'placaDolmen': "ha llegit la placa del Dolmen",

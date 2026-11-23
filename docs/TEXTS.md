@@ -718,7 +718,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### premiMonja  <sub>(js/dialegs.js:79)</sub>
 
-*Si: ha rebut el premi de la Dolora i ha rebut el premi de la Pilària i ha rebut el premi de la Carmèlia ; (depèn d'un càlcul del joc)*
+*Si: ha rebut el premi de la Dolòria i ha rebut el premi de la Pilària i ha rebut el premi de la Carmèlia ; (depèn d'un càlcul del joc)*
 
 **[224]** ★ Has obtingut un GRA DEL ROSARI: la llum de les tres germanes.
 
@@ -870,9 +870,9 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### julius  <sub>(js/dialegs.js:438)</sub>
 
-**[275] Julius:** Ei, Ineu! El repte més gran del Miracle és derrotar el Jusef i el seu servei màgic. T'hi atreveixes?
+**[275] Július:** Ei, Ineu! El repte més gran del Miracle és derrotar el Jusef i el seu servei màgic. T'hi atreveixes?
 
-**[276] Julius:** El Senyor Pomers juga amb una pala de pedra. De pedra! I tot i així, em guanya fàcilment.
+**[276] Július:** El Senyor Pomers juga amb una pala de pedra. De pedra! I tot i així, em guanya fàcilment.
 
 ### pomers  <sub>(js/dialegs.js:448)</sub>
 
@@ -922,7 +922,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[699] Jusef:** Vols repetir la partida?
 
-**[292] Jusef:** Com vulguis. Torna-hi quan vulguis: el Julius diu que la segona vegada sempre surt millor.
+**[292] Jusef:** Com vulguis. Torna-hi quan vulguis: el Július diu que la segona vegada sempre surt millor.
 
 ---
 
@@ -1044,7 +1044,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[675] Pare Alberic:** No et deixarà passar sense una prova de bona voluntat, i res no el convenç com la Carta del Cortiner, que reposa al tronc del Pi dels Tres Cants. Hauràs de despertar el pi amb els tres cants: Aurora, Vespres i Miracle. Fes-ho abans d'anar a la porta, que després no hi ha manera de tornar enrere.
 
-**[673] Pare Alberic:** Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Francí t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat.
+**[673] Pare Alberic:** Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Floresc t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat.
 
 *Si: ha fet llegir els pergamins al Pare Alberic i ha rebut la benedicció de l'ombra del monjo i encara no ha rebut el Saber (les paraules del monjo)*
 
@@ -1102,11 +1102,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: porta el ram*
 
-**[335] Ineu:** Aquest ram és del Germà Francí, per als monjos que dormen aquí. El deixo als peus de l'àngel.
+**[335] Ineu:** Aquest ram és del Germà Floresc, per als monjos que dormen aquí. El deixo als peus de l'àngel.
 
 **[336] Ineu:** (Els pètals tremolen, com si algú respirés a prop. L'àngel, que mirava a terra, alça la cara al cel i somriu: ja no plora sol.)
 
-**[337] Ineu:** El Germà Francí es posarà content. Va dir que, en tornar, tindria alguna cosa per a mi a Sant Antoni.
+**[337] Ineu:** El Germà Floresc es posarà content. Va dir que, en tornar, tindria alguna cosa per a mi a Sant Antoni.
 
 **[338]** ★ Has deixat el RAM DE FLORS als peus de l'àngel.
 
@@ -1458,37 +1458,37 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### germa_franci  <sub>(js/dialegs.js:1815)</sub>
 
-**[448] Germà Francí:** La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui.
+**[448] Germà Floresc:** La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui.
 
 ### germaFranci  <sub>(js/zones/nord.js:757)</sub>
 
-**[449] Germà Francí:** Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.
+**[449] Germà Floresc:** Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.
 
 *Si: ha deixat flors a la creu*
 
-**[450] Germà Francí:** Les has deixades a l'àngel? Que Déu t'ho pagui, fill. Els monjos d'abans ja deuen estar contents: algú encara se'n recorda.
+**[450] Germà Floresc:** Les has deixades a l'àngel? Que Déu t'ho pagui, fill. Els monjos d'abans ja deuen estar contents: algú encara se'n recorda.
 
-**[451] Germà Francí:** Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.
+**[451] Germà Floresc:** Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.
 
 **[452]** ★ Has obtingut els GUANTS DE PODER!
 
-**[453] Germà Francí:** Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.
+**[453] Germà Floresc:** Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.
 
-**[663] Germà Francí:** I una altra cosa, fill: a l'Hostatgeria hi ha un mussol de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella.
+**[663] Germà Floresc:** I una altra cosa, fill: a l'Hostatgeria hi ha un mussol de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella.
 
 *Altrament (per defecte):*
 
-**[454] Germà Francí:** El ram, a la tomba de l'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.
+**[454] Germà Floresc:** El ram, a la tomba de l'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.
 
-**[455] Germà Francí:** Ineu... Bon dia, fill. Ja et deixen créixer?
+**[455] Germà Floresc:** Ineu... Bon dia, fill. Ja et deixen créixer?
 
-**[456] Germà Francí:** Perdona que no camini de pressa: aquests genolls ja tenen més anys que la torre del rellotge.
+**[456] Germà Floresc:** Perdona que no camini de pressa: aquests genolls ja tenen més anys que la torre del rellotge.
 
-**[457] Germà Francí:** Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.
+**[457] Germà Floresc:** Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.
 
-**[458] Germà Francí:** Cada setmana porto flors a l'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.
+**[458] Germà Floresc:** Cada setmana porto flors a l'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.
 
-**[459] Germà Francí:** Me'n faries el favor? Deixa aquest ram als peus de l'àngel. I torna, que tinc una cosa per a tu.
+**[459] Germà Floresc:** Me'n faries el favor? Deixa aquest ram als peus de l'àngel. I torna, que tinc una cosa per a tu.
 
 **[460]** ★ Has obtingut un RAM DE FLORS.
 
@@ -1650,7 +1650,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: ha trobat les sacerdotesses i encara no ha avisat l'Isílder*
 
-**[502] Isílder:** He sentit com s'obria la porta de l'Hostatgeria. Són elles, oi? La Dolora, la Pilària, la Carmèlia... les sacerdotesses de la nostra casa.
+**[502] Isílder:** He sentit com s'obria la porta de l'Hostatgeria. Són elles, oi? La Dolòria, la Pilària, la Carmèlia... les sacerdotesses de la nostra casa.
 
 **[503] Isílder:** Tres nits tancades a vint passes de mi, i jo aquí amb les flors, sense saber-ne res. La seva pregària sempre ha mantingut la pau a aquesta terra.
 
@@ -1742,31 +1742,31 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[537] Ineu:** Una música lleugera, de tres notes, potser la desperta.
 
-*Si: encara no ha rebut el premi de la Dolora*
+*Si: encara no ha rebut el premi de la Dolòria*
 
-**[538] Dolora:** Oh, jove monjo! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Dolora.
+**[538] Dolòria:** Oh, jove monjo! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Dolòria.
 
-**[539] Dolora:** La boira va entrar pel soterrani fa tres nits. Vaig veure un germà amb hàbit que xiulava com els ocells i s'enduia el Sardi dins la boira, rient baixet.
+**[539] Dolòria:** La boira va entrar pel soterrani fa tres nits. Vaig veure un germà amb hàbit que xiulava com els ocells i s'enduia el Sardi dins la boira, rient baixet.
 
-**[540] Dolora:** Si passes pel jardí, saluda l'Isílder, el jardiner d'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.
+**[540] Dolòria:** Si passes pel jardí, saluda l'Isílder, el jardiner d'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.
 
-*Si: encara no ha rebut el premi de la Dolora ; porta l'espasa Runna*
+*Si: encara no ha rebut el premi de la Dolòria ; porta l'espasa Runna*
 
-**[541] Dolora:** La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d'aquests que no els talla ni la falç. Diuen que només cedeixen davant d'una espasa de llum. Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho.
+**[541] Dolòria:** La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d'aquests que no els talla ni la falç. Diuen que només cedeixen davant d'una espasa de llum. Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho.
 
-*Si: encara no ha rebut el premi de la Dolora ; encara no porta l'espasa Runna*
+*Si: encara no ha rebut el premi de la Dolòria ; encara no porta l'espasa Runna*
 
-**[542] Dolora:** La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d'aquests que no els talla ni la falç. Diuen que només cedeixen davant d'una espasa de llum.
+**[542] Dolòria:** La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d'aquests que no els talla ni la falç. Diuen que només cedeixen davant d'una espasa de llum.
 
-*Si: encara no ha rebut el premi de la Dolora*
+*Si: encara no ha rebut el premi de la Dolòria*
 
-**[543] Dolora:** Vés amb compte, fill. Entre les tres germanes guardem l'Empara d'aquesta casa. Quan siguem lliures les tres, serà teva.
+**[543] Dolòria:** Vés amb compte, fill. Entre les tres germanes guardem l'Empara d'aquesta casa. Quan siguem lliures les tres, serà teva.
 
 *Altrament (per defecte):*
 
-**[544] Dolora:** Vés amb Déu, fill. La cadira em fa mal als ossos, però encara tinc bones orelles.
+**[544] Dolòria:** Vés amb Déu, fill. La cadira em fa mal als ossos, però encara tinc bones orelles.
 
-**[545] Dolora:** El Sardi ja torna a robar galetes del rebost. Senyal que està bé del tot.
+**[545] Dolòria:** El Sardi ja torna a robar galetes del rebost. Senyal que està bé del tot.
 
 ### pilaria  <sub>(js/dialegs.js:1201)</sub>
 
@@ -1814,7 +1814,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### cofreMonges  <sub>(js/dialegs.js:1234)</sub>
 
-**[559] Nota:** «Per a qui ha tornat la llum a aquesta casa. Al fons de les Gírgoles, abans d'arribar a la gàbia, hi ha una boira que crema: la nostra empara l'esvairà al teu pas.» — Dolora, Pilària i Carmèlia
+**[559] Nota:** «Per a qui ha tornat la llum a aquesta casa. Al fons de les Gírgoles, abans d'arribar a la gàbia, hi ha una boira que crema: la nostra empara l'esvairà al teu pas.» — Dolòria, Pilària i Carmèlia
 
 **[560]** ★ Has obtingut l'EMPARA FRATERNAL: et protegeix de la boira verinosa que barra el camí de la Sala de la Gàbia.
 
@@ -2120,7 +2120,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### pensament a enMelodia  <sub>(js/zones/hostatgeria.js:615)</sub>
 
-**[651] Ineu:** La Dolora ja és desperta.
+**[651] Ineu:** La Dolòria ja és desperta.
 
 ### pensament a actualitzar  <sub>(js/zones/nord.js:547)</sub>
 

@@ -74,10 +74,10 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // El cap retallat del sprite del personatge: es fa una sola vegada i es desa com a textura 'retrat_<clau>'.
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
-    'Ineu': 'ineu', 'Pare Jòrdius': 'pare_jorda', 'Germà Aleu': 'germa_aldreu', 'Pastor de la Boira': 'pastor_boira', 'Aleu, Pastor de la Boira': 'pastor_boira', 'Aleu, Guàrdia de la Gàbia': 'pastor_boira', 'Germà Francí': 'germa_franci', 'Pare Nadiel': 'pare_daimiel',
-    'Pare Alberic': 'pare_alcovi', 'Pare Xèvius': 'pare_xevius', 'Eve': 'eve', 'Senyor Buidor': 'senyor_budo', 'Jusef': 'jusef', 'Senyor Pomers': 'pomers', 'Julius': 'julius', 'Galf': 'galf', 'Isílder': 'isilder',
+    'Ineu': 'ineu', 'Pare Jòrdius': 'pare_jorda', 'Germà Aleu': 'germa_aldreu', 'Pastor de la Boira': 'pastor_boira', 'Aleu, Pastor de la Boira': 'pastor_boira', 'Aleu, Guàrdia de la Gàbia': 'pastor_boira', 'Germà Floresc': 'germa_franci', 'Pare Nadiel': 'pare_daimiel',
+    'Pare Alberic': 'pare_alcovi', 'Pare Xèvius': 'pare_xevius', 'Eve': 'eve', 'Senyor Buidor': 'senyor_budo', 'Jusef': 'jusef', 'Senyor Pomers': 'pomers', 'Július': 'julius', 'Galf': 'galf', 'Isílder': 'isilder',
     'La Pianista': 'pianista', 'La Joaneta': 'joaneta', 'Iscu': 'iscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
-    'Carmèlia': 'carmelia', 'Pilària': 'pilaria', 'Dolora': 'dolora', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
+    'Carmèlia': 'carmelia', 'Pilària': 'pilaria', 'Dolòria': 'dolora', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
     'Nelis': 'meus', 'Senyor Llaminer': 'molner', 'Gori': 'georgi_caseta', 'Rosansa': 'rosansa', 'Monjo': 'ombra_monjo', 'Home del Raïm': 'home_raim',
     'Carry': 'carry', 'Follet del Carro Verd': 'follet_carro', 'El Gran Til·ler': 'tiller',
     "L'Home de la Gàbia": 'ocellaire', 'Huri': 'nen_uri', 'Fram': 'nen_flam', 'Mandu': 'mandu', 'Flami': 'nen_flam', 'Sardi': 'nen_sardin'
@@ -185,7 +185,7 @@ const CATALEG_OBJECTES = {
     telescopi:        ['Telescopi del Galf', 'Per mirar els estels als Dipòsits.'],
     estel_llorenc:    ['Llàgrima de Sant Llorenç', 'Una gota de llum caiguda del cel, de la nit en què el cel plora.'],
     runna:            ['Runna', 'L\'espasa de llum del monjo.'],
-    ram:              ['Ram de flors', 'Del Germà Francí, per a la tomba de l\'àngel.'],
+    ram:              ['Ram de flors', 'Del Germà Floresc, per a la tomba de l\'àngel.'],
     guants:           ['Guants de Poder', 'Per moure el que pesa massa.'],
     maneta:           ['Maneta d\'engranatge', 'De ferro: encaixa en volants i rodes vells.'],
     clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Aleu li va caure; l\'Iscu te l\'ha donada.'],

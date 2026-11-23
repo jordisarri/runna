@@ -25,7 +25,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Pare Alberic** | Biblioteca (Monestir) | Llegeix els pergamins; dona el Saber. |
 | **La Pianista** | Santuari | Ensenya els tres cants (Aurora, Vespres, Miracle) i dona la tarota. |
 | **Pare Nadiel** | Santuari | Dirigeix el cor. |
-| **Germà Francí** | Monestir / Sant Antoni | Monjo vell; dona els Guants de Poder. |
+| **Germà Floresc** | Monestir / Sant Antoni | Monjo vell; dona els Guants de Poder. |
 | **Germà Aleu** | Plaça, Cirosa, Gàbia | Antagonista simpàtic: servent de l'Ocellaire (el «Pastor de Boira»). |
 | **L'Ocellaire (L'Home de la Gàbia)** | Sala de la Gàbia | Boss final. |
 | **Nelis i senyor Llaminer** | Sant Benet | Matrimoni veí dels nens; la Nelis fa l'escudella del sopar. |
@@ -34,9 +34,9 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Carry** | Nostra Senyora | Vídua del campaner; busca el gos Pallofa. |
 | **Rosansa** | Cel·les (un sol cop, **només a l'Acte 3**) | Dona la Llavor de Lluna. |
 | **Càren, Eve, Iscu** | Taverna / cabana amagada | L'Eve obre la Taverna; l'Iscu té la clau rovellada. |
-| **Julius, Senyor Pomers, Eloi, Jusef** | El Celler | Ping-pong; en Jusef és el repte. |
+| **Július, Senyor Pomers, Eloi, Jusef** | El Celler | Ping-pong; en Jusef és el repte. |
 | **Isílder** | Hostatgeria (jardí) | Pare del Sardi; cuida les flors. |
-| **Les sacerdotesses** Dolora, Pilària, Carmèlia | Hostatgeria | Protectores del Sardi; atrapades al soterrani. |
+| **Les sacerdotesses** Dolòria, Pilària, Carmèlia | Hostatgeria | Protectores del Sardi; atrapades al soterrani. |
 | **Galf** | L'Era | Inventor del telescopi. |
 | **Gori** | La Caseta | Nen que guarda la Maneta. |
 | **La Joaneta** | Cabana del bosc | Bruixa-vident; dona el beuratge. |
@@ -54,7 +54,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 |---|---|---|
 | Bastó de pelegrí | Germà Aleu (Plaça), al començament | Atac bàsic. |
 | Tarota del Cortiner | La Pianista (Santuari) | Tocar els cants (notes 1-2-3). |
-| Cant de l'Aurora | Pianista | Neteja la Bassadòria; allibera Dolora. |
+| Cant de l'Aurora | Pianista | Neteja la Bassadòria; allibera Dolòria. |
 | Aigua de la Font del Bisbe | Font del Bisbe (bosc de Sant Joan) | Obre el portal de la Joaneta. |
 | Beuratge | La Joaneta | Esvaeix la boira del camí del Gran Til·ler. |
 | Branca del Til·ler | Gran Til·ler | Atac millor; enfonsa les arrels que barren la Cirosa. |
@@ -71,7 +71,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Runna** | El Dolmen | Dany 3; talla els esbarzers negres. |
 | Cant del Miracle | Pianista (després de Runna) | Obre els barrots de la gàbia. |
 | Llanterna (Llum d'en Mamet) | Jusef (en guanyar-lo a ping-pong, **a l'Acte 2, abans del fragment 1**) | **Imprescindible a les Runes** (sense llum no es veu el pergamí del forat); eixampla la llum als llocs foscos. |
-| Ram / Guants de Poder | Germà Francí | Mouen la roda del Celler, el rastell i l'àngel de pedra. |
+| Ram / Guants de Poder | Germà Floresc | Mouen la roda del Celler, el rastell i l'àngel de pedra. |
 | Maneta | Cofre de joguines de la Caseta (en Gori) | Fa girar el cap de l'Home del Raïm. |
 | Pergamí del monjo | Cambra secreta (Casa Gran) | Pista del puzle del Raïm. |
 | Clau de ferro | Cripta de la Casa Gran | Obre la porta de ferro exterior (Pati del Celler). |
@@ -154,7 +154,7 @@ Ritual de tres espelmes (una per cada nen: l'Huri, el Fram i el Sardi): cau la *
 ### 2B · El Saber i les benediccions
 
 **Pas 14b · El Celler — partit de ping-pong contra en Jusef: la Llanterna** `jusef` `jusefRegles` `jusefGuanyat` `jusefPerdut` `julius` `pomers`
-Cal guanyar en **Jusef** (set punts; Julius i Senyor Pomers donen consells, l'Eloi és arrogant i no cal vèncer-lo). En guanyar, dona el **Llum d'en Mamet** (Llanterna) i revela que la **roda de carruatge** del Celler amaga el túnel dels monjos, però pesa massa per a uns braços sols (això s'aprofitarà a l'Acte 3). Sense la Llanterna, a les Runes l'Ineu diu «Sense llum no s'hi veu res»: la pista de les Venerables envia aquí.
+Cal guanyar en **Jusef** (set punts; Július i Senyor Pomers donen consells, l'Eloi és arrogant i no cal vèncer-lo). En guanyar, dona el **Llum d'en Mamet** (Llanterna) i revela que la **roda de carruatge** del Celler amaga el túnel dels monjos, però pesa massa per a uns braços sols (això s'aprofitarà a l'Acte 3). Sense la Llanterna, a les Runes l'Ineu diu «Sense llum no s'hi veu res»: la pista de les Venerables envia aquí.
 
 **Pas 15 · Runes — fragment 1 i l'ombra** `ruines`
 L'Ineu llegeix el pergamí entre dues pedres; la llum s'apaga i **apareix l'ombra del monjo** sobre el mur `ombraMonjo`. (A les Runes també hi ha l'esquerda i un cartell `cartellRuinesPingpong`.)
@@ -201,7 +201,7 @@ Just després de Runna. És el cant que l'Ocellaire va robar als ocells: obre el
 En Jusef ja va revelar al pas 14b que la **roda de carruatge** del Celler amaga el túnel dels monjos, però pesa massa per a uns braços sols: cal arribar-hi amb els Guants de Poder (pas 28).
 
 **Pas 28 · Sant Antoni → Cementiri → Sant Antoni — els Guants de Poder** `germa_franci` `germaFranci`
-El Germà Francí demana que portis el seu **ram** a la tomba de l'àngel del Cementiri `creuCementiri`; en tornar, et dona els **Guants de Poder**. Amb ells la roda cedeix.
+El Germà Floresc demana que portis el seu **ram** a la tomba de l'àngel del Cementiri `creuCementiri`; en tornar, et dona els **Guants de Poder**. Amb ells la roda cedeix.
 
 **Pas 29 · Casa Gran per dins: passadís, cambra, cofre** `cofreCambra` `homeRaimInt` `botaTresor`
 Roda → **Passadís secret** (escolopendres i un mur de cinc esbarzers negres: Runna) → **Cambra secreta** (cofre: el **pergamí del monjo**; la porta del fons és una llosa sense pany: la bóta de la creu rodola, deixa veure una anella, i una cadena fa girar la politja i puja la llosa).
@@ -232,7 +232,7 @@ Sense l'**Empara Fraternal** la boira verinosa de la galeria final fa tossir l'I
 0. **Només a l'Acte 3 (amb Runna):** fins aleshores l'Isílder només parla del jardí i del Sardi, i ningú esmenta la llosa ni la Rosansa. Un cop tens Runna, l'**Isílder** t'explica que el jardí amaga una llosa que només s'obre amb una flor de lluna, i que la **Rosansa** ha tornat a passar per les cel·les; les **Venerables Sàvies** també t'ho recorden.
 1. **Rosansa** (Cel·les, només a partir de l'Acte 3) dona la **Llavor de Lluna**; l'Isílder la planta i s'obre la **llosa** del jardí.
 2. Soterrani de l'Hostatgeria (laberint fosc): vestíbul amb tres portes.
-3. **Dolora** (dormitori, en un capoll de boira): Cant de l'Aurora. **Pilària** (refetor): un àngel de pedra barra la porta; s'empeny amb els Guants. **Carmèlia** (capella): esbarzers negres; Runna.
+3. **Dolòria** (dormitori, en un capoll de boira): Cant de l'Aurora. **Pilària** (refetor): un àngel de pedra barra la porta; s'empeny amb els Guants. **Carmèlia** (capella): esbarzers negres; Runna.
 4. En lliurar-les totes tres: +1 cor (la tercera), s'obre la porta de l'Hostatgeria per dins i al vestíbul apareix el **cofre amb l'Empara Fraternal**. Carmèlia diu que el Cant del Miracle obre la gàbia; la Pilària va veure el Germà Aleu anar a la Porta de les Gírgoles moltes nits.
 
 **Pas 38 · Sala de la Gàbia — el pont** `pontGabia`

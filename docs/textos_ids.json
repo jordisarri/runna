@@ -2043,14 +2043,14 @@
   "dialegs::julius": [
    {
     "id": 275,
-    "qui": "Julius",
+    "qui": "Július",
     "text": "Ei, Ineu! El repte més gran del Miracle és derrotar el Jusef i el seu servei màgic. T'hi atreveixes?",
     "fitxer": "js/dialegs.js",
     "linia": 438
    },
    {
     "id": 276,
-    "qui": "Julius",
+    "qui": "Július",
     "text": "El Senyor Pomers juga amb una pala de pedra. De pedra! I tot i així, em guanya fàcilment.",
     "fitxer": "js/dialegs.js",
     "linia": 439
@@ -2192,7 +2192,7 @@
    {
     "id": 292,
     "qui": "Jusef",
-    "text": "Com vulguis. Torna-hi quan vulguis: el Julius diu que la segona vegada sempre surt millor.",
+    "text": "Com vulguis. Torna-hi quan vulguis: el Július diu que la segona vegada sempre surt millor.",
     "fitxer": "js/dialegs.js",
     "linia": 521
    }
@@ -2475,7 +2475,7 @@
    {
     "id": 673,
     "qui": "Pare Alberic",
-    "text": "Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Francí t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat.",
+    "text": "Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Floresc t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat.",
     "fitxer": "js/dialegs.js",
     "linia": 734
    },
@@ -2607,7 +2607,7 @@
    {
     "id": 335,
     "qui": "Ineu",
-    "text": "Aquest ram és del Germà Francí, per als monjos que dormen aquí. El deixo als peus de l'àngel.",
+    "text": "Aquest ram és del Germà Floresc, per als monjos que dormen aquí. El deixo als peus de l'àngel.",
     "fitxer": "js/dialegs.js",
     "linia": 1770
    },
@@ -2621,7 +2621,7 @@
    {
     "id": 337,
     "qui": "Ineu",
-    "text": "El Germà Francí es posarà content. Va dir que, en tornar, tindria alguna cosa per a mi a Sant Antoni.",
+    "text": "El Germà Floresc es posarà content. Va dir que, en tornar, tindria alguna cosa per a mi a Sant Antoni.",
     "fitxer": "js/dialegs.js",
     "linia": 1773
    },
@@ -3453,7 +3453,7 @@
   "dialegs::germa_franci": [
    {
     "id": 448,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui.",
     "fitxer": "js/dialegs.js",
     "linia": 1815
@@ -3462,21 +3462,21 @@
   "zones/nord::germaFranci": [
    {
     "id": 449,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.",
     "fitxer": "js/zones/nord.js",
     "linia": 757
    },
    {
     "id": 450,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "Les has deixades a l'àngel? Que Déu t'ho pagui, fill. Els monjos d'abans ja deuen estar contents: algú encara se'n recorda.",
     "fitxer": "js/zones/nord.js",
     "linia": 761
    },
    {
     "id": 451,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.",
     "fitxer": "js/zones/nord.js",
     "linia": 762
@@ -3490,56 +3490,56 @@
    },
    {
     "id": 453,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.",
     "fitxer": "js/zones/nord.js",
     "linia": 764
    },
    {
     "id": 663,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "I una altra cosa, fill: a l'Hostatgeria hi ha un mussol de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella.",
     "fitxer": "js/zones/nord.js",
     "linia": 765
    },
    {
     "id": 454,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "El ram, a la tomba de l'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.",
     "fitxer": "js/zones/nord.js",
     "linia": 773
    },
    {
     "id": 455,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "Ineu... Bon dia, fill. Ja et deixen créixer?",
     "fitxer": "js/zones/nord.js",
     "linia": 777
    },
    {
     "id": 456,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "Perdona que no camini de pressa: aquests genolls ja tenen més anys que la torre del rellotge.",
     "fitxer": "js/zones/nord.js",
     "linia": 778
    },
    {
     "id": 457,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.",
     "fitxer": "js/zones/nord.js",
     "linia": 779
    },
    {
     "id": 458,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "Cada setmana porto flors a l'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.",
     "fitxer": "js/zones/nord.js",
     "linia": 780
    },
    {
     "id": 459,
-    "qui": "Germà Francí",
+    "qui": "Germà Floresc",
     "text": "Me'n faries el favor? Deixa aquest ram als peus de l'àngel. I torna, que tinc una cosa per a tu.",
     "fitxer": "js/zones/nord.js",
     "linia": 781
@@ -3893,7 +3893,7 @@
    {
     "id": 502,
     "qui": "Isílder",
-    "text": "He sentit com s'obria la porta de l'Hostatgeria. Són elles, oi? La Dolora, la Pilària, la Carmèlia... les sacerdotesses de la nostra casa.",
+    "text": "He sentit com s'obria la porta de l'Hostatgeria. Són elles, oi? La Dolòria, la Pilària, la Carmèlia... les sacerdotesses de la nostra casa.",
     "fitxer": "js/dialegs.js",
     "linia": 1086
    },
@@ -4139,56 +4139,56 @@
    },
    {
     "id": 538,
-    "qui": "Dolora",
-    "text": "Oh, jove monjo! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Dolora.",
+    "qui": "Dolòria",
+    "text": "Oh, jove monjo! Quin cant més bonic... fa seixanta anys que no el sentia així. Jo sóc la Dolòria.",
     "fitxer": "js/dialegs.js",
     "linia": 1186
    },
    {
     "id": 539,
-    "qui": "Dolora",
+    "qui": "Dolòria",
     "text": "La boira va entrar pel soterrani fa tres nits. Vaig veure un germà amb hàbit que xiulava com els ocells i s'enduia el Sardi dins la boira, rient baixet.",
     "fitxer": "js/dialegs.js",
     "linia": 1187
    },
    {
     "id": 540,
-    "qui": "Dolora",
+    "qui": "Dolòria",
     "text": "Si passes pel jardí, saluda l'Isílder, el jardiner d'aquesta casa. Un bon home, amb el cor malmès des que van desaparèixer les criatures.",
     "fitxer": "js/dialegs.js",
     "linia": 1188
    },
    {
     "id": 541,
-    "qui": "Dolora",
+    "qui": "Dolòria",
     "text": "La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d'aquests que no els talla ni la falç. Diuen que només cedeixen davant d'una espasa de llum. Aquesta espasa que portes, fill, brilla com la que diuen. Prova-ho.",
     "fitxer": "js/dialegs.js",
     "linia": 1189
    },
    {
     "id": 542,
-    "qui": "Dolora",
+    "qui": "Dolòria",
     "text": "La Carmèlia, la nostra gran sacerdotessa, és tancada a la capella del fons. Uns esbarzers negres li tapen la porta: d'aquests que no els talla ni la falç. Diuen que només cedeixen davant d'una espasa de llum.",
     "fitxer": "js/dialegs.js",
     "linia": 1189
    },
    {
     "id": 543,
-    "qui": "Dolora",
+    "qui": "Dolòria",
     "text": "Vés amb compte, fill. Entre les tres germanes guardem l'Empara d'aquesta casa. Quan siguem lliures les tres, serà teva.",
     "fitxer": "js/dialegs.js",
     "linia": 1191
    },
    {
     "id": 544,
-    "qui": "Dolora",
+    "qui": "Dolòria",
     "text": "Vés amb Déu, fill. La cadira em fa mal als ossos, però encara tinc bones orelles.",
     "fitxer": "js/dialegs.js",
     "linia": 1196
    },
    {
     "id": 545,
-    "qui": "Dolora",
+    "qui": "Dolòria",
     "text": "El Sardi ja torna a robar galetes del rebost. Senyal que està bé del tot.",
     "fitxer": "js/dialegs.js",
     "linia": 1809
@@ -4293,7 +4293,7 @@
    {
     "id": 559,
     "qui": "Nota",
-    "text": "«Per a qui ha tornat la llum a aquesta casa. Al fons de les Gírgoles, abans d'arribar a la gàbia, hi ha una boira que crema: la nostra empara l'esvairà al teu pas.» — Dolora, Pilària i Carmèlia",
+    "text": "«Per a qui ha tornat la llum a aquesta casa. Al fons de les Gírgoles, abans d'arribar a la gàbia, hi ha una boira que crema: la nostra empara l'esvairà al teu pas.» — Dolòria, Pilària i Carmèlia",
     "fitxer": "js/dialegs.js",
     "linia": 1234
    },
@@ -5087,7 +5087,7 @@
    {
     "id": 651,
     "qui": "Ineu",
-    "text": "La Dolora ja és desperta.",
+    "text": "La Dolòria ja és desperta.",
     "fitxer": "js/zones/hostatgeria.js",
     "linia": 615
    }
@@ -5169,12 +5169,12 @@
   "666": {
    "conversa": "",
    "qui": "Pare Alberic",
-   "text": "Les sacerdotesses són a l'Hostatgeria, i els guants del Germà Francí t'hi ajudaran. No baixis sense les tres: l'avenc no perdona."
+   "text": "Les sacerdotesses són a l'Hostatgeria, i els guants del Germà Floresc t'hi ajudaran. No baixis sense les tres: l'avenc no perdona."
   },
   "665": {
    "conversa": "",
    "qui": "Pare Alberic",
-   "text": "I una cosa més que diu el marge de la Crònica, per quan baixis a la porta de ferro de la Taverna. Per obrir-la calen tres coses: la clau petita del vigilant, el Cant del Miracle que els ocells van perdre, i l'Empara de les sacerdotesses de l'Hostatgeria, que protegeix de l'alè de la boira. Les sacerdotesses són a l'Hostatgeria; els guants del Germà Francí t'hi ajudaran."
+   "text": "I una cosa més que diu el marge de la Crònica, per quan baixis a la porta de ferro de la Taverna. Per obrir-la calen tres coses: la clau petita del vigilant, el Cant del Miracle que els ocells van perdre, i l'Empara de les sacerdotesses de l'Hostatgeria, que protegeix de l'alè de la boira. Les sacerdotesses són a l'Hostatgeria; els guants del Germà Floresc t'hi ajudaran."
   },
   "669": {
    "conversa": "",
@@ -5244,7 +5244,7 @@
   "570": {
    "conversa": "zones/gabia::tornRastell",
    "qui": "Ineu",
-   "text": "(Em caldrien unes mans molt més fortes: els guants dels picapedrers del Germà Francí.)"
+   "text": "(Em caldrien unes mans molt més fortes: els guants dels picapedrers del Germà Floresc.)"
   },
   "571": {
    "conversa": "",

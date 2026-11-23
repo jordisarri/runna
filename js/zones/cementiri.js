@@ -40,7 +40,7 @@ class ZonaCementiri extends ZonaBase {
         }
         this.fanalet(585, 500); this.fanalet(818, 500);
 
-        // La tomba de l'àngel, on el Germà Francí porta flors: l'àngel que plora al cap i un gerro als peus
+        // La tomba de l'àngel, on el Germà Floresc porta flors: l'àngel que plora al cap i un gerro als peus
         this.tombaAngel = this.posar(Estat.flag('florsCreu') ? 'tomba_angel_content' : 'tomba_angel', 1370, 600, { col: { w: 124, h: 122 }, opac: true });      // opac, i el bloc de col·lisió va des de la base de l'àngel fins als peus de la tomba: venint de dalt no es pot passar per sobre
         const puntAngel = this.interactiu(1370, 615, RADI_GRAN, DIALEGS.creuCementiri, { altura: 230, enTancar: () => this.posarRam() });
         this.brilloImatge(this.tombaAngel, { punt: puntAngel, actiu: () => !Estat.flag('florsCreu') });          // la tomba de l'àngel brilla fins que s'hi porten les flors
@@ -152,7 +152,7 @@ class ZonaCementiri extends ZonaBase {
         Estat.desar();
     }
 
-    // Quan el ram del Germà Francí ja és als peus de l'àngel, la tomba canvia de gràfic amb un fade in: ara l'àngel és content i mira al cel
+    // Quan el ram del Germà Floresc ja és als peus de l'àngel, la tomba canvia de gràfic amb un fade in: ara l'àngel és content i mira al cel
     posarRam(ara = false) {
         if ((!ara && !Estat.flag('florsCreu')) || this.tombaAngel.texture.key === 'tomba_angel_content') return;
         const nova = this.add.image(this.tombaAngel.x, this.tombaAngel.y, 'tomba_angel_content').setOrigin(0.5, 1)

@@ -112,9 +112,9 @@ const PROGRES = {
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
           pista: E => "Runna ja és amb tu. Els barrots de la gàbia només escolten un cant que la Pianista encara no t'ha ensenyat." },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
-          pista: E => E.flag('florsCreu') ? "El Germà Francí t'espera a Sant Antoni, content."
-              : E.te('ram') ? "El ram del Germà Francí és per a algú que ja no el pot rebre: la tomba de l'àngel, al Cementiri."
-              : "El Germà Francí, a Sant Antoni, té uns guants que mouen el que pesa. Fes-li un favor." },
+          pista: E => E.flag('florsCreu') ? "El Germà Floresc t'espera a Sant Antoni, content."
+              : E.te('ram') ? "El ram del Germà Floresc és per a algú que ja no el pot rebre: la tomba de l'àngel, al Cementiri."
+              : "El Germà Floresc, a Sant Antoni, té uns guants que mouen el que pesa. Fes-li un favor." },
         // El Pi dels Tres Cants és obligatori: el Pare Xèvius, vigilant de la Porta de les Gírgoles, només deixa passar qui li ensenya la Carta del Cortiner.
         { id: 'pi', marca: ['piObert', 'piAurora', 'piPedres', 'piMiracle', 'piVist', 'obj:carta_cortiner'], fet: E => E.flag('piObert') || E.flag('portaSoterraniOberta'),
           pista: E => E.flag('cantMiracle')
@@ -129,7 +129,7 @@ const PROGRES = {
                       ? "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. Al jardí de l'Hostatgeria, la llosa dels monjos s'encén amb la llum de Runna: parla-ho amb l'Isílder."
                       : "Per passar la boira verinosa cal l'Empara Fraternal de les sacerdotesses. La Rosansa, la venedora de verdures, ha tornat a passar per les cel·les: potser té la llavor d'una flor de lluna.")
               : !E.flag('mongesTrobades')
-                  ? "Sota la llosa, les sacerdotesses: desperta la Dolora, empeny el mussol de pedra que barra la porta de la Pilària i talla els esbarzers de la Carmèlia."
+                  ? "Sota la llosa, les sacerdotesses: desperta la Dolòria, empeny el mussol de pedra que barra la porta de la Pilària i talla els esbarzers de la Carmèlia."
                   : "Les sacerdotesses són lliures: la seva Empara Fraternal t'espera al cofre del vestíbul de l'Hostatgeria." },
         { id: 'roda', marca: ['rodaMoguda'], fet: E => E.flag('rodaMoguda'),
           pista: E => "La roda de carruatge de la qual et va parlar en Jusef tapa el túnel dels monjos. Amb els guants, es deixarà empènyer." },

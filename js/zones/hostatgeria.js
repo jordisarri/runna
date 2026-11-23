@@ -159,7 +159,7 @@ class ZonaSoterraniHost extends ZonaBase {
 }
 
 // El vestíbul de l'Hostatgeria. Tres portes duen a les cambres de les sacerdotesses; cada una té el seu bloqueig:
-//   esquerra (dormitori, la Dolora): oberta, però la sacerdotessa dorm dins un capoll de boira → Cant de l'Aurora (flauta)
+//   esquerra (dormitori, la Dolòria): oberta, però la sacerdotessa dorm dins un capoll de boira → Cant de l'Aurora (flauta)
 //   mig (refetor, la Pilària): un àngel de pedra massís barra la porta → Guants de Poder (s'empeny des d'un costat)
 //   dreta (capella, la Carmèlia): esbarzers negres → Runna
 // En alliberar les tres, obren la porta de l'Hostatgeria per dins (al vestíbul apareix un cofre amb l'Empara Fraternal).
@@ -608,17 +608,17 @@ class CambraMonja extends ZonaCasaBase {
         return this.monja === 'dolora' && nom === 'aurora' && !Estat.flag('lliureDolora') && Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 520, 460) <= 320;
     }
 
-    // Cant de l'Aurora davant el capoll: la boira s'esvaeix i la Dolora es desperta
+    // Cant de l'Aurora davant el capoll: la boira s'esvaeix i la Dolòria es desperta
     enMelodia(nom) {
         if (this.monja !== 'dolora' || nom !== 'aurora') return false;
         if (Phaser.Math.Distance.Between(this.ineu.x, this.ineu.y, 520, 460) > 320) return false;
-        if (Estat.flag('lliureDolora')) { this.ineuDiu('La Dolora ja és desperta.'); return true; }
+        if (Estat.flag('lliureDolora')) { this.ineuDiu('La Dolòria ja és desperta.'); return true; }
         Estat.posaFlag('lliureDolora');
         this.alliberada(false);
         Sfx.secret();
         this.cameras.main.shake(300, 0.003);
         Estat.desar();
-        this.time.delayedCall(1900, () => { if (!Estat.flag('premiDolora')) this.ui().obrirDialeg(DIALEGS.dolora(Estat)); });   // la Dolora es desperta i parla
+        this.time.delayedCall(1900, () => { if (!Estat.flag('premiDolora')) this.ui().obrirDialeg(DIALEGS.dolora(Estat)); });   // la Dolòria es desperta i parla
         return true;
     }
 

@@ -47,7 +47,7 @@ const RENOMS_ANTICS = {
     parlatAlcui: 'parlatAlcovi',
     parlatDaniel: 'parlatDaimiel',
     parlatFrederic: 'parlatPomers',
-    parlatJuli: 'parlatJulius',
+    parlatJuli: 'parlatJúlius',
     phili: 'pilaria',
     portalJaumeta: 'portalJoaneta',
     premiCharm: 'premiCarmelia',
