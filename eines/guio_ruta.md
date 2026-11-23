@@ -14,7 +14,7 @@ Aquest fitxer es genera amb `python eines/fer_guio_complet.py` (la ruta és a `e
 
 L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres nens desapareguts (l'Huri, el Fram i el Sardi) i una boira violeta que surt de sota terra i fa callar l'orgue. Ha de trobar **Runna, l'espasa del Miracle** (adormida al Dolmen), baixar a la **Sala de la Gàbia** (fons de les Gírgoles), vèncer l'**Ocellaire** (l'Home de la Gàbia) i tornar el cant i el riure al poble.
 
-**La llegenda.** Fa segles, un firaire (l'Ocellaire) venia ocells en gàbies i, amb els anys, va començar a robar el riure dels nens. Pastors i monjos el van tancar dins la seva pròpia gàbia gegant, sota terra. Un monjo va segellar la porta de ferro amb la llum de Runna, va deixar l'espasa dormint al Dolmen i va amagar la clau. La tomba dels monjos del Cementiri s'ha esquerdat: d'allà surt la boira (l'alè de l'Ocellaire) i els escolopendres. El Germà Aldreu, que admira l'Ocellaire, li ha obert la porta.
+**La llegenda.** Fa segles, un firaire (l'Ocellaire) venia ocells en gàbies i, amb els anys, va començar a robar el riure dels nens. Pastors i monjos el van tancar dins la seva pròpia gàbia gegant, sota terra. Un monjo va segellar la porta de ferro amb la llum de Runna, va deixar l'espasa dormint al Dolmen i va amagar la clau. La tomba dels monjos del Cementiri s'ha esquerdat: d'allà surt la boira (l'alè de l'Ocellaire) i els escolopendres. El Germà Aleu, que admira l'Ocellaire, li ha obert la porta.
 
 ## 0b. Qui és qui
 
@@ -26,7 +26,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **La Pianista** | Santuari | Ensenya els tres cants (Aurora, Vespres, Miracle) i dona la tarota. |
 | **Pare Nadiel** | Santuari | Dirigeix el cor. |
 | **Germà Francí** | Monestir / Sant Antoni | Monjo vell; dona els Guants de Poder. |
-| **Germà Aldreu** | Plaça, Cirosa, Gàbia | Antagonista simpàtic: servent de l'Ocellaire (el «Pastor de Boira»). |
+| **Germà Aleu** | Plaça, Cirosa, Gàbia | Antagonista simpàtic: servent de l'Ocellaire (el «Pastor de Boira»). |
 | **L'Ocellaire (L'Home de la Gàbia)** | Sala de la Gàbia | Boss final. |
 | **Meus i senyor Llaminer** | Sant Benet | Matrimoni veí dels nens; la Meus fa l'escudella del sopar. |
 | **Mandu** | Sant Benet | Nena petita, germana del Fram. |
@@ -52,7 +52,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 
 | Objecte | On / de qui | Serveix per a |
 |---|---|---|
-| Bastó de pelegrí | Germà Aldreu (Plaça), al començament | Atac bàsic. |
+| Bastó de pelegrí | Germà Aleu (Plaça), al començament | Atac bàsic. |
 | Tarota del Cortiner | La Pianista (Santuari) | Tocar els cants (notes 1-2-3). |
 | Cant de l'Aurora | Pianista | Neteja la Bassadòria; allibera Dolora. |
 | Aigua de la Font del Bisbe | Font del Bisbe (bosc de Sant Joan) | Obre el portal de la Joaneta. |
@@ -100,7 +100,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 **Pas 1 · Plaça del Santuari — Pare Jordà** `pareJorda`
 L'Ineu parla amb el prior: li explica la desaparició dels nens i li demana que parli amb tothom. *(Posa el flag `clauerNovici`.)*
 
-**Pas 2 · Plaça — Germà Aldreu, vora els xiprers** `germaAldreu`
+**Pas 2 · Plaça — Germà Aleu, vora els xiprers** `germaAldreu`
 Simpàtic i rialler (parla de cromos i del Barça), li dona el **bastó de pelegrí**. *Atenció a la lectura: aquest és el futur Pastor de Boira; a la Plaça sembla inofensiu.*
 
 **Pas 3 · Santuari (interior) — la Pianista** `pianista`
@@ -116,7 +116,7 @@ Amb la tarota, el Cant de l'Aurora neteja l'aigua tèrbola (en surten gripaus en
 - El camí del nord, cap al Gran Til·ler, és tapat per una **boira espessa**.
 
 **Pas 6 · Taverna (lateral des de l'inici)** `eve` `portaTaverna`
-La porta és tancada («Avui no servim — Càren»). Truca: l'**Eve** obre per la finestra, explica que el Germà Aldreu va cada nit a la Porta de les Gírgoles i que d'allà se senten ocells, i que el Sardi hi berenava. A la galeria hi ha una **porta de ferro** d'on surt boira (tancada amb clau).
+La porta és tancada («Avui no servim — Càren»). Truca: l'**Eve** obre per la finestra, explica que el Germà Aleu va cada nit a la Porta de les Gírgoles i que d'allà se senten ocells, i que el Sardi hi berenava. A la galeria hi ha una **porta de ferro** d'on surt boira (tancada amb clau).
 
 ## ACTE 2 — «La recerca de Runna»
 
@@ -139,7 +139,7 @@ Només amb la branca **i la Bassadòria neta** les arrels s'enfonsen i s'obre el
 *(Branca lateral: a l'oest del Til·ler hi ha **La Caseta** (vegeu «Maneta», pas 25).)*
 
 **Pas 12 · La Cirosa — Pastor de Boira** `aldreuPastor` `aldreuDerrotat`
-Camí llarg amb ovelles de boira, un banc de pedra (desa la partida), la masia (Mas de la Cirosa, amb el **Llibre del Ramat** `masiaLlibre`) i els pastors `pastorA` `pastorB`. El Germà Aldreu, convertit en **Pastor de Boira**, és un mini-boss. En vèncer-lo no es penedeix: diu que el Mestre ja és despert al fons de les Gírgoles i marxa rient camí avall. (+1 cor.)
+Camí llarg amb ovelles de boira, un banc de pedra (desa la partida), la masia (Mas de la Cirosa, amb el **Llibre del Ramat** `masiaLlibre`) i els pastors `pastorA` `pastorB`. El Germà Aleu, convertit en **Pastor de Boira**, és un mini-boss. En vèncer-lo no es penedeix: diu que el Mestre ja és despert al fons de les Gírgoles i marxa rient camí avall. (+1 cor.)
 
 **Pas 13 · Cirosa — el pastor vell** `pastorVell`
 Vora el foc, el pastor vell dona les **Esquelles** dels seus avis.
@@ -216,10 +216,10 @@ La Maneta s'encaixa al volant de ferro del pedestal: tres voltes i el cap girat 
 El Pare Alcoví llegeix a la Crònica que la llum de Runna tanca la tomba. Un cop de **Runna** a la tomba esquerdada la segella i la boira s'esvaeix.
 
 **Pas 33 · Pati del Celler — porta de ferro exterior** `cartellCeller` `cartellGirgoles`
-La Clau de ferro obre la **porta de les Gírgoles**, a l'est del Pati del Celler (la que visitava l'Aldreu): duu a la **Galeria de la Porta de Ferro** i al fons hi ha una segona porta de pany petit.
+La Clau de ferro obre la **porta de les Gírgoles**, a l'est del Pati del Celler (la que visitava l'Aleu): duu a la **Galeria de la Porta de Ferro** i al fons hi ha una segona porta de pany petit.
 
 **Pas 34 · Cabana amagada (camí de la Desaparició) — l'Iscu** `iscu`
-El fill de la Càren s'amaga allà fent solitaris. Ha vist l'Aldreu picar tres cops de nit a la porta de ferro i té la **clau rovellada** (cofre: +1 cor).
+El fill de la Càren s'amaga allà fent solitaris. Ha vist l'Aleu picar tres cops de nit a la porta de ferro i té la **clau rovellada** (cofre: +1 cor).
 
 **Pas 35 · Sala de les Gírgoles — puzle de les mates** `girgolesInscripcio`
 Cinc mates de gírgoles lluminoses en rotllana: en tocar-ne una, canvien ella i les dues veïnes. Quan brillen les cinc, es desfà la cortina de micel·li del túnel nord.
@@ -233,20 +233,20 @@ Sense l'**Empara Fraternal** la boira verinosa de la galeria final fa tossir l'I
 1. **Rosansa** (Cel·les, només a partir de l'Acte 3) dona la **Llavor de Lluna**; l'Isílder la planta i s'obre la **llosa** del jardí.
 2. Soterrani de l'Hostatgeria (laberint fosc): vestíbul amb tres portes.
 3. **Dolora** (dormitori, en un capoll de boira): Cant de l'Aurora. **Pilària** (refetor): un àngel de pedra barra la porta; s'empeny amb els Guants. **Carmèlia** (capella): esbarzers negres; Runna.
-4. En lliurar-les totes tres: +1 cor (la tercera), s'obre la porta de l'Hostatgeria per dins i al vestíbul apareix el **cofre amb l'Empara Fraternal**. Carmèlia diu que el Cant del Miracle obre la gàbia; la Pilària va veure el Germà Aldreu anar a la Porta de les Gírgoles moltes nits.
+4. En lliurar-les totes tres: +1 cor (la tercera), s'obre la porta de l'Hostatgeria per dins i al vestíbul apareix el **cofre amb l'Empara Fraternal**. Carmèlia diu que el Cant del Miracle obre la gàbia; la Pilària va veure el Germà Aleu anar a la Porta de les Gírgoles moltes nits.
 
 **Pas 38 · Sala de la Gàbia — el pont** `pontGabia`
 Al marge de l'avenc, el **Cant de Vespres** aixeca els blocs del fons i fa un pont.
 
 **Pas 39 · Combat final contra l'Ocellaire** `aldreuGabia` `ocellaireDerrotat`
-L'Aldreu (encara Pastor de Boira) hi fa de guàrdia i, quan l'Ineu trepitja la plataforma, crida el seu Mestre: la boira baixa de la cúpula i surt l'**Ocellaire** (rètol «L'HOME DE LA GÀBIA»). Tres fases (54 de vida): ocells de foc, cop de bàcul en cercle, bàcul llançat, foc a terra; només el cap és vulnerable quan cau de genolls. Si l'Ineu cau, torna a l'entrada. Vençut, el bàcul es parteix, ell es desfà en boira i l'Aldreu torna a ser el Germà Aldreu i s'agenolla davant els barrots.
+L'Aleu (encara Pastor de Boira) hi fa de guàrdia i, quan l'Ineu trepitja la plataforma, crida el seu Mestre: la boira baixa de la cúpula i surt l'**Ocellaire** (rètol «L'HOME DE LA GÀBIA»). Tres fases (54 de vida): ocells de foc, cop de bàcul en cercle, bàcul llançat, foc a terra; només el cap és vulnerable quan cau de genolls. Si l'Ineu cau, torna a l'entrada. Vençut, el bàcul es parteix, ell es desfà en boira i l'Aleu torna a ser el Germà Aleu i s'agenolla davant els barrots.
 
 **Pas 40 · Alliberament** `finalGabia`
 El **Cant del Miracle** davant els barrots fa brillar la gàbia, que s'aixeca fins al sostre. Els tres capolls baixen davant l'Ineu i **Runna els trenca** un a un: l'Huri, el Fram i el Sardi es desperten rient.
 
 ## EPÍLEG — «Torna el cant» `ferEpileg` `gentEpileg`
 
-A la Gàbia, els nens riuen i el riure desfà la boira. L'Aldreu («El Mestre és aquí dins... Jo em quedo amb ell») es posa sota la gàbia, que baixa i el tanca. Al **Santuari** hi és tothom: la Meus abraça l'Huri i el Fram, les sacerdotesses el Sardi, l'Iscu hi ha escapat de la Taverna. La Pianista dona l'entrada: l'Ineu comença el Cant del Miracle amb la tarota, l'orgue el segueix i el poble canta. Si el rellotge del campanar funciona, toca tres campanades. El Pare Jordà: «Benvingut a casa, Ineu.» **Crèdits** i es pot continuar jugant (la gent té frases noves: vegeu `DIALEGS_FINAL` a l'annex).
+A la Gàbia, els nens riuen i el riure desfà la boira. L'Aleu («El Mestre és aquí dins... Jo em quedo amb ell») es posa sota la gàbia, que baixa i el tanca. Al **Santuari** hi és tothom: la Meus abraça l'Huri i el Fram, les sacerdotesses el Sardi, l'Iscu hi ha escapat de la Taverna. La Pianista dona l'entrada: l'Ineu comença el Cant del Miracle amb la tarota, l'orgue el segueix i el poble canta. Si el rellotge del campanar funciona, toca tres campanades. El Pare Jordà: «Benvingut a casa, Ineu.» **Crèdits** i es pot continuar jugant (la gent té frases noves: vegeu `DIALEGS_FINAL` a l'annex).
 
 ---
 
@@ -256,7 +256,7 @@ Les Venerables Sàvies recorden una lateral quan la història principal és atur
 
 | Lateral | Com començar-la | Què cal fer | Resultat |
 |---|---|---|---|
-| **Taverna i l'Eve** | Des de l'inici: truca a la Taverna | Parla amb l'Eve (`eve`) | Pistes sobre l'Aldreu i les Gírgoles. |
+| **Taverna i l'Eve** | Des de l'inici: truca a la Taverna | Parla amb l'Eve (`eve`) | Pistes sobre l'Aleu i les Gírgoles. |
 | **Carry i el Pallofa** | Parla amb la Carry (Nostra Senyora) `carry` `pallofa` | Troba el gos **Pallofa** a Sant Antoni i porta-l'hi | **Clau del campanar**. |
 | **Rellotge del campanar** | Amb la clau del campanar; el Pare Nadiel obre la porta de la dreta del retaule | Torre → Sala del Rellotge: tres engranatges (petit, gran, mitjà, segons la nota del campaner) | El rellotge camina; a l'epíleg toca tres campanades. |
 | **Tresor del Santuari** | Després del Cant de Vespres `pedraEscolta` | Tocar el Cant de Vespres davant la pedra de la façana | Sala del tresor: +1 cor. |
@@ -268,8 +268,8 @@ Les Venerables Sàvies recorden una lateral quan la història principal és atur
 
 # PREGUNTES PER CAÇAR FORATS DE GUIÓ (mentre llegeixes l'annex)
 
-- Cada nen desaparegut (Huri, Fram, Sardi): qui n'explica la desaparició i quan? Ho expliquen igual la Carry, la Meus, les sacerdotesses i l'Aldreu?
-- El Germà Aldreu: a la Plaça diu «el Mestre»? Hi ha prou pistes abans del Pastor de Boira?
+- Cada nen desaparegut (Huri, Fram, Sardi): qui n'explica la desaparició i quan? Ho expliquen igual la Carry, la Meus, les sacerdotesses i l'Aleu?
+- El Germà Aleu: a la Plaça diu «el Mestre»? Hi ha prou pistes abans del Pastor de Boira?
 - Qui dona el Cant de Vespres i quan? (Pianista, però el demana l'ombra: el sopar del Til·ler també el necessita per al pa dels pastors.)
 - Les pistes de les Venerables Sàvies i el Pare Jordà (surten de `js/progres.js`) han de coincidir amb el que diuen els personatges concrets.
 - Després de l'epíleg: tothom té frase nova? Falta algú (Nena de les Trenes, Galf, Follet, Jorgi, Mandu)?

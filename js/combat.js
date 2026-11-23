@@ -367,7 +367,7 @@ const ENEMICS = {
         }
     },
 
-    // BOSS: el Germà Aldreu convertit en Pastor de la Boira. Crida ovelles, carrega amb la caiada i la clava a terra en arc.
+    // BOSS: el Germà Aleu convertit en Pastor de la Boira. Crida ovelles, carrega amb la caiada i la clava a terra en arc.
     // Fulls d'animació (assets/enemics/pastor_*.webp, vegeu docs/PROMPTS_GRAFICS.md): si no hi són, es veu el dibuix fix de sempre.
     pastor: {
         tex: 'pastor_camina', texAlt: 'pastor_boira', escala: ESC_CAMINA, vida: 40, vel: 430, mal: 1, radi: 30, cos: [46, 26], ombra: 0.5, immune: 270,

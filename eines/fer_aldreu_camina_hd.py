@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Fulls de caminar del Germà Aldreu monjo en ALTA RESOLUCIÓ → assets/personatges/germa_aldreu_camina.webp (cap a la dreta) i germa_aldreu_ne.webp (cap al nord-est).
+"""Fulls de caminar del Germà Aleu monjo en ALTA RESOLUCIÓ → assets/personatges/germa_aldreu_camina.webp (cap a la dreta) i germa_aldreu_ne.webp (cap al nord-est).
     python3 eines/fer_aldreu_camina_hd.py
-Origen: art/personatges/aldreu_camina_hd/{right,northeast}.png (AutoSprite, caminar isomètric del personatge «Germà Aldreu monjo», 4x4 fotogrames de 512; es fan servir 8 dels 16).
+Origen: art/personatges/aldreu_camina_hd/{right,northeast}.png (AutoSprite, caminar isomètric del personatge «Germà Aleu monjo», 4x4 fotogrames de 512; es fan servir 8 dels 16).
 Mida: escala ESC (0,65): el personatge hi fa uns 266 px d'alt, igual que el dibuix quiet un cop carregat (amplada 133 x RES), de manera que el joc, que posa als fulls de caminar l'escala del dibuix quiet, el veu igual de gran.
 Els peus (el punt més baix de cada fotograma) sempre a CEL_ALT - 6 i el cos centrat al centre mig de l'animació.
 IMPORTANT: el joc suposa cel·les de CEL_AMPLE x CEL_ALT (frameWidth/frameHeight a js/assets.js).

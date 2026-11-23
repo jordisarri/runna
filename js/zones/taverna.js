@@ -73,8 +73,8 @@ class ZonaTaverna extends ZonaBase {
  * LA TAVERNA PER DINS i la GALERIA DE LA PORTA DE FERRO (l'entrada de les Gírgoles, a l'est del Celler: res a veure amb la Taverna)
  * La Càren (mandrosa) dorm darrere el taulell; l'Eve (amiga fidel) obre la porta a l'Ineu i li explica què passa de nit.
  * La galeria s'entra per la porta de ferro exterior de la Sala de les Gírgoles, a l'est del Pati del Celler (la que fa servir
- * el Germà Aldreu cada nit), que s'obre amb la Clau de ferro. Al fons de la galeria, una segona porta de ferro, de pany petit, dona a la
- * Sala de les Gírgoles: l'obre la clau rovellada que l\'Iscu va trobar (al Germà Aldreu li va caure).
+ * el Germà Aleu cada nit), que s'obre amb la Clau de ferro. Al fons de la galeria, una segona porta de ferro, de pany petit, dona a la
+ * Sala de les Gírgoles: l'obre la clau rovellada que l\'Iscu va trobar (al Germà Aleu li va caure).
  */
 
 Object.assign(DIALEGS, {
@@ -92,7 +92,7 @@ Object.assign(DIALEGS, {
     eveBase: E => {
         if (!E.flag('eveParlat')) return {
             pagines: [
-                { qui: 'Eve', text: 'Sóc l\'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T\'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, i la porta s\'obre sola. A dins, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.' },
+                { qui: 'Eve', text: 'Sóc l\'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T\'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aleu pica tres cops a la Porta de les Gírgoles, i la porta s\'obre sola. A dins, diuen, n\'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.' },
                 { qui: 'Eve', text: 'I l\'Iscu, el fill de la Càren, fa dos dies que s\'escapa pel camí de la Desaparició: diu que hi ha un forat entre els arbres «per on els grans no hi caben». Aquest no l\'ha pres la boira, sinó la mandra: des que la seva mare dorm, els gots els frego jo, i ell s\'esfuma. Si el trobes, digues-li que torni a sopar... i a fregar.' },
                 { qui: 'Eve', text: 'El Sardi, en canvi, ve cada tarda a berenar pa amb xocolata. Ahir no va venir.' },
             ],
@@ -116,12 +116,12 @@ Object.assign(DIALEGS, {
     },
 
 
-    // La Porta de les Gírgoles (a l'est del Pati del Celler): la de la galeria, que s'obria sola per al Germà Aldreu mentre la boira obeïa la veu del Mestre
+    // La Porta de les Gírgoles (a l'est del Pati del Celler): la de la galeria, que s'obria sola per al Germà Aleu mentre la boira obeïa la veu del Mestre
     portaSoterrani: E => E.flag('clauFerro') ? { pagines: [
     ] } : E.flag('tombaSegellada') ? { pagines: [
-        { qui: 'Ineu', text: "(Tancada amb clau. A l'Aldreu se li obria sola perquè la boira que sortia de la tomba obeïa la veu del Mestre... però la tomba és segellada i la boira ja no puja: ara la porta no s'obre per a ningú. Em cal la clau dels monjos.)" }
+        { qui: 'Ineu', text: "(Tancada amb clau. A l'Aleu se li obria sola perquè la boira que sortia de la tomba obeïa la veu del Mestre... però la tomba és segellada i la boira ja no puja: ara la porta no s'obre per a ningú. Em cal la clau dels monjos.)" }
     ] } : { pagines: [
-        { qui: 'Ineu', text: "(Tancada amb clau. Diuen que a l'Aldreu se li obre sola: la boira l'obeeix. A mi, no.)" }
+        { qui: 'Ineu', text: "(Tancada amb clau. Diuen que a l'Aleu se li obre sola: la boira l'obeeix. A mi, no.)" }
     ] },
 
     acordio: E => ({ pagines: [] }),
@@ -135,7 +135,7 @@ Object.assign(DIALEGS, {
         const clau = E.te('clau_girgoles'), cant = E.flag('cantMiracle'), empara = E.te('benedicio_fraterna');
         // Sense la clau petita: l'Ineu recorda qui s'escapa de nit (l'Iscu) i l'objectiu l'hi porta
         if (!clau) return { pagines: [
-            { qui: 'Ineu', text: '(La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Aldreu en deu tenir una altra.)' },
+            { qui: 'Ineu', text: '(La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Aleu en deu tenir una altra.)' },
             { qui: 'Ineu', text: '(Algú l\'hauria d\'haver vist anar-hi de nit... L\'Iscu, el fill de la Càren! L\'Eve va dir que s\'escapa pel camí de la Desaparició, per un forat entre els arbres.)' }
         ], enAcabar: () => { E.posaFlag('portaPetitaVista'); E.posaObjectiu(PROGRES.pista(E)); } };
         if (cant && empara) return { pagines: [
@@ -393,7 +393,7 @@ class ZonaSotaTaverna extends ZonaBase {
         // Botes i sacs de gra de les provisions dels monjos (es poden trencar)
         [[150, 300], [180, 350], [640, 320]].forEach(([x, y]) => this.barril(x, y, 46, 20));
         this.sacs(640, 540, 'duo'); this.sacs(150, 580, 'un');
-        // Les petjades a la pols: un rastre de botes que puja de l'escala fins a la porta de ferro i s'hi atura (són les del Germà Aldreu, que hi pica cada nit); les més properes a la porta, més fosques i amb boira
+        // Les petjades a la pols: un rastre de botes que puja de l'escala fins a la porta de ferro i s'hi atura (són les del Germà Aleu, que hi pica cada nit); les més properes a la porta, més fosques i amb boira
         const pj = this.add.graphics().setDepth(-1000);
         for (let k = 0; k < 13; k++) {
             const y = 760 - k * 42, x = 400 + (k % 2 ? 16 : -16) + Math.sin(k * 0.9) * 6, f = 1 - k / 18;

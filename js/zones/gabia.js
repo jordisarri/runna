@@ -7,7 +7,7 @@
  *   Tortura:  un rastell rovellat barra el pas: el torn només el giren els Guants de Poder. Més amunt, un mur d'esbarzers negres (Runna).
  *   Gàbia:    la gàbia penja al mig d'un avenc. Els blocs de pedra del pont dormen al fons: el Cant de Vespres els aixeca.
  *             Combat final contra l'Ocellaire (bàcul que gira i ocells de foc). Vençut, el Cant del Miracle aixeca la gàbia,
- *             Runna trenca els capolls dels nens i l'Aldreu s'hi queda tancat. Després, l'epíleg al Santuari.
+ *             Runna trenca els capolls dels nens i l'Aleu s'hi queda tancat. Després, l'epíleg al Santuari.
  */
 
 // Foscor amb forats de llum (la mateixa tècnica que el soterrani de l'Hostatgeria)
@@ -77,16 +77,16 @@ Object.assign(DIALEGS, {
     ] }),
     capoll: nom => E => ({ pagines: [] }),
     aldreuGabia: E => ({ pagines: E.flag('andreuTancat') ? [
-        { qui: 'Germà Aldreu', text: "Estic bé, Ineu. La boira fa companyia quan ja no demana res." },
-        { qui: 'Germà Aldreu', text: "Torna quan vulguis. Si mai se'm gira el cor, ja trobaré qui em pugui acompanyar..." }
+        { qui: 'Germà Aleu', text: "Estic bé, Ineu. La boira fa companyia quan ja no demana res." },
+        { qui: 'Germà Aleu', text: "Torna quan vulguis. Si mai se'm gira el cor, ja trobaré qui em pugui acompanyar..." }
     ] : E.flag('gabiaOberta') ? [
-        { qui: 'Germà Aldreu', text: "Encara no, noi. Deixa'm sentir com riuen." }
-    ] : E.flag('ocellaireVencut') ? [{ qui: 'Germà Aldreu', text: [
+        { qui: 'Germà Aleu', text: "Encara no, noi. Deixa'm sentir com riuen." }
+    ] : E.flag('ocellaireVencut') ? [{ qui: 'Germà Aleu', text: [
         "(No et mira.) Ja no em parla. Abans em parlava sempre.",
         "Fes el que has de fer, noi. Avui no et miraré.",
         "Quan era a la Plaça, tothom em passava pel costat. Ell em va veure."
     ][(DIALEGS._rotAldreu = ((DIALEGS._rotAldreu || 0) + 1) % 3)] }] : [
-        { qui: 'Aldreu, Pastor de la Boira', text: "El Mestre ve, monjo. Ja el sents?" }
+        { qui: 'Aleu, Pastor de la Boira', text: "El Mestre ve, monjo. Ja el sents?" }
     ] }),
     gentEpileg: E => ({ pagines: [{ qui: 'Gent', text: "Avui tothom canta, encara que l'orgue faci una nota de pega." }] }),
     nenGabia: nom => E => ({ pagines: [{ qui: nom, text: {
@@ -816,8 +816,8 @@ class ZonaGabia extends ZonaBase {
             this.ocellsBoira.push(o);
         }
 
-        // El Germà Aldreu: abans del combat no és visible (apareix de cop quan l'Ineu entra a la plataforma);
-        // un cop vençut el Mestre, queda com a Germà Aldreu, i al final resta tancat dins la gàbia.
+        // El Germà Aleu: abans del combat no és visible (apareix de cop quan l'Ineu entra a la plataforma);
+        // un cop vençut el Mestre, queda com a Germà Aleu, i al final resta tancat dins la gàbia.
         if (Estat.flag('andreuTancat')) this.npc('germa_aldreu', gx, base + 10, DIALEGS.aldreuGabia);
         else if (!Estat.flag('gabiaOberta')) {
             if (Estat.flag('ocellaireVencut')) this.npc('germa_aldreu', gx + 230, base + 60, DIALEGS.aldreuGabia, { flipX: true });
@@ -856,7 +856,7 @@ class ZonaGabia extends ZonaBase {
 
         // Capolls que encara no s'han trencat, si la gàbia ja és oberta (s'havia sortit a mig alliberament)
         if (Estat.flag('gabiaOberta')) NENS_GABIA.forEach((n, i) => { if (!Estat.flag(n.flag)) this.crearCapoll(n, gx - 105 + i * 105, base + 160); });
-        // Tots alliberats però l'Aldreu encara no s'ha tancat: es reprèn el final
+        // Tots alliberats però l'Aleu encara no s'ha tancat: es reprèn el final
         if (this.totsLliures() && !Estat.flag('andreuTancat')) this.time.delayedCall(600, () => this.finalGabia());
     }
 
@@ -1289,7 +1289,7 @@ class ZonaGabia extends ZonaBase {
 
     // ---------------- El combat final ----------------
     actualitzar() {
-        // L'Ineu trepitja la plataforma: l'Aldreu crida el seu Mestre
+        // L'Ineu trepitja la plataforma: l'Aleu crida el seu Mestre
         if (!this.combatIniciat && Estat.flag('pontGabia') && !Estat.flag('ocellaireVencut') && this.ineu.y < GABIA.y + GABIA.platH / 2 - 30) {
             if (!Estat.flag('cantMiracle')) {                                         // sense el Cant del Miracle no es pot entrar al combat
                 this.ineu.setY(GABIA.y + GABIA.platH / 2 - 10);
@@ -1326,7 +1326,7 @@ class ZonaGabia extends ZonaBase {
         if (t && t.customData && t.customData.escala) a.setScale(t.customData.escala);
         a.escalaBase = a.scaleY;
     }
-    // Bancs de frases de combat (no bloquegen: z.flotant). nou = primera vegada, retry = si ja havia vist l'Ocellaire; ald = l'Aldreu des de fora
+    // Bancs de frases de combat (no bloquegen: z.flotant). nou = primera vegada, retry = si ja havia vist l'Ocellaire; ald = l'Aleu des de fora
     bancsFrases() {
         return {
             fase2: {
@@ -1364,7 +1364,7 @@ class ZonaGabia extends ZonaBase {
     // Frase de combat sense bloquejar. clau: 'fase2' | 'fase3' | 'cap' (primer cop al cap) | 'caiguda' (l'Ineu cau) | 'espor'.
     // punchFase ja la crida per a les fases; 'cap' i 'caiguda' les ha de cridar qui detecta el fet (combat.js).
     dirFrase(clau) {
-        if (!FRASES_FLOTANTS_COMBAT) return;        // desactivades: les sobreimpressions desconcentraven (les frases de l'Aldreu i del Mestre van als quadres de diàleg)
+        if (!FRASES_FLOTANTS_COMBAT) return;        // desactivades: les sobreimpressions desconcentraven (les frases de l'Aleu i del Mestre van als quadres de diàleg)
         const b = this.bancsFrases()[clau], e = this.boss;
         if (!b || !e || !e.spr || !e.spr.active || this.bossCaigut) return;
         const llista = (this.combatVist && b.retry) ? b.retry : b.nou;
@@ -1415,7 +1415,7 @@ class ZonaGabia extends ZonaBase {
         // Una respiració molt més suau (0,8%) en lloc del 2,8% de la resta de personatges: a mida gran, el Pastor es veia «inflar-se i desinflar-se»
         if (a.respira) { a.respira.stop(); a.respira = this.tweens.add({ targets: a, scaleY: a.escalaBase * 1.008, scaleX: a.scaleX * 0.998, yoyo: true, repeat: -1, duration: 1900, ease: 'Sine.easeInOut' }); }
     }
-    // ---------- L'Aldreu final: trist (cap cot) -> aixeca el cap -> somriu ----------
+    // ---------- L'Aleu final: trist (cap cot) -> aixeca el cap -> somriu ----------
     aldreuTrist(a) {
         if (!a || !a.active) return;
         this.aldreuEstat = 'trist';
@@ -1433,7 +1433,7 @@ class ZonaGabia extends ZonaBase {
         a.respiraTrist = this.tweens.add({ targets: a, scaleY: s * 1.015, yoyo: true, repeat: -1, duration: 2600, ease: 'Sine.easeInOut' });
     }
     // Camina fins a (x, y); si encara és trist, recupera la postura en arribar (npcVa la reinicia)
-    // L'Ineu i l'Aldreu es miren: cadascun gira l'sprite cap a l'altre (l'Ineu a la vista de 8 direccions més propera; l'Aldreu amb el mirall)
+    // L'Ineu i l'Aleu es miren: cadascun gira l'sprite cap a l'altre (l'Ineu a la vista de 8 direccions més propera; l'Aleu amb el mirall)
     mirarseIneuAldreu() {
         const a = this.npcs.germa_aldreu, I = this.ineu;
         if (!a) return;
@@ -1443,7 +1443,7 @@ class ZonaGabia extends ZonaBase {
         this.vista8Manual = true; this.posarDireccio(dir, false, oct);
         a.setFlipX(I.x < a.x);
     }
-    // L'Ineu camina fins al costat de l'Aldreu (al lloc d'on ve: a l'esquerra seu) i es giren l'un cap a l'altre; fet() quan hi és
+    // L'Ineu camina fins al costat de l'Aleu (al lloc d'on ve: a l'esquerra seu) i es giren l'un cap a l'altre; fet() quan hi és
     ineuAproparAldreu(fet) {
         const a = this.npcs.germa_aldreu, I = this.ineu;
         if (!a) { fet(); return; }
@@ -1485,7 +1485,7 @@ class ZonaGabia extends ZonaBase {
         ap.escalaFi = (this.textures.get('ocellaire').customData.escala || 1 / RES) * KO;
         ap.setScale(ap.escalaFi);
         this.npcs.ocellaire = ap;
-        const cam = this.cameras.main, ui = this.ui(), I = this.ineu, A = 'Aldreu, Pastor de la Boira', O = "L'Home de la Gàbia";
+        const cam = this.cameras.main, ui = this.ui(), I = this.ineu, A = 'Aleu, Pastor de la Boira', O = "L'Home de la Gàbia";
         // Plans (sense barres negres: només zoom i desplaçament). pla(objectiu, zoom, ms, reserva)
         const pla = (obj, zoom, ms, reserva) => ({ fer: (z, fet) => { const p = obj(); z.enquadrar(p[0], p[1], zoom, ms, fet, reserva); } });
         const pIneu = () => [I.x, I.y - 70];
@@ -1493,7 +1493,7 @@ class ZonaGabia extends ZonaBase {
         const pMestre = k => () => [ap.x, ap.y - k * ap.displayHeight];
         const pDos = () => [(ap.x + I.x) / 2, ((ap.y - ap.displayHeight) + I.y) / 2];       // els dos alhora: l'Ocellaire (gegant) sencer i l'Ineu
         const aparicioAldreu = f => {
-            // El Germà Aldreu (Pastor de la Boira) apareix de cop entre una bafarada de boira, gran (x1.5)
+            // El Germà Aleu (Pastor de la Boira) apareix de cop entre una bafarada de boira, gran (x1.5)
             const ald = this.npcs.germa_aldreu;
             if (ald) {
                 Sfx.puf();
@@ -1505,8 +1505,8 @@ class ZonaGabia extends ZonaBase {
                 if (ald.col) ald.col.body.enable = true;
             }
             this.npcMira('germa_aldreu', 'ineu');
-            // L'Ineu es gira de tres quarts cap a l'Aldreu (abans es quedava mirant cap amunt, d'esquena a la càmera, durant tota l'escena)
-            this.vista8Manual = true; this.posarDireccio('dreta', false, 'right');         // de perfil: l'Aldreu és a la seva dreta
+            // L'Ineu es gira de tres quarts cap a l'Aleu (abans es quedava mirant cap amunt, d'esquena a la càmera, durant tota l'escena)
+            this.vista8Manual = true; this.posarDireccio('dreta', false, 'right');         // de perfil: l'Aleu és a la seva dreta
             this.enquadrar(gx + 230, base - 10, 1.55, 350, () => this.esperar(250, f));
         };
         const transformacio = (z, fet) => z.seq([
@@ -1532,7 +1532,7 @@ class ZonaGabia extends ZonaBase {
             }, 0);
         };
         const fuig = (z, fet) => {
-            // P15: l'Aldreu fuig i crida des de lluny; P16: s'obre el joc
+            // P15: l'Aleu fuig i crida des de lluny; P16: s'obre el joc
             const ald = z.npcs.germa_aldreu;
             if (ald) z.enquadrar(ald.x, ald.y - 110, 1.3, 600, null, 0);
             z.npcVa('germa_aldreu', gx + 330, base + 40, null, 220); z.amagarAldreu();
@@ -1570,9 +1570,9 @@ class ZonaGabia extends ZonaBase {
                 { fer: (z, fet) => aparicioAldreu(fet) },
                 { qui: A, text: "Silenci! Aquí no s'alça la veu, monjo. El Mestre dorm, i jo vetllo el seu son." },
                 pla(pIneu, 2.2, 700),          // pla molt més gran de l'Ineu
-                { qui: 'Ineu', text: "Germà Aldreu, sóc jo. Baixeu la veu." },
+                { qui: 'Ineu', text: "Germà Aleu, sóc jo. Baixeu la veu." },
                 pla(pAld(0.8), 1.55, 1),
-                { qui: A, text: "Per cada riure que li duc, em gratifica amb un «bon minyó, Aldreu». No pots entendre què vol dir per a mi que algú tan poderós conegui el meu nom." },
+                { qui: A, text: "Per cada riure que li duc, em gratifica amb un «bon minyó, Aleu». No pots entendre què vol dir per a mi que algú tan poderós conegui el meu nom." },
                 { fer: (z, fet) => {
                     const ald = z.npcs.germa_aldreu;
                     if (ald && z.textures.exists('pastor_enfadat')) z.granPastor(ald, 'pastor_enfadat');
@@ -1581,11 +1581,11 @@ class ZonaGabia extends ZonaBase {
                 } },
                 { qui: A, text: "Tu sempre has tingut el favor de tothom, nen mimat!" },
                 pla(pIneu, 1.5, 1),
-                { qui: 'Ineu', text: "Això no és admirar algú, Aldreu, és engabiar-se." },
+                { qui: 'Ineu', text: "Això no és admirar algú, Aleu, és engabiar-se." },
                 pla(pAld(0.8), 2.0, 500),
                 { qui: A, text: "Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!" },
                 { fer: (z, fet) => transformacio(z, fet) },
-                { qui: O, text: "Aldreu, fill meu, no cal que cridis." },
+                { qui: O, text: "Aleu, fill meu, no cal que cridis." },
                 { qui: O, text: "Uns peus de monjo jove damunt la meva pedra." },
                 pla(pDos, 0.82, 700),
                 { qui: 'Ineu', text: "Deixeu que els nens tornin amb els seus!" },
@@ -1598,7 +1598,7 @@ class ZonaGabia extends ZonaBase {
                 { qui: O, text: "Runna... Quina espasa tan petita per a una sala tan gran." },
                 pla(pAld(0.8), 1.3, 500),
                 { qui: A, text: "Deixeu-me'l a mi, Mestre, aquest cop l'esclafaré!" },
-                { qui: O, text: "Aparta, Aldreu. Aquesta nit el Mestre mateix et mostrarà com es fa." },
+                { qui: O, text: "Aparta, Aleu. Aquesta nit el Mestre mateix et mostrarà com es fa." },
                 { qui: A, text: "Sí, Mestre..." },
                 { fer: (z, fet) => rugit(z, fet) },
                 { fer: (z, fet) => fuig(z, fet) }
@@ -1607,7 +1607,7 @@ class ZonaGabia extends ZonaBase {
         this.ui().obrirDialeg({ pagines }, () => this.començarBoss(ap));
     }
 
-    // L'Aldreu fuig i s'amaga durant el combat (després torna)
+    // L'Aleu fuig i s'amaga durant el combat (després torna)
     amagarAldreu() {
         const a = this.npcs.germa_aldreu;
         if (!a) return;
@@ -1619,7 +1619,7 @@ class ZonaGabia extends ZonaBase {
         this.tweens.killTweensOf(a);
         a.setVisible(true).setAlpha(1); if (a.ombra) a.ombra.setVisible(true).setAlpha(a.ombra.alpha || 1);
     }
-    // Quan el Mestre cau, la boira deixa l'Aldreu: el Pastor de la Boira torna a ser el Germà Aldreu (a mida normal, trist)
+    // Quan el Mestre cau, la boira deixa l'Aleu: el Pastor de la Boira torna a ser el Germà Aleu (a mida normal, trist)
     desferPastor() {
         const a = this.npcs.germa_aldreu;
         if (!a) return null;          // (no mira la textura: en caminar, npcVa li torna el dibuix normal, i la boira ha de deixar-lo igualment)
@@ -1766,7 +1766,7 @@ class ZonaGabia extends ZonaBase {
                         f();
                     } });
                 },
-                // P35: la boira deixa l'Aldreu (a mida normal, tot petit), que es queda trist; la veu del Mestre, ja sense cos
+                // P35: la boira deixa l'Aleu (a mida normal, tot petit), que es queda trist; la veu del Mestre, ja sense cos
                 f => {
                     const n = z.desferPastor() || z.npcs.germa_aldreu;
                     if (n) z.enquadrar(n.x - 20, n.y - 0.6 * n.displayHeight, 1.2, 700, null);
@@ -1779,7 +1779,7 @@ class ZonaGabia extends ZonaBase {
                     z.enquadrar(gx + 60, base - 10, 1.1, 1500, f);
                 }
             ], fet) },
-            { qui: 'Germà Aldreu', text: "Mestre! No em deixeu!" },
+            { qui: 'Germà Aleu', text: "Mestre! No em deixeu!" },
             // P36: pla general buit, en silenci
             { fer: (z, fet) => z.seq([
                 f => { z.ajupir('germa_aldreu', null, 1200); z.enquadrar(gx + 60, base + 60, 0.95, 1500, f, 0); },
@@ -1814,10 +1814,10 @@ class ZonaGabia extends ZonaBase {
                 z.enquadrar(I.x, I.y - 70, 1.5, 700, null);
                 z.esperar(1200, fet);
             } },
-            // Abans d'obrir: l'Ineu convida l'Aldreu (que encara no, de cap cot i sense mirar)
-            { fer: (z, fet) => { const p = pAld(); z.enquadrar(p[0], p[1], 1.35, 900, fet); z.mirarseIneuAldreu(); } },          // es miren: l'Ineu gira cap a l'Aldreu i l'Aldreu cap a l'Ineu
-            { qui: 'Ineu', text: "Germà Aldreu, la gàbia s'obrirà. Podeu venir amb nosaltres." },
-            { qui: 'Germà Aldreu', text: "Encara no." },
+            // Abans d'obrir: l'Ineu convida l'Aleu (que encara no, de cap cot i sense mirar)
+            { fer: (z, fet) => { const p = pAld(); z.enquadrar(p[0], p[1], 1.35, 900, fet); z.mirarseIneuAldreu(); } },          // es miren: l'Ineu gira cap a l'Aleu i l'Aleu cap a l'Ineu
+            { qui: 'Ineu', text: "Germà Aleu, la gàbia s'obrirà. Podeu venir amb nosaltres." },
+            { qui: 'Germà Aleu', text: "Encara no." },
             { fer: (z, fet) => z.seq([
             f => {
                 z.enquadrar(gx, base - 80, 1.05, 900, null);          // P41
@@ -1879,7 +1879,7 @@ class ZonaGabia extends ZonaBase {
         });
     }
 
-    // Els nens riuen, la boira es desfà i l'Aldreu (trist -> somrient) tria quedar-se amb el seu Mestre
+    // Els nens riuen, la boira es desfà i l'Aleu (trist -> somrient) tria quedar-se amb el seu Mestre
     finalGabia() {
         if (this.finalEngegat) return;
         this.finalEngegat = true;
@@ -1917,21 +1917,21 @@ class ZonaGabia extends ZonaBase {
                 },
                 f => z.npcMira('germa_aldreu', gx, f)
             ], fet) },
-            pla(pAld, 1.9, 900),                                       // P53: l'Aldreu escolta
-            { qui: 'Germà Aldreu', text: "La seva veu em parlava dins el cap cada nit. Era l'única que em parlava." },
-            { qui: 'Germà Aldreu', text: "Escolta'ls, riuen tan fort que no es poden engabiar." },
-            { fer: (z, fet) => { z.mirarseIneuAldreu(); const a = z.npcs.germa_aldreu; z.enquadrar(a ? (I.x + a.x) / 2 : I.x, a ? (I.y + a.y) / 2 - 70 : I.y - 70, a ? 1.1 : 1.5, 700, fet); } },          // P54: l'Ineu es gira cap a l'Aldreu (i l'Aldreu cap a ell), i se'ls veu tots dos
-            { qui: 'Ineu', text: "Veniu amb nosaltres, Aldreu. A la taula del refectori hi ha lloc per a tothom." },
-            // L'Ineu s'apropa a l'Aldreu i se'ls veu junts, de cara: el somriure (el de la Plaça), suau, humil, una mica trist als ulls
+            pla(pAld, 1.9, 900),                                       // P53: l'Aleu escolta
+            { qui: 'Germà Aleu', text: "La seva veu em parlava dins el cap cada nit. Era l'única que em parlava." },
+            { qui: 'Germà Aleu', text: "Escolta'ls, riuen tan fort que no es poden engabiar." },
+            { fer: (z, fet) => { z.mirarseIneuAldreu(); const a = z.npcs.germa_aldreu; z.enquadrar(a ? (I.x + a.x) / 2 : I.x, a ? (I.y + a.y) / 2 - 70 : I.y - 70, a ? 1.1 : 1.5, 700, fet); } },          // P54: l'Ineu es gira cap a l'Aleu (i l'Aleu cap a ell), i se'ls veu tots dos
+            { qui: 'Ineu', text: "Veniu amb nosaltres, Aleu. A la taula del refectori hi ha lloc per a tothom." },
+            // L'Ineu s'apropa a l'Aleu i se'ls veu junts, de cara: el somriure (el de la Plaça), suau, humil, una mica trist als ulls
             { fer: (z, fet) => { z.ineuAproparAldreu(() => { const a = z.npcs.germa_aldreu; z.enquadrar((I.x + a.x) / 2, a.y - 0.68 * a.displayHeight, 2.1, 800, () => { z.esperar(500, () => { z.aldreuSomriu(a); z.esperar(600, fet); }); }); }); } },
-            { qui: 'Germà Aldreu', text: "Ja ho sé que n'hi ha. Gràcies, Ineu." },
-            { qui: 'Germà Aldreu', text: "El Mestre és aquí dins... Algú l'ha de vetllar. Algú que sàpiga què és no ser vist." },
+            { qui: 'Germà Aleu', text: "Ja ho sé que n'hi ha. Gràcies, Ineu." },
+            { qui: 'Germà Aleu', text: "El Mestre és aquí dins... Algú l'ha de vetllar. Algú que sàpiga què és no ser vist." },
             { fer: (z, fet) => { z.npcVa('germa_aldreu', gx, base + 10, null, 100); const a = z.npcs.germa_aldreu; z.enquadrar(gx, base + 10 - 0.8 * (a ? a.displayHeight : 100), 1.9, 1600, fet); } },
-            { qui: 'Germà Aldreu', text: "Jo em quedo amb ell." },
+            { qui: 'Germà Aleu', text: "Jo em quedo amb ell." },
             pla(() => [I.x, I.y - 70], 1.5, 1),
-            { fer: (z, fet) => { z.mirarseIneuAldreu(); const a = z.npcs.germa_aldreu; z.enquadrar(a ? (I.x + a.x) / 2 : I.x, a ? (I.y + a.y) / 2 - 70 : I.y - 70, 1.5, 600, fet); } },          // l'Ineu mira l'Aldreu
+            { fer: (z, fet) => { z.mirarseIneuAldreu(); const a = z.npcs.germa_aldreu; z.enquadrar(a ? (I.x + a.x) / 2 : I.x, a ? (I.y + a.y) / 2 - 70 : I.y - 70, 1.5, 600, fet); } },          // l'Ineu mira l'Aleu
             { qui: 'Ineu', text: "Vindré a veure-us." },
-            { qui: 'Germà Aldreu', text: "Ja ho sé." },
+            { qui: 'Germà Aleu', text: "Ja ho sé." },
             { fer: (z, fet) => z.seq([
                 f => {
                     // P55: la gàbia baixa, suau (tilt-down amb ella) i el tanca
@@ -1945,8 +1945,8 @@ class ZonaGabia extends ZonaBase {
                     }, 0);
                 },
                 f => {
-                    // P56: primer pla entre barrots: l'Aldreu somriu, els nens saluden
-                    z.enquadrar(gx, base + 40, 1.4, 900, null);          // (menys zoom i més avall: es veuen l'Aldreu a la gàbia i els tres nens, junts)
+                    // P56: primer pla entre barrots: l'Aleu somriu, els nens saluden
+                    z.enquadrar(gx, base + 40, 1.4, 900, null);          // (menys zoom i més avall: es veuen l'Aleu a la gàbia i els tres nens, junts)
                     const a = z.npcs.germa_aldreu;
                     if (a) z.tweens.add({ targets: a, y: a.y - 3, yoyo: true, duration: 900 });
                     nens.forEach(k => z.npcSalta(k, null, 1));

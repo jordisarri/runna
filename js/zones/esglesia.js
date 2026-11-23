@@ -372,10 +372,10 @@ class ZonaEsglesia extends ZonaBase {
                 { qui: 'Pare Nadiel', text: "Sents la torre del rellotge, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu." },
                 ...(hi('carry') ? [foc(['carry'], 2.6), { qui: 'Carry', text: "El meu home estaria orgullós que el caminar del seu rellotge ens uneixi a tots. Gràcies, fill." }] : [])
             ] : []),
-            // L'Ineu explica al Pare Jordà què ha passat amb l'Aldreu, i el prior tanca l'epíleg
+            // L'Ineu explica al Pare Jordà què ha passat amb l'Aleu, i el prior tanca l'epíleg
             foc(['ineu', 'pare_jorda'], 2.2),
-            { qui: 'Ineu', text: "Pare Jordà... el Germà Aldreu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar." },
-            { qui: 'Pare Jordà', text: "L'Aldreu... dins la gàbia?" },
+            { qui: 'Ineu', text: "Pare Jordà... el Germà Aleu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar." },
+            { qui: 'Pare Jordà', text: "L'Aleu... dins la gàbia?" },
             { fer: (z, fet) => z.seq([f => z.bombolla('pare_jorda', '…', f, 1300)], fet) },        // sospira i mira cap al terra
             { qui: 'Pare Jordà', text: "Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller." },
             { qui: 'Pare Jordà', text: "Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més." },

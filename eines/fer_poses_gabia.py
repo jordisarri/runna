@@ -7,7 +7,7 @@ Ocellaire: art/enemics/ocellaire_{invoca,cercle,llanca,genolls_v2}.png -> assets
   Mateixa escala per a totes (la dels dibuixos dempeus: 322 px d'alçada de figura), peus a y=322 d'un llenç de 340x329 i centrat al cos (mitjana de l'alfa).
   Els llenços són més amples que els de l'idle (260) perquè les poses obertes (cercle, genolls) no es tallin: a js/assets.js l'amplada és 170 (= 340/2, mateix 0,5 de sempre).
   combat.js recentra la caixa de col·lisió en canviar de textura.
-Germà Aldreu trist: art/personatges/germa_aldreu_trist.png -> assets/personatges/germa_aldreu_trist.webp (llenç de 158x255, com germa_aldreu, figura alta 255).
+Germà Aleu trist: art/personatges/germa_aldreu_trist.png -> assets/personatges/germa_aldreu_trist.webp (llenç de 158x255, com germa_aldreu, figura alta 255).
 """
 import sys
 from pathlib import Path

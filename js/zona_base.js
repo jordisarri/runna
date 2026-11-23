@@ -859,7 +859,7 @@ class ZonaBase extends Phaser.Scene {
     }
     // Torna al dibuix d'idle (després d'una caminada o d'un canvi de dibuix)
     tornaIdleNpc(img, key) {
-        if (img.clauPastor) { img.setTexture(img.clauPastor); return; }          // (l'Aldreu convertit en Pastor de la Boira: no torna mai al dibuix de monjo mentre dura la conversió)
+        if (img.clauPastor) { img.setTexture(img.clauPastor); return; }          // (l'Aleu convertit en Pastor de la Boira: no torna mai al dibuix de monjo mentre dura la conversió)
         if (img.idleClau && this.textures.exists(key + '_idle')) { img.setTexture(key + '_idle', 0); img.play('idle_' + key, true); }
         else img.setTexture(key);
     }
@@ -1025,7 +1025,7 @@ class ZonaBase extends Phaser.Scene {
         if (this.ineuAltObjecte) { this.ineuAltObjecte.forEach(o => { this.tweens.killTweensOf(o); o.destroy(); }); this.ineuAltObjecte = null; }
         I.setVisible(false);
         if (this.fantasma) this.fantasma.setVisible(false);          // la silueta translúcida de l'Ineu també: un dibuix desapareix i l'altre apareix, sense transparències
-        this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(85000);       // per sobre de tothom (també del Germà Aldreu), però SOTA la boira (89990+): si no, quedava il·luminat
+        this.ineuAlt = this.add.image(I.x, I.y + 2, key).setOrigin(ox, 1).setScale(esc).setDepth(85000);       // per sobre de tothom (també del Germà Aleu), però SOTA la boira (89990+): si no, quedava il·luminat
         // Excepció: si l'Ineu és darrere d'un objecte opac (un cofre agafat pel nord...), es queda darrere seu i no el travessa
         const davant = (this.opacs || []).find(o => o.active && o.visible && o.depth > I.y && o.y - o.displayHeight < I.y && Math.abs(o.x - I.x) < o.displayWidth / 2);
         if (davant && !this.assegut) this.ineuAlt.setDepth(I.y);          // (assegut en un banc: el dibuix d'alçar l'objecte passa per SOBRE del banc, i en acabar l'Ineu torna a quedar assegut darrere seu)

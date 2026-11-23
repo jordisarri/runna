@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mides de l'Aldreu i del Pastor</title>
+<title>Mides de l'Aleu i del Pastor</title>
 <style>
     body { background: #2a3a22; color: #f2e6c8; font: 15px Georgia, serif; margin: 10px; }
     h1 { font-size: 18px; margin: 4px 0 8px; }
@@ -15,7 +15,7 @@
     #resum { background: #1c2a16; padding: 6px 8px; border-radius: 6px; font: 12px monospace; word-break: break-all; margin-top: 6px; }
     .avis { color: #ffe08a; }
 </style>
-<h1>Mides de l'Aldreu i del Pastor de la Boira</h1>
+<h1>Mides de l'Aleu i del Pastor de la Boira</h1>
 <small>A l'<b>esquerra de cada fila</b> hi ha l'Ineu aturat (la referència: no es canvia). Sota cada figura hi ha la seva mida real (alt × ample visibles, en px de joc). Cada figura es dibuixa a la mida real del joc (px de món); el zoom només ho amplia per veure-ho. Les línies marquen l'alçada de l'Ineu i la del seu cap. Els canvis es desen sols en aquest navegador i el joc els fa servir de seguida (obre'l a continuació). Per fer-los definitius, copia el text i passa'l.</small>
 
 <h2>Comparació</h2>
@@ -24,7 +24,7 @@
 
 <h2>Pastor de la Boira (combat)</h2>
 <div id="sPastor"></div>
-<h2>Aldreu (fora del combat)</h2>
+<h2>Aleu (fora del combat)</h2>
 <div id="sAldreu"></div>
 
 <p>
@@ -39,7 +39,7 @@
 <script>
 const B = MIDES_ALDREU.base, M = Object.assign({}, MIDES_ALDREU.mult);       // M: els multiplicadors (de codi + el que hi hagi desat)
 const NOMS = { pastor: 'Mida general del Pastor', camina: 'Pastor caminant / dret', apunta: 'Pastor: apuntar', ataca: 'Pastor: batre', enfadat: 'Pastor: enfadat', derrota: 'Pastor: de genolls',
-               germa_aldreu: 'Aldreu (monjo)', germa_aldreu_trist: 'Aldreu trist', pastor_boira: 'Aldreu (conversa)' };
+               germa_aldreu: 'Aleu (monjo)', germa_aldreu_trist: 'Aleu trist', pastor_boira: 'Aleu (conversa)' };
 const imatges = {};
 const carrega = (k, src) => new Promise(r => { const i = new Image(); i.onload = () => { imatges[k] = i; r(); }; i.onerror = () => r(); i.src = src; });
 const FITXERS = { ineu: '../assets/ineu/idle/idle_down.webp', camina: '../assets/enemics/pastor_camina.webp', apunta: '../assets/enemics/pastor_apunta.webp', ataca: '../assets/enemics/pastor_ataca.webp',

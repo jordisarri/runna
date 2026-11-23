@@ -70,7 +70,7 @@ class ZonaPlaca extends ZonaBase {
         this.llocFlauta('pedra', PX, 480, 150, true, () => !Estat.flag('tresorObert'), false, ['pedres']);    // un cop oberta, ESPAI hi entra
 
         // --- Reixes del terra per on surt la boira ---
-        [[600, 625], [870, 975]].forEach(([x, y]) => {          // (la de davant del Germà Aldreu s'ha tret)
+        [[600, 625], [870, 975]].forEach(([x, y]) => {          // (la de davant del Germà Aleu s'ha tret)
             this.posar('reixa', x, y, { fonsY: -900 });
             this.boiraAmbient(x, y - 14, 40, 10, 0.8);
         });

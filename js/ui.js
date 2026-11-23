@@ -74,7 +74,7 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // El cap retallat del sprite del personatge: es fa una sola vegada i es desa com a textura 'retrat_<clau>'.
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
-    'Ineu': 'ineu', 'Pare Jordà': 'pare_jorda', 'Germà Aldreu': 'germa_aldreu', 'Pastor de la Boira': 'pastor_boira', 'Aldreu, Pastor de la Boira': 'pastor_boira', 'Aldreu, Guàrdia de la Gàbia': 'pastor_boira', 'Germà Francí': 'germa_franci', 'Pare Nadiel': 'pare_daimiel',
+    'Ineu': 'ineu', 'Pare Jordà': 'pare_jorda', 'Germà Aleu': 'germa_aldreu', 'Pastor de la Boira': 'pastor_boira', 'Aleu, Pastor de la Boira': 'pastor_boira', 'Aleu, Guàrdia de la Gàbia': 'pastor_boira', 'Germà Francí': 'germa_franci', 'Pare Nadiel': 'pare_daimiel',
     'Pare Alcoví': 'pare_alcovi', 'Pare Xèvius': 'pare_xevius', 'Eve': 'eve', 'Senyor Buidor': 'senyor_budo', 'Jusef': 'jusef', 'Senyor Pomers': 'pomers', 'Julius': 'julius', 'Galf': 'galf', 'Isílder': 'isilder',
     'La Pianista': 'pianista', 'La Joaneta': 'joaneta', 'Iscu': 'iscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Carmèlia': 'carmelia', 'Pilària': 'pilaria', 'Dolora': 'dolora', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
@@ -188,7 +188,7 @@ const CATALEG_OBJECTES = {
     ram:              ['Ram de flors', 'Del Germà Francí, per a la tomba de l\'àngel.'],
     guants:           ['Guants de Poder', 'Per moure el que pesa massa.'],
     maneta:           ['Maneta d\'engranatge', 'De ferro: encaixa en volants i rodes vells.'],
-    clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Aldreu li va caure; l\'Iscu te l\'ha donada.'],
+    clau_girgoles:    ['Clau rovellada', 'Petita, amb un ocell gravat. Al Germà Aleu li va caure; l\'Iscu te l\'ha donada.'],
     fragment1:        ['Pergamí partit (1/2)', 'La meitat d\'un pergamí esquinçat, trobada a les Runes.'],
     fragment2:        ['Pergamí partit (2/2)', "L'altra meitat de la crònica, trobada al sagrari de l'església."],
     pergami_monjo:    ['Pergamí del monjo', "«El germà bodeguer es bevia el vi de la sagristia. El vam petrificar perquè vigili la cripta fins que el vi es torni vinagre (a la cripta mai no es torna). Dorm de cara a la paret i només es desperta si el mires a la cara.»"],

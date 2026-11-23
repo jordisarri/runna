@@ -90,19 +90,19 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: encara no porta el bastó*
 
-**[26] Germà Aldreu:** Ineu! Quin drama, oi? Tothom corrent amunt i avall... Segur que els nens s'han amagat per jugar.
+**[26] Germà Aleu:** Ineu! Quin drama, oi? Tothom corrent amunt i avall... Segur que els nens s'han amagat per jugar.
 
-**[27] Germà Aldreu:** Ets del Barça, tu? Tinc uns cromos que els nens es moren per tenir. Ells sí que m'escolten.
+**[27] Germà Aleu:** Ets del Barça, tu? Tinc uns cromos que els nens es moren per tenir. Ells sí que m'escolten.
 
-**[28] Germà Aldreu:** Tinc aquest bastó de pelegrí. És perillós anar sol. Agafa'l.
+**[28] Germà Aleu:** Tinc aquest bastó de pelegrí. És perillós anar sol. Agafa'l.
 
 **[29]** ★ Has obtingut el BASTÓ DE PELEGRÍ!
 
 *Altrament (per defecte):*
 
-**[30] Germà Aldreu:** Avui no tinc temps, Ineu. Tinc... coses a fer.
+**[30] Germà Aleu:** Avui no tinc temps, Ineu. Tinc... coses a fer.
 
-**[31] Germà Aldreu:** Ei, no sents res? Com una veu molt fluixeta que em crida de sota terra... Deu ser el vent. Força Barça!
+**[31] Germà Aleu:** Ei, no sents res? Com una veu molt fluixeta que em crida de sota terra... Deu ser el vent. Força Barça!
 
 ### creu  <sub>(js/dialegs.js:188)</sub>
 
@@ -456,7 +456,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[135] El Gran Til·ler:** A la Cirosa viuen uns pastors desterrats que guarden les esquelles dels seus avis: amb elles es van afinar els cants antics. Tracta'ls amb dolçor, que ja han patit prou.
 
-**[136] El Gran Til·ler:** I vés amb compte: el Germà Aldreu hi puja de nit per un pas que jo no vigilo, i porta la boira a dins. L'Home de la Gàbia li parla a cau d'orella, i ell l'escolta.
+**[136] El Gran Til·ler:** I vés amb compte: el Germà Aleu hi puja de nit per un pas que jo no vigilo, i porta la boira a dins. L'Home de la Gàbia li parla a cau d'orella, i ell l'escolta.
 
 *Altrament (per defecte):*
 
@@ -492,7 +492,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[144] Pastor:** El ramat és de nou al corral. No sé com agrair-t'ho, monjo. Nosaltres només volem una mica de pau, i un racó on no ens miri ningú malament.
 
-**[145] Pastor:** No s'acosti gaire, pare, que la gent diu que portem mala sort. Només tenim el ramat... i el Germà Aldreu, aquell monjo pesat que sempre jugava amb els nens, ens l'ha pres. Ara es fa dir el Pastor de la Boira.
+**[145] Pastor:** No s'acosti gaire, pare, que la gent diu que portem mala sort. Només tenim el ramat... i el Germà Aleu, aquell monjo pesat que sempre jugava amb els nens, ens l'ha pres. Ara es fa dir el Pastor de la Boira.
 
 ### pastorB  <sub>(js/dialegs.js:1255)</sub>
 
@@ -506,7 +506,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: encara no ha vençut el Pastor de Boira*
 
-**[149] Pastor vell:** Fill, el Germà Aldreu feia bona cara, però això ja ho portava dins. L'Ocellaire, l'Home de la Gàbia, només li va prometre que tothom el seguiria, i ell se'l va creure.
+**[149] Pastor vell:** Fill, el Germà Aleu feia bona cara, però això ja ho portava dins. L'Ocellaire, l'Home de la Gàbia, només li va prometre que tothom el seguiria, i ell se'l va creure.
 
 **[150] Pastor vell:** I no només les ovelles. Fa unes nits el vam veure baixar cap al poble amb un nen adormit als braços. Els nens que falten, fill, se'ls ha endut ell.
 
@@ -516,7 +516,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: encara no porta les esquelles*
 
-**[153] Pastor vell:** Has tornat el ramat. El Germà Aldreu ha baixat camí avall rient: encara porta la boira a dins, pobre home. Que Déu t'ho pagui, monjo.
+**[153] Pastor vell:** Has tornat el ramat. El Germà Aleu ha baixat camí avall rient: encara porta la boira a dins, pobre home. Que Déu t'ho pagui, monjo.
 
 **[154] Pastor vell:** Aquí tens les esquelles dels nostres avis. Que sonin amb la teva tarota, i que els cants antics et guiïn.
 
@@ -584,33 +584,33 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### aldreuPastor  <sub>(js/dialegs.js:1371)</sub>
 
-**[175] Aldreu, Pastor de la Boira:** Ineu!
+**[175] Aleu, Pastor de la Boira:** Ineu!
 
-**[176] Ineu:** Germà Aldreu?!
+**[176] Ineu:** Germà Aleu?!
 
-**[177] Aldreu, Pastor de la Boira:** L'Aldreu era un monjo que ningú no mirava. Ara sóc el Pastor de la Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai.
+**[177] Aleu, Pastor de la Boira:** L'Aleu era un monjo que ningú no mirava. Ara sóc el Pastor de la Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai.
 
-**[178] Aldreu, Pastor de la Boira:** Des que va pujar la boira, una veu em parla dins el cap, baixeta, només per a mi. Ella em va veure quan ningú més no ho feia. És la veu del Mestre.
+**[178] Aleu, Pastor de la Boira:** Des que va pujar la boira, una veu em parla dins el cap, baixeta, només per a mi. Ella em va veure quan ningú més no ho feia. És la veu del Mestre.
 
-**[179] Ineu:** Una veu dins el teu cap... Aldreu, és la de l'Home de la Gàbia. L'Ocellaire parla per la teva boca.
+**[179] Ineu:** Una veu dins el teu cap... Aleu, és la de l'Home de la Gàbia. L'Ocellaire parla per la teva boca.
 
-**[180] Aldreu, Pastor de la Boira:** L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» I ara sóc el seu pastor. El PASTOR DE LA BOIRA!
+**[180] Aleu, Pastor de la Boira:** L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» I ara sóc el seu pastor. El PASTOR DE LA BOIRA!
 
 **[181] Ineu:** On són l'Huri, el Fram i el Sardi?
 
-**[182] Aldreu, Pastor de la Boira:** Dormen. Els vaig portar jo al Mestre, un per un, de nit. Allà dins ja no tenen por de res.
+**[182] Aleu, Pastor de la Boira:** Dormen. Els vaig portar jo al Mestre, un per un, de nit. Allà dins ja no tenen por de res.
 
-**[183] Ineu:** Aldreu, això que et parla no és bo. Encara pots tornar enrere.
+**[183] Ineu:** Aleu, això que et parla no és bo. Encara pots tornar enrere.
 
-**[184] Aldreu, Pastor de la Boira:** Tornar enrere? Mai! El Mestre em va veure, quan ningú més no ho feia. Calla! Be-e-e!
+**[184] Aleu, Pastor de la Boira:** Tornar enrere? Mai! El Mestre em va veure, quan ningú més no ho feia. Calla! Be-e-e!
 
 ### aldreuDerrotat  <sub>(js/dialegs.js:1388)</sub>
 
-**[185] Aldreu, Pastor de la Boira:** Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré.
+**[185] Aleu, Pastor de la Boira:** Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré.
 
-**[186] Aldreu, Pastor de la Boira:** El Mestre és al fons de les Gírgoles, i ja és despert: la seva veu em crida des d'allà baix i no calla mai. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells.
+**[186] Aleu, Pastor de la Boira:** El Mestre és al fons de les Gírgoles, i ja és despert: la seva veu em crida des d'allà baix i no calla mai. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells.
 
-**[187] Aldreu, Pastor de la Boira:** Je, je, je... Ens veurem allà baix, monjo.
+**[187] Aleu, Pastor de la Boira:** Je, je, je... Ens veurem allà baix, monjo.
 
 **[188] Ineu:** («Al fons de les Gírgoles»... Ara ja sé on mirar.)
 
@@ -782,7 +782,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: encara no ha parlat amb l'Eve*
 
-**[244] Eve:** Sóc l'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, i la porta s'obre sola. A dins, diuen, n'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.
+**[244] Eve:** Sóc l'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aleu pica tres cops a la Porta de les Gírgoles, i la porta s'obre sola. A dins, diuen, n'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.
 
 **[245] Eve:** I l'Iscu, el fill de la Càren, fa dos dies que s'escapa pel camí de la Desaparició: diu que hi ha un forat entre els arbres «per on els grans no hi caben». Aquest no l'ha pres la boira, sinó la mandra: des que la seva mare dorm, els gots els frego jo, i ell s'esfuma. Si el trobes, digues-li que torni a sopar... i a fregar.
 
@@ -836,7 +836,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### iscu  <sub>(js/dialegs.js:224)</sub>
 
-**[264] Iscu:** Ei, espera. Tinc una cosa que potser et va bé. Una nit vaig trobar una clau a terra: li havia caigut al Germà Aldreu i ni se'n va adonar.
+**[264] Iscu:** Ei, espera. Tinc una cosa que potser et va bé. Una nit vaig trobar una clau a terra: li havia caigut al Germà Aleu i ni se'n va adonar.
 
 **[265] Iscu:** És rovellada, però encara gira. Te la dono: jo no tinc res a obrir. I tu no m'has vist, eh?
 
@@ -1040,7 +1040,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[690] Pare Alcoví:** Ho has fet bé, fill. Amb la llum de Runna van tancar la porta, i amb la mateixa llum, la tomba. Ara ja et puc dir la resta.
 
-**[674] Pare Alcoví:** I una cosa més, fill, que no és de la Crònica sinó d'un amic. Al Pare Xèvius, el vigilant de la porta de les Gírgoles, el conec de fa quaranta anys: no és dolent, sinó escarmentat. Fa trenta anys l'Aldreu el va enganyar amb bones paraules, i des d'aleshores no es fia de ningú. Entén-lo, i no t'ho prenguis a mal.
+**[674] Pare Alcoví:** I una cosa més, fill, que no és de la Crònica sinó d'un amic. Al Pare Xèvius, el vigilant de la porta de les Gírgoles, el conec de fa quaranta anys: no és dolent, sinó escarmentat. Fa trenta anys l'Aleu el va enganyar amb bones paraules, i des d'aleshores no es fia de ningú. Entén-lo, i no t'ho prenguis a mal.
 
 **[675] Pare Alcoví:** No et deixarà passar sense una prova de bona voluntat, i res no el convenç com la Carta del Cortiner, que reposa al tronc del Pi dels Tres Cants. Hauràs de despertar el pi amb els tres cants: Aurora, Vespres i Miracle. Fes-ho abans d'anar a la porta, que després no hi ha manera de tornar enrere.
 
@@ -1774,7 +1774,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[546] Pilària:** Per fi! Tres nits que colpejo aquesta porta! Soc la Pilària, i no, no m'he estat quieta ni un minut.
 
-**[547] Pilària:** T'ho dic perquè ho vaig veure: el Germà Aldreu, aquell pesat que sempre anava jugant amb els nens, anava moltes nits a la Porta de les Gírgoles, i la porta se li obria sola, com si la boira l'obeís. Mai no li he cregut el somriure.
+**[547] Pilària:** T'ho dic perquè ho vaig veure: el Germà Aleu, aquell pesat que sempre anava jugant amb els nens, anava moltes nits a la Porta de les Gírgoles, i la porta se li obria sola, com si la boira l'obeís. Mai no li he cregut el somriure.
 
 **[548] Pilària:** Tots aquests nens innocents segrestats per aquesta maleïda boira... Troba'ls, monjo! Salva'ls a tots!
 
@@ -1824,9 +1824,9 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### portaSoterrani  <sub>(js/zones/taverna.js:122)</sub>
 
-**[561] Ineu:** (Tancada amb clau. A l'Aldreu se li obria sola perquè la boira que sortia de la tomba obeïa la veu del Mestre... però la tomba és segellada i la boira ja no puja: ara la porta no s'obre per a ningú. Em cal la clau dels monjos.)
+**[561] Ineu:** (Tancada amb clau. A l'Aleu se li obria sola perquè la boira que sortia de la tomba obeïa la veu del Mestre... però la tomba és segellada i la boira ja no puja: ara la porta no s'obre per a ningú. Em cal la clau dels monjos.)
 
-**[562] Ineu:** (Tancada amb clau. Diuen que a l'Aldreu se li obre sola: la boira l'obeeix. A mi, no.)
+**[562] Ineu:** (Tancada amb clau. Diuen que a l'Aleu se li obre sola: la boira l'obeeix. A mi, no.)
 
 ### xevius  <sub>(js/dialegs.js:671)</sub>
 
@@ -1842,13 +1842,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[681] Pare Xèvius:** La lletra del Cortiner... i el sagell blau, intacte. Només qui fa tornar els ocells al pi té un cor així.
 
-**[682] Pare Xèvius:** Perdona'm, fill. Les males experiències deixen ferides. Obre bé els ulls allà baix: l'Aldreu no és el que era.
+**[682] Pare Xèvius:** Perdona'm, fill. Les males experiències deixen ferides. Obre bé els ulls allà baix: l'Aleu no és el que era.
 
 ### portaFerro  <sub>(js/zones/taverna.js:133)</sub>
 
 **[565] Ineu:** (Aquí és d'on surt tot. Em falta l'espasa que la va segellar... i una clau.)
 
-**[566] Ineu:** (La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Aldreu en deu tenir una altra.)
+**[566] Ineu:** (La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Aleu en deu tenir una altra.)
 
 **[567] Ineu:** (Algú l'hauria d'haver vist anar-hi de nit... L'Iscu, el fill de la Càren! L'Eve va dir que s'escapa pel camí de la Desaparició, per un forat entre els arbres.)
 
@@ -1900,15 +1900,15 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### aldreuGabia  <sub>(js/zones/gabia.js:80)</sub>
 
-**[576] Germà Aldreu:** Estic bé, Ineu. La boira fa companyia quan ja no demana res.
+**[576] Germà Aleu:** Estic bé, Ineu. La boira fa companyia quan ja no demana res.
 
-**[577] Germà Aldreu:** Torna quan vulguis. Si mai se'm gira el cor, ja trobaré qui em pugui acompanyar...
+**[577] Germà Aleu:** Torna quan vulguis. Si mai se'm gira el cor, ja trobaré qui em pugui acompanyar...
 
-**[578] Germà Aldreu:** Encara no, noi. Deixa'm sentir com riuen.
+**[578] Germà Aleu:** Encara no, noi. Deixa'm sentir com riuen.
 
-**[579] Germà Aldreu:** (No et mira.) Ja no em parla. Abans em parlava sempre.Fes el que has de fer, noi. Avui no et miraré.Quan era a la Plaça, tothom em passava pel costat. Ell em va veure. […]
+**[579] Germà Aleu:** (No et mira.) Ja no em parla. Abans em parlava sempre.Fes el que has de fer, noi. Avui no et miraré.Quan era a la Plaça, tothom em passava pel costat. Ell em va veure. […]
 
-**[580] Aldreu, Pastor de la Boira:** El Mestre ve, monjo. Ja el sents?
+**[580] Aleu, Pastor de la Boira:** El Mestre ve, monjo. Ja el sents?
 
 ### nenGabia  <sub>(js/zones/gabia.js:92)</sub>
 
@@ -1934,29 +1934,29 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### iniciarCombatFinal  <sub>(js/zones/gabia.js:1556)</sub>
 
-**[587] Aldreu, Pastor de la Boira:** Una altra vegada, monjo? El Mestre no es cansa mai.
+**[587] Aleu, Pastor de la Boira:** Una altra vegada, monjo? El Mestre no es cansa mai.
 
 **[588] L'Home de la Gàbia:** Torna a entrar, petit. Sempre torna, el riure.
 
-**[589] Aldreu, Pastor de la Boira:** Mestre, aquesta vegada sí!
+**[589] Aleu, Pastor de la Boira:** Mestre, aquesta vegada sí!
 
 **[590] Ineu:** (Tres capolls de boira, penjats com llonganisses... L'Huri, el Fram, el Sardi. Dormen.)
 
 **[591] Ineu:** Aguanteu. Ja sóc aquí.
 
-**[592] Aldreu, Pastor de la Boira:** Silenci! Aquí no s'alça la veu, monjo. El Mestre dorm, i jo vetllo el seu son.
+**[592] Aleu, Pastor de la Boira:** Silenci! Aquí no s'alça la veu, monjo. El Mestre dorm, i jo vetllo el seu son.
 
-**[593] Ineu:** Germà Aldreu, sóc jo. Baixeu la veu.
+**[593] Ineu:** Germà Aleu, sóc jo. Baixeu la veu.
 
-**[594] Aldreu, Pastor de la Boira:** Per cada riure que li duc, em gratifica amb un «bon minyó, Aldreu». No pots entendre què vol dir per a mi que algú tan poderós conegui el meu nom.
+**[594] Aleu, Pastor de la Boira:** Per cada riure que li duc, em gratifica amb un «bon minyó, Aleu». No pots entendre què vol dir per a mi que algú tan poderós conegui el meu nom.
 
-**[595] Aldreu, Pastor de la Boira:** Tu sempre has tingut el favor de tothom, nen mimat!
+**[595] Aleu, Pastor de la Boira:** Tu sempre has tingut el favor de tothom, nen mimat!
 
-**[596] Ineu:** Això no és admirar algú, Aldreu, és engabiar-se.
+**[596] Ineu:** Això no és admirar algú, Aleu, és engabiar-se.
 
-**[597] Aldreu, Pastor de la Boira:** Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!
+**[597] Aleu, Pastor de la Boira:** Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!
 
-**[598] L'Home de la Gàbia:** Aldreu, fill meu, no cal que cridis.
+**[598] L'Home de la Gàbia:** Aleu, fill meu, no cal que cridis.
 
 **[599] L'Home de la Gàbia:** Uns peus de monjo jove damunt la meva pedra.
 
@@ -1970,11 +1970,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[604] L'Home de la Gàbia:** Runna... Quina espasa tan petita per a una sala tan gran.
 
-**[605] Aldreu, Pastor de la Boira:** Deixeu-me'l a mi, Mestre, aquest cop l'esclafaré!
+**[605] Aleu, Pastor de la Boira:** Deixeu-me'l a mi, Mestre, aquest cop l'esclafaré!
 
-**[606] L'Home de la Gàbia:** Aparta, Aldreu. Aquesta nit el Mestre mateix et mostrarà com es fa.
+**[606] L'Home de la Gàbia:** Aparta, Aleu. Aquesta nit el Mestre mateix et mostrarà com es fa.
 
-**[607] Aldreu, Pastor de la Boira:** Sí, Mestre...
+**[607] Aleu, Pastor de la Boira:** Sí, Mestre...
 
 ### ocellaireDerrotat  <sub>(js/zones/gabia.js:1751)</sub>
 
@@ -1982,31 +1982,31 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[609] L'Home de la Gàbia:** Tantes rialles, i cap no era per a mi.
 
-**[610] Germà Aldreu:** Mestre! No em deixeu!
+**[610] Germà Aleu:** Mestre! No em deixeu!
 
 ### obrirGabia  <sub>(js/zones/gabia.js:1819)</sub>
 
-**[611] Ineu:** Germà Aldreu, la gàbia s'obrirà. Podeu venir amb nosaltres.
+**[611] Ineu:** Germà Aleu, la gàbia s'obrirà. Podeu venir amb nosaltres.
 
-**[612] Germà Aldreu:** Encara no.
+**[612] Germà Aleu:** Encara no.
 
 ### finalGabia  <sub>(js/zones/gabia.js:1921)</sub>
 
-**[613] Germà Aldreu:** La seva veu em parlava dins el cap cada nit. Era l'única que em parlava.
+**[613] Germà Aleu:** La seva veu em parlava dins el cap cada nit. Era l'única que em parlava.
 
-**[614] Germà Aldreu:** Escolta'ls, riuen tan fort que no es poden engabiar.
+**[614] Germà Aleu:** Escolta'ls, riuen tan fort que no es poden engabiar.
 
-**[615] Ineu:** Veniu amb nosaltres, Aldreu. A la taula del refectori hi ha lloc per a tothom.
+**[615] Ineu:** Veniu amb nosaltres, Aleu. A la taula del refectori hi ha lloc per a tothom.
 
-**[616] Germà Aldreu:** Ja ho sé que n'hi ha. Gràcies, Ineu.
+**[616] Germà Aleu:** Ja ho sé que n'hi ha. Gràcies, Ineu.
 
-**[617] Germà Aldreu:** El Mestre és aquí dins... Algú l'ha de vetllar. Algú que sàpiga què és no ser vist.
+**[617] Germà Aleu:** El Mestre és aquí dins... Algú l'ha de vetllar. Algú que sàpiga què és no ser vist.
 
-**[618] Germà Aldreu:** Jo em quedo amb ell.
+**[618] Germà Aleu:** Jo em quedo amb ell.
 
 **[619] Ineu:** Vindré a veure-us.
 
-**[620] Germà Aldreu:** Ja ho sé.
+**[620] Germà Aleu:** Ja ho sé.
 
 ---
 
@@ -2044,9 +2044,9 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[635] Carry:** El meu home estaria orgullós que el caminar del seu rellotge ens uneixi a tots. Gràcies, fill.
 
-**[636] Ineu:** Pare Jordà... el Germà Aldreu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar.
+**[636] Ineu:** Pare Jordà... el Germà Aleu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar.
 
-**[637] Pare Jordà:** L'Aldreu... dins la gàbia?
+**[637] Pare Jordà:** L'Aleu... dins la gàbia?
 
 **[638] Pare Jordà:** Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller.
 

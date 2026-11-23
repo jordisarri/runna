@@ -191,21 +191,21 @@
   "dialegs::germaAldreu": [
    {
     "id": 26,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Ineu! Quin drama, oi? Tothom corrent amunt i avall... Segur que els nens s'han amagat per jugar.",
     "fitxer": "js/dialegs.js",
     "linia": 156
    },
    {
     "id": 27,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Ets del Barça, tu? Tinc uns cromos que els nens es moren per tenir. Ells sí que m'escolten.",
     "fitxer": "js/dialegs.js",
     "linia": 157
    },
    {
     "id": 28,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Tinc aquest bastó de pelegrí. És perillós anar sol. Agafa'l.",
     "fitxer": "js/dialegs.js",
     "linia": 158
@@ -219,14 +219,14 @@
    },
    {
     "id": 30,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Avui no tinc temps, Ineu. Tinc... coses a fer.",
     "fitxer": "js/dialegs.js",
     "linia": 172
    },
    {
     "id": 31,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Ei, no sents res? Com una veu molt fluixeta que em crida de sota terra... Deu ser el vent. Força Barça!",
     "fitxer": "js/dialegs.js",
     "linia": 173
@@ -1008,7 +1008,7 @@
    {
     "id": 136,
     "qui": "El Gran Til·ler",
-    "text": "I vés amb compte: el Germà Aldreu hi puja de nit per un pas que jo no vigilo, i porta la boira a dins. L'Home de la Gàbia li parla a cau d'orella, i ell l'escolta.",
+    "text": "I vés amb compte: el Germà Aleu hi puja de nit per un pas que jo no vigilo, i porta la boira a dins. L'Home de la Gàbia li parla a cau d'orella, i ell l'escolta.",
     "fitxer": "js/dialegs.js",
     "linia": 643
    },
@@ -1079,7 +1079,7 @@
    {
     "id": 145,
     "qui": "Pastor",
-    "text": "No s'acosti gaire, pare, que la gent diu que portem mala sort. Només tenim el ramat... i el Germà Aldreu, aquell monjo pesat que sempre jugava amb els nens, ens l'ha pres. Ara es fa dir el Pastor de la Boira.",
+    "text": "No s'acosti gaire, pare, que la gent diu que portem mala sort. Només tenim el ramat... i el Germà Aleu, aquell monjo pesat que sempre jugava amb els nens, ens l'ha pres. Ara es fa dir el Pastor de la Boira.",
     "fitxer": "js/dialegs.js",
     "linia": 1249
    }
@@ -1111,7 +1111,7 @@
    {
     "id": 149,
     "qui": "Pastor vell",
-    "text": "Fill, el Germà Aldreu feia bona cara, però això ja ho portava dins. L'Ocellaire, l'Home de la Gàbia, només li va prometre que tothom el seguiria, i ell se'l va creure.",
+    "text": "Fill, el Germà Aleu feia bona cara, però això ja ho portava dins. L'Ocellaire, l'Home de la Gàbia, només li va prometre que tothom el seguiria, i ell se'l va creure.",
     "fitxer": "js/dialegs.js",
     "linia": 1266
    },
@@ -1139,7 +1139,7 @@
    {
     "id": 153,
     "qui": "Pastor vell",
-    "text": "Has tornat el ramat. El Germà Aldreu ha baixat camí avall rient: encara porta la boira a dins, pobre home. Que Déu t'ho pagui, monjo.",
+    "text": "Has tornat el ramat. El Germà Aleu ha baixat camí avall rient: encara porta la boira a dins, pobre home. Que Déu t'ho pagui, monjo.",
     "fitxer": "js/dialegs.js",
     "linia": 1277
    },
@@ -1306,7 +1306,7 @@
   "dialegs::aldreuPastor": [
    {
     "id": 175,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Ineu!",
     "fitxer": "js/dialegs.js",
     "linia": 1371
@@ -1314,20 +1314,20 @@
    {
     "id": 176,
     "qui": "Ineu",
-    "text": "Germà Aldreu?!",
+    "text": "Germà Aleu?!",
     "fitxer": "js/dialegs.js",
     "linia": 1372
    },
    {
     "id": 177,
-    "qui": "Aldreu, Pastor de la Boira",
-    "text": "L'Aldreu era un monjo que ningú no mirava. Ara sóc el Pastor de la Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai.",
+    "qui": "Aleu, Pastor de la Boira",
+    "text": "L'Aleu era un monjo que ningú no mirava. Ara sóc el Pastor de la Boira. Mira'ls, com em segueixen. Ningú no m'havia seguit mai.",
     "fitxer": "js/dialegs.js",
     "linia": 1373
    },
    {
     "id": 178,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Des que va pujar la boira, una veu em parla dins el cap, baixeta, només per a mi. Ella em va veure quan ningú més no ho feia. És la veu del Mestre.",
     "fitxer": "js/dialegs.js",
     "linia": 1374
@@ -1335,13 +1335,13 @@
    {
     "id": 179,
     "qui": "Ineu",
-    "text": "Una veu dins el teu cap... Aldreu, és la de l'Home de la Gàbia. L'Ocellaire parla per la teva boca.",
+    "text": "Una veu dins el teu cap... Aleu, és la de l'Home de la Gàbia. L'Ocellaire parla per la teva boca.",
     "fitxer": "js/dialegs.js",
     "linia": 1375
    },
    {
     "id": 180,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "L'Home de la Gàbia, sí! El Mestre m'ho va prometre: «Tots els que tinguin por et seguiran.» I ara sóc el seu pastor. El PASTOR DE LA BOIRA!",
     "fitxer": "js/dialegs.js",
     "linia": 1376
@@ -1355,7 +1355,7 @@
    },
    {
     "id": 182,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Dormen. Els vaig portar jo al Mestre, un per un, de nit. Allà dins ja no tenen por de res.",
     "fitxer": "js/dialegs.js",
     "linia": 1378
@@ -1363,13 +1363,13 @@
    {
     "id": 183,
     "qui": "Ineu",
-    "text": "Aldreu, això que et parla no és bo. Encara pots tornar enrere.",
+    "text": "Aleu, això que et parla no és bo. Encara pots tornar enrere.",
     "fitxer": "js/dialegs.js",
     "linia": 1379
    },
    {
     "id": 184,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Tornar enrere? Mai! El Mestre em va veure, quan ningú més no ho feia. Calla! Be-e-e!",
     "fitxer": "js/dialegs.js",
     "linia": 1380
@@ -1378,21 +1378,21 @@
   "dialegs::aldreuDerrotat": [
    {
     "id": 185,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré.",
     "fitxer": "js/dialegs.js",
     "linia": 1388
    },
    {
     "id": 186,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "El Mestre és al fons de les Gírgoles, i ja és despert: la seva veu em crida des d'allà baix i no calla mai. Vine, si goses: els nens ja són seus, i jo només sóc el primer dels seus ocells.",
     "fitxer": "js/dialegs.js",
     "linia": 1389
    },
    {
     "id": 187,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Je, je, je... Ens veurem allà baix, monjo.",
     "fitxer": "js/dialegs.js",
     "linia": 1391
@@ -1822,7 +1822,7 @@
    {
     "id": 244,
     "qui": "Eve",
-    "text": "Sóc l'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aldreu pica tres cops a la Porta de les Gírgoles, i la porta s'obre sola. A dins, diuen, n'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.",
+    "text": "Sóc l'Eve. Faig la feina de la Càren, que dorm des que va arribar la boira. T'he fet entrar per una cosa: cada nit, quan tot és tancat, el Germà Aleu pica tres cops a la Porta de les Gírgoles, i la porta s'obre sola. A dins, diuen, n'hi ha una altra de ferro, molt vella, que ningú no ha obert mai.",
     "fitxer": "js/zones/taverna.js",
     "linia": 95
    },
@@ -1968,7 +1968,7 @@
    {
     "id": 264,
     "qui": "Iscu",
-    "text": "Ei, espera. Tinc una cosa que potser et va bé. Una nit vaig trobar una clau a terra: li havia caigut al Germà Aldreu i ni se'n va adonar.",
+    "text": "Ei, espera. Tinc una cosa que potser et va bé. Una nit vaig trobar una clau a terra: li havia caigut al Germà Aleu i ni se'n va adonar.",
     "fitxer": "js/dialegs.js",
     "linia": 224
    },
@@ -2461,7 +2461,7 @@
    {
     "id": 674,
     "qui": "Pare Alcoví",
-    "text": "I una cosa més, fill, que no és de la Crònica sinó d'un amic. Al Pare Xèvius, el vigilant de la porta de les Gírgoles, el conec de fa quaranta anys: no és dolent, sinó escarmentat. Fa trenta anys l'Aldreu el va enganyar amb bones paraules, i des d'aleshores no es fia de ningú. Entén-lo, i no t'ho prenguis a mal.",
+    "text": "I una cosa més, fill, que no és de la Crònica sinó d'un amic. Al Pare Xèvius, el vigilant de la porta de les Gírgoles, el conec de fa quaranta anys: no és dolent, sinó escarmentat. Fa trenta anys l'Aleu el va enganyar amb bones paraules, i des d'aleshores no es fia de ningú. Entén-lo, i no t'ho prenguis a mal.",
     "fitxer": "js/dialegs.js",
     "linia": 732
    },
@@ -4205,7 +4205,7 @@
    {
     "id": 547,
     "qui": "Pilària",
-    "text": "T'ho dic perquè ho vaig veure: el Germà Aldreu, aquell pesat que sempre anava jugant amb els nens, anava moltes nits a la Porta de les Gírgoles, i la porta se li obria sola, com si la boira l'obeís. Mai no li he cregut el somriure.",
+    "text": "T'ho dic perquè ho vaig veure: el Germà Aleu, aquell pesat que sempre anava jugant amb els nens, anava moltes nits a la Porta de les Gírgoles, i la porta se li obria sola, com si la boira l'obeís. Mai no li he cregut el somriure.",
     "fitxer": "js/dialegs.js",
     "linia": 1202
    },
@@ -4309,14 +4309,14 @@
    {
     "id": 561,
     "qui": "Ineu",
-    "text": "(Tancada amb clau. A l'Aldreu se li obria sola perquè la boira que sortia de la tomba obeïa la veu del Mestre... però la tomba és segellada i la boira ja no puja: ara la porta no s'obre per a ningú. Em cal la clau dels monjos.)",
+    "text": "(Tancada amb clau. A l'Aleu se li obria sola perquè la boira que sortia de la tomba obeïa la veu del Mestre... però la tomba és segellada i la boira ja no puja: ara la porta no s'obre per a ningú. Em cal la clau dels monjos.)",
     "fitxer": "js/zones/taverna.js",
     "linia": 122
    },
    {
     "id": 562,
     "qui": "Ineu",
-    "text": "(Tancada amb clau. Diuen que a l'Aldreu se li obre sola: la boira l'obeeix. A mi, no.)",
+    "text": "(Tancada amb clau. Diuen que a l'Aleu se li obre sola: la boira l'obeeix. A mi, no.)",
     "fitxer": "js/zones/taverna.js",
     "linia": 124
    }
@@ -4367,7 +4367,7 @@
    {
     "id": 682,
     "qui": "Pare Xèvius",
-    "text": "Perdona'm, fill. Les males experiències deixen ferides. Obre bé els ulls allà baix: l'Aldreu no és el que era.",
+    "text": "Perdona'm, fill. Les males experiències deixen ferides. Obre bé els ulls allà baix: l'Aleu no és el que era.",
     "fitxer": "js/dialegs.js",
     "linia": 681
    }
@@ -4383,7 +4383,7 @@
    {
     "id": 566,
     "qui": "Ineu",
-    "text": "(La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Aldreu en deu tenir una altra.)",
+    "text": "(La Clau de ferro no hi entra: aquest pany és molt més petit. El Germà Aleu en deu tenir una altra.)",
     "fitxer": "js/zones/taverna.js",
     "linia": 138
    },
@@ -4490,35 +4490,35 @@
   "zones/gabia::aldreuGabia": [
    {
     "id": 576,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Estic bé, Ineu. La boira fa companyia quan ja no demana res.",
     "fitxer": "js/zones/gabia.js",
     "linia": 80
    },
    {
     "id": 577,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Torna quan vulguis. Si mai se'm gira el cor, ja trobaré qui em pugui acompanyar...",
     "fitxer": "js/zones/gabia.js",
     "linia": 81
    },
    {
     "id": 578,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Encara no, noi. Deixa'm sentir com riuen.",
     "fitxer": "js/zones/gabia.js",
     "linia": 83
    },
    {
     "id": 579,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "(No et mira.) Ja no em parla. Abans em parlava sempre.Fes el que has de fer, noi. Avui no et miraré.Quan era a la Plaça, tothom em passava pel costat. Ell em va veure. […]",
     "fitxer": "js/zones/gabia.js",
     "linia": 84
    },
    {
     "id": 580,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "El Mestre ve, monjo. Ja el sents?",
     "fitxer": "js/zones/gabia.js",
     "linia": 89
@@ -4575,7 +4575,7 @@
   "zones/gabia::iniciarCombatFinal": [
    {
     "id": 587,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Una altra vegada, monjo? El Mestre no es cansa mai.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1556
@@ -4589,7 +4589,7 @@
    },
    {
     "id": 589,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Mestre, aquesta vegada sí!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1560
@@ -4610,7 +4610,7 @@
    },
    {
     "id": 592,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Silenci! Aquí no s'alça la veu, monjo. El Mestre dorm, i jo vetllo el seu son.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1571
@@ -4618,20 +4618,20 @@
    {
     "id": 593,
     "qui": "Ineu",
-    "text": "Germà Aldreu, sóc jo. Baixeu la veu.",
+    "text": "Germà Aleu, sóc jo. Baixeu la veu.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1573
    },
    {
     "id": 594,
-    "qui": "Aldreu, Pastor de la Boira",
-    "text": "Per cada riure que li duc, em gratifica amb un «bon minyó, Aldreu». No pots entendre què vol dir per a mi que algú tan poderós conegui el meu nom.",
+    "qui": "Aleu, Pastor de la Boira",
+    "text": "Per cada riure que li duc, em gratifica amb un «bon minyó, Aleu». No pots entendre què vol dir per a mi que algú tan poderós conegui el meu nom.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1575
    },
    {
     "id": 595,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Tu sempre has tingut el favor de tothom, nen mimat!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1582
@@ -4639,13 +4639,13 @@
    {
     "id": 596,
     "qui": "Ineu",
-    "text": "Això no és admirar algú, Aldreu, és engabiar-se.",
+    "text": "Això no és admirar algú, Aleu, és engabiar-se.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1584
    },
    {
     "id": 597,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1586
@@ -4653,7 +4653,7 @@
    {
     "id": 598,
     "qui": "L'Home de la Gàbia",
-    "text": "Aldreu, fill meu, no cal que cridis.",
+    "text": "Aleu, fill meu, no cal que cridis.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1588
    },
@@ -4701,7 +4701,7 @@
    },
    {
     "id": 605,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Deixeu-me'l a mi, Mestre, aquest cop l'esclafaré!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1600
@@ -4709,13 +4709,13 @@
    {
     "id": 606,
     "qui": "L'Home de la Gàbia",
-    "text": "Aparta, Aldreu. Aquesta nit el Mestre mateix et mostrarà com es fa.",
+    "text": "Aparta, Aleu. Aquesta nit el Mestre mateix et mostrarà com es fa.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1601
    },
    {
     "id": 607,
-    "qui": "Aldreu, Pastor de la Boira",
+    "qui": "Aleu, Pastor de la Boira",
     "text": "Sí, Mestre...",
     "fitxer": "js/zones/gabia.js",
     "linia": 1602
@@ -4738,7 +4738,7 @@
    },
    {
     "id": 610,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Mestre! No em deixeu!",
     "fitxer": "js/zones/gabia.js",
     "linia": 1782
@@ -4748,13 +4748,13 @@
    {
     "id": 611,
     "qui": "Ineu",
-    "text": "Germà Aldreu, la gàbia s'obrirà. Podeu venir amb nosaltres.",
+    "text": "Germà Aleu, la gàbia s'obrirà. Podeu venir amb nosaltres.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1819
    },
    {
     "id": 612,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Encara no.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1820
@@ -4763,14 +4763,14 @@
   "zones/gabia::finalGabia": [
    {
     "id": 613,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "La seva veu em parlava dins el cap cada nit. Era l'única que em parlava.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1921
    },
    {
     "id": 614,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Escolta'ls, riuen tan fort que no es poden engabiar.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1922
@@ -4778,27 +4778,27 @@
    {
     "id": 615,
     "qui": "Ineu",
-    "text": "Veniu amb nosaltres, Aldreu. A la taula del refectori hi ha lloc per a tothom.",
+    "text": "Veniu amb nosaltres, Aleu. A la taula del refectori hi ha lloc per a tothom.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1924
    },
    {
     "id": 616,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Ja ho sé que n'hi ha. Gràcies, Ineu.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1927
    },
    {
     "id": 617,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "El Mestre és aquí dins... Algú l'ha de vetllar. Algú que sàpiga què és no ser vist.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1928
    },
    {
     "id": 618,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Jo em quedo amb ell.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1930
@@ -4812,7 +4812,7 @@
    },
    {
     "id": 620,
-    "qui": "Germà Aldreu",
+    "qui": "Germà Aleu",
     "text": "Ja ho sé.",
     "fitxer": "js/zones/gabia.js",
     "linia": 1934
@@ -4927,14 +4927,14 @@
    {
     "id": 636,
     "qui": "Ineu",
-    "text": "Pare Jordà... el Germà Aldreu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar.",
+    "text": "Pare Jordà... el Germà Aleu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar.",
     "fitxer": "js/zones/esglesia.js",
     "linia": 377
    },
    {
     "id": 637,
     "qui": "Pare Jordà",
-    "text": "L'Aldreu... dins la gàbia?",
+    "text": "L'Aleu... dins la gàbia?",
     "fitxer": "js/zones/esglesia.js",
     "linia": 378
    },
