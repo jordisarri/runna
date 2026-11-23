@@ -74,11 +74,11 @@ const FONT = 'Georgia, "Times New Roman", serif';
 // El cap retallat del sprite del personatge: es fa una sola vegada i es desa com a textura 'retrat_<clau>'.
 // Els noms que no són personatges (cartells, llibres, inscripcions, el Til·ler...) no en tenen.
 const RETRATS = {
-    'Ineu': 'ineu', 'Pare Jordà': 'pare_jorda', 'Germà Aleu': 'germa_aldreu', 'Pastor de la Boira': 'pastor_boira', 'Aleu, Pastor de la Boira': 'pastor_boira', 'Aleu, Guàrdia de la Gàbia': 'pastor_boira', 'Germà Francí': 'germa_franci', 'Pare Nadiel': 'pare_daimiel',
-    'Pare Alcoví': 'pare_alcovi', 'Pare Xèvius': 'pare_xevius', 'Eve': 'eve', 'Senyor Buidor': 'senyor_budo', 'Jusef': 'jusef', 'Senyor Pomers': 'pomers', 'Julius': 'julius', 'Galf': 'galf', 'Isílder': 'isilder',
+    'Ineu': 'ineu', 'Pare Jòrdius': 'pare_jorda', 'Germà Aleu': 'germa_aldreu', 'Pastor de la Boira': 'pastor_boira', 'Aleu, Pastor de la Boira': 'pastor_boira', 'Aleu, Guàrdia de la Gàbia': 'pastor_boira', 'Germà Francí': 'germa_franci', 'Pare Nadiel': 'pare_daimiel',
+    'Pare Alberic': 'pare_alcovi', 'Pare Xèvius': 'pare_xevius', 'Eve': 'eve', 'Senyor Buidor': 'senyor_budo', 'Jusef': 'jusef', 'Senyor Pomers': 'pomers', 'Julius': 'julius', 'Galf': 'galf', 'Isílder': 'isilder',
     'La Pianista': 'pianista', 'La Joaneta': 'joaneta', 'Iscu': 'iscu', 'Nena de les Trenes': 'nena_trenes', 'Les Venerables Sàvies': 'venerables',
     'Carmèlia': 'carmelia', 'Pilària': 'pilaria', 'Dolora': 'dolora', 'Pastor vell': 'pastor_vell', 'Pastor': 'pastor_a', 'Pastora': 'pastor_b',
-    'Meus': 'meus', 'Senyor Llaminer': 'molner', 'Jorgi': 'georgi_caseta', 'Rosansa': 'rosansa', 'Monjo': 'ombra_monjo', 'Home del Raïm': 'home_raim',
+    'Nelis': 'meus', 'Senyor Llaminer': 'molner', 'Gori': 'georgi_caseta', 'Rosansa': 'rosansa', 'Monjo': 'ombra_monjo', 'Home del Raïm': 'home_raim',
     'Carry': 'carry', 'Follet del Carro Verd': 'follet_carro', 'El Gran Til·ler': 'tiller',
     "L'Home de la Gàbia": 'ocellaire', 'Huri': 'nen_uri', 'Fram': 'nen_flam', 'Mandu': 'mandu', 'Flami': 'nen_flam', 'Sardi': 'nen_sardin'
 };
@@ -171,13 +171,13 @@ const CATALEG_OBJECTES = {
     cristall_gel:     ['Cristall de gel', 'No es fon ni a l\'estiu. El Galf en sabrà fer alguna cosa.'],
     pruna:            ['Pruna daurada', 'De la Prunera de l\'Hostatgeria. La Font del Bisbe en demana una; un cop oferta, te la quedes de record.'],
     beuratge:         ['Beuratge de la Joaneta', 'Dissipa la boira del camí cap al Til·ler; no protegeix de la boira verinosa.'],
-    escudella:        ['Escudella de la Meus', 'Encara calenta, com cada any per al sopar del Til·ler.'],
+    escudella:        ['Escudella de la Nelis', 'Encara calenta, com cada any per al sopar del Til·ler.'],
     flors_isilder:     ['Flors d\'Isílder', 'Un ram embolicat amb un tros de pergamí.'],
     pa_pastor:        ['Pa dels pastors', 'Una barra baixa i fosca, cuita sota la cendra.'],
     esquelles:        ['Esquelles dels pastors', 'Amb elles, els cants antics sonen més clars.'],
     medallo_arbre:    ["Medalló de l'Arbre", "De pedra, amb una fulla tallada: el permís del Gran Til·ler. Va a la placa del Dolmen."],
     medallo_saber:    ['Medalló del Saber', "De pedra, amb un llibre tallat: les paraules del monjo. Va a la placa del Dolmen."],
-    medallo_benedicio: ['Medalló de la Benedicció', "De pedra, amb una mà tallada: la benedicció del Pare Jordà. Va a la placa del Dolmen."],
+    medallo_benedicio: ['Medalló de la Benedicció', "De pedra, amb una mà tallada: la benedicció del Pare Jòrdius. Va a la placa del Dolmen."],
     cinta_nena:       ['Llaç de la Nena', 'Absorbeix un cop cada vegada que entres a una zona.'],
     benedicio_fraterna:  ['Empara fraternal', 'La protecció sagrada de les tres sacerdotesses de l\'Hostatgeria. Dissipa la boira verinosa de la galeria que porta a la Sala de la Gàbia.'],
     llac_nena:        ['Llaç de cinta', 'Rosa i descolorit. És de la Nena de les Trenes.'],

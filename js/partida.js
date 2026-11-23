@@ -3,7 +3,7 @@
  * Totes les dades que cal desar viuen a Estat.dades (objecte JSON pla).
  * Es desa al localStorage del navegador i es pot exportar com a "codi de partida" (Base64).
  */
-// Noms antics → actuals (flags, objectes, zones i entrades de les partides desades abans del renom: Jauneta → Joaneta, Isidre → Isílder, Neus → Meus, etc.).
+// Noms antics → actuals (flags, objectes, zones i entrades de les partides desades abans del renom: Jauneta → Joaneta, Isidre → Isílder, Neus → Nelis, etc.).
 // Es tradueix en carregar una partida (vegeu migraNoms) perquè ningú no perdi el progrés. (Aquest és l'ÚNIC lloc del projecte on queden noms antics, a propòsit.)
 const RENOMS_ANTICS = {
     ZonaCambraCharm: 'ZonaCambraCarmelia',
@@ -78,7 +78,7 @@ const Estat = {
             y: null,
             vida: 6,          // en meitats de gra del rosari (6 = 3 grans encesos)
             corsMax: 3,
-            objectiu: 'Parla amb el Pare Jordà a la Plaça.',
+            objectiu: 'Parla amb el Pare Jòrdius a la Plaça.',
             objectes: [],
             flags: {},
             pingpongVictories: 0
@@ -227,7 +227,7 @@ const Estat = {
         if (!resultat.flags.bastoObtingut) resultat.objectes = resultat.objectes.filter(o => o !== 'basto');
         // Si ja se sap el Cant de l'Aurora, la flauta hi ha de ser (alguna versió antiga no la donava)
         if (resultat.flags.cantAurora && !resultat.objectes.includes('flauta')) resultat.objectes.push('flauta');
-        // La palanca d'en Jorgi ara és una maneta (el volant de l'Home del Raïm)
+        // La palanca d'en Gori ara és una maneta (el volant de l'Home del Raïm)
         resultat.objectes = resultat.objectes.map(o => o === 'palanca' ? 'maneta' : o);
         [['palanca', 'maneta'], ['georgiPalanca', 'georgiManeta'], ['fragment3', 'alcoviLlegit']].forEach(([vell, nou]) => { if (resultat.flags[vell]) { resultat.flags[nou] = resultat.flags[vell]; delete resultat.flags[vell]; } });
         this.migraNoms(resultat);

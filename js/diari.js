@@ -10,7 +10,7 @@
 
 // Títol i zona de cada pas de la història (la zona marca l'estrella de l'objectiu al mapa)
 const DIARI_PASSOS = {
-    clauer: ['El Pare Jordà et busca', 'ZonaPlaca'], basto: ['El bastó de pelegrí', 'ZonaPlaca'],
+    clauer: ['El Pare Jòrdius et busca', 'ZonaPlaca'], basto: ['El bastó de pelegrí', 'ZonaPlaca'],
     cantAurora: ["El Cant de l'Aurora", 'ZonaEsglesia'], bassadoria: ['La Bassadòria tèrbola', 'ZonaCreu'],
     font: ['La Font del Bisbe', 'ZonaBosc'], joaneta: ["L'Alzina Buida", 'ZonaBosc'],
     boiraTiller: ['La boira del Til·ler', 'ZonaCelles'], tiller: ['El Gran Til·ler', 'ZonaTiller'],
@@ -18,15 +18,15 @@ const DIARI_PASSOS = {
     pastor: ['El Pastor de la Boira', 'ZonaCirosa'], esquelles: ['Les esquelles', 'ZonaCirosa'],
     soparObert: ['Tornar al Til·ler', 'ZonaTiller'], sopar: ['El sopar del Til·ler', 'ZonaTiller'],
     fragment1: ['El primer fragment', 'ZonaRuines'], clauSagrari: ['La clau del sagrari', 'ZonaCami'], fragment2: ['El sagrari', 'ZonaEsglesia'],
-    alcoviLlegit: ['Els fragments del Pare Alcoví', 'ZonaBiblioteca'], ombra: ["L'ombra del monjo", 'ZonaRuines'],
+    alcoviLlegit: ['Els fragments del Pare Alberic', 'ZonaBiblioteca'], ombra: ["L'ombra del monjo", 'ZonaRuines'],
     saber: ['Les Paraules del Saber', 'ZonaBiblioteca'], benediccio: ['La benedicció', 'ZonaPlaca'],
     telescopi: ['El telescopi del Galf', 'ZonaEra'], estels: ['Els estels', 'ZonaDipositos'],
     estelLlorenc: ['La Llàgrima de Sant Llorenç', 'ZonaDipositos'], runna: ['Runna', 'ZonaDolmen'],
     jusef: ['El partit contra en Jusef', 'ZonaPingpong'],
     guants: ['Els Guants de Poder', 'ZonaSantAntoni'], roda: ['La roda del Celler', 'ZonaPingpong'],
-    cambra: ['La cambra secreta', 'ZonaPassadis'], maneta: ["La maneta d\'en Jorgi", 'ZonaGeorgi'],
+    cambra: ['La cambra secreta', 'ZonaPassadis'], maneta: ["La maneta d\'en Gori", 'ZonaGeorgi'],
     raim: ['L\'Home del Raïm', 'ZonaCasaGranInt'], cripta: ['La Cripta', 'ZonaCasaCripta'],
-    segellDemana: ['El Pare Alcoví i la Crònica', 'ZonaBiblioteca'], rellotge: ['El rellotge de la torre', 'ZonaEsglesia'], segell: ['La tomba dels monjos', 'ZonaCementiri'], cantMiracle: ['El Cant del Miracle', 'ZonaEsglesia'],
+    segellDemana: ['El Pare Alberic i la Crònica', 'ZonaBiblioteca'], rellotge: ['El rellotge de la torre', 'ZonaEsglesia'], segell: ['La tomba dels monjos', 'ZonaCementiri'], cantMiracle: ['El Cant del Miracle', 'ZonaEsglesia'],
     pi: ['El Pi dels Tres Cants', 'ZonaBoscPi'], vigilant: ['El Pare Xèvius', 'ZonaGirgolesFora'],
     soterrani: ['La porta de les Gírgoles', 'ZonaGirgolesFora'], clauIscu: ['La clau de l\'Iscu', 'ZonaCabanaCami'],
     portaFerro: ['La porta de ferro', 'ZonaSotaTaverna'], girgoles: ['Les gírgoles', 'ZonaGirgoles'],

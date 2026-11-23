@@ -477,7 +477,7 @@ const PROLEG_QUADRES = [
     { text: "Pastors i monjos s'alçaren contra ell i el tancaren dins la seva pròpia gàbia, al més profund de la terra. Els monjos van segellar la porta de ferro amb la llum de l'espasa del Miracle, Runna. La van fer dormir entre pedres, a l'espera del dia en què la foscor tornés.", dibuix: 'segell', vitrall: [0.515, 0.50, 1.95] },
     { text: "Però la foscor no oblida. Fa tres nits, una boira violeta i glaçada s'ha alçat de sota terra: marceix els horts, enterboleix les aigües i ha fet emmudir l'orgue sagrat del Santuari.", dibuix: 'boira', vitrall: [0.512, 0.67, 2.5] },
     { text: "I cada nit, la boira reclama un nen.\nUn llit buit a Sant Benet, i després un altre.\nI aquesta nit maleïda... un tercer bressol s'ha quedat fred.", dibuix: 'nens', vitrall: [0.56, 0.555, 3.2] },
-    { text: "Quan l'alba torna a incendiar el cel del Miracle, un jove monjo desperta al Monestir: l'Ineu.\nEl destí l'ha triat, encara que ell no ho sàpiga. El Pare Jordà l'espera a la Plaça.", dibuix: 'mati', vitrall: [0.502, 0.58, 3.0] }
+    { text: "Quan l'alba torna a incendiar el cel del Miracle, un jove monjo desperta al Monestir: l'Ineu.\nEl destí l'ha triat, encara que ell no ho sàpiga. El Pare Jòrdius l'espera a la Plaça.", dibuix: 'mati', vitrall: [0.502, 0.58, 3.0] }
 ];
 
 const PAPER_X = 30, PAPER_W = AMPLE - 60, PAPER_H = 285, PAPER_Y = ALT - 365;      // full de paper vell del text del pròleg

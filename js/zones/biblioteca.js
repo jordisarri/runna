@@ -2,7 +2,7 @@
  * LA BIBLIOTECA DEL MONESTIR
  * Sala alta de prestatgeries fins al sostre, dos vitralls que tenyeixen el terra de colors, pols que balla dins la llum,
  * una taula llarga de lectura amb espelmes, el faristol amb la Crònica, un globus terraqüi i una escala de mà.
- * Hi treballa el Pare Alcoví, que llegeix els fragments i dona el Saber.
+ * Hi treballa el Pare Alberic, que llegeix els fragments i dona el Saber.
  */
 
 class ZonaBiblioteca extends ZonaBase {
@@ -109,14 +109,19 @@ class ZonaBiblioteca extends ZonaBase {
             ar.fillStyle(0xffc040, 0.9).fillEllipse(550 + dx, 55, 5, 8).fillStyle(0xffe890, 0.5).fillCircle(550 + dx, 55, 10);
         });
 
-        // El Pare Alcoví, entre la taula i el faristol
-        const alc = this.npc('pare_alcovi', 760, 330, DIALEGS.pareAlcovi, { flipX: true, radi: 110 });
-        alc.punt.enTancar = () => this.alcoviTorna();          // en acabar de parlar, sempre torna a mirar l'Ineu
+        // El Pare Alberic, sempre d'esquena davant el faristol llegint la Crònica; només es gira quan l'Ineu hi parla
+        const alc = this.npc('pare_alcovi', 842, 372, E => {
+            const d = DIALEGS.pareAlcovi(E);
+            if (!d || !d.pagines || !d.pagines.length) return d;
+            return Object.assign({}, d, { pagines: [{ fer: (z, fet) => z.alcoviTorna(fet) }, ...d.pagines] });
+        }, { flipX: true, radi: 110 });
+        if (this.textures.exists('pare_alcovi_esquena')) this.alcoviPosa(true);
+        alc.punt.enTancar = () => { if (this.textures.exists('pare_alcovi_esquena')) this.alcoviPosa(true); };          // en acabar de parlar, torna a llegir d'esquena
 
         this.add.rectangle(A / 2, H / 2, A, H, 0xffd38a, 0.06).setDepth(80000);
         this.sortida(510, H - 22, 80, 14, 'ZonaMonestirRebedor', 'biblioteca');
     }
-    // El Pare Alcoví va al faristol i llegeix la Crònica d'esquena a la càmera (sprite d'esquena); l'Ineu es posa al seu costat, no davant seu
+    // El Pare Alberic va al faristol i llegeix la Crònica d'esquena a la càmera (sprite d'esquena); l'Ineu es posa al seu costat, no davant seu
     alcoviLlegeix(fet) {
         const a = this.npcs && this.npcs.pare_alcovi, I = this.ineu;
         if (!a || !this.textures.exists('pare_alcovi_esquena')) { if (fet) fet(); return; }

@@ -312,7 +312,7 @@ class ZonaRuines extends ZonaBase {
         } });
     }
 
-    // Ja es pot tocar davant l'ombra: els dos fragments són al sarró, el Pare Alcoví els ha llegit i l'ombra ha demanat el cant
+    // Ja es pot tocar davant l'ombra: els dos fragments són al sarró, el Pare Alberic els ha llegit i l'ombra ha demanat el cant
     ombraCantOberta() { return ['fragment1', 'fragment2', 'alcoviLlegit', 'ombraDemanaCant'].every(f => Estat.flag(f)); }
 
     teEfecteMelodia(nom) {
@@ -631,7 +631,7 @@ class ZonaCelles extends ZonaBase {
         if (Estat.flag('manduNinaTrencada') && !Estat.flag('epilegFet')) this.mandu.setTexture('mandu_trencada');
         else this.jugaMandu();
 
-        // Sant Benet (est): la Meus i el seu marit, el senyor Llaminer, veïns de Sant Benet
+        // Sant Benet (est): la Nelis i el seu marit, el senyor Llaminer, veïns de Sant Benet
         this.npc('meus', 1250, 680, DIALEGS.meus, { zoomConversa: 1.3 });
         this.npc('molner', 1320, 700, DIALEGS.molner);
         // Les dues Venerables Sàvies (agafades del braç, un sol gràfic): donen consells
@@ -646,7 +646,7 @@ class ZonaCelles extends ZonaBase {
 
         this.arbres([[230, 1010]]);
         // Els tres de l'est, més petits i més al sud, perquè no tapin la Rosansa (ni el carro) ni el camí per on se'n va
-        [[1400, 1070, 0.62], [1730, 1075, 0.6], [1990, 1060, 0.62]].forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 34, h: 16 } }));      // ben repartits: un a l'oest i tres al sud, davant la porta de la Meus i de Sant Benet (abans, tres junts a l'oest i l'espai buit)      // (el de l'est del camí de les Runes es queda lluny: hi para el carro de la Rosansa)
+        [[1400, 1070, 0.62], [1730, 1075, 0.6], [1990, 1060, 0.62]].forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 34, h: 16 } }));      // ben repartits: un a l'oest i tres al sud, davant la porta de la Nelis i de Sant Benet (abans, tres junts a l'oest i l'espai buit)      // (el de l'est del camí de les Runes es queda lluny: hi para el carro de la Rosansa)
 
         this.sortida(1000, 1086, 140, 14, 'ZonaRuines', 'celles');
         this.sortida(0, 640, 14, 130, 'ZonaBosc', 'celles');
@@ -850,10 +850,10 @@ class ZonaSantAntoni extends ZonaBase {
 }
 
 // ---------------- EL GRAN TIL·LER (escenari petit: només l'arbre amb qui es parla) ----------------
-// Hi arriba el camí del sud (les cel·les). Cap a l'oest, un camí duu a la Caseta (on viu en Jorgi); cap al nord-est, a la Cirosa, tancat
+// Hi arriba el camí del sud (les cel·les). Cap a l'oest, un camí duu a la Caseta (on viu en Gori); cap al nord-est, a la Cirosa, tancat
 // per les arrels del Til·ler, que només s'enfonsen davant la seva branca.
 const TIL_X = 520, TIL_Y = 510;
-const TAULA_SOPAR = { x: 520, y: 715 };          // la taula del sopar, al camí de davant del Til·ler
+const TAULA_SOPAR = { x: 520, y: 680 };          // la taula del sopar, al camí de davant del Til·ler
 
 class ZonaTiller extends ZonaBase {
     constructor() {
@@ -1094,26 +1094,46 @@ class ZonaTiller extends ZonaBase {
     fesSopar() {
         const vel = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x3a1c00, 1).setScrollFactor(0).setDepth(89500).setAlpha(0);
         this.tweens.add({ targets: vel, alpha: 0.14, duration: 1600 });
-        // La taula, al camí just davant del Til·ler (el camí va de y 520 a 670: la taula arriba fins al 730, i els comensals seuen darrere seu, amb la taula tapant-los les cames)
-        // La taula, més llarga (perquè hi càpiguen tots sense solapar-se) i a l'alçada d'una taula de menjar normal (el dibuix és més alt: s'aplana, com a la taula del refetor de la Pilària), opaca
-        const taula = this.posar('taula_sopar', TAULA_SOPAR.x, TAULA_SOPAR.y, { fonsY: TAULA_SOPAR.y, escala: 1.2, opac: true }).setAlpha(0);
-        taula.setScale(taula.scaleX * 1.5, taula.scaleY * 0.68);
+        // La taula, al camí just davant del Til·ler; més compacta d'ample perquè hi hagi comensals a dalt i a baix i la càmera pugui fer més zoom
+        const taula = this.posar('taula_sopar', TAULA_SOPAR.x, TAULA_SOPAR.y, { fonsY: TAULA_SOPAR.y, escala: 1.28, opac: true }).setAlpha(0);
+        taula.setScale(taula.scaleX, taula.scaleY * 0.72);
         this.tweens.add({ targets: taula, alpha: 1, duration: 1200 });
         this.npcs = this.npcs || {};
-        // Els personatges no tenen full de caminar: apareixen amb un fade in al seu lloc de la taula, un rere l'altre
-        const gent = [['meus', 235], ['isilder', 350], ['pastor_a', 465], ['pastor_b', 580], ['pastor_vell', 695], ['venerables', 810]];          // (116 px entre un i l'altre: abans se solapaven)
-        const imatges = gent.map(([k, x], i) => {
-            const img = this.posar(k, x, TAULA_SOPAR.y - 115, { fonsY: TAULA_SOPAR.y - 115 }).setAlpha(0);          // darrere la taula, que els tapa les cames
+        // Els personatges no tenen full de caminar: apareixen amb un fade in al seu lloc de la taula, un rere l'altre, repartits a dalt i a baix sense tapar-se ni tapar la cara del Til·ler
+        const gent = [
+            ['meus', TAULA_SOPAR.x - 165, TAULA_SOPAR.y - 105],
+            ['isilder', TAULA_SOPAR.x - 65, TAULA_SOPAR.y - 105],
+            ['venerables', TAULA_SOPAR.x + 115, TAULA_SOPAR.y - 105],
+            ['pastor_a', TAULA_SOPAR.x - 165, TAULA_SOPAR.y + 40],
+            ['pastor_vell', TAULA_SOPAR.x - 55, TAULA_SOPAR.y + 40],
+            ['pastor_b', TAULA_SOPAR.x + 55, TAULA_SOPAR.y + 40]
+        ];
+        const imatges = gent.map(([k, x, y], i) => {
+            const img = this.posar(k, x, y, { fonsY: y }).setAlpha(0);
             img.ombra = null;
             this.npcs['sopar_' + k] = img;
             this.tweens.add({ targets: img, alpha: 1, duration: 900, delay: 700 + i * 450, ease: 'Sine.easeInOut' });
             return img;
         });
-        // L'Ineu (que sí que camina) va a l'extrem de la taula
-        this.time.delayedCall(300, () => this.ineuVa(TAULA_SOPAR.x + 390, TAULA_SOPAR.y - 25, () => this.posarDireccio('esquerra', false), 150));
+        // L'Ineu (que sí que camina) voreja la taula per la dreta per no travessar-la i es posa al cantó dret mirant cap endins (de costat, mai d'esquena)
+        this.time.delayedCall(300, () => {
+            const destX = TAULA_SOPAR.x + 175, destY = TAULA_SOPAR.y + 20, voraX = TAULA_SOPAR.x + 265;
+            const passos = (this.ineu.y < TAULA_SOPAR.y + 5 && this.ineu.x < voraX - 10)
+                ? [
+                    c => this.ineuVa(voraX, Math.min(this.ineu.y, TAULA_SOPAR.y - 105), c, 190),
+                    c => this.ineuVa(voraX, destY, c, 190)
+                ]
+                : [];
+            passos.push(c => this.ineuVa(destX, destY, () => { this.posarDireccio('esquerra', false); c(); }, 190));
+            this.seq(passos);
+        });
+        // Pla de càmera immediat (així no talla la taula mentre arriba la gent): compensa el HUD de dalt i el quadre de text de baix
+        const reserva = 440, top = TOP_HUD + 12, lliure = (ALT - ALT_HUD) - reserva - top;
+        const zoom = Math.min(1.18, Math.max(0.8, lliure / 440));
+        const yMid = 515 - (top / 2) / zoom;
+        this.enquadrar(TAULA_SOPAR.x, yMid, zoom, 1200, null, reserva);
         this.time.delayedCall(4800, () => {
-            // Pla de càmera: el Til·ler (la cara), la taula, els comensals i l'Ineu, centrats a l'espai que deixa el quadre de text
-            this.enquadrar(560, 560, 1.0, 1200, () => this.ui().obrirDialeg(DIALEGS.tillerSoparRitual(Estat), () => { this.alliberarCamera(1200); Estat.desar(); }), 440);
+            this.ui().obrirDialeg(DIALEGS.tillerSoparRitual(Estat), () => { this.alliberarCamera(1200); Estat.desar(); });
         });
         this.sopar = { vel, taula, pastors: imatges, espelmes: [] };
     }
@@ -1122,7 +1142,7 @@ class ZonaTiller extends ZonaBase {
     encendreEspelmes(llista, fet) {
         if (!this.sopar) { fet(); return; }
         this.seq(llista.map(i => c => {
-            const x = TAULA_SOPAR.x + (i - 1) * 120, y = TAULA_SOPAR.y - 92;          // els tres llocs buits, a davant de la taula (sobre el tauler)
+            const x = TAULA_SOPAR.x + (i - 1) * 105, y = TAULA_SOPAR.y - 95;          // els tres llocs buits, sobre el tauler
             const e = this.posar('espelma', x, y, { fonsY: TAULA_SOPAR.y + 5 }).setAlpha(0);
             this.sopar.espelmes.push(e);
             this.tweens.add({ targets: e, alpha: 1, duration: 300 });
@@ -1146,11 +1166,15 @@ class ZonaTiller extends ZonaBase {
     acabarSopar() {
         if (!this.sopar) { this.posarEspelmes(); return; }
         const { vel, taula, pastors, espelmes } = this.sopar;
-        this.time.delayedCall(800, () => {
-            this.tweens.add({ targets: [vel, taula, ...pastors, ...espelmes], alpha: 0, duration: 2200, onComplete: () => { [taula, ...pastors, ...espelmes].forEach(o => o.destroy()); vel.destroy(); } });
-            this.posarEspelmes();
-        });
         this.sopar = null;
+        if (this.npcs) Object.keys(this.npcs).filter(k => k.startsWith('sopar_')).forEach(k => delete this.npcs[k]);
+        this.posarEspelmes();
+        this.tweens.add({
+            targets: [vel, taula, ...pastors, ...espelmes],
+            alpha: 0,
+            duration: 900,
+            onComplete: () => { [taula, ...pastors, ...espelmes].forEach(o => o && o.destroy()); if (vel) vel.destroy(); }
+        });
     }
 
     sincroFantasma() {
@@ -1164,8 +1188,8 @@ class ZonaTiller extends ZonaBase {
     }
 }
 
-// ---------------- LA CASETA (a l'oest del Til·ler): on viu el Jorgi de la Caseta ----------------
-// Escenari petit: en Jorgi al jardí, la seva casa (es pot entrar: només decorada) i la caseta aixecada sobre pilars
+// ---------------- LA CASETA (a l'oest del Til·ler): on viu el Gori de la Caseta ----------------
+// Escenari petit: en Gori al jardí, la seva casa (es pot entrar: només decorada) i la caseta aixecada sobre pilars
 // de fusta, amb el cofre de les joguines on hi ha la maneta.
 class ZonaGeorgi extends ZonaBase {
     constructor() {
@@ -1182,7 +1206,7 @@ class ZonaGeorgi extends ZonaBase {
         this.terra('herba', 0, 0, 1100, 800, -1100);
         this.terra('cami', 330, 500, 770, 150);            // del Til·ler (est) a la porta de la casa
 
-        // La casa d'en Jorgi (520 d'ample): la porta del mig duu a dins
+        // La casa d'en Gori (520 d'ample): la porta del mig duu a dins
         const masiaGeorgi = this.edifici('masia_georgi', 380, 480, 500, 96, 'ZonaCasaGeorgi', 'porta', { alt: 90 });
         this.portaMasia(masiaGeorgi, 380, 480, false, { cx: 0.504, w: 0.111, top: 0.567, bottom: 0.931 });          // (la porta del gràfic generat)
         this.npc('georgi_caseta', 560, 590, DIALEGS.georgiCaseta);
@@ -1239,7 +1263,7 @@ class ZonaGeorgi extends ZonaBase {
 }
 
 // ---------------- CASA D'EN GEORGI (interior) ----------------
-// Una casa de pagès endreçada i plena de vida, però buida: en Jorgi és al jardí. Només es mira.
+// Una casa de pagès endreçada i plena de vida, però buida: en Gori és al jardí. Només es mira.
 Object.assign(DIALEGS, {
     casaGeorgiEines: E => ({ pagines: [] }),
     casaGeorgiTaula: E => ({ pagines: [] }),
@@ -1249,7 +1273,7 @@ Object.assign(DIALEGS, {
 class ZonaCasaGeorgi extends ZonaBase {
     constructor() {
         super('ZonaCasaGeorgi', {
-            nom: "Masia d'en Jorgi",
+            nom: "Masia d'en Gori",
             amplada: 900,
             alcada: 700,
             colorFons: '#140e0a',
@@ -1401,7 +1425,7 @@ class ZonaCasetaJoc extends ZonaBase {
         this.posar('tamboret', 240, 360, { escala: 0.7, col: { w: 28, h: 12 } });
         this.posar('tamboret', 400, 360, { escala: 0.7, col: { w: 28, h: 12 } });
 
-        // El cofre dels joguets, amb la maneta d'en Jorgi a sota
+        // El cofre dels joguets, amb la maneta d'en Gori a sota
         const maneta = () => Estat.te('maneta') || Estat.flag('maneta');
         const cofreJ = this.posar(maneta() ? 'cofre_joguines_obert' : 'cofre_joguines', 510, 222, { col: { w: 56, h: 20 }, opac: true });       // tancat fins que se'n treu la maneta
         this.interactiu(510, 225, RADI_OBJECTE, DIALEGS.cofreManeta, { altura: 80, actiu: () => !maneta(), enTancar: () => { if (maneta()) cofreJ.setTexture('cofre_joguines_obert'); } });

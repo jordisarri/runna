@@ -33,7 +33,7 @@
    {
     "id": 5,
     "qui": "(narrador)",
-    "text": "Quan l'alba torna a incendiar el cel del Miracle, un jove monjo desperta al Monestir: l'Ineu. / El destí l'ha triat, encara que ell no ho sàpiga. El Pare Jordà l'espera a la Plaça.",
+    "text": "Quan l'alba torna a incendiar el cel del Miracle, un jove monjo desperta al Monestir: l'Ineu. / El destí l'ha triat, encara que ell no ho sàpiga. El Pare Jòrdius l'espera a la Plaça.",
     "fitxer": "js/main.js",
     "linia": 0
    }
@@ -41,7 +41,7 @@
   "zona_base::despertarCaigut": [
    {
     "id": 6,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Ineu! Què fas a terra? Respira, fill! Encara prendràs mal. Ja estàs bé?",
     "fitxer": "js/zona_base.js",
     "linia": 376
@@ -51,7 +51,7 @@
    {
     "id": 7,
     "qui": "Ineu",
-    "text": "Una altra nit de boira... i aquest fred que no marxa. El Pare Jordà em deu estar esperant a la Plaça.",
+    "text": "Una altra nit de boira... i aquest fred que no marxa. El Pare Jòrdius em deu estar esperant a la Plaça.",
     "fitxer": "js/zones/monestir.js",
     "linia": 30
    }
@@ -68,56 +68,56 @@
   "dialegs::pareJorda": [
    {
     "id": 9,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Ineu, bon dia. Que bé que hagis sortit, et buscava.",
     "fitxer": "js/dialegs.js",
     "linia": 107
    },
    {
     "id": 10,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "No et vull espantar. Fa tres nits que una boira violeta surt de sota terra, i cada nit falta un nen: l'Huri i el Fram, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el protegit de les sacerdotesses de l'Hostatgeria.",
     "fitxer": "js/dialegs.js",
     "linia": 108
    },
    {
     "id": 11,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Ningú no els ha vist marxar. Els llits són desfets, i les finestres tancades per dins. Només queda una olor de terra mullada.",
     "fitxer": "js/dialegs.js",
     "linia": 109
    },
    {
     "id": 12,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot. Ves amb compte pels camins, Ineu.",
     "fitxer": "js/dialegs.js",
     "linia": 110
    },
    {
     "id": 13,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna a qualsevol.",
     "fitxer": "js/dialegs.js",
     "linia": 121
    },
    {
     "id": 14,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és l'autèntica bona voluntat. Ajup el cap.",
     "fitxer": "js/dialegs.js",
     "linia": 122
    },
    {
     "id": 15,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "No vas sol, Ineu. T'acompanya tot el Miracle.",
     "fitxer": "js/dialegs.js",
     "linia": 124
    },
    {
     "id": 16,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "I pren això. És un medalló de pedra, amb una mà oberta tallada, que han guardat totes les generacions de priors del Miracle. Ara ha de ser teu: porta'l al Dolmen.",
     "fitxer": "js/dialegs.js",
     "linia": 125
@@ -131,49 +131,49 @@
    },
    {
     "id": 18,
-    "qui": "Pare Jordà",
-    "text": "Ineu, la gent diu que has parlat amb el Gran Til·ler. Per despertar Runna et calen tres coses: el permís de l'arbre (el seu medalló), les Paraules del Saber del Pare Alcoví i la meva benedicció.",
+    "qui": "Pare Jòrdius",
+    "text": "Ineu, la gent diu que has parlat amb el Gran Til·ler. Per despertar Runna et calen tres coses: el permís de l'arbre (el seu medalló), les Paraules del Saber del Pare Alberic i la meva benedicció.",
     "fitxer": "js/dialegs.js",
     "linia": 133
    },
    {
     "id": 19,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "[pista del pas següent de la història: vegeu la Ruta]",
     "fitxer": "js/dialegs.js",
     "linia": 134
    },
    {
     "id": 20,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Les bestioles han sortit pels camins, Ineu. Fins i tot alguns visitants, que pujaven al Miracle a fer fotos, vagaregen amb la pell verdosa i la mirada perduda: la boira els ha trastocat i no saben ni qui són. Si en veus pel Santuari o pel Cementiri, no t'espantis.",
     "fitxer": "js/dialegs.js",
     "linia": 139
    },
    {
     "id": 21,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "No són dolents, pobrets: només fes-los dormir i es despertaran sense recordar res. Quan la boira se'n vagi, tornaran a ser turistes.",
     "fitxer": "js/dialegs.js",
     "linia": 140
    },
    {
     "id": 22,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "I torna abans que es faci fosc.",
     "fitxer": "js/dialegs.js",
     "linia": 141
    },
    {
     "id": 23,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Parla amb la gent: les famílies de les cel·les, els germans, la Pianista... Algú haurà vist alguna cosa.",
     "fitxer": "js/dialegs.js",
     "linia": 146
    },
    {
     "id": 24,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Si et perds, les Venerables Sàvies de les cel·les sempre tenen un bon consell.",
     "fitxer": "js/dialegs.js",
     "linia": 147
@@ -489,7 +489,7 @@
    {
     "id": 67,
     "qui": "Pare Nadiel",
-    "text": "El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se'ls mengi. Si el Pare Alcoví els busca, ja era hora que algú els llegís!",
+    "text": "El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se'ls mengi. Si el Pare Alberic els busca, ja era hora que algú els llegís!",
     "fitxer": "js/dialegs.js",
     "linia": 336
    },
@@ -1444,7 +1444,7 @@
    {
     "id": 194,
     "qui": "El Gran Til·ler",
-    "text": "Porta l'escudella de la Meus, les flors d'Isílder i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís.",
+    "text": "Porta l'escudella de la Nelis, les flors d'Isílder i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís.",
     "fitxer": "js/dialegs.js",
     "linia": 1321
    },
@@ -1477,7 +1477,7 @@
   "dialegs::tillerSoparRitual": [
    {
     "id": 198,
-    "qui": "Meus",
+    "qui": "Nelis",
     "text": "Aquest any l'escudella té gust de poc, fill: hi falta l'alegria de tres nens. Que ens ho perdonin els tres, allà on siguin.",
     "fitxer": "js/dialegs.js",
     "linia": 1342
@@ -1544,21 +1544,21 @@
   "dialegs::meus": [
    {
     "id": 207,
-    "qui": "Meus",
+    "qui": "Nelis",
     "text": "El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb tres nens que falten...",
     "fitxer": "js/dialegs.js",
     "linia": 532
    },
    {
     "id": 208,
-    "qui": "Meus",
+    "qui": "Nelis",
     "text": "...Però el Til·ler té raó, maleït sigui. No es pot deixar de fer el que s'ha fet sempre, ni quan el cor fa mal. Pren l'escudella, i no la vessis!",
     "fitxer": "js/dialegs.js",
     "linia": 533
    },
    {
     "id": 209,
-    "qui": "Meus",
+    "qui": "Nelis",
     "text": "És l'escudella de cada any, la de les nostres àvies, però enguany té un gust que no voldria explicar. Tu tingues-ne cura de portar-la sencera.",
     "fitxer": "js/dialegs.js",
     "linia": 534
@@ -1572,7 +1572,7 @@
    },
    {
     "id": 211,
-    "qui": "Meus",
+    "qui": "Nelis",
     "text": "Ineu, fill, no t'hi quedis plantat! L'Huri i el Fram dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!",
     "fitxer": "js/dialegs.js",
     "linia": 542
@@ -1580,27 +1580,27 @@
    {
     "id": 212,
     "qui": "Senyor Llaminer",
-    "text": "Meus, deixa'l respirar...",
+    "text": "Nelis, deixa'l respirar...",
     "fitxer": "js/dialegs.js",
     "linia": 543
    },
    {
     "id": 213,
-    "qui": "Meus",
+    "qui": "Nelis",
     "text": "Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls.",
     "fitxer": "js/dialegs.js",
     "linia": 544
    },
    {
     "id": 214,
-    "qui": "Meus",
+    "qui": "Nelis",
     "text": "Ja els tinc a casa, i ja els he renyat tres vegades. Dues més i potser els deixo sortir a jugar.",
     "fitxer": "js/dialegs.js",
     "linia": 1804
    },
    {
     "id": 215,
-    "qui": "Meus",
+    "qui": "Nelis",
     "text": "Gràcies, Ineu. No ho diré gaires cops, així que escolta'm bé: gràcies.",
     "fitxer": "js/dialegs.js",
     "linia": 1805
@@ -1610,7 +1610,7 @@
    {
     "id": 216,
     "qui": "Senyor Llaminer",
-    "text": "Sí, Meus. No, Meus. Ara vinc, Meus.",
+    "text": "Sí, Nelis. No, Nelis. Ara vinc, Nelis.",
     "fitxer": "js/dialegs.js",
     "linia": 552
    },
@@ -1624,7 +1624,7 @@
    {
     "id": 218,
     "qui": "Senyor Llaminer",
-    "text": "Des que han tornat els nens, la Meus canta mentre renta. Desafina, però canta.",
+    "text": "Des que han tornat els nens, la Nelis canta mentre renta. Desafina, però canta.",
     "fitxer": "js/dialegs.js",
     "linia": 1807
    },
@@ -2236,7 +2236,7 @@
    {
     "id": 298,
     "qui": "Ineu",
-    "text": "L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.",
+    "text": "L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alberic sabrà llegir-los junts.",
     "fitxer": "js/dialegs.js",
     "linia": 424
    }
@@ -2305,7 +2305,7 @@
    {
     "id": 307,
     "qui": "Monjo",
-    "text": "Jo només puc dir-te les paraules; el Pare Alcoví sabrà entendre-les. Quan les cridis davant l'espasa, la meva paraula farà que et reconegui.",
+    "text": "Jo només puc dir-te les paraules; el Pare Alberic sabrà entendre-les. Quan les cridis davant l'espasa, la meva paraula farà que et reconegui.",
     "fitxer": "js/dialegs.js",
     "linia": 814
    },
@@ -2328,13 +2328,13 @@
    {
     "id": 310,
     "qui": "Ineu",
-    "text": "Pare Alcoví, a la placa del Dolmen hi diu que només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. Què vol dir?",
+    "text": "Pare Alberic, a la placa del Dolmen hi diu que només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. Què vol dir?",
     "fitxer": "js/dialegs.js",
     "linia": 692
    },
    {
     "id": 311,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Això ho tinc a la Crònica, fill. Deixa'm que t'ho llegeixi.",
     "fitxer": "js/dialegs.js",
     "linia": 693
@@ -2348,35 +2348,35 @@
    },
    {
     "id": 313,
-    "qui": "Pare Alcoví",
-    "text": "L'arbre sagrat és el Gran Til·ler, el de les cel·les: el seu medalló és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jordà, el prior.",
+    "qui": "Pare Alberic",
+    "text": "L'arbre sagrat és el Gran Til·ler, el de les cel·les: el seu medalló és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jòrdius, el prior.",
     "fitxer": "js/dialegs.js",
     "linia": 697
    },
    {
     "id": 314,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "I ara, el que et toca: [text calculat pel joc: pas]",
     "fitxer": "js/dialegs.js",
     "linia": 699
    },
    {
     "id": 709,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "I quan tinguis Runna, torna a veure'm: hi ha pàgines de la Crònica que encara no et puc llegir.",
     "fitxer": "js/dialegs.js",
     "linia": 700
    },
    {
     "id": 685,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "La tomba, fill. Mentre l'esquerda del Cementiri treu boira no et puc llegir la resta de la Crònica. Colpeja-la amb Runna i torna.",
     "fitxer": "js/dialegs.js",
     "linia": 706
    },
    {
     "id": 710,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "La tomba, fill. Un segell no aguanta si el temps no el sosté: fes que el rellotge de la torre torni a caminar i colpeja l'esquerda del Cementiri amb Runna. Mentre treu boira no et puc llegir la resta de la Crònica.",
     "fitxer": "js/dialegs.js",
     "linia": 706
@@ -2384,13 +2384,13 @@
    {
     "id": 686,
     "qui": "Ineu",
-    "text": "Pare Alcoví, ja tinc Runna. Ara, què més diu la Crònica?",
+    "text": "Pare Alberic, ja tinc Runna. Ara, què més diu la Crònica?",
     "fitxer": "js/dialegs.js",
     "linia": 712
    },
    {
     "id": 687,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Deixa'm mirar-ho un cop més.",
     "fitxer": "js/dialegs.js",
     "linia": 713
@@ -2404,42 +2404,42 @@
    },
    {
     "id": 711,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Un moment, fill. Fixa't en una cosa: la tomba es va esquerdar a un quart de quatre. És l'hora exacta a què es va aturar el rellotge de la torre.",
     "fitxer": "js/dialegs.js",
     "linia": 717
    },
    {
     "id": 712,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "I ja l'has fet caminar: bon senyal. Un segell només aguanta si el temps el sosté.",
     "fitxer": "js/dialegs.js",
     "linia": 718
    },
    {
     "id": 713,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Un segell no aguanta si el temps no el sosté. Primer cal que el rellotge torni a caminar: la clau de la porta del retaule la guarda la Carry, a Nostra Senyora.",
     "fitxer": "js/dialegs.js",
     "linia": 718
    },
    {
     "id": 318,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "La tomba és al Cementiri, darrere del Santuari i el Monestir, i treu boira per l'esquerda. Fins que no sigui tancada no et puc llegir la resta: la boira esborra les paraules que et caldran.",
     "fitxer": "js/dialegs.js",
     "linia": 721
    },
    {
     "id": 688,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Colpeja l'esquerda amb Runna, fill, i torna a veure'm.",
     "fitxer": "js/dialegs.js",
     "linia": 722
    },
    {
     "id": 714,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Quan el rellotge camini, colpeja l'esquerda amb Runna, fill, i torna a veure'm.",
     "fitxer": "js/dialegs.js",
     "linia": 722
@@ -2447,62 +2447,62 @@
    {
     "id": 689,
     "qui": "Ineu",
-    "text": "Pare Alcoví, he segellat la tomba amb Runna: la boira ja no puja.",
+    "text": "Pare Alberic, he segellat la tomba amb Runna: la boira ja no puja.",
     "fitxer": "js/dialegs.js",
     "linia": 730
    },
    {
     "id": 690,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Ho has fet bé, fill. Amb la llum de Runna van tancar la porta, i amb la mateixa llum, la tomba. Ara ja et puc dir la resta.",
     "fitxer": "js/dialegs.js",
     "linia": 731
    },
    {
     "id": 674,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "I una cosa més, fill, que no és de la Crònica sinó d'un amic. Al Pare Xèvius, el vigilant de la porta de les Gírgoles, el conec de fa quaranta anys: no és dolent, sinó escarmentat. Fa trenta anys l'Aleu el va enganyar amb bones paraules, i des d'aleshores no es fia de ningú. Entén-lo, i no t'ho prenguis a mal.",
     "fitxer": "js/dialegs.js",
     "linia": 732
    },
    {
     "id": 675,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "No et deixarà passar sense una prova de bona voluntat, i res no el convenç com la Carta del Cortiner, que reposa al tronc del Pi dels Tres Cants. Hauràs de despertar el pi amb els tres cants: Aurora, Vespres i Miracle. Fes-ho abans d'anar a la porta, que després no hi ha manera de tornar enrere.",
     "fitxer": "js/dialegs.js",
     "linia": 733
    },
    {
     "id": 673,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Francí t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat.",
     "fitxer": "js/dialegs.js",
     "linia": 734
    },
    {
     "id": 319,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Has parlat amb l'ombra, oi? Fa temps que ho sospitava. A la Crònica hi ha un marge que no vaig saber llegir: una paraula esborrada, de la mateixa mà que va escriure els fragments.",
     "fitxer": "js/dialegs.js",
     "linia": 742
    },
    {
     "id": 320,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Amb la paraula que t'ha donat, ara ho entenc. «La foscor tem la llum, però més encara el riure.» Aquestes són les paraules que desperten Runna, fill: no és un conjur, és una veritat. Digues-les davant l'espasa, senceres i amb tot el cor.",
     "fitxer": "js/dialegs.js",
     "linia": 743
    },
    {
     "id": 321,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "I una cosa més, fill. Fa anys, a la biblioteca, vaig trobar un compartiment secret dins el llibre més antic de tots, i hi havia això: un medalló de pedra amb un llibre obert tallat. Té centenars d'anys.",
     "fitxer": "js/dialegs.js",
     "linia": 744
    },
    {
     "id": 322,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "No sabia per a què servia. Ara sí: porta'l a la placa del Dolmen, i guarda les paraules dins teu per al moment de dir-les.",
     "fitxer": "js/dialegs.js",
     "linia": 745
@@ -2516,21 +2516,21 @@
    },
    {
     "id": 324,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Ja saps les paraules, fill. Ara només cal que arribi el dia de cridar-les.",
     "fitxer": "js/dialegs.js",
     "linia": 752
    },
    {
     "id": 325,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Els dos fragments expliquen el mateix, fill: algú vigila el segell des de fa segles. Ves a les Runes i no tinguis por de l'ombra. […]",
     "fitxer": "js/dialegs.js",
     "linia": 752
    },
    {
     "id": 326,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Has trobat els dos fragments! Deixa'm llegir-los... Sí. Ho explica la Crònica que guardo a la biblioteca: un monjo va segellar la foscor amb la llum de l'espasa Runna.",
     "fitxer": "js/dialegs.js",
     "linia": 757
@@ -2544,21 +2544,21 @@
    },
    {
     "id": 328,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "L'ombra del monjo... No fa mal a ningú, Ineu. Crec que és el monjo que va segellar la foscor amb la llum de Runna. Ves a les Runes, passat el Pati del Celler: és sobre el mur de l'església inacabada. Parla-hi.",
     "fitxer": "js/dialegs.js",
     "linia": 761
    },
    {
     "id": 329,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Ineu, fill. Aquesta boira no és natural. Les boires d'aquí baixen de les muntanyes; aquesta puja de sota terra.",
     "fitxer": "js/dialegs.js",
     "linia": 768
    },
    {
     "id": 330,
-    "qui": "Pare Alcoví",
+    "qui": "Pare Alberic",
     "text": "Diuen que cada nit apareix l'ombra d'un monjo a les Runes. Hi ha dos fragments d'una crònica antiga escampats pel Santuari: un a les Runes i un altre al sagrari de l'església. Porta-me'ls i els llegirem junts.",
     "fitxer": "js/dialegs.js",
     "linia": 769
@@ -3067,7 +3067,7 @@
    {
     "id": 395,
     "qui": "Ineu",
-    "text": "(El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alcoví deu saber-ho: ho tindrà escrit a la Crònica.)",
+    "text": "(El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alberic deu saber-ho: ho tindrà escrit a la Crònica.)",
     "fitxer": "js/dialegs.js",
     "linia": 1614
    },
@@ -3403,7 +3403,7 @@
    {
     "id": 441,
     "qui": "Mandu",
-    "text": "La Meus diu que la boira se l'ha endut. Però jo li vaig dir que no se n'anés! Li ho vaig dir! I ell se n'ha anat igualment! PER QUÈ NO TORNA?!",
+    "text": "La Nelis diu que la boira se l'ha endut. Però jo li vaig dir que no se n'anés! Li ho vaig dir! I ell se n'ha anat igualment! PER QUÈ NO TORNA?!",
     "fitxer": "js/dialegs.js",
     "linia": 1422
    },
@@ -3555,15 +3555,15 @@
   "zones/casa::georgiCaseta": [
    {
     "id": 461,
-    "qui": "Jorgi",
+    "qui": "Gori",
     "text": "Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes.",
     "fitxer": "js/zones/casa.js",
     "linia": 80
    },
    {
     "id": 462,
-    "qui": "Jorgi",
-    "text": "Ei, monjo! Sóc en Jorgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.",
+    "qui": "Gori",
+    "text": "Ei, monjo! Sóc en Gori de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.",
     "fitxer": "js/zones/casa.js",
     "linia": 85
    },
@@ -3576,49 +3576,49 @@
    },
    {
     "id": 464,
-    "qui": "Jorgi",
+    "qui": "Gori",
     "text": "Doncs ja saps on trobar-me si algun dia et cal un cop de mà.",
     "fitxer": "js/zones/casa.js",
     "linia": 87
    },
    {
     "id": 465,
-    "qui": "Jorgi",
+    "qui": "Gori",
     "text": "La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!",
     "fitxer": "js/zones/casa.js",
     "linia": 92
    },
    {
     "id": 466,
-    "qui": "Jorgi",
-    "text": "Ei, monjo! Sóc en Jorgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.",
+    "qui": "Gori",
+    "text": "Ei, monjo! Sóc en Gori de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.",
     "fitxer": "js/zones/casa.js",
     "linia": 96
    },
    {
     "id": 467,
     "qui": "Ineu",
-    "text": "Jorgi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar.",
+    "text": "Gori, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar.",
     "fitxer": "js/zones/casa.js",
     "linia": 97
    },
    {
     "id": 468,
-    "qui": "Jorgi",
+    "qui": "Gori",
     "text": "Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda.",
     "fitxer": "js/zones/casa.js",
     "linia": 98
    },
    {
     "id": 469,
-    "qui": "Jorgi",
+    "qui": "Gori",
     "text": "Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!",
     "fitxer": "js/zones/casa.js",
     "linia": 99
    },
    {
     "id": 470,
-    "qui": "Jorgi",
+    "qui": "Gori",
     "text": "Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la.",
     "fitxer": "js/zones/casa.js",
     "linia": 100
@@ -3665,7 +3665,7 @@
    {
     "id": 475,
     "qui": "Ineu",
-    "text": "No és meva... Millor preguntar a en Jorgi abans d'agafar-la.",
+    "text": "No és meva... Millor preguntar a en Gori abans d'agafar-la.",
     "fitxer": "js/dialegs.js",
     "linia": 1745
    },
@@ -3742,7 +3742,7 @@
    {
     "id": 662,
     "qui": "Ineu",
-    "text": "En Jorgi de la Caseta segur que me'n pot deixar una, és un expert en tot tipus d'eines.",
+    "text": "En Gori de la Caseta segur que me'n pot deixar una, és un expert en tot tipus d'eines.",
     "fitxer": "js/zones/casa.js",
     "linia": 22
    }
@@ -4346,7 +4346,7 @@
    {
     "id": 679,
     "qui": "Ineu",
-    "text": "(Quina prova se li pot demostrar? Potser el Pare Alcoví, a la Biblioteca, ho sap: ho deu tenir a la Crònica.)",
+    "text": "(Quina prova se li pot demostrar? Potser el Pare Alberic, a la Biblioteca, ho sap: ho deu tenir a la Crònica.)",
     "fitxer": "js/dialegs.js",
     "linia": 676
    },
@@ -4397,14 +4397,14 @@
    {
     "id": 667,
     "qui": "Ineu",
-    "text": "(Tinc la clau, el Cant del Miracle i l'Empara: les dues proves de què parlava la Crònica del Pare Alcoví. Endavant.)",
+    "text": "(Tinc la clau, el Cant del Miracle i l'Empara: les dues proves de què parlava la Crònica del Pare Alberic. Endavant.)",
     "fitxer": "js/zones/taverna.js",
     "linia": 142
    },
    {
     "id": 668,
     "qui": "Ineu",
-    "text": "(Tinc la clau petita, però la Crònica del Pare Alcoví deia que, per baixar, em cal passar dues proves. Encara em falta  i  […].)",
+    "text": "(Tinc la clau petita, però la Crònica del Pare Alberic deia que, per baixar, em cal passar dues proves. Encara em falta  i  […].)",
     "fitxer": "js/zones/taverna.js",
     "linia": 149
    },
@@ -4927,34 +4927,34 @@
    {
     "id": 636,
     "qui": "Ineu",
-    "text": "Pare Jordà... el Germà Aleu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar.",
+    "text": "Pare Jòrdius... el Germà Aleu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar.",
     "fitxer": "js/zones/esglesia.js",
     "linia": 377
    },
    {
     "id": 637,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "L'Aleu... dins la gàbia?",
     "fitxer": "js/zones/esglesia.js",
     "linia": 378
    },
    {
     "id": 638,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller.",
     "fitxer": "js/zones/esglesia.js",
     "linia": 380
    },
    {
     "id": 639,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més.",
     "fitxer": "js/zones/esglesia.js",
     "linia": 381
    },
    {
     "id": 640,
-    "qui": "Pare Jordà",
+    "qui": "Pare Jòrdius",
     "text": "Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill.",
     "fitxer": "js/zones/esglesia.js",
     "linia": 383
@@ -5168,52 +5168,52 @@
   },
   "666": {
    "conversa": "",
-   "qui": "Pare Alcoví",
+   "qui": "Pare Alberic",
    "text": "Les sacerdotesses són a l'Hostatgeria, i els guants del Germà Francí t'hi ajudaran. No baixis sense les tres: l'avenc no perdona."
   },
   "665": {
    "conversa": "",
-   "qui": "Pare Alcoví",
+   "qui": "Pare Alberic",
    "text": "I una cosa més que diu el marge de la Crònica, per quan baixis a la porta de ferro de la Taverna. Per obrir-la calen tres coses: la clau petita del vigilant, el Cant del Miracle que els ocells van perdre, i l'Empara de les sacerdotesses de l'Hostatgeria, que protegeix de l'alè de la boira. Les sacerdotesses són a l'Hostatgeria; els guants del Germà Francí t'hi ajudaran."
   },
   "669": {
    "conversa": "",
-   "qui": "Pare Alcoví",
+   "qui": "Pare Alberic",
    "text": "I a dins, abans de la gàbia, hi ha dues proves. La primera és la Sala de les Gírgoles: cinc mates lluminoses que només s'encenen totes alhora si trobes l'ordre just, perquè cada una desperta les veïnes. No hi cal res més que el seny."
   },
   "670": {
    "conversa": "",
-   "qui": "Pare Alcoví",
+   "qui": "Pare Alberic",
    "text": "La segona és el passadís de tortura: un rastell rovellat que només els Guants de Poder fan pujar, i al fons un mur d'esbarzers negres que només Runna talla. Després hi ha la boira verinosa, que només l'Empara travessa, i un avenc amb un pont de blocs que dormen: els desperta el cant que les pedres entenen, el de Vespres."
   },
   "671": {
    "conversa": "",
-   "qui": "Pare Alcoví",
+   "qui": "Pare Alberic",
    "text": "Al capdavall hi ha la gàbia, i els seus barrots només escolten el Cant del Miracle. Vés-hi ben preparat, fill: dins no hi ha camí de tornada fàcil."
   },
   "672": {
    "conversa": "",
-   "qui": "Pare Alcoví",
+   "qui": "Pare Alberic",
    "text": "I una cosa més que diu el marge de la Crònica, per quan baixis a la porta de ferro de la Taverna. El pany és petit, i el vigilant en devia deixar la clau a algú que s'escapa de nit. Però un cop oberta, dins hi ha dues proves, fill."
   },
   "683": {
    "conversa": "",
    "qui": "Ineu",
-   "text": "Pare Alcoví, he baixat a la cripta de la Casa Gran i he trobat una clau de ferro. I amb Runna he segellat la tomba esquerdada del Cementiri: la boira ja no puja."
+   "text": "Pare Alberic, he baixat a la cripta de la Casa Gran i he trobat una clau de ferro. I amb Runna he segellat la tomba esquerdada del Cementiri: la boira ja no puja."
   },
   "684": {
    "conversa": "",
-   "qui": "Pare Alcoví",
+   "qui": "Pare Alberic",
    "text": "Ho has fet bé, fill. Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba."
   },
   "315": {
    "conversa": "",
    "qui": "Ineu",
-   "text": "Pare Alcoví, he baixat a la cripta de la Casa Gran. Hi havia una clau de ferro, i la tomba dels monjos no para de treure boira."
+   "text": "Pare Alberic, he baixat a la cripta de la Casa Gran. Hi havia una clau de ferro, i la tomba dels monjos no para de treure boira."
   },
   "316": {
    "conversa": "",
-   "qui": "Pare Alcoví",
+   "qui": "Pare Alberic",
    "text": "Una clau de ferro, i una tomba que no calla... Deixa'm mirar la Crònica."
   },
   "50": {

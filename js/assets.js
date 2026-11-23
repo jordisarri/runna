@@ -66,7 +66,7 @@ const CATALEG = [
     { key: 'pi_tres_cants', file: 'assets/natura/pi_tres_cants.webp', amplada: 340, provisional: (c, w) => lienc(c, w, Math.round(w * 1.53), (ctx, W, H) => pintarPiTresCants(ctx, W, H)) },   // el Pi dels Tres Cants (js/zones/bosc_pi.js); prompt a docs/PROMPTS_GRAFICS.md
     { key: 'pi',           file: 'assets/natura/pi.webp',           amplada: 230, provisional: (c, w) => dibuixarPi(c, w) },
     { key: 'pi_pinyer',    file: 'assets/natura/pi_pinyer.webp',    amplada: 470, provisional: (c, w) => dibuixarPiPinyer(c, w) },
-    { key: 'caseta_joc',   file: 'assets/edificis/caseta_joc.webp',   amplada: 260, provisional: (c, w) => dibuixarCasetaJoc(c, w) },          // la caseta de joc del jardí d'en Jorgi (art/edificis/caseta_joc.png)
+    { key: 'caseta_joc',   file: 'assets/edificis/caseta_joc.webp',   amplada: 260, provisional: (c, w) => dibuixarCasetaJoc(c, w) },          // la caseta de joc del jardí d'en Gori (art/edificis/caseta_joc.png)
     { key: 'xiprer',       file: 'assets/natura/xiprer.webp',       amplada: 80,  provisional: (c, w) => dibuixarXiprer(c, w) },
     { key: 'retaule',      file: 'assets/edificis/retaule_tancat.webp', amplada: 800, provisional: (c, w) => dibuixarRetauleBarroc(c, w) },
 
@@ -144,7 +144,7 @@ const CATALEG = [
     { key: 'roca_mobil',     file: 'assets/natura/roca_mobil.webp',  amplada: 100, cru: true },         // roca grossa de fileres de pedra: les que s'empenyen (pedraMobil i la pedra del forat de les Runes)
     { key: 'basto_ocellaire', file: 'assets/armes/basto_ocellaire.webp', amplada: 184, cru: true },      // (art/armes/basto_ocellaire.png, sense flames: les posa el joc quan gira de pressa; la versió amb flames és basto_ocellaire_flames.png)
     { key: 'masia',          file: 'assets/edificis/masia_cirosa.webp',          amplada: 520, provisional: (c, w) => dibuixarMasia(c, w) },          // la masia dels pastors de la Cirosa (art/edificis/masia_cirosa.png)
-    { key: 'masia_georgi',   file: 'assets/edificis/masia_georgi.webp',          amplada: 520, provisional: (c, w) => dibuixarMasiaGeorgi(c, w) },          // la masia d'en Jorgi (la de la Cirosa és 'masia')
+    { key: 'masia_georgi',   file: 'assets/edificis/masia_georgi.webp',          amplada: 520, provisional: (c, w) => dibuixarMasiaGeorgi(c, w) },          // la masia d'en Gori (la de la Cirosa és 'masia')
     { key: 'pastor_a',       file: 'assets/personatges/pastor_a.webp',       amplada: 93.8, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#6a5a48', cabell: '#8a7a60', alt: 0.9, ample: 0.95, calb: true }) },
     { key: 'pastor_b',       file: 'assets/personatges/pastor_b.webp',       amplada: 88.5, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a4a58', cabell: '#7a7a7a', dona: true, alt: 0.88, ample: 0.95 }) },
     { key: 'pastor_vell',    file: 'assets/personatges/pastor_vell.webp',    amplada: 100.1, cru: true, provisional: (c, w) => dibuixarPersona(c, w, { roba: '#5a5040', cabell: '#d0d0d0', barba: '#d0d0d0', alt: 0.86, bastoCoix: true }) },
@@ -361,7 +361,7 @@ const Grafics = {
         scene.load.spritesheet('venerables_camina', 'assets/personatges/venerables_camina.webp', { frameWidth: 266, frameHeight: 267 });       // (fer_camina_npc.py: les dues velletes agafades del braç)
         scene.load.spritesheet('mandu_camina', 'assets/personatges/mandu_camina.webp', { frameWidth: 134, frameHeight: 236 });
         scene.load.spritesheet('ineu_beu_llet', 'assets/ineu/llet/beu_llet.webp?v=6', { frameWidth: 512, frameHeight: 512 });          // l'Ineu de perfil (mirant a la dreta) bevent un got de llet: 4 x 4 fotogrames d'AutoSprite (eines/fer_beu_llet_ineu.py); es gira com un mirall segons on sigui l'Eve (ZonaBase.beureLlet)
-        scene.load.spritesheet('ineu_desperta', 'assets/personatges/ineu_desperta.webp', { frameWidth: 342, frameHeight: 342 });          // l'Ineu a terra i el Pare Jordà que l'acaricia: 4 x 2 fotogrames fets a mà (vegeu despertarCaigut)
+        scene.load.spritesheet('ineu_desperta', 'assets/personatges/ineu_desperta.webp', { frameWidth: 342, frameHeight: 342 });          // l'Ineu a terra i el Pare Jòrdius que l'acaricia: 4 x 2 fotogrames fets a mà (vegeu despertarCaigut)
         scene.load.spritesheet('nena_trenes_camina', 'assets/personatges/nena_trenes_camina.webp', { frameWidth: 225, frameHeight: 282 });       // la Nena de les Trenes corrent cap a la mare (AutoSprite iso_run_right; eines/fer_camina_npc.py)
         DIRS_INEU.forEach(dir => {
             const mida = { frameWidth: SPRITE_INEU.ample, frameHeight: SPRITE_INEU.alt };
@@ -1392,7 +1392,7 @@ const Grafics = {
         crea('parquet_biblio', 64, 64, pintarParquetBiblio);
         crea('paret_biblio', 984, 214, pintarParetBiblio);
         crea('lloses_rebedor', 128, 128, pintarLosesRebedor);
-        // Mobles de cel·la (js/dibuixos_cela.js), que fa servir la casa d'en Jorgi
+        // Mobles de cel·la (js/dibuixos_cela.js), que fa servir la casa d'en Gori
         crea('llar_cela', 200, 170, pintarLlarCela);
         crea('llit_cela', 120, 180, pintarLlitCela);
         crea('taula_cela', 120, 90, pintarTaulaCela);
@@ -1410,7 +1410,7 @@ const Grafics = {
         crea('enclusa_taller', 120, 170, pintarEnclusaTaller);
         crea('trastos_taller', 150, 90, pintarTrastosTaller);
         crea('catifa_taller', 240, 120, pintarCatifaTaller);
-        // Casa d'en Jorgi i la caseta de joc (js/dibuixos_georgi.js)
+        // Casa d'en Gori i la caseta de joc (js/dibuixos_georgi.js)
         crea('paret_masia', 780, 200, pintarParetMasia);
         crea('tauler_eines', 270, 72, pintarTaulerEines);
         crea('penjolls', 96, 120, pintarPenjolls);

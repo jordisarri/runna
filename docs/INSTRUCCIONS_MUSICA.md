@@ -30,7 +30,7 @@ Les Cel·les comparteixen `poble`; la resta de peces que ja hi ha: `titol` (tít
 ## El leitmotiv (la fanfàrria d'`intro_runna`)
 
 Do Mi Mi Mi Fa Sol Do · Do Re Mi Fa Fa Mi Re Do Re (notes i ritme a `art/musica/motiu/`; `Sfx.FANFARRA` a `js/sfx.js`). A més de sonar a les cançons, el joc el toca en moments curts:
-- **Quan l'Ineu cau** i el Pare Jordà el recull: el principi, lent i suau, amb flauta.
+- **Quan l'Ineu cau** i el Pare Jòrdius el recull: el principi, lent i suau, amb flauta.
 - **El cofre de joguines de la Caseta**: una capsa de música hi toca el principi abans de treure'n la Maneta.
 - **L'orgue de l'epíleg**: després del Cant del Miracle, la fanfàrria sencera amb els acords de l'original.
 - **La Pianista, després del final**: si hi parles, la toca a l'orgue.

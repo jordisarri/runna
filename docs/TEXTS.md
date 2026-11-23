@@ -20,7 +20,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[4] (narrador):** I cada nit, la boira reclama un nen. / Un llit buit a Sant Benet, i després un altre. / I aquesta nit maleïda... un tercer bressol s'ha quedat fred.
 
-**[5] (narrador):** Quan l'alba torna a incendiar el cel del Miracle, un jove monjo desperta al Monestir: l'Ineu. / El destí l'ha triat, encara que ell no ho sàpiga. El Pare Jordà l'espera a la Plaça.
+**[5] (narrador):** Quan l'alba torna a incendiar el cel del Miracle, un jove monjo desperta al Monestir: l'Ineu. / El destí l'ha triat, encara que ell no ho sàpiga. El Pare Jòrdius l'espera a la Plaça.
 
 ---
 
@@ -28,11 +28,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### despertarCaigut  <sub>(js/zona_base.js:376)</sub>
 
-**[6] Pare Jordà:** Ineu! Què fas a terra? Respira, fill! Encara prendràs mal. Ja estàs bé?
+**[6] Pare Jòrdius:** Ineu! Què fas a terra? Respira, fill! Encara prendràs mal. Ja estàs bé?
 
 ### enEntrar  <sub>(js/zones/monestir.js:30)</sub>
 
-**[7] Ineu:** Una altra nit de boira... i aquest fred que no marxa. El Pare Jordà em deu estar esperant a la Plaça.
+**[7] Ineu:** Una altra nit de boira... i aquest fred que no marxa. El Pare Jòrdius em deu estar esperant a la Plaça.
 
 ### construir  <sub>(js/zones/monestir.js:65)</sub>
 
@@ -40,47 +40,47 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### pareJorda  <sub>(js/dialegs.js:107)</sub>
 
-*Si: encara no ha parlat per primer cop amb el Pare Jordà (l'encàrrec inicial)*
+*Si: encara no ha parlat per primer cop amb el Pare Jòrdius (l'encàrrec inicial)*
 
-**[9] Pare Jordà:** Ineu, bon dia. Que bé que hagis sortit, et buscava.
+**[9] Pare Jòrdius:** Ineu, bon dia. Que bé que hagis sortit, et buscava.
 
-**[10] Pare Jordà:** No et vull espantar. Fa tres nits que una boira violeta surt de sota terra, i cada nit falta un nen: l'Huri i el Fram, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el protegit de les sacerdotesses de l'Hostatgeria.
+**[10] Pare Jòrdius:** No et vull espantar. Fa tres nits que una boira violeta surt de sota terra, i cada nit falta un nen: l'Huri i el Fram, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el protegit de les sacerdotesses de l'Hostatgeria.
 
-**[11] Pare Jordà:** Ningú no els ha vist marxar. Els llits són desfets, i les finestres tancades per dins. Només queda una olor de terra mullada.
+**[11] Pare Jòrdius:** Ningú no els ha vist marxar. Els llits són desfets, i les finestres tancades per dins. Només queda una olor de terra mullada.
 
-**[12] Pare Jordà:** Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot. Ves amb compte pels camins, Ineu.
+**[12] Pare Jòrdius:** Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot. Ves amb compte pels camins, Ineu.
 
 *Si: té la fulla del Til·ler i encara no ha rebut la benedicció del prior*
 
-**[13] Pare Jordà:** Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna a qualsevol.
+**[13] Pare Jòrdius:** Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna a qualsevol.
 
-**[14] Pare Jordà:** Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és l'autèntica bona voluntat. Ajup el cap.
+**[14] Pare Jòrdius:** Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és l'autèntica bona voluntat. Ajup el cap.
 
-**[15] Pare Jordà:** No vas sol, Ineu. T'acompanya tot el Miracle.
+**[15] Pare Jòrdius:** No vas sol, Ineu. T'acompanya tot el Miracle.
 
-**[16] Pare Jordà:** I pren això. És un medalló de pedra, amb una mà oberta tallada, que han guardat totes les generacions de priors del Miracle. Ara ha de ser teu: porta'l al Dolmen.
+**[16] Pare Jòrdius:** I pren això. És un medalló de pedra, amb una mà oberta tallada, que han guardat totes les generacions de priors del Miracle. Ara ha de ser teu: porta'l al Dolmen.
 
 **[17]** ★ Has obtingut el MEDALLÓ DE LA BENEDICCIÓ!
 
 *Si: porta el bastó del Til·ler i encara no ha aconseguit Runna*
 
-**[18] Pare Jordà:** Ineu, la gent diu que has parlat amb el Gran Til·ler. Per despertar Runna et calen tres coses: el permís de l'arbre (el seu medalló), les Paraules del Saber del Pare Alcoví i la meva benedicció.
+**[18] Pare Jòrdius:** Ineu, la gent diu que has parlat amb el Gran Til·ler. Per despertar Runna et calen tres coses: el permís de l'arbre (el seu medalló), les Paraules del Saber del Pare Alberic i la meva benedicció.
 
-**[19] Pare Jordà:** [pista del pas següent de la història: vegeu la Ruta]
+**[19] Pare Jòrdius:** [pista del pas següent de la història: vegeu la Ruta]
 
 *Si: (depèn d'un càlcul del joc)*
 
-**[20] Pare Jordà:** Les bestioles han sortit pels camins, Ineu. Fins i tot alguns visitants, que pujaven al Miracle a fer fotos, vagaregen amb la pell verdosa i la mirada perduda: la boira els ha trastocat i no saben ni qui són. Si en veus pel Santuari o pel Cementiri, no t'espantis.
+**[20] Pare Jòrdius:** Les bestioles han sortit pels camins, Ineu. Fins i tot alguns visitants, que pujaven al Miracle a fer fotos, vagaregen amb la pell verdosa i la mirada perduda: la boira els ha trastocat i no saben ni qui són. Si en veus pel Santuari o pel Cementiri, no t'espantis.
 
-**[21] Pare Jordà:** No són dolents, pobrets: només fes-los dormir i es despertaran sense recordar res. Quan la boira se'n vagi, tornaran a ser turistes.
+**[21] Pare Jòrdius:** No són dolents, pobrets: només fes-los dormir i es despertaran sense recordar res. Quan la boira se'n vagi, tornaran a ser turistes.
 
-**[22] Pare Jordà:** I torna abans que es faci fosc.
+**[22] Pare Jòrdius:** I torna abans que es faci fosc.
 
 *Altrament (per defecte):*
 
-**[23] Pare Jordà:** Parla amb la gent: les famílies de les cel·les, els germans, la Pianista... Algú haurà vist alguna cosa.
+**[23] Pare Jòrdius:** Parla amb la gent: les famílies de les cel·les, els germans, la Pianista... Algú haurà vist alguna cosa.
 
-**[24] Pare Jordà:** Si et perds, les Venerables Sàvies de les cel·les sempre tenen un bon consell.
+**[24] Pare Jòrdius:** Si et perds, les Venerables Sàvies de les cel·les sempre tenen un bon consell.
 
 ### cartellPlaca  <sub>(js/dialegs.js:194)</sub>
 
@@ -224,7 +224,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[66] Ineu:** Pare Nadiel, el pergamí que he trobat a les Runes diu que l'altra meitat és al sagrari. Sap on és la clau?
 
-**[67] Pare Nadiel:** El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se'ls mengi. Si el Pare Alcoví els busca, ja era hora que algú els llegís!
+**[67] Pare Nadiel:** El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se'ls mengi. Si el Pare Alberic els busca, ja era hora que algú els llegís!
 
 **[68] Pare Nadiel:** Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l'ermita de la Desaparició. Potser és allà.
 
@@ -626,7 +626,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[193] El Gran Til·ler:** Fa tres-cents anys, quan van tancar la gàbia, els pastors de la Cirosa s'asseien aquí amb els monjos i els pelegrins. Després els van foragitar, i van oblidar que també eren de la casa. Que vingui el menjar de cada llar, també el seu. I que hi hagi flors.
 
-**[194] El Gran Til·ler:** Porta l'escudella de la Meus, les flors d'Isílder i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís.
+**[194] El Gran Til·ler:** Porta l'escudella de la Nelis, les flors d'Isílder i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís.
 
 **[195] El Gran Til·ler:** Però els pastors no s'asseuran a taula només amb paraules: fa anys que no senten música vora el foc. Abans de tornar-hi, ves a veure la Pianista del Santuari: guarda un cant tan vell com ells.
 
@@ -640,7 +640,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### tillerSoparRitual  <sub>(js/dialegs.js:1342)</sub>
 
-**[198] Meus:** Aquest any l'escudella té gust de poc, fill: hi falta l'alegria de tres nens. Que ens ho perdonin els tres, allà on siguin.
+**[198] Nelis:** Aquest any l'escudella té gust de poc, fill: hi falta l'alegria de tres nens. Que ens ho perdonin els tres, allà on siguin.
 
 **[199] Isílder:** He posat les flors de lluna al mig, com cada any. Aquest cop són per l'Huri, pel Fram... i pel meu Sardi.
 
@@ -658,7 +658,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ---
 
-## Les Cel·les: la Meus, el senyor Llaminer, les Venerables i la Carry
+## Les Cel·les: la Nelis, el senyor Llaminer, les Venerables i la Carry
 
 ### construir  <sub>(js/zones/cela.js:92)</sub>
 
@@ -666,35 +666,35 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### meus  <sub>(js/dialegs.js:532)</sub>
 
-*Si: ha sentit parlar del sopar del Til·ler i encara no té l'escudella de la Meus*
+*Si: ha sentit parlar del sopar del Til·ler i encara no té l'escudella de la Nelis*
 
-**[207] Meus:** El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb tres nens que falten...
+**[207] Nelis:** El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb tres nens que falten...
 
-**[208] Meus:** ...Però el Til·ler té raó, maleït sigui. No es pot deixar de fer el que s'ha fet sempre, ni quan el cor fa mal. Pren l'escudella, i no la vessis!
+**[208] Nelis:** ...Però el Til·ler té raó, maleït sigui. No es pot deixar de fer el que s'ha fet sempre, ni quan el cor fa mal. Pren l'escudella, i no la vessis!
 
-**[209] Meus:** És l'escudella de cada any, la de les nostres àvies, però enguany té un gust que no voldria explicar. Tu tingues-ne cura de portar-la sencera.
+**[209] Nelis:** És l'escudella de cada any, la de les nostres àvies, però enguany té un gust que no voldria explicar. Tu tingues-ne cura de portar-la sencera.
 
 **[210]** ★ Has obtingut L'ESCUDELLA DE LA MEUS.
 
 *Altrament (per defecte):*
 
-**[211] Meus:** Ineu, fill, no t'hi quedis plantat! L'Huri i el Fram dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!
+**[211] Nelis:** Ineu, fill, no t'hi quedis plantat! L'Huri i el Fram dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!
 
-**[212] Senyor Llaminer:** Meus, deixa'l respirar...
+**[212] Senyor Llaminer:** Nelis, deixa'l respirar...
 
-**[213] Meus:** Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls.
+**[213] Nelis:** Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls.
 
-**[214] Meus:** Ja els tinc a casa, i ja els he renyat tres vegades. Dues més i potser els deixo sortir a jugar.
+**[214] Nelis:** Ja els tinc a casa, i ja els he renyat tres vegades. Dues més i potser els deixo sortir a jugar.
 
-**[215] Meus:** Gràcies, Ineu. No ho diré gaires cops, així que escolta'm bé: gràcies.
+**[215] Nelis:** Gràcies, Ineu. No ho diré gaires cops, així que escolta'm bé: gràcies.
 
 ### molner  <sub>(js/dialegs.js:552)</sub>
 
-**[216] Senyor Llaminer:** Sí, Meus. No, Meus. Ara vinc, Meus.
+**[216] Senyor Llaminer:** Sí, Nelis. No, Nelis. Ara vinc, Nelis.
 
 **[217] Senyor Llaminer:** ...Ah, Ineu. Ets tu. Fes cas del que digui ella. Sempre té raó. Sempre.
 
-**[218] Senyor Llaminer:** Des que han tornat els nens, la Meus canta mentre renta. Desafina, però canta.
+**[218] Senyor Llaminer:** Des que han tornat els nens, la Nelis canta mentre renta. Desafina, però canta.
 
 **[219] Senyor Llaminer:** No li diguis que t'ho he dit.
 
@@ -940,7 +940,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[297] Ineu:** El pergamí s'acaba aquí, però diu que l'altra meitat és sota clau, al sagrari de l'església. I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo.
 
-**[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts.
+**[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alberic sabrà llegir-los junts.
 
 ### pedraMobil  <sub>(js/zona_base.js:1950)</sub>
 
@@ -974,7 +974,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[306] Monjo:** L'espasa dorm al sud-est, entre pedres, allà on el sol s'atura. Rep la meva paraula, que no pesa ni es veu, i recorda: la foscor tem la llum, però més encara el riure.
 
-**[307] Monjo:** Jo només puc dir-te les paraules; el Pare Alcoví sabrà entendre-les. Quan les cridis davant l'espasa, la meva paraula farà que et reconegui.
+**[307] Monjo:** Jo només puc dir-te les paraules; el Pare Alberic sabrà entendre-les. Quan les cridis davant l'espasa, la meva paraula farà que et reconegui.
 
 **[308] Monjo:** Ara ja puc descansar en pau.
 
@@ -984,101 +984,101 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: (depèn d'un càlcul del joc)*
 
-**[310] Ineu:** Pare Alcoví, a la placa del Dolmen hi diu que només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. Què vol dir?
+**[310] Ineu:** Pare Alberic, a la placa del Dolmen hi diu que només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. Què vol dir?
 
-**[311] Pare Alcoví:** Això ho tinc a la Crònica, fill. Deixa'm que t'ho llegeixi.
+**[311] Pare Alberic:** Això ho tinc a la Crònica, fill. Deixa'm que t'ho llegeixi.
 
 **[312] Crònica:** «Per alçar l'espasa calen tres coses: el permís de l'arbre més vell, que seu a taula amb tothom; les paraules que el monjo va deixar, que només entén qui ha parlat amb la seva ombra; i la benedicció del prior, que és la de Déu passada per les mans dels homes.»
 
-**[313] Pare Alcoví:** L'arbre sagrat és el Gran Til·ler, el de les cel·les: el seu medalló és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jordà, el prior.
+**[313] Pare Alberic:** L'arbre sagrat és el Gran Til·ler, el de les cel·les: el seu medalló és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jòrdius, el prior.
 
-**[314] Pare Alcoví:** I ara, el que et toca: [text calculat pel joc: pas]
+**[314] Pare Alberic:** I ara, el que et toca: [text calculat pel joc: pas]
 
-**[709] Pare Alcoví:** I quan tinguis Runna, torna a veure'm: hi ha pàgines de la Crònica que encara no et puc llegir.
+**[709] Pare Alberic:** I quan tinguis Runna, torna a veure'm: hi ha pàgines de la Crònica que encara no et puc llegir.
 
 *Si: ha aconseguit Runna i encara no ha trobat segellada la tomba de l'Ocellaire ; ha reparat el rellotge de la torre*
 
-**[685] Pare Alcoví:** La tomba, fill. Mentre l'esquerda del Cementiri treu boira no et puc llegir la resta de la Crònica. Colpeja-la amb Runna i torna.
+**[685] Pare Alberic:** La tomba, fill. Mentre l'esquerda del Cementiri treu boira no et puc llegir la resta de la Crònica. Colpeja-la amb Runna i torna.
 
 *Si: ha aconseguit Runna i encara no ha trobat segellada la tomba de l'Ocellaire ; encara no ha reparat el rellotge de la torre*
 
-**[710] Pare Alcoví:** La tomba, fill. Un segell no aguanta si el temps no el sosté: fes que el rellotge de la torre torni a caminar i colpeja l'esquerda del Cementiri amb Runna. Mentre treu boira no et puc llegir la resta de la Crònica.
+**[710] Pare Alberic:** La tomba, fill. Un segell no aguanta si el temps no el sosté: fes que el rellotge de la torre torni a caminar i colpeja l'esquerda del Cementiri amb Runna. Mentre treu boira no et puc llegir la resta de la Crònica.
 
 *Si: ha aconseguit Runna i encara no ha trobat segellada la tomba de l'Ocellaire*
 
-**[686] Ineu:** Pare Alcoví, ja tinc Runna. Ara, què més diu la Crònica?
+**[686] Ineu:** Pare Alberic, ja tinc Runna. Ara, què més diu la Crònica?
 
-**[687] Pare Alcoví:** Deixa'm mirar-ho un cop més.
+**[687] Pare Alberic:** Deixa'm mirar-ho un cop més.
 
 **[317] Crònica:** «Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»
 
-**[711] Pare Alcoví:** Un moment, fill. Fixa't en una cosa: la tomba es va esquerdar a un quart de quatre. És l'hora exacta a què es va aturar el rellotge de la torre.
+**[711] Pare Alberic:** Un moment, fill. Fixa't en una cosa: la tomba es va esquerdar a un quart de quatre. És l'hora exacta a què es va aturar el rellotge de la torre.
 
 *Si: ha aconseguit Runna i encara no ha trobat segellada la tomba de l'Ocellaire ; ha reparat el rellotge de la torre*
 
-**[712] Pare Alcoví:** I ja l'has fet caminar: bon senyal. Un segell només aguanta si el temps el sosté.
+**[712] Pare Alberic:** I ja l'has fet caminar: bon senyal. Un segell només aguanta si el temps el sosté.
 
 *Si: ha aconseguit Runna i encara no ha trobat segellada la tomba de l'Ocellaire ; encara no ha reparat el rellotge de la torre*
 
-**[713] Pare Alcoví:** Un segell no aguanta si el temps no el sosté. Primer cal que el rellotge torni a caminar: la clau de la porta del retaule la guarda la Carry, a Nostra Senyora.
+**[713] Pare Alberic:** Un segell no aguanta si el temps no el sosté. Primer cal que el rellotge torni a caminar: la clau de la porta del retaule la guarda la Carry, a Nostra Senyora.
 
 *Si: ha aconseguit Runna i encara no ha trobat segellada la tomba de l'Ocellaire*
 
-**[318] Pare Alcoví:** La tomba és al Cementiri, darrere del Santuari i el Monestir, i treu boira per l'esquerda. Fins que no sigui tancada no et puc llegir la resta: la boira esborra les paraules que et caldran.
+**[318] Pare Alberic:** La tomba és al Cementiri, darrere del Santuari i el Monestir, i treu boira per l'esquerda. Fins que no sigui tancada no et puc llegir la resta: la boira esborra les paraules que et caldran.
 
 *Si: ha aconseguit Runna i encara no ha trobat segellada la tomba de l'Ocellaire ; ha reparat el rellotge de la torre*
 
-**[688] Pare Alcoví:** Colpeja l'esquerda amb Runna, fill, i torna a veure'm.
+**[688] Pare Alberic:** Colpeja l'esquerda amb Runna, fill, i torna a veure'm.
 
 *Si: ha aconseguit Runna i encara no ha trobat segellada la tomba de l'Ocellaire ; encara no ha reparat el rellotge de la torre*
 
-**[714] Pare Alcoví:** Quan el rellotge camini, colpeja l'esquerda amb Runna, fill, i torna a veure'm.
+**[714] Pare Alberic:** Quan el rellotge camini, colpeja l'esquerda amb Runna, fill, i torna a veure'm.
 
 *Si: ha aconseguit Runna i ha trobat segellada la tomba de l'Ocellaire i encara no ha llegit la tomba dels monjos*
 
-**[689] Ineu:** Pare Alcoví, he segellat la tomba amb Runna: la boira ja no puja.
+**[689] Ineu:** Pare Alberic, he segellat la tomba amb Runna: la boira ja no puja.
 
-**[690] Pare Alcoví:** Ho has fet bé, fill. Amb la llum de Runna van tancar la porta, i amb la mateixa llum, la tomba. Ara ja et puc dir la resta.
+**[690] Pare Alberic:** Ho has fet bé, fill. Amb la llum de Runna van tancar la porta, i amb la mateixa llum, la tomba. Ara ja et puc dir la resta.
 
-**[674] Pare Alcoví:** I una cosa més, fill, que no és de la Crònica sinó d'un amic. Al Pare Xèvius, el vigilant de la porta de les Gírgoles, el conec de fa quaranta anys: no és dolent, sinó escarmentat. Fa trenta anys l'Aleu el va enganyar amb bones paraules, i des d'aleshores no es fia de ningú. Entén-lo, i no t'ho prenguis a mal.
+**[674] Pare Alberic:** I una cosa més, fill, que no és de la Crònica sinó d'un amic. Al Pare Xèvius, el vigilant de la porta de les Gírgoles, el conec de fa quaranta anys: no és dolent, sinó escarmentat. Fa trenta anys l'Aleu el va enganyar amb bones paraules, i des d'aleshores no es fia de ningú. Entén-lo, i no t'ho prenguis a mal.
 
-**[675] Pare Alcoví:** No et deixarà passar sense una prova de bona voluntat, i res no el convenç com la Carta del Cortiner, que reposa al tronc del Pi dels Tres Cants. Hauràs de despertar el pi amb els tres cants: Aurora, Vespres i Miracle. Fes-ho abans d'anar a la porta, que després no hi ha manera de tornar enrere.
+**[675] Pare Alberic:** No et deixarà passar sense una prova de bona voluntat, i res no el convenç com la Carta del Cortiner, que reposa al tronc del Pi dels Tres Cants. Hauràs de despertar el pi amb els tres cants: Aurora, Vespres i Miracle. Fes-ho abans d'anar a la porta, que després no hi ha manera de tornar enrere.
 
-**[673] Pare Alcoví:** Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Francí t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat.
+**[673] Pare Alberic:** Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Francí t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat.
 
-*Si: ha fet llegir els pergamins al Pare Alcoví i ha rebut la benedicció de l'ombra del monjo i encara no ha rebut el Saber (les paraules del monjo)*
+*Si: ha fet llegir els pergamins al Pare Alberic i ha rebut la benedicció de l'ombra del monjo i encara no ha rebut el Saber (les paraules del monjo)*
 
-**[319] Pare Alcoví:** Has parlat amb l'ombra, oi? Fa temps que ho sospitava. A la Crònica hi ha un marge que no vaig saber llegir: una paraula esborrada, de la mateixa mà que va escriure els fragments.
+**[319] Pare Alberic:** Has parlat amb l'ombra, oi? Fa temps que ho sospitava. A la Crònica hi ha un marge que no vaig saber llegir: una paraula esborrada, de la mateixa mà que va escriure els fragments.
 
-**[320] Pare Alcoví:** Amb la paraula que t'ha donat, ara ho entenc. «La foscor tem la llum, però més encara el riure.» Aquestes són les paraules que desperten Runna, fill: no és un conjur, és una veritat. Digues-les davant l'espasa, senceres i amb tot el cor.
+**[320] Pare Alberic:** Amb la paraula que t'ha donat, ara ho entenc. «La foscor tem la llum, però més encara el riure.» Aquestes són les paraules que desperten Runna, fill: no és un conjur, és una veritat. Digues-les davant l'espasa, senceres i amb tot el cor.
 
-**[321] Pare Alcoví:** I una cosa més, fill. Fa anys, a la biblioteca, vaig trobar un compartiment secret dins el llibre més antic de tots, i hi havia això: un medalló de pedra amb un llibre obert tallat. Té centenars d'anys.
+**[321] Pare Alberic:** I una cosa més, fill. Fa anys, a la biblioteca, vaig trobar un compartiment secret dins el llibre més antic de tots, i hi havia això: un medalló de pedra amb un llibre obert tallat. Té centenars d'anys.
 
-**[322] Pare Alcoví:** No sabia per a què servia. Ara sí: porta'l a la placa del Dolmen, i guarda les paraules dins teu per al moment de dir-les.
+**[322] Pare Alberic:** No sabia per a què servia. Ara sí: porta'l a la placa del Dolmen, i guarda les paraules dins teu per al moment de dir-les.
 
 **[323]** ★ Has obtingut el MEDALLÓ DEL SABER!
 
-*Si: ha fet llegir els pergamins al Pare Alcoví ; ha rebut el Saber (les paraules del monjo)*
+*Si: ha fet llegir els pergamins al Pare Alberic ; ha rebut el Saber (les paraules del monjo)*
 
-**[324] Pare Alcoví:** Ja saps les paraules, fill. Ara només cal que arribi el dia de cridar-les.
+**[324] Pare Alberic:** Ja saps les paraules, fill. Ara només cal que arribi el dia de cridar-les.
 
-*Si: ha fet llegir els pergamins al Pare Alcoví ; encara no ha rebut el Saber (les paraules del monjo)*
+*Si: ha fet llegir els pergamins al Pare Alberic ; encara no ha rebut el Saber (les paraules del monjo)*
 
-**[325] Pare Alcoví:** Els dos fragments expliquen el mateix, fill: algú vigila el segell des de fa segles. Ves a les Runes i no tinguis por de l'ombra. […]
+**[325] Pare Alberic:** Els dos fragments expliquen el mateix, fill: algú vigila el segell des de fa segles. Ves a les Runes i no tinguis por de l'ombra. […]
 
 *Si: (depèn d'un càlcul del joc)*
 
-**[326] Pare Alcoví:** Has trobat els dos fragments! Deixa'm llegir-los... Sí. Ho explica la Crònica que guardo a la biblioteca: un monjo va segellar la foscor amb la llum de l'espasa Runna.
+**[326] Pare Alberic:** Has trobat els dos fragments! Deixa'm llegir-los... Sí. Ho explica la Crònica que guardo a la biblioteca: un monjo va segellar la foscor amb la llum de l'espasa Runna.
 
 **[327] Crònica:** «Des que la tercera església va quedar inacabada, l'ombra del monjo es veu clarament sobre el mur de les Runes: mig corbat, amb les mans unides, com si pregués. Apareix cada nit.»
 
-**[328] Pare Alcoví:** L'ombra del monjo... No fa mal a ningú, Ineu. Crec que és el monjo que va segellar la foscor amb la llum de Runna. Ves a les Runes, passat el Pati del Celler: és sobre el mur de l'església inacabada. Parla-hi.
+**[328] Pare Alberic:** L'ombra del monjo... No fa mal a ningú, Ineu. Crec que és el monjo que va segellar la foscor amb la llum de Runna. Ves a les Runes, passat el Pati del Celler: és sobre el mur de l'església inacabada. Parla-hi.
 
 *Altrament (per defecte):*
 
-**[329] Pare Alcoví:** Ineu, fill. Aquesta boira no és natural. Les boires d'aquí baixen de les muntanyes; aquesta puja de sota terra.
+**[329] Pare Alberic:** Ineu, fill. Aquesta boira no és natural. Les boires d'aquí baixen de les muntanyes; aquesta puja de sota terra.
 
-**[330] Pare Alcoví:** Diuen que cada nit apareix l'ombra d'un monjo a les Runes. Hi ha dos fragments d'una crònica antiga escampats pel Santuari: un a les Runes i un altre al sagrari de l'església. Porta-me'ls i els llegirem junts.
+**[330] Pare Alberic:** Diuen que cada nit apareix l'ombra d'un monjo a les Runes. Hi ha dos fragments d'una crònica antiga escampats pel Santuari: un a les Runes i un altre al sagrari de l'església. Porta-me'ls i els llegirem junts.
 
 ### construir  <sub>(js/zones/cementiri.js:74)</sub>
 
@@ -1310,7 +1310,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: altrament*
 
-**[395] Ineu:** (El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alcoví deu saber-ho: ho tindrà escrit a la Crònica.)
+**[395] Ineu:** (El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alberic deu saber-ho: ho tindrà escrit a la Crònica.)
 
 **[396] Ineu:** (Tres cercles buits: un per a cada medalló. Em falta: ,  […].)
 
@@ -1438,7 +1438,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[440] Mandu:** Sí. Dormíem a la mateixa habitació. Una nit em vaig adormir amb ell al costat, i al matí el seu llit era buit. Sempre em diu on va, i aquesta vegada...
 
-**[441] Mandu:** La Meus diu que la boira se l'ha endut. Però jo li vaig dir que no se n'anés! Li ho vaig dir! I ell se n'ha anat igualment! PER QUÈ NO TORNA?!
+**[441] Mandu:** La Nelis diu que la boira se l'ha endut. Però jo li vaig dir que no se n'anés! Li ho vaig dir! I ell se n'ha anat igualment! PER QUÈ NO TORNA?!
 
 **[442] Mandu:** Ja n'hi ha prou! LI HE ARRENCAT EL CAP A LA NINA! I m'és igual: així el Fram haurà de tornar per cosir-lo!
 
@@ -1494,37 +1494,37 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ---
 
-## Acte 3: el passadís secret, la cambra i la maneta (en Jorgi)
+## Acte 3: el passadís secret, la cambra i la maneta (en Gori)
 
 ### georgiCaseta  <sub>(js/zones/casa.js:80)</sub>
 
 *Si: porta la maneta o porta la maneta*
 
-**[461] Jorgi:** Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes.
+**[461] Gori:** Fes-ne bon ús, monjo! I vigila, que les coses de pedra no sempre s'estan quietes.
 
 *Si: encara no ha vist el volant del Raïm*
 
-**[462] Jorgi:** Ei, monjo! Sóc en Jorgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.
+**[462] Gori:** Ei, monjo! Sóc en Gori de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.
 
 **[463] Ineu:** M'anirà bé saber-ho. De moment només passava a saludar.
 
-**[464] Jorgi:** Doncs ja saps on trobar-me si algun dia et cal un cop de mà.
+**[464] Gori:** Doncs ja saps on trobar-me si algun dia et cal un cop de mà.
 
-*Si: ha parlat amb en Jorgi de la maneta*
+*Si: ha parlat amb en Gori de la maneta*
 
-**[465] Jorgi:** La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!
+**[465] Gori:** La caseta és aquí al costat: puja per l'escala. Al cofre de les meves joguines, la maneta és a sota. Que no se't cansi el braç!
 
 *Altrament (per defecte):*
 
-**[466] Jorgi:** Ei, monjo! Sóc en Jorgi de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.
+**[466] Gori:** Ei, monjo! Sóc en Gori de la Caseta. Conec cada drecera del Miracle, i les eines, encara millor.
 
-**[467] Ineu:** Jorgi, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar.
+**[467] Ineu:** Gori, em diuen que en saps, d'eines. Hi ha un volant de ferro vell que no té maneta, i sense no hi ha manera de fer-lo girar.
 
-**[468] Jorgi:** Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda.
+**[468] Gori:** Una maneta! En tinc una de ferro, de les bones. Encaixa en rodes de pou, en premses... i, si cal, en el volant d'una estàtua tossuda.
 
-**[469] Jorgi:** Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!
+**[469] Gori:** Però la vaig amagar dalt de la meva caseta, la que està aixecada sobre pals, al cofre de les meves joguines. Ningú no s'atreveix a tocar-les, perquè jo no deixo que ningú hi posi les mans. MAI! MAI!
 
-**[470] Jorgi:** Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la.
+**[470] Gori:** Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la.
 
 ### llibreCambra  <sub>(js/dialegs.js:1664)</sub>
 
@@ -1538,13 +1538,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### cofreManeta  <sub>(js/dialegs.js:1741)</sub>
 
-*Si: encara no ha parlat amb en Jorgi de la maneta ; encara no ha vist el volant del Raïm*
+*Si: encara no ha parlat amb en Gori de la maneta ; encara no ha vist el volant del Raïm*
 
 **[659] Ineu:** Un cofre de joguines d'infant. No és meu: millor no remenar-lo.
 
-*Si: encara no ha parlat amb en Jorgi de la maneta*
+*Si: encara no ha parlat amb en Gori de la maneta*
 
-**[475] Ineu:** No és meva... Millor preguntar a en Jorgi abans d'agafar-la.
+**[475] Ineu:** No és meva... Millor preguntar a en Gori abans d'agafar-la.
 
 *Altrament (per defecte):*
 
@@ -1582,7 +1582,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[483] Ineu:** L'estàtua té el cap completament girat d'esquena, mirant la paret. A la base del pedestal hi ha un volant de ferro amb engranatges, però li falta la maneta per poder-lo fer girar.
 
-**[662] Ineu:** En Jorgi de la Caseta segur que me'n pot deixar una, és un expert en tot tipus d'eines.
+**[662] Ineu:** En Gori de la Caseta segur que me'n pot deixar una, és un expert en tot tipus d'eines.
 
 ### raimDesperta  <sub>(js/zones/casa.js:30)</sub>
 
@@ -1836,7 +1836,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[678] Pare Xèvius:** Des d'aleshores, qui vol passar m'ha de demostrar la bona voluntat. No amb paraules, fill: amb fets.
 
-**[679] Ineu:** (Quina prova se li pot demostrar? Potser el Pare Alcoví, a la Biblioteca, ho sap: ho deu tenir a la Crònica.)
+**[679] Ineu:** (Quina prova se li pot demostrar? Potser el Pare Alberic, a la Biblioteca, ho sap: ho deu tenir a la Crònica.)
 
 **[680] Ineu:** Pare Xèvius, porto això: la Carta del Cortiner. Era al tronc del Pi dels Tres Cants. Els ocells hi han tornat.
 
@@ -1852,9 +1852,9 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[567] Ineu:** (Algú l'hauria d'haver vist anar-hi de nit... L'Iscu, el fill de la Càren! L'Eve va dir que s'escapa pel camí de la Desaparició, per un forat entre els arbres.)
 
-**[667] Ineu:** (Tinc la clau, el Cant del Miracle i l'Empara: les dues proves de què parlava la Crònica del Pare Alcoví. Endavant.)
+**[667] Ineu:** (Tinc la clau, el Cant del Miracle i l'Empara: les dues proves de què parlava la Crònica del Pare Alberic. Endavant.)
 
-**[668] Ineu:** (Tinc la clau petita, però la Crònica del Pare Alcoví deia que, per baixar, em cal passar dues proves. Encara em falta  i  […].)
+**[668] Ineu:** (Tinc la clau petita, però la Crònica del Pare Alberic deia que, per baixar, em cal passar dues proves. Encara em falta  i  […].)
 
 *Si: té els grans del rosari buits (no té la vida plena)*
 
@@ -2044,15 +2044,15 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[635] Carry:** El meu home estaria orgullós que el caminar del seu rellotge ens uneixi a tots. Gràcies, fill.
 
-**[636] Ineu:** Pare Jordà... el Germà Aleu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar.
+**[636] Ineu:** Pare Jòrdius... el Germà Aleu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar.
 
-**[637] Pare Jordà:** L'Aleu... dins la gàbia?
+**[637] Pare Jòrdius:** L'Aleu... dins la gàbia?
 
-**[638] Pare Jordà:** Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller.
+**[638] Pare Jòrdius:** Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller.
 
-**[639] Pare Jordà:** Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més.
+**[639] Pare Jòrdius:** Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més.
 
-**[640] Pare Jordà:** Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill.
+**[640] Pare Jòrdius:** Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill.
 
 ### gentEpileg  <sub>(js/zones/gabia.js:91)</sub>
 

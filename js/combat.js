@@ -1556,7 +1556,7 @@ Object.assign(ZonaBase.prototype, {
         if (d.vida <= 0) this.caure();
     },
 
-    // L'Ineu cau: el Pare Jordà el recull a la Plaça amb tota la vida
+    // L'Ineu cau: el Pare Jòrdius el recull a la Plaça amb tota la vida
     caure() {
         if (this.bossActiu && this.dirFrase) this.dirFrase('caiguda');       // el Mestre s'en riu (frase flotant, no bloqueja)
         this.caient = true; this.canviant = true;

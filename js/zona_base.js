@@ -42,7 +42,7 @@ const ZOOM_CAMERA = (() => {
     } catch (e) { }
     return z >= 1 && z <= 1.6 ? z : 1.2;
 })();
-// Inici tancat: fins que l'Ineu no ha parlat amb el Pare Jordà i no té el bastó de pelegrí, només pot anar pel Monestir i la Plaça
+// Inici tancat: fins que l'Ineu no ha parlat amb el Pare Jòrdius i no té el bastó de pelegrí, només pot anar pel Monestir i la Plaça
 const ZONES_INICI = ['ZonaMonestir', 'ZonaMonestirRebedor', 'ZonaBiblioteca', 'ZonaPlaca'];
 const BANDA_SUD = 120;   // franja de baix (vora sud, sortides) que es desplaça cap avall en ampliar la zona
 const VELOCITAT_INEU = 230;
@@ -233,7 +233,7 @@ class ZonaBase extends Phaser.Scene {
         Estat.dades.zona = this.scene.key;
         const primeraVisita = !Estat.flag('visitada_' + this.scene.key);       // (per al pla de situació d'entrada)
         Estat.posaFlag('visitada_' + this.scene.key); // el mapa només mostra el que s'ha visitat
-        // Si s'hi arriba després d'una derrota (el Pare Jordà et recull), sona la música de l'església durant tota l'escena; en acabar entra la de la zona
+        // Si s'hi arriba després d'una derrota (el Pare Jòrdius et recull), sona la música de l'església durant tota l'escena; en acabar entra la de la zona
         if (Estat.caigut) Joc.iniciarMusica(this, 0, Joc.MUSICA_ZONES.ZonaEsglesia, 1500); else Joc.musicaZona(this);
         this.time.delayedCall(400, () => { if (this.sys.isActive()) Joc.musicaVeines(this); });          // (les sortides ja són posades) baixa la música de les zones veïnes
         // Red de seguretat: si passat un moment una zona amb música no en té cap (o la que sona no és la seva), s'hi posa la de la zona
@@ -370,16 +370,16 @@ class ZonaBase extends Phaser.Scene {
         this.ajustarSuperposicions();
     }
 
-    // Després d'una derrota: l'Ineu a terra, i de cop el Pare Jordà agenollat al seu costat; en tancar el diàleg l'Ineu s'aixeca
+    // Després d'una derrota: l'Ineu a terra, i de cop el Pare Jòrdius agenollat al seu costat; en tancar el diàleg l'Ineu s'aixeca
     despertarCaigut() {
         const ui = this.ui(), I = this.ineu;
-        const dialeg = { pagines: [{ qui: 'Pare Jordà', text: 'Ineu! Què fas a terra? Respira, fill! Encara prendràs mal. Ja estàs bé?' }] };
+        const dialeg = { pagines: [{ qui: 'Pare Jòrdius', text: 'Ineu! Què fas a terra? Respira, fill! Encara prendràs mal. Ja estàs bé?' }] };
         if (!this.textures.exists('ineu_inconscient') || !this.textures.exists('ineu_desperta')) {
             this.time.delayedCall(600, () => ui.obrirDialeg(dialeg, () => Joc.musicaZona(this, 3000)));
             return;
         }
         // L'Ineu a terra amb els ulls tancats (ineu_inconscient, 420 x 342, alineat per l'esquerra amb l'spritesheet) i, en tocar, l'animació feta a mà (ineu_desperta, 3 x 3 cel·les de 342):
-        // el Pare Jordà acaricia el front de l'Ineu, que té els ulls oberts (eines/fer_desperta_v5.py). Les dues imatges comparteixen origen: el centre de la cel·la (x = 171) i els peus (85 % d'alçada).
+        // el Pare Jòrdius acaricia el front de l'Ineu, que té els ulls oberts (eines/fer_desperta_v5.py). Les dues imatges comparteixen origen: el centre de la cel·la (x = 171) i els peus (85 % d'alçada).
         const esc = this.textures.get('ineu_inconscient').customData.escala || 1 / RES;
         const mon = (px, py) => ({ x: I.x + (px - 171) * esc, y: I.y + (py - 0.85 * 342) * esc });          // (px, py) de la cel·la de 342 -> món
         const ineuT = this.add.image(I.x, I.y, 'ineu_inconscient').setOrigin(171 / this.textures.get('ineu_inconscient').getSourceImage().width, 0.85).setScale(esc).setDepth(I.y + 1).setAlpha(0);
@@ -413,8 +413,8 @@ class ZonaBase extends Phaser.Scene {
             tw({ targets: p, x: pols.x - 20 - k * 6, y: pols.y - 18 - k * 5, scale: 2.3, alpha: { from: 0.5, to: 0 }, duration: 2400, delay: k * 800, repeat: -1, ease: 'Sine.easeOut',
                 onRepeat: () => p.setPosition(pols.x, pols.y).setScale(1) });
         });
-        // L'Ineu és a terra i no passa res fins que el jugador fa clic, toca la pantalla o prem ESPAI/ENTER: llavors apareix el Pare Jordà i comença el diàleg
-        let fase = 0;                                   // 0: a terra, esperant · 1: el Pare Jordà (gest i diàleg) · 2: acabat
+        // L'Ineu és a terra i no passa res fins que el jugador fa clic, toca la pantalla o prem ESPAI/ENTER: llavors apareix el Pare Jòrdius i comença el diàleg
+        let fase = 0;                                   // 0: a terra, esperant · 1: el Pare Jòrdius (gest i diàleg) · 2: acabat
         const llest = this.time.now + 900;              // un instant perquè un toc o una tecla d'abans no es salti l'escena
         const avis = ui.add.text(AMPLE / 2, ALT - 230, 'Toca la pantalla', estilText(24, '#f1e3b6', { stroke: '#1a120b', strokeThickness: 5 })).setOrigin(0.5).setAlpha(0).setDepth(60);
         ui.tweens.add({ targets: avis, alpha: 0.9, duration: 700, delay: 1200, yoyo: true, repeat: -1, hold: 500 });
@@ -434,11 +434,11 @@ class ZonaBase extends Phaser.Scene {
                 if (this.time.now < llest) return;
                 fase = 1;
                 if (avis.active) { ui.tweens.killTweensOf(avis); avis.destroy(); }
-                // Les estrelletes i la pols s'esvaeixen; el Pare Jordà s'acosta des de la dreta (el cos i la mà del pit, amb l'espatlla) i la càmera es posa entre els dos caps
+                // Les estrelletes i la pols s'esvaeixen; el Pare Jòrdius s'acosta des de la dreta (el cos i la mà del pit, amb l'espatlla) i la càmera es posa entre els dos caps
                 tws.forEach(t => { if (t !== respira) t.stop(); }); tws.length = 0; tws.push(respira);          // (només segueix la respiració)
                 tw({ targets: extres, alpha: 0, duration: 400, onComplete: () => { extres.forEach(o => o.active && o.destroy()); extres.length = 0; } });
                 Sfx.secret && Sfx.secret();
-                // El Pare Jordà arriba: l'animació apareix amb una fosa, al mateix lloc, mentre l'Ineu de ulls tancats s'esvaeix
+                // El Pare Jòrdius arriba: l'animació apareix amb una fosa, al mateix lloc, mentre l'Ineu de ulls tancats s'esvaeix
                 anim.setAlpha(0); anim.play('ineu_desperta_gest');
                 tw({ targets: anim, alpha: 1, duration: 800, ease: 'Sine.easeInOut' });
                 tw({ targets: ineuT, alpha: 0, duration: 800, delay: 150, ease: 'Sine.easeInOut' });
@@ -3048,14 +3048,14 @@ class ZonaBase extends Phaser.Scene {
     }
 
     // ---- Inici tancat ----
-    // L'aventura s'obre en tenir parlat amb el Pare Jordà i el bastó de pelegrí (les partides que ja han anat més enllà, també queden obertes)
+    // L'aventura s'obre en tenir parlat amb el Pare Jòrdius i el bastó de pelegrí (les partides que ja han anat més enllà, també queden obertes)
     iniciObert() {
         return (Estat.flag('clauerNovici') && Estat.flag('bastoObtingut')) ||
             ['cantAurora', 'visitada_ZonaRuines', 'visitada_ZonaCreu', 'visitada_ZonaCasaGran', 'visitada_ZonaCelles', 'visitada_ZonaEsglesia'].some(f => Estat.flag(f));
     }
     sortidaTancada(s) { return !this.iniciObert() && ZONES_INICI.includes(this.scene.key) && !ZONES_INICI.includes(s.desti); }
 
-    // Les sortides tancades de l'inici no tenen llum: en obrir-se el camí (bastó + Pare Jordà), apareix la llum i ja es pot passar
+    // Les sortides tancades de l'inici no tenen llum: en obrir-se el camí (bastó + Pare Jòrdius), apareix la llum i ja es pot passar
     posarBoiraSortides() {
         const pendents = this.sortides.filter(s => s.pendentLlum);
         if (!pendents.length) return;

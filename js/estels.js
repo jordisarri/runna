@@ -9,9 +9,9 @@
 // L'ocell (els 7 punts que s'uneixen): cua, cos, ala esquerra, coll, ala dreta, cap i bec. Vola amunt i a la dreta.
 const ESTELS_PUNTS = [[360, 760], [440, 680], [370, 500], [560, 610], [530, 420], [615, 572], [672, 556]];
 const ESTELS_LINIES = [[1, 2], [2, 3], [3, 4], [2, 4], [4, 5], [2, 5], [4, 6], [6, 7]];
-// La gàbia (estels febles), a baix a l'esquerra: base, costats, cúpula i la porteta oberta cap a fora
-const ESTELS_GABIA = { a: [90, 1000], b: [270, 1000], c: [90, 820], d: [270, 820], e: [180, 735], f: [270, 885], g: [345, 945] };
-const ESTELS_GABIA_LINIES = [['a', 'b'], ['a', 'c'], ['c', 'e'], ['e', 'd'], ['d', 'f'], ['b', 'g']];
+// La gàbia (estels febles), a baix a l'esquerra: base (a-b), cos (c-d), cúpula (e) i porteta oberta cap a fora (f-g-h-b)
+const ESTELS_GABIA = { a: [90, 855], b: [270, 855], c: [90, 730], d: [270, 730], e: [180, 645], f: [270, 765], g: [340, 748], h: [340, 838] };
+const ESTELS_GABIA_LINIES = [['a', 'b'], ['a', 'c'], ['c', 'd'], ['d', 'f'], ['f', 'g'], ['g', 'h'], ['h', 'b']];
 
 // Final de la constel·lació: l'últim estel s'apaga damunt del dipòsit de llevant i hi deixa una llum a l'aigua
 // (la zona dels Dipòsits la mostra; recollir-la dona la Llàgrima de Sant Llorenç)
@@ -202,22 +202,23 @@ class EscenaEstels extends Phaser.Scene {
 
     completar() {
         this.tancat = true;
-        // La gàbia s'uneix sola: base, costats, cúpula rodona amb l'anella de penjar, barrots i la porteta oberta
+        // La gàbia s'uneix sola: base, costats, cúpula el·líptica passant exactament per c-e-d, anella, barrots i porteta oberta (f-g-h-b)
         const G = ESTELS_GABIA, OR = 0xd4af37, g = this.add.graphics().setAlpha(0);
+        const cx = G.e[0], cy = G.c[1], rx = (G.d[0] - G.c[0]) / 2, ry = cy - G.e[1];
         const cupula = [];
-        for (let t = 0; t <= 1.001; t += 0.05) cupula.push({
-            x: Phaser.Math.Interpolation.QuadraticBezier(t, G.c[0], G.e[0], G.d[0]),
-            y: Phaser.Math.Interpolation.QuadraticBezier(t, G.c[1], 2 * G.e[1] - (G.c[1] + G.d[1]) / 2, G.d[1])
-        });
+        for (let t = Math.PI; t >= -0.001; t -= Math.PI / 24) {
+            cupula.push({ x: cx + Math.cos(t) * rx, y: cy - Math.sin(t) * ry });
+        }
         g.lineStyle(3, OR, 0.85).strokePoints(cupula);
-        ESTELS_GABIA_LINIES.filter(([p, q]) => !(p === 'c' && q === 'e') && !(p === 'e' && q === 'd')).forEach(([p, q]) => g.lineBetween(G[p][0], G[p][1], G[q][0], G[q][1]));
-        g.strokeCircle(G.e[0], G.e[1] - 12, 9);
+        ESTELS_GABIA_LINIES.forEach(([p, q]) => g.lineBetween(G[p][0], G[p][1], G[q][0], G[q][1]));
+        g.lineBetween(G.a[0] - 6, G.a[1] + 8, G.b[0] + 6, G.b[1] + 8);          // sòcol de la base
+        g.strokeCircle(G.e[0], G.e[1] - 11, 9);                                   // anella de penjar
         g.lineStyle(2, OR, 0.45);
-        [120, 150, 180, 210, 240].forEach(x => {                                // barrots fins a la cúpula
-            const p = cupula.reduce((m, q) => Math.abs(q.x - x) < Math.abs(m.x - x) ? q : m);
-            g.lineBetween(x, G.a[1], x, p.y);
+        [120, 150, 180, 210, 240].forEach(x => {                                   // barrots fins a la cúpula
+            const yd = cy - ry * Math.sqrt(Math.max(0, 1 - ((x - cx) / rx) ** 2));
+            g.lineBetween(x, G.a[1], x, yd);
         });
-        g.lineBetween(G.c[0], G.c[1] + 60, G.d[0], G.d[1] + 60);
+        g.lineBetween((G.f[0] + G.g[0]) / 2, (G.f[1] + G.g[1]) / 2, (G.b[0] + G.h[0]) / 2, (G.b[1] + G.h[1]) / 2);   // barrot de la porteta oberta
         // L'ocell, dibuixat sobre els 7 estels: cua en ventall, cos, dues ales amb plomes, cap i bec
         const P = i => ({ x: ESTELS_PUNTS[i - 1][0], y: ESTELS_PUNTS[i - 1][1] }), o = this.add.graphics().setAlpha(0);
         const ple = (pts, a = 0.35) => { o.fillStyle(0xffe08a, a).fillPoints(pts, true); o.lineStyle(2.5, 0xffe08a, 0.9).strokePoints(pts, true); };
@@ -241,8 +242,9 @@ class EscenaEstels extends Phaser.Scene {
         o.fillStyle(0xffe08a, 0.5).fillCircle(p6.x, p6.y, 16).lineStyle(2.5, 0xffe08a, 0.9).strokeCircle(p6.x, p6.y, 16);
         o.fillStyle(0x050818, 1).fillCircle(p6.x + 5, p6.y - 4, 3);              // ull
         // Rastre de punts de la porteta fins a la cua: l'ocell s'ha escapat
-        for (let t = 0.08; t < 0.95; t += 0.09) {
-            const x = Phaser.Math.Interpolation.QuadraticBezier(t, G.g[0], G.g[0] + 60, p1.x), y = Phaser.Math.Interpolation.QuadraticBezier(t, G.g[1], p1.y + 120, p1.y);
+        const ox = G.f[0] + 18, oy = (G.f[1] + G.b[1]) / 2;
+        for (let t = 0.08; t < 0.95; t += 0.1) {
+            const x = Phaser.Math.Interpolation.QuadraticBezier(t, ox, G.g[0] + 10, p1.x), y = Phaser.Math.Interpolation.QuadraticBezier(t, oy, oy - 10, p1.y);
             o.fillStyle(0xffe08a, 0.8).fillCircle(x, y, 3);
         }
         this.fletxa.setAlpha(0.35);                                             // les línies d'unir els punts queden de fons

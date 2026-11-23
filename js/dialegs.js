@@ -56,7 +56,7 @@ function consellVenerables(E) {
 // Objectiu viu del sopar del Til·ler: diu què falta
 function objectiuSopar(E) {
     const f = [];
-    if (!E.flag("escudella")) f.push("l'escudella de la Meus");
+    if (!E.flag("escudella")) f.push("l'escudella de la Nelis");
     if (!E.flag("floresIsilder")) f.push("les flors d'Isílder (Hostatgeria)");
     if (!E.flag("pastorsConvencuts")) f.push(E.flag("cantPedres") ? "el pa dels pastors de la Cirosa (toca'ls el cant vora el foc)" : "el pa dels pastors (primer, una música antiga: la Pianista)");
     E.posaObjectiu(f.length ? "El sopar del Til·ler: falta " + f.join(", ") + "." : "Tot a punt: torna al Gran Til·ler per al sopar.");
@@ -104,10 +104,10 @@ const DIALEGS = {
         if (!E.flag("clauerNovici")) {
             return {
                 pagines: [
-                    { qui: "Pare Jordà", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
-                    { qui: "Pare Jordà", text: "No et vull espantar. Fa tres nits que una boira violeta surt de sota terra, i cada nit falta un nen: l'Huri i el Fram, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el protegit de les sacerdotesses de l'Hostatgeria." },
-                    { qui: "Pare Jordà", text: "Ningú no els ha vist marxar. Els llits són desfets, i les finestres tancades per dins. Només queda una olor de terra mullada." },
-                    { qui: "Pare Jordà", text: "Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot. Ves amb compte pels camins, Ineu." }
+                    { qui: "Pare Jòrdius", text: "Ineu, bon dia. Que bé que hagis sortit, et buscava." },
+                    { qui: "Pare Jòrdius", text: "No et vull espantar. Fa tres nits que una boira violeta surt de sota terra, i cada nit falta un nen: l'Huri i el Fram, de les cel·les de Sant Benet, porta amb porta; i aquesta nit, el Sardi, el protegit de les sacerdotesses de l'Hostatgeria." },
+                    { qui: "Pare Jòrdius", text: "Ningú no els ha vist marxar. Els llits són desfets, i les finestres tancades per dins. Només queda una olor de terra mullada." },
+                    { qui: "Pare Jòrdius", text: "Tu tens bons ulls i bon cor. Parla amb tothom i explica-m'ho tot. Ves amb compte pels camins, Ineu." }
                 ],
                 enAcabar: () => {
                     E.posaFlag("clauerNovici");
@@ -118,11 +118,11 @@ const DIALEGS = {
         if (E.flag("fullaTiler") && !E.flag("benediccio")) {
             return {
                 pagines: [
-                    { qui: "Pare Jordà", text: "Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna a qualsevol." },
-                    { qui: "Pare Jordà", text: "Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és l'autèntica bona voluntat. Ajup el cap." },
+                    { qui: "Pare Jòrdius", text: "Ineu! Ho he sentit: el Til·ler t'ha donat el seu permís. Aquell arbre no en dóna a qualsevol." },
+                    { qui: "Pare Jòrdius", text: "Mira, fill: jo no soc valent com tu, però sí que sé una cosa. Una benedicció no és una paraula màgica, és l'autèntica bona voluntat. Ajup el cap." },
                     { fer: (z, fet) => z.seq([c => z.npcVa('pare_jorda', z.ineu.x + 60, z.ineu.y + 4, c), c => z.npcMira('pare_jorda', 'ineu', c), c => { z.ajupir('ineu'); z.llum(z.ineu.x, z.ineu.y - 90, 0xffe8a0, c); }], fet) },
-                    { qui: "Pare Jordà", text: "No vas sol, Ineu. T'acompanya tot el Miracle." },
-                    { qui: "Pare Jordà", text: "I pren això. És un medalló de pedra, amb una mà oberta tallada, que han guardat totes les generacions de priors del Miracle. Ara ha de ser teu: porta'l al Dolmen." },
+                    { qui: "Pare Jòrdius", text: "No vas sol, Ineu. T'acompanya tot el Miracle." },
+                    { qui: "Pare Jòrdius", text: "I pren això. És un medalló de pedra, amb una mà oberta tallada, que han guardat totes les generacions de priors del Miracle. Ara ha de ser teu: porta'l al Dolmen." },
                     { avis: "Has obtingut el MEDALLÓ DE LA BENEDICCIÓ!", obj: 'medallo_benedicio' }
                 ],
                 enAcabar: () => { E.dona("medallo_benedicio"); E.posaFlag("benediccio"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
@@ -130,21 +130,21 @@ const DIALEGS = {
         }
         if (E.te("basto_tiller") && !E.flag("runna")) {
             return { pagines: [
-                { qui: "Pare Jordà", text: "Ineu, la gent diu que has parlat amb el Gran Til·ler. Per despertar Runna et calen tres coses: el permís de l'arbre (el seu medalló), les Paraules del Saber del Pare Alcoví i la meva benedicció." },
-                { qui: "Pare Jordà", text: pistaRunna(E) }
+                { qui: "Pare Jòrdius", text: "Ineu, la gent diu que has parlat amb el Gran Til·ler. Per despertar Runna et calen tres coses: el permís de l'arbre (el seu medalló), les Paraules del Saber del Pare Alberic i la meva benedicció." },
+                { qui: "Pare Jòrdius", text: pistaRunna(E) }
             ] };
         }
         if (E.flag("combatActiu")) {
             return { pagines: [
-                { qui: "Pare Jordà", text: "Les bestioles han sortit pels camins, Ineu. Fins i tot alguns visitants, que pujaven al Miracle a fer fotos, vagaregen amb la pell verdosa i la mirada perduda: la boira els ha trastocat i no saben ni qui són. Si en veus pel Santuari o pel Cementiri, no t'espantis." },
-                { qui: "Pare Jordà", text: "No són dolents, pobrets: només fes-los dormir i es despertaran sense recordar res. Quan la boira se'n vagi, tornaran a ser turistes." },
-                { qui: "Pare Jordà", text: "I torna abans que es faci fosc." }
+                { qui: "Pare Jòrdius", text: "Les bestioles han sortit pels camins, Ineu. Fins i tot alguns visitants, que pujaven al Miracle a fer fotos, vagaregen amb la pell verdosa i la mirada perduda: la boira els ha trastocat i no saben ni qui són. Si en veus pel Santuari o pel Cementiri, no t'espantis." },
+                { qui: "Pare Jòrdius", text: "No són dolents, pobrets: només fes-los dormir i es despertaran sense recordar res. Quan la boira se'n vagi, tornaran a ser turistes." },
+                { qui: "Pare Jòrdius", text: "I torna abans que es faci fosc." }
             ] };
         }
         return {
             pagines: [
-                { qui: "Pare Jordà", text: "Parla amb la gent: les famílies de les cel·les, els germans, la Pianista... Algú haurà vist alguna cosa." },
-                { qui: "Pare Jordà", text: "Si et perds, les Venerables Sàvies de les cel·les sempre tenen un bon consell." }
+                { qui: "Pare Jòrdius", text: "Parla amb la gent: les famílies de les cel·les, els germans, la Pianista... Algú haurà vist alguna cosa." },
+                { qui: "Pare Jòrdius", text: "Si et perds, les Venerables Sàvies de les cel·les sempre tenen un bon consell." }
             ]
         };
     },
@@ -282,19 +282,20 @@ const DIALEGS = {
                 enAcabar: () => { E.posaFlag("parlatPianista"); iniciarLliço("aurora"); }
             };
         }
-        // El Cant de Vespres: l'Ineu el demana a la Pianista, o perquè l'ombra del monjo ha dit que qui toca l'orgue el coneix, o perquè el Til·ler l'hi
-        // ha remès pels pastors de la Cirosa. Ella no sap res de l'ombra ni dels pastors: ho sap pel que l'Ineu li explica.
+        // El Cant de Vespres: l'Ineu l'aprèn si l'ombra del monjo l'ha demanat, si el Til·ler l'hi ha remès pels pastors, o si ja porta les esquelles dels pastors.
         const vespres = () => {
-            if (!((E.flag("ombraDemanaCant") || E.flag("soparObert")) && !E.flag("cantPedres"))) return null;
+            if (!((E.flag("ombraDemanaCant") || E.flag("soparObert") || E.flag("esquelles")) && !E.flag("cantPedres"))) return null;
             const perOmbra = E.flag("ombraDemanaCant");
+            const perSopar = E.flag("soparObert");
             return {
-                pagines: [
-                    { qui: "Ineu", text: perOmbra
-                        ? "Una ombra de monjo, a les Runes, diu que vostè coneix un cant que les pedres entenen."
-                        : "Els pastors de la Cirosa fa anys que no senten música vora el foc. El Gran Til·ler diu que vostè guarda un cant tan vell com ells." },
-                    { qui: "La Pianista", text: perOmbra
-                        ? "Un cant que les pedres entenen? Ai, fill... Potser és el de Vespres: és molt vell, me'l va ensenyar la meva mare. Vine, escolta."
-                        : "Un cant tan vell com ells? Tinc el de Vespres, fill: molt vell, me'l va ensenyar la meva mare. Potser els recorda casa. Vine, escolta." }
+                pagines: perOmbra ? [
+                    { qui: "Ineu", text: "Una ombra de monjo, a les Runes, diu que vostè coneix un cant que les pedres entenen." },
+                    { qui: "La Pianista", text: "Un cant que les pedres entenen? Ai, fill... Potser és el de Vespres: és molt vell, me'l va ensenyar la meva mare. Vine, escolta." }
+                ] : perSopar ? [
+                    { qui: "Ineu", text: "Els pastors de la Cirosa fa anys que no senten música vora el foc. El Gran Til·ler diu que vostè guarda un cant tan vell com ells." },
+                    { qui: "La Pianista", text: "Un cant tan vell com ells? Tinc el de Vespres, fill: molt vell, me'l va ensenyar la meva mare. Potser els recorda casa. Vine, escolta." }
+                ] : [
+                    { qui: "La Pianista", text: "Aquest so m'ha fet recordar el Cant de Vespres: és tan vell com elles, me'l va ensenyar la meva mare. Vine, escolta." }
                 ],
                 enAcabar: () => iniciarLliço("pedres")
             };
@@ -333,7 +334,7 @@ const DIALEGS = {
         const sagrari = !E.te('clau_sagrari') && !E.flag('fragment2') && E.flag('fragment1');
         const paginesSagrari = [
             { qui: 'Ineu', text: "Pare Nadiel, el pergamí que he trobat a les Runes diu que l'altra meitat és al sagrari. Sap on és la clau?" },
-            { qui: 'Pare Nadiel', text: 'El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se\'ls mengi. Si el Pare Alcoví els busca, ja era hora que algú els llegís!' },
+            { qui: 'Pare Nadiel', text: 'El sagrari? Hi guardo quatre papers vells dels monjos, perquè la humitat no se\'ls mengi. Si el Pare Alberic els busca, ja era hora que algú els llegís!' },
             { qui: 'Pare Nadiel', text: 'Però la clau, ai, fa anys que no sé on para: una de petita, que sembla de joguina. Els monjos antics deixaven les seves coses a l\'ermita de la Desaparició. Potser és allà.' }
         ];
         if (!E.flag('parlatDaimiel')) {
@@ -398,7 +399,7 @@ const DIALEGS = {
                 { qui: "Pergamí", text: "Fragment 2 de 2:\n«El monjo va guardar el segell fins al darrer dia. Des d'aleshores la seva ombra torna cada nit al mur de les Runes a vigilar. La clau de ferro és on ell la va deixar, amb els seus germans, sota la mirada d'un guardià de pedra.»" },
                 { qui: "Pergamí", text: "«Qui busqui la clau, que no oblidi mai on neix el sol.»" }
             ],
-            enAcabar: () => { E.dona('fragment2'); E.posaFlag("fragment2"); E.posaObjectiu("Ja tens els dos fragments: porta'ls al Pare Alcoví, a la biblioteca del Monestir."); }
+            enAcabar: () => { E.dona('fragment2'); E.posaFlag("fragment2"); E.posaObjectiu("Ja tens els dos fragments: porta'ls al Pare Alberic, a la biblioteca del Monestir."); }
         };
     },
 
@@ -421,7 +422,7 @@ const DIALEGS = {
                 { qui: 'Pergamí', text: "Un pergamí esquinçat (fragment 1 de 2):\n«Quan l'Ocellaire va ser tancat a la seva gàbia, un monjo va segellar la porta de ferro amb la llum de l'espasa Runna i la va deixar dormint a la pedra. Després va amagar la clau de la porta allà on ningú no la trobés.\nL'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.»" },
                 { qui: 'Ineu', text: "El pergamí s'acaba aquí, però diu que l'altra meitat és sota clau, al sagrari de l'església. I cada nit, diuen, a aquest mur s'hi veu l'ombra d'un monjo." },
                 { fer: (z, fet) => z.aparicioOmbra ? z.aparicioOmbra(fet) : fet() },
-                { qui: 'Ineu', text: "L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alcoví sabrà llegir-los junts." }
+                { qui: 'Ineu', text: "L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alberic sabrà llegir-los junts." }
             ],
             enAcabar: () => { E.posaFlag('fragment1'); E.posaObjectiu("Segons el pergamí, l'altra meitat és sota clau al sagrari de l'església, al Santuari. El Pare Nadiel en sabrà alguna cosa."); }
         };
@@ -529,9 +530,9 @@ const DIALEGS = {
         if (E.flag("soparObert") && !E.flag("escudella")) {
             return {
                 pagines: [
-                    { qui: "Meus", text: "El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb tres nens que falten..." },
-                    { qui: "Meus", text: "...Però el Til·ler té raó, maleït sigui. No es pot deixar de fer el que s'ha fet sempre, ni quan el cor fa mal. Pren l'escudella, i no la vessis!" },
-                    { qui: "Meus", text: "És l'escudella de cada any, la de les nostres àvies, però enguany té un gust que no voldria explicar. Tu tingues-ne cura de portar-la sencera." },
+                    { qui: "Nelis", text: "El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb tres nens que falten..." },
+                    { qui: "Nelis", text: "...Però el Til·ler té raó, maleït sigui. No es pot deixar de fer el que s'ha fet sempre, ni quan el cor fa mal. Pren l'escudella, i no la vessis!" },
+                    { qui: "Nelis", text: "És l'escudella de cada any, la de les nostres àvies, però enguany té un gust que no voldria explicar. Tu tingues-ne cura de portar-la sencera." },
                     { avis: "Has obtingut L'ESCUDELLA DE LA MEUS.", obj: 'escudella' }
                 ],
                 enAcabar: () => { E.dona("escudella"); E.posaFlag("escudella"); objectiuSopar(E); }
@@ -539,9 +540,9 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { qui: "Meus", text: "Ineu, fill, no t'hi quedis plantat! L'Huri i el Fram dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!" },
-                { qui: "Senyor Llaminer", text: "Meus, deixa'l respirar..." },
-                { qui: "Meus", text: "Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls." }
+                { qui: "Nelis", text: "Ineu, fill, no t'hi quedis plantat! L'Huri i el Fram dormien aquí mateix, a Sant Benet, porta amb porta, i ara no hi són. I ningú no fa res!" },
+                { qui: "Senyor Llaminer", text: "Nelis, deixa'l respirar..." },
+                { qui: "Nelis", text: "Tu calla, que ets tan pesat com el cafè d'ahir. Ineu, busca'ls." }
             ],
             enAcabar: () => E.posaFlag("parlatSantBenet")
         };
@@ -549,7 +550,7 @@ const DIALEGS = {
 
     molner: E => ({
         pagines: [
-            { qui: 'Senyor Llaminer', text: 'Sí, Meus. No, Meus. Ara vinc, Meus.' },
+            { qui: 'Senyor Llaminer', text: 'Sí, Nelis. No, Nelis. Ara vinc, Nelis.' },
             { qui: 'Senyor Llaminer', text: '...Ah, Ineu. Ets tu. Fes cas del que digui ella. Sempre té raó. Sempre.' }
         ]
     }),
@@ -673,7 +674,7 @@ const DIALEGS = {
         if (!E.te("carta_cortiner")) return { pagines: [
             { qui: "Pare Xèvius", text: "Alto, noi. No passes. Fa trenta anys un monjo de bona cara va picar a aquesta porta, va dir tres paraules dolces... i el meu predecessor li va obrir." },
             { qui: "Pare Xèvius", text: "Des d'aleshores, qui vol passar m'ha de demostrar la bona voluntat. No amb paraules, fill: amb fets." },
-            { qui: "Ineu", text: "(Quina prova se li pot demostrar? Potser el Pare Alcoví, a la Biblioteca, ho sap: ho deu tenir a la Crònica.)" }
+            { qui: "Ineu", text: "(Quina prova se li pot demostrar? Potser el Pare Alberic, a la Biblioteca, ho sap: ho deu tenir a la Crònica.)" }
         ] };
         return { pagines: [
             { qui: "Ineu", text: "Pare Xèvius, porto això: la Carta del Cortiner. Era al tronc del Pi dels Tres Cants. Els ocells hi han tornat." },
@@ -689,37 +690,37 @@ const DIALEGS = {
         if (E.flag("placaDolmen") && !E.flag("alcoviPlacaDita") && DIALEGS.faltaRunna(E).length === 3) {
             const pas = pistaRunna(E);
             const pagines = [
-                { qui: "Ineu", text: "Pare Alcoví, a la placa del Dolmen hi diu que només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. Què vol dir?" },
-                { qui: "Pare Alcoví", text: "Això ho tinc a la Crònica, fill. Deixa'm que t'ho llegeixi." },
+                { qui: "Ineu", text: "Pare Alberic, a la placa del Dolmen hi diu que només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina. Què vol dir?" },
+                { qui: "Pare Alberic", text: "Això ho tinc a la Crònica, fill. Deixa'm que t'ho llegeixi." },
                 { fer: (z, fet) => z.alcoviLlegeix ? z.alcoviLlegeix(fet) : z.npcVa('pare_alcovi', 812, 372, fet, 120) },
                 { qui: "Crònica", text: "«Per alçar l'espasa calen tres coses: el permís de l'arbre més vell, que seu a taula amb tothom; les paraules que el monjo va deixar, que només entén qui ha parlat amb la seva ombra; i la benedicció del prior, que és la de Déu passada per les mans dels homes.»" },
                 { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
-                { qui: "Pare Alcoví", text: "L'arbre sagrat és el Gran Til·ler, el de les cel·les: el seu medalló és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jordà, el prior." }
+                { qui: "Pare Alberic", text: "L'arbre sagrat és el Gran Til·ler, el de les cel·les: el seu medalló és el permís. Les paraules les guarda l'ombra del monjo, a les Runes, i només jo sabré entendre-les quan te les digui. I la benedicció divina és la del Pare Jòrdius, el prior." }
             ];
-            if (pas) pagines.push({ qui: "Pare Alcoví", text: "I ara, el que et toca: " + pas });
-            pagines.push({ qui: "Pare Alcoví", text: "I quan tinguis Runna, torna a veure'm: hi ha pàgines de la Crònica que encara no et puc llegir." });
+            if (pas) pagines.push({ qui: "Pare Alberic", text: "I ara, el que et toca: " + pas });
+            pagines.push({ qui: "Pare Alberic", text: "I quan tinguis Runna, torna a veure'm: hi ha pàgines de la Crònica que encara no et puc llegir." });
             return { pagines, enAcabar: () => { E.posaFlag("alcoviPlacaDita"); E.desar(); } };
         }
-        // Amb Runna, el Pare Alcoví no pot continuar llegint la Crònica mentre la tomba esquerdada del Cementiri treu boira: demana que la segelli (obligatori) i, quan torna, li dona la resta
+        // Amb Runna, el Pare Alberic no pot continuar llegint la Crònica mentre la tomba esquerdada del Cementiri treu boira: demana que la segelli (obligatori) i, quan torna, li dona la resta
         if (E.flag("runna") && !E.flag("tombaSegellada")) {
             if (E.flag("tombaDemanada")) return { pagines: [
-                { qui: "Pare Alcoví", text: E.flag("rellotgeReparat")
+                { qui: "Pare Alberic", text: E.flag("rellotgeReparat")
                     ? "La tomba, fill. Mentre l'esquerda del Cementiri treu boira no et puc llegir la resta de la Crònica. Colpeja-la amb Runna i torna."
                     : "La tomba, fill. Un segell no aguanta si el temps no el sosté: fes que el rellotge de la torre torni a caminar i colpeja l'esquerda del Cementiri amb Runna. Mentre treu boira no et puc llegir la resta de la Crònica." }
             ] };
             return {
                 pagines: [
-                    { qui: "Ineu", text: "Pare Alcoví, ja tinc Runna. Ara, què més diu la Crònica?" },
-                    { qui: "Pare Alcoví", text: "Deixa'm mirar-ho un cop més." },
+                    { qui: "Ineu", text: "Pare Alberic, ja tinc Runna. Ara, què més diu la Crònica?" },
+                    { qui: "Pare Alberic", text: "Deixa'm mirar-ho un cop més." },
                     { fer: (z, fet) => z.alcoviLlegeix ? z.alcoviLlegeix(fet) : z.npcVa('pare_alcovi', 812, 372, fet, 120) },
                     { qui: "Crònica", text: "«Amb la llum de Runna van tancar la porta, i amb la mateixa llum van tancar la seva tomba. Mentre l'esquerda treu boira, la porta no és del tot closa.»" },
                     { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
-                    { qui: "Pare Alcoví", text: "Un moment, fill. Fixa't en una cosa: la tomba es va esquerdar a un quart de quatre. És l'hora exacta a què es va aturar el rellotge de la torre." },
-                    { qui: "Pare Alcoví", text: E.flag("rellotgeReparat")
+                    { qui: "Pare Alberic", text: "Un moment, fill. Fixa't en una cosa: la tomba es va esquerdar a un quart de quatre. És l'hora exacta a què es va aturar el rellotge de la torre." },
+                    { qui: "Pare Alberic", text: E.flag("rellotgeReparat")
                         ? "I ja l'has fet caminar: bon senyal. Un segell només aguanta si el temps el sosté."
                         : "Un segell no aguanta si el temps no el sosté. Primer cal que el rellotge torni a caminar: la clau de la porta del retaule la guarda la Carry, a Nostra Senyora." },
-                    { qui: "Pare Alcoví", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir, i treu boira per l'esquerda. Fins que no sigui tancada no et puc llegir la resta: la boira esborra les paraules que et caldran." },
-                    { qui: "Pare Alcoví", text: E.flag("rellotgeReparat") ? "Colpeja l'esquerda amb Runna, fill, i torna a veure'm." : "Quan el rellotge camini, colpeja l'esquerda amb Runna, fill, i torna a veure'm." }
+                    { qui: "Pare Alberic", text: "La tomba és al Cementiri, darrere del Santuari i el Monestir, i treu boira per l'esquerda. Fins que no sigui tancada no et puc llegir la resta: la boira esborra les paraules que et caldran." },
+                    { qui: "Pare Alberic", text: E.flag("rellotgeReparat") ? "Colpeja l'esquerda amb Runna, fill, i torna a veure'm." : "Quan el rellotge camini, colpeja l'esquerda amb Runna, fill, i torna a veure'm." }
                 ],
                 enAcabar: () => { E.posaFlag("tombaDemanada"); E.posaObjectiu(PROGRES.pista(E)); }
             };
@@ -727,11 +728,11 @@ const DIALEGS = {
         if (E.flag("runna") && E.flag("tombaSegellada") && !E.flag("tombaLlegida")) {
             return {
                 pagines: [
-                    { qui: "Ineu", text: "Pare Alcoví, he segellat la tomba amb Runna: la boira ja no puja." },
-                    { qui: "Pare Alcoví", text: "Ho has fet bé, fill. Amb la llum de Runna van tancar la porta, i amb la mateixa llum, la tomba. Ara ja et puc dir la resta." },
-                    { qui: "Pare Alcoví", text: "I una cosa més, fill, que no és de la Crònica sinó d'un amic. Al Pare Xèvius, el vigilant de la porta de les Gírgoles, el conec de fa quaranta anys: no és dolent, sinó escarmentat. Fa trenta anys l'Aleu el va enganyar amb bones paraules, i des d'aleshores no es fia de ningú. Entén-lo, i no t'ho prenguis a mal." },
-                    { qui: "Pare Alcoví", text: "No et deixarà passar sense una prova de bona voluntat, i res no el convenç com la Carta del Cortiner, que reposa al tronc del Pi dels Tres Cants. Hauràs de despertar el pi amb els tres cants: Aurora, Vespres i Miracle. Fes-ho abans d'anar a la porta, que després no hi ha manera de tornar enrere." },
-                    { qui: "Pare Alcoví", text: "Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Francí t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat." }
+                    { qui: "Ineu", text: "Pare Alberic, he segellat la tomba amb Runna: la boira ja no puja." },
+                    { qui: "Pare Alberic", text: "Ho has fet bé, fill. Amb la llum de Runna van tancar la porta, i amb la mateixa llum, la tomba. Ara ja et puc dir la resta." },
+                    { qui: "Pare Alberic", text: "I una cosa més, fill, que no és de la Crònica sinó d'un amic. Al Pare Xèvius, el vigilant de la porta de les Gírgoles, el conec de fa quaranta anys: no és dolent, sinó escarmentat. Fa trenta anys l'Aleu el va enganyar amb bones paraules, i des d'aleshores no es fia de ningú. Entén-lo, i no t'ho prenguis a mal." },
+                    { qui: "Pare Alberic", text: "No et deixarà passar sense una prova de bona voluntat, i res no el convenç com la Carta del Cortiner, que reposa al tronc del Pi dels Tres Cants. Hauràs de despertar el pi amb els tres cants: Aurora, Vespres i Miracle. Fes-ho abans d'anar a la porta, que després no hi ha manera de tornar enrere." },
+                    { qui: "Pare Alberic", text: "Ja a dins, hi ha dues proves més: la boira que crema, que només la travessa qui duu l'Empara de les sacerdotesses de l'Hostatgeria (els guants del Germà Francí t'ajudaran a guanyar-te-la), i la gàbia, els barrots de la qual només escolten el Cant del Miracle. No baixis sense tot plegat." }
                 ],
                 enAcabar: () => { E.posaFlag("tombaLlegida"); E.posaObjectiu(PROGRES.pista(E)); }
             };
@@ -739,34 +740,34 @@ const DIALEGS = {
         if (E.flag("alcoviLlegit") && E.flag("benedicioMonjo") && !E.flag("saber")) {
             return {
                 pagines: [
-                    { qui: "Pare Alcoví", text: "Has parlat amb l'ombra, oi? Fa temps que ho sospitava. A la Crònica hi ha un marge que no vaig saber llegir: una paraula esborrada, de la mateixa mà que va escriure els fragments." },
-                    { qui: "Pare Alcoví", text: "Amb la paraula que t'ha donat, ara ho entenc. «La foscor tem la llum, però més encara el riure.» Aquestes són les paraules que desperten Runna, fill: no és un conjur, és una veritat. Digues-les davant l'espasa, senceres i amb tot el cor." },
-                    { qui: "Pare Alcoví", text: "I una cosa més, fill. Fa anys, a la biblioteca, vaig trobar un compartiment secret dins el llibre més antic de tots, i hi havia això: un medalló de pedra amb un llibre obert tallat. Té centenars d'anys." },
-                    { qui: "Pare Alcoví", text: "No sabia per a què servia. Ara sí: porta'l a la placa del Dolmen, i guarda les paraules dins teu per al moment de dir-les." },
+                    { qui: "Pare Alberic", text: "Has parlat amb l'ombra, oi? Fa temps que ho sospitava. A la Crònica hi ha un marge que no vaig saber llegir: una paraula esborrada, de la mateixa mà que va escriure els fragments." },
+                    { qui: "Pare Alberic", text: "Amb la paraula que t'ha donat, ara ho entenc. «La foscor tem la llum, però més encara el riure.» Aquestes són les paraules que desperten Runna, fill: no és un conjur, és una veritat. Digues-les davant l'espasa, senceres i amb tot el cor." },
+                    { qui: "Pare Alberic", text: "I una cosa més, fill. Fa anys, a la biblioteca, vaig trobar un compartiment secret dins el llibre més antic de tots, i hi havia això: un medalló de pedra amb un llibre obert tallat. Té centenars d'anys." },
+                    { qui: "Pare Alberic", text: "No sabia per a què servia. Ara sí: porta'l a la placa del Dolmen, i guarda les paraules dins teu per al moment de dir-les." },
                     { avis: "Has obtingut el MEDALLÓ DEL SABER!", obj: 'medallo_saber' }
                 ],
                 enAcabar: () => { E.dona("medallo_saber"); E.posaFlag("saber"); E.posaObjectiu(DIALEGS.objectiuRunna(E)); }
             };
         }
         if (E.flag("alcoviLlegit")) {
-            return { pagines: [{ qui: "Pare Alcoví", text: E.flag("saber") ? "Ja saps les paraules, fill. Ara només cal que arribi el dia de cridar-les." : "Els dos fragments expliquen el mateix, fill: algú vigila el segell des de fa segles. " + (pistaRunna(E) || "Ves a les Runes i no tinguis por de l'ombra.") }] };
+            return { pagines: [{ qui: "Pare Alberic", text: E.flag("saber") ? "Ja saps les paraules, fill. Ara només cal que arribi el dia de cridar-les." : "Els dos fragments expliquen el mateix, fill: algú vigila el segell des de fa segles. " + (pistaRunna(E) || "Ves a les Runes i no tinguis por de l'ombra.") }] };
         }
         if (f1 && f2) {
             return {
                 pagines: [
-                    { qui: "Pare Alcoví", text: "Has trobat els dos fragments! Deixa'm llegir-los... Sí. Ho explica la Crònica que guardo a la biblioteca: un monjo va segellar la foscor amb la llum de l'espasa Runna." },
+                    { qui: "Pare Alberic", text: "Has trobat els dos fragments! Deixa'm llegir-los... Sí. Ho explica la Crònica que guardo a la biblioteca: un monjo va segellar la foscor amb la llum de l'espasa Runna." },
                     { fer: (z, fet) => z.alcoviLlegeix ? z.alcoviLlegeix(fet) : z.npcVa('pare_alcovi', 812, 372, fet, 120) },
                     { qui: "Crònica", text: "«Des que la tercera església va quedar inacabada, l'ombra del monjo es veu clarament sobre el mur de les Runes: mig corbat, amb les mans unides, com si pregués. Apareix cada nit.»" },
                     { fer: (z, fet) => z.alcoviTorna ? z.alcoviTorna(fet) : fet() },
-                    { qui: "Pare Alcoví", text: "L'ombra del monjo... No fa mal a ningú, Ineu. Crec que és el monjo que va segellar la foscor amb la llum de Runna. Ves a les Runes, passat el Pati del Celler: és sobre el mur de l'església inacabada. Parla-hi." }
+                    { qui: "Pare Alberic", text: "L'ombra del monjo... No fa mal a ningú, Ineu. Crec que és el monjo que va segellar la foscor amb la llum de Runna. Ves a les Runes, passat el Pati del Celler: és sobre el mur de l'església inacabada. Parla-hi." }
                 ],
                 enAcabar: () => { E.posaFlag("alcoviLlegit"); E.posaFlag("parlatAlcovi"); E.posaObjectiu("A les Runes, passat el Pati del Celler, l'ombra del monjo és sobre el mur de l'església inacabada. Parla-hi."); }
             };
         }
         return {
             pagines: [
-                { qui: "Pare Alcoví", text: "Ineu, fill. Aquesta boira no és natural. Les boires d'aquí baixen de les muntanyes; aquesta puja de sota terra." },
-                { qui: "Pare Alcoví", text: "Diuen que cada nit apareix l'ombra d'un monjo a les Runes. Hi ha dos fragments d'una crònica antiga escampats pel Santuari: un a les Runes i un altre al sagrari de l'església. Porta-me'ls i els llegirem junts." }
+                { qui: "Pare Alberic", text: "Ineu, fill. Aquesta boira no és natural. Les boires d'aquí baixen de les muntanyes; aquesta puja de sota terra." },
+                { qui: "Pare Alberic", text: "Diuen que cada nit apareix l'ombra d'un monjo a les Runes. Hi ha dos fragments d'una crònica antiga escampats pel Santuari: un a les Runes i un altre al sagrari de l'església. Porta-me'ls i els llegirem junts." }
             ],
             enAcabar: () => E.posaFlag("parlatAlcovi")
         };
@@ -811,14 +812,14 @@ const DIALEGS = {
             { qui: "Monjo", text: "Jo era el qui va tancar la porta. Quan van obrir el cementiri, rient, els meus germans van deixar de descansar i el segell es va esquerdar." },
             { qui: "Monjo", text: "Sota terra hi ha una gàbia, petit monjo, i una cosa que no ha oblidat cap cant ni cap nen. Jo només puc vigilar. Tu pots tornar a tancar-ho." },
             { qui: "Monjo", text: "L'espasa dorm al sud-est, entre pedres, allà on el sol s'atura. Rep la meva paraula, que no pesa ni es veu, i recorda: la foscor tem la llum, però més encara el riure." },
-            { qui: "Monjo", text: "Jo només puc dir-te les paraules; el Pare Alcoví sabrà entendre-les. Quan les cridis davant l'espasa, la meva paraula farà que et reconegui." },
+            { qui: "Monjo", text: "Jo només puc dir-te les paraules; el Pare Alberic sabrà entendre-les. Quan les cridis davant l'espasa, la meva paraula farà que et reconegui." },
             { qui: "Monjo", text: "Ara ja puc descansar en pau." },
             { fer: (z, fet) => z.ombraDescansa ? z.ombraDescansa(fet) : fet() },
             { avis: "Has rebut la PARAULA DE L'OMBRA." }
         ],
         enAcabar: () => {
             E.posaFlag("benedicioMonjo");
-            E.posaObjectiu("Ara que l'ombra t'ha parlat, el Pare Alcoví tindrà paraules per a tu, a la biblioteca.");
+            E.posaObjectiu("Ara que l'ombra t'ha parlat, el Pare Alberic tindrà paraules per a tu, a la biblioteca.");
         }
     }),
 
@@ -1318,7 +1319,7 @@ const DIALEGS = {
             { qui: "El Gran Til·ler", text: "Un cop l'any, a la tardor, la gent de les cel·les s'asseu sota les meves branques i menja plegada. Ho anomeneu el sopar del Til·ler. Jo no menjo, però escolto. Tota la saviesa d'un arbre és escoltar la gent que menja junta." },
             { qui: "El Gran Til·ler", text: "Aquest any ningú no té ganes de taula: tres cadires buides, i el poble amb por. La boira s'alimenta de la solitud, petit monjo. I no val a mitges: la taula ha d'estar plena." },
             { qui: "El Gran Til·ler", text: "Fa tres-cents anys, quan van tancar la gàbia, els pastors de la Cirosa s'asseien aquí amb els monjos i els pelegrins. Després els van foragitar, i van oblidar que també eren de la casa. Que vingui el menjar de cada llar, també el seu. I que hi hagi flors." },
-            { qui: "El Gran Til·ler", text: "Porta l'escudella de la Meus, les flors d'Isílder i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís." },
+            { qui: "El Gran Til·ler", text: "Porta l'escudella de la Nelis, les flors d'Isílder i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís." },
             { qui: "El Gran Til·ler", text: "Però els pastors no s'asseuran a taula només amb paraules: fa anys que no senten música vora el foc. Abans de tornar-hi, ves a veure la Pianista del Santuari: guarda un cant tan vell com ells." }
         ],
         enAcabar: () => { E.posaFlag("soparObert"); objectiuSopar(E); }
@@ -1339,13 +1340,13 @@ const DIALEGS = {
     // El ritual: s'encén una espelma per cada nen que falta (l'Huri, el Fram i el Sardi)
     tillerSoparRitual: E => ({
         pagines: [
-            { qui: "Meus", text: "Aquest any l'escudella té gust de poc, fill: hi falta l'alegria de tres nens. Que ens ho perdonin els tres, allà on siguin." },
+            { qui: "Nelis", text: "Aquest any l'escudella té gust de poc, fill: hi falta l'alegria de tres nens. Que ens ho perdonin els tres, allà on siguin." },
             { qui: "Isílder", text: "He posat les flors de lluna al mig, com cada any. Aquest cop són per l'Huri, pel Fram... i pel meu Sardi." },
             { qui: "Les Venerables Sàvies", text: "Sempre fem el mateix, fill: una espelma per cada cadira buida a la taula. Enguany en són tres: l'Huri, el Fram i el Sardi. Encén-les tu: ets tu en qui tenim les nostres esperances posades." },
             { fer: (z, fet) => z.encendreEspelmes([0, 1, 2], fet) },
             { qui: "Pastor vell", text: "Fa molts anys que a nosaltres ningú no ens guardava cap cadira a cap taula. Gràcies per convidar-nos, fill." },
             { qui: "El Gran Til·ler", text: "Aquesta és la saviesa que et volia donar, petit monjo: ningú no es perd del tot mentre algú el recorda a taula. La gàbia de l'Ocellaire només s'omple de qui s'ha quedat sol." },
-            { fer: (z, fet) => z.enquadrar(715, 535, 1.25, 1000, fet, 440) },
+            { fer: (z, fet) => z.enquadrar(520, 390 - (TOP_HUD / 2) / 1.25, 1.25, 1000, fet, 440) },
             { qui: "El Gran Til·ler", text: "Rep el meu permís. Que et sigui lleu, i que no et faci oblidar mai que vas menjar amb tots." },
             { qui: "El Gran Til·ler", text: "Entre les meves branques hi custodio, des de temps immemorials, un medalló de pedra amb una fulla tallada: el permís de l'arbre. Fa segles que espera algú que s'assegui a taula amb tothom. Agafa'l." },
             { fer: (z, fet) => z.fullaCau(fet) },
@@ -1355,7 +1356,7 @@ const DIALEGS = {
         enAcabar: () => {
             E.dona("medallo_arbre"); E.posaFlag("fullaTiler"); E.posaFlag("soparFet");
             E.treu("pa_pastor");
-            E.posaObjectiu("Tens el Medalló de l'Arbre. Ara falten el Saber del Pare Alcoví, la Benedicció del Pare Jordà i trobar Runna més enllà del mirador de les estrelles.");
+            E.posaObjectiu("Tens el Medalló de l'Arbre. Ara falten el Saber del Pare Alberic, la Benedicció del Pare Jòrdius i trobar Runna més enllà del mirador de les estrelles.");
             const z = game.scene.getScene("ZonaTiller");
             if (z && z.acabarSopar) z.acabarSopar();
         }
@@ -1419,7 +1420,7 @@ const DIALEGS = {
                 { qui: 'Mandu', text: "Mandu. I ella és la nina. Sempre juguem aquí, davant la porta, esperant el Fram." },
                 { qui: 'Ineu', text: "El Fram és el teu germà?" },
                 { qui: 'Mandu', text: "Sí. Dormíem a la mateixa habitació. Una nit em vaig adormir amb ell al costat, i al matí el seu llit era buit. Sempre em diu on va, i aquesta vegada..." },
-                { qui: 'Mandu', text: "La Meus diu que la boira se l'ha endut. Però jo li vaig dir que no se n'anés! Li ho vaig dir! I ell se n'ha anat igualment! PER QUÈ NO TORNA?!" },
+                { qui: 'Mandu', text: "La Nelis diu que la boira se l'ha endut. Però jo li vaig dir que no se n'anés! Li ho vaig dir! I ell se n'ha anat igualment! PER QUÈ NO TORNA?!" },
                 { fer: (z, fet) => z.seq([c => z.enquadrarMandu ? z.enquadrarMandu(c) : c(), c => z.bombolla('mandu', '!!', c, 500), c => z.manduTrencaNina ? z.manduTrencaNina(c) : c()], fet) },
                 { qui: 'Mandu', text: "Ja n'hi ha prou! LI HE ARRENCAT EL CAP A LA NINA! I m'és igual: així el Fram haurà de tornar per cosir-lo!" },
                 { qui: 'Ineu', text: "Tranquil·la, Mandu. Deixa'm veure-la: potser el puc cosir." },
@@ -1611,7 +1612,7 @@ const DIALEGS = {
         } else {
             // Sense cap medalló a les mans: què cal i què falta
             const falta = DIALEGS.faltaRunna(E);
-            if (falta.length === 3) { if (!E.flag("alcoviPlacaDita")) pagines.push({ qui: "Ineu", text: "(El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alcoví deu saber-ho: ho tindrà escrit a la Crònica.)" }); }
+            if (falta.length === 3) { if (!E.flag("alcoviPlacaDita")) pagines.push({ qui: "Ineu", text: "(El permís de l'arbre sagrat... les paraules del saber... la benedicció divina. Què voldrà dir tot això? El Pare Alberic deu saber-ho: ho tindrà escrit a la Crònica.)" }); }
             else pagines.push({ qui: "Ineu", text: "(Tres cercles buits: un per a cada medalló. Em falta: " + falta.join(", ") + ".)" });
         }
         return { pagines, enAcabar: () => { E.posaFlag("placaDolmen"); E.desar(); } };
@@ -1620,15 +1621,15 @@ const DIALEGS = {
     faltaRunna: E => {
         const falta = [];
         if (!E.flag("fullaTiler")) falta.push("el permís del Til·ler (el Medalló de l'Arbre)");
-        if (!E.flag("saber")) falta.push("les Paraules del Saber (Medalló del Saber, Pare Alcoví)");
-        if (!E.flag("benediccio")) falta.push("la Benedicció del prior (Medalló de la Benedicció, Pare Jordà)");
+        if (!E.flag("saber")) falta.push("les Paraules del Saber (Medalló del Saber, Pare Alberic)");
+        if (!E.flag("benediccio")) falta.push("la Benedicció del prior (Medalló de la Benedicció, Pare Jòrdius)");
         return falta;
     },
 
     objectiuRunna: E => {
         const falta = [];
-        if (!E.flag("saber")) falta.push("les Paraules del Saber (Pare Alcoví)");
-        if (!E.flag("benediccio")) falta.push("la Benedicció del Pare Jordà");
+        if (!E.flag("saber")) falta.push("les Paraules del Saber (Pare Alberic)");
+        if (!E.flag("benediccio")) falta.push("la Benedicció del Pare Jòrdius");
         if (!E.flag("fullaTiler")) falta.push("el Medalló de l'Arbre (sopar)");
         if (falta.length) return "Per despertar Runna falta: " + falta.join(", ") + ".";
         if (!E.flag("estelLlorenc")) return PROGRES.pista(E);                  // el camí del Dolmen encara és tapat per la boira: primer l'estel
@@ -1729,20 +1730,20 @@ const DIALEGS = {
     },
 
 
-    // El cofre de les joguines de la caseta: la maneta d'en Jorgi és a sota
+    // El cofre de les joguines de la caseta: la maneta d'en Gori és a sota
     cofreManeta: E => {
         if (E.te("maneta") || E.flag("maneta")) {
             return { pagines: [] };
         }
         if (!E.flag("georgiManeta")) {
-            // Fins que no s'ha vist el volant de l'Home del Raïm (raimVolantVist), en Jorgi no sap res de la maneta: el cofre no ha de portar el jugador a parlar-hi
+            // Fins que no s'ha vist el volant de l'Home del Raïm (raimVolantVist), en Gori no sap res de la maneta: el cofre no ha de portar el jugador a parlar-hi
             if (!E.flag("raimVolantVist")) {
                 return { pagines: [
                     { qui: "Ineu", text: "Un cofre de joguines d'infant. No és meu: millor no remenar-lo." }
                 ] };
             }
             return { pagines: [
-                { qui: "Ineu", text: "No és meva... Millor preguntar a en Jorgi abans d'agafar-la." }
+                { qui: "Ineu", text: "No és meva... Millor preguntar a en Gori abans d'agafar-la." }
             ] };
         }
         return {
@@ -1794,17 +1795,17 @@ const DIALEGS = {
 
 // ---------------- DESPRÉS DE L'EPÍLEG ----------------
 // Quan ja s'ha acabat la història (epilegFet), la gent diu una cosa nova. Si la funció torna null (té una lateral encara oberta),
-// es manté el seu diàleg de sempre. Les que donen pistes (Pare Jordà, Venerables Sàvies, Alcoví, Til·ler) no canvien: ja saben dir que tot és fet.
+// es manté el seu diàleg de sempre. Les que donen pistes (Pare Jòrdius, Venerables Sàvies, Alberic, Til·ler) no canvien: ja saben dir que tot és fet.
 const DIALEGS_FINAL = {
     pianista: E => ({ pagines: [
         { qui: 'La Pianista', text: "Has sentit l'orgue? Encara li falla el re, però canta. Escolta." },
         { fer: (z, fet) => { const d = Joc.leitmotiv(z, 'orgue') || 4; z.npcFeina('pianista', d * 1000, 'notes'); z.esperar(d * 1000 + 300, fet); } },
         { qui: 'La Pianista', text: "I tu, fill, no deixis mai la tarota al calaix." }] }),
     meus: E => ({ pagines: [
-        { qui: 'Meus', text: "Ja els tinc a casa, i ja els he renyat tres vegades. Dues més i potser els deixo sortir a jugar." },
-        { qui: 'Meus', text: "Gràcies, Ineu. No ho diré gaires cops, així que escolta'm bé: gràcies." }] }),
+        { qui: 'Nelis', text: "Ja els tinc a casa, i ja els he renyat tres vegades. Dues més i potser els deixo sortir a jugar." },
+        { qui: 'Nelis', text: "Gràcies, Ineu. No ho diré gaires cops, així que escolta'm bé: gràcies." }] }),
     molner: E => ({ pagines: [
-        { qui: 'Senyor Llaminer', text: "Des que han tornat els nens, la Meus canta mentre renta. Desafina, però canta." },
+        { qui: 'Senyor Llaminer', text: "Des que han tornat els nens, la Nelis canta mentre renta. Desafina, però canta." },
         { qui: 'Senyor Llaminer', text: "No li diguis que t'ho he dit." }] }),
     dolora: E => ({ pagines: [{ qui: 'Dolora', text: "El Sardi ja torna a robar galetes del rebost. Senyal que està bé del tot." }] }),
     pilaria: E => ({ pagines: [{ qui: 'Pilària', text: "Hem posat una espelma per tu a cada cambra, Ineu. I una altra per si de cas." }] }),

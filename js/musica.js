@@ -73,7 +73,11 @@ function completarLliço(nom) {
                     ? 'El Cant de Vespres: 5-4-3-1. Toca\'l vora el foc dels pastors: un cant tan vell potser els recorda casa.'
                     : 'El Cant de Vespres: 5-4-3-1. És molt vell: les pedres antigues sempre l\'han entès.' }
         ];
-        E.posaObjectiu(E.flag('ombraDemanaCant') ? "El Cant de Vespres farà parlar l'ombra del monjo, a les Runes." : "Toca el Cant de Vespres vora el foc dels pastors, a la Cirosa.");
+        E.posaObjectiu(E.flag('ombraDemanaCant')
+            ? "El Cant de Vespres farà parlar l'ombra del monjo, a les Runes."
+            : (E.flag('soparObert') && !E.flag('pastorsConvencuts'))
+                ? "Toca el Cant de Vespres vora el foc dels pastors, a la Cirosa."
+                : PROGRES.pista(E));
     } else {
         pagines = [
             { qui: 'La Pianista', text: 'Això mateix, fill! El Cant del Miracle. Els ocells el cantaven a l\'alba, abans que l\'Ocellaire se\'l quedés i el tanqués a la seva gàbia.' },

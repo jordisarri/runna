@@ -27,7 +27,7 @@ class ZonaMonestir extends ZonaBase {
         this.time.delayedCall(700, () => {
             this.ui().obrirDialeg({
                 pagines: [
-                    { qui: 'Ineu', text: 'Una altra nit de boira... i aquest fred que no marxa. El Pare Jordà em deu estar esperant a la Plaça.' }
+                    { qui: 'Ineu', text: 'Una altra nit de boira... i aquest fred que no marxa. El Pare Jòrdius em deu estar esperant a la Plaça.' }
                 ]
             }, () => { Estat.desar(); this.alliberarCamera(1800); });
         });
@@ -40,7 +40,7 @@ class ZonaMonestir extends ZonaBase {
         this.terra('cami', 1400, 0, 160, 460 + D);         // cap al cementiri (darrere el Monestir i el Santuari)
 
         // 800 d'ample: la façana surt per dalt de la pantalla i només es veu a partir de les últimes fileres de teula
-        // La façana: el portal del mig duu a la biblioteca (on treballa el Pare Alcoví)
+        // La façana: el portal del mig duu a la biblioteca (on treballa el Pare Alberic)
         // La imatge va al fons (fonsY): l'Ineu puja l'escalinata per davant i arriba a la porta, que es veu obrir-se i el duu al Rebedor
         const facanaMon = this.posar('monestir', 800, 440 + D, { fonsY: 330 });
         // Murs de la façana: als costats de l'escalinata la paret arriba fins a y=535; dalt de l'escalinata el mur i la porta són a y=438

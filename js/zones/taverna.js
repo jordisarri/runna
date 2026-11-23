@@ -139,14 +139,14 @@ Object.assign(DIALEGS, {
             { qui: 'Ineu', text: '(Algú l\'hauria d\'haver vist anar-hi de nit... L\'Iscu, el fill de la Càren! L\'Eve va dir que s\'escapa pel camí de la Desaparició, per un forat entre els arbres.)' }
         ], enAcabar: () => { E.posaFlag('portaPetitaVista'); E.posaObjectiu(PROGRES.pista(E)); } };
         if (cant && empara) return { pagines: [
-            { qui: 'Ineu', text: "(Tinc la clau, el Cant del Miracle i l'Empara: les dues proves de què parlava la Crònica del Pare Alcoví. Endavant.)" }
+            { qui: 'Ineu', text: "(Tinc la clau, el Cant del Miracle i l'Empara: les dues proves de què parlava la Crònica del Pare Alberic. Endavant.)" }
         ] };
         // Tot el que falta, d'una vegada (la clau ja la té)
         const falta = [];
         if (!cant) falta.push("el Cant del Miracle (la Pianista, al Santuari, me l'ensenyarà un cop tingui Runna)");
         if (!empara) falta.push("l'Empara de les sacerdotesses de l'Hostatgeria (contra la boira que crema)");
         return { pagines: [
-            { qui: 'Ineu', text: "(Tinc la clau petita, però la Crònica del Pare Alcoví deia que, per baixar, em cal passar dues proves. Encara em falta " + falta.join(' i ') + '.)' }
+            { qui: 'Ineu', text: "(Tinc la clau petita, però la Crònica del Pare Alberic deia que, per baixar, em cal passar dues proves. Encara em falta " + falta.join(' i ') + '.)' }
         ] };
     }
 });

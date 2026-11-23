@@ -1229,7 +1229,7 @@ function dibuixarMasia(c, w) {
     });
 }
 
-// Masia d'en Jorgi: casa de pagès de dues plantes, de pedra vista irregular (carreus de to i mida diferents amb morter clar i alguna taca de calç), amb dues finestres
+// Masia d'en Gori: casa de pagès de dues plantes, de pedra vista irregular (carreus de to i mida diferents amb morter clar i alguna taca de calç), amb dues finestres
 // de fusta clara a dalt (la de l'esquerra més gran), la porta de pi clar amb vidre al mig, sota un llindar de pedra amb un fanal, i dues contraportes velles de fusta
 // fosca obertes a banda i banda, amb creus. Teulada de teules i un parell de mates florides al peu. La porta és al mig (a 0,56 de l'alçada, com a portaMasia).
 function dibuixarMasiaGeorgi(c, w) {
@@ -1379,13 +1379,38 @@ function dibuixarTaulaSopar(c, w) {
         };
         const copa = (x, y) => { ctx.fillStyle = '#c8a050'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(x - 4, y - 9); ctx.lineTo(x + 4, y - 9); ctx.lineTo(x + 3, y); ctx.lineTo(x - 3, y); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#8a2a3a'; ctx.fillRect(x - 3, y - 8, 6, 3); };
         [0.16, 0.30, 0.44, 0.58, 0.72, 0.86].forEach((f, i) => { const x = W * f, y = H * 0.25; plat(x, y, true); copa(x + 22, y - 1); ctx.strokeStyle = '#8a8a90'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 24, y + 1); ctx.lineTo(x - 19, y - 4); ctx.stroke(); });
-        // pa, gerres i el vas de flors de lluna al mig
-        [[0.23, 0.28], [0.66, 0.28], [0.50, 0.31]].forEach(([f, g], i) => { const x = W * f, y = H * g; ctx.fillStyle = '#c98a3e'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(x, y, 13, 7, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.strokeStyle = 'rgba(80,40,10,0.5)'; ctx.lineWidth = 1.3; for (let k = -1; k <= 1; k++) { ctx.beginPath(); ctx.moveTo(x + k * 6 - 2, y - 4); ctx.lineTo(x + k * 6 + 2, y + 3); ctx.stroke(); } });
-        [0.38, 0.62].forEach(f => { const x = W * f, y = H * 0.29; ctx.fillStyle = '#7a5a3a'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 6, y - 14); ctx.quadraticCurveTo(x - 10, y - 3, x - 5, y + 2); ctx.lineTo(x + 5, y + 2); ctx.quadraticCurveTo(x + 10, y - 3, x + 6, y - 14); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#9a7a52'; ctx.fillRect(x - 5, y - 16, 10, 3); });
-        const vx = W * 0.5, vy = H * 0.215;
-        ctx.fillStyle = '#4f8c3a'; ctx.strokeStyle = '#1e3a14'; ctx.lineWidth = 1.4; for (let k = -3; k <= 3; k++) { ctx.beginPath(); ctx.moveTo(vx, vy - 4); ctx.quadraticCurveTo(vx + k * 5, vy - 16, vx + k * 7, vy - 24 - Math.abs(k)); ctx.stroke(); }
-        [[-14, -26], [-6, -32], [3, -30], [12, -25], [-2, -22]].forEach(([dx, dy], i) => { ctx.fillStyle = i % 2 ? '#e8f0ff' : '#cfe0ff'; ctx.strokeStyle = '#4a5a8a'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(vx + dx, vy + dy, 5.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#f4d860'; ctx.beginPath(); ctx.arc(vx + dx, vy + dy, 1.7, 0, Math.PI * 2); ctx.fill(); });
-        ctx.fillStyle = '#7ab0c8'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(vx - 6, vy - 6); ctx.lineTo(vx - 4, vy + 6); ctx.lineTo(vx + 4, vy + 6); ctx.lineTo(vx + 6, vy - 6); ctx.closePath(); ctx.fill(); ctx.stroke();      // el vas
+        // pa dels pastors (fogasses grosses i daurades), sopera d'escudella fumejant i el vas gros de flors de lluna al mig
+        [[0.21, 0.29, 17, 9], [0.66, 0.26, 19, 10]].forEach(([f, g, rx, ry]) => {
+            const x = W * f, y = H * g;
+            ctx.fillStyle = 'rgba(70,40,15,0.22)'; ctx.beginPath(); ctx.ellipse(x + 2, y + 3, rx + 2, ry, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#d49242'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#e8b468'; ctx.beginPath(); ctx.ellipse(x - 2, y - 3, rx * 0.65, ry * 0.5, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = 'rgba(90,45,10,0.65)'; ctx.lineWidth = 1.6;
+            for (let k = -1; k <= 1; k++) { ctx.beginPath(); ctx.moveTo(x + k * 6 - 3, y - 4); ctx.lineTo(x + k * 6 + 3, y + 3); ctx.stroke(); }
+        });
+        // Sopera d'escudella fumejant (olla de terrissa amb cullerot i brou)
+        {
+            const sx = W * 0.35, sy = H * 0.24;
+            ctx.fillStyle = 'rgba(70,40,15,0.22)'; ctx.beginPath(); ctx.ellipse(sx + 2, sy + 6, 20, 7, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#a84e2c'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.2;
+            ctx.beginPath(); ctx.ellipse(sx, sy + 1, 18, 9, 0, 0, Math.PI); ctx.lineTo(sx - 18, sy - 6); ctx.quadraticCurveTo(sx, sy - 2, sx + 18, sy - 6); ctx.closePath(); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#d88232'; ctx.beginPath(); ctx.ellipse(sx, sy - 6, 17, 5.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#8fb04a'; ctx.beginPath(); ctx.arc(sx - 5, sy - 6, 2, 0, 7); ctx.arc(sx + 4, sy - 5, 1.8, 0, 7); ctx.fill();
+            ctx.strokeStyle = '#c8b896'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(sx + 7, sy - 7); ctx.lineTo(sx + 16, sy - 20); ctx.stroke();
+            ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 1.8;
+            ctx.beginPath(); ctx.moveTo(sx - 6, sy - 12); ctx.quadraticCurveTo(sx - 12, sy - 22, sx - 5, sy - 30); ctx.moveTo(sx + 2, sy - 13); ctx.quadraticCurveTo(sx + 8, sy - 23, sx + 1, sy - 32); ctx.stroke();
+        }
+        [0.41, 0.59].forEach(f => { const x = W * f, y = H * 0.29; ctx.fillStyle = '#7a5a3a'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 6, y - 14); ctx.quadraticCurveTo(x - 10, y - 3, x - 5, y + 2); ctx.lineTo(x + 5, y + 2); ctx.quadraticCurveTo(x + 10, y - 3, x + 6, y - 14); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#9a7a52'; ctx.fillRect(x - 5, y - 16, 10, 3); });
+        // Vas de flors de lluna al mig (més gros i lluminós perquè es vegi clarament al centre de la taula)
+        const vx = W * 0.5, vy = H * 0.22;
+        ctx.fillStyle = 'rgba(180,220,255,0.22)'; ctx.beginPath(); ctx.arc(vx, vy - 28, 28, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#2d6822'; ctx.lineWidth = 2; for (let k = -3; k <= 3; k++) { ctx.beginPath(); ctx.moveTo(vx, vy - 6); ctx.quadraticCurveTo(vx + k * 6, vy - 20, vx + k * 8, vy - 30 - Math.abs(k)); ctx.stroke(); }
+        [[-18, -32], [-8, -40], [4, -38], [16, -30], [-2, -26]].forEach(([dx, dy], i) => {
+            ctx.fillStyle = i % 2 ? '#f4f8ff' : '#d6e8ff'; ctx.strokeStyle = '#3a4e8a'; ctx.lineWidth = 1.6;
+            ctx.beginPath(); ctx.arc(vx + dx, vy + dy, 7.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#ffe055'; ctx.beginPath(); ctx.arc(vx + dx, vy + dy, 2.4, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.fillStyle = '#7ab0c8'; ctx.strokeStyle = CONTORN; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(vx - 8, vy - 9); ctx.lineTo(vx - 5, vy + 7); ctx.lineTo(vx + 5, vy + 7); ctx.lineTo(vx + 8, vy - 9); ctx.closePath(); ctx.fill(); ctx.stroke();      // el vas
         // tres llocs buits al davant, per a les espelmes (x del joc: 0,30 / 0,50 / 0,70 de l'amplada)
         [0.30, 0.50, 0.70].forEach(f => { plat(W * f, H * 0.37, false); copa(W * f + 22, H * 0.36); });
     });

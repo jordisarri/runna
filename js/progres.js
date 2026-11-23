@@ -12,7 +12,7 @@ const PROGRES = {
     passos: [
         // ---- ACTE 1 ----
         { id: 'clauer', marca: ['clauerNovici'], fet: E => E.flag('clauerNovici'),
-          pista: E => "El Pare Jordà t'ha fet cridar. Deu ser a la Plaça." },
+          pista: E => "El Pare Jòrdius t'ha fet cridar. Deu ser a la Plaça." },
         { id: 'basto', marca: ['bastoObtingut', 'obj:basto'], fet: E => E.flag('bastoObtingut'),
           pista: E => "El Germà Aleu, vora els xiprers de la Plaça, té un bastó per a tu: hi ha bestioles pels camins." },
         { id: 'cantAurora', marca: ['cantAurora', 'obj:flauta'], fet: E => E.flag('cantAurora'),
@@ -50,7 +50,7 @@ const PROGRES = {
         { id: 'sopar', marca: ['escudella', 'floresIsilder', 'pastorsConvencuts', 'soparFet', 'fullaTiler', 'obj:medallo_arbre'], fet: E => E.flag('soparFet'),
           pista: E => {
               const f = [];
-              if (!E.flag('escudella')) f.push("l'escudella de la Meus (a les cel·les)");
+              if (!E.flag('escudella')) f.push("l'escudella de la Nelis (a les cel·les)");
               if (!E.flag('floresIsilder')) f.push("les flors d'Isílder (a l'Hostatgeria)");
               if (!E.flag('pastorsConvencuts')) f.push(E.flag('cantPedres') ? "el pa que pasten els pastors de la Cirosa (toca'ls el cant vora el foc)" : "el pa dels pastors de la Cirosa: primer cal una música antiga per a ells, i la Pianista, al Santuari, en coneix una");
               return f.length ? "Al sopar del Til·ler encara hi falta: " + f.join(', ') + "." : "Ja ho tens tot: el Gran Til·ler espera la taula parada.";
@@ -69,7 +69,7 @@ const PROGRES = {
         { id: 'fragment2', marca: ['fragment2'], fet: E => E.flag('fragment2'),
           pista: E => "La clau petita encaixa al sagrari, al mig del retaule del Santuari." },
         { id: 'alcoviLlegit', marca: ['alcoviLlegit'], fet: E => E.flag('alcoviLlegit'),
-          pista: E => "Ja tens els dos fragments de la crònica. Porta'ls al Pare Alcoví, a la biblioteca del Monestir, perquè els compari amb la Crònica." },
+          pista: E => "Ja tens els dos fragments de la crònica. Porta'ls al Pare Alberic, a la biblioteca del Monestir, perquè els compari amb la Crònica." },
         { id: 'ombra', marca: ['ombraDemanaCant', 'cantPedres', 'benedicioMonjo'], fet: E => E.flag('benedicioMonjo'),
           pista: E => !E.flag('ombraDemanaCant') ? "A les Runes, l'ombra del monjo és sobre el mur de l'església inacabada. Parla-hi."
               : !E.flag('cantPedres') ? "L'ombra del monjo demana un cant que les pedres entenen. La Pianista, al Santuari, el coneix."
@@ -95,20 +95,20 @@ const PROGRES = {
               ? "Els tres medallons són a la placa: l'espasa del Dolmen espera, dalt de la llosa."
               : "La llàgrima aparta la boira. Al final, la placa del Dolmen espera els medallons de l'Arbre, del Saber i de la Benedicció." },
         // ---- ACTE 3 ----
-        // Amb Runna, el Pare Alcoví demana segellar la tomba del Cementiri per poder llegir-li la resta de la Crònica (el Pare Xèvius, el Pi, les proves de dins): és obligatori
+        // Amb Runna, el Pare Alberic demana segellar la tomba del Cementiri per poder llegir-li la resta de la Crònica (el Pare Xèvius, el Pi, les proves de dins): és obligatori
         { id: 'segellDemana', marca: ['tombaDemanada'], fet: E => E.flag('tombaDemanada') || E.flag('tombaSegellada') || E.flag('tombaLlegida') || E.flag('portaSoterraniOberta'),
-          pista: E => "Ja tens Runna: el Pare Alcoví, a la Biblioteca, té més a dir-te de la Crònica." },
+          pista: E => "Ja tens Runna: el Pare Alberic, a la Biblioteca, té més a dir-te de la Crònica." },
         // El rellotge de la torre (la Carry, el Pallofa i la clau) és obligatori: la tomba es va esquerdar a la mateixa hora a què es va aturar el rellotge, i el segell no aguanta si el temps no el sosté
         { id: 'rellotge', marca: ['carryParlat', 'pallofaTornat', 'obj:pallofa', 'obj:clau_campanar', 'portaCampanarOberta', 'rellotgeReparat'],
           fet: E => E.flag('rellotgeReparat') || E.flag('tombaSegellada') || E.flag('tombaLlegida') || E.flag('portaSoterraniOberta'),
           pista: E => (E.te('clau_campanar') || E.flag('portaCampanarOberta') || E.flag('clauCampanar') || E.flag('pallofaTornat'))
               ? "El rellotge de la torre s'ha aturat. La clau de la Carry obre una porta del retaule; dalt la torre, uns engranatges esperen."
-              : !E.flag('carryParlat') ? "El Pare Alcoví vol que el rellotge de la torre torni a caminar. La clau de la porta del retaule la té la Carry, a Nostra Senyora."
+              : !E.flag('carryParlat') ? "El Pare Alberic vol que el rellotge de la torre torni a caminar. La clau de la porta del retaule la té la Carry, a Nostra Senyora."
               : E.te('pallofa') ? "El Pallofa ja és amb tu: porta'l a la Carry, a Nostra Senyora, i et donarà la clau de la torre."
               : "El Pallofa, el gos de la Carry, passeja per Sant Antoni. La Carry, que guarda la clau de la torre del rellotge, t'ho agrairia." },
         { id: 'segell', marca: ['tombaSegellada', 'tombaLlegida'], fet: E => E.flag('tombaLlegida') || E.flag('portaSoterraniOberta'),
-          pista: E => !E.flag('tombaSegellada') ? "El rellotge ja camina: la llum de Runna pot tancar l'esquerda de la tomba del Cementiri. El Pare Alcoví no et llegirà la resta de la Crònica fins que no ho facis."
-              : "Has segellat la tomba. Torna al Pare Alcoví: et vol llegir la resta de la Crònica." },
+          pista: E => !E.flag('tombaSegellada') ? "El rellotge ja camina: la llum de Runna pot tancar l'esquerda de la tomba del Cementiri. El Pare Alberic no et llegirà la resta de la Crònica fins que no ho facis."
+              : "Has segellat la tomba. Torna al Pare Alberic: et vol llegir la resta de la Crònica." },
         { id: 'cantMiracle', marca: ['cantMiracle'], fet: E => E.flag('cantMiracle'),
           pista: E => "Runna ja és amb tu. Els barrots de la gàbia només escolten un cant que la Pianista encara no t'ha ensenyat." },
         { id: 'guants', marca: ['obj:ram', 'florsCreu', 'obj:guants'], fet: E => E.te('guants') || E.flag('rodaMoguda'),
@@ -137,8 +137,8 @@ const PROGRES = {
           pista: E => "Rere la roda, un passadís baixa a una cambra secreta. Els esbarzers negres del camí només cedeixen a Runna." },
         { id: 'maneta', marca: ['georgiManeta', 'maneta', 'obj:maneta'], fet: E => E.flag('maneta') || E.te('maneta'),
           pista: E => E.flag('georgiManeta')
-              ? "La maneta d\'en Jorgi és al cofre de les joguines, dalt de la caseta de pals, a la Caseta."
-              : "El volant de ferro de l'Home del Raïm no té maneta. En Jorgi de la Caseta en deu saber alguna cosa." },
+              ? "La maneta d\'en Gori és al cofre de les joguines, dalt de la caseta de pals, a la Caseta."
+              : "El volant de ferro de l'Home del Raïm no té maneta. En Gori de la Caseta en deu saber alguna cosa." },
         { id: 'raim', marca: ['raimDesperta', 'raimDerrotat'], fet: E => E.flag('raimDerrotat'),
           pista: E => "A l'escalinata de la Casa Gran, l'Home del Raïm té el cap girat d'esquena. Amb la maneta al volant de la base, gira'l tres voltes fins que et miri de cara: es desperta. Només Runna li fa mal, i només al cap, quan ensopega de morros després d'una envestida." },
         { id: 'cripta', marca: ['relTretes', 'clauFerro', 'obj:clau_ferro'], fet: E => E.flag('relTretes'),
@@ -240,7 +240,7 @@ const PROGRES = {
         return "Els nens tornen a riure i l'orgue sona (gairebé bé). Ho has fet tot, fill.";
     },
 
-    // Pista només fins a Runna (null quan ja la tens): la fan servir el Pare Jordà, el Pare Alcoví i el Til·ler
+    // Pista només fins a Runna (null quan ja la tens): la fan servir el Pare Jòrdius, el Pare Alberic i el Til·ler
     pistaRunna(E) {
         if (E.flag('runna')) return null;
         const p = this.seguent(E);

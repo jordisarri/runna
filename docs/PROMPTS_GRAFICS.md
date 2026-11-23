@@ -22,7 +22,7 @@
 
 - [x] `masia_cirosa` i `masia_georgi` (les dues masies: `art/edificis/masia_cirosa.png` i `masia_georgi.png`; la porta és a `portaMasia`, amb les fraccions de cada una)
 
-- [x] `caseta_joc` (la caseta de joc del jardí d'en Jorgi: `art/edificis/caseta_joc.png`; convertida amb `python eines/treure_fons.py art/edificis/caseta_joc.png assets/edificis/caseta_joc.webp 260 --forats 300`, que també buida els forats blancs entre pilars i graons)
+- [x] `caseta_joc` (la caseta de joc del jardí d'en Gori: `art/edificis/caseta_joc.png`; convertida amb `python eines/treure_fons.py art/edificis/caseta_joc.png assets/edificis/caseta_joc.webp 260 --forats 300`, que també buida els forats blancs entre pilars i graons)
 
 - [x] `cabana` (la cabana de la Joaneta: `art/edificis/cabana.png`)
 
@@ -68,7 +68,7 @@
 
 - [x] `ocellaire_cansat`
 
-- [x] `meus` (Meus) i `molner` (senyor Llaminer)
+- [x] `meus` (Nelis) i `molner` (senyor Llaminer)
 
 - [x] `carro_rosansa` (Rosansa)
 

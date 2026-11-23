@@ -175,7 +175,7 @@ class ZonaEsglesia extends ZonaBase {
 
     // ---------------- EPÍLEG: «Torna el cant» ----------------
     // Tothom és al Santuari, ben distribuït per la nau sense bancs ni orgue perquè ningú es tapi:
-    // els nens davant l'altar, la Pianista i el Pare Jordà a banda i banda, i el poble repartit en files
+    // els nens davant l'altar, la Pianista i el Pare Jòrdius a banda i banda, i el poble repartit en files
     // deixant un passadís ample al mig per on puja l'Ineu, que es queda mirant de cara a la càmera.
     prepararEpileg() {
         this.epileg = true;
@@ -186,7 +186,7 @@ class ZonaEsglesia extends ZonaBase {
         const HOMES_EPILEG = ['pare_daimiel', 'pare_jorda', 'pare_alcovi', 'isilder', 'molner', 'pomers', 'jusef', 'germa_franci', 'galf'];
         const seient = (fila, costat, n) => [(costat < 0 ? [345, 430, 515] : [765, 850, 935])[n], FILES[fila]];
         [['nen_uri', 480, R + 245, NEN - 8], ['nen_flam', 590, R + 245, NEN + 9], ['nen_sardin', 700, R + 245, NEN + 9],      // els tres nens, separats, al peu de l'altar
-         ['pare_daimiel', 360, R + 215, AD], ['pare_jorda', 1030, R + 215, AD],                                      // el presbiteri: el Pare Nadiel a l'esquerra, el Pare Jordà a la dreta, i l'orgue amb la Pianista asseguda
+         ['pare_daimiel', 360, R + 215, AD], ['pare_jorda', 1030, R + 215, AD],                                      // el presbiteri: el Pare Nadiel a l'esquerra, el Pare Jòrdius a la dreta, i l'orgue amb la Pianista asseguda
          ['carry', ...seient(0, -1, 0), AD], ['pare_alcovi', ...seient(0, -1, 1), AD], ['venerables', ...seient(0, -1, 2), AD],
          ['isilder', ...seient(0, 1, 0), AD], ['carmelia', ...seient(0, 1, 1), AD], ['pilaria', ...seient(0, 1, 2), AD],
          ['meus', ...seient(1, -1, 0), AD], ['molner', ...seient(1, -1, 1), AD], ['mandu', ...seient(1, -1, 2), NEN],
@@ -279,7 +279,7 @@ class ZonaEsglesia extends ZonaBase {
                 pla(640, R + 330, 1.0, 1200),
                 f => riure(nens, f)
             ]),
-            // Els adults importants per als nens: les Venerables Sàvies, la Mandu (la germana del Fram) i l'Isílder (el pare del Sardi). La Meus i el senyor Llaminer, a la multitud, sense protagonisme.
+            // Els adults importants per als nens: les Venerables Sàvies, la Mandu (la germana del Fram) i l'Isílder (el pare del Sardi). La Nelis i el senyor Llaminer, a la multitud, sense protagonisme.
             // Cada un surt del seu banc pel passadís i puja fins al nen (caminant).
             accio(z => [pla(560, R + 380, 0.95, 900), camina('venerables', [[640, R + 480], [640, R + 330], [340, R + 290]]), f => z.npcMira('venerables', 480, f), f => z.bombolla('venerables', '♥', f, 900),
                         f => { z.npcSalta('nen_uri', null, 2); z.npcSalta('nen_flam', f, 2); }]),
@@ -346,7 +346,7 @@ class ZonaEsglesia extends ZonaBase {
                     z.posarDireccio('avall', false);
                     riure(tots, f);
                 },
-                // El Pare Jordà (de la dreta del presbiteri) baixa a trobar l'Ineu
+                // El Pare Jòrdius (de la dreta del presbiteri) baixa a trobar l'Ineu
                 pla(800, R + 330, 0.95, 900),
                 camina('pare_jorda', [[1030, R + 300], [700, R + 395], [705, R + 440]], 130),
                 f => z.npcMira('pare_jorda', 'ineu', f)
@@ -372,15 +372,15 @@ class ZonaEsglesia extends ZonaBase {
                 { qui: 'Pare Nadiel', text: "Sents la torre del rellotge, Ineu? Torna a tocar les hores! Fa tres nits que el temps no passava, i l'has tornat a posar en marxa tu." },
                 ...(hi('carry') ? [foc(['carry'], 2.6), { qui: 'Carry', text: "El meu home estaria orgullós que el caminar del seu rellotge ens uneixi a tots. Gràcies, fill." }] : [])
             ] : []),
-            // L'Ineu explica al Pare Jordà què ha passat amb l'Aleu, i el prior tanca l'epíleg
+            // L'Ineu explica al Pare Jòrdius què ha passat amb l'Aleu, i el prior tanca l'epíleg
             foc(['ineu', 'pare_jorda'], 2.2),
-            { qui: 'Ineu', text: "Pare Jordà... el Germà Aleu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar." },
-            { qui: 'Pare Jordà', text: "L'Aleu... dins la gàbia?" },
+            { qui: 'Ineu', text: "Pare Jòrdius... el Germà Aleu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar." },
+            { qui: 'Pare Jòrdius', text: "L'Aleu... dins la gàbia?" },
             { fer: (z, fet) => z.seq([f => z.bombolla('pare_jorda', '…', f, 1300)], fet) },        // sospira i mira cap al terra
-            { qui: 'Pare Jordà', text: "Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller." },
-            { qui: 'Pare Jordà', text: "Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més." },
+            { qui: 'Pare Jòrdius', text: "Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller." },
+            { qui: 'Pare Jòrdius', text: "Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més." },
             foc(['pare_jorda', 'ineu'], 1.7),
-            { qui: 'Pare Jordà', text: "Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill." },
+            { qui: 'Pare Jòrdius', text: "Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill." },
             { fer: (z, fet) => {
                 z.posarDireccio('avall', false);
                 z.seq([

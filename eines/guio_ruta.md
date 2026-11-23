@@ -21,14 +21,14 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | Personatge | On | Paper |
 |---|---|---|
 | **Ineu** | — | Protagonista, jove monjo. |
-| **Pare Jordà** | Plaça / Monestir | Prior. Encarrega la missió i dona la Benedicció. |
-| **Pare Alcoví** | Biblioteca (Monestir) | Llegeix els pergamins; dona el Saber. |
+| **Pare Jòrdius** | Plaça / Monestir | Prior. Encarrega la missió i dona la Benedicció. |
+| **Pare Alberic** | Biblioteca (Monestir) | Llegeix els pergamins; dona el Saber. |
 | **La Pianista** | Santuari | Ensenya els tres cants (Aurora, Vespres, Miracle) i dona la tarota. |
 | **Pare Nadiel** | Santuari | Dirigeix el cor. |
 | **Germà Francí** | Monestir / Sant Antoni | Monjo vell; dona els Guants de Poder. |
 | **Germà Aleu** | Plaça, Cirosa, Gàbia | Antagonista simpàtic: servent de l'Ocellaire (el «Pastor de Boira»). |
 | **L'Ocellaire (L'Home de la Gàbia)** | Sala de la Gàbia | Boss final. |
-| **Meus i senyor Llaminer** | Sant Benet | Matrimoni veí dels nens; la Meus fa l'escudella del sopar. |
+| **Nelis i senyor Llaminer** | Sant Benet | Matrimoni veí dels nens; la Nelis fa l'escudella del sopar. |
 | **Mandu** | Sant Benet | Nena petita, germana del Fram. |
 | **Venerables Sàvies** | Cel·les | Donen la pista del moment. |
 | **Carry** | Nostra Senyora | Vídua del campaner; busca el gos Pallofa. |
@@ -38,7 +38,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Isílder** | Hostatgeria (jardí) | Pare del Sardi; cuida les flors. |
 | **Les sacerdotesses** Dolora, Pilària, Carmèlia | Hostatgeria | Protectores del Sardi; atrapades al soterrani. |
 | **Galf** | L'Era | Inventor del telescopi. |
-| **Jorgi** | La Caseta | Nen que guarda la Maneta. |
+| **Gori** | La Caseta | Nen que guarda la Maneta. |
 | **La Joaneta** | Cabana del bosc | Bruixa-vident; dona el beuratge. |
 | **El Gran Til·ler** | Gran Til·ler | Esperit savi; dona la branca i la Fulla. |
 | **Pastors de la Cirosa** (el pastor vell) | Cirosa | Desterrats; guarden les Esquelles. |
@@ -59,20 +59,20 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | Beuratge | La Joaneta | Esvaeix la boira del camí del Gran Til·ler. |
 | Branca del Til·ler | Gran Til·ler | Atac millor; enfonsa les arrels que barren la Cirosa. |
 | Esquelles dels pastors | Pastor vell (Cirosa) | Trama del sopar. |
-| Escudella / Flors d'Isílder / Pa dels pastors | Meus / Isílder / pastors | Les tres coses del sopar del Til·ler. |
+| Escudella / Flors d'Isílder / Pa dels pastors | Nelis / Isílder / pastors | Les tres coses del sopar del Til·ler. |
 | Medalló de l'Arbre (la «Fulla del Til·ler» al guió) | Sopar del Til·ler (★ «Has obtingut el MEDALLÓ DE L'ARBRE!») | Permís per al Dolmen. |
 | Clau del sagrari | Ermita de la Desaparició (missatge de les 12 columnes) | Obre el sagrari del Santuari. |
-| Fragments 1 i 2 | Runes / sagrari del Santuari | Pista per a l'Alcoví. |
+| Fragments 1 i 2 | Runes / sagrari del Santuari | Pista per a l'Alberic. |
 | Cant de Vespres | Pianista | Desperta l'ombra, la pedra secreta i el pont de la Gàbia. |
-| Medalló del Saber | Pare Alcoví | Placa del Dolmen. |
-| Medalló de la Benedicció | Pare Jordà | Placa del Dolmen. |
+| Medalló del Saber | Pare Alberic | Placa del Dolmen. |
+| Medalló de la Benedicció | Pare Jòrdius | Placa del Dolmen. |
 | Clau de Sant Gabriel / Cristall de Gel | Senyor Buidor (després del Galf) / cofre de l'ermita de Sant Gabriel | Telescopi. |
 | Telescopi / Llàgrima de Sant Llorenç | Galf / Dipòsits | Aparta la boira del camí del Dolmen. |
 | **Runna** | El Dolmen | Dany 3; talla els esbarzers negres. |
 | Cant del Miracle | Pianista (després de Runna) | Obre els barrots de la gàbia. |
 | Llanterna (Llum d'en Mamet) | Jusef (en guanyar-lo a ping-pong, **a l'Acte 2, abans del fragment 1**) | **Imprescindible a les Runes** (sense llum no es veu el pergamí del forat); eixampla la llum als llocs foscos. |
 | Ram / Guants de Poder | Germà Francí | Mouen la roda del Celler, el rastell i l'àngel de pedra. |
-| Maneta | Cofre de joguines de la Caseta (en Jorgi) | Fa girar el cap de l'Home del Raïm. |
+| Maneta | Cofre de joguines de la Caseta (en Gori) | Fa girar el cap de l'Home del Raïm. |
 | Pergamí del monjo | Cambra secreta (Casa Gran) | Pista del puzle del Raïm. |
 | Clau de ferro | Cripta de la Casa Gran | Obre la porta de ferro exterior (Pati del Celler). |
 | Clau rovellada | L'Iscu (cabana amagada) | Obre la porta de ferro del fons de la galeria. |
@@ -91,13 +91,13 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 2. Pastors i monjos el tanquen sota terra; un monjo segella la porta de ferro amb la llum de Runna.
 3. El Santuari de nit: fa tres nits que puja una boira lila que emmudeix l'orgue.
 4. Cada nit falta un nen: l'Huri i el Fram (de Sant Benet) i, aquesta nit, el Sardi, el protegit de les sacerdotesses. Una ombra amb hàbit se l'endú dins la boira cap a les Gírgoles.
-5. Matí: l'Ineu es desperta i el Pare Jordà el busca.
+5. Matí: l'Ineu es desperta i el Pare Jòrdius el busca.
 
 (Els textos exactes són al codi: `js/main.js`, `PROLEG_QUADRES`.) Quan comença el joc, els tres nens ja falten.
 
 ## ACTE 1 — «El misteri»
 
-**Pas 1 · Plaça del Santuari — Pare Jordà** `pareJorda`
+**Pas 1 · Plaça del Santuari — Pare Jòrdius** `pareJorda`
 L'Ineu parla amb el prior: li explica la desaparició dels nens i li demana que parli amb tothom. *(Posa el flag `clauerNovici`.)*
 
 **Pas 2 · Plaça — Germà Aleu, vora els xiprers** `germaAldreu`
@@ -110,7 +110,7 @@ L'orgue no sona. Ensenya el **Cant de l'Aurora** i dona la **tarota del Cortiner
 Amb la tarota, el Cant de l'Aurora neteja l'aigua tèrbola (en surten gripaus enverinats i boira). La Creu de l'Aparició reacciona `creu`.
 
 **Pas 5 · Cel·les (Sant Benet, Nostra Senyora, Sant Antoni)** *(es pot fer ara o quan toqui)*
-- **Meus i senyor Llaminer** `meus` `molner`; **Mandu** `mandu` (nena petita, germana del Fram).
+- **Nelis i senyor Llaminer** `meus` `molner`; **Mandu** `mandu` (nena petita, germana del Fram).
 - **Venerables Sàvies** `venerables`: donen la pista del moment si vas perdut.
 - **Carry** `carry`: busca el seu gos (lateral, vegeu més avall).
 - El camí del nord, cap al Gran Til·ler, és tapat per una **boira espessa**.
@@ -146,7 +146,7 @@ Vora el foc, el pastor vell dona les **Esquelles** dels seus avis.
 
 **Pas 14 · Sopar del Til·ler** `tillerSoparIntro` `tillerSoparFalta` `tillerSoparPreparat` `tillerSoparRitual` `espelmesTiller`
 Amb les esquelles, el Til·ler parla d'un sopar. Calen tres coses:
-1. **L'escudella de la Meus** (Cel·les, Sant Benet) `meus`.
+1. **L'escudella de la Nelis** (Cel·les, Sant Benet) `meus`.
 2. **Les flors d'Isílder** (jardí de l'Hostatgeria) `isilderBase`.
 3. **El pa dels pastors**: els pastors el pasten ells, però necessiten una música antiga vora el foc. La Pianista ensenya el **Cant de Vespres** (veure pas 17) i, tocat vora el foc de la Cirosa, convenç els pastors `pastorsConvencuts`.
 Ritual de tres espelmes (una per cada nen: l'Huri, el Fram i el Sardi): cau la **Fulla del Til·ler**: en objecte, el **Medalló de l'Arbre** i el **medalló de l'Arbre**.
@@ -165,18 +165,18 @@ Per tot el camí hi ha **12 columnes** que «parlen»: cada una dona una paraula
 **Pas 17 · Santuari — fragment 2 (sagrari) i Cant de Vespres** `sagrari` `pareDaimiel` `pianista`
 El Pare Nadiel només parla del sagrari quan l'Ineu ja té el primer pergamí. La clau petita obre el sagrari del retaule: **fragment 2**. La Pianista ensenya el **Cant de Vespres** (5-4-3-1; normalment al sopar, quan el Til·ler hi envia l'Ineu; si l'Ineu fa abans les Runes, l'hi envia l'ombra); el mateix cant desperta la **pedra secreta** de la façana del Santuari (sala del tresor: +1 cor, `pedraEscolta` `cofreTresor`).
 
-**Pas 18 · Biblioteca — Pare Alcoví** `pareAlcovi`
+**Pas 18 · Biblioteca — Pare Alberic** `pareAlcovi`
 Llegeix els fragments i els compara amb la Crònica: en un marge hi diu que l'ombra apareix a les Runes. Activa el fragment 3 i demana a l'Ineu que hi parli.
 
 **Pas 19 · Runes — l'ombra i el Cant de Vespres** `ombraMonjo` `benedicioMonjo`
 - Sense els fragments llegits: l'ombra només el mira i li diu quants fragments li falten.
-- Amb els fragments llegits: demana el **Cant de Vespres**. Quan l'Ineu li el toca, l'ombra explica qui era i que el segell es va esquerdar quan van obrir el cementiri, i dona la **Paraula de l'Ombra**: li diu on dorm Runna (sud-est, entre pedres, on el sol s'atura: el Dolmen) i la frase que només l'Alcoví sabrà entendre. Després s'enlaira i es desfà en llum.
+- Amb els fragments llegits: demana el **Cant de Vespres**. Quan l'Ineu li el toca, l'ombra explica qui era i que el segell es va esquerdar quan van obrir el cementiri, i dona la **Paraula de l'Ombra**: li diu on dorm Runna (sud-est, entre pedres, on el sol s'atura: el Dolmen) i la frase que només l'Alberic sabrà entendre. Després s'enlaira i es desfà en llum.
 
 **Pas 20 · Biblioteca — el Saber** `pareAlcovi`
-Amb el que l'Ineu li explica, l'Alcoví entén la paraula esborrada de la Crònica: *«La foscor tem la llum, però més encara el riure».* Això és el **Saber** (+ medalló).
+Amb el que l'Ineu li explica, l'Alberic entén la paraula esborrada de la Crònica: *«La foscor tem la llum, però més encara el riure».* Això és el **Saber** (+ medalló).
 
 **Pas 21 · Plaça — la Benedicció** `pareJorda`
-Només amb la Fulla del Til·ler: el Pare Jordà beneeix l'Ineu (animació) i li dona el **medalló de la Benedicció**.
+Només amb la Fulla del Til·ler: el Pare Jòrdius beneeix l'Ineu (animació) i li dona el **medalló de la Benedicció**.
 
 ### 2C · El camí del Dolmen
 
@@ -207,13 +207,13 @@ El Germà Francí demana que portis el seu **ram** a la tomba de l'àngel del Ce
 Roda → **Passadís secret** (escolopendres i un mur de cinc esbarzers negres: Runna) → **Cambra secreta** (cofre: el **pergamí del monjo**; la porta del fons és una llosa sense pany: la bóta de la creu rodola, deixa veure una anella, i una cadena fa girar la politja i puja la llosa).
 
 **Pas 30 · La Caseta — la Maneta** `georgiCaseta` `cofreManeta`
-A l'oest del Gran Til·ler, en Jorgi (que crida «MAI! MAI!») guarda la **Maneta** al cofre de les joguines de la caseta aixecada sobre pals; per una cosa seriosa, la hi deixa agafar.
+A l'oest del Gran Til·ler, en Gori (que crida «MAI! MAI!») guarda la **Maneta** al cofre de les joguines de la caseta aixecada sobre pals; per una cosa seriosa, la hi deixa agafar.
 
 **Pas 31 · Escalinata de la Casa Gran — Home del Raïm i Cripta** `homeRaim` `raimDesperta` `raimDerrotat` `tombaMonjos`
 La Maneta s'encaixa al volant de ferro del pedestal: tres voltes i el cap girat el mira de cara → **boss**. Vençut, la trapa de sota l'escalinata duu a la **Cripta** dels monjos: la **Clau de ferro**.
 
 **Pas 32 · Cementiri — segellar la tomba** `creuCementiri` `tombaMonjos` `pareAlcovi`
-El Pare Alcoví llegeix a la Crònica que la llum de Runna tanca la tomba. Un cop de **Runna** a la tomba esquerdada la segella i la boira s'esvaeix.
+El Pare Alberic llegeix a la Crònica que la llum de Runna tanca la tomba. Un cop de **Runna** a la tomba esquerdada la segella i la boira s'esvaeix.
 
 **Pas 33 · Pati del Celler — porta de ferro exterior** `cartellCeller` `cartellGirgoles`
 La Clau de ferro obre la **porta de les Gírgoles**, a l'est del Pati del Celler (la que visitava l'Aleu): duu a la **Galeria de la Porta de Ferro** i al fons hi ha una segona porta de pany petit.
@@ -246,7 +246,7 @@ El **Cant del Miracle** davant els barrots fa brillar la gàbia, que s'aixeca fi
 
 ## EPÍLEG — «Torna el cant» `ferEpileg` `gentEpileg`
 
-A la Gàbia, els nens riuen i el riure desfà la boira. L'Aleu («El Mestre és aquí dins... Jo em quedo amb ell») es posa sota la gàbia, que baixa i el tanca. Al **Santuari** hi és tothom: la Meus abraça l'Huri i el Fram, les sacerdotesses el Sardi, l'Iscu hi ha escapat de la Taverna. La Pianista dona l'entrada: l'Ineu comença el Cant del Miracle amb la tarota, l'orgue el segueix i el poble canta. Si el rellotge del campanar funciona, toca tres campanades. El Pare Jordà: «Benvingut a casa, Ineu.» **Crèdits** i es pot continuar jugant (la gent té frases noves: vegeu `DIALEGS_FINAL` a l'annex).
+A la Gàbia, els nens riuen i el riure desfà la boira. L'Aleu («El Mestre és aquí dins... Jo em quedo amb ell») es posa sota la gàbia, que baixa i el tanca. Al **Santuari** hi és tothom: la Nelis abraça l'Huri i el Fram, les sacerdotesses el Sardi, l'Iscu hi ha escapat de la Taverna. La Pianista dona l'entrada: l'Ineu comença el Cant del Miracle amb la tarota, l'orgue el segueix i el poble canta. Si el rellotge del campanar funciona, toca tres campanades. El Pare Jòrdius: «Benvingut a casa, Ineu.» **Crèdits** i es pot continuar jugant (la gent té frases noves: vegeu `DIALEGS_FINAL` a l'annex).
 
 ---
 
@@ -268,9 +268,9 @@ Les Venerables Sàvies recorden una lateral quan la història principal és atur
 
 # PREGUNTES PER CAÇAR FORATS DE GUIÓ (mentre llegeixes l'annex)
 
-- Cada nen desaparegut (Huri, Fram, Sardi): qui n'explica la desaparició i quan? Ho expliquen igual la Carry, la Meus, les sacerdotesses i l'Aleu?
+- Cada nen desaparegut (Huri, Fram, Sardi): qui n'explica la desaparició i quan? Ho expliquen igual la Carry, la Nelis, les sacerdotesses i l'Aleu?
 - El Germà Aleu: a la Plaça diu «el Mestre»? Hi ha prou pistes abans del Pastor de Boira?
 - Qui dona el Cant de Vespres i quan? (Pianista, però el demana l'ombra: el sopar del Til·ler també el necessita per al pa dels pastors.)
-- Les pistes de les Venerables Sàvies i el Pare Jordà (surten de `js/progres.js`) han de coincidir amb el que diuen els personatges concrets.
-- Després de l'epíleg: tothom té frase nova? Falta algú (Nena de les Trenes, Galf, Follet, Jorgi, Mandu)?
+- Les pistes de les Venerables Sàvies i el Pare Jòrdius (surten de `js/progres.js`) han de coincidir amb el que diuen els personatges concrets.
+- Després de l'epíleg: tothom té frase nova? Falta algú (Nena de les Trenes, Galf, Follet, Gori, Mandu)?
 - Els diàlegs amb variant «Si: ...» (annex): n'hi ha cap condició que no es pugui complir mai o que repeteixi el mateix text?
