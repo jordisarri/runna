@@ -38,7 +38,7 @@ class ZonaCellerFora extends ZonaBase {
         this.colisio(PORTA_X, BASE_Y - 100, PORTA_AMPLE, 20);
         this.sortida(PORTA_X - PORTA_AMPLE / 2 + 6, BASE_Y - 80, PORTA_AMPLE - 12, 56, 'ZonaPingpong', 'porta');
         this.portaAnimada({ x: 404, top: 703, bottom: 862, ample: 102, fons: BASE_Y - 20, arc: true, color: 0xa84a30, vora: 0x3a1408 });   // la porta d'arc del Celler
-        this.blocDarrere((0 + dreta) / 2, dreta, BASE_Y - 110);   // ni darrere de l'edifici
+        this.colisio(dreta / 2, (BASE_Y - ALT_PARET) / 2, dreta, BASE_Y - ALT_PARET);   // tot el cos de l'edifici fins al top del món (sense escletxes laterals)
 
         // Barrils i una bóta vella vora la porta; a l'altra banda del camí, un pati d'herba amb arbres
         [[560, 930], [612, 948], [190, 940]].forEach(([x, y]) => this.barril(x, y, 50, 22));
@@ -1092,8 +1092,8 @@ class ZonaTiller extends ZonaBase {
 
     // Escena del sopar del Til·ler: cau el dia, la gent de les cel·les puja del sud i els pastors baixen del camí de la Cirosa
     fesSopar() {
-        const vel = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x2a1000, 1).setScrollFactor(0).setDepth(89500).setAlpha(0);
-        this.tweens.add({ targets: vel, alpha: 0.38, duration: 1600 });
+        const vel = this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x3a1c00, 1).setScrollFactor(0).setDepth(89500).setAlpha(0);
+        this.tweens.add({ targets: vel, alpha: 0.14, duration: 1600 });
         // La taula, al camí just davant del Til·ler (el camí va de y 520 a 670: la taula arriba fins al 730, i els comensals seuen darrere seu, amb la taula tapant-los les cames)
         // La taula, més llarga (perquè hi càpiguen tots sense solapar-se) i a l'alçada d'una taula de menjar normal (el dibuix és més alt: s'aplana, com a la taula del refetor de la Pilària), opaca
         const taula = this.posar('taula_sopar', TAULA_SOPAR.x, TAULA_SOPAR.y, { fonsY: TAULA_SOPAR.y, escala: 1.2, opac: true }).setAlpha(0);
@@ -1112,8 +1112,8 @@ class ZonaTiller extends ZonaBase {
         // L'Ineu (que sí que camina) va a l'extrem de la taula
         this.time.delayedCall(300, () => this.ineuVa(TAULA_SOPAR.x + 390, TAULA_SOPAR.y - 25, () => this.posarDireccio('esquerra', false), 150));
         this.time.delayedCall(4800, () => {
-            // Pla de càmera: el Til·ler (la cara), la taula, els comensals i l'Ineu, centrats a l'espai que deixa el quadre de text (el zoom més gran en què hi caben)
-            this.enquadrar(560, 545, 0.85, 1200, () => this.ui().obrirDialeg(DIALEGS.tillerSoparRitual(Estat), () => { this.alliberarCamera(1200); Estat.desar(); }), 440);
+            // Pla de càmera: el Til·ler (la cara), la taula, els comensals i l'Ineu, centrats a l'espai que deixa el quadre de text
+            this.enquadrar(560, 560, 1.0, 1200, () => this.ui().obrirDialeg(DIALEGS.tillerSoparRitual(Estat), () => { this.alliberarCamera(1200); Estat.desar(); }), 440);
         });
         this.sopar = { vel, taula, pastors: imatges, espelmes: [] };
     }
@@ -1134,7 +1134,7 @@ class ZonaTiller extends ZonaBase {
     // El medalló de pedra que el Til·ler custodiava entre les branques cau de la capçada, giravoltant, fins a l'Ineu
     fullaCau(fet) {
         const clau = this.textures.exists('emblema_arbre') ? 'emblema_arbre' : null;
-        const f = clau ? this.add.image(TIL_X, TIL_Y - 330, clau).setDisplaySize(52, 52).setDepth(99000) : this.add.circle(TIL_X, TIL_Y - 330, 18, 0xb8b2a4, 1).setDepth(99000);
+        const f = clau ? this.add.image(TIL_X, TIL_Y - 250, clau).setDisplaySize(52, 52).setDepth(99000) : this.add.circle(TIL_X, TIL_Y - 250, 18, 0xb8b2a4, 1).setDepth(99000);
         Sfx.xiu(1.0, 0.12, 'bandpass', 500, 1600, 1.4); this.cameras.main.shake(500, 0.0015);
         const cua = this.add.particles(0, 0, 'espurna', { follow: f, speed: { min: 5, max: 25 }, lifespan: 600, scale: { start: 0.35, end: 0 }, alpha: { start: 0.8, end: 0 }, tint: [0xd8f0a0, 0xffffff], frequency: 40, blendMode: 'ADD' }).setDepth(98999);
         this.tweens.add({ targets: f, angle: 720, duration: 2400 });

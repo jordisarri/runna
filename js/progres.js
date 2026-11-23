@@ -69,7 +69,7 @@ const PROGRES = {
         { id: 'fragment2', marca: ['fragment2'], fet: E => E.flag('fragment2'),
           pista: E => "La clau petita encaixa al sagrari, al mig del retaule del Santuari." },
         { id: 'alcoviLlegit', marca: ['alcoviLlegit'], fet: E => E.flag('alcoviLlegit'),
-          pista: E => "Els dos pergamins són en un llatí molt vell. El Pare Alcoví, entre els llibres del Monestir, el sap llegir." },
+          pista: E => "Ja tens els dos fragments de la crònica. Porta'ls al Pare Alcoví, a la biblioteca del Monestir, perquè els compari amb la Crònica." },
         { id: 'ombra', marca: ['ombraDemanaCant', 'cantPedres', 'benedicioMonjo'], fet: E => E.flag('benedicioMonjo'),
           pista: E => !E.flag('ombraDemanaCant') ? "A les Runes, l'ombra del monjo és sobre el mur de l'església inacabada. Parla-hi."
               : !E.flag('cantPedres') ? "L'ombra del monjo demana un cant que les pedres entenen. La Pianista, al Santuari, el coneix."

@@ -135,14 +135,14 @@ class ZonaCirosa extends ZonaBase {
         this.tweens.add({ targets: this.resplendor, alpha: 0.2, yoyo: true, repeat: -1, duration: 400 });
         const vorFoc = () => Estat.flag('soparObert') && !Estat.flag('pastorsConvencuts');          // quan toca convèncer els pastors
         const tocaFoc = () => vorFoc() && Estat.flag('cantPedres');                                  // la tarota només surt un cop après el cant (el de Vespres)
-        this.llocFlauta('foc', 280, 715, 200, false, tocaFoc, true, ['pedres']);                              // música vora el foc dels pastors
+        this.llocFlauta('foc', 280, 715, 250, false, tocaFoc, true, ['pedres']);                              // música vora el foc dels pastors
         this.interactiu(280, 715, 120, E => ({ pagines: [{ qui: 'Ineu', text: E.flag('cantPedres')
             ? "(El foc crepita i els pastors callen. Un cant antic vora les brases, el de Vespres, els podria obrir el cor...)"
             : "(El foc crepita i els pastors callen. Una música antiga vora les brases els podria obrir el cor... Potser la Pianista, al Santuari, en coneix alguna.)" }] }),
             { altura: 90, actiu: vorFoc, senseMirada: true });                                    // el text previ a tocar la tarota
-        this.npc('pastor_a', 200, 740, E => pasDelsPastors(E, 'Pastor', DIALEGS.pastorA), { flipX: false });          // (qualsevol dels tres pastors dona el pas següent, no només el vell)
-        this.npc('pastor_b', 370, 755, E => pasDelsPastors(E, 'Pastora', DIALEGS.pastorB), { flipX: true });
-        this.npc('pastor_vell', 285, 650, DIALEGS.pastorVell);
+        this.npc('pastor_a', 200, 740, E => pasDelsPastors(E, 'Pastor', DIALEGS.pastorA), { flipX: false }).punt.tarota = true;          // (qualsevol dels tres pastors dona el pas següent i obre la tarota vora el foc)
+        this.npc('pastor_b', 370, 755, E => pasDelsPastors(E, 'Pastora', DIALEGS.pastorB), { flipX: true }).punt.tarota = true;
+        this.npc('pastor_vell', 285, 650, DIALEGS.pastorVell).punt.tarota = true;
 
         // La pastura de la dreta: oberta del tot. Només es tanca amb unes tanques de fusta quan comença el combat contra el Pastor
         // (la pastura té la mateixa gespa que la resta de la zona: abans hi havia un tros d'herba tenyit, d'un altre color)

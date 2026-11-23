@@ -1345,6 +1345,7 @@ const DIALEGS = {
             { fer: (z, fet) => z.encendreEspelmes([0, 1, 2], fet) },
             { qui: "Pastor vell", text: "Fa molts anys que a nosaltres ningú no ens guardava cap cadira a cap taula. Gràcies per convidar-nos, fill." },
             { qui: "El Gran Til·ler", text: "Aquesta és la saviesa que et volia donar, petit monjo: ningú no es perd del tot mentre algú el recorda a taula. La gàbia de l'Ocellaire només s'omple de qui s'ha quedat sol." },
+            { fer: (z, fet) => z.enquadrar(715, 535, 1.25, 1000, fet, 440) },
             { qui: "El Gran Til·ler", text: "Rep el meu permís. Que et sigui lleu, i que no et faci oblidar mai que vas menjar amb tots." },
             { qui: "El Gran Til·ler", text: "Entre les meves branques hi custodio, des de temps immemorials, un medalló de pedra amb una fulla tallada: el permís de l'arbre. Fa segles que espera algú que s'assegui a taula amb tothom. Agafa'l." },
             { fer: (z, fet) => z.fullaCau(fet) },
