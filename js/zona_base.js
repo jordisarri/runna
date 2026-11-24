@@ -2310,14 +2310,32 @@ class ZonaBase extends Phaser.Scene {
         // Un objecte opac (orgue, altar, bancs...) davant l'Ineu amaga del tot la silueta, encara que també hi hagi un personatge davant (només es pot emmascarar amb un objecte)
         if ((this.opacs || []).some(n => n && n.active && n.visible && n.depth > i.depth && Phaser.Geom.Intersects.RectangleToRectangle(n.getBounds(), ibc))) f.setAlpha(0);
         const enem = (this.enemics || []).filter(e => !e.mort && e.spr).map(e => e.spr);          // un enemic davant l'Ineu el tapa de debò: la silueta no es veu a través seu
-        let davant = Object.values(this.npcs || {}).concat(this.opacs || [], enem).find(n => n && n.active && n.visible && n.depth > i.depth
+        // TOTS els que són davant l'Ineu i el toquen (abans només el primer: amb una ovella i l'Aleu alhora davant, la silueta s'amagava sota l'ovella
+        // però es dibuixava per sobre de l'Aleu, i l'Aleu semblava transparent)
+        const davants = Object.values(this.npcs || {}).concat(this.opacs || [], enem).filter(n => n && n.active && n.visible && n.depth > i.depth
             && Phaser.Geom.Intersects.RectangleToRectangle(n.getBounds(), ib));
-        if (!davant) {            // el tronc d'un arbre davant l'Ineu també l'amaga (la copa no: la silueta s'hi veu a través)
-            const arbre = (this.copes || []).find(t => t.tronc && t.active && t.visible && t.depth > i.depth && Phaser.Geom.Intersects.RectangleToRectangle(t.troncRect(), ib));
-            if (arbre) { davant = arbre.tronc; davant.setPosition(arbre.x, arbre.y).setScale(arbre.scaleX, arbre.scaleY).setFlipX(arbre.flipX); }
+        // el tronc d'un arbre davant l'Ineu també l'amaga (la copa no: la silueta s'hi veu a través)
+        const arbre = (this.copes || []).find(t => t.tronc && t.active && t.visible && t.depth > i.depth && Phaser.Geom.Intersects.RectangleToRectangle(t.troncRect(), ib));
+        if (arbre) { arbre.tronc.setPosition(arbre.x, arbre.y).setScale(arbre.scaleX, arbre.scaleY).setFlipX(arbre.flipX); davants.push(arbre.tronc); }
+        let davant = davants[0];
+        if (davants.length > 1) {
+            // Més d'un: es dibuixen tots en una textura que fa de màscara (només la zona de l'Ineu, que és l'única on hi ha silueta)
+            const MM = 512;
+            if (!this.mascaraMultiRT || !this.mascaraMultiRT.active) {
+                this.mascaraMultiRT = this.make.renderTexture({ x: 0, y: 0, width: MM, height: MM }, false).setOrigin(0);
+                this.mascaraMulti = new Phaser.Display.Masks.BitmapMask(this, this.mascaraMultiRT);
+                this.mascaraMulti.invertAlpha = true;
+                this.events.once('shutdown', () => { if (this.mascaraMultiRT) this.mascaraMultiRT.destroy(); this.mascaraMultiRT = this.mascaraMulti = null; });
+            }
+            const rt = this.mascaraMultiRT, x0 = Math.round(ib.centerX - MM / 2), y0 = Math.round(ib.centerY - MM / 2);
+            rt.setPosition(x0, y0).clear();
+            davants.forEach(n => rt.draw(n, n.x - x0, n.y - y0));
+            davant = 'multi';
+            if (this.npcDavant !== 'multi') f.setMask(this.mascaraMulti);
         }
         if (davant !== this.npcDavant) {
             this.npcDavant = davant;
+            if (davant === 'multi') return;
             if (davant && !davant.mascaraInv) { davant.mascaraInv = new Phaser.Display.Masks.BitmapMask(this, davant); davant.mascaraInv.invertAlpha = true; }
             if (davant) f.setMask(davant.mascaraInv);
             else f.clearMask();
