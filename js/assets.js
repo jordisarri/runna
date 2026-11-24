@@ -1385,6 +1385,7 @@ const Grafics = {
         crea('vitrall_biblio', 118, 190, pintarVitrallBiblio);
         crea('globus_biblio', 72, 108, pintarGlobusBiblio);
         crea('cadira_biblio', 54, 76, pintarCadiraBiblio);
+        crea('cadira_biblio_davant', 54, 76, (ctx, w, h) => pintarCadiraBiblio(ctx, w, h, true));
         crea('faristol_cronica', 100, 140, pintarFaristolCronica);
         crea('escala_biblio', 76, 232, pintarEscalaBiblio);
         crea('taula_lectura', 450, 112, pintarTaulaBiblio);

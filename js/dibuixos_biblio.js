@@ -95,41 +95,43 @@ function pintarPrestatgeBiblio(ctx, w, h, files, llavor) {
     ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.8; ctx.strokeRect(2, h - base, w - 4, base);
 }
 
-// Paret lateral de la biblioteca (vista des de dalt en 3/4): mur de pedra a fora, cornisa de roure amb pilastres i sòcol cap al parquet
+// Prestatgeria lateral: prestatge estret al llarg de la paret, amb baldes horitzontals i llibres drets (de peu, no tombats)
 function pintarPrestatgeLateralBiblio(ctx, w, h, llavor, esquerra) {
-    const r = rndBib(llavor);
-    ctx.save();
-    if (!esquerra) { ctx.translate(w, 0); ctx.scale(-1, 1); }
+    const r = rndBib(llavor), px = 5, cim = 10, base = 10;
+    const ix = px, iw = w - 2 * px, iy = cim, ih = h - cim - base;
+    const files = 16, fila = ih / files;
     ctx.lineJoin = 'round';
-    // Mur de pedra exterior (x = 0..11)
-    ctx.fillStyle = '#4a3e30'; ctx.fillRect(0, 0, 11, h);
-    for (let y = 0; y < h; y += 44) {
-        const t = 0.85 + r() * 0.25;
-        ctx.fillStyle = `rgb(${Math.round(96 * t)},${Math.round(82 * t)},${Math.round(64 * t)})`;
-        ctx.fillRect(1, y + 1, 9, 42);
-        ctx.strokeStyle = 'rgba(20,12,6,0.65)'; ctx.lineWidth = 1; ctx.strokeRect(1, y + 1, 9, 42);
+    ctx.fillStyle = gradHBib(ctx, 0, w, esquerra ? [[0, '#3a2010'], [1, '#6a4020']] : [[0, '#6a4020'], [1, '#3a2010']]);
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = gradVBib(ctx, iy, iy + ih, [[0, '#1c0f07'], [1, '#0a0502']]);
+    ctx.fillRect(ix, iy, iw, ih);
+    for (let f = 0; f < files; f++) {
+        const yb = iy + (f + 1) * fila - 3;
+        ctx.fillStyle = gradVBib(ctx, yb - fila + 3, yb - fila + 13, [[0, 'rgba(0,0,0,0.55)'], [1, 'rgba(0,0,0,0)']]);
+        ctx.fillRect(ix, yb - fila + 3, iw, 10);
+        let bx = ix + 1;
+        while (bx < ix + iw - 5) {
+            const bw = Math.min(ix + iw - 1 - bx, 5.5 + r() * 3.5);
+            if (bw < 4) break;
+            const bh = fila * (0.58 + r() * 0.28), c = PALETA_LLIBRES_BIB[Math.floor(r() * PALETA_LLIBRES_BIB.length)];
+            llibreBib(ctx, bx, yb - bh, bw, bh, c, false, r);
+            bx += bw + 0.6;
+        }
+        ctx.fillStyle = gradVBib(ctx, yb, yb + 6, [[0, '#b98a52'], [0.3, '#8a5a2c'], [1, '#4a2a12']]);
+        ctx.fillRect(ix - 1, yb, iw + 2, 6);
+        ctx.fillStyle = 'rgba(255,230,170,0.35)'; ctx.fillRect(ix - 1, yb, iw + 2, 1.3);
+        ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.3; ctx.strokeRect(ix - 1, yb, iw + 2, 6);
     }
-    // Cornisa superior de la prestatgeria / arrimador de roure (x = 11..34)
-    ctx.fillStyle = gradHBib(ctx, 11, 34, [[0, '#3a200e'], [0.3, '#6a4020'], [0.65, '#8a5a2c'], [1, '#4a2a14']]);
-    ctx.fillRect(11, 0, 23, h);
-    ctx.strokeStyle = 'rgba(25,12,4,0.35)'; ctx.lineWidth = 0.9;
-    for (let k = 0; k < 4; k++) { const x = 15 + k * 4.5; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
-    ctx.fillStyle = 'rgba(255,230,170,0.32)'; ctx.fillRect(28, 0, 2, h);
-    // Vora interior i sòcol arran del parquet (x = 34..w)
-    ctx.fillStyle = gradHBib(ctx, 34, w, [[0, '#5a3418'], [0.45, '#2a1608'], [1, 'rgba(0,0,0,0.38)']]);
-    ctx.fillRect(34, 0, w - 34, h);
-    ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.6;
-    ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(11, h); ctx.moveTo(34, 0); ctx.lineTo(34, h); ctx.stroke();
-    // Capitells de pilastres que divideixen els trams al llarg de la paret
-    for (let y = 64; y < h - 30; y += 136) {
-        ctx.fillStyle = gradHBib(ctx, 9, 36, [[0, '#4a2a14'], [0.5, '#9a6a38'], [1, '#5a3418']]);
-        ctx.fillRect(9, y - 7, 27, 14);
-        ctx.fillStyle = 'rgba(255,230,170,0.35)'; ctx.fillRect(10, y - 6, 25, 1.5);
-        ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.6; ctx.strokeRect(9, y - 7, 27, 14);
-        ctx.fillStyle = '#d4a840'; ctx.beginPath(); ctx.arc(22, y, 2.2, 0, Math.PI * 2); ctx.fill();
-    }
-    ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 2.4; ctx.strokeRect(1, 0, 34, h);
-    ctx.restore();
+    // Pilastres laterals
+    [0, w - px].forEach((x, i) => {
+        ctx.fillStyle = gradHBib(ctx, x, x + px, i ? [[0, '#5a3418'], [1, '#2e1a0c']] : [[0, '#8a5a2c'], [1, '#4a2a14']]);
+        ctx.fillRect(x, 0, px, h);
+        ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.6; ctx.strokeRect(x, 0, px, h);
+    });
+    // Cornisa de dalt i sòcol de baix
+    ctx.fillStyle = '#8a5a2c'; ctx.fillRect(0, 0, w, cim); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.6; ctx.strokeRect(0, 0, w, cim);
+    ctx.fillStyle = gradVBib(ctx, h - base, h, [[0, '#6a4020'], [1, '#2a1608']]); ctx.fillRect(1, h - base, w - 2, base);
+    ctx.strokeRect(1, h - base, w - 2, base);
 }
 
 // ---------- Vitrall apuntat: marc de pedra amb dovelles, vidres amb plom i un monjo amb l'espasa de llum davant la porta de ferro ----------
@@ -267,32 +269,40 @@ function pintarGlobusBiblio(ctx, w, h) {
     horitzo(true);
 }
 
-// ---------- Cadira de lectura, vista des del darrere (la taula és a davant): respatller de fusta tallada i coixí vermell ----------
-function pintarCadiraBiblio(ctx, w, h) {
+// ---------- Cadira de lectura: vista des del darrere (davant = false) o de cara (davant = true) ----------
+function pintarCadiraBiblio(ctx, w, h, davant = false) {
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.beginPath(); ctx.ellipse(w / 2, h - 5, 24, 5, 0, 0, Math.PI * 2); ctx.fill();
-    // Seient i coixí (darrere del respatller, més al fons)
-    ctx.fillStyle = '#6a4020'; ctx.fillRect(7, 44, w - 14, 7); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.8; ctx.strokeRect(7, 44, w - 14, 7);
-    ctx.fillStyle = gradVBib(ctx, 34, 46, [[0, '#b83a3a'], [1, '#6a1a1e']]);
-    ctx.beginPath(); ctx.moveTo(10, 46); ctx.quadraticCurveTo(w / 2, 28, w - 10, 46); ctx.lineTo(w - 12, 48); ctx.lineTo(12, 48); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#d8b050'; ctx.beginPath(); ctx.arc(w / 2, 40, 1.8, 0, Math.PI * 2); ctx.fill();
-    // Potes del darrere
-    [[9, 10], [w - 9, w - 10]].forEach(([xa, xb]) => {
-        ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(xa, 8); ctx.lineTo(xb, h - 8); ctx.stroke();
-        ctx.strokeStyle = gradHBib(ctx, xa - 3, xa + 3, [[0, '#9a6a38'], [1, '#5a3418']]); ctx.strokeStyle = '#7a4a24'; ctx.lineWidth = 5; ctx.stroke();
-        ctx.strokeStyle = 'rgba(255,220,160,0.4)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(xa - 1.4, 10); ctx.lineTo(xb - 1.4, h - 10); ctx.stroke();
-    });
-    // Travesser baix
-    ctx.fillStyle = '#5a3418'; ctx.fillRect(10, h - 20, w - 20, 5); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.6; ctx.strokeRect(10, h - 20, w - 20, 5);
-    // Respatller: llistons verticals i travesser de dalt amb cresta
-    for (let k = 0; k < 4; k++) {
-        const x = 15 + k * ((w - 30) / 3.0);
-        ctx.fillStyle = gradHBib(ctx, x - 2, x + 2, [[0, '#9a6a38'], [1, '#5a3418']]); ctx.fillRect(x - 2.2, 14, 4.4, 32); ctx.strokeRect(x - 2.2, 14, 4.4, 32);
-    }
-    ctx.fillStyle = gradVBib(ctx, 12, 26, [[0, '#a87644'], [1, '#6a4020']]);
-    ctx.beginPath(); ctx.moveTo(4, 24); ctx.quadraticCurveTo(w / 2, 4, w - 4, 24); ctx.lineTo(w - 4, 30); ctx.lineTo(4, 30); ctx.closePath(); ctx.fill(); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 2; ctx.stroke();
-    ctx.fillStyle = '#d4a840'; [[6, 10], [w - 6, 10]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y + 10, 3.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });      // pom de les puntes
-    ctx.fillStyle = '#5a3418'; ctx.fillRect(10, 34, w - 20, 5); ctx.strokeRect(10, 34, w - 20, 5);
+    const seient = () => {
+        ctx.fillStyle = '#6a4020'; ctx.fillRect(7, 44, w - 14, 7); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.8; ctx.strokeRect(7, 44, w - 14, 7);
+        ctx.fillStyle = gradVBib(ctx, 34, 46, [[0, '#b83a3a'], [1, '#6a1a1e']]);
+        ctx.beginPath(); ctx.moveTo(10, 46); ctx.quadraticCurveTo(w / 2, 28, w - 10, 46); ctx.lineTo(w - 12, 48); ctx.lineTo(12, 48); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#d8b050'; ctx.beginPath(); ctx.arc(w / 2, 40, 1.8, 0, Math.PI * 2); ctx.fill();
+        if (davant) {
+            [[10, 50], [w - 10, 50]].forEach(([x, y0]) => {
+                ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 7; ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, h - 6); ctx.stroke();
+                ctx.strokeStyle = '#7a4a24'; ctx.lineWidth = 4.4; ctx.stroke();
+            });
+            ctx.fillStyle = '#5a3418'; ctx.fillRect(10, h - 18, w - 20, 4.5); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.5; ctx.strokeRect(10, h - 18, w - 20, 4.5);
+        }
+    };
+    const respatller = () => {
+        [[9, 10], [w - 9, w - 10]].forEach(([xa, xb]) => {
+            ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(xa, 8); ctx.lineTo(xb, h - 8); ctx.stroke();
+            ctx.strokeStyle = '#7a4a24'; ctx.lineWidth = 5; ctx.stroke();
+            ctx.strokeStyle = 'rgba(255,220,160,0.4)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(xa - 1.4, 10); ctx.lineTo(xb - 1.4, h - 10); ctx.stroke();
+        });
+        ctx.fillStyle = '#5a3418'; ctx.fillRect(10, h - 20, w - 20, 5); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.6; ctx.strokeRect(10, h - 20, w - 20, 5);
+        for (let k = 0; k < 4; k++) {
+            const x = 15 + k * ((w - 30) / 3.0);
+            ctx.fillStyle = gradHBib(ctx, x - 2, x + 2, [[0, '#9a6a38'], [1, '#5a3418']]); ctx.fillRect(x - 2.2, 14, 4.4, 32); ctx.strokeRect(x - 2.2, 14, 4.4, 32);
+        }
+        ctx.fillStyle = gradVBib(ctx, 12, 26, [[0, '#a87644'], [1, '#6a4020']]);
+        ctx.beginPath(); ctx.moveTo(4, 24); ctx.quadraticCurveTo(w / 2, 4, w - 4, 24); ctx.lineTo(w - 4, 30); ctx.lineTo(4, 30); ctx.closePath(); ctx.fill(); ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 2; ctx.stroke();
+        ctx.fillStyle = '#d4a840'; [[6, 10], [w - 6, 10]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y + 10, 3.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); });
+        ctx.fillStyle = '#5a3418'; ctx.fillRect(10, 34, w - 20, 5); ctx.strokeRect(10, 34, w - 20, 5);
+    };
+    if (davant) { respatller(); seient(); } else { seient(); respatller(); }
 }
 
 // ---------- Faristol amb la Crònica del Miracle: peu torneat, pupitre inclinat i un llibre enorme obert, amb capitular il·luminada i ocellet ----------

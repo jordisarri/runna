@@ -62,7 +62,7 @@ class ZonaBiblioteca extends ZonaBase {
         });
         // Piles de llibres a terra
         [['pila_a', 140, 810], ['pila_b', 960, 810]].forEach(([k, x, y]) => {
-            this.add.image(x, y, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(y);
+            (this.opacs = this.opacs || []).push(this.add.image(x, y, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(y));
             this.colisio(x, y - 6, 44, 16);
         });
 
@@ -77,16 +77,21 @@ class ZonaBiblioteca extends ZonaBase {
         this.colisio(815, H - 10, 370, 20);
 
         // Taula llarga de lectura amb llibres oberts, espelmes i un tinter, i una cadira a cada lloc
-        this.add.image(550, 502, 'taula_lectura').setOrigin(0.5, 1).setScale(1 / RES).setDepth(479);
-        this.colisio(550, 440, 420, 80);
+        const taula = this.add.image(550, 502, 'taula_lectura').setOrigin(0.5, 1).setScale(1 / RES).setDepth(479);
+        (this.opacs = this.opacs || []).push(taula);
+        this.colisio(550, 461, 420, 30);
         [[370, 405], [730, 405], [550, 405]].forEach(([x, y], i) => {
             const e = this.posar('espelma', x, y, { fonsY: 480 });
             this.tweens.add({ targets: e, alpha: 0.7, yoyo: true, repeat: -1, duration: 320 + i * 90 });
             this.add.circle(x, y - 40, 60, 0xffc060, 0.08).setDepth(480);
         });
-        [[432, 548], [550, 553], [668, 548]].forEach(([x, y]) => {
-            const img = this.posar('cadira_biblio', x, y, { col: { w: 46, h: 16 }, opac: true, escala: 1.38 });
+        [[432, 542], [550, 545], [668, 542]].forEach(([x, y]) => {
+            const img = this.posar('cadira_biblio', x, y, { col: { w: 46, h: 14 }, opac: true, escala: 1.38 });
             (this.bancsEsg = this.bancsEsg || []).push({ x, y, w: 70, cara: 'amunt', img });
+        });
+        [[432, 404], [550, 404], [668, 404]].forEach(([x, y]) => {
+            const img = this.posar('cadira_biblio_davant', x, y, { col: { w: 46, h: 14 }, opac: true, escala: 1.38 });
+            (this.bancsEsg = this.bancsEsg || []).push({ x, y, w: 70, cara: 'avall', img });
         });
 
         // El faristol amb la Crònica, a la dreta de la catifa
