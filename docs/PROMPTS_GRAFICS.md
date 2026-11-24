@@ -367,3 +367,35 @@ A magical rune circle engraved into a stone floor, seen from a high three-quarte
 *Variants (opcionals):* una segona versió amb la capçada una mica més clara i buida (tardor avançada) per al moment en què s'han collit les prunes, i una versió fosca i sense fulles si es vol una prunera «adormida».
 
 *Notes:* si surt massa vermellosa o taronja, afegeix «avoid orange and red, keep the leaves honey-gold». Si la capçada surt massa densa, «more open crown, 30% gaps between leaf clusters». Quan hi hagi el PNG: `python3 eines/treure_fons.py art/natura/prunera.png assets/natura/prunera.webp 460`, afegeix l'entrada `prunera` a `js/assets.js` i substitueix a `jardi.js` el `posar('arbre', …).setTint(0xffd878)`; ho faig jo.
+
+---
+
+## Fulls de caminar dels NPC pendents (perquè no llisquin amb `npcVa`)
+
+Tots es fan igual amb **AutoSprite** (`iso_walk_right`, cel·les de `320×320`, 3 columnes, 8 fotogrames, caminant cap a la dreta; el joc gira cap a l'esquerra amb `flipX`) partint del dibuix estàtic com a referència, i es converteixen amb:
+
+```bash
+python eines/fer_camina_npc.py art/personatges/caminar/<NOM>.png <NOM>
+```
+
+Això genera `assets/personatges/<NOM>_camina.webp` (quadrícula 4×2 de 8 fotogrames, ajustada a l'alçada de l'estàtic). Després només cal registrar `scene.load.spritesheet('<NOM>_camina', ...)` i `scene.anims.create({ key: '<NOM>_camina', ... })` a `js/assets.js`.
+
+- [ ] **`pare_alcovi_camina`** (`assets/personatges/pare_alcovi_camina.webp`)
+  - *On camina:* a la Biblioteca cap al faristol (`js/zones/biblioteca.js`, `alcoviLlegeix`).
+  - *Referència:* `assets/personatges/pare_alcovi.webp` (monjo gran d'hàbit negre/molt fosc, cabell blanc i llibre).
+
+- [ ] **`joaneta_camina`** (`assets/personatges/joaneta_camina.webp`)
+  - *On camina:* a la Cabana, cap a l'olla i de tornada quan prepara el beuratge (`js/dialegs.js`, `joaneta`).
+  - *Referència:* `assets/personatges/joaneta.webp`.
+
+- [ ] **`nen_uri_camina`** (`assets/personatges/nen_uri_camina.webp`)
+  - *On camina:* al final de la Gàbia, corrent cap a l'Ineu (`js/zones/gabia.js`).
+  - *Referència:* `assets/personatges/nen_uri.webp` (nen ros amb túnica blava).
+
+- [ ] **`nen_flam_camina`** (`assets/personatges/nen_flam_camina.webp`)
+  - *On camina:* al final de la Gàbia, corrent cap a l'Ineu (`js/zones/gabia.js`).
+  - *Referència:* `assets/personatges/nen_flam.webp` (nen de cabell fosc amb túnica vermella).
+
+- [ ] **`nen_sardin_camina`** (`assets/personatges/nen_sardin_camina.webp`)
+  - *On camina:* al final de la Gàbia, corrent cap a l'Ineu (`js/zones/gabia.js`).
+  - *Referència:* `assets/personatges/nen_sardin.webp` (nen amb ulleres i túnica verda).
