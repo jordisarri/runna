@@ -507,19 +507,31 @@ class EscenaProleg extends Phaser.Scene {
             .on('pointerout', () => fletxes.setAlpha(0.9))
             .on('pointerdown', (p, x, y, ev) => { if (ev) ev.stopPropagation(); this.acabar(); });
 
+        this.carregant = true;
         this.input.keyboard.on('keydown-SPACE', () => this.seguent());
         this.input.keyboard.on('keydown-ENTER', () => this.seguent());
         this.input.keyboard.on('keydown-ESC', () => this.acabar());
         this.input.on('pointerdown', (p, sobre) => { if (!sobre.length) this.seguent(); });
-        // Carrega els vitralls que hi hagi (els que falten es queden amb el dibuix de codi) i comença
-        PROLEG_QUADRES.forEach(q => { if (q.vitrall && !this.textures.exists('vitrall_' + q.dibuix)) this.load.image('vitrall_' + q.dibuix, 'assets/proleg/' + q.dibuix + '.webp'); });
-        if (this.load.list.size) { this.load.once('complete', () => this.seguent()); this.load.start(); }
-        else this.seguent();
+        // Carrega els vitralls (amb reintents si la xarxa en talla algun mentre carrega la resta del joc) i no comença fins que hi són
+        this.carregarVitralls(() => { this.carregant = false; this.seguent(); });
+    }
+
+    carregarVitralls(fet, intent = 0) {
+        const falten = PROLEG_QUADRES.filter(q => q.vitrall && !this.textures.exists('vitrall_' + q.dibuix));
+        if (!falten.length || intent >= 3) { fet(); return; }
+        falten.forEach(q => this.load.image('vitrall_' + q.dibuix, 'assets/proleg/' + q.dibuix + '.webp' + (intent ? '?r=' + Date.now() + '_' + intent : '')));
+        this.load.once('complete', () => {
+            if (this.acabat) return;
+            const resten = PROLEG_QUADRES.some(q => q.vitrall && !this.textures.exists('vitrall_' + q.dibuix));
+            if (!resten || intent >= 2) fet();
+            else this.time.delayedCall(350 * (intent + 1), () => { if (!this.acabat) this.carregarVitralls(fet, intent + 1); });
+        });
+        this.load.start();
     }
 
     // Passa al quadre següent (o acaba d'escriure el text si encara s'escriu)
     seguent() {
-        if (this.acabat) return;
+        if (this.acabat || this.carregant) return;
         if (this.escrivint) { this.escrivint(); return; }
         this.index++;
         if (this.index >= PROLEG_QUADRES.length) return this.acabar();

@@ -58,7 +58,7 @@ class ZonaBiblioteca extends ZonaBase {
             const g = this.add.image(x, base, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(base);
             (this.opacs = this.opacs || []).push(g);
             this.add.ellipse(x, base + 2, g.displayWidth + 24, 14, 0x000000, 0.28).setDepth(base - 1);
-            this.colisio(x, base - 52, g.displayWidth, 104);
+            this.colisio(x, base - 44, g.displayWidth, 88);
         });
         // Piles de llibres a terra
         [['pila_a', 140, 810], ['pila_b', 960, 810]].forEach(([k, x, y]) => {
