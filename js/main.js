@@ -570,6 +570,7 @@ class EscenaProleg extends Phaser.Scene {
 
     // Compon el text justificat (com un llibre antic: línies plenes, l'última de cada paràgraf a l'esquerra) i el mostra amb un fade-in línia a línia
     escriure(text) {
+        text = Idioma.t(text);                   // (es tradueix sencer: les paraules soltes que es posen després no)
         if (this.textCont) { const vell = this.textCont; this.tweens.add({ targets: vell, alpha: 0, duration: 300, onComplete: () => vell.destroy() }); }
         const cont = this.textCont = this.add.container(0, 0).setDepth(51);
         const MIDA = 29, INTERLINIA = 40, X0 = PAPER_X + 38, AMPLE_TEXT = PAPER_W - 76, Y0 = PAPER_Y + 34;
@@ -592,11 +593,13 @@ class EscenaProleg extends Phaser.Scene {
             const suma = l.paraules.reduce((s, [, w]) => s + w, 0), forats = l.paraules.length - 1;
             const sep = (l.ultima || forats === 0) ? espai : (AMPLE_TEXT - suma) / forats;
             let x = X0;
+            Idioma.literal = true;
             const grup = l.paraules.map(([p, w]) => {
                 const o = this.add.text(x, Y0 + i * INTERLINIA, p, { fontFamily: FONT_LLIBRE, fontSize: MIDA + 'px', color: '#2e1a0a', resolution: 2 }).setAlpha(0);
                 x += w + sep;
                 return o;
             });
+            Idioma.literal = false;
             cont.add(grup);
             objectes.push(grup);
         });

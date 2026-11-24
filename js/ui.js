@@ -818,6 +818,7 @@ class EscenaUI extends Phaser.Scene {
         this.plaquetaNom = this.add.text(-310, -186, '', { fontFamily: FONT_PLACA, fontSize: '32px', fontStyle: 'bold', color: '#fff3c8', stroke: '#2a0a0e', strokeThickness: 4, resolution: 2 })
             .setOrigin(0, 0.5);
         this.textDialeg = this.add.text(-316, -146, '', estilText(Math.round(28 * this.escalaDialeg), '#2a170b', { wordWrap: { width: 632 }, lineSpacing: Math.round(5 * this.escalaDialeg) }));
+        this.textDialeg.senseTraduir = true;          // (el text de cada pàgina es tradueix sencer a mostrarPagina: les lletres que s'escriuen una a una no s'han de traduir)
         this.barraScrollDialeg = this.add.graphics();
         this.mascaraDialeg = this.make.graphics({ x: 0, y: 0, add: false });
         this.mascaraGeomDialeg = this.mascaraDialeg.createGeometryMask();
@@ -904,7 +905,7 @@ class EscenaUI extends Phaser.Scene {
         this.textDialeg.setFontSize(Math.round(midaBase * this.escalaDialeg))
                        .setLineSpacing(Math.round((pagina.vers ? 10 : 5) * this.escalaDialeg))
                        .setFontStyle(pagina.qui || pagina.avis !== undefined ? (pagina.vers ? 'bold' : 'normal') : 'italic')
-                       .setText(text);
+                       .setText(Idioma.t(text));
         const h = this.textDialeg.height;
         this.textDialeg.setText('');
         return Math.max(ALCADA_CAIXA_MIN, Math.ceil(h + 104));
@@ -986,7 +987,7 @@ class EscenaUI extends Phaser.Scene {
         this.plaquetaNom.setText(p.qui || '').setVisible(!!p.qui).setX(xCinta + 44);
         this.cintaNom.setVisible(!!p.qui).setX(xCinta);
         if (p.qui) this.cintaNom.setSize((this.plaquetaNom.width + 88) * RES, 60 * RES);
-        this.textComplet = p.text;
+        this.textComplet = Idioma.t(p.text);
         this.lletres = 0;
         this.textDialeg.setText('');
         // La veu del narrador, en cursiva i en un to vermellós; els personatges, en tinta fosca
@@ -1148,6 +1149,8 @@ class EscenaUI extends Phaser.Scene {
         this.opcions = [
             { text: 'Continuar', fn: () => this.tancarMenu() },
             { text: 'Àudio', audio: true, fn: () => { Sfx.commutarSilenci(); this.pintarSeleccio(); Sfx.tria(); } },
+            // Idioma: cada clic passa al següent i tots els textos de la pantalla (menú, HUD, cartells...) canvien a l'instant, sense recarregar
+            { text: 'Idioma', etiqueta: () => 'Idioma: ' + Idioma.nom(), commuta: true, fn: () => { Idioma.canvia(Idioma.seguent()); this.actualitzarCompletat(); this.pintarSeleccio(); Sfx.tria(); } },
             { text: 'Desa a un fitxer', fn: () => { Estat.exportar(); this.missatge('Partida baixada: guarda el fitxer. La podràs carregar des del títol.'); } },
             { text: 'Tornar al títol', fn: () => { this.tancarMenu(); Joc.anarAlTitol(this); } }
         ];

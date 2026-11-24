@@ -188,6 +188,14 @@ class EscenaTitol extends Phaser.Scene {
             if (ok) Joc.continuar(this);
             else this.menu.add(this.add.text(AMPLE / 2, ALT - 330, 'No he pogut llegir aquest fitxer com a partida.', estilText(20, '#ffb0a0', { backgroundColor: '#1a120bcc', padding: { x: 10, y: 5 } })).setOrigin(0.5));
         }) });
+        // Idioma: cada clic passa al següent i tots els textos de la pantalla canvien a l'instant
+        const opIdioma = { text: 'Idioma: ' + Idioma.nom(), fn: () => {
+            Idioma.canvia(Idioma.seguent());
+            opIdioma.text = 'Idioma: ' + Idioma.nom();
+            Sfx.tria && Sfx.tria();
+            this.pintar();
+        } };
+        this.opcions.push(opIdioma);
 
         const separacio = 72;
         const y0 = ALT - 70 - (this.opcions.length - 1) * separacio;
