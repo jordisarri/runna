@@ -15,7 +15,11 @@ LOGO = os.path.join(ARREL, 'art', 'titol', 'logo_runna.png')
 ESPASA = os.path.join(ARREL, 'art', 'armes', 'espasa.jpg')
 SORTIDA = os.path.join(ARREL, 'assets', 'pwa')
 ICONA_ART = os.path.join(ARREL, 'art', 'pwa', 'icona.png')      # si hi és (vegeu docs/PROMPTS_GRAFICS.md), es fa servir aquesta imatge en lloc de la composició
-RETALL = (108, 57, 978, 927)    # el que es queda de la imatge feta a mà (en píxels d'una de 1024 × 1024): quadrat ajustat al dibuix, amb un petit marge a l'espasa, que és el que més ocupa
+# CENTRAT DE LA R (art/pwa/icona.png, 2000 × 2000). La icona NO es centra amb el quadre que envolta tot el dibuix (cua i sarments inclosos: això feia que la R quedés
+# desplaçada), sinó amb la lletra mateixa: horitzontalment, entre la vora esquerra del pal i la vora dreta de la panxa; verticalment, entre l'extrem de dalt i el de baix del pal.
+R_ESQ, R_DRE, R_DALT, R_BAIX = 570, 1365, 436, 1618          # píxels de la imatge de 2000 (vora del pal a l'esquerra, de la panxa a la dreta, de dalt i de baix del pal)
+R_CENTRE = ((R_ESQ + R_DRE) / 2, (R_DALT + R_BAIX) / 2)       # (967,5 ; 1027): aquest punt va al mig de la icona
+RETALL_MITJA = 905              # meitat del costat del quadrat que es retalla al voltant d'aquest centre (px de la imatge de 2000): hi cap tot el dibuix, fins a la punta del sarment de dalt, amb una mica de marge
 R_CAIXA = (100, 120, 840, 1070)          # la R (amb els sarments) dins el logo, en píxels de l'original
 # La R toca la U al logo: només es queda el que cau dins d'aquest polígon (la vora dreta passa pel buit que hi ha entre la pota de la R i la U)
 R_POLIGON = [(95, 100), (648, 100), (648, 700), (690, 750), (720, 890), (775, 980), (832, 1012), (845, 1075), (95, 1075)]
@@ -59,8 +63,14 @@ def icones_de_l_art():
     sense tallar-se; a la «maskable», que es retalla en cercle, es fa més petita i el que l'envolta s'omple allargant la seva vora i desenfocant-la."""
     import numpy as np
     art = Image.open(ICONA_ART).convert('RGB')
-    k = art.width / 1024
-    art = art.crop(tuple(int(v * k) for v in RETALL))
+    k = art.width / 2000
+    cx, cy, m = R_CENTRE[0] * k, R_CENTRE[1] * k, RETALL_MITJA * k
+    caixa = (round(cx - m), round(cy - m), round(cx + m), round(cy + m))
+    if min(caixa) < 0 or caixa[2] > art.width or caixa[3] > art.height:            # si el quadrat surt de la imatge, s'allarga la vora (el fons és un pergamí)
+        extra = max(-min(caixa), caixa[2] - art.width, caixa[3] - art.height)
+        art = Image.fromarray(np.pad(np.array(art), ((extra, extra), (extra, extra), (0, 0)), mode='edge'))
+        caixa = tuple(v + extra for v in caixa)
+    art = art.crop(caixa)
     for nom, mida, escala in [('icona-512.png', 512, 1), ('icona-192.png', 192, 1), ('icona-maskable-512.png', 512, 0.72),
                               ('apple-touch-icon.png', 180, 1), ('favicon.png', 64, 1)]:
         petita = art.resize((int(mida * escala), int(mida * escala)), Image.LANCZOS)
