@@ -95,21 +95,41 @@ function pintarPrestatgeBiblio(ctx, w, h, files, llavor) {
     ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.8; ctx.strokeRect(2, h - base, w - 4, base);
 }
 
-// Prestatgeria lateral, vista de cantó: llibres de cara amb les puntes
+// Paret lateral de la biblioteca (vista des de dalt en 3/4): mur de pedra a fora, cornisa de roure amb pilastres i sòcol cap al parquet
 function pintarPrestatgeLateralBiblio(ctx, w, h, llavor, esquerra) {
     const r = rndBib(llavor);
-    ctx.fillStyle = gradHBib(ctx, 0, w, esquerra ? [[0, '#2a1608'], [1, '#5a3418']] : [[0, '#5a3418'], [1, '#2a1608']]);
-    ctx.fillRect(0, 0, w, h);
-    for (let y = 4; y < h - 8;) {
-        const hh = 9 + r() * 6, c = PALETA_LLIBRES_BIB[Math.floor(r() * PALETA_LLIBRES_BIB.length)];
-        ctx.fillStyle = gradVBib(ctx, y, y + hh, [[0, c[0]], [1, c[1]]]);
-        ctx.fillRect(6, y, w - 12, hh - 1);
-        ctx.fillStyle = 'rgba(212,166,64,0.8)'; ctx.fillRect(6, y + hh * 0.3, w - 12, 1.2);
-        ctx.strokeStyle = 'rgba(10,5,2,0.85)'; ctx.lineWidth = 0.9; ctx.strokeRect(6, y, w - 12, hh - 1);
-        y += hh;
-        if (r() < 0.12) { ctx.fillStyle = '#5a3418'; ctx.fillRect(2, y, w - 4, 4); ctx.strokeRect(2, y, w - 4, 4); y += 4; }   // una balda
+    ctx.save();
+    if (!esquerra) { ctx.translate(w, 0); ctx.scale(-1, 1); }
+    ctx.lineJoin = 'round';
+    // Mur de pedra exterior (x = 0..11)
+    ctx.fillStyle = '#4a3e30'; ctx.fillRect(0, 0, 11, h);
+    for (let y = 0; y < h; y += 44) {
+        const t = 0.85 + r() * 0.25;
+        ctx.fillStyle = `rgb(${Math.round(96 * t)},${Math.round(82 * t)},${Math.round(64 * t)})`;
+        ctx.fillRect(1, y + 1, 9, 42);
+        ctx.strokeStyle = 'rgba(20,12,6,0.65)'; ctx.lineWidth = 1; ctx.strokeRect(1, y + 1, 9, 42);
     }
-    ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 3; ctx.strokeRect(1.5, 1.5, w - 3, h - 3);
+    // Cornisa superior de la prestatgeria / arrimador de roure (x = 11..34)
+    ctx.fillStyle = gradHBib(ctx, 11, 34, [[0, '#3a200e'], [0.3, '#6a4020'], [0.65, '#8a5a2c'], [1, '#4a2a14']]);
+    ctx.fillRect(11, 0, 23, h);
+    ctx.strokeStyle = 'rgba(25,12,4,0.35)'; ctx.lineWidth = 0.9;
+    for (let k = 0; k < 4; k++) { const x = 15 + k * 4.5; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+    ctx.fillStyle = 'rgba(255,230,170,0.32)'; ctx.fillRect(28, 0, 2, h);
+    // Vora interior i sòcol arran del parquet (x = 34..w)
+    ctx.fillStyle = gradHBib(ctx, 34, w, [[0, '#5a3418'], [0.45, '#2a1608'], [1, 'rgba(0,0,0,0.38)']]);
+    ctx.fillRect(34, 0, w - 34, h);
+    ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(11, h); ctx.moveTo(34, 0); ctx.lineTo(34, h); ctx.stroke();
+    // Capitells de pilastres que divideixen els trams al llarg de la paret
+    for (let y = 64; y < h - 30; y += 136) {
+        ctx.fillStyle = gradHBib(ctx, 9, 36, [[0, '#4a2a14'], [0.5, '#9a6a38'], [1, '#5a3418']]);
+        ctx.fillRect(9, y - 7, 27, 14);
+        ctx.fillStyle = 'rgba(255,230,170,0.35)'; ctx.fillRect(10, y - 6, 25, 1.5);
+        ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 1.6; ctx.strokeRect(9, y - 7, 27, 14);
+        ctx.fillStyle = '#d4a840'; ctx.beginPath(); ctx.arc(22, y, 2.2, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.strokeStyle = BIB_CONTORN; ctx.lineWidth = 2.4; ctx.strokeRect(1, 0, 34, h);
+    ctx.restore();
 }
 
 // ---------- Vitrall apuntat: marc de pedra amb dovelles, vidres amb plom i un monjo amb l'espasa de llum davant la porta de ferro ----------

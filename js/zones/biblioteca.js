@@ -48,16 +48,17 @@ class ZonaBiblioteca extends ZonaBase {
         [['prestatge_a', 185, 0], ['prestatge_b', 550, 1], ['prestatge_c', 955, 2]].forEach(([k, x, n]) => {
             this.add.image(x, 206, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(-985);
         });
-        // Prestatgeries laterals (de cantó), pegades a les parets
-        this.add.image(60, 220, 'prestatge_lat_e').setOrigin(0).setScale(1 / RES).setDepth(-980);
-        this.add.image(1000, 220, 'prestatge_lat_d').setOrigin(0).setScale(1 / RES).setDepth(-980);
+        // Parets laterals (de y = 214 fins a baix de tot, y = 900)
+        this.add.image(60, 214, 'prestatge_lat_e').setOrigin(0).setScale(1 / RES).setDepth(-980);
+        this.add.image(1000, 214, 'prestatge_lat_d').setOrigin(0).setScale(1 / RES).setDepth(-980);
 
         // Prestatgeries lliures de terra a sostre, en dues files, que formen passadissos: la biblioteca és enorme
         [['prestatge_l3', 185, 740, 5], ['prestatge_l4', 336, 740, 3],
-         ['prestatge_l5', 768, 740, 4], ['prestatge_l6', 915, 740, 5]].forEach(([k, x, base, n]) => {
+        ['prestatge_l5', 768, 740, 4], ['prestatge_l6', 915, 740, 5]].forEach(([k, x, base, n]) => {
             const g = this.add.image(x, base, k).setOrigin(0.5, 1).setScale(1 / RES).setDepth(base);
+            (this.opacs = this.opacs || []).push(g);
             this.add.ellipse(x, base + 2, g.displayWidth + 24, 14, 0x000000, 0.28).setDepth(base - 1);
-            this.colisio(x, base - 12, g.displayWidth, 24);
+            this.colisio(x, base - 52, g.displayWidth, 104);
         });
         // Piles de llibres a terra
         [['pila_a', 140, 810], ['pila_b', 960, 810]].forEach(([k, x, y]) => {
@@ -84,8 +85,8 @@ class ZonaBiblioteca extends ZonaBase {
             this.add.circle(x, y - 40, 60, 0xffc060, 0.08).setDepth(480);
         });
         [[432, 548], [550, 553], [668, 548]].forEach(([x, y]) => {
-            this.add.image(x, y, 'cadira_biblio').setOrigin(0.5, 1).setScale(1.15 / RES).setDepth(y);
-            this.colisio(x, y - 8, 34, 14);
+            const img = this.posar('cadira_biblio', x, y, { col: { w: 46, h: 16 }, opac: true, escala: 1.38 });
+            (this.bancsEsg = this.bancsEsg || []).push({ x, y, w: 70, cara: 'amunt', img });
         });
 
         // El faristol amb la Crònica, a la dreta de la catifa
@@ -141,7 +142,9 @@ class ZonaBiblioteca extends ZonaBase {
 
     alcoviPosa(esquena) {
         const a = this.npcs.pare_alcovi, clau = esquena ? 'pare_alcovi_esquena' : 'pare_alcovi';
+        this.aturaIdleCodi(a);
         a.setTexture(clau).setFlipX(!esquena);
         a.escalaBase = a.scaleX = a.scaleY = this.textures.get(clau).customData.escala;
+        this.idleCodi(a);                         // refà el tween de respiració amb l'escala del nou dibuix
     }
 }
