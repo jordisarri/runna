@@ -533,7 +533,7 @@ const DIALEGS = {
                     { qui: "Nelis", text: "El sopar del Til·ler? Ai, Ineu, i qui té ganes de taula, aquest any! Amb tres nens que falten..." },
                     { qui: "Nelis", text: "...Però el Til·ler té raó, maleït sigui. No es pot deixar de fer el que s'ha fet sempre, ni quan el cor fa mal. Pren l'escudella, i no la vessis!" },
                     { qui: "Nelis", text: "És l'escudella de cada any, la de les nostres àvies, però enguany té un gust que no voldria explicar. Tu tingues-ne cura de portar-la sencera." },
-                    { avis: "Has obtingut L'ESCUDELLA DE LA MEUS.", obj: 'escudella' }
+                    { avis: "Has obtingut L'ESCUDELLA DE LA NELIS.", obj: 'escudella' }
                 ],
                 enAcabar: () => { E.dona("escudella"); E.posaFlag("escudella"); objectiuSopar(E); }
             };
@@ -952,7 +952,7 @@ const DIALEGS = {
 
     // ---------------- CAMÍ DE LA DESAPARICIÓ ----------------
     columna: n => E => {
-        const paraula = PARAULES_MISSATGE[n - 1], signe = SIGNES_MISSATGE[n - 1];
+        const paraula = Idioma.paraulesMissatge(PARAULES_MISSATGE)[n - 1], signe = SIGNES_MISSATGE[n - 1];
         const total = () => Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).filter(Boolean).length;
         return {
             pagines: [
@@ -976,7 +976,7 @@ const DIALEGS = {
     taulaPedra: part => E => {
         const inici = part === 1 ? 0 : 6;
         const mots = [];
-        for (let i = inici; i < inici + 6; i++) mots.push(E.flag('col' + (i + 1)) ? PARAULES_MISSATGE[i] : SIGNES_MISSATGE[i]);
+        for (let i = inici; i < inici + 6; i++) mots.push(E.flag('col' + (i + 1)) ? Idioma.paraulesMissatge(PARAULES_MISSATGE)[i] : SIGNES_MISSATGE[i]);
         const totes = Array.from({ length: 12 }, (_, i) => E.flag('col' + (i + 1))).every(Boolean);
         const pagines = [{ qui: 'Inscripció', text: `Taula de pedra ${part} de 2:\n\n${mots.join('   ')}` }];
         if (totes) {
@@ -1813,7 +1813,7 @@ const DIALEGS_FINAL = {
     isilder: E => ({ pagines: [{ qui: 'Isílder', text: "Les flors de lluna ja s'obren de dia. Diria que és el riure dels nens, que les enganya." }] }),
     joaneta: E => ({ pagines: [{ qui: 'La Joaneta', text: "L'olla ja no fa bombolles liles. Ara fa olor de farigola, com ha de ser." }] }),
     galf: E => ({ pagines: [{ qui: 'Galf', text: "Des del telescopi es veu tot el poble, i aquesta nit no hi ha ni un fil de boira." }] }),
-    germa_franci: E => ({ pagines: [{ qui: 'Germà Floresc', text: "La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui." }] }),
+    germa_floresc: E => ({ pagines: [{ qui: 'Germà Floresc', text: "La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui." }] }),
     iscu: E => ({ pagines: [{ qui: 'Iscu', text: "M'ha sortit el solitari! M'encanta això de les cartes. Ara ja no cal que m'amagui tant..." }] }),
     eve: E => E.flag('eveParlat') ? ({ pagines: [{ qui: 'Eve', text: "El Sardi ja torna a berenar aquí cada tarda. La Càren encara dorm, però ronca més contenta." }] }) : null,
     carry: E => E.flag('pallofaTornat') ? ({ pagines: [{ qui: 'Carry', text: "El Pallofa ja no s'escapa: des que no hi ha boira, no té res a perseguir." }] }) : null,

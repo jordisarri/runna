@@ -25,7 +25,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Pare Alcoví** | Biblioteca (Monestir) | Llegeix els pergamins; dona el Saber. |
 | **La Pianista** | Santuari | Ensenya els tres cants (Aurora, Vespres, Miracle) i dona la tarota. |
 | **Pare Nadiel** | Santuari | Dirigeix el cor. |
-| **Germà Francí** | Monestir / Sant Antoni | Monjo vell; dona els Guants de Poder. |
+| **Germà Floresc** | Monestir / Sant Antoni | Monjo vell; dona els Guants de Poder. |
 | **Germà Aldreu** | Plaça, Cirosa, Gàbia | Antagonista simpàtic: servent de l'Ocellaire (el «Pastor de Boira»). |
 | **L'Ocellaire (L'Home de la Gàbia)** | Sala de la Gàbia | Boss final. |
 | **Meus i senyor Llaminer** | Sant Benet | Matrimoni veí dels nens; la Meus fa l'escudella del sopar. |
@@ -71,7 +71,7 @@ L'**Ineu**, un jove monjo del Santuari del Miracle, desperta un matí amb tres n
 | **Runna** | El Dolmen | Dany 3; talla els esbarzers negres. |
 | Cant del Miracle | Pianista (després de Runna) | Obre els barrots de la gàbia. |
 | Llanterna (Llum d'en Mamet) | Jusef (en guanyar-lo a ping-pong, **a l'Acte 2, abans del fragment 1**) | **Imprescindible a les Runes** (sense llum no es veu el pergamí del forat); eixampla la llum als llocs foscos. |
-| Ram / Guants de Poder | Germà Francí | Mouen la roda del Celler, el rastell i l'àngel de pedra. |
+| Ram / Guants de Poder | Germà Floresc | Mouen la roda del Celler, el rastell i l'àngel de pedra. |
 | Maneta | Cofre de joguines de la Caseta (en Jorgi) | Fa girar el cap de l'Home del Raïm. |
 | Pergamí del monjo | Cambra secreta (Casa Gran) | Pista del puzle del Raïm. |
 | Clau de ferro | Cripta de la Casa Gran | Obre la porta de ferro exterior (Pati del Celler). |
@@ -200,8 +200,8 @@ Just després de Runna. És el cant que l'Ocellaire va robar als ocells: obre el
 **Pas 27 · El Celler — la roda (ja se sap des del pas 14b)** `jusef`
 En Jusef ja va revelar al pas 14b que la **roda de carruatge** del Celler amaga el túnel dels monjos, però pesa massa per a uns braços sols: cal arribar-hi amb els Guants de Poder (pas 28).
 
-**Pas 28 · Sant Antoni → Cementiri → Sant Antoni — els Guants de Poder** `germa_franci` `germaFranci`
-El Germà Francí demana que portis el seu **ram** a la tomba de l'àngel del Cementiri `creuCementiri`; en tornar, et dona els **Guants de Poder**. Amb ells la roda cedeix.
+**Pas 28 · Sant Antoni → Cementiri → Sant Antoni — els Guants de Poder** `germa_floresc` `germaFloresc`
+El Germà Floresc demana que portis el seu **ram** a la tomba de l'àngel del Cementiri `creuCementiri`; en tornar, et dona els **Guants de Poder**. Amb ells la roda cedeix.
 
 **Pas 29 · Casa Gran per dins: passadís, cambra, cofre** `cofreCambra` `homeRaimInt` `botaTresor`
 Roda → **Passadís secret** (escolopendres i un mur de cinc esbarzers negres: Runna) → **Cambra secreta** (cofre: el **pergamí del monjo**; la porta del fons és una llosa sense pany: la bóta de la creu rodola, deixa veure una anella, i una cadena fa girar la politja i puja la llosa).
@@ -313,7 +313,7 @@ Extrets automàticament del codi (`js/dialegs.js` i `js/zones/`). Cada bloc és 
 - **Gent**: `gentEpileg`
 - **Jorgi**: `georgiCaseta`
 - **Germà Aldreu**: `germaAldreu`, `aldreuGabia`, `ocellaireDerrotat`, `finalGabia`
-- **Germà Francí**: `germa_franci`, `germaFranci`
+- **Germà Floresc**: `germa_floresc`, `germaFloresc`
 - **Home del Raïm**: `raimDesperta`, `raimDerrotat`
 - **Huri**: `nenGabia`
 - **Ineu**: `bassadoria`, `creu`, `pedraEscolta`, `pedraSecretaOberta`, `faristolOratori`, `pianista`, `pareDaimiel`, `sagrari`, `homeRaim`, `ruines`, `pareAlcovi`, `ombraMonjo`, `bassadoriaNeta`, `fontSJ`, `alzinaBuida`, `columna`, `taulaPedra`, `altarErmita`, `cofreAltar`, `isilderBase`, `rosansa`, `llosaJardi`, `hostatgeria`, `taulaRefetor`, `dolora`, `pastorVell`, `aldreuPastor`, `aldreuDerrotat`, `mandu`, `nenaTrenes`, `cofreGabriel`, `telescopiMon`, `estelDiposit`, `boiraDolmen`, `dolmenBaix`, `placaDolmen`, `portaReixa`, `reixaDins`, `cofreCambra`, `botaTresor`, `homeRaimInt`, `joaneta`, `boiraTiller`, `arrelsTiller`, `cofreManeta`, `tombaMonjos`, `creuCementiri`, `piOest`, `piPlaca`, `piTresCants`, `piHistoria`, `homeRaimInt`, `raimDesperta`, `raimSenseArma`, `georgiCaseta`, `mecanismePorta`, `golfesRellotge`, `golfesNota`, `golfesReparat`, `construir`, `alAtacar`, `masiaTaula`, `masiaEsquelles`, `construir`, `tornRastell`, `pontGabia`, `gabiaGran`, `actualitzar`, `enMelodia`, `iniciarCombatFinal`, `construir`, `construir`, `ferEpileg`, `enEntrar`, `portaTaverna`, `portaSoterrani`, `portaFerro`
@@ -863,7 +863,7 @@ L'altra meitat d'aquesta crònica la deixo sota clau, al sagrari de l'església.
 
 **Meus:** És l'escudella de cada any, la de les nostres àvies, però enguany té un gust que no voldria explicar. Tu tingues-ne cura de portar-la sencera.
 
-★ Has obtingut L'ESCUDELLA DE LA MEUS.
+★ Has obtingut L'ESCUDELLA DE LA NELIS.
 
 
 *Altrament (per defecte):*
@@ -1612,7 +1612,7 @@ ${mots.join('   ')}
 
 **El Gran Til·ler:** Fa tres-cents anys, quan van tancar la gàbia, els pastors de la Cirosa s'asseien aquí amb els monjos i els pelegrins. Després els van foragitar, i van oblidar que també eren de la casa. Que vingui el menjar de cada llar, també el seu. I que hi hagi flors.
 
-**El Gran Til·ler:** Porta l'escudella de la Meus, les flors d'Isílder i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís.
+**El Gran Til·ler:** Porta l'escudella de la Nelis, les flors d'Isílder i el pa que els pastors de la Cirosa pasten amb les seves mans. Llavors, i només llavors, et donaré el meu permís.
 
 **El Gran Til·ler:** Però els pastors no s'asseuran a taula només amb paraules: fa anys que no senten música vora el foc. Abans de tornar-hi, ves a veure la Pianista del Santuari: guarda un cant tan vell com ells.
 
@@ -1989,11 +1989,11 @@ ${mots.join('   ')}
 
 *Si: té ram*
 
-**Ineu:** Aquest ram és del Germà Francí, per als monjos que dormen aquí. El deixo als peus de l'àngel.
+**Ineu:** Aquest ram és del Germà Floresc, per als monjos que dormen aquí. El deixo als peus de l'àngel.
 
 **Ineu:** (Els pètals tremolen, com si algú respirés a prop. L'àngel, que mirava a terra, alça la cara al cel i somriu: ja no plora sol.)
 
-**Ineu:** El Germà Francí es posarà content. Va dir que, en tornar, tindria alguna cosa per a mi a Sant Antoni.
+**Ineu:** El Germà Floresc es posarà content. Va dir que, en tornar, tindria alguna cosa per a mi a Sant Antoni.
 
 ★ Has deixat el RAM DE FLORS als peus de l'àngel.
 
@@ -2042,11 +2042,11 @@ ${mots.join('   ')}
 **Isílder:** Les flors de lluna ja s'obren de dia. Diria que és el riure dels nens, que les enganya.
 
 
-### germa_franci
+### germa_floresc
 
 
 
-**Germà Francí:** La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui.
+**Germà Floresc:** La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui.
 
 
 ### eve
@@ -2377,7 +2377,7 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 
 
 
-**Ineu:** (Em caldrien unes mans molt més fortes: els guants dels picapedrers del Germà Francí.)
+**Ineu:** (Em caldrien unes mans molt més fortes: els guants dels picapedrers del Germà Floresc.)
 
 
 ### pontGabia
@@ -2515,37 +2515,37 @@ Abans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantav
 → El Gran Til·ler
 
 
-### germaFranci
+### germaFloresc
 
 
 
-**Germà Francí:** Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.
+**Germà Floresc:** Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.
 
 
 *Si: florsCreu*
 
-**Germà Francí:** Les has deixades a l'àngel? Que Déu t'ho pagui, fill. Els monjos d'abans ja deuen estar contents: algú encara se'n recorda.
+**Germà Floresc:** Les has deixades a l'àngel? Que Déu t'ho pagui, fill. Els monjos d'abans ja deuen estar contents: algú encara se'n recorda.
 
-**Germà Francí:** Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.
+**Germà Floresc:** Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.
 
 ★ Has obtingut els GUANTS DE PODER!
 
-**Germà Francí:** Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.
+**Germà Floresc:** Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.
 
 
 *Altrament (per defecte):*
 
-**Germà Francí:** El ram, a la tomba de l'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.
+**Germà Floresc:** El ram, a la tomba de l'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.
 
-**Germà Francí:** Ineu... Bon dia, fill. Ja et deixen créixer?
+**Germà Floresc:** Ineu... Bon dia, fill. Ja et deixen créixer?
 
-**Germà Francí:** Perdona que no camini de pressa: aquests genolls ja tenen més anys que el campanar.
+**Germà Floresc:** Perdona que no camini de pressa: aquests genolls ja tenen més anys que el campanar.
 
-**Germà Francí:** Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.
+**Germà Floresc:** Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.
 
-**Germà Francí:** Cada setmana porto flors a l'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.
+**Germà Floresc:** Cada setmana porto flors a l'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.
 
-**Germà Francí:** Me'n faries el favor? Deixa aquest ram als peus de l'àngel. I torna, que tinc una cosa per a tu.
+**Germà Floresc:** Me'n faries el favor? Deixa aquest ram als peus de l'àngel. I torna, que tinc una cosa per a tu.
 
 ★ Has obtingut un RAM DE FLORS.
 

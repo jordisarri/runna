@@ -200,7 +200,7 @@ Just després de Runna. És el cant que l'Ocellaire va robar als ocells: obre el
 **Pas 27 · El Celler — la roda (ja se sap des del pas 14b)** `jusef`
 En Jusef ja va revelar al pas 14b que la **roda de carruatge** del Celler amaga el túnel dels monjos, però pesa massa per a uns braços sols: cal arribar-hi amb els Guants de Poder (pas 28).
 
-**Pas 28 · Sant Antoni → Cementiri → Sant Antoni — els Guants de Poder** `germa_franci` `germaFranci`
+**Pas 28 · Sant Antoni → Cementiri → Sant Antoni — els Guants de Poder** `germa_floresc` `germaFloresc`
 El Germà Floresc demana que portis el seu **ram** a la tomba de l'àngel del Cementiri `creuCementiri`; en tornar, et dona els **Guants de Poder**. Amb ells la roda cedeix.
 
 **Pas 29 · Casa Gran per dins: passadís, cambra, cofre** `cofreCambra` `homeRaimInt` `botaTresor`

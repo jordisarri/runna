@@ -54,7 +54,7 @@ def genera(lang, reg):
         if e['fitxer'] == 'js/main.js':          # (el pròleg: al registre els salts de línia són « / »; al joc, \n)
             taula[ca.replace(' / ', '\n')] = tr.replace(' / ', '\n')
         else:
-            taula[ca] = tr
+            taula[ca] = tr.replace(' / ', '\n') if '\n' in ca else tr          # (els salts de línia s'escriuen « / », com a TEXTS.md)
         # «origen» guarda l'empremta del text català que es va traduir: si el català ha canviat, cal revisar la traducció
         o = d['origen'].get(k)
         if o and o != empremta(ca):

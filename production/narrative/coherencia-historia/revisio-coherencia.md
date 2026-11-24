@@ -14,7 +14,7 @@ Auditoria de només lectura (cap fitxer del joc modificat). Canon: `docs/GUIO.md
 | 5 | Mitjana | Carry: el Pallofa marxa «fa tres nits» però va darrere del segrest del Fram (2a nit) | dialegs.js:510 vs 490 |
 | 6 | Mitjana | Bastó de pelegrí: el guió A7 diu Pare Jordà; el joc usa l'Aldreu | GUIO A7 vs dialegs.js:127 |
 | 7 | Mitjana | Dany de les armes: A4 (1/2) vs A7 i rev. 186 (1/2/3) | GUIO A4 l.50, 58 vs A7 |
-| 8 | Mitjana | Guants de Poder: A3 (Francí) vs A5 (Refetor) vs ús al codi | GUIO A3 l.26, A5 l.86 |
+| 8 | Mitjana | Guants de Poder: A3 (Floresc) vs A5 (Refetor) vs ús al codi | GUIO A3 l.26, A5 l.86 |
 | 9 | Mitjana | L'Aldreu a la Cirosa mentre les arrels tanquen el camí i és a la Plaça de dia | dialegs.js:559, 1071 vs GUIO A6 l.118 |
 | 10 | Mitjana | Pistes de `progres.js` tractades com a víctima («la boira s'ha endut l'Aldreu») vs «dolent de debò» | progres.js:44; GUIO A3 l.29 |
 | 11 | Baixa | «Home amb abric d'ocells» (Dolora) vs Ocellaire de hàbit negre / ombra amb hàbit | dialegs.js:991 vs GUIO A3 l.30, A6 l.115 |
@@ -69,7 +69,7 @@ Auditoria de només lectura (cap fitxer del joc modificat). Canon: `docs/GUIO.md
 - A4 l.50 «Branca... 1 de dany», l.58 «Runna... Dany 2». A7 i rev. 186: bastó 1, branca 2, Runna 3. **Proposta**: corregir A4 a branca = 2 i Runna = 3. El valor del codi no s'ha comprovat (vegeu «Sense verificar»).
 
 ### 8. Guants de Poder
-- A3 l.26: Francí els dona. A5 l.86: «Refetor... àngel de pedra → Guants de Poder». El codi usa Francí: `progres.js:95-98`, `gabia.js:59`. L'àngel del Refetor s'empeny **amb** els guants (`dialegs.js:978-979`). A5 és el que falla. **Proposta**: A5 l.86, canviar «→ Guants de Poder» per «(s'empeny amb els Guants de Poder)».
+- A3 l.26: Floresc els dona. A5 l.86: «Refetor... àngel de pedra → Guants de Poder». El codi usa Floresc: `progres.js:95-98`, `gabia.js:59`. L'àngel del Refetor s'empeny **amb** els guants (`dialegs.js:978-979`). A5 és el que falla. **Proposta**: A5 l.86, canviar «→ Guants de Poder» per «(s'empeny amb els Guants de Poder)».
 - El «rastell amb els Guants» és coherent amb el codi (ús, no font).
 
 ### 9. L'Aldreu a la Cirosa
@@ -98,6 +98,6 @@ Auditoria de només lectura (cap fitxer del joc modificat). Canon: `docs/GUIO.md
 - Valors de dany reals al codi (`combat.js`): no llegit.
 - Rosansa: A3 la posa a les Cel·les, rev. 195 al camí de les Runes; no s'ha mirat la zona.
 - Diari (`js/diari.js`) i `js/credits.js`: no llegits; cal revisar pistes i noms.
-- Diàlegs a `js/zones/*.js` (nord, oest, cirosa, casa, cela, cementiri, bosc_pi): no llegits. Això inclou el Germà Francí, en Georgi i la foguera dels pastors.
+- Diàlegs a `js/zones/*.js` (nord, oest, cirosa, casa, cela, cementiri, bosc_pi): no llegits. Això inclou el Germà Floresc, en Georgi i la foguera dels pastors.
 - Resta de «Taverna» als textos: només s'ha vist `main.js:604`, `:615` i `cirosa.js:256` (comentaris).
 - Eve «tres cops» i Iscu (A3): l'Iscu no ho diu al codi; l'Eve sí (`taverna.js:25`). Menor.

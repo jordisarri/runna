@@ -183,7 +183,7 @@ class ZonaEsglesia extends ZonaBase {
         // Les dones i l'Ineu fan la mateixa alçada (130, que a l'Ineu li dona uns 133 de cos visible), els homes una mica més (139) i els nens 96. Sense bancs: el poble és DE PEU, en tres files de tres a cada costat del passadís central (x 590-690),
         // a 85 px entre persones i 130 entre files per sota dels graons del presbiteri; els qui toquen el passadís (x 515 i 765) són els qui en surten per anar cap als nens.
         const AD = 130, HOME = 139, NEN = 96, FILES = [R + 480, R + 610, R + 740];
-        const HOMES_EPILEG = ['pare_daimiel', 'pare_jorda', 'pare_alcovi', 'isilder', 'molner', 'pomers', 'jusef', 'germa_franci', 'galf'];
+        const HOMES_EPILEG = ['pare_daimiel', 'pare_jorda', 'pare_alcovi', 'isilder', 'molner', 'pomers', 'jusef', 'germa_floresc', 'galf'];
         const seient = (fila, costat, n) => [(costat < 0 ? [345, 430, 515] : [765, 850, 935])[n], FILES[fila]];
         [['nen_uri', 480, R + 245, NEN - 8], ['nen_flam', 590, R + 245, NEN + 9], ['nen_sardin', 700, R + 245, NEN + 9],      // els tres nens, separats, al peu de l'altar
          ['pare_daimiel', 360, R + 215, AD], ['pare_jorda', 1030, R + 215, AD],                                      // el presbiteri: el Pare Nadiel a l'esquerra, el Pare Jòrdius a la dreta, i l'orgue amb la Pianista asseguda
@@ -191,7 +191,7 @@ class ZonaEsglesia extends ZonaBase {
          ['isilder', ...seient(0, 1, 0), AD], ['carmelia', ...seient(0, 1, 1), AD], ['pilaria', ...seient(0, 1, 2), AD],
          ['meus', ...seient(1, -1, 0), AD], ['molner', ...seient(1, -1, 1), AD], ['mandu', ...seient(1, -1, 2), NEN],
          ['dolora', ...seient(1, 1, 0), AD], ['eve', ...seient(1, 1, 1), AD], ['iscu', ...seient(1, 1, 2), NEN],
-         ['pomers', ...seient(2, -1, 0), AD], ['jusef', ...seient(2, -1, 1), AD], ['germa_franci', ...seient(2, -1, 2), AD],
+         ['pomers', ...seient(2, -1, 0), AD], ['jusef', ...seient(2, -1, 1), AD], ['germa_floresc', ...seient(2, -1, 2), AD],
          ['joaneta', ...seient(2, 1, 0), AD], ['galf', ...seient(2, 1, 1), AD]
         ].forEach(([k, x, y, h]) => {
             if (!this.textures.exists(k) || (this.npcs && this.npcs[k])) return;

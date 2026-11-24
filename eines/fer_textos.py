@@ -42,7 +42,7 @@ SECCIONS = [
     ('Acte 2: l\'Era, el Galf i el telescopi', ['cartellEra', 'galf', 'cofreGabriel', 'telescopiMon', 'estelDiposit', 'cotxer']),
     ('Acte 2: el Dolmen i Runna', ['estels:completarEstels', 'boiraDolmen', 'dolmenBaix', 'placaDolmen']),
     ('El pi dels tres cants i la Nena de les Trenes', ['zones/bosc_pi:piOest', 'zones/bosc_pi:piPlaca', 'zones/bosc_pi:piTresCants', 'zones/bosc_pi:piHistoria', 'nenaTrenes', 'nenaEpileg', 'mandu']),
-    ('Acte 3: els Guants de Poder i la roda de carruatge', ['germa_franci', 'zones/nord:germaFranci']),
+    ('Acte 3: els Guants de Poder i la roda de carruatge', ['germa_floresc', 'zones/nord:germaFloresc']),
     ('Acte 3: el passadís secret, la cambra i la maneta (en Gori)', ['zones/casa:georgiCaseta', 'llibreCambra', 'cofreManeta', 'zones/casa:golfesRellotge', 'zones/casa:golfesNota', 'zones/casa:golfesReparat']),
     ('Acte 3: la Casa Gran, la cripta i l\'Home del Raïm', ['portaReixa', 'reixaDins', 'homeRaim', 'zones/casa:homeRaimInt', 'zones/casa:raimDesperta', 'zones/casa:raimSenseArma', 'zones/casa:raimDerrotat',
                                                             'zones/casa:raimEstatuaFinal', 'zones/casa:cofreCripta', 'zones/casa:puzleRaim', 'zones/casa:mecanismePorta', 'zones/casa_gran:construir']),

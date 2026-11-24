@@ -78,7 +78,7 @@
 
 - [x] `germa_aldreu`
 
-- [x] `germa_franci`
+- [x] `germa_floresc`
 
 - [x] `follet_carro`
 

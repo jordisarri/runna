@@ -22,7 +22,7 @@ const CATALEG = [
     { key: 'dolora',   file: 'assets/personatges/dolora.webp', amplada: 73.4, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cadira: true, cabell: '#e8e8e8', ample: 0.95 }) },
     { key: 'carmelia',   file: 'assets/personatges/carmelia.webp', amplada: 96.4, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#6a4a2e', ample: 1.45, alt: 0.92 }) },
     { key: 'pilaria',   file: 'assets/personatges/pilaria.webp', amplada: 92.3, cru: true, provisional: (c, w) => dibuixarMonja(c, w, { cabell: '#3b2a1e', ulleres: true, ample: 0.8, alt: 1.06 }) },
-    { key: 'germa_franci', file: 'assets/personatges/germa_franci.webp', amplada: 87.6, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
+    { key: 'germa_floresc', file: 'assets/personatges/germa_floresc.webp', amplada: 87.6, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#3a2c22', cabell: '#e8e8e8', alt: 1.14, prim: true, barba: '#ececec' }) },
     { key: 'pare_alcovi',   file: 'assets/personatges/pare_alcovi.webp',   amplada: 88.5, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },
     { key: 'pare_xevius',   file: 'assets/personatges/pare_xevius.webp',   amplada: 80, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#4a3a2c', cabell: '#cfcfcf', alt: 1.1, prim: true, barba: '#dcdcdc' }) },      // el Vigilant de la Porta de les Gírgoles (provisional fins que hi hagi l'art: vegeu docs/PROMPTS_GRAFICS.md)
     { key: 'pare_alcovi_esquena', file: 'assets/personatges/pare_alcovi_esquena.webp', amplada: 86.4, cru: true, provisional: (c, w) => dibuixarMonjo(c, w, { habit: '#1d1b22', cabell: '#d8d8d8', llibre: true }) },      // d'esquena, llegint la Crònica al faristol (AutoSprite)
@@ -226,7 +226,7 @@ const CATALEG = [
 
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
-['ineu', 'pare_jorda', 'germa_aldreu', 'germa_franci', 'pare_daimiel', 'pare_alcovi', 'pare_xevius', 'eve', 'senyor_budo', 'jusef', 'pomers', 'julius', 'galf', 'isilder', 'pianista', 'joaneta', 'iscu',
+['ineu', 'pare_jorda', 'germa_aldreu', 'germa_floresc', 'pare_daimiel', 'pare_alcovi', 'pare_xevius', 'eve', 'senyor_budo', 'jusef', 'pomers', 'julius', 'galf', 'isilder', 'pianista', 'joaneta', 'iscu',
  'nena_trenes', 'venerables', 'carry', 'carmelia', 'pilaria', 'dolora', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'follet_carro', 'georgi_caseta', 'rosansa', 'meus', 'molner', 'ombra_monjo', 'mandu', 'mandu_trencada', 'nen_uri', 'nen_flam', 'nen_sardin', 'ocellaire', 'ocellaire_derrotat', 'home_raim', 'home_raim_horitzo']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 

@@ -744,7 +744,7 @@ class ZonaCelles extends ZonaBase {
 }
 
 // ---------------- CEL·LES DE SANT ANTONI ----------------
-// A llevant del Monestir. Hi passeja el Germà Francí, monjo del Monestir que cuida les flors del cementiri: per un favor
+// A llevant del Monestir. Hi passeja el Germà Floresc, monjo del Monestir que cuida les flors del cementiri: per un favor
 // (portar-hi el seu ram), et dona els Guants de Poder, els que mouen la roda del Celler. L'Huri, el primer nen desaparegut, hi venia a robar figues.
 Object.assign(DIALEGS, {
     portaFlam: E => ({ pagines: [] }),
@@ -752,17 +752,17 @@ Object.assign(DIALEGS, {
     cel_ntrasra: E => ({ pagines: [] }),
     cel_stantoni: E => ({ pagines: [] }),
 
-    germaFranci: E => {
+    germaFloresc: E => {
         if (E.te('guants')) return { pagines: [
-            { qui: 'Germà Francí', text: 'Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.' }
+            { qui: 'Germà Floresc', text: 'Els guants et queden grans, eh? Ja hi creixeràs. Fes-los servir per moure el que pesa, no per empènyer la gent.' }
         ] };
         if (E.flag('florsCreu')) return {
             pagines: [
-                { qui: 'Germà Francí', text: 'Les has deixades a l\'àngel? Que Déu t\'ho pagui, fill. Els monjos d\'abans ja deuen estar contents: algú encara se\'n recorda.' },
-                { qui: 'Germà Francí', text: 'Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.' },
+                { qui: 'Germà Floresc', text: 'Les has deixades a l\'àngel? Que Déu t\'ho pagui, fill. Els monjos d\'abans ja deuen estar contents: algú encara se\'n recorda.' },
+                { qui: 'Germà Floresc', text: 'Té. Són els guants de picapedrer dels monjos antics: amb ells van aixecar les pedres del Santuari. Jo ja no tinc força per fer-los servir, però tu sí.' },
                 { avis: 'Has obtingut els GUANTS DE PODER!', obj: 'guants' },
-                { qui: 'Germà Francí', text: 'Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.' },
-                { qui: 'Germà Francí', text: "I una altra cosa, fill: a l'Hostatgeria hi ha un mussol de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella." }
+                { qui: 'Germà Floresc', text: 'Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.' },
+                { qui: 'Germà Floresc', text: "I una altra cosa, fill: a l'Hostatgeria hi ha un mussol de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella." }
             ],
             enAcabar: () => {
                 E.dona('guants');
@@ -770,18 +770,18 @@ Object.assign(DIALEGS, {
             }
         };
         if (E.te('ram')) return { pagines: [
-            { qui: 'Germà Francí', text: 'El ram, a la tomba de l\'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.' }
+            { qui: 'Germà Floresc', text: 'El ram, a la tomba de l\'àngel de pedra, a la dreta del Cementiri, fill. Darrere el Monestir, camí amunt. I compte amb les bestioles.' }
         ] };
         return {
             pagines: [
-                { qui: 'Germà Francí', text: 'Ineu... Bon dia, fill. Ja et deixen créixer?' },
-                { qui: 'Germà Francí', text: 'Perdona que no camini de pressa: aquests genolls ja tenen més anys que la torre del rellotge.' },
-                { qui: 'Germà Francí', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L\'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
-                { qui: 'Germà Francí', text: 'Cada setmana porto flors a l\'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
-                { qui: 'Germà Francí', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },
+                { qui: 'Germà Floresc', text: 'Ineu... Bon dia, fill. Ja et deixen créixer?' },
+                { qui: 'Germà Floresc', text: 'Perdona que no camini de pressa: aquests genolls ja tenen més anys que la torre del rellotge.' },
+                { qui: 'Germà Floresc', text: 'Jo visc al Monestir, però cada matí baixo a passejar fins a Sant Antoni. L\'Huri, el de Sant Benet, em venia a robar figues i jo feia veure que no el veia. Fa dos dies que la figuera és plena.' },
+                { qui: 'Germà Floresc', text: 'Cada setmana porto flors a l\'àngel del Cementiri, per als monjos que hi dormen. Però amb aquesta boira no hi arribo: les cames no em responen i les bestioles no em respecten.' },
+                { qui: 'Germà Floresc', text: 'Me\'n faries el favor? Deixa aquest ram als peus de l\'àngel. I torna, que tinc una cosa per a tu.' },
                 { avis: 'Has obtingut un RAM DE FLORS.', obj: 'ram' }
             ],
-            enAcabar: () => { E.dona('ram'); E.posaObjectiu("El ram del Germà Francí és per a la tomba de l'àngel, al Cementiri."); }
+            enAcabar: () => { E.dona('ram'); E.posaObjectiu("El ram del Germà Floresc és per a la tomba de l'àngel, al Cementiri."); }
         };
     }
 });
@@ -810,11 +810,11 @@ class ZonaSantAntoni extends ZonaBase {
         this.sortida(509, 730, 80, 16, 'ZonaCelaStAntoni', 'porta');
         this.portaAnimada({ x: 549, top: 600, bottom: 755, ample: 92, fons: 761, color: 0x5a3a20, panell: 0x6a4628, vora: 0x2a1608, ferro: true });   // la porta de la cel·la, de fusta amb ferros
 
-        this.npc('germa_franci', 1010, 870, DIALEGS.germaFranci, { flipX: true });
+        this.npc('germa_floresc', 1010, 870, DIALEGS.germaFloresc, { flipX: true });
         // El Pallofa, el gos de la Carry: només hi passeja un cop has parlat amb ella, fins que l'agafes
         if (Estat.flag('carryParlat') && !Estat.te('pallofa') && !Estat.flag('pallofaTornat')) this.posarPallofa();
         this.cartell(170, 800, () => ({ pagines: [{ qui: 'Cartell', text: '← El Monestir i la Plaça\n↓ El Bosc del Pi dels Tres Cants' }] }));
-        this.arbres([[1250, 300], [1320, 560], [1340, 1060], [160, 300], [360, 220]]);   // cap arbre davant el cartell ni el Germà Francí
+        this.arbres([[1250, 300], [1320, 560], [1340, 1060], [160, 300], [360, 220]]);   // cap arbre davant el cartell ni el Germà Floresc
 
         this.sortida(0, 820, 14, 140, 'ZonaMonestir', 'santantoni');   // surts per l'est del Monestir
         this.sortida(1000, 1086, 130, 14, 'ZonaBoscPi', 'santantoni');   // i, al sud, el camí del bosc

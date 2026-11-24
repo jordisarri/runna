@@ -60,8 +60,9 @@ const Idioma = {
             const parts = k.split(/\{(\d)\}/), ordre = [];
             let re = '^';
             parts.forEach((p, i) => { if (i % 2) { ordre.push(+p); re += '([\\s\\S]*?)'; } else re += esc(p); });
-            return { re: new RegExp(re + '$'), ordre, v };
+            return { re: new RegExp(re + '$'), ordre, v, fix: k.replace(/\{\d\}/g, '').length };
         });
+        this._patrons.sort((a, b) => b.fix - a.fix);          // els més concrets (més text fix) primer: «Escolta: {0}» abans que «{0}\nRecorda...»
         return this._patrons;
     },
 
@@ -73,13 +74,37 @@ const Idioma = {
         // Decoracions dels menús: «✦ Nova partida ✦», «▸ Sí»
         const m = text.match(/^(\s*[✦▸•★→←↑↓]+\s*)?([\s\S]*?)(\s*[✦]+\s*)?$/);
         if (m && (m[1] || m[3]) && Object.prototype.hasOwnProperty.call(T, m[2])) return (m[1] || '') + T[m[2]] + (m[3] || '');
+        // Els avisos «★ Has obtingut...» també surten sense l'estrella (objectiu, missatges)
+        if (Object.prototype.hasOwnProperty.call(T, '★ ' + text)) return T['★ ' + text].replace(/^★\s*/, '');
         for (const p of this.patrons()) {
             const r = text.match(p.re);
-            if (r) return p.v.replace(/\{(\d)\}/g, (_, n) => this.t(r[1 + p.ordre.indexOf(+n)] || ''));
+            if (r) return p.v.replace(/\{(\d)\}/g, (_, n) => this.tros(r[1 + p.ordre.indexOf(+n)] || ''));
         }
         if (!this.IDIOMES.some(([, n]) => n === text)) this.pendents.add(text);          // (els noms dels idiomes no es tradueixen)
         return text;
     },
+
+    // Un tros variable d'un patró: sencer (o per un altre patró) si té traducció; si no, una llista «a, b i c» element per element,
+    // però només si TOTS els elements en tenen (una frase qualsevol amb una «i» no s'ha de partir)
+    I_LLISTA: { es: ' y ', fr: ' et ', en: ' and ' },
+    tros(s) {
+        if (!s || this.codi === 'ca') return s;
+        const sencer = this.t(s);
+        if (sencer !== s || !/, | i /.test(s)) return sencer;
+        const T = this.taula(), te = x => Object.prototype.hasOwnProperty.call(T, x);
+        const i = s.lastIndexOf(' i ');
+        const parts = (i > 0 ? s.slice(0, i) : s).split(', '), darrer = i > 0 ? s.slice(i + 3) : null;
+        if (!parts.every(te) || (darrer !== null && !te(darrer))) return s;
+        return parts.map(x => T[x]).join(', ') + (darrer !== null ? (this.I_LLISTA[this.codi] || ' i ') + T[darrer] : '');
+    },
+
+    // Les dotze paraules de les columnes del camí de la Desaparició: en cada idioma, la frase de l'altar (texts 347 i 350) partida en dotze trossos
+    PARAULES_MISSATGE: {
+        es: ['Cuando', 'la', 'niebla', 'cubra', 'el', 'Miracle,', 'los', 'pasos', 'de los', 'ausentes', 'volverán', 'con el alba.'],
+        fr: ['Quand', 'la', 'brume', 'couvrira', 'le', 'Miracle,', 'les', 'pas', 'des', 'absents', 'reviendront', "avec l'aube."],
+        en: ['When', 'the', 'mist', 'covers', 'the', 'Miracle,', 'the', 'footsteps', 'of the', 'absent', 'will return', 'with the dawn.']
+    },
+    paraulesMissatge(ca) { return this.PARAULES_MISSATGE[this.codi] || ca; },
 
     mostraPendents() { const l = [...this.pendents]; console.log(l.join('\n')); return l.length; }
 };
