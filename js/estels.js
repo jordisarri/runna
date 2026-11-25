@@ -173,7 +173,7 @@ class EscenaEstels extends Phaser.Scene {
                 if (this.compte >= 7) {
                     this.estrelles = [];
                     this.info.setText("Set llàgrimes! Ara, mira bé el cel...");
-                    this.info.setY(215);
+                    this.info.setY(215); this.punters.forEach(c => c.setVisible(false));
                     this.time.delayedCall(1800, () => { this.part = 2; this.iniciarPart2(); });
                 }
             } else {
@@ -251,6 +251,7 @@ class EscenaEstels extends Phaser.Scene {
         this.tweens.add({ targets: [g, o], alpha: 1, duration: 1400 });
         this.info.setText("Un ocell que s'escapa d'una gàbia oberta...");
         this.info.setFontSize(30).setWordWrapWidth(520).setY(215);          // (text llarg: més petit i amb marge als costats del quadre)
+        this.punters.forEach(c => c.setVisible(false));                       // (el comptador de llàgrimes ja no serveix i el text llarg se li solapava)
         [1, 3, 2].forEach((n, i) => this.time.delayedCall(i * 350, () => this.so(n + 1)));
         this.time.delayedCall(6500, () => this.tancar(true));          // (més estona per poder llegir el missatge)
     }
