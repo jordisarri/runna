@@ -662,7 +662,9 @@
   "713": "Un sceau ne tient pas si le temps ne le soutient pas. Il faut d'abord que l'horloge se remette en marche : c'est Carry qui garde la clé de la porte du retable, à Notre-Dame.",
   "714": "Quand l'horloge marchera, frappe la fissure avec Runna, mon fils, et reviens me voir.",
   "715": "(La lumière ne cède pas. Il manque quelque chose... ce n'est peut-être pas encore... l'heure.)",
-  "716": "Un chant que les pierres comprennent ? Ah, mon fils... C'est peut-être celui des Vêpres : il est très vieux, ma mère me l'a appris. Viens, écoute."
+  "716": "Un chant que les pierres comprennent ? Ah, mon fils... C'est peut-être celui des Vêpres : il est très vieux, ma mère me l'a appris. Viens, écoute.",
+  "718": "J'ai entendu dire que tu es entré dans le tunnel que cachait la roue. Ces ronces noires, ce n'est pas un bâton qui les coupe, mon garçon : seule Runna, l'épée du Dolmen, y arrive.",
+  "719": "Si tu es passé par le tunnel derrière la roue et que des ronces noires t'ont barré la route, ne t'acharne pas avec le bâton : seule l'épée du Dolmen, Runna, les coupe."
  },
  "interficie": {
   "Toca la pantalla per començar": "Touche l'écran pour commencer",
@@ -1926,6 +1928,8 @@
   "714": "9a830aee",
   "715": "4798cf97",
   "716": "c819bfda",
-  "210": "7fd40770"
+  "210": "7fd40770",
+  "718": "57b546c8",
+  "719": "e3fb6825"
  }
 }

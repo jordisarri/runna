@@ -660,6 +660,8 @@ TRADUCCIONS.fr = {
 "Quan el rellotge camini, colpeja l'esquerda amb Runna, fill, i torna a veure'm.": "Quand l'horloge marchera, frappe la fissure avec Runna, mon fils, et reviens me voir.",
 "(La llum no cedeix. Falta alguna cosa... potser encara no és... l'hora.)": "(La lumière ne cède pas. Il manque quelque chose... ce n'est peut-être pas encore... l'heure.)",
 "Un cant que les pedres entenen? Ai, fill... Potser és el de Vespres: és molt vell, me'l va ensenyar la meva mare. Vine, escolta.": "Un chant que les pierres comprennent ? Ah, mon fils... C'est peut-être celui des Vêpres : il est très vieux, ma mère me l'a appris. Viens, écoute.",
+"He sentit que has entrat al túnel que amagava la roda. Aquells esbarzers negres no els talla un bastó, noi: només Runna, l'espasa del Dolmen.": "J'ai entendu dire que tu es entré dans le tunnel que cachait la roue. Ces ronces noires, ce n'est pas un bâton qui les coupe, mon garçon : seule Runna, l'épée du Dolmen, y arrive.",
+"Si has passat pel túnel de darrere la roda i t'han barrat el pas uns esbarzers negres, no t'hi escarrassis amb el bastó: només l'espasa del Dolmen, Runna, els talla.": "Si tu es passé par le tunnel derrière la roue et que des ronces noires t'ont barré la route, ne t'acharne pas avec le bâton : seule l'épée du Dolmen, Runna, les coupe.",
 "Toca la pantalla per començar": "Touche l'écran pour commencer",
 "Àudio activat": "Son activé",
 "Àudio desactivat": "Son désactivé",

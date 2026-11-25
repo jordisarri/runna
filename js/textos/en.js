@@ -660,6 +660,8 @@ TRADUCCIONS.en = {
 "Quan el rellotge camini, colpeja l'esquerda amb Runna, fill, i torna a veure'm.": "When the clock is ticking, strike the crack with Runna, son, and come back to see me.",
 "(La llum no cedeix. Falta alguna cosa... potser encara no és... l'hora.)": "(The light won't give way. Something's missing... maybe it isn't yet... the hour.)",
 "Un cant que les pedres entenen? Ai, fill... Potser és el de Vespres: és molt vell, me'l va ensenyar la meva mare. Vine, escolta.": "A song the stones understand? Oh, son... Maybe it's the Vespers Song: it's very old, my mother taught it to me. Come, listen.",
+"He sentit que has entrat al túnel que amagava la roda. Aquells esbarzers negres no els talla un bastó, noi: només Runna, l'espasa del Dolmen.": "I hear you've gone into the tunnel the wheel was hiding. A staff won't cut those black brambles, lad: only Runna, the sword of the Dolmen, will.",
+"Si has passat pel túnel de darrere la roda i t'han barrat el pas uns esbarzers negres, no t'hi escarrassis amb el bastó: només l'espasa del Dolmen, Runna, els talla.": "If you went through the tunnel behind the wheel and some black brambles blocked your way, don't struggle with the staff: only the sword of the Dolmen, Runna, can cut them.",
 "Toca la pantalla per començar": "Tap the screen to start",
 "Àudio activat": "Sound on",
 "Àudio desactivat": "Sound off",

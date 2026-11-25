@@ -662,7 +662,9 @@
   "713": "Un sello no aguanta si el tiempo no lo sostiene. Primero hace falta que el reloj vuelva a andar: la llave de la puerta del retablo la guarda Carry, en Nuestra Señora.",
   "714": "Cuando el reloj ande, golpea la grieta con Runna, hijo, y vuelve a verme.",
   "715": "(La luz no cede. Falta algo... quizá todavía no sea... la hora.)",
-  "716": "¿Un canto que las piedras entienden? Ay, hijo... Quizá sea el de Vísperas: es muy viejo, me lo enseñó mi madre. Ven, escucha."
+  "716": "¿Un canto que las piedras entienden? Ay, hijo... Quizá sea el de Vísperas: es muy viejo, me lo enseñó mi madre. Ven, escucha.",
+  "718": "He oído que has entrado en el túnel que escondía la rueda. Esas zarzas negras no las corta un bastón, muchacho: solo Runna, la espada del Dolmen.",
+  "719": "Si has pasado por el túnel de detrás de la rueda y te han cerrado el paso unas zarzas negras, no te esfuerces con el bastón: solo la espada del Dolmen, Runna, las corta."
  },
  "interficie": {
   "Toca la pantalla per començar": "Toca la pantalla para empezar",
@@ -1925,6 +1927,8 @@
   "714": "9a830aee",
   "715": "4798cf97",
   "716": "c819bfda",
-  "210": "7fd40770"
+  "210": "7fd40770",
+  "718": "57b546c8",
+  "719": "e3fb6825"
  }
 }

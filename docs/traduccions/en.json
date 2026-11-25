@@ -662,7 +662,9 @@
   "713": "A seal won't hold unless time holds it up. First the clock has to tick again: Carry keeps the key to the altarpiece door, at Our Lady's.",
   "714": "When the clock is ticking, strike the crack with Runna, son, and come back to see me.",
   "715": "(The light won't give way. Something's missing... maybe it isn't yet... the hour.)",
-  "716": "A song the stones understand? Oh, son... Maybe it's the Vespers Song: it's very old, my mother taught it to me. Come, listen."
+  "716": "A song the stones understand? Oh, son... Maybe it's the Vespers Song: it's very old, my mother taught it to me. Come, listen.",
+  "718": "I hear you've gone into the tunnel the wheel was hiding. A staff won't cut those black brambles, lad: only Runna, the sword of the Dolmen, will.",
+  "719": "If you went through the tunnel behind the wheel and some black brambles blocked your way, don't struggle with the staff: only the sword of the Dolmen, Runna, can cut them."
  },
  "interficie": {
   "Toca la pantalla per començar": "Tap the screen to start",
@@ -1926,6 +1928,8 @@
   "714": "9a830aee",
   "715": "4798cf97",
   "716": "c819bfda",
-  "210": "7fd40770"
+  "210": "7fd40770",
+  "718": "57b546c8",
+  "719": "e3fb6825"
  }
 }

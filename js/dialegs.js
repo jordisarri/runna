@@ -444,8 +444,10 @@ const DIALEGS = {
 
     pomers: E => {
         E.posaFlag('parlatPomers');
+        const pista = (E.flag('visitada_ZonaPassadis') && !E.flag('passadisNet')) ? [{ qui: 'Senyor Pomers', text: "He sentit que has entrat al túnel que amagava la roda. Aquells esbarzers negres no els talla un bastó, noi: només Runna, l'espasa del Dolmen." }] : [];      // un cop dins el túnel de la roda, fins que se'n tallen els esbarzers
         return {
             pagines: [
+                ...pista,
                 { qui: 'Senyor Pomers', text: 'Calma, noi. La pilota no s\'ha de perseguir, s\'ha d\'esperar.' },
                 { qui: 'Senyor Pomers', text: 'Jo jugo amb una pala de pedra. De pedra, sí: pesa com un maó i no té goma ni res. Quan jugueu a la taula, no em veuràs ni a mi ni la pala; no cal.' },
                 { qui: 'Senyor Pomers', text: 'Perquè amb què es juga és igual. La pala només és una extensió de l\'ànima. El que compta és l\'esperit del joc, la màgia que portes dins.' }
@@ -455,6 +457,7 @@ const DIALEGS = {
 
     jusef: E => E.flag('jusefVencut') ? {
         pagines: [
+            ...((E.flag('visitada_ZonaPassadis') && !E.flag('passadisNet')) ? [{ qui: 'Jusef', text: "Si has passat pel túnel de darrere la roda i t'han barrat el pas uns esbarzers negres, no t'hi escarrassis amb el bastó: només l'espasa del Dolmen, Runna, els talla." }] : []),
             { qui: 'Jusef', text: 'La taula és teva quan vulguis, noi. Vols provar de tornar-me el servei un altre cop?' },
             { fer: (z, fet) => z.ui().triar(['Sí', 'No'], i => { DIALEGS._triaPP = i; fet(); }) }
         ],
