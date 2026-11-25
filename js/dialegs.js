@@ -1014,7 +1014,7 @@ const DIALEGS = {
             return {
                 pagines: [
                     { qui: 'Galf', text: 'Un cristall de gel de debò! Fa anys que en buscava un. Dóna\'m una estona.' },
-                    { fer: (z, fet) => z.seq([c => z.npcFeina('galf', 1800, 'guspires', c), c => z.npcSalta('galf', c, 1), c => z.objecteVola('galf', c, 'telescopi_mon')], fet) },
+                    { fer: (z, fet) => z.seq([c => z.npcFeina('galf', 1800, 'guspires', c), c => z.npcSalta('galf', c, 1), c => z.objecteVola('galf', c, iconaObjecte(z, 'telescopi'))], fet) },
                     { qui: 'Galf', text: 'Un telescopi! Amb això veuràs coses que cap monjo no ha vist. Perquè no se\'t perdi: les estrelles fan camí.' },
                     { avis: 'Has obtingut el TELESCOPI DEL GALF.', obj: 'telescopi' }
                 ],
@@ -1518,7 +1518,7 @@ const DIALEGS = {
         }
         return {
             pagines: [
-                { fer: (z, fet) => z.deixar(fet, 'telescopi_mon', 0xd8e8ff) },
+                { fer: (z, fet) => z.deixar(fet, iconaObjecte(z, 'telescopi'), 0xd8e8ff) },
                 { qui: "Ineu", text: "Diuen que per Sant Llorenç el cel plora. Compta les llàgrimes... i potser et mostraran alguna cosa." }
             ],
             enAcabar: () => { E.posaFlag("telescopiMuntat"); game.scene.start("Estels"); }
