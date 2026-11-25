@@ -3161,7 +3161,7 @@ class ZonaBase extends Phaser.Scene {
             const my = Math.min(6, Math.max(2, s.r.height * 0.05));
             // Si és la sortida d'una porta animada, el cos sencer ha d'estar dins del buit de la porta (no només el centre): si no, s'entrava «pel marc», pel costat de la porta
             const pa = horitz && (this.portesAnim || []).find(P => !P.senseSortida && Math.abs(P.DX - s.r.centerX) < 14 && s.r.y < P.DB && s.r.bottom > P.DB - 50);
-            const mitja = pa ? Math.max(8, pa.DW / 2 - b.width / 2 - 2) : 0;
+            const mitja = pa ? Math.max(8, pa.DW / 2 - b.width / 2 - 2, Math.min(pa.DW / 2 - 8, 24)) : 0;          // (en portes estretes, com la del mas de la Cirosa, el marge era només de ~14 px a cada banda i costava molt entrar-hi)
             const centrat = horitz ? (pa ? Math.abs(c.x - pa.DX) <= Math.min(mitja, (s.r.width / 2) - mx) : (c.x >= s.r.x + mx && c.x <= s.r.right - mx))
                                    : (c.y >= s.r.y + my && c.y <= s.r.bottom - my);
             if (s.peu ? s.r.contains(b.center.x, b.bottom) : (centrat && Phaser.Geom.Intersects.RectangleToRectangle(peus, s.r))) {
