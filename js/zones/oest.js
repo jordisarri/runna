@@ -365,7 +365,7 @@ class ZonaCamiRov extends ZonaBase {
         this.roca1 = this.pedraMobil(480, 1215, 'llac1', 110, 0, null, () => Estat.flag('nenaVista'));
 
         // Animalets i bolets
-        [[2400, 320], [1500, 670], [1000, 660], [450, 1210]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[2400, 320], [1730, 330], [1000, 660], [450, 1210]].forEach(([x, y]) => this.enemic('escolopendra', x, y));          // (cap enemic a prop de la Nena de les Trenes (1560, 670): entorpeix la conversa)
         [[2100, 620], [1200, 460], [700, 1060]].forEach(([x, y]) => this.enemic('bolet', x, y));
 
         this.boiraAmbient(900, 900, 400, 160, 1);
