@@ -26,7 +26,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Inici: el Monestir i la Plaça
 
-### despertarCaigut  <sub>(js/zona_base.js:376)</sub>
+### despertarCaigut  <sub>(js/zona_base.js:383)</sub>
 
 **[6] Pare Jòrdius:** Ineu! Què fas a terra? Respira, fill! Encara prendràs mal. Ja estàs bé?
 
@@ -938,7 +938,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alberic sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1954)</sub>
+### pedraMobil  <sub>(js/zona_base.js:2007)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1258,15 +1258,15 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 *Si: (depèn d'un càlcul del joc) ; (depèn d'un càlcul del joc)*
 
-**[383] Follet del Carro Verd:** Mira qui hi ha! Ara ja saps que també paro aquí. Recorda: només puc parar allà on ja ens hàgim trobat.
+**[383] Follet del Carro Verd:** Mira qui hi ha! Aquí també m'hi has trobat: d'ara endavant, quan vulguis, et puc portar fins a aquest lloc.
 
-**[384] Follet del Carro Verd:** Eh, monjo! Aquest trasto me'l va fer el Galf: va amb vapor i no es cansa mai. Si has d'anar lluny, puja. Això sí: només paro allà on ja m'hagis trobat.
+**[384] Follet del Carro Verd:** Eh, monjo! Aquest trasto me'l va fer el Galf: va amb vapor i no es cansa mai. Si has d'anar lluny, puja: et puc portar a qualsevol lloc on ens hàgim trobat, i com més llocs em coneguis, més lluny podrem arribar.
 
 *Altrament (per defecte):*
 
 **[385] Follet del Carro Verd:** De moment només conec aquest lloc, monjo. Quan em trobis en un altre, t'hi portaré.
 
-**[386] Follet del Carro Verd:** On anem? Recorda que només puc parar allà on ja ens hàgim trobat.
+**[386] Follet del Carro Verd:** On anem, monjo? Tria un dels llocs on ja ens hem trobat.
 
 ---
 
@@ -2128,7 +2128,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[654] Ineu:** El passatge ja és obert.
 
-### pensament a ineuDiu  <sub>(js/zona_base.js:472)</sub>
+### pensament a ineuDiu  <sub>(js/zona_base.js:479)</sub>
 
 **[655] Ineu:** [text calculat pel joc: text]
 
@@ -2136,11 +2136,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[656] Ineu:** [text calculat pel joc: text]
 
-### pensament a triarViatge  <sub>(js/zona_base.js:534)</sub>
+### pensament a triarViatge  <sub>(js/zona_base.js:541)</sub>
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2210)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2263)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 

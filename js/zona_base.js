@@ -1638,8 +1638,8 @@ class ZonaBase extends Phaser.Scene {
                     const im = this.add.image(x, y, this.textureRiuBoira(Math.floor(rnd() * 3))).setTint(0xcdb8f5).setDisplaySize(w, h).setDepth(y + 2).setAlpha(0)
                         .setFlipX(rnd() < 0.5).setFlipY(rnd() < 0.5).setAngle((rnd() - 0.5) * 5);
                     parts.push({ o: im, alfa: alfaRiu * (0.75 + 0.35 * rnd()) });
-                    const dir = rnd() < 0.5 ? 1 : -1;
-                    this.tweens.add({ targets: im, x: x + dir * (140 + rnd() * 160), duration: 16000 + rnd() * 14000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+                    const dir = c % 2 ? 1 : -1;                                              // cada carril flueix en un sentit (alternant), com un riu
+                    this.tweens.add({ targets: im, x: x + dir * (420 + rnd() * 260), duration: 15000 + rnd() * 8000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
                     this.tweens.add({ targets: im, y: y + (rnd() - 0.5) * 24, scaleY: im.scaleY * (0.88 + rnd() * 0.22), duration: 7000 + rnd() * 6000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: rnd() * 3000 });
                 }
             }
@@ -1675,8 +1675,11 @@ class ZonaBase extends Phaser.Scene {
         return q < 0.08 ? null : this.boira(x, y, ample, alt, q, to);
     }
 
+    // Les boles de boira (partícules que neixen i s'esvaeixen) ja no es volen enlloc: la boira són només els rius de posarBoiraGeneral. Es manté l'emissor (els escenaris en fan
+    // stop/destroy) però sense emetre (tampoc la bufada de pols beix en descobrir el forat de la pedra del Nord).
     boira(x, y, ample = 120, alt = 40, quantitat = 1, to = null) {
         return this.add.particles(x, y, 'boira', {
+            emitting: false,
             ...(to ? { tint: to } : {}),
             x: { min: -ample / 2, max: ample / 2 },
             y: { min: -alt / 2, max: alt / 2 },
@@ -2435,7 +2438,14 @@ class ZonaBase extends Phaser.Scene {
                 const dalt = Math.min(...mides.map(m => m.dalt)), baix = Math.max(...mides.map(m => m.baix));
                 const ampleGrup = Math.max(...cossos.map(o => o.getBounds().right)) - Math.min(...cossos.map(o => o.getBounds().x));
                 zt = Math.max(0.6, Math.min(zt, 0.9 * AMPLE / Math.max(1, ampleGrup)));                // si el grup és ample (tres personatges), tots hi caben de costat a costat
-                const wyC = (dalt + baix) / 2 - ((TOP + LIM) / 2 - ALT_HUD) / zt;
+                // Els NPC amb zoomConversa (la Pianista, la Joaneta, l'Isilder...) es miren de molt a prop, com a la tarota (2,4): es prova el zoom gran i, si l'Ineu i l'NPC no hi caben
+                // entre el HUD i el quadre, es va baixant fins al zoom de sempre d'aquest NPC.
+                const centreY = z => (dalt + baix) / 2 - ((TOP + LIM) / 2 - ALT_HUD) / z;
+                if (p.zoomConversa) {
+                    const maxG = Math.min(2.4, 0.9 * AMPLE / Math.max(1, ampleGrup));
+                    for (let zg = maxG; zg > zt + 1e-6; zg -= 0.1) if (be(zg, centreY(zg))) { zt = zg; break; }
+                }
+                const wyC = centreY(zt);
                 if (be(zt, wyC)) {
                     z2 = zt; wy2 = wyC; trobat = true;
                     const esq = Math.min(...cossos.map(o => o.getBounds().x)), dre = Math.max(...cossos.map(o => o.getBounds().right));

@@ -65,18 +65,7 @@ class ZonaMonestir extends ZonaBase {
         this.cartell(1368, 450 + D, () => ({ pagines: [{ qui: 'Cartell', text: '→ Cel·les de Sant Antoni\n↑ El Cementiri' }] }));
         this.arbres([[160, 250], [330, 200], [1250, 260], [250, 720], [1250, 720], [420, 770], [1090, 770], [750, 780]].map(([x, y]) => [x, y + D]));
 
-        // La boira violeta que surt de sota terra jeu a la plaça, davant del Monestir i al peu de l'escalinata (vegeu posarBoiraGeneral):
-        // aquí és on és més espessa, i va marxant a mesura que es resolen les missions
-        if (!Estat.flag('ocellaireVencut')) {
-            const nivell = () => nivellBoira();
-            const vel = this.add.graphics().setDepth(5000);
-            vel.fillGradientStyle(0x9a5ae8, 0x9a5ae8, 0x9a5ae8, 0x9a5ae8, 0, 0, 0.5, 0.5).fillRect(0, 440 + D, 1600, 800);
-            this.tweens.add({ targets: vel, alpha: 0.65 * nivell(), yoyo: true, repeat: -1, duration: 3600, ease: 'Sine.easeInOut' });
-            [[800, 590, 1500, 110, 4], [800, 530, 760, 90, 3.2], [420, 660, 800, 120, 3], [1180, 660, 800, 120, 3], [800, 730, 1500, 100, 3]].forEach(([x, y, w, h, q]) => {
-                const f = this.boira(x, y + D, w, h, q * nivell());
-                f.setDepth(5100);
-            });
-        }
+        // La boira del Monestir són només els rius de boira a ras de terra de posarBoiraGeneral (aquí és on és més espessa, i va marxant amb les missions): res de boles ni vel
 
         this.enemic('visitant', 1100, 700 + D);
         this.enemic('escolopendra', 400, 700 + D);

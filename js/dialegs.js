@@ -926,14 +926,14 @@ const DIALEGS = {
         if (!E.flag('parada_' + id)) {
             return {
                 pagines: [{ qui: nom, text: conegudes
-                    ? "Mira qui hi ha! Ara ja saps que també paro aquí. Recorda: només puc parar allà on ja ens hàgim trobat."
-                    : "Eh, monjo! Aquest trasto me'l va fer el Galf: va amb vapor i no es cansa mai. Si has d'anar lluny, puja. Això sí: només paro allà on ja m'hagis trobat." }],
+                    ? "Mira qui hi ha! Aquí també m'hi has trobat: d'ara endavant, quan vulguis, et puc portar fins a aquest lloc."
+                    : "Eh, monjo! Aquest trasto me'l va fer el Galf: va amb vapor i no es cansa mai. Si has d'anar lluny, puja: et puc portar a qualsevol lloc on ens hàgim trobat, i com més llocs em coneguis, més lluny podrem arribar." }],
                 enAcabar: () => E.posaFlag('parada_' + id)
             };
         }
         if (conegudes < 2) return { pagines: [{ qui: nom, text: "De moment només conec aquest lloc, monjo. Quan em trobis en un altre, t'hi portaré." }] };
         return { pagines: [
-            { qui: nom, text: "On anem? Recorda que només puc parar allà on ja ens hàgim trobat." },
+            { qui: nom, text: "On anem, monjo? Tria un dels llocs on ja ens hem trobat." },
             { fer: (z, fet) => z.triarViatge(fet) }
         ] };
     },
