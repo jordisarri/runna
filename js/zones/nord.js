@@ -560,6 +560,7 @@ class ZonaPingpong extends ZonaBase {
         // La porta secreta es descobreix just en apartar la roda (no cal esperar que acabi de rodar): el passadís ja és una sortida, les juntes
         // s'il·luminen i la porta s'obre un moment per ensenyar-lo (després s'obre en acostar-s'hi)
         this.obrirPassadis();
+        this.sortides.forEach(q => { if (q.desti === 'ZonaPassadis') q.desarmada = false; });          // (acabada d'apartar la roda, s'hi pot entrar tot seguit, sense haver de baixar i tornar a pujar: només es desarma en sortir-ne)
         this.tweens.add({ targets: this.juntesPorta, alpha: 0.4, yoyo: true, repeat: 2, duration: 220 });
         this.portaSecreta.forcaFins = this.time.now + 3200;
         this.tweens.add({
