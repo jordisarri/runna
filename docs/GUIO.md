@@ -1,6 +1,7 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 655: nou pas «El camí del Til·ler» abans de la Font del Bisbe: fins que l'Ineu no ha anat a les Cel·les i ha topat amb la boira que tanca el camí del Til·ler (flag boiraTillerVista), les pistes (Pare Alberic, Pare Jòrdius, Venerables Sàvies, Diari) només diuen que vagi al nord a veure el camí, i no parlen de la Font del Bisbe ni del beuratge; just després de veure la boira, l'objectiu passa a ser la Font. Les partides velles que ja han estat a la font o més enllà no el necessiten.*
 *Revisió 654: el cartell de la Rovellonera diu «Bosc dels Rovellons» (abans «Bosc de les Rovelloneres»).*
 *Revisió 653: la boira (rius) és igual a tots els exteriors i s'esvaeix alhora i al mateix ritme a mesura que es resolen les missions (ja no depèn de la zona ni s'esvaeix a part en netejar un focus); hi ha més rius i més lila.*
 *Revisió 652: el Germà Floresc, en donar els Guants de Poder, ja no parla del mussol de pedra de l'Hostatgeria (el jugador ja ho dedueix); només recorda l'Empara de les sacerdotesses contra les boires que cremen.*

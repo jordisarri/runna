@@ -1252,5 +1252,7 @@ TRADUCCIONS.fr = {
 "Torre del rellotge": "Tour de l'horloge",
 "Columna {0} de 12: {1} vol dir «{2}». Ja ho tenia apuntat ({3}/12).": "Colonne {0} sur 12 : {1} veut dire « {2} ». Je l'avais déjà noté ({3}/12).",
 "Columna {0} de 12. Sota el signe {1}, amb lletra petita: «{2}». Ho apunto ({3}/12).": "Colonne {0} sur 12. Sous le signe {1}, en petites lettres : « {2} ». Je le note ({3}/12).",
-"Taula de pedra {0} de 2:\n\n{1}": "Table de pierre {0} sur 2 :\n\n{1}"
+"Taula de pedra {0} de 2:\n\n{1}": "Table de pierre {0} sur 2 :\n\n{1}",
+"Al nord del Santuari, les Cel·les guarden un camí que puja cap al Gran Til·ler. Val la pena anar-hi a veure com és.": "Au nord du Sanctuaire, les Cellules gardent un chemin qui monte vers le Grand Tilleul. Ça vaut la peine d'aller voir à quoi il ressemble.",
+"El camí del Til·ler": "Le chemin du Tilleul"
 };

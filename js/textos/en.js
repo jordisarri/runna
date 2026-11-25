@@ -1252,5 +1252,7 @@ TRADUCCIONS.en = {
 "Torre del rellotge": "Clock tower",
 "Columna {0} de 12: {1} vol dir «{2}». Ja ho tenia apuntat ({3}/12).": "Column {0} of 12: {1} means \"{2}\". I'd already noted it ({3}/12).",
 "Columna {0} de 12. Sota el signe {1}, amb lletra petita: «{2}». Ho apunto ({3}/12).": "Column {0} of 12. Under the sign {1}, in small letters: \"{2}\". I'll note it down ({3}/12).",
-"Taula de pedra {0} de 2:\n\n{1}": "Stone tablet {0} of 2:\n\n{1}"
+"Taula de pedra {0} de 2:\n\n{1}": "Stone tablet {0} of 2:\n\n{1}",
+"Al nord del Santuari, les Cel·les guarden un camí que puja cap al Gran Til·ler. Val la pena anar-hi a veure com és.": "North of the Sanctuary, the Cells hold a path that climbs toward the Great Linden. It's worth going to see what it's like.",
+"El camí del Til·ler": "The Linden's path"
 };

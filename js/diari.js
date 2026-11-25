@@ -12,7 +12,7 @@
 const DIARI_PASSOS = {
     clauer: ['El Pare Jòrdius et busca', 'ZonaPlaca'], basto: ['El bastó de pelegrí', 'ZonaPlaca'],
     cantAurora: ["El Cant de l'Aurora", 'ZonaEsglesia'], bassadoria: ['La Bassadòria tèrbola', 'ZonaCreu'],
-    font: ['La Font del Bisbe', 'ZonaBosc'], joaneta: ["L'Alzina Buida", 'ZonaBosc'],
+    boiraVista: ['El camí del Til·ler', 'ZonaCelles'], font: ['La Font del Bisbe', 'ZonaBosc'], joaneta: ["L'Alzina Buida", 'ZonaBosc'],
     boiraTiller: ['La boira del Til·ler', 'ZonaCelles'], tiller: ['El Gran Til·ler', 'ZonaTiller'],
     branca: ['La branca del Til·ler', 'ZonaTiller'], bardissa: ['Les arrels del Til·ler', 'ZonaTiller'],
     pastor: ['El Pastor de la Boira', 'ZonaCirosa'], esquelles: ['Les esquelles', 'ZonaCirosa'],
@@ -42,7 +42,7 @@ const DIARI_LATERALS = {
 };
 const DIARI_ACTES = [
     { nom: 'Acte 1 · La boira', des: 'clauer' },
-    { nom: 'Acte 2 · El Til·ler i el Saber', des: 'font' },
+    { nom: 'Acte 2 · El Til·ler i el Saber', des: 'boiraVista' },
     { nom: 'Acte 3 · La Sala de la Gàbia', des: 'segellDemana' }
 ];
 const DIARI_PESTANYES = [['missio', 'Missió'], ['encarrecs', 'Precs'], ['sarro', 'Sarró'], ['cants', 'Cants'], ['mapa', 'Mapa']];

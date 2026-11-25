@@ -1696,7 +1696,8 @@ const DIALEGS = {
     } : {
         pagines: [
             { qui: "Ineu", text: "No hi puc passar. Aquesta boira no és de les que marxen amb el vent: per desfer-la em caldria algun líquid, una poció... alguna cosa que no tinc." }
-        ]
+        ],
+        enAcabar: () => { E.posaFlag('boiraTillerVista'); E.posaObjectiu(PROGRES.pista(E)); E.desar(); }      // fins aquí no cal saber res de la Font del Bisbe
     },
 
     // Les arrels del Til·ler que tanquen el camí de la Cirosa (s'enfonsen davant la branca del mateix arbre)

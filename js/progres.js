@@ -20,6 +20,11 @@ const PROGRES = {
         { id: 'bassadoria', marca: ['bassadoriaNeta'], fet: E => E.flag('bassadoriaNeta'),
           pista: E => "La Bassadòria raja tèrbola. Potser el Cant de l'Aurora la deixaria neta." },
         // ---- ACTE 2: el camí del Til·ler ----
+        // El camí cap al Til·ler (nord) és el primer que s'ha d'anar a veure: allà es descobreix que una boira el tanca. Fins que no s'ha vist (o s'ha anat a la font pel
+        // seu compte), no es parla de la Font del Bisbe ni del beuratge: no calen encara.
+        { id: 'boiraVista', marca: ['boiraTillerVista'],
+          fet: E => ['boiraTillerVista', 'fontVista', 'fontNeta', 'joanetaVista', 'boiraTillerNeta', 'parlatTiler'].some(f => E.flag(f)),
+          pista: E => "Al nord del Santuari, les Cel·les guarden un camí que puja cap al Gran Til·ler. Val la pena anar-hi a veure com és." },
         { id: 'font', marca: ['fontNeta', 'obj:aigua_sj', 'obj:pruna'], fet: E => E.flag('fontNeta'),
           pista: E => {
               // Fins que no s'ha anat a la font (fontVista) no se sap què cal portar-hi: la pista només dona el lloc
