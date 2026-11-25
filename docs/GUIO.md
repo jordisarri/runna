@@ -1,6 +1,8 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 651: la boira del Miracle passa de «boles» a RIUS: cintes llargues i sinuoses de boira que corren lentament pel terra (en carrils, intercalades amb els personatges: els peus dins la boira, els caps nets). La quantitat depèn de l'ESPESSOR de la zona = nivell de la història x densitat de la zona (1,8 = màxim: Plaça i Monestir; protegits com el Til·ler, 0,4): amb més espessor, més carrils plens i més segments per carril. Nova zona amb densitat pròpia: Gírgoles de fora (1,1), a prop del focus. Els nivells que baixen amb les missions i la boira dels focus (Creu, Cementiri, Cirosa, Dolmen, Bosc, Pi) no canvien.*
+
 *Revisió 650: la boira del Miracle (general) ja no és un vel violeta i uns bancs que passaven per DAVANT dels personatges (els feien perdre detall de cares i sprites): ara és boira a ras de terra (bancs plans en coordenades de món, intercalats amb els personatges segons la y, de manera que els peus queden dins la boira però els caps es veuen nets) més una vinyeta lila suau només a les vores. El nivell de boira de cada zona (BOIRA_ZONES) i com va marxant amb les missions no canvien; les parets de boira que tapen camins, tampoc.*
 
 *Revisió 649: el «Guàrdia de la Gàbia» i el Pastor de la Boira són el MATEIX personatge (l'Aleu convertit): ja no hi ha un segon dibuix; a la Sala de la Gàbia l'Aleu es transforma amb el mateix dibuix del Pastor (pastor_boira) i es diu igual al quadre de diàleg.*
