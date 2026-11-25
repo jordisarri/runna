@@ -330,7 +330,7 @@ TRADUCCIONS.es = {
 "«Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l'alba.»": "«Cuando la niebla cubra el Miracle, los pasos de los ausentes volverán con el alba.»",
 "★ Has obtingut la CLAU DEL SAGRARI.": "★ Has obtenido la LLAVE DEL SAGRARIO.",
 "La clau del sagrari del Santuari! Els monjos la van deixar aquí. Amb això obriré el sagrari del retaule.": "¡La llave del sagrario del Santuario! Los monjes la dejaron aquí. Con esto abriré el sagrario del retablo.",
-"Bosc de les Rovelloneres.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»": "Bosque de las Rovelloneras.\n«Quien no mira al suelo, se pierde. Los níscalos crecen siempre junto al buen camino. Si te equivocas, volverás al primer claro.»",
+"Bosc dels Rovellons.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»": "Bosque de los Níscalos.\n«Quien no mira al suelo, se pierde. Los níscalos crecen siempre junto al buen camino. Si te equivocas, volverás al primer claro.»",
 "← Rovellonera\n«On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.»": "← Rovellonera\n«Donde hay níscalos, hay pinos; donde hay pinos, hay camino.»",
 "La clau del senyor Buidor encaixa al pany. La porta de l'ermita s'obre.": "La llave del señor Buidor encaja en la cerradura. La puerta de la ermita se abre.",
 "L'ermita de Sant Gabriel és tancada amb clau.": "La ermita de Sant Gabriel está cerrada con llave.",

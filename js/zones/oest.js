@@ -79,7 +79,7 @@ class ZonaRovellonera extends ZonaBase {
         else if (D) this.rovellons(D);
         // Cartell d'entrada (només a la primera clariana): la regla del bosc
         if (pas === 0) this.cartell(1330, 650, () => ({ pagines: [
-            { qui: 'Cartell', text: "Bosc de les Rovelloneres.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»" },
+            { qui: 'Cartell', text: "Bosc dels Rovellons.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»" },
             ...(this.simple ? [{ qui: 'Ineu', text: '(El camí ara és més senzill: només he de seguir els rovellons. Ja no cal que recordi les pistes.)' }] : [])
         ] }));
         // Si l'Ineu s'ha perdut dues vegades o més, unes llumetes assenyalen la sortida bona (el bosc s'apiada)

@@ -1,6 +1,7 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 654: el cartell de la Rovellonera diu «Bosc dels Rovellons» (abans «Bosc de les Rovelloneres»).*
 *Revisió 653: la boira (rius) és igual a tots els exteriors i s'esvaeix alhora i al mateix ritme a mesura que es resolen les missions (ja no depèn de la zona ni s'esvaeix a part en netejar un focus); hi ha més rius i més lila.*
 *Revisió 652: el Germà Floresc, en donar els Guants de Poder, ja no parla del mussol de pedra de l'Hostatgeria (el jugador ja ho dedueix); només recorda l'Empara de les sacerdotesses contra les boires que cremen.*
 *Revisió 651: la boira del Miracle passa de «boles» a RIUS: cintes llargues i sinuoses de boira que corren lentament pel terra (en carrils, intercalades amb els personatges: els peus dins la boira, els caps nets). La quantitat depèn de l'ESPESSOR de la zona = nivell de la història x densitat de la zona (1,8 = màxim: Plaça i Monestir; protegits com el Til·ler, 0,4): amb més espessor, més carrils plens i més segments per carril. Nova zona amb densitat pròpia: Gírgoles de fora (1,1), a prop del focus. Els nivells que baixen amb les missions i la boira dels focus (Creu, Cementiri, Cirosa, Dolmen, Bosc, Pi) no canvien.*

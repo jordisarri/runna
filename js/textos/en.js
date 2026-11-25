@@ -330,7 +330,7 @@ TRADUCCIONS.en = {
 "«Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l'alba.»": "\"When the mist covers the Miracle, the footsteps of the absent will return with the dawn.\"",
 "★ Has obtingut la CLAU DEL SAGRARI.": "★ You got the TABERNACLE KEY.",
 "La clau del sagrari del Santuari! Els monjos la van deixar aquí. Amb això obriré el sagrari del retaule.": "The key to the Sanctuary's tabernacle! The monks left it here. With this I can open the tabernacle in the altarpiece.",
-"Bosc de les Rovelloneres.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»": "Rovellonera Wood.\n\"Whoever doesn't look at the ground gets lost. Saffron milk caps always grow beside the right path. If you go wrong, you'll return to the first clearing.\"",
+"Bosc dels Rovellons.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»": "Saffron Milk Cap Wood.\n\"Whoever doesn't look at the ground gets lost. Saffron milk caps always grow beside the right path. If you go wrong, you'll return to the first clearing.\"",
 "← Rovellonera\n«On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.»": "← Rovellonera\n\"Where there are milk caps, there are pines; where there are pines, there's a path.\"",
 "La clau del senyor Buidor encaixa al pany. La porta de l'ermita s'obre.": "Mr Buidor's key fits the lock. The hermitage door opens.",
 "L'ermita de Sant Gabriel és tancada amb clau.": "The hermitage of Sant Gabriel is locked.",

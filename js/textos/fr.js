@@ -330,7 +330,7 @@ TRADUCCIONS.fr = {
 "«Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l'alba.»": "« Quand la brume couvrira le Miracle, les pas des absents reviendront avec l'aube. »",
 "★ Has obtingut la CLAU DEL SAGRARI.": "★ Tu as obtenu la CLÉ DU TABERNACLE.",
 "La clau del sagrari del Santuari! Els monjos la van deixar aquí. Amb això obriré el sagrari del retaule.": "La clé du tabernacle du Sanctuaire ! Les moines l'ont laissée ici. Avec ça, j'ouvrirai le tabernacle du retable.",
-"Bosc de les Rovelloneres.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»": "Bois des Rovelloneres.\n« Qui ne regarde pas par terre se perd. Les lactaires poussent toujours près du bon chemin. Si tu te trompes, tu reviendras à la première clairière. »",
+"Bosc dels Rovellons.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»": "Bois des Lactaires.\n« Qui ne regarde pas par terre se perd. Les lactaires poussent toujours près du bon chemin. Si tu te trompes, tu reviendras à la première clairière. »",
 "← Rovellonera\n«On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.»": "← Rovellonera\n« Où il y a des lactaires, il y a des pins ; où il y a des pins, il y a un chemin. »",
 "La clau del senyor Buidor encaixa al pany. La porta de l'ermita s'obre.": "La clé de Monsieur Buidor entre dans la serrure. La porte de l'ermitage s'ouvre.",
 "L'ermita de Sant Gabriel és tancada amb clau.": "L'ermitage de Sant Gabriel est fermé à clé.",

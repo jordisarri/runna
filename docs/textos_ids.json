@@ -2254,7 +2254,7 @@
     "qui": "Ineu",
     "text": "[text calculat pel joc: textPista]",
     "fitxer": "js/zona_base.js",
-    "linia": 2007
+    "linia": 2006
    }
   ],
   "dialegs::ombraMonjo": [
@@ -2760,7 +2760,7 @@
    {
     "id": 353,
     "qui": "Cartell",
-    "text": "Bosc de les Rovelloneres.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»",
+    "text": "Bosc dels Rovellons.\n«Qui no mira a terra, es perd. Els rovellons creixen sempre vora el bon camí. Si t'equivoques, tornaràs a la primera clariana.»",
     "fitxer": "js/zones/oest.js",
     "linia": 82
    },
@@ -5148,7 +5148,7 @@
     "qui": "Ineu",
     "text": "He tocat el [text calculat pel joc: MELODIES[nom].nom], però aquí no passa res...",
     "fitxer": "js/zona_base.js",
-    "linia": 2263
+    "linia": 2262
    }
   ]
  },
