@@ -149,7 +149,7 @@ class ZonaBoscPi extends ZonaBase {
     posarBarrera() {
         const { barX, camiY } = PI3;
         this.barrera = this.posar('pi_arrels_mortes', barX, camiY + 150, { fonsY: camiY + 200 });      // seca, com el pi adormit
-        this.colBarrera = this.colisio(barX, camiY, 110, 220);
+        this.colBarrera = this.colisio(barX, 620, 140, 270);          // tota la paret d'arrels (x 1075-1225, y 496-750): abans en deixava lliure la part de baix (de 710 a 726) i es podia travessar
     }
 
     // Les arrels reviscolen (s'afegeix la imatge viva per sobre, que apareix poc a poc) i, tot seguit, s'enfonsen a terra per la part de baix: el que
