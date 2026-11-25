@@ -284,12 +284,16 @@ const Proves = {
         const nomZona = z => { const sc = game.scene.getScene(z); return (sc && sc.config && sc.config.nom) || z.replace(/^Zona/, ''); };
         const opcions = () => ['#provesLaterals', '#provesMapa', '#provesMelodies'].map(s => cos.querySelector(s).checked);
         entrades.push({ acabada: true });
+        entrades.push({ follet: true });
         entrades.forEach((e, n) => {
             let text, f;
             if (e.passa !== undefined) {
                 const p = PROGRES.passos[e.passa], info = DIARI_PASSOS[p.id];
                 text = (n + 1) + '. ' + (info ? info[0] : p.id) + (info ? '  ·  ' + nomZona(info[1]) : '');
                 f = () => { const [l, m, me] = opcions(); this.panell(); this.saltar(e.passa, l, m, me); };
+            } else if (e.follet) {
+                text = 'Acte independent: escena final del Follet que allibera els ocells (acaba als crèdits)  ·  ' + nomZona('ZonaEra');
+                f = () => { const [l, m, me] = opcions(); this.panell(); this.estatFins(PROGRES.passos.length, l, m, me); Estat.posaFlag('epilegFet'); this.anar('ZonaEra', 'final'); };
             } else if (e.acabada) {
                 text = 'Història acabada (epíleg fet): només queden les missions laterals  ·  ' + nomZona('ZonaPlaca');
                 f = () => { const [l, m, me] = opcions(); this.panell(); this.estatFins(PROGRES.passos.length, l, m, me); this.anar('ZonaPlaca'); };

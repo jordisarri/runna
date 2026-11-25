@@ -285,31 +285,9 @@ Els objectes plans (taules, basses, lloses) es veuen des d'uns 45°. Ja està in
 
 ## Estat
 
-Tots els gràfics de dalt són fets i connectats (els seus prompts s'han esborrat d'aquest document).
+Tots els gràfics de dalt són fets i connectats (els seus prompts s'han esborrat d'aquest document). També ho estan, i s'han tret els prompts: el **senyor Buidor** (`senyor_budo`), el **cercle de runes** (`cercle_runes`), l'escultura de l'Hostatgeria (ara és el mussol de pedra, `estatua_mussol`; el prompt del rossinyol ja no feia falta), la **columna d'heura**, el **graó** de la pèrgola, la **cortina d'heura** i la **Prunera Màgica** (`prunera`).
 
-**Pendents:** `cercle_runes` (el cercle de runes del terra de l'Escalinata; ara es dibuixa amb codi).
-
----
-
-## Pendent
-
-### `senyor_budo.png` → `assets/personatges/senyor_budo.webp` (amplada 78) *(El **senyor Buidor**, el vell assegut a la taula de l'esquerra de tot de la Taverna (`ZonaTavernaInt`, `js/zones/taverna.js`), assaborint l'anís escarxat que li ha preparat l'Eve. NPC només de conversa (`DIALEGS.senyorBudo`). Ara el joc el dibuixa amb un placeholder. Imatge **de cos sencer, ASSEGUT en un tamboret, de cara a la càmera**, fons blanc pur (el trec jo); la taula del joc li tapa les cames, així que cal que tingui les cames i el tamboret dibuixats igualment.)*
-
-```
-A chubby, jovial, grumpy-looking old man, seen from the front in a high three-quarter view, SITTING on a small round wooden tavern stool, full body visible (stool and legs included), calm and relaxed, savouring a drink. Chibi proportions like the reference image (large head, small body). He has a BIG round bulbous nose (red-ish at the tip), round wire-rimmed spectacles, small squinting happy eyes, white eyebrows, a very sparse amount of white hair (not bald: just a few thin white wisps around the sides and a little on top), rosy cheeks, a soft double chin and a big round belly. He wears a worn brown woollen waistcoat over a cream-coloured shirt with rolled-up sleeves, dark baggy trousers, and old leather shoes. In one hand, held up in front of his chest, he holds a small glass of milky cloudy white-yellow aniseed liqueur (anís escarxat) with a small piece of ice; the other hand rests on his knee. A relaxed contented face, eyes half closed as he savours the drink. 2D charming game character in the same art style as the reference image: bold clean dark outline, rich saturated warm colours, two-tone cel shading, hand-painted look. Isolated on a pure white background (#FFFFFF), no ground, no table, no shadow, no text.
-```
-
-(Referència d'estil: `assets/personatges/galf.webp` o `assets/personatges/pomers.webp`. Si també vols el **retrat** de diàleg: mateix personatge, de cara i de tres quarts, fins a les espatlles, `assets/retrats/senyor_budo.webp`; mentrestant el joc fa servir el cap retallat de l'sprite.)
-
----
-
-### `cercle_runes.png` → `assets/objectes/cercle_runes.webp` (amplada 440) *(El **cercle de runes** gravat a terra al voltant del pedestal de l'Home del Raïm, que s'encén en lila quan el guardià es desperta (`cercleRunes`, `js/zones/casa.js`). Ara el joc el dibuixa amb codi; quan hi hagi el PNG, el substitueix. Imatge **apaïsada, 2,7:1** (el joc la fa servir a uns 440 × 163), fons blanc pur (el trec jo).)*
-
-```
-A magical rune circle engraved into a stone floor, seen from a high three-quarter top-down view as a flat ELLIPSE (about 2.7 times wider than tall), perfectly centred. Two concentric thin ellipses of carved stone grooves with a ring of twelve distinct ancient runes carved between them (simple angular symbols: crosses, triangles, bars, circles), the grooves glowing a soft lilac-violet light as if filled with magic mist, with small wisps of lilac mist rising from some of the runes and a few tiny chips of stone. 2D charming game asset in the same art style as the reference image: bold clean dark outline, rich saturated colours, two-tone cel shading, hand-painted look. Only the circle itself, isolated on a pure white background (#FFFFFF), no floor tiles, no shadow, no text, no frame, no pedestal in the middle (the centre is empty).
-```
-
-(Referència d'estil: `art/enemics/home_raim_apunta.png` per al lila de la boira i `art/objectes/creu.png` per al contorn.)
+**Pendents:** cap.
 
 ---
 
@@ -330,72 +308,16 @@ A magical rune circle engraved into a stone floor, seen from a high three-quarte
 
 
 
-## Escultura de l'Hostatgeria: el rossinyol de pedra (substitueix l'àngel del vestíbul; `assets/objectes/estatua_ocell.webp`)
-
-*Prompt (anglès):* Game object sprite, front view, transparent or plain white background. A large weathered stone statue of a nightingale, sitting upright on a two-step square stone pedestal. The bird has its wings folded tight against its body and its beak firmly closed, its head slightly bowed, as if it had forgotten how to sing; carved feathers, a few cracks and patches of green moss on the pedestal and on one wing. The pedestal is wide and heavy-looking. Warm grey sandstone, soft cartoon outlines, flat soft colors with simple shading, chibi cute proportions with a big rounded body, cheerful fairy-tale game art. Symmetrical, centered, no shadow on the ground, no text.
-
-## Columna de pedra amb heura (pèrgola del jardí de l'Hostatgeria; `assets/objectes/columna_heura.webp`)
-
-*Prompt (anglès):* Chibi-style game object sprite, a single stone pillar for a garden pergola, front view, perfectly symmetrical left to right (mirror-symmetric silhouette and layout, so it can be flipped horizontally without looking different), plain white background, centered. Cute chunky chibi proportions: a short, thick pillar with a wide base and a wide flat capital. The shaft is built from a few big irregular rough stones of different sizes and shapes (not bricks, no regular courses), separated by thick dark mortar lines, with a couple of chunky cracks. A small two-step stone base at the bottom and a flat square capital on top. A few big cartoon ivy leaves on short vines climbing up both sides, evenly placed so the pillar stays symmetrical, leaving most of the stones visible. Very thick, bold, dark outlines around every shape (the whole sprite, each stone and each leaf), flat soft colors with simple cel shading, warm grey sandstone with slight color variation per stone and fresh green leaves, cheerful fairy-tale game art, no ground shadow, no text.
-
-*Per variar-les al joc:* genera'n 2 o 3 de lleugerament diferents (altres pedres, altra quantitat d'heura) i el joc les gira (mirall) o les escala una mica perquè no siguin totes iguals.
-
-## Graó d'entrada a la pèrgola (una llosa de pedra davant del muret; `assets/objectes/pergola_grao.webp`; el primer intent, de dos graons, és a `art/arxiu/objectes/pergola_graons.jpg`)
-
-*Entrada:* adjunta la textura del muret (`art/objectes/muret_textura.webp`) com a imatge de referència. *Mida de sortida:* aprox. 2,6 : 1 d'ample per alt (p. ex. 1950 × 750); al joc fa ~94 × 36 px.
-
-*Prompt (anglès):* Using the attached image as the exact style and material reference (a low garden stone wall with a few ivy leaves: same warm cream and sand stone colour, same chunky irregular rough stones, same thin dark outline, same flat cartoon shading with soft highlights), draw a small two-step stone staircase for the entrance of a garden pergola, to be placed in front of that wall. Seen from the front with a slight top-down angle, exactly like the wall is drawn. Only two steps, stacked like a low pyramid: a lower, front step and a slightly higher step right behind it, both the same width, the staircase filling the whole width of the canvas. Each step is one long slab: show its top surface as a narrow lighter band and, below it, its vertical front face made of a few big irregular stones separated by thin dark mortar lines, like the wall. Perfectly symmetrical left to right, flat and straight, no perspective distortion, no ivy except at most one tiny leaf in a corner, no shadow on the ground, no text. Plain white background, nothing else in the image.
-
-*Notes:* els dos graons han de ser baixos (cada un ~12 px d'alt al joc) i la part de dalt del de darrere ha de quedar a la mateixa alçada visual que la pedra de baix del muret perquè s'hi enganxi; si surt un graó més alt que l'altre, millor el de darrere.
-
-## Cortina d'heura entre les columnes de la pèrgola (jardí de l'Hostatgeria; `art/objectes/cortina_heura.png` → `assets/objectes/cortina_heura.webp` amb `eines/treure_fons.py`; es col·loca a `js/zones/jardi.js`)
-
-*Entrada:* adjunta `art/objectes/columna_heura.webp` i `art/objectes/muret_textura.webp` com a imatges de referència (mateixos verds, mateix contorn). *Mida de sortida:* aprox. 1:1,05 d'ample per alt (p. ex. 1000 × 1050); al joc fa ~180 × 167 px. Calen 2 o 3 variants perquè no es repeteixi.
-
-*Prompt (anglès):* Using the attached images as the exact style reference (same ivy leaves, same fresh greens, same thick dark outline, same flat cartoon shading), draw a hanging curtain of dense ivy, front view, to hang between two stone pillars of a garden pergola. A thick wall of overlapping ivy leaves on many vertical vines hanging straight down from the top edge, in several layers: dark green leaves at the back, mid greens, and a few light yellow-green leaves on top; every leaf with a bold dark outline and a light vein. Almost no gaps in the middle, but the top edge, the two side edges and the bottom edge are ragged, with single vines and loose leaves hanging at different lengths so that the shape looks natural and can sit in front of a stone wall. No pillars, no stone, no wall, no ground, no shadow, no text. Perfectly plain white background (or transparent), nothing else in the image.
-
-*Notes:* al joc es posa a mig camí entre dues columnes, des del capitell fins al muret, amb una opacitat del 60-80 % perquè es vegi l'Ineu a través; per això les vores laterals han de ser irregulars (les columnes les tapen una mica) i no hi ha d'haver fons.
-
-## [FET] La Prunera Màgica (jardí de l'Hostatgeria; `art/natura/prunera.jpg` → `assets/natura/prunera.webp` amb `eines/treure_fons.py ... 300 --forats 8`, i després `eines/netejar_vora.py assets/natura/prunera.webp` (treu la vora blanca); ara el joc fa servir `arbre` tintat d'or, a `js/zones/jardi.js`)
-
-*Entrada:* adjunta `art/natura/arbre.png` com a imatge de referència d'estil (mateix pinzell suau, mateixes ombres, **sense contorn negre gruixut**: els arbres van pictòrics, vegeu la revisió d'art). *Mida de sortida:* aprox. 1:1,1 (p. ex. 1200 × 1320); al joc faria uns 460 px d'ample (ara és l'`arbre` a escala 1,55). Només un arbre, fons blanc pur (el trec jo).
-
-*Important per al joc:* **sense fruits** (les prunes són icones que el joc penja de la capçada i que es poden collir i tornen a créixer), **sense halo, sense espurnes, sense ombra de terra, sense herba al peu** (hi ha espurnes de codi i el terra és el del jardí). La capçada es posa transparent al joc perquè es vegi l'Ineu a través: per això ha de tenir **forats entre fulles** i les branques principals visibles.
-
-*Prompt (anglès):* Using the attached image as the exact style reference (same soft painterly cartoon rendering, same warm lighting from above-left, no heavy black outline), draw a single magical plum tree (a real plum tree, Prunus domestica), front view, full tree from the roots to the top of the crown. A short, sturdy, gnarled trunk with rough dark brown bark that splits low into 4 or 5 thick, twisting branches spreading outward like an open umbrella, with many thinner side branches clearly visible. The crown is wide and rounded (wider than tall), made of clusters of small oval pointed leaves with finely serrated edges, painted in warm GOLDEN colours: honey gold, amber and pale straw yellow, with a few darker olive-gold leaves in the shadows and some light cream highlights on top. The foliage is airy: leave natural gaps between the leaf clusters so that branches and the sky behind show through. A few tiny golden-white blossoms among the leaves are fine. NO fruit at all, no plums, no glow, no sparkles, no halo, no magic effects, no shadow on the ground, no grass, no rocks, no text. Perfectly plain white background, nothing else in the image.
-
-*Variants (opcionals):* una segona versió amb la capçada una mica més clara i buida (tardor avançada) per al moment en què s'han collit les prunes, i una versió fosca i sense fulles si es vol una prunera «adormida».
-
-*Notes:* si surt massa vermellosa o taronja, afegeix «avoid orange and red, keep the leaves honey-gold». Si la capçada surt massa densa, «more open crown, 30% gaps between leaf clusters». Quan hi hagi el PNG: `python3 eines/treure_fons.py art/natura/prunera.png assets/natura/prunera.webp 460`, afegeix l'entrada `prunera` a `js/assets.js` i substitueix a `jardi.js` el `posar('arbre', …).setTint(0xffd878)`; ho faig jo.
-
 ---
 
-## Fulls de caminar dels NPC pendents (perquè no llisquin amb `npcVa`)
+## Fulls de caminar dels NPC (fets)
 
 Tots es fan igual amb **AutoSprite** (`iso_walk_right`, cel·les de `320×320`, 3 columnes, 8 fotogrames, caminant cap a la dreta; el joc gira cap a l'esquerra amb `flipX`) partint del dibuix estàtic com a referència, i es converteixen amb:
 
 ```bash
-python eines/fer_camina_npc.py art/personatges/caminar/<NOM>.png <NOM>
+python eines/fer_camina_npc.py art/personatges/caminar/<NOM>_camina_autosprite.png <NOM>
 ```
 
-Això genera `assets/personatges/<NOM>_camina.webp` (quadrícula 4×2 de 8 fotogrames, ajustada a l'alçada de l'estàtic). Després només cal registrar `scene.load.spritesheet('<NOM>_camina', ...)` i `scene.anims.create({ key: '<NOM>_camina', ... })` a `js/assets.js`.
+Això genera `assets/personatges/<NOM>_camina.webp` (quadrícula 4×2 de 8 fotogrames, ajustada a l'alçada de l'estàtic). Després cal registrar `scene.load.spritesheet('<NOM>_camina', ...)` i `scene.anims.create({ key: '<NOM>_camina', ... })` a `js/assets.js`.
 
-- [ ] **`pare_alcovi_camina`** (`assets/personatges/pare_alcovi_camina.webp`)
-  - *On camina:* a la Biblioteca cap al faristol (`js/zones/biblioteca.js`, `alcoviLlegeix`).
-  - *Referència:* `assets/personatges/pare_alcovi.webp` (monjo gran d'hàbit negre/molt fosc, cabell blanc i llibre).
-
-- [ ] **`joaneta_camina`** (`assets/personatges/joaneta_camina.webp`)
-  - *On camina:* a la Cabana, cap a l'olla i de tornada quan prepara el beuratge (`js/dialegs.js`, `joaneta`).
-  - *Referència:* `assets/personatges/joaneta.webp`.
-
-- [ ] **`nen_uri_camina`** (`assets/personatges/nen_uri_camina.webp`)
-  - *On camina:* al final de la Gàbia, corrent cap a l'Ineu (`js/zones/gabia.js`).
-  - *Referència:* `assets/personatges/nen_uri.webp` (nen ros amb túnica blava).
-
-- [ ] **`nen_flam_camina`** (`assets/personatges/nen_flam_camina.webp`)
-  - *On camina:* al final de la Gàbia, corrent cap a l'Ineu (`js/zones/gabia.js`).
-  - *Referència:* `assets/personatges/nen_flam.webp` (nen de cabell fosc amb túnica vermella).
-
-- [ ] **`nen_sardin_camina`** (`assets/personatges/nen_sardin_camina.webp`)
-  - *On camina:* al final de la Gàbia, corrent cap a l'Ineu (`js/zones/gabia.js`).
-  - *Referència:* `assets/personatges/nen_sardin.webp` (nen amb ulleres i túnica verda).
+Fets (2026-11-25, 5 crèdits cadascun): `pare_alcovi_camina`, `joaneta_camina`, `nen_uri_camina`, `nen_flam_camina`, `nen_sardin_camina`. Els originals d'AutoSprite són a `art/personatges/caminar/<NOM>_camina_autosprite.png`. Els nens es van pujar a AutoSprite ampliats ×4 sobre fons blanc (els dibuixos del joc són molt petits).

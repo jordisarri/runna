@@ -91,9 +91,10 @@ class ZonaEsglesia extends ZonaBase {
         this.retaule = this.posar('retaule', 640, ESG.retY + ESG.retBaix, { fonsY: 900 });   // una mica més avall: les bases tapen el sòcol
         // La porta de la dreta del peu del retaule: la mateixa del gràfic, que s'obre cap endins (amb la clau de la torre del rellotge) i duu a la torre
         this.portaRetaule = this.portaAnimada({ x: 872, top: 868, bottom: 1021, ample: 83, fons: 900, senseAjust: true, unic: true, arc: true, retall: this.retaule, bloq: () => !this.portaRellotge });
-        this.dibuixarSagrari();
+        const enEpileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg: el sagrari és tancat (sense el gràfic de la porteta ni cap claror) i la porta de la dreta no brilla
+        if (!enEpileg) this.dibuixarSagrari();
         const puntSagrari = this.interactiu(640, ESG.retY + 36, 130, DIALEGS.sagrari, { altura: 170, actiu: () => !Estat.flag('fragment2'), toc: { x0: this.sagrariX - 100, x1: this.sagrariX + 100, y0: 0, y1: ESG.sostre + 26 } });     // el sagrari, al mig del retaule (fragment 2); només es toca des de la franja de dalt de tot (fins a sostre + 26): més avall, per la part de dalt de l'altar, mana el punt de l'altar (agenollar-se)
-        this.brillo(this.sagrariX, this.sagrariY, 19, 32, { arc: true, punt: puntSagrari, actiu: () => !Estat.flag('fragment2') });          // el sagrari brilla fins que se n'agafa el pergamí
+        if (!enEpileg) this.brillo(this.sagrariX, this.sagrariY, 19, 32, { arc: true, punt: puntSagrari, actiu: () => !Estat.flag('fragment2') });          // el sagrari brilla fins que se n'agafa el pergamí
         this.posar('altar', 640, ESG.retY + 128, { col: { w: 130, h: 30 }, opac: true });
         this.altarRepos(640, ESG.retY + 176, { dalt: 100 });                     // l'Ineu s'hi agenolla i recupera l'energia
 
@@ -107,7 +108,7 @@ class ZonaEsglesia extends ZonaBase {
         }) : ({
             pagines: [{ qui: 'Ineu', text: 'Tancada amb clau.' }]
         }), { altura: 150, actiu: () => !this.portaRellotge, toc: { x0: ESG.portaDx - 95, x1: ESG.portaDx + 95, y0: 0, y1: ESG.retY + 130 } });
-        this.brillo(ESG.portaDx + 2, 944, 83, 153, { arc: true, punt: puntPorta, actiu: () => !this.portaRellotge });         // la porta de la dreta del retaule brilla mentre és tancada
+        if (!enEpileg) this.brillo(ESG.portaDx + 2, 944, 83, 153, { arc: true, punt: puntPorta, actiu: () => !this.portaRellotge });         // la porta de la dreta del retaule brilla mentre és tancada
 
         // Orgue (la Pianista seu a l'orgue) i el Pare Nadiel, que dirigeix el cor
         const epileg = Estat.flag('epilegPendent') && !Estat.flag('epilegFet');          // a l'epíleg, el Pare Nadiel es posa amb la resta; l'orgue, la Pianista (asseguda: no s'aixeca) i els bancs es queden al seu lloc
@@ -201,8 +202,8 @@ class ZonaEsglesia extends ZonaBase {
         if (this.npcs && this.npcs.mandu && Estat.flag('manduNinaTrencada')) this.npcs.mandu.setTexture('mandu_trencada');            // la nina, encara sense cap
         // La Nena de les Trenes i la seva mare (si l'Ineu les va retrobar): dos esperits translúcids, de la mà al forat lliure del fons de la nau, que han sentit el cant des de lluny
         if (Estat.flag('nenaAlliberada') && this.textures.exists('mare_nena') && this.textures.exists('nena_trenes') && !(this.npcs && this.npcs.nena_trenes)) {
-            const mare = this.npc('mare_nena', 935, R + 740, () => ({ pagines: [] }), { flipX: true });
-            this.fixaAlcada(mare, AD); mare.setTint(0xe8eeff).setAlpha(0.8);
+            const mare = this.npc('mare_nena', 935, R + 740, () => ({ pagines: [] }), { flipX: false });
+            this.fixaAlcada(mare, AD); mare.setFlipX(false); mare.setTint(0xe8eeff).setAlpha(0.8);
             const nena = this.npc('nena_trenes', 1004, R + 740, DIALEGS.nenaEpileg, { flipX: true });
             this.fixaAlcada(nena, 92); nena.setAlpha(0.9);
         }

@@ -314,7 +314,7 @@ class ZonaBase extends Phaser.Scene {
 
         const ui = this.ui();
         ui.actualitzarHUD();
-        ui.mostrarZona(c.nom);
+        if (!(this.dadesEntrada && this.dadesEntrada.entrada === 'final')) ui.mostrarZona(c.nom);          // (a la cinemàtica final no surt el nom del lloc)
 
         // Autodesat en entrar a una zona
         this.guardarPosicio();
@@ -484,10 +484,11 @@ class ZonaBase extends Phaser.Scene {
     parada(pd) {
         const [cx, cy] = pd.c, [hx, hy] = pd.h;
         const KC = CARRUATGE_K;          // el carruatge, una mica més gran (el fum i el follet es recoloquen amb ell)
-        const carro = this.posar('carruatge', cx, cy, { col: { w: 190 * KC, h: 40 * KC }, opac: true, escala: KC }).setFlipX(true);     // girat: el davant mira cap a l'escena
+        const finalEra = !!(this.dadesEntrada && this.dadesEntrada.entrada === 'final');        // cinemàtica final (Era): el carro sense girar, perquè la gàbia del darrere quedi a la dreta, a l'abast del Follet
+        const carro = this.posar('carruatge', cx, cy, { col: { w: 190 * KC, h: 40 * KC }, opac: true, escala: KC }).setFlipX(!finalEra);     // girat: el davant mira cap a l'escena
         // el fum blanc de la xemeneia (la xemeneia és a l'esquerra del dibuix, que està girat): animat per codi, sempre blanc
         this.carroParada = carro;
-        const ox = 107 * carro.scaleX - 8 * KC, oy = -carro.displayHeight + 6 * KC;             // la xemeneia, respecte al peu del carruatge (si la zona s'amplia cap al sud, el carruatge es mou i el fum el segueix)
+        const ox = (finalEra ? -1 : 1) * (107 * carro.scaleX - 8 * KC), oy = -carro.displayHeight + 6 * KC;             // la xemeneia, respecte al peu del carruatge (si la zona s'amplia cap al sud, el carruatge es mou i el fum el segueix)
         const fum = this.add.particles(carro.x + ox, carro.y + oy, 'fum', {
             speedY: { min: -34, max: -20 }, speedX: { min: -9, max: 7 }, accelerationX: 1, lifespan: { min: 2400, max: 3400 },
             scale: { start: 0.16 * KC, end: 0.95 * KC }, alpha: { start: 0.8, end: 0 }, rotate: { min: -25, max: 25 }, frequency: 260, quantity: 1,
@@ -502,10 +503,13 @@ class ZonaBase extends Phaser.Scene {
             carro.setRotation(Math.sin(t / 47) * 0.0035);
             fum.setPosition(bx + ox, by + oy);
         };
-        fum.setPosition(carro.x + ox, carro.y + oy);
-        this.events.on('update', motor);
-        this.events.once('shutdown', () => this.events.off('update', motor));
-        this.npc('follet_carro', hx + 30 * (KC - 1) / 0.25, hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true, colAmple: 48 });     // girat: mira cap a l'escena, no cap al carruatge
+        if (finalEra) fum.destroy();                 // a la cinemàtica final, el carro està quiet i sense fum (perquè la porta de la gàbia hi encaixi)
+        else {
+            fum.setPosition(carro.x + ox, carro.y + oy);
+            this.events.on('update', motor);
+            this.events.once('shutdown', () => this.events.off('update', motor));
+        }
+        this.npc('follet_carro', finalEra ? cx - 100 : hx + 30 * (KC - 1) / 0.25, finalEra ? cy + 30 : hy, () => DIALEGS.cotxer(Estat, pd.id), { flipX: true, colAmple: 48 });     // girat: mira cap a l'escena, no cap al carruatge
         this.paradaAqui = pd;
         if (Estat.arribadaCarruatge === pd.id) {                       // hi acabem d'arribar: bufada de vapor
             Estat.arribadaCarruatge = null;
@@ -3186,6 +3190,7 @@ class ZonaBase extends Phaser.Scene {
         this.tweens.addCounter({ from: 0, to: 1, duration: 2000, onUpdate: tw => {
             const t = tw.getValue(), e = Phaser.Math.Easing.Sine.InOut(t);
             I.setPosition(Phaser.Math.Linear(x0, cx, Math.min(1, t * 3)), Phaser.Math.Linear(y0, yFi, e));
+            I.setDepth(P.AY + 3);
             const f = Math.max(0, (I.y - yFi) / Math.max(1, y0 - yFi));                 // 1 a l'entrada del passadís, 0 al fons del forat
             this.escalaIneuK = 0.5 + 0.5 * f;
             const c = Math.round(255 * (0.18 + 0.82 * f)); I.setTint(Phaser.Display.Color.GetColor(c, c, c));
@@ -3212,6 +3217,7 @@ class ZonaBase extends Phaser.Scene {
         this.time.delayedCall(350, () => this.tweens.addCounter({ from: 0, to: 1, duration: 2000, onUpdate: tw => {
             const t = tw.getValue(), e = Phaser.Math.Easing.Sine.InOut(t);
             I.setPosition(cx, Phaser.Math.Linear(yIni, yFi, e));
+            I.setDepth(P.AY + 3);                                                        // sempre davant del tronc (el bucle de la zona li torna la profunditat a la y, que és més amunt que l'alzina)
             const f = Math.min(1, (I.y - yIni) / (P.AY - yIni));                        // 0 al forat, 1 al peu del passadís
             this.escalaIneuK = 0.5 + 0.5 * f;
             const c = Math.round(255 * (0.18 + 0.82 * f)); I.setTint(Phaser.Display.Color.GetColor(c, c, c));

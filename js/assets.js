@@ -226,7 +226,7 @@ const CATALEG = [
 
 // Retrats de qui parla als diàlegs (assets/retrats/<clau>.webp: de tres quarts, amb fons transparent; es fan amb eines/convertir_retrats.js).
 // Els personatges que encara no en tenen fan servir el cap retallat del sprite (retratDe, a ui.js).
-['ineu', 'pare_jorda', 'germa_aldreu', 'germa_floresc', 'pare_daimiel', 'pare_alcovi', 'pare_xevius', 'eve', 'senyor_budo', 'jusef', 'pomers', 'julius', 'galf', 'isilder', 'pianista', 'joaneta', 'iscu',
+['ineu', 'pare_jorda', 'germa_aldreu', 'germa_aldreu_trist', 'germa_floresc', 'pare_daimiel', 'pare_alcovi', 'pare_xevius', 'eve', 'senyor_budo', 'jusef', 'pomers', 'julius', 'galf', 'isilder', 'pianista', 'joaneta', 'iscu',
  'nena_trenes', 'venerables', 'carry', 'carmelia', 'pilaria', 'dolora', 'pastor_vell', 'pastor_a', 'pastor_b', 'tiller', 'pastor_boira', 'follet_carro', 'georgi_caseta', 'rosansa', 'meus', 'molner', 'ombra_monjo', 'mandu', 'mandu_trencada', 'nen_uri', 'nen_flam', 'nen_sardin', 'ocellaire', 'ocellaire_derrotat', 'home_raim', 'home_raim_horitzo']
     .forEach(k => CATALEG.push({ key: 'retratimg_' + k, file: 'assets/retrats/' + k + '.webp', amplada: 170, cru: true }));
 
@@ -240,7 +240,7 @@ const DIRS_INEU = ['down', 'up', 'left', 'right', 'southwest', 'southeast', 'nor
 // (eines/fer_ineu_v2.py). Esquerra i dreta són walk_elev_/idle_elev_ (eines/fer_ineu_v2_alt.py): l'idle dret és el mirall de l'esquerre i el caminar esquerre el mirall del dret.
 // Les mides dels idles s'igualen a les dels caminars amb eines/igualar_idle_ineu.py. Els fulls i els prototips anteriors són a art/ineu/arxiu/.
 const rutaIneu = (dir, idle) => {
-    const v = '?v=2611211010';
+    const v = '?v=2611251349';
     if (dir === 'left' || dir === 'right') return `assets/ineu/${idle ? 'idle/idle_elev_' : 'caminar/walk_elev_'}${dir}.webp${v}`;
     return `assets/ineu/${idle ? 'idle/idle_' : 'caminar/'}${dir}.webp${v}`;
 };
@@ -360,6 +360,13 @@ const Grafics = {
         scene.load.spritesheet('isilder_camina', 'assets/personatges/isilder_camina.webp', { frameWidth: 190, frameHeight: 285 });
         scene.load.spritesheet('venerables_camina', 'assets/personatges/venerables_camina.webp', { frameWidth: 266, frameHeight: 267 });       // (fer_camina_npc.py: les dues velletes agafades del braç)
         scene.load.spritesheet('mandu_camina', 'assets/personatges/mandu_camina.webp', { frameWidth: 134, frameHeight: 236 });
+        scene.load.spritesheet('pare_alcovi_camina', 'assets/personatges/pare_alcovi_camina.webp?v=2611251257', { frameWidth: 192, frameHeight: 295 });       // (fer_camina_npc.py, AutoSprite iso_walk_right: el Pare Alcoví, la Joaneta i els tres nens de la Gàbia)
+        scene.load.spritesheet('porta_gabia', 'assets/objectes/porta_gabia.webp', { frameWidth: 164, frameHeight: 267 });          // la porta de barrots del darrere del carruatge, que s'obre (cinemàtica final; eines/fer_porta_gabia.py)
+        scene.load.spritesheet('follet_carro_camina', 'assets/personatges/follet_carro_camina.webp?v=2611251257', { frameWidth: 161, frameHeight: 238 });
+        scene.load.spritesheet('joaneta_camina', 'assets/personatges/joaneta_camina.webp?v=2611251257', { frameWidth: 178, frameHeight: 275 });
+        scene.load.spritesheet('nen_uri_camina', 'assets/personatges/nen_uri_camina.webp?v=2611251257', { frameWidth: 102, frameHeight: 186 });
+        scene.load.spritesheet('nen_flam_camina', 'assets/personatges/nen_flam_camina.webp?v=2611251257', { frameWidth: 127, frameHeight: 223 });
+        scene.load.spritesheet('nen_sardin_camina', 'assets/personatges/nen_sardin_camina.webp?v=2611251257', { frameWidth: 130, frameHeight: 222 });
         scene.load.spritesheet('ineu_beu_llet', 'assets/ineu/llet/beu_llet.webp?v=6', { frameWidth: 512, frameHeight: 512 });          // l'Ineu de perfil (mirant a la dreta) bevent un got de llet: 4 x 4 fotogrames d'AutoSprite (eines/fer_beu_llet_ineu.py); es gira com un mirall segons on sigui l'Eve (ZonaBase.beureLlet)
         scene.load.spritesheet('ineu_desperta', 'assets/personatges/ineu_desperta.webp', { frameWidth: 342, frameHeight: 342 });          // l'Ineu a terra i el Pare Jòrdius que l'acaricia: 4 x 2 fotogrames fets a mà (vegeu despertarCaigut)
         scene.load.spritesheet('nena_trenes_camina', 'assets/personatges/nena_trenes_camina.webp', { frameWidth: 225, frameHeight: 282 });       // la Nena de les Trenes corrent cap a la mare (AutoSprite iso_run_right; eines/fer_camina_npc.py)
@@ -628,6 +635,24 @@ const Grafics = {
         }
         if (!scene.anims.exists('venerables_camina') && scene.textures.exists('venerables_camina')) {
             scene.anims.create({ key: 'venerables_camina', frames: scene.anims.generateFrameNumbers('venerables_camina', { start: 0, end: 7 }), frameRate: 8, repeat: -1 });
+        }
+        if (!scene.anims.exists('pare_alcovi_camina') && scene.textures.exists('pare_alcovi_camina')) {
+            scene.anims.create({ key: 'pare_alcovi_camina', frames: scene.anims.generateFrameNumbers('pare_alcovi_camina', { start: 0, end: 7 }), frameRate: 9, repeat: -1 });
+        }
+        if (!scene.anims.exists('follet_carro_camina') && scene.textures.exists('follet_carro_camina')) {
+            scene.anims.create({ key: 'follet_carro_camina', frames: scene.anims.generateFrameNumbers('follet_carro_camina', { start: 0, end: 7 }), frameRate: 9, repeat: -1 });
+        }
+        if (!scene.anims.exists('joaneta_camina') && scene.textures.exists('joaneta_camina')) {
+            scene.anims.create({ key: 'joaneta_camina', frames: scene.anims.generateFrameNumbers('joaneta_camina', { start: 0, end: 7 }), frameRate: 9, repeat: -1 });
+        }
+        if (!scene.anims.exists('nen_uri_camina') && scene.textures.exists('nen_uri_camina')) {
+            scene.anims.create({ key: 'nen_uri_camina', frames: scene.anims.generateFrameNumbers('nen_uri_camina', { start: 0, end: 7 }), frameRate: 12, repeat: -1 });
+        }
+        if (!scene.anims.exists('nen_flam_camina') && scene.textures.exists('nen_flam_camina')) {
+            scene.anims.create({ key: 'nen_flam_camina', frames: scene.anims.generateFrameNumbers('nen_flam_camina', { start: 0, end: 7 }), frameRate: 12, repeat: -1 });
+        }
+        if (!scene.anims.exists('nen_sardin_camina') && scene.textures.exists('nen_sardin_camina')) {
+            scene.anims.create({ key: 'nen_sardin_camina', frames: scene.anims.generateFrameNumbers('nen_sardin_camina', { start: 0, end: 7 }), frameRate: 12, repeat: -1 });
         }
         if (!scene.anims.exists('mandu_camina') && scene.textures.exists('mandu_camina')) {
             scene.anims.create({ key: 'mandu_camina', frames: scene.anims.generateFrameNumbers('mandu_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });

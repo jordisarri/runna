@@ -902,29 +902,17 @@ const DIALEGS = {
     cartellCirosa: E => ({ pagines: [{ qui: "Cartell", text: E.flag("camiCirosaObert") ? "↑ La Cirosa (camí llarg, tot el camí amunt)\n← La Caseta\n↓ Les Cel·les" : "↑ La Cirosa\n← La Caseta" }] }),
 
     // ---------------- EL FOLLET DEL CARRO VERD: VIATGE RÀPID ----------------
-    // CINEMÀTICA FINAL (ZonaEra.enEntrar, després de l'epíleg i abans dels crèdits): el Follet obre la gàbia del darrere i en surten els ocells que l'Ocellaire havia tancat fa segles
+    // CINEMÀTICA FINAL (ZonaEra.enEntrar, després de l'epíleg i abans dels crèdits): el Follet obre l'última gàbia i en surten els ocells que l'Ocellaire havia tancat fa segles
     follet_final: E => {
         const nom = 'Follet del Carro Verd';
         return {
             pagines: [
-                { qui: nom, text: "La boira se n'ha anat del tot, monjo. Abans de tornar a la carretera, deixa'm obrir la gàbia del darrere." },
-                { qui: nom, text: "Hi porto els ocells que l'Ocellaire va tancar fa segles. Els meus avis els van recollir i els hem guardat de pare a fill, perquè amb la boira no volien cantar." },
-                { fer: (z, fet) => {
-                    const [cx, cy] = z.paradaAqui ? z.paradaAqui.c : [260, 1230];
-                    for (let i = 0; i < 16; i++) z.time.delayedCall(i * 190, () => {
-                        const g = z.add.graphics().setDepth(90000);
-                        g.lineStyle(9, 0x2a1a10, 1).beginPath().moveTo(-24, 4).lineTo(0, -12).lineTo(24, 4).strokePath();          // un ocell de lluny: una «v» clara amb contorn fosc (es veu sobre l'arbre i sobre l'herba)
-                        g.lineStyle(4, 0xfff1c9, 1).beginPath().moveTo(-24, 4).lineTo(0, -12).lineTo(24, 4).strokePath();
-                        g.setPosition(cx - 40 - Math.random() * 50, cy - 80);      // la gàbia és al darrere (el carruatge és girat)
-                        z.tweens.add({ targets: g, scaleY: { from: 1, to: -0.6 }, yoyo: true, repeat: -1, duration: 170 + Math.random() * 60 });
-                        // pugen cap al cel, cap a la dreta (l'Ineu i l'arbre), dins del que veu la càmera, i només s'esvaeixen al final
-                        z.tweens.add({ targets: g, x: cx + 120 + Math.random() * 520, y: cy - 300 - Math.random() * 230, duration: 3400 + Math.random() * 800, ease: 'Sine.easeOut',
-                            alpha: { value: 0, duration: 1100, delay: 2600 }, onComplete: () => g.destroy() });
-                    });
-                    z.esperar(3600, fet);
-                } },
+                { qui: nom, text: "La boira se n'ha anat del tot, monjo. Abans de tornar a la carretera, deixa'm obrir l'última gàbia." },
+                { fer: (z, fet) => z.folletVaDarrere ? z.folletVaDarrere(fet) : fet() },
+                { qui: nom, text: "Hi porto els ocells que vaig rescatar i que he cuidat durant molt de temps. Amb la boira no volien cantar, però ara ja poden tornar a volar lliures." },
+                { fer: (z, fet) => z.ocellsVolen ? z.ocellsVolen(fet) : fet() },
                 { qui: nom, text: "Ja poden cantar. Gràcies per tornar-los el cant." },
-                { qui: nom, text: "Au, ves-te'n a casa, Ineu: el Miracle sempre et tindrà carretera." }
+                { qui: nom, text: "Au, ves-te'n a casa, Ineu: el Miracle sempre recordarà el seu heroi." }
             ]
         };
     },
@@ -1681,7 +1669,7 @@ const DIALEGS = {
                     { qui: "La Joaneta", text: "Ei! Tu! Qui coi t'ha dit que podies entrar? Els frares no veniu mai per aquí! Fot el camp o et faig créixer bolets a les orelles!" },
                     { qui: "Ineu", text: "Perdoni... He arribat per l'alzina. Duc aigua de la Font del Bisbe." },
                     { qui: "La Joaneta", text: "Aigua... de la Font del Bisbe?! Dona'm aixòooo! Fa trenta anys que no en tinc ni una gota neta." },
-                    { fer: (z, fet) => z.seq([c => z.npcVa('joaneta', 500, 360, c, 200), c => z.camaraPla(500, 290, 1.3, 700, 'Sine.easeInOut', c), c => { z.llum(450, 290, 0x6aff6a); z.animaNpc('joaneta', 4200, c, 'bombolles'); }, c => z.npcVa('joaneta', 560, 420, c, 200)], () => { z.reenquadrarDialeg(); fet(); }) },          // davant l'olla prepara el beuratge (animació pròpia: l'ampolla gran)
+                    { fer: (z, fet) => z.seq([c => z.npcVa('joaneta', 500, 360, c, 200), c => z.camaraPla(500, 300, 2.0, 700, 'Sine.easeInOut', c), c => { z.llum(450, 290, 0x6aff6a); z.animaNpc('joaneta', 4200, c, 'bombolles'); }, c => z.npcVa('joaneta', 560, 420, c, 200)], () => { z.reenquadrarDialeg(); fet(); }) },          // davant l'olla prepara el beuratge (animació pròpia: l'ampolla gran)
                     { qui: "La Joaneta", text: "Mmm... collonut. Ets tonto, xaval, però ets bo. Els ocells i les guineus xerren, i jo ho sento tot: busques el Gran Til·ler, oi? Han tapat el camí que hi porta amb una boira que no marxa amb el vent." },
                     { qui: "La Joaneta", text: "Mira, he barrejat l'aigua que queda amb rialla, herba de Sant Joan i una mica de pruna daurada. Aquest beuratge fa fugir la boira dolenta. No te'l beguis, eh! Aboca'l sobre la boira i prou, que si no et sortiran bolets." },
                     { avis: "Has obtingut el BEURATGE DE LA JOANETA.", obj: 'beuratge' }

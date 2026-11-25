@@ -1,6 +1,7 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 650: a la cinemàtica final de l’Era, el Follet camina fins a la gàbia del carro i l’obre; en surten molts ocells de colors (els que va rescatar i ha cuidat durant molt de temps). Ja no diu «fa segles».*
 *Revisió 649: el «Guàrdia de la Gàbia» i el Pastor de la Boira són el MATEIX personatge (l'Aleu convertit): ja no hi ha un segon dibuix; a la Sala de la Gàbia l'Aleu es transforma amb el mateix dibuix del Pastor (pastor_boira) i es diu igual al quadre de diàleg.*
 
 *Revisió 648: Germà Aleu: el retrat del quadre de diàleg és nou (la mateixa cara que el Pastor de la Boira, ulleres rodones, somriure tímid) i el Guàrdia de la Gàbia (aldreu_guardia) també té la cara del Pastor, amb la mateixa roba i la caiada; ambdós generats a AutoSprite.*

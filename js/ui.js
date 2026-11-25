@@ -94,6 +94,8 @@ function retratDe(scene, qui) {
     if (key === 'ocellaire' && window.RETRAT_OCELLAIRE_DERROTAT && scene.textures.exists('retratimg_ocellaire_derrotat') && !Grafics.faltants.includes('retratimg_ocellaire_derrotat')) key = 'ocellaire_derrotat';
     // L'Home del Raïm: enfadat (ulls vermells) fins que és vençut; llavors, el rostre de pedra tranquil, mirant a l'horitzó
     if (key === 'home_raim' && Estat.dades && Estat.flag('raimDerrotat') && scene.textures.exists('retratimg_home_raim_horitzo') && !Grafics.faltants.includes('retratimg_home_raim_horitzo')) key = 'home_raim_horitzo';
+    // L'Aleu, a la Sala de la Gàbia, mentre és trist (cap cot): el retrat trist, si hi és
+    if (key === 'germa_aldreu' && scene.aldreuEstat === 'trist' && scene.textures.exists('retratimg_germa_aldreu_trist') && !Grafics.faltants.includes('retratimg_germa_aldreu_trist')) key = 'germa_aldreu_trist';
     const clau = 'retrat_' + key;
     if (scene.textures.exists(clau)) return clau;
     // Retrat dibuixat de tres quarts (assets/retrats/<clau>.webp): es posa sobre el fons de pergamí, amb el tall d'espatlles a baix

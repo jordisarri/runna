@@ -1894,7 +1894,7 @@ class ZonaGabia extends ZonaBase {
                 f => {                                                 // P51: pla general dels nens
                     let pend = 2; const llest = () => { if (--pend === 0) f(); };
                     z.ineuVa(gx - 60, base + 330, () => { z.posarDireccio('amunt', false); llest(); }, 210);
-                    z.enquadrar(gx, base + 40, 1.0, 1000, llest);
+                    z.enquadrar(gx, base + 20, 1.5, 1000, llest);
                 },
                 f => {
                     Sfx.riure();
@@ -1904,7 +1904,7 @@ class ZonaGabia extends ZonaBase {
                 },
                 f => {
                     // P52: el riure desfà la boira: la cova s'aclareix
-                    z.enquadrar(gx, base - 60, 1.05, 2000, null, 0);
+                    z.enquadrar(gx, base - 40, 1.6, 2000, null, 0);
                     this.cameras.main.flash(900, 255, 240, 200);
                     this.boires.forEach(b => b.stop());
                     this.tweens.add({ targets: this.velLila, alpha: 0.05, duration: 2000 });

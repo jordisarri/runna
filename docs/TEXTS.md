@@ -302,7 +302,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[90] Pergamí:** «Qui busqui la clau, que no oblidi mai on neix el sol.»
 
-### construir  <sub>(js/zones/esglesia.js:105)</sub>
+### construir  <sub>(js/zones/esglesia.js:106)</sub>
 
 **[91] Ineu:** La clau de la torre del rellotge encaixa al pany. La porta s'obre.
 
@@ -346,7 +346,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[101] Ineu:** L'herba de Sant Joan fa llum, sempre en una clariana: en deu haver-n'hi per aquí, en aquest mateix bosc. I l'arbre d'or... és la Prunera Màgica, al jardí de l'Hostatgeria! Una pruna.
 
-### joaneta  <sub>(js/dialegs.js:1681)</sub>
+### joaneta  <sub>(js/dialegs.js:1669)</sub>
 
 *Si: encara no ha vist la Joaneta*
 
@@ -398,7 +398,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[118] Cartell:** La Caseta / → El Gran Til·ler
 
-### prunera  <sub>(js/dialegs.js:1163)</sub>
+### prunera  <sub>(js/dialegs.js:1151)</sub>
 
 **[119] Isílder:** No te'n facis un fart, monjo! Són prunes daurades, màgiques: una sola et deixa com nou. El meu Sardi en menjava deu cada tarda i no n'hi tenia mai prou...
 
@@ -408,7 +408,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## El Gran Til·ler, la Cirosa i els pastors
 
-### boiraTiller  <sub>(js/dialegs.js:1704)</sub>
+### boiraTiller  <sub>(js/dialegs.js:1692)</sub>
 
 **[121] Ineu:** Provaré amb el beuratge de la Joaneta.
 
@@ -462,7 +462,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[138]** ★ Has obtingut la BRANCA DEL TIL·LER!
 
-### arrelsTiller  <sub>(js/dialegs.js:1718)</sub>
+### arrelsTiller  <sub>(js/dialegs.js:1706)</sub>
 
 *Si: encara no porta el bastó del Til·ler*
 
@@ -482,7 +482,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[142] Cartell:** ↑ La Cirosa / ← La Caseta
 
-### pastorA  <sub>(js/dialegs.js:1246)</sub>
+### pastorA  <sub>(js/dialegs.js:1234)</sub>
 
 **[143] Pastor:** M'han assegut a taula... M'han passat el pa. Fa cinquanta anys que ningú no em passava el pa.
 
@@ -490,7 +490,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[145] Pastor:** No s'acosti gaire, pare, que la gent diu que portem mala sort. Només tenim el ramat... i el Germà Aleu, aquell monjo pesat que sempre jugava amb els nens, ens l'ha pres. Ara es fa dir el Pastor de la Boira.
 
-### pastorB  <sub>(js/dialegs.js:1256)</sub>
+### pastorB  <sub>(js/dialegs.js:1244)</sub>
 
 **[146] Pastora:** Hi havia flors a la taula. Feia tant de temps que no veia flors a una taula.
 
@@ -498,7 +498,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[148] Pastora:** No fem mal a ningú. Només intentem refer el que ens queda.
 
-### pastorVell  <sub>(js/dialegs.js:1267)</sub>
+### pastorVell  <sub>(js/dialegs.js:1255)</sub>
 
 *Si: encara no ha vençut el Pastor de Boira*
 
@@ -536,11 +536,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[161] Pastor vell:** Aquesta pastura torna a ser un lloc tranquil. Gràcies per això.
 
-### pastor_vell  <sub>(js/dialegs.js:1820)</sub>
+### pastor_vell  <sub>(js/dialegs.js:1808)</sub>
 
 **[162] Pastor vell:** Les ovelles tornen a ser blanques. Alguna encara té les orelles una mica liles, però ja li passarà.
 
-### pastorsConvencuts  <sub>(js/dialegs.js:1307)</sub>
+### pastorsConvencuts  <sub>(js/dialegs.js:1295)</sub>
 
 **[163] Pastora:** Havia oblidat que existia això...
 
@@ -578,7 +578,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[174] Ineu:** (Qui sap on són ara. Potser els pastors les guarden.)
 
-### aldreuPastor  <sub>(js/dialegs.js:1373)</sub>
+### aldreuPastor  <sub>(js/dialegs.js:1361)</sub>
 
 **[175] Aleu, Pastor de la Boira:** Ineu!
 
@@ -600,7 +600,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[184] Aleu, Pastor de la Boira:** Tornar enrere? Mai! El Mestre em va veure, quan ningú més no ho feia. Calla! Be-e-e!
 
-### aldreuDerrotat  <sub>(js/dialegs.js:1390)</sub>
+### aldreuDerrotat  <sub>(js/dialegs.js:1378)</sub>
 
 **[185] Aleu, Pastor de la Boira:** Has guanyat aquesta, monjo... Fa trenta anys que ningú no em mirava, i ell sí. Mai no li fallaré.
 
@@ -612,7 +612,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[189] Ineu:** (I el pastor vell em va prometre les esquelles dels seus avis. Aniré a veure'l vora el foc.)
 
-### tillerSoparIntro  <sub>(js/dialegs.js:1318)</sub>
+### tillerSoparIntro  <sub>(js/dialegs.js:1306)</sub>
 
 **[190] El Gran Til·ler:** Has portat música al lloc on feia anys que no n'hi havia. Això em fa pensar en el sopar.
 
@@ -626,15 +626,15 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[195] El Gran Til·ler:** Però els pastors no s'asseuran a taula només amb paraules: fa anys que no senten música vora el foc. Abans de tornar-hi, ves a veure la Pianista del Santuari: guarda un cant tan vell com ells.
 
-### tillerSoparFalta  <sub>(js/dialegs.js:1329)</sub>
+### tillerSoparFalta  <sub>(js/dialegs.js:1317)</sub>
 
 **[196] El Gran Til·ler:** La taula encara no és plena, petit monjo. Menjar sol és només alimentar-se; per això hem de ser tots.
 
-### tillerSoparPreparat  <sub>(js/dialegs.js:1335)</sub>
+### tillerSoparPreparat  <sub>(js/dialegs.js:1323)</sub>
 
 **[197] El Gran Til·ler:** Ho has portat tot. Que es faci el sopar.
 
-### tillerSoparRitual  <sub>(js/dialegs.js:1343)</sub>
+### tillerSoparRitual  <sub>(js/dialegs.js:1331)</sub>
 
 **[198] Nelis:** Aquest any l'escudella té gust de poc, fill: hi falta l'alegria de tres nens. Que ens ho perdonin els tres, allà on siguin.
 
@@ -754,7 +754,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[238]** ★ Has agafat el PALLOFA. Duu-lo a la Carry.
 
-### llac  <sub>(js/dialegs.js:1493)</sub>
+### llac  <sub>(js/dialegs.js:1481)</sub>
 
 **[239]** ★ Has trobat un llaç de la nena (
 
@@ -808,11 +808,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[254] Eve:** Busca aquesta espasa, Ineu. Jo em quedo aquí, fent veure que treballo.
 
-### eve  <sub>(js/dialegs.js:1818)</sub>
+### eve  <sub>(js/dialegs.js:1806)</sub>
 
 **[255] Eve:** El Sardi ja torna a berenar aquí cada tarda. La Càren encara dorm, però ronca més contenta.
 
-### senyorBudo  <sub>(js/dialegs.js:1059)</sub>
+### senyorBudo  <sub>(js/dialegs.js:1047)</sub>
 
 **[256] Senyor Buidor:** Xxt... ¿El Galf? Ah, sí. Vol el cristall de gel de l'ermita de Sant Gabriel, oi? Sempre ha tingut ganes de mirar el cel.
 
@@ -938,7 +938,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alberic sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:1950)</sub>
+### pedraMobil  <sub>(js/zona_base.js:1954)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1092,7 +1092,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[333] Ineu:** (Sense la boira que sortia d'aquí, la veu de l'Home de la Gàbia ja no arriba tan lluny, i les portes que ella obria soles ja no s'obriran. Però la boira que ja s'ha acumulat sota terra, a les Gírgoles, hi continua tancada.)
 
-### creuCementiri  <sub>(js/dialegs.js:1768)</sub>
+### creuCementiri  <sub>(js/dialegs.js:1756)</sub>
 
 **[334] Ineu:** «Els monjos del Miracle, d'ara i d'abans.»
 
@@ -1106,11 +1106,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[338]** ★ Has deixat el RAM DE FLORS als peus de l'àngel.
 
-### lapida  <sub>(js/dialegs.js:1792)</sub>
+### lapida  <sub>(js/dialegs.js:1780)</sub>
 
 **[339] Làpida:** [text calculat pel joc: mots[n % mots.length]]
 
-### tombaMonjos  <sub>(js/dialegs.js:1763)</sub>
+### tombaMonjos  <sub>(js/dialegs.js:1751)</sub>
 
 **[340] Ineu:** «Aquí reposen els qui van tancar la porta.»
 
@@ -1118,15 +1118,15 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Acte 2: l'ermita de la Desaparició i la clau del sagrari
 
-### cartellCami  <sub>(js/dialegs.js:972)</sub>
+### cartellCami  <sub>(js/dialegs.js:960)</sub>
 
 **[341] Cartell:** Camí de la Desaparició. / "Qui segueix els passos, no torna sol."
 
-### sortidaErmita  <sub>(js/dialegs.js:1013)</sub>
+### sortidaErmita  <sub>(js/dialegs.js:1001)</sub>
 
 **[342] Cartell:** ← L'Era / → Camí de la Desaparició
 
-### columna  <sub>(js/dialegs.js:960)</sub>
+### columna  <sub>(js/dialegs.js:948)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1134,11 +1134,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[344] Ineu:** Columna ${n} de 12. Sota el signe ${signe}, amb lletra petita: «${paraula}». Ho apunto (${total() + 1}/12).
 
-### creuDesaparicio  <sub>(js/dialegs.js:1016)</sub>
+### creuDesaparicio  <sub>(js/dialegs.js:1004)</sub>
 
 **[345] Inscripció:** «Dotze paraules guarda el camí. Qui les escolti, trobarà el nom dels que callen.»
 
-### taulaPedra  <sub>(js/dialegs.js:981)</sub>
+### taulaPedra  <sub>(js/dialegs.js:969)</sub>
 
 **[346] Inscripció:** Taula de pedra ${part} de 2: /  / ${mots.join('   ')}
 
@@ -1154,11 +1154,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[349] Ineu:** Només entenc les paraules que he apuntat al camí. Els signes que em falten... són a les columnes.
 
-### altarErmita  <sub>(js/dialegs.js:998)</sub>
+### altarErmita  <sub>(js/dialegs.js:986)</sub>
 
 **[350] Ineu:** «Quan la boira cobreixi el Miracle, els passos dels absents tornaran amb l'alba.»
 
-### cofreAltar  <sub>(js/dialegs.js:1004)</sub>
+### cofreAltar  <sub>(js/dialegs.js:992)</sub>
 
 **[351]** ★ Has obtingut la CLAU DEL SAGRARI.
 
@@ -1184,11 +1184,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Acte 2: l'Era, el Galf i el telescopi
 
-### cartellEra  <sub>(js/dialegs.js:1053)</sub>
+### cartellEra  <sub>(js/dialegs.js:1041)</sub>
 
 **[359] Cartell:** ↑ Ermita de la Desaparició / → Hostatgeria / ← Rovellonera
 
-### galf  <sub>(js/dialegs.js:1023)</sub>
+### galf  <sub>(js/dialegs.js:1011)</sub>
 
 *Si: té el telescopi*
 
@@ -1220,13 +1220,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[370] Galf:** Des del telescopi es veu tot el poble, i aquesta nit no hi ha ni un fil de boira.
 
-### cofreGabriel  <sub>(js/dialegs.js:1505)</sub>
+### cofreGabriel  <sub>(js/dialegs.js:1493)</sub>
 
 **[371] Ineu:** Un cofre petit, tan fred que em fa mal a les mans. El pany és ple de gel i cedeix en tocar-lo. A la tapa hi ha gravat: «La rosada de l'alba no es fon ni a l'estiu.»
 
 **[372]** ★ Has obtingut el CRISTALL DE GEL.
 
-### telescopiMon  <sub>(js/dialegs.js:1516)</sub>
+### telescopiMon  <sub>(js/dialegs.js:1504)</sub>
 
 *Si: ha vist tots els estels*
 
@@ -1248,13 +1248,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[377] Ineu:** Diuen que per Sant Llorenç el cel plora. Compta les llàgrimes... i potser et mostraran alguna cosa.
 
-### estelDiposit  <sub>(js/dialegs.js:1544)</sub>
+### estelDiposit  <sub>(js/dialegs.js:1532)</sub>
 
 **[378]** ★ Has obtingut la LLÀGRIMA DE SANT LLORENÇ.
 
 **[379] Ineu:** Fa la mateixa claror que els set estels... Diuen que la boira no gosa tocar la llum de Sant Llorenç. El camí del Dolmen, a llevant, n'és ple.
 
-### cotxer  <sub>(js/dialegs.js:940)</sub>
+### cotxer  <sub>(js/dialegs.js:928)</sub>
 
 *Si: (depèn d'un càlcul del joc) ; (depèn d'un càlcul del joc)*
 
@@ -1276,7 +1276,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[387] Ineu:** Set estels... i un ocell que s'escapa d'una gàbia oberta. És la nit de les llàgrimes de Sant Llorenç!
 
-### boiraDolmen  <sub>(js/dialegs.js:1557)</sub>
+### boiraDolmen  <sub>(js/dialegs.js:1545)</sub>
 
 **[660] Ineu:** La Llàgrima de Sant Llorenç fa la claror dels estels. Diuen que la boira no gosa tocar-la... Provem-ho.
 
@@ -1284,11 +1284,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[388] Ineu:** Aquí no s'hi veu res. Em caldria una llum que la boira no pogués apagar...
 
-### dolmenBaix  <sub>(js/dialegs.js:1586)</sub>
+### dolmenBaix  <sub>(js/dialegs.js:1574)</sub>
 
 **[389] Ineu:** (Runna és dalt de la llosa. Potser s'hi pot pujar per darrere.)
 
-### placaDolmen  <sub>(js/dialegs.js:1597)</sub>
+### placaDolmen  <sub>(js/dialegs.js:1585)</sub>
 
 **[390] Placa:** Només podrà alçar Runna qui posseeixi el permís de l'arbre sagrat, les paraules del saber i la benedicció divina.
 
@@ -1366,7 +1366,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[414] Ineu:** (Les arrels s'han enfonsat a terra com un respir llarg, i els ocells han tornat a les branques. El camí d'aquí al Dolmen ha quedat lliure.)
 
-### nenaTrenes  <sub>(js/dialegs.js:1445)</sub>
+### nenaTrenes  <sub>(js/dialegs.js:1433)</sub>
 
 *Si: encara no ha vist la Nena de les Trenes*
 
@@ -1404,11 +1404,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[430] Nena de les Trenes:** Adéu, monjo. Canta fort.
 
-### nenaEpileg  <sub>(js/dialegs.js:1490)</sub>
+### nenaEpileg  <sub>(js/dialegs.js:1478)</sub>
 
 **[431] Nena de les Trenes:** Gràcies per portar-me a casa, monjo.
 
-### mandu  <sub>(js/dialegs.js:1409)</sub>
+### mandu  <sub>(js/dialegs.js:1397)</sub>
 
 *Si: s'ha trencat la nina de la Mandu*
 
@@ -1452,7 +1452,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Acte 3: els Guants de Poder i la roda de carruatge
 
-### germa_floresc  <sub>(js/dialegs.js:1816)</sub>
+### germa_floresc  <sub>(js/dialegs.js:1804)</sub>
 
 **[448] Germà Floresc:** La tomba de l'àngel té flors noves cada dia. No sóc jo qui les hi porta... i no em preguntis qui.
 
@@ -1522,7 +1522,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[470] Gori:** Però tu vens per una cosa seriosa, així que per aquesta vegada et deixo. Puja per l'escala, que la porta no té clau, i agafa-la.
 
-### llibreCambra  <sub>(js/dialegs.js:1665)</sub>
+### llibreCambra  <sub>(js/dialegs.js:1653)</sub>
 
 **[471] Ineu:** Un llibre gros, obert sobre la taula, amb lletra de monjo. Diu a dalt de la pàgina: «Del càstig del germà bodeguer».
 
@@ -1532,7 +1532,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[474] Llibre:** «Per això li diuen l'Home del Raïm. Dorm de cara a la paret, com un nen castigat, i només es desperta si algú el fa girar i el mira a la cara.»
 
-### cofreManeta  <sub>(js/dialegs.js:1742)</sub>
+### cofreManeta  <sub>(js/dialegs.js:1730)</sub>
 
 *Si: encara no ha parlat amb en Gori de la maneta ; encara no ha vist el volant del Raïm*
 
@@ -1562,11 +1562,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Acte 3: la Casa Gran, la cripta i l'Home del Raïm
 
-### portaReixa  <sub>(js/dialegs.js:1649)</sub>
+### portaReixa  <sub>(js/dialegs.js:1637)</sub>
 
 **[480] Ineu:** Fa generacions que ningú no obre això. Haurà d'haver-hi una altra manera d'entrar-hi.
 
-### reixaDins  <sub>(js/dialegs.js:1657)</sub>
+### reixaDins  <sub>(js/dialegs.js:1645)</sub>
 
 **[481] Ineu:** (La barra fora: ara puc entrar i sortir per la plaça.)
 
@@ -1634,7 +1634,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Acte 3: l'Hostatgeria, les sacerdotesses i la llosa del jardí
 
-### isilderBase  <sub>(js/dialegs.js:1076)</sub>
+### isilderBase  <sub>(js/dialegs.js:1064)</sub>
 
 *Si: ha sentit parlar del sopar del Til·ler i encara no té les flors de l'Isílder*
 
@@ -1678,7 +1678,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[514] Isílder:** T'has fixat en la llosa? Cap home l'ha pogut moure mai. Expliquen que només reacciona a la llum d'una llavor de lluna. Només se m'acut que en podria haver vist una la venedora de verdura que de tant en tant volta per les cel·les. Pots provar.
 
-### isilderRunna  <sub>(js/dialegs.js:1132)</sub>
+### isilderRunna  <sub>(js/dialegs.js:1120)</sub>
 
 **[515] Isílder:** Monjo, espera! Mira la llosa: s'ha encès. Fa anys que la veig cada dia i no havia fet mai res així.
 
@@ -1688,11 +1688,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[518] Isílder:** De llavors de lluna ja no en queden. Però la Rosansa, la venedora de verdures, ha tornat a passar per les cel·les, i fa anys que porta al carro una llavor estranya que ningú no sap què és. Pregunta-li.
 
-### isilder  <sub>(js/dialegs.js:1813)</sub>
+### isilder  <sub>(js/dialegs.js:1801)</sub>
 
 **[519] Isílder:** Les flors de lluna ja s'obren de dia. Diria que és el riure dels nens, que les enganya.
 
-### llosaJardi  <sub>(js/dialegs.js:1154)</sub>
+### llosaJardi  <sub>(js/dialegs.js:1142)</sub>
 
 **[520] Ineu:** Una llosa de pedra amb una creu gravada. La Llavor de Lluna voldria terra aquí vora, però cal algú que conegui el jardí: l'Isílder.
 
@@ -1704,7 +1704,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[523] Cartell:** L'Hostatgeria / → La Taverna / ← L'Era
 
-### rosansa  <sub>(js/dialegs.js:1143)</sub>
+### rosansa  <sub>(js/dialegs.js:1131)</sub>
 
 **[524] Rosansa:** Verdures fresques, fruita de la rodalia! Cebes, raves, cols... Què et poso, monjo?
 
@@ -1728,13 +1728,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[531] Les Venerables Sàvies:** I la llosa del jardí de l'Hostatgeria? És obra dels monjos antics: la van tancar amb la mateixa llum de Runna que va segellar la porta de ferro. Mentre l'espasa dormi, la llosa dormirà amb ella.
 
-### hostatgeria  <sub>(js/dialegs.js:1177)</sub>
+### hostatgeria  <sub>(js/dialegs.js:1165)</sub>
 
 **[532] Carmèlia:** Entra, fill: aquesta casa torna a ser teva.
 
 **[533] Ineu:** La porta està tancada per dins.
 
-### dolora  <sub>(js/dialegs.js:1184)</sub>
+### dolora  <sub>(js/dialegs.js:1172)</sub>
 
 **[537] Ineu:** Una música lleugera, de tres notes, potser la desperta.
 
@@ -1764,7 +1764,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[545] Dolòria:** El Sardi ja torna a robar galetes del rebost. Senyal que està bé del tot.
 
-### pilaria  <sub>(js/dialegs.js:1202)</sub>
+### pilaria  <sub>(js/dialegs.js:1190)</sub>
 
 *Si: encara no ha rebut el premi de la Pilària*
 
@@ -1782,7 +1782,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[551] Pilària:** Hem posat una espelma per tu a cada cambra, Ineu. I una altra per si de cas.
 
-### carmelia  <sub>(js/dialegs.js:1215)</sub>
+### carmelia  <sub>(js/dialegs.js:1203)</sub>
 
 *Si: encara no ha rebut el premi de la Carmèlia*
 
@@ -1808,7 +1808,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[558] Carmèlia:** Les tres te'n devem una. I nosaltres sempre paguem els deutes... amb pastissos.
 
-### cofreMonges  <sub>(js/dialegs.js:1235)</sub>
+### cofreMonges  <sub>(js/dialegs.js:1223)</sub>
 
 **[559] Nota:** «Per a qui ha tornat la llum a aquesta casa. Al fons de les Gírgoles, abans d'arribar a la gàbia, hi ha una boira que crema: la nostra empara l'esvairà al teu pas.» — Dolòria, Pilària i Carmèlia
 
@@ -2008,7 +2008,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## Epíleg: després del final
 
-### ferEpileg  <sub>(js/zones/esglesia.js:287)</sub>
+### ferEpileg  <sub>(js/zones/esglesia.js:288)</sub>
 
 **[621] Les Venerables Sàvies:** Huri, no hem dubtat ni per un instant que l'Ineu et salvaria. El seu destí estava escrit a la crònica del Miracle.
 
@@ -2056,13 +2056,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ### follet_final  <sub>(js/dialegs.js:910)</sub>
 
-**[705] Follet del Carro Verd:** La boira se n'ha anat del tot, monjo. Abans de tornar a la carretera, deixa'm obrir la gàbia del darrere.
+**[705] Follet del Carro Verd:** La boira se n'ha anat del tot, monjo. Abans de tornar a la carretera, deixa'm obrir l'última gàbia.
 
-**[706] Follet del Carro Verd:** Hi porto els ocells que l'Ocellaire va tancar fa segles. Els meus avis els van recollir i els hem guardat de pare a fill, perquè amb la boira no volien cantar.
+**[706] Follet del Carro Verd:** Hi porto els ocells que vaig rescatar i que he cuidat durant molt de temps. Amb la boira no volien cantar, però ara ja poden tornar a volar lliures.
 
 **[707] Follet del Carro Verd:** Ja poden cantar. Gràcies per tornar-los el cant.
 
-**[708] Follet del Carro Verd:** Au, ves-te'n a casa, Ineu: el Miracle sempre et tindrà carretera.
+**[708] Follet del Carro Verd:** Au, ves-te'n a casa, Ineu: el Miracle sempre recordarà el seu heroi.
 
 ---
 
@@ -2090,7 +2090,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[646] Ineu:** Els pastors somriuen: aquí ja ha tornat la música.
 
-### pensament a obrirPortaRellotge  <sub>(js/zones/esglesia.js:442)</sub>
+### pensament a obrirPortaRellotge  <sub>(js/zones/esglesia.js:443)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -2136,11 +2136,11 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[656] Ineu:** [text calculat pel joc: text]
 
-### pensament a triarViatge  <sub>(js/zona_base.js:530)</sub>
+### pensament a triarViatge  <sub>(js/zona_base.js:534)</sub>
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2206)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2210)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
