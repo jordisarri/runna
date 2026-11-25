@@ -481,7 +481,7 @@ const DIALEGS = {
     }) : ({
         pagines: [
             { qui: 'Jusef', text: 'M\'has... m\'has vençut... El meu servei màgic, per primer cop... M\'has vençut amb tota justícia.' },
-            { fer: (z, fet) => z.npcVa('jusef', z.ineu.x + (z.ineu.x < z.config.amplada / 2 ? 60 : -60), z.ineu.y, fet) },
+            { fer: (z, fet) => { const sg = z.ineu.x < z.config.amplada / 2 ? 1 : -1; z.npcVa('jusef', z.ineu.x + sg * 85, z.ineu.y, () => { z.npcPerfil('jusef', 'ineu'); z.posarDireccio(sg > 0 ? 'dreta' : 'esquerra', false); fet(); }); } },       // es posen cara a cara, de perfil
             { qui: 'Jusef', text: 'Això és per a tu: el Llum d\'en Mamet. En Mamet era un vell ermità del Miracle que coneixia tots els passos subterranis i les escletxes dels murs.' },
             { qui: 'Jusef', text: 'La seva flama s\'alimenta d\'un oli antic que mai no s\'apaga. Als passadissos tenebrosos i a la foscor de les pedres velles, la seva claror et farà visible allò que sembla ocult.' },
             { fer: (z, fet) => z.objecteVola('jusef', fet) },
