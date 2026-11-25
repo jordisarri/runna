@@ -1,6 +1,7 @@
 # Runna: l'espasa del Miracle — Guió (versió lleugera, ~5 hores)
 
 Document de referència del joc. Qualsevol canvi d'història es fa primer aquí.
+*Revisió 657: els rius de boira es dibuixen SOTA tots els personatges i objectes (només sobre l'herba): cap personatge (l'Aleu inclòs) queda rentat de lila ni sembla transparent quan la boira passa per damunt.*
 *Revisió 656: al Celler, un cop l'Ineu ha entrat al túnel de darrere la roda (i fins que en talla els esbarzers), el Senyor Pomers i en Jusef li diuen que els esbarzers negres només els talla Runna.*
 *Revisió 655: nou pas «El camí del Til·ler» abans de la Font del Bisbe: fins que l'Ineu no ha anat a les Cel·les i ha topat amb la boira que tanca el camí del Til·ler (flag boiraTillerVista), les pistes (Pare Alberic, Pare Jòrdius, Venerables Sàvies, Diari) només diuen que vagi al nord a veure el camí, i no parlen de la Font del Bisbe ni del beuratge; just després de veure la boira, l'objectiu passa a ser la Font. Les partides velles que ja han estat a la font o més enllà no el necessiten.*
 *Revisió 654: el cartell de la Rovellonera diu «Bosc dels Rovellons» (abans «Bosc de les Rovelloneres»).*

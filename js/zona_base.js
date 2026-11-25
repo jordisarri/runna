@@ -1622,8 +1622,8 @@ class ZonaBase extends Phaser.Scene {
         // La boira només baixa (cada pas de la història la fa marxar i mai no torna): si en aquesta zona ja és tan fluixa que no es veuria, no es crea res
         const nivell0 = nivellBoira(), esp = nivell0;        // els rius són IGUALS a tots els exteriors i s'esvaeixen alhora i al mateix ritme (el nivell general de la història; no depenen de la zona)
         // BOIRA A RAS DE TERRA, EN FORMA DE RIUS (abans era un vel violeta a pantalla completa i uns bancs que passaven PER DAVANT de tot, i desllueixien les cares i els sprites): cintes llargues i
-        // sinuoses de boira, en coordenades de món, que corren molt lentament pel terra i s'intercalen amb els personatges segons la y (depth = y + 2): els peus queden dins la boira, però els
-        // caps i els sprites es veuen nets. Es reparteixen en «carrils» (un cada 150 px de món): com més espessor (nivell de la història x densitat de la zona), més carrils plens i més segments per carril.
+        // sinuoses de boira, en coordenades de món, que corren molt lentament pel terra, SOTA tots els personatges i objectes (depth -200, per sobre només de l'herba i les ombres): mai no els tapen ni els fan semblar
+        // transparents (l'Aleu, per exemple, quedava rentat de lila quan la seva y era menor que la del riu). Es reparteixen en «carrils» (un cada 150 px de món): com més espessor (nivell de la història x densitat de la zona), més carrils plens i més segments per carril.
         // A més, una vinyeta lila suau només a les vores de la pantalla (el centre queda net).
         const alfaRiu = 0.45, alfaVinyeta = 0.5;
         if (esp >= 0.06) {
@@ -1634,7 +1634,7 @@ class ZonaBase extends Phaser.Scene {
                 if (rnd() > 0.35 + 0.6 * esp) continue;                               // els carrils buits: com menys espessor, més aire net entre rius
                 for (let k = 0; k < segs; k++) {
                     const w = 950 + rnd() * 650, h = 200 + rnd() * 110, x = rnd() * A, y = 90 + (c + 0.5) * (Hm - 120) / carrils + (rnd() - 0.5) * 50;
-                    const im = this.add.image(x, y, this.textureRiuBoira(Math.floor(rnd() * 3))).setTint(0xb890f2).setDisplaySize(w, h).setDepth(y + 2).setAlpha(0)
+                    const im = this.add.image(x, y, this.textureRiuBoira(Math.floor(rnd() * 3))).setTint(0xb890f2).setDisplaySize(w, h).setDepth(-200 + y / 10000).setAlpha(0)
                         .setFlipX(rnd() < 0.5).setFlipY(rnd() < 0.5).setAngle((rnd() - 0.5) * 5);
                     parts.push({ o: im, alfa: alfaRiu * (0.75 + 0.35 * rnd()) });
                     const dir = c % 2 ? 1 : -1;                                              // cada carril flueix en un sentit (alternant), com un riu
