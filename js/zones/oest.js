@@ -675,6 +675,7 @@ class ZonaDipositos extends ZonaBase {
 
     actualitzar() {
         const E = Estat;
+        if (this.estelCaient && this.ineu && this.ineu.body) { this.ineu.body.setVelocity(0); if (this.ineu.anims && this.ineu.anims.isPlaying) this.posarDireccio(this.direccio, false); }      // mentre cau l'estel, l'Ineu es queda quiet (ni camina ni fa l'animació)
         if (!this.llumEstel && !this.llumRecollida && !this.estelCaient && E.flag('estelsFets') && !E.te('estel_llorenc')) this.posarLlumEstel();
         if (this.llumEstel && E.te('estel_llorenc')) { this.llumEstel.forEach(o => o.destroy()); this.llumEstel = null; }
         if (!this.tripodeMuntat && (E.flag('telescopiMuntat'))) { this.tripodeMuntat = true; this.tripode.setTexture('telescopi_mon'); }
@@ -685,7 +686,7 @@ class ZonaDipositos extends ZonaBase {
     caureEstel(fet) {
         const { estelX: x, estelY: y } = DIP, cam = this.cameras.main, ui = this.ui();
         this.estelCaient = true;
-        ui.bloquejatFins = ui.time.now + 4500;
+        ui.bloquejatFins = ui.time.now + 60000;          // l'Ineu no es pot moure fins que acaba tota l'escena (es torna a obrir just abans de passar-li el torn)
         cam.stopFollow();
         cam.pan(x - 60, y + 120, 900, 'Sine.easeInOut');
         this.esperar(1000, () => {
@@ -708,7 +709,7 @@ class ZonaDipositos extends ZonaBase {
                     this.posarLlumEstel();
                     this.esperar(1100, () => {
                         cam.pan(this.ineu.x, this.ineu.y, 800, 'Sine.easeInOut');
-                        this.esperar(850, () => { cam.startFollow(this.ineu, false, 0.12, 0.12); this.estelCaient = false; if (fet) fet(); });
+                        this.esperar(850, () => { cam.startFollow(this.ineu, false, 0.12, 0.12); this.estelCaient = false; ui.bloquejatFins = ui.time.now + 200; if (fet) fet(); });
                     });
                 } });
         });
