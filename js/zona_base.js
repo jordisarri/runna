@@ -1583,24 +1583,35 @@ class ZonaBase extends Phaser.Scene {
     posarBoiraGeneral() {
         if (this.esInterior() || this.config.senseBoira) return;
         const dens = (BOIRA_ZONES[this.scene.key] || {}).dens || this.config.densitatBoira || 1;
-        const W = AMPLE / ZOOM_CAMERA + 4, H = (ALT - ALT_HUD) / ZOOM_CAMERA + 4, CY = (ALT - ALT_HUD) / 2;      // la càmera mira per una finestra més baixa que el llenç (sota el HUD): el centre és el d'aquesta finestra
         const parts = [];                                               // { o, alfa }: el que val cada peça amb la boira al màxim
         // La boira només baixa (cada pas de la història la fa marxar i mai no torna): si en aquesta zona ja és tan fluixa que no es veuria, no es crea res
-        // (el vel i els bancs de boira són objectes a pantalla completa amb transparència: pesen molt al mòbil)
         const nivell0 = nivellBoiraZona(this.scene.key);
-        const alfaVel = Math.min(0.34, 0.14 * dens), alfaBanc = 0.3 * Math.min(dens, 1.6);
-        if (alfaVel * nivell0 >= 0.08) {
-            const vel = this.add.rectangle(AMPLE / 2, CY, W, H, 0x3a1a55, 1).setScrollFactor(0).setDepth(90000).setAlpha(0);
-            parts.push({ o: vel, alfa: alfaVel });
-        }
-        if (this.textures.exists('boira') && alfaBanc * nivell0 >= 0.15) {
-            const n = Math.round(4 + 2 * dens);
+        // BOIRA A RAS DE TERRA (abans era un vel violeta a pantalla completa i uns bancs que passaven PER DAVANT de tot, i desllueixien les cares i els sprites): ara són bancs plans de boira,
+        // en coordenades de món i intercalats amb els personatges segons la y (depth = y + 2): els peus i el terra queden dins la boira, però els caps i els sprites es veuen nets.
+        // A més, una vinyeta lila suau només a les vores de la pantalla (el centre queda net).
+        const alfaBanc = 0.5 * Math.min(dens, 1.8) / 1.8 + 0.06, alfaVinyeta = 0.55 * Math.min(dens, 1.8) / 1.8 + 0.12;
+        if (this.textures.exists('boira') && alfaBanc * nivell0 >= 0.1) {
+            const A = this.config.amplada, Hm = this.config.alcada;
+            const n = Math.max(6, Math.min(64, Math.round(A * Hm / 240000 * 26 * dens / 1.8)));
+            let llavor = 7919 + A; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
             for (let i = 0; i < n; i++) {
-                const x = AMPLE / 2 + (i / (n - 1) - 0.5) * W * 0.9, y = CY + (((i * 37) % 7) / 7 - 0.5) * H * 0.9;
-                const b = this.add.image(x, y, 'boira').setTint(0xa878ec).setScrollFactor(0).setDepth(89990 + i * 0.01).setAlpha(0).setDisplaySize(W * 0.7, H * 0.28);
-                parts.push({ o: b, alfa: alfaBanc });
-                this.tweens.add({ targets: b, x: x + (i % 2 ? 60 : -60), duration: 9000 + i * 1300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+                const x = rnd() * A, y = 60 + rnd() * (Hm - 80), w = 340 + rnd() * 240, h = 96 + rnd() * 50;
+                const b = this.add.image(x, y, 'boira').setTint(0xcdb8f5).setDisplaySize(w, h).setDepth(y + 2).setAlpha(0).setAngle((rnd() - 0.5) * 6);
+                parts.push({ o: b, alfa: alfaBanc * (0.8 + 0.4 * rnd()) });
+                this.tweens.add({ targets: b, x: x + (i % 2 ? 80 : -80), duration: 11000 + rnd() * 9000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
             }
+        }
+        if (alfaVinyeta * nivell0 >= 0.06) {
+            if (!this.textures.exists('vinyeta_boira')) {
+                const c = document.createElement('canvas'); c.width = c.height = 256;
+                const g = c.getContext('2d'), gr = g.createRadialGradient(128, 128, 70, 128, 128, 182);
+                gr.addColorStop(0, 'rgba(58,26,85,0)'); gr.addColorStop(1, 'rgba(58,26,85,1)');
+                g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
+                this.textures.addCanvas('vinyeta_boira', c);
+            }
+            const v = this.add.image(AMPLE / 2, (ALT - ALT_HUD) / 2, 'vinyeta_boira').setScrollFactor(0).setDepth(90000).setAlpha(0)
+                .setDisplaySize(AMPLE + 4, (ALT - ALT_HUD) + 4);
+            parts.push({ o: v, alfa: alfaVinyeta });
         }
         if (!parts.length) return;
         let nivell = nivell0, objectiu = nivell, tw = null;
