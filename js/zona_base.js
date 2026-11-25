@@ -1618,24 +1618,23 @@ class ZonaBase extends Phaser.Scene {
 
     posarBoiraGeneral() {
         if (this.esInterior() || this.config.senseBoira) return;
-        const dens = (BOIRA_ZONES[this.scene.key] || {}).dens || this.config.densitatBoira || 1;
-        const parts = [];                                               // { o, alfa }: el que val cada peça amb la boira al màxim
+                const parts = [];                                               // { o, alfa }: el que val cada peça amb la boira al màxim
         // La boira només baixa (cada pas de la història la fa marxar i mai no torna): si en aquesta zona ja és tan fluixa que no es veuria, no es crea res
-        const nivell0 = nivellBoiraZona(this.scene.key), esp = espessorBoira(this.scene.key);
+        const nivell0 = nivellBoira(), esp = nivell0;        // els rius són IGUALS a tots els exteriors i s'esvaeixen alhora i al mateix ritme (el nivell general de la història; no depenen de la zona)
         // BOIRA A RAS DE TERRA, EN FORMA DE RIUS (abans era un vel violeta a pantalla completa i uns bancs que passaven PER DAVANT de tot, i desllueixien les cares i els sprites): cintes llargues i
         // sinuoses de boira, en coordenades de món, que corren molt lentament pel terra i s'intercalen amb els personatges segons la y (depth = y + 2): els peus queden dins la boira, però els
         // caps i els sprites es veuen nets. Es reparteixen en «carrils» (un cada 150 px de món): com més espessor (nivell de la història x densitat de la zona), més carrils plens i més segments per carril.
         // A més, una vinyeta lila suau només a les vores de la pantalla (el centre queda net).
-        const alfaRiu = 0.40 + 0.52 * Math.min(dens, 1.8) / 1.8, alfaVinyeta = 0.5 * Math.min(dens, 1.8) / 1.8 + 0.12;
+        const alfaRiu = 0.6, alfaVinyeta = 0.5;
         if (esp >= 0.06) {
             const A = this.config.amplada, Hm = this.config.alcada;
             let llavor = 7919 + A + Hm; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
-            const carrils = Math.max(3, Math.round((Hm - 100) / 150)), segs = Math.max(1, Math.ceil(A / 1000 * (0.4 + 0.9 * esp)));
+            const carrils = Math.max(4, Math.round((Hm - 100) / 120)), segs = Math.max(2, Math.ceil(A / 1000 * (0.9 + 0.9 * esp)));
             for (let c = 0; c < carrils; c++) {
-                if (rnd() > 0.3 + 0.8 * esp) continue;                               // els carrils buits: com menys espessor, més aire net entre rius
+                if (rnd() > 0.45 + 0.55 * esp) continue;                               // els carrils buits: com menys espessor, més aire net entre rius
                 for (let k = 0; k < segs; k++) {
                     const w = 950 + rnd() * 650, h = 200 + rnd() * 110, x = rnd() * A, y = 90 + (c + 0.5) * (Hm - 120) / carrils + (rnd() - 0.5) * 50;
-                    const im = this.add.image(x, y, this.textureRiuBoira(Math.floor(rnd() * 3))).setTint(0xcdb8f5).setDisplaySize(w, h).setDepth(y + 2).setAlpha(0)
+                    const im = this.add.image(x, y, this.textureRiuBoira(Math.floor(rnd() * 3))).setTint(0xb890f2).setDisplaySize(w, h).setDepth(y + 2).setAlpha(0)
                         .setFlipX(rnd() < 0.5).setFlipY(rnd() < 0.5).setAngle((rnd() - 0.5) * 5);
                     parts.push({ o: im, alfa: alfaRiu * (0.75 + 0.35 * rnd()) });
                     const dir = c % 2 ? 1 : -1;                                              // cada carril flueix en un sentit (alternant), com un riu
@@ -1648,7 +1647,7 @@ class ZonaBase extends Phaser.Scene {
             if (!this.textures.exists('vinyeta_boira')) {
                 const c = document.createElement('canvas'); c.width = c.height = 256;
                 const g = c.getContext('2d'), gr = g.createRadialGradient(128, 128, 70, 128, 128, 182);
-                gr.addColorStop(0, 'rgba(58,26,85,0)'); gr.addColorStop(1, 'rgba(58,26,85,1)');
+                gr.addColorStop(0, 'rgba(84,36,130,0)'); gr.addColorStop(1, 'rgba(84,36,130,1)');
                 g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
                 this.textures.addCanvas('vinyeta_boira', c);
             }
@@ -1661,7 +1660,7 @@ class ZonaBase extends Phaser.Scene {
         const posa = v => { nivell = v; parts.forEach(p => p.o.setAlpha(p.alfa * v)); };
         posa(nivell);
         this.time.addEvent({ delay: 700, loop: true, callback: () => {
-            const n = nivellBoiraZona(this.scene.key);
+            const n = nivellBoira();
             if (Math.abs(n - objectiu) < 0.001) return;
             objectiu = n;
             if (tw) tw.stop();
