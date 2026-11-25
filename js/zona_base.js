@@ -1625,13 +1625,13 @@ class ZonaBase extends Phaser.Scene {
         // sinuoses de boira, en coordenades de món, que corren molt lentament pel terra i s'intercalen amb els personatges segons la y (depth = y + 2): els peus queden dins la boira, però els
         // caps i els sprites es veuen nets. Es reparteixen en «carrils» (un cada 150 px de món): com més espessor (nivell de la història x densitat de la zona), més carrils plens i més segments per carril.
         // A més, una vinyeta lila suau només a les vores de la pantalla (el centre queda net).
-        const alfaRiu = 0.6, alfaVinyeta = 0.5;
+        const alfaRiu = 0.45, alfaVinyeta = 0.5;
         if (esp >= 0.06) {
             const A = this.config.amplada, Hm = this.config.alcada;
             let llavor = 7919 + A + Hm; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
-            const carrils = Math.max(4, Math.round((Hm - 100) / 120)), segs = Math.max(2, Math.ceil(A / 1000 * (0.9 + 0.9 * esp)));
+            const carrils = Math.max(3, Math.round((Hm - 100) / 170)), segs = Math.max(1, Math.ceil(A / 1000 * (0.5 + 0.5 * esp)));
             for (let c = 0; c < carrils; c++) {
-                if (rnd() > 0.45 + 0.55 * esp) continue;                               // els carrils buits: com menys espessor, més aire net entre rius
+                if (rnd() > 0.35 + 0.6 * esp) continue;                               // els carrils buits: com menys espessor, més aire net entre rius
                 for (let k = 0; k < segs; k++) {
                     const w = 950 + rnd() * 650, h = 200 + rnd() * 110, x = rnd() * A, y = 90 + (c + 0.5) * (Hm - 120) / carrils + (rnd() - 0.5) * 50;
                     const im = this.add.image(x, y, this.textureRiuBoira(Math.floor(rnd() * 3))).setTint(0xb890f2).setDisplaySize(w, h).setDepth(y + 2).setAlpha(0)
