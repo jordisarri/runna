@@ -1470,7 +1470,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[453] Germà Floresc:** Diuen que, posats, un noi pot moure una roda de carro com si fos de suro. Jo no ho he vist mai. Però mai no havia vist una boira com aquesta, tampoc.
 
-**[663] Germà Floresc:** I una altra cosa, fill: a l'Hostatgeria hi ha un mussol de pedra que no es deixa moure per ningú. Amb aquests guants, potser sí. Les sacerdotesses de dins guarden una Empara contra les boires que cremen: no baixis al fons sense ella.
+**[663] Germà Floresc:** I una altra cosa, fill: les sacerdotesses de l'Hostatgeria guarden una Empara contra les boires que cremen: no baixis al fons sense ella.
 
 *Altrament (per defecte):*
 
