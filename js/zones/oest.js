@@ -277,11 +277,19 @@ class ZonaCamiRov extends ZonaBase {
                 this.llum(mx + 40, n.y - 90, 0xfff4e0);                                                    // s'abracen
                 this.time.delayedCall(600, () => this.llum(mx + 40, n.y - 90, 0xffc8e0));
                 par.explode(14);
-                this.cara(n);
+                this.cara(n); this.nenaGira('mare');                                                  // (de perfil, mirant la mare)
                 this.camaraPla(mx + 45, n.y - 80, Z * 1.95, 2600, 'Sine.easeOut');                    // pla C: l'abraçada, tancat
                 this.time.delayedCall(1300, fet);
             } });
         });
+    }
+
+    // La nena mira la mare (de perfil, amb el primer fotograma del full de caminar, girat cap a l'esquerra) o torna a mirar l'Ineu (el dibuix de cara de sempre)
+    nenaGira(cap) {
+        const n = this.nena;
+        if (!n || !n.active) return;
+        if (cap === 'mare' && this.textures.exists('nena_trenes_camina')) n.setTexture('nena_trenes_camina', 0).setFlipX(true);
+        else n.setTexture('nena_trenes').setFlipX(true);
     }
 
     // Després de la frase de la mare: s'acaben les espurnes, la mare es queda al costat de la nena (callada, tranquil·la) i la càmera s'obre per tornar a abastar els tres

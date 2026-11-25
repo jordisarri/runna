@@ -1460,11 +1460,13 @@ const DIALEGS = {
                 { fer: (z, fet) => z.mareApareix(fet) },
                 { qui: "La mare", text: "Ja t'he trobat, filla. Perdona que hagi trigat tant." },
                 { fer: (z, fet) => z.mareSeQueda(fet) },
+                { fer: (z, fet) => { z.nenaGira('ineu'); fet(); } },          // (li parla a l'Ineu: el mira)
                 { qui: "Nena de les Trenes", text: "Ja no tinc por. M'ha lligat les trenes, com abans. Gràcies, monjo." },
                 { qui: "Nena de les Trenes", text: "L'altre llaç és per a tu. Guarda'l: protegeix els qui es perden." },
                 { avis: "Has obtingut el LLAÇ DE LA NENA.", obj: 'cinta_nena' },
                 { qui: "Nena de les Trenes", text: "Aguantarà el primer cop que rebis a cada lloc nou. Ara ja no et quedaràs sol." },
                 { qui: "Ineu", text: "Ni tu. Ja no estaràs mai més sola." },
+                { fer: (z, fet) => { z.nenaGira('mare'); fet(); } },          // (ara es parlen entre elles: es miren)
                 { qui: "Nena de les Trenes", text: "Mare, anem a casa?" },
                 { qui: "La mare", text: "Anem, filla." },
                 { qui: "Nena de les Trenes", text: "Adéu, monjo. Canta fort." },
