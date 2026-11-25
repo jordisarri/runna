@@ -89,6 +89,7 @@ const BOIRA_ZONES = {
     ZonaJardi: { dens: 0.8, neta: E => E.flag('mongesTrobades'), resta: 0.35 },                     // l'Hostatgeria, quan les sacerdotesses són lliures
     ZonaCelles: { dens: 1.0 }, ZonaTaverna: { dens: 1.0 }, ZonaCami: { dens: 1.0 }, ZonaCamiRov: { dens: 0.9 }, ZonaRovellonera: { dens: 0.9 },
     ZonaErmita: { dens: 0.8 }, ZonaEra: { dens: 0.8 }, ZonaGabriel: { dens: 0.6 }, ZonaDipositos: { dens: 0.6 }, ZonaSantAntoni: { dens: 0.6 }, ZonaGeorgi: { dens: 0.6 },
+    ZonaGirgolesFora: { dens: 1.1 },                                                                  // a prop del focus de les Gírgoles
     ZonaTiller: { dens: 0.4 }, ZonaCabana: { dens: 0.4 }                                              // llocs protegits: l'aire gairebé net
 };
 function nivellBoiraZona(clau) {
@@ -96,6 +97,12 @@ function nivellBoiraZona(clau) {
     const z = BOIRA_ZONES[clau];
     if (v > 0 && z && z.neta && z.neta(Estat)) v *= (z.resta == null ? 0.3 : z.resta);
     return v;
+}
+
+// ESPESSOR de la boira d'una zona (0-1): el nivell general de la història x la densitat de la zona (1,8 = el màxim, Plaça i Monestir). Decideix quants rius de boira hi ha i com de visibles són.
+function espessorBoira(clau) {
+    const d = (BOIRA_ZONES[clau] || {}).dens || 1;
+    return nivellBoiraZona(clau) * Math.min(d, 1.8) / 1.8;
 }
 
 // Un punt interactiu sense res a dir (diàleg buit i sense efecte) no és interactiu. Només es mira als diàlegs del registre DIALEGS (funcions pures
@@ -1584,27 +1591,70 @@ class ZonaBase extends Phaser.Scene {
     // Una sola boira per a tot el Santuari: un vel violeta i uns bancs de boira que passen per davant de la càmera a totes les zones
     // d'exterior. Va marxant a poc a poc a mesura que es resolen les missions (BOIRA_PASSOS) i s'esvaeix del tot quan cau l'Ocellaire.
     // Si una missió es resol dins de la mateixa zona, es veu com la boira s'aclareix. config.densitatBoira: més espessa a prop d'on neix.
+    // Textura d'un RIU de boira (una sola vegada): una cinta sinuosa i llarga de boira blanca (es tenyeix de lila al joc), més gruixuda al mig i que s'esfilagarsa a les puntes
+    textureRiuBoira(v) {
+        const clau = 'boira_riu' + v;
+        if (this.textures.exists(clau)) return clau;
+        const W = 1024, H = 192, c = document.createElement('canvas'); c.width = W; c.height = H;
+        const g = c.getContext('2d');
+        let llavor = 101 + v * 977; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+        const fase = v * 1.9, L = 620 + v * 170;
+        for (let k = 0; k < 220; k++) {
+            const x = rnd() * W, t = x / W, taper = Math.pow(Math.sin(Math.PI * t), 0.7);
+            const cy = H / 2 + Math.sin(x / L * Math.PI * 2 + fase) * 30 * taper + (rnd() - 0.5) * 22 * taper;
+            const r = (22 + rnd() * 40) * (0.35 + 0.65 * taper);
+            const gr = g.createRadialGradient(x, cy, 0, x, cy, r);
+            gr.addColorStop(0, 'rgba(255,255,255,' + (0.30 * taper + 0.04) + ')'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+            g.fillStyle = gr; g.beginPath(); g.ellipse(x, cy, r * 1.9, r * 0.8, (rnd() - 0.5) * 0.3, 0, Math.PI * 2); g.fill();
+        }
+        for (let k = 0; k < 26; k++) {                                         // fils de boira que s'esmunyen
+            const x = rnd() * W * 0.8, t = x / W, taper = Math.pow(Math.sin(Math.PI * Math.min(1, t + 0.1)), 0.7), cy = H / 2 + (rnd() - 0.5) * 70 * taper;
+            const gr = g.createLinearGradient(x, 0, x + 260, 0); gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(0.5, 'rgba(255,255,255,' + 0.09 * taper + ')'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+            g.fillStyle = gr; g.beginPath(); g.ellipse(x + 130, cy, 130, 5 + rnd() * 6, (rnd() - 0.5) * 0.1, 0, Math.PI * 2); g.fill();
+        }
+        this.textures.addCanvas(clau, c);
+        return clau;
+    }
+
     posarBoiraGeneral() {
         if (this.esInterior() || this.config.senseBoira) return;
         const dens = (BOIRA_ZONES[this.scene.key] || {}).dens || this.config.densitatBoira || 1;
-        const W = AMPLE / ZOOM_CAMERA + 4, H = (ALT - ALT_HUD) / ZOOM_CAMERA + 4, CY = (ALT - ALT_HUD) / 2;      // la càmera mira per una finestra més baixa que el llenç (sota el HUD): el centre és el d'aquesta finestra
         const parts = [];                                               // { o, alfa }: el que val cada peça amb la boira al màxim
         // La boira només baixa (cada pas de la història la fa marxar i mai no torna): si en aquesta zona ja és tan fluixa que no es veuria, no es crea res
-        // (el vel i els bancs de boira són objectes a pantalla completa amb transparència: pesen molt al mòbil)
-        const nivell0 = nivellBoiraZona(this.scene.key);
-        const alfaVel = Math.min(0.34, 0.14 * dens), alfaBanc = 0.3 * Math.min(dens, 1.6);
-        if (alfaVel * nivell0 >= 0.08) {
-            const vel = this.add.rectangle(AMPLE / 2, CY, W, H, 0x3a1a55, 1).setScrollFactor(0).setDepth(90000).setAlpha(0);
-            parts.push({ o: vel, alfa: alfaVel });
-        }
-        if (this.textures.exists('boira') && alfaBanc * nivell0 >= 0.15) {
-            const n = Math.round(4 + 2 * dens);
-            for (let i = 0; i < n; i++) {
-                const x = AMPLE / 2 + (i / (n - 1) - 0.5) * W * 0.9, y = CY + (((i * 37) % 7) / 7 - 0.5) * H * 0.9;
-                const b = this.add.image(x, y, 'boira').setTint(0xa878ec).setScrollFactor(0).setDepth(89990 + i * 0.01).setAlpha(0).setDisplaySize(W * 0.7, H * 0.28);
-                parts.push({ o: b, alfa: alfaBanc });
-                this.tweens.add({ targets: b, x: x + (i % 2 ? 60 : -60), duration: 9000 + i * 1300, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+        const nivell0 = nivellBoiraZona(this.scene.key), esp = espessorBoira(this.scene.key);
+        // BOIRA A RAS DE TERRA, EN FORMA DE RIUS (abans era un vel violeta a pantalla completa i uns bancs que passaven PER DAVANT de tot, i desllueixien les cares i els sprites): cintes llargues i
+        // sinuoses de boira, en coordenades de món, que corren molt lentament pel terra i s'intercalen amb els personatges segons la y (depth = y + 2): els peus queden dins la boira, però els
+        // caps i els sprites es veuen nets. Es reparteixen en «carrils» (un cada 150 px de món): com més espessor (nivell de la història x densitat de la zona), més carrils plens i més segments per carril.
+        // A més, una vinyeta lila suau només a les vores de la pantalla (el centre queda net).
+        const alfaRiu = 0.40 + 0.52 * Math.min(dens, 1.8) / 1.8, alfaVinyeta = 0.5 * Math.min(dens, 1.8) / 1.8 + 0.12;
+        if (esp >= 0.06) {
+            const A = this.config.amplada, Hm = this.config.alcada;
+            let llavor = 7919 + A + Hm; const rnd = () => { llavor = (llavor * 16807) % 2147483647; return llavor / 2147483647; };
+            const carrils = Math.max(3, Math.round((Hm - 100) / 150)), segs = Math.max(1, Math.ceil(A / 1000 * (0.4 + 0.9 * esp)));
+            for (let c = 0; c < carrils; c++) {
+                if (rnd() > 0.3 + 0.8 * esp) continue;                               // els carrils buits: com menys espessor, més aire net entre rius
+                for (let k = 0; k < segs; k++) {
+                    const w = 950 + rnd() * 650, h = 200 + rnd() * 110, x = rnd() * A, y = 90 + (c + 0.5) * (Hm - 120) / carrils + (rnd() - 0.5) * 50;
+                    const im = this.add.image(x, y, this.textureRiuBoira(Math.floor(rnd() * 3))).setTint(0xcdb8f5).setDisplaySize(w, h).setDepth(y + 2).setAlpha(0)
+                        .setFlipX(rnd() < 0.5).setFlipY(rnd() < 0.5).setAngle((rnd() - 0.5) * 5);
+                    parts.push({ o: im, alfa: alfaRiu * (0.75 + 0.35 * rnd()) });
+                    const dir = rnd() < 0.5 ? 1 : -1;
+                    this.tweens.add({ targets: im, x: x + dir * (140 + rnd() * 160), duration: 16000 + rnd() * 14000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+                    this.tweens.add({ targets: im, y: y + (rnd() - 0.5) * 24, scaleY: im.scaleY * (0.88 + rnd() * 0.22), duration: 7000 + rnd() * 6000, yoyo: true, repeat: -1, ease: 'Sine.easeInOut', delay: rnd() * 3000 });
+                }
             }
+        }
+        if (alfaVinyeta * nivell0 >= 0.06) {
+            if (!this.textures.exists('vinyeta_boira')) {
+                const c = document.createElement('canvas'); c.width = c.height = 256;
+                const g = c.getContext('2d'), gr = g.createRadialGradient(128, 128, 70, 128, 128, 182);
+                gr.addColorStop(0, 'rgba(58,26,85,0)'); gr.addColorStop(1, 'rgba(58,26,85,1)');
+                g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
+                this.textures.addCanvas('vinyeta_boira', c);
+            }
+            const v = this.add.image(AMPLE / 2, (ALT - ALT_HUD) / 2, 'vinyeta_boira').setScrollFactor(0).setDepth(90000).setAlpha(0)
+                .setDisplaySize(AMPLE + 4, (ALT - ALT_HUD) + 4);
+            parts.push({ o: v, alfa: alfaVinyeta });
         }
         if (!parts.length) return;
         let nivell = nivell0, objectiu = nivell, tw = null;
