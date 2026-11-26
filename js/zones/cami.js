@@ -30,7 +30,9 @@ class ZonaCami extends ZonaBase {
             this.brilloColumna(i + 1, x, y - 73);   // a l'alçada del signe (plafó de la columna)
         }
 
-        [[700, 450], [1250, 450], [1950, 440], [2500, 460]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[700, 450], [2500, 460]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        this.enemic('cargol', 1250, 450);
+        this.enemic('visitanta', 1950, 440);        // una turista trastocada per la boira, al mig del camí
         this.cartell(2650, 560, DIALEGS.cartellCami);
         // Mur d'arbres del nord: només a x=1380 hi ha dos arbres més separats, i per aquí es puja a la cabana (sense marcar-ho)
         this.muralla(0, 140, 1160, 140, 128);

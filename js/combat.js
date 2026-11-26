@@ -219,10 +219,10 @@ const ESC_PASTOR = MIDES_ALDREU.base.pastor * MA('pastor');          // (js/mide
 const ESC_CAMINA = ESC_PASTOR * 227 / 342 * MA('camina');
 // On són els peus del Pastor dins de cada dibuix, respecte del centre horitzontal (px del dibuix): l'ombra va allà, no al centre del dibuix
 const PEUS_X_PASTOR = { pastor_apunta: -19, pastor_ataca: -68, pastor_enfadat: -4, pastor_derrota: 13, pastor_boira: -4 };
-const ENEMICS_SOLIDS = ['escolopendra', 'gripau', 'ovella', 'pastor', 'visitant'];
+const ENEMICS_SOLIDS = ['cargol', 'escolopendra', 'gripau', 'ovella', 'pastor', 'visitant', 'visitanta'];
 const ENEMICS = {
     escolopendra: {
-        tex: 'escolopendra', vida: 2, vel: 95, mal: 1, radi: 20, cos: [40, 16], ombra: 0, centrat: true,   // l'ombra ja és al dibuix; vista de dalt, el cos és al mig
+        tex: 'escolopendra', vida: 3, vel: 95, mal: 1, radi: 20, cos: [40, 16], ombra: 0, centrat: true,   // l'ombra ja és al dibuix; vista de dalt, el cos és al mig
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             if (ara > e.canviFins) {
@@ -250,7 +250,7 @@ const ENEMICS = {
     },
 
     gripau: {
-        tex: 'gripau', vida: 2, vel: 250, mal: 1, radi: 22, cos: [36, 22], ombra: 0.38,
+        tex: 'gripau', vida: 3, vel: 250, mal: 1, radi: 22, cos: [36, 22], ombra: 0.38,
         // Només fa mal mentre salta; en aterrar queda quiet i vulnerable
         perill: e => e.estat === 'salt',
         ia(z, e, ara) {
@@ -275,7 +275,7 @@ const ENEMICS = {
 
     // Bolet brut: estàtic; carrega espores (cercle verd) i les deixa anar a l'àrea
     bolet: {
-        tex: 'bolet', vida: 2, vel: 0, mal: 1, radi: 22, cos: [34, 18], ombra: 0.35,
+        tex: 'bolet', vida: 3, vel: 0, mal: 1, radi: 22, cos: [34, 18], ombra: 0.35,
         perill: () => false,            // el mal el fan les espores, no el contacte
         ia(z, e, ara) {
             e.spr.body.setVelocity(0);
@@ -711,7 +711,7 @@ const ENEMICS = {
     // Ratpenat de boira (Gírgoles): penja cap per avall amb les ales plegades; quan l'Ineu s'acosta, es desperta amb un xiscle ultrasònic,
     // desplega les ales i es llança en picat fent ziga-zaga abans de tornar a revoltar
     ratpenat: {
-        tex: 'ratpenat', vida: 2, vel: 215, mal: 1, radi: 22, cos: [36, 22], ombra: 0.22, centrat: true,
+        tex: 'ratpenat', vida: 3, vel: 215, mal: 1, radi: 22, cos: [36, 22], ombra: 0.22, centrat: true,
         preparar: z => {
             if (z.textures.exists('ratpenat_penja') || typeof pintarRatpenatFotograma !== 'function') return;
             const W = 84 * RES, H = Math.round(84 * 0.65 * RES);
@@ -784,7 +784,7 @@ const ENEMICS = {
     },
 
     visitant: {
-        tex: 'visitant_zombi', texAlt: 'visitant', escala: 0.85, vida: 4, vel: 58, mal: 1, radi: 28, cos: [52, 28], ombra: 0.55, claredat: 1.35, saturacio: 0.5,
+        visitant: true, tex: 'visitant_zombi', texAlt: 'visitant', escala: 0.85, vida: 4, vel: 58, mal: 1, radi: 28, cos: [52, 28], ombra: 0.55, claredat: 1.35, saturacio: 0.5,
         ia(z, e, ara) {
             const jo = z.ineu.body.center, c = e.spr.body.center;
             const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
@@ -797,10 +797,10 @@ const ENEMICS = {
                 vx = e.pausa ? 0 : Math.cos(e.ang) * this.vel * 0.5; vy = e.pausa ? 0 : Math.sin(e.ang) * this.vel * 0.5;
             }
             e.spr.body.setVelocity(vx, vy);
-            if (e.spr.texture.key === 'visitant_zombi' && z.anims.exists('visitant_camina')) {
+            if (e.spr.texture.key === this.tex && z.anims.exists(this.tex === 'visitant_zombi' ? 'visitant_camina' : 'visitanta_camina')) {
                 // El full és de cara i serveix per a totes les direccions (sense girar-lo); s'atura quan es queda quiet
                 const quiet = vx === 0 && vy === 0;
-                if (!quiet && !e.spr.anims.isPlaying) e.spr.play('visitant_camina', true);
+                if (!quiet && !e.spr.anims.isPlaying) e.spr.play(this.tex === 'visitant_zombi' ? 'visitant_camina' : 'visitanta_camina', true);
                 else if (quiet && e.spr.anims.isPlaying) e.spr.anims.pause();
                 else if (!quiet && e.spr.anims.isPaused) e.spr.anims.resume();
             } else if (Math.abs(vx) > 5) e.spr.setFlipX(vx < 0);
@@ -808,6 +808,49 @@ const ENEMICS = {
         }
     }
 };
+// CARGOL DE BOIRA: arrossega's a poc a poc cap a l'Ineu. Quan és a prop (o quan el piquen) s'amaga a la closca (rebota tots els cops i no fa mal) i, al cap d'un moment,
+// en surt i queda al descobert un temps: és la finestra per colpejar-lo. Vida 2 (bastó 2 cops, branca 1, Runna 1).
+ENEMICS.cargol = {
+    tex: 'cargol_boira', texAlt: 'cargol_closca', escala: 0.5, vida: 2, vel: 34, mal: 1, radi: 26, cos: [56, 26], ombra: 0.5, robust: true,
+    perill: e => e.estat === 'arrossega' || e.estat === 'surt',
+    tancat: e => e.estat === 'closca' || e.estat === 'tanca',
+    alCop(z, e, ara) { e.estat = 'closca'; e.fins = ara + 1100; e.spr.body.setVelocity(0); },
+    ia(z, e, ara) {
+        const jo = z.ineu.body.center, c = e.spr.body.center;
+        const dist = Phaser.Math.Distance.Between(c.x, c.y, jo.x, jo.y);
+        const mostra = clau => { if (e.spr.texture.key !== clau && z.textures.exists(clau)) e.spr.setTexture(clau); };
+        const camina = () => { mostra('cargol_boira'); if (z.anims.exists('cargol_camina') && !e.spr.anims.isPlaying) e.spr.play('cargol_camina', true); };
+        if (e.estat === 'closca' || e.estat === 'tanca') {                       // dins la closca: quiet, sense mal i sense que el cop li faci res
+            e.spr.body.setVelocity(0);
+            if (e.spr.anims.isPlaying) e.spr.anims.stop();
+            mostra('cargol_closca');
+            if (ara > e.fins) { e.estat = 'surt'; e.fins = ara + 1900; e.spr.setTint(0xe8d8ff); z.time.delayedCall(180, () => { if (e.spr.active) e.spr.clearTint(); }); }
+            return;
+        }
+        if (e.estat === 'surt') {                                              // al descobert i vulnerable: es mou molt a poc cap a l'Ineu
+            camina();
+            const a = Math.atan2(jo.y - c.y, jo.x - c.x);
+            e.spr.body.setVelocity(Math.cos(a) * this.vel * 0.6, Math.sin(a) * this.vel * 0.6);
+            if (Math.abs(jo.x - c.x) > 6) e.spr.setFlipX(jo.x < c.x);
+            if (ara > e.fins) { e.estat = 'arrossega'; }
+            return;
+        }
+        // arrossega: se't va acostant; a prop, es tanca a la closca
+        camina();
+        if (dist < 150) { e.estat = 'closca'; e.fins = ara + 1500; e.spr.body.setVelocity(0); Sfx.escut(); return; }
+        if (dist < 520) {
+            const a = Math.atan2(jo.y - c.y, jo.x - c.x);
+            e.spr.body.setVelocity(Math.cos(a) * this.vel, Math.sin(a) * this.vel);
+            if (Math.abs(jo.x - c.x) > 6) e.spr.setFlipX(jo.x < c.x);
+        } else {
+            if (ara > e.canviFins) { e.ang = Math.random() * Math.PI * 2; e.canviFins = ara + 2000 + Math.random() * 2000; e.pausa = Math.random() < 0.4; }
+            e.spr.body.setVelocity(e.pausa ? 0 : Math.cos(e.ang) * this.vel * 0.5, e.pausa ? 0 : Math.sin(e.ang) * this.vel * 0.5);
+            if (!e.pausa && Math.abs(Math.cos(e.ang)) > 0.2) e.spr.setFlipX(Math.cos(e.ang) < 0);
+        }
+    }
+};
+// La visitant (turista zombi dona): el mateix enemic que el visitant, amb el seu propi full de caminar
+ENEMICS.visitanta = Object.assign({}, ENEMICS.visitant, { tex: 'visitanta_zombi', texAlt: 'visitant' });
 ENEMICS_SOLIDS.forEach(k => { if (ENEMICS[k]) ENEMICS[k].solid = true; });
 
 Object.assign(ZonaBase.prototype, {
@@ -1029,6 +1072,7 @@ Object.assign(ZonaBase.prototype, {
             // Cada boss té la seva arma (el Pastor, la branca del Til·ler; l'Home del Raïm i l'Ocellaire, Runna): amb una altra, el cop rebota.
             // (La història ja ho garanteix, perquè l'Ineu sempre fa servir la millor arma que té; això n'és la xarxa de seguretat.)
             if (e.def.arma && e.def.arma !== armaIneu()) { this.copRebutjat(e, d); return; }
+            if (e.def.tancat && e.def.tancat(e)) { this.copRebutjat(e, d); return; }          // el cargol dins la closca: el cop rebota
             if (e.def.cap && (!tocats.some(c => c.cap) || (this.capDe(e).nomesCansat && e.estat !== 'cansat'))) { this.copRebutjat(e, d); return; }
             // Pausa de l'Ocellaire ja esgotada (3 cops fets): els cops que queden rebotaran fins que es tanqui
             if ((e.tipus === 'ocellaire' || e.tipus === 'raim') && e.estat === 'cansat' && e.copsRebuts >= e.def.copsPausa) { this.copRebutjat(e, d); return; }
@@ -1127,7 +1171,7 @@ Object.assign(ZonaBase.prototype, {
     },
     // El cop ha caigut al cos, no al cap: no fa mal
     copRebutjat(e, d) {
-        const q = this.puntsCop(e)[2], ara = this.time.now;
+        const pq = this.puntsCop(e), q = pq[2] || pq[0], ara = this.time.now;
         if (e.tipus === 'ocellaire' || e.tipus === 'raim') { this.copRebutjatOcellaire(e, d, q, ara); return; }       // rebot gris (no es confon amb un cop encertat)
         Sfx.escut();
         this.cameras.main.shake(70, 0.0015, true);
@@ -1194,6 +1238,7 @@ Object.assign(ZonaBase.prototype, {
         this.hitStop(mort ? 120 : dany > 1 ? 85 : 55);
         this.cameras.main.shake(mort ? 170 : 110, mort ? 0.008 : 0.004, true);
         if (e.def.barra) this.ui().vidaBoss(e.vida / e.def.vida);
+        if (!mort && e.def.alCop) e.def.alCop(this, e, ara);          // (el cargol, en rebre un cop, s'amaga a la closca)
         if (mort) this.derrotar(e);
     },
 
@@ -1268,13 +1313,13 @@ Object.assign(ZonaBase.prototype, {
         e.spr.body.enable = false;
         const c = e.spr.body.center;
         Estat.dades.flags.derrotats = (Estat.dades.flags.derrotats || 0) + 1;
-        if (e.tipus !== 'visitant') this.boiraPuf(c.x, c.y);               // (els visitants cauen adormits, sense esclat)
+        if (!e.def.visitant) this.boiraPuf(c.x, c.y);               // (els visitants cauen adormits, sense esclat)
         Sfx.derrota();
         this.tweens.killTweensOf(e.spr);
-        if (e.tipus !== 'visitant') this.ondaMort(c.x, c.y);
+        if (!e.def.visitant) this.ondaMort(c.x, c.y);
         if (e.def.alDerrotar) { e.def.alDerrotar(this, e); return; }
 
-        if (e.tipus === 'visitant') {
+        if (e.def.visitant) {
             this.caigudaVisitant(e);
         } else {
             this.tweens.add({ targets: e.spr, alpha: 0, duration: 320, onComplete: () => this.retirar(e) });

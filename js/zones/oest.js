@@ -101,9 +101,11 @@ class ZonaRovellonera extends ZonaBase {
 
         // Enemics: bolets bruts i escolopendres
         const bolets = [[[420, 380], [1200, 760]], [[500, 300], [1150, 380], [650, 850]], [[420, 420], [1100, 300], [500, 820]]][pas];
-        const escolo = [[[1150, 780], [450, 780]], [[1250, 760]], [[1250, 480], [300, 560]]][pas];
+        const escolo = [[[1150, 780]], [[1250, 760]], [[1250, 480]]][pas];
+        const cargols = [[[450, 780]], [[700, 640]], [[300, 560]]][pas];
         bolets.forEach(([x, y]) => this.enemic('bolet', x, y));
         escolo.forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        cargols.forEach(([x, y]) => this.enemic('cargol', x, y));
 
         this.boiraAmbient(800, 550, 700, 300, 1.2);
         this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x1a0a30, 0.14).setScrollFactor(0).setDepth(90000);
@@ -373,7 +375,9 @@ class ZonaCamiRov extends ZonaBase {
         this.roca1 = this.pedraMobil(480, 1215, 'llac1', 110, 0, null, () => Estat.flag('nenaVista'));
 
         // Animalets i bolets
-        [[2400, 320], [1730, 330], [1000, 660], [450, 1210]].forEach(([x, y]) => this.enemic('escolopendra', x, y));          // (cap enemic a prop de la Nena de les Trenes (1560, 670): entorpeix la conversa)
+        [[2400, 320], [450, 1210]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        this.enemic('cargol', 1730, 330);
+        this.enemic('visitant', 1000, 660);          // (cap enemic a prop de la Nena de les Trenes (1560, 670): entorpeix la conversa)
         [[2100, 620], [1200, 460], [700, 1060]].forEach(([x, y]) => this.enemic('bolet', x, y));
 
         this.boiraAmbient(900, 900, 400, 160, 1);
@@ -440,7 +444,9 @@ class ZonaGabriel extends ZonaBase {
         // Pins joves i arbustos prims vora la capella (com a la foto): un turó obert, amb poc arbre
         [[70, 690, 0.5], [740, 560, 0.45]].forEach(([x, y, e]) => this.posar('arbre', x, y, { escala: e, col: { w: 18, h: 10 } }));
         [[400, 900], [950, 760]].forEach(([x, y]) => this.enemic('bolet', x, y));
-        [[400, 300], [1250, 300], [800, 900]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        this.enemic('escolopendra', 400, 300);
+        this.enemic('cargol', 1250, 300);
+        this.enemic('visitanta', 800, 900);
 
         this.sortida(700, 0, 200, 14, 'ZonaRovellonera', 'gabriel');
         this.sortida(1586, 650, 14, 130, 'ZonaDipositos', 'gabriel');
@@ -659,7 +665,9 @@ class ZonaDipositos extends ZonaBase {
         this.cartell(230, 500, () => ({ pagines: [{ qui: 'Cartell', text: '→ Dolmen\n← Ermita de Sant Gabriel' }] }));
 
         this.arbres([[100, 150], [250, 90], [800, 100], [1450, 140], [1350, 900], [1500, 960], [660, 820]]);      //
-        [[1250, 800], [1050, 880], [900, 820]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        this.enemic('escolopendra', 1250, 800);
+        this.enemic('cargol', 1050, 880);
+        this.enemic('visitant', 900, 820);
         [[330, 440], [1290, 440]].forEach(([x, y]) => this.enemic('gripau', x, y));       // gripaus: a prop de l'aigua dels dipòsits
 
         // Cel de nit estrellat sobre el paisatge

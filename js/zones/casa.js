@@ -1417,7 +1417,8 @@ class ZonaPassadis extends ZonaCasaBase {
 
         // Els animalets del cementiri esquerdat, abans i després del mur
         if (!Estat.flag('passadisNet')) {
-            [[330, 1150], [470, 1000], [350, 880], [440, 520], [340, 330]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+            [[330, 1150], [470, 1000], [440, 520], [340, 330]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+            this.enemic('visitant', 350, 880);
         }
 
         this.add.rectangle(AMPLE / 2, (ALT - ALT_HUD) / 2, AMPLE / ZOOM_CAMERA + 4, (ALT - ALT_HUD) / ZOOM_CAMERA + 4, 0x000018, 0.12).setScrollFactor(0).setDepth(80000);

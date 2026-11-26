@@ -348,6 +348,9 @@ const Grafics = {
         });
         if (part === 'inici') return;
         scene.load.spritesheet('visitant_zombi', 'assets/enemics/visitant_zombi.webp', { frameWidth: 127, frameHeight: 209 });      // el visitant (turista zombi) caminant, de cara (4x4 fotogrames): serveix per a totes les direccions
+        scene.load.spritesheet('visitanta_zombi', 'assets/enemics/visitanta_zombi.webp', { frameWidth: 127, frameHeight: 209 });      // la visitant (turista zombi dona): el mateix cicle de caminar de cara, 16 fotogrames
+        scene.load.spritesheet('cargol_boira', 'assets/enemics/cargol_boira.webp', { frameWidth: 250, frameHeight: 190 });      // el cargol de boira caminant (4x2 fotogrames, cap a la dreta)
+        scene.load.image('cargol_closca', 'assets/enemics/cargol_closca.webp');      // el cargol tancat a la closca (la mateixa cel·la de 250x190, peus a baix)
         scene.load.spritesheet('pallofa_cami', 'assets/personatges/pallofa_cami.webp', { frameWidth: 135, frameHeight: 140 });      // el Pallofa caminant cap a la dreta (4x4 fotogrames); es gira per anar cap a l'esquerra
         scene.load.spritesheet('pare_jorda_camina', 'assets/personatges/pare_jorda_camina.webp', { frameWidth: 200, frameHeight: 290 });
         // Fulls d'animació del Pastor de la Boira (boss de la Cirosa): quadrícula de fotogrames: 384 x 384 el full de caminar (alta resolució, vegeu eines/fer_pastor_camina_hd.py); si no hi són, es veu el dibuix fix (vegeu docs/PROMPTS_GRAFICS.md)
@@ -620,6 +623,12 @@ const Grafics = {
         // El visitant (turista trastocat per la boira): cicle de caminar de 16 fotogrames, el mateix per a totes les direccions
         if (!scene.anims.exists('visitant_camina') && scene.textures.exists('visitant_zombi') && scene.textures.get('visitant_zombi').frameTotal > 2) {
             scene.anims.create({ key: 'visitant_camina', frames: scene.anims.generateFrameNumbers('visitant_zombi', { start: 0, end: 15 }), frameRate: 13, repeat: -1 });
+        }
+        if (!scene.anims.exists('cargol_camina') && scene.textures.exists('cargol_boira') && scene.textures.get('cargol_boira').frameTotal > 2) {
+            scene.anims.create({ key: 'cargol_camina', frames: scene.anims.generateFrameNumbers('cargol_boira', { start: 0, end: 7 }), frameRate: 6, repeat: -1 });
+        }
+        if (!scene.anims.exists('visitanta_camina') && scene.textures.exists('visitanta_zombi') && scene.textures.get('visitanta_zombi').frameTotal > 2) {
+            scene.anims.create({ key: 'visitanta_camina', frames: scene.anims.generateFrameNumbers('visitanta_zombi', { start: 0, end: 15 }), frameRate: 13, repeat: -1 });
         }
         if (!scene.anims.exists('pare_jorda_camina') && scene.textures.exists('pare_jorda_camina')) {
             scene.anims.create({ key: 'pare_jorda_camina', frames: scene.anims.generateFrameNumbers('pare_jorda_camina', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });

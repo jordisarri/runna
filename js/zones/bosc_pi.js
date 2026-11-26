@@ -113,7 +113,9 @@ class ZonaBoscPi extends ZonaBase {
         if (!Estat.flag('piObert')) this.posarBarrera();
 
         // Enemics: només fora de la clariana, a banda i banda del pi
-        [[2450, 330], [2150, 640], [700, 620], [350, 580]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[2450, 330], [350, 580]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        this.enemic('cargol', 2150, 640);
+        this.enemic('visitanta', 700, 620);
         [[2300, 760], [2450, 520], [550, 760]].forEach(([x, y]) => this.enemic('bolet', x, y));
         this.boiraAmbient(2200, 640, 360, 80, 0.8);
         this.boiraAmbient(500, 640, 360, 80, 0.8);

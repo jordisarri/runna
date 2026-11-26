@@ -1502,7 +1502,9 @@ class ZonaBosc extends ZonaBase {
             }
         }
 
-        [[600, 400], [1300, 300], [1200, 900], [1550, 450]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        [[600, 400], [1550, 450]].forEach(([x, y]) => this.enemic('escolopendra', x, y));
+        this.enemic('cargol', 1300, 300);
+        this.enemic('visitanta', 1200, 900);
         [[450, 720], [1400, 720]].forEach(([x, y]) => this.enemic('bolet', x, y));        // bolets: al bosc
         // El cartell, a la vora del camí d'entrada, en una zona sense arbres que el tapin
         this.cartell(1520, 600, DIALEGS.cartellBosc);
