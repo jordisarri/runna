@@ -1115,7 +1115,18 @@ class ZonaBase extends Phaser.Scene {
     // fins a la seva mà i hi queda, brillant, fins que es crida ineuBaixa() (la UI ho fa en passar la pàgina d'avís { avis, obj: 'id' }). Sona la fanfara.
     // Si no es pot (no hi ha el dibuix, l'Ineu és ocult, ja alça una altra cosa), no fa res: l'avís es mostra igualment. Assegut en un banc sí que es pot (el Galf et dona
     // la clau): el dibuix de l'Ineu dret alça el braç al lloc del seient i, en acabar, torna el de l'Ineu assegut: no s'aixeca del banc (this.assegut no es toca).
+    // El cofre del punt d'interacció passa a obert JUST quan l'Ineu en treu l'objecte (abans es feia en tancar el diàleg i el cofre es veia tancat darrere d'ell)
+    obrirCofreDelPunt() {
+        const pt = this.puntActiu; if (!pt) return;
+        this.children.list.forEach(o => {
+            if (!o || o.type !== 'Image' || !o.texture || !o.active) return;
+            const k = o.texture.key;
+            if (!/^cofre/.test(k) || /_obert$/.test(k) || !this.textures.exists(k + '_obert')) return;
+            if (Phaser.Math.Distance.Between(o.x, o.y, pt.x, pt.y) < 90) o.setTexture(k + '_obert');
+        });
+    }
     ineuRep(id) {
+        this.obrirCofreDelPunt();
         const I = this.ineu, KEY = 'ineu_aixeca_buit';
         if (!I || !I.visible || this.ineuAlt || this.ineuFlautaImg || !this.textures.exists(KEY) || Grafics.faltants.includes(KEY)) return false;
         const OX = 0.556;                                          // on cau el cos de l'Ineu dins del dibuix (centre dels peus)

@@ -3111,17 +3111,28 @@ function pintarCofre(ctx, w, h, obert = false) {
     // Ombra al terra
     ctx.fillStyle = 'rgba(0,0,0,0.32)'; ctx.beginPath(); ctx.ellipse(w / 2 + 2, h - 3.5, w * 0.48, h * 0.065, 0, 0, Math.PI * 2); ctx.fill();
 
-    // Obert: la tapa s'ha alçat cap enrere i es veu per darrere del cos (la cara de dins, més fosca, amb les bandes de ferro)
+    // Obert: la tapa s'ha alçat cap enrere i es veu per darrere del cos per la cara de dins: bombada com la tancada, amb fusta fosca, les dues bandes de ferro,
+    // el gruix de la tapa (vora clara a dalt) i la frontissa a la línia on toca el cos
+    const yFris = yCos - h * 0.1;                                                // on s'articula la tapa (una mica per sobre del cos: queda enrere)
     if (obert) {
-        const lb = new Path2D();
-        lb.moveTo(x0 + 1, yCos + 1); lb.lineTo(x0 + 5, yTapa - h * 0.02); lb.quadraticCurveTo(w / 2, yTapa - h * 0.1, x1 - 5, yTapa - h * 0.02); lb.lineTo(x1 - 1, yCos + 1); lb.closePath();
-        const gl = ctx.createLinearGradient(0, yTapa, 0, yCos); gl.addColorStop(0, '#5a3a1c'); gl.addColorStop(1, '#3c2410');
+        const lb = new Path2D(), apexL = yTapa - h * 0.1;
+        lb.moveTo(x0 + 3, yFris); lb.lineTo(x0 + 1, yTapa + h * 0.04); lb.quadraticCurveTo(w / 2, apexL - h * 0.06, x1 - 1, yTapa + h * 0.04); lb.lineTo(x1 - 3, yFris); lb.closePath();
+        const gl = ctx.createLinearGradient(0, yTapa, 0, yFris); gl.addColorStop(0, '#6e4724'); gl.addColorStop(0.6, '#472a14'); gl.addColorStop(1, '#2c1a0c');
         ctx.fillStyle = gl; ctx.fill(lb);
         ctx.save(); ctx.clip(lb);
+        ctx.strokeStyle = 'rgba(20,8,2,0.45)'; ctx.lineWidth = 1;                // taulons de la tapa, de dins
+        for (let i = 1; i < 3; i++) { const y = yFris - (yFris - yTapa) * i / 3; ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke(); }
         const amp = Math.max(6, w * 0.115);
-        [w * 0.2, w * 0.8].forEach(cx => { ctx.fillStyle = '#383a42'; ctx.fillRect(cx - amp / 2, yTapa - h * 0.1, amp, yCos - yTapa + h * 0.1); ctx.fillStyle = '#5a5c66'; ctx.fillRect(cx - amp / 2, yTapa - h * 0.1, amp * 0.3, yCos - yTapa + h * 0.1); });
+        [w * 0.2, w * 0.8].forEach(cx => {
+            ctx.fillStyle = '#383a42'; ctx.fillRect(cx - amp / 2, yTapa - h * 0.1, amp, yFris - yTapa + h * 0.04);
+            ctx.fillStyle = '#5e606a'; ctx.fillRect(cx - amp / 2, yTapa - h * 0.1, amp * 0.3, yFris - yTapa + h * 0.04);
+            ctx.fillStyle = '#d9c26a'; [yTapa + h * 0.16, yFris - 4].forEach(y => { ctx.beginPath(); ctx.arc(cx, y, Math.max(1.2, w / 64), 0, Math.PI * 2); ctx.fill(); });
+        });
         ctx.restore();
         ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix; ctx.stroke(lb);
+        // gruix de la tapa: vora de fusta clara seguint la corba de dalt
+        ctx.strokeStyle = '#c28a4c'; ctx.lineWidth = gruix * 1.1; ctx.beginPath(); ctx.moveTo(x0 + 1, yTapa + h * 0.04); ctx.quadraticCurveTo(w / 2, apexL - h * 0.06, x1 - 1, yTapa + h * 0.04); ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,235,190,0.45)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0 + 3, yTapa + h * 0.1 + 1); ctx.quadraticCurveTo(w / 2, apexL - h * 0.06 + 1.5, x1 - 3, yTapa + h * 0.1 + 1); ctx.stroke();
     }
 
     // Cos: taulons horitzontals amb degradat, veta i una vora de llum dalt i d'ombra baix
@@ -3140,10 +3151,15 @@ function pintarCofre(ctx, w, h, obert = false) {
     ctx.fillStyle = 'rgba(0,0,0,0.22)'; ctx.fillRect(x0, yBaix - 4, x1 - x0, 4);               // ombra de baix
     ctx.restore();
     ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix; ctx.stroke(cos);
-    if (obert) {                                                                                  // l'obertura: l'interior, buit i fosc
-        const io = new Path2D(); io.roundRect(x0 + 2, yCos - 5, x1 - x0 - 4, 9, 2);
-        ctx.fillStyle = '#1a0e06'; ctx.fill(io);
-        ctx.fillStyle = 'rgba(120,70,30,0.35)'; ctx.fillRect(x0 + 4, yCos + 1, x1 - x0 - 8, 2);
+    if (obert) {                                                                                  // l'obertura: paret del fons de dins (fusta fosca) i el fons buit, amb una claror suau
+        const io = new Path2D(); io.roundRect(x0 + 2, yFris + 1, x1 - x0 - 4, yCos - yFris + 3, 2);
+        const gi = ctx.createLinearGradient(0, yFris, 0, yCos); gi.addColorStop(0, '#4a2c14'); gi.addColorStop(0.55, '#2a170a'); gi.addColorStop(1, '#0f0703');
+        ctx.fillStyle = gi; ctx.fill(io);
+        ctx.save(); ctx.clip(io);
+        ctx.strokeStyle = 'rgba(0,0,0,0.4)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x0, yFris + (yCos - yFris) * 0.45); ctx.lineTo(x1, yFris + (yCos - yFris) * 0.45); ctx.stroke();     // junta dels taulons del fons
+        const cl = ctx.createRadialGradient(w / 2, yCos, 1, w / 2, yCos, w * 0.4); cl.addColorStop(0, 'rgba(255,200,110,0.30)'); cl.addColorStop(1, 'rgba(255,200,110,0)');
+        ctx.fillStyle = cl; ctx.fillRect(x0, yFris, x1 - x0, yCos - yFris + 4);
+        ctx.restore();
         ctx.strokeStyle = CONT_FUSTA; ctx.lineWidth = gruix * 0.7; ctx.stroke(io);
     }
 

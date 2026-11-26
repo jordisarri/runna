@@ -94,9 +94,9 @@ class ZonaTresor extends ZonaBase {
             t.fillStyle(c, 1).fillRect(W / 2 - a / 2, y, a, 26).lineStyle(2, 0x1c1610, 1).strokeRect(W / 2 - a / 2, y, a, 26);
             t.fillStyle(0xfff0d8, 0.3).fillRect(W / 2 - a / 2 + 2, y + 2, a - 4, 3);
         });
-        // L'arqueta-reliquiari, al mig de la tarima
+        // El cofre (abans, una arqueta-reliquiari pròpia), al mig de la tarima
         const obert = Estat.flag('cofreTresor');
-        this.reliquiari = this.posar(obert ? 'reliquiari_obert' : 'reliquiari', W / 2, YP + 34, { col: { w: 110, h: 24 }, opac: true });
+        this.reliquiari = this.posar(obert ? 'cofre_obert' : 'cofre', W / 2, YP + 34, { col: { w: 56, h: 20 }, opac: true, escala: 1.4 });       // el mateix cofre de fusta que a la resta del joc
         this.interactiu(W / 2, YP + 44, RADI_OBJECTE, DIALEGS.cofreTresor, { altura: 120 });
         // El raig de llum de la finestreta de l'absis, fins a l'arqueta, amb pols que sura
         const raig = this.add.graphics().setDepth(79000).setBlendMode('ADD');
@@ -144,8 +144,8 @@ class ZonaTresor extends ZonaBase {
         const r = this.reliquiari;
         Sfx.secret();
         this.cameras.main.shake(200, 0.002);
-        const nova = this.add.image(r.x, r.y, 'reliquiari_obert').setOrigin(r.originX, r.originY).setScale(r.scaleX).setDepth(r.depth + 1).setAlpha(0);
-        this.tweens.add({ targets: nova, alpha: 1, duration: 450, onComplete: () => { r.setTexture('reliquiari_obert'); nova.destroy(); } });
+        const nova = this.add.image(r.x, r.y, 'cofre_obert').setOrigin(r.originX, r.originY).setScale(r.scaleX).setDepth(r.depth + 1).setAlpha(0);
+        this.tweens.add({ targets: nova, alpha: 1, duration: 450, onComplete: () => { r.setTexture('cofre_obert'); nova.destroy(); } });
         this.llum(r.x, r.y - 70, 0xffe08a);
         this.esperar(900, fet);
     }
