@@ -57,6 +57,9 @@ class ZonaEra extends ZonaBase {
         this.cartell(470, 485, DIALEGS.cartellEra);
         // Poca cosa més: uns quants arbres a la vora del nord, lluny de les sortides i del cartell, perquè els dos roures siguin els protagonistes
         this.arbres([[70, 200], [560, 150], [1000, 170], [1500, 160], [1700, 260], [600, 380], [1200, 390]]);
+        // Enemics a l'herba del nord, lluny dels bancs i de les sortides: una escolopendra i un cargol
+        this.enemic('escolopendra', 700, 300);
+        this.enemic('cargol', 1300, 330);
 
         this.sortida(240, 0, 160, 14, 'ZonaErmita', 'era');
         this.sortida(1786, 500, 14, 130, 'ZonaJardi', 'era');

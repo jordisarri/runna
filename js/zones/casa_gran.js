@@ -45,6 +45,10 @@ class ZonaCasaGran extends ZonaBase {
         // Arbres només a la dreta, deixant el camí lliure
         this.arbres([[1480, 300], [1530, 520], [1470, 740]]);
 
+        // Enemics a la plaça empedrada, davant la façana (lluny de les entrades): una turista trastocada per la boira i un cargol
+        this.enemic('visitanta', 1050, 920);
+        this.enemic('cargol', 420, 830);
+
         // Les sortides són a sota de la casa (la façana no les tapa)
         this.sortida(1586, 880, 14, 160, 'ZonaPlaca', 'casaGran');
         this.sortida(0, 880, 14, 160, 'ZonaTaverna', 'casagran');
