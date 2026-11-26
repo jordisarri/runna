@@ -35,6 +35,11 @@ jobs:
           [ -f manifest.json ] && cp manifest.json dist/ || true
           [ -f sw.js ] && cp sw.js dist/ || true
 
+      - name: Garantir que art/ i production/ MAI es publiquen
+        run: |
+          rm -rf dist/art dist/production
+          if [ -e dist/art ] || [ -e dist/production ]; then echo 'ERROR: art/ o production/ a dist'; exit 1; fi
+
       - name: Mida del que es publica (sense art/)
         run: |
           du -sh dist

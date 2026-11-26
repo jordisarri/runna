@@ -633,12 +633,12 @@ class ZonaCelles extends ZonaBase {
         else this.jugaMandu();
 
         // Sant Benet (est): la Nelis i el seu marit, el senyor Llaminer, veïns de Sant Benet
-        this.npc('meus', 1250, 680, DIALEGS.meus, { zoomConversa: 1.3 });
-        this.npc('molner', 1320, 700, DIALEGS.molner);
+        this.npc('meus', 1250, 680, DIALEGS.meus, { zoomConversa: 1.9 });
+        this.npc('molner', 1320, 700, DIALEGS.molner, { zoomConversa: 1.9 });
         // Les dues Venerables Sàvies (agafades del braç, un sol gràfic): donen consells
-        this.npc('venerables', 815, 700, DIALEGS.venerables, { colAmple: 100 });
+        this.npc('venerables', 815, 700, DIALEGS.venerables, { colAmple: 100, zoomConversa: 1.9 });
         // Nostra Senyora (oest): la Carry, vídua del rellotger, que busca el seu gos Pallofa (el trobaràs a Sant Antoni)
-        this.npc('carry', 360, 690, DIALEGS.carry);
+        this.npc('carry', 360, 690, DIALEGS.carry, { zoomConversa: 1.9 });
 
         // La Rosansa i el seu carro de verdures: només passen per les cel·les a l'Acte 3 (quan l'Ineu ja té Runna), fins que et dona la llavor i se'n va
         if (Estat.flag('runna') && !Estat.flag('llavorRosansa')) this.posarRosansa();

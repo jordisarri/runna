@@ -369,7 +369,7 @@ class ZonaCabanaCami extends ZonaBase {
         }
         cartes.fillStyle(0x8a2a2a, 1).fillRect(508, 378, 15, 21).lineStyle(1, 0x3a2410, 1).strokeRect(508, 378, 15, 21);
         this.interactiu(450, 440, RADI_OBJECTE, DIALEGS.solitari, { altura: 60 });
-        this.npc('iscu', 520, 560, DIALEGS.iscu, { flipX: true });
+        this.npc('iscu', 520, 560, DIALEGS.iscu, { flipX: true, zoomConversa: 1.9 });
         this.posar('llenya', 735, 410, { col: { w: 110, h: 26 } });
         this.posar('tronc_tall', 160, 540, { col: { w: 70, h: 24 } });
 

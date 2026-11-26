@@ -546,7 +546,7 @@ class ZonaGirgolesFora extends ZonaBase {
             b.fillStyle(0x3a2616, 1).fillRect(PX - GAP - 5, YT - 58, 10, 66).fillRect(PX + GAP - 5, YT - 58, 10, 66);
         }
         const x = obert ? PX + 150 : PX, y = obert ? 372 : 430;
-        this.vigilant = this.npc('pare_xevius', x, y, DIALEGS.xevius, { quiet: false });
+        this.vigilant = this.npc('pare_xevius', x, y, DIALEGS.xevius, { quiet: false, zoomConversa: 1.9 });
         if (!obert) this.vigilant.punt.enTancar = () => {};                  // (la porta s'obre al diàleg, vegeu obrirVigilant)
         this.vigilant.punt.altura = this.vigilant.displayHeight + 6;
         // Mentre no s'ha obert el camí, la porta no es pot fer servir (hi ha la tanca pel mig)
