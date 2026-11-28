@@ -377,9 +377,11 @@ class ZonaEsglesia extends ZonaBase {
             foc(['ineu', 'pare_jorda'], 2.2),
             { qui: 'Ineu', text: "Pare Jòrdius... el Germà Aleu no ha tornat. Va triar quedar-se amb el Mestre, sota terra, i la gàbia se'l va empassar." },
             { qui: 'Pare Jòrdius', text: "L'Aleu... dins la gàbia?" },
+            { qui: 'Ineu', text: "Ho va triar ell, Pare: el Mestre és allà dins i algú l'ha de vetllar. Li he promès que aniré a veure'ls." },
             { fer: (z, fet) => z.seq([f => z.bombolla('pare_jorda', '…', f, 1300)], fet) },        // sospira i mira cap al terra
             { qui: 'Pare Jòrdius', text: "Quan un home busca l'admiració a la foscor perquè no sap trobar l'amor entre els seus germans, acaba sent el seu propi carceller." },
             { qui: 'Pare Jòrdius', text: "Haurà de respondre davant de Déu i davant nostre per cada llàgrima dels infants. Però la gàbia que ell mateix ha triat tancar... és on la seva boira ja no farà mal a ningú més." },
+            { qui: 'Pare Jòrdius', text: "Però que ho sàpiga: en aquesta casa hi haurà lloc per a ell, el dia que vulgui tornar." },
             foc(['pare_jorda', 'ineu'], 1.7),
             { qui: 'Pare Jòrdius', text: "Ara mira al teu voltant, Ineu: els nens riuen i el Santuari canta. Que la seva tristor no ens robi la llum que has tornat al Miracle. Benvingut a casa, fill." },
             { fer: (z, fet) => {

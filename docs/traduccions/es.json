@@ -360,7 +360,7 @@
   "378": "★ Has obtenido la LÁGRIMA DE SAN LORENZO.",
   "379": "Da la misma claridad que las siete estrellas... Dicen que la niebla no se atreve a tocar la luz de San Lorenzo. El camino del Dolmen, a levante, está lleno de ella.",
   "383": "¡Mira quién está aquí! Aquí también me has encontrado: de ahora en adelante, cuando quieras, puedo llevarte hasta este lugar.",
-  "384": "¡Eh, monje! Este cacharro me lo hizo Galf: va a vapor y no se cansa nunca. Si tienes que ir lejos, sube: puedo llevarte a cualquier lugar donde nos hayamos encontrado, y cuantos más lugares me conozcas, más lejos podremos llegar.",
+  "384": "¡Eh, monje! Este cacharro me lo hizo Galf: va a vapor y no se cansa nunca. Si tienes que ir lejos, sube: puedo llevarte a cualquier lugar donde nos hayamos encontrado, y cuantos más lugares me conozcas, más lejos podremos llegar. Llevo pájaros que un día cantaban.",
   "385": "De momento solo conozco este sitio, monje. Cuando me encuentres en otro, te llevaré.",
   "386": "¿Adónde vamos, monje? Elige uno de los lugares donde ya nos hemos encontrado.",
   "387": "Siete estrellas... y un pájaro que se escapa de una jaula abierta. ¡Es la noche de las lágrimas de San Lorenzo!",
@@ -652,7 +652,7 @@
   "703": "Que te aproveche, monje.",
   "704": "Como quieras.",
   "705": "La niebla se ha ido del todo, monje. Antes de volver a la carretera, déjame abrir la última jaula.",
-  "706": "Llevo aquí los pájaros que rescaté y que he cuidado durante mucho tiempo. Con la niebla no querían cantar, pero ahora ya pueden volver a volar libres.",
+  "706": "Llevo aquí los pájaros que el Hombre de la Jaula había enjaulado: mis abuelos los recogieron y yo los he cuidado toda la vida. Con la niebla no querían cantar, pero ahora ya pueden volver a volar libres.",
   "707": "Ya pueden cantar. Gracias por devolverles el canto.",
   "708": "Venga, vete a casa, Ineu: el Miracle siempre recordará a su héroe.",
   "709": "Y cuando tengas a Runna, vuelve a verme: hay páginas de la Crónica que todavía no te puedo leer.",
@@ -664,7 +664,15 @@
   "715": "(La luz no cede. Falta algo... quizá todavía no sea... la hora.)",
   "716": "¿Un canto que las piedras entienden? Ay, hijo... Quizá sea el de Vísperas: es muy viejo, me lo enseñó mi madre. Ven, escucha.",
   "718": "He oído que has entrado en el túnel que escondía la rueda. Esas zarzas negras no las corta un bastón, muchacho: solo Runna, la espada del Dolmen.",
-  "719": "Si has pasado por el túnel de detrás de la rueda y te han cerrado el paso unas zarzas negras, no te esfuerces con el bastón: solo la espada del Dolmen, Runna, las corta."
+  "719": "Si has pasado por el túnel de detrás de la rueda y te han cerrado el paso unas zarzas negras, no te esfuerces con el bastón: solo la espada del Dolmen, Runna, las corta.",
+  "720": "Lo eligió él, Padre: el Maestro está allí dentro y alguien tiene que velarlo. Le he prometido que iré a verlos.",
+  "721": "Pero que lo sepa: en esta casa habrá sitio para él, el día que quiera volver.",
+  "722": "(Entre las chispas del fuego, por un momento me parece oír un silbido muy lejano, como el de un pájaro.)",
+  "723": "(Por la grieta que se cierra, aún llega un susurro: «Cierra, monje, cierra. Aleu siempre ha sabido volver a abrir».)",
+  "724": "(Esta niebla no es solo niebla: parece que alguien me escucha.)",
+  "725": "(Un castigado que solo se despierta cuando alguien lo mira a la cara... Me recuerda a Aleu: quizá todo el mundo solo quiere que alguien lo mire.)",
+  "726": "Un corazón vacío abrió mi puerta, y yo respondí. Los vacíos siempre tienen eco.",
+  "727": "(Un corazón vacío, como el de Aleu. Solo que él tuvo siglos para llenarlo de risas robadas.)"
  },
  "interficie": {
   "Toca la pantalla per començar": "Toca la pantalla para empezar",
@@ -1624,7 +1632,6 @@
   "378": "58c652e1",
   "379": "84ba3d1e",
   "383": "034f73be",
-  "384": "27c4a52a",
   "385": "c7cfd596",
   "386": "df4de459",
   "387": "a9b14294",
@@ -1916,7 +1923,6 @@
   "703": "c5091b62",
   "704": "f04d85f9",
   "705": "53aa8c5e",
-  "706": "fb1738b8",
   "707": "92f9eacc",
   "708": "71324847",
   "709": "b1c31d26",
@@ -1929,6 +1935,16 @@
   "716": "c819bfda",
   "210": "7fd40770",
   "718": "57b546c8",
-  "719": "e3fb6825"
+  "719": "e3fb6825",
+  "706": "1a7f7d41",
+  "720": "b3607a20",
+  "721": "60f82192",
+  "384": "93d5c1b8",
+  "722": "33bd490a",
+  "723": "73d437fe",
+  "724": "cca9bc3a",
+  "725": "0d3df779",
+  "726": "31b5918a",
+  "727": "7b338e24"
  }
 }

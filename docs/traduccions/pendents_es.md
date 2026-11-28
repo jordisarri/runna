@@ -41,7 +41,3 @@ Cada línia: el número (el de docs/TEXTS.md), qui ho diu i el text en català. 
 **[658] Ineu:** He tocat el [text calculat pel joc: MELODIES[nom].nom], però aquí no passa res...
 
 **[717] La Pianista:** Aquest so m'ha fet recordar el Cant de Vespres: és tan vell com elles, me'l va ensenyar la meva mare. Vine, escolta.
-
-**[718] Senyor Pomers:** He sentit que has entrat al túnel que amagava la roda. Aquells esbarzers negres no els talla un bastó, noi: només Runna, l'espasa del Dolmen.
-
-**[719] Jusef:** Si has passat pel túnel de darrere la roda i t'han barrat el pas uns esbarzers negres, no t'hi escarrassis amb el bastó: només l'espasa del Dolmen, Runna, els talla.

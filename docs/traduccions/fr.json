@@ -360,7 +360,7 @@
   "378": "★ Tu as obtenu la LARME DE SAINT-LAURENT.",
   "379": "Elle brille comme les sept étoiles... On dit que la brume n'ose pas toucher la lumière de Saint-Laurent. Le chemin du Dolmen, à l'est, en est rempli.",
   "383": "Regarde qui voilà ! Ici aussi tu m'as trouvé : désormais, quand tu voudras, je peux t'emmener jusqu'à cet endroit.",
-  "384": "Hé, moine ! Cet engin, c'est le Galf qui me l'a fait : il marche à la vapeur et ne se fatigue jamais. Si tu dois aller loin, monte : je peux t'emmener n'importe où nous nous sommes déjà rencontrés, et plus tu me connaîtras d'endroits, plus nous irons loin.",
+  "384": "Hé, moine ! Cet engin, c'est le Galf qui me l'a fait : il marche à la vapeur et ne se fatigue jamais. Si tu dois aller loin, monte : je peux t'emmener n'importe où nous nous sommes déjà rencontrés, et plus tu me connais d'endroits, plus nous pourrons aller loin. J'y transporte des oiseaux qui chantaient autrefois.",
   "385": "Pour l'instant, je ne connais que cet endroit, moine. Quand tu me trouveras ailleurs, je t'y emmènerai.",
   "386": "On va où, moine ? Choisis l'un des endroits où nous nous sommes déjà rencontrés.",
   "387": "Sept étoiles... et un oiseau qui s'échappe d'une cage ouverte. C'est la nuit des larmes de Saint-Laurent !",
@@ -652,7 +652,7 @@
   "703": "Bon appétit, moine.",
   "704": "Comme tu veux.",
   "705": "La brume s'est complètement dissipée, moine. Avant de reprendre la route, laisse-moi ouvrir la dernière cage.",
-  "706": "J'y transporte les oiseaux que j'ai sauvés et dont j'ai pris soin pendant longtemps. Avec la brume ils ne voulaient pas chanter, mais maintenant ils peuvent de nouveau voler libres.",
+  "706": "J'y transporte les oiseaux que l'Homme de la Cage avait enfermés : mes grands-parents les ont recueillis et je m'en suis occupé toute ma vie. Avec la brume ils ne voulaient pas chanter, mais maintenant ils peuvent de nouveau voler libres.",
   "707": "Maintenant ils peuvent chanter. Merci de leur avoir rendu leur chant.",
   "708": "Allez, rentre chez toi, Ineu : le Miracle se souviendra toujours de son héros.",
   "709": "Et quand tu auras Runna, reviens me voir : il y a des pages de la Chronique que je ne peux pas encore te lire.",
@@ -664,7 +664,15 @@
   "715": "(La lumière ne cède pas. Il manque quelque chose... ce n'est peut-être pas encore... l'heure.)",
   "716": "Un chant que les pierres comprennent ? Ah, mon fils... C'est peut-être celui des Vêpres : il est très vieux, ma mère me l'a appris. Viens, écoute.",
   "718": "J'ai entendu dire que tu es entré dans le tunnel que cachait la roue. Ces ronces noires, ce n'est pas un bâton qui les coupe, mon garçon : seule Runna, l'épée du Dolmen, y arrive.",
-  "719": "Si tu es passé par le tunnel derrière la roue et que des ronces noires t'ont barré la route, ne t'acharne pas avec le bâton : seule l'épée du Dolmen, Runna, les coupe."
+  "719": "Si tu es passé par le tunnel derrière la roue et que des ronces noires t'ont barré la route, ne t'acharne pas avec le bâton : seule l'épée du Dolmen, Runna, les coupe.",
+  "720": "C'est lui qui l'a choisi, Père : le Maître est là-dedans et quelqu'un doit le veiller. Je lui ai promis d'aller les voir.",
+  "721": "Mais qu'il le sache : dans cette maison, il y aura une place pour lui, le jour où il voudra revenir.",
+  "722": "(Parmi les étincelles du feu, un instant, il me semble entendre un sifflement très lointain, comme celui d'un oiseau.)",
+  "723": "(Par la fissure qui se referme, un murmure arrive encore : « Ferme, moine, ferme. L'Aleu a toujours su rouvrir. »)",
+  "724": "(Cette brume n'est pas que de la brume : on dirait que quelqu'un m'écoute.)",
+  "725": "(Un puni qui ne se réveille que lorsque quelqu'un le regarde en face... Cela me fait penser à l'Aleu : peut-être que tout le monde veut simplement qu'on le regarde.)",
+  "726": "Un cœur vide a ouvert ma porte, et j'ai répondu. Les vides ont toujours de l'écho.",
+  "727": "(Un cœur vide, comme celui de l'Aleu. Sauf que lui a eu des siècles pour le remplir de rires volés.)"
  },
  "interficie": {
   "Toca la pantalla per començar": "Touche l'écran pour commencer",
@@ -1625,7 +1633,6 @@
   "378": "58c652e1",
   "379": "84ba3d1e",
   "383": "034f73be",
-  "384": "27c4a52a",
   "385": "c7cfd596",
   "386": "df4de459",
   "387": "a9b14294",
@@ -1917,7 +1924,6 @@
   "703": "c5091b62",
   "704": "f04d85f9",
   "705": "53aa8c5e",
-  "706": "fb1738b8",
   "707": "92f9eacc",
   "708": "71324847",
   "709": "b1c31d26",
@@ -1930,6 +1936,16 @@
   "716": "c819bfda",
   "210": "7fd40770",
   "718": "57b546c8",
-  "719": "e3fb6825"
+  "719": "e3fb6825",
+  "706": "1a7f7d41",
+  "720": "b3607a20",
+  "721": "60f82192",
+  "384": "93d5c1b8",
+  "722": "33bd490a",
+  "723": "73d437fe",
+  "724": "cca9bc3a",
+  "725": "0d3df779",
+  "726": "31b5918a",
+  "727": "7b338e24"
  }
 }

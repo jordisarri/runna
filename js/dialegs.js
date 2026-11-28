@@ -912,7 +912,7 @@ const DIALEGS = {
             pagines: [
                 { qui: nom, text: "La boira se n'ha anat del tot, monjo. Abans de tornar a la carretera, deixa'm obrir l'última gàbia." },
                 { fer: (z, fet) => z.folletVaDarrere ? z.folletVaDarrere(fet) : fet() },
-                { qui: nom, text: "Hi porto els ocells que vaig rescatar i que he cuidat durant molt de temps. Amb la boira no volien cantar, però ara ja poden tornar a volar lliures." },
+                { qui: nom, text: "Hi porto els ocells que l'Home de la Gàbia havia engabiat: els meus avis els van recollir i jo els he cuidat tota la vida. Amb la boira no volien cantar, però ara ja poden tornar a volar lliures." },
                 { fer: (z, fet) => z.ocellsVolen ? z.ocellsVolen(fet) : fet() },
                 { qui: nom, text: "Ja poden cantar. Gràcies per tornar-los el cant." },
                 { qui: nom, text: "Au, ves-te'n a casa, Ineu: el Miracle sempre recordarà el seu heroi." }
@@ -930,7 +930,7 @@ const DIALEGS = {
             return {
                 pagines: [{ qui: nom, text: conegudes
                     ? "Mira qui hi ha! Aquí també m'hi has trobat: d'ara endavant, quan vulguis, et puc portar fins a aquest lloc."
-                    : "Eh, monjo! Aquest trasto me'l va fer el Galf: va amb vapor i no es cansa mai. Si has d'anar lluny, puja: et puc portar a qualsevol lloc on ens hàgim trobat, i com més llocs em coneguis, més lluny podrem arribar." }],
+                    : "Eh, monjo! Aquest trasto me'l va fer el Galf: va amb vapor i no es cansa mai. Si has d'anar lluny, puja: et puc portar a qualsevol lloc on ens hàgim trobat, i com més llocs em coneguis, més lluny podrem arribar. Hi porto ocells que un dia cantaven." }],
                 enAcabar: () => E.posaFlag('parada_' + id)
             };
         }
@@ -993,7 +993,8 @@ const DIALEGS = {
     cofreAltar: E => ({
         pagines: [
             { avis: 'Has obtingut la CLAU DEL SAGRARI.', obj: 'clau_sagrari' },
-            { qui: 'Ineu', text: 'La clau del sagrari del Santuari! Els monjos la van deixar aquí. Amb això obriré el sagrari del retaule.' }
+            { qui: 'Ineu', text: 'La clau del sagrari del Santuari! Els monjos la van deixar aquí. Amb això obriré el sagrari del retaule.' },
+            { qui: 'Ineu', text: "(Aquesta boira no és només boira: sembla que algú m'escolta.)" }
         ],
         enAcabar: () => {
             E.posaFlag('missatgeDesxifrat');
@@ -1342,6 +1343,7 @@ const DIALEGS = {
             { qui: "El Gran Til·ler", text: "Entre les meves branques hi custodio, des de temps immemorials, un medalló de pedra amb una fulla tallada: el permís de l'arbre. Fa segles que espera algú que s'assegui a taula amb tothom. Agafa'l." },
             { fer: (z, fet) => z.fullaCau(fet) },
             { avis: "Has obtingut el MEDALLÓ DE L'ARBRE!", obj: 'medallo_arbre' },
+            { qui: "Ineu", text: "(Entre les espurnes del foc, per un moment em sembla sentir un xiulet molt lluny, com el d'un ocell.)" },
             { fer: (z, fet) => { ['sopar_pastor_a', 'sopar_pastor_b', 'sopar_pastor_vell'].forEach(k => z.bombolla(k, '♪', null, 1400)); z.esperar(1500, fet); } },
         ],
         enAcabar: () => {
@@ -1658,7 +1660,8 @@ const DIALEGS = {
             { qui: "Ineu", text: "Un llibre gros, obert sobre la taula, amb lletra de monjo. Diu a dalt de la pàgina: «Del càstig del germà bodeguer»." },
             { qui: "Llibre", text: "«El germà bodeguer es bevia el vi de la sagristia, bóta rere bóta, i després jurava que s'havia evaporat.»" },
             { qui: "Llibre", text: "«Quan ho vam descobrir, el Prior no el va foragitar: el va fer petrificar i el va posar a vigilar la cripta fins que el vi es torni vinagre. A la cripta mai no es torna vinagre.»" },
-            { qui: "Llibre", text: "«Per això li diuen l'Home del Raïm. Dorm de cara a la paret, com un nen castigat, i només es desperta si algú el fa girar i el mira a la cara.»" }
+            { qui: "Llibre", text: "«Per això li diuen l'Home del Raïm. Dorm de cara a la paret, com un nen castigat, i només es desperta si algú el fa girar i el mira a la cara.»" },
+            { qui: "Ineu", text: "(Un castigat que només es desperta quan algú el mira a la cara... Em fa pensar en l'Aleu: potser tothom només vol que algú el miri.)" }
         ],
         enAcabar: () => Estat.posaFlag('llibreCambraLlegit')
     },

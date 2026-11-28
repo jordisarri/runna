@@ -1586,6 +1586,7 @@ class ZonaGabia extends ZonaBase {
                 { qui: A, text: "Tard, massa tard! Mestre! MESTRE, ja és aquí! El monjo que us vol prendre els nens!" },
                 { fer: (z, fet) => transformacio(z, fet) },
                 { qui: O, text: "Aleu, fill meu, no cal que cridis." },
+                { qui: O, text: "Un cor buit va obrir la meva porta, i jo vaig respondre. Els buits sempre tenen ressò." },
                 { qui: O, text: "Uns peus de monjo jove damunt la meva pedra." },
                 pla(pDos, 0.82, 700),
                 { qui: 'Ineu', text: "Deixeu que els nens tornin amb els seus!" },
@@ -1751,6 +1752,7 @@ class ZonaGabia extends ZonaBase {
             { qui: O, text: "No... els meus riures... els meus ocells..." },
             { fer: (z, fet) => z.enquadrar(e.spr.x, e.spr.y - 0.45 * e.spr.displayHeight, 2.0, 1100, fet) },
             { qui: O, text: "Tantes rialles, i cap no era per a mi." },
+            { qui: "Ineu", text: "(Un cor buit, com el de l'Aleu. Només que ell va tenir segles per omplir-lo de riures robats.)" },
             { fer: (z, fet) => z.seq([
                 // P33-P34: es desfà en boira i la gàbia se l'empassa
                 f => {

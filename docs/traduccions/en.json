@@ -360,7 +360,7 @@
   "378": "★ You got the TEAR OF ST LAWRENCE.",
   "379": "It shines just like the seven stars... They say the mist doesn't dare touch the light of St Lawrence. The path to the Dolmen, to the east, is full of it.",
   "383": "Look who it is! You've found me here too: from now on, whenever you like, I can take you to this place.",
-  "384": "Hey, monk! Galf built me this contraption: it runs on steam and never gets tired. If you need to go far, hop on: I can take you anywhere we've already met, and the more places you know me from, the farther we can go.",
+  "384": "Hey, monk! Galf built me this contraption: it runs on steam and never gets tired. If you need to go far, hop on: I can take you anywhere we've already met, and the more places you know me from, the farther we can go. I carry birds that used to sing.",
   "385": "So far I only know this place, monk. When you find me somewhere else, I'll take you there.",
   "386": "Where to, monk? Pick one of the places where we've already met.",
   "387": "Seven stars... and a bird escaping from an open cage. It's the night of the Tears of St Lawrence!",
@@ -652,7 +652,7 @@
   "703": "Enjoy, monk.",
   "704": "As you like.",
   "705": "The mist is gone for good, monk. Before I take to the road again, let me open the last cage.",
-  "706": "In it I carry the birds I rescued and have looked after for a long time. With the mist they wouldn't sing, but now they can fly free again.",
+  "706": "In it I carry the birds the Cage Man had locked up: my grandparents took them in and I've looked after them all my life. With the mist they wouldn't sing, but now they can fly free again.",
   "707": "Now they can sing. Thank you for giving them back their song.",
   "708": "Off you go home, Ineu: the Miracle will always remember its hero.",
   "709": "And when you have Runna, come back to see me: there are pages of the Chronicle I can't read you yet.",
@@ -664,7 +664,15 @@
   "715": "(The light won't give way. Something's missing... maybe it isn't yet... the hour.)",
   "716": "A song the stones understand? Oh, son... Maybe it's the Vespers Song: it's very old, my mother taught it to me. Come, listen.",
   "718": "I hear you've gone into the tunnel the wheel was hiding. A staff won't cut those black brambles, lad: only Runna, the sword of the Dolmen, will.",
-  "719": "If you went through the tunnel behind the wheel and some black brambles blocked your way, don't struggle with the staff: only the sword of the Dolmen, Runna, can cut them."
+  "719": "If you went through the tunnel behind the wheel and some black brambles blocked your way, don't struggle with the staff: only the sword of the Dolmen, Runna, can cut them.",
+  "720": "He chose it himself, Father: the Master is in there and someone has to watch over him. I promised him I'd come and see them.",
+  "721": "But let him know: there will be a place for him in this house, the day he wants to come back.",
+  "722": "(Among the sparks of the fire, for a moment I think I hear a whistle far away, like a bird's.)",
+  "723": "(Through the crack that is closing, a whisper still reaches me: \"Close it, monk, close it. Aleu has always known how to open it again.\")",
+  "724": "(This mist isn't just mist: it feels as if someone is listening to me.)",
+  "725": "(A punished man who only wakes when someone looks him in the face... He reminds me of Aleu: maybe everyone just wants someone to look at them.)",
+  "726": "An empty heart opened my door, and I answered. Empty things always have an echo.",
+  "727": "(An empty heart, like Aleu's. Only he had centuries to fill it with stolen laughter.)"
  },
  "interficie": {
   "Toca la pantalla per començar": "Tap the screen to start",
@@ -1625,7 +1633,6 @@
   "378": "58c652e1",
   "379": "84ba3d1e",
   "383": "034f73be",
-  "384": "27c4a52a",
   "385": "c7cfd596",
   "386": "df4de459",
   "387": "a9b14294",
@@ -1917,7 +1924,6 @@
   "703": "c5091b62",
   "704": "f04d85f9",
   "705": "53aa8c5e",
-  "706": "fb1738b8",
   "707": "92f9eacc",
   "708": "71324847",
   "709": "b1c31d26",
@@ -1930,6 +1936,16 @@
   "716": "c819bfda",
   "210": "7fd40770",
   "718": "57b546c8",
-  "719": "e3fb6825"
+  "719": "e3fb6825",
+  "706": "1a7f7d41",
+  "720": "b3607a20",
+  "721": "60f82192",
+  "384": "93d5c1b8",
+  "722": "33bd490a",
+  "723": "73d437fe",
+  "724": "cca9bc3a",
+  "725": "0d3df779",
+  "726": "31b5918a",
+  "727": "7b338e24"
  }
 }
