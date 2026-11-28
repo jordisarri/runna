@@ -29,7 +29,7 @@ class ZonaEra extends ZonaBase {
         if (this.dadesEntrada && this.dadesEntrada.entrada === 'final') {          // escena final (el Follet allibera els ocells): només herba i uns quants arbres, sense camins, bancs ni Galf
             this.bancsEsg = []; this.assegut = false;
             this.cinemaCel();
-            this.posar('roure', 760, 1660, { escala: 1.7, col: { w: 100, h: 40 } });
+            this.posar('roure', 760, 1660, { escala: 1.7, col: { w: 140, h: 40 } });
             this.arbres([[30, 1190], [1000, 1700], [1220, 1640], [470, 1680]]);          // (només el de l'esquerra queda a l'altura dels personatges; els altres, a la part baixa, on el diàleg els pot tapar)
             return;
         }
@@ -38,8 +38,8 @@ class ZonaEra extends ZonaBase {
 
         // Dos roures enormes amb dos bancs al mig, un davant de l'altre: el Galf seu al del nord i l'Ineu pot seure al del sud
         // Més grans i sols a la clariana: les copes (de 800 d'ample) emmarquen els bancs i no toquen el camí (queden per sota de y 630) ni les sortides
-        this.posar('roure', 480, 1130, { escala: 1.9, col: { w: 100, h: 40 } });
-        this.posar('roure', 1440, 1130, { escala: 1.9, col: { w: 100, h: 40 } });
+        this.posar('roure', 480, 1130, { escala: 1.9, col: { w: 155, h: 40 } });
+        this.posar('roure', 1440, 1130, { escala: 1.9, col: { w: 155, h: 40 } });
         this.bancNord = this.posar('banc_respatller', ERA_BANC_X, ERA_BANC_N, { col: { w: 140, h: 16 } });
         this.bancSud = this.posar('banc_davant', ERA_BANC_X, ERA_BANC_S, { col: { w: 140, h: 16 } });   // sempre amb respatller (vist per darrere)
 

@@ -48,7 +48,7 @@ const BANDA_SUD = 120;   // franja de baix (vora sud, sortides) que es desplaça
 const VELOCITAT_INEU = 230;
 // Caixa de col·lisió del tronc de l'arbre (gràfic 'arbre': les arrels fan ~130 px d'ample i el tronc ~70-100)
 // Part del dibuix (fraccions x0, y0, x1, y1 del gràfic) que és el tronc: és opac (la silueta de l'Ineu s'hi amaga); la copa i les branques, no
-const TRONCS = { arbre: [0.27, 0.52, 0.75, 1], prunera: [0.36, 0.55, 0.66, 1], alzina_buida: [0.32, 0.55, 0.70, 0.96], pi: [0.36, 0.55, 0.66, 1], pi_pinyer: [0.30, 0.60, 0.62, 1] };
+const TRONCS = { roure: [0.33, 0.6, 0.68, 1], arbre: [0.27, 0.52, 0.75, 1], prunera: [0.36, 0.55, 0.66, 1], alzina_buida: [0.32, 0.55, 0.70, 0.96], pi: [0.36, 0.55, 0.66, 1], pi_pinyer: [0.30, 0.60, 0.62, 1] };
 const TRONC_ARBRE = esc => ({ w: Math.round(100 * esc), h: Math.round(36 * esc) });
 
 const ESTIL_PORTA_PEDRA = ['ZonaErmitaInt', 'ZonaGabrielInt', 'ZonaPassadis', 'ZonaSotaTaverna', 'ZonaGirgoles', 'ZonaTortura', 'ZonaBoira', 'ZonaGabia', 'ZonaSoterraniHost', 'ZonaEsglesia', 'ZonaMonestirRebedor', 'ZonaPingpong', 'ZonaTresor', 'ZonaGolfes'];
@@ -2342,19 +2342,39 @@ class ZonaBase extends Phaser.Scene {
     // (com la de l'Ineu), que apareix i s'esvaeix suaument. Els arbres no canvien.
     transparenciaCopes() {
         if (!this.copes || !this.enemics) return;
-        const caixes = this.copes.map(img => ({ y: img.y, b: img.getBounds() }));
+        const caixes = this.copes.map(img => ({ y: img.y, b: img.getBounds(), img }));
+        // L'enemic només es considera amagat si algun punt del seu cos cau sobre un píxel opac de l'arbre (no sobre la caixa buida entre les branques)
+        const tapat = (c, b) => {
+            const im = c.img, W = im.width, H = im.height, sx = Math.abs(im.scaleX), sy = Math.abs(im.scaleY);
+            let n = 0;
+            for (let i = 0; i < 5; i++) for (let j = 0; j < 5; j++) {
+                const px = b.x + b.width * (i + 0.5) / 5, py = b.y + b.height * (j + 0.5) / 5;
+                let u = (px - im.x) / sx; if (im.flipX) u = -u;
+                const x = Math.floor(u + W / 2), y = Math.floor((py - im.y) / sy + H);
+                if (x >= 0 && y >= 0 && x < W && y < H && this.textures.getPixelAlpha(x, y, im.texture.key) > 100) n++;
+            }
+            return n >= 6;
+        };
         this.enemics.forEach(e => {
             const sp = e.spr;
             let alfa = 0;
             if (!e.mort && sp.active && sp.visible) {
                 const b = sp.getBounds();
-                if (caixes.some(c => sp.y < c.y + 4 && Phaser.Geom.Rectangle.Overlaps(c.b, b))) alfa = 0.42;
+                if (caixes.some(c => sp.y < c.y + 4 && Phaser.Geom.Rectangle.Overlaps(c.b, b) && tapat(c, b))) alfa = 0.42;
             }
             let f = e.fantasma;
             if (!f) {
                 if (!alfa) return;
                 f = e.fantasma = this.add.sprite(sp.x, sp.y, sp.texture.key, sp.frame.name).setDepth(87000).setAlpha(0);
             }
+            // El tronc d'un arbre davant l'enemic el tapa de debò (opac, com amb l'Ineu): la silueta s'emmascara amb el tronc; només la copa deixa veure'l a través
+            const sb = sp.getBounds();
+            const tr = (this.copes || []).find(t => t.tronc && t.active && t.visible && t.y > sp.y && Phaser.Geom.Intersects.RectangleToRectangle(t.troncRect(), sb));
+            if (tr) {
+                tr.tronc.setPosition(tr.x, tr.y).setScale(tr.scaleX, tr.scaleY).setFlipX(tr.flipX);
+                if (!tr.mascaraInv) { tr.mascaraInv = new Phaser.Display.Masks.BitmapMask(this, tr.tronc); tr.mascaraInv.invertAlpha = true; }
+                if (f.mask !== tr.mascaraInv) f.setMask(tr.mascaraInv);
+            } else if (f.mask) f.clearMask();
             if (f.texture.key !== sp.texture.key || f.frame.name !== sp.frame.name) f.setTexture(sp.texture.key, sp.frame.name);
             f.setOrigin(sp.originX, sp.originY).setPosition(sp.x, sp.y).setScale(sp.scaleX, sp.scaleY).setFlip(sp.flipX, sp.flipY).setAngle(sp.angle);
             const dest = alfa * sp.alpha;
