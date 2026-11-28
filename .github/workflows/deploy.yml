@@ -16,7 +16,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  proves:
+    name: Proves abans de publicar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Sintaxi de tot el codi de js/
+        run: |
+          fallats=0
+          for f in $(find js -name '*.js'); do node --check "$f" || fallats=1; done
+          [ "$fallats" = 0 ]
+      - name: Prova de la progressió de la història
+        run: node eines/prova_progres.js
+      - name: Textos numerats (cap conversa sense classificar)
+        run: |
+          python3 eines/fer_textos.py | tee sortida_textos.txt
+          if grep -qi 'sense classificar' sortida_textos.txt; then echo 'ERROR: hi ha converses sense classificar: afegeix-les a SECCIONS d eines/fer_textos.py'; exit 1; fi
+
   deploy:
+    needs: proves
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

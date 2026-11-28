@@ -942,7 +942,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[298] Ineu:** L'ombra del monjo ha aparegut en llegir el pergamí... És el monjo del segell? Quan tingui l'altre fragment, el Pare Alberic sabrà llegir-los junts.
 
-### pedraMobil  <sub>(js/zona_base.js:2006)</sub>
+### pedraMobil  <sub>(js/zona_base.js:2017)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 
@@ -1318,13 +1318,13 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 ## El pi dels tres cants i la Nena de les Trenes
 
-### piOest  <sub>(js/zones/bosc_pi.js:377)</sub>
+### piOest  <sub>(js/zones/bosc_pi.js:379)</sub>
 
 **[397] Ineu:** (Unes branques molt baixes, i gruixudes com troncs, baixen fins a terra i barren el camí. Per aquí no hi ha manera de passar.)
 
 **[398] Ineu:** (Totes miren cap a llevant, cap on neix l'alba, i al fons es veu una clariana amb un pi enorme. Si el pi escolta algú, ha de ser pel cantó d'allà. Hauré d'arribar-hi per l'altre costat: per Sant Antoni, potser.)
 
-### piPlaca  <sub>(js/zones/bosc_pi.js:388)</sub>
+### piPlaca  <sub>(js/zones/bosc_pi.js:390)</sub>
 
 **[399] Ineu:** (Davant el pi, una pedra de fita baixa, gastada i coberta de molsa. Hi ha gravat un pi de tres soques i, a sota, tres notes.)
 
@@ -1342,7 +1342,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[404] Ineu:** (Necessitaré la tarota per respondre-li.)
 
-### piTresCants  <sub>(js/zones/bosc_pi.js:403)</sub>
+### piTresCants  <sub>(js/zones/bosc_pi.js:405)</sub>
 
 *Si: ha obert el pi dels tres cants i encara no porta la carta del Cortiner*
 
@@ -1354,7 +1354,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[407] Ineu:** (Un pi vell, amb tres soques que s'obren com tres braços. Sembla que escolta.)
 
-### piHistoria  <sub>(js/zones/bosc_pi.js:412)</sub>
+### piHistoria  <sub>(js/zones/bosc_pi.js:414)</sub>
 
 **[408]** ★ Has trobat la CARTA DEL CORTINER.
 
@@ -1550,15 +1550,15 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[476]** ★ Has obtingut la MANETA D'ENGRANATGE.
 
-### golfesRellotge  <sub>(js/zones/casa.js:1631)</sub>
+### golfesRellotge  <sub>(js/zones/casa.js:1632)</sub>
 
 **[477] Ineu:** El mecanisme és al bastidor de fusta de l'esquerra: tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran.
 
-### golfesNota  <sub>(js/zones/casa.js:1635)</sub>
+### golfesNota  <sub>(js/zones/casa.js:1636)</sub>
 
 **[478] Ineu:** «Nota del rellotger. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el mitjà al mig, i el gran darrere.»
 
-### golfesReparat  <sub>(js/zones/casa.js:1644)</sub>
+### golfesReparat  <sub>(js/zones/casa.js:1645)</sub>
 
 **[479] Ineu:** (Torna a caminar! Ara se sentirà per tot el poble.)
 
@@ -1620,7 +1620,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[495] Ineu:** [text calculat pel joc: frases[this.raimPas - 1]]
 
-### mecanismePorta  <sub>(js/zones/casa.js:1536)</sub>
+### mecanismePorta  <sub>(js/zones/casa.js:1537)</sub>
 
 *Si: ha fet servir la bota d'alçada*
 
@@ -2144,7 +2144,7 @@ Tot el que diuen els personatges, en ordre aproximadament cronològic, amb el **
 
 **[657] Ineu:** Ara no: hi ha bèsties a prop.
 
-### pensament a melodiaTocada  <sub>(js/zona_base.js:2262)</sub>
+### pensament a melodiaTocada  <sub>(js/zona_base.js:2273)</sub>
 
 *Si: (depèn d'un càlcul del joc)*
 

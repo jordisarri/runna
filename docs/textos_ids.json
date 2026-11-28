@@ -2268,7 +2268,7 @@
     "qui": "Ineu",
     "text": "[text calculat pel joc: textPista]",
     "fitxer": "js/zona_base.js",
-    "linia": 2006
+    "linia": 2017
    }
   ],
   "dialegs::ombraMonjo": [
@@ -2790,35 +2790,35 @@
     "qui": "Cartell",
     "text": "← Rovellonera\n«On hi ha rovellons, hi ha pins; on hi ha pins, hi ha camí.»",
     "fitxer": "js/zones/oest.js",
-    "linia": 359
+    "linia": 361
    },
    {
     "id": 355,
     "qui": "Ineu",
     "text": "La clau del senyor Buidor encaixa al pany. La porta de l'ermita s'obre.",
     "fitxer": "js/zones/oest.js",
-    "linia": 429
+    "linia": 433
    },
    {
     "id": 356,
     "qui": "Ineu",
     "text": "L'ermita de Sant Gabriel és tancada amb clau.",
     "fitxer": "js/zones/oest.js",
-    "linia": 432
+    "linia": 436
    },
    {
     "id": 357,
     "qui": "Cartell",
     "text": "→ Dipòsits\n↑ La Rovellonera",
     "fitxer": "js/zones/oest.js",
-    "linia": 434
+    "linia": 438
    },
    {
     "id": 358,
     "qui": "Cartell",
     "text": "→ Dolmen\n← Ermita de Sant Gabriel",
     "fitxer": "js/zones/oest.js",
-    "linia": 659
+    "linia": 665
    }
   ],
   "dialegs::cartellEra": [
@@ -3106,14 +3106,14 @@
     "qui": "Ineu",
     "text": "(Unes branques molt baixes, i gruixudes com troncs, baixen fins a terra i barren el camí. Per aquí no hi ha manera de passar.)",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 377
+    "linia": 379
    },
    {
     "id": 398,
     "qui": "Ineu",
     "text": "(Totes miren cap a llevant, cap on neix l'alba, i al fons es veu una clariana amb un pi enorme. Si el pi escolta algú, ha de ser pel cantó d'allà. Hauré d'arribar-hi per l'altre costat: per Sant Antoni, potser.)",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 378
+    "linia": 380
    }
   ],
   "zones/bosc_pi::piPlaca": [
@@ -3122,42 +3122,42 @@
     "qui": "Ineu",
     "text": "(Davant el pi, una pedra de fita baixa, gastada i coberta de molsa. Hi ha gravat un pi de tres soques i, a sota, tres notes.)",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 388
+    "linia": 390
    },
    {
     "id": 400,
     "qui": "La placa",
     "text": "Tres branques té el vell pi,\ntres cants li cal sentir.\nUn cant per cada branca:\nsols així s'obrirà el camí.",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 389
+    "linia": 391
    },
    {
     "id": 401,
     "qui": "Ineu",
     "text": "(Un cant per cada branca... Em falta aprendre'n algun amb la Pianista abans de poder-ho provar.)",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 391
+    "linia": 393
    },
    {
     "id": 402,
     "qui": "Ineu",
     "text": "([text calculat pel joc: n] de les tres branques ja brillen. Falta que cantin les altres.)",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 393
+    "linia": 395
    },
    {
     "id": 403,
     "qui": "Ineu",
     "text": "(Tres cants, tres branques. Ho provaré amb la tarota, aquí mateix.)",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 393
+    "linia": 395
    },
    {
     "id": 404,
     "qui": "Ineu",
     "text": "(Necessitaré la tarota per respondre-li.)",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 394
+    "linia": 396
    }
   ],
   "zones/bosc_pi::piTresCants": [
@@ -3166,21 +3166,21 @@
     "qui": "Ineu",
     "text": "(Entre dues arrels del tronc hi ha un plec de paper, guardat com un tresor.)",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 403
+    "linia": 405
    },
    {
     "id": 406,
     "qui": "Ineu",
     "text": "(Els ocells piulen entre les branques i el pi es mou una mica, com si respirés. Sembla content.)",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 405
+    "linia": 407
    },
    {
     "id": 407,
     "qui": "Ineu",
     "text": "(Un pi vell, amb tres soques que s'obren com tres braços. Sembla que escolta.)",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 406
+    "linia": 408
    }
   ],
   "zones/bosc_pi::piHistoria": [
@@ -3189,49 +3189,49 @@
     "qui": "",
     "text": "★ Has trobat la CARTA DEL CORTINER.",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 412
+    "linia": 414
    },
    {
     "id": 409,
     "qui": "Carta del Cortiner",
     "text": "«A qui sigui que torni a sentir aquest pi respirar:\n\nAbans de la boira, els ocells dormien en els pins d'aquest bosc. A l'alba cantaven tots alhora, i aquell cant feia viure la terra: el Cant del Miracle.»",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 413
+    "linia": 415
    },
    {
     "id": 410,
     "qui": "Carta del Cortiner",
     "text": "«Un home sol, l'Ocellaire, el va voler per a ell. Va tancar els ocells en una gàbia i se'n va endur el cant. I amb el cant se'n va anar l'alba, i va començar la boira.»",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 414
+    "linia": 416
    },
    {
     "id": 411,
     "qui": "Carta del Cortiner",
     "text": "«Hi havia dos cants més, germans d'aquell: el de l'Aurora, que fa fugir la boira, i el de Vespres, que la terra escolta. Van tenir por que també se'ls emportés, i van venir a amagar-se aquí, a les branques d'aquest pi: un a cada una. Muts, com un nen que guarda un secret.»",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 415
+    "linia": 417
    },
    {
     "id": 412,
     "qui": "Carta del Cortiner",
     "text": "«Una tarda, cansat, em vaig asseure sota seu. Els vaig escoltar i els vaig escriure en tres sons: un, dos i tres. Són els de la tarota. Cada nota és una de les branques.»",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 416
+    "linia": 418
    },
    {
     "id": 413,
     "qui": "Carta del Cortiner",
     "text": "«El pi només deixa passar qui porta els tres cants, perquè només qui els porta els pot tornar als ocells. Quan la boira se'n vagi del tot, que els qui guarden els ocells robats vinguin aquí. Aquest bosc és casa seva.\n\n— El Cortiner»",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 417
+    "linia": 419
    },
    {
     "id": 414,
     "qui": "Ineu",
     "text": "(Les arrels s'han enfonsat a terra com un respir llarg, i els ocells han tornat a les branques. El camí d'aquí al Dolmen ha quedat lliure.)",
     "fitxer": "js/zones/bosc_pi.js",
-    "linia": 418
+    "linia": 420
    }
   ],
   "dialegs::nenaTrenes": [
@@ -3704,7 +3704,7 @@
     "qui": "Ineu",
     "text": "El mecanisme és al bastidor de fusta de l'esquerra: tres engranatges a les posicions I, II i III. Cada cop que en toco un canvia de mida: petit, mitjà, gran.",
     "fitxer": "js/zones/casa.js",
-    "linia": 1631
+    "linia": 1632
    }
   ],
   "zones/casa::golfesNota": [
@@ -3713,7 +3713,7 @@
     "qui": "Ineu",
     "text": "«Nota del rellotger. El rellotge només camina si els engranatges hi van en ordre: el petit primer, el mitjà al mig, i el gran darrere.»",
     "fitxer": "js/zones/casa.js",
-    "linia": 1635
+    "linia": 1636
    }
   ],
   "zones/casa::golfesReparat": [
@@ -3722,7 +3722,7 @@
     "qui": "Ineu",
     "text": "(Torna a caminar! Ara se sentirà per tot el poble.)",
     "fitxer": "js/zones/casa.js",
-    "linia": 1644
+    "linia": 1645
    }
   ],
   "dialegs::portaReixa": [
@@ -3870,14 +3870,14 @@
     "qui": "Ineu",
     "text": "(La llosa no té pany ni maneta. La cadena de la politja hi està lligada: el mecanisme de terra deu fer-la pujar.)",
     "fitxer": "js/zones/casa.js",
-    "linia": 1536
+    "linia": 1537
    },
    {
     "id": 497,
     "qui": "Ineu",
     "text": "(Una llosa de pedra sense pany ni maneta. No cedeix gens: s'ha d'obrir d'una altra manera.)",
     "fitxer": "js/zones/casa.js",
-    "linia": 1536
+    "linia": 1537
    }
   ],
   "zones/casa_gran::construir": [
@@ -5162,7 +5162,7 @@
     "qui": "Ineu",
     "text": "He tocat el [text calculat pel joc: MELODIES[nom].nom], però aquí no passa res...",
     "fitxer": "js/zona_base.js",
-    "linia": 2262
+    "linia": 2273
    }
   ]
  },
